@@ -531,6 +531,97 @@
     .verdict-foot .source-pill.claude { color: var(--moss); border-color: rgba(47,74,42,0.3); background: rgba(47,74,42,0.06); }
     .verdict-foot .source-pill.fallback { color: var(--amber); border-color: rgba(138,106,22,0.4); background: rgba(138,106,22,0.07); }
 
+    /* ───────────── DISPLAY-AFFINITY WATCH (Countermeasure A) ───────────── */
+    .affinity {
+      margin: 18px 0 10px;
+      border: 1px solid var(--rule);
+      border-radius: 2px;
+      background: var(--paper-warm);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .affinity .ah {
+      display: flex; justify-content: space-between; align-items: center; gap: 8px;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--rule-soft);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    .affinity .ah .ttl { font-weight: 700; color: var(--ink); }
+    .affinity .ah .src { color: var(--ink-faint); font-size: 9px; }
+    .affinity .status {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 3px 9px; border-radius: 999px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase;
+      border: 1px solid var(--rule);
+    }
+    .affinity .status::before {
+      content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor;
+    }
+    .affinity .status.online   { color: var(--moss);     border-color: rgba(47,74,42,0.3);   background: rgba(47,74,42,0.08); }
+    .affinity .status.offline  { color: var(--ink-faint); }
+    .affinity .status.armed    { color: var(--ox); border-color: rgba(107,26,26,0.4); background: var(--ox-tint); animation: pulse-red 1.4s ease-in-out infinite; }
+    .affinity .body { padding: 12px 14px; }
+    .affinity .empty {
+      font-family: "Fraunces", serif; font-style: italic;
+      color: var(--ink-faint); font-size: 13px; padding: 4px 0;
+    }
+    .affinity .row {
+      display: grid; grid-template-columns: auto 1fr auto;
+      gap: 10px; align-items: center;
+      padding: 8px 10px;
+      border-left: 3px solid var(--ox);
+      background: linear-gradient(to right, rgba(107,26,26,0.06), transparent 80%);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 11px;
+      margin-bottom: 6px;
+      animation: slideIn .25s ease-out;
+    }
+    .affinity .row .pid { color: var(--ink-faint); letter-spacing: 0.08em; }
+    .affinity .row .name { color: var(--ink); font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .affinity .row .flag { color: var(--ox); font-size: 9.5px; letter-spacing: 0.14em; }
+    .affinity .footer {
+      display: flex; justify-content: space-between; align-items: center; gap: 8px;
+      padding: 8px 14px;
+      border-top: 1px solid var(--rule-soft);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+    .affinity.alarm { border-color: var(--ox); box-shadow: 0 0 0 2px var(--ox-tint), var(--shadow); }
+
+    /* baseline indicator inside telemetry */
+    .baseline-status {
+      grid-column: 1 / -1;
+      padding: 8px 14px;
+      background: var(--paper);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--ink-soft);
+      display: flex; justify-content: space-between; align-items: center; gap: 10px;
+      flex-wrap: wrap;
+    }
+    .baseline-status b { color: var(--ink); font-weight: 600; }
+    .baseline-status.flag { color: var(--ox); }
+    .baseline-status.flag b { color: var(--ox); }
+
+    /* audit + export buttons in footer */
+    .colophon .actions { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; justify-content: flex-end; }
+    .colophon .actions a, .colophon .actions button {
+      appearance: none; border: 1px solid var(--rule); background: var(--paper-warm);
+      color: var(--ink-soft);
+      padding: 6px 10px; border-radius: 2px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase;
+      cursor: pointer; text-decoration: none;
+      transition: all .15s ease;
+    }
+    .colophon .actions a:hover, .colophon .actions button:hover {
+      color: var(--ox); border-color: var(--ox); background: var(--ox-tint);
+    }
+
     /* telemetry */
     .panel-title {
       display: flex; align-items: center; gap: 10px;
@@ -873,6 +964,7 @@
         <button class="trig" id="simIdle" type="button">Simulate idle</button>
         <button class="trig" id="simBlur" type="button">Simulate tab-out</button>
         <button class="trig crit" id="simPaste" type="button">Simulate big paste</button>
+        <button class="trig crit" id="simInvisible" type="button" title="Simulate the disclosed Invisible Window attack — Countermeasure A native helper will catch it">Arm Invisible Window ⌘</button>
       </div>
     </section>
 
@@ -905,6 +997,21 @@
           <span class="stat">peak <b id="sigPeak">0</b><small> kpm</small></span>
           <span class="stat">cadence σ <b id="sigSigma">—</b></span>
           <span class="stat">anomalies <b id="sigAnom">0</b></span>
+        </div>
+      </div>
+
+      <!-- Countermeasure A · Display-Affinity Watch (paper §VI-A) -->
+      <div class="affinity" id="affinityPanel" aria-live="polite">
+        <div class="ah">
+          <span><span class="ttl">Display-Affinity Watch</span> &nbsp;<span class="src">countermeasure A · §VI-A</span></span>
+          <span class="status offline" id="helperStatus">helper offline</span>
+        </div>
+        <div class="body" id="affinityBody">
+          <div class="empty">No native helper attached. Run <span class="mono">tools/verity-helper</span> or use the simulator below.</div>
+        </div>
+        <div class="footer">
+          <span id="affinityCount">0 capture-invisible windows</span>
+          <span id="affinityLastSeen">—</span>
         </div>
       </div>
 
@@ -955,6 +1062,10 @@
           <span class="v" id="t-idle">0.0<small>s</small></span>
           <span class="baseline">flag &gt; 8s</span>
         </div>
+        <div class="baseline-status" id="baselineStatus">
+          <span>Personal cadence baseline: <b id="baselineState">calibrating…</b></span>
+          <span id="baselineDelta">σ-deviation: <b>—</b></span>
+        </div>
       </div>
 
       <div class="panel-title">Verdict History <span class="count" id="histCount"></span></div>
@@ -974,6 +1085,10 @@
       <a href="https://raoufabedini.dev/projects/invisible-window-research" target="_blank" rel="noopener">read the paper →</a>
       &nbsp;·&nbsp;
       <a href="#" id="aboutLink">view system prompt →</a>
+      <div class="actions">
+        <a href="https://github.com/Raoof128/Verity/tree/main/tools/verity-helper" target="_blank" rel="noopener">build native helper</a>
+        <button id="exportAudit" type="button">export audit log</button>
+      </div>
     </div>
   </footer>
 
@@ -1670,12 +1785,201 @@ OUTPUT FORMAT
             history = data.history.slice(0, 50);
             renderHistory();
           }
+          if (data.affinity) paintAffinity(data.affinity);
         }
       } catch {}
     }, 4000);
 
     // tick connection chip
     setInterval(updateConn, 1500);
+
+    // ═══════════════════════════════════════════════════
+    //  COUNTERMEASURE A — Display-Affinity Watch
+    //  Renders helper status + hostile-window list. The actual helper
+    //  lives in tools/verity-helper (Swift). When no helper is running,
+    //  the "Arm Invisible Window" demo button injects a simulated event
+    //  via the same /api/affinity endpoint so the demo is realistic.
+    // ═══════════════════════════════════════════════════
+    const affinityPanel  = $("affinityPanel");
+    const affinityBody   = $("affinityBody");
+    const affinityCount  = $("affinityCount");
+    const affinityLast   = $("affinityLastSeen");
+    const helperStatus   = $("helperStatus");
+
+    let armedSimulated = false;
+
+    function paintAffinity(a) {
+      const hostile = Array.isArray(a?.hostile) ? a.hostile : [];
+      const lastHb  = a?.lastHeartbeat;
+      const helperOnline = lastHb && (Date.now() - lastHb) < 8000;
+      const isSimulated = a?.source && /simulator/.test(a.source);
+
+      // status pill
+      helperStatus.classList.remove("online","offline","armed");
+      if (armedSimulated || isSimulated) {
+        helperStatus.classList.add("armed");
+        helperStatus.textContent = "simulator armed";
+      } else if (helperOnline) {
+        helperStatus.classList.add("online");
+        helperStatus.textContent = "helper online";
+      } else {
+        helperStatus.classList.add("offline");
+        helperStatus.textContent = "helper offline";
+      }
+
+      // body
+      if (hostile.length === 0) {
+        affinityBody.innerHTML = helperOnline
+          ? '<div class="empty" style="color:var(--moss)">✓ All on-screen windows are capturable. No display-affinity violations detected.</div>'
+          : '<div class="empty">No native helper attached. Run <span class="mono">tools/verity-helper</span> or click <b>Arm Invisible Window</b> below.</div>';
+      } else {
+        affinityBody.innerHTML = hostile.map(w => `
+          <div class="row">
+            <span class="pid">PID ${escapeHtml(String(w.pid ?? "—"))}</span>
+            <span class="name">${escapeHtml(w.name || "unknown")}</span>
+            <span class="flag">${escapeHtml(w.type || "capture-excluded")}</span>
+          </div>
+        `).join("");
+      }
+
+      affinityPanel.classList.toggle("alarm", hostile.length > 0);
+      affinityCount.textContent = hostile.length === 0
+        ? "0 capture-invisible windows"
+        : hostile.length + " capture-invisible window" + (hostile.length === 1 ? "" : "s");
+      affinityLast.textContent = lastHb ? "last seen " + new Date(lastHb).toLocaleTimeString() : "—";
+    }
+
+    // dedicated affinity poll (faster than dashboard) — 1s
+    setInterval(async () => {
+      try {
+        const ctrl = new AbortController();
+        const t = setTimeout(() => ctrl.abort(), 2500);
+        const r = await fetch("/api/affinity/" + sessionId, { signal: ctrl.signal });
+        clearTimeout(t);
+        if (r.ok) {
+          const a = await r.json();
+          paintAffinity(a);
+        }
+      } catch {}
+    }, 1000);
+
+    // ═══════════════════════════════════════════════════
+    //  PERSONAL CADENCE BASELINE (Tier-2 #4)
+    //  First 60 s of typing → personal mean + sigma over inter-key
+    //  intervals. Each subsequent window's cadence is scored against
+    //  the candidate's own baseline, not a population baseline.
+    // ═══════════════════════════════════════════════════
+    const baselineState = $("baselineState");
+    const baselineDelta = $("baselineDelta").querySelector("b");
+    const baselineRow   = $("baselineStatus");
+    const calibration = {
+      startedAt: Date.now(),
+      durationMs: 60_000,
+      intervals: [],
+      finalised: false,
+      mean: 0,
+      sigma: 0,
+    };
+
+    function ingestForBaseline() {
+      // pull recent intervals from current bucket
+      const recent = bucket.keydown_intervals_ms;
+      if (recent.length) calibration.intervals.push(...recent.slice(-recent.length));
+      // cap memory
+      if (calibration.intervals.length > 4000) calibration.intervals.splice(0, calibration.intervals.length - 4000);
+
+      const elapsed = Date.now() - calibration.startedAt;
+      if (!calibration.finalised && elapsed >= calibration.durationMs && calibration.intervals.length >= 30) {
+        const xs = calibration.intervals.filter(x => x > 30 && x < 1500);
+        if (xs.length >= 20) {
+          const mean = xs.reduce((a,b)=>a+b,0)/xs.length;
+          const variance = xs.reduce((a,b)=>a+(b-mean)**2,0)/xs.length;
+          calibration.mean = mean;
+          calibration.sigma = Math.max(8, Math.sqrt(variance));
+          calibration.finalised = true;
+        }
+      }
+
+      if (!calibration.finalised) {
+        const remain = Math.max(0, calibration.durationMs - elapsed) / 1000;
+        baselineState.textContent = `calibrating · ${remain.toFixed(0)}s left`;
+        baselineDelta.textContent = "—";
+        baselineRow.classList.remove("flag");
+        return;
+      }
+
+      // compute σ-deviation for current window's cadence
+      const recentXs = (bucket.keydown_intervals_ms || []).filter(x => x > 30 && x < 1500);
+      if (recentXs.length < 4) {
+        baselineState.innerHTML = `<b>${Math.round(calibration.mean)}ms ± ${Math.round(calibration.sigma)}ms</b>`;
+        baselineDelta.textContent = "—";
+        baselineRow.classList.remove("flag");
+        return;
+      }
+      const m = recentXs.reduce((a,b)=>a+b,0)/recentXs.length;
+      const z = (m - calibration.mean) / calibration.sigma;
+      baselineState.innerHTML = `<b>${Math.round(calibration.mean)}ms ± ${Math.round(calibration.sigma)}ms</b>`;
+      baselineDelta.textContent = (z >= 0 ? "+" : "") + z.toFixed(2) + "σ";
+      baselineRow.classList.toggle("flag", Math.abs(z) >= 2.5);
+    }
+    setInterval(ingestForBaseline, 500);
+
+    // ═══════════════════════════════════════════════════
+    //  ARM INVISIBLE WINDOW — disclosed-attack simulator
+    //  Posts a hostile-window event to /api/affinity using the
+    //  same shape the real Swift helper would. The Display-Affinity
+    //  Watch will light up red within 1s and the next verdict will
+    //  escalate to Critical (server fuses A + C signals).
+    // ═══════════════════════════════════════════════════
+    const FAKE_HOSTILE = [
+      { pid: 41892, name: "Cluely Helper",          type: "sharingType=.none / capture-excluded" },
+      { pid: 41897, name: "Interview Coder",         type: "sharingType=.none / capture-excluded" },
+      { pid: 38214, name: "ChatGPT (overlay)",       type: "GPU-layer hook · Metal" },
+    ];
+    let armCycle = 0;
+    $("simInvisible").addEventListener("click", async () => {
+      armedSimulated = !armedSimulated;
+      const btn = $("simInvisible");
+      btn.textContent = armedSimulated ? "Disarm Invisible Window ⌘" : "Arm Invisible Window ⌘";
+      const hostile = armedSimulated
+        ? [FAKE_HOSTILE[armCycle++ % FAKE_HOSTILE.length]]
+        : [];
+      try {
+        await fetch("/api/affinity", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            "x-verity-helper-secret": "verity-dev-helper",
+          },
+          body: JSON.stringify({
+            sessionId,
+            helper: "verity-helper-simulator/0.1",
+            hostile,
+          }),
+        });
+        flashToast(armedSimulated
+          ? `<b>● ATTACK ARMED</b> · ${hostile[0].name} · capture-excluded window injected`
+          : `<b>● ATTACK DISARMED</b> · helper now reports clean`);
+      } catch (e) {
+        flashToast("<b>● SIMULATOR ERROR</b>");
+      }
+    });
+
+    // ═══════════════════════════════════════════════════
+    //  AUDIT LOG EXPORT (Tier-2 #6)
+    //  Tamper-evident HMAC chain — server signs each verdict + each
+    //  affinity transition over the previous entry's signature.
+    // ═══════════════════════════════════════════════════
+    $("exportAudit").addEventListener("click", () => {
+      const url = "/api/audit/" + sessionId;
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `verity-audit-${sessionId}.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      flashToast("<b>● AUDIT LOG EXPORTED</b> · HMAC-SHA256 chain · tamper-evident");
+    });
   </script>
 </body>
 </html>

@@ -58,7 +58,7 @@ Verity implements **Countermeasure C — Application Focus Monitoring** from §V
 
 | Paper § | Countermeasure | Status in Verity |
 |---------|---------------|------------------|
-| §VI-A | Display-affinity flag enumeration via native agent | ❌ Roadmap — see *Native helper* below |
+| **§VI-A** | **Display-affinity flag enumeration via native agent** | **✅ Implemented in [`tools/verity-helper`](tools/verity-helper/) (macOS Swift; Windows C# planned)** |
 | §VI-B | Frame comparison with known state | ❌ Paper rates "Low feasibility" |
 | **§VI-C** | **Application focus + paste monitoring** | **✅ Implemented (this repo)** |
 | §VI-D | Hardware-rooted display attestation (TPM) | ❌ Paper rates "Very low feasibility" |
@@ -143,12 +143,36 @@ The behavioral signature waveform (the dark oscilloscope strip) draws keystroke 
 cp .env.example .env
 # .env
 # ANTHROPIC_API_KEY=sk-ant-…
-# PORT=3030                  (optional, default 3030)
-# VERITY_DEMO_MODE=0          (set to 1 to force local heuristic)
+# PORT=3030                       (optional, default 3030)
+# VERITY_DEMO_MODE=0               (set to 1 to force local heuristic)
+# VERITY_HELPER_SECRET=…           (shared secret for the native helper)
+# VERITY_AUDIT_SECRET=…            (HMAC key for the audit chain)
 
 npm install
 npm start
 ```
+
+### Optional: build & run the native helper (Countermeasure A)
+
+```bash
+cd tools/verity-helper
+make
+./verity-helper --session sess-XXXXXXXX
+# (sess-XXXXXXXX is the session id shown in the bottom-right of the exam page)
+```
+
+The first time you run the helper, macOS will ask for **Screen Recording**
+permission — required, see [`tools/verity-helper/README.md`](tools/verity-helper/README.md).
+Once it connects, the dashboard's Display-Affinity Watch panel turns green
+("helper online"). Any window with `sharingType = .none` set on your machine
+will appear in the panel within 2 seconds.
+
+### Demo without the helper
+
+Click **Arm Invisible Window** in the Demo Triggers strip. This posts a
+simulated hostile-window event through the same `/api/affinity` endpoint the
+real helper uses — a faithful preview of what running the helper alongside
+Cluely or Interview Coder would look like in production.
 
 ### Scripts
 
@@ -161,15 +185,13 @@ npm start
 
 ```
 ┌────────────────────────────┐                       ┌─────────────────────────────────────┐
-│      Browser (student)     │   POST /api/telemetry │      Node + Express server          │
+│      Browser (candidate)   │   POST /api/telemetry │      Node + Express server          │
 │  ─────────────────────────  │ ────────────────────► │  ─────────────────────────────────  │
-│  • keystroke cadence        │       (every 5s)      │  • forwards JSON window to Claude   │
+│  • keystroke cadence        │       (every 5s)      │  • forwards window to Claude        │
 │  • focus / blur events      │                       │  • prompt-cached system prompt      │
-│  • paste size (NOT content) │                       │  • parses strict JSON response      │
-│  • idle gaps                │ ◄──────────────────── │  • persists per-session history     │
-│                             │   200 OK { verdict }  │  • falls back to local heuristic    │
-│  Live signature waveform    │                       │    on API failure (low credit, etc) │
-│  Live verdict + history     │                       │                                     │
+│  • paste size (NOT content) │                       │  • fuses A + C signals              │
+│  • personal cadence baseline│ ◄──────────────────── │  • HMAC-chain audit log             │
+│  • signature waveform       │   200 OK { verdict }  │  • graceful fallback heuristic      │
 └────────────────────────────┘                       └──────────────────┬──────────────────┘
                                                                         │
                                                                         ▼
@@ -178,7 +200,20 @@ npm start
                                                           │  + cached system prompt    │
                                                           │  → JSON risk verdict       │
                                                           └────────────────────────────┘
+
+┌────────────────────────────┐  POST /api/affinity   ┌─────────────────────────────────────┐
+│  verity-helper (Swift)     │ ────────────────────► │  Affinity ingest                    │
+│  Countermeasure A · §VI-A  │       (every 2s)      │  • secret-gated                     │
+│  • CGWindowListCopyWindowInfo                      │  • escalates verdict to Critical    │
+│  • CGWindowListCreateImage │                       │    when hostile windows present     │
+│  • binary integrity probe  │                       │  • writes affinity transition to    │
+│  • PID / owner / bounds    │                       │    HMAC audit chain                 │
+└────────────────────────────┘                       └─────────────────────────────────────┘
 ```
+
+The two layers run independently. The Verity demo works without the helper
+(catches Variants A/B from the paper); attaching the helper closes the §VI-C
+blind spot (Variants C and Cluely-class GPU-layer overlays).
 
 ### Why prompt caching matters here
 
@@ -249,12 +284,58 @@ Submit one 5-second telemetry window for analysis.
 
 ### `GET /api/dashboard/:sessionId`
 
-Return the latest verdict and rolling history (max 50) for a session.
+Return the latest verdict, rolling history (max 50), and current affinity state.
 
 ```json
 {
   "latest": { "...verdict..." },
-  "history": [ "...verdict...", "...verdict..." ]
+  "history": [ "...verdict...", "...verdict..." ],
+  "affinity": {
+    "hostile": [{ "pid": 41892, "name": "Cluely Helper", "type": "sharingType=.none / capture-excluded", "since": 1746273612458 }],
+    "lastHeartbeat": 1746273612458,
+    "source": "verity-helper-mac/0.1"
+  }
+}
+```
+
+### `POST /api/affinity` *(helper → server)*
+
+Ingest a Countermeasure A scan from the native helper. Requires the shared
+secret in the `x-verity-helper-secret` header (configurable via
+`VERITY_HELPER_SECRET`).
+
+```json
+{
+  "sessionId": "sess-3a8f29c1",
+  "helper": "verity-helper-mac/0.1",
+  "hostile": [
+    { "pid": 41892, "name": "Cluely Helper", "type": "sharingType=.none / capture-excluded", "since": 1746273612458 }
+  ]
+}
+```
+
+Empty `hostile` array signals "all clean — heartbeat only."
+
+When the helper reports any hostile windows, the next verdict is **automatically
+escalated to Critical** server-side (`server.js:persistVerdict`), regardless of
+behavioral signal. This is the (A)+(C) fusion the paper recommends in §VI-F.
+
+### `GET /api/audit/:sessionId`
+
+Download a tamper-evident HMAC chain of every verdict and every affinity
+transition for the session. Each entry is signed over its content plus the
+previous entry's signature; modifying any entry invalidates every subsequent
+signature. Verifies cryptographically against `VERITY_AUDIT_SECRET`.
+
+```json
+{
+  "sessionId": "sess-3a8f29c1",
+  "chain_terminator": "9a4f…",
+  "entry_count": 142,
+  "entries": [
+    { "seq": 0, "ts": ..., "type": "verdict",  "payload": {...}, "prev": "GENESIS", "sig": "8b2c…" },
+    { "seq": 1, "ts": ..., "type": "affinity", "payload": {...}, "prev": "8b2c…",   "sig": "f0e9…" }
+  ]
 }
 ```
 
@@ -321,19 +402,22 @@ The frontend is intentionally a single static HTML file — no Vite, no React, n
 
 ### Closing the gap to the paper's full recommendation
 
-- [ ] **Countermeasure A — Native helper agent (paper §VI-A).**
-      A small Windows/macOS companion that enumerates top-level windows during the
-      exam session and calls `GetWindowDisplayAffinity` (Win32) /
-      reads `NSWindow.sharingType` (AppKit) on each. Any window with
-      `WDA_EXCLUDEFROMCAPTURE` or `sharingType = .none` set during an active
-      session is reported to the proctor in real time. This is the half of the
-      paper's recommended (A)+(C) pair that Verity does not yet ship — and the
-      paper names it as the **most immediately effective** countermeasure on
-      Windows.
-- [ ] **Heuristic enrichment for click-through overlays.** Surface a *"too clean"*
-      meta-signal when a long answer accumulates with zero focus / paste / idle
-      events — the residual evidence of a read-don't-paste attack. The model
-      already flags this in its reasoning (§VI-C blind-spot disclosure).
+- [x] **Countermeasure A — macOS native helper (paper §VI-A).**
+      Implemented in [`tools/verity-helper`](tools/verity-helper/) using
+      `CGWindowListCopyWindowInfo` + `CGWindowListCreateImage` integrity probe.
+      Reports any window with `sharingType = .none` to the server every 2 s;
+      the next verdict is escalated to Critical server-side.
+- [x] **Personal cadence baseline.** First 60 s of typing → personal mean + σ
+      over inter-key intervals. Subsequent windows are scored against the
+      candidate's own cadence, not a population baseline.
+- [x] **Tamper-evident audit log.** HMAC-SHA256 chain over every verdict + every
+      affinity transition. Downloadable from the dashboard.
+- [x] **"Too clean" UI escalator.** Substantive typing with zero anomalies for an
+      extended window now emits a Warning citing the §VI-C blind spot.
+- [ ] **Windows native helper.** Equivalent agent calling
+      `GetWindowDisplayAffinity` on every top-level window enumerated through
+      `EnumWindows`. The paper names this as the *most immediately effective*
+      countermeasure on Windows.
 
 ### Beyond the paper
 

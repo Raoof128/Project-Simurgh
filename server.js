@@ -1,5 +1,6 @@
 import express from "express";
 import Anthropic from "@anthropic-ai/sdk";
+import crypto from "node:crypto";
 import { readFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
@@ -109,17 +110,59 @@ const app = express();
 app.use(express.json({ limit: "256kb" }));
 app.use(express.static(join(__dirname, "public")));
 
+const HELPER_SHARED_SECRET = process.env.VERITY_HELPER_SECRET || "verity-dev-helper";
+const AUDIT_HMAC_SECRET = process.env.VERITY_AUDIT_SECRET || crypto.randomBytes(32).toString("hex");
+
 const sessions = new Map();
 function getSession(id) {
-  if (!sessions.has(id)) sessions.set(id, { latest: null, history: [] });
+  if (!sessions.has(id)) {
+    sessions.set(id, {
+      latest: null,
+      history: [],
+      affinity: { hostile: [], lastHeartbeat: null, source: null },
+      auditChain: { prevHash: "GENESIS", entries: [] },
+    });
+  }
   return sessions.get(id);
 }
 
 function persistVerdict(sessionId, verdict) {
   const sess = getSession(sessionId);
+  // attach affinity snapshot at verdict time — Countermeasure A signal fused with C
+  verdict.affinity_snapshot = {
+    hostile_count: sess.affinity.hostile.length,
+    hostile: sess.affinity.hostile.map(w => ({ pid: w.pid, name: w.name, type: w.type })),
+    helper_active: sess.affinity.lastHeartbeat != null && (Date.now() - sess.affinity.lastHeartbeat) < 8000,
+    source: sess.affinity.source,
+  };
+  // if the helper reports hostile windows, escalate
+  if (verdict.affinity_snapshot.hostile_count > 0 && verdict.risk_level !== "Critical") {
+    verdict.risk_level = "Critical";
+    const names = verdict.affinity_snapshot.hostile.map(w => w.name).slice(0, 2).join(", ");
+    verdict.reasoning = `Countermeasure A native helper flagged ${verdict.affinity_snapshot.hostile_count} capture-invisible window(s): ${names}. ` + (verdict.reasoning || "");
+    verdict.reasoning = verdict.reasoning.slice(0, 280);
+  }
   sess.latest = verdict;
   sess.history.unshift(verdict);
   if (sess.history.length > 50) sess.history.pop();
+  appendAudit(sess, "verdict", verdict);
+}
+
+function appendAudit(sess, type, payload) {
+  const entry = {
+    seq: sess.auditChain.entries.length,
+    ts: Date.now(),
+    type,
+    payload,
+    prev: sess.auditChain.prevHash,
+  };
+  const sig = crypto.createHmac("sha256", AUDIT_HMAC_SECRET)
+    .update(JSON.stringify(entry))
+    .digest("hex");
+  entry.sig = sig;
+  sess.auditChain.entries.push(entry);
+  sess.auditChain.prevHash = sig;
+  if (sess.auditChain.entries.length > 500) sess.auditChain.entries.shift();
 }
 
 app.post("/api/telemetry", async (req, res) => {
@@ -197,9 +240,78 @@ app.post("/api/telemetry", async (req, res) => {
 
 app.get("/api/dashboard/:sessionId", (req, res) => {
   const sess = sessions.get(req.params.sessionId);
-  res.json({ latest: sess?.latest ?? null, history: sess?.history ?? [] });
+  res.json({
+    latest: sess?.latest ?? null,
+    history: sess?.history ?? [],
+    affinity: sess?.affinity ?? { hostile: [], lastHeartbeat: null, source: null },
+  });
+});
+
+// ─────────────────────────────────────────────────────────────
+//  Countermeasure A — native helper ingest (paper §VI-A)
+//  The helper enumerates top-level windows on the host and reports
+//  any with WDA_EXCLUDEFROMCAPTURE / sharingType=.none set.
+//  POST body: { sessionId, hostile: [{ pid, name, type, since }], helper: "verity-helper-mac" }
+//  Header:    x-verity-helper-secret: <shared secret>
+// ─────────────────────────────────────────────────────────────
+app.post("/api/affinity", (req, res) => {
+  const secret = req.headers["x-verity-helper-secret"];
+  if (secret !== HELPER_SHARED_SECRET) {
+    return res.status(401).json({ error: "invalid_helper_secret" });
+  }
+  const { sessionId, hostile, helper } = req.body ?? {};
+  if (!sessionId) return res.status(400).json({ error: "sessionId required" });
+
+  const sess = getSession(sessionId);
+  const list = Array.isArray(hostile) ? hostile.slice(0, 64).map(w => ({
+    pid: Number(w.pid) || 0,
+    name: String(w.name ?? "unknown").slice(0, 80),
+    type: String(w.type ?? "unknown").slice(0, 40),
+    since: Number(w.since) || Date.now(),
+  })) : [];
+
+  const wasEmpty = sess.affinity.hostile.length === 0;
+  const isEmpty = list.length === 0;
+
+  sess.affinity = {
+    hostile: list,
+    lastHeartbeat: Date.now(),
+    source: String(helper ?? "native-helper").slice(0, 40),
+  };
+
+  // append to audit chain on transitions only (avoid noise)
+  if (wasEmpty !== isEmpty || list.length !== sess.affinity.hostile.length) {
+    appendAudit(sess, "affinity", { hostile_count: list.length, hostile: list, helper });
+  }
+
+  res.json({ ok: true });
+});
+
+app.get("/api/affinity/:sessionId", (req, res) => {
+  const sess = sessions.get(req.params.sessionId);
+  if (!sess) return res.json({ hostile: [], lastHeartbeat: null, source: null });
+  res.json(sess.affinity);
+});
+
+// ─────────────────────────────────────────────────────────────
+//  Audit log — tamper-evident HMAC chain (paper §VI-F layered evidence)
+// ─────────────────────────────────────────────────────────────
+app.get("/api/audit/:sessionId", (req, res) => {
+  const sess = sessions.get(req.params.sessionId);
+  if (!sess) return res.status(404).json({ error: "session not found" });
+  res.setHeader("content-disposition",
+    `attachment; filename="verity-audit-${req.params.sessionId}.json"`);
+  res.json({
+    sessionId: req.params.sessionId,
+    generated_at: new Date().toISOString(),
+    chain_terminator: sess.auditChain.prevHash,
+    entry_count: sess.auditChain.entries.length,
+    entries: sess.auditChain.entries,
+    notes: "HMAC-SHA256 chain. Each entry is signed over its content + the previous entry's signature. Tampering with any entry invalidates every subsequent signature.",
+  });
 });
 
 app.listen(PORT, () => {
   console.log(`[verity] listening on http://localhost:${PORT}  (model: ${MODEL})`);
+  console.log(`[verity] helper ingest ready at POST /api/affinity (header: x-verity-helper-secret)`);
 });
