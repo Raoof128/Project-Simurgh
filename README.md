@@ -25,18 +25,23 @@ Detects cheating without ever looking at the screen.
 ## Table of contents
 
 1. [Why this exists](#why-this-exists)
-2. [What Verity does (and what it deliberately doesn't)](#what-verity-does)
-3. [Live demo](#live-demo)
-4. [Quick start](#quick-start)
-5. [Architecture](#architecture)
-6. [Detection model](#detection-model)
-7. [API reference](#api-reference)
-8. [Cost & latency](#cost--latency)
-9. [Privacy guarantees](#privacy-guarantees)
-10. [Graceful degradation](#graceful-degradation)
-11. [Project layout](#project-layout)
-12. [Roadmap](#roadmap)
-13. [License](#license)
+2. [Mapping to the disclosure paper](#mapping-to-the-disclosure-paper)
+3. [What Verity does](#what-verity-does)
+4. [Live demo](#live-demo)
+5. [Quick start](#quick-start)
+   - [Native helper (Countermeasure A)](#optional-build--run-the-native-helper-countermeasure-a)
+   - [Disclosed-attack reproducer](#optional-run-the-disclosed-attack-against-your-own-mitigation)
+   - [Instructor view](#instructor-view)
+   - [Model tier (Sonnet vs. Haiku)](#model-tier-sonnet-vs-haiku)
+6. [Architecture](#architecture)
+7. [Detection model](#detection-model)
+8. [API reference](#api-reference)
+9. [Cost & latency](#cost--latency)
+10. [Privacy guarantees](#privacy-guarantees)
+11. [Graceful degradation](#graceful-degradation)
+12. [Project layout](#project-layout)
+13. [Roadmap](#roadmap)
+14. [License](#license)
 
 ---
 
@@ -103,15 +108,18 @@ The proctor dashboard paints the verdict in real time alongside a live behaviora
 - ❌ It does **not** capture the screen.
 - ❌ It does **not** access the camera.
 - ❌ It does **not** transmit keystroke **content** (only timing, focus, and paste **size** — not the bytes).
-- ❌ It does **not** require a native agent or browser extension.
+- ❌ The default browser-only deployment does **not** require a browser extension.
 
-This is the entire pitch: a privacy-respecting, OS-independent, model-driven mitigation that survives an exploit no one else has patched yet.
+This is the entire pitch: a privacy-respecting, OS-independent, model-driven mitigation
+that survives an exploit no one else has patched yet. An *optional* macOS native helper
+(`tools/verity-helper`) closes the §VI-C blind spot — see
+[Countermeasure A](#optional-build--run-the-native-helper-countermeasure-a) below.
 
 ## Live demo
 
 ```bash
-git clone https://github.com/Raoof128/verity.git
-cd verity
+git clone https://github.com/Raoof128/Verity.git
+cd Verity
 cp .env.example .env   # add your ANTHROPIC_API_KEY
 npm install
 npm start
@@ -364,6 +372,14 @@ When the helper reports any hostile windows, the next verdict is **automatically
 escalated to Critical** server-side (`server.js:persistVerdict`), regardless of
 behavioral signal. This is the (A)+(C) fusion the paper recommends in §VI-F.
 
+### `POST /api/affinity/simulate` *(open · for the demo)*
+
+Same body shape as `/api/affinity` but **does not require the shared secret**.
+The server stamps the source as `verity-helper-simulator/0.1` so the UI can
+visually distinguish a simulated event from a real native-helper report. Used
+by the **Arm Invisible Window** button so the demo works regardless of
+whether `VERITY_HELPER_SECRET` has been customised.
+
 ### `GET /api/audit/:sessionId`
 
 Download a tamper-evident HMAC chain of every verdict and every affinity
@@ -423,15 +439,28 @@ VERITY_DEMO_MODE=1 npm start
 
 ```
 verity/
-├── server.js                  # Express + Anthropic SDK + local fallback heuristic
+├── server.js                       # Express + Anthropic SDK + audit chain + SSE
 ├── public/
-│   └── index.html             # Single-file frontend (no build step)
+│   ├── index.html                  # Candidate exam tab + proctor panel
+│   └── instructor.html             # Multi-session live aggregator (SSE)
+├── tools/
+│   ├── verity-helper/              # Countermeasure A — Swift native agent (paper §VI-A)
+│   │   ├── main.swift
+│   │   ├── Makefile
+│   │   └── README.md
+│   └── invisible-window-poc/       # Disclosed-attack reproducer (paper §IV-C)
+│       ├── main.swift
+│       ├── Makefile
+│       └── README.md
+├── docs/
+│   └── screenshot.png              # Used by the README hero block
 ├── package.json
 ├── .env.example
+├── LICENSE
 └── README.md
 ```
 
-The frontend is intentionally a single static HTML file — no Vite, no React, no build step. Open the file, read the source, ship it.
+The frontend is intentionally two single static HTML files — no Vite, no React, no build step. Open the file, read the source, ship it. The two Swift binaries each compile from a single `.swift` file via `make`.
 
 ### Frontend highlights
 
@@ -477,13 +506,10 @@ The frontend is intentionally a single static HTML file — no Vite, no React, n
 
 ### Beyond the paper
 
-- [ ] WebSocket transport for sub-100ms verdict latency
-- [ ] Per-candidate baseline calibration (first 60s = personal cadence)
+- [ ] WebSocket transport for sub-100 ms verdict latency (currently 5 s windows + SSE for instructor)
 - [ ] Multi-question exam flow with question-level verdicts
-- [ ] Instructor dashboard aggregating live sessions
 - [ ] Hardware key-cadence biometrics (`KeyboardEvent.code` n-grams)
-- [ ] Local model option (Claude Haiku for cost-sensitive deployments)
-- [ ] Audit log export (signed, tamper-evident)
+- [ ] Audit-log offline verifier (CLI that re-checks the HMAC chain against an exported `verity-audit-*.json`)
 
 ## Status
 
@@ -491,7 +517,7 @@ Research demo. Built as a working counterpart to a published vulnerability discl
 
 ## License
 
-MIT © 2026 Raouf — see [LICENSE](#) for full text.
+MIT © 2026 Raouf — see [LICENSE](LICENSE) for full text.
 
 ---
 

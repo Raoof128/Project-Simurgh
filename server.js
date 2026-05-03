@@ -197,7 +197,13 @@ function appendAudit(sess, type, payload) {
   entry.sig = sig;
   sess.auditChain.entries.push(entry);
   sess.auditChain.prevHash = sig;
-  if (sess.auditChain.entries.length > 500) sess.auditChain.entries.shift();
+  // Cap at 5000 entries (~24h of 5s windows + affinity transitions). Do NOT
+  // shift — shifting breaks the chain's verifiability since the very first
+  // remaining entry would reference a `prev` that's no longer in the chain.
+  // For long-running production deployments this should rotate to disk.
+  if (sess.auditChain.entries.length > 5000) {
+    sess.auditChain.truncated = true;
+  }
 }
 
 app.post("/api/telemetry", async (req, res) => {
@@ -289,11 +295,8 @@ app.get("/api/dashboard/:sessionId", (req, res) => {
 //  POST body: { sessionId, hostile: [{ pid, name, type, since }], helper: "verity-helper-mac" }
 //  Header:    x-verity-helper-secret: <shared secret>
 // ─────────────────────────────────────────────────────────────
-app.post("/api/affinity", (req, res) => {
-  const secret = req.headers["x-verity-helper-secret"];
-  if (secret !== HELPER_SHARED_SECRET) {
-    return res.status(401).json({ error: "invalid_helper_secret" });
-  }
+// shared body-parser & state-update — used by both real ingest and simulator
+function ingestAffinity(req, res, opts = {}) {
   const { sessionId, hostile, helper, forensic } = req.body ?? {};
   if (!sessionId) return res.status(400).json({ error: "sessionId required" });
 
@@ -305,10 +308,13 @@ app.post("/api/affinity", (req, res) => {
     since: Number(w.since) || Date.now(),
   })) : [];
 
-  const prevHostileCount = sess.affinity.hostile.length;
+  // detect both count AND content changes to drive audit/SSE
+  const prev = sess.affinity.hostile;
+  const sigOf = (l) => l.map(w => `${w.pid}|${w.name}|${w.type}`).sort().join(";");
+  const transition = sigOf(prev) !== sigOf(list);
 
-  // sanitise forensic
-  const f = forensic && typeof forensic === "object" ? {
+  // sanitise forensic (reject arrays — typeof [] === "object")
+  const f = forensic && typeof forensic === "object" && !Array.isArray(forensic) ? {
     display_width:        Number(forensic.display_width) || 0,
     display_height:       Number(forensic.display_height) || 0,
     display_pixels:       Number(forensic.display_pixels) || 0,
@@ -318,25 +324,43 @@ app.post("/api/affinity", (req, res) => {
     hostile_window_count: Number(forensic.hostile_window_count) || 0,
   } : null;
 
+  const sourceLabel = opts.simulator
+    ? "verity-helper-simulator/0.1"
+    : String(helper ?? "native-helper").slice(0, 40);
+
   sess.affinity = {
     hostile: list,
     lastHeartbeat: Date.now(),
-    source: String(helper ?? "native-helper").slice(0, 40),
+    source: sourceLabel,
     forensic: f,
   };
 
-  // append to audit chain on transitions only (avoid noise)
-  if (prevHostileCount !== list.length) {
-    appendAudit(sess, "affinity", { hostile_count: list.length, hostile: list, helper, forensic: f });
+  if (transition) {
+    appendAudit(sess, "affinity", { hostile_count: list.length, hostile: list, helper: sourceLabel, forensic: f });
     sseBroadcast("affinity", { sessionId, summary: sessionSummary(sessionId), hostile: list, forensic: f });
   }
 
-  res.json({ ok: true });
+  res.json({ ok: true, transition });
+}
+
+// Real helper — secret-gated
+app.post("/api/affinity", (req, res) => {
+  const secret = req.headers["x-verity-helper-secret"];
+  if (secret !== HELPER_SHARED_SECRET) {
+    return res.status(401).json({ error: "invalid_helper_secret" });
+  }
+  ingestAffinity(req, res);
+});
+
+// Demo simulator — open endpoint, but server stamps source as "simulator"
+// so the UI can mark it visually. Used by the "Arm Invisible Window" button.
+app.post("/api/affinity/simulate", (req, res) => {
+  ingestAffinity(req, res, { simulator: true });
 });
 
 app.get("/api/affinity/:sessionId", (req, res) => {
   const sess = sessions.get(req.params.sessionId);
-  if (!sess) return res.json({ hostile: [], lastHeartbeat: null, source: null });
+  if (!sess) return res.json({ hostile: [], lastHeartbeat: null, source: null, forensic: null });
   res.json(sess.affinity);
 });
 

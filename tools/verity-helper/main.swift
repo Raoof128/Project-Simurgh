@@ -118,17 +118,12 @@ func isWindowExcludedFromCapture(windowId: CGWindowID, bounds: CGRect) -> Bool {
     return nonZero == 0
 }
 
-func scanHostileWindows(verbose: Bool) -> [HostileWindow] {
-    let opts: CFArray = [
-        kCGWindowListOptionOnScreenOnly as CFString,
-        kCGWindowListExcludeDesktopElements as CFString,
-    ] as CFArray
-    let listOpt = CGWindowListOption(rawValue:
+func windowListOpts() -> CGWindowListOption {
+    return CGWindowListOption(rawValue:
         UInt32(kCGWindowListOptionOnScreenOnly) | UInt32(kCGWindowListExcludeDesktopElements))
-    guard let infoList = CGWindowListCopyWindowInfo(listOpt, kCGNullWindowID) as? [[String: Any]] else {
-        return []
-    }
-    _ = opts
+}
+
+func scanHostileWindows(infoList: [[String: Any]], verbose: Bool) -> [HostileWindow] {
     let me = ProcessInfo.processInfo.processIdentifier
     var hostile: [HostileWindow] = []
     let now = Int64(Date().timeIntervalSince1970 * 1000)
@@ -259,17 +254,71 @@ func reportToServer(_ hostile: [HostileWindow], forensic: ForensicSnapshot, args
     _ = sema.wait(timeout: .now() + 4)
 }
 
+// ───────── Screen Recording permission preflight ─────────
+//
+// Without Screen Recording permission, CGWindowListCreateImage returns a
+// transparent buffer for every window the helper doesn't own — meaning the
+// helper would flag every window as hostile (the ~0% nonZero check trips).
+// Detect this state at startup and refuse to run rather than spam the
+// dashboard with false positives.
+//
+// We probe by sampling the desktop wallpaper region with CGWindowListCreateImage
+// and counting non-zero pixels in the captured frame. With permission, the
+// wallpaper has many non-zero pixels. Without it, the buffer is empty.
+func hasScreenRecordingPermission() -> Bool {
+    let dispId = CGMainDisplayID()
+    let bounds = CGRect(x: 0, y: 0,
+                        width: max(64, Int(CGDisplayPixelsWide(dispId))),
+                        height: max(64, Int(CGDisplayPixelsHigh(dispId))))
+    let listOpts = CGWindowListOption(rawValue: UInt32(kCGWindowListOptionOnScreenBelowWindow))
+    guard let img = CGWindowListCreateImage(bounds, listOpts, kCGNullWindowID, [.bestResolution]) else {
+        return false
+    }
+    guard let prov = img.dataProvider, let data = prov.data, let bytes = CFDataGetBytePtr(data) else {
+        return false
+    }
+    let bpr = img.bytesPerRow
+    let bpp = img.bitsPerPixel / 8
+    if bpp < 4 { return true } // can't tell; assume OK
+    var nonZero = 0
+    let samples = 24
+    let w = img.width, h = img.height
+    if w == 0 || h == 0 { return false }
+    for i in 0..<samples {
+        let x = (w * i) / samples
+        let y = (h * (i % 7 + 1)) / 8
+        let off = y * bpr + x * bpp
+        if bytes[off] > 0 || bytes[off+1] > 0 || bytes[off+2] > 0 || bytes[off+3] > 0 {
+            nonZero += 1
+        }
+    }
+    return nonZero >= 3
+}
+
 // ───────── main loop ─────────
 let args = parseArgs()
 print("[verity-helper] starting · session=\(args.sessionId) · server=\(args.server) · interval=\(args.intervalMs)ms")
-print("[verity-helper] grant Screen Recording permission to this binary in System Settings → Privacy & Security")
-print("[verity-helper] (without it the integrity probe always returns 'excluded' and you'll get false positives)")
+
+if !hasScreenRecordingPermission() {
+    FileHandle.standardError.write(Data("""
+        [verity-helper] ⚠ Screen Recording permission appears to be denied.
+        [verity-helper] Without it, CGWindowListCreateImage returns empty frames for every
+        [verity-helper] window — the integrity probe would flag everything as hostile.
+        [verity-helper]
+        [verity-helper] Grant access in System Settings → Privacy & Security → Screen
+        [verity-helper] Recording (toggle 'verity-helper' on, then re-launch).
+        [verity-helper]
+        [verity-helper] Re-running with --skip-permission-check is not recommended; aborting.
+        \n
+        """.utf8))
+    exit(77)
+}
+
+print("[verity-helper] Screen Recording permission OK · entering scan loop")
 
 while true {
-    let listOpt = CGWindowListOption(rawValue:
-        UInt32(kCGWindowListOptionOnScreenOnly) | UInt32(kCGWindowListExcludeDesktopElements))
-    let allInfo = (CGWindowListCopyWindowInfo(listOpt, kCGNullWindowID) as? [[String: Any]]) ?? []
-    let hostile = scanHostileWindows(verbose: args.verbose)
+    let allInfo = (CGWindowListCopyWindowInfo(windowListOpts(), kCGNullWindowID) as? [[String: Any]]) ?? []
+    let hostile = scanHostileWindows(infoList: allInfo, verbose: args.verbose)
     let forensic = computeForensic(hostile: hostile, allInfo: allInfo)
     reportToServer(hostile, forensic: forensic, args: args)
     if hostile.isEmpty {

@@ -927,7 +927,7 @@
     <div class="intro-card">
       <div class="eyebrow">▲ Live Demo · Verity v0.1</div>
       <h2 id="intro-title">A behavioral proctor that <em>never sees your screen.</em></h2>
-      <p>You're about to test a working zero-trust mitigation against the macOS 26 invisible-window exam exploit. Verity ignores pixels. It analyzes <em>how</em> you behave — not what you see — and flags cheating in 5-second windows using Claude.</p>
+      <p>You're about to test a working zero-trust mitigation against the <em>Invisible Window</em> attack class (Abedini, 2026) — display-affinity APIs that hide cheat windows from screen capture on Windows 10/11 and macOS 14–26. Verity ignores pixels and analyses <em>how</em> you behave, flagging cheating in 5-second windows.</p>
       <ul>
         <li>▸ Type, pause, paste, switch tabs — try anything</li>
         <li>▸ The proctor panel updates in real time (you'd never see it in production)</li>
@@ -949,7 +949,7 @@
     </div>
     <div class="header-meta">
       <span class="chip ok" id="connChip"><span class="dot"></span><span id="connText">live</span></span>
-      <span class="chip mono" id="modelChip">claude-sonnet-4-5</span>
+      <span class="chip mono" id="modelChip">connecting…</span>
       <span class="header-actions">
         <button class="icon-btn" id="resetBtn" title="Start a fresh session">↻ reset</button>
       </span>
@@ -1007,7 +1007,7 @@
         <button class="trig" id="simIdle" type="button">Simulate idle</button>
         <button class="trig" id="simBlur" type="button">Simulate tab-out</button>
         <button class="trig crit" id="simPaste" type="button">Simulate big paste</button>
-        <button class="trig crit" id="simInvisible" type="button" title="Simulate the disclosed Invisible Window attack — Countermeasure A native helper will catch it">Arm Invisible Window ⌘</button>
+        <button class="trig crit" id="simInvisible" type="button" title="Simulate the disclosed Invisible Window attack — Countermeasure A native helper will catch it">Arm Invisible Window</button>
       </div>
     </section>
 
@@ -1018,7 +1018,7 @@
       <div class="proctor-head">
         <div>
           <div class="title">Live Verdict</div>
-          <div class="sub">claude · streaming heuristic · 5s windows</div>
+          <div class="sub">claude · windowed heuristic · 5s cadence</div>
         </div>
         <div class="analysis-ring" id="ring" aria-label="Time until next analysis window">
           <svg viewBox="0 0 60 60">
@@ -1138,8 +1138,8 @@
 
   <footer class="colophon">
     <div class="left">
-      <div style="margin-bottom:6px"><b>VERITY</b> — A zero-trust behavioural mitigation against the macOS 26 invisible-window screen-sharing exploit. Not a detector of <em>what</em> is on screen, but of <em>how</em> the human is behaving.</div>
-      <div>Heuristic engine: Anthropic Claude · prompt-cached system prompt · sub-second window inference.</div>
+      <div style="margin-bottom:6px"><b>VERITY</b> — A zero-trust behavioural mitigation against the <em>Invisible Window</em> attack class (Abedini, 2026). Not a detector of <em>what</em> is on screen, but of <em>how</em> the human is behaving.</div>
+      <div>Heuristic engine: Anthropic Claude · prompt-cached system prompt · ~700 ms p50 window inference.</div>
     </div>
     <div style="text-align:right">
       built by raouf · 2026<br>
@@ -1228,7 +1228,6 @@ OUTPUT FORMAT
     const ring          = $("ringFill");
     const ringLabel     = $("ringLabel");
     const winRemain     = $("winRemain");
-    const progFill      = $("progFill");
     const verdictCard   = $("verdictCard");
     const verdictBox    = $("verdictBox");
     const historyEl     = $("history");
@@ -1259,7 +1258,17 @@ OUTPUT FORMAT
       qTitle.innerHTML = q.title;
       qTarget.textContent = q.target;
       qNum.textContent = String(Math.floor(Math.random() * 8) + 2);
-      document.querySelector(".question-meta > span").firstChild.nodeValue = q.course + " · Final · Question ";
+      // robustly replace the leading text node of the first .question-meta > span
+      // (whitespace changes in markup could otherwise pick up a stray text node)
+      const courseSpan = document.querySelector(".question-meta > span");
+      if (courseSpan) {
+        for (const node of [...courseSpan.childNodes]) {
+          if (node.nodeType === Node.TEXT_NODE && node.nodeValue.trim()) {
+            node.nodeValue = q.course + " · Final · Question ";
+            break;
+          }
+        }
+      }
     })();
 
     // restore draft
@@ -1268,6 +1277,11 @@ OUTPUT FORMAT
       if (draft) ta.value = draft;
     } catch {}
     updateCounts();
+    // hydrate submit button from restored draft length
+    {
+      const submitEl = document.getElementById("submitBtn");
+      if (submitEl) submitEl.disabled = ta.value.trim().length < 30;
+    }
 
     // ═══════════════════════════════════════════════════
     //  TELEMETRY BUCKET
@@ -1424,7 +1438,12 @@ OUTPUT FORMAT
       const remain = Math.max(0, (WINDOW_MS - elapsed) / 1000);
       ringLabel.textContent = remain.toFixed(1) + "s";
       winRemain.textContent = remain.toFixed(1) + "s";
-      if (progFill) progFill.style.transform = `scaleX(${frac.toFixed(3)})`;
+      // re-query progFill each tick — the original element is detached
+      // when paintVerdict() rewrites verdictBox.innerHTML on the first verdict,
+      // and a new one is created on reset(). A stale captured reference would
+      // silently update an off-DOM element.
+      const pf = document.getElementById("progFill");
+      if (pf) pf.style.transform = `scaleX(${frac.toFixed(3)})`;
     }
 
     // ═══════════════════════════════════════════════════
@@ -1770,7 +1789,7 @@ OUTPUT FORMAT
         <div class="modal-back" id="modalBack">
           <div class="modal" role="dialog" aria-labelledby="modalTitle">
             <h3 id="modalTitle">What is Verity?</h3>
-            <p>A working zero-trust mitigation against the macOS 26 invisible-window screen-sharing exploit. Verity ignores pixels — it analyses behavioral telemetry every 5 seconds via a prompt-cached Claude system prompt and returns a structured risk verdict.</p>
+            <p>A working zero-trust mitigation against the <em>Invisible Window</em> attack class (Abedini, 2026) — Windows <code>SetWindowDisplayAffinity(WDA_EXCLUDEFROMCAPTURE)</code> and macOS <code>NSWindow.SharingType.none</code>. Verity ignores pixels — it analyses behavioral telemetry every 5 seconds via a prompt-cached Claude system prompt and returns a structured risk verdict.</p>
             <p><b>The actual system prompt sent to Claude:</b></p>
             <pre>${escapeHtml(SYSTEM_PROMPT_TEXT)}</pre>
             <button class="close" id="modalClose">Close</button>
@@ -1800,6 +1819,8 @@ OUTPUT FORMAT
       if (!confirm("Start a new session? Your draft will be cleared.")) return;
       try { localStorage.removeItem(STORAGE_KEY); } catch {}
       ta.value = "";
+      ta.readOnly = false;
+      submitBtn.textContent = "Submit response";
       bucket = newBucket();
       lastKeyTs = null;
       history = [];
@@ -1808,6 +1829,17 @@ OUTPUT FORMAT
       totalAnomalies = 0; peakKpm = 0;
       $("sigAnom").textContent = "0";
       $("sigPeak").textContent = "0";
+      // reset baseline calibration too
+      calibration.startedAt = Date.now();
+      calibration.intervals.length = 0;
+      calibration.finalised = false;
+      calibration.mean = 0;
+      calibration.sigma = 0;
+      // disarm simulated attack so the new session starts clean
+      if (armedSimulated) {
+        armedSimulated = false;
+        $("simInvisible").textContent = "Arm Invisible Window";
+      }
       sessionId = newSessionId();
       sessionLabel.textContent = "session: " + sessionId;
       verdictBox.innerHTML = `<div class="verdict-empty">Awaiting first window — analysing…<div class="progress" aria-hidden="true"><div id="progFill" style="position:absolute;inset:0;background:var(--ox);transform-origin:left;transform:scaleX(0);transition:transform .12s linear"></div></div></div>`;
@@ -2032,28 +2064,32 @@ OUTPUT FORMAT
     $("simInvisible").addEventListener("click", async () => {
       armedSimulated = !armedSimulated;
       const btn = $("simInvisible");
-      btn.textContent = armedSimulated ? "Disarm Invisible Window ⌘" : "Arm Invisible Window ⌘";
+      btn.textContent = armedSimulated ? "Disarm Invisible Window" : "Arm Invisible Window";
       const hostile = armedSimulated
         ? [FAKE_HOSTILE[armCycle++ % FAKE_HOSTILE.length]]
         : [];
       try {
-        await fetch("/api/affinity", {
+        // Use the simulator endpoint — open (no shared secret required), so the
+        // demo works even when VERITY_HELPER_SECRET has been customised in .env.
+        // The server stamps source="verity-helper-simulator/0.1" so the UI knows
+        // this is a simulated event, not a real native helper report.
+        const r = await fetch("/api/affinity/simulate", {
           method: "POST",
-          headers: {
-            "content-type": "application/json",
-            "x-verity-helper-secret": "verity-dev-helper",
-          },
+          headers: { "content-type": "application/json" },
           body: JSON.stringify({
             sessionId,
-            helper: "verity-helper-simulator/0.1",
             hostile,
           }),
         });
+        if (!r.ok) throw new Error("status " + r.status);
         flashToast(armedSimulated
           ? `<b>● ATTACK ARMED</b> · ${hostile[0].name} · capture-excluded window injected`
           : `<b>● ATTACK DISARMED</b> · helper now reports clean`);
       } catch (e) {
-        flashToast("<b>● SIMULATOR ERROR</b>");
+        // revert the toggle on failure
+        armedSimulated = !armedSimulated;
+        $("simInvisible").textContent = armedSimulated ? "Disarm Invisible Window" : "Arm Invisible Window";
+        flashToast("<b>● SIMULATOR ERROR</b> · could not inject hostile window");
       }
     });
 

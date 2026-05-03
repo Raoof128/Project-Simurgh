@@ -1,11 +1,24 @@
 node_modules
-.env
-.env.local
-.env.*.local
 package-lock.json
+
+# secrets — keep .env.example tracked, ignore everything else
+.env
+.env.*
+!.env.example
+
+# OS / editor
 .DS_Store
-*.log
-npm-debug.log*
 .idea/
 .vscode/
 *.swp
+*.log
+npm-debug.log*
+
+# compiled native helpers (Swift outputs)
+tools/verity-helper/verity-helper
+tools/invisible-window-poc/invisible-window-poc
+tools/**/*.dSYM
+tools/**/*.o
+
+# audit log exports — local only
+verity-audit-*.json

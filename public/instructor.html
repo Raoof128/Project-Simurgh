@@ -159,8 +159,8 @@
       <span class="tag">live · multi-session</span>
     </div>
     <div class="meta">
-      <span class="chip" id="streamChip"><span class="dot"></span><span id="streamText">streaming</span></span>
-      <span class="chip mono" id="modelChip">claude-sonnet-4-5</span>
+      <span class="chip" id="streamChip"><span class="dot"></span><span id="streamText">connecting…</span></span>
+      <span class="chip mono" id="modelChip">connecting…</span>
       <span class="chip mono" id="sessionsChip">0 sessions</span>
     </div>
   </header>
@@ -232,7 +232,7 @@
                 ${hostile>0 ? `${hostile} hostile` : (helperOnline?'helper online':'helper offline')}
               </span>
               ${fid > 0 ? `<span>fidelity-deficit <b style="color:var(--ox)">${fid.toFixed(2)}%</b></span>` : ""}
-              <a class="open-link" href="/" target="_blank" rel="noopener" style="margin-left:auto">open ↗</a>
+              <a class="open-link" href="/" target="_blank" rel="noopener" style="margin-left:auto" title="Open a new candidate exam tab — instructor view does not deep-link into a specific session">new exam ↗</a>
             </div>
           </div>
         </article>`;
