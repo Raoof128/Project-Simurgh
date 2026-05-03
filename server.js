@@ -16,7 +16,8 @@ if (existsSync(envPath)) {
 }
 
 const PORT = Number(process.env.PORT) || 3030;
-const MODEL = "claude-sonnet-4-5";
+// Tier-3 #9: configurable model (sonnet-4-5 default; haiku-4-5 for cost-sensitive deploys)
+const MODEL = process.env.VERITY_MODEL || "claude-sonnet-4-5";
 
 const apiKey = process.env.ANTHROPIC_API_KEY;
 const DEMO_MODE = process.env.VERITY_DEMO_MODE === "1" || !apiKey;
@@ -109,6 +110,7 @@ Be calibrated. Most windows are Safe. Do not raise Critical for ambiguous cases.
 const app = express();
 app.use(express.json({ limit: "256kb" }));
 app.use(express.static(join(__dirname, "public")));
+app.get("/instructor", (req, res) => res.sendFile(join(__dirname, "public", "instructor.html")));
 
 const HELPER_SHARED_SECRET = process.env.VERITY_HELPER_SECRET || "verity-dev-helper";
 const AUDIT_HMAC_SECRET = process.env.VERITY_AUDIT_SECRET || crypto.randomBytes(32).toString("hex");
@@ -117,13 +119,44 @@ const sessions = new Map();
 function getSession(id) {
   if (!sessions.has(id)) {
     sessions.set(id, {
+      createdAt: Date.now(),
       latest: null,
       history: [],
-      affinity: { hostile: [], lastHeartbeat: null, source: null },
+      affinity: { hostile: [], lastHeartbeat: null, source: null, forensic: null },
       auditChain: { prevHash: "GENESIS", entries: [] },
     });
   }
   return sessions.get(id);
+}
+
+// ─────────────────────────────────────────────────────────────
+//  Server-Sent Events broadcast (instructor view)
+// ─────────────────────────────────────────────────────────────
+const sseClients = new Set();
+function sseBroadcast(event, data) {
+  const payload = `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`;
+  for (const res of sseClients) {
+    try { res.write(payload); } catch {}
+  }
+}
+function sessionSummary(id) {
+  const s = sessions.get(id);
+  if (!s) return null;
+  const recent = s.history.slice(0, 12);
+  const counts = recent.reduce((a, v) => {
+    a[String(v.risk_level || "Safe").toLowerCase()] = (a[String(v.risk_level || "Safe").toLowerCase()] || 0) + 1;
+    return a;
+  }, {});
+  return {
+    sessionId: id,
+    createdAt: s.createdAt,
+    latest: s.latest,
+    hostile_count: s.affinity.hostile.length,
+    helper_active: s.affinity.lastHeartbeat != null && (Date.now() - s.affinity.lastHeartbeat) < 8000,
+    fidelity_deficit_pct: s.affinity.forensic?.fidelity_deficit_pct ?? 0,
+    counts,
+    history_count: s.history.length,
+  };
 }
 
 function persistVerdict(sessionId, verdict) {
@@ -134,6 +167,7 @@ function persistVerdict(sessionId, verdict) {
     hostile: sess.affinity.hostile.map(w => ({ pid: w.pid, name: w.name, type: w.type })),
     helper_active: sess.affinity.lastHeartbeat != null && (Date.now() - sess.affinity.lastHeartbeat) < 8000,
     source: sess.affinity.source,
+    forensic: sess.affinity.forensic ?? null,
   };
   // if the helper reports hostile windows, escalate
   if (verdict.affinity_snapshot.hostile_count > 0 && verdict.risk_level !== "Critical") {
@@ -146,6 +180,7 @@ function persistVerdict(sessionId, verdict) {
   sess.history.unshift(verdict);
   if (sess.history.length > 50) sess.history.pop();
   appendAudit(sess, "verdict", verdict);
+  sseBroadcast("verdict", { sessionId, summary: sessionSummary(sessionId), verdict });
 }
 
 function appendAudit(sess, type, payload) {
@@ -259,7 +294,7 @@ app.post("/api/affinity", (req, res) => {
   if (secret !== HELPER_SHARED_SECRET) {
     return res.status(401).json({ error: "invalid_helper_secret" });
   }
-  const { sessionId, hostile, helper } = req.body ?? {};
+  const { sessionId, hostile, helper, forensic } = req.body ?? {};
   if (!sessionId) return res.status(400).json({ error: "sessionId required" });
 
   const sess = getSession(sessionId);
@@ -270,18 +305,30 @@ app.post("/api/affinity", (req, res) => {
     since: Number(w.since) || Date.now(),
   })) : [];
 
-  const wasEmpty = sess.affinity.hostile.length === 0;
-  const isEmpty = list.length === 0;
+  const prevHostileCount = sess.affinity.hostile.length;
+
+  // sanitise forensic
+  const f = forensic && typeof forensic === "object" ? {
+    display_width:        Number(forensic.display_width) || 0,
+    display_height:       Number(forensic.display_height) || 0,
+    display_pixels:       Number(forensic.display_pixels) || 0,
+    invisible_pixels:     Number(forensic.invisible_pixels) || 0,
+    fidelity_deficit_pct: Number(forensic.fidelity_deficit_pct) || 0,
+    visible_window_count: Number(forensic.visible_window_count) || 0,
+    hostile_window_count: Number(forensic.hostile_window_count) || 0,
+  } : null;
 
   sess.affinity = {
     hostile: list,
     lastHeartbeat: Date.now(),
     source: String(helper ?? "native-helper").slice(0, 40),
+    forensic: f,
   };
 
   // append to audit chain on transitions only (avoid noise)
-  if (wasEmpty !== isEmpty || list.length !== sess.affinity.hostile.length) {
-    appendAudit(sess, "affinity", { hostile_count: list.length, hostile: list, helper });
+  if (prevHostileCount !== list.length) {
+    appendAudit(sess, "affinity", { hostile_count: list.length, hostile: list, helper, forensic: f });
+    sseBroadcast("affinity", { sessionId, summary: sessionSummary(sessionId), hostile: list, forensic: f });
   }
 
   res.json({ ok: true });
@@ -311,7 +358,41 @@ app.get("/api/audit/:sessionId", (req, res) => {
   });
 });
 
+// ─────────────────────────────────────────────────────────────
+//  Instructor view — multi-session aggregator
+// ─────────────────────────────────────────────────────────────
+app.get("/api/sessions", (req, res) => {
+  const out = [];
+  for (const id of sessions.keys()) {
+    const s = sessionSummary(id);
+    if (s) out.push(s);
+  }
+  out.sort((a, b) => (b.latest?.ts ?? b.createdAt) - (a.latest?.ts ?? a.createdAt));
+  res.json({ sessions: out, model: MODEL });
+});
+
+// SSE — push verdict + affinity events to instructor view in real time
+app.get("/api/stream/instructor", (req, res) => {
+  res.set({
+    "content-type": "text/event-stream",
+    "cache-control": "no-cache, no-transform",
+    "connection": "keep-alive",
+    "x-accel-buffering": "no",
+  });
+  res.flushHeaders?.();
+  res.write(`event: hello\ndata: ${JSON.stringify({ ts: Date.now(), model: MODEL })}\n\n`);
+  sseClients.add(res);
+  const ka = setInterval(() => { try { res.write(": keepalive\n\n"); } catch {} }, 25_000);
+  req.on("close", () => { clearInterval(ka); sseClients.delete(res); });
+});
+
+// expose model name to the frontend so the chip is accurate
+app.get("/api/meta", (req, res) => {
+  res.json({ model: MODEL, demo_mode: !!DEMO_MODE });
+});
+
 app.listen(PORT, () => {
   console.log(`[verity] listening on http://localhost:${PORT}  (model: ${MODEL})`);
   console.log(`[verity] helper ingest ready at POST /api/affinity (header: x-verity-helper-secret)`);
+  console.log(`[verity] instructor view at http://localhost:${PORT}/instructor`);
 });

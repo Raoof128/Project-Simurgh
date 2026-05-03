@@ -174,6 +174,50 @@ simulated hostile-window event through the same `/api/affinity` endpoint the
 real helper uses — a faithful preview of what running the helper alongside
 Cluely or Interview Coder would look like in production.
 
+### Optional: run the disclosed attack against your own mitigation
+
+The repo also ships a minimal reproducer of the Invisible Window attack so you
+can verify the mitigation against the real exploit:
+
+```bash
+cd tools/invisible-window-poc
+make
+./invisible-window-poc
+```
+
+A window appears on your physical display reading *"INVISIBLE TO SCREEN
+CAPTURE."* Take a screenshot — the window is absent. While `verity-helper`
+is running, the dashboard's Display-Affinity Watch flags the PoC within ~2 s
+and the next verdict escalates to Critical. See
+[`tools/invisible-window-poc/README.md`](tools/invisible-window-poc/README.md)
+for the responsible-use note and the §VI-C click-through demonstration
+(`⌘C` toggles `ignoresMouseEvents` to show the blind-spot path that defeats
+pure JavaScript focus monitoring).
+
+### Instructor view
+
+The server exposes a multi-session live aggregator at
+**[`/instructor`](http://localhost:3030/instructor)**. Real-time updates push
+via Server-Sent Events the moment any session emits a verdict or any helper
+detects a capture-invisible window. Each card shows: latest verdict + reasoning,
+helper status, fidelity-deficit %, recent verdict counts. Useful both for
+proctoring at scale and for showing an interviewer what a Verity *product*
+looks like running across N candidates.
+
+### Model tier (Sonnet vs. Haiku)
+
+Set `VERITY_MODEL` in `.env`:
+
+```bash
+VERITY_MODEL=claude-haiku-4-5-20251001     # cost-sensitive deployment
+VERITY_MODEL=claude-sonnet-4-5             # default — best calibration
+```
+
+The model name flows through to the live model chip in the header and to
+`/api/meta`. Per-window inference cost on Haiku is roughly 5× lower than on
+Sonnet at the cost of slightly more aggressive false positives — a useful
+knob for institution-scale deployments.
+
 ### Scripts
 
 | Command         | What it does                                   |
@@ -414,10 +458,22 @@ The frontend is intentionally a single static HTML file — no Vite, no React, n
       affinity transition. Downloadable from the dashboard.
 - [x] **"Too clean" UI escalator.** Substantive typing with zero anomalies for an
       extended window now emits a Warning citing the §VI-C blind spot.
+- [x] **Pixel-forensic mode.** Helper computes per-frame display-fidelity deficit
+      (`Σ(rect.width × rect.height)` for capture-excluded windows ÷ display pixels).
+      Surfaced as a live gauge in the Display-Affinity Watch panel — visualises
+      the §III-B trust-boundary violation in pixels.
+- [x] **Disclosed-attack reproducer.** [`tools/invisible-window-poc`](tools/invisible-window-poc/)
+      ships a minimal Swift binary that creates an `NSWindow.SharingType.none`
+      overlay so the mitigation can be verified against the real attack.
+- [x] **Instructor view.** Multi-session live aggregator at `/instructor`
+      with SSE push for real-time verdict + affinity events.
+- [x] **Haiku tier.** `VERITY_MODEL` env var; model flows through to the UI.
 - [ ] **Windows native helper.** Equivalent agent calling
       `GetWindowDisplayAffinity` on every top-level window enumerated through
       `EnumWindows`. The paper names this as the *most immediately effective*
       countermeasure on Windows.
+- [ ] **Cross-platform PoC.** Windows equivalent of `tools/invisible-window-poc`
+      using `SetWindowDisplayAffinity(WDA_EXCLUDEFROMCAPTURE)` from §IV-B.
 
 ### Beyond the paper
 

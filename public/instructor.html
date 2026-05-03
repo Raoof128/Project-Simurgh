@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#f3efe6" />
+  <title>Verity — Instructor View</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23f3efe6'/%3E%3Ccircle cx='16' cy='16' r='6' fill='none' stroke='%236b1a1a' stroke-width='2'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=JetBrains+Mono:wght@400;500;700&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper:#f3efe6; --paper-deep:#ece6d8; --paper-warm:#fdfaf2;
+      --rule:#d6cfbe; --rule-soft:#e3dccb;
+      --ink:#14110d; --ink-soft:#4a463d; --ink-faint:#8a8676;
+      --ox:#6b1a1a; --ox-tint:rgba(107,26,26,0.08);
+      --amber:#8a6a16; --moss:#2f4a2a;
+      --shadow:0 1px 0 rgba(20,17,13,0.04), 0 12px 28px -18px rgba(20,17,13,0.25);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);overflow-x:hidden;
+      font-family:"Inter Tight",ui-sans-serif,system-ui,sans-serif;
+      -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+      background-image:
+        repeating-linear-gradient(0deg, transparent 0 23px, rgba(20,17,13,0.035) 23px 24px),
+        repeating-linear-gradient(90deg, transparent 0 23px, rgba(20,17,13,0.025) 23px 24px);
+      background-attachment:fixed;
+    }
+    .mono{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace}
+    .serif{font-family:"Fraunces",Georgia,serif;font-optical-sizing:auto}
+
+    header{
+      position:sticky;top:0;z-index:10;
+      display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;
+      padding:18px clamp(18px,4vw,40px) 14px;
+      background:rgba(243,239,230,0.85);
+      backdrop-filter:saturate(140%) blur(10px);
+      border-bottom:1px solid var(--rule);
+    }
+    .brand{display:flex;align-items:center;gap:12px}
+    .seal{width:26px;height:26px;border:1.5px solid var(--ox);border-radius:50%;position:relative}
+    .seal::before{content:"";position:absolute;inset:5px;border-radius:50%;background:var(--ox)}
+    h1.title{margin:0;font-family:"Fraunces",serif;font-weight:700;font-size:22px;letter-spacing:-0.01em}
+    .tag{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;
+      color:var(--ink-soft);padding-left:12px;border-left:1px solid var(--rule)}
+    .meta{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+      font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;
+      color:var(--ink-soft)}
+    .chip{padding:5px 10px;border:1px solid var(--rule);border-radius:999px;background:var(--paper-warm);
+      display:inline-flex;align-items:center;gap:7px}
+    .chip .dot{width:6px;height:6px;border-radius:50%;background:var(--moss);
+      box-shadow:0 0 0 3px rgba(47,74,42,0.15);animation:pulse 2.4s ease-in-out infinite}
+    @keyframes pulse{0%,100%{box-shadow:0 0 0 3px rgba(47,74,42,0.15)}50%{box-shadow:0 0 0 6px rgba(47,74,42,0)}}
+
+    main{padding:clamp(20px,3vw,32px) clamp(18px,4vw,40px) 60px}
+    .lede{
+      font-family:"Fraunces",serif;font-style:italic;
+      color:var(--ink-soft);font-size:14px;
+      max-width:64ch;margin:0 0 24px;
+    }
+    .lede b{color:var(--ink);font-style:normal;font-weight:600}
+
+    .summary-row{
+      display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+      gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:2px;
+      margin-bottom:24px;overflow:hidden;
+    }
+    .summary-row .cell{
+      background:var(--paper-warm);padding:14px 16px;
+      display:flex;flex-direction:column;gap:4px
+    }
+    .summary-row .k{
+      font-family:"JetBrains Mono",monospace;font-size:9.5px;letter-spacing:0.18em;
+      text-transform:uppercase;color:var(--ink-faint);
+    }
+    .summary-row .v{
+      font-family:"JetBrains Mono",monospace;font-weight:500;font-size:26px;
+      letter-spacing:-0.02em;color:var(--ink);font-variant-numeric:tabular-nums;
+    }
+    .summary-row .v.crit{color:var(--ox)}
+    .summary-row .v.warn{color:var(--amber)}
+
+    .grid{
+      display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+      gap:14px;
+    }
+    .card{
+      background:var(--paper-warm);border:1px solid var(--rule);border-radius:2px;
+      box-shadow:var(--shadow);overflow:hidden;
+      display:flex;flex-direction:column;
+      transition:border-color .25s,box-shadow .25s;
+    }
+    .card.crit{border-color:var(--ox);box-shadow:0 0 0 2px var(--ox-tint),var(--shadow)}
+    .card.warn{border-color:rgba(138,106,22,0.4)}
+    .card .top{
+      display:flex;justify-content:space-between;align-items:center;
+      padding:11px 14px;border-bottom:1px solid var(--rule-soft);
+      font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.14em;
+      text-transform:uppercase;color:var(--ink-soft);
+    }
+    .card .top .sid{color:var(--ink);font-weight:700}
+    .stamp{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:3px 9px;border:1.5px solid currentColor;border-radius:2px;
+      font-family:"JetBrains Mono",monospace;font-weight:700;font-size:10px;
+      letter-spacing:0.18em;text-transform:uppercase;
+    }
+    .stamp::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+    .stamp[data-level="safe"]{color:var(--moss)}
+    .stamp[data-level="warning"]{color:var(--amber)}
+    .stamp[data-level="critical"]{color:var(--ox)}
+    .body{padding:14px;flex:1;display:flex;flex-direction:column;gap:10px}
+    .reason{font-family:"Fraunces",serif;font-size:14px;line-height:1.45;color:var(--ink);min-height:42px}
+    .reason.empty{font-style:italic;color:var(--ink-faint)}
+    .stats{
+      display:flex;gap:16px;flex-wrap:wrap;
+      font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.12em;
+      text-transform:uppercase;color:var(--ink-faint);
+    }
+    .stats b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+    .stats .hot b{color:var(--ox)}
+    .helper{
+      display:inline-flex;align-items:center;gap:6px;
+      font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;
+      padding:3px 9px;border-radius:999px;border:1px solid var(--rule);
+      color:var(--ink-faint);
+    }
+    .helper.online{color:var(--moss);border-color:rgba(47,74,42,0.3);background:rgba(47,74,42,0.06)}
+    .helper.online::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--moss)}
+    .helper.alarm{color:var(--ox);border-color:rgba(107,26,26,0.4);background:var(--ox-tint)}
+    .helper.alarm::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--ox);
+      animation:pulse-red 1.4s ease-in-out infinite}
+    @keyframes pulse-red{0%,100%{opacity:1}50%{opacity:0.4}}
+
+    .empty-state{
+      padding:60px 20px;text-align:center;
+      font-family:"Fraunces",serif;font-style:italic;color:var(--ink-faint);
+      border:1px dashed var(--rule);border-radius:2px;background:var(--paper-warm);
+    }
+    .open-link{
+      font-family:"JetBrains Mono",monospace;font-size:9.5px;letter-spacing:0.14em;
+      text-transform:uppercase;color:var(--ox);text-decoration:none;
+      border-bottom:1px solid var(--ox-tint);
+    }
+    .open-link:hover{border-color:var(--ox)}
+    .pulse-flash{animation:flash .9s ease-out}
+    @keyframes flash{
+      0%{background:var(--ox-tint)}
+      100%{background:var(--paper-warm)}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <span class="seal" aria-hidden="true"></span>
+      <h1 class="title">Verity · Instructor</h1>
+      <span class="tag">live · multi-session</span>
+    </div>
+    <div class="meta">
+      <span class="chip" id="streamChip"><span class="dot"></span><span id="streamText">streaming</span></span>
+      <span class="chip mono" id="modelChip">claude-sonnet-4-5</span>
+      <span class="chip mono" id="sessionsChip">0 sessions</span>
+    </div>
+  </header>
+
+  <main>
+    <p class="lede">
+      Real-time aggregator across all active <b>Verity</b> sessions. Each card surfaces the latest
+      verdict, the helper's display-affinity status, and pixel-fidelity deficit. Updates push via
+      Server-Sent Events the moment a verdict or affinity transition lands.
+    </p>
+
+    <div class="summary-row">
+      <div class="cell"><span class="k">Active sessions</span><span class="v" id="sActive">0</span></div>
+      <div class="cell"><span class="k">Critical (last hour)</span><span class="v crit" id="sCrit">0</span></div>
+      <div class="cell"><span class="k">Warning (last hour)</span><span class="v warn" id="sWarn">0</span></div>
+      <div class="cell"><span class="k">Helpers online</span><span class="v" id="sHelpers">0</span></div>
+      <div class="cell"><span class="k">Capture-invisible windows</span><span class="v" id="sHostile">0</span></div>
+    </div>
+
+    <div id="grid" class="grid"></div>
+    <div id="emptyState" class="empty-state" style="display:none">
+      No active sessions. Open <a class="open-link" href="/" target="_blank" rel="noopener">an exam tab ↗</a> to begin.
+    </div>
+  </main>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const grid       = $("grid");
+    const emptyState = $("emptyState");
+    const streamChip = $("streamChip");
+    const streamText = $("streamText");
+    const sActive    = $("sActive");
+    const sCrit      = $("sCrit");
+    const sWarn      = $("sWarn");
+    const sHelpers   = $("sHelpers");
+    const sHostile   = $("sHostile");
+    const sessionsChip = $("sessionsChip");
+
+    const sessionState = new Map();
+    const ALLOWED = new Set(["safe","warning","critical"]);
+    const lvl = (x) => { const s = String(x||"").toLowerCase(); return ALLOWED.has(s) ? s : "safe"; };
+    const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+    const fmtTs = (ts) => { try { const d = new Date(ts); return isNaN(d) ? "—" : d.toLocaleTimeString(); } catch { return "—"; } };
+
+    function renderCard(s) {
+      const id = s.sessionId;
+      const v = s.latest;
+      const lv = lvl(v?.risk_level);
+      const helperOnline = !!s.helper_active;
+      const hostile = s.hostile_count || 0;
+      const fid = s.fidelity_deficit_pct || 0;
+      const cls = (lv === "critical" || hostile > 0) ? "crit" : (lv === "warning" ? "warn" : "");
+      return `
+        <article class="card ${cls}" id="card-${esc(id)}">
+          <div class="top">
+            <span class="sid">${esc(id)}</span>
+            <span class="stamp" data-level="${lv}">${lv.toUpperCase()}</span>
+          </div>
+          <div class="body">
+            <div class="reason ${v ? "" : "empty"}">${v ? esc(v.reasoning || "—") : "Awaiting first verdict…"}</div>
+            <div class="stats">
+              <span>verdicts <b>${s.history_count || 0}</b></span>
+              <span class="${(s.counts?.critical||0)>0?'hot':''}">crit <b>${s.counts?.critical || 0}</b></span>
+              <span>warn <b>${s.counts?.warning || 0}</b></span>
+              <span>last <b>${v?.ts ? fmtTs(v.ts) : "—"}</b></span>
+            </div>
+            <div class="stats">
+              <span class="helper ${hostile>0?'alarm':(helperOnline?'online':'')}">
+                ${hostile>0 ? `${hostile} hostile` : (helperOnline?'helper online':'helper offline')}
+              </span>
+              ${fid > 0 ? `<span>fidelity-deficit <b style="color:var(--ox)">${fid.toFixed(2)}%</b></span>` : ""}
+              <a class="open-link" href="/" target="_blank" rel="noopener" style="margin-left:auto">open ↗</a>
+            </div>
+          </div>
+        </article>`;
+    }
+
+    function rerender() {
+      const list = [...sessionState.values()];
+      list.sort((a,b) => (b.latest?.ts ?? b.createdAt ?? 0) - (a.latest?.ts ?? a.createdAt ?? 0));
+      if (!list.length) {
+        grid.innerHTML = "";
+        emptyState.style.display = "";
+      } else {
+        emptyState.style.display = "none";
+        grid.innerHTML = list.map(renderCard).join("");
+      }
+      // summary
+      sActive.textContent = list.length;
+      sessionsChip.textContent = list.length + " session" + (list.length === 1 ? "" : "s");
+      const oneHourAgo = Date.now() - 3600_000;
+      let crit = 0, warn = 0;
+      for (const s of list) {
+        if (s.latest && s.latest.ts > oneHourAgo) {
+          if (lvl(s.latest.risk_level) === "critical") crit++;
+          else if (lvl(s.latest.risk_level) === "warning") warn++;
+        }
+      }
+      sCrit.textContent = crit;
+      sWarn.textContent = warn;
+      sHelpers.textContent = list.filter(s => s.helper_active).length;
+      sHostile.textContent = list.reduce((a,s) => a + (s.hostile_count || 0), 0);
+    }
+
+    function flashCard(id) {
+      const el = document.getElementById("card-" + id);
+      if (el) {
+        el.classList.remove("pulse-flash");
+        // force reflow
+        void el.offsetWidth;
+        el.classList.add("pulse-flash");
+      }
+    }
+
+    async function pullSessions() {
+      try {
+        const r = await fetch("/api/sessions");
+        if (!r.ok) return;
+        const data = await r.json();
+        if (data.model) document.getElementById("modelChip").textContent = data.model;
+        sessionState.clear();
+        for (const s of data.sessions || []) sessionState.set(s.sessionId, s);
+        rerender();
+      } catch {}
+    }
+    pullSessions();
+    setInterval(pullSessions, 5000);
+
+    // SSE for real-time pushes
+    let es = null;
+    function connectSSE() {
+      es = new EventSource("/api/stream/instructor");
+      es.addEventListener("hello", () => {
+        streamChip.classList.remove("warn","critical");
+        streamText.textContent = "streaming";
+      });
+      const onUpdate = (ev) => {
+        try {
+          const d = JSON.parse(ev.data);
+          if (d?.summary?.sessionId) {
+            sessionState.set(d.summary.sessionId, d.summary);
+            rerender();
+            flashCard(d.summary.sessionId);
+          }
+        } catch {}
+      };
+      es.addEventListener("verdict", onUpdate);
+      es.addEventListener("affinity", onUpdate);
+      es.onerror = () => {
+        streamText.textContent = "reconnecting…";
+        try { es.close(); } catch {}
+        setTimeout(connectSSE, 2000);
+      };
+    }
+    connectSSE();
+  </script>
+</body>
+</html>

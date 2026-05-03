@@ -174,12 +174,69 @@ func scanHostileWindows(verbose: Bool) -> [HostileWindow] {
     return hostile
 }
 
+// ───────── pixel-forensic computation (paper §III-B display fidelity) ─────────
+struct ForensicSnapshot: Codable {
+    let display_width: Int
+    let display_height: Int
+    let display_pixels: Int
+    let invisible_pixels: Int
+    let fidelity_deficit_pct: Double
+    let visible_window_count: Int
+    let hostile_window_count: Int
+}
+
+func computeForensic(hostile: [HostileWindow], allInfo: [[String: Any]]) -> ForensicSnapshot {
+    let dispId = CGMainDisplayID()
+    let dispW  = Int(CGDisplayPixelsWide(dispId))
+    let dispH  = Int(CGDisplayPixelsHigh(dispId))
+    let dispPx = dispW * dispH
+
+    var invisiblePx = 0
+    var visibleCount = 0
+    let me = ProcessInfo.processInfo.processIdentifier
+
+    // re-walk the window list to compute per-hostile pixel area
+    let hostilePids = Set(hostile.map { Int($0.pid) })
+    for info in allInfo {
+        guard let pid = info[kCGWindowOwnerPID as String] as? Int32, pid != me else { continue }
+        guard let layer = info[kCGWindowLayer as String] as? Int, layer >= 0 && layer <= 100 else { continue }
+        if let b = info[kCGWindowBounds as String] as? [String: CGFloat] {
+            let w = Int(b["Width"] ?? 0), h = Int(b["Height"] ?? 0)
+            if w >= 40 && h >= 40 {
+                visibleCount += 1
+                if hostilePids.contains(Int(pid)) {
+                    invisiblePx += w * h
+                }
+            }
+        }
+    }
+    let pct = dispPx > 0 ? (Double(invisiblePx) / Double(dispPx)) * 100.0 : 0.0
+    return ForensicSnapshot(
+        display_width: dispW,
+        display_height: dispH,
+        display_pixels: dispPx,
+        invisible_pixels: invisiblePx,
+        fidelity_deficit_pct: (pct * 100).rounded() / 100,
+        visible_window_count: visibleCount,
+        hostile_window_count: hostile.count
+    )
+}
+
 // ───────── network ─────────
-func reportToServer(_ hostile: [HostileWindow], args: Args) {
+func reportToServer(_ hostile: [HostileWindow], forensic: ForensicSnapshot, args: Args) {
     let body: [String: Any] = [
         "sessionId": args.sessionId,
-        "helper":    "verity-helper-mac/0.1",
+        "helper":    "verity-helper-mac/0.2",
         "hostile":   hostile.map { ["pid": $0.pid, "name": $0.name, "type": $0.type, "since": $0.since] },
+        "forensic":  [
+            "display_width":         forensic.display_width,
+            "display_height":        forensic.display_height,
+            "display_pixels":        forensic.display_pixels,
+            "invisible_pixels":      forensic.invisible_pixels,
+            "fidelity_deficit_pct":  forensic.fidelity_deficit_pct,
+            "visible_window_count":  forensic.visible_window_count,
+            "hostile_window_count":  forensic.hostile_window_count,
+        ],
     ]
     guard let data = try? JSONSerialization.data(withJSONObject: body),
           let url = URL(string: args.server.trimmingCharacters(in: .init(charactersIn: "/")) + "/api/affinity") else { return }
@@ -209,12 +266,16 @@ print("[verity-helper] grant Screen Recording permission to this binary in Syste
 print("[verity-helper] (without it the integrity probe always returns 'excluded' and you'll get false positives)")
 
 while true {
+    let listOpt = CGWindowListOption(rawValue:
+        UInt32(kCGWindowListOptionOnScreenOnly) | UInt32(kCGWindowListExcludeDesktopElements))
+    let allInfo = (CGWindowListCopyWindowInfo(listOpt, kCGNullWindowID) as? [[String: Any]]) ?? []
     let hostile = scanHostileWindows(verbose: args.verbose)
-    reportToServer(hostile, args: args)
+    let forensic = computeForensic(hostile: hostile, allInfo: allInfo)
+    reportToServer(hostile, forensic: forensic, args: args)
     if hostile.isEmpty {
-        if args.verbose { print("[verity-helper] clean — no capture-excluded windows") }
+        if args.verbose { print("[verity-helper] clean — no capture-excluded windows · fidelity-deficit \(forensic.fidelity_deficit_pct)%") }
     } else {
-        print("[verity-helper] ⚠ \(hostile.count) capture-excluded window(s): " +
+        print("[verity-helper] ⚠ \(hostile.count) capture-excluded window(s) · fidelity-deficit \(forensic.fidelity_deficit_pct)% (\(forensic.invisible_pixels) px) · " +
               hostile.map { "\($0.name)[\($0.pid)]" }.joined(separator: ", "))
     }
     Thread.sleep(forTimeInterval: Double(args.intervalMs) / 1000.0)

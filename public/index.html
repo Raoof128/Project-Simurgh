@@ -592,6 +592,49 @@
     }
     .affinity.alarm { border-color: var(--ox); box-shadow: 0 0 0 2px var(--ox-tint), var(--shadow); }
 
+    .forensic {
+      border-top: 1px solid var(--rule-soft);
+      background: linear-gradient(to bottom, var(--paper-warm), var(--paper-deep));
+      padding: 12px 14px 10px;
+    }
+    .forensic .fh {
+      display: flex; justify-content: space-between;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--ink-faint); margin-bottom: 8px;
+    }
+    .forensic .fh .src { color: var(--ink-faint); }
+    .forensic .bigpct {
+      font-family: "JetBrains Mono", monospace;
+      font-variant-numeric: tabular-nums;
+      font-weight: 500; font-size: 28px;
+      color: var(--ink); letter-spacing: -0.02em;
+      display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px;
+      transition: color .25s;
+    }
+    .forensic .bigpct.hot { color: var(--ox); }
+    .forensic .bigpct small { font-size: 16px; color: var(--ink-soft); margin-right: 8px; }
+    .forensic .bigpct .bplbl {
+      font-size: 10px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--ink-faint); flex-basis: 100%;
+    }
+    .forensic .bar {
+      height: 4px; background: var(--rule); border-radius: 2px;
+      margin: 8px 0 6px; overflow: hidden;
+    }
+    .forensic .bar .fill {
+      height: 100%; width: 0;
+      background: linear-gradient(90deg, var(--moss), var(--amber) 60%, var(--ox));
+      transition: width .4s ease;
+    }
+    .forensic .meta {
+      display: flex; justify-content: space-between;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+    .forensic .meta b { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+
     /* baseline indicator inside telemetry */
     .baseline-status {
       grid-column: 1 / -1;
@@ -1013,6 +1056,24 @@
           <span id="affinityCount">0 capture-invisible windows</span>
           <span id="affinityLastSeen">—</span>
         </div>
+        <!-- Pixel-forensic gauge — paper §III-B display fidelity violation visualised -->
+        <div class="forensic" id="forensicBlock">
+          <div class="fh">
+            <span>DISPLAY FIDELITY</span>
+            <span class="src">paper §III-B</span>
+          </div>
+          <div class="fbody">
+            <div class="bigpct">
+              <span id="fidelityPct">0.00</span><small>%</small>
+              <span class="bplbl">of physical display invisible to capture</span>
+            </div>
+            <div class="bar"><div class="fill" id="fidelityFill"></div></div>
+            <div class="meta">
+              <span id="fidelityResolution">— × —</span>
+              <span><b id="fidelityPx">0</b> invisible px</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="verdict-card" id="verdictCard" aria-live="polite" aria-atomic="true">
@@ -1086,6 +1147,7 @@
       &nbsp;·&nbsp;
       <a href="#" id="aboutLink">view system prompt →</a>
       <div class="actions">
+        <a href="/instructor" target="_blank" rel="noopener">instructor view ↗</a>
         <a href="https://github.com/Raoof128/Verity/tree/main/tools/verity-helper" target="_blank" rel="noopener">build native helper</a>
         <button id="exportAudit" type="button">export audit log</button>
       </div>
@@ -1182,6 +1244,14 @@ OUTPUT FORMAT
     const srAnnounce    = $("srAnnounce");
 
     sessionLabel.textContent = "session: " + sessionId;
+
+    // pull authoritative model name from server (Tier-3 #9 — Haiku tier support)
+    fetch("/api/meta").then(r => r.ok ? r.json() : null).then(m => {
+      if (m?.model) {
+        const chip = document.getElementById("modelChip");
+        if (chip) chip.textContent = m.model;
+      }
+    }).catch(() => {});
 
     // pick random question
     (function pickQuestion() {
@@ -1847,6 +1917,28 @@ OUTPUT FORMAT
         ? "0 capture-invisible windows"
         : hostile.length + " capture-invisible window" + (hostile.length === 1 ? "" : "s");
       affinityLast.textContent = lastHb ? "last seen " + new Date(lastHb).toLocaleTimeString() : "—";
+
+      // pixel-forensic gauge
+      const f = a?.forensic;
+      const fidPct = $("fidelityPct");
+      const fidFill = $("fidelityFill");
+      const fidPx  = $("fidelityPx");
+      const fidRes = $("fidelityResolution");
+      const big = fidPct.parentElement;
+      if (f && f.display_pixels > 0) {
+        const pct = Math.max(0, Math.min(100, Number(f.fidelity_deficit_pct) || 0));
+        fidPct.textContent = pct.toFixed(2);
+        fidFill.style.width = Math.min(100, pct * 4) + "%"; // amplify for visibility
+        fidPx.textContent  = (Number(f.invisible_pixels) || 0).toLocaleString();
+        fidRes.textContent = `${f.display_width} × ${f.display_height} px`;
+        big.classList.toggle("hot", pct > 0.01);
+      } else {
+        fidPct.textContent = "0.00";
+        fidFill.style.width = "0%";
+        fidPx.textContent = "0";
+        fidRes.textContent = (armedSimulated ? "simulator (no helper)" : "helper offline");
+        big.classList.remove("hot");
+      }
     }
 
     // dedicated affinity poll (faster than dashboard) — 1s
