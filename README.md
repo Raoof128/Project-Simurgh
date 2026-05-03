@@ -12,6 +12,10 @@ Detects cheating without ever looking at the screen.
 
 *A working counter-measure to the macOS 26 "Invisible Window" exam-proctor exploit.*
 
+<br/>
+
+![Verity — live proctor view](docs/screenshot.png)
+
 </div>
 
 ---
