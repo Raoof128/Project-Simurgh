@@ -10,7 +10,9 @@ Detects cheating without ever looking at the screen.
 [![License](https://img.shields.io/badge/license-MIT-d6cfbe?style=flat-square)](#license)
 [![Status](https://img.shields.io/badge/status-research%20demo-2f4a2a?style=flat-square)](#status)
 
-*A working counter-measure to the macOS 26 "Invisible Window" exam-proctor exploit.*
+*A working counter-measure to the "Invisible Window" exam-proctor attack class.*
+
+**[Read the disclosure paper →](https://raoufabedini.dev/projects/invisible-window-research)**
 
 <br/>
 
