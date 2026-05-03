@@ -1,0 +1,16 @@
+{
+  "name": "verity",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Zero-trust behavioral AI exam proctor — Claude Sonnet 4.5 heuristic engine.",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
+    "express": "^4.21.2"
+  }
+}

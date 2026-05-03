@@ -1,0 +1,1673 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#f3efe6" />
+  <meta name="description" content="Verity — A zero-trust behavioral AI proctor that detects exam cheating without ever seeing the screen." />
+  <title>Verity — Behavioral Exam Proctor</title>
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23f3efe6'/%3E%3Ccircle cx='16' cy='16' r='6' fill='none' stroke='%236b1a1a' stroke-width='2'/%3E%3C/svg%3E" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=JetBrains+Mono:wght@400;500;700&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --paper:        #f3efe6;
+      --paper-deep:   #ece6d8;
+      --paper-warm:   #fdfaf2;
+      --rule:         #d6cfbe;
+      --rule-soft:    #e3dccb;
+      --ink:          #14110d;
+      --ink-soft:     #4a463d;
+      --ink-faint:    #8a8676;
+      --ox:           #6b1a1a;
+      --ox-deep:      #4a0f0f;
+      --ox-tint:      rgba(107,26,26,0.08);
+      --amber:        #8a6a16;
+      --moss:         #2f4a2a;
+      --shadow:       0 1px 0 rgba(20,17,13,0.04), 0 12px 28px -18px rgba(20,17,13,0.25);
+      --grid:         24px;
+      --safe-bottom:  env(safe-area-inset-bottom, 0px);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; overflow-x: hidden; }
+    img, svg { max-width: 100%; }
+
+    body {
+      font-family: "Inter Tight", ui-sans-serif, system-ui, sans-serif;
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--ink);
+      background: var(--paper);
+      min-height: 100vh;
+      font-feature-settings: "ss01","ss02","cv11";
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      background-image:
+        repeating-linear-gradient(0deg,  transparent 0 calc(var(--grid) - 1px), rgba(20,17,13,0.035) calc(var(--grid) - 1px) var(--grid)),
+        repeating-linear-gradient(90deg, transparent 0 calc(var(--grid) - 1px), rgba(20,17,13,0.025) calc(var(--grid) - 1px) var(--grid));
+      background-attachment: fixed;
+    }
+
+    .mono  { font-family: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace; font-feature-settings: "zero","ss01"; }
+    .serif { font-family: "Fraunces", "Tiempos", Georgia, serif; font-optical-sizing: auto; }
+    .vh    { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0; }
+
+    :focus-visible { outline: 2px solid var(--ox); outline-offset: 2px; border-radius: 2px; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+
+    /* ───────────── HEADER ───────────── */
+    header {
+      position: sticky; top: 0; z-index: 30;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 24px;
+      padding: 16px clamp(14px, 3vw, 28px) 14px;
+      background: rgba(243,239,230,0.85);
+      backdrop-filter: saturate(140%) blur(10px);
+      -webkit-backdrop-filter: saturate(140%) blur(10px);
+      border-bottom: 1px solid var(--rule);
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand .seal {
+      width: 26px; height: 26px;
+      border: 1.5px solid var(--ox);
+      border-radius: 50%;
+      position: relative;
+    }
+    .brand .seal::before {
+      content: ""; position: absolute; inset: 5px;
+      border-radius: 50%; background: var(--ox);
+    }
+    .brand h1 {
+      margin: 0;
+      font-family: "Fraunces", serif;
+      font-weight: 700;
+      font-size: 22px;
+      letter-spacing: -0.01em;
+      font-variation-settings: "opsz" 144;
+      line-height: 1;
+    }
+    .brand .tag {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      padding-left: 12px;
+      border-left: 1px solid var(--rule);
+    }
+    .header-meta { display: flex; gap: 14px; align-items: center; font-size: 11px; letter-spacing: 0.06em; color: var(--ink-soft); justify-self: end; flex-wrap: wrap; }
+    .header-meta .chip {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 5px 10px;
+      border: 1px solid var(--rule);
+      border-radius: 999px;
+      background: var(--paper-warm);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      transition: color .25s, border-color .25s, background .25s;
+      cursor: default;
+    }
+    .header-meta .chip.ok       .dot { background: var(--moss); box-shadow: 0 0 0 3px rgba(47,74,42,0.15); animation: pulse 2.4s ease-in-out infinite; }
+    .header-meta .chip.warn     { color: var(--amber); border-color: rgba(138,106,22,0.4); }
+    .header-meta .chip.critical { color: var(--ox); border-color: rgba(107,26,26,0.5); background: var(--ox-tint); }
+    .header-meta .dot { display:inline-block; width:6px; height:6px; border-radius:50%; background: var(--ink-faint); }
+    @keyframes pulse {
+      0%,100% { box-shadow: 0 0 0 3px rgba(47,74,42,0.15); }
+      50%     { box-shadow: 0 0 0 6px rgba(47,74,42,0.0); }
+    }
+    .header-actions { display: flex; gap: 6px; }
+    .icon-btn {
+      appearance: none; border: 1px solid var(--rule); background: var(--paper-warm);
+      color: var(--ink-soft);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+      padding: 6px 10px; border-radius: 2px;
+      cursor: pointer; transition: all .15s ease;
+    }
+    .icon-btn:hover { color: var(--ox); border-color: var(--ox); background: var(--ox-tint); }
+    .center-eyebrow {
+      text-align: center;
+      font-family: "Fraunces", serif;
+      font-style: italic; font-weight: 500; font-size: 13px;
+      color: var(--ink-soft); letter-spacing: 0.01em;
+    }
+    .center-eyebrow b { color: var(--ink); font-style: normal; font-weight: 600; }
+    @media (max-width: 880px) {
+      header { grid-template-columns: 1fr auto; gap: 10px 14px; }
+      .center-eyebrow { grid-column: 1 / -1; order: 3; text-align: left; font-size: 12px; }
+    }
+    @media (max-width: 520px) {
+      header { grid-template-columns: 1fr; }
+      .header-meta { justify-self: start; gap: 8px; }
+    }
+
+    /* ───────────── LAYOUT ───────────── */
+    main {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) clamp(380px, 32vw, 460px);
+      min-height: calc(100vh - 70px);
+    }
+    @media (max-width: 1080px) {
+      main { grid-template-columns: 1fr; }
+      .proctor { border-left: none !important; border-top: 1px solid var(--rule); }
+    }
+
+    /* ───────────── EXAM ───────────── */
+    .exam {
+      padding: clamp(24px, 4vw, 40px) clamp(18px, 5vw, 64px);
+      position: relative;
+      min-width: 0;
+    }
+    @media (max-width: 520px) { .exam { padding: 22px 16px 28px; } }
+
+    .exam-rule {
+      display: flex; align-items: center; gap: 14px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-bottom: 18px;
+    }
+    .exam-rule::before, .exam-rule::after { content: ""; flex: 1; height: 1px; background: var(--rule); }
+
+    .question-meta {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 10px;
+      display: flex; flex-wrap: wrap; gap: 14px; align-items: center;
+    }
+    .question-meta .q-num { color: var(--ox); font-weight: 700; }
+    .question-meta .target {
+      color: var(--ink-faint);
+      padding-left: 14px;
+      border-left: 1px solid var(--rule);
+    }
+    h2.question-title {
+      font-family: "Fraunces", serif;
+      font-weight: 500;
+      font-variation-settings: "opsz" 144;
+      font-size: clamp(22px, 4.2vw, 40px);
+      line-height: 1.15;
+      letter-spacing: -0.015em;
+      margin: 0 0 8px;
+      max-width: 22ch;
+      overflow-wrap: break-word;
+      hyphens: auto;
+    }
+    h2.question-title em { font-style: italic; color: var(--ox-deep); }
+    .question-sub {
+      font-size: 13px; color: var(--ink-soft);
+      max-width: 60ch; margin: 0 0 22px;
+    }
+
+    .exam-frame {
+      background: var(--paper-warm);
+      border: 1px solid var(--rule);
+      border-radius: 2px;
+      box-shadow: var(--shadow);
+      position: relative;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .exam-frame::before {
+      content: "RESPONSE — SESSION RECORDED";
+      position: absolute; top: -10px; left: 18px;
+      background: var(--paper);
+      padding: 0 10px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 9px; letter-spacing: 0.22em;
+      color: var(--ink-faint);
+    }
+    textarea#answer {
+      width: 100%;
+      min-height: clamp(220px, 38vh, 360px);
+      resize: vertical;
+      border: 0;
+      background: transparent;
+      padding: clamp(18px, 3vw, 28px);
+      font-family: "Fraunces", serif;
+      font-variation-settings: "opsz" 14;
+      font-size: 16px;       /* iOS no-zoom minimum */
+      line-height: 1.65;
+      color: var(--ink);
+      outline: none;
+      caret-color: var(--ox);
+      display: block;
+    }
+    textarea#answer::placeholder { color: var(--ink-faint); font-style: italic; }
+    .exam-frame:focus-within { border-color: var(--ox); box-shadow: var(--shadow), 0 0 0 3px var(--ox-tint); }
+
+    .exam-footer {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 16px;
+      border-top: 1px solid var(--rule-soft);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 10px; letter-spacing: 0.12em; color: var(--ink-faint);
+      text-transform: uppercase;
+      gap: 12px; flex-wrap: wrap;
+    }
+    .exam-footer .chars span.num { color: var(--ink); font-weight: 600; }
+    .exam-footer .session-id { color: var(--ink-faint); }
+    .submit-btn {
+      appearance: none; border: 0;
+      background: var(--ink); color: var(--paper);
+      padding: 9px 16px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+      border-radius: 2px;
+      cursor: pointer; transition: background .2s;
+    }
+    .submit-btn:hover { background: var(--ox); }
+    .submit-btn[disabled] { opacity: 0.4; cursor: not-allowed; background: var(--ink-soft); }
+
+    .integrity-strip {
+      margin-top: 22px;
+      display: flex; gap: 10px 18px;
+      flex-wrap: wrap; align-items: center;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 10px; letter-spacing: 0.14em; color: var(--ink-soft);
+      text-transform: uppercase;
+    }
+    .integrity-strip .item { display: inline-flex; align-items: center; gap: 8px; }
+    .integrity-strip svg { width: 12px; height: 12px; stroke: var(--ink-soft); fill: none; stroke-width: 2; }
+    .integrity-strip .item.deny { color: var(--ox-deep); }
+    .integrity-strip .item.deny svg { stroke: var(--ox-deep); }
+
+    /* ───────────── DEMO TRIGGER DRAWER ───────────── */
+    .demo-bar {
+      margin-top: 22px;
+      border: 1px dashed var(--rule);
+      border-radius: 2px;
+      background: linear-gradient(90deg, transparent, rgba(107,26,26,0.04), transparent);
+      padding: 12px 14px;
+      display: flex; align-items: center; gap: 10px 14px;
+      flex-wrap: wrap;
+    }
+    .demo-bar .label {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--ox); font-weight: 700;
+    }
+    .demo-bar .desc { font-size: 12px; color: var(--ink-soft); flex: 1; min-width: 200px; }
+    .trig {
+      appearance: none;
+      border: 1px solid var(--ink);
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+      padding: 7px 11px;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .trig:hover { background: var(--ink); color: var(--paper); }
+    .trig.crit { border-color: var(--ox); color: var(--ox); }
+    .trig.crit:hover { background: var(--ox); color: var(--paper); }
+
+    /* ───────────── PROCTOR ───────────── */
+    .proctor {
+      padding: clamp(22px, 3vw, 30px) clamp(18px, 4vw, 28px) 60px;
+      border-left: 1px solid var(--rule);
+      background: linear-gradient(to bottom, var(--paper-deep), var(--paper) 320px);
+      position: relative;
+      min-width: 0;
+    }
+    .proctor::before {
+      content: ""; position: absolute; top: 0; bottom: 0; left: -1px; width: 3px;
+      background: var(--ox); opacity: 0;
+      transition: opacity .35s ease;
+    }
+    .proctor.alarm::before { opacity: 1; }
+    .proctor-eyebrow {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 9px; letter-spacing: 0.24em; text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-bottom: 10px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .proctor-eyebrow::before {
+      content: ""; width: 8px; height: 8px;
+      border: 1.5px solid var(--ink-faint); border-radius: 50%;
+    }
+
+    .proctor-head {
+      display: flex; justify-content: space-between; align-items: flex-start; gap: 14px;
+      margin-bottom: 18px;
+    }
+    .proctor-head .title {
+      font-family: "Fraunces", serif;
+      font-weight: 700; font-size: 14px; letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .proctor-head .sub {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 10px; letter-spacing: 0.14em;
+      color: var(--ink-faint);
+      margin-top: 4px;
+      text-transform: uppercase;
+    }
+    .analysis-ring { width: 60px; height: 60px; position: relative; flex-shrink: 0; }
+    .analysis-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+    .analysis-ring circle.track { fill:none; stroke: var(--rule); stroke-width: 2; }
+    .analysis-ring circle.fill {
+      fill: none; stroke: var(--ox); stroke-width: 2;
+      stroke-linecap: round;
+      stroke-dasharray: 175.93;
+      stroke-dashoffset: 175.93;
+      transition: stroke-dashoffset .12s linear;
+    }
+    .analysis-ring.busy circle.fill { animation: spin 1.4s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); transform-origin: 30px 30px; } }
+    .analysis-ring .label {
+      position: absolute; inset: 0;
+      display: grid; place-items: center;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 11px; color: var(--ink-soft);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ───────────── JAW-DROPPER: signature waveform ───────────── */
+    .signature {
+      position: relative;
+      border: 1px solid var(--rule);
+      border-radius: 2px;
+      background: linear-gradient(to bottom, #14110d 0%, #1d1813 100%);
+      overflow: hidden;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow);
+    }
+    .signature .sig-head {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 14px 8px;
+      border-bottom: 1px solid rgba(214,207,190,0.12);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase;
+      color: rgba(243,239,230,0.55);
+    }
+    .signature .sig-head .live {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: rgba(243,239,230,0.9);
+    }
+    .signature .sig-head .live::before {
+      content: ""; width: 6px; height: 6px; border-radius: 50%;
+      background: #ff4040; box-shadow: 0 0 8px #ff4040;
+      animation: pulse-red 1.4s ease-in-out infinite;
+    }
+    @keyframes pulse-red {
+      0%,100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .signature canvas {
+      display: block;
+      width: 100%;
+      height: 96px;
+      background:
+        repeating-linear-gradient(0deg,  transparent 0 19px, rgba(243,239,230,0.04) 19px 20px),
+        repeating-linear-gradient(90deg, transparent 0 19px, rgba(243,239,230,0.03) 19px 20px);
+    }
+    .signature .sig-foot {
+      display: flex; justify-content: space-between; align-items: center; gap: 10px;
+      padding: 6px 14px 8px;
+      border-top: 1px solid rgba(214,207,190,0.08);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: rgba(243,239,230,0.45);
+    }
+    .signature .sig-foot .stat b {
+      color: rgba(243,239,230,0.9); font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ───────────── VERDICT ───────────── */
+    .verdict-card {
+      border: 1px solid var(--rule);
+      border-radius: 2px;
+      background: var(--paper-warm);
+      padding: 18px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      transition: border-color .25s;
+    }
+    .verdict-card.in-flight { border-color: rgba(107,26,26,0.4); }
+    .verdict-card.in-flight::after {
+      content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--ox), transparent);
+      animation: scan 1.2s ease-in-out infinite;
+    }
+    @keyframes scan {
+      0%   { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+    .verdict-card .grain {
+      position: absolute; inset: 0; pointer-events: none;
+      opacity: 0.5; mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.08 0 0 0 0 0.07 0 0 0 0 0.05 0 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    .verdict-empty {
+      font-family: "Fraunces", serif; font-style: italic;
+      color: var(--ink-faint); font-size: 14px;
+      padding: 18px 4px; text-align: center;
+    }
+    .verdict-empty .progress {
+      margin-top: 10px;
+      height: 2px; background: var(--rule); border-radius: 2px;
+      position: relative; overflow: hidden;
+    }
+    .verdict-empty .progress::after {
+      content: ""; position: absolute; inset: 0;
+      background: var(--ox); transform-origin: left; transform: scaleX(0);
+      transition: transform .12s linear;
+    }
+    .stamp {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 6px 14px 7px;
+      border: 2px solid currentColor;
+      border-radius: 2px;
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 700; font-size: 11px;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      animation: stamp .35s cubic-bezier(.2,.8,.2,1);
+      transform-origin: center;
+    }
+    @keyframes stamp {
+      0%   { transform: scale(1.4) rotate(-1.3deg); opacity: 0; }
+      55%  { transform: scale(0.96) rotate(-1.3deg); opacity: 1; }
+      100% { transform: scale(1) rotate(-1.3deg); }
+    }
+    .stamp[data-level="safe"]     { color: var(--moss); }
+    .stamp[data-level="warning"]  { color: var(--amber); }
+    .stamp[data-level="critical"] { color: var(--ox); animation: stamp .35s cubic-bezier(.2,.8,.2,1), shake .55s .3s ease-in-out; }
+    @keyframes shake {
+      0%,100% { transform: rotate(-1.3deg) translateX(0); }
+      20%     { transform: rotate(-1.3deg) translateX(-3px); }
+      40%     { transform: rotate(-1.3deg) translateX(3px); }
+      60%     { transform: rotate(-1.3deg) translateX(-2px); }
+      80%     { transform: rotate(-1.3deg) translateX(2px); }
+    }
+    .stamp .glyph { width: 8px; height: 8px; background: currentColor; border-radius: 50%; }
+
+    .reasoning {
+      font-family: "Fraunces", serif;
+      font-size: 15px; line-height: 1.45; letter-spacing: -0.005em;
+      margin: 14px 0 12px; color: var(--ink);
+    }
+    .reasoning.long { font-size: 13.5px; line-height: 1.5; }
+    .verdict-foot {
+      display: flex; justify-content: space-between; align-items: center; gap: 8px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--ink-faint);
+      border-top: 1px dashed var(--rule);
+      padding-top: 10px;
+      flex-wrap: wrap;
+    }
+    .verdict-foot .cache-pill {
+      color: var(--moss);
+      padding: 3px 8px;
+      border: 1px solid rgba(47,74,42,0.3);
+      border-radius: 999px;
+      background: rgba(47,74,42,0.06);
+      font-weight: 600;
+    }
+    .verdict-foot .source-pill {
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-weight: 600;
+      border: 1px solid var(--rule);
+    }
+    .verdict-foot .source-pill.claude { color: var(--moss); border-color: rgba(47,74,42,0.3); background: rgba(47,74,42,0.06); }
+    .verdict-foot .source-pill.fallback { color: var(--amber); border-color: rgba(138,106,22,0.4); background: rgba(138,106,22,0.07); }
+
+    /* telemetry */
+    .panel-title {
+      display: flex; align-items: center; gap: 10px;
+      margin: 24px 0 10px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    .panel-title::after { content: ""; flex: 1; height: 1px; background: var(--rule); }
+    .panel-title .count { color: var(--ink-faint); font-weight: 400; }
+
+    .telemetry {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--rule);
+      border: 1px solid var(--rule);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .telemetry .cell {
+      background: var(--paper-warm);
+      padding: 12px 14px 10px;
+      display: flex; flex-direction: column; gap: 2px;
+      min-width: 0;
+      position: relative;
+    }
+    .telemetry .cell.hot::before {
+      content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 2px;
+      background: var(--ox);
+    }
+    .telemetry .k {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+    .telemetry .v {
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 500;
+      font-size: clamp(18px, 4vw, 22px);
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      font-variant-numeric: tabular-nums;
+      transition: color .25s ease;
+      overflow-wrap: anywhere;
+    }
+    .telemetry .v.hot { color: var(--ox); }
+    .telemetry .v small {
+      font-size: 11px; font-weight: 400; color: var(--ink-faint);
+      letter-spacing: 0.06em; margin-left: 5px;
+    }
+    .telemetry .baseline {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-top: 2px;
+    }
+
+    /* history */
+    .history { display: flex; flex-direction: column; gap: 8px; max-height: 320px; overflow-y: auto; padding-right: 4px; }
+    .history::-webkit-scrollbar { width: 6px; }
+    .history::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 3px; }
+    .history-item {
+      border-left: 3px solid var(--rule);
+      padding: 8px 12px;
+      background: var(--paper-warm);
+      border-top: 1px solid var(--rule-soft);
+      border-right: 1px solid var(--rule-soft);
+      border-bottom: 1px solid var(--rule-soft);
+      border-radius: 0 2px 2px 0;
+      font-size: 12.5px;
+      transition: opacity .25s;
+      animation: slideIn .3s ease-out;
+    }
+    .history-item.stale { opacity: 0.55; }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-4px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    .history-item[data-level="safe"]     { border-left-color: var(--moss); }
+    .history-item[data-level="warning"]  { border-left-color: var(--amber); }
+    .history-item[data-level="critical"] { border-left-color: var(--ox); background: linear-gradient(to right, rgba(107,26,26,0.05), var(--paper-warm) 60%); }
+    .history-item .top {
+      display: flex; justify-content: space-between; gap: 8px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-bottom: 4px;
+    }
+    .history-item .lvl { font-weight: 700; display: inline-flex; align-items: center; gap: 6px; }
+    .history-item .lvl::before {
+      content: ""; width: 6px; height: 6px; border-radius: 50%;
+      background: currentColor;
+    }
+    .history-item[data-level="safe"]     .lvl { color: var(--moss); }
+    .history-item[data-level="warning"]  .lvl { color: var(--amber); }
+    .history-item[data-level="critical"] .lvl { color: var(--ox); }
+    .history-item .reason {
+      font-family: "Fraunces", serif; font-size: 13.5px; line-height: 1.4;
+      color: var(--ink);
+    }
+    .history-empty {
+      font-family: "Fraunces", serif; font-style: italic;
+      color: var(--ink-faint); padding: 12px 0; font-size: 13px;
+    }
+
+    /* toast */
+    .toast {
+      position: fixed; left: 50%;
+      bottom: calc(24px + var(--safe-bottom));
+      transform: translateX(-50%) translateY(20px);
+      background: var(--ink); color: var(--paper);
+      padding: 12px 18px; border-radius: 2px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      opacity: 0; pointer-events: none;
+      transition: opacity .2s, transform .25s cubic-bezier(.2,.8,.2,1);
+      z-index: 60;
+      box-shadow: 0 16px 32px -12px rgba(20,17,13,0.4);
+      max-width: 90vw;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast b { color: var(--ox); font-weight: 700; }
+
+    /* footer */
+    .colophon {
+      padding: 28px clamp(18px, 5vw, 64px) calc(36px + var(--safe-bottom));
+      border-top: 1px solid var(--rule);
+      display: flex; justify-content: space-between; gap: 24px;
+      flex-wrap: wrap;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 10px; letter-spacing: 0.14em; color: var(--ink-faint);
+      text-transform: uppercase;
+    }
+    .colophon a {
+      color: var(--ox); text-decoration: none;
+      border-bottom: 1px solid var(--ox-tint);
+      display: inline-flex; align-items: center; gap: 4px;
+    }
+    .colophon a:hover { border-bottom-color: var(--ox); }
+    .colophon .left { max-width: 60ch; line-height: 1.7; }
+    .colophon .left b { color: var(--ink); }
+
+    /* ───────────── INTRO OVERLAY ───────────── */
+    .intro {
+      position: fixed; inset: 0; z-index: 100;
+      background: rgba(20,17,13,0.65);
+      backdrop-filter: blur(8px);
+      display: grid; place-items: center;
+      padding: 24px;
+      animation: fade .25s ease;
+    }
+    @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+    .intro-card {
+      max-width: 540px; width: 100%;
+      background: var(--paper-warm);
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+      padding: 32px;
+      box-shadow: 0 40px 80px -20px rgba(0,0,0,0.5);
+      animation: rise .35s cubic-bezier(.2,.8,.2,1);
+      max-height: 90vh; overflow-y: auto;
+    }
+    @keyframes rise { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .intro-card .eyebrow {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--ox); font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .intro-card h2 {
+      font-family: "Fraunces", serif;
+      font-weight: 500; font-variation-settings: "opsz" 144;
+      font-size: 32px; line-height: 1.15; letter-spacing: -0.015em;
+      margin: 0 0 14px;
+    }
+    .intro-card h2 em { font-style: italic; color: var(--ox-deep); }
+    .intro-card p {
+      font-family: "Fraunces", serif;
+      font-size: 16px; line-height: 1.55;
+      color: var(--ink-soft);
+      margin: 0 0 14px;
+    }
+    .intro-card ul {
+      list-style: none; padding: 0; margin: 16px 0;
+      display: grid; gap: 8px;
+    }
+    .intro-card li {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 11px; letter-spacing: 0.06em;
+      color: var(--ink-soft);
+      padding: 8px 12px;
+      background: var(--paper);
+      border-left: 2px solid var(--ox);
+    }
+    .intro-card .cta {
+      appearance: none; border: 0;
+      background: var(--ink); color: var(--paper);
+      padding: 14px 22px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+      border-radius: 2px;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background .2s;
+    }
+    .intro-card .cta:hover { background: var(--ox); }
+
+    /* mobile sticky proctor summary */
+    @media (max-width: 1080px) {
+      .mobile-bar { display: none; }
+    }
+
+    /* about modal */
+    .modal-back {
+      position: fixed; inset: 0; z-index: 90;
+      background: rgba(20,17,13,0.55);
+      backdrop-filter: blur(6px);
+      display: grid; place-items: center;
+      padding: 20px;
+    }
+    .modal {
+      max-width: 580px; width: 100%;
+      background: var(--paper-warm);
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+      padding: 28px;
+      max-height: 84vh; overflow-y: auto;
+      box-shadow: 0 40px 80px -20px rgba(0,0,0,0.4);
+    }
+    .modal h3 {
+      font-family: "Fraunces", serif;
+      font-size: 22px; font-weight: 700;
+      margin: 0 0 12px;
+    }
+    .modal p { font-family: "Fraunces", serif; font-size: 15px; line-height: 1.55; color: var(--ink-soft); margin: 0 0 12px; }
+    .modal pre {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 11px; line-height: 1.55;
+      background: var(--ink); color: var(--paper);
+      padding: 14px; border-radius: 2px;
+      overflow-x: auto; white-space: pre-wrap;
+      max-height: 320px; overflow-y: auto;
+    }
+    .modal .close {
+      appearance: none; border: 1px solid var(--rule); background: var(--paper);
+      padding: 8px 14px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+      cursor: pointer; border-radius: 2px;
+      margin-top: 8px;
+    }
+    .modal .close:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  </style>
+</head>
+<body>
+
+  <!-- ───── INTRO OVERLAY ───── -->
+  <div class="intro" id="intro" role="dialog" aria-labelledby="intro-title">
+    <div class="intro-card">
+      <div class="eyebrow">▲ Live Demo · Verity v0.1</div>
+      <h2 id="intro-title">A behavioral proctor that <em>never sees your screen.</em></h2>
+      <p>You're about to test a working zero-trust mitigation against the macOS 26 invisible-window exam exploit. Verity ignores pixels. It analyzes <em>how</em> you behave — not what you see — and flags cheating in 5-second windows using Claude.</p>
+      <ul>
+        <li>▸ Type, pause, paste, switch tabs — try anything</li>
+        <li>▸ The proctor panel updates in real time (you'd never see it in production)</li>
+        <li>▸ Hit the <b>SIMULATE</b> buttons to demo the catch instantly</li>
+      </ul>
+      <button class="cta" id="introStart">Begin session →</button>
+    </div>
+  </div>
+
+  <!-- ───── HEADER ───── -->
+  <header>
+    <div class="brand">
+      <span class="seal" aria-hidden="true"></span>
+      <h1>Verity</h1>
+      <span class="tag">Behavioral Proctor</span>
+    </div>
+    <div class="center-eyebrow">
+      Zero-trust mitigation against <b>invisible-window</b> exam exploits.
+    </div>
+    <div class="header-meta">
+      <span class="chip ok" id="connChip"><span class="dot"></span><span id="connText">live</span></span>
+      <span class="chip mono" id="modelChip">claude-sonnet-4-5</span>
+      <span class="header-actions">
+        <button class="icon-btn" id="resetBtn" title="Start a fresh session">↻ reset</button>
+      </span>
+    </div>
+  </header>
+
+  <main>
+    <!-- ───── EXAM ───── -->
+    <section class="exam" aria-labelledby="q-title">
+      <div class="exam-rule"><span>— Examination Sheet —</span></div>
+
+      <div class="question-meta">
+        <span>CSC 343 · Network Security · Final · Question <span class="q-num" id="qNum">3</span> / 10</span>
+        <span class="target">target: <span id="qTarget">200–400 words</span></span>
+      </div>
+      <h2 class="question-title" id="qTitle">
+        Explain how a <em>SYN flood</em> attack works, and propose two practical mitigations.
+      </h2>
+      <p class="question-sub">
+        Telemetry is captured every 5 seconds and analysed in real time by Verity. Pasted content is logged.
+      </p>
+
+      <div class="exam-frame">
+        <label for="answer" class="vh">Your answer</label>
+        <textarea id="answer" placeholder="Begin your response here…"></textarea>
+        <div class="exam-footer">
+          <span class="chars"><span class="num" id="charCount">0</span> chars · ~<span id="wordCount">0</span> words</span>
+          <span class="session-id mono" id="sessionLabel">session: —</span>
+          <button class="submit-btn" id="submitBtn" disabled>Submit response</button>
+        </div>
+      </div>
+
+      <div class="integrity-strip" role="note" aria-label="Privacy guarantees">
+        <span class="item">
+          <svg viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/></svg>
+          ZERO-TRUST ACTIVE
+        </span>
+        <span class="item deny">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M5 5l14 14"/></svg>
+          NO SCREEN CAPTURE
+        </span>
+        <span class="item deny">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M5 5l14 14"/></svg>
+          NO CAMERA
+        </span>
+        <span class="item deny">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M5 5l14 14"/></svg>
+          NO KEYSTROKE CONTENT
+        </span>
+      </div>
+
+      <div class="demo-bar" aria-label="Demo controls">
+        <span class="label">▲ DEMO</span>
+        <span class="desc">Trigger a scenario without typing — watch Verity catch it within one window.</span>
+        <button class="trig" id="simIdle" type="button">Simulate idle</button>
+        <button class="trig" id="simBlur" type="button">Simulate tab-out</button>
+        <button class="trig crit" id="simPaste" type="button">Simulate big paste</button>
+      </div>
+    </section>
+
+    <!-- ───── PROCTOR ───── -->
+    <aside class="proctor" id="proctor" aria-label="Live proctor analysis">
+      <div class="proctor-eyebrow">PROCTOR VIEW · NOT VISIBLE TO STUDENT IN PRODUCTION</div>
+
+      <div class="proctor-head">
+        <div>
+          <div class="title">Live Verdict</div>
+          <div class="sub">claude · streaming heuristic · 5s windows</div>
+        </div>
+        <div class="analysis-ring" id="ring" aria-label="Time until next analysis window">
+          <svg viewBox="0 0 60 60">
+            <circle class="track" cx="30" cy="30" r="28"/>
+            <circle class="fill" cx="30" cy="30" r="28" id="ringFill"/>
+          </svg>
+          <div class="label" id="ringLabel">5.0s</div>
+        </div>
+      </div>
+
+      <!-- ★ JAW-DROPPER: behavioral signature waveform -->
+      <div class="signature" aria-hidden="true">
+        <div class="sig-head">
+          <span class="live">REC · Behavioral Signature</span>
+          <span>60s rolling</span>
+        </div>
+        <canvas id="sigCanvas" width="800" height="96"></canvas>
+        <div class="sig-foot">
+          <span class="stat">peak <b id="sigPeak">0</b><small> kpm</small></span>
+          <span class="stat">cadence σ <b id="sigSigma">—</b></span>
+          <span class="stat">anomalies <b id="sigAnom">0</b></span>
+        </div>
+      </div>
+
+      <div class="verdict-card" id="verdictCard" aria-live="polite" aria-atomic="true">
+        <div class="grain" aria-hidden="true"></div>
+        <div id="verdictBox">
+          <div class="verdict-empty">
+            Awaiting first window — analysing…
+            <div class="progress" aria-hidden="true"><div id="progFill" style="position:absolute;inset:0;background:var(--ox);transform-origin:left;transform:scaleX(0);transition:transform .12s linear"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-title">Current Window <span class="count">resets in <span id="winRemain">5.0s</span></span></div>
+      <div class="telemetry mono" role="group" aria-label="Live behavioral telemetry">
+        <div class="cell" id="c-keys">
+          <span class="k">keystrokes</span>
+          <span class="v" id="t-keys">0</span>
+          <span class="baseline">typical: 30–80</span>
+        </div>
+        <div class="cell" id="c-wpm">
+          <span class="k">effective wpm</span>
+          <span class="v" id="t-wpm">0</span>
+          <span class="baseline">human: 30–90</span>
+        </div>
+        <div class="cell" id="c-blurs">
+          <span class="k">focus losses</span>
+          <span class="v" id="t-blurs">0</span>
+          <span class="baseline">expected: 0</span>
+        </div>
+        <div class="cell" id="c-off">
+          <span class="k">off-window</span>
+          <span class="v" id="t-off">0.0<small>s</small></span>
+          <span class="baseline">typical: 0s</span>
+        </div>
+        <div class="cell" id="c-pas">
+          <span class="k">pastes</span>
+          <span class="v" id="t-pastes">0</span>
+          <span class="baseline">expected: 0</span>
+        </div>
+        <div class="cell" id="c-pb">
+          <span class="k">paste payload</span>
+          <span class="v" id="t-paste-bytes">0<small>ch</small></span>
+          <span class="baseline">flag &gt; 80ch</span>
+        </div>
+        <div class="cell" id="c-idle" style="grid-column: 1 / -1">
+          <span class="k">max idle gap</span>
+          <span class="v" id="t-idle">0.0<small>s</small></span>
+          <span class="baseline">flag &gt; 8s</span>
+        </div>
+      </div>
+
+      <div class="panel-title">Verdict History <span class="count" id="histCount"></span></div>
+      <div class="history" id="history">
+        <div class="history-empty">No verdicts yet.</div>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="colophon">
+    <div class="left">
+      <div style="margin-bottom:6px"><b>VERITY</b> — A zero-trust behavioural mitigation against the macOS 26 invisible-window screen-sharing exploit. Not a detector of <em>what</em> is on screen, but of <em>how</em> the human is behaving.</div>
+      <div>Heuristic engine: Anthropic Claude · prompt-cached system prompt · sub-second window inference.</div>
+    </div>
+    <div style="text-align:right">
+      built by raouf · 2026<br>
+      <a href="#" id="aboutLink">view system prompt →</a>
+    </div>
+  </footer>
+
+  <!-- toast -->
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <span><b>● PASTE DETECTED</b> · logged to proctor</span>
+  </div>
+
+  <!-- screen-reader announcer -->
+  <div class="vh" id="srAnnounce" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- about modal target -->
+  <div id="modalRoot"></div>
+
+  <script>
+    // ═══════════════════════════════════════════════════
+    //  CONFIG
+    // ═══════════════════════════════════════════════════
+    const ALLOWED_LEVELS = new Set(["safe","warning","critical"]);
+    const WINDOW_MS = 5000;
+    const POST_TIMEOUT_MS = 8000;
+    const STORAGE_KEY = "verity:answer";
+
+    const QUESTIONS = [
+      { course: "CSC 343 · Network Security",   target: "200–400 words", title: 'Explain how a <em>SYN flood</em> attack works, and propose two practical mitigations.' },
+      { course: "CSC 412 · Cryptography",        target: "180–350 words", title: 'Compare <em>AES-GCM</em> and <em>ChaCha20-Poly1305</em>. When would you choose one over the other?' },
+      { course: "CSC 401 · Operating Systems",   target: "200–400 words", title: 'Describe the <em>thundering-herd</em> problem and how modern schedulers mitigate it.' },
+      { course: "CSC 360 · Distributed Systems", target: "250–500 words", title: 'Define <em>linearizability</em> and explain why it is strictly stronger than sequential consistency.' },
+    ];
+
+    const SYSTEM_PROMPT_TEXT = `You are Verity, an AI security behavioral analyst monitoring a student during a high-stakes proctored exam. You receive 5-second telemetry windows from the student's browser and must detect cheating.
+
+THREAT MODEL
+The exam runs in a browser. Traditional proctoring tools rely on OS-level screen capture, but a recently disclosed macOS 26 exploit allows attackers to render an "Invisible Window" over the exam that browser screen-capture APIs cannot see. Visual surveillance is therefore unreliable. Verity instead detects the BEHAVIORAL FOOTPRINT of cheating by analyzing input timing and focus patterns.
+
+WHAT TO LOOK FOR
+1. Impossible cognitive cadence — large paste payloads (> 200 chars) with little to no manual typing in the same window, or sudden bursts of typed characters at superhuman WPM (> 250 effective WPM).
+2. Suspicious context switching — the window losing focus immediately followed by a large paste on refocus.
+3. Repeated tab-out behavior — many short blur/focus cycles indicating consultation with another window.
+4. Idle followed by paste — long zero-input gap followed by paste with no manual edits.
+5. Normal studying — steady typing, occasional small pastes (< 50 chars), brief focus loss to read a question.
+
+OUTPUT FORMAT
+Respond with ONLY a single JSON object:
+{"risk_level":"Safe|Warning|Critical","reasoning":"one short sentence citing the specific signal"}`;
+
+    // ═══════════════════════════════════════════════════
+    //  SESSION
+    // ═══════════════════════════════════════════════════
+    const newSessionId = () => {
+      try { return "sess-" + crypto.randomUUID().slice(0, 8); }
+      catch { return "sess-" + Math.random().toString(36).slice(2, 10); }
+    };
+    let sessionId = newSessionId();
+
+    // ═══════════════════════════════════════════════════
+    //  ELEMENTS
+    // ═══════════════════════════════════════════════════
+    const $ = (id) => document.getElementById(id);
+    const ta            = $("answer");
+    const proctorEl     = $("proctor");
+    const toastEl       = $("toast");
+    const submitBtn     = $("submitBtn");
+    const resetBtn      = $("resetBtn");
+    const introEl       = $("intro");
+    const introStart    = $("introStart");
+    const aboutLink     = $("aboutLink");
+    const modalRoot     = $("modalRoot");
+    const ring          = $("ringFill");
+    const ringLabel     = $("ringLabel");
+    const winRemain     = $("winRemain");
+    const progFill      = $("progFill");
+    const verdictCard   = $("verdictCard");
+    const verdictBox    = $("verdictBox");
+    const historyEl     = $("history");
+    const histCount     = $("histCount");
+    const connChip      = $("connChip");
+    const connText      = $("connText");
+    const charCountEl   = $("charCount");
+    const wordCountEl   = $("wordCount");
+    const sessionLabel  = $("sessionLabel");
+    const qTitle        = $("qTitle");
+    const qNum          = $("qNum");
+    const qTarget       = $("qTarget");
+    const srAnnounce    = $("srAnnounce");
+
+    sessionLabel.textContent = "session: " + sessionId;
+
+    // pick random question
+    (function pickQuestion() {
+      const q = QUESTIONS[Math.floor(Math.random() * QUESTIONS.length)];
+      qTitle.innerHTML = q.title;
+      qTarget.textContent = q.target;
+      qNum.textContent = String(Math.floor(Math.random() * 8) + 2);
+      document.querySelector(".question-meta > span").firstChild.nodeValue = q.course + " · Final · Question ";
+    })();
+
+    // restore draft
+    try {
+      const draft = localStorage.getItem(STORAGE_KEY);
+      if (draft) ta.value = draft;
+    } catch {}
+    updateCounts();
+
+    // ═══════════════════════════════════════════════════
+    //  TELEMETRY BUCKET
+    // ═══════════════════════════════════════════════════
+    let windowStart = Date.now();
+    let lastKeyTs = null;
+    let bucket = newBucket();
+    let postsInFlight = 0;
+    let consecFailures = 0;
+    let history = [];     // local mirror, newest-first
+    let totalAnomalies = 0;
+    let peakKpm = 0;
+
+    function newBucket() {
+      windowStart = Date.now();
+      return {
+        keystrokes: 0,
+        chars_typed: 0,
+        keydown_intervals_ms: [],
+        focus_losses: 0,
+        time_off_window_ms: 0,
+        pastes: 0,
+        paste_payload_chars: 0,
+        max_idle_gap_ms: 0,
+        window_started_at: windowStart,
+      };
+    }
+
+    // focus tracking
+    let blurStart = null;
+    window.addEventListener("blur", () => {
+      blurStart = Date.now();
+      bucket.focus_losses += 1;
+      announceLater(`Window left.`);
+    });
+    window.addEventListener("focus", () => {
+      if (blurStart) {
+        const dur = Date.now() - blurStart;
+        bucket.time_off_window_ms += dur;
+        if (dur > 1000) showFocusReturn(dur);
+        blurStart = null;
+      }
+    });
+
+    function showFocusReturn(durMs) {
+      flashToast(`<b>● TAB-OUT</b> · ${(durMs/1000).toFixed(1)}s away · logged`);
+    }
+
+    // input tracking
+    ta.addEventListener("keydown", (e) => {
+      // Tab → indent
+      if (e.key === "Tab" && !e.shiftKey) {
+        e.preventDefault();
+        const start = ta.selectionStart, end = ta.selectionEnd;
+        ta.value = ta.value.slice(0, start) + "  " + ta.value.slice(end);
+        ta.selectionStart = ta.selectionEnd = start + 2;
+        updateCounts();
+        return;
+      }
+      registerKeystroke(e.key);
+    });
+    ta.addEventListener("input", () => {
+      updateCounts();
+      try { localStorage.setItem(STORAGE_KEY, ta.value); } catch {}
+      submitBtn.disabled = ta.value.trim().length < 30;
+    });
+    ta.addEventListener("paste", (e) => {
+      const text = (e.clipboardData || window.clipboardData)?.getData("text") ?? "";
+      bucket.pastes += 1;
+      bucket.paste_payload_chars += text.length;
+      flashToast(`<b>● PASTE DETECTED</b> · ${text.length.toLocaleString()} chars logged to proctor`);
+      announceLater(`Paste detected, ${text.length} characters logged.`);
+    });
+    ta.addEventListener("drop", (e) => {
+      const text = e.dataTransfer?.getData("text") ?? "";
+      if (text) {
+        bucket.pastes += 1;
+        bucket.paste_payload_chars += text.length;
+        flashToast(`<b>● DROP DETECTED</b> · ${text.length.toLocaleString()} chars logged`);
+      }
+    });
+
+    function registerKeystroke(key) {
+      const now = Date.now();
+      if (lastKeyTs != null) {
+        const gap = now - lastKeyTs;
+        bucket.keydown_intervals_ms.push(gap);
+        if (gap > bucket.max_idle_gap_ms) bucket.max_idle_gap_ms = gap;
+      }
+      lastKeyTs = now;
+      bucket.keystrokes += 1;
+      if (key && key.length === 1) bucket.chars_typed += 1;
+      pushSignaturePoint(now);
+    }
+
+    function updateCounts() {
+      const len = ta.value.length;
+      charCountEl.textContent = len.toLocaleString();
+      const words = ta.value.trim() ? ta.value.trim().split(/\s+/).length : 0;
+      wordCountEl.textContent = words.toLocaleString();
+    }
+
+    // ═══════════════════════════════════════════════════
+    //  SUMMARISE / PAINT
+    // ═══════════════════════════════════════════════════
+    function summarize(b) {
+      const elapsedSec = Math.max(0.001, (Date.now() - b.window_started_at) / 1000);
+      const wpm = (b.chars_typed / 5) / (elapsedSec / 60);
+      return {
+        keystrokes: b.keystrokes,
+        chars_typed: b.chars_typed,
+        effective_wpm: Math.round(wpm),
+        focus_losses: b.focus_losses,
+        time_off_window_ms: Math.round(b.time_off_window_ms),
+        pastes: b.pastes,
+        paste_payload_chars: b.paste_payload_chars,
+        max_idle_gap_ms: Math.round(b.max_idle_gap_ms),
+        window_seconds: Math.round(elapsedSec * 10) / 10,
+      };
+    }
+
+    const setHot = (cellId, hot) => {
+      const cell = $(cellId);
+      const v = cell.querySelector(".v");
+      cell.classList.toggle("hot", !!hot);
+      v.classList.toggle("hot", !!hot);
+    };
+
+    function paintCurrent(s) {
+      $("t-keys").textContent  = s.keystrokes;
+      $("t-wpm").textContent   = s.effective_wpm;
+      $("t-blurs").textContent = s.focus_losses;
+      $("t-off").innerHTML     = (s.time_off_window_ms / 1000).toFixed(1) + "<small>s</small>";
+      $("t-pastes").textContent = s.pastes;
+      $("t-paste-bytes").innerHTML = s.paste_payload_chars.toLocaleString() + "<small>ch</small>";
+      $("t-idle").innerHTML    = (s.max_idle_gap_ms / 1000).toFixed(1) + "<small>s</small>";
+
+      setHot("c-blurs", s.focus_losses >= 1);
+      setHot("c-off",   s.time_off_window_ms >= 1500);
+      setHot("c-pas",   s.pastes >= 1);
+      setHot("c-pb",    s.paste_payload_chars >= 80);
+      setHot("c-idle",  s.max_idle_gap_ms >= 8000);
+      setHot("c-wpm",   s.effective_wpm >= 200);
+    }
+
+    // ═══════════════════════════════════════════════════
+    //  ANALYSIS RING
+    // ═══════════════════════════════════════════════════
+    const RING_LEN = 175.93; // 2π·r where r=28
+    function tickRing() {
+      const elapsed = Date.now() - windowStart;
+      const frac = Math.min(1, elapsed / WINDOW_MS);
+      ring.style.strokeDashoffset = (RING_LEN * (1 - frac)).toFixed(2);
+      const remain = Math.max(0, (WINDOW_MS - elapsed) / 1000);
+      ringLabel.textContent = remain.toFixed(1) + "s";
+      winRemain.textContent = remain.toFixed(1) + "s";
+      if (progFill) progFill.style.transform = `scaleX(${frac.toFixed(3)})`;
+    }
+
+    // ═══════════════════════════════════════════════════
+    //  VERDICT
+    // ═══════════════════════════════════════════════════
+    function safeLevel(raw) {
+      const lvl = String(raw || "").toLowerCase();
+      return ALLOWED_LEVELS.has(lvl) ? lvl : "safe";
+    }
+    function escapeHtml(s) {
+      return String(s ?? "").replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+    }
+    function fmtTime(ts) {
+      try {
+        const d = new Date(ts);
+        if (isNaN(d.getTime())) return "just now";
+        return d.toLocaleTimeString();
+      } catch { return "just now"; }
+    }
+    function cacheTokens(v) {
+      return (v?.cache?.read ?? v?.cache?.cache_read_input_tokens ?? 0);
+    }
+    function cachePct(v) {
+      const r = v?.cache?.read ?? 0;
+      const c = v?.cache?.creation ?? 0;
+      const total = r + c;
+      return total ? Math.round((r / total) * 100) : 0;
+    }
+
+    function paintVerdict(v, opts={}) {
+      if (!v) return;
+      const lvl = safeLevel(v.risk_level);
+      const reason = v.reasoning || "—";
+      const isLong = reason.length > 120;
+      const tok = cacheTokens(v);
+      const pct = cachePct(v);
+      const cost = (tok * 0.0000003).toFixed(5); // illustrative — Sonnet cached read pricing
+      const src = v.source || "claude";
+      const isFallback = src.startsWith("fallback") || src === "heuristic-fallback";
+      const sourceHtml = isFallback
+        ? `<span class="source-pill fallback" title="Local heuristic — Claude API unavailable">⚙ local heuristic</span>`
+        : `<span class="source-pill claude" title="Claude verdict">▲ claude</span>`;
+      const cacheHtml = isFallback
+        ? ``
+        : `<span class="cache-pill" title="Prompt-cache hit rate this window">💾 ${pct}% cache · $${cost}</span>`;
+      verdictBox.innerHTML = `
+        <div class="stamp" data-level="${lvl}">
+          <span class="glyph"></span>${lvl.toUpperCase()}
+        </div>
+        <p class="reasoning ${isLong ? "long" : ""}">${escapeHtml(reason)}</p>
+        <div class="verdict-foot">
+          <span>${escapeHtml(fmtTime(v.ts || Date.now()))}</span>
+          <span style="display:inline-flex;gap:6px;align-items:center;flex-wrap:wrap">${sourceHtml}${cacheHtml}</span>
+        </div>
+      `;
+      proctorEl.classList.toggle("alarm", lvl === "critical");
+      verdictCard.classList.remove("in-flight");
+      if (lvl === "critical") {
+        totalAnomalies += 1;
+        $("sigAnom").textContent = totalAnomalies;
+        announceLater(`Critical verdict: ${reason}`);
+      } else {
+        announceLater(`${lvl} verdict.`);
+      }
+    }
+
+    function pushHistory(v) {
+      const exists = history.some(h => h.ts === v.ts && h.reasoning === v.reasoning);
+      if (!exists) history.unshift(v);
+      if (history.length > 50) history.pop();
+      renderHistory();
+    }
+
+    function renderHistory() {
+      if (!history.length) {
+        historyEl.innerHTML = '<div class="history-empty">No verdicts yet.</div>';
+        histCount.textContent = "";
+        return;
+      }
+      histCount.textContent = `${history.length} total`;
+      const now = Date.now();
+      historyEl.innerHTML = history.map((v, i) => {
+        const lvl = safeLevel(v.risk_level);
+        const stale = (now - (v.ts || now)) > 30_000;
+        return `
+          <div class="history-item ${stale ? "stale" : ""}" data-level="${lvl}" tabindex="0">
+            <div class="top">
+              <span class="lvl">${lvl.toUpperCase()}</span>
+              <span>${escapeHtml(fmtTime(v.ts || Date.now()))}</span>
+            </div>
+            <div class="reason">${escapeHtml(v.reasoning || "—")}</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    // ═══════════════════════════════════════════════════
+    //  POST telemetry — self-rescheduling
+    // ═══════════════════════════════════════════════════
+    async function sendWindow() {
+      const telemetry = summarize(bucket);
+      const sentBucket = bucket;
+
+      verdictCard.classList.add("in-flight");
+      postsInFlight++;
+      updateConn();
+
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), POST_TIMEOUT_MS);
+
+      try {
+        const r = await fetch("/api/telemetry", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ sessionId, telemetry }),
+          signal: ctrl.signal,
+        });
+        clearTimeout(timer);
+        if (!r.ok) throw new Error("status " + r.status);
+        const verdict = await r.json();
+        consecFailures = 0;
+
+        // reset only on success — sentBucket guard prevents losing concurrent input
+        if (sentBucket === bucket) {
+          bucket = newBucket();
+          lastKeyTs = null;
+          tickRing();
+        }
+        paintVerdict(verdict);
+        pushHistory(verdict);
+      } catch (err) {
+        clearTimeout(timer);
+        consecFailures++;
+        verdictCard.classList.remove("in-flight");
+        console.warn("[verity] telemetry post failed", err);
+      } finally {
+        postsInFlight = Math.max(0, postsInFlight - 1);
+        updateConn();
+        // self-reschedule
+        scheduleNextWindow();
+      }
+    }
+
+    let nextWindowTimer = null;
+    function scheduleNextWindow() {
+      clearTimeout(nextWindowTimer);
+      const elapsed = Date.now() - windowStart;
+      const wait = Math.max(0, WINDOW_MS - elapsed);
+      nextWindowTimer = setTimeout(sendWindow, wait);
+    }
+
+    function updateConn() {
+      connChip.classList.remove("ok","warn","critical");
+      if (consecFailures >= 3) {
+        connChip.classList.add("critical");
+        connText.textContent = "connection lost · retrying";
+      } else if (consecFailures >= 1) {
+        connChip.classList.add("warn");
+        connText.textContent = "retry";
+      } else {
+        connChip.classList.add("ok");
+        connText.textContent = postsInFlight ? "analysing…" : "live";
+      }
+    }
+
+    // ═══════════════════════════════════════════════════
+    //  TOAST + ANNOUNCER
+    // ═══════════════════════════════════════════════════
+    let toastTimer = null;
+    function flashToast(html) {
+      toastEl.querySelector("span").innerHTML = html;
+      toastEl.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toastEl.classList.remove("show"), 2400);
+    }
+    let annTimer = null;
+    function announceLater(msg) {
+      clearTimeout(annTimer);
+      annTimer = setTimeout(() => { srAnnounce.textContent = msg; }, 200);
+    }
+
+    // ═══════════════════════════════════════════════════
+    //  ★ JAW-DROPPER: Behavioral Signature Waveform
+    //   - Continuously draws keystroke cadence as an oscilloscope trace
+    //   - 60s rolling window, 20fps
+    //   - Spikes tinted oxblood when verdict was Critical/Warning
+    // ═══════════════════════════════════════════════════
+    const sigCanvas = $("sigCanvas");
+    const sigCtx = sigCanvas.getContext("2d");
+    const SIG_WINDOW_MS = 60_000;
+    const sigPoints = []; // [{t, v, level}]
+    const verdictMarks = []; // [{t, level}]
+
+    function resizeSig() {
+      const dpr = window.devicePixelRatio || 1;
+      const w = sigCanvas.clientWidth;
+      const h = 96;
+      sigCanvas.width = w * dpr;
+      sigCanvas.height = h * dpr;
+      sigCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    window.addEventListener("resize", resizeSig);
+    setTimeout(resizeSig, 50);
+
+    function pushSignaturePoint(t) {
+      sigPoints.push({ t, kind: "key" });
+    }
+
+    // synthesize a smooth amplitude trace from keystroke events
+    function drawSig() {
+      const w = sigCanvas.clientWidth;
+      const h = 96;
+      sigCtx.clearRect(0, 0, w, h);
+
+      // grid drawn via CSS background; draw centerline
+      sigCtx.strokeStyle = "rgba(243,239,230,0.15)";
+      sigCtx.lineWidth = 1;
+      sigCtx.beginPath();
+      sigCtx.moveTo(0, h/2);
+      sigCtx.lineTo(w, h/2);
+      sigCtx.stroke();
+
+      const now = Date.now();
+      const cutoff = now - SIG_WINDOW_MS;
+      while (sigPoints.length && sigPoints[0].t < cutoff) sigPoints.shift();
+      while (verdictMarks.length && verdictMarks[0].t < cutoff) verdictMarks.shift();
+
+      // build amplitude per pixel column from key density
+      const cols = w;
+      const buf = new Float32Array(cols);
+      const colMs = SIG_WINDOW_MS / cols;
+      for (const p of sigPoints) {
+        const x = ((p.t - cutoff) / colMs) | 0;
+        if (x >= 0 && x < cols) buf[x] += 1;
+      }
+      // smooth (3-tap)
+      const sm = new Float32Array(cols);
+      for (let i = 0; i < cols; i++) {
+        sm[i] = (buf[Math.max(0,i-1)] + buf[i] + buf[Math.min(cols-1,i+1)]) / 3;
+      }
+
+      // last-second peak kpm = key density
+      let recentKeys = 0;
+      const oneSecAgo = now - 1000;
+      for (const p of sigPoints) if (p.t > oneSecAgo) recentKeys++;
+      const kpm = recentKeys * 60;
+      if (kpm > peakKpm) peakKpm = kpm;
+      $("sigPeak").textContent = Math.round(peakKpm);
+
+      // sigma of recent intervals
+      const recentIntervals = bucket.keydown_intervals_ms.slice(-20);
+      if (recentIntervals.length > 3) {
+        const mean = recentIntervals.reduce((a,b)=>a+b,0)/recentIntervals.length;
+        const variance = recentIntervals.reduce((a,b)=>a+(b-mean)**2,0)/recentIntervals.length;
+        $("sigSigma").textContent = Math.round(Math.sqrt(variance)) + "ms";
+      }
+
+      // draw trace — oscilloscope style with glow
+      const baseAmp = h * 0.35;
+      const t0 = now / 1000;
+
+      // glow under-layer
+      sigCtx.strokeStyle = "rgba(255,80,80,0.18)";
+      sigCtx.lineWidth = 4;
+      sigCtx.beginPath();
+      for (let x = 0; x < cols; x++) {
+        const density = sm[x];
+        // carrier wave + density modulation
+        const phase = (x * 0.05) + t0 * 1.2;
+        const carrier = Math.sin(phase) * 0.18 + Math.sin(phase*2.3) * 0.08;
+        const y = h/2 - (carrier + Math.tanh(density * 0.8) * 0.9) * baseAmp;
+        if (x === 0) sigCtx.moveTo(x, y); else sigCtx.lineTo(x, y);
+      }
+      sigCtx.stroke();
+
+      // sharp top-layer
+      sigCtx.lineWidth = 1.4;
+      sigCtx.beginPath();
+      for (let x = 0; x < cols; x++) {
+        const density = sm[x];
+        const phase = (x * 0.05) + t0 * 1.2;
+        const carrier = Math.sin(phase) * 0.18 + Math.sin(phase*2.3) * 0.08;
+        const y = h/2 - (carrier + Math.tanh(density * 0.8) * 0.9) * baseAmp;
+        if (x === 0) sigCtx.moveTo(x, y); else sigCtx.lineTo(x, y);
+      }
+      // gradient stroke
+      const grad = sigCtx.createLinearGradient(0, 0, w, 0);
+      grad.addColorStop(0,    "rgba(243,239,230,0.6)");
+      grad.addColorStop(0.85, "rgba(243,239,230,0.95)");
+      grad.addColorStop(1,    "rgba(255,80,80,1)");
+      sigCtx.strokeStyle = grad;
+      sigCtx.stroke();
+
+      // verdict markers — vertical bands tinted by level
+      for (const m of verdictMarks) {
+        const x = ((m.t - cutoff) / colMs);
+        const color =
+          m.level === "critical" ? "rgba(255,64,64,0.35)" :
+          m.level === "warning"  ? "rgba(245,180,60,0.22)" :
+                                    "rgba(120,200,140,0.10)";
+        sigCtx.fillStyle = color;
+        sigCtx.fillRect(x - 1, 0, 2, h);
+        if (m.level === "critical") {
+          sigCtx.fillStyle = "rgba(255,64,64,0.08)";
+          sigCtx.fillRect(x - 18, 0, 36, h);
+        }
+      }
+
+      // leading edge dot
+      sigCtx.fillStyle = "rgba(255,80,80,0.95)";
+      sigCtx.beginPath();
+      sigCtx.arc(w - 2, h/2, 3, 0, Math.PI*2);
+      sigCtx.fill();
+
+      requestAnimationFrame(drawSig);
+    }
+    requestAnimationFrame(drawSig);
+
+    // ═══════════════════════════════════════════════════
+    //  SIMULATION TRIGGERS
+    // ═══════════════════════════════════════════════════
+    $("simIdle").addEventListener("click", () => {
+      bucket.max_idle_gap_ms = Math.max(bucket.max_idle_gap_ms, 12000);
+      flashToast("<b>● SIMULATED</b> · 12s idle gap injected");
+    });
+    $("simBlur").addEventListener("click", () => {
+      bucket.focus_losses += 3;
+      bucket.time_off_window_ms += 4200;
+      flashToast("<b>● SIMULATED</b> · 3 tab-outs (4.2s away)");
+    });
+    $("simPaste").addEventListener("click", () => {
+      bucket.pastes += 1;
+      bucket.paste_payload_chars += 1247;
+      flashToast("<b>● SIMULATED</b> · 1,247-char paste injected");
+    });
+
+    // ═══════════════════════════════════════════════════
+    //  ABOUT modal — real, not alert()
+    // ═══════════════════════════════════════════════════
+    aboutLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      modalRoot.innerHTML = `
+        <div class="modal-back" id="modalBack">
+          <div class="modal" role="dialog" aria-labelledby="modalTitle">
+            <h3 id="modalTitle">What is Verity?</h3>
+            <p>A working zero-trust mitigation against the macOS 26 invisible-window screen-sharing exploit. Verity ignores pixels — it analyses behavioral telemetry every 5 seconds via a prompt-cached Claude system prompt and returns a structured risk verdict.</p>
+            <p><b>The actual system prompt sent to Claude:</b></p>
+            <pre>${escapeHtml(SYSTEM_PROMPT_TEXT)}</pre>
+            <button class="close" id="modalClose">Close</button>
+          </div>
+        </div>`;
+      $("modalClose").addEventListener("click", () => modalRoot.innerHTML = "");
+      $("modalBack").addEventListener("click", (e) => {
+        if (e.target.id === "modalBack") modalRoot.innerHTML = "";
+      });
+      document.addEventListener("keydown", function esc(ev) {
+        if (ev.key === "Escape") { modalRoot.innerHTML = ""; document.removeEventListener("keydown", esc); }
+      });
+    });
+
+    // ═══════════════════════════════════════════════════
+    //  INTRO + RESET + SUBMIT
+    // ═══════════════════════════════════════════════════
+    const introSeen = (() => { try { return localStorage.getItem("verity:introSeen") === "1"; } catch { return false; } })();
+    if (introSeen) introEl.style.display = "none";
+    introStart.addEventListener("click", () => {
+      introEl.style.display = "none";
+      try { localStorage.setItem("verity:introSeen", "1"); } catch {}
+      ta.focus();
+    });
+
+    resetBtn.addEventListener("click", () => {
+      if (!confirm("Start a new session? Your draft will be cleared.")) return;
+      try { localStorage.removeItem(STORAGE_KEY); } catch {}
+      ta.value = "";
+      bucket = newBucket();
+      lastKeyTs = null;
+      history = [];
+      sigPoints.length = 0;
+      verdictMarks.length = 0;
+      totalAnomalies = 0; peakKpm = 0;
+      $("sigAnom").textContent = "0";
+      $("sigPeak").textContent = "0";
+      sessionId = newSessionId();
+      sessionLabel.textContent = "session: " + sessionId;
+      verdictBox.innerHTML = `<div class="verdict-empty">Awaiting first window — analysing…<div class="progress" aria-hidden="true"><div id="progFill" style="position:absolute;inset:0;background:var(--ox);transform-origin:left;transform:scaleX(0);transition:transform .12s linear"></div></div></div>`;
+      proctorEl.classList.remove("alarm");
+      renderHistory();
+      updateCounts();
+      submitBtn.disabled = true;
+      flashToast("<b>● SESSION RESET</b>");
+    });
+
+    submitBtn.addEventListener("click", () => {
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Submitted ✓";
+      ta.readOnly = true;
+      flashToast("<b>● RESPONSE SUBMITTED</b> · session frozen for review");
+      clearTimeout(nextWindowTimer);
+      // send one final window
+      sendWindow().finally(() => clearTimeout(nextWindowTimer));
+    });
+
+    // tag verdicts onto the waveform
+    const _origPaintVerdict = paintVerdict;
+    paintVerdict = function(v, opts) {
+      _origPaintVerdict(v, opts);
+      verdictMarks.push({ t: Date.now(), level: safeLevel(v.risk_level) });
+    };
+
+    // ═══════════════════════════════════════════════════
+    //  TIMERS
+    // ═══════════════════════════════════════════════════
+    setInterval(() => paintCurrent(summarize(bucket)), 250);
+    setInterval(tickRing, 100);
+    scheduleNextWindow();
+
+    // dashboard reconciliation poll (backstop only)
+    setInterval(async () => {
+      try {
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), 4000);
+        const r = await fetch("/api/dashboard/" + sessionId, { signal: ctrl.signal });
+        clearTimeout(timer);
+        if (r.ok) {
+          const data = await r.json();
+          if (Array.isArray(data.history) && data.history.length > history.length) {
+            history = data.history.slice(0, 50);
+            renderHistory();
+          }
+        }
+      } catch {}
+    }, 4000);
+
+    // tick connection chip
+    setInterval(updateConn, 1500);
+  </script>
+</body>
+</html>
