@@ -40,13 +40,44 @@ Detects cheating without ever looking at the screen.
 
 ## Why this exists
 
-In 2026 a flaw was disclosed in macOS 26's screen-capture stack: a malicious application can render an **Invisible Window** that is fully visible to the user but absent from any feed produced by the W3C `getDisplayMedia()` API. Browser-based proctoring tools — which rely on that API to record the candidate's screen — cannot see the window. ChatGPT, lecture notes, a teammate's Zoom — anything painted into that overlay is a free pass.
+A 2026 disclosure (Abedini, *The Invisible Window: Exploiting OS-Level Display Affinity to Bypass WebRTC Proctoring Systems*) formalised an attack class against browser-based proctoring. The attack uses two **documented OS-level display-affinity APIs** — Windows `SetWindowDisplayAffinity(WDA_EXCLUDEFROMCAPTURE)` and macOS `NSWindow.SharingType.none` — to render application windows that are fully visible on the physical display but **produce zero pixels in any output of the W3C `getDisplayMedia()` capture API**.
 
-Visual proctoring at the browser layer is therefore broken, and patching it requires changes inside the OS compositor's trust boundary. Schools cannot wait.
+The paper demonstrates 100 % evasion across Windows 10/11 and macOS 14–26, including macOS 26 where the vector was previously assumed mitigated (§V, Table I). The paper formalises this as a **display-fidelity violation** between the browser capture API and the OS compositing pipeline (§III-B).
 
-**Verity is a working mitigation that ignores the visual channel entirely.** Instead of asking *"what is on the screen?"* it asks *"how is the human behaving?"* — a question whose evidence (keystroke cadence, focus events, paste payloads) lives inside the browser, beneath the exploit's reach.
+Visual proctoring at the browser layer is therefore structurally broken. Patching it requires changes inside the OS compositor's trust boundary, and schools cannot wait.
 
-> If a student's screen recording looks pristine but their telemetry shows a 20-second tab-out followed by a 1,400-character paste, the screen recording is the lie. Verity catches the lie.
+**Verity is a working implementation of Countermeasure C from §VI-C of the paper:** JavaScript-based behavioral monitoring (focus / blur / paste / cadence) augmented with an LLM fusion layer. It ignores the visual channel entirely and asks *"how is the human behaving?"* — a question whose evidence lives inside the browser, beneath the display-affinity exploit's reach.
+
+> If a candidate's screen recording looks pristine but their telemetry shows a 4-second tab-out followed by a 1,247-character paste, the screen recording is the lie. Verity catches the lie.
+
+## Mapping to the disclosure paper
+
+Verity implements **Countermeasure C — Application Focus Monitoring** from §VI-C of the disclosure paper. The paper recommends pairing C with **Countermeasure A — Display Affinity Flag Enumeration** (§VI-A) as the *"most practical near-term defence"* (§VI-F). Verity is the JavaScript half of that pair; the native-agent half is on the [roadmap](#roadmap).
+
+| Paper § | Countermeasure | Status in Verity |
+|---------|---------------|------------------|
+| §VI-A | Display-affinity flag enumeration via native agent | ❌ Roadmap — see *Native helper* below |
+| §VI-B | Frame comparison with known state | ❌ Paper rates "Low feasibility" |
+| **§VI-C** | **Application focus + paste monitoring** | **✅ Implemented (this repo)** |
+| §VI-D | Hardware-rooted display attestation (TPM) | ❌ Paper rates "Very low feasibility" |
+| §VI-E | OS-level capture integrity API | ❌ Requires Microsoft / Apple |
+
+### What Verity catches (paper §V-C-2 confirms these signals leak)
+
+- Focus loss when the candidate clicks an invisible window
+- Paste / drop events — including the size of the payload
+- Tab-out → paste workflow (the classic alt-tab pattern)
+- Idle gap → paste with no manual edits
+- Superhuman cadence (>250 effective WPM)
+
+### What Verity **cannot** catch — explicit limitations from §VI-C
+
+The disclosure paper itself names two evasions that defeat focus-monitoring approaches, and they apply to Verity verbatim:
+
+1. **Click-through overlays.** A window using `WS_EX_TRANSPARENT` (Windows) or `ignoresMouseEvents` (macOS) — or a GPU-layer overlay like the one Cluely is reported to use (§VIII-F) — never receives focus, so the exam tab never blurs. Verity sees no anomaly.
+2. **Read-don't-paste workflows.** A candidate who silently transcribes content from an invisible overlay (Variant A static notes, Interview Coder) generates no paste events and a human-cadence WPM. Verity cannot distinguish this from honest typing.
+
+For these classes, the paper concludes (§VI-F) that you need Countermeasure A — a native agent enumerating display-affinity flags directly. **Verity is therefore a defense-in-depth layer, not a complete mitigation.** The honest framing in any presentation should be: *Verity is countermeasure C deployed as a working LLM-fusion prototype; it catches the unsophisticated attacker reliably, and the paper specifies exactly which sophisticated attackers it does not catch.*
 
 ## What Verity does
 
@@ -285,6 +316,24 @@ The frontend is intentionally a single static HTML file — no Vite, no React, n
 - Fully responsive, ARIA-live announcers, `prefers-reduced-motion` honored, iOS safe-area aware.
 
 ## Roadmap
+
+### Closing the gap to the paper's full recommendation
+
+- [ ] **Countermeasure A — Native helper agent (paper §VI-A).**
+      A small Windows/macOS companion that enumerates top-level windows during the
+      exam session and calls `GetWindowDisplayAffinity` (Win32) /
+      reads `NSWindow.sharingType` (AppKit) on each. Any window with
+      `WDA_EXCLUDEFROMCAPTURE` or `sharingType = .none` set during an active
+      session is reported to the proctor in real time. This is the half of the
+      paper's recommended (A)+(C) pair that Verity does not yet ship — and the
+      paper names it as the **most immediately effective** countermeasure on
+      Windows.
+- [ ] **Heuristic enrichment for click-through overlays.** Surface a *"too clean"*
+      meta-signal when a long answer accumulates with zero focus / paste / idle
+      events — the residual evidence of a read-don't-paste attack. The model
+      already flags this in its reasoning (§VI-C blind-spot disclosure).
+
+### Beyond the paper
 
 - [ ] WebSocket transport for sub-100ms verdict latency
 - [ ] Per-candidate baseline calibration (first 60s = personal cadence)
