@@ -34,29 +34,44 @@ appear in the panel within 2 seconds.
 |----------------|----------------------------|---------------------------------------------------|
 | `--session`    | *(required)*               | Browser session ID to attach to                   |
 | `--server`     | `http://localhost:3030`    | Verity server URL                                 |
-| `--secret`     | `verity-dev-helper`        | Shared secret (must match `VERITY_HELPER_SECRET`) |
+| `--secret`     | *(required, or env var)*   | Shared secret (must match `VERITY_HELPER_SECRET`) |
 | `--interval`   | `2000`                     | Scan interval in ms                               |
 | `--verbose`    | off                        | Print every detected window                       |
 
 ## How it detects capture-invisible windows
 
-The helper does **not** parse a private API or read kernel structures. For each
-on-screen window enumerated by `CGWindowListCopyWindowInfo`, it captures a tiny
-image of the window via `CGWindowListCreateImage` — the same API the disclosure
-paper used (§V-C-1) to verify capture evasion on macOS 26. Five probe pixels
-across the captured frame are read.
+The helper does **not** parse a private API or read kernel structures. It uses
+two complementary public-API signals from Apple's ScreenCaptureKit (the same
+framework Apple ships its own screen-capture tools on top of):
 
-If the window has `sharingType = .none` (or any equivalent display-affinity flag),
-all five pixels come back as zero alpha — the OS compositor renders the window
-to the physical display but withholds the pixels from any capture pipeline.
-That binary signal — *on-screen but uncapturable* — is the flag.
+1. **Diff signal.** Enumerate every on-screen window with
+   `CGWindowListCopyWindowInfo`, then ask `SCShareableContent` for every
+   window the OS will surface to a capture pipeline. Any window present in
+   the first list but missing from the second is *on-screen but uncapturable*.
+   On some macOS versions, capture-excluded windows are filtered out of
+   `SCShareableContent` entirely — the diff catches them.
+
+2. **Probe signal.** For windows that DO appear in `SCShareableContent`,
+   call `SCScreenshotManager.captureImage(contentFilter:configuration:)`
+   (the supported replacement for `CGWindowListCreateImage`, which Apple
+   obsoleted in macOS 15). A capture-excluded window returns a buffer of
+   the right dimensions but with all-zero alpha. Five probe pixels are
+   sampled per window — if every one is zero, the window is hostile.
+
+A double-probe pass after a 50 ms settle filters transient SCK failures on
+legitimate windows. Both passes run in parallel via Swift TaskGroups.
+
+This implementation is verified live against the bundled
+[`invisible-window-poc`](../invisible-window-poc/) — running the PoC while
+the helper is attached produces a detection within 2 s and escalates the
+next telemetry verdict to Critical.
 
 ## Permission
 
 The first time you run the helper, macOS will ask you to grant **Screen
 Recording** permission. You must allow this. Without it,
-`CGWindowListCreateImage` returns nothing for *every* window and you'll see
-false positives.
+`SCShareableContent.excludingDesktopWindows(...)` throws and the helper
+exits cleanly with a clear error pointing at System Settings.
 
 ## Privacy
 

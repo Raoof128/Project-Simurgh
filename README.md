@@ -265,8 +265,8 @@ knob for institution-scale deployments.
 │  verity-helper (Swift)     │ ────────────────────► │  Affinity ingest                    │
 │  Countermeasure A · §VI-A  │       (every 2s)      │  • secret-gated                     │
 │  • CGWindowListCopyWindowInfo                      │  • escalates verdict to Critical    │
-│  • CGWindowListCreateImage │                       │    when hostile windows present     │
-│  • binary integrity probe  │                       │  • writes affinity transition to    │
+│  • SCShareableContent diff │                       │    when hostile windows present     │
+│  • SCScreenshotManager probe                       │  • writes affinity transition to    │
 │  • PID / owner / bounds    │                       │    HMAC audit chain                 │
 └────────────────────────────┘                       └─────────────────────────────────────┘
 ```
@@ -495,9 +495,14 @@ The frontend is intentionally two single static HTML files — no Vite, no React
 
 - [x] **Countermeasure A — macOS native helper (paper §VI-A).**
       Implemented in [`tools/verity-helper`](tools/verity-helper/) using
-      `CGWindowListCopyWindowInfo` + `CGWindowListCreateImage` integrity probe.
-      Reports any window with `sharingType = .none` to the server every 2 s;
-      the next verdict is escalated to Critical server-side.
+      `CGWindowListCopyWindowInfo` for enumeration plus the modern
+      ScreenCaptureKit pipeline (`SCShareableContent` diff +
+      `SCScreenshotManager` per-window pixel probe — the supported
+      replacement for `CGWindowListCreateImage`, which Apple obsoleted in
+      macOS 15). Reports any window with `sharingType = .none` to the
+      server every 2 s; the next verdict is escalated to Critical
+      server-side. Verified live against the bundled
+      [`invisible-window-poc`](tools/invisible-window-poc/) reproducer.
 - [x] **Personal cadence baseline.** First 60 s of typing → personal mean + σ
       over inter-key intervals. Subsequent windows are scored against the
       candidate's own cadence, not a population baseline.

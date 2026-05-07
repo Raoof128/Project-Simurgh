@@ -1,43 +1,54 @@
 // verity-helper — Countermeasure A from Abedini, 2026 §VI-A
 //
-// Enumerates every top-level on-screen window using
-// CGWindowListCopyWindowInfo(.optionOnScreenOnly) and inspects each for
-// the OS-level capture-exclusion flag.
+// Detects on-screen windows that are excluded from screen capture
+// (NSWindow.SharingType.none / WDA_EXCLUDEFROMCAPTURE on Windows) and
+// reports them to the Verity server every <interval> ms.
 //
-// On macOS, a window with NSWindow.SharingType.none — or any window
-// whose backing process otherwise disappears from the system capture
-// pipeline — is reported as "hostile" to the Verity server every 2 s.
+// DETECTION STRATEGY (ScreenCaptureKit, macOS 14+)
 //
-// CGWindowListCreateImage() is the same API the disclosure paper used
-// in §V-C-1 to verify the macOS 26 capture-evasion result. We use it
-// here as an oracle: if a process owns an on-screen window but the
-// captured image of that window region is fully transparent or absent,
-// the window has the .none sharingType (or equivalent display affinity)
-// and is excluded from screen capture.
+// We combine two signals:
+//
+//   (1) Diff: windows in CGWindowListCopyWindowInfo (on-screen) but NOT in
+//       SCShareableContent.windows. macOS sometimes filters capture-excluded
+//       windows out of the shareable list — when that happens, a window
+//       being on-screen but absent from SCK is a strong hostile signal.
+//
+//   (2) Probe: for every window that IS in SCShareableContent, ask
+//       SCScreenshotManager.captureImage(...) for the window's pixels.
+//       A capture-excluded window comes back as a transparent image with
+//       all-zero alpha. We sample 5 probe pixels — if every one is zero,
+//       the window is hostile.
+//
+// The probe is the load-bearing test (signal 2). The diff is a defence-in-
+// depth backstop in case macOS evolves to hide such windows entirely.
+//
+// SCScreenshotManager is the Apple-blessed replacement for
+// CGWindowListCreateImage (which Apple obsoleted in macOS 15).
 //
 // Privacy: the helper does NOT capture user content. It only reads
-// per-window metadata (PID, owner name, layer, bounds) and a single
-// integrity probe pixel from each window's bounding rect.
+// per-window metadata (PID, owner name, layer, bounds, capturability) and
+// 5 probe pixels per suspect window strictly to test transparency.
 //
 // Build:
-//     swiftc -O main.swift -o verity-helper -framework CoreGraphics -framework AppKit -framework Foundation
+//     make             # produces ./verity-helper
+//     make sign        # ad-hoc sign with the hardened-runtime entitlements
 //
 // Run:
-//     export VERITY_HELPER_SECRET=$(openssl rand -hex 32)   # same value the server uses
+//     export VERITY_HELPER_SECRET=$(openssl rand -hex 32)
 //     ./verity-helper --session sess-xxxxxxxx
 //     ./verity-helper --session sess-xxxxxxxx --server http://localhost:3030 --secret "$VERITY_HELPER_SECRET"
 
 import Foundation
 import CoreGraphics
 import AppKit
+import ScreenCaptureKit
 
 // ───────── argument parsing ─────────
 struct Args {
     var sessionId: String = ""
     var server: String   = "http://localhost:3030"
-    // No default secret — the operator must supply one explicitly via --secret
-    // or VERITY_HELPER_SECRET. Refusing to default keeps the helper from
-    // silently authenticating with a publicly known string.
+    // No default secret — refusing to default keeps the helper from silently
+    // authenticating with a publicly known string.
     var secret: String   = ProcessInfo.processInfo.environment["VERITY_HELPER_SECRET"] ?? ""
     var intervalMs: Int  = 2000
     var verbose: Bool    = false
@@ -58,8 +69,9 @@ func parseArgs() -> Args {
                 verity-helper — Countermeasure A native agent
                 Usage: verity-helper --session <sessionId> [--server URL] [--secret S] [--interval ms]
 
-                Reports any on-screen window that is excluded from screen capture
+                Reports any on-screen window the OS hides from screen capture
                 (NSWindow.SharingType.none) to the Verity server every <interval> ms.
+                Detection: SCShareableContent diff + SCScreenshotManager pixel probe.
                 """)
             exit(0)
         default: break
@@ -78,133 +90,16 @@ func parseArgs() -> Args {
     return a
 }
 
-// ───────── window enumeration + integrity probe ─────────
+// ───────── data shapes ─────────
 struct HostileWindow {
     let wid: CGWindowID       // internal; not serialised
     let pid: Int32
     let name: String
     let type: String
     let since: Int64
-    let pixelArea: Int        // width*height of this specific window (M-8)
+    let pixelArea: Int
 }
 
-/// Build a low-overhead capture for a single window via SCWindow's underlying
-/// CGWindow ID. If the captured image is "empty" (all-transparent or zero
-/// pixels) while the window is reported as on-screen and visible, the window
-/// is excluded from capture — i.e. it has sharingType=.none or equivalent.
-func isWindowExcludedFromCapture(windowId: CGWindowID, bounds: CGRect) -> Bool {
-    // Capture only the window's bounding rect, off-screen-rendered, ignoring framing.
-    let opts: CGWindowImageOption = [.boundsIgnoreFraming, .nominalResolution]
-    let listOpts: CGWindowListOption = [.optionIncludingWindow]
-    guard let img = CGWindowListCreateImage(.null, listOpts, windowId, opts) else {
-        // could not capture at all — strongest signal of exclusion
-        return true
-    }
-    // A captured frame from an excluded window comes back as a transparent
-    // image with the right dimensions but all-zero alpha. Sample a handful
-    // of pixels to verify.
-    let w = img.width, h = img.height
-    if w == 0 || h == 0 { return true }
-    guard let dataProv = img.dataProvider, let data = dataProv.data,
-          let bytes = CFDataGetBytePtr(data) else { return true }
-    let bpr = img.bytesPerRow
-    let bpp = img.bitsPerPixel / 8
-    if bpp < 4 { return false }     // not RGBA — skip integrity probe
-    let probes: [(Int, Int)] = [
-        (w / 4, h / 4),
-        (w / 2, h / 2),
-        ((w * 3) / 4, (h * 3) / 4),
-        (w / 2, h / 4),
-        (w / 4, (h * 3) / 4),
-    ]
-    var nonZero = 0
-    for (x, y) in probes {
-        let off = y * bpr + x * bpp
-        let r = bytes[off], g = bytes[off+1], b = bytes[off+2], a = bytes[off+3]
-        if a > 0 || r > 0 || g > 0 || b > 0 { nonZero += 1 }
-    }
-    // If 0 of 5 probe pixels carry data, the capture pipeline is returning a
-    // zero buffer for a window the OS reports as on-screen — i.e. the
-    // window is excluded from capture (sharingType = .none).
-    _ = bounds
-    return nonZero == 0
-}
-
-func windowListOpts() -> CGWindowListOption {
-    return CGWindowListOption(rawValue:
-        UInt32(kCGWindowListOptionOnScreenOnly) | UInt32(kCGWindowListExcludeDesktopElements))
-}
-
-struct WindowCandidate {
-    let wid: CGWindowID
-    let pid: Int32
-    let name: String
-    let layer: Int
-    let rect: CGRect
-}
-
-func scanHostileWindows(infoList: [[String: Any]], verbose: Bool) -> [HostileWindow] {
-    let me = ProcessInfo.processInfo.processIdentifier
-    let now = Int64(Date().timeIntervalSince1970 * 1000)
-
-    // Pass 1 — gather plausible candidates (cheap).
-    var candidates: [WindowCandidate] = []
-    for info in infoList {
-        guard let wid = info[kCGWindowNumber as String] as? CGWindowID,
-              let pid = info[kCGWindowOwnerPID as String] as? Int32,
-              pid != me,
-              let layer = info[kCGWindowLayer as String] as? Int else { continue }
-        if layer < 0 || layer > 100 { continue }
-        let owner = (info[kCGWindowOwnerName as String] as? String) ?? "unknown"
-        if ["WindowServer", "Dock", "Window Manager", "Control Centre", "ControlCenter",
-            "SystemUIServer", "loginwindow", "Notification Centre", "NotificationCenter"]
-            .contains(owner) { continue }
-        var rect = CGRect.zero
-        if let b = info[kCGWindowBounds as String] as? [String: CGFloat] {
-            rect = CGRect(x: b["X"] ?? 0, y: b["Y"] ?? 0,
-                          width: b["Width"] ?? 0, height: b["Height"] ?? 0)
-        }
-        if rect.width < 40 || rect.height < 40 { continue }
-        candidates.append(WindowCandidate(wid: wid, pid: pid, name: owner, layer: layer, rect: rect))
-    }
-
-    // Pass 2 — first probe in parallel.
-    var firstProbe = [Bool](repeating: false, count: candidates.count)
-    DispatchQueue.concurrentPerform(iterations: candidates.count) { i in
-        let c = candidates[i]
-        firstProbe[i] = isWindowExcludedFromCapture(windowId: c.wid, bounds: c.rect)
-    }
-
-    // Pass 3 — for the candidates that tripped the first probe, double-check
-    // in parallel after a short settle. The double-probe filters transient
-    // CGWindowListCreateImage failures on legitimate windows.
-    let suspectIdx = (0..<candidates.count).filter { firstProbe[$0] }
-    var secondProbe = [Bool](repeating: false, count: suspectIdx.count)
-    if !suspectIdx.isEmpty {
-        Thread.sleep(forTimeInterval: 0.05)
-        DispatchQueue.concurrentPerform(iterations: suspectIdx.count) { j in
-            let c = candidates[suspectIdx[j]]
-            secondProbe[j] = isWindowExcludedFromCapture(windowId: c.wid, bounds: c.rect)
-        }
-    }
-
-    var hostile: [HostileWindow] = []
-    for (j, idx) in suspectIdx.enumerated() where secondProbe[j] {
-        let c = candidates[idx]
-        if verbose {
-            print("[helper] HOSTILE wid=\(c.wid) pid=\(c.pid) name=\(c.name) layer=\(c.layer) bounds=\(c.rect)")
-        }
-        hostile.append(HostileWindow(
-            wid: c.wid, pid: c.pid, name: c.name,
-            type: "sharingType=.none / capture-excluded",
-            since: now,
-            pixelArea: Int(c.rect.width) * Int(c.rect.height)
-        ))
-    }
-    return hostile
-}
-
-// ───────── pixel-forensic computation (paper §III-B display fidelity) ─────────
 struct ForensicSnapshot: Codable {
     let display_width: Int
     let display_height: Int
@@ -215,29 +110,180 @@ struct ForensicSnapshot: Codable {
     let hostile_window_count: Int
 }
 
-func computeForensic(hostile: [HostileWindow], allInfo: [[String: Any]]) -> ForensicSnapshot {
-    let dispId = CGMainDisplayID()
-    let dispW  = Int(CGDisplayPixelsWide(dispId))
-    let dispH  = Int(CGDisplayPixelsHigh(dispId))
-    let dispPx = dispW * dispH
+let SYSTEM_OWNERS: Set<String> = [
+    "WindowServer", "Dock", "Window Manager",
+    "Control Centre", "ControlCenter",
+    "SystemUIServer", "loginwindow",
+    "Notification Centre", "NotificationCenter",
+    "Spotlight", "TextInputMenuAgent", "Wallpaper",
+]
 
-    var visibleCount = 0
-    let me = ProcessInfo.processInfo.processIdentifier
-    for info in allInfo {
-        guard let pid = info[kCGWindowOwnerPID as String] as? Int32, pid != me else { continue }
-        guard let layer = info[kCGWindowLayer as String] as? Int, layer >= 0 && layer <= 100 else { continue }
-        if let b = info[kCGWindowBounds as String] as? [String: CGFloat] {
-            let w = Int(b["Width"] ?? 0), h = Int(b["Height"] ?? 0)
-            if w >= 40 && h >= 40 { visibleCount += 1 }
-        }
+// ───────── pixel probe via SCScreenshotManager ─────────
+// Returns true if the captured image of `scWindow` is all-transparent /
+// zero-alpha across all probe samples (i.e. capture-excluded).
+@available(macOS 14.0, *)
+func isWindowExcluded(scWindow: SCWindow) async -> Bool {
+    let filter = SCContentFilter(desktopIndependentWindow: scWindow)
+    let cfg = SCStreamConfiguration()
+    let frame = scWindow.frame
+    cfg.width  = max(64, Int(frame.width))
+    cfg.height = max(64, Int(frame.height))
+    cfg.showsCursor = false
+    cfg.scalesToFit = false
+    cfg.pixelFormat = kCVPixelFormatType_32BGRA
+    cfg.queueDepth = 3
+
+    let img: CGImage
+    do {
+        img = try await SCScreenshotManager.captureImage(contentFilter: filter, configuration: cfg)
+    } catch {
+        // Capture failed outright — strongest possible "excluded" signal.
+        return true
     }
 
-    // Sum pixel area only for the SPECIFIC hostile windows (matched by wid),
-    // not for every window owned by a hostile PID — apps can legitimately own
-    // a normal capturable window alongside an excluded one (M-8).
+    let w = img.width, h = img.height
+    if w == 0 || h == 0 { return true }
+    guard let dataProv = img.dataProvider, let data = dataProv.data,
+          let bytes = CFDataGetBytePtr(data) else { return true }
+    let bpr = img.bytesPerRow
+    let bpp = img.bitsPerPixel / 8
+    if bpp < 4 { return false }   // can't tell — assume capturable
+
+    // Sample 5 probe points. A capture-excluded window returns a buffer of
+    // the right dimensions but with all bytes zero.
+    let probes: [(Int, Int)] = [
+        (w / 4, h / 4),
+        (w / 2, h / 2),
+        ((w * 3) / 4, (h * 3) / 4),
+        (w / 2, h / 4),
+        (w / 4, (h * 3) / 4),
+    ]
+    var nonZero = 0
+    for (x, y) in probes {
+        let off = y * bpr + x * bpp
+        let bb = bytes[off], gg = bytes[off+1], rr = bytes[off+2], aa = bytes[off+3]
+        if aa > 0 || rr > 0 || gg > 0 || bb > 0 { nonZero += 1 }
+    }
+    return nonZero == 0
+}
+
+// ───────── scan ─────────
+@available(macOS 14.0, *)
+func scanOnce(args: Args) async -> (hostile: [HostileWindow], forensic: ForensicSnapshot)? {
+    // SCShareableContent: every window the OS will surface to a capture pipeline.
+    let content: SCShareableContent
+    do {
+        content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: true)
+    } catch {
+        if args.verbose { print("[helper] SCK error: \(error.localizedDescription)") }
+        return nil
+    }
+
+    // Map wid → SCWindow for the probe phase.
+    var scByWid: [CGWindowID: SCWindow] = [:]
+    for w in content.windows { scByWid[w.windowID] = w }
+
+    // CGWindowList: every window actually on-screen (CGWindowList still
+    // works in 15+ — only CGWindowListCreateImage was obsoleted).
+    let listOpts: CGWindowListOption = [.optionOnScreenOnly, .excludeDesktopElements]
+    let allInfo = (CGWindowListCopyWindowInfo(listOpts, kCGNullWindowID) as? [[String: Any]]) ?? []
+
+    let me = ProcessInfo.processInfo.processIdentifier
+    let now = Int64(Date().timeIntervalSince1970 * 1000)
+
+    struct Candidate {
+        let wid: CGWindowID
+        let pid: Int32
+        let name: String
+        let layer: Int
+        let rect: CGRect
+        let scWindow: SCWindow?       // nil → window is in CGWindowList but not SCShareableContent
+    }
+
+    var candidates: [Candidate] = []
+    var visibleCount = 0
+    for info in allInfo {
+        guard let wid = info[kCGWindowNumber as String] as? CGWindowID,
+              let pid = info[kCGWindowOwnerPID as String] as? Int32,
+              pid != me,
+              let layer = info[kCGWindowLayer as String] as? Int else { continue }
+        if layer < 0 || layer > 100 { continue }
+        let owner = (info[kCGWindowOwnerName as String] as? String) ?? "unknown"
+        if SYSTEM_OWNERS.contains(owner) { continue }
+        var rect = CGRect.zero
+        if let b = info[kCGWindowBounds as String] as? [String: CGFloat] {
+            rect = CGRect(x: b["X"] ?? 0, y: b["Y"] ?? 0,
+                          width: b["Width"] ?? 0, height: b["Height"] ?? 0)
+        }
+        if rect.width < 40 || rect.height < 40 { continue }
+        visibleCount += 1
+        candidates.append(Candidate(
+            wid: wid, pid: pid, name: owner, layer: layer, rect: rect,
+            scWindow: scByWid[wid]
+        ))
+    }
+
+    // Probe phase — run all SCScreenshotManager probes in parallel via
+    // a TaskGroup so a slow window doesn't stall the rest.
+    let probeResults: [Bool] = await withTaskGroup(of: (Int, Bool).self) { group in
+        for (i, c) in candidates.enumerated() {
+            group.addTask {
+                // Backstop signal: window is on-screen but absent from
+                // SCShareableContent → treat as hostile without probing.
+                guard let sc = c.scWindow else { return (i, true) }
+                let excluded = await isWindowExcluded(scWindow: sc)
+                return (i, excluded)
+            }
+        }
+        var out = [Bool](repeating: false, count: candidates.count)
+        for await (i, excluded) in group { out[i] = excluded }
+        return out
+    }
+
+    // Double-check: if the first probe trips, run it once more after a short
+    // settle to filter transient SCK failures on legitimate windows.
+    var firstHits: [Int] = []
+    for (i, hit) in probeResults.enumerated() where hit { firstHits.append(i) }
+
+    var confirmed = [Bool](repeating: false, count: candidates.count)
+    if !firstHits.isEmpty {
+        try? await Task.sleep(nanoseconds: 50_000_000)   // 50ms
+        let confirmedResults: [(Int, Bool)] = await withTaskGroup(of: (Int, Bool).self) { group in
+            for i in firstHits {
+                group.addTask {
+                    guard let sc = candidates[i].scWindow else { return (i, true) }
+                    return (i, await isWindowExcluded(scWindow: sc))
+                }
+            }
+            var out: [(Int, Bool)] = []
+            for await r in group { out.append(r) }
+            return out
+        }
+        for (i, hit) in confirmedResults { confirmed[i] = hit }
+    }
+
+    var hostile: [HostileWindow] = []
+    for (i, c) in candidates.enumerated() where confirmed[i] {
+        if args.verbose {
+            print("[helper] HOSTILE wid=\(c.wid) pid=\(c.pid) name=\(c.name) layer=\(c.layer) bounds=\(c.rect) inSCK=\(c.scWindow != nil)")
+        }
+        hostile.append(HostileWindow(
+            wid: c.wid, pid: c.pid, name: c.name,
+            type: c.scWindow == nil
+                  ? "absent from SCShareableContent / capture-excluded"
+                  : "sharingType=.none / capture-excluded",
+            since: now,
+            pixelArea: Int(c.rect.width) * Int(c.rect.height)
+        ))
+    }
+
+    let dispId  = CGMainDisplayID()
+    let dispW   = Int(CGDisplayPixelsWide(dispId))
+    let dispH   = Int(CGDisplayPixelsHigh(dispId))
+    let dispPx  = dispW * dispH
     let invisiblePx = hostile.reduce(0) { $0 + $1.pixelArea }
     let pct = dispPx > 0 ? (Double(invisiblePx) / Double(dispPx)) * 100.0 : 0.0
-    return ForensicSnapshot(
+    let forensic = ForensicSnapshot(
         display_width: dispW,
         display_height: dispH,
         display_pixels: dispPx,
@@ -246,13 +292,14 @@ func computeForensic(hostile: [HostileWindow], allInfo: [[String: Any]]) -> Fore
         visible_window_count: visibleCount,
         hostile_window_count: hostile.count
     )
+    return (hostile, forensic)
 }
 
 // ───────── network ─────────
 func reportToServer(_ hostile: [HostileWindow], forensic: ForensicSnapshot, args: Args) {
     let body: [String: Any] = [
         "sessionId": args.sessionId,
-        "helper":    "verity-helper-mac/0.2",
+        "helper":    "verity-helper-mac/0.3-sck",
         "hostile":   hostile.map { ["pid": $0.pid, "name": $0.name, "type": $0.type, "since": $0.since] },
         "forensic":  [
             "display_width":         forensic.display_width,
@@ -273,8 +320,6 @@ func reportToServer(_ hostile: [HostileWindow], forensic: ForensicSnapshot, args
     req.setValue(args.secret, forHTTPHeaderField: "x-verity-helper-secret")
     req.httpBody = data
     // Fire-and-forget — do NOT block the scan loop on the network round-trip.
-    // A heartbeat that races a slow server doesn't justify halving the poll
-    // rate; if the server is down we just log and keep scanning.
     URLSession.shared.dataTask(with: req) { _, resp, err in
         if args.verbose {
             if let err = err { print("[helper] post error: \(err.localizedDescription)") }
@@ -285,78 +330,49 @@ func reportToServer(_ hostile: [HostileWindow], forensic: ForensicSnapshot, args
     }.resume()
 }
 
-// ───────── Screen Recording permission preflight ─────────
-//
-// Without Screen Recording permission, CGWindowListCreateImage returns a
-// transparent buffer for every window the helper doesn't own — meaning the
-// helper would flag every window as hostile (the ~0% nonZero check trips).
-// Detect this state at startup and refuse to run rather than spam the
-// dashboard with false positives.
-//
-// We probe by sampling the desktop wallpaper region with CGWindowListCreateImage
-// and counting non-zero pixels in the captured frame. With permission, the
-// wallpaper has many non-zero pixels. Without it, the buffer is empty.
-func hasScreenRecordingPermission() -> Bool {
-    let dispId = CGMainDisplayID()
-    let bounds = CGRect(x: 0, y: 0,
-                        width: max(64, Int(CGDisplayPixelsWide(dispId))),
-                        height: max(64, Int(CGDisplayPixelsHigh(dispId))))
-    let listOpts = CGWindowListOption(rawValue: UInt32(kCGWindowListOptionOnScreenBelowWindow))
-    guard let img = CGWindowListCreateImage(bounds, listOpts, kCGNullWindowID, [.bestResolution]) else {
-        return false
-    }
-    guard let prov = img.dataProvider, let data = prov.data, let bytes = CFDataGetBytePtr(data) else {
-        return false
-    }
-    let bpr = img.bytesPerRow
-    let bpp = img.bitsPerPixel / 8
-    if bpp < 4 { return true } // can't tell; assume OK
-    var nonZero = 0
-    let samples = 24
-    let w = img.width, h = img.height
-    if w == 0 || h == 0 { return false }
-    for i in 0..<samples {
-        let x = (w * i) / samples
-        let y = (h * (i % 7 + 1)) / 8
-        let off = y * bpr + x * bpp
-        if bytes[off] > 0 || bytes[off+1] > 0 || bytes[off+2] > 0 || bytes[off+3] > 0 {
-            nonZero += 1
+// ───────── main loop ─────────
+@available(macOS 14.0, *)
+@main
+struct VerityHelper {
+    static func main() async {
+        // Force unbuffered stdout so log lines flush promptly when the helper
+        // is run from a parent process / pipe.
+        setbuf(stdout, nil)
+
+        let args = parseArgs()
+        print("[verity-helper] starting · session=\(args.sessionId) · server=\(args.server) · interval=\(args.intervalMs)ms · backend=ScreenCaptureKit")
+
+        // Preflight: SCShareableContent throws if Screen Recording is denied.
+        // The first call also triggers the system permission prompt on a
+        // fresh install, so we let it run before the main loop.
+        do {
+            _ = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: true)
+        } catch {
+            FileHandle.standardError.write(Data("""
+                [verity-helper] ⚠ Screen Recording permission denied.
+                [verity-helper] reason: \(error.localizedDescription)
+                [verity-helper]
+                [verity-helper] Grant access in System Settings → Privacy & Security → Screen
+                [verity-helper] Recording (toggle 'verity-helper' on, then re-launch).
+
+                """.utf8))
+            exit(77)
+        }
+        print("[verity-helper] Screen Recording permission OK · entering scan loop")
+
+        while true {
+            if let (hostile, forensic) = await scanOnce(args: args) {
+                reportToServer(hostile, forensic: forensic, args: args)
+                if hostile.isEmpty {
+                    if args.verbose {
+                        print("[verity-helper] clean — no capture-excluded windows · fidelity-deficit \(forensic.fidelity_deficit_pct)%")
+                    }
+                } else {
+                    print("[verity-helper] ⚠ \(hostile.count) capture-excluded window(s) · fidelity-deficit \(forensic.fidelity_deficit_pct)% (\(forensic.invisible_pixels) px) · " +
+                          hostile.map { "\($0.name)[\($0.pid)]" }.joined(separator: ", "))
+                }
+            }
+            try? await Task.sleep(nanoseconds: UInt64(args.intervalMs) * 1_000_000)
         }
     }
-    return nonZero >= 3
-}
-
-// ───────── main loop ─────────
-let args = parseArgs()
-print("[verity-helper] starting · session=\(args.sessionId) · server=\(args.server) · interval=\(args.intervalMs)ms")
-
-if !hasScreenRecordingPermission() {
-    FileHandle.standardError.write(Data("""
-        [verity-helper] ⚠ Screen Recording permission appears to be denied.
-        [verity-helper] Without it, CGWindowListCreateImage returns empty frames for every
-        [verity-helper] window — the integrity probe would flag everything as hostile.
-        [verity-helper]
-        [verity-helper] Grant access in System Settings → Privacy & Security → Screen
-        [verity-helper] Recording (toggle 'verity-helper' on, then re-launch).
-        [verity-helper]
-        [verity-helper] Re-running with --skip-permission-check is not recommended; aborting.
-        \n
-        """.utf8))
-    exit(77)
-}
-
-print("[verity-helper] Screen Recording permission OK · entering scan loop")
-
-while true {
-    let allInfo = (CGWindowListCopyWindowInfo(windowListOpts(), kCGNullWindowID) as? [[String: Any]]) ?? []
-    let hostile = scanHostileWindows(infoList: allInfo, verbose: args.verbose)
-    let forensic = computeForensic(hostile: hostile, allInfo: allInfo)
-    reportToServer(hostile, forensic: forensic, args: args)
-    if hostile.isEmpty {
-        if args.verbose { print("[verity-helper] clean — no capture-excluded windows · fidelity-deficit \(forensic.fidelity_deficit_pct)%") }
-    } else {
-        print("[verity-helper] ⚠ \(hostile.count) capture-excluded window(s) · fidelity-deficit \(forensic.fidelity_deficit_pct)% (\(forensic.invisible_pixels) px) · " +
-              hostile.map { "\($0.name)[\($0.pid)]" }.joined(separator: ", "))
-    }
-    Thread.sleep(forTimeInterval: Double(args.intervalMs) / 1000.0)
 }
