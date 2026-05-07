@@ -205,6 +205,12 @@
     const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
     const fmtTs = (ts) => { try { const d = new Date(ts); return isNaN(d) ? "—" : d.toLocaleTimeString(); } catch { return "—"; } };
 
+    // Auth — token comes from ?token= query param. The server validates it
+    // for /api/sessions, /api/dashboard, /api/audit, and /api/stream/instructor.
+    const TOKEN = new URLSearchParams(location.search).get("token") || "";
+    const tokenQuery = TOKEN ? "?token=" + encodeURIComponent(TOKEN) : "";
+    const authHeaders = TOKEN ? { "authorization": "Bearer " + TOKEN } : {};
+
     function renderCard(s) {
       const id = s.sessionId;
       const v = s.latest;
@@ -251,13 +257,11 @@
       // summary
       sActive.textContent = list.length;
       sessionsChip.textContent = list.length + " session" + (list.length === 1 ? "" : "s");
-      const oneHourAgo = Date.now() - 3600_000;
+      // Server-side counts already filter to the last hour — sum across sessions.
       let crit = 0, warn = 0;
       for (const s of list) {
-        if (s.latest && s.latest.ts > oneHourAgo) {
-          if (lvl(s.latest.risk_level) === "critical") crit++;
-          else if (lvl(s.latest.risk_level) === "warning") warn++;
-        }
+        crit += s.counts?.critical || 0;
+        warn += s.counts?.warning  || 0;
       }
       sCrit.textContent = crit;
       sWarn.textContent = warn;
@@ -277,7 +281,11 @@
 
     async function pullSessions() {
       try {
-        const r = await fetch("/api/sessions");
+        const r = await fetch("/api/sessions" + tokenQuery, { headers: authHeaders });
+        if (r.status === 401) {
+          streamText.textContent = "unauthorised — append ?token=… to URL";
+          return;
+        }
         if (!r.ok) return;
         const data = await r.json();
         if (data.model) document.getElementById("modelChip").textContent = data.model;
@@ -289,11 +297,15 @@
     pullSessions();
     setInterval(pullSessions, 5000);
 
-    // SSE for real-time pushes
+    // SSE for real-time pushes — exponential backoff with jitter on reconnect.
     let es = null;
+    let reconnectAttempt = 0;
+    let reconnectTimer = null;
     function connectSSE() {
-      es = new EventSource("/api/stream/instructor");
+      try { if (es) es.close(); } catch {}
+      es = new EventSource("/api/stream/instructor" + tokenQuery);
       es.addEventListener("hello", () => {
+        reconnectAttempt = 0;
         streamChip.classList.remove("warn","critical");
         streamText.textContent = "streaming";
       });
@@ -309,10 +321,16 @@
       };
       es.addEventListener("verdict", onUpdate);
       es.addEventListener("affinity", onUpdate);
+      es.addEventListener("shutdown", () => {
+        streamText.textContent = "server restarting…";
+      });
       es.onerror = () => {
         streamText.textContent = "reconnecting…";
         try { es.close(); } catch {}
-        setTimeout(connectSSE, 2000);
+        const delay = Math.min(30000, 1000 * Math.pow(2, reconnectAttempt) + Math.random() * 500);
+        reconnectAttempt++;
+        clearTimeout(reconnectTimer);
+        reconnectTimer = setTimeout(connectSSE, delay);
       };
     }
     connectSSE();

@@ -23,8 +23,9 @@
 //     swiftc -O main.swift -o verity-helper -framework CoreGraphics -framework AppKit -framework Foundation
 //
 // Run:
+//     export VERITY_HELPER_SECRET=$(openssl rand -hex 32)   # same value the server uses
 //     ./verity-helper --session sess-xxxxxxxx
-//     ./verity-helper --session sess-xxxxxxxx --server http://localhost:3030 --secret verity-dev-helper
+//     ./verity-helper --session sess-xxxxxxxx --server http://localhost:3030 --secret "$VERITY_HELPER_SECRET"
 
 import Foundation
 import CoreGraphics
@@ -34,7 +35,10 @@ import AppKit
 struct Args {
     var sessionId: String = ""
     var server: String   = "http://localhost:3030"
-    var secret: String   = ProcessInfo.processInfo.environment["VERITY_HELPER_SECRET"] ?? "verity-dev-helper"
+    // No default secret — the operator must supply one explicitly via --secret
+    // or VERITY_HELPER_SECRET. Refusing to default keeps the helper from
+    // silently authenticating with a publicly known string.
+    var secret: String   = ProcessInfo.processInfo.environment["VERITY_HELPER_SECRET"] ?? ""
     var intervalMs: Int  = 2000
     var verbose: Bool    = false
 }
@@ -65,15 +69,23 @@ func parseArgs() -> Args {
         FileHandle.standardError.write(Data("error: --session required (the sessionId from the Verity browser tab)\n".utf8))
         exit(64)
     }
+    if a.secret.isEmpty {
+        FileHandle.standardError.write(Data(
+            "error: --secret or VERITY_HELPER_SECRET required. Use the same value the server is started with.\n".utf8
+        ))
+        exit(64)
+    }
     return a
 }
 
 // ───────── window enumeration + integrity probe ─────────
-struct HostileWindow: Codable {
+struct HostileWindow {
+    let wid: CGWindowID       // internal; not serialised
     let pid: Int32
     let name: String
     let type: String
     let since: Int64
+    let pixelArea: Int        // width*height of this specific window (M-8)
 }
 
 /// Build a low-overhead capture for a single window via SCWindow's underlying
@@ -123,48 +135,71 @@ func windowListOpts() -> CGWindowListOption {
         UInt32(kCGWindowListOptionOnScreenOnly) | UInt32(kCGWindowListExcludeDesktopElements))
 }
 
+struct WindowCandidate {
+    let wid: CGWindowID
+    let pid: Int32
+    let name: String
+    let layer: Int
+    let rect: CGRect
+}
+
 func scanHostileWindows(infoList: [[String: Any]], verbose: Bool) -> [HostileWindow] {
     let me = ProcessInfo.processInfo.processIdentifier
-    var hostile: [HostileWindow] = []
     let now = Int64(Date().timeIntervalSince1970 * 1000)
 
+    // Pass 1 — gather plausible candidates (cheap).
+    var candidates: [WindowCandidate] = []
     for info in infoList {
         guard let wid = info[kCGWindowNumber as String] as? CGWindowID,
               let pid = info[kCGWindowOwnerPID as String] as? Int32,
               pid != me,
               let layer = info[kCGWindowLayer as String] as? Int else { continue }
-        // skip system menu bar / dock layers
         if layer < 0 || layer > 100 { continue }
         let owner = (info[kCGWindowOwnerName as String] as? String) ?? "unknown"
-        // ignore obvious system processes
         if ["WindowServer", "Dock", "Window Manager", "Control Centre", "ControlCenter",
             "SystemUIServer", "loginwindow", "Notification Centre", "NotificationCenter"]
             .contains(owner) { continue }
-
-        // bounding rect
         var rect = CGRect.zero
         if let b = info[kCGWindowBounds as String] as? [String: CGFloat] {
             rect = CGRect(x: b["X"] ?? 0, y: b["Y"] ?? 0,
                           width: b["Width"] ?? 0, height: b["Height"] ?? 0)
         }
-        if rect.width < 40 || rect.height < 40 { continue }     // too small to be cheat surface
+        if rect.width < 40 || rect.height < 40 { continue }
+        candidates.append(WindowCandidate(wid: wid, pid: pid, name: owner, layer: layer, rect: rect))
+    }
 
-        let excluded = isWindowExcludedFromCapture(windowId: wid, bounds: rect)
-        if excluded {
-            // double-check: occasionally CGWindowListCreateImage transiently
-            // returns nil for a legitimate window. Only flag if the window
-            // has been on-screen and the second probe also fails.
-            usleep(50_000)
-            let second = isWindowExcludedFromCapture(windowId: wid, bounds: rect)
-            if second {
-                if verbose {
-                    print("[helper] HOSTILE wid=\(wid) pid=\(pid) name=\(owner) layer=\(layer) bounds=\(rect)")
-                }
-                hostile.append(HostileWindow(pid: pid, name: owner,
-                                             type: "sharingType=.none / capture-excluded",
-                                             since: now))
-            }
+    // Pass 2 — first probe in parallel.
+    var firstProbe = [Bool](repeating: false, count: candidates.count)
+    DispatchQueue.concurrentPerform(iterations: candidates.count) { i in
+        let c = candidates[i]
+        firstProbe[i] = isWindowExcludedFromCapture(windowId: c.wid, bounds: c.rect)
+    }
+
+    // Pass 3 — for the candidates that tripped the first probe, double-check
+    // in parallel after a short settle. The double-probe filters transient
+    // CGWindowListCreateImage failures on legitimate windows.
+    let suspectIdx = (0..<candidates.count).filter { firstProbe[$0] }
+    var secondProbe = [Bool](repeating: false, count: suspectIdx.count)
+    if !suspectIdx.isEmpty {
+        Thread.sleep(forTimeInterval: 0.05)
+        DispatchQueue.concurrentPerform(iterations: suspectIdx.count) { j in
+            let c = candidates[suspectIdx[j]]
+            secondProbe[j] = isWindowExcludedFromCapture(windowId: c.wid, bounds: c.rect)
         }
+    }
+
+    var hostile: [HostileWindow] = []
+    for (j, idx) in suspectIdx.enumerated() where secondProbe[j] {
+        let c = candidates[idx]
+        if verbose {
+            print("[helper] HOSTILE wid=\(c.wid) pid=\(c.pid) name=\(c.name) layer=\(c.layer) bounds=\(c.rect)")
+        }
+        hostile.append(HostileWindow(
+            wid: c.wid, pid: c.pid, name: c.name,
+            type: "sharingType=.none / capture-excluded",
+            since: now,
+            pixelArea: Int(c.rect.width) * Int(c.rect.height)
+        ))
     }
     return hostile
 }
@@ -186,25 +221,21 @@ func computeForensic(hostile: [HostileWindow], allInfo: [[String: Any]]) -> Fore
     let dispH  = Int(CGDisplayPixelsHigh(dispId))
     let dispPx = dispW * dispH
 
-    var invisiblePx = 0
     var visibleCount = 0
     let me = ProcessInfo.processInfo.processIdentifier
-
-    // re-walk the window list to compute per-hostile pixel area
-    let hostilePids = Set(hostile.map { Int($0.pid) })
     for info in allInfo {
         guard let pid = info[kCGWindowOwnerPID as String] as? Int32, pid != me else { continue }
         guard let layer = info[kCGWindowLayer as String] as? Int, layer >= 0 && layer <= 100 else { continue }
         if let b = info[kCGWindowBounds as String] as? [String: CGFloat] {
             let w = Int(b["Width"] ?? 0), h = Int(b["Height"] ?? 0)
-            if w >= 40 && h >= 40 {
-                visibleCount += 1
-                if hostilePids.contains(Int(pid)) {
-                    invisiblePx += w * h
-                }
-            }
+            if w >= 40 && h >= 40 { visibleCount += 1 }
         }
     }
+
+    // Sum pixel area only for the SPECIFIC hostile windows (matched by wid),
+    // not for every window owned by a hostile PID — apps can legitimately own
+    // a normal capturable window alongside an excluded one (M-8).
+    let invisiblePx = hostile.reduce(0) { $0 + $1.pixelArea }
     let pct = dispPx > 0 ? (Double(invisiblePx) / Double(dispPx)) * 100.0 : 0.0
     return ForensicSnapshot(
         display_width: dispW,
@@ -241,7 +272,9 @@ func reportToServer(_ hostile: [HostileWindow], forensic: ForensicSnapshot, args
     req.setValue("application/json", forHTTPHeaderField: "content-type")
     req.setValue(args.secret, forHTTPHeaderField: "x-verity-helper-secret")
     req.httpBody = data
-    let sema = DispatchSemaphore(value: 0)
+    // Fire-and-forget — do NOT block the scan loop on the network round-trip.
+    // A heartbeat that races a slow server doesn't justify halving the poll
+    // rate; if the server is down we just log and keep scanning.
     URLSession.shared.dataTask(with: req) { _, resp, err in
         if args.verbose {
             if let err = err { print("[helper] post error: \(err.localizedDescription)") }
@@ -249,9 +282,7 @@ func reportToServer(_ hostile: [HostileWindow], forensic: ForensicSnapshot, args
                 print("[helper] post status=\(r.statusCode)")
             }
         }
-        sema.signal()
     }.resume()
-    _ = sema.wait(timeout: .now() + 4)
 }
 
 // ───────── Screen Recording permission preflight ─────────

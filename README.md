@@ -152,13 +152,20 @@ cp .env.example .env
 # .env
 # ANTHROPIC_API_KEY=sk-ant-…
 # PORT=3030                       (optional, default 3030)
-# VERITY_DEMO_MODE=0               (set to 1 to force local heuristic)
-# VERITY_HELPER_SECRET=…           (shared secret for the native helper)
-# VERITY_AUDIT_SECRET=…            (HMAC key for the audit chain)
+# VERITY_DEMO_MODE=0              (set to 1 to force local heuristic + open simulator)
+# VERITY_HELPER_SECRET=…          (REQUIRED in non-demo mode — long random hex)
+# VERITY_AUDIT_SECRET=…           (REQUIRED in production — HMAC key for the audit chain)
+# VERITY_INSTRUCTOR_TOKEN=…       (REQUIRED in production — gates /instructor + dashboard + SSE)
+# VERITY_ALLOWED_ORIGIN=*         (optional CORS — set to your exam origin in production)
 
 npm install
 npm start
 ```
+
+In non-demo mode the server refuses to start without `VERITY_HELPER_SECRET`,
+warns loudly when `VERITY_AUDIT_SECRET` is unset (the chain becomes
+unverifiable across restarts), and auto-generates an ephemeral instructor
+token printed to stdout if `VERITY_INSTRUCTOR_TOKEN` is unset.
 
 ### Optional: build & run the native helper (Countermeasure A)
 
@@ -205,12 +212,13 @@ pure JavaScript focus monitoring).
 ### Instructor view
 
 The server exposes a multi-session live aggregator at
-**[`/instructor`](http://localhost:3030/instructor)**. Real-time updates push
-via Server-Sent Events the moment any session emits a verdict or any helper
-detects a capture-invisible window. Each card shows: latest verdict + reasoning,
-helper status, fidelity-deficit %, recent verdict counts. Useful both for
-proctoring at scale and for showing an interviewer what a Verity *product*
-looks like running across N candidates.
+**`/instructor?token=<VERITY_INSTRUCTOR_TOKEN>`**. The token is required
+in non-demo mode and gates the page itself plus `/api/sessions`,
+`/api/dashboard/:id`, `/api/audit/:id`, and `/api/stream/instructor`.
+Real-time updates push via Server-Sent Events the moment any session emits
+a verdict or any helper detects a capture-invisible window. Each card shows
+latest verdict + reasoning, helper status, fidelity-deficit %, and verdict
+counts (last hour).
 
 ### Model tier (Sonnet vs. Haiku)
 
@@ -372,20 +380,30 @@ When the helper reports any hostile windows, the next verdict is **automatically
 escalated to Critical** server-side (`server.js:persistVerdict`), regardless of
 behavioral signal. This is the (A)+(C) fusion the paper recommends in §VI-F.
 
-### `POST /api/affinity/simulate` *(open · for the demo)*
+### `POST /api/affinity/simulate` *(DEMO_MODE only)*
 
-Same body shape as `/api/affinity` but **does not require the shared secret**.
-The server stamps the source as `verity-helper-simulator/0.1` so the UI can
-visually distinguish a simulated event from a real native-helper report. Used
-by the **Arm Invisible Window** button so the demo works regardless of
-whether `VERITY_HELPER_SECRET` has been customised.
+Same body shape as `/api/affinity` but does not require the helper shared
+secret. **Returns 403 outside `DEMO_MODE`** so the simulator cannot be used
+to forge hostile-window reports against a production server. The server
+stamps the source as `verity-helper-simulator/0.1` so the UI can distinguish
+a simulated event from a real native-helper report.
 
-### `GET /api/audit/:sessionId`
+### `GET /api/audit/:sessionId` *(instructor-token gated)*
 
 Download a tamper-evident HMAC chain of every verdict and every affinity
 transition for the session. Each entry is signed over its content plus the
 previous entry's signature; modifying any entry invalidates every subsequent
-signature. Verifies cryptographically against `VERITY_AUDIT_SECRET`.
+signature. Verify with the bundled tool:
+
+```bash
+VERITY_AUDIT_SECRET=<hex> node tools/verify-audit.mjs verity-audit-<id>.json
+```
+
+The chain is capped at 5000 entries; once full, the server stops appending
+and the export sets `"truncated": true` so a verifier can detect the
+boundary. If the server was started without `VERITY_AUDIT_SECRET`, exports
+include `"hmac_key_ephemeral": true` — those exports are not portable across
+restarts.
 
 ```json
 {
