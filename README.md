@@ -34,11 +34,13 @@ In Persian mythology, the Simurgh is the ultimate protector of pure knowledge—
 1. [The Threat: The Invisible Window](#1-the-threat-the-invisible-window)
 2. [The Simurgh Engine](#2-the-simurgh-engine)
 3. [Architecture](#3-architecture)
-4. [Quick Start](#4-quick-start)
-5. [API Reference](#5-api-reference)
-6. [Cost & Latency](#6-cost--latency)
-7. [Strategic Roadmap](#7-strategic-roadmap)
-8. [Status & License](#8-status--license)
+4. [Socio-Economic Impact & Democratic Access](#4-socio-economic-impact--democratic-access)
+5. [Quick Start](#5-quick-start)
+6. [API Reference](#6-api-reference)
+7. [Cost & Latency](#7-cost--latency)
+8. [Why Anthropic?](#8-why-anthropic)
+9. [Strategic Roadmap](#9-strategic-roadmap)
+10. [Status & License](#10-status--license)
 
 ---
 
@@ -91,7 +93,23 @@ The behavioral engine cannot natively detect click-through GPU overlays (e.g., C
 
 ---
 
-## 4. Quick Start
+## 4. Socio-Economic Impact & Democratic Access
+
+Current proctoring standards (CodeSignal, ProctorU, Examity) are built for the high-bandwidth elite. Project Simurgh intentionally disrupts this by prioritizing **Bandwidth-Inclusive Security**.
+
+### Bridging the Digital Divide (Remote Access)
+Traditional proctoring requires continuous, high-speed video streaming. This effectively excludes students in remote villages, developing nations, and rural regions (e.g., Regional Australia, the Global South) where bandwidth is a luxury. 
+* **The Simurgh Edge:** By transmitting lightweight behavioral JSON (~2KB) instead of HD video, we allow a student in a remote village on a 3G connection to maintain the same "Integrity Rating" as a student in Silicon Valley.
+
+### Privacy-as-Code vs. Privacy-as-Surveillance
+Platforms like CodeSignal are increasingly criticized for invasive data collection. Simurgh’s "Zero-Visual" approach removes the psychological stress of being "watched," which research shows disproportionately affects neurodivergent and underprivileged students. 
+
+### Institutional Dependency & Cost Reduction
+By leveraging Anthropic’s prompt-caching, universities can reduce proctoring overhead by up to **85%**. This forces a shift: institutions stop paying for human "surveillance bots" and start depending on **Anthropic’s Integrity API**. It transforms safety from a recurring expense into a core infrastructure dependency.
+
+---
+
+## 5. Quick Start
 
 ### Prerequisites
 - Node.js ≥ 20.0
@@ -128,7 +146,7 @@ make
 
 ---
 
-## 5. API Reference
+## 6. API Reference
 
 ### `POST /api/telemetry`
 Ingests the 5-second behavioral telemetry window from the client.
@@ -142,7 +160,7 @@ Receives native OS window metrics from the `simurgh-helper`.
 
 ---
 
-## 6. Cost & Latency
+## 7. Cost & Latency
 
 ### Prompt Caching Economics
 The system prompt encoding the threat model consists of ~700 tokens. As this prompt remains static across telemetry windows, Project Simurgh leverages Anthropic's `cache_control: { type: "ephemeral" }`. 
@@ -154,7 +172,21 @@ Telemetry evaluation occurs in real-time, with Claude API round-trips consistent
 
 ---
 
-## 7. Strategic Roadmap (2026 - 2027)
+## 8. Why Anthropic?
+
+Project Simurgh was architected with the same "Safety-First" DNA that defines Anthropic. While the broader industry races toward unconstrained agentic autonomy, Anthropic has consistently pioneered **Constitutional AI**—the principle that models must be helpful, honest, and harmless by design. 
+
+I am seeking to cooperate with Anthropic because our values are technically and ethically aligned:
+
+1. **Constitutional Integrity:** Just as Claude is guided by a constitution, Simurgh is guided by a commitment to **Privacy-as-Code**. We reject the invasive, high-bandwidth surveillance models of legacy proctoring platforms. We believe that security should never come at the cost of human dignity or privacy.
+2. **Alignment on "Computer Use":** Anthropic’s leadership in agentic capabilities (Project Glasswing/Opus 4.x) creates the most critical frontier for UI safety. Simurgh is the natural defensive partner for this ecosystem, providing the "Visual Guardrails" necessary for autonomous agents to interact with the world safely.
+3. **Democratizing Safety:** Anthropic's focus on ethical deployment matches my mission to bridge the digital divide. Together, we can ensure that a student in a remote village has access to the same high-integrity, low-bandwidth certification as a student in Silicon Valley.
+
+Project Simurgh is more than a project; it is an invitation to cooperate on the next generation of the AI Integrity Layer.
+
+---
+
+## 9. Strategic Roadmap (2026 - 2027)
 
 Project Simurgh is evolving from a vulnerability demonstration into a comprehensive, enterprise-grade Integrity API.
 
@@ -172,9 +204,14 @@ Project Simurgh is evolving from a vulnerability demonstration into a comprehens
 - [ ] Roll out the Integrity API as a mandatory safety dependency for academic proctoring and enterprise "Computer Use" agents.
 - [ ] Establish hardened OS environments natively immune to cross-platform redressing.
 
+### Phase 4: Privacy-Preserving Visuals (The "Code-Video" Layer)
+- [ ] **Edge-to-Token Processing:** Moving beyond telemetry to localized vision. Instead of streaming video of a user's room to a server, Simurgh will process video *on the edge* and convert physical movement into **Behavioral Metadata**.
+- [ ] **Pose-to-Code Translation:** Turning a webcam feed into a string of skeletal coordinates and gaze-vectors. The server never sees a photo of the student's home; it only sees a stream of "pose-tokens" that verify the human is present and focused. *(Requires Hardware-Rooted Attestation to prevent pose-token injection attacks).*
+- [ ] **Zero-Knowledge Visuals:** Establishing a future where universities can prove a test was taken fairly without ever possessing a single pixel of the student's likeness.
+
 ---
 
-## 8. Status & License
+## 10. Status & License
 
 **Status:** Research prototype and technical demonstrator. Built as a functional counterpart to a published vulnerability disclosure. 
 
