@@ -275,7 +275,7 @@ Returns all active and historical session metadata. Requires instructor token.
 | **Header** | `Authorization: Bearer <SIMURGH_INSTRUCTOR_TOKEN>` |
 | **Response** | `200 OK` — JSON array of session objects |
 
-### `GET /api/audit-export/:sessionId`
+### `GET /api/audit/:sessionId`
 Exports the full HMAC-chained audit trail for a given session. Requires instructor token.
 
 ---
@@ -357,19 +357,25 @@ Project Simurgh is evolving from a vulnerability demonstration into a comprehens
 - [ ] Release unified cross-platform installer / deployment toolkit.
 
 ### Phase 3b: Delivery Modes — Browser & Native Application (2027)
-Project Simurgh is designed to support two parallel delivery modes to maximize institutional flexibility:
+Project Simurgh is designed to support two parallel delivery modes per platform to maximize institutional flexibility:
 
-| Mode | Description | Target Use Case |
-|------|-------------|----------------|
-| **Browser-Based (PWA)** | Zero-install progressive web app served via the institution's LMS or exam portal. Works on any device with a modern browser. | Remote exams, BYOD environments, developing regions |
-| **Native Application** | Platform-specific desktop/mobile apps with deeper OS integration for enhanced telemetry and helper capabilities. | On-campus lockdown environments, enterprise agent deployments |
+| Platform | Browser (PWA) | Native App | Native Helper |
+|----------|--------------|------------|---------------|
+| **macOS** | ✅ Current | Roadmap — `.app` via MDM | ✅ `simurgh-helper` (Swift / ScreenCaptureKit) |
+| **Windows** | ✅ Current | Roadmap — `.msix` via GPO | Roadmap — `simurgh-helper-win` (Win32 API) |
+| **Linux** | ✅ Current | Roadmap — `.deb` / `.rpm` / Flatpak | Roadmap — `simurgh-helper-linux` (X11/Wayland) |
+| **iOS / iPadOS** | Roadmap — Safari PWA | Roadmap — Swift/SwiftUI (App Store) | Roadmap — embedded in native app |
+| **Android** | Roadmap — Chrome PWA | Roadmap — Kotlin (Play Store) | Roadmap — embedded in native app |
+| **ChromeOS** | Roadmap — Chrome PWA | Roadmap — Android APK sideload | N/A (browser telemetry sufficient) |
 
-- [ ] **Browser PWA:** Package the exam client as an installable Progressive Web App with offline telemetry buffering.
-- [ ] **macOS App:** Bundle `simurgh-helper` into a signed `.app` distributed via MDM for institutional deployment.
+**Browser-based delivery** provides zero-install access via the institution's LMS or exam portal — ideal for BYOD, remote exams, and developing regions. **Native applications** provide deeper OS integration, enabling the full `simurgh-helper` countermeasure suite (display-affinity scanning, process enumeration) alongside the behavioral telemetry client.
+
+- [ ] **Browser PWA (all platforms):** Package the exam client as an installable Progressive Web App with offline telemetry buffering and service worker resilience.
+- [ ] **macOS App:** Bundle `simurgh-helper` into a signed, notarized `.app` distributed via MDM for institutional deployment.
 - [ ] **Windows App:** Package `simurgh-helper-win` as a signed `.msix` installer for enterprise group policy distribution.
 - [ ] **Linux App:** Distribute as `.deb` / `.rpm` / Flatpak / Snap for managed university Linux labs.
-- [ ] **iOS App:** Develop a native Swift/SwiftUI exam client with App Store distribution for managed iPad fleets.
-- [ ] **Android App:** Develop a native Kotlin exam client with Play Store / managed Google Play distribution.
+- [ ] **iOS App:** Develop a native Swift/SwiftUI exam client with embedded behavioral helper and App Store distribution for managed iPad fleets.
+- [ ] **Android App:** Develop a native Kotlin exam client with embedded behavioral helper and Play Store / managed Google Play distribution.
 
 ### Phase 4: Privacy-Preserving Visuals — The "Code-Video" Layer (2027 – 2028)
 - [ ] **Edge-to-Token Processing:** Process video on the edge and convert physical movement into behavioral metadata. The server never receives raw video frames.

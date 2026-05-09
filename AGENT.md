@@ -126,3 +126,14 @@
   - `README.md` — Sections 2, 10, 11 updated.
 - **Verification:** All email claims now backed by README.
 - **Follow-ups:** Ready for GitHub push.
+
+### 2026-05-09 (Australia/Sydney)
+**Raouf:**
+- **Scope:** Codebase Verification Audit, Roadmap Expansion, Bug Fixes
+- **Summary:** Verified all README claims against codebase. Fixed 3 issues: wrong audit endpoint name, stale `verity-helper` binary, wrong Countermeasure label. Expanded Phase 3b with full 6-platform delivery matrix (Browser + App + Helper).
+- **Files Changed:**
+  - `README.md` — Fixed `/api/audit-export` → `/api/audit`, expanded Phase 3b matrix.
+  - `package.json` — Fixed Countermeasure A → C.
+  - `tools/simurgh-helper/verity-helper` — Deleted stale binary.
+- **Verification:** 14 architectural claims ✅, 6 env vars ✅, 4 API endpoints ✅.
+- **Follow-ups:** Ready for GitHub push.

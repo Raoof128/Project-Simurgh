@@ -2,7 +2,7 @@
   "name": "simurgh",
   "version": "0.1.0",
   "private": true,
-  "description": "Zero-trust behavioral AI exam proctor — working mitigation against the Invisible Window attack (Abedini, 2026). Claude-powered, prompt-cached, with native Countermeasure A helper.",
+  "description": "Zero-trust behavioral AI exam proctor — working mitigation against the Invisible Window attack (Abedini, 2026). Claude-powered, prompt-cached, with native Countermeasure C helper.",
   "type": "module",
   "main": "server.js",
   "scripts": {
