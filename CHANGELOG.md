@@ -73,3 +73,21 @@
   - `README.md` — Updated hero image caption, added Screenshots subsection with side-by-side table, fixed badge anchor links
 - **Verification:** All 4 screenshots render correctly in the README. Hero screenshot displays "Simurgh | BEHAVIORAL PROCTOR" header. No remaining "Verity" branding in any screenshot.
 - **Follow-ups:** Ready for GitHub push.
+
+### 2026-05-09 (Australia/Sydney)
+**Raouf:**
+- **Scope:** README Content Enhancement — Cost Reduction, First-Mover Strategy, Contributors
+- **Summary:** Expanded the Institutional Cost Reduction subsection to address the elimination of human invigilators and physical venue costs. Added a 4th point to "Why Anthropic?" — the first-mover advantage and strategic moat argument. Added Section 11 (Contributors) crediting Claude as an AI pair-programming partner.
+- **Files Changed:**
+  - `README.md` — Expanded Section 4 (Institutional Cost Reduction), added first-mover advantage to Section 9, added Section 11 (Contributors), renumbered Status & License to Section 12, updated ToC and badge anchors.
+- **Verification:** All 12 ToC anchors resolve correctly. Badge links updated to `#12-status--license`.
+- **Follow-ups:** Ready for GitHub push.
+
+### 2026-05-09 (Australia/Sydney)
+**Raouf:**
+- **Scope:** README — Public Health Resilience Argument
+- **Summary:** Added a "Public Health Resilience" subsection to Section 4 (Socio-Economic Impact). Frames the epidemiological risk of large-scale in-person exams (COVID-19, seasonal influenza) and positions behavioral integrity verification as institutional resilience infrastructure.
+- **Files Changed:**
+  - `README.md` — New subsection under Section 4.
+- **Verification:** Section reads in a formal, research-grade tone consistent with the rest of the document.
+- **Follow-ups:** Ready for GitHub push.

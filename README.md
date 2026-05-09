@@ -8,8 +8,8 @@
 
 [![Node](https://img.shields.io/badge/node-%E2%89%A520.0-1a1a1a?style=flat-square)](https://nodejs.org)
 [![Claude](https://img.shields.io/badge/claude-sonnet--4--5-6b1a1a?style=flat-square)](https://docs.claude.com)
-[![License](https://img.shields.io/badge/license-MIT-d6cfbe?style=flat-square)](#11-status--license)
-[![Status](https://img.shields.io/badge/status-research%20prototype-2f4a2a?style=flat-square)](#11-status--license)
+[![License](https://img.shields.io/badge/license-MIT-d6cfbe?style=flat-square)](#12-status--license)
+[![Status](https://img.shields.io/badge/status-research%20prototype-2f4a2a?style=flat-square)](#12-status--license)
 
 **[Read the Disclosure Paper →](https://raoufabedini.dev/projects/invisible-window-research)**
 
@@ -43,7 +43,8 @@ In Persian mythology, the Simurgh is the ultimate protector of pure knowledge �
 | 8 | [Security Considerations](#8-security-considerations) | HMAC audit chain and threat model |
 | 9 | [Why Anthropic?](#9-why-anthropic) | Strategic alignment with Constitutional AI |
 | 10 | [Strategic Roadmap](#10-strategic-roadmap-2026---2028) | Four-phase evolution from PoC to Sovereign Shield |
-| 11 | [Status & License](#11-status--license) | Current status and licensing |
+| 11 | [Contributors](#11-contributors) | Project contributors |
+| 12 | [Status & License](#12-status--license) | Current status and licensing |
 
 ---
 
@@ -131,7 +132,19 @@ Traditional proctoring requires continuous, high-speed video streaming. This eff
 Platforms such as CodeSignal are increasingly scrutinized for invasive data collection practices. Project Simurgh's zero-visual approach eliminates the psychological burden of continuous observation — a factor that research indicates disproportionately affects neurodivergent and socioeconomically disadvantaged students.
 
 ### Institutional Cost Reduction
-By leveraging prompt caching, institutions can reduce proctoring infrastructure costs by up to **85%** relative to traditional video-based systems. This transforms integrity verification from a recurring per-seat surveillance expense into a lightweight, API-driven infrastructure dependency.
+Beyond software licensing, universities currently bear significant operational costs for examination integrity: hiring teams of **human invigilators**, booking **physical examination venues**, and managing the logistics of large-scale in-person supervision. A single mid-sized university can spend hundreds of thousands of dollars per semester on venue hire and casual invigilation staff alone.
+
+Project Simurgh eliminates these line items entirely. By replacing physical supervision with a lightweight behavioral API, institutions can:
+* Remove the need for dedicated examination halls and their associated booking, maintenance, and scheduling overhead.
+* Eliminate per-session human invigilator costs — no recruitment, no training, no rostering.
+* Reduce proctoring infrastructure costs by up to **85%** relative to traditional video-based remote systems through prompt caching.
+
+This transforms integrity verification from a recurring operational expense into a low-cost, API-driven infrastructure dependency — enabling universities to scale examination capacity without scaling headcount or real estate.
+
+### Public Health Resilience
+Large-scale in-person examinations concentrate hundreds of individuals in enclosed venues for extended periods — creating significant epidemiological risk vectors during seasonal influenza outbreaks, respiratory pandemics (as demonstrated by COVID-19), and other communicable disease events. Institutions are frequently forced to choose between maintaining assessment schedules and protecting student and staff health.
+
+Project Simurgh renders this trade-off obsolete. By enabling high-integrity remote examination without visual surveillance, institutions can maintain full assessment continuity while preserving safe social distancing. Students complete examinations from their own environments, eliminating the public health liability of physical congregation entirely. This positions behavioral integrity verification not merely as a cost optimization, but as a critical component of **institutional resilience infrastructure**.
 
 ---
 
@@ -267,6 +280,7 @@ This project represents an invitation to cooperate because the values are techni
 1. **Constitutional Integrity:** Just as Claude is guided by a constitution, Simurgh is guided by a commitment to **Privacy-as-Code**. The project rejects the invasive, high-bandwidth surveillance models of legacy proctoring platforms. Security should never come at the cost of human dignity or privacy.
 2. **Alignment on "Computer Use":** Anthropic's leadership in agentic capabilities creates the most critical frontier for UI safety. Simurgh is the natural defensive partner for this ecosystem, providing the "Visual Guardrails" necessary for autonomous agents to interact with the world safely.
 3. **Democratizing Safety:** Anthropic's focus on ethical deployment aligns with this project's mission to bridge the digital divide — ensuring that a student in a remote village has access to the same high-integrity, low-bandwidth certification as a student in Silicon Valley.
+4. **First-Mover Advantage:** No competing AI provider currently offers a privacy-preserving, behavioral integrity API at this level. By partnering on Project Simurgh, Anthropic would establish the definitive standard in this space — creating an ecosystem where every university, certification body, and enterprise deploying autonomous agents depends on Anthropic's infrastructure for integrity verification. Once institutions build their examination and agent-safety workflows around the Simurgh Integrity API, the cost of switching becomes prohibitively high. This is not just a product opportunity; it is a strategic moat.
 
 Project Simurgh is more than a technical demonstration; it is an invitation to cooperate on the next generation of the AI Integrity Layer.
 
@@ -297,7 +311,16 @@ Project Simurgh is evolving from a vulnerability demonstration into a comprehens
 
 ---
 
-## 11. Status & License
+## 11. Contributors
+
+| Contributor | Role |
+|-------------|------|
+| **Raouf Abedini** | Project lead — vulnerability research, system architecture, full-stack implementation |
+| **Claude (Anthropic)** | AI pair-programming partner — code review, architectural feedback, documentation refinement |
+
+---
+
+## 12. Status & License
 
 **Status:** Research prototype and technical demonstrator. Built as a functional counterpart to a published vulnerability disclosure. Not currently deployed in production.
 

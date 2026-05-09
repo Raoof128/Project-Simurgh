@@ -72,3 +72,21 @@
   - `README.md` — Updated hero caption, added Screenshots subsection, fixed badge anchors
 - **Verification:** All screenshots render correctly. No remaining "Verity" branding.
 - **Follow-ups:** Ready for GitHub push.
+
+### 2026-05-09 (Australia/Sydney)
+**Raouf:**
+- **Scope:** README Content Enhancement — Cost Reduction, First-Mover Strategy, Contributors
+- **Summary:** Expanded Institutional Cost Reduction (invigilator/venue elimination), added first-mover advantage to Why Anthropic, added Contributors section with Claude credit.
+- **Files Changed:**
+  - `README.md` — Sections 4, 9, 11, 12 updated; ToC and badge anchors renumbered.
+- **Verification:** All 12 ToC anchors resolve. Badge links updated.
+- **Follow-ups:** Ready for GitHub push.
+
+### 2026-05-09 (Australia/Sydney)
+**Raouf:**
+- **Scope:** README — Public Health Resilience Argument
+- **Summary:** Added "Public Health Resilience" subsection to Section 4. Positions remote behavioral verification as institutional resilience infrastructure against epidemiological risks.
+- **Files Changed:**
+  - `README.md` — New subsection under Section 4.
+- **Verification:** Formal, research-grade tone validated.
+- **Follow-ups:** Ready for GitHub push.
