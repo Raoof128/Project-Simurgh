@@ -4,8 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="theme-color" content="#f3efe6" />
-  <meta name="description" content="Verity — A zero-trust behavioral AI proctor that detects exam cheating without ever seeing the screen." />
-  <title>Verity — Behavioral Exam Proctor</title>
+  <meta name="description" content="Simurgh — A zero-trust behavioral AI proctor that detects exam cheating without ever seeing the screen." />
+  <title>Simurgh — Behavioral Exam Proctor</title>
 
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23f3efe6'/%3E%3Ccircle cx='16' cy='16' r='6' fill='none' stroke='%236b1a1a' stroke-width='2'/%3E%3C/svg%3E" />
 
@@ -925,9 +925,9 @@
   <!-- ───── INTRO OVERLAY ───── -->
   <div class="intro" id="intro" role="dialog" aria-labelledby="intro-title">
     <div class="intro-card">
-      <div class="eyebrow">▲ Live Demo · Verity v0.1</div>
+      <div class="eyebrow">▲ Live Demo · Simurgh v0.1</div>
       <h2 id="intro-title">A behavioral proctor that <em>never sees your screen.</em></h2>
-      <p>You're about to test a working zero-trust mitigation against the <em>Invisible Window</em> attack class (Abedini, 2026) — display-affinity APIs that hide cheat windows from screen capture on Windows 10/11 and macOS 14–26. Verity ignores pixels and analyses <em>how</em> you behave, flagging cheating in 5-second windows.</p>
+      <p>You're about to test a working zero-trust mitigation against the <em>Invisible Window</em> attack class (Abedini, 2026) — display-affinity APIs that hide cheat windows from screen capture on Windows 10/11 and macOS 14–26. Simurgh ignores pixels and analyses <em>how</em> you behave, flagging cheating in 5-second windows.</p>
       <ul>
         <li>▸ Type, pause, paste, switch tabs — try anything</li>
         <li>▸ The proctor panel updates in real time (you'd never see it in production)</li>
@@ -941,7 +941,7 @@
   <header>
     <div class="brand">
       <span class="seal" aria-hidden="true"></span>
-      <h1>Verity</h1>
+      <h1>Simurgh</h1>
       <span class="tag">Behavioral Proctor</span>
     </div>
     <div class="center-eyebrow">
@@ -969,7 +969,7 @@
         Explain how a <em>SYN flood</em> attack works, and propose two practical mitigations.
       </h2>
       <p class="question-sub">
-        Telemetry is captured every 5 seconds and analysed in real time by Verity. Pasted content is logged.
+        Telemetry is captured every 5 seconds and analysed in real time by Simurgh. Pasted content is logged.
       </p>
 
       <div class="exam-frame">
@@ -1003,7 +1003,7 @@
 
       <div class="demo-bar" aria-label="Demo controls">
         <span class="label">▲ DEMO</span>
-        <span class="desc">Trigger a scenario without typing — watch Verity catch it within one window.</span>
+        <span class="desc">Trigger a scenario without typing — watch Simurgh catch it within one window.</span>
         <button class="trig" id="simIdle" type="button">Simulate idle</button>
         <button class="trig" id="simBlur" type="button">Simulate tab-out</button>
         <button class="trig crit" id="simPaste" type="button">Simulate big paste</button>
@@ -1050,7 +1050,7 @@
           <span class="status offline" id="helperStatus">helper offline</span>
         </div>
         <div class="body" id="affinityBody">
-          <div class="empty">No native helper attached. Run <span class="mono">tools/verity-helper</span> or use the simulator below.</div>
+          <div class="empty">No native helper attached. Run <span class="mono">tools/simurgh-helper</span> or use the simulator below.</div>
         </div>
         <div class="footer">
           <span id="affinityCount">0 capture-invisible windows</span>
@@ -1138,7 +1138,7 @@
 
   <footer class="colophon">
     <div class="left">
-      <div style="margin-bottom:6px"><b>VERITY</b> — A zero-trust behavioural mitigation against the <em>Invisible Window</em> attack class (Abedini, 2026). Not a detector of <em>what</em> is on screen, but of <em>how</em> the human is behaving.</div>
+      <div style="margin-bottom:6px"><b>SIMURGH</b> — A zero-trust behavioural mitigation against the <em>Invisible Window</em> attack class (Abedini, 2026). Not a detector of <em>what</em> is on screen, but of <em>how</em> the human is behaving.</div>
       <div>Heuristic engine: Anthropic Claude · prompt-cached system prompt · ~700 ms p50 window inference.</div>
     </div>
     <div style="text-align:right">
@@ -1148,7 +1148,7 @@
       <a href="#" id="aboutLink">view system prompt →</a>
       <div class="actions">
         <a href="/instructor" target="_blank" rel="noopener">instructor view ↗</a>
-        <a href="https://github.com/Raoof128/Verity/tree/main/tools/verity-helper" target="_blank" rel="noopener">build native helper</a>
+        <a href="https://github.com/Raoof128/Simurgh/tree/main/tools/simurgh-helper" target="_blank" rel="noopener">build native helper</a>
         <button id="exportAudit" type="button">export audit log</button>
       </div>
     </div>
@@ -1172,7 +1172,7 @@
     const ALLOWED_LEVELS = new Set(["safe","warning","critical"]);
     const WINDOW_MS = 5000;
     const POST_TIMEOUT_MS = 8000;
-    const STORAGE_KEY = "verity:answer";
+    const STORAGE_KEY = "simurgh:answer";
 
     const QUESTIONS = [
       { course: "CSC 343 · Network Security",   target: "200–400 words", title: 'Explain how a <em>SYN flood</em> attack works, and propose two practical mitigations.' },
@@ -1181,12 +1181,12 @@
       { course: "CSC 360 · Distributed Systems", target: "250–500 words", title: 'Define <em>linearizability</em> and explain why it is strictly stronger than sequential consistency.' },
     ];
 
-    const SYSTEM_PROMPT_TEXT = `You are Verity, an AI security behavioral analyst monitoring a candidate during a high-stakes proctored exam.
+    const SYSTEM_PROMPT_TEXT = `You are Simurgh, an AI security behavioral analyst monitoring a candidate during a high-stakes proctored exam.
 
 THREAT MODEL (Abedini, 2026 — "The Invisible Window")
 Display-affinity APIs — Windows SetWindowDisplayAffinity(WDA_EXCLUDEFROMCAPTURE) and macOS NSWindow.SharingType.none — let an attacker render windows fully visible on the physical display but absent from any frame returned by W3C getDisplayMedia(). Visual surveillance is unreliable on Windows 10/11 and macOS 14–26.
 
-Verity implements Countermeasure C from §VI-C of the paper: detect the BEHAVIORAL footprint of cheating from telemetry alone — no screen, no camera, no keystroke contents.
+Simurgh implements Countermeasure C from §VI-C of the paper: detect the BEHAVIORAL footprint of cheating from telemetry alone — no screen, no camera, no keystroke contents.
 
 WHAT TO LOOK FOR
 1. Impossible cognitive cadence — large pastes with negligible manual typing, or > 250 WPM bursts.
@@ -1654,7 +1654,7 @@ OUTPUT FORMAT
           clearTimeout(timer);
           consecFailures++;
           verdictCard.classList.remove("in-flight");
-          console.warn("[verity] telemetry post failed", err);
+          console.warn("[simurgh] telemetry post failed", err);
         } finally {
           postsInFlight = Math.max(0, postsInFlight - 1);
           updateConn();
@@ -1893,7 +1893,7 @@ OUTPUT FORMAT
       dlg.setAttribute("role", "dialog");
       dlg.setAttribute("aria-labelledby", "modalTitle");
 
-      const h = document.createElement("h3"); h.id = "modalTitle"; h.textContent = "What is Verity?";
+      const h = document.createElement("h3"); h.id = "modalTitle"; h.textContent = "What is Simurgh?";
       const p1 = document.createElement("p");
       p1.append(
         "A working zero-trust mitigation against the ",
@@ -1902,7 +1902,7 @@ OUTPUT FORMAT
         Object.assign(document.createElement("code"), { textContent: "SetWindowDisplayAffinity(WDA_EXCLUDEFROMCAPTURE)" }),
         " and macOS ",
         Object.assign(document.createElement("code"), { textContent: "NSWindow.SharingType.none" }),
-        ". Verity ignores pixels — it analyses behavioral telemetry every 5 seconds via a prompt-cached Claude system prompt and returns a structured risk verdict."
+        ". Simurgh ignores pixels — it analyses behavioral telemetry every 5 seconds via a prompt-cached Claude system prompt and returns a structured risk verdict."
       );
       const p2 = document.createElement("p");
       p2.appendChild(Object.assign(document.createElement("b"), { textContent: "The actual system prompt sent to Claude:" }));
@@ -1928,11 +1928,11 @@ OUTPUT FORMAT
     // ═══════════════════════════════════════════════════
     //  INTRO + RESET + SUBMIT
     // ═══════════════════════════════════════════════════
-    const introSeen = (() => { try { return localStorage.getItem("verity:introSeen") === "1"; } catch { return false; } })();
+    const introSeen = (() => { try { return localStorage.getItem("simurgh:introSeen") === "1"; } catch { return false; } })();
     if (introSeen) introEl.style.display = "none";
     introStart.addEventListener("click", () => {
       introEl.style.display = "none";
-      try { localStorage.setItem("verity:introSeen", "1"); } catch {}
+      try { localStorage.setItem("simurgh:introSeen", "1"); } catch {}
       ta.focus();
     });
 
@@ -1994,7 +1994,7 @@ OUTPUT FORMAT
     // ═══════════════════════════════════════════════════
     //  COUNTERMEASURE A — Display-Affinity Watch
     //  Renders helper status + hostile-window list. The actual helper
-    //  lives in tools/verity-helper (Swift). When no helper is running,
+    //  lives in tools/simurgh-helper (Swift). When no helper is running,
     //  the "Arm Invisible Window" demo button injects a simulated event
     //  via the same /api/affinity endpoint so the demo is realistic.
     // ═══════════════════════════════════════════════════
@@ -2037,7 +2037,7 @@ OUTPUT FORMAT
           empty.appendChild(document.createTextNode("No native helper attached. Run "));
           const code = document.createElement("span");
           code.className = "mono";
-          code.textContent = "tools/verity-helper";
+          code.textContent = "tools/simurgh-helper";
           empty.appendChild(code);
           empty.appendChild(document.createTextNode(" or click "));
           const b = document.createElement("b");
@@ -2201,8 +2201,8 @@ OUTPUT FORMAT
         : [];
       try {
         // Use the simulator endpoint — open (no shared secret required), so the
-        // demo works even when VERITY_HELPER_SECRET has been customised in .env.
-        // The server stamps source="verity-helper-simulator/0.1" so the UI knows
+        // demo works even when SIMURGH_HELPER_SECRET has been customised in .env.
+        // The server stamps source="simurgh-helper-simulator/0.1" so the UI knows
         // this is a simulated event, not a real native helper report.
         const r = await fetch("/api/affinity/simulate", {
           method: "POST",
@@ -2233,7 +2233,7 @@ OUTPUT FORMAT
       const url = "/api/audit/" + sessionId;
       const a = document.createElement("a");
       a.href = url;
-      a.download = `verity-audit-${sessionId}.json`;
+      a.download = `simurgh-audit-${sessionId}.json`;
       document.body.appendChild(a);
       a.click();
       a.remove();

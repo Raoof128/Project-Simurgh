@@ -28,54 +28,54 @@ if (existsSync(envPath)) {
 }
 
 const PORT = Number(process.env.PORT) || 3030;
-const MODEL = process.env.VERITY_MODEL || "claude-sonnet-4-5";
+const MODEL = process.env.SIMURGH_MODEL || "claude-sonnet-4-5";
 
 const apiKey = process.env.ANTHROPIC_API_KEY;
-const DEMO_MODE = process.env.VERITY_DEMO_MODE === "1" || !apiKey;
+const DEMO_MODE = process.env.SIMURGH_DEMO_MODE === "1" || !apiKey;
 if (!apiKey) {
-  console.warn("[verity] ANTHROPIC_API_KEY not set — running in DEMO_MODE (local heuristic).");
+  console.warn("[simurgh] ANTHROPIC_API_KEY not set — running in DEMO_MODE (local heuristic).");
 }
 const client = apiKey ? new Anthropic({ apiKey }) : null;
 
 // ─────────────────────────────────────────────────────────────
 //  Secret bootstrap — fail fast in production, warn in demo
 // ─────────────────────────────────────────────────────────────
-const HELPER_SHARED_SECRET = process.env.VERITY_HELPER_SECRET;
+const HELPER_SHARED_SECRET = process.env.SIMURGH_HELPER_SECRET;
 if (!HELPER_SHARED_SECRET) {
   if (DEMO_MODE) {
-    console.warn("[verity] VERITY_HELPER_SECRET not set — /api/affinity helper ingest is DISABLED in this demo session.");
+    console.warn("[simurgh] SIMURGH_HELPER_SECRET not set — /api/affinity helper ingest is DISABLED in this demo session.");
   } else {
-    console.error("[verity] FATAL: VERITY_HELPER_SECRET must be set in non-demo mode. Refusing to start.");
+    console.error("[simurgh] FATAL: SIMURGH_HELPER_SECRET must be set in non-demo mode. Refusing to start.");
     process.exit(78);
   }
 }
 
-const AUDIT_HMAC_SECRET = process.env.VERITY_AUDIT_SECRET;
+const AUDIT_HMAC_SECRET = process.env.SIMURGH_AUDIT_SECRET;
 const AUDIT_KEY_EPHEMERAL = !AUDIT_HMAC_SECRET;
 const AUDIT_KEY = AUDIT_HMAC_SECRET || crypto.randomBytes(32).toString("hex");
 if (AUDIT_KEY_EPHEMERAL) {
-  console.warn("[verity] ⚠ VERITY_AUDIT_SECRET not set — audit chain HMAC key is ephemeral.");
-  console.warn("[verity] ⚠ Every restart invalidates previously exported audit chains. Set VERITY_AUDIT_SECRET in production.");
+  console.warn("[simurgh] ⚠ SIMURGH_AUDIT_SECRET not set — audit chain HMAC key is ephemeral.");
+  console.warn("[simurgh] ⚠ Every restart invalidates previously exported audit chains. Set SIMURGH_AUDIT_SECRET in production.");
 }
 
-const INSTRUCTOR_TOKEN = process.env.VERITY_INSTRUCTOR_TOKEN
+const INSTRUCTOR_TOKEN = process.env.SIMURGH_INSTRUCTOR_TOKEN
   || (DEMO_MODE ? "demo" : crypto.randomBytes(24).toString("hex"));
-if (!process.env.VERITY_INSTRUCTOR_TOKEN && !DEMO_MODE) {
-  console.warn(`[verity] VERITY_INSTRUCTOR_TOKEN not set — generated ephemeral token: ${INSTRUCTOR_TOKEN}`);
-  console.warn("[verity] Set VERITY_INSTRUCTOR_TOKEN in production so the instructor URL is stable across restarts.");
+if (!process.env.SIMURGH_INSTRUCTOR_TOKEN && !DEMO_MODE) {
+  console.warn(`[simurgh] SIMURGH_INSTRUCTOR_TOKEN not set — generated ephemeral token: ${INSTRUCTOR_TOKEN}`);
+  console.warn("[simurgh] Set SIMURGH_INSTRUCTOR_TOKEN in production so the instructor URL is stable across restarts.");
 }
 
-const ALLOWED_ORIGIN = process.env.VERITY_ALLOWED_ORIGIN || "*";
+const ALLOWED_ORIGIN = process.env.SIMURGH_ALLOWED_ORIGIN || "*";
 
 // ─────────────────────────────────────────────────────────────
 //  System prompt — sent (cached) to Claude for behavioural classification
 // ─────────────────────────────────────────────────────────────
-const SYSTEM_PROMPT = `You are Verity, an AI security behavioral analyst monitoring a candidate during a high-stakes proctored exam. You receive 5-second telemetry windows from the candidate's browser and must classify the behavioral footprint.
+const SYSTEM_PROMPT = `You are Simurgh, an AI security behavioral analyst monitoring a candidate during a high-stakes proctored exam. You receive 5-second telemetry windows from the candidate's browser and must classify the behavioral footprint.
 
 THREAT MODEL (Abedini, 2026 — "The Invisible Window")
 The exam runs in a browser. Traditional proctoring relies on the W3C getDisplayMedia() API to capture the candidate's screen. The disclosure paper formalises a display-fidelity violation: documented OS-level display-affinity APIs — Windows SetWindowDisplayAffinity(WDA_EXCLUDEFROMCAPTURE) and macOS NSWindow.SharingType.none — let an attacker render application windows that are fully visible on the physical display but absent from any frame returned by getDisplayMedia(). Visual surveillance is therefore unreliable on Windows 10/11 and macOS 14–26.
 
-Verity implements Countermeasure C from §VI-C of the paper: detect the BEHAVIORAL footprint of cheating from input timing, focus events, and paste payloads. You do NOT see the screen, the camera, or the keystroke contents.
+Simurgh implements Countermeasure C from §VI-C of the paper: detect the BEHAVIORAL footprint of cheating from input timing, focus events, and paste payloads. You do NOT see the screen, the camera, or the keystroke contents.
 
 WHAT TO LOOK FOR (signals the paper confirms leak through, §V-C-2)
 1. Impossible cognitive cadence — paste payloads (> 200 chars) with little to no manual typing in the same window, or sudden bursts of typed characters at superhuman WPM (> 250 effective WPM).
@@ -309,7 +309,7 @@ app.use(express.json({ limit: "256kb" }));
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", ALLOWED_ORIGIN);
   res.setHeader("Vary", "Origin");
-  res.setHeader("Access-Control-Allow-Headers", "content-type, authorization, x-verity-helper-secret");
+  res.setHeader("Access-Control-Allow-Headers", "content-type, authorization, x-simurgh-helper-secret");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   if (req.method === "OPTIONS") return res.status(204).end();
   next();
@@ -323,7 +323,7 @@ app.use(express.static(join(__dirname, "public")));
 app.get("/instructor", (req, res) => {
   if (!DEMO_MODE && req.query.token !== INSTRUCTOR_TOKEN) {
     return res.status(401).type("text/plain")
-      .send("Verity instructor view requires VERITY_INSTRUCTOR_TOKEN as ?token= query param.");
+      .send("Simurgh instructor view requires SIMURGH_INSTRUCTOR_TOKEN as ?token= query param.");
   }
   res.sendFile(join(__dirname, "public", "instructor.html"));
 });
@@ -400,8 +400,8 @@ app.post("/api/telemetry", async (req, res) => {
   } catch (err) {
     const msg = err?.message ?? String(err);
     const lowCredit = /credit balance is too low/i.test(msg);
-    if (lowCredit) console.warn("[verity] anthropic low-credit — falling back to local heuristic");
-    else console.error("[verity] anthropic error:", msg);
+    if (lowCredit) console.warn("[simurgh] anthropic low-credit — falling back to local heuristic");
+    else console.error("[simurgh] anthropic error:", msg);
     const h = localHeuristic(telemetry);
     const verdict = {
       ...h,
@@ -459,7 +459,7 @@ function ingestAffinity(req, res, opts = {}) {
   } : null;
 
   const sourceLabel = opts.simulator
-    ? "verity-helper-simulator/0.1"
+    ? "simurgh-helper-simulator/0.1"
     : String(helper ?? "native-helper").slice(0, 40);
 
   sess.affinity = { hostile: list, lastHeartbeat: Date.now(), source: sourceLabel, forensic: f };
@@ -474,7 +474,7 @@ function ingestAffinity(req, res, opts = {}) {
 // Real helper — secret-gated. Disabled when no secret configured.
 app.post("/api/affinity", (req, res) => {
   if (!HELPER_SHARED_SECRET) return res.status(503).json({ error: "helper_ingest_disabled" });
-  const secret = req.headers["x-verity-helper-secret"];
+  const secret = req.headers["x-simurgh-helper-secret"];
   if (secret !== HELPER_SHARED_SECRET) return res.status(401).json({ error: "invalid_helper_secret" });
   ingestAffinity(req, res);
 });
@@ -499,7 +499,7 @@ app.get("/api/audit/:sessionId", requireInstructorAuth, (req, res) => {
   const sess = sessions.get(req.params.sessionId);
   if (!sess) return res.status(404).json({ error: "session not found" });
   res.setHeader("content-disposition",
-    `attachment; filename="verity-audit-${req.params.sessionId}.json"`);
+    `attachment; filename="simurgh-audit-${req.params.sessionId}.json"`);
   res.json({
     sessionId: req.params.sessionId,
     generated_at: new Date().toISOString(),
@@ -553,18 +553,18 @@ app.get("/api/meta", (_req, res) => {
 //  Listen + graceful shutdown
 // ─────────────────────────────────────────────────────────────
 const server = app.listen(PORT, () => {
-  console.log(`[verity] listening on http://localhost:${PORT}  (model: ${MODEL})`);
+  console.log(`[simurgh] listening on http://localhost:${PORT}  (model: ${MODEL})`);
   if (HELPER_SHARED_SECRET) {
-    console.log(`[verity] helper ingest ready at POST /api/affinity (header: x-verity-helper-secret)`);
+    console.log(`[simurgh] helper ingest ready at POST /api/affinity (header: x-simurgh-helper-secret)`);
   }
   const tokenSuffix = DEMO_MODE ? "" : `?token=${INSTRUCTOR_TOKEN}`;
-  console.log(`[verity] instructor view at http://localhost:${PORT}/instructor${tokenSuffix}`);
+  console.log(`[simurgh] instructor view at http://localhost:${PORT}/instructor${tokenSuffix}`);
 });
 server.on("error", (err) => {
   if (err.code === "EADDRINUSE") {
-    console.error(`[verity] FATAL: port ${PORT} already in use.`);
+    console.error(`[simurgh] FATAL: port ${PORT} already in use.`);
   } else {
-    console.error("[verity] FATAL:", err);
+    console.error("[simurgh] FATAL:", err);
   }
   process.exit(1);
 });
@@ -573,7 +573,7 @@ let shuttingDown = false;
 function shutdown(signal) {
   if (shuttingDown) return;
   shuttingDown = true;
-  console.log(`[verity] received ${signal} — closing server gracefully.`);
+  console.log(`[simurgh] received ${signal} — closing server gracefully.`);
   for (const res of sseClients) {
     try { res.write(`event: shutdown\ndata: {"ts":${Date.now()}}\n\n`); res.end(); }
     catch {}

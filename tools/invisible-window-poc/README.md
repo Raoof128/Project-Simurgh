@@ -7,7 +7,7 @@ Abedini, 2026 §IV-C.
 > `NSWindow.SharingType.none` — the documented macOS display-affinity flag
 > that hides a window from screen capture while keeping it visible on the
 > physical display. It carries the same dual-use posture as Section VII of
-> the disclosure paper. **Use it only against your own copy of Verity, in a
+> the disclosure paper. **Use it only against your own copy of Simurgh, in a
 > controlled environment, to verify the mitigation.** Do not use it during
 > any real examination.
 
@@ -15,7 +15,7 @@ Abedini, 2026 §IV-C.
 
 A working mitigation is only credible if you can run the disclosed attack
 against it. This binary lets you launch a real `sharingType = .none` overlay
-in one terminal, run `verity-helper` in another, and watch the Verity
+in one terminal, run `simurgh-helper` in another, and watch the Simurgh
 dashboard's Display-Affinity Watch flag the attack within ~2 seconds.
 
 ## Build
@@ -43,11 +43,11 @@ not appear in the screenshot.
 | `⌘C` | Toggle click-through (`ignoresMouseEvents`) — demonstrates §VI-C blind spot |
 | `⌘Q` | Quit                                                                      |
 
-### Verifying the attack against Verity
+### Verifying the attack against Simurgh
 
-1. In one terminal: `npm start` (Verity server)
+1. In one terminal: `npm start` (Simurgh server)
 2. Open `http://localhost:3030` in your browser, dismiss the intro
-3. In another terminal: `cd tools/verity-helper && ./verity-helper --session sess-XXXXXXXX` (helper)
+3. In another terminal: `cd tools/simurgh-helper && ./simurgh-helper --session sess-XXXXXXXX` (helper)
 4. In a third terminal: `cd tools/invisible-window-poc && ./invisible-window-poc` (this PoC)
 
 Within ~2 seconds the dashboard's Display-Affinity Watch panel flags the PoC's
@@ -59,7 +59,7 @@ window. The next 5-second verdict escalates to **Critical** with reasoning
 Press `⌘C` to toggle click-through. The window stays visible but
 `ignoresMouseEvents = true` — clicking through it does **not** trigger blur
 on the exam tab. This is the residual evasion the paper names in §VI-C: pure
-JavaScript focus monitoring (Verity's Countermeasure C) cannot detect this
+JavaScript focus monitoring (Simurgh's Countermeasure C) cannot detect this
 case. Only the native helper (Countermeasure A) can.
 
 ## What it does NOT do

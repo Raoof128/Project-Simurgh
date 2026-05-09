@@ -1,8 +1,8 @@
-// verity-helper — Countermeasure A from Abedini, 2026 §VI-A
+// simurgh-helper — Countermeasure A from Abedini, 2026 §VI-A
 //
 // Detects on-screen windows that are excluded from screen capture
 // (NSWindow.SharingType.none / WDA_EXCLUDEFROMCAPTURE on Windows) and
-// reports them to the Verity server every <interval> ms.
+// reports them to the Simurgh server every <interval> ms.
 //
 // DETECTION STRATEGY (ScreenCaptureKit, macOS 14+)
 //
@@ -30,13 +30,13 @@
 // 5 probe pixels per suspect window strictly to test transparency.
 //
 // Build:
-//     make             # produces ./verity-helper
+//     make             # produces ./simurgh-helper
 //     make sign        # ad-hoc sign with the hardened-runtime entitlements
 //
 // Run:
-//     export VERITY_HELPER_SECRET=$(openssl rand -hex 32)
-//     ./verity-helper --session sess-xxxxxxxx
-//     ./verity-helper --session sess-xxxxxxxx --server http://localhost:3030 --secret "$VERITY_HELPER_SECRET"
+//     export SIMURGH_HELPER_SECRET=$(openssl rand -hex 32)
+//     ./simurgh-helper --session sess-xxxxxxxx
+//     ./simurgh-helper --session sess-xxxxxxxx --server http://localhost:3030 --secret "$SIMURGH_HELPER_SECRET"
 
 import Foundation
 import CoreGraphics
@@ -49,7 +49,7 @@ struct Args {
     var server: String   = "http://localhost:3030"
     // No default secret — refusing to default keeps the helper from silently
     // authenticating with a publicly known string.
-    var secret: String   = ProcessInfo.processInfo.environment["VERITY_HELPER_SECRET"] ?? ""
+    var secret: String   = ProcessInfo.processInfo.environment["SIMURGH_HELPER_SECRET"] ?? ""
     var intervalMs: Int  = 2000
     var verbose: Bool    = false
 }
@@ -66,11 +66,11 @@ func parseArgs() -> Args {
         case "--verbose", "-v": a.verbose = true
         case "--help", "-h":
             print("""
-                verity-helper — Countermeasure A native agent
-                Usage: verity-helper --session <sessionId> [--server URL] [--secret S] [--interval ms]
+                simurgh-helper — Countermeasure A native agent
+                Usage: simurgh-helper --session <sessionId> [--server URL] [--secret S] [--interval ms]
 
                 Reports any on-screen window the OS hides from screen capture
-                (NSWindow.SharingType.none) to the Verity server every <interval> ms.
+                (NSWindow.SharingType.none) to the Simurgh server every <interval> ms.
                 Detection: SCShareableContent diff + SCScreenshotManager pixel probe.
                 """)
             exit(0)
@@ -78,12 +78,12 @@ func parseArgs() -> Args {
         }
     }
     if a.sessionId.isEmpty {
-        FileHandle.standardError.write(Data("error: --session required (the sessionId from the Verity browser tab)\n".utf8))
+        FileHandle.standardError.write(Data("error: --session required (the sessionId from the Simurgh browser tab)\n".utf8))
         exit(64)
     }
     if a.secret.isEmpty {
         FileHandle.standardError.write(Data(
-            "error: --secret or VERITY_HELPER_SECRET required. Use the same value the server is started with.\n".utf8
+            "error: --secret or SIMURGH_HELPER_SECRET required. Use the same value the server is started with.\n".utf8
         ))
         exit(64)
     }
@@ -299,7 +299,7 @@ func scanOnce(args: Args) async -> (hostile: [HostileWindow], forensic: Forensic
 func reportToServer(_ hostile: [HostileWindow], forensic: ForensicSnapshot, args: Args) {
     let body: [String: Any] = [
         "sessionId": args.sessionId,
-        "helper":    "verity-helper-mac/0.3-sck",
+        "helper":    "simurgh-helper-mac/0.3-sck",
         "hostile":   hostile.map { ["pid": $0.pid, "name": $0.name, "type": $0.type, "since": $0.since] },
         "forensic":  [
             "display_width":         forensic.display_width,
@@ -317,7 +317,7 @@ func reportToServer(_ hostile: [HostileWindow], forensic: ForensicSnapshot, args
     req.httpMethod = "POST"
     req.timeoutInterval = 4
     req.setValue("application/json", forHTTPHeaderField: "content-type")
-    req.setValue(args.secret, forHTTPHeaderField: "x-verity-helper-secret")
+    req.setValue(args.secret, forHTTPHeaderField: "x-simurgh-helper-secret")
     req.httpBody = data
     // Fire-and-forget — do NOT block the scan loop on the network round-trip.
     URLSession.shared.dataTask(with: req) { _, resp, err in
@@ -333,14 +333,14 @@ func reportToServer(_ hostile: [HostileWindow], forensic: ForensicSnapshot, args
 // ───────── main loop ─────────
 @available(macOS 14.0, *)
 @main
-struct VerityHelper {
+struct SimurghHelper {
     static func main() async {
         // Force unbuffered stdout so log lines flush promptly when the helper
         // is run from a parent process / pipe.
         setbuf(stdout, nil)
 
         let args = parseArgs()
-        print("[verity-helper] starting · session=\(args.sessionId) · server=\(args.server) · interval=\(args.intervalMs)ms · backend=ScreenCaptureKit")
+        print("[simurgh-helper] starting · session=\(args.sessionId) · server=\(args.server) · interval=\(args.intervalMs)ms · backend=ScreenCaptureKit")
 
         // Preflight: SCShareableContent throws if Screen Recording is denied.
         // The first call also triggers the system permission prompt on a
@@ -349,26 +349,26 @@ struct VerityHelper {
             _ = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: true)
         } catch {
             FileHandle.standardError.write(Data("""
-                [verity-helper] ⚠ Screen Recording permission denied.
-                [verity-helper] reason: \(error.localizedDescription)
-                [verity-helper]
-                [verity-helper] Grant access in System Settings → Privacy & Security → Screen
-                [verity-helper] Recording (toggle 'verity-helper' on, then re-launch).
+                [simurgh-helper] ⚠ Screen Recording permission denied.
+                [simurgh-helper] reason: \(error.localizedDescription)
+                [simurgh-helper]
+                [simurgh-helper] Grant access in System Settings → Privacy & Security → Screen
+                [simurgh-helper] Recording (toggle 'simurgh-helper' on, then re-launch).
 
                 """.utf8))
             exit(77)
         }
-        print("[verity-helper] Screen Recording permission OK · entering scan loop")
+        print("[simurgh-helper] Screen Recording permission OK · entering scan loop")
 
         while true {
             if let (hostile, forensic) = await scanOnce(args: args) {
                 reportToServer(hostile, forensic: forensic, args: args)
                 if hostile.isEmpty {
                     if args.verbose {
-                        print("[verity-helper] clean — no capture-excluded windows · fidelity-deficit \(forensic.fidelity_deficit_pct)%")
+                        print("[simurgh-helper] clean — no capture-excluded windows · fidelity-deficit \(forensic.fidelity_deficit_pct)%")
                     }
                 } else {
-                    print("[verity-helper] ⚠ \(hostile.count) capture-excluded window(s) · fidelity-deficit \(forensic.fidelity_deficit_pct)% (\(forensic.invisible_pixels) px) · " +
+                    print("[simurgh-helper] ⚠ \(hostile.count) capture-excluded window(s) · fidelity-deficit \(forensic.fidelity_deficit_pct)% (\(forensic.invisible_pixels) px) · " +
                           hostile.map { "\($0.name)[\($0.pid)]" }.joined(separator: ", "))
                 }
             }

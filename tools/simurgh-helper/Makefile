@@ -1,6 +1,6 @@
-BIN := verity-helper
+BIN := simurgh-helper
 SRC := main.swift
-ENTITLEMENTS := verity-helper.entitlements
+ENTITLEMENTS := simurgh-helper.entitlements
 SIGN_IDENTITY ?= -
 
 # macOS 14+ ships SCScreenshotManager — the supported per-window pixel

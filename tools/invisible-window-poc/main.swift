@@ -1,4 +1,4 @@
-// invisible-window-poc — disclosed-attack reproducer for testing Verity
+// invisible-window-poc — disclosed-attack reproducer for testing Simurgh
 //
 // This binary creates an NSWindow with `sharingType = .none`, the documented
 // macOS display-affinity flag described in Abedini, 2026 §IV-C. The window is
@@ -6,8 +6,8 @@
 // returned by getDisplayMedia(), CGWindowListCreateImage, or screencapture.
 //
 // PURPOSE
-// Provided so a researcher can verify the Verity mitigation against the actual
-// attack — running this binary while the verity-helper agent is attached
+// Provided so a researcher can verify the Simurgh mitigation against the actual
+// attack — running this binary while the simurgh-helper agent is attached
 // causes the agent's Display-Affinity Watch to flag the window within 2 s and
 // the next telemetry verdict to escalate to Critical.
 //
@@ -15,7 +15,7 @@
 // This is a minimal reproducer for the published vulnerability — it carries
 // the same dual-use posture as Section VII of the disclosure paper. Do not
 // use this binary against any real proctoring system or examination. Use it
-// only against your own copy of Verity in a controlled environment.
+// only against your own copy of Simurgh in a controlled environment.
 //
 // Build:
 //     swiftc -O main.swift -o invisible-window-poc -framework AppKit
@@ -78,8 +78,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             "absent from any frame produced by getDisplayMedia(), CGWindowListCreateImage, " +
             "or screencapture. It reproduces the attack class formalised in Abedini, 2026 " +
             "§IV-C.\n\n" +
-            "While verity-helper is running, watch the Display-Affinity Watch panel in the " +
-            "Verity dashboard — this window will appear there within ~2 seconds, and the " +
+            "While simurgh-helper is running, watch the Display-Affinity Watch panel in the " +
+            "Simurgh dashboard — this window will appear there within ~2 seconds, and the " +
             "next 5-second telemetry verdict will escalate to Critical."
         )
         body.frame = NSRect(x: 24, y: 200, width: 680, height: 150)

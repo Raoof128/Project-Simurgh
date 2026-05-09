@@ -1,29 +1,29 @@
-# verity-helper
+# simurgh-helper
 
 **Countermeasure A — native display-affinity flag enumeration (Abedini, 2026 §VI-A).**
 
-A small Swift agent that runs alongside the Verity browser session and reports any
+A small Swift agent that runs alongside the Simurgh browser session and reports any
 on-screen window excluded from screen capture (`NSWindow.SharingType.none` /
-display-affinity-protected) to the Verity server. Closes the §VI-C blind spot
+display-affinity-protected) to the Simurgh server. Closes the §VI-C blind spot
 that pure JavaScript focus monitoring cannot.
 
 ## Build
 
 ```bash
-cd tools/verity-helper
+cd tools/simurgh-helper
 make
 ```
 
-Produces a single ~200 KB binary `verity-helper`. Requires the Xcode command-line
+Produces a single ~200 KB binary `simurgh-helper`. Requires the Xcode command-line
 tools (`xcode-select --install`).
 
 ## Run
 
 ```bash
-./verity-helper --session sess-XXXXXXXX
+./simurgh-helper --session sess-XXXXXXXX
 ```
 
-The `sess-XXXXXXXX` value is shown in the bottom-right of the Verity exam page
+The `sess-XXXXXXXX` value is shown in the bottom-right of the Simurgh exam page
 ("session: sess-…"). Once running, the dashboard's **Display-Affinity Watch**
 panel will turn green ("helper online") and any capture-invisible window will
 appear in the panel within 2 seconds.
@@ -33,8 +33,8 @@ appear in the panel within 2 seconds.
 | Flag           | Default                    | Meaning                                           |
 |----------------|----------------------------|---------------------------------------------------|
 | `--session`    | *(required)*               | Browser session ID to attach to                   |
-| `--server`     | `http://localhost:3030`    | Verity server URL                                 |
-| `--secret`     | *(required, or env var)*   | Shared secret (must match `VERITY_HELPER_SECRET`) |
+| `--server`     | `http://localhost:3030`    | Simurgh server URL                                 |
+| `--secret`     | *(required, or env var)*   | Shared secret (must match `SIMURGH_HELPER_SECRET`) |
 | `--interval`   | `2000`                     | Scan interval in ms                               |
 | `--verbose`    | off                        | Print every detected window                       |
 
@@ -91,7 +91,7 @@ in `main.swift`.
 - **All processes show as hostile** → you didn't grant Screen Recording
   permission. Open System Settings → Privacy & Security → Screen Recording,
   toggle the helper on, restart it.
-- **`401 invalid_helper_secret`** → set `VERITY_HELPER_SECRET` in the
+- **`401 invalid_helper_secret`** → set `SIMURGH_HELPER_SECRET` in the
   server's `.env` and pass the same value via `--secret` to the helper.
 - **The dashboard says "helper offline" even though the helper is running** →
   the helper sends one POST every 2 s; the server marks it offline after 8 s

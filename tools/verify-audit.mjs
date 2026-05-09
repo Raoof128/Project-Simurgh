@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-// verify-audit — validates a Verity audit-chain export.
+// verify-audit — validates a Simurgh audit-chain export.
 //
 // Usage:
-//   VERITY_AUDIT_SECRET=<hex> node tools/verify-audit.mjs <path-to-export.json>
+//   SIMURGH_AUDIT_SECRET=<hex> node tools/verify-audit.mjs <path-to-export.json>
 //
 // Exit codes: 0 OK, 1 invalid chain, 2 usage error.
 
@@ -11,12 +11,12 @@ import crypto from "node:crypto";
 
 const path = process.argv[2];
 if (!path) {
-  console.error("usage: VERITY_AUDIT_SECRET=<hex> node tools/verify-audit.mjs <path>");
+  console.error("usage: SIMURGH_AUDIT_SECRET=<hex> node tools/verify-audit.mjs <path>");
   process.exit(2);
 }
-const secret = process.env.VERITY_AUDIT_SECRET;
+const secret = process.env.SIMURGH_AUDIT_SECRET;
 if (!secret) {
-  console.error("error: VERITY_AUDIT_SECRET env var required (the same key the server signed with).");
+  console.error("error: SIMURGH_AUDIT_SECRET env var required (the same key the server signed with).");
   process.exit(2);
 }
 
