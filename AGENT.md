@@ -117,3 +117,12 @@
   - `README.md` — New subsection in Section 4.
 - **Verification:** Factually accurate to architecture.
 - **Follow-ups:** Ready for GitHub push.
+
+### 2026-05-09 (Australia/Sydney)
+**Raouf:**
+- **Scope:** Email Cross-Reference Audit, Browser/App Delivery Roadmap, Gap Patching
+- **Summary:** Audited email to Dario vs README (7 matches, 6 gaps patched). Added Interview Coder, capability-uplift note, Macquarie University, and Phase 3b (browser PWA + native apps for 5 platforms).
+- **Files Changed:**
+  - `README.md` — Sections 2, 10, 11 updated.
+- **Verification:** All email claims now backed by README.
+- **Follow-ups:** Ready for GitHub push.

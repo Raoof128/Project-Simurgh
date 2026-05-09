@@ -118,3 +118,12 @@
   - `README.md` — New subsection in Section 4.
 - **Verification:** Content is factually accurate to the architecture (server-side Claude inference, ~2KB JSON telemetry only).
 - **Follow-ups:** Ready for GitHub push.
+
+### 2026-05-09 (Australia/Sydney)
+**Raouf:**
+- **Scope:** Email Cross-Reference Audit, Browser/App Delivery Roadmap, Gap Patching
+- **Summary:** Performed a line-by-line cross-reference audit of the email to Dario Amodei against the README. Identified 7 full matches, 6 minor gaps, and confirmed the README substantially exceeds the email's claims. Patched key gaps: added "Interview Coder" alongside Cluely, added Claude capability-uplift case study note (Paper Section VIII-G), added Macquarie University to Contributors. Added Phase 3b (Delivery Modes) to the roadmap with browser-based PWA and native application milestones for macOS, Windows, Linux, iOS, and Android.
+- **Files Changed:**
+  - `README.md` — Section 2 (added Interview Coder + capability-uplift note), Section 10 (new Phase 3b with browser PWA and 5 native app milestones), Section 11 (Macquarie University + VIII-G reference in Contributors).
+- **Verification:** All email claims now have README backing. Delivery mode table renders correctly. Phase numbering is consistent.
+- **Follow-ups:** Ready for GitHub push.

@@ -79,7 +79,9 @@ This telemetry is securely transmitted to a Node/Express server, which interface
 > **Illustrative scenario:** A screen recording appears pristine, yet telemetry reveals a 4-second focus loss followed by a 1,247-character paste. The visual feed is compromised. The Simurgh engine identifies this discrepancy and escalates the risk verdict accordingly.
 
 ### Explicit Limitations & Countermeasures
-The behavioral engine cannot natively detect click-through GPU overlays (e.g., Cluely), as they do not trigger focus-loss events. To address this vector, Simurgh deploys a native counterpart (`simurgh-helper`) that enumerates display-affinity flags directly at the OS level. See Section 3 for the data-flow integration.
+The behavioral engine cannot natively detect click-through GPU overlays (e.g., Cluely, Interview Coder), as they do not trigger focus-loss events. To address this vector, Simurgh deploys a native counterpart (`simurgh-helper`) that enumerates display-affinity flags directly at the OS level. See Section 3 for the data-flow integration.
+
+> **Capability-uplift context:** The cross-platform exploits documented in the disclosure paper were built using Claude Opus 4.6 via Claude Code in a single research session by a student with no prior Win32 or ScreenCaptureKit experience — a self-contained capability-uplift case study directly relevant to Anthropic's RSP threshold work (see Paper, Section VIII-G).
 
 ---
 
@@ -354,6 +356,21 @@ Project Simurgh is evolving from a vulnerability demonstration into a comprehens
 - [ ] **ChromeOS:** Certify compatibility with managed Chromebook environments used in education.
 - [ ] Release unified cross-platform installer / deployment toolkit.
 
+### Phase 3b: Delivery Modes — Browser & Native Application (2027)
+Project Simurgh is designed to support two parallel delivery modes to maximize institutional flexibility:
+
+| Mode | Description | Target Use Case |
+|------|-------------|----------------|
+| **Browser-Based (PWA)** | Zero-install progressive web app served via the institution's LMS or exam portal. Works on any device with a modern browser. | Remote exams, BYOD environments, developing regions |
+| **Native Application** | Platform-specific desktop/mobile apps with deeper OS integration for enhanced telemetry and helper capabilities. | On-campus lockdown environments, enterprise agent deployments |
+
+- [ ] **Browser PWA:** Package the exam client as an installable Progressive Web App with offline telemetry buffering.
+- [ ] **macOS App:** Bundle `simurgh-helper` into a signed `.app` distributed via MDM for institutional deployment.
+- [ ] **Windows App:** Package `simurgh-helper-win` as a signed `.msix` installer for enterprise group policy distribution.
+- [ ] **Linux App:** Distribute as `.deb` / `.rpm` / Flatpak / Snap for managed university Linux labs.
+- [ ] **iOS App:** Develop a native Swift/SwiftUI exam client with App Store distribution for managed iPad fleets.
+- [ ] **Android App:** Develop a native Kotlin exam client with Play Store / managed Google Play distribution.
+
 ### Phase 4: Privacy-Preserving Visuals — The "Code-Video" Layer (2027 – 2028)
 - [ ] **Edge-to-Token Processing:** Process video on the edge and convert physical movement into behavioral metadata. The server never receives raw video frames.
 - [ ] **Pose-to-Code Translation:** Convert a webcam feed into skeletal coordinates and gaze-vectors. The server receives only "pose-tokens" that verify human presence and attention. *(Requires Hardware-Rooted Attestation to prevent pose-token injection attacks.)*
@@ -365,8 +382,8 @@ Project Simurgh is evolving from a vulnerability demonstration into a comprehens
 
 | Contributor | Role |
 |-------------|------|
-| **Raouf Abedini** | Project lead — vulnerability research, system architecture, full-stack implementation |
-| **Claude (Anthropic)** | AI pair-programming partner — code review, architectural feedback, documentation refinement |
+| **Raouf Abedini** | Project lead — vulnerability research, system architecture, full-stack implementation. Final-year Cybersecurity student, Macquarie University. |
+| **Claude (Anthropic)** | AI pair-programming partner — code review, architectural feedback, documentation refinement. Also used as the exploit development tool in the original disclosure (capability-uplift case study, Paper Section VIII-G). |
 
 ---
 
