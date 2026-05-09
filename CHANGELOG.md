@@ -138,3 +138,12 @@
   - `tools/simurgh-helper/verity-helper` — Deleted stale binary (rebranding leftover).
 - **Verification:** All 14 core architectural claims verified ✅. All 6 env vars verified ✅. All 4 API endpoints match codebase ✅. 5-second interval confirmed (WINDOW_MS=5000). Helper 2-second interval confirmed (intervalMs=2000). Prompt caching confirmed (cache_control: { type: "ephemeral" }).
 - **Follow-ups:** Ready for GitHub push.
+
+### 2026-05-09 (Australia/Sydney)
+**Raouf:**
+- **Scope:** Terminology Refinement & Strategic Positioning
+- **Summary:** Replaced "cooperate" with "collaborate" and "partner" in the README. This shift in terminology elevates the project from a formal/legalistic tone to a "Silicon Valley" peer-to-peer ecosystem dialect, better aligning with Anthropic's partnership-driven culture.
+- **Files Changed:**
+  - `README.md` — Updated lines 323 and 330.
+- **Verification:** Verified that "collaborate" and "partner" now appear in the "Why Anthropic?" and concluding sections. Global grep for "cooperate" returns zero matches in source code or documentation.
+- **Follow-ups:** None.
