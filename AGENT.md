@@ -90,3 +90,30 @@
   - `README.md` — New subsection under Section 4.
 - **Verification:** Formal, research-grade tone validated.
 - **Follow-ups:** Ready for GitHub push.
+
+### 2026-05-09 (Australia/Sydney)
+**Raouf:**
+- **Scope:** Mermaid Architecture Diagram & Rebranding Audit
+- **Summary:** Converted ASCII architecture diagram to Mermaid flowchart. Full-codebase grep confirms zero "Verity" leaks in source/config/HTML — only historical changelog entries remain.
+- **Files Changed:**
+  - `README.md` — Replaced ASCII diagram with Mermaid in Section 3.
+- **Verification:** `grep -ri verity` clean across all source files.
+- **Follow-ups:** Ready for GitHub push.
+
+### 2026-05-09 (Australia/Sydney)
+**Raouf:**
+- **Scope:** SEB Critique & Cross-Platform Roadmap Expansion
+- **Summary:** Added SEB comparison table contrasting Windows-only lockdown with Simurgh's platform-agnostic approach. Expanded roadmap with per-platform milestones (Windows, Linux, iOS, Android, ChromeOS).
+- **Files Changed:**
+  - `README.md` — New subsection in Section 4, expanded Phases 1–3 in Section 10.
+- **Verification:** Tables render correctly. Platform roadmap is logically sequenced.
+- **Follow-ups:** Ready for GitHub push.
+
+### 2026-05-09 (Australia/Sydney)
+**Raouf:**
+- **Scope:** README — Zero Client-Side Compute & Device Inclusivity
+- **Summary:** Added subsection explaining server-side Claude processing, no video/images leaving the device, and universal device compatibility.
+- **Files Changed:**
+  - `README.md` — New subsection in Section 4.
+- **Verification:** Factually accurate to architecture.
+- **Follow-ups:** Ready for GitHub push.

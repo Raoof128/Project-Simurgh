@@ -91,3 +91,30 @@
   - `README.md` — New subsection under Section 4.
 - **Verification:** Section reads in a formal, research-grade tone consistent with the rest of the document.
 - **Follow-ups:** Ready for GitHub push.
+
+### 2026-05-09 (Australia/Sydney)
+**Raouf:**
+- **Scope:** Mermaid Architecture Diagram & Rebranding Audit
+- **Summary:** Converted the ASCII art architecture diagram to a native Mermaid flowchart for professional GitHub rendering. Performed a full-codebase grep audit for any remaining "Verity" references — confirmed zero leaks in source code, HTML, README, or config files. Only historical changelog/agent log entries referencing the rebranding remain (correct behavior).
+- **Files Changed:**
+  - `README.md` — Replaced `text` code block with `mermaid` flowchart in Section 3.
+- **Verification:** `grep -ri verity` returns matches only in CHANGELOG.md and AGENT.md historical entries. Zero leaks in server.js, public/*.html, package.json, .env.example, or tools/.
+- **Follow-ups:** Ready for GitHub push.
+
+### 2026-05-09 (Australia/Sydney)
+**Raouf:**
+- **Scope:** SEB Critique & Cross-Platform Roadmap Expansion
+- **Summary:** Added a "Cross-Platform Superiority over Legacy Lockdown Software" subsection to Section 4, critically contrasting Safe Exam Browser's Windows-centric limitations against Simurgh's platform-agnostic behavioral API. Included a comparison table covering Windows, macOS, Linux, iOS, Android, and ChromeOS. Expanded the Strategic Roadmap (Section 10) with explicit per-platform milestones: `simurgh-helper-win` (Win32), `simurgh-helper-linux` (X11/Wayland), iOS/iPadOS Safari validation, Android Chrome/WebView validation, ChromeOS managed environment certification, and a unified cross-platform deployment toolkit.
+- **Files Changed:**
+  - `README.md` — New subsection in Section 4, expanded Phases 1–3 in Section 10 with platform-specific deliverables.
+- **Verification:** Markdown tables render correctly. Roadmap phases logically sequence platform expansion from current macOS PoC through to full mobile/ChromeOS coverage.
+- **Follow-ups:** Ready for GitHub push.
+
+### 2026-05-09 (Australia/Sydney)
+**Raouf:**
+- **Scope:** README — Zero Client-Side Compute & Device Inclusivity
+- **Summary:** Added a "Zero Client-Side Compute — Device Inclusivity by Design" subsection to Section 4. Explains that all AI processing is offloaded to Claude server-side, no video/images ever leave the student's device, and any device (old or new) with a browser can participate — eliminating hardware inequality as a barrier to assessment.
+- **Files Changed:**
+  - `README.md` — New subsection in Section 4.
+- **Verification:** Content is factually accurate to the architecture (server-side Claude inference, ~2KB JSON telemetry only).
+- **Follow-ups:** Ready for GitHub push.

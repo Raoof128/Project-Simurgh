@@ -85,23 +85,41 @@ The behavioral engine cannot natively detect click-through GPU overlays (e.g., C
 
 ## 3. System Architecture
 
-```text
-┌────────────────────────────┐                       ┌─────────────────────────────────────┐
-│      Browser (Environment) │   POST /api/telemetry │      Node + Express server          │
-│  ───────────────────────── │ ────────────────────► │  ─────────────────────────────────  │
-│  • keystroke cadence       │       (every 5s)      │  • forwards window to Claude        │
-│  • focus / blur events     │                       │  • prompt-cached system prompt      │
-│  • paste interception      │ ◄──────────────────── │  • HMAC-chain audit log             │
-└────────────────────────────┘   200 OK { verdict }  └──────────────────┬──────────────────┘
-                                                                        ▼
-                                                          ┌────────────────────────────┐
-                                                          │  Claude Sonnet 4.5         │
-                                                          │  → JSON risk verdict       │
-                                                          └────────────────────────────┘
-┌────────────────────────────┐  POST /api/affinity   ┌─────────────────────────────────────┐
-│  simurgh-helper (Swift)    │ ────────────────────► │  Affinity ingest                    │
-│  Native Countermeasure     │       (every 2s)      │  • escalates verdict to Critical    │
-└────────────────────────────┘                       └─────────────────────────────────────┘
+```mermaid
+flowchart LR
+    subgraph Client["Browser (Environment)"]
+        direction TB
+        K["Keystroke cadence"]
+        F["Focus / blur events"]
+        P["Paste interception"]
+    end
+
+    subgraph Server["Node + Express Server"]
+        direction TB
+        FW["Forwards window to Claude"]
+        PS["Prompt-cached system prompt"]
+        HMAC["HMAC-chain audit log"]
+    end
+
+    subgraph Claude["Claude Sonnet 4.5"]
+        V["JSON risk verdict"]
+    end
+
+    subgraph Helper["simurgh-helper (Swift)"]
+        direction TB
+        NC["Native Countermeasure"]
+    end
+
+    subgraph Affinity["Affinity Ingest"]
+        ESC["Escalates verdict to Critical"]
+    end
+
+    Client -- "POST /api/telemetry (every 5s)" --> Server
+    Server -- "200 OK { verdict }" --> Client
+    Server --> Claude
+    Claude --> Server
+    Helper -- "POST /api/affinity (every 2s)" --> Affinity
+    Affinity --> Server
 ```
 
 ### Component Summary
@@ -130,6 +148,31 @@ Traditional proctoring requires continuous, high-speed video streaming. This eff
 
 ### Privacy-as-Code vs. Privacy-as-Surveillance
 Platforms such as CodeSignal are increasingly scrutinized for invasive data collection practices. Project Simurgh's zero-visual approach eliminates the psychological burden of continuous observation — a factor that research indicates disproportionately affects neurodivergent and socioeconomically disadvantaged students.
+
+### Cross-Platform Superiority over Legacy Lockdown Software
+The industry's prevailing lockdown solution — Safe Exam Browser (SEB) — was originally designed for Windows and remains functionally constrained to that ecosystem. Its macOS and Linux support is incomplete, its mobile compatibility is non-existent, and its architecture has not evolved to address modern threat vectors such as display-affinity exploits or AI-driven UI spoofing. SEB represents a generation of security thinking built around *restricting the environment* rather than *verifying behavior*.
+
+Project Simurgh inverts this model. Because the integrity signal is derived from lightweight behavioral telemetry transmitted over a standard browser session, the system is inherently **platform-agnostic**:
+
+| Platform | SEB Support | Simurgh Support |
+|----------|-------------|------------------|
+| Windows | Partial (primary) | ✅ Full (browser-based telemetry) |
+| macOS | Limited | ✅ Full (browser + native `simurgh-helper`) |
+| Linux | Experimental | ✅ Full (browser-based telemetry) |
+| iOS / iPadOS | ❌ None | ✅ Roadmap (browser-based) |
+| Android | ❌ None | ✅ Roadmap (browser-based) |
+| ChromeOS | ❌ None | ✅ Roadmap (browser-based) |
+
+By decoupling integrity verification from the operating system's lockdown capabilities, Simurgh enables a single, unified API to serve every device a student or agent might use — without requiring platform-specific client installations.
+
+### Zero Client-Side Compute — Device Inclusivity by Design
+Traditional proctoring platforms impose significant hardware demands: continuous video encoding, real-time screen capture processing, and local AI inference all require modern CPUs, dedicated GPUs, and substantial RAM. Students with older or lower-specification devices are systematically disadvantaged — or outright excluded.
+
+Project Simurgh eliminates this barrier entirely. **All intelligence resides server-side.** The client's only responsibility is collecting lightweight behavioral events (keystrokes, focus changes, paste events) and transmitting a ~2 KB JSON payload every five seconds. Claude performs all analytical processing on Anthropic's infrastructure. As a result:
+
+* **No video or images ever leave the student's device.** The system transmits only anonymized behavioral metadata — never pixels, never frames, never recordings of the student's environment.
+* **No local AI inference is required.** The device does not need a GPU, does not need to run a machine learning model, and does not need to encode or decode video streams.
+* **Any device with a browser can participate.** A student using a five-year-old laptop, a budget Chromebook, or even a mobile phone maintains the same integrity verification quality as a student on a high-end workstation. Hardware inequality does not translate into assessment inequality.
 
 ### Institutional Cost Reduction
 Beyond software licensing, universities currently bear significant operational costs for examination integrity: hiring teams of **human invigilators**, booking **physical examination venues**, and managing the logistics of large-scale in-person supervision. A single mid-sized university can spend hundreds of thousands of dollars per semester on venue hire and casual invigilation staff alone.
@@ -294,15 +337,22 @@ Project Simurgh is evolving from a vulnerability demonstration into a comprehens
 - [x] Document the "Invisible Window" exploit class.
 - [x] Develop the Simurgh heuristic proof-of-concept environment.
 - [x] Demonstrate cross-platform UI redressing blindspots (macOS, Windows, Linux).
+- [x] Implement `simurgh-helper` native agent for macOS (Swift / ScreenCaptureKit).
 
-### Phase 2: Autonomous Agent Hardening (Q3 – Q4 2026)
+### Phase 2: Autonomous Agent Hardening & Cross-Platform Expansion (Q3 – Q4 2026)
 - [ ] Formalize the Heuristic Engine using advanced cluster compute.
 - [ ] Red-team the heuristics against next-generation "Computer Use" agentic models.
 - [ ] Publish the open-source Simurgh Integrity API draft for enterprise feedback.
+- [ ] **Windows:** Develop `simurgh-helper-win` using `SetWindowDisplayAffinity` enumeration via Win32 API.
+- [ ] **Linux:** Develop `simurgh-helper-linux` leveraging X11/Wayland compositor introspection.
 
-### Phase 3: The Sovereign Shield (2027)
+### Phase 3: The Sovereign Shield — Unified Cross-Platform Release (2027)
 - [ ] Roll out the Integrity API as a safety dependency for academic proctoring and enterprise "Computer Use" agents.
 - [ ] Establish hardened OS environments natively immune to cross-platform redressing.
+- [ ] **iOS / iPadOS:** Validate browser-based telemetry collection under Safari WebKit constraints.
+- [ ] **Android:** Validate browser-based telemetry collection under Chrome/WebView constraints.
+- [ ] **ChromeOS:** Certify compatibility with managed Chromebook environments used in education.
+- [ ] Release unified cross-platform installer / deployment toolkit.
 
 ### Phase 4: Privacy-Preserving Visuals — The "Code-Video" Layer (2027 – 2028)
 - [ ] **Edge-to-Token Processing:** Process video on the edge and convert physical movement into behavioral metadata. The server never receives raw video frames.
