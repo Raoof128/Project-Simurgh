@@ -8,14 +8,14 @@
 
 [![Node](https://img.shields.io/badge/node-%E2%89%A520.0-1a1a1a?style=flat-square)](https://nodejs.org)
 [![Claude](https://img.shields.io/badge/claude-sonnet--4--5-6b1a1a?style=flat-square)](https://docs.claude.com)
-[![License](https://img.shields.io/badge/license-MIT-d6cfbe?style=flat-square)](#10-status--license)
-[![Status](https://img.shields.io/badge/status-research%20prototype-2f4a2a?style=flat-square)](#10-status--license)
+[![License](https://img.shields.io/badge/license-MIT-d6cfbe?style=flat-square)](#11-status--license)
+[![Status](https://img.shields.io/badge/status-research%20prototype-2f4a2a?style=flat-square)](#11-status--license)
 
 **[Read the Disclosure Paper →](https://raoufabedini.dev/projects/invisible-window-research)**
 
 <br/>
 
-![Simurgh — Live Dashboard View](docs/screenshot.png)
+![Simurgh — Student exam view with live behavioral verdict and telemetry signature](docs/screenshot.png)
 
 </div>
 
@@ -178,6 +178,13 @@ cd tools/simurgh-helper
 make
 ./simurgh-helper --session <SESSION_ID> --server http://localhost:3030 --secret "$SIMURGH_HELPER_SECRET"
 ```
+
+### Screenshots
+
+| Student Exam View | Instructor Dashboard |
+|---|---|
+| ![Student view — behavioral telemetry with live verdict](docs/screenshot-exam-view.png) | ![Instructor view — multi-session aggregator with SSE streaming](docs/screenshot-instructor.png) |
+| *Real-time behavioral analysis with keystroke signature waveform, display-affinity monitoring, and Claude-powered risk verdicts.* | *Multi-session monitoring dashboard with per-session verdict history, helper status, and capture-invisible window counts.* |
 
 ---
 

@@ -62,3 +62,13 @@
   - `README.md` — Full rewrite. Added Section 8 (Security Considerations), expanded API Reference, added tables throughout, normalized voice, fixed anchors, extended roadmap.
 - **Verification:** All 11 ToC anchors resolve correctly. Consistent formatting. No trailing whitespace.
 - **Follow-ups:** Ready for GitHub push and interview presentation.
+
+### 2026-05-09 (Australia/Sydney)
+**Raouf:**
+- **Scope:** README Screenshots & Visual Documentation
+- **Summary:** Replaced stale hero screenshot (old "Verity" branding) with fresh Simurgh-branded captures. Added student exam view and instructor dashboard screenshots in a side-by-side table.
+- **Files Changed:**
+  - `docs/screenshot.png`, `docs/screenshot-exam-view.png`, `docs/screenshot-instructor.png`, `docs/screenshot-idle.png`
+  - `README.md` — Updated hero caption, added Screenshots subsection, fixed badge anchors
+- **Verification:** All screenshots render correctly. No remaining "Verity" branding.
+- **Follow-ups:** Ready for GitHub push.

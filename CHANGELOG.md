@@ -60,3 +60,16 @@
   - `README.md` — Full rewrite. Added Section 8 (Security Considerations) with HMAC audit chain, helper auth, and threat model coverage table. Expanded API Reference with 4 endpoints, auth headers, and error codes. Converted telemetry fields to a proper table with types and descriptions. Added Component Summary table. Added full environment variable reference table. Normalized all voice to consistent 3rd-person. Fixed badge anchors to resolve to correct heading IDs. Extended roadmap timeline to 2028.
 - **Verification:** All 11 Table of Contents anchor links resolve to correct heading IDs. Markdown structure validated with consistent `---` separators between all sections. No trailing whitespace. Zero instances of informal/editorial language.
 - **Follow-ups:** Ready for GitHub push and interview presentation.
+
+### 2026-05-09 (Australia/Sydney)
+**Raouf:**
+- **Scope:** README Screenshots & Visual Documentation
+- **Summary:** Replaced the stale hero screenshot (which still displayed old "Verity" branding) with a fresh capture showing the rebranded "Simurgh" UI. Added two additional screenshots: the student exam view with a live behavioral verdict and the instructor multi-session dashboard. Screenshots are embedded in a side-by-side table in the Quick Start section for maximum visual impact.
+- **Files Changed:**
+  - `docs/screenshot.png` — Replaced with updated Simurgh-branded exam view
+  - `docs/screenshot-exam-view.png` — New: student view with typed response and live verdict
+  - `docs/screenshot-instructor.png` — New: instructor dashboard with session cards and SSE streaming
+  - `docs/screenshot-idle.png` — New: idle exam view before user interaction
+  - `README.md` — Updated hero image caption, added Screenshots subsection with side-by-side table, fixed badge anchor links
+- **Verification:** All 4 screenshots render correctly in the README. Hero screenshot displays "Simurgh | BEHAVIORAL PROCTOR" header. No remaining "Verity" branding in any screenshot.
+- **Follow-ups:** Ready for GitHub push.
