@@ -1233,6 +1233,8 @@ OUTPUT FORMAT
       catch { return "sess-" + Math.random().toString(36).slice(2, 10); }
     };
     let sessionId = newSessionId();
+    let sessionToken = null;        // issued by /api/exams/:id/join (joined sessions only)
+    let telemetrySequence = 0;      // monotonic, sent with every /api/telemetry POST
 
     // ═══════════════════════════════════════════════════
     //  ELEMENTS
@@ -1659,10 +1661,18 @@ OUTPUT FORMAT
 
       inflightSend = (async () => {
         try {
+          telemetrySequence += 1;
+          const headers = { "content-type": "application/json" };
+          if (sessionToken) headers["authorization"] = "Bearer " + sessionToken;
           const r = await fetch("/api/telemetry", {
             method: "POST",
-            headers: { "content-type": "application/json" },
-            body: JSON.stringify({ sessionId, telemetry }),
+            headers,
+            body: JSON.stringify({
+              sessionId,
+              sequence: telemetrySequence,
+              timestamp: Date.now(),
+              telemetry,
+            }),
             signal: ctrl.signal,
           });
           clearTimeout(timer);
@@ -1984,6 +1994,8 @@ OUTPUT FORMAT
         $("simInvisible").textContent = "Arm Invisible Window";
       }
       sessionId = newSessionId();
+      sessionToken = null;
+      telemetrySequence = 0;
       sessionLabel.textContent = "session: " + sessionId;
       verdictBox.innerHTML = `<div class="verdict-empty">Awaiting first window — analysing…<div class="progress" aria-hidden="true"><div id="progFill" style="position:absolute;inset:0;background:var(--ox);transform-origin:left;transform:scaleX(0);transition:transform .12s linear"></div></div></div>`;
       proctorEl.classList.remove("alarm");
@@ -2267,9 +2279,14 @@ OUTPUT FORMAT
     // ═══════════════════════════════════════════════════
     document.getElementById('accept-privacy-btn')?.addEventListener('click', async () => {
       document.getElementById('privacy-modal').style.display = 'none';
-      if (sessionId) {
+      // Only notify the server if this is a joined exam session (token present).
+      // Anonymous demo sessions just dismiss the modal client-side.
+      if (sessionId && sessionToken) {
         try {
-          await fetch(`/api/sessions/${sessionId}/privacy-accept`, { method: 'POST' });
+          await fetch(`/api/sessions/${sessionId}/privacy-accept`, {
+            method: 'POST',
+            headers: { authorization: 'Bearer ' + sessionToken },
+          });
         } catch {}
       }
     });

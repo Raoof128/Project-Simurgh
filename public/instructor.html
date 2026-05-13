@@ -239,8 +239,14 @@
     // Auth — token comes from ?token= query param. The server validates it
     // for /api/sessions, /api/dashboard, /api/audit, and /api/stream/instructor.
     const TOKEN = new URLSearchParams(location.search).get("token") || "";
+    // SSE requires the token in the query string because EventSource cannot set headers.
+    // For every other API call we use the Authorization header instead.
     const tokenQuery = TOKEN ? "?token=" + encodeURIComponent(TOKEN) : "";
     const authHeaders = TOKEN ? { "authorization": "Bearer " + TOKEN } : {};
+    // Strip the token from the visible URL so it does not get logged/shared.
+    if (TOKEN && typeof history !== "undefined" && history.replaceState) {
+      try { history.replaceState(null, "", location.pathname); } catch {}
+    }
 
     function renderSessionCard(sess) {
       const level = (sess.latest?.risk_level || 'Safe').toLowerCase();
@@ -381,12 +387,12 @@
     connectSSE();
 
     // ── Export / Audit helpers ──
-    const _token = new URLSearchParams(location.search).get('token') || '';
-    const _authParam = _token ? `?token=${_token}` : '';
-
+    // Report export and audit verify both use the Authorization header from the
+    // top-of-page TOKEN/authHeaders pair — no token in query string, no token in URL.
     async function exportReport(sessionId) {
       try {
-        const res = await fetch(`/api/sessions/${sessionId}/report${_authParam}`);
+        const res = await fetch(`/api/sessions/${sessionId}/report`, { headers: authHeaders });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
         const report = await res.json();
         const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
         const a = document.createElement('a');
@@ -398,7 +404,8 @@
 
     async function verifyAudit(sessionId) {
       try {
-        const res = await fetch(`/api/audit/${sessionId}/verify${_authParam}`);
+        const res = await fetch(`/api/audit/${sessionId}/verify`, { headers: authHeaders });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
         const data = await res.json();
         alert(`Audit chain: ${data.valid ? '✅ VALID' : '❌ INVALID'}\nEntries: ${data.entry_count}\n${data.errors?.join('\n') || ''}`);
       } catch (e) { alert('Audit verify failed: ' + e.message); }
