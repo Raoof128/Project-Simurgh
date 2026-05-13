@@ -19,6 +19,8 @@
 
 </div>
 
+> **Status: Stage 1 research MVP.** This repository demonstrates a privacy-preserving behavioural integrity prototype. It does not collect video, audio, biometric data, or personal identity data. See [PRIVACY.md](PRIVACY.md), [ETHICS.md](ETHICS.md), and [DISCLAIMER.md](DISCLAIMER.md).
+
 ---
 
 ## The Core Philosophy

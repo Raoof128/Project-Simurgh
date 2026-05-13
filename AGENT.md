@@ -2,6 +2,14 @@
 
 ## Agent Change Log
 
+### 2026-05-13 (Australia/Sydney) — Repository Documentation
+**Raouf:**
+- **Scope:** Repository documentation polish
+- **Summary:** Created SECURITY.md, PRIVACY.md, ROADMAP.md, ETHICS.md, DISCLAIMER.md. Added status notice to README.md top section.
+- **Files Changed:** `SECURITY.md`, `PRIVACY.md`, `ROADMAP.md`, `ETHICS.md`, `DISCLAIMER.md`, `README.md`
+- **Verification:** All files render correctly. README status notice links to the three policy docs.
+- **Follow-ups:** None.
+
 ### 2026-05-13 (Australia/Sydney)
 **Raouf:**
 - **Scope:** Stage 1 Academic Shield

@@ -1,5 +1,15 @@
 ## Change Log
 
+## [0.2.1] — 2026-05-13
+
+### Added
+- `SECURITY.md` — vulnerability disclosure policy and security architecture overview
+- `PRIVACY.md` — full data collection policy (collected vs. never collected)
+- `ROADMAP.md` — Stages 1–4 with current status and known limitations
+- `ETHICS.md` — commitments on misconduct findings, transparency, and power asymmetry
+- `DISCLAIMER.md` — research prototype disclaimer, no-warranty statement, compliance guidance
+- README status notice linking to policy documents
+
 ## [0.2.0] — 2026-05-13
 
 ### Added
