@@ -8,6 +8,9 @@ import { stagingConfig } from "./src/config/env.js";
 import { normaliseTelemetry } from "./src/privacy/normaliseTelemetry.js";
 import { scoreAcademicRisk } from "./src/academic/riskScoring.js";
 import { EVENTS, eventTimeline } from "./src/academic/academicEvents.js";
+import { createExam, getExam, listExams } from "./src/academic/exams.js";
+import { STATES, createSessionRecord, transitionState } from "./src/academic/sessions.js";
+import { hashStudentId } from "./src/privacy/hashIdentity.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -185,6 +188,7 @@ const SESSION_TTL_MS = 4 * 60 * 60 * 1000; // 4 hours of inactivity
 const AUDIT_CHAIN_CAP = 5000;
 const sessions = new Map();
 const timeline = eventTimeline();
+const examSessions = new Map(); // sessionId → sessionRecord (Stage 1 lifecycle)
 function getSession(id) {
   if (!sessions.has(id)) {
     sessions.set(id, {
@@ -609,6 +613,99 @@ app.get("/api/stream/instructor", requireInstructorAuth, (req, res) => {
 
 app.get("/api/meta", (_req, res) => {
   res.json({ model: MODEL, demo_mode: !!DEMO_MODE });
+});
+
+// ─────────────────────────────────────────────────────────────
+//  Stage 1 Academic Shield — exam lifecycle endpoints
+// ─────────────────────────────────────────────────────────────
+
+// Create exam (instructor only)
+app.post("/api/exams", requireInstructorAuth, (req, res) => {
+  const { title, durationMinutes, description } = req.body ?? {};
+  if (!title) return res.status(400).json({ error: "title required" });
+  const exam = createExam({ title, durationMinutes, description });
+  res.status(201).json(exam);
+});
+
+// List exams (instructor only)
+app.get("/api/exams", requireInstructorAuth, (_req, res) => {
+  res.json({ exams: listExams() });
+});
+
+// Student joins exam — creates session record linked to exam
+app.post("/api/exams/:examId/join", (req, res) => {
+  const exam = getExam(req.params.examId);
+  if (!exam) return res.status(404).json({ error: "exam not found" });
+  const rawStudentId = String(req.body?.studentId ?? "").slice(0, 256);
+  if (!rawStudentId) return res.status(400).json({ error: "studentId required" });
+  const studentIdHash = hashStudentId(rawStudentId);
+  const sessionId = String(req.body?.sessionId ?? "").slice(0, 64) ||
+    `sess_${crypto.randomBytes(6).toString("hex")}`;
+  if (!/^[A-Za-z0-9_-]+$/.test(sessionId)) {
+    return res.status(400).json({ error: "invalid sessionId format" });
+  }
+  let record = createSessionRecord(exam.id, studentIdHash);
+  record = { ...record, id: sessionId };
+  record = transitionState(record, STATES.JOINED);
+  examSessions.set(sessionId, record);
+  getSession(sessionId); // ensure telemetry session exists
+  res.json({ sessionId, examId: exam.id, studentIdHash, state: record.state });
+});
+
+// Student accepts privacy notice
+app.post("/api/sessions/:sessionId/privacy-accept", (req, res) => {
+  const record = examSessions.get(req.params.sessionId);
+  if (!record) return res.status(404).json({ error: "session not found" });
+  try {
+    const updated = transitionState(record, STATES.PRIVACY_ACCEPTED);
+    examSessions.set(req.params.sessionId, updated);
+    timeline.add(req.params.sessionId, EVENTS.PRIVACY_ACCEPTED, {});
+    res.json({ state: updated.state });
+  } catch (e) {
+    res.status(409).json({ error: e.message });
+  }
+});
+
+// Start exam
+app.post("/api/sessions/:sessionId/start", (req, res) => {
+  const record = examSessions.get(req.params.sessionId);
+  if (!record) return res.status(404).json({ error: "session not found" });
+  try {
+    const canStart = [STATES.PRIVACY_ACCEPTED, STATES.HELPER_CONNECTED].includes(record.state);
+    if (!canStart) return res.status(409).json({ error: `Cannot start from state: ${record.state}` });
+    let updated = transitionState(record, STATES.EXAM_STARTED);
+    updated = { ...updated, startedAt: Date.now() };
+    const sess = getSession(req.params.sessionId);
+    sess.startedAt = updated.startedAt;
+    examSessions.set(req.params.sessionId, updated);
+    timeline.add(req.params.sessionId, EVENTS.EXAM_STARTED, { examId: record.examId });
+    appendAudit(sess, "exam_started", { examId: record.examId, ts: updated.startedAt });
+    res.json({ state: updated.state, startedAt: updated.startedAt });
+  } catch (e) {
+    res.status(409).json({ error: e.message });
+  }
+});
+
+// Submit exam
+app.post("/api/sessions/:sessionId/submit", (req, res) => {
+  let record = examSessions.get(req.params.sessionId);
+  if (!record) return res.status(404).json({ error: "session not found" });
+  try {
+    // If still in exam_started, transition through active first
+    if (record.state === STATES.EXAM_STARTED) {
+      record = transitionState(record, STATES.ACTIVE);
+    }
+    let updated = transitionState(record, STATES.SUBMITTED);
+    updated = { ...updated, submittedAt: Date.now() };
+    examSessions.set(req.params.sessionId, updated);
+    const sess = getSession(req.params.sessionId);
+    timeline.add(req.params.sessionId, EVENTS.EXAM_SUBMITTED, { ts: updated.submittedAt });
+    appendAudit(sess, "exam_submitted", { ts: updated.submittedAt });
+    sseBroadcast("session_submitted", { sessionId: req.params.sessionId });
+    res.json({ state: updated.state, submittedAt: updated.submittedAt });
+  } catch (e) {
+    res.status(409).json({ error: e.message });
+  }
 });
 
 // ─────────────────────────────────────────────────────────────
