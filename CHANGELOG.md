@@ -1,5 +1,23 @@
 ## Change Log
 
+## [0.3.3] — 2026-05-13 — Stage 1 Documentation Polish
+
+### Changed
+
+- Replaced `docs/STAGE_1_ACADEMIC_SHIELD.md` short branch note with the full Stage 1 Academic Shield reviewer/reference document
+- Added document metadata, contents, an explicit Stage 1 threat model, exact verification commands, reviewer notes, and consistent section numbering
+- Renamed the documentation heading from "CI/CD Status" to "CI Status" to match the Stage 1 CI-only boundary
+
+### Notes
+
+- Branch protection remains documented as a manual follow-up because the saved GitHub branch-protection state was not confirmed during this pass
+
+### Verified
+
+- Initial `./scripts/check.sh` found only Prettier formatting drift in `docs/STAGE_1_ACADEMIC_SHIELD.md`
+- `npm run format`
+- `./scripts/check.sh` → 21/21 pass
+
 ## [0.3.2] — 2026-05-13 — Stage 1 CI
 
 ### Added

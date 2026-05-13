@@ -2,6 +2,18 @@
 
 ## Agent Change Log
 
+### 2026-05-13 (Australia/Sydney) — Stage 1 Documentation Polish
+
+**Raouf:**
+
+- **Scope:** Stage 1 reviewer documentation
+- **Summary:** Replaced the short Stage 1 branch note with the full polished Stage 1 Academic Shield reference document. Added document metadata, a contents section, an explicit threat model, CI-only heading cleanup, exact verification commands, reviewer notes, and consistent section numbering. Kept branch protection documented as a manual follow-up because the saved GitHub branch-protection state was not confirmed.
+- **Files Changed:**
+  - `docs/STAGE_1_ACADEMIC_SHIELD.md` — full Stage 1 reviewer/reference document with threat model and verification commands
+- **Verification:** Initial `./scripts/check.sh` found only Prettier formatting drift in `docs/STAGE_1_ACADEMIC_SHIELD.md`. Ran `npm run format`, synced the uploaded Desktop copy, then reran `./scripts/check.sh` successfully: 21/21 checks passed.
+- **Follow-ups:**
+  - Enable branch protection on `main` in the GitHub UI if it has not already been saved.
+
 ### 2026-05-13 (Australia/Sydney) — Stage 1 CI (GitHub Actions)
 
 **Raouf:**
