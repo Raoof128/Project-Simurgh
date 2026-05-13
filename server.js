@@ -4,6 +4,10 @@ import crypto from "node:crypto";
 import { readFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+import { stagingConfig } from "./src/config/env.js";
+import { normaliseTelemetry } from "./src/privacy/normaliseTelemetry.js";
+import { scoreAcademicRisk } from "./src/academic/riskScoring.js";
+import { EVENTS, eventTimeline } from "./src/academic/academicEvents.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -180,6 +184,7 @@ function sanitiseTelemetry(raw) {
 const SESSION_TTL_MS = 4 * 60 * 60 * 1000; // 4 hours of inactivity
 const AUDIT_CHAIN_CAP = 5000;
 const sessions = new Map();
+const timeline = eventTimeline();
 function getSession(id) {
   if (!sessions.has(id)) {
     sessions.set(id, {
@@ -190,6 +195,14 @@ function getSession(id) {
       affinity: { hostile: [], lastHeartbeat: null, source: null, forensic: null },
       auditChain: { prevHash: "GENESIS", entries: [], truncated: false },
       rate: { tokens: 3, lastRefill: Date.now() },
+      // Stage 1 Academic Shield fields
+      state: 'active',
+      examId: null,
+      studentIdHash: null,
+      reconnects: 0,
+      startedAt: Date.now(),
+      latestRiskScore: null,
+      latestCategories: null,
     });
   }
   const s = sessions.get(id);
@@ -359,8 +372,29 @@ app.post("/api/telemetry", async (req, res) => {
   }
 
   if (!client || DEMO_MODE) {
-    const h = localHeuristic(telemetry);
-    const verdict = { ...h, ts: Date.now(), source: "heuristic-fallback", cache: { creation: 0, read: 0 } };
+    const normed = normaliseTelemetry(telemetry) ?? telemetry;
+    const scored = scoreAcademicRisk(normed, {
+      connected: sess.affinity.lastHeartbeat != null && (Date.now() - sess.affinity.lastHeartbeat) < 8000,
+      hostileCount: sess.affinity.hostile.length,
+    }, { reconnects: sess.reconnects || 0, startedAt: sess.startedAt });
+    const verdict = {
+      risk_level: scored.risk_level,
+      risk_score: scored.risk_score,
+      confidence: scored.confidence,
+      categories: scored.categories,
+      reasoning: scored.reasoning || scored.recommendation,
+      recommendation: scored.recommendation,
+      source: scored.source,
+      ts: Date.now(),
+      cache: { creation: 0, read: 0 },
+    };
+    sess.latestRiskScore = scored.risk_score;
+    sess.latestCategories = scored.categories;
+    timeline.add(sessionId, EVENTS.TELEMETRY_WINDOW_RECEIVED, { risk_level: scored.risk_level, risk_score: scored.risk_score });
+    if (telemetry.focus_losses > 0) timeline.add(sessionId, EVENTS.FOCUS_LOSS, { count: telemetry.focus_losses });
+    if (telemetry.paste_payload_chars >= 200) timeline.add(sessionId, EVENTS.BULK_PASTE, { chars: telemetry.paste_payload_chars });
+    if (telemetry.effective_wpm >= 250) timeline.add(sessionId, EVENTS.ABNORMAL_WPM_SPIKE, { wpm: telemetry.effective_wpm });
+    if (telemetry.max_idle_gap_ms >= 60000) timeline.add(sessionId, EVENTS.LONG_IDLE_GAP, { ms: telemetry.max_idle_gap_ms });
     persistVerdict(sessionId, verdict);
     return res.json(verdict);
   }
@@ -385,16 +419,33 @@ app.post("/api/telemetry", async (req, res) => {
       parsed = { risk_level: "Safe", reasoning: "Model output unparseable; defaulting to Safe." };
     }
 
+    const normed = normaliseTelemetry(telemetry) ?? telemetry;
+    const scored = scoreAcademicRisk(normed, {
+      connected: sess.affinity.lastHeartbeat != null && (Date.now() - sess.affinity.lastHeartbeat) < 8000,
+      hostileCount: sess.affinity.hostile.length,
+    }, { reconnects: sess.reconnects || 0, startedAt: sess.startedAt });
+    const claudeReasoning = String(parsed.reasoning ?? "").slice(0, 280);
     const verdict = {
-      risk_level: ["Safe", "Warning", "Critical"].includes(parsed.risk_level) ? parsed.risk_level : "Safe",
-      reasoning: String(parsed.reasoning ?? "").slice(0, 280),
+      risk_level: scored.risk_level,
+      risk_score: scored.risk_score,
+      confidence: scored.confidence,
+      categories: scored.categories,
+      reasoning: claudeReasoning || scored.recommendation,
+      recommendation: scored.recommendation,
+      source: { score: 'local_heuristic', reasoning: 'claude_narrative' },
       ts: Date.now(),
-      source: "claude",
       cache: {
         creation: response.usage?.cache_creation_input_tokens ?? 0,
         read: response.usage?.cache_read_input_tokens ?? 0,
       },
     };
+    sess.latestRiskScore = scored.risk_score;
+    sess.latestCategories = scored.categories;
+    timeline.add(sessionId, EVENTS.TELEMETRY_WINDOW_RECEIVED, { risk_level: scored.risk_level, risk_score: scored.risk_score });
+    if (telemetry.focus_losses > 0) timeline.add(sessionId, EVENTS.FOCUS_LOSS, { count: telemetry.focus_losses });
+    if (telemetry.paste_payload_chars >= 200) timeline.add(sessionId, EVENTS.BULK_PASTE, { chars: telemetry.paste_payload_chars });
+    if (telemetry.effective_wpm >= 250) timeline.add(sessionId, EVENTS.ABNORMAL_WPM_SPIKE, { wpm: telemetry.effective_wpm });
+    if (telemetry.max_idle_gap_ms >= 60000) timeline.add(sessionId, EVENTS.LONG_IDLE_GAP, { ms: telemetry.max_idle_gap_ms });
     persistVerdict(sessionId, verdict);
     res.json(verdict);
   } catch (err) {
@@ -402,13 +453,24 @@ app.post("/api/telemetry", async (req, res) => {
     const lowCredit = /credit balance is too low/i.test(msg);
     if (lowCredit) console.warn("[simurgh] anthropic low-credit — falling back to local heuristic");
     else console.error("[simurgh] anthropic error:", msg);
-    const h = localHeuristic(telemetry);
+    const normed = normaliseTelemetry(telemetry) ?? telemetry;
+    const scored = scoreAcademicRisk(normed, {
+      connected: sess.affinity.lastHeartbeat != null && (Date.now() - sess.affinity.lastHeartbeat) < 8000,
+      hostileCount: sess.affinity.hostile.length,
+    }, { reconnects: sess.reconnects || 0, startedAt: sess.startedAt });
     const verdict = {
-      ...h,
+      risk_level: scored.risk_level,
+      risk_score: scored.risk_score,
+      confidence: scored.confidence,
+      categories: scored.categories,
+      reasoning: scored.recommendation,
+      recommendation: scored.recommendation,
+      source: { score: 'local_heuristic', reasoning: lowCredit ? 'fallback-low-credit' : 'fallback-error' },
       ts: Date.now(),
-      source: lowCredit ? "fallback-low-credit" : "fallback-error",
       cache: { creation: 0, read: 0 },
     };
+    sess.latestRiskScore = scored.risk_score;
+    sess.latestCategories = scored.categories;
     persistVerdict(sessionId, verdict);
     res.json(verdict);
   }
