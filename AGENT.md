@@ -2,6 +2,23 @@
 
 ## Agent Change Log
 
+### 2026-05-13 (Australia/Sydney)
+**Raouf:**
+- **Scope:** Stage 1 Academic Shield
+- **Summary:** Implemented full Stage 1 Academic Shield — exam lifecycle, privacy-safe telemetry normaliser, SHA-256 identity hashing, local category-based risk scoring (7 weighted categories), Claude narrative layer (Warning/Critical only, fail-open), academic event taxonomy, session state machine, HMAC audit chain module, JSON report builder, and updated instructor dashboard with risk cards, event timeline, filter bar, report export, and audit verify.
+- **Files Changed:**
+  - `src/config/env.js`, `src/privacy/privacyConfig.js`, `src/privacy/normaliseTelemetry.js`, `src/privacy/hashIdentity.js`
+  - `src/storage/memoryStore.js`
+  - `src/academic/riskScoring.js`, `src/academic/academicEvents.js`, `src/academic/exams.js`, `src/academic/sessions.js`, `src/academic/reportBuilder.js`
+  - `src/audit/hmacChain.js`, `src/audit/verifyAudit.js`
+  - `server.js` — integrated all modules, added 9 new routes
+  - `public/index.html` — privacy modal, helper status
+  - `public/instructor.html` — risk cards, timeline, filters, report export, audit verify
+  - `README.md` — Academic Shield section added
+  - `tests/unit/` — 8 test files covering all new modules
+- **Verification:** All 42 unit tests pass. Server starts cleanly. Telemetry endpoint returns category-based risk scores. Report endpoint returns valid JSON. Audit verify confirms chain integrity. Dashboard loads with new components.
+- **Follow-ups:** Stage 1.5 — route-level refactor of server.js into src/routes/. PDF report export (P2).
+
 ### 2026-05-09 (Australia/Sydney)
 **Raouf:**
 - **Scope:** Project Branding and Documentation

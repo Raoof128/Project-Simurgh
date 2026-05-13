@@ -1,5 +1,24 @@
 ## Change Log
 
+## [0.2.0] — 2026-05-13
+
+### Added
+- **Stage 1 Academic Shield** — full academic integrity workflow
+- `src/privacy/` — privacy config, telemetry normaliser, SHA-256 identity hashing
+- `src/academic/` — local risk scoring (7 categories), academic event taxonomy, session state machine, exam registry, JSON report builder
+- `src/audit/` — HMAC chain module, audit chain verifier
+- `src/config/env.js` — Stage 1 environment variable config
+- `src/storage/memoryStore.js` — namespace memory store
+- 9 new API endpoints: `/api/exams`, `/api/exams/:id/join`, `/api/sessions/:id/privacy-accept`, `/api/sessions/:id/start`, `/api/sessions/:id/submit`, `/api/sessions/:id/report`, `/api/audit/:id/verify`, plus `GET /api/exams`
+- Privacy notice modal on student exam page
+- Helper status badge on student exam page
+- Risk score cards, event timeline, filter bar, report export, audit verify on instructor dashboard
+- `node:test` unit test suite (8 modules, 42 tests)
+
+### Changed
+- Telemetry scoring now uses local heuristic category model (7 weighted categories); Claude provides narrative only on Warning/Critical (fail-open)
+- Session objects extended with lifecycle state, exam linkage, reconnect count, risk score cache
+
 ### 2026-05-09 (Australia/Sydney)
 **Raouf:**
 - **Scope:** Project Branding and Documentation

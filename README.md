@@ -139,6 +139,26 @@ The system prompt encoding the threat model is ~700 tokens and does not change a
 
 ---
 
+## Simurgh Academic Shield
+
+Stage 1 extends the core behavioural telemetry engine into a complete **privacy-first academic integrity workflow**.
+
+**What it adds:**
+
+| Capability | Detail |
+|---|---|
+| Exam lifecycle | `POST /api/exams` → join → privacy-accept → start → submit |
+| Identity privacy | Student IDs are SHA-256 hashed — raw names never stored |
+| Local risk scoring | Weighted category model (paste, focus, typing, idle, affinity, helper, session) |
+| Claude narrative | Called only on Warning/Critical; fail-open (local score stands if Claude unavailable) |
+| Academic events | Named taxonomy (BULK_PASTE, FOCUS_LOSS, CAPTURE_EXCLUDED_WINDOW, etc.) |
+| JSON report export | `GET /api/sessions/:id/report` — includes timeline, risk summary, audit validity |
+| Audit verification | `GET /api/audit/:id/verify` — HMAC chain integrity check |
+
+**Privacy commitment:** Simurgh collects behavioural metadata only. No screen pixels, no webcam frames, no typed content, no paste content. Risk scores are heuristic-based. Any anomaly recommendation requires manual human review — Simurgh never makes automatic misconduct findings.
+
+---
+
 ## 4. Socio-Economic Impact & Democratic Access
 
 Current proctoring standards (CodeSignal, ProctorU, Examity) are architected for high-bandwidth environments. Project Simurgh intentionally disrupts this paradigm by prioritizing **Bandwidth-Inclusive Security**.
