@@ -1,8 +1,29 @@
 ## Change Log
 
+## [0.3.1] — 2026-05-13 — Stage 1 Quality Gate
+
+### Added
+
+- `scripts/check.sh` — one-shot pre-commit/pre-push verification script (Node version, syntax, format, tests, privacy guard, secret scan, tone check, npm audit, server boot smoke, audit chain self-test, git state). Mirrors the COMP3130 structure; supports `--quick`, `--fix`, `--verbose`, `--help`.
+- Prettier 3 as a dev dependency; `npm run format` and `npm run format:check` scripts
+- `.prettierignore` and `.prettierrc.json` (printWidth 100, double quotes, semis, trailing-comma es5)
+- README "Stage 1 Verification" section linking to `./scripts/check.sh`
+
+### Changed
+
+- 41 source/test/doc files reformatted to Prettier defaults (no semantic changes)
+
+### Verified
+
+- `./scripts/check.sh --quick` → 11/11 pass
+- `./scripts/check.sh` (full) → 21/21 pass
+- All 65 unit tests still pass after formatting
+- 0 npm vulnerabilities
+
 ## [0.3.0] — 2026-05-13 — Stage 1 Security Hardening
 
 ### Added
+
 - `src/security/sessionToken.js` — HMAC-signed student session tokens (issue + verify, with timing-safe comparison)
 - `src/security/replayGuard.js` — per-session sequence + timestamp window enforcement
 - `src/security/rateLimit.js` — generic per-key rate limiter middleware
@@ -15,6 +36,7 @@
 - README "Stage 1 Security Hardening" section documenting the auth model, replay protection, rate limits, and headers
 
 ### Changed
+
 - JSON body limit reduced from 256 KB to 32 KB (configurable via `SIMURGH_JSON_LIMIT`)
 - `sanitiseTelemetry` now rejects (returns null) on NaN, Infinity, negative values, or values > 2× the documented max; only mild over-range values are clamped
 - Student page (`public/index.html`) sends `Authorization: Bearer <sessionToken>` + monotonic `sequence` + `timestamp` on every telemetry POST
@@ -22,6 +44,7 @@
 - `.gitignore` now excludes `data/sessions/`, `data/audit/`, `data/reports/`, `data/exams/`, `logs/`, `simurgh-audit-*.json`, `simurgh-report-*.json`
 
 ### Security
+
 - Four-secret separation enforced: instructor token, helper secret, audit HMAC key, session signing key — never reused for cross-purposes
 - All HTTP responses carry `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy`, `Permissions-Policy`, plus `Strict-Transport-Security` in production
 - Documented Stage 1 limitations and the privacy/tamper-test workflow
@@ -29,6 +52,7 @@
 ## [0.2.2] — 2026-05-13
 
 ### Fixed
+
 - Block telemetry ingestion on submitted/closed exam sessions (prevents post-submission audit manipulation)
 - Add `MAX_SESSIONS` cap (default 10,000) — return 503 at capacity instead of unbounded memory growth
 - Add HTTP security headers on all responses: `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy`, `Permissions-Policy`, `Strict-Transport-Security` (production only)
@@ -40,6 +64,7 @@
 ## [0.2.1] — 2026-05-13
 
 ### Added
+
 - `SECURITY.md` — vulnerability disclosure policy and security architecture overview
 - `PRIVACY.md` — full data collection policy (collected vs. never collected)
 - `ROADMAP.md` — Stages 1–4 with current status and known limitations
@@ -50,6 +75,7 @@
 ## [0.2.0] — 2026-05-13
 
 ### Added
+
 - **Stage 1 Academic Shield** — full academic integrity workflow
 - `src/privacy/` — privacy config, telemetry normaliser, SHA-256 identity hashing
 - `src/academic/` — local risk scoring (7 categories), academic event taxonomy, session state machine, exam registry, JSON report builder
@@ -63,11 +89,14 @@
 - `node:test` unit test suite (8 modules, 42 tests)
 
 ### Changed
+
 - Telemetry scoring now uses local heuristic category model (7 weighted categories); Claude provides narrative only on Warning/Critical (fail-open)
 - Session objects extended with lifecycle state, exam linkage, reconnect count, risk score cache
 
 ### 2026-05-09 (Australia/Sydney)
+
 **Raouf:**
+
 - **Scope:** Project Branding and Documentation
 - **Summary:** Rebranded the project from "Verity" to "Project Simurgh" and updated the core README.md content to reflect the new brand, emphasizing behavioral telemetry.
 - **Files Changed:**
@@ -76,7 +105,9 @@
 - **Follow-ups:** Ensure that any other text occurrences or components inside the source code (like public HTML files) are eventually scrubbed of "Verity" if necessary.
 
 ### 2026-05-09 (Australia/Sydney)
+
 **Raouf:**
+
 - **Scope:** Complete Codebase Rebranding
 - **Summary:** Executed a global search-and-replace to rename all internal mentions, variables, file structures, and titles from "Verity" to "Simurgh".
 - **Files Changed:**
@@ -92,7 +123,9 @@
 - **Follow-ups:** Testing the project (e.g. `npm start`) locally to ensure the refactored keys and environment variables run identically as before.
 
 ### 2026-05-09 (Australia/Sydney)
+
 **Raouf:**
+
 - **Scope:** README Professional Polish
 - **Summary:** Elevated the tone of the README to a highly professional, academic/engineering standard suitable for a patent review and technical interview. Filled out the previously empty placeholder sections.
 - **Files Changed:**
@@ -101,7 +134,9 @@
 - **Follow-ups:** Prepare the presentation or demo environment for the actual interview.
 
 ### 2026-05-09 (Australia/Sydney)
+
 **Raouf:**
+
 - **Scope:** "Ethical Manifesto" & Roadmap Upgrade
 - **Summary:** Elevated the product positioning from a purely technical security tool to a Global Ethics Standard. Added the "Socio-Economic Impact" section focusing on Bandwidth-Inclusive Security and privacy-as-code. Advanced the Strategic Roadmap with Phase 4: Privacy-Preserving Visuals ("Code-Video").
 - **Files Changed:**
@@ -110,7 +145,9 @@
 - **Follow-ups:** Prepare for patent review emphasizing the Code-Video layer and hardware-rooted attestation concepts.
 
 ### 2026-05-09 (Australia/Sydney)
+
 **Raouf:**
+
 - **Scope:** "Why Anthropic?" Strategic Alignment
 - **Summary:** Positioned the README as a direct partnership proposal by adding a dedicated section that maps Project Simurgh's "Privacy-as-Code" values to Anthropic's "Constitutional AI" principles.
 - **Files Changed:**
@@ -119,7 +156,9 @@
 - **Follow-ups:** Final review before pushing to GitHub.
 
 ### 2026-05-09 (Australia/Sydney)
+
 **Raouf:**
+
 - **Scope:** README Final Professional & Research Polish
 - **Summary:** Comprehensive polish pass to bring the README to patent-review and technical-interview quality. Fixed 10 identified issues: broken badge anchor links, inconsistent voice (mixed 1st/3rd person), missing horizontal rule separators, trailing whitespace, informal language ("surveillance bots"), sparse API reference, missing Security Considerations section, missing env var documentation table, telemetry fields presented as raw list instead of structured table, and missing component summary.
 - **Files Changed:**
@@ -128,7 +167,9 @@
 - **Follow-ups:** Ready for GitHub push and interview presentation.
 
 ### 2026-05-09 (Australia/Sydney)
+
 **Raouf:**
+
 - **Scope:** README Screenshots & Visual Documentation
 - **Summary:** Replaced the stale hero screenshot (which still displayed old "Verity" branding) with a fresh capture showing the rebranded "Simurgh" UI. Added two additional screenshots: the student exam view with a live behavioral verdict and the instructor multi-session dashboard. Screenshots are embedded in a side-by-side table in the Quick Start section for maximum visual impact.
 - **Files Changed:**
@@ -141,7 +182,9 @@
 - **Follow-ups:** Ready for GitHub push.
 
 ### 2026-05-09 (Australia/Sydney)
+
 **Raouf:**
+
 - **Scope:** README Content Enhancement — Cost Reduction, First-Mover Strategy, Contributors
 - **Summary:** Expanded the Institutional Cost Reduction subsection to address the elimination of human invigilators and physical venue costs. Added a 4th point to "Why Anthropic?" — the first-mover advantage and strategic moat argument. Added Section 11 (Contributors) crediting Claude as an AI pair-programming partner.
 - **Files Changed:**
@@ -150,7 +193,9 @@
 - **Follow-ups:** Ready for GitHub push.
 
 ### 2026-05-09 (Australia/Sydney)
+
 **Raouf:**
+
 - **Scope:** README — Public Health Resilience Argument
 - **Summary:** Added a "Public Health Resilience" subsection to Section 4 (Socio-Economic Impact). Frames the epidemiological risk of large-scale in-person exams (COVID-19, seasonal influenza) and positions behavioral integrity verification as institutional resilience infrastructure.
 - **Files Changed:**
@@ -159,16 +204,20 @@
 - **Follow-ups:** Ready for GitHub push.
 
 ### 2026-05-09 (Australia/Sydney)
+
 **Raouf:**
+
 - **Scope:** Mermaid Architecture Diagram & Rebranding Audit
 - **Summary:** Converted the ASCII art architecture diagram to a native Mermaid flowchart for professional GitHub rendering. Performed a full-codebase grep audit for any remaining "Verity" references — confirmed zero leaks in source code, HTML, README, or config files. Only historical changelog/agent log entries referencing the rebranding remain (correct behavior).
 - **Files Changed:**
   - `README.md` — Replaced `text` code block with `mermaid` flowchart in Section 3.
-- **Verification:** `grep -ri verity` returns matches only in CHANGELOG.md and AGENT.md historical entries. Zero leaks in server.js, public/*.html, package.json, .env.example, or tools/.
+- **Verification:** `grep -ri verity` returns matches only in CHANGELOG.md and AGENT.md historical entries. Zero leaks in server.js, public/\*.html, package.json, .env.example, or tools/.
 - **Follow-ups:** Ready for GitHub push.
 
 ### 2026-05-09 (Australia/Sydney)
+
 **Raouf:**
+
 - **Scope:** SEB Critique & Cross-Platform Roadmap Expansion
 - **Summary:** Added a "Cross-Platform Superiority over Legacy Lockdown Software" subsection to Section 4, critically contrasting Safe Exam Browser's Windows-centric limitations against Simurgh's platform-agnostic behavioral API. Included a comparison table covering Windows, macOS, Linux, iOS, Android, and ChromeOS. Expanded the Strategic Roadmap (Section 10) with explicit per-platform milestones: `simurgh-helper-win` (Win32), `simurgh-helper-linux` (X11/Wayland), iOS/iPadOS Safari validation, Android Chrome/WebView validation, ChromeOS managed environment certification, and a unified cross-platform deployment toolkit.
 - **Files Changed:**
@@ -177,7 +226,9 @@
 - **Follow-ups:** Ready for GitHub push.
 
 ### 2026-05-09 (Australia/Sydney)
+
 **Raouf:**
+
 - **Scope:** README — Zero Client-Side Compute & Device Inclusivity
 - **Summary:** Added a "Zero Client-Side Compute — Device Inclusivity by Design" subsection to Section 4. Explains that all AI processing is offloaded to Claude server-side, no video/images ever leave the student's device, and any device (old or new) with a browser can participate — eliminating hardware inequality as a barrier to assessment.
 - **Files Changed:**
@@ -186,7 +237,9 @@
 - **Follow-ups:** Ready for GitHub push.
 
 ### 2026-05-09 (Australia/Sydney)
+
 **Raouf:**
+
 - **Scope:** Email Cross-Reference Audit, Browser/App Delivery Roadmap, Gap Patching
 - **Summary:** Performed a line-by-line cross-reference audit of the email to Dario Amodei against the README. Identified 7 full matches, 6 minor gaps, and confirmed the README substantially exceeds the email's claims. Patched key gaps: added "Interview Coder" alongside Cluely, added Claude capability-uplift case study note (Paper Section VIII-G), added Macquarie University to Contributors. Added Phase 3b (Delivery Modes) to the roadmap with browser-based PWA and native application milestones for macOS, Windows, Linux, iOS, and Android.
 - **Files Changed:**
@@ -195,7 +248,9 @@
 - **Follow-ups:** Ready for GitHub push.
 
 ### 2026-05-09 (Australia/Sydney)
+
 **Raouf:**
+
 - **Scope:** Codebase Verification Audit, Roadmap Expansion (Browser + App + Helper for all platforms), Bug Fixes
 - **Summary:** Performed a file-by-file verification of every README claim against the actual codebase. Found and fixed 3 issues: (1) README said `GET /api/audit-export/:sessionId` but actual endpoint is `/api/audit/:sessionId` — fixed. (2) Stale `verity-helper` binary left in `tools/simurgh-helper/` — deleted. (3) `package.json` described "Countermeasure A" instead of the correct "Countermeasure C" — fixed. Expanded Phase 3b roadmap to show a full per-platform matrix of Browser PWA, Native App, and Native Helper support across macOS, Windows, Linux, iOS, Android, and ChromeOS.
 - **Files Changed:**
@@ -206,7 +261,9 @@
 - **Follow-ups:** Ready for GitHub push.
 
 ### 2026-05-09 (Australia/Sydney)
+
 **Raouf:**
+
 - **Scope:** Terminology Refinement & Strategic Positioning
 - **Summary:** Replaced "cooperate" with "collaborate" and "partner" in the README. This shift in terminology elevates the project from a formal/legalistic tone to a "Silicon Valley" peer-to-peer ecosystem dialect, better aligning with Anthropic's partnership-driven culture.
 - **Files Changed:**

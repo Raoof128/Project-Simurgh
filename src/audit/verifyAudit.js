@@ -1,8 +1,8 @@
-import { verifyChain } from './hmacChain.js';
+import { verifyChain } from "./hmacChain.js";
 
 export function verifyAuditExport(auditExport, hmacKey) {
   const chain = {
-    prevHash: 'GENESIS',
+    prevHash: "GENESIS",
     entries: auditExport.entries ?? [],
     truncated: auditExport.truncated ?? false,
   };

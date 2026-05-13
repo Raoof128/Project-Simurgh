@@ -1,11 +1,15 @@
-import crypto from 'node:crypto';
-import { getStore } from '../storage/memoryStore.js';
+import crypto from "node:crypto";
+import { getStore } from "../storage/memoryStore.js";
 
-const store = getStore('exams');
+const store = getStore("exams");
 
-export function createExam({ title = 'Untitled Exam', durationMinutes = 120, description = '' } = {}) {
+export function createExam({
+  title = "Untitled Exam",
+  durationMinutes = 120,
+  description = "",
+} = {}) {
   const exam = {
-    id: `exam_${crypto.randomBytes(6).toString('hex')}`,
+    id: `exam_${crypto.randomBytes(6).toString("hex")}`,
     title,
     durationMinutes,
     description,

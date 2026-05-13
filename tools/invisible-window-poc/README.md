@@ -31,17 +31,17 @@ make
 ./invisible-window-poc
 ```
 
-A window appears on the physical display reading *"INVISIBLE TO SCREEN
-CAPTURE."* Take a screenshot of your screen with `⌘⇧4` — the window does
+A window appears on the physical display reading _"INVISIBLE TO SCREEN
+CAPTURE."_ Take a screenshot of your screen with `⌘⇧4` — the window does
 not appear in the screenshot.
 
 ### Hotkeys
 
-| Key  | Action                                                                    |
-|------|----------------------------------------------------------------------------|
-| `⌘T` | Hide / show on the physical display (the window remains capture-invisible) |
+| Key  | Action                                                                      |
+| ---- | --------------------------------------------------------------------------- |
+| `⌘T` | Hide / show on the physical display (the window remains capture-invisible)  |
 | `⌘C` | Toggle click-through (`ignoresMouseEvents`) — demonstrates §VI-C blind spot |
-| `⌘Q` | Quit                                                                      |
+| `⌘Q` | Quit                                                                        |
 
 ### Verifying the attack against Simurgh
 
@@ -52,7 +52,7 @@ not appear in the screenshot.
 
 Within ~2 seconds the dashboard's Display-Affinity Watch panel flags the PoC's
 window. The next 5-second verdict escalates to **Critical** with reasoning
-*"Countermeasure A native helper flagged 1 capture-invisible window: invisible-window-poc."*
+_"Countermeasure A native helper flagged 1 capture-invisible window: invisible-window-poc."_
 
 ### Demonstrating the §VI-C click-through blind spot
 

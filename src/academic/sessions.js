@@ -1,28 +1,28 @@
-import crypto from 'node:crypto';
+import crypto from "node:crypto";
 
 export const STATES = {
-  CREATED:          'created',
-  JOINED:           'joined',
-  PRIVACY_ACCEPTED: 'privacy_accepted',
-  HELPER_CONNECTED: 'helper_connected',
-  EXAM_STARTED:     'exam_started',
-  ACTIVE:           'active',
-  SUBMITTED:        'submitted',
-  REPORT_GENERATED: 'report_generated',
-  CLOSED:           'closed',
+  CREATED: "created",
+  JOINED: "joined",
+  PRIVACY_ACCEPTED: "privacy_accepted",
+  HELPER_CONNECTED: "helper_connected",
+  EXAM_STARTED: "exam_started",
+  ACTIVE: "active",
+  SUBMITTED: "submitted",
+  REPORT_GENERATED: "report_generated",
+  CLOSED: "closed",
 };
 
 // Allowed forward transitions
 const TRANSITIONS = {
-  [STATES.CREATED]:          [STATES.JOINED],
-  [STATES.JOINED]:           [STATES.PRIVACY_ACCEPTED],
+  [STATES.CREATED]: [STATES.JOINED],
+  [STATES.JOINED]: [STATES.PRIVACY_ACCEPTED],
   [STATES.PRIVACY_ACCEPTED]: [STATES.HELPER_CONNECTED, STATES.EXAM_STARTED],
   [STATES.HELPER_CONNECTED]: [STATES.EXAM_STARTED],
-  [STATES.EXAM_STARTED]:     [STATES.ACTIVE],
-  [STATES.ACTIVE]:           [STATES.SUBMITTED],
-  [STATES.SUBMITTED]:        [STATES.REPORT_GENERATED],
+  [STATES.EXAM_STARTED]: [STATES.ACTIVE],
+  [STATES.ACTIVE]: [STATES.SUBMITTED],
+  [STATES.SUBMITTED]: [STATES.REPORT_GENERATED],
   [STATES.REPORT_GENERATED]: [STATES.CLOSED],
-  [STATES.CLOSED]:           [],
+  [STATES.CLOSED]: [],
 };
 
 export function canTransition(currentState, nextState) {
@@ -31,7 +31,7 @@ export function canTransition(currentState, nextState) {
 
 export function createSessionRecord(examId, studentIdHash) {
   return {
-    id: `sess_${crypto.randomBytes(6).toString('hex')}`,
+    id: `sess_${crypto.randomBytes(6).toString("hex")}`,
     examId,
     studentIdHash,
     state: STATES.CREATED,

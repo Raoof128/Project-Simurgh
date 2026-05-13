@@ -1,9 +1,9 @@
-import crypto from 'node:crypto';
+import crypto from "node:crypto";
 
 export const CHAIN_CAP = 5000;
 
 export function createChain() {
-  return { prevHash: 'GENESIS', entries: [], truncated: false };
+  return { prevHash: "GENESIS", entries: [], truncated: false };
 }
 
 export function appendEntry(chain, hmacKey, type, payload) {
@@ -19,9 +19,7 @@ export function appendEntry(chain, hmacKey, type, payload) {
     payload,
     prev: chain.prevHash,
   };
-  const sig = crypto.createHmac('sha256', hmacKey)
-    .update(JSON.stringify(entry))
-    .digest('hex');
+  const sig = crypto.createHmac("sha256", hmacKey).update(JSON.stringify(entry)).digest("hex");
   entry.sig = sig;
   chain.entries.push(entry);
   chain.prevHash = sig;
@@ -29,13 +27,14 @@ export function appendEntry(chain, hmacKey, type, payload) {
 
 export function verifyChain(chain, hmacKey) {
   const errors = [];
-  let prevHash = 'GENESIS';
+  let prevHash = "GENESIS";
 
   for (const entry of chain.entries) {
     const { sig, ...rest } = entry;
-    const expected = crypto.createHmac('sha256', hmacKey)
+    const expected = crypto
+      .createHmac("sha256", hmacKey)
       .update(JSON.stringify(rest))
-      .digest('hex');
+      .digest("hex");
     if (expected !== sig) {
       errors.push(`Entry seq=${entry.seq} signature mismatch`);
     }

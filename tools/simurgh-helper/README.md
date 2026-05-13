@@ -30,13 +30,13 @@ appear in the panel within 2 seconds.
 
 ### Flags
 
-| Flag           | Default                    | Meaning                                           |
-|----------------|----------------------------|---------------------------------------------------|
-| `--session`    | *(required)*               | Browser session ID to attach to                   |
-| `--server`     | `http://localhost:3030`    | Simurgh server URL                                 |
-| `--secret`     | *(required, or env var)*   | Shared secret (must match `SIMURGH_HELPER_SECRET`) |
-| `--interval`   | `2000`                     | Scan interval in ms                               |
-| `--verbose`    | off                        | Print every detected window                       |
+| Flag         | Default                  | Meaning                                            |
+| ------------ | ------------------------ | -------------------------------------------------- |
+| `--session`  | _(required)_             | Browser session ID to attach to                    |
+| `--server`   | `http://localhost:3030`  | Simurgh server URL                                 |
+| `--secret`   | _(required, or env var)_ | Shared secret (must match `SIMURGH_HELPER_SECRET`) |
+| `--interval` | `2000`                   | Scan interval in ms                                |
+| `--verbose`  | off                      | Print every detected window                        |
 
 ## How it detects capture-invisible windows
 
@@ -47,7 +47,7 @@ framework Apple ships its own screen-capture tools on top of):
 1. **Diff signal.** Enumerate every on-screen window with
    `CGWindowListCopyWindowInfo`, then ask `SCShareableContent` for every
    window the OS will surface to a capture pipeline. Any window present in
-   the first list but missing from the second is *on-screen but uncapturable*.
+   the first list but missing from the second is _on-screen but uncapturable_.
    On some macOS versions, capture-excluded windows are filtered out of
    `SCShareableContent` entirely — the diff catches them.
 

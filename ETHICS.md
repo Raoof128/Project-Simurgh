@@ -25,7 +25,7 @@ Simurgh verifies behavioural integrity without ever seeing content. It does not 
 - What was on their screen
 - Their face, voice, or body
 
-This is not a limitation — it is a deliberate design choice. The research underpinning this project (*The Invisible Window*, Abedini 2026) demonstrates that screen-based surveillance is structurally unreliable on modern operating systems. Behavioural metadata is both more privacy-preserving and more tamper-resistant.
+This is not a limitation — it is a deliberate design choice. The research underpinning this project (_The Invisible Window_, Abedini 2026) demonstrates that screen-based surveillance is structurally unreliable on modern operating systems. Behavioural metadata is both more privacy-preserving and more tamper-resistant.
 
 ### 3. Transparency to Examinees
 
@@ -79,4 +79,4 @@ Any proctoring system creates a power imbalance. The commitments in this documen
 
 ## Research Context
 
-This project implements Countermeasure C from *The Invisible Window: A Taxonomy of Display-Fidelity Violations and Proposed Mitigations* (Abedini, 2026). The paper discloses both the attack surface and its limitations. Publishing the countermeasure alongside the attack is a deliberate choice — security through obscurity does not protect students or institutions.
+This project implements Countermeasure C from _The Invisible Window: A Taxonomy of Display-Fidelity Violations and Proposed Mitigations_ (Abedini, 2026). The paper discloses both the attack surface and its limitations. Publishing the countermeasure alongside the attack is a deliberate choice — security through obscurity does not protect students or institutions.

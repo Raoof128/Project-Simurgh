@@ -14,9 +14,18 @@ import { hashStudentId } from "./src/privacy/hashIdentity.js";
 import { buildReport } from "./src/academic/reportBuilder.js";
 import { verifyAuditExport } from "./src/audit/verifyAudit.js";
 import { appendEntry, CHAIN_CAP } from "./src/audit/hmacChain.js";
-import { issueSessionToken, verifySessionToken, extractBearer } from "./src/security/sessionToken.js";
+import {
+  issueSessionToken,
+  verifySessionToken,
+  extractBearer,
+} from "./src/security/sessionToken.js";
 import { createReplayGuard } from "./src/security/replayGuard.js";
-import { createRateLimiter, keyByIp, keyByHelperSecret, keyByInstructorToken } from "./src/security/rateLimit.js";
+import {
+  createRateLimiter,
+  keyByIp,
+  keyByHelperSecret,
+  keyByInstructorToken,
+} from "./src/security/rateLimit.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -56,9 +65,13 @@ const client = apiKey ? new Anthropic({ apiKey }) : null;
 const HELPER_SHARED_SECRET = process.env.SIMURGH_HELPER_SECRET;
 if (!HELPER_SHARED_SECRET) {
   if (DEMO_MODE) {
-    console.warn("[simurgh] SIMURGH_HELPER_SECRET not set — /api/affinity helper ingest is DISABLED in this demo session.");
+    console.warn(
+      "[simurgh] SIMURGH_HELPER_SECRET not set — /api/affinity helper ingest is DISABLED in this demo session."
+    );
   } else {
-    console.error("[simurgh] FATAL: SIMURGH_HELPER_SECRET must be set in non-demo mode. Refusing to start.");
+    console.error(
+      "[simurgh] FATAL: SIMURGH_HELPER_SECRET must be set in non-demo mode. Refusing to start."
+    );
     process.exit(78);
   }
 }
@@ -68,36 +81,52 @@ const AUDIT_KEY_EPHEMERAL = !AUDIT_HMAC_SECRET;
 const AUDIT_KEY = AUDIT_HMAC_SECRET || crypto.randomBytes(32).toString("hex");
 if (AUDIT_KEY_EPHEMERAL) {
   if (!DEMO_MODE) {
-    console.error("[simurgh] FATAL: SIMURGH_AUDIT_SECRET must be set in non-demo mode. Audit chains cannot be verified across restarts. Refusing to start.");
+    console.error(
+      "[simurgh] FATAL: SIMURGH_AUDIT_SECRET must be set in non-demo mode. Audit chains cannot be verified across restarts. Refusing to start."
+    );
     process.exit(78);
   }
   console.warn("[simurgh] ⚠ SIMURGH_AUDIT_SECRET not set — audit chain HMAC key is ephemeral.");
-  console.warn("[simurgh] ⚠ Every restart invalidates previously exported audit chains. Set SIMURGH_AUDIT_SECRET in production.");
+  console.warn(
+    "[simurgh] ⚠ Every restart invalidates previously exported audit chains. Set SIMURGH_AUDIT_SECRET in production."
+  );
 }
 
 // Separate signing key for student session tokens. In production this MUST be set.
 // In demo mode an ephemeral key is generated; tokens issued under one demo run will
 // not validate after a restart (acceptable for demo).
-const SESSION_SIGNING_SECRET = process.env.SIMURGH_SESSION_SIGNING_SECRET
-  || (DEMO_MODE ? crypto.randomBytes(32).toString("hex") : null);
+const SESSION_SIGNING_SECRET =
+  process.env.SIMURGH_SESSION_SIGNING_SECRET ||
+  (DEMO_MODE ? crypto.randomBytes(32).toString("hex") : null);
 if (!SESSION_SIGNING_SECRET) {
-  console.error("[simurgh] FATAL: SIMURGH_SESSION_SIGNING_SECRET must be set in non-demo mode. Refusing to start.");
+  console.error(
+    "[simurgh] FATAL: SIMURGH_SESSION_SIGNING_SECRET must be set in non-demo mode. Refusing to start."
+  );
   process.exit(78);
 }
 if (!process.env.SIMURGH_SESSION_SIGNING_SECRET && DEMO_MODE) {
-  console.warn("[simurgh] ⚠ SIMURGH_SESSION_SIGNING_SECRET not set — student tokens are signed with an ephemeral key (demo only).");
+  console.warn(
+    "[simurgh] ⚠ SIMURGH_SESSION_SIGNING_SECRET not set — student tokens are signed with an ephemeral key (demo only)."
+  );
 }
 
-const INSTRUCTOR_TOKEN = process.env.SIMURGH_INSTRUCTOR_TOKEN
-  || (DEMO_MODE ? "demo" : crypto.randomBytes(24).toString("hex"));
+const INSTRUCTOR_TOKEN =
+  process.env.SIMURGH_INSTRUCTOR_TOKEN ||
+  (DEMO_MODE ? "demo" : crypto.randomBytes(24).toString("hex"));
 if (!process.env.SIMURGH_INSTRUCTOR_TOKEN && !DEMO_MODE) {
-  console.warn(`[simurgh] SIMURGH_INSTRUCTOR_TOKEN not set — generated ephemeral token: ${INSTRUCTOR_TOKEN}`);
-  console.warn("[simurgh] Set SIMURGH_INSTRUCTOR_TOKEN in production so the instructor URL is stable across restarts.");
+  console.warn(
+    `[simurgh] SIMURGH_INSTRUCTOR_TOKEN not set — generated ephemeral token: ${INSTRUCTOR_TOKEN}`
+  );
+  console.warn(
+    "[simurgh] Set SIMURGH_INSTRUCTOR_TOKEN in production so the instructor URL is stable across restarts."
+  );
 }
 
 const ALLOWED_ORIGIN = process.env.SIMURGH_ALLOWED_ORIGIN || "*";
 if (!process.env.SIMURGH_ALLOWED_ORIGIN && !DEMO_MODE) {
-  console.warn("[simurgh] ⚠ SIMURGH_ALLOWED_ORIGIN not set — CORS is open to all origins (*). Set this in production.");
+  console.warn(
+    "[simurgh] ⚠ SIMURGH_ALLOWED_ORIGIN not set — CORS is open to all origins (*). Set this in production."
+  );
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -160,18 +189,20 @@ function localHeuristic(t) {
     reasons.push(`superhuman typing cadence at ${wpm} WPM`);
   } else if (idle >= 8000 && paste >= 80) {
     level = "Critical";
-    reasons.push(`${(idle/1000).toFixed(1)}s idle gap then ${paste}-char paste`);
+    reasons.push(`${(idle / 1000).toFixed(1)}s idle gap then ${paste}-char paste`);
   } else if (paste >= 80 || blurs >= 2 || off >= 3000) {
     level = "Warning";
     if (paste >= 80) reasons.push(`medium paste of ${paste} chars`);
     if (blurs >= 2) reasons.push(`${blurs} focus losses in window`);
-    if (off >= 3000) reasons.push(`${(off/1000).toFixed(1)}s spent off-window`);
+    if (off >= 3000) reasons.push(`${(off / 1000).toFixed(1)}s spent off-window`);
   } else if (blurs === 1 || (paste > 0 && paste < 80)) {
     level = "Warning";
     reasons.push(blurs ? "single tab-out — could be benign" : `small paste of ${paste} chars`);
   } else if (typed >= 60 && blurs === 0 && pastes === 0 && idle < 4000) {
     level = "Warning";
-    reasons.push("no behavioral signal — click-through overlay cannot be ruled out from telemetry alone (paper §VI-C)");
+    reasons.push(
+      "no behavioral signal — click-through overlay cannot be ruled out from telemetry alone (paper §VI-C)"
+    );
   } else {
     reasons.push(typed > 0 ? "steady typing, no anomalies" : "idle window, no signal");
   }
@@ -184,21 +215,24 @@ function localHeuristic(t) {
 //  Defends against prompt injection and oversized payloads.
 // ─────────────────────────────────────────────────────────────
 const TELEMETRY_SCHEMA = {
-  keystrokes:           { type: "int", min: 0, max: 5000 },
-  chars_typed:          { type: "int", min: 0, max: 5000 },
-  effective_wpm:        { type: "int", min: 0, max: 1000 },
-  focus_losses:         { type: "int", min: 0, max: 200 },
-  time_off_window_ms:   { type: "int", min: 0, max: 600_000 },
-  pastes:               { type: "int", min: 0, max: 200 },
-  paste_payload_chars:  { type: "int", min: 0, max: 200_000 },
-  max_idle_gap_ms:      { type: "int", min: 0, max: 600_000 },
-  window_seconds:       { type: "num", min: 0, max: 60 },
+  keystrokes: { type: "int", min: 0, max: 5000 },
+  chars_typed: { type: "int", min: 0, max: 5000 },
+  effective_wpm: { type: "int", min: 0, max: 1000 },
+  focus_losses: { type: "int", min: 0, max: 200 },
+  time_off_window_ms: { type: "int", min: 0, max: 600_000 },
+  pastes: { type: "int", min: 0, max: 200 },
+  paste_payload_chars: { type: "int", min: 0, max: 200_000 },
+  max_idle_gap_ms: { type: "int", min: 0, max: 600_000 },
+  window_seconds: { type: "num", min: 0, max: 60 },
 };
 function sanitiseTelemetry(raw) {
   if (!raw || typeof raw !== "object" || Array.isArray(raw)) return null;
   const out = {};
   for (const [k, spec] of Object.entries(TELEMETRY_SCHEMA)) {
-    if (!(k in raw)) { out[k] = 0; continue; }
+    if (!(k in raw)) {
+      out[k] = 0;
+      continue;
+    }
     const v = Number(raw[k]);
     // Hard reject blatantly invalid inputs (NaN, Infinity, negative).
     // Clamp only for over-range positive values (browser bookkeeping drift).
@@ -243,7 +277,7 @@ function getSession(id, { allowCreate = true } = {}) {
       auditChain: { prevHash: "GENESIS", entries: [], truncated: false },
       rate: { tokens: 3, lastRefill: Date.now() },
       // Stage 1 Academic Shield fields
-      state: 'active',
+      state: "active",
       examId: null,
       studentIdHash: null,
       reconnects: 0,
@@ -256,19 +290,25 @@ function getSession(id, { allowCreate = true } = {}) {
   s.lastActivity = Date.now();
   return s;
 }
-const evictionTimer = setInterval(() => {
-  const cutoff = Date.now() - SESSION_TTL_MS;
-  for (const [id, s] of sessions.entries()) {
-    if (s.lastActivity < cutoff) sessions.delete(id);
-  }
-}, 5 * 60 * 1000).unref?.();
+const evictionTimer = setInterval(
+  () => {
+    const cutoff = Date.now() - SESSION_TTL_MS;
+    for (const [id, s] of sessions.entries()) {
+      if (s.lastActivity < cutoff) sessions.delete(id);
+    }
+  },
+  5 * 60 * 1000
+).unref?.();
 
 // Evict examSessions entries whose telemetry session has been evicted.
-const examEvictionTimer = setInterval(() => {
-  for (const [id] of examSessions.entries()) {
-    if (!sessions.has(id)) examSessions.delete(id);
-  }
-}, 5 * 60 * 1000).unref?.();
+const examEvictionTimer = setInterval(
+  () => {
+    for (const [id] of examSessions.entries()) {
+      if (!sessions.has(id)) examSessions.delete(id);
+    }
+  },
+  5 * 60 * 1000
+).unref?.();
 
 // Token-bucket rate limit per session: 1 telemetry POST / 2.5s burst 3.
 function consumeRateToken(sess) {
@@ -290,10 +330,13 @@ const sseClients = new Set();
 function sseBroadcast(event, data) {
   const payload = `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`;
   for (const res of sseClients) {
-    try { res.write(payload); }
-    catch {
+    try {
+      res.write(payload);
+    } catch {
       sseClients.delete(res);
-      try { res.destroy?.(); } catch {}
+      try {
+        res.destroy?.();
+      } catch {}
     }
   }
 }
@@ -303,7 +346,7 @@ function sessionSummary(id) {
   const s = sessions.get(id);
   if (!s) return null;
   const cutoff = Date.now() - ONE_HOUR;
-  const recent = s.history.filter(v => (v.ts || 0) >= cutoff);
+  const recent = s.history.filter((v) => (v.ts || 0) >= cutoff);
   const counts = recent.reduce((a, v) => {
     const k = String(v.risk_level || "Safe").toLowerCase();
     a[k] = (a[k] || 0) + 1;
@@ -314,7 +357,7 @@ function sessionSummary(id) {
     createdAt: s.createdAt,
     latest: s.latest,
     hostile_count: s.affinity.hostile.length,
-    helper_active: s.affinity.lastHeartbeat != null && (Date.now() - s.affinity.lastHeartbeat) < 8000,
+    helper_active: s.affinity.lastHeartbeat != null && Date.now() - s.affinity.lastHeartbeat < 8000,
     fidelity_deficit_pct: s.affinity.forensic?.fidelity_deficit_pct ?? 0,
     counts,
     history_count: s.history.length,
@@ -325,15 +368,21 @@ function persistVerdict(sessionId, verdict) {
   const sess = sessions.get(sessionId); // session must already exist at this point
   verdict.affinity_snapshot = {
     hostile_count: sess.affinity.hostile.length,
-    hostile: sess.affinity.hostile.map(w => ({ pid: w.pid, name: w.name, type: w.type })),
-    helper_active: sess.affinity.lastHeartbeat != null && (Date.now() - sess.affinity.lastHeartbeat) < 8000,
+    hostile: sess.affinity.hostile.map((w) => ({ pid: w.pid, name: w.name, type: w.type })),
+    helper_active:
+      sess.affinity.lastHeartbeat != null && Date.now() - sess.affinity.lastHeartbeat < 8000,
     source: sess.affinity.source,
     forensic: sess.affinity.forensic ?? null,
   };
   if (verdict.affinity_snapshot.hostile_count > 0 && verdict.risk_level !== "Critical") {
     verdict.risk_level = "Critical";
-    const names = verdict.affinity_snapshot.hostile.map(w => w.name).slice(0, 2).join(", ");
-    verdict.reasoning = `Countermeasure A native helper flagged ${verdict.affinity_snapshot.hostile_count} capture-invisible window(s): ${names}. ` + (verdict.reasoning || "");
+    const names = verdict.affinity_snapshot.hostile
+      .map((w) => w.name)
+      .slice(0, 2)
+      .join(", ");
+    verdict.reasoning =
+      `Countermeasure A native helper flagged ${verdict.affinity_snapshot.hostile_count} capture-invisible window(s): ${names}. ` +
+      (verdict.reasoning || "");
     verdict.reasoning = verdict.reasoning.slice(0, 280);
   }
   sess.latest = verdict;
@@ -371,7 +420,10 @@ app.use((_req, res, next) => {
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", ALLOWED_ORIGIN);
   res.setHeader("Vary", "Origin");
-  res.setHeader("Access-Control-Allow-Headers", "content-type, authorization, x-simurgh-helper-secret");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "content-type, authorization, x-simurgh-helper-secret"
+  );
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   if (req.method === "OPTIONS") return res.status(204).end();
   next();
@@ -384,7 +436,9 @@ app.use(express.static(join(__dirname, "public")));
 // it for SSE + dashboard fetches.
 app.get("/instructor", (req, res) => {
   if (!DEMO_MODE && req.query.token !== INSTRUCTOR_TOKEN) {
-    return res.status(401).type("text/plain")
+    return res
+      .status(401)
+      .type("text/plain")
       .send("Simurgh instructor view requires SIMURGH_INSTRUCTOR_TOKEN as ?token= query param.");
   }
   res.sendFile(join(__dirname, "public", "instructor.html"));
@@ -423,11 +477,31 @@ function requireSessionToken(req, res, next) {
 }
 
 // Pre-configured rate limiters
-const limitJoin     = createRateLimiter({ windowMs: 60_000, max: 10, keyFn: keyByIp,            name: 'join' });
-const limitAffinity = createRateLimiter({ windowMs: 60_000, max: 60, keyFn: keyByHelperSecret, name: 'affinity' });
-const limitReport   = createRateLimiter({ windowMs: 60_000, max: 20, keyFn: keyByInstructorToken, name: 'report' });
-const limitVerify   = createRateLimiter({ windowMs: 60_000, max: 20, keyFn: keyByInstructorToken, name: 'verify' });
-const limitSessions = createRateLimiter({ windowMs: 60_000, max: 60, keyFn: keyByInstructorToken, name: 'sessions' });
+const limitJoin = createRateLimiter({ windowMs: 60_000, max: 10, keyFn: keyByIp, name: "join" });
+const limitAffinity = createRateLimiter({
+  windowMs: 60_000,
+  max: 60,
+  keyFn: keyByHelperSecret,
+  name: "affinity",
+});
+const limitReport = createRateLimiter({
+  windowMs: 60_000,
+  max: 20,
+  keyFn: keyByInstructorToken,
+  name: "report",
+});
+const limitVerify = createRateLimiter({
+  windowMs: 60_000,
+  max: 20,
+  keyFn: keyByInstructorToken,
+  name: "verify",
+});
+const limitSessions = createRateLimiter({
+  windowMs: 60_000,
+  max: 60,
+  keyFn: keyByInstructorToken,
+  name: "sessions",
+});
 
 // ─────────────────────────────────────────────────────────────
 //  /api/telemetry — candidate-side ingest (rate-limited, validated)
@@ -448,7 +522,8 @@ app.post("/api/telemetry", async (req, res) => {
     if (!bearer) return res.status(401).json({ error: "session_token_required" });
     const ver = verifySessionToken(bearer, SESSION_SIGNING_SECRET);
     if (!ver.valid) return res.status(401).json({ error: ver.reason });
-    if (ver.sessionId !== sessionId) return res.status(401).json({ error: "token_session_mismatch" });
+    if (ver.sessionId !== sessionId)
+      return res.status(401).json({ error: "token_session_mismatch" });
   }
 
   // Replay protection — required when sequence + timestamp are provided.
@@ -457,7 +532,7 @@ app.post("/api/telemetry", async (req, res) => {
   const sequence = req.body?.sequence;
   const clientTs = req.body?.timestamp;
   if (sequence !== undefined || clientTs !== undefined) {
-    const ts = typeof clientTs === 'number' ? clientTs : Date.parse(clientTs);
+    const ts = typeof clientTs === "number" ? clientTs : Date.parse(clientTs);
     const result = replayGuard.check(sessionId, sequence, ts);
     if (!result.ok) return res.status(400).json({ error: result.reason });
   }
@@ -480,10 +555,15 @@ app.post("/api/telemetry", async (req, res) => {
 
   if (!client || DEMO_MODE) {
     const normed = normaliseTelemetry(telemetry) ?? telemetry;
-    const scored = scoreAcademicRisk(normed, {
-      connected: sess.affinity.lastHeartbeat != null && (Date.now() - sess.affinity.lastHeartbeat) < 8000,
-      hostileCount: sess.affinity.hostile.length,
-    }, { reconnects: sess.reconnects || 0, startedAt: sess.startedAt });
+    const scored = scoreAcademicRisk(
+      normed,
+      {
+        connected:
+          sess.affinity.lastHeartbeat != null && Date.now() - sess.affinity.lastHeartbeat < 8000,
+        hostileCount: sess.affinity.hostile.length,
+      },
+      { reconnects: sess.reconnects || 0, startedAt: sess.startedAt }
+    );
     const verdict = {
       risk_level: scored.risk_level,
       risk_score: scored.risk_score,
@@ -497,24 +577,36 @@ app.post("/api/telemetry", async (req, res) => {
     };
     sess.latestRiskScore = scored.risk_score;
     sess.latestCategories = scored.categories;
-    timeline.add(sessionId, EVENTS.TELEMETRY_WINDOW_RECEIVED, { risk_level: scored.risk_level, risk_score: scored.risk_score });
-    if (telemetry.focus_losses > 0) timeline.add(sessionId, EVENTS.FOCUS_LOSS, { count: telemetry.focus_losses });
-    if (telemetry.paste_payload_chars >= 200) timeline.add(sessionId, EVENTS.BULK_PASTE, { chars: telemetry.paste_payload_chars });
-    if (telemetry.effective_wpm >= 250) timeline.add(sessionId, EVENTS.ABNORMAL_WPM_SPIKE, { wpm: telemetry.effective_wpm });
-    if (telemetry.max_idle_gap_ms >= 60000) timeline.add(sessionId, EVENTS.LONG_IDLE_GAP, { ms: telemetry.max_idle_gap_ms });
+    timeline.add(sessionId, EVENTS.TELEMETRY_WINDOW_RECEIVED, {
+      risk_level: scored.risk_level,
+      risk_score: scored.risk_score,
+    });
+    if (telemetry.focus_losses > 0)
+      timeline.add(sessionId, EVENTS.FOCUS_LOSS, { count: telemetry.focus_losses });
+    if (telemetry.paste_payload_chars >= 200)
+      timeline.add(sessionId, EVENTS.BULK_PASTE, { chars: telemetry.paste_payload_chars });
+    if (telemetry.effective_wpm >= 250)
+      timeline.add(sessionId, EVENTS.ABNORMAL_WPM_SPIKE, { wpm: telemetry.effective_wpm });
+    if (telemetry.max_idle_gap_ms >= 60000)
+      timeline.add(sessionId, EVENTS.LONG_IDLE_GAP, { ms: telemetry.max_idle_gap_ms });
     persistVerdict(sessionId, verdict);
     return res.json(verdict);
   }
 
   try {
     const normed = normaliseTelemetry(telemetry) ?? telemetry;
-    const scored = scoreAcademicRisk(normed, {
-      connected: sess.affinity.lastHeartbeat != null && (Date.now() - sess.affinity.lastHeartbeat) < 8000,
-      hostileCount: sess.affinity.hostile.length,
-    }, { reconnects: sess.reconnects || 0, startedAt: sess.startedAt });
+    const scored = scoreAcademicRisk(
+      normed,
+      {
+        connected:
+          sess.affinity.lastHeartbeat != null && Date.now() - sess.affinity.lastHeartbeat < 8000,
+        hostileCount: sess.affinity.hostile.length,
+      },
+      { reconnects: sess.reconnects || 0, startedAt: sess.startedAt }
+    );
 
     // Honour stagingConfig.claudeOnSafe — skip Claude call for Safe verdicts to reduce cost.
-    if (scored.risk_level === 'Safe' && !stagingConfig.claudeOnSafe) {
+    if (scored.risk_level === "Safe" && !stagingConfig.claudeOnSafe) {
       const verdict = {
         risk_level: scored.risk_level,
         risk_score: scored.risk_score,
@@ -522,17 +614,24 @@ app.post("/api/telemetry", async (req, res) => {
         categories: scored.categories,
         reasoning: scored.recommendation,
         recommendation: scored.recommendation,
-        source: { score: 'local_heuristic', reasoning: 'skipped-safe' },
+        source: { score: "local_heuristic", reasoning: "skipped-safe" },
         ts: Date.now(),
         cache: { creation: 0, read: 0 },
       };
       sess.latestRiskScore = scored.risk_score;
       sess.latestCategories = scored.categories;
-      timeline.add(sessionId, EVENTS.TELEMETRY_WINDOW_RECEIVED, { risk_level: scored.risk_level, risk_score: scored.risk_score });
-      if (telemetry.focus_losses > 0) timeline.add(sessionId, EVENTS.FOCUS_LOSS, { count: telemetry.focus_losses });
-      if (telemetry.paste_payload_chars >= 200) timeline.add(sessionId, EVENTS.BULK_PASTE, { chars: telemetry.paste_payload_chars });
-      if (telemetry.effective_wpm >= 250) timeline.add(sessionId, EVENTS.ABNORMAL_WPM_SPIKE, { wpm: telemetry.effective_wpm });
-      if (telemetry.max_idle_gap_ms >= 60000) timeline.add(sessionId, EVENTS.LONG_IDLE_GAP, { ms: telemetry.max_idle_gap_ms });
+      timeline.add(sessionId, EVENTS.TELEMETRY_WINDOW_RECEIVED, {
+        risk_level: scored.risk_level,
+        risk_score: scored.risk_score,
+      });
+      if (telemetry.focus_losses > 0)
+        timeline.add(sessionId, EVENTS.FOCUS_LOSS, { count: telemetry.focus_losses });
+      if (telemetry.paste_payload_chars >= 200)
+        timeline.add(sessionId, EVENTS.BULK_PASTE, { chars: telemetry.paste_payload_chars });
+      if (telemetry.effective_wpm >= 250)
+        timeline.add(sessionId, EVENTS.ABNORMAL_WPM_SPIKE, { wpm: telemetry.effective_wpm });
+      if (telemetry.max_idle_gap_ms >= 60000)
+        timeline.add(sessionId, EVENTS.LONG_IDLE_GAP, { ms: telemetry.max_idle_gap_ms });
       persistVerdict(sessionId, verdict);
       return res.json(verdict);
     }
@@ -541,10 +640,12 @@ app.post("/api/telemetry", async (req, res) => {
       model: MODEL,
       max_tokens: 200,
       system: [{ type: "text", text: SYSTEM_PROMPT, cache_control: { type: "ephemeral" } }],
-      messages: [{
-        role: "user",
-        content: `Telemetry window (last 5 seconds):\n\`\`\`json\n${JSON.stringify(telemetry, null, 2)}\n\`\`\``,
-      }],
+      messages: [
+        {
+          role: "user",
+          content: `Telemetry window (last 5 seconds):\n\`\`\`json\n${JSON.stringify(telemetry, null, 2)}\n\`\`\``,
+        },
+      ],
     });
 
     const text = response.content.find((b) => b.type === "text")?.text ?? "{}";
@@ -564,7 +665,7 @@ app.post("/api/telemetry", async (req, res) => {
       categories: scored.categories,
       reasoning: claudeReasoning || scored.recommendation,
       recommendation: scored.recommendation,
-      source: { score: 'local_heuristic', reasoning: 'claude_narrative' },
+      source: { score: "local_heuristic", reasoning: "claude_narrative" },
       ts: Date.now(),
       cache: {
         creation: response.usage?.cache_creation_input_tokens ?? 0,
@@ -573,11 +674,18 @@ app.post("/api/telemetry", async (req, res) => {
     };
     sess.latestRiskScore = scored.risk_score;
     sess.latestCategories = scored.categories;
-    timeline.add(sessionId, EVENTS.TELEMETRY_WINDOW_RECEIVED, { risk_level: scored.risk_level, risk_score: scored.risk_score });
-    if (telemetry.focus_losses > 0) timeline.add(sessionId, EVENTS.FOCUS_LOSS, { count: telemetry.focus_losses });
-    if (telemetry.paste_payload_chars >= 200) timeline.add(sessionId, EVENTS.BULK_PASTE, { chars: telemetry.paste_payload_chars });
-    if (telemetry.effective_wpm >= 250) timeline.add(sessionId, EVENTS.ABNORMAL_WPM_SPIKE, { wpm: telemetry.effective_wpm });
-    if (telemetry.max_idle_gap_ms >= 60000) timeline.add(sessionId, EVENTS.LONG_IDLE_GAP, { ms: telemetry.max_idle_gap_ms });
+    timeline.add(sessionId, EVENTS.TELEMETRY_WINDOW_RECEIVED, {
+      risk_level: scored.risk_level,
+      risk_score: scored.risk_score,
+    });
+    if (telemetry.focus_losses > 0)
+      timeline.add(sessionId, EVENTS.FOCUS_LOSS, { count: telemetry.focus_losses });
+    if (telemetry.paste_payload_chars >= 200)
+      timeline.add(sessionId, EVENTS.BULK_PASTE, { chars: telemetry.paste_payload_chars });
+    if (telemetry.effective_wpm >= 250)
+      timeline.add(sessionId, EVENTS.ABNORMAL_WPM_SPIKE, { wpm: telemetry.effective_wpm });
+    if (telemetry.max_idle_gap_ms >= 60000)
+      timeline.add(sessionId, EVENTS.LONG_IDLE_GAP, { ms: telemetry.max_idle_gap_ms });
     persistVerdict(sessionId, verdict);
     res.json(verdict);
   } catch (err) {
@@ -586,10 +694,15 @@ app.post("/api/telemetry", async (req, res) => {
     if (lowCredit) console.warn("[simurgh] anthropic low-credit — falling back to local heuristic");
     else console.error("[simurgh] anthropic error:", msg);
     const normed = normaliseTelemetry(telemetry) ?? telemetry;
-    const scored = scoreAcademicRisk(normed, {
-      connected: sess.affinity.lastHeartbeat != null && (Date.now() - sess.affinity.lastHeartbeat) < 8000,
-      hostileCount: sess.affinity.hostile.length,
-    }, { reconnects: sess.reconnects || 0, startedAt: sess.startedAt });
+    const scored = scoreAcademicRisk(
+      normed,
+      {
+        connected:
+          sess.affinity.lastHeartbeat != null && Date.now() - sess.affinity.lastHeartbeat < 8000,
+        hostileCount: sess.affinity.hostile.length,
+      },
+      { reconnects: sess.reconnects || 0, startedAt: sess.startedAt }
+    );
     const verdict = {
       risk_level: scored.risk_level,
       risk_score: scored.risk_score,
@@ -597,7 +710,10 @@ app.post("/api/telemetry", async (req, res) => {
       categories: scored.categories,
       reasoning: scored.recommendation,
       recommendation: scored.recommendation,
-      source: { score: 'local_heuristic', reasoning: lowCredit ? 'fallback-low-credit' : 'fallback-error' },
+      source: {
+        score: "local_heuristic",
+        reasoning: lowCredit ? "fallback-low-credit" : "fallback-error",
+      },
       ts: Date.now(),
       cache: { creation: 0, read: 0 },
     };
@@ -632,26 +748,35 @@ function ingestAffinity(req, res, opts = {}) {
 
   const sess = getSession(sessionId);
   if (!sess) return res.status(503).json({ error: "server_capacity_exceeded" });
-  const list = Array.isArray(hostile) ? hostile.slice(0, 64).map(w => ({
-    pid: Number(w.pid) || 0,
-    name: String(w.name ?? "unknown").slice(0, 80),
-    type: String(w.type ?? "unknown").slice(0, 40),
-    since: Number(w.since) || Date.now(),
-  })) : [];
+  const list = Array.isArray(hostile)
+    ? hostile.slice(0, 64).map((w) => ({
+        pid: Number(w.pid) || 0,
+        name: String(w.name ?? "unknown").slice(0, 80),
+        type: String(w.type ?? "unknown").slice(0, 40),
+        since: Number(w.since) || Date.now(),
+      }))
+    : [];
 
   const prev = sess.affinity.hostile;
-  const sigOf = (l) => l.map(w => `${w.pid}|${w.name}|${w.type}`).sort().join(";");
+  const sigOf = (l) =>
+    l
+      .map((w) => `${w.pid}|${w.name}|${w.type}`)
+      .sort()
+      .join(";");
   const transition = sigOf(prev) !== sigOf(list);
 
-  const f = forensic && typeof forensic === "object" && !Array.isArray(forensic) ? {
-    display_width:        Number(forensic.display_width) || 0,
-    display_height:       Number(forensic.display_height) || 0,
-    display_pixels:       Number(forensic.display_pixels) || 0,
-    invisible_pixels:     Number(forensic.invisible_pixels) || 0,
-    fidelity_deficit_pct: Number(forensic.fidelity_deficit_pct) || 0,
-    visible_window_count: Number(forensic.visible_window_count) || 0,
-    hostile_window_count: Number(forensic.hostile_window_count) || 0,
-  } : null;
+  const f =
+    forensic && typeof forensic === "object" && !Array.isArray(forensic)
+      ? {
+          display_width: Number(forensic.display_width) || 0,
+          display_height: Number(forensic.display_height) || 0,
+          display_pixels: Number(forensic.display_pixels) || 0,
+          invisible_pixels: Number(forensic.invisible_pixels) || 0,
+          fidelity_deficit_pct: Number(forensic.fidelity_deficit_pct) || 0,
+          visible_window_count: Number(forensic.visible_window_count) || 0,
+          hostile_window_count: Number(forensic.hostile_window_count) || 0,
+        }
+      : null;
 
   const sourceLabel = opts.simulator
     ? "simurgh-helper-simulator/0.1"
@@ -660,8 +785,18 @@ function ingestAffinity(req, res, opts = {}) {
   sess.affinity = { hostile: list, lastHeartbeat: Date.now(), source: sourceLabel, forensic: f };
 
   if (transition) {
-    appendAudit(sess, "affinity", { hostile_count: list.length, hostile: list, helper: sourceLabel, forensic: f });
-    sseBroadcast("affinity", { sessionId, summary: sessionSummary(sessionId), hostile: list, forensic: f });
+    appendAudit(sess, "affinity", {
+      hostile_count: list.length,
+      hostile: list,
+      helper: sourceLabel,
+      forensic: f,
+    });
+    sseBroadcast("affinity", {
+      sessionId,
+      summary: sessionSummary(sessionId),
+      hostile: list,
+      forensic: f,
+    });
   }
   res.json({ ok: true, transition });
 }
@@ -670,7 +805,8 @@ function ingestAffinity(req, res, opts = {}) {
 app.post("/api/affinity", limitAffinity, (req, res) => {
   if (!HELPER_SHARED_SECRET) return res.status(503).json({ error: "helper_ingest_disabled" });
   const secret = req.headers["x-simurgh-helper-secret"];
-  if (secret !== HELPER_SHARED_SECRET) return res.status(401).json({ error: "invalid_helper_secret" });
+  if (secret !== HELPER_SHARED_SECRET)
+    return res.status(401).json({ error: "invalid_helper_secret" });
   ingestAffinity(req, res);
 });
 
@@ -693,8 +829,10 @@ app.get("/api/affinity/:sessionId", (req, res) => {
 app.get("/api/audit/:sessionId", requireInstructorAuth, (req, res) => {
   const sess = sessions.get(req.params.sessionId);
   if (!sess) return res.status(404).json({ error: "session not found" });
-  res.setHeader("content-disposition",
-    `attachment; filename="simurgh-audit-${req.params.sessionId}.json"`);
+  res.setHeader(
+    "content-disposition",
+    `attachment; filename="simurgh-audit-${req.params.sessionId}.json"`
+  );
   res.json({
     sessionId: req.params.sessionId,
     generated_at: new Date().toISOString(),
@@ -705,7 +843,8 @@ app.get("/api/audit/:sessionId", requireInstructorAuth, (req, res) => {
     hmac_algorithm: "HMAC-SHA256",
     hmac_key_ephemeral: AUDIT_KEY_EPHEMERAL,
     entries: sess.auditChain.entries,
-    notes: "HMAC-SHA256 chain. Each entry signs its content + the previous entry's signature. Tampering with any entry invalidates every subsequent signature. Verify with tools/verify-audit.mjs.",
+    notes:
+      "HMAC-SHA256 chain. Each entry signs its content + the previous entry's signature. Tampering with any entry invalidates every subsequent signature. Verify with tools/verify-audit.mjs.",
   });
 });
 
@@ -727,17 +866,27 @@ app.get("/api/stream/instructor", requireInstructorAuth, (req, res) => {
   res.set({
     "content-type": "text/event-stream",
     "cache-control": "no-cache, no-transform",
-    "connection": "keep-alive",
+    connection: "keep-alive",
     "x-accel-buffering": "no",
   });
   res.flushHeaders?.();
   res.write(`event: hello\ndata: ${JSON.stringify({ ts: Date.now(), model: MODEL })}\n\n`);
   sseClients.add(res);
   const ka = setInterval(() => {
-    try { res.write(": keepalive\n\n"); }
-    catch { sseClients.delete(res); clearInterval(ka); try { res.destroy?.(); } catch {} }
+    try {
+      res.write(": keepalive\n\n");
+    } catch {
+      sseClients.delete(res);
+      clearInterval(ka);
+      try {
+        res.destroy?.();
+      } catch {}
+    }
   }, 25_000);
-  req.on("close", () => { clearInterval(ka); sseClients.delete(res); });
+  req.on("close", () => {
+    clearInterval(ka);
+    sseClients.delete(res);
+  });
 });
 
 app.get("/api/meta", (_req, res) => {
@@ -768,7 +917,8 @@ app.post("/api/exams/:examId/join", limitJoin, (req, res) => {
   const rawStudentId = String(req.body?.studentId ?? "").slice(0, 256);
   if (!rawStudentId) return res.status(400).json({ error: "studentId required" });
   const studentIdHash = hashStudentId(rawStudentId);
-  const sessionId = String(req.body?.sessionId ?? "").slice(0, 64) ||
+  const sessionId =
+    String(req.body?.sessionId ?? "").slice(0, 64) ||
     `sess_${crypto.randomBytes(6).toString("hex")}`;
   if (!/^[A-Za-z0-9_-]+$/.test(sessionId)) {
     return res.status(400).json({ error: "invalid sessionId format" });
@@ -785,7 +935,11 @@ app.post("/api/exams/:examId/join", limitJoin, (req, res) => {
     examSessions.delete(sessionId);
     return res.status(503).json({ error: "server_capacity_exceeded" });
   }
-  const sessionToken = issueSessionToken(sessionId, SESSION_SIGNING_SECRET, stagingConfig.sessionTokenTtlMs);
+  const sessionToken = issueSessionToken(
+    sessionId,
+    SESSION_SIGNING_SECRET,
+    stagingConfig.sessionTokenTtlMs
+  );
   res.json({ sessionId, examId: exam.id, studentIdHash, state: record.state, sessionToken });
 });
 
@@ -809,7 +963,8 @@ app.post("/api/sessions/:sessionId/start", requireSessionToken, (req, res) => {
   if (!record) return res.status(404).json({ error: "session not found" });
   try {
     const canStart = [STATES.PRIVACY_ACCEPTED, STATES.HELPER_CONNECTED].includes(record.state);
-    if (!canStart) return res.status(409).json({ error: `Cannot start from state: ${record.state}` });
+    if (!canStart)
+      return res.status(409).json({ error: `Cannot start from state: ${record.state}` });
     let updated = transitionState(record, STATES.EXAM_STARTED);
     updated = { ...updated, startedAt: Date.now() };
     const sess = getSession(req.params.sessionId);
@@ -862,7 +1017,7 @@ app.get("/api/sessions/:sessionId/report", limitReport, requireInstructorAuth, (
       id: sessionId,
       examId: null,
       studentIdHash: null,
-      state: 'active',
+      state: "active",
       createdAt: sess?.createdAt ?? Date.now(),
       startedAt: sess?.startedAt ?? null,
       submittedAt: null,
@@ -877,7 +1032,7 @@ app.get("/api/sessions/:sessionId/report", limitReport, requireInstructorAuth, (
   );
 
   timeline.add(sessionId, EVENTS.REPORT_GENERATED, { report_id: report.report_id });
-  if (sess) appendAudit(sess, 'report_generated', { report_id: report.report_id });
+  if (sess) appendAudit(sess, "report_generated", { report_id: report.report_id });
 
   res.json(report);
 });
@@ -904,7 +1059,9 @@ app.get("/api/audit/:sessionId/verify", limitVerify, requireInstructorAuth, (req
 const server = app.listen(PORT, () => {
   console.log(`[simurgh] listening on http://localhost:${PORT}  (model: ${MODEL})`);
   if (HELPER_SHARED_SECRET) {
-    console.log(`[simurgh] helper ingest ready at POST /api/affinity (header: x-simurgh-helper-secret)`);
+    console.log(
+      `[simurgh] helper ingest ready at POST /api/affinity (header: x-simurgh-helper-secret)`
+    );
   }
   const tokenSuffix = DEMO_MODE ? "" : `?token=${INSTRUCTOR_TOKEN}`;
   console.log(`[simurgh] instructor view at http://localhost:${PORT}/instructor${tokenSuffix}`);
@@ -924,8 +1081,10 @@ function shutdown(signal) {
   shuttingDown = true;
   console.log(`[simurgh] received ${signal} — closing server gracefully.`);
   for (const res of sseClients) {
-    try { res.write(`event: shutdown\ndata: {"ts":${Date.now()}}\n\n`); res.end(); }
-    catch {}
+    try {
+      res.write(`event: shutdown\ndata: {"ts":${Date.now()}}\n\n`);
+      res.end();
+    } catch {}
   }
   sseClients.clear();
   clearInterval(evictionTimer);
@@ -934,4 +1093,4 @@ function shutdown(signal) {
   setTimeout(() => process.exit(1), 8000).unref?.();
 }
 process.on("SIGTERM", () => shutdown("SIGTERM"));
-process.on("SIGINT",  () => shutdown("SIGINT"));
+process.on("SIGINT", () => shutdown("SIGINT"));

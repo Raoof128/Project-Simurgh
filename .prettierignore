@@ -1,0 +1,28 @@
+node_modules
+package-lock.json
+coverage
+
+# build / runtime artifacts
+.simurgh_check_logs
+data/sessions
+data/audit
+data/reports
+data/exams
+logs
+*.log
+*.tmp
+
+# environment / secrets
+.env
+.env.*
+!.env.example
+
+# native helper binaries / build outputs
+tools/simurgh-helper/simurgh-helper
+tools/verity-helper/verity-helper
+tools/invisible-window-poc/invisible-window-poc
+tools/**/*.dSYM
+tools/**/*.o
+
+# git internals
+.git

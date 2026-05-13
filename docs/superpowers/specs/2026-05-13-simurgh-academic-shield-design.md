@@ -31,11 +31,11 @@ Stage 1 is complete when Simurgh can:
 
 ## Architecture Decisions
 
-| Decision | Choice | Rationale |
-|---|---|---|
-| Code structure | Extend in-place | Avoid restructure bugs while adding major features; `server.js` stays as conductor |
-| Frontend | Vanilla HTML + polished CSS | No build step, demo-stable, faster to ship |
-| Risk scoring | Local heuristics + Claude narrative | Deterministic scores, cheaper, fail-open; Claude explains Warning/Critical only |
+| Decision       | Choice                              | Rationale                                                                          |
+| -------------- | ----------------------------------- | ---------------------------------------------------------------------------------- |
+| Code structure | Extend in-place                     | Avoid restructure bugs while adding major features; `server.js` stays as conductor |
+| Frontend       | Vanilla HTML + polished CSS         | No build step, demo-stable, faster to ship                                         |
+| Risk scoring   | Local heuristics + Claude narrative | Deterministic scores, cheaper, fail-open; Claude explains Warning/Critical only    |
 
 ---
 
@@ -146,22 +146,22 @@ export const privacyConfig = {
 
 ### Categories and weights
 
-| Category | Signal | Weight |
-|---|---|---|
-| `paste_risk` | paste length > 200 chars; paste immediately after blur | 25% |
-| `focus_risk` | blur count; cumulative time off window > 30s | 20% |
-| `typing_risk` | WPM burst > 250; sudden cadence spike | 15% |
-| `idle_risk` | idle gap > 60s followed by paste | 10% |
-| `affinity_risk` | helper reports capture-excluded window | 20% |
-| `helper_risk` | helper not connected within first 30s of exam | 5% |
-| `session_risk` | session reconnects > 2 | 5% |
+| Category        | Signal                                                 | Weight |
+| --------------- | ------------------------------------------------------ | ------ |
+| `paste_risk`    | paste length > 200 chars; paste immediately after blur | 25%    |
+| `focus_risk`    | blur count; cumulative time off window > 30s           | 20%    |
+| `typing_risk`   | WPM burst > 250; sudden cadence spike                  | 15%    |
+| `idle_risk`     | idle gap > 60s followed by paste                       | 10%    |
+| `affinity_risk` | helper reports capture-excluded window                 | 20%    |
+| `helper_risk`   | helper not connected within first 30s of exam          | 5%     |
+| `session_risk`  | session reconnects > 2                                 | 5%     |
 
 ### Thresholds
 
-| Score | Level |
-|---|---|
-| 0–39 | Safe |
-| 40–69 | Warning |
+| Score  | Level    |
+| ------ | -------- |
+| 0–39   | Safe     |
+| 40–69  | Warning  |
 | 70–100 | Critical |
 
 ### Affinity override rule
@@ -300,14 +300,14 @@ GET  /api/audit
 
 ## Security Controls
 
-| Control | Implementation |
-|---|---|
-| Instructor auth | Bearer token (`SIMURGH_INSTRUCTOR_TOKEN`) |
-| Helper auth | `x-simurgh-helper-secret` header |
-| Student identity | HMAC-SHA256 hash (never raw name) |
-| Audit chain | HMAC-SHA256 linked entries |
-| CORS | `SIMURGH_ALLOWED_ORIGIN` |
-| Data minimisation | `normaliseTelemetry()` enforced before any storage |
+| Control             | Implementation                                         |
+| ------------------- | ------------------------------------------------------ |
+| Instructor auth     | Bearer token (`SIMURGH_INSTRUCTOR_TOKEN`)              |
+| Helper auth         | `x-simurgh-helper-secret` header                       |
+| Student identity    | HMAC-SHA256 hash (never raw name)                      |
+| Audit chain         | HMAC-SHA256 linked entries                             |
+| CORS                | `SIMURGH_ALLOWED_ORIGIN`                               |
+| Data minimisation   | `normaliseTelemetry()` enforced before any storage     |
 | Debug process names | Disabled unless `SIMURGH_DEBUG_RAW_PROCESS_NAMES=true` |
 
 ---
@@ -355,37 +355,41 @@ All | Safe | Warning | Critical | Helper Missing | Review Required | Submitted
 ## Build Order (4 sprints)
 
 ### Sprint 1 — Privacy + scoring foundation
+
 `env.js`, `privacyConfig.js`, `normaliseTelemetry.js`, `hashIdentity.js`, `riskScoring.js`, `academicEvents.js`
 
 ### Sprint 2 — Session lifecycle
+
 `exams.js`, `sessions.js`, `sessionState.js`, new session/exam API endpoints
 
 ### Sprint 3 — Audit + reports
+
 `hmacChain.js` (module wrap), `verifyAudit.js`, `reportBuilder.js`, report/verify endpoints
 
 ### Sprint 4 — Dashboard polish
+
 Risk score cards, event timeline, helper status, report export, audit verify button, filter bar
 
 ---
 
 ## Acceptance Criteria
 
-| Requirement | Priority |
-|---|---|
-| Privacy config enforced | P0 |
-| Telemetry normaliser strips content | P0 |
-| Student ID hashed | P0 |
-| Local risk scoring with categories | P0 |
-| Event taxonomy emitted | P0 |
-| Session lifecycle (created → submitted) | P0 |
-| Helper status in scoring | P0 |
-| HMAC audit chain stores events | P0 |
-| Report builder exports JSON | P0 |
-| Instructor dashboard shows risk scores | P1 |
-| Dashboard event timeline | P1 |
-| Audit verification endpoint | P1 |
-| README updated with Academic Shield section | P1 |
-| AGENT.md and CHANGELOG.md updated | P1 |
-| PDF export | P2 |
-| Database storage | P2 |
-| LMS integration | P3 |
+| Requirement                                 | Priority |
+| ------------------------------------------- | -------- |
+| Privacy config enforced                     | P0       |
+| Telemetry normaliser strips content         | P0       |
+| Student ID hashed                           | P0       |
+| Local risk scoring with categories          | P0       |
+| Event taxonomy emitted                      | P0       |
+| Session lifecycle (created → submitted)     | P0       |
+| Helper status in scoring                    | P0       |
+| HMAC audit chain stores events              | P0       |
+| Report builder exports JSON                 | P0       |
+| Instructor dashboard shows risk scores      | P1       |
+| Dashboard event timeline                    | P1       |
+| Audit verification endpoint                 | P1       |
+| README updated with Academic Shield section | P1       |
+| AGENT.md and CHANGELOG.md updated           | P1       |
+| PDF export                                  | P2       |
+| Database storage                            | P2       |
+| LMS integration                             | P3       |

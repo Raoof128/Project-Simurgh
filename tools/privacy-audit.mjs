@@ -83,7 +83,11 @@ function scanFile(file) {
 
 function walk(dir) {
   let stat;
-  try { stat = statSync(dir); } catch { return; }
+  try {
+    stat = statSync(dir);
+  } catch {
+    return;
+  }
   if (stat.isFile()) {
     if (dir.endsWith(".json")) scanFile(dir);
     return;
@@ -97,9 +101,10 @@ function walk(dir) {
 }
 
 const cwd = process.cwd();
-const targets = explicitTargets.length > 0
-  ? explicitTargets.map((t) => resolve(cwd, t))
-  : DEFAULT_SCAN_DIRS.map((d) => resolve(cwd, d));
+const targets =
+  explicitTargets.length > 0
+    ? explicitTargets.map((t) => resolve(cwd, t))
+    : DEFAULT_SCAN_DIRS.map((d) => resolve(cwd, d));
 
 if (!quiet) console.log("Simurgh privacy audit — scanning for forbidden fields");
 for (const t of targets) walk(t);
@@ -113,5 +118,7 @@ if (violations.length > 0) {
   process.exit(1);
 }
 
-console.log(`\n✓ Privacy audit PASSED — no forbidden fields found in ${filesScanned} scanned file(s).`);
+console.log(
+  `\n✓ Privacy audit PASSED — no forbidden fields found in ${filesScanned} scanned file(s).`
+);
 process.exit(0);

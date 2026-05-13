@@ -155,7 +155,15 @@ else
   pass "node --check on all .js / .mjs files"
 fi
 
-# ── 4. Tests ─────────────────────────────────────────────
+# ── 4. Format ────────────────────────────────────────────
+step "Format"
+if [[ "$FIX" == true ]]; then
+  run_step "prettier --write (npm run format)" "npm run format"
+else
+  run_step "prettier --check (npm run format:check)" "npm run format:check"
+fi
+
+# ── 5. Tests ─────────────────────────────────────────────
 step "Tests"
 run_step "npm test" "npm test"
 

@@ -16,7 +16,9 @@ if (!path) {
 }
 const secret = process.env.SIMURGH_AUDIT_SECRET;
 if (!secret) {
-  console.error("error: SIMURGH_AUDIT_SECRET env var required (the same key the server signed with).");
+  console.error(
+    "error: SIMURGH_AUDIT_SECRET env var required (the same key the server signed with)."
+  );
   process.exit(2);
 }
 
@@ -39,7 +41,9 @@ for (let i = 0; i < doc.entries.length; i++) {
     bad++;
   }
   if (e.prev !== prev) {
-    console.error(`#${i}: prev hash chain broken (expected ${prev.slice(0, 12)}…, got ${String(e.prev).slice(0, 12)}…)`);
+    console.error(
+      `#${i}: prev hash chain broken (expected ${prev.slice(0, 12)}…, got ${String(e.prev).slice(0, 12)}…)`
+    );
     bad++;
   }
   const { sig, ...body } = e;
@@ -51,12 +55,16 @@ for (let i = 0; i < doc.entries.length; i++) {
   prev = sig;
 }
 if (doc.chain_terminator && prev !== doc.chain_terminator) {
-  console.error(`chain terminator mismatch (expected ${doc.chain_terminator.slice(0, 12)}…, got ${prev.slice(0, 12)}…)`);
+  console.error(
+    `chain terminator mismatch (expected ${doc.chain_terminator.slice(0, 12)}…, got ${prev.slice(0, 12)}…)`
+  );
   bad++;
 }
 
 if (bad === 0) {
-  console.log(`OK · ${doc.entries.length} entries · chain intact${doc.truncated ? " · TRUNCATED at cap" : ""}`);
+  console.log(
+    `OK · ${doc.entries.length} entries · chain intact${doc.truncated ? " · TRUNCATED at cap" : ""}`
+  );
   process.exit(0);
 } else {
   console.error(`FAIL · ${bad} integrity violation(s)`);

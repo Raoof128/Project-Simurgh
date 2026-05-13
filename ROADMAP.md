@@ -87,11 +87,11 @@ Countermeasure D — the "Code-Video" layer.
 
 These limitations are documented in the research paper (§VI-C) and are not bugs:
 
-| Limitation | Class | Mitigation |
-|---|---|---|
+| Limitation                                                     | Class                       | Mitigation                                 |
+| -------------------------------------------------------------- | --------------------------- | ------------------------------------------ |
 | Click-through overlays (WS_EX_TRANSPARENT, ignoresMouseEvents) | Countermeasure C blind spot | Pair with native helper (Countermeasure A) |
-| Read-don't-paste workflows (silent transcription, human WPM) | Structural detection gap | Behavioural baseline analysis (Stage 2) |
-| GPU-layer overlays (Cluely-class) | Advanced evasion | Stage 4 research track |
+| Read-don't-paste workflows (silent transcription, human WPM)   | Structural detection gap    | Behavioural baseline analysis (Stage 2)    |
+| GPU-layer overlays (Cluely-class)                              | Advanced evasion            | Stage 4 research track                     |
 
 ---
 

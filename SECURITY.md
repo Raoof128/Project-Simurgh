@@ -4,11 +4,11 @@
 
 Project Simurgh is a research prototype. Security fixes are applied to the latest tagged release and the `main` branch.
 
-| Version | Supported |
-|---|---|
-| `v0.3.0` (Stage 1 Hardening) | ✅ Active |
-| `main` (development) | ✅ Active |
-| Earlier tags | Not maintained |
+| Version                      | Supported      |
+| ---------------------------- | -------------- |
+| `v0.3.0` (Stage 1 Hardening) | ✅ Active      |
+| `main` (development)         | ✅ Active      |
+| Earlier tags                 | Not maintained |
 
 ## Reporting a Vulnerability
 
@@ -17,6 +17,7 @@ Project Simurgh is a research prototype. Security fixes are applied to the lates
 Report security issues to: **raoof.r12@gmail.com**
 
 Include:
+
 - Description of the vulnerability
 - Steps to reproduce
 - Affected component (server, helper, audit chain, dashboard, etc.)
@@ -28,25 +29,25 @@ You will receive a response within **72 hours**. If the vulnerability is confirm
 
 ### Trust Boundaries
 
-| Component | Trust Level | Mechanism |
-|---|---|---|
-| Student browser | **Untrusted** | Strict allowlist + range-reject validation; replay guard (sequence + timestamp); rate limit |
-| Joined student session | **Token-bound** | HMAC-SHA256 session token issued at `/api/exams/:id/join`, required for lifecycle + telemetry |
-| Native helper | **Authenticated** | `x-simurgh-helper-secret` shared-secret header + per-helper rate limit |
-| Instructor dashboard | **Authenticated** | Bearer token (`SIMURGH_INSTRUCTOR_TOKEN`) — query-string token stripped from URL after capture |
-| Claude API | **Trusted service** | Receives sanitised behavioural metadata only, never raw content |
-| Audit chain | **Tamper-evident** | HMAC-SHA256 linked entries; any modification invalidates downstream signatures |
+| Component              | Trust Level         | Mechanism                                                                                      |
+| ---------------------- | ------------------- | ---------------------------------------------------------------------------------------------- |
+| Student browser        | **Untrusted**       | Strict allowlist + range-reject validation; replay guard (sequence + timestamp); rate limit    |
+| Joined student session | **Token-bound**     | HMAC-SHA256 session token issued at `/api/exams/:id/join`, required for lifecycle + telemetry  |
+| Native helper          | **Authenticated**   | `x-simurgh-helper-secret` shared-secret header + per-helper rate limit                         |
+| Instructor dashboard   | **Authenticated**   | Bearer token (`SIMURGH_INSTRUCTOR_TOKEN`) — query-string token stripped from URL after capture |
+| Claude API             | **Trusted service** | Receives sanitised behavioural metadata only, never raw content                                |
+| Audit chain            | **Tamper-evident**  | HMAC-SHA256 linked entries; any modification invalidates downstream signatures                 |
 
 ### Secret Separation
 
 Four independent secrets in production. Reuse is not permitted.
 
-| Secret | Purpose |
-|---|---|
-| `SIMURGH_INSTRUCTOR_TOKEN` | Dashboard, sessions list, report, audit verify, SSE |
-| `SIMURGH_HELPER_SECRET` | Native helper authentication |
-| `SIMURGH_AUDIT_SECRET` | HMAC key for the audit chain |
-| `SIMURGH_SESSION_SIGNING_SECRET` | HMAC key for student session tokens |
+| Secret                           | Purpose                                             |
+| -------------------------------- | --------------------------------------------------- |
+| `SIMURGH_INSTRUCTOR_TOKEN`       | Dashboard, sessions list, report, audit verify, SSE |
+| `SIMURGH_HELPER_SECRET`          | Native helper authentication                        |
+| `SIMURGH_AUDIT_SECRET`           | HMAC key for the audit chain                        |
+| `SIMURGH_SESSION_SIGNING_SECRET` | HMAC key for student session tokens                 |
 
 The server refuses to start in non-demo mode if any of these are unset.
 

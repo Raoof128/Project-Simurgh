@@ -1,9 +1,9 @@
-import { test, describe } from 'node:test';
-import assert from 'node:assert/strict';
-import { normaliseTelemetry } from '../../src/privacy/normaliseTelemetry.js';
+import { test, describe } from "node:test";
+import assert from "node:assert/strict";
+import { normaliseTelemetry } from "../../src/privacy/normaliseTelemetry.js";
 
-describe('normaliseTelemetry', () => {
-  test('passes through allowed metadata fields', () => {
+describe("normaliseTelemetry", () => {
+  test("passes through allowed metadata fields", () => {
     const input = {
       keystrokes: 42,
       chars_typed: 100,
@@ -21,12 +21,12 @@ describe('normaliseTelemetry', () => {
     assert.equal(result.focus_losses, 1);
   });
 
-  test('strips any content fields that should never be collected', () => {
+  test("strips any content fields that should never be collected", () => {
     const input = {
       keystrokes: 10,
-      paste_content: 'secret text',
-      typed_content: 'answer here',
-      screen_data: 'base64stuff',
+      paste_content: "secret text",
+      typed_content: "answer here",
+      screen_data: "base64stuff",
     };
     const result = normaliseTelemetry(input);
     assert.equal(result.paste_content, undefined);
@@ -35,18 +35,18 @@ describe('normaliseTelemetry', () => {
     assert.equal(result.keystrokes, 10);
   });
 
-  test('adds privacy_mode annotation', () => {
+  test("adds privacy_mode annotation", () => {
     const result = normaliseTelemetry({ keystrokes: 5 });
-    assert.equal(result._privacy_mode, 'metadata_only');
+    assert.equal(result._privacy_mode, "metadata_only");
   });
 
-  test('caps key_intervals array to maxKeyIntervalsStored', () => {
+  test("caps key_intervals array to maxKeyIntervalsStored", () => {
     const intervals = Array.from({ length: 500 }, (_, i) => i);
     const result = normaliseTelemetry({ keystrokes: 5, key_intervals: intervals });
     assert.ok(result.key_intervals.length <= 200);
   });
 
-  test('returns null for null input', () => {
+  test("returns null for null input", () => {
     assert.equal(normaliseTelemetry(null), null);
   });
 });

@@ -45,7 +45,7 @@ This project uses the Anthropic Claude API. Use of that API is subject to [Anthr
 
 The threat model underlying this project is described in:
 
-> Abedini, R. (2026). *The Invisible Window: A Taxonomy of Display-Fidelity Violations and Proposed Mitigations*. Western Sydney University.
+> Abedini, R. (2026). _The Invisible Window: A Taxonomy of Display-Fidelity Violations and Proposed Mitigations_. Western Sydney University.
 
 The paper is provided for research and educational purposes. Reproduction of the attack techniques described therein for malicious purposes is prohibited.
 

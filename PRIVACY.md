@@ -10,33 +10,33 @@ Project Simurgh is a research prototype for privacy-preserving academic integrit
 
 Simurgh collects **behavioural metadata only**. No content is ever collected, stored, or transmitted.
 
-| Signal | Collected | Purpose |
-|---|---|---|
-| Keystroke count per window | ✅ | Typing cadence analysis |
-| Characters typed (count only) | ✅ | Cognitive load signal |
-| Effective WPM | ✅ | Superhuman cadence detection |
-| Focus loss count | ✅ | Context-switch detection |
-| Time off window (ms) | ✅ | Off-task duration signal |
-| Paste count | ✅ | Paste frequency |
-| Paste length (chars, no content) | ✅ | Bulk paste detection |
-| Maximum idle gap (ms) | ✅ | Idle-then-paste pattern |
-| Keydown timing intervals | ✅ (capped at 200) | Rhythm analysis |
-| Helper connection status | ✅ | Countermeasure A attestation |
-| Display-affinity alerts | ✅ | Invisible window detection |
+| Signal                           | Collected          | Purpose                      |
+| -------------------------------- | ------------------ | ---------------------------- |
+| Keystroke count per window       | ✅                 | Typing cadence analysis      |
+| Characters typed (count only)    | ✅                 | Cognitive load signal        |
+| Effective WPM                    | ✅                 | Superhuman cadence detection |
+| Focus loss count                 | ✅                 | Context-switch detection     |
+| Time off window (ms)             | ✅                 | Off-task duration signal     |
+| Paste count                      | ✅                 | Paste frequency              |
+| Paste length (chars, no content) | ✅                 | Bulk paste detection         |
+| Maximum idle gap (ms)            | ✅                 | Idle-then-paste pattern      |
+| Keydown timing intervals         | ✅ (capped at 200) | Rhythm analysis              |
+| Helper connection status         | ✅                 | Countermeasure A attestation |
+| Display-affinity alerts          | ✅                 | Invisible window detection   |
 
 ## What We Never Collect
 
-| Data | Status |
-|---|---|
-| Screen pixels or screenshots | ❌ Never |
-| Webcam frames | ❌ Never |
-| Microphone audio | ❌ Never |
-| Typed answer content | ❌ Never |
-| Pasted text content | ❌ Never |
-| Raw student name or email | ❌ Never |
-| Biometric identifiers | ❌ Never |
-| IP address (stored) | ❌ Not persisted |
-| Location data | ❌ Never |
+| Data                         | Status           |
+| ---------------------------- | ---------------- |
+| Screen pixels or screenshots | ❌ Never         |
+| Webcam frames                | ❌ Never         |
+| Microphone audio             | ❌ Never         |
+| Typed answer content         | ❌ Never         |
+| Pasted text content          | ❌ Never         |
+| Raw student name or email    | ❌ Never         |
+| Biometric identifiers        | ❌ Never         |
+| IP address (stored)          | ❌ Not persisted |
+| Location data                | ❌ Never         |
 
 ---
 
@@ -56,11 +56,11 @@ Risk scores are produced by **local deterministic heuristics**. When a session r
 
 ## Data Retention
 
-| Data type | Retention |
-|---|---|
+| Data type                   | Retention                            |
+| --------------------------- | ------------------------------------ |
 | In-memory session telemetry | 4 hours of inactivity (auto-evicted) |
-| Audit chain (in-memory) | Session lifetime |
-| Exported reports | Operator-controlled |
+| Audit chain (in-memory)     | Session lifetime                     |
+| Exported reports            | Operator-controlled                  |
 
 This is a stateless prototype. No data is written to a database. Restarting the server clears all session data.
 
@@ -68,8 +68,8 @@ This is a stateless prototype. No data is written to a database. Restarting the 
 
 ## Third-Party Services
 
-| Service | What it receives | Purpose |
-|---|---|---|
+| Service              | What it receives             | Purpose                                |
+| -------------------- | ---------------------------- | -------------------------------------- |
 | Anthropic Claude API | Sanitised telemetry metadata | Risk narrative (Warning/Critical only) |
 
 No other third-party services receive any data.
