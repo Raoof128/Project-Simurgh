@@ -149,6 +149,27 @@
       0%{background:var(--ox-tint)}
       100%{background:var(--paper-warm)}
     }
+
+    /* ── Risk cards & badges ── */
+    .risk-card { background: #0f1117; border: 1px solid #1e293b; border-radius: 10px; padding: 1rem; min-width: 140px; text-align: center; }
+    .risk-score { font-size: 2rem; font-weight: 800; font-family: monospace; }
+    .risk-safe    { color: #22c55e; }
+    .risk-warning { color: #f59e0b; }
+    .risk-critical{ color: #ef4444; }
+    .badge { display:inline-block; padding:2px 8px; border-radius:999px; font-size:0.7rem; font-family:monospace; font-weight:600; }
+    .badge-safe    { background:#14532d; color:#4ade80; }
+    .badge-warning { background:#78350f; color:#fbbf24; }
+    .badge-critical{ background:#7f1d1d; color:#fca5a5; }
+    .badge-missing { background:#1e293b; color:#94a3b8; }
+    .event-timeline { max-height:180px; overflow-y:auto; font-size:0.72rem; font-family:monospace; color:#94a3b8; }
+    .event-row { display:flex; gap:8px; padding:2px 0; border-bottom:1px solid #1e293b; }
+    .event-row .ev-time { color:#475569; flex-shrink:0; }
+    .event-row .ev-type { color:#38bdf8; }
+    .event-row .ev-type.ev-critical { color:#ef4444; }
+    .filter-bar { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:1rem; }
+    .filter-btn { padding:4px 12px; border-radius:999px; font-size:0.75rem; font-family:monospace; cursor:pointer; border:1px solid #334155; background:#1e293b; color:#94a3b8; }
+    .filter-btn.active { background:#1d4ed8; border-color:#3b82f6; color:#fff; }
+    .session-card { background:var(--paper-warm); border:1px solid var(--rule); border-radius:2px; box-shadow:var(--shadow); padding:14px; }
   </style>
 </head>
 <body>
@@ -178,6 +199,16 @@
       <div class="cell"><span class="k">Warning (last hour)</span><span class="v warn" id="sWarn">0</span></div>
       <div class="cell"><span class="k">Helpers online</span><span class="v" id="sHelpers">0</span></div>
       <div class="cell"><span class="k">Capture-invisible windows</span><span class="v" id="sHostile">0</span></div>
+    </div>
+
+    <div class="filter-bar" id="filter-bar">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="safe">Safe</button>
+      <button class="filter-btn" data-filter="warning">Warning</button>
+      <button class="filter-btn" data-filter="critical">Critical</button>
+      <button class="filter-btn" data-filter="helper_missing">Helper Missing</button>
+      <button class="filter-btn" data-filter="review_required">Review Required</button>
+      <button class="filter-btn" data-filter="submitted">Submitted</button>
     </div>
 
     <div id="grid" class="grid"></div>
@@ -211,38 +242,52 @@
     const tokenQuery = TOKEN ? "?token=" + encodeURIComponent(TOKEN) : "";
     const authHeaders = TOKEN ? { "authorization": "Bearer " + TOKEN } : {};
 
-    function renderCard(s) {
-      const id = s.sessionId;
-      const v = s.latest;
-      const lv = lvl(v?.risk_level);
-      const helperOnline = !!s.helper_active;
-      const hostile = s.hostile_count || 0;
-      const fid = s.fidelity_deficit_pct || 0;
-      const cls = (lv === "critical" || hostile > 0) ? "crit" : (lv === "warning" ? "warn" : "");
+    function renderSessionCard(sess) {
+      const level = (sess.latest?.risk_level || 'Safe').toLowerCase();
+      const score = sess.latest?.risk_score ?? 0;
+      const cats = sess.latest?.categories ?? {};
+      const helperActive = sess.helper_active;
+      const submittedState = sess.state === 'submitted' || sess.state === 'report_generated';
+
+      const badgeClass = level === 'critical' ? 'badge-critical' :
+                         level === 'warning'  ? 'badge-warning'  : 'badge-safe';
+      const scoreClass  = level === 'critical' ? 'risk-critical'  :
+                          level === 'warning'  ? 'risk-warning'   : 'risk-safe';
+
       return `
-        <article class="card ${cls}" id="card-${esc(id)}">
-          <div class="top">
-            <span class="sid">${esc(id)}</span>
-            <span class="stamp" data-level="${lv}">${lv.toUpperCase()}</span>
-          </div>
-          <div class="body">
-            <div class="reason ${v ? "" : "empty"}">${v ? esc(v.reasoning || "—") : "Awaiting first verdict…"}</div>
-            <div class="stats">
-              <span>verdicts <b>${s.history_count || 0}</b></span>
-              <span class="${(s.counts?.critical||0)>0?'hot':''}">crit <b>${s.counts?.critical || 0}</b></span>
-              <span>warn <b>${s.counts?.warning || 0}</b></span>
-              <span>last <b>${v?.ts ? fmtTs(v.ts) : "—"}</b></span>
-            </div>
-            <div class="stats">
-              <span class="helper ${hostile>0?'alarm':(helperOnline?'online':'')}">
-                ${hostile>0 ? `${hostile} hostile` : (helperOnline?'helper online':'helper offline')}
-              </span>
-              ${fid > 0 ? `<span>fidelity-deficit <b style="color:var(--ox)">${fid.toFixed(2)}%</b></span>` : ""}
-              <a class="open-link" href="/" target="_blank" rel="noopener" style="margin-left:auto" title="Open a new candidate exam tab — instructor view does not deep-link into a specific session">new exam ↗</a>
-            </div>
-          </div>
-        </article>`;
+<div class="session-card" id="card-${esc(sess.sessionId)}" data-session="${esc(sess.sessionId)}" data-level="${level}" data-helper="${helperActive}" data-submitted="${submittedState}">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+    <span style="font-family:monospace;color:#64748b;font-size:0.75rem;">${esc(sess.sessionId)}</span>
+    <span class="badge ${badgeClass}">${level.toUpperCase()}</span>
+  </div>
+  <div style="display:flex;gap:1rem;align-items:center;margin-bottom:0.75rem;">
+    <div class="risk-card">
+      <div class="risk-score ${scoreClass}">${score}</div>
+      <div style="font-size:0.65rem;color:#64748b;margin-top:2px;">RISK SCORE</div>
+    </div>
+    <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:0.68rem;font-family:monospace;">
+      ${Object.entries(cats).map(([k, v]) => `
+        <div style="color:#64748b;">${k.replace('_risk','')}: <span style="color:${v>=70?'#ef4444':v>=40?'#f59e0b':'#22c55e'}">${v}</span></div>
+      `).join('')}
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:6px;margin-bottom:0.5rem;font-size:0.72rem;font-family:monospace;">
+    <span style="width:8px;height:8px;border-radius:50%;display:inline-block;background:${helperActive?'#22c55e':'#f59e0b'};"></span>
+    <span style="color:#94a3b8;">Helper: ${helperActive ? 'Connected' : 'Not detected'}</span>
+    ${submittedState ? '<span class="badge" style="background:#1e3a5f;color:#38bdf8;margin-left:auto;">Submitted</span>' : ''}
+  </div>
+  <div id="timeline-${esc(sess.sessionId)}" class="event-timeline" style="margin-bottom:0.5rem;">
+    <em style="color:#475569;">No events yet</em>
+  </div>
+  <div style="display:flex;gap:6px;margin-top:0.5rem;">
+    <button onclick="exportReport('${esc(sess.sessionId)}')" style="background:#1e293b;color:#94a3b8;border:1px solid #334155;padding:3px 10px;border-radius:6px;font-size:0.72rem;font-family:monospace;cursor:pointer;">Export Report</button>
+    <button onclick="verifyAudit('${esc(sess.sessionId)}')" style="background:#1e293b;color:#94a3b8;border:1px solid #334155;padding:3px 10px;border-radius:6px;font-size:0.72rem;font-family:monospace;cursor:pointer;">Verify Audit</button>
+  </div>
+</div>`;
     }
+
+    // Keep renderCard as alias for backward-compatibility with flashCard and SSE handlers
+    function renderCard(s) { return renderSessionCard(s); }
 
     function rerender() {
       const list = [...sessionState.values()];
@@ -334,6 +379,50 @@
       };
     }
     connectSSE();
+
+    // ── Export / Audit helpers ──
+    const _token = new URLSearchParams(location.search).get('token') || '';
+    const _authParam = _token ? `?token=${_token}` : '';
+
+    async function exportReport(sessionId) {
+      try {
+        const res = await fetch(`/api/sessions/${sessionId}/report${_authParam}`);
+        const report = await res.json();
+        const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `simurgh-report-${sessionId}.json`;
+        a.click();
+      } catch (e) { alert('Report export failed: ' + e.message); }
+    }
+
+    async function verifyAudit(sessionId) {
+      try {
+        const res = await fetch(`/api/audit/${sessionId}/verify${_authParam}`);
+        const data = await res.json();
+        alert(`Audit chain: ${data.valid ? '✅ VALID' : '❌ INVALID'}\nEntries: ${data.entry_count}\n${data.errors?.join('\n') || ''}`);
+      } catch (e) { alert('Audit verify failed: ' + e.message); }
+    }
+
+    // ── Filter bar ──
+    document.getElementById('filter-bar')?.addEventListener('click', (e) => {
+      const btn = e.target.closest('.filter-btn');
+      if (!btn) return;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      document.querySelectorAll('.session-card').forEach(card => {
+        const show =
+          filter === 'all'             ? true :
+          filter === 'safe'            ? card.dataset.level === 'safe' :
+          filter === 'warning'         ? card.dataset.level === 'warning' :
+          filter === 'critical'        ? card.dataset.level === 'critical' :
+          filter === 'helper_missing'  ? card.dataset.helper === 'false' :
+          filter === 'review_required' ? (card.dataset.level === 'warning' || card.dataset.level === 'critical') :
+          filter === 'submitted'       ? card.dataset.submitted === 'true' : true;
+        card.style.display = show ? '' : 'none';
+      });
+    });
   </script>
 </body>
 </html>
