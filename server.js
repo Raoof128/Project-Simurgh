@@ -11,6 +11,8 @@ import { EVENTS, eventTimeline } from "./src/academic/academicEvents.js";
 import { createExam, getExam, listExams } from "./src/academic/exams.js";
 import { STATES, createSessionRecord, transitionState } from "./src/academic/sessions.js";
 import { hashStudentId } from "./src/privacy/hashIdentity.js";
+import { buildReport } from "./src/academic/reportBuilder.js";
+import { verifyAuditExport } from "./src/audit/verifyAudit.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -706,6 +708,59 @@ app.post("/api/sessions/:sessionId/submit", (req, res) => {
   } catch (e) {
     res.status(409).json({ error: e.message });
   }
+});
+
+// Report export — assembles JSON report for a session
+app.get("/api/sessions/:sessionId/report", requireInstructorAuth, (req, res) => {
+  const { sessionId } = req.params;
+  const sess = sessions.get(sessionId);
+  const record = examSessions.get(sessionId);
+  if (!sess && !record) return res.status(404).json({ error: "session not found" });
+
+  const { valid: auditValid } = verifyAuditExport(
+    { entries: sess?.auditChain?.entries ?? [], truncated: sess?.auditChain?.truncated ?? false },
+    AUDIT_KEY
+  );
+
+  const report = buildReport(
+    record ?? {
+      id: sessionId,
+      examId: null,
+      studentIdHash: null,
+      state: 'active',
+      createdAt: sess?.createdAt ?? Date.now(),
+      startedAt: sess?.startedAt ?? null,
+      submittedAt: null,
+      reconnects: 0,
+    },
+    {
+      latest: sess?.latest ?? null,
+      affinity: sess?.affinity ?? { hostile: [], lastHeartbeat: null, source: null },
+    },
+    timeline.get(sessionId),
+    auditValid
+  );
+
+  timeline.add(sessionId, EVENTS.REPORT_GENERATED, { report_id: report.report_id });
+  if (sess) appendAudit(sess, 'report_generated', { report_id: report.report_id });
+
+  res.json(report);
+});
+
+// Audit chain verification endpoint
+app.get("/api/audit/:sessionId/verify", requireInstructorAuth, (req, res) => {
+  const sess = sessions.get(req.params.sessionId);
+  if (!sess) return res.status(404).json({ error: "session not found" });
+
+  const result = verifyAuditExport(
+    { entries: sess.auditChain.entries, truncated: sess.auditChain.truncated },
+    AUDIT_KEY
+  );
+
+  timeline.add(req.params.sessionId, EVENTS.AUDIT_VERIFIED, { valid: result.valid });
+  sseBroadcast("audit_verified", { sessionId: req.params.sessionId, valid: result.valid });
+
+  res.json({ sessionId: req.params.sessionId, ...result });
 });
 
 // ─────────────────────────────────────────────────────────────
