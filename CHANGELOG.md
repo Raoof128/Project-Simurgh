@@ -1,5 +1,16 @@
 ## Change Log
 
+## [0.2.2] — 2026-05-13
+
+### Fixed
+- Block telemetry ingestion on submitted/closed exam sessions (prevents post-submission audit manipulation)
+- Add `MAX_SESSIONS` cap (default 10,000) — return 503 at capacity instead of unbounded memory growth
+- Add HTTP security headers on all responses: `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy`, `Permissions-Policy`, `Strict-Transport-Security` (production only)
+- Fail fast with `process.exit(78)` in non-demo mode when `SIMURGH_AUDIT_SECRET` is not set
+- Warn in non-demo mode when `SIMURGH_ALLOWED_ORIGIN` is unset (wildcard CORS)
+- Replace local `AUDIT_CHAIN_CAP` constant with imported `CHAIN_CAP` from `hmacChain.js`
+- Guard all `getSession()` call sites for null return at capacity
+
 ## [0.2.1] — 2026-05-13
 
 ### Added

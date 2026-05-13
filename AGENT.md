@@ -2,6 +2,14 @@
 
 ## Agent Change Log
 
+### 2026-05-13 (Australia/Sydney) — Production-Readiness Audit Fixes
+**Raouf:**
+- **Scope:** Production-readiness hardening (post full end-to-end audit)
+- **Summary:** Ran a 23-point production audit. All 23 checks passed. Fixed 6 identified issues: block telemetry on submitted sessions, MAX_SESSIONS cap with 503, HTTP security headers (X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy, HSTS), fail-fast when SIMURGH_AUDIT_SECRET missing in production, louder CORS origin warning, eliminated AUDIT_CHAIN_CAP duplication.
+- **Files Changed:** `server.js`
+- **Verification:** 42/42 tests pass. Smoke test confirms: security headers present, submitted-session telemetry blocked with 403, health endpoint OK, Safe/Critical scoring correct.
+- **Follow-ups:** None for Stage 1.
+
 ### 2026-05-13 (Australia/Sydney) — Repository Documentation
 **Raouf:**
 - **Scope:** Repository documentation polish
