@@ -13,6 +13,7 @@ import { STATES, createSessionRecord, transitionState } from "./src/academic/ses
 import { hashStudentId } from "./src/privacy/hashIdentity.js";
 import { buildReport } from "./src/academic/reportBuilder.js";
 import { verifyAuditExport } from "./src/audit/verifyAudit.js";
+import { appendEntry } from "./src/audit/hmacChain.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -222,6 +223,13 @@ const evictionTimer = setInterval(() => {
   }
 }, 5 * 60 * 1000).unref?.();
 
+// Evict examSessions entries whose telemetry session has been evicted.
+const examEvictionTimer = setInterval(() => {
+  for (const [id] of examSessions.entries()) {
+    if (!sessions.has(id)) examSessions.delete(id);
+  }
+}, 5 * 60 * 1000).unref?.();
+
 // Token-bucket rate limit per session: 1 telemetry POST / 2.5s burst 3.
 function consumeRateToken(sess) {
   const now = Date.now();
@@ -296,24 +304,7 @@ function persistVerdict(sessionId, verdict) {
 }
 
 function appendAudit(sess, type, payload) {
-  if (sess.auditChain.truncated) return;
-  if (sess.auditChain.entries.length >= AUDIT_CHAIN_CAP) {
-    sess.auditChain.truncated = true;
-    return;
-  }
-  const entry = {
-    seq: sess.auditChain.entries.length,
-    ts: Date.now(),
-    type,
-    payload,
-    prev: sess.auditChain.prevHash,
-  };
-  const sig = crypto.createHmac("sha256", AUDIT_KEY)
-    .update(JSON.stringify(entry))
-    .digest("hex");
-  entry.sig = sig;
-  sess.auditChain.entries.push(entry);
-  sess.auditChain.prevHash = sig;
+  appendEntry(sess.auditChain, AUDIT_KEY, type, payload);
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -406,6 +397,36 @@ app.post("/api/telemetry", async (req, res) => {
   }
 
   try {
+    const normed = normaliseTelemetry(telemetry) ?? telemetry;
+    const scored = scoreAcademicRisk(normed, {
+      connected: sess.affinity.lastHeartbeat != null && (Date.now() - sess.affinity.lastHeartbeat) < 8000,
+      hostileCount: sess.affinity.hostile.length,
+    }, { reconnects: sess.reconnects || 0, startedAt: sess.startedAt });
+
+    // Honour stagingConfig.claudeOnSafe — skip Claude call for Safe verdicts to reduce cost.
+    if (scored.risk_level === 'Safe' && !stagingConfig.claudeOnSafe) {
+      const verdict = {
+        risk_level: scored.risk_level,
+        risk_score: scored.risk_score,
+        confidence: scored.confidence,
+        categories: scored.categories,
+        reasoning: scored.recommendation,
+        recommendation: scored.recommendation,
+        source: { score: 'local_heuristic', reasoning: 'skipped-safe' },
+        ts: Date.now(),
+        cache: { creation: 0, read: 0 },
+      };
+      sess.latestRiskScore = scored.risk_score;
+      sess.latestCategories = scored.categories;
+      timeline.add(sessionId, EVENTS.TELEMETRY_WINDOW_RECEIVED, { risk_level: scored.risk_level, risk_score: scored.risk_score });
+      if (telemetry.focus_losses > 0) timeline.add(sessionId, EVENTS.FOCUS_LOSS, { count: telemetry.focus_losses });
+      if (telemetry.paste_payload_chars >= 200) timeline.add(sessionId, EVENTS.BULK_PASTE, { chars: telemetry.paste_payload_chars });
+      if (telemetry.effective_wpm >= 250) timeline.add(sessionId, EVENTS.ABNORMAL_WPM_SPIKE, { wpm: telemetry.effective_wpm });
+      if (telemetry.max_idle_gap_ms >= 60000) timeline.add(sessionId, EVENTS.LONG_IDLE_GAP, { ms: telemetry.max_idle_gap_ms });
+      persistVerdict(sessionId, verdict);
+      return res.json(verdict);
+    }
+
     const response = await client.messages.create({
       model: MODEL,
       max_tokens: 200,
@@ -425,11 +446,6 @@ app.post("/api/telemetry", async (req, res) => {
       parsed = { risk_level: "Safe", reasoning: "Model output unparseable; defaulting to Safe." };
     }
 
-    const normed = normaliseTelemetry(telemetry) ?? telemetry;
-    const scored = scoreAcademicRisk(normed, {
-      connected: sess.affinity.lastHeartbeat != null && (Date.now() - sess.affinity.lastHeartbeat) < 8000,
-      hostileCount: sess.affinity.hostile.length,
-    }, { reconnects: sess.reconnects || 0, startedAt: sess.startedAt });
     const claudeReasoning = String(parsed.reasoning ?? "").slice(0, 280);
     const verdict = {
       risk_level: scored.risk_level,
@@ -646,6 +662,9 @@ app.post("/api/exams/:examId/join", (req, res) => {
   if (!/^[A-Za-z0-9_-]+$/.test(sessionId)) {
     return res.status(400).json({ error: "invalid sessionId format" });
   }
+  if (examSessions.has(sessionId)) {
+    return res.status(409).json({ error: "sessionId already in use" });
+  }
   let record = createSessionRecord(exam.id, studentIdHash);
   record = { ...record, id: sessionId };
   record = transitionState(record, STATES.JOINED);
@@ -794,6 +813,7 @@ function shutdown(signal) {
   }
   sseClients.clear();
   clearInterval(evictionTimer);
+  clearInterval(examEvictionTimer);
   server.close(() => process.exit(0));
   setTimeout(() => process.exit(1), 8000).unref?.();
 }
