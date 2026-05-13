@@ -6,7 +6,8 @@
 
 _Detecting UI-redressing and behavioral spoofing without relying on screen capture._
 
-[![Node](https://img.shields.io/badge/node-%E2%89%A520.0-1a1a1a?style=flat-square)](https://nodejs.org)
+[![Stage 1 Checks](https://github.com/Raoof128/Project-Simurgh/actions/workflows/stage-1-checks.yml/badge.svg?branch=main)](https://github.com/Raoof128/Project-Simurgh/actions/workflows/stage-1-checks.yml)
+[![Node](https://img.shields.io/badge/node-%E2%89%A522.0-1a1a1a?style=flat-square)](https://nodejs.org)
 [![Claude](https://img.shields.io/badge/claude-sonnet--4--5-6b1a1a?style=flat-square)](https://docs.claude.com)
 [![License](https://img.shields.io/badge/license-MIT-d6cfbe?style=flat-square)](#12-status--license)
 [![Status](https://img.shields.io/badge/status-research%20prototype-2f4a2a?style=flat-square)](#12-status--license)
@@ -210,7 +211,9 @@ Every academic event is appended to an HMAC-SHA256 linked chain. Any modificatio
 
 ### Stage 1 Verification
 
-Run the full Stage 1 security, privacy, format, audit, and boot verification suite in one command:
+Every push to `main` and every pull request runs the full Stage 1 quality gate as a GitHub Actions workflow ([.github/workflows/stage-1-checks.yml](.github/workflows/stage-1-checks.yml)) — same script, same checks. The badge at the top of this file reflects the current status of `main`.
+
+Run the suite locally before pushing:
 
 ```bash
 ./scripts/check.sh              # full pre-push check (21 gates, ~7s)

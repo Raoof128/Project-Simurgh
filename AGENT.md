@@ -2,6 +2,23 @@
 
 ## Agent Change Log
 
+### 2026-05-13 (Australia/Sydney) — Stage 1 CI (GitHub Actions)
+
+**Raouf:**
+
+- **Scope:** Continuous integration
+- **Summary:** Added `.github/workflows/stage-1-checks.yml` — a GitHub Actions workflow that runs `./scripts/check.sh` on every push to `main`/`stage-1-academic-shield` and every PR targeting `main`. Uses Ubuntu latest + Node 22 + `npm ci`. Safe non-real env vars are injected so the smoke test can boot the server in demo mode. Failed runs upload `.simurgh_check_logs/` as an artifact for debugging. Concurrency group cancels in-flight runs when newer commits land. Removed `package-lock.json` from `.gitignore` and committed the lockfile so `npm ci` is reproducible. Added a CI status badge to the README and noted the workflow in the Stage 1 Verification block.
+- **Files Changed:**
+  - `.github/workflows/stage-1-checks.yml` (new)
+  - `.gitignore` — drop `package-lock.json` exclusion
+  - `package-lock.json` (now tracked)
+  - `README.md` — Stage 1 Checks badge + CI note in Verification block
+- **Verification:** Local `./scripts/check.sh` continues to pass 21/21. CI run will be triggered automatically by the commit push.
+- **Follow-ups:**
+  - After CI is green on `main`, tag `v0.3.2-stage-1-ci`.
+  - Enable branch protection on `main`: require PR, require `Stage 1 Security Checks` to pass, disallow force-push. (Manual UI step on GitHub.)
+  - CD (deployment automation) is intentionally NOT in scope until Stage 2.
+
 ### 2026-05-13 (Australia/Sydney) — Stage 1 Quality Gate (Prettier + check.sh)
 
 **Raouf:**

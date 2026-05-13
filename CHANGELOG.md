@@ -1,5 +1,25 @@
 ## Change Log
 
+## [0.3.2] — 2026-05-13 — Stage 1 CI
+
+### Added
+
+- `.github/workflows/stage-1-checks.yml` — GitHub Actions workflow runs `./scripts/check.sh` on every push to `main`/`stage-1-academic-shield` and every PR to `main`
+  - Ubuntu latest, Node 22, `npm ci`
+  - Safe non-real env vars (`SIMURGH_*` test values) injected for the boot smoke test
+  - 10-minute timeout, concurrency cancellation per branch
+  - Uploads `.simurgh_check_logs/` as artifact on failure
+- Stage 1 Checks badge added to the README header
+
+### Changed
+
+- `.gitignore` no longer excludes `package-lock.json`; the lockfile is now tracked so CI can run `npm ci` reproducibly
+
+### Notes
+
+- CD (deployment automation) intentionally deferred — Stage 1 is a research prototype
+- Branch protection on `main` should be enabled in the GitHub UI: require PR, require Stage 1 Security Checks to pass, disallow force-push
+
 ## [0.3.1] — 2026-05-13 — Stage 1 Quality Gate
 
 ### Added

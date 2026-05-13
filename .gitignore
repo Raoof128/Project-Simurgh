@@ -1,5 +1,4 @@
 node_modules
-package-lock.json
 
 # secrets — keep .env.example tracked, ignore everything else
 .env

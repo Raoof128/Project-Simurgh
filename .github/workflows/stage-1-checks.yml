@@ -1,0 +1,63 @@
+name: Stage 1 Security Checks
+
+on:
+  push:
+    branches:
+      - main
+      - stage-1-academic-shield
+  pull_request:
+    branches:
+      - main
+
+# Allow only one concurrent run per branch — newer pushes cancel older runs.
+concurrency:
+  group: stage-1-checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  stage-1-checks:
+    name: Run Stage 1 quality gate (scripts/check.sh)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    # Safe non-real values used purely so the server can start in the smoke
+    # test step. ANTHROPIC_API_KEY is intentionally NOT set — the smoke test
+    # path forces SIMURGH_DEMO_MODE=1 inside scripts/check.sh anyway.
+    env:
+      NODE_ENV: test
+      SIMURGH_ALLOWED_ORIGIN: http://localhost:33030
+      SIMURGH_INSTRUCTOR_TOKEN: test-instructor-token
+      SIMURGH_HELPER_SECRET: test-helper-secret
+      SIMURGH_AUDIT_SECRET: test-audit-secret
+      SIMURGH_SESSION_SIGNING_SECRET: test-session-secret
+      SIMURGH_SCORING_MODE: local
+      SIMURGH_CLAUDE_ON_SAFE: "false"
+      SIMURGH_CLAUDE_ON_WARNING: "false"
+      SIMURGH_CLAUDE_ON_CRITICAL: "false"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies (npm ci)
+        run: npm ci
+
+      - name: Run Stage 1 check suite
+        run: ./scripts/check.sh
+
+      - name: Upload check logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: simurgh-check-logs
+          path: .simurgh_check_logs/
+          if-no-files-found: ignore
+          retention-days: 7
