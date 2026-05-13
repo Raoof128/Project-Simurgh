@@ -376,10 +376,21 @@ make
 Ingests the 5-second behavioral telemetry window from the browser client.
 
 | Field            | Value                                                                                                                                                           |
-| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ------------------------------- |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Content-Type** | `application/json`                                                                                                                                              |
 | **Payload**      | JSON object: `{ keystrokes, chars_typed, effective_wpm, focus_losses, time_off_window_ms, pastes, paste_payload_chars, max_idle_gap_ms, keydown_intervals_ms }` |
-| **Response**     | `200 OK` — `{ risk_level: "Safe"                                                                                                                                | "Warning" | "Critical", reasoning: "..." }` |
+| **Response**     | `200 OK` with a JSON risk result                                                                                                                                |
+
+Example response:
+
+```json
+{
+  "risk_level": "Safe",
+  "reasoning": "Metadata-only telemetry stayed within normal behavioral thresholds."
+}
+```
+
+`risk_level` may be `"Safe"`, `"Warning"`, or `"Critical"`.
 
 ### `POST /api/affinity`
 

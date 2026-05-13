@@ -1,5 +1,19 @@
 ## Change Log
 
+## [0.3.4] — 2026-05-13 — README API Table Repair
+
+### Fixed
+
+- Fixed the broken `POST /api/telemetry` API reference table in `README.md`
+- Moved the response JSON into a fenced code block so `Safe | Warning | Critical` no longer breaks Markdown table columns
+- Clarified the allowed `risk_level` values directly below the response example
+
+### Verified
+
+- `npm run format:check`
+- `git diff --check`
+- `./scripts/check.sh --quick` → 11/11 pass
+
 ## [0.3.3] — 2026-05-13 — Stage 1 Documentation Polish
 
 ### Changed

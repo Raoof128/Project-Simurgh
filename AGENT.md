@@ -2,6 +2,17 @@
 
 ## Agent Change Log
 
+### 2026-05-13 (Australia/Sydney) — README API Table Repair
+
+**Raouf:**
+
+- **Scope:** README API reference polish
+- **Summary:** Fixed the broken `POST /api/telemetry` API reference table by removing unescaped pipe characters from the table cell and moving the risk response shape into a fenced JSON example. Clarified the allowed `risk_level` values in prose so the Markdown renders cleanly on GitHub.
+- **Files Changed:**
+  - `README.md` — repaired telemetry API table and response example
+- **Verification:** `npm run format:check` passed. `git diff --check` passed. `./scripts/check.sh --quick` passed 11/11; server boot smoke and audit-chain self-test were skipped by quick mode.
+- **Follow-ups:** None.
+
 ### 2026-05-13 (Australia/Sydney) — Stage 1 Documentation Polish
 
 **Raouf:**
