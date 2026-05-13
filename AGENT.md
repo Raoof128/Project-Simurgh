@@ -2,6 +2,23 @@
 
 ## Agent Change Log
 
+### 2026-05-13 (Australia/Sydney) — Stage 1 Security Hardening
+**Raouf:**
+- **Scope:** Stage 1 cybersecurity hardening (full blueprint pass)
+- **Summary:** Implemented the Stage 1 security hardening blueprint end-to-end. Added HMAC-signed session tokens (issued at `/join`, required on lifecycle + joined-session telemetry), per-session sequence+timestamp replay guard, generic per-key rate limiter with limits on join/affinity/sessions/report/verify, four-secret separation (instructor / helper / audit / session-signing) with non-demo fail-fast, JSON body limit dropped to 32 KB, stricter sanitiser (reject NaN/Infinity/negative/2× over-range), HTTP security headers, dashboard XSS hardening (URL token strip, Authorization header everywhere, escaped DOM rendering), privacy audit CLI tool, hardened `.gitignore` for runtime data.
+- **Files Changed:**
+  - `src/security/sessionToken.js`, `src/security/replayGuard.js`, `src/security/rateLimit.js` (new)
+  - `src/config/env.js` (extended)
+  - `server.js` (session token + replay + rate limits wired into all routes)
+  - `public/index.html` (token + sequence + timestamp on every telemetry POST; sequence reset on session rotation)
+  - `public/instructor.html` (URL token stripping; Authorization header for report/verify)
+  - `tools/privacy-audit.mjs` (new — CI-ready forbidden-field scanner)
+  - `.gitignore` (data/sessions, data/audit, data/reports, logs/, simurgh-* artifacts)
+  - `README.md` (new "Stage 1 Security Hardening" section)
+  - `tests/unit/sessionToken.test.js`, `tests/unit/replayGuard.test.js`, `tests/unit/rateLimit.test.js` (23 new tests; 65 total)
+- **Verification:** All 65 unit tests pass. End-to-end smoke confirms: anonymous telemetry works, replay rejected, stale timestamp rejected, negative numbers rejected, joined-session telemetry without token returns 401, joined-session telemetry with token passes, security headers present on every response.
+- **Follow-ups:** Optional Stage 1.1 — full request HMAC signing with `SIMURGH_SESSION_SIGNING_SECRET` (currently signing is at token-issuance only).
+
 ### 2026-05-13 (Australia/Sydney) — Production-Readiness Audit Fixes
 **Raouf:**
 - **Scope:** Production-readiness hardening (post full end-to-end audit)

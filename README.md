@@ -161,6 +161,80 @@ Stage 1 extends the core behavioural telemetry engine into a complete **privacy-
 
 ---
 
+## Stage 1 Security Hardening
+
+Simurgh Stage 1 is **privacy-preserving, tamper-evident, hardened, and auditable against the Stage 1 threat model**. It is not "unhackable" — no system is — but every documented gap has a deliberate countermeasure.
+
+### Authentication boundaries
+
+| Boundary | Required | Mechanism |
+|---|---|---|
+| Instructor APIs (`/api/sessions`, `/report`, `/audit/:id/verify`, SSE, etc.) | Bearer token | `SIMURGH_INSTRUCTOR_TOKEN`, validated by `requireInstructorAuth` |
+| Native helper (`/api/affinity`) | Shared secret header | `SIMURGH_HELPER_SECRET` |
+| Student lifecycle (`privacy-accept`, `start`, `submit`) | HMAC session token | Issued at `/api/exams/:id/join`, verified by `requireSessionToken` |
+| Student telemetry (joined sessions) | HMAC session token | Bound to sessionId; rejected on mismatch |
+| Student telemetry (anonymous demo) | Replay guard + rate limit | No identity binding required |
+
+Four separate secrets in production: `SIMURGH_INSTRUCTOR_TOKEN`, `SIMURGH_HELPER_SECRET`, `SIMURGH_AUDIT_SECRET`, `SIMURGH_SESSION_SIGNING_SECRET`. The server refuses to start in non-demo mode if any are missing.
+
+### Replay and tamper protection
+
+Every joined-session telemetry POST carries `sequence` and `timestamp`. The server rejects:
+
+- Duplicate or rolled-back sequences (`sequence_replay_or_rollback`)
+- Timestamps more than 30 s in the past (`timestamp_stale`)
+- Timestamps more than 5 s in the future (`timestamp_in_future`)
+- Negative numbers, `NaN`, `Infinity`, or values more than 2× over the documented field max
+- Payloads larger than 32 KB (`SIMURGH_JSON_LIMIT` configurable)
+
+### Rate limits
+
+| Endpoint | Limit | Key |
+|---|---|---|
+| `/api/exams/:id/join` | 10/min | per IP |
+| `/api/affinity` | 60/min | per helper secret |
+| `/api/sessions` | 60/min | per instructor token |
+| `/api/sessions/:id/report` | 20/min | per instructor token |
+| `/api/audit/:id/verify` | 20/min | per instructor token |
+| `/api/telemetry` | 3 burst / 1 per 2.5 s | per session |
+
+### HTTP security headers
+
+`X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy: camera=(), microphone=(), geolocation=()`, `Strict-Transport-Security` (production).
+
+### Tamper-evident audit chain
+
+Every academic event is appended to an HMAC-SHA256 linked chain. Any modification of a prior entry invalidates the signatures of every downstream entry. Verified end-to-end via `GET /api/audit/:id/verify`.
+
+Test it locally:
+
+```bash
+# Run the privacy audit against generated data
+node tools/privacy-audit.mjs
+
+# Run the unit test suite (65+ tests covering security modules)
+npm test
+
+# Verify an exported audit chain
+node tools/verify-audit.mjs simurgh-audit-<sessionId>.json
+```
+
+### Dashboard
+
+- Instructor token is stripped from the URL on page load via `history.replaceState` (no leak into history or referrer)
+- Report/verify calls use the `Authorization` header — no token in query string
+- All dynamic rendering uses HTML-escaped strings; no unescaped untrusted data interpolation
+
+### Honest limitations (from the research paper §VI-C)
+
+- **Click-through overlays** (`WS_EX_TRANSPARENT`, `ignoresMouseEvents`) do not fire focus events. Pair Simurgh with the native helper (Countermeasure A).
+- **Read-don't-paste workflows** — silent transcription at human WPM with no paste — cannot be detected from telemetry alone. Documented in `SECURITY.md`.
+- **GPU-layer overlays** (DirectX/Metal hooks) — Stage 4 research track.
+
+The privacy audit, tamper test, and replay test scripts MUST pass before any deployment to a shared environment. See `SECURITY.md` for the disclosure process.
+
+---
+
 ## 4. Socio-Economic Impact & Democratic Access
 
 Current proctoring standards (CodeSignal, ProctorU, Examity) are architected for high-bandwidth environments. Project Simurgh intentionally disrupts this paradigm by prioritizing **Bandwidth-Inclusive Security**.
