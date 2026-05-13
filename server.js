@@ -14,6 +14,9 @@ import { hashStudentId } from "./src/privacy/hashIdentity.js";
 import { buildReport } from "./src/academic/reportBuilder.js";
 import { verifyAuditExport } from "./src/audit/verifyAudit.js";
 import { appendEntry, CHAIN_CAP } from "./src/audit/hmacChain.js";
+import { issueSessionToken, verifySessionToken, extractBearer } from "./src/security/sessionToken.js";
+import { createReplayGuard } from "./src/security/replayGuard.js";
+import { createRateLimiter, keyByIp, keyByHelperSecret, keyByInstructorToken } from "./src/security/rateLimit.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -70,6 +73,19 @@ if (AUDIT_KEY_EPHEMERAL) {
   }
   console.warn("[simurgh] ⚠ SIMURGH_AUDIT_SECRET not set — audit chain HMAC key is ephemeral.");
   console.warn("[simurgh] ⚠ Every restart invalidates previously exported audit chains. Set SIMURGH_AUDIT_SECRET in production.");
+}
+
+// Separate signing key for student session tokens. In production this MUST be set.
+// In demo mode an ephemeral key is generated; tokens issued under one demo run will
+// not validate after a restart (acceptable for demo).
+const SESSION_SIGNING_SECRET = process.env.SIMURGH_SESSION_SIGNING_SECRET
+  || (DEMO_MODE ? crypto.randomBytes(32).toString("hex") : null);
+if (!SESSION_SIGNING_SECRET) {
+  console.error("[simurgh] FATAL: SIMURGH_SESSION_SIGNING_SECRET must be set in non-demo mode. Refusing to start.");
+  process.exit(78);
+}
+if (!process.env.SIMURGH_SESSION_SIGNING_SECRET && DEMO_MODE) {
+  console.warn("[simurgh] ⚠ SIMURGH_SESSION_SIGNING_SECRET not set — student tokens are signed with an ephemeral key (demo only).");
 }
 
 const INSTRUCTOR_TOKEN = process.env.SIMURGH_INSTRUCTOR_TOKEN
@@ -182,11 +198,20 @@ function sanitiseTelemetry(raw) {
   if (!raw || typeof raw !== "object" || Array.isArray(raw)) return null;
   const out = {};
   for (const [k, spec] of Object.entries(TELEMETRY_SCHEMA)) {
-    let v = Number(raw[k]);
-    if (!Number.isFinite(v)) v = 0;
-    if (v < spec.min) v = spec.min;
-    if (v > spec.max) v = spec.max;
-    out[k] = spec.type === "int" ? Math.round(v) : v;
+    if (!(k in raw)) { out[k] = 0; continue; }
+    const v = Number(raw[k]);
+    // Hard reject blatantly invalid inputs (NaN, Infinity, negative).
+    // Clamp only for over-range positive values (browser bookkeeping drift).
+    if (!Number.isFinite(v)) return null;
+    if (v < 0) return null;
+    if (v > spec.max * 2) return null; // 2x the documented max → caller is doing something wrong
+    const clamped = Math.min(spec.max, Math.max(spec.min, v));
+    out[k] = spec.type === "int" ? Math.round(clamped) : clamped;
+  }
+  // key_intervals (optional array) — reject if oversized
+  if (Array.isArray(raw.key_intervals)) {
+    if (raw.key_intervals.length > 1000) return null;
+    out.key_intervals = raw.key_intervals.slice(0, 200);
   }
   return out;
 }
@@ -199,6 +224,12 @@ const MAX_SESSIONS = Number(process.env.SIMURGH_MAX_SESSIONS) || 10_000;
 const sessions = new Map();
 const timeline = eventTimeline();
 const examSessions = new Map(); // sessionId → sessionRecord (Stage 1 lifecycle)
+
+// Replay guard for /api/telemetry submissions
+const replayGuard = createReplayGuard({
+  skewMs: stagingConfig.telemetryTimestampSkewMs,
+  futureMs: stagingConfig.telemetryTimestampFutureMs,
+});
 function getSession(id, { allowCreate = true } = {}) {
   if (!sessions.has(id)) {
     if (!allowCreate) return null;
@@ -321,7 +352,7 @@ function appendAudit(sess, type, payload) {
 // ─────────────────────────────────────────────────────────────
 const app = express();
 app.disable("x-powered-by");
-app.use(express.json({ limit: "256kb" }));
+app.use(express.json({ limit: stagingConfig.jsonBodyLimit }));
 
 // Security headers
 app.use((_req, res, next) => {
@@ -373,22 +404,71 @@ function requireInstructorAuth(req, res, next) {
   next();
 }
 
+// Auth gate for student session endpoints. Token is issued at /join and must
+// bind to the sessionId in the URL or body. The bearer token is the canonical
+// source; ?token= query is NOT accepted to avoid leaking via logs.
+function requireSessionToken(req, res, next) {
+  const sessionIdFromUrl = req.params?.sessionId;
+  const sessionIdFromBody = req.body?.sessionId;
+  const claimedSessionId = sessionIdFromUrl || sessionIdFromBody;
+  const token = extractBearer(req);
+  if (!token) return res.status(401).json({ error: "session_token_required" });
+  const result = verifySessionToken(token, SESSION_SIGNING_SECRET);
+  if (!result.valid) return res.status(401).json({ error: result.reason });
+  if (claimedSessionId && result.sessionId !== claimedSessionId) {
+    return res.status(401).json({ error: "token_session_mismatch" });
+  }
+  req.sessionTokenSessionId = result.sessionId;
+  next();
+}
+
+// Pre-configured rate limiters
+const limitJoin     = createRateLimiter({ windowMs: 60_000, max: 10, keyFn: keyByIp,            name: 'join' });
+const limitAffinity = createRateLimiter({ windowMs: 60_000, max: 60, keyFn: keyByHelperSecret, name: 'affinity' });
+const limitReport   = createRateLimiter({ windowMs: 60_000, max: 20, keyFn: keyByInstructorToken, name: 'report' });
+const limitVerify   = createRateLimiter({ windowMs: 60_000, max: 20, keyFn: keyByInstructorToken, name: 'verify' });
+const limitSessions = createRateLimiter({ windowMs: 60_000, max: 60, keyFn: keyByInstructorToken, name: 'sessions' });
+
 // ─────────────────────────────────────────────────────────────
 //  /api/telemetry — candidate-side ingest (rate-limited, validated)
 // ─────────────────────────────────────────────────────────────
 app.post("/api/telemetry", async (req, res) => {
   const sessionId = String(req.body?.sessionId ?? "").slice(0, 64);
-  const telemetry = sanitiseTelemetry(req.body?.telemetry);
   if (!sessionId || !/^[A-Za-z0-9_-]+$/.test(sessionId)) {
     return res.status(400).json({ error: "valid sessionId required" });
   }
-  if (!telemetry) return res.status(400).json({ error: "telemetry payload invalid" });
+
+  // Session token enforcement:
+  //   - If the session was created via /api/exams/:id/join, token is REQUIRED.
+  //   - If not (legacy direct-telemetry session), token is OPTIONAL (no identity bound).
+  // This protects authenticated exam sessions while preserving direct-test workflows.
+  const examRecord = examSessions.get(sessionId);
+  if (examRecord) {
+    const bearer = extractBearer(req);
+    if (!bearer) return res.status(401).json({ error: "session_token_required" });
+    const ver = verifySessionToken(bearer, SESSION_SIGNING_SECRET);
+    if (!ver.valid) return res.status(401).json({ error: ver.reason });
+    if (ver.sessionId !== sessionId) return res.status(401).json({ error: "token_session_mismatch" });
+  }
+
+  // Replay protection — required when sequence + timestamp are provided.
+  // For backward compatibility, telemetry without these fields uses only the
+  // legacy token-bucket rate limiter below. New clients send both.
+  const sequence = req.body?.sequence;
+  const clientTs = req.body?.timestamp;
+  if (sequence !== undefined || clientTs !== undefined) {
+    const ts = typeof clientTs === 'number' ? clientTs : Date.parse(clientTs);
+    const result = replayGuard.check(sessionId, sequence, ts);
+    if (!result.ok) return res.status(400).json({ error: result.reason });
+  }
+
+  const telemetry = sanitiseTelemetry(req.body?.telemetry);
+  if (!telemetry) return res.status(400).json({ error: "telemetry_payload_invalid" });
 
   const sess = getSession(sessionId);
   if (!sess) return res.status(503).json({ error: "server_capacity_exceeded" });
 
   // Block telemetry on closed/submitted sessions to protect the audit record.
-  const examRecord = examSessions.get(sessionId);
   const closedStates = new Set([STATES.SUBMITTED, STATES.REPORT_GENERATED, STATES.CLOSED]);
   if (examRecord && closedStates.has(examRecord.state)) {
     return res.status(403).json({ error: "session_closed", state: examRecord.state });
@@ -587,7 +667,7 @@ function ingestAffinity(req, res, opts = {}) {
 }
 
 // Real helper — secret-gated. Disabled when no secret configured.
-app.post("/api/affinity", (req, res) => {
+app.post("/api/affinity", limitAffinity, (req, res) => {
   if (!HELPER_SHARED_SECRET) return res.status(503).json({ error: "helper_ingest_disabled" });
   const secret = req.headers["x-simurgh-helper-secret"];
   if (secret !== HELPER_SHARED_SECRET) return res.status(401).json({ error: "invalid_helper_secret" });
@@ -632,7 +712,7 @@ app.get("/api/audit/:sessionId", requireInstructorAuth, (req, res) => {
 // ─────────────────────────────────────────────────────────────
 //  Instructor view — multi-session aggregator (auth-gated)
 // ─────────────────────────────────────────────────────────────
-app.get("/api/sessions", requireInstructorAuth, (_req, res) => {
+app.get("/api/sessions", limitSessions, requireInstructorAuth, (_req, res) => {
   const out = [];
   for (const id of sessions.keys()) {
     const s = sessionSummary(id);
@@ -682,7 +762,7 @@ app.get("/api/exams", requireInstructorAuth, (_req, res) => {
 });
 
 // Student joins exam — creates session record linked to exam
-app.post("/api/exams/:examId/join", (req, res) => {
+app.post("/api/exams/:examId/join", limitJoin, (req, res) => {
   const exam = getExam(req.params.examId);
   if (!exam) return res.status(404).json({ error: "exam not found" });
   const rawStudentId = String(req.body?.studentId ?? "").slice(0, 256);
@@ -705,11 +785,12 @@ app.post("/api/exams/:examId/join", (req, res) => {
     examSessions.delete(sessionId);
     return res.status(503).json({ error: "server_capacity_exceeded" });
   }
-  res.json({ sessionId, examId: exam.id, studentIdHash, state: record.state });
+  const sessionToken = issueSessionToken(sessionId, SESSION_SIGNING_SECRET, stagingConfig.sessionTokenTtlMs);
+  res.json({ sessionId, examId: exam.id, studentIdHash, state: record.state, sessionToken });
 });
 
 // Student accepts privacy notice
-app.post("/api/sessions/:sessionId/privacy-accept", (req, res) => {
+app.post("/api/sessions/:sessionId/privacy-accept", requireSessionToken, (req, res) => {
   const record = examSessions.get(req.params.sessionId);
   if (!record) return res.status(404).json({ error: "session not found" });
   try {
@@ -723,7 +804,7 @@ app.post("/api/sessions/:sessionId/privacy-accept", (req, res) => {
 });
 
 // Start exam
-app.post("/api/sessions/:sessionId/start", (req, res) => {
+app.post("/api/sessions/:sessionId/start", requireSessionToken, (req, res) => {
   const record = examSessions.get(req.params.sessionId);
   if (!record) return res.status(404).json({ error: "session not found" });
   try {
@@ -743,7 +824,7 @@ app.post("/api/sessions/:sessionId/start", (req, res) => {
 });
 
 // Submit exam
-app.post("/api/sessions/:sessionId/submit", (req, res) => {
+app.post("/api/sessions/:sessionId/submit", requireSessionToken, (req, res) => {
   let record = examSessions.get(req.params.sessionId);
   if (!record) return res.status(404).json({ error: "session not found" });
   try {
@@ -765,7 +846,7 @@ app.post("/api/sessions/:sessionId/submit", (req, res) => {
 });
 
 // Report export — assembles JSON report for a session
-app.get("/api/sessions/:sessionId/report", requireInstructorAuth, (req, res) => {
+app.get("/api/sessions/:sessionId/report", limitReport, requireInstructorAuth, (req, res) => {
   const { sessionId } = req.params;
   const sess = sessions.get(sessionId);
   const record = examSessions.get(sessionId);
@@ -802,7 +883,7 @@ app.get("/api/sessions/:sessionId/report", requireInstructorAuth, (req, res) => 
 });
 
 // Audit chain verification endpoint
-app.get("/api/audit/:sessionId/verify", requireInstructorAuth, (req, res) => {
+app.get("/api/audit/:sessionId/verify", limitVerify, requireInstructorAuth, (req, res) => {
   const sess = sessions.get(req.params.sessionId);
   if (!sess) return res.status(404).json({ error: "session not found" });
 
