@@ -13,7 +13,7 @@ import { STATES, createSessionRecord, transitionState } from "./src/academic/ses
 import { hashStudentId } from "./src/privacy/hashIdentity.js";
 import { buildReport } from "./src/academic/reportBuilder.js";
 import { verifyAuditExport } from "./src/audit/verifyAudit.js";
-import { appendEntry } from "./src/audit/hmacChain.js";
+import { appendEntry, CHAIN_CAP } from "./src/audit/hmacChain.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -64,6 +64,10 @@ const AUDIT_HMAC_SECRET = process.env.SIMURGH_AUDIT_SECRET;
 const AUDIT_KEY_EPHEMERAL = !AUDIT_HMAC_SECRET;
 const AUDIT_KEY = AUDIT_HMAC_SECRET || crypto.randomBytes(32).toString("hex");
 if (AUDIT_KEY_EPHEMERAL) {
+  if (!DEMO_MODE) {
+    console.error("[simurgh] FATAL: SIMURGH_AUDIT_SECRET must be set in non-demo mode. Audit chains cannot be verified across restarts. Refusing to start.");
+    process.exit(78);
+  }
   console.warn("[simurgh] ⚠ SIMURGH_AUDIT_SECRET not set — audit chain HMAC key is ephemeral.");
   console.warn("[simurgh] ⚠ Every restart invalidates previously exported audit chains. Set SIMURGH_AUDIT_SECRET in production.");
 }
@@ -76,6 +80,9 @@ if (!process.env.SIMURGH_INSTRUCTOR_TOKEN && !DEMO_MODE) {
 }
 
 const ALLOWED_ORIGIN = process.env.SIMURGH_ALLOWED_ORIGIN || "*";
+if (!process.env.SIMURGH_ALLOWED_ORIGIN && !DEMO_MODE) {
+  console.warn("[simurgh] ⚠ SIMURGH_ALLOWED_ORIGIN not set — CORS is open to all origins (*). Set this in production.");
+}
 
 // ─────────────────────────────────────────────────────────────
 //  System prompt — sent (cached) to Claude for behavioural classification
@@ -188,12 +195,14 @@ function sanitiseTelemetry(raw) {
 //  Sessions — in-memory with TTL eviction
 // ─────────────────────────────────────────────────────────────
 const SESSION_TTL_MS = 4 * 60 * 60 * 1000; // 4 hours of inactivity
-const AUDIT_CHAIN_CAP = 5000;
+const MAX_SESSIONS = Number(process.env.SIMURGH_MAX_SESSIONS) || 10_000;
 const sessions = new Map();
 const timeline = eventTimeline();
 const examSessions = new Map(); // sessionId → sessionRecord (Stage 1 lifecycle)
-function getSession(id) {
+function getSession(id, { allowCreate = true } = {}) {
   if (!sessions.has(id)) {
+    if (!allowCreate) return null;
+    if (sessions.size >= MAX_SESSIONS) return null;
     sessions.set(id, {
       createdAt: Date.now(),
       lastActivity: Date.now(),
@@ -282,7 +291,7 @@ function sessionSummary(id) {
 }
 
 function persistVerdict(sessionId, verdict) {
-  const sess = getSession(sessionId);
+  const sess = sessions.get(sessionId); // session must already exist at this point
   verdict.affinity_snapshot = {
     hostile_count: sess.affinity.hostile.length,
     hostile: sess.affinity.hostile.map(w => ({ pid: w.pid, name: w.name, type: w.type })),
@@ -313,6 +322,18 @@ function appendAudit(sess, type, payload) {
 const app = express();
 app.disable("x-powered-by");
 app.use(express.json({ limit: "256kb" }));
+
+// Security headers
+app.use((_req, res, next) => {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "DENY");
+  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+  res.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+  if (!DEMO_MODE) {
+    res.setHeader("Strict-Transport-Security", "max-age=63072000; includeSubDomains");
+  }
+  next();
+});
 
 // Minimal CORS — locked to ALLOWED_ORIGIN (default same-origin "*" deny would
 // break local dev; we explicitly list * for now and recommend overriding).
@@ -364,6 +385,15 @@ app.post("/api/telemetry", async (req, res) => {
   if (!telemetry) return res.status(400).json({ error: "telemetry payload invalid" });
 
   const sess = getSession(sessionId);
+  if (!sess) return res.status(503).json({ error: "server_capacity_exceeded" });
+
+  // Block telemetry on closed/submitted sessions to protect the audit record.
+  const examRecord = examSessions.get(sessionId);
+  const closedStates = new Set([STATES.SUBMITTED, STATES.REPORT_GENERATED, STATES.CLOSED]);
+  if (examRecord && closedStates.has(examRecord.state)) {
+    return res.status(403).json({ error: "session_closed", state: examRecord.state });
+  }
+
   if (!consumeRateToken(sess)) {
     return res.status(429).json({ error: "rate_limited", retry_after_ms: 2500 });
   }
@@ -521,6 +551,7 @@ function ingestAffinity(req, res, opts = {}) {
   }
 
   const sess = getSession(sessionId);
+  if (!sess) return res.status(503).json({ error: "server_capacity_exceeded" });
   const list = Array.isArray(hostile) ? hostile.slice(0, 64).map(w => ({
     pid: Number(w.pid) || 0,
     name: String(w.name ?? "unknown").slice(0, 80),
@@ -590,7 +621,7 @@ app.get("/api/audit/:sessionId", requireInstructorAuth, (req, res) => {
     chain_terminator: sess.auditChain.prevHash,
     entry_count: sess.auditChain.entries.length,
     truncated: !!sess.auditChain.truncated,
-    cap: AUDIT_CHAIN_CAP,
+    cap: CHAIN_CAP,
     hmac_algorithm: "HMAC-SHA256",
     hmac_key_ephemeral: AUDIT_KEY_EPHEMERAL,
     entries: sess.auditChain.entries,
@@ -669,7 +700,11 @@ app.post("/api/exams/:examId/join", (req, res) => {
   record = { ...record, id: sessionId };
   record = transitionState(record, STATES.JOINED);
   examSessions.set(sessionId, record);
-  getSession(sessionId); // ensure telemetry session exists
+  const telSess = getSession(sessionId); // ensure telemetry session exists
+  if (!telSess) {
+    examSessions.delete(sessionId);
+    return res.status(503).json({ error: "server_capacity_exceeded" });
+  }
   res.json({ sessionId, examId: exam.id, studentIdHash, state: record.state });
 });
 
