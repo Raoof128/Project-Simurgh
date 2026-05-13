@@ -30,7 +30,7 @@ describe('scoreAcademicRisk', () => {
   test('raises Warning for a medium paste', () => {
     const t = { ...baseline, paste_payload_chars: 90, pastes: 1 };
     const result = scoreAcademicRisk(t, { connected: true, hostileCount: 0 }, { reconnects: 0 });
-    assert.ok(result.risk_level === 'Warning' || result.risk_level === 'Critical');
+    assert.equal(result.risk_level, 'Warning');
   });
 
   test('raises Critical for large paste with minimal typing', () => {

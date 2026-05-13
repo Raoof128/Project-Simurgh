@@ -1,4 +1,4 @@
-export const EVENTS = {
+export const EVENTS = Object.freeze({
   EXAM_STARTED:              'EXAM_STARTED',
   PRIVACY_ACCEPTED:          'PRIVACY_ACCEPTED',
   HELPER_CONNECTED:          'HELPER_CONNECTED',
@@ -17,7 +17,7 @@ export const EVENTS = {
   EXAM_SUBMITTED:            'EXAM_SUBMITTED',
   REPORT_GENERATED:          'REPORT_GENERATED',
   AUDIT_VERIFIED:            'AUDIT_VERIFIED',
-};
+});
 
 export function createEvent(sessionId, type, detail = {}) {
   return { sessionId, type, detail, ts: Date.now() };
@@ -32,7 +32,7 @@ export function eventTimeline() {
       store.get(sessionId).push(createEvent(sessionId, type, detail));
     },
     get(sessionId) {
-      return store.get(sessionId) ?? [];
+      return [...(store.get(sessionId) ?? [])];
     },
     clear(sessionId) {
       store.delete(sessionId);

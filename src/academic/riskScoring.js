@@ -25,7 +25,7 @@ export function scoreAcademicRisk(telemetry, helperInfo = {}, sessionInfo = {}) 
 
   const { connected = false, hostileCount = 0 } = helperInfo;
   const { reconnects = 0, startedAt = Date.now() } = sessionInfo;
-  const sessionAgeSec = (Date.now() - (startedAt || Date.now())) / 1000;
+  const sessionAgeSec = (Date.now() - startedAt) / 1000;
 
   // Paste risk: large paste, especially after focus loss
   let pasteRaw = 0;
@@ -90,6 +90,7 @@ export function scoreAcademicRisk(telemetry, helperInfo = {}, sessionInfo = {}) 
   if (affinityRaw >= 100) risk_score = Math.max(risk_score, 85);
 
   const risk_level = risk_score >= 70 ? 'Critical' : risk_score >= 40 ? 'Warning' : 'Safe';
+  // Confidence floor of 0.5: heuristic results always carry at least baseline certainty.
   const confidence = clamp(0.5 + risk_score / 200, 0, 1);
 
   const recommendation =
