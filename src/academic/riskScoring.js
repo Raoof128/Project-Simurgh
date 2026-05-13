@@ -1,9 +1,9 @@
 // Weights must sum to 1.0
 const WEIGHTS = {
-  paste_risk:    0.40,
-  focus_risk:    0.15,
-  typing_risk:   0.10,
-  idle_risk:     0.05,
+  paste_risk:    0.25,
+  focus_risk:    0.20,
+  typing_risk:   0.15,
+  idle_risk:     0.10,
   affinity_risk: 0.20,
   helper_risk:   0.05,
   session_risk:  0.05,
@@ -83,6 +83,8 @@ export function scoreAcademicRisk(telemetry, helperInfo = {}, sessionInfo = {}) 
 
   // Paste override: large paste with minimal own typing is a hard Critical signal
   if (paste >= 200 && typed < 20) risk_score = Math.max(risk_score, 75);
+  // Medium paste floor: a substantial paste alone should flag at least Warning
+  if (paste >= 80 && risk_score < 40) risk_score = 40;
 
   // Affinity override: confirmed excluded window forces Critical floor
   if (affinityRaw >= 100) risk_score = Math.max(risk_score, 85);
