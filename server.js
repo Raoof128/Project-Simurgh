@@ -4,6 +4,19 @@ import crypto from "node:crypto";
 import { readFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+import { stagingConfig } from "./src/config/env.js";
+import { normaliseTelemetry } from "./src/privacy/normaliseTelemetry.js";
+import { scoreAcademicRisk } from "./src/academic/riskScoring.js";
+import { EVENTS, eventTimeline } from "./src/academic/academicEvents.js";
+import { createExam, getExam, listExams } from "./src/academic/exams.js";
+import { STATES, createSessionRecord, transitionState } from "./src/academic/sessions.js";
+import { hashStudentId } from "./src/privacy/hashIdentity.js";
+import { buildReport } from "./src/academic/reportBuilder.js";
+import { verifyAuditExport } from "./src/audit/verifyAudit.js";
+import { appendEntry, CHAIN_CAP } from "./src/audit/hmacChain.js";
+import { issueSessionToken, verifySessionToken, extractBearer } from "./src/security/sessionToken.js";
+import { createReplayGuard } from "./src/security/replayGuard.js";
+import { createRateLimiter, keyByIp, keyByHelperSecret, keyByInstructorToken } from "./src/security/rateLimit.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -54,8 +67,25 @@ const AUDIT_HMAC_SECRET = process.env.SIMURGH_AUDIT_SECRET;
 const AUDIT_KEY_EPHEMERAL = !AUDIT_HMAC_SECRET;
 const AUDIT_KEY = AUDIT_HMAC_SECRET || crypto.randomBytes(32).toString("hex");
 if (AUDIT_KEY_EPHEMERAL) {
+  if (!DEMO_MODE) {
+    console.error("[simurgh] FATAL: SIMURGH_AUDIT_SECRET must be set in non-demo mode. Audit chains cannot be verified across restarts. Refusing to start.");
+    process.exit(78);
+  }
   console.warn("[simurgh] ⚠ SIMURGH_AUDIT_SECRET not set — audit chain HMAC key is ephemeral.");
   console.warn("[simurgh] ⚠ Every restart invalidates previously exported audit chains. Set SIMURGH_AUDIT_SECRET in production.");
+}
+
+// Separate signing key for student session tokens. In production this MUST be set.
+// In demo mode an ephemeral key is generated; tokens issued under one demo run will
+// not validate after a restart (acceptable for demo).
+const SESSION_SIGNING_SECRET = process.env.SIMURGH_SESSION_SIGNING_SECRET
+  || (DEMO_MODE ? crypto.randomBytes(32).toString("hex") : null);
+if (!SESSION_SIGNING_SECRET) {
+  console.error("[simurgh] FATAL: SIMURGH_SESSION_SIGNING_SECRET must be set in non-demo mode. Refusing to start.");
+  process.exit(78);
+}
+if (!process.env.SIMURGH_SESSION_SIGNING_SECRET && DEMO_MODE) {
+  console.warn("[simurgh] ⚠ SIMURGH_SESSION_SIGNING_SECRET not set — student tokens are signed with an ephemeral key (demo only).");
 }
 
 const INSTRUCTOR_TOKEN = process.env.SIMURGH_INSTRUCTOR_TOKEN
@@ -66,6 +96,9 @@ if (!process.env.SIMURGH_INSTRUCTOR_TOKEN && !DEMO_MODE) {
 }
 
 const ALLOWED_ORIGIN = process.env.SIMURGH_ALLOWED_ORIGIN || "*";
+if (!process.env.SIMURGH_ALLOWED_ORIGIN && !DEMO_MODE) {
+  console.warn("[simurgh] ⚠ SIMURGH_ALLOWED_ORIGIN not set — CORS is open to all origins (*). Set this in production.");
+}
 
 // ─────────────────────────────────────────────────────────────
 //  System prompt — sent (cached) to Claude for behavioural classification
@@ -165,11 +198,20 @@ function sanitiseTelemetry(raw) {
   if (!raw || typeof raw !== "object" || Array.isArray(raw)) return null;
   const out = {};
   for (const [k, spec] of Object.entries(TELEMETRY_SCHEMA)) {
-    let v = Number(raw[k]);
-    if (!Number.isFinite(v)) v = 0;
-    if (v < spec.min) v = spec.min;
-    if (v > spec.max) v = spec.max;
-    out[k] = spec.type === "int" ? Math.round(v) : v;
+    if (!(k in raw)) { out[k] = 0; continue; }
+    const v = Number(raw[k]);
+    // Hard reject blatantly invalid inputs (NaN, Infinity, negative).
+    // Clamp only for over-range positive values (browser bookkeeping drift).
+    if (!Number.isFinite(v)) return null;
+    if (v < 0) return null;
+    if (v > spec.max * 2) return null; // 2x the documented max → caller is doing something wrong
+    const clamped = Math.min(spec.max, Math.max(spec.min, v));
+    out[k] = spec.type === "int" ? Math.round(clamped) : clamped;
+  }
+  // key_intervals (optional array) — reject if oversized
+  if (Array.isArray(raw.key_intervals)) {
+    if (raw.key_intervals.length > 1000) return null;
+    out.key_intervals = raw.key_intervals.slice(0, 200);
   }
   return out;
 }
@@ -178,10 +220,20 @@ function sanitiseTelemetry(raw) {
 //  Sessions — in-memory with TTL eviction
 // ─────────────────────────────────────────────────────────────
 const SESSION_TTL_MS = 4 * 60 * 60 * 1000; // 4 hours of inactivity
-const AUDIT_CHAIN_CAP = 5000;
+const MAX_SESSIONS = Number(process.env.SIMURGH_MAX_SESSIONS) || 10_000;
 const sessions = new Map();
-function getSession(id) {
+const timeline = eventTimeline();
+const examSessions = new Map(); // sessionId → sessionRecord (Stage 1 lifecycle)
+
+// Replay guard for /api/telemetry submissions
+const replayGuard = createReplayGuard({
+  skewMs: stagingConfig.telemetryTimestampSkewMs,
+  futureMs: stagingConfig.telemetryTimestampFutureMs,
+});
+function getSession(id, { allowCreate = true } = {}) {
   if (!sessions.has(id)) {
+    if (!allowCreate) return null;
+    if (sessions.size >= MAX_SESSIONS) return null;
     sessions.set(id, {
       createdAt: Date.now(),
       lastActivity: Date.now(),
@@ -190,6 +242,14 @@ function getSession(id) {
       affinity: { hostile: [], lastHeartbeat: null, source: null, forensic: null },
       auditChain: { prevHash: "GENESIS", entries: [], truncated: false },
       rate: { tokens: 3, lastRefill: Date.now() },
+      // Stage 1 Academic Shield fields
+      state: 'active',
+      examId: null,
+      studentIdHash: null,
+      reconnects: 0,
+      startedAt: Date.now(),
+      latestRiskScore: null,
+      latestCategories: null,
     });
   }
   const s = sessions.get(id);
@@ -200,6 +260,13 @@ const evictionTimer = setInterval(() => {
   const cutoff = Date.now() - SESSION_TTL_MS;
   for (const [id, s] of sessions.entries()) {
     if (s.lastActivity < cutoff) sessions.delete(id);
+  }
+}, 5 * 60 * 1000).unref?.();
+
+// Evict examSessions entries whose telemetry session has been evicted.
+const examEvictionTimer = setInterval(() => {
+  for (const [id] of examSessions.entries()) {
+    if (!sessions.has(id)) examSessions.delete(id);
   }
 }, 5 * 60 * 1000).unref?.();
 
@@ -255,7 +322,7 @@ function sessionSummary(id) {
 }
 
 function persistVerdict(sessionId, verdict) {
-  const sess = getSession(sessionId);
+  const sess = sessions.get(sessionId); // session must already exist at this point
   verdict.affinity_snapshot = {
     hostile_count: sess.affinity.hostile.length,
     hostile: sess.affinity.hostile.map(w => ({ pid: w.pid, name: w.name, type: w.type })),
@@ -277,24 +344,7 @@ function persistVerdict(sessionId, verdict) {
 }
 
 function appendAudit(sess, type, payload) {
-  if (sess.auditChain.truncated) return;
-  if (sess.auditChain.entries.length >= AUDIT_CHAIN_CAP) {
-    sess.auditChain.truncated = true;
-    return;
-  }
-  const entry = {
-    seq: sess.auditChain.entries.length,
-    ts: Date.now(),
-    type,
-    payload,
-    prev: sess.auditChain.prevHash,
-  };
-  const sig = crypto.createHmac("sha256", AUDIT_KEY)
-    .update(JSON.stringify(entry))
-    .digest("hex");
-  entry.sig = sig;
-  sess.auditChain.entries.push(entry);
-  sess.auditChain.prevHash = sig;
+  appendEntry(sess.auditChain, AUDIT_KEY, type, payload);
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -302,7 +352,19 @@ function appendAudit(sess, type, payload) {
 // ─────────────────────────────────────────────────────────────
 const app = express();
 app.disable("x-powered-by");
-app.use(express.json({ limit: "256kb" }));
+app.use(express.json({ limit: stagingConfig.jsonBodyLimit }));
+
+// Security headers
+app.use((_req, res, next) => {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "DENY");
+  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+  res.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+  if (!DEMO_MODE) {
+    res.setHeader("Strict-Transport-Security", "max-age=63072000; includeSubDomains");
+  }
+  next();
+});
 
 // Minimal CORS — locked to ALLOWED_ORIGIN (default same-origin "*" deny would
 // break local dev; we explicitly list * for now and recommend overriding).
@@ -342,30 +404,139 @@ function requireInstructorAuth(req, res, next) {
   next();
 }
 
+// Auth gate for student session endpoints. Token is issued at /join and must
+// bind to the sessionId in the URL or body. The bearer token is the canonical
+// source; ?token= query is NOT accepted to avoid leaking via logs.
+function requireSessionToken(req, res, next) {
+  const sessionIdFromUrl = req.params?.sessionId;
+  const sessionIdFromBody = req.body?.sessionId;
+  const claimedSessionId = sessionIdFromUrl || sessionIdFromBody;
+  const token = extractBearer(req);
+  if (!token) return res.status(401).json({ error: "session_token_required" });
+  const result = verifySessionToken(token, SESSION_SIGNING_SECRET);
+  if (!result.valid) return res.status(401).json({ error: result.reason });
+  if (claimedSessionId && result.sessionId !== claimedSessionId) {
+    return res.status(401).json({ error: "token_session_mismatch" });
+  }
+  req.sessionTokenSessionId = result.sessionId;
+  next();
+}
+
+// Pre-configured rate limiters
+const limitJoin     = createRateLimiter({ windowMs: 60_000, max: 10, keyFn: keyByIp,            name: 'join' });
+const limitAffinity = createRateLimiter({ windowMs: 60_000, max: 60, keyFn: keyByHelperSecret, name: 'affinity' });
+const limitReport   = createRateLimiter({ windowMs: 60_000, max: 20, keyFn: keyByInstructorToken, name: 'report' });
+const limitVerify   = createRateLimiter({ windowMs: 60_000, max: 20, keyFn: keyByInstructorToken, name: 'verify' });
+const limitSessions = createRateLimiter({ windowMs: 60_000, max: 60, keyFn: keyByInstructorToken, name: 'sessions' });
+
 // ─────────────────────────────────────────────────────────────
 //  /api/telemetry — candidate-side ingest (rate-limited, validated)
 // ─────────────────────────────────────────────────────────────
 app.post("/api/telemetry", async (req, res) => {
   const sessionId = String(req.body?.sessionId ?? "").slice(0, 64);
-  const telemetry = sanitiseTelemetry(req.body?.telemetry);
   if (!sessionId || !/^[A-Za-z0-9_-]+$/.test(sessionId)) {
     return res.status(400).json({ error: "valid sessionId required" });
   }
-  if (!telemetry) return res.status(400).json({ error: "telemetry payload invalid" });
+
+  // Session token enforcement:
+  //   - If the session was created via /api/exams/:id/join, token is REQUIRED.
+  //   - If not (legacy direct-telemetry session), token is OPTIONAL (no identity bound).
+  // This protects authenticated exam sessions while preserving direct-test workflows.
+  const examRecord = examSessions.get(sessionId);
+  if (examRecord) {
+    const bearer = extractBearer(req);
+    if (!bearer) return res.status(401).json({ error: "session_token_required" });
+    const ver = verifySessionToken(bearer, SESSION_SIGNING_SECRET);
+    if (!ver.valid) return res.status(401).json({ error: ver.reason });
+    if (ver.sessionId !== sessionId) return res.status(401).json({ error: "token_session_mismatch" });
+  }
+
+  // Replay protection — required when sequence + timestamp are provided.
+  // For backward compatibility, telemetry without these fields uses only the
+  // legacy token-bucket rate limiter below. New clients send both.
+  const sequence = req.body?.sequence;
+  const clientTs = req.body?.timestamp;
+  if (sequence !== undefined || clientTs !== undefined) {
+    const ts = typeof clientTs === 'number' ? clientTs : Date.parse(clientTs);
+    const result = replayGuard.check(sessionId, sequence, ts);
+    if (!result.ok) return res.status(400).json({ error: result.reason });
+  }
+
+  const telemetry = sanitiseTelemetry(req.body?.telemetry);
+  if (!telemetry) return res.status(400).json({ error: "telemetry_payload_invalid" });
 
   const sess = getSession(sessionId);
+  if (!sess) return res.status(503).json({ error: "server_capacity_exceeded" });
+
+  // Block telemetry on closed/submitted sessions to protect the audit record.
+  const closedStates = new Set([STATES.SUBMITTED, STATES.REPORT_GENERATED, STATES.CLOSED]);
+  if (examRecord && closedStates.has(examRecord.state)) {
+    return res.status(403).json({ error: "session_closed", state: examRecord.state });
+  }
+
   if (!consumeRateToken(sess)) {
     return res.status(429).json({ error: "rate_limited", retry_after_ms: 2500 });
   }
 
   if (!client || DEMO_MODE) {
-    const h = localHeuristic(telemetry);
-    const verdict = { ...h, ts: Date.now(), source: "heuristic-fallback", cache: { creation: 0, read: 0 } };
+    const normed = normaliseTelemetry(telemetry) ?? telemetry;
+    const scored = scoreAcademicRisk(normed, {
+      connected: sess.affinity.lastHeartbeat != null && (Date.now() - sess.affinity.lastHeartbeat) < 8000,
+      hostileCount: sess.affinity.hostile.length,
+    }, { reconnects: sess.reconnects || 0, startedAt: sess.startedAt });
+    const verdict = {
+      risk_level: scored.risk_level,
+      risk_score: scored.risk_score,
+      confidence: scored.confidence,
+      categories: scored.categories,
+      reasoning: scored.reasoning || scored.recommendation,
+      recommendation: scored.recommendation,
+      source: scored.source,
+      ts: Date.now(),
+      cache: { creation: 0, read: 0 },
+    };
+    sess.latestRiskScore = scored.risk_score;
+    sess.latestCategories = scored.categories;
+    timeline.add(sessionId, EVENTS.TELEMETRY_WINDOW_RECEIVED, { risk_level: scored.risk_level, risk_score: scored.risk_score });
+    if (telemetry.focus_losses > 0) timeline.add(sessionId, EVENTS.FOCUS_LOSS, { count: telemetry.focus_losses });
+    if (telemetry.paste_payload_chars >= 200) timeline.add(sessionId, EVENTS.BULK_PASTE, { chars: telemetry.paste_payload_chars });
+    if (telemetry.effective_wpm >= 250) timeline.add(sessionId, EVENTS.ABNORMAL_WPM_SPIKE, { wpm: telemetry.effective_wpm });
+    if (telemetry.max_idle_gap_ms >= 60000) timeline.add(sessionId, EVENTS.LONG_IDLE_GAP, { ms: telemetry.max_idle_gap_ms });
     persistVerdict(sessionId, verdict);
     return res.json(verdict);
   }
 
   try {
+    const normed = normaliseTelemetry(telemetry) ?? telemetry;
+    const scored = scoreAcademicRisk(normed, {
+      connected: sess.affinity.lastHeartbeat != null && (Date.now() - sess.affinity.lastHeartbeat) < 8000,
+      hostileCount: sess.affinity.hostile.length,
+    }, { reconnects: sess.reconnects || 0, startedAt: sess.startedAt });
+
+    // Honour stagingConfig.claudeOnSafe — skip Claude call for Safe verdicts to reduce cost.
+    if (scored.risk_level === 'Safe' && !stagingConfig.claudeOnSafe) {
+      const verdict = {
+        risk_level: scored.risk_level,
+        risk_score: scored.risk_score,
+        confidence: scored.confidence,
+        categories: scored.categories,
+        reasoning: scored.recommendation,
+        recommendation: scored.recommendation,
+        source: { score: 'local_heuristic', reasoning: 'skipped-safe' },
+        ts: Date.now(),
+        cache: { creation: 0, read: 0 },
+      };
+      sess.latestRiskScore = scored.risk_score;
+      sess.latestCategories = scored.categories;
+      timeline.add(sessionId, EVENTS.TELEMETRY_WINDOW_RECEIVED, { risk_level: scored.risk_level, risk_score: scored.risk_score });
+      if (telemetry.focus_losses > 0) timeline.add(sessionId, EVENTS.FOCUS_LOSS, { count: telemetry.focus_losses });
+      if (telemetry.paste_payload_chars >= 200) timeline.add(sessionId, EVENTS.BULK_PASTE, { chars: telemetry.paste_payload_chars });
+      if (telemetry.effective_wpm >= 250) timeline.add(sessionId, EVENTS.ABNORMAL_WPM_SPIKE, { wpm: telemetry.effective_wpm });
+      if (telemetry.max_idle_gap_ms >= 60000) timeline.add(sessionId, EVENTS.LONG_IDLE_GAP, { ms: telemetry.max_idle_gap_ms });
+      persistVerdict(sessionId, verdict);
+      return res.json(verdict);
+    }
+
     const response = await client.messages.create({
       model: MODEL,
       max_tokens: 200,
@@ -385,16 +556,28 @@ app.post("/api/telemetry", async (req, res) => {
       parsed = { risk_level: "Safe", reasoning: "Model output unparseable; defaulting to Safe." };
     }
 
+    const claudeReasoning = String(parsed.reasoning ?? "").slice(0, 280);
     const verdict = {
-      risk_level: ["Safe", "Warning", "Critical"].includes(parsed.risk_level) ? parsed.risk_level : "Safe",
-      reasoning: String(parsed.reasoning ?? "").slice(0, 280),
+      risk_level: scored.risk_level,
+      risk_score: scored.risk_score,
+      confidence: scored.confidence,
+      categories: scored.categories,
+      reasoning: claudeReasoning || scored.recommendation,
+      recommendation: scored.recommendation,
+      source: { score: 'local_heuristic', reasoning: 'claude_narrative' },
       ts: Date.now(),
-      source: "claude",
       cache: {
         creation: response.usage?.cache_creation_input_tokens ?? 0,
         read: response.usage?.cache_read_input_tokens ?? 0,
       },
     };
+    sess.latestRiskScore = scored.risk_score;
+    sess.latestCategories = scored.categories;
+    timeline.add(sessionId, EVENTS.TELEMETRY_WINDOW_RECEIVED, { risk_level: scored.risk_level, risk_score: scored.risk_score });
+    if (telemetry.focus_losses > 0) timeline.add(sessionId, EVENTS.FOCUS_LOSS, { count: telemetry.focus_losses });
+    if (telemetry.paste_payload_chars >= 200) timeline.add(sessionId, EVENTS.BULK_PASTE, { chars: telemetry.paste_payload_chars });
+    if (telemetry.effective_wpm >= 250) timeline.add(sessionId, EVENTS.ABNORMAL_WPM_SPIKE, { wpm: telemetry.effective_wpm });
+    if (telemetry.max_idle_gap_ms >= 60000) timeline.add(sessionId, EVENTS.LONG_IDLE_GAP, { ms: telemetry.max_idle_gap_ms });
     persistVerdict(sessionId, verdict);
     res.json(verdict);
   } catch (err) {
@@ -402,13 +585,24 @@ app.post("/api/telemetry", async (req, res) => {
     const lowCredit = /credit balance is too low/i.test(msg);
     if (lowCredit) console.warn("[simurgh] anthropic low-credit — falling back to local heuristic");
     else console.error("[simurgh] anthropic error:", msg);
-    const h = localHeuristic(telemetry);
+    const normed = normaliseTelemetry(telemetry) ?? telemetry;
+    const scored = scoreAcademicRisk(normed, {
+      connected: sess.affinity.lastHeartbeat != null && (Date.now() - sess.affinity.lastHeartbeat) < 8000,
+      hostileCount: sess.affinity.hostile.length,
+    }, { reconnects: sess.reconnects || 0, startedAt: sess.startedAt });
     const verdict = {
-      ...h,
+      risk_level: scored.risk_level,
+      risk_score: scored.risk_score,
+      confidence: scored.confidence,
+      categories: scored.categories,
+      reasoning: scored.recommendation,
+      recommendation: scored.recommendation,
+      source: { score: 'local_heuristic', reasoning: lowCredit ? 'fallback-low-credit' : 'fallback-error' },
       ts: Date.now(),
-      source: lowCredit ? "fallback-low-credit" : "fallback-error",
       cache: { creation: 0, read: 0 },
     };
+    sess.latestRiskScore = scored.risk_score;
+    sess.latestCategories = scored.categories;
     persistVerdict(sessionId, verdict);
     res.json(verdict);
   }
@@ -437,6 +631,7 @@ function ingestAffinity(req, res, opts = {}) {
   }
 
   const sess = getSession(sessionId);
+  if (!sess) return res.status(503).json({ error: "server_capacity_exceeded" });
   const list = Array.isArray(hostile) ? hostile.slice(0, 64).map(w => ({
     pid: Number(w.pid) || 0,
     name: String(w.name ?? "unknown").slice(0, 80),
@@ -472,7 +667,7 @@ function ingestAffinity(req, res, opts = {}) {
 }
 
 // Real helper — secret-gated. Disabled when no secret configured.
-app.post("/api/affinity", (req, res) => {
+app.post("/api/affinity", limitAffinity, (req, res) => {
   if (!HELPER_SHARED_SECRET) return res.status(503).json({ error: "helper_ingest_disabled" });
   const secret = req.headers["x-simurgh-helper-secret"];
   if (secret !== HELPER_SHARED_SECRET) return res.status(401).json({ error: "invalid_helper_secret" });
@@ -506,7 +701,7 @@ app.get("/api/audit/:sessionId", requireInstructorAuth, (req, res) => {
     chain_terminator: sess.auditChain.prevHash,
     entry_count: sess.auditChain.entries.length,
     truncated: !!sess.auditChain.truncated,
-    cap: AUDIT_CHAIN_CAP,
+    cap: CHAIN_CAP,
     hmac_algorithm: "HMAC-SHA256",
     hmac_key_ephemeral: AUDIT_KEY_EPHEMERAL,
     entries: sess.auditChain.entries,
@@ -517,7 +712,7 @@ app.get("/api/audit/:sessionId", requireInstructorAuth, (req, res) => {
 // ─────────────────────────────────────────────────────────────
 //  Instructor view — multi-session aggregator (auth-gated)
 // ─────────────────────────────────────────────────────────────
-app.get("/api/sessions", requireInstructorAuth, (_req, res) => {
+app.get("/api/sessions", limitSessions, requireInstructorAuth, (_req, res) => {
   const out = [];
   for (const id of sessions.keys()) {
     const s = sessionSummary(id);
@@ -547,6 +742,160 @@ app.get("/api/stream/instructor", requireInstructorAuth, (req, res) => {
 
 app.get("/api/meta", (_req, res) => {
   res.json({ model: MODEL, demo_mode: !!DEMO_MODE });
+});
+
+// ─────────────────────────────────────────────────────────────
+//  Stage 1 Academic Shield — exam lifecycle endpoints
+// ─────────────────────────────────────────────────────────────
+
+// Create exam (instructor only)
+app.post("/api/exams", requireInstructorAuth, (req, res) => {
+  const { title, durationMinutes, description } = req.body ?? {};
+  if (!title) return res.status(400).json({ error: "title required" });
+  const exam = createExam({ title, durationMinutes, description });
+  res.status(201).json(exam);
+});
+
+// List exams (instructor only)
+app.get("/api/exams", requireInstructorAuth, (_req, res) => {
+  res.json({ exams: listExams() });
+});
+
+// Student joins exam — creates session record linked to exam
+app.post("/api/exams/:examId/join", limitJoin, (req, res) => {
+  const exam = getExam(req.params.examId);
+  if (!exam) return res.status(404).json({ error: "exam not found" });
+  const rawStudentId = String(req.body?.studentId ?? "").slice(0, 256);
+  if (!rawStudentId) return res.status(400).json({ error: "studentId required" });
+  const studentIdHash = hashStudentId(rawStudentId);
+  const sessionId = String(req.body?.sessionId ?? "").slice(0, 64) ||
+    `sess_${crypto.randomBytes(6).toString("hex")}`;
+  if (!/^[A-Za-z0-9_-]+$/.test(sessionId)) {
+    return res.status(400).json({ error: "invalid sessionId format" });
+  }
+  if (examSessions.has(sessionId)) {
+    return res.status(409).json({ error: "sessionId already in use" });
+  }
+  let record = createSessionRecord(exam.id, studentIdHash);
+  record = { ...record, id: sessionId };
+  record = transitionState(record, STATES.JOINED);
+  examSessions.set(sessionId, record);
+  const telSess = getSession(sessionId); // ensure telemetry session exists
+  if (!telSess) {
+    examSessions.delete(sessionId);
+    return res.status(503).json({ error: "server_capacity_exceeded" });
+  }
+  const sessionToken = issueSessionToken(sessionId, SESSION_SIGNING_SECRET, stagingConfig.sessionTokenTtlMs);
+  res.json({ sessionId, examId: exam.id, studentIdHash, state: record.state, sessionToken });
+});
+
+// Student accepts privacy notice
+app.post("/api/sessions/:sessionId/privacy-accept", requireSessionToken, (req, res) => {
+  const record = examSessions.get(req.params.sessionId);
+  if (!record) return res.status(404).json({ error: "session not found" });
+  try {
+    const updated = transitionState(record, STATES.PRIVACY_ACCEPTED);
+    examSessions.set(req.params.sessionId, updated);
+    timeline.add(req.params.sessionId, EVENTS.PRIVACY_ACCEPTED, {});
+    res.json({ state: updated.state });
+  } catch (e) {
+    res.status(409).json({ error: e.message });
+  }
+});
+
+// Start exam
+app.post("/api/sessions/:sessionId/start", requireSessionToken, (req, res) => {
+  const record = examSessions.get(req.params.sessionId);
+  if (!record) return res.status(404).json({ error: "session not found" });
+  try {
+    const canStart = [STATES.PRIVACY_ACCEPTED, STATES.HELPER_CONNECTED].includes(record.state);
+    if (!canStart) return res.status(409).json({ error: `Cannot start from state: ${record.state}` });
+    let updated = transitionState(record, STATES.EXAM_STARTED);
+    updated = { ...updated, startedAt: Date.now() };
+    const sess = getSession(req.params.sessionId);
+    sess.startedAt = updated.startedAt;
+    examSessions.set(req.params.sessionId, updated);
+    timeline.add(req.params.sessionId, EVENTS.EXAM_STARTED, { examId: record.examId });
+    appendAudit(sess, "exam_started", { examId: record.examId, ts: updated.startedAt });
+    res.json({ state: updated.state, startedAt: updated.startedAt });
+  } catch (e) {
+    res.status(409).json({ error: e.message });
+  }
+});
+
+// Submit exam
+app.post("/api/sessions/:sessionId/submit", requireSessionToken, (req, res) => {
+  let record = examSessions.get(req.params.sessionId);
+  if (!record) return res.status(404).json({ error: "session not found" });
+  try {
+    // If still in exam_started, transition through active first
+    if (record.state === STATES.EXAM_STARTED) {
+      record = transitionState(record, STATES.ACTIVE);
+    }
+    let updated = transitionState(record, STATES.SUBMITTED);
+    updated = { ...updated, submittedAt: Date.now() };
+    examSessions.set(req.params.sessionId, updated);
+    const sess = getSession(req.params.sessionId);
+    timeline.add(req.params.sessionId, EVENTS.EXAM_SUBMITTED, { ts: updated.submittedAt });
+    appendAudit(sess, "exam_submitted", { ts: updated.submittedAt });
+    sseBroadcast("session_submitted", { sessionId: req.params.sessionId });
+    res.json({ state: updated.state, submittedAt: updated.submittedAt });
+  } catch (e) {
+    res.status(409).json({ error: e.message });
+  }
+});
+
+// Report export — assembles JSON report for a session
+app.get("/api/sessions/:sessionId/report", limitReport, requireInstructorAuth, (req, res) => {
+  const { sessionId } = req.params;
+  const sess = sessions.get(sessionId);
+  const record = examSessions.get(sessionId);
+  if (!sess && !record) return res.status(404).json({ error: "session not found" });
+
+  const { valid: auditValid } = verifyAuditExport(
+    { entries: sess?.auditChain?.entries ?? [], truncated: sess?.auditChain?.truncated ?? false },
+    AUDIT_KEY
+  );
+
+  const report = buildReport(
+    record ?? {
+      id: sessionId,
+      examId: null,
+      studentIdHash: null,
+      state: 'active',
+      createdAt: sess?.createdAt ?? Date.now(),
+      startedAt: sess?.startedAt ?? null,
+      submittedAt: null,
+      reconnects: 0,
+    },
+    {
+      latest: sess?.latest ?? null,
+      affinity: sess?.affinity ?? { hostile: [], lastHeartbeat: null, source: null },
+    },
+    timeline.get(sessionId),
+    auditValid
+  );
+
+  timeline.add(sessionId, EVENTS.REPORT_GENERATED, { report_id: report.report_id });
+  if (sess) appendAudit(sess, 'report_generated', { report_id: report.report_id });
+
+  res.json(report);
+});
+
+// Audit chain verification endpoint
+app.get("/api/audit/:sessionId/verify", limitVerify, requireInstructorAuth, (req, res) => {
+  const sess = sessions.get(req.params.sessionId);
+  if (!sess) return res.status(404).json({ error: "session not found" });
+
+  const result = verifyAuditExport(
+    { entries: sess.auditChain.entries, truncated: sess.auditChain.truncated },
+    AUDIT_KEY
+  );
+
+  timeline.add(req.params.sessionId, EVENTS.AUDIT_VERIFIED, { valid: result.valid });
+  sseBroadcast("audit_verified", { sessionId: req.params.sessionId, valid: result.valid });
+
+  res.json({ sessionId: req.params.sessionId, ...result });
 });
 
 // ─────────────────────────────────────────────────────────────
@@ -580,6 +929,7 @@ function shutdown(signal) {
   }
   sseClients.clear();
   clearInterval(evictionTimer);
+  clearInterval(examEvictionTimer);
   server.close(() => process.exit(0));
   setTimeout(() => process.exit(1), 8000).unref?.();
 }

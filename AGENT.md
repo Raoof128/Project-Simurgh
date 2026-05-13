@@ -2,6 +2,56 @@
 
 ## Agent Change Log
 
+### 2026-05-13 (Australia/Sydney) — Stage 1 Security Hardening
+**Raouf:**
+- **Scope:** Stage 1 cybersecurity hardening (full blueprint pass)
+- **Summary:** Implemented the Stage 1 security hardening blueprint end-to-end. Added HMAC-signed session tokens (issued at `/join`, required on lifecycle + joined-session telemetry), per-session sequence+timestamp replay guard, generic per-key rate limiter with limits on join/affinity/sessions/report/verify, four-secret separation (instructor / helper / audit / session-signing) with non-demo fail-fast, JSON body limit dropped to 32 KB, stricter sanitiser (reject NaN/Infinity/negative/2× over-range), HTTP security headers, dashboard XSS hardening (URL token strip, Authorization header everywhere, escaped DOM rendering), privacy audit CLI tool, hardened `.gitignore` for runtime data.
+- **Files Changed:**
+  - `src/security/sessionToken.js`, `src/security/replayGuard.js`, `src/security/rateLimit.js` (new)
+  - `src/config/env.js` (extended)
+  - `server.js` (session token + replay + rate limits wired into all routes)
+  - `public/index.html` (token + sequence + timestamp on every telemetry POST; sequence reset on session rotation)
+  - `public/instructor.html` (URL token stripping; Authorization header for report/verify)
+  - `tools/privacy-audit.mjs` (new — CI-ready forbidden-field scanner)
+  - `.gitignore` (data/sessions, data/audit, data/reports, logs/, simurgh-* artifacts)
+  - `README.md` (new "Stage 1 Security Hardening" section)
+  - `tests/unit/sessionToken.test.js`, `tests/unit/replayGuard.test.js`, `tests/unit/rateLimit.test.js` (23 new tests; 65 total)
+- **Verification:** All 65 unit tests pass. End-to-end smoke confirms: anonymous telemetry works, replay rejected, stale timestamp rejected, negative numbers rejected, joined-session telemetry without token returns 401, joined-session telemetry with token passes, security headers present on every response.
+- **Follow-ups:** Optional Stage 1.1 — full request HMAC signing with `SIMURGH_SESSION_SIGNING_SECRET` (currently signing is at token-issuance only).
+
+### 2026-05-13 (Australia/Sydney) — Production-Readiness Audit Fixes
+**Raouf:**
+- **Scope:** Production-readiness hardening (post full end-to-end audit)
+- **Summary:** Ran a 23-point production audit. All 23 checks passed. Fixed 6 identified issues: block telemetry on submitted sessions, MAX_SESSIONS cap with 503, HTTP security headers (X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy, HSTS), fail-fast when SIMURGH_AUDIT_SECRET missing in production, louder CORS origin warning, eliminated AUDIT_CHAIN_CAP duplication.
+- **Files Changed:** `server.js`
+- **Verification:** 42/42 tests pass. Smoke test confirms: security headers present, submitted-session telemetry blocked with 403, health endpoint OK, Safe/Critical scoring correct.
+- **Follow-ups:** None for Stage 1.
+
+### 2026-05-13 (Australia/Sydney) — Repository Documentation
+**Raouf:**
+- **Scope:** Repository documentation polish
+- **Summary:** Created SECURITY.md, PRIVACY.md, ROADMAP.md, ETHICS.md, DISCLAIMER.md. Added status notice to README.md top section.
+- **Files Changed:** `SECURITY.md`, `PRIVACY.md`, `ROADMAP.md`, `ETHICS.md`, `DISCLAIMER.md`, `README.md`
+- **Verification:** All files render correctly. README status notice links to the three policy docs.
+- **Follow-ups:** None.
+
+### 2026-05-13 (Australia/Sydney)
+**Raouf:**
+- **Scope:** Stage 1 Academic Shield
+- **Summary:** Implemented full Stage 1 Academic Shield — exam lifecycle, privacy-safe telemetry normaliser, SHA-256 identity hashing, local category-based risk scoring (7 weighted categories), Claude narrative layer (Warning/Critical only, fail-open), academic event taxonomy, session state machine, HMAC audit chain module, JSON report builder, and updated instructor dashboard with risk cards, event timeline, filter bar, report export, and audit verify.
+- **Files Changed:**
+  - `src/config/env.js`, `src/privacy/privacyConfig.js`, `src/privacy/normaliseTelemetry.js`, `src/privacy/hashIdentity.js`
+  - `src/storage/memoryStore.js`
+  - `src/academic/riskScoring.js`, `src/academic/academicEvents.js`, `src/academic/exams.js`, `src/academic/sessions.js`, `src/academic/reportBuilder.js`
+  - `src/audit/hmacChain.js`, `src/audit/verifyAudit.js`
+  - `server.js` — integrated all modules, added 9 new routes
+  - `public/index.html` — privacy modal, helper status
+  - `public/instructor.html` — risk cards, timeline, filters, report export, audit verify
+  - `README.md` — Academic Shield section added
+  - `tests/unit/` — 8 test files covering all new modules
+- **Verification:** All 42 unit tests pass. Server starts cleanly. Telemetry endpoint returns category-based risk scores. Report endpoint returns valid JSON. Audit verify confirms chain integrity. Dashboard loads with new components.
+- **Follow-ups:** Stage 1.5 — route-level refactor of server.js into src/routes/. PDF report export (P2).
+
 ### 2026-05-09 (Australia/Sydney)
 **Raouf:**
 - **Scope:** Project Branding and Documentation

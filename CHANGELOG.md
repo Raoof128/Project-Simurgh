@@ -1,5 +1,71 @@
 ## Change Log
 
+## [0.3.0] — 2026-05-13 — Stage 1 Security Hardening
+
+### Added
+- `src/security/sessionToken.js` — HMAC-signed student session tokens (issue + verify, with timing-safe comparison)
+- `src/security/replayGuard.js` — per-session sequence + timestamp window enforcement
+- `src/security/rateLimit.js` — generic per-key rate limiter middleware
+- `tools/privacy-audit.mjs` — CLI scanner that exits 1 if any forbidden field (typed_content, paste_content, screen_data, webcam, biometric, etc.) appears in generated data; allowlists `*_hash` variants
+- `SIMURGH_SESSION_SIGNING_SECRET` env var; non-demo mode refuses to start without it
+- `Authorization: Bearer <token>` enforcement on `/api/sessions/:id/privacy-accept`, `/start`, `/submit`, and on `/api/telemetry` for joined sessions
+- Per-endpoint rate limiters: `/join` (10/min/IP), `/affinity` (60/min/helper), `/sessions`, `/report`, `/audit/.../verify` (20–60/min/token)
+- `sequence` and `timestamp` fields on telemetry payloads (replay rejection of duplicates, rollbacks, stale, future timestamps)
+- 23 new unit tests covering session token, replay guard, rate limiter (65 total)
+- README "Stage 1 Security Hardening" section documenting the auth model, replay protection, rate limits, and headers
+
+### Changed
+- JSON body limit reduced from 256 KB to 32 KB (configurable via `SIMURGH_JSON_LIMIT`)
+- `sanitiseTelemetry` now rejects (returns null) on NaN, Infinity, negative values, or values > 2× the documented max; only mild over-range values are clamped
+- Student page (`public/index.html`) sends `Authorization: Bearer <sessionToken>` + monotonic `sequence` + `timestamp` on every telemetry POST
+- Instructor dashboard (`public/instructor.html`) strips `?token=` from the URL via `history.replaceState`; report/verify use `Authorization` header instead of query param
+- `.gitignore` now excludes `data/sessions/`, `data/audit/`, `data/reports/`, `data/exams/`, `logs/`, `simurgh-audit-*.json`, `simurgh-report-*.json`
+
+### Security
+- Four-secret separation enforced: instructor token, helper secret, audit HMAC key, session signing key — never reused for cross-purposes
+- All HTTP responses carry `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy`, `Permissions-Policy`, plus `Strict-Transport-Security` in production
+- Documented Stage 1 limitations and the privacy/tamper-test workflow
+
+## [0.2.2] — 2026-05-13
+
+### Fixed
+- Block telemetry ingestion on submitted/closed exam sessions (prevents post-submission audit manipulation)
+- Add `MAX_SESSIONS` cap (default 10,000) — return 503 at capacity instead of unbounded memory growth
+- Add HTTP security headers on all responses: `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy`, `Permissions-Policy`, `Strict-Transport-Security` (production only)
+- Fail fast with `process.exit(78)` in non-demo mode when `SIMURGH_AUDIT_SECRET` is not set
+- Warn in non-demo mode when `SIMURGH_ALLOWED_ORIGIN` is unset (wildcard CORS)
+- Replace local `AUDIT_CHAIN_CAP` constant with imported `CHAIN_CAP` from `hmacChain.js`
+- Guard all `getSession()` call sites for null return at capacity
+
+## [0.2.1] — 2026-05-13
+
+### Added
+- `SECURITY.md` — vulnerability disclosure policy and security architecture overview
+- `PRIVACY.md` — full data collection policy (collected vs. never collected)
+- `ROADMAP.md` — Stages 1–4 with current status and known limitations
+- `ETHICS.md` — commitments on misconduct findings, transparency, and power asymmetry
+- `DISCLAIMER.md` — research prototype disclaimer, no-warranty statement, compliance guidance
+- README status notice linking to policy documents
+
+## [0.2.0] — 2026-05-13
+
+### Added
+- **Stage 1 Academic Shield** — full academic integrity workflow
+- `src/privacy/` — privacy config, telemetry normaliser, SHA-256 identity hashing
+- `src/academic/` — local risk scoring (7 categories), academic event taxonomy, session state machine, exam registry, JSON report builder
+- `src/audit/` — HMAC chain module, audit chain verifier
+- `src/config/env.js` — Stage 1 environment variable config
+- `src/storage/memoryStore.js` — namespace memory store
+- 9 new API endpoints: `/api/exams`, `/api/exams/:id/join`, `/api/sessions/:id/privacy-accept`, `/api/sessions/:id/start`, `/api/sessions/:id/submit`, `/api/sessions/:id/report`, `/api/audit/:id/verify`, plus `GET /api/exams`
+- Privacy notice modal on student exam page
+- Helper status badge on student exam page
+- Risk score cards, event timeline, filter bar, report export, audit verify on instructor dashboard
+- `node:test` unit test suite (8 modules, 42 tests)
+
+### Changed
+- Telemetry scoring now uses local heuristic category model (7 weighted categories); Claude provides narrative only on Warning/Critical (fail-open)
+- Session objects extended with lifecycle state, exam linkage, reconnect count, risk score cache
+
 ### 2026-05-09 (Australia/Sydney)
 **Raouf:**
 - **Scope:** Project Branding and Documentation

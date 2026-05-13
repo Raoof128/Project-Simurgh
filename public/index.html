@@ -922,6 +922,23 @@
 </head>
 <body>
 
+  <!-- Privacy Notice Modal -->
+  <div id="privacy-modal" style="position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:1000;display:flex;align-items:center;justify-content:center;">
+    <div style="background:#0f1117;border:1px solid #1e3a5f;border-radius:12px;padding:2rem;max-width:480px;width:90%;color:#e2e8f0;font-family:monospace;">
+      <div style="color:#38bdf8;font-size:1.1rem;font-weight:700;margin-bottom:1rem;">🛡 Simurgh Academic Shield</div>
+      <div style="font-size:0.85rem;color:#94a3b8;margin-bottom:1rem;line-height:1.6;">
+        <strong style="color:#e2e8f0;">Privacy Mode: Metadata Only</strong><br><br>
+        This session monitors <em>behavioural metadata only</em>:<br>
+        keystroke timing, focus events, paste lengths, and typing cadence.<br><br>
+        <strong style="color:#22c55e;">We do not collect:</strong> screen content, typed answers, paste content, webcam, audio, or biometrics.<br><br>
+        Risk scores are heuristic-based. Any anomaly triggers <em>manual review</em>, not automatic findings.
+      </div>
+      <button id="accept-privacy-btn" style="background:#1d4ed8;color:#fff;border:none;padding:0.6rem 1.5rem;border-radius:6px;cursor:pointer;font-family:monospace;font-size:0.9rem;">
+        I understand — begin exam
+      </button>
+    </div>
+  </div>
+
   <!-- ───── INTRO OVERLAY ───── -->
   <div class="intro" id="intro" role="dialog" aria-labelledby="intro-title">
     <div class="intro-card">
@@ -950,6 +967,11 @@
     <div class="header-meta">
       <span class="chip ok" id="connChip"><span class="dot"></span><span id="connText">live</span></span>
       <span class="chip mono" id="modelChip">connecting…</span>
+      <!-- Helper status badge -->
+      <span id="helper-status-badge" style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:0.75rem;font-family:monospace;background:#1e293b;color:#94a3b8;border:1px solid #334155;">
+        <span id="helper-dot" style="width:8px;height:8px;border-radius:50%;background:#64748b;"></span>
+        <span id="helper-label">Helper: checking…</span>
+      </span>
       <span class="header-actions">
         <button class="icon-btn" id="resetBtn" title="Start a fresh session">↻ reset</button>
       </span>
@@ -1211,6 +1233,8 @@ OUTPUT FORMAT
       catch { return "sess-" + Math.random().toString(36).slice(2, 10); }
     };
     let sessionId = newSessionId();
+    let sessionToken = null;        // issued by /api/exams/:id/join (joined sessions only)
+    let telemetrySequence = 0;      // monotonic, sent with every /api/telemetry POST
 
     // ═══════════════════════════════════════════════════
     //  ELEMENTS
@@ -1637,10 +1661,18 @@ OUTPUT FORMAT
 
       inflightSend = (async () => {
         try {
+          telemetrySequence += 1;
+          const headers = { "content-type": "application/json" };
+          if (sessionToken) headers["authorization"] = "Bearer " + sessionToken;
           const r = await fetch("/api/telemetry", {
             method: "POST",
-            headers: { "content-type": "application/json" },
-            body: JSON.stringify({ sessionId, telemetry }),
+            headers,
+            body: JSON.stringify({
+              sessionId,
+              sequence: telemetrySequence,
+              timestamp: Date.now(),
+              telemetry,
+            }),
             signal: ctrl.signal,
           });
           clearTimeout(timer);
@@ -1962,6 +1994,8 @@ OUTPUT FORMAT
         $("simInvisible").textContent = "Arm Invisible Window";
       }
       sessionId = newSessionId();
+      sessionToken = null;
+      telemetrySequence = 0;
       sessionLabel.textContent = "session: " + sessionId;
       verdictBox.innerHTML = `<div class="verdict-empty">Awaiting first window — analysing…<div class="progress" aria-hidden="true"><div id="progFill" style="position:absolute;inset:0;background:var(--ox);transform-origin:left;transform:scaleX(0);transition:transform .12s linear"></div></div></div>`;
       proctorEl.classList.remove("alarm");
@@ -2239,6 +2273,43 @@ OUTPUT FORMAT
       a.remove();
       flashToast("<b>● AUDIT LOG EXPORTED</b> · HMAC-SHA256 chain · tamper-evident");
     });
+
+    // ═══════════════════════════════════════════════════
+    //  PRIVACY MODAL DISMISS
+    // ═══════════════════════════════════════════════════
+    document.getElementById('accept-privacy-btn')?.addEventListener('click', async () => {
+      document.getElementById('privacy-modal').style.display = 'none';
+      // Only notify the server if this is a joined exam session (token present).
+      // Anonymous demo sessions just dismiss the modal client-side.
+      if (sessionId && sessionToken) {
+        try {
+          await fetch(`/api/sessions/${sessionId}/privacy-accept`, {
+            method: 'POST',
+            headers: { authorization: 'Bearer ' + sessionToken },
+          });
+        } catch {}
+      }
+    });
+
+    // ═══════════════════════════════════════════════════
+    //  HELPER STATUS POLLING
+    // ═══════════════════════════════════════════════════
+    async function pollHelperStatus() {
+      if (!sessionId) return;
+      try {
+        const res = await fetch(`/api/affinity/${sessionId}`);
+        const data = await res.json();
+        const connected = data.lastHeartbeat && (Date.now() - data.lastHeartbeat) < 8000;
+        const dot = document.getElementById('helper-dot');
+        const label = document.getElementById('helper-label');
+        if (dot && label) {
+          dot.style.background = connected ? '#22c55e' : '#f59e0b';
+          label.textContent = connected ? 'Helper: Connected' : 'Helper: Not detected';
+        }
+      } catch {}
+    }
+    setInterval(pollHelperStatus, 4000);
+    pollHelperStatus();
   </script>
 </body>
 </html>
