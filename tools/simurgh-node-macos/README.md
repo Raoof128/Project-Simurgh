@@ -41,22 +41,22 @@ Expected response: `status: 202` with `signature_status: "unregistered_node"`.
 
 ## CLI options
 
-| Flag                  | Description                                            |
-|-----------------------|--------------------------------------------------------|
-| `--session <ID>`      | Session ID (required unless `SIMURGH_SESSION_ID` set)  |
-| `--key-path <path>`   | Override the default `~/.simurgh/node-key` location    |
-| `--print-key-info`    | Print `node_id_hash` and `node_public_key` only        |
-| `--help`              | Show usage                                             |
+| Flag                | Description                                           |
+| ------------------- | ----------------------------------------------------- |
+| `--session <ID>`    | Session ID (required unless `SIMURGH_SESSION_ID` set) |
+| `--key-path <path>` | Override the default `~/.simurgh/node-key` location   |
+| `--print-key-info`  | Print `node_id_hash` and `node_public_key` only       |
+| `--help`            | Show usage                                            |
 
 ## Exit codes
 
-| Code | Meaning                                |
-|------|----------------------------------------|
-| `0`  | Proof printed successfully             |
-| `1`  | Generic error                          |
-| `2`  | Key file malformed                     |
-| `3`  | Missing required `--session`           |
-| `64` | Unknown CLI flag                       |
+| Code | Meaning                      |
+| ---- | ---------------------------- |
+| `0`  | Proof printed successfully   |
+| `1`  | Generic error                |
+| `2`  | Key file malformed           |
+| `3`  | Missing required `--session` |
+| `64` | Unknown CLI flag             |
 
 ## Privacy notice for screenshots
 

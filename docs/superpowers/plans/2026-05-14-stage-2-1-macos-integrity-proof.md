@@ -16,51 +16,51 @@
 
 ### Server (new + refactored)
 
-| File | Status | Responsibility |
-|---|---|---|
-| `src/integrity/proofSchema.js` | rewrite | v1 constants: version, platform, allowed values, forbidden top-level fields, required-field list, capability keys, signal keys |
-| `src/integrity/proofCanonicalise.js` | new | `canonicaliseProofPayload(obj)` — sorted-key recursive JSON, top-level `signature` excluded, no whitespace |
-| `src/integrity/proofSignature.js` | new | `createEd25519PublicKeyFromRaw(rawBytes)`, `verifyProofSignature(canonical, rawPubKey, sig)`, `computeNodeIdHash(rawPubKey)` |
-| `src/integrity/proofValidator.js` | new | `validateProof(raw, { now })` — orchestrates schema + timestamp + privacy + key + signature checks; returns `{ ok, proof, reason }` |
-| `src/integrity/nonceGuard.js` | simplify | remove `nonce_session_mismatch`; same-session replay → `nonce_replayed` |
-| `src/integrity/integrityState.js` | new | per-session N1 continuity; `record/get/evict/evictMissing/size` |
-| `src/academic/academicEvents.js` | modify | add `INTEGRITY_NODE_STALE` constant (defined, not emitted in 2.1) |
-| `server.js` | modify | refactor `POST /api/integrity/proofs` to v1 pipeline; gate on `requireSessionToken`; reject `409 session_expired_or_evicted` if telemetry session missing |
+| File                                 | Status   | Responsibility                                                                                                                                            |
+| ------------------------------------ | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src/integrity/proofSchema.js`       | rewrite  | v1 constants: version, platform, allowed values, forbidden top-level fields, required-field list, capability keys, signal keys                            |
+| `src/integrity/proofCanonicalise.js` | new      | `canonicaliseProofPayload(obj)` — sorted-key recursive JSON, top-level `signature` excluded, no whitespace                                                |
+| `src/integrity/proofSignature.js`    | new      | `createEd25519PublicKeyFromRaw(rawBytes)`, `verifyProofSignature(canonical, rawPubKey, sig)`, `computeNodeIdHash(rawPubKey)`                              |
+| `src/integrity/proofValidator.js`    | new      | `validateProof(raw, { now })` — orchestrates schema + timestamp + privacy + key + signature checks; returns `{ ok, proof, reason }`                       |
+| `src/integrity/nonceGuard.js`        | simplify | remove `nonce_session_mismatch`; same-session replay → `nonce_replayed`                                                                                   |
+| `src/integrity/integrityState.js`    | new      | per-session N1 continuity; `record/get/evict/evictMissing/size`                                                                                           |
+| `src/academic/academicEvents.js`     | modify   | add `INTEGRITY_NODE_STALE` constant (defined, not emitted in 2.1)                                                                                         |
+| `server.js`                          | modify   | refactor `POST /api/integrity/proofs` to v1 pipeline; gate on `requireSessionToken`; reject `409 session_expired_or_evicted` if telemetry session missing |
 
 ### Server tests (new + rewritten)
 
-| File | Status |
-|---|---|
-| `tests/unit/integrity/proofSchema.test.js` | rewrite for v1 |
-| `tests/unit/integrity/proofCanonicalise.test.js` | new |
-| `tests/unit/integrity/proofSignature.test.js` | new |
-| `tests/unit/integrity/proofValidator.test.js` | new |
-| `tests/unit/integrity/integrityState.test.js` | new |
-| `tests/unit/integrity/nonceGuard.test.js` | simplify (drop session-mismatch case) |
-| `tests/unit/integrity/__fixtures__/golden-proof.json` | new — input proof body (no signature) |
+| File                                                    | Status                                    |
+| ------------------------------------------------------- | ----------------------------------------- |
+| `tests/unit/integrity/proofSchema.test.js`              | rewrite for v1                            |
+| `tests/unit/integrity/proofCanonicalise.test.js`        | new                                       |
+| `tests/unit/integrity/proofSignature.test.js`           | new                                       |
+| `tests/unit/integrity/proofValidator.test.js`           | new                                       |
+| `tests/unit/integrity/integrityState.test.js`           | new                                       |
+| `tests/unit/integrity/nonceGuard.test.js`               | simplify (drop session-mismatch case)     |
+| `tests/unit/integrity/__fixtures__/golden-proof.json`   | new — input proof body (no signature)     |
 | `tests/unit/integrity/__fixtures__/golden-proof.sha256` | new — expected SHA-256 of canonical bytes |
 
 ### macOS Swift CLI (all new)
 
-| File | Status |
-|---|---|
-| `tools/simurgh-node-macos/README.md` | new |
-| `tools/simurgh-node-macos/Package.swift` | new |
-| `tools/simurgh-node-macos/.gitignore` | new |
-| `tools/simurgh-node-macos/Sources/SimurghNode/main.swift` | new |
-| `tools/simurgh-node-macos/Sources/SimurghNode/NodeIdentity.swift` | new |
-| `tools/simurgh-node-macos/Sources/SimurghNode/ProofSigner.swift` | new |
-| `tools/simurgh-node-macos/Sources/SimurghNode/ProofEnvelope.swift` | new |
-| `tools/simurgh-node-macos/Tests/SimurghNodeTests/CanonicaliseTests.swift` | new |
+| File                                                                      | Status |
+| ------------------------------------------------------------------------- | ------ |
+| `tools/simurgh-node-macos/README.md`                                      | new    |
+| `tools/simurgh-node-macos/Package.swift`                                  | new    |
+| `tools/simurgh-node-macos/.gitignore`                                     | new    |
+| `tools/simurgh-node-macos/Sources/SimurghNode/main.swift`                 | new    |
+| `tools/simurgh-node-macos/Sources/SimurghNode/NodeIdentity.swift`         | new    |
+| `tools/simurgh-node-macos/Sources/SimurghNode/ProofSigner.swift`          | new    |
+| `tools/simurgh-node-macos/Sources/SimurghNode/ProofEnvelope.swift`        | new    |
+| `tools/simurgh-node-macos/Tests/SimurghNodeTests/CanonicaliseTests.swift` | new    |
 
 ### Tooling + docs
 
-| File | Status |
-|---|---|
+| File               | Status                                                                                                                |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------- |
 | `scripts/check.sh` | extend smoke block with Stage 2.1 Ed25519 round-trip + add Swift-conditional build/test step + CLI privacy regression |
-| `README.md` | add brief Stage 2.1 paragraph linking to the spec |
-| `AGENT.md` | add Stage 2.1 implementation entry |
-| `CHANGELOG.md` | add 0.4.1-stage-2-1-macos-integrity entry |
+| `README.md`        | add brief Stage 2.1 paragraph linking to the spec                                                                     |
+| `AGENT.md`         | add Stage 2.1 implementation entry                                                                                    |
+| `CHANGELOG.md`     | add 0.4.1-stage-2-1-macos-integrity entry                                                                             |
 
 ---
 
@@ -69,6 +69,7 @@
 ### Task 1: Rewrite `proofSchema.js` for v1
 
 **Files:**
+
 - Modify: `src/integrity/proofSchema.js`
 
 - [ ] **Step 1: Replace the file contents entirely**
@@ -289,6 +290,7 @@ git commit -m "refactor(integrity): v1 schema constants"
 ### Task 2: Add `proofCanonicalise.js`
 
 **Files:**
+
 - Create: `src/integrity/proofCanonicalise.js`
 - Create: `tests/unit/integrity/proofCanonicalise.test.js`
 
@@ -498,6 +500,7 @@ git commit -m "feat(integrity): add canonical JSON serialiser + golden fixture"
 ### Task 3: Add `proofSignature.js`
 
 **Files:**
+
 - Create: `src/integrity/proofSignature.js`
 - Create: `tests/unit/integrity/proofSignature.test.js`
 
@@ -689,6 +692,7 @@ git commit -m "feat(integrity): add Ed25519 signature verifier with SPKI wrappin
 ### Task 4: Add `proofValidator.js`
 
 **Files:**
+
 - Create: `src/integrity/proofValidator.js`
 - Create: `tests/unit/integrity/proofValidator.test.js`
 
@@ -1103,6 +1107,7 @@ git commit -m "feat(integrity): add v1 proof validator"
 ### Task 5: Simplify `nonceGuard.js`
 
 **Files:**
+
 - Modify: `src/integrity/nonceGuard.js`
 - Modify: `tests/unit/integrity/nonceGuard.test.js`
 
@@ -1220,6 +1225,7 @@ git commit -m "refactor(integrity): simplify nonce guard to global replay protec
 ### Task 6: Add `integrityState.js` with N1 continuity
 
 **Files:**
+
 - Create: `src/integrity/integrityState.js`
 - Create: `tests/unit/integrity/integrityState.test.js`
 
@@ -1395,6 +1401,7 @@ git commit -m "feat(integrity): add per-session state with N1 strict node contin
 ### Task 7: Add `INTEGRITY_NODE_STALE` event constant
 
 **Files:**
+
 - Modify: `src/academic/academicEvents.js`
 
 - [ ] **Step 1: Add the new constant**
@@ -1444,6 +1451,7 @@ git commit -m "feat(academic): add INTEGRITY_NODE_STALE event (defined, not yet 
 ### Task 8: Refactor `POST /api/integrity/proofs` to v1 pipeline
 
 **Files:**
+
 - Modify: `server.js`
 
 - [ ] **Step 1: Update imports at top of `server.js`**
@@ -1480,7 +1488,7 @@ const integrityState = createIntegrityState();
 Locate the existing eviction-timer block (it sweeps `sessions`/`examSessions`). At the end of its callback, add:
 
 ```js
-  integrityState.evictMissing(new Set(sessions.keys()));
+integrityState.evictMissing(new Set(sessions.keys()));
 ```
 
 - [ ] **Step 4: Replace the `POST /api/integrity/proofs` route**
@@ -1662,6 +1670,7 @@ git commit -m "refactor: rewire /api/integrity/proofs to v1 pipeline with state 
 ### Task 9: Scaffold the Swift package
 
 **Files:**
+
 - Create: `tools/simurgh-node-macos/Package.swift`
 - Create: `tools/simurgh-node-macos/.gitignore`
 - Create: `tools/simurgh-node-macos/README.md`
@@ -1707,7 +1716,7 @@ let package = Package(
 
 - [ ] **Step 3: Create README.md**
 
-```markdown
+````markdown
 # Simurgh macOS Integrity Node — Stage 2.1 CLI
 
 Generates a signed Stage 2 v1 integrity proof envelope from the local macOS device and prints it to stdout. The Simurgh server validates the proof structure and Ed25519 signature; in Stage 2.1 every accepted proof is recorded with `signature_status: "unregistered_node"` because pairing/registration lands in Stage 2.2.
@@ -1729,6 +1738,7 @@ cd tools/simurgh-node-macos
 swift build
 swift run SimurghNode --session <SESSION_ID>
 ```
+````
 
 Or pass the session via env:
 
@@ -1751,22 +1761,22 @@ Expected response: `status: 202` with `signature_status: "unregistered_node"`.
 
 ## CLI options
 
-| Flag                  | Description                                            |
-|-----------------------|--------------------------------------------------------|
-| `--session <ID>`      | Session ID (required unless `SIMURGH_SESSION_ID` set)  |
-| `--key-path <path>`   | Override the default `~/.simurgh/node-key` location    |
-| `--print-key-info`    | Print `node_id_hash` and `node_public_key` only        |
-| `--help`              | Show usage                                             |
+| Flag                | Description                                           |
+| ------------------- | ----------------------------------------------------- |
+| `--session <ID>`    | Session ID (required unless `SIMURGH_SESSION_ID` set) |
+| `--key-path <path>` | Override the default `~/.simurgh/node-key` location   |
+| `--print-key-info`  | Print `node_id_hash` and `node_public_key` only       |
+| `--help`            | Show usage                                            |
 
 ## Exit codes
 
-| Code | Meaning                                |
-|------|----------------------------------------|
-| `0`  | Proof printed successfully             |
-| `1`  | Generic error                          |
-| `2`  | Key file malformed                     |
-| `3`  | Missing required `--session`           |
-| `64` | Unknown CLI flag                       |
+| Code | Meaning                      |
+| ---- | ---------------------------- |
+| `0`  | Proof printed successfully   |
+| `1`  | Generic error                |
+| `2`  | Key file malformed           |
+| `3`  | Missing required `--session` |
+| `64` | Unknown CLI flag             |
 
 ## Privacy notice for screenshots
 
@@ -1775,7 +1785,8 @@ The `--print-key-info` output and the proof JSON show `key_path`, which contains
 ## First-run behaviour
 
 On first run the CLI generates a fresh Ed25519 keypair, stores the private key at `~/.simurgh/node-key` with `0600` permissions, and prints a one-time warning to stderr. Subsequent runs reuse the same key. If the key file is malformed the CLI exits `2` without auto-regenerating — silent regeneration would mask key loss.
-```
+
+````
 
 - [ ] **Step 4: Create a minimal `main.swift` that compiles**
 
@@ -1895,7 +1906,7 @@ do {
     stderr("error: \(error)")
     exit(1)
 }
-```
+````
 
 - [ ] **Step 5: Commit (the package will not compile yet — the next tasks add the missing files)**
 
@@ -1912,6 +1923,7 @@ git commit -m "feat(node-macos): scaffold Swift package, CLI surface, README"
 ### Task 10: Implement `NodeIdentity.swift`
 
 **Files:**
+
 - Create: `tools/simurgh-node-macos/Sources/SimurghNode/NodeIdentity.swift`
 
 - [ ] **Step 1: Implement the keypair lifecycle**
@@ -1997,6 +2009,7 @@ git commit -m "feat(node-macos): keypair load-or-create at ~/.simurgh/node-key"
 ### Task 11: Implement `ProofEnvelope.swift`
 
 **Files:**
+
 - Create: `tools/simurgh-node-macos/Sources/SimurghNode/ProofEnvelope.swift`
 
 - [ ] **Step 1: Implement the envelope builder**
@@ -2085,6 +2098,7 @@ git commit -m "feat(node-macos): v1 proof envelope builder with CSPRNG nonce"
 ### Task 12: Implement `ProofSigner.swift`
 
 **Files:**
+
 - Create: `tools/simurgh-node-macos/Sources/SimurghNode/ProofSigner.swift`
 
 - [ ] **Step 1: Implement canonicaliser + signer**
@@ -2177,6 +2191,7 @@ git commit -m "feat(node-macos): canonical JSON serializer + Ed25519 signing"
 ### Task 13: Swift golden-fixture interop test
 
 **Files:**
+
 - Create: `tools/simurgh-node-macos/Tests/SimurghNodeTests/CanonicaliseTests.swift`
 
 - [ ] **Step 1: Write the test**
@@ -2253,6 +2268,7 @@ git commit -m "test(node-macos): golden-fixture canonicaliser interop"
 ### Task 14: Extend `scripts/check.sh` with Stage 2.1 smoke + Swift step
 
 **Files:**
+
 - Modify: `scripts/check.sh`
 
 - [ ] **Step 1: Open `scripts/check.sh` and find the existing server-boot smoke block**
@@ -2404,6 +2420,7 @@ git commit -m "ci(check.sh): add Stage 2.1 round-trip smoke + Swift-conditional 
 ### Task 15: README, AGENT.md, CHANGELOG.md
 
 **Files:**
+
 - Modify: `README.md`
 - Modify: `AGENT.md`
 - Modify: `CHANGELOG.md`
@@ -2502,26 +2519,26 @@ Expected: CI runs on push. The GitHub Actions workflow is the existing `stage-1-
 
 ### Spec coverage
 
-| Spec section | Task(s) |
-|---|---|
-| Module layout — `src/integrity/` files | Tasks 1, 2, 3, 4, 5, 6 |
-| Module layout — macOS Swift | Tasks 9, 10, 11, 12 |
-| v1 envelope shape + field rules | Tasks 1, 4 |
-| Forbidden top-level fields | Tasks 1, 4 |
-| Canonical signing rule | Tasks 2, 12 |
-| Cross-implementation golden fixture | Tasks 2, 13 |
-| SPKI wrapping helper for Node | Task 3 |
-| Server validation flow (steps 2–8) | Tasks 4, 8 |
-| Failure-path minimal audit payload | Task 8 |
-| Session-expired → 409 with no audit entry | Task 8 |
-| Per-session integrity state with N1 | Task 6 |
+| Spec section                                     | Task(s)                                |
+| ------------------------------------------------ | -------------------------------------- |
+| Module layout — `src/integrity/` files           | Tasks 1, 2, 3, 4, 5, 6                 |
+| Module layout — macOS Swift                      | Tasks 9, 10, 11, 12                    |
+| v1 envelope shape + field rules                  | Tasks 1, 4                             |
+| Forbidden top-level fields                       | Tasks 1, 4                             |
+| Canonical signing rule                           | Tasks 2, 12                            |
+| Cross-implementation golden fixture              | Tasks 2, 13                            |
+| SPKI wrapping helper for Node                    | Task 3                                 |
+| Server validation flow (steps 2–8)               | Tasks 4, 8                             |
+| Failure-path minimal audit payload               | Task 8                                 |
+| Session-expired → 409 with no audit entry        | Task 8                                 |
+| Per-session integrity state with N1              | Task 6                                 |
 | Audit events `INTEGRITY_PROOF_*` + `_NODE_STALE` | Task 7, plus payload shaping in Task 8 |
-| macOS CLI keypair lifecycle | Task 10 |
-| macOS CLI options + exit codes | Task 9 |
-| macOS CLI stdout-only proof + stderr warnings | Tasks 9, 10 |
-| Test plan — all suites | Tasks 1–6, 13 |
-| `scripts/check.sh` extensions | Task 14 |
-| Docs (README + AGENT + CHANGELOG) | Task 15 |
+| macOS CLI keypair lifecycle                      | Task 10                                |
+| macOS CLI options + exit codes                   | Task 9                                 |
+| macOS CLI stdout-only proof + stderr warnings    | Tasks 9, 10                            |
+| Test plan — all suites                           | Tasks 1–6, 13                          |
+| `scripts/check.sh` extensions                    | Task 14                                |
+| Docs (README + AGENT + CHANGELOG)                | Task 15                                |
 
 All 10 acceptance criteria from the spec map to a task. No gaps.
 
