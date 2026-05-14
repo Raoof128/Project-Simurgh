@@ -2,6 +2,20 @@
 
 ## Agent Change Log
 
+### 2026-05-14 (Australia/Sydney) — Stage 2.1 Task 4: Proof Validator
+
+**Raouf:**
+
+- **Scope:** Stage 2.1 Task 4 — proof validator (TDD)
+- **Summary:** Added `src/integrity/proofValidator.js` as the single-entry-point validator orchestrating schema, timestamp, privacy, public-key, and signature checks. Written test-first: test file created, confirmed module-not-found failure, then implemented. 32 tests across 9 suites all pass. Also added `proofValidator.js` to the privacy grep exclusion list in `scripts/check.sh` (it imports and references forbidden-field constants, not privacy violations).
+- **Files Changed:**
+  - `src/integrity/proofValidator.js` (new — `validateProof` export)
+  - `tests/unit/integrity/proofValidator.test.js` (new — 32 tests, 9 suites)
+  - `scripts/check.sh` — added `proofValidator.js` to privacy grep exclusion list
+  - `AGENT.md`, `CHANGELOG.md` — postflight log entries
+- **Verification:** `node --test tests/unit/integrity/proofValidator.test.js` → 32/32 pass, 0 fail. Does NOT run `npm test` (other tests pending Task 8 route wiring).
+- **Follow-ups:** Task 5 (integrityState.js), Task 6 (route wiring), Task 7 (nonceGuard integration), Task 8 (full npm test).
+
 ### 2026-05-14 (Australia/Sydney) — Stage 2.1 Design Spec (macOS Integrity Proof Pipeline)
 
 **Raouf:**

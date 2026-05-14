@@ -1,5 +1,20 @@
 ## Change Log
 
+## [Unreleased] — 2026-05-14 — Stage 2.1 Task 4: Proof Validator
+
+### Added
+
+- `src/integrity/proofValidator.js` — `validateProof(raw, { now })` orchestrates forbidden-field, required-field, version, platform, privacy_mode, session_id, timestamp window, capabilities, signals, public-key length, node_id_hash binding, nonce, signature format, and Ed25519 signature checks. Returns `{ ok: true, proof }` (with raw `nonce_bytes` Buffer) or `{ ok: false, reason }`.
+- `tests/unit/integrity/proofValidator.test.js` — 32 tests across 9 suites (happy path, required-field deletion loop, forbidden-field loop, version/platform/mode, session_id, timestamp window, capabilities/signals shapes, public-key/hash binding, signature format + verification + canonical-sort stability).
+
+### Changed
+
+- `scripts/check.sh` — added `src/integrity/proofValidator.js` to privacy grep exclusion list (it imports forbidden-field constants, not privacy violations).
+
+### Verified
+
+- `node --test tests/unit/integrity/proofValidator.test.js` → 32/32 pass, 0 fail.
+
 ## [Unreleased] — 2026-05-14 — Stage 2.1 Design Spec
 
 ### Added

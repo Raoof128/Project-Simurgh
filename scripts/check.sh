@@ -199,6 +199,7 @@ if grep -RIEn "$FORBIDDEN_FIELDS_PATTERN" \
   | grep -v "tools/privacy-audit.mjs" \
   | grep -v "src/privacy/normaliseTelemetry.js" \
   | grep -v "src/integrity/proofSchema.js" \
+  | grep -v "src/integrity/proofValidator.js" \
   | grep -v "Permissions-Policy" \
   | grep -v "Content-Security-Policy" \
   | grep -v "/check.sh" > "$PRIVACY_GREP_LOG"; then
