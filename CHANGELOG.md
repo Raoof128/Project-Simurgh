@@ -1,5 +1,58 @@
 ## Change Log
 
+## [0.4.1] — 2026-05-14 — Stage 2.1 macOS Integrity Proof Pipeline
+
+### Added
+
+- `src/integrity/proofCanonicalise.js` — canonical JSON serialiser (sorted keys, no whitespace, top-level `signature` excluded)
+- `src/integrity/proofSignature.js` — Ed25519 verifier with raw-bytes → DER/SPKI wrap for Node `crypto.verify`; `computeNodeIdHash` helper
+- `src/integrity/proofValidator.js` — orchestrates v1 schema + timestamp + privacy + key + signature checks
+- `src/integrity/integrityState.js` — per-session N1 strict node continuity (immutable `bound_node_id_hash`)
+- `INTEGRITY_NODE_STALE` event constant in `src/academic/academicEvents.js` (defined; not emitted in Stage 2.1, reserved for Stage 2.x)
+- `tools/simurgh-node-macos/` — Swift CLI generating signed v1 proofs (no daemon, no permissions, no ScreenCaptureKit, no content collection); package builds and tests pass on macOS
+- `tests/unit/integrity/__fixtures__/golden-proof.{json,sha256}` — cross-implementation canonical-bytes fixture; SHA-256 locked at `fa63f66f9800cd8b9589b2a6e026f3c6f682fea98bd017f95c03b82185faeeca`
+- `scripts/check.sh` — 6 new gates: Stage 2.1 round-trip smoke, zeroed-signature rejection, fixture sync, Swift conditional build + test, CLI output privacy regression. Quick mode skips the Stage 2.1 server smoke and the Swift block.
+- Cross-implementation interop test (`tools/simurgh-node-macos/Tests/SimurghNodeTests/CanonicaliseTests.swift`) proves `JSONEncoder.sortedKeys` produces byte-identical output to the Node canonicaliser for the golden fixture
+
+### Changed
+
+- `src/integrity/proofSchema.js` — rewritten to declarative v1 constants (validation moved to `proofValidator.js`)
+- `src/integrity/nonceGuard.js` — simplified to global replay protection (removed `nonce_session_mismatch`)
+- `server.js` — `POST /api/integrity/proofs` rewired to the v1 pipeline; returns `409 session_expired_or_evicted` if telemetry session is missing; logs minimal privacy-safe rejection payloads
+- Audit payload for `INTEGRITY_PROOF_RECEIVED` now stores `nonce_hash` (not raw nonce) and capability/signal summaries (not raw signals)
+- `package.json` test glob recurses into `tests/unit/**/*.test.js`
+- `.gitignore` excludes `.simurgh_check_logs/`, `tools/simurgh-node-macos/.build/`, `.swiftpm/`
+
+### Notes
+
+- Stage 2.1 transitional posture: every accepted proof returns `signature_status: "unregistered_node"` until pairing registry lands in Stage 2.2
+- The CLI's `~/.simurgh/node-key` is a development identity key, not hardware-backed attestation
+- No claim of production device trust
+- SwiftPM does not permit resources from outside the package, so the golden fixture is duplicated under `tools/simurgh-node-macos/Tests/SimurghNodeTests/Fixtures/`. The check.sh "Golden fixture sync" gate enforces byte-identity between the two copies.
+
+### Verified
+
+- `npm test` — 140/140 tests pass across 27 suites
+- `./scripts/check.sh` (full) — 27/27 gates pass
+- `swift build` (macOS) — succeeds
+- `swift test` (golden interop) — passes
+- `npm audit --audit-level=high` — 0 vulnerabilities
+
+## [Unreleased] — 2026-05-14 — README Anchor Audit Fix
+
+### Fixed
+
+- Corrected stale README badge and table-of-contents anchors on the Stage 2 branch after the vendor-neutral heading update.
+
+### Raouf
+
+- **Date:** 2026-05-14 (Australia/Sydney)
+- **Scope:** README anchor audit
+- **Summary:** Fixed stale README badge and table-of-contents anchors on the Stage 2 branch after the vendor-neutral heading update.
+- **Files changed:** `README.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** Branch-object audit confirmed zero old company-specific README wording, the neutral section exists, AGENT/CHANGELOG contain the vendor-neutral log, and README relative links/anchors pass across all active branches. `npx prettier --check README.md AGENT.md CHANGELOG.md` passed. `git diff --check` passed.
+- **Follow-ups:** None.
+
 ## [Unreleased] — 2026-05-14 — Vendor-Neutral README Positioning
 
 ### Changed
@@ -15,8 +68,66 @@
 - **Scope:** README vendor-neutral positioning
 - **Summary:** Removed company-specific Anthropic pitch language before external outreach and reframed the README around AI platforms, proof-based integrity, and vendor-neutral education/enterprise/agentic workflow relevance.
 - **Files changed:** `README.md`, `AGENT.md`, `CHANGELOG.md`.
-- **Verification:** `npx prettier --check README.md AGENT.md CHANGELOG.md` passed. README relative links and anchors passed. README grep confirmed no `Why Anthropic`, `Anthropic`, `Claude`, `Constitutional`, `strategic moat`, or partnership-pitch wording remains. `git diff --check` passed.
+- **Verification:** `npx prettier --check README.md AGENT.md CHANGELOG.md` passed. README relative links and anchors passed. README grep confirmed no `Why Anthropic`, `Anthropic`, `Claude`, `Constitutional`, `strategic moat`, or partnership-pitch wording remains. `git diff --check` passed. Full `npm run format:check` remains blocked by existing Stage 2/generated files outside this README change (`docs/superpowers/plans/2026-05-14-stage-2-1-macos-integrity-proof.md`, `tools/simurgh-node-macos/README.md`, and tracked `.build` artifacts).
 - **Follow-ups:** None.
+
+## [Unreleased] — 2026-05-14 — Stage 2.1 Task 4: Proof Validator
+
+### Added
+
+- `src/integrity/proofValidator.js` — `validateProof(raw, { now })` orchestrates forbidden-field, required-field, version, platform, privacy_mode, session_id, timestamp window, capabilities, signals, public-key length, node_id_hash binding, nonce, signature format, and Ed25519 signature checks. Returns `{ ok: true, proof }` (with raw `nonce_bytes` Buffer) or `{ ok: false, reason }`.
+- `tests/unit/integrity/proofValidator.test.js` — 32 tests across 9 suites (happy path, required-field deletion loop, forbidden-field loop, version/platform/mode, session_id, timestamp window, capabilities/signals shapes, public-key/hash binding, signature format + verification + canonical-sort stability).
+
+### Changed
+
+- `scripts/check.sh` — added `src/integrity/proofValidator.js` to privacy grep exclusion list (it imports forbidden-field constants, not privacy violations).
+
+### Verified
+
+- `node --test tests/unit/integrity/proofValidator.test.js` → 32/32 pass, 0 fail.
+
+## [Unreleased] — 2026-05-14 — Stage 2.1 Design Spec
+
+### Added
+
+- `docs/superpowers/specs/2026-05-14-stage-2-1-macos-integrity-proof-design.md` — approved design spec for Stage 2.1 (macOS CLI integrity proof pipeline)
+  - Locks A (v1 envelope refactor), B2 (Ed25519 per-node keypair), D1 (CLI proof generator), N1 (strict node continuity)
+  - v1 envelope shape, strict validator rules, canonical-JSON signing, Node SPKI wrapping for Ed25519, asymmetric timestamp tolerance, audit-payload privacy rules, ~60-test plan with cross-implementation golden fixture
+- AGENT.md entry: Stage 2.1 design spec scope + verification + follow-ups
+
+### Notes
+
+- Spec only; no runtime code changes yet
+- Next: invoke `superpowers:writing-plans` to produce the implementation plan
+- Stage 2.0 scaffold (v0.4.0) will be refactored — the v1 envelope replaces the simpler shape
+
+## [0.4.0] — 2026-05-14 — Stage 2.0 Integrity Proof Pipeline Scaffold
+
+### Added
+
+- `src/integrity/proofSchema.js` — proof validator enforcing forbidden-field blocklist (screen_pixels, webcam_frame, paste_content, typed_answer, etc.), required-field checks, 30 s timestamp freshness window, capability allowlist, privacy_mode enforcement, sha256 hash root validation
+- `src/integrity/nonceGuard.js` — nonce replay protection with TTL eviction for `POST /api/integrity/proofs`
+- `POST /api/integrity/proofs` route — session-token-gated, nonce-replay-protected, audit-chain-connected Stage 2.0 scaffold endpoint (returns 202 with `note:` field advertising scaffold status)
+- `INTEGRITY_PROOF_RECEIVED` and `INTEGRITY_PROOF_REJECTED` events in `src/academic/academicEvents.js`
+- 25 new unit tests across `tests/unit/integrity/` (19 proofSchema + 6 nonceGuard)
+- Test runner glob now recurses into `tests/unit/**/*.test.js`
+
+### Changed
+
+- `scripts/check.sh` privacy grep now excludes `src/integrity/proofSchema.js` (contains the forbidden-field constant list, not privacy violations)
+
+### Does not include
+
+- Cryptographic signature verification (planned Stage 2.x)
+- Integration with Stage 1 risk scoring (planned Stage 2.x)
+- Hardware-rooted attestation (future milestone)
+- Replacement of the `/api/affinity` helper path
+
+### Verified
+
+- 93/93 unit tests pass
+- `./scripts/check.sh` (full) → 21/21 pass
+- `npm audit` → 0 vulnerabilities
 
 ## [0.3.6] — 2026-05-14 — Stage 2 Readiness Audit Fix
 

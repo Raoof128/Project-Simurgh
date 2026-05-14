@@ -198,6 +198,8 @@ if grep -RIEn "$FORBIDDEN_FIELDS_PATTERN" \
   | grep -v "FORBIDDEN_FIELDS" \
   | grep -v "tools/privacy-audit.mjs" \
   | grep -v "src/privacy/normaliseTelemetry.js" \
+  | grep -v "src/integrity/proofSchema.js" \
+  | grep -v "src/integrity/proofValidator.js" \
   | grep -v "Permissions-Policy" \
   | grep -v "Content-Security-Policy" \
   | grep -v "/check.sh" > "$PRIVACY_GREP_LOG"; then
@@ -508,6 +510,138 @@ import('./src/audit/verifyAudit.js').then(({ verifyAuditExport }) => {
     tail -40 "$LOG_DIR/chain-build.log" || true
   fi
   rm -f "$TMP_CHAIN"
+fi
+
+# ── 10b. Stage 2.1 — integrity proof round-trip ──────────
+if [[ "$QUICK" == true ]]; then
+  step "Stage 2.1 integrity proof round-trip"
+  echo -e "${YELLOW}Skipped because --quick was used.${NC}"
+else
+  step "Stage 2.1 integrity proof round-trip"
+  SIMURGH_DEMO_MODE=1 PORT=33031 node server.js > "$LOG_DIR/stage21-srv.log" 2>&1 &
+  S2_PID=$!
+  sleep 1
+
+  ROUND_TRIP_OK=$(node --input-type=module -e "
+import crypto from 'node:crypto';
+import { canonicaliseProofPayload } from './src/integrity/proofCanonicalise.js';
+import { computeNodeIdHash } from './src/integrity/proofSignature.js';
+const base = 'http://localhost:33031';
+const exam = await (await fetch(base + '/api/exams', {method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({title:'check',durationMinutes:60})})).json();
+const join = await (await fetch(base + '/api/exams/' + exam.id + '/join', {method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({studentId:'check@check', sessionId:'check_sess'})})).json();
+const tok = join.sessionToken;
+const { publicKey, privateKey } = crypto.generateKeyPairSync('ed25519');
+const rawPub = Buffer.from(publicKey.export({format:'jwk'}).x, 'base64url');
+const proof = {
+  version:'simurgh-integrity-proof-v1', platform:'macos', session_id:'check_sess',
+  node_id_hash: computeNodeIdHash(rawPub), node_public_key: rawPub.toString('base64'),
+  nonce: crypto.randomBytes(16).toString('base64'),
+  timestamp: new Date().toISOString(),
+  capabilities:{screencapturekit_available:false,window_enumeration:false,sharing_state_scan:false,helper_bridge:false},
+  signals:{node_uptime_ms:0,window_count:0,capture_excluded_window_count:0,helper_status:'not_configured'},
+  privacy_mode:'metadata_only',
+};
+const canonical = canonicaliseProofPayload(proof);
+proof.signature = crypto.sign(null, Buffer.from(canonical,'utf8'), privateKey).toString('base64');
+const res = await fetch(base + '/api/integrity/proofs', {method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tok},body:JSON.stringify(proof)});
+const body = await res.json();
+process.stdout.write(res.status === 202 && body.signature_status === 'unregistered_node' ? 'OK' : 'FAIL:' + res.status + ':' + JSON.stringify(body));
+" 2>&1)
+
+  if [[ "$ROUND_TRIP_OK" == "OK" ]]; then
+    pass "Stage 2.1 integrity proof verified end-to-end (signature_status=unregistered_node)"
+  else
+    fail "Stage 2.1 integrity proof round-trip"
+    echo "$ROUND_TRIP_OK"
+  fi
+
+  NEG_RESULT=$(node --input-type=module -e "
+import crypto from 'node:crypto';
+const base = 'http://localhost:33031';
+const exam = await (await fetch(base + '/api/exams', {method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({title:'check',durationMinutes:60})})).json();
+const join = await (await fetch(base + '/api/exams/' + exam.id + '/join', {method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({studentId:'check2@check', sessionId:'check_sess_neg'})})).json();
+const tok = join.sessionToken;
+const { publicKey } = crypto.generateKeyPairSync('ed25519');
+const rawPub = Buffer.from(publicKey.export({format:'jwk'}).x, 'base64url');
+const { computeNodeIdHash } = await import('./src/integrity/proofSignature.js');
+const proof = {
+  version:'simurgh-integrity-proof-v1', platform:'macos', session_id:'check_sess_neg',
+  node_id_hash: computeNodeIdHash(rawPub), node_public_key: rawPub.toString('base64'),
+  nonce: crypto.randomBytes(16).toString('base64'),
+  timestamp: new Date().toISOString(),
+  capabilities:{screencapturekit_available:false,window_enumeration:false,sharing_state_scan:false,helper_bridge:false},
+  signals:{node_uptime_ms:0,window_count:0,capture_excluded_window_count:0,helper_status:'not_configured'},
+  privacy_mode:'metadata_only',
+  signature: Buffer.alloc(64).toString('base64'),
+};
+const res = await fetch(base + '/api/integrity/proofs', {method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tok},body:JSON.stringify(proof)});
+const body = await res.json();
+process.stdout.write(res.status === 401 && body.error === 'invalid_signature' ? 'OK' : 'FAIL:' + res.status + ':' + JSON.stringify(body));
+" 2>&1)
+
+  if [[ "$NEG_RESULT" == "OK" ]]; then
+    pass "Stage 2.1 zeroed signature rejected (401 invalid_signature)"
+  else
+    fail "Stage 2.1 zeroed signature check"
+    echo "$NEG_RESULT"
+  fi
+
+  kill "$S2_PID" 2>/dev/null
+  wait "$S2_PID" 2>/dev/null
+fi
+
+# ── 10c. Golden fixture sync check ───────────────────────
+step "Golden fixture sync"
+if diff -q tests/unit/integrity/__fixtures__/golden-proof.json \
+          tools/simurgh-node-macos/Tests/SimurghNodeTests/Fixtures/golden-proof.json >/dev/null 2>&1 \
+   && diff -q tests/unit/integrity/__fixtures__/golden-proof.sha256 \
+              tools/simurgh-node-macos/Tests/SimurghNodeTests/Fixtures/golden-proof.sha256 >/dev/null 2>&1; then
+  pass "Node + Swift golden fixtures are identical"
+else
+  fail "Golden fixture drift between Node and Swift copies — keep them in sync"
+fi
+
+# ── 10d. Swift macOS node — conditional build + test ─────
+# Only runs on Darwin (macOS) because the node uses CryptoKit, an Apple-only framework.
+# Ubuntu has Swift but no CryptoKit — skip cleanly there so CI stays green.
+if [[ "$QUICK" == true ]]; then
+  step "Swift macOS node"
+  echo -e "${YELLOW}Skipped because --quick was used.${NC}"
+elif [[ "$(uname)" != "Darwin" ]]; then
+  step "Swift macOS node"
+  echo -e "${YELLOW}Not on macOS (uname=$(uname)) — CryptoKit unavailable; skipping Swift block${NC}"
+elif command -v swift >/dev/null 2>&1 && [[ -d tools/simurgh-node-macos ]]; then
+  step "Swift macOS node build + test"
+  if (cd tools/simurgh-node-macos && swift build) > "$LOG_DIR/swift-build.log" 2>&1; then
+    pass "swift build (macOS node) succeeded"
+  else
+    fail "swift build (macOS node)"
+    tail -20 "$LOG_DIR/swift-build.log"
+  fi
+
+  if (cd tools/simurgh-node-macos && swift test) > "$LOG_DIR/swift-test.log" 2>&1; then
+    pass "swift test (golden-fixture interop)"
+  else
+    fail "swift test (golden-fixture interop)"
+    tail -20 "$LOG_DIR/swift-test.log"
+  fi
+
+  # CLI privacy regression — assert stdout JSON contains none of the forbidden field names.
+  TMP_KEY="/tmp/simurgh-check-key-$$"
+  rm -f "$TMP_KEY"
+  if (cd tools/simurgh-node-macos && swift run SimurghNode --session check_session --key-path "$TMP_KEY") > "$LOG_DIR/swift-cli-out.json" 2>/dev/null; then
+    if grep -qE 'private_key|raw_process_names|raw_window_titles|screen_pixels|webcam|audio|typed_answer|paste_content' "$LOG_DIR/swift-cli-out.json"; then
+      fail "Stage 2.1 CLI output privacy regression — forbidden field appeared in stdout"
+    else
+      pass "Stage 2.1 CLI output privacy regression (no forbidden field in stdout)"
+    fi
+  else
+    fail "swift run SimurghNode (privacy regression)"
+  fi
+  rm -f "$TMP_KEY"
+else
+  step "Swift macOS node"
+  echo -e "${YELLOW}Swift toolchain not available or tools/simurgh-node-macos missing — skipping macOS node build/test${NC}"
 fi
 
 # ── 11. Git status sanity ────────────────────────────────

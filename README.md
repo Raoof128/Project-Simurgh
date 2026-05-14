@@ -235,6 +235,10 @@ npm run format:check                              # Prettier check
 npm run format                                    # Prettier write
 ```
 
+### Stage 2.1 macOS Integrity Node (in progress on `stage-2-integrity-node` branch)
+
+Stage 2.1 adds a v1 signed-integrity-proof pipeline. A macOS Swift CLI under `tools/simurgh-node-macos/` generates an Ed25519 keypair, builds a metadata-only proof envelope, signs the canonical JSON, and prints it to stdout. The Simurgh server accepts the proof at `POST /api/integrity/proofs` with `signature_status: "unregistered_node"` until pairing lands in Stage 2.2. A cross-implementation golden fixture locks canonical-JSON byte equality between Node and Swift. Design spec: [`docs/superpowers/specs/2026-05-14-stage-2-1-macos-integrity-proof-design.md`](docs/superpowers/specs/2026-05-14-stage-2-1-macos-integrity-proof-design.md).
+
 ### Dashboard
 
 - Instructor token is stripped from the URL on page load via `history.replaceState` (no leak into history or referrer)

@@ -1,0 +1,22 @@
+{
+  "version": "simurgh-integrity-proof-v1",
+  "platform": "macos",
+  "session_id": "sess_test_golden_001",
+  "node_id_hash": "5a1c8d2cae3c7c1f0a8b9d4f5e2c1a7b6d3e9f0c4b8a1d2e5f7c3b9a0e1d2f3a",
+  "node_public_key": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+  "nonce": "AAAAAAAAAAAAAAAAAAAAAA==",
+  "timestamp": "2026-05-14T00:00:00.000Z",
+  "capabilities": {
+    "screencapturekit_available": false,
+    "window_enumeration": false,
+    "sharing_state_scan": false,
+    "helper_bridge": false
+  },
+  "signals": {
+    "node_uptime_ms": 0,
+    "window_count": 0,
+    "capture_excluded_window_count": 0,
+    "helper_status": "not_configured"
+  },
+  "privacy_mode": "metadata_only"
+}

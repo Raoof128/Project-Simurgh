@@ -32,6 +32,13 @@ data/reports/
 data/exams/
 logs/
 
+# scripts/check.sh runtime logs
+.simurgh_check_logs/
+
+# Swift build artifacts inside the macOS node package
+tools/simurgh-node-macos/.build/
+tools/simurgh-node-macos/.swiftpm/
+
 # tmp
 .tmp/
 *.tmp
