@@ -9,8 +9,8 @@ _Detecting UI-redressing and behavioral spoofing without relying on screen captu
 [![Stage 1 Checks](https://github.com/Raoof128/Project-Simurgh/actions/workflows/stage-1-checks.yml/badge.svg?branch=main)](https://github.com/Raoof128/Project-Simurgh/actions/workflows/stage-1-checks.yml)
 [![Node](https://img.shields.io/badge/node-%E2%89%A522.0-1a1a1a?style=flat-square)](https://nodejs.org)
 [![Claude](https://img.shields.io/badge/claude-sonnet--4--5-6b1a1a?style=flat-square)](https://docs.claude.com)
-[![License](https://img.shields.io/badge/license-MIT-d6cfbe?style=flat-square)](#12-status--license)
-[![Status](https://img.shields.io/badge/status-research%20prototype-2f4a2a?style=flat-square)](#12-status--license)
+[![License](https://img.shields.io/badge/license-MIT-d6cfbe?style=flat-square)](#13-status--license)
+[![Status](https://img.shields.io/badge/status-research%20prototype-2f4a2a?style=flat-square)](#13-status--license)
 
 **[Read the Disclosure Paper →](https://raoufabedini.dev/projects/invisible-window-research)**
 
@@ -20,7 +20,7 @@ _Detecting UI-redressing and behavioral spoofing without relying on screen captu
 
 </div>
 
-> **Status: Stage 1 research MVP.** This repository demonstrates a privacy-preserving behavioural integrity prototype. It does not collect video, audio, biometric data, or personal identity data. See [PRIVACY.md](PRIVACY.md), [ETHICS.md](ETHICS.md), and [DISCLAIMER.md](DISCLAIMER.md).
+> **Status: Stage 1 research MVP with Stage 1.5 validation pack.** This repository demonstrates a privacy-preserving behavioural integrity prototype and now includes reviewer-readiness docs for validation before Stage 2 planning. It does not collect video, audio, biometric data, typed answer content, pasted content, or personal identity data. See [PRIVACY.md](PRIVACY.md), [ETHICS.md](ETHICS.md), and [DISCLAIMER.md](DISCLAIMER.md).
 
 ---
 
@@ -44,10 +44,11 @@ In Persian mythology, the Simurgh is the ultimate protector of pure knowledge �
 | 6   | [API Reference](#6-api-reference)                                      | Endpoint specifications                           |
 | 7   | [Cost & Latency](#7-cost--latency)                                     | Prompt-caching economics and response times       |
 | 8   | [Security Considerations](#8-security-considerations)                  | HMAC audit chain and threat model                 |
-| 9   | [Why Anthropic?](#9-why-anthropic)                                     | Strategic alignment with Constitutional AI        |
-| 10  | [Strategic Roadmap](#10-strategic-roadmap-2026---2028)                 | Four-phase evolution from PoC to Sovereign Shield |
-| 11  | [Contributors](#11-contributors)                                       | Project contributors                              |
-| 12  | [Status & License](#12-status--license)                                | Current status and licensing                      |
+| 9   | [Stage 1.5 Validation Pack](#9-stage-15-validation-pack)               | Reviewer-readiness and evidence map               |
+| 10  | [Why Anthropic?](#10-why-anthropic)                                    | Strategic alignment with Constitutional AI        |
+| 11  | [Strategic Roadmap](#11-strategic-roadmap-2026---2028)                 | Four-phase evolution from PoC to Sovereign Shield |
+| 12  | [Contributors](#12-contributors)                                       | Project contributors                              |
+| 13  | [Status & License](#13-status--license)                                | Current status and licensing                      |
 
 ---
 
@@ -315,15 +316,15 @@ Project Simurgh renders this trade-off obsolete. By enabling high-integrity remo
 
 ### Prerequisites
 
-- Node.js ≥ 20.0
+- Node.js ≥ 22.0 (matches CI and `scripts/check.sh`)
 - Anthropic API Key (for Claude integration)
 - Xcode Command Line Tools (macOS — for building the native helper)
 
 ### Installation
 
 ```bash
-git clone https://github.com/Raoof128/Simurgh.git
-cd Simurgh
+git clone https://github.com/Raoof128/Project-Simurgh.git
+cd Project-Simurgh
 npm install
 ```
 
@@ -333,14 +334,15 @@ npm install
 cp .env.example .env
 ```
 
-| Variable                   | Required | Description                                                                                   |
-| -------------------------- | -------- | --------------------------------------------------------------------------------------------- |
-| `ANTHROPIC_API_KEY`        | Yes\*    | Anthropic SDK key. If unset, server runs in demo mode (local heuristic).                      |
-| `SIMURGH_HELPER_SECRET`    | Yes\*    | Shared secret for `simurgh-helper` authentication. Generate: `openssl rand -hex 32`           |
-| `SIMURGH_AUDIT_SECRET`     | Yes\*    | HMAC key for the tamper-evident audit chain. Generate: `openssl rand -hex 32`                 |
-| `SIMURGH_INSTRUCTOR_TOKEN` | Yes\*    | Bearer token gating the instructor dashboard and SSE stream. Generate: `openssl rand -hex 24` |
-| `SIMURGH_MODEL`            | No       | Model override. Default: `claude-sonnet-4-5`                                                  |
-| `SIMURGH_ALLOWED_ORIGIN`   | No       | CORS origin restriction. Default: `*`                                                         |
+| Variable                         | Required | Description                                                                                   |
+| -------------------------------- | -------- | --------------------------------------------------------------------------------------------- |
+| `ANTHROPIC_API_KEY`              | Yes\*    | Anthropic SDK key. If unset, server runs in demo mode (local heuristic).                      |
+| `SIMURGH_HELPER_SECRET`          | Yes\*    | Shared secret for `simurgh-helper` authentication. Generate: `openssl rand -hex 32`           |
+| `SIMURGH_AUDIT_SECRET`           | Yes\*    | HMAC key for the tamper-evident audit chain. Generate: `openssl rand -hex 32`                 |
+| `SIMURGH_INSTRUCTOR_TOKEN`       | Yes\*    | Bearer token gating the instructor dashboard and SSE stream. Generate: `openssl rand -hex 24` |
+| `SIMURGH_SESSION_SIGNING_SECRET` | Yes\*    | HMAC key for student session tokens. Generate: `openssl rand -hex 32`                         |
+| `SIMURGH_MODEL`                  | No       | Model override. Default: `claude-sonnet-4-5`                                                  |
+| `SIMURGH_ALLOWED_ORIGIN`         | No       | CORS origin restriction. Default: `*`                                                         |
 
 _Required for production deployment. The server auto-generates ephemeral values for local development._
 
@@ -416,6 +418,10 @@ Returns all active and historical session metadata. Requires instructor token.
 
 Exports the full HMAC-chained audit trail for a given session. Requires instructor token.
 
+### `GET /api/audit/:sessionId/verify`
+
+Verifies the in-memory HMAC audit chain for a given session. Requires instructor token.
+
 ---
 
 ## 7. Cost & Latency
@@ -449,17 +455,64 @@ The `simurgh-helper` native agent authenticates to the server via a shared secre
 
 ### Threat Model Boundaries
 
-| Vector                                      | Covered | Mechanism                                           |
-| ------------------------------------------- | ------- | --------------------------------------------------- |
-| Tab-switching + paste injection             | ✅      | Behavioral telemetry (focus loss + paste detection) |
-| `NSWindow.SharingType.none` overlays        | ✅      | `simurgh-helper` (ScreenCaptureKit enumeration)     |
-| `SetWindowDisplayAffinity` overlays         | ✅      | Architecture-equivalent Windows helper (roadmap)    |
-| Click-through GPU overlays (no focus steal) | ✅      | `simurgh-helper` display-affinity scan              |
-| Pose-token injection (future)               | ⬜      | Hardware-Rooted Attestation (Phase 4)               |
+| Vector                                      | Covered  | Mechanism                                             |
+| ------------------------------------------- | -------- | ----------------------------------------------------- |
+| Tab-switching + paste injection             | ✅       | Behavioral telemetry (focus loss + paste detection)   |
+| `NSWindow.SharingType.none` overlays        | ✅       | `simurgh-helper` (ScreenCaptureKit enumeration)       |
+| `SetWindowDisplayAffinity` overlays         | Planned  | Windows helper is Stage 2 work                        |
+| Click-through/GPU overlays (no focus steal) | Partial  | Documented limitation; helper may not cover all cases |
+| Pose-token injection (future)               | Research | Hardware-rooted attestation is future work            |
 
 ---
 
-## 9. Why Anthropic?
+## 9. Stage 1.5 Validation Pack
+
+Stage 1.5 is a validation, audit, documentation, and reviewer-readiness sprint. It does not add major Stage 2 runtime code.
+
+| Review area               | Entry point                                                        |
+| ------------------------- | ------------------------------------------------------------------ |
+| Main reviewer pack        | [docs/STAGE_1_5_REVIEWER_PACK.md](docs/STAGE_1_5_REVIEWER_PACK.md) |
+| Threat model              | [docs/THREAT_MODEL.md](docs/THREAT_MODEL.md)                       |
+| Validation matrix         | [docs/VALIDATION.md](docs/VALIDATION.md)                           |
+| Limitations               | [docs/LIMITATIONS.md](docs/LIMITATIONS.md)                         |
+| Stage 2 architecture plan | [docs/STAGE_2_ARCHITECTURE.md](docs/STAGE_2_ARCHITECTURE.md)       |
+| Resource plan             | [docs/RESOURCE_PLAN.md](docs/RESOURCE_PLAN.md)                     |
+| Demo script               | [docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md)                         |
+| Decisions                 | [docs/DECISIONS.md](docs/DECISIONS.md)                             |
+| Risk register             | [docs/RISK_REGISTER.md](docs/RISK_REGISTER.md)                     |
+| Reviewer checklist        | [docs/REVIEWER_CHECKLIST.md](docs/REVIEWER_CHECKLIST.md)           |
+| Evidence folder rules     | [docs/evidence/stage-1/README.md](docs/evidence/stage-1/README.md) |
+
+### What Stage 1 Proves
+
+- Metadata-only behavioral telemetry can support a low-bandwidth academic integrity workflow.
+- Joined sessions can enforce HMAC session tokens and replay protection.
+- Local deterministic scoring can remain the official score while Claude provides optional narrative.
+- Helper display-affinity telemetry can escalate risk when available.
+- HMAC audit chains can provide tamper-evident review records.
+
+### What Stage 1 Does Not Prove
+
+- It does not prove production readiness.
+- It does not fully solve GPU overlays or read-only cheating workflows.
+- It does not provide hardware-rooted attestation.
+- It does not replace institutional misconduct review.
+- It does not provide complete cross-platform helper coverage.
+
+Recommended local validation:
+
+```bash
+npm install
+./scripts/check.sh
+npm test
+node tools/privacy-audit.mjs
+npm audit --audit-level=high
+git diff --check
+```
+
+---
+
+## 10. Why Anthropic?
 
 Project Simurgh was architected with the same "Safety-First" DNA that defines Anthropic. While the broader industry races toward unconstrained agentic autonomy, Anthropic has consistently pioneered **Constitutional AI** — the principle that models must be helpful, honest, and harmless by design.
 
@@ -474,7 +527,7 @@ Project Simurgh is more than a technical demonstration; it is an invitation to p
 
 ---
 
-## 10. Strategic Roadmap (2026 - 2028)
+## 11. Strategic Roadmap (2026 - 2028)
 
 Project Simurgh is evolving from a vulnerability demonstration into a comprehensive, enterprise-grade Integrity API.
 
@@ -484,6 +537,7 @@ Project Simurgh is evolving from a vulnerability demonstration into a comprehens
 - [x] Develop the Simurgh heuristic proof-of-concept environment.
 - [x] Demonstrate cross-platform UI redressing blindspots (macOS, Windows, Linux).
 - [x] Implement `simurgh-helper` native agent for macOS (Swift / ScreenCaptureKit).
+- [x] Add Stage 1.5 validation and reviewer-readiness pack.
 
 ### Phase 2: Autonomous Agent Hardening & Cross-Platform Expansion (Q3 – Q4 2026)
 
@@ -492,6 +546,7 @@ Project Simurgh is evolving from a vulnerability demonstration into a comprehens
 - [ ] Publish the open-source Simurgh Integrity API draft for enterprise feedback.
 - [ ] **Windows:** Develop `simurgh-helper-win` using `SetWindowDisplayAffinity` enumeration via Win32 API.
 - [ ] **Linux:** Develop `simurgh-helper-linux` leveraging X11/Wayland compositor introspection.
+- [ ] Design the Stage 2 Local Integrity Node and signed proof envelope.
 
 ### Phase 3: The Sovereign Shield — Unified Cross-Platform Release (2027)
 
@@ -532,7 +587,7 @@ Project Simurgh is designed to support two parallel delivery modes per platform 
 
 ---
 
-## 11. Contributors
+## 12. Contributors
 
 | Contributor            | Role                                                                                                                                                                                                                    |
 | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -541,8 +596,8 @@ Project Simurgh is designed to support two parallel delivery modes per platform 
 
 ---
 
-## 12. Status & License
+## 13. Status & License
 
-**Status:** Research prototype and technical demonstrator. Built as a functional counterpart to a published vulnerability disclosure. Not currently deployed in production.
+**Status:** Research prototype and technical demonstrator. Stage 1 is complete as a bounded research MVP; Stage 1.5 provides validation and reviewer-readiness documentation; Stage 2 is planned. Not currently deployed in production.
 
 **License:** MIT © 2026 Raouf Abedini

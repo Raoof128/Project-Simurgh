@@ -83,7 +83,7 @@ Safe from obvious dashboard XSS
 Backed by automated tests, local checks, and CI
 ```
 
-Stage 1 does **not** claim to be unbreakable or fully secure against all possible adversaries. The correct security posture is:
+Stage 1 does **not** claim to be unbreakable or complete security against all possible adversaries. The correct security posture is:
 
 > Hardened against the Stage 1 threat model, with honest limitations documented.
 
@@ -620,7 +620,7 @@ audit-chain verification result
 manual review recommendation
 ```
 
-Reports must not state that a student cheated.
+Reports must not state that a student committed misconduct.
 
 Required wording:
 

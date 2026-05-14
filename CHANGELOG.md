@@ -1,5 +1,41 @@
 ## Change Log
 
+## [0.3.5] — 2026-05-14 — Stage 1.5 Validation Pack
+
+### Added
+
+- Stage 1.5 reviewer documentation:
+  - `docs/STAGE_1_5_REVIEWER_PACK.md`
+  - `docs/THREAT_MODEL.md`
+  - `docs/VALIDATION.md`
+  - `docs/LIMITATIONS.md`
+  - `docs/STAGE_2_ARCHITECTURE.md`
+  - `docs/RESOURCE_PLAN.md`
+  - `docs/DEMO_SCRIPT.md`
+  - `docs/DECISIONS.md`
+  - `docs/RISK_REGISTER.md`
+  - `docs/REVIEWER_CHECKLIST.md`
+  - `docs/evidence/stage-1/README.md`
+  - `docs/evidence/stage-1/.gitkeep`
+- `.github/pull_request_template.md` with validation, security/privacy, docs, and Stage boundary checks
+
+### Changed
+
+- Updated `README.md` for Stage 1 complete / Stage 1.5 validation pack / Stage 2 planned framing
+- Fixed README clone URL and Node prerequisite to match the actual repo and CI target
+- Added README links to the Stage 1.5 pack and clarified what Stage 1 proves and does not prove
+- Updated `ROADMAP.md` so Stage 1.5 is the validation pack and Stage 2 is the Device Shield / Integrity Node direction
+- Tightened Stage 1 documentation wording around bounded security claims and misconduct language
+
+### Raouf
+
+- **Date:** 2026-05-14 (Australia/Sydney)
+- **Scope:** Stage 1.5 validation and reviewer readiness
+- **Summary:** Added the Stage 1.5 validation pack, evidence rules, risk register, reviewer checklist, Stage 2 architecture plan, and PR hygiene template. Kept the work documentation-first and did not add major Stage 2 runtime code.
+- **Files changed:** `README.md`, `ROADMAP.md`, `docs/STAGE_1_ACADEMIC_SHIELD.md`, `docs/STAGE_1_5_REVIEWER_PACK.md`, `docs/THREAT_MODEL.md`, `docs/VALIDATION.md`, `docs/LIMITATIONS.md`, `docs/STAGE_2_ARCHITECTURE.md`, `docs/RESOURCE_PLAN.md`, `docs/DEMO_SCRIPT.md`, `docs/DECISIONS.md`, `docs/RISK_REGISTER.md`, `docs/REVIEWER_CHECKLIST.md`, `docs/evidence/stage-1/README.md`, `docs/evidence/stage-1/.gitkeep`, `.github/pull_request_template.md`.
+- **Verification:** `npm install` passed with 0 vulnerabilities. `./scripts/check.sh --fix` passed 21/21. Initial `./scripts/check.sh` found one Prettier drift in `docs/STAGE_1_5_REVIEWER_PACK.md`; reran `./scripts/check.sh --fix`, then final `./scripts/check.sh` passed 21/21. `npm test` passed 65/65 tests. `node tools/privacy-audit.mjs` passed with 0 forbidden fields in generated data. `npm audit --audit-level=high` found 0 vulnerabilities. `git diff --check` passed. Markdown relative link audit passed. README image path audit passed. Secret/privacy/overclaim grep audits found only expected enforcement, test, policy, and historical-log references.
+- **Follow-ups:** Push branch and collect fresh remote CI evidence. Recommended next tag after review: `v0.3.4-stage-1-5-validation-pack`.
+
 ## [0.3.4] — 2026-05-13 — README API Table Repair
 
 ### Fixed

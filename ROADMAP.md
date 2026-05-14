@@ -26,25 +26,40 @@ Privacy-first academic integrity prototype.
 
 ---
 
-## Stage 1.5 — Codebase Refactor (Next)
+## Stage 1.5 — Validation Pack (Current)
 
-**Status: Planned**
+**Status: In review**
 
-Internal refactor after Stage 1 is stable. No new user-facing features.
+Reviewer-readiness, validation, evidence mapping, and Stage 2 planning. No major Stage 2 runtime code.
 
-- [ ] Split `server.js` into `src/routes/` modules
-- [ ] Route-level middleware consolidation
-- [ ] OpenAPI spec for all endpoints
-- [ ] Integration test suite (end-to-end flow)
+- [x] Threat model
+- [x] Validation matrix
+- [x] Limitations document
+- [x] Stage 2 architecture plan
+- [x] Resource plan
+- [x] Demo script
+- [x] Risk register
+- [x] Reviewer checklist
+- [x] Evidence folder rules
+- [ ] Fresh remote CI evidence after branch push
+- [ ] Red-team validation
+- [ ] Privacy/legal review
+- [ ] Accessibility review
+- [ ] Institutional pilot evidence
 
 ---
 
-## Stage 2 — Sovereign Shield
+## Stage 2 — Device Shield / Integrity Node
 
 **Status: Planned**
 
-Extend beyond academic proctoring to enterprise and AI agent integrity.
+Transition toward signed local integrity proofs and device-aware validation.
 
+- [ ] Simurgh SDK to Local Integrity Node pairing
+- [ ] Signed integrity proof envelope
+- [ ] Tamper-aware local node logs
+- [ ] Replay-resistant node/API challenge flow
+- [ ] Privacy-preserving proof summaries
 - [ ] Windows native helper (SetWindowDisplayAffinity WDA_EXCLUDEFROMCAPTURE detection)
 - [ ] Linux Wayland surface-level affinity detection
 - [ ] Agent integrity API — validates AI computer-use sessions
@@ -97,4 +112,4 @@ These limitations are documented in the research paper (§VI-C) and are not bugs
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) (coming soon) or open an issue to discuss a proposal before submitting a PR.
+Open an issue to discuss a proposal before submitting a PR. A dedicated contributor guide is not included in the Stage 1.5 validation pack.
