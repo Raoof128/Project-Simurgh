@@ -20,6 +20,8 @@ export const EVENTS = Object.freeze({
   // Stage 2 integrity proof events
   INTEGRITY_PROOF_RECEIVED: "INTEGRITY_PROOF_RECEIVED",
   INTEGRITY_PROOF_REJECTED: "INTEGRITY_PROOF_REJECTED",
+  // Defined for Stage 2.x staleness checker. Not emitted by Stage 2.1.
+  INTEGRITY_NODE_STALE: "INTEGRITY_NODE_STALE",
 });
 
 export function createEvent(sessionId, type, detail = {}) {

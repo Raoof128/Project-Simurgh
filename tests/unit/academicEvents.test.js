@@ -23,6 +23,9 @@ describe("academicEvents", () => {
       "EXAM_SUBMITTED",
       "REPORT_GENERATED",
       "AUDIT_VERIFIED",
+      "INTEGRITY_PROOF_RECEIVED",
+      "INTEGRITY_PROOF_REJECTED",
+      "INTEGRITY_NODE_STALE",
     ];
     for (const name of required) {
       assert.ok(EVENTS[name], `Missing event: ${name}`);
