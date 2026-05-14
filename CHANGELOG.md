@@ -1,5 +1,20 @@
 ## Change Log
 
+## [Unreleased] — 2026-05-14 — README Anchor Audit Fix
+
+### Fixed
+
+- Corrected stale README badge and table-of-contents anchors on the Stage 2 branch after the vendor-neutral heading update.
+
+### Raouf
+
+- **Date:** 2026-05-14 (Australia/Sydney)
+- **Scope:** README anchor audit
+- **Summary:** Fixed stale README badge and table-of-contents anchors on the Stage 2 branch after the vendor-neutral heading update.
+- **Files changed:** `README.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** Branch-object audit confirmed zero old company-specific README wording, the neutral section exists, AGENT/CHANGELOG contain the vendor-neutral log, and README relative links/anchors pass across all active branches. `npx prettier --check README.md AGENT.md CHANGELOG.md` passed. `git diff --check` passed.
+- **Follow-ups:** None.
+
 ## [Unreleased] — 2026-05-14 — Vendor-Neutral README Positioning
 
 ### Changed

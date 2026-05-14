@@ -2,6 +2,18 @@
 
 ## Agent Change Log
 
+### 2026-05-14 (Australia/Sydney) — README Anchor Audit Fix
+
+**Raouf:**
+
+- **Scope:** README anchor audit
+- **Summary:** Fixed stale README badge and table-of-contents anchors on the Stage 2 branch after the vendor-neutral heading update.
+- **Files Changed:**
+  - `README.md` — corrected GitHub-style anchors for Socio-Economic Impact, Cost & Latency, Strategic Roadmap, and Status & License
+  - `AGENT.md`, `CHANGELOG.md` — postflight log entries
+- **Verification:** Branch-object audit confirmed zero old company-specific README wording, the neutral section exists, AGENT/CHANGELOG contain the vendor-neutral log, and README relative links/anchors pass across all active branches. `npx prettier --check README.md AGENT.md CHANGELOG.md` passed. `git diff --check` passed.
+- **Follow-ups:** None.
+
 ### 2026-05-14 (Australia/Sydney) — Vendor-Neutral README Positioning
 
 **Raouf:**

@@ -9,8 +9,8 @@ _Detecting UI-redressing and behavioral spoofing without relying on screen captu
 [![Stage 1 Checks](https://github.com/Raoof128/Project-Simurgh/actions/workflows/stage-1-checks.yml/badge.svg?branch=main)](https://github.com/Raoof128/Project-Simurgh/actions/workflows/stage-1-checks.yml)
 [![Node](https://img.shields.io/badge/node-%E2%89%A522.0-1a1a1a?style=flat-square)](https://nodejs.org)
 [![AI Narrative](https://img.shields.io/badge/AI%20narrative-optional-6b1a1a?style=flat-square)](#2-the-simurgh-engine)
-[![License](https://img.shields.io/badge/license-MIT-d6cfbe?style=flat-square)](#13-status--license)
-[![Status](https://img.shields.io/badge/status-research%20prototype-2f4a2a?style=flat-square)](#13-status--license)
+[![License](https://img.shields.io/badge/license-MIT-d6cfbe?style=flat-square)](#13-status-license)
+[![Status](https://img.shields.io/badge/status-research%20prototype-2f4a2a?style=flat-square)](#13-status-license)
 
 **[Read the Disclosure Paper â†’](https://raoufabedini.dev/projects/invisible-window-research)**
 
@@ -39,16 +39,16 @@ In Persian mythology, the Simurgh is the ultimate protector of pure knowledge â€
 | 1   | [The Threat: The Invisible Window](#1-the-threat-the-invisible-window)                         | The vulnerability class this project mitigates    |
 | 2   | [The Simurgh Engine](#2-the-simurgh-engine)                                                    | Behavioral heuristic architecture                 |
 | 3   | [System Architecture](#3-system-architecture)                                                  | Data-flow diagram and component topology          |
-| 4   | [Socio-Economic Impact](#4-socio-economic-impact--democratic-access)                           | Bandwidth-inclusive security and privacy ethics   |
+| 4   | [Socio-Economic Impact](#4-socio-economic-impact-democratic-access)                            | Bandwidth-inclusive security and privacy ethics   |
 | 5   | [Quick Start](#5-quick-start)                                                                  | Installation, configuration, and first run        |
 | 6   | [API Reference](#6-api-reference)                                                              | Endpoint specifications                           |
-| 7   | [Cost & Latency](#7-cost--latency)                                                             | Prompt-caching economics and response times       |
+| 7   | [Cost & Latency](#7-cost-latency)                                                              | Prompt-caching economics and response times       |
 | 8   | [Security Considerations](#8-security-considerations)                                          | HMAC audit chain and threat model                 |
 | 9   | [Stage 1.5 Validation Pack](#9-stage-15-validation-pack)                                       | Reviewer-readiness and evidence map               |
 | 10  | [Why AI Platforms Need Proof-Based Integrity](#10-why-ai-platforms-need-proof-based-integrity) | Vendor-neutral platform relevance                 |
-| 11  | [Strategic Roadmap](#11-strategic-roadmap-2026---2028)                                         | Four-phase evolution from PoC to Sovereign Shield |
+| 11  | [Strategic Roadmap](#11-strategic-roadmap-2026-2028)                                           | Four-phase evolution from PoC to Sovereign Shield |
 | 12  | [Contributors](#12-contributors)                                                               | Project contributors                              |
-| 13  | [Status & License](#13-status--license)                                                        | Current status and licensing                      |
+| 13  | [Status & License](#13-status-license)                                                         | Current status and licensing                      |
 
 ---
 
