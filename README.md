@@ -512,18 +512,20 @@ git diff --check
 
 ---
 
-## 10. Why Anthropic?
+## 10. Why AI Platforms Need Proof-Based Integrity
+Frontier AI systems are moving into education, enterprise workflows, coding environments, browser automation, and high-stakes digital sessions.
 
-Project Simurgh was architected with the same "Safety-First" DNA that defines Anthropic. While the broader industry races toward unconstrained agentic autonomy, Anthropic has consistently pioneered **Constitutional AI** — the principle that models must be helpful, honest, and harmless by design.
+Current trust infrastructure still relies heavily on surveillance: webcam monitoring, screen recording, lockdown browsers, biometrics, and human review. This model is invasive, bandwidth-heavy, difficult to scale globally, and still vulnerable to display-layer and agentic workflow blind spots.
 
-This project represents an invitation to collaborate because the values are technically and ethically aligned:
+Project Simurgh explores a different model: proof-based integrity.
 
-1. **Constitutional Integrity:** Just as Claude is guided by a constitution, Simurgh is guided by a commitment to **Privacy-as-Code**. The project rejects the invasive, high-bandwidth surveillance models of legacy proctoring platforms. Security should never come at the cost of human dignity or privacy.
-2. **Alignment on "Computer Use":** Anthropic's leadership in agentic capabilities creates the most critical frontier for UI safety. Simurgh is the natural defensive partner for this ecosystem, providing the "Visual Guardrails" necessary for autonomous agents to interact with the world safely.
-3. **Democratizing Safety:** Anthropic's focus on ethical deployment aligns with this project's mission to bridge the digital divide — ensuring that a student in a remote village has access to the same high-integrity, low-bandwidth certification as a student in Silicon Valley.
-4. **First-Mover Advantage:** No competing AI provider currently offers a privacy-preserving, behavioral integrity API at this level. By partnering on Project Simurgh, Anthropic would establish the definitive standard in this space — creating an ecosystem where every university, certification body, and enterprise deploying autonomous agents depends on Anthropic's infrastructure for integrity verification. Once institutions build their examination and agent-safety workflows around the Simurgh Integrity API, the cost of switching becomes prohibitively high. This is not just a product opportunity; it is a strategic moat.
+Instead of verifying trust by watching the user, Simurgh verifies the session environment through signed, privacy-preserving integrity proofs.
 
-Project Simurgh is more than a technical demonstration; it is an invitation to partner on the next generation of the AI Integrity Layer.
+This makes Simurgh relevant to AI education products, enterprise AI deployments, agentic browser workflows, assessment platforms, and safety-critical computer-use systems.
+
+Research Origin
+This project emerged from research into browser-based proctoring failures and frontier-AI-assisted capability uplift. Although the original research was framed around AI safety, Simurgh is designed as a vendor-neutral integrity layer for AI-era education, enterprise, and agentic workflows.
+
 
 ---
 
