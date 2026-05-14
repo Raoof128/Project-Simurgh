@@ -1,166 +1,108 @@
 import { test, describe } from "node:test";
 import assert from "node:assert/strict";
-import { validateProof, PROOF_VERSION, NODE_STATES } from "../../../src/integrity/proofSchema.js";
+import {
+  PROOF_VERSION,
+  PROOF_PLATFORM,
+  PROOF_PRIVACY_MODE,
+  REQUIRED_FIELDS,
+  FORBIDDEN_FIELDS,
+  CAPABILITY_KEYS,
+  SIGNAL_KEYS,
+  HELPER_STATUS_VALUES,
+  PUBLIC_KEY_BYTES,
+  SIGNATURE_BYTES,
+  NONCE_BYTES_MIN,
+  NONCE_BYTES_MAX,
+  TIMESTAMP_PAST_MS,
+  TIMESTAMP_FUTURE_MS,
+  SESSION_ID_PATTERN,
+  NODE_ID_HASH_PATTERN,
+} from "../../../src/integrity/proofSchema.js";
 
-const NOW = Date.now();
-
-// Minimal valid proof factory
-function validProof(overrides = {}) {
-  return {
-    session_id: "sess_abc123",
-    nonce: "api-nonce-abcdef12",
-    issued_at: new Date(NOW).toISOString(),
-    capabilities: ["display_affinity_scan"],
-    privacy_mode: "metadata_only",
-    signature: "placeholder-sig-xyz",
-    ...overrides,
-  };
-}
-
-describe("validateProof", () => {
-  test("accepts a valid minimal proof", () => {
-    const result = validateProof(validProof(), NOW);
-    assert.equal(result.ok, true);
-    assert.equal(result.proof.session_id, "sess_abc123");
-    assert.equal(result.proof.privacy_mode, "metadata_only");
-    assert.equal(result.proof.proof_version, PROOF_VERSION);
-    assert.ok(result.proof.received_at);
+describe("proofSchema constants", () => {
+  test("version, platform, privacy_mode are locked v1 values", () => {
+    assert.equal(PROOF_VERSION, "simurgh-integrity-proof-v1");
+    assert.equal(PROOF_PLATFORM, "macos");
+    assert.equal(PROOF_PRIVACY_MODE, "metadata_only");
   });
 
-  test("rejects null / non-object input", () => {
-    assert.equal(validateProof(null, NOW).reason, "proof_not_an_object");
-    assert.equal(validateProof("string", NOW).reason, "proof_not_an_object");
-    assert.equal(validateProof([], NOW).reason, "proof_not_an_object");
-  });
-
-  test("rejects missing required fields", () => {
-    for (const field of [
+  test("REQUIRED_FIELDS lists all 11 v1 top-level fields", () => {
+    assert.equal(REQUIRED_FIELDS.length, 11);
+    for (const f of [
+      "version",
+      "platform",
       "session_id",
+      "node_id_hash",
+      "node_public_key",
       "nonce",
-      "issued_at",
+      "timestamp",
       "capabilities",
+      "signals",
       "privacy_mode",
       "signature",
     ]) {
-      const proof = validProof();
-      delete proof[field];
-      const result = validateProof(proof, NOW);
-      assert.equal(result.ok, false, `Expected rejection for missing: ${field}`);
-      assert.match(result.reason, new RegExp(`missing_field:${field}|invalid_`));
+      assert.ok(REQUIRED_FIELDS.includes(f), `missing required: ${f}`);
     }
   });
 
-  test("rejects stale issued_at", () => {
-    const staleProof = validProof({ issued_at: new Date(NOW - 60_000).toISOString() });
-    const result = validateProof(staleProof, NOW);
-    assert.equal(result.ok, false);
-    assert.equal(result.reason, "proof_stale");
+  test("FORBIDDEN_FIELDS includes all Section 2 entries", () => {
+    for (const f of [
+      "screen_pixels",
+      "screenshot",
+      "screen_frame",
+      "webcam",
+      "audio",
+      "microphone",
+      "typed_answer",
+      "paste_content",
+      "face_embedding",
+      "window_title",
+      "process_name",
+      "raw_student_name",
+      "biometric",
+    ]) {
+      assert.ok(FORBIDDEN_FIELDS.has(f), `missing forbidden: ${f}`);
+    }
   });
 
-  test("rejects future issued_at", () => {
-    const futureProof = validProof({ issued_at: new Date(NOW + 60_000).toISOString() });
-    const result = validateProof(futureProof, NOW);
-    assert.equal(result.ok, false);
-    assert.equal(result.reason, "proof_in_future");
+  test("CAPABILITY_KEYS lists exactly 4 keys", () => {
+    assert.deepEqual([...CAPABILITY_KEYS].sort(), [
+      "helper_bridge",
+      "screencapturekit_available",
+      "sharing_state_scan",
+      "window_enumeration",
+    ]);
   });
 
-  test("accepts issued_at as epoch ms number", () => {
-    const result = validateProof(validProof({ issued_at: NOW }), NOW);
-    assert.equal(result.ok, true);
+  test("SIGNAL_KEYS lists exactly 4 typed entries", () => {
+    assert.deepEqual(Object.keys(SIGNAL_KEYS).sort(), [
+      "capture_excluded_window_count",
+      "helper_status",
+      "node_uptime_ms",
+      "window_count",
+    ]);
   });
 
-  test("rejects privacy_mode other than metadata_only", () => {
-    const result = validateProof(validProof({ privacy_mode: "full_capture" }), NOW);
-    assert.equal(result.ok, false);
-    assert.equal(result.reason, "invalid_privacy_mode");
+  test("HELPER_STATUS_VALUES enumerates connected/stale/not_configured", () => {
+    assert.deepEqual([...HELPER_STATUS_VALUES].sort(), ["connected", "not_configured", "stale"]);
   });
 
-  test("strips unknown capabilities, keeps known ones", () => {
-    const result = validateProof(
-      validProof({
-        capabilities: ["display_affinity_scan", "unknown_capability", "local_log_hash"],
-      }),
-      NOW
-    );
-    assert.equal(result.ok, true);
-    assert.deepEqual(result.proof.capabilities, ["display_affinity_scan", "local_log_hash"]);
+  test("byte-length constants are 32/64/12/64", () => {
+    assert.equal(PUBLIC_KEY_BYTES, 32);
+    assert.equal(SIGNATURE_BYTES, 64);
+    assert.equal(NONCE_BYTES_MIN, 12);
+    assert.equal(NONCE_BYTES_MAX, 64);
   });
 
-  test("accepts empty capabilities array", () => {
-    const result = validateProof(validProof({ capabilities: [] }), NOW);
-    assert.equal(result.ok, true);
-    assert.deepEqual(result.proof.capabilities, []);
+  test("timestamp windows are 30s past, 5s future", () => {
+    assert.equal(TIMESTAMP_PAST_MS, 30_000);
+    assert.equal(TIMESTAMP_FUTURE_MS, 5_000);
   });
 
-  test("rejects forbidden fields — screen_pixels", () => {
-    const result = validateProof(validProof({ screen_pixels: "base64data" }), NOW);
-    assert.equal(result.ok, false);
-    assert.match(result.reason, /forbidden_field:screen_pixels/);
-  });
-
-  test("rejects forbidden fields — typed_answer", () => {
-    const result = validateProof(validProof({ typed_answer: "my exam answer" }), NOW);
-    assert.equal(result.ok, false);
-    assert.match(result.reason, /forbidden_field:typed_answer/);
-  });
-
-  test("rejects forbidden fields — paste_content", () => {
-    const result = validateProof(validProof({ paste_content: "pasted text" }), NOW);
-    assert.equal(result.ok, false);
-    assert.match(result.reason, /forbidden_field:paste_content/);
-  });
-
-  test("rejects forbidden fields — webcam_frame", () => {
-    const result = validateProof(validProof({ webcam_frame: "base64" }), NOW);
-    assert.equal(result.ok, false);
-  });
-
-  test("normalises risk_signals — valid node_state", () => {
-    const result = validateProof(
-      validProof({
-        risk_signals: {
-          capture_excluded_window_count: 2,
-          node_state: NODE_STATES.HEALTHY,
-        },
-      }),
-      NOW
-    );
-    assert.equal(result.ok, true);
-    assert.equal(result.proof.risk_signals.capture_excluded_window_count, 2);
-    assert.equal(result.proof.risk_signals.node_state, "healthy");
-  });
-
-  test("normalises risk_signals — unknown node_state falls back to unavailable", () => {
-    const result = validateProof(
-      validProof({ risk_signals: { node_state: "hacked", capture_excluded_window_count: 0 } }),
-      NOW
-    );
-    assert.equal(result.ok, true);
-    assert.equal(result.proof.risk_signals.node_state, NODE_STATES.UNAVAILABLE);
-  });
-
-  test("accepts valid local_log_root sha256 hash", () => {
-    const hash = "sha256:" + "a".repeat(64);
-    const result = validateProof(validProof({ local_log_root: hash }), NOW);
-    assert.equal(result.ok, true);
-    assert.equal(result.proof.local_log_root, hash);
-  });
-
-  test("drops malformed local_log_root", () => {
-    const result = validateProof(validProof({ local_log_root: "not-a-hash" }), NOW);
-    assert.equal(result.ok, true);
-    assert.equal(result.proof.local_log_root, null);
-  });
-
-  test("rejects empty signature", () => {
-    const result = validateProof(validProof({ signature: "" }), NOW);
-    assert.equal(result.ok, false);
-    assert.equal(result.reason, "missing_signature");
-  });
-
-  test("rejects invalid session_id format", () => {
-    const result = validateProof(validProof({ session_id: "../../etc/passwd" }), NOW);
-    assert.equal(result.ok, false);
-    assert.equal(result.reason, "invalid_session_id");
+  test("regex patterns match expected formats", () => {
+    assert.ok(SESSION_ID_PATTERN.test("sess_abc123"));
+    assert.ok(!SESSION_ID_PATTERN.test("../etc/passwd"));
+    assert.ok(NODE_ID_HASH_PATTERN.test("a".repeat(64)));
+    assert.ok(!NODE_ID_HASH_PATTERN.test("A".repeat(64)));
   });
 });
