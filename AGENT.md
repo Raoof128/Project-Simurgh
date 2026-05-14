@@ -2,6 +2,21 @@
 
 ## Agent Change Log
 
+### 2026-05-14 (Australia/Sydney) — Stage 2 Readiness Audit Fix
+
+**Raouf:**
+
+- **Scope:** Stage 2 readiness audit fix
+- **Summary:** Full audit found one code/docs mismatch: Safe verdicts were documented as skipping Claude by default, but `stagingConfig.claudeOnSafe` defaulted to enabled when the env var was absent. Fixed the default, added regression coverage, and updated current verification-count docs.
+- **Files Changed:**
+  - `src/config/env.js` — `SIMURGH_CLAUDE_ON_SAFE` now defaults to false unless explicitly set to `true`
+  - `tests/unit/envConfig.test.js` — regression coverage for Claude gating defaults
+  - `README.md`, `SECURITY.md` — current test count updated to 68 tests / 13 modules
+  - `AGENT.md`, `CHANGELOG.md` — audit log entries
+- **Verification:** `npm test` passed 68/68 tests. `npm run format:check` passed. `./scripts/check.sh --fix` passed 21/21. Final `./scripts/check.sh` passed 21/21. Markdown relative links and anchors passed. `node tools/privacy-audit.mjs` passed with 0 forbidden fields in generated data. `npm audit --audit-level=high` found 0 vulnerabilities. Direct dependency licence spot-check found MIT for `@anthropic-ai/sdk`, `express`, and `prettier`. `git diff --check` passed.
+- **Follow-ups:**
+  - Push branch and collect remote CI evidence before tagging.
+
 ### 2026-05-14 (Australia/Sydney) — Stage 1.5 Validation Pack
 
 **Raouf:**
@@ -18,7 +33,7 @@
 - **Verification:** `npm install` passed with 0 vulnerabilities. `./scripts/check.sh --fix` passed 21/21. Initial `./scripts/check.sh` found one Prettier drift in `docs/STAGE_1_5_REVIEWER_PACK.md`; reran `./scripts/check.sh --fix`, then final `./scripts/check.sh` passed 21/21. `npm test` passed 65/65 tests. `node tools/privacy-audit.mjs` passed with 0 forbidden fields in generated data. `npm audit --audit-level=high` found 0 vulnerabilities. `git diff --check` passed. Markdown relative link audit passed. README image path audit passed. Secret/privacy/overclaim grep audits found only expected enforcement, test, policy, and historical-log references.
 - **Follow-ups:**
   - Push the branch and collect fresh remote CI evidence.
-  - Recommended next tag after review: `v0.3.4-stage-1-5-validation-pack`.
+  - Recommended next tag after review: `v0.3.6-stage-1-5-validation-pack`.
 
 ### 2026-05-13 (Australia/Sydney) — README API Table Repair
 

@@ -229,7 +229,7 @@ Individual checks can also be run directly:
 
 ```bash
 node tools/privacy-audit.mjs                      # privacy audit
-npm test                                          # 65 unit tests
+npm test                                          # 68 unit tests
 node tools/verify-audit.mjs simurgh-audit-*.json  # verify an exported chain
 npm run format:check                              # Prettier check
 npm run format                                    # Prettier write
