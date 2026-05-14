@@ -12,6 +12,8 @@ import { createExam, getExam, listExams } from "./src/academic/exams.js";
 import { STATES, createSessionRecord, transitionState } from "./src/academic/sessions.js";
 import { hashStudentId } from "./src/privacy/hashIdentity.js";
 import { buildReport } from "./src/academic/reportBuilder.js";
+import { validateProof } from "./src/integrity/proofSchema.js";
+import { createNonceGuard } from "./src/integrity/nonceGuard.js";
 import { verifyAuditExport } from "./src/audit/verifyAudit.js";
 import { appendEntry, CHAIN_CAP } from "./src/audit/hmacChain.js";
 import {
@@ -258,6 +260,9 @@ const MAX_SESSIONS = Number(process.env.SIMURGH_MAX_SESSIONS) || 10_000;
 const sessions = new Map();
 const timeline = eventTimeline();
 const examSessions = new Map(); // sessionId → sessionRecord (Stage 1 lifecycle)
+
+// Stage 2: nonce guard for /api/integrity/proofs submissions
+const proofNonceGuard = createNonceGuard();
 
 // Replay guard for /api/telemetry submissions
 const replayGuard = createReplayGuard({
@@ -1051,6 +1056,65 @@ app.get("/api/audit/:sessionId/verify", limitVerify, requireInstructorAuth, (req
   sseBroadcast("audit_verified", { sessionId: req.params.sessionId, valid: result.valid });
 
   res.json({ sessionId: req.params.sessionId, ...result });
+});
+
+// ─────────────────────────────────────────────────────────────
+//  Stage 2 scaffold — integrity proof ingestion
+//  POST /api/integrity/proofs
+//
+//  This is a Stage 2.0 scaffold stub. It validates the proof
+//  structure, enforces nonce uniqueness, records the submission
+//  in the audit chain, and returns a structured receipt.
+//
+//  It does NOT yet:
+//   - perform cryptographic signature verification (planned Stage 2.x)
+//   - influence the Stage 1 risk score (planned Stage 2.x)
+//   - claim hardware attestation (future milestone)
+//   - replace the existing /api/affinity helper path
+//
+//  Stage 2 scaffold is clearly separated from Stage 1 logic.
+// ─────────────────────────────────────────────────────────────
+app.post("/api/integrity/proofs", requireSessionToken, (req, res) => {
+  const sessionId = req.sessionTokenSessionId;
+
+  const validation = validateProof(req.body);
+  if (!validation.ok) {
+    return res.status(400).json({ error: "proof_invalid", reason: validation.reason });
+  }
+
+  const { proof } = validation;
+
+  // Ensure proof is bound to the authenticated session.
+  if (proof.session_id !== sessionId) {
+    return res.status(401).json({ error: "proof_session_mismatch" });
+  }
+
+  // Replay protection — reject reused nonces.
+  const nonceResult = proofNonceGuard.check(proof.nonce, sessionId);
+  if (!nonceResult.ok) {
+    return res.status(409).json({ error: nonceResult.reason });
+  }
+
+  // Record in the audit chain if a telemetry session exists.
+  const sess = sessions.get(sessionId);
+  if (sess) {
+    appendAudit(sess, "integrity_proof_received", {
+      nonce: proof.nonce,
+      capabilities: proof.capabilities,
+      node_state: proof.risk_signals?.node_state ?? null,
+      capture_excluded_window_count: proof.risk_signals?.capture_excluded_window_count ?? null,
+      proof_version: proof.proof_version,
+    });
+  }
+
+  return res.status(202).json({
+    status: "accepted",
+    session_id: sessionId,
+    nonce: proof.nonce,
+    capabilities_accepted: proof.capabilities,
+    received_at: proof.received_at,
+    note: "Stage 2.0 scaffold: proof recorded. Signature verification and scoring integration are planned for later Stage 2 milestones.",
+  });
 });
 
 // ─────────────────────────────────────────────────────────────

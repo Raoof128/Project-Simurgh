@@ -2,6 +2,25 @@
 
 ## Agent Change Log
 
+### 2026-05-14 (Australia/Sydney) — Stage 2.0 Integrity Proof Pipeline Scaffold
+
+**Raouf:**
+
+- **Scope:** Stage 2 scaffold — integrity proof pipeline
+- **Summary:** Merged Stage 1.5 validation pack into `main`. Created `stage-2-integrity-node` branch. Scaffolded the Stage 2 integrity proof pipeline: proof schema validator (`src/integrity/proofSchema.js`) with forbidden-field enforcement, timestamp freshness, capability allowlist, nonce guard (`src/integrity/nonceGuard.js`), `POST /api/integrity/proofs` route stub (session-token-gated, nonce replay protected, audit-chain connected), two new EVENTS constants (`INTEGRITY_PROOF_RECEIVED`, `INTEGRITY_PROOF_REJECTED`), and 25 new unit tests (93 total). Updated test glob to recurse into subdirectories.
+- **Files Changed:**
+  - `src/integrity/proofSchema.js` (new)
+  - `src/integrity/nonceGuard.js` (new)
+  - `src/academic/academicEvents.js` — two Stage 2 event constants added
+  - `server.js` — imports and `POST /api/integrity/proofs` route
+  - `package.json` — test glob updated to recurse into `tests/unit/**/*.test.js`
+  - `tests/unit/integrity/proofSchema.test.js` (new, 19 tests)
+  - `tests/unit/integrity/nonceGuard.test.js` (new, 6 tests)
+  - `scripts/check.sh` — proofSchema.js added to privacy-grep exclusion list
+- **Verification:** 93/93 tests pass. `./scripts/check.sh` (full) → 21/21 pass. Server starts, smoke test passes. Privacy audit passes. npm audit 0 vulnerabilities.
+- **What this does NOT do:** No cryptographic signature verification (planned). No influence on Stage 1 risk score (planned). No hardware attestation claim. Does not replace `/api/affinity` helper path.
+- **Follow-ups:** Push branch, CI, tag `v0.4.0-stage-2-scaffold`.
+
 ### 2026-05-14 (Australia/Sydney) — Stage 2 Readiness Audit Fix
 
 **Raouf:**

@@ -17,6 +17,9 @@ export const EVENTS = Object.freeze({
   EXAM_SUBMITTED: "EXAM_SUBMITTED",
   REPORT_GENERATED: "REPORT_GENERATED",
   AUDIT_VERIFIED: "AUDIT_VERIFIED",
+  // Stage 2 integrity proof events
+  INTEGRITY_PROOF_RECEIVED: "INTEGRITY_PROOF_RECEIVED",
+  INTEGRITY_PROOF_REJECTED: "INTEGRITY_PROOF_REJECTED",
 });
 
 export function createEvent(sessionId, type, detail = {}) {

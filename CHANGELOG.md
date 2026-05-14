@@ -1,5 +1,33 @@
 ## Change Log
 
+## [0.4.0] — 2026-05-14 — Stage 2.0 Integrity Proof Pipeline Scaffold
+
+### Added
+
+- `src/integrity/proofSchema.js` — proof validator enforcing forbidden-field blocklist (screen_pixels, webcam_frame, paste_content, typed_answer, etc.), required-field checks, 30 s timestamp freshness window, capability allowlist, privacy_mode enforcement, sha256 hash root validation
+- `src/integrity/nonceGuard.js` — nonce replay protection with TTL eviction for `POST /api/integrity/proofs`
+- `POST /api/integrity/proofs` route — session-token-gated, nonce-replay-protected, audit-chain-connected Stage 2.0 scaffold endpoint (returns 202 with `note:` field advertising scaffold status)
+- `INTEGRITY_PROOF_RECEIVED` and `INTEGRITY_PROOF_REJECTED` events in `src/academic/academicEvents.js`
+- 25 new unit tests across `tests/unit/integrity/` (19 proofSchema + 6 nonceGuard)
+- Test runner glob now recurses into `tests/unit/**/*.test.js`
+
+### Changed
+
+- `scripts/check.sh` privacy grep now excludes `src/integrity/proofSchema.js` (contains the forbidden-field constant list, not privacy violations)
+
+### Does not include
+
+- Cryptographic signature verification (planned Stage 2.x)
+- Integration with Stage 1 risk scoring (planned Stage 2.x)
+- Hardware-rooted attestation (future milestone)
+- Replacement of the `/api/affinity` helper path
+
+### Verified
+
+- 93/93 unit tests pass
+- `./scripts/check.sh` (full) → 21/21 pass
+- `npm audit` → 0 vulnerabilities
+
 ## [0.3.6] — 2026-05-14 — Stage 2 Readiness Audit Fix
 
 ### Fixed
