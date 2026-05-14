@@ -2,6 +2,27 @@
 
 ## Agent Change Log
 
+### 2026-05-14 (Australia/Sydney) — Stage 2.1 Implementation Complete
+
+**Raouf:**
+
+- **Scope:** Stage 2.1 — macOS CLI integrity proof pipeline (Tasks 1–15)
+- **Summary:** Implemented the full Stage 2.1 plan end-to-end. Refactored Stage 2.0 scaffold to v1 envelope. New JS modules: `proofSchema` (constants), `proofCanonicalise` (sorted-key JSON), `proofSignature` (Ed25519 verify with SPKI wrap for raw 32-byte keys), `proofValidator` (full pipeline orchestration), `integrityState` (N1 strict node continuity with immutable `bound_node_id_hash`). Simplified `nonceGuard` to global replay. Rewired `POST /api/integrity/proofs` to the v1 pipeline with `signature_status: "unregistered_node"`, hashed-nonce audit payloads, and 409 on session_expired_or_evicted. New macOS Swift CLI under `tools/simurgh-node-macos/`: `Package.swift`, `main.swift`, `NodeIdentity.swift` (keypair at `~/.simurgh/node-key`, 0600/0700, no auto-regen), `ProofEnvelope.swift`, `ProofSigner.swift`. Cross-implementation golden-fixture interop test (Swift `JSONEncoder.sortedKeys` matches Node canonicaliser byte-for-byte; SHA-256 locked at `fa63f66f9800cd8b9589b2a6e026f3c6f682fea98bd017f95c03b82185faeeca`). `scripts/check.sh` extended with 6 new gates (round-trip smoke, zeroed-sig negative, fixture sync, conditional Swift build/test, CLI privacy regression).
+- **Files Changed:**
+  - `src/integrity/{proofSchema,proofCanonicalise,proofSignature,proofValidator,integrityState,nonceGuard}.js` (rewritten or new)
+  - `tests/unit/integrity/*` (all rewritten or new)
+  - `tests/unit/integrity/__fixtures__/golden-proof.{json,sha256}`
+  - `src/academic/academicEvents.js` — `INTEGRITY_NODE_STALE` constant added (defined, not yet emitted)
+  - `server.js` — v1 pipeline route, integrity-state eviction
+  - `tools/simurgh-node-macos/` — full Swift package + test target + Fixtures copy
+  - `scripts/check.sh` — Stage 2.1 round-trip, fixture sync, conditional Swift block
+  - `.gitignore` — `.simurgh_check_logs/`, `.build/`, `.swiftpm/`
+  - `README.md` — Stage 2.1 paragraph
+  - `package.json` — recursive test glob
+- **Verification:** `npm test` 140/140 pass. `./scripts/check.sh` 27/27 gates pass. `swift test` (in `tools/simurgh-node-macos/`) 1/1 pass. `swift build` succeeds. Smoke round-trip returns `202 + signature_status: "unregistered_node"`. Zeroed signature rejected with 401. CLI stdout contains no forbidden fields. `npm audit --audit-level=high` clean.
+- **What this does NOT do:** No pairing/registry (Stage 2.2). No daemon, no port, no ScreenCaptureKit, no screen recording permission. No hardware-rooted attestation claim. No risk-score integration. No replacement of `/api/affinity` helper path.
+- **Follow-ups:** Open a draft PR `stage-2-integrity-node` → `main`, let CI go green, tag `v0.4.1-stage-2-1-macos-integrity` after merge.
+
 ### 2026-05-14 (Australia/Sydney) — README Anchor Audit Fix
 
 **Raouf:**

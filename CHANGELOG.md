@@ -1,5 +1,43 @@
 ## Change Log
 
+## [0.4.1] — 2026-05-14 — Stage 2.1 macOS Integrity Proof Pipeline
+
+### Added
+
+- `src/integrity/proofCanonicalise.js` — canonical JSON serialiser (sorted keys, no whitespace, top-level `signature` excluded)
+- `src/integrity/proofSignature.js` — Ed25519 verifier with raw-bytes → DER/SPKI wrap for Node `crypto.verify`; `computeNodeIdHash` helper
+- `src/integrity/proofValidator.js` — orchestrates v1 schema + timestamp + privacy + key + signature checks
+- `src/integrity/integrityState.js` — per-session N1 strict node continuity (immutable `bound_node_id_hash`)
+- `INTEGRITY_NODE_STALE` event constant in `src/academic/academicEvents.js` (defined; not emitted in Stage 2.1, reserved for Stage 2.x)
+- `tools/simurgh-node-macos/` — Swift CLI generating signed v1 proofs (no daemon, no permissions, no ScreenCaptureKit, no content collection); package builds and tests pass on macOS
+- `tests/unit/integrity/__fixtures__/golden-proof.{json,sha256}` — cross-implementation canonical-bytes fixture; SHA-256 locked at `fa63f66f9800cd8b9589b2a6e026f3c6f682fea98bd017f95c03b82185faeeca`
+- `scripts/check.sh` — 6 new gates: Stage 2.1 round-trip smoke, zeroed-signature rejection, fixture sync, Swift conditional build + test, CLI output privacy regression. Quick mode skips the Stage 2.1 server smoke and the Swift block.
+- Cross-implementation interop test (`tools/simurgh-node-macos/Tests/SimurghNodeTests/CanonicaliseTests.swift`) proves `JSONEncoder.sortedKeys` produces byte-identical output to the Node canonicaliser for the golden fixture
+
+### Changed
+
+- `src/integrity/proofSchema.js` — rewritten to declarative v1 constants (validation moved to `proofValidator.js`)
+- `src/integrity/nonceGuard.js` — simplified to global replay protection (removed `nonce_session_mismatch`)
+- `server.js` — `POST /api/integrity/proofs` rewired to the v1 pipeline; returns `409 session_expired_or_evicted` if telemetry session is missing; logs minimal privacy-safe rejection payloads
+- Audit payload for `INTEGRITY_PROOF_RECEIVED` now stores `nonce_hash` (not raw nonce) and capability/signal summaries (not raw signals)
+- `package.json` test glob recurses into `tests/unit/**/*.test.js`
+- `.gitignore` excludes `.simurgh_check_logs/`, `tools/simurgh-node-macos/.build/`, `.swiftpm/`
+
+### Notes
+
+- Stage 2.1 transitional posture: every accepted proof returns `signature_status: "unregistered_node"` until pairing registry lands in Stage 2.2
+- The CLI's `~/.simurgh/node-key` is a development identity key, not hardware-backed attestation
+- No claim of production device trust
+- SwiftPM does not permit resources from outside the package, so the golden fixture is duplicated under `tools/simurgh-node-macos/Tests/SimurghNodeTests/Fixtures/`. The check.sh "Golden fixture sync" gate enforces byte-identity between the two copies.
+
+### Verified
+
+- `npm test` — 140/140 tests pass across 27 suites
+- `./scripts/check.sh` (full) — 27/27 gates pass
+- `swift build` (macOS) — succeeds
+- `swift test` (golden interop) — passes
+- `npm audit --audit-level=high` — 0 vulnerabilities
+
 ## [Unreleased] — 2026-05-14 — README Anchor Audit Fix
 
 ### Fixed
