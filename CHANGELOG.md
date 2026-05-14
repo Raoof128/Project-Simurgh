@@ -1,5 +1,20 @@
 ## Change Log
 
+## [Unreleased] — 2026-05-14 — Stage 2.1 Design Spec
+
+### Added
+
+- `docs/superpowers/specs/2026-05-14-stage-2-1-macos-integrity-proof-design.md` — approved design spec for Stage 2.1 (macOS CLI integrity proof pipeline)
+  - Locks A (v1 envelope refactor), B2 (Ed25519 per-node keypair), D1 (CLI proof generator), N1 (strict node continuity)
+  - v1 envelope shape, strict validator rules, canonical-JSON signing, Node SPKI wrapping for Ed25519, asymmetric timestamp tolerance, audit-payload privacy rules, ~60-test plan with cross-implementation golden fixture
+- AGENT.md entry: Stage 2.1 design spec scope + verification + follow-ups
+
+### Notes
+
+- Spec only; no runtime code changes yet
+- Next: invoke `superpowers:writing-plans` to produce the implementation plan
+- Stage 2.0 scaffold (v0.4.0) will be refactored — the v1 envelope replaces the simpler shape
+
 ## [0.4.0] — 2026-05-14 — Stage 2.0 Integrity Proof Pipeline Scaffold
 
 ### Added

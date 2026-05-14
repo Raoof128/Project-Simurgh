@@ -18,12 +18,12 @@ This is **Stage 2.1**. Pairing (browser ↔ node), risk-score integration, Scree
 
 ## Design Decisions Locked
 
-| ID | Choice | Rationale |
-|---|---|---|
-| **A** | Refactor Stage 2.0 scaffold to the v1 envelope (no parallel schemas) | Clean contract, no prototype drift |
-| **B2** | Ed25519 / Curve25519.Signing per-node keypair | Real Stage 2 trust shape; both stdlibs native |
-| **D1** | CLI proof generator on macOS (no daemon, no permissions) | Stage 2.1 proves the contract, not the transport |
-| **N1** | Strict node continuity — first proof binds `node_id_hash` for the session | One session = one node; node-swap rejected |
+| ID     | Choice                                                                    | Rationale                                        |
+| ------ | ------------------------------------------------------------------------- | ------------------------------------------------ |
+| **A**  | Refactor Stage 2.0 scaffold to the v1 envelope (no parallel schemas)      | Clean contract, no prototype drift               |
+| **B2** | Ed25519 / Curve25519.Signing per-node keypair                             | Real Stage 2 trust shape; both stdlibs native    |
+| **D1** | CLI proof generator on macOS (no daemon, no permissions)                  | Stage 2.1 proves the contract, not the transport |
+| **N1** | Strict node continuity — first proof binds `node_id_hash` for the session | One session = one node; node-swap rejected       |
 
 Stage 2.1 transitional posture: `signature_status: "unregistered_node"` for every accepted proof until pairing registry lands in Stage 2.2.
 
@@ -37,8 +37,10 @@ Stage 2.1 transitional posture: `signature_status: "unregistered_node"` for ever
 src/integrity/
   proofSchema.js          ← constants, allowed values, forbidden fields, required fields
   proofCanonicalise.js    ← canonicaliseProofPayload() — sorted-key, no-whitespace JSON
-  proofValidator.js       ← validateProof() — orchestrates schema + signature + state
+  proofValidator.js       ← validateProof() — schema + timestamp + privacy + public-key + signature
+                            (does NOT do node-continuity; that lives in integrityState.js)
   proofSignature.js       ← Ed25519 verify + sha256(public_key) → node_id_hash
+                            (includes raw-bytes → SPKI KeyObject helper for Node crypto.verify)
   nonceGuard.js           ← per-session nonce TTL replay protection (existing, simplified)
   integrityState.js       ← per-session integrity record with N1 continuity
 ```
@@ -98,19 +100,19 @@ Each module < 150 lines. Single responsibility per file.
 
 ### Field rules
 
-| Field | Type | Rule |
-|---|---|---|
-| `version` | string | must equal `"simurgh-integrity-proof-v1"` |
-| `platform` | string | must equal `"macos"` (Stage 2.1) |
-| `session_id` | string | `^[A-Za-z0-9_-]{1,64}$` AND matches `req.sessionTokenSessionId` |
-| `node_id_hash` | string | `^[0-9a-f]{64}$` AND equals `sha256(decode(node_public_key))` |
-| `node_public_key` | string | base64 → exactly 32 bytes |
-| `nonce` | string | base64 → 12 to 64 bytes |
-| `timestamp` | string | ISO-8601 UTC; within **30s past** or **5s future** of server clock |
-| `capabilities` | object | exactly the four boolean keys above |
-| `signals` | object | exactly the four typed keys above (3 non-negative integers + `helper_status` enum: `connected` / `stale` / `not_configured`) |
-| `privacy_mode` | string | must equal `"metadata_only"` |
-| `signature` | string | base64 → exactly 64 bytes |
+| Field             | Type   | Rule                                                                                                                                                              |
+| ----------------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `version`         | string | must equal `"simurgh-integrity-proof-v1"`                                                                                                                         |
+| `platform`        | string | must equal `"macos"` (Stage 2.1)                                                                                                                                  |
+| `session_id`      | string | `^[A-Za-z0-9_-]{1,64}$` AND matches `req.sessionTokenSessionId`                                                                                                   |
+| `node_id_hash`    | string | `^[0-9a-f]{64}$` AND equals `sha256(decode(node_public_key))`                                                                                                     |
+| `node_public_key` | string | must base64-decode to **exactly 32 bytes**. The string length (44 chars with padding) is a hint only; the rule is the decoded byte length, not the string length. |
+| `nonce`           | string | must base64-decode to **12 to 64 bytes** (rule is decoded length, not string length)                                                                              |
+| `timestamp`       | string | ISO-8601 UTC; within **30s past** or **5s future** of server clock                                                                                                |
+| `capabilities`    | object | exactly the four boolean keys above                                                                                                                               |
+| `signals`         | object | exactly the four typed keys above (3 non-negative integers + `helper_status` enum: `connected` / `stale` / `not_configured`)                                      |
+| `privacy_mode`    | string | must equal `"metadata_only"`                                                                                                                                      |
+| `signature`       | string | must base64-decode to **exactly 64 bytes** (rule is decoded length, not string length)                                                                            |
 
 ### Forbidden top-level fields (rejection, not strip)
 
@@ -165,11 +167,13 @@ POST /api/integrity/proofs
       g. timestamp ISO-8601, ≤30s past, ≤5s future      → 400 proof_stale / proof_in_future
       h. capabilities = exactly the 4 boolean keys      → 400 invalid_capabilities
       i. signals = exactly the 4 typed keys             → 400 invalid_signals
-      j. node_public_key base64 → 32 bytes              → 400 invalid_public_key
+      j. node_public_key base64-decodes to exactly 32 bytes
+                                                         → 400 invalid_public_key
       k. node_id_hash matches sha256(public_key bytes)  → 400 node_id_hash_mismatch
-      l. signature base64 → 64 bytes                    → 400 invalid_signature_format
+      l. signature base64-decodes to exactly 64 bytes   → 400 invalid_signature_format
       m. canonical = canonicaliseProofPayload(proof)
-      n. crypto.verify(null, canonical, publicKeyObject, signature)
+      n. publicKeyObject = createEd25519PublicKeyFromRaw(rawPublicKeyBytes)
+         crypto.verify(null, canonical, publicKeyObject, signatureBytes)
                                                          → 401 invalid_signature
   │
   ▼
@@ -196,9 +200,39 @@ POST /api/integrity/proofs
  8. 202 Accepted JSON receipt
 ```
 
+### Node.js Ed25519 verification — SPKI wrapping
+
+Node's `crypto.verify(null, data, key, signature)` requires `key` to be a `KeyObject` (PEM/DER input or `createPublicKey()` result). It does **not** accept raw 32-byte Ed25519 public-key bytes directly.
+
+`proofSignature.js` therefore exposes a helper that wraps the raw 32-byte public key in the DER/SPKI envelope required by Node:
+
+```js
+import crypto from "node:crypto";
+
+// DER prefix for "AlgorithmIdentifier(id-Ed25519), BIT STRING" wrapping a 32-byte key.
+// 30 2a — SEQUENCE, length 42
+//   30 05 — SEQUENCE, length 5
+//     06 03 2b 65 70 — OID 1.3.101.112 (Ed25519)
+//   03 21 00 — BIT STRING, length 33, 0 unused bits
+const ED25519_SPKI_PREFIX = Buffer.from("302a300506032b6570032100", "hex");
+
+export function createEd25519PublicKeyFromRaw(rawPublicKey) {
+  if (!Buffer.isBuffer(rawPublicKey) || rawPublicKey.length !== 32) {
+    throw new Error("invalid_public_key");
+  }
+  return crypto.createPublicKey({
+    key: Buffer.concat([ED25519_SPKI_PREFIX, rawPublicKey]),
+    format: "der",
+    type: "spki",
+  });
+}
+```
+
+The validator pipeline at step (n) calls this helper before `crypto.verify(null, canonical, publicKeyObject, signatureBytes)`. Without this wrap, `crypto.verify` throws on the raw 32-byte buffer and no signature ever verifies, even when the canonical bytes match.
+
 ### Failure path
 
-On any rejection in steps 2–5, append `EVENTS.INTEGRITY_PROOF_REJECTED` to the audit chain with a **minimal privacy-safe payload**:
+On any rejection in steps 3–5, append `EVENTS.INTEGRITY_PROOF_REJECTED` to the audit chain with a **minimal privacy-safe payload**:
 
 ```json
 {
@@ -209,6 +243,8 @@ On any rejection in steps 2–5, append `EVENTS.INTEGRITY_PROOF_REJECTED` to the
 ```
 
 `node_id_hash_if_parsed` is set only if the hash field passed regex AND the public key parsed. Prevents attacker-controlled strings entering the audit chain via malformed submissions.
+
+**Special case — step 2 (`session_expired_or_evicted`)**: if the telemetry session has already been evicted, there is no session object to append the audit event to. Stage 2.1 deliberately does **not** create a separate global rejection log (no implicit session resurrection). The route returns `409 session_expired_or_evicted` with no audit entry. A global integrity rejection log is a Stage 2.x discussion if/when external monitoring needs visibility into these events.
 
 ### Response shape (success)
 
@@ -271,11 +307,11 @@ else:
 
 Three constants on `EVENTS` in `src/academic/academicEvents.js`:
 
-| Constant | Emitted in 2.1? | Notes |
-|---|---|---|
-| `INTEGRITY_PROOF_RECEIVED` | ✅ Yes | Already exists from Stage 2.0; payload format finalised below |
-| `INTEGRITY_PROOF_REJECTED` | ✅ Yes | Already exists from Stage 2.0; payload format finalised below |
-| `INTEGRITY_NODE_STALE` | ❌ No | New constant. Defined to lock the audit-chain wire format; emitted by Stage 2.x staleness checker. |
+| Constant                   | Emitted in 2.1? | Notes                                                                                              |
+| -------------------------- | --------------- | -------------------------------------------------------------------------------------------------- |
+| `INTEGRITY_PROOF_RECEIVED` | ✅ Yes          | Already exists from Stage 2.0; payload format finalised below                                      |
+| `INTEGRITY_PROOF_REJECTED` | ✅ Yes          | Already exists from Stage 2.0; payload format finalised below                                      |
+| `INTEGRITY_NODE_STALE`     | ❌ No           | New constant. Defined to lock the audit-chain wire format; emitted by Stage 2.x staleness checker. |
 
 ### `INTEGRITY_PROOF_RECEIVED` payload
 
@@ -342,18 +378,20 @@ ENVIRONMENT
 
 ### Exit codes
 
-| Code | Meaning |
-|---|---|
-| `0` | Proof printed successfully |
-| `1` | Generic error |
-| `2` | Key file malformed |
-| `3` | Missing required `--session` and no env var |
-| `64` | Unknown CLI flag |
+| Code | Meaning                                     |
+| ---- | ------------------------------------------- |
+| `0`  | Proof printed successfully                  |
+| `1`  | Generic error                               |
+| `2`  | Key file malformed                          |
+| `3`  | Missing required `--session` and no env var |
+| `64` | Unknown CLI flag                            |
 
 ### stdout vs stderr
 
 - **stdout** — ONLY the signed proof JSON, pretty-printed (sorted keys, indented). Pipeable to `curl --data @-`.
 - **stderr** — all diagnostic messages, including the first-run privacy warning.
+
+> **Note:** The printed pretty JSON does **not** need to byte-match the canonical JSON used for signing. The server re-runs `canonicaliseProofPayload()` on its side before verifying, so any equivalent encoding of the same logical object (different whitespace, different key insertion order in the printed form) verifies correctly. The pretty output exists for human inspection and curl piping; the canonical bytes exist only inside the signing function.
 
 ### Stage 2.1 capability/signal values (hard-coded)
 
@@ -391,7 +429,7 @@ signals = {
 
 ### README screenshot warning
 
-The README must include: *"Redact `key_path` before sharing screenshots or logs publicly — it contains your local username."*
+The README must include: _"Redact `key_path` before sharing screenshots or logs publicly — it contains your local username."_
 
 ---
 
@@ -399,14 +437,14 @@ The README must include: *"Redact `key_path` before sharing screenshots or logs 
 
 ### JS unit tests (`tests/unit/integrity/`)
 
-| File | Tests |
-|---|---|
-| `proofCanonicalise.test.js` (new) | top-level keys lex-sorted; nested keys lex-sorted; array order preserved; top-level `signature` excluded; nested `signature` key preserved; no whitespace; integers stay integers; empty object/array handled; **golden-fixture SHA-256 matches `golden-proof.sha256`** |
-| `proofSignature.test.js` (new) | `computeNodeIdHash(pubKey)` matches `crypto.createHash('sha256')`; round-trip signature verifies; tampered canonical fails; wrong public key fails; non-64-byte signature rejected |
-| `proofValidator.test.js` (new, ~25 cases) | every reason code from Section 3 — generates real Ed25519 pair in-test, signs canonical, asserts pass/fail |
-| `proofSchema.test.js` (rewrite of existing) | v1 constants present; forbidden-field list complete; capability/signal key sets exact |
-| `nonceGuard.test.js` (existing, simplify) | drop `nonce_session_mismatch`; keep replay + per-session isolation |
-| `integrityState.test.js` (new) | first record sets `bound_node_id_hash`; same hash updates last_* and increments `proof_count`; preserves bound hash; different hash returns `node_id_hash_changed`; `evict` removes record; `evictMissing(Set)` removes records absent from set |
+| File                                        | Tests                                                                                                                                                                                                                                                                   |
+| ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `proofCanonicalise.test.js` (new)           | top-level keys lex-sorted; nested keys lex-sorted; array order preserved; top-level `signature` excluded; nested `signature` key preserved; no whitespace; integers stay integers; empty object/array handled; **golden-fixture SHA-256 matches `golden-proof.sha256`** |
+| `proofSignature.test.js` (new)              | `computeNodeIdHash(pubKey)` matches `crypto.createHash('sha256')`; round-trip signature verifies; tampered canonical fails; wrong public key fails; non-64-byte signature rejected                                                                                      |
+| `proofValidator.test.js` (new, ~25 cases)   | every reason code from Section 3 — generates real Ed25519 pair in-test, signs canonical, asserts pass/fail                                                                                                                                                              |
+| `proofSchema.test.js` (rewrite of existing) | v1 constants present; forbidden-field list complete; capability/signal key sets exact                                                                                                                                                                                   |
+| `nonceGuard.test.js` (existing, simplify)   | drop `nonce_session_mismatch`; keep replay + per-session isolation                                                                                                                                                                                                      |
+| `integrityState.test.js` (new)              | first record sets `bound_node_id_hash`; same hash updates last\_\* and increments `proof_count`; preserves bound hash; different hash returns `node_id_hash_changed`; `evict` removes record; `evictMissing(Set)` removes records absent from set                       |
 
 ### Golden fixture (`tests/unit/integrity/__fixtures__/`)
 
@@ -444,11 +482,11 @@ Negative:
 
 ### Total
 
-| Suite | Tests |
-|---|---|
+| Suite                     | Tests                                                  |
+| ------------------------- | ------------------------------------------------------ |
 | Existing (after refactor) | ~70 (Stage 1 + integrity tests preserved or rewritten) |
-| New Stage 2.1 | ~60 |
-| **Total target** | **~130 tests** |
+| New Stage 2.1             | ~60                                                    |
+| **Total target**          | **~130 tests**                                         |
 
 Plus 2 new gates in `scripts/check.sh` (signature round-trip + CLI output privacy), bringing the quality gate from 21 → **23 gates**.
 

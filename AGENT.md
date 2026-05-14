@@ -2,6 +2,17 @@
 
 ## Agent Change Log
 
+### 2026-05-14 (Australia/Sydney) — Stage 2.1 Design Spec (macOS Integrity Proof Pipeline)
+
+**Raouf:**
+
+- **Scope:** Stage 2.1 design spec — macOS CLI integrity proof pipeline
+- **Summary:** Brainstormed and locked Stage 2.1 architecture with the user across six sections: module layout, v1 proof envelope + canonical signing, server validation flow, macOS CLI behaviour, audit events + per-session integrity state, and test plan. Four decisions locked: (A) refactor existing Stage 2.0 scaffold to the v1 envelope, (B2) Ed25519 / Curve25519 per-node keypair with `signature_status: "unregistered_node"` transitional state, (D1) CLI proof generator (no daemon, no permissions, no ScreenCaptureKit), (N1) strict node continuity via immutable `bound_node_id_hash`. Spec includes the Node SPKI wrapping detail required for `crypto.verify` on raw Ed25519 keys, asymmetric timestamp tolerance (30 s past / 5 s future), golden cross-implementation canonical-bytes fixture, and ~60 new tests.
+- **Files Changed:**
+  - `docs/superpowers/specs/2026-05-14-stage-2-1-macos-integrity-proof-design.md` (new — 6-section approved spec)
+- **Verification:** Spec self-review passed: no placeholders, internal consistency confirmed across sections, single-milestone scope, all field rules and reason codes enumerated. User reviewed and approved with six refinement requests (SPKI wrapping detail, validator scope clarification, evicted-session audit semantics, base64-decoded-length validation rule, pretty-vs-canonical clarification, AGENT/CHANGELOG entry) — all applied before this commit.
+- **Follow-ups:** Invoke `superpowers:writing-plans` to produce an implementation plan from the locked spec.
+
 ### 2026-05-14 (Australia/Sydney) — Stage 2.0 Integrity Proof Pipeline Scaffold
 
 **Raouf:**
