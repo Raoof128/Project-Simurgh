@@ -12,8 +12,9 @@ import { createExam, getExam, listExams } from "./src/academic/exams.js";
 import { STATES, createSessionRecord, transitionState } from "./src/academic/sessions.js";
 import { hashStudentId } from "./src/privacy/hashIdentity.js";
 import { buildReport } from "./src/academic/reportBuilder.js";
-import { validateProof } from "./src/integrity/proofSchema.js";
+import { validateProof } from "./src/integrity/proofValidator.js";
 import { createNonceGuard } from "./src/integrity/nonceGuard.js";
+import { createIntegrityState } from "./src/integrity/integrityState.js";
 import { verifyAuditExport } from "./src/audit/verifyAudit.js";
 import { appendEntry, CHAIN_CAP } from "./src/audit/hmacChain.js";
 import {
@@ -264,6 +265,9 @@ const examSessions = new Map(); // sessionId → sessionRecord (Stage 1 lifecycl
 // Stage 2: nonce guard for /api/integrity/proofs submissions
 const proofNonceGuard = createNonceGuard();
 
+// Stage 2.1: per-session integrity state with N1 strict node continuity.
+const integrityState = createIntegrityState();
+
 // Replay guard for /api/telemetry submissions
 const replayGuard = createReplayGuard({
   skewMs: stagingConfig.telemetryTimestampSkewMs,
@@ -311,6 +315,7 @@ const examEvictionTimer = setInterval(
     for (const [id] of examSessions.entries()) {
       if (!sessions.has(id)) examSessions.delete(id);
     }
+    integrityState.evictMissing(new Set(sessions.keys()));
   },
   5 * 60 * 1000
 ).unref?.();
@@ -1059,61 +1064,92 @@ app.get("/api/audit/:sessionId/verify", limitVerify, requireInstructorAuth, (req
 });
 
 // ─────────────────────────────────────────────────────────────
-//  Stage 2 scaffold — integrity proof ingestion
+//  Stage 2.1 — integrity proof ingestion (v1 pipeline)
 //  POST /api/integrity/proofs
-//
-//  This is a Stage 2.0 scaffold stub. It validates the proof
-//  structure, enforces nonce uniqueness, records the submission
-//  in the audit chain, and returns a structured receipt.
-//
-//  It does NOT yet:
-//   - perform cryptographic signature verification (planned Stage 2.x)
-//   - influence the Stage 1 risk score (planned Stage 2.x)
-//   - claim hardware attestation (future milestone)
-//   - replace the existing /api/affinity helper path
-//
-//  Stage 2 scaffold is clearly separated from Stage 1 logic.
 // ─────────────────────────────────────────────────────────────
 app.post("/api/integrity/proofs", requireSessionToken, (req, res) => {
   const sessionId = req.sessionTokenSessionId;
 
-  const validation = validateProof(req.body);
-  if (!validation.ok) {
-    return res.status(400).json({ error: "proof_invalid", reason: validation.reason });
-  }
-
-  const { proof } = validation;
-
-  // Ensure proof is bound to the authenticated session.
-  if (proof.session_id !== sessionId) {
-    return res.status(401).json({ error: "proof_session_mismatch" });
-  }
-
-  // Replay protection — reject reused nonces.
-  const nonceResult = proofNonceGuard.check(proof.nonce, sessionId);
-  if (!nonceResult.ok) {
-    return res.status(409).json({ error: nonceResult.reason });
-  }
-
-  // Record in the audit chain if a telemetry session exists.
+  // Step 2 (spec): session must still exist. No implicit resurrection.
   const sess = sessions.get(sessionId);
-  if (sess) {
-    appendAudit(sess, "integrity_proof_received", {
-      nonce: proof.nonce,
-      capabilities: proof.capabilities,
-      node_state: proof.risk_signals?.node_state ?? null,
-      capture_excluded_window_count: proof.risk_signals?.capture_excluded_window_count ?? null,
-      proof_version: proof.proof_version,
+  if (!sess) {
+    return res.status(409).json({ error: "session_expired_or_evicted" });
+  }
+
+  // Helper to log rejection to audit chain with a minimal privacy-safe payload.
+  function recordReject(reason, parsedHash = null, hasSignature = false) {
+    appendAudit(sess, EVENTS.INTEGRITY_PROOF_REJECTED, {
+      reason,
+      node_id_hash_if_parsed: parsedHash,
+      has_signature: hasSignature,
     });
   }
 
-  return res.status(202).json({
+  // Step 3 (spec): schema + crypto validation.
+  const validation = validateProof(req.body, { now: Date.now() });
+  if (!validation.ok) {
+    const rawHash =
+      typeof req.body?.node_id_hash === "string" && /^[0-9a-f]{64}$/.test(req.body.node_id_hash)
+        ? req.body.node_id_hash
+        : null;
+    const hasSig = typeof req.body?.signature === "string" && req.body.signature.length > 0;
+    recordReject(validation.reason, rawHash, hasSig);
+
+    let status = 400;
+    if (validation.reason === "invalid_signature") status = 401;
+    if (validation.reason === "proof_session_mismatch") status = 401;
+    return res.status(status).json({ error: validation.reason });
+  }
+  const { proof } = validation;
+
+  // Token session must match proof session.
+  if (proof.session_id !== sessionId) {
+    recordReject("proof_session_mismatch", proof.node_id_hash, true);
+    return res.status(401).json({ error: "proof_session_mismatch" });
+  }
+
+  // Step 4 (spec): nonce replay protection.
+  const nonceResult = proofNonceGuard.check(proof.nonce, sessionId);
+  if (!nonceResult.ok) {
+    recordReject(nonceResult.reason, proof.node_id_hash, true);
+    return res.status(409).json({ error: nonceResult.reason });
+  }
+
+  // Step 5 (spec): N1 strict node continuity.
+  const stateResult = integrityState.record(sessionId, proof);
+  if (!stateResult.ok) {
+    recordReject(stateResult.reason, proof.node_id_hash, true);
+    return res.status(409).json({ error: stateResult.reason });
+  }
+
+  // Step 6 (spec): Stage 2.1 always emits unregistered_node.
+  const signatureStatus = "unregistered_node";
+
+  // Step 7 (spec): success audit with hashed nonce + summaries only.
+  const nonceHash = crypto.createHash("sha256").update(proof.nonce_bytes).digest("hex");
+  appendAudit(sess, EVENTS.INTEGRITY_PROOF_RECEIVED, {
+    node_id_hash: proof.node_id_hash,
+    nonce_hash: nonceHash,
+    signature_status: signatureStatus,
+    platform: proof.platform,
+    version: proof.version,
+    capability_summary: { ...proof.capabilities },
+    signal_summary: {
+      capture_excluded_window_count: proof.signals.capture_excluded_window_count,
+      helper_status: proof.signals.helper_status,
+    },
+  });
+
+  // Step 8 (spec): success receipt.
+  res.status(202).json({
     status: "accepted",
     session_id: sessionId,
     nonce: proof.nonce,
-    capabilities_accepted: proof.capabilities,
-    received_at: proof.received_at,
-    note: "Stage 2.0 scaffold: proof recorded. Signature verification and scoring integration are planned for later Stage 2 milestones.",
+    node_id_hash: proof.node_id_hash,
+    signature_status: signatureStatus,
+    platform: proof.platform,
+    received_at: new Date().toISOString(),
+    note: "Stage 2.1 scaffold: signature mathematically verified, node not yet paired. Pairing lands in Stage 2.2.",
   });
 });
 
