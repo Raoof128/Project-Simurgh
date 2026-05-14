@@ -3,7 +3,7 @@
 // remain in server.js — this module only declares the new flags and limits.
 export const stagingConfig = {
   scoringMode: process.env.SIMURGH_SCORING_MODE || "hybrid",
-  claudeOnSafe: process.env.SIMURGH_CLAUDE_ON_SAFE !== "true", // default: skip Claude on Safe
+  claudeOnSafe: process.env.SIMURGH_CLAUDE_ON_SAFE === "true", // default: skip Claude on Safe
   claudeOnWarning: process.env.SIMURGH_CLAUDE_ON_WARNING !== "false", // default: call Claude
   claudeOnCritical: process.env.SIMURGH_CLAUDE_ON_CRITICAL !== "false", // default: call Claude
   retentionDays: Number(process.env.SIMURGH_RETENTION_DAYS) || 30,

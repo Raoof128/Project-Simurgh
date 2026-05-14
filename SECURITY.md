@@ -106,7 +106,7 @@ The repository currently reports **0 known vulnerabilities**. Report any new fin
 ## Verification Tools
 
 ```bash
-npm test                                       # 65 unit tests across 12 modules
+npm test                                       # 68 unit tests across 13 modules
 node tools/privacy-audit.mjs                   # scan generated data for forbidden fields
 node tools/verify-audit.mjs <chain.json>       # verify an exported HMAC audit chain
 ```
