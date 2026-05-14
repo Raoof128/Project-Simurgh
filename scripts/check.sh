@@ -602,9 +602,14 @@ else
 fi
 
 # ── 10d. Swift macOS node — conditional build + test ─────
+# Only runs on Darwin (macOS) because the node uses CryptoKit, an Apple-only framework.
+# Ubuntu has Swift but no CryptoKit — skip cleanly there so CI stays green.
 if [[ "$QUICK" == true ]]; then
   step "Swift macOS node"
   echo -e "${YELLOW}Skipped because --quick was used.${NC}"
+elif [[ "$(uname)" != "Darwin" ]]; then
+  step "Swift macOS node"
+  echo -e "${YELLOW}Not on macOS (uname=$(uname)) — CryptoKit unavailable; skipping Swift block${NC}"
 elif command -v swift >/dev/null 2>&1 && [[ -d tools/simurgh-node-macos ]]; then
   step "Swift macOS node build + test"
   if (cd tools/simurgh-node-macos && swift build) > "$LOG_DIR/swift-build.log" 2>&1; then
