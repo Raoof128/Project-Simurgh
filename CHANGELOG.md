@@ -1,5 +1,23 @@
 ## Change Log
 
+## [Unreleased] — 2026-05-14 — Vendor-Neutral README Positioning
+
+### Changed
+
+- Removed the README's company-specific "Why Anthropic?" section.
+- Added vendor-neutral "Why AI Platforms Need Proof-Based Integrity" positioning.
+- Reworded high-visibility README references from Claude/Anthropic-specific phrasing to optional AI narrative provider language while keeping actual environment variable names accurate.
+- Neutralized contributor and capability-uplift wording for company-neutral review.
+
+### Raouf
+
+- **Date:** 2026-05-14 (Australia/Sydney)
+- **Scope:** README vendor-neutral positioning
+- **Summary:** Removed company-specific Anthropic pitch language before external outreach and reframed the README around AI platforms, proof-based integrity, and vendor-neutral education/enterprise/agentic workflow relevance.
+- **Files changed:** `README.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `npx prettier --check README.md AGENT.md CHANGELOG.md` passed. README relative links and anchors passed. README grep confirmed no `Why Anthropic`, `Anthropic`, `Claude`, `Constitutional`, `strategic moat`, or partnership-pitch wording remains. `git diff --check` passed.
+- **Follow-ups:** None.
+
 ## [0.3.6] — 2026-05-14 — Stage 2 Readiness Audit Fix
 
 ### Fixed

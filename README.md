@@ -8,9 +8,9 @@ _Detecting UI-redressing and behavioral spoofing without relying on screen captu
 
 [![Stage 1 Checks](https://github.com/Raoof128/Project-Simurgh/actions/workflows/stage-1-checks.yml/badge.svg?branch=main)](https://github.com/Raoof128/Project-Simurgh/actions/workflows/stage-1-checks.yml)
 [![Node](https://img.shields.io/badge/node-%E2%89%A522.0-1a1a1a?style=flat-square)](https://nodejs.org)
-[![Claude](https://img.shields.io/badge/claude-sonnet--4--5-6b1a1a?style=flat-square)](https://docs.claude.com)
-[![License](https://img.shields.io/badge/license-MIT-d6cfbe?style=flat-square)](#13-status--license)
-[![Status](https://img.shields.io/badge/status-research%20prototype-2f4a2a?style=flat-square)](#13-status--license)
+[![AI Narrative](https://img.shields.io/badge/AI%20narrative-optional-6b1a1a?style=flat-square)](#2-the-simurgh-engine)
+[![License](https://img.shields.io/badge/license-MIT-d6cfbe?style=flat-square)](#13-status-license)
+[![Status](https://img.shields.io/badge/status-research%20prototype-2f4a2a?style=flat-square)](#13-status-license)
 
 **[Read the Disclosure Paper →](https://raoufabedini.dev/projects/invisible-window-research)**
 
@@ -34,21 +34,21 @@ In Persian mythology, the Simurgh is the ultimate protector of pure knowledge �
 
 ## Table of Contents
 
-| #   | Section                                                                | Description                                       |
-| --- | ---------------------------------------------------------------------- | ------------------------------------------------- |
-| 1   | [The Threat: The Invisible Window](#1-the-threat-the-invisible-window) | The vulnerability class this project mitigates    |
-| 2   | [The Simurgh Engine](#2-the-simurgh-engine)                            | Behavioral heuristic architecture                 |
-| 3   | [System Architecture](#3-system-architecture)                          | Data-flow diagram and component topology          |
-| 4   | [Socio-Economic Impact](#4-socio-economic-impact--democratic-access)   | Bandwidth-inclusive security and privacy ethics   |
-| 5   | [Quick Start](#5-quick-start)                                          | Installation, configuration, and first run        |
-| 6   | [API Reference](#6-api-reference)                                      | Endpoint specifications                           |
-| 7   | [Cost & Latency](#7-cost--latency)                                     | Prompt-caching economics and response times       |
-| 8   | [Security Considerations](#8-security-considerations)                  | HMAC audit chain and threat model                 |
-| 9   | [Stage 1.5 Validation Pack](#9-stage-15-validation-pack)               | Reviewer-readiness and evidence map               |
-| 10  | [Why Anthropic?](#10-why-anthropic)                                    | Strategic alignment with Constitutional AI        |
-| 11  | [Strategic Roadmap](#11-strategic-roadmap-2026---2028)                 | Four-phase evolution from PoC to Sovereign Shield |
-| 12  | [Contributors](#12-contributors)                                       | Project contributors                              |
-| 13  | [Status & License](#13-status--license)                                | Current status and licensing                      |
+| #   | Section                                                                                        | Description                                       |
+| --- | ---------------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| 1   | [The Threat: The Invisible Window](#1-the-threat-the-invisible-window)                         | The vulnerability class this project mitigates    |
+| 2   | [The Simurgh Engine](#2-the-simurgh-engine)                                                    | Behavioral heuristic architecture                 |
+| 3   | [System Architecture](#3-system-architecture)                                                  | Data-flow diagram and component topology          |
+| 4   | [Socio-Economic Impact](#4-socio-economic-impact-democratic-access)                            | Bandwidth-inclusive security and privacy ethics   |
+| 5   | [Quick Start](#5-quick-start)                                                                  | Installation, configuration, and first run        |
+| 6   | [API Reference](#6-api-reference)                                                              | Endpoint specifications                           |
+| 7   | [Cost & Latency](#7-cost-latency)                                                              | Prompt-caching economics and response times       |
+| 8   | [Security Considerations](#8-security-considerations)                                          | HMAC audit chain and threat model                 |
+| 9   | [Stage 1.5 Validation Pack](#9-stage-15-validation-pack)                                       | Reviewer-readiness and evidence map               |
+| 10  | [Why AI Platforms Need Proof-Based Integrity](#10-why-ai-platforms-need-proof-based-integrity) | Vendor-neutral platform relevance                 |
+| 11  | [Strategic Roadmap](#11-strategic-roadmap-2026-2028)                                           | Four-phase evolution from PoC to Sovereign Shield |
+| 12  | [Contributors](#12-contributors)                                                               | Project contributors                              |
+| 13  | [Status & License](#13-status-license)                                                         | Current status and licensing                      |
 
 ---
 
@@ -78,7 +78,7 @@ The active heuristic engine bypasses the visual channel entirely, evaluating the
 | `max_idle_gap_ms`      | `int`   | Longest inter-keystroke interval        |
 | `keydown_intervals_ms` | `int[]` | Raw inter-key timing array              |
 
-This telemetry is securely transmitted to a Node/Express server, which interfaces with **Claude Sonnet 4.5** using a prompt-cached system prompt that encodes the threat model.
+This telemetry is securely transmitted to a Node/Express server, which can call a configured AI narrative provider using a prompt-cached system prompt that encodes the threat model.
 
 > **Illustrative scenario:** A screen recording appears pristine, yet telemetry reveals a 4-second focus loss followed by a 1,247-character paste. The visual feed is compromised. The Simurgh engine identifies this discrepancy and escalates the risk verdict accordingly.
 
@@ -86,7 +86,7 @@ This telemetry is securely transmitted to a Node/Express server, which interface
 
 The behavioral engine cannot natively detect click-through GPU overlays (e.g., Cluely, Interview Coder), as they do not trigger focus-loss events. To address this vector, Simurgh deploys a native counterpart (`simurgh-helper`) that enumerates display-affinity flags directly at the OS level. See Section 3 for the data-flow integration.
 
-> **Capability-uplift context:** The cross-platform exploits documented in the disclosure paper were built using Claude Opus 4.6 via Claude Code in a single research session by a student with no prior Win32 or ScreenCaptureKit experience — a self-contained capability-uplift case study directly relevant to Anthropic's RSP threshold work (see Paper, Section VIII-G).
+> **Capability-uplift context:** The cross-platform exploits documented in the disclosure paper were built with frontier AI coding assistance in a single research session by a student with no prior Win32 or ScreenCaptureKit experience — a self-contained capability-uplift case study relevant to AI platform safety work (see Paper, Section VIII-G).
 
 ---
 
@@ -103,12 +103,12 @@ flowchart LR
 
     subgraph Server["Node + Express Server"]
         direction TB
-        FW["Forwards window to Claude"]
+        FW["Scores telemetry window"]
         PS["Prompt-cached system prompt"]
         HMAC["HMAC-chain audit log"]
     end
 
-    subgraph Claude["Claude Sonnet 4.5"]
+    subgraph Narrative["AI Narrative Provider"]
         V["JSON risk verdict"]
     end
 
@@ -123,25 +123,25 @@ flowchart LR
 
     Client -- "POST /api/telemetry (every 5s)" --> Server
     Server -- "200 OK { verdict }" --> Client
-    Server --> Claude
-    Claude --> Server
+    Server --> Narrative
+    Narrative --> Server
     Helper -- "POST /api/affinity (every 2s)" --> Affinity
     Affinity --> Server
 ```
 
 ### Component Summary
 
-| Component                | Language          | Role                                                                       |
-| ------------------------ | ----------------- | -------------------------------------------------------------------------- |
-| **Browser Client**       | JavaScript        | Collects behavioral telemetry; renders verdict overlay                     |
-| **Server**               | Node.js / Express | Routes telemetry to Claude; maintains HMAC audit chain                     |
-| **Claude Sonnet 4.5**    | —                 | Evaluates behavioral windows against the encoded threat model              |
-| **simurgh-helper**       | Swift (macOS)     | Native agent; enumerates `NSWindow.SharingType` flags via ScreenCaptureKit |
-| **Instructor Dashboard** | HTML / SSE        | Real-time multi-session monitoring and audit export                        |
+| Component                 | Language          | Role                                                                           |
+| ------------------------- | ----------------- | ------------------------------------------------------------------------------ |
+| **Browser Client**        | JavaScript        | Collects behavioral telemetry; renders verdict overlay                         |
+| **Server**                | Node.js / Express | Scores telemetry, optionally requests AI narrative, maintains HMAC audit chain |
+| **AI Narrative Provider** | Configured API    | Provides optional explanations for Warning/Critical review cases               |
+| **simurgh-helper**        | Swift (macOS)     | Native agent; enumerates `NSWindow.SharingType` flags via ScreenCaptureKit     |
+| **Instructor Dashboard**  | HTML / SSE        | Real-time multi-session monitoring and audit export                            |
 
 ### Why Prompt Caching Matters
 
-The system prompt encoding the threat model is ~700 tokens and does not change across windows. Using `cache_control: { type: "ephemeral" }` ensures every subsequent window is a cache read — approximately **90% cheaper** than a cold invocation.
+The system prompt encoding the threat model is ~700 tokens and does not change across windows. Provider-side prompt caching, where available, keeps repeated narrative calls cheaper than cold invocations.
 
 ---
 
@@ -151,15 +151,15 @@ Stage 1 extends the core behavioural telemetry engine into a complete **privacy-
 
 **What it adds:**
 
-| Capability         | Detail                                                                                |
-| ------------------ | ------------------------------------------------------------------------------------- |
-| Exam lifecycle     | `POST /api/exams` → join → privacy-accept → start → submit                            |
-| Identity privacy   | Student IDs are SHA-256 hashed — raw names never stored                               |
-| Local risk scoring | Weighted category model (paste, focus, typing, idle, affinity, helper, session)       |
-| Claude narrative   | Called only on Warning/Critical; fail-open (local score stands if Claude unavailable) |
-| Academic events    | Named taxonomy (BULK_PASTE, FOCUS_LOSS, CAPTURE_EXCLUDED_WINDOW, etc.)                |
-| JSON report export | `GET /api/sessions/:id/report` — includes timeline, risk summary, audit validity      |
-| Audit verification | `GET /api/audit/:id/verify` — HMAC chain integrity check                              |
+| Capability         | Detail                                                                                         |
+| ------------------ | ---------------------------------------------------------------------------------------------- |
+| Exam lifecycle     | `POST /api/exams` → join → privacy-accept → start → submit                                     |
+| Identity privacy   | Student IDs are SHA-256 hashed — raw names never stored                                        |
+| Local risk scoring | Weighted category model (paste, focus, typing, idle, affinity, helper, session)                |
+| AI narrative       | Called only on Warning/Critical; fail-open (local score stands if the provider is unavailable) |
+| Academic events    | Named taxonomy (BULK_PASTE, FOCUS_LOSS, CAPTURE_EXCLUDED_WINDOW, etc.)                         |
+| JSON report export | `GET /api/sessions/:id/report` — includes timeline, risk summary, audit validity               |
+| Audit verification | `GET /api/audit/:id/verify` — HMAC chain integrity check                                       |
 
 **Privacy commitment:** Simurgh collects behavioural metadata only. No screen pixels, no webcam frames, no typed content, no paste content. Risk scores are heuristic-based. Any anomaly recommendation requires manual human review — Simurgh never makes automatic misconduct findings.
 
@@ -286,7 +286,7 @@ By decoupling integrity verification from the operating system's lockdown capabi
 
 Traditional proctoring platforms impose significant hardware demands: continuous video encoding, real-time screen capture processing, and local AI inference all require modern CPUs, dedicated GPUs, and substantial RAM. Students with older or lower-specification devices are systematically disadvantaged — or outright excluded.
 
-Project Simurgh eliminates this barrier entirely. **All intelligence resides server-side.** The client's only responsibility is collecting lightweight behavioral events (keystrokes, focus changes, paste events) and transmitting a ~2 KB JSON payload every five seconds. Claude performs all analytical processing on Anthropic's infrastructure. As a result:
+Project Simurgh eliminates this barrier entirely. **All intelligence resides server-side.** The client's only responsibility is collecting lightweight behavioral events (keystrokes, focus changes, paste events) and transmitting a ~2 KB JSON payload every five seconds. Optional narrative analysis can run through the configured AI provider while the deterministic local score remains authoritative. As a result:
 
 - **No video or images ever leave the student's device.** The system transmits only anonymized behavioral metadata — never pixels, never frames, never recordings of the student's environment.
 - **No local AI inference is required.** The device does not need a GPU, does not need to run a machine learning model, and does not need to encode or decode video streams.
@@ -317,7 +317,7 @@ Project Simurgh renders this trade-off obsolete. By enabling high-integrity remo
 ### Prerequisites
 
 - Node.js ≥ 22.0 (matches CI and `scripts/check.sh`)
-- Anthropic API Key (for Claude integration)
+- AI provider API key for optional narrative integration (current env var: `ANTHROPIC_API_KEY`)
 - Xcode Command Line Tools (macOS — for building the native helper)
 
 ### Installation
@@ -336,7 +336,7 @@ cp .env.example .env
 
 | Variable                         | Required | Description                                                                                   |
 | -------------------------------- | -------- | --------------------------------------------------------------------------------------------- |
-| `ANTHROPIC_API_KEY`              | Yes\*    | Anthropic SDK key. If unset, server runs in demo mode (local heuristic).                      |
+| `ANTHROPIC_API_KEY`              | Yes\*    | Current provider SDK key. If unset, server runs in demo mode (local heuristic).               |
 | `SIMURGH_HELPER_SECRET`          | Yes\*    | Shared secret for `simurgh-helper` authentication. Generate: `openssl rand -hex 32`           |
 | `SIMURGH_AUDIT_SECRET`           | Yes\*    | HMAC key for the tamper-evident audit chain. Generate: `openssl rand -hex 32`                 |
 | `SIMURGH_INSTRUCTOR_TOKEN`       | Yes\*    | Bearer token gating the instructor dashboard and SSE stream. Generate: `openssl rand -hex 24` |
@@ -367,7 +367,7 @@ make
 | Student Exam View                                                                                                                 | Instructor Dashboard                                                                                                       |
 | --------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
 | ![Student view — behavioral telemetry with live verdict](docs/screenshot-exam-view.png)                                           | ![Instructor view — multi-session aggregator with SSE streaming](docs/screenshot-instructor.png)                           |
-| _Real-time behavioral analysis with keystroke signature waveform, display-affinity monitoring, and Claude-powered risk verdicts._ | _Multi-session monitoring dashboard with per-session verdict history, helper status, and capture-invisible window counts._ |
+| _Real-time behavioral analysis with keystroke signature waveform, display-affinity monitoring, and AI-assisted review narrative._ | _Multi-session monitoring dashboard with per-session verdict history, helper status, and capture-invisible window counts._ |
 
 ---
 
@@ -428,7 +428,7 @@ Verifies the in-memory HMAC audit chain for a given session. Requires instructor
 
 ### Prompt Caching Economics
 
-The system prompt encoding the threat model consists of ~700 tokens. As this prompt remains static across all telemetry windows within a session, Project Simurgh leverages Anthropic's `cache_control: { type: "ephemeral" }`.
+The system prompt encoding the threat model consists of ~700 tokens. As this prompt remains static across all telemetry windows within a session, Project Simurgh can use provider-side prompt caching where supported.
 
 | Metric                             | Value                    |
 | ---------------------------------- | ------------------------ |
@@ -439,7 +439,7 @@ The system prompt encoding the threat model consists of ~700 tokens. As this pro
 
 ### Latency
 
-Telemetry evaluation occurs in real-time, with Claude API round-trips consistently resolving under 800ms. This ensures the instructor dashboard reflects behavioral anomalies within one telemetry cycle (5 seconds).
+Telemetry evaluation occurs in real time. In the current local prototype, optional AI narrative calls are designed to resolve within one telemetry cycle so the instructor dashboard can reflect behavioral anomalies quickly.
 
 ---
 
@@ -487,7 +487,7 @@ Stage 1.5 is a validation, audit, documentation, and reviewer-readiness sprint. 
 
 - Metadata-only behavioral telemetry can support a low-bandwidth academic integrity workflow.
 - Joined sessions can enforce HMAC session tokens and replay protection.
-- Local deterministic scoring can remain the official score while Claude provides optional narrative.
+- Local deterministic scoring can remain the official score while an AI provider supplies optional narrative.
 - Helper display-affinity telemetry can escalate risk when available.
 - HMAC audit chains can provide tamper-evident review records.
 
@@ -513,6 +513,7 @@ git diff --check
 ---
 
 ## 10. Why AI Platforms Need Proof-Based Integrity
+
 Frontier AI systems are moving into education, enterprise workflows, coding environments, browser automation, and high-stakes digital sessions.
 
 Current trust infrastructure still relies heavily on surveillance: webcam monitoring, screen recording, lockdown browsers, biometrics, and human review. This model is invasive, bandwidth-heavy, difficult to scale globally, and still vulnerable to display-layer and agentic workflow blind spots.
@@ -523,9 +524,9 @@ Instead of verifying trust by watching the user, Simurgh verifies the session en
 
 This makes Simurgh relevant to AI education products, enterprise AI deployments, agentic browser workflows, assessment platforms, and safety-critical computer-use systems.
 
-Research Origin
-This project emerged from research into browser-based proctoring failures and frontier-AI-assisted capability uplift. Although the original research was framed around AI safety, Simurgh is designed as a vendor-neutral integrity layer for AI-era education, enterprise, and agentic workflows.
+### Research Origin
 
+This project emerged from research into browser-based proctoring failures and frontier-AI-assisted capability uplift. Although the original research was framed around AI safety, Simurgh is designed as a vendor-neutral integrity layer for AI-era education, enterprise, and agentic workflows.
 
 ---
 
@@ -591,10 +592,10 @@ Project Simurgh is designed to support two parallel delivery modes per platform 
 
 ## 12. Contributors
 
-| Contributor            | Role                                                                                                                                                                                                                    |
-| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Raouf Abedini**      | Project lead — vulnerability research, system architecture, full-stack implementation. Final-year Cybersecurity student, Macquarie University.                                                                          |
-| **Claude (Anthropic)** | AI pair-programming partner — code review, architectural feedback, documentation refinement. Also used as the exploit development tool in the original disclosure (capability-uplift case study, Paper Section VIII-G). |
+| Contributor                       | Role                                                                                                                                           |
+| --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Raouf Abedini**                 | Project lead — vulnerability research, system architecture, full-stack implementation. Final-year Cybersecurity student, Macquarie University. |
+| **AI-assisted development tools** | Pair-programming support for code review, architectural feedback, documentation refinement, and exploit-development research context.          |
 
 ---
 
