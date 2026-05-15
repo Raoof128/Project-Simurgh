@@ -1,5 +1,7 @@
 # Stage 1 Limitations
 
+> **Status (v0.4.3, 2026-05-15):** This document describes the Stage 1 boundary as published in the Stage 1.5 reviewer pack. Stage 2.1 (macOS integrity proofs) and Stage 2.2 (macOS node pairing) are now merged; for Stage 2 limitations see [`STAGE_2_ARCHITECTURE.md`](STAGE_2_ARCHITECTURE.md) and `SECURITY.md`.
+
 Stage 1 is a research MVP and reviewer validation baseline. These limitations define the controlled security boundary; they are not hidden defects or production claims.
 
 ## Current Boundary

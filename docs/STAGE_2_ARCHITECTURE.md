@@ -1,6 +1,15 @@
 # Stage 2 Architecture: Device Shield / Integrity Node
 
-Stage 2 is the planned transition from a browser-centered Stage 1 Academic Shield to a device-aware integrity architecture. This document is architectural only; Stage 2 runtime code is not implemented by the Stage 1.5 validation pack.
+> **Implementation status (as of v0.4.3, 2026-05-15):**
+>
+> - **Stage 2.1 ✅ merged** — Ed25519 signed-integrity-proof pipeline (`/api/integrity/proofs`, macOS Swift CLI under `tools/simurgh-node-macos/`, golden-fixture cross-implementation lock).
+> - **Stage 2.2 ✅ merged** — macOS node pairing (`/api/integrity/pairing/challenge`, `/api/integrity/pairing/complete`, per-session pairing registry, paired-session proofs return `signature_status: "verified"`).
+> - **v0.4.3 ✅ merged** — security hardening: 30/min proof rate limit, `safeParsedPairingHints` audit safety, constant-time challenge compare.
+> - **Stage 2.3 ⏳ planned** — macOS localhost node daemon (host the CLI flows behind an HTTP endpoint).
+> - **Stage 2.4 ⏳ planned** — browser SDK (discovers and talks to the localhost daemon).
+> - **Stage 2.5 ⏳ planned** — ScreenCaptureKit signal collection.
+
+Stage 2 is the transition from a browser-centered Stage 1 Academic Shield to a device-aware integrity architecture. Sections below describing "pairing" and "signed proof envelopes" are now implemented at the CLI + server boundary; the "Simurgh SDK ↔ Local Integrity Node" interaction is Stage 2.3+ work.
 
 ```text
 Browser Session

@@ -1,5 +1,7 @@
 # Stage 1.5 Validation Matrix
 
+> **Status (v0.4.3, 2026-05-15):** Stage 1.5 reviewer validation matrix, frozen at the time of the Stage 1.5 pack. Stage 2.1 (v0.4.1) and Stage 2.2 (v0.4.2 + v0.4.3 hardening) are merged. For Stage 2 verification gates see `scripts/check.sh` (currently 32/32) and `CHANGELOG.md`. The matrix below remains a faithful Stage 1.5 baseline.
+
 This matrix maps reviewer checks to expected behavior and repo evidence. Results should be refreshed after every material change. Evidence files that do not yet exist are marked as pending evidence rather than invented.
 
 | Test                                          | Expected                                                                | Result                                                          | Evidence                                                                       | Status                             |

@@ -1,11 +1,15 @@
 # Reviewer Checklist
 
+> **Status (v0.4.3, 2026-05-15):** Stage 1.5 reviewer checklist. Stage 2.1 + 2.2 are merged on `main`; reviewers evaluating the current state should also read `CHANGELOG.md` entries `[0.4.1]` → `[0.4.3]` and [`STAGE_2_ARCHITECTURE.md`](STAGE_2_ARCHITECTURE.md).
+
 ## Read First
 
 - `docs/STAGE_1_5_REVIEWER_PACK.md`
 - `README.md`
 - `docs/LIMITATIONS.md`
 - `docs/THREAT_MODEL.md`
+- `docs/STAGE_2_ARCHITECTURE.md` (Stage 2.1/2.2 implementation status)
+- `CHANGELOG.md` (v0.4.1, v0.4.2, v0.4.3 entries)
 - `SECURITY.md`
 - `PRIVACY.md`
 - `ETHICS.md`

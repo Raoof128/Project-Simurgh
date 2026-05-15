@@ -1,5 +1,7 @@
 # Stage 2 Resource Plan
 
+> **Status (v0.4.3, 2026-05-15):** Stage 2.1 (signed proofs) and 2.2 (macOS node pairing) shipped as solo R&D using the resources available. Stage 2.3 (localhost daemon), 2.4 (browser SDK), and 2.5 (ScreenCaptureKit) still require the institutional resources outlined below.
+
 Stage 2 requires institutional validation, not only solo development.
 
 | Resource                           | Why needed                                                                       | Stage 2 impact                           | Priority |

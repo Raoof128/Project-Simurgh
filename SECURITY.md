@@ -4,11 +4,14 @@
 
 Project Simurgh is a research prototype. Security fixes are applied to the latest tagged release and the `main` branch.
 
-| Version                      | Supported      |
-| ---------------------------- | -------------- |
-| `v0.3.0` (Stage 1 Hardening) | ✅ Active      |
-| `main` (development)         | ✅ Active      |
-| Earlier tags                 | Not maintained |
+| Version                                 | Supported              |
+| --------------------------------------- | ---------------------- |
+| `v0.4.3` (Stage 2 hardening, current)   | ✅ Active              |
+| `v0.4.2` (Stage 2.2 macOS node pairing) | ✅ Active              |
+| `v0.4.1` (Stage 2.1 macOS integrity)    | ✅ Active              |
+| `v0.3.x` (Stage 1 / 1.5)                | ⚠️ Critical fixes only |
+| `main` (development)                    | ✅ Active              |
+| Earlier tags                            | Not maintained         |
 
 ## Reporting a Vulnerability
 
@@ -25,9 +28,11 @@ Include:
 
 You will receive a response within **72 hours**. If the vulnerability is confirmed, a fix will be prioritised for the next release. You will be credited in the changelog unless you request anonymity.
 
-## Security Architecture (v0.3.0)
+## Security Architecture (v0.4.3)
 
-### Trust Boundaries
+> The trust-boundary table below describes the Stage 1 surface. Stage 2.1 added an Ed25519-signed integrity-proof envelope (`/api/integrity/proofs`); Stage 2.2 added per-session node pairing (`/api/integrity/pairing/{challenge,complete}`); v0.4.3 added rate limiting on the proofs route, cryptographically-reconciled audit hints (`safeParsedPairingHints`), and a constant-time challenge compare. The macOS Ed25519 node key at `~/.simurgh/node-key` is a development identity key — it is not Keychain- or Secure-Enclave-backed and does not constitute production device trust or hardware attestation.
+
+### Stage 1 Trust Boundaries
 
 | Component              | Trust Level         | Mechanism                                                                                      |
 | ---------------------- | ------------------- | ---------------------------------------------------------------------------------------------- |

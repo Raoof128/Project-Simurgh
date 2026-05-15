@@ -1,5 +1,7 @@
 # Stage 1.5 Reviewer Demo Script
 
+> **Status (v0.4.3, 2026-05-15):** Stage 1.5 demo script. A Stage 2 demo (integrity proof + node pairing round-trip on macOS) is documented inline in `tools/simurgh-node-macos/README.md` and exercised by 4 `scripts/check.sh` gates (pairing round-trip, paired-proof verified, paired-session rejects different node, N1 cross-route consistency).
+
 Target length: 5 to 10 minutes.
 
 ## 1. Problem: Invisible and AI-Assisted Integrity Gap

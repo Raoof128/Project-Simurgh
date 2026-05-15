@@ -1,5 +1,7 @@
 # Stage 1.5 Reviewer Pack
 
+> **Status (v0.4.3, 2026-05-15):** This pack remains the canonical reviewer entry point for **Stage 1.5**. Stage 2.1 (v0.4.1), Stage 2.2 (v0.4.2), and the v0.4.3 hardening pass are now merged on `main`. For Stage 2 documentation, see `CHANGELOG.md`, [`STAGE_2_ARCHITECTURE.md`](STAGE_2_ARCHITECTURE.md), `SECURITY.md`, and the design specs under [`docs/superpowers/specs/`](superpowers/specs/).
+
 This is the main entry point for reviewing Project Simurgh after Stage 1 and before Stage 2.
 
 ## Executive Summary

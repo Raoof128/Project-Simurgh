@@ -1,5 +1,7 @@
 # Stage 1.5 Risk Register
 
+> **Status (v0.4.3, 2026-05-15):** "Stage 2 control" column items related to signed proofs and node pairing are now implemented (Stage 2.1 + 2.2 merged). Rows referring to Local Integrity Node / signed envelope are partially fulfilled — the proof envelope and pairing flow exist, but the localhost daemon (Stage 2.3) and browser SDK (Stage 2.4) are still pending. Hardware attestation remains future work.
+
 | Risk                                          | Likelihood | Impact | Current control                                                           | Stage 2 control                                                           | Status     |
 | --------------------------------------------- | ---------- | ------ | ------------------------------------------------------------------------- | ------------------------------------------------------------------------- | ---------- |
 | GPU overlays                                  | Medium     | High   | Documented limitation; helper may catch some display-affinity cases       | Local Integrity Node plus future hardware/compositor attestation research | Open       |

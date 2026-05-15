@@ -1,5 +1,7 @@
 # Stage 1.5 Threat Model
 
+> **Status (v0.4.3, 2026-05-15):** Document represents the Stage 1.5 reviewer baseline. Several "Stage 2" countermeasures referenced below are now live: signed integrity proofs (Stage 2.1, merged in v0.4.1) and macOS node pairing with `signature_status: "verified"` (Stage 2.2, merged in v0.4.2). Stage 2.3+ (localhost daemon, browser SDK, ScreenCaptureKit) remain future work. See [`STAGE_2_ARCHITECTURE.md`](STAGE_2_ARCHITECTURE.md) for the implementation status banner.
+
 Project Simurgh Stage 1 is a bounded research MVP for academic integrity review. This threat model describes what Stage 1 protects, what it does not protect, and why Stage 2 moves toward a Local Integrity Node.
 
 ## Protected Assets

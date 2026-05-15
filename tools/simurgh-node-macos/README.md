@@ -1,6 +1,11 @@
-# Simurgh macOS Integrity Node — Stage 2.1 CLI
+# Simurgh macOS Integrity Node CLI (Stage 2.1 + 2.2)
 
-Generates a signed Stage 2 v1 integrity proof envelope from the local macOS device and prints it to stdout. The Simurgh server validates the proof structure and Ed25519 signature; in Stage 2.1 every accepted proof is recorded with `signature_status: "unregistered_node"` because pairing/registration lands in Stage 2.2.
+Generates signed integrity-proof and pairing envelopes from the local macOS device and prints them to stdout. Two subcommands:
+
+- **`proof`** (Stage 2.1) — emits a v1 signed integrity proof envelope. Unpaired sessions accept the proof with `signature_status: "unregistered_node"`.
+- **`pair`** (Stage 2.2) — signs a server-issued challenge with the local Ed25519 key, producing a pairing payload. Once submitted to `/api/integrity/pairing/complete`, subsequent proofs return `signature_status: "verified"`.
+
+Status (v0.4.3, 2026-05-15): Stage 2.1 + 2.2 + post-audit hardening pass all merged. No localhost daemon yet (Stage 2.3 future work).
 
 ## What this does NOT do
 
