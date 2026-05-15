@@ -10,12 +10,16 @@ struct DaemonConfig {
         var i = 1
         while i < args.count {
             switch args[i] {
+            case "start", "stop", "status", "doctor", "reset-identity", "help", "--help":
+                break
             case "--port":
                 i += 1
                 if i < args.count, let p = UInt16(args[i]) { port = p }
             case "--allowed-origin":
                 i += 1
                 if i < args.count { origins.insert(args[i]) }
+            case "--server-base-url":
+                i += 1
             default:
                 break
             }

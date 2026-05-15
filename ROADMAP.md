@@ -60,6 +60,8 @@ Transition toward signed local integrity proofs and device-aware validation.
 - [x] macOS localhost daemon foundation with P-256 signed proofs
 - [x] Server challenge verification and telemetry `daemon_proof`
 - [x] Dashboard/report device-integrity state
+- [x] Reusable browser SDK for daemon discovery, pairing, proof fetch, and telemetry send
+- [x] Development daemon lifecycle commands and LaunchAgent install/uninstall helpers
 - [ ] Tamper-aware local node logs
 - [x] Replay-resistant node/API challenge flow
 - [x] Privacy-preserving proof summaries
@@ -80,6 +82,7 @@ Transition toward signed local integrity proofs and device-aware validation.
 Cross-platform delivery and LMS integration.
 
 - [ ] Browser PWA (no install required)
+- [ ] Production macOS daemon packaging, signing, notarisation, and managed deployment design
 - [ ] iOS and Android companion apps
 - [ ] ChromeOS support
 - [ ] LMS integration (Canvas, Moodle, Blackboard webhooks)

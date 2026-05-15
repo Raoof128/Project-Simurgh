@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Last updated:** 2026-05-15 (Stage 2.3 localhost daemon)
+**Last updated:** 2026-05-16 (Stage 2.4 browser SDK and daemon lifecycle)
 
 Project Simurgh is a research prototype for privacy-preserving academic integrity verification. This document describes what data is collected, how it is used, and what is explicitly not collected.
 
@@ -31,6 +31,7 @@ Simurgh collects **behavioural metadata only**. No content is ever collected, st
 | Node uptime / window count / capture-excluded count | ✅                     | Stage 2.1 — numeric signals                                       |
 | Daemon node hash and version                        | ✅                     | Stage 2.3 — localhost daemon proof verification                   |
 | Daemon state, proof age, and challenge hash         | ✅                     | Stage 2.3 — replay-resistant device-integrity metadata            |
+| Browser SDK daemon state label                      | ✅                     | Stage 2.4 — local lifecycle status only                           |
 
 ## What We Never Collect
 
@@ -51,6 +52,7 @@ Simurgh collects **behavioural metadata only**. No content is ever collected, st
 | macOS node private key                               | ❌ Never leaves the local machine (stored at `~/.simurgh/node-key`, 0600) |
 | Daemon private key                                   | ❌ Never leaves the local machine (stored in macOS Keychain)              |
 | Usernames, serial numbers, MAC addresses, file paths | ❌ Never                                                                  |
+| LaunchAgent system inventory or device identifiers   | ❌ Never                                                                  |
 
 ---
 
@@ -97,6 +99,7 @@ Simurgh enforces privacy constraints at the code level:
 - `src/privacy/privacyConfig.js` — declarative policy (what is and is not collected)
 - `src/privacy/normaliseTelemetry.js` — strict allowlist enforcement before any processing
 - `src/privacy/hashIdentity.js` — one-way hashing at point of entry
+- `public/sdk/simurgh-browser-sdk.js` — daemon status state machine with metadata-only proof attachment
 
 These controls cannot be bypassed by configuration without code changes.
 
