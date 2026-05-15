@@ -63,7 +63,10 @@ export function validatePairingProof(raw, { now = Date.now(), expectedSessionId 
   const pubKey = tryDecodeBase64(raw.node_public_key);
   if (!pubKey || pubKey.length !== PAIRING_PUBLIC_KEY_BYTES) return fail("invalid_public_key");
 
-  if (typeof raw.node_id_hash !== "string" || !PAIRING_NODE_ID_HASH_PATTERN.test(raw.node_id_hash)) {
+  if (
+    typeof raw.node_id_hash !== "string" ||
+    !PAIRING_NODE_ID_HASH_PATTERN.test(raw.node_id_hash)
+  ) {
     return fail("node_id_hash_mismatch");
   }
   if (raw.node_id_hash !== computeNodeIdHash(pubKey)) return fail("node_id_hash_mismatch");

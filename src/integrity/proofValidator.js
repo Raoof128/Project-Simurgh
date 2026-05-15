@@ -74,7 +74,10 @@ function validateSignals(signals) {
  * This validator does NOT check nonce replay or node continuity.
  * Those are downstream responsibilities of nonceGuard and integrityState.
  */
-export function validateProof(raw, { now = Date.now(), pairedNode = null, expectedSessionId = null } = {}) {
+export function validateProof(
+  raw,
+  { now = Date.now(), pairedNode = null, expectedSessionId = null } = {}
+) {
   if (raw === null || typeof raw !== "object" || Array.isArray(raw)) {
     return fail("proof_not_an_object");
   }
@@ -120,7 +123,8 @@ export function validateProof(raw, { now = Date.now(), pairedNode = null, expect
 
   if (pairedNode) {
     if (raw.node_id_hash !== pairedNode.node_id_hash) return fail("paired_node_mismatch");
-    if (raw.node_public_key !== pairedNode.node_public_key) return fail("paired_public_key_mismatch");
+    if (raw.node_public_key !== pairedNode.node_public_key)
+      return fail("paired_public_key_mismatch");
   }
 
   if (typeof raw.nonce !== "string") return fail("invalid_nonce");

@@ -18,17 +18,17 @@ Stage 2.2 is explicitly **narrow**: pairing endpoints + registry + verified proo
 
 ## Locked Design Decisions
 
-| ID | Decision | Rationale |
-|---|---|---|
-| **Scope** | Narrow — pairing semantics only; transport stays manual (CLI + curl) | Prove pairing first, daemon comes in Stage 2.3 |
-| **Crypto** | Same Ed25519 / SPKI / canonical-JSON pipeline as Stage 2.1 (re-export the canonicaliser) | Single source of truth for the wire format |
-| **State** | In-memory only, evicts with session | Matches `integrityState.js` lifecycle |
-| **Immutability** | Once paired, `paired_node_id_hash` + `paired_node_public_key` are immutable for the session | One session = one node (N1 strict) |
-| **Re-pairing** | Forbidden in Stage 2.2 — `/challenge` AND `/complete` both reject 409 `node_already_paired` | Closes the swap-attack window |
-| **Verification (E1)** | On paired proofs: hash match + public-key string match + signature with registered key | Three explicit gates; reviewer-friendly |
-| **Backward compat** | Stage 2.1 unpaired flow still works (returns `unregistered_node`) | No demo regression |
-| **CLI** | New `pair` subcommand; bare `--session` still means `proof` | Forward-compatible CLI surface |
-| **Rate limits** | 10/min on `/challenge`, 20/min on `/complete` (per session token) | Light throttling matches Stage 1 hygiene |
+| ID                    | Decision                                                                                    | Rationale                                      |
+| --------------------- | ------------------------------------------------------------------------------------------- | ---------------------------------------------- |
+| **Scope**             | Narrow — pairing semantics only; transport stays manual (CLI + curl)                        | Prove pairing first, daemon comes in Stage 2.3 |
+| **Crypto**            | Same Ed25519 / SPKI / canonical-JSON pipeline as Stage 2.1 (re-export the canonicaliser)    | Single source of truth for the wire format     |
+| **State**             | In-memory only, evicts with session                                                         | Matches `integrityState.js` lifecycle          |
+| **Immutability**      | Once paired, `paired_node_id_hash` + `paired_node_public_key` are immutable for the session | One session = one node (N1 strict)             |
+| **Re-pairing**        | Forbidden in Stage 2.2 — `/challenge` AND `/complete` both reject 409 `node_already_paired` | Closes the swap-attack window                  |
+| **Verification (E1)** | On paired proofs: hash match + public-key string match + signature with registered key      | Three explicit gates; reviewer-friendly        |
+| **Backward compat**   | Stage 2.1 unpaired flow still works (returns `unregistered_node`)                           | No demo regression                             |
+| **CLI**               | New `pair` subcommand; bare `--session` still means `proof`                                 | Forward-compatible CLI surface                 |
+| **Rate limits**       | 10/min on `/challenge`, 20/min on `/complete` (per session token)                           | Light throttling matches Stage 1 hygiene       |
 
 ---
 
@@ -108,18 +108,18 @@ Each module < 200 lines. Single responsibility per file.
 
 ### Field rules
 
-| Field | Type | Rule |
-|---|---|---|
-| `version` | string | must equal `"simurgh-pairing-proof-v1"` (distinct from proof v1) |
-| `platform` | string | must equal `"macos"` |
-| `session_id` | string | `^[A-Za-z0-9_-]{1,64}$` AND matches `expectedSessionId` (route's session token) |
-| `node_id_hash` | string | `^[0-9a-f]{64}$` AND equals `sha256(decode(node_public_key))` |
-| `node_public_key` | string | base64-decodes to **exactly 32 bytes** |
-| `challenge` | string | base64-decodes to **exactly 32 bytes**; route+registry verify it equals the issued challenge |
-| `timestamp` | string | ISO-8601 UTC; within **30 s past** or **5 s future** of server clock |
-| `signature` | string | base64-decodes to **exactly 64 bytes** |
+| Field             | Type   | Rule                                                                                         |
+| ----------------- | ------ | -------------------------------------------------------------------------------------------- |
+| `version`         | string | must equal `"simurgh-pairing-proof-v1"` (distinct from proof v1)                             |
+| `platform`        | string | must equal `"macos"`                                                                         |
+| `session_id`      | string | `^[A-Za-z0-9_-]{1,64}$` AND matches `expectedSessionId` (route's session token)              |
+| `node_id_hash`    | string | `^[0-9a-f]{64}$` AND equals `sha256(decode(node_public_key))`                                |
+| `node_public_key` | string | base64-decodes to **exactly 32 bytes**                                                       |
+| `challenge`       | string | base64-decodes to **exactly 32 bytes**; route+registry verify it equals the issued challenge |
+| `timestamp`       | string | ISO-8601 UTC; within **30 s past** or **5 s future** of server clock                         |
+| `signature`       | string | base64-decodes to **exactly 64 bytes**                                                       |
 
-**Strict 8-key validation:** the envelope must contain *exactly* these 8 top-level fields. Any extra key triggers `unknown_field:<name>`. Any missing key triggers `missing_field:<name>`.
+**Strict 8-key validation:** the envelope must contain _exactly_ these 8 top-level fields. Any extra key triggers `unknown_field:<name>`. Any missing key triggers `missing_field:<name>`.
 
 ### Forbidden top-level fields (rejection, not strip)
 
@@ -230,7 +230,7 @@ const pairingRegistry = createPairingRegistry({ challengeTtlMs: 60_000 });
 // Extend the existing examEvictionTimer callback:
 const activeIds = new Set(sessions.keys());
 integrityState.evictMissing(activeIds);
-pairingRegistry.evictMissing(activeIds);   // ← added
+pairingRegistry.evictMissing(activeIds); // ← added
 ```
 
 ### What the registry does NOT do
@@ -364,11 +364,11 @@ INTEGRITY_PAIRING_REJECTED:
 
 ### Reason code → HTTP status map
 
-| Status | Codes |
-|---|---|
-| `400` | `proof_not_an_object`, `forbidden_field:*`, `missing_field:*`, `unknown_field:*`, `unsupported_version`, `unsupported_platform`, `invalid_session_id`, `pairing_stale`, `pairing_in_future`, `invalid_public_key`, `node_id_hash_mismatch`, `invalid_challenge_format`, `invalid_signature_format` |
-| `401` | `session_token_required`, `proof_session_mismatch`, `invalid_signature` |
-| `409` | `session_expired_or_evicted`, `node_already_paired`, `challenge_not_found`, `challenge_expired`, `challenge_mismatch`, `node_id_hash_changed` |
+| Status | Codes                                                                                                                                                                                                                                                                                              |
+| ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `400`  | `proof_not_an_object`, `forbidden_field:*`, `missing_field:*`, `unknown_field:*`, `unsupported_version`, `unsupported_platform`, `invalid_session_id`, `pairing_stale`, `pairing_in_future`, `invalid_public_key`, `node_id_hash_mismatch`, `invalid_challenge_format`, `invalid_signature_format` |
+| `401`  | `session_token_required`, `proof_session_mismatch`, `invalid_signature`                                                                                                                                                                                                                            |
+| `409`  | `session_expired_or_evicted`, `node_already_paired`, `challenge_not_found`, `challenge_expired`, `challenge_mismatch`, `node_id_hash_changed`                                                                                                                                                      |
 
 ---
 
@@ -509,14 +509,14 @@ swift run SimurghNode pair --session sess_abc --challenge <base64>
 
 ### Exit codes
 
-| Code | Meaning |
-|---|---|
-| `0` | Proof or pairing JSON printed |
-| `1` | Generic error |
-| `2` | Key file malformed |
-| `3` | Missing `--session` |
-| `4` | Missing `--challenge` (pair mode only) |
-| `64` | Unknown CLI flag or subcommand |
+| Code | Meaning                                |
+| ---- | -------------------------------------- |
+| `0`  | Proof or pairing JSON printed          |
+| `1`  | Generic error                          |
+| `2`  | Key file malformed                     |
+| `3`  | Missing `--session`                    |
+| `4`  | Missing `--challenge` (pair mode only) |
+| `64` | Unknown CLI flag or subcommand         |
 
 ### What the CLI does NOT do
 
@@ -532,9 +532,9 @@ swift run SimurghNode pair --session sess_abc --challenge <base64>
 ### Three new constants
 
 ```js
-INTEGRITY_PAIRING_CHALLENGE_CREATED
-INTEGRITY_NODE_PAIRED
-INTEGRITY_PAIRING_REJECTED
+INTEGRITY_PAIRING_CHALLENGE_CREATED;
+INTEGRITY_NODE_PAIRED;
+INTEGRITY_PAIRING_REJECTED;
 ```
 
 ### Success payloads
@@ -584,26 +584,26 @@ A dedicated test asserts the absence of these fields in audit payloads.
 
 ### New JS unit tests (`tests/unit/integrity/`)
 
-| File | Approx tests |
-|---|---|
-| `pairingSchema.test.js` | 6 |
-| `pairingCanonicalise.test.js` | 2 (re-export reference + golden fixture interop) |
-| `pairingValidator.test.js` | ~22 reason codes |
-| `pairingRegistry.test.js` | ~16 state machine transitions (TTL via injectable `now`) |
+| File                          | Approx tests                                             |
+| ----------------------------- | -------------------------------------------------------- |
+| `pairingSchema.test.js`       | 6                                                        |
+| `pairingCanonicalise.test.js` | 2 (re-export reference + golden fixture interop)         |
+| `pairingValidator.test.js`    | ~22 reason codes                                         |
+| `pairingRegistry.test.js`     | ~16 state machine transitions (TTL via injectable `now`) |
 
 ### Updated tests
 
-| File | Additions |
-|---|---|
+| File                     | Additions                                                                                                                                                                                 |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `proofValidator.test.js` | + paired happy path (verified); + `paired_node_mismatch`; + `paired_public_key_mismatch`; + `registered_signature_invalid`; + unpaired baseline preserved; + `expectedSessionId` mismatch |
-| `academicEvents.test.js` | + 3 new constants in required list; + absence assertion (audit payloads do NOT contain `challenge`, `node_public_key`, `signature` keys) |
+| `academicEvents.test.js` | + 3 new constants in required list; + absence assertion (audit payloads do NOT contain `challenge`, `node_public_key`, `signature` keys)                                                  |
 
 ### Swift tests
 
-| File | Tests |
-|---|---|
-| `PairingCanonicaliseTests.swift` | 1 — golden-pairing-payload SHA-256 matches Node |
-| Optional CLI integration check | `pair` stdout JSON has exactly 8 top-level keys (best-effort) |
+| File                             | Tests                                                         |
+| -------------------------------- | ------------------------------------------------------------- |
+| `PairingCanonicaliseTests.swift` | 1 — golden-pairing-payload SHA-256 matches Node               |
+| Optional CLI integration check   | `pair` stdout JSON has exactly 8 top-level keys (best-effort) |
 
 ### Golden fixture
 

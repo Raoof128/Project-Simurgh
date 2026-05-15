@@ -16,50 +16,50 @@
 
 ### Server (new + updated)
 
-| File | Status | Responsibility |
-|---|---|---|
-| `src/integrity/pairingSchema.js` | new | v1 pairing constants, REQUIRED_FIELDS (8 keys), FORBIDDEN_FIELDS (re-uses proof list), byte-length and regex constants |
-| `src/integrity/pairingCanonicalise.js` | new | one-line re-export of `canonicaliseProofPayload` as `canonicalisePairingPayload` |
-| `src/integrity/pairingValidator.js` | new | `validatePairingProof(raw, { now, expectedSessionId })` — schema + crypto |
-| `src/integrity/pairingRegistry.js` | new | `createPairingRegistry({ challengeTtlMs })`; injectable `now`; pending/paired state |
-| `src/integrity/proofValidator.js` | modify | accepts `pairedNode` + `expectedSessionId`; returns `signature_status`; E1 strict triple check |
-| `src/academic/academicEvents.js` | modify | + `INTEGRITY_PAIRING_CHALLENGE_CREATED`, `INTEGRITY_NODE_PAIRED`, `INTEGRITY_PAIRING_REJECTED` |
-| `server.js` | modify | new `/pairing/challenge` + `/pairing/complete` routes (rate-limited); `proofs` route uses registry; eviction timer extended |
+| File                                   | Status | Responsibility                                                                                                              |
+| -------------------------------------- | ------ | --------------------------------------------------------------------------------------------------------------------------- |
+| `src/integrity/pairingSchema.js`       | new    | v1 pairing constants, REQUIRED_FIELDS (8 keys), FORBIDDEN_FIELDS (re-uses proof list), byte-length and regex constants      |
+| `src/integrity/pairingCanonicalise.js` | new    | one-line re-export of `canonicaliseProofPayload` as `canonicalisePairingPayload`                                            |
+| `src/integrity/pairingValidator.js`    | new    | `validatePairingProof(raw, { now, expectedSessionId })` — schema + crypto                                                   |
+| `src/integrity/pairingRegistry.js`     | new    | `createPairingRegistry({ challengeTtlMs })`; injectable `now`; pending/paired state                                         |
+| `src/integrity/proofValidator.js`      | modify | accepts `pairedNode` + `expectedSessionId`; returns `signature_status`; E1 strict triple check                              |
+| `src/academic/academicEvents.js`       | modify | + `INTEGRITY_PAIRING_CHALLENGE_CREATED`, `INTEGRITY_NODE_PAIRED`, `INTEGRITY_PAIRING_REJECTED`                              |
+| `server.js`                            | modify | new `/pairing/challenge` + `/pairing/complete` routes (rate-limited); `proofs` route uses registry; eviction timer extended |
 
 ### Server tests (new + updated)
 
-| File | Status |
-|---|---|
-| `tests/unit/integrity/pairingSchema.test.js` | new |
-| `tests/unit/integrity/pairingCanonicalise.test.js` | new |
-| `tests/unit/integrity/pairingValidator.test.js` | new |
-| `tests/unit/integrity/pairingRegistry.test.js` | new |
-| `tests/unit/integrity/proofValidator.test.js` | extended (paired-session cases) |
-| `tests/unit/academicEvents.test.js` | extended (3 new constants + audit-absence assertions) |
-| `tests/unit/integrity/__fixtures__/golden-pairing-payload.json` | new |
-| `tests/unit/integrity/__fixtures__/golden-pairing-payload.sha256` | new |
+| File                                                              | Status                                                |
+| ----------------------------------------------------------------- | ----------------------------------------------------- |
+| `tests/unit/integrity/pairingSchema.test.js`                      | new                                                   |
+| `tests/unit/integrity/pairingCanonicalise.test.js`                | new                                                   |
+| `tests/unit/integrity/pairingValidator.test.js`                   | new                                                   |
+| `tests/unit/integrity/pairingRegistry.test.js`                    | new                                                   |
+| `tests/unit/integrity/proofValidator.test.js`                     | extended (paired-session cases)                       |
+| `tests/unit/academicEvents.test.js`                               | extended (3 new constants + audit-absence assertions) |
+| `tests/unit/integrity/__fixtures__/golden-pairing-payload.json`   | new                                                   |
+| `tests/unit/integrity/__fixtures__/golden-pairing-payload.sha256` | new                                                   |
 
 ### macOS Swift CLI (new + updated)
 
-| File | Status |
-|---|---|
-| `tools/simurgh-node-macos/Sources/SimurghNode/main.swift` | modify — strict subcommand dispatch |
-| `tools/simurgh-node-macos/Sources/SimurghNode/PairingEnvelope.swift` | new |
-| `tools/simurgh-node-macos/Sources/SimurghNode/PairingSigner.swift` | new |
-| `tools/simurgh-node-macos/Package.swift` | modify — add pairing fixture resources |
-| `tools/simurgh-node-macos/Tests/SimurghNodeTests/PairingCanonicaliseTests.swift` | new |
-| `tools/simurgh-node-macos/Tests/SimurghNodeTests/Fixtures/golden-pairing-payload.json` | new (synced copy) |
-| `tools/simurgh-node-macos/Tests/SimurghNodeTests/Fixtures/golden-pairing-payload.sha256` | new (synced copy) |
-| `tools/simurgh-node-macos/README.md` | modify — pair subcommand examples |
+| File                                                                                     | Status                                 |
+| ---------------------------------------------------------------------------------------- | -------------------------------------- |
+| `tools/simurgh-node-macos/Sources/SimurghNode/main.swift`                                | modify — strict subcommand dispatch    |
+| `tools/simurgh-node-macos/Sources/SimurghNode/PairingEnvelope.swift`                     | new                                    |
+| `tools/simurgh-node-macos/Sources/SimurghNode/PairingSigner.swift`                       | new                                    |
+| `tools/simurgh-node-macos/Package.swift`                                                 | modify — add pairing fixture resources |
+| `tools/simurgh-node-macos/Tests/SimurghNodeTests/PairingCanonicaliseTests.swift`         | new                                    |
+| `tools/simurgh-node-macos/Tests/SimurghNodeTests/Fixtures/golden-pairing-payload.json`   | new (synced copy)                      |
+| `tools/simurgh-node-macos/Tests/SimurghNodeTests/Fixtures/golden-pairing-payload.sha256` | new (synced copy)                      |
+| `tools/simurgh-node-macos/README.md`                                                     | modify — pair subcommand examples      |
 
 ### Tooling + docs
 
-| File | Status |
-|---|---|
+| File               | Status                                                                                                               |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------- |
 | `scripts/check.sh` | extend — 4 new gates (pairing round-trip + paired/unpaired proof checks); golden fixture sync extended to both pairs |
-| `README.md` | add Stage 2.2 paragraph |
-| `AGENT.md` | add Stage 2.2 implementation entry |
-| `CHANGELOG.md` | add `0.4.2-stage-2-2-macos-node-pairing` entry |
+| `README.md`        | add Stage 2.2 paragraph                                                                                              |
+| `AGENT.md`         | add Stage 2.2 implementation entry                                                                                   |
+| `CHANGELOG.md`     | add `0.4.2-stage-2-2-macos-node-pairing` entry                                                                       |
 
 ---
 
@@ -68,6 +68,7 @@
 ### Task 1: `pairingSchema.js`
 
 **Files:**
+
 - Create: `src/integrity/pairingSchema.js`
 - Create: `tests/unit/integrity/pairingSchema.test.js`
 
@@ -206,6 +207,7 @@ git commit -m "feat(integrity): add pairing v1 schema constants"
 ### Task 2: `pairingCanonicalise.js` + golden fixture
 
 **Files:**
+
 - Create: `src/integrity/pairingCanonicalise.js`
 - Create: `tests/unit/integrity/pairingCanonicalise.test.js`
 - Create: `tests/unit/integrity/__fixtures__/golden-pairing-payload.json`
@@ -315,6 +317,7 @@ git commit -m "feat(integrity): re-export proof canonicaliser as pairing canonic
 ### Task 3: `pairingValidator.js`
 
 **Files:**
+
 - Create: `src/integrity/pairingValidator.js`
 - Create: `tests/unit/integrity/pairingValidator.test.js`
 
@@ -417,7 +420,10 @@ describe("validatePairingProof — version/platform/session", () => {
 
   test("rejects invalid session_id format", () => {
     const payload = freshSignedPairing({ session_id: "../../etc/passwd" });
-    const result = validatePairingProof(payload, { now: NOW, expectedSessionId: "../../etc/passwd" });
+    const result = validatePairingProof(payload, {
+      now: NOW,
+      expectedSessionId: "../../etc/passwd",
+    });
     assert.equal(result.reason, "invalid_session_id");
   });
 
@@ -588,7 +594,10 @@ export function validatePairingProof(raw, { now = Date.now(), expectedSessionId 
   if (!pubKey || pubKey.length !== PAIRING_PUBLIC_KEY_BYTES) return fail("invalid_public_key");
 
   // 7. node_id_hash matches
-  if (typeof raw.node_id_hash !== "string" || !PAIRING_NODE_ID_HASH_PATTERN.test(raw.node_id_hash)) {
+  if (
+    typeof raw.node_id_hash !== "string" ||
+    !PAIRING_NODE_ID_HASH_PATTERN.test(raw.node_id_hash)
+  ) {
     return fail("node_id_hash_mismatch");
   }
   if (raw.node_id_hash !== computeNodeIdHash(pubKey)) return fail("node_id_hash_mismatch");
@@ -644,6 +653,7 @@ git commit -m "feat(integrity): add pairing proof validator"
 ### Task 4: `pairingRegistry.js`
 
 **Files:**
+
 - Create: `src/integrity/pairingRegistry.js`
 - Create: `tests/unit/integrity/pairingRegistry.test.js`
 
@@ -683,7 +693,7 @@ describe("pairingRegistry — createChallenge", () => {
     r.completePairing(
       "sess_a",
       { challenge: c.challenge, node_id_hash: "h", node_public_key: "k" },
-      T0 + 1_000,
+      T0 + 1_000
     );
     const second = r.createChallenge("sess_a", T0 + 2_000);
     assert.equal(second.ok, false);
@@ -698,7 +708,7 @@ describe("pairingRegistry — completePairing", () => {
     const result = r.completePairing(
       "sess_a",
       { challenge: c.challenge, node_id_hash: "hash1", node_public_key: "key1" },
-      T0 + 1_000,
+      T0 + 1_000
     );
     assert.equal(result.ok, true);
     assert.equal(result.paired_at, T0 + 1_000);
@@ -715,7 +725,7 @@ describe("pairingRegistry — completePairing", () => {
     const result = r.completePairing(
       "sess_a",
       { challenge: "x", node_id_hash: "h", node_public_key: "k" },
-      T0,
+      T0
     );
     assert.equal(result.reason, "challenge_not_found");
   });
@@ -726,7 +736,7 @@ describe("pairingRegistry — completePairing", () => {
     const result = r.completePairing(
       "sess_a",
       { challenge: c.challenge, node_id_hash: "h", node_public_key: "k" },
-      T0 + 60_001,
+      T0 + 60_001
     );
     assert.equal(result.reason, "challenge_expired");
   });
@@ -737,7 +747,7 @@ describe("pairingRegistry — completePairing", () => {
     const result = r.completePairing(
       "sess_a",
       { challenge: "wrong-challenge", node_id_hash: "h", node_public_key: "k" },
-      T0 + 1_000,
+      T0 + 1_000
     );
     assert.equal(result.reason, "challenge_mismatch");
   });
@@ -748,12 +758,12 @@ describe("pairingRegistry — completePairing", () => {
     r.completePairing(
       "sess_a",
       { challenge: c.challenge, node_id_hash: "h", node_public_key: "k" },
-      T0 + 1_000,
+      T0 + 1_000
     );
     const result = r.completePairing(
       "sess_a",
       { challenge: c.challenge, node_id_hash: "h2", node_public_key: "k2" },
-      T0 + 2_000,
+      T0 + 2_000
     );
     assert.equal(result.reason, "node_already_paired");
   });
@@ -773,7 +783,7 @@ describe("pairingRegistry — accessors + lifecycle", () => {
     r.completePairing(
       "sess_a",
       { challenge: c.challenge, node_id_hash: "h", node_public_key: "k" },
-      T0 + 100,
+      T0 + 100
     );
     assert.equal(r.isPaired("sess_a"), true);
   });
@@ -879,7 +889,11 @@ export function createPairingRegistry({ challengeTtlMs = DEFAULT_TTL_MS } = {}) 
     };
   }
 
-  function completePairing(sessionId, { challenge, node_id_hash, node_public_key }, now = Date.now()) {
+  function completePairing(
+    sessionId,
+    { challenge, node_id_hash, node_public_key },
+    now = Date.now()
+  ) {
     const rec = records.get(sessionId);
     if (!rec) return { ok: false, reason: "challenge_not_found" };
     if (rec.paired) return { ok: false, reason: "node_already_paired" };
@@ -950,6 +964,7 @@ git commit -m "feat(integrity): add pairing registry with injectable now"
 ### Task 5: Extend `proofValidator.js` with `pairedNode` + `expectedSessionId`
 
 **Files:**
+
 - Modify: `src/integrity/proofValidator.js`
 - Modify: `tests/unit/integrity/proofValidator.test.js`
 
@@ -973,7 +988,11 @@ describe("validateProof — paired session (Stage 2.2)", () => {
 
   test("unpaired session returns signature_status: 'unregistered_node'", () => {
     const proof = freshSignedProof();
-    const result = validateProof(proof, { now: NOW, pairedNode: null, expectedSessionId: "sess_abc" });
+    const result = validateProof(proof, {
+      now: NOW,
+      pairedNode: null,
+      expectedSessionId: "sess_abc",
+    });
     assert.equal(result.ok, true);
     assert.equal(result.signature_status, "unregistered_node");
   });
@@ -1107,7 +1126,10 @@ function validateSignals(signals) {
  *   { ok: true, proof, signature_status }   where signature_status ∈ {"verified", "unregistered_node"}
  *   { ok: false, reason }                   see spec for reason → HTTP map
  */
-export function validateProof(raw, { now = Date.now(), pairedNode = null, expectedSessionId = null } = {}) {
+export function validateProof(
+  raw,
+  { now = Date.now(), pairedNode = null, expectedSessionId = null } = {}
+) {
   if (raw === null || typeof raw !== "object" || Array.isArray(raw)) {
     return fail("proof_not_an_object");
   }
@@ -1154,7 +1176,8 @@ export function validateProof(raw, { now = Date.now(), pairedNode = null, expect
   // Stage 2.2 paired-session checks (E1 strict triple check) — only if pairedNode supplied.
   if (pairedNode) {
     if (raw.node_id_hash !== pairedNode.node_id_hash) return fail("paired_node_mismatch");
-    if (raw.node_public_key !== pairedNode.node_public_key) return fail("paired_public_key_mismatch");
+    if (raw.node_public_key !== pairedNode.node_public_key)
+      return fail("paired_public_key_mismatch");
   }
 
   if (typeof raw.nonce !== "string") return fail("invalid_nonce");
@@ -1223,6 +1246,7 @@ git commit -m "feat(integrity): proofValidator accepts pairedNode + expectedSess
 ### Task 6: Add three pairing event constants
 
 **Files:**
+
 - Modify: `src/academic/academicEvents.js`
 - Modify: `tests/unit/academicEvents.test.js`
 
@@ -1272,6 +1296,7 @@ git commit -m "feat(academic): add 3 pairing event constants for Stage 2.2"
 ### Task 7: Wire pairing registry into `server.js` (instance + eviction)
 
 **Files:**
+
 - Modify: `server.js`
 
 - [ ] **Step 1: Add imports**
@@ -1297,9 +1322,9 @@ const pairingRegistry = createPairingRegistry({ challengeTtlMs: 60_000 });
 Find the existing `examEvictionTimer` block. Inside its callback, find the line `integrityState.evictMissing(new Set(sessions.keys()));`. Replace that single line with:
 
 ```js
-    const activeIds = new Set(sessions.keys());
-    integrityState.evictMissing(activeIds);
-    pairingRegistry.evictMissing(activeIds);
+const activeIds = new Set(sessions.keys());
+integrityState.evictMissing(activeIds);
+pairingRegistry.evictMissing(activeIds);
 ```
 
 - [ ] **Step 4: Verify the file parses**
@@ -1320,6 +1345,7 @@ git commit -m "feat(server): wire pairing registry + add to session eviction"
 ### Task 8: Add per-route rate limiters
 
 **Files:**
+
 - Modify: `server.js`
 
 - [ ] **Step 1: Add limiter declarations**
@@ -1362,6 +1388,7 @@ git commit -m "feat(server): add rate limiters for pairing challenge + complete"
 ### Task 9: Add `POST /api/integrity/pairing/challenge` route
 
 **Files:**
+
 - Modify: `server.js`
 
 - [ ] **Step 1: Add the route**
@@ -1398,7 +1425,7 @@ app.post(
       expires_at: new Date(result.expires_at).toISOString(),
       note: "Sign this challenge with the macOS Simurgh node and POST the result to /api/integrity/pairing/complete. Expires in 60 s.",
     });
-  },
+  }
 );
 ```
 
@@ -1451,6 +1478,7 @@ git commit -m "feat(server): add POST /api/integrity/pairing/challenge"
 ### Task 10: Add `POST /api/integrity/pairing/complete` route
 
 **Files:**
+
 - Modify: `server.js`
 
 - [ ] **Step 1: Add the route immediately after the challenge route**
@@ -1485,7 +1513,7 @@ app.post(
           ? req.body.node_id_hash
           : null,
         null,
-        typeof req.body?.signature === "string" && req.body.signature.length > 0,
+        typeof req.body?.signature === "string" && req.body.signature.length > 0
       );
       return res.status(409).json({ error: "node_already_paired" });
     }
@@ -1530,7 +1558,7 @@ app.post(
         node_id_hash: payload.node_id_hash,
         node_public_key: payload.node_public_key,
       },
-      Date.now(),
+      Date.now()
     );
     if (!state.ok) {
       recordReject(state.reason, payload.node_id_hash, challengeHash, true);
@@ -1552,7 +1580,7 @@ app.post(
       paired_at: new Date(state.paired_at).toISOString(),
       note: "Subsequent /api/integrity/proofs submissions for this session must be signed by the registered node and will return signature_status: verified.",
     });
-  },
+  }
 );
 ```
 
@@ -1618,6 +1646,7 @@ git commit -m "feat(server): add POST /api/integrity/pairing/complete with audit
 ### Task 11: Upgrade `POST /api/integrity/proofs` route to use pairing registry
 
 **Files:**
+
 - Modify: `server.js`
 
 - [ ] **Step 1: Update the proofs route**
@@ -1627,55 +1656,55 @@ In `server.js`, find the existing `app.post("/api/integrity/proofs", …)` handl
 Find:
 
 ```js
-  const validation = validateProof(req.body, { now: Date.now() });
+const validation = validateProof(req.body, { now: Date.now() });
 ```
 
 Replace with:
 
 ```js
-  const pairedNode = pairingRegistry.getPairedNode(sessionId);
-  const validation = validateProof(req.body, {
-    now: Date.now(),
-    pairedNode,
-    expectedSessionId: sessionId,
-  });
+const pairedNode = pairingRegistry.getPairedNode(sessionId);
+const validation = validateProof(req.body, {
+  now: Date.now(),
+  pairedNode,
+  expectedSessionId: sessionId,
+});
 ```
 
 Then in the same handler, find the existing reason-code → status mapping that says:
 
 ```js
-    let status = 400;
-    if (validation.reason === "invalid_signature") status = 401;
-    if (validation.reason === "proof_session_mismatch") status = 401;
+let status = 400;
+if (validation.reason === "invalid_signature") status = 401;
+if (validation.reason === "proof_session_mismatch") status = 401;
 ```
 
 Add three more mapping lines so the block becomes:
 
 ```js
-    let status = 400;
-    if (validation.reason === "invalid_signature") status = 401;
-    if (validation.reason === "registered_signature_invalid") status = 401;
-    if (validation.reason === "proof_session_mismatch") status = 401;
-    if (validation.reason === "paired_node_mismatch") status = 409;
-    if (validation.reason === "paired_public_key_mismatch") status = 409;
+let status = 400;
+if (validation.reason === "invalid_signature") status = 401;
+if (validation.reason === "registered_signature_invalid") status = 401;
+if (validation.reason === "proof_session_mismatch") status = 401;
+if (validation.reason === "paired_node_mismatch") status = 409;
+if (validation.reason === "paired_public_key_mismatch") status = 409;
 ```
 
 Then find the line that extracts the proof:
 
 ```js
-  const { proof } = validation;
+const { proof } = validation;
 ```
 
 Replace with:
 
 ```js
-  const { proof, signature_status } = validation;
+const { proof, signature_status } = validation;
 ```
 
 Find the constant assignment of `signatureStatus`:
 
 ```js
-  const signatureStatus = "unregistered_node";
+const signatureStatus = "unregistered_node";
 ```
 
 Delete that line entirely. Replace all subsequent uses of `signatureStatus` in the audit and response with `signature_status`. The two specific edits:
@@ -1794,6 +1823,7 @@ git commit -m "feat(server): proofs route uses pairing registry; returns verifie
 ### Task 12: Add `PairingEnvelope.swift`
 
 **Files:**
+
 - Create: `tools/simurgh-node-macos/Sources/SimurghNode/PairingEnvelope.swift`
 
 - [ ] **Step 1: Write the envelope struct**
@@ -1845,6 +1875,7 @@ cd /Users/raoof.r12/Desktop/Raouf/Project-Simurgh/tools/simurgh-node-macos && sw
 Expected: build succeeds (or fails with errors about `PairingSigner` — that's expected; Task 13 adds it).
 
 If the build fails specifically because `currentIso8601()` is duplicated with `ProofEnvelope.swift`, open `PairingEnvelope.swift` and either:
+
 - Remove the helper from this file (it lives in `ProofEnvelope.swift` already), OR
 - Rename one of them (e.g. `pairingIso8601()`).
 
@@ -1860,6 +1891,7 @@ git commit -m "feat(node-macos): v1 pairing envelope struct"
 ### Task 13: Add `PairingSigner.swift`
 
 **Files:**
+
 - Create: `tools/simurgh-node-macos/Sources/SimurghNode/PairingSigner.swift`
 
 - [ ] **Step 1: Write the signer**
@@ -1926,6 +1958,7 @@ git commit -m "feat(node-macos): pairing canonicaliser + Ed25519 signer"
 ### Task 14: Update `main.swift` with `pair` subcommand + strict unknown-subcommand handling
 
 **Files:**
+
 - Modify: `tools/simurgh-node-macos/Sources/SimurghNode/main.swift`
 
 - [ ] **Step 1: Rewrite `parseArgs` + dispatch logic**
@@ -2132,6 +2165,7 @@ git commit -m "feat(node-macos): add pair subcommand with strict unknown-subcomm
 ### Task 15: Add Swift golden-pairing interop test
 
 **Files:**
+
 - Modify: `tools/simurgh-node-macos/Package.swift`
 - Create: `tools/simurgh-node-macos/Tests/SimurghNodeTests/PairingCanonicaliseTests.swift`
 - Create: `tools/simurgh-node-macos/Tests/SimurghNodeTests/Fixtures/golden-pairing-payload.json`
@@ -2226,6 +2260,7 @@ git commit -m "test(node-macos): golden-pairing-payload canonicaliser interop"
 ### Task 16: Extend `scripts/check.sh` with Stage 2.2 gates
 
 **Files:**
+
 - Modify: `scripts/check.sh`
 
 - [ ] **Step 1: Extend the golden fixture sync check**
@@ -2396,6 +2431,7 @@ git commit -m "ci(check.sh): add Stage 2.2 pairing gates (27 → 31)"
 ### Task 17: Update README + AGENT.md + CHANGELOG.md
 
 **Files:**
+
 - Modify: `README.md`
 - Modify: `AGENT.md`
 - Modify: `CHANGELOG.md`
@@ -2486,7 +2522,7 @@ At the top of `CHANGELOG.md`:
 
 Open `tools/simurgh-node-macos/README.md`. Find the "Build and run" section. After the existing build/run examples, append:
 
-```markdown
+````markdown
 ### Pair with a session (Stage 2.2)
 
 ```bash
@@ -2505,18 +2541,20 @@ curl -s -X POST http://localhost:3030/api/integrity/pairing/complete \
   -H 'Content-Type: application/json' \
   --data @/tmp/simurgh-pair.json | jq
 ```
+````
 
 Expected response: `status: "paired"` with `signature_status: "verified"`. Subsequent proof submissions for this session now return `signature_status: "verified"`.
 
 The `pair` subcommand prints exactly 8 fields to stdout: `version`, `platform`, `session_id`, `node_id_hash`, `node_public_key`, `challenge`, `timestamp`, `signature`. No private key. No content. No raw process names or window titles.
-```
+
+````
 
 - [ ] **Step 5: Format and run final check**
 
 ```bash
 npm run format 2>&1 | tail -3
 ./scripts/check.sh 2>&1 | grep -E "Summary|Passed|Failed" | tail -3
-```
+````
 
 Expected: 31/31 pass.
 
@@ -2583,30 +2621,30 @@ gh pr create \
 
 ### Spec coverage
 
-| Spec section / requirement | Task(s) |
-|---|---|
-| Module layout — `src/integrity/pairing*` files | Tasks 1, 2, 3, 4 |
-| Module layout — macOS Swift | Tasks 12, 13, 14, 15 |
-| v1 pairing envelope shape + field rules | Tasks 1, 3 |
-| Forbidden fields reuse | Task 1 |
-| Canonical signing rule (re-export) | Task 2 |
-| Cross-implementation golden fixture | Tasks 2, 15 |
-| Pairing registry state machine + injectable now | Task 4 |
-| Server validation flow (challenge) | Task 9 |
-| Server validation flow (complete) | Task 10 |
-| Cross-route N1 consistency | Task 10 |
-| Rate limits (10/min, 20/min) | Tasks 8, 9, 10 |
-| Failure-path minimal audit payload | Task 10 |
-| Per-session integrity state with N1 | Task 5 (validator) + Task 10 (route) |
-| Audit events (3 new constants) | Task 6 |
-| macOS CLI subcommands + strict unknown handling | Task 14 |
-| macOS CLI Stage 2.1 backward compat | Task 14 |
-| Test plan — schemas | Tasks 1, 6 |
-| Test plan — validator | Tasks 3, 5 |
-| Test plan — registry | Task 4 |
-| Test plan — Swift interop | Task 15 |
-| `scripts/check.sh` extensions (27 → 31) | Task 16 |
-| Docs (README + AGENT + CHANGELOG + macOS README) | Task 17 |
+| Spec section / requirement                       | Task(s)                              |
+| ------------------------------------------------ | ------------------------------------ |
+| Module layout — `src/integrity/pairing*` files   | Tasks 1, 2, 3, 4                     |
+| Module layout — macOS Swift                      | Tasks 12, 13, 14, 15                 |
+| v1 pairing envelope shape + field rules          | Tasks 1, 3                           |
+| Forbidden fields reuse                           | Task 1                               |
+| Canonical signing rule (re-export)               | Task 2                               |
+| Cross-implementation golden fixture              | Tasks 2, 15                          |
+| Pairing registry state machine + injectable now  | Task 4                               |
+| Server validation flow (challenge)               | Task 9                               |
+| Server validation flow (complete)                | Task 10                              |
+| Cross-route N1 consistency                       | Task 10                              |
+| Rate limits (10/min, 20/min)                     | Tasks 8, 9, 10                       |
+| Failure-path minimal audit payload               | Task 10                              |
+| Per-session integrity state with N1              | Task 5 (validator) + Task 10 (route) |
+| Audit events (3 new constants)                   | Task 6                               |
+| macOS CLI subcommands + strict unknown handling  | Task 14                              |
+| macOS CLI Stage 2.1 backward compat              | Task 14                              |
+| Test plan — schemas                              | Tasks 1, 6                           |
+| Test plan — validator                            | Tasks 3, 5                           |
+| Test plan — registry                             | Task 4                               |
+| Test plan — Swift interop                        | Task 15                              |
+| `scripts/check.sh` extensions (27 → 31)          | Task 16                              |
+| Docs (README + AGENT + CHANGELOG + macOS README) | Task 17                              |
 
 All 19 acceptance criteria from the spec map to tasks.
 

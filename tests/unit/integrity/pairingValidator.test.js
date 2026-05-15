@@ -92,7 +92,10 @@ describe("validatePairingProof — version/platform/session", () => {
 
   test("rejects invalid session_id format", () => {
     const payload = freshSignedPairing({ session_id: "../../etc/passwd" });
-    const result = validatePairingProof(payload, { now: NOW, expectedSessionId: "../../etc/passwd" });
+    const result = validatePairingProof(payload, {
+      now: NOW,
+      expectedSessionId: "../../etc/passwd",
+    });
     assert.equal(result.reason, "invalid_session_id");
   });
 

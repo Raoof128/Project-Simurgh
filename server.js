@@ -1108,7 +1108,7 @@ app.post(
       expires_at: new Date(result.expires_at).toISOString(),
       note: "Sign this challenge with the macOS Simurgh node and POST the result to /api/integrity/pairing/complete. Expires in 60 s.",
     });
-  },
+  }
 );
 
 // Stage 2.2: pairing — verify a node-signed pairing payload and bind the node to the session.
@@ -1137,7 +1137,7 @@ app.post(
           ? req.body.node_id_hash
           : null,
         null,
-        typeof req.body?.signature === "string" && req.body.signature.length > 0,
+        typeof req.body?.signature === "string" && req.body.signature.length > 0
       );
       return res.status(409).json({ error: "node_already_paired" });
     }
@@ -1180,7 +1180,7 @@ app.post(
         node_id_hash: payload.node_id_hash,
         node_public_key: payload.node_public_key,
       },
-      Date.now(),
+      Date.now()
     );
     if (!state.ok) {
       recordReject(state.reason, payload.node_id_hash, challengeHash, true);
@@ -1202,7 +1202,7 @@ app.post(
       paired_at: new Date(state.paired_at).toISOString(),
       note: "Subsequent /api/integrity/proofs submissions for this session must be signed by the registered node and will return signature_status: verified.",
     });
-  },
+  }
 );
 
 // ─────────────────────────────────────────────────────────────

@@ -223,7 +223,11 @@ describe("validateProof — paired session (Stage 2.2)", () => {
 
   test("unpaired session returns signature_status: 'unregistered_node'", () => {
     const proof = freshSignedProof();
-    const result = validateProof(proof, { now: NOW, pairedNode: null, expectedSessionId: "sess_abc" });
+    const result = validateProof(proof, {
+      now: NOW,
+      pairedNode: null,
+      expectedSessionId: "sess_abc",
+    });
     assert.equal(result.ok, true);
     assert.equal(result.signature_status, "unregistered_node");
   });
