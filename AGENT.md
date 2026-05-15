@@ -15,6 +15,7 @@
   - Updated student and instructor pages with localhost daemon discovery/status, token-aware pairing/proof flow, and dashboard device-integrity display.
   - Expanded privacy enforcement for raw local-data terms and documented Stage 2.3 in README, SECURITY, PRIVACY, ROADMAP, and `docs/STAGE_2_3_MACOS_LOCALHOST_DAEMON.md`.
   - Added targeted Stage 2.3 test-creator pass coverage for daemon risk scoring, report `device_integrity`, daemon-required env config, and end-to-end tampered/missing daemon proof rejection audit gates.
+  - Renamed the GitHub Actions workflow to the Simurgh Quality Gate so CI/CD naming matches the Stage 2.3 `scripts/check.sh` release gate.
 - **Files Changed:**
   - `server.js`
   - `.env.example`, `.prettierignore`, `src/config/env.js`
@@ -24,6 +25,7 @@
   - `tools/simurgh-daemon-macos/`
   - `public/index.html`, `public/instructor.html`
   - `tools/privacy-audit.mjs`, `scripts/check.sh`
+  - `.github/workflows/stage-1-checks.yml`
   - `README.md`, `SECURITY.md`, `PRIVACY.md`, `ROADMAP.md`, `docs/STAGE_2_3_MACOS_LOCALHOST_DAEMON.md`
 - **Verification:** `node --test tests/unit/riskScoring.test.js tests/unit/reportBuilder.test.js` → 15/15 pass. `node --test tests/unit/envConfig.test.js` → 3/3 pass. `npm test` → 219/219 pass. `swift test` in `tools/simurgh-daemon-macos` → 1/1 pass. Full `./scripts/check.sh` → 38/38 gates pass, including Stage 2.3 daemon pair/proof smoke, replay rejection, tampered-proof audit rejection, hardened missing-proof rejection/audit, Swift macOS daemon build, and Swift macOS daemon test. `npm audit --audit-level=high` inside `check.sh` → 0 vulnerabilities.
 - **Follow-ups:** Stage 2.4 should harden browser SDK packaging and daemon lifecycle. Future native scanner work can replace the placeholder `AffinityScanner` while preserving the metadata-only contract.

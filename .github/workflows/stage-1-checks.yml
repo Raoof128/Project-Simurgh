@@ -1,4 +1,4 @@
-name: Stage 1 Security Checks
+name: Simurgh Quality Gate
 
 on:
   push:
@@ -6,6 +6,7 @@ on:
       - main
       - stage-1-academic-shield
       - stage-2-integrity-node
+      - stage-*
   pull_request:
     branches:
       - main
@@ -13,12 +14,12 @@ on:
 
 # Allow only one concurrent run per branch — newer pushes cancel older runs.
 concurrency:
-  group: stage-1-checks-${{ github.ref }}
+  group: simurgh-quality-gate-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   stage-1-checks:
-    name: Run Stage 1 quality gate (scripts/check.sh)
+    name: Run Simurgh quality gate (scripts/check.sh)
     runs-on: ubuntu-latest
     timeout-minutes: 10
 

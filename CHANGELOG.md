@@ -23,6 +23,7 @@
 - `tools/privacy-audit.mjs` and `scripts/check.sh` now enforce additional raw local-data forbidden fields: serial/device identifiers, usernames, home directories, process names, window titles, and raw process/window fields.
 - README, SECURITY, PRIVACY, and ROADMAP now describe the Stage 2.3 daemon boundary and limitations.
 - `.env.example` documents the demo/browser-only default and hardened `SIMURGH_REQUIRE_DAEMON=true` path.
+- GitHub Actions now names the CI/CD workflow as the Simurgh Quality Gate while continuing to run `./scripts/check.sh`.
 
 ### Verified
 
