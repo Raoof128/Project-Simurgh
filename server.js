@@ -1080,6 +1080,37 @@ app.get("/api/audit/:sessionId/verify", limitVerify, requireInstructorAuth, (req
   res.json({ sessionId: req.params.sessionId, ...result });
 });
 
+// Stage 2.2: pairing — issue a one-time challenge for the authenticated session.
+app.post(
+  "/api/integrity/pairing/challenge",
+  limitPairingChallenge,
+  requireSessionToken,
+  (req, res) => {
+    const sessionId = req.sessionTokenSessionId;
+    const sess = sessions.get(sessionId);
+    if (!sess) return res.status(409).json({ error: "session_expired_or_evicted" });
+
+    const result = pairingRegistry.createChallenge(sessionId, Date.now());
+    if (!result.ok) {
+      return res.status(409).json({ error: result.reason });
+    }
+
+    appendAudit(sess, EVENTS.INTEGRITY_PAIRING_CHALLENGE_CREATED, {
+      challenge_hash: result.challenge_hash,
+      expires_at: new Date(result.expires_at).toISOString(),
+      platform: "macos",
+    });
+
+    return res.status(200).json({
+      status: "challenge_created",
+      session_id: sessionId,
+      challenge: result.challenge,
+      expires_at: new Date(result.expires_at).toISOString(),
+      note: "Sign this challenge with the macOS Simurgh node and POST the result to /api/integrity/pairing/complete. Expires in 60 s.",
+    });
+  },
+);
+
 // ─────────────────────────────────────────────────────────────
 //  Stage 2.1 — integrity proof ingestion (v1 pipeline)
 //  POST /api/integrity/proofs
