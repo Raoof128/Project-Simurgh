@@ -37,6 +37,12 @@ const FORBIDDEN_FIELDS = new Set([
   "home_directory",
   "process_name",
   "window_title",
+  "raw_process_name",
+  "raw_window_title",
+  "pid",
+  "process_identifier",
+  "bundle_path",
+  "file_path",
   "raw_window",
   "raw_process",
 ]);

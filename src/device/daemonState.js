@@ -27,6 +27,15 @@ function baseRecord(now) {
     stale_periods: 0,
     capture_excluded_window_count: 0,
     capture_excluded_window_count_max: 0,
+    scanner_state: "unknown",
+    scanner_version: null,
+    scanner_scans_verified: 0,
+    scanner_error_count: 0,
+    permission_denied_count: 0,
+    visible_window_count: 0,
+    suspicious_window_count: 0,
+    scan_duration_ms: null,
+    last_scan_at: null,
     signature_valid: null,
     challenge_id_hash: null,
     updated_at: now,
@@ -53,6 +62,13 @@ export function scoreDaemonRisk(record) {
   const maxExcluded = record?.capture_excluded_window_count_max ?? 0;
   if (maxExcluded > 0 || state === DAEMON_STATES.RISK_DETECTED) {
     return { daemon_risk: 100, forceCritical: true };
+  }
+  if (
+    record?.scanner_state === "scanner_unavailable" ||
+    record?.scanner_state === "permission_denied" ||
+    record?.scanner_state === "scan_error"
+  ) {
+    return { daemon_risk: 40, forceCritical: false };
   }
   if (state === DAEMON_STATES.UNTRUSTED) return { daemon_risk: 50, forceCritical: false };
   if (state === DAEMON_STATES.UNPAIRED) return { daemon_risk: 25, forceCritical: false };
@@ -95,6 +111,13 @@ export function createDaemonStateRegistry({ staleAfterMs = 10_000 } = {}) {
         sequence,
         capture_excluded_window_count,
         helper_state,
+        scanner_state = capture_excluded_window_count > 0 ? "risk_detected" : "healthy",
+        scanner_version = null,
+        scan_timestamp = null,
+        scan_duration_ms = null,
+        scan_error_count = 0,
+        suspicious_window_count = capture_excluded_window_count,
+        visible_window_count = 0,
         timestamp,
         challenge_id_hash = null,
         now = Date.now(),
@@ -104,6 +127,15 @@ export function createDaemonStateRegistry({ staleAfterMs = 10_000 } = {}) {
       record.daemon_state =
         capture_excluded_window_count > 0 ? DAEMON_STATES.RISK_DETECTED : DAEMON_STATES.HEALTHY;
       record.helper_state = helper_state;
+      record.scanner_state = scanner_state;
+      record.scanner_version = scanner_version;
+      record.scan_duration_ms = scan_duration_ms;
+      record.scanner_error_count += scan_error_count;
+      if (scanner_state === "permission_denied") record.permission_denied_count += 1;
+      record.visible_window_count = visible_window_count;
+      record.suspicious_window_count = suspicious_window_count;
+      record.last_scan_at = scan_timestamp;
+      record.scanner_scans_verified += 1;
       record.last_sequence = sequence;
       record.last_proof_at = now;
       record.proof_timestamp = timestamp;

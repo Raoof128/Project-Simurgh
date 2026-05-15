@@ -58,9 +58,9 @@ final class LocalHttpServer {
             case ("OPTIONS", _):
                 return response(200, ["ok": true], origin: headers["origin"])
             case ("GET", "/health"):
-                return response(200, ["ok": true, "daemon": "simurgh-daemon-macos", "version": "0.4.5", "platform": "macos"], origin: headers["origin"])
+                return response(200, ["ok": true, "daemon": "simurgh-daemon-macos", "version": "0.4.7", "platform": "macos"], origin: headers["origin"])
             case ("GET", "/status"):
-                return response(200, PrivacyNormaliser.status(nodeIdHash: signer.identity.nodeIdHash, sessionActive: state.sessionActive, paired: state.paired), origin: headers["origin"])
+                return response(200, PrivacyNormaliser.status(nodeIdHash: signer.identity.nodeIdHash, sessionActive: state.sessionActive, paired: state.paired, scan: signer.scanner.scan()), origin: headers["origin"])
             case ("POST", "/pair"):
                 let session = body["session_id"] as? String ?? ""
                 let exam = body["exam_id"] as? String ?? ""

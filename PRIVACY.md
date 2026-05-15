@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Last updated:** 2026-05-16 (Stage 2.4 browser SDK and daemon lifecycle)
+**Last updated:** 2026-05-16 (Stage 2.5 macOS metadata-only affinity scanner)
 
 Project Simurgh is a research prototype for privacy-preserving academic integrity verification. This document describes what data is collected, how it is used, and what is explicitly not collected.
 
@@ -32,6 +32,8 @@ Simurgh collects **behavioural metadata only**. No content is ever collected, st
 | Daemon node hash and version                        | ✅                     | Stage 2.3 — localhost daemon proof verification                   |
 | Daemon state, proof age, and challenge hash         | ✅                     | Stage 2.3 — replay-resistant device-integrity metadata            |
 | Browser SDK daemon state label                      | ✅                     | Stage 2.4 — local lifecycle status only                           |
+| Scanner state, counts, duration, and version        | ✅                     | Stage 2.5 — aggregate metadata-only affinity scanner summary      |
+| Raw process/window names, PIDs, paths, pixels       | ❌                     | Forbidden; rejected by daemon-proof validation and privacy audit  |
 
 ## What We Never Collect
 
@@ -100,6 +102,7 @@ Simurgh enforces privacy constraints at the code level:
 - `src/privacy/normaliseTelemetry.js` — strict allowlist enforcement before any processing
 - `src/privacy/hashIdentity.js` — one-way hashing at point of entry
 - `public/sdk/simurgh-browser-sdk.js` — daemon status state machine with metadata-only proof attachment
+- `tools/simurgh-daemon-macos/Sources/SimurghDaemon/AffinityScanner.swift` — CoreGraphics metadata scanner with aggregate output only
 
 These controls cannot be bypassed by configuration without code changes.
 

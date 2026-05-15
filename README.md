@@ -21,7 +21,7 @@ _Detecting UI-redressing and behavioral spoofing without relying on screen captu
 
 </div>
 
-> **Status: Stage 2.4 research prototype — browser SDK and daemon lifecycle hardening branch active.** Browser daemon logic now lives in a reusable SDK, and the macOS localhost daemon has development lifecycle commands plus a development-only LaunchAgent path. Stage 2.3's signed P-256 daemon proofs, hardened `SIMURGH_REQUIRE_DAEMON=true` path, and metadata-only privacy contract remain intact. The system does not collect video, audio, biometric data, typed answer content, pasted content, raw process names, raw window titles, usernames, serial numbers, MAC addresses, or personal identity data. See [PRIVACY.md](PRIVACY.md), [ETHICS.md](ETHICS.md), and [DISCLAIMER.md](DISCLAIMER.md).
+> **Status: Stage 2.5 research prototype — macOS metadata-only affinity scanner active.** Browser daemon logic lives in a reusable SDK, the macOS localhost daemon has development lifecycle controls, and signed daemon proofs now include privacy-safe scanner summaries from a CoreGraphics metadata scanner. The hardened `SIMURGH_REQUIRE_DAEMON=true` path and metadata-only privacy contract remain intact. The system does not collect video, audio, biometric data, typed answer content, pasted content, raw process names, raw window titles, usernames, serial numbers, MAC addresses, or personal identity data. See [PRIVACY.md](PRIVACY.md), [ETHICS.md](ETHICS.md), and [DISCLAIMER.md](DISCLAIMER.md).
 
 ---
 
@@ -137,7 +137,7 @@ flowchart LR
 | **Browser Client**        | JavaScript        | Collects behavioral telemetry; renders verdict overlay                         |
 | **Server**                | Node.js / Express | Scores telemetry, optionally requests AI narrative, maintains HMAC audit chain |
 | **AI Narrative Provider** | Configured API    | Provides optional explanations for Warning/Critical review cases               |
-| **simurgh-helper**        | Swift (macOS)     | Native agent; enumerates `NSWindow.SharingType` flags via ScreenCaptureKit     |
+| **simurgh-helper**        | Swift (macOS)     | Native agent; reports metadata-only display-affinity risk summaries            |
 | **Instructor Dashboard**  | HTML / SSE        | Real-time multi-session monitoring and audit export                            |
 
 ### Why Prompt Caching Matters
@@ -218,13 +218,13 @@ Every push to `main` and every pull request runs the full Stage 1 quality gate a
 Run the suite locally before pushing:
 
 ```bash
-./scripts/check.sh              # full pre-push check (Stage 2.4 adds browser SDK and daemon lifecycle gates)
+./scripts/check.sh              # full pre-push check (Stage 2.5 adds scanner proof/risk/report gates)
 ./scripts/check.sh --quick      # pre-commit (skips server boot + chain self-test, ~3s)
 ./scripts/check.sh --fix        # auto-format with Prettier instead of check
 ./scripts/check.sh --verbose    # stream command output instead of writing to logs
 ```
 
-The script enforces: Node >= 22, JS syntax, Prettier format, unit tests, privacy audit (CLI + composite field grep + forbidden npm packages), secret scan, tone check, `npm audit`, server boot + auth gates + security headers + replay rejection, audit chain build/verify round-trip, Stage 2 integrity and daemon gates, browser SDK loading/tests, LaunchAgent plist lint, Swift build/test, and git state. Failed steps write a tail of their log to `.simurgh_check_logs/`.
+The script enforces: Node >= 22, JS syntax, Prettier format, unit tests, privacy audit (CLI + composite field grep + forbidden npm packages), secret scan, tone check, `npm audit`, server boot + auth gates + security headers + replay rejection, audit chain build/verify round-trip, Stage 2 integrity and daemon gates, browser SDK loading/tests, LaunchAgent plist lint, Stage 2.5 scanner proof/risk/report tests, Swift build/test, and git state. Failed steps write a tail of their log to `.simurgh_check_logs/`.
 
 Individual checks can also be run directly:
 
@@ -248,7 +248,7 @@ Stage 2.2 binds a browser exam session to a macOS node public key. The server is
 
 Stage 2.3 adds a macOS localhost daemon under `tools/simurgh-daemon-macos/`. The browser probes `127.0.0.1:3031`, requests server challenges from `POST /api/device/challenge`, pairs the daemon through `POST /api/device/pair`, and can attach signed `daemon_proof` metadata to `POST /api/telemetry`. The server verifies P-256 signatures, rejects replayed challenges, updates `daemon_risk`, appends daemon audit events, and includes `device_integrity` in reports. Design doc: [`docs/STAGE_2_3_MACOS_LOCALHOST_DAEMON.md`](docs/STAGE_2_3_MACOS_LOCALHOST_DAEMON.md).
 
-### Stage 2.4 Browser SDK & Daemon Lifecycle Hardening (branch active — v0.4.6 target)
+### Stage 2.4 Browser SDK & Daemon Lifecycle Hardening (merged — v0.4.6)
 
 Stage 2.4 extracts the browser daemon bridge into [`public/sdk/simurgh-browser-sdk.js`](public/sdk/simurgh-browser-sdk.js). The student page consumes the SDK for daemon discovery, pairing, proof fetch, telemetry send, hardened missing-proof handling, proof-rejection state, and retry-safe local status. The macOS daemon now exposes development lifecycle commands: `start`, `stop`, `status`, `doctor`, and `reset-identity`.
 
@@ -261,6 +261,12 @@ cd tools/simurgh-daemon-macos
 ```
 
 This LaunchAgent path is development-only. It is not notarised, not production endpoint management, and not MDM deployment.
+
+### Stage 2.5 macOS Affinity Scanner Implementation (branch active — v0.4.7 target)
+
+Stage 2.5 replaces the daemon's conservative placeholder scanner with a real CoreGraphics-backed, metadata-only scanner. The scanner enumerates visible window metadata, filters tiny/system noise, counts capture-excluded visible windows conservatively, and attaches only aggregate scanner summaries inside signed daemon proofs.
+
+The server accepts validated scanner fields, rejects forbidden raw local fields, escalates `capture_excluded_window_count > 0` to Critical/manual review, and records privacy-safe scanner audit events. Reports and the instructor dashboard now expose scanner state, visible-window count, maximum capture-excluded count, and manual-review wording. Design doc: [`docs/STAGE_2_5_MACOS_AFFINITY_SCANNER.md`](docs/STAGE_2_5_MACOS_AFFINITY_SCANNER.md).
 
 ### Dashboard
 
@@ -486,7 +492,7 @@ The `simurgh-helper` native agent authenticates to the server via a shared secre
 | Vector                                      | Covered  | Mechanism                                             |
 | ------------------------------------------- | -------- | ----------------------------------------------------- |
 | Tab-switching + paste injection             | ✅       | Behavioral telemetry (focus loss + paste detection)   |
-| `NSWindow.SharingType.none` overlays        | ✅       | `simurgh-helper` (ScreenCaptureKit enumeration)       |
+| `NSWindow.SharingType.none` overlays        | ✅       | macOS daemon scanner (CoreGraphics metadata summary)  |
 | `SetWindowDisplayAffinity` overlays         | Planned  | Windows helper is Stage 2 work                        |
 | Click-through/GPU overlays (no focus steal) | Partial  | Documented limitation; helper may not cover all cases |
 | Pose-token injection (future)               | Research | Hardware-rooted attestation is future work            |
@@ -567,19 +573,20 @@ Project Simurgh is evolving from a vulnerability demonstration into a comprehens
 - [x] Document the "Invisible Window" exploit class.
 - [x] Develop the Simurgh heuristic proof-of-concept environment.
 - [x] Demonstrate cross-platform UI redressing blindspots (macOS, Windows, Linux).
-- [x] Implement `simurgh-helper` native agent for macOS (Swift / ScreenCaptureKit).
+- [x] Implement `simurgh-helper` native agent for macOS (Swift metadata-only scanner).
 - [x] Add Stage 1.5 validation and reviewer-readiness pack.
 - [x] Stage 2.1 — macOS integrity proof pipeline (Swift CLI + signed envelope + `/api/integrity/proofs`).
 - [x] Stage 2.2 — macOS node pairing (Ed25519 challenge/response, paired-session verified status).
 - [x] Post-audit hardening pass (v0.4.3) — proof rate limit, audit-hint safety, constant-time challenge compare.
 - [x] Stage 2.3 — macOS localhost daemon foundation (P-256 daemon identity, `/api/device/*` challenges, telemetry `daemon_proof`, dashboard/report device-integrity state).
 - [x] Stage 2.4 — browser SDK extraction and macOS daemon development lifecycle hardening.
+- [x] Stage 2.5 — macOS metadata-only display-affinity scanner implementation.
 
 ### Phase 2: Autonomous Agent Hardening & Cross-Platform Expansion (Q3 – Q4 2026)
 
 - [x] **Stage 2.3:** macOS localhost node daemon foundation (host signed proof flows behind a localhost endpoint for browser discovery).
 - [x] **Stage 2.4:** Browser SDK hardening and development-only daemon lifecycle controls.
-- [ ] **Stage 2.5:** ScreenCaptureKit signal collection.
+- [x] **Stage 2.5:** CoreGraphics metadata-only display-affinity scanner.
 - [ ] Formalize the Heuristic Engine using advanced cluster compute.
 - [ ] Red-team the heuristics against next-generation "Computer Use" agentic models.
 - [ ] Publish the open-source Simurgh Integrity API draft for enterprise feedback.
@@ -599,14 +606,14 @@ Project Simurgh is evolving from a vulnerability demonstration into a comprehens
 
 Project Simurgh is designed to support two parallel delivery modes per platform to maximize institutional flexibility:
 
-| Platform         | Browser (PWA)        | Native App                          | Native Helper                                  |
-| ---------------- | -------------------- | ----------------------------------- | ---------------------------------------------- |
-| **macOS**        | ✅ Current           | Roadmap — `.app` via MDM            | ✅ `simurgh-helper` (Swift / ScreenCaptureKit) |
-| **Windows**      | ✅ Current           | Roadmap — `.msix` via GPO           | Roadmap — `simurgh-helper-win` (Win32 API)     |
-| **Linux**        | ✅ Current           | Roadmap — `.deb` / `.rpm` / Flatpak | Roadmap — `simurgh-helper-linux` (X11/Wayland) |
-| **iOS / iPadOS** | Roadmap — Safari PWA | Roadmap — Swift/SwiftUI (App Store) | Roadmap — embedded in native app               |
-| **Android**      | Roadmap — Chrome PWA | Roadmap — Kotlin (Play Store)       | Roadmap — embedded in native app               |
-| **ChromeOS**     | Roadmap — Chrome PWA | Roadmap — Android APK sideload      | N/A (browser telemetry sufficient)             |
+| Platform         | Browser (PWA)        | Native App                          | Native Helper                                       |
+| ---------------- | -------------------- | ----------------------------------- | --------------------------------------------------- |
+| **macOS**        | ✅ Current           | Roadmap — `.app` via MDM            | ✅ `simurgh-helper` (Swift / CoreGraphics metadata) |
+| **Windows**      | ✅ Current           | Roadmap — `.msix` via GPO           | Roadmap — `simurgh-helper-win` (Win32 API)          |
+| **Linux**        | ✅ Current           | Roadmap — `.deb` / `.rpm` / Flatpak | Roadmap — `simurgh-helper-linux` (X11/Wayland)      |
+| **iOS / iPadOS** | Roadmap — Safari PWA | Roadmap — Swift/SwiftUI (App Store) | Roadmap — embedded in native app                    |
+| **Android**      | Roadmap — Chrome PWA | Roadmap — Kotlin (Play Store)       | Roadmap — embedded in native app                    |
+| **ChromeOS**     | Roadmap — Chrome PWA | Roadmap — Android APK sideload      | N/A (browser telemetry sufficient)                  |
 
 **Browser-based delivery** provides zero-install access via the institution's LMS or exam portal — ideal for BYOD, remote exams, and developing regions. **Native applications** provide deeper OS integration, enabling the full `simurgh-helper` countermeasure suite (display-affinity scanning, process enumeration) alongside the behavioral telemetry client.
 
@@ -636,6 +643,6 @@ Project Simurgh is designed to support two parallel delivery modes per platform 
 
 ## 13. Status & License
 
-**Status:** Research prototype and technical demonstrator. Stage 1 is a bounded research MVP; Stage 1.5 ships validation + reviewer-readiness documentation; Stage 2.1 and 2.2 are merged (macOS integrity proofs + node pairing); Stage 2.3 adds a localhost daemon foundation; Stage 2.4 packages the browser bridge as an SDK and adds development-only daemon lifecycle controls. Not currently deployed in production. Hardware attestation, production installer lifecycle, notarisation, MDM deployment, and ScreenCaptureKit signal collection remain future work.
+**Status:** Research prototype and technical demonstrator. Stage 1 is a bounded research MVP; Stage 1.5 ships validation + reviewer-readiness documentation; Stage 2.1 and 2.2 are merged (macOS integrity proofs + node pairing); Stage 2.3 adds a localhost daemon foundation; Stage 2.4 packages the browser bridge as an SDK and adds development-only daemon lifecycle controls; Stage 2.5 adds macOS metadata-only affinity scanning inside signed daemon proofs. Not currently deployed in production. Hardware attestation, production installer lifecycle, notarisation, MDM deployment, and Windows/Linux scanner work remain future work.
 
 **License:** MIT © 2026 Raouf Abedini

@@ -6,6 +6,7 @@ Project Simurgh is a research prototype. Security fixes are applied to the lates
 
 | Version                                 | Supported              |
 | --------------------------------------- | ---------------------- |
+| `v0.4.7` (Stage 2.5 macOS scanner)      | ✅ Active              |
 | `v0.4.6` (Stage 2.4 SDK/lifecycle)      | ✅ Active              |
 | `v0.4.5` (Stage 2.3 daemon foundation)  | ✅ Active              |
 | `v0.4.3` (Stage 2 hardening)            | ✅ Active              |
@@ -30,9 +31,9 @@ Include:
 
 You will receive a response within **72 hours**. If the vulnerability is confirmed, a fix will be prioritised for the next release. You will be credited in the changelog unless you request anonymity.
 
-## Security Architecture (v0.4.6)
+## Security Architecture (v0.4.7)
 
-> The trust-boundary table below describes the Stage 1 surface. Stage 2.1 added an Ed25519-signed integrity-proof envelope (`/api/integrity/proofs`); Stage 2.2 added per-session node pairing (`/api/integrity/pairing/{challenge,complete}`); v0.4.3 added rate limiting on the proofs route, cryptographically-reconciled audit hints (`safeParsedPairingHints`), and a constant-time challenge compare. Stage 2.3 adds a macOS localhost daemon proof surface (`/api/device/{challenge,pair}` plus telemetry `daemon_proof`) with P-256 signatures and Keychain-backed daemon identity. Stage 2.4 moves the browser bridge into a reusable SDK and adds development daemon lifecycle/doctor commands. This still does not constitute hardware attestation, notarised distribution, MDM readiness, or a production device-trust claim.
+> The trust-boundary table below describes the Stage 1 surface. Stage 2.1 added an Ed25519-signed integrity-proof envelope (`/api/integrity/proofs`); Stage 2.2 added per-session node pairing (`/api/integrity/pairing/{challenge,complete}`); v0.4.3 added rate limiting on the proofs route, cryptographically-reconciled audit hints (`safeParsedPairingHints`), and a constant-time challenge compare. Stage 2.3 adds a macOS localhost daemon proof surface (`/api/device/{challenge,pair}` plus telemetry `daemon_proof`) with P-256 signatures and Keychain-backed daemon identity. Stage 2.4 moves the browser bridge into a reusable SDK and adds development daemon lifecycle/doctor commands. Stage 2.5 adds a CoreGraphics-backed, metadata-only scanner summary inside signed daemon proofs. This still does not constitute hardware attestation, notarised distribution, MDM readiness, or a production device-trust claim.
 
 ### Stage 2.3 localhost daemon controls
 
@@ -50,6 +51,13 @@ You will receive a response within **72 hours**. If the vulnerability is confirm
 - Server-side proof replay or invalid-proof responses move the client state to `untrusted`; hardened missing-proof mode blocks telemetry before spoofing a daemon proof.
 - `simurgh-daemon doctor` reports only status labels such as daemon reachability, port availability, Keychain identity presence, allowed-origin configuration, localhost binding, server reachability, and proof round-trip readiness.
 - Development LaunchAgent scripts are local-only and user-scoped. They do not install into system LaunchDaemons and do not make production, notarisation, or managed-deployment claims.
+
+### Stage 2.5 scanner controls
+
+- `AffinityScanner` uses CoreGraphics window metadata only and filters for meaningful onscreen windows before counting capture-excluded risk.
+- Scanner summaries are signed inside daemon proofs; browser code cannot append trusted scanner fields beside the proof.
+- Server validation rejects forbidden raw local fields including process/window names, raw process/window fields, PIDs, usernames, home directories, file paths, serial numbers, MAC addresses, screenshots, pixels, audio, typed content, and pasted content.
+- `scanner_unavailable` and `permission_denied` are accepted as signed scanner states and treated as warning/manual-review context, not automatic findings.
 
 ### Stage 1 Trust Boundaries
 

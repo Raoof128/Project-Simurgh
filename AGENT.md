@@ -2,6 +2,32 @@
 
 ## Agent Change Log
 
+### 2026-05-16 (Australia/Sydney) — Stage 2.5 macOS Affinity Scanner Implementation
+
+**Raouf:**
+
+- **Scope:** Stage 2.5 — macOS metadata-only display-affinity scanner implementation.
+- **Summary:**
+  - Replaced the daemon's conservative placeholder `AffinityScanner` with a mockable CoreGraphics metadata scanner using `WindowInfoProvider`, privacy-safe `WindowInfo`, `AffinityScanResult`, and conservative visible-window filtering.
+  - Wired scanner summaries into daemon `/status` and signed `/proof` payloads, including scanner state, version, scan timestamp, duration, visible/suspicious/capture-excluded counts, error count, privacy mode, and privacy-safe window fingerprint hashes.
+  - Updated server daemon-proof validation to accept Stage 2.5 scanner fields, preserve Stage 2.3/2.4 compatibility, reject forbidden raw scanner/local fields, and reject scanner-field tampering through the existing signed payload.
+  - Extended daemon state, risk scoring, reports, instructor dashboard, audit events, and privacy audit for scanner state while keeping manual-review wording and no automatic misconduct finding.
+  - Added Stage 2.5 Swift and Node tests plus `scripts/check.sh` gates for scanner proof validation, scanner risk mapping, report scanner summaries, Swift scanner privacy/risk behavior, and signed scanner proof inclusion.
+  - Updated README, SECURITY, PRIVACY, ROADMAP, and `docs/STAGE_2_5_MACOS_AFFINITY_SCANNER.md` with Stage 2.5 scope and non-production boundaries.
+- **Files Changed:**
+  - `tools/simurgh-daemon-macos/Sources/SimurghDaemon/{AffinityScanner,ProofSigner,PrivacyNormaliser,LocalHttpServer,KeychainIdentity}.swift`
+  - `tools/simurgh-daemon-macos/Tests/SimurghDaemonTests/{AffinityScannerTests,ScannerProofTests}.swift`
+  - `src/device/{daemonProof,daemonState,daemonEvents}.js`
+  - `src/academic/{academicEvents,reportBuilder}.js`
+  - `server.js`
+  - `public/instructor.html`
+  - `tests/unit/{daemonProofScanner,daemonScannerRisk,reportBuilderScanner,reportBuilder}.test.js`
+  - `tools/privacy-audit.mjs`
+  - `scripts/check.sh`
+  - `README.md`, `SECURITY.md`, `PRIVACY.md`, `ROADMAP.md`, `docs/STAGE_2_5_MACOS_AFFINITY_SCANNER.md`, `AGENT.md`, `CHANGELOG.md`
+- **Verification:** Baseline before edits: `git diff --check`, `npm test`, `./scripts/check.sh`, `swift test`, and `swift build` all passed. Targeted Stage 2.5 tests: `node --test tests/unit/daemonProofScanner.test.js tests/unit/daemonScannerRisk.test.js tests/unit/reportBuilderScanner.test.js` → 7/7 pass; `swift test --filter AffinityScannerTests` → 5/5 pass; `swift test --filter ScannerProofTests` → 1/1 pass. Broad verification: `npm test` → 234/234 pass; `swift test` in `tools/simurgh-daemon-macos` → 8/8 pass; `swift build` in `tools/simurgh-daemon-macos` → pass; `git diff --check` → clean; `./scripts/check.sh` → 48/48 gates pass.
+- **Follow-ups:** Stage 2.6 can add Windows scanner work. Production packaging, notarisation, MDM deployment, hardware attestation, Windows/Linux support, and automatic misconduct detection remain out of scope.
+
 ### 2026-05-16 (Australia/Sydney) — Stage 2.4 Browser SDK & Daemon Lifecycle Hardening
 
 **Raouf:**
