@@ -546,7 +546,7 @@ proof.signature = crypto.sign(null, Buffer.from(canonical,'utf8'), privateKey).t
 const res = await fetch(base + '/api/integrity/proofs', {method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tok},body:JSON.stringify(proof)});
 const body = await res.json();
 process.stdout.write(res.status === 202 && body.signature_status === 'unregistered_node' ? 'OK' : 'FAIL:' + res.status + ':' + JSON.stringify(body));
-" 2>&1)
+" 2>&1 || true)
 
   if [[ "$ROUND_TRIP_OK" == "OK" ]]; then
     pass "Stage 2.1 integrity proof verified end-to-end (signature_status=unregistered_node)"
@@ -577,7 +577,7 @@ const proof = {
 const res = await fetch(base + '/api/integrity/proofs', {method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tok},body:JSON.stringify(proof)});
 const body = await res.json();
 process.stdout.write(res.status === 401 && body.error === 'invalid_signature' ? 'OK' : 'FAIL:' + res.status + ':' + JSON.stringify(body));
-" 2>&1)
+" 2>&1 || true)
 
   if [[ "$NEG_RESULT" == "OK" ]]; then
     pass "Stage 2.1 zeroed signature rejected (401 invalid_signature)"
@@ -607,7 +607,7 @@ const pair = { version:'simurgh-pairing-proof-v1', platform:'macos', session_id:
 pair.signature = crypto.sign(null, Buffer.from(canonicalisePairingPayload(pair),'utf8'), privateKey).toString('base64');
 const cmp = await (await fetch(base + '/api/integrity/pairing/complete', {method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tok},body:JSON.stringify(pair)})).json();
 process.stdout.write(cmp.status === 'paired' && cmp.signature_status === 'verified' ? 'OK' : 'FAIL:' + JSON.stringify(cmp));
-" 2>&1)
+" 2>&1 || true)
   if [[ "$PAIR_RT" == "OK" ]]; then
     pass "Stage 2.2 pairing round-trip (signature_status: verified)"
   else
@@ -637,7 +637,7 @@ proof.signature = crypto.sign(null, Buffer.from(canonicaliseProofPayload(proof),
 const res = await fetch(base + '/api/integrity/proofs', {method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tok},body:JSON.stringify(proof)});
 const body = await res.json();
 process.stdout.write(res.status === 202 && body.signature_status === 'verified' ? 'OK' : 'FAIL:' + res.status + ':' + JSON.stringify(body));
-" 2>&1)
+" 2>&1 || true)
   if [[ "$PAIRED_PROOF" == "OK" ]]; then
     pass "Stage 2.2 paired-session proof returns verified"
   else
@@ -667,7 +667,7 @@ proof.signature = crypto.sign(null, Buffer.from(canonicaliseProofPayload(proof),
 const res = await fetch(base + '/api/integrity/proofs', {method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tok},body:JSON.stringify(proof)});
 const body = await res.json();
 process.stdout.write(res.status === 409 && body.error === 'paired_node_mismatch' ? 'OK' : 'FAIL:' + res.status + ':' + JSON.stringify(body));
-" 2>&1)
+" 2>&1 || true)
   if [[ "$PAIRED_REJECT" == "OK" ]]; then
     pass "Stage 2.2 paired-session rejects different node (409 paired_node_mismatch)"
   else
@@ -690,7 +690,7 @@ proof.signature = crypto.sign(null, Buffer.from(canonicaliseProofPayload(proof),
 const res = await fetch(base + '/api/integrity/proofs', {method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tok},body:JSON.stringify(proof)});
 const body = await res.json();
 process.stdout.write(res.status === 202 && body.signature_status === 'unregistered_node' ? 'OK' : 'FAIL:' + res.status + ':' + JSON.stringify(body));
-" 2>&1)
+" 2>&1 || true)
   if [[ "$UNPAIRED" == "OK" ]]; then
     pass "Stage 2.2 unpaired-session proof still returns unregistered_node (backward compat)"
   else
@@ -721,7 +721,7 @@ pair.signature = crypto.sign(null, Buffer.from(canonicalisePairingPayload(pair),
 const res = await fetch(base + '/api/integrity/pairing/complete', {method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tok},body:JSON.stringify(pair)});
 const body = await res.json();
 process.stdout.write(res.status === 409 && body.error === 'node_id_hash_changed' ? 'OK' : 'FAIL:' + res.status + ':' + JSON.stringify(body));
-" 2>&1)
+" 2>&1 || true)
   if [[ "$N1_CROSS" == "OK" ]]; then
     pass "Stage 2.2 /pairing/complete refuses different node when integrityState already bound (N1)"
   else
