@@ -1111,6 +1111,100 @@ app.post(
   },
 );
 
+// Stage 2.2: pairing — verify a node-signed pairing payload and bind the node to the session.
+app.post(
+  "/api/integrity/pairing/complete",
+  limitPairingComplete,
+  requireSessionToken,
+  (req, res) => {
+    const sessionId = req.sessionTokenSessionId;
+    const sess = sessions.get(sessionId);
+    if (!sess) return res.status(409).json({ error: "session_expired_or_evicted" });
+
+    function recordReject(reason, parsedHash = null, parsedChallengeHash = null, hasSig = false) {
+      appendAudit(sess, EVENTS.INTEGRITY_PAIRING_REJECTED, {
+        reason,
+        node_id_hash_if_parsed: parsedHash,
+        challenge_hash_if_parsed: parsedChallengeHash,
+        has_signature: hasSig,
+      });
+    }
+
+    if (pairingRegistry.isPaired(sessionId)) {
+      recordReject(
+        "node_already_paired",
+        typeof req.body?.node_id_hash === "string" && /^[0-9a-f]{64}$/.test(req.body.node_id_hash)
+          ? req.body.node_id_hash
+          : null,
+        null,
+        typeof req.body?.signature === "string" && req.body.signature.length > 0,
+      );
+      return res.status(409).json({ error: "node_already_paired" });
+    }
+
+    const validation = validatePairingProof(req.body, {
+      now: Date.now(),
+      expectedSessionId: sessionId,
+    });
+
+    if (!validation.ok) {
+      const rawHash =
+        typeof req.body?.node_id_hash === "string" && /^[0-9a-f]{64}$/.test(req.body.node_id_hash)
+          ? req.body.node_id_hash
+          : null;
+      const hasSig = typeof req.body?.signature === "string" && req.body.signature.length > 0;
+      recordReject(validation.reason, rawHash, null, hasSig);
+
+      let status = 400;
+      if (validation.reason === "invalid_signature") status = 401;
+      if (validation.reason === "proof_session_mismatch") status = 401;
+      return res.status(status).json({ error: validation.reason });
+    }
+
+    const { payload } = validation;
+    const challengeHash = crypto.createHash("sha256").update(payload.challenge_bytes).digest("hex");
+
+    const existingIntegrity = integrityState.get(sessionId);
+    if (
+      existingIntegrity?.bound_node_id_hash &&
+      existingIntegrity.bound_node_id_hash !== payload.node_id_hash
+    ) {
+      recordReject("node_id_hash_changed", payload.node_id_hash, challengeHash, true);
+      return res.status(409).json({ error: "node_id_hash_changed" });
+    }
+
+    const state = pairingRegistry.completePairing(
+      sessionId,
+      {
+        challenge: payload.challenge,
+        node_id_hash: payload.node_id_hash,
+        node_public_key: payload.node_public_key,
+      },
+      Date.now(),
+    );
+    if (!state.ok) {
+      recordReject(state.reason, payload.node_id_hash, challengeHash, true);
+      return res.status(409).json({ error: state.reason });
+    }
+
+    appendAudit(sess, EVENTS.INTEGRITY_NODE_PAIRED, {
+      node_id_hash: payload.node_id_hash,
+      challenge_hash: challengeHash,
+      platform: "macos",
+      signature_status: "verified",
+    });
+
+    return res.status(200).json({
+      status: "paired",
+      session_id: sessionId,
+      node_id_hash: payload.node_id_hash,
+      signature_status: "verified",
+      paired_at: new Date(state.paired_at).toISOString(),
+      note: "Subsequent /api/integrity/proofs submissions for this session must be signed by the registered node and will return signature_status: verified.",
+    });
+  },
+);
+
 // ─────────────────────────────────────────────────────────────
 //  Stage 2.1 — integrity proof ingestion (v1 pipeline)
 //  POST /api/integrity/proofs
