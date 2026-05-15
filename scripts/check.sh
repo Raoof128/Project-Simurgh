@@ -546,7 +546,7 @@ proof.signature = crypto.sign(null, Buffer.from(canonical,'utf8'), privateKey).t
 const res = await fetch(base + '/api/integrity/proofs', {method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tok},body:JSON.stringify(proof)});
 const body = await res.json();
 process.stdout.write(res.status === 202 && body.signature_status === 'unregistered_node' ? 'OK' : 'FAIL:' + res.status + ':' + JSON.stringify(body));
-" 2>&1)
+" 2>&1 || true)
 
   if [[ "$ROUND_TRIP_OK" == "OK" ]]; then
     pass "Stage 2.1 integrity proof verified end-to-end (signature_status=unregistered_node)"
@@ -577,7 +577,7 @@ const proof = {
 const res = await fetch(base + '/api/integrity/proofs', {method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tok},body:JSON.stringify(proof)});
 const body = await res.json();
 process.stdout.write(res.status === 401 && body.error === 'invalid_signature' ? 'OK' : 'FAIL:' + res.status + ':' + JSON.stringify(body));
-" 2>&1)
+" 2>&1 || true)
 
   if [[ "$NEG_RESULT" == "OK" ]]; then
     pass "Stage 2.1 zeroed signature rejected (401 invalid_signature)"
@@ -586,17 +586,170 @@ process.stdout.write(res.status === 401 && body.error === 'invalid_signature' ? 
     echo "$NEG_RESULT"
   fi
 
+  # ─────────────────────────────────────────────────────────────
+  #  Stage 2.2 — pairing round-trip + verified proof status
+  # ─────────────────────────────────────────────────────────────
+  PAIR_RT=$(node --input-type=module -e "
+import crypto from 'node:crypto';
+import { canonicalisePairingPayload } from './src/integrity/pairingCanonicalise.js';
+import { canonicaliseProofPayload } from './src/integrity/proofCanonicalise.js';
+import { computeNodeIdHash } from './src/integrity/proofSignature.js';
+const base = 'http://localhost:33031';
+const exam = await (await fetch(base + '/api/exams', {method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({title:'pair_check',durationMinutes:60})})).json();
+const join = await (await fetch(base + '/api/exams/' + exam.id + '/join', {method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({studentId:'p@c',sessionId:'pair_check'})})).json();
+const tok = join.sessionToken;
+const { publicKey, privateKey } = crypto.generateKeyPairSync('ed25519');
+const rawPub = Buffer.from(publicKey.export({format:'jwk'}).x, 'base64url');
+const nodeIdHash = computeNodeIdHash(rawPub);
+const nodePub = rawPub.toString('base64');
+const ch = await (await fetch(base + '/api/integrity/pairing/challenge', {method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tok},body:'{}'})).json();
+const pair = { version:'simurgh-pairing-proof-v1', platform:'macos', session_id:'pair_check', node_id_hash: nodeIdHash, node_public_key: nodePub, challenge: ch.challenge, timestamp: new Date().toISOString() };
+pair.signature = crypto.sign(null, Buffer.from(canonicalisePairingPayload(pair),'utf8'), privateKey).toString('base64');
+const cmp = await (await fetch(base + '/api/integrity/pairing/complete', {method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tok},body:JSON.stringify(pair)})).json();
+process.stdout.write(cmp.status === 'paired' && cmp.signature_status === 'verified' ? 'OK' : 'FAIL:' + JSON.stringify(cmp));
+" 2>&1 || true)
+  if [[ "$PAIR_RT" == "OK" ]]; then
+    pass "Stage 2.2 pairing round-trip (signature_status: verified)"
+  else
+    fail "Stage 2.2 pairing round-trip"
+    echo "$PAIR_RT"
+  fi
+
+  PAIRED_PROOF=$(node --input-type=module -e "
+import crypto from 'node:crypto';
+import { canonicalisePairingPayload } from './src/integrity/pairingCanonicalise.js';
+import { canonicaliseProofPayload } from './src/integrity/proofCanonicalise.js';
+import { computeNodeIdHash } from './src/integrity/proofSignature.js';
+const base = 'http://localhost:33031';
+const exam = await (await fetch(base + '/api/exams', {method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({title:'paired_proof',durationMinutes:60})})).json();
+const join = await (await fetch(base + '/api/exams/' + exam.id + '/join', {method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({studentId:'pp@c',sessionId:'paired_proof'})})).json();
+const tok = join.sessionToken;
+const { publicKey, privateKey } = crypto.generateKeyPairSync('ed25519');
+const rawPub = Buffer.from(publicKey.export({format:'jwk'}).x, 'base64url');
+const nodeIdHash = computeNodeIdHash(rawPub);
+const nodePub = rawPub.toString('base64');
+const ch = await (await fetch(base + '/api/integrity/pairing/challenge', {method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tok},body:'{}'})).json();
+const pair = { version:'simurgh-pairing-proof-v1', platform:'macos', session_id:'paired_proof', node_id_hash: nodeIdHash, node_public_key: nodePub, challenge: ch.challenge, timestamp: new Date().toISOString() };
+pair.signature = crypto.sign(null, Buffer.from(canonicalisePairingPayload(pair),'utf8'), privateKey).toString('base64');
+await fetch(base + '/api/integrity/pairing/complete', {method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tok},body:JSON.stringify(pair)});
+const proof = { version:'simurgh-integrity-proof-v1', platform:'macos', session_id:'paired_proof', node_id_hash: nodeIdHash, node_public_key: nodePub, nonce: crypto.randomBytes(16).toString('base64'), timestamp: new Date().toISOString(), capabilities:{screencapturekit_available:false,window_enumeration:false,sharing_state_scan:false,helper_bridge:false}, signals:{node_uptime_ms:0,window_count:0,capture_excluded_window_count:0,helper_status:'not_configured'}, privacy_mode:'metadata_only' };
+proof.signature = crypto.sign(null, Buffer.from(canonicaliseProofPayload(proof),'utf8'), privateKey).toString('base64');
+const res = await fetch(base + '/api/integrity/proofs', {method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tok},body:JSON.stringify(proof)});
+const body = await res.json();
+process.stdout.write(res.status === 202 && body.signature_status === 'verified' ? 'OK' : 'FAIL:' + res.status + ':' + JSON.stringify(body));
+" 2>&1 || true)
+  if [[ "$PAIRED_PROOF" == "OK" ]]; then
+    pass "Stage 2.2 paired-session proof returns verified"
+  else
+    fail "Stage 2.2 paired-session proof"
+    echo "$PAIRED_PROOF"
+  fi
+
+  PAIRED_REJECT=$(node --input-type=module -e "
+import crypto from 'node:crypto';
+import { canonicalisePairingPayload } from './src/integrity/pairingCanonicalise.js';
+import { canonicaliseProofPayload } from './src/integrity/proofCanonicalise.js';
+import { computeNodeIdHash } from './src/integrity/proofSignature.js';
+const base = 'http://localhost:33031';
+const exam = await (await fetch(base + '/api/exams', {method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({title:'paired_reject',durationMinutes:60})})).json();
+const join = await (await fetch(base + '/api/exams/' + exam.id + '/join', {method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({studentId:'pr@c',sessionId:'paired_reject'})})).json();
+const tok = join.sessionToken;
+const a = crypto.generateKeyPairSync('ed25519');
+const b = crypto.generateKeyPairSync('ed25519');
+const rawA = Buffer.from(a.publicKey.export({format:'jwk'}).x, 'base64url');
+const rawB = Buffer.from(b.publicKey.export({format:'jwk'}).x, 'base64url');
+const ch = await (await fetch(base + '/api/integrity/pairing/challenge', {method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tok},body:'{}'})).json();
+const pair = { version:'simurgh-pairing-proof-v1', platform:'macos', session_id:'paired_reject', node_id_hash: computeNodeIdHash(rawA), node_public_key: rawA.toString('base64'), challenge: ch.challenge, timestamp: new Date().toISOString() };
+pair.signature = crypto.sign(null, Buffer.from(canonicalisePairingPayload(pair),'utf8'), a.privateKey).toString('base64');
+await fetch(base + '/api/integrity/pairing/complete', {method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tok},body:JSON.stringify(pair)});
+const proof = { version:'simurgh-integrity-proof-v1', platform:'macos', session_id:'paired_reject', node_id_hash: computeNodeIdHash(rawB), node_public_key: rawB.toString('base64'), nonce: crypto.randomBytes(16).toString('base64'), timestamp: new Date().toISOString(), capabilities:{screencapturekit_available:false,window_enumeration:false,sharing_state_scan:false,helper_bridge:false}, signals:{node_uptime_ms:0,window_count:0,capture_excluded_window_count:0,helper_status:'not_configured'}, privacy_mode:'metadata_only' };
+proof.signature = crypto.sign(null, Buffer.from(canonicaliseProofPayload(proof),'utf8'), b.privateKey).toString('base64');
+const res = await fetch(base + '/api/integrity/proofs', {method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tok},body:JSON.stringify(proof)});
+const body = await res.json();
+process.stdout.write(res.status === 409 && body.error === 'paired_node_mismatch' ? 'OK' : 'FAIL:' + res.status + ':' + JSON.stringify(body));
+" 2>&1 || true)
+  if [[ "$PAIRED_REJECT" == "OK" ]]; then
+    pass "Stage 2.2 paired-session rejects different node (409 paired_node_mismatch)"
+  else
+    fail "Stage 2.2 paired-session rejection"
+    echo "$PAIRED_REJECT"
+  fi
+
+  UNPAIRED=$(node --input-type=module -e "
+import crypto from 'node:crypto';
+import { canonicaliseProofPayload } from './src/integrity/proofCanonicalise.js';
+import { computeNodeIdHash } from './src/integrity/proofSignature.js';
+const base = 'http://localhost:33031';
+const exam = await (await fetch(base + '/api/exams', {method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({title:'unpaired',durationMinutes:60})})).json();
+const join = await (await fetch(base + '/api/exams/' + exam.id + '/join', {method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({studentId:'u@c',sessionId:'unpaired_check'})})).json();
+const tok = join.sessionToken;
+const { publicKey, privateKey } = crypto.generateKeyPairSync('ed25519');
+const rawPub = Buffer.from(publicKey.export({format:'jwk'}).x, 'base64url');
+const proof = { version:'simurgh-integrity-proof-v1', platform:'macos', session_id:'unpaired_check', node_id_hash: computeNodeIdHash(rawPub), node_public_key: rawPub.toString('base64'), nonce: crypto.randomBytes(16).toString('base64'), timestamp: new Date().toISOString(), capabilities:{screencapturekit_available:false,window_enumeration:false,sharing_state_scan:false,helper_bridge:false}, signals:{node_uptime_ms:0,window_count:0,capture_excluded_window_count:0,helper_status:'not_configured'}, privacy_mode:'metadata_only' };
+proof.signature = crypto.sign(null, Buffer.from(canonicaliseProofPayload(proof),'utf8'), privateKey).toString('base64');
+const res = await fetch(base + '/api/integrity/proofs', {method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tok},body:JSON.stringify(proof)});
+const body = await res.json();
+process.stdout.write(res.status === 202 && body.signature_status === 'unregistered_node' ? 'OK' : 'FAIL:' + res.status + ':' + JSON.stringify(body));
+" 2>&1 || true)
+  if [[ "$UNPAIRED" == "OK" ]]; then
+    pass "Stage 2.2 unpaired-session proof still returns unregistered_node (backward compat)"
+  else
+    fail "Stage 2.2 unpaired-session backward compat"
+    echo "$UNPAIRED"
+  fi
+
+  N1_CROSS=$(node --input-type=module -e "
+import crypto from 'node:crypto';
+import { canonicalisePairingPayload } from './src/integrity/pairingCanonicalise.js';
+import { canonicaliseProofPayload } from './src/integrity/proofCanonicalise.js';
+import { computeNodeIdHash } from './src/integrity/proofSignature.js';
+const base = 'http://localhost:33031';
+const exam = await (await fetch(base + '/api/exams', {method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({title:'n1_cross',durationMinutes:60})})).json();
+const join = await (await fetch(base + '/api/exams/' + exam.id + '/join', {method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({studentId:'n1@c',sessionId:'n1_cross'})})).json();
+const tok = join.sessionToken;
+const a = crypto.generateKeyPairSync('ed25519');
+const b = crypto.generateKeyPairSync('ed25519');
+const rawA = Buffer.from(a.publicKey.export({format:'jwk'}).x, 'base64url');
+const rawB = Buffer.from(b.publicKey.export({format:'jwk'}).x, 'base64url');
+const proofA = { version:'simurgh-integrity-proof-v1', platform:'macos', session_id:'n1_cross', node_id_hash: computeNodeIdHash(rawA), node_public_key: rawA.toString('base64'), nonce: crypto.randomBytes(16).toString('base64'), timestamp: new Date().toISOString(), capabilities:{screencapturekit_available:false,window_enumeration:false,sharing_state_scan:false,helper_bridge:false}, signals:{node_uptime_ms:0,window_count:0,capture_excluded_window_count:0,helper_status:'not_configured'}, privacy_mode:'metadata_only' };
+proofA.signature = crypto.sign(null, Buffer.from(canonicaliseProofPayload(proofA),'utf8'), a.privateKey).toString('base64');
+const proofRes = await fetch(base + '/api/integrity/proofs', {method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tok},body:JSON.stringify(proofA)});
+if (proofRes.status !== 202) { process.stdout.write('FAIL:proof_setup:' + proofRes.status); process.exit(0); }
+const ch = await (await fetch(base + '/api/integrity/pairing/challenge', {method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tok},body:'{}'})).json();
+const pair = { version:'simurgh-pairing-proof-v1', platform:'macos', session_id:'n1_cross', node_id_hash: computeNodeIdHash(rawB), node_public_key: rawB.toString('base64'), challenge: ch.challenge, timestamp: new Date().toISOString() };
+pair.signature = crypto.sign(null, Buffer.from(canonicalisePairingPayload(pair),'utf8'), b.privateKey).toString('base64');
+const res = await fetch(base + '/api/integrity/pairing/complete', {method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tok},body:JSON.stringify(pair)});
+const body = await res.json();
+process.stdout.write(res.status === 409 && body.error === 'node_id_hash_changed' ? 'OK' : 'FAIL:' + res.status + ':' + JSON.stringify(body));
+" 2>&1 || true)
+  if [[ "$N1_CROSS" == "OK" ]]; then
+    pass "Stage 2.2 /pairing/complete refuses different node when integrityState already bound (N1)"
+  else
+    fail "Stage 2.2 N1 cross-route consistency"
+    echo "$N1_CROSS"
+  fi
+
   kill "$S2_PID" 2>/dev/null
   wait "$S2_PID" 2>/dev/null
 fi
 
 # ── 10c. Golden fixture sync check ───────────────────────
 step "Golden fixture sync"
-if diff -q tests/unit/integrity/__fixtures__/golden-proof.json \
-          tools/simurgh-node-macos/Tests/SimurghNodeTests/Fixtures/golden-proof.json >/dev/null 2>&1 \
-   && diff -q tests/unit/integrity/__fixtures__/golden-proof.sha256 \
-              tools/simurgh-node-macos/Tests/SimurghNodeTests/Fixtures/golden-proof.sha256 >/dev/null 2>&1; then
-  pass "Node + Swift golden fixtures are identical"
+SYNC_OK=true
+if ! diff -q tests/unit/integrity/__fixtures__/golden-proof.json \
+            tools/simurgh-node-macos/Tests/SimurghNodeTests/Fixtures/golden-proof.json >/dev/null 2>&1 \
+   || ! diff -q tests/unit/integrity/__fixtures__/golden-proof.sha256 \
+                tools/simurgh-node-macos/Tests/SimurghNodeTests/Fixtures/golden-proof.sha256 >/dev/null 2>&1; then
+  SYNC_OK=false
+fi
+if ! diff -q tests/unit/integrity/__fixtures__/golden-pairing-payload.json \
+            tools/simurgh-node-macos/Tests/SimurghNodeTests/Fixtures/golden-pairing-payload.json >/dev/null 2>&1 \
+   || ! diff -q tests/unit/integrity/__fixtures__/golden-pairing-payload.sha256 \
+                tools/simurgh-node-macos/Tests/SimurghNodeTests/Fixtures/golden-pairing-payload.sha256 >/dev/null 2>&1; then
+  SYNC_OK=false
+fi
+if [[ "$SYNC_OK" == "true" ]]; then
+  pass "Node + Swift golden fixtures are identical (proof + pairing)"
 else
   fail "Golden fixture drift between Node and Swift copies — keep them in sync"
 fi

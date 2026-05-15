@@ -19,6 +19,8 @@ let package = Package(
             resources: [
                 .copy("Fixtures/golden-proof.json"),
                 .copy("Fixtures/golden-proof.sha256"),
+                .copy("Fixtures/golden-pairing-payload.json"),
+                .copy("Fixtures/golden-pairing-payload.sha256"),
             ]
         ),
     ]

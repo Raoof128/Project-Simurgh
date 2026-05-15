@@ -65,3 +65,10 @@ export const keyByInstructorToken = (req) => {
   const bearer = auth && /^Bearer\s+/i.test(auth) ? auth.replace(/^Bearer\s+/i, "") : null;
   return bearer || req.query?.token || null;
 };
+
+export const keyBySessionToken = (req) => {
+  if (req.sessionTokenSessionId) return req.sessionTokenSessionId;
+  const auth = req.headers.authorization;
+  const bearer = auth && /^Bearer\s+/i.test(auth) ? auth.replace(/^Bearer\s+/i, "") : null;
+  return bearer ? `tok:${bearer.slice(0, 64)}` : "unauthenticated";
+};

@@ -207,3 +207,72 @@ describe("validateProof — signature", () => {
     assert.equal(result.ok, true);
   });
 });
+
+describe("validateProof — paired session (Stage 2.2)", () => {
+  test("returns signature_status: 'verified' when pairedNode matches", () => {
+    const proof = freshSignedProof();
+    const pairedNode = {
+      node_id_hash: proof.node_id_hash,
+      node_public_key: proof.node_public_key,
+      paired_at: NOW - 1000,
+    };
+    const result = validateProof(proof, { now: NOW, pairedNode, expectedSessionId: "sess_abc" });
+    assert.equal(result.ok, true);
+    assert.equal(result.signature_status, "verified");
+  });
+
+  test("unpaired session returns signature_status: 'unregistered_node'", () => {
+    const proof = freshSignedProof();
+    const result = validateProof(proof, {
+      now: NOW,
+      pairedNode: null,
+      expectedSessionId: "sess_abc",
+    });
+    assert.equal(result.ok, true);
+    assert.equal(result.signature_status, "unregistered_node");
+  });
+
+  test("paired_node_mismatch when node_id_hash differs", () => {
+    const proof = freshSignedProof();
+    const pairedNode = {
+      node_id_hash: "f".repeat(64),
+      node_public_key: proof.node_public_key,
+      paired_at: NOW - 1000,
+    };
+    const result = validateProof(proof, { now: NOW, pairedNode, expectedSessionId: "sess_abc" });
+    assert.equal(result.ok, false);
+    assert.equal(result.reason, "paired_node_mismatch");
+  });
+
+  test("paired_public_key_mismatch when public key string differs but hash matches", () => {
+    const proof = freshSignedProof();
+    const pairedNode = {
+      node_id_hash: proof.node_id_hash,
+      node_public_key: "different-base64-key",
+      paired_at: NOW - 1000,
+    };
+    const result = validateProof(proof, { now: NOW, pairedNode, expectedSessionId: "sess_abc" });
+    assert.equal(result.ok, false);
+    assert.equal(result.reason, "paired_public_key_mismatch");
+  });
+
+  test("registered_signature_invalid when paired but signature is zeroed", () => {
+    const proof = freshSignedProof();
+    proof.signature = Buffer.alloc(64).toString("base64");
+    const pairedNode = {
+      node_id_hash: proof.node_id_hash,
+      node_public_key: proof.node_public_key,
+      paired_at: NOW - 1000,
+    };
+    const result = validateProof(proof, { now: NOW, pairedNode, expectedSessionId: "sess_abc" });
+    assert.equal(result.ok, false);
+    assert.equal(result.reason, "registered_signature_invalid");
+  });
+
+  test("expectedSessionId mismatch returns proof_session_mismatch", () => {
+    const proof = freshSignedProof();
+    const result = validateProof(proof, { now: NOW, expectedSessionId: "sess_other" });
+    assert.equal(result.ok, false);
+    assert.equal(result.reason, "proof_session_mismatch");
+  });
+});

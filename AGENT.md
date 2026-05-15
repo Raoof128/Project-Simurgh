@@ -2,6 +2,39 @@
 
 ## Agent Change Log
 
+### 2026-05-14 (Australia/Sydney) — Stage 2.2 Implementation
+
+**Raouf:**
+
+- **Scope:** Stage 2.2 — macOS node pairing (Tasks 1–17)
+- **Summary:** Five new JS modules: `pairingSchema` (constants), `pairingCanonicalise` (re-export of proof canonicaliser), `pairingValidator` (schema + crypto), `pairingRegistry` (in-memory state machine with injectable now), plus an update to `proofValidator` that accepts `pairedNode` + `expectedSessionId` and returns `signature_status`. Two new server routes: `POST /api/integrity/pairing/challenge` and `/complete`, both rate-limited (10/min and 20/min per session token). The proofs route now looks up the paired node and returns `signature_status: "verified"` when paired. Cross-route N1 consistency check refuses pairing if `integrityState.bound_node_id_hash` already differs. Three new audit event constants emitted with privacy-safe payloads (hashed nonce, challenge_hash, never raw key/signature). macOS Swift CLI gains a `pair` subcommand with strict unknown-subcommand handling (exit 64). Cross-implementation golden pairing fixture locks Swift `JSONEncoder.sortedKeys` byte-equal to Node canonicaliser.
+- **Files Changed:**
+  - `src/integrity/{pairingSchema,pairingCanonicalise,pairingValidator,pairingRegistry}.js` (new)
+  - `src/integrity/proofValidator.js` (pairedNode + expectedSessionId)
+  - `src/academic/academicEvents.js` (3 new constants)
+  - `server.js` (pairing registry instance, eviction, 2 new routes, proofs route upgrade)
+  - `tools/simurgh-node-macos/Sources/SimurghNode/{PairingEnvelope,PairingSigner}.swift` (new)
+  - `tools/simurgh-node-macos/Sources/SimurghNode/main.swift` (pair subcommand)
+  - `tools/simurgh-node-macos/Tests/SimurghNodeTests/PairingCanonicaliseTests.swift` (new)
+  - `tests/unit/integrity/__fixtures__/golden-pairing-payload.{json,sha256}` (new)
+  - `scripts/check.sh` (5 new gates: 27 → 32)
+- **Verification:** `npm test` (target ≈ 200 pass). `./scripts/check.sh` (full) → 32/32 gates pass on macOS. `swift build` + `swift test` pass on macOS. Smoke round-trip returns `signature_status: "verified"`. Different-node proofs rejected with 409 `paired_node_mismatch`. Unpaired baseline still returns `"unregistered_node"`. `npm audit --audit-level=high` clean.
+- **What this does NOT do:** No localhost daemon (Stage 2.3). No browser SDK (Stage 2.4). No ScreenCaptureKit (Stage 2.5). No risk-score integration. No hardware attestation. No persistence across server restarts.
+- **Follow-ups:** Open draft PR `stage-2-2-macos-node-pairing` → `main`; tag `v0.4.2-stage-2-2-macos-node-pairing` after merge.
+
+### 2026-05-15 (Australia/Sydney) — Stage 2.2 Task 4: Pairing Registry
+
+**Raouf:**
+
+- **Scope:** Stage 2.2 Task 4 — per-session pairing state machine (TDD)
+- **Summary:** Added `src/integrity/pairingRegistry.js` — a factory-pattern in-memory registry tracking per-session pairing state (none → pending → paired). Injectable `now` parameter enables deterministic testing. Default TTL 60 s. Paired state is immutable for the session lifetime. Written test-first: test file created and confirmed module-not-found failure, then implemented. 14 tests across 3 suites all pass. API: `createChallenge`, `getChallenge`, `completePairing`, `getPairedNode`, `isPaired`, `evict`, `evictMissing`, `size`. Reason codes: `node_already_paired`, `challenge_not_found`, `challenge_expired`, `challenge_mismatch`. Prettier formatting applied before commit.
+- **Files Changed:**
+  - `src/integrity/pairingRegistry.js` (new — `createPairingRegistry` factory export)
+  - `tests/unit/integrity/pairingRegistry.test.js` (new — 14 tests, 3 suites)
+  - `AGENT.md`, `CHANGELOG.md` — postflight log entries
+- **Verification:** `node --test tests/unit/integrity/pairingRegistry.test.js` → 14/14 pass, 0 fail. `npm test` → 189/189 pass. `npx prettier --check` passes on both new files.
+- **Follow-ups:** Task 5 (wire pairingRegistry into server.js pairing endpoints), Task 6 (Swift CLI pairing handshake), Task 7 (full check.sh gates for Stage 2.2).
+
 ### 2026-05-14 (Australia/Sydney) — Stage 2.1 Implementation Complete
 
 **Raouf:**

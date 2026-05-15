@@ -59,16 +59,25 @@ function validateSignals(signals) {
 }
 
 /**
- * Validate a Stage 2.1 macOS integrity proof.
+ * Validate a macOS integrity proof.
  *
  * Returns:
- *   { ok: true, proof }                — proof is the accepted shape (includes raw nonce_bytes Buffer)
- *   { ok: false, reason: "<code>" }    — see spec §"Server Validation Flow"
+ *   { ok: true, proof, signature_status }  — proof is the accepted shape (includes raw nonce_bytes Buffer)
+ *                                             signature_status: "verified" | "unregistered_node"
+ *   { ok: false, reason: "<code>" }        — see spec §"Server Validation Flow"
+ *
+ * Options:
+ *   now               — override current timestamp (ms since epoch); defaults to Date.now()
+ *   pairedNode        — { node_id_hash, node_public_key, paired_at } from node-pairing store, or null
+ *   expectedSessionId — if non-null, proof.session_id must equal this value
  *
  * This validator does NOT check nonce replay or node continuity.
  * Those are downstream responsibilities of nonceGuard and integrityState.
  */
-export function validateProof(raw, { now = Date.now() } = {}) {
+export function validateProof(
+  raw,
+  { now = Date.now(), pairedNode = null, expectedSessionId = null } = {}
+) {
   if (raw === null || typeof raw !== "object" || Array.isArray(raw)) {
     return fail("proof_not_an_object");
   }
@@ -90,6 +99,9 @@ export function validateProof(raw, { now = Date.now() } = {}) {
   if (typeof raw.session_id !== "string" || !SESSION_ID_PATTERN.test(raw.session_id)) {
     return fail("invalid_session_id");
   }
+  if (expectedSessionId !== null && raw.session_id !== expectedSessionId) {
+    return fail("proof_session_mismatch");
+  }
 
   if (typeof raw.timestamp !== "string") return fail("invalid_timestamp");
   const ts = Date.parse(raw.timestamp);
@@ -109,6 +121,12 @@ export function validateProof(raw, { now = Date.now() } = {}) {
   }
   if (raw.node_id_hash !== computeNodeIdHash(pubKey)) return fail("node_id_hash_mismatch");
 
+  if (pairedNode) {
+    if (raw.node_id_hash !== pairedNode.node_id_hash) return fail("paired_node_mismatch");
+    if (raw.node_public_key !== pairedNode.node_public_key)
+      return fail("paired_public_key_mismatch");
+  }
+
   if (typeof raw.nonce !== "string") return fail("invalid_nonce");
   const nonceBytes = tryDecodeBase64(raw.nonce);
   if (!nonceBytes || nonceBytes.length < NONCE_BYTES_MIN || nonceBytes.length > NONCE_BYTES_MAX) {
@@ -120,7 +138,21 @@ export function validateProof(raw, { now = Date.now() } = {}) {
   if (!sigBytes || sigBytes.length !== SIGNATURE_BYTES) return fail("invalid_signature_format");
 
   const canonical = canonicaliseProofPayload(raw);
-  if (!verifyProofSignature(canonical, pubKey, sigBytes)) return fail("invalid_signature");
+
+  let signature_status;
+  if (pairedNode) {
+    const registeredKey = tryDecodeBase64(pairedNode.node_public_key);
+    if (!registeredKey || registeredKey.length !== PUBLIC_KEY_BYTES) {
+      return fail("registered_signature_invalid");
+    }
+    if (!verifyProofSignature(canonical, registeredKey, sigBytes)) {
+      return fail("registered_signature_invalid");
+    }
+    signature_status = "verified";
+  } else {
+    if (!verifyProofSignature(canonical, pubKey, sigBytes)) return fail("invalid_signature");
+    signature_status = "unregistered_node";
+  }
 
   const accepted = {
     version: raw.version,
@@ -136,5 +168,5 @@ export function validateProof(raw, { now = Date.now() } = {}) {
     privacy_mode: raw.privacy_mode,
     signature: raw.signature,
   };
-  return { ok: true, proof: accepted };
+  return { ok: true, proof: accepted, signature_status };
 }

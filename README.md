@@ -7,6 +7,7 @@
 _Detecting UI-redressing and behavioral spoofing without relying on screen capture._
 
 [![Stage 1 Checks](https://github.com/Raoof128/Project-Simurgh/actions/workflows/stage-1-checks.yml/badge.svg?branch=main)](https://github.com/Raoof128/Project-Simurgh/actions/workflows/stage-1-checks.yml)
+[![DOI](https://zenodo.org/badge/1227737305.svg)](https://doi.org/10.5281/zenodo.20195198)
 [![Node](https://img.shields.io/badge/node-%E2%89%A522.0-1a1a1a?style=flat-square)](https://nodejs.org)
 [![AI Narrative](https://img.shields.io/badge/AI%20narrative-optional-6b1a1a?style=flat-square)](#2-the-simurgh-engine)
 [![License](https://img.shields.io/badge/license-MIT-d6cfbe?style=flat-square)](#13-status-license)
@@ -238,6 +239,10 @@ npm run format                                    # Prettier write
 ### Stage 2.1 macOS Integrity Node (in progress on `stage-2-integrity-node` branch)
 
 Stage 2.1 adds a v1 signed-integrity-proof pipeline. A macOS Swift CLI under `tools/simurgh-node-macos/` generates an Ed25519 keypair, builds a metadata-only proof envelope, signs the canonical JSON, and prints it to stdout. The Simurgh server accepts the proof at `POST /api/integrity/proofs` with `signature_status: "unregistered_node"` until pairing lands in Stage 2.2. A cross-implementation golden fixture locks canonical-JSON byte equality between Node and Swift. Design spec: [`docs/superpowers/specs/2026-05-14-stage-2-1-macos-integrity-proof-design.md`](docs/superpowers/specs/2026-05-14-stage-2-1-macos-integrity-proof-design.md).
+
+### Stage 2.2 macOS Node Pairing (in progress on `stage-2-2-macos-node-pairing` branch)
+
+Stage 2.2 binds a browser exam session to a macOS node public key. The server issues a one-time 32-byte challenge via `POST /api/integrity/pairing/challenge`; the macOS CLI's new `pair` subcommand signs the canonical pairing payload; `POST /api/integrity/pairing/complete` records the node's public key. Subsequent integrity proofs from the registered node return `signature_status: "verified"`. Stage 2.1 unpaired flow remains backward-compatible. Design spec: [`docs/superpowers/specs/2026-05-14-stage-2-2-macos-node-pairing-design.md`](docs/superpowers/specs/2026-05-14-stage-2-2-macos-node-pairing-design.md).
 
 ### Dashboard
 
