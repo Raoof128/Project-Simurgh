@@ -3,6 +3,14 @@ import crypto from "node:crypto";
 const DEFAULT_TTL_MS = 60_000;
 const CHALLENGE_BYTES = 32;
 
+function constantTimeStringEquals(a, b) {
+  if (typeof a !== "string" || typeof b !== "string") return false;
+  const ab = Buffer.from(a, "utf8");
+  const bb = Buffer.from(b, "utf8");
+  if (ab.length !== bb.length) return false;
+  return crypto.timingSafeEqual(ab, bb);
+}
+
 export function createPairingRegistry({ challengeTtlMs = DEFAULT_TTL_MS } = {}) {
   if (
     typeof challengeTtlMs !== "number" ||
@@ -62,7 +70,9 @@ export function createPairingRegistry({ challengeTtlMs = DEFAULT_TTL_MS } = {}) 
     if (rec.paired) return { ok: false, reason: "node_already_paired" };
     if (!rec.pending) return { ok: false, reason: "challenge_not_found" };
     if (rec.pending.challenge_expires_at < now) return { ok: false, reason: "challenge_expired" };
-    if (rec.pending.challenge !== challenge) return { ok: false, reason: "challenge_mismatch" };
+    if (!constantTimeStringEquals(rec.pending.challenge, challenge)) {
+      return { ok: false, reason: "challenge_mismatch" };
+    }
 
     rec.paired = {
       node_id_hash,

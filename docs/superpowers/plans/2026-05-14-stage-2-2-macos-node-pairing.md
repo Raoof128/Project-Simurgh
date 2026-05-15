@@ -2417,13 +2417,13 @@ fi
 cd /Users/raoof.r12/Desktop/Raouf/Project-Simurgh && ./scripts/check.sh 2>&1 | grep -E "━━━|✓|✗|Summary|Passed|Failed" | tail -30
 ```
 
-Expected: 31/31 gates pass (was 27 in Stage 2.1; +4 new gates).
+Expected: 32/32 gates pass (was 27 in Stage 2.1; +5 new gates).
 
 - [ ] **Step 4: Commit**
 
 ```bash
 git add scripts/check.sh
-git commit -m "ci(check.sh): add Stage 2.2 pairing gates (27 → 31)"
+git commit -m "ci(check.sh): add Stage 2.2 pairing gates (27 → 32)"
 ```
 
 ---
@@ -2467,8 +2467,8 @@ Insert at the top of the changelog body in `AGENT.md`:
   - `tools/simurgh-node-macos/Sources/SimurghNode/main.swift` (pair subcommand)
   - `tools/simurgh-node-macos/Tests/SimurghNodeTests/PairingCanonicaliseTests.swift` (new)
   - `tests/unit/integrity/__fixtures__/golden-pairing-payload.{json,sha256}` (new)
-  - `scripts/check.sh` (4 new gates: 27 → 31)
-- **Verification:** `npm test` (target ≈ 200 pass). `./scripts/check.sh` (full) → 31/31 gates pass on macOS. `swift build` + `swift test` pass on macOS. Smoke round-trip returns `signature_status: "verified"`. Different-node proofs rejected with 409 `paired_node_mismatch`. Unpaired baseline still returns `"unregistered_node"`. `npm audit --audit-level=high` clean.
+  - `scripts/check.sh` (5 new gates: 27 → 32)
+- **Verification:** `npm test` (target ≈ 200 pass). `./scripts/check.sh` (full) → 32/32 gates pass on macOS. `swift build` + `swift test` pass on macOS. Smoke round-trip returns `signature_status: "verified"`. Different-node proofs rejected with 409 `paired_node_mismatch`. Unpaired baseline still returns `"unregistered_node"`. `npm audit --audit-level=high` clean.
 - **What this does NOT do:** No localhost daemon (Stage 2.3). No browser SDK (Stage 2.4). No ScreenCaptureKit (Stage 2.5). No risk-score integration. No hardware attestation. No persistence across server restarts.
 - **Follow-ups:** Open draft PR `stage-2-2-macos-node-pairing` → `main`; tag `v0.4.2-stage-2-2-macos-node-pairing` after merge.
 ```
@@ -2492,7 +2492,7 @@ At the top of `CHANGELOG.md`:
 - macOS Swift CLI `pair` subcommand with strict unknown-subcommand handling (exit 64)
 - `PairingEnvelope.swift` + `PairingSigner.swift` mirror their proof counterparts
 - Cross-implementation golden pairing fixture (`golden-pairing-payload.{json,sha256}`)
-- 4 new `scripts/check.sh` gates: pairing round-trip, paired-proof verified, paired-session rejects different node, unpaired backward compat — gate count 27 → 31
+- 5 new `scripts/check.sh` gates: pairing round-trip, paired-proof verified, paired-session rejects different node, unpaired backward compat — gate count 27 → 32
 
 ### Changed
 
@@ -2513,7 +2513,7 @@ At the top of `CHANGELOG.md`:
 ### Verified
 
 - `npm test` — all tests pass
-- `./scripts/check.sh` (full) — 31/31 gates pass on macOS
+- `./scripts/check.sh` (full) — 32/32 gates pass on macOS
 - `swift build` + `swift test` — pass on macOS
 - `npm audit --audit-level=high` — 0 vulnerabilities
 ```
@@ -2556,7 +2556,7 @@ npm run format 2>&1 | tail -3
 ./scripts/check.sh 2>&1 | grep -E "Summary|Passed|Failed" | tail -3
 ````
 
-Expected: 31/31 pass.
+Expected: 32/32 pass.
 
 - [ ] **Step 6: Commit**
 
@@ -2577,7 +2577,7 @@ git commit -m "docs: Stage 2.2 README + AGENT/CHANGELOG 0.4.2 entries + macOS pa
 cd /Users/raoof.r12/Desktop/Raouf/Project-Simurgh && ./scripts/check.sh 2>&1 | tail -10
 ```
 
-Expected: 31/31 gates pass.
+Expected: 32/32 gates pass.
 
 - [ ] **Step 2: Run all unit tests**
 
@@ -2643,7 +2643,7 @@ gh pr create \
 | Test plan — validator                            | Tasks 3, 5                           |
 | Test plan — registry                             | Task 4                               |
 | Test plan — Swift interop                        | Task 15                              |
-| `scripts/check.sh` extensions (27 → 31)          | Task 16                              |
+| `scripts/check.sh` extensions (27 → 32)          | Task 16                              |
 | Docs (README + AGENT + CHANGELOG + macOS README) | Task 17                              |
 
 All 19 acceptance criteria from the spec map to tasks.
