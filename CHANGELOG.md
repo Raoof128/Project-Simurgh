@@ -1,5 +1,21 @@
 ## Change Log
 
+## [Unreleased] — 2026-05-15 — Stage 2.2 Task 4: Pairing Registry
+
+### Added
+
+- `src/integrity/pairingRegistry.js` — `createPairingRegistry({ challengeTtlMs })` factory that tracks per-session pairing state (none → pending → paired). Injectable `now` parameter for deterministic tests. Default TTL 60 s. Paired state is immutable for the session lifetime. Exports: `createChallenge`, `getChallenge`, `completePairing`, `getPairedNode`, `isPaired`, `evict`, `evictMissing`, `size`. Reason codes: `node_already_paired`, `challenge_not_found`, `challenge_expired`, `challenge_mismatch`.
+- `tests/unit/integrity/pairingRegistry.test.js` — 14 tests across 3 suites covering challenge creation, replacement, rejection when paired; pairing happy path and all error paths; accessors, eviction, and size reporting.
+
+### Raouf
+
+- **Date:** 2026-05-15 (Australia/Sydney)
+- **Scope:** Stage 2.2 Task 4 — pairing registry (TDD)
+- **Summary:** Written test-first: test file confirmed module-not-found failure before implementation. 14/14 tests pass. `npm test` → 189/189 total. Prettier passes on both new files.
+- **Files changed:** `src/integrity/pairingRegistry.js`, `tests/unit/integrity/pairingRegistry.test.js`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `node --test tests/unit/integrity/pairingRegistry.test.js` → 14/14. `npm test` → 189/189. `npx prettier --check` → clean.
+- **Follow-ups:** Task 5 (wire registry into server pairing endpoints), Task 6 (Swift pairing handshake), Task 7 (check.sh Stage 2.2 gates).
+
 ## [0.4.1] — 2026-05-14 — Stage 2.1 macOS Integrity Proof Pipeline
 
 ### Added

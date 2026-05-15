@@ -2,6 +2,19 @@
 
 ## Agent Change Log
 
+### 2026-05-15 (Australia/Sydney) — Stage 2.2 Task 4: Pairing Registry
+
+**Raouf:**
+
+- **Scope:** Stage 2.2 Task 4 — per-session pairing state machine (TDD)
+- **Summary:** Added `src/integrity/pairingRegistry.js` — a factory-pattern in-memory registry tracking per-session pairing state (none → pending → paired). Injectable `now` parameter enables deterministic testing. Default TTL 60 s. Paired state is immutable for the session lifetime. Written test-first: test file created and confirmed module-not-found failure, then implemented. 14 tests across 3 suites all pass. API: `createChallenge`, `getChallenge`, `completePairing`, `getPairedNode`, `isPaired`, `evict`, `evictMissing`, `size`. Reason codes: `node_already_paired`, `challenge_not_found`, `challenge_expired`, `challenge_mismatch`. Prettier formatting applied before commit.
+- **Files Changed:**
+  - `src/integrity/pairingRegistry.js` (new — `createPairingRegistry` factory export)
+  - `tests/unit/integrity/pairingRegistry.test.js` (new — 14 tests, 3 suites)
+  - `AGENT.md`, `CHANGELOG.md` — postflight log entries
+- **Verification:** `node --test tests/unit/integrity/pairingRegistry.test.js` → 14/14 pass, 0 fail. `npm test` → 189/189 pass. `npx prettier --check` passes on both new files.
+- **Follow-ups:** Task 5 (wire pairingRegistry into server.js pairing endpoints), Task 6 (Swift CLI pairing handshake), Task 7 (full check.sh gates for Stage 2.2).
+
 ### 2026-05-14 (Australia/Sydney) — Stage 2.1 Implementation Complete
 
 **Raouf:**
