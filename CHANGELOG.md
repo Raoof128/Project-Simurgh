@@ -1,5 +1,30 @@
 ## Change Log
 
+## [0.4.3] — 2026-05-15 — Stage 2 Security Hardening Pass
+
+### Added
+
+- `src/integrity/pairingAuditHints.js` — `safeParsedPairingHints()` helper. `node_id_hash_if_parsed` is now emitted in audit chain rejection payloads only when the public key actually decodes to 32 bytes AND the hash matches sha256(pubkey), not on regex shape alone.
+- `tests/unit/integrity/pairingAuditHints.test.js` — 8 tests covering the audit-hint safety invariants.
+- `limitIntegrityProof` — rate limiter on `POST /api/integrity/proofs` (30/min per session token) to bound Ed25519 verify cost on a compromised session token.
+
+### Changed
+
+- `pairingRegistry.completePairing` — challenge comparison now uses `crypto.timingSafeEqual` rather than `!==`. Challenges are not strictly secrets (they round-trip through the client), but constant-time compare removes future regression risk.
+- `server.js` `/api/integrity/proofs` and `/api/integrity/pairing/complete` rejection paths — use the new safe-parsed-hints helper instead of inline regex checks; audit payloads now never carry a `node_id_hash_if_parsed` that wasn't cryptographically reconciled with the submitted public key.
+- Stage 2.2 design spec, plan, and historical docs — gate-count references normalised to `32/32` (was a mix of `31/31` and `32/32`).
+
+### Verified
+
+- `npm test` — 203/203 pass (was 195; +8 from new audit-hints suite)
+- `./scripts/check.sh` — 32/32 gates pass
+- `npm audit --audit-level=high` — 0 vulnerabilities
+- No raw key / signature / challenge bytes appear in any audit payload (verified by inspection of all `appendAudit(... EVENTS.INTEGRITY_*)` call sites)
+
+### Notes
+
+- The macOS CLI key at `~/.simurgh/node-key` remains a development identity key (0600 / dir 0700). Not Keychain-backed. Not Secure Enclave-backed. Hardware attestation remains future work — do not infer production device trust.
+
 ## [0.4.2] — 2026-05-14 — Stage 2.2 macOS Node Pairing
 
 ### Added

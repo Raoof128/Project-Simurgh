@@ -17,6 +17,7 @@ import { createNonceGuard } from "./src/integrity/nonceGuard.js";
 import { createIntegrityState } from "./src/integrity/integrityState.js";
 import { validatePairingProof } from "./src/integrity/pairingValidator.js";
 import { createPairingRegistry } from "./src/integrity/pairingRegistry.js";
+import { safeParsedPairingHints } from "./src/integrity/pairingAuditHints.js";
 import { verifyAuditExport } from "./src/audit/verifyAudit.js";
 import { appendEntry, CHAIN_CAP } from "./src/audit/hmacChain.js";
 import {
@@ -517,6 +518,12 @@ const limitSessions = createRateLimiter({
   max: 60,
   keyFn: keyByInstructorToken,
   name: "sessions",
+});
+const limitIntegrityProof = createRateLimiter({
+  windowMs: 60_000,
+  max: 30,
+  keyFn: keyBySessionToken,
+  name: "integrity_proof",
 });
 const limitPairingChallenge = createRateLimiter({
   windowMs: 60_000,
@@ -1132,14 +1139,8 @@ app.post(
     }
 
     if (pairingRegistry.isPaired(sessionId)) {
-      recordReject(
-        "node_already_paired",
-        typeof req.body?.node_id_hash === "string" && /^[0-9a-f]{64}$/.test(req.body.node_id_hash)
-          ? req.body.node_id_hash
-          : null,
-        null,
-        typeof req.body?.signature === "string" && req.body.signature.length > 0
-      );
+      const hints = safeParsedPairingHints(req.body);
+      recordReject("node_already_paired", hints.node_id_hash_if_parsed, null, hints.has_signature);
       return res.status(409).json({ error: "node_already_paired" });
     }
 
@@ -1149,12 +1150,8 @@ app.post(
     });
 
     if (!validation.ok) {
-      const rawHash =
-        typeof req.body?.node_id_hash === "string" && /^[0-9a-f]{64}$/.test(req.body.node_id_hash)
-          ? req.body.node_id_hash
-          : null;
-      const hasSig = typeof req.body?.signature === "string" && req.body.signature.length > 0;
-      recordReject(validation.reason, rawHash, null, hasSig);
+      const hints = safeParsedPairingHints(req.body);
+      recordReject(validation.reason, hints.node_id_hash_if_parsed, null, hints.has_signature);
 
       let status = 400;
       if (validation.reason === "invalid_signature") status = 401;
@@ -1210,7 +1207,7 @@ app.post(
 //  Stage 2.1 — integrity proof ingestion (v1 pipeline)
 //  POST /api/integrity/proofs
 // ─────────────────────────────────────────────────────────────
-app.post("/api/integrity/proofs", requireSessionToken, (req, res) => {
+app.post("/api/integrity/proofs", limitIntegrityProof, requireSessionToken, (req, res) => {
   const sessionId = req.sessionTokenSessionId;
 
   // Step 2 (spec): session must still exist. No implicit resurrection.
@@ -1236,12 +1233,8 @@ app.post("/api/integrity/proofs", requireSessionToken, (req, res) => {
     expectedSessionId: sessionId,
   });
   if (!validation.ok) {
-    const rawHash =
-      typeof req.body?.node_id_hash === "string" && /^[0-9a-f]{64}$/.test(req.body.node_id_hash)
-        ? req.body.node_id_hash
-        : null;
-    const hasSig = typeof req.body?.signature === "string" && req.body.signature.length > 0;
-    recordReject(validation.reason, rawHash, hasSig);
+    const hints = safeParsedPairingHints(req.body);
+    recordReject(validation.reason, hints.node_id_hash_if_parsed, hints.has_signature);
 
     let status = 400;
     if (validation.reason === "invalid_signature") status = 401;

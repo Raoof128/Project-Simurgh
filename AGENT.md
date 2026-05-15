@@ -2,6 +2,27 @@
 
 ## Agent Change Log
 
+### 2026-05-15 (Australia/Sydney) — Stage 2 Security Hardening Pass
+
+**Raouf:**
+
+- **Scope:** Pre-tag hardening pass on the merged Stage 2.1 + 2.2 surface following an external cybersecurity audit (A- / 8.7). No new features, no Stage 2.3 work.
+- **Summary:**
+  - Added per-session-token rate limiter to `POST /api/integrity/proofs` (30/min) — closes the only remaining CPU-abuse path on the integrity surface.
+  - Introduced `src/integrity/pairingAuditHints.js` with `safeParsedPairingHints()`. Rejection-path audit entries no longer emit `node_id_hash_if_parsed` on regex shape alone; the hash must be cryptographically reconciled with a 32-byte decoded public key. Wired into both `/pairing/complete` and `/proofs` reject paths.
+  - Hardened `pairingRegistry.completePairing` with `crypto.timingSafeEqual` for challenge comparison (challenges are not strict secrets but the constant-time path removes future-regression risk).
+  - Normalised all gate-count references in `docs/superpowers/{plans,specs}/` to `32/32` to match `AGENT.md`, `CHANGELOG.md`, and the actual `check.sh` total.
+- **Files Changed:**
+  - `server.js` (new limiter + reject-path refactor in two routes)
+  - `src/integrity/pairingAuditHints.js` (new)
+  - `src/integrity/pairingRegistry.js` (constant-time compare)
+  - `tests/unit/integrity/pairingAuditHints.test.js` (new, 8 tests)
+  - Spec + plan docs gate-count normalisation
+  - `CHANGELOG.md`, `AGENT.md`
+- **Verification:** `npm test` → 203/203 pass (was 195). `./scripts/check.sh` → 32/32 gates pass. `npm audit --audit-level=high` → 0 vulnerabilities. Honesty grep confirms no false "production device trust", "hardware attestation", or "ScreenCaptureKit scanning" claims.
+- **What this does NOT do:** No new Stage 2.x scope. Does not migrate node key to Keychain or Secure Enclave (still development key at `~/.simurgh/node-key`). Does not add browser SDK, daemon, or risk-score integration.
+- **Follow-ups:** Open PR, merge, tag `v0.4.3-stage-2-hardening`. Then Stage 2.3 brainstorm (macOS localhost node daemon).
+
 ### 2026-05-14 (Australia/Sydney) — Stage 2.2 Implementation
 
 **Raouf:**

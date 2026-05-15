@@ -619,7 +619,7 @@ tools/simurgh-node-macos/Tests/SimurghNodeTests/Fixtures/
 
 `scripts/check.sh` "Golden fixture sync" gate extended to cover both pairs.
 
-### `scripts/check.sh` extensions (27 → 31 gates)
+### `scripts/check.sh` extensions (27 → 32 gates)
 
 Four new server-side gates:
 
@@ -677,7 +677,7 @@ Stage 2.2 is complete when:
 12. ✅ Audit payloads contain no raw challenge / public key / signature
 13. ✅ Rate limits: 10/min on `/challenge`, 20/min on `/complete`
 14. ✅ Unknown CLI subcommand exits 64 (no silent fallthrough)
-15. ✅ `./scripts/check.sh` → 31/31 gates pass
+15. ✅ `./scripts/check.sh` → 32/32 gates pass
 16. ✅ `npm test` passes (target ≈ 200 tests)
 17. ✅ `swift build` + `swift test` pass on macOS
 18. ✅ `npm audit` → 0 high/critical
