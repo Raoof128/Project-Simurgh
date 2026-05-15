@@ -15,6 +15,8 @@ import { buildReport } from "./src/academic/reportBuilder.js";
 import { validateProof } from "./src/integrity/proofValidator.js";
 import { createNonceGuard } from "./src/integrity/nonceGuard.js";
 import { createIntegrityState } from "./src/integrity/integrityState.js";
+import { validatePairingProof } from "./src/integrity/pairingValidator.js";
+import { createPairingRegistry } from "./src/integrity/pairingRegistry.js";
 import { verifyAuditExport } from "./src/audit/verifyAudit.js";
 import { appendEntry, CHAIN_CAP } from "./src/audit/hmacChain.js";
 import {
@@ -267,6 +269,7 @@ const proofNonceGuard = createNonceGuard();
 
 // Stage 2.1: per-session integrity state with N1 strict node continuity.
 const integrityState = createIntegrityState();
+const pairingRegistry = createPairingRegistry({ challengeTtlMs: 60_000 });
 
 // Replay guard for /api/telemetry submissions
 const replayGuard = createReplayGuard({
@@ -315,7 +318,9 @@ const examEvictionTimer = setInterval(
     for (const [id] of examSessions.entries()) {
       if (!sessions.has(id)) examSessions.delete(id);
     }
-    integrityState.evictMissing(new Set(sessions.keys()));
+    const activeIds = new Set(sessions.keys());
+    integrityState.evictMissing(activeIds);
+    pairingRegistry.evictMissing(activeIds);
   },
   5 * 60 * 1000
 ).unref?.();
