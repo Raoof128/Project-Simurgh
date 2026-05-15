@@ -65,3 +65,26 @@ The `--print-key-info` output and the proof JSON show `key_path`, which contains
 ## First-run behaviour
 
 On first run the CLI generates a fresh Ed25519 keypair, stores the private key at `~/.simurgh/node-key` with `0600` permissions, and prints a one-time warning to stderr. Subsequent runs reuse the same key. If the key file is malformed the CLI exits `2` without auto-regenerating — silent regeneration would mask key loss.
+
+### Pair with a session (Stage 2.2)
+
+```bash
+# 1. Server issues a challenge
+curl -s -X POST http://localhost:3030/api/integrity/pairing/challenge \
+  -H "Authorization: Bearer <SESSION_TOKEN>" \
+  -H 'Content-Type: application/json' \
+  -d '{}' | jq -r .challenge > /tmp/simurgh-challenge.txt
+
+# 2. Node signs the challenge
+swift run SimurghNode pair --session sess_abc --challenge "$(cat /tmp/simurgh-challenge.txt)" > /tmp/simurgh-pair.json
+
+# 3. Submit the signed pairing payload
+curl -s -X POST http://localhost:3030/api/integrity/pairing/complete \
+  -H "Authorization: Bearer <SESSION_TOKEN>" \
+  -H 'Content-Type: application/json' \
+  --data @/tmp/simurgh-pair.json | jq
+```
+
+Expected response: `status: "paired"` with `signature_status: "verified"`. Subsequent proof submissions for this session now return `signature_status: "verified"`.
+
+The `pair` subcommand prints exactly 8 fields to stdout: `version`, `platform`, `session_id`, `node_id_hash`, `node_public_key`, `challenge`, `timestamp`, `signature`. No private key. No content. No raw process names or window titles.

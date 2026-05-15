@@ -1,5 +1,44 @@
 ## Change Log
 
+## [0.4.2] — 2026-05-14 — Stage 2.2 macOS Node Pairing
+
+### Added
+
+- `src/integrity/pairingSchema.js` — v1 pairing envelope constants (8 required fields, reused forbidden-field blocklist)
+- `src/integrity/pairingCanonicalise.js` — re-exports the proof canonicaliser as `canonicalisePairingPayload` (single source of truth for the wire format)
+- `src/integrity/pairingValidator.js` — orchestrates v1 schema + timestamp + key/hash + signature checks
+- `src/integrity/pairingRegistry.js` — per-session state machine (pending → paired) with injectable `now` for deterministic tests
+- `POST /api/integrity/pairing/challenge` — 32-byte CSPRNG challenge, 60 s TTL, 10/min/session-token rate limit
+- `POST /api/integrity/pairing/complete` — verifies Ed25519-signed pairing payload, stores node public key for the session, 20/min rate limit
+- Three new audit event constants: `INTEGRITY_PAIRING_CHALLENGE_CREATED`, `INTEGRITY_NODE_PAIRED`, `INTEGRITY_PAIRING_REJECTED`; payloads carry only hashes, never raw challenge/public-key/signature
+- macOS Swift CLI `pair` subcommand with strict unknown-subcommand handling (exit 64)
+- `PairingEnvelope.swift` + `PairingSigner.swift` mirror their proof counterparts
+- Cross-implementation golden pairing fixture (`golden-pairing-payload.{json,sha256}`)
+- 4 new `scripts/check.sh` gates: pairing round-trip, paired-proof verified, paired-session rejects different node, unpaired backward compat — gate count 27 → 31
+
+### Changed
+
+- `src/integrity/proofValidator.js` — `validateProof(raw, { now, pairedNode, expectedSessionId })`; returns `{ ok, proof, signature_status }`. Paired sessions get `signature_status: "verified"` via E1 strict triple check (hash + public-key string + signature using registered key).
+- `server.js` — `POST /api/integrity/proofs` looks up `pairingRegistry.getPairedNode(sessionId)` and forwards it to the validator; new reason codes mapped to 401/409
+- `examEvictionTimer` callback now evicts pairing registry entries alongside integrity state
+- macOS Swift CLI — `main.swift` rewritten for subcommand dispatch; bare `--session` still defaults to `proof`
+
+### Notes
+
+- Stage 2.2 transitional posture preserved: unpaired Stage 2.1 sessions still return `signature_status: "unregistered_node"`
+- Pairing registry is in-memory only; server restart loses all pairings (matches session lifecycle)
+- Pairing is immutable per session; `/challenge` and `/complete` both reject 409 `node_already_paired` after pairing
+- Cross-route N1 consistency: `/pairing/complete` refuses to pair if `integrityState.bound_node_id_hash` already differs from the pairing payload
+- SwiftPM cannot reference resources outside the package, so the golden pairing fixture is duplicated under `tools/simurgh-node-macos/Tests/SimurghNodeTests/Fixtures/`; sync enforced by the `check.sh` "Golden fixture sync" gate
+- The CLI's `~/.simurgh/node-key` remains a development identity key, not hardware-backed attestation
+
+### Verified
+
+- `npm test` — all tests pass
+- `./scripts/check.sh` (full) — 31/31 gates pass on macOS
+- `swift build` + `swift test` — pass on macOS
+- `npm audit --audit-level=high` — 0 vulnerabilities
+
 ## [Unreleased] — 2026-05-15 — Stage 2.2 Task 4: Pairing Registry
 
 ### Added
