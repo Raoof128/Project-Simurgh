@@ -1100,6 +1100,13 @@ app.post(
 
     const result = pairingRegistry.createChallenge(sessionId, Date.now());
     if (!result.ok) {
+      appendAudit(sess, EVENTS.INTEGRITY_PAIRING_REJECTED, {
+        reason: result.reason,
+        node_id_hash_if_parsed: null,
+        challenge_hash_if_parsed: null,
+        has_signature: false,
+        stage: "challenge_request",
+      });
       return res.status(409).json({ error: result.reason });
     }
 

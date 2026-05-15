@@ -729,6 +729,80 @@ process.stdout.write(res.status === 409 && body.error === 'node_id_hash_changed'
     echo "$N1_CROSS"
   fi
 
+  # ── audit-coverage demo states (Q10: stale, replayed, invalid_signature) + Q9 audit emission ──
+  # Two sessions only, to stay under the /join 10/min rate limit on this server.
+  AUDIT_STATES_A=$(node --input-type=module -e "
+import crypto from 'node:crypto';
+import { canonicaliseProofPayload } from './src/integrity/proofCanonicalise.js';
+import { computeNodeIdHash } from './src/integrity/proofSignature.js';
+const base = 'http://localhost:33031';
+const exam = await (await fetch(base + '/api/exams', {method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({title:'audit_states_a',durationMinutes:60})})).json();
+const join = await (await fetch(base + '/api/exams/' + exam.id + '/join', {method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({studentId:'asa@c',sessionId:'audit_a'})})).json();
+const tok = join.sessionToken;
+const { publicKey, privateKey } = crypto.generateKeyPairSync('ed25519');
+const rawPub = Buffer.from(publicKey.export({format:'jwk'}).x, 'base64url');
+function mkProof(opts) {
+  const p = { version:'simurgh-integrity-proof-v1', platform:'macos', session_id:'audit_a', node_id_hash: computeNodeIdHash(rawPub), node_public_key: rawPub.toString('base64'), nonce: opts.nonce || crypto.randomBytes(16).toString('base64'), timestamp: opts.ts || new Date().toISOString(), capabilities:{screencapturekit_available:false,window_enumeration:false,sharing_state_scan:false,helper_bridge:false}, signals:{node_uptime_ms:0,window_count:0,capture_excluded_window_count:0,helper_status:'not_configured'}, privacy_mode:'metadata_only' };
+  p.signature = crypto.sign(null, Buffer.from(canonicaliseProofPayload(p),'utf8'), privateKey).toString('base64');
+  return p;
+}
+const stale = mkProof({ ts: new Date(Date.now() - 24*60*60*1000).toISOString() });
+const r1 = await fetch(base + '/api/integrity/proofs', {method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tok},body:JSON.stringify(stale)});
+const b1 = await r1.json();
+if (b1.error !== 'proof_stale') { process.stdout.write('FAIL:stale:' + r1.status + ':' + JSON.stringify(b1)); process.exit(0); }
+const good = mkProof({});
+const r2 = await fetch(base + '/api/integrity/proofs', {method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tok},body:JSON.stringify(good)});
+if (r2.status !== 202) { process.stdout.write('FAIL:good:' + r2.status); process.exit(0); }
+const r3 = await fetch(base + '/api/integrity/proofs', {method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tok},body:JSON.stringify(good)});
+const b3 = await r3.json();
+if (r3.status !== 409 || b3.error !== 'nonce_replayed') { process.stdout.write('FAIL:replay:' + r3.status + ':' + JSON.stringify(b3)); process.exit(0); }
+process.stdout.write('OK');
+" 2>&1 || true)
+  if [[ "$AUDIT_STATES_A" == "OK" ]]; then
+    pass "Stage 2 stale proof + replayed nonce both rejected (proof_stale, nonce_replayed)"
+  else
+    fail "Stage 2 stale/replayed coverage"
+    echo "$AUDIT_STATES_A"
+  fi
+
+  # Q9 + invalid_signature on pairing: bad sig → audit reject, then valid pair, then re-challenge → audit reject again.
+  AUDIT_STATES_B=$(node --input-type=module -e "
+import crypto from 'node:crypto';
+import { canonicalisePairingPayload } from './src/integrity/pairingCanonicalise.js';
+import { computeNodeIdHash } from './src/integrity/proofSignature.js';
+const base = 'http://localhost:33031';
+const exam = await (await fetch(base + '/api/exams', {method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({title:'audit_states_b',durationMinutes:60})})).json();
+const join = await (await fetch(base + '/api/exams/' + exam.id + '/join', {method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({studentId:'asb@c',sessionId:'audit_b'})})).json();
+const tok = join.sessionToken;
+const { publicKey, privateKey } = crypto.generateKeyPairSync('ed25519');
+const rawPub = Buffer.from(publicKey.export({format:'jwk'}).x, 'base64url');
+const ch1 = await (await fetch(base + '/api/integrity/pairing/challenge', {method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tok},body:'{}'})).json();
+const bad = { version:'simurgh-pairing-proof-v1', platform:'macos', session_id:'audit_b', node_id_hash: computeNodeIdHash(rawPub), node_public_key: rawPub.toString('base64'), challenge: ch1.challenge, timestamp: new Date().toISOString(), signature: Buffer.alloc(64).toString('base64') };
+const rBad = await fetch(base + '/api/integrity/pairing/complete', {method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tok},body:JSON.stringify(bad)});
+const bBad = await rBad.json();
+if (rBad.status !== 401 || bBad.error !== 'invalid_signature') { process.stdout.write('FAIL:bad_sig:' + rBad.status + ':' + JSON.stringify(bBad)); process.exit(0); }
+const ch2 = await (await fetch(base + '/api/integrity/pairing/challenge', {method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tok},body:'{}'})).json();
+const good = { version:'simurgh-pairing-proof-v1', platform:'macos', session_id:'audit_b', node_id_hash: computeNodeIdHash(rawPub), node_public_key: rawPub.toString('base64'), challenge: ch2.challenge, timestamp: new Date().toISOString() };
+good.signature = crypto.sign(null, Buffer.from(canonicalisePairingPayload(good),'utf8'), privateKey).toString('base64');
+const cmp = await fetch(base + '/api/integrity/pairing/complete', {method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tok},body:JSON.stringify(good)});
+if (cmp.status !== 200) { process.stdout.write('FAIL:complete:' + cmp.status); process.exit(0); }
+const reChall = await fetch(base + '/api/integrity/pairing/challenge', {method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tok},body:'{}'});
+if (reChall.status !== 409) { process.stdout.write('FAIL:re_chall:' + reChall.status); process.exit(0); }
+const audit = await (await fetch(base + '/api/audit/audit_b')).json();
+const entries = audit.entries || [];
+const hasInvSig = entries.some(e => e.type === 'INTEGRITY_PAIRING_REJECTED' && e.payload?.reason === 'invalid_signature');
+const hasChallReject = entries.some(e => e.type === 'INTEGRITY_PAIRING_REJECTED' && e.payload?.stage === 'challenge_request');
+if (!hasInvSig) { process.stdout.write('FAIL:no_inv_sig_audit'); process.exit(0); }
+if (!hasChallReject) { process.stdout.write('FAIL:no_challenge_reject_audit'); process.exit(0); }
+process.stdout.write('OK');
+" 2>&1 || true)
+  if [[ "$AUDIT_STATES_B" == "OK" ]]; then
+    pass "Stage 2.2 invalid_signature + challenge-rejection both emit INTEGRITY_PAIRING_REJECTED (Q9)"
+  else
+    fail "Stage 2.2 invalid_signature / challenge-rejection audit coverage"
+    echo "$AUDIT_STATES_B"
+  fi
+
   kill "$S2_PID" 2>/dev/null
   wait "$S2_PID" 2>/dev/null
 fi

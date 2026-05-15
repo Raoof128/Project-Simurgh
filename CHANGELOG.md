@@ -1,5 +1,29 @@
 ## Change Log
 
+## [0.4.4] — 2026-05-15 — Audit-Coverage Closure (Q9 + Q10) and Research Programme
+
+### Added
+
+- `docs/RESEARCH_PROGRAMME.md` — long-horizon four-track research roadmap (Interface Vulnerabilities, Proof-Based Integrity Defence, Secure Agent Sandboxing, Regulated / Secure-Environment Roadmap). Includes the 10/10 audit-question evidence matrix with file/line citations.
+- `scripts/check.sh` — two consolidated audit-coverage gates covering the five Q10 demo states:
+  - "Stage 2 stale proof + replayed nonce both rejected (proof_stale, nonce_replayed)" — exercises `proof_stale` clock-drift rejection and `nonce_replayed` replay-guard rejection on one session.
+  - "Stage 2.2 invalid_signature + challenge-rejection both emit INTEGRITY_PAIRING_REJECTED (Q9)" — exercises pairing `invalid_signature` rejection (zeroed sig) **and** the new challenge-request audit emission (`stage: "challenge_request"`).
+
+### Changed
+
+- `server.js` `/api/integrity/pairing/challenge` rejection path — now appends `INTEGRITY_PAIRING_REJECTED` with `stage: "challenge_request"` when `createChallenge` returns a failure (e.g. `node_already_paired`). Previously these returned `409` silently with no audit trail entry. Closes the Q9 audit-coverage gap identified in the May 2026 internal audit.
+
+### Verified
+
+- `npm test` — 203/203 pass
+- `./scripts/check.sh` — 34/34 gates pass (was 32; +2 consolidated audit-coverage gates)
+- `npm audit --audit-level=high` — 0 vulnerabilities
+- Audit posture: 10/10 on the May 2026 ten-question matrix (all entries have both a code-level answer and a regression gate).
+
+### Notes
+
+- The new gates intentionally share two sessions (one for proof-state coverage, one for pairing-state coverage) to stay under the `/join` 10/min IP rate limit when run inside the stage-21 server boot in `check.sh`.
+
 ## [0.4.3] — 2026-05-15 — Stage 2 Security Hardening Pass
 
 ### Added
