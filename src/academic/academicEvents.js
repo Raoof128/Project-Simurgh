@@ -22,6 +22,10 @@ export const EVENTS = Object.freeze({
   INTEGRITY_PROOF_REJECTED: "INTEGRITY_PROOF_REJECTED",
   // Defined for Stage 2.x staleness checker. Not emitted by Stage 2.1.
   INTEGRITY_NODE_STALE: "INTEGRITY_NODE_STALE",
+  // Stage 2.2 — pairing events
+  INTEGRITY_PAIRING_CHALLENGE_CREATED: "INTEGRITY_PAIRING_CHALLENGE_CREATED",
+  INTEGRITY_NODE_PAIRED: "INTEGRITY_NODE_PAIRED",
+  INTEGRITY_PAIRING_REJECTED: "INTEGRITY_PAIRING_REJECTED",
 });
 
 export function createEvent(sessionId, type, detail = {}) {
