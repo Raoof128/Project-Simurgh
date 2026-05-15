@@ -517,6 +517,18 @@ const limitSessions = createRateLimiter({
   keyFn: keyByInstructorToken,
   name: "sessions",
 });
+const limitPairingChallenge = createRateLimiter({
+  windowMs: 60_000,
+  max: 10,
+  keyFn: keyByInstructorToken,
+  name: "pairing_challenge",
+});
+const limitPairingComplete = createRateLimiter({
+  windowMs: 60_000,
+  max: 20,
+  keyFn: keyByInstructorToken,
+  name: "pairing_complete",
+});
 
 // ─────────────────────────────────────────────────────────────
 //  /api/telemetry — candidate-side ingest (rate-limited, validated)
