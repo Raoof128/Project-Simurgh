@@ -17,8 +17,8 @@
   - `tools/simurgh-node-macos/Sources/SimurghNode/main.swift` (pair subcommand)
   - `tools/simurgh-node-macos/Tests/SimurghNodeTests/PairingCanonicaliseTests.swift` (new)
   - `tests/unit/integrity/__fixtures__/golden-pairing-payload.{json,sha256}` (new)
-  - `scripts/check.sh` (4 new gates: 27 → 31)
-- **Verification:** `npm test` (target ≈ 200 pass). `./scripts/check.sh` (full) → 31/31 gates pass on macOS. `swift build` + `swift test` pass on macOS. Smoke round-trip returns `signature_status: "verified"`. Different-node proofs rejected with 409 `paired_node_mismatch`. Unpaired baseline still returns `"unregistered_node"`. `npm audit --audit-level=high` clean.
+  - `scripts/check.sh` (5 new gates: 27 → 32)
+- **Verification:** `npm test` (target ≈ 200 pass). `./scripts/check.sh` (full) → 32/32 gates pass on macOS. `swift build` + `swift test` pass on macOS. Smoke round-trip returns `signature_status: "verified"`. Different-node proofs rejected with 409 `paired_node_mismatch`. Unpaired baseline still returns `"unregistered_node"`. `npm audit --audit-level=high` clean.
 - **What this does NOT do:** No localhost daemon (Stage 2.3). No browser SDK (Stage 2.4). No ScreenCaptureKit (Stage 2.5). No risk-score integration. No hardware attestation. No persistence across server restarts.
 - **Follow-ups:** Open draft PR `stage-2-2-macos-node-pairing` → `main`; tag `v0.4.2-stage-2-2-macos-node-pairing` after merge.
 

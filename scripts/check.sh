@@ -698,6 +698,37 @@ process.stdout.write(res.status === 202 && body.signature_status === 'unregister
     echo "$UNPAIRED"
   fi
 
+  N1_CROSS=$(node --input-type=module -e "
+import crypto from 'node:crypto';
+import { canonicalisePairingPayload } from './src/integrity/pairingCanonicalise.js';
+import { canonicaliseProofPayload } from './src/integrity/proofCanonicalise.js';
+import { computeNodeIdHash } from './src/integrity/proofSignature.js';
+const base = 'http://localhost:33031';
+const exam = await (await fetch(base + '/api/exams', {method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({title:'n1_cross',durationMinutes:60})})).json();
+const join = await (await fetch(base + '/api/exams/' + exam.id + '/join', {method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({studentId:'n1@c',sessionId:'n1_cross'})})).json();
+const tok = join.sessionToken;
+const a = crypto.generateKeyPairSync('ed25519');
+const b = crypto.generateKeyPairSync('ed25519');
+const rawA = Buffer.from(a.publicKey.export({format:'jwk'}).x, 'base64url');
+const rawB = Buffer.from(b.publicKey.export({format:'jwk'}).x, 'base64url');
+const proofA = { version:'simurgh-integrity-proof-v1', platform:'macos', session_id:'n1_cross', node_id_hash: computeNodeIdHash(rawA), node_public_key: rawA.toString('base64'), nonce: crypto.randomBytes(16).toString('base64'), timestamp: new Date().toISOString(), capabilities:{screencapturekit_available:false,window_enumeration:false,sharing_state_scan:false,helper_bridge:false}, signals:{node_uptime_ms:0,window_count:0,capture_excluded_window_count:0,helper_status:'not_configured'}, privacy_mode:'metadata_only' };
+proofA.signature = crypto.sign(null, Buffer.from(canonicaliseProofPayload(proofA),'utf8'), a.privateKey).toString('base64');
+const proofRes = await fetch(base + '/api/integrity/proofs', {method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tok},body:JSON.stringify(proofA)});
+if (proofRes.status !== 202) { process.stdout.write('FAIL:proof_setup:' + proofRes.status); process.exit(0); }
+const ch = await (await fetch(base + '/api/integrity/pairing/challenge', {method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tok},body:'{}'})).json();
+const pair = { version:'simurgh-pairing-proof-v1', platform:'macos', session_id:'n1_cross', node_id_hash: computeNodeIdHash(rawB), node_public_key: rawB.toString('base64'), challenge: ch.challenge, timestamp: new Date().toISOString() };
+pair.signature = crypto.sign(null, Buffer.from(canonicalisePairingPayload(pair),'utf8'), b.privateKey).toString('base64');
+const res = await fetch(base + '/api/integrity/pairing/complete', {method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tok},body:JSON.stringify(pair)});
+const body = await res.json();
+process.stdout.write(res.status === 409 && body.error === 'node_id_hash_changed' ? 'OK' : 'FAIL:' + res.status + ':' + JSON.stringify(body));
+" 2>&1)
+  if [[ "$N1_CROSS" == "OK" ]]; then
+    pass "Stage 2.2 /pairing/complete refuses different node when integrityState already bound (N1)"
+  else
+    fail "Stage 2.2 N1 cross-route consistency"
+    echo "$N1_CROSS"
+  fi
+
   kill "$S2_PID" 2>/dev/null
   wait "$S2_PID" 2>/dev/null
 fi

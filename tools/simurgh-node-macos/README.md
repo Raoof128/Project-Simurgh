@@ -50,13 +50,14 @@ Expected response: `status: 202` with `signature_status: "unregistered_node"`.
 
 ## Exit codes
 
-| Code | Meaning                      |
-| ---- | ---------------------------- |
-| `0`  | Proof printed successfully   |
-| `1`  | Generic error                |
-| `2`  | Key file malformed           |
-| `3`  | Missing required `--session` |
-| `64` | Unknown CLI flag             |
+| Code | Meaning                                |
+| ---- | -------------------------------------- |
+| `0`  | Proof printed successfully             |
+| `1`  | Generic error                          |
+| `2`  | Key file malformed                     |
+| `3`  | Missing required `--session`           |
+| `4`  | Pair mode missing `--challenge`        |
+| `64` | Unknown CLI flag or unknown subcommand |
 
 ## Privacy notice for screenshots
 

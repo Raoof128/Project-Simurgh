@@ -30,6 +30,7 @@ import {
   keyByIp,
   keyByHelperSecret,
   keyByInstructorToken,
+  keyBySessionToken,
 } from "./src/security/rateLimit.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -520,13 +521,13 @@ const limitSessions = createRateLimiter({
 const limitPairingChallenge = createRateLimiter({
   windowMs: 60_000,
   max: 10,
-  keyFn: keyByInstructorToken,
+  keyFn: keyBySessionToken,
   name: "pairing_challenge",
 });
 const limitPairingComplete = createRateLimiter({
   windowMs: 60_000,
   max: 20,
-  keyFn: keyByInstructorToken,
+  keyFn: keyBySessionToken,
   name: "pairing_complete",
 });
 

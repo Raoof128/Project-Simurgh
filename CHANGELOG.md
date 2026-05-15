@@ -14,7 +14,7 @@
 - macOS Swift CLI `pair` subcommand with strict unknown-subcommand handling (exit 64)
 - `PairingEnvelope.swift` + `PairingSigner.swift` mirror their proof counterparts
 - Cross-implementation golden pairing fixture (`golden-pairing-payload.{json,sha256}`)
-- 4 new `scripts/check.sh` gates: pairing round-trip, paired-proof verified, paired-session rejects different node, unpaired backward compat — gate count 27 → 31
+- 5 new `scripts/check.sh` gates: pairing round-trip, paired-proof verified, paired-session rejects different node, unpaired backward compat, N1 cross-route consistency — gate count 27 → 32
 
 ### Changed
 
@@ -35,7 +35,7 @@
 ### Verified
 
 - `npm test` — all tests pass
-- `./scripts/check.sh` (full) — 31/31 gates pass on macOS
+- `./scripts/check.sh` (full) — 32/32 gates pass on macOS
 - `swift build` + `swift test` — pass on macOS
 - `npm audit --audit-level=high` — 0 vulnerabilities
 

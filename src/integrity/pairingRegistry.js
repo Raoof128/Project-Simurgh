@@ -4,6 +4,13 @@ const DEFAULT_TTL_MS = 60_000;
 const CHALLENGE_BYTES = 32;
 
 export function createPairingRegistry({ challengeTtlMs = DEFAULT_TTL_MS } = {}) {
+  if (
+    typeof challengeTtlMs !== "number" ||
+    !Number.isFinite(challengeTtlMs) ||
+    challengeTtlMs <= 0
+  ) {
+    throw new TypeError("challengeTtlMs must be a positive finite number");
+  }
   const records = new Map();
 
   function ensureRecord(sessionId) {
