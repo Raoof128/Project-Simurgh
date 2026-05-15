@@ -30,7 +30,16 @@ You will receive a response within **72 hours**. If the vulnerability is confirm
 
 ## Security Architecture (v0.4.3)
 
-> The trust-boundary table below describes the Stage 1 surface. Stage 2.1 added an Ed25519-signed integrity-proof envelope (`/api/integrity/proofs`); Stage 2.2 added per-session node pairing (`/api/integrity/pairing/{challenge,complete}`); v0.4.3 added rate limiting on the proofs route, cryptographically-reconciled audit hints (`safeParsedPairingHints`), and a constant-time challenge compare. The macOS Ed25519 node key at `~/.simurgh/node-key` is a development identity key — it is not Keychain- or Secure-Enclave-backed and does not constitute production device trust or hardware attestation.
+> The trust-boundary table below describes the Stage 1 surface. Stage 2.1 added an Ed25519-signed integrity-proof envelope (`/api/integrity/proofs`); Stage 2.2 added per-session node pairing (`/api/integrity/pairing/{challenge,complete}`); v0.4.3 added rate limiting on the proofs route, cryptographically-reconciled audit hints (`safeParsedPairingHints`), and a constant-time challenge compare. Stage 2.3 adds a macOS localhost daemon proof surface (`/api/device/{challenge,pair}` plus telemetry `daemon_proof`) with P-256 signatures and Keychain-backed daemon identity. This still does not constitute hardware attestation or a production device-trust claim.
+
+### Stage 2.3 localhost daemon controls
+
+- Daemon binds to `127.0.0.1` only.
+- Browser-facing daemon endpoints reject unknown origins and require `X-Simurgh-Local-Client: browser` on POST requests.
+- Server challenges expire after 30 seconds and are single-use.
+- `SIMURGH_REQUIRE_DAEMON=true` enforces signed `daemon_proof` on telemetry; missing proofs are rejected and HMAC-audited as `DAEMON_MISSING`.
+- Server stores public key hashes, proof ages, daemon state, signature status, and capture-excluded counts only.
+- Raw process names, raw window titles, usernames, serial numbers, MAC addresses, screenshots, pixels, audio, typed content, and pasted content remain forbidden.
 
 ### Stage 1 Trust Boundaries
 

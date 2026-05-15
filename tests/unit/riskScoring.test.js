@@ -60,6 +60,23 @@ describe("scoreAcademicRisk", () => {
     assert.equal(result.categories.affinity_risk, 100);
   });
 
+  test("raises Critical when daemon reports capture-excluded risk", () => {
+    const result = scoreAcademicRisk(
+      baseline,
+      {
+        connected: true,
+        hostileCount: 0,
+        daemonRisk: 100,
+        daemonForceCritical: true,
+      },
+      { reconnects: 0 }
+    );
+    assert.equal(result.risk_level, "Critical");
+    assert.ok(result.risk_score >= 85);
+    assert.equal(result.categories.daemon_risk, 100);
+    assert.match(result.recommendation, /No automatic misconduct finding/);
+  });
+
   test("risk_score is between 0 and 100", () => {
     const extreme = { ...baseline, paste_payload_chars: 999, focus_losses: 99, effective_wpm: 999 };
     const result = scoreAcademicRisk(

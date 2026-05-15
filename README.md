@@ -21,7 +21,7 @@ _Detecting UI-redressing and behavioral spoofing without relying on screen captu
 
 </div>
 
-> **Status: Stage 2.2 research prototype — macOS node pairing live, post-audit hardening pass merged (v0.4.3).** A browser exam session can now be cryptographically bound to a macOS node public key via Ed25519 challenge/response. Stage 1 behavioural-integrity surface, Stage 1.5 validation pack, Stage 2.1 signed-proof pipeline, and Stage 2.2 pairing are all merged to `main`. Next: Stage 2.3 — macOS localhost node daemon. The system does not collect video, audio, biometric data, typed answer content, pasted content, or personal identity data. See [PRIVACY.md](PRIVACY.md), [ETHICS.md](ETHICS.md), and [DISCLAIMER.md](DISCLAIMER.md).
+> **Status: Stage 2.3 research prototype — macOS localhost daemon branch active.** A browser exam session can now use server-issued challenges, a local macOS daemon, and signed P-256 daemon proofs to bind privacy-safe native status to telemetry. Stage 1, Stage 1.5, Stage 2.1, and Stage 2.2 remain intact. The system does not collect video, audio, biometric data, typed answer content, pasted content, raw process names, raw window titles, or personal identity data. See [PRIVACY.md](PRIVACY.md), [ETHICS.md](ETHICS.md), and [DISCLAIMER.md](DISCLAIMER.md).
 
 ---
 
@@ -244,9 +244,9 @@ Stage 2.1 adds a v1 signed-integrity-proof pipeline. A macOS Swift CLI under `to
 
 Stage 2.2 binds a browser exam session to a macOS node public key. The server issues a one-time 32-byte challenge via `POST /api/integrity/pairing/challenge`; the macOS CLI's `pair` subcommand signs the canonical pairing payload; `POST /api/integrity/pairing/complete` records the node's public key. Subsequent integrity proofs from the registered node return `signature_status: "verified"`. Stage 2.1 unpaired flow remains backward-compatible. The v0.4.3 hardening pass added a 30/min rate limiter on `/api/integrity/proofs`, cryptographically-reconciled audit hints (`safeParsedPairingHints`), and a constant-time challenge compare in the pairing registry. Design spec: [`docs/superpowers/specs/2026-05-14-stage-2-2-macos-node-pairing-design.md`](docs/superpowers/specs/2026-05-14-stage-2-2-macos-node-pairing-design.md).
 
-### Next — Stage 2.3 macOS localhost node daemon (planned)
+### Stage 2.3 macOS Localhost Daemon (branch active — v0.4.5 target)
 
-The CLI's `pair` / `proof` flows will move behind a localhost HTTP daemon so the browser SDK (Stage 2.4) has a stable endpoint to discover. No browser SDK or ScreenCaptureKit work until the daemon brick lands.
+Stage 2.3 adds a macOS localhost daemon under `tools/simurgh-daemon-macos/`. The browser probes `127.0.0.1:3031`, requests server challenges from `POST /api/device/challenge`, pairs the daemon through `POST /api/device/pair`, and can attach signed `daemon_proof` metadata to `POST /api/telemetry`. The server verifies P-256 signatures, rejects replayed challenges, updates `daemon_risk`, appends daemon audit events, and includes `device_integrity` in reports. Design doc: [`docs/STAGE_2_3_MACOS_LOCALHOST_DAEMON.md`](docs/STAGE_2_3_MACOS_LOCALHOST_DAEMON.md).
 
 ### Dashboard
 
@@ -356,6 +356,7 @@ cp .env.example .env
 | `SIMURGH_SESSION_SIGNING_SECRET` | Yes\*    | HMAC key for student session tokens. Generate: `openssl rand -hex 32`                         |
 | `SIMURGH_MODEL`                  | No       | Model override. Default: `claude-sonnet-4-5`                                                  |
 | `SIMURGH_ALLOWED_ORIGIN`         | No       | CORS origin restriction. Default: `*`                                                         |
+| `SIMURGH_REQUIRE_DAEMON`         | No       | Set `true` for hardened/native-required exams; missing `daemon_proof` is rejected and audited |
 
 _Required for production deployment. The server auto-generates ephemeral values for local development._
 
@@ -557,11 +558,12 @@ Project Simurgh is evolving from a vulnerability demonstration into a comprehens
 - [x] Stage 2.1 — macOS integrity proof pipeline (Swift CLI + signed envelope + `/api/integrity/proofs`).
 - [x] Stage 2.2 — macOS node pairing (Ed25519 challenge/response, paired-session verified status).
 - [x] Post-audit hardening pass (v0.4.3) — proof rate limit, audit-hint safety, constant-time challenge compare.
+- [x] Stage 2.3 — macOS localhost daemon foundation (P-256 daemon identity, `/api/device/*` challenges, telemetry `daemon_proof`, dashboard/report device-integrity state).
 
 ### Phase 2: Autonomous Agent Hardening & Cross-Platform Expansion (Q3 – Q4 2026)
 
-- [ ] **Stage 2.3:** macOS localhost node daemon (host the CLI flows behind an HTTP endpoint for SDK discovery).
-- [ ] **Stage 2.4:** Browser SDK that discovers and talks to the localhost daemon.
+- [x] **Stage 2.3:** macOS localhost node daemon foundation (host signed proof flows behind a localhost endpoint for browser discovery).
+- [ ] **Stage 2.4:** Browser SDK hardening and installer-grade daemon lifecycle.
 - [ ] **Stage 2.5:** ScreenCaptureKit signal collection.
 - [ ] Formalize the Heuristic Engine using advanced cluster compute.
 - [ ] Red-team the heuristics against next-generation "Computer Use" agentic models.
@@ -619,6 +621,6 @@ Project Simurgh is designed to support two parallel delivery modes per platform 
 
 ## 13. Status & License
 
-**Status:** Research prototype and technical demonstrator. Stage 1 is a bounded research MVP; Stage 1.5 ships validation + reviewer-readiness documentation; Stage 2.1 and 2.2 are merged (macOS integrity proofs + node pairing); v0.4.3 hardening pass merged. Stage 2.3 (macOS localhost daemon) is the next brick. Not currently deployed in production. Hardware attestation, browser SDK, and ScreenCaptureKit remain future work.
+**Status:** Research prototype and technical demonstrator. Stage 1 is a bounded research MVP; Stage 1.5 ships validation + reviewer-readiness documentation; Stage 2.1 and 2.2 are merged (macOS integrity proofs + node pairing); Stage 2.3 adds a localhost daemon foundation. Not currently deployed in production. Hardware attestation, installer lifecycle, and ScreenCaptureKit remain future work.
 
 **License:** MIT © 2026 Raouf Abedini

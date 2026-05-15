@@ -60,4 +60,38 @@ describe("buildReport", () => {
     const report = buildReport(sessionRecord, sessionData, eventList, true);
     assert.equal(report.helper_connected, false); // no lastHeartbeat
   });
+
+  test("includes privacy-safe device integrity section", () => {
+    const report = buildReport(
+      sessionRecord,
+      {
+        ...sessionData,
+        daemon: {
+          daemon_required: true,
+          daemon_state: "healthy",
+          node_id_hash: "sha256:abc123",
+          daemon_version: "0.4.5",
+          proofs_verified: 3,
+          proofs_rejected: 0,
+          stale_periods: 0,
+          capture_excluded_window_count_max: 0,
+        },
+      },
+      eventList,
+      true
+    );
+    assert.deepEqual(report.device_integrity, {
+      daemon_required: true,
+      daemon_final_state: "healthy",
+      node_id_hash: "sha256:abc123",
+      daemon_version: "0.4.5",
+      proofs_verified: 3,
+      proofs_rejected: 0,
+      stale_periods: 0,
+      capture_excluded_window_count_max: 0,
+      manual_review_recommendation: "No device-integrity anomaly detected.",
+    });
+    assert.equal("process_name" in report.device_integrity, false);
+    assert.equal("window_title" in report.device_integrity, false);
+  });
 });

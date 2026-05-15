@@ -1,5 +1,44 @@
 ## Change Log
 
+## [0.4.5] — 2026-05-15 — Stage 2.3 macOS Localhost Daemon
+
+### Added
+
+- `src/device/daemonProof.js` — P-256 daemon proof canonicalisation, node hash derivation, signature verification, timestamp/session/exam validation, and raw local-data field rejection.
+- `src/device/daemonPairing.js` — per-session single-use daemon challenge registry for `pair`, `session_start`, `proof`, and `session_end` purposes.
+- `src/device/daemonState.js` — daemon state machine and `daemon_risk` scoring helper.
+- `src/device/daemonEvents.js` and Stage 2.3 event constants in `src/academic/academicEvents.js`.
+- `POST /api/device/challenge` and `POST /api/device/pair` in `server.js`.
+- Telemetry `daemon_proof` handling: valid proofs update daemon state and audit; invalid, stale, node-mismatched, or replayed proofs are rejected.
+- `SIMURGH_REQUIRE_DAEMON=true` hardened mode, which rejects telemetry without a daemon proof and audits `DAEMON_MISSING`.
+- `device_integrity` report section and instructor-dashboard daemon status card.
+- `tools/simurgh-daemon-macos/` — SwiftPM macOS localhost daemon skeleton with Keychain-backed P-256 identity, `127.0.0.1` listener, `/health`, `/status`, `/pair`, `/proof`, and `/session/end`.
+- `docs/STAGE_2_3_MACOS_LOCALHOST_DAEMON.md`.
+- Unit tests for daemon proof validation, pairing registry, daemon state, daemon risk scoring, and report `device_integrity`.
+- `scripts/check.sh` gates for Stage 2.3 daemon pair/proof smoke, replay rejection, tampered-proof audit rejection, hardened missing-proof rejection, and Swift daemon build/test.
+
+### Changed
+
+- `src/academic/riskScoring.js` now includes `daemon_risk` without removing existing helper and affinity categories.
+- `tools/privacy-audit.mjs` and `scripts/check.sh` now enforce additional raw local-data forbidden fields: serial/device identifiers, usernames, home directories, process names, window titles, and raw process/window fields.
+- README, SECURITY, PRIVACY, and ROADMAP now describe the Stage 2.3 daemon boundary and limitations.
+- `.env.example` documents the demo/browser-only default and hardened `SIMURGH_REQUIRE_DAEMON=true` path.
+
+### Verified
+
+- `npm test` — 219/219 pass.
+- `node --test tests/unit/riskScoring.test.js tests/unit/reportBuilder.test.js` — 15/15 pass.
+- `node --test tests/unit/envConfig.test.js` — 3/3 pass.
+- `swift test` in `tools/simurgh-daemon-macos` — 1/1 pass.
+- `./scripts/check.sh` — 38/38 gates pass.
+- Stage 2.3 check gate verifies daemon pairing, telemetry proof acceptance, replay rejection, tampered-proof audit rejection, and hardened missing-proof rejection/audit.
+- `npm audit --audit-level=high` — 0 vulnerabilities.
+
+### Notes
+
+- Stage 2.3 remains a research prototype. It does not claim hardware attestation, production endpoint management, or automatic misconduct detection.
+- The daemon scanner currently returns a conservative zero count; future native scanner work should preserve the same metadata-only API contract.
+
 ## [0.4.4] — 2026-05-15 — Audit-Coverage Closure (Q9 + Q10) and Research Programme
 
 ### Added

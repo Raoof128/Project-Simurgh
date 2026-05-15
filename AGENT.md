@@ -2,6 +2,32 @@
 
 ## Agent Change Log
 
+### 2026-05-15 (Australia/Sydney) — Stage 2.3 macOS Localhost Daemon
+
+**Raouf:**
+
+- **Scope:** Stage 2.3 — macOS localhost integrity daemon foundation.
+- **Summary:**
+  - Added server-side daemon modules under `src/device/` for P-256 daemon proof verification, single-use device challenges, per-session daemon state, and daemon event names.
+  - Added `POST /api/device/challenge` and `POST /api/device/pair`; telemetry now accepts optional `daemon_proof` by default, rejects invalid/replayed/stale proofs, updates `daemon_risk`, appends privacy-safe daemon audit events, and exposes `device_integrity` in verdicts/reports.
+  - Added hardened native-required mode with `SIMURGH_REQUIRE_DAEMON=true`, which rejects telemetry missing a daemon proof with `daemon_proof_required` and audits `DAEMON_MISSING` without consuming the sequence number.
+  - Added `tools/simurgh-daemon-macos/`, a SwiftPM macOS daemon skeleton that binds to `127.0.0.1`, stores a P-256 identity in Keychain, exposes `/health`, `/status`, `/pair`, `/proof`, and `/session/end`, and returns metadata-only status/proofs.
+  - Updated student and instructor pages with localhost daemon discovery/status, token-aware pairing/proof flow, and dashboard device-integrity display.
+  - Expanded privacy enforcement for raw local-data terms and documented Stage 2.3 in README, SECURITY, PRIVACY, ROADMAP, and `docs/STAGE_2_3_MACOS_LOCALHOST_DAEMON.md`.
+  - Added targeted Stage 2.3 test-creator pass coverage for daemon risk scoring, report `device_integrity`, daemon-required env config, and end-to-end tampered/missing daemon proof rejection audit gates.
+- **Files Changed:**
+  - `server.js`
+  - `.env.example`, `.prettierignore`, `src/config/env.js`
+  - `src/device/{daemonProof,daemonPairing,daemonState,daemonEvents}.js`
+  - `src/academic/{academicEvents,reportBuilder,riskScoring}.js`
+  - `tests/unit/daemon{Proof,Pairing,State}.test.js`, `tests/unit/{envConfig,reportBuilder,riskScoring}.test.js`
+  - `tools/simurgh-daemon-macos/`
+  - `public/index.html`, `public/instructor.html`
+  - `tools/privacy-audit.mjs`, `scripts/check.sh`
+  - `README.md`, `SECURITY.md`, `PRIVACY.md`, `ROADMAP.md`, `docs/STAGE_2_3_MACOS_LOCALHOST_DAEMON.md`
+- **Verification:** `node --test tests/unit/riskScoring.test.js tests/unit/reportBuilder.test.js` → 15/15 pass. `node --test tests/unit/envConfig.test.js` → 3/3 pass. `npm test` → 219/219 pass. `swift test` in `tools/simurgh-daemon-macos` → 1/1 pass. Full `./scripts/check.sh` → 38/38 gates pass, including Stage 2.3 daemon pair/proof smoke, replay rejection, tampered-proof audit rejection, hardened missing-proof rejection/audit, Swift macOS daemon build, and Swift macOS daemon test. `npm audit --audit-level=high` inside `check.sh` → 0 vulnerabilities.
+- **Follow-ups:** Stage 2.4 should harden browser SDK packaging and daemon lifecycle. Future native scanner work can replace the placeholder `AffinityScanner` while preserving the metadata-only contract.
+
 ### 2026-05-15 (Australia/Sydney) — Stage 2 Security Hardening Pass
 
 **Raouf:**

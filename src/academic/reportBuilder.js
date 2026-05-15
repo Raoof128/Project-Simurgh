@@ -2,7 +2,7 @@ import crypto from "node:crypto";
 
 export function buildReport(sessionRecord, sessionData, eventList, auditChainValid) {
   const { id, examId, studentIdHash, startedAt, submittedAt, createdAt } = sessionRecord;
-  const { latest, affinity } = sessionData;
+  const { latest, affinity, daemon } = sessionData;
 
   const durationMs = submittedAt
     ? submittedAt - (startedAt ?? createdAt)
@@ -56,8 +56,31 @@ export function buildReport(sessionRecord, sessionData, eventList, auditChainVal
     privacy_mode: "metadata_only",
     audit_chain_valid: !!auditChainValid,
     helper_connected: helperConnected,
+    device_integrity: buildDeviceIntegritySection(daemon),
     summary,
     recommendation,
     timeline,
+  };
+}
+
+function buildDeviceIntegritySection(daemon) {
+  const state = daemon ?? {};
+  const anomaly =
+    state.daemon_state === "untrusted" ||
+    state.daemon_state === "risk_detected" ||
+    (state.proofs_rejected ?? 0) > 0 ||
+    (state.capture_excluded_window_count_max ?? 0) > 0;
+  return {
+    daemon_required: state.daemon_required ?? true,
+    daemon_final_state: state.daemon_state ?? "missing",
+    node_id_hash: state.node_id_hash ?? null,
+    daemon_version: state.daemon_version ?? null,
+    proofs_verified: state.proofs_verified ?? 0,
+    proofs_rejected: state.proofs_rejected ?? 0,
+    stale_periods: state.stale_periods ?? 0,
+    capture_excluded_window_count_max: state.capture_excluded_window_count_max ?? 0,
+    manual_review_recommendation: anomaly
+      ? "Manual review recommended. No automatic misconduct finding."
+      : "No device-integrity anomaly detected.",
   };
 }
