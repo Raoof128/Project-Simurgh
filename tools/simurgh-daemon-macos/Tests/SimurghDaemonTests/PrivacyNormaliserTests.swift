@@ -1,0 +1,12 @@
+import XCTest
+@testable import SimurghDaemon
+
+final class PrivacyNormaliserTests: XCTestCase {
+    func testStatusContainsOnlyPrivacySafeFields() {
+        let status = PrivacyNormaliser.status(nodeIdHash: "sha256:abc", sessionActive: true, paired: true)
+        XCTAssertEqual(status["paired"] as? Bool, true)
+        XCTAssertNil(status["process_name"])
+        XCTAssertNil(status["window_title"])
+        XCTAssertNil(status["username"])
+    }
+}

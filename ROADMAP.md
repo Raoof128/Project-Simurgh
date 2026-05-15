@@ -51,15 +51,18 @@ Reviewer-readiness, validation, evidence mapping, and Stage 2 planning. No major
 
 ## Stage 2 — Device Shield / Integrity Node
 
-**Status: Planned**
+**Status: In progress**
 
 Transition toward signed local integrity proofs and device-aware validation.
 
-- [ ] Simurgh SDK to Local Integrity Node pairing
-- [ ] Signed integrity proof envelope
+- [x] Simurgh SDK to Local Integrity Node pairing
+- [x] Signed integrity proof envelope
+- [x] macOS localhost daemon foundation with P-256 signed proofs
+- [x] Server challenge verification and telemetry `daemon_proof`
+- [x] Dashboard/report device-integrity state
 - [ ] Tamper-aware local node logs
-- [ ] Replay-resistant node/API challenge flow
-- [ ] Privacy-preserving proof summaries
+- [x] Replay-resistant node/API challenge flow
+- [x] Privacy-preserving proof summaries
 - [ ] Windows native helper (SetWindowDisplayAffinity WDA_EXCLUDEFROMCAPTURE detection)
 - [ ] Linux Wayland surface-level affinity detection
 - [ ] Agent integrity API — validates AI computer-use sessions

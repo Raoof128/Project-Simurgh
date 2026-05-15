@@ -1,11 +1,12 @@
 // Weights must sum to 1.0
 const WEIGHTS = {
   paste_risk: 0.25,
-  focus_risk: 0.2,
+  focus_risk: 0.18,
   typing_risk: 0.15,
   idle_risk: 0.1,
-  affinity_risk: 0.2,
+  affinity_risk: 0.18,
   helper_risk: 0.05,
+  daemon_risk: 0.09,
   session_risk: 0.05,
 };
 
@@ -23,7 +24,12 @@ export function scoreAcademicRisk(telemetry, helperInfo = {}, sessionInfo = {}) 
     max_idle_gap_ms: idleMs = 0,
   } = telemetry;
 
-  const { connected = false, hostileCount = 0 } = helperInfo;
+  const {
+    connected = false,
+    hostileCount = 0,
+    daemonRisk = 0,
+    daemonForceCritical = false,
+  } = helperInfo;
   const { reconnects = 0, startedAt = Date.now() } = sessionInfo;
   const sessionAgeSec = (Date.now() - startedAt) / 1000;
 
@@ -73,6 +79,7 @@ export function scoreAcademicRisk(telemetry, helperInfo = {}, sessionInfo = {}) 
     idle_risk: clamp(Math.round(idleRaw), 0, 100),
     affinity_risk: clamp(Math.round(affinityRaw), 0, 100),
     helper_risk: clamp(Math.round(helperRaw), 0, 100),
+    daemon_risk: clamp(Math.round(daemonRisk), 0, 100),
     session_risk: clamp(Math.round(sessionRaw), 0, 100),
   };
 
@@ -86,6 +93,7 @@ export function scoreAcademicRisk(telemetry, helperInfo = {}, sessionInfo = {}) 
 
   // Affinity override: confirmed excluded window forces Critical floor
   if (affinityRaw >= 100) risk_score = Math.max(risk_score, 85);
+  if (daemonForceCritical) risk_score = Math.max(risk_score, 85);
 
   const risk_level = risk_score >= 70 ? "Critical" : risk_score >= 40 ? "Warning" : "Safe";
   // Confidence floor of 0.5: heuristic results always carry at least baseline certainty.

@@ -1711,6 +1711,27 @@
           ></span>
           <span id="helper-label">Helper: checking…</span>
         </span>
+        <span
+          id="daemon-status-badge"
+          style="
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-family: monospace;
+            background: #1e293b;
+            color: #94a3b8;
+            border: 1px solid #334155;
+          "
+        >
+          <span
+            id="daemon-dot"
+            style="width: 8px; height: 8px; border-radius: 50%; background: #64748b"
+          ></span>
+          <span id="daemon-label">Daemon: checking…</span>
+        </span>
         <span class="header-actions">
           <button class="icon-btn" id="resetBtn" title="Start a fresh session">↻ reset</button>
         </span>
@@ -2061,7 +2082,15 @@ OUTPUT FORMAT
       };
       let sessionId = newSessionId();
       let sessionToken = null; // issued by /api/exams/:id/join (joined sessions only)
+      let examId = null;
       let telemetrySequence = 0; // monotonic, sent with every /api/telemetry POST
+      const daemon = {
+        base: "http://127.0.0.1:3031",
+        reachable: false,
+        paired: false,
+        nodeIdHash: null,
+        lastProofAt: null,
+      };
 
       // ═══════════════════════════════════════════════════
       //  ELEMENTS
@@ -2511,6 +2540,7 @@ OUTPUT FORMAT
             telemetrySequence += 1;
             const headers = { "content-type": "application/json" };
             if (sessionToken) headers["authorization"] = "Bearer " + sessionToken;
+            const daemonProof = await fetchDaemonProof(telemetrySequence);
             const r = await fetch("/api/telemetry", {
               method: "POST",
               headers,
@@ -2519,6 +2549,8 @@ OUTPUT FORMAT
                 sequence: telemetrySequence,
                 timestamp: Date.now(),
                 telemetry,
+                daemon_required: false,
+                ...(daemonProof ? { daemon_proof: daemonProof } : {}),
               }),
               signal: ctrl.signal,
             });
@@ -2882,7 +2914,10 @@ OUTPUT FORMAT
         }
         sessionId = newSessionId();
         sessionToken = null;
+        examId = null;
         telemetrySequence = 0;
+        daemon.paired = false;
+        daemon.nodeIdHash = null;
         sessionLabel.textContent = "session: " + sessionId;
         verdictBox.innerHTML = `<div class="verdict-empty">Awaiting first window — analysing…<div class="progress" aria-hidden="true"><div id="progFill" style="position:absolute;inset:0;background:var(--ox);transform-origin:left;transform:scaleX(0);transition:transform .12s linear"></div></div></div>`;
         proctorEl.classList.remove("alarm");
@@ -2911,6 +2946,131 @@ OUTPUT FORMAT
 
       // tick connection chip
       setInterval(updateConn, 1500);
+
+      // ═══════════════════════════════════════════════════
+      //  STAGE 2.3 — localhost daemon bridge
+      // ═══════════════════════════════════════════════════
+      function paintDaemon(state, detail) {
+        const dot = $("daemon-dot");
+        const label = $("daemon-label");
+        if (!dot || !label) return;
+        const colors = {
+          healthy: "#22c55e",
+          paired: "#22c55e",
+          missing: "#f59e0b",
+          unavailable: "#64748b",
+          untrusted: "#ef4444",
+        };
+        dot.style.background = colors[state] || colors.unavailable;
+        label.textContent = "Daemon: " + (detail || state);
+      }
+
+      async function daemonJson(path, options = {}) {
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), 1200);
+        try {
+          const res = await fetch(daemon.base + path, {
+            ...options,
+            headers: {
+              "content-type": "application/json",
+              "x-simurgh-local-client": "browser",
+              ...(options.headers || {}),
+            },
+            signal: ctrl.signal,
+          });
+          clearTimeout(timer);
+          if (!res.ok) return null;
+          return await res.json();
+        } catch {
+          clearTimeout(timer);
+          return null;
+        }
+      }
+
+      async function pollDaemon() {
+        const health = await daemonJson("/health");
+        daemon.reachable = !!health?.ok;
+        if (!daemon.reachable) {
+          daemon.paired = false;
+          paintDaemon("missing", "not detected");
+          return;
+        }
+        const status = await daemonJson("/status");
+        daemon.paired = !!status?.paired;
+        daemon.nodeIdHash = status?.node_id_hash || daemon.nodeIdHash;
+        paintDaemon(daemon.paired ? "paired" : "healthy", daemon.paired ? "paired" : "available");
+        await pairDaemonIfPossible();
+      }
+
+      async function serverChallenge(purpose) {
+        if (!sessionToken) return null;
+        const res = await fetch("/api/device/challenge", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            authorization: "Bearer " + sessionToken,
+          },
+          body: JSON.stringify({ sessionId, purpose }),
+        });
+        return res.ok ? res.json() : null;
+      }
+
+      async function pairDaemonIfPossible() {
+        if (!daemon.reachable || daemon.paired || !sessionToken || !examId) return;
+        const challenge = await serverChallenge("pair");
+        if (!challenge?.challenge) return;
+        const pair = await daemonJson("/pair", {
+          method: "POST",
+          body: JSON.stringify({
+            session_id: sessionId,
+            exam_id: examId,
+            challenge: challenge.challenge,
+            server_origin: location.origin,
+          }),
+        });
+        if (!pair?.ok) return;
+        const res = await fetch("/api/device/pair", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            authorization: "Bearer " + sessionToken,
+          },
+          body: JSON.stringify({
+            sessionId,
+            node_id_hash: pair.node_id_hash,
+            public_key: pair.public_key,
+            signed_payload: pair.signed_payload,
+            signature: pair.signature,
+          }),
+        });
+        if (res.ok) {
+          daemon.paired = true;
+          daemon.nodeIdHash = pair.node_id_hash;
+          paintDaemon("paired", "paired");
+        }
+      }
+
+      async function fetchDaemonProof(sequence) {
+        if (!daemon.reachable || !daemon.paired || !sessionToken || !examId) return null;
+        const challenge = await serverChallenge("proof");
+        if (!challenge?.challenge) return null;
+        const proof = await daemonJson("/proof", {
+          method: "POST",
+          body: JSON.stringify({
+            session_id: sessionId,
+            exam_id: examId,
+            sequence,
+            challenge: challenge.challenge,
+          }),
+        });
+        if (!proof?.ok || !proof.daemon_proof) return null;
+        daemon.lastProofAt = Date.now();
+        paintDaemon("healthy", "healthy");
+        return proof.daemon_proof;
+      }
+
+      setInterval(pollDaemon, 4000);
+      pollDaemon();
 
       // ═══════════════════════════════════════════════════
       //  COUNTERMEASURE A — Display-Affinity Watch

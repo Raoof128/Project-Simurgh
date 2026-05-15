@@ -30,8 +30,15 @@ const FORBIDDEN_FIELDS = new Set([
   "biometric_data",
   "raw_student_name",
   "student_name",
+  "device_serial",
+  "serial_number",
+  "mac_address",
+  "username",
+  "home_directory",
   "process_name",
   "window_title",
+  "raw_window",
+  "raw_process",
 ]);
 
 // These are explicitly allowed — they are the *_hash counterparts to the

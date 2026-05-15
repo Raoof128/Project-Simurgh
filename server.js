@@ -18,6 +18,9 @@ import { createIntegrityState } from "./src/integrity/integrityState.js";
 import { validatePairingProof } from "./src/integrity/pairingValidator.js";
 import { createPairingRegistry } from "./src/integrity/pairingRegistry.js";
 import { safeParsedPairingHints } from "./src/integrity/pairingAuditHints.js";
+import { createDaemonPairingRegistry } from "./src/device/daemonPairing.js";
+import { validateDaemonProof } from "./src/device/daemonProof.js";
+import { createDaemonStateRegistry, scoreDaemonRisk } from "./src/device/daemonState.js";
 import { verifyAuditExport } from "./src/audit/verifyAudit.js";
 import { appendEntry, CHAIN_CAP } from "./src/audit/hmacChain.js";
 import {
@@ -272,6 +275,8 @@ const proofNonceGuard = createNonceGuard();
 // Stage 2.1: per-session integrity state with N1 strict node continuity.
 const integrityState = createIntegrityState();
 const pairingRegistry = createPairingRegistry({ challengeTtlMs: 60_000 });
+const daemonPairingRegistry = createDaemonPairingRegistry({ challengeTtlMs: 30_000 });
+const daemonStateRegistry = createDaemonStateRegistry({ staleAfterMs: 10_000 });
 
 // Replay guard for /api/telemetry submissions
 const replayGuard = createReplayGuard({
@@ -323,6 +328,8 @@ const examEvictionTimer = setInterval(
     const activeIds = new Set(sessions.keys());
     integrityState.evictMissing(activeIds);
     pairingRegistry.evictMissing(activeIds);
+    daemonPairingRegistry.evictMissing(activeIds);
+    daemonStateRegistry.evictMissing(activeIds);
   },
   5 * 60 * 1000
 ).unref?.();
@@ -375,6 +382,7 @@ function sessionSummary(id) {
     latest: s.latest,
     hostile_count: s.affinity.hostile.length,
     helper_active: s.affinity.lastHeartbeat != null && Date.now() - s.affinity.lastHeartbeat < 8000,
+    daemon: daemonStateRegistry.get(id),
     fidelity_deficit_pct: s.affinity.forensic?.fidelity_deficit_pct ?? 0,
     counts,
     history_count: s.history.length,
@@ -391,6 +399,7 @@ function persistVerdict(sessionId, verdict) {
     source: sess.affinity.source,
     forensic: sess.affinity.forensic ?? null,
   };
+  verdict.device_integrity = daemonStateRegistry.get(sessionId);
   if (verdict.affinity_snapshot.hostile_count > 0 && verdict.risk_level !== "Critical") {
     verdict.risk_level = "Critical";
     const names = verdict.affinity_snapshot.hostile
@@ -407,6 +416,17 @@ function persistVerdict(sessionId, verdict) {
   if (sess.history.length > 50) sess.history.pop();
   appendAudit(sess, "verdict", verdict);
   sseBroadcast("verdict", { sessionId, summary: sessionSummary(sessionId), verdict });
+}
+
+function helperInfoForSession(sess, sessionId) {
+  const daemonRisk = scoreDaemonRisk(daemonStateRegistry.get(sessionId));
+  return {
+    connected:
+      sess.affinity.lastHeartbeat != null && Date.now() - sess.affinity.lastHeartbeat < 8000,
+    hostileCount: sess.affinity.hostile.length,
+    daemonRisk: daemonRisk.daemon_risk,
+    daemonForceCritical: daemonRisk.forceCritical,
+  };
 }
 
 function appendAudit(sess, type, payload) {
@@ -537,6 +557,86 @@ const limitPairingComplete = createRateLimiter({
   keyFn: keyBySessionToken,
   name: "pairing_complete",
 });
+const limitDeviceChallenge = createRateLimiter({
+  windowMs: 60_000,
+  max: 30,
+  keyFn: keyBySessionToken,
+  name: "device_challenge",
+});
+const limitDevicePair = createRateLimiter({
+  windowMs: 60_000,
+  max: 10,
+  keyFn: keyBySessionToken,
+  name: "device_pair",
+});
+
+// ─────────────────────────────────────────────────────────────
+//  Stage 2.3 — device daemon challenge + pairing
+// ─────────────────────────────────────────────────────────────
+app.post("/api/device/challenge", limitDeviceChallenge, requireSessionToken, (req, res) => {
+  const sessionId = req.sessionTokenSessionId;
+  const sess = sessions.get(sessionId);
+  if (!sess) return res.status(409).json({ error: "session_expired_or_evicted" });
+  const purpose = String(req.body?.purpose ?? "");
+  const result = daemonPairingRegistry.createChallenge(sessionId, purpose, Date.now());
+  if (!result.ok) return res.status(400).json({ error: result.reason });
+  appendAudit(sess, EVENTS.DAEMON_PAIRING_CHALLENGE_ISSUED, {
+    purpose,
+    challenge_id_hash: result.challenge_hash,
+    expires_at: new Date(result.expires_at).toISOString(),
+  });
+  res.json({
+    challenge: result.challenge,
+    expires_in_ms: result.expires_in_ms,
+    purpose,
+  });
+});
+
+app.post("/api/device/pair", limitDevicePair, requireSessionToken, (req, res) => {
+  const sessionId = req.sessionTokenSessionId;
+  const sess = sessions.get(sessionId);
+  const record = examSessions.get(sessionId);
+  if (!sess || !record) return res.status(409).json({ error: "session_expired_or_evicted" });
+  const result = daemonPairingRegistry.completePairing(req.body, {
+    sessionId,
+    examId: record.examId,
+    now: Date.now(),
+  });
+  if (!result.ok) {
+    daemonStateRegistry.recordRejected(sessionId, { reason: result.reason });
+    appendAudit(sess, EVENTS.DAEMON_PROOF_REJECTED, {
+      reason: result.reason,
+      stage: "pair",
+    });
+    return res.status(result.reason === "invalid_signature" ? 401 : 409).json({
+      error: result.reason,
+    });
+  }
+  daemonStateRegistry.recordPaired(sessionId, {
+    node_id_hash: result.node_id_hash,
+    public_key: result.public_key,
+    daemon_version: result.daemon_version,
+    now: result.paired_at,
+  });
+  appendAudit(sess, EVENTS.DAEMON_PAIRED, {
+    node_id_hash: result.node_id_hash,
+    daemon_version: result.daemon_version,
+    platform: result.platform,
+    challenge_id_hash: result.challenge_hash,
+  });
+  timeline.add(sessionId, EVENTS.DAEMON_PAIRED, {
+    node_id_hash: result.node_id_hash,
+    daemon_version: result.daemon_version,
+  });
+  sseBroadcast("daemon", { sessionId, summary: sessionSummary(sessionId) });
+  res.json({
+    status: "paired",
+    session_id: sessionId,
+    node_id_hash: result.node_id_hash,
+    daemon_version: result.daemon_version,
+    paired_at: new Date(result.paired_at).toISOString(),
+  });
+});
 
 // ─────────────────────────────────────────────────────────────
 //  /api/telemetry — candidate-side ingest (rate-limited, validated)
@@ -561,17 +661,6 @@ app.post("/api/telemetry", async (req, res) => {
       return res.status(401).json({ error: "token_session_mismatch" });
   }
 
-  // Replay protection — required when sequence + timestamp are provided.
-  // For backward compatibility, telemetry without these fields uses only the
-  // legacy token-bucket rate limiter below. New clients send both.
-  const sequence = req.body?.sequence;
-  const clientTs = req.body?.timestamp;
-  if (sequence !== undefined || clientTs !== undefined) {
-    const ts = typeof clientTs === "number" ? clientTs : Date.parse(clientTs);
-    const result = replayGuard.check(sessionId, sequence, ts);
-    if (!result.ok) return res.status(400).json({ error: result.reason });
-  }
-
   const telemetry = sanitiseTelemetry(req.body?.telemetry);
   if (!telemetry) return res.status(400).json({ error: "telemetry_payload_invalid" });
 
@@ -588,17 +677,98 @@ app.post("/api/telemetry", async (req, res) => {
     return res.status(429).json({ error: "rate_limited", retry_after_ms: 2500 });
   }
 
+  if (
+    (stagingConfig.requireDaemonProof || req.body?.daemon_required === true) &&
+    !req.body?.daemon_proof
+  ) {
+    daemonStateRegistry.recordMissing(sessionId);
+    appendAudit(sess, EVENTS.DAEMON_MISSING, {
+      daemon_state: "missing",
+      reason: stagingConfig.requireDaemonProof
+        ? "daemon_proof_required"
+        : "telemetry_without_daemon_proof",
+    });
+    if (stagingConfig.requireDaemonProof) {
+      return res.status(428).json({ error: "daemon_proof_required" });
+    }
+  }
+
+  // Replay protection — required when sequence + timestamp are provided.
+  // For backward compatibility, telemetry without these fields uses only the
+  // legacy token-bucket rate limiter below. New clients send both.
+  const sequence = req.body?.sequence;
+  const clientTs = req.body?.timestamp;
+  if (sequence !== undefined || clientTs !== undefined) {
+    const ts = typeof clientTs === "number" ? clientTs : Date.parse(clientTs);
+    const result = replayGuard.check(sessionId, sequence, ts);
+    if (!result.ok) return res.status(400).json({ error: result.reason });
+  }
+
+  if (req.body?.daemon_proof) {
+    const pairedDaemon = daemonPairingRegistry.getPairedNode(sessionId);
+    const daemonValidation = validateDaemonProof(req.body.daemon_proof, {
+      now: Date.now(),
+      expectedSessionId: sessionId,
+      expectedExamId: examRecord?.examId ?? null,
+      pairedNode: pairedDaemon,
+    });
+    if (!daemonValidation.ok) {
+      daemonStateRegistry.recordRejected(sessionId, { reason: daemonValidation.reason });
+      appendAudit(sess, EVENTS.DAEMON_PROOF_REJECTED, {
+        reason: daemonValidation.reason,
+        node_id_hash_if_paired: pairedDaemon?.node_id_hash ?? null,
+      });
+      return res.status(daemonValidation.reason === "invalid_signature" ? 401 : 409).json({
+        error: daemonValidation.reason,
+      });
+    }
+    const consumed = daemonPairingRegistry.consumeChallenge(
+      sessionId,
+      daemonValidation.proof.challenge,
+      "proof",
+      Date.now()
+    );
+    if (!consumed.ok) {
+      daemonStateRegistry.recordRejected(sessionId, { reason: consumed.reason });
+      appendAudit(sess, EVENTS.DAEMON_PROOF_REJECTED, {
+        reason: consumed.reason,
+        node_id_hash: daemonValidation.proof.node_id_hash,
+      });
+      return res.status(409).json({ error: consumed.reason });
+    }
+    daemonStateRegistry.recordProofVerified(sessionId, {
+      sequence: daemonValidation.proof.sequence,
+      capture_excluded_window_count: daemonValidation.proof.capture_excluded_window_count,
+      helper_state: daemonValidation.proof.helper_state,
+      timestamp: daemonValidation.proof.timestamp,
+      challenge_id_hash: daemonValidation.proof.challenge_id_hash,
+    });
+    appendAudit(sess, EVENTS.DAEMON_PROOF_VERIFIED, {
+      node_id_hash: daemonValidation.proof.node_id_hash,
+      daemon_version: daemonValidation.proof.daemon_version,
+      platform: daemonValidation.proof.platform,
+      proof_timestamp: daemonValidation.proof.timestamp,
+      capture_excluded_window_count: daemonValidation.proof.capture_excluded_window_count,
+      helper_state: daemonValidation.proof.helper_state,
+      challenge_id_hash: daemonValidation.proof.challenge_id_hash,
+    });
+    if (daemonValidation.proof.capture_excluded_window_count > 0) {
+      appendAudit(sess, EVENTS.DEVICE_RISK_ESCALATED, {
+        daemon_state: "risk_detected",
+        capture_excluded_window_count: daemonValidation.proof.capture_excluded_window_count,
+      });
+      timeline.add(sessionId, EVENTS.DEVICE_RISK_ESCALATED, {
+        daemon_state: "risk_detected",
+      });
+    }
+  }
+
   if (!client || DEMO_MODE) {
     const normed = normaliseTelemetry(telemetry) ?? telemetry;
-    const scored = scoreAcademicRisk(
-      normed,
-      {
-        connected:
-          sess.affinity.lastHeartbeat != null && Date.now() - sess.affinity.lastHeartbeat < 8000,
-        hostileCount: sess.affinity.hostile.length,
-      },
-      { reconnects: sess.reconnects || 0, startedAt: sess.startedAt }
-    );
+    const scored = scoreAcademicRisk(normed, helperInfoForSession(sess, sessionId), {
+      reconnects: sess.reconnects || 0,
+      startedAt: sess.startedAt,
+    });
     const verdict = {
       risk_level: scored.risk_level,
       risk_score: scored.risk_score,
@@ -630,15 +800,10 @@ app.post("/api/telemetry", async (req, res) => {
 
   try {
     const normed = normaliseTelemetry(telemetry) ?? telemetry;
-    const scored = scoreAcademicRisk(
-      normed,
-      {
-        connected:
-          sess.affinity.lastHeartbeat != null && Date.now() - sess.affinity.lastHeartbeat < 8000,
-        hostileCount: sess.affinity.hostile.length,
-      },
-      { reconnects: sess.reconnects || 0, startedAt: sess.startedAt }
-    );
+    const scored = scoreAcademicRisk(normed, helperInfoForSession(sess, sessionId), {
+      reconnects: sess.reconnects || 0,
+      startedAt: sess.startedAt,
+    });
 
     // Honour stagingConfig.claudeOnSafe — skip Claude call for Safe verdicts to reduce cost.
     if (scored.risk_level === "Safe" && !stagingConfig.claudeOnSafe) {
@@ -729,15 +894,10 @@ app.post("/api/telemetry", async (req, res) => {
     if (lowCredit) console.warn("[simurgh] anthropic low-credit — falling back to local heuristic");
     else console.error("[simurgh] anthropic error:", msg);
     const normed = normaliseTelemetry(telemetry) ?? telemetry;
-    const scored = scoreAcademicRisk(
-      normed,
-      {
-        connected:
-          sess.affinity.lastHeartbeat != null && Date.now() - sess.affinity.lastHeartbeat < 8000,
-        hostileCount: sess.affinity.hostile.length,
-      },
-      { reconnects: sess.reconnects || 0, startedAt: sess.startedAt }
-    );
+    const scored = scoreAcademicRisk(normed, helperInfoForSession(sess, sessionId), {
+      reconnects: sess.reconnects || 0,
+      startedAt: sess.startedAt,
+    });
     const verdict = {
       risk_level: scored.risk_level,
       risk_score: scored.risk_score,
@@ -768,6 +928,7 @@ app.get("/api/dashboard/:sessionId", requireInstructorAuth, (req, res) => {
     latest: sess?.latest ?? null,
     history: sess?.history ?? [],
     affinity: sess?.affinity ?? { hostile: [], lastHeartbeat: null, source: null },
+    daemon: daemonStateRegistry.get(req.params.sessionId),
   });
 });
 
@@ -1061,6 +1222,7 @@ app.get("/api/sessions/:sessionId/report", limitReport, requireInstructorAuth, (
     {
       latest: sess?.latest ?? null,
       affinity: sess?.affinity ?? { hostile: [], lastHeartbeat: null, source: null },
+      daemon: daemonStateRegistry.get(sessionId),
     },
     timeline.get(sessionId),
     auditValid

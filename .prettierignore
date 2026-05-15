@@ -23,6 +23,8 @@ tools/verity-helper/verity-helper
 tools/invisible-window-poc/invisible-window-poc
 tools/**/*.dSYM
 tools/**/*.o
+tools/**/.build
+tools/**/.swiftpm
 
 # git internals
 .git

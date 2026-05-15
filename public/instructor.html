@@ -598,6 +598,9 @@
         const score = sess.latest?.risk_score ?? 0;
         const cats = sess.latest?.categories ?? {};
         const helperActive = sess.helper_active;
+        const daemonState = sess.daemon?.daemon_state || "missing";
+        const daemonVersion = sess.daemon?.daemon_version || "—";
+        const excludedCount = sess.daemon?.capture_excluded_window_count_max ?? 0;
         const submittedState = sess.state === "submitted" || sess.state === "report_generated";
 
         const badgeClass =
@@ -638,6 +641,15 @@
     <span style="width:8px;height:8px;border-radius:50%;display:inline-block;background:${helperActive ? "#22c55e" : "#f59e0b"};"></span>
     <span style="color:#94a3b8;">Helper: ${helperActive ? "Connected" : "Not detected"}</span>
     ${submittedState ? '<span class="badge" style="background:#1e3a5f;color:#38bdf8;margin-left:auto;">Submitted</span>' : ""}
+  </div>
+  <div style="border:1px solid #334155;background:#0f172a;padding:8px 10px;border-radius:6px;margin-bottom:0.5rem;font-size:0.68rem;font-family:monospace;color:#94a3b8;">
+    <div style="display:flex;justify-content:space-between;gap:8px;margin-bottom:4px;">
+      <span>Device Integrity</span>
+      <span style="color:${daemonState === "healthy" ? "#22c55e" : daemonState === "risk_detected" || daemonState === "untrusted" ? "#ef4444" : "#f59e0b"};">${esc(daemonState)}</span>
+    </div>
+    <div>Daemon: macOS localhost · ${esc(daemonVersion)}</div>
+    <div>Capture-excluded windows: ${excludedCount}</div>
+    <div>Node: ${esc((sess.daemon?.node_id_hash || "unpaired").slice(0, 19))}</div>
   </div>
   <div id="timeline-${esc(sess.sessionId)}" class="event-timeline" style="margin-bottom:0.5rem;">
     <em style="color:#475569;">No events yet</em>

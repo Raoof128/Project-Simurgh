@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Last updated:** 2026-05-15 (Stage 2.2 + v0.4.3 hardening)
+**Last updated:** 2026-05-15 (Stage 2.3 localhost daemon)
 
 Project Simurgh is a research prototype for privacy-preserving academic integrity verification. This document describes what data is collected, how it is used, and what is explicitly not collected.
 
@@ -29,24 +29,28 @@ Simurgh collects **behavioural metadata only**. No content is ever collected, st
 | Proof / pairing signatures (verify-only)            | ✅ (not stored as raw) | Stage 2.1/2.2 — Ed25519 verification; raw bytes never enter audit |
 | Capability flags (booleans)                         | ✅                     | Stage 2.1 — node capability summary                               |
 | Node uptime / window count / capture-excluded count | ✅                     | Stage 2.1 — numeric signals                                       |
+| Daemon node hash and version                        | ✅                     | Stage 2.3 — localhost daemon proof verification                   |
+| Daemon state, proof age, and challenge hash         | ✅                     | Stage 2.3 — replay-resistant device-integrity metadata            |
 
 ## What We Never Collect
 
-| Data                                    | Status                                                                    |
-| --------------------------------------- | ------------------------------------------------------------------------- |
-| Screen pixels or screenshots            | ❌ Never                                                                  |
-| Webcam frames                           | ❌ Never                                                                  |
-| Microphone audio                        | ❌ Never                                                                  |
-| Typed answer content                    | ❌ Never                                                                  |
-| Pasted text content                     | ❌ Never                                                                  |
-| Raw student name or email               | ❌ Never                                                                  |
-| Biometric identifiers                   | ❌ Never                                                                  |
-| IP address (stored)                     | ❌ Not persisted                                                          |
-| Location data                           | ❌ Never                                                                  |
-| Raw Ed25519 signatures (Stage 2)        | ❌ Never persisted to audit (verify-only)                                 |
-| Raw pairing challenge bytes (Stage 2.2) | ❌ Never (only the SHA-256 hash enters audit)                             |
-| Raw process names or window titles      | ❌ Never (Stage 2.1+ only ships counts and capability flags)              |
-| macOS node private key                  | ❌ Never leaves the local machine (stored at `~/.simurgh/node-key`, 0600) |
+| Data                                                 | Status                                                                    |
+| ---------------------------------------------------- | ------------------------------------------------------------------------- |
+| Screen pixels or screenshots                         | ❌ Never                                                                  |
+| Webcam frames                                        | ❌ Never                                                                  |
+| Microphone audio                                     | ❌ Never                                                                  |
+| Typed answer content                                 | ❌ Never                                                                  |
+| Pasted text content                                  | ❌ Never                                                                  |
+| Raw student name or email                            | ❌ Never                                                                  |
+| Biometric identifiers                                | ❌ Never                                                                  |
+| IP address (stored)                                  | ❌ Not persisted                                                          |
+| Location data                                        | ❌ Never                                                                  |
+| Raw Ed25519 signatures (Stage 2)                     | ❌ Never persisted to audit (verify-only)                                 |
+| Raw pairing challenge bytes (Stage 2.2)              | ❌ Never (only the SHA-256 hash enters audit)                             |
+| Raw process names or window titles                   | ❌ Never (Stage 2.1+ only ships counts and capability flags)              |
+| macOS node private key                               | ❌ Never leaves the local machine (stored at `~/.simurgh/node-key`, 0600) |
+| Daemon private key                                   | ❌ Never leaves the local machine (stored in macOS Keychain)              |
+| Usernames, serial numbers, MAC addresses, file paths | ❌ Never                                                                  |
 
 ---
 

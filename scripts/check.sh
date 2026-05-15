@@ -188,7 +188,7 @@ fi
 # Only flag unambiguous data-field shapes (underscored composites + raw_*).
 # Single-word terms like "microphone" or "audio" are too noisy for source grep —
 # tools/privacy-audit.mjs catches them in JSON data files where context is clear.
-FORBIDDEN_FIELDS_PATTERN='\b(typed_content|paste_content|answer_text|answer_content|screen_frame|screen_data|webcam_frame|microphone_data|microphone_audio|biometric_data|face_data|raw_student_name|raw_identity)\b'
+FORBIDDEN_FIELDS_PATTERN='\b(typed_content|paste_content|answer_text|answer_content|screen_frame|screen_data|webcam_frame|microphone_data|microphone_audio|biometric_data|face_data|raw_student_name|raw_identity|device_serial|serial_number|mac_address|username|home_directory|process_name|window_title|raw_window|raw_process)\b'
 PRIVACY_GREP_LOG="$LOG_DIR/privacy-fields.log"
 
 if grep -RIEn "$FORBIDDEN_FIELDS_PATTERN" \
@@ -200,6 +200,8 @@ if grep -RIEn "$FORBIDDEN_FIELDS_PATTERN" \
   | grep -v "src/privacy/normaliseTelemetry.js" \
   | grep -v "src/integrity/proofSchema.js" \
   | grep -v "src/integrity/proofValidator.js" \
+  | grep -v "src/device/daemonProof.js" \
+  | grep -v "tools/privacy-audit.mjs" \
   | grep -v "Permissions-Policy" \
   | grep -v "Content-Security-Policy" \
   | grep -v "/check.sh" > "$PRIVACY_GREP_LOG"; then
@@ -803,8 +805,107 @@ process.stdout.write('OK');
     echo "$AUDIT_STATES_B"
   fi
 
+  DAEMON_SMOKE=$(node --input-type=module -e "
+import crypto from 'node:crypto';
+const base = 'http://localhost:33031';
+const b64url = (buf) => Buffer.from(buf).toString('base64url');
+const canonical = (payload) => JSON.stringify(Object.fromEntries(Object.keys(payload).filter((k)=>k!=='signature').sort().map((k)=>[k,payload[k]])));
+const { publicKey, privateKey } = crypto.generateKeyPairSync('ec', { namedCurve: 'prime256v1' });
+const public_key = b64url(publicKey.export({ format: 'der', type: 'spki' }));
+const node_id_hash = 'sha256:' + crypto.createHash('sha256').update(Buffer.from(public_key, 'base64url')).digest('hex');
+const sign = (payload) => b64url(crypto.sign('sha256', Buffer.from(canonical(payload)), { key: privateKey, dsaEncoding: 'der' }));
+const post = async (path, body, token) => {
+  const res = await fetch(base + path, { method: 'POST', headers: { 'content-type': 'application/json', ...(token ? { authorization: 'Bearer ' + token } : {}) }, body: JSON.stringify(body) });
+  const json = await res.json().catch(() => ({}));
+  return { status: res.status, json };
+};
+const exam = await post('/api/exams', { title: 'daemon_check', durationMinutes: 60 });
+const join = await post('/api/exams/' + exam.json.id + '/join', { studentId: 'daemon@check', sessionId: 'daemon_check' });
+const tok = join.json.sessionToken;
+const pairCh = await post('/api/device/challenge', { sessionId: 'daemon_check', purpose: 'pair' }, tok);
+const pairPayload = { type: 'simurgh.daemon.pair', session_id: 'daemon_check', exam_id: exam.json.id, challenge: pairCh.json.challenge, timestamp: new Date().toISOString(), node_id_hash, daemon_version: '0.4.5', platform: 'macos' };
+const pair = await post('/api/device/pair', { sessionId: 'daemon_check', node_id_hash, public_key, signed_payload: pairPayload, signature: sign(pairPayload) }, tok);
+const proofCh = await post('/api/device/challenge', { sessionId: 'daemon_check', purpose: 'proof' }, tok);
+const proofPayload = { type: 'simurgh.daemon.proof', session_id: 'daemon_check', exam_id: exam.json.id, sequence: 1, timestamp: new Date().toISOString(), node_id_hash, daemon_version: '0.4.5', platform: 'macos', capture_excluded_window_count: 0, helper_state: 'healthy', challenge: proofCh.json.challenge };
+const proof = { ...proofPayload, signature: sign(proofPayload) };
+const telemetry = await post('/api/telemetry', { sessionId: 'daemon_check', sequence: 1, timestamp: Date.now(), telemetry: { keystrokes: 2, chars_typed: 5, effective_wpm: 30, focus_losses: 0, time_off_window_ms: 0, pastes: 0, paste_payload_chars: 0, max_idle_gap_ms: 0, window_seconds: 5 }, daemon_proof: proof }, tok);
+const replay = await post('/api/telemetry', { sessionId: 'daemon_check', sequence: 2, timestamp: Date.now(), telemetry: { keystrokes: 2, chars_typed: 5, effective_wpm: 30, focus_losses: 0, time_off_window_ms: 0, pastes: 0, paste_payload_chars: 0, max_idle_gap_ms: 0, window_seconds: 5 }, daemon_proof: proof }, tok);
+const badCh = await post('/api/device/challenge', { sessionId: 'daemon_check', purpose: 'proof' }, tok);
+const signedBadPayload = { type: 'simurgh.daemon.proof', session_id: 'daemon_check', exam_id: exam.json.id, sequence: 3, timestamp: new Date().toISOString(), node_id_hash, daemon_version: '0.4.5', platform: 'macos', capture_excluded_window_count: 0, helper_state: 'healthy', challenge: badCh.json.challenge };
+const tamperedProof = { ...signedBadPayload, signature: sign(signedBadPayload), helper_state: 'missing' };
+const tampered = await post('/api/telemetry', { sessionId: 'daemon_check', sequence: 3, timestamp: Date.now(), telemetry: { keystrokes: 2, chars_typed: 5, effective_wpm: 30, focus_losses: 0, time_off_window_ms: 0, pastes: 0, paste_payload_chars: 0, max_idle_gap_ms: 0, window_seconds: 5 }, daemon_proof: tamperedProof }, tok);
+const audit = await (await fetch(base + '/api/audit/daemon_check')).json();
+const hasReject = (audit.entries || []).some(e => e.type === 'DAEMON_PROOF_REJECTED' && e.payload?.reason === 'invalid_signature');
+if (pair.status !== 200) { process.stdout.write('FAIL:pair:' + pair.status + ':' + JSON.stringify(pair.json)); process.exit(0); }
+if (telemetry.status !== 200 || telemetry.json.device_integrity?.daemon_state !== 'healthy') { process.stdout.write('FAIL:telemetry:' + telemetry.status + ':' + JSON.stringify(telemetry.json)); process.exit(0); }
+if (replay.status !== 409 || replay.json.error !== 'challenge_not_found') { process.stdout.write('FAIL:replay:' + replay.status + ':' + JSON.stringify(replay.json)); process.exit(0); }
+if (tampered.status !== 401 || tampered.json.error !== 'invalid_signature') { process.stdout.write('FAIL:tampered:' + tampered.status + ':' + JSON.stringify(tampered.json)); process.exit(0); }
+if (!hasReject) { process.stdout.write('FAIL:no_tampered_audit'); process.exit(0); }
+process.stdout.write('OK');
+" 2>&1 || true)
+  if [[ "$DAEMON_SMOKE" == "OK" ]]; then
+    pass "Stage 2.3 daemon pair + proof accepted, replay rejected, tamper audited"
+  else
+    fail "Stage 2.3 daemon proof smoke"
+    echo "$DAEMON_SMOKE"
+  fi
+
   kill "$S2_PID" 2>/dev/null
   wait "$S2_PID" 2>/dev/null
+fi
+
+# ── 10c. Stage 2.3 hardened daemon-required mode ────────
+if [[ "$QUICK" == true ]]; then
+  step "Stage 2.3 hardened daemon-required mode"
+  echo -e "${YELLOW}Skipped because --quick was used.${NC}"
+else
+  step "Stage 2.3 hardened daemon-required mode"
+  REQUIRE_DAEMON_PORT=33033
+  REQUIRE_DAEMON_LOG="$LOG_DIR/stage23-require-daemon-srv.log"
+  : > "$REQUIRE_DAEMON_LOG"
+  SIMURGH_DEMO_MODE=1 SIMURGH_REQUIRE_DAEMON=true PORT=$REQUIRE_DAEMON_PORT node server.js > "$REQUIRE_DAEMON_LOG" 2>&1 &
+  REQUIRE_DAEMON_PID=$!
+
+  REQUIRE_READY=false
+  for _ in 1 2 3 4 5 6 7 8 9 10; do
+    sleep 0.5
+    if curl -s -m 1 "http://localhost:$REQUIRE_DAEMON_PORT/health" >/dev/null 2>&1; then
+      REQUIRE_READY=true
+      break
+    fi
+  done
+
+  if [[ "$REQUIRE_READY" != true ]]; then
+    fail "Stage 2.3 hardened daemon-required server boot"
+    tail -20 "$REQUIRE_DAEMON_LOG" || true
+  else
+    REQUIRE_DAEMON_RESULT=$(node --input-type=module -e "
+const base = 'http://localhost:$REQUIRE_DAEMON_PORT';
+const post = async (path, body, token) => {
+  const res = await fetch(base + path, { method: 'POST', headers: { 'content-type': 'application/json', ...(token ? { authorization: 'Bearer ' + token } : {}) }, body: JSON.stringify(body) });
+  const json = await res.json().catch(() => ({}));
+  return { status: res.status, json };
+};
+const exam = await post('/api/exams', { title: 'daemon_required', durationMinutes: 60 });
+const join = await post('/api/exams/' + exam.json.id + '/join', { studentId: 'daemon-required@check', sessionId: 'daemon_required' });
+const tok = join.json.sessionToken;
+const missing = await post('/api/telemetry', { sessionId: 'daemon_required', sequence: 1, timestamp: Date.now(), telemetry: { keystrokes: 2, chars_typed: 5, effective_wpm: 30, focus_losses: 0, time_off_window_ms: 0, pastes: 0, paste_payload_chars: 0, max_idle_gap_ms: 0, window_seconds: 5 } }, tok);
+const audit = await (await fetch(base + '/api/audit/daemon_required')).json();
+const hasMissing = (audit.entries || []).some(e => e.type === 'DAEMON_MISSING' && e.payload?.reason === 'daemon_proof_required');
+if (missing.status !== 428 || missing.json.error !== 'daemon_proof_required') { process.stdout.write('FAIL:missing:' + missing.status + ':' + JSON.stringify(missing.json)); process.exit(0); }
+if (!hasMissing) { process.stdout.write('FAIL:no_missing_audit'); process.exit(0); }
+process.stdout.write('OK');
+" 2>&1 || true)
+    if [[ "$REQUIRE_DAEMON_RESULT" == "OK" ]]; then
+      pass "SIMURGH_REQUIRE_DAEMON rejects missing telemetry proof and audits DAEMON_MISSING"
+    else
+      fail "SIMURGH_REQUIRE_DAEMON missing-proof enforcement"
+      echo "$REQUIRE_DAEMON_RESULT"
+    fi
+  fi
+
+  kill "$REQUIRE_DAEMON_PID" 2>/dev/null || true
+  wait "$REQUIRE_DAEMON_PID" 2>/dev/null || true
 fi
 
 # ── 10c. Golden fixture sync check ───────────────────────
@@ -869,6 +970,33 @@ elif command -v swift >/dev/null 2>&1 && [[ -d tools/simurgh-node-macos ]]; then
 else
   step "Swift macOS node"
   echo -e "${YELLOW}Swift toolchain not available or tools/simurgh-node-macos missing — skipping macOS node build/test${NC}"
+fi
+
+# ── 10e. Swift macOS daemon — conditional build + test ───
+if [[ "$QUICK" == true ]]; then
+  step "Swift macOS daemon"
+  echo -e "${YELLOW}Skipped because --quick was used.${NC}"
+elif [[ "$(uname)" != "Darwin" ]]; then
+  step "Swift macOS daemon"
+  echo -e "${YELLOW}Not on macOS (uname=$(uname)) — CryptoKit unavailable; skipping daemon Swift block${NC}"
+elif command -v swift >/dev/null 2>&1 && [[ -d tools/simurgh-daemon-macos ]]; then
+  step "Swift macOS daemon build + test"
+  if (cd tools/simurgh-daemon-macos && swift build) > "$LOG_DIR/swift-daemon-build.log" 2>&1; then
+    pass "swift build (macOS daemon) succeeded"
+  else
+    fail "swift build (macOS daemon)"
+    tail -20 "$LOG_DIR/swift-daemon-build.log"
+  fi
+
+  if (cd tools/simurgh-daemon-macos && swift test) > "$LOG_DIR/swift-daemon-test.log" 2>&1; then
+    pass "swift test (macOS daemon)"
+  else
+    fail "swift test (macOS daemon)"
+    tail -20 "$LOG_DIR/swift-daemon-test.log"
+  fi
+else
+  step "Swift macOS daemon"
+  echo -e "${YELLOW}Swift toolchain not available or tools/simurgh-daemon-macos missing — skipping macOS daemon build/test${NC}"
 fi
 
 # ── 11. Git status sanity ────────────────────────────────

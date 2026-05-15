@@ -1,0 +1,153 @@
+export const DAEMON_STATES = Object.freeze({
+  NOT_REQUIRED: "not_required",
+  MISSING: "missing",
+  UNPAIRED: "unpaired",
+  PAIRED: "paired",
+  HEALTHY: "healthy",
+  STALE: "stale",
+  UNTRUSTED: "untrusted",
+  RISK_DETECTED: "risk_detected",
+  ENDED: "ended",
+});
+
+function baseRecord(now) {
+  return {
+    daemon_required: true,
+    daemon_state: DAEMON_STATES.MISSING,
+    helper_state: "unknown",
+    node_id_hash: null,
+    daemon_version: null,
+    platform: "macos",
+    paired_at: null,
+    last_proof_at: null,
+    proof_timestamp: null,
+    proof_age_ms: null,
+    proofs_verified: 0,
+    proofs_rejected: 0,
+    stale_periods: 0,
+    capture_excluded_window_count: 0,
+    capture_excluded_window_count_max: 0,
+    signature_valid: null,
+    challenge_id_hash: null,
+    updated_at: now,
+  };
+}
+
+export function summariseDaemonState(record, now = Date.now(), { staleAfterMs = 10_000 } = {}) {
+  const summary = { ...(record ?? baseRecord(now)) };
+  if (
+    summary.daemon_state === DAEMON_STATES.HEALTHY &&
+    summary.last_proof_at !== null &&
+    now - summary.last_proof_at > staleAfterMs
+  ) {
+    summary.daemon_state = DAEMON_STATES.STALE;
+    summary.proof_age_ms = now - summary.last_proof_at;
+  } else if (summary.last_proof_at !== null) {
+    summary.proof_age_ms = now - summary.last_proof_at;
+  }
+  return summary;
+}
+
+export function scoreDaemonRisk(record) {
+  const state = record?.daemon_state ?? DAEMON_STATES.MISSING;
+  const maxExcluded = record?.capture_excluded_window_count_max ?? 0;
+  if (maxExcluded > 0 || state === DAEMON_STATES.RISK_DETECTED) {
+    return { daemon_risk: 100, forceCritical: true };
+  }
+  if (state === DAEMON_STATES.UNTRUSTED) return { daemon_risk: 50, forceCritical: false };
+  if (state === DAEMON_STATES.UNPAIRED) return { daemon_risk: 25, forceCritical: false };
+  if (state === DAEMON_STATES.STALE) return { daemon_risk: 20, forceCritical: false };
+  if (state === DAEMON_STATES.MISSING) return { daemon_risk: 15, forceCritical: false };
+  return { daemon_risk: 0, forceCritical: false };
+}
+
+export function createDaemonStateRegistry({ staleAfterMs = 10_000 } = {}) {
+  const records = new Map();
+
+  function ensure(sessionId, now = Date.now()) {
+    if (!records.has(sessionId)) records.set(sessionId, baseRecord(now));
+    return records.get(sessionId);
+  }
+
+  return {
+    recordMissing(sessionId, { now = Date.now() } = {}) {
+      const record = ensure(sessionId, now);
+      record.daemon_state = DAEMON_STATES.MISSING;
+      record.updated_at = now;
+      return record;
+    },
+
+    recordPaired(sessionId, { node_id_hash, public_key, daemon_version, now = Date.now() }) {
+      const record = ensure(sessionId, now);
+      record.daemon_state = DAEMON_STATES.PAIRED;
+      record.node_id_hash = node_id_hash;
+      record.public_key = public_key;
+      record.daemon_version = daemon_version;
+      record.platform = "macos";
+      record.paired_at = now;
+      record.updated_at = now;
+      return record;
+    },
+
+    recordProofVerified(
+      sessionId,
+      {
+        sequence,
+        capture_excluded_window_count,
+        helper_state,
+        timestamp,
+        challenge_id_hash = null,
+        now = Date.now(),
+      }
+    ) {
+      const record = ensure(sessionId, now);
+      record.daemon_state =
+        capture_excluded_window_count > 0 ? DAEMON_STATES.RISK_DETECTED : DAEMON_STATES.HEALTHY;
+      record.helper_state = helper_state;
+      record.last_sequence = sequence;
+      record.last_proof_at = now;
+      record.proof_timestamp = timestamp;
+      record.capture_excluded_window_count = capture_excluded_window_count;
+      record.capture_excluded_window_count_max = Math.max(
+        record.capture_excluded_window_count_max,
+        capture_excluded_window_count
+      );
+      record.signature_valid = true;
+      record.challenge_id_hash = challenge_id_hash;
+      record.proofs_verified += 1;
+      record.updated_at = now;
+      return record;
+    },
+
+    recordRejected(sessionId, { reason, now = Date.now() } = {}) {
+      const record = ensure(sessionId, now);
+      record.daemon_state = DAEMON_STATES.UNTRUSTED;
+      record.signature_valid = false;
+      record.last_reject_reason = reason;
+      record.proofs_rejected += 1;
+      record.updated_at = now;
+      return record;
+    },
+
+    recordEnded(sessionId, { now = Date.now() } = {}) {
+      const record = ensure(sessionId, now);
+      record.daemon_state = DAEMON_STATES.ENDED;
+      record.updated_at = now;
+      return record;
+    },
+
+    get(sessionId, now = Date.now()) {
+      return summariseDaemonState(records.get(sessionId), now, { staleAfterMs });
+    },
+
+    evict(sessionId) {
+      records.delete(sessionId);
+    },
+
+    evictMissing(activeIds) {
+      for (const sessionId of records.keys()) {
+        if (!activeIds.has(sessionId)) records.delete(sessionId);
+      }
+    },
+  };
+}

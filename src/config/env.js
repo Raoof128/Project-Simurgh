@@ -9,6 +9,7 @@ export const stagingConfig = {
   retentionDays: Number(process.env.SIMURGH_RETENTION_DAYS) || 30,
   debugRawProcessNames: process.env.SIMURGH_DEBUG_RAW_PROCESS_NAMES === "true",
   debugRawWindowTitles: process.env.SIMURGH_DEBUG_RAW_WINDOW_TITLES === "true",
+  requireDaemonProof: process.env.SIMURGH_REQUIRE_DAEMON === "true",
   jsonBodyLimit: process.env.SIMURGH_JSON_LIMIT || "32kb",
   // Replay protection windows
   telemetryTimestampSkewMs: Number(process.env.SIMURGH_TIMESTAMP_SKEW_MS) || 30_000,

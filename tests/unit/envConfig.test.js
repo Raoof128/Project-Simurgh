@@ -43,4 +43,14 @@ describe("stagingConfig", () => {
     assert.equal(config.claudeOnWarning, true);
     assert.equal(config.claudeOnCritical, true);
   });
+
+  test("does not require daemon proofs unless explicitly enabled", async () => {
+    const defaultConfig = await loadConfig({ SIMURGH_REQUIRE_DAEMON: undefined });
+    const disabled = await loadConfig({ SIMURGH_REQUIRE_DAEMON: "false" });
+    const enabled = await loadConfig({ SIMURGH_REQUIRE_DAEMON: "true" });
+
+    assert.equal(defaultConfig.requireDaemonProof, false);
+    assert.equal(disabled.requireDaemonProof, false);
+    assert.equal(enabled.requireDaemonProof, true);
+  });
 });
