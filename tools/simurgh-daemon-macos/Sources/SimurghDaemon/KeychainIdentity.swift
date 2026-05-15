@@ -3,6 +3,9 @@ import Foundation
 import Security
 
 final class KeychainIdentity {
+    private static let service = "org.simurgh.daemon"
+    private static let account = "p256-signing-key"
+
     private let key: P256.Signing.PrivateKey
     let publicKey: String
     let nodeIdHash: String
@@ -15,8 +18,6 @@ final class KeychainIdentity {
     }
 
     static func loadOrCreate() throws -> KeychainIdentity {
-        let service = "org.simurgh.daemon"
-        let account = "p256-signing-key"
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
@@ -42,6 +43,28 @@ final class KeychainIdentity {
         let status = SecItemAdd(add as CFDictionary, nil)
         guard status == errSecSuccess else { throw NSError(domain: NSOSStatusErrorDomain, code: Int(status)) }
         return KeychainIdentity(key: key)
+    }
+
+    static func exists() -> Bool {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service,
+            kSecAttrAccount as String: account,
+            kSecReturnData as String: false,
+        ]
+        return SecItemCopyMatching(query as CFDictionary, nil) == errSecSuccess
+    }
+
+    static func reset() throws {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service,
+            kSecAttrAccount as String: account,
+        ]
+        let status = SecItemDelete(query as CFDictionary)
+        guard status == errSecSuccess || status == errSecItemNotFound else {
+            throw NSError(domain: NSOSStatusErrorDomain, code: Int(status))
+        }
     }
 
     func sign(_ payload: [String: Any]) throws -> String {

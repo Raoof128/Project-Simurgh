@@ -55,6 +55,8 @@ final class LocalHttpServer {
         let body = (try? JSONSerialization.jsonObject(with: bodyData)) as? [String: Any] ?? [:]
         do {
             switch (method, path) {
+            case ("OPTIONS", _):
+                return response(200, ["ok": true], origin: headers["origin"])
             case ("GET", "/health"):
                 return response(200, ["ok": true, "daemon": "simurgh-daemon-macos", "version": "0.4.5", "platform": "macos"], origin: headers["origin"])
             case ("GET", "/status"):
@@ -70,6 +72,11 @@ final class LocalHttpServer {
             case ("POST", "/session/end"):
                 state.sessionActive = false
                 return response(200, ["ok": true, "session_active": false], origin: headers["origin"])
+            case ("POST", "/shutdown"):
+                DispatchQueue.global().asyncAfter(deadline: .now() + 0.1) {
+                    Foundation.exit(0)
+                }
+                return response(200, ["ok": true, "shutdown": "requested"], origin: headers["origin"])
             default:
                 return response(404, ["ok": false, "error": "not_found"], origin: headers["origin"])
             }
@@ -84,6 +91,8 @@ final class LocalHttpServer {
         var headers = "HTTP/1.1 \(status) \(reason)\r\nContent-Type: application/json\r\nContent-Length: \(body.count)\r\nConnection: close\r\n"
         if let origin, config.allowedOrigins.contains(origin) {
             headers += "Access-Control-Allow-Origin: \(origin)\r\nVary: Origin\r\n"
+            headers += "Access-Control-Allow-Headers: content-type,x-simurgh-local-client\r\n"
+            headers += "Access-Control-Allow-Methods: GET,POST,OPTIONS\r\n"
         }
         headers += "\r\n"
         return Data(headers.utf8) + body

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>dev.raouf.simurgh.daemon</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>__SIMURGH_DAEMON_BINARY__</string>
+    <string>start</string>
+    <string>--port</string>
+    <string>3031</string>
+    <string>--allowed-origin</string>
+    <string>http://localhost:3030</string>
+  </array>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>SIMURGH_DAEMON_PORT</key>
+    <string>3031</string>
+  </dict>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <false/>
+  <key>StandardOutPath</key>
+  <string>__SIMURGH_LOG_DIR__/simurgh-daemon.out.log</string>
+  <key>StandardErrorPath</key>
+  <string>__SIMURGH_LOG_DIR__/simurgh-daemon.err.log</string>
+</dict>
+</plist>

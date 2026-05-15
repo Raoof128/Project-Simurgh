@@ -2,6 +2,32 @@
 
 ## Agent Change Log
 
+### 2026-05-16 (Australia/Sydney) — Stage 2.4 Browser SDK & Daemon Lifecycle Hardening
+
+**Raouf:**
+
+- **Scope:** Stage 2.4 — Browser SDK extraction and macOS daemon lifecycle hardening.
+- **Summary:**
+  - Added `public/sdk/simurgh-browser-sdk.js` as the reusable daemon browser SDK for discovery, health/status checks, pairing, challenge/proof fetch, telemetry send, hardened missing-proof handling, safe failure state, and explicit local daemon states.
+  - Updated `public/index.html` so the student page consumes the SDK instead of owning the daemon bridge inline.
+  - Added macOS daemon lifecycle commands: `start`, `stop`, `status`, `doctor`, and `reset-identity`.
+  - Added privacy-safe `DaemonDoctor` diagnostics for daemon reachability, port availability, Keychain identity presence, allowed-origin configuration, localhost binding, server reachability, and proof round-trip readiness.
+  - Added development-only LaunchAgent plist plus install/uninstall scripts under `tools/simurgh-daemon-macos/`.
+  - Extended `scripts/check.sh` with Stage 2.4 SDK, lifecycle, doctor redaction, LaunchAgent plist, and lifecycle smoke gates.
+  - Updated README, SECURITY, PRIVACY, and ROADMAP with Stage 2.4 scope and explicit non-production boundaries.
+- **Files Changed:**
+  - `public/sdk/simurgh-browser-sdk.js`
+  - `public/index.html`
+  - `tools/simurgh-daemon-macos/Sources/SimurghDaemon/{DaemonCommand,DaemonDoctor,DaemonConfig,KeychainIdentity,LocalHttpServer,main}.swift`
+  - `tools/simurgh-daemon-macos/Tests/SimurghDaemonTests/DaemonDoctorTests.swift`
+  - `tools/simurgh-daemon-macos/launchd/dev.raouf.simurgh.daemon.plist`
+  - `tools/simurgh-daemon-macos/scripts/{install-launch-agent,uninstall-launch-agent}.sh`
+  - `tests/unit/{browserSdk,daemonLifecycle,daemonDoctor}.test.js`
+  - `scripts/check.sh`
+  - `README.md`, `SECURITY.md`, `PRIVACY.md`, `ROADMAP.md`, `AGENT.md`, `CHANGELOG.md`
+- **Verification:** Baseline before edits: `git diff --check`, `npm test`, `./scripts/check.sh`, `swift test`, and `swift build` all passed. Stage 2.4 targeted checks: `node --test tests/unit/browserSdk.test.js tests/unit/daemonLifecycle.test.js tests/unit/daemonDoctor.test.js` → 8/8 pass; `swift test` in `tools/simurgh-daemon-macos` → 2/2 pass. Final verification: `npm test` → 227/227 pass; `swift build` in `tools/simurgh-daemon-macos` → pass; `swift test` in `tools/simurgh-daemon-macos` → 2/2 pass; `./scripts/check.sh` → 43/43 gates pass.
+- **Follow-ups:** Stage 2.5 can upgrade scanner signals while preserving the metadata-only contract.
+
 ### 2026-05-15 (Australia/Sydney) — Stage 2.3 macOS Localhost Daemon
 
 **Raouf:**

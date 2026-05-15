@@ -999,6 +999,57 @@ else
   echo -e "${YELLOW}Swift toolchain not available or tools/simurgh-daemon-macos missing — skipping macOS daemon build/test${NC}"
 fi
 
+# ── 10f. Stage 2.4 — browser SDK + daemon lifecycle ─────
+if [[ "$QUICK" == true ]]; then
+  step "Stage 2.4 browser SDK + daemon lifecycle"
+  echo -e "${YELLOW}Skipped because --quick was used.${NC}"
+else
+  step "Stage 2.4 browser SDK + daemon lifecycle"
+
+  if node --input-type=module -e "import('./public/sdk/simurgh-browser-sdk.js').then(m => { if (!m.createSimurghClient || !m.SIMURGH_DAEMON_STATES.includes('proof_ready')) process.exit(1); })" > "$LOG_DIR/stage24-sdk-load.log" 2>&1; then
+    pass "Stage 2.4 browser SDK builds / loads"
+  else
+    fail "Stage 2.4 browser SDK builds / loads"
+    cat "$LOG_DIR/stage24-sdk-load.log"
+  fi
+
+  if node --test tests/unit/browserSdk.test.js > "$LOG_DIR/stage24-browser-sdk-test.log" 2>&1; then
+    pass "Stage 2.4 SDK handles missing, pair success, hardened block, and proof rejection"
+  else
+    fail "Stage 2.4 browser SDK unit tests"
+    tail -40 "$LOG_DIR/stage24-browser-sdk-test.log"
+  fi
+
+  if node --test tests/unit/daemonLifecycle.test.js tests/unit/daemonDoctor.test.js > "$LOG_DIR/stage24-daemon-lifecycle-test.log" 2>&1; then
+    pass "Stage 2.4 daemon lifecycle, doctor redaction, and LaunchAgent checks"
+  else
+    fail "Stage 2.4 daemon lifecycle unit tests"
+    tail -40 "$LOG_DIR/stage24-daemon-lifecycle-test.log"
+  fi
+
+  if command -v plutil >/dev/null 2>&1; then
+    if plutil -lint tools/simurgh-daemon-macos/launchd/dev.raouf.simurgh.daemon.plist > "$LOG_DIR/stage24-plist-lint.log" 2>&1; then
+      pass "Stage 2.4 LaunchAgent plist lint/check"
+    else
+      fail "Stage 2.4 LaunchAgent plist lint/check"
+      cat "$LOG_DIR/stage24-plist-lint.log"
+    fi
+  else
+    echo -e "${YELLOW}plutil unavailable — skipping LaunchAgent plist lint${NC}"
+  fi
+
+  if [[ "$(uname)" == "Darwin" ]] && command -v swift >/dev/null 2>&1; then
+    if (cd tools/simurgh-daemon-macos && swift run SimurghDaemon --help) > "$LOG_DIR/stage24-daemon-help.log" 2>&1; then
+      pass "Stage 2.4 daemon lifecycle smoke"
+    else
+      fail "Stage 2.4 daemon lifecycle smoke"
+      tail -20 "$LOG_DIR/stage24-daemon-help.log"
+    fi
+  else
+    echo -e "${YELLOW}Not on macOS or Swift unavailable — skipping daemon lifecycle smoke${NC}"
+  fi
+fi
+
 # ── 11. Git status sanity ────────────────────────────────
 step "Git status"
 if git rev-parse --git-dir > /dev/null 2>&1; then

@@ -2012,7 +2012,9 @@
     <!-- about modal target -->
     <div id="modalRoot"></div>
 
-    <script>
+    <script type="module">
+      import { createSimurghClient } from "./sdk/simurgh-browser-sdk.js";
+
       // ═══════════════════════════════════════════════════
       //  CONFIG
       // ═══════════════════════════════════════════════════
@@ -2084,13 +2086,14 @@ OUTPUT FORMAT
       let sessionToken = null; // issued by /api/exams/:id/join (joined sessions only)
       let examId = null;
       let telemetrySequence = 0; // monotonic, sent with every /api/telemetry POST
-      const daemon = {
-        base: "http://127.0.0.1:3031",
-        reachable: false,
-        paired: false,
-        nodeIdHash: null,
-        lastProofAt: null,
-      };
+      const simurghClient = createSimurghClient({
+        serverBaseUrl: location.origin,
+        daemonBaseUrl: "http://127.0.0.1:3031",
+        sessionToken,
+        sessionId,
+        examId,
+        requireDaemon: false,
+      });
 
       // ═══════════════════════════════════════════════════
       //  ELEMENTS
@@ -2538,29 +2541,23 @@ OUTPUT FORMAT
         inflightSend = (async () => {
           try {
             telemetrySequence += 1;
-            const headers = { "content-type": "application/json" };
-            if (sessionToken) headers["authorization"] = "Bearer " + sessionToken;
-            const daemonProof = await fetchDaemonProof(telemetrySequence);
-            const r = await fetch("/api/telemetry", {
-              method: "POST",
-              headers,
-              body: JSON.stringify({
-                sessionId,
-                sequence: telemetrySequence,
-                timestamp: Date.now(),
-                telemetry,
-                daemon_required: false,
-                ...(daemonProof ? { daemon_proof: daemonProof } : {}),
-              }),
+            simurghClient.updateSession({
+              sessionId,
+              sessionToken,
+              examId,
+              requireDaemon: false,
+            });
+            const verdict = await simurghClient.sendTelemetry({
+              sequence: telemetrySequence,
+              timestamp: Date.now(),
+              telemetry,
               signal: ctrl.signal,
             });
             clearTimeout(timer);
-            if (r.status === 429) {
+            if (verdict?.error === "rate_limited") {
               consecFailures = 0;
               return;
             } // rate-limited; just skip
-            if (!r.ok) throw new Error("status " + r.status);
-            const verdict = await r.json();
             consecFailures = 0;
             paintVerdict(verdict);
             pushHistory(verdict);
@@ -2916,8 +2913,7 @@ OUTPUT FORMAT
         sessionToken = null;
         examId = null;
         telemetrySequence = 0;
-        daemon.paired = false;
-        daemon.nodeIdHash = null;
+        simurghClient.updateSession({ sessionId, sessionToken, examId });
         sessionLabel.textContent = "session: " + sessionId;
         verdictBox.innerHTML = `<div class="verdict-empty">Awaiting first window — analysing…<div class="progress" aria-hidden="true"><div id="progFill" style="position:absolute;inset:0;background:var(--ox);transform-origin:left;transform:scaleX(0);transition:transform .12s linear"></div></div></div>`;
         proctorEl.classList.remove("alarm");
@@ -2965,108 +2961,24 @@ OUTPUT FORMAT
         label.textContent = "Daemon: " + (detail || state);
       }
 
-      async function daemonJson(path, options = {}) {
-        const ctrl = new AbortController();
-        const timer = setTimeout(() => ctrl.abort(), 1200);
-        try {
-          const res = await fetch(daemon.base + path, {
-            ...options,
-            headers: {
-              "content-type": "application/json",
-              "x-simurgh-local-client": "browser",
-              ...(options.headers || {}),
-            },
-            signal: ctrl.signal,
-          });
-          clearTimeout(timer);
-          if (!res.ok) return null;
-          return await res.json();
-        } catch {
-          clearTimeout(timer);
-          return null;
-        }
-      }
-
       async function pollDaemon() {
-        const health = await daemonJson("/health");
-        daemon.reachable = !!health?.ok;
-        if (!daemon.reachable) {
-          daemon.paired = false;
+        simurghClient.updateSession({ sessionId, sessionToken, examId });
+        const status = await simurghClient.discover();
+        if (!status.reachable) {
           paintDaemon("missing", "not detected");
           return;
         }
-        const status = await daemonJson("/status");
-        daemon.paired = !!status?.paired;
-        daemon.nodeIdHash = status?.node_id_hash || daemon.nodeIdHash;
-        paintDaemon(daemon.paired ? "paired" : "healthy", daemon.paired ? "paired" : "available");
-        await pairDaemonIfPossible();
-      }
-
-      async function serverChallenge(purpose) {
-        if (!sessionToken) return null;
-        const res = await fetch("/api/device/challenge", {
-          method: "POST",
-          headers: {
-            "content-type": "application/json",
-            authorization: "Bearer " + sessionToken,
-          },
-          body: JSON.stringify({ sessionId, purpose }),
-        });
-        return res.ok ? res.json() : null;
-      }
-
-      async function pairDaemonIfPossible() {
-        if (!daemon.reachable || daemon.paired || !sessionToken || !examId) return;
-        const challenge = await serverChallenge("pair");
-        if (!challenge?.challenge) return;
-        const pair = await daemonJson("/pair", {
-          method: "POST",
-          body: JSON.stringify({
-            session_id: sessionId,
-            exam_id: examId,
-            challenge: challenge.challenge,
-            server_origin: location.origin,
-          }),
-        });
-        if (!pair?.ok) return;
-        const res = await fetch("/api/device/pair", {
-          method: "POST",
-          headers: {
-            "content-type": "application/json",
-            authorization: "Bearer " + sessionToken,
-          },
-          body: JSON.stringify({
-            sessionId,
-            node_id_hash: pair.node_id_hash,
-            public_key: pair.public_key,
-            signed_payload: pair.signed_payload,
-            signature: pair.signature,
-          }),
-        });
-        if (res.ok) {
-          daemon.paired = true;
-          daemon.nodeIdHash = pair.node_id_hash;
-          paintDaemon("paired", "paired");
+        if (!status.paired && sessionToken && examId) {
+          await simurghClient.pair();
         }
-      }
-
-      async function fetchDaemonProof(sequence) {
-        if (!daemon.reachable || !daemon.paired || !sessionToken || !examId) return null;
-        const challenge = await serverChallenge("proof");
-        if (!challenge?.challenge) return null;
-        const proof = await daemonJson("/proof", {
-          method: "POST",
-          body: JSON.stringify({
-            session_id: sessionId,
-            exam_id: examId,
-            sequence,
-            challenge: challenge.challenge,
-          }),
-        });
-        if (!proof?.ok || !proof.daemon_proof) return null;
-        daemon.lastProofAt = Date.now();
-        paintDaemon("healthy", "healthy");
-        return proof.daemon_proof;
+        const next = simurghClient.getState();
+        if (next.state === "untrusted") {
+          paintDaemon("untrusted", "untrusted");
+        } else if (next.paired) {
+          paintDaemon("paired", "paired");
+        } else {
+          paintDaemon("healthy", "available");
+        }
       }
 
       setInterval(pollDaemon, 4000);

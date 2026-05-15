@@ -1,5 +1,36 @@
 ## Change Log
 
+## [0.4.6] — 2026-05-16 — Stage 2.4 Browser SDK & Daemon Lifecycle Hardening
+
+### Added
+
+- `public/sdk/simurgh-browser-sdk.js` — reusable browser SDK for daemon discovery, health/status checks, pairing, proof fetch, telemetry send, hardened missing-proof handling, and explicit client daemon state.
+- Browser SDK unit coverage for missing daemon state, pair success, proof-backed telemetry, hardened missing-proof blocking, and proof replay/rejection state.
+- macOS daemon lifecycle commands: `start`, `stop`, `status`, `doctor`, and `reset-identity`.
+- `DaemonDoctor` diagnostics covering daemon reachability, port availability, Keychain identity presence, allowed-origin configuration, localhost binding, server reachability, and proof round-trip readiness.
+- Development-only LaunchAgent plist plus install/uninstall scripts under `tools/simurgh-daemon-macos/`.
+- Stage 2.4 check gates for SDK loading/tests, daemon lifecycle/doctor redaction tests, LaunchAgent plist lint, and daemon lifecycle smoke.
+
+### Changed
+
+- `public/index.html` now consumes the SDK instead of owning the daemon bridge inline.
+- Daemon localhost server now supports CORS preflight for allowed origins and a local `/shutdown` control route for development lifecycle use.
+- README, SECURITY, PRIVACY, and ROADMAP document Stage 2.4 while keeping production deployment, notarisation, MDM, hardware attestation, Windows/Linux daemon, and scanner-upgrade work out of scope.
+
+### Verified
+
+- Baseline before edits: `git diff --check`, `npm test`, `./scripts/check.sh`, `swift test`, and `swift build` all passed.
+- `node --test tests/unit/browserSdk.test.js tests/unit/daemonLifecycle.test.js tests/unit/daemonDoctor.test.js` — 8/8 pass.
+- `npm test` — 227/227 pass.
+- `swift build` in `tools/simurgh-daemon-macos` — pass.
+- `swift test` in `tools/simurgh-daemon-macos` — 2/2 pass.
+- `./scripts/check.sh` — 43/43 gates pass, including Stage 2.4 SDK load/tests, doctor redaction, LaunchAgent plist lint, and daemon lifecycle smoke.
+
+### Notes
+
+- The LaunchAgent path is development-only. It is not notarised, not production endpoint management, and not MDM deployment.
+- The daemon scanner remains a conservative metadata-only placeholder; deeper scanner detection is reserved for a later stage.
+
 ## [0.4.5] — 2026-05-15 — Stage 2.3 macOS Localhost Daemon
 
 ### Added
