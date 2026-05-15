@@ -1228,7 +1228,12 @@ app.post("/api/integrity/proofs", requireSessionToken, (req, res) => {
   }
 
   // Step 3 (spec): schema + crypto validation.
-  const validation = validateProof(req.body, { now: Date.now() });
+  const pairedNode = pairingRegistry.getPairedNode(sessionId);
+  const validation = validateProof(req.body, {
+    now: Date.now(),
+    pairedNode,
+    expectedSessionId: sessionId,
+  });
   if (!validation.ok) {
     const rawHash =
       typeof req.body?.node_id_hash === "string" && /^[0-9a-f]{64}$/.test(req.body.node_id_hash)
@@ -1239,10 +1244,13 @@ app.post("/api/integrity/proofs", requireSessionToken, (req, res) => {
 
     let status = 400;
     if (validation.reason === "invalid_signature") status = 401;
+    if (validation.reason === "registered_signature_invalid") status = 401;
     if (validation.reason === "proof_session_mismatch") status = 401;
+    if (validation.reason === "paired_node_mismatch") status = 409;
+    if (validation.reason === "paired_public_key_mismatch") status = 409;
     return res.status(status).json({ error: validation.reason });
   }
-  const { proof } = validation;
+  const { proof, signature_status } = validation;
 
   // Token session must match proof session.
   if (proof.session_id !== sessionId) {
@@ -1264,15 +1272,12 @@ app.post("/api/integrity/proofs", requireSessionToken, (req, res) => {
     return res.status(409).json({ error: stateResult.reason });
   }
 
-  // Step 6 (spec): Stage 2.1 always emits unregistered_node.
-  const signatureStatus = "unregistered_node";
-
   // Step 7 (spec): success audit with hashed nonce + summaries only.
   const nonceHash = crypto.createHash("sha256").update(proof.nonce_bytes).digest("hex");
   appendAudit(sess, EVENTS.INTEGRITY_PROOF_RECEIVED, {
     node_id_hash: proof.node_id_hash,
     nonce_hash: nonceHash,
-    signature_status: signatureStatus,
+    signature_status,
     platform: proof.platform,
     version: proof.version,
     capability_summary: { ...proof.capabilities },
@@ -1288,10 +1293,13 @@ app.post("/api/integrity/proofs", requireSessionToken, (req, res) => {
     session_id: sessionId,
     nonce: proof.nonce,
     node_id_hash: proof.node_id_hash,
-    signature_status: signatureStatus,
+    signature_status,
     platform: proof.platform,
     received_at: new Date().toISOString(),
-    note: "Stage 2.1 scaffold: signature mathematically verified, node not yet paired. Pairing lands in Stage 2.2.",
+    note:
+      signature_status === "verified"
+        ? "Signature verified against the node registered to this session."
+        : "Signature mathematically verified, node not yet paired. Submit /api/integrity/pairing/challenge to pair.",
   });
 });
 
