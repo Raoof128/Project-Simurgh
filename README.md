@@ -21,7 +21,7 @@ _Detecting UI-redressing and behavioral spoofing without relying on screen captu
 
 </div>
 
-> **Status: Stage 1 research MVP with Stage 1.5 validation pack.** This repository demonstrates a privacy-preserving behavioural integrity prototype and now includes reviewer-readiness docs for validation before Stage 2 planning. It does not collect video, audio, biometric data, typed answer content, pasted content, or personal identity data. See [PRIVACY.md](PRIVACY.md), [ETHICS.md](ETHICS.md), and [DISCLAIMER.md](DISCLAIMER.md).
+> **Status: Stage 2.2 research prototype — macOS node pairing live, post-audit hardening pass merged (v0.4.3).** A browser exam session can now be cryptographically bound to a macOS node public key via Ed25519 challenge/response. Stage 1 behavioural-integrity surface, Stage 1.5 validation pack, Stage 2.1 signed-proof pipeline, and Stage 2.2 pairing are all merged to `main`. Next: Stage 2.3 — macOS localhost node daemon. The system does not collect video, audio, biometric data, typed answer content, pasted content, or personal identity data. See [PRIVACY.md](PRIVACY.md), [ETHICS.md](ETHICS.md), and [DISCLAIMER.md](DISCLAIMER.md).
 
 ---
 
@@ -236,13 +236,17 @@ npm run format:check                              # Prettier check
 npm run format                                    # Prettier write
 ```
 
-### Stage 2.1 macOS Integrity Node (in progress on `stage-2-integrity-node` branch)
+### Stage 2.1 macOS Integrity Node (merged — v0.4.1)
 
 Stage 2.1 adds a v1 signed-integrity-proof pipeline. A macOS Swift CLI under `tools/simurgh-node-macos/` generates an Ed25519 keypair, builds a metadata-only proof envelope, signs the canonical JSON, and prints it to stdout. The Simurgh server accepts the proof at `POST /api/integrity/proofs` with `signature_status: "unregistered_node"` until pairing lands in Stage 2.2. A cross-implementation golden fixture locks canonical-JSON byte equality between Node and Swift. Design spec: [`docs/superpowers/specs/2026-05-14-stage-2-1-macos-integrity-proof-design.md`](docs/superpowers/specs/2026-05-14-stage-2-1-macos-integrity-proof-design.md).
 
-### Stage 2.2 macOS Node Pairing (in progress on `stage-2-2-macos-node-pairing` branch)
+### Stage 2.2 macOS Node Pairing (merged — v0.4.2, hardened in v0.4.3)
 
-Stage 2.2 binds a browser exam session to a macOS node public key. The server issues a one-time 32-byte challenge via `POST /api/integrity/pairing/challenge`; the macOS CLI's new `pair` subcommand signs the canonical pairing payload; `POST /api/integrity/pairing/complete` records the node's public key. Subsequent integrity proofs from the registered node return `signature_status: "verified"`. Stage 2.1 unpaired flow remains backward-compatible. Design spec: [`docs/superpowers/specs/2026-05-14-stage-2-2-macos-node-pairing-design.md`](docs/superpowers/specs/2026-05-14-stage-2-2-macos-node-pairing-design.md).
+Stage 2.2 binds a browser exam session to a macOS node public key. The server issues a one-time 32-byte challenge via `POST /api/integrity/pairing/challenge`; the macOS CLI's `pair` subcommand signs the canonical pairing payload; `POST /api/integrity/pairing/complete` records the node's public key. Subsequent integrity proofs from the registered node return `signature_status: "verified"`. Stage 2.1 unpaired flow remains backward-compatible. The v0.4.3 hardening pass added a 30/min rate limiter on `/api/integrity/proofs`, cryptographically-reconciled audit hints (`safeParsedPairingHints`), and a constant-time challenge compare in the pairing registry. Design spec: [`docs/superpowers/specs/2026-05-14-stage-2-2-macos-node-pairing-design.md`](docs/superpowers/specs/2026-05-14-stage-2-2-macos-node-pairing-design.md).
+
+### Next — Stage 2.3 macOS localhost node daemon (planned)
+
+The CLI's `pair` / `proof` flows will move behind a localhost HTTP daemon so the browser SDK (Stage 2.4) has a stable endpoint to discover. No browser SDK or ScreenCaptureKit work until the daemon brick lands.
 
 ### Dashboard
 
@@ -550,15 +554,20 @@ Project Simurgh is evolving from a vulnerability demonstration into a comprehens
 - [x] Demonstrate cross-platform UI redressing blindspots (macOS, Windows, Linux).
 - [x] Implement `simurgh-helper` native agent for macOS (Swift / ScreenCaptureKit).
 - [x] Add Stage 1.5 validation and reviewer-readiness pack.
+- [x] Stage 2.1 — macOS integrity proof pipeline (Swift CLI + signed envelope + `/api/integrity/proofs`).
+- [x] Stage 2.2 — macOS node pairing (Ed25519 challenge/response, paired-session verified status).
+- [x] Post-audit hardening pass (v0.4.3) — proof rate limit, audit-hint safety, constant-time challenge compare.
 
 ### Phase 2: Autonomous Agent Hardening & Cross-Platform Expansion (Q3 – Q4 2026)
 
+- [ ] **Stage 2.3:** macOS localhost node daemon (host the CLI flows behind an HTTP endpoint for SDK discovery).
+- [ ] **Stage 2.4:** Browser SDK that discovers and talks to the localhost daemon.
+- [ ] **Stage 2.5:** ScreenCaptureKit signal collection.
 - [ ] Formalize the Heuristic Engine using advanced cluster compute.
 - [ ] Red-team the heuristics against next-generation "Computer Use" agentic models.
 - [ ] Publish the open-source Simurgh Integrity API draft for enterprise feedback.
 - [ ] **Windows:** Develop `simurgh-helper-win` using `SetWindowDisplayAffinity` enumeration via Win32 API.
 - [ ] **Linux:** Develop `simurgh-helper-linux` leveraging X11/Wayland compositor introspection.
-- [ ] Design the Stage 2 Local Integrity Node and signed proof envelope.
 
 ### Phase 3: The Sovereign Shield — Unified Cross-Platform Release (2027)
 
@@ -610,6 +619,6 @@ Project Simurgh is designed to support two parallel delivery modes per platform 
 
 ## 13. Status & License
 
-**Status:** Research prototype and technical demonstrator. Stage 1 is complete as a bounded research MVP; Stage 1.5 provides validation and reviewer-readiness documentation; Stage 2 is planned. Not currently deployed in production.
+**Status:** Research prototype and technical demonstrator. Stage 1 is a bounded research MVP; Stage 1.5 ships validation + reviewer-readiness documentation; Stage 2.1 and 2.2 are merged (macOS integrity proofs + node pairing); v0.4.3 hardening pass merged. Stage 2.3 (macOS localhost daemon) is the next brick. Not currently deployed in production. Hardware attestation, browser SDK, and ScreenCaptureKit remain future work.
 
 **License:** MIT © 2026 Raouf Abedini

@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Last updated:** 2026-05-13
+**Last updated:** 2026-05-15 (Stage 2.2 + v0.4.3 hardening)
 
 Project Simurgh is a research prototype for privacy-preserving academic integrity verification. This document describes what data is collected, how it is used, and what is explicitly not collected.
 
@@ -10,33 +10,43 @@ Project Simurgh is a research prototype for privacy-preserving academic integrit
 
 Simurgh collects **behavioural metadata only**. No content is ever collected, stored, or transmitted.
 
-| Signal                           | Collected          | Purpose                      |
-| -------------------------------- | ------------------ | ---------------------------- |
-| Keystroke count per window       | ✅                 | Typing cadence analysis      |
-| Characters typed (count only)    | ✅                 | Cognitive load signal        |
-| Effective WPM                    | ✅                 | Superhuman cadence detection |
-| Focus loss count                 | ✅                 | Context-switch detection     |
-| Time off window (ms)             | ✅                 | Off-task duration signal     |
-| Paste count                      | ✅                 | Paste frequency              |
-| Paste length (chars, no content) | ✅                 | Bulk paste detection         |
-| Maximum idle gap (ms)            | ✅                 | Idle-then-paste pattern      |
-| Keydown timing intervals         | ✅ (capped at 200) | Rhythm analysis              |
-| Helper connection status         | ✅                 | Countermeasure A attestation |
-| Display-affinity alerts          | ✅                 | Invisible window detection   |
+| Signal                                              | Collected              | Purpose                                                           |
+| --------------------------------------------------- | ---------------------- | ----------------------------------------------------------------- |
+| Keystroke count per window                          | ✅                     | Typing cadence analysis                                           |
+| Characters typed (count only)                       | ✅                     | Cognitive load signal                                             |
+| Effective WPM                                       | ✅                     | Superhuman cadence detection                                      |
+| Focus loss count                                    | ✅                     | Context-switch detection                                          |
+| Time off window (ms)                                | ✅                     | Off-task duration signal                                          |
+| Paste count                                         | ✅                     | Paste frequency                                                   |
+| Paste length (chars, no content)                    | ✅                     | Bulk paste detection                                              |
+| Maximum idle gap (ms)                               | ✅                     | Idle-then-paste pattern                                           |
+| Keydown timing intervals                            | ✅ (capped at 200)     | Rhythm analysis                                                   |
+| Helper connection status                            | ✅                     | Countermeasure A attestation                                      |
+| Display-affinity alerts                             | ✅                     | Invisible window detection                                        |
+| Node ID hash (SHA-256 of Ed25519 pubkey)            | ✅                     | Stage 2.1/2.2 — node continuity check                             |
+| Node public key (base64)                            | ✅                     | Stage 2.2 — paired-session signature verification                 |
+| Pairing challenge hash                              | ✅                     | Stage 2.2 — pairing audit trail                                   |
+| Proof / pairing signatures (verify-only)            | ✅ (not stored as raw) | Stage 2.1/2.2 — Ed25519 verification; raw bytes never enter audit |
+| Capability flags (booleans)                         | ✅                     | Stage 2.1 — node capability summary                               |
+| Node uptime / window count / capture-excluded count | ✅                     | Stage 2.1 — numeric signals                                       |
 
 ## What We Never Collect
 
-| Data                         | Status           |
-| ---------------------------- | ---------------- |
-| Screen pixels or screenshots | ❌ Never         |
-| Webcam frames                | ❌ Never         |
-| Microphone audio             | ❌ Never         |
-| Typed answer content         | ❌ Never         |
-| Pasted text content          | ❌ Never         |
-| Raw student name or email    | ❌ Never         |
-| Biometric identifiers        | ❌ Never         |
-| IP address (stored)          | ❌ Not persisted |
-| Location data                | ❌ Never         |
+| Data                                    | Status                                                                    |
+| --------------------------------------- | ------------------------------------------------------------------------- |
+| Screen pixels or screenshots            | ❌ Never                                                                  |
+| Webcam frames                           | ❌ Never                                                                  |
+| Microphone audio                        | ❌ Never                                                                  |
+| Typed answer content                    | ❌ Never                                                                  |
+| Pasted text content                     | ❌ Never                                                                  |
+| Raw student name or email               | ❌ Never                                                                  |
+| Biometric identifiers                   | ❌ Never                                                                  |
+| IP address (stored)                     | ❌ Not persisted                                                          |
+| Location data                           | ❌ Never                                                                  |
+| Raw Ed25519 signatures (Stage 2)        | ❌ Never persisted to audit (verify-only)                                 |
+| Raw pairing challenge bytes (Stage 2.2) | ❌ Never (only the SHA-256 hash enters audit)                             |
+| Raw process names or window titles      | ❌ Never (Stage 2.1+ only ships counts and capability flags)              |
+| macOS node private key                  | ❌ Never leaves the local machine (stored at `~/.simurgh/node-key`, 0600) |
 
 ---
 
