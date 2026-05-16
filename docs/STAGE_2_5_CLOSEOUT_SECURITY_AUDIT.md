@@ -79,3 +79,20 @@ Stage 2.6 stays blocked if any of these fail:
 - macOS `swift test`, `swift build`, and `swift build -c release`
 
 This audit does not claim production readiness, notarisation, MDM readiness, hardware attestation, Windows/Linux support, or automatic misconduct detection.
+
+## External Review Status
+
+Stage 2.5 is closed, regression-gated, and ready for external technical review.
+
+This means the macOS Device Shield research prototype has completed its daemon, SDK, scanner, E2E smoke, and cybersecurity audit closeout cycle. Reviewers should evaluate the system as a research prototype, not as production endpoint-management software.
+
+External review is especially welcome on:
+
+- browser SDK trust boundaries
+- localhost daemon lifecycle
+- signed daemon proof validation
+- metadata-only scanner design
+- replay/tamper/missing-proof handling
+- recursive forbidden-field rejection
+- report/dashboard/audit integration
+- privacy and limitation wording
