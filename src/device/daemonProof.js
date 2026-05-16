@@ -1,6 +1,10 @@
 import crypto from "node:crypto";
 
 import { containsForbiddenLocalFieldDeep } from "./forbiddenLocalFields.js";
+import {
+  SUPPORTED_DEVICE_PLATFORMS,
+  validateScannerSummary,
+} from "./platformScannerSchema.js";
 
 export const DAEMON_VERSION = "0.4.7";
 export const DAEMON_PLATFORM = "macos";
@@ -8,7 +12,6 @@ export const DAEMON_CHALLENGE_BYTES = 32;
 export const DAEMON_TIMESTAMP_PAST_MS = 30_000;
 export const DAEMON_TIMESTAMP_FUTURE_MS = 5_000;
 const SUPPORTED_DAEMON_VERSIONS = new Set(["0.4.5", "0.4.7", "0.4.11"]);
-const SUPPORTED_DAEMON_PLATFORMS = new Set(["macos", "windows"]);
 
 const PROOF_REQUIRED_FIELDS = [
   "type",
@@ -26,19 +29,9 @@ const PROOF_REQUIRED_FIELDS = [
 ];
 
 const HELPER_STATES = new Set(["healthy", "missing", "stale", "risk_detected", "unknown"]);
-const SCANNER_STATES = new Set([
-  "healthy",
-  "risk_detected",
-  "restricted_detected",
-  "scanner_unavailable",
-  "permission_denied",
-  "scan_error",
-  "unsupported_macos_version",
-]);
 const SESSION_ID_PATTERN = /^[A-Za-z0-9_-]{1,64}$/;
 const EXAM_ID_PATTERN = /^[A-Za-z0-9_-]{1,80}$/;
 const NODE_ID_HASH_PATTERN = /^sha256:[a-f0-9]{64}$/;
-const FINGERPRINT_HASH_PATTERN = /^sha256:[a-f0-9]{64}$/;
 
 function fail(reason) {
   return { ok: false, reason };
@@ -53,102 +46,6 @@ function decodeBase64Url(value) {
   } catch {
     return null;
   }
-}
-
-function isNonNegativeInt(value, max = 100_000) {
-  return Number.isInteger(value) && value >= 0 && value <= max;
-}
-
-function validateScannerFields(raw) {
-  const scannerKeys = [
-    "scanner_state",
-    "scanner_version",
-    "scan_timestamp",
-    "scan_duration_ms",
-    "scan_error_count",
-    "suspicious_window_count",
-    "visible_window_count",
-    "capture_restricted_window_count",
-    "monitor_only_window_count",
-    "privacy_mode",
-    "window_fingerprint_hashes",
-  ];
-  const hasScannerFields = scannerKeys.some((key) => key in raw);
-  if (!hasScannerFields) {
-    return {
-      ok: true,
-      fields: {
-        scanner_state: raw.capture_excluded_window_count > 0 ? "risk_detected" : "healthy",
-        scanner_version: null,
-        scan_timestamp: null,
-        scan_duration_ms: null,
-        scan_error_count: 0,
-        suspicious_window_count: raw.capture_excluded_window_count,
-        visible_window_count: null,
-        capture_restricted_window_count: 0,
-        monitor_only_window_count: 0,
-        privacy_mode: "metadata_only",
-        window_fingerprint_hashes: [],
-      },
-    };
-  }
-  if (typeof raw.scanner_state !== "string" || !SCANNER_STATES.has(raw.scanner_state)) {
-    return fail("invalid_scanner_state");
-  }
-  const expectedScannerVersion = raw.platform === "windows" ? "2.6.0" : "2.5.0";
-  if (typeof raw.scanner_version !== "string" || raw.scanner_version !== expectedScannerVersion) {
-    return fail("invalid_scanner_version");
-  }
-  const scanTs = Date.parse(raw.scan_timestamp);
-  if (typeof raw.scan_timestamp !== "string" || !Number.isFinite(scanTs)) {
-    return fail("invalid_scan_timestamp");
-  }
-  if (!isNonNegativeInt(raw.scan_duration_ms, 60_000)) {
-    return fail("invalid_scan_duration_ms");
-  }
-  if (!isNonNegativeInt(raw.scan_error_count, 256)) return fail("invalid_scan_error_count");
-  if (!isNonNegativeInt(raw.suspicious_window_count, 256)) {
-    return fail("invalid_suspicious_window_count");
-  }
-  if (!isNonNegativeInt(raw.visible_window_count, 10_000)) {
-    return fail("invalid_visible_window_count");
-  }
-  const captureRestrictedWindowCount = raw.capture_restricted_window_count ?? 0;
-  const monitorOnlyWindowCount = raw.monitor_only_window_count ?? 0;
-  if (!isNonNegativeInt(captureRestrictedWindowCount, 256)) {
-    return fail("invalid_capture_restricted_window_count");
-  }
-  if (!isNonNegativeInt(monitorOnlyWindowCount, 256)) {
-    return fail("invalid_monitor_only_window_count");
-  }
-  if (raw.privacy_mode !== "metadata_only") return fail("invalid_privacy_mode");
-  if (!Array.isArray(raw.window_fingerprint_hashes) || raw.window_fingerprint_hashes.length > 256) {
-    return fail("invalid_window_fingerprint_hashes");
-  }
-  for (const hash of raw.window_fingerprint_hashes) {
-    if (typeof hash !== "string" || !FINGERPRINT_HASH_PATTERN.test(hash)) {
-      return fail("invalid_window_fingerprint_hashes");
-    }
-  }
-  if (raw.suspicious_window_count < raw.capture_excluded_window_count + monitorOnlyWindowCount) {
-    return fail("invalid_suspicious_window_count");
-  }
-  return {
-    ok: true,
-    fields: {
-      scanner_state: raw.scanner_state,
-      scanner_version: raw.scanner_version,
-      scan_timestamp: raw.scan_timestamp,
-      scan_duration_ms: raw.scan_duration_ms,
-      scan_error_count: raw.scan_error_count,
-      suspicious_window_count: raw.suspicious_window_count,
-      visible_window_count: raw.visible_window_count,
-      capture_restricted_window_count: captureRestrictedWindowCount,
-      monitor_only_window_count: monitorOnlyWindowCount,
-      privacy_mode: raw.privacy_mode,
-      window_fingerprint_hashes: [...raw.window_fingerprint_hashes],
-    },
-  };
 }
 
 export function canonicaliseDaemonPayload(payload) {
@@ -205,7 +102,7 @@ export function validateDaemonProof(
   }
 
   if (raw.type !== "simurgh.daemon.proof") return fail("invalid_type");
-  if (!SUPPORTED_DAEMON_PLATFORMS.has(raw.platform)) return fail("unsupported_platform");
+  if (!SUPPORTED_DEVICE_PLATFORMS.includes(raw.platform)) return fail("unsupported_platform");
   if (!SUPPORTED_DAEMON_VERSIONS.has(raw.daemon_version)) {
     return fail("unsupported_daemon_version");
   }
@@ -251,7 +148,7 @@ export function validateDaemonProof(
   ) {
     return fail("invalid_capture_excluded_window_count");
   }
-  const scannerValidation = validateScannerFields(raw);
+  const scannerValidation = validateScannerSummary(raw);
   if (!scannerValidation.ok) return scannerValidation;
   if (typeof raw.helper_state !== "string" || !HELPER_STATES.has(raw.helper_state)) {
     return fail("invalid_helper_state");
@@ -322,7 +219,7 @@ export function validateDaemonPairingPayload(
     if (!(field in signed_payload)) return fail(`missing_field:${field}`);
   }
   if (signed_payload.type !== "simurgh.daemon.pair") return fail("invalid_type");
-  if (!SUPPORTED_DAEMON_PLATFORMS.has(signed_payload.platform)) return fail("unsupported_platform");
+  if (!SUPPORTED_DEVICE_PLATFORMS.includes(signed_payload.platform)) return fail("unsupported_platform");
   if (!SUPPORTED_DAEMON_VERSIONS.has(signed_payload.daemon_version)) {
     return fail("unsupported_daemon_version");
   }
