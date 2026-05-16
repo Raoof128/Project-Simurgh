@@ -2,6 +2,25 @@
 
 ## Agent Change Log
 
+### 2026-05-16 (Australia/Sydney) — Stage 2.5 External Technical Review Signal
+
+**Raouf:**
+
+- **Scope:** Review-signal closeout artefact — signal Stage 2.5 external technical review readiness without touching Stage 2.6 feature code.
+- **Summary:**
+  - Updated README status block from "Stage 2.5 research prototype — macOS metadata-only affinity scanner active" to "Stage 2.5 closed — macOS Device Shield regression-gated and ready for external technical review."
+  - Fixed stale README Stage 2.5 section heading: `branch active — v0.4.7 target` → `frozen — v0.4.10`.
+  - Added `## External Technical Review` section to README (immediately after the status block) listing the full macOS Device Shield baseline, current verification numbers (234/234 tests, 50/50+ gates, Swift build/test, all smoke packs, security audit, privacy audit), an open-door statement for technical reviewers, and the honest non-claims list.
+  - Updated README Status & License section to reflect Stage 2.5 closeout state.
+  - Added `## External Review Status` section to `docs/STAGE_2_5_CLOSEOUT_SECURITY_AUDIT.md` with prototype framing and eight specific focus areas for reviewers.
+  - Pushed branch `stage-2-macos-external-review-signal`, opened PR #10, created and pinned GitHub Issue #11 "External Review Request: Stage 2.5 macOS Integrity Stack."
+- **Files Changed:**
+  - `README.md`
+  - `docs/STAGE_2_5_CLOSEOUT_SECURITY_AUDIT.md`
+  - `AGENT.md`, `CHANGELOG.md`
+- **Verification:** `npm test` — 234/234 pass. `npm audit --audit-level=high` — 0 vulnerabilities. `node tools/privacy-audit.mjs` — pass. `git diff --check` — clean. Docs-only change; no code, no gates altered.
+- **Follow-ups:** Merge PR #10. Then begin Stage 2.6 Windows daemon and display-affinity scanner work on `stage-2-6-windows-display-affinity-scanner`. Do not infer production deployment, notarisation, MDM readiness, hardware attestation, Windows/Linux support, raw process/window collection, or automatic misconduct detection.
+
 ### 2026-05-16 (Australia/Sydney) — Stage 2.5 Closeout Security Audit
 
 **Raouf:**
