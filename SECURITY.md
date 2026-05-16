@@ -4,18 +4,19 @@
 
 Project Simurgh is a research prototype. Security fixes are applied to the latest tagged release and the `main` branch.
 
-| Version                                      | Supported              |
-| -------------------------------------------- | ---------------------- |
-| `v0.4.11` (Stage 2.6 Windows scanner branch) | ✅ Active              |
-| `v0.4.7` (Stage 2.5 macOS scanner)           | ✅ Active              |
-| `v0.4.6` (Stage 2.4 SDK/lifecycle)           | ✅ Active              |
-| `v0.4.5` (Stage 2.3 daemon foundation)       | ✅ Active              |
-| `v0.4.3` (Stage 2 hardening)                 | ✅ Active              |
-| `v0.4.2` (Stage 2.2 macOS node pairing)      | ✅ Active              |
-| `v0.4.1` (Stage 2.1 macOS integrity)         | ✅ Active              |
-| `v0.3.x` (Stage 1 / 1.5)                     | ⚠️ Critical fixes only |
-| `main` (development)                         | ✅ Active              |
-| Earlier tags                                 | Not maintained         |
+| Version                                           | Supported              |
+| ------------------------------------------------- | ---------------------- |
+| `v0.4.12` (Stage 2.6B Windows scanner validation) | ✅ Active              |
+| `v0.4.11` (Stage 2.6 Windows scanner branch)      | ✅ Active              |
+| `v0.4.7` (Stage 2.5 macOS scanner)                | ✅ Active              |
+| `v0.4.6` (Stage 2.4 SDK/lifecycle)                | ✅ Active              |
+| `v0.4.5` (Stage 2.3 daemon foundation)            | ✅ Active              |
+| `v0.4.3` (Stage 2 hardening)                      | ✅ Active              |
+| `v0.4.2` (Stage 2.2 macOS node pairing)           | ✅ Active              |
+| `v0.4.1` (Stage 2.1 macOS integrity)              | ✅ Active              |
+| `v0.3.x` (Stage 1 / 1.5)                          | ⚠️ Critical fixes only |
+| `main` (development)                              | ✅ Active              |
+| Earlier tags                                      | Not maintained         |
 
 ## Reporting a Vulnerability
 
@@ -32,9 +33,9 @@ Include:
 
 You will receive a response within **72 hours**. If the vulnerability is confirmed, a fix will be prioritised for the next release. You will be credited in the changelog unless you request anonymity.
 
-## Security Architecture (v0.4.11)
+## Security Architecture (v0.4.12)
 
-> The trust-boundary table below describes the Stage 1 surface. Stage 2.1 added an Ed25519-signed integrity-proof envelope (`/api/integrity/proofs`); Stage 2.2 added per-session node pairing (`/api/integrity/pairing/{challenge,complete}`); v0.4.3 added rate limiting on the proofs route, cryptographically-reconciled audit hints (`safeParsedPairingHints`), and a constant-time challenge compare. Stage 2.3 adds a localhost daemon proof surface (`/api/device/{challenge,pair}` plus telemetry `daemon_proof`) with P-256 signatures. Stage 2.4 moves the browser bridge into a reusable SDK. Stage 2.5 adds a CoreGraphics-backed, metadata-only macOS scanner summary inside signed daemon proofs. Stage 2.6 extends the signed proof contract for Windows scanner metadata and adds a mock-first .NET daemon skeleton. This still does not constitute hardware attestation, notarised distribution, MDM/Intune readiness, Windows Service readiness, or a production device-trust claim.
+> The trust-boundary table below describes the Stage 1 surface. Stage 2.1 added an Ed25519-signed integrity-proof envelope (`/api/integrity/proofs`); Stage 2.2 added per-session node pairing (`/api/integrity/pairing/{challenge,complete}`); v0.4.3 added rate limiting on the proofs route, cryptographically-reconciled audit hints (`safeParsedPairingHints`), and a constant-time challenge compare. Stage 2.3 adds a localhost daemon proof surface (`/api/device/{challenge,pair}` plus telemetry `daemon_proof`) with P-256 signatures. Stage 2.4 moves the browser bridge into a reusable SDK. Stage 2.5 adds a CoreGraphics-backed, metadata-only macOS scanner summary inside signed daemon proofs. Stage 2.6B validates live Windows `GetWindowDisplayAffinity` detection on Windows 10 Pro build 19045 using a controlled local fixture. This still does not constitute hardware attestation, notarised distribution, MDM/Intune readiness, Windows Service readiness, kernel-level visibility, or a production device-trust claim.
 
 ### Stage 2.3 localhost daemon controls
 
@@ -67,6 +68,7 @@ You will receive a response within **72 hours**. If the vulnerability is confirm
 - `WDA_MONITOR` maps to Warning/manual review through `monitor_only_window_count > 0` and `capture_restricted_window_count > 0`.
 - Tampered scanner counts invalidate the P-256 daemon proof signature; replayed proof challenges are rejected.
 - Raw HWNDs, PIDs, process names, window titles, executable paths, usernames, home directories, screenshots, pixels, webcam frames, microphone audio, typed content, and pasted content are forbidden and rejected recursively with the generic `forbidden_local_field` reason.
+- Real-device validation on Windows 10 Pro build 19045 confirmed normal scans, `WDA_MONITOR`, `WDA_EXCLUDEFROMCAPTURE`, signed proof acceptance, tamper/replay rejection, report/dashboard output, audit verification, and privacy audit.
 
 ### Stage 1 Trust Boundaries
 

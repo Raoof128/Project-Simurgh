@@ -2,6 +2,30 @@
 
 ## Agent Change Log
 
+### 2026-05-16 (Australia/Sydney) — Stage 2.6 Windows Display Affinity Scanner Real-Device Validation
+
+**Raouf:**
+
+- **Scope:** Stage 2.6B — real Windows laptop validation for Win32 display-affinity detection.
+- **Summary:**
+  - Validated the Windows daemon on Windows 10 Pro build 19045.
+  - Added a controlled local `SimurghAffinityFixture` with `none`, `monitor`, and `exclude` modes for real `SetWindowDisplayAffinity` validation.
+  - Confirmed normal desktop scanner state with zero restricted/excluded counts.
+  - Confirmed `WDA_MONITOR` increments `monitor_only_window_count` and `capture_restricted_window_count`.
+  - Confirmed `WDA_EXCLUDEFROMCAPTURE` increments `capture_excluded_window_count` and moves scanner state to `risk_detected`.
+  - Confirmed signed Windows scanner proofs are accepted by the server and mapped to Warning/Critical manual-review context.
+  - Confirmed tampered, replayed, and raw-field proofs are rejected, with raw local fields rejected as `forbidden_local_field`.
+  - Confirmed reports, dashboard state, audit-chain verification, privacy audit, and baseline gates remain green.
+- **Files Changed:**
+  - `tools/simurgh-daemon-windows/SimurghDaemon.Windows.sln`
+  - `tools/simurgh-daemon-windows/src/SimurghAffinityFixture/`
+  - `tools/simurgh-daemon-windows/src/SimurghDaemon.Windows/{DaemonProof,JsonResponse,LocalHttpServer,Program,ProofSigner}.cs`
+  - `tools/simurgh-daemon-windows/tests/SimurghDaemon.Windows.Tests/{AffinityFixtureProjectTests,LocalHttpServerTests}.cs`
+  - `docs/STAGE_2_6_WINDOWS_DISPLAY_AFFINITY_SCANNER.md`
+  - `README.md`, `SECURITY.md`, `PRIVACY.md`, `ROADMAP.md`, `AGENT.md`, `CHANGELOG.md`
+- **Verification:** Windows OS check: Windows 10 Pro build 19045. Toolchain: Git 2.53.0, Node 24.14.0, npm 11.9.0, .NET 8.0.421. Baseline before edits: `git diff --check` clean; `npm test` passed 239/239; `npm audit --audit-level=high` passed with 0 vulnerabilities; `node tools/privacy-audit.mjs` passed; Git Bash `scripts/smoke-stage-2-6-windows-scanner.sh` passed; Git Bash `scripts/security-audit-stage-2-4-2-5.sh` passed; Git Bash `scripts/check.sh` passed 44/44; `.tools/dotnet/dotnet.exe build tools/simurgh-daemon-windows/SimurghDaemon.Windows.sln` passed; `.tools/dotnet/dotnet.exe test tools/simurgh-daemon-windows/SimurghDaemon.Windows.sln --no-restore` passed 8/8 before fixture and 11/11 after fixture. Runtime validation: `/health` returned platform `windows`; `/status` returned scanner version `2.6.0` and `metadata_only`; normal scan returned zero restricted/excluded counts; `WDA_MONITOR` returned `restricted_detected`, `monitor_only_window_count: 1`, `capture_restricted_window_count: 1`; `WDA_EXCLUDEFROMCAPTURE` returned `risk_detected`, `capture_excluded_window_count: 1`; live daemon proof chain accepted healthy/monitor/exclude proofs, rejected tampered proof with `invalid_signature`, rejected replayed proof with consumed challenge, rejected raw `hwnd` as `forbidden_local_field`, generated Windows report/dashboard state, and verified the audit chain. Privacy sweep found only expected forbidden-field rejection references in test logs.
+- **Follow-ups:** Open PR, merge after GitHub Actions pass, and tag `v0.4.12-stage-2-6-windows-display-affinity-scanner` or the chosen release tag. Do not claim production Windows Service deployment, MDM/Intune readiness, hardware attestation, kernel-level visibility, Linux scanner support, or automatic misconduct detection.
+
 ### 2026-05-16 (Australia/Sydney) — Stage 2.6 Windows Display Affinity Scanner
 
 **Raouf:**

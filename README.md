@@ -21,13 +21,13 @@ _Detecting UI-redressing and behavioral spoofing without relying on screen captu
 
 </div>
 
-> **Status: Stage 2.6A implementation-complete — pending real Windows laptop validation.** Browser daemon logic lives in a reusable SDK, signed daemon proofs include privacy-safe scanner summaries, and the server accepts signed Windows scanner metadata for `WDA_EXCLUDEFROMCAPTURE` and `WDA_MONITOR` risk mapping. Real `GetWindowDisplayAffinity` validation is still required before closing Stage 2.6 or making any production/deployment claim. The system does not collect video, audio, biometric data, typed answer content, pasted content, raw process names, raw window titles, HWNDs, PIDs, usernames, serial numbers, MAC addresses, or personal identity data. See [PRIVACY.md](PRIVACY.md), [ETHICS.md](ETHICS.md), and [DISCLAIMER.md](DISCLAIMER.md).
+> **Status: Stage 2.6B real Windows display-affinity validation passed.** Browser daemon logic lives in a reusable SDK, signed daemon proofs include privacy-safe scanner summaries, and the Windows daemon has been validated on Windows 10 Pro build 19045 for live `GetWindowDisplayAffinity` detection of `WDA_MONITOR` and `WDA_EXCLUDEFROMCAPTURE`. The system remains a research prototype and does not claim production Windows Service deployment, MDM/Intune readiness, hardware attestation, kernel-level visibility, or automatic misconduct detection. It does not collect video, audio, biometric data, typed answer content, pasted content, raw process names, raw window titles, HWNDs, PIDs, usernames, serial numbers, MAC addresses, or personal identity data. See [PRIVACY.md](PRIVACY.md), [ETHICS.md](ETHICS.md), and [DISCLAIMER.md](DISCLAIMER.md).
 
 ---
 
 ## External Technical Review
 
-Project Simurgh Stage 2.5 is closed for macOS research validation and ready for external technical review.
+Project Simurgh Stage 2.6B is closed for Windows display-affinity research validation and ready for external technical review.
 
 The current macOS Device Shield baseline includes:
 
@@ -41,14 +41,16 @@ The current macOS Device Shield baseline includes:
 - Stage 2.4/2.5 E2E smoke coverage
 - Stage 2.5 closeout cybersecurity audit coverage
 - Stage 2.6 Windows scanner smoke coverage
+- Stage 2.6B real Windows laptop validation for `WDA_MONITOR` and `WDA_EXCLUDEFROMCAPTURE`
 - recursive rejection of forbidden raw local fields
 - privacy audit and npm audit gates
 
 **Current verification:**
 
-- 234/234 Node tests passing
-- 50/50+ quality gates passing
+- 239/239 Node tests passing
+- 44/44 Windows quality gates passing
 - Swift daemon build/test passing
+- Windows .NET daemon build/test passing
 - Stage 2.2/2.3 E2E smoke passing
 - Stage 2.4/2.5 E2E smoke passing
 - Stage 2.5 closeout security audit passing
@@ -63,7 +65,7 @@ The project is open for technical review from researchers, engineers, and organi
 - no hardware attestation claim
 - no automatic misconduct finding
 - no raw process name or raw window title collection
-- real Windows laptop validation remains pending
+- no Windows Service, MDM/Intune, or production endpoint-management claim
 - Linux support remains in progress
 
 **Technical brief:** [`docs/STAGE_2_5_TECHNICAL_BRIEF.md`](docs/STAGE_2_5_TECHNICAL_BRIEF.md) — full Stage 1–2.5 architecture, cryptographic detail, privacy contract, validation gates, limitations, and non-claims.

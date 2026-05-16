@@ -24,6 +24,8 @@ public sealed class ProofSigner(WindowsIdentityStore identity)
             Platform: "windows",
             ScannerState: scan.ScannerState,
             ScannerVersion: scan.ScannerVersion,
+            ScanTimestamp: timestamp.UtcDateTime.ToString("O"),
+            ScanDurationMs: 0,
             VisibleWindowCount: scan.VisibleWindowCount,
             SuspiciousWindowCount: scan.SuspiciousWindowCount,
             CaptureExcludedWindowCount: scan.CaptureExcludedWindowCount,
@@ -31,6 +33,7 @@ public sealed class ProofSigner(WindowsIdentityStore identity)
             MonitorOnlyWindowCount: scan.MonitorOnlyWindowCount,
             ScanErrorCount: scan.ScanErrorCount,
             PrivacyMode: scan.PrivacyMode,
+            WindowFingerprintHashes: [],
             HelperState: "healthy",
             Challenge: challenge,
             Signature: "");
@@ -51,5 +54,28 @@ public sealed class ProofSigner(WindowsIdentityStore identity)
         {
             return false;
         }
+    }
+
+    public DaemonPairResponse CreatePair(
+        string sessionId,
+        string examId,
+        string challenge,
+        DateTimeOffset timestamp)
+    {
+        var signedPayload = new DaemonPairSignedPayload(
+            Type: "simurgh.daemon.pair",
+            SessionId: sessionId,
+            ExamId: examId,
+            Challenge: challenge,
+            Timestamp: timestamp.UtcDateTime.ToString("O"),
+            NodeIdHash: identity.NodeIdHash,
+            DaemonVersion: "0.4.11",
+            Platform: "windows");
+        var canonical = CanonicalJson.SerializeWithoutSignature(signedPayload);
+        var signature = identity.Key.SignData(
+            Encoding.UTF8.GetBytes(canonical),
+            HashAlgorithmName.SHA256,
+            DSASignatureFormat.Rfc3279DerSequence);
+        return new DaemonPairResponse(true, identity.NodeIdHash, identity.PublicKey, signedPayload, Base64Url.Encode(signature));
     }
 }
