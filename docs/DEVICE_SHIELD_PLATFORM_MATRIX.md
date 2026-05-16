@@ -29,9 +29,9 @@ Linux remains a Stage 2.8+ research target. Stage 2.7 daemons rejecting `platfor
 
 ## 2. README Coverage Matrix (reconciled)
 
-The `README.md` carries two related tables: one for browser-based telemetry coverage and one for production-packaging plans. Reproduced here verbatim for cross-reference, with Stage 2.7 reconciliation notes:
+The `README.md` carries two related coverage tables — one for browser-based telemetry, one for the strategic Phase 3b packaging plan — using different schemas to those above. The tables below are **reconciled views** (not verbatim copies) that normalise the README content into the Stage 2.7 vocabulary, so reviewers can cross-check without flipping back and forth. The authoritative wording in `README.md` remains the source of truth; Stage 2.7 Task 15 brings the README's roadmap items in line with the v0.4.12 baseline.
 
-### 2.1 Telemetry coverage (`README.md` near line 383)
+### 2.1 Telemetry coverage (reconciled from `README.md` §4)
 
 | Host OS | Browser Coverage | Helper Coverage                                    |
 | ------- | ---------------- | -------------------------------------------------- |
@@ -39,9 +39,9 @@ The `README.md` carries two related tables: one for browser-based telemetry cove
 | macOS   | Full             | Yes via `tools/simurgh-daemon-macos` (Stage 2.3+)  |
 | Linux   | Full             | None — Stage 2.8 research                          |
 
-> **Stage 2.7 reconciliation:** The README previously described Windows helper coverage as "Roadmap — `simurgh-helper-win` (Win32 API)" — that wording predates Stage 2.6 and is superseded by the Windows .NET daemon shipped in v0.4.12. The Windows row above reflects the v0.4.12 baseline.
+> **Stage 2.7 reconciliation:** The README's Phase 2 roadmap still carries the pre-Stage-2.6 line "Develop `simurgh-helper-win` using `SetWindowDisplayAffinity` enumeration via Win32 API" as a planned item. The Windows row above reflects the v0.4.12 baseline; Stage 2.7 Task 15 brings the README's Phase 2 list in line.
 
-### 2.2 Packaging plans (`README.md` near line 685)
+### 2.2 Packaging plans (reconciled from `README.md` §11 Phase 3b)
 
 | Host OS | Daemon Status      | Packaging Target                   | Native Helper Status                             |
 | ------- | ------------------ | ---------------------------------- | ------------------------------------------------ |
