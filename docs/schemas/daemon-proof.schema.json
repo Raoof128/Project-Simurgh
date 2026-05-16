@@ -1,0 +1,154 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://simurgh.local/schemas/daemon-proof.schema.json",
+  "title": "Simurgh Daemon Proof",
+  "description": "Canonical signed proof envelope produced by the cross-platform Simurgh integrity daemon (macOS and Windows). Mirrors the shape accepted by src/device/daemonProof.js:validateDaemonProof at the Stage 2.7 baseline.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "type",
+    "session_id",
+    "exam_id",
+    "sequence",
+    "timestamp",
+    "node_id_hash",
+    "daemon_version",
+    "platform",
+    "capture_excluded_window_count",
+    "helper_state",
+    "challenge",
+    "signature"
+  ],
+  "properties": {
+    "type": {
+      "$comment": "Fixed message-type discriminator; rejected as invalid_type otherwise.",
+      "type": "string",
+      "const": "simurgh.daemon.proof"
+    },
+    "session_id": {
+      "$comment": "Exam-session identifier; matches /^[A-Za-z0-9_-]{1,64}$/.",
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,64}$"
+    },
+    "exam_id": {
+      "$comment": "Exam identifier; matches /^[A-Za-z0-9_-]{1,80}$/.",
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,80}$"
+    },
+    "sequence": {
+      "$comment": "Monotonic non-negative integer assigned by the daemon per proof.",
+      "type": "integer",
+      "minimum": 0
+    },
+    "timestamp": {
+      "$comment": "ISO-8601 timestamp; rejected if more than 5s in the future or 30s in the past.",
+      "type": "string",
+      "format": "date-time"
+    },
+    "node_id_hash": {
+      "$comment": "sha256: hex digest of the daemon's SPKI DER public key; must equal the paired node hash.",
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "daemon_version": {
+      "$comment": "Daemon build identifier; must be in the server-side allow-list (e.g. 0.4.5, 0.4.7, 0.4.11).",
+      "type": "string"
+    },
+    "platform": {
+      "$comment": "Operating-system platform that produced the proof. Linux is currently rejected as unsupported_platform.",
+      "type": "string",
+      "enum": ["macos", "windows"]
+    },
+    "capture_excluded_window_count": {
+      "$comment": "Aggregate count of windows observed with capture-excluded display affinity (NSWindow.SharingType.none on macOS, WDA_EXCLUDEFROMCAPTURE on Windows). Any value > 0 escalates to Critical/manual review.",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 256
+    },
+    "capture_restricted_window_count": {
+      "$comment": "Aggregate count of windows observed with restricted (but not excluded) capture affinity. Optional; Windows-leaning counter.",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 256
+    },
+    "monitor_only_window_count": {
+      "$comment": "Aggregate count of windows flagged as WDA_MONITOR (Windows). macOS emits 0.",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 256
+    },
+    "helper_state": {
+      "$comment": "Native helper state vocabulary; copied from daemonProof.js HELPER_STATES.",
+      "type": "string",
+      "enum": ["healthy", "missing", "stale", "risk_detected", "unknown"]
+    },
+    "scanner_state": {
+      "$comment": "Scanner state vocabulary; copied from daemonProof.js SCANNER_STATES. 'unsupported_macos_version' is historical and only emitted by macOS.",
+      "type": "string",
+      "enum": [
+        "healthy",
+        "risk_detected",
+        "restricted_detected",
+        "scanner_unavailable",
+        "permission_denied",
+        "scan_error",
+        "unsupported_macos_version"
+      ]
+    },
+    "scanner_version": {
+      "$comment": "Platform-specific scanner version. macOS baseline 2.5.0; Windows baseline 2.6.0.",
+      "type": "string"
+    },
+    "scan_timestamp": {
+      "$comment": "ISO-8601 timestamp of the underlying scan that produced the scanner summary.",
+      "type": "string",
+      "format": "date-time"
+    },
+    "scan_duration_ms": {
+      "$comment": "Wall-clock duration of the scan, in milliseconds; bounded at 60000.",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 60000
+    },
+    "scan_error_count": {
+      "$comment": "Non-fatal scan-error count; bounded at 256.",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 256
+    },
+    "suspicious_window_count": {
+      "$comment": "Aggregate count of windows the scanner flagged as suspicious. Must be >= capture_excluded + monitor_only.",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 256
+    },
+    "visible_window_count": {
+      "$comment": "Total visible-window count observed by the scanner; bounded at 10000.",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 10000
+    },
+    "privacy_mode": {
+      "$comment": "Constant privacy-contract marker. Anything other than 'metadata_only' is rejected.",
+      "type": "string",
+      "const": "metadata_only"
+    },
+    "window_fingerprint_hashes": {
+      "$comment": "Optional array of sha256: window-fingerprint hashes (max 256). No raw titles, HWNDs, PIDs, or process names.",
+      "type": "array",
+      "maxItems": 256,
+      "items": {
+        "type": "string",
+        "pattern": "^sha256:[a-f0-9]{64}$"
+      }
+    },
+    "challenge": {
+      "$comment": "Server-issued base64url challenge; 32 raw bytes after decoding.",
+      "type": "string"
+    },
+    "signature": {
+      "$comment": "P-256 ECDSA signature over the canonicalised payload (sorted-key JSON, 'signature' key excluded), base64url-encoded.",
+      "type": "string"
+    }
+  }
+}
