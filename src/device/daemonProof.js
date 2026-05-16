@@ -1,5 +1,7 @@
 import crypto from "node:crypto";
 
+import { containsForbiddenLocalFieldDeep } from "./forbiddenLocalFields.js";
+
 export const DAEMON_VERSION = "0.4.7";
 export const DAEMON_PLATFORM = "macos";
 export const DAEMON_CHALLENGE_BYTES = 32;
@@ -23,38 +25,6 @@ const PROOF_REQUIRED_FIELDS = [
   "signature",
 ];
 
-const FORBIDDEN_FIELDS = [
-  "device_serial",
-  "serial_number",
-  "mac_address",
-  "username",
-  "home_directory",
-  "process_name",
-  "process_id",
-  "window_title",
-  "raw_window_title",
-  "window_handle",
-  "hwnd",
-  "screenshot",
-  "screen_pixels",
-  "screen_frame",
-  "raw_window",
-  "raw_process",
-  "raw_process_name",
-  "pid",
-  "process_identifier",
-  "bundle_path",
-  "executable_path",
-  "file_path",
-  "microphone",
-  "audio",
-  "webcam",
-  "typed_content",
-  "paste_content",
-  "answer_text",
-  "answer_content",
-];
-
 const HELPER_STATES = new Set(["healthy", "missing", "stale", "risk_detected", "unknown"]);
 const SCANNER_STATES = new Set([
   "healthy",
@@ -72,23 +42,6 @@ const FINGERPRINT_HASH_PATTERN = /^sha256:[a-f0-9]{64}$/;
 
 function fail(reason) {
   return { ok: false, reason };
-}
-
-function findForbiddenField(value) {
-  if (value === null || typeof value !== "object") return null;
-  if (Array.isArray(value)) {
-    for (const item of value) {
-      const nested = findForbiddenField(item);
-      if (nested) return nested;
-    }
-    return null;
-  }
-  for (const [key, nestedValue] of Object.entries(value)) {
-    if (FORBIDDEN_FIELDS.includes(key)) return key;
-    const nested = findForbiddenField(nestedValue);
-    if (nested) return nested;
-  }
-  return null;
 }
 
 function decodeBase64Url(value) {
@@ -243,7 +196,7 @@ export function validateDaemonProof(
     return fail("proof_not_an_object");
   }
 
-  const forbiddenField = findForbiddenField(raw);
+  const forbiddenField = containsForbiddenLocalFieldDeep(raw);
   if (forbiddenField) return fail("forbidden_local_field");
   for (const field of PROOF_REQUIRED_FIELDS) {
     if (!(field in raw) || raw[field] === null || raw[field] === undefined) {
@@ -354,7 +307,7 @@ export function validateDaemonPairingPayload(
   ) {
     return fail("signed_payload_not_an_object");
   }
-  const forbiddenField = findForbiddenField(raw);
+  const forbiddenField = containsForbiddenLocalFieldDeep(raw);
   if (forbiddenField) return fail("forbidden_local_field");
   for (const field of [
     "type",
