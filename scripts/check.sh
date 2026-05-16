@@ -1097,6 +1097,20 @@ else
   fi
 fi
 
+# ── 10h. Stage 2.2/2.3 closeout E2E smoke ───────────────
+if [[ "$QUICK" == true ]]; then
+  step "Stage 2.2/2.3 E2E smoke"
+  echo -e "${YELLOW}Skipped because --quick was used.${NC}"
+else
+  step "Stage 2.2/2.3 E2E smoke"
+  if scripts/smoke-stage-2-2-2-3.sh > "$LOG_DIR/stage22-23-e2e-smoke.log" 2>&1; then
+    pass "Stage 2.2/2.3 E2E smoke: pairing + daemon proof bridge"
+  else
+    fail "Stage 2.2/2.3 E2E smoke: pairing + daemon proof bridge"
+    tail -80 "$LOG_DIR/stage22-23-e2e-smoke.log"
+  fi
+fi
+
 # ── 10h. Stage 2.4/2.5 closeout E2E smoke ───────────────
 if [[ "$QUICK" == true ]]; then
   step "Stage 2.4/2.5 E2E smoke"

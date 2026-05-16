@@ -1,5 +1,29 @@
 ## Change Log
 
+## [0.4.9] — 2026-05-16 — Stage 2.2/2.3 E2E Smoke Closeout
+
+### Added
+
+- `scripts/smoke-stage-2-2-2-3.sh` — closeout smoke wrapper for Stage 2.2 node pairing and Stage 2.3 daemon proof flows.
+- `tests/e2e/stage22_23_smoke.mjs` — CI-safe E2E driver covering verified node pairing, signed integrity proofs, different-node rejection, stale proof rejection, nonce replay rejection, invalid signature rejection, daemon pairing/proofs, daemon proof replay/tamper rejection, reports, dashboard state, audit verification, and hardened missing-proof mode.
+- `docs/superpowers/plans/2026-05-16-stage-2-2-2-3-e2e-smoke-pack.md` — implementation plan for the Stage 2.2/2.3 smoke pack.
+- `scripts/check.sh` gate: `Stage 2.2/2.3 E2E smoke: pairing + daemon proof bridge`.
+
+### Changed
+
+- README now documents the dedicated Stage 2.2/2.3 smoke command and the bridge checks it performs before later Stage 2 work.
+
+### Verified
+
+- Targeted red step confirmed `tests/e2e/stage22_23_smoke.mjs` was missing before implementation.
+- `scripts/smoke-stage-2-2-2-3.sh` — pass.
+- Final verification after edits: `git diff --check` — clean; `npm test` — 234/234 pass; `./scripts/check.sh` — 50/50 gates pass; `swift test` in `tools/simurgh-daemon-macos` — 8/8 pass; `swift build` in `tools/simurgh-daemon-macos` — pass.
+
+### Notes
+
+- This is a Stage 2.2/2.3 smoke gate, not Stage 2.6 feature work.
+- No production deployment, hardware attestation, notarisation, MDM readiness, Windows/Linux daemon support, or automatic misconduct detection is claimed.
+
 ## [0.4.8] — 2026-05-16 — Stage 2.4/2.5 E2E Smoke Closeout
 
 ### Added

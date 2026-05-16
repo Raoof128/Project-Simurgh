@@ -2,6 +2,25 @@
 
 ## Agent Change Log
 
+### 2026-05-16 (Australia/Sydney) — Stage 2.2/2.3 E2E Smoke Closeout
+
+**Raouf:**
+
+- **Scope:** Stage 2.2 + Stage 2.3 closeout — pairing, integrity proof, daemon proof, hardened-required, report, dashboard, audit, and privacy E2E smoke.
+- **Summary:**
+  - Added `scripts/smoke-stage-2-2-2-3.sh`, a dedicated smoke wrapper that starts daemon-optional and daemon-required demo servers, runs the Stage 2.2/2.3 Node E2E driver, runs privacy audit, and performs macOS-only Swift daemon build/test/help checks when available.
+  - Added `tests/e2e/stage22_23_smoke.mjs`, which verifies Ed25519 node pairing, verified integrity proofs, different-node rejection, nonce replay rejection, stale proof rejection, invalid registered-signature rejection, deterministic mock P-256 daemon pairing/proofs, daemon proof replay/tamper rejection, hardened missing-proof rejection, report/dashboard `device_integrity`, and HMAC audit verification.
+  - Added the smoke wrapper to `scripts/check.sh` as `Stage 2.2/2.3 E2E smoke: pairing + daemon proof bridge`.
+  - Documented the smoke command in README and captured the Superpowers implementation plan under `docs/superpowers/plans/`.
+- **Files Changed:**
+  - `scripts/smoke-stage-2-2-2-3.sh`
+  - `tests/e2e/stage22_23_smoke.mjs`
+  - `docs/superpowers/plans/2026-05-16-stage-2-2-2-3-e2e-smoke-pack.md`
+  - `scripts/check.sh`
+  - `README.md`, `AGENT.md`, `CHANGELOG.md`
+- **Verification:** Targeted red step confirmed `tests/e2e/stage22_23_smoke.mjs` was missing before implementation. Targeted closeout smoke: `scripts/smoke-stage-2-2-2-3.sh` → pass. Final verification after edits: `git diff --check` → clean; `npm test` → 234/234 pass; `./scripts/check.sh` → 50/50 gates pass; `swift test` in `tools/simurgh-daemon-macos` → 8/8 pass; `swift build` in `tools/simurgh-daemon-macos` → pass.
+- **Follow-ups:** Keep this Stage 2.2/2.3 bridge smoke green before relying on Stage 2.4/2.5 or Stage 2.6 work. No production deployment, hardware attestation, notarisation, MDM readiness, Windows/Linux daemon support, or automatic misconduct detection is claimed.
+
 ### 2026-05-16 (Australia/Sydney) — Stage 2.4/2.5 E2E Smoke Closeout
 
 **Raouf:**

@@ -222,10 +222,11 @@ Run the suite locally before pushing:
 ./scripts/check.sh --quick      # pre-commit (skips server boot + chain self-test, ~3s)
 ./scripts/check.sh --fix        # auto-format with Prettier instead of check
 ./scripts/check.sh --verbose    # stream command output instead of writing to logs
+./scripts/smoke-stage-2-2-2-3.sh # Stage 2.2/2.3 E2E smoke: pairing + daemon proof bridge
 ./scripts/smoke-stage-2-4-2-5.sh # Stage 2.4/2.5 E2E smoke: SDK + daemon + scanner + signed proof
 ```
 
-The script enforces: Node >= 22, JS syntax, Prettier format, unit tests, privacy audit (CLI + composite field grep + forbidden npm packages), secret scan, tone check, `npm audit`, server boot + auth gates + security headers + replay rejection, audit chain build/verify round-trip, Stage 2 integrity and daemon gates, browser SDK loading/tests, LaunchAgent plist lint, Stage 2.5 scanner proof/risk/report tests, the Stage 2.4/2.5 E2E smoke pack, Swift build/test, and git state. Failed steps write a tail of their log to `.simurgh_check_logs/`.
+The script enforces: Node >= 22, JS syntax, Prettier format, unit tests, privacy audit (CLI + composite field grep + forbidden npm packages), secret scan, tone check, `npm audit`, server boot + auth gates + security headers + replay rejection, audit chain build/verify round-trip, Stage 2 integrity and daemon gates, browser SDK loading/tests, LaunchAgent plist lint, Stage 2.5 scanner proof/risk/report tests, the Stage 2.2/2.3 and Stage 2.4/2.5 E2E smoke packs, Swift build/test, and git state. Failed steps write a tail of their log to `.simurgh_check_logs/`.
 
 Individual checks can also be run directly:
 
@@ -248,6 +249,14 @@ Stage 2.2 binds a browser exam session to a macOS node public key. The server is
 ### Stage 2.3 macOS Localhost Daemon (merged — v0.4.5)
 
 Stage 2.3 adds a macOS localhost daemon under `tools/simurgh-daemon-macos/`. The browser probes `127.0.0.1:3031`, requests server challenges from `POST /api/device/challenge`, pairs the daemon through `POST /api/device/pair`, and can attach signed `daemon_proof` metadata to `POST /api/telemetry`. The server verifies P-256 signatures, rejects replayed challenges, updates `daemon_risk`, appends daemon audit events, and includes `device_integrity` in reports. Design doc: [`docs/STAGE_2_3_MACOS_LOCALHOST_DAEMON.md`](docs/STAGE_2_3_MACOS_LOCALHOST_DAEMON.md).
+
+Stage 2.2/2.3 closeout can be run independently:
+
+```bash
+./scripts/smoke-stage-2-2-2-3.sh
+```
+
+The smoke starts daemon-optional and daemon-required demo servers, verifies Ed25519 node pairing and verified integrity proofs, rejects different-node proofs, stale proofs, nonce replay, invalid signatures, pairs a deterministic mock P-256 daemon, verifies signed daemon proof telemetry, rejects replayed/tampered daemon proofs, checks report/dashboard `device_integrity`, verifies audit chains, and confirms `SIMURGH_REQUIRE_DAEMON=true` still rejects missing daemon proofs with `DAEMON_MISSING`.
 
 ### Stage 2.4 Browser SDK & Daemon Lifecycle Hardening (merged — v0.4.6)
 
