@@ -188,7 +188,7 @@ fi
 # Only flag unambiguous data-field shapes (underscored composites + raw_*).
 # Single-word terms like "microphone" or "audio" are too noisy for source grep —
 # tools/privacy-audit.mjs catches them in JSON data files where context is clear.
-FORBIDDEN_FIELDS_PATTERN='\b(typed_content|paste_content|answer_text|answer_content|screen_frame|screen_data|webcam_frame|microphone_data|microphone_audio|biometric_data|face_data|raw_student_name|raw_identity|device_serial|serial_number|mac_address|username|home_directory|process_name|window_title|raw_window|raw_process)\b'
+FORBIDDEN_FIELDS_PATTERN='\b(typed_content|paste_content|answer_text|answer_content|screen_frame|screen_data|screen_pixels|webcam_frame|microphone_data|microphone_audio|biometric_data|face_data|raw_student_name|raw_identity|device_serial|serial_number|mac_address|username|home_directory|bundle_path|file_path|process_identifier|process_name|raw_process_name|window_title|raw_window_title|raw_window|raw_process)\b'
 PRIVACY_GREP_LOG="$LOG_DIR/privacy-fields.log"
 
 if grep -RIEn "$FORBIDDEN_FIELDS_PATTERN" \
@@ -1047,6 +1047,53 @@ else
     fi
   else
     echo -e "${YELLOW}Not on macOS or Swift unavailable — skipping daemon lifecycle smoke${NC}"
+  fi
+fi
+
+# ── 10g. Stage 2.5 — macOS affinity scanner ─────────────
+if [[ "$QUICK" == true ]]; then
+  step "Stage 2.5 macOS affinity scanner"
+  echo -e "${YELLOW}Skipped because --quick was used.${NC}"
+else
+  step "Stage 2.5 macOS affinity scanner"
+
+  if node --test tests/unit/daemonProofScanner.test.js > "$LOG_DIR/stage25-daemon-proof-scanner.log" 2>&1; then
+    pass "Stage 2.5 scanner proof accepts zero-count, risk, privacy, and tamper cases"
+  else
+    fail "Stage 2.5 scanner proof validation"
+    tail -40 "$LOG_DIR/stage25-daemon-proof-scanner.log"
+  fi
+
+  if node --test tests/unit/daemonScannerRisk.test.js > "$LOG_DIR/stage25-daemon-scanner-risk.log" 2>&1; then
+    pass "Stage 2.5 scanner risk maps unavailable to warning and excluded windows to Critical"
+  else
+    fail "Stage 2.5 scanner risk mapping"
+    tail -40 "$LOG_DIR/stage25-daemon-scanner-risk.log"
+  fi
+
+  if node --test tests/unit/reportBuilderScanner.test.js > "$LOG_DIR/stage25-report-scanner.log" 2>&1; then
+    pass "Stage 2.5 report includes privacy-safe scanner summary"
+  else
+    fail "Stage 2.5 report scanner summary"
+    tail -40 "$LOG_DIR/stage25-report-scanner.log"
+  fi
+
+  if [[ "$(uname)" == "Darwin" ]] && command -v swift >/dev/null 2>&1; then
+    if (cd tools/simurgh-daemon-macos && swift test --filter AffinityScannerTests) > "$LOG_DIR/stage25-swift-scanner.log" 2>&1; then
+      pass "Stage 2.5 Swift scanner mock risk and privacy regression"
+    else
+      fail "Stage 2.5 Swift scanner tests"
+      tail -40 "$LOG_DIR/stage25-swift-scanner.log"
+    fi
+
+    if (cd tools/simurgh-daemon-macos && swift test --filter ScannerProofTests) > "$LOG_DIR/stage25-swift-proof.log" 2>&1; then
+      pass "Stage 2.5 Swift proof includes signed scanner fields"
+    else
+      fail "Stage 2.5 Swift scanner proof tests"
+      tail -40 "$LOG_DIR/stage25-swift-proof.log"
+    fi
+  else
+    echo -e "${YELLOW}Not on macOS or Swift unavailable — skipping Stage 2.5 Swift scanner tests${NC}"
   fi
 fi
 

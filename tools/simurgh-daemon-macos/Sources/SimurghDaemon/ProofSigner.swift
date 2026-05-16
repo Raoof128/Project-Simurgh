@@ -2,10 +2,11 @@ import Foundation
 
 final class ProofSigner {
     let identity: KeychainIdentity
-    let scanner = AffinityScanner()
+    let scanner: AffinityScanner
 
-    init(identity: KeychainIdentity) {
+    init(identity: KeychainIdentity, scanner: AffinityScanner = AffinityScanner()) {
         self.identity = identity
+        self.scanner = scanner
     }
 
     func pair(sessionId: String, examId: String, challenge: String) throws -> [String: Any] {
@@ -16,7 +17,7 @@ final class ProofSigner {
             "challenge": challenge,
             "timestamp": isoNow(),
             "node_id_hash": identity.nodeIdHash,
-            "daemon_version": "0.4.5",
+            "daemon_version": "0.4.7",
             "platform": "macos",
         ]
         return [
@@ -29,6 +30,7 @@ final class ProofSigner {
     }
 
     func proof(sessionId: String, examId: String, sequence: Int, challenge: String) throws -> [String: Any] {
+        let scan = scanner.scan()
         var payload: [String: Any] = [
             "type": "simurgh.daemon.proof",
             "session_id": sessionId,
@@ -36,12 +38,14 @@ final class ProofSigner {
             "sequence": sequence,
             "timestamp": isoNow(),
             "node_id_hash": identity.nodeIdHash,
-            "daemon_version": "0.4.5",
+            "daemon_version": "0.4.7",
             "platform": "macos",
-            "capture_excluded_window_count": scanner.captureExcludedWindowCount(),
-            "helper_state": "healthy",
+            "helper_state": scan.scannerState == "risk_detected" ? "risk_detected" : "healthy",
             "challenge": challenge,
         ]
+        for (key, value) in scan.asDictionary() {
+            payload[key] = value
+        }
         payload["signature"] = try identity.sign(payload)
         return ["ok": true, "daemon_proof": payload]
     }

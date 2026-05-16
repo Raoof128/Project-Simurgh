@@ -17,7 +17,7 @@ final class KeychainIdentity {
         self.nodeIdHash = "sha256:" + sha256Hex(publicDer)
     }
 
-    static func loadOrCreate() throws -> KeychainIdentity {
+    static func loadOrCreate(service: String = KeychainIdentity.service) throws -> KeychainIdentity {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,

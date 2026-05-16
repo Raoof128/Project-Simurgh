@@ -62,6 +62,7 @@ Transition toward signed local integrity proofs and device-aware validation.
 - [x] Dashboard/report device-integrity state
 - [x] Reusable browser SDK for daemon discovery, pairing, proof fetch, and telemetry send
 - [x] Development daemon lifecycle commands and LaunchAgent install/uninstall helpers
+- [x] macOS metadata-only display-affinity scanner implementation
 - [ ] Tamper-aware local node logs
 - [x] Replay-resistant node/API challenge flow
 - [x] Privacy-preserving proof summaries

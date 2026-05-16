@@ -1,5 +1,39 @@
 ## Change Log
 
+## [0.4.7] — 2026-05-16 — Stage 2.5 macOS Affinity Scanner Implementation
+
+### Added
+
+- `AffinityScanner` now uses a mockable CoreGraphics metadata provider to enumerate meaningful visible windows and count capture-excluded risk signals.
+- Stage 2.5 scanner summary fields inside signed daemon proofs: scanner state/version, scan timestamp, scan duration, visible/suspicious/capture-excluded counts, scan error count, privacy mode, and privacy-safe fingerprint hashes.
+- Server-side daemon-proof validation for scanner fields, including privacy rejection for raw process/window/PID/path/user fields and signature tamper rejection when scanner fields change.
+- Scanner audit events: `SCANNER_SCAN_COMPLETED`, `SCANNER_RISK_DETECTED`, `SCANNER_PERMISSION_DENIED`, `SCANNER_UNAVAILABLE`, `SCANNER_PRIVACY_REJECTED`, and `SCANNER_ERROR`.
+- Stage 2.5 Swift and Node tests plus `scripts/check.sh` gates for scanner proof validation, scanner risk mapping, report scanner summaries, Swift scanner privacy/risk behavior, and signed scanner proof inclusion.
+- `docs/STAGE_2_5_MACOS_AFFINITY_SCANNER.md`.
+
+### Changed
+
+- Daemon `/status` now exposes privacy-safe scanner state and last-scan metadata.
+- Daemon `/proof` now signs scanner summaries inside the proof payload; browser code does not add trusted scanner fields beside the proof.
+- `capture_excluded_window_count > 0` remains Critical/manual-review context, while `scanner_unavailable` and `permission_denied` are accepted as signed warning-level scanner states.
+- Instructor dashboard and reports include scanner state, visible-window count, max capture-excluded count, scanner error counts, permission-denied counts, and manual-review wording.
+- README, SECURITY, PRIVACY, and ROADMAP document Stage 2.5 while preserving the research-prototype and metadata-only boundaries.
+
+### Verified
+
+- Baseline before edits: `git diff --check`, `npm test`, `./scripts/check.sh`, `swift test`, and `swift build` all passed.
+- `node --test tests/unit/daemonProofScanner.test.js tests/unit/daemonScannerRisk.test.js tests/unit/reportBuilderScanner.test.js` — 7/7 pass.
+- `npm test` — 234/234 pass.
+- `swift test` in `tools/simurgh-daemon-macos` — 8/8 pass.
+- `swift build` in `tools/simurgh-daemon-macos` — pass.
+- `git diff --check` — clean.
+- `./scripts/check.sh` — 48/48 gates pass, including Stage 2.5 scanner proof, risk, report, Swift scanner, and signed-proof gates.
+
+### Notes
+
+- Stage 2.5 remains a research prototype milestone. It does not claim production deployment, notarisation, MDM readiness, hardware attestation, Windows/Linux support, or automatic misconduct detection.
+- Scanner output is metadata-only. It does not transmit raw process names, raw window titles, PIDs, usernames, home directories, file paths, serial numbers, MAC addresses, screenshots, screen pixels, webcam frames, microphone audio, typed content, or pasted content.
+
 ## [0.4.6] — 2026-05-16 — Stage 2.4 Browser SDK & Daemon Lifecycle Hardening
 
 ### Added

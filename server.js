@@ -718,6 +718,12 @@ app.post("/api/telemetry", async (req, res) => {
         reason: daemonValidation.reason,
         node_id_hash_if_paired: pairedDaemon?.node_id_hash ?? null,
       });
+      if (String(daemonValidation.reason).startsWith("forbidden_field:")) {
+        appendAudit(sess, EVENTS.SCANNER_PRIVACY_REJECTED, {
+          reason: daemonValidation.reason,
+          privacy_mode: "metadata_only",
+        });
+      }
       return res.status(daemonValidation.reason === "invalid_signature" ? 401 : 409).json({
         error: daemonValidation.reason,
       });
@@ -740,6 +746,13 @@ app.post("/api/telemetry", async (req, res) => {
       sequence: daemonValidation.proof.sequence,
       capture_excluded_window_count: daemonValidation.proof.capture_excluded_window_count,
       helper_state: daemonValidation.proof.helper_state,
+      scanner_state: daemonValidation.proof.scanner_state,
+      scanner_version: daemonValidation.proof.scanner_version,
+      scan_timestamp: daemonValidation.proof.scan_timestamp,
+      scan_duration_ms: daemonValidation.proof.scan_duration_ms,
+      scan_error_count: daemonValidation.proof.scan_error_count,
+      suspicious_window_count: daemonValidation.proof.suspicious_window_count,
+      visible_window_count: daemonValidation.proof.visible_window_count,
       timestamp: daemonValidation.proof.timestamp,
       challenge_id_hash: daemonValidation.proof.challenge_id_hash,
     });
@@ -750,9 +763,49 @@ app.post("/api/telemetry", async (req, res) => {
       proof_timestamp: daemonValidation.proof.timestamp,
       capture_excluded_window_count: daemonValidation.proof.capture_excluded_window_count,
       helper_state: daemonValidation.proof.helper_state,
+      scanner_state: daemonValidation.proof.scanner_state,
+      scanner_version: daemonValidation.proof.scanner_version,
+      visible_window_count: daemonValidation.proof.visible_window_count,
+      suspicious_window_count: daemonValidation.proof.suspicious_window_count,
+      scan_duration_ms: daemonValidation.proof.scan_duration_ms,
+      scan_error_count: daemonValidation.proof.scan_error_count,
+      privacy_mode: daemonValidation.proof.privacy_mode,
       challenge_id_hash: daemonValidation.proof.challenge_id_hash,
     });
+    appendAudit(sess, EVENTS.SCANNER_SCAN_COMPLETED, {
+      scanner_state: daemonValidation.proof.scanner_state,
+      capture_excluded_window_count: daemonValidation.proof.capture_excluded_window_count,
+      visible_window_count: daemonValidation.proof.visible_window_count,
+      scan_duration_ms: daemonValidation.proof.scan_duration_ms,
+      privacy_mode: daemonValidation.proof.privacy_mode,
+    });
+    if (daemonValidation.proof.scanner_state === "permission_denied") {
+      appendAudit(sess, EVENTS.SCANNER_PERMISSION_DENIED, {
+        scanner_state: daemonValidation.proof.scanner_state,
+        scan_error_count: daemonValidation.proof.scan_error_count,
+        privacy_mode: daemonValidation.proof.privacy_mode,
+      });
+    } else if (daemonValidation.proof.scanner_state === "scanner_unavailable") {
+      appendAudit(sess, EVENTS.SCANNER_UNAVAILABLE, {
+        scanner_state: daemonValidation.proof.scanner_state,
+        scan_error_count: daemonValidation.proof.scan_error_count,
+        privacy_mode: daemonValidation.proof.privacy_mode,
+      });
+    } else if (daemonValidation.proof.scanner_state === "scan_error") {
+      appendAudit(sess, EVENTS.SCANNER_ERROR, {
+        scanner_state: daemonValidation.proof.scanner_state,
+        scan_error_count: daemonValidation.proof.scan_error_count,
+        privacy_mode: daemonValidation.proof.privacy_mode,
+      });
+    }
     if (daemonValidation.proof.capture_excluded_window_count > 0) {
+      appendAudit(sess, EVENTS.SCANNER_RISK_DETECTED, {
+        scanner_state: daemonValidation.proof.scanner_state,
+        capture_excluded_window_count: daemonValidation.proof.capture_excluded_window_count,
+        visible_window_count: daemonValidation.proof.visible_window_count,
+        scan_duration_ms: daemonValidation.proof.scan_duration_ms,
+        privacy_mode: daemonValidation.proof.privacy_mode,
+      });
       appendAudit(sess, EVENTS.DEVICE_RISK_ESCALATED, {
         daemon_state: "risk_detected",
         capture_excluded_window_count: daemonValidation.proof.capture_excluded_window_count,
