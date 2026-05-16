@@ -104,6 +104,7 @@ Simurgh enforces privacy constraints at the code level:
 - `src/privacy/hashIdentity.js` — one-way hashing at point of entry
 - `public/sdk/simurgh-browser-sdk.js` — daemon status state machine with metadata-only proof attachment
 - `tools/simurgh-daemon-macos/Sources/SimurghDaemon/AffinityScanner.swift` — CoreGraphics metadata scanner with aggregate output only
+- `tools/simurgh-daemon-windows/src/SimurghDaemon.Windows/DisplayAffinityScanner.cs` — Win32 `GetWindowDisplayAffinity` scanner with aggregate counts only; raw field transmission is unconditionally rejected
 
 These controls cannot be bypassed by configuration without code changes.
 

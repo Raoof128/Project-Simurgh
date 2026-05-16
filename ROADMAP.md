@@ -26,9 +26,9 @@ Privacy-first academic integrity prototype.
 
 ---
 
-## Stage 1.5 — Validation Pack (Current)
+## Stage 1.5 — Validation Pack ✅
 
-**Status: In review**
+**Status: Complete**
 
 Reviewer-readiness, validation, evidence mapping, and Stage 2 planning. No major Stage 2 runtime code.
 
@@ -51,7 +51,7 @@ Reviewer-readiness, validation, evidence mapping, and Stage 2 planning. No major
 
 ## Stage 2 — Device Shield / Integrity Node
 
-**Status: In progress**
+**Status: In progress** (Stage 2.6 complete — `v0.4.12`)
 
 Transition toward signed local integrity proofs and device-aware validation.
 

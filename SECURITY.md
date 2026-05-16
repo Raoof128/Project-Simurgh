@@ -104,7 +104,7 @@ Simurgh is designed around data minimisation. The following data is **never** co
 - Paste content (only paste length and count are recorded)
 - Raw student names or email addresses (SHA-256 hashed at ingress only)
 - Biometric identifiers
-- Process names or window titles (hashed when sent by the helper unless `SIMURGH_DEBUG_RAW_PROCESS_NAMES=true`)
+- Raw process names or window titles (Stage 1 helper hashes these; Stage 2+ daemon proofs reject them unconditionally as `forbidden_local_field` — no flag enables raw transmission)
 
 Enforcement points:
 
