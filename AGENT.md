@@ -2,6 +2,28 @@
 
 ## Agent Change Log
 
+### 2026-05-16 (Australia/Sydney) — Stage 2.6 Windows Display Affinity Scanner
+
+**Raouf:**
+
+- **Scope:** Stage 2.6A implementation-complete, pending real Windows laptop validation — Windows metadata-only display-affinity scanner contract, mock-first .NET daemon skeleton, server risk/report/dashboard support, and Windows-local gate portability.
+- **Summary:**
+  - Extended signed daemon proof validation to accept `platform: "windows"` with `scanner_version: "2.6.0"`, `capture_restricted_window_count`, and `monitor_only_window_count`.
+  - Mapped `WDA_EXCLUDEFROMCAPTURE` / `capture_excluded_window_count > 0` to Critical/manual review and `WDA_MONITOR` / `monitor_only_window_count > 0` to Warning/manual review.
+  - Changed daemon proof and pairing raw-local-data rejection to generic `forbidden_local_field`, including recursive Windows fields such as HWNDs, window handles, process IDs, executable paths, microphone/audio, screenshots, pixels, typed content, and pasted content.
+  - Added Windows scanner state/report/dashboard fields while preserving the signed-proof trust boundary and metadata-only contract.
+  - Added `tools/simurgh-daemon-windows/`, a .NET 8 mock-first daemon skeleton with scanner provider abstraction, Win32 provider stub, privacy normaliser, P-256 proof signer, identity store, health payload, and xUnit tests.
+  - Added Stage 2.6 E2E smoke coverage, Windows daemon CI workflow, Windows-safe baseline fixes for Node test path handling, Git Bash check temp paths, and Windows line-ending tolerant check formatting.
+- **Files Changed:**
+  - `src/device/daemonProof.js`, `src/device/daemonState.js`
+  - `src/academic/riskScoring.js`, `src/academic/reportBuilder.js`
+  - `server.js`, `public/instructor.html`, `tools/privacy-audit.mjs`
+  - `tests/unit/*daemon*`, `tests/security/stage24_25_security_audit.test.js`, `tests/e2e/stage24_25_smoke.mjs`, `tests/e2e/stage26_windows_scanner_smoke.mjs`
+  - `tools/simurgh-daemon-windows/`, `scripts/smoke-stage-2-6-windows-scanner.sh`, `scripts/check.sh`, `.github/workflows/windows-daemon.yml`
+  - `README.md`, `SECURITY.md`, `PRIVACY.md`, `ROADMAP.md`, `docs/STAGE_2_6_WINDOWS_DISPLAY_AFFINITY_SCANNER.md`, `docs/superpowers/plans/2026-05-16-stage-2-6-windows-display-affinity-scanner.md`, `AGENT.md`, `CHANGELOG.md`
+- **Verification:** Red step confirmed Stage 2.6 Windows proof/risk/report tests failed before implementation. `npm test` passed 239/239. `npm audit --audit-level=high` passed with 0 vulnerabilities. `node tools/privacy-audit.mjs` passed. `scripts/security-audit-stage-2-4-2-5.sh` passed. `scripts/smoke-stage-2-6-windows-scanner.sh` passed. `.tools/dotnet/dotnet.exe build tools/simurgh-daemon-windows/SimurghDaemon.Windows.sln` passed. `.tools/dotnet/dotnet.exe test tools/simurgh-daemon-windows/SimurghDaemon.Windows.sln --no-restore` passed 8/8. `scripts/check.sh` passed 44/44 gates on Windows, with macOS Swift gates skipped honestly.
+- **Follow-ups:** Run the real Windows laptop validation for `GetWindowDisplayAffinity` detection of `WDA_MONITOR` and `WDA_EXCLUDEFROMCAPTURE`. Do not claim production Windows Service readiness, MDM/Intune readiness, hardware attestation, kernel visibility, Linux scanner support, or automatic misconduct detection.
+
 ### 2026-05-16 (Australia/Sydney) — Stage 2.5 External Technical Review Signal
 
 **Raouf:**

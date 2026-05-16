@@ -143,7 +143,7 @@ test("forbidden raw local fields are rejected", () => {
     expectedExamId: "exam_daemon",
     pairedNode: { node_id_hash: proof.node_id_hash, public_key },
   });
-  assert.equal(result.reason, "forbidden_field:window_title");
+  assert.equal(result.reason, "forbidden_local_field");
 });
 
 test("raw P-256 signature verifier accepts canonical bytes", () => {

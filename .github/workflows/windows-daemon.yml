@@ -1,0 +1,24 @@
+name: Windows Daemon
+
+on:
+  push:
+    branches:
+      - main
+      - stage-*
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  windows-daemon:
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+      - name: Build Windows daemon
+        run: dotnet build tools/simurgh-daemon-windows/SimurghDaemon.Windows.sln
+      - name: Test Windows daemon
+        run: dotnet test tools/simurgh-daemon-windows/SimurghDaemon.Windows.sln --no-build

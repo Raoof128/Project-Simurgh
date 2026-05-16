@@ -72,10 +72,13 @@ function buildDeviceIntegritySection(daemon) {
     state.scanner_state === "permission_denied" ||
     state.scanner_state === "scan_error" ||
     (state.proofs_rejected ?? 0) > 0 ||
-    (state.capture_excluded_window_count_max ?? 0) > 0;
+    (state.capture_excluded_window_count_max ?? 0) > 0 ||
+    (state.capture_restricted_window_count_max ?? 0) > 0 ||
+    (state.monitor_only_window_count_max ?? 0) > 0;
   return {
     daemon_required: state.daemon_required ?? true,
     daemon_final_state: state.daemon_state ?? "missing",
+    platform: state.platform ?? "unknown",
     node_id_hash: state.node_id_hash ?? null,
     daemon_version: state.daemon_version ?? null,
     scanner_final_state: state.scanner_state ?? "unknown",
@@ -85,6 +88,8 @@ function buildDeviceIntegritySection(daemon) {
     proofs_rejected: state.proofs_rejected ?? 0,
     stale_periods: state.stale_periods ?? 0,
     capture_excluded_window_count_max: state.capture_excluded_window_count_max ?? 0,
+    capture_restricted_window_count_max: state.capture_restricted_window_count_max ?? 0,
+    monitor_only_window_count_max: state.monitor_only_window_count_max ?? 0,
     scanner_error_count: state.scanner_error_count ?? 0,
     permission_denied_count: state.permission_denied_count ?? 0,
     manual_review_recommendation: anomaly

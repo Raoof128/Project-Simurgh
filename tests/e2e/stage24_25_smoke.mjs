@@ -216,7 +216,7 @@ async function checkRawLocalFieldValidator() {
       }
     );
     assertSmoke(
-      result.reason === `forbidden_field:${field}`,
+      result.reason === "forbidden_local_field",
       `validator did not reject raw local field ${field}`,
       result
     );
@@ -424,7 +424,7 @@ async function runMainSmoke(baseUrl) {
     process_name: "SecretApp",
   });
   assertSmoke(
-    rawRejected.status === 409 && rawRejected.json.error === "forbidden_field:process_name",
+    rawRejected.status === 409 && rawRejected.json.error === "forbidden_local_field",
     "raw local field proof was not rejected",
     rawRejected
   );

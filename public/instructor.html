@@ -600,10 +600,13 @@
         const helperActive = sess.helper_active;
         const daemonState = sess.daemon?.daemon_state || "missing";
         const daemonVersion = sess.daemon?.daemon_version || "—";
+        const daemonPlatform = sess.daemon?.platform || "unknown";
         const scannerState = sess.daemon?.scanner_state || "unknown";
         const scannerVersion = sess.daemon?.scanner_version || "—";
         const visibleWindowCount = sess.daemon?.visible_window_count ?? 0;
         const excludedCount = sess.daemon?.capture_excluded_window_count_max ?? 0;
+        const restrictedCount = sess.daemon?.capture_restricted_window_count_max ?? 0;
+        const monitorOnlyCount = sess.daemon?.monitor_only_window_count_max ?? 0;
         const lastScan = sess.daemon?.last_scan_at || "—";
         const submittedState = sess.state === "submitted" || sess.state === "report_generated";
 
@@ -651,12 +654,14 @@
       <span>Device Integrity</span>
       <span style="color:${daemonState === "healthy" ? "#22c55e" : daemonState === "risk_detected" || daemonState === "untrusted" ? "#ef4444" : "#f59e0b"};">${esc(daemonState)}</span>
     </div>
-    <div>Daemon: macOS localhost · ${esc(daemonVersion)}</div>
+    <div>Daemon: ${esc(daemonPlatform)} localhost · ${esc(daemonVersion)}</div>
     <div>Scanner: ${esc(scannerState)} · ${esc(scannerVersion)}</div>
     <div>Last scan: ${esc(lastScan)}</div>
     <div>Visible windows scanned: ${visibleWindowCount}</div>
     <div>Capture-excluded windows: ${excludedCount}</div>
-    ${excludedCount > 0 ? '<div style="color:#f59e0b;">Manual review recommended. No automatic misconduct finding.</div>' : ""}
+    <div>Monitor-only windows: ${monitorOnlyCount}</div>
+    <div>Capture-restricted windows: ${restrictedCount}</div>
+    ${excludedCount > 0 || restrictedCount > 0 || monitorOnlyCount > 0 ? '<div style="color:#f59e0b;">Manual review recommended. No automatic misconduct finding.</div>' : ""}
     <div>Node: ${esc((sess.daemon?.node_id_hash || "unpaired").slice(0, 19))}</div>
   </div>
   <div id="timeline-${esc(sess.sessionId)}" class="event-timeline" style="margin-bottom:0.5rem;">

@@ -93,6 +93,8 @@ export function scoreAcademicRisk(telemetry, helperInfo = {}, sessionInfo = {}) 
 
   // Affinity override: confirmed excluded window forces Critical floor
   if (affinityRaw >= 100) risk_score = Math.max(risk_score, 85);
+  // Daemon warning floor: signed scanner-unavailable or monitor-only signals need manual review.
+  if (daemonRisk >= 40 && !daemonForceCritical) risk_score = Math.max(risk_score, 40);
   if (daemonForceCritical) risk_score = Math.max(risk_score, 85);
 
   const risk_level = risk_score >= 70 ? "Critical" : risk_score >= 40 ? "Warning" : "Safe";

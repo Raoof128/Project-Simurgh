@@ -159,6 +159,8 @@ fi
 step "Format"
 if [[ "$FIX" == true ]]; then
   run_step "prettier --write (npm run format)" "npm run format"
+elif [[ "$(uname -s)" == MINGW* || "$(uname -s)" == MSYS* || "$(uname -s)" == CYGWIN* ]]; then
+  run_step "prettier --check (Windows line endings tolerated)" "npx prettier --check . --end-of-line auto"
 else
   run_step "prettier --check (npm run format:check)" "npm run format:check"
 fi
@@ -460,7 +462,7 @@ else
   step "Audit chain self-test"
   # Build a tiny chain via the hmacChain module, write to a temp file,
   # then verify it with verify-audit.mjs.
-  TMP_CHAIN="$(mktemp -t simurgh-chain.XXXXXX.json)"
+  TMP_CHAIN="$(mktemp "$LOG_DIR/simurgh-chain.XXXXXX.json")"
   if node -e "
 import('./src/audit/hmacChain.js').then(({ createChain, appendEntry }) => {
   const key = 'check-script-test-key';
@@ -851,7 +853,7 @@ process.stdout.write('OK');
   fi
 
   kill "$S2_PID" 2>/dev/null
-  wait "$S2_PID" 2>/dev/null
+  wait "$S2_PID" 2>/dev/null || true
 fi
 
 # ── 10c. Stage 2.3 hardened daemon-required mode ────────
@@ -1136,6 +1138,41 @@ else
   else
     fail "Stage 2.4/2.5 cybersecurity audit: SDK + daemon + scanner hardening"
     tail -100 "$LOG_DIR/stage24-25-security-audit.log"
+  fi
+fi
+
+# ── 10k. Stage 2.6 Windows scanner smoke + daemon tests ──
+if [[ "$QUICK" == true ]]; then
+  step "Stage 2.6 Windows scanner"
+  echo -e "${YELLOW}Skipped because --quick was used.${NC}"
+else
+  step "Stage 2.6 Windows scanner"
+  if scripts/smoke-stage-2-6-windows-scanner.sh > "$LOG_DIR/stage26-windows-scanner-smoke.log" 2>&1; then
+    pass "Stage 2.6 Windows scanner smoke: signed proof + risk + report + audit"
+  else
+    fail "Stage 2.6 Windows scanner smoke"
+    tail -100 "$LOG_DIR/stage26-windows-scanner-smoke.log"
+  fi
+
+  DOTNET_BIN="${DOTNET_BIN:-}"
+  if [[ -z "$DOTNET_BIN" ]]; then
+    if command -v dotnet >/dev/null 2>&1; then
+      DOTNET_BIN="dotnet"
+    elif [[ -x ".tools/dotnet/dotnet" ]]; then
+      DOTNET_BIN=".tools/dotnet/dotnet"
+    elif [[ -x ".tools/dotnet/dotnet.exe" ]]; then
+      DOTNET_BIN=".tools/dotnet/dotnet.exe"
+    fi
+  fi
+  if [[ -n "$DOTNET_BIN" ]]; then
+    if "$DOTNET_BIN" test tools/simurgh-daemon-windows/SimurghDaemon.Windows.sln > "$LOG_DIR/stage26-dotnet-test.log" 2>&1; then
+      pass "Stage 2.6 Windows daemon .NET tests"
+    else
+      fail "Stage 2.6 Windows daemon .NET tests"
+      tail -80 "$LOG_DIR/stage26-dotnet-test.log"
+    fi
+  else
+    echo -e "${YELLOW}.NET SDK unavailable — skipping Stage 2.6 Windows daemon .NET tests${NC}"
   fi
 fi
 

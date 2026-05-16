@@ -27,6 +27,10 @@ function baseRecord(now) {
     stale_periods: 0,
     capture_excluded_window_count: 0,
     capture_excluded_window_count_max: 0,
+    capture_restricted_window_count: 0,
+    capture_restricted_window_count_max: 0,
+    monitor_only_window_count: 0,
+    monitor_only_window_count_max: 0,
     scanner_state: "unknown",
     scanner_version: null,
     scanner_scans_verified: 0,
@@ -60,8 +64,13 @@ export function summariseDaemonState(record, now = Date.now(), { staleAfterMs = 
 export function scoreDaemonRisk(record) {
   const state = record?.daemon_state ?? DAEMON_STATES.MISSING;
   const maxExcluded = record?.capture_excluded_window_count_max ?? 0;
+  const maxRestricted = record?.capture_restricted_window_count_max ?? 0;
+  const maxMonitorOnly = record?.monitor_only_window_count_max ?? 0;
   if (maxExcluded > 0 || state === DAEMON_STATES.RISK_DETECTED) {
     return { daemon_risk: 100, forceCritical: true };
+  }
+  if (maxRestricted > 0 || maxMonitorOnly > 0 || record?.scanner_state === "restricted_detected") {
+    return { daemon_risk: 40, forceCritical: false };
   }
   if (
     record?.scanner_state === "scanner_unavailable" ||
@@ -93,13 +102,16 @@ export function createDaemonStateRegistry({ staleAfterMs = 10_000 } = {}) {
       return record;
     },
 
-    recordPaired(sessionId, { node_id_hash, public_key, daemon_version, now = Date.now() }) {
+    recordPaired(
+      sessionId,
+      { node_id_hash, public_key, daemon_version, platform = "macos", now = Date.now() }
+    ) {
       const record = ensure(sessionId, now);
       record.daemon_state = DAEMON_STATES.PAIRED;
       record.node_id_hash = node_id_hash;
       record.public_key = public_key;
       record.daemon_version = daemon_version;
-      record.platform = "macos";
+      record.platform = platform;
       record.paired_at = now;
       record.updated_at = now;
       return record;
@@ -109,7 +121,10 @@ export function createDaemonStateRegistry({ staleAfterMs = 10_000 } = {}) {
       sessionId,
       {
         sequence,
+        platform = "macos",
         capture_excluded_window_count,
+        capture_restricted_window_count = 0,
+        monitor_only_window_count = 0,
         helper_state,
         scanner_state = capture_excluded_window_count > 0 ? "risk_detected" : "healthy",
         scanner_version = null,
@@ -126,6 +141,7 @@ export function createDaemonStateRegistry({ staleAfterMs = 10_000 } = {}) {
       const record = ensure(sessionId, now);
       record.daemon_state =
         capture_excluded_window_count > 0 ? DAEMON_STATES.RISK_DETECTED : DAEMON_STATES.HEALTHY;
+      record.platform = platform;
       record.helper_state = helper_state;
       record.scanner_state = scanner_state;
       record.scanner_version = scanner_version;
@@ -143,6 +159,16 @@ export function createDaemonStateRegistry({ staleAfterMs = 10_000 } = {}) {
       record.capture_excluded_window_count_max = Math.max(
         record.capture_excluded_window_count_max,
         capture_excluded_window_count
+      );
+      record.capture_restricted_window_count = capture_restricted_window_count;
+      record.capture_restricted_window_count_max = Math.max(
+        record.capture_restricted_window_count_max,
+        capture_restricted_window_count
+      );
+      record.monitor_only_window_count = monitor_only_window_count;
+      record.monitor_only_window_count_max = Math.max(
+        record.monitor_only_window_count_max,
+        monitor_only_window_count
       );
       record.signature_valid = true;
       record.challenge_id_hash = challenge_id_hash;

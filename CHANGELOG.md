@@ -1,5 +1,43 @@
 ## Change Log
 
+## [0.4.11-stage-2-6A] — 2026-05-16 — Stage 2.6A Windows Display Affinity Scanner Implementation
+
+Stage 2.6A is implementation-complete and pending real Windows laptop validation for live `GetWindowDisplayAffinity` detection.
+
+### Added
+
+- Windows signed daemon-proof support for `platform: "windows"` and `scanner_version: "2.6.0"`.
+- Windows scanner fields: `capture_restricted_window_count` and `monitor_only_window_count`.
+- Stage 2.6 smoke driver: `scripts/smoke-stage-2-6-windows-scanner.sh` and `tests/e2e/stage26_windows_scanner_smoke.mjs`.
+- `tools/simurgh-daemon-windows/` .NET 8 daemon skeleton with mock-first scanner architecture, Win32 provider stub, privacy normaliser, P-256 proof signer, identity store, local health payload, and xUnit tests.
+- GitHub Actions Windows daemon build/test workflow.
+- `docs/STAGE_2_6_WINDOWS_DISPLAY_AFFINITY_SCANNER.md`.
+
+### Changed
+
+- `WDA_EXCLUDEFROMCAPTURE` / `capture_excluded_window_count > 0` maps to Critical/manual review.
+- `WDA_MONITOR` / `monitor_only_window_count > 0` maps to Warning/manual review.
+- Recursive daemon proof and pairing privacy rejection now returns generic `forbidden_local_field` for forbidden local fields.
+- Reports and instructor dashboard include Windows platform and aggregate scanner counts without raw HWND, PID, process, title, path, username, pixel, audio, webcam, typed, or pasted data.
+- `scripts/check.sh` is safer on Windows hosts: portable Node test paths, Windows line-ending tolerant format check, and repo-local audit-chain temp files.
+
+### Verified
+
+- Red step: Stage 2.6 Windows proof/risk/report tests failed before implementation.
+- `node --test tests/unit/daemonProof.test.js tests/unit/daemonProofScanner.test.js tests/unit/daemonScannerRisk.test.js tests/unit/reportBuilderScanner.test.js` — pass.
+- `node --test tests/security/stage24_25_security_audit.test.js` — pass.
+- `scripts/smoke-stage-2-6-windows-scanner.sh` — pass.
+- `npm test` — 239/239 pass.
+- `npm audit --audit-level=high` — 0 vulnerabilities.
+- `node tools/privacy-audit.mjs` — pass.
+- `scripts/security-audit-stage-2-4-2-5.sh` — pass.
+- `.tools/dotnet/dotnet.exe test tools/simurgh-daemon-windows/SimurghDaemon.Windows.sln --no-restore` — 8/8 pass.
+- `scripts/check.sh` — 44/44 gates pass on Windows; macOS Swift gates skipped honestly.
+
+### Notes
+
+- Real Windows laptop validation is still pending. This branch does not claim production deployment, Windows Service readiness, MDM/Intune readiness, hardware attestation, kernel-level visibility, Linux scanner support, or automatic misconduct detection.
+
 ## [0.4.11] — 2026-05-16 — Stage 2.5 External Technical Review Signal
 
 ### Changed

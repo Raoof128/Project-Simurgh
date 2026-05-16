@@ -66,7 +66,9 @@ Transition toward signed local integrity proofs and device-aware validation.
 - [ ] Tamper-aware local node logs
 - [x] Replay-resistant node/API challenge flow
 - [x] Privacy-preserving proof summaries
-- [ ] Windows native helper (SetWindowDisplayAffinity WDA_EXCLUDEFROMCAPTURE detection)
+- [x] Windows scanner proof contract and mock-first .NET daemon skeleton
+- [ ] Real Windows laptop validation for `WDA_MONITOR` and `WDA_EXCLUDEFROMCAPTURE`
+- [ ] Production Windows Service packaging and deployment design
 - [ ] Linux Wayland surface-level affinity detection
 - [ ] Agent integrity API — validates AI computer-use sessions
 - [ ] Webhook delivery for real-time risk alerts
