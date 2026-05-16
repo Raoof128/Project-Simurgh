@@ -1,5 +1,33 @@
 ## Change Log
 
+## [0.4.11] — 2026-05-16 — Stage 2.5 External Technical Review Signal
+
+### Changed
+
+- README status block updated from "Stage 2.5 research prototype — macOS metadata-only affinity scanner active" to "Stage 2.5 closed — macOS Device Shield regression-gated and ready for external technical review."
+- README Stage 2.5 section heading corrected from `branch active — v0.4.7 target` to `frozen — v0.4.10`.
+- README Status & License section updated to state Stage 2.5 is closed and ready for external technical review.
+
+### Added
+
+- README `## External Technical Review` section (after status block): lists the full macOS Device Shield baseline, current verification numbers (234/234 tests, 50/50+ gates, all smoke packs), open-door statement for reviewers, and honest non-claims list.
+- `docs/STAGE_2_5_CLOSEOUT_SECURITY_AUDIT.md` — `## External Review Status` section with prototype framing and eight specific focus areas for reviewers.
+- PR #10 `stage-2-macos-external-review-signal` → `main`.
+- GitHub Issue #11 "External Review Request: Stage 2.5 macOS Integrity Stack" (pinned).
+
+### Verified
+
+- `npm test` — 234/234 pass.
+- `npm audit --audit-level=high` — 0 vulnerabilities.
+- `node tools/privacy-audit.mjs` — pass.
+- `git diff --check` — clean.
+- Docs only — no code changes, no gate changes.
+
+### Notes
+
+- This is a review-signal closeout artefact, not Stage 2.6 feature work.
+- No production deployment, notarisation, MDM readiness, hardware attestation, Windows/Linux support, raw process/window collection, or automatic misconduct detection is claimed.
+
 ## [0.4.10] — 2026-05-16 — Stage 2.5 Closeout Security Audit
 
 ### Added
