@@ -64,6 +64,8 @@ The project is open for technical review from researchers, engineers, and organi
 - no raw process name or raw window title collection
 - Windows/Linux support remains in progress
 
+**Technical brief:** [`docs/STAGE_2_5_TECHNICAL_BRIEF.md`](docs/STAGE_2_5_TECHNICAL_BRIEF.md) — full Stage 1–2.5 architecture, cryptographic detail, privacy contract, validation gates, limitations, and non-claims.
+
 ---
 
 ## The Core Philosophy
