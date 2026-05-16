@@ -12,6 +12,32 @@ AGENT_DIR="$HOME/Library/LaunchAgents"
 LOG_DIR="$HOME/Library/Logs/Simurgh"
 AGENT_PATH="$AGENT_DIR/dev.raouf.simurgh.daemon.plist"
 BINARY_PATH="$ROOT_DIR/.build/debug/SimurghDaemon"
+MODE="${1:-install}"
+
+case "$MODE" in
+  install | --check | --dry-run) ;;
+  *)
+    echo "usage: $0 [--check|--dry-run]" >&2
+    exit 64
+    ;;
+esac
+
+if [[ ! -f "$PLIST_TEMPLATE" ]]; then
+  echo "missing plist template: $PLIST_TEMPLATE" >&2
+  exit 66
+fi
+
+if [[ "$AGENT_PATH" != "$HOME/Library/LaunchAgents/dev.raouf.simurgh.daemon.plist" ]]; then
+  echo "refusing unexpected LaunchAgent path" >&2
+  exit 73
+fi
+
+if [[ "$MODE" == "--check" || "$MODE" == "--dry-run" ]]; then
+  plutil -lint "$PLIST_TEMPLATE" >/dev/null
+  echo "check passed: development LaunchAgent template is valid"
+  echo "boundary: development-only local LaunchAgent; not notarised; not production endpoint management; not MDM deployment."
+  exit 0
+fi
 
 swift build --package-path "$ROOT_DIR"
 mkdir -p "$AGENT_DIR" "$LOG_DIR"

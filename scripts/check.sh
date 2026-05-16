@@ -1111,7 +1111,7 @@ else
   fi
 fi
 
-# ── 10h. Stage 2.4/2.5 closeout E2E smoke ───────────────
+# ── 10i. Stage 2.4/2.5 closeout E2E smoke ───────────────
 if [[ "$QUICK" == true ]]; then
   step "Stage 2.4/2.5 E2E smoke"
   echo -e "${YELLOW}Skipped because --quick was used.${NC}"
@@ -1122,6 +1122,20 @@ else
   else
     fail "Stage 2.4/2.5 E2E smoke: SDK + daemon + scanner + signed proof"
     tail -80 "$LOG_DIR/stage24-25-e2e-smoke.log"
+  fi
+fi
+
+# ── 10j. Stage 2.4/2.5 cybersecurity audit ──────────────
+if [[ "$QUICK" == true ]]; then
+  step "Stage 2.4/2.5 cybersecurity audit"
+  echo -e "${YELLOW}Skipped because --quick was used.${NC}"
+else
+  step "Stage 2.4/2.5 cybersecurity audit"
+  if scripts/security-audit-stage-2-4-2-5.sh > "$LOG_DIR/stage24-25-security-audit.log" 2>&1; then
+    pass "Stage 2.4/2.5 cybersecurity audit: SDK + daemon + scanner hardening"
+  else
+    fail "Stage 2.4/2.5 cybersecurity audit: SDK + daemon + scanner hardening"
+    tail -100 "$LOG_DIR/stage24-25-security-audit.log"
   fi
 fi
 

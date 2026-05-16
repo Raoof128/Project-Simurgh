@@ -286,6 +286,14 @@ Stage 2.5 closeout includes a dedicated E2E smoke pack:
 
 The smoke starts daemon-optional and daemon-required demo servers, imports the browser SDK, pairs a deterministic mock daemon, submits signed healthy and capture-excluded scanner proofs, rejects tampered/replayed/raw-field proofs, verifies report `device_integrity`, verifies the audit chain, and runs the privacy audit. On macOS with Swift available it also builds/tests the real daemon, starts the localhost daemon, checks `/health` and `/status`, runs privacy-safe `doctor`, and performs a safe LaunchAgent boundary/plist check. It does not install production services and does not claim notarisation, MDM readiness, hardware attestation, or automatic misconduct detection.
 
+Stage 2.5 closeout also includes a cybersecurity audit gate:
+
+```bash
+./scripts/security-audit-stage-2-4-2-5.sh
+```
+
+The audit gate verifies recursive raw local-data rejection, SDK token and proof boundaries, daemon loopback/body/method/malformed JSON/origin guards, LaunchAgent dry-run safety, dashboard/report wording, the Stage 2.4/2.5 smoke pack, privacy audit, npm audit, and macOS Swift daemon test/build/doctor redaction checks when available. Details: [`docs/STAGE_2_5_CLOSEOUT_SECURITY_AUDIT.md`](docs/STAGE_2_5_CLOSEOUT_SECURITY_AUDIT.md).
+
 ### Dashboard
 
 - Instructor token is stripped from the URL on page load via `history.replaceState` (no leak into history or referrer)

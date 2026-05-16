@@ -2,6 +2,30 @@
 
 ## Agent Change Log
 
+### 2026-05-16 (Australia/Sydney) — Stage 2.5 Closeout Security Audit
+
+**Raouf:**
+
+- **Scope:** Stage 2.5 closeout — cybersecurity audit and hardening gate for Stage 2.4 browser SDK + Stage 2.5 scanner/daemon proof surfaces before Stage 2.6.
+- **Summary:**
+  - Added `scripts/security-audit-stage-2-4-2-5.sh`, a dedicated closeout cybersecurity gate that runs the Stage 2.4/2.5 security tests, privacy audit, npm audit, E2E smoke pack, LaunchAgent shell/dry-run checks, generated-output privacy grep, overclaim grep, daemon dangerous-pattern grep, and macOS Swift daemon test/build/doctor checks when available.
+  - Added `tests/security/stage24_25_security_audit.test.js`, which verifies recursive raw local-field rejection in daemon proof/pairing payloads, SDK token/proof trust boundaries, localhost daemon loopback/body/malformed JSON/method/origin hardening, LaunchAgent dry-run safety, and dashboard/report manual-review wording.
+  - Hardened `src/device/daemonProof.js` so forbidden raw local-data fields are rejected recursively, including nested debug/scanner objects in daemon proof and pairing envelopes.
+  - Hardened `LocalHttpServer.swift` with explicit request-size checks, malformed JSON rejection for sensitive JSON endpoints, method-not-allowed responses for known routes, and preserved loopback-only binding.
+  - Added safe `--check` / `--dry-run` modes and bounded path checks to the development LaunchAgent install/uninstall scripts.
+  - Added `docs/STAGE_2_5_CLOSEOUT_SECURITY_AUDIT.md`, documented the audit command in README, and wired the gate into `scripts/check.sh`.
+- **Files Changed:**
+  - `scripts/security-audit-stage-2-4-2-5.sh`
+  - `tests/security/stage24_25_security_audit.test.js`
+  - `docs/STAGE_2_5_CLOSEOUT_SECURITY_AUDIT.md`
+  - `src/device/daemonProof.js`
+  - `tools/simurgh-daemon-macos/Sources/SimurghDaemon/LocalHttpServer.swift`
+  - `tools/simurgh-daemon-macos/scripts/{install-launch-agent,uninstall-launch-agent}.sh`
+  - `scripts/check.sh`
+  - `README.md`, `AGENT.md`, `CHANGELOG.md`
+- **Verification:** Baseline before edits on `stage-2-5-closeout-smoke-security-audit`: `git diff --check` → clean; `npm test` → 234/234 pass; `npm audit --audit-level=high` → 0 vulnerabilities; `node tools/privacy-audit.mjs` → pass; `./scripts/check.sh` → 50/50 gates pass; `swift test`, `swift build`, and `swift build -c release` in `tools/simurgh-daemon-macos` → pass. Red step confirmed `tests/security/stage24_25_security_audit.test.js` failed before implementation on recursive forbidden fields, daemon HTTP hardening checks, and LaunchAgent dry-run checks. Targeted closeout security gate: `scripts/security-audit-stage-2-4-2-5.sh` → pass.
+- **Follow-ups:** Keep this security audit and the Stage 2.4/2.5 smoke gate green before Stage 2.6. Do not infer production deployment, notarisation, MDM readiness, hardware attestation, Windows/Linux support, raw process/window collection, or automatic misconduct detection.
+
 ### 2026-05-16 (Australia/Sydney) — Stage 2.2/2.3 E2E Smoke Closeout
 
 **Raouf:**

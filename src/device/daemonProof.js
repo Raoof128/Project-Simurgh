@@ -67,6 +67,23 @@ function fail(reason) {
   return { ok: false, reason };
 }
 
+function findForbiddenField(value) {
+  if (value === null || typeof value !== "object") return null;
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      const nested = findForbiddenField(item);
+      if (nested) return nested;
+    }
+    return null;
+  }
+  for (const [key, nestedValue] of Object.entries(value)) {
+    if (FORBIDDEN_FIELDS.includes(key)) return key;
+    const nested = findForbiddenField(nestedValue);
+    if (nested) return nested;
+  }
+  return null;
+}
+
 function decodeBase64Url(value) {
   if (typeof value !== "string" || value.length === 0) return null;
   try {
@@ -204,9 +221,8 @@ export function validateDaemonProof(
     return fail("proof_not_an_object");
   }
 
-  for (const field of FORBIDDEN_FIELDS) {
-    if (field in raw) return fail(`forbidden_field:${field}`);
-  }
+  const forbiddenField = findForbiddenField(raw);
+  if (forbiddenField) return fail(`forbidden_field:${forbiddenField}`);
   for (const field of PROOF_REQUIRED_FIELDS) {
     if (!(field in raw) || raw[field] === null || raw[field] === undefined) {
       return fail(`missing_field:${field}`);
@@ -314,9 +330,8 @@ export function validateDaemonPairingPayload(
   ) {
     return fail("signed_payload_not_an_object");
   }
-  for (const field of FORBIDDEN_FIELDS) {
-    if (field in raw || field in signed_payload) return fail(`forbidden_field:${field}`);
-  }
+  const forbiddenField = findForbiddenField(raw);
+  if (forbiddenField) return fail(`forbidden_field:${forbiddenField}`);
   for (const field of [
     "type",
     "session_id",

@@ -1,5 +1,31 @@
 ## Change Log
 
+## [0.4.10] — 2026-05-16 — Stage 2.5 Closeout Security Audit
+
+### Added
+
+- `scripts/security-audit-stage-2-4-2-5.sh` — closeout cybersecurity gate for the Stage 2.4 browser SDK and Stage 2.5 scanner/daemon proof surface.
+- `tests/security/stage24_25_security_audit.test.js` — regression suite covering recursive raw local-field rejection, SDK token/proof boundaries, daemon localhost hardening source checks, LaunchAgent dry-run safety, and dashboard/report wording.
+- `docs/STAGE_2_5_CLOSEOUT_SECURITY_AUDIT.md` — closeout audit scope, locked security decisions, command, and Stage 2.6 go/no-go rules.
+- `scripts/check.sh` gate: `Stage 2.4/2.5 cybersecurity audit: SDK + daemon + scanner hardening`.
+
+### Changed
+
+- Daemon proof and pairing validation now reject forbidden raw local-data fields recursively, including nested debug/scanner objects.
+- macOS daemon localhost server now has explicit request-size handling, malformed JSON rejection for sensitive JSON endpoints, method-not-allowed responses for known routes, and keeps loopback-only binding.
+- Development LaunchAgent install/uninstall scripts now expose safe `--check` / `--dry-run` modes and bounded path checks.
+- README now documents the Stage 2.5 closeout cybersecurity audit command and links the audit note.
+
+### Verified
+
+- Red step: `node --test tests/security/stage24_25_security_audit.test.js` failed before implementation on recursive forbidden fields, daemon HTTP hardening checks, and LaunchAgent dry-run checks.
+- Targeted gate: `scripts/security-audit-stage-2-4-2-5.sh` — pass.
+
+### Notes
+
+- This is a Stage 2.5 closeout hardening pass, not Stage 2.6 feature work.
+- No production deployment, notarisation, MDM readiness, hardware attestation, Windows/Linux daemon/scanner support, raw process/window collection, or automatic misconduct detection is claimed.
+
 ## [0.4.9] — 2026-05-16 — Stage 2.2/2.3 E2E Smoke Closeout
 
 ### Added

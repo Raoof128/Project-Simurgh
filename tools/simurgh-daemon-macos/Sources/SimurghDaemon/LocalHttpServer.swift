@@ -2,6 +2,7 @@ import Foundation
 import Network
 
 final class LocalHttpServer {
+    private static let maxRequestBytes = 64 * 1024
     private let config: DaemonConfig
     private let state: SessionState
     private let signer: ProofSigner
@@ -26,7 +27,7 @@ final class LocalHttpServer {
     }
 
     private func read(_ connection: NWConnection) {
-        connection.receive(minimumIncompleteLength: 1, maximumLength: 64 * 1024) { [weak self] data, _, _, _ in
+        connection.receive(minimumIncompleteLength: 1, maximumLength: Self.maxRequestBytes) { [weak self] data, _, _, _ in
             guard let self, let data else { connection.cancel(); return }
             let response = self.handle(data)
             connection.send(content: response, completion: .contentProcessed { _ in connection.cancel() })
@@ -34,6 +35,9 @@ final class LocalHttpServer {
     }
 
     private func handle(_ data: Data) -> Data {
+        if data.count > Self.maxRequestBytes {
+            return response(413, ["ok": false, "error": "request_too_large"], origin: nil)
+        }
         let raw = String(decoding: data, as: UTF8.self)
         let headBody = raw.components(separatedBy: "\r\n\r\n")
         let lines = headBody.first?.components(separatedBy: "\r\n") ?? []
@@ -45,6 +49,11 @@ final class LocalHttpServer {
             let parts = line.split(separator: ":", maxSplits: 1).map { String($0).trimmingCharacters(in: .whitespaces) }
             if parts.count == 2 { headers[parts[0].lowercased()] = parts[1] }
         }
+        if let contentLength = headers["content-length"],
+           let bytes = Int(contentLength),
+           bytes > Self.maxRequestBytes {
+            return response(413, ["ok": false, "error": "request_too_large"], origin: headers["origin"])
+        }
         if let origin = headers["origin"], !config.allowedOrigins.contains(origin) {
             return response(403, ["ok": false, "error": "origin_not_allowed"], origin: origin)
         }
@@ -52,7 +61,27 @@ final class LocalHttpServer {
             return response(400, ["ok": false, "error": "local_client_header_required"], origin: headers["origin"])
         }
         let bodyData = Data((headBody.dropFirst().first ?? "").utf8)
-        let body = (try? JSONSerialization.jsonObject(with: bodyData)) as? [String: Any] ?? [:]
+        var body: [String: Any] = [:]
+        if method == "POST", !bodyData.isEmpty {
+            guard let parsed = try? JSONSerialization.jsonObject(with: bodyData) as? [String: Any] else {
+                return response(400, ["ok": false, "error": "malformed_json"], origin: headers["origin"])
+            }
+            body = parsed
+        }
+        if method == "POST", ["/pair", "/proof"].contains(path), bodyData.isEmpty {
+            return response(400, ["ok": false, "error": "malformed_json"], origin: headers["origin"])
+        }
+        let knownMethodsByPath: [String: Set<String>] = [
+            "/health": ["GET"],
+            "/status": ["GET"],
+            "/pair": ["POST"],
+            "/proof": ["POST"],
+            "/session/end": ["POST"],
+            "/shutdown": ["POST"],
+        ]
+        if let allowedMethods = knownMethodsByPath[path], !allowedMethods.contains(method), method != "OPTIONS" {
+            return response(405, ["ok": false, "error": "method_not_allowed"], origin: headers["origin"])
+        }
         do {
             switch (method, path) {
             case ("OPTIONS", _):
