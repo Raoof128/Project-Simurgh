@@ -12,7 +12,7 @@
   - Added `tests/security/stage24_25_security_audit.test.js`, which verifies recursive raw local-field rejection in daemon proof/pairing payloads, SDK token/proof trust boundaries, localhost daemon loopback/body/malformed JSON/method/origin hardening, LaunchAgent dry-run safety, and dashboard/report manual-review wording.
   - Hardened `src/device/daemonProof.js` so forbidden raw local-data fields are rejected recursively, including nested debug/scanner objects in daemon proof and pairing envelopes.
   - Hardened `LocalHttpServer.swift` with explicit request-size checks, malformed JSON rejection for sensitive JSON endpoints, method-not-allowed responses for known routes, and preserved loopback-only binding.
-  - Added safe `--check` / `--dry-run` modes and bounded path checks to the development LaunchAgent install/uninstall scripts.
+  - Added safe `--check` / `--dry-run` modes and bounded path checks to the development LaunchAgent install/uninstall scripts; plist lint runs when `plutil` is available and skips cleanly on Linux CI.
   - Added `docs/STAGE_2_5_CLOSEOUT_SECURITY_AUDIT.md`, documented the audit command in README, and wired the gate into `scripts/check.sh`.
 - **Files Changed:**
   - `scripts/security-audit-stage-2-4-2-5.sh`

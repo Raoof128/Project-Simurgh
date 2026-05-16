@@ -33,8 +33,12 @@ if [[ "$AGENT_PATH" != "$HOME/Library/LaunchAgents/dev.raouf.simurgh.daemon.plis
 fi
 
 if [[ "$MODE" == "--check" || "$MODE" == "--dry-run" ]]; then
-  plutil -lint "$PLIST_TEMPLATE" >/dev/null
-  echo "check passed: development LaunchAgent template is valid"
+  if command -v plutil >/dev/null 2>&1; then
+    plutil -lint "$PLIST_TEMPLATE" >/dev/null
+    echo "check passed: development LaunchAgent template is valid"
+  else
+    echo "check passed: development LaunchAgent path is bounded; plist lint skipped because plutil is unavailable"
+  fi
   echo "boundary: development-only local LaunchAgent; not notarised; not production endpoint management; not MDM deployment."
   exit 0
 fi

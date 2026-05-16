@@ -13,7 +13,7 @@
 
 - Daemon proof and pairing validation now reject forbidden raw local-data fields recursively, including nested debug/scanner objects.
 - macOS daemon localhost server now has explicit request-size handling, malformed JSON rejection for sensitive JSON endpoints, method-not-allowed responses for known routes, and keeps loopback-only binding.
-- Development LaunchAgent install/uninstall scripts now expose safe `--check` / `--dry-run` modes and bounded path checks.
+- Development LaunchAgent install/uninstall scripts now expose safe `--check` / `--dry-run` modes and bounded path checks; plist lint runs when `plutil` is available and is skipped cleanly on Linux CI.
 - README now documents the Stage 2.5 closeout cybersecurity audit command and links the audit note.
 
 ### Verified
