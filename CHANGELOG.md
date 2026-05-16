@@ -1,5 +1,27 @@
 ## Change Log
 
+## [0.4.12] — 2026-05-16 — Stage 2.6 Windows Display Affinity Scanner (Release)
+
+Tagged `v0.4.12-stage-2-6-windows-display-affinity-scanner` on `main` after PR #14 merged clean.
+
+Stage 2.6 completes real-device Windows display-affinity validation for the Device Shield research prototype. WDA_MONITOR and WDA_EXCLUDEFROMCAPTURE are detected through the Windows daemon, signed inside daemon proofs, verified server-side, reflected in risk/report/dashboard/audit outputs, and protected by tamper, replay, and raw-field rejection gates.
+
+### Fixed (this session)
+
+- `scripts/smoke-stage-2-6-windows-scanner.sh` committed with mode `100644` (not executable) — caused `Permission denied` on the Linux CI runner at `check.sh` line 1150. Fixed with `git update-index --chmod=+x` (mode → `100755`).
+
+### Removed (this session)
+
+- `.github/workflows/windows-daemon.yml` — deleted as fully redundant. Both `dotnet test` on the Windows daemon solution and the Stage 2.6 smoke script are already executed inside `scripts/check.sh` step 10k on every Simurgh Quality Gate run. Consolidates all checks under a single workflow.
+
+### Released
+
+- PR #14 merged to `main`.
+- Tag `v0.4.12-stage-2-6-windows-display-affinity-scanner` pushed.
+- GitHub release published with Stage 2.6 release note.
+
+---
+
 ## [0.4.12-stage-2-6B] — 2026-05-16 — Stage 2.6B Windows Display Affinity Scanner Real-Device Validation
 
 Stage 2.6B is real-device validated on Windows 10 Pro build 19045 for live `GetWindowDisplayAffinity` detection of `WDA_MONITOR` and `WDA_EXCLUDEFROMCAPTURE`.

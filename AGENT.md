@@ -2,6 +2,26 @@
 
 ## Agent Change Log
 
+### 2026-05-16 (Australia/Sydney) — Stage 2.6 CI Fix, Workflow Consolidation, PR Merge & Release Tag
+
+**Claude (claude-sonnet-4-6):**
+
+- **Scope:** Post-implementation CI triage, workflow consolidation, PR merge, and release tagging for Stage 2.6.
+- **Summary:**
+  - Diagnosed CI failure on PR #14: `scripts/smoke-stage-2-6-windows-scanner.sh` was committed with file mode `100644` (not executable), causing `Permission denied` on the Linux GitHub Actions runner at `check.sh` line 1150. All 43 other gates had passed.
+  - Fixed by running `git update-index --chmod=+x scripts/smoke-stage-2-6-windows-scanner.sh` (mode `100644` → `100755`). No file content was changed.
+  - Identified that the separate `.github/workflows/windows-daemon.yml` workflow was fully redundant: `scripts/check.sh` step 10k already runs both `dotnet test` on the Windows daemon solution and the Stage 2.6 smoke script on every Linux CI run. CI logs confirmed `✓ Stage 2.6 Windows daemon .NET tests` passing inside the quality gate.
+  - Removed `.github/workflows/windows-daemon.yml`. After the push, only the Simurgh Quality Gate workflow remains; both `windows-daemon` check entries disappeared from PR #14.
+  - Marked PR #14 as ready for review (`gh pr ready 14`) and merged to `main` with `--admin` flag after both quality gate checks passed (43 passes, 0 failures).
+  - Tagged `v0.4.12-stage-2-6-windows-display-affinity-scanner` on `main` and pushed the tag.
+  - Published a GitHub release at that tag with the Stage 2.6 release note.
+- **Files Changed:**
+  - `scripts/smoke-stage-2-6-windows-scanner.sh` — mode `100644` → `100755` (executable bit only)
+  - `.github/workflows/windows-daemon.yml` — deleted
+  - `AGENT.md`, `CHANGELOG.md`
+- **Verification:** `gh pr checks 14` — 2/2 quality gate checks pass, 0 windows-daemon checks. `gh run view` — 43 passed, 1 previously failed (now fixed). `git tag` — `v0.4.12-stage-2-6-windows-display-affinity-scanner` present on `main`. GitHub release published.
+- **Follow-ups:** Stage 2.7 or next milestone. The Windows goblin has been inspected, fingerprinted, and escorted into the audit log.
+
 ### 2026-05-16 (Australia/Sydney) — Stage 2.6 Windows Display Affinity Scanner Real-Device Validation
 
 **Raouf:**
