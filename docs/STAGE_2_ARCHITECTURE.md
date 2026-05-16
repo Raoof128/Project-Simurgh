@@ -1,24 +1,25 @@
 # Stage 2 Architecture: Device Shield / Integrity Node
 
-> **Implementation status (as of v0.4.3, 2026-05-15):**
+> **Implementation status (v0.4.10, 2026-05-16):**
 >
-> - **Stage 2.1 ✅ merged** — Ed25519 signed-integrity-proof pipeline (`/api/integrity/proofs`, macOS Swift CLI under `tools/simurgh-node-macos/`, golden-fixture cross-implementation lock).
-> - **Stage 2.2 ✅ merged** — macOS node pairing (`/api/integrity/pairing/challenge`, `/api/integrity/pairing/complete`, per-session pairing registry, paired-session proofs return `signature_status: "verified"`).
-> - **v0.4.3 ✅ merged** — security hardening: 30/min proof rate limit, `safeParsedPairingHints` audit safety, constant-time challenge compare.
-> - **Stage 2.3 ⏳ planned** — macOS localhost node daemon (host the CLI flows behind an HTTP endpoint).
-> - **Stage 2.4 ⏳ planned** — browser SDK (discovers and talks to the localhost daemon).
-> - **Stage 2.5 ⏳ planned** — ScreenCaptureKit signal collection.
+> - **Stage 2.1 ✅ merged** — Ed25519 signed-integrity-proof pipeline.
+> - **Stage 2.2 ✅ merged** — macOS node pairing.
+> - **Stage 2.3 ✅ merged** — macOS localhost node daemon (Swift).
+> - **Stage 2.4 ✅ merged** — browser SDK bridge.
+> - **Stage 2.5 ✅ merged** — CoreGraphics metadata affinity scanner.
+> - **v0.4.10 ✅ merged** — Stage 2.5 cybersecurity audit and documentation closeout.
+> - **Stage 2.6 ⏳ planned** — Windows Display Affinity Scanner.
 
-Stage 2 is the transition from a browser-centered Stage 1 Academic Shield to a device-aware integrity architecture. Sections below describing "pairing" and "signed proof envelopes" are now implemented at the CLI + server boundary; the "Simurgh SDK ↔ Local Integrity Node" interaction is Stage 2.3+ work.
+Stage 2 is the transition from a browser-centered Stage 1 Academic Shield to a device-aware integrity architecture for macOS. The sections below describe the implemented architecture.
 
 ```text
 Browser Session
    ↓
 Simurgh SDK
    ↓
-Local Integrity Node
+Local Integrity Node (macOS Daemon)
    ↓
-Signed Integrity Proof
+Signed Integrity Proof (P-256)
    ↓
 Simurgh API
    ↓
@@ -114,20 +115,20 @@ The current helper-secret model is acceptable for Stage 1 validation. Stage 2 sh
 
 ### SDK to Node
 
-| Operation         | Purpose                                |
-| ----------------- | -------------------------------------- |
-| `pair(challenge)` | Bind browser session to local node     |
-| `status()`        | Report capability and health summary   |
-| `proof(nonce)`    | Return signed proof for API submission |
+| Operation         | Purpose                                | Status      |
+| ----------------- | -------------------------------------- | ----------- |
+| `pair(challenge)` | Bind browser session to local node     | Implemented |
+| `status()`        | Report capability and health summary   | Implemented |
+| `proof(nonce)`    | Return signed proof for API submission | Implemented |
 
 ### Node to API
 
-| Endpoint                              | Purpose                                 |
-| ------------------------------------- | --------------------------------------- |
-| `POST /api/integrity/proofs`          | Submit signed proof envelope            |
-| `GET /api/integrity/nodes/:id/status` | Instructor/admin status path, protected |
-
-These endpoints are planned; they are not present in Stage 1.
+| Endpoint                              | Purpose                                 | Status      |
+| ------------------------------------- | --------------------------------------- | ----------- |
+| `POST /api/device/challenge`          | Request pairing/proof challenge         | Implemented |
+| `POST /api/device/pair`               | Complete node pairing                   | Implemented |
+| `POST /api/telemetry`                 | Submit signed proof envelope            | Implemented |
+| `GET /api/integrity/nodes/:id/status` | Instructor/admin status path, protected | Planned     |
 
 ## Failure and Degradation Modes
 

@@ -1,10 +1,9 @@
 # Stage 2.3 — macOS Localhost Integrity Daemon
 
-**Release target:** `v0.4.5-stage-2-3-macos-localhost-daemon`  
-**Branch:** `stage-2-3-macos-localhost-daemon`  
-**Status:** research prototype
+**Release:** `v0.4.10-stage-2-macos-closeout-docs`
+**Status:** Complete and Frozen
 
-Stage 2.3 implements a macOS localhost daemon that bridges the browser client and native helper through signed, replay-resistant, privacy-preserving proof messages, without collecting screen pixels, webcam data, typed content, pasted content, raw process names, raw window titles, usernames, serial numbers, MAC addresses, or file paths.
+Stage 2.3 implements a macOS localhost daemon that bridges the browser client and native helper through signed, replay-resistant, privacy-preserving proof messages. It has been verified through Stage 2.5 closeout gates.
 
 ## Architecture
 

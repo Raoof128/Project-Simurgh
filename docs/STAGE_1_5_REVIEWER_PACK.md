@@ -1,26 +1,30 @@
-# Stage 1.5 Reviewer Pack
+# Stage 1.5 Reviewer Pack (Retrospective)
 
-> **Status (v0.4.3, 2026-05-15):** This pack remains the canonical reviewer entry point for **Stage 1.5**. Stage 2.1 (v0.4.1), Stage 2.2 (v0.4.2), and the v0.4.3 hardening pass are now merged on `main`. For Stage 2 documentation, see `CHANGELOG.md`, [`STAGE_2_ARCHITECTURE.md`](STAGE_2_ARCHITECTURE.md), `SECURITY.md`, and the design specs under [`docs/superpowers/specs/`](superpowers/specs/).
+> **Status (v0.4.10, 2026-05-16):** This pack remains available for historical reference of the **Stage 1.5** validation milestone. **Stage 2.5 is now complete and frozen for macOS.** Reviewers should use [`STAGE_2_MACOS_DEVICE_SHIELD_CLOSEOUT.md`](STAGE_2_MACOS_DEVICE_SHIELD_CLOSEOUT.md) as the current canonical entry point for the Project Simurgh research prototype.
 
-This is the main entry point for reviewing Project Simurgh after Stage 1 and before Stage 2.
+This document was the main entry point for reviewing Project Simurgh after Stage 1 and before Stage 2 implementation.
 
 ## Executive Summary
 
 Project Simurgh Stage 1 is a privacy-preserving academic integrity research MVP. It demonstrates metadata-only telemetry, deterministic local risk scoring, HMAC audit chaining, session-token enforcement, replay protection, helper-authenticated display-affinity signals, and an instructor review dashboard.
 
-Stage 1.5 is a validation and reviewer-readiness pack. It does not add major Stage 2 runtime code.
+Stage 1.5 was a validation and reviewer-readiness pack.
 
 ## Current Status
 
-| Area                                   | Status                   |
-| -------------------------------------- | ------------------------ |
-| Stage 1 Academic Shield                | Complete as research MVP |
-| Stage 1.5 validation docs              | Present in this pack     |
-| Stage 2 Device Shield / Integrity Node | Planned, not implemented |
-| Production deployment                  | Not claimed              |
-| Institutional pilot                    | Pending                  |
-| Red-team validation                    | Pending                  |
-| Privacy/legal review                   | Pending                  |
+| Area                        | Status                   |
+| --------------------------- | ------------------------ |
+| Stage 1 Academic Shield     | Complete as research MVP |
+| Stage 1.5 validation docs   | Present in this pack     |
+| Stage 2 macOS Device Shield | **Complete (v0.4.10)**   |
+| Stage 2.6 Windows Scanner   | Planned (Next)           |
+
+...
+
+| Production deployment | Not claimed |
+| Institutional pilot | Pending |
+| Red-team validation | Pending |
+| Privacy/legal review | Pending |
 
 ## What Stage 1 Proves
 

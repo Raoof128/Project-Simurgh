@@ -1,13 +1,13 @@
 # Simurgh Research Programme
 
-> **Status:** v0.4.4 — 2026-05-15. Stage 2.2 macOS node pairing shipped, 10/10 security audit posture reached, Q9 audit-coverage gap closed, Q10 demo states (`stale`, `replayed`, `invalid_signature`) added to `scripts/check.sh`. 34/34 gates, 203/203 tests, 0 high/critical npm advisories.
+> **Status:** v0.4.10 — 2026-05-16. Stage 2.5 macOS Device Shield complete and frozen. 51/51 gates, 234/234 tests, 0 high/critical npm advisories. Stage 2.6 Windows next.
 
 This document is the long-horizon research roadmap for Project Simurgh — a privacy-preserving academic integrity prototype. It frames the work as four nested research tracks rather than a single product backlog. Each track has explicit non-goals and an anti-overclaiming clause so progress claims stay honest.
 
 The structure is:
 
 1. **Interface Vulnerabilities** — what an exam-taking surface (browser, helper, OS UI) actually leaks and what an attacker can do at that layer.
-2. **Proof-Based Integrity Defence** — the signed-envelope architecture (Stage 2.1 + 2.2 shipped) and how it converts trust from "the client said so" into "the device cryptographically attests."
+2. **Proof-Based Integrity Defence** — the signed-envelope architecture (Stage 2.1–2.5 shipped for macOS) and how it converts trust from "the client said so" into "the device cryptographically attests."
 3. **Secure Agent Sandboxing** — what an LLM-backed analysis agent is allowed to see, infer, and persist; how its inputs and outputs are bounded.
 4. **Regulated / Secure-Environment Roadmap** — what it would take to pilot Simurgh inside an institution with real legal, accessibility, and privacy review attached.
 
@@ -17,20 +17,20 @@ Together these four tracks frame the answer to every question raised in the most
 
 ## 0. Audit posture and the ten questions
 
-The May 2026 internal audit asked ten questions about Stage 2's posture before Stage 2.3 (macOS localhost daemon) is started. The matrix below is the canonical answer; each row is the question, the current state of the system, and the file/line evidence.
+The May 2026 internal audit asked ten questions about Stage 2's posture. The matrix below is the canonical answer; each row is the question, the current state of the system, and the file/line evidence.
 
-| #   | Question                                               | Current state                                                                                                                                                                                                        | Evidence                                                                                                                                                                  |
-| --- | ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Q1  | Can pairing be replayed across sessions?               | No. Challenges are one-shot, 60 s TTL, constant-time compared, immutable once paired.                                                                                                                                | `src/integrity/pairingRegistry.js` (TTL, `constantTimeStringEquals`); `server.js` `/pairing/complete` route.                                                              |
-| Q2  | Can a browser forge `signature_status: "verified"`?    | No. The field is server-derived inside `validateProof` and never read from request bodies.                                                                                                                           | `src/integrity/proofValidator.js` (`signature_status` returned by validator only).                                                                                        |
-| Q3  | Is the macOS node key adequately protected?            | Adequate for a research prototype. File mode `0600`, dir `0700`, key marked as a **development identity key** in CLI README. No hardware-backed attestation claim.                                                   | `tools/simurgh-node-macos/Sources/SimurghNode/NodeIdentity.swift`; `tools/simurgh-node-macos/README.md`.                                                                  |
-| Q4  | Are challenges single-use and expiring?                | Yes. `createChallenge` clears any unconsumed pending; `completePairing` sets `rec.pending = null` on success; expiry enforced before the compare.                                                                    | `src/integrity/pairingRegistry.js`.                                                                                                                                       |
-| Q5  | Is node continuity enforced per session?               | Yes (E1 + N1). First accepted proof binds `bound_node_id_hash`, immutable; pairing route also rejects when integrity state's bound hash differs.                                                                     | `src/integrity/integrityState.js`; `server.js` cross-route N1 check.                                                                                                      |
-| Q6  | Are audit hints spoof-proof?                           | Yes. `safeParsedPairingHints` only emits `node_id_hash_if_parsed` when the decoded public key is 32 bytes **and** `sha256(pubkey) === claimed_hash`.                                                                 | `src/integrity/pairingAuditHints.js`.                                                                                                                                     |
-| Q7  | Are rate limits sized correctly?                       | Yes. `/integrity/proofs` 30/min, `/pairing/challenge` 10/min, `/pairing/complete` 20/min — all keyed per session bearer token.                                                                                       | `server.js` rate limiter declarations.                                                                                                                                    |
-| Q8  | Is the browser treated as untrusted at every boundary? | Yes. Every state-changing route revalidates against the registered key/hash; no caller-supplied trust fields.                                                                                                        | `src/integrity/proofValidator.js`, `pairingValidator.js`.                                                                                                                 |
-| Q9  | Does every rejected request emit an audit event?       | **Yes (closed in v0.4.4).** `/pairing/challenge` rejection paths now also append `INTEGRITY_PAIRING_REJECTED` with `stage: "challenge_request"`.                                                                     | `server.js` `/pairing/challenge` route; `scripts/check.sh` gate "Stage 2.2 invalid_signature + challenge-rejection both emit INTEGRITY_PAIRING_REJECTED (Q9)".            |
-| Q10 | Can each demo failure state be reproduced end-to-end?  | **Yes (closed in v0.4.4).** The five demo states — `verified`, `unregistered_node`, `paired_node_mismatch`, `proof_stale`, `nonce_replayed`, and pairing `invalid_signature` — all have gates in `scripts/check.sh`. | `scripts/check.sh` gates 10b (verified, unregistered, paired_node_mismatch) + new audit-coverage gates (stale, replayed, invalid_signature, challenge_request rejection). |
+| #   | Question                                               | Current state                                                                                                                                                                                                     | Evidence                                                                                                                                                              |
+| --- | ------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Q1  | Can pairing be replayed across sessions?               | No. Challenges are one-shot, 60 s TTL, constant-time compared, immutable once paired.                                                                                                                             | `src/integrity/pairingRegistry.js` (TTL, `constantTimeStringEquals`); `server.js` `/pairing/complete` route.                                                          |
+| Q2  | Can a browser forge `signature_status: "verified"`?    | No. The field is server-derived inside `validateProof` and never read from request bodies.                                                                                                                        | `src/integrity/proofValidator.js` (`signature_status` returned by validator only).                                                                                    |
+| Q3  | Is the macOS node key adequately protected?            | Adequate for a research prototype. File mode `0600`, dir `0700`, key marked as a **development identity key** in CLI README. Private key stored in Keychain for the macOS daemon. No hardware-backed attestation. | `tools/simurgh-node-macos/Sources/SimurghNode/NodeIdentity.swift`; `tools/simurgh-daemon-macos/Sources/SimurghDaemon/KeychainIdentity.swift`.                         |
+| Q4  | Are challenges single-use and expiring?                | Yes. `createChallenge` clears any unconsumed pending; `completePairing` sets `rec.pending = null` on success; expiry enforced before the compare.                                                                 | `src/integrity/pairingRegistry.js`.                                                                                                                                   |
+| Q5  | Is node continuity enforced per session?               | Yes (E1 + N1). First accepted proof binds `bound_node_id_hash`, immutable; pairing route also rejects when integrity state's bound hash differs.                                                                  | `src/integrity/integrityState.js`; `server.js` cross-route N1 check.                                                                                                  |
+| Q6  | Are audit hints spoof-proof?                           | Yes. `safeParsedPairingHints` only emits `node_id_hash_if_parsed` when the decoded public key is 32 bytes **and** `sha256(pubkey) === claimed_hash`.                                                              | `src/integrity/pairingAuditHints.js`.                                                                                                                                 |
+| Q7  | Are rate limits sized correctly?                       | Yes. `/integrity/proofs` 30/min, `/pairing/challenge` 10/min, `/pairing/complete` 20/min — all keyed per session bearer token.                                                                                    | `server.js` rate limiter declarations.                                                                                                                                |
+| Q8  | Is the browser treated as untrusted at every boundary? | Yes. Every state-changing route revalidates against the registered key/hash; no caller-supplied trust fields.                                                                                                     | `src/integrity/proofValidator.js`, `pairingValidator.js`.                                                                                                             |
+| Q9  | Does every rejected request emit an audit event?       | **Yes.** `/pairing/challenge` rejection paths now also append `INTEGRITY_PAIRING_REJECTED` with `stage: "challenge_request"`.                                                                                     | `server.js` `/pairing/challenge` route; `scripts/check.sh` gate "Stage 2.2 invalid_signature + challenge-rejection both emit INTEGRITY_PAIRING_REJECTED".             |
+| Q10 | Can each demo failure state be reproduced end-to-end?  | **Yes.** The five demo states — `verified`, `unregistered_node`, `paired_node_mismatch`, `proof_stale`, `nonce_replayed`, and pairing `invalid_signature` — all have gates in `scripts/check.sh`.                 | `scripts/check.sh` gates 10b (verified, unregistered, paired_node_mismatch) + audit-coverage gates (stale, replayed, invalid_signature, challenge_request rejection). |
 
 Score: **10 / 10**. Every question has both a code-level answer and a regression gate. New questions invalidate this; old ones don't expire.
 
@@ -68,22 +68,24 @@ Avoid: "cannot be bypassed", "complete endpoint security", "universal detection"
 
 ## 2. Proof-Based Integrity Defence
 
-### What is built today (Stage 2.1 + 2.2, v0.4.3 hardening, v0.4.4 audit-coverage)
+### What is built today (Stage 2.1–2.5, v0.4.10)
 
-The shipped pipeline:
+The shipped pipeline for macOS:
 
-1. **Ed25519 signed proof envelope** (`simurgh-integrity-proof-v1`). Eight required fields plus `signature`. Canonicalised through `proofCanonicalise.js` so the Node server and Swift CLI produce byte-identical golden fixtures.
-2. **Per-session node pairing** (`simurgh-pairing-proof-v1`). Challenge issued by `/pairing/challenge`, signed by the macOS node, verified by `/pairing/complete`. Once paired, that session's `node_id_hash` is immutable.
+1. **Ed25519 and P-256 signed proof envelopes.** Eight required fields plus `signature`. Canonicalised through `proofCanonicalise.js` so the Node server and native daemon produce byte-identical golden fixtures.
+2. **Per-session node pairing.** Challenge issued by `/pairing/challenge`, signed by the macOS node, verified by `/pairing/complete`. Once paired, that session's `node_id_hash` is immutable.
 3. **E1 strict triple check.** Every accepted proof must match: claimed hash + public-key string + valid signature. Any mismatch is a reject with reason.
-4. **N1 strict node continuity.** First accepted proof binds the session's node identity. Subsequent proofs from a different node hash are rejected (`node_id_hash_changed`) on both `/integrity/proofs` and `/pairing/complete`.
-5. **Audit chain.** HMAC-SHA256-linked entries; every accept and every reject appends. `INTEGRITY_PAIRING_REJECTED` now also fires for `/pairing/challenge` rejections (Q9 closure, v0.4.4) with `stage: "challenge_request"`.
-6. **Privacy budget.** Audit payloads contain hashes only — no raw challenge, no raw public key, no raw signature. `safeParsedPairingHints` enforces this for the few hint fields that are decoded.
+4. **N1 strict node continuity.** First accepted proof binds the session's node identity. Subsequent proofs from a different node hash are rejected (`node_id_hash_changed`).
+5. **Audit chain.** HMAC-SHA256-linked entries; every accept and every reject appends.
+6. **Privacy budget.** Audit payloads contain hashes only — no raw challenge, no raw public key, no raw signature.
+7. **macOS Localhost Daemon.** Swift-based sidecar (`tools/simurgh-daemon-macos/`) providing OS-level integrity signals over a loopback-only HTTP bridge.
+8. **Browser SDK.** Reusable bridge (`public/sdk/simurgh-browser-sdk.js`) that discovers and talks to the daemon.
+9. **CoreGraphics Metadata Scanner.** Privacy-safe display-affinity detection included inside signed daemon proofs.
 
 ### Where the next phase goes
 
-- **Stage 2.3 — macOS localhost daemon.** Move the CLI flows (`proof`, `pair`) behind a `127.0.0.1`-bound HTTP listener. Auth between the browser SDK (Stage 2.4) and the daemon is the open design question (per-session token? OS keychain handoff? port advertised via WKWebView postMessage?). Lifecycle (menu-bar, login-launched, on-demand) needs an explicit decision before code.
-- **Stage 2.4 — browser SDK.** Discovers and talks to the daemon. Treats the browser side as untrusted: all proof material is signed by the daemon, the SDK only relays.
-- **Stage 2.5 — ScreenCaptureKit.** Real OS-level signals (excluded-window count, sharing state, capture-active boolean). Still metadata-only — never pixels, never process names.
+- **Stage 2.6 — Windows Display Affinity Scanner.** Port the native detection logic to Windows while preserving the existing signed-proof and SDK bridge patterns.
+- **Stage 2.x — Linux Wayland Affinity.** Research into surface-level affinity detection for Linux environments.
 
 ### Non-goals
 
@@ -147,12 +149,14 @@ A research prototype that passes its own check.sh does not equal an institution-
 ### Sequencing
 
 ```
-v0.4.x  Stage 2.x research prototype (current).
-  ├─ Stage 2.3 macOS localhost daemon (next).
-  ├─ Stage 2.4 browser SDK ↔ daemon.
-  └─ Stage 2.5 ScreenCaptureKit signal collection.
+v0.4.x  Stage 2.x macOS Device Shield research prototype complete.
+  ├─ Stage 2.1 Ed25519 proofs (done).
+  ├─ Stage 2.2 Node pairing (done).
+  ├─ Stage 2.3 macOS localhost daemon (done).
+  ├─ Stage 2.4 Browser SDK ↔ daemon (done).
+  └─ Stage 2.5 CoreGraphics scanner (done).
 
-v0.5.x  Privacy / legal review pass, accessibility audit, red-team round 1.
+v0.5.x  Stage 2.6 Windows scanner, Privacy / legal review pass, accessibility audit, red-team round 1.
 v0.6.x  Distribution + LMS integration scaffolds.
 v0.7.x  First closed institutional pilot (single department, opt-in).
 v1.0.x  General-availability candidate — only after pilot results, accessibility re-test, and red-team round 2.
@@ -198,4 +202,4 @@ The verifier walks every HMAC link and reports the first tampered or missing ent
 
 ---
 
-_Last updated: 2026-05-15 (v0.4.4-audit-coverage). Maintainer: Raouf._
+_Last updated: 2026-05-16 (v0.4.10-macos-closeout). Maintainer: Raouf._

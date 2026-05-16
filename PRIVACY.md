@@ -56,6 +56,38 @@ Simurgh collects **behavioural metadata only**. No content is ever collected, st
 | Usernames, serial numbers, MAC addresses, file paths | ❌ Never                                                                  |
 | LaunchAgent system inventory or device identifiers   | ❌ Never                                                                  |
 
+## macOS Scanner Privacy Contract
+
+The Stage 2.5 macOS Affinity Scanner follows a strict **metadata-only** privacy contract. The native daemon and the browser SDK are cryptographically and procedurally prevented from collecting raw local-data identifiers.
+
+### Allowed Metadata (Aggregated & Signed)
+
+- `scanner_state`: (e.g., `healthy`, `risk_detected`, `scanner_unavailable`, `permission_denied`)
+- `scanner_version`: (e.g., `v1.0.0`)
+- `scan_timestamp`: Epoch time of the most recent scan
+- `scan_duration_ms`: Execution time of the scan pass
+- `visible_window_count`: Number of meaningful onscreen windows detected
+- `suspicious_window_count`: Number of windows matching broad risk patterns (e.g., non-standard affinity)
+- `capture_excluded_window_count`: Aggregate count of windows with `NSWindow.SharingType.none`
+- `scan_error_count`: Number of failed scan attempts in the current window
+- `privacy_mode`: Set to `metadata-only`
+- `platform`: Set to `macos`
+
+### Forbidden Data (Never Collected)
+
+The following data categories are **hard-blocked** at the daemon source and rejected recursively by the server:
+
+- **Screen Pixels:** No screenshots, screen recordings, or pixel sampling.
+- **Window Content:** No raw window titles, text, or accessibility-layer content.
+- **Process Identifiers:** No raw process names, PIDs, or bundle identifiers.
+- **Local Paths:** No home directories, file paths, or working directories.
+- **Hardware IDs:** No serial numbers, MAC addresses, or UDIDs.
+- **User Identity:** No usernames, login names, or real names.
+- **Input Content:** No keystroke values, typed characters, or paste content.
+- **Media Streams:** No webcam frames or microphone audio.
+
+Any attempt to append these fields to a signed proof will cause a **signature mismatch** (as they are not part of the signed canonical structure) and a **policy rejection** (as the server-side validator explicitly blocks these keys).
+
 ---
 
 ## Student Identity

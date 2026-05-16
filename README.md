@@ -21,7 +21,7 @@ _Detecting UI-redressing and behavioral spoofing without relying on screen captu
 
 </div>
 
-> **Status: Stage 2.5 research prototype — macOS metadata-only affinity scanner active.** Browser daemon logic lives in a reusable SDK, the macOS localhost daemon has development lifecycle controls, and signed daemon proofs now include privacy-safe scanner summaries from a CoreGraphics metadata scanner. The hardened `SIMURGH_REQUIRE_DAEMON=true` path and metadata-only privacy contract remain intact. The system does not collect video, audio, biometric data, typed answer content, pasted content, raw process names, raw window titles, usernames, serial numbers, MAC addresses, or personal identity data. See [PRIVACY.md](PRIVACY.md), [ETHICS.md](ETHICS.md), and [DISCLAIMER.md](DISCLAIMER.md).
+> **Status: Stage 2.5 research prototype — macOS Device Shield complete and frozen.** Browser daemon logic lives in a reusable SDK, the macOS localhost daemon has development lifecycle controls, and signed daemon proofs include privacy-safe scanner summaries from a CoreGraphics metadata scanner. The hardened `SIMURGH_REQUIRE_DAEMON=true` path and metadata-only privacy contract are complete and verified through Stage 2.5 closeout gates. The system does not collect video, audio, biometric data, typed answer content, pasted content, raw process names, raw window titles, usernames, serial numbers, MAC addresses, or personal identity data. See [PRIVACY.md](PRIVACY.md), [ETHICS.md](ETHICS.md), and [DISCLAIMER.md](DISCLAIMER.md).
 
 ---
 
@@ -272,11 +272,32 @@ cd tools/simurgh-daemon-macos
 
 This LaunchAgent path is development-only. It is not notarised, not production endpoint management, and not MDM deployment.
 
-### Stage 2.5 macOS Affinity Scanner Implementation (branch active — v0.4.7 target)
+### Stage 2.5 macOS Affinity Scanner + Closeout (frozen — v0.4.10)
 
 Stage 2.5 replaces the daemon's conservative placeholder scanner with a real CoreGraphics-backed, metadata-only scanner. The scanner enumerates visible window metadata, filters tiny/system noise, counts capture-excluded visible windows conservatively, and attaches only aggregate scanner summaries inside signed daemon proofs.
 
 The server accepts validated scanner fields, rejects forbidden raw local fields, escalates `capture_excluded_window_count > 0` to Critical/manual review, and records privacy-safe scanner audit events. Reports and the instructor dashboard now expose scanner state, visible-window count, maximum capture-excluded count, and manual-review wording. Design doc: [`docs/STAGE_2_5_MACOS_AFFINITY_SCANNER.md`](docs/STAGE_2_5_MACOS_AFFINITY_SCANNER.md).
+
+#### macOS Device Shield Closeout Status
+
+The macOS research prototype is complete and frozen through v0.4.10:
+
+- **Localhost daemon:** Complete
+- **Browser SDK bridge:** Complete
+- **Daemon lifecycle controls:** Complete
+- **Metadata-only affinity scanner:** Complete
+- **E2E smoke packs (2.2/2.3 and 2.4/2.5):** Complete
+- **Cybersecurity audit gate:** Complete
+- **Next stage:** Windows Display Affinity Scanner (Stage 2.6)
+
+| Release   | Purpose                                         |
+| --------- | ----------------------------------------------- |
+| `v0.4.5`  | macOS localhost daemon and signed daemon proofs |
+| `v0.4.6`  | Browser SDK and daemon lifecycle hardening      |
+| `v0.4.7`  | macOS CoreGraphics metadata affinity scanner    |
+| `v0.4.8`  | Stage 2.4/2.5 E2E smoke closeout                |
+| `v0.4.9`  | Stage 2.2/2.3 E2E smoke closeout                |
+| `v0.4.10` | Stage 2.5 cybersecurity audit and hardening     |
 
 Stage 2.5 closeout includes a dedicated E2E smoke pack:
 
@@ -293,6 +314,16 @@ Stage 2.5 closeout also includes a cybersecurity audit gate:
 ```
 
 The audit gate verifies recursive raw local-data rejection, SDK token and proof boundaries, daemon loopback/body/method/malformed JSON/origin guards, LaunchAgent dry-run safety, dashboard/report wording, the Stage 2.4/2.5 smoke pack, privacy audit, npm audit, and macOS Swift daemon test/build/doctor redaction checks when available. Details: [`docs/STAGE_2_5_CLOSEOUT_SECURITY_AUDIT.md`](docs/STAGE_2_5_CLOSEOUT_SECURITY_AUDIT.md).
+
+#### Future macOS Production Hardening Backlog
+
+The following items are identified for future production hardening and are out of scope for the Stage 2.5 research prototype:
+
+- **Thread Sanitizer & Concurrency:** Extended soak testing and TSan audits for the Swift daemon.
+- **Code Signing & Notarisation:** Developer ID signing and Apple notarisation/stapling.
+- **Managed Deployment:** MDM (Mobile Device Management) and TCC/PPPC profile distribution.
+- **Hardware Attestation:** Research into Secure Enclave-backed key storage and device attestation.
+- **Corporate/BYOD Threat Models:** Differentiation between institution-managed and student-owned device controls.
 
 ### Dashboard
 

@@ -1,8 +1,8 @@
-# Stage 1.5 Reviewer Demo Script
+# Stage 2 macOS Reviewer Demo Script
 
-> **Status (v0.4.3, 2026-05-15):** Stage 1.5 demo script. A Stage 2 demo (integrity proof + node pairing round-trip on macOS) is documented inline in `tools/simurgh-node-macos/README.md` and exercised by 4 `scripts/check.sh` gates (pairing round-trip, paired-proof verified, paired-session rejects different node, N1 cross-route consistency).
+> **Status (v0.4.10, 2026-05-16):** Stage 2.5 macOS Device Shield complete and frozen. This script covers the full macOS integrity proof round-trip. For the Stage 2.5 cybersecurity audit, run `./scripts/security-audit-stage-2-4-2-5.sh`. For Stage 2.2–2.5 smoke coverage, see [`STAGE_2_MACOS_DEVICE_SHIELD_CLOSEOUT.md`](STAGE_2_MACOS_DEVICE_SHIELD_CLOSEOUT.md).
 
-Target length: 5 to 10 minutes.
+Target length: 10 to 15 minutes.
 
 ## 1. Problem: Invisible and AI-Assisted Integrity Gap
 
@@ -12,23 +12,24 @@ Reviewer should observe: the project starts from a display-fidelity threat, not 
 
 ## 2. Why Screen Capture Fails
 
-Show the Stage 1 documentation and helper references. Explain that Stage 1 avoids relying on pixels as the primary trust signal.
+Show the Stage 1 documentation and helper references. Explain that Stage 1 and Stage 2 avoid relying on pixels as the primary trust signal.
 
 Reviewer should observe: the privacy model is a security decision, not only a policy statement.
 
-## 3. Stage 1 Architecture
+## 3. Stage 2 Architecture
 
 Walk through:
 
 - browser metadata telemetry,
-- Node/Express API,
-- deterministic local scoring,
-- optional Claude narrative for Warning/Critical,
-- macOS helper display-affinity reports,
+- reusable browser SDK (`public/sdk/simurgh-browser-sdk.js`),
+- macOS localhost daemon (`tools/simurgh-daemon-macos/`),
+- CoreGraphics-backed metadata-only affinity scanner,
+- P-256 signed integrity proofs with Keychain-backed node identity,
+- server challenge/replay and signature verification,
 - HMAC audit chain,
-- instructor dashboard.
+- instructor dashboard with `device_integrity` status.
 
-Reviewer should observe: official scores come from local deterministic scoring; Claude is explanatory, not the authority.
+Reviewer should observe: OS-level integrity signals are cryptographically signed by a local node and verified by the server.
 
 ## 4. Local Setup
 
@@ -45,7 +46,7 @@ Open:
 
 Reviewer should observe: the student page explains metadata-only monitoring before the session starts.
 
-## 5. Live Telemetry / Risk Demo
+## 5. Live Telemetry / Risk / Device Integrity Demo
 
 Trigger normal typing, focus loss, and paste-heavy behavior in a demo session.
 
@@ -54,25 +55,27 @@ Reviewer should observe:
 - normal telemetry remains low risk,
 - focus loss/paste patterns elevate risk,
 - dashboard updates through server events,
-- recommendations remain manual-review language.
+- signed `daemon_proof` metadata appears in telemetry logs.
 
-## 6. Security Hardening
+## 6. Security Hardening & Stage 2 Gates
 
 Run:
 
 ```bash
 ./scripts/check.sh
 npm test
+./scripts/security-audit-stage-2-4-2-5.sh
 ```
 
 Reviewer should observe:
 
-- unit tests pass,
+- unit tests pass (234/234),
 - secret scan runs,
 - privacy guard runs,
 - server boot smoke runs,
 - replay/auth checks run,
-- audit-chain round trip runs.
+- audit-chain round trip runs,
+- Stage 2.5 cybersecurity audit gate passes.
 
 ## 7. Privacy Model
 
@@ -82,17 +85,17 @@ Run:
 node tools/privacy-audit.mjs
 ```
 
-Reviewer should observe: generated-data scan passes or reports exact forbidden fields if a future run creates evidence files incorrectly.
+Reviewer should observe: generated-data scan passes with 0 forbidden fields found.
 
 ## 8. Validation Evidence
 
 Open:
 
 - `docs/VALIDATION.md`
-- `docs/STAGE_1_5_REVIEWER_PACK.md`
-- `docs/evidence/stage-1/README.md`
+- `docs/STAGE_2_MACOS_VALIDATION_MATRIX.md`
+- `docs/evidence/stage-2-macos/README.md`
 
-Reviewer should observe: unavailable evidence is marked pending instead of fabricated.
+Reviewer should observe: unavailable evidence (Windows/Linux) is marked pending instead of fabricated.
 
 ## 9. Known Limitations
 
@@ -101,22 +104,22 @@ Open:
 - `docs/LIMITATIONS.md`
 - `docs/RISK_REGISTER.md`
 
-Reviewer should observe: GPU overlays, read-only cheating, compromised endpoints, and incomplete helper coverage remain explicit risks.
+Reviewer should observe: GPU overlays, read-only cheating, and compromised endpoints remain explicit risks.
 
-## 10. Stage 2 Integrity Node Plan
+## 10. Stage 2 macOS Prototype Status
 
 Open:
 
-- `docs/STAGE_2_ARCHITECTURE.md`
-- `docs/RESOURCE_PLAN.md`
+- `docs/STAGE_2_MACOS_DEVICE_SHIELD_CLOSEOUT.md`
+- `docs/STAGE_2_MACOS_REVIEWER_CHECKLIST.md`
 
-Reviewer should observe: Stage 2 is a planned signed-proof architecture, not prematurely implemented code.
+Reviewer should observe: the macOS Device Shield is a complete research prototype, not only a planned architecture.
 
 ## 11. Resource Ask / Next Step
 
 Close with:
 
-- review Stage 1.5 evidence,
+- review Stage 2 macOS closeout evidence,
 - run local checks,
-- confirm legal/privacy review requirements,
-- decide whether to support Stage 2 planning, red-team testing, and a controlled pilot.
+- confirm legal/privacy review requirements for institutional pilot,
+- decide whether to support Stage 2.6 Windows scanner implementation.

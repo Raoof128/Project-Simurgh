@@ -6,6 +6,9 @@ Project Simurgh is a research prototype. Security fixes are applied to the lates
 
 | Version                                 | Supported              |
 | --------------------------------------- | ---------------------- |
+| `v0.4.10` (Stage 2.5 closeout audit)    | ✅ Active              |
+| `v0.4.9` (Stage 2.2/2.3 smoke)          | ✅ Active              |
+| `v0.4.8` (Stage 2.4/2.5 smoke)          | ✅ Active              |
 | `v0.4.7` (Stage 2.5 macOS scanner)      | ✅ Active              |
 | `v0.4.6` (Stage 2.4 SDK/lifecycle)      | ✅ Active              |
 | `v0.4.5` (Stage 2.3 daemon foundation)  | ✅ Active              |
@@ -31,9 +34,33 @@ Include:
 
 You will receive a response within **72 hours**. If the vulnerability is confirmed, a fix will be prioritised for the next release. You will be credited in the changelog unless you request anonymity.
 
-## Security Architecture (v0.4.7)
+## Security Architecture (v0.4.10)
 
-> The trust-boundary table below describes the Stage 1 surface. Stage 2.1 added an Ed25519-signed integrity-proof envelope (`/api/integrity/proofs`); Stage 2.2 added per-session node pairing (`/api/integrity/pairing/{challenge,complete}`); v0.4.3 added rate limiting on the proofs route, cryptographically-reconciled audit hints (`safeParsedPairingHints`), and a constant-time challenge compare. Stage 2.3 adds a macOS localhost daemon proof surface (`/api/device/{challenge,pair}` plus telemetry `daemon_proof`) with P-256 signatures and Keychain-backed daemon identity. Stage 2.4 moves the browser bridge into a reusable SDK and adds development daemon lifecycle/doctor commands. Stage 2.5 adds a CoreGraphics-backed, metadata-only scanner summary inside signed daemon proofs. This still does not constitute hardware attestation, notarised distribution, MDM readiness, or a production device-trust claim.
+> The trust-boundary table below describes the Stage 1 surface. Stage 2.1 added an Ed25519-signed integrity-proof envelope (`/api/integrity/proofs`); Stage 2.2 added per-session node pairing (`/api/integrity/pairing/{challenge,complete}`); v0.4.3 added rate limiting on the proofs route, cryptographically-reconciled audit hints (`safeParsedPairingHints`), and a constant-time challenge compare. Stage 2.3 adds a macOS localhost daemon proof surface (`/api/device/{challenge,pair}` plus telemetry `daemon_proof`) with P-256 signatures and Keychain-backed daemon identity. Stage 2.4 moves the browser bridge into a reusable SDK and adds development daemon lifecycle/doctor commands. Stage 2.5 adds a CoreGraphics-backed, metadata-only scanner summary inside signed daemon proofs. The Stage 2.5 closeout cybersecurity audit (v0.4.10) hardened the recursive forbidden-field rejection, daemon loopback/body/method/origin guards, and LaunchAgent dry-run safety. This still does not constitute hardware attestation, notarised distribution, MDM readiness, or a production device-trust claim.
+
+### Stage 2 macOS Device Shield Security Posture
+
+The Stage 2.5 research prototype implements the following security controls for the macOS Device Shield:
+
+- **P-256 Signed Daemon Proofs:** All OS-level metadata summaries are cryptographically signed by a Keychain-backed daemon identity.
+- **Single-Use Challenge & Replay Protection:** Replay-resistant nonce-based challenges for both pairing and proof flows.
+- **Recursive Forbidden-Field Rejection:** Explicit server-side rejection of forbidden local data fields (e.g., raw process names, window titles) across all levels of the signed proof envelope.
+- **Localhost Loopback-Only Binding:** The macOS daemon binds strictly to `127.0.0.1` to prevent remote access to the integrity bridge.
+- **Hardened HTTP Gateway:** Request-size limits, malformed JSON rejection, and strict Origin/Method checks on daemon endpoints.
+- **Privacy-Safe Doctor Diagnostics:** The `daemon doctor` tool redacts sensitive configuration values and verifies reachability without leaking state.
+- **LaunchAgent Dry-Run Safety:** Development-only LaunchAgent scripts use bounded path checks and safe shell patterns to prevent accidental system-wide modification.
+- **Audit-Chain Verification:** All daemon integrity events are recorded in the tamper-evident HMAC audit chain.
+
+#### Security Exclusions (Out of Scope)
+
+Project Simurgh is a research prototype. The following production-level security controls are **not** claimed:
+
+- **No Production Endpoint Management:** The system is not designed as a production EDR or MDM solution.
+- **No Notarised Distribution:** The macOS daemon and CLI tools are not signed with a Developer ID or notarised by Apple.
+- **No MDM Deployment:** No support for managed configuration profiles or TCC/PPPC distribution.
+- **No Hardware Attestation:** Cryptographic keys are stored in the Keychain but are not currently backed by Secure Enclave hardware attestation.
+- **No Kernel-Level Protection:** The system operates in user-space and does not use kernel extensions or System Extensions for monitoring.
+- **No Automatic Misconduct Detection:** As with Stage 1, all anomalies are recommendations for manual review only.
 
 ### Stage 2.3 localhost daemon controls
 
@@ -141,4 +168,5 @@ The repository currently reports **0 known vulnerabilities**. Report any new fin
 npm test                                       # full unit suite
 node tools/privacy-audit.mjs                   # scan generated data for forbidden fields
 node tools/verify-audit.mjs <chain.json>       # verify an exported HMAC audit chain
+./scripts/security-audit-stage-2-4-2-5.sh      # Stage 2.5 closeout cybersecurity audit gate
 ```

@@ -1,5 +1,7 @@
 # Simurgh Academic Shield — Stage 1 Documentation
 
+> **Historical Note:** This document describes the Stage 1 frozen baseline. **Stage 2 macOS Device Shield is now complete (v0.4.10).** See [`STAGE_2_MACOS_DEVICE_SHIELD_CLOSEOUT.md`](STAGE_2_MACOS_DEVICE_SHIELD_CLOSEOUT.md) for the current status.
+
 > **Status:** Stage 1 frozen baseline
 > **Release:** `v0.3.2-stage-1-ci`
 > **Scope:** Academic Shield only

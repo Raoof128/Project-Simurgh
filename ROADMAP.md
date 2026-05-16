@@ -51,7 +51,7 @@ Reviewer-readiness, validation, evidence mapping, and Stage 2 planning. No major
 
 ## Stage 2 — Device Shield / Integrity Node
 
-**Status: In progress**
+**Status: macOS Complete and Frozen (v0.4.10) / Windows Next (Stage 2.6)**
 
 Transition toward signed local integrity proofs and device-aware validation.
 
@@ -63,10 +63,13 @@ Transition toward signed local integrity proofs and device-aware validation.
 - [x] Reusable browser SDK for daemon discovery, pairing, proof fetch, and telemetry send
 - [x] Development daemon lifecycle commands and LaunchAgent install/uninstall helpers
 - [x] macOS metadata-only display-affinity scanner implementation
-- [ ] Tamper-aware local node logs
+- [x] Stage 2.2/2.3 and 2.4/2.5 E2E smoke closeout packs
+- [x] Stage 2.5 closeout cybersecurity audit gate
+- [x] macOS closeout documentation and reviewer checklist
+- [x] Tamper-aware local node logs (HMAC audit chain integration)
 - [x] Replay-resistant node/API challenge flow
 - [x] Privacy-preserving proof summaries
-- [ ] Windows native helper (SetWindowDisplayAffinity WDA_EXCLUDEFROMCAPTURE detection)
+- [ ] Windows native helper (SetWindowDisplayAffinity WDA_EXCLUDEFROMCAPTURE detection — Stage 2.6)
 - [ ] Linux Wayland surface-level affinity detection
 - [ ] Agent integrity API — validates AI computer-use sessions
 - [ ] Webhook delivery for real-time risk alerts

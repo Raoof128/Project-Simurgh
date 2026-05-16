@@ -2,6 +2,63 @@
 
 ## Agent Change Log
 
+### 2026-05-16 (Australia/Sydney) — Documentation Audit and Synchronization
+
+**Raouf:**
+
+- **Scope:** Repository-wide documentation audit — ensuring Stage 2.5 macOS completion is reflected in all files.
+- **Summary:**
+  - Performed a line-by-line audit of all 20+ documentation files in the `docs/` directory and root.
+  - Updated `DECISIONS.md`, `DEMO_SCRIPT.md`, `LIMITATIONS.md`, and `RESOURCE_PLAN.md` to reflect that Stage 2.5 is no longer "planned" but "implemented and frozen" for macOS.
+  - Synchronized `RESEARCH_PROGRAMME.md` and `STAGE_2_ARCHITECTURE.md` with the current v0.4.10 architecture.
+  - Rewrote `THREAT_MODEL.md`, `VALIDATION.md`, and `RISK_REGISTER.md` to establish the Stage 2.5 macOS prototype as the new baseline for institutional review.
+  - Marked Stage 1 and Stage 1.5 documents (`STAGE_1_ACADEMIC_SHIELD.md`, `STAGE_1_5_REVIEWER_PACK.md`) as historical retrospectives.
+  - Updated all status banners, version strings (v0.4.10), and release dates to 2026-05-16.
+- **Files Changed:**
+  - `docs/DECISIONS.md`
+  - `docs/DEMO_SCRIPT.md`
+  - `docs/LIMITATIONS.md`
+  - `docs/RESOURCE_PLAN.md`
+  - `docs/RESEARCH_PROGRAMME.md`
+  - `docs/STAGE_2_ARCHITECTURE.md`
+  - `docs/THREAT_MODEL.md`
+  - `docs/VALIDATION.md`
+  - `docs/RISK_REGISTER.md`
+  - `docs/REVIEWER_CHECKLIST.md`
+  - `docs/STAGE_1_5_REVIEWER_PACK.md`
+  - `docs/STAGE_2_3_MACOS_LOCALHOST_DAEMON.md`
+  - `docs/STAGE_1_ACADEMIC_SHIELD.md`
+- **Verification:** Global grep confirmed zero remaining "Stage 2.5 branch active" or "planned" wording for completed macOS tasks. All documentation now consistently points to v0.4.10 as the frozen macOS prototype baseline.
+- **Follow-ups:** None.
+
+### 2026-05-16 (Australia/Sydney) — Stage 2 macOS Device Shield Closeout Documentation
+
+**Raouf:**
+
+- **Scope:** Stage 2.5 closeout — reviewer-ready macOS Device Shield documentation freeze.
+- **Summary:**
+  - Created `docs/STAGE_2_MACOS_DEVICE_SHIELD_CLOSEOUT.md`, providing a comprehensive executive summary, timeline, architecture overview, and verification guide for the macOS research prototype.
+  - Created `docs/STAGE_2_MACOS_VALIDATION_MATRIX.md` mapping requirements to evidence.
+  - Created `docs/STAGE_2_MACOS_REVIEWER_CHECKLIST.md` for formal closeout verification.
+  - Set up `docs/evidence/stage-2-macos/` for redacted verification artifacts.
+  - Updated `README.md`, `SECURITY.md`, `PRIVACY.md`, and `ROADMAP.md` to reflect the frozen status of the macOS Device Shield through v0.4.10.
+  - Documented the future macOS production-hardening backlog (notarisation, MDM, hardware attestation) as out of scope for the current research prototype.
+  - Confirmed Stage 2.6 (Windows Display Affinity Scanner) as the next implementation stage.
+- **Files Changed:**
+  - `docs/STAGE_2_MACOS_DEVICE_SHIELD_CLOSEOUT.md`
+  - `docs/STAGE_2_MACOS_VALIDATION_MATRIX.md`
+  - `docs/STAGE_2_MACOS_REVIEWER_CHECKLIST.md`
+  - `docs/evidence/stage-2-macos/README.md`
+  - `docs/evidence/stage-2-macos/.gitkeep`
+  - `README.md`
+  - `SECURITY.md`
+  - `PRIVACY.md`
+  - `ROADMAP.md`
+  - `AGENT.md`
+  - `CHANGELOG.md`
+- **Verification:** `npm test` passed 234/234; `node tools/privacy-audit.mjs` passed; `./scripts/check.sh` passed 51/51; `scripts/smoke-stage-2-2-2-3.sh`, `scripts/smoke-stage-2-4-2-5.sh`, and `scripts/security-audit-stage-2-4-2-5.sh` all passed. Swift daemon build/test/release-build passed. All stale "branch active" wording removed from core documentation.
+- **Follow-ups:** Prepare Stage 2.6 Windows Display Affinity Scanner design spec.
+
 ### 2026-05-16 (Australia/Sydney) — Stage 2.5 Closeout Security Audit
 
 **Raouf:**

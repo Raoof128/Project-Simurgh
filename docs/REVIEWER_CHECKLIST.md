@@ -1,15 +1,15 @@
-# Reviewer Checklist
+# Stage 2 macOS Reviewer Checklist
 
-> **Status (v0.4.3, 2026-05-15):** Stage 1.5 reviewer checklist. Stage 2.1 + 2.2 are merged on `main`; reviewers evaluating the current state should also read `CHANGELOG.md` entries `[0.4.1]` → `[0.4.3]` and [`STAGE_2_ARCHITECTURE.md`](STAGE_2_ARCHITECTURE.md).
+> **Status (v0.4.10, 2026-05-16):** Stage 2.5 macOS Device Shield prototype complete and frozen. This checklist is the primary verification tool for the macOS prototype. For the formal closeout specifically see [`STAGE_2_MACOS_REVIEWER_CHECKLIST.md`](STAGE_2_MACOS_REVIEWER_CHECKLIST.md).
 
 ## Read First
 
-- `docs/STAGE_1_5_REVIEWER_PACK.md`
+- [`STAGE_2_MACOS_DEVICE_SHIELD_CLOSEOUT.md`](STAGE_2_MACOS_DEVICE_SHIELD_CLOSEOUT.md)
 - `README.md`
 - `docs/LIMITATIONS.md`
 - `docs/THREAT_MODEL.md`
-- `docs/STAGE_2_ARCHITECTURE.md` (Stage 2.1/2.2 implementation status)
-- `CHANGELOG.md` (v0.4.1, v0.4.2, v0.4.3 entries)
+- `docs/STAGE_2_ARCHITECTURE.md`
+- `CHANGELOG.md` (v0.4.1 to v0.4.10 entries)
 - `SECURITY.md`
 - `PRIVACY.md`
 - `ETHICS.md`
@@ -21,56 +21,51 @@ npm install
 ./scripts/check.sh
 npm test
 node tools/privacy-audit.mjs
-npm audit --audit-level=high
-git diff --check
+./scripts/smoke-stage-2-2-2-3.sh
+./scripts/smoke-stage-2-4-2-5.sh
+./scripts/security-audit-stage-2-4-2-5.sh
+cd tools/simurgh-daemon-macos && swift test && swift build && cd ../..
 ```
 
 ## Claims to Verify
 
-- Metadata-only telemetry.
-- No screen, webcam, audio, typed-content, pasted-content, or biometric storage.
-- HMAC audit chain.
-- Audit verification endpoint.
-- Session token enforcement.
-- Replay protection.
-- Helper secret enforcement.
-- Instructor token enforcement.
-- Rate limiting.
-- Manual-review wording.
-- Stage 2 not implemented yet.
+- Metadata-only telemetry (No pixels, no raw titles).
+- Signed OS-level integrity proofs (P-256).
+- Reusable browser SDK for daemon integration.
+- macOS localhost daemon with loopback hardening.
+- Recursive forbidden-field rejection in server validation.
+- HMAC audit chain linking integrity events.
+- Session token and replay protection.
+- Manual-review wording in all verdicts.
+- Stage 2.5 macOS prototype is complete.
 
 ## Limitations to Inspect
 
-- GPU overlays.
-- Click-through overlays.
+- GPU overlays (Metal/DirectX).
 - Read-only cheating workflows.
-- Helper coverage gaps.
-- OS API behavior dependencies.
-- Compromised endpoint boundary.
-- Missing pilot/red-team/legal review evidence.
+- Windows/Linux scanner absence (Stage 2.6 milestone).
+- Hardware attestation absence (Future research).
+- Missing institutional pilot/red-team evidence.
 
 ## Evidence Available
 
-- Unit tests under `tests/unit/`.
-- Check suite in `scripts/check.sh`.
-- Privacy audit in `tools/privacy-audit.mjs`.
-- CI workflow in `.github/workflows/stage-1-checks.yml`.
-- Stage 1 reference in `docs/STAGE_1_ACADEMIC_SHIELD.md`.
+- Unit tests (234 tests, 43 suites).
+- macOS smoke packs (2.2–2.5 coverage).
+- Cybersecurity audit gate script.
+- Privacy audit tool.
+- CI workflow status.
+- Stage 2 macOS closeout documentation.
 
 ## Evidence Pending
 
-- Fresh remote CI run after this branch is pushed.
-- Redacted reviewer command-output bundle.
-- Red-team results.
-- Privacy/legal review memo.
-- Accessibility review.
-- Institutional pilot data.
+- Institutional red-team results.
+- Privacy/legal review memo for deployment.
+- Accessibility review for student surfaces.
+- Pilot environment data.
 
-## Questions Before Stage 2 Support
+## Questions for Stage 2.6 (Windows)
 
-- What pilot environment will be used?
-- Who owns privacy/legal approval?
-- What devices and operating systems must be supported first?
-- What red-team scenarios are in scope?
-- What evidence can be shared publicly?
-- What deployment channel will sign and distribute the Local Integrity Node?
+- What Windows display-affinity APIs will be targeted?
+- How will the Windows daemon be packaged and distributed?
+- What Windows-specific red-team scenarios are in scope?
+- Will the browser SDK require platform-specific logic?

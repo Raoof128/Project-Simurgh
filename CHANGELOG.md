@@ -1,5 +1,49 @@
 ## Change Log
 
+## [0.4.10-sync] — 2026-05-16 — Documentation Audit and Synchronization
+
+### Changed
+
+- `DECISIONS.md`, `DEMO_SCRIPT.md`, `LIMITATIONS.md`, `RESOURCE_PLAN.md` — updated status to v0.4.10; reflected Stage 2 completion for macOS.
+- `RESEARCH_PROGRAMME.md`, `STAGE_2_ARCHITECTURE.md` — synchronized architecture tracks with the frozen macOS implementation.
+- `THREAT_MODEL.md`, `VALIDATION.md`, `RISK_REGISTER.md` — updated baseline to Stage 2.5 macOS prototype.
+- `STAGE_1_5_REVIEWER_PACK.md`, `STAGE_1_ACADEMIC_SHIELD.md` — added historical/retrospective notes.
+- `STAGE_2_3_MACOS_LOCALHOST_DAEMON.md` — marked as complete and verified.
+
+### Raouf
+
+- **Date:** 2026-05-16 (Australia/Sydney)
+- **Scope:** Repository-wide documentation audit and synchronization
+- **Summary:** Line-by-line audit of all 20+ documentation files to ensure consistency with the completed Stage 2.5 macOS Device Shield.
+- **Files changed:** 13 files in `docs/` and root.
+- **Verification:** All stale status banners and version strings updated to v0.4.10.
+- **Follow-ups:** None.
+
+## [0.4.10-docs] — 2026-05-16 — macOS Device Shield Closeout Documentation
+
+### Added
+
+- `docs/STAGE_2_MACOS_DEVICE_SHIELD_CLOSEOUT.md` — main reviewer closeout document.
+- `docs/STAGE_2_MACOS_VALIDATION_MATRIX.md` — mapping of requirements to verification evidence.
+- `docs/STAGE_2_MACOS_REVIEWER_CHECKLIST.md` — formal verification checklist for the macOS prototype.
+- `docs/evidence/stage-2-macos/` — folder for redacted verification evidence.
+
+### Changed
+
+- `README.md` — marked macOS Device Shield as frozen through v0.4.10; added release timeline and production-hardening backlog.
+- `SECURITY.md` — added Stage 2 macOS security posture and clarified out-of-scope production controls.
+- `PRIVACY.md` — documented the metadata-only scanner privacy contract and forbidden data list.
+- `ROADMAP.md` — marked Stage 2 macOS tasks as complete and indicated Stage 2.6 Windows as the next milestone.
+
+### Raouf
+
+- **Date:** 2026-05-16 (Australia/Sydney)
+- **Scope:** macOS Device Shield closeout documentation
+- **Summary:** Final documentation pass to mark the macOS research prototype as complete, audited, and frozen before starting Windows Stage 2.6 work.
+- **Files changed:** `docs/STAGE_2_MACOS_DEVICE_SHIELD_CLOSEOUT.md`, `docs/STAGE_2_MACOS_VALIDATION_MATRIX.md`, `docs/STAGE_2_MACOS_REVIEWER_CHECKLIST.md`, `docs/evidence/stage-2-macos/README.md`, `README.md`, `SECURITY.md`, `PRIVACY.md`, `ROADMAP.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** Full verification suite passed (tests, privacy audit, security audit, smoke packs, check.sh).
+- **Follow-ups:** None.
+
 ## [0.4.10] — 2026-05-16 — Stage 2.5 Closeout Security Audit
 
 ### Added
