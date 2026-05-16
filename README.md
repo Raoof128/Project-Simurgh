@@ -21,7 +21,48 @@ _Detecting UI-redressing and behavioral spoofing without relying on screen captu
 
 </div>
 
-> **Status: Stage 2.5 research prototype — macOS metadata-only affinity scanner active.** Browser daemon logic lives in a reusable SDK, the macOS localhost daemon has development lifecycle controls, and signed daemon proofs now include privacy-safe scanner summaries from a CoreGraphics metadata scanner. The hardened `SIMURGH_REQUIRE_DAEMON=true` path and metadata-only privacy contract remain intact. The system does not collect video, audio, biometric data, typed answer content, pasted content, raw process names, raw window titles, usernames, serial numbers, MAC addresses, or personal identity data. See [PRIVACY.md](PRIVACY.md), [ETHICS.md](ETHICS.md), and [DISCLAIMER.md](DISCLAIMER.md).
+> **Status: Stage 2.5 closed — macOS Device Shield regression-gated and ready for external technical review.** Browser daemon logic lives in a reusable SDK, the macOS localhost daemon has development lifecycle controls, and signed daemon proofs now include privacy-safe scanner summaries from a CoreGraphics metadata scanner. The hardened `SIMURGH_REQUIRE_DAEMON=true` path and metadata-only privacy contract remain intact. The system does not collect video, audio, biometric data, typed answer content, pasted content, raw process names, raw window titles, usernames, serial numbers, MAC addresses, or personal identity data. See [PRIVACY.md](PRIVACY.md), [ETHICS.md](ETHICS.md), and [DISCLAIMER.md](DISCLAIMER.md).
+
+---
+
+## External Technical Review
+
+Project Simurgh Stage 2.5 is closed for macOS research validation and ready for external technical review.
+
+The current macOS Device Shield baseline includes:
+
+- browser SDK lifecycle integration
+- macOS localhost daemon
+- Keychain-backed daemon identity
+- signed P-256 daemon proofs
+- metadata-only CoreGraphics affinity scanning
+- report and dashboard device-integrity output
+- Stage 2.2/2.3 E2E smoke coverage
+- Stage 2.4/2.5 E2E smoke coverage
+- Stage 2.5 closeout cybersecurity audit coverage
+- recursive rejection of forbidden raw local fields
+- privacy audit and npm audit gates
+
+**Current verification:**
+
+- 234/234 Node tests passing
+- 50/50+ quality gates passing
+- Swift daemon build/test passing
+- Stage 2.2/2.3 E2E smoke passing
+- Stage 2.4/2.5 E2E smoke passing
+- Stage 2.5 closeout security audit passing
+- Privacy audit and npm audit passing
+
+The project is open for technical review from researchers, engineers, and organisations working on AI safety, enterprise integrity, education trust, agentic workflows, and privacy-preserving secure-session infrastructure.
+
+**Known boundaries:**
+
+- research prototype only — no production deployment claim
+- no notarisation or MDM readiness claim
+- no hardware attestation claim
+- no automatic misconduct finding
+- no raw process name or raw window title collection
+- Windows/Linux support remains in progress
 
 ---
 
@@ -272,7 +313,7 @@ cd tools/simurgh-daemon-macos
 
 This LaunchAgent path is development-only. It is not notarised, not production endpoint management, and not MDM deployment.
 
-### Stage 2.5 macOS Affinity Scanner Implementation (branch active — v0.4.7 target)
+### Stage 2.5 macOS Affinity Scanner + Closeout (frozen — v0.4.10)
 
 Stage 2.5 replaces the daemon's conservative placeholder scanner with a real CoreGraphics-backed, metadata-only scanner. The scanner enumerates visible window metadata, filters tiny/system noise, counts capture-excluded visible windows conservatively, and attaches only aggregate scanner summaries inside signed daemon proofs.
 
@@ -669,6 +710,6 @@ Project Simurgh is designed to support two parallel delivery modes per platform 
 
 ## 13. Status & License
 
-**Status:** Research prototype and technical demonstrator. Stage 1 is a bounded research MVP; Stage 1.5 ships validation + reviewer-readiness documentation; Stage 2.1 and 2.2 are merged (macOS integrity proofs + node pairing); Stage 2.3 adds a localhost daemon foundation; Stage 2.4 packages the browser bridge as an SDK and adds development-only daemon lifecycle controls; Stage 2.5 adds macOS metadata-only affinity scanning inside signed daemon proofs. Not currently deployed in production. Hardware attestation, production installer lifecycle, notarisation, MDM deployment, and Windows/Linux scanner work remain future work.
+**Status:** Research prototype and technical demonstrator. Stage 1 is a bounded research MVP; Stage 1.5 ships validation + reviewer-readiness documentation; Stage 2.1 and 2.2 are merged (macOS integrity proofs + node pairing); Stage 2.3 adds a localhost daemon foundation; Stage 2.4 packages the browser bridge as an SDK and adds development-only daemon lifecycle controls; Stage 2.5 closes the macOS Device Shield loop with metadata-only affinity scanning, E2E smoke gates, and a cybersecurity audit closeout (frozen — v0.4.10). Stage 2.5 is closed and ready for external technical review. Not currently deployed in production. Hardware attestation, production installer lifecycle, notarisation, MDM deployment, and Windows/Linux scanner work remain future work.
 
 **License:** MIT © 2026 Raouf Abedini
