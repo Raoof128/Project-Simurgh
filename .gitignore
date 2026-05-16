@@ -19,6 +19,8 @@ tools/verity-helper/verity-helper
 tools/invisible-window-poc/invisible-window-poc
 tools/**/*.dSYM
 tools/**/*.o
+tools/**/bin/
+tools/**/obj/
 
 # audit log / report exports — local only
 verity-audit-*.json
@@ -34,10 +36,13 @@ logs/
 
 # scripts/check.sh runtime logs
 .simurgh_check_logs/
+.tools/
 
 # Swift build artifacts inside the macOS node package
 tools/simurgh-node-macos/.build/
 tools/simurgh-node-macos/.swiftpm/
+tools/simurgh-daemon-windows/**/bin/
+tools/simurgh-daemon-windows/**/obj/
 
 # tmp
 .tmp/

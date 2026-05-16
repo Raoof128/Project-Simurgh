@@ -23,6 +23,8 @@ tools/verity-helper/verity-helper
 tools/invisible-window-poc/invisible-window-poc
 tools/**/*.dSYM
 tools/**/*.o
+tools/**/bin
+tools/**/obj
 tools/**/.build
 tools/**/.swiftpm
 

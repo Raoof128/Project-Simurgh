@@ -1,9 +1,10 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
 import { join } from "node:path";
 import test from "node:test";
 
-const ROOT = new URL("../..", import.meta.url).pathname;
+const ROOT = fileURLToPath(new URL("../..", import.meta.url));
 const DAEMON_ROOT = join(ROOT, "tools", "simurgh-daemon-macos");
 
 test("daemon lifecycle source exposes start stop status doctor reset-identity commands", async () => {

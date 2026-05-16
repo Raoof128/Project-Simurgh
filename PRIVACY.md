@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Last updated:** 2026-05-16 (Stage 2.5 macOS metadata-only affinity scanner)
+**Last updated:** 2026-05-16 (Stage 2.6B real Windows metadata-only scanner validation)
 
 Project Simurgh is a research prototype for privacy-preserving academic integrity verification. This document describes what data is collected, how it is used, and what is explicitly not collected.
 
@@ -10,30 +10,31 @@ Project Simurgh is a research prototype for privacy-preserving academic integrit
 
 Simurgh collects **behavioural metadata only**. No content is ever collected, stored, or transmitted.
 
-| Signal                                              | Collected              | Purpose                                                           |
-| --------------------------------------------------- | ---------------------- | ----------------------------------------------------------------- |
-| Keystroke count per window                          | ✅                     | Typing cadence analysis                                           |
-| Characters typed (count only)                       | ✅                     | Cognitive load signal                                             |
-| Effective WPM                                       | ✅                     | Superhuman cadence detection                                      |
-| Focus loss count                                    | ✅                     | Context-switch detection                                          |
-| Time off window (ms)                                | ✅                     | Off-task duration signal                                          |
-| Paste count                                         | ✅                     | Paste frequency                                                   |
-| Paste length (chars, no content)                    | ✅                     | Bulk paste detection                                              |
-| Maximum idle gap (ms)                               | ✅                     | Idle-then-paste pattern                                           |
-| Keydown timing intervals                            | ✅ (capped at 200)     | Rhythm analysis                                                   |
-| Helper connection status                            | ✅                     | Countermeasure A attestation                                      |
-| Display-affinity alerts                             | ✅                     | Invisible window detection                                        |
-| Node ID hash (SHA-256 of Ed25519 pubkey)            | ✅                     | Stage 2.1/2.2 — node continuity check                             |
-| Node public key (base64)                            | ✅                     | Stage 2.2 — paired-session signature verification                 |
-| Pairing challenge hash                              | ✅                     | Stage 2.2 — pairing audit trail                                   |
-| Proof / pairing signatures (verify-only)            | ✅ (not stored as raw) | Stage 2.1/2.2 — Ed25519 verification; raw bytes never enter audit |
-| Capability flags (booleans)                         | ✅                     | Stage 2.1 — node capability summary                               |
-| Node uptime / window count / capture-excluded count | ✅                     | Stage 2.1 — numeric signals                                       |
-| Daemon node hash and version                        | ✅                     | Stage 2.3 — localhost daemon proof verification                   |
-| Daemon state, proof age, and challenge hash         | ✅                     | Stage 2.3 — replay-resistant device-integrity metadata            |
-| Browser SDK daemon state label                      | ✅                     | Stage 2.4 — local lifecycle status only                           |
-| Scanner state, counts, duration, and version        | ✅                     | Stage 2.5 — aggregate metadata-only affinity scanner summary      |
-| Raw process/window names, PIDs, paths, pixels       | ❌                     | Forbidden; rejected by daemon-proof validation and privacy audit  |
+| Signal                                               | Collected              | Purpose                                                             |
+| ---------------------------------------------------- | ---------------------- | ------------------------------------------------------------------- |
+| Keystroke count per window                           | ✅                     | Typing cadence analysis                                             |
+| Characters typed (count only)                        | ✅                     | Cognitive load signal                                               |
+| Effective WPM                                        | ✅                     | Superhuman cadence detection                                        |
+| Focus loss count                                     | ✅                     | Context-switch detection                                            |
+| Time off window (ms)                                 | ✅                     | Off-task duration signal                                            |
+| Paste count                                          | ✅                     | Paste frequency                                                     |
+| Paste length (chars, no content)                     | ✅                     | Bulk paste detection                                                |
+| Maximum idle gap (ms)                                | ✅                     | Idle-then-paste pattern                                             |
+| Keydown timing intervals                             | ✅ (capped at 200)     | Rhythm analysis                                                     |
+| Helper connection status                             | ✅                     | Countermeasure A attestation                                        |
+| Display-affinity alerts                              | ✅                     | Invisible window detection                                          |
+| Node ID hash (SHA-256 of Ed25519 pubkey)             | ✅                     | Stage 2.1/2.2 — node continuity check                               |
+| Node public key (base64)                             | ✅                     | Stage 2.2 — paired-session signature verification                   |
+| Pairing challenge hash                               | ✅                     | Stage 2.2 — pairing audit trail                                     |
+| Proof / pairing signatures (verify-only)             | ✅ (not stored as raw) | Stage 2.1/2.2 — Ed25519 verification; raw bytes never enter audit   |
+| Capability flags (booleans)                          | ✅                     | Stage 2.1 — node capability summary                                 |
+| Node uptime / window count / capture-excluded count  | ✅                     | Stage 2.1 — numeric signals                                         |
+| Daemon node hash and version                         | ✅                     | Stage 2.3 — localhost daemon proof verification                     |
+| Daemon state, proof age, and challenge hash          | ✅                     | Stage 2.3 — replay-resistant device-integrity metadata              |
+| Browser SDK daemon state label                       | ✅                     | Stage 2.4 — local lifecycle status only                             |
+| Scanner state, counts, duration, and version         | ✅                     | Stage 2.5/2.6 — aggregate metadata-only affinity scanner summary    |
+| Windows monitor-only / capture-excluded counts       | ✅                     | Stage 2.6B — signed `WDA_MONITOR` / `WDA_EXCLUDEFROMCAPTURE` counts |
+| Raw HWNDs, process/window names, PIDs, paths, pixels | ❌                     | Forbidden; rejected by daemon-proof validation and privacy audit    |
 
 ## What We Never Collect
 
@@ -50,7 +51,7 @@ Simurgh collects **behavioural metadata only**. No content is ever collected, st
 | Location data                                        | ❌ Never                                                                  |
 | Raw Ed25519 signatures (Stage 2)                     | ❌ Never persisted to audit (verify-only)                                 |
 | Raw pairing challenge bytes (Stage 2.2)              | ❌ Never (only the SHA-256 hash enters audit)                             |
-| Raw process names or window titles                   | ❌ Never (Stage 2.1+ only ships counts and capability flags)              |
+| Raw process names, window titles, HWNDs, or PIDs     | ❌ Never (Stage 2.1+ only ships counts and capability flags)              |
 | macOS node private key                               | ❌ Never leaves the local machine (stored at `~/.simurgh/node-key`, 0600) |
 | Daemon private key                                   | ❌ Never leaves the local machine (stored in macOS Keychain)              |
 | Usernames, serial numbers, MAC addresses, file paths | ❌ Never                                                                  |

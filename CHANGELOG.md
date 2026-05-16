@@ -1,5 +1,88 @@
 ## Change Log
 
+## [0.4.12-stage-2-6B] — 2026-05-16 — Stage 2.6B Windows Display Affinity Scanner Real-Device Validation
+
+Stage 2.6B is real-device validated on Windows 10 Pro build 19045 for live `GetWindowDisplayAffinity` detection of `WDA_MONITOR` and `WDA_EXCLUDEFROMCAPTURE`.
+
+### Added
+
+- `tools/simurgh-daemon-windows/src/SimurghAffinityFixture/` — controlled local Win32 fixture with `none`, `monitor`, and `exclude` modes.
+- Windows daemon runtime `/health`, `/status`, `/pair`, and `/proof` loopback paths for local validation.
+- .NET tests covering privacy-safe status/proof payloads and fixture project safety expectations.
+
+### Changed
+
+- Windows daemon proofs now include the full scanner field set required by the server validator, including scan timestamp, duration, privacy mode, and empty fingerprint hash array.
+- `docs/STAGE_2_6_WINDOWS_DISPLAY_AFFINITY_SCANNER.md`, README, SECURITY, PRIVACY, and ROADMAP now mark Stage 2.6B real Windows validation as passed.
+- Roadmap now tracks real Windows laptop validation as complete while leaving production Windows Service packaging and deployment design out of scope.
+
+### Verified
+
+- Windows OS: Windows 10 Pro / Build 19045.
+- Toolchain: Git 2.53.0, Node 24.14.0, npm 11.9.0, .NET 8.0.421.
+- `npm test` — 239/239 pass.
+- `npm audit --audit-level=high` — 0 vulnerabilities.
+- `node tools/privacy-audit.mjs` — pass.
+- Git Bash `scripts/smoke-stage-2-6-windows-scanner.sh` — pass.
+- Git Bash `scripts/security-audit-stage-2-4-2-5.sh` — pass.
+- Git Bash `scripts/check.sh` — 44/44 pass.
+- `.tools/dotnet/dotnet.exe build tools/simurgh-daemon-windows/SimurghDaemon.Windows.sln` — pass.
+- `.tools/dotnet/dotnet.exe test tools/simurgh-daemon-windows/SimurghDaemon.Windows.sln --no-restore` — 11/11 pass.
+- Live daemon `/health` returned `platform: "windows"`.
+- Live daemon `/status` returned `scanner_version: "2.6.0"` and `privacy_mode: "metadata_only"`.
+- Normal desktop scan returned zero restricted/excluded counts.
+- `WDA_MONITOR` fixture returned `restricted_detected`, `monitor_only_window_count: 1`, and `capture_restricted_window_count: 1`.
+- `WDA_EXCLUDEFROMCAPTURE` fixture returned `risk_detected` and `capture_excluded_window_count: 1`.
+- Live signed Windows daemon proofs were accepted by the server for healthy, monitor-only, and capture-excluded states.
+- Tampered scanner proof rejected with `invalid_signature`.
+- Replayed proof rejected through consumed challenge rejection.
+- Raw local `hwnd` rejected as `forbidden_local_field`.
+- Report showed Windows scanner summary; dashboard showed Windows scanner state; audit chain verified.
+- Privacy sweep found only expected forbidden-field rejection references in test logs.
+
+### Notes
+
+- Manual review wording remains: `Manual review recommended. No automatic misconduct finding.`
+- This is still a research prototype. It does not claim Windows Service deployment, production endpoint management, MDM/Intune readiness, hardware attestation, kernel-level visibility, Linux scanner support, or automatic misconduct detection.
+
+## [0.4.11-stage-2-6A] — 2026-05-16 — Stage 2.6A Windows Display Affinity Scanner Implementation
+
+Stage 2.6A is implementation-complete and pending real Windows laptop validation for live `GetWindowDisplayAffinity` detection.
+
+### Added
+
+- Windows signed daemon-proof support for `platform: "windows"` and `scanner_version: "2.6.0"`.
+- Windows scanner fields: `capture_restricted_window_count` and `monitor_only_window_count`.
+- Stage 2.6 smoke driver: `scripts/smoke-stage-2-6-windows-scanner.sh` and `tests/e2e/stage26_windows_scanner_smoke.mjs`.
+- `tools/simurgh-daemon-windows/` .NET 8 daemon skeleton with mock-first scanner architecture, Win32 provider stub, privacy normaliser, P-256 proof signer, identity store, local health payload, and xUnit tests.
+- GitHub Actions Windows daemon build/test workflow.
+- `docs/STAGE_2_6_WINDOWS_DISPLAY_AFFINITY_SCANNER.md`.
+
+### Changed
+
+- `WDA_EXCLUDEFROMCAPTURE` / `capture_excluded_window_count > 0` maps to Critical/manual review.
+- `WDA_MONITOR` / `monitor_only_window_count > 0` maps to Warning/manual review.
+- Recursive daemon proof and pairing privacy rejection now returns generic `forbidden_local_field` for forbidden local fields.
+- Reports and instructor dashboard include Windows platform and aggregate scanner counts without raw HWND, PID, process, title, path, username, pixel, audio, webcam, typed, or pasted data.
+- `scripts/check.sh` is safer on Windows hosts: portable Node test paths, Windows line-ending tolerant format check, and repo-local audit-chain temp files.
+
+### Verified
+
+- Red step: Stage 2.6 Windows proof/risk/report tests failed before implementation.
+- `node --test tests/unit/daemonProof.test.js tests/unit/daemonProofScanner.test.js tests/unit/daemonScannerRisk.test.js tests/unit/reportBuilderScanner.test.js` — pass.
+- `node --test tests/security/stage24_25_security_audit.test.js` — pass.
+- `scripts/smoke-stage-2-6-windows-scanner.sh` — pass.
+- `npm test` — 239/239 pass.
+- `npm audit --audit-level=high` — 0 vulnerabilities.
+- `node tools/privacy-audit.mjs` — pass.
+- `scripts/security-audit-stage-2-4-2-5.sh` — pass.
+- `.tools/dotnet/dotnet.exe test tools/simurgh-daemon-windows/SimurghDaemon.Windows.sln --no-restore` — 8/8 pass.
+- `scripts/check.sh` — 44/44 gates pass on Windows; macOS Swift gates skipped honestly.
+
+### Notes
+
+- Real Windows laptop validation is still pending. This branch does not claim production deployment, Windows Service readiness, MDM/Intune readiness, hardware attestation, kernel-level visibility, Linux scanner support, or automatic misconduct detection.
+
 ## [0.4.11] — 2026-05-16 — Stage 2.5 External Technical Review Signal
 
 ### Changed

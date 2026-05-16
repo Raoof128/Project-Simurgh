@@ -49,6 +49,17 @@ function createSignedProof(overrides = {}) {
   return { proof: { ...proof, signature: b64url(signature) }, public_key };
 }
 
+function createSignedWindowsProof(overrides = {}) {
+  return createSignedProof({
+    daemon_version: "0.4.11",
+    platform: "windows",
+    scanner_version: "2.6.0",
+    capture_restricted_window_count: 0,
+    monitor_only_window_count: 0,
+    ...overrides,
+  });
+}
+
 test("valid daemon proof with zero-count scanner fields is accepted", () => {
   const { proof, public_key } = createSignedProof();
   const result = validateDaemonProof(proof, {
@@ -100,7 +111,7 @@ test("raw local scanner fields are rejected before signature trust", () => {
       expectedExamId: "exam_scanner",
       pairedNode: { node_id_hash: proof.node_id_hash, public_key },
     });
-    assert.equal(result.reason, `forbidden_field:${field}`);
+    assert.equal(result.reason, "forbidden_local_field");
   }
 });
 
@@ -115,4 +126,62 @@ test("scanner field tampering invalidates the daemon proof signature", () => {
   });
 
   assert.equal(result.reason, "invalid_signature");
+});
+
+test("valid Windows scanner proof is accepted with signed Stage 2.6 fields", () => {
+  const { proof, public_key } = createSignedWindowsProof({
+    visible_window_count: 18,
+    monitor_only_window_count: 1,
+    capture_restricted_window_count: 1,
+    suspicious_window_count: 1,
+    scanner_state: "restricted_detected",
+  });
+  const result = validateDaemonProof(proof, {
+    now: Date.parse("2026-05-16T00:00:02.000Z"),
+    expectedSessionId: "sess_scanner",
+    expectedExamId: "exam_scanner",
+    pairedNode: { node_id_hash: proof.node_id_hash, public_key },
+  });
+
+  assert.equal(result.ok, true);
+  assert.equal(result.proof.platform, "windows");
+  assert.equal(result.proof.scanner_version, "2.6.0");
+  assert.equal(result.proof.monitor_only_window_count, 1);
+  assert.equal(result.proof.capture_restricted_window_count, 1);
+});
+
+test("Windows scanner field tampering invalidates the daemon proof signature", () => {
+  const { proof, public_key } = createSignedWindowsProof();
+  const tampered = { ...proof, visible_window_count: 19 };
+  const result = validateDaemonProof(tampered, {
+    now: Date.parse("2026-05-16T00:00:02.000Z"),
+    expectedSessionId: "sess_scanner",
+    expectedExamId: "exam_scanner",
+    pairedNode: { node_id_hash: proof.node_id_hash, public_key },
+  });
+
+  assert.equal(result.reason, "invalid_signature");
+});
+
+test("Windows raw local fields are rejected recursively with generic privacy reason", () => {
+  for (const field of [
+    "hwnd",
+    "window_handle",
+    "process_id",
+    "executable_path",
+    "microphone",
+    "typed_content",
+  ]) {
+    const { proof, public_key } = createSignedWindowsProof({
+      scanner_debug: { nested: { [field]: field.includes("id") ? 42 : "raw" } },
+    });
+    const result = validateDaemonProof(proof, {
+      now: Date.parse("2026-05-16T00:00:02.000Z"),
+      expectedSessionId: "sess_scanner",
+      expectedExamId: "exam_scanner",
+      pairedNode: { node_id_hash: proof.node_id_hash, public_key },
+    });
+
+    assert.equal(result.reason, "forbidden_local_field");
+  }
 });

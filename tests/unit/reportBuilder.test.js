@@ -88,6 +88,7 @@ describe("buildReport", () => {
     assert.deepEqual(report.device_integrity, {
       daemon_required: true,
       daemon_final_state: "healthy",
+      platform: "unknown",
       node_id_hash: "sha256:abc123",
       daemon_version: "0.4.5",
       scanner_final_state: "healthy",
@@ -97,6 +98,8 @@ describe("buildReport", () => {
       proofs_rejected: 0,
       stale_periods: 0,
       capture_excluded_window_count_max: 0,
+      capture_restricted_window_count_max: 0,
+      monitor_only_window_count_max: 0,
       scanner_error_count: 0,
       permission_denied_count: 0,
       manual_review_recommendation: "No device-integrity anomaly detected.",

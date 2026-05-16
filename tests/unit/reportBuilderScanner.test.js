@@ -43,3 +43,46 @@ test("report includes privacy-safe scanner summary in device_integrity", () => {
     assert.equal(forbidden in report.device_integrity, false);
   }
 });
+
+test("report includes Windows scanner counts without raw local fields", () => {
+  const report = buildReport(
+    {
+      id: "sess_windows",
+      examId: "exam_windows",
+      studentIdHash: "sha256:student",
+      createdAt: Date.now() - 60_000,
+      startedAt: Date.now() - 50_000,
+      submittedAt: Date.now(),
+    },
+    {
+      latest: { risk_level: "Warning", risk_score: 40, categories: { daemon_risk: 40 } },
+      affinity: { hostile: [], lastHeartbeat: null, source: null },
+      daemon: {
+        platform: "windows",
+        daemon_state: "healthy",
+        scanner_state: "restricted_detected",
+        scanner_version: "2.6.0",
+        proofs_verified: 2,
+        scanner_scans_verified: 2,
+        capture_excluded_window_count_max: 0,
+        capture_restricted_window_count_max: 1,
+        monitor_only_window_count_max: 1,
+        scanner_error_count: 0,
+        permission_denied_count: 0,
+      },
+    },
+    [],
+    true
+  );
+
+  assert.equal(report.device_integrity.platform, "windows");
+  assert.equal(report.device_integrity.capture_restricted_window_count_max, 1);
+  assert.equal(report.device_integrity.monitor_only_window_count_max, 1);
+  assert.equal(
+    report.device_integrity.manual_review_recommendation,
+    "Manual review recommended. No automatic misconduct finding."
+  );
+  for (const forbidden of ["hwnd", "process_id", "process_name", "window_title"]) {
+    assert.equal(forbidden in report.device_integrity, false);
+  }
+});

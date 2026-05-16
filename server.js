@@ -496,7 +496,9 @@ function requireInstructorAuth(req, res, next) {
 }
 
 function privacySafeDaemonRejectReason(reason) {
-  return String(reason).startsWith("forbidden_field:") ? "forbidden_local_field" : reason;
+  return reason === "forbidden_local_field" || String(reason).startsWith("forbidden_field:")
+    ? "forbidden_local_field"
+    : reason;
 }
 
 // Auth gate for student session endpoints. Token is issued at /join and must
@@ -621,6 +623,7 @@ app.post("/api/device/pair", limitDevicePair, requireSessionToken, (req, res) =>
     node_id_hash: result.node_id_hash,
     public_key: result.public_key,
     daemon_version: result.daemon_version,
+    platform: result.platform,
     now: result.paired_at,
   });
   appendAudit(sess, EVENTS.DAEMON_PAIRED, {
@@ -724,7 +727,7 @@ app.post("/api/telemetry", async (req, res) => {
         reason: safeReason,
         node_id_hash_if_paired: pairedDaemon?.node_id_hash ?? null,
       });
-      if (String(daemonValidation.reason).startsWith("forbidden_field:")) {
+      if (daemonValidation.reason === "forbidden_local_field") {
         appendAudit(sess, EVENTS.SCANNER_PRIVACY_REJECTED, {
           reason: safeReason,
           privacy_mode: "metadata_only",
@@ -750,7 +753,10 @@ app.post("/api/telemetry", async (req, res) => {
     }
     daemonStateRegistry.recordProofVerified(sessionId, {
       sequence: daemonValidation.proof.sequence,
+      platform: daemonValidation.proof.platform,
       capture_excluded_window_count: daemonValidation.proof.capture_excluded_window_count,
+      capture_restricted_window_count: daemonValidation.proof.capture_restricted_window_count,
+      monitor_only_window_count: daemonValidation.proof.monitor_only_window_count,
       helper_state: daemonValidation.proof.helper_state,
       scanner_state: daemonValidation.proof.scanner_state,
       scanner_version: daemonValidation.proof.scanner_version,
@@ -768,6 +774,8 @@ app.post("/api/telemetry", async (req, res) => {
       platform: daemonValidation.proof.platform,
       proof_timestamp: daemonValidation.proof.timestamp,
       capture_excluded_window_count: daemonValidation.proof.capture_excluded_window_count,
+      capture_restricted_window_count: daemonValidation.proof.capture_restricted_window_count,
+      monitor_only_window_count: daemonValidation.proof.monitor_only_window_count,
       helper_state: daemonValidation.proof.helper_state,
       scanner_state: daemonValidation.proof.scanner_state,
       scanner_version: daemonValidation.proof.scanner_version,
@@ -781,6 +789,8 @@ app.post("/api/telemetry", async (req, res) => {
     appendAudit(sess, EVENTS.SCANNER_SCAN_COMPLETED, {
       scanner_state: daemonValidation.proof.scanner_state,
       capture_excluded_window_count: daemonValidation.proof.capture_excluded_window_count,
+      capture_restricted_window_count: daemonValidation.proof.capture_restricted_window_count,
+      monitor_only_window_count: daemonValidation.proof.monitor_only_window_count,
       visible_window_count: daemonValidation.proof.visible_window_count,
       scan_duration_ms: daemonValidation.proof.scan_duration_ms,
       privacy_mode: daemonValidation.proof.privacy_mode,

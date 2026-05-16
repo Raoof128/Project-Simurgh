@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import crypto from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import test from "node:test";
 
 import {
@@ -11,7 +12,7 @@ import {
   validateDaemonProof,
 } from "../../src/device/daemonProof.js";
 
-const ROOT = new URL("../..", import.meta.url).pathname;
+const ROOT = fileURLToPath(new URL("../..", import.meta.url));
 const DAEMON_ROOT = join(ROOT, "tools", "simurgh-daemon-macos");
 const FIXED_NOW = Date.parse("2026-05-16T00:00:02.000Z");
 
@@ -116,7 +117,7 @@ test("daemon proof rejects forbidden raw local fields recursively", () => {
       expectedExamId: "exam_security",
       pairedNode,
     });
-    assert.equal(result.reason, `forbidden_field:${field}`);
+    assert.equal(result.reason, "forbidden_local_field");
   }
 });
 
@@ -125,13 +126,13 @@ test("daemon pairing rejects forbidden raw local fields recursively in envelope 
     signedPairing({}, { debug: { window_title: "Answers" } }),
     { now: FIXED_NOW, expectedSessionId: "sess_security", expectedExamId: "exam_security" }
   );
-  assert.equal(topLevel.reason, "forbidden_field:window_title");
+  assert.equal(topLevel.reason, "forbidden_local_field");
 
   const signedPayload = validateDaemonPairingPayload(
     signedPairing({ debug: { process_name: "SecretApp" } }),
     { now: FIXED_NOW, expectedSessionId: "sess_security", expectedExamId: "exam_security" }
   );
-  assert.equal(signedPayload.reason, "forbidden_field:process_name");
+  assert.equal(signedPayload.reason, "forbidden_local_field");
 });
 
 test("browser SDK keeps tokens out of URLs and only fetches daemon proof after a server challenge", async () => {
