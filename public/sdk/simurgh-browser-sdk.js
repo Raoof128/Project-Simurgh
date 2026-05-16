@@ -44,6 +44,13 @@ export function createSimurghClient(options = {}) {
     nodeIdHash: null,
     lastProofAt: null,
     lastError: null,
+    // Stage 2.7: UX-only platform/scanner status captured from daemon /status.
+    // The server NEVER trusts these — it requires a signed daemon_proof on
+    // /api/telemetry. These fields are for browser UI display only.
+    daemonPlatform: null,
+    scannerState: null,
+    scannerVersion: null,
+    privacyMode: null,
   };
   const listeners = new Set();
 
@@ -131,6 +138,10 @@ export function createSimurghClient(options = {}) {
         reachable: true,
         paired,
         nodeIdHash: status?.node_id_hash || state.nodeIdHash,
+        daemonPlatform: status?.platform ?? state.daemonPlatform,
+        scannerState: status?.scanner_state ?? state.scannerState,
+        scannerVersion: status?.scanner_version ?? state.scannerVersion,
+        privacyMode: status?.privacy_mode ?? state.privacyMode,
         lastError: null,
       });
     } catch (error) {
@@ -268,12 +279,31 @@ export function createSimurghClient(options = {}) {
     });
   }
 
+  // Stage 2.7: UX-only Device Shield status accessor.
+  //
+  // TRUST BOUNDARY: This status reflects whatever the locally-discovered
+  // daemon reported via /status. The Simurgh server NEVER consults this —
+  // server trust requires a signed P-256 daemon_proof attached to
+  // /api/telemetry. Treat this accessor as read-only UI data; do not gate
+  // any server-side decision on it.
+  function getDeviceShieldStatus() {
+    return {
+      available: state.reachable === true,
+      platform: state.daemonPlatform ?? "unknown",
+      daemon_state: state.state,
+      scanner_state: state.scannerState ?? "unknown",
+      scanner_version: state.scannerVersion ?? null,
+      privacy_mode: state.privacyMode ?? "metadata_only",
+    };
+  }
+
   return {
     discover,
     pair,
     fetchProof,
     sendTelemetry,
     getState,
+    getDeviceShieldStatus,
     setDaemonAvailable,
     subscribe,
     updateSession,

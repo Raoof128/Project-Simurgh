@@ -16,6 +16,50 @@ function jsonResponse(body, status = 200) {
   };
 }
 
+test("getDeviceShieldStatus returns UX-only platform and scanner state from /status", async () => {
+  const client = createSimurghClient({
+    serverBaseUrl: "http://server.test",
+    daemonBaseUrl: "http://127.0.0.1:3031",
+    fetchImpl: async (url) => {
+      const u = String(url);
+      if (u.endsWith("/health")) return jsonResponse({ ok: true });
+      if (u.endsWith("/status")) {
+        return jsonResponse({
+          paired: true,
+          node_id_hash: "sha256:abc",
+          platform: "windows",
+          scanner_state: "healthy",
+          scanner_version: "2.6.0",
+          privacy_mode: "metadata_only",
+        });
+      }
+      return jsonResponse({}, 404);
+    },
+  });
+  await client.discover();
+  const status = client.getDeviceShieldStatus();
+  assert.equal(status.available, true);
+  assert.equal(status.platform, "windows");
+  assert.equal(status.scanner_state, "healthy");
+  assert.equal(status.scanner_version, "2.6.0");
+  assert.equal(status.privacy_mode, "metadata_only");
+});
+
+test("getDeviceShieldStatus reports available=false and unknown platform when daemon unreachable", async () => {
+  const client = createSimurghClient({
+    serverBaseUrl: "http://server.test",
+    daemonBaseUrl: "http://127.0.0.1:3031",
+    fetchImpl: async () => {
+      throw new Error("ECONNREFUSED");
+    },
+  });
+  await client.discover();
+  const status = client.getDeviceShieldStatus();
+  assert.equal(status.available, false);
+  assert.equal(status.platform, "unknown");
+  assert.equal(status.privacy_mode, "metadata_only");
+});
+
 test("browser SDK reports missing when daemon discovery fails", async () => {
   const calls = [];
   const client = createSimurghClient({
