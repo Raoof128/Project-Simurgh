@@ -4,7 +4,7 @@
 
 _A Stage 1–2.5 technical summary of Project Simurgh's privacy-preserving integrity architecture._
 
-**Author:** Raouf Abedini — Final-year Cybersecurity, Macquarie University  
+**Author:** Raouf Abedini — Final-year Cyber Security student, Macquarie University  
 **Status:** Stage 2.5 closed · v0.4.10 · Ready for external technical review  
 **Date:** 2026-05-16
 
@@ -20,17 +20,17 @@ Simurgh replaces surveillance-first trust with signed, privacy-preserving integr
 
 Modern operating systems expose a documented, unprivileged API that allows any user-level application to render a window visible on the physical display while hiding it from all screen-capture APIs.
 
-On macOS, the mechanism is `NSWindow.sharingType = .none`. On Windows, `WS_EX_LAYERED` with `LWA_ALPHA` achieves the same result. These flags are not exploits. They are documented OS features intended for DRM and rights-managed content playback. They have been re-purposed by AI-assistance tools (Cluely, Interview Coder, and similar products) to deliver live AI output during exams, technical interviews, and performance reviews. The output appears only on the physical display and leaves no trace in any screen recording.
+On macOS, the mechanism is `NSWindow.sharingType = .none`. On Windows, the equivalent capture-exclusion mechanism is `SetWindowDisplayAffinity` with `WDA_EXCLUDEFROMCAPTURE` or `WDA_MONITOR`. Click-through behaviour may involve `WS_EX_TRANSPARENT`, and layered windows may involve `WS_EX_LAYERED`, but those are window-style flags and are not the same as display-affinity capture exclusion. These APIs are documented OS features intended for DRM and rights-managed content playback. Commercial AI-overlay tools and compositor-layer overlays have re-purposed them to deliver live AI output during exams, technical interviews, and performance reviews. The output appears only on the physical display and leaves no trace in any screen recording.
 
 The PoC lives in this repository at `tools/invisible-window-poc/`. It creates a `sharingType = .none` window, runs alongside Simurgh, and verifies that the native helper detects and flags the window within approximately two seconds. The attack is plain-labelled and cites the disclosure paper directly. It ships because a claimed mitigation is only credible when you can run the disclosed attack against it.
 
 The research paper (Abedini, 2026) defines three attack subclasses:
 
-| Subclass                  | Mechanism                                         | Detectability without native OS signals                  |
-| ------------------------- | ------------------------------------------------- | -------------------------------------------------------- |
-| Capture-invisible overlay | `sharingType = .none` / `WS_EX_LAYERED`           | Not detectable from DOM events or `getDisplayMedia()`    |
-| Click-through overlay     | `ignoresMouseEvents = true` / `WS_EX_TRANSPARENT` | Does not fire blur or focus events; undetectable from JS |
-| GPU-layer overlay         | DirectX / Metal compositor hooks                  | Bypasses both DOM events and screen-capture APIs         |
+| Subclass                  | Mechanism                                                          | Detectability without native OS signals                  |
+| ------------------------- | ------------------------------------------------------------------ | -------------------------------------------------------- |
+| Capture-invisible overlay | `sharingType = .none` (macOS) / `WDA_EXCLUDEFROMCAPTURE` (Windows) | Not detectable from DOM events or `getDisplayMedia()`    |
+| Click-through overlay     | `ignoresMouseEvents = true` / `WS_EX_TRANSPARENT`                  | Does not fire blur or focus events; undetectable from JS |
+| GPU-layer overlay         | DirectX / Metal compositor hooks                                   | Bypasses both DOM events and screen-capture APIs         |
 
 Visual monitoring is structurally weak against all three because screen capture returns what the compositor chooses to expose, not what is physically on the display. The gap between the capture surface and the physical surface is the attack surface.
 
@@ -317,7 +317,7 @@ The browser cannot inject trusted daemon or scanner fields without a signed proo
 | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Click-through overlays     | `ignoresMouseEvents = true` does not fire focus or blur events. Only the native daemon scanner can flag the window.                                        |
 | Read-don't-paste workflows | Silent transcription at human WPM with no paste events is not detectable from metadata alone.                                                              |
-| GPU-layer overlays         | DirectX / Metal compositor hooks (Cluely-class) bypass both DOM events and CoreGraphics enumeration.                                                       |
+| GPU-layer overlays         | DirectX / Metal compositor hooks used by commercial AI-overlay tools bypass both DOM events and CoreGraphics enumeration.                                  |
 | Compromised endpoint       | A fully compromised OS or kernel is out of scope for Stage 2.                                                                                              |
 | Helper secret exposure     | If `SIMURGH_HELPER_SECRET` is leaked, the helper telemetry channel can be spoofed. Stage 2 daemon proofs are not affected — they use Keychain-backed keys. |
 
@@ -337,7 +337,7 @@ The browser cannot inject trusted daemon or scanner fields without a signed proo
 
 ## 10. Stage 2.6
 
-Stage 2.6 begins Windows daemon and display-affinity scanner work. The equivalent of the `NSWindow.sharingType` surface on Windows is the `WS_EX_LAYERED` / `WS_EX_TRANSPARENT` display-affinity flag set. Stage 2.6 will implement a `simurgh-helper-win` agent that enumerates these flags at the Win32 level and produces the same metadata-only signed proof structure as the macOS daemon.
+Stage 2.6 begins Windows daemon and display-affinity scanner work. The Windows equivalent surface is `SetWindowDisplayAffinity`, including `WDA_EXCLUDEFROMCAPTURE` and `WDA_MONITOR`. Stage 2.6 will implement a `simurgh-helper-win` agent that queries these flags at the Win32 level and produces the same metadata-only signed proof structure as the macOS daemon. Related overlay behaviours such as `WS_EX_TRANSPARENT` click-through windows will be tracked as adjacent UI-redressing signals but are not the core display-affinity mechanism.
 
 Stage 2.5 closeout gates remain as go/no-go prerequisites for all Stage 2.6 work.
 
@@ -390,5 +390,5 @@ Stage 2.5 is open for external technical review. Feedback is especially welcome 
 - privacy boundary accuracy and limitation wording
 
 GitHub: [github.com/Raoof128/Project-Simurgh](https://github.com/Raoof128/Project-Simurgh)  
-Issue #11 (pinned): External Review Request — Stage 2.5 macOS Integrity Stack  
+Primary review entry point: [Issue #11 — External Review Request: Stage 2.5 macOS Integrity Stack](https://github.com/Raoof128/Project-Simurgh/issues/11) (pinned)  
 Contact: raoof.r12@gmail.com
