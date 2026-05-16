@@ -88,6 +88,7 @@ describe("buildReport", () => {
     assert.deepEqual(report.device_integrity, {
       daemon_required: true,
       daemon_final_state: "healthy",
+      daemon_platform: "unknown",
       platform: "unknown",
       node_id_hash: "sha256:abc123",
       daemon_version: "0.4.5",

@@ -1,5 +1,7 @@
 import crypto from "node:crypto";
 
+import { getManualReviewReason } from "../device/scannerRiskPolicy.js";
+
 export function buildReport(sessionRecord, sessionData, eventList, auditChainValid) {
   const { id, examId, studentIdHash, startedAt, submittedAt, createdAt } = sessionRecord;
   const { latest, affinity, daemon } = sessionData;
@@ -75,10 +77,12 @@ function buildDeviceIntegritySection(daemon) {
     (state.capture_excluded_window_count_max ?? 0) > 0 ||
     (state.capture_restricted_window_count_max ?? 0) > 0 ||
     (state.monitor_only_window_count_max ?? 0) > 0;
+  const platform = state.platform ?? "unknown";
   return {
     daemon_required: state.daemon_required ?? true,
     daemon_final_state: state.daemon_state ?? "missing",
-    platform: state.platform ?? "unknown",
+    daemon_platform: platform,
+    platform,
     node_id_hash: state.node_id_hash ?? null,
     daemon_version: state.daemon_version ?? null,
     scanner_final_state: state.scanner_state ?? "unknown",
@@ -92,8 +96,8 @@ function buildDeviceIntegritySection(daemon) {
     monitor_only_window_count_max: state.monitor_only_window_count_max ?? 0,
     scanner_error_count: state.scanner_error_count ?? 0,
     permission_denied_count: state.permission_denied_count ?? 0,
-    manual_review_recommendation: anomaly
-      ? "Manual review recommended. No automatic misconduct finding."
-      : "No device-integrity anomaly detected.",
+    manual_review_recommendation: getManualReviewReason(anomaly ? "Warning" : "Safe", {
+      context: "device_integrity",
+    }),
   };
 }
