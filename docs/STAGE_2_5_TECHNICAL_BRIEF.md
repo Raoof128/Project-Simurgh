@@ -26,11 +26,11 @@ The PoC lives in this repository at `tools/invisible-window-poc/`. It creates a 
 
 The research paper (Abedini, 2026) defines three attack subclasses:
 
-| Subclass | Mechanism | Detectability without native OS signals |
-|---|---|---|
-| Capture-invisible overlay | `sharingType = .none` / `WS_EX_LAYERED` | Not detectable from DOM events or `getDisplayMedia()` |
-| Click-through overlay | `ignoresMouseEvents = true` / `WS_EX_TRANSPARENT` | Does not fire blur or focus events; undetectable from JS |
-| GPU-layer overlay | DirectX / Metal compositor hooks | Bypasses both DOM events and screen-capture APIs |
+| Subclass                  | Mechanism                                         | Detectability without native OS signals                  |
+| ------------------------- | ------------------------------------------------- | -------------------------------------------------------- |
+| Capture-invisible overlay | `sharingType = .none` / `WS_EX_LAYERED`           | Not detectable from DOM events or `getDisplayMedia()`    |
+| Click-through overlay     | `ignoresMouseEvents = true` / `WS_EX_TRANSPARENT` | Does not fire blur or focus events; undetectable from JS |
+| GPU-layer overlay         | DirectX / Metal compositor hooks                  | Bypasses both DOM events and screen-capture APIs         |
 
 Visual monitoring is structurally weak against all three because screen capture returns what the compositor chooses to expose, not what is physically on the display. The gap between the capture surface and the physical surface is the attack surface.
 
@@ -46,16 +46,16 @@ Stage 1 (v0.3.x) establishes the behavioural integrity layer that Stage 2 builds
 
 The browser client sends metadata only. No content leaves the student's device.
 
-| Signal | What is collected | What is never collected |
-|---|---|---|
-| Keystroke count | Count per window | Keystroke content |
-| Characters typed | Count only | Any typed text |
-| Paste events | Count and character length | Paste content |
-| Focus loss | Count and duration (ms) | Window title or target |
-| Idle gaps | Maximum gap (ms) | Any content during idle |
-| WPM | Effective words per minute | Text being typed |
-| Keydown timing | Up to 200 interval samples | Keydown content |
-| Helper affinity signal | Connection status + count | Process names or window titles |
+| Signal                 | What is collected          | What is never collected        |
+| ---------------------- | -------------------------- | ------------------------------ |
+| Keystroke count        | Count per window           | Keystroke content              |
+| Characters typed       | Count only                 | Any typed text                 |
+| Paste events           | Count and character length | Paste content                  |
+| Focus loss             | Count and duration (ms)    | Window title or target         |
+| Idle gaps              | Maximum gap (ms)           | Any content during idle        |
+| WPM                    | Effective words per minute | Text being typed               |
+| Keydown timing         | Up to 200 interval samples | Keydown content                |
+| Helper affinity signal | Connection status + count  | Process names or window titles |
 
 The server hashes student identifiers with SHA-256 at ingress. The raw identifier is never written to disk, logged, or transmitted.
 
@@ -141,13 +141,13 @@ The v0.4.3 hardening pass added a 30/min rate limiter on `/api/integrity/proofs`
 
 Stage 2.3 moves the CLI signing flow behind a localhost HTTP server. The Swift daemon (`tools/simurgh-daemon-macos/`) runs at `127.0.0.1:3031` and exposes:
 
-| Daemon endpoint | Purpose |
-|---|---|
-| `GET /health` | Liveness check |
-| `GET /status` | Capability and scanner state summary |
-| `POST /pair` | Challenge-signed pairing handshake |
-| `POST /proof` | Signed daemon proof for a session-issued nonce |
-| `POST /session/end` | Session teardown |
+| Daemon endpoint     | Purpose                                        |
+| ------------------- | ---------------------------------------------- |
+| `GET /health`       | Liveness check                                 |
+| `GET /status`       | Capability and scanner state summary           |
+| `POST /pair`        | Challenge-signed pairing handshake             |
+| `POST /proof`       | Signed daemon proof for a session-issued nonce |
+| `POST /session/end` | Session teardown                               |
 
 **Cryptography:** P-256 signing key, private key stored in macOS Keychain. Public key exported as base64url SPKI DER. `node_id_hash` is `sha256:` of the public-key DER bytes. Challenges are 32 random bytes, single-use, and expire after 30 seconds.
 
@@ -234,18 +234,18 @@ Covers recursive raw local-field rejection for daemon proofs and pairing payload
 
 All gates must pass before Stage 2.6 work begins.
 
-| Gate | Result |
-|---|---|
-| `npm test` | 234/234 pass |
-| `scripts/check.sh` | 50/50 gates pass |
-| Swift daemon `swift test` | 8/8 pass |
-| Swift daemon `swift build` | pass |
-| Swift daemon `swift build -c release` | pass |
-| Stage 2.2/2.3 E2E smoke | pass |
-| Stage 2.4/2.5 E2E smoke | pass |
-| Stage 2.5 closeout security audit | pass |
-| `node tools/privacy-audit.mjs` | pass — 0 forbidden fields |
-| `npm audit --audit-level=high` | pass — 0 vulnerabilities |
+| Gate                                  | Result                    |
+| ------------------------------------- | ------------------------- |
+| `npm test`                            | 234/234 pass              |
+| `scripts/check.sh`                    | 50/50 gates pass          |
+| Swift daemon `swift test`             | 8/8 pass                  |
+| Swift daemon `swift build`            | pass                      |
+| Swift daemon `swift build -c release` | pass                      |
+| Stage 2.2/2.3 E2E smoke               | pass                      |
+| Stage 2.4/2.5 E2E smoke               | pass                      |
+| Stage 2.5 closeout security audit     | pass                      |
+| `node tools/privacy-audit.mjs`        | pass — 0 forbidden fields |
+| `npm audit --audit-level=high`        | pass — 0 vulnerabilities  |
 
 Run all gates:
 
@@ -267,13 +267,13 @@ On macOS with Swift available, `./scripts/check.sh` also builds, tests, and rele
 
 Privacy enforcement lives in code, not in configuration. Each forbidden-field boundary maps to one enforcement module and one test gate.
 
-| Enforcement point | Module | What it blocks |
-|---|---|---|
-| Telemetry ingress | `src/privacy/normaliseTelemetry.js` | Any field not on the explicit allowlist |
-| Identity hashing | `src/privacy/hashIdentity.js` | Raw student identifiers at point of entry |
-| Daemon proof validation | `src/device/daemonProof.js` | Forbidden raw local fields, recursively, including nested objects |
-| Scanner output | `PrivacyNormaliser.swift` | Raw window titles, process names, PIDs, paths, identifiers |
-| Privacy audit | `tools/privacy-audit.mjs` | CI-side scan of all generated output for forbidden field names |
+| Enforcement point       | Module                              | What it blocks                                                    |
+| ----------------------- | ----------------------------------- | ----------------------------------------------------------------- |
+| Telemetry ingress       | `src/privacy/normaliseTelemetry.js` | Any field not on the explicit allowlist                           |
+| Identity hashing        | `src/privacy/hashIdentity.js`       | Raw student identifiers at point of entry                         |
+| Daemon proof validation | `src/device/daemonProof.js`         | Forbidden raw local fields, recursively, including nested objects |
+| Scanner output          | `PrivacyNormaliser.swift`           | Raw window titles, process names, PIDs, paths, identifiers        |
+| Privacy audit           | `tools/privacy-audit.mjs`           | CI-side scan of all generated output for forbidden field names    |
 
 The full set of fields that are never collected or transmitted:
 
@@ -313,13 +313,13 @@ The browser cannot inject trusted daemon or scanner fields without a signed proo
 
 ## 8. Known Limitations
 
-| Limitation | Detail |
-|---|---|
-| Click-through overlays | `ignoresMouseEvents = true` does not fire focus or blur events. Only the native daemon scanner can flag the window. |
-| Read-don't-paste workflows | Silent transcription at human WPM with no paste events is not detectable from metadata alone. |
-| GPU-layer overlays | DirectX / Metal compositor hooks (Cluely-class) bypass both DOM events and CoreGraphics enumeration. |
-| Compromised endpoint | A fully compromised OS or kernel is out of scope for Stage 2. |
-| Helper secret exposure | If `SIMURGH_HELPER_SECRET` is leaked, the helper telemetry channel can be spoofed. Stage 2 daemon proofs are not affected — they use Keychain-backed keys. |
+| Limitation                 | Detail                                                                                                                                                     |
+| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Click-through overlays     | `ignoresMouseEvents = true` does not fire focus or blur events. Only the native daemon scanner can flag the window.                                        |
+| Read-don't-paste workflows | Silent transcription at human WPM with no paste events is not detectable from metadata alone.                                                              |
+| GPU-layer overlays         | DirectX / Metal compositor hooks (Cluely-class) bypass both DOM events and CoreGraphics enumeration.                                                       |
+| Compromised endpoint       | A fully compromised OS or kernel is out of scope for Stage 2.                                                                                              |
+| Helper secret exposure     | If `SIMURGH_HELPER_SECRET` is leaked, the helper telemetry channel can be spoofed. Stage 2 daemon proofs are not affected — they use Keychain-backed keys. |
 
 ---
 
