@@ -9,6 +9,7 @@ struct PrivacyNormaliser {
             "session_active": sessionActive,
             "daemon_state": paired ? "healthy" : "unpaired",
             "helper_state": "healthy",
+            "platform": "macos",
             "last_scan_at": scan.scanTimestamp,
             "node_id_hash": nodeIdHash as Any,
         ]

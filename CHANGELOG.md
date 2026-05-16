@@ -1,5 +1,32 @@
 ## Change Log
 
+## [0.4.8] — 2026-05-16 — Stage 2.4/2.5 E2E Smoke Closeout
+
+### Added
+
+- `scripts/smoke-stage-2-4-2-5.sh` — closeout smoke wrapper for Stage 2.4 browser SDK + Stage 2.5 scanner proof flows.
+- `tests/e2e/stage24_25_smoke.mjs` — CI-safe E2E driver that creates an exam session, pairs a deterministic mock P-256 daemon, sends signed healthy and capture-excluded scanner proofs, rejects tampered/replayed/raw-field proofs, verifies report/dashboard `device_integrity`, and verifies the audit chain.
+- `docs/superpowers/plans/2026-05-16-stage-2-4-2-5-e2e-smoke-pack.md` — implementation plan for the closeout smoke pack.
+- `scripts/check.sh` gate: `Stage 2.4/2.5 E2E smoke: SDK + daemon + scanner + signed proof`.
+
+### Changed
+
+- README now documents the dedicated Stage 2.4/2.5 smoke command and its CI-safe versus macOS-only checks.
+- Daemon rejection audit/dashboard state now stores `forbidden_local_field` for forbidden local-data proof failures instead of preserving exact forbidden field names.
+- Daemon proof validation explicitly rejects `webcam` as a forbidden raw local-data field.
+- Daemon `/status` now includes privacy-safe `platform: "macos"` for lifecycle smoke and UI consistency.
+
+### Verified
+
+- Baseline after pulling latest `main`: `git diff --check` passed; `npm test` — 234/234 pass; `./scripts/check.sh` — 48/48 gates pass; `swift test` in `tools/simurgh-daemon-macos` — 8/8 pass; `swift build` in `tools/simurgh-daemon-macos` — pass.
+- `scripts/smoke-stage-2-4-2-5.sh` — pass.
+- Final verification after edits: `git diff --check` — clean; `npm test` — 234/234 pass; `./scripts/check.sh` — 49/49 gates pass; `swift test` in `tools/simurgh-daemon-macos` — 8/8 pass; `swift build` in `tools/simurgh-daemon-macos` — pass.
+
+### Notes
+
+- This is a Stage 2.5 closeout gate, not Stage 2.6 feature work.
+- No production deployment, notarisation, MDM readiness, hardware attestation, Windows/Linux support, raw process/window collection, or automatic misconduct detection is claimed.
+
 ## [0.4.7] — 2026-05-16 — Stage 2.5 macOS Affinity Scanner Implementation
 
 ### Added

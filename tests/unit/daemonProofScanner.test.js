@@ -91,6 +91,7 @@ test("raw local scanner fields are rejected before signature trust", () => {
     "window_title",
     "raw_window_title",
     "pid",
+    "webcam",
   ]) {
     const { proof, public_key } = createSignedProof({ [field]: field === "pid" ? 123 : "raw" });
     const result = validateDaemonProof(proof, {

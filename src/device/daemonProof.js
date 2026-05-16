@@ -42,6 +42,7 @@ const FORBIDDEN_FIELDS = [
   "bundle_path",
   "file_path",
   "audio",
+  "webcam",
   "typed_content",
   "paste_content",
   "answer_text",

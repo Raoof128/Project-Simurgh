@@ -2,6 +2,31 @@
 
 ## Agent Change Log
 
+### 2026-05-16 (Australia/Sydney) — Stage 2.4/2.5 E2E Smoke Closeout
+
+**Raouf:**
+
+- **Scope:** Stage 2.5 closeout — Stage 2.4 browser SDK + Stage 2.5 scanner end-to-end smoke gauntlet before Stage 2.6.
+- **Summary:**
+  - Added `scripts/smoke-stage-2-4-2-5.sh`, a dedicated closeout smoke wrapper that starts daemon-optional and daemon-required demo servers, runs the CI-safe Node E2E driver, runs privacy audit, and performs macOS-only daemon lifecycle checks when Swift is available.
+  - Added `tests/e2e/stage24_25_smoke.mjs`, which imports the browser SDK, verifies `public/index.html` uses it, creates/join/starts an exam, pairs a deterministic mock P-256 daemon, sends signed healthy and capture-excluded scanner proofs, rejects tampered and replayed proofs, rejects raw local fields, checks report/dashboard `device_integrity`, and verifies the audit chain.
+  - Added the smoke wrapper to `scripts/check.sh` as `Stage 2.4/2.5 E2E smoke: SDK + daemon + scanner + signed proof`.
+  - Documented the smoke command in README and captured the Superpowers implementation plan under `docs/superpowers/plans/`.
+  - Tightened daemon privacy handling after the smoke exposed closeout gaps: audit/dashboard rejection reasons now store `forbidden_local_field` instead of exact forbidden field names, daemon proof validation explicitly rejects `webcam`, and daemon `/status` includes privacy-safe `platform: "macos"`.
+- **Files Changed:**
+  - `scripts/smoke-stage-2-4-2-5.sh`
+  - `tests/e2e/stage24_25_smoke.mjs`
+  - `docs/superpowers/plans/2026-05-16-stage-2-4-2-5-e2e-smoke-pack.md`
+  - `scripts/check.sh`
+  - `server.js`
+  - `src/device/daemonProof.js`
+  - `tests/unit/daemonProofScanner.test.js`
+  - `tools/simurgh-daemon-macos/Sources/SimurghDaemon/PrivacyNormaliser.swift`
+  - `tools/simurgh-daemon-macos/Tests/SimurghDaemonTests/PrivacyNormaliserTests.swift`
+  - `README.md`, `AGENT.md`, `CHANGELOG.md`
+- **Verification:** Baseline after pulling latest `main`: `git diff --check` passed; `npm test` → 234/234 pass; `./scripts/check.sh` → 48/48 gates pass; `swift test` in `tools/simurgh-daemon-macos` → 8/8 pass; `swift build` in `tools/simurgh-daemon-macos` → pass. Targeted closeout smoke: `scripts/smoke-stage-2-4-2-5.sh` → pass. Final verification after edits: `git diff --check` → clean; `npm test` → 234/234 pass; `./scripts/check.sh` → 49/49 gates pass; `swift test` in `tools/simurgh-daemon-macos` → 8/8 pass; `swift build` in `tools/simurgh-daemon-macos` → pass.
+- **Follow-ups:** Stage 2.6 can start only after this closeout smoke remains green. Do not infer production deployment, notarisation, MDM readiness, hardware attestation, Windows/Linux support, raw process/window collection, or automatic misconduct detection.
+
 ### 2026-05-16 (Australia/Sydney) — Stage 2.5 macOS Affinity Scanner Implementation
 
 **Raouf:**

@@ -1097,6 +1097,20 @@ else
   fi
 fi
 
+# ── 10h. Stage 2.4/2.5 closeout E2E smoke ───────────────
+if [[ "$QUICK" == true ]]; then
+  step "Stage 2.4/2.5 E2E smoke"
+  echo -e "${YELLOW}Skipped because --quick was used.${NC}"
+else
+  step "Stage 2.4/2.5 E2E smoke"
+  if scripts/smoke-stage-2-4-2-5.sh > "$LOG_DIR/stage24-25-e2e-smoke.log" 2>&1; then
+    pass "Stage 2.4/2.5 E2E smoke: SDK + daemon + scanner + signed proof"
+  else
+    fail "Stage 2.4/2.5 E2E smoke: SDK + daemon + scanner + signed proof"
+    tail -80 "$LOG_DIR/stage24-25-e2e-smoke.log"
+  fi
+fi
+
 # ── 11. Git status sanity ────────────────────────────────
 step "Git status"
 if git rev-parse --git-dir > /dev/null 2>&1; then

@@ -218,13 +218,14 @@ Every push to `main` and every pull request runs the full Stage 1 quality gate a
 Run the suite locally before pushing:
 
 ```bash
-./scripts/check.sh              # full pre-push check (Stage 2.5 adds scanner proof/risk/report gates)
+./scripts/check.sh              # full pre-push check (Stage 2.5 adds scanner proof/risk/report + E2E smoke gates)
 ./scripts/check.sh --quick      # pre-commit (skips server boot + chain self-test, ~3s)
 ./scripts/check.sh --fix        # auto-format with Prettier instead of check
 ./scripts/check.sh --verbose    # stream command output instead of writing to logs
+./scripts/smoke-stage-2-4-2-5.sh # Stage 2.4/2.5 E2E smoke: SDK + daemon + scanner + signed proof
 ```
 
-The script enforces: Node >= 22, JS syntax, Prettier format, unit tests, privacy audit (CLI + composite field grep + forbidden npm packages), secret scan, tone check, `npm audit`, server boot + auth gates + security headers + replay rejection, audit chain build/verify round-trip, Stage 2 integrity and daemon gates, browser SDK loading/tests, LaunchAgent plist lint, Stage 2.5 scanner proof/risk/report tests, Swift build/test, and git state. Failed steps write a tail of their log to `.simurgh_check_logs/`.
+The script enforces: Node >= 22, JS syntax, Prettier format, unit tests, privacy audit (CLI + composite field grep + forbidden npm packages), secret scan, tone check, `npm audit`, server boot + auth gates + security headers + replay rejection, audit chain build/verify round-trip, Stage 2 integrity and daemon gates, browser SDK loading/tests, LaunchAgent plist lint, Stage 2.5 scanner proof/risk/report tests, the Stage 2.4/2.5 E2E smoke pack, Swift build/test, and git state. Failed steps write a tail of their log to `.simurgh_check_logs/`.
 
 Individual checks can also be run directly:
 
@@ -267,6 +268,14 @@ This LaunchAgent path is development-only. It is not notarised, not production e
 Stage 2.5 replaces the daemon's conservative placeholder scanner with a real CoreGraphics-backed, metadata-only scanner. The scanner enumerates visible window metadata, filters tiny/system noise, counts capture-excluded visible windows conservatively, and attaches only aggregate scanner summaries inside signed daemon proofs.
 
 The server accepts validated scanner fields, rejects forbidden raw local fields, escalates `capture_excluded_window_count > 0` to Critical/manual review, and records privacy-safe scanner audit events. Reports and the instructor dashboard now expose scanner state, visible-window count, maximum capture-excluded count, and manual-review wording. Design doc: [`docs/STAGE_2_5_MACOS_AFFINITY_SCANNER.md`](docs/STAGE_2_5_MACOS_AFFINITY_SCANNER.md).
+
+Stage 2.5 closeout includes a dedicated E2E smoke pack:
+
+```bash
+./scripts/smoke-stage-2-4-2-5.sh
+```
+
+The smoke starts daemon-optional and daemon-required demo servers, imports the browser SDK, pairs a deterministic mock daemon, submits signed healthy and capture-excluded scanner proofs, rejects tampered/replayed/raw-field proofs, verifies report `device_integrity`, verifies the audit chain, and runs the privacy audit. On macOS with Swift available it also builds/tests the real daemon, starts the localhost daemon, checks `/health` and `/status`, runs privacy-safe `doctor`, and performs a safe LaunchAgent boundary/plist check. It does not install production services and does not claim notarisation, MDM readiness, hardware attestation, or automatic misconduct detection.
 
 ### Dashboard
 

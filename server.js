@@ -495,6 +495,10 @@ function requireInstructorAuth(req, res, next) {
   next();
 }
 
+function privacySafeDaemonRejectReason(reason) {
+  return String(reason).startsWith("forbidden_field:") ? "forbidden_local_field" : reason;
+}
+
 // Auth gate for student session endpoints. Token is issued at /join and must
 // bind to the sessionId in the URL or body. The bearer token is the canonical
 // source; ?token= query is NOT accepted to avoid leaking via logs.
@@ -603,9 +607,10 @@ app.post("/api/device/pair", limitDevicePair, requireSessionToken, (req, res) =>
     now: Date.now(),
   });
   if (!result.ok) {
-    daemonStateRegistry.recordRejected(sessionId, { reason: result.reason });
+    const safeReason = privacySafeDaemonRejectReason(result.reason);
+    daemonStateRegistry.recordRejected(sessionId, { reason: safeReason });
     appendAudit(sess, EVENTS.DAEMON_PROOF_REJECTED, {
-      reason: result.reason,
+      reason: safeReason,
       stage: "pair",
     });
     return res.status(result.reason === "invalid_signature" ? 401 : 409).json({
@@ -713,14 +718,15 @@ app.post("/api/telemetry", async (req, res) => {
       pairedNode: pairedDaemon,
     });
     if (!daemonValidation.ok) {
-      daemonStateRegistry.recordRejected(sessionId, { reason: daemonValidation.reason });
+      const safeReason = privacySafeDaemonRejectReason(daemonValidation.reason);
+      daemonStateRegistry.recordRejected(sessionId, { reason: safeReason });
       appendAudit(sess, EVENTS.DAEMON_PROOF_REJECTED, {
-        reason: daemonValidation.reason,
+        reason: safeReason,
         node_id_hash_if_paired: pairedDaemon?.node_id_hash ?? null,
       });
       if (String(daemonValidation.reason).startsWith("forbidden_field:")) {
         appendAudit(sess, EVENTS.SCANNER_PRIVACY_REJECTED, {
-          reason: daemonValidation.reason,
+          reason: safeReason,
           privacy_mode: "metadata_only",
         });
       }
