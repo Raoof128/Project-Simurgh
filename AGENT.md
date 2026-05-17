@@ -2,6 +2,24 @@
 
 ## Agent Change Log
 
+### 2026-05-17 (Australia/Sydney) — Stage 2.7 Cross-Platform Device Shield Unification
+
+**Raouf:**
+
+- **Scope:** Stage 2.7 unifies the macOS and Windows Device Shield surfaces under one documented cross-platform proof, scanner, risk, report, dashboard, privacy, and audit contract before Linux research begins.
+- **Summary:**
+  - Extracted three shared server modules: `src/device/forbiddenLocalFields.js` (canonical raw-field name list + recursive deep-check helper), `src/device/platformScannerSchema.js` (supported platforms + scanner enum + scanner validator), `src/device/scannerRiskPolicy.js` (daemon-risk mapping + manual-review wording).
+  - Refactored `src/device/daemonProof.js`, `src/device/daemonState.js`, `src/academic/riskScoring.js` (via `daemonState.scoreDaemonRisk`), `src/academic/reportBuilder.js`, and `tools/privacy-audit.mjs` to consume the shared modules. No behaviour change; every `fail()` reason code preserved.
+  - `device_integrity` report section now emits `daemon_platform` as the canonical platform key (back-compat `platform` alias retained for this release).
+  - Browser SDK gains UX-only `getDeviceShieldStatus()` accessor; trust boundary explicit in code comments — the server NEVER consults this status; trust still requires signed `daemon_proof` on `/api/telemetry`.
+  - Stage 2.7 cross-platform E2E smoke (`scripts/smoke-stage-2-7-cross-platform-device-shield.sh`) with Scenarios A–G covers macOS healthy, Windows healthy, macOS capture-excluded Critical, Windows monitor-only Warning, Windows capture-excluded Critical, Linux `unsupported_platform` rejection, and recursive raw-field rejection across nested objects and arrays.
+  - Stage 2.7 cross-platform security audit (`scripts/security-audit-stage-2-7-cross-platform-device-shield.sh`) locks tampered platform/scanner-field rejection, unsupported-platform rejection, raw-field rejection, dashboard misconduct-phrase ban, and a sweep that every name on `forbiddenLocalFields` is rejected by the proof validator.
+  - Docs added: `docs/DEVICE_SHIELD_CONTRACT.md`, `docs/DEVICE_SHIELD_PLATFORM_MATRIX.md`, `docs/STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md`, `docs/STAGE_2_7_REVIEWER_CHECKLIST.md`, `docs/schemas/daemon-proof.schema.json`, `docs/schemas/device-scanner-result.schema.json`.
+  - `scripts/check.sh` extended with Stage 2.7 smoke + audit gates.
+- **Verification:** Windows OS: Windows 10 Pro / Build 19045. Toolchain: Node 24.14.0, npm 11.9.0, .NET 8.0.421. Baseline `v0.4.12`: clean working tree, 239/239 Node tests, privacy audit pass. After Stage 2.7: 273/273 Node tests pass, `npm audit --audit-level=high` clean (0 vulnerabilities), `node tools/privacy-audit.mjs` clean, Stage 2.7 cross-platform smoke (Scenarios A–G) green, Stage 2.7 security audit green, Stage 2.2/2.3 smoke green, Stage 2.4/2.5 smoke green, Stage 2.5 security audit green, Stage 2.6 Windows scanner smoke green, Stage 2.6 .NET daemon tests green (11/11), `scripts/check.sh` 45/46 green (the one failure is the pre-existing Windows-line-endings prettier tolerance — CI on Linux passes prettier).
+- **Non-claims preserved:** Research prototype only. No production deployment claim, no MDM/Intune readiness, no hardware attestation, no kernel-level visibility, no GPU overlay coverage, no automatic misconduct detection. No collection of screen pixels, webcam/microphone frames, typed content, paste content, raw process names, raw window titles, HWNDs, PIDs, usernames, serial numbers, MAC addresses, or personal identity data.
+- **Follow-ups:** Open PR, merge after GitHub Actions pass, tag `v0.4.13-stage-2-7-cross-platform-device-shield`. Stage 2.8 Linux Display Integrity Research is the next milestone — X11 enumeration feasibility plus Wayland compositor/security-model investigation, no parity claim until both paths are signed and validated.
+
 ### 2026-05-16 (Australia/Sydney) — Stage 2.6 CI Fix, Workflow Consolidation, PR Merge & Release Tag
 
 **Claude (claude-sonnet-4-6):**

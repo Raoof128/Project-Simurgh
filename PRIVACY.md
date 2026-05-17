@@ -1,6 +1,8 @@
 # Privacy Policy
 
-**Last updated:** 2026-05-16 (Stage 2.6B real Windows metadata-only scanner validation)
+**Last updated:** 2026-05-17 (Stage 2.7 Cross-Platform Device Shield Unification)
+
+> **Stage 2.7 note:** The canonical list of forbidden raw-field names now lives in [`src/device/forbiddenLocalFields.js`](src/device/forbiddenLocalFields.js) and is enforced recursively by the daemon proof validator, the privacy audit CLI (`tools/privacy-audit.mjs`), and the Stage 2.7 security audit gate. Any new field added to that list automatically tightens the privacy contract across both macOS and Windows.
 
 Project Simurgh is a research prototype for privacy-preserving academic integrity verification. This document describes what data is collected, how it is used, and what is explicitly not collected.
 

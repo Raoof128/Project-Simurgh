@@ -21,13 +21,13 @@ _Detecting UI-redressing and behavioral spoofing without relying on screen captu
 
 </div>
 
-> **Status: Stage 2.6 complete — tagged `v0.4.12-stage-2-6-windows-display-affinity-scanner`.** `WDA_MONITOR` and `WDA_EXCLUDEFROMCAPTURE` are detected through the Windows daemon, signed inside daemon proofs, verified server-side, reflected in risk/report/dashboard/audit outputs, and protected by tamper, replay, and raw-field rejection gates. Validated on Windows 10 Pro build 19045 — 239/239 Node tests, 11/11 .NET tests, 44/44 quality gate checks. The system remains a research prototype and does not claim production Windows Service deployment, MDM/Intune readiness, hardware attestation, kernel-level visibility, or automatic misconduct detection. It does not collect video, audio, biometric data, typed answer content, pasted content, raw process names, raw window titles, HWNDs, PIDs, usernames, serial numbers, MAC addresses, or personal identity data. See [PRIVACY.md](PRIVACY.md), [ETHICS.md](ETHICS.md), and [DISCLAIMER.md](DISCLAIMER.md).
+> **Status: Stage 2.7 complete — tagged `v0.4.13-stage-2-7-cross-platform-device-shield`.** Stage 2.7 unifies the macOS and Windows Device Shield surfaces under one documented cross-platform proof, scanner, risk, report, dashboard, privacy, and audit contract. Three shared modules — `forbiddenLocalFields`, `platformScannerSchema`, `scannerRiskPolicy` — replace previously scattered logic; the browser SDK gains a UX-only `getDeviceShieldStatus()` accessor (server trust still requires signed `daemon_proof`); a cross-platform E2E smoke (Scenarios A–G) and Stage 2.7 security audit gate cover both platforms; Linux daemon proofs are rejected with `unsupported_platform` until Stage 2.8. Stage 2.6's `WDA_MONITOR` and `WDA_EXCLUDEFROMCAPTURE` detection (validated on Windows 10 Pro build 19045) is now consumed under the unified contract. The system remains a research prototype and does not claim production Windows Service deployment, MDM/Intune readiness, hardware attestation, kernel-level visibility, or automatic misconduct detection. It does not collect video, audio, biometric data, typed answer content, pasted content, raw process names, raw window titles, HWNDs, PIDs, usernames, serial numbers, MAC addresses, or personal identity data. See [PRIVACY.md](PRIVACY.md), [ETHICS.md](ETHICS.md), and [DISCLAIMER.md](DISCLAIMER.md).
 
 ---
 
 ## External Technical Review
 
-Project Simurgh Stage 2.6 (`v0.4.12`) is closed and merged to `main`. It is ready for external technical review.
+Project Simurgh Stage 2.7 (`v0.4.13`) is closed and merged to `main`. It is ready for external technical review.
 
 The current macOS Device Shield baseline includes:
 
@@ -42,10 +42,11 @@ The current macOS Device Shield baseline includes:
 - Stage 2.5 closeout cybersecurity audit coverage
 - Stage 2.6 Windows scanner smoke coverage
 - Stage 2.6B real Windows laptop validation for `WDA_MONITOR` and `WDA_EXCLUDEFROMCAPTURE`
+- Stage 2.7 cross-platform Device Shield unification (shared `forbiddenLocalFields`, `platformScannerSchema`, `scannerRiskPolicy`; browser SDK `getDeviceShieldStatus()`; cross-platform E2E smoke + security audit; Linux proofs rejected with `unsupported_platform`)
 - recursive rejection of forbidden raw local fields
 - privacy audit and npm audit gates
 
-**Current verification (`v0.4.12` / `main`):**
+**Current verification (`v0.4.13` / `main`):**
 
 - 239/239 Node tests passing
 - 11/11 Windows .NET daemon tests passing
@@ -272,6 +273,8 @@ Run the suite locally before pushing:
 ./scripts/smoke-stage-2-2-2-3.sh # Stage 2.2/2.3 E2E smoke: pairing + daemon proof bridge
 ./scripts/smoke-stage-2-4-2-5.sh # Stage 2.4/2.5 E2E smoke: SDK + daemon + scanner + signed proof
 ./scripts/smoke-stage-2-6-windows-scanner.sh # Stage 2.6 E2E smoke: signed Windows scanner proof contract
+./scripts/smoke-stage-2-7-cross-platform-device-shield.sh # Stage 2.7 E2E smoke: macOS + Windows scenarios A-G
+./scripts/security-audit-stage-2-7-cross-platform-device-shield.sh # Stage 2.7 security audit gate
 ```
 
 The script enforces: Node >= 22, JS syntax, Prettier format, unit tests, privacy audit (CLI + composite field grep + forbidden npm packages), secret scan, tone check, `npm audit`, server boot + auth gates + security headers + replay rejection, audit chain build/verify round-trip, Stage 2 integrity and daemon gates, browser SDK loading/tests, LaunchAgent plist lint, Stage 2.5 scanner proof/risk/report tests, the Stage 2.2/2.3 and Stage 2.4/2.5 E2E smoke packs, Stage 2.6 Windows scanner smoke and .NET daemon tests when the SDK is available, Swift build/test, and git state. Failed steps write a tail of their log to `.simurgh_check_logs/`.
@@ -567,7 +570,7 @@ The `simurgh-helper` native agent authenticates to the server via a shared secre
 | ------------------------------------------- | -------- | ----------------------------------------------------- |
 | Tab-switching + paste injection             | ✅       | Behavioral telemetry (focus loss + paste detection)   |
 | `NSWindow.SharingType.none` overlays        | ✅       | macOS daemon scanner (CoreGraphics metadata summary)  |
-| `SetWindowDisplayAffinity` overlays         | Planned  | Windows helper is Stage 2 work                        |
+| `SetWindowDisplayAffinity` overlays         | ✅       | Windows daemon scanner (Stage 2.6 `WDA_MONITOR` + `WDA_EXCLUDEFROMCAPTURE`; consumed under Stage 2.7 unified contract) |
 | Click-through/GPU overlays (no focus steal) | Partial  | Documented limitation; helper may not cover all cases |
 | Pose-token injection (future)               | Research | Hardware-rooted attestation is future work            |
 
