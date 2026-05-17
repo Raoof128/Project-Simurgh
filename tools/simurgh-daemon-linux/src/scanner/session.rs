@@ -67,10 +67,18 @@ pub fn detect(env: &SessionEnv) -> SessionDetection {
 
 fn is_local_display(d: &str) -> bool {
     // Local forms: ":N", ":N.M", "unix/:N", "unix:N", absolute paths.
-    if d.is_empty() { return false; }
-    if d.starts_with(':') { return true; }
-    if d.starts_with("unix/") || d.starts_with("unix:") { return true; }
-    if d.starts_with('/') { return true; }
+    if d.is_empty() {
+        return false;
+    }
+    if d.starts_with(':') {
+        return true;
+    }
+    if d.starts_with("unix/") || d.starts_with("unix:") {
+        return true;
+    }
+    if d.starts_with('/') {
+        return true;
+    }
     // Anything before the first ':' is a host. Empty / loopback hosts only.
     let host = d.split(':').next().unwrap_or("");
     matches!(host, "" | "localhost" | "127.0.0.1" | "::1")

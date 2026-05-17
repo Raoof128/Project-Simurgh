@@ -1,11 +1,11 @@
+use base64::{engine::general_purpose::URL_SAFE_NO_PAD, Engine};
+use serde_json::json;
+use simurgh_daemon_linux::canonical_json::canonicalise;
 use simurgh_daemon_linux::identity::{load_or_create_identity, IdentityPaths};
+use simurgh_daemon_linux::proof::{build_proof, ProofInputs};
 use std::fs;
 use std::os::unix::fs::PermissionsExt;
 use tempfile::tempdir;
-use simurgh_daemon_linux::canonical_json::canonicalise;
-use simurgh_daemon_linux::proof::{build_proof, ProofInputs};
-use serde_json::json;
-use base64::{engine::general_purpose::URL_SAFE_NO_PAD, Engine};
 
 #[test]
 fn identity_file_created_with_0600_permissions() {
@@ -83,5 +83,6 @@ fn build_proof_signature_verifies_against_canonical_payload() {
     let pk_bytes = URL_SAFE_NO_PAD.decode(id.public_key_b64url()).unwrap();
     let pk = p256::PublicKey::from_public_key_der(&pk_bytes).unwrap();
     let vk: VerifyingKey = pk.into();
-    vk.verify(canonical.as_bytes(), &sig).expect("signature verifies");
+    vk.verify(canonical.as_bytes(), &sig)
+        .expect("signature verifies");
 }

@@ -10,7 +10,12 @@ async fn health_endpoint_returns_ok_without_display_env() {
     std::env::remove_var("WAYLAND_DISPLAY");
     let app = router();
     let resp = app
-        .oneshot(Request::builder().uri("/health").body(Body::empty()).unwrap())
+        .oneshot(
+            Request::builder()
+                .uri("/health")
+                .body(Body::empty())
+                .unwrap(),
+        )
         .await
         .unwrap();
     assert_eq!(resp.status(), StatusCode::OK);
@@ -27,7 +32,12 @@ async fn status_endpoint_returns_scanner_unavailable_when_headless() {
     std::env::remove_var("WAYLAND_DISPLAY");
     let app = router();
     let resp = app
-        .oneshot(Request::builder().uri("/status").body(Body::empty()).unwrap())
+        .oneshot(
+            Request::builder()
+                .uri("/status")
+                .body(Body::empty())
+                .unwrap(),
+        )
         .await
         .unwrap();
     assert_eq!(resp.status(), StatusCode::OK);

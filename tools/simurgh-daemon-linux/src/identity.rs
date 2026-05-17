@@ -23,7 +23,10 @@ impl IdentityPaths {
             });
         let state_dir = state_home.join("simurgh");
         let identity_file = state_dir.join("daemon-identity.pem");
-        Self { state_dir, identity_file }
+        Self {
+            state_dir,
+            identity_file,
+        }
     }
 }
 
@@ -76,5 +79,8 @@ pub fn load_or_create_identity(paths: &IdentityPaths) -> Result<Identity> {
     let pk: p256::PublicKey = (*verifying_key).into();
     let public_key_spki_der = pk.to_public_key_der()?.as_bytes().to_vec();
 
-    Ok(Identity { signing_key, public_key_spki_der })
+    Ok(Identity {
+        signing_key,
+        public_key_spki_der,
+    })
 }

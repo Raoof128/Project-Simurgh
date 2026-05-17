@@ -54,6 +54,9 @@ pub fn build_proof(id: &Identity, i: &ProofInputs) -> Value {
     });
     let canonical = canonicalise(&payload);
     let signature = id.sign(canonical.as_bytes());
-    payload.as_object_mut().unwrap().insert("signature".into(), Value::String(signature));
+    payload
+        .as_object_mut()
+        .unwrap()
+        .insert("signature".into(), Value::String(signature));
     payload
 }
