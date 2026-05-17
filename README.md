@@ -566,13 +566,13 @@ The `simurgh-helper` native agent authenticates to the server via a shared secre
 
 ### Threat Model Boundaries
 
-| Vector                                      | Covered  | Mechanism                                             |
-| ------------------------------------------- | -------- | ----------------------------------------------------- |
-| Tab-switching + paste injection             | ✅       | Behavioral telemetry (focus loss + paste detection)   |
-| `NSWindow.SharingType.none` overlays        | ✅       | macOS daemon scanner (CoreGraphics metadata summary)  |
+| Vector                                      | Covered  | Mechanism                                                                                                              |
+| ------------------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Tab-switching + paste injection             | ✅       | Behavioral telemetry (focus loss + paste detection)                                                                    |
+| `NSWindow.SharingType.none` overlays        | ✅       | macOS daemon scanner (CoreGraphics metadata summary)                                                                   |
 | `SetWindowDisplayAffinity` overlays         | ✅       | Windows daemon scanner (Stage 2.6 `WDA_MONITOR` + `WDA_EXCLUDEFROMCAPTURE`; consumed under Stage 2.7 unified contract) |
-| Click-through/GPU overlays (no focus steal) | Partial  | Documented limitation; helper may not cover all cases |
-| Pose-token injection (future)               | Research | Hardware-rooted attestation is future work            |
+| Click-through/GPU overlays (no focus steal) | Partial  | Documented limitation; helper may not cover all cases                                                                  |
+| Pose-token injection (future)               | Research | Hardware-rooted attestation is future work                                                                             |
 
 ---
 

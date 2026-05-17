@@ -1,10 +1,7 @@
 import crypto from "node:crypto";
 
 import { containsForbiddenLocalFieldDeep } from "./forbiddenLocalFields.js";
-import {
-  SUPPORTED_DEVICE_PLATFORMS,
-  validateScannerSummary,
-} from "./platformScannerSchema.js";
+import { SUPPORTED_DEVICE_PLATFORMS, validateScannerSummary } from "./platformScannerSchema.js";
 
 export const DAEMON_VERSION = "0.4.7";
 export const DAEMON_PLATFORM = "macos";
@@ -219,7 +216,8 @@ export function validateDaemonPairingPayload(
     if (!(field in signed_payload)) return fail(`missing_field:${field}`);
   }
   if (signed_payload.type !== "simurgh.daemon.pair") return fail("invalid_type");
-  if (!SUPPORTED_DEVICE_PLATFORMS.includes(signed_payload.platform)) return fail("unsupported_platform");
+  if (!SUPPORTED_DEVICE_PLATFORMS.includes(signed_payload.platform))
+    return fail("unsupported_platform");
   if (!SUPPORTED_DAEMON_VERSIONS.has(signed_payload.daemon_version)) {
     return fail("unsupported_daemon_version");
   }

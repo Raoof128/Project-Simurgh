@@ -19,14 +19,14 @@ After 2.7, reviewers see one Device Shield surface with two platform adapters, n
 
 The Stage 2.6 baseline already does more cross-platform work than the blueprint suggests. Before designing new modules, the spec acknowledges what exists today (verified 2026-05-17 against `main`):
 
-| Capability                                            | Current location                            | Stage 2.7 action                                                    |
-| ----------------------------------------------------- | ------------------------------------------- | ------------------------------------------------------------------- |
-| `SUPPORTED_DAEMON_PLATFORMS = { macos, windows }`     | `src/device/daemonProof.js:9`               | Move to shared module; treat as single source of truth.             |
-| `FORBIDDEN_FIELDS` list + recursive `findForbiddenField` | `src/device/daemonProof.js:26-92`        | Extract to `src/device/forbiddenLocalFields.js`; reuse from privacy audit + tests. |
-| Scanner field validation (per-platform expected version) | `src/device/daemonProof.js:109-199`     | Extract to `src/device/platformScannerSchema.js`; preserve all current invariants. |
-| Risk escalation on `capture_excluded_window_count > 0` | `src/academic/riskScoring.js`              | Extract policy to `src/device/scannerRiskPolicy.js`. No behaviour change. |
-| Report `device_integrity` shape                       | `src/academic/reportBuilder.js`             | Add `daemon_platform` + ensure both platforms emit identical key set. |
-| Browser SDK platform awareness                        | `public/sdk/simurgh-browser-sdk.js`         | Add `getDeviceShieldStatus()` UX accessor; **server trust unchanged**. |
+| Capability                                               | Current location                    | Stage 2.7 action                                                                   |
+| -------------------------------------------------------- | ----------------------------------- | ---------------------------------------------------------------------------------- |
+| `SUPPORTED_DAEMON_PLATFORMS = { macos, windows }`        | `src/device/daemonProof.js:9`       | Move to shared module; treat as single source of truth.                            |
+| `FORBIDDEN_FIELDS` list + recursive `findForbiddenField` | `src/device/daemonProof.js:26-92`   | Extract to `src/device/forbiddenLocalFields.js`; reuse from privacy audit + tests. |
+| Scanner field validation (per-platform expected version) | `src/device/daemonProof.js:109-199` | Extract to `src/device/platformScannerSchema.js`; preserve all current invariants. |
+| Risk escalation on `capture_excluded_window_count > 0`   | `src/academic/riskScoring.js`       | Extract policy to `src/device/scannerRiskPolicy.js`. No behaviour change.          |
+| Report `device_integrity` shape                          | `src/academic/reportBuilder.js`     | Add `daemon_platform` + ensure both platforms emit identical key set.              |
+| Browser SDK platform awareness                           | `public/sdk/simurgh-browser-sdk.js` | Add `getDeviceShieldStatus()` UX accessor; **server trust unchanged**.             |
 
 **Implication for risk:** Stage 2.7 is dominated by extract-and-document work rather than green-field logic. The negative tests (tamper, replay, unsupported-platform, raw-field) already pass today; the unification must not weaken them. Coverage gains come from cross-platform smoke + the unified security audit gate.
 
@@ -132,6 +132,7 @@ The native daemons are **not modified** by Stage 2.7. Their proof outputs alread
 ```
 
 **Cross-platform rules:**
+
 - macOS may emit `0` for Windows-leaning counters (`monitor_only_window_count`).
 - Windows may emit `0` for macOS-leaning counters where they don't apply.
 - All supported platforms produce the same top-level keys.
@@ -147,10 +148,18 @@ The native daemons are **not modified** by Stage 2.7. Their proof outputs alread
 export const SUPPORTED_DEVICE_PLATFORMS = ["macos", "windows"];
 export const PLANNED_DEVICE_PLATFORMS = ["linux"];
 
-export function isSupportedPlatform(platform) { /* ... */ }
-export function getPlatformScannerDefaults(platform) { /* ... */ }
-export function normaliseScannerSummary(raw) { /* ... */ }
-export function validateScannerSummary(raw) { /* ... */ }
+export function isSupportedPlatform(platform) {
+  /* ... */
+}
+export function getPlatformScannerDefaults(platform) {
+  /* ... */
+}
+export function normaliseScannerSummary(raw) {
+  /* ... */
+}
+export function validateScannerSummary(raw) {
+  /* ... */
+}
 ```
 
 All scanner-shape logic now in `daemonProof.js:validateScannerFields` is moved here. `daemonProof.js` imports and delegates. No reason codes change; same negative-test surface.
@@ -159,16 +168,16 @@ All scanner-shape logic now in `daemonProof.js:validateScannerFields` is moved h
 
 Canonical mapping (preserves current behaviour):
 
-| Signal                                | Result                                  |
-| ------------------------------------- | --------------------------------------- |
-| `capture_excluded_window_count > 0`   | Critical floor (manual review)          |
-| `monitor_only_window_count > 0`       | Warning + manual review                 |
-| `capture_restricted_window_count > 0` | Warning + manual review                 |
-| `scanner_state = scanner_unavailable` | Warning if daemon required, else Info   |
-| `scanner_state = permission_denied`   | Warning + manual review context         |
-| `scanner_state = scan_error`          | Warning + manual review context         |
-| Invalid proof                         | Reject (existing behaviour)             |
-| Raw local field                       | Reject as `forbidden_local_field`       |
+| Signal                                | Result                                |
+| ------------------------------------- | ------------------------------------- |
+| `capture_excluded_window_count > 0`   | Critical floor (manual review)        |
+| `monitor_only_window_count > 0`       | Warning + manual review               |
+| `capture_restricted_window_count > 0` | Warning + manual review               |
+| `scanner_state = scanner_unavailable` | Warning if daemon required, else Info |
+| `scanner_state = permission_denied`   | Warning + manual review context       |
+| `scanner_state = scan_error`          | Warning + manual review context       |
+| Invalid proof                         | Reject (existing behaviour)           |
+| Raw local field                       | Reject as `forbidden_local_field`     |
 
 Exports `mapScannerSummaryToRisk()`, `getScannerRiskLevel()`, `getManualReviewReason()`. `riskScoring.js` and `reportBuilder.js` import from here.
 
@@ -234,14 +243,14 @@ Risk display: `Scanner: Risk detected — Manual review recommended. No automati
 
 `scripts/smoke-stage-2-7-cross-platform-device-shield.sh` drives `tests/e2e/stage27_cross_platform_device_shield_smoke.mjs`. All scenarios use deterministic mock P-256 daemons (no real native daemons required in CI):
 
-| Scenario | Platform | Inputs                                                        | Expected                                                         |
-| -------- | -------- | ------------------------------------------------------------- | ---------------------------------------------------------------- |
-| A        | macos    | `capture_excluded_window_count = 0`                           | Accepted; `device_integrity.platform = macos`; risk unchanged    |
-| B        | windows  | `capture_excluded_window_count = 0`, `monitor_only = 0`       | Accepted; `device_integrity.platform = windows`; risk unchanged  |
-| C        | macos    | `capture_excluded_window_count = 1`                           | Critical/manual review; report + audit consistent                |
-| D        | windows  | `monitor_only_window_count = 1`, `capture_restricted = 1`     | Warning/manual review; no automatic-misconduct wording           |
-| E        | windows  | `capture_excluded_window_count = 1`                           | Critical/manual review; report/dashboard/audit consistent        |
-| F        | linux    | (any)                                                         | Rejected as `unsupported_platform` until Stage 2.8               |
+| Scenario | Platform | Inputs                                                                               | Expected                                                                          |
+| -------- | -------- | ------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------- |
+| A        | macos    | `capture_excluded_window_count = 0`                                                  | Accepted; `device_integrity.platform = macos`; risk unchanged                     |
+| B        | windows  | `capture_excluded_window_count = 0`, `monitor_only = 0`                              | Accepted; `device_integrity.platform = windows`; risk unchanged                   |
+| C        | macos    | `capture_excluded_window_count = 1`                                                  | Critical/manual review; report + audit consistent                                 |
+| D        | windows  | `monitor_only_window_count = 1`, `capture_restricted = 1`                            | Warning/manual review; no automatic-misconduct wording                            |
+| E        | windows  | `capture_excluded_window_count = 1`                                                  | Critical/manual review; report/dashboard/audit consistent                         |
+| F        | linux    | (any)                                                                                | Rejected as `unsupported_platform` until Stage 2.8                                |
 | G        | windows  | proof contains `debug.hwnd`, `debug.pid`, `debug.window_title`, `debug.process_name` | Rejected as `forbidden_local_field`; no raw value leaks to audit/report/dashboard |
 
 ---
