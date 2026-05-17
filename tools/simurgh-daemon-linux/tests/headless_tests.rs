@@ -38,3 +38,19 @@ async fn status_endpoint_returns_scanner_unavailable_when_headless() {
     assert_eq!(v["scanner_reason"], "no_display_server");
     assert_eq!(v["coverage"], "headless_none");
 }
+
+#[tokio::test]
+async fn post_to_get_only_endpoint_is_rejected() {
+    let app = router();
+    let resp = app
+        .oneshot(
+            Request::builder()
+                .method("POST")
+                .uri("/health")
+                .body(Body::empty())
+                .unwrap(),
+        )
+        .await
+        .unwrap();
+    assert_eq!(resp.status(), StatusCode::METHOD_NOT_ALLOWED);
+}
