@@ -490,8 +490,10 @@ async function runScenarioE(baseUrl) {
 }
 
 async function runScenarioF(baseUrl) {
-  // Linux pairing => rejected with unsupported_platform
-  const { examId, sessionId, token } = await bootstrapSession(baseUrl, "Stage27-F-linux-pair");
+  // Unknown platform pairing => rejected with unsupported_platform.
+  // Stage 2.8 promoted "linux" to supported, so this regression now uses "freebsd"
+  // to keep proving the platform gate still exists.
+  const { examId, sessionId, token } = await bootstrapSession(baseUrl, "Stage27-F-unknown-pair");
   const identity = createIdentity();
   const challengeValue = await challenge(baseUrl, sessionId, token, "pair");
   const signed_payload = {
@@ -502,7 +504,7 @@ async function runScenarioF(baseUrl) {
     timestamp: new Date().toISOString(),
     node_id_hash: identity.node_id_hash,
     daemon_version: "0.4.11",
-    platform: "linux",
+    platform: "freebsd",
   };
   const body = {
     sessionId,
@@ -519,16 +521,16 @@ async function runScenarioF(baseUrl) {
   const json = await response.json().catch(() => ({}));
   assertSmoke(
     response.status >= 400 && response.status < 500,
-    "F: Linux pairing should have been rejected with 4xx",
+    "F: unknown-platform pairing should have been rejected with 4xx",
     { status: response.status, json }
   );
   const reason = json.error || json.reason;
   assertSmoke(
     reason === "unsupported_platform",
-    "F: Linux pairing rejection reason !== unsupported_platform",
+    "F: unknown-platform pairing rejection reason !== unsupported_platform",
     { status: response.status, json }
   );
-  console.log("Scenario F (Linux unsupported_platform): pass");
+  console.log("Scenario F (unknown-platform unsupported_platform): pass");
 }
 
 async function runScenarioG(baseUrl) {
