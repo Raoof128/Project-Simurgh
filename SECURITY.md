@@ -4,20 +4,21 @@
 
 Project Simurgh is a research prototype. Security fixes are applied to the latest tagged release and the `main` branch.
 
-| Version                                           | Supported              |
-| ------------------------------------------------- | ---------------------- |
-| `v0.4.13` (Stage 2.7 cross-platform unification)  | ✅ Active              |
-| `v0.4.12` (Stage 2.6B Windows scanner validation) | ✅ Active              |
-| `v0.4.11` (Stage 2.6 Windows scanner branch)      | ✅ Active              |
-| `v0.4.7` (Stage 2.5 macOS scanner)                | ✅ Active              |
-| `v0.4.6` (Stage 2.4 SDK/lifecycle)                | ✅ Active              |
-| `v0.4.5` (Stage 2.3 daemon foundation)            | ✅ Active              |
-| `v0.4.3` (Stage 2 hardening)                      | ✅ Active              |
-| `v0.4.2` (Stage 2.2 macOS node pairing)           | ✅ Active              |
-| `v0.4.1` (Stage 2.1 macOS integrity)              | ✅ Active              |
-| `v0.3.x` (Stage 1 / 1.5)                          | ⚠️ Critical fixes only |
-| `main` (development)                              | ✅ Active              |
-| Earlier tags                                      | Not maintained         |
+| Version                                                           | Supported              |
+| ----------------------------------------------------------------- | ---------------------- |
+| `v0.4.13-stage-2-6-2-7-closeout` (Windows Device Shield closeout) | ✅ Active              |
+| `v0.4.13` (Stage 2.7 cross-platform unification)                  | ✅ Active              |
+| `v0.4.12` (Stage 2.6B Windows scanner validation)                 | ✅ Active              |
+| `v0.4.11` (Stage 2.6 Windows scanner branch)                      | ✅ Active              |
+| `v0.4.7` (Stage 2.5 macOS scanner)                                | ✅ Active              |
+| `v0.4.6` (Stage 2.4 SDK/lifecycle)                                | ✅ Active              |
+| `v0.4.5` (Stage 2.3 daemon foundation)                            | ✅ Active              |
+| `v0.4.3` (Stage 2 hardening)                                      | ✅ Active              |
+| `v0.4.2` (Stage 2.2 macOS node pairing)                           | ✅ Active              |
+| `v0.4.1` (Stage 2.1 macOS integrity)                              | ✅ Active              |
+| `v0.3.x` (Stage 1 / 1.5)                                          | ⚠️ Critical fixes only |
+| `main` (development)                                              | ✅ Active              |
+| Earlier tags                                                      | Not maintained         |
 
 ## Reporting a Vulnerability
 
@@ -70,6 +71,24 @@ You will receive a response within **72 hours**. If the vulnerability is confirm
 - Tampered scanner counts invalidate the P-256 daemon proof signature; replayed proof challenges are rejected.
 - Raw HWNDs, PIDs, process names, window titles, executable paths, usernames, home directories, screenshots, pixels, webcam frames, microphone audio, typed content, and pasted content are forbidden and rejected recursively with the generic `forbidden_local_field` reason.
 - Real-device validation on Windows 10 Pro build 19045 confirmed normal scans, `WDA_MONITOR`, `WDA_EXCLUDEFROMCAPTURE`, signed proof acceptance, tamper/replay rejection, report/dashboard output, audit verification, and privacy audit.
+
+### Stage 2 Windows Device Shield Security Posture
+
+The Windows Device Shield path is protected by:
+
+- Signed P-256 daemon proofs with session/exam/challenge binding
+- Single-use challenge replay protection (consumed on use)
+- Timestamp freshness checks (±30 s past, +5 s future)
+- Platform and all scanner-field content is inside the signed canonical payload
+- Recursive forbidden local-field rejection (`containsForbiddenLocalFieldDeep`)
+- Generic `forbidden_local_field` reason (no raw identifier ever echoed)
+- Metadata-only scanner output (counts only, no raw identifiers)
+- Pairing-level unsupported-platform rejection (`unsupported_platform` at both pairing and proof layers)
+- Report/dashboard/audit privacy minimisation
+- Controlled local fixture validation (`SimurghAffinityFixture`)
+- Stage 2.6/2.7 closeout cybersecurity audit (24/24 tests across nine dimensions)
+
+**The Windows daemon is not a production Windows Service. It is not MDM/Intune managed. It does not provide hardware attestation, kernel visibility, or endpoint-control guarantees.**
 
 ### Stage 1 Trust Boundaries
 

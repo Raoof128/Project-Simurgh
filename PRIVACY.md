@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Last updated:** 2026-05-17 (Stage 2.7 Cross-Platform Device Shield Unification)
+**Last updated:** 2026-05-17 (Stage 2 Windows Device Shield Closeout)
 
 > **Stage 2.7 note:** The canonical list of forbidden raw-field names now lives in [`src/device/forbiddenLocalFields.js`](src/device/forbiddenLocalFields.js) and is enforced recursively by the daemon proof validator, the privacy audit CLI (`tools/privacy-audit.mjs`), and the Stage 2.7 security audit gate. Any new field added to that list automatically tightens the privacy contract across both macOS and Windows.
 
@@ -109,6 +109,47 @@ Simurgh enforces privacy constraints at the code level:
 - `tools/simurgh-daemon-windows/src/SimurghDaemon.Windows/DisplayAffinityScanner.cs` — Win32 `GetWindowDisplayAffinity` scanner with aggregate counts only; raw field transmission is unconditionally rejected
 
 These controls cannot be bypassed by configuration without code changes.
+
+---
+
+---
+
+## Windows Scanner Privacy Contract
+
+The Windows Device Shield scanner (`tools/simurgh-daemon-windows/src/SimurghDaemon.Windows/DisplayAffinityScanner.cs`) operates on metadata only.
+
+**Allowed Windows scanner output:**
+
+| Field                             | Type     | Description                                             |
+| --------------------------------- | -------- | ------------------------------------------------------- |
+| `platform`                        | string   | `"windows"`                                             |
+| `scanner_state`                   | string   | `healthy`, `risk_detected`, `restricted_detected`, etc. |
+| `scanner_version`                 | string   | `"2.6.0"`                                               |
+| `scan_timestamp`                  | ISO-8601 | When the scan ran                                       |
+| `scan_duration_ms`                | int      | How long the scan took                                  |
+| `visible_window_count`            | int      | Count of visible non-trivial windows                    |
+| `suspicious_window_count`         | int      | Count of display-restricted windows                     |
+| `capture_excluded_window_count`   | int      | Count of `WDA_EXCLUDEFROMCAPTURE` windows               |
+| `capture_restricted_window_count` | int      | Count of `WDA_MONITOR` windows                          |
+| `monitor_only_window_count`       | int      | Count of `WDA_MONITOR` windows                          |
+| `scan_error_count`                | int      | Count of scan errors                                    |
+| `privacy_mode`                    | string   | Always `"metadata_only"`                                |
+| `window_fingerprint_hashes`       | string[] | SHA-256 of position/size tuple — no title, no handle    |
+
+**Unconditionally forbidden in Windows scanner output:**
+
+- HWNDs / window handles
+- PIDs / process identifiers
+- Process names / executable names
+- Executable paths / bundle paths
+- Window titles / raw window titles
+- Usernames / home directories
+- Serial numbers / MAC addresses
+- Screen pixels / screenshots / screen frames
+- Webcam frames / microphone audio
+- Typed content / pasted content / answer text
+
+Raw field transmission is rejected server-side by `containsForbiddenLocalFieldDeep` with the generic reason code `forbidden_local_field`, which never echoes the raw value.
 
 ---
 

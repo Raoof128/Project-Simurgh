@@ -2,6 +2,27 @@
 
 ## Agent Change Log
 
+### 2026-05-17 (Australia/Sydney) — Stage 2 Windows Device Shield Closeout
+
+**Raouf:**
+
+- **Scope:** Windows Device Shield closeout documentation, validation matrix, reviewer checklist, logo integration, release freeze documentation, and external review signal.
+- **Summary:**
+  - Created `docs/STAGE_2_WINDOWS_TECHNICAL_BRIEF.md` — 20-section reviewer-facing technical summary covering the full Windows path: research origin, daemon architecture, scanner design, controlled affinity fixture, signed proof flow, server verification, risk mapping, report/dashboard/audit integration, privacy contract, E2E smoke coverage, cybersecurity audit coverage, real-device validation, known limitations, and non-claims.
+  - Created `docs/STAGE_2_WINDOWS_DEVICE_SHIELD_CLOSEOUT.md` — freeze declaration with evidence table (WDA_MONITOR, WDA_EXCLUDEFROMCAPTURE, tamper/replay/raw-field rejection, gate evidence), cross-platform contract cross-references, and confirmed non-claims.
+  - Created `docs/STAGE_2_WINDOWS_VALIDATION_MATRIX.md` — gate-level verification matrix covering build/test gates, smoke gates, security audit gates, real Windows device validation (all 20 test rows), Scenario A–G smoke, and all nine closeout audit dimensions.
+  - Created `docs/STAGE_2_WINDOWS_REVIEWER_CHECKLIST.md` — reviewer checklist covering release gates, real-device validation, proof path, platform integrity, privacy contract, cross-platform contract, report/dashboard/audit, smoke and security audit coverage, non-claims, and documentation completeness.
+  - Created `docs/evidence/stage-2-windows/README.md` — evidence-folder rules specifying what artefacts are allowed and what is strictly forbidden.
+  - Added Project Simurgh logo (`docs/Project-Simurgh-Logo.png`) to README.md header, `docs/STAGE_2_5_TECHNICAL_BRIEF.md`, and `docs/STAGE_2_WINDOWS_TECHNICAL_BRIEF.md`.
+  - Updated README: logo in header, Windows Device Shield Closeout section, updated verification counts (`273/273` Node tests, `47/48` check.sh gates), status block updated to Stage 2 Windows closeout, External Technical Review updated.
+  - Updated SECURITY.md: v0.4.13-closeout added to supported versions; Stage 2 Windows Device Shield Security Posture section added (9 protection mechanisms + production non-claim wording).
+  - Updated PRIVACY.md: last-updated date updated; Windows Scanner Privacy Contract section added with full allowed/forbidden field tables.
+  - Updated ROADMAP.md: Stage 2 Windows Device Shield closeout marked done; "Next: Linux research, not Linux production implementation" note added.
+  - Updated AGENT.md (this entry) and CHANGELOG.md with Raouf-prefixed entries.
+- **Verification:** `npm test` 273/273, `npm audit --audit-level=high` 0 vulnerabilities, `node tools/privacy-audit.mjs` pass, `bash scripts/check.sh` 47/48 (pre-existing Windows CRLF prettier tolerance). All smoke and audit scripts pass locally.
+- **Non-claims preserved:** Research prototype only. No production Windows Service, MDM/Intune readiness, hardware attestation, kernel-level visibility, GPU overlay coverage, or automatic misconduct detection. No collection of raw HWNDs, PIDs, process names, window titles, usernames, serial numbers, MAC addresses, screen pixels, webcam/microphone frames, typed content, or pasted content.
+- **Follow-ups:** Push branch, open PR `stage-2-windows-device-shield-closeout`, wait for GitHub Actions Quality Gate, merge to `main`, then begin Stage 2.8 Linux Display Integrity Research.
+
 ### 2026-05-17 (Australia/Sydney) — Stage 2.6/2.7 Closeout (umbrella E2E smoke + cybersecurity audit)
 
 **Raouf:**
