@@ -1,6 +1,8 @@
 <div align="center">
 
-# 🦅 Project Simurgh
+<img src="docs/Project-Simurgh-Logo.png" alt="Project Simurgh Logo" width="280"/>
+
+# Project Simurgh
 
 **Zero-Trust Integrity API for Autonomous Agents and High-Stakes Proctoring**
 
@@ -21,13 +23,33 @@ _Detecting UI-redressing and behavioral spoofing without relying on screen captu
 
 </div>
 
-> **Status: Stage 2.7 complete — tagged `v0.4.13-stage-2-7-cross-platform-device-shield`.** Stage 2.7 unifies the macOS and Windows Device Shield surfaces under one documented cross-platform proof, scanner, risk, report, dashboard, privacy, and audit contract. Three shared modules — `forbiddenLocalFields`, `platformScannerSchema`, `scannerRiskPolicy` — replace previously scattered logic; the browser SDK gains a UX-only `getDeviceShieldStatus()` accessor (server trust still requires signed `daemon_proof`); a cross-platform E2E smoke (Scenarios A–G) and Stage 2.7 security audit gate cover both platforms; Linux daemon proofs are rejected with `unsupported_platform` until Stage 2.8. Stage 2.6's `WDA_MONITOR` and `WDA_EXCLUDEFROMCAPTURE` detection (validated on Windows 10 Pro build 19045) is now consumed under the unified contract. The system remains a research prototype and does not claim production Windows Service deployment, MDM/Intune readiness, hardware attestation, kernel-level visibility, or automatic misconduct detection. It does not collect video, audio, biometric data, typed answer content, pasted content, raw process names, raw window titles, HWNDs, PIDs, usernames, serial numbers, MAC addresses, or personal identity data. See [PRIVACY.md](PRIVACY.md), [ETHICS.md](ETHICS.md), and [DISCLAIMER.md](DISCLAIMER.md).
+> **Status: Stage 2 Windows Device Shield frozen — tagged `v0.4.13-stage-2-6-2-7-closeout`.** The Windows Device Shield is implemented, real-device validated on Windows 10 Pro build 19045, regression-gated, security-audited (24/24 tests across nine audit dimensions), and frozen as a research-prototype baseline. Stage 2.7 unifies macOS and Windows under one cross-platform proof, scanner, risk, report, dashboard, privacy, and audit contract. Stage 2.8 Linux Display Integrity Research is the next milestone. The system remains a research prototype and does not claim production Windows Service deployment, MDM/Intune readiness, hardware attestation, kernel-level visibility, or automatic misconduct detection. It does not collect video, audio, biometric data, typed answer content, pasted content, raw process names, raw window titles, HWNDs, PIDs, usernames, serial numbers, MAC addresses, or personal identity data. See [PRIVACY.md](PRIVACY.md), [ETHICS.md](ETHICS.md), and [DISCLAIMER.md](DISCLAIMER.md).
+
+---
+
+## Windows Device Shield Closeout
+
+Stage 2 Windows Device Shield is frozen as a research-prototype baseline. The Windows path includes:
+
+- .NET 8 localhost daemon (`tools/simurgh-daemon-windows/`)
+- Metadata-only Win32 display-affinity scanner (`GetWindowDisplayAffinity`)
+- Controlled `SimurghAffinityFixture` for local validation
+- `WDA_MONITOR` detection → `restricted_detected` / manual review
+- `WDA_EXCLUDEFROMCAPTURE` detection → `risk_detected` / Critical floor
+- Signed P-256 daemon proofs with session/exam/challenge binding
+- Server-side proof validation, tamper and replay rejection
+- Recursive raw local-field rejection (`forbidden_local_field`)
+- Report, dashboard, and audit integration
+- Stage 2.6, Stage 2.7, and closeout smoke coverage
+- Stage 2.6/2.7 cybersecurity audit (24/24 tests, nine dimensions)
+
+Validated on Windows 10 Pro build 19045. **Known boundaries:** research prototype only; no production Windows Service deployment; no MDM/Intune readiness; no hardware attestation; no kernel-level visibility; no automatic misconduct finding; no raw HWND, PID, process name, or window title collection. Linux support is Stage 2.8 future research.
 
 ---
 
 ## External Technical Review
 
-Project Simurgh Stage 2.7 (`v0.4.13`) is closed and merged to `main`. It is ready for external technical review.
+Project Simurgh Stage 2 Windows Device Shield (`v0.4.13-stage-2-6-2-7-closeout`) is closed and merged to `main`. It is ready for external technical review.
 
 The current macOS Device Shield baseline includes:
 
@@ -46,11 +68,11 @@ The current macOS Device Shield baseline includes:
 - recursive rejection of forbidden raw local fields
 - privacy audit and npm audit gates
 
-**Current verification (`v0.4.13` / `main`):**
+**Current verification (`v0.4.13-stage-2-6-2-7-closeout` / `main`):**
 
-- 239/239 Node tests passing
+- 273/273 Node tests passing
 - 11/11 Windows .NET daemon tests passing
-- 44/44 quality gate checks passing (`scripts/check.sh`)
+- 47/48 quality gate checks passing (`scripts/check.sh`)
 - Swift macOS daemon build/test passing
 - Stage 2.2/2.3 E2E smoke passing
 - Stage 2.4/2.5 E2E smoke passing

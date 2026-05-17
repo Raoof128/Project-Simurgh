@@ -1,3 +1,7 @@
+<div align="center">
+<img src="Project-Simurgh-Logo.png" alt="Project Simurgh Logo" width="220"/>
+</div>
+
 # Project Simurgh Technical Brief
 
 **From The Invisible Window to Proof-Based Integrity for High-Stakes AI Sessions**

@@ -51,7 +51,7 @@ Reviewer-readiness, validation, evidence mapping, and Stage 2 planning. No major
 
 ## Stage 2 — Device Shield / Integrity Node
 
-**Status: In progress** (Stage 2.7 complete — `v0.4.13`)
+**Status: In progress** (Stage 2 Windows Device Shield frozen — `v0.4.13-stage-2-6-2-7-closeout`)
 
 Transition toward signed local integrity proofs and device-aware validation.
 
@@ -69,8 +69,12 @@ Transition toward signed local integrity proofs and device-aware validation.
 - [x] Windows scanner proof contract and mock-first .NET daemon skeleton
 - [x] Real Windows laptop validation for `WDA_MONITOR` and `WDA_EXCLUDEFROMCAPTURE`
 - [x] Cross-platform Device Shield unification — Stage 2.7, `v0.4.13` (shared proof/scanner/risk/privacy contracts, cross-platform smoke + audit, Linux daemon proofs rejected with `unsupported_platform`)
+- [x] Stage 2 Windows Device Shield closeout — `v0.4.13-stage-2-6-2-7-closeout` (Windows technical brief, validation matrix, reviewer checklist, umbrella smoke + security audit gates, evidence folder, external review signal)
 - [ ] Production Windows Service packaging and deployment design
 - [ ] Stage 2.8 Linux Display Integrity Research — X11 enumeration feasibility, Wayland compositor/security-model investigation, no parity claim until signed and validated
+
+**Next: Linux research, not Linux production implementation.**
+
 - [ ] Agent integrity API — validates AI computer-use sessions
 - [ ] Webhook delivery for real-time risk alerts
 - [ ] Multi-exam support (concurrent sessions)

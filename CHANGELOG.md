@@ -1,5 +1,42 @@
 ## Change Log
 
+## [0.4.13-windows-closeout] — 2026-05-17 — Stage 2 Windows Device Shield Closeout
+
+Stage 2 Windows Device Shield is frozen as a real-device validated research-prototype baseline. This entry adds the Windows technical brief, closeout declaration, validation matrix, reviewer checklist, evidence-folder rules, logo integration, and top-level doc updates.
+
+### Added
+
+- `docs/STAGE_2_WINDOWS_TECHNICAL_BRIEF.md` — 20-section reviewer-facing technical summary (research origin, daemon architecture, scanner design, affinity fixture, signed proof flow, server verification, risk mapping, report/audit integration, privacy contract, smoke/audit coverage, real-device validation, limitations, non-claims).
+- `docs/STAGE_2_WINDOWS_DEVICE_SHIELD_CLOSEOUT.md` — freeze declaration with evidence table, gate evidence, cross-platform contract references, and confirmed non-claims.
+- `docs/STAGE_2_WINDOWS_VALIDATION_MATRIX.md` — gate-level verification matrix across all smoke, audit, real-device, and Scenario A–G rows.
+- `docs/STAGE_2_WINDOWS_REVIEWER_CHECKLIST.md` — reviewer checklist covering release gates, real-device validation, proof path, privacy contract, cross-platform contract, smoke/audit coverage, non-claims, and documentation completeness.
+- `docs/evidence/stage-2-windows/README.md` — evidence-folder rules specifying allowed artefacts and forbidden raw identifiers.
+- `docs/evidence/stage-2-windows/.gitkeep` — folder initialisation.
+- `docs/Project-Simurgh-Logo.png` — Project Simurgh official logo (Simurgh bird with shield and keyhole, "Project Simurgh" wordmark, Knowledge / Verification / Guidance attributes).
+
+### Changed
+
+- `README.md` — logo added to header; Windows Device Shield Closeout section added; status block updated to Stage 2 Windows closeout; External Technical Review updated; verification counts updated (`273/273`, `47/48`).
+- `docs/STAGE_2_5_TECHNICAL_BRIEF.md` — logo added to header.
+- `SECURITY.md` — `v0.4.13-stage-2-6-2-7-closeout` added to supported versions; Stage 2 Windows Device Shield Security Posture section added.
+- `PRIVACY.md` — last-updated date updated; Windows Scanner Privacy Contract section added with full allowed/forbidden field tables.
+- `ROADMAP.md` — Stage 2 Windows Device Shield closeout marked done; next-stage note added.
+
+### Verified
+
+- Windows 10 Pro build 19045 validation passed (Stage 2.6B AGENT.md entry).
+- `WDA_MONITOR` and `WDA_EXCLUDEFROMCAPTURE` detected.
+- Signed daemon proofs accepted; tampered, replayed, raw-field proofs rejected.
+- Reports, dashboard, audit chain, and privacy sweep passed.
+- `npm test` 273/273, `npm audit --audit-level=high` 0 vulnerabilities, `node tools/privacy-audit.mjs` pass.
+- All smoke and security audit gates pass.
+
+### Non-claims
+
+- Research prototype only. No production deployment, Windows Service, MDM/Intune, hardware attestation, kernel visibility, GPU overlay, or automatic misconduct detection.
+
+---
+
 ## [0.4.13-closeout] — 2026-05-17 — Stage 2.6/2.7 Closeout (umbrella gates + hardening)
 
 Final closeout before tagging `v0.4.13-stage-2-7-cross-platform-device-shield`. Adds two umbrella gates that exercise the full Stage 2.6/2.7 surface plus targeted hardening of gaps surfaced during Stage 2.7 review.
