@@ -190,3 +190,33 @@ export function createDaemonStateRegistry({ staleAfterMs = 10_000 } = {}) {
     },
   };
 }
+
+export function createDisplayServerLock() {
+  const locked = new Map();
+  return {
+    observe(sessionId, displayServer) {
+      const existing = locked.get(sessionId);
+      if (existing === undefined) {
+        locked.set(sessionId, displayServer);
+        return { ok: true, locked_display_server: displayServer };
+      }
+      if (existing !== displayServer) {
+        return {
+          ok: false,
+          reason: "display_server_mismatch",
+          locked_display_server: existing,
+          observed_display_server: displayServer,
+        };
+      }
+      return { ok: true, locked_display_server: existing };
+    },
+    evict(sessionId) {
+      locked.delete(sessionId);
+    },
+    evictMissing(activeIds) {
+      for (const sessionId of locked.keys()) {
+        if (!activeIds.has(sessionId)) locked.delete(sessionId);
+      }
+    },
+  };
+}

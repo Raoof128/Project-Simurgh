@@ -1,14 +1,17 @@
 import crypto from "node:crypto";
 
 import { containsForbiddenLocalFieldDeep } from "./forbiddenLocalFields.js";
-import { SUPPORTED_DEVICE_PLATFORMS, validateScannerSummary } from "./platformScannerSchema.js";
+import {
+  SUPPORTED_DEVICE_PLATFORMS,
+  validateScannerSummaryForPlatform,
+} from "./platformScannerSchema.js";
 
 export const DAEMON_VERSION = "0.4.7";
 export const DAEMON_PLATFORM = "macos";
 export const DAEMON_CHALLENGE_BYTES = 32;
 export const DAEMON_TIMESTAMP_PAST_MS = 30_000;
 export const DAEMON_TIMESTAMP_FUTURE_MS = 5_000;
-const SUPPORTED_DAEMON_VERSIONS = new Set(["0.4.5", "0.4.7", "0.4.11"]);
+const SUPPORTED_DAEMON_VERSIONS = new Set(["0.4.5", "0.4.7", "0.4.11", "2.8.0"]);
 
 const PROOF_REQUIRED_FIELDS = [
   "type",
@@ -145,7 +148,20 @@ export function validateDaemonProof(
   ) {
     return fail("invalid_capture_excluded_window_count");
   }
-  const scannerValidation = validateScannerSummary(raw);
+
+  if (raw.platform === "linux") {
+    for (const field of [
+      "display_server",
+      "scanner_state",
+      "scanner_version",
+      "scanner_reason",
+      "coverage",
+    ]) {
+      if (!(field in raw)) return fail(`missing_field:${field}`);
+    }
+  }
+
+  const scannerValidation = validateScannerSummaryForPlatform(raw.platform, raw);
   if (!scannerValidation.ok) return scannerValidation;
   if (typeof raw.helper_state !== "string" || !HELPER_STATES.has(raw.helper_state)) {
     return fail("invalid_helper_state");

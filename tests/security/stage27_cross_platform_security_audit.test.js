@@ -116,9 +116,9 @@ test("audit: tampered capture_excluded_window_count after signing rejected as in
   );
 });
 
-test("audit: unsupported platform linux rejected before signature check", () => {
+test("audit: unsupported platform freebsd rejected before signature check", () => {
   const { proof, public_key, node_id_hash } = makeProof("macos");
-  proof.platform = "linux";
+  proof.platform = "freebsd";
   const r = validateDaemonProof(proof, validateOpts(public_key, node_id_hash));
   assert.equal(r.ok, false);
   assert.equal(r.reason, "unsupported_platform");
@@ -232,8 +232,8 @@ test("audit: pairing payload with forbidden field nested in signed_payload rejec
   assert.equal(r.reason, "forbidden_local_field");
 });
 
-test("audit: pairing payload with platform=linux rejected as unsupported_platform", () => {
-  const env = makePairingEnvelope("linux");
+test("audit: pairing payload with platform=freebsd rejected as unsupported_platform", () => {
+  const env = makePairingEnvelope("freebsd");
   const r = validateDaemonPairingPayload(env, {
     expectedSessionId: "sess_audit",
     expectedExamId: "exam_audit",

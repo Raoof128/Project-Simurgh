@@ -11,19 +11,19 @@ import {
   validateScannerSummary,
 } from "../../src/device/platformScannerSchema.js";
 
-test("SUPPORTED_DEVICE_PLATFORMS contains macos and windows only", () => {
-  assert.deepEqual([...SUPPORTED_DEVICE_PLATFORMS].sort(), ["macos", "windows"]);
+test("SUPPORTED_DEVICE_PLATFORMS contains macos, windows, and linux", () => {
+  assert.deepEqual([...SUPPORTED_DEVICE_PLATFORMS].sort(), ["linux", "macos", "windows"]);
 });
 
-test("PLANNED_DEVICE_PLATFORMS contains linux", () => {
-  assert.ok(PLANNED_DEVICE_PLATFORMS.includes("linux"));
+test("PLANNED_DEVICE_PLATFORMS is empty after Linux acceptance", () => {
+  assert.deepEqual([...PLANNED_DEVICE_PLATFORMS], []);
 });
 
-test("isSupportedPlatform accepts macos and windows, rejects linux/unknown", () => {
+test("isSupportedPlatform accepts linux post-Stage-2.8A", () => {
   assert.equal(isSupportedPlatform("macos"), true);
   assert.equal(isSupportedPlatform("windows"), true);
-  assert.equal(isSupportedPlatform("linux"), false);
-  assert.equal(isSupportedPlatform("unknown"), false);
+  assert.equal(isSupportedPlatform("linux"), true);
+  assert.equal(isSupportedPlatform("freebsd"), false);
   assert.equal(isSupportedPlatform(""), false);
   assert.equal(isSupportedPlatform(null), false);
 });
@@ -33,8 +33,8 @@ test("getExpectedScannerVersion returns 2.5.0 for macos and 2.6.0 for windows", 
   assert.equal(getExpectedScannerVersion("windows"), "2.6.0");
 });
 
-test("getExpectedScannerVersion returns null for unsupported platform", () => {
-  assert.equal(getExpectedScannerVersion("linux"), null);
+test("getExpectedScannerVersion returns 2.8.0 for linux and null for unsupported platforms", () => {
+  assert.equal(getExpectedScannerVersion("linux"), "2.8.0");
   assert.equal(getExpectedScannerVersion("unknown"), null);
 });
 
