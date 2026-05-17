@@ -2,6 +2,35 @@
 
 ## Agent Change Log
 
+### 2026-05-17 (Australia/Sydney) — Stage 2.6/2.7 Closeout (umbrella E2E smoke + cybersecurity audit)
+
+**Raouf:**
+
+- **Scope:** Final closeout for the Windows Device Shield (Stage 2.6) and cross-platform unification (Stage 2.7). Two new umbrella gates plus targeted hardening of gaps surfaced during Stage 2.7 review.
+- **Hardening additions** (extending `tests/security/stage27_cross_platform_security_audit.test.js`):
+  - Pairing payload with raw `hwnd` anywhere in the envelope is rejected as `forbidden_local_field` (previously only tested on the proof path).
+  - Pairing payload with forbidden field nested inside `signed_payload` is rejected.
+  - Pairing payload with `platform: "linux"` is rejected as `unsupported_platform` at `validateDaemonPairingPayload` (the actual rejection point; Stage 2.7 audit only covered the proof-level path).
+  - SDK trust-boundary invariant: `validateDaemonProof` never echoes unsigned client-supplied fields into the trusted proof object.
+  - `FORBIDDEN_LOCAL_FIELD_NAMES` is frozen and mutation throws at runtime (push and indexed assignment both rejected).
+- **New umbrella audit** (`tests/security/stage_26_27_closeout_audit.test.js`, 24 tests): a single manifest covering nine dimensions with file-scoped assertions:
+  - `[1.proof]` canonicalisation determinism, post-signing sequence tamper, stale timestamp.
+  - `[2.scanner]` platform-pinned scanner version, fingerprint hash pattern, suspicious_count consistency.
+  - `[3.platform]` Linux rejection at both proof and pairing paths.
+  - `[4.daemon]` node-id mismatch, no-pairing, public-key mismatch.
+  - `[5.sdk]` `getDeviceShieldStatus` carries trust-boundary comment; `sendTelemetry` never emits top-level `scanner_state` / `platform` / `capture_excluded_window_count` outside the signed proof.
+  - `[6.report]` `device_integrity` exposes `daemon_platform` + manual-review wording; full recursive scan finds zero forbidden raw fields.
+  - `[7.dashboard]` no affirmative misconduct phrases; no template interpolation of raw forbidden field names.
+  - `[8.privacy]` daemonProof and privacy-audit both import the shared `forbiddenLocalFields` list; the list is frozen and contains every known leak vector.
+  - `[9.wording]` source files contain no overclaim phrases (production-ready, MDM-ready, hardware-attestation, cheating-detected, etc.); manual-review wording preserved verbatim in `scannerRiskPolicy`.
+- **New umbrella scripts:**
+  - `scripts/security-audit-stage-2-6-2-7-closeout.sh` — runs Stage 2.4/2.5 + Stage 2.7 + new closeout audits + privacy-audit + `npm audit`.
+  - `scripts/smoke-stage-2-6-2-7-closeout.sh` — runs Stage 2.6 Windows smoke + Stage 2.7 cross-platform smoke + privacy-audit.
+- **CI wiring:** `scripts/check.sh` section 10m runs both closeout gates after the per-stage gates.
+- **Verification:** Windows OS Windows 10 Pro / Build 19045. Node 24.14.0, .NET 8.0.421. After closeout: 282/282 Node tests pass (+9 hardening tests, +24 closeout tests over the Stage 2.7 baseline). `scripts/check.sh` 47/48 (the single failure is the pre-existing Windows-line-endings prettier tolerance documented in check.sh itself; CI on Linux passes prettier). All five smoke scripts, four security-audit scripts, .NET daemon tests (11/11), privacy audit, and `npm audit --audit-level=high` (0 vulns) green.
+- **Non-claims preserved:** Research prototype only. No production deployment claim, no MDM/Intune, no hardware attestation, no kernel-level visibility, no GPU overlay coverage, no automatic misconduct detection. Linux daemon proofs rejected with `unsupported_platform` at both pairing and proof layers until Stage 2.8.
+- **Follow-ups:** Open closeout PR (supersedes/extends Stage 2.7 PR #15), wait for GitHub Actions Quality Gate to confirm Linux-CI green, merge to `main`, tag `v0.4.13-stage-2-7-cross-platform-device-shield`, publish GitHub release. Then Stage 2.8 Linux Display Integrity Research.
+
 ### 2026-05-17 (Australia/Sydney) — Stage 2.7 Cross-Platform Device Shield Unification
 
 **Raouf:**
