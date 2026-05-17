@@ -143,6 +143,10 @@ function linuxAnomaly(state) {
   if (state.scanner_state === "permission_denied") return true;
   if (state.coverage === "wayland_limited") return true;
   if (state.coverage === "xwayland_partial") return true;
+  // X11 overlay signals — always-on-top and override_redirect surfaces are
+  // the cheat-overlay class. Must surface as Warning context (NOT misconduct).
+  if ((state.x11_above_window_count_max ?? 0) > 0) return true;
+  if ((state.x11_override_redirect_window_count_max ?? 0) > 0) return true;
   if ((state.proofs_rejected ?? 0) > 0) return true;
   return false;
 }

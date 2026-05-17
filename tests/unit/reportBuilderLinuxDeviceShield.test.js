@@ -54,7 +54,12 @@ test("Linux device_integrity emits display_server + coverage + portal fields", (
   assert.equal(d.portal_active, null);
   assert.equal(d.x11_managed_window_count_max, 4);
   assert.equal(d.x11_above_window_count_max, 1);
-  assert.equal(d.manual_review_recommendation, "No device-integrity anomaly detected.");
+  // baseSession() seeds x11_above_window_count_max=1, so Warning is the
+  // correct outcome (the always-on-top overlay class is Warning context).
+  assert.equal(
+    d.manual_review_recommendation,
+    "Manual review recommended. No automatic misconduct finding."
+  );
 });
 
 test("Linux device_integrity rolls up Warning when coverage is wayland_limited", () => {
@@ -70,6 +75,36 @@ test("Linux device_integrity rolls up Warning when coverage is wayland_limited",
   ).device_integrity;
   assert.equal(d.display_server, "wayland");
   assert.equal(d.coverage, "wayland_limited");
+  assert.equal(
+    d.manual_review_recommendation,
+    "Manual review recommended. No automatic misconduct finding."
+  );
+});
+
+test("Linux x11_above_window_count_max > 0 rolls up to Warning", () => {
+  const s = baseSession();
+  s.sessionData.daemon.x11_above_window_count_max = 1;
+  const d = buildReport(
+    s.sessionRecord,
+    s.sessionData,
+    s.eventList,
+    s.auditChainValid
+  ).device_integrity;
+  assert.equal(
+    d.manual_review_recommendation,
+    "Manual review recommended. No automatic misconduct finding."
+  );
+});
+
+test("Linux x11_override_redirect_window_count_max > 0 rolls up to Warning", () => {
+  const s = baseSession();
+  s.sessionData.daemon.x11_override_redirect_window_count_max = 2;
+  const d = buildReport(
+    s.sessionRecord,
+    s.sessionData,
+    s.eventList,
+    s.auditChainValid
+  ).device_integrity;
   assert.equal(
     d.manual_review_recommendation,
     "Manual review recommended. No automatic misconduct finding."
