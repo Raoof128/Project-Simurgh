@@ -2,8 +2,8 @@
 // src/device/daemonProof.js so both the proof validator and any future
 // scanner-only consumers share one truth.
 
-export const SUPPORTED_DEVICE_PLATFORMS = Object.freeze(["macos", "windows"]);
-export const PLANNED_DEVICE_PLATFORMS = Object.freeze(["linux"]);
+export const SUPPORTED_DEVICE_PLATFORMS = Object.freeze(["macos", "windows", "linux"]);
+export const PLANNED_DEVICE_PLATFORMS = Object.freeze([]);
 
 export const SCANNER_STATES = new Set([
   "healthy",
@@ -15,9 +15,50 @@ export const SCANNER_STATES = new Set([
   "unsupported_macos_version",
 ]);
 
+export const LINUX_SCANNER_STATES = new Set([
+  "healthy",
+  "risk_detected",
+  "restricted_detected",
+  "wayland_portal_available",
+  "wayland_compositor_restricted",
+  "wayland_compositor_unsupported",
+  "xwayland_detected",
+  "permission_denied",
+  "scanner_unavailable",
+  "scan_error",
+]);
+
+export const LINUX_SCANNER_REASONS = new Set([
+  "none",
+  "no_display_server",
+  "non_local_display",
+  "portal_not_active",
+  "portal_active_probe_unavailable",
+  "sandboxed_browser_loopback_possible",
+]);
+
+export const LINUX_DISPLAY_SERVERS = new Set([
+  "x11",
+  "wayland",
+  "xwayland",
+  "headless",
+  "unknown",
+]);
+
+export const LINUX_COVERAGES = new Set([
+  "x11_full",
+  "wayland_limited",
+  "xwayland_partial",
+  "headless_none",
+  "unknown",
+]);
+
+const CLEAN_LINUX_SCANNER_STATES = new Set(["healthy", "risk_detected"]);
+
 const SCANNER_VERSION_BY_PLATFORM = Object.freeze({
   macos: "2.5.0",
   windows: "2.6.0",
+  linux: "2.8.0",
 });
 
 const FINGERPRINT_HASH_PATTERN = /^sha256:[a-f0-9]{64}$/;
@@ -148,4 +189,69 @@ export function validateScannerSummary(raw) {
       window_fingerprint_hashes: [...raw.window_fingerprint_hashes],
     },
   };
+}
+
+export function validateLinuxScannerSummary(raw) {
+  if (typeof raw.scanner_state !== "string" || !LINUX_SCANNER_STATES.has(raw.scanner_state)) {
+    return fail("invalid_linux_scanner_state");
+  }
+  if (raw.scanner_version !== "2.8.0") return fail("invalid_linux_scanner_version");
+  if (typeof raw.display_server !== "string" || !LINUX_DISPLAY_SERVERS.has(raw.display_server)) {
+    return fail("invalid_linux_display_server");
+  }
+  if (typeof raw.coverage !== "string" || !LINUX_COVERAGES.has(raw.coverage)) {
+    return fail("invalid_linux_coverage");
+  }
+  if (typeof raw.scanner_reason !== "string" || !LINUX_SCANNER_REASONS.has(raw.scanner_reason)) {
+    return fail("invalid_linux_scanner_reason");
+  }
+  if (CLEAN_LINUX_SCANNER_STATES.has(raw.scanner_state) && raw.scanner_reason !== "none") {
+    return fail("invalid_linux_scanner_reason");
+  }
+  if (typeof raw.portal_advertised !== "boolean" && raw.portal_advertised !== null) {
+    return fail("invalid_linux_portal_state");
+  }
+  if (typeof raw.portal_active !== "boolean" && raw.portal_active !== null) {
+    return fail("invalid_linux_portal_state");
+  }
+  if (raw.portal_active === true && raw.portal_advertised !== true) {
+    return fail("invalid_linux_portal_state");
+  }
+  for (const key of [
+    "x11_managed_window_count",
+    "x11_override_redirect_window_count",
+    "x11_above_window_count",
+    "x11_fullscreen_window_count",
+    "x11_skip_taskbar_window_count",
+    "xwayland_window_count",
+  ]) {
+    const v = raw[key];
+    if (!Number.isInteger(v) || v < 0 || v > 10_000) return fail("invalid_linux_x11_count");
+  }
+  if (raw.privacy_mode !== "metadata_only") return fail("invalid_privacy_mode");
+  return {
+    ok: true,
+    fields: {
+      scanner_state: raw.scanner_state,
+      scanner_version: raw.scanner_version,
+      display_server: raw.display_server,
+      coverage: raw.coverage,
+      scanner_reason: raw.scanner_reason,
+      portal_advertised: raw.portal_advertised,
+      portal_active: raw.portal_active,
+      x11_managed_window_count: raw.x11_managed_window_count,
+      x11_override_redirect_window_count: raw.x11_override_redirect_window_count,
+      x11_above_window_count: raw.x11_above_window_count,
+      x11_fullscreen_window_count: raw.x11_fullscreen_window_count,
+      x11_skip_taskbar_window_count: raw.x11_skip_taskbar_window_count,
+      xwayland_window_count: raw.xwayland_window_count,
+      privacy_mode: raw.privacy_mode,
+    },
+  };
+}
+
+export function validateScannerSummaryForPlatform(platform, raw) {
+  if (platform === "macos" || platform === "windows") return validateScannerSummary(raw);
+  if (platform === "linux") return validateLinuxScannerSummary(raw);
+  return fail("unsupported_platform");
 }
