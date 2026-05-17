@@ -2,11 +2,11 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Replace the Linux daemon's hardcoded-zero scanner counts with a real X11 metadata scanner that reads EWMH properties (`_NET_CLIENT_LIST`, `_NET_WM_WINDOW_TYPE`, `_NET_WM_STATE`) via `x11rb`, returns counts only (no raw window IDs / titles / classes / process names), wires the result through `/status` and signed proofs, extends the Node `reportBuilder` to emit Linux `device_integrity`, and extends the privacy-audit sweep to cover the Linux daemon paths.
+**Goal:** Replace the Linux daemon's hardcoded-zero scanner counts with a real X11 metadata scanner that reads EWMH properties (`_NET_CLIENT_LIST` + `query_tree` for unmanaged/override_redirect children, `_NET_WM_STATE`) via `x11rb`, returns counts only (no raw window IDs / titles / classes / process names), wires the result into **both `/status` AND the signed `/proof` payload**, extends the Node `reportBuilder` to emit Linux `device_integrity`, extends the Node risk policy to cover Linux signals, and extends the privacy-audit sweep to cover the Linux daemon paths.
 
-**Architecture:** Add `tools/simurgh-daemon-linux/src/scanner/x11.rs` (open connection → read root `_NET_CLIENT_LIST` → query per-window properties → count by category) plus `scanner/privacy.rs` (pure raw-to-summary filter that guarantees no raw fields ever leave the scanner). Unit tests cover the privacy filter with synthetic raw data. Integration tests use a spawned `Xvfb :99` server with synthetic windows (gated by `Xvfb` availability — local skip if missing, will become mandatory in PR #22 once Ubuntu CI lands). Node `reportBuilder.js` adds a Linux branch in `buildDeviceIntegritySection`. `tools/privacy-audit.mjs` extends `DEFAULT_SCAN_DIRS` to sweep the Linux daemon tree.
+**Architecture:** Add `tools/simurgh-daemon-linux/src/scanner/x11.rs` (open connection → read root `_NET_CLIENT_LIST` for managed + `query_tree(root)` for unmanaged children → query per-window properties + GetWindowAttributes → count by category) plus `scanner/privacy.rs` (pure raw-to-summary filter that guarantees no raw fields ever leave the scanner). `x11::scan()` enforces non-local `$DISPLAY` refusal as a defence-in-depth layer before calling `x11rb::connect`. Unit tests cover the privacy filter with synthetic raw data. Integration tests use a spawned `Xvfb :99` server with **real synthetic windows created via x11rb** (gated by `Xvfb` availability — local skip if missing, will become mandatory in PR #22 once Ubuntu CI lands). Node `reportBuilder.js` adds a Linux branch in `buildDeviceIntegritySection`. `scannerRiskPolicy.js` extends to map Linux signals to risk. `daemonState.js` rolls up Linux x11 counts into `*_max`. `tools/privacy-audit.mjs` extends `DEFAULT_SCAN_DIRS` to sweep the Linux daemon tree.
 
-**Tech Stack:** Rust (`x11rb` 0.13), Xvfb for integration tests (`apt-get install xvfb x11-utils` — installed by reviewer; gracefully skipped if missing). Node 20 (server). Spec: `docs/superpowers/specs/2026-05-17-stage-2-8-linux-display-integrity-design.md` §6.10, §7.1, §7.3.
+**Tech Stack:** Rust (`x11rb` 0.13), Xvfb for integration tests (`apt-get install xvfb x11-utils` — installed by reviewer; gracefully skipped if missing). Node ≥ 22 (matching current CI Quality Gate). Spec: `docs/superpowers/specs/2026-05-17-stage-2-8-linux-display-integrity-design.md` §6.10, §7.1, §7.3.
 
 **Scope (this PR):** Real X11 scanner + privacy-audit Linux paths + reportBuilder Linux device_integrity. **Out of scope:** Wayland portal probing (PR #21), Snap/Flatpak hint detection (PR #21), systemd unit (PR #22), Ubuntu CI (PR #22), reviewer docs (PR #23).
 
@@ -25,10 +25,12 @@
 **Modified files:**
 - `tools/simurgh-daemon-linux/Cargo.toml` — add `x11rb` dep.
 - `tools/simurgh-daemon-linux/src/scanner/mod.rs` — export `x11` and `privacy` modules.
-- `tools/simurgh-daemon-linux/src/scanner/session.rs` — no change to detection logic; later tasks compose scanner with session detector.
-- `tools/simurgh-daemon-linux/src/http.rs` — `/status` calls X11 scanner when `display_server == "x11"`.
+- `tools/simurgh-daemon-linux/src/scanner/session.rs` — no change to detection logic; later tasks compose scanner with session detector. Adds `is_local_display` re-export so `x11::scan()` can defend in depth.
+- `tools/simurgh-daemon-linux/src/http.rs` — adds `/proof` POST endpoint + `/status` GET; both call shared `current_scanner_summary()` helper so signed proofs carry the real X11 counts.
 - `tools/simurgh-daemon-linux/src/bin/simurgh-daemon-linux-fixture.rs` — fixture binary uses real scanner when X11 is available, falls back to zeros for fixture stability under CI.
 - `src/academic/reportBuilder.js` — extend `buildDeviceIntegritySection` to emit Linux signals.
+- `src/device/scannerRiskPolicy.js` — extend `mapScannerSummaryToRisk` to surface Warning context for Linux `x11_above_window_count_max > 0`, `x11_override_redirect_window_count_max > 0`, `wayland_compositor_restricted`, `xwayland_partial` (no behaviour change for macOS/Windows).
+- `src/device/daemonState.js` — rollup new Linux `*_max` fields across proofs in a session.
 - `tools/privacy-audit.mjs` — add `tools/simurgh-daemon-linux` (excluding `target/`) + `tests/fixtures/stage-2-8` to `DEFAULT_SCAN_DIRS`.
 
 ---
@@ -211,11 +213,20 @@ x11rb = { version = "0.13", default-features = false, features = ["allow-unsafe-
 
 ```rust
 use crate::scanner::privacy::{raw_to_summary, scanner_unavailable, RawX11Counts, X11ScannerSummary};
+use crate::scanner::session::is_local_display;
 
 /// High-level entry point: open an X11 connection from $DISPLAY, run the scan,
 /// return a privacy-filtered summary. Errors return scanner_unavailable with a
 /// stable reason code — they MUST NOT propagate connection details to callers.
+///
+/// Defence-in-depth: refuses non-local $DISPLAY before connecting. The session
+/// detector also enforces this in /status, but the scanner enforces it again
+/// so any direct caller of `scan()` cannot bypass the privacy boundary.
 pub fn scan() -> X11ScannerSummary {
+    let display = std::env::var("DISPLAY").unwrap_or_default();
+    if !is_local_display(&display) {
+        return scanner_unavailable("non_local_display");
+    }
     match scan_inner() {
         Ok(raw) => raw_to_summary(raw),
         Err(reason) => scanner_unavailable(reason),
@@ -239,7 +250,7 @@ pub(crate) fn scan_with_connection<C: x11rb::connection::Connection>(
     // Intern the EWMH atoms we need. Names from the EWMH spec.
     let atoms = InternedAtoms::intern(conn)?;
 
-    // Read _NET_CLIENT_LIST from the root window — managed top-level windows.
+    // (a) Managed top-level windows from _NET_CLIENT_LIST.
     let client_list_cookie = conn
         .get_property(false, root, atoms.net_client_list, AtomEnum::WINDOW, 0, u32::MAX)
         .map_err(|_| "scanner_unavailable")?;
@@ -249,13 +260,25 @@ pub(crate) fn scan_with_connection<C: x11rb::connection::Connection>(
         .map(|iter| iter.collect())
         .unwrap_or_default();
 
+    // (b) ALL root children via query_tree. Needed because override_redirect
+    // windows (e.g. tooltips, menus, overlays used for cheating attempts) are
+    // typically NOT listed in _NET_CLIENT_LIST. The X11 spec puts unmanaged
+    // top-levels under the root window's children, not in the WM client list.
+    let tree_reply = conn
+        .query_tree(root)
+        .map_err(|_| "scanner_unavailable")?
+        .reply()
+        .map_err(|_| "scanner_unavailable")?;
+    let root_children: Vec<u32> = tree_reply.children.into_iter().collect();
+
     let mut above = 0u32;
     let mut fullscreen = 0u32;
     let mut skip_taskbar = 0u32;
     let mut override_redirect = 0u32;
 
+    // Per-window _NET_WM_STATE on managed windows (state hints only meaningful
+    // when the WM is in the loop — overrides skip state-hint enumeration).
     for win in &managed {
-        // Per-window _NET_WM_STATE
         if let Ok(reply) = conn
             .get_property(false, *win, atoms.net_wm_state, AtomEnum::ATOM, 0, u32::MAX)
             .and_then(|c| Ok(c.reply().ok()))
@@ -276,7 +299,14 @@ pub(crate) fn scan_with_connection<C: x11rb::connection::Connection>(
                 }
             }
         }
-        // override_redirect lives on GetWindowAttributes, not a property.
+    }
+
+    // override_redirect must be counted across ALL root children, not just the
+    // managed set — that's where overlays hide. Skip the root window itself.
+    for win in &root_children {
+        if *win == root {
+            continue;
+        }
         if let Ok(attrs) = conn.get_window_attributes(*win).and_then(|c| Ok(c.reply().ok())) {
             if let Some(attrs) = attrs {
                 if attrs.override_redirect {
@@ -286,7 +316,10 @@ pub(crate) fn scan_with_connection<C: x11rb::connection::Connection>(
         }
     }
 
+    // visible_window_count policy: managed + override_redirect. Documented so
+    // future readers know the math behind the number.
     let managed_count = managed.len() as u32;
+    let visible_count = managed_count + override_redirect;
     Ok(RawX11Counts {
         managed_window_count: managed_count,
         override_redirect_window_count: override_redirect,
@@ -294,7 +327,7 @@ pub(crate) fn scan_with_connection<C: x11rb::connection::Connection>(
         fullscreen_window_count: fullscreen,
         skip_taskbar_window_count: skip_taskbar,
         suspicious_window_count: 0,
-        visible_window_count: managed_count,
+        visible_window_count: visible_count,
     })
 }
 
@@ -405,13 +438,16 @@ If missing, install with `sudo apt-get install -y xvfb x11-utils xterm` (reviewe
 
 Write `tools/simurgh-daemon-linux/tests/xvfb_integration_tests.rs`:
 ```rust
-use simurgh_daemon_linux::scanner::x11::scan;
+use simurgh_daemon_linux::scanner::x11::{scan, scan_with_connection};
 use std::process::{Child, Command, Stdio};
 use std::sync::OnceLock;
 use std::time::Duration;
+use x11rb::connection::Connection;
+use x11rb::protocol::xproto::{
+    AtomEnum, ChangeWindowAttributesAux, ConnectionExt, CreateWindowAux, EventMask,
+    PropMode, WindowClass,
+};
 
-/// Skip the test gracefully if Xvfb is not installed (will be mandatory in PR #22 once
-/// the Ubuntu CI job installs xvfb).
 fn xvfb_available() -> bool {
     Command::new("which")
         .arg("Xvfb")
@@ -425,7 +461,6 @@ fn xvfb_available() -> bool {
 struct XvfbGuard {
     child: Child,
 }
-
 impl Drop for XvfbGuard {
     fn drop(&mut self) {
         let _ = self.child.kill();
@@ -444,7 +479,6 @@ fn start_xvfb(display_num: u32) -> Option<XvfbGuard> {
         .stderr(Stdio::null())
         .spawn()
         .ok()?;
-    // Wait briefly for Xvfb to be ready.
     std::thread::sleep(Duration::from_millis(500));
     Some(XvfbGuard { child })
 }
@@ -454,43 +488,110 @@ static DISPLAY_LOCK: OnceLock<std::sync::Mutex<()>> = OnceLock::new();
 #[test]
 fn scan_returns_summary_against_empty_xvfb_root() {
     if !xvfb_available() {
-        eprintln!("Xvfb not installed; skipping (will be enforced in PR #22 Ubuntu CI)");
+        eprintln!("Xvfb not installed; skipping (PR #22 Ubuntu CI will enforce)");
         return;
     }
-    let _guard_lock = DISPLAY_LOCK
-        .get_or_init(|| std::sync::Mutex::new(()))
-        .lock()
-        .unwrap();
+    let _guard_lock = DISPLAY_LOCK.get_or_init(|| std::sync::Mutex::new(())).lock().unwrap();
     let _xvfb = start_xvfb(99).expect("Xvfb spawn");
     std::env::set_var("DISPLAY", ":99");
     let summary = scan();
-    // Empty Xvfb root has no managed clients; managed_count should be 0.
     assert_eq!(summary.x11_managed_window_count, 0);
-    // Privacy: scanner_state for empty x11 still healthy; reason none.
     assert_eq!(summary.scanner_state, "healthy");
     assert_eq!(summary.scanner_reason, "none");
 }
 
 #[test]
 fn scan_returns_scanner_unavailable_when_display_invalid() {
-    let _guard_lock = DISPLAY_LOCK
-        .get_or_init(|| std::sync::Mutex::new(()))
-        .lock()
-        .unwrap();
+    let _guard_lock = DISPLAY_LOCK.get_or_init(|| std::sync::Mutex::new(())).lock().unwrap();
     std::env::set_var("DISPLAY", ":invalid-display");
     let summary = scan();
     assert_eq!(summary.scanner_state, "scanner_unavailable");
 }
+
+#[test]
+fn scan_counts_managed_above_and_fullscreen_windows() {
+    if !xvfb_available() {
+        eprintln!("Xvfb not installed; skipping");
+        return;
+    }
+    let _guard_lock = DISPLAY_LOCK.get_or_init(|| std::sync::Mutex::new(())).lock().unwrap();
+    let _xvfb = start_xvfb(100).expect("Xvfb spawn");
+    std::env::set_var("DISPLAY", ":100");
+
+    let (conn, screen_num) = x11rb::connect(None).expect("connect");
+    let screen = &conn.setup().roots[screen_num];
+    let root = screen.root;
+
+    // Intern atoms we'll need to set on root + on the test windows.
+    let net_client_list = conn.intern_atom(false, b"_NET_CLIENT_LIST").unwrap().reply().unwrap().atom;
+    let net_wm_state = conn.intern_atom(false, b"_NET_WM_STATE").unwrap().reply().unwrap().atom;
+    let net_wm_state_above = conn.intern_atom(false, b"_NET_WM_STATE_ABOVE").unwrap().reply().unwrap().atom;
+    let net_wm_state_fullscreen = conn.intern_atom(false, b"_NET_WM_STATE_FULLSCREEN").unwrap().reply().unwrap().atom;
+
+    // Create two managed top-level windows.
+    let win1 = conn.generate_id().unwrap();
+    let win2 = conn.generate_id().unwrap();
+    for w in [win1, win2] {
+        conn.create_window(
+            x11rb::COPY_DEPTH_FROM_PARENT, w, root, 0, 0, 100, 100, 0,
+            WindowClass::INPUT_OUTPUT, x11rb::COPY_FROM_PARENT,
+            &CreateWindowAux::new().event_mask(EventMask::EXPOSURE),
+        ).unwrap();
+    }
+    // Mark win1 _NET_WM_STATE_ABOVE; mark win2 _NET_WM_STATE_FULLSCREEN.
+    conn.change_property32(PropMode::REPLACE, win1, net_wm_state, AtomEnum::ATOM, &[net_wm_state_above]).unwrap();
+    conn.change_property32(PropMode::REPLACE, win2, net_wm_state, AtomEnum::ATOM, &[net_wm_state_fullscreen]).unwrap();
+    // Populate root's _NET_CLIENT_LIST with both managed windows.
+    conn.change_property32(PropMode::REPLACE, root, net_client_list, AtomEnum::WINDOW, &[win1, win2]).unwrap();
+    conn.flush().unwrap();
+
+    // Drive the scanner directly against our prepared connection + root.
+    let raw = scan_with_connection(&conn, root).expect("scan_with_connection");
+    assert_eq!(raw.managed_window_count, 2);
+    assert_eq!(raw.above_window_count, 1);
+    assert_eq!(raw.fullscreen_window_count, 1);
+}
+
+#[test]
+fn scan_counts_override_redirect_root_children() {
+    if !xvfb_available() {
+        eprintln!("Xvfb not installed; skipping");
+        return;
+    }
+    let _guard_lock = DISPLAY_LOCK.get_or_init(|| std::sync::Mutex::new(())).lock().unwrap();
+    let _xvfb = start_xvfb(101).expect("Xvfb spawn");
+    std::env::set_var("DISPLAY", ":101");
+
+    let (conn, screen_num) = x11rb::connect(None).expect("connect");
+    let screen = &conn.setup().roots[screen_num];
+    let root = screen.root;
+
+    // Create an override_redirect window as a direct root child (the kind
+    // _NET_CLIENT_LIST does NOT include — overlays, tooltips, exam-cheat surfaces).
+    let overlay = conn.generate_id().unwrap();
+    conn.create_window(
+        x11rb::COPY_DEPTH_FROM_PARENT, overlay, root, 0, 0, 80, 80, 0,
+        WindowClass::INPUT_OUTPUT, x11rb::COPY_FROM_PARENT,
+        &CreateWindowAux::new().override_redirect(1).event_mask(EventMask::EXPOSURE),
+    ).unwrap();
+    conn.flush().unwrap();
+
+    let raw = scan_with_connection(&conn, root).expect("scan_with_connection");
+    assert!(raw.override_redirect_window_count >= 1,
+        "expected >=1 override_redirect window, got {}", raw.override_redirect_window_count);
+}
 ```
+
+NOTE: this test imports `scan_with_connection` which is `pub(crate)` in Task 3. Promote it to `pub` (still inside the `x11` module) so integration tests can drive the scanner against a hand-prepared connection deterministically.
 
 - [ ] **Step 3: Run tests**
 
 ```bash
-source ~/.cargo/env && cargo test --manifest-path tools/simurgh-daemon-linux/Cargo.toml xvfb_integration
+source ~/.cargo/env && cargo test --manifest-path tools/simurgh-daemon-linux/Cargo.toml --test xvfb_integration_tests
 ```
 Expected:
-- Xvfb installed: 2/2 PASS.
-- Xvfb missing: first test prints "Xvfb not installed; skipping" and returns ok; second test still PASSes (invalid display → scanner_unavailable).
+- Xvfb installed: 4/4 PASS.
+- Xvfb missing: tests 1, 3, 4 print "skipping" and return ok; test 2 PASSes (invalid display → scanner_unavailable).
 
 - [ ] **Step 4: Commit**
 
@@ -576,6 +677,278 @@ git add tools/simurgh-daemon-linux/
 GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
 GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
 git commit -m "feat(stage-2-8b): /status endpoint runs X11 scanner when display=x11"
+```
+
+---
+
+## Task 6.5: Wire X11 scanner summary into POST /proof (the trusted payload)
+
+**Files:**
+- Modify: `tools/simurgh-daemon-linux/src/http.rs` — add `current_scanner_summary()` shared helper + POST `/proof` route.
+- Modify: `tools/simurgh-daemon-linux/src/proof.rs` — `ProofInputs` already carries the count fields; nothing structural to change.
+- Create: `tools/simurgh-daemon-linux/tests/proof_endpoint_tests.rs` — Rust integration test asserting POST /proof returns a signed payload whose x11 counts come from the scanner.
+- Create: `tests/unit/daemonProofLinuxXcountsRollup.test.js` — Node test asserting Linux proofs with x11 counts roll up into report `x11_*_count_max`.
+
+This is the most important task in PR #20 — without it, the live daemon would only expose scanner data via `/status` (UX-only) while signing proofs with stale defaults. The signed payload is the trust boundary.
+
+- [ ] **Step 1: Refactor `tools/simurgh-daemon-linux/src/http.rs` to extract `current_scanner_summary`**
+
+Add module-private helper:
+```rust
+use crate::scanner::privacy::X11ScannerSummary;
+use crate::scanner::session::{detect, SessionDetection, SessionEnv};
+use crate::scanner::x11;
+
+pub(crate) struct CurrentScan {
+    pub detection: SessionDetection,
+    pub x11: Option<X11ScannerSummary>,
+}
+
+pub(crate) fn current_scanner_summary() -> CurrentScan {
+    let det = detect(&SessionEnv::from_process_env());
+    let x11 = if det.display_server == "x11" && det.scanner_reason == "none" {
+        Some(x11::scan())
+    } else {
+        None
+    };
+    CurrentScan { detection: det, x11 }
+}
+```
+
+Update `status()` to use this helper (replaces the inline scanner call from Task 6). The /status JSON body shape stays the same.
+
+- [ ] **Step 2: Add POST /proof handler**
+
+The browser SDK calls this endpoint with a challenge from the Node server. The daemon builds a signed proof using its identity + current scanner output.
+
+Add to `http.rs`:
+```rust
+use axum::{extract::Json, routing::post};
+use serde::Deserialize;
+
+use crate::identity::{load_or_create_identity, IdentityPaths};
+use crate::proof::{build_proof, ProofInputs};
+
+#[derive(Deserialize)]
+pub struct ProofRequest {
+    pub session_id: String,
+    pub exam_id: String,
+    pub sequence: u64,
+    pub challenge: String,
+}
+
+async fn proof(Json(req): Json<ProofRequest>) -> Result<Json<serde_json::Value>, (axum::http::StatusCode, String)> {
+    let identity = load_or_create_identity(&IdentityPaths::from_xdg())
+        .map_err(|_| (axum::http::StatusCode::INTERNAL_SERVER_ERROR, "identity_unavailable".into()))?;
+    let scan = current_scanner_summary();
+    let display_server: &'static str = match scan.detection.display_server {
+        "x11" => "x11",
+        "wayland" => "wayland",
+        "xwayland" => "xwayland",
+        "headless" => "headless",
+        _ => "unknown",
+    };
+    let (scanner_state, scanner_reason, coverage, counts, visible) = match &scan.x11 {
+        Some(s) => (
+            s.scanner_state,
+            s.scanner_reason,
+            s.coverage,
+            [
+                s.x11_managed_window_count,
+                s.x11_override_redirect_window_count,
+                s.x11_above_window_count,
+                s.x11_fullscreen_window_count,
+                s.x11_skip_taskbar_window_count,
+            ],
+            s.visible_window_count,
+        ),
+        None => (
+            scan.detection.scanner_state,
+            scan.detection.scanner_reason,
+            scan.detection.coverage,
+            [0, 0, 0, 0, 0],
+            0,
+        ),
+    };
+    let timestamp = chrono_like_iso8601_utc_now();
+    let inputs = ProofInputs {
+        session_id: req.session_id,
+        exam_id: req.exam_id,
+        sequence: req.sequence,
+        timestamp,
+        challenge: req.challenge,
+        display_server,
+        scanner_state,
+        scanner_reason,
+        coverage,
+        portal_advertised: None,
+        portal_active: None,
+        x11_counts: counts,
+        xwayland_window_count: 0,
+        suspicious_window_count: 0,
+        visible_window_count: visible,
+    };
+    Ok(Json(build_proof(&identity, &inputs)))
+}
+
+// Minimal ISO-8601 UTC timestamp without pulling chrono (keep dep surface small).
+fn chrono_like_iso8601_utc_now() -> String {
+    use std::time::{SystemTime, UNIX_EPOCH};
+    let d = SystemTime::now().duration_since(UNIX_EPOCH).unwrap_or_default();
+    let secs = d.as_secs();
+    let millis = d.subsec_millis();
+    let days = (secs / 86_400) as i64;
+    let secs_of_day = secs % 86_400;
+    let h = secs_of_day / 3600;
+    let m = (secs_of_day % 3600) / 60;
+    let s = secs_of_day % 60;
+    let (y, mo, da) = days_to_ymd(days + 719_468); // 1970-01-01 in days_to_ymd's epoch
+    format!("{:04}-{:02}-{:02}T{:02}:{:02}:{:02}.{:03}Z", y, mo, da, h, m, s, millis)
+}
+
+// Howard Hinnant's civil-from-days algorithm — compact, correct, no deps.
+fn days_to_ymd(z: i64) -> (i32, u32, u32) {
+    let z = z - 60; // adjust epoch to civil 0000-03-01
+    let era = if z >= 0 { z / 146_097 } else { (z - 146_096) / 146_097 };
+    let doe = (z - era * 146_097) as u64;
+    let yoe = (doe - doe / 1460 + doe / 36_524 - doe / 146_096) / 365;
+    let y = (yoe as i64) + era * 400;
+    let doy = doe - (365 * yoe + yoe / 4 - yoe / 100);
+    let mp = (5 * doy + 2) / 153;
+    let d = doy - (153 * mp + 2) / 5 + 1;
+    let m = if mp < 10 { mp + 3 } else { mp - 9 };
+    let y = if m <= 2 { y + 1 } else { y };
+    (y as i32, m as u32, d as u32)
+}
+```
+
+Add the route in `router()`:
+```rust
+.route("/proof", post(proof))
+```
+
+- [ ] **Step 3: Rust integration test for /proof endpoint**
+
+Write `tools/simurgh-daemon-linux/tests/proof_endpoint_tests.rs`:
+```rust
+use axum::body::Body;
+use http_body_util::BodyExt;
+use hyper::{Request, StatusCode};
+use simurgh_daemon_linux::http::router;
+use tower::ServiceExt;
+
+#[tokio::test]
+async fn post_proof_returns_signed_payload_with_required_linux_fields() {
+    // Force a deterministic identity dir for the test process.
+    let tmp = tempfile::tempdir().unwrap();
+    std::env::set_var("XDG_STATE_HOME", tmp.path());
+
+    let app = router();
+    let body = serde_json::json!({
+        "session_id": "sess_proof_test",
+        "exam_id": "exam_proof_test",
+        "sequence": 1,
+        "challenge": "Y2hhbGxlbmdl"
+    });
+    let resp = app
+        .oneshot(
+            Request::builder()
+                .method("POST")
+                .uri("/proof")
+                .header("content-type", "application/json")
+                .body(Body::from(serde_json::to_vec(&body).unwrap()))
+                .unwrap(),
+        )
+        .await
+        .unwrap();
+    assert_eq!(resp.status(), StatusCode::OK);
+    let bytes = resp.into_body().collect().await.unwrap().to_bytes();
+    let proof: serde_json::Value = serde_json::from_slice(&bytes).unwrap();
+    assert_eq!(proof["type"], "simurgh.daemon.proof");
+    assert_eq!(proof["platform"], "linux");
+    assert_eq!(proof["scanner_version"], "2.8.0");
+    assert!(proof["signature"].is_string());
+    assert!(proof["node_id_hash"].is_string());
+    // Required Linux fields must all be present (headless env still emits them).
+    for key in [
+        "display_server", "scanner_state", "scanner_reason", "coverage",
+        "x11_managed_window_count", "x11_override_redirect_window_count",
+        "x11_above_window_count", "x11_fullscreen_window_count",
+        "x11_skip_taskbar_window_count", "xwayland_window_count",
+    ] {
+        assert!(proof.get(key).is_some(), "missing {key} in proof");
+    }
+}
+```
+
+- [ ] **Step 4: Node test — Linux x11 counts roll up into report max**
+
+This requires Linux rollup in `src/device/daemonState.js`. Check first whether `daemonState` already aggregates Linux fields; if not, add to the existing rollup logic the new fields:
+- `x11_managed_window_count_max`
+- `x11_override_redirect_window_count_max`
+- `x11_above_window_count_max`
+- `x11_fullscreen_window_count_max`
+- `x11_skip_taskbar_window_count_max`
+- `xwayland_window_count_max`
+
+Then write `tests/unit/daemonProofLinuxXcountsRollup.test.js`:
+```javascript
+import assert from "node:assert/strict";
+import test from "node:test";
+
+// Read existing daemonState aggregator API and exercise it with Linux proofs.
+// Assertion: after three proofs with managed=2, managed=5, managed=4 in the same
+// session, the rolled-up state has x11_managed_window_count_max === 5.
+
+import { createDaemonState } from "../../src/device/daemonState.js";
+
+function linuxProof(seq, x11_managed) {
+  return {
+    platform: "linux",
+    sequence: seq,
+    scanner_state: "healthy",
+    scanner_version: "2.8.0",
+    scanner_reason: "none",
+    display_server: "x11",
+    coverage: "x11_full",
+    x11_managed_window_count: x11_managed,
+    x11_override_redirect_window_count: 0,
+    x11_above_window_count: 0,
+    x11_fullscreen_window_count: 0,
+    x11_skip_taskbar_window_count: 0,
+    xwayland_window_count: 0,
+    visible_window_count: x11_managed,
+  };
+}
+
+test("Linux x11_managed rolls up to max across proofs", () => {
+  const state = createDaemonState();
+  state.observe("sess_a", linuxProof(1, 2));
+  state.observe("sess_a", linuxProof(2, 5));
+  state.observe("sess_a", linuxProof(3, 4));
+  const summary = state.summary("sess_a");
+  assert.equal(summary.x11_managed_window_count_max, 5);
+});
+```
+
+NOTE: the exact `createDaemonState` / `observe` / `summary` API surface in `daemonState.js` may differ from this sketch — read the file first and adapt the test to the actual factory shape. The invariant is: max of x11_managed across proofs in a session is reported.
+
+- [ ] **Step 5: Build + run tests**
+
+```bash
+source ~/.cargo/env && cargo test --manifest-path tools/simurgh-daemon-linux/Cargo.toml --test proof_endpoint_tests
+node --test tests/unit/daemonProofLinuxXcountsRollup.test.js
+npm test
+```
+Expected: all PASS.
+
+- [ ] **Step 6: Commit**
+
+```bash
+git add tools/simurgh-daemon-linux/ src/device/daemonState.js tests/unit/daemonProofLinuxXcountsRollup.test.js
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+git commit -m "feat(stage-2-8b): wire X11 scanner into signed /proof + Linux count rollup"
 ```
 
 ---
@@ -725,9 +1098,13 @@ test("Linux device_integrity rolls up Warning when coverage is wayland_limited",
 test("Linux device_integrity does not include macOS/Windows-only count fields when platform=linux", () => {
   const d = buildReport(baseSession()).device_integrity;
   // The macOS/Windows shape used capture_excluded/capture_restricted/monitor_only.
-  // Linux reports must not surface those (they are zero by construction here, but
-  // the keys should also not appear on a Linux report — they belong to other platforms).
-  assert.ok(!("capture_excluded_window_count_max" in d) || d.capture_excluded_window_count_max === 0);
+  // Linux reports MUST NOT surface those keys at all — they belong to other platforms.
+  assert.ok(!("capture_excluded_window_count_max" in d),
+    "Linux report leaked macOS/Windows capture_excluded_window_count_max");
+  assert.ok(!("capture_restricted_window_count_max" in d),
+    "Linux report leaked macOS/Windows capture_restricted_window_count_max");
+  assert.ok(!("monitor_only_window_count_max" in d),
+    "Linux report leaked macOS/Windows monitor_only_window_count_max");
 });
 ```
 
@@ -831,6 +1208,141 @@ git add src/academic/reportBuilder.js
 GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
 GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
 git commit -m "feat(stage-2-8b): reportBuilder emits Linux device_integrity block"
+```
+
+---
+
+## Task 9.5: Extend `scannerRiskPolicy.js` for Linux signals
+
+**Files:**
+- Create: `tests/unit/scannerRiskPolicyLinux.test.js`
+- Modify: `src/device/scannerRiskPolicy.js`
+
+Linux signals must map to risk so the dashboard / report / risk score stay aligned with the new `device_integrity` block. macOS/Windows mapping must remain byte-identical.
+
+- [ ] **Step 1: Write the failing test**
+
+Write `tests/unit/scannerRiskPolicyLinux.test.js`:
+```javascript
+import assert from "node:assert/strict";
+import test from "node:test";
+
+import { mapScannerSummaryToRisk } from "../../src/device/scannerRiskPolicy.js";
+
+test("Linux healthy x11 counts → Safe (daemon_risk 0, no force)", () => {
+  const r = mapScannerSummaryToRisk({
+    daemon_state: "healthy",
+    platform: "linux",
+    scanner_state: "healthy",
+    coverage: "x11_full",
+    x11_above_window_count_max: 0,
+    x11_override_redirect_window_count_max: 0,
+  });
+  assert.equal(r.daemon_risk, 0);
+  assert.equal(r.forceCritical, false);
+});
+
+test("Linux x11_above_window_count_max > 0 → Warning context", () => {
+  const r = mapScannerSummaryToRisk({
+    daemon_state: "healthy",
+    platform: "linux",
+    scanner_state: "healthy",
+    coverage: "x11_full",
+    x11_above_window_count_max: 1,
+    x11_override_redirect_window_count_max: 0,
+  });
+  assert.ok(r.daemon_risk >= 40, `expected ≥40 risk, got ${r.daemon_risk}`);
+  assert.equal(r.forceCritical, false);
+});
+
+test("Linux x11_override_redirect_window_count_max > 0 → Warning context", () => {
+  const r = mapScannerSummaryToRisk({
+    daemon_state: "healthy",
+    platform: "linux",
+    scanner_state: "healthy",
+    coverage: "x11_full",
+    x11_above_window_count_max: 0,
+    x11_override_redirect_window_count_max: 1,
+  });
+  assert.ok(r.daemon_risk >= 40);
+  assert.equal(r.forceCritical, false);
+});
+
+test("Linux wayland_compositor_restricted → Warning context (not misconduct)", () => {
+  const r = mapScannerSummaryToRisk({
+    daemon_state: "healthy",
+    platform: "linux",
+    scanner_state: "wayland_compositor_restricted",
+    coverage: "wayland_limited",
+  });
+  assert.ok(r.daemon_risk >= 40);
+  assert.equal(r.forceCritical, false);
+});
+
+test("Linux xwayland_partial coverage → Warning context", () => {
+  const r = mapScannerSummaryToRisk({
+    daemon_state: "healthy",
+    platform: "linux",
+    scanner_state: "xwayland_detected",
+    coverage: "xwayland_partial",
+  });
+  assert.ok(r.daemon_risk >= 40);
+  assert.equal(r.forceCritical, false);
+});
+
+test("macOS capture_excluded_window_count_max > 0 still forces Critical (no regression)", () => {
+  const r = mapScannerSummaryToRisk({
+    daemon_state: "healthy",
+    capture_excluded_window_count_max: 1,
+  });
+  assert.equal(r.daemon_risk, 100);
+  assert.equal(r.forceCritical, true);
+});
+```
+
+- [ ] **Step 2: Run to verify failure**
+
+```bash
+node --test tests/unit/scannerRiskPolicyLinux.test.js
+```
+Expected: Linux-specific tests FAIL; macOS regression test PASSes.
+
+- [ ] **Step 3: Extend `src/device/scannerRiskPolicy.js`**
+
+Read the file first. In `mapScannerSummaryToRisk`, after the existing macOS/Windows-shaped checks (capture_excluded / capture_restricted / monitor_only) and BEFORE the daemon-state fallbacks, add a Linux-aware branch:
+
+```javascript
+  const x11Above = record?.x11_above_window_count_max ?? 0;
+  const x11Override = record?.x11_override_redirect_window_count_max ?? 0;
+  if (x11Above > 0 || x11Override > 0) {
+    return { daemon_risk: 40, forceCritical: false };
+  }
+  if (
+    record?.scanner_state === "wayland_compositor_restricted" ||
+    record?.scanner_state === "wayland_compositor_unsupported" ||
+    record?.scanner_state === "xwayland_detected" ||
+    record?.coverage === "wayland_limited" ||
+    record?.coverage === "xwayland_partial"
+  ) {
+    return { daemon_risk: 40, forceCritical: false };
+  }
+```
+
+- [ ] **Step 4: Run tests**
+
+```bash
+node --test tests/unit/scannerRiskPolicyLinux.test.js
+npm test
+```
+Expected: 6/6 Linux risk tests PASS; full suite green (macOS/Windows byte-identical).
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add src/device/scannerRiskPolicy.js tests/unit/scannerRiskPolicyLinux.test.js
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+git commit -m "feat(stage-2-8b): scannerRiskPolicy maps Linux x11/Wayland signals to Warning"
 ```
 
 ---
@@ -1131,10 +1643,21 @@ gh release create v0.4.15-stage-2-8B-linux-x11-scanner --title "Stage 2.8B — L
 ## Self-Review (post-write, pre-handoff)
 
 **Spec coverage** (§ references to design spec):
-- §6.10 platform-specific validators: covered by PR #19 — extended here by Task 9 reportBuilder Linux branch.
-- §7.1 Linux daemon proof payload x11 counts: Tasks 3, 6, 7 produce real counts; flow through proof builder already lands per PR #19's `build_proof` consuming `ProofInputs`.
+- §6.10 platform-specific validators: covered by PR #19 — extended here by Task 9 reportBuilder Linux branch + Task 9.5 risk policy.
+- §7.1 Linux daemon proof payload x11 counts: Tasks 3, 6, 6.5, 7 — Task 6.5 wires the scanner into the **signed `/proof`** payload (the trust boundary), not only `/status`.
 - §7.3 Linux `device_integrity` shape: Task 9 emits every field (`display_server`, `display_server_locked`, `coverage`, `portal_advertised`, `portal_active`, six x11 counts, `xwayland_window_count_max`).
+- §7.4 risk policy (Linux Warning context for above/override-redirect/wayland_limited/xwayland_partial): Task 9.5.
 - §15.5 red-test checklist items 6 (reportBuilder Linux fields) + 7 (privacy-audit Linux coverage): closed by Tasks 8/9 + Tasks 10/11 respectively. These were the two checklist items deferred from PR #19.
+
+**Raouf review fixes (applied 2026-05-18):**
+1. ✅ `/proof` wiring — Task 6.5 added (scanner into signed payload + Linux count rollup in daemonState).
+2. ✅ `query_tree(root)` for override_redirect (overlay windows are NOT in `_NET_CLIENT_LIST`) — Task 3 updated.
+3. ✅ Real synthetic-window Xvfb tests (create managed windows + override_redirect child) — Task 5 strengthened.
+4. ✅ `x11::scan()` defence-in-depth non-local `$DISPLAY` refusal — Task 3 updated.
+5. ✅ `cargo test --test xvfb_integration_tests` (not name filter) — Task 5 command fixed.
+6. ✅ Node ≥ 22 — header fixed.
+7. ✅ Strict `assert.ok(!("key" in d))` for macOS/Windows field absence — Task 8 fixed.
+8. ✅ scannerRiskPolicy Linux coverage — Task 9.5 added.
 
 **Placeholder scan:** No TBDs. Each step has runnable code. The fixture-regeneration in Task 7 is deliberately optional with explicit revert guidance to preserve PR #19's signed fixture.
 
