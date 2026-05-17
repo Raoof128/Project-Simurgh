@@ -1199,6 +1199,28 @@ else
   fi
 fi
 
+# ── 10m. Stage 2.6/2.7 closeout — umbrella E2E smoke + cybersecurity audit ──
+if [[ "$QUICK" == true ]]; then
+  step "Stage 2.6/2.7 closeout"
+  echo -e "${YELLOW}Skipped because --quick was used.${NC}"
+else
+  step "Stage 2.6/2.7 closeout E2E smoke"
+  if scripts/smoke-stage-2-6-2-7-closeout.sh > "$LOG_DIR/stage26-27-closeout-smoke.log" 2>&1; then
+    pass "Stage 2.6/2.7 closeout E2E smoke: 2.6 Windows + 2.7 cross-platform + privacy"
+  else
+    fail "Stage 2.6/2.7 closeout E2E smoke"
+    tail -100 "$LOG_DIR/stage26-27-closeout-smoke.log"
+  fi
+
+  step "Stage 2.6/2.7 closeout cybersecurity audit"
+  if scripts/security-audit-stage-2-6-2-7-closeout.sh > "$LOG_DIR/stage26-27-closeout-audit.log" 2>&1; then
+    pass "Stage 2.6/2.7 closeout cybersecurity audit: proof/scanner/platform/daemon/SDK/report/dashboard/privacy/wording"
+  else
+    fail "Stage 2.6/2.7 closeout cybersecurity audit"
+    tail -100 "$LOG_DIR/stage26-27-closeout-audit.log"
+  fi
+fi
+
 # ── 11. Git status sanity ────────────────────────────────
 step "Git status"
 if git rev-parse --git-dir > /dev/null 2>&1; then
