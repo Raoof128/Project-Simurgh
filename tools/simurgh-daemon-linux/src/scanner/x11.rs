@@ -1,4 +1,6 @@
-use crate::scanner::privacy::{raw_to_summary, scanner_unavailable, RawX11Counts, X11ScannerSummary};
+use crate::scanner::privacy::{
+    raw_to_summary, scanner_unavailable, RawX11Counts, X11ScannerSummary,
+};
 use crate::scanner::session::is_local_display;
 
 /// High-level entry point: open an X11 connection from $DISPLAY, run the scan,
@@ -38,9 +40,18 @@ pub fn scan_with_connection<C: x11rb::connection::Connection>(
 
     // (a) Managed top-level windows from _NET_CLIENT_LIST.
     let client_list_cookie = conn
-        .get_property(false, root, atoms.net_client_list, AtomEnum::WINDOW, 0, u32::MAX)
+        .get_property(
+            false,
+            root,
+            atoms.net_client_list,
+            AtomEnum::WINDOW,
+            0,
+            u32::MAX,
+        )
         .map_err(|_| "scanner_unavailable")?;
-    let client_list_reply = client_list_cookie.reply().map_err(|_| "scanner_unavailable")?;
+    let client_list_reply = client_list_cookie
+        .reply()
+        .map_err(|_| "scanner_unavailable")?;
     let managed: Vec<u32> = client_list_reply
         .value32()
         .map(|iter| iter.collect())
@@ -62,7 +73,9 @@ pub fn scan_with_connection<C: x11rb::connection::Connection>(
 
     // Per-window _NET_WM_STATE on managed windows only.
     for win in &managed {
-        if let Ok(cookie) = conn.get_property(false, *win, atoms.net_wm_state, AtomEnum::ATOM, 0, u32::MAX) {
+        if let Ok(cookie) =
+            conn.get_property(false, *win, atoms.net_wm_state, AtomEnum::ATOM, 0, u32::MAX)
+        {
             if let Ok(reply) = cookie.reply() {
                 if let Some(atoms_iter) = reply.value32() {
                     for atom in atoms_iter {
