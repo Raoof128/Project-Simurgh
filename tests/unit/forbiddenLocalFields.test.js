@@ -68,10 +68,7 @@ test("containsForbiddenLocalFieldDeep finds top-level forbidden key", () => {
 });
 
 test("containsForbiddenLocalFieldDeep finds deeply-nested forbidden key", () => {
-  assert.equal(
-    containsForbiddenLocalFieldDeep({ debug: { scanner: { hwnd: "0x123" } } }),
-    "hwnd"
-  );
+  assert.equal(containsForbiddenLocalFieldDeep({ debug: { scanner: { hwnd: "0x123" } } }), "hwnd");
 });
 
 test("containsForbiddenLocalFieldDeep finds forbidden key inside array", () => {

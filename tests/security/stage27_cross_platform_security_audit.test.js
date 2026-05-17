@@ -166,9 +166,7 @@ test("audit: dashboard HTML contains no affirmative misconduct phrases", () => {
 
 test("audit: forbiddenLocalFields list is the single source of truth for raw-field rejection", async () => {
   // Sanity: the daemonProof validator must reject every name on the canonical list.
-  const { FORBIDDEN_LOCAL_FIELD_NAMES } = await import(
-    "../../src/device/forbiddenLocalFields.js"
-  );
+  const { FORBIDDEN_LOCAL_FIELD_NAMES } = await import("../../src/device/forbiddenLocalFields.js");
   for (const fieldName of FORBIDDEN_LOCAL_FIELD_NAMES) {
     const { proof, public_key, node_id_hash } = makeProof("macos");
     proof.tainted = { [fieldName]: "raw-value" };

@@ -20,11 +20,7 @@ export function mapScannerSummaryToRisk(record) {
   if (maxExcluded > 0 || state === DAEMON_STATES.RISK_DETECTED) {
     return { daemon_risk: 100, forceCritical: true };
   }
-  if (
-    maxRestricted > 0 ||
-    maxMonitorOnly > 0 ||
-    record?.scanner_state === "restricted_detected"
-  ) {
+  if (maxRestricted > 0 || maxMonitorOnly > 0 || record?.scanner_state === "restricted_detected") {
     return { daemon_risk: 40, forceCritical: false };
   }
   if (

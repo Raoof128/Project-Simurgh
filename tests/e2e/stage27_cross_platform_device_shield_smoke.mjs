@@ -125,7 +125,16 @@ function pairEnvelope(identity, sessionId, examId, challengeValue, platform) {
   };
 }
 
-function proof({ identity, sessionId, examId, sequence, challengeValue, platform, fields = {}, extra = {} }) {
+function proof({
+  identity,
+  sessionId,
+  examId,
+  sequence,
+  challengeValue,
+  platform,
+  fields = {},
+  extra = {},
+}) {
   const payload = {
     type: "simurgh.daemon.proof",
     session_id: sessionId,
@@ -428,18 +437,19 @@ async function runScenarioD(baseUrl) {
     "automatic misconduct detected",
     "automatic misconduct confirmed",
   ]) {
-    assertSmoke(
-      !serialized.includes(banned),
-      `D: report contained forbidden phrase "${banned}"`,
-      { snippet: serialized.slice(0, 400) }
-    );
+    assertSmoke(!serialized.includes(banned), `D: report contained forbidden phrase "${banned}"`, {
+      snippet: serialized.slice(0, 400),
+    });
   }
   console.log("Scenario D (Windows monitor-only Warning): pass");
 }
 
 async function runScenarioE(baseUrl) {
   // Windows capture-excluded => Critical
-  const { examId, sessionId, token } = await bootstrapSession(baseUrl, "Stage27-E-windows-critical");
+  const { examId, sessionId, token } = await bootstrapSession(
+    baseUrl,
+    "Stage27-E-windows-critical"
+  );
   const identity = createIdentity();
   await pairDaemon(baseUrl, sessionId, examId, token, identity, "windows", "Windows Critical");
   const proofChallenge = await challenge(baseUrl, sessionId, token, "proof");
@@ -571,11 +581,9 @@ async function runScenarioG(baseUrl) {
   if (reportResp.status === 200) {
     const reportJson = JSON.stringify(reportResp.json);
     for (const v of forbiddenValues) {
-      assertSmoke(
-        !reportJson.includes(v),
-        `G: report leaked raw value "${v}"`,
-        { snippet: reportJson.slice(0, 400) }
-      );
+      assertSmoke(!reportJson.includes(v), `G: report leaked raw value "${v}"`, {
+        snippet: reportJson.slice(0, 400),
+      });
     }
   } else {
     console.log(`  (G) report endpoint returned ${reportResp.status} — no data to leak`);
@@ -587,11 +595,9 @@ async function runScenarioG(baseUrl) {
   if (auditResp.status === 200) {
     const auditJson = JSON.stringify(auditResp.json);
     for (const v of forbiddenValues) {
-      assertSmoke(
-        !auditJson.includes(v),
-        `G: audit leaked raw value "${v}"`,
-        { snippet: auditJson.slice(0, 400) }
-      );
+      assertSmoke(!auditJson.includes(v), `G: audit leaked raw value "${v}"`, {
+        snippet: auditJson.slice(0, 400),
+      });
     }
   } else {
     console.log(`  (G) audit endpoint returned ${auditResp.status} — no data to leak`);
