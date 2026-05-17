@@ -1,6 +1,6 @@
 # Stage 2.8 — Linux Display Integrity Research
 
-**Status:** Design pending Raouf approval (2026-05-17). Implementation plan via `writing-plans` once approved.
+**Status:** Design **approved** (Raouf, 2026-05-17, 9/10 → ready after 4 fixes applied: fail-code/reason split, unknown-platform regression scenario, portal_active hard rule, scanner_reason=none invariant + red-test checklist).
 **Baseline:** `v0.4.13-stage-2-windows-device-shield-closeout` on `main`.
 **Target release umbrella:** `v0.4.18-stage-2-8-linux-display-integrity-closeout`.
 **Branch:** `stage-2-8-linux-display-integrity-research`.
@@ -144,8 +144,14 @@ Sandboxed browser packages may behave differently around localhost discovery, lo
 
 ### 6.2 Portal advertised vs portal active (P0)
 - `portal_advertised`: cheap DBus name + property probe (`org.freedesktop.portal.ScreenCast` present, AvailableSourceTypes readable).
-- `portal_active`: safe non-capture capability probe — never trigger a user consent prompt during background health checks.
+- `portal_active`: a **no-consent, non-capture** capability probe succeeded.
 - Daemon never claims ScreenCast availability from DBus name alone.
+- **Hard rule:** the daemon MUST NOT briefly start a ScreenCast session if that could trigger a user consent prompt. If the compositor cannot provide a safe probe, emit:
+  ```json
+  { "portal_advertised": true, "portal_active": false,
+    "scanner_reason": "portal_active_probe_unavailable" }
+  ```
+- Implementation acceptance test: assert no `org.freedesktop.portal.Request` consent dialog is ever issued by the daemon during health/proof flows.
 
 ### 6.3 Display-server lock (P0)
 - First verified Linux proof in a session locks `display_server`.
@@ -212,7 +218,7 @@ Sandboxed browser packages may behave differently around localhost discovery, lo
   "scanner_state": "healthy|risk_detected|restricted_detected|wayland_portal_available|wayland_compositor_restricted|wayland_compositor_unsupported|xwayland_detected|permission_denied|scanner_unavailable|scan_error",
   "scanner_version": "2.8.0",
   "privacy_mode": "metadata_only",
-  "scanner_reason": "none|no_display_server|non_local_display|portal_not_active|sandboxed_browser_loopback_possible",
+  "scanner_reason": "none|no_display_server|non_local_display|portal_not_active|portal_active_probe_unavailable|sandboxed_browser_loopback_possible",
   "coverage": "x11_full|wayland_limited|xwayland_partial|headless_none|unknown",
   "portal_advertised": true,
   "portal_active": false,
@@ -234,11 +240,11 @@ Sandboxed browser packages may behave differently around localhost discovery, lo
 
 Canonicalisation: existing key-sort + signature-exclusion in `canonicaliseDaemonPayload` (unchanged).
 
-### 7.2 New fail codes
+### 7.2 New fail codes vs scanner reasons
+
+**Fail codes (proof rejected):**
 ```text
 display_server_mismatch
-non_local_display
-no_display_server
 invalid_linux_display_server
 invalid_linux_portal_state
 invalid_linux_coverage
@@ -248,6 +254,22 @@ invalid_linux_scanner_state
 invalid_linux_scanner_version
 unsupported_linux_display_server
 ```
+
+**Scanner reasons (valid signed proof, Warning context only — never reject):**
+```text
+none
+non_local_display
+no_display_server
+portal_not_active
+portal_active_probe_unavailable
+sandboxed_browser_loopback_possible
+```
+
+Rule (must be enforced by tests):
+- `display_server_mismatch` → reject proof.
+- `non_local_display` → valid proof, Warning context.
+- `no_display_server` → valid proof, Warning context.
+- For any `scanner_state` in `{healthy, risk_detected}`, `scanner_reason` MUST be `"none"`. Mixed states (`healthy` + non-`none` reason) are a schema violation → `invalid_linux_scanner_reason`.
 
 Preserved existing fail codes (must not regress):
 ```text
@@ -414,7 +436,8 @@ Each step lands red tests → implementation → green → commit, mirroring Sta
 | K  | Linux proof before pairing                                  | rejected                                                  |
 | L  | Linux paired-node mismatch                                  | `daemon_node_mismatch`                                    |
 | M  | display_server changes mid-session (X11 → Wayland)          | `display_server_mismatch`                                 |
-| N  | Pre-Linux pairing attempt (negative regression)             | `unsupported_platform` (proves gate exists)               |
+| N  | Unknown platform pairing attempt (e.g. `freebsd`/`android`/`chromeos`/`plan9`) | `unsupported_platform` (proves gate still exists post-Linux acceptance) |
+| O  | Linux proof with `scanner_state: healthy` + `scanner_reason: non_local_display` (mixed state) | `invalid_linux_scanner_reason`                            |
 
 Mock-first for CI; real-device for evidence.
 
@@ -523,6 +546,26 @@ Every `AGENT.md` and `CHANGELOG.md` entry begins with `Raouf:` per project conve
 - **`x11rb` on XWayland**: behaviour under hybrid sessions varies by compositor; XWayland scanner output is explicitly partial coverage and must never claim parity.
 - **CI flakiness under Xvfb**: deterministic fixture design required; mark any flake as a blocker.
 - **systemd `--user` unit on minimal/server installs**: install scripts must degrade gracefully if no user session bus is available.
+
+---
+
+## 15.5 Stage 2.8A Red-Test Checklist (TDD entry point)
+
+Stage 2.8A MUST start red on every one of these. Implementation only begins after each fails for the expected reason:
+
+```text
+[ ] Linux platform rejected at pairing (daemonPairing.js: unsupported_platform)
+[ ] Linux proof rejected at proof validation (daemonProof.js: unsupported_platform)
+[ ] platformScannerSchema dispatcher missing (no validateLinuxScannerSummary export)
+[ ] display_server_mismatch fail code missing from daemonProof.js
+[ ] scanner_reason mixed-state guard missing (healthy + non-none reason currently silently passes)
+[ ] reportBuilder.js emits no device_integrity.display_server / coverage / portal_* fields
+[ ] tools/privacy-audit.mjs has no Linux daemon paths or Linux scanner fields in its sweep
+[ ] daemonEvents.js cannot emit DAEMON_PROOF_REJECTED with reason display_server_mismatch
+[ ] tools/simurgh-daemon-linux/ does not exist (no Cargo.toml)
+```
+
+Each red test maps directly to a §9 implementation step. Codex / subagent dispatch should not write green code for any item until its red test exists and fails for the documented reason.
 
 ---
 
