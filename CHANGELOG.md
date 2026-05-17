@@ -25,7 +25,9 @@ Final closeout before tagging `v0.4.13-stage-2-7-cross-platform-device-shield`. 
 ### Verified
 
 - Windows OS: Windows 10 Pro / Build 19045. Toolchain: Node 24.14.0, npm 11.9.0, .NET 8.0.421.
-- `npm test` — 282/282 pass (+9 hardening tests over the Stage 2.7 baseline of 273, +24 closeout audit tests).
+- `npm test` — 273/273 unit tests pass (unchanged; closeout work lives in `tests/security/`, which `npm test` does not glob).
+- `node --test tests/security/stage27_cross_platform_security_audit.test.js` — 15/15 (5 new hardening tests, was 10).
+- `node --test tests/security/stage_26_27_closeout_audit.test.js` — 24/24.
 - `npm audit --audit-level=high` — 0 vulnerabilities.
 - `node tools/privacy-audit.mjs` — pass.
 - `bash scripts/smoke-stage-2-6-2-7-closeout.sh` — pass (Stage 2.6 + Stage 2.7 smokes + privacy).
