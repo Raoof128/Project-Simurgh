@@ -1,5 +1,24 @@
 ## Change Log
 
+## [post-merge] — 2026-05-17 — CI fix, tag release, issue updates
+
+Post-merge housekeeping after PR #17 merged to `main`.
+
+### Fixed
+
+- **CI transient failure** on PR #17 `main` push — "server boot — /health not reachable" caused by runner resource contention after two prior merges on the same host. Docs-only PR; server boots locally in < 1s. Fixed via `gh run rerun --failed`; re-run passed 47/48 gates.
+
+### Released
+
+- Tag `v0.4.13-stage-2-windows-device-shield-closeout` published as a GitHub Release.
+
+### Updated (GitHub Issues)
+
+- **Issue #11** (macOS external review) — updated to match the Windows issue template: logo, scope bullets, validation table, review focus areas, confirmed non-claims, Stage 2.7 cross-platform note.
+- **Issue #18** (Windows external review) — fixed broken relative doc links; replaced with absolute GitHub URLs; added Review Documents table, all 4 release tags hyperlinked, logo via raw GitHub URL.
+
+---
+
 ## [0.4.13-windows-closeout] — 2026-05-17 — Stage 2 Windows Device Shield Closeout
 
 Stage 2 Windows Device Shield is frozen as a real-device validated research-prototype baseline. This entry adds the Windows technical brief, closeout declaration, validation matrix, reviewer checklist, evidence-folder rules, logo integration, and top-level doc updates.

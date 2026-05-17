@@ -2,6 +2,20 @@
 
 ## Agent Change Log
 
+### 2026-05-17 (Australia/Sydney) — Post-Merge Fixes: CI Rerun, Tag Release, Issue Updates
+
+**Raouf:**
+
+- **Scope:** Post-merge housekeeping after PR #17 (Windows Device Shield Closeout) was merged to `main`.
+- **Summary:**
+  - **CI transient failure diagnosed and fixed.** GitHub Actions Quality Gate failed on the `main` push for PR #17 with "server boot — /health not reachable" and "server boot smoke (composite)". Root cause: transient runner resource contention — two prior PR merges (PRs #15 and #16) had run on the same shared runner moments earlier. The docs-only PR #17 added no JS changes; `node server.js` boots in under 1 second locally. Fixed via `gh run rerun --failed` on run `25981443157`; re-run passed ✅ 47/48 gates.
+  - **Release tag published.** `v0.4.13-stage-2-windows-device-shield-closeout` tagged on `main` commit `c456455` (PR #17 merge) and published as a GitHub Release with full release notes.
+  - **macOS external review issue #11 updated.** Issue was sparse (no logo, no validation table, no reviewer checklist link). Updated to match the Windows issue template: logo at top (absolute raw GitHub URL), full scope bullet list, technical brief as primary review doc with scope footnote, validation table (234/234 tests, 50/50 gates, all smokes), review focus areas, known limitations, confirmed non-claims, and Stage 2.7 cross-platform note linking to Issue #18.
+  - **Windows external review issue #18 fixed.** All relative doc links (`docs/STAGE_2_WINDOWS_TECHNICAL_BRIEF.md` etc.) were broken in the GitHub issue UI. Replaced with absolute `https://github.com/Raoof128/Project-Simurgh/blob/main/docs/...` URLs. Added a proper Review Documents table (8 docs), all 4 release tags hyperlinked, logo rendered via raw GitHub URL.
+- **Files changed:** `AGENT.md` (this entry), `CHANGELOG.md` (post-merge log entry). GitHub Issues #11 and #18 updated remotely via `gh issue edit`.
+- **Verification:** CI re-run passed. `v0.4.13-stage-2-windows-device-shield-closeout` tag pushed and release published. Both issues verified with working links.
+- **Follow-ups:** Stage 2.8 Linux Display Integrity Research — X11 enumeration feasibility and Wayland compositor/security-model investigation. Linux daemon proofs currently rejected with `unsupported_platform` at both pairing and proof layers.
+
 ### 2026-05-17 (Australia/Sydney) — Stage 2 Windows Device Shield Closeout
 
 **Raouf:**
