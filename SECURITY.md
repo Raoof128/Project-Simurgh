@@ -6,6 +6,7 @@ Project Simurgh is a research prototype. Security fixes are applied to the lates
 
 | Version                                           | Supported              |
 | ------------------------------------------------- | ---------------------- |
+| `v0.4.13` (Stage 2.7 cross-platform unification)  | ✅ Active              |
 | `v0.4.12` (Stage 2.6B Windows scanner validation) | ✅ Active              |
 | `v0.4.11` (Stage 2.6 Windows scanner branch)      | ✅ Active              |
 | `v0.4.7` (Stage 2.5 macOS scanner)                | ✅ Active              |

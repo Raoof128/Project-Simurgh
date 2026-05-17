@@ -1,5 +1,51 @@
 ## Change Log
 
+## [0.4.13] — 2026-05-17 — Stage 2.7 Cross-Platform Device Shield Unification
+
+Stage 2.7 unifies the macOS and Windows Device Shield implementations under one documented cross-platform proof, scanner, risk, report, dashboard, privacy, and audit contract before Linux research begins.
+
+### Added
+
+- `src/device/forbiddenLocalFields.js` — shared single source of truth for forbidden raw-field names plus recursive deep-check helper.
+- `src/device/platformScannerSchema.js` — supported-platform list, scanner-state enum, per-platform scanner-version map, and scanner-summary validator.
+- `src/device/scannerRiskPolicy.js` — shared `mapScannerSummaryToRisk` plus `getManualReviewReason` (session + device-integrity contexts).
+- `public/sdk/simurgh-browser-sdk.js#getDeviceShieldStatus` — UX-only platform/scanner status accessor with explicit trust-boundary comment.
+- `docs/DEVICE_SHIELD_CONTRACT.md`, `docs/DEVICE_SHIELD_PLATFORM_MATRIX.md`, `docs/STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md`, `docs/STAGE_2_7_REVIEWER_CHECKLIST.md`.
+- `docs/schemas/daemon-proof.schema.json`, `docs/schemas/device-scanner-result.schema.json` — JSON Schema draft-07.
+- `scripts/smoke-stage-2-7-cross-platform-device-shield.sh`, `scripts/security-audit-stage-2-7-cross-platform-device-shield.sh`.
+- `tests/e2e/stage27_cross_platform_device_shield_smoke.mjs` — Scenarios A–G.
+- `tests/security/stage27_cross_platform_security_audit.test.js` — 10 negative tests including a full sweep over `FORBIDDEN_LOCAL_FIELD_NAMES`.
+- `tests/unit/{forbiddenLocalFields,platformScannerSchema,scannerRiskPolicy,reportBuilderDeviceShield}.test.js`.
+
+### Changed
+
+- `src/device/daemonProof.js`, `src/device/daemonState.js`, `src/academic/reportBuilder.js`, `tools/privacy-audit.mjs` — refactored to consume the new shared modules. No behaviour change; every `fail()` reason code preserved.
+- `src/device/daemonState.js` `baseRecord.platform` default: `"macos"` → `"unknown"`. Unpaired sessions no longer implicitly claim a platform.
+- `device_integrity` report section now emits `daemon_platform` as the canonical platform key; legacy `platform` retained as a back-compat alias for this release (planned removal: Stage 2.8 or later).
+- `device_integrity.manual_review_recommendation` wording is now sourced from `scannerRiskPolicy.getManualReviewReason({ context: "device_integrity" })`.
+- `scripts/check.sh` — new section 10l wires Stage 2.7 smoke + audit into the CI gate; privacy guard exemption added for `src/device/forbiddenLocalFields.js`.
+- `scripts/security-audit-stage-2-4-2-5.sh` — overclaim grep exempts the Stage 2.7 contract / matrix / reviewer checklist / stage doc / spec / plan / security-test files, which legitimately enumerate the forbidden phrases.
+
+### Verified
+
+- Windows OS: Windows 10 Pro / Build 19045. Toolchain: Node 24.14.0, npm 11.9.0, .NET 8.0.421.
+- `npm test` — 273/273 pass (+34 new tests).
+- `npm audit --audit-level=high` — 0 vulnerabilities.
+- `node tools/privacy-audit.mjs` — pass.
+- Git Bash `scripts/smoke-stage-2-7-cross-platform-device-shield.sh` — all seven scenarios pass.
+- Git Bash `scripts/security-audit-stage-2-7-cross-platform-device-shield.sh` — 10/10 negative tests pass.
+- Stage 2.2/2.3, Stage 2.4/2.5, Stage 2.5 security audit, Stage 2.6 Windows scanner smoke, Stage 2.6 .NET daemon tests — all green.
+- `scripts/check.sh` — 45/46 green; one pre-existing Windows-line-endings prettier tolerance failure (documented in check.sh itself). CI on Linux passes prettier cleanly.
+
+### Non-claims (unchanged)
+
+- Research prototype only. No production deployment claim.
+- No MDM/Intune readiness, no Windows Service or notarised macOS packaging, no hardware attestation, no kernel-level visibility, no GPU overlay coverage, no automatic misconduct detection.
+- No collection or transmission of screen pixels, webcam/microphone frames, typed content, paste content, raw process names, raw window titles, HWNDs, PIDs, usernames, serial numbers, MAC addresses, or personal identity data.
+- Linux daemon proofs are rejected with `unsupported_platform` until Stage 2.8 Linux Display Integrity Research delivers a signed, validated path.
+
+---
+
 ## [0.4.12] — 2026-05-16 — Stage 2.6 Windows Display Affinity Scanner (Release)
 
 Tagged `v0.4.12-stage-2-6-windows-display-affinity-scanner` on `main` after PR #14 merged clean.

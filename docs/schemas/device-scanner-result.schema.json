@@ -1,0 +1,94 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://simurgh.local/schemas/device-scanner-result.schema.json",
+  "title": "Simurgh Device Scanner Result",
+  "description": "Aggregate, metadata-only scanner summary produced by the platform scanner adapter (macOS CoreGraphics or Windows Win32). All supported platforms emit the same top-level key set; platforms emit 0 for counters that do not apply to them (e.g. macOS emits monitor_only_window_count = 0; Windows never emits the historical unsupported_macos_version state). The signed daemon proof embeds these fields under the same names.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["platform", "scanner_state", "scanner_version", "privacy_mode"],
+  "properties": {
+    "platform": {
+      "$comment": "Operating-system platform that produced the scan. Linux is rejected by Stage 2.7 server validation.",
+      "type": "string",
+      "enum": ["macos", "windows"]
+    },
+    "scanner_state": {
+      "$comment": "Scanner state vocabulary; copied from daemonProof.js SCANNER_STATES. 'unsupported_macos_version' is historical and only emitted by macOS.",
+      "type": "string",
+      "enum": [
+        "healthy",
+        "risk_detected",
+        "restricted_detected",
+        "scanner_unavailable",
+        "permission_denied",
+        "scan_error",
+        "unsupported_macos_version"
+      ]
+    },
+    "scanner_version": {
+      "$comment": "Platform-specific scanner version. macOS baseline 2.5.0; Windows baseline 2.6.0.",
+      "type": "string"
+    },
+    "scan_timestamp": {
+      "$comment": "ISO-8601 timestamp of the scan.",
+      "type": "string",
+      "format": "date-time"
+    },
+    "scan_duration_ms": {
+      "$comment": "Wall-clock duration of the scan, in milliseconds; bounded at 60000.",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 60000
+    },
+    "visible_window_count": {
+      "$comment": "Total visible-window count observed by the scanner; bounded at 10000.",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 10000
+    },
+    "suspicious_window_count": {
+      "$comment": "Aggregate count of windows the scanner flagged as suspicious. Must be >= capture_excluded + monitor_only.",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 256
+    },
+    "capture_excluded_window_count": {
+      "$comment": "Aggregate count of capture-excluded windows (NSWindow.SharingType.none on macOS, WDA_EXCLUDEFROMCAPTURE on Windows). > 0 escalates to Critical/manual review.",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 256
+    },
+    "capture_restricted_window_count": {
+      "$comment": "Aggregate count of capture-restricted-but-not-excluded windows. Windows-leaning counter; macOS may emit 0.",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 256
+    },
+    "monitor_only_window_count": {
+      "$comment": "Aggregate count of WDA_MONITOR windows (Windows). macOS always emits 0.",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 256
+    },
+    "scan_error_count": {
+      "$comment": "Non-fatal scan-error count; bounded at 256.",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 256
+    },
+    "privacy_mode": {
+      "$comment": "Constant privacy-contract marker. Anything other than 'metadata_only' is rejected by the server.",
+      "type": "string",
+      "const": "metadata_only"
+    },
+    "window_fingerprint_hashes": {
+      "$comment": "Optional array of sha256: window-fingerprint hashes (max 256). Never contains raw titles, HWNDs, PIDs, or process names.",
+      "type": "array",
+      "maxItems": 256,
+      "items": {
+        "type": "string",
+        "pattern": "^sha256:[a-f0-9]{64}$"
+      }
+    }
+  }
+}

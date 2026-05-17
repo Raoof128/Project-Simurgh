@@ -11,45 +11,11 @@
 import { readFileSync, statSync, readdirSync } from "node:fs";
 import { resolve, join, basename } from "node:path";
 
-const FORBIDDEN_FIELDS = new Set([
-  "typed_content",
-  "paste_content",
-  "answer_text",
-  "answer_content",
-  "screenshot",
-  "screen_frame",
-  "screen_data",
-  "webcam",
-  "webcam_frame",
-  "audio",
-  "audio_data",
-  "microphone",
-  "face",
-  "face_data",
-  "biometric",
-  "biometric_data",
-  "raw_student_name",
-  "student_name",
-  "device_serial",
-  "serial_number",
-  "mac_address",
-  "username",
-  "home_directory",
-  "process_name",
-  "process_id",
-  "window_title",
-  "raw_process_name",
-  "raw_window_title",
-  "window_handle",
-  "hwnd",
-  "pid",
-  "process_identifier",
-  "executable_path",
-  "bundle_path",
-  "file_path",
-  "raw_window",
-  "raw_process",
-]);
+import { FORBIDDEN_LOCAL_FIELD_NAMES } from "../src/device/forbiddenLocalFields.js";
+
+// Stage 2.7: forbidden raw-field list sourced from the shared module so the
+// privacy audit, server validator, and security tests share one truth.
+const FORBIDDEN_FIELDS = new Set(FORBIDDEN_LOCAL_FIELD_NAMES);
 
 // These are explicitly allowed — they are the *_hash counterparts to the
 // forbidden raw fields. We don't flag them.

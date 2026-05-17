@@ -1,3 +1,5 @@
+import { mapScannerSummaryToRisk } from "./scannerRiskPolicy.js";
+
 export const DAEMON_STATES = Object.freeze({
   NOT_REQUIRED: "not_required",
   MISSING: "missing",
@@ -17,7 +19,7 @@ function baseRecord(now) {
     helper_state: "unknown",
     node_id_hash: null,
     daemon_version: null,
-    platform: "macos",
+    platform: "unknown",
     paired_at: null,
     last_proof_at: null,
     proof_timestamp: null,
@@ -62,28 +64,7 @@ export function summariseDaemonState(record, now = Date.now(), { staleAfterMs = 
 }
 
 export function scoreDaemonRisk(record) {
-  const state = record?.daemon_state ?? DAEMON_STATES.MISSING;
-  const maxExcluded = record?.capture_excluded_window_count_max ?? 0;
-  const maxRestricted = record?.capture_restricted_window_count_max ?? 0;
-  const maxMonitorOnly = record?.monitor_only_window_count_max ?? 0;
-  if (maxExcluded > 0 || state === DAEMON_STATES.RISK_DETECTED) {
-    return { daemon_risk: 100, forceCritical: true };
-  }
-  if (maxRestricted > 0 || maxMonitorOnly > 0 || record?.scanner_state === "restricted_detected") {
-    return { daemon_risk: 40, forceCritical: false };
-  }
-  if (
-    record?.scanner_state === "scanner_unavailable" ||
-    record?.scanner_state === "permission_denied" ||
-    record?.scanner_state === "scan_error"
-  ) {
-    return { daemon_risk: 40, forceCritical: false };
-  }
-  if (state === DAEMON_STATES.UNTRUSTED) return { daemon_risk: 50, forceCritical: false };
-  if (state === DAEMON_STATES.UNPAIRED) return { daemon_risk: 25, forceCritical: false };
-  if (state === DAEMON_STATES.STALE) return { daemon_risk: 20, forceCritical: false };
-  if (state === DAEMON_STATES.MISSING) return { daemon_risk: 15, forceCritical: false };
-  return { daemon_risk: 0, forceCritical: false };
+  return mapScannerSummaryToRisk(record);
 }
 
 export function createDaemonStateRegistry({ staleAfterMs = 10_000 } = {}) {

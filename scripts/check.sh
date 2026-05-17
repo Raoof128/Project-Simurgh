@@ -203,6 +203,7 @@ if grep -RIEn "$FORBIDDEN_FIELDS_PATTERN" \
   | grep -v "src/integrity/proofSchema.js" \
   | grep -v "src/integrity/proofValidator.js" \
   | grep -v "src/device/daemonProof.js" \
+  | grep -v "src/device/forbiddenLocalFields.js" \
   | grep -v "tools/privacy-audit.mjs" \
   | grep -v "Permissions-Policy" \
   | grep -v "Content-Security-Policy" \
@@ -1173,6 +1174,28 @@ else
     fi
   else
     echo -e "${YELLOW}.NET SDK unavailable — skipping Stage 2.6 Windows daemon .NET tests${NC}"
+  fi
+fi
+
+# ── 10l. Stage 2.7 Cross-Platform Device Shield smoke + security audit ──
+if [[ "$QUICK" == true ]]; then
+  step "Stage 2.7 cross-platform Device Shield"
+  echo -e "${YELLOW}Skipped because --quick was used.${NC}"
+else
+  step "Stage 2.7 cross-platform Device Shield smoke"
+  if scripts/smoke-stage-2-7-cross-platform-device-shield.sh > "$LOG_DIR/stage27-cross-platform-smoke.log" 2>&1; then
+    pass "Stage 2.7 cross-platform Device Shield smoke: scenarios A-G + privacy"
+  else
+    fail "Stage 2.7 cross-platform Device Shield smoke"
+    tail -100 "$LOG_DIR/stage27-cross-platform-smoke.log"
+  fi
+
+  step "Stage 2.7 cross-platform security audit"
+  if scripts/security-audit-stage-2-7-cross-platform-device-shield.sh > "$LOG_DIR/stage27-cross-platform-audit.log" 2>&1; then
+    pass "Stage 2.7 cross-platform security audit: signature/platform/raw-field gates"
+  else
+    fail "Stage 2.7 cross-platform security audit"
+    tail -100 "$LOG_DIR/stage27-cross-platform-audit.log"
   fi
 fi
 
