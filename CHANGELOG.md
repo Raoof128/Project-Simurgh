@@ -1,5 +1,51 @@
 ## Change Log
 
+## [0.4.13-closeout] — 2026-05-17 — Stage 2.6/2.7 Closeout (umbrella gates + hardening)
+
+Final closeout before tagging `v0.4.13-stage-2-7-cross-platform-device-shield`. Adds two umbrella gates that exercise the full Stage 2.6/2.7 surface plus targeted hardening of gaps surfaced during Stage 2.7 review.
+
+### Added
+
+- `tests/security/stage_26_27_closeout_audit.test.js` — 24-test umbrella manifest covering nine audit dimensions: proof, scanner, platform, daemon, SDK, report, dashboard, privacy, wording.
+- `scripts/security-audit-stage-2-6-2-7-closeout.sh` — closeout cybersecurity audit running Stage 2.4/2.5 + Stage 2.7 + new closeout audit + privacy-audit + `npm audit`.
+- `scripts/smoke-stage-2-6-2-7-closeout.sh` — closeout E2E smoke running Stage 2.6 Windows scanner smoke + Stage 2.7 cross-platform smoke + privacy-audit.
+
+### Hardened (extending `tests/security/stage27_cross_platform_security_audit.test.js`)
+
+- Pairing payload with raw `hwnd` anywhere in the envelope is rejected as `forbidden_local_field` (was only tested on the proof path).
+- Pairing payload with forbidden field nested inside `signed_payload` is rejected.
+- Pairing payload with `platform: "linux"` is rejected as `unsupported_platform` at the pairing layer (the actual rejection point).
+- SDK trust-boundary invariant: `validateDaemonProof` never echoes unsigned client-supplied fields into the trusted proof object.
+- `FORBIDDEN_LOCAL_FIELD_NAMES` is frozen — mutation via `push` and indexed assignment both throw at runtime.
+
+### Changed
+
+- `scripts/check.sh` — new section 10m runs both closeout umbrella gates after the per-stage gates.
+
+### Verified
+
+- Windows OS: Windows 10 Pro / Build 19045. Toolchain: Node 24.14.0, npm 11.9.0, .NET 8.0.421.
+- `npm test` — 273/273 unit tests pass (unchanged; closeout work lives in `tests/security/`, which `npm test` does not glob).
+- `node --test tests/security/stage27_cross_platform_security_audit.test.js` — 15/15 (5 new hardening tests, was 10).
+- `node --test tests/security/stage_26_27_closeout_audit.test.js` — 24/24.
+- `npm audit --audit-level=high` — 0 vulnerabilities.
+- `node tools/privacy-audit.mjs` — pass.
+- `bash scripts/smoke-stage-2-6-2-7-closeout.sh` — pass (Stage 2.6 + Stage 2.7 smokes + privacy).
+- `bash scripts/security-audit-stage-2-6-2-7-closeout.sh` — pass (Stage 2.4/2.5 + Stage 2.7 + closeout audit + privacy + npm audit).
+- All five smoke scripts (2.2/2.3, 2.4/2.5, 2.5 audit, 2.6 Windows, 2.7 cross-platform) green.
+- `bash scripts/check.sh` — 47/48 green; the single failure is the pre-existing Windows-line-endings prettier tolerance documented in check.sh itself. CI on Linux passes prettier cleanly.
+
+### Non-claims (unchanged)
+
+- Research prototype only.
+- No production deployment claim, no MDM/Intune readiness, no Windows Service or notarised macOS packaging, no hardware attestation, no kernel-level visibility, no GPU overlay coverage, no automatic misconduct detection.
+- No collection or transmission of screen pixels, webcam/microphone frames, typed content, paste content, raw process names, raw window titles, HWNDs, PIDs, usernames, serial numbers, MAC addresses, or personal identity data.
+- Linux daemon proofs rejected with `unsupported_platform` at both pairing and proof layers until Stage 2.8 Linux Display Integrity Research delivers a signed, validated path.
+
+After this closeout the Windows Device Shield is fully closed as a research prototype, Stage 2.7 is safe to release, and Linux research can begin.
+
+---
+
 ## [0.4.13] — 2026-05-17 — Stage 2.7 Cross-Platform Device Shield Unification
 
 Stage 2.7 unifies the macOS and Windows Device Shield implementations under one documented cross-platform proof, scanner, risk, report, dashboard, privacy, and audit contract before Linux research begins.
