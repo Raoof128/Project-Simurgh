@@ -19,6 +19,7 @@
 ## File Structure (locked decomposition)
 
 **Create (server modules + tests):**
+
 - `src/device/forbiddenLocalFields.js` — single source of forbidden raw field names + recursive deep-check helper.
 - `src/device/platformScannerSchema.js` — supported-platform list, scanner-field schema validation, scanner defaults.
 - `src/device/scannerRiskPolicy.js` — mapping from scanner summary → risk level + manual-review wording.
@@ -30,10 +31,12 @@
 - `tests/security/stage27_cross_platform_security_audit.test.js`
 
 **Create (scripts):**
+
 - `scripts/smoke-stage-2-7-cross-platform-device-shield.sh`
 - `scripts/security-audit-stage-2-7-cross-platform-device-shield.sh`
 
 **Create (docs):**
+
 - `docs/DEVICE_SHIELD_CONTRACT.md`
 - `docs/DEVICE_SHIELD_PLATFORM_MATRIX.md`
 - `docs/STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md`
@@ -42,6 +45,7 @@
 - `docs/schemas/device-scanner-result.schema.json`
 
 **Modify (refactor consumers — no behaviour change):**
+
 - `src/device/daemonProof.js` — import from shared modules instead of inlining the lists/validators.
 - `src/device/daemonState.js` — `platform` default no longer hard-coded to `"macos"` in `baseRecord`; use `"unknown"`.
 - `src/academic/riskScoring.js` — pull daemon-risk policy from `scannerRiskPolicy.js` (light touch; `riskScoring` already consumes `helperInfo.daemonRisk` from `scoreDaemonRisk`).
@@ -69,6 +73,7 @@
 ## Task 1: Pre-flight and branch
 
 **Files:**
+
 - None changed; verification only.
 
 - [ ] **Step 1: Confirm clean baseline**
@@ -77,6 +82,7 @@
 git status
 git log --oneline -1
 ```
+
 Expected: clean working tree; HEAD at `2591cb5 docs(stage-2-7): add cross-platform Device Shield unification design spec` (or later — the spec was just committed on `main`).
 
 - [ ] **Step 2: Run all current verification gates**
@@ -92,6 +98,7 @@ bash scripts/security-audit-stage-2-4-2-5.sh
 bash scripts/smoke-stage-2-6-windows-scanner.sh
 bash scripts/check.sh
 ```
+
 Expected: all pass. (Per README: 239 Node tests, 11 .NET, 44 quality gate checks.) If any fail, **STOP** and report — the baseline is not what we think.
 
 - [ ] **Step 3: Create the Stage 2.7 branch**
@@ -110,6 +117,7 @@ Skip — branch creation is enough; no commit needed yet.
 ## Task 2: Doc scaffolding — contract, matrix, schemas, stage doc, reviewer checklist
 
 **Files:**
+
 - Create: `docs/DEVICE_SHIELD_CONTRACT.md`
 - Create: `docs/DEVICE_SHIELD_PLATFORM_MATRIX.md`
 - Create: `docs/STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md`
@@ -122,6 +130,7 @@ These ship docs-first so subsequent code tasks can point at them.
 - [ ] **Step 1: Create `docs/DEVICE_SHIELD_CONTRACT.md`**
 
 Source the section headings and content from spec §4, §5, §6, §7. Sections:
+
 ```
 1. Overview
 2. Supported Platforms
@@ -140,9 +149,11 @@ Source the section headings and content from spec §4, §5, §6, §7. Sections:
 ```
 
 The document is the authoritative contract — it must enumerate **every** `fail("...")` reason currently produced by `validateDaemonProof` (lines 76, 254-316 in `src/device/daemonProof.js`). To enumerate them, grep:
+
 ```bash
 grep -n 'return fail' src/device/daemonProof.js
 ```
+
 List each reason code with one-line meaning.
 
 - [ ] **Step 2: Create `docs/DEVICE_SHIELD_PLATFORM_MATRIX.md`**
@@ -187,6 +198,7 @@ EOF
 ## Task 3: Extract `forbiddenLocalFields.js` with TDD
 
 **Files:**
+
 - Create: `src/device/forbiddenLocalFields.js`
 - Create: `tests/unit/forbiddenLocalFields.test.js`
 
@@ -195,6 +207,7 @@ The current forbidden-field list lives in two places: `src/device/daemonProof.js
 - [ ] **Step 1: Write the failing test**
 
 Create `tests/unit/forbiddenLocalFields.test.js`:
+
 ```js
 import assert from "node:assert/strict";
 import test from "node:test";
@@ -207,20 +220,51 @@ import {
 test("FORBIDDEN_LOCAL_FIELD_NAMES is the union of proof and privacy-audit lists", () => {
   // Names currently in daemonProof.js FORBIDDEN_FIELDS
   const proofNames = [
-    "device_serial", "serial_number", "mac_address", "username", "home_directory",
-    "process_name", "process_id", "window_title", "raw_window_title",
-    "window_handle", "hwnd", "screenshot", "screen_pixels", "screen_frame",
-    "raw_window", "raw_process", "raw_process_name", "pid", "process_identifier",
-    "bundle_path", "executable_path", "file_path", "microphone", "audio",
-    "webcam", "typed_content", "paste_content", "answer_text", "answer_content",
+    "device_serial",
+    "serial_number",
+    "mac_address",
+    "username",
+    "home_directory",
+    "process_name",
+    "process_id",
+    "window_title",
+    "raw_window_title",
+    "window_handle",
+    "hwnd",
+    "screenshot",
+    "screen_pixels",
+    "screen_frame",
+    "raw_window",
+    "raw_process",
+    "raw_process_name",
+    "pid",
+    "process_identifier",
+    "bundle_path",
+    "executable_path",
+    "file_path",
+    "microphone",
+    "audio",
+    "webcam",
+    "typed_content",
+    "paste_content",
+    "answer_text",
+    "answer_content",
   ];
   // Additional names currently in tools/privacy-audit.mjs FORBIDDEN_FIELDS
   const privacyAuditExtras = [
-    "screen_data", "webcam_frame", "audio_data", "face", "face_data",
-    "biometric", "biometric_data", "raw_student_name", "student_name",
+    "screen_data",
+    "webcam_frame",
+    "audio_data",
+    "face",
+    "face_data",
+    "biometric",
+    "biometric_data",
+    "raw_student_name",
+    "student_name",
   ];
   for (const n of proofNames) assert.ok(FORBIDDEN_LOCAL_FIELD_NAMES.includes(n), `missing: ${n}`);
-  for (const n of privacyAuditExtras) assert.ok(FORBIDDEN_LOCAL_FIELD_NAMES.includes(n), `missing: ${n}`);
+  for (const n of privacyAuditExtras)
+    assert.ok(FORBIDDEN_LOCAL_FIELD_NAMES.includes(n), `missing: ${n}`);
 });
 
 test("FORBIDDEN_LOCAL_FIELD_NAMES is frozen and contains no duplicates", () => {
@@ -234,10 +278,7 @@ test("containsForbiddenLocalFieldDeep finds top-level forbidden key", () => {
 });
 
 test("containsForbiddenLocalFieldDeep finds deeply-nested forbidden key", () => {
-  assert.equal(
-    containsForbiddenLocalFieldDeep({ debug: { scanner: { hwnd: "0x123" } } }),
-    "hwnd"
-  );
+  assert.equal(containsForbiddenLocalFieldDeep({ debug: { scanner: { hwnd: "0x123" } } }), "hwnd");
 });
 
 test("containsForbiddenLocalFieldDeep finds forbidden key inside array", () => {
@@ -277,11 +318,13 @@ test("containsForbiddenLocalFieldDeep is allowed-hash-suffix aware", () => {
 ```bash
 node --test tests/unit/forbiddenLocalFields.test.js
 ```
+
 Expected: FAIL with `Cannot find module ... forbiddenLocalFields.js`.
 
 - [ ] **Step 3: Implement the module**
 
 Create `src/device/forbiddenLocalFields.js`:
+
 ```js
 // Single source of truth for forbidden raw local field names across the
 // Stage 2.7 cross-platform Device Shield surface. Consumed by:
@@ -372,6 +415,7 @@ export function containsForbiddenLocalFieldDeep(value) {
 ```bash
 node --test tests/unit/forbiddenLocalFields.test.js
 ```
+
 Expected: all 8 tests PASS.
 
 - [ ] **Step 5: Run full unit suite to confirm no regression**
@@ -379,6 +423,7 @@ Expected: all 8 tests PASS.
 ```bash
 npm test
 ```
+
 Expected: all green. (`daemonProof.js` still uses its own list; that's Task 4.)
 
 - [ ] **Step 6: Format and commit**
@@ -406,6 +451,7 @@ EOF
 ## Task 4: Refactor `src/device/daemonProof.js` to consume `forbiddenLocalFields`
 
 **Files:**
+
 - Modify: `src/device/daemonProof.js:1-92` (imports + delete inlined `FORBIDDEN_FIELDS` + `findForbiddenField`)
 
 Pure refactor — no behaviour change. All `daemonProof*.test.js` and `daemonProofScanner.test.js` must remain green.
@@ -415,11 +461,13 @@ Pure refactor — no behaviour change. All `daemonProof*.test.js` and `daemonPro
 ```bash
 npm test -- 2>&1 | tail -5
 ```
+
 Expected: pass count noted; will compare after refactor.
 
 - [ ] **Step 2: Edit `src/device/daemonProof.js`**
 
 Replace lines 1-92 region. The changes:
+
 - Add import line at top: `import { FORBIDDEN_LOCAL_FIELD_NAMES, containsForbiddenLocalFieldDeep } from "./forbiddenLocalFields.js";`
 - Delete the inline `const FORBIDDEN_FIELDS = [...]` array (lines 26-56).
 - Delete the inline `function findForbiddenField(...)` (lines 77-92).
@@ -432,6 +480,7 @@ There are exactly two `findForbiddenField` call sites (currently lines 246 and 3
 ```bash
 node --test tests/unit/daemonProof.test.js tests/unit/daemonProofScanner.test.js tests/unit/daemonPairing.test.js
 ```
+
 Expected: all PASS.
 
 - [ ] **Step 4: Run full unit suite**
@@ -439,6 +488,7 @@ Expected: all PASS.
 ```bash
 npm test
 ```
+
 Expected: same number of pass/fail as Step 1 baseline.
 
 - [ ] **Step 5: Commit**
@@ -461,11 +511,13 @@ EOF
 ## Task 5: Refactor `tools/privacy-audit.mjs` to consume `forbiddenLocalFields`
 
 **Files:**
+
 - Modify: `tools/privacy-audit.mjs:14-52` (delete inline list, import shared)
 
 - [ ] **Step 1: Edit `tools/privacy-audit.mjs`**
 
 Replace lines 14-52 with:
+
 ```js
 import { FORBIDDEN_LOCAL_FIELD_NAMES } from "../src/device/forbiddenLocalFields.js";
 
@@ -479,6 +531,7 @@ Keep `ALLOWED_HASH_SUFFIXES` and `isAllowedHashField` as-is (the audit-side suff
 ```bash
 node tools/privacy-audit.mjs
 ```
+
 Expected: same output as before — passes with N files scanned.
 
 - [ ] **Step 3: Run full unit suite**
@@ -486,6 +539,7 @@ Expected: same output as before — passes with N files scanned.
 ```bash
 npm test
 ```
+
 Expected: all green.
 
 - [ ] **Step 4: Commit**
@@ -509,6 +563,7 @@ EOF
 ## Task 6: Extract `platformScannerSchema.js` with TDD
 
 **Files:**
+
 - Create: `src/device/platformScannerSchema.js`
 - Create: `tests/unit/platformScannerSchema.test.js`
 
@@ -517,6 +572,7 @@ This extracts the per-platform scanner version map, supported-platform list, sca
 - [ ] **Step 1: Write the failing test**
 
 Create `tests/unit/platformScannerSchema.test.js`:
+
 ```js
 import assert from "node:assert/strict";
 import test from "node:test";
@@ -649,6 +705,7 @@ test("validateScannerSummary rejects suspicious_window_count below capture_exclu
 ```bash
 node --test tests/unit/platformScannerSchema.test.js
 ```
+
 Expected: FAIL — module missing.
 
 - [ ] **Step 3: Implement `src/device/platformScannerSchema.js`**
@@ -813,6 +870,7 @@ export function validateScannerSummary(raw) {
 ```bash
 node --test tests/unit/platformScannerSchema.test.js
 ```
+
 Expected: all 10 tests PASS.
 
 - [ ] **Step 5: Run full unit suite (no consumer migrated yet)**
@@ -820,6 +878,7 @@ Expected: all 10 tests PASS.
 ```bash
 npm test
 ```
+
 Expected: all green.
 
 - [ ] **Step 6: Commit**
@@ -845,19 +904,19 @@ EOF
 ## Task 7: Refactor `src/device/daemonProof.js` to consume `platformScannerSchema`
 
 **Files:**
+
 - Modify: `src/device/daemonProof.js` — delete inlined `validateScannerFields`, `SCANNER_STATES`, `SUPPORTED_DAEMON_PLATFORMS`, `FINGERPRINT_HASH_PATTERN`, the `expectedScannerVersion` per-platform branch; import from `./platformScannerSchema.js`.
 
 - [ ] **Step 1: Edit `src/device/daemonProof.js`**
 
 At top, add:
+
 ```js
-import {
-  SUPPORTED_DEVICE_PLATFORMS,
-  validateScannerSummary,
-} from "./platformScannerSchema.js";
+import { SUPPORTED_DEVICE_PLATFORMS, validateScannerSummary } from "./platformScannerSchema.js";
 ```
 
 Remove:
+
 - `const SUPPORTED_DAEMON_PLATFORMS = new Set(["macos", "windows"]);` (line 9) → replace usages with `SUPPORTED_DEVICE_PLATFORMS.includes(raw.platform)` and `SUPPORTED_DEVICE_PLATFORMS.includes(signed_payload.platform)`.
 - `const SCANNER_STATES = new Set([...]);` (lines 59-67).
 - `const FINGERPRINT_HASH_PATTERN = ...` (line 71) — only if no other reference; otherwise leave.
@@ -870,6 +929,7 @@ Remove:
 ```bash
 node --test tests/unit/daemonProof.test.js tests/unit/daemonProofScanner.test.js tests/unit/daemonPairing.test.js
 ```
+
 Expected: all PASS.
 
 - [ ] **Step 3: Run full unit suite**
@@ -877,6 +937,7 @@ Expected: all PASS.
 ```bash
 npm test
 ```
+
 Expected: all green; same pass count as before.
 
 - [ ] **Step 4: Commit**
@@ -901,6 +962,7 @@ EOF
 ## Task 8: Extract `scannerRiskPolicy.js` with TDD
 
 **Files:**
+
 - Create: `src/device/scannerRiskPolicy.js`
 - Create: `tests/unit/scannerRiskPolicy.test.js`
 
@@ -909,6 +971,7 @@ This extracts the daemon-risk mapping currently in `src/device/daemonState.js:sc
 - [ ] **Step 1: Write the failing test**
 
 Create `tests/unit/scannerRiskPolicy.test.js`:
+
 ```js
 import assert from "node:assert/strict";
 import test from "node:test";
@@ -1021,6 +1084,7 @@ test("getManualReviewReason device-integrity variant", () => {
 ```bash
 node --test tests/unit/scannerRiskPolicy.test.js
 ```
+
 Expected: FAIL — module missing.
 
 - [ ] **Step 3: Implement `src/device/scannerRiskPolicy.js`**
@@ -1048,11 +1112,7 @@ export function mapScannerSummaryToRisk(record) {
   if (maxExcluded > 0 || state === DAEMON_STATES.RISK_DETECTED) {
     return { daemon_risk: 100, forceCritical: true };
   }
-  if (
-    maxRestricted > 0 ||
-    maxMonitorOnly > 0 ||
-    record?.scanner_state === "restricted_detected"
-  ) {
+  if (maxRestricted > 0 || maxMonitorOnly > 0 || record?.scanner_state === "restricted_detected") {
     return { daemon_risk: 40, forceCritical: false };
   }
   if (
@@ -1090,6 +1150,7 @@ export function getManualReviewReason(riskLevel, { context = "session" } = {}) {
 ```bash
 node --test tests/unit/scannerRiskPolicy.test.js
 ```
+
 Expected: all 8 tests PASS.
 
 - [ ] **Step 5: Run full unit suite**
@@ -1097,6 +1158,7 @@ Expected: all 8 tests PASS.
 ```bash
 npm test
 ```
+
 Expected: all green.
 
 - [ ] **Step 6: Commit**
@@ -1121,17 +1183,20 @@ EOF
 ## Task 9: Refactor `src/device/daemonState.js` to consume `scannerRiskPolicy`
 
 **Files:**
+
 - Modify: `src/device/daemonState.js:64-87` (delete inline `scoreDaemonRisk` body, delegate to shared module)
 - Modify: `src/device/daemonState.js:20` (`platform: "macos"` default → `"unknown"`)
 
 - [ ] **Step 1: Edit `daemonState.js` to import and delegate**
 
 Add at top of the file (after existing line 1 `export const DAEMON_STATES = ...`):
+
 ```js
 import { mapScannerSummaryToRisk } from "./scannerRiskPolicy.js";
 ```
 
 Replace `scoreDaemonRisk` body (lines 64-87) with:
+
 ```js
 export function scoreDaemonRisk(record) {
   return mapScannerSummaryToRisk(record);
@@ -1145,6 +1210,7 @@ Change line 20 from `platform: "macos",` to `platform: "unknown",`. This is the 
 ```bash
 node --test tests/unit/daemonState.test.js tests/unit/daemonScannerRisk.test.js tests/unit/riskScoring.test.js
 ```
+
 Expected: all PASS. If `daemonState.test.js` fails on the platform default, update the assertion to `"unknown"` (verify no integration test relies on the old default).
 
 - [ ] **Step 3: Run full unit suite**
@@ -1152,6 +1218,7 @@ Expected: all PASS. If `daemonState.test.js` fails on the platform default, upda
 ```bash
 npm test
 ```
+
 Expected: all green.
 
 - [ ] **Step 4: Commit**
@@ -1176,6 +1243,7 @@ EOF
 ## Task 10: Refactor `src/academic/reportBuilder.js` to consume `scannerRiskPolicy` + add `daemon_platform`
 
 **Files:**
+
 - Modify: `src/academic/reportBuilder.js:66-99` (`buildDeviceIntegritySection`)
 - Create: `tests/unit/reportBuilderDeviceShield.test.js`
 
@@ -1184,6 +1252,7 @@ The current section emits `platform`. Per spec §7.1, Stage 2.7 adds `daemon_pla
 - [ ] **Step 1: Write the failing test**
 
 Create `tests/unit/reportBuilderDeviceShield.test.js`:
+
 ```js
 import assert from "node:assert/strict";
 import test from "node:test";
@@ -1245,7 +1314,10 @@ test("device_integrity safe wording when no anomaly", () => {
     proofs_verified: 5,
   };
   const r = buildReport(s.sessionRecord, s.sessionData, s.eventList, s.auditChainValid);
-  assert.equal(r.device_integrity.manual_review_recommendation, "No device-integrity anomaly detected.");
+  assert.equal(
+    r.device_integrity.manual_review_recommendation,
+    "No device-integrity anomaly detected."
+  );
 });
 
 test("device_integrity daemon_platform defaults to unknown when daemon missing", () => {
@@ -1281,16 +1353,19 @@ test("device_integrity emits same top-level key set for macOS and Windows", () =
 ```bash
 node --test tests/unit/reportBuilderDeviceShield.test.js
 ```
+
 Expected: FAIL on `daemon_platform`.
 
 - [ ] **Step 3: Edit `src/academic/reportBuilder.js`**
 
 Add import at top:
+
 ```js
 import { getManualReviewReason } from "../device/scannerRiskPolicy.js";
 ```
 
 Replace `buildDeviceIntegritySection` (lines 66-99) with:
+
 ```js
 function buildDeviceIntegritySection(daemon) {
   const state = daemon ?? {};
@@ -1323,10 +1398,9 @@ function buildDeviceIntegritySection(daemon) {
     monitor_only_window_count_max: state.monitor_only_window_count_max ?? 0,
     scanner_error_count: state.scanner_error_count ?? 0,
     permission_denied_count: state.permission_denied_count ?? 0,
-    manual_review_recommendation: getManualReviewReason(
-      anomaly ? "Warning" : "Safe",
-      { context: "device_integrity" }
-    ),
+    manual_review_recommendation: getManualReviewReason(anomaly ? "Warning" : "Safe", {
+      context: "device_integrity",
+    }),
   };
 }
 ```
@@ -1336,6 +1410,7 @@ function buildDeviceIntegritySection(daemon) {
 ```bash
 node --test tests/unit/reportBuilderDeviceShield.test.js tests/unit/reportBuilder.test.js tests/unit/reportBuilderScanner.test.js
 ```
+
 Expected: all PASS. If `reportBuilder.test.js` or `reportBuilderScanner.test.js` snapshots the old key set strictly, update those assertions to include `daemon_platform`.
 
 - [ ] **Step 5: Run full unit suite**
@@ -1343,6 +1418,7 @@ Expected: all PASS. If `reportBuilder.test.js` or `reportBuilderScanner.test.js`
 ```bash
 npm test
 ```
+
 Expected: all green.
 
 - [ ] **Step 6: Commit**
@@ -1368,6 +1444,7 @@ EOF
 ## Task 11: Browser SDK `getDeviceShieldStatus()` UX accessor
 
 **Files:**
+
 - Modify: `public/sdk/simurgh-browser-sdk.js`
 - Modify: `tests/unit/browserSdk.test.js` (add new tests for the accessor)
 
@@ -1378,11 +1455,13 @@ The accessor exposes platform/scanner state from the last observed daemon `/stat
 ```bash
 grep -n "status\|daemonState\|reachable" public/sdk/simurgh-browser-sdk.js
 ```
+
 Identify the function that fetches `/status` from the daemon (likely named `discoverDaemon` or `refreshStatus`). Note the state-update pattern (`setState({...})`).
 
 - [ ] **Step 2: Write failing tests in `tests/unit/browserSdk.test.js`**
 
 Append:
+
 ```js
 test("getDeviceShieldStatus returns UX-only status with platform and scanner state", async () => {
   const fetchImpl = async (url) => {
@@ -1411,7 +1490,9 @@ test("getDeviceShieldStatus returns UX-only status with platform and scanner sta
 });
 
 test("getDeviceShieldStatus reports available=false when daemon unreachable", () => {
-  const fetchImpl = async () => { throw new Error("ECONNREFUSED"); };
+  const fetchImpl = async () => {
+    throw new Error("ECONNREFUSED");
+  };
   const client = createSimurghClient({ fetchImpl, serverBaseUrl: "http://srv" });
   const status = client.getDeviceShieldStatus();
   assert.equal(status.available, false);
@@ -1426,6 +1507,7 @@ Note: the exact `discoverDaemon` name may differ; adapt based on Step 1 grep. If
 ```bash
 node --test tests/unit/browserSdk.test.js
 ```
+
 Expected: FAIL — `getDeviceShieldStatus is not a function`.
 
 - [ ] **Step 4: Implement in `public/sdk/simurgh-browser-sdk.js`**
@@ -1454,6 +1536,7 @@ Export it from the returned client object alongside `getState`, `discoverDaemon`
 ```bash
 node --test tests/unit/browserSdk.test.js
 ```
+
 Expected: all PASS.
 
 - [ ] **Step 6: Run full unit suite**
@@ -1461,6 +1544,7 @@ Expected: all PASS.
 ```bash
 npm test
 ```
+
 Expected: all green.
 
 - [ ] **Step 7: Commit**
@@ -1485,6 +1569,7 @@ EOF
 ## Task 12: Cross-platform E2E smoke (Scenarios A–G)
 
 **Files:**
+
 - Create: `scripts/smoke-stage-2-7-cross-platform-device-shield.sh`
 - Create: `tests/e2e/stage27_cross_platform_device_shield_smoke.mjs`
 
@@ -1497,6 +1582,7 @@ Top-of-file imports and helpers (`assertSmoke`, `b64url`, `canonicalDaemonPayloa
 Add `macosScannerFields(overrides)` returning the macOS fields (scanner_version `2.5.0`, no `monitor_only_window_count`/`capture_restricted_window_count` defaults beyond 0). Keep `windowsScannerFields` for Windows.
 
 Driver structure:
+
 ```js
 async function run() {
   const baseUrl = process.argv[2] || "http://127.0.0.1:33127";
@@ -1510,36 +1596,46 @@ async function run() {
   await scenarioG(baseUrl, instructorToken);
   console.log("Stage 2.7 cross-platform Device Shield smoke: pass");
 }
-run().catch((e) => { console.error(e); process.exit(1); });
+run().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});
 ```
 
 For each scenario, write a helper that: creates an exam via `/api/exams`, joins, gets a session token, requests pair + proof challenges, pairs the mock daemon with the appropriate `platform`, sends a telemetry POST with `daemon_proof` matching the scenario inputs, asserts the expected outcome on `/api/sessions/<id>/report`.
 
 **Scenario A — macOS healthy:**
+
 - `platform: "macos"`, `scanner_version: "2.5.0"`, `capture_excluded_window_count: 0`.
 - Expect: 200 OK telemetry; report `device_integrity.daemon_platform === "macos"`; `final_risk_level` not "Critical".
 
 **Scenario B — Windows healthy:**
+
 - `platform: "windows"`, `scanner_version: "2.6.0"`, all counters 0.
 - Expect: 200 OK; report `daemon_platform === "windows"`; risk not "Critical".
 
 **Scenario C — macOS capture-excluded:**
+
 - `platform: "macos"`, `capture_excluded_window_count: 1`, `scanner_state: "risk_detected"`, `suspicious_window_count: 1`.
 - Expect: report `final_risk_level === "Critical"`; `device_integrity.manual_review_recommendation === "Manual review recommended. No automatic misconduct finding."`; audit verifies.
 
 **Scenario D — Windows monitor-only:**
+
 - `platform: "windows"`, `monitor_only_window_count: 1`, `capture_restricted_window_count: 1`, `suspicious_window_count: 1`.
 - Expect: `final_risk_level === "Warning"`; manual-review wording present; no "automatic misconduct"/"cheating detected" strings in report JSON.
 
 **Scenario E — Windows capture-excluded:**
+
 - `platform: "windows"`, `capture_excluded_window_count: 1`, `scanner_state: "risk_detected"`.
 - Expect: `final_risk_level === "Critical"`.
 
 **Scenario F — Unsupported platform linux:**
+
 - Pair a daemon with `platform: "linux"`. The pairing endpoint should reject with `unsupported_platform`.
 - Expect: 4xx response on `/api/device/pair`; assert response body `reason === "unsupported_platform"`.
 
 **Scenario G — Raw forbidden field in proof:**
+
 - Send a valid Windows proof, but inject `proof.debug = { hwnd: "0x123", pid: 4321, window_title: "Answers", process_name: "hidden.exe" }` BEFORE signing.
 - Expect: telemetry endpoint returns 4xx with `reason === "forbidden_local_field"`. Then fetch the report and the audit chain JSON; grep their stringified output to ensure none of the raw values (`"0x123"`, `"4321"`, `"Answers"`, `"hidden.exe"`) appear.
 
@@ -1590,6 +1686,7 @@ echo "Stage 2.7 cross-platform Device Shield smoke: pass"
 ```
 
 Mark executable:
+
 ```bash
 chmod +x scripts/smoke-stage-2-7-cross-platform-device-shield.sh
 ```
@@ -1599,6 +1696,7 @@ chmod +x scripts/smoke-stage-2-7-cross-platform-device-shield.sh
 ```bash
 bash scripts/smoke-stage-2-7-cross-platform-device-shield.sh
 ```
+
 Expected: all seven scenarios pass; final "pass" line printed. If Scenario F or G fail, the cross-platform refactor likely regressed — investigate before continuing.
 
 - [ ] **Step 4: Commit**
@@ -1623,6 +1721,7 @@ EOF
 ## Task 13: Cross-platform security audit
 
 **Files:**
+
 - Create: `scripts/security-audit-stage-2-7-cross-platform-device-shield.sh`
 - Create: `tests/security/stage27_cross_platform_security_audit.test.js`
 
@@ -1631,15 +1730,21 @@ Model the bash script on `scripts/security-audit-stage-2-4-2-5.sh` and the test 
 - [ ] **Step 1: Create `tests/security/stage27_cross_platform_security_audit.test.js`**
 
 Tests (each using `validateDaemonProof` directly, no server boot):
+
 ```js
 import assert from "node:assert/strict";
 import crypto from "node:crypto";
 import test from "node:test";
 
-import { validateDaemonProof, canonicaliseDaemonPayload, computeDaemonNodeIdHash }
-  from "../../src/device/daemonProof.js";
+import {
+  validateDaemonProof,
+  canonicaliseDaemonPayload,
+  computeDaemonNodeIdHash,
+} from "../../src/device/daemonProof.js";
 
-function b64url(buf) { return Buffer.from(buf).toString("base64url"); }
+function b64url(buf) {
+  return Buffer.from(buf).toString("base64url");
+}
 
 function makeProof(platform, overrides = {}) {
   const { publicKey, privateKey } = crypto.generateKeyPairSync("ec", { namedCurve: "prime256v1" });
@@ -1675,7 +1780,8 @@ function makeProof(platform, overrides = {}) {
   };
   const signature = b64url(
     crypto.sign("sha256", Buffer.from(canonicaliseDaemonPayload(proof)), {
-      key: privateKey, dsaEncoding: "der",
+      key: privateKey,
+      dsaEncoding: "der",
     })
   );
   return { proof: { ...proof, signature }, public_key, node_id_hash };
@@ -1697,7 +1803,8 @@ test("audit: tampered scanner_version rejected", () => {
   const { proof, public_key, node_id_hash } = makeProof("windows");
   proof.scanner_version = "9.9.9";
   const r = validateDaemonProof(proof, {
-    expectedSessionId: "sess_audit", expectedExamId: "exam_audit",
+    expectedSessionId: "sess_audit",
+    expectedExamId: "exam_audit",
     pairedNode: { node_id_hash, public_key },
   });
   assert.equal(r.ok, false);
@@ -1709,7 +1816,8 @@ test("audit: tampered monitor_only_window_count rejected", () => {
   const { proof, public_key, node_id_hash } = makeProof("windows");
   proof.monitor_only_window_count = 5;
   const r = validateDaemonProof(proof, {
-    expectedSessionId: "sess_audit", expectedExamId: "exam_audit",
+    expectedSessionId: "sess_audit",
+    expectedExamId: "exam_audit",
     pairedNode: { node_id_hash, public_key },
   });
   assert.equal(r.ok, false);
@@ -1720,7 +1828,8 @@ test("audit: tampered capture_excluded_window_count rejected", () => {
   const { proof, public_key, node_id_hash } = makeProof("macos");
   proof.capture_excluded_window_count = 1;
   const r = validateDaemonProof(proof, {
-    expectedSessionId: "sess_audit", expectedExamId: "exam_audit",
+    expectedSessionId: "sess_audit",
+    expectedExamId: "exam_audit",
     pairedNode: { node_id_hash, public_key },
   });
   assert.equal(r.ok, false);
@@ -1731,7 +1840,8 @@ test("audit: unsupported platform linux rejected before signature check", () => 
   const { proof, public_key, node_id_hash } = makeProof("macos");
   proof.platform = "linux";
   const r = validateDaemonProof(proof, {
-    expectedSessionId: "sess_audit", expectedExamId: "exam_audit",
+    expectedSessionId: "sess_audit",
+    expectedExamId: "exam_audit",
     pairedNode: { node_id_hash, public_key },
   });
   assert.equal(r.ok, false);
@@ -1742,7 +1852,8 @@ test("audit: raw hwnd nested in scanner sub-object rejected as forbidden_local_f
   const { proof, public_key, node_id_hash } = makeProof("windows");
   proof.scanner_debug = { hwnd: "0x123" };
   const r = validateDaemonProof(proof, {
-    expectedSessionId: "sess_audit", expectedExamId: "exam_audit",
+    expectedSessionId: "sess_audit",
+    expectedExamId: "exam_audit",
     pairedNode: { node_id_hash, public_key },
   });
   assert.equal(r.ok, false);
@@ -1753,7 +1864,8 @@ test("audit: raw process_name nested in debug sub-object rejected", () => {
   const { proof, public_key, node_id_hash } = makeProof("macos");
   proof.debug = { extra: { process_name: "hidden" } };
   const r = validateDaemonProof(proof, {
-    expectedSessionId: "sess_audit", expectedExamId: "exam_audit",
+    expectedSessionId: "sess_audit",
+    expectedExamId: "exam_audit",
     pairedNode: { node_id_hash, public_key },
   });
   assert.equal(r.ok, false);
@@ -1763,8 +1875,16 @@ test("audit: raw process_name nested in debug sub-object rejected", () => {
 test("audit: dashboard HTML contains no forbidden misconduct phrases", () => {
   // Static-string check on the dashboard template.
   const html = readDashboardHtml();
-  for (const phrase of ["cheating detected", "student guilty", "automatic misconduct", "confirmed misconduct"]) {
-    assert.ok(!html.toLowerCase().includes(phrase), `dashboard contains forbidden phrase: ${phrase}`);
+  for (const phrase of [
+    "cheating detected",
+    "student guilty",
+    "automatic misconduct",
+    "confirmed misconduct",
+  ]) {
+    assert.ok(
+      !html.toLowerCase().includes(phrase),
+      `dashboard contains forbidden phrase: ${phrase}`
+    );
   }
 });
 
@@ -1782,6 +1902,7 @@ Note on the last test: replace the `require` with an ESM import (`import { readF
 ```bash
 node --test tests/security/stage27_cross_platform_security_audit.test.js
 ```
+
 Expected: all PASS. If any fail, the refactor regressed a negative-test surface — fix before continuing.
 
 - [ ] **Step 3: Create the audit shell script**
@@ -1801,6 +1922,7 @@ echo "Stage 2.7 cross-platform security audit: pass"
 ```
 
 Mark executable:
+
 ```bash
 chmod +x scripts/security-audit-stage-2-7-cross-platform-device-shield.sh
 ```
@@ -1810,6 +1932,7 @@ chmod +x scripts/security-audit-stage-2-7-cross-platform-device-shield.sh
 ```bash
 bash scripts/security-audit-stage-2-7-cross-platform-device-shield.sh
 ```
+
 Expected: pass.
 
 - [ ] **Step 5: Commit**
@@ -1833,6 +1956,7 @@ EOF
 ## Task 14: Wire Stage 2.7 gates into `scripts/check.sh`
 
 **Files:**
+
 - Modify: `scripts/check.sh`
 
 - [ ] **Step 1: Find the Stage 2.6 invocation block in check.sh**
@@ -1844,6 +1968,7 @@ grep -n "stage-2-6" scripts/check.sh
 - [ ] **Step 2: Append Stage 2.7 invocations**
 
 Immediately after the Stage 2.6 smoke invocation, add:
+
 ```bash
 run_step "Stage 2.7 cross-platform Device Shield smoke" "bash scripts/smoke-stage-2-7-cross-platform-device-shield.sh"
 run_step "Stage 2.7 cross-platform security audit" "bash scripts/security-audit-stage-2-7-cross-platform-device-shield.sh"
@@ -1856,6 +1981,7 @@ Use whatever `run_step` (or equivalent) helper the script already defines for pr
 ```bash
 bash scripts/check.sh
 ```
+
 Expected: passes; new gate count is 44 + 2 = 46, or higher if check.sh already enumerates more (~50/50). Don't fixate on a specific number — verify "all PASSED" at the end.
 
 - [ ] **Step 4: Commit**
@@ -1878,6 +2004,7 @@ EOF
 ## Task 15: Documentation updates (README, SECURITY, PRIVACY, ROADMAP, AGENT, CHANGELOG, brief footnotes)
 
 **Files:**
+
 - Modify: `README.md`
 - Modify: `SECURITY.md`
 - Modify: `PRIVACY.md`
@@ -1891,7 +2018,7 @@ EOF
 
 In `README.md`, locate the Stage 2.6 section (search for `Stage 2.6 complete`). Immediately after it, add a Stage 2.7 paragraph in the same style:
 
-```markdown
+````markdown
 ### Stage 2.7 Cross-Platform Device Shield Unification (merged — v0.4.13)
 
 Stage 2.7 unifies the macOS and Windows Device Shield implementations under one
@@ -1911,7 +2038,9 @@ Stage 2.7 closeout can be run independently:
 ./scripts/smoke-stage-2-7-cross-platform-device-shield.sh
 ./scripts/security-audit-stage-2-7-cross-platform-device-shield.sh
 ```
-```
+````
+
+````
 
 Also update the top status badge text and the "external technical review" baseline list to include "Stage 2.7 cross-platform Device Shield unification". Update the `Stage 2.5 complete` mention to add Stage 2.7 alongside.
 
@@ -1952,7 +2081,7 @@ Open `AGENT.md`. Find the Stage 2.6 entry block to match style. Append a new ent
 - Linux daemon proofs rejected with `unsupported_platform` until Stage 2.8.
 
 **Non-claims preserved:** research prototype only; no production deployment claim; no MDM/Intune; no hardware attestation; no kernel visibility; no automatic misconduct detection; metadata-only.
-```
+````
 
 - [ ] **Step 6: CHANGELOG.md — Raouf-prefixed v0.4.13 entry**
 
@@ -1962,6 +2091,7 @@ Match the existing changelog style. Add:
 ## v0.4.13 — 2026-05-17 — Stage 2.7 Cross-Platform Device Shield Unification (Raouf)
 
 ### Added
+
 - `src/device/forbiddenLocalFields.js` — shared forbidden raw-field list + recursive deep-check helper.
 - `src/device/platformScannerSchema.js` — shared platform list, scanner enum, scanner validator.
 - `src/device/scannerRiskPolicy.js` — shared risk mapping + manual-review wording.
@@ -1973,27 +2103,32 @@ Match the existing changelog style. Add:
 - `tests/unit/{forbiddenLocalFields,platformScannerSchema,scannerRiskPolicy,reportBuilderDeviceShield}.test.js`.
 
 ### Changed
+
 - `src/device/daemonProof.js`, `src/device/daemonState.js`, `src/academic/riskScoring.js`, `src/academic/reportBuilder.js`, `tools/privacy-audit.mjs` — refactored to consume the shared modules.
 - `src/device/daemonState.js` `baseRecord.platform` default: `"macos"` → `"unknown"`.
 - `device_integrity` report section gains `daemon_platform`; legacy `platform` retained as back-compat alias.
 
 ### Verified
+
 - All existing smoke gates and Stage 2.7 cross-platform smoke + audit green.
 - `npm test`, `npm audit`, `tools/privacy-audit.mjs`, `scripts/check.sh` green.
 - Linux daemon proofs rejected with `unsupported_platform`.
 
 ### Non-claims (unchanged)
+
 - Research prototype only; no production deployment claim; no MDM/Intune readiness; no hardware attestation; no kernel-level visibility; no automatic misconduct detection.
 ```
 
 - [ ] **Step 7: Historical doc footnotes**
 
 In `docs/STAGE_2_5_TECHNICAL_BRIEF.md`, add a top-of-file note:
+
 ```markdown
 > **Scope:** This brief documents Stage 1 through Stage 2.5 (macOS-only Device Shield). Windows display-affinity scanning landed in Stage 2.6 (`v0.4.12`). The cross-platform unification contract is documented in [`STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md`](STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md) and [`DEVICE_SHIELD_CONTRACT.md`](DEVICE_SHIELD_CONTRACT.md).
 ```
 
 In `docs/STAGE_2_6_WINDOWS_DISPLAY_AFFINITY_SCANNER.md`, add at the end of the document:
+
 ```markdown
 ## Stage 2.7 unification
 
@@ -2027,6 +2162,7 @@ EOF
 ## Task 16: Final verification, PR, and release tag
 
 **Files:**
+
 - None modified; verification + release ceremony.
 
 - [ ] **Step 1: Run the full verification matrix**
@@ -2048,6 +2184,7 @@ bash scripts/check.sh
 Expected: every command exits 0. **If any fails, STOP and report — do not tag a release on a red gate.**
 
 Optional native daemon builds (require platform tooling):
+
 ```bash
 cd tools/simurgh-daemon-macos && swift test && swift build && cd ../..
 dotnet test tools/simurgh-daemon-windows/SimurghDaemon.Windows.sln
@@ -2126,30 +2263,31 @@ Report to user: branch merged, tag pushed, release published. Done.
 
 **1. Spec coverage check** — every spec section maps to a task:
 
-| Spec § | Topic                                  | Task(s)       |
-| ------ | -------------------------------------- | ------------- |
-| 2      | Reality check (current code surface)   | 4, 7, 9       |
-| 3      | Scope (in/out)                         | All tasks     |
-| 4      | Architecture target                    | 3, 6, 8       |
-| 5.1    | Daemon proof schema                    | 2 (schemas)   |
-| 5.2    | Scanner result schema                  | 2 (schemas)   |
-| 6.1    | platformScannerSchema module           | 6, 7          |
-| 6.2    | scannerRiskPolicy module               | 8, 9, 10      |
-| 6.3    | forbiddenLocalFields module            | 3, 4, 5       |
-| 7.1    | Report device_integrity shape          | 10            |
-| 7.2    | Dashboard card + forbidden phrases     | 13 (audit)    |
-| 8      | Smoke Scenarios A–G                    | 12            |
-| 9      | Security audit                         | 13            |
-| 10     | Documentation                          | 2, 15         |
-| 11     | Implementation order                   | Task 1–16     |
-| 12     | Acceptance criteria                    | Task 16       |
-| 13     | Non-claims                             | 15 (AGENT)    |
+| Spec § | Topic                                | Task(s)     |
+| ------ | ------------------------------------ | ----------- |
+| 2      | Reality check (current code surface) | 4, 7, 9     |
+| 3      | Scope (in/out)                       | All tasks   |
+| 4      | Architecture target                  | 3, 6, 8     |
+| 5.1    | Daemon proof schema                  | 2 (schemas) |
+| 5.2    | Scanner result schema                | 2 (schemas) |
+| 6.1    | platformScannerSchema module         | 6, 7        |
+| 6.2    | scannerRiskPolicy module             | 8, 9, 10    |
+| 6.3    | forbiddenLocalFields module          | 3, 4, 5     |
+| 7.1    | Report device_integrity shape        | 10          |
+| 7.2    | Dashboard card + forbidden phrases   | 13 (audit)  |
+| 8      | Smoke Scenarios A–G                  | 12          |
+| 9      | Security audit                       | 13          |
+| 10     | Documentation                        | 2, 15       |
+| 11     | Implementation order                 | Task 1–16   |
+| 12     | Acceptance criteria                  | Task 16     |
+| 13     | Non-claims                           | 15 (AGENT)  |
 
 All sections covered.
 
 **2. Placeholder scan** — searched for "TBD", "TODO", "fill in", "similar to", "appropriate error", "edge cases". None present. Code blocks supplied for every code step. Commands have expected outcomes.
 
 **3. Type consistency check:**
+
 - `FORBIDDEN_LOCAL_FIELD_NAMES` named consistently across Tasks 3, 4, 5, 13.
 - `containsForbiddenLocalFieldDeep` named consistently.
 - `SUPPORTED_DEVICE_PLATFORMS` named consistently across Tasks 6, 7.
