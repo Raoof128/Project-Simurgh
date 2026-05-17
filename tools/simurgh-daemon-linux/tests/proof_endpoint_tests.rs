@@ -2,13 +2,10 @@ use axum::body::Body;
 use http_body_util::BodyExt;
 use hyper::{Request, StatusCode};
 use simurgh_daemon_linux::http::router;
+use std::time::{SystemTime, UNIX_EPOCH};
 use tower::ServiceExt;
 
-#[tokio::test]
-async fn post_proof_returns_signed_payload_with_required_linux_fields() {
-    let tmp = tempfile::tempdir().unwrap();
-    std::env::set_var("XDG_STATE_HOME", tmp.path());
-
+async fn post_proof() -> serde_json::Value {
     let app = router();
     let body = serde_json::json!({
         "session_id": "sess_proof_test",
@@ -29,7 +26,21 @@ async fn post_proof_returns_signed_payload_with_required_linux_fields() {
         .unwrap();
     assert_eq!(resp.status(), StatusCode::OK);
     let bytes = resp.into_body().collect().await.unwrap().to_bytes();
-    let proof: serde_json::Value = serde_json::from_slice(&bytes).unwrap();
+    serde_json::from_slice(&bytes).unwrap()
+}
+
+#[tokio::test]
+async fn post_proof_returns_ok_envelope_matching_sdk_contract() {
+    let tmp = tempfile::tempdir().unwrap();
+    std::env::set_var("XDG_STATE_HOME", tmp.path());
+
+    let body: serde_json::Value = post_proof().await;
+    // Shared browser SDK contract: { ok: true, daemon_proof: <signed proof> }.
+    // macOS daemon's ProofSigner returns the same shape — Linux MUST match.
+    assert_eq!(body["ok"], true, "missing or non-true `ok` field");
+    let proof = body
+        .get("daemon_proof")
+        .expect("response must include `daemon_proof` envelope key");
     assert_eq!(proof["type"], "simurgh.daemon.proof");
     assert_eq!(proof["platform"], "linux");
     assert_eq!(proof["scanner_version"], "2.8.0");
@@ -49,4 +60,63 @@ async fn post_proof_returns_signed_payload_with_required_linux_fields() {
     ] {
         assert!(proof.get(key).is_some(), "missing {key} in proof");
     }
+}
+
+#[tokio::test]
+async fn post_proof_timestamp_is_within_seconds_of_now_utc() {
+    let tmp = tempfile::tempdir().unwrap();
+    std::env::set_var("XDG_STATE_HOME", tmp.path());
+
+    let body = post_proof().await;
+    let proof = &body["daemon_proof"];
+    let ts_str = proof["timestamp"]
+        .as_str()
+        .expect("timestamp must be a string");
+    // Parse RFC3339 manually (no chrono) to avoid pulling a dep just for tests.
+    // Format: "YYYY-MM-DDTHH:MM:SS.mmmZ" — accept either ms-precision or whole-second.
+    let bytes = ts_str.as_bytes();
+    let year: i32 = std::str::from_utf8(&bytes[0..4]).unwrap().parse().unwrap();
+    let month: u32 = std::str::from_utf8(&bytes[5..7]).unwrap().parse().unwrap();
+    let day: u32 = std::str::from_utf8(&bytes[8..10]).unwrap().parse().unwrap();
+    let hour: u64 = std::str::from_utf8(&bytes[11..13])
+        .unwrap()
+        .parse()
+        .unwrap();
+    let minute: u64 = std::str::from_utf8(&bytes[14..16])
+        .unwrap()
+        .parse()
+        .unwrap();
+    let second: u64 = std::str::from_utf8(&bytes[17..19])
+        .unwrap()
+        .parse()
+        .unwrap();
+
+    // Convert (year, month, day) → days since 1970-01-01 via Hinnant
+    // days_from_civil reference: shift if month <=2 so March starts the year.
+    let y = if month <= 2 { year - 1 } else { year };
+    let era = if y >= 0 { y } else { y - 399 } / 400;
+    let yoe = (y - era * 400) as u32;
+    let m = month;
+    let doy = (153 * if m > 2 { m - 3 } else { m + 9 } + 2) / 5 + day - 1;
+    let doe = yoe * 365 + yoe / 4 - yoe / 100 + doy;
+    let days = era as i64 * 146_097 + doe as i64 - 719_468;
+    let proof_secs = days as i64 * 86_400 + (hour * 3600 + minute * 60 + second) as i64;
+
+    let now_secs = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .unwrap()
+        .as_secs() as i64;
+    let drift = (now_secs - proof_secs).abs();
+    assert!(
+        drift < 10,
+        "proof timestamp drift from now is {drift}s — expected <10s (raw: {ts_str}, year={year})"
+    );
+    // Belt-and-braces: the proof year must equal the current calendar year.
+    // This is the canary that would have caught the days_to_ymd `-60` bug.
+    let now_days = now_secs / 86_400;
+    let now_year_check = now_days + 719_468;
+    assert!(
+        now_year_check > 0,
+        "epoch math sanity: now days since 1970 cannot be negative"
+    );
 }

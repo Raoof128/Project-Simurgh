@@ -160,7 +160,10 @@ async fn proof(
         suspicious_window_count: 0,
         visible_window_count: visible,
     };
-    Ok(Json(build_proof(&identity, &inputs)))
+    let proof = build_proof(&identity, &inputs);
+    Ok(Json(
+        serde_json::json!({ "ok": true, "daemon_proof": proof }),
+    ))
 }
 
 fn iso8601_utc_now() -> String {
@@ -182,8 +185,11 @@ fn iso8601_utc_now() -> String {
     )
 }
 
+// Howard Hinnant's civil-from-days. Input `z` is days since 1970-01-01
+// pre-shifted by +719_468 by the caller (so the algorithm's internal civil-day
+// epoch alignment is satisfied). Do NOT subtract anything inside this function —
+// that shifted the date by ~60 days in earlier revisions.
 fn days_to_ymd(z: i64) -> (i32, u32, u32) {
-    let z = z - 60;
     let era = if z >= 0 {
         z / 146_097
     } else {
