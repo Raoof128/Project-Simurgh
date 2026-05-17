@@ -2,12 +2,12 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
-  DAEMON_EVENT_TYPES,
+  DAEMON_EVENTS,
   buildDaemonProofRejectedEvent,
 } from "../../src/device/daemonEvents.js";
 
 test("DAEMON_PROOF_REJECTED event type exists", () => {
-  assert.equal(DAEMON_EVENT_TYPES.DAEMON_PROOF_REJECTED, "DAEMON_PROOF_REJECTED");
+  assert.equal(DAEMON_EVENTS.DAEMON_PROOF_REJECTED, "DAEMON_PROOF_REJECTED");
 });
 
 test("buildDaemonProofRejectedEvent emits display_server_mismatch reason", () => {
