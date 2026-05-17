@@ -1,10 +1,7 @@
-mod config;
-mod http;
-
 use anyhow::Result;
 use std::net::SocketAddr;
 
-use crate::config::DaemonConfig;
+use simurgh_daemon_linux::{config::DaemonConfig, http};
 
 #[tokio::main]
 async fn main() -> Result<()> {

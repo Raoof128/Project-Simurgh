@@ -5,6 +5,14 @@ edition = "2021"
 description = "Project Simurgh Linux Device Shield daemon — research prototype."
 license = "MIT"
 
+[lib]
+name = "simurgh_daemon_linux"
+path = "src/lib.rs"
+
+[[bin]]
+name = "simurgh-daemon-linux"
+path = "src/main.rs"
+
 [dependencies]
 axum = { version = "0.7", default-features = false, features = ["http1", "json", "tokio"] }
 tokio = { version = "1", features = ["macros", "rt-multi-thread", "net", "signal"] }
