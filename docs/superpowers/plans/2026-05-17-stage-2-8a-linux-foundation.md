@@ -15,6 +15,7 @@
 ## File Structure
 
 **New files:**
+
 - `tools/simurgh-daemon-linux/Cargo.toml`
 - `tools/simurgh-daemon-linux/README.md`
 - `tools/simurgh-daemon-linux/src/main.rs`
@@ -37,6 +38,7 @@
 - `tests/unit/displayServerLock.test.js`
 
 **Modified files:**
+
 - `src/device/platformScannerSchema.js` — add dispatcher + `validateLinuxScannerSummary` + Linux scanner_reason invariant.
 - `src/device/daemonProof.js` — accept `"linux"`, add `display_server` + `scanner_reason` field handling, add `display_server_mismatch` rejection.
 - `src/device/daemonPairing.js` — Linux platform acceptance (transitive via `daemonProof.js`).
@@ -45,6 +47,7 @@
 - `src/device/forbiddenLocalFields.js` — no change (reused as-is); just verify with new tests.
 
 **Out of scope this PR (left as stubs):**
+
 - `src/scanner/x11.rs`, `src/scanner/wayland.rs`, `src/scanner/xwayland.rs` — created in later PRs.
 
 ---
@@ -52,6 +55,7 @@
 ## Task 1: Red — Dispatcher export missing
 
 **Files:**
+
 - Test: `tests/unit/platformScannerSchemaDispatcher.test.js`
 
 - [ ] **Step 1: Write the failing test**
@@ -99,11 +103,13 @@ git commit -m "test(stage-2-8a): red — platformScannerSchema dispatcher missin
 ## Task 2: Green — Add dispatcher + Linux validator skeleton
 
 **Files:**
+
 - Modify: `src/device/platformScannerSchema.js`
 
 - [ ] **Step 1: Add `"linux"` to `SUPPORTED_DEVICE_PLATFORMS`**
 
 Edit `src/device/platformScannerSchema.js:5`:
+
 ```javascript
 export const SUPPORTED_DEVICE_PLATFORMS = Object.freeze(["macos", "windows", "linux"]);
 export const PLANNED_DEVICE_PLATFORMS = Object.freeze([]);
@@ -112,6 +118,7 @@ export const PLANNED_DEVICE_PLATFORMS = Object.freeze([]);
 - [ ] **Step 2: Add Linux scanner version constant**
 
 In `SCANNER_VERSION_BY_PLATFORM`:
+
 ```javascript
 const SCANNER_VERSION_BY_PLATFORM = Object.freeze({
   macos: "2.5.0",
@@ -123,6 +130,7 @@ const SCANNER_VERSION_BY_PLATFORM = Object.freeze({
 - [ ] **Step 3: Add Linux-specific scanner state set + reason set + display server set**
 
 After `SCANNER_STATES`:
+
 ```javascript
 export const LINUX_SCANNER_STATES = new Set([
   "healthy",
@@ -146,13 +154,7 @@ export const LINUX_SCANNER_REASONS = new Set([
   "sandboxed_browser_loopback_possible",
 ]);
 
-export const LINUX_DISPLAY_SERVERS = new Set([
-  "x11",
-  "wayland",
-  "xwayland",
-  "headless",
-  "unknown",
-]);
+export const LINUX_DISPLAY_SERVERS = new Set(["x11", "wayland", "xwayland", "headless", "unknown"]);
 
 export const LINUX_COVERAGES = new Set([
   "x11_full",
@@ -168,6 +170,7 @@ const CLEAN_LINUX_SCANNER_STATES = new Set(["healthy", "risk_detected"]);
 - [ ] **Step 4: Add `validateLinuxScannerSummary` and dispatcher**
 
 At the end of the file:
+
 ```javascript
 export function validateLinuxScannerSummary(raw) {
   if (typeof raw.scanner_state !== "string" || !LINUX_SCANNER_STATES.has(raw.scanner_state)) {
@@ -244,6 +247,7 @@ Expected: dispatcher tests PASS. **Note:** the existing test `SUPPORTED_DEVICE_P
 - [ ] **Step 6: Update the existing schema test to reflect Linux acceptance**
 
 Edit `tests/unit/platformScannerSchema.test.js`:
+
 ```javascript
 test("SUPPORTED_DEVICE_PLATFORMS contains macos, windows, and linux", () => {
   assert.deepEqual([...SUPPORTED_DEVICE_PLATFORMS].sort(), ["linux", "macos", "windows"]);
@@ -278,6 +282,7 @@ git commit -m "feat(stage-2-8a): platformScannerSchema dispatcher + Linux valida
 ## Task 3: Red — Linux proof rejected by daemonProof.js
 
 **Files:**
+
 - Test: `tests/unit/daemonProofLinux.test.js`
 
 - [ ] **Step 1: Write the failing test**
@@ -387,11 +392,13 @@ git commit -m "test(stage-2-8a): red — Linux daemon proof not accepted"
 ## Task 4: Green — Accept Linux proofs in daemonProof.js
 
 **Files:**
+
 - Modify: `src/device/daemonProof.js`
 
 - [ ] **Step 1: Add `2.8.0` to supported daemon versions**
 
 Edit `src/device/daemonProof.js:11`:
+
 ```javascript
 const SUPPORTED_DAEMON_VERSIONS = new Set(["0.4.5", "0.4.7", "0.4.11", "2.8.0"]);
 ```
@@ -399,8 +406,12 @@ const SUPPORTED_DAEMON_VERSIONS = new Set(["0.4.5", "0.4.7", "0.4.11", "2.8.0"])
 - [ ] **Step 2: Replace direct `validateScannerSummary` call with dispatcher**
 
 Find every use of `validateScannerSummary(raw)` in `daemonProof.js` and change to:
+
 ```javascript
-import { SUPPORTED_DEVICE_PLATFORMS, validateScannerSummaryForPlatform } from "./platformScannerSchema.js";
+import {
+  SUPPORTED_DEVICE_PLATFORMS,
+  validateScannerSummaryForPlatform,
+} from "./platformScannerSchema.js";
 // ...
 const scannerValidation = validateScannerSummaryForPlatform(raw.platform, raw);
 ```
@@ -410,6 +421,7 @@ const scannerValidation = validateScannerSummaryForPlatform(raw.platform, raw);
 - [ ] **Step 3: Add Linux-specific required fields when `platform === "linux"`**
 
 Inside `validateDaemonProof`, after the `SUPPORTED_DEVICE_PLATFORMS.includes` check:
+
 ```javascript
 if (raw.platform === "linux") {
   for (const field of [
@@ -448,6 +460,7 @@ git commit -m "feat(stage-2-8a): accept Linux daemon proofs via dispatcher"
 ## Task 5: Red — display_server_mismatch rejection
 
 **Files:**
+
 - Test: `tests/unit/displayServerLock.test.js`
 
 - [ ] **Step 1: Write the failing test**
@@ -518,11 +531,13 @@ git commit -m "test(stage-2-8a): red — display_server session lock missing"
 ## Task 6: Green — Implement createDisplayServerLock
 
 **Files:**
+
 - Modify: `src/device/daemonState.js`
 
 - [ ] **Step 1: Add the lock factory**
 
 Append to `src/device/daemonState.js`:
+
 ```javascript
 export function createDisplayServerLock() {
   const locked = new Map();
@@ -574,6 +589,7 @@ git commit -m "feat(stage-2-8a): display_server session lock factory"
 ## Task 7: Red — Linux pairing acceptance
 
 **Files:**
+
 - Test: `tests/unit/daemonPairingLinux.test.js`
 
 - [ ] **Step 1: Write the failing test**
@@ -660,6 +676,7 @@ git commit -m "test(stage-2-8a): Linux pairing acceptance + unknown-platform reg
 ## Task 8: Red — daemonEvents emits display_server_mismatch reason
 
 **Files:**
+
 - Test: `tests/unit/daemonEventsLinux.test.js`
 
 - [ ] **Step 1: Write the failing test**
@@ -712,11 +729,13 @@ git commit -m "test(stage-2-8a): red — daemonEvents lacks proof-rejected build
 ## Task 9: Green — Add buildDaemonProofRejectedEvent
 
 **Files:**
+
 - Modify: `src/device/daemonEvents.js`
 
 - [ ] **Step 1: Add the builder**
 
 Append to `src/device/daemonEvents.js`:
+
 ```javascript
 import { containsForbiddenLocalFieldDeep } from "./forbiddenLocalFields.js";
 
@@ -759,6 +778,7 @@ git commit -m "feat(stage-2-8a): emit DAEMON_PROOF_REJECTED with display_server_
 ## Task 10: Green — Privacy audit + full suite pass
 
 **Files:**
+
 - Verify-only.
 
 - [ ] **Step 1: Run privacy audit**
@@ -788,6 +808,7 @@ git status
 ## Task 11: Rust daemon crate skeleton
 
 **Files:**
+
 - Create: `tools/simurgh-daemon-linux/Cargo.toml`
 - Create: `tools/simurgh-daemon-linux/README.md`
 - Create: `tools/simurgh-daemon-linux/src/main.rs`
@@ -802,6 +823,7 @@ Expected: stable 1.70+. If missing, install via `rustup` before continuing.
 - [ ] **Step 2: Create `Cargo.toml`**
 
 Write `tools/simurgh-daemon-linux/Cargo.toml`:
+
 ```toml
 [package]
 name = "simurgh-daemon-linux"
@@ -832,6 +854,7 @@ tokio = { version = "1", features = ["macros", "rt-multi-thread", "test-util"] }
 - [ ] **Step 3: Create `src/config.rs`**
 
 Write `tools/simurgh-daemon-linux/src/config.rs`:
+
 ```rust
 use std::net::{IpAddr, Ipv4Addr};
 
@@ -862,6 +885,7 @@ impl Default for DaemonConfig {
 - [ ] **Step 4: Create `src/http.rs`**
 
 Write `tools/simurgh-daemon-linux/src/http.rs`:
+
 ```rust
 use axum::{routing::get, Json, Router};
 use serde::Serialize;
@@ -893,6 +917,7 @@ async fn health() -> Json<HealthResponse> {
 - [ ] **Step 5: Create `src/main.rs`**
 
 Write `tools/simurgh-daemon-linux/src/main.rs`:
+
 ```rust
 mod config;
 mod http;
@@ -916,6 +941,7 @@ async fn main() -> Result<()> {
 - [ ] **Step 6: Create minimal README**
 
 Write `tools/simurgh-daemon-linux/README.md`:
+
 ```markdown
 # simurgh-daemon-linux
 
@@ -924,13 +950,18 @@ Project Simurgh Linux Device Shield daemon. Research prototype. Listens on
 
 ## Build
 ```
+
 cargo build --release
+
 ```
 
 ## Run
 ```
+
 cargo run -- --port 3031
+
 ```
+
 ```
 
 - [ ] **Step 7: Build to verify it compiles**
@@ -952,6 +983,7 @@ git commit -m "feat(stage-2-8a): Rust daemon crate skeleton with /health endpoin
 ## Task 12: Display session detector + /status
 
 **Files:**
+
 - Create: `tools/simurgh-daemon-linux/src/scanner/mod.rs`
 - Create: `tools/simurgh-daemon-linux/src/scanner/session.rs`
 - Create: `tools/simurgh-daemon-linux/tests/session_detector_tests.rs`
@@ -961,6 +993,7 @@ git commit -m "feat(stage-2-8a): Rust daemon crate skeleton with /health endpoin
 - [ ] **Step 1: Write failing test**
 
 Write `tools/simurgh-daemon-linux/tests/session_detector_tests.rs`:
+
 ```rust
 use simurgh_daemon_linux::scanner::session::{detect, SessionEnv};
 
@@ -1019,6 +1052,7 @@ Expected: FAIL — module does not exist.
 - [ ] **Step 3: Add library exposure to main.rs**
 
 At top of `tools/simurgh-daemon-linux/src/main.rs`, add a `lib.rs` peer. Create `tools/simurgh-daemon-linux/src/lib.rs`:
+
 ```rust
 pub mod config;
 pub mod http;
@@ -1026,6 +1060,7 @@ pub mod scanner;
 ```
 
 Then update `Cargo.toml` to expose both bin and lib:
+
 ```toml
 [lib]
 name = "simurgh_daemon_linux"
@@ -1037,19 +1072,23 @@ path = "src/main.rs"
 ```
 
 Update `src/main.rs` first line set to:
+
 ```rust
 use simurgh_daemon_linux::{config::DaemonConfig, http};
 ```
+
 Remove `mod config;` and `mod http;` from `main.rs`.
 
 - [ ] **Step 4: Implement session detector**
 
 Write `tools/simurgh-daemon-linux/src/scanner/mod.rs`:
+
 ```rust
 pub mod session;
 ```
 
 Write `tools/simurgh-daemon-linux/src/scanner/session.rs`:
+
 ```rust
 #[derive(Debug, Clone)]
 pub struct SessionEnv {
@@ -1116,6 +1155,7 @@ Expected: PASS (all 4 tests).
 - [ ] **Step 6: Wire /status endpoint**
 
 Update `tools/simurgh-daemon-linux/src/http.rs`:
+
 ```rust
 use axum::{routing::get, Json, Router};
 use serde::Serialize;
@@ -1190,12 +1230,14 @@ git commit -m "feat(stage-2-8a): display session detector + /status endpoint"
 ## Task 13: Identity (P-256 key generation + persistence)
 
 **Files:**
+
 - Create: `tools/simurgh-daemon-linux/src/identity.rs`
 - Create: `tools/simurgh-daemon-linux/tests/proof_tests.rs` (partial — identity only here)
 
 - [ ] **Step 1: Write failing test**
 
 Write `tools/simurgh-daemon-linux/tests/proof_tests.rs`:
+
 ```rust
 use simurgh_daemon_linux::identity::{load_or_create_identity, IdentityPaths};
 use std::fs;
@@ -1236,6 +1278,7 @@ fn identity_is_stable_across_loads() {
 - [ ] **Step 2: Add `tempfile` dev-dep**
 
 Edit `Cargo.toml` dev-dependencies:
+
 ```toml
 tempfile = "3"
 ```
@@ -1248,6 +1291,7 @@ Expected: FAIL — `identity` module missing.
 - [ ] **Step 4: Implement identity module**
 
 Write `tools/simurgh-daemon-linux/src/identity.rs`:
+
 ```rust
 use anyhow::{Context, Result};
 use base64::{engine::general_purpose::URL_SAFE_NO_PAD, Engine};
@@ -1330,6 +1374,7 @@ pub fn load_or_create_identity(paths: &IdentityPaths) -> Result<Identity> {
 ```
 
 Add deps in `Cargo.toml`:
+
 ```toml
 hex = "0.4"
 rand_core = { version = "0.6", features = ["getrandom"] }
@@ -1356,6 +1401,7 @@ git commit -m "feat(stage-2-8a): P-256 identity with XDG state, 0600/0700 perms"
 ## Task 14: Canonical JSON + proof signing
 
 **Files:**
+
 - Create: `tools/simurgh-daemon-linux/src/canonical_json.rs`
 - Create: `tools/simurgh-daemon-linux/src/proof.rs`
 - Append to `tools/simurgh-daemon-linux/tests/proof_tests.rs`
@@ -1363,6 +1409,7 @@ git commit -m "feat(stage-2-8a): P-256 identity with XDG state, 0600/0700 perms"
 - [ ] **Step 1: Append failing tests**
 
 Append to `tools/simurgh-daemon-linux/tests/proof_tests.rs`:
+
 ```rust
 use simurgh_daemon_linux::canonical_json::canonicalise;
 use simurgh_daemon_linux::proof::{build_proof, ProofInputs};
@@ -1429,6 +1476,7 @@ Expected: FAIL — module missing.
 - [ ] **Step 3: Implement canonical JSON**
 
 Write `tools/simurgh-daemon-linux/src/canonical_json.rs`:
+
 ```rust
 use serde_json::{Map, Value};
 
@@ -1457,6 +1505,7 @@ fn strip_signature_and_sort(value: &Value) -> Value {
 - [ ] **Step 4: Implement proof builder**
 
 Write `tools/simurgh-daemon-linux/src/proof.rs`:
+
 ```rust
 use serde_json::{json, Value};
 
@@ -1540,12 +1589,14 @@ git commit -m "feat(stage-2-8a): canonical JSON + P-256 proof builder"
 ## Task 15: Non-local DISPLAY refusal
 
 **Files:**
+
 - Modify: `tools/simurgh-daemon-linux/src/scanner/session.rs`
 - Create: `tools/simurgh-daemon-linux/tests/non_local_display_tests.rs`
 
 - [ ] **Step 1: Write failing test**
 
 Write `tools/simurgh-daemon-linux/tests/non_local_display_tests.rs`:
+
 ```rust
 use simurgh_daemon_linux::scanner::session::{detect, SessionEnv};
 
@@ -1605,6 +1656,7 @@ Expected: FAIL on remote-hostname and remote-IP tests (current implementation do
 - [ ] **Step 3: Implement non-local refusal in detector**
 
 Edit `tools/simurgh-daemon-linux/src/scanner/session.rs` — replace the X11 arm with:
+
 ```rust
         (false, true) => {
             if is_local_display(env.x_display.as_deref().unwrap_or("")) {
@@ -1626,6 +1678,7 @@ Edit `tools/simurgh-daemon-linux/src/scanner/session.rs` — replace the X11 arm
 ```
 
 Add helper at bottom of file:
+
 ```rust
 fn is_local_display(d: &str) -> bool {
     // Local forms: ":N", ":N.M", "unix/:N", "/path/.X11-unix/X0".
@@ -1658,11 +1711,13 @@ git commit -m "feat(stage-2-8a): refuse non-local DISPLAY (privacy boundary)"
 ## Task 16: Headless behaviour test against /status endpoint
 
 **Files:**
+
 - Create: `tools/simurgh-daemon-linux/tests/headless_tests.rs`
 
 - [ ] **Step 1: Write the integration test**
 
 Write `tools/simurgh-daemon-linux/tests/headless_tests.rs`:
+
 ```rust
 use simurgh_daemon_linux::http::router;
 use axum::body::Body;
@@ -1728,11 +1783,13 @@ git commit -m "test(stage-2-8a): headless /health + /status integration tests"
 ## Task 17: HTTP hardening — loopback bind, body limits, method allowlist
 
 **Files:**
+
 - Modify: `tools/simurgh-daemon-linux/src/http.rs`
 
 - [ ] **Step 1: Add body limit and method-allowlist layer**
 
 Edit `tools/simurgh-daemon-linux/src/http.rs` — wrap router:
+
 ```rust
 use axum::{routing::get, Json, Router};
 use tower_http::limit::RequestBodyLimitLayer;
@@ -1751,6 +1808,7 @@ pub fn router() -> Router {
 - [ ] **Step 2: Add a method-rejection test**
 
 Append to `tools/simurgh-daemon-linux/tests/headless_tests.rs`:
+
 ```rust
 #[tokio::test]
 async fn post_to_get_only_endpoint_is_rejected() {
@@ -1792,6 +1850,7 @@ git commit -m "feat(stage-2-8a): HTTP body-limit + method-allowlist enforcement"
 ## Task 18: Rust formatting + clippy gates
 
 **Files:**
+
 - Verify-only.
 
 - [ ] **Step 1: Run `cargo fmt --check`**
@@ -1824,6 +1883,7 @@ git commit -am "chore(stage-2-8a): cargo fmt + clippy clean"
 ## Task 19: End-to-end Linux proof acceptance (Rust signs → Node validates)
 
 **Files:**
+
 - Create: `tests/unit/daemonProofLinuxEndToEnd.test.js`
 
 This test bridges the two halves: it spawns the Rust daemon's proof builder (via a generated fixture file) and asserts the Node server accepts the result. To avoid coupling unit tests to Rust runtime, this task ships a fixture generated locally and verifies the Node validator accepts it byte-for-byte.
@@ -1831,12 +1891,14 @@ This test bridges the two halves: it spawns the Rust daemon's proof builder (via
 - [ ] **Step 1: Generate a Linux proof fixture from the Rust daemon**
 
 Run:
+
 ```bash
 mkdir -p tests/fixtures/stage-2-8
 cargo run --manifest-path tools/simurgh-daemon-linux/Cargo.toml --bin simurgh-daemon-linux-fixture > tests/fixtures/stage-2-8/linux-proof.json
 ```
 
 If the fixture binary does not yet exist, add it: create `tools/simurgh-daemon-linux/src/bin/simurgh-daemon-linux-fixture.rs`:
+
 ```rust
 use simurgh_daemon_linux::identity::{load_or_create_identity, IdentityPaths};
 use simurgh_daemon_linux::proof::{build_proof, ProofInputs};
@@ -1874,11 +1936,13 @@ fn main() {
     println!("{}", wrapper);
 }
 ```
+
 Then re-run the fixture generation command above.
 
 - [ ] **Step 2: Write Node test that consumes the fixture**
 
 Write `tests/unit/daemonProofLinuxEndToEnd.test.js`:
+
 ```javascript
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -1919,6 +1983,7 @@ git commit -m "test(stage-2-8a): Rust-signed Linux proof accepted by Node valida
 ## Task 20: Umbrella verification + PR
 
 **Files:**
+
 - Verify-only.
 
 - [ ] **Step 1: Full Node test suite**
@@ -1949,11 +2014,13 @@ Expected: PASS.
 - [ ] **Step 6: Rust gates**
 
 Run:
+
 ```bash
 cargo fmt --check --manifest-path tools/simurgh-daemon-linux/Cargo.toml
 cargo clippy --manifest-path tools/simurgh-daemon-linux/Cargo.toml --all-targets -- -D warnings
 cargo test --manifest-path tools/simurgh-daemon-linux/Cargo.toml
 ```
+
 Expected: all PASS.
 
 - [ ] **Step 7: Push branch and open PR**
@@ -1996,6 +2063,7 @@ Expected: PR URL returned. Wait for GitHub Actions Quality Gate.
 ## Self-Review (post-write, pre-handoff)
 
 **Spec coverage** (§ references to design spec):
+
 - §9.1 Server schema + pairing/events: Tasks 1, 2, 3, 4, 7, 8, 9.
 - §9.2 Daemon skeleton: Tasks 11, 12.
 - §9.3 Signed proof acceptance: Tasks 13, 14, 19.
@@ -2009,6 +2077,7 @@ Expected: PR URL returned. Wait for GitHub Actions Quality Gate.
 **Placeholder scan:** No TBDs, no "implement later", no "similar to Task N" without code, every code step has runnable code.
 
 **Type consistency:**
+
 - `validateScannerSummaryForPlatform(platform, raw)` — same signature across Tasks 1, 4.
 - `createDisplayServerLock()` returns `{observe, evict, evictMissing}` — used consistently Tasks 5, 6.
 - `IdentityPaths { state_dir, identity_file }` — same shape Tasks 13, 14, 19.

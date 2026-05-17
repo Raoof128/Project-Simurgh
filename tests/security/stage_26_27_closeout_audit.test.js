@@ -184,20 +184,22 @@ test("[2.scanner] suspicious_window_count must be >= capture_excluded + monitor_
 
 // === 3. PLATFORM ==========================================================
 
-test("[3.platform] SUPPORTED_DEVICE_PLATFORMS is exactly {macos, windows}", () => {
-  assert.deepEqual([...SUPPORTED_DEVICE_PLATFORMS].sort(), ["macos", "windows"]);
-  assert.ok(PLANNED_DEVICE_PLATFORMS.includes("linux"));
+test("[3.platform] SUPPORTED_DEVICE_PLATFORMS is exactly {macos, windows, linux}", () => {
+  // Stage 2.8 promoted linux from planned to supported. The unsupported-platform
+  // gate remains, proven by the freebsd cases below.
+  assert.deepEqual([...SUPPORTED_DEVICE_PLATFORMS].sort(), ["linux", "macos", "windows"]);
+  assert.deepEqual([...PLANNED_DEVICE_PLATFORMS], []);
 });
 
-test("[3.platform] linux proof rejected at validateDaemonProof", () => {
+test("[3.platform] freebsd proof rejected at validateDaemonProof", () => {
   const { proof, identity } = makeSignedProof("macos");
-  proof.platform = "linux";
+  proof.platform = "freebsd";
   const r = validateDaemonProof(proof, opts(identity));
   assert.equal(r.ok, false);
   assert.equal(r.reason, "unsupported_platform");
 });
 
-test("[3.platform] linux pairing rejected at validateDaemonPairingPayload", () => {
+test("[3.platform] freebsd pairing rejected at validateDaemonPairingPayload", () => {
   const identity = makeIdentity();
   const signed_payload = {
     type: "simurgh.daemon.pair",
@@ -207,7 +209,7 @@ test("[3.platform] linux pairing rejected at validateDaemonPairingPayload", () =
     timestamp: new Date().toISOString(),
     node_id_hash: identity.node_id_hash,
     daemon_version: "0.4.11",
-    platform: "linux",
+    platform: "freebsd",
   };
   const envelope = {
     node_id_hash: identity.node_id_hash,

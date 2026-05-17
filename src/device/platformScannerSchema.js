@@ -37,13 +37,7 @@ export const LINUX_SCANNER_REASONS = new Set([
   "sandboxed_browser_loopback_possible",
 ]);
 
-export const LINUX_DISPLAY_SERVERS = new Set([
-  "x11",
-  "wayland",
-  "xwayland",
-  "headless",
-  "unknown",
-]);
+export const LINUX_DISPLAY_SERVERS = new Set(["x11", "wayland", "xwayland", "headless", "unknown"]);
 
 export const LINUX_COVERAGES = new Set([
   "x11_full",

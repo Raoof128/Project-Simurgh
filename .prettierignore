@@ -27,6 +27,8 @@ tools/**/bin
 tools/**/obj
 tools/**/.build
 tools/**/.swiftpm
+tools/**/target
+tools/**/Cargo.lock
 
 # git internals
 .git
