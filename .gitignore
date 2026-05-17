@@ -21,6 +21,8 @@ tools/**/*.dSYM
 tools/**/*.o
 tools/**/bin/
 tools/**/obj/
+# Rust source-level bin/ directories are source, not build artifacts
+!tools/**/src/bin/
 
 # audit log / report exports — local only
 verity-audit-*.json
