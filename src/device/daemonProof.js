@@ -3,7 +3,6 @@ import crypto from "node:crypto";
 import { containsForbiddenLocalFieldDeep } from "./forbiddenLocalFields.js";
 import {
   SUPPORTED_DEVICE_PLATFORMS,
-  validateScannerSummary,
   validateScannerSummaryForPlatform,
 } from "./platformScannerSchema.js";
 
