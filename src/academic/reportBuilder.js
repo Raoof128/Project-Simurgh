@@ -78,6 +78,40 @@ function buildDeviceIntegritySection(daemon) {
     (state.capture_restricted_window_count_max ?? 0) > 0 ||
     (state.monitor_only_window_count_max ?? 0) > 0;
   const platform = state.platform ?? "unknown";
+
+  if (platform === "linux") {
+    const linuxAnom = linuxAnomaly(state);
+    return {
+      daemon_required: state.daemon_required ?? true,
+      daemon_final_state: state.daemon_state ?? "missing",
+      daemon_platform: "linux",
+      platform: "linux",
+      node_id_hash: state.node_id_hash ?? null,
+      daemon_version: state.daemon_version ?? null,
+      scanner_final_state: state.scanner_state ?? "unknown",
+      scanner_version: state.scanner_version ?? null,
+      proofs_verified: state.proofs_verified ?? 0,
+      proofs_rejected: state.proofs_rejected ?? 0,
+      stale_periods: state.stale_periods ?? 0,
+      display_server: state.display_server ?? "unknown",
+      display_server_locked: state.display_server_locked ?? false,
+      coverage: state.coverage ?? "unknown",
+      portal_advertised: state.portal_advertised ?? null,
+      portal_active: state.portal_active ?? null,
+      x11_managed_window_count_max: state.x11_managed_window_count_max ?? 0,
+      x11_override_redirect_window_count_max: state.x11_override_redirect_window_count_max ?? 0,
+      x11_above_window_count_max: state.x11_above_window_count_max ?? 0,
+      x11_fullscreen_window_count_max: state.x11_fullscreen_window_count_max ?? 0,
+      x11_skip_taskbar_window_count_max: state.x11_skip_taskbar_window_count_max ?? 0,
+      xwayland_window_count_max: state.xwayland_window_count_max ?? 0,
+      scanner_error_count: state.scanner_error_count ?? 0,
+      permission_denied_count: state.permission_denied_count ?? 0,
+      manual_review_recommendation: getManualReviewReason(linuxAnom ? "Warning" : "Safe", {
+        context: "device_integrity",
+      }),
+    };
+  }
+
   return {
     daemon_required: state.daemon_required ?? true,
     daemon_final_state: state.daemon_state ?? "missing",
@@ -100,4 +134,15 @@ function buildDeviceIntegritySection(daemon) {
       context: "device_integrity",
     }),
   };
+}
+
+function linuxAnomaly(state) {
+  if (state.scanner_state === "wayland_compositor_restricted") return true;
+  if (state.scanner_state === "wayland_compositor_unsupported") return true;
+  if (state.scanner_state === "scanner_unavailable") return true;
+  if (state.scanner_state === "permission_denied") return true;
+  if (state.coverage === "wayland_limited") return true;
+  if (state.coverage === "xwayland_partial") return true;
+  if ((state.proofs_rejected ?? 0) > 0) return true;
+  return false;
 }
