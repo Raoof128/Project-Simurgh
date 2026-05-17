@@ -5,6 +5,7 @@ import test from "node:test";
 
 import {
   validateDaemonProof,
+  validateDaemonPairingPayload,
   canonicaliseDaemonPayload,
   computeDaemonNodeIdHash,
 } from "../../src/device/daemonProof.js";
@@ -174,4 +175,104 @@ test("audit: forbiddenLocalFields list is the single source of truth for raw-fie
     assert.equal(r.ok, false, `field ${fieldName} was not rejected`);
     assert.equal(r.reason, "forbidden_local_field", `field ${fieldName} wrong reason`);
   }
+});
+
+// --- Hardening (Stage 2.6/2.7 closeout) ------------------------------------
+
+function makePairingEnvelope(platform, overrides = {}) {
+  const { publicKey, privateKey } = crypto.generateKeyPairSync("ec", { namedCurve: "prime256v1" });
+  const publicKeyDer = publicKey.export({ format: "der", type: "spki" });
+  const public_key = b64url(publicKeyDer);
+  const node_id_hash = computeDaemonNodeIdHash(public_key);
+  const daemon_version = platform === "windows" ? "0.4.11" : "0.4.7";
+  const signed_payload = {
+    type: "simurgh.daemon.pair",
+    session_id: "sess_audit",
+    exam_id: "exam_audit",
+    challenge: b64url(crypto.randomBytes(32)),
+    timestamp: new Date().toISOString(),
+    node_id_hash,
+    daemon_version,
+    platform,
+  };
+  const envelope = {
+    node_id_hash,
+    public_key,
+    signed_payload,
+    signature: b64url(
+      crypto.sign("sha256", Buffer.from(canonicaliseDaemonPayload(signed_payload)), {
+        key: privateKey,
+        dsaEncoding: "der",
+      })
+    ),
+    ...overrides,
+  };
+  return envelope;
+}
+
+test("audit: pairing payload with raw hwnd anywhere in envelope rejected as forbidden_local_field", () => {
+  const env = makePairingEnvelope("windows");
+  env.scanner_debug = { hwnd: "0xdead" };
+  const r = validateDaemonPairingPayload(env, {
+    expectedSessionId: "sess_audit",
+    expectedExamId: "exam_audit",
+  });
+  assert.equal(r.ok, false);
+  assert.equal(r.reason, "forbidden_local_field");
+});
+
+test("audit: pairing payload with forbidden field nested in signed_payload rejected", () => {
+  const env = makePairingEnvelope("macos");
+  env.signed_payload.process_name = "leaked";
+  const r = validateDaemonPairingPayload(env, {
+    expectedSessionId: "sess_audit",
+    expectedExamId: "exam_audit",
+  });
+  assert.equal(r.ok, false);
+  assert.equal(r.reason, "forbidden_local_field");
+});
+
+test("audit: pairing payload with platform=linux rejected as unsupported_platform", () => {
+  const env = makePairingEnvelope("linux");
+  const r = validateDaemonPairingPayload(env, {
+    expectedSessionId: "sess_audit",
+    expectedExamId: "exam_audit",
+  });
+  assert.equal(r.ok, false);
+  assert.equal(r.reason, "unsupported_platform");
+});
+
+test("audit: validateDaemonProof output only exposes signed scanner fields (no echoed body fields)", () => {
+  // SDK trust-boundary invariant: the server's accepted proof object must
+  // not include fields that the client could inject outside the signed payload.
+  const { proof, public_key, node_id_hash } = makeProof("windows");
+  // The signed proof already contains the legitimate scanner_state. Attempt to
+  // also inject a NON-forbidden but rogue field — validateDaemonProof should
+  // either reject (preferred) or NOT include it in the returned `proof` object.
+  proof.client_supplied_scanner_state = "healthy";
+  const r = validateDaemonProof(proof, validateOpts(public_key, node_id_hash));
+  if (r.ok) {
+    assert.equal(
+      r.proof.client_supplied_scanner_state,
+      undefined,
+      "validator echoed an unsigned client field into the trusted proof object"
+    );
+  } else {
+    // Either rejected at signature check (because the rogue key was in the
+    // canonical payload at sign time) or earlier — both are valid responses.
+    assert.ok(["invalid_signature"].includes(r.reason) || r.reason.startsWith("invalid_"));
+  }
+});
+
+test("audit: FORBIDDEN_LOCAL_FIELD_NAMES cannot be mutated at runtime (frozen)", async () => {
+  const { FORBIDDEN_LOCAL_FIELD_NAMES } = await import("../../src/device/forbiddenLocalFields.js");
+  assert.ok(Object.isFrozen(FORBIDDEN_LOCAL_FIELD_NAMES));
+  // In strict mode, attempting to mutate a frozen array throws. Modules are
+  // strict mode by default in Node.js ESM.
+  assert.throws(() => {
+    FORBIDDEN_LOCAL_FIELD_NAMES.push("brand_new_leak");
+  });
+  assert.throws(() => {
+    FORBIDDEN_LOCAL_FIELD_NAMES[0] = "overwritten";
+  });
 });
