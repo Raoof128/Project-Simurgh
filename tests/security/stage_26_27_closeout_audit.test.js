@@ -393,10 +393,7 @@ test("[7.dashboard] instructor.html does not interpolate raw forbidden field nam
     // the privacy stance — flag only property accessors (.fieldName) or
     // template interpolations (${fieldName} or {{ fieldName }}).
     const interpolation = new RegExp(`(\\.|\\$\\{|\\{\\{\\s*)${fieldName}\\b`);
-    assert.ok(
-      !interpolation.test(html),
-      `dashboard interpolates raw field "${fieldName}"`
-    );
+    assert.ok(!interpolation.test(html), `dashboard interpolates raw field "${fieldName}"`);
   }
 });
 
