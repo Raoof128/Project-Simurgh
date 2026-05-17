@@ -62,19 +62,38 @@ test("Linux device_integrity rolls up Warning when coverage is wayland_limited",
   s.sessionData.daemon.display_server = "wayland";
   s.sessionData.daemon.coverage = "wayland_limited";
   s.sessionData.daemon.scanner_state = "wayland_compositor_restricted";
-  const d = buildReport(s.sessionRecord, s.sessionData, s.eventList, s.auditChainValid).device_integrity;
+  const d = buildReport(
+    s.sessionRecord,
+    s.sessionData,
+    s.eventList,
+    s.auditChainValid
+  ).device_integrity;
   assert.equal(d.display_server, "wayland");
   assert.equal(d.coverage, "wayland_limited");
-  assert.equal(d.manual_review_recommendation, "Manual review recommended. No automatic misconduct finding.");
+  assert.equal(
+    d.manual_review_recommendation,
+    "Manual review recommended. No automatic misconduct finding."
+  );
 });
 
 test("Linux device_integrity does not include macOS/Windows-only count fields when platform=linux", () => {
   const s = baseSession();
-  const d = buildReport(s.sessionRecord, s.sessionData, s.eventList, s.auditChainValid).device_integrity;
-  assert.ok(!("capture_excluded_window_count_max" in d),
-    "Linux report leaked macOS/Windows capture_excluded_window_count_max");
-  assert.ok(!("capture_restricted_window_count_max" in d),
-    "Linux report leaked macOS/Windows capture_restricted_window_count_max");
-  assert.ok(!("monitor_only_window_count_max" in d),
-    "Linux report leaked macOS/Windows monitor_only_window_count_max");
+  const d = buildReport(
+    s.sessionRecord,
+    s.sessionData,
+    s.eventList,
+    s.auditChainValid
+  ).device_integrity;
+  assert.ok(
+    !("capture_excluded_window_count_max" in d),
+    "Linux report leaked macOS/Windows capture_excluded_window_count_max"
+  );
+  assert.ok(
+    !("capture_restricted_window_count_max" in d),
+    "Linux report leaked macOS/Windows capture_restricted_window_count_max"
+  );
+  assert.ok(
+    !("monitor_only_window_count_max" in d),
+    "Linux report leaked macOS/Windows monitor_only_window_count_max"
+  );
 });

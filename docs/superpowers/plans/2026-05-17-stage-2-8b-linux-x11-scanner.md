@@ -15,6 +15,7 @@
 ## File Structure
 
 **New files:**
+
 - `tools/simurgh-daemon-linux/src/scanner/x11.rs` — X11 connection + EWMH property reads.
 - `tools/simurgh-daemon-linux/src/scanner/privacy.rs` — `RawX11Counts` → `X11ScannerSummary` filter; the trust boundary that ensures no raw fields leak out.
 - `tools/simurgh-daemon-linux/tests/x11_scanner_tests.rs` — unit tests on the privacy filter.
@@ -23,6 +24,7 @@
 - `tests/unit/privacyAuditLinux.test.js` — assert privacy-audit sweeps Linux daemon paths.
 
 **Modified files:**
+
 - `tools/simurgh-daemon-linux/Cargo.toml` — add `x11rb` dep.
 - `tools/simurgh-daemon-linux/src/scanner/mod.rs` — export `x11` and `privacy` modules.
 - `tools/simurgh-daemon-linux/src/scanner/session.rs` — no change to detection logic; later tasks compose scanner with session detector. Adds `is_local_display` re-export so `x11::scan()` can defend in depth.
@@ -38,11 +40,13 @@
 ## Task 1: Red — privacy filter export missing
 
 **Files:**
+
 - Test: `tools/simurgh-daemon-linux/tests/x11_scanner_tests.rs`
 
 - [ ] **Step 1: Write the failing test**
 
 Write `tools/simurgh-daemon-linux/tests/x11_scanner_tests.rs`:
+
 ```rust
 use simurgh_daemon_linux::scanner::privacy::{raw_to_summary, RawX11Counts};
 
@@ -86,9 +90,11 @@ fn raw_to_summary_with_override_redirect_does_not_change_state_alone() {
 - [ ] **Step 2: Run to verify failure**
 
 Run:
+
 ```bash
 source ~/.cargo/env && cargo test --manifest-path tools/simurgh-daemon-linux/Cargo.toml x11_scanner
 ```
+
 Expected: FAIL — `scanner::privacy` module does not exist yet.
 
 - [ ] **Step 3: Commit red test**
@@ -105,6 +111,7 @@ git commit -m "test(stage-2-8b): red — X11 privacy filter module missing"
 ## Task 2: Green — implement `scanner/privacy.rs`
 
 **Files:**
+
 - Create: `tools/simurgh-daemon-linux/src/scanner/privacy.rs`
 - Modify: `tools/simurgh-daemon-linux/src/scanner/mod.rs`
 
@@ -181,6 +188,7 @@ pub mod session;
 ```bash
 source ~/.cargo/env && cargo test --manifest-path tools/simurgh-daemon-linux/Cargo.toml x11_scanner
 ```
+
 Expected: 2/2 PASS.
 
 - [ ] **Step 4: Commit**
@@ -197,6 +205,7 @@ git commit -m "feat(stage-2-8b): X11 scanner privacy filter (counts-only output)
 ## Task 3: Add `x11rb` dependency + scanner skeleton
 
 **Files:**
+
 - Modify: `tools/simurgh-daemon-linux/Cargo.toml`
 - Create: `tools/simurgh-daemon-linux/src/scanner/x11.rs`
 - Modify: `tools/simurgh-daemon-linux/src/scanner/mod.rs`
@@ -376,6 +385,7 @@ pub mod x11;
 ```bash
 source ~/.cargo/env && cargo build --manifest-path tools/simurgh-daemon-linux/Cargo.toml
 ```
+
 Expected: build succeeds. May take a few minutes on first build to fetch `x11rb`.
 
 If `x11rb` 0.13 API differs (the API has been stable but check), adjust property-read calls to compile. Document any deviation in the report.
@@ -394,6 +404,7 @@ git commit -m "feat(stage-2-8b): X11 scanner skeleton reading _NET_CLIENT_LIST +
 ## Task 4: Verify privacy filter unit tests still pass + run clippy
 
 **Files:**
+
 - Verify-only.
 
 - [ ] **Step 1: Run tests**
@@ -401,6 +412,7 @@ git commit -m "feat(stage-2-8b): X11 scanner skeleton reading _NET_CLIENT_LIST +
 ```bash
 source ~/.cargo/env && cargo test --manifest-path tools/simurgh-daemon-linux/Cargo.toml
 ```
+
 Expected: 15 prior + 2 new (privacy filter) = 17 PASS. The `scan_with_connection` function has no unit tests yet — that's Task 5 (Xvfb).
 
 - [ ] **Step 2: Run clippy**
@@ -408,6 +420,7 @@ Expected: 15 prior + 2 new (privacy filter) = 17 PASS. The `scan_with_connection
 ```bash
 source ~/.cargo/env && cargo clippy --manifest-path tools/simurgh-daemon-linux/Cargo.toml --all-targets -- -D warnings
 ```
+
 Expected: clean. If clippy complains about unused `screen` variable or similar, fix inline and re-run.
 
 - [ ] **Step 3: Commit (only if clippy required changes)**
@@ -425,6 +438,7 @@ git commit -am "chore(stage-2-8b): clippy clean"
 ## Task 5: Xvfb integration test (gracefully skipped if Xvfb missing)
 
 **Files:**
+
 - Create: `tools/simurgh-daemon-linux/tests/xvfb_integration_tests.rs`
 
 - [ ] **Step 1: Check Xvfb availability**
@@ -432,11 +446,13 @@ git commit -am "chore(stage-2-8b): clippy clean"
 ```bash
 which Xvfb || echo "MISSING"
 ```
+
 If missing, install with `sudo apt-get install -y xvfb x11-utils xterm` (reviewer note: this is local — Ubuntu CI will install in PR #22). If you cannot install, write the test anyway with the skip guard described below; it will simply pass-as-skipped.
 
 - [ ] **Step 2: Write the integration test**
 
 Write `tools/simurgh-daemon-linux/tests/xvfb_integration_tests.rs`:
+
 ```rust
 use simurgh_daemon_linux::scanner::x11::{scan, scan_with_connection};
 use std::process::{Child, Command, Stdio};
@@ -589,7 +605,9 @@ NOTE: this test imports `scan_with_connection` which is `pub(crate)` in Task 3. 
 ```bash
 source ~/.cargo/env && cargo test --manifest-path tools/simurgh-daemon-linux/Cargo.toml --test xvfb_integration_tests
 ```
+
 Expected:
+
 - Xvfb installed: 4/4 PASS.
 - Xvfb missing: tests 1, 3, 4 print "skipping" and return ok; test 2 PASSes (invalid display → scanner_unavailable).
 
@@ -607,11 +625,13 @@ git commit -m "test(stage-2-8b): Xvfb integration tests for X11 scanner (gracefu
 ## Task 6: Wire X11 scanner into `/status` endpoint
 
 **Files:**
+
 - Modify: `tools/simurgh-daemon-linux/src/http.rs`
 
 - [ ] **Step 1: Update `tools/simurgh-daemon-linux/src/http.rs`**
 
 After the existing `use crate::scanner::session::...` line add:
+
 ```rust
 use crate::scanner::x11;
 ```
@@ -658,9 +678,11 @@ Remove the `StatusResponse` struct (no longer used). Keep `HealthResponse`.
 - [ ] **Step 2: Update existing headless test for /status (Task 16 from PR #19) — it should still pass because in headless mode `display_server == "headless"`, so the scanner block is skipped and the body shape stays the same.**
 
 Verify by running:
+
 ```bash
 source ~/.cargo/env && cargo test --manifest-path tools/simurgh-daemon-linux/Cargo.toml status_endpoint_returns_scanner_unavailable_when_headless
 ```
+
 Expected: PASS unchanged.
 
 - [ ] **Step 3: Run all daemon tests**
@@ -668,6 +690,7 @@ Expected: PASS unchanged.
 ```bash
 source ~/.cargo/env && cargo test --manifest-path tools/simurgh-daemon-linux/Cargo.toml
 ```
+
 Expected: all PASS (Xvfb-dependent ones may skip).
 
 - [ ] **Step 4: Commit**
@@ -684,6 +707,7 @@ git commit -m "feat(stage-2-8b): /status endpoint runs X11 scanner when display=
 ## Task 6.5: Wire X11 scanner summary into POST /proof (the trusted payload)
 
 **Files:**
+
 - Modify: `tools/simurgh-daemon-linux/src/http.rs` — add `current_scanner_summary()` shared helper + POST `/proof` route.
 - Modify: `tools/simurgh-daemon-linux/src/proof.rs` — `ProofInputs` already carries the count fields; nothing structural to change.
 - Create: `tools/simurgh-daemon-linux/tests/proof_endpoint_tests.rs` — Rust integration test asserting POST /proof returns a signed payload whose x11 counts come from the scanner.
@@ -694,6 +718,7 @@ This is the most important task in PR #20 — without it, the live daemon would 
 - [ ] **Step 1: Refactor `tools/simurgh-daemon-linux/src/http.rs` to extract `current_scanner_summary`**
 
 Add module-private helper:
+
 ```rust
 use crate::scanner::privacy::X11ScannerSummary;
 use crate::scanner::session::{detect, SessionDetection, SessionEnv};
@@ -722,6 +747,7 @@ Update `status()` to use this helper (replaces the inline scanner call from Task
 The browser SDK calls this endpoint with a challenge from the Node server. The daemon builds a signed proof using its identity + current scanner output.
 
 Add to `http.rs`:
+
 ```rust
 use axum::{extract::Json, routing::post};
 use serde::Deserialize;
@@ -823,6 +849,7 @@ fn days_to_ymd(z: i64) -> (i32, u32, u32) {
 ```
 
 Add the route in `router()`:
+
 ```rust
 .route("/proof", post(proof))
 ```
@@ -830,6 +857,7 @@ Add the route in `router()`:
 - [ ] **Step 3: Rust integration test for /proof endpoint**
 
 Write `tools/simurgh-daemon-linux/tests/proof_endpoint_tests.rs`:
+
 ```rust
 use axum::body::Body;
 use http_body_util::BodyExt;
@@ -884,6 +912,7 @@ async fn post_proof_returns_signed_payload_with_required_linux_fields() {
 - [ ] **Step 4: Node test — Linux x11 counts roll up into report max**
 
 This requires Linux rollup in `src/device/daemonState.js`. Check first whether `daemonState` already aggregates Linux fields; if not, add to the existing rollup logic the new fields:
+
 - `x11_managed_window_count_max`
 - `x11_override_redirect_window_count_max`
 - `x11_above_window_count_max`
@@ -892,6 +921,7 @@ This requires Linux rollup in `src/device/daemonState.js`. Check first whether `
 - `xwayland_window_count_max`
 
 Then write `tests/unit/daemonProofLinuxXcountsRollup.test.js`:
+
 ```javascript
 import assert from "node:assert/strict";
 import test from "node:test";
@@ -940,6 +970,7 @@ source ~/.cargo/env && cargo test --manifest-path tools/simurgh-daemon-linux/Car
 node --test tests/unit/daemonProofLinuxXcountsRollup.test.js
 npm test
 ```
+
 Expected: all PASS.
 
 - [ ] **Step 6: Commit**
@@ -956,6 +987,7 @@ git commit -m "feat(stage-2-8b): wire X11 scanner into signed /proof + Linux cou
 ## Task 7: Update fixture binary to use real scanner when X11 is available
 
 **Files:**
+
 - Modify: `tools/simurgh-daemon-linux/src/bin/simurgh-daemon-linux-fixture.rs`
 
 - [ ] **Step 1: Update the fixture binary**
@@ -968,6 +1000,7 @@ use simurgh_daemon_linux::scanner::x11;
 ```
 
 In `main()`, before constructing `inputs`:
+
 ```rust
 let det = detect(&SessionEnv::from_process_env());
 let scanned = if det.display_server == "x11" && det.scanner_reason == "none" {
@@ -1000,6 +1033,7 @@ source ~/.cargo/env && \
 cargo run --manifest-path tools/simurgh-daemon-linux/Cargo.toml --bin simurgh-daemon-linux-fixture > /tmp/preview.json 2>/dev/null && \
 diff -q tests/fixtures/stage-2-8/linux-proof.json /tmp/preview.json
 ```
+
 If the diff is non-empty in a way that breaks the existing test (e.g., the `node_id_hash` differs because the temp identity is fresh each run), revert by NOT regenerating — the fixture from PR #19 stays valid because the headless branch preserves the original `[3, 0, 0, 0, 0]` defaults.
 
 (The fixture's signature changes every run because identity is fresh; we keep PR #19's committed fixture for reproducibility. Re-generation is reviewer-discretion only.)
@@ -1009,6 +1043,7 @@ If the diff is non-empty in a way that breaks the existing test (e.g., the `node
 ```bash
 node --test tests/unit/daemonProofLinuxEndToEnd.test.js
 ```
+
 Expected: PASS — the committed fixture's signature still verifies because the fixture file itself is unchanged.
 
 - [ ] **Step 4: Commit**
@@ -1025,11 +1060,13 @@ git commit -m "feat(stage-2-8b): fixture binary uses real X11 scanner when avail
 ## Task 8: Red — `reportBuilder` does not emit Linux device_integrity signals
 
 **Files:**
+
 - Create: `tests/unit/reportBuilderLinuxDeviceShield.test.js`
 
 - [ ] **Step 1: Write the failing test**
 
 Write `tests/unit/reportBuilderLinuxDeviceShield.test.js`:
+
 ```javascript
 import assert from "node:assert/strict";
 import test from "node:test";
@@ -1092,19 +1129,28 @@ test("Linux device_integrity rolls up Warning when coverage is wayland_limited",
   assert.equal(d.display_server, "wayland");
   assert.equal(d.coverage, "wayland_limited");
   // Wayland limited coverage is Warning context — not safe-clear, not misconduct.
-  assert.equal(d.manual_review_recommendation, "Manual review recommended. No automatic misconduct finding.");
+  assert.equal(
+    d.manual_review_recommendation,
+    "Manual review recommended. No automatic misconduct finding."
+  );
 });
 
 test("Linux device_integrity does not include macOS/Windows-only count fields when platform=linux", () => {
   const d = buildReport(baseSession()).device_integrity;
   // The macOS/Windows shape used capture_excluded/capture_restricted/monitor_only.
   // Linux reports MUST NOT surface those keys at all — they belong to other platforms.
-  assert.ok(!("capture_excluded_window_count_max" in d),
-    "Linux report leaked macOS/Windows capture_excluded_window_count_max");
-  assert.ok(!("capture_restricted_window_count_max" in d),
-    "Linux report leaked macOS/Windows capture_restricted_window_count_max");
-  assert.ok(!("monitor_only_window_count_max" in d),
-    "Linux report leaked macOS/Windows monitor_only_window_count_max");
+  assert.ok(
+    !("capture_excluded_window_count_max" in d),
+    "Linux report leaked macOS/Windows capture_excluded_window_count_max"
+  );
+  assert.ok(
+    !("capture_restricted_window_count_max" in d),
+    "Linux report leaked macOS/Windows capture_restricted_window_count_max"
+  );
+  assert.ok(
+    !("monitor_only_window_count_max" in d),
+    "Linux report leaked macOS/Windows monitor_only_window_count_max"
+  );
 });
 ```
 
@@ -1113,6 +1159,7 @@ test("Linux device_integrity does not include macOS/Windows-only count fields wh
 ```bash
 node --test tests/unit/reportBuilderLinuxDeviceShield.test.js
 ```
+
 Expected: FAIL — current `buildDeviceIntegritySection` does not emit `display_server`, `coverage`, etc.
 
 - [ ] **Step 3: Commit red test**
@@ -1129,6 +1176,7 @@ git commit -m "test(stage-2-8b): red — reportBuilder lacks Linux device_integr
 ## Task 9: Green — extend `buildDeviceIntegritySection` for Linux
 
 **Files:**
+
 - Modify: `src/academic/reportBuilder.js`
 
 - [ ] **Step 1: Read `src/academic/reportBuilder.js` to find `buildDeviceIntegritySection` (around line 68).**
@@ -1138,6 +1186,7 @@ git commit -m "test(stage-2-8b): red — reportBuilder lacks Linux device_integr
 Replace the `return { ... }` block with platform-aware logic. The macOS/Windows path must stay byte-identical (no regression). New Linux path adds `display_server`, `display_server_locked`, `coverage`, `portal_advertised`, `portal_active`, the six x11 counts and `xwayland_window_count_max`.
 
 Add a helper at the bottom of the file:
+
 ```javascript
 function linuxAnomaly(state) {
   if (state.scanner_state === "wayland_compositor_restricted") return true;
@@ -1154,39 +1203,40 @@ function linuxAnomaly(state) {
 ```
 
 In `buildDeviceIntegritySection`, after the existing `anomaly = ...` line, add a Linux branch BEFORE the `return` block:
+
 ```javascript
-  if (platform === "linux") {
-    const linuxAnom = linuxAnomaly(state);
-    return {
-      daemon_required: state.daemon_required ?? true,
-      daemon_final_state: state.daemon_state ?? "missing",
-      daemon_platform: "linux",
-      platform: "linux",
-      node_id_hash: state.node_id_hash ?? null,
-      daemon_version: state.daemon_version ?? null,
-      scanner_final_state: state.scanner_state ?? "unknown",
-      scanner_version: state.scanner_version ?? null,
-      proofs_verified: state.proofs_verified ?? 0,
-      proofs_rejected: state.proofs_rejected ?? 0,
-      stale_periods: state.stale_periods ?? 0,
-      display_server: state.display_server ?? "unknown",
-      display_server_locked: state.display_server_locked ?? false,
-      coverage: state.coverage ?? "unknown",
-      portal_advertised: state.portal_advertised ?? null,
-      portal_active: state.portal_active ?? null,
-      x11_managed_window_count_max: state.x11_managed_window_count_max ?? 0,
-      x11_override_redirect_window_count_max: state.x11_override_redirect_window_count_max ?? 0,
-      x11_above_window_count_max: state.x11_above_window_count_max ?? 0,
-      x11_fullscreen_window_count_max: state.x11_fullscreen_window_count_max ?? 0,
-      x11_skip_taskbar_window_count_max: state.x11_skip_taskbar_window_count_max ?? 0,
-      xwayland_window_count_max: state.xwayland_window_count_max ?? 0,
-      scanner_error_count: state.scanner_error_count ?? 0,
-      permission_denied_count: state.permission_denied_count ?? 0,
-      manual_review_recommendation: getManualReviewReason(linuxAnom ? "Warning" : "Safe", {
-        context: "device_integrity",
-      }),
-    };
-  }
+if (platform === "linux") {
+  const linuxAnom = linuxAnomaly(state);
+  return {
+    daemon_required: state.daemon_required ?? true,
+    daemon_final_state: state.daemon_state ?? "missing",
+    daemon_platform: "linux",
+    platform: "linux",
+    node_id_hash: state.node_id_hash ?? null,
+    daemon_version: state.daemon_version ?? null,
+    scanner_final_state: state.scanner_state ?? "unknown",
+    scanner_version: state.scanner_version ?? null,
+    proofs_verified: state.proofs_verified ?? 0,
+    proofs_rejected: state.proofs_rejected ?? 0,
+    stale_periods: state.stale_periods ?? 0,
+    display_server: state.display_server ?? "unknown",
+    display_server_locked: state.display_server_locked ?? false,
+    coverage: state.coverage ?? "unknown",
+    portal_advertised: state.portal_advertised ?? null,
+    portal_active: state.portal_active ?? null,
+    x11_managed_window_count_max: state.x11_managed_window_count_max ?? 0,
+    x11_override_redirect_window_count_max: state.x11_override_redirect_window_count_max ?? 0,
+    x11_above_window_count_max: state.x11_above_window_count_max ?? 0,
+    x11_fullscreen_window_count_max: state.x11_fullscreen_window_count_max ?? 0,
+    x11_skip_taskbar_window_count_max: state.x11_skip_taskbar_window_count_max ?? 0,
+    xwayland_window_count_max: state.xwayland_window_count_max ?? 0,
+    scanner_error_count: state.scanner_error_count ?? 0,
+    permission_denied_count: state.permission_denied_count ?? 0,
+    manual_review_recommendation: getManualReviewReason(linuxAnom ? "Warning" : "Safe", {
+      context: "device_integrity",
+    }),
+  };
+}
 ```
 
 - [ ] **Step 3: Run tests**
@@ -1194,11 +1244,13 @@ In `buildDeviceIntegritySection`, after the existing `anomaly = ...` line, add a
 ```bash
 node --test tests/unit/reportBuilderLinuxDeviceShield.test.js
 ```
+
 Expected: 3/3 PASS.
 
 ```bash
 npm test
 ```
+
 Expected: full suite passes — macOS/Windows report tests must still pass byte-identically.
 
 - [ ] **Step 4: Commit**
@@ -1215,6 +1267,7 @@ git commit -m "feat(stage-2-8b): reportBuilder emits Linux device_integrity bloc
 ## Task 9.5: Extend `scannerRiskPolicy.js` for Linux signals
 
 **Files:**
+
 - Create: `tests/unit/scannerRiskPolicyLinux.test.js`
 - Modify: `src/device/scannerRiskPolicy.js`
 
@@ -1223,6 +1276,7 @@ Linux signals must map to risk so the dashboard / report / risk score stay align
 - [ ] **Step 1: Write the failing test**
 
 Write `tests/unit/scannerRiskPolicyLinux.test.js`:
+
 ```javascript
 import assert from "node:assert/strict";
 import test from "node:test";
@@ -1305,6 +1359,7 @@ test("macOS capture_excluded_window_count_max > 0 still forces Critical (no regr
 ```bash
 node --test tests/unit/scannerRiskPolicyLinux.test.js
 ```
+
 Expected: Linux-specific tests FAIL; macOS regression test PASSes.
 
 - [ ] **Step 3: Extend `src/device/scannerRiskPolicy.js`**
@@ -1312,20 +1367,20 @@ Expected: Linux-specific tests FAIL; macOS regression test PASSes.
 Read the file first. In `mapScannerSummaryToRisk`, after the existing macOS/Windows-shaped checks (capture_excluded / capture_restricted / monitor_only) and BEFORE the daemon-state fallbacks, add a Linux-aware branch:
 
 ```javascript
-  const x11Above = record?.x11_above_window_count_max ?? 0;
-  const x11Override = record?.x11_override_redirect_window_count_max ?? 0;
-  if (x11Above > 0 || x11Override > 0) {
-    return { daemon_risk: 40, forceCritical: false };
-  }
-  if (
-    record?.scanner_state === "wayland_compositor_restricted" ||
-    record?.scanner_state === "wayland_compositor_unsupported" ||
-    record?.scanner_state === "xwayland_detected" ||
-    record?.coverage === "wayland_limited" ||
-    record?.coverage === "xwayland_partial"
-  ) {
-    return { daemon_risk: 40, forceCritical: false };
-  }
+const x11Above = record?.x11_above_window_count_max ?? 0;
+const x11Override = record?.x11_override_redirect_window_count_max ?? 0;
+if (x11Above > 0 || x11Override > 0) {
+  return { daemon_risk: 40, forceCritical: false };
+}
+if (
+  record?.scanner_state === "wayland_compositor_restricted" ||
+  record?.scanner_state === "wayland_compositor_unsupported" ||
+  record?.scanner_state === "xwayland_detected" ||
+  record?.coverage === "wayland_limited" ||
+  record?.coverage === "xwayland_partial"
+) {
+  return { daemon_risk: 40, forceCritical: false };
+}
 ```
 
 - [ ] **Step 4: Run tests**
@@ -1334,6 +1389,7 @@ Read the file first. In `mapScannerSummaryToRisk`, after the existing macOS/Wind
 node --test tests/unit/scannerRiskPolicyLinux.test.js
 npm test
 ```
+
 Expected: 6/6 Linux risk tests PASS; full suite green (macOS/Windows byte-identical).
 
 - [ ] **Step 5: Commit**
@@ -1350,11 +1406,13 @@ git commit -m "feat(stage-2-8b): scannerRiskPolicy maps Linux x11/Wayland signal
 ## Task 10: Red — privacy-audit does not sweep Linux daemon paths
 
 **Files:**
+
 - Create: `tests/unit/privacyAuditLinux.test.js`
 
 - [ ] **Step 1: Write the failing test**
 
 Write `tests/unit/privacyAuditLinux.test.js`:
+
 ```javascript
 import assert from "node:assert/strict";
 import test from "node:test";
@@ -1394,6 +1452,7 @@ test("privacy-audit walk function skips target/ build directories", () => {
 ```bash
 node --test tests/unit/privacyAuditLinux.test.js
 ```
+
 Expected: FAIL — `DEFAULT_SCAN_DIRS` currently does not include the Linux daemon path, and there is no `target/` skip.
 
 - [ ] **Step 3: Commit red test**
@@ -1410,6 +1469,7 @@ git commit -m "test(stage-2-8b): red — privacy-audit lacks Linux daemon sweep"
 ## Task 11: Green — extend privacy-audit for Linux paths + target/ skip
 
 **Files:**
+
 - Modify: `tools/privacy-audit.mjs`
 
 - [ ] **Step 1: Find `DEFAULT_SCAN_DIRS` (line 24) and update it**
@@ -1429,6 +1489,7 @@ const DEFAULT_SCAN_DIRS = [
 - [ ] **Step 2: Find the `walk` function and add a `target/` skip**
 
 Locate `function walk(dir) { ... }` and at the top of its body, before recursing into subdirectories, add:
+
 ```javascript
 function walk(dir) {
   try {
@@ -1454,16 +1515,19 @@ If the `walk` function is structured differently than shown, adapt the patch —
 ```bash
 node tools/privacy-audit.mjs
 ```
+
 Expected: PASS — should sweep more files now but find no violations.
 
 ```bash
 node --test tests/unit/privacyAuditLinux.test.js
 ```
+
 Expected: 2/2 PASS.
 
 ```bash
 npm test
 ```
+
 Expected: full suite passes.
 
 - [ ] **Step 4: Commit**
@@ -1480,6 +1544,7 @@ git commit -m "feat(stage-2-8b): privacy-audit sweeps Linux daemon + skips targe
 ## Task 12: Rust gates — fmt + clippy + test
 
 **Files:**
+
 - Verify-only.
 
 - [ ] **Step 1: Run `cargo fmt --check`**
@@ -1487,6 +1552,7 @@ git commit -m "feat(stage-2-8b): privacy-audit sweeps Linux daemon + skips targe
 ```bash
 source ~/.cargo/env && cargo fmt --check --manifest-path tools/simurgh-daemon-linux/Cargo.toml
 ```
+
 Expected: PASS. If FAIL, run `cargo fmt` and recheck.
 
 - [ ] **Step 2: Run `cargo clippy`**
@@ -1494,6 +1560,7 @@ Expected: PASS. If FAIL, run `cargo fmt` and recheck.
 ```bash
 source ~/.cargo/env && cargo clippy --manifest-path tools/simurgh-daemon-linux/Cargo.toml --all-targets -- -D warnings
 ```
+
 Expected: clean.
 
 - [ ] **Step 3: Run all Rust tests**
@@ -1501,6 +1568,7 @@ Expected: clean.
 ```bash
 source ~/.cargo/env && cargo test --manifest-path tools/simurgh-daemon-linux/Cargo.toml
 ```
+
 Expected: prior 15 + 2 privacy + 2 xvfb (skipped if no Xvfb) = 19 PASS minimum.
 
 - [ ] **Step 4: Commit if fmt required changes**
@@ -1518,6 +1586,7 @@ git commit -am "chore(stage-2-8b): cargo fmt + clippy clean"
 ## Task 13: Umbrella regression — Stage 2.7 smoke + closeout audit + full Node suite
 
 **Files:**
+
 - Verify-only.
 
 - [ ] **Step 1: Stage 2.7 smoke**
@@ -1525,6 +1594,7 @@ git commit -am "chore(stage-2-8b): cargo fmt + clippy clean"
 ```bash
 bash scripts/smoke-stage-2-7-cross-platform-device-shield.sh
 ```
+
 Expected: all 7 scenarios PASS.
 
 - [ ] **Step 2: Stage 2.6/2.7 closeout audit**
@@ -1532,6 +1602,7 @@ Expected: all 7 scenarios PASS.
 ```bash
 bash scripts/security-audit-stage-2-6-2-7-closeout.sh
 ```
+
 Expected: PASS.
 
 - [ ] **Step 3: Full Node suite**
@@ -1539,6 +1610,7 @@ Expected: PASS.
 ```bash
 npm test
 ```
+
 Expected: all PASS (288 prior + ~5 new = ~293).
 
 - [ ] **Step 4: prettier check**
@@ -1546,6 +1618,7 @@ Expected: all PASS (288 prior + ~5 new = ~293).
 ```bash
 npm run format:check
 ```
+
 Expected: PASS.
 
 - [ ] **Step 5: npm audit**
@@ -1553,6 +1626,7 @@ Expected: PASS.
 ```bash
 npm audit --audit-level=high
 ```
+
 Expected: 0 vulnerabilities.
 
 - [ ] **Step 6: Privacy audit**
@@ -1560,6 +1634,7 @@ Expected: 0 vulnerabilities.
 ```bash
 node tools/privacy-audit.mjs
 ```
+
 Expected: PASS — and should now report more files scanned than before (Linux daemon tree included).
 
 If any gate fails, fix the cause and re-run from Step 1. Do not advance to Task 14 until every gate is green.
@@ -1569,6 +1644,7 @@ If any gate fails, fix the cause and re-run from Step 1. Do not advance to Task 
 ## Task 14: Push, open PR #20, release tag
 
 **Files:**
+
 - Verify-only + git operations.
 
 - [ ] **Step 1: Push branch**
@@ -1624,6 +1700,7 @@ EOF
 ```bash
 gh pr checks <new-pr-number> --watch
 ```
+
 When green, merge per Raouf's preferred policy (`gh pr merge <N> --auto --squash --delete-branch` for review-gated, or `--admin` for self-approved).
 
 - [ ] **Step 4: Tag and release after merge**
@@ -1643,6 +1720,7 @@ gh release create v0.4.15-stage-2-8B-linux-x11-scanner --title "Stage 2.8B — L
 ## Self-Review (post-write, pre-handoff)
 
 **Spec coverage** (§ references to design spec):
+
 - §6.10 platform-specific validators: covered by PR #19 — extended here by Task 9 reportBuilder Linux branch + Task 9.5 risk policy.
 - §7.1 Linux daemon proof payload x11 counts: Tasks 3, 6, 6.5, 7 — Task 6.5 wires the scanner into the **signed `/proof`** payload (the trust boundary), not only `/status`.
 - §7.3 Linux `device_integrity` shape: Task 9 emits every field (`display_server`, `display_server_locked`, `coverage`, `portal_advertised`, `portal_active`, six x11 counts, `xwayland_window_count_max`).
@@ -1650,6 +1728,7 @@ gh release create v0.4.15-stage-2-8B-linux-x11-scanner --title "Stage 2.8B — L
 - §15.5 red-test checklist items 6 (reportBuilder Linux fields) + 7 (privacy-audit Linux coverage): closed by Tasks 8/9 + Tasks 10/11 respectively. These were the two checklist items deferred from PR #19.
 
 **Raouf review fixes (applied 2026-05-18):**
+
 1. ✅ `/proof` wiring — Task 6.5 added (scanner into signed payload + Linux count rollup in daemonState).
 2. ✅ `query_tree(root)` for override_redirect (overlay windows are NOT in `_NET_CLIENT_LIST`) — Task 3 updated.
 3. ✅ Real synthetic-window Xvfb tests (create managed windows + override_redirect child) — Task 5 strengthened.
@@ -1662,6 +1741,7 @@ gh release create v0.4.15-stage-2-8B-linux-x11-scanner --title "Stage 2.8B — L
 **Placeholder scan:** No TBDs. Each step has runnable code. The fixture-regeneration in Task 7 is deliberately optional with explicit revert guidance to preserve PR #19's signed fixture.
 
 **Type consistency:**
+
 - `RawX11Counts` field set matches `X11ScannerSummary` field set: managed / override_redirect / above / fullscreen / skip_taskbar + suspicious + visible counts. Same names used in scanner module (Task 2/3), `/status` JSON (Task 6), fixture binary (Task 7).
 - `x11_counts: [u32; 5]` ordering preserved from PR #19: managed, override_redirect, above, fullscreen, skip_taskbar. Task 7's mapping respects this order.
 - Linux `device_integrity` field names in Task 8 test match Task 9 implementation: `display_server_locked`, `coverage`, `portal_advertised`, `portal_active`, `x11_*_count_max`, `xwayland_window_count_max`.
