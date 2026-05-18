@@ -583,16 +583,28 @@ async function runScenarioL_systemdServiceFileSafety() {
 }
 
 async function runScenarioM_mandatoryXvfbInCi() {
-  if (process.env.CI !== "true") {
-    console.log("Scenario M (mandatory Xvfb): skipped (CI=false locally)");
-    return;
-  }
-  const r = runScript("bash", [
-    "-c",
-    "source ~/.cargo/env && SIMURGH_REQUIRE_XVFB_TESTS=1 cargo test --manifest-path tools/simurgh-daemon-linux/Cargo.toml --test xvfb_integration_tests",
-  ]);
-  assertSmoke(r.ok, "M: mandatory Xvfb test run failed in CI", r);
-  console.log("Scenario M (mandatory Xvfb in CI): pass");
+  // The workflow already runs `cargo test` with SIMURGH_REQUIRE_XVFB_TESTS=1 as
+  // its own step (Phase F2). Re-executing cargo from inside this smoke is
+  // redundant and slow. Instead, assert the invariant by inspecting the workflow
+  // file — if a future commit removes the env var or the cargo test step,
+  // this scenario fails fast without spawning a second build.
+  const wf = readFileSync(".github/workflows/stage-1-checks.yml", "utf8");
+  assertSmoke(
+    /SIMURGH_REQUIRE_XVFB_TESTS:\s*["']?1["']?/.test(wf),
+    "M: workflow does not set SIMURGH_REQUIRE_XVFB_TESTS=1 (Xvfb tests would skip in CI)"
+  );
+  assertSmoke(
+    /cargo test.*tools\/simurgh-daemon-linux/.test(wf),
+    "M: workflow does not run cargo test for the Linux daemon"
+  );
+  // The Rust integration test file must also branch on the env var so the
+  // promotion actually fires when CI runs it.
+  const t = readFileSync("tools/simurgh-daemon-linux/tests/xvfb_integration_tests.rs", "utf8");
+  assertSmoke(
+    /SIMURGH_REQUIRE_XVFB_TESTS/.test(t),
+    "M: xvfb_integration_tests.rs does not consume SIMURGH_REQUIRE_XVFB_TESTS"
+  );
+  console.log("Scenario M (mandatory Xvfb in CI — workflow + test wiring intact): pass");
 }
 
 async function runScenarioN_reportShape(baseUrl) {
