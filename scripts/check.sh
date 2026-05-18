@@ -1221,6 +1221,67 @@ else
   fi
 fi
 
+# ── 10n. Stage 2.8A/2.8B Linux foundation + X11 scanner ───────────────────
+if [[ "$QUICK" == true ]]; then
+  step "Stage 2.8A/2.8B Linux"
+  echo -e "${YELLOW}Skipped because --quick was used.${NC}"
+else
+  step "Stage 2.8A/2.8B Linux foundation + X11 scanner smoke"
+  if scripts/smoke-stage-2-8a-2-8b-linux-foundation-x11.sh > "$LOG_DIR/stage28ab-linux-smoke.log" 2>&1; then
+    pass "Stage 2.8A/2.8B Linux foundation + X11 scanner smoke"
+  else
+    fail "Stage 2.8A/2.8B Linux foundation + X11 scanner smoke"
+    tail -100 "$LOG_DIR/stage28ab-linux-smoke.log"
+  fi
+
+  step "Stage 2.8A/2.8B Linux cybersecurity audit"
+  if scripts/security-audit-stage-2-8a-2-8b-linux.sh > "$LOG_DIR/stage28ab-linux-audit.log" 2>&1; then
+    pass "Stage 2.8A/2.8B Linux cybersecurity audit"
+  else
+    fail "Stage 2.8A/2.8B Linux cybersecurity audit"
+    tail -100 "$LOG_DIR/stage28ab-linux-audit.log"
+  fi
+fi
+
+# ── 10o. Stage 2.8C/2.8D Linux Wayland + systemd + CI ────────────────────
+if [[ "$QUICK" == true ]]; then
+  step "Stage 2.8C/2.8D Linux"
+  echo -e "${YELLOW}Skipped because --quick was used.${NC}"
+else
+  step "Stage 2.8C/2.8D Linux Wayland + systemd + CI smoke"
+  if scripts/smoke-stage-2-8c-8d-linux-wayland-systemd-ci.sh > "$LOG_DIR/stage28cd-linux-smoke.log" 2>&1; then
+    pass "Stage 2.8C/2.8D Linux Wayland + systemd + CI smoke"
+  else
+    fail "Stage 2.8C/2.8D Linux Wayland + systemd + CI smoke"
+    tail -100 "$LOG_DIR/stage28cd-linux-smoke.log"
+  fi
+
+  step "Stage 2.8C/2.8D Linux cybersecurity audit"
+  if scripts/security-audit-stage-2-8c-8d-linux-wayland-systemd-ci.sh > "$LOG_DIR/stage28cd-linux-audit.log" 2>&1; then
+    pass "Stage 2.8C/2.8D Linux cybersecurity audit"
+  else
+    fail "Stage 2.8C/2.8D Linux cybersecurity audit"
+    tail -100 "$LOG_DIR/stage28cd-linux-audit.log"
+  fi
+fi
+
+# ── 10p. Linux Rust daemon fmt + clippy + test (gated on cargo) ──────────
+if command -v cargo >/dev/null 2>&1; then
+  step "Linux Rust daemon fmt + clippy + test (Xvfb mandatory in CI)"
+  if (cargo fmt --check --manifest-path tools/simurgh-daemon-linux/Cargo.toml \
+      && cargo clippy --manifest-path tools/simurgh-daemon-linux/Cargo.toml --all-targets -- -D warnings \
+      && SIMURGH_REQUIRE_XVFB_TESTS=1 cargo test --manifest-path tools/simurgh-daemon-linux/Cargo.toml) \
+      > "$LOG_DIR/stage28-rust-gates.log" 2>&1; then
+    pass "Linux Rust daemon: fmt + clippy + test"
+  else
+    fail "Linux Rust daemon fmt/clippy/test"
+    tail -100 "$LOG_DIR/stage28-rust-gates.log"
+  fi
+else
+  step "Linux Rust daemon"
+  echo -e "${YELLOW}Skipped — cargo not on PATH (install Rust to run Linux daemon gates).${NC}"
+fi
+
 # ── 11. Git status sanity ────────────────────────────────
 step "Git status"
 if git rev-parse --git-dir > /dev/null 2>&1; then
