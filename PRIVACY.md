@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Last updated:** 2026-05-18 (Stage 2.8C/D Linux Wayland + systemd + Ubuntu CI)
+**Last updated:** 2026-05-19 (Stage 2.8 Linux Display Integrity Research closeout docs)
 
 > **Stage 2.7 note:** The canonical list of forbidden raw-field names now lives in [`src/device/forbiddenLocalFields.js`](src/device/forbiddenLocalFields.js) and is enforced recursively by the daemon proof validator, the privacy audit CLI (`tools/privacy-audit.mjs`), and the Stage 2.7 security audit gate. Any new field added to that list automatically tightens the privacy contract across both macOS and Windows.
 

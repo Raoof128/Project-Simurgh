@@ -51,7 +51,7 @@ Reviewer-readiness, validation, evidence mapping, and Stage 2 planning. No major
 
 ## Stage 2 — Device Shield / Integrity Node
 
-**Status: In progress** (Stage 2 Windows Device Shield frozen — `v0.4.13-stage-2-6-2-7-closeout`)
+**Status: In progress** (Stage 2.8 Linux Display Integrity Research frozen — `v0.4.16-stage-2-8C-8D-linux-wayland-systemd-ci`)
 
 Transition toward signed local integrity proofs and device-aware validation.
 
@@ -73,9 +73,9 @@ Transition toward signed local integrity proofs and device-aware validation.
 - [x] Stage 2.8A/2.8B Linux X11 scanner + display-server lock + server-side Linux proof acceptance — `v0.4.15-stage-2-8A-8B-linux-x11-scanner` (X11 window-affinity enumeration, `display_server_lock` enforcement, Linux daemon lifecycle, Stage 2.8A/B smoke + cybersecurity audit)
 - [x] Stage 2.8C/2.8D Linux Wayland + XWayland + systemd `--user` lifecycle + Ubuntu CI — `v0.4.16-stage-2-8C-8D-linux-wayland-systemd-ci` (live `display_server_mismatch` enforcement, Wayland portal advertised/active probe with no consent triggered, XWayland partial coverage, browser_package_hint UX-only, dev-only systemd user unit + lifecycle scripts, Ubuntu CI Rust + mandatory Xvfb + shellcheck, combined smoke + cybersecurity audit)
 - [ ] Production Windows Service packaging and deployment design
-- [ ] Stage 2.8 Linux Display Integrity Research — X11 enumeration feasibility, Wayland compositor/security-model investigation, no parity claim until signed and validated
+- [x] Stage 2.8 Linux Display Integrity Research closeout — `v0.4.18-stage-2-8-linux-closeout` (Linux technical brief, validation matrix, reviewer checklist, closeout declaration, real-device validation plan, top-level doc updates)
 
-**Next: Linux research, not Linux production implementation.**
+**Next: Stage 2.8 external review signal + Stage 3 Agent Shield planning.**
 
 - [ ] Agent integrity API — validates AI computer-use sessions
 - [ ] Webhook delivery for real-time risk alerts
