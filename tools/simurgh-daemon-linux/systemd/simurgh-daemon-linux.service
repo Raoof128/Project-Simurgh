@@ -1,0 +1,33 @@
+# Project Simurgh — Linux Device Shield daemon (research prototype, dev-only).
+#
+# This is a systemd `--user` unit. It is NOT a system-wide service.
+# It does NOT run as root. It does NOT deploy production endpoint software.
+#
+# Install:    bash tools/simurgh-daemon-linux/scripts/install-user-unit.sh
+# Uninstall:  bash tools/simurgh-daemon-linux/scripts/uninstall-user-unit.sh
+# Check:      bash tools/simurgh-daemon-linux/scripts/check-user-unit.sh
+# Doctor:     bash tools/simurgh-daemon-linux/scripts/doctor-user-unit.sh
+
+[Unit]
+Description=Project Simurgh Linux Device Shield Daemon (research prototype, development)
+After=graphical-session.target
+PartOf=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/simurgh-daemon-linux
+Restart=on-failure
+RestartSec=3
+Environment=RUST_LOG=info
+
+# Hardening: the daemon already binds 127.0.0.1 only and emits metadata-only
+# output. These sandboxing directives restrict the unit's capabilities even
+# further than the binary itself.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=%h/.local/state/simurgh
+
+[Install]
+WantedBy=default.target
