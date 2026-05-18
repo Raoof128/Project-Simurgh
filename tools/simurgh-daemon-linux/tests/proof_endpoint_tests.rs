@@ -120,3 +120,35 @@ async fn post_proof_timestamp_is_within_seconds_of_now_utc() {
         "epoch math sanity: now days since 1970 cannot be negative"
     );
 }
+
+#[tokio::test]
+async fn post_proof_carries_xwayland_window_count_field_in_signed_payload() {
+    let tmp = tempfile::tempdir().unwrap();
+    std::env::set_var("XDG_STATE_HOME", tmp.path());
+
+    let body = post_proof().await;
+    let proof = &body["daemon_proof"];
+    // The signed proof MUST carry xwayland_window_count on every Linux proof
+    // so the Node validator's required-field check never fails. The value is
+    // environment-dependent: 0 in headless/pure-Wayland, non-zero when
+    // XWayland windows are present.
+    assert!(
+        proof.get("xwayland_window_count").is_some(),
+        "signed proof missing xwayland_window_count field"
+    );
+    assert!(
+        proof["xwayland_window_count"].is_u64(),
+        "xwayland_window_count must be a non-negative integer, got: {}",
+        proof["xwayland_window_count"]
+    );
+    // portal_advertised / portal_active must always be present in the signed
+    // payload (may be null when no Wayland portal probe ran).
+    assert!(
+        proof.get("portal_advertised").is_some(),
+        "signed proof missing portal_advertised field (may be null but must be present)"
+    );
+    assert!(
+        proof.get("portal_active").is_some(),
+        "signed proof missing portal_active field (may be null but must be present)"
+    );
+}
