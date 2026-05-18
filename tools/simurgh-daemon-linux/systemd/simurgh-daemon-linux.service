@@ -1,7 +1,7 @@
 # Project Simurgh — Linux Device Shield daemon (research prototype, dev-only).
 #
 # This is a systemd `--user` unit. It is NOT a system-wide service.
-# It does NOT run as root. It does NOT deploy production endpoint software.
+# It does NOT run as root. It does NOT expose any public-facing or server-side service.
 #
 # Install:    bash tools/simurgh-daemon-linux/scripts/install-user-unit.sh
 # Uninstall:  bash tools/simurgh-daemon-linux/scripts/uninstall-user-unit.sh
