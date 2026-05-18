@@ -2,8 +2,40 @@ use axum::body::Body;
 use http_body_util::BodyExt;
 use hyper::{Request, StatusCode};
 use simurgh_daemon_linux::http::router;
+use std::sync::{Mutex, OnceLock};
 use std::time::{SystemTime, UNIX_EPOCH};
+use tempfile::TempDir;
 use tower::ServiceExt;
+
+/// Serialises tests in this binary. The /proof handler reads identity from
+/// `$XDG_STATE_HOME` — a process-wide env var that cannot safely race across
+/// parallel tokio::test threads. Each test takes this guard, sets a fresh
+/// tempdir, runs, then drops both. CI surfaced this race in PR #21 once a
+/// third proof-endpoint test was added.
+static XDG_LOCK: OnceLock<Mutex<()>> = OnceLock::new();
+
+fn xdg_lock() -> std::sync::MutexGuard<'static, ()> {
+    XDG_LOCK
+        .get_or_init(|| Mutex::new(()))
+        .lock()
+        .unwrap_or_else(|e| e.into_inner())
+}
+
+/// Returns a guard + tempdir bundle. The guard releases the lock when dropped;
+/// the tempdir auto-deletes when dropped. Both live until the test returns.
+///
+/// We deliberately hold a `std::sync::MutexGuard` across the test's `.await`
+/// points because the daemon reads `XDG_STATE_HOME` synchronously during the
+/// request lifecycle — releasing the guard early would let a concurrent test
+/// swap the env var mid-request. Clippy's `await_holding_lock` lint is
+/// allowed at each test site for the same reason; this is the test-only
+/// pattern and the daemon itself never holds a sync lock across awaits.
+fn isolated_xdg_state() -> (std::sync::MutexGuard<'static, ()>, TempDir) {
+    let guard = xdg_lock();
+    let tmp = tempfile::tempdir().unwrap();
+    std::env::set_var("XDG_STATE_HOME", tmp.path());
+    (guard, tmp)
+}
 
 async fn post_proof() -> serde_json::Value {
     let app = router();
@@ -29,10 +61,10 @@ async fn post_proof() -> serde_json::Value {
     serde_json::from_slice(&bytes).unwrap()
 }
 
+#[allow(clippy::await_holding_lock)]
 #[tokio::test]
 async fn post_proof_returns_ok_envelope_matching_sdk_contract() {
-    let tmp = tempfile::tempdir().unwrap();
-    std::env::set_var("XDG_STATE_HOME", tmp.path());
+    let (_guard, _tmp) = isolated_xdg_state();
 
     let body: serde_json::Value = post_proof().await;
     // Shared browser SDK contract: { ok: true, daemon_proof: <signed proof> }.
@@ -62,10 +94,10 @@ async fn post_proof_returns_ok_envelope_matching_sdk_contract() {
     }
 }
 
+#[allow(clippy::await_holding_lock)]
 #[tokio::test]
 async fn post_proof_timestamp_is_within_seconds_of_now_utc() {
-    let tmp = tempfile::tempdir().unwrap();
-    std::env::set_var("XDG_STATE_HOME", tmp.path());
+    let (_guard, _tmp) = isolated_xdg_state();
 
     let body = post_proof().await;
     let proof = &body["daemon_proof"];
@@ -121,10 +153,10 @@ async fn post_proof_timestamp_is_within_seconds_of_now_utc() {
     );
 }
 
+#[allow(clippy::await_holding_lock)]
 #[tokio::test]
 async fn post_proof_carries_xwayland_window_count_field_in_signed_payload() {
-    let tmp = tempfile::tempdir().unwrap();
-    std::env::set_var("XDG_STATE_HOME", tmp.path());
+    let (_guard, _tmp) = isolated_xdg_state();
 
     let body = post_proof().await;
     let proof = &body["daemon_proof"];
