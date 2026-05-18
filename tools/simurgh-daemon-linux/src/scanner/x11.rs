@@ -21,6 +21,13 @@ pub fn scan() -> X11ScannerSummary {
     }
 }
 
+/// Public re-export of the internal X11 scanner entry point, used by the
+/// xwayland module so it can reuse the X11 enumeration logic against
+/// $DISPLAY without exposing the full scan_inner private signature.
+pub fn scan_inner_public() -> Result<crate::scanner::privacy::RawX11Counts, &'static str> {
+    scan_inner()
+}
+
 fn scan_inner() -> Result<RawX11Counts, &'static str> {
     use x11rb::connection::Connection;
     let (conn, screen_num) = x11rb::connect(None).map_err(|_| "scanner_unavailable")?;

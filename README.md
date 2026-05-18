@@ -65,18 +65,23 @@ The current macOS Device Shield baseline includes:
 - Stage 2.6 Windows scanner smoke coverage
 - Stage 2.6B real Windows laptop validation for `WDA_MONITOR` and `WDA_EXCLUDEFROMCAPTURE`
 - Stage 2.7 cross-platform Device Shield unification (shared `forbiddenLocalFields`, `platformScannerSchema`, `scannerRiskPolicy`; browser SDK `getDeviceShieldStatus()`; cross-platform E2E smoke + security audit; Linux proofs rejected with `unsupported_platform`)
+- Stage 2.8A/B Linux X11 scanner + display-server lock + server-side Linux proof acceptance
+- Stage 2.8C/D Linux Wayland portal probe (property-read only, no consent triggered) + XWayland partial coverage + `display_server_mismatch` enforcement + dev-only systemd `--user` lifecycle + Ubuntu CI Rust toolchain + mandatory Xvfb + shellcheck
 - recursive rejection of forbidden raw local fields
 - privacy audit and npm audit gates
 
-**Current verification (`v0.4.13-stage-2-6-2-7-closeout` / `main`):**
+**Current verification (`v0.4.16-stage-2-8C-8D-linux-wayland-systemd-ci` / branch):**
 
-- 273/273 Node tests passing
+- 327/327 Node tests passing
+- 33/33 Rust tests passing (`cargo test` with `SIMURGH_REQUIRE_XVFB_TESTS=1`)
 - 11/11 Windows .NET daemon tests passing
-- 47/48 quality gate checks passing (`scripts/check.sh`)
 - Swift macOS daemon build/test passing
 - Stage 2.2/2.3 E2E smoke passing
 - Stage 2.4/2.5 E2E smoke passing
 - Stage 2.5 closeout security audit passing
+- Stage 2.8A/B smoke + cybersecurity audit passing
+- Stage 2.8C/D combined smoke (16 scenarios) + cybersecurity audit (30 assertions) passing
+- `cargo fmt --check` + `cargo clippy -- -D warnings` clean
 - Privacy audit and npm audit passing (0 vulnerabilities)
 
 The project is open for technical review from researchers, engineers, and organisations working on AI safety, enterprise integrity, education trust, agentic workflows, and privacy-preserving secure-session infrastructure.
@@ -89,7 +94,7 @@ The project is open for technical review from researchers, engineers, and organi
 - no automatic misconduct finding
 - no raw process name or raw window title collection
 - no Windows Service, MDM/Intune, or production endpoint-management claim
-- Linux support remains in progress
+- Linux Stage 2.8C/D research prototype only — no production Linux endpoint deployment, no distro packaging, no system-wide service, no universal Wayland surface enumeration
 
 **Technical brief:** [`docs/STAGE_2_5_TECHNICAL_BRIEF.md`](docs/STAGE_2_5_TECHNICAL_BRIEF.md) — full Stage 1–2.5 architecture, cryptographic detail, privacy contract, validation gates, limitations, and non-claims.
 

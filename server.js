@@ -20,7 +20,11 @@ import { createPairingRegistry } from "./src/integrity/pairingRegistry.js";
 import { safeParsedPairingHints } from "./src/integrity/pairingAuditHints.js";
 import { createDaemonPairingRegistry } from "./src/device/daemonPairing.js";
 import { validateDaemonProof } from "./src/device/daemonProof.js";
-import { createDaemonStateRegistry, scoreDaemonRisk } from "./src/device/daemonState.js";
+import {
+  createDaemonStateRegistry,
+  createDisplayServerLock,
+  scoreDaemonRisk,
+} from "./src/device/daemonState.js";
 import { verifyAuditExport } from "./src/audit/verifyAudit.js";
 import { appendEntry, CHAIN_CAP } from "./src/audit/hmacChain.js";
 import {
@@ -277,6 +281,7 @@ const integrityState = createIntegrityState();
 const pairingRegistry = createPairingRegistry({ challengeTtlMs: 60_000 });
 const daemonPairingRegistry = createDaemonPairingRegistry({ challengeTtlMs: 30_000 });
 const daemonStateRegistry = createDaemonStateRegistry({ staleAfterMs: 10_000 });
+const displayServerLock = createDisplayServerLock();
 
 // Replay guard for /api/telemetry submissions
 const replayGuard = createReplayGuard({
@@ -330,6 +335,7 @@ const examEvictionTimer = setInterval(
     pairingRegistry.evictMissing(activeIds);
     daemonPairingRegistry.evictMissing(activeIds);
     daemonStateRegistry.evictMissing(activeIds);
+    displayServerLock.evictMissing(activeIds);
   },
   5 * 60 * 1000
 ).unref?.();
@@ -750,6 +756,21 @@ app.post("/api/telemetry", async (req, res) => {
         node_id_hash: daemonValidation.proof.node_id_hash,
       });
       return res.status(409).json({ error: consumed.reason });
+    }
+    if (daemonValidation.proof.platform === "linux" && daemonValidation.proof.display_server) {
+      const lockResult = displayServerLock.observe(
+        sessionId,
+        daemonValidation.proof.display_server
+      );
+      if (!lockResult.ok) {
+        appendAudit(sess, EVENTS.DAEMON_PROOF_REJECTED, {
+          reason: "display_server_mismatch",
+          locked_display_server: lockResult.locked_display_server,
+          observed_display_server: lockResult.observed_display_server,
+          node_id_hash: daemonValidation.proof.node_id_hash,
+        });
+        return res.status(409).json({ error: "display_server_mismatch" });
+      }
     }
     daemonStateRegistry.recordProofVerified(sessionId, {
       sequence: daemonValidation.proof.sequence,

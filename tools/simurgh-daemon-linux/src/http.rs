@@ -5,9 +5,8 @@ use tower_http::limit::RequestBodyLimitLayer;
 use crate::config::{DAEMON_PLATFORM, DAEMON_VERSION, MAX_BODY_BYTES, SCANNER_VERSION};
 use crate::identity::{load_or_create_identity, IdentityPaths};
 use crate::proof::{build_proof, ProofInputs};
-use crate::scanner::privacy::X11ScannerSummary;
+use crate::scanner::privacy::{x11_to_linux_summary, LinuxScannerSummary};
 use crate::scanner::session::{detect, SessionDetection, SessionEnv};
-use crate::scanner::x11;
 
 #[derive(Serialize)]
 pub struct HealthResponse {
@@ -17,21 +16,25 @@ pub struct HealthResponse {
     pub privacy_mode: &'static str,
 }
 
-pub struct CurrentScan {
+pub struct LinuxScannerSnapshot {
     pub detection: SessionDetection,
-    pub x11: Option<X11ScannerSummary>,
+    pub scanner: Option<LinuxScannerSummary>,
 }
 
-pub(crate) fn current_scanner_summary() -> CurrentScan {
+pub(crate) fn current_scanner_summary() -> LinuxScannerSnapshot {
+    use crate::scanner::wayland::{probe as wayland_probe, wayland_summary};
     let det = detect(&SessionEnv::from_process_env());
-    let x11 = if det.display_server == "x11" && det.scanner_reason == "none" {
-        Some(x11::scan())
-    } else {
-        None
+    let scanner: Option<LinuxScannerSummary> = match det.display_server {
+        "x11" if det.scanner_reason == "none" => {
+            Some(x11_to_linux_summary(crate::scanner::x11::scan()))
+        }
+        "wayland" => Some(wayland_summary(wayland_probe())),
+        "xwayland" => Some(crate::scanner::xwayland::scan()),
+        _ => None,
     };
-    CurrentScan {
+    LinuxScannerSnapshot {
         detection: det,
-        x11,
+        scanner,
     }
 }
 
@@ -60,12 +63,12 @@ async fn status() -> Json<serde_json::Value> {
         "daemon_version": DAEMON_VERSION,
         "scanner_version": SCANNER_VERSION,
         "display_server": det.display_server,
-        "scanner_state": scan.x11.as_ref().map(|s| s.scanner_state).unwrap_or(det.scanner_state),
-        "scanner_reason": scan.x11.as_ref().map(|s| s.scanner_reason).unwrap_or(det.scanner_reason),
-        "coverage": scan.x11.as_ref().map(|s| s.coverage).unwrap_or(det.coverage),
+        "scanner_state": scan.scanner.as_ref().map(|s| s.scanner_state).unwrap_or(det.scanner_state),
+        "scanner_reason": scan.scanner.as_ref().map(|s| s.scanner_reason).unwrap_or(det.scanner_reason),
+        "coverage": scan.scanner.as_ref().map(|s| s.coverage).unwrap_or(det.coverage),
         "privacy_mode": "metadata_only",
     });
-    if let Some(s) = scan.x11 {
+    if let Some(s) = scan.scanner {
         let obj = body.as_object_mut().unwrap();
         obj.insert(
             "x11_managed_window_count".into(),
@@ -88,10 +91,20 @@ async fn status() -> Json<serde_json::Value> {
             s.x11_skip_taskbar_window_count.into(),
         );
         obj.insert(
+            "xwayland_window_count".into(),
+            s.xwayland_window_count.into(),
+        );
+        obj.insert(
             "suspicious_window_count".into(),
             s.suspicious_window_count.into(),
         );
         obj.insert("visible_window_count".into(), s.visible_window_count.into());
+        if let Some(pa) = s.portal_advertised {
+            obj.insert("portal_advertised".into(), pa.into());
+        }
+        if let Some(pa) = s.portal_active {
+            obj.insert("portal_active".into(), pa.into());
+        }
     }
     Json(body)
 }
@@ -121,7 +134,16 @@ async fn proof(
         "headless" => "headless",
         _ => "unknown",
     };
-    let (scanner_state, scanner_reason, coverage, counts, visible) = match &scan.x11 {
+    let (
+        scanner_state,
+        scanner_reason,
+        coverage,
+        counts,
+        xwayland_count,
+        visible,
+        portal_advertised,
+        portal_active,
+    ) = match &scan.scanner {
         Some(s) => (
             s.scanner_state,
             s.scanner_reason,
@@ -133,7 +155,10 @@ async fn proof(
                 s.x11_fullscreen_window_count,
                 s.x11_skip_taskbar_window_count,
             ],
+            s.xwayland_window_count,
             s.visible_window_count,
+            s.portal_advertised,
+            s.portal_active,
         ),
         None => (
             scan.detection.scanner_state,
@@ -141,6 +166,9 @@ async fn proof(
             scan.detection.coverage,
             [0, 0, 0, 0, 0],
             0,
+            0,
+            None,
+            None,
         ),
     };
     let inputs = ProofInputs {
@@ -153,10 +181,10 @@ async fn proof(
         scanner_state,
         scanner_reason,
         coverage,
-        portal_advertised: None,
-        portal_active: None,
+        portal_advertised,
+        portal_active,
         x11_counts: counts,
-        xwayland_window_count: 0,
+        xwayland_window_count: xwayland_count,
         suspicious_window_count: 0,
         visible_window_count: visible,
     };

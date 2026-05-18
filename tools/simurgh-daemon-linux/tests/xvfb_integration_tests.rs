@@ -54,7 +54,13 @@ fn lock() -> std::sync::MutexGuard<'static, ()> {
 #[test]
 fn scan_returns_summary_against_empty_xvfb_root() {
     if !xvfb_available() {
-        eprintln!("Xvfb not installed; skipping (PR #22 Ubuntu CI will enforce)");
+        if std::env::var("SIMURGH_REQUIRE_XVFB_TESTS").is_ok() {
+            panic!(
+                "SIMURGH_REQUIRE_XVFB_TESTS is set but Xvfb is not installed — \
+                 install xvfb + x11-utils + dbus-x11 in CI"
+            );
+        }
+        eprintln!("Xvfb not installed; skipping (set SIMURGH_REQUIRE_XVFB_TESTS=1 in CI)");
         return;
     }
     let _g = lock();
@@ -77,7 +83,13 @@ fn scan_returns_scanner_unavailable_when_display_invalid() {
 #[test]
 fn scan_counts_managed_above_and_fullscreen_windows() {
     if !xvfb_available() {
-        eprintln!("Xvfb not installed; skipping");
+        if std::env::var("SIMURGH_REQUIRE_XVFB_TESTS").is_ok() {
+            panic!(
+                "SIMURGH_REQUIRE_XVFB_TESTS is set but Xvfb is not installed — \
+                 install xvfb + x11-utils + dbus-x11 in CI"
+            );
+        }
+        eprintln!("Xvfb not installed; skipping (set SIMURGH_REQUIRE_XVFB_TESTS=1 in CI)");
         return;
     }
     let _g = lock();
@@ -166,7 +178,13 @@ fn scan_counts_managed_above_and_fullscreen_windows() {
 #[test]
 fn scan_counts_override_redirect_root_children() {
     if !xvfb_available() {
-        eprintln!("Xvfb not installed; skipping");
+        if std::env::var("SIMURGH_REQUIRE_XVFB_TESTS").is_ok() {
+            panic!(
+                "SIMURGH_REQUIRE_XVFB_TESTS is set but Xvfb is not installed — \
+                 install xvfb + x11-utils + dbus-x11 in CI"
+            );
+        }
+        eprintln!("Xvfb not installed; skipping (set SIMURGH_REQUIRE_XVFB_TESTS=1 in CI)");
         return;
     }
     let _g = lock();
