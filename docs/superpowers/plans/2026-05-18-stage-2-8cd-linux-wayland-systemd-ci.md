@@ -12,6 +12,7 @@
 **Target tag:** `v0.4.16-stage-2-8C-8D-linux-wayland-systemd-ci`.
 
 **Scope (this PR):**
+
 - Phase A — Live `display_server_mismatch` enforcement in `server.js` telemetry path.
 - Phase B — Wayland portal advertised/active (no consent).
 - Phase C — XWayland partial coverage detection + counting.
@@ -24,12 +25,14 @@
 - Phase J — Light README/ROADMAP/SECURITY/PRIVACY/AGENT/CHANGELOG updates.
 
 **Out of scope:**
+
 - Distro packaging (`.deb`/`.rpm`/Snap/Flatpak/AppImage).
 - System-wide unit. Root service. Production endpoint deployment. MDM. Hardware attestation. Universal Wayland surface enumeration. GPU overlay detection. Automatic misconduct detection.
 - Full reviewer docs + complete validation matrix (PR #23 closeout).
 - Real-device validation across Fedora/KDE/Sway (Ubuntu GNOME + headless are minimums; full matrix is PR #23).
 
 **Deviations from Raouf's blueprint:**
+
 1. **Unit filename** `simurgh-daemon-linux.service` (per design spec §6.5), not the reverse-domain `dev.raouf.simurgh.daemon-linux.service` form.
 2. **ExecStart** uses just the binary path, no `start` subcommand (the daemon's `main.rs` starts immediately on invoke).
 3. **Binary distribution** uses `cargo install --path tools/simurgh-daemon-linux --root "$HOME/.local"` so the binary lands at the unit's expected path.
@@ -41,12 +44,14 @@
 ## File Structure
 
 **New files (Rust scanner):**
+
 - `tools/simurgh-daemon-linux/src/scanner/wayland.rs`
 - `tools/simurgh-daemon-linux/src/scanner/xwayland.rs`
 - `tools/simurgh-daemon-linux/tests/wayland_scanner_tests.rs`
 - `tools/simurgh-daemon-linux/tests/xwayland_scanner_tests.rs`
 
 **New files (systemd):**
+
 - `tools/simurgh-daemon-linux/systemd/simurgh-daemon-linux.service`
 - `tools/simurgh-daemon-linux/scripts/install-user-unit.sh`
 - `tools/simurgh-daemon-linux/scripts/uninstall-user-unit.sh`
@@ -54,6 +59,7 @@
 - `tools/simurgh-daemon-linux/scripts/doctor-user-unit.sh`
 
 **New files (tests + scripts):**
+
 - `tests/unit/displayServerLockServerWiring.test.js`
 - `tests/unit/browserPackageHintUxOnly.test.js`
 - `tests/unit/linuxSystemdScripts.test.js`
@@ -65,6 +71,7 @@
 - `docs/evidence/stage-2-linux/README.md`
 
 **Modified files:**
+
 - `server.js` — wire `createDisplayServerLock` into telemetry handler.
 - `src/device/daemonState.js` — registry exposes lock (or live wiring uses module-singleton).
 - `src/device/scannerRiskPolicy.js` — no new Linux mappings (already handled in PR #20); verify no regression.
@@ -82,7 +89,9 @@
 ---
 
 # ═══════════════════════════════════════════════════════════════════════════
+
 # Phase A — Live `display_server_mismatch` enforcement
+
 # ═══════════════════════════════════════════════════════════════════════════
 
 The factory + 5 unit tests for `createDisplayServerLock` shipped in PR #19 but the server doesn't actually call it. This phase closes the v0.4.15 P0 follow-up.
@@ -90,6 +99,7 @@ The factory + 5 unit tests for `createDisplayServerLock` shipped in PR #19 but t
 ## Task A1: Red — server.js does not enforce display_server_mismatch
 
 **Files:**
+
 - Create: `tests/unit/displayServerLockServerWiring.test.js`
 
 - [ ] **Step 1: Write the failing test**
@@ -315,7 +325,11 @@ test("server.js rejects telemetry proof when display_server changes mid-session"
     assert.ok(t2.status >= 400 && t2.status < 500, `wayland-after-x11 must 4xx, got ${t2.status}`);
     const body = await t2.json().catch(() => ({}));
     const reason = body.error || body.reason;
-    assert.equal(reason, "display_server_mismatch", `expected display_server_mismatch, got ${reason}`);
+    assert.equal(
+      reason,
+      "display_server_mismatch",
+      `expected display_server_mismatch, got ${reason}`
+    );
   } finally {
     srv.kill();
   }
@@ -327,6 +341,7 @@ test("server.js rejects telemetry proof when display_server changes mid-session"
 ```bash
 node --test tests/unit/displayServerLockServerWiring.test.js
 ```
+
 Expected: FAIL — the second telemetry returns 200 because the server doesn't enforce the lock.
 
 - [ ] **Step 3: Commit red test**
@@ -341,6 +356,7 @@ git commit -m "test(stage-2-8c): red — display_server_mismatch not enforced li
 ## Task A2: Green — wire createDisplayServerLock into server.js
 
 **Files:**
+
 - Modify: `server.js`
 
 - [ ] **Step 1: Read `server.js` around the telemetry handler (line 754, `recordProofVerified`)**
@@ -350,16 +366,19 @@ The display-server-lock check must run AFTER `validateDaemonProof` succeeds and 
 - [ ] **Step 2: Instantiate a module-level lock**
 
 Near the top of `server.js` where other registries are constructed:
+
 ```javascript
 import { createDaemonStateRegistry, createDisplayServerLock } from "./src/device/daemonState.js";
 // ...
 const displayServerLock = createDisplayServerLock();
 ```
+
 (If `createDisplayServerLock` is already imported, just add the construction.)
 
 - [ ] **Step 3: Add the lock check in the telemetry handler — exact placement matters**
 
 In the `/api/telemetry` handler, the lock check must run **EXACTLY HERE**:
+
 1. AFTER `validateDaemonProof(...)` returned `ok: true` (so we only lock on cryptographically valid proofs).
 2. AFTER the `consumed` challenge-consume call already succeeded — OR, look at how the existing flow handles a rejected proof. Two distinct cases:
    - If the existing code currently consumes the challenge BEFORE checking everything (e.g., the `invalid_signature` path also consumes), match that pattern.
@@ -371,24 +390,21 @@ In the `/api/telemetry` handler, the lock check must run **EXACTLY HERE**:
 **Read the existing `/api/telemetry` flow in `server.js` carefully before placing this block.** Pattern-match on how `invalid_signature` rejections behave today — your placement should produce the same side-effect shape (same challenge handling, same audit emission style, no double-counting).
 
 ```javascript
-    if (daemonValidation.proof.platform === "linux" && daemonValidation.proof.display_server) {
-      const lockResult = displayServerLock.observe(
-        sessionId,
-        daemonValidation.proof.display_server
-      );
-      if (!lockResult.ok) {
-        appendAudit(sess, EVENTS.DAEMON_PROOF_REJECTED, {
-          reason: "display_server_mismatch",
-          locked_display_server: lockResult.locked_display_server,
-          observed_display_server: lockResult.observed_display_server,
-          node_id_hash: daemonValidation.proof.node_id_hash,
-        });
-        // Do NOT call daemonStateRegistry.recordProofVerified — proof was rejected.
-        // Do NOT increment proofs_verified counters here — the registry stays untouched
-        // for rejection so the report's proofs_verified count reflects only accepted proofs.
-        return res.status(409).json({ error: "display_server_mismatch" });
-      }
-    }
+if (daemonValidation.proof.platform === "linux" && daemonValidation.proof.display_server) {
+  const lockResult = displayServerLock.observe(sessionId, daemonValidation.proof.display_server);
+  if (!lockResult.ok) {
+    appendAudit(sess, EVENTS.DAEMON_PROOF_REJECTED, {
+      reason: "display_server_mismatch",
+      locked_display_server: lockResult.locked_display_server,
+      observed_display_server: lockResult.observed_display_server,
+      node_id_hash: daemonValidation.proof.node_id_hash,
+    });
+    // Do NOT call daemonStateRegistry.recordProofVerified — proof was rejected.
+    // Do NOT increment proofs_verified counters here — the registry stays untouched
+    // for rejection so the report's proofs_verified count reflects only accepted proofs.
+    return res.status(409).json({ error: "display_server_mismatch" });
+  }
+}
 ```
 
 Verification belt-and-braces: the existing Linux-proof scenarios in PR #20 (Stage 2.8A/B smoke) must still pass byte-identically — those proofs all use `display_server: "x11"` consistently within a session, so the lock observes a single value and never trips.
@@ -402,11 +418,13 @@ Find where the session is submitted/ended in `server.js`. Add `displayServerLock
 ```bash
 node --test tests/unit/displayServerLockServerWiring.test.js
 ```
+
 Expected: PASS.
 
 ```bash
 npm test
 ```
+
 Expected: full suite green (no regression).
 
 - [ ] **Step 6: Commit**
@@ -421,7 +439,9 @@ git commit -m "feat(stage-2-8c): wire display_server_mismatch into /api/telemetr
 ---
 
 # ═══════════════════════════════════════════════════════════════════════════
+
 # Phase B — Wayland portal advertised vs active (no consent triggered)
+
 # ═══════════════════════════════════════════════════════════════════════════
 
 ## Definition: `portal_active`
@@ -435,6 +455,7 @@ For the avoidance of ambiguity:
 ## Task B1: Add zbus dependency + wayland scanner skeleton
 
 **Files:**
+
 - Modify: `tools/simurgh-daemon-linux/Cargo.toml`
 - Create: `tools/simurgh-daemon-linux/src/scanner/wayland.rs`
 - Modify: `tools/simurgh-daemon-linux/src/scanner/mod.rs`
@@ -686,6 +707,7 @@ pub mod xwayland;
 ```bash
 source ~/.cargo/env && cargo build --manifest-path tools/simurgh-daemon-linux/Cargo.toml
 ```
+
 Expected: builds (will fetch zbus on first build).
 
 - [ ] **Step 6: Commit**
@@ -700,6 +722,7 @@ git commit -m "feat(stage-2-8c): Wayland portal scanner (advertised/active, no c
 ## Task B2: Wayland scanner unit tests
 
 **Files:**
+
 - Create: `tools/simurgh-daemon-linux/tests/wayland_scanner_tests.rs`
 
 - [ ] **Step 1: Write tests for `wayland_summary` (pure function — easy to unit test)**
@@ -769,6 +792,7 @@ fn wayland_summary_emits_zero_counts() {
 ```bash
 source ~/.cargo/env && cargo test --manifest-path tools/simurgh-daemon-linux/Cargo.toml --test wayland_scanner_tests
 ```
+
 Expected: 5/5 PASS.
 
 - [ ] **Step 3: Commit**
@@ -783,7 +807,9 @@ git commit -m "test(stage-2-8c): wayland_summary unit tests"
 ---
 
 # ═══════════════════════════════════════════════════════════════════════════
+
 # Phase C — XWayland partial coverage
+
 # ═══════════════════════════════════════════════════════════════════════════
 
 XWayland presents an X11 connection inside a Wayland session. Use the existing X11 scanner against `$DISPLAY` and mark coverage as `xwayland_partial`. Counts come from `xwayland_window_count` (mapped from the existing X11 managed_window_count).
@@ -791,6 +817,7 @@ XWayland presents an X11 connection inside a Wayland session. Use the existing X
 ## Task C1: XWayland scanner module
 
 **Files:**
+
 - Modify: `tools/simurgh-daemon-linux/src/scanner/xwayland.rs` (created as stub in B1)
 - Create: `tools/simurgh-daemon-linux/tests/xwayland_scanner_tests.rs`
 
@@ -836,6 +863,7 @@ pub fn scan() -> LinuxScannerSummary {
 - [ ] **Step 2: Expose `scan_inner_public` from `x11.rs`**
 
 Edit `tools/simurgh-daemon-linux/src/scanner/x11.rs`. Locate `fn scan_inner` and add a public wrapper:
+
 ```rust
 pub fn scan_inner_public() -> Result<crate::scanner::privacy::RawX11Counts, &'static str> {
     scan_inner()
@@ -847,6 +875,7 @@ pub fn scan_inner_public() -> Result<crate::scanner::privacy::RawX11Counts, &'st
 - [ ] **Step 3: Write XWayland tests**
 
 `tools/simurgh-daemon-linux/tests/xwayland_scanner_tests.rs`:
+
 ```rust
 use simurgh_daemon_linux::scanner::xwayland;
 
@@ -877,6 +906,7 @@ fn xwayland_returns_partial_coverage_when_local() {
 ```bash
 source ~/.cargo/env && cargo test --manifest-path tools/simurgh-daemon-linux/Cargo.toml
 ```
+
 Expected: all PASS.
 
 - [ ] **Step 5: Commit**
@@ -891,6 +921,7 @@ git commit -m "feat(stage-2-8c): XWayland scanner with partial coverage label"
 ## Task C2: Route /status and /proof to wayland/xwayland scanners + rename type
 
 **Files:**
+
 - Modify: `tools/simurgh-daemon-linux/src/http.rs`
 
 - [ ] **Step 1: Rename `CurrentScan` → `LinuxScannerSnapshot` and field `x11` → `scanner`**
@@ -938,12 +969,14 @@ In the `display_server` match in `proof()`, the existing branches are already co
 ```bash
 source ~/.cargo/env && cargo test --manifest-path tools/simurgh-daemon-linux/Cargo.toml
 ```
+
 Expected: all PASS (existing headless + x11 + non-local + wayland summary + xwayland tests).
 
 ```bash
 cargo fmt --manifest-path tools/simurgh-daemon-linux/Cargo.toml
 cargo clippy --manifest-path tools/simurgh-daemon-linux/Cargo.toml --all-targets -- -D warnings
 ```
+
 Expected: clean.
 
 - [ ] **Step 4: Commit**
@@ -958,12 +991,15 @@ git commit -m "feat(stage-2-8c): /status + /proof dispatch to wayland/xwayland s
 ---
 
 # ═══════════════════════════════════════════════════════════════════════════
+
 # Phase D — Snap/Flatpak/AppImage browser hint (UX-only)
+
 # ═══════════════════════════════════════════════════════════════════════════
 
 ## Task D1: Browser SDK `browser_package_hint` (UX-only)
 
 **Files:**
+
 - Modify: `public/sdk/simurgh-browser-sdk.js`
 - Create: `tests/unit/browserPackageHintUxOnly.test.js`
 
@@ -995,6 +1031,7 @@ function detectBrowserPackageHint() {
 - [ ] **Step 2: Write the UX-only enforcement test**
 
 `tests/unit/browserPackageHintUxOnly.test.js`:
+
 ```javascript
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -1032,6 +1069,7 @@ test("daemonProof validator does not accept browser_package_hint as a trusted fi
 ```bash
 node --test tests/unit/browserPackageHintUxOnly.test.js
 ```
+
 Expected: 3/3 PASS after the SDK edit lands.
 
 - [ ] **Step 4: Commit**
@@ -1046,7 +1084,9 @@ git commit -m "feat(stage-2-8c): browser_package_hint as UX-only SDK signal"
 ---
 
 # ═══════════════════════════════════════════════════════════════════════════
+
 # Phase E — systemd `--user` lifecycle
+
 # ═══════════════════════════════════════════════════════════════════════════
 
 ## Task E1: Red — systemd files missing
@@ -1346,7 +1386,9 @@ git commit -m "feat(stage-2-8d): install/uninstall/check/doctor user-unit script
 ---
 
 # ═══════════════════════════════════════════════════════════════════════════
+
 # Phase F — Ubuntu CI + mandatory Xvfb
+
 # ═══════════════════════════════════════════════════════════════════════════
 
 ## Task F1: `SIMURGH_REQUIRE_XVFB_TESTS` enforcement
@@ -1354,6 +1396,7 @@ git commit -m "feat(stage-2-8d): install/uninstall/check/doctor user-unit script
 **File:** `tools/simurgh-daemon-linux/tests/xvfb_integration_tests.rs`
 
 Replace every `if !xvfb_available() { ... return; }` with:
+
 ```rust
     if !xvfb_available() {
         if std::env::var("SIMURGH_REQUIRE_XVFB_TESTS").is_ok() {
@@ -1377,44 +1420,45 @@ git commit -am "feat(stage-2-8d): SIMURGH_REQUIRE_XVFB_TESTS promotes Xvfb to ma
 Insert AFTER `Install dependencies (npm ci)` and BEFORE `Run Stage 1 check suite`:
 
 ```yaml
-      - name: Install Linux daemon test dependencies (xvfb, dbus, shellcheck)
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends \
-            xvfb x11-utils dbus-x11 xterm shellcheck
+- name: Install Linux daemon test dependencies (xvfb, dbus, shellcheck)
+  run: |
+    sudo apt-get update
+    sudo apt-get install -y --no-install-recommends \
+      xvfb x11-utils dbus-x11 xterm shellcheck
 
-      - name: Install Rust stable toolchain
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          components: rustfmt,clippy
+- name: Install Rust stable toolchain
+  uses: dtolnay/rust-toolchain@stable
+  with:
+    components: rustfmt,clippy
 
-      - name: Cache cargo registry + target
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-            tools/simurgh-daemon-linux/target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('tools/simurgh-daemon-linux/Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-cargo-
+- name: Cache cargo registry + target
+  uses: actions/cache@v4
+  with:
+    path: |
+      ~/.cargo/registry
+      ~/.cargo/git
+      tools/simurgh-daemon-linux/target
+    key: ${{ runner.os }}-cargo-${{ hashFiles('tools/simurgh-daemon-linux/Cargo.lock') }}
+    restore-keys: |
+      ${{ runner.os }}-cargo-
 
-      - name: Shellcheck Linux daemon lifecycle scripts
-        run: shellcheck tools/simurgh-daemon-linux/scripts/*.sh
+- name: Shellcheck Linux daemon lifecycle scripts
+  run: shellcheck tools/simurgh-daemon-linux/scripts/*.sh
 
-      - name: Rust fmt (Linux daemon)
-        run: cargo fmt --check --manifest-path tools/simurgh-daemon-linux/Cargo.toml
+- name: Rust fmt (Linux daemon)
+  run: cargo fmt --check --manifest-path tools/simurgh-daemon-linux/Cargo.toml
 
-      - name: Rust clippy (Linux daemon)
-        run: cargo clippy --manifest-path tools/simurgh-daemon-linux/Cargo.toml --all-targets -- -D warnings
+- name: Rust clippy (Linux daemon)
+  run: cargo clippy --manifest-path tools/simurgh-daemon-linux/Cargo.toml --all-targets -- -D warnings
 
-      - name: Rust tests (Linux daemon) — Xvfb mandatory
-        env:
-          SIMURGH_REQUIRE_XVFB_TESTS: "1"
-        run: cargo test --manifest-path tools/simurgh-daemon-linux/Cargo.toml
+- name: Rust tests (Linux daemon) — Xvfb mandatory
+  env:
+    SIMURGH_REQUIRE_XVFB_TESTS: "1"
+  run: cargo test --manifest-path tools/simurgh-daemon-linux/Cargo.toml
 ```
 
 Validate YAML:
+
 ```bash
 python3 -c "import yaml; yaml.safe_load(open('.github/workflows/stage-1-checks.yml'))"
 ```
@@ -1488,12 +1532,15 @@ git commit -m "test(stage-2-8d): workflow assertions for CI Rust + Xvfb + shellc
 ---
 
 # ═══════════════════════════════════════════════════════════════════════════
+
 # Phase G — Combined Stage 2.8C/D smoke
+
 # ═══════════════════════════════════════════════════════════════════════════
 
 ## Task G1: Smoke test
 
 **Files:**
+
 - Create: `tests/e2e/stage28cd_linux_wayland_systemd_ci_smoke.mjs`
 - Create: `scripts/smoke-stage-2-8c-8d-linux-wayland-systemd-ci.sh`
 
@@ -1501,26 +1548,27 @@ The smoke runs 16 scenarios. Use the Stage 2.8A/B smoke (`stage28ab_linux_founda
 
 Scenarios:
 
-| ID | Scenario                                | Expected                                          |
-| -- | --------------------------------------- | ------------------------------------------------- |
-| A  | X11 healthy                             | `coverage=x11_full`                               |
-| B  | Wayland advertised+active               | accepted, `wayland_portal_available`              |
-| C  | Wayland advertised only                 | accepted, `wayland_compositor_restricted`, Warning |
-| D  | Wayland portal probe unavailable        | accepted, `scanner_reason=portal_active_probe_unavailable` |
-| E  | XWayland partial                        | accepted, `coverage=xwayland_partial`             |
-| F  | Snap/Flatpak hint via SDK               | UX-only, server ignores                           |
-| G  | display-server mismatch (x11 → wayland) | rejected, `display_server_mismatch`               |
-| H  | non-local `$DISPLAY`                    | accepted, `scanner_reason=non_local_display`      |
-| I  | headless                                | accepted, `scanner_reason=no_display_server`      |
-| J  | systemd install --check                 | no mutation                                       |
-| K  | systemd install --dry-run               | safe output                                       |
-| L  | service file safety                     | user unit only                                    |
-| M  | mandatory Xvfb in CI mode               | (CI only) real tests run                          |
-| N  | Linux report device_integrity           | correct fields, no macOS/Windows leak             |
-| O  | audit verify                            | valid chain                                       |
-| P  | Stage 2.7 + Stage 2.8A/B regression     | green                                             |
+| ID  | Scenario                                | Expected                                                   |
+| --- | --------------------------------------- | ---------------------------------------------------------- |
+| A   | X11 healthy                             | `coverage=x11_full`                                        |
+| B   | Wayland advertised+active               | accepted, `wayland_portal_available`                       |
+| C   | Wayland advertised only                 | accepted, `wayland_compositor_restricted`, Warning         |
+| D   | Wayland portal probe unavailable        | accepted, `scanner_reason=portal_active_probe_unavailable` |
+| E   | XWayland partial                        | accepted, `coverage=xwayland_partial`                      |
+| F   | Snap/Flatpak hint via SDK               | UX-only, server ignores                                    |
+| G   | display-server mismatch (x11 → wayland) | rejected, `display_server_mismatch`                        |
+| H   | non-local `$DISPLAY`                    | accepted, `scanner_reason=non_local_display`               |
+| I   | headless                                | accepted, `scanner_reason=no_display_server`               |
+| J   | systemd install --check                 | no mutation                                                |
+| K   | systemd install --dry-run               | safe output                                                |
+| L   | service file safety                     | user unit only                                             |
+| M   | mandatory Xvfb in CI mode               | (CI only) real tests run                                   |
+| N   | Linux report device_integrity           | correct fields, no macOS/Windows leak                      |
+| O   | audit verify                            | valid chain                                                |
+| P   | Stage 2.7 + Stage 2.8A/B regression     | green                                                      |
 
 Smoke implementation strategy:
+
 - **Header + helpers**: copy lines 1–223 of `tests/e2e/stage28ab_linux_foundation_x11_smoke.mjs` (assertSmoke, b64url, canonicalDaemonPayload, createIdentity, sign, linuxScannerFields, expectJson, challenge, linuxPairEnvelope, linuxProof, sendTelemetry, bootstrapSession, pairLinux). Rename to scenario set A–P.
 - **Scenarios A, B, C, D (Wayland states)**: forge Linux proofs with the `display_server: "wayland"` and the documented `scanner_state` + `scanner_reason` combos. The server-side validator already accepts these (PR #19 Linux validator). Assert telemetry returns 200 and the resulting report's `device_integrity.display_server === "wayland"` with the expected `coverage` and `scanner_reason`.
 - **Scenario E (XWayland)**: forge proof with `display_server: "xwayland"`, `coverage: "xwayland_partial"`, non-zero `xwayland_window_count`. Assert report's `xwayland_window_count_max === N`.
@@ -1545,12 +1593,15 @@ git commit -m "test(stage-2-8cd): combined Wayland + systemd + CI smoke (16 scen
 ---
 
 # ═══════════════════════════════════════════════════════════════════════════
+
 # Phase H — Combined Stage 2.8C/D cybersecurity audit
+
 # ═══════════════════════════════════════════════════════════════════════════
 
 ## Task H1: Audit test + wrapper
 
 **Files:**
+
 - Create: `tests/security/stage28cd_linux_wayland_systemd_ci_security_audit.test.js`
 - Create: `scripts/security-audit-stage-2-8c-8d-linux-wayland-systemd-ci.sh`
 
@@ -1586,6 +1637,7 @@ Audit dimensions (16, mirroring Raouf's blueprint Phase H + the PR #22 plan's Ph
 16. Wording — no production / attestation / automatic-misconduct overclaim.
 
 Audit-test implementation strategy:
+
 - **Header + helpers**: copy the import block + `b64url` / `makeIdentity` / `makeLinuxProof` / `validateOpts` helpers from `tests/security/stage28ab_linux_security_audit.test.js`. Reuse them; no need to re-derive.
 - **Dimension 4 (Wayland advertised/active independence)**: validator-level test — `validateLinuxScannerSummary` returns ok for `{portal_advertised: true, portal_active: true}` and for `{portal_advertised: true, portal_active: false}`, but rejects `{portal_advertised: false, portal_active: true}` as `invalid_linux_portal_state` (already enforced in PR #19's validator; just assert).
 - **Dimension 5 (consent safety)**: the explicit banned-method grep test shown above in Phase B definition section. Inline that test here:
@@ -1607,6 +1659,7 @@ Audit-test implementation strategy:
 - **Dimensions 15–16 (audit chain, wording)**: copy from the existing Stage 2.7 closeout audit (`tests/security/stage_26_27_closeout_audit.test.js`). Verify tamper invalidates a sample HMAC chain; verify dashboard + report contain no `cheating detected` / `misconduct detected` / `guilty` phrases.
 
 Wrapper script `scripts/security-audit-stage-2-8c-8d-linux-wayland-systemd-ci.sh` follows the shape of `scripts/security-audit-stage-2-8a-2-8b-linux.sh`:
+
 ```bash
 #!/usr/bin/env bash
 set -euo pipefail
@@ -1635,6 +1688,7 @@ npm audit --audit-level=high
 
 echo "Stage 2.8C/D Linux Wayland + systemd + CI cybersecurity audit: pass"
 ```
+
 `chmod +x` it, then run from repo root.
 
 ```bash
@@ -1646,7 +1700,9 @@ git commit -m "test(stage-2-8cd): combined cybersecurity audit (16 dimensions)"
 ---
 
 # ═══════════════════════════════════════════════════════════════════════════
+
 # Phase I — Evidence rules
+
 # ═══════════════════════════════════════════════════════════════════════════
 
 ## Task I1: `docs/evidence/stage-2-linux/README.md`
@@ -1696,12 +1752,12 @@ the automated guard; this list is the human one.
 
 ## Validation matrix (target — full version lands in PR #23)
 
-| Platform               | Required signals                                            |
-| ---------------------- | ----------------------------------------------------------- |
-| Ubuntu GNOME Wayland   | `/health` ok, `portal_advertised` true, no consent dialog   |
-| Ubuntu GNOME X11/Xorg  | X11 scanner healthy, x11_managed_window_count > 0           |
-| Headless (no display)  | `scanner_unavailable`, `scanner_reason: no_display_server`  |
-| Xvfb in CI             | All Xvfb integration tests pass deterministically           |
+| Platform              | Required signals                                           |
+| --------------------- | ---------------------------------------------------------- |
+| Ubuntu GNOME Wayland  | `/health` ok, `portal_advertised` true, no consent dialog  |
+| Ubuntu GNOME X11/Xorg | X11 scanner healthy, x11_managed_window_count > 0          |
+| Headless (no display) | `scanner_unavailable`, `scanner_reason: no_display_server` |
+| Xvfb in CI            | All Xvfb integration tests pass deterministically          |
 ```
 
 ```bash
@@ -1720,7 +1776,9 @@ git commit -m "docs(stage-2-8cd): Linux evidence rules README"
 ---
 
 # ═══════════════════════════════════════════════════════════════════════════
+
 # Phase J — Light docs + check.sh wiring
+
 # ═══════════════════════════════════════════════════════════════════════════
 
 ## Task J1: Wire 2.8A/B + 2.8C/D gates into `scripts/check.sh`
@@ -1744,7 +1802,9 @@ git commit -m "docs(stage-2-8cd): light README/ROADMAP/SECURITY/PRIVACY/AGENT/CH
 ---
 
 # ═══════════════════════════════════════════════════════════════════════════
+
 # Final verification + PR + release
+
 # ═══════════════════════════════════════════════════════════════════════════
 
 ## Task Z1: Full umbrella gate
@@ -1839,6 +1899,7 @@ gh release create v0.4.16-stage-2-8C-8D-linux-wayland-systemd-ci \
 ## Self-Review (post-write, pre-handoff)
 
 **Spec coverage** (§ references to design spec):
+
 - §6.1 Sandboxed-browser loopback — Phase D.
 - §6.2 Portal advertised vs portal active — Phase B (no consent triggered).
 - §6.3 Display-server lock — Phase A (live wiring), spec §6.3 hard rule satisfied.
@@ -1857,6 +1918,7 @@ gh release create v0.4.16-stage-2-8C-8D-linux-wayland-systemd-ci \
 **Placeholder scan (post Raouf-fix-5):** All PR #22 cross-references have been inlined. Phase E1/E2/E3 now contain the full systemd unit + 4 lifecycle scripts. Phase F3 contains the full CI assertion test. Phase I1 contains the full evidence README. Phases G/H now spell out scenario-by-scenario implementation strategy referencing exact files + line ranges to copy from (`tests/e2e/stage28ab_linux_foundation_x11_smoke.mjs` lines 1–223 for helpers, `tests/security/stage28ab_linux_security_audit.test.js` for audit boilerplate, `tests/security/stage_26_27_closeout_audit.test.js` for chain-tamper assertions). No `verbatim from X` placeholders remain.
 
 **Raouf fixes applied (2026-05-18):**
+
 1. ✅ Replaced `X11ScannerSummary` reuse with new `LinuxScannerSummary` carrying `portal_advertised`/`portal_active`/`xwayland_window_count` as first-class fields. Added `x11_to_linux_summary` promotion helper.
 2. ✅ Renamed `CurrentScan` → `LinuxScannerSnapshot` and field `x11` → `scanner` immediately in Task C2 (not deferred).
 3. ✅ Phase A lock-placement spelled out exactly: AFTER `validateDaemonProof` ok, BEFORE `recordProofVerified`, BEFORE `appendAudit DAEMON_PROOF_VERIFIED`, must not increment counters on rejection. Implementer must pattern-match `invalid_signature` to match existing challenge/sequence semantics.
@@ -1864,6 +1926,7 @@ gh release create v0.4.16-stage-2-8C-8D-linux-wayland-systemd-ci \
 5. ✅ All PR #22 cross-references inlined.
 
 **Type consistency:**
+
 - Field names: `display_server`, `coverage`, `portal_advertised`, `portal_active`, `scanner_reason`, `x11_*_count`, `xwayland_window_count` — consistent across phases.
 - Env var: `SIMURGH_REQUIRE_XVFB_TESTS` — same spelling in Phase F1/F2/F3, G, H.
 - Unit filename: `simurgh-daemon-linux.service` — consistent.
@@ -1871,6 +1934,7 @@ gh release create v0.4.16-stage-2-8C-8D-linux-wayland-systemd-ci \
 - Scanner reason enum: `portal_active_probe_unavailable`, `portal_not_active`, `non_local_display`, `no_display_server`, `sandboxed_browser_loopback_possible` — all already in `LINUX_SCANNER_REASONS` (PR #19).
 
 **Risks:**
+
 1. **Phase A live wiring** is the highest-risk change — it edits the production telemetry path. The red test is comprehensive (real server boot + 2-proof sequence). If any existing macOS/Windows test breaks, the lock observe branch is too aggressive — gate it strictly on `platform === "linux"`.
 2. **Phase B zbus dependency** adds a meaningful build-time + binary-size cost. The `default-features = false` + `features = ["tokio"]` keeps it minimal; verify clippy stays clean.
 3. **Phase D `browser_package_hint`** detection is genuinely unreliable across browsers. Default to `"unknown"` and resist the temptation to add fragile heuristics. The test ENFORCES that the server never trusts it.

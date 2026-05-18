@@ -218,7 +218,11 @@ test("server.js rejects telemetry proof when display_server changes mid-session"
     assert.ok(t2.status >= 400 && t2.status < 500, `wayland-after-x11 must 4xx, got ${t2.status}`);
     const body = await t2.json().catch(() => ({}));
     const reason = body.error || body.reason;
-    assert.equal(reason, "display_server_mismatch", `expected display_server_mismatch, got ${reason}`);
+    assert.equal(
+      reason,
+      "display_server_mismatch",
+      `expected display_server_mismatch, got ${reason}`
+    );
   } finally {
     srv.kill();
   }
@@ -301,9 +305,15 @@ test("display_server_mismatch rejection does not block subsequent valid telemetr
         sequence: 1,
         timestamp: Date.now(),
         telemetry: {
-          keystrokes: 4, chars_typed: 12, effective_wpm: 42, focus_losses: 0,
-          time_off_window_ms: 0, pastes: 0, paste_payload_chars: 0,
-          max_idle_gap_ms: 0, window_seconds: 5,
+          keystrokes: 4,
+          chars_typed: 12,
+          effective_wpm: 42,
+          focus_losses: 0,
+          time_off_window_ms: 0,
+          pastes: 0,
+          paste_payload_chars: 0,
+          max_idle_gap_ms: 0,
+          window_seconds: 5,
         },
         daemon_proof: p1,
       }),
@@ -339,9 +349,15 @@ test("display_server_mismatch rejection does not block subsequent valid telemetr
         sequence: 2,
         timestamp: Date.now(),
         telemetry: {
-          keystrokes: 4, chars_typed: 12, effective_wpm: 42, focus_losses: 0,
-          time_off_window_ms: 0, pastes: 0, paste_payload_chars: 0,
-          max_idle_gap_ms: 0, window_seconds: 5,
+          keystrokes: 4,
+          chars_typed: 12,
+          effective_wpm: 42,
+          focus_losses: 0,
+          time_off_window_ms: 0,
+          pastes: 0,
+          paste_payload_chars: 0,
+          max_idle_gap_ms: 0,
+          window_seconds: 5,
         },
         daemon_proof: p2,
       }),
@@ -377,9 +393,15 @@ test("display_server_mismatch rejection does not block subsequent valid telemetr
         sequence: 3,
         timestamp: Date.now(),
         telemetry: {
-          keystrokes: 4, chars_typed: 12, effective_wpm: 42, focus_losses: 0,
-          time_off_window_ms: 0, pastes: 0, paste_payload_chars: 0,
-          max_idle_gap_ms: 0, window_seconds: 5,
+          keystrokes: 4,
+          chars_typed: 12,
+          effective_wpm: 42,
+          focus_losses: 0,
+          time_off_window_ms: 0,
+          pastes: 0,
+          paste_payload_chars: 0,
+          max_idle_gap_ms: 0,
+          window_seconds: 5,
         },
         daemon_proof: p3,
       }),
