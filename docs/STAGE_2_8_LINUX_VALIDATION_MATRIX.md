@@ -132,7 +132,7 @@ Real-desktop evidence is pending for all non-CI environments.
 | Environment | Display Server | Expected Coverage | Expected Scanner State | Status |
 |---|---|---|---|---|
 | Ubuntu GNOME Wayland | wayland | wayland_limited | portal_probe | pending |
-| Ubuntu GNOME X11 | x11 | x11_full | x11_active | pending (headless Xvfb CI validated) |
+| Ubuntu GNOME X11 | x11 | x11_full | x11_active | pending |
 | Ubuntu XWayland app | xwayland | xwayland_partial | xwayland_detected | pending |
 | Fedora GNOME Wayland | wayland | wayland_limited | portal_probe | pending |
 | KDE Plasma Wayland | wayland | wayland_limited | portal_probe | pending |
@@ -140,13 +140,11 @@ Real-desktop evidence is pending for all non-CI environments.
 | Sway / wlroots | wayland | wayland_limited | portal_probe | pending |
 | Headless CI (Xvfb) | x11 (virtual) | x11_full | x11_active | validated (CI) |
 | Non-local DISPLAY | x11 | rejected / unsupported | scanner_unavailable | validated (unit test) |
-| display_server_mismatch | linux proof | rejected 409 | — | validated (smoke + integration) |
+| display_server_mismatch | linux proof | rejected 409 | — | validated (CI) |
 
 ---
 
 ## 8. Browser Package Hint Matrix
-
-`browser_package_hint` is a UX-only field. It is never included in the proof payload, never trusted by the server, and has no effect on the schema, risk engine, or report.
 
 | Hint Value | Detection Condition | Trust Level | Used In | Status |
 |---|---|---|---|---|
