@@ -6,6 +6,7 @@ Project Simurgh is a research prototype. Security fixes are applied to the lates
 
 | Version                                                           | Supported              |
 | ----------------------------------------------------------------- | ---------------------- |
+| `v0.4.16-stage-2-8C-8D-linux-wayland-systemd-ci`                  | ✅ Active              |
 | `v0.4.13-stage-2-6-2-7-closeout` (Windows Device Shield closeout) | ✅ Active              |
 | `v0.4.13` (Stage 2.7 cross-platform unification)                  | ✅ Active              |
 | `v0.4.12` (Stage 2.6B Windows scanner validation)                 | ✅ Active              |
@@ -166,16 +167,22 @@ npm audit
 
 The repository currently reports **0 known vulnerabilities**. Report any new findings with high or critical severity via the vulnerability disclosure process above.
 
-## Stage 2.8C/2.8D Linux Wayland + systemd + CI Hygiene
+## Stage 2.8 Linux Device Shield Security Posture
 
+- P-256 ECDSA daemon proof signed over canonical JSON; server verifies signature before processing any telemetry.
+- Challenge binding: proof includes a server-issued challenge echoed back; session-scoped one-time use prevents replay.
 - Wayland portal probe uses property reads only (`AvailableSourceTypes`); never calls `CreateSession`, `SelectSources`, `Start`, or `OpenPipeWireRemote`. Enforced by source-grep tests in both the Wayland scanner test file and the cybersecurity audit.
 - `display_server` is locked to the first verified value per session; mid-session changes are rejected with `display_server_mismatch` and emit `DAEMON_PROOF_REJECTED` to the HMAC audit chain.
 - XWayland output never claims `x11_full` or `wayland_limited` coverage — always `xwayland_partial`.
 - `browser_package_hint` is UX-only. The server (`server.js`), proof validator (`daemonProof.js`), schema (`platformScannerSchema.js`), risk policy (`scannerRiskPolicy.js`), and report builder (`reportBuilder.js`) all source-grep clean of the field.
 - systemd `--user` unit is development-only. No system-wide service. No root. No sudo in lifecycle scripts. Hardening directives: `NoNewPrivileges=true`, `ProtectSystem=strict`, `ProtectHome=read-only`, `PrivateTmp=true`.
 - Ubuntu CI now enforces Rust `cargo fmt --check`, `cargo clippy -- -D warnings`, `cargo test`, and `shellcheck` on the lifecycle scripts. Xvfb integration tests are mandatory via `SIMURGH_REQUIRE_XVFB_TESTS=1`.
+- Forbidden raw local field rejection: server and proof validator reject any proof payload carrying forbidden local identifiers (window titles, PIDs, process names, usernames, home paths).
+- No automatic misconduct finding: all anomalies are flagged for manual review only; the system makes no misconduct determination.
 
 Non-claims preserved: research prototype only. No production Linux endpoint deployment, no distro packaging, no system-wide service, no MDM, no hardware attestation, no kernel-level visibility, no universal Wayland surface enumeration, no GPU overlay detection, no automatic misconduct detection.
+
+See [`docs/STAGE_2_8_LINUX_TECHNICAL_BRIEF.md`](docs/STAGE_2_8_LINUX_TECHNICAL_BRIEF.md) for the full security architecture.
 
 ## Verification Tools
 

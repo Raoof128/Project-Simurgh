@@ -1,5 +1,24 @@
 ## Change Log
 
+## [0.4.18-stage-2-8-linux-closeout] — 2026-05-19 — Stage 2.8 Linux Closeout Docs
+
+**Raouf:** Stage 2.8 Linux closeout documentation, validation matrix, reviewer checklist, real-device validation plan, external-review readiness, and top-level security/privacy/roadmap documentation refresh.
+
+### Added
+
+- `docs/STAGE_2_8_LINUX_TECHNICAL_BRIEF.md` — 24-section reviewer-facing technical brief: daemon architecture, X11/Wayland/XWayland scanner design, display server lock, browser_package_hint trust boundary, systemd dev-only lifecycle, proof flow, privacy contract, CI/smoke/audit coverage, non-claims.
+- `docs/STAGE_2_8_LINUX_VALIDATION_MATRIX.md` — build/test/CI/smoke/cybersecurity/real-device validation matrix with honest pending status for unvalidated environments.
+- `docs/STAGE_2_8_LINUX_REVIEWER_CHECKLIST.md` — 16-group, 76-item reviewer checklist with concrete, file-level assertions.
+- `docs/STAGE_2_8_LINUX_CLOSEOUT.md` — freeze declaration: what is frozen, what is not claimed, gate evidence, real-device evidence (pending), reviewer notes.
+- `scripts/check.sh` gate 53 — doc-grep safety: rejects forbidden overclaim phrases in docs/README/SECURITY/PRIVACY/ROADMAP.
+
+### Changed
+
+- `README.md` — Status blockquote updated to reflect Stage 2.8 frozen; Linux Display Integrity Closeout section added; "Linux support is Stage 2.8 future research" removed.
+- `SECURITY.md` — Stage 2.8C/2.8D section renamed to "Stage 2.8 Linux Device Shield Security Posture"; expanded with proof verification, challenge binding, forbidden-field rejection, no-automatic-misconduct bullets.
+- `PRIVACY.md` — Last-updated date refreshed to 2026-05-19.
+- `ROADMAP.md` — Stage 2.8 status updated; Stage 2.8 Linux Research item marked complete; next-step updated to external review + Stage 3 planning.
+
 ## [0.4.16-stage-2-8C-8D] — 2026-05-18 — Stage 2.8C/2.8D Linux Wayland + systemd + Ubuntu CI
 
 **Raouf:** Combined PR #21+#22 — Linux Wayland portal probe (property-read only, no consent triggered), XWayland partial coverage, browser_package_hint UX-only, live `display_server_mismatch` enforcement, dev-only systemd `--user` lifecycle, Ubuntu CI Rust toolchain + mandatory Xvfb + shellcheck, combined Stage 2.8C/D smoke and cybersecurity audit.

@@ -21,6 +21,25 @@
 - **Non-claims preserved:** research prototype only. No production Linux endpoint deployment, no distro packaging, no system-wide service, no MDM, no hardware attestation, no kernel-level visibility, no universal Wayland surface enumeration, no GPU overlay detection, no automatic misconduct detection.
 - **Follow-up:** PR #23 closeout docs + full real-device validation matrix (Fedora, KDE, Sway).
 
+### 2026-05-19 (Australia/Sydney) — Stage 2.8 Linux Closeout Docs + Validation Matrix
+
+**Raouf:**
+
+- **Scope:** PR #23 — Stage 2.8 Linux closeout documentation, validation matrix, reviewer checklist, closeout declaration, README/SECURITY/PRIVACY/ROADMAP refresh, AGENT/CHANGELOG entries.
+- **Summary:** Wrote four new Linux closeout documents (`STAGE_2_8_LINUX_TECHNICAL_BRIEF.md`, `STAGE_2_8_LINUX_VALIDATION_MATRIX.md`, `STAGE_2_8_LINUX_REVIEWER_CHECKLIST.md`, `STAGE_2_8_LINUX_CLOSEOUT.md`) and refreshed six top-level docs. Added doc-grep safety gates to scripts/check.sh. Stage 2.8 Linux Display Integrity Research frozen as a documented research-prototype baseline through `v0.4.16-stage-2-8C-8D-linux-wayland-systemd-ci`.
+- **Files Changed:**
+  - `docs/STAGE_2_8_LINUX_TECHNICAL_BRIEF.md` — new (24 sections, Linux daemon architecture, scanner design, proof flow, privacy contract, non-claims)
+  - `docs/STAGE_2_8_LINUX_VALIDATION_MATRIX.md` — new (11 sections, build/CI/smoke/audit/real-device validation evidence)
+  - `docs/STAGE_2_8_LINUX_REVIEWER_CHECKLIST.md` — new (16 groups, 76 checklist items)
+  - `docs/STAGE_2_8_LINUX_CLOSEOUT.md` — new (10 sections, freeze declaration)
+  - `README.md` — Linux closeout section added, status updated
+  - `SECURITY.md` — Stage 2.8 security posture section renamed and expanded
+  - `PRIVACY.md` — last-updated date refreshed
+  - `ROADMAP.md` — Stage 2.8 status and next-step updated
+  - `scripts/check.sh` — doc-grep safety gate added (gate 53)
+- **Verification:** 327/327 Node, 33/33 Rust, 53/53 scripts/check.sh, privacy audit pass, cargo fmt/clippy clean.
+- **Non-claims preserved:** Research prototype only. No production Linux endpoint deployment, no distro packaging, no system-wide service, no MDM, no hardware attestation, no kernel-level visibility, no universal Wayland surface enumeration, no GPU overlay detection, no automatic misconduct detection.
+
 ### 2026-05-17 (Australia/Sydney) — Post-Merge Fixes: CI Rerun, Tag Release, Issue Updates
 
 **Raouf:**

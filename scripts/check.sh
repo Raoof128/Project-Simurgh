@@ -1282,6 +1282,36 @@ else
   echo -e "${YELLOW}Skipped — cargo not on PATH (install Rust to run Linux daemon gates).${NC}"
 fi
 
+# ── 10q. Doc-grep safety: no overclaim phrases in Linux closeout docs ──────
+step "Doc-grep safety (no overclaim phrases in Linux closeout docs)"
+DOC_GREP_FAIL=false
+DOC_FILES="README.md SECURITY.md PRIVACY.md ROADMAP.md \
+  docs/STAGE_2_8_LINUX_TECHNICAL_BRIEF.md \
+  docs/STAGE_2_8_LINUX_VALIDATION_MATRIX.md \
+  docs/STAGE_2_8_LINUX_REVIEWER_CHECKLIST.md \
+  docs/STAGE_2_8_LINUX_CLOSEOUT.md"
+
+# "cheating detected" should never appear — we never claim automatic misconduct detection
+if grep -qr "cheating detected" $DOC_FILES 2>/dev/null; then
+  echo "FAIL: 'cheating detected' found in docs (overclaim — no automatic misconduct detection is claimed)"
+  grep -rn "cheating detected" $DOC_FILES
+  DOC_GREP_FAIL=true
+fi
+
+# "Linux parity" must only appear in negation/qualification lines
+while IFS= read -r line; do
+  if echo "$line" | grep -qi "linux parity" && ! echo "$line" | grep -qiE "(no|not|without|never|parity claim)"; then
+    echo "FAIL: 'Linux parity' positive claim found: $line"
+    DOC_GREP_FAIL=true
+  fi
+done < <(grep -rn "linux parity" $DOC_FILES 2>/dev/null)
+
+if [[ "$DOC_GREP_FAIL" == "false" ]]; then
+  pass "Doc-grep safety: no overclaim phrases in Linux closeout docs"
+else
+  fail "Doc-grep safety: overclaim phrases found in Linux closeout docs"
+fi
+
 # ── 11. Git status sanity ────────────────────────────────
 step "Git status"
 if git rev-parse --git-dir > /dev/null 2>&1; then

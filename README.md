@@ -23,7 +23,7 @@ _Detecting UI-redressing and behavioral spoofing without relying on screen captu
 
 </div>
 
-> **Status: Stage 2 Windows Device Shield frozen — tagged `v0.4.13-stage-2-6-2-7-closeout`.** The Windows Device Shield is implemented, real-device validated on Windows 10 Pro build 19045, regression-gated, security-audited (24/24 tests across nine audit dimensions), and frozen as a research-prototype baseline. Stage 2.7 unifies macOS and Windows under one cross-platform proof, scanner, risk, report, dashboard, privacy, and audit contract. Stage 2.8 Linux Display Integrity Research is the next milestone. The system remains a research prototype and does not claim production Windows Service deployment, MDM/Intune readiness, hardware attestation, kernel-level visibility, or automatic misconduct detection. It does not collect video, audio, biometric data, typed answer content, pasted content, raw process names, raw window titles, HWNDs, PIDs, usernames, serial numbers, MAC addresses, or personal identity data. See [PRIVACY.md](PRIVACY.md), [ETHICS.md](ETHICS.md), and [DISCLAIMER.md](DISCLAIMER.md).
+> **Status: Stage 2 Windows Device Shield frozen — tagged `v0.4.13-stage-2-6-2-7-closeout`.** The Windows Device Shield is implemented, real-device validated on Windows 10 Pro build 19045, regression-gated, security-audited (24/24 tests across nine audit dimensions), and frozen as a research-prototype baseline. Stage 2.7 unifies macOS and Windows under one cross-platform proof, scanner, risk, report, dashboard, privacy, and audit contract. Stage 2.8 Linux Display Integrity Research is frozen through `v0.4.16-stage-2-8C-8D-linux-wayland-systemd-ci`. The system remains a research prototype and does not claim production Windows Service deployment, MDM/Intune readiness, hardware attestation, kernel-level visibility, or automatic misconduct detection. It does not collect video, audio, biometric data, typed answer content, pasted content, raw process names, raw window titles, HWNDs, PIDs, usernames, serial numbers, MAC addresses, or personal identity data. See [PRIVACY.md](PRIVACY.md), [ETHICS.md](ETHICS.md), and [DISCLAIMER.md](DISCLAIMER.md).
 
 ---
 
@@ -43,7 +43,28 @@ Stage 2 Windows Device Shield is frozen as a research-prototype baseline. The Wi
 - Stage 2.6, Stage 2.7, and closeout smoke coverage
 - Stage 2.6/2.7 cybersecurity audit (24/24 tests, nine dimensions)
 
-Validated on Windows 10 Pro build 19045. **Known boundaries:** research prototype only; no production Windows Service deployment; no MDM/Intune readiness; no hardware attestation; no kernel-level visibility; no automatic misconduct finding; no raw HWND, PID, process name, or window title collection. Linux support is Stage 2.8 future research.
+Validated on Windows 10 Pro build 19045. **Known boundaries:** research prototype only; no production Windows Service deployment; no MDM/Intune readiness; no hardware attestation; no kernel-level visibility; no automatic misconduct finding; no raw HWND, PID, process name, or window title collection. Stage 2.8 Linux Display Integrity Research is frozen through `v0.4.16-stage-2-8C-8D-linux-wayland-systemd-ci`.
+
+---
+
+## Linux Display Integrity Closeout
+
+Stage 2.8 Linux Display Integrity Research is frozen as a research-prototype baseline through `v0.4.16-stage-2-8C-8D-linux-wayland-systemd-ci`.
+
+The Linux path includes:
+
+- Rust axum localhost daemon (`tools/simurgh-daemon-linux/`) on 127.0.0.1:3031
+- P-256 ECDSA signed proofs with challenge binding and replay rejection
+- X11 scanner: `query_tree` window counting (managed, override-redirect, above-hint, fullscreen, skip-taskbar)
+- Wayland portal probe: `NameHasOwner` + `GetProperty<AvailableSourceTypes>` only — no screen capture session initiated
+- XWayland partial coverage: `coverage=xwayland_partial`, `xwayland_window_count`
+- `display_server_mismatch` enforcement: session-scoped lock, 409 + audit event on mismatch
+- `browser_package_hint`: UX-only SDK field, never trusted by server/proof/schema/risk/report
+- Dev-only systemd `--user` lifecycle: 4 shellcheck-clean lifecycle scripts, no root/sudo
+- Ubuntu CI: `ubuntu-latest`, Xvfb, dbus-x11, shellcheck, `SIMURGH_REQUIRE_XVFB_TESTS=1`
+- 16-scenario smoke + 30-assertion cybersecurity audit (16 dimensions)
+
+**Known boundaries:** research prototype only; no production Linux endpoint deployment; no distro packaging; no system-wide service; no MDM readiness; no hardware attestation; no kernel-level visibility; no universal Wayland surface enumeration; no GPU overlay detection; no automatic misconduct detection.
 
 ---
 
