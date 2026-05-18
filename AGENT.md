@@ -2,6 +2,25 @@
 
 ## Agent Change Log
 
+### 2026-05-18 (Australia/Sydney) — Stage 2.8C/2.8D Linux Wayland + systemd + Ubuntu CI
+
+**Raouf:**
+
+- **Scope:** Combined PR #21+#22 — Linux Wayland portal probe, XWayland partial coverage, browser_package_hint UX-only, live `display_server_mismatch` enforcement, dev-only systemd `--user` lifecycle, Ubuntu CI Rust toolchain + mandatory Xvfb + shellcheck, combined Stage 2.8C/D smoke (16 scenarios) + cybersecurity audit (16 dimensions, 30 assertions), evidence-rules README.
+- **Phase A:** Wired `createDisplayServerLock` into `/api/telemetry`. Closes the v0.4.15 P0 follow-up. Strictly gated on `platform === "linux"`. Counters not advanced on rejection. `DAEMON_PROOF_REJECTED` audit emitted. Stage 2.7 macOS/Windows path byte-identical.
+- **Phase B:** Added `zbus` 4.4.0 (minimal `tokio` feature). New `LinuxScannerSummary` type alongside `X11ScannerSummary`. `scanner/wayland.rs` probes `org.freedesktop.portal.Desktop` via `NameHasOwner` + reads `ScreenCast.AvailableSourceTypes` property — NEVER calls `CreateSession`/`SelectSources`/`Start`/`OpenPipeWireRemote`. Banned-method grep test enforces consent safety.
+- **Phase C:** `scanner/xwayland.rs` reuses X11 path against `$DISPLAY` but maps to `coverage=xwayland_partial`. `CurrentScan` renamed to `LinuxScannerSnapshot`. `/status` + `/proof` dispatch on `display_server`. New proof-endpoint test proves `xwayland_window_count` + `portal_*` flow through SIGNED proof.
+- **Phase D:** `browser_package_hint` UX-only via SDK `getDeviceShieldStatus()`. Defaults to `"unknown"`. Soft `daemon_unreachable_hint` wording. 8 trust-boundary tests across SDK + 5 server modules — none of which reference the field.
+- **Phase E:** `systemd/simurgh-daemon-linux.service` (user-scope, hardening directives). Four lifecycle scripts (install/uninstall/check/doctor) with `--check` + `--dry-run`. No sudo, no eval, no curl-pipe-sh, only `systemctl --user`.
+- **Phase F:** `SIMURGH_REQUIRE_XVFB_TESTS=1` env-var enforcement (panic when set + Xvfb missing; eprintln skip when unset). `.github/workflows/stage-1-checks.yml` extended with apt deps (xvfb x11-utils dbus-x11 xterm shellcheck), Rust stable toolchain, cargo cache, shellcheck, fmt/clippy/test, env var set. Timeout 10→20 min for cold-cache headroom. 7 workflow assertion tests.
+- **Phase G:** 16-scenario combined smoke covering X11, Wayland states, XWayland, browser hint, display lock, non-local DISPLAY, headless, systemd lifecycle, mandatory Xvfb CI gate, report shape, audit chain. 15/15 executed pass (scenario M correctly skipped locally; CI-only).
+- **Phase H:** 30-assertion combined cybersecurity audit across 16 dimensions. Surfaced one wording violation (systemd unit comment said "production endpoint" in a negated form — reworded). All other dimensions clean.
+- **Phase I:** `docs/evidence/stage-2-linux/README.md` with allowed/forbidden evidence rules + research-prototype non-claims posture.
+- **Phase J:** scripts/check.sh wired for 5 new gates (Stage 2.8A/B smoke+audit, Stage 2.8C/D smoke+audit, Linux Rust fmt+clippy+test). Light README/ROADMAP/SECURITY/PRIVACY updates.
+- **Verification:** `npm test` 327/327, `cargo test` 33/33 with `SIMURGH_REQUIRE_XVFB_TESTS=1`, `cargo fmt --check` + `cargo clippy -- -D warnings` clean, prettier clean, npm audit 0 high vulnerabilities, privacy audit pass, Stage 2.7 + Stage 2.8A/B regression green, Stage 2.8C/D smoke 16 scenarios pass, Stage 2.8C/D cybersecurity audit 30 assertions pass.
+- **Non-claims preserved:** research prototype only. No production Linux endpoint deployment, no distro packaging, no system-wide service, no MDM, no hardware attestation, no kernel-level visibility, no universal Wayland surface enumeration, no GPU overlay detection, no automatic misconduct detection.
+- **Follow-up:** PR #23 closeout docs + full real-device validation matrix (Fedora, KDE, Sway).
+
 ### 2026-05-17 (Australia/Sydney) — Post-Merge Fixes: CI Rerun, Tag Release, Issue Updates
 
 **Raouf:**

@@ -70,6 +70,8 @@ Transition toward signed local integrity proofs and device-aware validation.
 - [x] Real Windows laptop validation for `WDA_MONITOR` and `WDA_EXCLUDEFROMCAPTURE`
 - [x] Cross-platform Device Shield unification — Stage 2.7, `v0.4.13` (shared proof/scanner/risk/privacy contracts, cross-platform smoke + audit, Linux daemon proofs rejected with `unsupported_platform`)
 - [x] Stage 2 Windows Device Shield closeout — `v0.4.13-stage-2-6-2-7-closeout` (Windows technical brief, validation matrix, reviewer checklist, umbrella smoke + security audit gates, evidence folder, external review signal)
+- [x] Stage 2.8A/2.8B Linux X11 scanner + display-server lock + server-side Linux proof acceptance — `v0.4.15-stage-2-8A-8B-linux-x11-scanner` (X11 window-affinity enumeration, `display_server_lock` enforcement, Linux daemon lifecycle, Stage 2.8A/B smoke + cybersecurity audit)
+- [x] Stage 2.8C/2.8D Linux Wayland + XWayland + systemd `--user` lifecycle + Ubuntu CI — `v0.4.16-stage-2-8C-8D-linux-wayland-systemd-ci` (live `display_server_mismatch` enforcement, Wayland portal advertised/active probe with no consent triggered, XWayland partial coverage, browser_package_hint UX-only, dev-only systemd user unit + lifecycle scripts, Ubuntu CI Rust + mandatory Xvfb + shellcheck, combined smoke + cybersecurity audit)
 - [ ] Production Windows Service packaging and deployment design
 - [ ] Stage 2.8 Linux Display Integrity Research — X11 enumeration feasibility, Wayland compositor/security-model investigation, no parity claim until signed and validated
 

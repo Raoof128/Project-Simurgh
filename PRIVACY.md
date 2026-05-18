@@ -1,8 +1,10 @@
 # Privacy Policy
 
-**Last updated:** 2026-05-17 (Stage 2 Windows Device Shield Closeout)
+**Last updated:** 2026-05-18 (Stage 2.8C/D Linux Wayland + systemd + Ubuntu CI)
 
 > **Stage 2.7 note:** The canonical list of forbidden raw-field names now lives in [`src/device/forbiddenLocalFields.js`](src/device/forbiddenLocalFields.js) and is enforced recursively by the daemon proof validator, the privacy audit CLI (`tools/privacy-audit.mjs`), and the Stage 2.7 security audit gate. Any new field added to that list automatically tightens the privacy contract across both macOS and Windows.
+
+> **Stage 2.8C/D note:** The Linux daemon counts-only contract is preserved in Stage 2.8C/D. The Wayland portal probe reads only the `AvailableSourceTypes` property (an integer bitmask); no session, stream, or PipeWire handle is ever opened. `browser_package_hint` is UX-only and client-side — it is not collected, stored, transmitted to the server, or referenced in any server module. No new field categories were introduced.
 
 Project Simurgh is a research prototype for privacy-preserving academic integrity verification. This document describes what data is collected, how it is used, and what is explicitly not collected.
 

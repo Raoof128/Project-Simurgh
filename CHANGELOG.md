@@ -1,5 +1,31 @@
 ## Change Log
 
+## [0.4.16-stage-2-8C-8D] — 2026-05-18 — Stage 2.8C/2.8D Linux Wayland + systemd + Ubuntu CI
+
+**Raouf:** Combined PR #21+#22 — Linux Wayland portal probe (property-read only, no consent triggered), XWayland partial coverage, browser_package_hint UX-only, live `display_server_mismatch` enforcement, dev-only systemd `--user` lifecycle, Ubuntu CI Rust toolchain + mandatory Xvfb + shellcheck, combined Stage 2.8C/D smoke and cybersecurity audit.
+
+### Added
+
+- `scanner/wayland.rs` — Wayland portal probe via `AvailableSourceTypes` property read only. Banned-method grep test prevents consent-triggering calls.
+- `scanner/xwayland.rs` — XWayland scanner mapping to `coverage=xwayland_partial`. Never claims `x11_full` or `wayland_limited`.
+- `systemd/simurgh-daemon-linux.service` — dev-only `--user` unit with `NoNewPrivileges`, `ProtectSystem=strict`, `ProtectHome=read-only`, `PrivateTmp=true`. No root, no sudo.
+- Lifecycle scripts: install/uninstall/check/doctor with `--check` + `--dry-run`. shellcheck-clean.
+- `SIMURGH_REQUIRE_XVFB_TESTS=1` env-var gate: panics when set + Xvfb missing; skips gracefully when unset.
+- 16-scenario combined smoke + 30-assertion cybersecurity audit (16 dimensions). `docs/evidence/stage-2-linux/README.md` evidence rules.
+
+### Changed
+
+- `/api/telemetry` now enforces `display_server_mismatch` live (Phase A P0 follow-up). Emits `DAEMON_PROOF_REJECTED` to HMAC audit chain on mismatch.
+- `browser_package_hint` is UX-only in SDK `getDeviceShieldStatus()`. Server modules source-grep clean of the field.
+- Ubuntu CI extended: Rust stable toolchain, cargo fmt/clippy/test, shellcheck, Xvfb apt deps, timeout 10→20 min.
+- README Node test count: 327/327. Rust test count: 33/33.
+
+### Non-claims preserved
+
+Research prototype only. No production Linux endpoint deployment, no distro packaging, no system-wide service, no MDM, no hardware attestation, no kernel-level visibility, no universal Wayland surface enumeration, no GPU overlay detection, no automatic misconduct detection.
+
+---
+
 ## [post-merge] — 2026-05-17 — CI fix, tag release, issue updates
 
 Post-merge housekeeping after PR #17 merged to `main`.
