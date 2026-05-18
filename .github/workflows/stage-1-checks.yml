@@ -21,7 +21,9 @@ jobs:
   stage-1-checks:
     name: Run Simurgh quality gate (scripts/check.sh)
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    # 20 min headroom: first push has cold Cargo cache (~3–5 min for x11rb/zbus/axum build).
+    # Subsequent pushes hit the actions/cache@v4 key on Cargo.lock and run in <2 min.
+    timeout-minutes: 20
 
     # Safe non-real values used purely so the server can start in the smoke
     # test step. ANTHROPIC_API_KEY is intentionally NOT set — the smoke test
