@@ -65,7 +65,7 @@ pub fn detect(env: &SessionEnv) -> SessionDetection {
     }
 }
 
-fn is_local_display(d: &str) -> bool {
+pub fn is_local_display(d: &str) -> bool {
     // Local forms: ":N", ":N.M", "unix/:N", "unix:N", absolute paths.
     if d.is_empty() {
         return false;

@@ -44,6 +44,23 @@ function baseRecord(now) {
     last_scan_at: null,
     signature_valid: null,
     challenge_id_hash: null,
+    x11_managed_window_count: 0,
+    x11_managed_window_count_max: 0,
+    x11_override_redirect_window_count: 0,
+    x11_override_redirect_window_count_max: 0,
+    x11_above_window_count: 0,
+    x11_above_window_count_max: 0,
+    x11_fullscreen_window_count: 0,
+    x11_fullscreen_window_count_max: 0,
+    x11_skip_taskbar_window_count: 0,
+    x11_skip_taskbar_window_count_max: 0,
+    xwayland_window_count: 0,
+    xwayland_window_count_max: 0,
+    display_server: null,
+    display_server_locked: false,
+    coverage: null,
+    portal_advertised: null,
+    portal_active: null,
     updated_at: now,
   };
 }
@@ -116,6 +133,16 @@ export function createDaemonStateRegistry({ staleAfterMs = 10_000 } = {}) {
         visible_window_count = 0,
         timestamp,
         challenge_id_hash = null,
+        x11_managed_window_count = 0,
+        x11_override_redirect_window_count = 0,
+        x11_above_window_count = 0,
+        x11_fullscreen_window_count = 0,
+        x11_skip_taskbar_window_count = 0,
+        xwayland_window_count = 0,
+        display_server = null,
+        coverage = null,
+        portal_advertised = null,
+        portal_active = null,
         now = Date.now(),
       }
     ) {
@@ -151,6 +178,40 @@ export function createDaemonStateRegistry({ staleAfterMs = 10_000 } = {}) {
         record.monitor_only_window_count_max,
         monitor_only_window_count
       );
+      record.x11_managed_window_count = x11_managed_window_count;
+      record.x11_managed_window_count_max = Math.max(
+        record.x11_managed_window_count_max,
+        x11_managed_window_count
+      );
+      record.x11_override_redirect_window_count = x11_override_redirect_window_count;
+      record.x11_override_redirect_window_count_max = Math.max(
+        record.x11_override_redirect_window_count_max,
+        x11_override_redirect_window_count
+      );
+      record.x11_above_window_count = x11_above_window_count;
+      record.x11_above_window_count_max = Math.max(
+        record.x11_above_window_count_max,
+        x11_above_window_count
+      );
+      record.x11_fullscreen_window_count = x11_fullscreen_window_count;
+      record.x11_fullscreen_window_count_max = Math.max(
+        record.x11_fullscreen_window_count_max,
+        x11_fullscreen_window_count
+      );
+      record.x11_skip_taskbar_window_count = x11_skip_taskbar_window_count;
+      record.x11_skip_taskbar_window_count_max = Math.max(
+        record.x11_skip_taskbar_window_count_max,
+        x11_skip_taskbar_window_count
+      );
+      record.xwayland_window_count = xwayland_window_count;
+      record.xwayland_window_count_max = Math.max(
+        record.xwayland_window_count_max,
+        xwayland_window_count
+      );
+      if (display_server !== null) record.display_server = display_server;
+      if (coverage !== null) record.coverage = coverage;
+      if (portal_advertised !== null) record.portal_advertised = portal_advertised;
+      if (portal_active !== null) record.portal_active = portal_active;
       record.signature_valid = true;
       record.challenge_id_hash = challenge_id_hash;
       record.proofs_verified += 1;

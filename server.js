@@ -767,6 +767,18 @@ app.post("/api/telemetry", async (req, res) => {
       visible_window_count: daemonValidation.proof.visible_window_count,
       timestamp: daemonValidation.proof.timestamp,
       challenge_id_hash: daemonValidation.proof.challenge_id_hash,
+      // Stage 2.8B: forward Linux-specific scanner fields. The recorder
+      // defaults them to 0/null when absent (macOS/Windows path is unaffected).
+      x11_managed_window_count: daemonValidation.proof.x11_managed_window_count,
+      x11_override_redirect_window_count: daemonValidation.proof.x11_override_redirect_window_count,
+      x11_above_window_count: daemonValidation.proof.x11_above_window_count,
+      x11_fullscreen_window_count: daemonValidation.proof.x11_fullscreen_window_count,
+      x11_skip_taskbar_window_count: daemonValidation.proof.x11_skip_taskbar_window_count,
+      xwayland_window_count: daemonValidation.proof.xwayland_window_count,
+      display_server: daemonValidation.proof.display_server,
+      coverage: daemonValidation.proof.coverage,
+      portal_advertised: daemonValidation.proof.portal_advertised,
+      portal_active: daemonValidation.proof.portal_active,
     });
     appendAudit(sess, EVENTS.DAEMON_PROOF_VERIFIED, {
       node_id_hash: daemonValidation.proof.node_id_hash,

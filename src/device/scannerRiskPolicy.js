@@ -30,6 +30,20 @@ export function mapScannerSummaryToRisk(record) {
   ) {
     return { daemon_risk: 40, forceCritical: false };
   }
+  const x11Above = record?.x11_above_window_count_max ?? 0;
+  const x11Override = record?.x11_override_redirect_window_count_max ?? 0;
+  if (x11Above > 0 || x11Override > 0) {
+    return { daemon_risk: 40, forceCritical: false };
+  }
+  if (
+    record?.scanner_state === "wayland_compositor_restricted" ||
+    record?.scanner_state === "wayland_compositor_unsupported" ||
+    record?.scanner_state === "xwayland_detected" ||
+    record?.coverage === "wayland_limited" ||
+    record?.coverage === "xwayland_partial"
+  ) {
+    return { daemon_risk: 40, forceCritical: false };
+  }
   if (state === DAEMON_STATES.UNTRUSTED) return { daemon_risk: 50, forceCritical: false };
   if (state === DAEMON_STATES.UNPAIRED) return { daemon_risk: 25, forceCritical: false };
   if (state === DAEMON_STATES.STALE) return { daemon_risk: 20, forceCritical: false };

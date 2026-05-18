@@ -21,7 +21,15 @@ const FORBIDDEN_FIELDS = new Set(FORBIDDEN_LOCAL_FIELD_NAMES);
 // forbidden raw fields. We don't flag them.
 const ALLOWED_HASH_SUFFIXES = ["_hash", "_sha256", "_digest"];
 
-const DEFAULT_SCAN_DIRS = ["data", "data/sessions", "data/audit", "data/reports", "data/exams"];
+const DEFAULT_SCAN_DIRS = [
+  "data",
+  "data/sessions",
+  "data/audit",
+  "data/reports",
+  "data/exams",
+  "tools/simurgh-daemon-linux",
+  "tests/fixtures/stage-2-8",
+];
 
 const args = process.argv.slice(2);
 const quiet = args.includes("--quiet");
@@ -76,9 +84,13 @@ function walk(dir) {
     return;
   }
   if (!stat.isDirectory()) return;
+  // Skip Rust build directories — they contain artifact JSONs that may
+  // legitimately reference forbidden field names from crate source
+  // comments. Same rationale for node_modules.
+  const base = basename(dir);
+  if (base === "target" || base === "node_modules") return;
   for (const entry of readdirSync(dir)) {
     if (entry.startsWith(".")) continue;
-    if (entry === "node_modules") continue;
     walk(join(dir, entry));
   }
 }
