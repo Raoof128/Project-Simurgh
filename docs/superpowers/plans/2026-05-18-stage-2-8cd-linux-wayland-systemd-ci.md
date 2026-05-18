@@ -357,9 +357,19 @@ const displayServerLock = createDisplayServerLock();
 ```
 (If `createDisplayServerLock` is already imported, just add the construction.)
 
-- [ ] **Step 3: Add the lock check in the telemetry handler**
+- [ ] **Step 3: Add the lock check in the telemetry handler — exact placement matters**
 
-In `/api/telemetry` handler, AFTER the daemonValidation success check and BEFORE the `consumed.ok` check (or wherever sequencing makes sense — read the existing flow first to place it correctly):
+In the `/api/telemetry` handler, the lock check must run **EXACTLY HERE**:
+1. AFTER `validateDaemonProof(...)` returned `ok: true` (so we only lock on cryptographically valid proofs).
+2. AFTER the `consumed` challenge-consume call already succeeded — OR, look at how the existing flow handles a rejected proof. Two distinct cases:
+   - If the existing code currently consumes the challenge BEFORE checking everything (e.g., the `invalid_signature` path also consumes), match that pattern.
+   - If existing rejections happen BEFORE challenge consumption, place this check BEFORE consumption too.
+3. BEFORE `daemonStateRegistry.recordProofVerified(...)` — so the registry's `proofs_verified` counter and scanner-count rollups do NOT advance on rejection.
+4. BEFORE the `appendAudit(sess, EVENTS.DAEMON_PROOF_VERIFIED, ...)` call — so the audit chain emits `DAEMON_PROOF_REJECTED` only, not both.
+5. BEFORE any telemetry/risk computation that depends on the proof — so display-server mismatch never increments risk scores.
+
+**Read the existing `/api/telemetry` flow in `server.js` carefully before placing this block.** Pattern-match on how `invalid_signature` rejections behave today — your placement should produce the same side-effect shape (same challenge handling, same audit emission style, no double-counting).
+
 ```javascript
     if (daemonValidation.proof.platform === "linux" && daemonValidation.proof.display_server) {
       const lockResult = displayServerLock.observe(
@@ -373,10 +383,15 @@ In `/api/telemetry` handler, AFTER the daemonValidation success check and BEFORE
           observed_display_server: lockResult.observed_display_server,
           node_id_hash: daemonValidation.proof.node_id_hash,
         });
+        // Do NOT call daemonStateRegistry.recordProofVerified — proof was rejected.
+        // Do NOT increment proofs_verified counters here — the registry stays untouched
+        // for rejection so the report's proofs_verified count reflects only accepted proofs.
         return res.status(409).json({ error: "display_server_mismatch" });
       }
     }
 ```
+
+Verification belt-and-braces: the existing Linux-proof scenarios in PR #20 (Stage 2.8A/B smoke) must still pass byte-identically — those proofs all use `display_server: "x11"` consistently within a session, so the lock observes a single value and never trips.
 
 - [ ] **Step 4: Evict the lock on session end**
 
@@ -409,6 +424,14 @@ git commit -m "feat(stage-2-8c): wire display_server_mismatch into /api/telemetr
 # Phase B — Wayland portal advertised vs active (no consent triggered)
 # ═══════════════════════════════════════════════════════════════════════════
 
+## Definition: `portal_active`
+
+For the avoidance of ambiguity:
+
+> `portal_active = true` means: the `org.freedesktop.portal.ScreenCast` interface's `AvailableSourceTypes` property was successfully read via a synchronous DBus property-get, AND no consent session was started, AND no capture pipeline was opened.
+
+`portal_active` does NOT mean "screen capture is currently in progress". It means "the portal's capability advertisement is reachable enough to plausibly support a future capture if the user explicitly authorised one". Phase H's audit greps the Wayland scanner source to enforce that none of these method names appear in code paths: `CreateSession`, `SelectSources`, `Start`, `OpenPipeWireRemote`.
+
 ## Task B1: Add zbus dependency + wayland scanner skeleton
 
 **Files:**
@@ -422,15 +445,90 @@ git commit -m "feat(stage-2-8c): wire display_server_mismatch into /api/telemetr
 zbus = { version = "4", default-features = false, features = ["tokio"] }
 ```
 
-- [ ] **Step 2: Create `tools/simurgh-daemon-linux/src/scanner/wayland.rs`**
+- [ ] **Step 2: Introduce a real `LinuxScannerSummary` type in `scanner/privacy.rs`**
+
+Add to `tools/simurgh-daemon-linux/src/scanner/privacy.rs` (do NOT remove existing `RawX11Counts` / `X11ScannerSummary` — the X11 scanner from PR #20 still uses them internally; we add the new shared type alongside):
+
+```rust
+/// Cross-platform Linux scanner summary. Carries every field the signed
+/// /proof payload needs from a scan, regardless of whether the source was
+/// X11, Wayland, XWayland, or headless. This is the trust-boundary output
+/// shape — fields here are the ones that cross from scanner to proof.
+#[derive(Debug, Clone)]
+pub struct LinuxScannerSummary {
+    pub scanner_state: &'static str,
+    pub scanner_reason: &'static str,
+    pub coverage: &'static str,
+    pub portal_advertised: Option<bool>,
+    pub portal_active: Option<bool>,
+    pub x11_managed_window_count: u32,
+    pub x11_override_redirect_window_count: u32,
+    pub x11_above_window_count: u32,
+    pub x11_fullscreen_window_count: u32,
+    pub x11_skip_taskbar_window_count: u32,
+    pub xwayland_window_count: u32,
+    pub suspicious_window_count: u32,
+    pub visible_window_count: u32,
+}
+
+impl LinuxScannerSummary {
+    pub fn unavailable(reason: &'static str) -> Self {
+        Self {
+            scanner_state: "scanner_unavailable",
+            scanner_reason: reason,
+            coverage: "unknown",
+            portal_advertised: None,
+            portal_active: None,
+            x11_managed_window_count: 0,
+            x11_override_redirect_window_count: 0,
+            x11_above_window_count: 0,
+            x11_fullscreen_window_count: 0,
+            x11_skip_taskbar_window_count: 0,
+            xwayland_window_count: 0,
+            suspicious_window_count: 0,
+            visible_window_count: 0,
+        }
+    }
+}
+
+pub fn x11_to_linux_summary(s: X11ScannerSummary) -> LinuxScannerSummary {
+    // Promotion path: existing X11 scanner output → LinuxScannerSummary shape.
+    LinuxScannerSummary {
+        scanner_state: s.scanner_state,
+        scanner_reason: s.scanner_reason,
+        coverage: s.coverage,
+        portal_advertised: None,
+        portal_active: None,
+        x11_managed_window_count: s.x11_managed_window_count,
+        x11_override_redirect_window_count: s.x11_override_redirect_window_count,
+        x11_above_window_count: s.x11_above_window_count,
+        x11_fullscreen_window_count: s.x11_fullscreen_window_count,
+        x11_skip_taskbar_window_count: s.x11_skip_taskbar_window_count,
+        xwayland_window_count: 0,
+        suspicious_window_count: s.suspicious_window_count,
+        visible_window_count: s.visible_window_count,
+    }
+}
+```
+
+- [ ] **Step 3: Create `tools/simurgh-daemon-linux/src/scanner/wayland.rs`**
 
 ```rust
 //! Wayland portal probe — `portal_advertised` (cheap DBus name check) and
-//! `portal_active` (no-consent capability probe). Never starts a ScreenCast
-//! session. Falls back to `portal_active_probe_unavailable` if the compositor
-//! cannot provide a safe probe.
+//! `portal_active` (no-consent capability probe — property read only, NEVER
+//! a session-creation call). Never starts a ScreenCast session. Falls back
+//! to `portal_active_probe_unavailable` if the compositor cannot provide
+//! a safe probe.
+//!
+//! Hard rule: this module MUST NOT call any of:
+//!   - org.freedesktop.portal.ScreenCast.CreateSession
+//!   - org.freedesktop.portal.ScreenCast.SelectSources
+//!   - org.freedesktop.portal.ScreenCast.Start
+//!   - org.freedesktop.portal.ScreenCast.OpenPipeWireRemote
+//! Any of those would surface a user consent dialog. The phase-H security
+//! audit greps this file's source to enforce that invariant.
 
-use crate::scanner::privacy::X11ScannerSummary;
+use crate::scanner::privacy::LinuxScannerSummary;
 
 #[derive(Debug, Clone, Copy)]
 pub struct WaylandProbe {
@@ -528,10 +626,11 @@ async fn read_available_source_types(conn: &zbus::Connection) -> Option<u32> {
     proxy.get_property::<u32>("AvailableSourceTypes").await.ok()
 }
 
-pub fn wayland_summary(probe_result: WaylandProbe) -> X11ScannerSummary {
-    // Reuse X11ScannerSummary shape for uniform proof field set, but populate
-    // Wayland-specific state. Counts stay at 0 — Wayland security model does
-    // not allow cross-client surface enumeration.
+pub fn wayland_summary(probe_result: WaylandProbe) -> LinuxScannerSummary {
+    // Use the cross-platform LinuxScannerSummary shape — Wayland-specific
+    // portal_advertised / portal_active fields are first-class. Counts stay
+    // at 0 because the Wayland security model does not allow cross-client
+    // surface enumeration.
     let scanner_state = if probe_result.portal_advertised && probe_result.portal_active {
         "wayland_portal_available"
     } else if probe_result.portal_advertised {
@@ -546,15 +645,18 @@ pub fn wayland_summary(probe_result: WaylandProbe) -> X11ScannerSummary {
     } else {
         "none"
     };
-    X11ScannerSummary {
+    LinuxScannerSummary {
         scanner_state,
         scanner_reason,
         coverage: "wayland_limited",
+        portal_advertised: Some(probe_result.portal_advertised),
+        portal_active: Some(probe_result.portal_active),
         x11_managed_window_count: 0,
         x11_override_redirect_window_count: 0,
         x11_above_window_count: 0,
         x11_fullscreen_window_count: 0,
         x11_skip_taskbar_window_count: 0,
+        xwayland_window_count: 0,
         suspicious_window_count: 0,
         visible_window_count: 0,
     }
@@ -615,6 +717,8 @@ fn wayland_summary_active_emits_portal_available_state() {
     assert_eq!(s.scanner_state, "wayland_portal_available");
     assert_eq!(s.scanner_reason, "none");
     assert_eq!(s.coverage, "wayland_limited");
+    assert_eq!(s.portal_advertised, Some(true));
+    assert_eq!(s.portal_active, Some(true));
 }
 
 #[test]
@@ -697,29 +801,34 @@ XWayland presents an X11 connection inside a Wayland session. Use the existing X
 //! into the xwayland-partial coverage shape so reports never claim full
 //! Wayland coverage from XWayland-only visibility.
 
-use crate::scanner::privacy::{scanner_unavailable, X11ScannerSummary};
+use crate::scanner::privacy::LinuxScannerSummary;
 use crate::scanner::session::is_local_display;
 
-pub fn scan() -> X11ScannerSummary {
+pub fn scan() -> LinuxScannerSummary {
     let display = std::env::var("DISPLAY").unwrap_or_default();
     if !is_local_display(&display) {
-        return scanner_unavailable("non_local_display");
+        return LinuxScannerSummary::unavailable("non_local_display");
     }
     match crate::scanner::x11::scan_inner_public() {
-        Ok(raw) => X11ScannerSummary {
+        Ok(raw) => LinuxScannerSummary {
             scanner_state: "xwayland_detected",
             scanner_reason: "none",
             coverage: "xwayland_partial",
+            portal_advertised: None,
+            portal_active: None,
+            // XWayland-mapped X11 visibility counts surface as xwayland_window_count,
+            // NOT as x11_managed_window_count — Wayland-side native surfaces are
+            // still unreachable and we must never claim full Wayland coverage.
             x11_managed_window_count: 0,
             x11_override_redirect_window_count: raw.override_redirect_window_count,
             x11_above_window_count: raw.above_window_count,
             x11_fullscreen_window_count: raw.fullscreen_window_count,
             x11_skip_taskbar_window_count: raw.skip_taskbar_window_count,
+            xwayland_window_count: raw.managed_window_count + raw.override_redirect_window_count,
             suspicious_window_count: 0,
-            // XWayland-visible windows surface here, NOT in x11_managed_window_count.
             visible_window_count: raw.managed_window_count + raw.override_redirect_window_count,
         },
-        Err(reason) => scanner_unavailable(reason),
+        Err(reason) => LinuxScannerSummary::unavailable(reason),
     }
 }
 ```
@@ -779,29 +888,46 @@ GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
 git commit -m "feat(stage-2-8c): XWayland scanner with partial coverage label"
 ```
 
-## Task C2: Route /status and /proof to wayland/xwayland scanners
+## Task C2: Route /status and /proof to wayland/xwayland scanners + rename type
 
 **Files:**
 - Modify: `tools/simurgh-daemon-linux/src/http.rs`
 
-- [ ] **Step 1: Extend `current_scanner_summary()` to dispatch by display_server**
+- [ ] **Step 1: Rename `CurrentScan` → `LinuxScannerSnapshot` and field `x11` → `scanner`**
 
-Replace the current x11-only branch with:
+PR #20's `CurrentScan { detection, x11: Option<X11ScannerSummary> }` becomes misleading the moment Wayland/XWayland summaries flow through it. Rename to a Linux-honest name and field. Update every reference in `http.rs`.
+
 ```rust
-pub(crate) fn current_scanner_summary() -> CurrentScan {
+use crate::scanner::privacy::{x11_to_linux_summary, LinuxScannerSummary};
+use crate::scanner::session::{detect, SessionDetection, SessionEnv};
+
+pub(crate) struct LinuxScannerSnapshot {
+    pub detection: SessionDetection,
+    pub scanner: Option<LinuxScannerSummary>,
+}
+
+pub(crate) fn current_scanner_summary() -> LinuxScannerSnapshot {
     use crate::scanner::wayland::{probe as wayland_probe, wayland_summary};
     let det = detect(&SessionEnv::from_process_env());
-    let scanner = match det.display_server {
-        "x11" if det.scanner_reason == "none" => Some(x11::scan()),
+    let scanner: Option<LinuxScannerSummary> = match det.display_server {
+        "x11" if det.scanner_reason == "none" => Some(x11_to_linux_summary(x11::scan())),
         "wayland" => Some(wayland_summary(wayland_probe())),
         "xwayland" => Some(crate::scanner::xwayland::scan()),
         _ => None,
     };
-    CurrentScan { detection: det, x11: scanner }
+    LinuxScannerSnapshot { detection: det, scanner }
 }
 ```
 
-(The field name `x11` is now a misnomer — it's the per-platform summary. Rename to `scanner` in `CurrentScan` AND update both `/status` and `/proof` handlers to use the new name.)
+- [ ] **Step 2: Update `/status` handler to consume `LinuxScannerSummary`**
+
+Replace the X11-shaped JSON-assembly block with one that emits `portal_advertised` / `portal_active` / `xwayland_window_count` whenever they're present. Existing keys (`x11_managed_window_count` etc.) stay byte-identical for the X11 path because `x11_to_linux_summary` preserves them.
+
+- [ ] **Step 3: Update `/proof` handler to consume `LinuxScannerSummary`**
+
+In `proof()`, replace the existing `match &scan.x11 { Some(s) => ... }` with `match &scan.scanner { Some(s) => ... }`. Forward `portal_advertised` / `portal_active` / `xwayland_window_count` into `ProofInputs` (these were stubs in PR #20 — now they carry real values).
+
+`ProofInputs` already has `portal_advertised: Option<bool>` and `portal_active: Option<bool>` from PR #19. The Wayland path passes `Some(true/false)`; the X11 path passes `None`. The Node validator's `validateLinuxScannerSummary` already accepts `null | boolean` for these fields, so no Node-side schema change is needed.
 
 - [ ] **Step 2: Update the `display_server` mapping in `/proof` handler**
 
@@ -923,27 +1049,298 @@ git commit -m "feat(stage-2-8c): browser_package_hint as UX-only SDK signal"
 # Phase E — systemd `--user` lifecycle
 # ═══════════════════════════════════════════════════════════════════════════
 
-This phase follows the previously-written PR #22 plan (file `docs/superpowers/plans/2026-05-18-stage-2-8d-linux-systemd-ci.md`) Tasks 1–3 verbatim. Re-using the same files and content here for self-containment:
-
 ## Task E1: Red — systemd files missing
 
-**File:** `tests/unit/linuxSystemdScripts.test.js` — identical to the standalone PR #22 plan Task 1. Asserts the unit file + 4 scripts exist, use `systemctl --user` only, support `--check` and `--dry-run`, contain no `sudo` / `eval` / `curl | sh`.
+**File:** `tests/unit/linuxSystemdScripts.test.js`
 
-(See `docs/superpowers/plans/2026-05-18-stage-2-8d-linux-systemd-ci.md` Task 1 for the full test code. Copy verbatim.)
+```javascript
+import assert from "node:assert/strict";
+import { existsSync, readFileSync, statSync } from "node:fs";
+import test from "node:test";
+
+const UNIT = "tools/simurgh-daemon-linux/systemd/simurgh-daemon-linux.service";
+const INSTALL = "tools/simurgh-daemon-linux/scripts/install-user-unit.sh";
+const UNINSTALL = "tools/simurgh-daemon-linux/scripts/uninstall-user-unit.sh";
+const CHECK = "tools/simurgh-daemon-linux/scripts/check-user-unit.sh";
+const DOCTOR = "tools/simurgh-daemon-linux/scripts/doctor-user-unit.sh";
+
+test("[stage-2-8d] systemd user unit file exists", () => {
+  assert.ok(existsSync(UNIT), `${UNIT} missing`);
+});
+
+test("[stage-2-8d] systemd unit is user-scope only (no system-wide)", () => {
+  const src = readFileSync(UNIT, "utf8");
+  assert.ok(!/User=root/.test(src), "unit declares User=root");
+  assert.ok(!/WantedBy=multi-user\.target/.test(src), "unit targets system-wide");
+  assert.ok(/WantedBy=default\.target/.test(src), "unit must target default.target (user)");
+  assert.ok(!/\bsudo\b/.test(src), "unit references sudo");
+});
+
+test("[stage-2-8d] systemd unit binds daemon to loopback by env or default", () => {
+  const src = readFileSync(UNIT, "utf8");
+  assert.ok(!/--bind\s+0\.0\.0\.0/.test(src), "unit broadens bind to 0.0.0.0");
+  assert.ok(/ExecStart=%h\/.local\/bin\/simurgh-daemon-linux/.test(src), "unit ExecStart wrong");
+});
+
+test("[stage-2-8d] install / uninstall / check / doctor scripts exist + executable", () => {
+  for (const s of [INSTALL, UNINSTALL, CHECK, DOCTOR]) {
+    assert.ok(existsSync(s), `${s} missing`);
+    const mode = statSync(s).mode & 0o777;
+    assert.ok((mode & 0o100) !== 0, `${s} not user-executable (mode ${mode.toString(8)})`);
+  }
+});
+
+test("[stage-2-8d] install script supports --check and --dry-run", () => {
+  const src = readFileSync(INSTALL, "utf8");
+  assert.ok(/--check/.test(src), "install script missing --check support");
+  assert.ok(/--dry-run/.test(src), "install script missing --dry-run support");
+});
+
+test("[stage-2-8d] lifecycle scripts use only systemctl --user (no sudo / no system mode)", () => {
+  for (const s of [INSTALL, UNINSTALL, CHECK, DOCTOR]) {
+    const src = readFileSync(s, "utf8");
+    assert.ok(!/\bsudo\b/.test(src), `${s} uses sudo`);
+    assert.ok(!/systemctl\s+(?!--user)/m.test(src), `${s} uses non --user systemctl`);
+  }
+});
+
+test("[stage-2-8d] lifecycle scripts contain no eval and no curl pipe", () => {
+  for (const s of [INSTALL, UNINSTALL, CHECK, DOCTOR]) {
+    const src = readFileSync(s, "utf8");
+    assert.ok(!/\beval\b/.test(src), `${s} uses eval`);
+    assert.ok(!/curl[^|]+\|\s*(sh|bash)/.test(src), `${s} pipes curl to shell`);
+  }
+});
+```
+
+```bash
+node --test tests/unit/linuxSystemdScripts.test.js   # expect FAIL
+git add tests/unit/linuxSystemdScripts.test.js
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+git commit -m "test(stage-2-8d): red — Linux systemd user lifecycle missing"
+```
 
 ## Task E2: systemd unit file
 
-**File:** `tools/simurgh-daemon-linux/systemd/simurgh-daemon-linux.service` — identical to standalone PR #22 plan Task 2. Includes hardening directives (`NoNewPrivileges=true`, `ProtectSystem=strict`, `ProtectHome=read-only`, `PrivateTmp=true`, `ReadWritePaths=%h/.local/state/simurgh`).
+**File:** `tools/simurgh-daemon-linux/systemd/simurgh-daemon-linux.service`
+
+```ini
+# Project Simurgh — Linux Device Shield daemon (research prototype, dev-only).
+#
+# This is a systemd `--user` unit. It is NOT a system-wide service.
+# It does NOT run as root. It does NOT deploy production endpoint software.
+
+[Unit]
+Description=Project Simurgh Linux Device Shield Daemon (research prototype, development)
+After=graphical-session.target
+PartOf=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/simurgh-daemon-linux
+Restart=on-failure
+RestartSec=3
+Environment=RUST_LOG=info
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=%h/.local/state/simurgh
+
+[Install]
+WantedBy=default.target
+```
+
+```bash
+node --test tests/unit/linuxSystemdScripts.test.js   # unit-file tests now pass
+git add tools/simurgh-daemon-linux/systemd/
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+git commit -m "feat(stage-2-8d): systemd --user unit for Linux daemon (dev-only)"
+```
 
 ## Task E3: 4 lifecycle scripts
 
-**Files:** `install-user-unit.sh`, `uninstall-user-unit.sh`, `check-user-unit.sh`, `doctor-user-unit.sh` — verbatim from PR #22 plan Task 3.
+**Files:** `install-user-unit.sh`, `uninstall-user-unit.sh`, `check-user-unit.sh`, `doctor-user-unit.sh`.
 
-Each commit pattern:
+### `install-user-unit.sh`
+
 ```bash
+#!/usr/bin/env bash
+# Install the Project Simurgh Linux Device Shield daemon as a systemd --user
+# service. Research prototype only. No sudo. No system-wide install.
+#
+# Usage:  install-user-unit.sh [--check] [--dry-run]
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DAEMON_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+UNIT_SRC="$DAEMON_ROOT/systemd/simurgh-daemon-linux.service"
+USER_UNIT_DIR="$HOME/.config/systemd/user"
+USER_BIN_DIR="$HOME/.local/bin"
+USER_STATE_DIR="$HOME/.local/state/simurgh"
+
+CHECK_ONLY=false
+DRY_RUN=false
+for arg in "$@"; do
+  case "$arg" in
+    --check) CHECK_ONLY=true ;;
+    --dry-run) DRY_RUN=true ;;
+    -h|--help) sed -n '2,5p' "$0"; exit 0 ;;
+    *) echo "unknown flag: $arg" >&2; exit 64 ;;
+  esac
+done
+
+run() { if "$DRY_RUN"; then printf '[dry-run] %s\n' "$*"; else "$@"; fi }
+
+if ! command -v systemctl >/dev/null 2>&1; then
+  echo "error: systemctl not found on PATH" >&2; exit 2
+fi
+if [[ -z "${XDG_RUNTIME_DIR:-}" ]] && ! systemctl --user show-environment >/dev/null 2>&1; then
+  echo "error: no systemd user session detected (XDG_RUNTIME_DIR unset)" >&2; exit 3
+fi
+if [[ ! -f "$UNIT_SRC" ]]; then
+  echo "error: unit source missing at $UNIT_SRC" >&2; exit 4
+fi
+if ! command -v cargo >/dev/null 2>&1; then
+  echo "error: cargo not found on PATH (install Rust via rustup)" >&2; exit 5
+fi
+
+if "$CHECK_ONLY"; then
+  echo "ok: preconditions met for simurgh-daemon-linux user unit"; exit 0
+fi
+
+run mkdir -p "$USER_BIN_DIR" "$USER_STATE_DIR" "$USER_UNIT_DIR"
+run cargo install --quiet --path "$DAEMON_ROOT" --root "$HOME/.local"
+run cp "$UNIT_SRC" "$USER_UNIT_DIR/simurgh-daemon-linux.service"
+run systemctl --user daemon-reload
+run systemctl --user enable simurgh-daemon-linux.service
+
+echo "ok: installed simurgh-daemon-linux.service (use 'systemctl --user start' to run)"
+```
+
+### `uninstall-user-unit.sh`
+
+```bash
+#!/usr/bin/env bash
+# Uninstall the Project Simurgh Linux Device Shield user unit.
+# Usage: uninstall-user-unit.sh [--check] [--dry-run]
+set -euo pipefail
+
+USER_UNIT_DIR="$HOME/.config/systemd/user"
+USER_BIN="$HOME/.local/bin/simurgh-daemon-linux"
+
+CHECK_ONLY=false
+DRY_RUN=false
+for arg in "$@"; do
+  case "$arg" in
+    --check) CHECK_ONLY=true ;;
+    --dry-run) DRY_RUN=true ;;
+    -h|--help) sed -n '2,3p' "$0"; exit 0 ;;
+    *) echo "unknown flag: $arg" >&2; exit 64 ;;
+  esac
+done
+run() { if "$DRY_RUN"; then printf '[dry-run] %s\n' "$*"; else "$@"; fi }
+
+if "$CHECK_ONLY"; then
+  if [[ -f "$USER_UNIT_DIR/simurgh-daemon-linux.service" ]]; then
+    echo "found: $USER_UNIT_DIR/simurgh-daemon-linux.service"
+  else
+    echo "not installed: nothing to do"
+  fi
+  exit 0
+fi
+
+if command -v systemctl >/dev/null 2>&1; then
+  run systemctl --user stop simurgh-daemon-linux.service 2>/dev/null || true
+  run systemctl --user disable simurgh-daemon-linux.service 2>/dev/null || true
+fi
+run rm -f "$USER_UNIT_DIR/simurgh-daemon-linux.service"
+run rm -f "$USER_BIN"
+if command -v systemctl >/dev/null 2>&1; then
+  run systemctl --user daemon-reload || true
+fi
+echo "ok: uninstalled simurgh-daemon-linux.service"
+```
+
+### `check-user-unit.sh`
+
+```bash
+#!/usr/bin/env bash
+# Read-only check of the simurgh-daemon-linux user unit.
+# Exit 0 if installed cleanly, 1 if not installed, 2 if inconsistent.
+set -euo pipefail
+
+USER_UNIT="$HOME/.config/systemd/user/simurgh-daemon-linux.service"
+USER_BIN="$HOME/.local/bin/simurgh-daemon-linux"
+ok=true
+
+if [[ ! -f "$USER_UNIT" ]]; then
+  echo "not installed: $USER_UNIT missing"; exit 1
+fi
+echo "unit file: present at $USER_UNIT"
+
+if [[ ! -x "$USER_BIN" ]]; then
+  echo "warning: binary missing or not executable at $USER_BIN"; ok=false
+fi
+
+if command -v systemctl >/dev/null 2>&1; then
+  if systemctl --user list-unit-files 2>/dev/null | grep -q '^simurgh-daemon-linux\.service'; then
+    echo "systemctl --user: knows the unit"
+  else
+    echo "warning: systemctl --user does not list the unit (no user session?)"; ok=false
+  fi
+fi
+
+if "$ok"; then echo "ok: simurgh-daemon-linux user unit installed cleanly"; exit 0; fi
+echo "inconsistent: see warnings above"; exit 2
+```
+
+### `doctor-user-unit.sh`
+
+```bash
+#!/usr/bin/env bash
+# Full diagnostic of the simurgh-daemon-linux user unit + binary.
+set -euo pipefail
+
+USER_UNIT="$HOME/.config/systemd/user/simurgh-daemon-linux.service"
+USER_BIN="$HOME/.local/bin/simurgh-daemon-linux"
+
+echo "── doctor: simurgh-daemon-linux ──"
+
+if command -v cargo >/dev/null 2>&1; then cargo --version; else echo "warning: cargo not on PATH"; fi
+[[ -x "$USER_BIN" ]] && echo "binary: $USER_BIN present" || echo "binary: $USER_BIN MISSING"
+[[ -f "$USER_UNIT" ]] && echo "unit:   $USER_UNIT present" || echo "unit:   $USER_UNIT MISSING"
+
+if command -v systemctl >/dev/null 2>&1; then
+  if [[ -n "${XDG_RUNTIME_DIR:-}" ]]; then
+    echo "session: XDG_RUNTIME_DIR present"
+    systemctl --user is-enabled simurgh-daemon-linux.service 2>/dev/null | sed 's/^/enabled: /' || echo "enabled: unknown"
+    systemctl --user is-active simurgh-daemon-linux.service 2>/dev/null | sed 's/^/active:  /' || echo "active:  unknown"
+  else
+    echo "session: no XDG_RUNTIME_DIR (headless / server / CI?)"
+  fi
+fi
+
+if command -v curl >/dev/null 2>&1; then
+  if curl -s -m 1 http://127.0.0.1:3031/health >/dev/null 2>&1; then
+    echo "health:  /health responding on 127.0.0.1:3031"
+  else
+    echo "health:  /health not reachable (daemon not running?)"
+  fi
+fi
+```
+
+```bash
+chmod +x tools/simurgh-daemon-linux/scripts/*.sh
+if command -v shellcheck >/dev/null 2>&1; then shellcheck tools/simurgh-daemon-linux/scripts/*.sh; fi
+node --test tests/unit/linuxSystemdScripts.test.js
+git add tools/simurgh-daemon-linux/scripts/
 GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
 GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
-git commit -m "feat(stage-2-8d): ..."
+git commit -m "feat(stage-2-8d): install/uninstall/check/doctor user-unit scripts"
 ```
 
 ---
@@ -1030,7 +1427,63 @@ git commit -am "ci(stage-2-8d): Ubuntu Rust + mandatory Xvfb + shellcheck"
 
 ## Task F3: CI workflow assertion test
 
-**File:** `tests/unit/linuxCiWorkflow.test.js` — verbatim from PR #22 plan Task 7. Asserts the workflow installs xvfb / x11-utils / dbus-x11, uses `dtolnay/rust-toolchain@stable`, runs `cargo fmt --check`, `cargo clippy -- -D warnings`, `cargo test`, sets `SIMURGH_REQUIRE_XVFB_TESTS: "1"`, runs shellcheck, and has NO publish/deploy/secret-echo steps.
+**File:** `tests/unit/linuxCiWorkflow.test.js`
+
+```javascript
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import test from "node:test";
+
+const WF_PATH = ".github/workflows/stage-1-checks.yml";
+
+test("[stage-2-8d] CI workflow installs xvfb + x11-utils + dbus-x11", () => {
+  const src = readFileSync(WF_PATH, "utf8");
+  assert.ok(/\bxvfb\b/.test(src), "CI does not install xvfb");
+  assert.ok(/\bx11-utils\b/.test(src), "CI does not install x11-utils");
+  assert.ok(/\bdbus-x11\b/.test(src), "CI does not install dbus-x11");
+});
+
+test("[stage-2-8d] CI workflow installs Rust stable + fmt + clippy + cargo test", () => {
+  const src = readFileSync(WF_PATH, "utf8");
+  assert.ok(/dtolnay\/rust-toolchain@stable/.test(src), "Rust toolchain action missing");
+  assert.ok(/cargo fmt --check/.test(src), "cargo fmt step missing");
+  assert.ok(/cargo clippy.*-D warnings/.test(src), "cargo clippy -D warnings missing");
+  assert.ok(/cargo test.*tools\/simurgh-daemon-linux/.test(src), "cargo test step missing");
+});
+
+test("[stage-2-8d] CI workflow sets SIMURGH_REQUIRE_XVFB_TESTS=1 for cargo test", () => {
+  const src = readFileSync(WF_PATH, "utf8");
+  assert.ok(
+    /SIMURGH_REQUIRE_XVFB_TESTS:\s*["']?1["']?/.test(src),
+    "Xvfb tests not promoted to mandatory in CI"
+  );
+});
+
+test("[stage-2-8d] CI workflow runs shellcheck on Linux daemon scripts", () => {
+  const src = readFileSync(WF_PATH, "utf8");
+  assert.ok(/shellcheck/.test(src), "shellcheck step missing");
+});
+
+test("[stage-2-8d] CI workflow has no deploy / release / publish steps", () => {
+  const src = readFileSync(WF_PATH, "utf8");
+  for (const banned of [/\bnpm publish\b/, /\bdocker push\b/, /softprops\/action-gh-release/]) {
+    assert.ok(!banned.test(src), `CI contains forbidden step: ${banned}`);
+  }
+});
+
+test("[stage-2-8d] CI workflow does not echo secrets", () => {
+  const src = readFileSync(WF_PATH, "utf8");
+  assert.ok(!/echo\s+\$\{\{\s*secrets\./.test(src), "workflow echoes a secret");
+});
+```
+
+```bash
+node --test tests/unit/linuxCiWorkflow.test.js
+git add tests/unit/linuxCiWorkflow.test.js
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+git commit -m "test(stage-2-8d): workflow assertions for CI Rust + Xvfb + shellcheck"
+```
 
 ---
 
@@ -1067,9 +1520,21 @@ Scenarios:
 | O  | audit verify                            | valid chain                                       |
 | P  | Stage 2.7 + Stage 2.8A/B regression     | green                                             |
 
-Smoke implementation: extend the Stage 2.8A/B smoke pattern. For lifecycle scenarios J–L, call the bash scripts via `execFileSync` and assert on output (same pattern as the PR #22 plan's smoke). For Wayland scenarios B/C/D, the daemon-Wayland-probe is exercised in unit tests; the SMOKE just sends Node-forged proofs with the relevant `scanner_state` / `scanner_reason` field combinations and asserts the server accepts each with Warning context.
+Smoke implementation strategy:
+- **Header + helpers**: copy lines 1–223 of `tests/e2e/stage28ab_linux_foundation_x11_smoke.mjs` (assertSmoke, b64url, canonicalDaemonPayload, createIdentity, sign, linuxScannerFields, expectJson, challenge, linuxPairEnvelope, linuxProof, sendTelemetry, bootstrapSession, pairLinux). Rename to scenario set A–P.
+- **Scenarios A, B, C, D (Wayland states)**: forge Linux proofs with the `display_server: "wayland"` and the documented `scanner_state` + `scanner_reason` combos. The server-side validator already accepts these (PR #19 Linux validator). Assert telemetry returns 200 and the resulting report's `device_integrity.display_server === "wayland"` with the expected `coverage` and `scanner_reason`.
+- **Scenario E (XWayland)**: forge proof with `display_server: "xwayland"`, `coverage: "xwayland_partial"`, non-zero `xwayland_window_count`. Assert report's `xwayland_window_count_max === N`.
+- **Scenario F (Snap/Flatpak hint)**: don't post the hint via the daemon proof — it's a UX-only browser-side signal. This scenario reads `public/sdk/simurgh-browser-sdk.js` and asserts the `browser_package_hint` field is present in `getDeviceShieldStatus()`'s return shape, AND that `server.js` source contains zero references to `browser_package_hint`. Pure source-grep — no live HTTP call needed.
+- **Scenario G (display-server mismatch)**: directly mirrors Phase A's red test. Pair → x11 proof (200) → wayland proof same session (409, reason `display_server_mismatch`).
+- **Scenarios H, I (non-local DISPLAY, headless)**: forge proofs with `scanner_state: scanner_unavailable` + the appropriate `scanner_reason`. Assert telemetry 200 (Warning context, not rejection).
+- **Scenarios J, K (systemd --check / --dry-run)**: `execFileSync("bash", [INSTALL, "--check"])` and `--dry-run`. Assert outputs and absence of mutation (best-effort — on this dev host, `--check` may exit with precondition codes 2/3/5 which is also acceptable, the assertion is "no actual install happened").
+- **Scenario L (service file safety)**: source-grep the unit file for `WantedBy=default.target` AND absence of `User=root` / `WantedBy=multi-user.target`.
+- **Scenario M (mandatory Xvfb in CI mode)**: only assert when `process.env.CI === "true"` — run `cargo test --test xvfb_integration_tests` with `SIMURGH_REQUIRE_XVFB_TESTS=1` and assert exit 0. Locally, skip with a console log.
+- **Scenario N (Linux report)**: bootstrap session, send healthy Linux proof, submit, fetch report, assert `device_integrity.daemon_platform === "linux"` and absence of macOS/Windows-only keys.
+- **Scenario O (audit verify)**: GET `/api/audit/:sessionId/verify`, assert `valid === true`.
+- **Scenario P (Stage 2.7 + 2.8A/B regression)**: NOT exercised in this script. Instead the umbrella `scripts/check.sh` already runs both Stage 2.7 smoke + 2.8A/B smoke; depend on those rather than duplicating.
 
-Wrapper script `scripts/smoke-stage-2-8c-8d-linux-wayland-systemd-ci.sh` follows the same shape as `smoke-stage-2-8a-2-8b-linux-foundation-x11.sh` (boot server, wait for health, run smoke, run privacy audit, declare pass).
+Wrapper script `scripts/smoke-stage-2-8c-8d-linux-wayland-systemd-ci.sh` follows the exact shape of `scripts/smoke-stage-2-8a-2-8b-linux-foundation-x11.sh` (cd to repo root, boot server with `SIMURGH_DEMO_MODE=1 PORT=33130`, wait for `/health`, run smoke, run privacy audit, declare pass). Use port 33130 to avoid collisions with the 2.7 and 2.8A/B smokes (33127, 33128).
 
 ```bash
 GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
@@ -1095,7 +1560,19 @@ Audit dimensions (16, mirroring Raouf's blueprint Phase H + the PR #22 plan's Ph
 2. Pairing — Linux valid, freebsd rejected.
 3. Display lock — live `display_server_mismatch` enforced.
 4. Wayland — `portal_advertised` and `portal_active` are independent fields; no consent triggered.
-5. Consent safety — Wayland probe never starts ScreenCast session.
+5. Consent safety — Wayland probe never starts ScreenCast session. **Enforced by source grep**: `tests/security/stage28cd_*` MUST include this test:
+   ```javascript
+   test("[28cd.5] Wayland scanner source contains no consent-triggering DBus method calls", () => {
+     const src = readFileSync("tools/simurgh-daemon-linux/src/scanner/wayland.rs", "utf8");
+     for (const banned of ["CreateSession", "SelectSources", "Start", "OpenPipeWireRemote"]) {
+       assert.ok(
+         !src.includes(`"${banned}"`) && !src.includes(`.${banned}(`),
+         `wayland.rs references ScreenCast method ${banned} — would trigger consent dialog`
+       );
+     }
+   });
+   ```
+   AND the same banned-method list MUST be checked in `LinuxScannerSummary` field-emission paths so a future maintainer cannot route around it.
 6. XWayland — `coverage=xwayland_partial` and never claims `wayland_limited` or `x11_full` parity.
 7. Browser hint — `browser_package_hint` is UX-only, ignored by `server.js` and `daemonProof.js`.
 8. systemd — user unit only, no root / sudo / system-wide install.
@@ -1108,7 +1585,57 @@ Audit dimensions (16, mirroring Raouf's blueprint Phase H + the PR #22 plan's Ph
 15. Audit chain — verifies; tamper invalidates.
 16. Wording — no production / attestation / automatic-misconduct overclaim.
 
-Reuse the Stage 2.8A/B audit test as the structural template. Add Wayland-specific assertions for (4, 5, 6), browser-hint assertions for (7), and the systemd / CI / shellcheck assertions for (8–11).
+Audit-test implementation strategy:
+- **Header + helpers**: copy the import block + `b64url` / `makeIdentity` / `makeLinuxProof` / `validateOpts` helpers from `tests/security/stage28ab_linux_security_audit.test.js`. Reuse them; no need to re-derive.
+- **Dimension 4 (Wayland advertised/active independence)**: validator-level test — `validateLinuxScannerSummary` returns ok for `{portal_advertised: true, portal_active: true}` and for `{portal_advertised: true, portal_active: false}`, but rejects `{portal_advertised: false, portal_active: true}` as `invalid_linux_portal_state` (already enforced in PR #19's validator; just assert).
+- **Dimension 5 (consent safety)**: the explicit banned-method grep test shown above in Phase B definition section. Inline that test here:
+  ```javascript
+  test("[28cd.5] Wayland scanner contains no consent-triggering ScreenCast method calls", () => {
+    const src = readFileSync("tools/simurgh-daemon-linux/src/scanner/wayland.rs", "utf8");
+    for (const banned of ["CreateSession", "SelectSources", "Start", "OpenPipeWireRemote"]) {
+      assert.ok(
+        !src.includes(`"${banned}"`) && !src.includes(`.${banned}(`),
+        `wayland.rs references ScreenCast method ${banned}`
+      );
+    }
+  });
+  ```
+- **Dimension 6 (XWayland partial-only)**: assert `LINUX_COVERAGES` contains `xwayland_partial` and reading `tools/simurgh-daemon-linux/src/scanner/xwayland.rs` confirms it never emits `coverage: "x11_full"` or `coverage: "wayland_limited"`.
+- **Dimension 7 (browser hint UX-only)**: copy the three assertions from `tests/unit/browserPackageHintUxOnly.test.js` (server.js doesn't reference, daemonProof.js doesn't reference, SDK trust-boundary comment intact).
+- **Dimensions 8–11 (systemd / scripts / CI / Xvfb)**: copy the corresponding assertions verbatim from the PR #22 plan's audit (`tests/security/stage28d_linux_systemd_ci_security_audit.test.js` shape). Each is a simple source-grep on `simurgh-daemon-linux.service` / lifecycle scripts / `.github/workflows/stage-1-checks.yml`.
+- **Dimensions 12–14 (privacy, report, dashboard)**: copy from `tests/security/stage28ab_linux_security_audit.test.js`. No new logic — these enforcements already passed in PR #20; assert they still hold.
+- **Dimensions 15–16 (audit chain, wording)**: copy from the existing Stage 2.7 closeout audit (`tests/security/stage_26_27_closeout_audit.test.js`). Verify tamper invalidates a sample HMAC chain; verify dashboard + report contain no `cheating detected` / `misconduct detected` / `guilty` phrases.
+
+Wrapper script `scripts/security-audit-stage-2-8c-8d-linux-wayland-systemd-ci.sh` follows the shape of `scripts/security-audit-stage-2-8a-2-8b-linux.sh`:
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+cd "$PROJECT_ROOT"
+
+echo "Stage 2.8C/D Linux Wayland + systemd + CI cybersecurity audit"
+
+echo "  [1/4] Stage 2.8A/B audit (no regression)"
+bash scripts/security-audit-stage-2-8a-2-8b-linux.sh
+
+echo "  [2/4] Stage 2.8C/D audit suite"
+node --test tests/security/stage28cd_linux_wayland_systemd_ci_security_audit.test.js
+
+echo "  [3/4] Shellcheck on lifecycle scripts"
+if command -v shellcheck >/dev/null 2>&1; then
+  shellcheck tools/simurgh-daemon-linux/scripts/*.sh
+else
+  echo "shellcheck not installed locally; CI enforces it"
+fi
+
+echo "  [4/4] Privacy + npm audit"
+node tools/privacy-audit.mjs
+npm audit --audit-level=high
+
+echo "Stage 2.8C/D Linux Wayland + systemd + CI cybersecurity audit: pass"
+```
+`chmod +x` it, then run from repo root.
 
 ```bash
 GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
@@ -1124,7 +1651,65 @@ git commit -m "test(stage-2-8cd): combined cybersecurity audit (16 dimensions)"
 
 ## Task I1: `docs/evidence/stage-2-linux/README.md`
 
-Verbatim from the PR #22 plan Task 10. Allowed: daemon `/health` JSON, `/status` JSON, signed proof (signature redacted), server accept/reject responses, report `device_integrity`, audit verify result, test logs, `systemctl --user is-enabled` / `is-active`, GitHub Actions run URL. Forbidden: window titles, process names, PIDs, XIDs, usernames, hostnames, home paths, machine IDs, MAC addresses, screen pixels, webcam, mic, typed/pasted content.
+```markdown
+# Stage 2 Linux — Evidence Rules
+
+This directory is for reviewer-facing evidence captured during real Linux
+device validation of the Linux Device Shield research prototype.
+
+## Posture
+
+Research prototype only. No production endpoint deployment, no hardware
+attestation, no system-wide service, no automatic misconduct detection.
+
+## Allowed evidence
+
+- Daemon `/health` JSON
+- Daemon `/status` JSON
+- Signed daemon proof JSON with `signature` redacted
+- Server accept/reject response JSON
+- Report `device_integrity` section
+- Audit chain verification result (`GET /api/audit/:id/verify`)
+- Test logs (`npm test`, `cargo test`, Stage 2.7 smoke, Stage 2.8 smoke)
+- Output from `systemctl --user is-enabled` / `is-active`
+- GitHub Actions run URL + summary
+
+## Forbidden evidence
+
+NEVER commit, upload, share, or screenshot:
+
+- Window titles
+- Process names
+- PIDs
+- XIDs / X11 window IDs
+- Usernames
+- Hostnames
+- Home directory paths
+- Machine IDs / serial numbers
+- MAC addresses
+- Screen pixels / screenshots with personal data
+- Webcam frames / microphone audio
+- Typed content / pasted content
+
+If in doubt: redact before commit. The `tools/privacy-audit.mjs` sweep is
+the automated guard; this list is the human one.
+
+## Validation matrix (target — full version lands in PR #23)
+
+| Platform               | Required signals                                            |
+| ---------------------- | ----------------------------------------------------------- |
+| Ubuntu GNOME Wayland   | `/health` ok, `portal_advertised` true, no consent dialog   |
+| Ubuntu GNOME X11/Xorg  | X11 scanner healthy, x11_managed_window_count > 0           |
+| Headless (no display)  | `scanner_unavailable`, `scanner_reason: no_display_server`  |
+| Xvfb in CI             | All Xvfb integration tests pass deterministically           |
+```
+
+```bash
+git add docs/evidence/stage-2-linux/README.md
+GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
+GIT_COMMITTER_NAME="Raoof Abedini" GIT_COMMITTER_EMAIL="raoof.r12@gmail.com" \
+git commit -m "docs(stage-2-8cd): Linux evidence rules README"
+```
 
 ```bash
 GIT_AUTHOR_NAME="Raoof Abedini" GIT_AUTHOR_EMAIL="raoof.r12@gmail.com" \
@@ -1269,7 +1854,14 @@ gh release create v0.4.16-stage-2-8C-8D-linux-wayland-systemd-ci \
 - §11 Cybersecurity audit gate — Phase H.
 - §12 Real Linux validation matrix — Phase I evidence README; full matrix is PR #23.
 
-**Placeholder scan:** Two phase descriptions reference the prior plan ("verbatim from PR #22 plan Task N") — these are deliberate to keep this combined plan readable, but executing agents MUST inline the actual content. Specifically: Phase E1/E2/E3 (systemd files), Phase F3 (CI workflow assertion test), Phase I1 (evidence README), and the Phase G/H smoke/audit templates draw heavily from the standalone PR #22 plan and the Stage 2.8A/B smoke at `tests/e2e/stage28ab_linux_foundation_x11_smoke.mjs`. The executing agent should READ those files and adapt rather than re-deriving from scratch.
+**Placeholder scan (post Raouf-fix-5):** All PR #22 cross-references have been inlined. Phase E1/E2/E3 now contain the full systemd unit + 4 lifecycle scripts. Phase F3 contains the full CI assertion test. Phase I1 contains the full evidence README. Phases G/H now spell out scenario-by-scenario implementation strategy referencing exact files + line ranges to copy from (`tests/e2e/stage28ab_linux_foundation_x11_smoke.mjs` lines 1–223 for helpers, `tests/security/stage28ab_linux_security_audit.test.js` for audit boilerplate, `tests/security/stage_26_27_closeout_audit.test.js` for chain-tamper assertions). No `verbatim from X` placeholders remain.
+
+**Raouf fixes applied (2026-05-18):**
+1. ✅ Replaced `X11ScannerSummary` reuse with new `LinuxScannerSummary` carrying `portal_advertised`/`portal_active`/`xwayland_window_count` as first-class fields. Added `x11_to_linux_summary` promotion helper.
+2. ✅ Renamed `CurrentScan` → `LinuxScannerSnapshot` and field `x11` → `scanner` immediately in Task C2 (not deferred).
+3. ✅ Phase A lock-placement spelled out exactly: AFTER `validateDaemonProof` ok, BEFORE `recordProofVerified`, BEFORE `appendAudit DAEMON_PROOF_VERIFIED`, must not increment counters on rejection. Implementer must pattern-match `invalid_signature` to match existing challenge/sequence semantics.
+4. ✅ `portal_active` definition tightened in a new "Definition" section under Phase B. Added explicit banned-method grep test (`CreateSession` / `SelectSources` / `Start` / `OpenPipeWireRemote`) listed in both Phase B definition section AND Phase H audit dimension 5.
+5. ✅ All PR #22 cross-references inlined.
 
 **Type consistency:**
 - Field names: `display_server`, `coverage`, `portal_advertised`, `portal_active`, `scanner_reason`, `x11_*_count`, `xwayland_window_count` — consistent across phases.
