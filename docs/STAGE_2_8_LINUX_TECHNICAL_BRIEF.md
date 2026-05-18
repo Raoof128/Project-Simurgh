@@ -31,10 +31,10 @@ The threat model for Linux exam integrity focuses on applications that may obscu
 
 Stage 2.8 is a research prototype covering:
 
-| Sub-stage | PR  | Description                                           |
-|-----------|-----|-------------------------------------------------------|
-| 2.8A      | #19 | Linux daemon foundation: axum, identity, endpoints    |
-| 2.8B      | #20 | X11 scanner: window tree walk, EWMH hint counts       |
+| Sub-stage | PR  | Description                                                       |
+| --------- | --- | ----------------------------------------------------------------- |
+| 2.8A      | #19 | Linux daemon foundation: axum, identity, endpoints                |
+| 2.8B      | #20 | X11 scanner: window tree walk, EWMH hint counts                   |
 | 2.8C/D    | #21 | Wayland portal probe, XWayland scanner, systemd unit, CI pipeline |
 
 The scope boundary is a localhost daemon verifiable by the Node.js exam server over a signed-proof protocol. It does not extend to production deployment, packaging, MDM integration, kernel-level visibility, or hardware attestation.
@@ -50,6 +50,7 @@ PR #19 establishes the core daemon infrastructure shared by all subsequent Linux
 **Identity:** At first run, a P-256 keypair and a `node_id_hash` are generated and persisted at `$XDG_STATE_HOME/simurgh/`. The `node_id_hash` is a one-way hash of the node identity — the raw keypair private key is never transmitted.
 
 **Endpoints:**
+
 - `GET /health` — liveness check
 - `GET /status` — daemon metadata without a proof
 - `POST /proof` — signed proof generation
@@ -97,13 +98,13 @@ PR #20 implements the X11 window tree scanner.
 
 **Scan:** `query_tree` walk from the root window. For each window encountered, the scanner reads EWMH/ICCCM properties to classify it. Counts produced:
 
-| Field                              | Meaning                                                  |
-|------------------------------------|----------------------------------------------------------|
-| `x11_managed_window_count`         | Windows under window manager control                     |
-| `x11_override_redirect_window_count` | Windows with `override_redirect` set (bypass WM)      |
-| `x11_above_window_count`           | Windows with `_NET_WM_STATE_ABOVE` hint                  |
-| `x11_fullscreen_window_count`      | Windows with `_NET_WM_STATE_FULLSCREEN` hint             |
-| `x11_skip_taskbar_window_count`    | Windows with `_NET_WM_STATE_SKIP_TASKBAR` hint           |
+| Field                                | Meaning                                          |
+| ------------------------------------ | ------------------------------------------------ |
+| `x11_managed_window_count`           | Windows under window manager control             |
+| `x11_override_redirect_window_count` | Windows with `override_redirect` set (bypass WM) |
+| `x11_above_window_count`             | Windows with `_NET_WM_STATE_ABOVE` hint          |
+| `x11_fullscreen_window_count`        | Windows with `_NET_WM_STATE_FULLSCREEN` hint     |
+| `x11_skip_taskbar_window_count`      | Windows with `_NET_WM_STATE_SKIP_TASKBAR` hint   |
 
 Window titles, XIDs, process names, and PIDs are never read or recorded.
 
@@ -127,6 +128,7 @@ PR #21 adds four major components:
 4. **Ubuntu CI pipeline** — automated build, test, lint, and format checks on `ubuntu-latest`.
 
 Additionally, PR #21 introduces:
+
 - `LinuxScannerSummary` struct (unified, carries both X11 and XWayland counts plus portal booleans)
 - `LinuxScannerSnapshot` (renamed from `CurrentScan`): `{ detection: SessionDetection, scanner: Option<LinuxScannerSummary> }`
 - `displayServerLock` in `server.js`
@@ -139,6 +141,7 @@ Additionally, PR #21 introduces:
 The Linux threat model addresses scenarios where a student running an exam browser may have additional applications active that could be used to access restricted material or manipulate the exam environment. The daemon targets observable metadata signals:
 
 **Signals collected:**
+
 - Override-redirect windows: applications that bypass the window manager and draw directly on screen, which may indicate screen overlays.
 - Above-hint windows: windows explicitly requesting persistent top-of-stack positioning.
 - Fullscreen windows: applications occupying the full display.
@@ -147,6 +150,7 @@ The Linux threat model addresses scenarios where a student running an exam brows
 - Portal advertised/active: whether the Wayland desktop portal is present and queryable.
 
 **Out of scope for this prototype:**
+
 - GPU overlays rendered below the compositor's awareness
 - Native Wayland surface enumeration (compositor controls access; the daemon cannot enumerate other clients)
 - Kernel-level process or syscall visibility
@@ -196,6 +200,7 @@ The daemon is stateless between requests except for the persisted keypair and th
 **Connection:** The scanner connects to the X11 server identified by `$DISPLAY` using `x11rb`. Non-local display strings are rejected before connection is attempted.
 
 **Walk:** Starting from the root window returned by `query_tree`, the scanner recursively enumerates all children. For each window, it checks:
+
 - `override_redirect` attribute
 - `_NET_WM_STATE` property for `_NET_WM_STATE_ABOVE`, `_NET_WM_STATE_FULLSCREEN`, `_NET_WM_STATE_SKIP_TASKBAR`
 - Window manager frame parentage to distinguish managed from unmanaged windows
@@ -213,6 +218,7 @@ The Wayland portal probe reads DBus metadata to determine whether the XDG Deskto
 **File:** `scanner/wayland.rs`
 
 **DBus operations used:**
+
 - `NameHasOwner("org.freedesktop.portal.Desktop")` — checks whether the portal bus name is registered
 - `GetProperty<AvailableSourceTypes>` on `org.freedesktop.portal.ScreenCast` — checks whether the property is readable (indicates portal is active)
 
@@ -222,11 +228,11 @@ This constraint exists because `CreateSession` and subsequent calls initiate a c
 
 **Output:** `WaylandProbe { portal_advertised, portal_active, probe_unavailable }`
 
-| Field                | Meaning                                                          |
-|----------------------|------------------------------------------------------------------|
-| `portal_advertised`  | `true` if `org.freedesktop.portal.Desktop` is on the DBus bus   |
-| `portal_active`      | `true` if `AvailableSourceTypes` property is readable            |
-| `probe_unavailable`  | `true` if DBus is not accessible (e.g., headless environment)    |
+| Field               | Meaning                                                       |
+| ------------------- | ------------------------------------------------------------- |
+| `portal_advertised` | `true` if `org.freedesktop.portal.Desktop` is on the DBus bus |
+| `portal_active`     | `true` if `AvailableSourceTypes` property is readable         |
+| `probe_unavailable` | `true` if DBus is not accessible (e.g., headless environment) |
 
 The `portal_active` field does NOT mean a screen capture session is active. It means the portal interface responded to a property read. No session is created, no sources are selected, and no frames are captured.
 
@@ -243,6 +249,7 @@ When `$WAYLAND_DISPLAY` is set (Wayland session) and `$DISPLAY` is also present 
 **Mechanism:** The XWayland scanner reuses the X11 scan path (`x11rb` `query_tree` walk) against `$DISPLAY`. It connects to the XWayland server, which exposes X11 windows that are bridged into the Wayland session.
 
 **Important constraints:**
+
 - Only X11 windows served via XWayland are visible. Native Wayland clients are not visible.
 - Results go into `xwayland_window_count`, NOT into `x11_managed_window_count`. The two fields are never conflated.
 - `coverage` is set to `"xwayland_partial"`.
@@ -257,6 +264,7 @@ The "partial" designation is precise: the count represents only the X11 applicat
 The `displayServerLock` in `server.js` prevents a session from switching its claimed display server mid-session.
 
 **Mechanism:**
+
 - On the first verified Linux proof for a session, `displayServerLock.observe(sessionId, display_server)` records the `display_server` value.
 - On each subsequent proof, `observe()` checks that the new `display_server` matches the locked value.
 - If a mismatch is detected, the server returns HTTP 409 and logs a `display_server_mismatch` audit event. The proof is not recorded.
@@ -273,6 +281,7 @@ The `displayServerLock` in `server.js` prevents a session from switching its cla
 The `browser_package_hint` field (`"snap" | "flatpak" | "unknown"`) is surfaced in the SDK's `getDeviceShieldStatus()` response to provide user-facing guidance when the daemon is unreachable.
 
 **Trust boundary:**
+
 - `browser_package_hint` is used ONLY to compose a hint message for the end user explaining possible reasons the daemon could not be reached (e.g., Snap/Flatpak network sandboxing).
 - It is NEVER included in the signed proof payload.
 - It is NEVER trusted by the server's proof validator.
@@ -291,6 +300,7 @@ PR #21 ships a systemd user unit and four lifecycle scripts for local developer 
 **Unit file:** `systemd/simurgh-daemon-linux.service`
 
 Key directives:
+
 - `After=graphical-session.target`
 - `PartOf=graphical-session.target`
 - `ExecStart=%h/.local/bin/simurgh-daemon-linux`
@@ -301,6 +311,7 @@ Key directives:
 - `ReadWritePaths=%h/.local/state/simurgh`
 
 **Lifecycle scripts:**
+
 - `install-user-unit.sh` — installs and enables the unit under `systemctl --user`
 - `uninstall-user-unit.sh` — disables and removes the unit
 - `check-user-unit.sh` — reports unit status
@@ -342,6 +353,7 @@ The canonical-JSON serialization used in step 5 matches the Node.js `canonicalis
 **Function:** `validateDaemonProof()` in `server.js`
 
 Steps:
+
 1. Deserialize the proof payload.
 2. Recompute canonical JSON of the payload fields.
 3. Verify the P-256 signature over the canonical JSON bytes using the `node_id_hash`-identified public key.
@@ -350,6 +362,7 @@ Steps:
 6. If any step fails, return an error and do not record the proof.
 
 **After successful validation:**
+
 - `displayServerLock.observe(sessionId, proof.display_server)` — enforce display server consistency.
 - `recordProofVerified()` — store proof fields: `x11_managed_window_count`, `x11_override_redirect_window_count`, `x11_above_window_count`, `x11_fullscreen_window_count`, `x11_skip_taskbar_window_count`, `xwayland_window_count`, `portal_advertised`, `portal_active`, `display_server`, `coverage`.
 
@@ -377,6 +390,7 @@ The risk engine does not make automatic misconduct determinations. It produces a
 **Linux anomaly detection function:** `linuxAnomaly()`
 
 Conditions checked:
+
 - `wayland_compositor_restricted` — Wayland surface enumeration unavailable
 - `scanner_unavailable` — daemon could not run a scanner
 - `permission_denied` — scanner was denied access
@@ -388,19 +402,19 @@ Conditions checked:
 
 **Linux branch output fields:**
 
-| Field                               | Source                        |
-|-------------------------------------|-------------------------------|
-| `display_server`                    | proof                         |
-| `display_server_locked`             | displayServerLock state       |
-| `coverage`                          | proof                         |
-| `portal_advertised`                 | proof                         |
-| `portal_active`                     | proof                         |
-| `x11_managed_window_count_max`      | max across session proofs     |
+| Field                                    | Source                    |
+| ---------------------------------------- | ------------------------- |
+| `display_server`                         | proof                     |
+| `display_server_locked`                  | displayServerLock state   |
+| `coverage`                               | proof                     |
+| `portal_advertised`                      | proof                     |
+| `portal_active`                          | proof                     |
+| `x11_managed_window_count_max`           | max across session proofs |
 | `x11_override_redirect_window_count_max` | max across session proofs |
-| `x11_above_window_count_max`        | max across session proofs     |
-| `x11_fullscreen_window_count_max`   | max across session proofs     |
-| `x11_skip_taskbar_window_count_max` | max across session proofs     |
-| `xwayland_window_count_max`         | max across session proofs     |
+| `x11_above_window_count_max`             | max across session proofs |
+| `x11_fullscreen_window_count_max`        | max across session proofs |
+| `x11_skip_taskbar_window_count_max`      | max across session proofs |
+| `xwayland_window_count_max`              | max across session proofs |
 
 These fields appear in the instructor-facing report. Audit events (including `display_server_mismatch`) are persisted in the audit chain for the session.
 
@@ -409,6 +423,7 @@ These fields appear in the instructor-facing report. Audit events (including `di
 ## 19. Privacy Contract
 
 **Collected fields (exhaustive list):**
+
 - `platform` — `"linux"`
 - `display_server` — `"x11"`, `"wayland"`, `"xwayland"`, `"headless"`, or `"unknown"`
 - `scanner_state` — string descriptor of scanner outcome
@@ -427,6 +442,7 @@ These fields appear in the instructor-facing report. Audit events (including `di
 - `scan_timestamp` — ISO-8601 timestamp
 
 **Fields explicitly never collected:**
+
 - Window titles
 - Process names
 - Process IDs (PIDs)
@@ -452,16 +468,19 @@ The scanner reads window tree structure and EWMH property flags only. It does no
 **Test invocation:** `SIMURGH_REQUIRE_XVFB_TESTS=1 cargo test`
 
 **Additional checks:**
+
 - `cargo clippy -- -D warnings` — lint with all warnings treated as errors
 - `cargo fmt --check` — format verification
 - `shellcheck scripts/*.sh` — static analysis of all lifecycle shell scripts
 - `actions/cache@v4` on `Cargo.lock` — dependency caching
 
 **Smoke test:** `tests/e2e/stage28cd_linux_wayland_systemd_ci_smoke.mjs`
+
 - 16 scenarios (A through P)
 - Covers daemon startup, proof generation, challenge binding, replay rejection, X11 scan, Wayland probe, XWayland detection, display server lock, mismatch enforcement, systemd unit operations, and report integration.
 
 **Cybersecurity audit test:** `tests/e2e/stage28cd_linux_security_audit.test.js`
+
 - 30 assertions across 16 security dimensions
 
 ---
@@ -494,6 +513,7 @@ The following security dimensions are covered:
 Stage 2.8 has been developed and validated on Linux systems running X11 and XWayland sessions. CI validation runs under Xvfb (virtual framebuffer) on `ubuntu-latest`.
 
 Validated configurations:
+
 - X11 session with `xterm` as a managed window client
 - XWayland under a Wayland compositor (Xvfb-backed in CI)
 - Headless environment (no `$DISPLAY`, no `$WAYLAND_DISPLAY`) — daemon reports `display_server = "headless"`, scanner produces no counts

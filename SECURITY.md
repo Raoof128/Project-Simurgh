@@ -6,7 +6,7 @@ Project Simurgh is a research prototype. Security fixes are applied to the lates
 
 | Version                                                           | Supported              |
 | ----------------------------------------------------------------- | ---------------------- |
-| `v0.4.16-stage-2-8C-8D-linux-wayland-systemd-ci`              | ✅ Active              |
+| `v0.4.16-stage-2-8C-8D-linux-wayland-systemd-ci`                  | ✅ Active              |
 | `v0.4.13-stage-2-6-2-7-closeout` (Windows Device Shield closeout) | ✅ Active              |
 | `v0.4.13` (Stage 2.7 cross-platform unification)                  | ✅ Active              |
 | `v0.4.12` (Stage 2.6B Windows scanner validation)                 | ✅ Active              |

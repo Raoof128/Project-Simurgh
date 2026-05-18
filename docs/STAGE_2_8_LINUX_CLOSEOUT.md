@@ -12,13 +12,13 @@ It does not claim production Linux endpoint deployment, distro packaging, system
 
 ## 2. Release Covered
 
-| Item | Value |
-|---|---|
-| Release tag | `v0.4.16-stage-2-8C-8D-linux-wayland-systemd-ci` |
-| Branch | `stage-2-8c-8d-linux-wayland-systemd-ci` merged to `main` |
-| PR #19 | Stage 2.8A — Rust axum daemon, P-256 ECDSA signed proofs |
-| PR #20 | Stage 2.8B — X11 scanner, Wayland portal probe, XWayland path |
-| PR #21 | Stage 2.8C/D combined — display_server_mismatch enforcement, systemd lifecycle, CI, smoke tests, cybersecurity audit |
+| Item        | Value                                                                                                                |
+| ----------- | -------------------------------------------------------------------------------------------------------------------- |
+| Release tag | `v0.4.16-stage-2-8C-8D-linux-wayland-systemd-ci`                                                                     |
+| Branch      | `stage-2-8c-8d-linux-wayland-systemd-ci` merged to `main`                                                            |
+| PR #19      | Stage 2.8A — Rust axum daemon, P-256 ECDSA signed proofs                                                             |
+| PR #20      | Stage 2.8B — X11 scanner, Wayland portal probe, XWayland path                                                        |
+| PR #21      | Stage 2.8C/D combined — display_server_mismatch enforcement, systemd lifecycle, CI, smoke tests, cybersecurity audit |
 
 ---
 
@@ -54,17 +54,17 @@ It does not claim production Linux endpoint deployment, distro packaging, system
 
 ## 5. Evidence Table
 
-| Evidence | Type | Status |
-|---|---|---|
-| Node tests | Automated | 327/327 pass |
-| Rust tests | Automated (SIMURGH_REQUIRE_XVFB_TESTS=1) | 33/33 pass |
-| scripts/check.sh | Automated | 52/52 pass |
-| npm audit | Automated | 0 high vulnerabilities |
-| Privacy audit | Automated | Pass |
-| cargo fmt | Automated | Clean |
-| cargo clippy -D warnings | Automated | Clean |
-| Stage 2.8C/D smoke scenarios | Automated | 16/16 pass |
-| Stage 2.8C/D cybersecurity assertions | Automated | 30/30 pass |
+| Evidence                              | Type                                     | Status                 |
+| ------------------------------------- | ---------------------------------------- | ---------------------- |
+| Node tests                            | Automated                                | 327/327 pass           |
+| Rust tests                            | Automated (SIMURGH_REQUIRE_XVFB_TESTS=1) | 33/33 pass             |
+| scripts/check.sh                      | Automated                                | 52/52 pass             |
+| npm audit                             | Automated                                | 0 high vulnerabilities |
+| Privacy audit                         | Automated                                | Pass                   |
+| cargo fmt                             | Automated                                | Clean                  |
+| cargo clippy -D warnings              | Automated                                | Clean                  |
+| Stage 2.8C/D smoke scenarios          | Automated                                | 16/16 pass             |
+| Stage 2.8C/D cybersecurity assertions | Automated                                | 30/30 pass             |
 
 ---
 
@@ -85,17 +85,17 @@ All gate evidence passed as of the freeze tag `v0.4.16-stage-2-8C-8D-linux-wayla
 
 Headless Xvfb CI validated all automated gate evidence. Real-device validation across physical Linux desktops is pending. Evidence will be collected according to the rules in `docs/evidence/stage-2-linux/README.md`.
 
-| Environment | Status |
-|---|---|
-| Headless CI (Xvfb, ubuntu-latest) | Validated |
-| Ubuntu GNOME Wayland (real compositor) | Pending |
-| Ubuntu GNOME X11 (real desktop session) | Pending |
-| XWayland app under real Wayland compositor | Pending |
-| Fedora GNOME Wayland | Pending |
-| KDE Plasma Wayland | Pending |
-| KDE Plasma X11 | Pending |
-| Sway / wlroots | Pending |
-| systemd live install/start/stop on real hardware | Pending |
+| Environment                                      | Status    |
+| ------------------------------------------------ | --------- |
+| Headless CI (Xvfb, ubuntu-latest)                | Validated |
+| Ubuntu GNOME Wayland (real compositor)           | Pending   |
+| Ubuntu GNOME X11 (real desktop session)          | Pending   |
+| XWayland app under real Wayland compositor       | Pending   |
+| Fedora GNOME Wayland                             | Pending   |
+| KDE Plasma Wayland                               | Pending   |
+| KDE Plasma X11                                   | Pending   |
+| Sway / wlroots                                   | Pending   |
+| systemd live install/start/stop on real hardware | Pending   |
 
 Real-device evidence will be added to `docs/evidence/stage-2-linux/` when available and will not alter the frozen gate evidence above.
 
