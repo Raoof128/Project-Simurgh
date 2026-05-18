@@ -53,6 +53,42 @@ jobs:
       - name: Install dependencies (npm ci)
         run: npm ci
 
+      - name: Install Linux daemon test dependencies (xvfb, dbus, shellcheck)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            xvfb x11-utils dbus-x11 xterm shellcheck
+
+      - name: Install Rust stable toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt,clippy
+
+      - name: Cache cargo registry + target
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            tools/simurgh-daemon-linux/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('tools/simurgh-daemon-linux/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Shellcheck Linux daemon lifecycle scripts
+        run: shellcheck tools/simurgh-daemon-linux/scripts/*.sh
+
+      - name: Rust fmt (Linux daemon)
+        run: cargo fmt --check --manifest-path tools/simurgh-daemon-linux/Cargo.toml
+
+      - name: Rust clippy (Linux daemon)
+        run: cargo clippy --manifest-path tools/simurgh-daemon-linux/Cargo.toml --all-targets -- -D warnings
+
+      - name: Rust tests (Linux daemon) — Xvfb mandatory
+        env:
+          SIMURGH_REQUIRE_XVFB_TESTS: "1"
+        run: cargo test --manifest-path tools/simurgh-daemon-linux/Cargo.toml
+
       - name: Run Stage 1 check suite
         run: ./scripts/check.sh
 
