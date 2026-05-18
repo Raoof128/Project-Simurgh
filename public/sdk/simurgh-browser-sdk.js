@@ -279,6 +279,32 @@ export function createSimurghClient(options = {}) {
     });
   }
 
+  // Browser packaging hint — UX-only.
+  //
+  // Sandboxed browser packages (Snap, Flatpak) may behave differently around
+  // localhost discovery, loopback networking, and host-service access. This
+  // hint lets the dashboard show a soft note suggesting an unconfined browser
+  // for reviewer validation. It does NOT change risk, never reaches the
+  // server, and is purely a UX accommodation.
+  //
+  // Default to "unknown" unless there is a boringly safe signal — we never
+  // guess. The server is the source of truth for trust; the SDK is the
+  // source of truth for nothing trust-bearing.
+  function detectBrowserPackageHint() {
+    if (typeof navigator === "undefined") return "unknown";
+    const ua = navigator.userAgent || "";
+    if (/\bSnap\b/i.test(ua)) return "snap";
+    if (/\bFlatpak\b/i.test(ua)) return "flatpak";
+    return "unknown";
+  }
+
+  // Soft UX wording for the daemon-unreachable case. Never suspicion wording.
+  // Surfaced for consumers via getDeviceShieldStatus().daemon_unreachable_hint
+  // when the daemon is not available; consumers may display it verbatim.
+  const DAEMON_UNREACHABLE_HINT =
+    "Local daemon unavailable. If using a sandboxed browser package such as " +
+    "Snap or Flatpak, try an unconfined browser for validation.";
+
   // Stage 2.7: UX-only Device Shield status accessor.
   //
   // TRUST BOUNDARY: This status reflects whatever the locally-discovered
@@ -294,6 +320,8 @@ export function createSimurghClient(options = {}) {
       scanner_state: state.scannerState ?? "unknown",
       scanner_version: state.scannerVersion ?? null,
       privacy_mode: state.privacyMode ?? "metadata_only",
+      browser_package_hint: detectBrowserPackageHint(),
+      daemon_unreachable_hint: state.reachable === true ? null : DAEMON_UNREACHABLE_HINT,
     };
   }
 
