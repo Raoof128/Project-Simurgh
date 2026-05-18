@@ -308,7 +308,7 @@ Key directives:
 
 **Security posture of scripts:** No root, no sudo, no eval, no curl-pipe-sh patterns.
 
-**THIS IS DEV-ONLY.** The systemd unit is provided for developer convenience during local testing and research. It does not constitute a production deployment mechanism, a supported installation path, or a distro package. It must not be treated as a production delivery artifact.
+This unit is for developer convenience during local testing only; it is not a production deployment mechanism, supported installation path, or distro package.
 
 ---
 
@@ -468,7 +468,7 @@ The scanner reads window tree structure and EWMH property flags only. It does no
 
 ## 21. Cybersecurity Audit Coverage
 
-The 30-assertion audit test (`stage28cd_linux_security_audit.test.js`) covers 16 security dimensions including:
+The following security dimensions are covered:
 
 - P-256 signature verification correctness
 - Challenge binding enforcement
