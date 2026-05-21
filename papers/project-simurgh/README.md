@@ -20,4 +20,4 @@ Requires TeX Live 2023+ with IEEEtran class.
 
 This paper is the system/defence companion to:
 
-> Abedini, M. R. (2026). *The Invisible Window: Exploiting OS-Level Display Affinity to Bypass WebRTC Proctoring Systems.* Zenodo. https://doi.org/10.5281/zenodo.20319832
+> Abedini, M. R. (2026). _The Invisible Window: Exploiting OS-Level Display Affinity to Bypass WebRTC Proctoring Systems._ Zenodo. https://doi.org/10.5281/zenodo.20319832
