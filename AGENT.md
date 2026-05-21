@@ -2,6 +2,21 @@
 
 ## Agent Change Log
 
+### 2026-05-21 (Australia/Sydney) — Paper: Project Simurgh research paper initial draft
+
+**Raouf:**
+
+- **Scope:** Initial IEEE-format research paper for Project Simurgh — companion to the Invisible Window disclosure paper.
+- **Files added:**
+  - `papers/project-simurgh/main.tex` — full 10-page IEEE conference paper (13 sections, 2 TikZ figures, 2 tables)
+  - `papers/project-simurgh/references.bib` — 34 BibTeX entries
+  - `papers/project-simurgh/Makefile` — build + arxiv-archive targets
+  - `papers/project-simurgh/README.md` — paper metadata
+  - `docs/superpowers/specs/2026-05-21-simurgh-paper-design.md` — paper design spec
+- **Paper coverage:** Threat model, system architecture, Ed25519 proof protocol (E1 triple check, N1 node continuity, nonce replay rejection), platform implementations (macOS/Windows/Linux), privacy model (metadata-only, forbidden fields), evaluation (327+33+11 tests, 30-assertion audit, real-device Windows validation, Linux CI), security analysis, ethics and deployment limits, related work, future work.
+- **Non-claims preserved throughout:** research prototype only, no production deployment, no automatic misconduct finding, no GPU overlay detection, no hardware attestation claim.
+- **Build status:** 10 pages, 0 overfull hboxes, 0 undefined citations, clean compile.
+
 ### 2026-05-18 (Australia/Sydney) — Stage 2.8C/2.8D Linux Wayland + systemd + Ubuntu CI
 
 **Raouf:**

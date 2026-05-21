@@ -1,5 +1,9 @@
 ## Change Log
 
+## [paper-v0.1] — 2026-05-21 — Project Simurgh Research Paper Initial Draft
+
+**Raouf:** Initial IEEE-format research paper draft. 10 pages, 13 sections, 34 citations, 0 overfull hboxes. Covers threat model, system architecture, Ed25519 proof protocol, cross-platform implementations, privacy model, evaluation (371 tests across 3 runtimes), security analysis, ethics. All non-claims preserved. Companion to the Invisible Window paper (Abedini, 2026).
+
 ## [0.4.18-stage-2-8-linux-closeout] — 2026-05-19 — Stage 2.8 Linux Closeout Docs
 
 **Raouf:** Stage 2.8 Linux closeout documentation, validation matrix, reviewer checklist, real-device validation plan, external-review readiness, and top-level security/privacy/roadmap documentation refresh.

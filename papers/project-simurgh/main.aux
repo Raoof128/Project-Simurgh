@@ -1,0 +1,151 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{abedini2026invisible}
+\citation{bruaroey2025screen}
+\citation{abedini2026invisible}
+\citation{cluely2025,interviewcoder2026,fabrichq2026cheating}
+\citation{conijn2022fear}
+\citation{paris2021sins,mukherjee2024balancing}
+\citation{rfc8032}
+\citation{rfc2104}
+\citation{abedini2026invisible}
+\@writefile{toc}{\contentsline {section}{\numberline {I}Introduction}{1}{section.1}\protected@file@percent }
+\citation{abedini2026invisible}
+\citation{microsoft2025setwindow}
+\citation{apple2025sharingtype}
+\citation{abedini2026invisible}
+\citation{abedini2026invisible}
+\citation{cluely2025}
+\citation{interviewcoder2026}
+\citation{fabrichq2026cheating}
+\citation{bruaroey2025screen}
+\citation{abedini2026invisible}
+\citation{balash2023educators,balash2021examining}
+\citation{conijn2022fear}
+\citation{mukherjee2024balancing}
+\citation{paris2021sins}
+\citation{prinsloo2024vulnerable}
+\citation{duncan2022necessity,khalil2022nexus}
+\@writefile{toc}{\contentsline {section}{\numberline {II}Motivation: The Capture-Fidelity Failure}{2}{section.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-A}}The Invisible Window Attack}{2}{subsection.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-B}}Why Screen Capture Is the Wrong Trust Boundary}{2}{subsection.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-C}}Privacy Problems with Surveillance-First Proctoring}{2}{subsection.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {III}Threat Model and Design Goals}{2}{section.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-A}}Adversary Model}{2}{subsection.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}Attacker Capabilities Against Capture-Based Systems}{2}{subsection.3.2}\protected@file@percent }
+\citation{rfc2104}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-C}}What Native OS Metadata Can Provide}{3}{subsection.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-D}}Design Goals}{3}{subsection.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {IV}System Overview}{3}{section.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-A}}Browser Telemetry Layer}{3}{subsection.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-B}}Local Integrity Daemon}{3}{subsection.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-C}}Server Verifier}{3}{subsection.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-D}}Instructor and Reporting Layer}{3}{subsection.4.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Simurgh system architecture. The student device runs a browser SDK (telemetry collection) and a local integrity daemon (Ed25519-signed proofs of OS metadata). The daemon queries OS-level window-state metadata without accessing content. All proof material crosses the trust boundary to the Node.js verifier, which checks signatures, scores risk, appends to the audit chain, optionally invokes the Claude narrative layer, and exposes a read-only instructor dashboard and report.}}{4}{figure.1}\protected@file@percent }
+\newlabel{fig:architecture}{{1}{4}{Simurgh system architecture. The student device runs a browser SDK (telemetry collection) and a local integrity daemon (Ed25519-signed proofs of OS metadata). The daemon queries OS-level window-state metadata without accessing content. All proof material crosses the trust boundary to the Node.js verifier, which checks signatures, scores risk, appends to the audit chain, optionally invokes the Claude narrative layer, and exposes a read-only instructor dashboard and report}{figure.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-E}}Tamper-Evident Audit Chain}{4}{subsection.4.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {V}Proof Protocol}{4}{section.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-A}}Pairing}{4}{subsection.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-B}}Challenge Issuance and Proof Envelope}{4}{subsection.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-C}}Signed Daemon Proof and Verification}{4}{subsection.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-D}}Replay Rejection}{4}{subsection.5.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-E}}Raw-Field Rejection}{4}{subsection.5.5}\protected@file@percent }
+\citation{apple2025screencapturekit}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Simurgh proof protocol. Pairing binds the session to one node. Each proof uses E1 (hash + key + sig) and N1 continuity. All results append to the HMAC audit chain.}}{5}{figure.2}\protected@file@percent }
+\newlabel{fig:protocol}{{2}{5}{Simurgh proof protocol. Pairing binds the session to one node. Each proof uses E1 (hash + key + sig) and N1 continuity. All results append to the HMAC audit chain}{figure.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-F}}Risk Mapping}{5}{subsection.5.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {VI}Platform Implementations}{5}{section.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-A}}macOS Device Shield}{5}{subsection.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-B}}Windows Device Shield}{5}{subsection.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-C}}Linux Display Integrity Research}{5}{subsection.6.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-D}}Cross-Platform Proof Contract}{5}{subsection.6.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {VII}Privacy Model}{5}{section.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-A}}Metadata-Only Collection}{5}{subsection.7.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces Privacy Collection Boundary}}{6}{table.1}\protected@file@percent }
+\newlabel{tab:privacy}{{I}{6}{Privacy Collection Boundary}{table.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-B}}Forbidden Fields}{6}{subsection.7.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-C}}No Screen, Audio, Webcam, or Content Collection}{6}{subsection.7.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-D}}Manual Review Only}{6}{subsection.7.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {VIII}Evaluation}{6}{section.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VIII-A}}Functional Validation}{6}{subsection.8.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces Automated Validation Summary}}{6}{table.2}\protected@file@percent }
+\newlabel{tab:eval}{{II}{6}{Automated Validation Summary}{table.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VIII-B}}Security Audit}{6}{subsection.8.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VIII-C}}Privacy Audit}{6}{subsection.8.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VIII-D}}Real-Device Windows Validation}{6}{subsection.8.4}\protected@file@percent }
+\citation{abedini2026invisible}
+\citation{kaddoura2023computational,ferdosi2023modeling}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VIII-E}}Linux CI and Display-Server Validation}{7}{subsection.8.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VIII-F}}LLM-Assisted Development Methodology}{7}{subsection.8.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {IX}Security Analysis}{7}{section.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IX-A}}What Simurgh Detects}{7}{subsection.9.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IX-B}}What Simurgh Cannot Detect}{7}{subsection.9.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IX-C}}Tamper and Replay Resistance}{7}{subsection.9.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IX-D}}Remaining Attack Surface}{7}{subsection.9.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {X}Ethics and Deployment Limits}{7}{section.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {X-A}}No Automatic Misconduct Finding}{7}{subsection.10.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {X-B}}Research Prototype Status}{7}{subsection.10.2}\protected@file@percent }
+\citation{acm2018code,ieee2024code}
+\citation{simko2024modern}
+\citation{balash2023educators,balash2021examining}
+\citation{luijben2024security}
+\citation{kaddoura2023computational,ferdosi2023modeling}
+\citation{wang2020user}
+\citation{guan2021design,atoum2017automated}
+\citation{nist2020zerotrust}
+\citation{tpm2spec}
+\citation{w3c2021webauthn}
+\citation{paris2021sins}
+\citation{mukherjee2024balancing}
+\citation{duncan2022necessity}
+\citation{prinsloo2024vulnerable}
+\citation{tpm2spec}
+\citation{abedini2026invisible}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {X-C}}Institutional Review Requirements}{8}{subsection.10.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {XI}Related Work}{8}{section.11}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {XI-A}}Proctoring System Security and Criticism}{8}{subsection.11.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {XI-B}}Behavioural Detection}{8}{subsection.11.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {XI-C}}Hardware Attestation and Zero Trust}{8}{subsection.11.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {XI-D}}Privacy-First Assessment}{8}{subsection.11.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {XII}Discussion and Future Work}{8}{section.12}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {XII-A}}Agent Shield}{8}{subsection.12.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {XII-B}}Hardware-Rooted Attestation}{8}{subsection.12.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {XII-C}}Privacy-Preserving Visual Verification}{8}{subsection.12.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {XIII}Conclusion}{8}{section.13}\protected@file@percent }
+\citation{abedini2026invisible}
+\bibstyle{IEEEtran}
+\bibdata{references}
+\bibcite{abedini2026invisible}{1}
+\bibcite{bruaroey2025screen}{2}
+\bibcite{cluely2025}{3}
+\bibcite{interviewcoder2026}{4}
+\bibcite{fabrichq2026cheating}{5}
+\bibcite{conijn2022fear}{6}
+\bibcite{paris2021sins}{7}
+\bibcite{mukherjee2024balancing}{8}
+\bibcite{rfc8032}{9}
+\bibcite{rfc2104}{10}
+\bibcite{microsoft2025setwindow}{11}
+\bibcite{apple2025sharingtype}{12}
+\bibcite{balash2023educators}{13}
+\bibcite{balash2021examining}{14}
+\bibcite{prinsloo2024vulnerable}{15}
+\bibcite{duncan2022necessity}{16}
+\bibcite{khalil2022nexus}{17}
+\bibcite{apple2025screencapturekit}{18}
+\bibcite{kaddoura2023computational}{19}
+\bibcite{ferdosi2023modeling}{20}
+\bibcite{acm2018code}{21}
+\bibcite{ieee2024code}{22}
+\bibcite{simko2024modern}{23}
+\bibcite{luijben2024security}{24}
+\bibcite{wang2020user}{25}
+\bibcite{guan2021design}{26}
+\bibcite{atoum2017automated}{27}
+\bibcite{nist2020zerotrust}{28}
+\bibcite{tpm2spec}{29}
+\bibcite{w3c2021webauthn}{30}
+\@writefile{toc}{\contentsline {section}{References}{9}{section*.2}\protected@file@percent }
+\gdef \@abspage@last{10}
