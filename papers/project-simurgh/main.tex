@@ -224,7 +224,7 @@ The integrity daemon is a native process running on the student's machine at \te
 \begin{enumerate}
 \item Maintain a persistent Ed25519 key pair (stored as a base64-encoded raw private key at mode \texttt{0600} in a \texttt{0700} directory).
 \item On request, query OS metadata APIs to obtain the current display-affinity window summary.
-\item Construct a signed proof envelope containing the session identifier, timestamp, nonce, scanner summary, and Ed25519 signature over the canonical serialisation of the proof fields.
+\item Construct a signed proof envelope containing the version, platform, session identifier, node identity hash, timestamp, nonce, \texttt{capabilities} sub-object (four boolean scanner-capability flags), \texttt{signals} sub-object (window counts and helper status), privacy mode, and Ed25519 signature over the canonical serialisation of all non-signature fields.
 \item Respond to pairing challenges issued by the server.
 \end{enumerate}
 
@@ -241,11 +241,12 @@ The Node.js server receives telemetry events and proof envelopes from the browse
 \item Audit append: the result (accept or reject with reason) is written to the HMAC chain.
 \end{enumerate}
 
-Risk scoring aggregates telemetry events and proof results into a session risk score across seven weighted categories: paste behaviour, focus events, typing patterns, idle periods, display-affinity signals, helper connection state, and session lifecycle. Safe, Warning, and Critical verdicts produce mandatory wording:
-\begin{quote}
-``Manual review required. No automatic misconduct finding.''
-\end{quote}
-This sentence is hard-coded in the risk scorer and cannot be suppressed through configuration.
+Risk scoring aggregates telemetry events and proof results into a session risk score across eight weighted categories: paste behaviour, focus events, typing patterns, idle periods, display-affinity signals, helper connection state, daemon proof signals, and session lifecycle. The risk scorer produces three fixed verdict strings, hard-coded and unsuppressable through configuration:
+\begin{itemize}
+\item \textbf{Critical}: ``Manual review required. No automatic misconduct finding.''
+\item \textbf{Warning}: ``Manual review recommended. No automatic misconduct finding.''
+\item \textbf{Safe}: ``No anomalies detected.''
+\end{itemize}
 
 \subsection{Instructor and Reporting Layer}
 
@@ -253,7 +254,7 @@ The instructor dashboard displays risk category breakdowns, event timelines, per
 
 \subsection{Tamper-Evident Audit Chain}
 
-Every state-changing event — telemetry accept, proof accept, proof reject, pairing accept, pairing reject, session state transition, and Claude narrative emission — is written to an HMAC-SHA256-linked audit chain~\cite{rfc2104}. Each entry contains a SHA-256 hash of the previous entry, making any retroactive modification detectable as a chain-break. The audit chain HMAC key is server-held; it is not shared with the daemon, the browser, or any AI analysis layer.
+Every state-changing event — telemetry accept, proof accept, proof reject, pairing accept, pairing reject, session state transition, and Claude narrative emission — is written to an HMAC-SHA256-linked audit chain~\cite{rfc2104}. Each entry's \texttt{prev} field contains the HMAC-SHA256 signature of the previous entry, computed over the full JSON serialisation of that entry, making any retroactive modification detectable as a chain-break. The audit chain HMAC key is server-held; it is not shared with the daemon, the browser, or any AI analysis layer.
 
 %% ===================================================================
 %% SECTION V: PROOF PROTOCOL
@@ -268,7 +269,7 @@ Before a proof can be accepted, the server and daemon must complete a pairing ha
 
 \subsection{Challenge Issuance and Proof Envelope}
 
-The signed integrity proof envelope (\texttt{simurgh-integrity-proof-v1}) contains eight required fields: \texttt{session\_id}, \texttt{proof\_type}, \texttt{timestamp}, \texttt{nonce} (32 bytes, base64), \texttt{node\_public\_key} (32 bytes, base64), \texttt{node\_id\_hash} (64-char hex), \texttt{scanner\_summary} (platform-specific metadata object), and \texttt{signature} (64 bytes, base64). The canonical serialisation for signing is a deterministic JSON string of all fields except \texttt{signature}, produced by \texttt{proofCanonicalise.js}; the same canonicalisation is implemented in the Swift and Rust daemons to ensure byte-identical golden fixtures.
+The signed integrity proof envelope (\texttt{simurgh-integrity-proof-v1}) contains eleven required fields: \texttt{version}, \texttt{platform}, \texttt{session\_id}, \texttt{node\_id\_hash} (64-char hex), \texttt{node\_public\_key} (32 bytes, base64), \texttt{nonce} (12--64 bytes, base64), \texttt{timestamp}, \texttt{capabilities} (four boolean scanner-capability flags), \texttt{signals} (window counts and helper status), \texttt{privacy\_mode}, and \texttt{signature} (64 bytes, base64). The canonical serialisation for signing is a deterministic JSON string of all fields except \texttt{signature}, produced by \texttt{proofCanonicalise.js}; the same canonicalisation is implemented in the Swift and Rust daemons to ensure byte-identical golden fixtures.
 
 \subsection{Signed Daemon Proof and Verification}
 
@@ -276,15 +277,15 @@ Signature verification on the server uses Node.js \texttt{crypto.verify(null, ca
 
 \subsection{Replay Rejection}
 
-Each session maintains a nonce guard: a set of all nonces seen in accepted proofs. When a proof arrives, its nonce is checked against this set before signature verification. If the nonce has been seen, the proof is rejected with \texttt{nonce\_replayed} and the event is appended to the audit chain. Nonces are 32~bytes of random data generated by the daemon; collision probability under a birthday attack over a single session is negligible.
+Each session maintains a nonce guard: a set of all nonces seen in accepted proofs. When a proof arrives, its nonce is checked against this set before signature verification. If the nonce has been seen, the proof is rejected with \texttt{nonce\_replayed} and the event is appended to the audit chain. Nonces are 12--64~bytes of random data generated by the daemon (16~bytes in the macOS implementation); collision probability under a birthday attack over a single session is negligible.
 
 \subsection{Raw-Field Rejection}
 
-The proof schema validator rejects any proof that contains fields not in the defined envelope. In particular, \texttt{window\_titles}, \texttt{process\_names}, \texttt{pids}, \texttt{handles}, and \texttt{device\_id} are explicitly forbidden. The \texttt{scanner\_summary} sub-object is validated against a platform-specific schema that allows only count-level fields (e.g., \texttt{capture\_excluded\_window\_count}) and boolean state flags (e.g., \texttt{portal\_screencast\_active}).
+The proof schema validator rejects any proof containing explicitly forbidden fields, including \texttt{screen\_pixels}, \texttt{screenshot}, \texttt{webcam\_frame}, \texttt{audio}, \texttt{typed\_answer}, \texttt{paste\_content}, \texttt{window\_title}, \texttt{process\_name}, \texttt{raw\_process\_names}, \texttt{raw\_window\_titles}, \texttt{hardware\_serial}, and \texttt{biometric}. The \texttt{capabilities} sub-object is validated against exactly four boolean keys: \texttt{screencapturekit\_available}, \texttt{window\_enumeration}, \texttt{sharing\_state\_scan}, and \texttt{helper\_bridge}. The \texttt{signals} sub-object is validated against exactly four defined keys: \texttt{node\_uptime\_ms}, \texttt{window\_count}, \texttt{capture\_excluded\_window\_count}, and \texttt{helper\_status}.
 
 \subsection{Risk Mapping}
 
-Accepted proofs are scored against the display-affinity category of the seven-category risk model. A non-zero \texttt{capture\_excluded\_window\_count} in an accepted proof elevates the affinity risk score proportionally. Rejected proofs (nonce replay, signature failure, node mismatch) also contribute to the helper-connection risk category, as repeated rejections may indicate tampering. All risk scores aggregate into a session-level verdict that is presented to the instructor with mandatory manual-review language.
+Accepted proofs are scored against the display-affinity category of the eight-category risk model. A non-zero \texttt{capture\_excluded\_window\_count} in an accepted proof elevates the affinity risk score proportionally. Rejected proofs (nonce replay, signature failure, node mismatch) also contribute to the helper-connection risk category, as repeated rejections may indicate tampering. All risk scores aggregate into a session-level verdict that is presented to the instructor with mandatory manual-review language.
 
 %% ===================================================================
 %% FIGURE 2: Proof Sequence
@@ -341,7 +342,7 @@ Accepted proofs are scored against the display-affinity category of the seven-ca
 
 \subsection{macOS Device Shield}
 
-The macOS daemon is implemented in Swift using the CryptoKit framework. It generates and stores an Ed25519 key pair (raw representation, 32-byte private key, 32-byte public key) at first launch. The daemon exposes a \texttt{127.0.0.1}-bound HTTP listener for proof and pairing endpoints. The OS scanner queries \texttt{CGWindowListCopyWindowInfo} with the \texttt{kCGWindowListOptionAll} mask and reads the \texttt{kCGWindowSharingState} property for each window. It reports \texttt{capture\_excluded\_window\_count} (windows with sharing state \texttt{kCGWindowSharingNone}) as the only scanner output. Starting with macOS~15, ScreenCaptureKit~\cite{apple2025screencapturekit} provides richer metadata; the scanner adapts its query strategy based on OS version while maintaining the metadata-only contract.
+The macOS daemon is implemented in Swift using the CryptoKit framework. It generates and stores an Ed25519 key pair (raw representation, 32-byte private key, 32-byte public key) at first launch. The daemon exposes a \texttt{127.0.0.1}-bound HTTP listener for proof and pairing endpoints. The OS scanner queries \texttt{CGWindowListCopyWindowInfo} with the \texttt{kCGWindowListOptionAll} mask and reads the \texttt{kCGWindowSharingState} property for each window. Its \texttt{signals} sub-object reports \texttt{node\_uptime\_ms}, \texttt{window\_count}, \texttt{capture\_excluded\_window\_count} (windows with sharing state \texttt{kCGWindowSharingNone}), and \texttt{helper\_status}. Starting with macOS~15, ScreenCaptureKit~\cite{apple2025screencapturekit} provides richer metadata; the scanner adapts its query strategy based on OS version while maintaining the metadata-only contract.
 
 \subsection{Windows Device Shield}
 
@@ -406,7 +407,7 @@ Simurgh does not implement and does not call \texttt{getDisplayMedia()}, \texttt
 
 \subsection{Manual Review Only}
 
-Every Warning and Critical verdict produced by the risk scorer is accompanied by the hard-coded wording: ``Manual review required. No automatic misconduct finding.'' This sentence cannot be suppressed through configuration. The system produces no binary misconduct verdict, no suspension action, no notification to any authority, and no persistent record outside the instructor-accessible audit export. All conclusions require a human reviewer.
+Critical verdicts are accompanied by the hard-coded string ``Manual review required. No automatic misconduct finding.'' Warning verdicts produce ``Manual review recommended. No automatic misconduct finding.'' Neither string can be suppressed through configuration. The system produces no binary misconduct verdict, no suspension action, no notification to any authority, and no persistent record outside the instructor-accessible audit export. All conclusions require a human reviewer.
 
 %% ===================================================================
 %% SECTION VIII: EVALUATION
