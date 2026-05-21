@@ -115,7 +115,7 @@ The WebRTC Screen Capture API~\cite{bruaroey2025screen} delegates pixel composit
 \textbf{Display Fidelity Property.} A capture system satisfies display fidelity if and only if the captured frame $F$ is pixel-identical to the physical display output $D$ for all visible screen regions.
 \end{quote}
 
-This property does not hold on any tested platform when any visible window has a capture-exclusion flag set. The trust boundary proctoring systems implicitly rely on --- that the OS faithfully reports what the user sees --- is structurally absent from the current platform landscape. Adding more resolution, frame rate, or webcam channels does not address the structural gap; it merely increases the surveillance cost without closing the attack surface.
+This property does not hold on any tested platform when any visible window has a capture-exclusion flag set. The trust boundary proctoring systems implicitly rely on --- that the OS faithfully reports what the user sees --- is structurally absent from the current platform landscape. Adding more resolution, frame rate, or webcam channels does not address the structural gap; it increases the surveillance cost without closing the attack surface.
 
 \subsection{Privacy Problems with Surveillance-First Proctoring}
 
@@ -260,6 +260,8 @@ Every state-changing event — telemetry accept, proof accept, proof reject, pai
 %% ===================================================================
 \section{Proof Protocol}
 
+Figure~\ref{fig:protocol} illustrates the full proof protocol sequence. Section~V-A through V-F describe each step.
+
 \subsection{Pairing}
 
 Before a proof can be accepted, the server and daemon must complete a pairing handshake. The server issues a one-time challenge token via \texttt{/api/pairing/challenge}. The challenge has a 60-second time-to-live and is consumed on first use; any unconsumed pending challenge for the session is cleared when a new one is issued. The daemon signs the challenge using its Ed25519 private key and submits the signed pairing proof to \texttt{/api/pairing/complete}. The server verifies the signature, extracts the raw public key from the proof, computes \texttt{node\_id\_hash~=~SHA-256(pubkey)} (64-character lowercase hex), and binds this hash to the session. Subsequent pairing attempts from a different node hash are rejected.
@@ -349,9 +351,9 @@ The Windows daemon is implemented in .NET. The Windows scanner enumerates all to
 
 The Linux daemon is implemented in Rust. Due to the diversity of the Linux desktop landscape, the Linux implementation is positioned as a display integrity research contribution rather than a complete deployment target. Three scanner paths are implemented:
 
-\textbf{X11}: The Rust daemon connects to the X server via \texttt{xcb} and enumerates top-level windows. It reads the \texttt{\_NET\_WM\_STATE} property and window manager hints to identify windows with unusual sharing configurations. \texttt{capture\_excluded\_window\_count} is reported. No window title or class is read.
+\textbf{X11}: The Rust daemon connects to the X server via \texttt{x11rb} and enumerates top-level windows. It reads the \texttt{\_NET\_WM\_STATE} property and window manager hints to identify windows with unusual sharing configurations. \texttt{capture\_excluded\_window\_count} is reported. No window title or class is read.
 
-\textbf{Wayland}: Direct window enumeration is not available to unprivileged clients in Wayland. The daemon probes the \texttt{org.freedesktop.portal.Desktop} service via D-Bus using \texttt{NameHasOwner} (to detect portal presence) and reads the \texttt{ScreenCast.AvailableSourceTypes} property (to detect active screencast capability). Critically, it never calls \texttt{CreateSession}, \texttt{SelectSources}, \texttt{Start}, or \texttt{OpenPipeWireRemote}~--- the portal methods that would trigger a user consent prompt. A banned-method grep test in CI enforces this invariant.
+\textbf{Wayland}: Direct window enumeration is not available to unprivileged clients in Wayland. The daemon probes the \texttt{org.freedesktop.portal.Desktop} service via D-Bus using \texttt{NameHasOwner} (to detect portal presence) and reads the \texttt{ScreenCast.AvailableSourceTypes} property (to detect active screencast capability). It never calls \texttt{CreateSession}, \texttt{SelectSources}, \texttt{Start}, or \texttt{OpenPipeWireRemote}~--- the portal methods that would trigger a user consent prompt. A banned-method grep test in CI enforces this invariant.
 
 \textbf{XWayland}: The X11 scanner path runs against the \texttt{\$DISPLAY} provided by XWayland, providing partial coverage of applications running in XWayland compatibility mode. Coverage is reported as \texttt{coverage=xwayland\_partial} in the proof.
 
@@ -359,7 +361,7 @@ A display-server lock prevents proof acceptance from sessions where the detected
 
 \subsection{Cross-Platform Proof Contract}
 
-All three daemons produce proofs that satisfy the same \texttt{simurgh-integrity-proof-v1} envelope. The canonical serialisation (\texttt{proofCanonicalise.js}) is mirrored in Swift (\texttt{ProofCanonicaliser.swift}) and Rust (\texttt{canonicalise.rs}), with byte-identical golden fixture tests enforcing cross-implementation consistency. The server verifier applies the same E1 triple check and N1 node-continuity rule regardless of which daemon submitted the proof.
+All three daemons produce proofs that satisfy the same \texttt{simurgh-integrity-proof-v1} envelope. The canonical serialisation (\texttt{proofCanonicalise.js}) is mirrored in Swift (\texttt{ProofSigner.swift}) and Rust (\texttt{canonical\_json.rs}), with byte-identical golden fixture tests enforcing cross-implementation consistency. The server verifier applies the same E1 triple check and N1 node-continuity rule regardless of which daemon submitted the proof.
 
 %% ===================================================================
 %% SECTION VII: PRIVACY MODEL
@@ -368,7 +370,7 @@ All three daemons produce proofs that satisfy the same \texttt{simurgh-integrity
 
 \subsection{Metadata-Only Collection}
 
-Simurgh's privacy model distinguishes sharply between \textit{behavioural metadata} (what the student did) and \textit{content} (what the student wrote, said, or displayed). Only the former is collected.
+Simurgh's privacy model distinguishes between \textit{behavioural metadata} (what the student did) and \textit{content} (what the student wrote, said, or displayed). Only the former is collected; Table~\ref{tab:privacy} specifies the boundary for each signal class.
 
 \begin{table}[t]
 \centering
@@ -428,7 +430,7 @@ Table~\ref{tab:eval} summarises the automated validation results across the prot
 Node.js unit tests & Node.js 22 & 327 / 327 pass \\
 Rust daemon tests & Rust stable & 33 / 33 pass \\
 Windows .NET tests & .NET 8 & 11 / 11 pass \\
-Stage 2.7 cross-platform smoke & Node.js + Rust & 12 scenarios pass \\
+Stage 2.7 cross-platform smoke & Node.js + Rust & All scenarios pass \\
 Stage 2.8 Linux smoke & Node.js + Rust & 16 scenarios pass \\
 Security audit assertions & Node.js & 30 / 30 pass \\
 Privacy audit gates & Node.js & All pass \\
@@ -438,7 +440,7 @@ npm advisory audit & npm & 0 high/critical \\
 }
 \end{table}
 
-The Node.js unit tests cover the proof validator, pairing registry, nonce guard, HMAC chain, risk scorer, session state machine, telemetry normaliser, and report builder. Rust tests cover the macOS and Linux scanner paths, the canonicalisation implementation, and the daemon proof flow. The Windows .NET tests exercise the display-affinity scanner and signed proof contract.
+The Node.js unit tests cover the proof validator, pairing registry, nonce guard, HMAC chain, risk scorer, session state machine, telemetry normaliser, and report builder. Rust tests cover the Linux daemon scanner paths (X11, Wayland, XWayland), the cross-platform canonicalisation implementation, and the Linux daemon proof flow; macOS daemon correctness is covered by the Swift test suite (\texttt{CanonicaliseTests.swift}). The Windows .NET tests exercise the display-affinity scanner and signed proof contract.
 
 \subsection{Security Audit}
 
