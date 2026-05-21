@@ -17,7 +17,7 @@
 \hypersetup{
   pdftitle={Project Simurgh: Privacy-Preserving Device Integrity Proofs for Capture-Resistant High-Stakes Sessions},
   pdfauthor={Mohammad Raouf Abedini},
-  pdfkeywords={academic integrity, device attestation, display affinity, Ed25519, integrity proofs, online proctoring, privacy-preserving, WebRTC},
+  pdfkeywords={academic integrity, device attestation, display affinity, Ed25519, ECDSA P-256, integrity proofs, online proctoring, privacy-preserving, WebRTC},
   colorlinks=true,
   linkcolor=black,
   citecolor=black,
@@ -60,7 +60,7 @@ mohammadraouf.abedini@students.mq.edu.au\\
 \begin{abstract}
 Project Simurgh is a privacy-preserving integrity architecture for high-stakes AI-mediated and remote assessment sessions. Existing browser-based proctoring systems commonly treat screen-capture output as a faithful representation of the physical display. However, documented operating-system display-affinity behaviours on Windows and macOS show that visible windows can be omitted from capture surfaces, invalidating capture-based trust assumptions~\cite{abedini2026invisible}.
 
-Simurgh responds by replacing surveillance-first visual monitoring with signed, metadata-only integrity proofs. The system combines browser behavioural telemetry, local device integrity daemons, cryptographic challenge-response proofs using Ed25519 signatures, native OS metadata scanners, server-side verification, and HMAC-SHA256-linked tamper-evident audit trails. It does not collect screen pixels, webcam frames, microphone audio, typed content, pasted content, raw process names, raw window titles, window handles, process identifiers, or personal device identifiers. Every anomaly is treated as a signal for mandatory manual human review; no automatic misconduct finding is ever produced.
+Simurgh responds by replacing surveillance-first visual monitoring with signed, metadata-only integrity proofs. The system combines browser behavioural telemetry, local device integrity daemons, cryptographic challenge-response proofs (Ed25519 for the Stage-1 browser-integrity envelope; ECDSA P-256 for the cross-platform device-shield daemons), native OS metadata scanners, server-side verification, and HMAC-SHA256-linked tamper-evident audit trails. It does not collect screen pixels, webcam frames, microphone audio, typed content, pasted content, raw process names, raw window titles, window handles, process identifiers, or personal device identifiers. Every anomaly is treated as a signal for mandatory manual human review; no automatic misconduct finding is ever produced.
 
 We implement Simurgh as a cross-platform research prototype spanning a Node.js verifier, a browser SDK, and localhost daemons for macOS (Swift/CryptoKit), Windows (.NET), and Linux (Rust). The Windows Device Shield validates detection of \texttt{WDA\_MONITOR} and \texttt{WDA\_EXCLUDEFROMCAPTURE} on Windows~10 Pro build~19045. The Linux research path adds signed daemon proofs, X11 display-affinity scanner coverage, Wayland portal property probing, XWayland partial coverage, display-server mismatch enforcement, and development systemd user lifecycle support. Automated validation includes 327 Node.js unit tests, 33 Rust tests, 11 Windows .NET tests, end-to-end smoke tests, cybersecurity audits, privacy audits, and CI gates.
 
@@ -68,7 +68,7 @@ This paper presents Simurgh's threat model, architecture, proof protocol, privac
 \end{abstract}
 
 \begin{IEEEkeywords}
-academic integrity, device attestation, display affinity, Ed25519, integrity proofs, online proctoring, privacy-preserving security, screen capture evasion
+academic integrity, device attestation, display affinity, Ed25519, ECDSA P-256, integrity proofs, online proctoring, privacy-preserving security, screen capture evasion
 \end{IEEEkeywords}
 
 %% ===================================================================
@@ -80,7 +80,7 @@ Remote proctoring systems that monitor examinations through the WebRTC \texttt{g
 
 The defensive response cannot simply be ``capture more.'' Existing proctoring approaches already collect webcam feeds, gaze streams, keystroke content, audio, and full-screen video, imposing well-documented psychological costs~\cite{conijn2022fear} and raising serious privacy concerns~\cite{paris2021sins,mukherjee2024balancing}. Adding hardware capture cards or GPU-level frame hooks compounds the privacy problem while still being defeatable by sufficiently motivated adversaries.
 
-\textit{Project Simurgh} takes a different path. Rather than attempting to close the gap between the physical display and the capture surface, Simurgh abandons that surface entirely as a trust anchor. Instead, it establishes session integrity through signed, metadata-only device proofs: the local integrity daemon attests to its own identity and environment state using Ed25519 cryptography~\cite{rfc8032}; the server verifies each proof against the session's registered key; and every accept and reject event is written to an HMAC-SHA256-linked audit chain~\cite{rfc2104} that any inspector can verify offline. No screen pixels, webcam frames, audio, typed content, pasted content, raw process names, raw window titles, or personal device identifiers are collected at any layer.
+\textit{Project Simurgh} takes a different path. Rather than attempting to close the gap between the physical display and the capture surface, Simurgh abandons that surface entirely as a trust anchor. Instead, it establishes session integrity through signed, metadata-only device proofs: the local integrity daemon attests to its own identity and environment state using ECDSA P-256 over SHA-256~\cite{fips1865}, while the Stage-1 browser-integrity envelope uses Ed25519~\cite{rfc8032}; the server verifies each proof against the session's registered key; and every accept and reject event is written to an HMAC-SHA256-linked audit chain~\cite{rfc2104} that any inspector can verify offline. No screen pixels, webcam frames, audio, typed content, pasted content, raw process names, raw window titles, or personal device identifiers are collected at any layer.
 
 This paper makes the following contributions:
 
@@ -178,7 +178,7 @@ Figure~\ref{fig:architecture} shows the high-level system architecture. Simurgh 
 \node[font=\small\bfseries, anchor=north west] at ([xshift=4pt,yshift=-4pt] device.north west) {Student Device};
 
 \node[box, fill=blue!10, draw=blue!50] (sdk)    at (-1.5, 0.8) {Browser SDK\\{\footnotesize Telemetry}};
-\node[box, fill=blue!10, draw=blue!50] (daemon) at ( 1.5, 0.8) {Integrity Daemon\\{\footnotesize Ed25519 signer}};
+\node[box, fill=blue!10, draw=blue!50] (daemon) at ( 1.5, 0.8) {Integrity Daemon\\{\footnotesize P-256 signer}};
 \node[box, fill=blue!10, draw=blue!50] (scanner) at (1.5, -0.7) {OS Scanner\\{\footnotesize (kCGWindow / WDA)}};
 
 \draw[arr, dashed] (daemon) -- (scanner) node[right, font=\tiny, midway] {query};
@@ -192,8 +192,8 @@ Figure~\ref{fig:architecture} shows the high-level system architecture. Simurgh 
 \node[bigbox, fill=orange!5, minimum width=6.5cm, minimum height=4.8cm] (server) at (8.0, 0) {};
 \node[font=\small\bfseries, anchor=north west] at ([xshift=4pt,yshift=-4pt] server.north west) {Verifier Server (Node.js)};
 
-\node[box, fill=orange!10, draw=orange!50] (verifier)  at (6.8, 1.2) {Proof Verifier\\{\footnotesize Ed25519 verify}};
-\node[box, fill=orange!10, draw=orange!50] (risk)      at (9.2, 1.2) {Risk Scorer\\{\footnotesize 7-category model}};
+\node[box, fill=orange!10, draw=orange!50] (verifier)  at (6.8, 1.2) {Proof Verifier\\{\footnotesize Ed25519 + P-256}};
+\node[box, fill=orange!10, draw=orange!50] (risk)      at (9.2, 1.2) {Risk Scorer\\{\footnotesize 8-category model}};
 \node[box, fill=orange!10, draw=orange!50] (audit)     at (6.8,-0.5) {Audit Chain\\{\footnotesize HMAC-SHA256}};
 \node[box, fill=orange!10, draw=orange!50] (claude)    at (9.2,-0.5) {Claude Layer\\{\footnotesize narrative, opt.}};
 \node[box, fill=orange!10, draw=orange!50] (report)    at (8.0,-1.9) {Report \& Dashboard\\{\footnotesize instructor view}};
@@ -208,7 +208,7 @@ Figure~\ref{fig:architecture} shows the high-level system architecture. Simurgh 
 \draw[arr, thick] (sdk) -- node[above, font=\footnotesize] {telemetry + proof} (verifier);
 
 \end{tikzpicture}
-\caption{Simurgh system architecture. The student device runs a browser SDK (telemetry collection) and a local integrity daemon (Ed25519-signed proofs of OS metadata). The daemon queries OS-level window-state metadata without accessing content. All proof material crosses the trust boundary to the Node.js verifier, which checks signatures, scores risk, appends to the audit chain, optionally invokes the Claude narrative layer, and exposes a read-only instructor dashboard and report.}
+\caption{Simurgh system architecture. The student device runs a browser SDK (telemetry collection) and a local integrity daemon (ECDSA P-256-signed proofs of OS metadata; the Stage-1 browser envelope uses Ed25519). The daemon queries OS-level window-state metadata without accessing content. All proof material crosses the trust boundary to the Node.js verifier, which checks signatures, scores risk, appends to the audit chain, optionally invokes the Claude narrative layer, and exposes a read-only instructor dashboard and report.}
 \label{fig:architecture}
 \end{figure*}
 
@@ -222,9 +222,9 @@ The telemetry stream is deliberately narrow. No DOM content, no clipboard text, 
 
 The integrity daemon is a native process running on the student's machine at \texttt{127.0.0.1}. Its responsibilities are:
 \begin{enumerate}
-\item Maintain a persistent Ed25519 key pair (stored as a base64-encoded raw private key at mode \texttt{0600} in a \texttt{0700} directory).
+\item Maintain a persistent ECDSA P-256 key pair (32-byte private scalar; macOS Keychain on macOS, an OS-native identity file at mode \texttt{0600} in a \texttt{0700} directory on Windows and Linux).
 \item On request, query OS metadata APIs to obtain the current display-affinity window summary.
-\item Construct a signed proof envelope containing the version, platform, session identifier, node identity hash, timestamp, nonce, \texttt{capabilities} sub-object (four boolean scanner-capability flags), \texttt{signals} sub-object (window counts and helper status), privacy mode, and Ed25519 signature over the canonical serialisation of all non-signature fields.
+\item Construct a signed proof envelope containing the version, platform, session identifier, node identity hash, timestamp, nonce, \texttt{capabilities} sub-object (four boolean scanner-capability flags), \texttt{signals} sub-object (window counts and helper status), privacy mode, and ECDSA P-256 signature over the canonical serialisation of all non-signature fields.
 \item Respond to pairing challenges issued by the server.
 \end{enumerate}
 
@@ -234,9 +234,9 @@ The daemon explicitly does not enumerate window titles, process names, process i
 
 The Node.js server receives telemetry events and proof envelopes from the browser SDK. For each proof, it performs the following verification steps, detailed further in Section~V:
 \begin{enumerate}
-\item Schema validation: all eight required fields must be present and correctly typed.
+\item Schema validation: all eleven required fields must be present and correctly typed.
 \item Nonce check: the nonce must not have been seen in this session (replay guard).
-\item Signature verification: Ed25519 \texttt{verify(canonical, pubkey, sig)}.
+\item Signature verification: Ed25519 \texttt{verify(canonical, pubkey, sig)} for the Stage-1 envelope; ECDSA P-256 over SHA-256 for the device-shield daemon envelope.
 \item Node continuity: the submitting node's hash must match the bound node for this session.
 \item Audit append: the result (accept or reject with reason) is written to the HMAC chain.
 \end{enumerate}
@@ -265,15 +265,15 @@ Figure~\ref{fig:protocol} illustrates the full proof protocol sequence. Section~
 
 \subsection{Pairing}
 
-Before a proof can be accepted, the server and daemon must complete a pairing handshake. The server issues a one-time challenge token via \texttt{/api/pairing/challenge}. The challenge has a 60-second time-to-live and is consumed on first use; any unconsumed pending challenge for the session is cleared when a new one is issued. The daemon signs the challenge using its Ed25519 private key and submits the signed pairing proof to \texttt{/api/pairing/complete}. The server verifies the signature, extracts the raw public key from the proof, computes \texttt{node\_id\_hash~=~SHA-256(pubkey)} (64-character lowercase hex), and binds this hash to the session. Subsequent pairing attempts from a different node hash are rejected.
+Before a proof can be accepted, the server and daemon must complete a pairing handshake. The server issues a one-time challenge token via \texttt{/api/pairing/challenge}. The challenge has a 60-second time-to-live and is consumed on first use; any unconsumed pending challenge for the session is cleared when a new one is issued. The daemon signs the challenge using its private key (Ed25519 in the Stage-1 path, ECDSA P-256 in the device-shield daemons) and submits the signed pairing proof to \texttt{/api/pairing/complete}. The server verifies the signature, extracts the raw public key from the proof, computes \texttt{node\_id\_hash~=~SHA-256(pubkey)} (64-character lowercase hex; the daemon path carries an explicit \texttt{sha256:} algorithm prefix), and binds this hash to the session. Subsequent pairing attempts from a different node hash are rejected.
 
-\subsection{Challenge Issuance and Proof Envelope}
+\subsection{Challenge Issuance and Proof Envelopes}
 
-The signed integrity proof envelope (\texttt{simurgh-integrity-proof-v1}) contains eleven required fields: \texttt{version}, \texttt{platform}, \texttt{session\_id}, \texttt{node\_id\_hash} (64-char hex), \texttt{node\_public\_key} (32 bytes, base64), \texttt{nonce} (12--64 bytes, base64), \texttt{timestamp}, \texttt{capabilities} (four boolean scanner-capability flags), \texttt{signals} (window counts and helper status), \texttt{privacy\_mode}, and \texttt{signature} (64 bytes, base64). The canonical serialisation for signing is a deterministic JSON string of all fields except \texttt{signature}, produced by \texttt{proofCanonicalise.js}; the same canonicalisation is implemented in the Swift and Rust daemons to ensure byte-identical golden fixtures.
+Simurgh defines two related proof envelopes. The \textbf{Stage-1 integrity proof envelope} (\texttt{simurgh-integrity-proof-v1}), produced by the browser-paired Node-side signer, contains eleven required fields: \texttt{version}, \texttt{platform}, \texttt{session\_id}, \texttt{node\_id\_hash} (64-char hex), \texttt{node\_public\_key} (32 bytes Ed25519, base64), \texttt{nonce} (12--64 bytes, base64), \texttt{timestamp}, \texttt{capabilities} (four boolean scanner-capability flags), \texttt{signals} (window counts and helper status), \texttt{privacy\_mode}, and \texttt{signature} (64 bytes, base64). The \textbf{device-shield daemon proof envelope}, produced by the macOS, Windows, and Linux daemons, carries instead twelve fields: \texttt{type}, \texttt{session\_id}, \texttt{exam\_id}, \texttt{sequence}, \texttt{timestamp}, \texttt{node\_id\_hash} (with \texttt{sha256:} prefix), \texttt{daemon\_version}, \texttt{platform}, \texttt{capture\_excluded\_window\_count}, \texttt{helper\_state}, \texttt{challenge}, and \texttt{signature}, with an SPKI-DER ECDSA P-256 public key delivered alongside the proof. The canonical serialisation for signing is a deterministic JSON string of all fields except \texttt{signature}, produced by \texttt{proofCanonicalise.js}; the same canonicalisation is implemented in the Swift and Rust daemons to ensure byte-identical golden fixtures.
 
 \subsection{Signed Daemon Proof and Verification}
 
-Signature verification on the server uses Node.js \texttt{crypto.verify(null, canonical, spkiWrappedPubkey, sigBytes)}. The raw 32-byte Ed25519 public key is wrapped in a DER SubjectPublicKeyInfo envelope before verification to satisfy the Node.js \texttt{crypto} API. The server performs a strict triple check (E1): (a)~the claimed \texttt{node\_id\_hash} must equal \texttt{SHA-256(decoded~pubkey)}; (b)~the raw public key must match the session's registered key; (c)~the Ed25519 signature must verify against the canonical payload. Any failure on any check produces a uniform \texttt{invalid\_signature} reason code to prevent oracle attacks.
+Stage-1 integrity proofs are verified via Node.js \texttt{crypto.verify(null, canonical, ed25519SpkiPubkey, sigBytes)} over a raw 32-byte Ed25519 public key wrapped in a DER SubjectPublicKeyInfo envelope. Device-shield daemon proofs are verified via \texttt{crypto.verify("sha256", canonical, p256SpkiPubkey, sigBytes)} over an SPKI-wrapped ECDSA P-256 public key. The server performs a strict triple check (E1): (a)~the claimed \texttt{node\_id\_hash} must equal \texttt{SHA-256(decoded~pubkey)}; (b)~the raw public key must match the session's registered key; (c)~the signature must verify against the canonical payload. Any failure on any check produces a uniform \texttt{invalid\_signature} reason code to prevent oracle attacks.
 
 \subsection{Replay Rejection}
 
@@ -342,15 +342,15 @@ Accepted proofs are scored against the display-affinity category of the eight-ca
 
 \subsection{macOS Device Shield}
 
-The macOS daemon is implemented in Swift using the CryptoKit framework. It generates and stores an Ed25519 key pair (raw representation, 32-byte private key, 32-byte public key) at first launch. The daemon exposes a \texttt{127.0.0.1}-bound HTTP listener for proof and pairing endpoints. The OS scanner queries \texttt{CGWindowListCopyWindowInfo} with the \texttt{kCGWindowListOptionAll} mask and reads the \texttt{kCGWindowSharingState} property for each window. Its \texttt{signals} sub-object reports \texttt{node\_uptime\_ms}, \texttt{window\_count}, \texttt{capture\_excluded\_window\_count} (windows with sharing state \texttt{kCGWindowSharingNone}), and \texttt{helper\_status}. Starting with macOS~15, ScreenCaptureKit~\cite{apple2025screencapturekit} provides richer metadata; the scanner adapts its query strategy based on OS version while maintaining the metadata-only contract.
+The macOS daemon is implemented in Swift using the CryptoKit framework. It generates and stores an ECDSA P-256 signing key (\texttt{P256.Signing.PrivateKey}) in the macOS Keychain at first launch under the account \texttt{p256-signing-key}. The daemon exposes a \texttt{127.0.0.1}-bound HTTP listener for proof and pairing endpoints. The OS scanner queries \texttt{CGWindowListCopyWindowInfo} with the \texttt{kCGWindowListOptionAll} mask and reads the \texttt{kCGWindowSharingState} property for each window. Its \texttt{signals} sub-object reports \texttt{node\_uptime\_ms}, \texttt{window\_count}, \texttt{capture\_excluded\_window\_count} (windows with sharing state \texttt{kCGWindowSharingNone}), and \texttt{helper\_status}. Starting with macOS~15, ScreenCaptureKit~\cite{apple2025screencapturekit} provides richer metadata; the scanner adapts its query strategy based on OS version while maintaining the metadata-only contract.
 
 \subsection{Windows Device Shield}
 
-The Windows daemon is implemented in .NET. The Windows scanner enumerates all top-level windows using \texttt{EnumWindows} and calls \texttt{GetWindowDisplayAffinity} on each handle. It counts windows with \texttt{WDA\_MONITOR} and \texttt{WDA\_EXCLUDEFROMCAPTURE} flags and reports these counts in the signed \texttt{scanner\_summary}. No window title, class name, process name, or PID is included in the summary; the raw window handle is used only transiently during enumeration and is never written to the proof. Real-device validation on Windows~10 Pro build~19045 confirmed correct detection of both flags, signed proof submission, server-side acceptance, and correct propagation of the affinity count into the risk score, dashboard, and audit chain.
+The Windows daemon is implemented in .NET, using \texttt{ECDsa.Create(ECCurve.NamedCurves.nistP256)} for proof signing. The Windows scanner enumerates all top-level windows using \texttt{EnumWindows} and calls \texttt{GetWindowDisplayAffinity} on each handle. It counts windows with \texttt{WDA\_MONITOR} and \texttt{WDA\_EXCLUDEFROMCAPTURE} flags and reports them in the signed proof as \texttt{capture\_excluded\_window\_count} (umbrella: \texttt{capture\_restricted\_window\_count}) and \texttt{monitor\_only\_window\_count}. No window title, class name, process name, or PID is included in the summary; the raw window handle is used only transiently during enumeration and is never written to the proof. Real-device validation on Windows~10 Pro build~19045 confirmed correct detection of both flags, signed proof submission, server-side acceptance, and correct propagation of the affinity count into the risk score, dashboard, and audit chain.
 
 \subsection{Linux Display Integrity Research}
 
-The Linux daemon is implemented in Rust. Due to the diversity of the Linux desktop landscape, the Linux implementation is positioned as a display integrity research contribution rather than a complete deployment target. Three scanner paths are implemented:
+The Linux daemon is implemented in Rust, using the \texttt{p256::ecdsa} crate for proof signing. Due to the diversity of the Linux desktop landscape, the Linux implementation is positioned as a display integrity research contribution rather than a complete deployment target. Three scanner paths are implemented:
 
 \textbf{X11}: The Rust daemon connects to the X server via \texttt{x11rb} and enumerates top-level windows. It reads the \texttt{\_NET\_WM\_STATE} property and window manager hints to identify windows with unusual sharing configurations. \texttt{capture\_excluded\_window\_count} is reported. No window title or class is read.
 
@@ -441,7 +441,7 @@ npm advisory audit & npm & 0 high/critical \\
 }
 \end{table}
 
-The Node.js unit tests cover the proof validator, pairing registry, nonce guard, HMAC chain, risk scorer, session state machine, telemetry normaliser, and report builder. Rust tests cover the Linux daemon scanner paths (X11, Wayland, XWayland), the cross-platform canonicalisation implementation, and the Linux daemon proof flow; macOS daemon correctness is covered by the Swift test suite (\texttt{CanonicaliseTests.swift}). The Windows .NET tests exercise the display-affinity scanner and signed proof contract.
+The Node.js unit tests cover the proof validator, pairing registry, nonce guard, HMAC chain, risk scorer, session state machine, telemetry normaliser, and report builder. Rust tests cover the Linux daemon scanner paths (X11, Wayland, XWayland), the cross-platform canonicalisation implementation, and the Linux daemon proof flow; macOS daemon correctness is covered by the Swift test suite (\texttt{AffinityScannerTests.swift}, \texttt{ScannerProofTests.swift}, \texttt{PrivacyNormaliserTests.swift}, \texttt{DaemonDoctorTests.swift}; 8 tests). The Windows .NET tests exercise the display-affinity scanner and signed proof contract.
 
 \subsection{Security Audit}
 
@@ -455,7 +455,7 @@ The privacy audit verifies the following properties as regression-gated checks: 
 
 \subsection{Real-Device Windows Validation}
 
-The Windows Device Shield was validated on a physical Windows~10 Pro machine (build~19045). The validation confirmed: \texttt{WDA\_MONITOR}-flagged windows increment the \texttt{wda\_monitor\_count}; \texttt{WDA\_EXCLUDEFROMCAPTURE}-flagged windows increment \texttt{wda\_excludefromcapture\_count}; unflagged windows contribute to neither counter. Signed proofs from the .NET daemon were accepted by the Node.js verifier; tampered proofs, replayed nonces, and wrong-node proofs were rejected with correct reason codes and audit entries. The affinity counts propagated correctly into the risk score, the instructor report, and the audit chain export.
+The Windows Device Shield was validated on a physical Windows~10 Pro machine (build~19045). The validation confirmed: \texttt{WDA\_MONITOR}-flagged windows increment \texttt{monitor\_only\_window\_count} (and the umbrella \texttt{capture\_restricted\_window\_count}); \texttt{WDA\_EXCLUDEFROMCAPTURE}-flagged windows increment \texttt{capture\_excluded\_window\_count}; unflagged windows contribute to neither counter. Signed proofs from the .NET daemon were accepted by the Node.js verifier; tampered proofs, replayed nonces, and wrong-node proofs were rejected with correct reason codes and audit entries. The affinity counts propagated correctly into the risk score, the instructor report, and the audit chain export.
 
 \subsection{Linux CI and Display-Server Validation}
 
@@ -501,7 +501,7 @@ The HMAC-SHA256 audit chain makes retroactive modification of any event record d
 
 \subsection{Remaining Attack Surface}
 
-An adversary who can run the Simurgh daemon client unmodified but controls the proof's \texttt{scanner\_summary} content through OS-level manipulation can submit a dishonest but validly signed proof. The server cannot distinguish a lying daemon from an honest one if the Ed25519 key is genuine and the proof format is correct. Signed proofs attest identity (\textit{this key submitted this data}) but not truthfulness (\textit{this data faithfully reflects OS state}). Hardware-rooted attestation, discussed in Section~XII-B, addresses this gap. Until then, the proof architecture provides meaningful replay and forgery resistance while being honest about the remaining trust assumption.
+An adversary who can run the Simurgh daemon client unmodified but controls the proof's \texttt{signals} sub-object (or, in the daemon envelope, the affinity-count fields) through OS-level manipulation can submit a dishonest but validly signed proof. The server cannot distinguish a lying daemon from an honest one if the signing key is genuine and the proof format is correct. Signed proofs attest identity (\textit{this key submitted this data}) but not truthfulness (\textit{this data faithfully reflects OS state}). Hardware-rooted attestation, discussed in Section~XII-B, addresses this gap. Until then, the proof architecture provides meaningful replay and forgery resistance while being honest about the remaining trust assumption.
 
 %% ===================================================================
 %% SECTION X: ETHICS AND DEPLOYMENT LIMITS
@@ -537,7 +537,7 @@ A substantial body of work applies gaze tracking~\cite{kaddoura2023computational
 
 \subsection{Hardware Attestation and Zero Trust}
 
-The NIST Zero Trust Architecture~\cite{nist2020zerotrust} framework motivates treating the client device as untrusted until it provides verifiable proof of identity and state. Simurgh's Ed25519-signed proof envelope is a software instantiation of this principle, pending hardware-rooted attestation. Trusted Platform Module~\cite{tpm2spec} and Intel TXT provide hardware-backed attestation primitives; WebAuthn~\cite{w3c2021webauthn} provides a browser-accessible version using platform authenticators. Simurgh's architecture is designed to accept hardware-rooted proofs in a future stage (Section~XII-B) without breaking the existing proof contract.
+The NIST Zero Trust Architecture~\cite{nist2020zerotrust} framework motivates treating the client device as untrusted until it provides verifiable proof of identity and state. Simurgh's signed proof envelope (Ed25519 for the Stage-1 path, ECDSA P-256 for the device-shield daemons) is a software instantiation of this principle, pending hardware-rooted attestation. Trusted Platform Module~\cite{tpm2spec} and Intel TXT provide hardware-backed attestation primitives; WebAuthn~\cite{w3c2021webauthn} provides a browser-accessible version using platform authenticators. Simurgh's architecture is designed to accept hardware-rooted proofs in a future stage (Section~XII-B) without breaking the existing proof contract.
 
 \subsection{Privacy-First Assessment}
 
@@ -554,7 +554,7 @@ Stage~3 of the Simurgh roadmap introduces an Agent Shield: a proof-based integri
 
 \subsection{Hardware-Rooted Attestation}
 
-The current Ed25519 proof architecture provides software-level identity binding: the proof attests that \textit{this key signed this data at this time}. It does not attest that the data faithfully reflects the OS state, because the key itself resides in user space. Hardware-rooted attestation via TPM~\cite{tpm2spec} or Secure Enclave would move the signing key into hardware, making it non-extractable and binding the attestation to physical device identity. Apple's Secure Enclave and Windows' TPM~2.0 both provide the necessary primitives; the challenge is integrating them into the existing proof contract without breaking the metadata-only privacy model. Attestation keys must not leak device identity across sessions.
+The current Ed25519 + ECDSA P-256 proof architecture provides software-level identity binding: the proof attests that \textit{this key signed this data at this time}. It does not attest that the data faithfully reflects the OS state, because the key itself resides in user space. Hardware-rooted attestation via TPM~\cite{tpm2spec} or Secure Enclave would move the signing key into hardware, making it non-extractable and binding the attestation to physical device identity. Apple's Secure Enclave and Windows' TPM~2.0 both provide the necessary primitives; the challenge is integrating them into the existing proof contract without breaking the metadata-only privacy model. Attestation keys must not leak device identity across sessions.
 
 \subsection{Privacy-Preserving Visual Verification}
 

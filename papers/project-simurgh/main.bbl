@@ -64,6 +64,11 @@ S.~Mukherjee, V.~Distler, G.~Lenzini, and P.~Cardoso-Leite, ``{Balancing the
   European Symp. Usable Security (EuroUSEC '24)}.\hskip 1em plus 0.5em minus
   0.4em\relax Karlstad, Sweden: ACM, 2024.
 
+\bibitem{fips1865}
+{National Institute of Standards and Technology}, ``{Digital Signature Standard
+  (DSS)},'' FIPS PUB 186-5, 2023, u.S. Department of Commerce.
+  \url{https://doi.org/10.6028/NIST.FIPS.186-5}.
+
 \bibitem{rfc8032}
 S.~Josefsson and I.~Liusvaara, ``{Edwards-Curve Digital Signature Algorithm
   (EdDSA)},'' RFC 8032, 2017, internet Engineering Task Force.
