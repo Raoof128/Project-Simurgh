@@ -214,7 +214,7 @@ Figure~\ref{fig:architecture} shows the high-level system architecture. Simurgh 
 
 \subsection{Browser Telemetry Layer}
 
-The browser SDK, embedded in the exam page, collects a behavioural metadata stream using 18 defined academic event types. The collected signals include: keystroke count (not content), character-typed count (not content), paste event count and character length (not paste content), focus-loss count and duration, idle-gap maxima, effective words-per-minute rate, and keydown timing intervals (up to 200 samples, no content). The raw student identifier is hashed with SHA-256 at server ingress; the raw value is never written to disk, logged, or transmitted further.
+The browser SDK, embedded in the exam page, collects a behavioural metadata stream covering approximately 18 browser-side behavioural event types; the full event registry (\texttt{src/academic/academicEvents.js}) additionally defines pairing, daemon-proof, scanner, and session-lifecycle events emitted server-side. The collected signals include: keystroke count (not content), character-typed count (not content), paste event count and character length (not paste content), focus-loss count and duration, idle-gap maxima, effective words-per-minute rate, and keydown timing intervals (up to 200 samples, no content). The raw student identifier is hashed with SHA-256 at server ingress; the raw value is never written to disk, logged, or transmitted further.
 
 The telemetry stream is deliberately narrow. No DOM content, no clipboard text, no window titles, no \texttt{getDisplayMedia()} stream, and no webcam feed are collected.
 
@@ -222,7 +222,7 @@ The telemetry stream is deliberately narrow. No DOM content, no clipboard text, 
 
 The integrity daemon is a native process running on the student's machine at \texttt{127.0.0.1}. Its responsibilities are:
 \begin{enumerate}
-\item Maintain a persistent ECDSA P-256 key pair (32-byte private scalar; macOS Keychain on macOS, an OS-native identity file at mode \texttt{0600} in a \texttt{0700} directory on Windows and Linux).
+\item Maintain an ECDSA P-256 key pair: persistent on macOS (stored in the macOS Keychain under account \texttt{p256-signing-key}) and on Linux (an identity file at mode \texttt{0600} within a \texttt{0700} state directory under \texttt{\$XDG\_STATE\_HOME}); the current Windows research daemon generates the key ephemerally for the lifetime of the process, with persistent storage backed by DPAPI deferred to a future stage.
 \item On request, query OS metadata APIs to obtain the current display-affinity window summary.
 \item Construct a signed proof envelope containing the version, platform, session identifier, node identity hash, timestamp, nonce, \texttt{capabilities} sub-object (four boolean scanner-capability flags), \texttt{signals} sub-object (window counts and helper status), privacy mode, and ECDSA P-256 signature over the canonical serialisation of all non-signature fields.
 \item Respond to pairing challenges issued by the server.
@@ -342,7 +342,7 @@ Accepted proofs are scored against the display-affinity category of the eight-ca
 
 \subsection{macOS Device Shield}
 
-The macOS daemon is implemented in Swift using the CryptoKit framework. It generates and stores an ECDSA P-256 signing key (\texttt{P256.Signing.PrivateKey}) in the macOS Keychain at first launch under the account \texttt{p256-signing-key}. The daemon exposes a \texttt{127.0.0.1}-bound HTTP listener for proof and pairing endpoints. The OS scanner queries \texttt{CGWindowListCopyWindowInfo} with the \texttt{kCGWindowListOptionAll} mask and reads the \texttt{kCGWindowSharingState} property for each window. Its \texttt{signals} sub-object reports \texttt{node\_uptime\_ms}, \texttt{window\_count}, \texttt{capture\_excluded\_window\_count} (windows with sharing state \texttt{kCGWindowSharingNone}), and \texttt{helper\_status}. Starting with macOS~15, ScreenCaptureKit~\cite{apple2025screencapturekit} provides richer metadata; the scanner adapts its query strategy based on OS version while maintaining the metadata-only contract.
+The macOS daemon is implemented in Swift using the CryptoKit framework. It generates and stores an ECDSA P-256 signing key (\texttt{P256.Signing.PrivateKey}) in the macOS Keychain at first launch under the account \texttt{p256-signing-key}. The daemon exposes a \texttt{127.0.0.1}-bound HTTP listener for proof and pairing endpoints. The OS scanner queries \texttt{CGWindowListCopyWindowInfo} with the combined \texttt{kCGWindowListOptionOnScreenOnly~|~kCGWindowListExcludeDesktopElements} mask and reads the \texttt{kCGWindowSharingState} property for each returned window. Its \texttt{signals} sub-object reports \texttt{node\_uptime\_ms}, \texttt{window\_count}, \texttt{capture\_excluded\_window\_count} (windows with sharing state \texttt{kCGWindowSharingNone}), and \texttt{helper\_status}. ScreenCaptureKit~\cite{apple2025screencapturekit} availability is exposed to the verifier as the \texttt{screencapturekit\_available} capability flag for forward compatibility; the current scanner remains single-path CoreGraphics, and an adaptive ScreenCaptureKit query path is reserved as a future-stage upgrade while preserving the metadata-only contract.
 
 \subsection{Windows Device Shield}
 
