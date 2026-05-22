@@ -89,7 +89,7 @@ This paper makes the following contributions:
 
 \item \textbf{Cross-platform research prototype}: We implement Simurgh as a working system spanning a browser telemetry SDK, a Node.js verifier, and localhost integrity daemons for macOS (Swift/CryptoKit), Windows (.NET), and Linux (Rust), unified under a common proof contract.
 
-\item \textbf{OS-level display-affinity detection without screen capture}: We show that the display-affinity risk class documented in~\cite{abedini2026invisible} can be detected through native OS metadata scanners that report window-count summaries without ever accessing window content, titles, or identifiers.
+\item \textbf{OS-level metadata detection without screen capture}: We show that the display-affinity risk class documented in~\cite{abedini2026invisible} can be detected through native OS metadata scanners — capture-exclusion counts on Windows and macOS, window-manager state metadata on Linux — without ever accessing window content, titles, or identifiers.
 
 \item \textbf{Evaluated prototype with manual-review-only decision model}: We evaluate the system through 379 automated tests across four language runtimes (Node.js, Rust, .NET, and Swift), end-to-end smoke tests, cybersecurity and privacy audits, and real-device Windows validation, while preserving the invariant that every anomaly signal requires a human reviewer to reach any integrity conclusion.
 \end{itemize}
@@ -228,7 +228,7 @@ The integrity daemon is a native process running on the student's machine at \te
 \item Respond to pairing challenges issued by the server.
 \end{enumerate}
 
-The daemon explicitly does not enumerate window titles, process names, process identifiers, raw window handles, or any content-level data. The OS scanner returns a count of windows with capture-exclusion flags set, not a list of which windows or what they display.
+The daemon explicitly does not enumerate window titles, process names, process identifiers, raw window handles, or any content-level data. The OS scanner returns platform-specific metadata summaries — capture-exclusion counts on Windows and macOS, and window-state or portal metadata on Linux — not a list of which windows exist or what they display.
 
 \subsection{Server Verifier}
 
@@ -411,7 +411,7 @@ Focus loss & Count + duration (ms) & Window title/target \\
 Idle gaps & Maximum gap (ms) & Content during idle \\
 WPM & Effective WPM & Text being typed \\
 Timing intervals & Up to 200 samples & Key content \\
-Display affinity & Window count & Titles, PIDs, names \\
+Device integrity metadata & Platform-specific counts/booleans & Titles, PIDs, names, handles \\
 Student identity & SHA-256 hash & Raw identifier \\
 \bottomrule
 \end{tabular}%
