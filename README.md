@@ -117,7 +117,7 @@ The project is open for technical review from researchers, engineers, and organi
 - no Windows Service, MDM/Intune, or production endpoint-management claim
 - Linux Stage 2.8C/D research prototype only — no production Linux endpoint deployment, no distro packaging, no system-wide service, no universal Wayland surface enumeration
 
-**Technical brief:** [`docs/STAGE_2_5_TECHNICAL_BRIEF.md`](docs/STAGE_2_5_TECHNICAL_BRIEF.md) — full Stage 1–2.5 architecture, cryptographic detail, privacy contract, validation gates, limitations, and non-claims.
+**Technical brief:** [`docs/STAGE_2_5_TECHNICAL_BRIEF.md`](docs/stages/STAGE_2_5_TECHNICAL_BRIEF.md) — full Stage 1–2.5 architecture, cryptographic detail, privacy contract, validation gates, limitations, and non-claims.
 
 ---
 
@@ -347,7 +347,7 @@ Stage 2.2 binds a browser exam session to a macOS node public key. The server is
 
 ### Stage 2.3 macOS Localhost Daemon (merged — v0.4.5)
 
-Stage 2.3 adds a macOS localhost daemon under `tools/simurgh-daemon-macos/`. The browser probes `127.0.0.1:3031`, requests server challenges from `POST /api/device/challenge`, pairs the daemon through `POST /api/device/pair`, and can attach signed `daemon_proof` metadata to `POST /api/telemetry`. The server verifies P-256 signatures, rejects replayed challenges, updates `daemon_risk`, appends daemon audit events, and includes `device_integrity` in reports. Design doc: [`docs/STAGE_2_3_MACOS_LOCALHOST_DAEMON.md`](docs/STAGE_2_3_MACOS_LOCALHOST_DAEMON.md).
+Stage 2.3 adds a macOS localhost daemon under `tools/simurgh-daemon-macos/`. The browser probes `127.0.0.1:3031`, requests server challenges from `POST /api/device/challenge`, pairs the daemon through `POST /api/device/pair`, and can attach signed `daemon_proof` metadata to `POST /api/telemetry`. The server verifies P-256 signatures, rejects replayed challenges, updates `daemon_risk`, appends daemon audit events, and includes `device_integrity` in reports. Design doc: [`docs/STAGE_2_3_MACOS_LOCALHOST_DAEMON.md`](docs/stages/STAGE_2_3_MACOS_LOCALHOST_DAEMON.md).
 
 Stage 2.2/2.3 closeout can be run independently:
 
@@ -375,7 +375,7 @@ This LaunchAgent path is development-only. It is not notarised, not production e
 
 Stage 2.5 replaces the daemon's conservative placeholder scanner with a real CoreGraphics-backed, metadata-only scanner. The scanner enumerates visible window metadata, filters tiny/system noise, counts capture-excluded visible windows conservatively, and attaches only aggregate scanner summaries inside signed daemon proofs.
 
-The server accepts validated scanner fields, rejects forbidden raw local fields, escalates `capture_excluded_window_count > 0` to Critical/manual review, and records privacy-safe scanner audit events. Reports and the instructor dashboard now expose scanner state, visible-window count, maximum capture-excluded count, and manual-review wording. Design doc: [`docs/STAGE_2_5_MACOS_AFFINITY_SCANNER.md`](docs/STAGE_2_5_MACOS_AFFINITY_SCANNER.md).
+The server accepts validated scanner fields, rejects forbidden raw local fields, escalates `capture_excluded_window_count > 0` to Critical/manual review, and records privacy-safe scanner audit events. Reports and the instructor dashboard now expose scanner state, visible-window count, maximum capture-excluded count, and manual-review wording. Design doc: [`docs/STAGE_2_5_MACOS_AFFINITY_SCANNER.md`](docs/stages/STAGE_2_5_MACOS_AFFINITY_SCANNER.md).
 
 Stage 2.5 closeout includes a dedicated E2E smoke pack:
 
@@ -391,7 +391,7 @@ Stage 2.5 closeout also includes a cybersecurity audit gate:
 ./scripts/security-audit-stage-2-4-2-5.sh
 ```
 
-The audit gate verifies recursive raw local-data rejection, SDK token and proof boundaries, daemon loopback/body/method/malformed JSON/origin guards, LaunchAgent dry-run safety, dashboard/report wording, the Stage 2.4/2.5 smoke pack, privacy audit, npm audit, and macOS Swift daemon test/build/doctor redaction checks when available. Details: [`docs/STAGE_2_5_CLOSEOUT_SECURITY_AUDIT.md`](docs/STAGE_2_5_CLOSEOUT_SECURITY_AUDIT.md).
+The audit gate verifies recursive raw local-data rejection, SDK token and proof boundaries, daemon loopback/body/method/malformed JSON/origin guards, LaunchAgent dry-run safety, dashboard/report wording, the Stage 2.4/2.5 smoke pack, privacy audit, npm audit, and macOS Swift daemon test/build/doctor redaction checks when available. Details: [`docs/STAGE_2_5_CLOSEOUT_SECURITY_AUDIT.md`](docs/stages/STAGE_2_5_CLOSEOUT_SECURITY_AUDIT.md).
 
 ### Dashboard
 
@@ -628,19 +628,19 @@ The `simurgh-helper` native agent authenticates to the server via a shared secre
 
 Stage 1.5 is a validation, audit, documentation, and reviewer-readiness sprint. It does not add major Stage 2 runtime code.
 
-| Review area               | Entry point                                                        |
-| ------------------------- | ------------------------------------------------------------------ |
-| Main reviewer pack        | [docs/STAGE_1_5_REVIEWER_PACK.md](docs/STAGE_1_5_REVIEWER_PACK.md) |
-| Threat model              | [docs/THREAT_MODEL.md](docs/THREAT_MODEL.md)                       |
-| Validation matrix         | [docs/VALIDATION.md](docs/VALIDATION.md)                           |
-| Limitations               | [docs/LIMITATIONS.md](docs/LIMITATIONS.md)                         |
-| Stage 2 architecture plan | [docs/STAGE_2_ARCHITECTURE.md](docs/STAGE_2_ARCHITECTURE.md)       |
-| Resource plan             | [docs/RESOURCE_PLAN.md](docs/RESOURCE_PLAN.md)                     |
-| Demo script               | [docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md)                         |
-| Decisions                 | [docs/DECISIONS.md](docs/DECISIONS.md)                             |
-| Risk register             | [docs/RISK_REGISTER.md](docs/RISK_REGISTER.md)                     |
-| Reviewer checklist        | [docs/REVIEWER_CHECKLIST.md](docs/REVIEWER_CHECKLIST.md)           |
-| Evidence folder rules     | [docs/evidence/stage-1/README.md](docs/evidence/stage-1/README.md) |
+| Review area               | Entry point                                                               |
+| ------------------------- | ------------------------------------------------------------------------- |
+| Main reviewer pack        | [docs/STAGE_1_5_REVIEWER_PACK.md](docs/stages/STAGE_1_5_REVIEWER_PACK.md) |
+| Threat model              | [docs/THREAT_MODEL.md](docs/THREAT_MODEL.md)                              |
+| Validation matrix         | [docs/VALIDATION.md](docs/VALIDATION.md)                                  |
+| Limitations               | [docs/LIMITATIONS.md](docs/LIMITATIONS.md)                                |
+| Stage 2 architecture plan | [docs/STAGE_2_ARCHITECTURE.md](docs/stages/STAGE_2_ARCHITECTURE.md)       |
+| Resource plan             | [docs/RESOURCE_PLAN.md](docs/RESOURCE_PLAN.md)                            |
+| Demo script               | [docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md)                                |
+| Decisions                 | [docs/DECISIONS.md](docs/DECISIONS.md)                                    |
+| Risk register             | [docs/RISK_REGISTER.md](docs/RISK_REGISTER.md)                            |
+| Reviewer checklist        | [docs/REVIEWER_CHECKLIST.md](docs/REVIEWER_CHECKLIST.md)                  |
+| Evidence folder rules     | [docs/evidence/stage-1/README.md](docs/evidence/stage-1/README.md)        |
 
 ### What Stage 1 Proves
 

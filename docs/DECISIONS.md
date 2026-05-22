@@ -1,6 +1,6 @@
 # Stage 1.5 Decisions
 
-> **Status (v0.4.3, 2026-05-15):** Stage 1.5 decision record. Stage 2.1 and 2.2 are now merged — the rationale below for "ship Stage 1 first, then layer Stage 2" is intact. See [`STAGE_2_ARCHITECTURE.md`](STAGE_2_ARCHITECTURE.md) and `CHANGELOG.md` `[0.4.1]`–`[0.4.3]` for Stage 2 decisions.
+> **Status (v0.4.3, 2026-05-15):** Stage 1.5 decision record. Stage 2.1 and 2.2 are now merged — the rationale below for "ship Stage 1 first, then layer Stage 2" is intact. See [`STAGE_2_ARCHITECTURE.md`](stages/STAGE_2_ARCHITECTURE.md) and `CHANGELOG.md` `[0.4.1]`–`[0.4.3]` for Stage 2 decisions.
 
 Short ADR-style entries for reviewer context.
 

@@ -2030,7 +2030,7 @@ and `tools/privacy-audit.mjs`. The browser SDK gains a UX-only
 `daemon_proof`. A new cross-platform E2E smoke (Scenarios A–G) and security
 audit gate cover both platforms. Linux daemon proofs are rejected with
 `unsupported_platform` until Stage 2.8. Design doc:
-[`docs/stages/STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md`](docs/stages/STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md).
+[`docs/stages/STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md`](../../stages/STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md).
 
 Stage 2.7 closeout can be run independently:
 
@@ -2124,7 +2124,7 @@ Match the existing changelog style. Add:
 In `docs/stages/STAGE_2_5_TECHNICAL_BRIEF.md`, add a top-of-file note:
 
 ```markdown
-> **Scope:** This brief documents Stage 1 through Stage 2.5 (macOS-only Device Shield). Windows display-affinity scanning landed in Stage 2.6 (`v0.4.12`). The cross-platform unification contract is documented in [`STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md`](STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md) and [`DEVICE_SHIELD_CONTRACT.md`](DEVICE_SHIELD_CONTRACT.md).
+> **Scope:** This brief documents Stage 1 through Stage 2.5 (macOS-only Device Shield). Windows display-affinity scanning landed in Stage 2.6 (`v0.4.12`). The cross-platform unification contract is documented in [`STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md`](../../stages/STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md) and [`DEVICE_SHIELD_CONTRACT.md`](../../DEVICE_SHIELD_CONTRACT.md).
 ```
 
 In `docs/stages/STAGE_2_6_WINDOWS_DISPLAY_AFFINITY_SCANNER.md`, add at the end of the document:
@@ -2132,7 +2132,7 @@ In `docs/stages/STAGE_2_6_WINDOWS_DISPLAY_AFFINITY_SCANNER.md`, add at the end o
 ```markdown
 ## Stage 2.7 unification
 
-The Stage 2.6 Windows scanner now operates under the unified Stage 2.7 Device Shield contract — see [`STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md`](STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md) and [`DEVICE_SHIELD_CONTRACT.md`](DEVICE_SHIELD_CONTRACT.md). The Windows native daemon code is unchanged.
+The Stage 2.6 Windows scanner now operates under the unified Stage 2.7 Device Shield contract — see [`STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md`](../../stages/STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md) and [`DEVICE_SHIELD_CONTRACT.md`](../../DEVICE_SHIELD_CONTRACT.md). The Windows native daemon code is unchanged.
 ```
 
 - [ ] **Step 8: Format and commit**

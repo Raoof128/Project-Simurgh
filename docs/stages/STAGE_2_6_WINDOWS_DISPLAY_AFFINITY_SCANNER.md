@@ -2,7 +2,7 @@
 
 **Release tag:** `v0.4.12-stage-2-6-windows-display-affinity-scanner`
 
-> **Stage 2.7 cross-reference (added 2026-05-17):** The Stage 2.6 Windows scanner now operates under the unified Stage 2.7 Device Shield contract — see [`STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md`](STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md) and [`DEVICE_SHIELD_CONTRACT.md`](DEVICE_SHIELD_CONTRACT.md). The Windows .NET daemon code is unchanged; what changed is that the Node server validator now consumes a shared `platformScannerSchema` module that codifies the contract this scanner has been emitting since v0.4.12.
+> **Stage 2.7 cross-reference (added 2026-05-17):** The Stage 2.6 Windows scanner now operates under the unified Stage 2.7 Device Shield contract — see [`STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md`](STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md) and [`DEVICE_SHIELD_CONTRACT.md`](../DEVICE_SHIELD_CONTRACT.md). The Windows .NET daemon code is unchanged; what changed is that the Node server validator now consumes a shared `platformScannerSchema` module that codifies the contract this scanner has been emitting since v0.4.12.
 
 Stage 2.6 completes real-device Windows display-affinity validation for the Device Shield research
 prototype. `WDA_MONITOR` and `WDA_EXCLUDEFROMCAPTURE` are detected through the Windows daemon,

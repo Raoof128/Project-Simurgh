@@ -182,7 +182,7 @@ The repository currently reports **0 known vulnerabilities**. Report any new fin
 
 Non-claims preserved: research prototype only. No production Linux endpoint deployment, no distro packaging, no system-wide service, no MDM, no hardware attestation, no kernel-level visibility, no universal Wayland surface enumeration, no GPU overlay detection, no automatic misconduct detection.
 
-See [`docs/STAGE_2_8_LINUX_TECHNICAL_BRIEF.md`](docs/STAGE_2_8_LINUX_TECHNICAL_BRIEF.md) for the full security architecture.
+See [`docs/STAGE_2_8_LINUX_TECHNICAL_BRIEF.md`](docs/stages/STAGE_2_8_LINUX_TECHNICAL_BRIEF.md) for the full security architecture.
 
 ## Verification Tools
 

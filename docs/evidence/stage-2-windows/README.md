@@ -40,5 +40,5 @@ Project Simurgh collects behavioural metadata only. Evidence artefacts must resp
 
 ## Reference
 
-Privacy contract: [`PRIVACY.md`](../../PRIVACY.md)
-Forbidden-field list: [`src/device/forbiddenLocalFields.js`](../../src/device/forbiddenLocalFields.js)
+Privacy contract: [`PRIVACY.md`](../../../PRIVACY.md)
+Forbidden-field list: [`src/device/forbiddenLocalFields.js`](../../../src/device/forbiddenLocalFields.js)

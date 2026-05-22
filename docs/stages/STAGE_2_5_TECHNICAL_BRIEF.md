@@ -8,7 +8,7 @@
 
 _A Stage 1–2.5 technical summary of Project Simurgh's privacy-preserving integrity architecture._
 
-> **Scope footnote (added 2026-05-17):** This brief documents Stage 1 through Stage 2.5 (macOS-only Device Shield). Windows display-affinity scanning landed in Stage 2.6 (`v0.4.12`). The cross-platform unification contract that ties macOS and Windows together is documented in [`STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md`](STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md) and [`DEVICE_SHIELD_CONTRACT.md`](DEVICE_SHIELD_CONTRACT.md). Sections of this brief that say "macOS only" or "Windows scanner is future work" reflect Stage 2.5 historical scope.
+> **Scope footnote (added 2026-05-17):** This brief documents Stage 1 through Stage 2.5 (macOS-only Device Shield). Windows display-affinity scanning landed in Stage 2.6 (`v0.4.12`). The cross-platform unification contract that ties macOS and Windows together is documented in [`STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md`](STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md) and [`DEVICE_SHIELD_CONTRACT.md`](../DEVICE_SHIELD_CONTRACT.md). Sections of this brief that say "macOS only" or "Windows scanner is future work" reflect Stage 2.5 historical scope.
 
 **Author:** Raouf Abedini — Final-year Cyber Security student, Macquarie University  
 **Status:** Stage 2.5 closed · v0.4.10 · Ready for external technical review  

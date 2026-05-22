@@ -2432,7 +2432,7 @@ Find the "Stage 1 Verification" block in `README.md`. Just below it, add:
 ```markdown
 ### Stage 2.1 macOS Integrity Node (in progress on `stage-2-integrity-node` branch)
 
-Stage 2.1 adds a v1 signed-integrity-proof pipeline. A macOS Swift CLI under `tools/simurgh-node-macos/` generates an Ed25519 keypair, builds a metadata-only proof envelope, signs the canonical JSON, and prints it to stdout. The Simurgh server accepts the proof at `POST /api/integrity/proofs` with `signature_status: "unregistered_node"` until pairing lands in Stage 2.2. Design spec: [`docs/superpowers/specs/2026-05-14-stage-2-1-macos-integrity-proof-design.md`](docs/superpowers/specs/2026-05-14-stage-2-1-macos-integrity-proof-design.md).
+Stage 2.1 adds a v1 signed-integrity-proof pipeline. A macOS Swift CLI under `tools/simurgh-node-macos/` generates an Ed25519 keypair, builds a metadata-only proof envelope, signs the canonical JSON, and prints it to stdout. The Simurgh server accepts the proof at `POST /api/integrity/proofs` with `signature_status: "unregistered_node"` until pairing lands in Stage 2.2. Design spec: [`docs/superpowers/specs/2026-05-14-stage-2-1-macos-integrity-proof-design.md`](../specs/2026-05-14-stage-2-1-macos-integrity-proof-design.md).
 ```
 
 - [ ] **Step 2: Add a top entry to `AGENT.md`**

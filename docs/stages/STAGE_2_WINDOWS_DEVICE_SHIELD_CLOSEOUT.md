@@ -59,10 +59,10 @@ A clean, serious Windows research checkpoint.
 
 The Windows Device Shield is unified with the macOS Device Shield under the Stage 2.7 cross-platform contract:
 
-- **Proof schema:** [`docs/schemas/daemon-proof.schema.json`](schemas/daemon-proof.schema.json)
-- **Scanner schema:** [`docs/schemas/device-scanner-result.schema.json`](schemas/device-scanner-result.schema.json)
-- **Device Shield contract:** [`DEVICE_SHIELD_CONTRACT.md`](DEVICE_SHIELD_CONTRACT.md)
-- **Platform matrix:** [`DEVICE_SHIELD_PLATFORM_MATRIX.md`](DEVICE_SHIELD_PLATFORM_MATRIX.md)
+- **Proof schema:** [`docs/schemas/daemon-proof.schema.json`](../schemas/daemon-proof.schema.json)
+- **Scanner schema:** [`docs/schemas/device-scanner-result.schema.json`](../schemas/device-scanner-result.schema.json)
+- **Device Shield contract:** [`DEVICE_SHIELD_CONTRACT.md`](../DEVICE_SHIELD_CONTRACT.md)
+- **Platform matrix:** [`DEVICE_SHIELD_PLATFORM_MATRIX.md`](../DEVICE_SHIELD_PLATFORM_MATRIX.md)
 
 Shared server modules enforce the same contract across platforms:
 
@@ -106,5 +106,5 @@ Stage 2.8 Linux Display Integrity Research begins next. Linux daemon proofs are 
 - [`STAGE_2_WINDOWS_REVIEWER_CHECKLIST.md`](STAGE_2_WINDOWS_REVIEWER_CHECKLIST.md) — reviewer checklist
 - [`STAGE_2_6_WINDOWS_DISPLAY_AFFINITY_SCANNER.md`](STAGE_2_6_WINDOWS_DISPLAY_AFFINITY_SCANNER.md) — Stage 2.6 stage doc
 - [`STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md`](STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md) — Stage 2.7 stage doc
-- [`DEVICE_SHIELD_CONTRACT.md`](DEVICE_SHIELD_CONTRACT.md) — unified cross-platform contract
+- [`DEVICE_SHIELD_CONTRACT.md`](../DEVICE_SHIELD_CONTRACT.md) — unified cross-platform contract
 - [`STAGE_2_5_TECHNICAL_BRIEF.md`](STAGE_2_5_TECHNICAL_BRIEF.md) — Stage 1–2.5 macOS brief (historical scope)

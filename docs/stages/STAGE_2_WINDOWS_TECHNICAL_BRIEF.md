@@ -53,10 +53,10 @@ Stage 2.6 (`v0.4.12-stage-2-6-windows-display-affinity-scanner`) delivers:
 
 Stage 2.7 (`v0.4.13-stage-2-7-cross-platform-device-shield`) unified the macOS and Windows Device Shield surfaces. The Windows scanner now operates under a shared contract documented in:
 
-- [`DEVICE_SHIELD_CONTRACT.md`](DEVICE_SHIELD_CONTRACT.md) — canonical proof/scanner/privacy/risk/report/audit contract
-- [`DEVICE_SHIELD_PLATFORM_MATRIX.md`](DEVICE_SHIELD_PLATFORM_MATRIX.md) — capability matrix
-- [`docs/schemas/daemon-proof.schema.json`](schemas/daemon-proof.schema.json) — JSON Schema draft-07
-- [`docs/schemas/device-scanner-result.schema.json`](schemas/device-scanner-result.schema.json) — JSON Schema draft-07
+- [`DEVICE_SHIELD_CONTRACT.md`](../DEVICE_SHIELD_CONTRACT.md) — canonical proof/scanner/privacy/risk/report/audit contract
+- [`DEVICE_SHIELD_PLATFORM_MATRIX.md`](../DEVICE_SHIELD_PLATFORM_MATRIX.md) — capability matrix
+- [`docs/schemas/daemon-proof.schema.json`](../schemas/daemon-proof.schema.json) — JSON Schema draft-07
+- [`docs/schemas/device-scanner-result.schema.json`](../schemas/device-scanner-result.schema.json) — JSON Schema draft-07
 
 The Windows .NET daemon code was not modified by Stage 2.7. What changed is that the Node server validator now consumes shared modules (`forbiddenLocalFields`, `platformScannerSchema`, `scannerRiskPolicy`) that codify the contract the Windows daemon has been emitting since v0.4.12.
 

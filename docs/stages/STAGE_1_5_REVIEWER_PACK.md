@@ -1,6 +1,6 @@
 # Stage 1.5 Reviewer Pack
 
-> **Status (v0.4.3, 2026-05-15):** This pack remains the canonical reviewer entry point for **Stage 1.5**. Stage 2.1 (v0.4.1), Stage 2.2 (v0.4.2), and the v0.4.3 hardening pass are now merged on `main`. For Stage 2 documentation, see `CHANGELOG.md`, [`STAGE_2_ARCHITECTURE.md`](STAGE_2_ARCHITECTURE.md), `SECURITY.md`, and the design specs under [`docs/superpowers/specs/`](superpowers/specs/).
+> **Status (v0.4.3, 2026-05-15):** This pack remains the canonical reviewer entry point for **Stage 1.5**. Stage 2.1 (v0.4.1), Stage 2.2 (v0.4.2), and the v0.4.3 hardening pass are now merged on `main`. For Stage 2 documentation, see `CHANGELOG.md`, [`STAGE_2_ARCHITECTURE.md`](STAGE_2_ARCHITECTURE.md), `SECURITY.md`, and the design specs under [`docs/superpowers/specs/`](../superpowers/specs/).
 
 This is the main entry point for reviewing Project Simurgh after Stage 1 and before Stage 2.
 
@@ -45,16 +45,16 @@ Stage 1.5 is a validation and reviewer-readiness pack. It does not add major Sta
 
 ## Stage 1.5 Pack Links
 
-- [Threat Model](THREAT_MODEL.md)
-- [Validation Matrix](VALIDATION.md)
-- [Limitations](LIMITATIONS.md)
+- [Threat Model](../THREAT_MODEL.md)
+- [Validation Matrix](../VALIDATION.md)
+- [Limitations](../LIMITATIONS.md)
 - [Stage 2 Architecture](STAGE_2_ARCHITECTURE.md)
-- [Resource Plan](RESOURCE_PLAN.md)
-- [Demo Script](DEMO_SCRIPT.md)
-- [Decisions](DECISIONS.md)
-- [Risk Register](RISK_REGISTER.md)
-- [Reviewer Checklist](REVIEWER_CHECKLIST.md)
-- [Evidence Folder Rules](evidence/stage-1/README.md)
+- [Resource Plan](../RESOURCE_PLAN.md)
+- [Demo Script](../DEMO_SCRIPT.md)
+- [Decisions](../DECISIONS.md)
+- [Risk Register](../RISK_REGISTER.md)
+- [Reviewer Checklist](../REVIEWER_CHECKLIST.md)
+- [Evidence Folder Rules](../evidence/stage-1/README.md)
 
 ## Claims-to-Evidence Table
 
@@ -100,7 +100,7 @@ Stage 1.5 is a validation and reviewer-readiness pack. It does not add major Sta
 
 ## Risk and Limitation Summary
 
-The major remaining risks are GPU overlays, read-only cheating workflows, helper spoofing if secrets leak, compromised endpoints, OS API behavior changes, and missing pilot data. See [Risk Register](RISK_REGISTER.md) and [Limitations](LIMITATIONS.md).
+The major remaining risks are GPU overlays, read-only cheating workflows, helper spoofing if secrets leak, compromised endpoints, OS API behavior changes, and missing pilot data. See [Risk Register](../RISK_REGISTER.md) and [Limitations](../LIMITATIONS.md).
 
 ## Stage 2 Readiness Criteria
 
