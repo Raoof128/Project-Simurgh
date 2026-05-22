@@ -1,5 +1,5 @@
 <div align="center">
-<img src="Project-Simurgh-Logo.png" alt="Project Simurgh Logo" width="220"/>
+<img src="../Project-Simurgh-Logo.png" alt="Project Simurgh Logo" width="220"/>
 </div>
 
 # Project Simurgh Technical Brief
