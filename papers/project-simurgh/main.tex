@@ -517,9 +517,45 @@ To bound the risk of unwarranted manual-review triggers, we evaluated the risk s
 
 Results: 19/20 sessions scored Safe (risk score $\leq 19$); 0/20 scored Warning; 0/20 scored Critical from behavioural signals alone. The one Critical case (S11, score = 85) was a deliberate boundary scenario: a macOS system-tray utility window with \texttt{SharingType.none} set by the OS itself (e.g., a screen-sharing or accessibility helper). This is a known limitation of the affinity override (H02): the override fires on \textit{any} excluded window, including legitimate system utilities. The false-positive rate for behavioural signals alone is \textbf{0/19 = 0\%} across these clean sessions; the affinity channel has a non-zero false-positive rate dependent on the mix of system utilities on the student's machine. Institutions deploying Simurgh should conduct platform-specific baselining before production use.
 
+\subsection{Risk Sensitivity Analysis}
+
+To assess whether the risk verdicts are sensitive to the choice of threshold values, we varied the Critical and Warning floors by $\pm$10\%, $\pm$20\%, and $\pm$30\% and re-scored five representative attack sessions and five clean sessions. Attack sessions covered: large paste with minimal own typing; capture-excluded window; superhuman WPM; long idle followed by large paste; and combined excluded-window plus large paste. Clean sessions are the representative subset from Section~VIII-D.
+
+Results are stable for clean sessions across all threshold variants: 0/5 false positives at every setting. For attack sessions, the baseline detects 4/5 sessions (the undetected session is a 280~WPM burst without paste or affinity signals, which falls below the threshold). At $\pm$10\% and $\pm$20\% variants, 4/5 attack sessions are still detected. At $+30\%$ (thresholds raised to Critical~$\geq$~91, Warning~$\geq$~52), 3/5 are detected; at $-30\%$ (thresholds lowered to Critical~$\geq$~49, Warning~$\geq$~28), 4/5 are detected with Warning/Critical severity shifting for one session. The affinity override (H02) is threshold-independent: any capture-excluded window forces Critical regardless of the weighted sum. These results suggest the scoring is not threshold-tuned to win: clean sessions are Safe across all variants and attack-session detection degrades gracefully rather than cliffing at a single tuned value.
+
 \subsection{Nonce TTL and Replay Safety}
 
 The nonce guard TTL of five minutes might appear to create a replay window: once a nonce expires from the guard, a captured proof could theoretically be re-submitted. This concern is addressed by the 30-second timestamp tolerance (\texttt{TIMESTAMP\_PAST\_MS = 30\,000}): any proof older than 30 seconds is rejected for timestamp staleness before the nonce check is reached. The nonce guard's five-minute TTL is therefore redundant protection beyond the timestamp window — a defense-in-depth design, not a security gap. The device-shield daemon proof path uses server-issued challenges that are consumed on first use, providing independent replay resistance without relying on either nonces or timestamps.
+
+\subsection{Performance Characterisation}
+
+Table~\ref{tab:perf} reports server-side verification latency (500-run average, Node.js~22, macOS M-series) and proof payload sizes.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Server-Side Latency and Payload Sizes}
+\label{tab:perf}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Operation} & \textbf{Measured} \\
+\midrule
+Ed25519 verify (browser-paired proof) & 0.083\,ms \\
+ECDSA P-256 verify (daemon proof) & 0.054\,ms \\
+Risk scorer (8 categories) & 0.003\,ms \\
+Proof canonicalisation (browser) & 0.005\,ms \\
+Audit chain append (HMAC) & 0.006\,ms \\
+\midrule
+Browser-paired proof payload (JSON) & 692\,B \\
+Device-shield daemon proof (JSON + pubkey) & 648\,B \\
+Combined per submission & $\approx$1.3\,KB \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+The per-proof verification budget is under 0.2\,ms server-side, well within the rate-limited ceiling of 30~proof submissions per minute per session. Payload size is modest; even at maximum submission rate, proof traffic is under 40\,KB/min per session. Daemon-side proof generation latency (cryptographic signing) depends on platform; typical Ed25519 and ECDSA P-256 signing operations on modern hardware complete in under 1\,ms, making Simurgh's proof overhead negligible relative to exam session duration.
 
 \subsection{LLM-Assisted Development Methodology}
 
@@ -559,6 +595,33 @@ The following attack classes are explicitly outside the current system boundary:
 
 The HMAC-SHA256 audit chain makes retroactive modification of any event record detectable by any verifier holding the HMAC key. The nonce guard prevents replaying a valid proof from one session epoch into another. The E1 triple check (hash + key + signature) prevents forging a proof that appears to come from a registered node. The N1 node-continuity invariant prevents an adversary from switching daemons mid-session after an initial pairing. Rate limits (30 proof submissions per minute, 10 pairing challenges per minute) bound amplification attacks.
 
+\subsection{Design Alternatives Considered}
+
+Table~\ref{tab:alternatives} summarises the main alternative design directions considered and the rationale for their rejection in favour of signed OS metadata proofs.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Design Alternatives and Rejection Rationale}
+\label{tab:alternatives}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{@{}lp{5.5cm}@{}}
+\toprule
+\textbf{Alternative} & \textbf{Why rejected} \\
+\midrule
+More screen capture & Still trusts the capture pipeline — excluded windows remain invisible regardless of resolution or frame rate \\
+Expanded webcam/gaze & More invasive and biased; still bypassable by GPU-layer overlays; adds cost without closing the structural gap \\
+Browser-only detection (DOM) & Browser has no access to OS capture-exclusion metadata; focus/blur events fire only on click-through, not on capture-invisible overlays \\
+Kernel-level agent & Requires elevated privileges; unacceptable for research prototype; introduces significant privacy risk \\
+Hardware capture card & Privacy-heavy; impractical at scale; does not detect GPU-layer overlays or second-device read-only workflows \\
+Full Wayland enumeration & Requires \texttt{CreateSession}/\texttt{SelectSources} portal calls that trigger a user consent prompt, violating the metadata-only privacy contract \\
+Configurable verdict strings & Any configurability risks inadvertent suppression of manual-review language; hard-coded strings are the only safe design \\
+Per-session nonce guard & Added session-lifecycle coordination complexity without security benefit; session binding via signed \texttt{session\_id} is cryptographically stronger \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
 \subsection{Remaining Attack Surface}
 
 An adversary who can run the Simurgh daemon client unmodified but controls the proof's \texttt{signals} sub-object (or, in the daemon envelope, the affinity-count fields) through OS-level manipulation can submit a dishonest but validly signed proof. The server cannot distinguish a lying daemon from an honest one if the signing key is genuine and the proof format is correct. Signed proofs attest identity (\textit{this key submitted this data}) but not truthfulness (\textit{this data faithfully reflects OS state}). Hardware-rooted attestation, discussed in Section~XII-B, addresses this gap. Until then, the proof architecture provides meaningful replay and forgery resistance while being honest about the remaining trust assumption.
@@ -579,6 +642,21 @@ Project Simurgh is a research prototype at version~0.4.18. It has not been revie
 The system should not be described as production-ready, compliant with any specific framework without naming the assessment, or ready for deployment by universities without the above-listed review processes.
 
 The motivating threat claim (Section~II-A) rests on the companion Invisible Window disclosure~\cite{abedini2026invisible}, which is a Zenodo preprint that has not yet undergone external peer review. Independent replication of the \texttt{WDA\_EXCLUDEFROMCAPTURE} evasion result is pending. Simurgh's defensive architecture is valid conditional on C01; reviewers should assess the companion paper independently.
+
+\subsection{Deployment Governance Checklist}
+
+Any institution considering Simurgh for a regulated assessment context should complete the following gates before any live use. None of these gates are currently passed by the Simurgh research prototype.
+
+\begin{enumerate}
+\item \textbf{Data-protection impact assessment} (FERPA, GDPR, or equivalent jurisdiction) with explicit documentation of data types collected, retention periods, and student access/deletion rights.
+\item \textbf{Accessibility review} against WCAG~2.2~AA, including the daemon installation flow and the instructor dashboard.
+\item \textbf{External red-team engagement} covering at minimum: pairing replay, helper spoofing, audit chain manipulation, and false-positive rate on representative student machines.
+\item \textbf{Student notice and appeal process} — students must be informed that a native daemon is running and have a documented process to flag incorrect verdicts.
+\item \textbf{Data retention policy} — session audit exports must have a defined retention window and deletion procedure.
+\item \textbf{Human review policy} — the institution must define who reviews Critical/Warning sessions, under what timeline, and what the escalation path is. No automated action may substitute.
+\item \textbf{Signed and notarised distribution packages} for macOS and Windows, or equivalent institutional MDM deployment.
+\item \textbf{Institutional ethics board sign-off} before any pilot involving actual students.
+\end{enumerate}
 
 \subsection{Institutional Review Requirements}
 
@@ -631,7 +709,7 @@ This paper has presented Project Simurgh, a privacy-preserving integrity archite
 
 The core architectural argument is straightforward: if the OS compositing pipeline cannot be trusted to faithfully expose all visible content to the browser capture API, then the appropriate response is to move the trust anchor to the OS level itself, where the capture-exclusion state is visible to any native process. Simurgh does exactly this, at the price of requiring a native daemon on the student's device — a cost that is explicit and reasonable, compared to the alternative of collecting full screen video.
 
-The four contributions of this work — the privacy-preserving architecture, the cross-platform prototype, the display-affinity detection without content capture, and the evaluated manual-review-only decision model — represent a concrete existence proof that capture-resistant integrity assessment is technically feasible while preserving meaningful privacy guarantees. We hope this work encourages further research into proof-based, metadata-only integrity systems and provides a documented, auditable foundation for institutional engagement.
+Simurgh does not claim to detect all cheating or all overlays. It shows that a capture-resistant integrity layer can be built using signed, metadata-only device proofs, and that this layer detects a documented class of capture-excluded OS windows without collecting visual or content data. The four contributions — the privacy-preserving architecture, the cross-platform prototype, the display-affinity detection without content capture, and the evaluated manual-review-only decision model — are a concrete existence proof that capture-resistant integrity assessment is technically feasible while preserving meaningful privacy guarantees. We hope this work encourages further research into proof-based, metadata-only integrity systems and provides a documented, auditable foundation for institutional engagement.
 
 \section*{Acknowledgements}
 
