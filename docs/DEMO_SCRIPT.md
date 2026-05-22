@@ -89,7 +89,7 @@ Reviewer should observe: generated-data scan passes or reports exact forbidden f
 Open:
 
 - `docs/VALIDATION.md`
-- `docs/STAGE_1_5_REVIEWER_PACK.md`
+- `docs/stages/STAGE_1_5_REVIEWER_PACK.md`
 - `docs/evidence/stage-1/README.md`
 
 Reviewer should observe: unavailable evidence is marked pending instead of fabricated.
@@ -107,7 +107,7 @@ Reviewer should observe: GPU overlays, read-only cheating, compromised endpoints
 
 Open:
 
-- `docs/STAGE_2_ARCHITECTURE.md`
+- `docs/stages/STAGE_2_ARCHITECTURE.md`
 - `docs/RESOURCE_PLAN.md`
 
 Reviewer should observe: Stage 2 is a planned signed-proof architecture, not prematurely implemented code.

@@ -73,8 +73,8 @@ Stage 1.5 is a validation and reviewer-readiness pack. It does not add major Sta
 | Privacy audit                     | `tools/privacy-audit.mjs`, `scripts/check.sh`                                                           | Verified in repo                                      |
 | CI workflow                       | `.github/workflows/stage-1-checks.yml`                                                                  | Workflow present; remote status depends on GitHub run |
 | Unit tests                        | `tests/unit/*.test.js`, `package.json`                                                                  | Verified in repo                                      |
-| Manual review wording             | `src/academic/riskScoring.js`, `ETHICS.md`                                                              | Verified in repo                                      |
-| Stage 2 not yet implemented       | `docs/STAGE_2_ARCHITECTURE.md`, repo source layout                                                      | Verified by repo inspection                           |
+| Manual review wording             | `src/academic/riskScoring.js`, `docs/ETHICS.md`                                                         | Verified in repo                                      |
+| Stage 2 not yet implemented       | `docs/stages/STAGE_2_ARCHITECTURE.md`, repo source layout                                               | Verified by repo inspection                           |
 
 ## Evidence Map
 
@@ -86,8 +86,8 @@ Stage 1.5 is a validation and reviewer-readiness pack. It does not add major Sta
 | Threat model                | `docs/THREAT_MODEL.md`                   |
 | Privacy policy              | `PRIVACY.md`                             |
 | Security policy             | `SECURITY.md`                            |
-| Ethics boundary             | `ETHICS.md`                              |
-| Stage 1 reference           | `docs/STAGE_1_ACADEMIC_SHIELD.md`        |
+| Ethics boundary             | `docs/ETHICS.md`                         |
+| Stage 1 reference           | `docs/stages/STAGE_1_ACADEMIC_SHIELD.md` |
 
 ## Licence and Dependency Review
 
@@ -139,7 +139,7 @@ Stage 2 planning is reasonable after:
 
 ## Recommended Privacy / Legal Review Path
 
-1. Read `PRIVACY.md`, `ETHICS.md`, and `DISCLAIMER.md`.
+1. Read `PRIVACY.md`, `docs/ETHICS.md`, and `docs/DISCLAIMER.md`.
 2. Inspect `src/privacy/`.
 3. Review evidence-folder rules before any logs are shared.
 4. Confirm student notice, consent, retention, appeals, and accessibility requirements.

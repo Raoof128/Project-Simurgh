@@ -17,7 +17,7 @@ Codify the existing cross-platform behaviour of `src/device/daemonProof.js` as a
 
 In scope for Stage 2.7:
 
-- Cross-platform contract docs: this file, `docs/DEVICE_SHIELD_CONTRACT.md`, `docs/DEVICE_SHIELD_PLATFORM_MATRIX.md`, `docs/STAGE_2_7_REVIEWER_CHECKLIST.md`.
+- Cross-platform contract docs: this file, `docs/DEVICE_SHIELD_CONTRACT.md`, `docs/DEVICE_SHIELD_PLATFORM_MATRIX.md`, `docs/stages/STAGE_2_7_REVIEWER_CHECKLIST.md`.
 - Canonical schemas: `docs/schemas/daemon-proof.schema.json`, `docs/schemas/device-scanner-result.schema.json`.
 - Shared server modules (subsequent tasks): `src/device/platformScannerSchema.js`, `src/device/scannerRiskPolicy.js`, `src/device/forbiddenLocalFields.js`.
 - Refactor consumers (subsequent tasks): `daemonProof.js`, `riskScoring.js`, `reportBuilder.js`, `daemonState.js`, `tools/privacy-audit.mjs`.
@@ -106,8 +106,8 @@ Preserved wording: _"Research prototype only. Manual review recommended. No auto
 
 - Contract: [`docs/DEVICE_SHIELD_CONTRACT.md`](DEVICE_SHIELD_CONTRACT.md)
 - Platform matrix: [`docs/DEVICE_SHIELD_PLATFORM_MATRIX.md`](DEVICE_SHIELD_PLATFORM_MATRIX.md)
-- Reviewer checklist: [`docs/STAGE_2_7_REVIEWER_CHECKLIST.md`](STAGE_2_7_REVIEWER_CHECKLIST.md)
+- Reviewer checklist: [`docs/stages/STAGE_2_7_REVIEWER_CHECKLIST.md`](STAGE_2_7_REVIEWER_CHECKLIST.md)
 - Daemon proof schema: [`docs/schemas/daemon-proof.schema.json`](schemas/daemon-proof.schema.json)
 - Scanner result schema: [`docs/schemas/device-scanner-result.schema.json`](schemas/device-scanner-result.schema.json)
 - Design spec: [`docs/superpowers/specs/2026-05-17-stage-2-7-cross-platform-device-shield-design.md`](superpowers/specs/2026-05-17-stage-2-7-cross-platform-device-shield-design.md)
-- Predecessors: [`docs/STAGE_2_3_MACOS_LOCALHOST_DAEMON.md`](STAGE_2_3_MACOS_LOCALHOST_DAEMON.md), [`docs/STAGE_2_5_MACOS_AFFINITY_SCANNER.md`](STAGE_2_5_MACOS_AFFINITY_SCANNER.md), [`docs/STAGE_2_6_WINDOWS_DISPLAY_AFFINITY_SCANNER.md`](STAGE_2_6_WINDOWS_DISPLAY_AFFINITY_SCANNER.md)
+- Predecessors: [`docs/stages/STAGE_2_3_MACOS_LOCALHOST_DAEMON.md`](STAGE_2_3_MACOS_LOCALHOST_DAEMON.md), [`docs/stages/STAGE_2_5_MACOS_AFFINITY_SCANNER.md`](STAGE_2_5_MACOS_AFFINITY_SCANNER.md), [`docs/stages/STAGE_2_6_WINDOWS_DISPLAY_AFFINITY_SCANNER.md`](STAGE_2_6_WINDOWS_DISPLAY_AFFINITY_SCANNER.md)

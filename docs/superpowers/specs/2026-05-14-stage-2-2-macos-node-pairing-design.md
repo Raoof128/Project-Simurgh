@@ -650,7 +650,7 @@ Swift block adds `PairingCanonicaliseTests` and a pairing-mode CLI privacy regre
 
 ```
 README.md                                — Stage 2.2 paragraph; new endpoints
-docs/STAGE_2_ARCHITECTURE.md             — clarify Stage 2.2 is manual/CLI; daemon is 2.3
+docs/stages/STAGE_2_ARCHITECTURE.md             — clarify Stage 2.2 is manual/CLI; daemon is 2.3
 docs/VALIDATION.md                        — pairing crypto + state + new endpoints
 docs/RISK_REGISTER.md                     — pairing risk row (CLI-only)
 tools/simurgh-node-macos/README.md       — `pair` subcommand + curl chain

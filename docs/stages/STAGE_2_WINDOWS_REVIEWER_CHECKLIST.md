@@ -104,9 +104,9 @@ Use this checklist when reviewing the Stage 2 Windows Device Shield research-pro
 
 ## Documentation Completeness
 
-- [ ] `docs/STAGE_2_WINDOWS_TECHNICAL_BRIEF.md` exists and covers all 20 sections
-- [ ] `docs/STAGE_2_WINDOWS_DEVICE_SHIELD_CLOSEOUT.md` exists with freeze evidence table
-- [ ] `docs/STAGE_2_WINDOWS_VALIDATION_MATRIX.md` exists with gate-level verification
+- [ ] `docs/stages/STAGE_2_WINDOWS_TECHNICAL_BRIEF.md` exists and covers all 20 sections
+- [ ] `docs/stages/STAGE_2_WINDOWS_DEVICE_SHIELD_CLOSEOUT.md` exists with freeze evidence table
+- [ ] `docs/stages/STAGE_2_WINDOWS_VALIDATION_MATRIX.md` exists with gate-level verification
 - [ ] `docs/evidence/stage-2-windows/README.md` exists with evidence-folder rules
 - [ ] `STAGE_2_6_WINDOWS_DISPLAY_AFFINITY_SCANNER.md` is linked from the technical brief
 - [ ] `DEVICE_SHIELD_CONTRACT.md` is cross-referenced

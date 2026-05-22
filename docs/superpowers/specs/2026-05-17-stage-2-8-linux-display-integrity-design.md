@@ -605,7 +605,7 @@ Each red test maps directly to a §9 implementation step. Codex / subagent dispa
 - `src/device/scannerRiskPolicy.js` — risk mapping seam.
 - `tools/simurgh-daemon-macos/Sources/SimurghDaemon/DaemonConfig.swift` — confirmed `127.0.0.1:3031`.
 - `tools/simurgh-daemon-windows/src/SimurghDaemon.Windows/DaemonConfig.cs` — confirmed `127.0.0.1:3031`.
-- `docs/STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md` — parent contract.
+- `docs/stages/STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md` — parent contract.
 - Freedesktop EWMH: `_NET_CLIENT_LIST`, `_NET_WM_WINDOW_TYPE`, `_NET_WM_STATE`.
 - Wayland protocol: client-isolation model (no cross-client surface enumeration).
 - XDG Desktop Portal: `org.freedesktop.portal.ScreenCast`.

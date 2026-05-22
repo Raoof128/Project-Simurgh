@@ -145,8 +145,8 @@ This checklist is the normative review gate for the Stage 2.8 Linux Wayland/syst
 
 ## 16. Documentation Completeness
 
-- [ ] `docs/STAGE_2_8_LINUX_TECHNICAL_BRIEF.md` is present in the repository
-- [ ] `docs/STAGE_2_8_LINUX_VALIDATION_MATRIX.md` is present in the repository
-- [ ] `docs/STAGE_2_8_LINUX_REVIEWER_CHECKLIST.md` is present in the repository (this file)
-- [ ] `docs/STAGE_2_8_LINUX_CLOSEOUT.md` is present in the repository
+- [ ] `docs/stages/STAGE_2_8_LINUX_TECHNICAL_BRIEF.md` is present in the repository
+- [ ] `docs/stages/STAGE_2_8_LINUX_VALIDATION_MATRIX.md` is present in the repository
+- [ ] `docs/stages/STAGE_2_8_LINUX_REVIEWER_CHECKLIST.md` is present in the repository (this file)
+- [ ] `docs/stages/STAGE_2_8_LINUX_CLOSEOUT.md` is present in the repository
 - [ ] `docs/evidence/stage-2-linux/README.md` is present in the repository

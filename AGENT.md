@@ -43,10 +43,10 @@
 - **Scope:** PR #23 — Stage 2.8 Linux closeout documentation, validation matrix, reviewer checklist, closeout declaration, README/SECURITY/PRIVACY/ROADMAP refresh, AGENT/CHANGELOG entries.
 - **Summary:** Wrote four new Linux closeout documents (`STAGE_2_8_LINUX_TECHNICAL_BRIEF.md`, `STAGE_2_8_LINUX_VALIDATION_MATRIX.md`, `STAGE_2_8_LINUX_REVIEWER_CHECKLIST.md`, `STAGE_2_8_LINUX_CLOSEOUT.md`) and refreshed six top-level docs. Added doc-grep safety gates to scripts/check.sh. Stage 2.8 Linux Display Integrity Research frozen as a documented research-prototype baseline through `v0.4.16-stage-2-8C-8D-linux-wayland-systemd-ci`.
 - **Files Changed:**
-  - `docs/STAGE_2_8_LINUX_TECHNICAL_BRIEF.md` — new (24 sections, Linux daemon architecture, scanner design, proof flow, privacy contract, non-claims)
-  - `docs/STAGE_2_8_LINUX_VALIDATION_MATRIX.md` — new (11 sections, build/CI/smoke/audit/real-device validation evidence)
-  - `docs/STAGE_2_8_LINUX_REVIEWER_CHECKLIST.md` — new (16 groups, 76 checklist items)
-  - `docs/STAGE_2_8_LINUX_CLOSEOUT.md` — new (10 sections, freeze declaration)
+  - `docs/stages/STAGE_2_8_LINUX_TECHNICAL_BRIEF.md` — new (24 sections, Linux daemon architecture, scanner design, proof flow, privacy contract, non-claims)
+  - `docs/stages/STAGE_2_8_LINUX_VALIDATION_MATRIX.md` — new (11 sections, build/CI/smoke/audit/real-device validation evidence)
+  - `docs/stages/STAGE_2_8_LINUX_REVIEWER_CHECKLIST.md` — new (16 groups, 76 checklist items)
+  - `docs/stages/STAGE_2_8_LINUX_CLOSEOUT.md` — new (10 sections, freeze declaration)
   - `README.md` — Linux closeout section added, status updated
   - `SECURITY.md` — Stage 2.8 security posture section renamed and expanded
   - `PRIVACY.md` — last-updated date refreshed
@@ -64,7 +64,7 @@
   - **CI transient failure diagnosed and fixed.** GitHub Actions Quality Gate failed on the `main` push for PR #17 with "server boot — /health not reachable" and "server boot smoke (composite)". Root cause: transient runner resource contention — two prior PR merges (PRs #15 and #16) had run on the same shared runner moments earlier. The docs-only PR #17 added no JS changes; `node server.js` boots in under 1 second locally. Fixed via `gh run rerun --failed` on run `25981443157`; re-run passed ✅ 47/48 gates.
   - **Release tag published.** `v0.4.13-stage-2-windows-device-shield-closeout` tagged on `main` commit `c456455` (PR #17 merge) and published as a GitHub Release with full release notes.
   - **macOS external review issue #11 updated.** Issue was sparse (no logo, no validation table, no reviewer checklist link). Updated to match the Windows issue template: logo at top (absolute raw GitHub URL), full scope bullet list, technical brief as primary review doc with scope footnote, validation table (234/234 tests, 50/50 gates, all smokes), review focus areas, known limitations, confirmed non-claims, and Stage 2.7 cross-platform note linking to Issue #18.
-  - **Windows external review issue #18 fixed.** All relative doc links (`docs/STAGE_2_WINDOWS_TECHNICAL_BRIEF.md` etc.) were broken in the GitHub issue UI. Replaced with absolute `https://github.com/Raoof128/Project-Simurgh/blob/main/docs/...` URLs. Added a proper Review Documents table (8 docs), all 4 release tags hyperlinked, logo rendered via raw GitHub URL.
+  - **Windows external review issue #18 fixed.** All relative doc links (`docs/stages/STAGE_2_WINDOWS_TECHNICAL_BRIEF.md` etc.) were broken in the GitHub issue UI. Replaced with absolute `https://github.com/Raoof128/Project-Simurgh/blob/main/docs/...` URLs. Added a proper Review Documents table (8 docs), all 4 release tags hyperlinked, logo rendered via raw GitHub URL.
 - **Files changed:** `AGENT.md` (this entry), `CHANGELOG.md` (post-merge log entry). GitHub Issues #11 and #18 updated remotely via `gh issue edit`.
 - **Verification:** CI re-run passed. `v0.4.13-stage-2-windows-device-shield-closeout` tag pushed and release published. Both issues verified with working links.
 - **Follow-ups:** Stage 2.8 Linux Display Integrity Research — X11 enumeration feasibility and Wayland compositor/security-model investigation. Linux daemon proofs currently rejected with `unsupported_platform` at both pairing and proof layers.
@@ -75,12 +75,12 @@
 
 - **Scope:** Windows Device Shield closeout documentation, validation matrix, reviewer checklist, logo integration, release freeze documentation, and external review signal.
 - **Summary:**
-  - Created `docs/STAGE_2_WINDOWS_TECHNICAL_BRIEF.md` — 20-section reviewer-facing technical summary covering the full Windows path: research origin, daemon architecture, scanner design, controlled affinity fixture, signed proof flow, server verification, risk mapping, report/dashboard/audit integration, privacy contract, E2E smoke coverage, cybersecurity audit coverage, real-device validation, known limitations, and non-claims.
-  - Created `docs/STAGE_2_WINDOWS_DEVICE_SHIELD_CLOSEOUT.md` — freeze declaration with evidence table (WDA_MONITOR, WDA_EXCLUDEFROMCAPTURE, tamper/replay/raw-field rejection, gate evidence), cross-platform contract cross-references, and confirmed non-claims.
-  - Created `docs/STAGE_2_WINDOWS_VALIDATION_MATRIX.md` — gate-level verification matrix covering build/test gates, smoke gates, security audit gates, real Windows device validation (all 20 test rows), Scenario A–G smoke, and all nine closeout audit dimensions.
-  - Created `docs/STAGE_2_WINDOWS_REVIEWER_CHECKLIST.md` — reviewer checklist covering release gates, real-device validation, proof path, platform integrity, privacy contract, cross-platform contract, report/dashboard/audit, smoke and security audit coverage, non-claims, and documentation completeness.
+  - Created `docs/stages/STAGE_2_WINDOWS_TECHNICAL_BRIEF.md` — 20-section reviewer-facing technical summary covering the full Windows path: research origin, daemon architecture, scanner design, controlled affinity fixture, signed proof flow, server verification, risk mapping, report/dashboard/audit integration, privacy contract, E2E smoke coverage, cybersecurity audit coverage, real-device validation, known limitations, and non-claims.
+  - Created `docs/stages/STAGE_2_WINDOWS_DEVICE_SHIELD_CLOSEOUT.md` — freeze declaration with evidence table (WDA_MONITOR, WDA_EXCLUDEFROMCAPTURE, tamper/replay/raw-field rejection, gate evidence), cross-platform contract cross-references, and confirmed non-claims.
+  - Created `docs/stages/STAGE_2_WINDOWS_VALIDATION_MATRIX.md` — gate-level verification matrix covering build/test gates, smoke gates, security audit gates, real Windows device validation (all 20 test rows), Scenario A–G smoke, and all nine closeout audit dimensions.
+  - Created `docs/stages/STAGE_2_WINDOWS_REVIEWER_CHECKLIST.md` — reviewer checklist covering release gates, real-device validation, proof path, platform integrity, privacy contract, cross-platform contract, report/dashboard/audit, smoke and security audit coverage, non-claims, and documentation completeness.
   - Created `docs/evidence/stage-2-windows/README.md` — evidence-folder rules specifying what artefacts are allowed and what is strictly forbidden.
-  - Added Project Simurgh logo (`docs/Project-Simurgh-Logo.png`) to README.md header, `docs/STAGE_2_5_TECHNICAL_BRIEF.md`, and `docs/STAGE_2_WINDOWS_TECHNICAL_BRIEF.md`.
+  - Added Project Simurgh logo (`docs/Project-Simurgh-Logo.png`) to README.md header, `docs/stages/STAGE_2_5_TECHNICAL_BRIEF.md`, and `docs/stages/STAGE_2_WINDOWS_TECHNICAL_BRIEF.md`.
   - Updated README: logo in header, Windows Device Shield Closeout section, updated verification counts (`273/273` Node tests, `47/48` check.sh gates), status block updated to Stage 2 Windows closeout, External Technical Review updated.
   - Updated SECURITY.md: v0.4.13-closeout added to supported versions; Stage 2 Windows Device Shield Security Posture section added (9 protection mechanisms + production non-claim wording).
   - Updated PRIVACY.md: last-updated date updated; Windows Scanner Privacy Contract section added with full allowed/forbidden field tables.
@@ -131,7 +131,7 @@
   - Browser SDK gains UX-only `getDeviceShieldStatus()` accessor; trust boundary explicit in code comments — the server NEVER consults this status; trust still requires signed `daemon_proof` on `/api/telemetry`.
   - Stage 2.7 cross-platform E2E smoke (`scripts/smoke-stage-2-7-cross-platform-device-shield.sh`) with Scenarios A–G covers macOS healthy, Windows healthy, macOS capture-excluded Critical, Windows monitor-only Warning, Windows capture-excluded Critical, Linux `unsupported_platform` rejection, and recursive raw-field rejection across nested objects and arrays.
   - Stage 2.7 cross-platform security audit (`scripts/security-audit-stage-2-7-cross-platform-device-shield.sh`) locks tampered platform/scanner-field rejection, unsupported-platform rejection, raw-field rejection, dashboard misconduct-phrase ban, and a sweep that every name on `forbiddenLocalFields` is rejected by the proof validator.
-  - Docs added: `docs/DEVICE_SHIELD_CONTRACT.md`, `docs/DEVICE_SHIELD_PLATFORM_MATRIX.md`, `docs/STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md`, `docs/STAGE_2_7_REVIEWER_CHECKLIST.md`, `docs/schemas/daemon-proof.schema.json`, `docs/schemas/device-scanner-result.schema.json`.
+  - Docs added: `docs/DEVICE_SHIELD_CONTRACT.md`, `docs/DEVICE_SHIELD_PLATFORM_MATRIX.md`, `docs/stages/STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md`, `docs/stages/STAGE_2_7_REVIEWER_CHECKLIST.md`, `docs/schemas/daemon-proof.schema.json`, `docs/schemas/device-scanner-result.schema.json`.
   - `scripts/check.sh` extended with Stage 2.7 smoke + audit gates.
 - **Verification:** Windows OS: Windows 10 Pro / Build 19045. Toolchain: Node 24.14.0, npm 11.9.0, .NET 8.0.421. Baseline `v0.4.12`: clean working tree, 239/239 Node tests, privacy audit pass. After Stage 2.7: 273/273 Node tests pass, `npm audit --audit-level=high` clean (0 vulnerabilities), `node tools/privacy-audit.mjs` clean, Stage 2.7 cross-platform smoke (Scenarios A–G) green, Stage 2.7 security audit green, Stage 2.2/2.3 smoke green, Stage 2.4/2.5 smoke green, Stage 2.5 security audit green, Stage 2.6 Windows scanner smoke green, Stage 2.6 .NET daemon tests green (11/11), `scripts/check.sh` 45/46 green (the one failure is the pre-existing Windows-line-endings prettier tolerance — CI on Linux passes prettier).
 - **Non-claims preserved:** Research prototype only. No production deployment claim, no MDM/Intune readiness, no hardware attestation, no kernel-level visibility, no GPU overlay coverage, no automatic misconduct detection. No collection of screen pixels, webcam/microphone frames, typed content, paste content, raw process names, raw window titles, HWNDs, PIDs, usernames, serial numbers, MAC addresses, or personal identity data.
@@ -176,7 +176,7 @@
   - `tools/simurgh-daemon-windows/src/SimurghAffinityFixture/`
   - `tools/simurgh-daemon-windows/src/SimurghDaemon.Windows/{DaemonProof,JsonResponse,LocalHttpServer,Program,ProofSigner}.cs`
   - `tools/simurgh-daemon-windows/tests/SimurghDaemon.Windows.Tests/{AffinityFixtureProjectTests,LocalHttpServerTests}.cs`
-  - `docs/STAGE_2_6_WINDOWS_DISPLAY_AFFINITY_SCANNER.md`
+  - `docs/stages/STAGE_2_6_WINDOWS_DISPLAY_AFFINITY_SCANNER.md`
   - `README.md`, `SECURITY.md`, `PRIVACY.md`, `ROADMAP.md`, `AGENT.md`, `CHANGELOG.md`
 - **Verification:** Windows OS check: Windows 10 Pro build 19045. Toolchain: Git 2.53.0, Node 24.14.0, npm 11.9.0, .NET 8.0.421. Baseline before edits: `git diff --check` clean; `npm test` passed 239/239; `npm audit --audit-level=high` passed with 0 vulnerabilities; `node tools/privacy-audit.mjs` passed; Git Bash `scripts/smoke-stage-2-6-windows-scanner.sh` passed; Git Bash `scripts/security-audit-stage-2-4-2-5.sh` passed; Git Bash `scripts/check.sh` passed 44/44; `.tools/dotnet/dotnet.exe build tools/simurgh-daemon-windows/SimurghDaemon.Windows.sln` passed; `.tools/dotnet/dotnet.exe test tools/simurgh-daemon-windows/SimurghDaemon.Windows.sln --no-restore` passed 8/8 before fixture and 11/11 after fixture. Runtime validation: `/health` returned platform `windows`; `/status` returned scanner version `2.6.0` and `metadata_only`; normal scan returned zero restricted/excluded counts; `WDA_MONITOR` returned `restricted_detected`, `monitor_only_window_count: 1`, `capture_restricted_window_count: 1`; `WDA_EXCLUDEFROMCAPTURE` returned `risk_detected`, `capture_excluded_window_count: 1`; live daemon proof chain accepted healthy/monitor/exclude proofs, rejected tampered proof with `invalid_signature`, rejected replayed proof with consumed challenge, rejected raw `hwnd` as `forbidden_local_field`, generated Windows report/dashboard state, and verified the audit chain. Privacy sweep found only expected forbidden-field rejection references in test logs.
 - **Follow-ups:** Open PR, merge after GitHub Actions pass, and tag `v0.4.12-stage-2-6-windows-display-affinity-scanner` or the chosen release tag. Do not claim production Windows Service deployment, MDM/Intune readiness, hardware attestation, kernel-level visibility, Linux scanner support, or automatic misconduct detection.
@@ -199,7 +199,7 @@
   - `server.js`, `public/instructor.html`, `tools/privacy-audit.mjs`
   - `tests/unit/*daemon*`, `tests/security/stage24_25_security_audit.test.js`, `tests/e2e/stage24_25_smoke.mjs`, `tests/e2e/stage26_windows_scanner_smoke.mjs`
   - `tools/simurgh-daemon-windows/`, `scripts/smoke-stage-2-6-windows-scanner.sh`, `scripts/check.sh`, `.github/workflows/windows-daemon.yml`
-  - `README.md`, `SECURITY.md`, `PRIVACY.md`, `ROADMAP.md`, `docs/STAGE_2_6_WINDOWS_DISPLAY_AFFINITY_SCANNER.md`, `docs/superpowers/plans/2026-05-16-stage-2-6-windows-display-affinity-scanner.md`, `AGENT.md`, `CHANGELOG.md`
+  - `README.md`, `SECURITY.md`, `PRIVACY.md`, `ROADMAP.md`, `docs/stages/STAGE_2_6_WINDOWS_DISPLAY_AFFINITY_SCANNER.md`, `docs/superpowers/plans/2026-05-16-stage-2-6-windows-display-affinity-scanner.md`, `AGENT.md`, `CHANGELOG.md`
 - **Verification:** Red step confirmed Stage 2.6 Windows proof/risk/report tests failed before implementation. `npm test` passed 239/239. `npm audit --audit-level=high` passed with 0 vulnerabilities. `node tools/privacy-audit.mjs` passed. `scripts/security-audit-stage-2-4-2-5.sh` passed. `scripts/smoke-stage-2-6-windows-scanner.sh` passed. `.tools/dotnet/dotnet.exe build tools/simurgh-daemon-windows/SimurghDaemon.Windows.sln` passed. `.tools/dotnet/dotnet.exe test tools/simurgh-daemon-windows/SimurghDaemon.Windows.sln --no-restore` passed 8/8. `scripts/check.sh` passed 44/44 gates on Windows, with macOS Swift gates skipped honestly.
 - **Follow-ups:** Run the real Windows laptop validation for `GetWindowDisplayAffinity` detection of `WDA_MONITOR` and `WDA_EXCLUDEFROMCAPTURE`. Do not claim production Windows Service readiness, MDM/Intune readiness, hardware attestation, kernel visibility, Linux scanner support, or automatic misconduct detection.
 
@@ -213,11 +213,11 @@
   - Fixed stale README Stage 2.5 section heading: `branch active — v0.4.7 target` → `frozen — v0.4.10`.
   - Added `## External Technical Review` section to README (immediately after the status block) listing the full macOS Device Shield baseline, current verification numbers (234/234 tests, 50/50+ gates, Swift build/test, all smoke packs, security audit, privacy audit), an open-door statement for technical reviewers, and the honest non-claims list.
   - Updated README Status & License section to reflect Stage 2.5 closeout state.
-  - Added `## External Review Status` section to `docs/STAGE_2_5_CLOSEOUT_SECURITY_AUDIT.md` with prototype framing and eight specific focus areas for reviewers.
+  - Added `## External Review Status` section to `docs/stages/STAGE_2_5_CLOSEOUT_SECURITY_AUDIT.md` with prototype framing and eight specific focus areas for reviewers.
   - Pushed branch `stage-2-macos-external-review-signal`, opened PR #10, created and pinned GitHub Issue #11 "External Review Request: Stage 2.5 macOS Integrity Stack."
 - **Files Changed:**
   - `README.md`
-  - `docs/STAGE_2_5_CLOSEOUT_SECURITY_AUDIT.md`
+  - `docs/stages/STAGE_2_5_CLOSEOUT_SECURITY_AUDIT.md`
   - `AGENT.md`, `CHANGELOG.md`
 - **Verification:** `npm test` — 234/234 pass. `npm audit --audit-level=high` — 0 vulnerabilities. `node tools/privacy-audit.mjs` — pass. `git diff --check` — clean. Docs-only change; no code, no gates altered.
 - **Follow-ups:** Merge PR #10. Then begin Stage 2.6 Windows daemon and display-affinity scanner work on `stage-2-6-windows-display-affinity-scanner`. Do not infer production deployment, notarisation, MDM readiness, hardware attestation, Windows/Linux support, raw process/window collection, or automatic misconduct detection.
@@ -233,11 +233,11 @@
   - Hardened `src/device/daemonProof.js` so forbidden raw local-data fields are rejected recursively, including nested debug/scanner objects in daemon proof and pairing envelopes.
   - Hardened `LocalHttpServer.swift` with explicit request-size checks, malformed JSON rejection for sensitive JSON endpoints, method-not-allowed responses for known routes, and preserved loopback-only binding.
   - Added safe `--check` / `--dry-run` modes and bounded path checks to the development LaunchAgent install/uninstall scripts; plist lint runs when `plutil` is available and skips cleanly on Linux CI.
-  - Added `docs/STAGE_2_5_CLOSEOUT_SECURITY_AUDIT.md`, documented the audit command in README, and wired the gate into `scripts/check.sh`.
+  - Added `docs/stages/STAGE_2_5_CLOSEOUT_SECURITY_AUDIT.md`, documented the audit command in README, and wired the gate into `scripts/check.sh`.
 - **Files Changed:**
   - `scripts/security-audit-stage-2-4-2-5.sh`
   - `tests/security/stage24_25_security_audit.test.js`
-  - `docs/STAGE_2_5_CLOSEOUT_SECURITY_AUDIT.md`
+  - `docs/stages/STAGE_2_5_CLOSEOUT_SECURITY_AUDIT.md`
   - `src/device/daemonProof.js`
   - `tools/simurgh-daemon-macos/Sources/SimurghDaemon/LocalHttpServer.swift`
   - `tools/simurgh-daemon-macos/scripts/{install-launch-agent,uninstall-launch-agent}.sh`
@@ -301,7 +301,7 @@
   - Updated server daemon-proof validation to accept Stage 2.5 scanner fields, preserve Stage 2.3/2.4 compatibility, reject forbidden raw scanner/local fields, and reject scanner-field tampering through the existing signed payload.
   - Extended daemon state, risk scoring, reports, instructor dashboard, audit events, and privacy audit for scanner state while keeping manual-review wording and no automatic misconduct finding.
   - Added Stage 2.5 Swift and Node tests plus `scripts/check.sh` gates for scanner proof validation, scanner risk mapping, report scanner summaries, Swift scanner privacy/risk behavior, and signed scanner proof inclusion.
-  - Updated README, SECURITY, PRIVACY, ROADMAP, and `docs/STAGE_2_5_MACOS_AFFINITY_SCANNER.md` with Stage 2.5 scope and non-production boundaries.
+  - Updated README, SECURITY, PRIVACY, ROADMAP, and `docs/stages/STAGE_2_5_MACOS_AFFINITY_SCANNER.md` with Stage 2.5 scope and non-production boundaries.
 - **Files Changed:**
   - `tools/simurgh-daemon-macos/Sources/SimurghDaemon/{AffinityScanner,ProofSigner,PrivacyNormaliser,LocalHttpServer,KeychainIdentity}.swift`
   - `tools/simurgh-daemon-macos/Tests/SimurghDaemonTests/{AffinityScannerTests,ScannerProofTests}.swift`
@@ -312,7 +312,7 @@
   - `tests/unit/{daemonProofScanner,daemonScannerRisk,reportBuilderScanner,reportBuilder}.test.js`
   - `tools/privacy-audit.mjs`
   - `scripts/check.sh`
-  - `README.md`, `SECURITY.md`, `PRIVACY.md`, `ROADMAP.md`, `docs/STAGE_2_5_MACOS_AFFINITY_SCANNER.md`, `AGENT.md`, `CHANGELOG.md`
+  - `README.md`, `SECURITY.md`, `PRIVACY.md`, `ROADMAP.md`, `docs/stages/STAGE_2_5_MACOS_AFFINITY_SCANNER.md`, `AGENT.md`, `CHANGELOG.md`
 - **Verification:** Baseline before edits: `git diff --check`, `npm test`, `./scripts/check.sh`, `swift test`, and `swift build` all passed. Targeted Stage 2.5 tests: `node --test tests/unit/daemonProofScanner.test.js tests/unit/daemonScannerRisk.test.js tests/unit/reportBuilderScanner.test.js` → 7/7 pass; `swift test --filter AffinityScannerTests` → 5/5 pass; `swift test --filter ScannerProofTests` → 1/1 pass. Broad verification: `npm test` → 234/234 pass; `swift test` in `tools/simurgh-daemon-macos` → 8/8 pass; `swift build` in `tools/simurgh-daemon-macos` → pass; `git diff --check` → clean; `./scripts/check.sh` → 48/48 gates pass.
 - **Follow-ups:** Stage 2.6 can add Windows scanner work. Production packaging, notarisation, MDM deployment, hardware attestation, Windows/Linux support, and automatic misconduct detection remain out of scope.
 
@@ -353,7 +353,7 @@
   - Added hardened native-required mode with `SIMURGH_REQUIRE_DAEMON=true`, which rejects telemetry missing a daemon proof with `daemon_proof_required` and audits `DAEMON_MISSING` without consuming the sequence number.
   - Added `tools/simurgh-daemon-macos/`, a SwiftPM macOS daemon skeleton that binds to `127.0.0.1`, stores a P-256 identity in Keychain, exposes `/health`, `/status`, `/pair`, `/proof`, and `/session/end`, and returns metadata-only status/proofs.
   - Updated student and instructor pages with localhost daemon discovery/status, token-aware pairing/proof flow, and dashboard device-integrity display.
-  - Expanded privacy enforcement for raw local-data terms and documented Stage 2.3 in README, SECURITY, PRIVACY, ROADMAP, and `docs/STAGE_2_3_MACOS_LOCALHOST_DAEMON.md`.
+  - Expanded privacy enforcement for raw local-data terms and documented Stage 2.3 in README, SECURITY, PRIVACY, ROADMAP, and `docs/stages/STAGE_2_3_MACOS_LOCALHOST_DAEMON.md`.
   - Added targeted Stage 2.3 test-creator pass coverage for daemon risk scoring, report `device_integrity`, daemon-required env config, and end-to-end tampered/missing daemon proof rejection audit gates.
   - Renamed the GitHub Actions workflow to the Simurgh Quality Gate so CI/CD naming matches the Stage 2.3 `scripts/check.sh` release gate.
 - **Files Changed:**
@@ -366,7 +366,7 @@
   - `public/index.html`, `public/instructor.html`
   - `tools/privacy-audit.mjs`, `scripts/check.sh`
   - `.github/workflows/stage-1-checks.yml`
-  - `README.md`, `SECURITY.md`, `PRIVACY.md`, `ROADMAP.md`, `docs/STAGE_2_3_MACOS_LOCALHOST_DAEMON.md`
+  - `README.md`, `SECURITY.md`, `PRIVACY.md`, `ROADMAP.md`, `docs/stages/STAGE_2_3_MACOS_LOCALHOST_DAEMON.md`
 - **Verification:** `node --test tests/unit/riskScoring.test.js tests/unit/reportBuilder.test.js` → 15/15 pass. `node --test tests/unit/envConfig.test.js` → 3/3 pass. `npm test` → 219/219 pass. `swift test` in `tools/simurgh-daemon-macos` → 1/1 pass. Full `./scripts/check.sh` → 38/38 gates pass, including Stage 2.3 daemon pair/proof smoke, replay rejection, tampered-proof audit rejection, hardened missing-proof rejection/audit, Swift macOS daemon build, and Swift macOS daemon test. `npm audit --audit-level=high` inside `check.sh` → 0 vulnerabilities.
 - **Follow-ups:** Stage 2.4 should harden browser SDK packaging and daemon lifecycle. Future native scanner work can replace the placeholder `AffinityScanner` while preserving the metadata-only contract.
 
@@ -537,11 +537,11 @@
 - **Files Changed:**
   - `README.md` — Stage 1.5 section, fixed clone URL, Node 22 prerequisite, clearer Stage 1/Stage 2 boundaries
   - `ROADMAP.md` — Stage 1.5 validation pack status and Stage 2 Device Shield / Integrity Node direction
-  - `docs/STAGE_1_ACADEMIC_SHIELD.md` — tightened bounded-security and misconduct wording
-  - `docs/STAGE_1_5_REVIEWER_PACK.md`, `docs/THREAT_MODEL.md`, `docs/VALIDATION.md`, `docs/LIMITATIONS.md`, `docs/STAGE_2_ARCHITECTURE.md`, `docs/RESOURCE_PLAN.md`, `docs/DEMO_SCRIPT.md`, `docs/DECISIONS.md`, `docs/RISK_REGISTER.md`, `docs/REVIEWER_CHECKLIST.md` — new Stage 1.5 reviewer pack
+  - `docs/stages/STAGE_1_ACADEMIC_SHIELD.md` — tightened bounded-security and misconduct wording
+  - `docs/stages/STAGE_1_5_REVIEWER_PACK.md`, `docs/THREAT_MODEL.md`, `docs/VALIDATION.md`, `docs/LIMITATIONS.md`, `docs/stages/STAGE_2_ARCHITECTURE.md`, `docs/RESOURCE_PLAN.md`, `docs/DEMO_SCRIPT.md`, `docs/DECISIONS.md`, `docs/RISK_REGISTER.md`, `docs/REVIEWER_CHECKLIST.md` — new Stage 1.5 reviewer pack
   - `docs/evidence/stage-1/README.md`, `docs/evidence/stage-1/.gitkeep` — evidence folder rules and placeholder
   - `.github/pull_request_template.md` — PR review checklist
-- **Verification:** `npm install` passed with 0 vulnerabilities. `./scripts/check.sh --fix` passed 21/21. Initial `./scripts/check.sh` found one Prettier drift in `docs/STAGE_1_5_REVIEWER_PACK.md`; reran `./scripts/check.sh --fix`, then final `./scripts/check.sh` passed 21/21. `npm test` passed 65/65 tests. `node tools/privacy-audit.mjs` passed with 0 forbidden fields in generated data. `npm audit --audit-level=high` found 0 vulnerabilities. `git diff --check` passed. Markdown relative link audit passed. README image path audit passed. Secret/privacy/overclaim grep audits found only expected enforcement, test, policy, and historical-log references.
+- **Verification:** `npm install` passed with 0 vulnerabilities. `./scripts/check.sh --fix` passed 21/21. Initial `./scripts/check.sh` found one Prettier drift in `docs/stages/STAGE_1_5_REVIEWER_PACK.md`; reran `./scripts/check.sh --fix`, then final `./scripts/check.sh` passed 21/21. `npm test` passed 65/65 tests. `node tools/privacy-audit.mjs` passed with 0 forbidden fields in generated data. `npm audit --audit-level=high` found 0 vulnerabilities. `git diff --check` passed. Markdown relative link audit passed. README image path audit passed. Secret/privacy/overclaim grep audits found only expected enforcement, test, policy, and historical-log references.
 - **Follow-ups:**
   - Push the branch and collect fresh remote CI evidence.
   - Recommended next tag after review: `v0.3.6-stage-1-5-validation-pack`.
@@ -564,8 +564,8 @@
 - **Scope:** Stage 1 reviewer documentation
 - **Summary:** Replaced the short Stage 1 branch note with the full polished Stage 1 Academic Shield reference document. Added document metadata, a contents section, an explicit threat model, CI-only heading cleanup, exact verification commands, reviewer notes, and consistent section numbering. Kept branch protection documented as a manual follow-up because the saved GitHub branch-protection state was not confirmed.
 - **Files Changed:**
-  - `docs/STAGE_1_ACADEMIC_SHIELD.md` — full Stage 1 reviewer/reference document with threat model and verification commands
-- **Verification:** Initial `./scripts/check.sh` found only Prettier formatting drift in `docs/STAGE_1_ACADEMIC_SHIELD.md`. Ran `npm run format`, synced the uploaded Desktop copy, then reran `./scripts/check.sh` successfully: 21/21 checks passed.
+  - `docs/stages/STAGE_1_ACADEMIC_SHIELD.md` — full Stage 1 reviewer/reference document with threat model and verification commands
+- **Verification:** Initial `./scripts/check.sh` found only Prettier formatting drift in `docs/stages/STAGE_1_ACADEMIC_SHIELD.md`. Ran `npm run format`, synced the uploaded Desktop copy, then reran `./scripts/check.sh` successfully: 21/21 checks passed.
 - **Follow-ups:**
   - Enable branch protection on `main` in the GitHub UI if it has not already been saved.
 

@@ -39,8 +39,8 @@
 
 - `docs/DEVICE_SHIELD_CONTRACT.md`
 - `docs/DEVICE_SHIELD_PLATFORM_MATRIX.md`
-- `docs/STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md`
-- `docs/STAGE_2_7_REVIEWER_CHECKLIST.md`
+- `docs/stages/STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md`
+- `docs/stages/STAGE_2_7_REVIEWER_CHECKLIST.md`
 - `docs/schemas/daemon-proof.schema.json`
 - `docs/schemas/device-scanner-result.schema.json`
 
@@ -54,8 +54,8 @@
 - `public/sdk/simurgh-browser-sdk.js` — add `getDeviceShieldStatus()` returning UX-only platform/scanner status from last observed daemon `/status` response. Add `daemonPlatform`, `scannerState`, `scannerVersion` to the state object.
 - `scripts/check.sh` — append Stage 2.7 smoke + audit invocations.
 - `README.md`, `SECURITY.md`, `PRIVACY.md`, `ROADMAP.md`, `AGENT.md`, `CHANGELOG.md` — Stage 2.7 entries / status updates.
-- `docs/STAGE_2_5_TECHNICAL_BRIEF.md` — add historical-scope footnote.
-- `docs/STAGE_2_6_WINDOWS_DISPLAY_AFFINITY_SCANNER.md` — Stage 2.7 unification cross-reference.
+- `docs/stages/STAGE_2_5_TECHNICAL_BRIEF.md` — add historical-scope footnote.
+- `docs/stages/STAGE_2_6_WINDOWS_DISPLAY_AFFINITY_SCANNER.md` — Stage 2.7 unification cross-reference.
 
 ---
 
@@ -120,8 +120,8 @@ Skip — branch creation is enough; no commit needed yet.
 
 - Create: `docs/DEVICE_SHIELD_CONTRACT.md`
 - Create: `docs/DEVICE_SHIELD_PLATFORM_MATRIX.md`
-- Create: `docs/STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md`
-- Create: `docs/STAGE_2_7_REVIEWER_CHECKLIST.md`
+- Create: `docs/stages/STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md`
+- Create: `docs/stages/STAGE_2_7_REVIEWER_CHECKLIST.md`
 - Create: `docs/schemas/daemon-proof.schema.json`
 - Create: `docs/schemas/device-scanner-result.schema.json`
 
@@ -160,11 +160,11 @@ List each reason code with one-line meaning.
 
 Use the matrix from spec §2 verbatim (the capability table covering Browser telemetry, Localhost daemon, Signed P-256 daemon proof, Metadata-only scanner, Display-affinity detection, Real-device validation, Production installer, Hardware attestation, Automatic misconduct decision rows × macOS/Windows/Linux columns).
 
-- [ ] **Step 3: Create `docs/STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md`**
+- [ ] **Step 3: Create `docs/stages/STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md`**
 
-Stage-doc style matching `docs/STAGE_2_3_MACOS_LOCALHOST_DAEMON.md`. Sections: Goal, Scope, Out-of-Scope, Architecture, Acceptance Criteria, Non-Claims. Cross-link the contract, matrix, schemas, and the spec file.
+Stage-doc style matching `docs/stages/STAGE_2_3_MACOS_LOCALHOST_DAEMON.md`. Sections: Goal, Scope, Out-of-Scope, Architecture, Acceptance Criteria, Non-Claims. Cross-link the contract, matrix, schemas, and the spec file.
 
-- [ ] **Step 4: Create `docs/STAGE_2_7_REVIEWER_CHECKLIST.md`**
+- [ ] **Step 4: Create `docs/stages/STAGE_2_7_REVIEWER_CHECKLIST.md`**
 
 A flat checklist matching the acceptance criteria from spec §12. Reviewers tick boxes.
 
@@ -180,7 +180,7 @@ JSON Schema draft-07. Required: `platform`, `scanner_state`, `scanner_version`, 
 
 ```bash
 npm run format
-git add docs/DEVICE_SHIELD_CONTRACT.md docs/DEVICE_SHIELD_PLATFORM_MATRIX.md docs/STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md docs/STAGE_2_7_REVIEWER_CHECKLIST.md docs/schemas/daemon-proof.schema.json docs/schemas/device-scanner-result.schema.json
+git add docs/DEVICE_SHIELD_CONTRACT.md docs/DEVICE_SHIELD_PLATFORM_MATRIX.md docs/stages/STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md docs/stages/STAGE_2_7_REVIEWER_CHECKLIST.md docs/schemas/daemon-proof.schema.json docs/schemas/device-scanner-result.schema.json
 git commit -m "$(cat <<'EOF'
 docs(stage-2-7): add cross-platform Device Shield contract, matrix, schemas
 
@@ -2011,8 +2011,8 @@ EOF
 - Modify: `ROADMAP.md`
 - Modify: `AGENT.md`
 - Modify: `CHANGELOG.md`
-- Modify: `docs/STAGE_2_5_TECHNICAL_BRIEF.md`
-- Modify: `docs/STAGE_2_6_WINDOWS_DISPLAY_AFFINITY_SCANNER.md`
+- Modify: `docs/stages/STAGE_2_5_TECHNICAL_BRIEF.md`
+- Modify: `docs/stages/STAGE_2_6_WINDOWS_DISPLAY_AFFINITY_SCANNER.md`
 
 - [ ] **Step 1: README.md — add Stage 2.7 status section**
 
@@ -2030,7 +2030,7 @@ and `tools/privacy-audit.mjs`. The browser SDK gains a UX-only
 `daemon_proof`. A new cross-platform E2E smoke (Scenarios A–G) and security
 audit gate cover both platforms. Linux daemon proofs are rejected with
 `unsupported_platform` until Stage 2.8. Design doc:
-[`docs/STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md`](docs/STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md).
+[`docs/stages/STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md`](docs/stages/STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md).
 
 Stage 2.7 closeout can be run independently:
 
@@ -2096,7 +2096,7 @@ Match the existing changelog style. Add:
 - `src/device/platformScannerSchema.js` — shared platform list, scanner enum, scanner validator.
 - `src/device/scannerRiskPolicy.js` — shared risk mapping + manual-review wording.
 - `public/sdk/simurgh-browser-sdk.js#getDeviceShieldStatus` — UX-only platform/scanner status accessor.
-- `docs/DEVICE_SHIELD_CONTRACT.md`, `docs/DEVICE_SHIELD_PLATFORM_MATRIX.md`, `docs/STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md`, `docs/STAGE_2_7_REVIEWER_CHECKLIST.md`.
+- `docs/DEVICE_SHIELD_CONTRACT.md`, `docs/DEVICE_SHIELD_PLATFORM_MATRIX.md`, `docs/stages/STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md`, `docs/stages/STAGE_2_7_REVIEWER_CHECKLIST.md`.
 - `docs/schemas/daemon-proof.schema.json`, `docs/schemas/device-scanner-result.schema.json`.
 - `scripts/smoke-stage-2-7-cross-platform-device-shield.sh`, `scripts/security-audit-stage-2-7-cross-platform-device-shield.sh`.
 - `tests/e2e/stage27_cross_platform_device_shield_smoke.mjs`, `tests/security/stage27_cross_platform_security_audit.test.js`.
@@ -2121,13 +2121,13 @@ Match the existing changelog style. Add:
 
 - [ ] **Step 7: Historical doc footnotes**
 
-In `docs/STAGE_2_5_TECHNICAL_BRIEF.md`, add a top-of-file note:
+In `docs/stages/STAGE_2_5_TECHNICAL_BRIEF.md`, add a top-of-file note:
 
 ```markdown
 > **Scope:** This brief documents Stage 1 through Stage 2.5 (macOS-only Device Shield). Windows display-affinity scanning landed in Stage 2.6 (`v0.4.12`). The cross-platform unification contract is documented in [`STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md`](STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md) and [`DEVICE_SHIELD_CONTRACT.md`](DEVICE_SHIELD_CONTRACT.md).
 ```
 
-In `docs/STAGE_2_6_WINDOWS_DISPLAY_AFFINITY_SCANNER.md`, add at the end of the document:
+In `docs/stages/STAGE_2_6_WINDOWS_DISPLAY_AFFINITY_SCANNER.md`, add at the end of the document:
 
 ```markdown
 ## Stage 2.7 unification
@@ -2139,7 +2139,7 @@ The Stage 2.6 Windows scanner now operates under the unified Stage 2.7 Device Sh
 
 ```bash
 npm run format
-git add README.md SECURITY.md PRIVACY.md ROADMAP.md AGENT.md CHANGELOG.md docs/STAGE_2_5_TECHNICAL_BRIEF.md docs/STAGE_2_6_WINDOWS_DISPLAY_AFFINITY_SCANNER.md
+git add README.md SECURITY.md PRIVACY.md ROADMAP.md AGENT.md CHANGELOG.md docs/stages/STAGE_2_5_TECHNICAL_BRIEF.md docs/stages/STAGE_2_6_WINDOWS_DISPLAY_AFFINITY_SCANNER.md
 git commit -m "$(cat <<'EOF'
 docs(stage-2-7): update README, SECURITY, PRIVACY, ROADMAP, AGENT, CHANGELOG
 
@@ -2248,7 +2248,7 @@ Highlights:
 - Cross-platform E2E smoke (Scenarios A–G) and Stage 2.7 security audit gate.
 - Linux daemon proofs rejected with unsupported_platform until Stage 2.8.
 
-Research prototype only — see PRIVACY.md, ETHICS.md, DISCLAIMER.md for boundaries.
+Research prototype only — see PRIVACY.md, docs/ETHICS.md, docs/DISCLAIMER.md for boundaries.
 EOF
 )"
 ```

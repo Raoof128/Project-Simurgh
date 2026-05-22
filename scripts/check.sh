@@ -307,7 +307,7 @@ TONE_FAIL=false
 # Hard-forbidden — any occurrence fails.
 HARD_FORBIDDEN='\b(fully secure|guaranteed detection|proves cheating|cannot be bypassed|impossible to evade|automatic misconduct finding)\b'
 if grep -RInE "$HARD_FORBIDDEN" \
-    README.md AGENT.md CHANGELOG.md SECURITY.md PRIVACY.md ETHICS.md DISCLAIMER.md ROADMAP.md 2>/dev/null \
+    README.md AGENT.md CHANGELOG.md SECURITY.md PRIVACY.md docs/ETHICS.md docs/DISCLAIMER.md ROADMAP.md 2>/dev/null \
   | grep -iv "never makes automatic misconduct" \
   | grep -iv "no automatic misconduct finding" \
   | grep -iv "cannot be bypassed by configuration" \
@@ -316,7 +316,7 @@ if grep -RInE "$HARD_FORBIDDEN" \
 # Soft-forbidden — must be negated. Flag if line does NOT contain "not".
 for word in "unhackable" "unbreakable"; do
   if grep -RInE "\\b$word\\b" \
-      README.md AGENT.md CHANGELOG.md SECURITY.md PRIVACY.md ETHICS.md DISCLAIMER.md ROADMAP.md 2>/dev/null \
+      README.md AGENT.md CHANGELOG.md SECURITY.md PRIVACY.md docs/ETHICS.md docs/DISCLAIMER.md ROADMAP.md 2>/dev/null \
     | grep -iv "not[[:space:]]*[\"']*$word" \
     | grep -iv "not be ${word}" \
     >> "$TONE_LOG"; then : ; fi
@@ -1286,10 +1286,10 @@ fi
 step "Doc-grep safety (no overclaim phrases in Linux closeout docs)"
 DOC_GREP_FAIL=false
 DOC_FILES="README.md SECURITY.md PRIVACY.md ROADMAP.md \
-  docs/STAGE_2_8_LINUX_TECHNICAL_BRIEF.md \
-  docs/STAGE_2_8_LINUX_VALIDATION_MATRIX.md \
-  docs/STAGE_2_8_LINUX_REVIEWER_CHECKLIST.md \
-  docs/STAGE_2_8_LINUX_CLOSEOUT.md"
+  docs/stages/STAGE_2_8_LINUX_TECHNICAL_BRIEF.md \
+  docs/stages/STAGE_2_8_LINUX_VALIDATION_MATRIX.md \
+  docs/stages/STAGE_2_8_LINUX_REVIEWER_CHECKLIST.md \
+  docs/stages/STAGE_2_8_LINUX_CLOSEOUT.md"
 
 # "cheating detected" should never appear — we never claim automatic misconduct detection
 if grep -qr "cheating detected" $DOC_FILES 2>/dev/null; then

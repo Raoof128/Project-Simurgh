@@ -4,15 +4,15 @@
 
 ## Read First
 
-- `docs/STAGE_1_5_REVIEWER_PACK.md`
+- `docs/stages/STAGE_1_5_REVIEWER_PACK.md`
 - `README.md`
 - `docs/LIMITATIONS.md`
 - `docs/THREAT_MODEL.md`
-- `docs/STAGE_2_ARCHITECTURE.md` (Stage 2.1/2.2 implementation status)
+- `docs/stages/STAGE_2_ARCHITECTURE.md` (Stage 2.1/2.2 implementation status)
 - `CHANGELOG.md` (v0.4.1, v0.4.2, v0.4.3 entries)
 - `SECURITY.md`
 - `PRIVACY.md`
-- `ETHICS.md`
+- `docs/ETHICS.md`
 
 ## Commands to Run
 
@@ -55,7 +55,7 @@ git diff --check
 - Check suite in `scripts/check.sh`.
 - Privacy audit in `tools/privacy-audit.mjs`.
 - CI workflow in `.github/workflows/stage-1-checks.yml`.
-- Stage 1 reference in `docs/STAGE_1_ACADEMIC_SHIELD.md`.
+- Stage 1 reference in `docs/stages/STAGE_1_ACADEMIC_SHIELD.md`.
 
 ## Evidence Pending
 

@@ -282,10 +282,10 @@ Audit gate also re-runs: privacy audit, npm audit, raw-field rejection across SD
 ### Create
 
 ```text
-docs/STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md
+docs/stages/STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD.md
 docs/DEVICE_SHIELD_CONTRACT.md
 docs/DEVICE_SHIELD_PLATFORM_MATRIX.md
-docs/STAGE_2_7_REVIEWER_CHECKLIST.md
+docs/stages/STAGE_2_7_REVIEWER_CHECKLIST.md
 docs/schemas/daemon-proof.schema.json
 docs/schemas/device-scanner-result.schema.json
 ```
@@ -299,8 +299,8 @@ PRIVACY.md           (point to shared forbidden-field module)
 ROADMAP.md           (move Windows scanner to done; add Stage 2.7 done; Stage 2.8 Linux research as next)
 AGENT.md             (Raouf-prefixed Stage 2.7 entry)
 CHANGELOG.md         (Raouf-prefixed v0.4.13 entry)
-docs/STAGE_2_5_TECHNICAL_BRIEF.md  (add footnote: Stage 1–2.5 historical scope; superseded by Stage 2.6 for Windows)
-docs/STAGE_2_6_WINDOWS_DISPLAY_AFFINITY_SCANNER.md  (note Stage 2.7 unification)
+docs/stages/STAGE_2_5_TECHNICAL_BRIEF.md  (add footnote: Stage 1–2.5 historical scope; superseded by Stage 2.6 for Windows)
+docs/stages/STAGE_2_6_WINDOWS_DISPLAY_AFFINITY_SCANNER.md  (note Stage 2.7 unification)
 ```
 
 Do not rewrite historical docs. Add scope footnotes where wording is now out of date.
