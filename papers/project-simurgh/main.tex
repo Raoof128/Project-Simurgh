@@ -223,7 +223,7 @@ The telemetry stream is deliberately narrow. No DOM content, no clipboard text, 
 The integrity daemon is a native process running on the student's machine at \texttt{127.0.0.1}. Its responsibilities are:
 \begin{enumerate}
 \item Maintain an ECDSA P-256 key pair: persistent on macOS (stored in the macOS Keychain under account \texttt{p256-signing-key}) and on Linux (an identity file at mode \texttt{0600} within a \texttt{0700} state directory under \texttt{\$XDG\_STATE\_HOME}); the current Windows research daemon generates the key ephemerally for the lifetime of the process, with persistent storage backed by DPAPI deferred to a future stage.
-\item On request, query OS metadata APIs to obtain the current display-affinity window summary.
+\item On request, query OS metadata APIs to obtain the current platform-specific display-integrity summary.
 \item Construct a signed proof envelope containing the version, platform, session identifier, node identity hash, timestamp, nonce, \texttt{capabilities} sub-object (four boolean scanner-capability flags), \texttt{signals} sub-object (window counts and helper status), privacy mode, and ECDSA P-256 signature over the canonical serialisation of all non-signature fields.
 \item Respond to pairing challenges issued by the server.
 \end{enumerate}
@@ -234,7 +234,7 @@ The daemon explicitly does not enumerate window titles, process names, process i
 
 The Node.js server receives telemetry events and proof envelopes from the browser SDK. For each proof, it performs the following verification steps, detailed further in Section~V:
 \begin{enumerate}
-\item Schema validation: all eleven required fields must be present and correctly typed.
+\item Schema validation: all required fields for the relevant proof envelope must be present and correctly typed.
 \item Nonce check: the nonce must not have been seen in this session (replay guard).
 \item Signature verification: Ed25519 \texttt{verify(canonical, pubkey, sig)} for the browser-paired proof envelope; ECDSA P-256 over SHA-256 for the device-shield daemon envelope.
 \item Node continuity: the submitting node's hash must match the bound node for this session.
@@ -352,7 +352,7 @@ The Windows daemon is implemented in .NET, using \texttt{ECDsa.Create(ECCurve.Na
 
 The Linux daemon is implemented in Rust, using the \texttt{p256::ecdsa} crate for proof signing. Due to the diversity of the Linux desktop landscape, the Linux implementation is positioned as a display integrity research contribution rather than a complete deployment target. Three scanner paths are implemented:
 
-\textbf{X11}: The Rust daemon connects to the X server via \texttt{x11rb} and enumerates top-level windows. It reads the \texttt{\_NET\_WM\_STATE} property and window manager hints to identify windows exhibiting overlay-relevant window-manager states. \texttt{capture\_excluded\_window\_count} is reported. No window title or class is read.
+\textbf{X11}: The Rust daemon connects to the X server via \texttt{x11rb} and enumerates top-level windows. It reads the \texttt{\_NET\_WM\_STATE} property and window manager hints to identify windows exhibiting overlay-relevant window-manager states. The Linux X11 path reports window-manager metadata counts — including managed, override-redirect, above, fullscreen, and skip-taskbar windows — and does not claim Windows/macOS-style capture-exclusion detection. No window title or class is read.
 
 \textbf{Wayland}: Direct window enumeration is not available to unprivileged clients in Wayland. The daemon probes the \texttt{org.freedesktop.portal.Desktop} service via D-Bus using \texttt{NameHasOwner} (to detect portal presence) and reads the \texttt{ScreenCast.AvailableSourceTypes} property (to detect active screencast capability). It never calls \texttt{CreateSession}, \texttt{SelectSources}, \texttt{Start}, or \texttt{OpenPipeWireRemote}~--- the portal methods that would trigger a user consent prompt. A banned-method grep test in CI enforces this invariant.
 
@@ -367,25 +367,23 @@ The macOS, Windows, and Linux daemons do not emit byte-identical envelopes acros
 %% ───────────────────────────────────────────────────────────────────
 %%  Table III: Platform Capability Matrix
 %% ───────────────────────────────────────────────────────────────────
-\begin{table}[t]
+\begin{table*}[t]
 \centering
-\small
+\scriptsize
 \caption{Platform Capability Matrix}
 \label{tab:platform}
-\resizebox{\columnwidth}{!}{%
-\begin{tabular}{@{}lllll@{}}
+\begin{tabularx}{\textwidth}{@{}lXllX@{}}
 \toprule
 \textbf{Platform} & \textbf{Signal source} & \textbf{Impl.} & \textbf{Validation} & \textbf{Known limitation} \\
 \midrule
-macOS & \texttt{kCGWindowSharingState} & Swift/CoreGraphics & Swift tests (8) & SCKit adaptive path deferred \\
-Windows & \texttt{WDA\_MONITOR}, \texttt{WDA\_EXCLUDEFROMCAPTURE} & .NET/Win32 & Real device (Win10 19045) & No kernel/GPU overlay visibility \\
-Linux X11 & Window-manager states (\texttt{\_NET\_WM\_STATE}) & Rust/x11rb & CI + Xvfb & Real desktop pending \\
-Linux Wayland & Portal metadata only & Rust/D-Bus & Mock D-Bus + CI & No surface enumeration \\
-XWayland & X11 bridge (partial) & Rust/x11rb & CI & Partial coverage only \\
+macOS & \texttt{kCGWindowSharingState} (CoreGraphics) & Swift & Swift tests (8) & SCKit adaptive path deferred to future stage \\
+Windows & \texttt{WDA\_MONITOR}, \texttt{WDA\_EXCLUDEFROMCAPTURE} & .NET/Win32 & Real device (Win10 Pro 19045) & No kernel/GPU overlay visibility \\
+Linux X11 & Window-manager states (\texttt{\_NET\_WM\_STATE}) & Rust/x11rb & CI + Xvfb & Real desktop validation pending \\
+Linux Wayland & Portal property metadata only & Rust/D-Bus & Mock D-Bus + CI & No surface/window enumeration \\
+XWayland & X11 bridge, XWayland \texttt{\$DISPLAY} & Rust/x11rb & CI & Partial coverage (\texttt{coverage=xwayland\_partial}) \\
 \bottomrule
-\end{tabular}%
-}
-\end{table}
+\end{tabularx}
+\end{table*}
 
 %% ===================================================================
 %% SECTION VII: PRIVACY MODEL
@@ -430,7 +428,7 @@ Simurgh does not implement and does not call \texttt{getDisplayMedia()}, \texttt
 
 \subsection{Manual Review Only}
 
-Critical verdicts are accompanied by the hard-coded string ``Manual review required. No automatic misconduct finding.'' Warning verdicts produce ``Manual review recommended. No automatic misconduct finding.'' Neither string can be suppressed through configuration. The system produces no binary misconduct verdict, no suspension action, no notification to any authority, and no persistent record outside the instructor-accessible audit export. All conclusions require a human reviewer.
+Critical verdicts are accompanied by the hard-coded string ``Manual review required. No automatic misconduct finding.'' Warning verdicts produce ``Manual review recommended. No automatic misconduct finding.'' Neither string can be suppressed through configuration. The system produces no binary misconduct verdict, no suspension action, no notification to any authority, and no automated disciplinary record or enforcement action outside the human-review workflow. All conclusions require a human reviewer.
 
 %% ===================================================================
 %% SECTION VIII: EVALUATION
@@ -589,7 +587,7 @@ Stage~4 explores the possibility of recovering some visual integrity signal with
 %% ===================================================================
 \section{Conclusion}
 
-This paper has presented Project Simurgh, a privacy-preserving integrity architecture for high-stakes AI-mediated and remote assessment sessions. We have shown that the display-fidelity failure documented in the Invisible Window attack~\cite{abedini2026invisible} — the gap between the physical display and the screen-capture surface — can be addressed without resorting to more invasive surveillance. Instead, Simurgh establishes session integrity through signed, metadata-only device proofs, native OS display-affinity scanners, and a tamper-evident audit chain.
+This paper has presented Project Simurgh, a privacy-preserving integrity architecture for high-stakes AI-mediated and remote assessment sessions. We have shown that the display-fidelity failure documented in the Invisible Window attack~\cite{abedini2026invisible} — the gap between the physical display and the screen-capture surface — can be addressed without resorting to more invasive surveillance. Instead, Simurgh establishes session integrity through signed, metadata-only device proofs, native OS metadata scanners, and a tamper-evident audit chain.
 
 The core architectural argument is straightforward: if the OS compositing pipeline cannot be trusted to faithfully expose all visible content to the browser capture API, then the appropriate response is to move the trust anchor to the OS level itself, where the capture-exclusion state is visible to any native process. Simurgh does exactly this, at the price of requiring a native daemon on the student's device — a cost that is explicit and reasonable, compared to the alternative of collecting full screen video.
 
