@@ -1,0 +1,238 @@
+{
+  "artifact": "Project Simurgh ARA",
+  "artifact_dir": "/Users/raoof.r12/Desktop/Raouf/Project-Simurgh/ara-output",
+  "review_version": "3.0.0",
+  "prerequisite": "Level 1 passed (21 files, all mandatory files present, 18-node exploration DAG with dead_end and decision types, 4 claims, 4 experiments, 6 heuristics, 6 concepts)",
+
+  "overall": {
+    "grade": "Accept",
+    "mean_score": 4.17,
+    "one_line_summary": "A well-scoped security systems ARA with exceptionally strong falsifiability and scope calibration, held back from Strong Accept only by uncalibrated risk heuristics and a C01 dependency on unre-verified prior work.",
+    "strengths_summary": [
+      "D2+D3: Falsifiability and scope calibration are genuinely excellent — all four claims have specific, independently-actionable falsification criteria; 9 explicit non-claims and 6 architectural constraints bound the system precisely; the Linux X11 non-equivalence to Windows/macOS capture-exclusion is stated twice (claims + constraints).",
+      "D4: Argument coherence is strong — all three gaps (G1 trust anchor, G2 no privacy-preserving alternative, G3 no cross-platform protocol) are resolved by specific claims; the logical chain from Display Fidelity failure to OS-metadata trust anchor is clear and non-circular.",
+      "D5: The exploration tree documents a genuine design decision (DEAD03 — Wayland surface enumeration via CreateSession rejected for violating the metadata-only contract) with source references to the banned-method grep CI test — this is authentic, not post-hoc."
+    ],
+    "weaknesses_summary": [
+      "D6: No user study, no false-positive or false-negative rate measurement, and no comparison of detection quality against a baseline system. The risk scorer weights (0.25, 0.18, …) and heuristic thresholds (200-char paste, 150 WPM) are uncalibrated design choices. H02 honestly acknowledges 'false positive rate is unknown without empirical data' — but this is the system's most significant evaluation gap.",
+      "D1: C01 (the motivating threat claim) is supported exclusively by cited prior work (Abedini 2026) and is explicitly not independently re-verified in this prototype. For a companion paper this is defensible, but it means the ARA's primary threat motivation rests on a single non-replicated source.",
+      "D5: Dead ends DEAD01 (configurable verdicts) and DEAD02 (per-session nonce guard) are marked inferred with terse one-line rationales. They describe alternatives not taken rather than alternatives attempted and failed — a genuine dead-end log would include a specific failure mode or empirical observation."
+    ]
+  },
+
+  "dimensions": {
+    "D1_evidence_relevance": {
+      "score": 4,
+      "strengths": [
+        "C02↔E02: Setup directly runs the privacy audit and forbidden-field rejection tests that C02 claims to enforce — substantive, not merely referential.",
+        "C03↔E03: Multi-platform setup (Windows real-device, macOS Swift suite, Linux CI/Xvfb) matches the cross-platform scope of C03 exactly.",
+        "C04↔E04: The experiment directly tests verdict string correctness, unconfigurability, and absence of automated action triggers — the three components of C04."
+      ],
+      "weaknesses": [
+        "C01↔E01: The experiment is sourced entirely from companion prior work (Abedini 2026) and is explicitly noted as 'not independently re-run in this prototype.' For a companion paper, this is disclosed and defensible, but C01 therefore rests on a single non-replicated prior result."
+      ],
+      "suggestions": [
+        "Add a minimal independent replication note for C01: even a one-machine confirmation of WDA_EXCLUDEFROMCAPTURE behavior on a Windows build available to the authors would strengthen the evidence chain. If replication is genuinely infeasible, add a statement that E01 is adopted by reference and explain why independent replication is out of scope for this paper."
+      ]
+    },
+
+    "D2_falsifiability": {
+      "score": 5,
+      "strengths": [
+        "C01: 'A platform where SetWindowDisplayAffinity(WDA_EXCLUDEFROMCAPTURE) does NOT exclude the window from a getDisplayMedia() capture would refute this claim' — specific platform, specific API, specific observable outcome. An independent researcher can run this today.",
+        "C02: Falsification via privacy-audit.mjs (a runnable tool with explicit exit code) plus forbidden-field schema inspection — both artifacts are in the repository and independently executable.",
+        "C03: Two independent falsifiers given (proof containing PID/title/HWND; flag-set window with zero count increment) — these address different failure modes of the same claim.",
+        "C04: 'Any code path that allows verdict strings to be configured away' — specific, checkable by source inspection without running the system."
+      ],
+      "weaknesses": [],
+      "suggestions": [
+        "C02 falsification criterion could additionally specify the exact privacy-audit.mjs exit code (0 = pass) and which Node.js test files contain the forbidden-field rejection tests, to make independent replication maximally unambiguous."
+      ]
+    },
+
+    "D3_scope_calibration": {
+      "score": 5,
+      "strengths": [
+        "The Linux X11 non-equivalence to Windows/macOS capture-exclusion is stated in both the claims interpretation ('Linux X11 path does NOT claim Windows/macOS-style capture-exclusion detection') and the constraints file (NC07). This double-scoping prevents the most common overclaim for cross-platform security papers.",
+        "9 explicit non-claims (NC01–NC09) spanning GPU overlays, kernel compromise, read-only workflows, hardware attestation, production readiness, Wayland enumeration, notarisation, and external red-team — this is exceptionally thorough non-claim documentation.",
+        "H02 explicitly states 'False positive rate is unknown without empirical data' and H06 notes thresholds are 'not calibrated against a specific student population baseline' — honest scope-bounding at the heuristic level.",
+        "The operational limits table (proof rate, challenge TTL, nonce TTL, chain cap, timestamp tolerances) precisely bounds the system's operational envelope."
+      ],
+      "weaknesses": [
+        "C02's statement that the system 'can assess session integrity' is a feasibility claim without a defined quality metric. While appropriate for a design paper, the scope is intentionally vague about what 'assess' means quantitatively — there is no sensitivity/specificity frame."
+      ],
+      "suggestions": [
+        "For C02, add a scoping sentence in the paper's claims or in the ARA's interpretation field: 'Integrity assessment here means surfacing anomaly signals for human review, not achieving a defined sensitivity or specificity against a calibrated threat model.' This would make the feasibility-vs-performance distinction explicit for reviewers."
+      ]
+    },
+
+    "D4_argument_coherence": {
+      "score": 4,
+      "strengths": [
+        "All three gaps are resolved: G1 (trust anchor mismatch) → C01+C03; G2 (no privacy-preserving alternative) → C02; G3 (no cross-platform protocol) → C03. No gap is motiviated and then abandoned.",
+        "The observation-to-insight chain is clean: O1/O4 (display fidelity failure + browser opacity) → G1 (trust anchor mismatch) → Key insight (move trust anchor to OS metadata layer) → daemon architecture → C03.",
+        "The solution architecture implements the key insight directly: daemons run at OS level where exclusion flags are visible, sign metadata counts, transmit proofs. No gap between insight and implementation."
+      ],
+      "weaknesses": [
+        "The 8-category risk scorer and its specific weights (paste_risk: 0.25, affinity_risk: 0.18, etc.) are not derived from the problem statement — they are design choices presented without rationale for the weight values. The argument does not explain why paste risk should be weighted 2.78× helper risk, for example.",
+        "The HMAC audit chain is a significant architectural component but does not have its own claim — it appears as a mechanism supporting C02 and C04 but is not a named contribution. The paper's four listed contributions don't include the audit chain explicitly."
+      ],
+      "suggestions": [
+        "Add a brief rationale section to the risk scorer description explaining the weight ordering priority (paste > affinity > focus > typing > idle > daemon > helper > session), even if the specific values are design choices. This would close the logical gap between 'anomaly signals' and 'how they are weighted.'",
+        "Consider adding a fifth observation in problem.md: 'O5 — No tamper-evident audit trail: existing proctoring logs are mutable server-side records.' This would derive the HMAC chain as a response to a gap, rather than leaving it as an unexplained mechanism."
+      ]
+    },
+
+    "D5_exploration_integrity": {
+      "score": 4,
+      "strengths": [
+        "DEAD03 (Wayland surface enumeration via CreateSession) is the strongest dead-end in the tree: marked explicit, sourced to wayland.rs comment and banned-method grep CI test, with a specific privacy-contract rationale. This is authentic documentation of a rejected path.",
+        "D06 (two canonicalisers) has a non-trivial rationale: 'Browser-paired proof predates device-shield daemon; different envelope structures required different serialisation strategies.' This reflects real architectural history, not a post-hoc justification.",
+        "D08 (Windows ephemeral key) honestly explains what was deferred and why: 'ephemeral key sufficient for research validation.' This is a genuine scope limitation, not a rationalization."
+      ],
+      "weaknesses": [
+        "DEAD01 (configurable verdicts) and DEAD02 (per-session nonce guard) are both marked inferred and have one-line rationales. They describe alternatives considered rather than alternatives attempted and failed — there is no failure mode, no empirical observation, and no lesson learned. They read as logical alternatives that were ruled out by argument rather than experience.",
+        "No dead-end documents a specific implementation failure — e.g., 'we tried approach X and it failed because Y.' All rejected paths were rejected by design reasoning, not by empirical dead-end."
+      ],
+      "suggestions": [
+        "For DEAD01 and DEAD02, if there were actual implementation attempts that failed, document the specific failure mode. If these were purely design-space alternatives ruled out by argument (never attempted), say so explicitly: 'This path was rejected by design argument without implementation, not by empirical failure.' This makes the inference honest.",
+        "Consider adding a dead-end for the macOS ScreenCaptureKit adaptive-query path: it was considered (the capability flag was added), attempted (partially), and deferred. This would add a genuine implementation-level dead-end with a specific reason."
+      ]
+    },
+
+    "D6_methodological_rigor": {
+      "score": 3,
+      "strengths": [
+        "E03 uses a real-device Windows 10 Pro (build 19045) validation with a controlled affinity fixture (SimurghAffinityFixture) — this is a genuine end-to-end test, not a unit-test mock.",
+        "E02 (privacy boundary) uses a deterministic, automatically runnable CI tool (privacy-audit.mjs) with a specific exit code as the pass criterion — reproducible by any researcher with the codebase.",
+        "Heuristics explicitly document calibration status: H02 ('False positive rate is unknown without empirical data'), H04 ('design choices with no empirical calibration'), H06 ('not calibrated against a specific student population baseline'). This honesty is a methodological strength."
+      ],
+      "weaknesses": [
+        "The risk scorer has no user study, no false-positive/false-negative rate measurement, and no comparison against a baseline system's detection quality. The weights (0.25, 0.18, 0.15, 0.10, 0.18, 0.05, 0.09, 0.05) and override thresholds (200-char paste, WPM ≥ 250) are uncalibrated. H02 and H06 acknowledge this, but the gap remains significant for any integrity claim.",
+        "E03 validates all three platforms together without isolating individual component contributions. It is not possible to determine from E03 alone whether the macOS affinity scanner or the Linux X11 scanner works independently — the experiment bundles them.",
+        "E01 is cited prior work, not independently re-run. This is honest, but it means the foundational threat claim has no independent experimental support within this paper."
+      ],
+      "suggestions": [
+        "For D6 improvement (most impactful): add a simple controlled experiment measuring false positive rate at the current thresholds — e.g., run the risk scorer against a set of synthetic 'legitimate' sessions (no overlay, normal typing, normal paste behavior) and report the fraction that receive Warning or Critical verdicts. Even a small synthetic dataset would significantly strengthen the evaluation.",
+        "For E03: separate the per-platform evidence — report macOS Swift test results, Windows real-device results, and Linux CI results as three separate table rows in Table II. This would allow readers to assess each platform independently.",
+        "For H06: cite literature on human typing speed distributions (e.g., Dhakal et al. 2018 on 37-million keystroke dataset) to justify the 150 WPM threshold, even if the specific implementation threshold of 180/250 is a conservative design choice."
+      ]
+    }
+  },
+
+  "findings": [
+    {
+      "finding_id": "F01",
+      "dimension": "D6_methodological_rigor",
+      "severity": "major",
+      "target_file": "logic/solution/heuristics.md",
+      "target_entity": "H02",
+      "evidence_span": "False positive rate is unknown without empirical data.",
+      "observation": "The affinity risk override (H02) fires on any non-zero capture_excluded_window_count, including legitimate system windows. No measurement of false positive rate under normal operating conditions is provided.",
+      "reasoning": "A critical floor of risk_score ≥ 85 for any excluded window is a strong claim about signal quality. Without knowing the false positive rate, it is impossible to assess whether the system would trigger Critical review on normal student machines. Legitimate system windows with WDA_MONITOR or SharingType.none (e.g., screen-sharing utilities, accessibility tools) would trigger this override.",
+      "suggestion": "Run the risk scorer against a set of 20-30 synthetic 'clean' sessions on representative hardware (macOS, Windows 10/11) and report how many receive Warning or Critical verdicts due to H02. Even a small controlled study would bound the false positive concern. If this is deferred, add it as a named future-work item with a specific study design."
+    },
+    {
+      "finding_id": "F02",
+      "dimension": "D1_evidence_relevance",
+      "severity": "major",
+      "target_file": "logic/experiments.md",
+      "target_entity": "E01",
+      "evidence_span": "Result sourced from companion paper (Abedini 2026) — not independently re-run in this prototype.",
+      "observation": "C01 (the foundational threat claim) is supported exclusively by cited prior work. E01 documents the prior experiment's design but does not represent an independent replication.",
+      "reasoning": "A workshop reviewer may question whether C01 can be treated as a given if the companion paper has not yet been peer-reviewed. The Invisible Window disclosure is a Zenodo preprint, not a published peer-reviewed result. The entire motivation of the Simurgh system rests on C01 being true.",
+      "suggestion": "Add a brief independent replication — even reproducing the WDA_EXCLUDEFROMCAPTURE result on one machine (Windows 10 Pro, the same build used for E03) and documenting it in the paper's evaluation section. Alternatively, strengthen the framing: present C01 as an inherited assumption from companion work, with a footnote to the companion DOI, and note that Simurgh's contribution is the defensive response assuming C01 holds."
+    },
+    {
+      "finding_id": "F03",
+      "dimension": "D6_methodological_rigor",
+      "severity": "minor",
+      "target_file": "logic/experiments.md",
+      "target_entity": "E03",
+      "evidence_span": "**Baselines:** A scanner that returns static zero counts (no detection capability).",
+      "observation": "The baseline for E03 is a zero-count scanner — the weakest possible baseline. There is no comparison to an existing proctoring system's detection capability, and no ablation isolating per-platform scanner contributions.",
+      "reasoning": "For a claim about 'correct detection,' the baseline should reflect what alternative approaches would detect. A static-zero scanner shows the system detects something, but doesn't show it detects the right things relative to alternatives.",
+      "suggestion": "Add a more meaningful baseline: e.g., a browser-only detection approach (JavaScript focus/blur events only, no daemon) compared to the daemon-augmented approach. This would show what the native daemon adds over the browser-only baseline. Even a conceptual comparison would improve the argument."
+    },
+    {
+      "finding_id": "F04",
+      "dimension": "D5_exploration_integrity",
+      "severity": "minor",
+      "target_file": "trace/exploration_tree.yaml",
+      "target_entity": "DEAD01_CONFIGURABLE_VERDICTS",
+      "evidence_span": "support_level: inferred",
+      "observation": "DEAD01 and DEAD02 are inferred alternatives that were rejected by design argument, not by implementation experience. The rationales are one-liners with no failure mode documentation.",
+      "reasoning": "Dead-ends that are purely logical alternatives — never attempted — are less informative than failed implementation attempts. They describe a design space rather than a research journey.",
+      "suggestion": "For DEAD01 and DEAD02, add one sentence explicitly clarifying: 'This alternative was rejected by design argument without implementation attempt.' This distinguishes logical dead-ends from empirical ones and makes the inferred status meaningful rather than just a structural marker."
+    },
+    {
+      "finding_id": "F05",
+      "dimension": "D4_argument_coherence",
+      "severity": "minor",
+      "target_file": "logic/problem.md",
+      "target_entity": "O1",
+      "evidence_span": null,
+      "observation": "The HMAC-SHA256 audit chain is a significant architectural component but is not derived from a problem observation or gap. It appears in the architecture and algorithm layers without a problem.md motivation.",
+      "reasoning": "A reader following the O→G→insight→solution chain will not find the audit chain's rationale in the problem statement. Audit tamper-evidence is not listed as a gap (G1–G3).",
+      "suggestion": "Add 'O5: Existing proctoring logs are mutable server-side records; retroactive modification is undetectable' and 'G4: No tamper-evident audit trail for session integrity events' to problem.md. This would ground the HMAC chain in the problem statement and complete the coherence chain."
+    },
+    {
+      "finding_id": "F06",
+      "dimension": "D3_scope_calibration",
+      "severity": "suggestion",
+      "target_file": "logic/claims.md",
+      "target_entity": "C02",
+      "evidence_span": "A privacy-preserving integrity system can assess session integrity through signed, metadata-only device proofs",
+      "observation": "C02's statement is a feasibility claim ('can assess') without a defined quality metric. 'Assess' is vague — it could mean 'produce a signal' or 'achieve 80% sensitivity.' The scope boundary between feasibility and effectiveness is not explicit.",
+      "reasoning": "For a workshop paper this is acceptable, but reviewers may press on what 'assessing integrity' means in practice. Without a quality bound, the claim is unfalsifiable in degree even if falsifiable in existence.",
+      "suggestion": "Add to C02's interpretation: 'Integrity assessment in this work means surfacing anomaly signals for human review, not achieving a defined sensitivity or specificity. Quality of detection is an open empirical question deferred to future work with a real student population.'"
+    },
+    {
+      "finding_id": "F07",
+      "dimension": "D6_methodological_rigor",
+      "severity": "suggestion",
+      "target_file": "logic/experiments.md",
+      "target_entity": "E02",
+      "evidence_span": "**Baselines:** A naive implementation with no schema validation (would pass any proof).",
+      "observation": "The privacy regression baseline (naive no-validation implementation) is appropriate for a conformance test but does not address privacy completeness — i.e., whether the forbidden-field list covers all privacy-sensitive data types that could be collected.",
+      "reasoning": "The forbidden-field list covers 21 named fields. A future daemon could transmit privacy-sensitive data under a field name not in the list. The regression gate checks for known-bad names, not for semantic privacy completeness.",
+      "suggestion": "Note in the paper's privacy audit section that the forbidden-field list protects against known-bad field names and is not a semantic privacy completeness proof. A more complete audit would include fuzzing the daemon to emit novel field names containing sensitive data. This is a limitation worth disclosing."
+    },
+    {
+      "finding_id": "F08",
+      "dimension": "D5_exploration_integrity",
+      "severity": "suggestion",
+      "target_file": "trace/exploration_tree.yaml",
+      "target_entity": "D07_MACOS_SWIFT",
+      "evidence_span": null,
+      "observation": "The exploration tree has no dead-end for the ScreenCaptureKit adaptive-query path on macOS, which was considered (the capability flag screencapturekit_available was added to the proof envelope) but deferred (the adaptive query path was not implemented).",
+      "reasoning": "This is a genuine partial-implementation decision that would enrich the exploration tree and explain why the macOS scanner uses CoreGraphics only despite ScreenCaptureKit being available on macOS 15+.",
+      "suggestion": "Add a dead-end or decision node: 'DEAD04_SCK_ADAPTIVE_QUERY: ScreenCaptureKit adaptive query path — capability flag added, implementation deferred; rationale: SCKit API requires entitlement changes and post-macOS-14 compatibility testing outside research prototype scope.'"
+    }
+  ],
+
+  "questions_for_authors": [
+    "What is the empirical false-positive rate of H02 (affinity_risk override) on normal student machines? System windows with SharingType.none or WDA_MONITOR are common on macOS and Windows — is there a measurement or estimate of how often this fires without a genuine attack present?",
+    "The risk scorer weights (paste_risk: 0.25, affinity_risk: 0.18, etc.) sum to 1.0 but their rationale is design intent, not data. Was any sensitivity analysis done — e.g., what happens to the Critical/Warning split if paste_risk and affinity_risk weights are swapped?",
+    "C01 rests on the Abedini 2026 companion paper. Has any independent party replicated the WDA_EXCLUDEFROMCAPTURE evasion result, or is it a single-lab result? If so, how should reviewers treat C01 while the companion paper is under review?",
+    "The nonce guard has a 5-minute TTL. An exam session might last 3 hours. Is the 5-minute TTL sufficient, or could an attacker capture a proof, wait for TTL expiry, and replay it? (The paper notes session_id + ECDSA binding prevents cross-session replay, but does it prevent same-session same-daemon replay after TTL?)"
+  ],
+
+  "read_order": [
+    "PAPER.md",
+    "logic/claims.md",
+    "logic/experiments.md",
+    "logic/problem.md",
+    "logic/concepts.md",
+    "logic/solution/architecture.md",
+    "logic/solution/algorithm.md",
+    "logic/solution/constraints.md",
+    "logic/solution/heuristics.md",
+    "logic/related_work.md",
+    "trace/exploration_tree.yaml",
+    "evidence/README.md",
+    "evidence/tables/table2_validation_summary.md",
+    "evidence/tables/table3_platform_matrix.md",
+    "evidence/figures/figure2_proof_sequence.md"
+  ]
+}

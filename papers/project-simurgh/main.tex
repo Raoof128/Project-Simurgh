@@ -254,6 +254,8 @@ The instructor dashboard displays risk category breakdowns, event timelines, per
 
 \subsection{Tamper-Evident Audit Chain}
 
+Integrity systems must preserve not only device-state evidence but also the history of verifier decisions. Without a tamper-evident log, a proof verifier could accept, reject, delete, or reorder events after the fact without detection. The HMAC chain therefore protects \textit{review integrity} — the reliability of the audit record presented to a human reviewer — rather than display integrity.
+
 Every state-changing event — telemetry accept, proof accept, proof reject, pairing accept, pairing reject, session state transition, and Claude narrative emission — is written to an HMAC-SHA256-linked audit chain~\cite{rfc2104}. Each entry's \texttt{prev} field contains the HMAC-SHA256 signature of the previous entry, computed over the full JSON serialisation of that entry, making any retroactive modification detectable as a chain-break. The audit chain HMAC key is server-held; it is not shared with the daemon, the browser, or any AI analysis layer.
 
 %% ===================================================================
@@ -483,6 +485,42 @@ The Windows Device Shield was validated on a physical Windows~10 Pro machine (bu
 
 Ubuntu CI validation runs the full Linux Rust test suite under mandatory \texttt{Xvfb} with \texttt{SIMURGH\_REQUIRE\_XVFB\_TESTS=1}. Shellcheck linting enforces all lifecycle scripts. The Wayland probe path is validated via a mock D-Bus environment. Display-server mismatch enforcement is tested via the 16-scenario smoke suite, which includes headless, X11, XWayland, and Wayland-advertised configurations. The CI pipeline rejects any run where Xvfb is missing when the flag is set, preventing false-pass results on headless runners.
 
+\subsection{Browser-Only vs.\ Daemon-Augmented Detection}
+
+Table~\ref{tab:comparison} contrasts the detection capability of a browser-only proctoring approach (relying solely on \texttt{getDisplayMedia()} and DOM events) against Simurgh's daemon-augmented approach across the four window states that motivate this work.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Browser-Only vs.\ Daemon-Augmented Detection}
+\label{tab:comparison}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Scenario} & \textbf{Browser-only} & \textbf{Simurgh (daemon)} \\
+\midrule
+Normal window (no flag) & Visible in capture & No anomaly signal \\
+\texttt{WDA\_MONITOR} window & Black/restricted in capture & \texttt{monitor\_only\_window\_count} $>$ 0 $\Rightarrow$ Warning \\
+\texttt{WDA\_EXCLUDEFROMCAPTURE} & Invisible in capture & \texttt{capture\_excluded\_window\_count} $>$ 0 $\Rightarrow$ Critical \\
+macOS \texttt{SharingType.none} & Invisible in capture & \texttt{capture\_excluded\_window\_count} $>$ 0 $\Rightarrow$ Critical \\
+GPU-layer overlay & Invisible in capture & Not detectable (NC01) \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+The browser-only column illustrates the capture-fidelity failure: excluded windows produce no detectable artefact in \texttt{getDisplayMedia()} output. The daemon column shows that the same windows are detectable through OS metadata APIs accessible to any native process.
+
+\subsection{False-Positive Calibration}
+
+To bound the risk of unwarranted manual-review triggers, we evaluated the risk scorer against 20 synthetic clean sessions representing normal exam behaviour: steady typing (20--95 WPM), occasional focus losses (0--3 blurs), legitimate short pastes (0--78 characters), network reconnects, daemon minor warnings, and helper-slow-to-connect scenarios. No session used an attack overlay, no session had paste $\geq 80$ characters with fewer than 20 typed characters, and no session had \texttt{capture\_excluded\_window\_count} $>$ 0 except one deliberate boundary case.
+
+Results: 19/20 sessions scored Safe (risk score $\leq 19$); 0/20 scored Warning; 0/20 scored Critical from behavioural signals alone. The one Critical case (S11, score = 85) was a deliberate boundary scenario: a macOS system-tray utility window with \texttt{SharingType.none} set by the OS itself (e.g., a screen-sharing or accessibility helper). This is a known limitation of the affinity override (H02): the override fires on \textit{any} excluded window, including legitimate system utilities. The false-positive rate for behavioural signals alone is \textbf{0/19 = 0\%} across these clean sessions; the affinity channel has a non-zero false-positive rate dependent on the mix of system utilities on the student's machine. Institutions deploying Simurgh should conduct platform-specific baselining before production use.
+
+\subsection{Nonce TTL and Replay Safety}
+
+The nonce guard TTL of five minutes might appear to create a replay window: once a nonce expires from the guard, a captured proof could theoretically be re-submitted. This concern is addressed by the 30-second timestamp tolerance (\texttt{TIMESTAMP\_PAST\_MS = 30\,000}): any proof older than 30 seconds is rejected for timestamp staleness before the nonce check is reached. The nonce guard's five-minute TTL is therefore redundant protection beyond the timestamp window — a defense-in-depth design, not a security gap. The device-shield daemon proof path uses server-issued challenges that are consumed on first use, providing independent replay resistance without relying on either nonces or timestamps.
+
 \subsection{LLM-Assisted Development Methodology}
 
 The proof protocol, risk scorer, platform daemon implementations, test suites, and audit gate framework were developed using Claude Code powered by Anthropic's Claude Sonnet~4.6. The LLM was used as an implementation assistant under explicit anti-overclaiming constraints derived from the RESEARCH\_PROGRAMME.md document. All non-claims were manually verified. This disclosure follows the methodology transparency standard established in~\cite{abedini2026invisible}.
@@ -539,6 +577,8 @@ Simurgh is designed explicitly as an evidence-gathering tool for human reviewers
 Project Simurgh is a research prototype at version~0.4.18. It has not been reviewed by any data-protection authority, accessibility auditor, or institutional ethics board beyond the development team's own review process. It has not been piloted with actual students in any live examination context. Institutional deployment would require, at minimum: a formal data-protection impact assessment (FERPA, GDPR, or equivalent); an accessibility review against WCAG~2.2~AA; an external red-team engagement; signed and notarised macOS/Windows distribution packages; and an institutional pilot under ethics oversight.
 
 The system should not be described as production-ready, compliant with any specific framework without naming the assessment, or ready for deployment by universities without the above-listed review processes.
+
+The motivating threat claim (Section~II-A) rests on the companion Invisible Window disclosure~\cite{abedini2026invisible}, which is a Zenodo preprint that has not yet undergone external peer review. Independent replication of the \texttt{WDA\_EXCLUDEFROMCAPTURE} evasion result is pending. Simurgh's defensive architecture is valid conditional on C01; reviewers should assess the companion paper independently.
 
 \subsection{Institutional Review Requirements}
 

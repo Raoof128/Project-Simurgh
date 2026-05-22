@@ -1,0 +1,118 @@
+research_dag:
+  - id: RQ1
+    type: research_question
+    label: "Can screen-capture-based proctoring be structurally defeated by standard-privilege users?"
+    support_level: explicit
+    source_ref: "Section II-A; abedini2026invisible"
+    children:
+      - id: E01_DISPLAY_FIDELITY
+        type: experiment
+        label: "Confirm 100% evasion via WDA_EXCLUDEFROMCAPTURE and SharingType.none"
+        support_level: explicit
+        source_ref: "Section II-A; abedini2026invisible (prior work, not re-run in prototype)"
+        result: "100% evasion, zero visual artefacts, zero DOM events"
+        children:
+          - id: D01_ABANDON_CAPTURE_SURFACE
+            type: decision
+            label: "Abandon screen-capture as trust anchor; move to OS-level metadata"
+            support_level: explicit
+            source_ref: "Section I; Section III-D Goal 1"
+            rationale: "Display fidelity property not satisfiable on any tested platform"
+
+  - id: RQ2
+    type: research_question
+    label: "Can session integrity be assessed through signed OS metadata without collecting content?"
+    support_level: explicit
+    source_ref: "Section I contributions; Section VII"
+    children:
+      - id: D02_METADATA_ONLY_DESIGN
+        type: decision
+        label: "Define forbidden-field schema + privacy audit CI gate"
+        support_level: explicit
+        source_ref: "src/integrity/proofSchema.js:FORBIDDEN_FIELDS; tools/privacy-audit.mjs"
+        rationale: "Architectural enforcement preferred over policy-only constraint"
+        children:
+          - id: E02_PRIVACY_REGRESSION
+            type: experiment
+            label: "Run privacy-audit.mjs and forbidden-field rejection tests"
+            support_level: explicit
+            source_ref: "Section VIII-C; tools/privacy-audit.mjs"
+            result: "All pass as of 2026-05-22"
+
+      - id: D03_HEURISTIC_RISK_SCORER
+        type: decision
+        label: "8-category weighted risk scorer with hard-coded verdict strings"
+        support_level: explicit
+        source_ref: "src/academic/riskScoring.js; Section IV-C"
+        rationale: "Verdict strings must be unconfigurable to prevent automatic misconduct findings"
+        children:
+          - id: DEAD01_CONFIGURABLE_VERDICTS
+            type: dead_end
+            label: "Considered configurable verdict strings"
+            support_level: inferred
+            rationale: "Rejected — any configurability risks suppression of manual-review language"
+
+  - id: RQ3
+    type: research_question
+    label: "Can the proof protocol prevent replay, forgery, and node-switching attacks?"
+    support_level: explicit
+    source_ref: "Section V; Section IX-C"
+    children:
+      - id: D04_E1_TRIPLE_CHECK
+        type: decision
+        label: "E1 = hash check + key match + signature verify, uniform error code"
+        support_level: explicit
+        source_ref: "src/device/daemonProof.js:170-188; Section V-C"
+        rationale: "Uniform error code prevents oracle attacks"
+
+      - id: D05_GLOBAL_NONCE_GUARD
+        type: decision
+        label: "Global nonce guard (not per-session) with 5-minute TTL"
+        support_level: explicit
+        source_ref: "src/integrity/nonceGuard.js"
+        rationale: "Session binding via session_id + ECDSA signature is cryptographically stronger than nonce-guard session isolation"
+        children:
+          - id: DEAD02_PER_SESSION_NONCE
+            type: dead_end
+            label: "Per-session nonce guard considered"
+            support_level: inferred
+            rationale: "Rejected — added coordination complexity without security benefit"
+
+      - id: D06_TWO_CANONICALISERS
+        type: decision
+        label: "Two distinct canonical serialisations: recursive-sort (browser-paired) vs top-level-sort (daemon)"
+        support_level: explicit
+        source_ref: "src/integrity/proofCanonicalise.js; src/device/daemonProof.js:canonicaliseDaemonPayload; Section V-B"
+        rationale: "Browser-paired proof predates device-shield daemon; different envelope structures required different serialisation strategies"
+
+  - id: RQ4
+    type: research_question
+    label: "Can the system be implemented cross-platform under a single verification contract?"
+    support_level: explicit
+    source_ref: "Section VI-D; Section I contribution 2"
+    children:
+      - id: D07_MACOS_SWIFT
+        type: decision
+        label: "macOS daemon in Swift/CryptoKit; key in Keychain"
+        support_level: explicit
+        source_ref: "Section VI-A; tools/simurgh-daemon-macos/"
+
+      - id: D08_WINDOWS_DOTNET_EPHEMERAL
+        type: decision
+        label: "Windows daemon in .NET; ephemeral key (DPAPI deferred)"
+        support_level: explicit
+        source_ref: "Section IV-B; tools/simurgh-daemon-windows/WindowsIdentityStore.cs:18"
+        rationale: "Persistent DPAPI-backed key store deferred to future stage; ephemeral key sufficient for research validation"
+
+      - id: D09_LINUX_RUST_THREE_PATHS
+        type: decision
+        label: "Linux daemon in Rust with three scanner paths: X11, Wayland portal probe, XWayland"
+        support_level: explicit
+        source_ref: "Section VI-C; tools/simurgh-daemon-linux/src/scanner/"
+        children:
+          - id: DEAD03_WAYLAND_SURFACE_ENUM
+            type: dead_end
+            label: "Full Wayland surface enumeration via CreateSession rejected"
+            support_level: explicit
+            source_ref: "Section VI-C; wayland.rs source comment; banned-method grep CI test"
+            rationale: "Requires user consent prompt — violates metadata-only privacy contract"
