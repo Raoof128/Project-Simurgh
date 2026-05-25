@@ -10,6 +10,7 @@ _Detecting UI-redressing and behavioral spoofing without relying on screen captu
 
 [![Stage 1 Checks](https://github.com/Raoof128/Project-Simurgh/actions/workflows/stage-1-checks.yml/badge.svg?branch=main)](https://github.com/Raoof128/Project-Simurgh/actions/workflows/stage-1-checks.yml)
 [![DOI](https://zenodo.org/badge/1227737305.svg)](https://doi.org/10.5281/zenodo.20195198)
+[![Project Simurgh Preprint](https://zenodo.org/badge/DOI/10.5281/zenodo.20374849.svg)](https://doi.org/10.5281/zenodo.20374849)
 [![Node](https://img.shields.io/badge/node-%E2%89%A522.0-1a1a1a?style=flat-square)](https://nodejs.org)
 [![AI Narrative](https://img.shields.io/badge/AI%20narrative-optional-6b1a1a?style=flat-square)](#2-the-simurgh-engine)
 [![License](https://img.shields.io/badge/license-MIT-d6cfbe?style=flat-square)](#13-status-license)
@@ -22,6 +23,16 @@ _Detecting UI-redressing and behavioral spoofing without relying on screen captu
 ![Simurgh — Student exam view with live behavioral verdict and telemetry signature](docs/screenshot.png)
 
 </div>
+
+## Research Paper
+
+Project Simurgh preprint v1.0 is available on Zenodo: **[https://doi.org/10.5281/zenodo.20374849](https://doi.org/10.5281/zenodo.20374849)**
+
+> Abedini, M. R. (2026). *Project Simurgh: Privacy-Preserving Device Integrity Proofs for Capture-Resistant High-Stakes Sessions* (v1.0). Zenodo. https://doi.org/10.5281/zenodo.20374849
+
+The paper presents the threat model, architecture, proof protocol, privacy contract, platform implementations (macOS, Windows, Linux), evaluation results (383 automated tests, real-device Windows validation), limitations, and ethical deployment boundaries. It is a companion to the Invisible Window disclosure paper ([10.5281/zenodo.20319832](https://doi.org/10.5281/zenodo.20319832)).
+
+---
 
 > **Status: Stage 2 Windows Device Shield frozen — tagged `v0.4.13-stage-2-6-2-7-closeout`.** The Windows Device Shield is implemented, real-device validated on Windows 10 Pro build 19045, regression-gated, security-audited (24/24 tests across nine audit dimensions), and frozen as a research-prototype baseline. Stage 2.7 unifies macOS and Windows under one cross-platform proof, scanner, risk, report, dashboard, privacy, and audit contract. Stage 2.8 Linux Display Integrity Research is frozen through `v0.4.16-stage-2-8C-8D-linux-wayland-systemd-ci`. The system remains a research prototype and does not claim production Windows Service deployment, MDM/Intune readiness, hardware attestation, kernel-level visibility, or automatic misconduct detection. It does not collect video, audio, biometric data, typed answer content, pasted content, raw process names, raw window titles, HWNDs, PIDs, usernames, serial numbers, MAC addresses, or personal identity data. See [PRIVACY.md](PRIVACY.md), [ETHICS.md](docs/ETHICS.md), and [DISCLAIMER.md](docs/DISCLAIMER.md).
 
