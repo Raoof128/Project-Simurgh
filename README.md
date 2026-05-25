@@ -34,7 +34,7 @@ The paper presents the threat model, architecture, proof protocol, privacy contr
 
 ---
 
-> **Status: Stage 2 Windows Device Shield frozen — tagged `v0.4.13-stage-2-6-2-7-closeout`.** The Windows Device Shield is implemented, real-device validated on Windows 10 Pro build 19045, regression-gated, security-audited (24/24 tests across nine audit dimensions), and frozen as a research-prototype baseline. Stage 2.7 unifies macOS and Windows under one cross-platform proof, scanner, risk, report, dashboard, privacy, and audit contract. Stage 2.8 Linux Display Integrity Research is frozen through `v0.4.16-stage-2-8C-8D-linux-wayland-systemd-ci`. The system remains a research prototype and does not claim production Windows Service deployment, MDM/Intune readiness, hardware attestation, kernel-level visibility, or automatic misconduct detection. It does not collect video, audio, biometric data, typed answer content, pasted content, raw process names, raw window titles, HWNDs, PIDs, usernames, serial numbers, MAC addresses, or personal identity data. See [PRIVACY.md](PRIVACY.md), [ETHICS.md](docs/ETHICS.md), and [DISCLAIMER.md](docs/DISCLAIMER.md).
+> **Status: Stage 2 complete — current baseline `v0.4.18`.** Windows Device Shield frozen at `v0.4.13-stage-2-6-2-7-closeout` (real-device validated on Windows 10 Pro build 19045, security-audited). Stage 2.7 unifies macOS and Windows under one cross-platform proof contract. Stage 2.8 Linux Display Integrity Research frozen at `v0.4.16-stage-2-8C-8D-linux-wayland-systemd-ci`. Research paper published on Zenodo ([10.5281/zenodo.20374849](https://doi.org/10.5281/zenodo.20374849)). The system remains a research prototype and does not claim production deployment, MDM/Intune readiness, hardware attestation, kernel-level visibility, or automatic misconduct detection. It does not collect video, audio, biometric data, typed answer content, pasted content, raw process names, raw window titles, HWNDs, PIDs, usernames, serial numbers, MAC addresses, or personal identity data. See [PRIVACY.md](PRIVACY.md), [ETHICS.md](docs/ETHICS.md), and [DISCLAIMER.md](docs/DISCLAIMER.md).
 
 ---
 
@@ -81,7 +81,7 @@ The Linux path includes:
 
 ## External Technical Review
 
-Project Simurgh Stage 2 Windows Device Shield (`v0.4.13-stage-2-6-2-7-closeout`) is closed and merged to `main`. It is ready for external technical review.
+Project Simurgh Stage 2 (`v0.4.18`) is closed and merged to `main`. It is ready for external technical review.
 
 The current macOS Device Shield baseline includes:
 
@@ -102,12 +102,12 @@ The current macOS Device Shield baseline includes:
 - recursive rejection of forbidden raw local fields
 - privacy audit and npm audit gates
 
-**Current verification (`v0.4.16-stage-2-8C-8D-linux-wayland-systemd-ci` / branch):**
+**Current verification (`v0.4.18` / `main`):**
 
-- 327/327 Node tests passing
+- 331/331 Node tests passing
 - 33/33 Rust tests passing (`cargo test` with `SIMURGH_REQUIRE_XVFB_TESTS=1`)
 - 11/11 Windows .NET daemon tests passing
-- Swift macOS daemon build/test passing
+- 8/8 macOS Swift daemon tests passing
 - Stage 2.2/2.3 E2E smoke passing
 - Stage 2.4/2.5 E2E smoke passing
 - Stage 2.5 closeout security audit passing
@@ -128,7 +128,7 @@ The project is open for technical review from researchers, engineers, and organi
 - no Windows Service, MDM/Intune, or production endpoint-management claim
 - Linux Stage 2.8C/D research prototype only — no production Linux endpoint deployment, no distro packaging, no system-wide service, no universal Wayland surface enumeration
 
-**Technical brief:** [`docs/STAGE_2_5_TECHNICAL_BRIEF.md`](docs/stages/STAGE_2_5_TECHNICAL_BRIEF.md) — full Stage 1–2.5 architecture, cryptographic detail, privacy contract, validation gates, limitations, and non-claims.
+**Technical brief:** [`docs/stages/STAGE_2_5_TECHNICAL_BRIEF.md`](docs/stages/STAGE_2_5_TECHNICAL_BRIEF.md) — full Stage 1–2.5 architecture, cryptographic detail, privacy contract, validation gates, limitations, and non-claims.
 
 ---
 
@@ -510,7 +510,7 @@ cp .env.example .env
 | `SIMURGH_AUDIT_SECRET`           | Yes\*    | HMAC key for the tamper-evident audit chain. Generate: `openssl rand -hex 32`                 |
 | `SIMURGH_INSTRUCTOR_TOKEN`       | Yes\*    | Bearer token gating the instructor dashboard and SSE stream. Generate: `openssl rand -hex 24` |
 | `SIMURGH_SESSION_SIGNING_SECRET` | Yes\*    | HMAC key for student session tokens. Generate: `openssl rand -hex 32`                         |
-| `SIMURGH_MODEL`                  | No       | Model override. Default: `claude-sonnet-4-5`                                                  |
+| `SIMURGH_MODEL`                  | No       | Model override. Default: `claude-sonnet-4-6`                                                  |
 | `SIMURGH_ALLOWED_ORIGIN`         | No       | CORS origin restriction. Default: `*`                                                         |
 | `SIMURGH_REQUIRE_DAEMON`         | No       | Set `true` for hardened/native-required exams; missing `daemon_proof` is rejected and audited |
 
@@ -726,8 +726,8 @@ Project Simurgh is evolving from a vulnerability demonstration into a comprehens
 - [ ] Formalize the Heuristic Engine using advanced cluster compute.
 - [ ] Red-team the heuristics against next-generation "Computer Use" agentic models.
 - [ ] Publish the open-source Simurgh Integrity API draft for enterprise feedback.
-- [ ] **Windows:** Develop `simurgh-helper-win` using `SetWindowDisplayAffinity` enumeration via Win32 API.
-- [ ] **Linux:** Develop `simurgh-helper-linux` leveraging X11/Wayland compositor introspection.
+- [x] **Windows:** `.NET` daemon (`simurgh-daemon-windows`) with `GetWindowDisplayAffinity` enumeration — real-device validated on Windows 10 Pro build 19045.
+- [x] **Linux:** Rust daemon (`simurgh-daemon-linux`) with X11 scanner, Wayland portal probe, XWayland partial coverage, display-server lock, and Ubuntu CI.
 
 ### Phase 3: The Sovereign Shield — Unified Cross-Platform Release (2027)
 
@@ -779,6 +779,6 @@ Project Simurgh is designed to support two parallel delivery modes per platform 
 
 ## 13. Status & License
 
-**Status:** Research prototype and technical demonstrator. Stage 1 is a bounded research MVP; Stage 1.5 ships validation + reviewer-readiness documentation; Stage 2.1 and 2.2 are merged (macOS integrity proofs + node pairing); Stage 2.3 adds a localhost daemon foundation; Stage 2.4 packages the browser bridge as an SDK and adds development-only daemon lifecycle controls; Stage 2.5 closes the macOS Device Shield loop with metadata-only affinity scanning, E2E smoke gates, and a cybersecurity audit closeout (frozen — v0.4.10). Stage 2.5 is closed and ready for external technical review. Not currently deployed in production. Hardware attestation, production installer lifecycle, notarisation, MDM deployment, and Windows/Linux scanner work remain future work.
+**Status:** Research prototype and technical demonstrator at `v0.4.18`. Stage 1–2.5 closed the macOS Device Shield loop (metadata-only affinity scanning, signed proofs, HMAC audit chain). Stage 2.6/2.7 added the Windows Device Shield (real-device validated on Windows 10 Pro build 19045) and cross-platform unification. Stage 2.8 added the Linux Display Integrity Research path (X11, Wayland portal probe, XWayland, display-server lock, Ubuntu CI). The companion research paper is published as a Zenodo preprint ([10.5281/zenodo.20374849](https://doi.org/10.5281/zenodo.20374849)). Automated validation covers 331 Node.js tests, 33 Rust tests, 11 Windows .NET tests, and 8 macOS Swift tests (383 total). Not deployed in production. Hardware attestation, notarisation, MDM deployment, and institutional pilot remain future work.
 
 **License:** MIT © 2026 Raouf Abedini
