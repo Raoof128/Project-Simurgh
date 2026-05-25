@@ -28,7 +28,7 @@ _Detecting UI-redressing and behavioral spoofing without relying on screen captu
 
 Project Simurgh preprint v1.0 is available on Zenodo: **[https://doi.org/10.5281/zenodo.20374849](https://doi.org/10.5281/zenodo.20374849)**
 
-> Abedini, M. R. (2026). *Project Simurgh: Privacy-Preserving Device Integrity Proofs for Capture-Resistant High-Stakes Sessions* (v1.0). Zenodo. https://doi.org/10.5281/zenodo.20374849
+> Abedini, M. R. (2026). _Project Simurgh: Privacy-Preserving Device Integrity Proofs for Capture-Resistant High-Stakes Sessions_ (v1.0). Zenodo. https://doi.org/10.5281/zenodo.20374849
 
 The paper presents the threat model, architecture, proof protocol, privacy contract, platform implementations (macOS, Windows, Linux), evaluation results (383 automated tests, real-device Windows validation), limitations, and ethical deployment boundaries. It is a companion to the Invisible Window disclosure paper ([10.5281/zenodo.20319832](https://doi.org/10.5281/zenodo.20319832)).
 
