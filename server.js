@@ -64,7 +64,7 @@ if (existsSync(envPath)) {
 }
 
 const PORT = Number(process.env.PORT) || 3030;
-const MODEL = process.env.SIMURGH_MODEL || "claude-sonnet-4-5";
+const MODEL = process.env.SIMURGH_MODEL || "claude-sonnet-4-6";
 
 const apiKey = process.env.ANTHROPIC_API_KEY;
 const DEMO_MODE = process.env.SIMURGH_DEMO_MODE === "1" || !apiKey;
