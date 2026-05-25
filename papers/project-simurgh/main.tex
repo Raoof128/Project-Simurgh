@@ -62,7 +62,7 @@ Project Simurgh is a privacy-preserving integrity architecture for high-stakes A
 
 Simurgh responds by replacing surveillance-first visual monitoring with signed, metadata-only integrity proofs. The system combines browser behavioural telemetry, local device integrity daemons, cryptographic challenge-response proofs (Ed25519 for the browser-paired integrity-proof envelope; ECDSA P-256 for the cross-platform device-shield daemons), native OS metadata scanners, server-side verification, and HMAC-SHA256-linked tamper-evident audit trails. It does not collect screen pixels, webcam frames, microphone audio, typed content, pasted content, raw process names, raw window titles, window handles, process identifiers, or personal device identifiers. Every anomaly is treated as a signal for human review; no automatic misconduct finding is ever produced.
 
-We implement Simurgh as a cross-platform research prototype spanning a Node.js verifier, a browser SDK, and localhost daemons for macOS (Swift/CryptoKit), Windows (.NET), and Linux (Rust). The Windows Device Shield validates detection of \texttt{WDA\_MONITOR} and \texttt{WDA\_EXCLUDEFROMCAPTURE} on Windows~10 Pro build~19045. The Linux research path adds signed daemon proofs, X11 window-state metadata coverage, Wayland portal property probing, XWayland partial coverage, display-server mismatch enforcement, and development systemd user lifecycle support. Automated validation includes 327 Node.js unit tests, 33 Rust tests, 11 Windows .NET tests, 8 macOS Swift tests, end-to-end smoke tests, cybersecurity audits, privacy audits, and CI gates.
+We implement Simurgh as a cross-platform research prototype spanning a Node.js verifier, a browser SDK, and localhost daemons for macOS (Swift/CryptoKit), Windows (.NET), and Linux (Rust). The Windows Device Shield validates detection of \texttt{WDA\_MONITOR} and \texttt{WDA\_EXCLUDEFROMCAPTURE} on Windows~10 Pro build~19045. The Linux research path adds signed daemon proofs, X11 window-state metadata coverage, Wayland portal property probing, XWayland partial coverage, display-server mismatch enforcement, and development systemd user lifecycle support. Automated validation includes 331 Node.js unit tests, 33 Rust tests, 11 Windows .NET tests, 8 macOS Swift tests, end-to-end smoke tests, cybersecurity audits, privacy audits, and CI gates.
 
 This paper presents Simurgh's threat model, architecture, proof protocol, privacy contract, platform implementations, evaluation results, limitations, and ethical deployment boundaries. We argue that capture-resistant integrity systems should verify signed environment metadata rather than collect more invasive surveillance data.
 \end{abstract}
@@ -91,7 +91,7 @@ This paper makes the following contributions:
 
 \item \textbf{OS-level metadata detection without screen capture}: We show that the display-affinity risk class documented in~\cite{abedini2026invisible} can be detected through native OS metadata scanners — capture-exclusion counts on Windows and macOS, window-manager state metadata on Linux — without ever accessing window content, titles, or identifiers.
 
-\item \textbf{Evaluated prototype with manual-review-only decision model}: We evaluate the system through 379 automated tests across four language runtimes (Node.js, Rust, .NET, and Swift), end-to-end smoke tests, cybersecurity and privacy audits, and real-device Windows validation, while preserving the invariant that every anomaly signal requires a human reviewer to reach any integrity conclusion.
+\item \textbf{Evaluated prototype with manual-review-only decision model}: We evaluate the system through 383 automated tests across four language runtimes (Node.js, Rust, .NET, and Swift), end-to-end smoke tests, cybersecurity and privacy audits, and real-device Windows validation, while preserving the invariant that every anomaly signal requires a human reviewer to reach any integrity conclusion.
 \end{itemize}
 
 The remainder of this paper is organised as follows. Section~II motivates the capture-fidelity failure and privacy problems with existing proctoring. Section~III presents the threat model and design goals. Section~IV describes the system architecture. Section~V details the proof protocol. Section~VI covers platform implementations. Section~VII specifies the privacy model. Section~VIII reports the evaluation. Section~IX analyses security properties and remaining attacks. Section~X addresses ethics and deployment limits. Section~XI surveys related work. Section~XII discusses future directions. Section~XIII concludes.
@@ -451,7 +451,7 @@ Table~\ref{tab:eval} summarises the automated validation results across the prot
 \toprule
 \textbf{Suite} & \textbf{Runtime} & \textbf{Result} \\
 \midrule
-Node.js unit tests & Node.js 22 & 327 / 327 pass \\
+Node.js unit tests & Node.js 22 & 331 / 331 pass \\
 Rust daemon tests & Rust stable & 33 / 33 pass \\
 Windows .NET tests & .NET 8 & 11 / 11 pass \\
 macOS Swift daemon tests & Swift/Xcode & 8 / 8 pass \\

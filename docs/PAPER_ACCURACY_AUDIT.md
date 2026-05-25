@@ -1,10 +1,10 @@
 # Project Simurgh Paper Accuracy Audit
 
 **Auditor:** Claude Sonnet 4.6 (senior security-research engineer role).
-**Audit date:** 2026-05-22.
-**Source under audit:** `papers/project-simurgh/main.tex` (current working tree, commit `4e56548`).
-**Verification basis:** live source tree, `npm test` run on 2026-05-22, file-by-file grep across all cited source files.
-**Prior audit superseded:** 2026-05-22 audit by Claude Opus (commit `f96776a`). This is a fresh, independent full re-audit.
+**Audit date:** 2026-05-25 (this pass); prior full audit 2026-05-22.
+**Source under audit:** `papers/project-simurgh/main.tex` (current working tree, commit `356543e`).
+**Verification basis:** live source tree, `npm test` run on 2026-05-25 (331/331 pass), file-by-file grep across all cited source files.
+**Prior audit superseded:** 2026-05-22 audit by Claude Sonnet 4.6. This is a re-verification pass after repository reorganisation and regression-test additions.
 
 ---
 
@@ -12,9 +12,11 @@
 
 The paper is accurate in its architecture, cryptographic algorithm choices, platform claims, privacy boundary, and non-claims posture. All validation numbers (327 Node, 33 Rust, 11 .NET, 8 Swift, 379 total, 16 Linux smoke, 30 Linux security assertions, 10/10 internal audit) re-verify against the live codebase on this pass.
 
-Three genuine issues remain after the prior audit's fixes: (1) Section IV-B bullet 3 uses the word "nonce" for the device-shield daemon proof envelope, but that envelope uses "challenge" — the correct term appears in Section V-B but the inconsistency in IV-B is a verifiable CONTRADICTION against the source; (2) Section V-D states "Each session maintains a nonce guard" and describes per-session nonce storage, but the implementation is a global store (not per-session) with a 5-minute TTL — NEEDS NARROWING; (3) Section V-B states that `proofCanonicalise.js` is "the same canonicalisation implemented in the Swift and Rust daemons," but `canonical_json.rs` implements a different canonicalisation (top-level key sort only) used for the daemon proof, while `proofCanonicalise.js` implements a recursive key sort used for the browser-paired proof — NEEDS NARROWING.
+All three issues identified in the 2026-05-22 audit are now correctly applied and verified: (1) Section IV-B bullet 3 now uses "challenge" for the device-shield daemon proof envelope; (2) Section V-D now reads "A global nonce guard …" (not per-session); (3) Section V-B now explicitly describes two distinct canonical serialisations.
 
-All other prior required edits (macOS scanner mask, ScreenCaptureKit claim, event-type count, Windows identity ephemerality, version number) are correctly applied and verified. The paper is ready for Zenodo / arXiv preprint after the three items above are addressed.
+One new issue found and fixed in this pass: the Node.js test count was stale (327→331) following addition of the 4-test `nonceGuardTtlReplay.test.js` regression suite. The total test count was updated accordingly (379→383) in the abstract, contribution bullet, and Table II. All claims now verify against the live codebase.
+
+**The paper is accurate and ready for submission.**
 
 ---
 
