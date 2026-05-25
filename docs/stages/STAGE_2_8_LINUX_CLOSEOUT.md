@@ -8,6 +8,8 @@ It does not claim production Linux endpoint deployment, distro packaging, system
 
 **Release tag:** `v0.4.16-stage-2-8C-8D-linux-wayland-systemd-ci`
 
+> **Current baseline note (2026-05-25):** Gate counts in this document reflect the Stage 2.8 frozen state. The current Node.js test count is **331** (4 regression tests added in the Stage 2.9 methodology upgrade). All other counts are unchanged.
+
 ---
 
 ## 2. Release Covered

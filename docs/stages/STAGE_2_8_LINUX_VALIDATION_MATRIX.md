@@ -2,6 +2,8 @@
 
 Frozen baseline: `v0.4.16-stage-2-8C-8D-linux-wayland-systemd-ci`
 
+> **Current baseline note (2026-05-25):** All counts in this matrix reflect the Stage 2.8 frozen state. The current Node.js test count is **331** (4 regression tests added in the Stage 2.9 methodology upgrade: `tests/unit/nonceGuardTtlReplay.test.js`). All other counts are unchanged.
+
 ---
 
 ## 1. Build and Test Gates

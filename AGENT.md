@@ -2,6 +2,23 @@
 
 ## Agent Change Log
 
+### 2026-05-25 (Australia/Sydney) — Paper accuracy audit + test-count sync + PDF rebuild
+
+**Raouf:**
+
+- **Scope:** Full paper accuracy re-audit, sync stale test counts in paper and repo docs, add Zenodo preprint version note, rebuild main.pdf.
+- **Findings:** All three required edits from the 2026-05-22 audit (IV-B nonce→challenge, V-D global nonce guard, V-B dual canonicaliser) confirmed applied. One new finding: Node.js test count was stale (327→331) following the nonceGuardTtlReplay regression suite added in the methodology upgrade session. Updated in paper (abstract, contribution bullet, Table II), AGENT.md, Stage 2.8 closeout docs, and PAPER_ACCURACY_AUDIT.md.
+- **Files changed:**
+  - `papers/project-simurgh/main.tex` — test counts updated (327→331, 379→383); Zenodo preprint version note added to \thanks
+  - `papers/project-simurgh/main.pdf` — rebuilt (12 pages, 0 errors)
+  - `AGENT.md` — methodology upgrade entry corrected (327→331); this entry added
+  - `docs/PAPER_ACCURACY_AUDIT.md` — updated to 2026-05-25 pass, table rows corrected
+  - `docs/stages/STAGE_2_8_LINUX_VALIDATION_MATRIX.md` — current baseline note added
+  - `docs/stages/STAGE_2_8_LINUX_CLOSEOUT.md` — current baseline note added
+  - `docs/stages/STAGE_2_8_LINUX_REVIEWER_CHECKLIST.md` — current baseline note added
+- **Verification:** 331/331 Node, 33/33 Rust, 53/53 scripts/check.sh (non-Rust gates), privacy audit pass, PDF compiles clean.
+- **Non-claims preserved:** Research prototype only. No production deployment, no automatic misconduct finding, no GPU overlay detection, no hardware attestation. Paper explicitly states preprint/prototype status.
+
 ### 2026-05-21 (Australia/Sydney) — Paper: Project Simurgh research paper initial draft
 
 **Raouf:**
@@ -52,7 +69,7 @@
   - `PRIVACY.md` — last-updated date refreshed
   - `ROADMAP.md` — Stage 2.8 status and next-step updated
   - `scripts/check.sh` — doc-grep safety gate added (gate 53)
-- **Verification:** 327/327 Node, 33/33 Rust, 53/53 scripts/check.sh, privacy audit pass, cargo fmt/clippy clean.
+- **Verification:** 331/331 Node, 33/33 Rust, 53/53 scripts/check.sh, privacy audit pass, cargo fmt/clippy clean.
 - **Non-claims preserved:** Research prototype only. No production Linux endpoint deployment, no distro packaging, no system-wide service, no MDM, no hardware attestation, no kernel-level visibility, no universal Wayland surface enumeration, no GPU overlay detection, no automatic misconduct detection.
 
 ### 2026-05-17 (Australia/Sydney) — Post-Merge Fixes: CI Rerun, Tag Release, Issue Updates

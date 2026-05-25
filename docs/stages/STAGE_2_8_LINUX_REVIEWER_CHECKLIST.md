@@ -2,6 +2,8 @@
 
 This checklist is the normative review gate for the Stage 2.8 Linux Wayland/systemd release of Project Simurgh. Every item must be marked before the release is considered reviewer-approved.
 
+> **Current baseline note (2026-05-25):** This checklist was written against the Stage 2.8 frozen baseline (`v0.4.16`). The current Node.js test count is **331** (item 1 below reflects the Stage 2.8 freeze count of 327; use 331 for post-Stage 2.9 verification).
+
 ## 1. Release Gates
 
 - [ ] Node test suite reports exactly 327/327 passing
