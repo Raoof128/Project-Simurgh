@@ -2,13 +2,13 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Build the MQ Persian Society voting pilot as an isolated `src/votingPilot/` module with atomic consent gate, ballot-choice blindness, tiered daemon model, and deterministic HTTP-level synthetic persona runner.
+**Goal:** Build the MQ Persian Society voting pilot as an isolated `src/votingPilot/` module with atomic consent gate, ballot-choice blindness, browser-only integrity tier (v0.1 — daemon tier planned for v0.2), and deterministic HTTP-level synthetic persona runner.
 
 **Architecture:** A self-contained Express sub-router mounted at `/api/voting-pilot` reuses Simurgh's existing session-token, HMAC audit-chain, and proof-verification infrastructure without touching any exam-lifecycle code. All voting-pilot-specific state lives in an in-memory `consentStore`. A persona script drives synthetic sessions via plain HTTP fetch.
 
 **Tech Stack:** Node.js ESM, `node:test` + `node:assert/strict`, Express router, `node:crypto` (HMAC-SHA256), existing `src/audit/hmacChain.js`, `src/security/sessionToken.js`.
 
-**Env vars to add to `.env`:**
+**Env vars to add to `.env.example`** (never commit real values to `.env`):
 - `SIMURGH_VOTING_PILOT_PEPPER` — HMAC key for participant-code hashing and audit chain
 - `SIMURGH_VOTING_PILOT_TOKEN_SECRET` — signing key for pilot session tokens
 
@@ -26,7 +26,7 @@
 | Create | `tests/unit/votingPilot/reportBuilder.test.js` | Unit tests for reportBuilder |
 | Create | `tests/unit/votingPilot/router.test.js` | HTTP integration tests for all 4 routes |
 | Modify | `server.js` | Add one mount line |
-| Modify | `.env` | Add PEPPER + TOKEN_SECRET |
+| Modify | `.env.example` | Document PEPPER + TOKEN_SECRET (never commit real `.env`) |
 | Create | `public/voting-pilot.html` | Consent landing page |
 | Create | `public/voting-pilot-submit.html` | Mock ballot + submit page |
 | Modify | `tools/privacy-audit.mjs` | Add voting-pilot forbidden-key scan |
@@ -520,14 +520,17 @@ describe("POST /withdraw", () => {
 });
 
 describe("GET /:sessionId/report", () => {
-  test("returns 200 with full report for submitted session", async () => {
+  test("returns 200 with full report for submitted session (token required)", async () => {
     const { body: consent } = await postJson("/consent/accept", {});
     await postJson(
       "/submit",
       { pilot_session_id: consent.pilot_session_id, submit_intent: true },
       { Authorization: `Bearer ${consent.token}` }
     );
-    const { status, body } = await getJson(`/${consent.pilot_session_id}/report`);
+    const { status, body } = await getJson(
+      `/${consent.pilot_session_id}/report`,
+      { Authorization: `Bearer ${consent.token}` }
+    );
     assert.equal(status, 200);
     assert.equal(body.schema_version, "2026-05-v1");
     assert.equal(body.official_vote_impact, false);
@@ -535,16 +538,30 @@ describe("GET /:sessionId/report", () => {
     assert.equal(body.audit.chain_valid, true);
   });
 
+  test("returns 401 without token", async () => {
+    const { body: consent } = await postJson("/consent/accept", {});
+    const { status } = await getJson(`/${consent.pilot_session_id}/report`);
+    assert.equal(status, 401);
+  });
+
   test("returns 403 for withdrawn session", async () => {
     const { body: consent } = await postJson("/consent/accept", {});
     await postJson("/withdraw", {}, { Authorization: `Bearer ${consent.token}` });
-    const { status } = await getJson(`/${consent.pilot_session_id}/report`);
+    const { status } = await getJson(
+      `/${consent.pilot_session_id}/report`,
+      { Authorization: `Bearer ${consent.token}` }
+    );
     assert.equal(status, 403);
   });
 
-  test("returns 404 for unknown session id", async () => {
-    const { status } = await getJson("/vp_nonexistent/report");
-    assert.equal(status, 404);
+  test("returns 403 when token session does not match path session", async () => {
+    const { body: c1 } = await postJson("/consent/accept", {});
+    const { body: c2 } = await postJson("/consent/accept", {});
+    const { status } = await getJson(
+      `/${c2.pilot_session_id}/report`,
+      { Authorization: `Bearer ${c1.token}` }
+    );
+    assert.equal(status, 403);
   });
 });
 ```
@@ -634,6 +651,12 @@ router.post("/consent/accept", (req, res) => {
 // POST /submit — submit intent only; forbidden ballot fields rejected
 router.post("/submit", requirePilotToken, (req, res) => {
   const body = req.body ?? {};
+
+  // Enforce that body.pilot_session_id matches the token's session ID
+  if (body.pilot_session_id && body.pilot_session_id !== req.pilotSessionId) {
+    return res.status(409).json({ error: "session_token_body_mismatch" });
+  }
+
   const forbidden = Object.keys(body).filter((k) => FORBIDDEN_BALLOT_FIELDS.has(k));
   if (forbidden.length > 0) {
     const record = store.get(req.pilotSessionId);
@@ -680,8 +703,12 @@ router.post("/withdraw", requirePilotToken, (req, res) => {
   res.json({ withdrawn: true, withdrawn_at: record.withdrawn_at });
 });
 
-// GET /:sessionId/report — blocked for withdrawn sessions
-router.get("/:sessionId/report", (req, res) => {
+// GET /:sessionId/report — requires pilot token; blocked for withdrawn sessions
+router.get("/:sessionId/report", requirePilotToken, (req, res) => {
+  // Token must match the session being requested
+  if (req.pilotSessionId !== req.params.sessionId) {
+    return res.status(403).json({ error: "session_token_mismatch" });
+  }
   const record = store.get(req.params.sessionId);
   if (!record) return res.status(404).json({ error: "session_not_found" });
   if (record.withdrawn) return res.status(403).json({ error: "report_blocked_session_withdrawn" });
@@ -706,7 +733,7 @@ export default router;
 node --test tests/unit/votingPilot/router.test.js
 ```
 
-Expected: all 10 tests pass.
+Expected: all 13 tests pass.
 
 - [ ] **Step 4.5: Commit**
 
@@ -723,13 +750,19 @@ git commit -m "feat(voting-pilot): add Express router with 4 routes and integrat
 - Modify: `server.js`
 - Modify: `.env`
 
-- [ ] **Step 5.1: Add env vars to .env**
+- [ ] **Step 5.1: Add env vars to .env.example — never commit real .env**
 
-Add these two lines to `.env` (use strong random values in real use):
+Add these two lines to `.env.example`:
 
 ```env
 SIMURGH_VOTING_PILOT_PEPPER=replace-with-32-char-random-secret
 SIMURGH_VOTING_PILOT_TOKEN_SECRET=replace-with-32-char-random-secret
+```
+
+Then add real values to your local `.env` file (which is gitignored). Generate secrets with:
+
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
 
 - [ ] **Step 5.2: Add import and mount to server.js**
@@ -757,8 +790,8 @@ Expected: all existing tests plus the 3 new voting-pilot test files pass. Zero f
 - [ ] **Step 5.4: Commit**
 
 ```bash
-git add server.js .env
-git commit -m "feat(voting-pilot): mount voting pilot router in server.js"
+git add server.js .env.example
+git commit -m "feat(voting-pilot): mount voting pilot router and document env vars"
 ```
 
 ---
@@ -966,8 +999,9 @@ let votingPilotViolations = 0;
 for (const key of VOTING_PILOT_FORBIDDEN_KEYS) {
   // Only flag exact key matches in JSON exports, not substrings inside allowed patterns
   const pattern = new RegExp(`"${key}"\\s*:`, "g");
-  // Scan src/votingPilot and any evidence exports
-  const auditTargets = ["src/votingPilot", "docs/research/mq-voting-pilot/evidence"];
+  // Scan only evidence exports — NOT src/votingPilot source, which intentionally
+  // declares these keys as constant names (not persisted values).
+  const auditTargets = ["docs/research/mq-voting-pilot/evidence"];
   for (const target of auditTargets) {
     if (!existsSync(target)) continue;
     const matches = grepDir(target, pattern); // use existing grepDir helper if present, else implement inline
@@ -1030,6 +1064,19 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
 
 // ── CLI args ─────────────────────────────────────────────────────────────────
+// ── Persona list — defined BEFORE CLI validation so error message can reference it ──
+const PERSONAS = [
+  "compliant_browser_only",
+  "compliant_with_fixture_daemon",
+  "distracted_member",
+  "daemon_unavailable",
+  "replay_attempt",
+  "tampered_proof",
+  "withdraws_midway",
+  "declines_consent",
+  "forbidden_ballot_field_attempt",
+];
+
 const args = Object.fromEntries(
   process.argv
     .slice(2)
@@ -1072,24 +1119,14 @@ async function post(path, body = {}, token = null) {
   return { status: res.status, body: await res.json() };
 }
 
-async function get(path) {
-  const res = await fetch(`${BASE_URL}/api/voting-pilot${path}`);
+async function get(path, token = null) {
+  const headers = token ? { Authorization: `Bearer ${token}` } : {};
+  const res = await fetch(`${BASE_URL}/api/voting-pilot${path}`, { headers });
   return { status: res.status, body: await res.json() };
 }
 
-// ── Persona definitions ───────────────────────────────────────────────────────
-const PERSONAS = [
-  "compliant_browser_only",
-  "compliant_with_real_daemon",
-  "compliant_with_fixture_daemon",
-  "distracted_member",
-  "daemon_unavailable",
-  "replay_attempt",
-  "tampered_proof",
-  "withdraws_midway",
-  "declines_consent",
-  "forbidden_ballot_field_attempt",
-];
+// ── Persona runner ────────────────────────────────────────────────────────────
+// (PERSONAS defined above at module top)
 
 async function runPersona(persona, seed) {
   const steps = [];
@@ -1196,10 +1233,10 @@ async function runPersona(persona, seed) {
     step("submit_browser_only", submit.status === 200 ? "pass" : "fail", submit.status);
     if (submit.status !== 200) assertion = "FAIL";
   } else {
-    // compliant_browser_only, compliant_with_real_daemon, compliant_with_fixture_daemon
-    if (persona.includes("daemon")) {
-      step("daemon_probe", "pass");
-      step("note_daemon_is_fixture_or_real", "pass", null, { note: "Daemon proof validation is out of scope for HTTP-level persona runner. Mark as fixture." });
+    // compliant_browser_only, compliant_with_fixture_daemon
+    // Note: real daemon tier is planned for v0.2; fixture persona is labelled synthetic
+    if (persona.includes("fixture_daemon")) {
+      step("daemon_probe_fixture", "pass", null, { note: "Fixture daemon — proof validation out of scope for HTTP-level runner. Labelled synthetic." });
     }
     const submit = await post("/submit", { pilot_session_id: sessionId, submit_intent: true }, token);
     step("submit", submit.status === 200 ? "pass" : "fail", submit.status);
@@ -1209,7 +1246,7 @@ async function runPersona(persona, seed) {
   // Fetch report (if not withdrawn)
   let reportSummary = null;
   if (sessionId && persona !== "withdraws_midway") {
-    const report = await get(`/${sessionId}/report`);
+    const report = await get(`/${sessionId}/report`, token);
     if (report.status === 200) {
       step("fetch_report", "pass", 200);
       reportSummary = {
@@ -1454,7 +1491,7 @@ Research data is accessible to the principal researcher only. No third-party sha
 | S3 | Request report for withdrawn session | 403 | High |
 | S4 | Request without pilot token | 401 | High |
 | S5 | Double withdrawal | 409 | Medium |
-| S6 | Oversized payload | Reject | Medium |
+| S6 | Token session ID does not match path session ID | 403 | High |
 
 ## Privacy tests
 
@@ -1548,8 +1585,8 @@ R2=$(curl -sf -X POST "$BASE/api/voting-pilot/submit" \
 echo "$R2" | grep -q '"ballot_submitted":true' && ok "submit returns ballot_submitted true" || fail "submit bad response"
 echo "$R2" | grep -q '"ballot_choice_recorded_by_simurgh":false' && ok "submit has ballot_choice_recorded_by_simurgh false" || fail "submit missing privacy field"
 
-# Gate 3: report returns valid JSON with chain_valid
-R3=$(curl -sf "$BASE/api/voting-pilot/$SESSION_ID/report")
+# Gate 3: report returns valid JSON with chain_valid (token required)
+R3=$(curl -sf -H "Authorization: Bearer $TOKEN" "$BASE/api/voting-pilot/$SESSION_ID/report")
 echo "$R3" | grep -q '"chain_valid":true' && ok "report chain_valid true" || fail "report chain not valid"
 echo "$R3" | grep -q '"official_vote_impact":false' && ok "report official_vote_impact false" || fail "report vote impact field missing"
 
@@ -1565,7 +1602,8 @@ WD_TOKEN=$(echo "$R5" | grep -o '"token":"[^"]*"' | cut -d'"' -f4)
 curl -sf -X POST "$BASE/api/voting-pilot/withdraw" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $WD_TOKEN" -d '{}' > /dev/null
-WD_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/api/voting-pilot/$WD_SESSION/report")
+WD_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+  -H "Authorization: Bearer $WD_TOKEN" "$BASE/api/voting-pilot/$WD_SESSION/report")
 [[ "$WD_STATUS" == "403" ]] && ok "withdrawal blocks report with 403" || fail "withdrawal report status: $WD_STATUS"
 
 echo ""
@@ -1625,14 +1663,25 @@ curl -sf -X POST "$BASE/api/voting-pilot/withdraw" \
 S4=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/api/voting-pilot/$SID4/report")
 [[ "$S4" == "403" ]] && ok "withdrawn session report → 403" || fail "withdrawn report status: $S4"
 
-# S5: Unknown session → 404 on report
-S5=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/api/voting-pilot/vp_nonexistent/report")
-[[ "$S5" == "404" ]] && ok "unknown session → 404" || fail "unknown session status: $S5"
+# S5: Report without token → 401
+S5=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/api/voting-pilot/$SID/report")
+[[ "$S5" == "401" ]] && ok "report without token → 401" || fail "report without token status: $S5"
 
-# S6: Decline path — verify no record created
-# (Decline happens client-side; verify server has no record for a fabricated id)
-S6=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/api/voting-pilot/vp_fabricated_decline/report")
-[[ "$S6" == "404" ]] && ok "decline path: fabricated id → 404, no server record" || fail "decline path status: $S6"
+# S6: Token/path session mismatch → 403
+R6A=$(curl -sf -X POST "$BASE/api/voting-pilot/consent/accept" \
+  -H "Content-Type: application/json" -d '{}')
+R6B=$(curl -sf -X POST "$BASE/api/voting-pilot/consent/accept" \
+  -H "Content-Type: application/json" -d '{}')
+SID6A=$(echo "$R6A" | grep -o '"pilot_session_id":"[^"]*"' | cut -d'"' -f4)
+SID6B=$(echo "$R6B" | grep -o '"pilot_session_id":"[^"]*"' | cut -d'"' -f4)
+TOK6A=$(echo "$R6A" | grep -o '"token":"[^"]*"' | cut -d'"' -f4)
+S6=$(curl -s -o /dev/null -w "%{http_code}" \
+  -H "Authorization: Bearer $TOK6A" "$BASE/api/voting-pilot/$SID6B/report")
+[[ "$S6" == "403" ]] && ok "cross-session report → 403" || fail "cross-session report status: $S6"
+
+# S7: Decline path — verify no record created (fabricated id returns 401 without token, 404 with valid token of other session)
+S7=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/api/voting-pilot/vp_fabricated_decline/report")
+[[ "$S7" == "401" ]] && ok "decline path: no token → 401" || fail "decline path status: $S7"
 
 # S7: Double withdrawal → 409
 R7=$(curl -sf -X POST "$BASE/api/voting-pilot/consent/accept" \
@@ -1706,7 +1755,7 @@ bash scripts/smoke-voting-pilot.sh 2>&1 > docs/research/mq-voting-pilot/evidence
 bash scripts/security-audit-voting-pilot.sh 2>&1 > docs/research/mq-voting-pilot/evidence/pre-pilot/security-audit-voting-pilot.txt
 ```
 
-- [ ] **Step 11.3: Run all 10 synthetic personas**
+- [ ] **Step 11.3: Run all 9 synthetic personas**
 
 ```bash
 node tools/voting-pilot-persona.mjs --persona compliant_browser_only --seed 101 --fixed-clock 2026-05-28T10:00:00.000Z
@@ -1721,6 +1770,7 @@ node tools/voting-pilot-persona.mjs --persona forbidden_ballot_field_attempt --s
 ```
 
 Expected: all 9 assert PASS. JSON files written to `evidence/synthetic/`.
+Note: `compliant_with_real_daemon` is deferred to v0.2 when the `/device-proof` route is implemented.
 
 - [ ] **Step 11.4: Commit evidence and close the branch**
 
@@ -1743,5 +1793,12 @@ git commit -m "evidence(voting-pilot): capture pre-pilot gates and 9 synthetic p
 - [x] `verifyChain` called with `record._hmacKey` → Task 3 reportBuilder
 - [x] `extractBearer(req)` (full req object) → Task 4 router
 - [x] `verifySessionToken` returns `sessionId` (not `sid`) → Task 4 router
+- [x] `.env` never committed — `.env.example` only → Task 5
+- [x] Token/body session ID mismatch → 409 in `/submit` → Task 4 router
+- [x] Report route requires pilot token + path/token match → Task 4 router + tests
+- [x] `PERSONAS` declared before CLI validation block → Task 8 persona engine
+- [x] 9 personas (not 10 — `compliant_with_real_daemon` deferred to v0.2) → Task 11
+- [x] S6 in experiment matrix = token/path mismatch test (not oversized payload) → Task 9 + Task 10
+- [x] Privacy audit scans evidence JSON only, not source constants → Task 7
 - [x] Research docs (5 files) → Task 9
 - [x] HTML pages (ballot choice discarded before POST, honest confirmation wording) → Task 6
