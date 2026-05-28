@@ -33,6 +33,7 @@ import {
   extractBearer,
 } from "./src/security/sessionToken.js";
 import { createReplayGuard } from "./src/security/replayGuard.js";
+import votingPilotRouter from "./src/votingPilot/index.js";
 import {
   createRateLimiter,
   keyByIp,
@@ -473,6 +474,7 @@ app.use((req, res, next) => {
 });
 
 app.use(express.static(join(__dirname, "public")));
+app.use("/api/voting-pilot", votingPilotRouter);
 
 // Instructor route — serves the page only when a valid token is supplied,
 // or in DEMO_MODE. The page reads the token from location.search and reuses
