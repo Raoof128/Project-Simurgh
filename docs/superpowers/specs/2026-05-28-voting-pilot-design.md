@@ -55,7 +55,7 @@ These categories must not be mixed. Each session carries a `data_source` field.
 
 ```
 src/votingPilot/
-  index.js          ← Express router; five routes
+  index.js          ← Express router; four API routes
   consentStore.js   ← In-memory consent records; no PII
   reportBuilder.js  ← Assembles pilot report JSON
   events.js         ← Namespaced event constants
@@ -126,7 +126,6 @@ VOTING_PILOT_REPORT_EXPORTED
 BALLOT_FIELD_REJECTED
 ```
 
-`VOTING_PILOT_CONSENT_DECLINED` is reserved in `events.js` but not emitted to the application layer.
 
 ---
 
@@ -167,7 +166,7 @@ No pilot session, telemetry, participant code, device proof, audit chain entry, 
 ```json
 {
   "pilot_session_id": "vp_<uuid>",
-  "participant_code_hash": "sha256(PEPPER + anonymous_code)",
+  "participant_code_hash": "hmac-sha256:<hex>",
   "consent_version": "2026-05-v1",
   "accepted": true,
   "accepted_at": "<ISO timestamp — server-generated>",
@@ -177,7 +176,7 @@ No pilot session, telemetry, participant code, device proof, audit chain entry, 
 }
 ```
 
-`participant_code_hash` uses a server-side pepper (`SIMURGH_VOTING_PILOT_PEPPER`). The raw anonymous code is shown once to the participant and never stored by Simurgh.
+`participant_code_hash = HMAC-SHA256(SIMURGH_VOTING_PILOT_PEPPER, anonymous_code)`. The raw anonymous code is shown once to the participant and never stored by Simurgh.
 
 ### 4.4 Never stored (any path)
 
@@ -483,3 +482,4 @@ Before any human participant sessions:
 - Written executive approval obtained
 - MQ Human Research Ethics application submitted and approved (if publishing participant data)
 - Consent page version locked and dated
+- Synthetic and participant artefacts retained only for the approved research period and deleted according to the MQ ethics-approved data management plan
