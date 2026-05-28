@@ -288,3 +288,147 @@ unsafe dynamic HTML sink found outside reviewed dashboard/student render paths
 ✓ Stage 2.8C/2.8D Linux Wayland + systemd + CI smoke
 
 ━━━ Stage 2.8C/2.8D Linux cybersecurity audit ━━━
+✗ Stage 2.8C/2.8D Linux cybersecurity audit
+Stage 2.8C/D Linux Wayland + systemd + CI cybersecurity audit
+  [1/5] Stage 2.8A/B audit (no regression)
+Stage 2.8A + 2.8B Linux cybersecurity audit
+  [1/4] Stage 2.6/2.7 closeout cybersecurity audit (no regression)
+Stage 2.6/2.7 closeout cybersecurity audit
+  [1/5] Stage 2.4/2.5 cybersecurity audit
+[0/1] Planning build
+Building for debugging...
+[0/4] Write swift-version--58304C5D6DBC2206.txt
+Build complete! (0.13s)
+Another instance of SwiftPM (PID: 39272) is already running using '/Users/raoof.r12/Desktop/Raouf/Project-Simurgh/tools/simurgh-daemon-macos/.build', waiting until that process has finished execution...Building for debugging...
+[0/3] Write swift-version--58304C5D6DBC2206.txt
+Build of product 'SimurghDaemon' complete! (0.11s)
+unsafe dynamic HTML sink found outside reviewed dashboard/student render paths
+
+━━━ Linux Rust daemon fmt + clippy + test (Xvfb mandatory in CI) ━━━
+✗ Linux Rust daemon fmt/clippy/test
+test post_to_get_only_endpoint_is_rejected ... ok
+test health_endpoint_returns_ok_without_display_env ... ok
+test status_endpoint_returns_scanner_unavailable_when_headless ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/non_local_display_tests.rs (tools/simurgh-daemon-linux/target/debug/deps/non_local_display_tests-5efed6890d33e8e1)
+
+running 4 tests
+test local_display_colon_zero_allowed ... ok
+test local_unix_display_allowed ... ok
+test remote_hostname_display_refused ... ok
+test remote_ip_display_refused ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/proof_endpoint_tests.rs (tools/simurgh-daemon-linux/target/debug/deps/proof_endpoint_tests-2977a595544299c5)
+
+running 3 tests
+test post_proof_timestamp_is_within_seconds_of_now_utc ... ok
+test post_proof_returns_ok_envelope_matching_sdk_contract ... ok
+test post_proof_carries_xwayland_window_count_field_in_signed_payload ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running tests/proof_tests.rs (tools/simurgh-daemon-linux/target/debug/deps/proof_tests-6a6e3af3c15a4c6b)
+
+running 4 tests
+test canonicalise_sorts_keys_and_excludes_signature ... ok
+test identity_file_created_with_0600_permissions ... ok
+test identity_is_stable_across_loads ... ok
+test build_proof_signature_verifies_against_canonical_payload ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/session_detector_tests.rs (tools/simurgh-daemon-linux/target/debug/deps/session_detector_tests-1371aa2fe14ed1b4)
+
+running 4 tests
+test headless_when_no_env_is_set ... ok
+test wayland_when_wayland_display_set ... ok
+test x11_when_display_set ... ok
+test xwayland_when_wayland_and_display_both_set ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/wayland_scanner_tests.rs (tools/simurgh-daemon-linux/target/debug/deps/wayland_scanner_tests-030b69dfbf7aef6c)
+
+running 6 tests
+test wayland_summary_advertised_only_emits_compositor_restricted ... ok
+test wayland_summary_probe_unavailable_emits_portal_active_probe_unavailable ... ok
+test wayland_summary_not_advertised_emits_compositor_unsupported ... ok
+test wayland_summary_active_emits_portal_available_state ... ok
+test wayland_summary_emits_zero_counts ... ok
+test wayland_rs_never_references_consent_triggering_methods ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/x11_scanner_tests.rs (tools/simurgh-daemon-linux/target/debug/deps/x11_scanner_tests-ca045068dc565acb)
+
+running 2 tests
+test raw_to_summary_returns_counts_only_no_raw_fields ... ok
+test raw_to_summary_with_override_redirect_does_not_change_state_alone ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/xvfb_integration_tests.rs (tools/simurgh-daemon-linux/target/debug/deps/xvfb_integration_tests-db10269d8877eed8)
+
+running 4 tests
+test scan_returns_scanner_unavailable_when_display_invalid ... ok
+test scan_counts_override_redirect_root_children ... FAILED
+test scan_counts_managed_above_and_fullscreen_windows ... FAILED
+test scan_returns_summary_against_empty_xvfb_root ... FAILED
+
+failures:
+
+---- scan_counts_override_redirect_root_children stdout ----
+
+thread 'scan_counts_override_redirect_root_children' (14815291) panicked at tests/xvfb_integration_tests.rs:182:13:
+SIMURGH_REQUIRE_XVFB_TESTS is set but Xvfb is not installed — install xvfb + x11-utils + dbus-x11 in CI
+
+---- scan_counts_managed_above_and_fullscreen_windows stdout ----
+
+thread 'scan_counts_managed_above_and_fullscreen_windows' (14815290) panicked at tests/xvfb_integration_tests.rs:87:13:
+SIMURGH_REQUIRE_XVFB_TESTS is set but Xvfb is not installed — install xvfb + x11-utils + dbus-x11 in CI
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- scan_returns_summary_against_empty_xvfb_root stdout ----
+
+thread 'scan_returns_summary_against_empty_xvfb_root' (14815293) panicked at tests/xvfb_integration_tests.rs:58:13:
+SIMURGH_REQUIRE_XVFB_TESTS is set but Xvfb is not installed — install xvfb + x11-utils + dbus-x11 in CI
+
+
+failures:
+    scan_counts_managed_above_and_fullscreen_windows
+    scan_counts_override_redirect_root_children
+    scan_returns_summary_against_empty_xvfb_root
+
+test result: FAILED. 1 passed; 3 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--test xvfb_integration_tests`
+
+━━━ Doc-grep safety (no overclaim phrases in Linux closeout docs) ━━━
+✓ Doc-grep safety: no overclaim phrases in Linux closeout docs
+
+━━━ Git status ━━━
+Working tree has uncommitted changes:
+ M docs/research/mq-voting-pilot/evidence/pre-pilot/check-sh.txt
+✓ working tree (uncommitted changes are fine if you haven't pushed yet)
+Branch: main
+Local vs origin/main: 11 ahead, 0 behind
+
+━━━ Summary ━━━
+  Passed: 55
+  Failed: 8
+
+Failed steps:
+  - prettier --check (npm run format:check)
+  - Stage 2.4/2.5 cybersecurity audit: SDK + daemon + scanner hardening
+  - Stage 2.6 Windows daemon .NET tests
+  - Stage 2.7 cross-platform Device Shield smoke
+  - Stage 2.6/2.7 closeout cybersecurity audit
+  - Stage 2.8A/2.8B Linux cybersecurity audit
+  - Stage 2.8C/2.8D Linux cybersecurity audit
+  - Linux Rust daemon fmt/clippy/test
+
+Logs saved in: .simurgh_check_logs

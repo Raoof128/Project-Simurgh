@@ -1,0 +1,28 @@
+{
+  "schema_version": "2026-05-v1",
+  "persona": "declines_consent",
+  "seed": 808,
+  "fixed_clock": null,
+  "run_at": "2026-05-28T01:59:49.141Z",
+  "synthetic": true,
+  "human_participant": false,
+  "pilot_session_id": null,
+  "server_record_created": false,
+  "steps": [
+    {
+      "name": "load_consent_page",
+      "status": "pass"
+    },
+    {
+      "name": "decline_consent",
+      "status": "pass"
+    }
+  ],
+  "privacy": {
+    "ballot_choice_sent": false,
+    "token_redacted": true,
+    "forbidden_values_recorded": false
+  },
+  "assertion": "PASS",
+  "notes": "Decline path — no server record created as expected."
+}

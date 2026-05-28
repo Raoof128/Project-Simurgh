@@ -1,0 +1,40 @@
+{
+  "schema_version": "2026-05-v1",
+  "persona": "withdraws_midway",
+  "seed": 707,
+  "fixed_clock": null,
+  "run_at": "2026-05-28T01:59:49.057Z",
+  "synthetic": true,
+  "human_participant": false,
+  "pilot_session_id": "vp_e429c0bb-9c16-4e8a-a359-803ed892c69b",
+  "integrity_tier": "browser_only",
+  "steps": [
+    {
+      "name": "accept_consent",
+      "status": "pass",
+      "server_status": 200
+    },
+    {
+      "name": "simulate_telemetry_delay",
+      "status": "pass"
+    },
+    {
+      "name": "withdraw",
+      "status": "pass",
+      "server_status": 200
+    },
+    {
+      "name": "report_blocked_after_withdraw",
+      "status": "pass",
+      "server_status": 403
+    }
+  ],
+  "privacy": {
+    "ballot_choice_sent": false,
+    "token_redacted": true,
+    "forbidden_values_recorded": false
+  },
+  "final_server_response": null,
+  "assertion": "PASS",
+  "notes": "withdraws_midway persona completed."
+}
