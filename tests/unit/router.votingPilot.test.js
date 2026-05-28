@@ -110,7 +110,11 @@ describe("POST /withdraw", () => {
   test("returns 409 on double withdraw", async () => {
     const { body: consent } = await postJson("/consent/accept", {});
     await postJson("/withdraw", {}, { Authorization: `Bearer ${consent.token}` });
-    const { status } = await postJson("/withdraw", {}, { Authorization: `Bearer ${consent.token}` });
+    const { status } = await postJson(
+      "/withdraw",
+      {},
+      { Authorization: `Bearer ${consent.token}` }
+    );
     assert.equal(status, 409);
   });
 
@@ -128,10 +132,9 @@ describe("GET /:sessionId/report", () => {
       { pilot_session_id: consent.pilot_session_id, submit_intent: true },
       { Authorization: `Bearer ${consent.token}` }
     );
-    const { status, body } = await getJson(
-      `/${consent.pilot_session_id}/report`,
-      { Authorization: `Bearer ${consent.token}` }
-    );
+    const { status, body } = await getJson(`/${consent.pilot_session_id}/report`, {
+      Authorization: `Bearer ${consent.token}`,
+    });
     assert.equal(status, 200);
     assert.equal(body.schema_version, "2026-05-v1");
     assert.equal(body.official_vote_impact, false);
@@ -148,20 +151,18 @@ describe("GET /:sessionId/report", () => {
   test("returns 403 for withdrawn session", async () => {
     const { body: consent } = await postJson("/consent/accept", {});
     await postJson("/withdraw", {}, { Authorization: `Bearer ${consent.token}` });
-    const { status } = await getJson(
-      `/${consent.pilot_session_id}/report`,
-      { Authorization: `Bearer ${consent.token}` }
-    );
+    const { status } = await getJson(`/${consent.pilot_session_id}/report`, {
+      Authorization: `Bearer ${consent.token}`,
+    });
     assert.equal(status, 403);
   });
 
   test("returns 403 when token session does not match path session", async () => {
     const { body: c1 } = await postJson("/consent/accept", {});
     const { body: c2 } = await postJson("/consent/accept", {});
-    const { status } = await getJson(
-      `/${c2.pilot_session_id}/report`,
-      { Authorization: `Bearer ${c1.token}` }
-    );
+    const { status } = await getJson(`/${c2.pilot_session_id}/report`, {
+      Authorization: `Bearer ${c1.token}`,
+    });
     assert.equal(status, 403);
   });
 });

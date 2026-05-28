@@ -18,19 +18,19 @@ The pilot runs in shadow mode beside (or after) the official MQ Persian Society 
 
 **Mode: Shadow + Mock Ballot (tiered)**
 
-| Layer | Official election | Simurgh pilot |
-|---|---|---|
-| MQ Persian Society vote | Runs normally | Not affected |
-| Simurgh | Consent-gated shadow | Runs beside or after |
-| Ballot content | Voting tool only | Never sent to Simurgh |
-| Result impact | Real election decides | Research data only |
+| Layer                   | Official election     | Simurgh pilot         |
+| ----------------------- | --------------------- | --------------------- |
+| MQ Persian Society vote | Runs normally         | Not affected          |
+| Simurgh                 | Consent-gated shadow  | Runs beside or after  |
+| Ballot content          | Voting tool only      | Never sent to Simurgh |
+| Result impact           | Real election decides | Research data only    |
 
 **Integrity tiers:**
 
-| Tier | Requirement | Coverage |
-|---|---|---|
-| `browser_only` | Browser-SDK only, no install | Session metadata, audit chain |
-| `browser_plus_daemon` | Browser-SDK + optional native daemon | Above + signed device proof |
+| Tier                  | Requirement                          | Coverage                      |
+| --------------------- | ------------------------------------ | ----------------------------- |
+| `browser_only`        | Browser-SDK only, no install         | Session metadata, audit chain |
+| `browser_plus_daemon` | Browser-SDK + optional native daemon | Above + signed device proof   |
 
 Daemon absence is not treated as misconduct, vote invalidity, or suspicious behaviour. It is recorded as reduced integrity-signal coverage. `SIMURGH_REQUIRE_DAEMON=false` for all Phase C participants.
 
@@ -38,12 +38,12 @@ Daemon absence is not treated as misconduct, vote invalidity, or suspicious beha
 
 ## 2. Data categories
 
-| Category | Label in paper |
-|---|---|
-| Persona script sessions | Synthetic generated sessions |
-| Researcher manual walkthrough | Researcher self-pilot |
-| Real consenting members | Human participant pilot |
-| Official election outcome | Out of scope |
+| Category                      | Label in paper               |
+| ----------------------------- | ---------------------------- |
+| Persona script sessions       | Synthetic generated sessions |
+| Researcher manual walkthrough | Researcher self-pilot        |
+| Real consenting members       | Human participant pilot      |
+| Official election outcome     | Out of scope                 |
 
 These categories must not be mixed. Each session carries a `data_source` field.
 
@@ -86,7 +86,7 @@ scripts/
 `server.js` receives one line:
 
 ```js
-app.use('/api/voting-pilot', require('./src/votingPilot/index.js'));
+app.use("/api/voting-pilot", require("./src/votingPilot/index.js"));
 ```
 
 ### 3.3 Routes
@@ -125,7 +125,6 @@ VOTING_PILOT_WITHDRAWN
 VOTING_PILOT_REPORT_EXPORTED
 BALLOT_FIELD_REJECTED
 ```
-
 
 ---
 
@@ -301,18 +300,18 @@ node tools/voting-pilot-persona.mjs --persona <name> --seed <n> [--fixed-clock <
 
 ### 6.3 Personas
 
-| Persona | Behaviour |
-|---|---|
-| `compliant_browser_only` | Accepts consent, completes ballot, submits. No daemon. Clean session. |
-| `compliant_with_real_daemon` | Same, but sends a real signed daemon proof. Requires local daemon running. |
-| `compliant_with_fixture_daemon` | Same, but uses a deterministic test-fixture proof. Labelled synthetic, not real device attestation. |
-| `distracted_member` | Accepts consent, generates seeded focus-loss + paste events mid-session, submits. |
-| `daemon_unavailable` | Accepts consent, probes localhost daemon, gets no response, continues browser-only. |
-| `replay_attempt` | Completes session 1, replays its proof challenge in session 2. Server rejects. |
-| `tampered_proof` | Sends daemon proof with mutated `platform` field. Server rejects signature. |
-| `withdraws_midway` | Accepts consent, sends telemetry, POSTs `/withdraw`. Session halts. Report blocked. |
-| `declines_consent` | Loads consent page, does not POST. No session. Runner logs: declined — no server record. |
-| `forbidden_ballot_field_attempt` | Sends `choice` field in submit body. Server returns 400. Field name audited. |
+| Persona                          | Behaviour                                                                                           |
+| -------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `compliant_browser_only`         | Accepts consent, completes ballot, submits. No daemon. Clean session.                               |
+| `compliant_with_real_daemon`     | Same, but sends a real signed daemon proof. Requires local daemon running.                          |
+| `compliant_with_fixture_daemon`  | Same, but uses a deterministic test-fixture proof. Labelled synthetic, not real device attestation. |
+| `distracted_member`              | Accepts consent, generates seeded focus-loss + paste events mid-session, submits.                   |
+| `daemon_unavailable`             | Accepts consent, probes localhost daemon, gets no response, continues browser-only.                 |
+| `replay_attempt`                 | Completes session 1, replays its proof challenge in session 2. Server rejects.                      |
+| `tampered_proof`                 | Sends daemon proof with mutated `platform` field. Server rejects signature.                         |
+| `withdraws_midway`               | Accepts consent, sends telemetry, POSTs `/withdraw`. Session halts. Report blocked.                 |
+| `declines_consent`               | Loads consent page, does not POST. No session. Runner logs: declined — no server record.            |
+| `forbidden_ballot_field_attempt` | Sends `choice` field in submit body. Server returns 400. Field name audited.                        |
 
 ### 6.4 Output schema
 

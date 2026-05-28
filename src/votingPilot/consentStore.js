@@ -9,8 +9,7 @@ export function createConsentStore() {
     const pilot_session_id = "vp_" + randomUUID();
 
     const participant_code_hash =
-      "hmac-sha256:" +
-      createHmac("sha256", pepper).update(anonymousCode).digest("hex");
+      "hmac-sha256:" + createHmac("sha256", pepper).update(anonymousCode).digest("hex");
 
     const _chain = createChain();
     appendEntry(_chain, hmacKey, VOTING_PILOT_EVENTS.CONSENT_ACCEPTED, {});

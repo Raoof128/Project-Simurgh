@@ -6,15 +6,15 @@
 
 ## Gate results
 
-| Gate | Result |
-|---|---|
-| `npm test` | 357/357 pass |
-| `npm audit --audit-level=high` | 0 high vulnerabilities |
-| `node tools/privacy-audit.mjs` | 0 violations (9 evidence files scanned) |
-| `bash scripts/check.sh` | exit 0 |
-| `bash scripts/smoke-voting-pilot.sh` | 8/8 pass |
-| `bash scripts/security-audit-voting-pilot.sh` | 10/10 pass |
-| Synthetic personas | 9/9 PASS |
+| Gate                                          | Result                                  |
+| --------------------------------------------- | --------------------------------------- |
+| `npm test`                                    | 357/357 pass                            |
+| `npm audit --audit-level=high`                | 0 high vulnerabilities                  |
+| `node tools/privacy-audit.mjs`                | 0 violations (9 evidence files scanned) |
+| `bash scripts/check.sh`                       | exit 0                                  |
+| `bash scripts/smoke-voting-pilot.sh`          | 8/8 pass                                |
+| `bash scripts/security-audit-voting-pilot.sh` | 10/10 pass                              |
+| Synthetic personas                            | 9/9 PASS                                |
 
 ## What was built
 

@@ -1,65 +1,112 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MQ Persian Society Voting Pilot — Project Simurgh</title>
-  <style>
-    body { font-family: system-ui, sans-serif; max-width: 640px; margin: 2rem auto; padding: 1rem; line-height: 1.6; }
-    .notice { background: #f0f4ff; border-left: 4px solid #3b6ff5; padding: 1rem; margin: 1.5rem 0; }
-    .forbidden { background: #fff0f0; border-left: 4px solid #d0352b; padding: 1rem; margin: 1.5rem 0; }
-    button { padding: 0.75rem 2rem; font-size: 1rem; border: none; border-radius: 6px; cursor: pointer; }
-    #btn-agree { background: #3b6ff5; color: white; }
-    #btn-decline { background: #eee; color: #333; margin-left: 1rem; }
-    #status { margin-top: 1rem; color: #555; }
-  </style>
-</head>
-<body>
-  <h1>MQ Persian Society — Integrity Pilot</h1>
-  <p>This is an <strong>optional research pilot</strong> for Project Simurgh. It runs beside the official MQ Persian Society event preference poll.</p>
-
-  <div class="notice">
-    <strong>This pilot does not affect the official election result.</strong>
-  </div>
-
-  <h2>What Simurgh collects</h2>
-  <p>Privacy-preserving session metadata: proof status, timestamps, focus-loss counts, paste counts, and audit-chain validity.</p>
-
-  <div class="forbidden">
-    <strong>Simurgh does NOT collect:</strong> who you vote for, ballot content, screen recordings, webcam video, microphone audio, typed text, clipboard text, raw process names, raw window titles, or device serial identifiers.
-  </div>
-
-  <p>Participation is voluntary. You may decline or stop at any time.</p>
-
-  <button id="btn-agree">Agree — join the pilot</button>
-  <button id="btn-decline">Decline — exit</button>
-  <p id="status"></p>
-
-  <script>
-    document.getElementById("btn-decline").addEventListener("click", () => {
-      document.body.innerHTML = "<h1>Thank you.</h1><p>No data was recorded. You may close this tab.</p>";
-    });
-
-    document.getElementById("btn-agree").addEventListener("click", async () => {
-      const status = document.getElementById("status");
-      status.textContent = "Starting pilot session…";
-      try {
-        const res = await fetch("/api/voting-pilot/consent/accept", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({}),
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error ?? "unknown error");
-        // Store token in sessionStorage — not localStorage; survives tab, not browser restart
-        sessionStorage.setItem("vp_token", data.token);
-        sessionStorage.setItem("vp_session_id", data.pilot_session_id);
-        status.textContent = `Pilot started. Your anonymous code: ${data.participant_code} (write this down — it is not stored).`;
-        setTimeout(() => { window.location.href = "/voting-pilot-submit.html"; }, 3000);
-      } catch (err) {
-        status.textContent = `Error: ${err.message}`;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MQ Persian Society Voting Pilot — Project Simurgh</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        max-width: 640px;
+        margin: 2rem auto;
+        padding: 1rem;
+        line-height: 1.6;
       }
-    });
-  </script>
-</body>
+      .notice {
+        background: #f0f4ff;
+        border-left: 4px solid #3b6ff5;
+        padding: 1rem;
+        margin: 1.5rem 0;
+      }
+      .forbidden {
+        background: #fff0f0;
+        border-left: 4px solid #d0352b;
+        padding: 1rem;
+        margin: 1.5rem 0;
+      }
+      button {
+        padding: 0.75rem 2rem;
+        font-size: 1rem;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+      #btn-agree {
+        background: #3b6ff5;
+        color: white;
+      }
+      #btn-decline {
+        background: #eee;
+        color: #333;
+        margin-left: 1rem;
+      }
+      #status {
+        margin-top: 1rem;
+        color: #555;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>MQ Persian Society — Integrity Pilot</h1>
+    <p>
+      This is an <strong>optional research pilot</strong> for Project Simurgh. It runs beside the
+      official MQ Persian Society event preference poll.
+    </p>
+
+    <div class="notice">
+      <strong>This pilot does not affect the official election result.</strong>
+    </div>
+
+    <h2>What Simurgh collects</h2>
+    <p>
+      Privacy-preserving session metadata: proof status, timestamps, focus-loss counts, paste
+      counts, and audit-chain validity.
+    </p>
+
+    <div class="forbidden">
+      <strong>Simurgh does NOT collect:</strong> who you vote for, ballot content, screen
+      recordings, webcam video, microphone audio, typed text, clipboard text, raw process names, raw
+      window titles, or device serial identifiers.
+    </div>
+
+    <p>Participation is voluntary. You may decline or stop at any time.</p>
+
+    <button id="btn-agree">Agree — join the pilot</button>
+    <button id="btn-decline">Decline — exit</button>
+    <p id="status"></p>
+
+    <script>
+      document.getElementById("btn-decline").addEventListener("click", () => {
+        document.body.replaceChildren(
+          Object.assign(document.createElement("h1"), { textContent: "Thank you." }),
+          Object.assign(document.createElement("p"), {
+            textContent: "No data was recorded. You may close this tab.",
+          })
+        );
+      });
+
+      document.getElementById("btn-agree").addEventListener("click", async () => {
+        const status = document.getElementById("status");
+        status.textContent = "Starting pilot session…";
+        try {
+          const res = await fetch("/api/voting-pilot/consent/accept", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({}),
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error ?? "unknown error");
+          // Store token in sessionStorage — not localStorage; survives tab, not browser restart
+          sessionStorage.setItem("vp_token", data.token);
+          sessionStorage.setItem("vp_session_id", data.pilot_session_id);
+          status.textContent = `Pilot started. Your anonymous code: ${data.participant_code} (write this down — it is not stored).`;
+          setTimeout(() => {
+            window.location.href = "/voting-pilot-submit.html";
+          }, 3000);
+        } catch (err) {
+          status.textContent = `Error: ${err.message}`;
+        }
+      });
+    </script>
+  </body>
 </html>

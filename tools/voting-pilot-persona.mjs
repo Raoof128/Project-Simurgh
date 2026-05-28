@@ -22,12 +22,10 @@ const PERSONAS = [
 
 // ── CLI args ──────────────────────────────────────────────────────────────────
 const args = Object.fromEntries(
-  process.argv
-    .slice(2)
-    .reduce((pairs, arg, i, arr) => {
-      if (arg.startsWith("--")) pairs.push([arg.slice(2), arr[i + 1] ?? true]);
-      return pairs;
-    }, [])
+  process.argv.slice(2).reduce((pairs, arg, i, arr) => {
+    if (arg.startsWith("--")) pairs.push([arg.slice(2), arr[i + 1] ?? true]);
+    return pairs;
+  }, [])
 );
 
 const PERSONA = args.persona;
@@ -36,7 +34,9 @@ const FIXED_CLOCK = args["fixed-clock"] ?? null;
 const BASE_URL = args["base-url"] ?? "http://127.0.0.1:3030";
 
 if (!PERSONA || !PERSONAS.includes(PERSONA)) {
-  console.error("Usage: node tools/voting-pilot-persona.mjs --persona <name> --seed <n> [--fixed-clock <ISO>] [--base-url <url>]");
+  console.error(
+    "Usage: node tools/voting-pilot-persona.mjs --persona <name> --seed <n> [--fixed-clock <ISO>] [--base-url <url>]"
+  );
   console.error("Personas:", PERSONAS.join(", "));
   process.exit(1);
 }
@@ -79,8 +79,15 @@ async function runPersona(persona, seed) {
   let notes = "";
 
   function step(name, status, serverStatus = null, extra = {}) {
-    steps.push({ name, status, ...(serverStatus != null ? { server_status: serverStatus } : {}), ...extra });
-    console.log(`  [${status.toUpperCase()}] ${name}${serverStatus ? ` (HTTP ${serverStatus})` : ""}`);
+    steps.push({
+      name,
+      status,
+      ...(serverStatus != null ? { server_status: serverStatus } : {}),
+      ...extra,
+    });
+    console.log(
+      `  [${status.toUpperCase()}] ${name}${serverStatus ? ` (HTTP ${serverStatus})` : ""}`
+    );
   }
 
   if (persona === "declines_consent") {
@@ -97,7 +104,11 @@ async function runPersona(persona, seed) {
       pilot_session_id: null,
       server_record_created: false,
       steps,
-      privacy: { ballot_choice_sent: false, token_redacted: true, forbidden_values_recorded: false },
+      privacy: {
+        ballot_choice_sent: false,
+        token_redacted: true,
+        forbidden_values_recorded: false,
+      },
       assertion: "PASS",
       notes: "Decline path — no server record created as expected.",
     };
@@ -130,7 +141,11 @@ async function runPersona(persona, seed) {
       assertion = "FAIL";
     }
   } else if (persona === "forbidden_ballot_field_attempt") {
-    const submit = await post("/submit", { pilot_session_id: sessionId, submit_intent: true, choice: "A" }, token);
+    const submit = await post(
+      "/submit",
+      { pilot_session_id: sessionId, submit_intent: true, choice: "A" },
+      token
+    );
     if (submit.status === 400 && submit.body.error === "ballot_choice_field_rejected") {
       step("forbidden_field_rejected", "pass", 400);
     } else {
@@ -146,7 +161,11 @@ async function runPersona(persona, seed) {
     await post("/submit", { pilot_session_id: replaySessionId, submit_intent: true }, replayToken);
     step("session2_submitted", "pass");
     // Cross-session replay: submit session 1 body using session 2's token — 409 mismatch
-    const replay = await post("/submit", { pilot_session_id: sessionId, submit_intent: true }, replayToken);
+    const replay = await post(
+      "/submit",
+      { pilot_session_id: sessionId, submit_intent: true },
+      replayToken
+    );
     if (replay.status === 409 || replay.status === 401 || replay.status === 404) {
       step("cross_session_replay_rejected", "pass", replay.status);
     } else {
@@ -155,7 +174,11 @@ async function runPersona(persona, seed) {
     }
   } else if (persona === "tampered_proof") {
     // No daemon proof route in voting pilot v0.1 — tamper test verifies server rejects forbidden fields
-    const submit = await post("/submit", { pilot_session_id: sessionId, submit_intent: true, candidate_id: "fake_tamper" }, token);
+    const submit = await post(
+      "/submit",
+      { pilot_session_id: sessionId, submit_intent: true, candidate_id: "fake_tamper" },
+      token
+    );
     if (submit.status === 400 && submit.body.forbidden_fields?.includes("candidate_id")) {
       step("tampered_field_rejected", "pass", 400);
     } else {
@@ -165,12 +188,20 @@ async function runPersona(persona, seed) {
   } else if (persona === "distracted_member") {
     await delay(seededInt(seed, 300) + 50);
     step("simulate_focus_loss_delay", "pass");
-    const submit = await post("/submit", { pilot_session_id: sessionId, submit_intent: true }, token);
+    const submit = await post(
+      "/submit",
+      { pilot_session_id: sessionId, submit_intent: true },
+      token
+    );
     step("submit", submit.status === 200 ? "pass" : "fail", submit.status);
     if (submit.status !== 200) assertion = "FAIL";
   } else if (persona === "daemon_unavailable") {
     step("daemon_probe_no_response", "pass");
-    const submit = await post("/submit", { pilot_session_id: sessionId, submit_intent: true }, token);
+    const submit = await post(
+      "/submit",
+      { pilot_session_id: sessionId, submit_intent: true },
+      token
+    );
     step("submit_browser_only", submit.status === 200 ? "pass" : "fail", submit.status);
     if (submit.status !== 200) assertion = "FAIL";
   } else {
@@ -180,7 +211,11 @@ async function runPersona(persona, seed) {
         note: "Fixture daemon — proof validation out of scope for HTTP-level runner v0.1. Labelled synthetic.",
       });
     }
-    const submit = await post("/submit", { pilot_session_id: sessionId, submit_intent: true }, token);
+    const submit = await post(
+      "/submit",
+      { pilot_session_id: sessionId, submit_intent: true },
+      token
+    );
     step("submit", submit.status === 200 ? "pass" : "fail", submit.status);
     if (submit.status !== 200) assertion = "FAIL";
   }

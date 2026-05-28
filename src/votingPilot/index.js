@@ -4,20 +4,23 @@ import { createConsentStore } from "./consentStore.js";
 import { buildPilotReport } from "./reportBuilder.js";
 import { VOTING_PILOT_EVENTS } from "./events.js";
 import { appendEntry } from "../audit/hmacChain.js";
-import {
-  issueSessionToken,
-  verifySessionToken,
-  extractBearer,
-} from "../security/sessionToken.js";
+import { issueSessionToken, verifySessionToken, extractBearer } from "../security/sessionToken.js";
 
 const router = Router();
 const store = createConsentStore();
 
 const FORBIDDEN_BALLOT_FIELDS = new Set([
-  "choice", "selected_choice", "selected_option",
-  "candidate", "candidate_id",
-  "vote", "vote_choice",
-  "ballot_choice", "ballot_content", "ballot_answer", "ballot",
+  "choice",
+  "selected_choice",
+  "selected_option",
+  "candidate",
+  "candidate_id",
+  "vote",
+  "vote_choice",
+  "ballot_choice",
+  "ballot_content",
+  "ballot_answer",
+  "ballot",
   "selected_candidate",
 ]);
 
@@ -33,7 +36,8 @@ function requirePilotToken(req, res, next) {
   const token = extractBearer(req);
   if (!token) return res.status(401).json({ error: "pilot_token_missing" });
   const result = verifySessionToken(token, getEnv("SIMURGH_VOTING_PILOT_TOKEN_SECRET"));
-  if (!result.valid) return res.status(401).json({ error: "pilot_token_invalid", reason: result.reason });
+  if (!result.valid)
+    return res.status(401).json({ error: "pilot_token_invalid", reason: result.reason });
   req.pilotSessionId = result.sessionId;
   next();
 }
@@ -81,7 +85,9 @@ router.post("/submit", requirePilotToken, (req, res) => {
         field_names: forbidden,
       });
     }
-    return res.status(400).json({ error: "ballot_choice_field_rejected", forbidden_fields: forbidden });
+    return res
+      .status(400)
+      .json({ error: "ballot_choice_field_rejected", forbidden_fields: forbidden });
   }
 
   const record = store.get(req.pilotSessionId);

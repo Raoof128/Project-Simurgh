@@ -9,6 +9,7 @@
 **Tech Stack:** Node.js ESM, `node:test` + `node:assert/strict`, Express router, `node:crypto` (HMAC-SHA256), existing `src/audit/hmacChain.js`, `src/security/sessionToken.js`.
 
 **Env vars to add to `.env.example`** (never commit real values to `.env`):
+
 - `SIMURGH_VOTING_PILOT_PEPPER` — HMAC key for participant-code hashing and audit chain
 - `SIMURGH_VOTING_PILOT_TOKEN_SECRET` — signing key for pilot session tokens
 
@@ -16,34 +17,35 @@
 
 ## File Map
 
-| Action | Path | Responsibility |
-|---|---|---|
-| Create | `src/votingPilot/events.js` | Namespaced event constants |
-| Create | `src/votingPilot/consentStore.js` | In-memory consent records, HMAC hash |
-| Create | `src/votingPilot/reportBuilder.js` | Assemble pilot report JSON |
-| Create | `src/votingPilot/index.js` | Express router, 4 API routes |
-| Create | `tests/unit/votingPilot/consentStore.test.js` | Unit tests for consentStore |
-| Create | `tests/unit/votingPilot/reportBuilder.test.js` | Unit tests for reportBuilder |
-| Create | `tests/unit/votingPilot/router.test.js` | HTTP integration tests for all 4 routes |
-| Modify | `server.js` | Add one mount line |
-| Modify | `.env.example` | Document PEPPER + TOKEN_SECRET (never commit real `.env`) |
-| Create | `public/voting-pilot.html` | Consent landing page |
-| Create | `public/voting-pilot-submit.html` | Mock ballot + submit page |
-| Modify | `tools/privacy-audit.mjs` | Add voting-pilot forbidden-key scan |
-| Create | `tools/voting-pilot-persona.mjs` | Deterministic synthetic scenario runner |
-| Create | `docs/research/mq-voting-pilot/VOTING_PILOT_PROTOCOL.md` | Research protocol |
-| Create | `docs/research/mq-voting-pilot/PARTICIPANT_INFORMATION_AND_CONSENT.md` | Consent wording |
-| Create | `docs/research/mq-voting-pilot/DATA_MANAGEMENT_PLAN.md` | Data retention |
-| Create | `docs/research/mq-voting-pilot/EXPERIMENT_MATRIX.md` | F/S/P test matrix |
-| Create | `docs/research/mq-voting-pilot/NON_CLAIMS.md` | Scope boundaries |
-| Create | `scripts/smoke-voting-pilot.sh` | Happy-path smoke gates |
-| Create | `scripts/security-audit-voting-pilot.sh` | Security/privacy audit gates |
+| Action | Path                                                                   | Responsibility                                            |
+| ------ | ---------------------------------------------------------------------- | --------------------------------------------------------- |
+| Create | `src/votingPilot/events.js`                                            | Namespaced event constants                                |
+| Create | `src/votingPilot/consentStore.js`                                      | In-memory consent records, HMAC hash                      |
+| Create | `src/votingPilot/reportBuilder.js`                                     | Assemble pilot report JSON                                |
+| Create | `src/votingPilot/index.js`                                             | Express router, 4 API routes                              |
+| Create | `tests/unit/votingPilot/consentStore.test.js`                          | Unit tests for consentStore                               |
+| Create | `tests/unit/votingPilot/reportBuilder.test.js`                         | Unit tests for reportBuilder                              |
+| Create | `tests/unit/votingPilot/router.test.js`                                | HTTP integration tests for all 4 routes                   |
+| Modify | `server.js`                                                            | Add one mount line                                        |
+| Modify | `.env.example`                                                         | Document PEPPER + TOKEN_SECRET (never commit real `.env`) |
+| Create | `public/voting-pilot.html`                                             | Consent landing page                                      |
+| Create | `public/voting-pilot-submit.html`                                      | Mock ballot + submit page                                 |
+| Modify | `tools/privacy-audit.mjs`                                              | Add voting-pilot forbidden-key scan                       |
+| Create | `tools/voting-pilot-persona.mjs`                                       | Deterministic synthetic scenario runner                   |
+| Create | `docs/research/mq-voting-pilot/VOTING_PILOT_PROTOCOL.md`               | Research protocol                                         |
+| Create | `docs/research/mq-voting-pilot/PARTICIPANT_INFORMATION_AND_CONSENT.md` | Consent wording                                           |
+| Create | `docs/research/mq-voting-pilot/DATA_MANAGEMENT_PLAN.md`                | Data retention                                            |
+| Create | `docs/research/mq-voting-pilot/EXPERIMENT_MATRIX.md`                   | F/S/P test matrix                                         |
+| Create | `docs/research/mq-voting-pilot/NON_CLAIMS.md`                          | Scope boundaries                                          |
+| Create | `scripts/smoke-voting-pilot.sh`                                        | Happy-path smoke gates                                    |
+| Create | `scripts/security-audit-voting-pilot.sh`                               | Security/privacy audit gates                              |
 
 ---
 
 ## Task 1: Event constants
 
 **Files:**
+
 - Create: `src/votingPilot/events.js`
 
 - [ ] **Step 1.1: Create the events file**
@@ -72,6 +74,7 @@ git commit -m "feat(voting-pilot): add namespaced event constants"
 ## Task 2: Consent store
 
 **Files:**
+
 - Create: `src/votingPilot/consentStore.js`
 - Create: `tests/unit/votingPilot/consentStore.test.js`
 
@@ -93,7 +96,12 @@ const TEST_HMAC_KEY = "test-hmac-key-also-32-chars-long!";
 describe("createConsentStore", () => {
   test("accept returns a record with pilot_session_id and hashed code", () => {
     const store = createConsentStore();
-    const record = store.accept({ anonymousCode: "abc123", integrityTier: "browser_only", pepper: TEST_PEPPER, hmacKey: TEST_HMAC_KEY });
+    const record = store.accept({
+      anonymousCode: "abc123",
+      integrityTier: "browser_only",
+      pepper: TEST_PEPPER,
+      hmacKey: TEST_HMAC_KEY,
+    });
     assert.ok(record.pilot_session_id.startsWith("vp_"));
     assert.ok(record.participant_code_hash.startsWith("hmac-sha256:"));
     assert.equal(record.accepted, true);
@@ -104,7 +112,12 @@ describe("createConsentStore", () => {
 
   test("get returns the stored record by id", () => {
     const store = createConsentStore();
-    const r = store.accept({ anonymousCode: "x", integrityTier: "browser_only", pepper: TEST_PEPPER, hmacKey: TEST_HMAC_KEY });
+    const r = store.accept({
+      anonymousCode: "x",
+      integrityTier: "browser_only",
+      pepper: TEST_PEPPER,
+      hmacKey: TEST_HMAC_KEY,
+    });
     assert.equal(store.get(r.pilot_session_id), r);
   });
 
@@ -115,7 +128,12 @@ describe("createConsentStore", () => {
 
   test("withdraw marks session withdrawn with timestamp", () => {
     const store = createConsentStore();
-    const r = store.accept({ anonymousCode: "x", integrityTier: "browser_only", pepper: TEST_PEPPER, hmacKey: TEST_HMAC_KEY });
+    const r = store.accept({
+      anonymousCode: "x",
+      integrityTier: "browser_only",
+      pepper: TEST_PEPPER,
+      hmacKey: TEST_HMAC_KEY,
+    });
     const ok = store.withdraw(r.pilot_session_id);
     assert.equal(ok, true);
     assert.equal(r.withdrawn, true);
@@ -124,14 +142,24 @@ describe("createConsentStore", () => {
 
   test("withdraw returns false for already-withdrawn session", () => {
     const store = createConsentStore();
-    const r = store.accept({ anonymousCode: "x", integrityTier: "browser_only", pepper: TEST_PEPPER, hmacKey: TEST_HMAC_KEY });
+    const r = store.accept({
+      anonymousCode: "x",
+      integrityTier: "browser_only",
+      pepper: TEST_PEPPER,
+      hmacKey: TEST_HMAC_KEY,
+    });
     store.withdraw(r.pilot_session_id);
     assert.equal(store.withdraw(r.pilot_session_id), false);
   });
 
   test("markSubmitted sets _submitted true and returns true", () => {
     const store = createConsentStore();
-    const r = store.accept({ anonymousCode: "x", integrityTier: "browser_only", pepper: TEST_PEPPER, hmacKey: TEST_HMAC_KEY });
+    const r = store.accept({
+      anonymousCode: "x",
+      integrityTier: "browser_only",
+      pepper: TEST_PEPPER,
+      hmacKey: TEST_HMAC_KEY,
+    });
     assert.equal(store.markSubmitted(r.pilot_session_id), true);
     assert.equal(r._submitted, true);
     assert.ok(typeof r._submitted_at === "string");
@@ -139,15 +167,30 @@ describe("createConsentStore", () => {
 
   test("markSubmitted returns false for withdrawn session", () => {
     const store = createConsentStore();
-    const r = store.accept({ anonymousCode: "x", integrityTier: "browser_only", pepper: TEST_PEPPER, hmacKey: TEST_HMAC_KEY });
+    const r = store.accept({
+      anonymousCode: "x",
+      integrityTier: "browser_only",
+      pepper: TEST_PEPPER,
+      hmacKey: TEST_HMAC_KEY,
+    });
     store.withdraw(r.pilot_session_id);
     assert.equal(store.markSubmitted(r.pilot_session_id), false);
   });
 
   test("participant_code_hash is deterministic for same inputs", () => {
     const store = createConsentStore();
-    const r1 = store.accept({ anonymousCode: "same", integrityTier: "browser_only", pepper: TEST_PEPPER, hmacKey: TEST_HMAC_KEY });
-    const r2 = store.accept({ anonymousCode: "same", integrityTier: "browser_only", pepper: TEST_PEPPER, hmacKey: TEST_HMAC_KEY });
+    const r1 = store.accept({
+      anonymousCode: "same",
+      integrityTier: "browser_only",
+      pepper: TEST_PEPPER,
+      hmacKey: TEST_HMAC_KEY,
+    });
+    const r2 = store.accept({
+      anonymousCode: "same",
+      integrityTier: "browser_only",
+      pepper: TEST_PEPPER,
+      hmacKey: TEST_HMAC_KEY,
+    });
     assert.equal(r1.participant_code_hash, r2.participant_code_hash);
   });
 });
@@ -243,6 +286,7 @@ git commit -m "feat(voting-pilot): add consentStore with HMAC participant hash"
 ## Task 3: Report builder
 
 **Files:**
+
 - Create: `src/votingPilot/reportBuilder.js`
 - Create: `tests/unit/votingPilot/reportBuilder.test.js`
 
@@ -260,7 +304,12 @@ const HMAC_KEY = "test-hmac-key-also-32-chars-long!";
 
 function makeRecord(opts = {}) {
   const store = createConsentStore();
-  return store.accept({ anonymousCode: "abc", integrityTier: opts.tier ?? "browser_only", pepper: PEPPER, hmacKey: HMAC_KEY });
+  return store.accept({
+    anonymousCode: "abc",
+    integrityTier: opts.tier ?? "browser_only",
+    pepper: PEPPER,
+    hmacKey: HMAC_KEY,
+  });
 }
 
 describe("buildPilotReport", () => {
@@ -316,7 +365,12 @@ describe("buildPilotReport", () => {
 
   test("session_result reflects submitted state", () => {
     const store = createConsentStore();
-    const record = store.accept({ anonymousCode: "abc", integrityTier: "browser_only", pepper: PEPPER, hmacKey: HMAC_KEY });
+    const record = store.accept({
+      anonymousCode: "abc",
+      integrityTier: "browser_only",
+      pepper: PEPPER,
+      hmacKey: HMAC_KEY,
+    });
     store.markSubmitted(record.pilot_session_id);
     const report = buildPilotReport(record);
     assert.equal(report.session_result.submitted, true);
@@ -405,6 +459,7 @@ git commit -m "feat(voting-pilot): add reportBuilder"
 ## Task 4: Router and HTTP integration tests
 
 **Files:**
+
 - Create: `src/votingPilot/index.js`
 - Create: `tests/unit/votingPilot/router.test.js`
 
@@ -514,7 +569,11 @@ describe("POST /withdraw", () => {
   test("returns 409 on double withdraw", async () => {
     const { body: consent } = await postJson("/consent/accept", {});
     await postJson("/withdraw", {}, { Authorization: `Bearer ${consent.token}` });
-    const { status } = await postJson("/withdraw", {}, { Authorization: `Bearer ${consent.token}` });
+    const { status } = await postJson(
+      "/withdraw",
+      {},
+      { Authorization: `Bearer ${consent.token}` }
+    );
     assert.equal(status, 409);
   });
 });
@@ -527,10 +586,9 @@ describe("GET /:sessionId/report", () => {
       { pilot_session_id: consent.pilot_session_id, submit_intent: true },
       { Authorization: `Bearer ${consent.token}` }
     );
-    const { status, body } = await getJson(
-      `/${consent.pilot_session_id}/report`,
-      { Authorization: `Bearer ${consent.token}` }
-    );
+    const { status, body } = await getJson(`/${consent.pilot_session_id}/report`, {
+      Authorization: `Bearer ${consent.token}`,
+    });
     assert.equal(status, 200);
     assert.equal(body.schema_version, "2026-05-v1");
     assert.equal(body.official_vote_impact, false);
@@ -547,20 +605,18 @@ describe("GET /:sessionId/report", () => {
   test("returns 403 for withdrawn session", async () => {
     const { body: consent } = await postJson("/consent/accept", {});
     await postJson("/withdraw", {}, { Authorization: `Bearer ${consent.token}` });
-    const { status } = await getJson(
-      `/${consent.pilot_session_id}/report`,
-      { Authorization: `Bearer ${consent.token}` }
-    );
+    const { status } = await getJson(`/${consent.pilot_session_id}/report`, {
+      Authorization: `Bearer ${consent.token}`,
+    });
     assert.equal(status, 403);
   });
 
   test("returns 403 when token session does not match path session", async () => {
     const { body: c1 } = await postJson("/consent/accept", {});
     const { body: c2 } = await postJson("/consent/accept", {});
-    const { status } = await getJson(
-      `/${c2.pilot_session_id}/report`,
-      { Authorization: `Bearer ${c1.token}` }
-    );
+    const { status } = await getJson(`/${c2.pilot_session_id}/report`, {
+      Authorization: `Bearer ${c1.token}`,
+    });
     assert.equal(status, 403);
   });
 });
@@ -584,20 +640,23 @@ import { createConsentStore } from "./consentStore.js";
 import { buildPilotReport } from "./reportBuilder.js";
 import { VOTING_PILOT_EVENTS } from "./events.js";
 import { appendEntry } from "../audit/hmacChain.js";
-import {
-  issueSessionToken,
-  verifySessionToken,
-  extractBearer,
-} from "../security/sessionToken.js";
+import { issueSessionToken, verifySessionToken, extractBearer } from "../security/sessionToken.js";
 
 const router = Router();
 const store = createConsentStore();
 
 const FORBIDDEN_BALLOT_FIELDS = new Set([
-  "choice", "selected_choice", "selected_option",
-  "candidate", "candidate_id",
-  "vote", "vote_choice",
-  "ballot_choice", "ballot_content", "ballot_answer", "ballot",
+  "choice",
+  "selected_choice",
+  "selected_option",
+  "candidate",
+  "candidate_id",
+  "vote",
+  "vote_choice",
+  "ballot_choice",
+  "ballot_content",
+  "ballot_answer",
+  "ballot",
   "selected_candidate",
 ]);
 
@@ -613,7 +672,8 @@ function requirePilotToken(req, res, next) {
   const token = extractBearer(req);
   if (!token) return res.status(401).json({ error: "pilot_token_missing" });
   const result = verifySessionToken(token, getEnv("SIMURGH_VOTING_PILOT_TOKEN_SECRET"));
-  if (!result.valid) return res.status(401).json({ error: "pilot_token_invalid", reason: result.reason });
+  if (!result.valid)
+    return res.status(401).json({ error: "pilot_token_invalid", reason: result.reason });
   req.pilotSessionId = result.sessionId;
   next();
 }
@@ -666,7 +726,9 @@ router.post("/submit", requirePilotToken, (req, res) => {
         field_names: forbidden,
       });
     }
-    return res.status(400).json({ error: "ballot_choice_field_rejected", forbidden_fields: forbidden });
+    return res
+      .status(400)
+      .json({ error: "ballot_choice_field_rejected", forbidden_fields: forbidden });
   }
 
   const record = store.get(req.pilotSessionId);
@@ -747,6 +809,7 @@ git commit -m "feat(voting-pilot): add Express router with 4 routes and integrat
 ## Task 5: Wire into server.js and add env vars
 
 **Files:**
+
 - Modify: `server.js`
 - Modify: `.env`
 
@@ -799,6 +862,7 @@ git commit -m "feat(voting-pilot): mount voting pilot router and document env va
 ## Task 6: HTML pages
 
 **Files:**
+
 - Create: `public/voting-pilot.html`
 - Create: `public/voting-pilot-submit.html`
 
@@ -808,68 +872,111 @@ git commit -m "feat(voting-pilot): mount voting pilot router and document env va
 <!-- public/voting-pilot.html -->
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MQ Persian Society Voting Pilot — Project Simurgh</title>
-  <style>
-    body { font-family: system-ui, sans-serif; max-width: 640px; margin: 2rem auto; padding: 1rem; line-height: 1.6; }
-    .notice { background: #f0f4ff; border-left: 4px solid #3b6ff5; padding: 1rem; margin: 1.5rem 0; }
-    .forbidden { background: #fff0f0; border-left: 4px solid #d0352b; padding: 1rem; margin: 1.5rem 0; }
-    button { padding: 0.75rem 2rem; font-size: 1rem; border: none; border-radius: 6px; cursor: pointer; }
-    #btn-agree { background: #3b6ff5; color: white; }
-    #btn-decline { background: #eee; color: #333; margin-left: 1rem; }
-    #status { margin-top: 1rem; color: #555; }
-  </style>
-</head>
-<body>
-  <h1>MQ Persian Society — Integrity Pilot</h1>
-  <p>This is an <strong>optional research pilot</strong> for Project Simurgh. It runs beside the official MQ Persian Society event preference poll.</p>
-
-  <div class="notice">
-    <strong>This pilot does not affect the official election result.</strong>
-  </div>
-
-  <h2>What Simurgh collects</h2>
-  <p>Privacy-preserving session metadata: proof status, timestamps, focus-loss counts, paste counts, and audit-chain validity.</p>
-
-  <div class="forbidden">
-    <strong>Simurgh does NOT collect:</strong> who you vote for, ballot content, screen recordings, webcam video, microphone audio, typed text, clipboard text, raw process names, raw window titles, or device serial identifiers.
-  </div>
-
-  <p>Participation is voluntary. You may decline or stop at any time.</p>
-
-  <button id="btn-agree">Agree — join the pilot</button>
-  <button id="btn-decline">Decline — exit</button>
-  <p id="status"></p>
-
-  <script>
-    document.getElementById("btn-decline").addEventListener("click", () => {
-      document.body.innerHTML = "<h1>Thank you.</h1><p>No data was recorded. You may close this tab.</p>";
-    });
-
-    document.getElementById("btn-agree").addEventListener("click", async () => {
-      const status = document.getElementById("status");
-      status.textContent = "Starting pilot session…";
-      try {
-        const res = await fetch("/api/voting-pilot/consent/accept", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({}),
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error ?? "unknown error");
-        // Store token in sessionStorage — not localStorage; survives tab, not browser restart
-        sessionStorage.setItem("vp_token", data.token);
-        sessionStorage.setItem("vp_session_id", data.pilot_session_id);
-        status.textContent = `Pilot started. Your anonymous code: ${data.participant_code} (write this down — it is not stored).`;
-        setTimeout(() => { window.location.href = "/voting-pilot-submit.html"; }, 3000);
-      } catch (err) {
-        status.textContent = `Error: ${err.message}`;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MQ Persian Society Voting Pilot — Project Simurgh</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        max-width: 640px;
+        margin: 2rem auto;
+        padding: 1rem;
+        line-height: 1.6;
       }
-    });
-  </script>
-</body>
+      .notice {
+        background: #f0f4ff;
+        border-left: 4px solid #3b6ff5;
+        padding: 1rem;
+        margin: 1.5rem 0;
+      }
+      .forbidden {
+        background: #fff0f0;
+        border-left: 4px solid #d0352b;
+        padding: 1rem;
+        margin: 1.5rem 0;
+      }
+      button {
+        padding: 0.75rem 2rem;
+        font-size: 1rem;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+      #btn-agree {
+        background: #3b6ff5;
+        color: white;
+      }
+      #btn-decline {
+        background: #eee;
+        color: #333;
+        margin-left: 1rem;
+      }
+      #status {
+        margin-top: 1rem;
+        color: #555;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>MQ Persian Society — Integrity Pilot</h1>
+    <p>
+      This is an <strong>optional research pilot</strong> for Project Simurgh. It runs beside the
+      official MQ Persian Society event preference poll.
+    </p>
+
+    <div class="notice">
+      <strong>This pilot does not affect the official election result.</strong>
+    </div>
+
+    <h2>What Simurgh collects</h2>
+    <p>
+      Privacy-preserving session metadata: proof status, timestamps, focus-loss counts, paste
+      counts, and audit-chain validity.
+    </p>
+
+    <div class="forbidden">
+      <strong>Simurgh does NOT collect:</strong> who you vote for, ballot content, screen
+      recordings, webcam video, microphone audio, typed text, clipboard text, raw process names, raw
+      window titles, or device serial identifiers.
+    </div>
+
+    <p>Participation is voluntary. You may decline or stop at any time.</p>
+
+    <button id="btn-agree">Agree — join the pilot</button>
+    <button id="btn-decline">Decline — exit</button>
+    <p id="status"></p>
+
+    <script>
+      document.getElementById("btn-decline").addEventListener("click", () => {
+        document.body.innerHTML =
+          "<h1>Thank you.</h1><p>No data was recorded. You may close this tab.</p>";
+      });
+
+      document.getElementById("btn-agree").addEventListener("click", async () => {
+        const status = document.getElementById("status");
+        status.textContent = "Starting pilot session…";
+        try {
+          const res = await fetch("/api/voting-pilot/consent/accept", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({}),
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error ?? "unknown error");
+          // Store token in sessionStorage — not localStorage; survives tab, not browser restart
+          sessionStorage.setItem("vp_token", data.token);
+          sessionStorage.setItem("vp_session_id", data.pilot_session_id);
+          status.textContent = `Pilot started. Your anonymous code: ${data.participant_code} (write this down — it is not stored).`;
+          setTimeout(() => {
+            window.location.href = "/voting-pilot-submit.html";
+          }, 3000);
+        } catch (err) {
+          status.textContent = `Error: ${err.message}`;
+        }
+      });
+    </script>
+  </body>
 </html>
 ```
 
@@ -879,74 +986,127 @@ git commit -m "feat(voting-pilot): mount voting pilot router and document env va
 <!-- public/voting-pilot-submit.html -->
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mock Ballot — MQ Persian Society Pilot</title>
-  <style>
-    body { font-family: system-ui, sans-serif; max-width: 640px; margin: 2rem auto; padding: 1rem; line-height: 1.6; }
-    .option { display: block; padding: 0.75rem 1rem; margin: 0.5rem 0; border: 2px solid #ddd; border-radius: 6px; cursor: pointer; }
-    .option input { margin-right: 0.75rem; }
-    .option:has(input:checked) { border-color: #3b6ff5; background: #f0f4ff; }
-    button { padding: 0.75rem 2rem; font-size: 1rem; background: #3b6ff5; color: white; border: none; border-radius: 6px; cursor: pointer; margin-top: 1rem; }
-    button:disabled { background: #aaa; }
-    #status { margin-top: 1rem; color: #555; }
-    .notice { background: #f0f4ff; border-left: 4px solid #3b6ff5; padding: 0.75rem; font-size: 0.9rem; }
-  </style>
-</head>
-<body>
-  <h1>Mock Ballot</h1>
-  <div class="notice">This is a <strong>mock ballot only</strong> — it does not affect the official election. Your selection is not sent to Simurgh.</div>
-
-  <h2>Which MQ Persian Society event should we prioritise next?</h2>
-  <form id="ballot-form">
-    <label class="option"><input type="radio" name="event" value="A" /> Nowruz cultural night</label>
-    <label class="option"><input type="radio" name="event" value="B" /> Persian movie night</label>
-    <label class="option"><input type="radio" name="event" value="C" /> Career/networking night</label>
-    <label class="option"><input type="radio" name="event" value="D" /> Food and music night</label>
-  </form>
-
-  <button id="btn-submit" disabled>Submit</button>
-  <p id="status"></p>
-
-  <script>
-    const form = document.getElementById("ballot-form");
-    const btn = document.getElementById("btn-submit");
-    const status = document.getElementById("status");
-
-    form.addEventListener("change", () => { btn.disabled = false; });
-
-    btn.addEventListener("click", async () => {
-      btn.disabled = true;
-      status.textContent = "Submitting…";
-
-      // The selected option exists only in transient browser memory.
-      // It is discarded here — never sent to Simurgh.
-      form.querySelectorAll("input[name=event]").forEach((el) => { el.value = ""; });
-
-      const token = sessionStorage.getItem("vp_token");
-      const sessionId = sessionStorage.getItem("vp_session_id");
-
-      try {
-        const res = await fetch("/api/voting-pilot/submit", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          // Only submit_intent is sent — no choice, no candidate, no ballot content
-          body: JSON.stringify({ pilot_session_id: sessionId, submit_intent: true }),
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error ?? "unknown");
-        status.textContent = "Thank you. Your pilot submission was recorded. Your selected option was not sent to Simurgh or stored.";
-      } catch (err) {
-        status.textContent = `Error: ${err.message}`;
-        btn.disabled = false;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mock Ballot — MQ Persian Society Pilot</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        max-width: 640px;
+        margin: 2rem auto;
+        padding: 1rem;
+        line-height: 1.6;
       }
-    });
-  </script>
-</body>
+      .option {
+        display: block;
+        padding: 0.75rem 1rem;
+        margin: 0.5rem 0;
+        border: 2px solid #ddd;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+      .option input {
+        margin-right: 0.75rem;
+      }
+      .option:has(input:checked) {
+        border-color: #3b6ff5;
+        background: #f0f4ff;
+      }
+      button {
+        padding: 0.75rem 2rem;
+        font-size: 1rem;
+        background: #3b6ff5;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-top: 1rem;
+      }
+      button:disabled {
+        background: #aaa;
+      }
+      #status {
+        margin-top: 1rem;
+        color: #555;
+      }
+      .notice {
+        background: #f0f4ff;
+        border-left: 4px solid #3b6ff5;
+        padding: 0.75rem;
+        font-size: 0.9rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Mock Ballot</h1>
+    <div class="notice">
+      This is a <strong>mock ballot only</strong> — it does not affect the official election. Your
+      selection is not sent to Simurgh.
+    </div>
+
+    <h2>Which MQ Persian Society event should we prioritise next?</h2>
+    <form id="ballot-form">
+      <label class="option"
+        ><input type="radio" name="event" value="A" /> Nowruz cultural night</label
+      >
+      <label class="option"
+        ><input type="radio" name="event" value="B" /> Persian movie night</label
+      >
+      <label class="option"
+        ><input type="radio" name="event" value="C" /> Career/networking night</label
+      >
+      <label class="option"
+        ><input type="radio" name="event" value="D" /> Food and music night</label
+      >
+    </form>
+
+    <button id="btn-submit" disabled>Submit</button>
+    <p id="status"></p>
+
+    <script>
+      const form = document.getElementById("ballot-form");
+      const btn = document.getElementById("btn-submit");
+      const status = document.getElementById("status");
+
+      form.addEventListener("change", () => {
+        btn.disabled = false;
+      });
+
+      btn.addEventListener("click", async () => {
+        btn.disabled = true;
+        status.textContent = "Submitting…";
+
+        // The selected option exists only in transient browser memory.
+        // It is discarded here — never sent to Simurgh.
+        form.querySelectorAll("input[name=event]").forEach((el) => {
+          el.value = "";
+        });
+
+        const token = sessionStorage.getItem("vp_token");
+        const sessionId = sessionStorage.getItem("vp_session_id");
+
+        try {
+          const res = await fetch("/api/voting-pilot/submit", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            // Only submit_intent is sent — no choice, no candidate, no ballot content
+            body: JSON.stringify({ pilot_session_id: sessionId, submit_intent: true }),
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error ?? "unknown");
+          status.textContent =
+            "Thank you. Your pilot submission was recorded. Your selected option was not sent to Simurgh or stored.";
+        } catch (err) {
+          status.textContent = `Error: ${err.message}`;
+          btn.disabled = false;
+        }
+      });
+    </script>
+  </body>
 </html>
 ```
 
@@ -970,6 +1130,7 @@ git commit -m "feat(voting-pilot): add consent landing page and mock ballot UI"
 ## Task 7: Extend privacy-audit.mjs
 
 **Files:**
+
 - Modify: `tools/privacy-audit.mjs`
 
 - [ ] **Step 7.1: Read the current privacy-audit.mjs**
@@ -983,16 +1144,26 @@ In `tools/privacy-audit.mjs`, add a new check section after the existing audit c
 ```js
 // ── Voting-pilot ballot-choice forbidden key audit ───────────────────────────
 const VOTING_PILOT_FORBIDDEN_KEYS = [
-  "choice", "selected_choice", "selected_option",
-  "candidate", "candidate_id",
-  "vote", "vote_choice",
-  "ballot_choice", "ballot_content", "ballot_answer",
+  "choice",
+  "selected_choice",
+  "selected_option",
+  "candidate",
+  "candidate_id",
+  "vote",
+  "vote_choice",
+  "ballot_choice",
+  "ballot_content",
+  "ballot_answer",
   "selected_candidate",
 ];
 
 const VOTING_PILOT_ALLOWED_PATTERNS = [
-  "ballot_presented", "ballot_submitted", "ballot_choice_recorded_by_simurgh",
-  "pilot_mode", "voting_pilot", "integrity_tier",
+  "ballot_presented",
+  "ballot_submitted",
+  "ballot_choice_recorded_by_simurgh",
+  "pilot_mode",
+  "voting_pilot",
+  "integrity_tier",
 ];
 
 let votingPilotViolations = 0;
@@ -1014,7 +1185,9 @@ for (const key of VOTING_PILOT_FORBIDDEN_KEYS) {
 if (votingPilotViolations === 0) {
   console.log("[voting-pilot] ballot-choice privacy audit: PASS");
 } else {
-  console.error(`[voting-pilot] ballot-choice privacy audit: FAIL (${votingPilotViolations} violations)`);
+  console.error(
+    `[voting-pilot] ballot-choice privacy audit: FAIL (${votingPilotViolations} violations)`
+  );
   process.exitCode = 1;
 }
 ```
@@ -1041,6 +1214,7 @@ git commit -m "feat(voting-pilot): extend privacy-audit with ballot-choice forbi
 ## Task 8: Persona engine
 
 **Files:**
+
 - Create: `tools/voting-pilot-persona.mjs`
 - Create: `docs/research/mq-voting-pilot/evidence/synthetic/.gitkeep`
 
@@ -1078,12 +1252,10 @@ const PERSONAS = [
 ];
 
 const args = Object.fromEntries(
-  process.argv
-    .slice(2)
-    .reduce((pairs, arg, i, arr) => {
-      if (arg.startsWith("--")) pairs.push([arg.slice(2), arr[i + 1] ?? true]);
-      return pairs;
-    }, [])
+  process.argv.slice(2).reduce((pairs, arg, i, arr) => {
+    if (arg.startsWith("--")) pairs.push([arg.slice(2), arr[i + 1] ?? true]);
+    return pairs;
+  }, [])
 );
 
 const PERSONA = args.persona;
@@ -1092,7 +1264,9 @@ const FIXED_CLOCK = args["fixed-clock"] ?? null;
 const BASE_URL = args["base-url"] ?? "http://127.0.0.1:3030";
 
 if (!PERSONA) {
-  console.error("Usage: node tools/voting-pilot-persona.mjs --persona <name> --seed <n> [--fixed-clock <ISO>] [--base-url <url>]");
+  console.error(
+    "Usage: node tools/voting-pilot-persona.mjs --persona <name> --seed <n> [--fixed-clock <ISO>] [--base-url <url>]"
+  );
   console.error("Personas:", PERSONAS.join(", "));
   process.exit(1);
 }
@@ -1137,8 +1311,15 @@ async function runPersona(persona, seed) {
   let notes = "";
 
   function step(name, status, serverStatus = null, extra = {}) {
-    steps.push({ name, status, ...(serverStatus != null ? { server_status: serverStatus } : {}), ...extra });
-    console.log(`  [${status.toUpperCase()}] ${name}${serverStatus ? ` (HTTP ${serverStatus})` : ""}`);
+    steps.push({
+      name,
+      status,
+      ...(serverStatus != null ? { server_status: serverStatus } : {}),
+      ...extra,
+    });
+    console.log(
+      `  [${status.toUpperCase()}] ${name}${serverStatus ? ` (HTTP ${serverStatus})` : ""}`
+    );
   }
 
   if (persona === "declines_consent") {
@@ -1155,7 +1336,11 @@ async function runPersona(persona, seed) {
       pilot_session_id: null,
       server_record_created: false,
       steps,
-      privacy: { ballot_choice_sent: false, token_redacted: true, forbidden_values_recorded: false },
+      privacy: {
+        ballot_choice_sent: false,
+        token_redacted: true,
+        forbidden_values_recorded: false,
+      },
       assertion: "PASS",
       notes: "Decline path — no server record created as expected.",
     };
@@ -1187,7 +1372,11 @@ async function runPersona(persona, seed) {
       assertion = "FAIL";
     }
   } else if (persona === "forbidden_ballot_field_attempt") {
-    const submit = await post("/submit", { pilot_session_id: sessionId, submit_intent: true, choice: "A" }, token);
+    const submit = await post(
+      "/submit",
+      { pilot_session_id: sessionId, submit_intent: true, choice: "A" },
+      token
+    );
     if (submit.status === 400 && submit.body.error === "ballot_choice_field_rejected") {
       step("forbidden_field_rejected", "pass", 400);
     } else {
@@ -1203,7 +1392,11 @@ async function runPersona(persona, seed) {
     await post("/submit", { pilot_session_id: replaySessionId, submit_intent: true }, replayToken);
     step("session2_submitted", "pass");
     // Now try to submit session 1 using session 2's token (cross-session replay)
-    const replay = await post("/submit", { pilot_session_id: sessionId, submit_intent: true }, replayToken);
+    const replay = await post(
+      "/submit",
+      { pilot_session_id: sessionId, submit_intent: true },
+      replayToken
+    );
     // The token's sessionId won't match req.pilotSessionId — this should 401 or 404
     if (replay.status === 401 || replay.status === 404) {
       step("cross_session_replay_rejected", "pass", replay.status);
@@ -1213,7 +1406,11 @@ async function runPersona(persona, seed) {
     }
   } else if (persona === "tampered_proof") {
     // No daemon proof route in voting pilot — tamper test verifies server rejects unknown fields
-    const submit = await post("/submit", { pilot_session_id: sessionId, submit_intent: true, candidate_id: "fake_tamper" }, token);
+    const submit = await post(
+      "/submit",
+      { pilot_session_id: sessionId, submit_intent: true, candidate_id: "fake_tamper" },
+      token
+    );
     if (submit.status === 400 && submit.body.forbidden_fields?.includes("candidate_id")) {
       step("tampered_field_rejected", "pass", 400);
     } else {
@@ -1223,22 +1420,36 @@ async function runPersona(persona, seed) {
   } else if (persona === "distracted_member") {
     await delay(seededInt(seed, 300) + 50); // simulate focus loss
     step("simulate_focus_loss_delay", "pass");
-    const submit = await post("/submit", { pilot_session_id: sessionId, submit_intent: true }, token);
+    const submit = await post(
+      "/submit",
+      { pilot_session_id: sessionId, submit_intent: true },
+      token
+    );
     step("submit", submit.status === 200 ? "pass" : "fail", submit.status);
     if (submit.status !== 200) assertion = "FAIL";
   } else if (persona === "daemon_unavailable") {
     // No daemon — proceed browser-only
     step("daemon_probe_no_response", "pass");
-    const submit = await post("/submit", { pilot_session_id: sessionId, submit_intent: true }, token);
+    const submit = await post(
+      "/submit",
+      { pilot_session_id: sessionId, submit_intent: true },
+      token
+    );
     step("submit_browser_only", submit.status === 200 ? "pass" : "fail", submit.status);
     if (submit.status !== 200) assertion = "FAIL";
   } else {
     // compliant_browser_only, compliant_with_fixture_daemon
     // Note: real daemon tier is planned for v0.2; fixture persona is labelled synthetic
     if (persona.includes("fixture_daemon")) {
-      step("daemon_probe_fixture", "pass", null, { note: "Fixture daemon — proof validation out of scope for HTTP-level runner. Labelled synthetic." });
+      step("daemon_probe_fixture", "pass", null, {
+        note: "Fixture daemon — proof validation out of scope for HTTP-level runner. Labelled synthetic.",
+      });
     }
-    const submit = await post("/submit", { pilot_session_id: sessionId, submit_intent: true }, token);
+    const submit = await post(
+      "/submit",
+      { pilot_session_id: sessionId, submit_intent: true },
+      token
+    );
     step("submit", submit.status === 200 ? "pass" : "fail", submit.status);
     if (submit.status !== 200) assertion = "FAIL";
   }
@@ -1301,11 +1512,13 @@ if (result.assertion !== "PASS") process.exit(1);
 - [ ] **Step 8.3: Run a clean persona to verify against live server**
 
 Start the server in one terminal:
+
 ```bash
 node server.js
 ```
 
 In another terminal:
+
 ```bash
 node tools/voting-pilot-persona.mjs --persona compliant_browser_only --seed 101
 ```
@@ -1333,6 +1546,7 @@ git commit -m "feat(voting-pilot): add deterministic HTTP persona engine"
 ## Task 9: Research protocol documents
 
 **Files:**
+
 - Create: `docs/research/mq-voting-pilot/VOTING_PILOT_PROTOCOL.md`
 - Create: `docs/research/mq-voting-pilot/PARTICIPANT_INFORMATION_AND_CONSENT.md`
 - Create: `docs/research/mq-voting-pilot/DATA_MANAGEMENT_PLAN.md`
@@ -1363,11 +1577,11 @@ Shadow mode. Simurgh runs beside the official MQ Persian Society vote. It does n
 
 ## Phases
 
-| Phase | Description | Participants |
-|---|---|---|
-| A | Lab validation — synthetic persona runs | None (researcher only) |
-| B | Internal dry run | 3–5 executive members |
-| C | Optional member pilot | Volunteer society members |
+| Phase | Description                             | Participants              |
+| ----- | --------------------------------------- | ------------------------- |
+| A     | Lab validation — synthetic persona runs | None (researcher only)    |
+| B     | Internal dry run                        | 3–5 executive members     |
+| C     | Optional member pilot                   | Volunteer society members |
 
 Phase C requires written MQ Persian Society executive approval and MQ Human Research Ethics approval before proceeding.
 
@@ -1380,12 +1594,12 @@ Daemon absence is not treated as misconduct or suspicious behaviour. It is recor
 
 ## Data separation
 
-| Category | Label |
-|---|---|
-| Persona script sessions | synthetic_persona |
+| Category                      | Label                 |
+| ----------------------------- | --------------------- |
+| Persona script sessions       | synthetic_persona     |
 | Researcher manual walkthrough | researcher_self_pilot |
-| Real consenting members | human_participant |
-| Official election outcome | out_of_scope |
+| Real consenting members       | human_participant     |
+| Official election outcome     | out_of_scope          |
 ```
 
 - [ ] **Step 9.3: Create PARTICIPANT_INFORMATION_AND_CONSENT.md**
@@ -1473,47 +1687,47 @@ Research data is accessible to the principal researcher only. No third-party sha
 
 ## Functional tests
 
-| ID | Scenario | Expected result | Evidence |
-|---|---|---|---|
-| F1 | Participant joins mock ballot | Session created | Consent record |
-| F2 | Consent accepted | Telemetry starts | Consent timestamp |
-| F3 | Consent declined | No data collected | No server record |
-| F4 | Ballot page opened | SDK active | Session active |
-| F5 | Session submitted | Report generated | JSON report |
-| F6 | Audit chain exported | Valid chain | Verify output |
+| ID  | Scenario                      | Expected result   | Evidence          |
+| --- | ----------------------------- | ----------------- | ----------------- |
+| F1  | Participant joins mock ballot | Session created   | Consent record    |
+| F2  | Consent accepted              | Telemetry starts  | Consent timestamp |
+| F3  | Consent declined              | No data collected | No server record  |
+| F4  | Ballot page opened            | SDK active        | Session active    |
+| F5  | Session submitted             | Report generated  | JSON report       |
+| F6  | Audit chain exported          | Valid chain       | Verify output     |
 
 ## Security tests
 
-| ID | Scenario | Expected result | Severity |
-|---|---|---|---|
-| S1 | Replay session token across sessions | Reject (401/404) | High |
-| S2 | Submit with forbidden ballot field | 400 + field names only | High |
-| S3 | Request report for withdrawn session | 403 | High |
-| S4 | Request without pilot token | 401 | High |
-| S5 | Double withdrawal | 409 | Medium |
-| S6 | Token session ID does not match path session ID | 403 | High |
+| ID  | Scenario                                        | Expected result        | Severity |
+| --- | ----------------------------------------------- | ---------------------- | -------- |
+| S1  | Replay session token across sessions            | Reject (401/404)       | High     |
+| S2  | Submit with forbidden ballot field              | 400 + field names only | High     |
+| S3  | Request report for withdrawn session            | 403                    | High     |
+| S4  | Request without pilot token                     | 401                    | High     |
+| S5  | Double withdrawal                               | 409                    | Medium   |
+| S6  | Token session ID does not match path session ID | 403                    | High     |
 
 ## Privacy tests
 
-| ID | Test | Pass condition |
-|---|---|---|
-| P1 | No vote content in Simurgh logs | Zero matches |
-| P2 | No candidate names in Simurgh logs | Zero matches |
-| P3 | No raw names/emails | Zero matches |
-| P4 | No screen/webcam/audio fields | Zero matches |
-| P5 | No raw process/window fields | Zero matches |
-| P6 | Privacy audit script passes | PASS |
-| P7 | Data export is de-identified | PASS |
+| ID  | Test                               | Pass condition |
+| --- | ---------------------------------- | -------------- |
+| P1  | No vote content in Simurgh logs    | Zero matches   |
+| P2  | No candidate names in Simurgh logs | Zero matches   |
+| P3  | No raw names/emails                | Zero matches   |
+| P4  | No screen/webcam/audio fields      | Zero matches   |
+| P5  | No raw process/window fields       | Zero matches   |
+| P6  | Privacy audit script passes        | PASS           |
+| P7  | Data export is de-identified       | PASS           |
 
 ## Usability targets (Phase C only)
 
-| ID | Metric | Target |
-|---|---|---|
-| U1 | Completion rate | ≥ 80% |
-| U2 | Median setup time | ≤ 5 minutes |
-| U3 | Consent understood | ≥ 80% agree |
-| U4 | Privacy concern score | Low/moderate |
-| U5 | Would use again | ≥ 60% agree |
+| ID  | Metric                | Target       |
+| --- | --------------------- | ------------ |
+| U1  | Completion rate       | ≥ 80%        |
+| U2  | Median setup time     | ≤ 5 minutes  |
+| U3  | Consent understood    | ≥ 80% agree  |
+| U4  | Privacy concern score | Low/moderate |
+| U5  | Would use again       | ≥ 60% agree  |
 ```
 
 - [ ] **Step 9.6: Create NON_CLAIMS.md**
@@ -1552,6 +1766,7 @@ git commit -m "docs(voting-pilot): add research protocol, consent, data manageme
 ## Task 10: Safety scripts
 
 **Files:**
+
 - Create: `scripts/smoke-voting-pilot.sh`
 - Create: `scripts/security-audit-voting-pilot.sh`
 

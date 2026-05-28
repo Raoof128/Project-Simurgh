@@ -33,9 +33,7 @@ describe("consentStore", () => {
       pepper: PEPPER,
       hmacKey: HMAC_KEY,
     });
-    const expectedHex = createHmac("sha256", PEPPER)
-      .update(anonymousCode)
-      .digest("hex");
+    const expectedHex = createHmac("sha256", PEPPER).update(anonymousCode).digest("hex");
     assert.equal(record.participant_code_hash, "hmac-sha256:" + expectedHex);
     assert.ok(
       !record.participant_code_hash.includes(anonymousCode),

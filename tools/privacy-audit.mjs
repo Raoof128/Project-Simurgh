@@ -35,16 +35,20 @@ const DEFAULT_SCAN_DIRS = [
 // Scanned only against evidence exports; NOT against src/votingPilot source,
 // which intentionally declares these as constant names (not persisted values).
 const VOTING_PILOT_FORBIDDEN_KEYS = new Set([
-  "choice", "selected_choice", "selected_option",
-  "candidate", "candidate_id",
-  "vote", "vote_choice",
-  "ballot_choice", "ballot_content", "ballot_answer",
+  "choice",
+  "selected_choice",
+  "selected_option",
+  "candidate",
+  "candidate_id",
+  "vote",
+  "vote_choice",
+  "ballot_choice",
+  "ballot_content",
+  "ballot_answer",
   "selected_candidate",
 ]);
 
-const VOTING_PILOT_EVIDENCE_DIRS = [
-  "docs/research/mq-voting-pilot/evidence",
-];
+const VOTING_PILOT_EVIDENCE_DIRS = ["docs/research/mq-voting-pilot/evidence"];
 
 const args = process.argv.slice(2);
 const quiet = args.includes("--quiet");
@@ -172,7 +176,8 @@ function walkVotingPilot(dir) {
   }
 }
 
-if (!quiet) console.log("\n[voting-pilot] Scanning evidence exports for ballot-choice forbidden keys");
+if (!quiet)
+  console.log("\n[voting-pilot] Scanning evidence exports for ballot-choice forbidden keys");
 for (const d of VOTING_PILOT_EVIDENCE_DIRS) {
   walkVotingPilot(resolve(cwd, d));
 }
@@ -183,7 +188,10 @@ if (vpViolations.length > 0) {
     console.error(`  ${v.file}  →  ${v.path}  (key: ${v.key})`);
   }
 } else {
-  if (!quiet) console.log(`[voting-pilot] ballot-choice privacy audit: PASS (${vpFilesScanned} evidence file(s) scanned)`);
+  if (!quiet)
+    console.log(
+      `[voting-pilot] ballot-choice privacy audit: PASS (${vpFilesScanned} evidence file(s) scanned)`
+    );
 }
 
 const totalViolations = violations.length + vpViolations.length;
@@ -194,7 +202,9 @@ if (totalViolations > 0) {
     for (const v of violations) {
       console.error(`  ${v.file}  →  ${v.path}  (field: ${v.key})`);
     }
-    console.error(`\nTotal violations: ${violations.length}  (across ${filesScanned} files scanned)`);
+    console.error(
+      `\nTotal violations: ${violations.length}  (across ${filesScanned} files scanned)`
+    );
   }
   process.exit(1);
 }

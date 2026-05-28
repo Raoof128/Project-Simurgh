@@ -13,11 +13,11 @@ Shadow mode. Simurgh runs beside the official MQ Persian Society vote. It does n
 
 ## Phases
 
-| Phase | Description | Participants |
-|---|---|---|
-| A | Lab validation — synthetic persona runs | None (researcher only) |
-| B | Internal dry run | 3–5 executive members |
-| C | Optional member pilot | Volunteer society members |
+| Phase | Description                             | Participants              |
+| ----- | --------------------------------------- | ------------------------- |
+| A     | Lab validation — synthetic persona runs | None (researcher only)    |
+| B     | Internal dry run                        | 3–5 executive members     |
+| C     | Optional member pilot                   | Volunteer society members |
 
 Phase C requires written MQ Persian Society executive approval and MQ Human Research Ethics approval before proceeding.
 
@@ -30,9 +30,9 @@ Daemon absence is not treated as misconduct or suspicious behaviour. It is recor
 
 ## Data separation
 
-| Category | Label |
-|---|---|
-| Persona script sessions | synthetic_persona |
+| Category                      | Label                 |
+| ----------------------------- | --------------------- |
+| Persona script sessions       | synthetic_persona     |
 | Researcher manual walkthrough | researcher_self_pilot |
-| Real consenting members | human_participant |
-| Official election outcome | out_of_scope |
+| Real consenting members       | human_participant     |
+| Official election outcome     | out_of_scope          |

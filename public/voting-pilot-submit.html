@@ -1,71 +1,124 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mock Ballot — MQ Persian Society Pilot</title>
-  <style>
-    body { font-family: system-ui, sans-serif; max-width: 640px; margin: 2rem auto; padding: 1rem; line-height: 1.6; }
-    .option { display: block; padding: 0.75rem 1rem; margin: 0.5rem 0; border: 2px solid #ddd; border-radius: 6px; cursor: pointer; }
-    .option input { margin-right: 0.75rem; }
-    .option:has(input:checked) { border-color: #3b6ff5; background: #f0f4ff; }
-    button { padding: 0.75rem 2rem; font-size: 1rem; background: #3b6ff5; color: white; border: none; border-radius: 6px; cursor: pointer; margin-top: 1rem; }
-    button:disabled { background: #aaa; }
-    #status { margin-top: 1rem; color: #555; }
-    .notice { background: #f0f4ff; border-left: 4px solid #3b6ff5; padding: 0.75rem; font-size: 0.9rem; }
-  </style>
-</head>
-<body>
-  <h1>Mock Ballot</h1>
-  <div class="notice">This is a <strong>mock ballot only</strong> — it does not affect the official election. Your selection is not sent to Simurgh.</div>
-
-  <h2>Which MQ Persian Society event should we prioritise next?</h2>
-  <form id="ballot-form">
-    <label class="option"><input type="radio" name="event" value="A" /> Nowruz cultural night</label>
-    <label class="option"><input type="radio" name="event" value="B" /> Persian movie night</label>
-    <label class="option"><input type="radio" name="event" value="C" /> Career/networking night</label>
-    <label class="option"><input type="radio" name="event" value="D" /> Food and music night</label>
-  </form>
-
-  <button id="btn-submit" disabled>Submit</button>
-  <p id="status"></p>
-
-  <script>
-    const form = document.getElementById("ballot-form");
-    const btn = document.getElementById("btn-submit");
-    const status = document.getElementById("status");
-
-    form.addEventListener("change", () => { btn.disabled = false; });
-
-    btn.addEventListener("click", async () => {
-      btn.disabled = true;
-      status.textContent = "Submitting…";
-
-      // The selected option exists only in transient browser memory.
-      // It is discarded here — never sent to Simurgh.
-      form.querySelectorAll("input[name=event]").forEach((el) => { el.value = ""; });
-
-      const token = sessionStorage.getItem("vp_token");
-      const sessionId = sessionStorage.getItem("vp_session_id");
-
-      try {
-        const res = await fetch("/api/voting-pilot/submit", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          // Only submit_intent is sent — no choice, no candidate, no ballot content
-          body: JSON.stringify({ pilot_session_id: sessionId, submit_intent: true }),
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error ?? "unknown");
-        status.textContent = "Thank you. Your pilot submission was recorded. Your selected option was not sent to Simurgh or stored.";
-      } catch (err) {
-        status.textContent = `Error: ${err.message}`;
-        btn.disabled = false;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mock Ballot — MQ Persian Society Pilot</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        max-width: 640px;
+        margin: 2rem auto;
+        padding: 1rem;
+        line-height: 1.6;
       }
-    });
-  </script>
-</body>
+      .option {
+        display: block;
+        padding: 0.75rem 1rem;
+        margin: 0.5rem 0;
+        border: 2px solid #ddd;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+      .option input {
+        margin-right: 0.75rem;
+      }
+      .option:has(input:checked) {
+        border-color: #3b6ff5;
+        background: #f0f4ff;
+      }
+      button {
+        padding: 0.75rem 2rem;
+        font-size: 1rem;
+        background: #3b6ff5;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-top: 1rem;
+      }
+      button:disabled {
+        background: #aaa;
+      }
+      #status {
+        margin-top: 1rem;
+        color: #555;
+      }
+      .notice {
+        background: #f0f4ff;
+        border-left: 4px solid #3b6ff5;
+        padding: 0.75rem;
+        font-size: 0.9rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Mock Ballot</h1>
+    <div class="notice">
+      This is a <strong>mock ballot only</strong> — it does not affect the official election. Your
+      selection is not sent to Simurgh.
+    </div>
+
+    <h2>Which MQ Persian Society event should we prioritise next?</h2>
+    <form id="ballot-form">
+      <label class="option"
+        ><input type="radio" name="event" value="A" /> Nowruz cultural night</label
+      >
+      <label class="option"
+        ><input type="radio" name="event" value="B" /> Persian movie night</label
+      >
+      <label class="option"
+        ><input type="radio" name="event" value="C" /> Career/networking night</label
+      >
+      <label class="option"
+        ><input type="radio" name="event" value="D" /> Food and music night</label
+      >
+    </form>
+
+    <button id="btn-submit" disabled>Submit</button>
+    <p id="status"></p>
+
+    <script>
+      const form = document.getElementById("ballot-form");
+      const btn = document.getElementById("btn-submit");
+      const status = document.getElementById("status");
+
+      form.addEventListener("change", () => {
+        btn.disabled = false;
+      });
+
+      btn.addEventListener("click", async () => {
+        btn.disabled = true;
+        status.textContent = "Submitting…";
+
+        // The selected option exists only in transient browser memory.
+        // It is discarded here — never sent to Simurgh.
+        form.querySelectorAll("input[name=event]").forEach((el) => {
+          el.value = "";
+        });
+
+        const token = sessionStorage.getItem("vp_token");
+        const sessionId = sessionStorage.getItem("vp_session_id");
+
+        try {
+          const res = await fetch("/api/voting-pilot/submit", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            // Only submit_intent is sent — no choice, no candidate, no ballot content
+            body: JSON.stringify({ pilot_session_id: sessionId, submit_intent: true }),
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error ?? "unknown");
+          status.textContent =
+            "Thank you. Your pilot submission was recorded. Your selected option was not sent to Simurgh or stored.";
+        } catch (err) {
+          status.textContent = `Error: ${err.message}`;
+          btn.disabled = false;
+        }
+      });
+    </script>
+  </body>
 </html>

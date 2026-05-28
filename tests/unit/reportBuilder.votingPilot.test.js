@@ -58,7 +58,10 @@ describe("buildPilotReport", () => {
     const { record } = makeRecord();
     const report = buildPilotReport(record);
     assert.equal(report.audit.chain_valid, true);
-    assert.ok(report.audit.event_count >= 1, "chain should have at least the CONSENT_ACCEPTED event");
+    assert.ok(
+      report.audit.event_count >= 1,
+      "chain should have at least the CONSENT_ACCEPTED event"
+    );
   });
 
   test("synthetic flag is passed through", () => {
