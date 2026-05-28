@@ -31,6 +31,21 @@ const DEFAULT_SCAN_DIRS = [
   "tests/fixtures/stage-2-8",
 ];
 
+// Voting-pilot ballot-choice forbidden keys — exact key matching only.
+// Scanned only against evidence exports; NOT against src/votingPilot source,
+// which intentionally declares these as constant names (not persisted values).
+const VOTING_PILOT_FORBIDDEN_KEYS = new Set([
+  "choice", "selected_choice", "selected_option",
+  "candidate", "candidate_id",
+  "vote", "vote_choice",
+  "ballot_choice", "ballot_content", "ballot_answer",
+  "selected_candidate",
+]);
+
+const VOTING_PILOT_EVIDENCE_DIRS = [
+  "docs/research/mq-voting-pilot/evidence",
+];
+
 const args = process.argv.slice(2);
 const quiet = args.includes("--quiet");
 const explicitTargets = args.filter((a) => !a.startsWith("--"));
@@ -104,12 +119,83 @@ const targets =
 if (!quiet) console.log("Simurgh privacy audit — scanning for forbidden fields");
 for (const t of targets) walk(t);
 
-if (violations.length > 0) {
-  console.error("\n✖ Privacy audit FAILED — forbidden fields found:");
-  for (const v of violations) {
-    console.error(`  ${v.file}  →  ${v.path}  (field: ${v.key})`);
+// ── Voting-pilot ballot-choice forbidden key audit ────────────────────────────
+// Uses the same visit() walker but with voting-pilot-specific forbidden keys.
+// Scan targets: evidence exports only (NOT src/votingPilot source constants).
+const vpViolations = [];
+let vpFilesScanned = 0;
+
+function visitVotingPilot(value, path, file) {
+  if (value === null || typeof value !== "object") return;
+  if (Array.isArray(value)) {
+    value.forEach((item, i) => visitVotingPilot(item, `${path}[${i}]`, file));
+    return;
   }
-  console.error(`\nTotal violations: ${violations.length}  (across ${filesScanned} files scanned)`);
+  for (const [key, v] of Object.entries(value)) {
+    const here = path ? `${path}.${key}` : key;
+    if (VOTING_PILOT_FORBIDDEN_KEYS.has(key)) {
+      vpViolations.push({ file, path: here, key });
+    }
+    visitVotingPilot(v, here, file);
+  }
+}
+
+function scanFileVotingPilot(file) {
+  let parsed;
+  try {
+    const raw = readFileSync(file, "utf8");
+    parsed = JSON.parse(raw);
+  } catch {
+    return;
+  }
+  vpFilesScanned += 1;
+  visitVotingPilot(parsed, "", file);
+}
+
+function walkVotingPilot(dir) {
+  let stat;
+  try {
+    stat = statSync(dir);
+  } catch {
+    return;
+  }
+  if (stat.isFile()) {
+    if (dir.endsWith(".json")) scanFileVotingPilot(dir);
+    return;
+  }
+  if (!stat.isDirectory()) return;
+  const base = basename(dir);
+  if (base === "target" || base === "node_modules") return;
+  for (const entry of readdirSync(dir)) {
+    if (entry.startsWith(".")) continue;
+    walkVotingPilot(join(dir, entry));
+  }
+}
+
+if (!quiet) console.log("\n[voting-pilot] Scanning evidence exports for ballot-choice forbidden keys");
+for (const d of VOTING_PILOT_EVIDENCE_DIRS) {
+  walkVotingPilot(resolve(cwd, d));
+}
+
+if (vpViolations.length > 0) {
+  console.error("[voting-pilot] ballot-choice privacy audit: FAIL");
+  for (const v of vpViolations) {
+    console.error(`  ${v.file}  →  ${v.path}  (key: ${v.key})`);
+  }
+} else {
+  if (!quiet) console.log(`[voting-pilot] ballot-choice privacy audit: PASS (${vpFilesScanned} evidence file(s) scanned)`);
+}
+
+const totalViolations = violations.length + vpViolations.length;
+
+if (totalViolations > 0) {
+  if (violations.length > 0) {
+    console.error("\n✖ Privacy audit FAILED — forbidden fields found:");
+    for (const v of violations) {
+      console.error(`  ${v.file}  →  ${v.path}  (field: ${v.key})`);
+    }
+    console.error(`\nTotal violations: ${violations.length}  (across ${filesScanned} files scanned)`);
+  }
   process.exit(1);
 }
 
