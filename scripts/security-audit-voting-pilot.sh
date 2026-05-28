@@ -6,8 +6,8 @@ set -euo pipefail
 BASE="${SIMURGH_BASE_URL:-http://127.0.0.1:3030}"
 PASS=0; FAIL=0
 
-ok()   { echo "[PASS] $1"; ((PASS++)); }
-fail() { echo "[FAIL] $1"; ((FAIL++)); }
+ok()   { echo "[PASS] $1"; ((PASS+=1)); }
+fail() { echo "[FAIL] $1"; ((FAIL+=1)); }
 
 # S1: No token → 401
 S=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASE/api/voting-pilot/submit" \
@@ -30,10 +30,10 @@ R3=$(curl -sf -X POST "$BASE/api/voting-pilot/consent/accept" \
   -H "Content-Type: application/json" -d '{}')
 SID3=$(echo "$R3" | grep -o '"pilot_session_id":"[^"]*"' | cut -d'"' -f4)
 TOK3=$(echo "$R3" | grep -o '"token":"[^"]*"' | cut -d'"' -f4)
-BODY3=$(curl -sf -X POST "$BASE/api/voting-pilot/submit" \
+BODY3=$(curl -s -X POST "$BASE/api/voting-pilot/submit" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $TOK3" \
-  -d "{\"pilot_session_id\":\"$SID3\",\"submit_intent\":true,\"candidate\":\"Alice\"}" || true)
+  -d "{\"pilot_session_id\":\"$SID3\",\"submit_intent\":true,\"candidate\":\"Alice\"}")
 echo "$BODY3" | grep -q '"forbidden_fields"' && ok "400 response contains forbidden_fields" || fail "400 response missing forbidden_fields"
 echo "$BODY3" | grep -vq '"Alice"' && ok "400 response does not echo forbidden value" || fail "400 response leaks forbidden value"
 

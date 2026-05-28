@@ -1,0 +1,7 @@
+Simurgh privacy audit — scanning for forbidden fields
+  scan   /Users/raoof.r12/Desktop/Raouf/Project-Simurgh/tests/fixtures/stage-2-8/linux-proof.json
+
+[voting-pilot] Scanning evidence exports for ballot-choice forbidden keys
+[voting-pilot] ballot-choice privacy audit: PASS (0 evidence file(s) scanned)
+
+✓ Privacy audit PASSED — no forbidden fields found in 1 scanned file(s).

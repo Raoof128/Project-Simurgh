@@ -1,0 +1,44 @@
+{
+  "schema_version": "2026-05-v1",
+  "persona": "distracted_member",
+  "seed": 303,
+  "fixed_clock": "2026-05-28T10:00:00.000Z",
+  "run_at": "2026-05-28T10:00:00.000Z",
+  "synthetic": true,
+  "human_participant": false,
+  "pilot_session_id": "vp_b608c260-d396-4780-93d7-a35a4ccf283f",
+  "integrity_tier": "browser_only",
+  "steps": [
+    {
+      "name": "accept_consent",
+      "status": "pass",
+      "server_status": 200
+    },
+    {
+      "name": "simulate_focus_loss_delay",
+      "status": "pass"
+    },
+    {
+      "name": "submit",
+      "status": "pass",
+      "server_status": 200
+    },
+    {
+      "name": "fetch_report",
+      "status": "pass",
+      "server_status": 200
+    }
+  ],
+  "privacy": {
+    "ballot_choice_sent": false,
+    "token_redacted": true,
+    "forbidden_values_recorded": false
+  },
+  "final_server_response": {
+    "status": 200,
+    "summary": "submitted",
+    "chain_valid": true
+  },
+  "assertion": "PASS",
+  "notes": "distracted_member persona completed."
+}

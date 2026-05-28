@@ -1,0 +1,290 @@
+
+━━━ Node version ━━━
+✓ node v22.16.0 (>= 22 required for node:test)
+
+━━━ Install dependencies ━━━
+✓ node_modules present (skipping install)
+
+━━━ Syntax check ━━━
+✓ node --check on all .js / .mjs files
+
+━━━ Format ━━━
+✗ prettier --check (npm run format:check)
+Last 40 log lines from .simurgh_check_logs/prettier_--check_(npm_run_format:check).log:
+
+> simurgh@0.4.18 format:check
+> prettier --check .
+
+Checking formatting...
+[warn] docs/research/mq-voting-pilot/evidence/synthetic/session-compliant_browser_only-101-1779929807085.json
+[warn] docs/research/mq-voting-pilot/evidence/synthetic/session-compliant_with_fixture_daemon-202-1779929807202.json
+[warn] docs/research/mq-voting-pilot/evidence/synthetic/session-daemon_unavailable-404-1779929807661.json
+[warn] docs/research/mq-voting-pilot/evidence/synthetic/session-declines_consent-808-1779929808576.json
+[warn] docs/research/mq-voting-pilot/evidence/synthetic/session-distracted_member-303-1779929807501.json
+[warn] docs/research/mq-voting-pilot/evidence/synthetic/session-forbidden_ballot_field_attempt-909-1779929808691.json
+[warn] docs/research/mq-voting-pilot/evidence/synthetic/session-replay_attempt-505-1779929807854.json
+[warn] docs/research/mq-voting-pilot/evidence/synthetic/session-tampered_proof-606-1779929808035.json
+[warn] docs/research/mq-voting-pilot/evidence/synthetic/session-withdraws_midway-707-1779929808461.json
+[warn] docs/research/mq-voting-pilot/EXPERIMENT_MATRIX.md
+[warn] docs/research/mq-voting-pilot/VOTING_PILOT_PROTOCOL.md
+[warn] docs/superpowers/plans/2026-05-28-voting-pilot.md
+[warn] docs/superpowers/specs/2026-05-28-voting-pilot-design.md
+[warn] public/voting-pilot-submit.html
+[warn] public/voting-pilot.html
+[warn] src/votingPilot/consentStore.js
+[warn] src/votingPilot/index.js
+[warn] tests/unit/consentStore.test.js
+[warn] tests/unit/reportBuilder.votingPilot.test.js
+[warn] tests/unit/router.votingPilot.test.js
+[warn] tools/privacy-audit.mjs
+[warn] tools/voting-pilot-persona.mjs
+[warn] Code style issues found in 22 files. Run Prettier with --write to fix.
+
+━━━ Tests ━━━
+✓ npm test
+
+━━━ Privacy guard ━━━
+✓ tools/privacy-audit.mjs (generated data scan)
+✓ privacy guard (no forbidden fields, no analytics packages)
+
+━━━ Secret scan ━━━
+✓ secret scan (no hardcoded keys or token values)
+
+━━━ Tone check ━━━
+✓ tone check (hedged language, no overclaim)
+
+━━━ npm audit ━━━
+✓ npm audit (0 high/critical vulnerabilities)
+
+━━━ Server boot smoke ━━━
+✓ /health reachable
+✓ header present: X-Frame-Options
+✓ header present: X-Content-Type-Options
+✓ header present: Referrer-Policy
+✓ header present: Permissions-Policy
+✓ telemetry rejects negative numbers
+✓ telemetry rejects duplicate sequence
+✓ /join issues sessionToken
+✓ joined-session telemetry requires token
+
+━━━ Audit chain self-test ━━━
+✓ audit chain verifies end-to-end
+
+━━━ Stage 2.1 integrity proof round-trip ━━━
+✓ Stage 2.1 integrity proof verified end-to-end (signature_status=unregistered_node)
+✓ Stage 2.1 zeroed signature rejected (401 invalid_signature)
+✓ Stage 2.2 pairing round-trip (signature_status: verified)
+✓ Stage 2.2 paired-session proof returns verified
+✓ Stage 2.2 paired-session rejects different node (409 paired_node_mismatch)
+✓ Stage 2.2 unpaired-session proof still returns unregistered_node (backward compat)
+✓ Stage 2.2 /pairing/complete refuses different node when integrityState already bound (N1)
+✓ Stage 2 stale proof + replayed nonce both rejected (proof_stale, nonce_replayed)
+✓ Stage 2.2 invalid_signature + challenge-rejection both emit INTEGRITY_PAIRING_REJECTED (Q9)
+✓ Stage 2.3 daemon pair + proof accepted, replay rejected, tamper audited
+
+━━━ Stage 2.3 hardened daemon-required mode ━━━
+✓ SIMURGH_REQUIRE_DAEMON rejects missing telemetry proof and audits DAEMON_MISSING
+
+━━━ Golden fixture sync ━━━
+✓ Node + Swift golden fixtures are identical (proof + pairing)
+
+━━━ Swift macOS node build + test ━━━
+✓ swift build (macOS node) succeeded
+✓ swift test (golden-fixture interop)
+✓ Stage 2.1 CLI output privacy regression (no forbidden field in stdout)
+
+━━━ Swift macOS daemon build + test ━━━
+✓ swift build (macOS daemon) succeeded
+✓ swift test (macOS daemon)
+
+━━━ Stage 2.4 browser SDK + daemon lifecycle ━━━
+✓ Stage 2.4 browser SDK builds / loads
+✓ Stage 2.4 SDK handles missing, pair success, hardened block, and proof rejection
+✓ Stage 2.4 daemon lifecycle, doctor redaction, and LaunchAgent checks
+✓ Stage 2.4 LaunchAgent plist lint/check
+✓ Stage 2.4 daemon lifecycle smoke
+
+━━━ Stage 2.5 macOS affinity scanner ━━━
+✓ Stage 2.5 scanner proof accepts zero-count, risk, privacy, and tamper cases
+✓ Stage 2.5 scanner risk maps unavailable to warning and excluded windows to Critical
+✓ Stage 2.5 report includes privacy-safe scanner summary
+✓ Stage 2.5 Swift scanner mock risk and privacy regression
+✓ Stage 2.5 Swift proof includes signed scanner fields
+
+━━━ Stage 2.2/2.3 E2E smoke ━━━
+✓ Stage 2.2/2.3 E2E smoke: pairing + daemon proof bridge
+
+━━━ Stage 2.4/2.5 E2E smoke ━━━
+✓ Stage 2.4/2.5 E2E smoke: SDK + daemon + scanner + signed proof
+
+━━━ Stage 2.4/2.5 cybersecurity audit ━━━
+✗ Stage 2.4/2.5 cybersecurity audit: SDK + daemon + scanner hardening
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 68.079375
+Simurgh privacy audit — scanning for forbidden fields
+  scan   /Users/raoof.r12/Desktop/Raouf/Project-Simurgh/tests/fixtures/stage-2-8/linux-proof.json
+
+[voting-pilot] Scanning evidence exports for ballot-choice forbidden keys
+[voting-pilot] ballot-choice privacy audit: PASS (9 evidence file(s) scanned)
+
+✓ Privacy audit PASSED — no forbidden fields found in 1 scanned file(s).
+# npm audit report
+
+qs  6.11.1 - 6.15.1
+Severity: moderate
+qs has a remotely triggerable DoS: qs.stringify crashes with TypeError on null/undefined entries in comma-format arrays when encodeValuesOnly is set - https://github.com/advisories/GHSA-q8mj-m7cp-5q26
+fix available via `npm audit fix`
+node_modules/body-parser/node_modules/qs
+node_modules/qs
+  express  4.21.0 - 4.22.1 || 5.0.0-alpha.1 - 5.0.1
+  Depends on vulnerable versions of qs
+  node_modules/express
+
+2 moderate severity vulnerabilities
+
+To address all issues, run:
+  npm audit fix
+Stage 2.4/2.5 E2E smoke: SDK + daemon + scanner + signed proof
+Stage 2.4/2.5 E2E smoke passed
+Simurgh privacy audit — scanning for forbidden fields
+  scan   /Users/raoof.r12/Desktop/Raouf/Project-Simurgh/tests/fixtures/stage-2-8/linux-proof.json
+
+[voting-pilot] Scanning evidence exports for ballot-choice forbidden keys
+[voting-pilot] ballot-choice privacy audit: PASS (9 evidence file(s) scanned)
+
+✓ Privacy audit PASSED — no forbidden fields found in 1 scanned file(s).
+Running macOS daemon lifecycle smoke...
+[0/1] Planning build
+Building for debugging...
+[0/3] Write swift-version--58304C5D6DBC2206.txt
+Build complete! (0.22s)
+[0/1] Planning build
+Building for debugging...
+[0/4] Write swift-version--58304C5D6DBC2206.txt
+Build complete! (0.16s)
+Test Suite 'All tests' started at 2026-05-28 11:00:04.706.
+Test Suite 'SimurghDaemonPackageTests.xctest' started at 2026-05-28 11:00:04.714.
+Test Suite 'AffinityScannerTests' started at 2026-05-28 11:00:04.714.
+Test Case '-[SimurghDaemonTests.AffinityScannerTests testCaptureExcludedVisibleWindowIncrementsCounts]' started.
+Test Case '-[SimurghDaemonTests.AffinityScannerTests testCaptureExcludedVisibleWindowIncrementsCounts]' passed (0.009 seconds).
+Test Case '-[SimurghDaemonTests.AffinityScannerTests testEmptyScanReturnsHealthyZeroCounts]' started.
+Test Case '-[SimurghDaemonTests.AffinityScannerTests testEmptyScanReturnsHealthyZeroCounts]' passed (0.000 seconds).
+Test Case '-[SimurghDaemonTests.AffinityScannerTests testProviderFailureReturnsScannerUnavailable]' started.
+Test Case '-[SimurghDaemonTests.AffinityScannerTests testProviderFailureReturnsScannerUnavailable]' passed (0.001 seconds).
+Test Case '-[SimurghDaemonTests.AffinityScannerTests testProviderPermissionDeniedReturnsPermissionDenied]' started.
+Test Case '-[SimurghDaemonTests.AffinityScannerTests testProviderPermissionDeniedReturnsPermissionDenied]' passed (0.000 seconds).
+Test Case '-[SimurghDaemonTests.AffinityScannerTests testTinyAndNonOnscreenWindowsAreIgnored]' started.
+Test Case '-[SimurghDaemonTests.AffinityScannerTests testTinyAndNonOnscreenWindowsAreIgnored]' passed (0.000 seconds).
+Test Suite 'AffinityScannerTests' passed at 2026-05-28 11:00:04.725.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 0.011 (0.011) seconds
+Test Suite 'DaemonDoctorTests' started at 2026-05-28 11:00:04.725.
+Test Case '-[SimurghDaemonTests.DaemonDoctorTests testDoctorReportRedactsSensitiveValues]' started.
+Test Case '-[SimurghDaemonTests.DaemonDoctorTests testDoctorReportRedactsSensitiveValues]' passed (0.001 seconds).
+Test Suite 'DaemonDoctorTests' passed at 2026-05-28 11:00:04.726.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
+Test Suite 'PrivacyNormaliserTests' started at 2026-05-28 11:00:04.726.
+Test Case '-[SimurghDaemonTests.PrivacyNormaliserTests testStatusContainsOnlyPrivacySafeFields]' started.
+Test Case '-[SimurghDaemonTests.PrivacyNormaliserTests testStatusContainsOnlyPrivacySafeFields]' passed (0.084 seconds).
+Test Suite 'PrivacyNormaliserTests' passed at 2026-05-28 11:00:04.810.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.084 (0.085) seconds
+Test Suite 'ScannerProofTests' started at 2026-05-28 11:00:04.810.
+Test Case '-[SimurghDaemonTests.ScannerProofTests testProofPayloadIncludesScannerSummaryInsideSignedPayload]' started.
+Test Case '-[SimurghDaemonTests.ScannerProofTests testProofPayloadIncludesScannerSummaryInsideSignedPayload]' passed (0.040 seconds).
+Test Suite 'ScannerProofTests' passed at 2026-05-28 11:00:04.850.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.040 (0.040) seconds
+Test Suite 'SimurghDaemonPackageTests.xctest' passed at 2026-05-28 11:00:04.850.
+	 Executed 8 tests, with 0 failures (0 unexpected) in 0.136 (0.137) seconds
+Test Suite 'All tests' passed at 2026-05-28 11:00:04.850.
+	 Executed 8 tests, with 0 failures (0 unexpected) in 0.136 (0.144) seconds
+◇ Test run started.
+↳ Testing Library Version: 1902
+↳ Target Platform: arm64e-apple-macos14.0
+✔ Test run with 0 tests in 0 suites passed after 0.001 seconds.
+Another instance of SwiftPM (PID: 38014) is already running using '/Users/raoof.r12/Desktop/Raouf/Project-Simurgh/tools/simurgh-daemon-macos/.build', waiting until that process has finished execution...Building for debugging...
+[0/3] Write swift-version--58304C5D6DBC2206.txt
+Build of product 'SimurghDaemon' complete! (0.12s)
+Stage 2.4/2.5 E2E smoke passed.
+check passed: development LaunchAgent template is valid
+boundary: development-only local LaunchAgent; not notarised; not production endpoint management; not MDM deployment.
+check passed: development LaunchAgent uninstall path is bounded
+boundary: Development-only local LaunchAgent removal; not notarised; not production endpoint management; not MDM deployment.
+public/voting-pilot.html:40:      document.body.innerHTML = "<h1>Thank you.</h1><p>No data was recorded. You may close this tab.</p>";
+unsafe dynamic HTML sink found outside reviewed dashboard/student render paths
+
+━━━ Stage 2.6 Windows scanner ━━━
+✓ Stage 2.6 Windows scanner smoke: signed proof + risk + report + audit
+✗ Stage 2.6 Windows daemon .NET tests
+  Determining projects to restore...
+/usr/local/share/dotnet/sdk/7.0.307/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.TargetFrameworkInference.targets(151,5): error NETSDK1045: The current .NET SDK does not support targeting .NET 8.0.  Either target .NET 7.0 or lower, or use a version of the .NET SDK that supports .NET 8.0. [/Users/raoof.r12/Desktop/Raouf/Project-Simurgh/tools/simurgh-daemon-windows/src/SimurghDaemon.Windows/SimurghDaemon.Windows.csproj]
+/usr/local/share/dotnet/sdk/7.0.307/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.TargetFrameworkInference.targets(151,5): error NETSDK1045: The current .NET SDK does not support targeting .NET 8.0.  Either target .NET 7.0 or lower, or use a version of the .NET SDK that supports .NET 8.0. [/Users/raoof.r12/Desktop/Raouf/Project-Simurgh/tools/simurgh-daemon-windows/src/SimurghAffinityFixture/SimurghAffinityFixture.csproj]
+/usr/local/share/dotnet/sdk/7.0.307/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.TargetFrameworkInference.targets(151,5): error NETSDK1045: The current .NET SDK does not support targeting .NET 8.0.  Either target .NET 7.0 or lower, or use a version of the .NET SDK that supports .NET 8.0. [/Users/raoof.r12/Desktop/Raouf/Project-Simurgh/tools/simurgh-daemon-windows/tests/SimurghDaemon.Windows.Tests/SimurghDaemon.Windows.Tests.csproj]
+
+━━━ Stage 2.7 cross-platform Device Shield smoke ━━━
+✗ Stage 2.7 cross-platform Device Shield smoke
+Stage 2.7 cross-platform Device Shield smoke
+Scenario A (macOS healthy): pass
+Scenario B (Windows healthy): pass
+Scenario C (macOS capture-excluded Critical): pass
+Scenario D (Windows monitor-only Warning): pass
+Scenario E (Windows capture-excluded Critical): pass
+Scenario F (unknown-platform unsupported_platform): pass
+Error: G: audit leaked raw value "4321"
+{
+  "snippet": "{\"sessionId\":\"sess_e2ff2fd1e008\",\"generated_at\":\"2026-05-28T01:00:19.154Z\",\"chain_terminator\":\"d57877d5f89b6cc1acb6b199b03a311cc51614c26a6648caf7d7f80c6c02e3c5\",\"entry_count\":7,\"truncated\":false,\"cap\":5000,\"hmac_algorithm\":\"HMAC-SHA256\",\"hmac_key_ephemeral\":true,\"entries\":[{\"seq\":0,\"ts\":1779930019150,\"type\":\"exam_started\",\"payload\":{\"examId\":\"exam_d04ea42d701d\",\"ts\":1779930019150},\"prev\":\"GENESIS\""
+}
+    at assertSmoke (file:///Users/raoof.r12/Desktop/Raouf/Project-Simurgh/tests/e2e/stage27_cross_platform_device_shield_smoke.mjs:9:11)
+    at runScenarioG (file:///Users/raoof.r12/Desktop/Raouf/Project-Simurgh/tests/e2e/stage27_cross_platform_device_shield_smoke.mjs:600:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async main (file:///Users/raoof.r12/Desktop/Raouf/Project-Simurgh/tests/e2e/stage27_cross_platform_device_shield_smoke.mjs:618:3)
+
+━━━ Stage 2.7 cross-platform security audit ━━━
+✓ Stage 2.7 cross-platform security audit: signature/platform/raw-field gates
+
+━━━ Stage 2.6/2.7 closeout E2E smoke ━━━
+✓ Stage 2.6/2.7 closeout E2E smoke: 2.6 Windows + 2.7 cross-platform + privacy
+
+━━━ Stage 2.6/2.7 closeout cybersecurity audit ━━━
+✗ Stage 2.6/2.7 closeout cybersecurity audit
+Stage 2.6/2.7 closeout cybersecurity audit
+  [1/5] Stage 2.4/2.5 cybersecurity audit
+[0/1] Planning build
+Building for debugging...
+[0/4] Write swift-version--58304C5D6DBC2206.txt
+Build complete! (0.15s)
+Another instance of SwiftPM (PID: 38543) is already running using '/Users/raoof.r12/Desktop/Raouf/Project-Simurgh/tools/simurgh-daemon-macos/.build', waiting until that process has finished execution...Building for debugging...
+[0/3] Write swift-version--58304C5D6DBC2206.txt
+Build of product 'SimurghDaemon' complete! (0.12s)
+unsafe dynamic HTML sink found outside reviewed dashboard/student render paths
+
+━━━ Stage 2.8A/2.8B Linux foundation + X11 scanner smoke ━━━
+✓ Stage 2.8A/2.8B Linux foundation + X11 scanner smoke
+
+━━━ Stage 2.8A/2.8B Linux cybersecurity audit ━━━
+✗ Stage 2.8A/2.8B Linux cybersecurity audit
+Stage 2.8A + 2.8B Linux cybersecurity audit
+  [1/4] Stage 2.6/2.7 closeout cybersecurity audit (no regression)
+Stage 2.6/2.7 closeout cybersecurity audit
+  [1/5] Stage 2.4/2.5 cybersecurity audit
+[0/1] Planning build
+Building for debugging...
+[0/4] Write swift-version--58304C5D6DBC2206.txt
+Build complete! (0.15s)
+[0/1] Planning build
+Building for debugging...
+[0/3] Write swift-version--58304C5D6DBC2206.txt
+Build of product 'SimurghDaemon' complete! (0.25s)
+unsafe dynamic HTML sink found outside reviewed dashboard/student render paths
+
+━━━ Stage 2.8C/2.8D Linux Wayland + systemd + CI smoke ━━━
+✓ Stage 2.8C/2.8D Linux Wayland + systemd + CI smoke
+
+━━━ Stage 2.8C/2.8D Linux cybersecurity audit ━━━

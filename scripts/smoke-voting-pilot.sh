@@ -6,8 +6,8 @@ set -euo pipefail
 BASE="${SIMURGH_BASE_URL:-http://127.0.0.1:3030}"
 PASS=0; FAIL=0
 
-ok()   { echo "[PASS] $1"; ((PASS++)); }
-fail() { echo "[FAIL] $1"; ((FAIL++)); }
+ok()   { echo "[PASS] $1"; ((PASS+=1)); }
+fail() { echo "[FAIL] $1"; ((FAIL+=1)); }
 
 # Gate 1: consent/accept returns pilot_session_id and token
 R=$(curl -sf -X POST "$BASE/api/voting-pilot/consent/accept" \

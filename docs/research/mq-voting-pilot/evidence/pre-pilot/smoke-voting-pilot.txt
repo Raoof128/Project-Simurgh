@@ -1,0 +1,10 @@
+[PASS] consent/accept returns vp_ session id
+[PASS] consent/accept returns token
+[PASS] submit returns ballot_submitted true
+[PASS] submit has ballot_choice_recorded_by_simurgh false
+[PASS] report chain_valid true
+[PASS] report official_vote_impact false
+[PASS] decline path: request without token → 401
+[PASS] withdrawal blocks report with 403
+
+smoke-voting-pilot: 8 passed, 0 failed

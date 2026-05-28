@@ -1,0 +1,44 @@
+{
+  "schema_version": "2026-05-v1",
+  "persona": "replay_attempt",
+  "seed": 505,
+  "fixed_clock": "2026-05-28T10:00:00.000Z",
+  "run_at": "2026-05-28T10:00:00.000Z",
+  "synthetic": true,
+  "human_participant": false,
+  "pilot_session_id": "vp_9aa47f99-f391-4fb3-9088-9cc399ac4b81",
+  "integrity_tier": "browser_only",
+  "steps": [
+    {
+      "name": "accept_consent",
+      "status": "pass",
+      "server_status": 200
+    },
+    {
+      "name": "session2_submitted",
+      "status": "pass"
+    },
+    {
+      "name": "cross_session_replay_rejected",
+      "status": "pass",
+      "server_status": 409
+    },
+    {
+      "name": "fetch_report",
+      "status": "pass",
+      "server_status": 200
+    }
+  ],
+  "privacy": {
+    "ballot_choice_sent": false,
+    "token_redacted": true,
+    "forbidden_values_recorded": false
+  },
+  "final_server_response": {
+    "status": 200,
+    "summary": "submitted",
+    "chain_valid": true
+  },
+  "assertion": "PASS",
+  "notes": "replay_attempt persona completed."
+}
