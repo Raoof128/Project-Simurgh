@@ -1,5 +1,23 @@
 ## Change Log
 
+## [ci-stage-2-7-smoke-flake] — 2026-06-01 — Quality Gate raw-field smoke hardening
+
+**Raouf:** Fixed the failing Simurgh Quality Gate run `26617769927` by hardening the Stage 2.7 raw-field smoke assertion. The CI failure was a false positive: scenario G searched the entire audit export JSON for the short forbidden value `"4321"`, which can appear by chance inside generated audit metadata such as HMACs, hashes, timestamps, or IDs even when the rejected raw debug payload is not leaked.
+
+### Fixed
+
+- `tests/e2e/stage27_cross_platform_device_shield_smoke.mjs` — replaced whole-export substring matching with structured forbidden-data traversal.
+- Audit leakage checks now inspect audit entry payloads, not HMAC chain metadata.
+- Crypto/generated fields such as signatures, previous hashes, chain terminators, nonces, node hashes, session IDs, exam IDs, and tokens are excluded from raw-value leak matching.
+- The raw-field rejection path remains unchanged: telemetry containing `hwnd`, `pid`, `window_title`, and `process_name` must still return `forbidden_local_field`.
+
+### Verified
+
+- `bash scripts/smoke-stage-2-7-cross-platform-device-shield.sh` — pass.
+- Five consecutive Stage 2.7 smoke runs — pass.
+- `npx prettier --check tests/e2e/stage27_cross_platform_device_shield_smoke.mjs` — pass.
+- `bash scripts/check.sh` — patched Stage 2.7 block passed; full local gate stopped on local prerequisites unrelated to this fix: installed .NET SDKs are 6.0/7.0 while Windows daemon projects target .NET 8.0, and local Xvfb is unavailable while CI installs Xvfb before running the mandatory Linux Rust tests.
+
 ## [paper-v0.1] — 2026-05-21 — Project Simurgh Research Paper Initial Draft
 
 **Raouf:** Initial IEEE-format research paper draft. 10 pages, 13 sections, 34 citations, 0 overfull hboxes. Covers threat model, system architecture, Ed25519 proof protocol, cross-platform implementations, privacy model, evaluation (371 tests across 3 runtimes), security analysis, ethics. All non-claims preserved. Companion to the Invisible Window paper (Abedini, 2026).

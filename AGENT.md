@@ -2,6 +2,20 @@
 
 ## Agent Change Log
 
+### 2026-06-01 (Australia/Sydney) — CI quality gate Stage 2.7 raw-field smoke hardening
+
+**Raouf:**
+
+- **Scope:** Diagnose and fix failed Simurgh Quality Gate run `26617769927` on `main` push for `docs(paper): full audit pass — fix margin overflow, citation accuracy…`.
+- **Root cause:** `tests/e2e/stage27_cross_platform_device_shield_smoke.mjs` scenario G used a whole-audit-export substring search for the short raw PID value `"4321"`. The audit export legitimately contains generated HMAC chain metadata, hashes, IDs, signatures, and timestamps, so the short value can appear by chance even when no raw debug field is leaked.
+- **Files changed:**
+  - `tests/e2e/stage27_cross_platform_device_shield_smoke.mjs` — added structured forbidden-data traversal, excluded cryptographic/generated metadata keys, and narrowed audit leak checks to entry payloads.
+  - `AGENT.md` — this continuity entry.
+  - `CHANGELOG.md` — release-log entry for the CI fix.
+- **Verification:** `bash scripts/smoke-stage-2-7-cross-platform-device-shield.sh` passed; five consecutive Stage 2.7 smoke runs passed; `npx prettier --check tests/e2e/stage27_cross_platform_device_shield_smoke.mjs` passed; full `bash scripts/check.sh` passed the patched Stage 2.7 block but could not fully pass on this Mac because local prerequisites are missing (`dotnet` SDK 8.0 for Windows daemon tests and Xvfb for mandatory Linux Rust tests). CI workflow installs Xvfb and the failed CI run showed Stage 2.6 .NET tests passing before the Stage 2.7 failure.
+- **Security/privacy review:** Raw-field rejection behavior is unchanged: signed telemetry containing `hwnd`, `pid`, `window_title`, or `process_name` is still rejected with `forbidden_local_field`. The fix only removes false positives from cryptographic/generated audit metadata.
+- **Follow-ups:** Confirm the next `main` push quality gate passes on GitHub Actions.
+
 ### 2026-05-25 (Australia/Sydney) — Paper accuracy audit + test-count sync + PDF rebuild
 
 **Raouf:**

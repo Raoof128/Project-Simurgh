@@ -10,6 +10,50 @@ function assertSmoke(condition, message, detail = undefined) {
   }
 }
 
+const CRYPTO_OR_GENERATED_KEYS = new Set([
+  "chain_terminator",
+  "challenge",
+  "examId",
+  "exam_id",
+  "node_id_hash",
+  "nonce",
+  "nonce_hash",
+  "prev",
+  "sessionId",
+  "session_id",
+  "sig",
+  "signature",
+  "token",
+]);
+
+function findForbiddenData(value, forbiddenValues, path = "$") {
+  if (value === null || value === undefined) return null;
+
+  if (typeof value === "string" || typeof value === "number") {
+    const text = String(value);
+    const matched = forbiddenValues.find((forbidden) => text.includes(forbidden));
+    return matched ? { path, matched, value } : null;
+  }
+
+  if (Array.isArray(value)) {
+    for (const [index, item] of value.entries()) {
+      const found = findForbiddenData(item, forbiddenValues, `${path}[${index}]`);
+      if (found) return found;
+    }
+    return null;
+  }
+
+  if (typeof value === "object") {
+    for (const [key, item] of Object.entries(value)) {
+      if (CRYPTO_OR_GENERATED_KEYS.has(key)) continue;
+      const found = findForbiddenData(item, forbiddenValues, `${path}.${key}`);
+      if (found) return found;
+    }
+  }
+
+  return null;
+}
+
 function b64url(bytes) {
   return Buffer.from(bytes).toString("base64url");
 }
@@ -581,12 +625,8 @@ async function runScenarioG(baseUrl) {
     token: INSTRUCTOR_TOKEN,
   });
   if (reportResp.status === 200) {
-    const reportJson = JSON.stringify(reportResp.json);
-    for (const v of forbiddenValues) {
-      assertSmoke(!reportJson.includes(v), `G: report leaked raw value "${v}"`, {
-        snippet: reportJson.slice(0, 400),
-      });
-    }
+    const leaked = findForbiddenData(reportResp.json, forbiddenValues);
+    assertSmoke(!leaked, `G: report leaked raw value "${leaked?.matched}"`, leaked);
   } else {
     console.log(`  (G) report endpoint returned ${reportResp.status} — no data to leak`);
   }
@@ -595,12 +635,9 @@ async function runScenarioG(baseUrl) {
     token: INSTRUCTOR_TOKEN,
   });
   if (auditResp.status === 200) {
-    const auditJson = JSON.stringify(auditResp.json);
-    for (const v of forbiddenValues) {
-      assertSmoke(!auditJson.includes(v), `G: audit leaked raw value "${v}"`, {
-        snippet: auditJson.slice(0, 400),
-      });
-    }
+    const auditPayloads = (auditResp.json.entries || []).map((entry) => entry.payload);
+    const leaked = findForbiddenData(auditPayloads, forbiddenValues);
+    assertSmoke(!leaked, `G: audit leaked raw value "${leaked?.matched}"`, leaked);
   } else {
     console.log(`  (G) audit endpoint returned ${auditResp.status} — no data to leak`);
   }
