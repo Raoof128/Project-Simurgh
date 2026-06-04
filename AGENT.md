@@ -2,6 +2,32 @@
 
 ## Agent Change Log
 
+### 2026-06-04 (Australia/Sydney) — Voting pilot paper: related work + PDF build
+
+**Raouf:**
+
+- **Scope:** Fill Related Work section in `papers/simurgh-voting-pilot/main.tex`, add protective abstract sentence, expand `references.bib`, add `Makefile`, build PDF.
+- **Related Work sections added (5):**
+  1. End-to-End Verifiable Voting — Helios, Civitas, STAR-Vote; positions Simurgh as session-integrity evidence, not ballot-verifiability protocol.
+  2. Remote and Internet Voting Security — NIST IR 7770, National Academies 2018; frames pilot as student-society case study not production internet voting.
+  3. Voting Standards, Privacy, and Auditability — VVSG 2.0 (EAC 2021); aligns Simurgh with audit-evidence direction, outside certification scope.
+  4. Australian Technology-Assisted Voting Context — NSWEC TAV review; provides local relevance, bounded-pilot rationale.
+  5. Privacy-Preserving Telemetry and Data Minimisation — Dwork & Roth (differential privacy), Cavoukian (privacy by design).
+  6. Position of This Work — explicit non-voting-protocol statement.
+- **Abstract:** Added "The study is voting-adjacent: it does not implement ballot cryptography, voter eligibility verification, coercion resistance, tally protection, or public-election certification."
+- **New BibTeX entries:** Clarkson 2008 (Civitas), Bell 2013 (STAR-Vote), NIST IR 7770, National Academies 2018, VVSG 2021, NSWEC 2022, Cavoukian 2009.
+- **Makefile:** `latexmk -pdf` build + `clean` target added.
+- **Build result:** 4 pages, 107 KB, 0 undefined citations, 0 undefined references. Underfull hbox warnings are standard IEEE two-column draft noise.
+- **Files changed:**
+  - `papers/simurgh-voting-pilot/main.tex` — related work + abstract sentence
+  - `papers/simurgh-voting-pilot/references.bib` — 7 new BibTeX entries
+  - `papers/simurgh-voting-pilot/Makefile` — new build file
+  - `papers/simurgh-voting-pilot/main.pdf` — rebuilt (4 pages)
+  - `AGENT.md` — this entry
+  - `CHANGELOG.md` — release-log entry
+
+---
+
 ### 2026-06-04 (Australia/Sydney) — Voting pilot Phase C results pack + paper scaffold
 
 **Raouf:**

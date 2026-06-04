@@ -50,7 +50,9 @@ collection closed, all write endpoints were enforced server-side with HTTP~410
 \texttt{Gone} responses, demonstrating a reproducible collection-closure
 posture. The pilot demonstrates that privacy-preserving voting-session
 integrity evidence is achievable without observing or influencing the official
-vote.
+vote. The study is voting-adjacent: it does not implement ballot cryptography,
+voter eligibility verification, coercion resistance, tally protection, or
+public-election certification.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -93,24 +95,84 @@ society's own voting system.
 %% ── II. RELATED WORK ──────────────────────────────────────────────────────
 \section{Related Work}
 
-\subsection{Privacy-preserving audit systems}
+\subsection{End-to-End Verifiable Voting}
 
-TODO: cite verifiable shuffle, mix-net, end-to-end verifiable voting
-(Helios~\cite{adida2008helios}, Civitas, STAR-Vote). Distinguish: those
-systems aim to verify the \emph{outcome} of an election; Simurgh aims to
-verify the \emph{session integrity} of a participant without revealing their
-choice.
+Prior systems such as Helios~\cite{adida2008helios} demonstrate web-based,
+open-audit voting protocols that use homomorphic encryption or mix-nets to
+allow voters to verify that their encrypted ballot was counted without
+revealing the plaintext choice. Civitas~\cite{clarkson2008civitas} and
+STAR-Vote~\cite{bell2013starvote} extend this line with coercion-resistance
+and risk-limiting-audit properties respectively.
 
-\subsection{Consent-based telemetry}
+This work differs in scope: Simurgh does not implement ballot encryption,
+voter-verifiable tallying, or public election certification. Instead, it
+evaluates whether \emph{session-integrity} evidence can be collected around
+a voting-adjacent workflow without recording ballot choices or any surveillance
+data. Where end-to-end verifiable voting focuses on the integrity of the
+\emph{outcome}, Simurgh focuses on the integrity of the
+\emph{participation session}.
 
-TODO: cite privacy-preserving telemetry literature. Simurgh's ballot-field
-exclusion architecture is structurally related to differential privacy and
-data minimisation principles \cite{dwork2014algorithmic}.
+\subsection{Remote and Internet Voting Security}
 
-\subsection{Integrity proofs for digital interactions}
+Remote electronic voting introduces risks beyond ordinary web application
+security, including endpoint compromise, coercion, eligibility verification,
+ballot secrecy, and tally integrity. NIST guidance~\cite{nistir7770}
+identifies threat categories for remote electronic voting systems and
+recommends caution around internet-connected election infrastructure.
+Broader election-security consensus work~\cite{nationalacademies2018}
+emphasises that vote collection, alteration, destruction, counting, and
+reporting are all distinct integrity concerns requiring separate mitigations.
 
-TODO: cite online exam integrity literature. Simurgh's HMAC chain approach
-extends prior work on tamper-evident logs.
+Accordingly, this pilot is framed as a student-society research case study
+rather than a production online-voting system. It does not address eligibility,
+coercion resistance, malware-compromised endpoints, official tally integrity,
+or public-election certification.
+
+\subsection{Voting Standards, Privacy, and Auditability}
+
+The U.S.\ Election Assistance Commission adopted the Voluntary Voting System
+Guidelines (VVSG)~2.0 in 2021~\cite{vvsg2021}, establishing updated
+requirements for privacy, accessibility, auditability, and software
+independence in voting systems. Modern voting-system guidance consistently
+emphasises the need for audit records that do not reveal individual ballot
+choices.
+
+Simurgh aligns with the privacy-preserving and audit-evidence direction of
+this work — the HMAC audit chain records session lifecycle events without
+recording ballot content — but remains outside public-election certification
+scope and does not claim compliance with any voting-system standard.
+
+\subsection{Australian Technology-Assisted Voting Context}
+
+Technology-assisted voting has been explored in Australian jurisdictions,
+including iVote in New South Wales. The NSW Electoral Commission's technology-assisted voting review~\cite{nswec2022tav} examined privacy,
+accessibility, and security trade-offs, recommending careful scoping and
+ongoing evaluation of voting technologies before broader deployment.
+
+The Australian context remains cautious about technology-assisted voting,
+making small, bounded pilots useful for studying usability and privacy
+boundaries without affecting official outcomes. This pilot contributes a
+student-governance case study that tests consent, privacy boundaries, and
+session-integrity evidence in exactly that bounded scope.
+
+\subsection{Privacy-Preserving Telemetry and Data Minimisation}
+
+Simurgh's ballot-field exclusion architecture is structurally related to
+data-minimisation principles and differential privacy~\cite{dwork2014algorithmic}.
+The system collects the minimum metadata required to produce a session-integrity
+signal and structurally prevents ballot-choice data from reaching the server.
+This design echoes privacy-by-design principles~\cite{cavoukian2009privacy}
+in which data that is never collected cannot be leaked.
+
+\subsection{Position of This Work}
+
+The contribution of this paper is not a new voting protocol. It is a bounded
+evaluation of privacy-preserving integrity evidence around a voting-adjacent
+workflow. The system remains blind to ballot choice and preserves a
+manual-review-only, non-disciplinary posture. It demonstrates that a
+shadow-mode consent-based pilot can produce verifiable session-integrity
+evidence at the student-society scale without any of the risks associated
+with internet voting in public elections.
 
 %% ── III. SYSTEM DESIGN ────────────────────────────────────────────────────
 \section{System Design}

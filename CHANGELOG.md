@@ -1,5 +1,21 @@
 ## Change Log
 
+## [voting-pilot-paper-related-work] — 2026-06-04 — Paper related work + PDF build
+
+**Raouf:** Filled Related Work section (5 subsections: E2E verifiable voting, remote voting security, voting standards, Australian TAV context, privacy/data minimisation, position statement). Added protective abstract sentence. Expanded `references.bib` to 10 entries. Added `Makefile`. PDF builds clean: 4 pages, 107 KB, 0 undefined citations.
+
+### Changed
+
+- `papers/simurgh-voting-pilot/main.tex` — full related work section, abstract protective sentence.
+- `papers/simurgh-voting-pilot/references.bib` — Civitas, STAR-Vote, NIST IR 7770, National Academies 2018, VVSG 2021, NSWEC TAV, Cavoukian 2009 added.
+
+### Added
+
+- `papers/simurgh-voting-pilot/Makefile` — `latexmk` build target.
+- `papers/simurgh-voting-pilot/main.pdf` — built (4 pages).
+
+---
+
 ## [voting-pilot-phase-c-results-pack] — 2026-06-04 — Phase C results pack + paper scaffold
 
 **Raouf:** Created Phase C results analysis documents and IEEE-format LaTeX paper scaffold. Three analysis docs (results analysis, results tables, paper findings summary) plus `papers/simurgh-voting-pilot/main.tex` and `references.bib`. All non-claims preserved; wording guide included to prevent reviewer-hostile overclaims.
