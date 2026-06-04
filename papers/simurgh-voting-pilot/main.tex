@@ -19,7 +19,6 @@
   urlcolor=black
 }
 
-%% Consistent method name
 \newcommand{\sys}{Project Simurgh}
 
 \begin{document}
@@ -45,20 +44,20 @@ Tag: \texttt{v0.5.0-voting-pilot-phase-c-closeout}.}}
 %% ── ABSTRACT ──────────────────────────────────────────────────────────────
 \begin{abstract}
 We show that a consent-based shadow-mode system can collect session-integrity
-metadata alongside a real voting event without recording ballot choices —
-enforced structurally, not by policy alone. Digital voting tools raise an
-integrity question that existing cryptographic protocols (end-to-end verifiable
-voting, mix-nets) do not address: can a participant verify their session was
-conducted fairly without revealing their vote? \sys{} answers this with an HMAC
-audit chain, client-side ballot-field discard before each network call, and a
-server-side forbidden-field guard that rejects any ballot-choice key. A 30-session
-Phase~C pilot (31 consented, 1 withdrawn) confirmed
-\texttt{ballot\_choice\_recorded\_by\_simurgh: false} in every submitted session;
-359/359 automated tests, 8/8 smoke gates, and 10/10 security-audit gates passed
-at closeout. After data collection ended, all write endpoints returned
-\texttt{HTTP~410 Gone} under a server-side collection-closed flag, verifiable by
-any caller. This study is voting-adjacent: it does not implement ballot
-cryptography, voter eligibility verification, coercion resistance, tally
+metadata alongside a real voting event without recording ballot choices,
+enforced structurally rather than by policy alone. Digital voting tools raise
+an integrity question that existing cryptographic protocols (end-to-end
+verifiable voting, mix-nets) do not address: can a participant verify their
+session was conducted fairly without revealing their vote? \sys{} answers this
+with an HMAC audit chain, client-side ballot-field discard before each network
+call, and a server-side forbidden-field guard that rejects any ballot-choice
+key. A 30-session Phase~C pilot (31 consented, 1 withdrawn) confirmed
+\texttt{ballot\_choice\_recorded\_by\_simurgh: false} in every submitted
+session; 359/359 automated tests, 8/8 smoke gates, and 10/10 security-audit
+gates passed at closeout. After data collection ended, all write endpoints
+returned \texttt{HTTP~410 Gone} under a server-side collection-closed flag,
+verifiable by any caller. This study is voting-adjacent: it does not implement
+ballot cryptography, voter eligibility verification, coercion resistance, tally
 protection, or public-election certification.
 \end{abstract}
 
@@ -70,35 +69,35 @@ HMAC audit chain, consent-based telemetry, collection closure
 %% ── I. INTRODUCTION ───────────────────────────────────────────────────────
 \section{Introduction}
 
-Student-society governance increasingly relies on digital voting tools for event
-preference polls, committee elections, and budget decisions. These tools introduce
-a question existing cryptographic solutions leave open: can a participant confirm
-their session was handled honestly — no screen capture, no ballot recording, no
-passive surveillance — without revealing their choice?
+Student-society governance increasingly relies on digital voting tools for
+event preference polls, committee elections, and budget decisions. These tools
+leave a question open that existing cryptographic solutions do not answer: can
+a participant verify their session was handled honestly (no screen capture, no
+ballot recording, no passive surveillance) without revealing their choice?
 
 End-to-end verifiable voting schemes~\cite{adida2008helios,clarkson2008civitas}
 solve the \emph{outcome} integrity problem (did the tally reflect all ballots?)
-but say nothing about \emph{session} integrity (was the participant's interaction
+but do not address \emph{session} integrity (was the participant's interaction
 free of covert collection?). \sys{} is a research prototype that targets
-session integrity through privacy-preserving metadata collection and tamper-evident
-audit chains~\cite{simurgh2026}.
+session integrity through privacy-preserving metadata collection and
+tamper-evident audit chains~\cite{simurgh2026}.
 
 This paper reports a Phase~C pilot in which \sys{} ran in shadow mode alongside
-a real MQ Persian Society event preference poll: collecting session-level integrity
-metadata in parallel, with no effect on the official result. The pilot was not a
-study of election security, voting-system integrity, or electoral fraud prevention.
-The official election result was determined entirely by the society's own voting system.
+a real MQ Persian Society event preference poll, collecting session-level
+integrity metadata in parallel with no effect on the official result. The pilot
+was not a study of election security, voting-system integrity, or electoral
+fraud prevention.
 
-\smallskip
+\medskip
 \noindent\textbf{Contributions:}
 \begin{itemize}
   \item A consent-to-submit pilot with 30 submitted sessions confirming
     \texttt{ballot\_choice\_recorded\_by\_simurgh: false} in every session,
     backed by smoke, security-audit, and privacy-audit gate suites
-    (§\ref{sec:results}).
+    (Sec.~\ref{sec:results}).
   \item A server-side collection-closure mechanism returning
     \texttt{HTTP~410 Gone} on all write routes, enforceable and verifiable
-    independently of the client UI (§\ref{sec:design}).
+    independently of the client UI (Sec.~\ref{sec:design}).
   \item A reproducible evidence baseline at tag
     \texttt{v0.5.0-voting-pilot-phase-c-closeout} for future work on
     privacy-preserving integrity proofs in voting-adjacent contexts.
@@ -118,23 +117,23 @@ integration.
 \sys{} differs in scope. It does not implement ballot encryption,
 voter-verifiable tallying, or public election certification. Where end-to-end
 verifiable voting proves the integrity of the \emph{outcome}, \sys{} studies
-the integrity of the \emph{participation session} — whether the system
-collected only what it disclosed and nothing more.
+the integrity of the \emph{participation session}: whether the system collected
+only what it disclosed and nothing more.
 
 \subsection{Remote and Internet Voting Security}
 
 Remote electronic voting introduces risks beyond ordinary web application
 security: endpoint compromise, coercion, eligibility verification, ballot
-secrecy, and tally integrity. NIST guidance~\cite{nistir7770} identifies
-threat categories for remote electronic voting and recommends caution around
+secrecy, and tally integrity. NIST guidance~\cite{nistir7770} identifies threat
+categories for remote electronic voting and recommends caution around
 internet-connected election infrastructure. The National Academies
 report~\cite{nationalacademies2018} emphasizes that vote collection, alteration,
 destruction, counting, and reporting each require separate mitigations.
 
 This pilot addresses none of those concerns. It is a student-society research
 case study, not a production online-voting system. It does not address
-eligibility, coercion resistance, malware-compromised endpoints, official
-tally integrity, or public-election certification.
+eligibility, coercion resistance, malware-compromised endpoints, official tally
+integrity, or public-election certification.
 
 \subsection{Voting Standards, Privacy, and Auditability}
 
@@ -144,25 +143,25 @@ accessibility, auditability, and software independence in voting systems.
 Modern voting-system guidance consistently requires audit records that do not
 reveal individual ballot choices.
 
-\sys{} aligns with this direction — the HMAC audit chain records session
-lifecycle events without ballot content — but remains outside public-election
+\sys{} aligns with this direction: the HMAC audit chain records session
+lifecycle events without ballot content, but remains outside public-election
 certification scope.
 
 \subsection{Australian Technology-Assisted Voting}
 
-Technology-assisted voting has been explored in several Australian
-jurisdictions, including iVote in New South Wales. The NSW Electoral
-Commission's technology-assisted voting review~\cite{nswec2022tav} examined
-privacy, accessibility, and security trade-offs, recommending careful scoping
-and ongoing evaluation before broader deployment.
+Several Australian jurisdictions have piloted technology-assisted voting,
+including iVote in New South Wales. The NSW Electoral Commission's
+technology-assisted voting review~\cite{nswec2022tav} examined privacy,
+accessibility, and security trade-offs, recommending careful scoping and
+ongoing evaluation before broader deployment.
 
 Australia's cautious posture toward technology-assisted voting makes small,
 bounded pilots valuable for studying consent, privacy boundaries, and
 session-integrity evidence without affecting official outcomes.
 
-\subsection{Privacy-Preserving Telemetry and Data Minimisation}
+\subsection{Privacy-Preserving Telemetry and Data Minimization}
 
-\sys{}'s ballot-field exclusion architecture follows data-minimisation
+\sys{}'s ballot-field exclusion architecture follows data-minimization
 principles~\cite{dwork2014algorithmic,cavoukian2009privacy}: the system
 collects the minimum metadata required for a session-integrity signal and
 structurally prevents ballot-choice data from reaching the server. Data that
@@ -172,8 +171,8 @@ is never collected cannot be leaked.
 
 This paper contributes a bounded empirical evaluation of privacy-preserving
 integrity evidence around a voting-adjacent workflow. The system remains blind
-to ballot choice and holds a non-disciplinary posture. The contribution is not
-a new voting protocol; it is evidence that shadow-mode session-integrity
+to ballot choice and does not discipline or flag participants. The contribution
+is not a new voting protocol; it is evidence that shadow-mode session-integrity
 collection is achievable at student-governance scale.
 
 %% ── III. SYSTEM DESIGN ────────────────────────────────────────────────────
@@ -196,34 +195,33 @@ Fig.~\ref{fig:flow} shows the Phase~C session lifecycle.
   note/.style={font=\scriptsize, text=black!55, align=center}
 ]
 
-%% Nodes
+%% Main flow nodes
 \node[box] (consent) {Consent page\\(opt-in)};
 \node[box, below=of consent] (accept) {POST /consent/\\accept};
-\node[box, below=of accept] (ballot)  {Mock ballot\\(choice discarded)};
+\node[box, below=of accept]  (ballot)  {Mock ballot\\(choice discarded)};
 \node[box, below=of ballot]  (submit)  {POST /submit\\(intent only)};
 \node[box, below=of submit]  (report)  {GET /report\\(token-gated)};
 
-%% Side nodes
+%% Side annotation nodes
 \node[act, right=0.8cm of accept] (chain1) {HMAC chain\\STARTED};
 \node[act, right=0.8cm of submit] (chain2) {HMAC chain\\SUBMITTED};
 \node[act, left=0.8cm of ballot]  (discard) {value = ``''\\before fetch};
 
-%% Main flow
+%% Main flow arrows
 \draw[arr] (consent) -- (accept);
 \draw[arr] (accept)  -- (ballot);
 \draw[arr] (ballot)  -- (submit);
 \draw[arr] (submit)  -- (report);
 
-%% Side arrows
-\draw[arr, dashed] (accept) -- (chain1);
-\draw[arr, dashed] (submit) -- (chain2);
+%% Side annotation arrows
+\draw[arr, dashed] (accept)  -- (chain1);
+\draw[arr, dashed] (submit)  -- (chain2);
 \draw[arr, dashed] (discard) -- (ballot);
 
-%% Collection-closed label
+%% Report annotation
 \node[note, right=0.15cm of report] {open\\\texttt{(token)}};
-\node[note, right=0.8cm of consent, yshift=-0.15cm] {};
 
-%% 410 bracket
+%% 410-when-closed bracket
 \draw[thick, black!40, decorate,
       decoration={brace, amplitude=4pt, mirror}]
   ([xshift=-0.1cm]accept.north west) -- ([xshift=-0.1cm]submit.south west)
@@ -232,20 +230,20 @@ Fig.~\ref{fig:flow} shows the Phase~C session lifecycle.
 
 \end{tikzpicture}
 \caption{Phase~C session lifecycle. The ballot choice is discarded in the
-browser before every \texttt{fetch} call (left). HMAC audit-chain events are
-appended on consent and submit (right). Under the collection-closed
-configuration, consent/accept, submit, and withdraw return \texttt{HTTP~410}
-(bracket); the report endpoint remains active and token-protected.}
+browser before every \texttt{fetch} call (left annotation). HMAC audit-chain
+events are appended on consent and submit (right annotations). Under the
+collection-closed configuration, consent/accept, submit, and withdraw return
+\texttt{HTTP~410} (bracket); the report endpoint remains token-protected.}
 \label{fig:flow}
 \end{figure}
 
 \subsection{Consent Flow}
 
-The consent page disclosed the data categories \sys{} may collect across its
-deployments — session timestamps, focus-loss and paste counts, audit-chain
-validity signal, and an anonymous HMAC-hashed session code — and what it never
-collects: ballot choices, screen recordings, webcam/audio, typed or pasted
-content, raw process names, window titles, or device serial identifiers. In
+The consent page disclosed two categories: data \sys{} may collect across its
+deployments (session timestamps, focus-loss and paste counts, audit-chain
+validity signal, and an anonymous HMAC-hashed session code) and data it never
+collects (ballot choices, screen recordings, webcam/audio, typed or pasted
+content, raw process names, window titles, or device serial identifiers). In
 Phase~C, implemented collection comprised session timestamps, audit-chain
 lifecycle events, and an anonymous participant code; focus-loss and paste counts
 are exam-integrity features of the broader \sys{} system and were not active in
@@ -256,8 +254,8 @@ token. No personally identifying information was collected at any step.
 
 \subsection{Ballot-Field Exclusion}
 
-Before every \texttt{fetch} call the submit page set all radio button
-\texttt{value} attributes to an empty string, ensuring the ballot field was
+Before every \texttt{fetch} call, the submit page set all radio button
+\texttt{value} attributes to an empty string, so the ballot field was
 structurally absent from the request body. The server provided a second layer:
 the \texttt{FORBIDDEN\_BALLOT\_FIELDS} set rejected any submission body
 containing a known ballot-choice key with \texttt{HTTP~400}, with no echo of
@@ -267,12 +265,12 @@ the supplied value.
 
 Each session maintained an append-only HMAC audit chain recording lifecycle
 events: \texttt{STARTED}, \texttt{SUBMITTED}, and optionally \texttt{WITHDRAWN}
-or \texttt{REPORT\_EXPORTED}. The chain initialized on consent and verified on
-report export.
+or \texttt{REPORT\_EXPORTED}. The chain initialized on consent; the server
+verified its integrity on report export.
 
 \subsection{Collection-Closure Posture}
 
-After the target dataset was reached, we set
+After reaching the 30-session target, we set
 \texttt{SIMURGH\_VOTING\_PILOT\_COLLECTION\_CLOSED=true}. With this flag active:
 \begin{itemize}
   \item \texttt{POST /api/voting-pilot/consent/accept} returns \texttt{410 Gone}.
@@ -290,32 +288,31 @@ session token cannot bypass it.
 \subsection{Study Design}
 
 The pilot ran in shadow mode alongside the MQ Persian Society 2026 event
-preference poll — an event asking members to rank four proposed social events
+preference poll, asking members to select one of four proposed social events
 (Nowruz cultural night, Persian movie night, career/networking night, food and
-music night). \sys{} ran in parallel without access to, or influence on, the
-official ballot-counting system. Each participant who chose to join the pilot
-completed two steps: a consent page explaining data collection and an optional
-mock ballot page that mirrored the official event poll. The mock ballot choice
-was discarded in the browser before any network call; \sys{} received only a
-submit-intent signal.
+music night). \sys{} ran in parallel without access to or influence on the
+official ballot-counting system. Each participant who joined the pilot completed
+two steps: a consent page explaining data collection and a mock ballot page
+mirroring the official event poll. The mock ballot choice was discarded in the
+browser before any network call; \sys{} received only a submit-intent signal.
 
 Participants were members of the society. Participation was voluntary and
-governed by the Phase~C participant notice and data management addendum
-approved by the society executive on 2026-06-04. No incentive was offered.
+governed by the Phase~C participant notice and data management addendum approved
+by the society executive on 2026-06-04. No incentive was offered.
 
 \subsection{Session Counts}
 
-Of 31 sessions that accepted the consent flow, 30 completed the submit step
-and form the primary analysis dataset. One session (\texttt{vp\_4fcc741a})
-was withdrawn by the participant before submit and is excluded from all
-analysis; its report endpoint returns \texttt{HTTP~403}.
+Of 31 sessions that accepted the consent flow, 30 completed the submit step and
+formed the primary analysis dataset. The participant in one session
+(\texttt{vp\_4fcc741a}) withdrew before submitting; that session is excluded
+from all analysis and its report endpoint returns \texttt{HTTP~403}.
 
 \subsection{Data Management}
 
-The server held session data in memory only — no data persisted to disk, and
-the store cleared on server restart. This is appropriate for a research
-prototype and consistent with the data management addendum, which specified
-no persistent storage of pilot session records.
+The server held session data in memory only. No data persisted to disk, and the
+store reset on server restart. This is appropriate for a research prototype and
+consistent with the data management addendum, which specified no persistent
+storage of pilot session records.
 
 %% ── V. RESULTS ────────────────────────────────────────────────────────────
 \section{Results}
@@ -343,13 +340,13 @@ no persistent storage of pilot session records.
 \subsection{Privacy Assertions}
 
 \begin{table}[!t]
-  \caption{Privacy Assertions — All 30 Submitted Sessions}
+  \caption{Privacy Assertions --- All 30 Submitted Sessions}
   \centering
   \begin{tabular}{ll}
     \toprule
     Assertion & Result \\
     \midrule
-    \texttt{ballot\_choice\_recorded\_by\_simurgh} & \texttt{false} \\
+    \texttt{ballot\_choice\_recorded} & \texttt{false} \\
     Ballot choice transmitted to server & No \\
     Screen capture & No \\
     Webcam / audio & No \\
@@ -359,17 +356,17 @@ no persistent storage of pilot session records.
     Raw process names & No \\
     Raw window titles & No \\
     \texttt{official\_vote\_impact} & \texttt{false} \\
-    Privacy audit (\texttt{tools/privacy-audit.mjs}) & PASS (code + evidence files) \\
+    Privacy audit (\texttt{privacy-audit.mjs}) & PASS \\
     \bottomrule
   \end{tabular}
   \label{tab:privacy}
 \end{table}
 
 The \texttt{ballot\_choice\_recorded\_by\_simurgh} field is a behavioral
-guarantee enforced by both client-side discard and server-side forbidden-field
+guarantee enforced by client-side discard and server-side forbidden-field
 rejection. Because the session store was in-memory and cleared after collection,
-individual session reports are not available post-hoc; the guarantee is verified
-by the automated smoke suite at every gate run.
+individual session reports are not available post-hoc; the automated smoke suite
+verifies the guarantee at every gate run.
 
 \subsection{Integrity Flow}
 
@@ -381,7 +378,7 @@ endpoint returned \texttt{HTTP~403}, confirming exclusion from analysis.
 \subsection{Safety Gates}
 
 \begin{table}[!t]
-  \caption{Safety Gates at Closeout (tag v0.5.0-voting-pilot-phase-c-closeout)}
+  \caption{Safety Gates --- Closeout Baseline}
   \centering
   \begin{tabular}{ll}
     \toprule
@@ -400,11 +397,11 @@ endpoint returned \texttt{HTTP~403}, confirming exclusion from analysis.
 
 Gate evidence files are archived at
 \texttt{docs/research/mq-voting-pilot/evidence/phase-c-closeout/} in the
-repository at the baseline tag.
+repository at tag \texttt{v0.5.0-voting-pilot-phase-c-closeout}.
 
 \subsection{Collection Closure}
 
-After the 30-session target was reached, all write endpoints returned
+After collection reached 30 sessions, all write endpoints returned
 \texttt{HTTP~410 Gone}. The closure smoke suite (5/5 gates) confirmed that
 consent/accept, submit, and withdraw are unreachable under the closed
 configuration, while report export remains available with a valid token.
@@ -416,12 +413,11 @@ configuration, while report export remains available with a valid token.
 
 The pilot shows that a consent-based shadow-mode prototype can operate alongside
 a real student-society voting event without collecting ballot choices or any
-other privacy-sensitive data. The privacy assertions in
-Table~\ref{tab:privacy} hold by system design: the ballot field is structurally
-absent from the server request body in every session, not because participants
-complied with a policy.
+privacy-sensitive data. The privacy assertions in Table~\ref{tab:privacy} hold
+by system design: the ballot field is structurally absent from the server
+request body in every session, not because participants complied with a policy.
 
-The server-side collection-closure mechanism provides a reproducible, auditable
+The server-side collection-closure mechanism produces a reproducible, auditable
 end-of-collection posture. Any caller with network access can verify closure;
 the mechanism does not depend on the client UI.
 
@@ -431,13 +427,13 @@ the mechanism does not depend on the client UI.
   \item The 30-session dataset is a proof-of-concept pilot. No statistical
     power calculation was performed; results should not be generalized beyond
     this scope.
-  \item Sessions were anonymous; no demographic or behavioral analysis
-    of participants is possible or intended.
-  \item The pilot ran in shadow mode only. No claim extends to a
-    non-shadow deployment.
-  \item The in-memory store means session data did not survive server
-    restarts. This suits a research prototype but is not a production
-    data-management posture.
+  \item Sessions were anonymous; no demographic or behavioral analysis of
+    participants is possible or intended.
+  \item The pilot ran in shadow mode only. No claim extends to a non-shadow
+    deployment.
+  \item The in-memory store means session data did not survive server restarts.
+    This suits a research prototype but is not a production data-management
+    posture.
   \item \texttt{ballot\_choice\_recorded\_by\_simurgh: false} is a behavioral
     guarantee verified by the automated gate suite; per-session audit reports
     are not available post-hoc due to in-memory storage.
@@ -461,12 +457,13 @@ Thirty sessions completed the full consent-to-submit flow in Phase~C of
 \sys{}. In every session, the system collected no ballot choice, screen
 recording, webcam or audio data, typed content, pasted content, or personal
 device identifier. After collection closed, all write endpoints returned
-\texttt{HTTP~410 Gone} under a server-side flag verifiable by any caller —
-proving that collection closure is not merely a UI gesture.
+\texttt{HTTP~410 Gone} under a server-side flag verifiable by any caller,
+confirming that collection closure is enforced at the API layer, not only at
+the UI.
 
-These results establish that privacy-preserving session-integrity evidence is
+This pilot demonstrates that privacy-preserving session-integrity evidence is
 structurally achievable alongside a real student-society voting event, without
-access to, or influence on, the official ballot.
+access to or influence on the official vote.
 
 %% ── REFERENCES ────────────────────────────────────────────────────────────
 \bibliographystyle{IEEEtran}

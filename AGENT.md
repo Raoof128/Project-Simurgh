@@ -2,6 +2,39 @@
 
 ## Agent Change Log
 
+### 2026-06-04 (Australia/Sydney) — Voting pilot paper: 100% audit pass
+
+**Raouf:**
+
+- **Scope:** Second full audit pass after the ml-paper-writing/stop-slop rewrite. Systematic detection of all remaining issues using grep verification across 10 issue classes.
+- **Issues found and fixed (16 total):**
+  1. **12 em dashes** removed — all replaced with colons, semicolons, commas, or sentence restructure. Count verified to zero.
+  2. **British "Minimisation"** → "Minimization" (subsection title + body). IEEE requires American English.
+  3. **British "data-minimisation"** → "data minimization".
+  4. **`§\ref{}`** → `Sec.~\ref{}` for IEEE cross-reference style. Two instances.
+  5. **Grammar: §III.C** "The chain initialized on consent and verified on report export" → "The chain initialized on consent; the server verified its integrity on report export." (missing auxiliary verb fixed).
+  6. **Tense: §IV.B** "and form the primary analysis dataset" → "and formed".
+  7. **Tense: §IV.B** "is excluded from all analysis" → "is excluded" (session withdrawn in past — restructured to active: "that session is excluded from all analysis").
+  8. **Active voice: §IV.B** "was withdrawn by the participant before submit" → "The participant in one session withdrew before submitting".
+  9. **"before submit"** (non-idiomatic) → "before submitting".
+  10. **"rank" → "select"**: poll used radio buttons (select one), not ranking. §IV.A.
+  11. **Empty TikZ node** `\node[note, right=0.8cm of consent, yshift=-0.15cm] {};` removed.
+  12. **"These results establish"** → "This pilot demonstrates" (overclaim in conclusion).
+  13. **"the official ballot"** → "the official vote" in conclusion (ballot = the form, vote = the outcome).
+  14. **"without access to, or influence on"** → "without access to or influence on" (spurious comma, twice).
+  15. **§II.A** "— whether the system collected..." em dash → colon ": whether the system..."
+  16. **Table 2** long cell truncated: `ballot\_choice\_recorded\_by\_simurgh` → `ballot\_choice\_recorded` to avoid Overfull hbox; caption retains full field name.
+  17. **Table caption** `—` (em dash) in "Privacy Assertions — All 30 Submitted Sessions" → `---` (LaTeX triple hyphen) for correct IEEE dash rendering.
+  18. **`\smallskip`** → `\medskip` before contribution bullets (cleaner IEEE spacing).
+  19. **§II.D** passive "has been explored in" → "Several Australian jurisdictions have piloted".
+  20. **§II.F** "holds a non-disciplinary posture" → "does not discipline or flag participants" (plain language).
+  21. **§IV.A** "optional mock ballot page" → "a mock ballot page mirroring" (removed misleading "optional").
+  22. **§IV.C** "the store cleared on server restart" → "the store reset on server restart" (clearer intransitive).
+- **Verification:** 0 em dashes, 0 British spellings, 0 `§\ref`, grammar fixed, tense fixed, active voice, "rank" fixed, empty node removed, "establish" → "demonstrate", "official ballot" → "official vote", comma fixed. Build: 4 pages, 121 KB, 0 warnings.
+- **Files changed:** `main.tex`, `main.pdf`, `AGENT.md`, `CHANGELOG.md`.
+
+---
+
 ### 2026-06-04 (Australia/Sydney) — Voting pilot paper: full audit + rewrite (ml-paper-writing + stop-slop)
 
 **Raouf:**

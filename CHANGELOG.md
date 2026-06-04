@@ -1,5 +1,11 @@
 ## Change Log
 
+## [voting-pilot-paper-100pct-audit] — 2026-06-04 — Paper 100% audit pass
+
+**Raouf:** Second systematic audit pass. 22 issues resolved: all 12 em dashes removed (count verified 0), British spellings fixed (Minimisation→Minimization), §\ref→Sec.~\ref, grammar fix in §III.C, tense fixes in §IV.B, passive→active in §IV.B, "rank"→"select" (radio buttons), empty TikZ node removed, "establish"→"demonstrate", "official ballot"→"official vote", spurious commas removed. Build: 4 pages, 121 KB, 0 warnings.
+
+---
+
 ## [voting-pilot-paper-full-audit] — 2026-06-04 — Full paper audit and rewrite
 
 **Raouf:** Full paper audit using ml-paper-writing and stop-slop skills. 16 issues found and fixed: abstract rewritten (Farquhar formula), TikZ flow figure added, contribution bullets added, §IV pilot section expanded, passive voice eliminated, stop-slop patterns removed, citation workshop name corrected (EVT/WOTE), float specifiers fixed. Build: 4 pages, 121 KB, 0 warnings.
