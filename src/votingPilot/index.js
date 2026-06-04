@@ -76,23 +76,20 @@ router.post("/submit", requirePilotToken, (req, res) => {
     return res.status(409).json({ error: "session_token_body_mismatch" });
   }
 
+  const record = store.get(req.pilotSessionId);
+  if (!record) return res.status(404).json({ error: "session_not_found" });
+  if (record.withdrawn) return res.status(403).json({ error: "session_withdrawn" });
+
   const forbidden = Object.keys(body).filter((k) => FORBIDDEN_BALLOT_FIELDS.has(k));
   if (forbidden.length > 0) {
-    const record = store.get(req.pilotSessionId);
-    if (record && !record.withdrawn) {
-      record._forbidden_fields_rejected += 1;
-      appendEntry(record._chain, record._hmacKey, VOTING_PILOT_EVENTS.BALLOT_FIELD_REJECTED, {
-        field_names: forbidden,
-      });
-    }
+    record._forbidden_fields_rejected += 1;
+    appendEntry(record._chain, record._hmacKey, VOTING_PILOT_EVENTS.BALLOT_FIELD_REJECTED, {
+      field_names: forbidden,
+    });
     return res
       .status(400)
       .json({ error: "ballot_choice_field_rejected", forbidden_fields: forbidden });
   }
-
-  const record = store.get(req.pilotSessionId);
-  if (!record) return res.status(404).json({ error: "session_not_found" });
-  if (record.withdrawn) return res.status(403).json({ error: "session_withdrawn" });
 
   const submitResult = store.markSubmitted(req.pilotSessionId);
   if (!submitResult.ok) return res.status(409).json({ error: "already_submitted_or_withdrawn" });

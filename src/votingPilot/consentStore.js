@@ -52,6 +52,7 @@ export function createConsentStore() {
     const record = store.get(pilot_session_id);
     if (!record) return { ok: false, reason: "not_found" };
     if (record.withdrawn) return { ok: false, reason: "withdrawn" };
+    if (record._submitted) return { ok: false, reason: "already_submitted" };
     record._submitted = true;
     return { ok: true };
   }

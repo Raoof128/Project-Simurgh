@@ -82,6 +82,32 @@ describe("POST /submit", () => {
     assert.equal(status, 401);
   });
 
+  test("returns 409 on double submit", async () => {
+    const { body: consent } = await postJson("/consent/accept", {});
+    await postJson(
+      "/submit",
+      { pilot_session_id: consent.pilot_session_id, submit_intent: true },
+      { Authorization: `Bearer ${consent.token}` }
+    );
+    const { status } = await postJson(
+      "/submit",
+      { pilot_session_id: consent.pilot_session_id, submit_intent: true },
+      { Authorization: `Bearer ${consent.token}` }
+    );
+    assert.equal(status, 409);
+  });
+
+  test("returns 403 for forbidden fields on withdrawn session", async () => {
+    const { body: consent } = await postJson("/consent/accept", {});
+    await postJson("/withdraw", {}, { Authorization: `Bearer ${consent.token}` });
+    const { status } = await postJson(
+      "/submit",
+      { pilot_session_id: consent.pilot_session_id, submit_intent: true, choice: "A" },
+      { Authorization: `Bearer ${consent.token}` }
+    );
+    assert.equal(status, 403);
+  });
+
   test("returns 409 when body.pilot_session_id does not match token session", async () => {
     const { body: c1 } = await postJson("/consent/accept", {});
     const { body: c2 } = await postJson("/consent/accept", {});
