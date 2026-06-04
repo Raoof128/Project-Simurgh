@@ -2,7 +2,7 @@
 
 **Auditor:** Claude Sonnet 4.6 (senior security-research engineer role).
 **Audit date:** 2026-05-25 (this pass); prior full audit 2026-05-22.
-**Source under audit:** `papers/project-simurgh/main.tex` (current working tree, commit `356543e`).
+**Source under audit:** `Papers/project-simurgh/main.tex` (current working tree, commit `356543e`).
 **Verification basis:** live source tree, `npm test` run on 2026-05-25 (331/331 pass), file-by-file grep across all cited source files.
 **Prior audit superseded:** 2026-05-22 audit by Claude Sonnet 4.6. This is a re-verification pass after repository reorganisation and regression-test additions.
 

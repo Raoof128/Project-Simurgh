@@ -143,9 +143,9 @@
   16. **`\sys` macro** — `\newcommand{\sys}{Project Simurgh}` added for consistency.
 - **Build result:** 4 pages, 121 KB, 0 warnings, 0 undefined references, 0 undefined citations.
 - **Files changed:**
-  - `papers/simurgh-voting-pilot/main.tex` — full rewrite as above
-  - `papers/simurgh-voting-pilot/references.bib` — EVT/WOTE fix, nswec year note
-  - `papers/simurgh-voting-pilot/main.pdf` — rebuilt
+  - `Papers/simurgh-voting-pilot/main.tex` — full rewrite as above
+  - `Papers/simurgh-voting-pilot/references.bib` — EVT/WOTE fix, nswec year note
+  - `Papers/simurgh-voting-pilot/main.pdf` — rebuilt
   - `AGENT.md` — this entry
   - `CHANGELOG.md` — release-log entry
 
@@ -163,9 +163,9 @@
 - **Audit result:** 20 claims audited — all confirmed or fixed. Verdict: Accurate.
 - **PDF rebuilt after fixes:** 4 pages, 0 undefined citations, 0 undefined references.
 - **Files changed:**
-  - `papers/simurgh-voting-pilot/PAPER_CLAIM_AUDIT.md` — new (20-claim audit table, evidence index, verdict)
-  - `papers/simurgh-voting-pilot/main.tex` — §III.A consent disclosure clarified; Table 2 privacy audit note added
-  - `papers/simurgh-voting-pilot/main.pdf` — rebuilt
+  - `Papers/simurgh-voting-pilot/PAPER_CLAIM_AUDIT.md` — new (20-claim audit table, evidence index, verdict)
+  - `Papers/simurgh-voting-pilot/main.tex` — §III.A consent disclosure clarified; Table 2 privacy audit note added
+  - `Papers/simurgh-voting-pilot/main.pdf` — rebuilt
   - `docs/research/mq-voting-pilot/evidence/phase-c-closeout/` — 7 files (npm-test, npm-audit, privacy-audit, smoke, security-audit, smoke-closed, README)
   - `AGENT.md` — this entry
   - `CHANGELOG.md` — release-log entry
@@ -176,7 +176,7 @@
 
 **Raouf:**
 
-- **Scope:** Fill Related Work section in `papers/simurgh-voting-pilot/main.tex`, add protective abstract sentence, expand `references.bib`, add `Makefile`, build PDF.
+- **Scope:** Fill Related Work section in `Papers/simurgh-voting-pilot/main.tex`, add protective abstract sentence, expand `references.bib`, add `Makefile`, build PDF.
 - **Related Work sections added (5):**
   1. End-to-End Verifiable Voting — Helios, Civitas, STAR-Vote; positions Simurgh as session-integrity evidence, not ballot-verifiability protocol.
   2. Remote and Internet Voting Security — NIST IR 7770, National Academies 2018; frames pilot as student-society case study not production internet voting.
@@ -189,10 +189,10 @@
 - **Makefile:** `latexmk -pdf` build + `clean` target added.
 - **Build result:** 4 pages, 107 KB, 0 undefined citations, 0 undefined references. Underfull hbox warnings are standard IEEE two-column draft noise.
 - **Files changed:**
-  - `papers/simurgh-voting-pilot/main.tex` — related work + abstract sentence
-  - `papers/simurgh-voting-pilot/references.bib` — 7 new BibTeX entries
-  - `papers/simurgh-voting-pilot/Makefile` — new build file
-  - `papers/simurgh-voting-pilot/main.pdf` — rebuilt (4 pages)
+  - `Papers/simurgh-voting-pilot/main.tex` — related work + abstract sentence
+  - `Papers/simurgh-voting-pilot/references.bib` — 7 new BibTeX entries
+  - `Papers/simurgh-voting-pilot/Makefile` — new build file
+  - `Papers/simurgh-voting-pilot/main.pdf` — rebuilt (4 pages)
   - `AGENT.md` — this entry
   - `CHANGELOG.md` — release-log entry
 
@@ -207,8 +207,8 @@
   - `docs/research/mq-voting-pilot/results/PHASE_C_RESULTS_ANALYSIS.md` — full results analysis: dataset summary, privacy envelope, integrity flow, safety gates, claims/non-claims, paper-safe headline finding, reviewer-safe wording guide.
   - `docs/research/mq-voting-pilot/results/PHASE_C_RESULTS_TABLES.md` — five numbered tables ready for paper inclusion (session counts, privacy assertions, integrity flow, safety gates, endpoint closure map).
   - `docs/research/mq-voting-pilot/results/PAPER_FINDINGS_SUMMARY.md` — paper title, abstract summary, headline finding, key findings by section, wording guide, suggested paper structure, non-claims checklist.
-  - `papers/simurgh-voting-pilot/main.tex` — IEEE-format LaTeX paper scaffold: title, abstract, introduction with scope note, related work (TODOs), system design (consent, ballot-field exclusion, HMAC chain, closure), Phase C pilot, results (4 tables), discussion (findings, limitations, non-claims), conclusion.
-  - `papers/simurgh-voting-pilot/references.bib` — initial BibTeX entries (Simurgh repo, Helios, Dwork 2014).
+  - `Papers/simurgh-voting-pilot/main.tex` — IEEE-format LaTeX paper scaffold: title, abstract, introduction with scope note, related work (TODOs), system design (consent, ballot-field exclusion, HMAC chain, closure), Phase C pilot, results (4 tables), discussion (findings, limitations, non-claims), conclusion.
+  - `Papers/simurgh-voting-pilot/references.bib` — initial BibTeX entries (Simurgh repo, Helios, Dwork 2014).
 - **Non-claims preserved throughout:** research prototype only; voting-adjacent case study, not election security; no automatic misconduct finding; official vote determined by society's own system.
 
 ---
@@ -317,8 +317,8 @@
 - **Scope:** Full paper accuracy re-audit, sync stale test counts in paper and repo docs, add Zenodo preprint version note, rebuild main.pdf.
 - **Findings:** All three required edits from the 2026-05-22 audit (IV-B nonce→challenge, V-D global nonce guard, V-B dual canonicaliser) confirmed applied. One new finding: Node.js test count was stale (327→331) following the nonceGuardTtlReplay regression suite added in the methodology upgrade session. Updated in paper (abstract, contribution bullet, Table II), AGENT.md, Stage 2.8 closeout docs, and PAPER_ACCURACY_AUDIT.md.
 - **Files changed:**
-  - `papers/project-simurgh/main.tex` — test counts updated (327→331, 379→383); Zenodo preprint version note added to \thanks
-  - `papers/project-simurgh/main.pdf` — rebuilt (12 pages, 0 errors)
+  - `Papers/project-simurgh/main.tex` — test counts updated (327→331, 379→383); Zenodo preprint version note added to \thanks
+  - `Papers/project-simurgh/main.pdf` — rebuilt (12 pages, 0 errors)
   - `AGENT.md` — methodology upgrade entry corrected (327→331); this entry added
   - `docs/PAPER_ACCURACY_AUDIT.md` — updated to 2026-05-25 pass, table rows corrected
   - `docs/stages/STAGE_2_8_LINUX_VALIDATION_MATRIX.md` — current baseline note added
@@ -333,10 +333,10 @@
 
 - **Scope:** Initial IEEE-format research paper for Project Simurgh — companion to the Invisible Window disclosure paper.
 - **Files added:**
-  - `papers/project-simurgh/main.tex` — full 10-page IEEE conference paper (13 sections, 2 TikZ figures, 2 tables)
-  - `papers/project-simurgh/references.bib` — 34 BibTeX entries
-  - `papers/project-simurgh/Makefile` — build + arxiv-archive targets
-  - `papers/project-simurgh/README.md` — paper metadata
+  - `Papers/project-simurgh/main.tex` — full 10-page IEEE conference paper (13 sections, 2 TikZ figures, 2 tables)
+  - `Papers/project-simurgh/references.bib` — 34 BibTeX entries
+  - `Papers/project-simurgh/Makefile` — build + arxiv-archive targets
+  - `Papers/project-simurgh/README.md` — paper metadata
   - `docs/superpowers/specs/2026-05-21-simurgh-paper-design.md` — paper design spec
 - **Paper coverage:** Threat model, system architecture, Ed25519 proof protocol (E1 triple check, N1 node continuity, nonce replay rejection), platform implementations (macOS/Windows/Linux), privacy model (metadata-only, forbidden fields), evaluation (327+33+11 tests, 30-assertion audit, real-device Windows validation, Linux CI), security analysis, ethics and deployment limits, related work, future work.
 - **Non-claims preserved throughout:** research prototype only, no production deployment, no automatic misconduct finding, no GPU overlay detection, no hardware attestation claim.

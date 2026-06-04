@@ -1,6 +1,6 @@
 {
   "artifact": "Project Simurgh ARA",
-  "artifact_dir": "/Users/raoof.r12/Desktop/Raouf/Project-Simurgh/papers/project-simurgh/ara",
+  "artifact_dir": "/Users/raoof.r12/Desktop/Raouf/Project-Simurgh/Papers/project-simurgh/ara",
   "review_version": "3.0.0",
   "prerequisite": "Level 1 passed (21 files, all mandatory files present, 18-node exploration DAG with dead_end and decision types, 4 claims, 4 experiments, 6 heuristics, 6 concepts)",
 

@@ -36,9 +36,9 @@
 
 ### Changed
 
-- `papers/simurgh-voting-pilot/main.tex` — abstract, figure, contributions, pilot section, passive voice, style, structure.
-- `papers/simurgh-voting-pilot/references.bib` — EVT/WOTE correction, nswec year verification note.
-- `papers/simurgh-voting-pilot/main.pdf` — rebuilt.
+- `Papers/simurgh-voting-pilot/main.tex` — abstract, figure, contributions, pilot section, passive voice, style, structure.
+- `Papers/simurgh-voting-pilot/references.bib` — EVT/WOTE correction, nswec year verification note.
+- `Papers/simurgh-voting-pilot/main.pdf` — rebuilt.
 
 ---
 
@@ -48,13 +48,13 @@
 
 ### Added
 
-- `papers/simurgh-voting-pilot/PAPER_CLAIM_AUDIT.md` — 20-claim audit table with evidence links and verdict.
+- `Papers/simurgh-voting-pilot/PAPER_CLAIM_AUDIT.md` — 20-claim audit table with evidence links and verdict.
 - `docs/research/mq-voting-pilot/evidence/phase-c-closeout/` — 7 gate evidence files at Phase C closeout baseline.
 
 ### Changed
 
-- `papers/simurgh-voting-pilot/main.tex` — §III.A consent/implementation distinction; Table 2 privacy audit note.
-- `papers/simurgh-voting-pilot/main.pdf` — rebuilt after fixes.
+- `Papers/simurgh-voting-pilot/main.tex` — §III.A consent/implementation distinction; Table 2 privacy audit note.
+- `Papers/simurgh-voting-pilot/main.pdf` — rebuilt after fixes.
 
 ---
 
@@ -64,27 +64,27 @@
 
 ### Changed
 
-- `papers/simurgh-voting-pilot/main.tex` — full related work section, abstract protective sentence.
-- `papers/simurgh-voting-pilot/references.bib` — Civitas, STAR-Vote, NIST IR 7770, National Academies 2018, VVSG 2021, NSWEC TAV, Cavoukian 2009 added.
+- `Papers/simurgh-voting-pilot/main.tex` — full related work section, abstract protective sentence.
+- `Papers/simurgh-voting-pilot/references.bib` — Civitas, STAR-Vote, NIST IR 7770, National Academies 2018, VVSG 2021, NSWEC TAV, Cavoukian 2009 added.
 
 ### Added
 
-- `papers/simurgh-voting-pilot/Makefile` — `latexmk` build target.
-- `papers/simurgh-voting-pilot/main.pdf` — built (4 pages).
+- `Papers/simurgh-voting-pilot/Makefile` — `latexmk` build target.
+- `Papers/simurgh-voting-pilot/main.pdf` — built (4 pages).
 
 ---
 
 ## [voting-pilot-phase-c-results-pack] — 2026-06-04 — Phase C results pack + paper scaffold
 
-**Raouf:** Created Phase C results analysis documents and IEEE-format LaTeX paper scaffold. Three analysis docs (results analysis, results tables, paper findings summary) plus `papers/simurgh-voting-pilot/main.tex` and `references.bib`. All non-claims preserved; wording guide included to prevent reviewer-hostile overclaims.
+**Raouf:** Created Phase C results analysis documents and IEEE-format LaTeX paper scaffold. Three analysis docs (results analysis, results tables, paper findings summary) plus `Papers/simurgh-voting-pilot/main.tex` and `references.bib`. All non-claims preserved; wording guide included to prevent reviewer-hostile overclaims.
 
 ### Added
 
 - `docs/research/mq-voting-pilot/results/PHASE_C_RESULTS_ANALYSIS.md`
 - `docs/research/mq-voting-pilot/results/PHASE_C_RESULTS_TABLES.md`
 - `docs/research/mq-voting-pilot/results/PAPER_FINDINGS_SUMMARY.md`
-- `papers/simurgh-voting-pilot/main.tex`
-- `papers/simurgh-voting-pilot/references.bib`
+- `Papers/simurgh-voting-pilot/main.tex`
+- `Papers/simurgh-voting-pilot/references.bib`
 
 ---
 

@@ -65,4 +65,4 @@ WRITE: "produces integrity signals for manual review", "research prototype", "de
 
 ## Directory
 
-`papers/project-simurgh/` inside the Project Simurgh repo.
+`Papers/project-simurgh/` inside the Project Simurgh repo.

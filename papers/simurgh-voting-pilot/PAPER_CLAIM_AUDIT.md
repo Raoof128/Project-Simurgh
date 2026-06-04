@@ -1,6 +1,6 @@
 # Simurgh Voting Pilot Paper Claim Audit
 
-**Paper:** `papers/simurgh-voting-pilot/main.tex`  
+**Paper:** `Papers/simurgh-voting-pilot/main.tex`  
 **Build:** 4 pages, 0 undefined citations, 0 undefined references  
 **Baseline tag:** `v0.5.0-voting-pilot-phase-c-closeout`  
 **Commit:** `f2803b4` (collection lock) / `c519040` (related work + PDF)  
