@@ -2,6 +2,26 @@
 
 ## Agent Change Log
 
+### 2026-06-04 (Australia/Sydney) — Voting pilot paper: author block + companion citation
+
+**Raouf:**
+
+- **Scope:** Extract author and companion-paper data from the Invisible Window PDF; update voting pilot paper accordingly.
+- **Data sourced from** `invisible-window-research-main/paper/main.pdf`:
+  - Full author name: Mohammad Raouf Abedini
+  - Department: Department of Computing, Macquarie University
+  - Email: mohammadraouf.abedini@students.mq.edu.au
+  - Companion paper DOI: 10.5281/zenodo.20376495
+  - HREC note: MQ HREC exempt determination was for the Invisible Window gaze-tracking study (n=8), NOT the voting pilot; voting pilot HREC sentence correctly remains "society-approved internal pilot" only.
+- **Changes:**
+  1. Author block updated: "Raouf" → "Mohammad Raouf Abedini", Department of Computing, institutional email.
+  2. `references.bib`: `simurgh2026` author fixed to "Abedini, Mohammad Raouf". New entry `abedini2026invisible` added with DOI 10.5281/zenodo.20376495.
+  3. Introduction: 2-sentence context added — \sys{} developed in response to the Invisible Window attack; companion citation `abedini2026invisible` wired.
+- **Build:** 4 pages, 122 KB, 0 Overfull, 0 undefined references in final pass. All citations verified in .bbl.
+- **Files changed:** `main.tex`, `references.bib`, `main.pdf`, `AGENT.md`, `CHANGELOG.md`.
+
+---
+
 ### 2026-06-04 (Australia/Sydney) — Voting pilot paper: external audit fixes — submission-ready v2
 
 **Raouf:**

@@ -32,9 +32,15 @@ M.~R. Clarkson, S.~Chong, and A.~C. Myers, ``Civitas: Toward a secure voting
   Privacy}.\hskip 1em plus 0.5em minus 0.4em\relax IEEE, 2008, pp. 354--368.
 
 \bibitem{simurgh2026}
-Raouf, ``Project simurgh: Privacy-preserving integrity proofs for high-stakes
-  digital interactions,'' \url{https://github.com/Raoof128/Project-Simurgh},
-  2026, tag: v0.5.0-voting-pilot-phase-c-closeout.
+M.~R. Abedini, ``Project simurgh: Privacy-preserving integrity proofs for
+  high-stakes digital interactions,''
+  \url{https://github.com/Raoof128/Project-Simurgh}, 2026, tag:
+  v0.5.0-voting-pilot-phase-c-closeout.
+
+\bibitem{abedini2026invisible}
+------, ``The invisible window: Exploiting {OS}-level display affinity to
+  bypass {WebRTC} proctoring systems,'' 2026, preprint.
+  \url{https://zenodo.org/records/20376495}.
 
 \bibitem{bell2013starvote}
 S.~Bell, J.~Benaloh, M.~Byrne, D.~DeBeauvoir, B.~Eakin, G.~Fisher, P.~Kortum,

@@ -32,11 +32,12 @@ Research prototype only. Source:
 Tag: \texttt{v0.5.0-voting-pilot-phase-c-closeout}.}}
 
 \author{
-  \IEEEauthorblockN{Raouf}
+  \IEEEauthorblockN{Mohammad Raouf Abedini}
   \IEEEauthorblockA{
-    \textit{MQ Persian Society}\\
+    \textit{Department of Computing}\\
     Macquarie University\\
-    Sydney, Australia
+    Sydney, Australia\\
+    mohammadraouf.abedini@students.mq.edu.au
   }
 }
 
@@ -80,9 +81,13 @@ ballot recording, no content-level surveillance) without revealing their choice?
 End-to-end verifiable voting schemes~\cite{adida2008helios,clarkson2008civitas}
 solve the \emph{outcome} integrity problem (did the tally reflect all ballots?)
 but do not address \emph{session} integrity (was the participant's interaction
-free of covert collection?). \sys{} is a research prototype that targets
-session integrity through privacy-preserving metadata collection and
-tamper-evident audit chains~\cite{simurgh2026}.
+free of covert collection?). \sys{} is a research prototype that targets session integrity through
+privacy-preserving metadata collection and tamper-evident audit
+chains~\cite{simurgh2026}. It was developed in response to the Invisible
+Window attack~\cite{abedini2026invisible}, which demonstrated that
+OS-level display affinity APIs allow application windows to evade
+browser-based screen capture entirely, undermining the display-fidelity
+assumption on which WebRTC proctoring relies.
 
 This paper reports a Phase~C pilot in which \sys{} ran in shadow mode alongside
 a real MQ Persian Society event preference poll, collecting session-level

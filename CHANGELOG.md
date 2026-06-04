@@ -1,5 +1,11 @@
 ## Change Log
 
+## [voting-pilot-paper-author-companion-cite] — 2026-06-04 — Author block + Invisible Window companion citation
+
+**Raouf:** Sourced author data from Invisible Window PDF. Author block: "Raouf" → "Mohammad Raouf Abedini", Department of Computing, mohammadraouf.abedini@students.mq.edu.au. `simurgh2026` BibTeX author corrected. New entry `abedini2026invisible` (DOI 10.5281/zenodo.20376495) added. Introduction updated with 2-sentence companion-paper context. Build: 4 pages, 122 KB, 0 Overfull, 0 undefined refs.
+
+---
+
 ## [voting-pilot-paper-external-audit-fixes] — 2026-06-04 — External audit fixes — submission-ready v2
 
 **Raouf:** PDF sanity confirmed (Hastings/Nov. 2023, no Runyan, no TODO). Applied 4 external-audit fixes: title → "Voting-Adjacent Workflows", placeins + FloatBarrier (×2) for float containment, "any caller" → "any caller able to reach the pilot API" (×3), HREC scope sentence added to §IV.C. Author block flagged for update (full name + MQ email needed before submission). Build: 4 pages, 122 KB, 0 Overfull, 0 warnings.
