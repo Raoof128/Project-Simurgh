@@ -203,9 +203,9 @@ Fig.~\ref{fig:flow} shows the Phase~C session lifecycle.
 \node[box, below=of submit]  (report)  {GET /report\\(token-gated)};
 
 %% Side annotation nodes
-\node[act, right=0.8cm of accept] (chain1) {HMAC chain\\STARTED};
-\node[act, right=0.8cm of submit] (chain2) {HMAC chain\\SUBMITTED};
-\node[act, left=0.8cm of ballot]  (discard) {value = ``''\\before fetch};
+\node[act, right=0.6cm of accept] (chain1) {HMAC chain\\STARTED};
+\node[act, right=0.6cm of submit] (chain2) {HMAC chain\\SUBMITTED};
+\node[act, left=0.6cm of ballot]  (discard) {value = ``''\\before fetch};
 
 %% Main flow arrows
 \draw[arr] (consent) -- (accept);
@@ -229,11 +229,10 @@ Fig.~\ref{fig:flow} shows the Phase~C session lifecycle.
     {410 when\\closed};
 
 \end{tikzpicture}
-\caption{Phase~C session lifecycle. The ballot choice is discarded in the
-browser before every \texttt{fetch} call (left annotation). HMAC audit-chain
-events are appended on consent and submit (right annotations). Under the
-collection-closed configuration, consent/accept, submit, and withdraw return
-\texttt{HTTP~410} (bracket); the report endpoint remains token-protected.}
+\caption{Phase~C session lifecycle. Ballot choice is discarded client-side
+before the submit call (left). HMAC chain events append on consent and
+submit (right). Under the collection-closed flag, write routes return
+\texttt{HTTP~410}; the report endpoint remains token-protected.}
 \label{fig:flow}
 \end{figure}
 
@@ -271,8 +270,9 @@ verified its integrity on report export.
 
 \subsection{Collection-Closure Posture}
 
-After reaching the 30-session target, we set
-\texttt{SIMURGH\_VOTING\_PILOT\_COLLECTION\_CLOSED=true}. With this flag active:
+After reaching the 30-session target, we set the environment variable
+\texttt{SIMURGH\_VOTING\_PILOT\_\allowbreak COLLECTION\_CLOSED=true}.
+With this flag active:
 \begin{itemize}
   \item \texttt{POST /api/voting-pilot/consent/accept} returns \texttt{410 Gone}.
   \item \texttt{POST /api/voting-pilot/submit} returns \texttt{410 Gone}.
