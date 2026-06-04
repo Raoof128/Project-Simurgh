@@ -11,11 +11,11 @@ Can volunteer MQ Persian Society members use the Simurgh voting pilot clearly, s
 
 ## Phase definition
 
-| Phase | Participants | Data label |
-|-------|-------------|------------|
-| A | None (synthetic) | `synthetic: true` |
-| B | Internal dry run (executive/researchers) | `data_source: internal_human_dry_run` |
-| C | Volunteer society members | `data_source: human_participant` |
+| Phase | Participants                             | Data label                            |
+| ----- | ---------------------------------------- | ------------------------------------- |
+| A     | None (synthetic)                         | `synthetic: true`                     |
+| B     | Internal dry run (executive/researchers) | `data_source: internal_human_dry_run` |
+| C     | Volunteer society members                | `data_source: human_participant`      |
 
 ## Scope
 

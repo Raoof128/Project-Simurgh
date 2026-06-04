@@ -16,29 +16,29 @@ Phase B files carry `"synthetic": false, "data_source": "internal_human_dry_run"
 
 ## Scenario coverage (34 artefacts)
 
-| Scenario                         | Files |
-| -------------------------------- | ----: |
-| `compliant_browser_only`         |    16 |
-| `distracted_member`              |     6 |
-| `daemon_unavailable`             |     4 |
-| `withdraws_midway`               |     3 |
-| `compliant_with_fixture_daemon`  |     1 |
-| `declines_consent`               |     1 |
-| `forbidden_ballot_field_attempt` |     1 |
-| `replay_attempt`                 |     1 |
-| `tampered_proof`                 |     1 |
-| **Total**                        |    **34** |
+| Scenario                         |  Files |
+| -------------------------------- | -----: |
+| `compliant_browser_only`         |     16 |
+| `distracted_member`              |      6 |
+| `daemon_unavailable`             |      4 |
+| `withdraws_midway`               |      3 |
+| `compliant_with_fixture_daemon`  |      1 |
+| `declines_consent`               |      1 |
+| `forbidden_ballot_field_attempt` |      1 |
+| `replay_attempt`                 |      1 |
+| `tampered_proof`                 |      1 |
+| **Total**                        | **34** |
 
 ## Gate results
 
-| Gate                                          | Result                                     |
-| --------------------------------------------- | ------------------------------------------ |
-| `npm test`                                    | 359/359 pass                               |
-| `npm audit --audit-level=high`                | 0 high vulnerabilities                     |
-| `node tools/privacy-audit.mjs`                | 0 violations (52 evidence files scanned)   |
-| `bash scripts/check.sh`                       | exit 0                                     |
-| `bash scripts/smoke-voting-pilot.sh`          | 8/8 pass                                   |
-| `bash scripts/security-audit-voting-pilot.sh` | 10/10 pass                                 |
+| Gate                                          | Result                                   |
+| --------------------------------------------- | ---------------------------------------- |
+| `npm test`                                    | 359/359 pass                             |
+| `npm audit --audit-level=high`                | 0 high vulnerabilities                   |
+| `node tools/privacy-audit.mjs`                | 0 violations (52 evidence files scanned) |
+| `bash scripts/check.sh`                       | exit 0                                   |
+| `bash scripts/smoke-voting-pilot.sh`          | 8/8 pass                                 |
+| `bash scripts/security-audit-voting-pilot.sh` | 10/10 pass                               |
 
 ## Key assertions verified
 

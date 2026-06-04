@@ -55,8 +55,8 @@
 
 **Sign-off — Phase C launch approved:**
 
-| Role | Name | Date |
-|------|------|------|
-| Principal researcher | Raouf | 2026-06-04 |
-| Society executive approver | Mona Zabeti | 2026-06-04 |
+| Role                            | Name                    | Date       |
+| ------------------------------- | ----------------------- | ---------- |
+| Principal researcher            | Raouf                   | 2026-06-04 |
+| Society executive approver      | Mona Zabeti             | 2026-06-04 |
 | Ethics approval (if applicable) | N/A — rationale on file | 2026-06-04 |

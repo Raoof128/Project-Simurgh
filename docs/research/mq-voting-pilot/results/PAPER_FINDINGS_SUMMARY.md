@@ -11,7 +11,7 @@
 **Privacy-Preserving Integrity Proofs for Student-Society Voting:
 A Phase C Pilot of Project Simurgh at Macquarie University**
 
-*Subtitle: A voting-adjacent case study, not a production election-security claim*
+_Subtitle: A voting-adjacent case study, not a production election-security claim_
 
 ---
 
@@ -70,14 +70,14 @@ HTTP 410 responses.
 
 ### Safety gates (Section: Evaluation / Verification)
 
-| Gate | Result |
-| --- | --- |
-| Node tests | 359/359 pass |
-| npm audit | 0 high/critical |
-| Privacy audit | PASS |
-| Smoke | 8/8 |
-| Security audit | 10/10 |
-| Closure smoke | 5/5 |
+| Gate           | Result          |
+| -------------- | --------------- |
+| Node tests     | 359/359 pass    |
+| npm audit      | 0 high/critical |
+| Privacy audit  | PASS            |
+| Smoke          | 8/8             |
+| Security audit | 10/10           |
+| Closure smoke  | 5/5             |
 
 ---
 

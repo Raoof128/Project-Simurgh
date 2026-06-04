@@ -9,14 +9,14 @@
 
 ## 1. Dataset summary
 
-| Metric | Value |
-| --- | --- |
-| Consented pilot sessions | 31 |
-| Submitted sessions (primary analysis) | 30 |
-| Withdrawn sessions | 1 |
-| Withdrawn session ID | `vp_4fcc741a` (excluded from report export and analysis) |
-| Official vote impact | 0 — shadow mode only |
-| Ballot choices collected by Simurgh | 0 |
+| Metric                                | Value                                                    |
+| ------------------------------------- | -------------------------------------------------------- |
+| Consented pilot sessions              | 31                                                       |
+| Submitted sessions (primary analysis) | 30                                                       |
+| Withdrawn sessions                    | 1                                                        |
+| Withdrawn session ID                  | `vp_4fcc741a` (excluded from report export and analysis) |
+| Official vote impact                  | 0 — shadow mode only                                     |
+| Ballot choices collected by Simurgh   | 0                                                        |
 
 The pilot ran alongside the MQ Persian Society event preference poll in shadow
 mode. No data was collected that could affect or reveal the official election
@@ -36,18 +36,18 @@ participant selected.
 
 ### Full privacy envelope
 
-| Privacy assertion | Result |
-| --- | --- |
-| `ballot_choice_recorded_by_simurgh` | `false` — all 30 submitted sessions |
-| Ballot choice transmitted to server | Never — discarded client-side pre-fetch |
-| Screen capture collected | No |
-| Webcam / audio collected | No |
-| Typed content collected | No |
-| Pasted content collected | No |
-| Personal device identifiers collected | No |
-| Raw process names collected | No |
-| Raw window titles collected | No |
-| Privacy audit (`node tools/privacy-audit.mjs`) | PASS — 52 evidence files scanned |
+| Privacy assertion                              | Result                                  |
+| ---------------------------------------------- | --------------------------------------- |
+| `ballot_choice_recorded_by_simurgh`            | `false` — all 30 submitted sessions     |
+| Ballot choice transmitted to server            | Never — discarded client-side pre-fetch |
+| Screen capture collected                       | No                                      |
+| Webcam / audio collected                       | No                                      |
+| Typed content collected                        | No                                      |
+| Pasted content collected                       | No                                      |
+| Personal device identifiers collected          | No                                      |
+| Raw process names collected                    | No                                      |
+| Raw window titles collected                    | No                                      |
+| Privacy audit (`node tools/privacy-audit.mjs`) | PASS — 52 evidence files scanned        |
 
 These assertions are enforced by the system design, not only by policy:
 
@@ -63,16 +63,16 @@ These assertions are enforced by the system design, not only by policy:
 
 ### Consent and submission flow
 
-| Flow step | Result |
-| --- | --- |
-| Consent page served | ✓ |
-| Consent accepted (31 sessions) | ✓ |
-| Anonymous participant code issued | ✓ per session |
-| HMAC audit chain initialised | ✓ per session |
-| Submit intent received (30 sessions) | ✓ |
-| Submit recorded in audit chain | ✓ per submitted session |
-| Withdrawn session (1) | ✓ blocked from report export (403) |
-| Withdrawn session included in analysis | No |
+| Flow step                              | Result                             |
+| -------------------------------------- | ---------------------------------- |
+| Consent page served                    | ✓                                  |
+| Consent accepted (31 sessions)         | ✓                                  |
+| Anonymous participant code issued      | ✓ per session                      |
+| HMAC audit chain initialised           | ✓ per session                      |
+| Submit intent received (30 sessions)   | ✓                                  |
+| Submit recorded in audit chain         | ✓ per submitted session            |
+| Withdrawn session (1)                  | ✓ blocked from report export (403) |
+| Withdrawn session included in analysis | No                                 |
 
 ### Collection closure
 
@@ -92,14 +92,14 @@ meaning it cannot be bypassed with a valid token.
 
 ## 4. Safety gates
 
-| Gate | Result |
-| --- | --- |
-| Node tests (`npm test`) | 359/359 pass |
+| Gate                             | Result                          |
+| -------------------------------- | ------------------------------- |
+| Node tests (`npm test`)          | 359/359 pass                    |
 | npm audit (`--audit-level=high`) | 0 high/critical vulnerabilities |
-| Privacy audit | PASS (52 files scanned) |
-| `smoke-voting-pilot.sh` | 8/8 pass |
-| `security-audit-voting-pilot.sh` | 10/10 pass |
-| `smoke-voting-pilot-closed.sh` | 5/5 pass |
+| Privacy audit                    | PASS (52 files scanned)         |
+| `smoke-voting-pilot.sh`          | 8/8 pass                        |
+| `security-audit-voting-pilot.sh` | 10/10 pass                      |
+| `smoke-voting-pilot-closed.sh`   | 5/5 pass                        |
 
 ---
 
@@ -141,10 +141,10 @@ HTTP 410 responses.
 
 ## 7. Reviewer-safe wording guide
 
-| Do not say | Say instead |
-| --- | --- |
-| "Simurgh secured the vote" | "Simurgh provided privacy-preserving integrity evidence for a consented voting-adjacent pilot" |
-| "voting security system" | "voting-session integrity research prototype" |
-| "election integrity" | "pilot session integrity" |
-| "participants voted through Simurgh" | "participants completed a consented shadow-mode pilot alongside the official voting event" |
-| "Simurgh monitored the election" | "Simurgh collected session-level integrity metadata in shadow mode" |
+| Do not say                           | Say instead                                                                                    |
+| ------------------------------------ | ---------------------------------------------------------------------------------------------- |
+| "Simurgh secured the vote"           | "Simurgh provided privacy-preserving integrity evidence for a consented voting-adjacent pilot" |
+| "voting security system"             | "voting-session integrity research prototype"                                                  |
+| "election integrity"                 | "pilot session integrity"                                                                      |
+| "participants voted through Simurgh" | "participants completed a consented shadow-mode pilot alongside the official voting event"     |
+| "Simurgh monitored the election"     | "Simurgh collected session-level integrity metadata in shadow mode"                            |

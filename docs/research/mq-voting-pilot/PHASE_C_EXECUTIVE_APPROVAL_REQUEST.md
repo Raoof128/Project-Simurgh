@@ -32,14 +32,15 @@ Members who decline or withdraw are treated identically to members who do not pa
 
 ## Prior validation
 
-| Phase | Status | Evidence |
-|-------|--------|----------|
-| A — synthetic validation | Complete | 19 synthetic artefacts, all gates pass |
-| B — internal dry run | Complete (2026-06-04) | 34 human dry-run artefacts, all gates pass |
+| Phase                    | Status                | Evidence                                   |
+| ------------------------ | --------------------- | ------------------------------------------ |
+| A — synthetic validation | Complete              | 19 synthetic artefacts, all gates pass     |
+| B — internal dry run     | Complete (2026-06-04) | 34 human dry-run artefacts, all gates pass |
 
 Tag: `v0.5.0-voting-pilot-phase-b-internal-dry-run`
 
 All safety and privacy gates passed:
+
 - 359/359 tests pass
 - 0 high vulnerabilities
 - 0 privacy violations
@@ -48,14 +49,14 @@ All safety and privacy gates passed:
 
 ## Proposed scope
 
-| Item | Value |
-|------|-------|
-| Participants | Volunteer society members only — opt-in |
-| Ceiling | ≤ 30 participants for Phase C pilot |
-| Duration | One election cycle (to be confirmed) |
-| Data use | Aggregate research analysis only |
-| Data label | `data_source: human_participant` |
-| Official ballot | Unaffected |
+| Item            | Value                                   |
+| --------------- | --------------------------------------- |
+| Participants    | Volunteer society members only — opt-in |
+| Ceiling         | ≤ 30 participants for Phase C pilot     |
+| Duration        | One election cycle (to be confirmed)    |
+| Data use        | Aggregate research analysis only        |
+| Data label      | `data_source: human_participant`        |
+| Official ballot | Unaffected                              |
 
 ## Ethics
 
@@ -70,11 +71,11 @@ By signing below, the MQ Persian Society executive committee confirms:
 3. They understand participation is voluntary and the official ballot is unaffected
 4. They agree that no individual integrity result will be used for disciplinary purposes
 
-| Name | Role | Signature | Date |
-|------|------|-----------|------|
+| Name        | Role                         | Signature  | Date       |
+| ----------- | ---------------------------- | ---------- | ---------- |
 | Mona Zabeti | MQ Persian Society Executive | ✓ Approved | 2026-06-04 |
-| | | | |
-| | | | |
+|             |                              |            |            |
+|             |                              |            |            |
 
 ## Documents provided for review
 

@@ -1,41 +1,41 @@
 {
-    "schema_version": "2026-05-v1",
-    "persona": "withdraws_midway",
-    "seed": 450,
-    "fixed_clock": null,
-    "run_at": "2026-06-04T02:54:36.154Z",
-    "synthetic": false,
-    "human_participant": true,
-    "pilot_session_id": "vp_801b6a9d-72bd-460d-b432-1f6d0d67f3a8",
-    "integrity_tier": "browser_only",
-    "steps": [
-        {
-            "name": "accept_consent",
-            "status": "pass",
-            "server_status": 200
-        },
-        {
-            "name": "simulate_telemetry_delay",
-            "status": "pass"
-        },
-        {
-            "name": "withdraw",
-            "status": "pass",
-            "server_status": 200
-        },
-        {
-            "name": "report_blocked_after_withdraw",
-            "status": "pass",
-            "server_status": 403
-        }
-    ],
-    "privacy": {
-        "ballot_choice_sent": false,
-        "token_redacted": true,
-        "forbidden_values_recorded": false
+  "schema_version": "2026-05-v1",
+  "persona": "withdraws_midway",
+  "seed": 450,
+  "fixed_clock": null,
+  "run_at": "2026-06-04T02:54:36.154Z",
+  "synthetic": false,
+  "human_participant": true,
+  "pilot_session_id": "vp_801b6a9d-72bd-460d-b432-1f6d0d67f3a8",
+  "integrity_tier": "browser_only",
+  "steps": [
+    {
+      "name": "accept_consent",
+      "status": "pass",
+      "server_status": 200
     },
-    "final_server_response": null,
-    "assertion": "PASS",
-    "notes": "withdraws_midway persona completed.",
-    "data_source": "internal_human_dry_run"
+    {
+      "name": "simulate_telemetry_delay",
+      "status": "pass"
+    },
+    {
+      "name": "withdraw",
+      "status": "pass",
+      "server_status": 200
+    },
+    {
+      "name": "report_blocked_after_withdraw",
+      "status": "pass",
+      "server_status": 403
+    }
+  ],
+  "privacy": {
+    "ballot_choice_sent": false,
+    "token_redacted": true,
+    "forbidden_values_recorded": false
+  },
+  "final_server_response": null,
+  "assertion": "PASS",
+  "notes": "withdraws_midway persona completed.",
+  "data_source": "internal_human_dry_run"
 }

@@ -14,18 +14,18 @@ This addendum extends `DATA_MANAGEMENT_PLAN.md` (Phase A/B) to cover Phase C rea
 
 ## Data collected in Phase C
 
-| Field | Description | Identifiable? |
-|-------|-------------|--------------|
-| `pilot_session_id` | Random UUID per session | No |
-| `participant_code_hash` | HMAC-SHA256 of anonymous code | No |
-| `consent_timestamp` | ISO-8601 UTC | No |
-| `integrity_tier` | `browser_only` or `browser_plus_daemon` | No |
-| `proof_status` | Pass / fail / partial | No |
-| `focus_loss_count` | Integer | No |
-| `paste_count` | Integer | No |
-| `chain_valid` | Boolean | No |
-| `run_at` | Submission timestamp | No |
-| `data_source` | `human_participant` | No |
+| Field                   | Description                             | Identifiable? |
+| ----------------------- | --------------------------------------- | ------------- |
+| `pilot_session_id`      | Random UUID per session                 | No            |
+| `participant_code_hash` | HMAC-SHA256 of anonymous code           | No            |
+| `consent_timestamp`     | ISO-8601 UTC                            | No            |
+| `integrity_tier`        | `browser_only` or `browser_plus_daemon` | No            |
+| `proof_status`          | Pass / fail / partial                   | No            |
+| `focus_loss_count`      | Integer                                 | No            |
+| `paste_count`           | Integer                                 | No            |
+| `chain_valid`           | Boolean                                 | No            |
+| `run_at`                | Submission timestamp                    | No            |
+| `data_source`           | `human_participant`                     | No            |
 
 No field in this table is linked to name, student ID, email, or any persistent device identifier.
 
@@ -78,6 +78,7 @@ All Phase C session artefacts must carry:
 ```
 
 This distinguishes Phase C data from:
+
 - Phase A: `"synthetic": true`
 - Phase B: `"data_source": "internal_human_dry_run"`
 
