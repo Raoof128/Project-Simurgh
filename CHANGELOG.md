@@ -1,5 +1,11 @@
 ## Change Log
 
+## [voting-pilot-paper-final-audit] — 2026-06-04 — Paper final full audit — submission-ready
+
+**Raouf:** Final systematic audit. One issue found: "artefacts" (British) → "artifacts" (American English, IEEE). Surrounding passive converted to active. Full scorecard: em dashes 0, British spellings 0, Overfull 0, undefined citations 0, TODO notes 0, NIST authors correct, NSWEC Nov. 2023. Build: 4 pages, 121 KB, 0 warnings. Status: submission-ready.
+
+---
+
 ## [voting-pilot-paper-submission-polish] — 2026-06-04 — Paper blocking fixes + submission polish
 
 **Raouf:** Fixed two blocking citation errors (NIST IR 7770 wrong author → 4 correct authors + DOI; NSWEC year 2022→2023 November, "verify year" TODO note removed from bibliography). Eight submission-readiness fixes: §V.A Dataset paragraph added, "privacy-sensitive data" narrowed, "passive surveillance" → "content-level surveillance", fetch-call precision fix, "no data persisted" scoped correctly, Table II abbreviation note, Governance and Ethics subsection added (§IV), long path cleaned. Build: 4 pages, 121 KB, 0 warnings.

@@ -2,6 +2,29 @@
 
 ## Agent Change Log
 
+### 2026-06-04 (Australia/Sydney) — Voting pilot paper: final full audit pass — submission-ready
+
+**Raouf:**
+
+- **Scope:** Final systematic audit after all previous passes. One remaining issue found and fixed.
+- **Issue found:** "artefacts" (British) → "artifacts" (American English, IEEE standard) in §IV.D. Also converted surrounding passive to active: "aggregate gate evidence and closeout artifacts were separately archived" → "The application persisted no live pilot session records; aggregate gate evidence and closeout artifacts were separately archived."
+- **Full scorecard verified clean:**
+  - Em dashes: 0 ✅
+  - British spellings: 0 ✅
+  - Overfull hboxes: 0 ✅
+  - Undefined citations: 0 ✅
+  - TODO/verify notes in tex/bib: 0 ✅
+  - §\ref style (should be Sec.~\ref): 0 ✅
+  - Old nswec2022 key: 0 ✅
+  - NIST IR 7770 correct authors (Hastings et al.): 1 ✅
+  - NSWEC Nov. 2023: 1 ✅
+  - Pages: 4 ✅
+- **Build:** 4 pages, 121 KB, 0 Overfull hboxes, 0 warnings, 0 undefined references, 0 undefined citations.
+- **Status: Submission-ready** for supervisor review or small workshop/WIP venue.
+- **Files changed:** `main.tex`, `main.pdf`, `AGENT.md`, `CHANGELOG.md`.
+
+---
+
 ### 2026-06-04 (Australia/Sydney) — Voting pilot paper: blocking fixes + submission polish
 
 **Raouf:**
