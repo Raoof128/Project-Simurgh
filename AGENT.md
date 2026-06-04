@@ -2,6 +2,23 @@
 
 ## Agent Change Log
 
+### 2026-06-04 (Australia/Sydney) — Voting pilot Phase B internal human dry run closeout
+
+**Raouf:**
+
+- **Scope:** Lock Phase B evidence artefacts, patch metadata labels, run all safety gates, commit closeout.
+- **Actions:**
+  - Patched 34 new Phase B evidence files: `"synthetic": false, "data_source": "internal_human_dry_run"` (previously mislabelled `synthetic: true`).
+  - Created `docs/research/mq-voting-pilot/PHASE_B_INTERNAL_HUMAN_DRY_RUN_CLOSEOUT.md` — 9 scenario types, 34 artefacts, all assertions PASS.
+- **Gate results:** 359/359 tests pass; 0 high vulnerabilities; 0 privacy violations (52 files scanned); check.sh exit 0; smoke 8/8; security-audit 10/10.
+- **Files changed:**
+  - `docs/research/mq-voting-pilot/PHASE_B_INTERNAL_HUMAN_DRY_RUN_CLOSEOUT.md` — new closeout document
+  - `docs/research/mq-voting-pilot/evidence/synthetic/session-*-1780541*.json` — 34 files: `synthetic` corrected, `data_source` added
+  - `AGENT.md` — this entry
+  - `CHANGELOG.md` — release-log entry
+
+---
+
 ### 2026-06-01 (Australia/Sydney) — CI quality gate Stage 2.7 raw-field smoke hardening
 
 **Raouf:**

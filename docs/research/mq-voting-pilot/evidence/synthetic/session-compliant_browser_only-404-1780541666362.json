@@ -1,0 +1,41 @@
+{
+    "schema_version": "2026-05-v1",
+    "persona": "compliant_browser_only",
+    "seed": 404,
+    "fixed_clock": null,
+    "run_at": "2026-06-04T02:54:26.362Z",
+    "synthetic": false,
+    "human_participant": true,
+    "pilot_session_id": "vp_00cb34ad-0f78-4997-8ef9-ce94f4986783",
+    "integrity_tier": "browser_only",
+    "steps": [
+        {
+            "name": "accept_consent",
+            "status": "pass",
+            "server_status": 200
+        },
+        {
+            "name": "submit",
+            "status": "pass",
+            "server_status": 200
+        },
+        {
+            "name": "fetch_report",
+            "status": "pass",
+            "server_status": 200
+        }
+    ],
+    "privacy": {
+        "ballot_choice_sent": false,
+        "token_redacted": true,
+        "forbidden_values_recorded": false
+    },
+    "final_server_response": {
+        "status": 200,
+        "summary": "submitted",
+        "chain_valid": true
+    },
+    "assertion": "PASS",
+    "notes": "compliant_browser_only persona completed.",
+    "data_source": "internal_human_dry_run"
+}

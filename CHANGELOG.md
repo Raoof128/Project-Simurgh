@@ -1,5 +1,9 @@
 ## Change Log
 
+## [voting-pilot-phase-b-closeout] — 2026-06-04 — Phase B internal human dry run closeout
+
+**Raouf:** Locked Phase B evidence artefacts for the MQ Persian Society voting pilot. Patched 34 Phase B session JSON files to carry `"synthetic": false, "data_source": "internal_human_dry_run"` (previously mislabelled). Created `PHASE_B_INTERNAL_HUMAN_DRY_RUN_CLOSEOUT.md`. All safety gates pass: 359/359 tests, 0 high vulns, 0 privacy violations, smoke 8/8, security-audit 10/10.
+
 ## [ci-stage-2-7-smoke-flake] — 2026-06-01 — Quality Gate raw-field smoke hardening
 
 **Raouf:** Fixed the failing Simurgh Quality Gate run `26617769927` by hardening the Stage 2.7 raw-field smoke assertion. The CI failure was a false positive: scenario G searched the entire audit export JSON for the short forbidden value `"4321"`, which can appear by chance inside generated audit metadata such as HMACs, hashes, timestamps, or IDs even when the rejected raw debug payload is not leaked.
