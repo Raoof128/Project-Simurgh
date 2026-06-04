@@ -8,6 +8,8 @@
 
 Phase B internal human dry run produced 34 human-run evidence artefacts across 9 scenario types. All 34 completed with PASS assertions. One decline flow (`declines_consent`) created no server-side pilot session; the three `withdraws_midway` flows correctly created a session on consent acceptance and then blocked the report export with 403.
 
+**Final analysed dataset: 34 retained human dry-run evidence artefacts across 9 scenario types.** Earlier local run counts referenced during development are not treated as the final analysed dataset; only the retained artefacts committed here are considered Phase B evidence.
+
 ## Evidence metadata correction
 
 Phase B files carry `"synthetic": false, "data_source": "internal_human_dry_run"` to distinguish them from the Phase A deterministic automated runs (`"synthetic": true`) that live in the same `evidence/synthetic/` directory.
