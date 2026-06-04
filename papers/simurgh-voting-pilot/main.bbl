@@ -21,11 +21,6 @@
 \providecommand{\BIBdecl}{\relax}
 \BIBdecl
 
-\bibitem{simurgh2026}
-Raouf, ``Project simurgh: Privacy-preserving integrity proofs for high-stakes
-  digital interactions,'' \url{https://github.com/Raoof128/Project-Simurgh},
-  2026, tag: v0.5.0-voting-pilot-phase-c-closeout.
-
 \bibitem{adida2008helios}
 B.~Adida, ``{Helios}: {Web}-based open-audit voting,'' in \emph{Proceedings of
   the 17th USENIX Security Symposium}.\hskip 1em plus 0.5em minus 0.4em\relax
@@ -36,13 +31,18 @@ M.~R. Clarkson, S.~Chong, and A.~C. Myers, ``Civitas: Toward a secure voting
   system,'' in \emph{Proceedings of the 2008 IEEE Symposium on Security and
   Privacy}.\hskip 1em plus 0.5em minus 0.4em\relax IEEE, 2008, pp. 354--368.
 
+\bibitem{simurgh2026}
+Raouf, ``Project simurgh: Privacy-preserving integrity proofs for high-stakes
+  digital interactions,'' \url{https://github.com/Raoof128/Project-Simurgh},
+  2026, tag: v0.5.0-voting-pilot-phase-c-closeout.
+
 \bibitem{bell2013starvote}
 S.~Bell, J.~Benaloh, M.~Byrne, D.~DeBeauvoir, B.~Eakin, G.~Fisher, P.~Kortum,
   N.~McBurnett, J.~Montoya, M.~Parker, O.~Pereira, P.~Stark, D.~Wallach, and
   M.~Winn, ``{STAR}-{Vote}: A secure, transparent, auditable, and reliable
-  voting system,'' in \emph{Proceedings of the 2013 USENIX/ACCURATE/EVT
-  Workshop on Electronic Voting Technology}.\hskip 1em plus 0.5em minus
-  0.4em\relax USENIX Association, 2013.
+  voting system,'' in \emph{Proceedings of the 2013 {EVT/WOTE} Workshop on
+  Electronic Voting Technology}.\hskip 1em plus 0.5em minus 0.4em\relax USENIX
+  Association, 2013.
 
 \bibitem{nistir7770}
 N.~Runyan, ``Security considerations for remote electronic {UOCAVA} voting,''
@@ -64,7 +64,8 @@ N.~Runyan, ``Security considerations for remote electronic {UOCAVA} voting,''
 \bibitem{nswec2022tav}
 {NSW Electoral Commission}, ``Technology assisted voting: Final review
   report,'' NSW Electoral Commission, Tech. Rep., 2022,
-  \url{https://elections.nsw.gov.au}.
+  \url{https://elections.nsw.gov.au} — verify publication year before
+  submission.
 
 \bibitem{dwork2014algorithmic}
 C.~Dwork and A.~Roth, \emph{The Algorithmic Foundations of Differential

@@ -2,6 +2,38 @@
 
 ## Agent Change Log
 
+### 2026-06-04 (Australia/Sydney) — Voting pilot paper: full audit + rewrite (ml-paper-writing + stop-slop)
+
+**Raouf:**
+
+- **Scope:** Full paper audit using ml-paper-writing and stop-slop skills. 16 issues found across narrative, abstract, structure, style, citation, and figure dimensions. All fixed.
+- **Issues fixed:**
+  1. **Abstract** — Rewritten with Farquhar 5-sentence formula: achievement first, why hard, how, evidence (359/359, 8/8, 10/10, 5/5), scope note. No more generic opener.
+  2. **Figures** — TikZ system flow diagram added (Fig. 1): consent→submit→report lifecycle, client-side discard, HMAC events, 410 bracket.
+  3. **Contribution bullets** — Explicit `\textbf{Contributions:}` list added to introduction.
+  4. **Introduction** — "While X, Y" binary contrast removed; "not a study of election security" tightened to active construction.
+  5. **§II.F** — "not a new voting protocol. It is a bounded evaluation" contrast removed; positive construction used.
+  6. **§III headers** — Consistent title case across all subsections.
+  7. **§IV** — Pilot section expanded: event description (4 options), explicit shadow-mode framing, session count subsection, data management rationale.
+  8. **§V.B** — Added explanatory paragraph: `ballot_choice_recorded_by_simurgh: false` is a behavioral guarantee verified by gate suite; per-session reports not available post-hoc (in-memory store).
+  9. **§VI.A** — "What the results show" renamed to "Interpretation".
+  10. **§VI.B** — Added fifth limitation bullet explicitly noting in-memory-store post-hoc report gap.
+  11. **Passive voice** — 11 passive constructions converted to active: "was held"→"held", "was persisted"→"persisted", "was set"→"we set", etc.
+  12. **Stop-slop** — Em dash in §VI removed; "not X, it is Y" patterns removed; "is structurally related to" → "follows"; "has been explored" → active.
+  13. **Spelling** — "emphasises" → "emphasizes" (IEEE American English).
+  14. **Float specifiers** — `[h]` → `[!t]` on all tables.
+  15. **Citations** — `bell2013starvote` workshop corrected: "USENIX/ACCURATE/EVT" → "EVT/WOTE"; `nswec2022tav` flagged for year verification before submission.
+  16. **`\sys` macro** — `\newcommand{\sys}{Project Simurgh}` added for consistency.
+- **Build result:** 4 pages, 121 KB, 0 warnings, 0 undefined references, 0 undefined citations.
+- **Files changed:**
+  - `papers/simurgh-voting-pilot/main.tex` — full rewrite as above
+  - `papers/simurgh-voting-pilot/references.bib` — EVT/WOTE fix, nswec year note
+  - `papers/simurgh-voting-pilot/main.pdf` — rebuilt
+  - `AGENT.md` — this entry
+  - `CHANGELOG.md` — release-log entry
+
+---
+
 ### 2026-06-04 (Australia/Sydney) — Voting pilot paper: claim audit + evidence capture
 
 **Raouf:**

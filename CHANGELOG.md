@@ -1,5 +1,17 @@
 ## Change Log
 
+## [voting-pilot-paper-full-audit] — 2026-06-04 — Full paper audit and rewrite
+
+**Raouf:** Full paper audit using ml-paper-writing and stop-slop skills. 16 issues found and fixed: abstract rewritten (Farquhar formula), TikZ flow figure added, contribution bullets added, §IV pilot section expanded, passive voice eliminated, stop-slop patterns removed, citation workshop name corrected (EVT/WOTE), float specifiers fixed. Build: 4 pages, 121 KB, 0 warnings.
+
+### Changed
+
+- `papers/simurgh-voting-pilot/main.tex` — abstract, figure, contributions, pilot section, passive voice, style, structure.
+- `papers/simurgh-voting-pilot/references.bib` — EVT/WOTE correction, nswec year verification note.
+- `papers/simurgh-voting-pilot/main.pdf` — rebuilt.
+
+---
+
 ## [voting-pilot-paper-claim-audit] — 2026-06-04 — Paper claim audit + evidence capture
 
 **Raouf:** Audited all 20 paper claims against repo evidence. Two issues found and fixed: (1) consent disclosure vs. Phase C implementation for focus-loss/paste counts; (2) privacy audit table entry scope clarified. Phase C gate evidence captured to `evidence/phase-c-closeout/` (359/359 tests, all gates). `PAPER_CLAIM_AUDIT.md` created. PDF rebuilt: 4 pages, 0 undefined citations. Verdict: Accurate.

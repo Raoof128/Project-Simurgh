@@ -2,6 +2,7 @@
 \providecommand\hyper@newdestlabel[2]{}
 \providecommand\HyField@AuxAddToFields[1]{}
 \providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{adida2008helios,clarkson2008civitas}
 \citation{simurgh2026}
 \citation{adida2008helios}
 \citation{clarkson2008civitas}
@@ -14,42 +15,43 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-B}}Remote and Internet Voting Security}{1}{subsection.2.2}\protected@file@percent }
 \citation{vvsg2021}
 \citation{nswec2022tav}
-\citation{dwork2014algorithmic}
-\citation{cavoukian2009privacy}
+\citation{dwork2014algorithmic,cavoukian2009privacy}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-C}}Voting Standards, Privacy, and Auditability}{2}{subsection.2.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-D}}Australian Technology-Assisted Voting Context}{2}{subsection.2.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-D}}Australian Technology-Assisted Voting}{2}{subsection.2.4}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-E}}Privacy-Preserving Telemetry and Data Minimisation}{2}{subsection.2.5}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-F}}Position of This Work}{2}{subsection.2.6}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {III}System Design}{2}{section.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-A}}Consent flow}{2}{subsection.3.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}Ballot-field exclusion}{2}{subsection.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-C}}HMAC audit chain}{2}{subsection.3.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-D}}Collection-closure posture}{2}{subsection.3.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {IV}Phase C Pilot}{2}{section.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-A}}Study design}{2}{subsection.4.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-B}}Data management}{3}{subsection.4.2}\protected@file@percent }
+\newlabel{sec:design}{{III}{2}{System Design}{section.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Phase~C session lifecycle. The ballot choice is discarded in the browser before every \texttt  {fetch} call (left). HMAC audit-chain events are appended on consent and submit (right). Under the collection-closed configuration, consent/accept, submit, and withdraw return \texttt  {HTTP~410} (bracket); the report endpoint remains active and token-protected.}}{2}{figure.1}\protected@file@percent }
+\newlabel{fig:flow}{{1}{2}{Phase~C session lifecycle. The ballot choice is discarded in the browser before every \texttt {fetch} call (left). HMAC audit-chain events are appended on consent and submit (right). Under the collection-closed configuration, consent/accept, submit, and withdraw return \texttt {HTTP~410} (bracket); the report endpoint remains active and token-protected}{figure.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-A}}Consent Flow}{2}{subsection.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}Ballot-Field Exclusion}{2}{subsection.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-C}}HMAC Audit Chain}{2}{subsection.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-D}}Collection-Closure Posture}{3}{subsection.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {IV}Phase C Pilot}{3}{section.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-A}}Study Design}{3}{subsection.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-B}}Session Counts}{3}{subsection.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-C}}Data Management}{3}{subsection.4.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {V}Results}{3}{section.5}\protected@file@percent }
+\newlabel{sec:results}{{V}{3}{Results}{section.5}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-A}}Dataset}{3}{subsection.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-B}}Privacy Assertions}{3}{subsection.5.2}\protected@file@percent }
 \@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces Session Counts}}{3}{table.1}\protected@file@percent }
 \newlabel{tab:sessions}{{I}{3}{Session Counts}{table.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-B}}Privacy assertions}{3}{subsection.5.2}\protected@file@percent }
 \@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces Privacy Assertions — All 30 Submitted Sessions}}{3}{table.2}\protected@file@percent }
 \newlabel{tab:privacy}{{II}{3}{Privacy Assertions — All 30 Submitted Sessions}{table.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-C}}Integrity flow}{3}{subsection.5.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-D}}Safety gates}{3}{subsection.5.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-E}}Collection closure}{3}{subsection.5.5}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {III}{\ignorespaces Safety Gates at Closeout}}{3}{table.3}\protected@file@percent }
-\newlabel{tab:gates}{{III}{3}{Safety Gates at Closeout}{table.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {III}{\ignorespaces Safety Gates at Closeout (tag v0.5.0-voting-pilot-phase-c-closeout)}}{3}{table.3}\protected@file@percent }
+\newlabel{tab:gates}{{III}{3}{Safety Gates at Closeout (tag v0.5.0-voting-pilot-phase-c-closeout)}{table.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-C}}Integrity Flow}{3}{subsection.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-D}}Safety Gates}{3}{subsection.5.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-E}}Collection Closure}{3}{subsection.5.5}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {VI}Discussion}{3}{section.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-A}}What the results show}{3}{subsection.6.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-B}}Limitations}{3}{subsection.6.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-C}}Non-claims}{3}{subsection.6.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {VII}Conclusion}{3}{section.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-A}}Interpretation}{3}{subsection.6.1}\protected@file@percent }
 \bibstyle{IEEEtran}
 \bibdata{references}
-\bibcite{simurgh2026}{1}
-\bibcite{adida2008helios}{2}
-\bibcite{clarkson2008civitas}{3}
+\bibcite{adida2008helios}{1}
+\bibcite{clarkson2008civitas}{2}
+\bibcite{simurgh2026}{3}
 \bibcite{bell2013starvote}{4}
 \bibcite{nistir7770}{5}
 \bibcite{nationalacademies2018}{6}
@@ -57,5 +59,8 @@
 \bibcite{nswec2022tav}{8}
 \bibcite{dwork2014algorithmic}{9}
 \bibcite{cavoukian2009privacy}{10}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-B}}Limitations}{4}{subsection.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-C}}Non-Claims}{4}{subsection.6.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {VII}Conclusion}{4}{section.7}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{References}{4}{section*.1}\protected@file@percent }
 \gdef \@abspage@last{4}
