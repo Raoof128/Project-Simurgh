@@ -9,7 +9,7 @@ Phase C must not begin until every item below is marked complete and the gate re
 
 ## Governance
 
-- [ ] MQ Persian Society executive committee provides written approval to proceed
+- [x] MQ Persian Society executive committee provides written approval to proceed — **Mona Zabeti, 2026-06-04**
 - [ ] Approval names the pilot scope, dates, and participant ceiling
 - [ ] Approval is signed and dated and stored in `docs/research/mq-voting-pilot/approvals/`
 

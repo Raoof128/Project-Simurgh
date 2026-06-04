@@ -72,7 +72,7 @@ By signing below, the MQ Persian Society executive committee confirms:
 
 | Name | Role | Signature | Date |
 |------|------|-----------|------|
-| | | | |
+| Mona Zabeti | MQ Persian Society Executive | ✓ Approved | 2026-06-04 |
 | | | | |
 | | | | |
 
