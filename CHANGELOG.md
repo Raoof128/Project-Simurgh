@@ -1,5 +1,9 @@
 ## Change Log
 
+## [voting-pilot-phase-c-approval-pack] — 2026-06-04 — Phase C approval pack
+
+**Raouf:** Created five governance documents for Phase C (real member pilot): go/no-go checklist, member pilot protocol, executive approval request, participant notice, and data management addendum. Phase C requires executive written approval and ethics determination before any member participation.
+
 ## [voting-pilot-phase-b-closeout] — 2026-06-04 — Phase B internal human dry run closeout
 
 **Raouf:** Locked Phase B evidence artefacts for the MQ Persian Society voting pilot. Patched 34 Phase B session JSON files to carry `"synthetic": false, "data_source": "internal_human_dry_run"` (previously mislabelled). Created `PHASE_B_INTERNAL_HUMAN_DRY_RUN_CLOSEOUT.md`. All safety gates pass: 359/359 tests, 0 high vulns, 0 privacy violations, smoke 8/8, security-audit 10/10.

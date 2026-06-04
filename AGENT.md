@@ -2,6 +2,22 @@
 
 ## Agent Change Log
 
+### 2026-06-04 (Australia/Sydney) — Voting pilot Phase C approval pack
+
+**Raouf:**
+
+- **Scope:** Prepare governance, ethics, and participant documents required before Phase C (real member pilot) can launch.
+- **Files created:**
+  - `docs/research/mq-voting-pilot/PHASE_C_GO_NO_GO_CHECKLIST.md` — all items must be checked before launch
+  - `docs/research/mq-voting-pilot/PHASE_C_MEMBER_PILOT_PROTOCOL.md` — full protocol for real-member pilot
+  - `docs/research/mq-voting-pilot/PHASE_C_EXECUTIVE_APPROVAL_REQUEST.md` — sign-off document for society executive
+  - `docs/research/mq-voting-pilot/PHASE_C_PARTICIPANT_NOTICE.md` — plain-language notice for participants
+  - `docs/research/mq-voting-pilot/PHASE_C_DATA_MANAGEMENT_ADDENDUM.md` — Phase C data management addendum
+- **Phase C data label confirmed:** `synthetic: false, human_participant: true, data_source: human_participant`
+- **Phase C prerequisite:** Executive written approval + ethics determination required before any real member participation.
+
+---
+
 ### 2026-06-04 (Australia/Sydney) — Voting pilot Phase B internal human dry run closeout
 
 **Raouf:**
