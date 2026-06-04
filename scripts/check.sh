@@ -1312,6 +1312,15 @@ else
   fail "Doc-grep safety: overclaim phrases found in Linux closeout docs"
 fi
 
+# ── 10r. Voting pilot Phase C collection-closure smoke ───────────────────────
+step "Voting pilot Phase C collection-closure smoke"
+if scripts/smoke-voting-pilot-closed.sh > "$LOG_DIR/vp-closed-smoke.log" 2>&1; then
+  pass "Voting pilot collection-closure smoke: consent/accept+submit+withdraw→410, report active"
+else
+  fail "Voting pilot collection-closure smoke"
+  tail -40 "$LOG_DIR/vp-closed-smoke.log"
+fi
+
 # ── 11. Git status sanity ────────────────────────────────
 step "Git status"
 if git rev-parse --git-dir > /dev/null 2>&1; then

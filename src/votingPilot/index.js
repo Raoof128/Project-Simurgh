@@ -26,6 +26,10 @@ const FORBIDDEN_BALLOT_FIELDS = new Set([
 
 const PILOT_TOKEN_TTL_MS = 24 * 60 * 60 * 1000;
 
+function collectionClosed() {
+  return process.env.SIMURGH_VOTING_PILOT_COLLECTION_CLOSED === "true";
+}
+
 function getEnv(key) {
   const val = process.env[key];
   if (!val) throw new Error(`${key} env var not set`);
@@ -42,8 +46,14 @@ function requirePilotToken(req, res, next) {
   next();
 }
 
+function rejectIfClosed(req, res, next) {
+  if (collectionClosed()) return res.status(410).json({ error: "voting_pilot_collection_closed" });
+  next();
+}
+
 // POST /consent/accept — atomic consent + session creation
 router.post("/consent/accept", (req, res) => {
+  if (collectionClosed()) return res.status(410).json({ error: "voting_pilot_collection_closed" });
   const pepper = getEnv("SIMURGH_VOTING_PILOT_PEPPER");
   const anonymousCode = crypto.randomBytes(8).toString("hex");
   const { pilot_session_id, record } = store.accept({
@@ -69,7 +79,7 @@ router.post("/consent/accept", (req, res) => {
 });
 
 // POST /submit — submit intent only; forbidden ballot fields rejected
-router.post("/submit", requirePilotToken, (req, res) => {
+router.post("/submit", rejectIfClosed, requirePilotToken, (req, res) => {
   const body = req.body ?? {};
 
   if (body.pilot_session_id && body.pilot_session_id !== req.pilotSessionId) {
@@ -106,7 +116,7 @@ router.post("/submit", requirePilotToken, (req, res) => {
 });
 
 // POST /withdraw
-router.post("/withdraw", requirePilotToken, (req, res) => {
+router.post("/withdraw", rejectIfClosed, requirePilotToken, (req, res) => {
   const record = store.get(req.pilotSessionId);
   if (!record) return res.status(404).json({ error: "session_not_found" });
   if (record.withdrawn) return res.status(409).json({ error: "already_withdrawn" });

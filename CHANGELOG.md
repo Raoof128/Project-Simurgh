@@ -1,5 +1,21 @@
 ## Change Log
 
+## [voting-pilot-phase-c-collection-lock] — 2026-06-04 — Phase C server-side collection lock
+
+**Raouf:** Enforced server-side Phase C collection closure. `SIMURGH_VOTING_PILOT_COLLECTION_CLOSED=true` causes consent/accept, submit, and withdraw to return `410 Gone` with `voting_pilot_collection_closed`. Report export remains open. New `scripts/smoke-voting-pilot-closed.sh` (5 gates, dedicated server on port 33034). Gates: closure smoke 5/5, original smoke 8/8, security-audit 10/10, 359/359 tests, 0 high vulns, privacy audit PASS.
+
+### Added
+
+- `scripts/smoke-voting-pilot-closed.sh` — server-side closure smoke (5 gates).
+- `scripts/check.sh` gate 10r — Voting pilot Phase C collection-closure smoke.
+
+### Changed
+
+- `src/votingPilot/index.js` — `collectionClosed()`, `rejectIfClosed` middleware; consent/accept + submit + withdraw return 410 when env var set; report unaffected.
+- `.env.example` — `SIMURGH_VOTING_PILOT_COLLECTION_CLOSED` documented.
+
+---
+
 ## [voting-pilot-phase-c-closeout] — 2026-06-04 — Phase C member pilot closeout
 
 **Raouf:** Closed Phase C data collection for the MQ Persian Society voting pilot. 31 consented sessions: 30 submitted (primary analysis set), 1 withdrawn (`vp_4fcc741a`, excluded). Both pilot pages replaced with "Collection closed" banners — no new sessions possible. All gates green: 359/359 tests, 0 high vulns, privacy audit PASS, smoke 8/8, security-audit 10/10.

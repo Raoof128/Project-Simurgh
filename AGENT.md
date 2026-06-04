@@ -2,6 +2,24 @@
 
 ## Agent Change Log
 
+### 2026-06-04 (Australia/Sydney) — Voting pilot Phase C server-side collection lock
+
+**Raouf:**
+
+- **Scope:** Enforce server-side collection closure so Phase C cannot be bypassed with `curl` even when the UI pages are closed.
+- **Change:** Added `SIMURGH_VOTING_PILOT_COLLECTION_CLOSED=true` env var. When set: `POST /api/voting-pilot/consent/accept` returns 410 (checked first in route handler); `POST /api/voting-pilot/submit` returns 410 (via `rejectIfClosed` middleware before `requirePilotToken`); `POST /api/voting-pilot/withdraw` returns 410 (same). `GET /:sessionId/report` remains open — existing sessions can still export their report.
+- **New script:** `scripts/smoke-voting-pilot-closed.sh` — boots a dedicated server on port 33034 with the closed flag, runs 5 closure gates (consent/accept→410, submit→410, withdraw→410, report still active), then shuts down. Wired into `scripts/check.sh` as gate 10r.
+- **Gate results:** closure smoke 5/5; original smoke 8/8; security-audit 10/10; 359/359 tests; 0 high vulns; privacy audit PASS; `index.js` prettier-clean.
+- **Files changed:**
+  - `src/votingPilot/index.js` — `collectionClosed()` helper, `rejectIfClosed` middleware, wired to consent/accept + submit + withdraw
+  - `.env.example` — `SIMURGH_VOTING_PILOT_COLLECTION_CLOSED` documented
+  - `scripts/smoke-voting-pilot-closed.sh` — new closure smoke script (5 gates)
+  - `scripts/check.sh` — gate 10r wired
+  - `AGENT.md` — this entry
+  - `CHANGELOG.md` — release-log entry
+
+---
+
 ### 2026-06-04 (Australia/Sydney) — Voting pilot Phase C member pilot closeout
 
 **Raouf:**
