@@ -231,11 +231,11 @@ INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm7
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/vf/adobe/courier/pcrr7t.vf
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/adobe/courier/pcrr8r.tfm
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/adobe/times/ptmrc7t.tfm
+INPUT /usr/local/texlive/2024/texmf-dist/fonts/vf/adobe/times/ptmrc7t.vf
+INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/adobe/times/ptmr8r.tfm
 INPUT ./main.bbl
 INPUT ./main.bbl
 INPUT main.bbl
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/vf/adobe/times/ptmrc7t.vf
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/adobe/times/ptmr8r.tfm
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/vf/adobe/times/ptmri7t.vf
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/adobe/times/ptmri8r.tfm
 INPUT main.aux

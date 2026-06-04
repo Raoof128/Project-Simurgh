@@ -1,0 +1,12 @@
+[PASS] no token → 401
+[PASS] forbidden ballot field → 400
+[PASS] 400 response contains forbidden_fields
+[PASS] 400 response does not echo forbidden value
+[PASS] withdrawn session report → 403
+[PASS] report without token → 401
+[PASS] cross-session report → 403
+[PASS] decline path: no token → 401
+[PASS] double withdrawal → 409
+[PASS] privacy audit voting-pilot scan: PASS
+
+security-audit-voting-pilot: 10 passed, 0 failed

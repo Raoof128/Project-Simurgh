@@ -1,0 +1,7 @@
+[PASS] collection closed → consent/accept returns 410
+[PASS] consent/accept 410 body has voting_pilot_collection_closed error
+[PASS] collection closed → submit returns 410
+[PASS] collection closed → withdraw returns 410
+[PASS] report endpoint still active (401 for missing token, not 410)
+
+smoke-voting-pilot-closed: 5 passed, 0 failed

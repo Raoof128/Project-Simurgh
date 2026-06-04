@@ -1,0 +1,16 @@
+# npm audit report
+
+qs  6.11.1 - 6.15.1
+Severity: moderate
+qs has a remotely triggerable DoS: qs.stringify crashes with TypeError on null/undefined entries in comma-format arrays when encodeValuesOnly is set - https://github.com/advisories/GHSA-q8mj-m7cp-5q26
+fix available via `npm audit fix`
+node_modules/body-parser/node_modules/qs
+node_modules/qs
+  express  4.21.0 - 4.22.1 || 5.0.0-alpha.1 - 5.0.1
+  Depends on vulnerable versions of qs
+  node_modules/express
+
+2 moderate severity vulnerabilities
+
+To address all issues, run:
+  npm audit fix

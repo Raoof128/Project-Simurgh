@@ -1,0 +1,2520 @@
+
+> simurgh@0.4.18 test
+> node --test tests/unit/*.test.js tests/unit/**/*.test.js
+
+TAP version 13
+# Subtest: academicEvents
+    # Subtest: EVENTS exports all required taxonomy constants
+    ok 1 - EVENTS exports all required taxonomy constants
+      ---
+      duration_ms: 0.78875
+      type: 'test'
+      ...
+    # Subtest: createEvent returns a well-shaped event object
+    ok 2 - createEvent returns a well-shaped event object
+      ---
+      duration_ms: 0.910625
+      type: 'test'
+      ...
+    # Subtest: eventTimeline adds and retrieves events in insertion order
+    ok 3 - eventTimeline adds and retrieves events in insertion order
+      ---
+      duration_ms: 0.246917
+      type: 'test'
+      ...
+    # Subtest: eventTimeline returns empty array for unknown session
+    ok 4 - eventTimeline returns empty array for unknown session
+      ---
+      duration_ms: 0.282458
+      type: 'test'
+      ...
+    1..4
+ok 1 - academicEvents
+  ---
+  duration_ms: 4.254125
+  type: 'suite'
+  ...
+# Subtest: SDK exposes browser_package_hint via getDeviceShieldStatus
+ok 2 - SDK exposes browser_package_hint via getDeviceShieldStatus
+  ---
+  duration_ms: 3.383083
+  type: 'test'
+  ...
+# Subtest: SDK exposes daemon_unreachable_hint with soft UX wording (not suspicion wording)
+ok 3 - SDK exposes daemon_unreachable_hint with soft UX wording (not suspicion wording)
+  ---
+  duration_ms: 0.2225
+  type: 'test'
+  ...
+# Subtest: SDK trust-boundary comment is preserved
+ok 4 - SDK trust-boundary comment is preserved
+  ---
+  duration_ms: 0.219
+  type: 'test'
+  ...
+# Subtest: server.js does not reference browser_package_hint (UX-only trust boundary)
+ok 5 - server.js does not reference browser_package_hint (UX-only trust boundary)
+  ---
+  duration_ms: 0.797667
+  type: 'test'
+  ...
+# Subtest: daemonProof validator does not reference browser_package_hint
+ok 6 - daemonProof validator does not reference browser_package_hint
+  ---
+  duration_ms: 0.373917
+  type: 'test'
+  ...
+# Subtest: platformScannerSchema does not reference browser_package_hint
+ok 7 - platformScannerSchema does not reference browser_package_hint
+  ---
+  duration_ms: 0.273166
+  type: 'test'
+  ...
+# Subtest: scannerRiskPolicy does not branch on browser_package_hint
+ok 8 - scannerRiskPolicy does not branch on browser_package_hint
+  ---
+  duration_ms: 0.210875
+  type: 'test'
+  ...
+# Subtest: reportBuilder does not surface browser_package_hint in device_integrity
+ok 9 - reportBuilder does not surface browser_package_hint in device_integrity
+  ---
+  duration_ms: 0.388042
+  type: 'test'
+  ...
+# Subtest: getDeviceShieldStatus returns UX-only platform and scanner state from /status
+ok 10 - getDeviceShieldStatus returns UX-only platform and scanner state from /status
+  ---
+  duration_ms: 1.642375
+  type: 'test'
+  ...
+# Subtest: getDeviceShieldStatus reports available=false and unknown platform when daemon unreachable
+ok 11 - getDeviceShieldStatus reports available=false and unknown platform when daemon unreachable
+  ---
+  duration_ms: 0.243292
+  type: 'test'
+  ...
+# Subtest: browser SDK reports missing when daemon discovery fails
+ok 12 - browser SDK reports missing when daemon discovery fails
+  ---
+  duration_ms: 0.431833
+  type: 'test'
+  ...
+# Subtest: browser SDK pairs daemon through server challenge and server verification
+ok 13 - browser SDK pairs daemon through server challenge and server verification
+  ---
+  duration_ms: 0.480375
+  type: 'test'
+  ...
+# Subtest: browser SDK fetches proof and sends telemetry with daemon proof
+ok 14 - browser SDK fetches proof and sends telemetry with daemon proof
+  ---
+  duration_ms: 0.324125
+  type: 'test'
+  ...
+# Subtest: browser SDK blocks hardened telemetry when daemon proof is unavailable
+ok 15 - browser SDK blocks hardened telemetry when daemon proof is unavailable
+  ---
+  duration_ms: 0.29825
+  type: 'test'
+  ...
+# Subtest: browser SDK marks daemon untrusted when server rejects a proof
+ok 16 - browser SDK marks daemon untrusted when server rejects a proof
+  ---
+  duration_ms: 0.448417
+  type: 'test'
+  ...
+# Subtest: consentStore
+    # Subtest: accept() creates record with correct public fields
+    ok 1 - accept() creates record with correct public fields
+      ---
+      duration_ms: 2.426917
+      type: 'test'
+      ...
+    # Subtest: accept() stores participant_code_hash as "hmac-sha256:<hex>" (never raw code)
+    ok 2 - accept() stores participant_code_hash as "hmac-sha256:<hex>" (never raw code)
+      ---
+      duration_ms: 0.127791
+      type: 'test'
+      ...
+    # Subtest: get() returns record after accept
+    ok 3 - get() returns record after accept
+      ---
+      duration_ms: 0.087875
+      type: 'test'
+      ...
+    # Subtest: withdraw() marks record as withdrawn
+    ok 4 - withdraw() marks record as withdrawn
+      ---
+      duration_ms: 0.477708
+      type: 'test'
+      ...
+    # Subtest: withdraw() returns already_withdrawn on second call
+    ok 5 - withdraw() returns already_withdrawn on second call
+      ---
+      duration_ms: 0.10575
+      type: 'test'
+      ...
+    # Subtest: markSubmitted() sets _submitted to true
+    ok 6 - markSubmitted() sets _submitted to true
+      ---
+      duration_ms: 0.087083
+      type: 'test'
+      ...
+    # Subtest: markSubmitted() returns withdrawn error if session withdrawn
+    ok 7 - markSubmitted() returns withdrawn error if session withdrawn
+      ---
+      duration_ms: 0.263708
+      type: 'test'
+      ...
+    1..7
+ok 17 - consentStore
+  ---
+  duration_ms: 4.144167
+  type: 'suite'
+  ...
+# Subtest: daemon doctor source checks lifecycle dependencies without printing sensitive data
+ok 18 - daemon doctor source checks lifecycle dependencies without printing sensitive data
+  ---
+  duration_ms: 3.268916
+  type: 'test'
+  ...
+# Subtest: DAEMON_PROOF_REJECTED event type exists
+ok 19 - DAEMON_PROOF_REJECTED event type exists
+  ---
+  duration_ms: 0.763166
+  type: 'test'
+  ...
+# Subtest: buildDaemonProofRejectedEvent emits display_server_mismatch reason
+ok 20 - buildDaemonProofRejectedEvent emits display_server_mismatch reason
+  ---
+  duration_ms: 0.30375
+  type: 'test'
+  ...
+# Subtest: daemon lifecycle source exposes start stop status doctor reset-identity commands
+ok 21 - daemon lifecycle source exposes start stop status doctor reset-identity commands
+  ---
+  duration_ms: 3.936
+  type: 'test'
+  ...
+# Subtest: development LaunchAgent installer and uninstaller are bounded to local dev
+ok 22 - development LaunchAgent installer and uninstaller are bounded to local dev
+  ---
+  duration_ms: 3.689
+  type: 'test'
+  ...
+# Subtest: registry creates single-use challenges with TTL
+ok 23 - registry creates single-use challenges with TTL
+  ---
+  duration_ms: 1.360166
+  type: 'test'
+  ...
+# Subtest: registry rejects wrong purpose and stale challenges
+ok 24 - registry rejects wrong purpose and stale challenges
+  ---
+  duration_ms: 0.155167
+  type: 'test'
+  ...
+# Subtest: completePairing verifies signed payload and stores paired node
+ok 25 - completePairing verifies signed payload and stores paired node
+  ---
+  duration_ms: 3.282167
+  type: 'test'
+  ...
+# Subtest: completePairing rejects replayed challenge
+ok 26 - completePairing rejects replayed challenge
+  ---
+  duration_ms: 0.79825
+  type: 'test'
+  ...
+# Subtest: Linux pairing is accepted
+ok 27 - Linux pairing is accepted
+  ---
+  duration_ms: 2.999083
+  type: 'test'
+  ...
+# Subtest: unknown platform pairing still rejected (regression guard)
+ok 28 - unknown platform pairing still rejected (regression guard)
+  ---
+  duration_ms: 0.340375
+  type: 'test'
+  ...
+# Subtest: valid daemon proof is accepted
+ok 29 - valid daemon proof is accepted
+  ---
+  duration_ms: 3.696208
+  type: 'test'
+  ...
+# Subtest: invalid signature is rejected
+ok 30 - invalid signature is rejected
+  ---
+  duration_ms: 1.001917
+  type: 'test'
+  ...
+# Subtest: wrong session and exam are rejected
+ok 31 - wrong session and exam are rejected
+  ---
+  duration_ms: 0.441
+  type: 'test'
+  ...
+# Subtest: stale and future daemon proofs are rejected
+ok 32 - stale and future daemon proofs are rejected
+  ---
+  duration_ms: 0.337875
+  type: 'test'
+  ...
+# Subtest: unknown node and node mismatch are rejected
+ok 33 - unknown node and node mismatch are rejected
+  ---
+  duration_ms: 1.7295
+  type: 'test'
+  ...
+# Subtest: forbidden raw local fields are rejected
+ok 34 - forbidden raw local fields are rejected
+  ---
+  duration_ms: 0.786584
+  type: 'test'
+  ...
+# Subtest: raw P-256 signature verifier accepts canonical bytes
+ok 35 - raw P-256 signature verifier accepts canonical bytes
+  ---
+  duration_ms: 1.121125
+  type: 'test'
+  ...
+# Subtest: valid Linux daemon proof is accepted
+ok 36 - valid Linux daemon proof is accepted
+  ---
+  duration_ms: 3.345959
+  type: 'test'
+  ...
+# Subtest: Linux proof with mixed state (healthy + non-none reason) is rejected
+ok 37 - Linux proof with mixed state (healthy + non-none reason) is rejected
+  ---
+  duration_ms: 0.463083
+  type: 'test'
+  ...
+# Subtest: Rust-signed Linux proof is accepted by Node validator
+ok 38 - Rust-signed Linux proof is accepted by Node validator
+  ---
+  duration_ms: 1.942584
+  type: 'test'
+  ...
+# Subtest: Linux x11_managed rolls up to max across proofs in a session
+ok 39 - Linux x11_managed rolls up to max across proofs in a session
+  ---
+  duration_ms: 2.08975
+  type: 'test'
+  ...
+# Subtest: Linux x11_above rolls up to max across proofs
+ok 40 - Linux x11_above rolls up to max across proofs
+  ---
+  duration_ms: 0.132917
+  type: 'test'
+  ...
+# Subtest: valid daemon proof with zero-count scanner fields is accepted
+ok 41 - valid daemon proof with zero-count scanner fields is accepted
+  ---
+  duration_ms: 5.90025
+  type: 'test'
+  ...
+# Subtest: capture-excluded scanner proof is accepted with signed scanner fields
+ok 42 - capture-excluded scanner proof is accepted with signed scanner fields
+  ---
+  duration_ms: 2.589042
+  type: 'test'
+  ...
+# Subtest: raw local scanner fields are rejected before signature trust
+ok 43 - raw local scanner fields are rejected before signature trust
+  ---
+  duration_ms: 2.744292
+  type: 'test'
+  ...
+# Subtest: scanner field tampering invalidates the daemon proof signature
+ok 44 - scanner field tampering invalidates the daemon proof signature
+  ---
+  duration_ms: 0.671458
+  type: 'test'
+  ...
+# Subtest: valid Windows scanner proof is accepted with signed Stage 2.6 fields
+ok 45 - valid Windows scanner proof is accepted with signed Stage 2.6 fields
+  ---
+  duration_ms: 0.518083
+  type: 'test'
+  ...
+# Subtest: Windows scanner field tampering invalidates the daemon proof signature
+ok 46 - Windows scanner field tampering invalidates the daemon proof signature
+  ---
+  duration_ms: 0.635042
+  type: 'test'
+  ...
+# Subtest: Windows raw local fields are rejected recursively with generic privacy reason
+ok 47 - Windows raw local fields are rejected recursively with generic privacy reason
+  ---
+  duration_ms: 1.46075
+  type: 'test'
+  ...
+# Subtest: scanner unavailable proof is accepted into state as warning-level daemon risk
+ok 48 - scanner unavailable proof is accepted into state as warning-level daemon risk
+  ---
+  duration_ms: 1.518958
+  type: 'test'
+  ...
+# Subtest: capture-excluded scanner result forces Critical manual review path
+ok 49 - capture-excluded scanner result forces Critical manual review path
+  ---
+  duration_ms: 0.10475
+  type: 'test'
+  ...
+# Subtest: Windows monitor-only scanner result is warning-level manual review context
+ok 50 - Windows monitor-only scanner result is warning-level manual review context
+  ---
+  duration_ms: 0.271333
+  type: 'test'
+  ...
+# Subtest: state registry tracks paired, healthy, stale, and ended states
+ok 51 - state registry tracks paired, healthy, stale, and ended states
+  ---
+  duration_ms: 0.562875
+  type: 'test'
+  ...
+# Subtest: invalid signatures and capture-excluded windows escalate risk
+ok 52 - invalid signatures and capture-excluded windows escalate risk
+  ---
+  duration_ms: 0.399
+  type: 'test'
+  ...
+# Subtest: first proof locks display_server for the session
+ok 53 - first proof locks display_server for the session
+  ---
+  duration_ms: 0.393792
+  type: 'test'
+  ...
+# Subtest: second proof with same display_server is accepted
+ok 54 - second proof with same display_server is accepted
+  ---
+  duration_ms: 0.108792
+  type: 'test'
+  ...
+# Subtest: second proof with different display_server is rejected
+ok 55 - second proof with different display_server is rejected
+  ---
+  duration_ms: 0.05675
+  type: 'test'
+  ...
+# Subtest: different sessions track display_server independently
+ok 56 - different sessions track display_server independently
+  ---
+  duration_ms: 0.049167
+  type: 'test'
+  ...
+# Subtest: evict removes session lock
+ok 57 - evict removes session lock
+  ---
+  duration_ms: 0.114125
+  type: 'test'
+  ...
+# Subtest: server.js rejects telemetry proof when display_server changes mid-session
+ok 58 - server.js rejects telemetry proof when display_server changes mid-session
+  ---
+  duration_ms: 570.49575
+  type: 'test'
+  ...
+# Subtest: display_server_mismatch rejection does not block subsequent valid telemetry from same daemon
+ok 59 - display_server_mismatch rejection does not block subsequent valid telemetry from same daemon
+  ---
+  duration_ms: 282.605833
+  type: 'test'
+  ...
+# Subtest: stagingConfig
+    # Subtest: skips Claude on Safe verdicts by default
+    ok 1 - skips Claude on Safe verdicts by default
+      ---
+      duration_ms: 4.571417
+      type: 'test'
+      ...
+    # Subtest: enables Claude on Safe only when explicitly set to true
+    ok 2 - enables Claude on Safe only when explicitly set to true
+      ---
+      duration_ms: 1.778709
+      type: 'test'
+      ...
+    # Subtest: keeps Warning and Critical Claude narratives enabled by default
+    ok 3 - keeps Warning and Critical Claude narratives enabled by default
+      ---
+      duration_ms: 2.125083
+      type: 'test'
+      ...
+    # Subtest: does not require daemon proofs unless explicitly enabled
+    ok 4 - does not require daemon proofs unless explicitly enabled
+      ---
+      duration_ms: 3.089875
+      type: 'test'
+      ...
+    1..4
+ok 60 - stagingConfig
+  ---
+  duration_ms: 12.568584
+  type: 'suite'
+  ...
+# Subtest: FORBIDDEN_LOCAL_FIELD_NAMES is the union of proof and privacy-audit lists
+ok 61 - FORBIDDEN_LOCAL_FIELD_NAMES is the union of proof and privacy-audit lists
+  ---
+  duration_ms: 0.466375
+  type: 'test'
+  ...
+# Subtest: FORBIDDEN_LOCAL_FIELD_NAMES is frozen and contains no duplicates
+ok 62 - FORBIDDEN_LOCAL_FIELD_NAMES is frozen and contains no duplicates
+  ---
+  duration_ms: 0.15525
+  type: 'test'
+  ...
+# Subtest: containsForbiddenLocalFieldDeep finds top-level forbidden key
+ok 63 - containsForbiddenLocalFieldDeep finds top-level forbidden key
+  ---
+  duration_ms: 0.094667
+  type: 'test'
+  ...
+# Subtest: containsForbiddenLocalFieldDeep finds deeply-nested forbidden key
+ok 64 - containsForbiddenLocalFieldDeep finds deeply-nested forbidden key
+  ---
+  duration_ms: 0.054708
+  type: 'test'
+  ...
+# Subtest: containsForbiddenLocalFieldDeep finds forbidden key inside array
+ok 65 - containsForbiddenLocalFieldDeep finds forbidden key inside array
+  ---
+  duration_ms: 0.05425
+  type: 'test'
+  ...
+# Subtest: containsForbiddenLocalFieldDeep returns null on clean payload
+ok 66 - containsForbiddenLocalFieldDeep returns null on clean payload
+  ---
+  duration_ms: 0.053625
+  type: 'test'
+  ...
+# Subtest: containsForbiddenLocalFieldDeep handles null and primitives
+ok 67 - containsForbiddenLocalFieldDeep handles null and primitives
+  ---
+  duration_ms: 0.094375
+  type: 'test'
+  ...
+# Subtest: containsForbiddenLocalFieldDeep is allowed-hash-suffix aware
+ok 68 - containsForbiddenLocalFieldDeep is allowed-hash-suffix aware
+  ---
+  duration_ms: 0.047
+  type: 'test'
+  ...
+# Subtest: hashStudentId
+    # Subtest: returns a 64-char hex string
+    ok 1 - returns a 64-char hex string
+      ---
+      duration_ms: 0.576666
+      type: 'test'
+      ...
+    # Subtest: same input always produces same hash
+    ok 2 - same input always produces same hash
+      ---
+      duration_ms: 0.070625
+      type: 'test'
+      ...
+    # Subtest: different inputs produce different hashes
+    ok 3 - different inputs produce different hashes
+      ---
+      duration_ms: 0.119458
+      type: 'test'
+      ...
+    # Subtest: coerces non-string input to string
+    ok 4 - coerces non-string input to string
+      ---
+      duration_ms: 0.053291
+      type: 'test'
+      ...
+    1..4
+ok 69 - hashStudentId
+  ---
+  duration_ms: 1.330416
+  type: 'suite'
+  ...
+# Subtest: hmacChain
+    # Subtest: createChain returns a chain with GENESIS prev hash
+    ok 1 - createChain returns a chain with GENESIS prev hash
+      ---
+      duration_ms: 0.532375
+      type: 'test'
+      ...
+    # Subtest: appendEntry adds an entry with a signature
+    ok 2 - appendEntry adds an entry with a signature
+      ---
+      duration_ms: 0.31125
+      type: 'test'
+      ...
+    # Subtest: chain is valid after several entries
+    ok 3 - chain is valid after several entries
+      ---
+      duration_ms: 0.173209
+      type: 'test'
+      ...
+    # Subtest: tampered entry invalidates chain
+    ok 4 - tampered entry invalidates chain
+      ---
+      duration_ms: 0.187875
+      type: 'test'
+      ...
+    # Subtest: prevHash links entries (each entry prev equals prior sig)
+    ok 5 - prevHash links entries (each entry prev equals prior sig)
+      ---
+      duration_ms: 0.05875
+      type: 'test'
+      ...
+    1..5
+ok 70 - hmacChain
+  ---
+  duration_ms: 1.725792
+  type: 'suite'
+  ...
+# Subtest: integrityState
+    # Subtest: first record binds node_id_hash
+    ok 1 - first record binds node_id_hash
+      ---
+      duration_ms: 2.934042
+      type: 'test'
+      ...
+    # Subtest: second record with same node_id_hash updates fields and increments count
+    ok 2 - second record with same node_id_hash updates fields and increments count
+      ---
+      duration_ms: 0.098333
+      type: 'test'
+      ...
+    # Subtest: second record with different node_id_hash is rejected
+    ok 3 - second record with different node_id_hash is rejected
+      ---
+      duration_ms: 0.453333
+      type: 'test'
+      ...
+    # Subtest: get returns null for unknown session
+    ok 4 - get returns null for unknown session
+      ---
+      duration_ms: 0.112916
+      type: 'test'
+      ...
+    # Subtest: evict removes the record
+    ok 5 - evict removes the record
+      ---
+      duration_ms: 0.084125
+      type: 'test'
+      ...
+    # Subtest: evictMissing keeps active sessions and drops the rest
+    ok 6 - evictMissing keeps active sessions and drops the rest
+      ---
+      duration_ms: 0.117917
+      type: 'test'
+      ...
+    # Subtest: size reports current entry count
+    ok 7 - size reports current entry count
+      ---
+      duration_ms: 0.062917
+      type: 'test'
+      ...
+    1..7
+ok 71 - integrityState
+  ---
+  duration_ms: 4.517708
+  type: 'suite'
+  ...
+# Subtest: nonceGuard
+    # Subtest: accepts a fresh nonce for a session
+    ok 1 - accepts a fresh nonce for a session
+      ---
+      duration_ms: 2.540083
+      type: 'test'
+      ...
+    # Subtest: rejects a replayed nonce for the same session
+    ok 2 - rejects a replayed nonce for the same session
+      ---
+      duration_ms: 0.118083
+      type: 'test'
+      ...
+    # Subtest: rejects a nonce reused on a different session (also nonce_replayed)
+    ok 3 - rejects a nonce reused on a different session (also nonce_replayed)
+      ---
+      duration_ms: 0.126958
+      type: 'test'
+      ...
+    # Subtest: accepts different nonces independently
+    ok 4 - accepts different nonces independently
+      ---
+      duration_ms: 0.130125
+      type: 'test'
+      ...
+    # Subtest: rejects empty nonce
+    ok 5 - rejects empty nonce
+      ---
+      duration_ms: 0.0615
+      type: 'test'
+      ...
+    1..5
+ok 72 - nonceGuard
+  ---
+  duration_ms: 3.625958
+  type: 'suite'
+  ...
+# Subtest: safeParsedPairingHints
+    # Subtest: emits node_id_hash only when pubkey decodes and hash matches
+    ok 1 - emits node_id_hash only when pubkey decodes and hash matches
+      ---
+      duration_ms: 2.394334
+      type: 'test'
+      ...
+    # Subtest: withholds node_id_hash when hash regex matches but pubkey is missing
+    ok 2 - withholds node_id_hash when hash regex matches but pubkey is missing
+      ---
+      duration_ms: 0.237
+      type: 'test'
+      ...
+    # Subtest: withholds node_id_hash when pubkey is wrong length
+    ok 3 - withholds node_id_hash when pubkey is wrong length
+      ---
+      duration_ms: 0.236042
+      type: 'test'
+      ...
+    # Subtest: withholds node_id_hash when hash does not match decoded pubkey
+    ok 4 - withholds node_id_hash when hash does not match decoded pubkey
+      ---
+      duration_ms: 0.120583
+      type: 'test'
+      ...
+    # Subtest: withholds node_id_hash when format is invalid
+    ok 5 - withholds node_id_hash when format is invalid
+      ---
+      duration_ms: 0.161917
+      type: 'test'
+      ...
+    # Subtest: has_signature false when signature missing or empty
+    ok 6 - has_signature false when signature missing or empty
+      ---
+      duration_ms: 0.055375
+      type: 'test'
+      ...
+    # Subtest: handles non-object input gracefully
+    ok 7 - handles non-object input gracefully
+      ---
+      duration_ms: 0.096209
+      type: 'test'
+      ...
+    # Subtest: withholds node_id_hash when pubkey is not valid base64
+    ok 8 - withholds node_id_hash when pubkey is not valid base64
+      ---
+      duration_ms: 0.200209
+      type: 'test'
+      ...
+    1..8
+ok 73 - safeParsedPairingHints
+  ---
+  duration_ms: 4.603667
+  type: 'suite'
+  ...
+# Subtest: pairingCanonicalise
+    # Subtest: re-exports the proof canonicaliser by reference identity
+    ok 1 - re-exports the proof canonicaliser by reference identity
+      ---
+      duration_ms: 0.642042
+      type: 'test'
+      ...
+    # Subtest: golden-pairing-payload SHA-256 matches expected hex
+    ok 2 - golden-pairing-payload SHA-256 matches expected hex
+      ---
+      duration_ms: 0.842667
+      type: 'test'
+      ...
+    1..2
+ok 74 - pairingCanonicalise
+  ---
+  duration_ms: 2.557125
+  type: 'suite'
+  ...
+# Subtest: pairingRegistry — createChallenge
+    # Subtest: creates a 32-byte base64 challenge for a fresh session
+    ok 1 - creates a 32-byte base64 challenge for a fresh session
+      ---
+      duration_ms: 0.869333
+      type: 'test'
+      ...
+    # Subtest: createChallenge replaces an unconsumed pending challenge
+    ok 2 - createChallenge replaces an unconsumed pending challenge
+      ---
+      duration_ms: 0.133875
+      type: 'test'
+      ...
+    # Subtest: rejects createChallenge if already paired
+    ok 3 - rejects createChallenge if already paired
+      ---
+      duration_ms: 0.20875
+      type: 'test'
+      ...
+    1..3
+ok 75 - pairingRegistry — createChallenge
+  ---
+  duration_ms: 1.788959
+  type: 'suite'
+  ...
+# Subtest: pairingRegistry — completePairing
+    # Subtest: happy path moves pending → paired
+    ok 1 - happy path moves pending → paired
+      ---
+      duration_ms: 0.51875
+      type: 'test'
+      ...
+    # Subtest: rejects when no pending challenge
+    ok 2 - rejects when no pending challenge
+      ---
+      duration_ms: 0.056791
+      type: 'test'
+      ...
+    # Subtest: rejects expired challenge
+    ok 3 - rejects expired challenge
+      ---
+      duration_ms: 0.099125
+      type: 'test'
+      ...
+    # Subtest: rejects challenge mismatch
+    ok 4 - rejects challenge mismatch
+      ---
+      duration_ms: 0.244834
+      type: 'test'
+      ...
+    # Subtest: rejects second pairing as node_already_paired
+    ok 5 - rejects second pairing as node_already_paired
+      ---
+      duration_ms: 0.331792
+      type: 'test'
+      ...
+    1..5
+ok 76 - pairingRegistry — completePairing
+  ---
+  duration_ms: 2.06425
+  type: 'suite'
+  ...
+# Subtest: pairingRegistry — accessors + lifecycle
+    # Subtest: getPairedNode null before pairing
+    ok 1 - getPairedNode null before pairing
+      ---
+      duration_ms: 1.742333
+      type: 'test'
+      ...
+    # Subtest: isPaired booleans
+    ok 2 - isPaired booleans
+      ---
+      duration_ms: 0.637
+      type: 'test'
+      ...
+    # Subtest: evict removes session entry
+    ok 3 - evict removes session entry
+      ---
+      duration_ms: 0.170417
+      type: 'test'
+      ...
+    # Subtest: evictMissing keeps active sessions
+    ok 4 - evictMissing keeps active sessions
+      ---
+      duration_ms: 0.226542
+      type: 'test'
+      ...
+    # Subtest: size reports total entries
+    ok 5 - size reports total entries
+      ---
+      duration_ms: 0.111625
+      type: 'test'
+      ...
+    # Subtest: getChallenge null when no entry
+    ok 6 - getChallenge null when no entry
+      ---
+      duration_ms: 0.07475
+      type: 'test'
+      ...
+    1..6
+ok 77 - pairingRegistry — accessors + lifecycle
+  ---
+  duration_ms: 3.265334
+  type: 'suite'
+  ...
+# Subtest: pairingSchema constants
+    # Subtest: version and platform are pairing-v1 / macos
+    ok 1 - version and platform are pairing-v1 / macos
+      ---
+      duration_ms: 0.611375
+      type: 'test'
+      ...
+    # Subtest: REQUIRED_FIELDS lists exactly the 8 v1 top-level fields
+    ok 2 - REQUIRED_FIELDS lists exactly the 8 v1 top-level fields
+      ---
+      duration_ms: 0.114875
+      type: 'test'
+      ...
+    # Subtest: FORBIDDEN_FIELDS reuses the proof forbidden list
+    ok 3 - FORBIDDEN_FIELDS reuses the proof forbidden list
+      ---
+      duration_ms: 0.800417
+      type: 'test'
+      ...
+    # Subtest: timestamp windows match proof (30s past, 5s future)
+    ok 4 - timestamp windows match proof (30s past, 5s future)
+      ---
+      duration_ms: 0.074375
+      type: 'test'
+      ...
+    # Subtest: byte-length constants: public_key 32, challenge 32, signature 64
+    ok 5 - byte-length constants: public_key 32, challenge 32, signature 64
+      ---
+      duration_ms: 0.055209
+      type: 'test'
+      ...
+    # Subtest: regex patterns match expected formats
+    ok 6 - regex patterns match expected formats
+      ---
+      duration_ms: 1.253458
+      type: 'test'
+      ...
+    1..6
+ok 78 - pairingSchema constants
+  ---
+  duration_ms: 7.921334
+  type: 'suite'
+  ...
+# Subtest: validatePairingProof — happy path
+    # Subtest: accepts well-formed pairing
+    ok 1 - accepts well-formed pairing
+      ---
+      duration_ms: 4.018875
+      type: 'test'
+      ...
+    1..1
+ok 79 - validatePairingProof — happy path
+  ---
+  duration_ms: 4.68725
+  type: 'suite'
+  ...
+# Subtest: validatePairingProof — required field checks
+    # Subtest: rejects missing version
+    ok 1 - rejects missing version
+      ---
+      duration_ms: 0.46425
+      type: 'test'
+      ...
+    # Subtest: rejects missing platform
+    ok 2 - rejects missing platform
+      ---
+      duration_ms: 0.309042
+      type: 'test'
+      ...
+    # Subtest: rejects missing session_id
+    ok 3 - rejects missing session_id
+      ---
+      duration_ms: 0.308542
+      type: 'test'
+      ...
+    # Subtest: rejects missing node_id_hash
+    ok 4 - rejects missing node_id_hash
+      ---
+      duration_ms: 0.18
+      type: 'test'
+      ...
+    # Subtest: rejects missing node_public_key
+    ok 5 - rejects missing node_public_key
+      ---
+      duration_ms: 0.172959
+      type: 'test'
+      ...
+    # Subtest: rejects missing challenge
+    ok 6 - rejects missing challenge
+      ---
+      duration_ms: 0.263208
+      type: 'test'
+      ...
+    # Subtest: rejects missing timestamp
+    ok 7 - rejects missing timestamp
+      ---
+      duration_ms: 0.645958
+      type: 'test'
+      ...
+    # Subtest: rejects missing signature
+    ok 8 - rejects missing signature
+      ---
+      duration_ms: 0.444792
+      type: 'test'
+      ...
+    1..8
+ok 80 - validatePairingProof — required field checks
+  ---
+  duration_ms: 3.374209
+  type: 'suite'
+  ...
+# Subtest: validatePairingProof — strict 8-key enforcement
+    # Subtest: rejects unknown extra field
+    ok 1 - rejects unknown extra field
+      ---
+      duration_ms: 0.242625
+      type: 'test'
+      ...
+    1..1
+ok 81 - validatePairingProof — strict 8-key enforcement
+  ---
+  duration_ms: 0.293125
+  type: 'suite'
+  ...
+# Subtest: validatePairingProof — forbidden fields
+    # Subtest: rejects forbidden screen_pixels
+    ok 1 - rejects forbidden screen_pixels
+      ---
+      duration_ms: 0.275875
+      type: 'test'
+      ...
+    # Subtest: rejects forbidden typed_answer
+    ok 2 - rejects forbidden typed_answer
+      ---
+      duration_ms: 0.244125
+      type: 'test'
+      ...
+    # Subtest: rejects forbidden paste_content
+    ok 3 - rejects forbidden paste_content
+      ---
+      duration_ms: 0.159333
+      type: 'test'
+      ...
+    # Subtest: rejects forbidden webcam
+    ok 4 - rejects forbidden webcam
+      ---
+      duration_ms: 0.137375
+      type: 'test'
+      ...
+    1..4
+ok 82 - validatePairingProof — forbidden fields
+  ---
+  duration_ms: 0.881792
+  type: 'suite'
+  ...
+# Subtest: validatePairingProof — version/platform/session
+    # Subtest: rejects unsupported version
+    ok 1 - rejects unsupported version
+      ---
+      duration_ms: 0.150125
+      type: 'test'
+      ...
+    # Subtest: rejects non-macos platform
+    ok 2 - rejects non-macos platform
+      ---
+      duration_ms: 0.120917
+      type: 'test'
+      ...
+    # Subtest: rejects invalid session_id format
+    ok 3 - rejects invalid session_id format
+      ---
+      duration_ms: 0.141041
+      type: 'test'
+      ...
+    # Subtest: rejects session_id mismatch with expectedSessionId
+    ok 4 - rejects session_id mismatch with expectedSessionId
+      ---
+      duration_ms: 0.197042
+      type: 'test'
+      ...
+    1..4
+ok 83 - validatePairingProof — version/platform/session
+  ---
+  duration_ms: 0.666584
+  type: 'suite'
+  ...
+# Subtest: validatePairingProof — timestamp window
+    # Subtest: accepts 25s past
+    ok 1 - accepts 25s past
+      ---
+      duration_ms: 0.407833
+      type: 'test'
+      ...
+    # Subtest: rejects 60s past as pairing_stale
+    ok 2 - rejects 60s past as pairing_stale
+      ---
+      duration_ms: 0.135083
+      type: 'test'
+      ...
+    # Subtest: rejects 60s future as pairing_in_future
+    ok 3 - rejects 60s future as pairing_in_future
+      ---
+      duration_ms: 0.121083
+      type: 'test'
+      ...
+    1..3
+ok 84 - validatePairingProof — timestamp window
+  ---
+  duration_ms: 1.159417
+  type: 'suite'
+  ...
+# Subtest: validatePairingProof — public key + node_id_hash
+    # Subtest: rejects 31-byte public key
+    ok 1 - rejects 31-byte public key
+      ---
+      duration_ms: 0.134375
+      type: 'test'
+      ...
+    # Subtest: rejects mismatched node_id_hash
+    ok 2 - rejects mismatched node_id_hash
+      ---
+      duration_ms: 0.123667
+      type: 'test'
+      ...
+    1..2
+ok 85 - validatePairingProof — public key + node_id_hash
+  ---
+  duration_ms: 0.28925
+  type: 'suite'
+  ...
+# Subtest: validatePairingProof — challenge + signature format
+    # Subtest: rejects 31-byte challenge
+    ok 1 - rejects 31-byte challenge
+      ---
+      duration_ms: 0.132083
+      type: 'test'
+      ...
+    # Subtest: rejects 63-byte signature
+    ok 2 - rejects 63-byte signature
+      ---
+      duration_ms: 0.307125
+      type: 'test'
+      ...
+    1..2
+ok 86 - validatePairingProof — challenge + signature format
+  ---
+  duration_ms: 0.524041
+  type: 'suite'
+  ...
+# Subtest: validatePairingProof — signature verification
+    # Subtest: rejects zeroed signature with invalid_signature
+    ok 1 - rejects zeroed signature with invalid_signature
+      ---
+      duration_ms: 0.374917
+      type: 'test'
+      ...
+    # Subtest: reordered keys still verify (canonicaliser sorts)
+    ok 2 - reordered keys still verify (canonicaliser sorts)
+      ---
+      duration_ms: 0.510916
+      type: 'test'
+      ...
+    1..2
+ok 87 - validatePairingProof — signature verification
+  ---
+  duration_ms: 0.970292
+  type: 'suite'
+  ...
+# Subtest: canonicaliseProofPayload
+    # Subtest: sorts top-level keys lexicographically
+    ok 1 - sorts top-level keys lexicographically
+      ---
+      duration_ms: 0.85025
+      type: 'test'
+      ...
+    # Subtest: sorts nested object keys recursively
+    ok 2 - sorts nested object keys recursively
+      ---
+      duration_ms: 0.089667
+      type: 'test'
+      ...
+    # Subtest: preserves array order
+    ok 3 - preserves array order
+      ---
+      duration_ms: 0.419584
+      type: 'test'
+      ...
+    # Subtest: excludes top-level signature only
+    ok 4 - excludes top-level signature only
+      ---
+      duration_ms: 0.327209
+      type: 'test'
+      ...
+    # Subtest: preserves nested signature key
+    ok 5 - preserves nested signature key
+      ---
+      duration_ms: 0.233459
+      type: 'test'
+      ...
+    # Subtest: emits no whitespace
+    ok 6 - emits no whitespace
+      ---
+      duration_ms: 0.394833
+      type: 'test'
+      ...
+    # Subtest: integers stay integers (no .0)
+    ok 7 - integers stay integers (no .0)
+      ---
+      duration_ms: 0.152042
+      type: 'test'
+      ...
+    # Subtest: empty object and empty array
+    ok 8 - empty object and empty array
+      ---
+      duration_ms: 0.274084
+      type: 'test'
+      ...
+    # Subtest: strings are JSON-encoded with escaping
+    ok 9 - strings are JSON-encoded with escaping
+      ---
+      duration_ms: 0.322875
+      type: 'test'
+      ...
+    # Subtest: booleans and null encode correctly
+    ok 10 - booleans and null encode correctly
+      ---
+      duration_ms: 1.442916
+      type: 'test'
+      ...
+    # Subtest: golden fixture canonical SHA-256 matches expected hex
+    ok 11 - golden fixture canonical SHA-256 matches expected hex
+      ---
+      duration_ms: 0.722416
+      type: 'test'
+      ...
+    1..11
+ok 88 - canonicaliseProofPayload
+  ---
+  duration_ms: 6.743375
+  type: 'suite'
+  ...
+# Subtest: proofSchema constants
+    # Subtest: version, platform, privacy_mode are locked v1 values
+    ok 1 - version, platform, privacy_mode are locked v1 values
+      ---
+      duration_ms: 0.909542
+      type: 'test'
+      ...
+    # Subtest: REQUIRED_FIELDS lists all 11 v1 top-level fields
+    ok 2 - REQUIRED_FIELDS lists all 11 v1 top-level fields
+      ---
+      duration_ms: 0.148625
+      type: 'test'
+      ...
+    # Subtest: FORBIDDEN_FIELDS includes all Section 2 entries
+    ok 3 - FORBIDDEN_FIELDS includes all Section 2 entries
+      ---
+      duration_ms: 0.074875
+      type: 'test'
+      ...
+    # Subtest: CAPABILITY_KEYS lists exactly 4 keys
+    ok 4 - CAPABILITY_KEYS lists exactly 4 keys
+      ---
+      duration_ms: 0.371458
+      type: 'test'
+      ...
+    # Subtest: SIGNAL_KEYS lists exactly 4 typed entries
+    ok 5 - SIGNAL_KEYS lists exactly 4 typed entries
+      ---
+      duration_ms: 0.068917
+      type: 'test'
+      ...
+    # Subtest: HELPER_STATUS_VALUES enumerates connected/stale/not_configured
+    ok 6 - HELPER_STATUS_VALUES enumerates connected/stale/not_configured
+      ---
+      duration_ms: 0.052959
+      type: 'test'
+      ...
+    # Subtest: byte-length constants are 32/64/12/64
+    ok 7 - byte-length constants are 32/64/12/64
+      ---
+      duration_ms: 0.048666
+      type: 'test'
+      ...
+    # Subtest: timestamp windows are 30s past, 5s future
+    ok 8 - timestamp windows are 30s past, 5s future
+      ---
+      duration_ms: 0.131084
+      type: 'test'
+      ...
+    # Subtest: regex patterns match expected formats
+    ok 9 - regex patterns match expected formats
+      ---
+      duration_ms: 0.254042
+      type: 'test'
+      ...
+    1..9
+ok 89 - proofSchema constants
+  ---
+  duration_ms: 2.928209
+  type: 'suite'
+  ...
+# Subtest: proofSignature
+    # Subtest: createEd25519PublicKeyFromRaw produces a usable KeyObject
+    ok 1 - createEd25519PublicKeyFromRaw produces a usable KeyObject
+      ---
+      duration_ms: 2.2775
+      type: 'test'
+      ...
+    # Subtest: rejects non-32-byte input
+    ok 2 - rejects non-32-byte input
+      ---
+      duration_ms: 0.252458
+      type: 'test'
+      ...
+    # Subtest: computeNodeIdHash returns lowercase hex sha256 of raw public key
+    ok 3 - computeNodeIdHash returns lowercase hex sha256 of raw public key
+      ---
+      duration_ms: 0.323708
+      type: 'test'
+      ...
+    # Subtest: verifyProofSignature returns true for a valid signed canonical
+    ok 4 - verifyProofSignature returns true for a valid signed canonical
+      ---
+      duration_ms: 0.525958
+      type: 'test'
+      ...
+    # Subtest: verifyProofSignature returns false for tampered canonical bytes
+    ok 5 - verifyProofSignature returns false for tampered canonical bytes
+      ---
+      duration_ms: 0.408083
+      type: 'test'
+      ...
+    # Subtest: verifyProofSignature returns false for wrong public key
+    ok 6 - verifyProofSignature returns false for wrong public key
+      ---
+      duration_ms: 0.55525
+      type: 'test'
+      ...
+    # Subtest: verifyProofSignature returns false for malformed signature (not 64 bytes)
+    ok 7 - verifyProofSignature returns false for malformed signature (not 64 bytes)
+      ---
+      duration_ms: 0.119875
+      type: 'test'
+      ...
+    # Subtest: verifyProofSignature returns false on invalid public key bytes
+    ok 8 - verifyProofSignature returns false on invalid public key bytes
+      ---
+      duration_ms: 0.487209
+      type: 'test'
+      ...
+    1..8
+ok 90 - proofSignature
+  ---
+  duration_ms: 5.702166
+  type: 'suite'
+  ...
+# Subtest: validateProof — accepts a well-formed proof
+    # Subtest: returns ok: true with all fields
+    ok 1 - returns ok: true with all fields
+      ---
+      duration_ms: 3.038458
+      type: 'test'
+      ...
+    1..1
+ok 91 - validateProof — accepts a well-formed proof
+  ---
+  duration_ms: 3.72625
+  type: 'suite'
+  ...
+# Subtest: validateProof — required field checks
+    # Subtest: rejects missing version
+    ok 1 - rejects missing version
+      ---
+      duration_ms: 0.778708
+      type: 'test'
+      ...
+    # Subtest: rejects missing platform
+    ok 2 - rejects missing platform
+      ---
+      duration_ms: 0.281083
+      type: 'test'
+      ...
+    # Subtest: rejects missing session_id
+    ok 3 - rejects missing session_id
+      ---
+      duration_ms: 0.169875
+      type: 'test'
+      ...
+    # Subtest: rejects missing node_id_hash
+    ok 4 - rejects missing node_id_hash
+      ---
+      duration_ms: 0.275125
+      type: 'test'
+      ...
+    # Subtest: rejects missing node_public_key
+    ok 5 - rejects missing node_public_key
+      ---
+      duration_ms: 0.159125
+      type: 'test'
+      ...
+    # Subtest: rejects missing nonce
+    ok 6 - rejects missing nonce
+      ---
+      duration_ms: 0.254042
+      type: 'test'
+      ...
+    # Subtest: rejects missing timestamp
+    ok 7 - rejects missing timestamp
+      ---
+      duration_ms: 0.395292
+      type: 'test'
+      ...
+    # Subtest: rejects missing capabilities
+    ok 8 - rejects missing capabilities
+      ---
+      duration_ms: 0.377375
+      type: 'test'
+      ...
+    # Subtest: rejects missing signals
+    ok 9 - rejects missing signals
+      ---
+      duration_ms: 0.3925
+      type: 'test'
+      ...
+    # Subtest: rejects missing privacy_mode
+    ok 10 - rejects missing privacy_mode
+      ---
+      duration_ms: 0.2015
+      type: 'test'
+      ...
+    # Subtest: rejects missing signature
+    ok 11 - rejects missing signature
+      ---
+      duration_ms: 0.251458
+      type: 'test'
+      ...
+    1..11
+ok 92 - validateProof — required field checks
+  ---
+  duration_ms: 3.969
+  type: 'suite'
+  ...
+# Subtest: validateProof — forbidden fields
+    # Subtest: rejects forbidden field screen_pixels
+    ok 1 - rejects forbidden field screen_pixels
+      ---
+      duration_ms: 0.16675
+      type: 'test'
+      ...
+    # Subtest: rejects forbidden field typed_answer
+    ok 2 - rejects forbidden field typed_answer
+      ---
+      duration_ms: 0.117
+      type: 'test'
+      ...
+    # Subtest: rejects forbidden field paste_content
+    ok 3 - rejects forbidden field paste_content
+      ---
+      duration_ms: 0.130916
+      type: 'test'
+      ...
+    # Subtest: rejects forbidden field webcam
+    ok 4 - rejects forbidden field webcam
+      ---
+      duration_ms: 0.642916
+      type: 'test'
+      ...
+    1..4
+ok 93 - validateProof — forbidden fields
+  ---
+  duration_ms: 1.132375
+  type: 'suite'
+  ...
+# Subtest: validateProof — version/platform/privacy_mode
+    # Subtest: rejects unsupported version
+    ok 1 - rejects unsupported version
+      ---
+      duration_ms: 0.16425
+      type: 'test'
+      ...
+    # Subtest: rejects non-macos platform
+    ok 2 - rejects non-macos platform
+      ---
+      duration_ms: 0.143709
+      type: 'test'
+      ...
+    # Subtest: rejects non-metadata privacy mode
+    ok 3 - rejects non-metadata privacy mode
+      ---
+      duration_ms: 0.1505
+      type: 'test'
+      ...
+    1..3
+ok 94 - validateProof — version/platform/privacy_mode
+  ---
+  duration_ms: 0.512
+  type: 'suite'
+  ...
+# Subtest: validateProof — session_id format
+    # Subtest: rejects path-traversal session id
+    ok 1 - rejects path-traversal session id
+      ---
+      duration_ms: 0.171209
+      type: 'test'
+      ...
+    1..1
+ok 95 - validateProof — session_id format
+  ---
+  duration_ms: 0.257125
+  type: 'suite'
+  ...
+# Subtest: validateProof — timestamp window
+    # Subtest: accepts within 25s past
+    ok 1 - accepts within 25s past
+      ---
+      duration_ms: 0.430042
+      type: 'test'
+      ...
+    # Subtest: accepts within 4s future
+    ok 2 - accepts within 4s future
+      ---
+      duration_ms: 0.543833
+      type: 'test'
+      ...
+    # Subtest: rejects 60s past
+    ok 3 - rejects 60s past
+      ---
+      duration_ms: 0.146083
+      type: 'test'
+      ...
+    # Subtest: rejects 60s future
+    ok 4 - rejects 60s future
+      ---
+      duration_ms: 0.143125
+      type: 'test'
+      ...
+    1..4
+ok 96 - validateProof — timestamp window
+  ---
+  duration_ms: 1.326
+  type: 'suite'
+  ...
+# Subtest: validateProof — capabilities and signals
+    # Subtest: rejects capabilities as array
+    ok 1 - rejects capabilities as array
+      ---
+      duration_ms: 0.180125
+      type: 'test'
+      ...
+    # Subtest: rejects capabilities missing a key
+    ok 2 - rejects capabilities missing a key
+      ---
+      duration_ms: 0.144917
+      type: 'test'
+      ...
+    # Subtest: rejects signals with wrong helper_status
+    ok 3 - rejects signals with wrong helper_status
+      ---
+      duration_ms: 0.202333
+      type: 'test'
+      ...
+    1..3
+ok 97 - validateProof — capabilities and signals
+  ---
+  duration_ms: 0.578167
+  type: 'suite'
+  ...
+# Subtest: validateProof — public key and node_id_hash
+    # Subtest: rejects public key that decodes to 31 bytes
+    ok 1 - rejects public key that decodes to 31 bytes
+      ---
+      duration_ms: 0.148459
+      type: 'test'
+      ...
+    # Subtest: rejects node_id_hash that does not match the public key
+    ok 2 - rejects node_id_hash that does not match the public key
+      ---
+      duration_ms: 0.126375
+      type: 'test'
+      ...
+    1..2
+ok 98 - validateProof — public key and node_id_hash
+  ---
+  duration_ms: 0.309167
+  type: 'suite'
+  ...
+# Subtest: validateProof — signature
+    # Subtest: rejects signature that decodes to 63 bytes
+    ok 1 - rejects signature that decodes to 63 bytes
+      ---
+      duration_ms: 0.140667
+      type: 'test'
+      ...
+    # Subtest: rejects signature that doesn't verify (zeroed)
+    ok 2 - rejects signature that doesn't verify (zeroed)
+      ---
+      duration_ms: 0.653834
+      type: 'test'
+      ...
+    # Subtest: re-ordered keys in input still verify (canonicaliser sorts)
+    ok 3 - re-ordered keys in input still verify (canonicaliser sorts)
+      ---
+      duration_ms: 0.602875
+      type: 'test'
+      ...
+    1..3
+ok 99 - validateProof — signature
+  ---
+  duration_ms: 1.486041
+  type: 'suite'
+  ...
+# Subtest: validateProof — paired session (Stage 2.2)
+    # Subtest: returns signature_status: 'verified' when pairedNode matches
+    ok 1 - returns signature_status: 'verified' when pairedNode matches
+      ---
+      duration_ms: 0.897
+      type: 'test'
+      ...
+    # Subtest: unpaired session returns signature_status: 'unregistered_node'
+    ok 2 - unpaired session returns signature_status: 'unregistered_node'
+      ---
+      duration_ms: 0.361584
+      type: 'test'
+      ...
+    # Subtest: paired_node_mismatch when node_id_hash differs
+    ok 3 - paired_node_mismatch when node_id_hash differs
+      ---
+      duration_ms: 0.146666
+      type: 'test'
+      ...
+    # Subtest: paired_public_key_mismatch when public key string differs but hash matches
+    ok 4 - paired_public_key_mismatch when public key string differs but hash matches
+      ---
+      duration_ms: 0.131375
+      type: 'test'
+      ...
+    # Subtest: registered_signature_invalid when paired but signature is zeroed
+    ok 5 - registered_signature_invalid when paired but signature is zeroed
+      ---
+      duration_ms: 0.291375
+      type: 'test'
+      ...
+    # Subtest: expectedSessionId mismatch returns proof_session_mismatch
+    ok 6 - expectedSessionId mismatch returns proof_session_mismatch
+      ---
+      duration_ms: 0.138708
+      type: 'test'
+      ...
+    1..6
+ok 100 - validateProof — paired session (Stage 2.2)
+  ---
+  duration_ms: 2.086334
+  type: 'suite'
+  ...
+# Subtest: [stage-2-8d] CI workflow installs xvfb + x11-utils + dbus-x11
+ok 101 - [stage-2-8d] CI workflow installs xvfb + x11-utils + dbus-x11
+  ---
+  duration_ms: 0.731375
+  type: 'test'
+  ...
+# Subtest: [stage-2-8d] CI workflow installs Rust stable + fmt + clippy + cargo test
+ok 102 - [stage-2-8d] CI workflow installs Rust stable + fmt + clippy + cargo test
+  ---
+  duration_ms: 1.065666
+  type: 'test'
+  ...
+# Subtest: [stage-2-8d] CI workflow sets SIMURGH_REQUIRE_XVFB_TESTS=1 for cargo test
+ok 103 - [stage-2-8d] CI workflow sets SIMURGH_REQUIRE_XVFB_TESTS=1 for cargo test
+  ---
+  duration_ms: 0.185042
+  type: 'test'
+  ...
+# Subtest: [stage-2-8d] CI workflow runs shellcheck on Linux daemon scripts
+ok 104 - [stage-2-8d] CI workflow runs shellcheck on Linux daemon scripts
+  ---
+  duration_ms: 0.112208
+  type: 'test'
+  ...
+# Subtest: [stage-2-8d] CI workflow has no deploy / release / publish steps
+ok 105 - [stage-2-8d] CI workflow has no deploy / release / publish steps
+  ---
+  duration_ms: 0.318042
+  type: 'test'
+  ...
+# Subtest: [stage-2-8d] CI workflow does not echo secrets
+ok 106 - [stage-2-8d] CI workflow does not echo secrets
+  ---
+  duration_ms: 0.121208
+  type: 'test'
+  ...
+# Subtest: [stage-2-8d] CI workflow caches the cargo registry to keep cold builds bounded
+ok 107 - [stage-2-8d] CI workflow caches the cargo registry to keep cold builds bounded
+  ---
+  duration_ms: 0.15025
+  type: 'test'
+  ...
+# Subtest: [stage-2-8d] systemd user unit file exists
+ok 108 - [stage-2-8d] systemd user unit file exists
+  ---
+  duration_ms: 0.384
+  type: 'test'
+  ...
+# Subtest: [stage-2-8d] systemd unit is user-scope only (no system-wide)
+ok 109 - [stage-2-8d] systemd unit is user-scope only (no system-wide)
+  ---
+  duration_ms: 1.000917
+  type: 'test'
+  ...
+# Subtest: [stage-2-8d] systemd unit binds daemon to loopback by env or default
+ok 110 - [stage-2-8d] systemd unit binds daemon to loopback by env or default
+  ---
+  duration_ms: 0.426833
+  type: 'test'
+  ...
+# Subtest: [stage-2-8d] install / uninstall / check / doctor scripts exist + executable
+ok 111 - [stage-2-8d] install / uninstall / check / doctor scripts exist + executable
+  ---
+  duration_ms: 0.144542
+  type: 'test'
+  ...
+# Subtest: [stage-2-8d] install script supports --check and --dry-run
+ok 112 - [stage-2-8d] install script supports --check and --dry-run
+  ---
+  duration_ms: 0.355959
+  type: 'test'
+  ...
+# Subtest: [stage-2-8d] lifecycle scripts use only systemctl --user (no sudo / no system mode)
+ok 113 - [stage-2-8d] lifecycle scripts use only systemctl --user (no sudo / no system mode)
+  ---
+  duration_ms: 0.655542
+  type: 'test'
+  ...
+# Subtest: [stage-2-8d] lifecycle scripts contain no eval and no curl pipe
+ok 114 - [stage-2-8d] lifecycle scripts contain no eval and no curl pipe
+  ---
+  duration_ms: 0.276042
+  type: 'test'
+  ...
+# Subtest: memoryStore
+    # Subtest: returns a Map for a namespace
+    ok 1 - returns a Map for a namespace
+      ---
+      duration_ms: 0.679916
+      type: 'test'
+      ...
+    # Subtest: same namespace returns same Map instance
+    ok 2 - same namespace returns same Map instance
+      ---
+      duration_ms: 0.837875
+      type: 'test'
+      ...
+    # Subtest: different namespaces return different Maps
+    ok 3 - different namespaces return different Maps
+      ---
+      duration_ms: 0.26675
+      type: 'test'
+      ...
+    # Subtest: items set in a namespace persist
+    ok 4 - items set in a namespace persist
+      ---
+      duration_ms: 0.712667
+      type: 'test'
+      ...
+    1..4
+ok 115 - memoryStore
+  ---
+  duration_ms: 3.520833
+  type: 'suite'
+  ...
+# Subtest: nonce guard TTL replay safety
+    # Subtest: nonce is rejected immediately after first use (within TTL)
+    ok 1 - nonce is rejected immediately after first use (within TTL)
+      ---
+      duration_ms: 0.393708
+      type: 'test'
+      ...
+    # Subtest: nonce evicted after TTL expiry — but timestamp window prevents post-TTL replay
+    ok 2 - nonce evicted after TTL expiry — but timestamp window prevents post-TTL replay
+      ---
+      duration_ms: 0.130666
+      type: 'test'
+      ...
+    # Subtest: TTL window is strictly shorter than nonce guard TTL (defense-in-depth)
+    ok 3 - TTL window is strictly shorter than nonce guard TTL (defense-in-depth)
+      ---
+      duration_ms: 0.140667
+      type: 'test'
+      ...
+    # Subtest: device-shield daemon proofs use challenge consumption — independent of nonce guard
+    ok 4 - device-shield daemon proofs use challenge consumption — independent of nonce guard
+      ---
+      duration_ms: 0.061625
+      type: 'test'
+      ...
+    1..4
+ok 116 - nonce guard TTL replay safety
+  ---
+  duration_ms: 1.303208
+  type: 'suite'
+  ...
+# Subtest: normaliseTelemetry
+    # Subtest: passes through allowed metadata fields
+    ok 1 - passes through allowed metadata fields
+      ---
+      duration_ms: 1.0025
+      type: 'test'
+      ...
+    # Subtest: strips any content fields that should never be collected
+    ok 2 - strips any content fields that should never be collected
+      ---
+      duration_ms: 0.131625
+      type: 'test'
+      ...
+    # Subtest: adds privacy_mode annotation
+    ok 3 - adds privacy_mode annotation
+      ---
+      duration_ms: 0.060833
+      type: 'test'
+      ...
+    # Subtest: caps key_intervals array to maxKeyIntervalsStored
+    ok 4 - caps key_intervals array to maxKeyIntervalsStored
+      ---
+      duration_ms: 0.103792
+      type: 'test'
+      ...
+    # Subtest: returns null for null input
+    ok 5 - returns null for null input
+      ---
+      duration_ms: 0.057875
+      type: 'test'
+      ...
+    1..5
+ok 117 - normaliseTelemetry
+  ---
+  duration_ms: 2.177958
+  type: 'suite'
+  ...
+# Subtest: SUPPORTED_DEVICE_PLATFORMS contains macos, windows, and linux
+ok 118 - SUPPORTED_DEVICE_PLATFORMS contains macos, windows, and linux
+  ---
+  duration_ms: 1.647708
+  type: 'test'
+  ...
+# Subtest: PLANNED_DEVICE_PLATFORMS is empty after Linux acceptance
+ok 119 - PLANNED_DEVICE_PLATFORMS is empty after Linux acceptance
+  ---
+  duration_ms: 0.264333
+  type: 'test'
+  ...
+# Subtest: isSupportedPlatform accepts linux post-Stage-2.8A
+ok 120 - isSupportedPlatform accepts linux post-Stage-2.8A
+  ---
+  duration_ms: 0.154875
+  type: 'test'
+  ...
+# Subtest: getExpectedScannerVersion returns 2.5.0 for macos and 2.6.0 for windows
+ok 121 - getExpectedScannerVersion returns 2.5.0 for macos and 2.6.0 for windows
+  ---
+  duration_ms: 0.114291
+  type: 'test'
+  ...
+# Subtest: getExpectedScannerVersion returns 2.8.0 for linux and null for unsupported platforms
+ok 122 - getExpectedScannerVersion returns 2.8.0 for linux and null for unsupported platforms
+  ---
+  duration_ms: 0.328167
+  type: 'test'
+  ...
+# Subtest: SCANNER_STATES is the canonical enum used across platforms
+ok 123 - SCANNER_STATES is the canonical enum used across platforms
+  ---
+  duration_ms: 0.093416
+  type: 'test'
+  ...
+# Subtest: getPlatformScannerDefaults returns zeroed counters for macos
+ok 124 - getPlatformScannerDefaults returns zeroed counters for macos
+  ---
+  duration_ms: 0.125208
+  type: 'test'
+  ...
+# Subtest: validateScannerSummary accepts a healthy macos summary
+ok 125 - validateScannerSummary accepts a healthy macos summary
+  ---
+  duration_ms: 0.765083
+  type: 'test'
+  ...
+# Subtest: validateScannerSummary rejects mismatched scanner_version for platform
+ok 126 - validateScannerSummary rejects mismatched scanner_version for platform
+  ---
+  duration_ms: 0.277209
+  type: 'test'
+  ...
+# Subtest: validateScannerSummary returns defaults when no scanner fields present
+ok 127 - validateScannerSummary returns defaults when no scanner fields present
+  ---
+  duration_ms: 0.31
+  type: 'test'
+  ...
+# Subtest: validateScannerSummary rejects suspicious_window_count below capture_excluded+monitor_only
+ok 128 - validateScannerSummary rejects suspicious_window_count below capture_excluded+monitor_only
+  ---
+  duration_ms: 0.114792
+  type: 'test'
+  ...
+# Subtest: validateScannerSummaryForPlatform dispatches to platform validator
+ok 129 - validateScannerSummaryForPlatform dispatches to platform validator
+  ---
+  duration_ms: 0.343041
+  type: 'test'
+  ...
+# Subtest: validateLinuxScannerSummary is exported
+ok 130 - validateLinuxScannerSummary is exported
+  ---
+  duration_ms: 0.051166
+  type: 'test'
+  ...
+# Subtest: validateScannerSummaryForPlatform rejects unknown platform
+ok 131 - validateScannerSummaryForPlatform rejects unknown platform
+  ---
+  duration_ms: 0.060875
+  type: 'test'
+  ...
+# Subtest: privacy-audit DEFAULT_SCAN_DIRS includes the Linux daemon path
+ok 132 - privacy-audit DEFAULT_SCAN_DIRS includes the Linux daemon path
+  ---
+  duration_ms: 0.681208
+  type: 'test'
+  ...
+# Subtest: privacy-audit walk function skips target/ build directories
+ok 133 - privacy-audit walk function skips target/ build directories
+  ---
+  duration_ms: 0.166
+  type: 'test'
+  ...
+# Subtest: rateLimit
+    # Subtest: allows up to max requests in the window
+    ok 1 - allows up to max requests in the window
+      ---
+      duration_ms: 1.248583
+      type: 'test'
+      ...
+    # Subtest: rejects with 429 after max
+    ok 2 - rejects with 429 after max
+      ---
+      duration_ms: 0.141125
+      type: 'test'
+      ...
+    # Subtest: isolates buckets per key
+    ok 3 - isolates buckets per key
+      ---
+      duration_ms: 0.151333
+      type: 'test'
+      ...
+    # Subtest: bypasses when key is null (no auth context)
+    ok 4 - bypasses when key is null (no auth context)
+      ---
+      duration_ms: 0.069625
+      type: 'test'
+      ...
+    # Subtest: keyByIp extracts from x-forwarded-for
+    ok 5 - keyByIp extracts from x-forwarded-for
+      ---
+      duration_ms: 0.071125
+      type: 'test'
+      ...
+    # Subtest: keyByHelperSecret extracts header
+    ok 6 - keyByHelperSecret extracts header
+      ---
+      duration_ms: 0.122459
+      type: 'test'
+      ...
+    # Subtest: keyByInstructorToken extracts bearer or query
+    ok 7 - keyByInstructorToken extracts bearer or query
+      ---
+      duration_ms: 0.118083
+      type: 'test'
+      ...
+    1..7
+ok 134 - rateLimit
+  ---
+  duration_ms: 2.423
+  type: 'suite'
+  ...
+# Subtest: replayGuard
+    # Subtest: accepts a fresh first telemetry window
+    ok 1 - accepts a fresh first telemetry window
+      ---
+      duration_ms: 1.783958
+      type: 'test'
+      ...
+    # Subtest: rejects duplicate sequence
+    ok 2 - rejects duplicate sequence
+      ---
+      duration_ms: 0.152958
+      type: 'test'
+      ...
+    # Subtest: rejects sequence rollback
+    ok 3 - rejects sequence rollback
+      ---
+      duration_ms: 0.080417
+      type: 'test'
+      ...
+    # Subtest: accepts strictly increasing sequence
+    ok 4 - accepts strictly increasing sequence
+      ---
+      duration_ms: 0.06425
+      type: 'test'
+      ...
+    # Subtest: rejects timestamps too far in the future
+    ok 5 - rejects timestamps too far in the future
+      ---
+      duration_ms: 0.112166
+      type: 'test'
+      ...
+    # Subtest: rejects stale timestamps
+    ok 6 - rejects stale timestamps
+      ---
+      duration_ms: 0.051583
+      type: 'test'
+      ...
+    # Subtest: rejects invalid sequence types
+    ok 7 - rejects invalid sequence types
+      ---
+      duration_ms: 0.055125
+      type: 'test'
+      ...
+    # Subtest: rejects invalid timestamps
+    ok 8 - rejects invalid timestamps
+      ---
+      duration_ms: 0.133416
+      type: 'test'
+      ...
+    # Subtest: isolates sequences between sessions
+    ok 9 - isolates sequences between sessions
+      ---
+      duration_ms: 0.164791
+      type: 'test'
+      ...
+    # Subtest: reset clears a session
+    ok 10 - reset clears a session
+      ---
+      duration_ms: 0.338875
+      type: 'test'
+      ...
+    1..10
+ok 135 - replayGuard
+  ---
+  duration_ms: 3.666208
+  type: 'suite'
+  ...
+# Subtest: buildReport
+    # Subtest: returns a report with all required top-level fields
+    ok 1 - returns a report with all required top-level fields
+      ---
+      duration_ms: 1.660292
+      type: 'test'
+      ...
+    # Subtest: recommendation always contains manual review language
+    ok 2 - recommendation always contains manual review language
+      ---
+      duration_ms: 0.144
+      type: 'test'
+      ...
+    # Subtest: timeline includes passed events
+    ok 3 - timeline includes passed events
+      ---
+      duration_ms: 0.08275
+      type: 'test'
+      ...
+    # Subtest: duration_minutes is calculated correctly
+    ok 4 - duration_minutes is calculated correctly
+      ---
+      duration_ms: 0.198333
+      type: 'test'
+      ...
+    # Subtest: helper_connected reflects affinity state
+    ok 5 - helper_connected reflects affinity state
+      ---
+      duration_ms: 0.091917
+      type: 'test'
+      ...
+    # Subtest: includes privacy-safe device integrity section
+    ok 6 - includes privacy-safe device integrity section
+      ---
+      duration_ms: 0.591666
+      type: 'test'
+      ...
+    1..6
+ok 136 - buildReport
+  ---
+  duration_ms: 3.265583
+  type: 'suite'
+  ...
+# Subtest: buildPilotReport
+    # Subtest: returns required top-level fields
+    ok 1 - returns required top-level fields
+      ---
+      duration_ms: 1.603167
+      type: 'test'
+      ...
+    # Subtest: consent block reflects record state
+    ok 2 - consent block reflects record state
+      ---
+      duration_ms: 0.118084
+      type: 'test'
+      ...
+    # Subtest: privacy_contract has no true collection fields
+    ok 3 - privacy_contract has no true collection fields
+      ---
+      duration_ms: 0.226125
+      type: 'test'
+      ...
+    # Subtest: device_integrity defaults to no daemon
+    ok 4 - device_integrity defaults to no daemon
+      ---
+      duration_ms: 0.095167
+      type: 'test'
+      ...
+    # Subtest: audit.chain_valid is true for fresh chain
+    ok 5 - audit.chain_valid is true for fresh chain
+      ---
+      duration_ms: 0.714041
+      type: 'test'
+      ...
+    # Subtest: synthetic flag is passed through
+    ok 6 - synthetic flag is passed through
+      ---
+      duration_ms: 0.098291
+      type: 'test'
+      ...
+    # Subtest: session_result reflects submitted state
+    ok 7 - session_result reflects submitted state
+      ---
+      duration_ms: 0.099958
+      type: 'test'
+      ...
+    1..7
+ok 137 - buildPilotReport
+  ---
+  duration_ms: 3.552792
+  type: 'suite'
+  ...
+# Subtest: device_integrity includes daemon_platform alongside back-compat platform key
+ok 138 - device_integrity includes daemon_platform alongside back-compat platform key
+  ---
+  duration_ms: 1.319792
+  type: 'test'
+  ...
+# Subtest: device_integrity manual_review_recommendation uses scannerRiskPolicy wording
+ok 139 - device_integrity manual_review_recommendation uses scannerRiskPolicy wording
+  ---
+  duration_ms: 0.16575
+  type: 'test'
+  ...
+# Subtest: device_integrity safe wording when no anomaly
+ok 140 - device_integrity safe wording when no anomaly
+  ---
+  duration_ms: 0.086083
+  type: 'test'
+  ...
+# Subtest: device_integrity daemon_platform defaults to unknown when daemon missing
+ok 141 - device_integrity daemon_platform defaults to unknown when daemon missing
+  ---
+  duration_ms: 0.069
+  type: 'test'
+  ...
+# Subtest: device_integrity emits same top-level key set for macOS and Windows
+ok 142 - device_integrity emits same top-level key set for macOS and Windows
+  ---
+  duration_ms: 0.45375
+  type: 'test'
+  ...
+# Subtest: Linux device_integrity emits display_server + coverage + portal fields
+ok 143 - Linux device_integrity emits display_server + coverage + portal fields
+  ---
+  duration_ms: 1.504042
+  type: 'test'
+  ...
+# Subtest: Linux device_integrity rolls up Warning when coverage is wayland_limited
+ok 144 - Linux device_integrity rolls up Warning when coverage is wayland_limited
+  ---
+  duration_ms: 0.153416
+  type: 'test'
+  ...
+# Subtest: Linux x11_above_window_count_max > 0 rolls up to Warning
+ok 145 - Linux x11_above_window_count_max > 0 rolls up to Warning
+  ---
+  duration_ms: 0.087042
+  type: 'test'
+  ...
+# Subtest: Linux x11_override_redirect_window_count_max > 0 rolls up to Warning
+ok 146 - Linux x11_override_redirect_window_count_max > 0 rolls up to Warning
+  ---
+  duration_ms: 0.08025
+  type: 'test'
+  ...
+# Subtest: Linux device_integrity does not include macOS/Windows-only count fields when platform=linux
+ok 147 - Linux device_integrity does not include macOS/Windows-only count fields when platform=linux
+  ---
+  duration_ms: 0.269166
+  type: 'test'
+  ...
+# Subtest: report includes privacy-safe scanner summary in device_integrity
+ok 148 - report includes privacy-safe scanner summary in device_integrity
+  ---
+  duration_ms: 1.337125
+  type: 'test'
+  ...
+# Subtest: report includes Windows scanner counts without raw local fields
+ok 149 - report includes Windows scanner counts without raw local fields
+  ---
+  duration_ms: 0.197125
+  type: 'test'
+  ...
+# Subtest: scoreAcademicRisk
+    # Subtest: returns Safe for normal exam behaviour
+    ok 1 - returns Safe for normal exam behaviour
+      ---
+      duration_ms: 1.98925
+      type: 'test'
+      ...
+    # Subtest: returns all required output fields
+    ok 2 - returns all required output fields
+      ---
+      duration_ms: 0.427208
+      type: 'test'
+      ...
+    # Subtest: raises Warning for a medium paste
+    ok 3 - raises Warning for a medium paste
+      ---
+      duration_ms: 0.167458
+      type: 'test'
+      ...
+    # Subtest: raises Critical for large paste with minimal typing
+    ok 4 - raises Critical for large paste with minimal typing
+      ---
+      duration_ms: 0.1515
+      type: 'test'
+      ...
+    # Subtest: raises Critical when helper reports excluded window (affinity override)
+    ok 5 - raises Critical when helper reports excluded window (affinity override)
+      ---
+      duration_ms: 0.214916
+      type: 'test'
+      ...
+    # Subtest: raises Critical when daemon reports capture-excluded risk
+    ok 6 - raises Critical when daemon reports capture-excluded risk
+      ---
+      duration_ms: 0.133083
+      type: 'test'
+      ...
+    # Subtest: risk_score is between 0 and 100
+    ok 7 - risk_score is between 0 and 100
+      ---
+      duration_ms: 0.1345
+      type: 'test'
+      ...
+    # Subtest: recommendation says manual review for Critical
+    ok 8 - recommendation says manual review for Critical
+      ---
+      duration_ms: 0.187708
+      type: 'test'
+      ...
+    # Subtest: confidence is between 0 and 1
+    ok 9 - confidence is between 0 and 1
+      ---
+      duration_ms: 0.260208
+      type: 'test'
+      ...
+    1..9
+ok 150 - scoreAcademicRisk
+  ---
+  duration_ms: 5.3335
+  type: 'suite'
+  ...
+# Subtest: POST /consent/accept
+    # Subtest: returns 200 with pilot_session_id, token, participant_code
+    ok 1 - returns 200 with pilot_session_id, token, participant_code
+      ---
+      duration_ms: 38.728125
+      type: 'test'
+      ...
+    1..1
+ok 151 - POST /consent/accept
+  ---
+  duration_ms: 41.959292
+  type: 'suite'
+  ...
+# Subtest: POST /submit
+    # Subtest: returns 200 for valid session with submit_intent
+    ok 1 - returns 200 for valid session with submit_intent
+      ---
+      duration_ms: 5.610209
+      type: 'test'
+      ...
+    # Subtest: returns 400 when forbidden ballot field is present
+    ok 2 - returns 400 when forbidden ballot field is present
+      ---
+      duration_ms: 3.114875
+      type: 'test'
+      ...
+    # Subtest: returns 401 with no token
+    ok 3 - returns 401 with no token
+      ---
+      duration_ms: 1.247709
+      type: 'test'
+      ...
+    # Subtest: returns 409 on double submit
+    ok 4 - returns 409 on double submit
+      ---
+      duration_ms: 6.561125
+      type: 'test'
+      ...
+    # Subtest: returns 403 for forbidden fields on withdrawn session
+    ok 5 - returns 403 for forbidden fields on withdrawn session
+      ---
+      duration_ms: 3.455625
+      type: 'test'
+      ...
+    # Subtest: returns 409 when body.pilot_session_id does not match token session
+    ok 6 - returns 409 when body.pilot_session_id does not match token session
+      ---
+      duration_ms: 3.471208
+      type: 'test'
+      ...
+    1..6
+ok 152 - POST /submit
+  ---
+  duration_ms: 23.944333
+  type: 'suite'
+  ...
+# Subtest: POST /withdraw
+    # Subtest: returns 200 and marks session withdrawn
+    ok 1 - returns 200 and marks session withdrawn
+      ---
+      duration_ms: 2.422083
+      type: 'test'
+      ...
+    # Subtest: returns 409 on double withdraw
+    ok 2 - returns 409 on double withdraw
+      ---
+      duration_ms: 5.997167
+      type: 'test'
+      ...
+    # Subtest: returns 401 with no token
+    ok 3 - returns 401 with no token
+      ---
+      duration_ms: 1.49
+      type: 'test'
+      ...
+    1..3
+ok 153 - POST /withdraw
+  ---
+  duration_ms: 10.183958
+  type: 'suite'
+  ...
+# Subtest: GET /:sessionId/report
+    # Subtest: returns 200 with full report for submitted session
+    ok 1 - returns 200 with full report for submitted session
+      ---
+      duration_ms: 2.52225
+      type: 'test'
+      ...
+    # Subtest: returns 401 without token
+    ok 2 - returns 401 without token
+      ---
+      duration_ms: 1.350458
+      type: 'test'
+      ...
+    # Subtest: returns 403 for withdrawn session
+    ok 3 - returns 403 for withdrawn session
+      ---
+      duration_ms: 1.802791
+      type: 'test'
+      ...
+    # Subtest: returns 403 when token session does not match path session
+    ok 4 - returns 403 when token session does not match path session
+      ---
+      duration_ms: 1.863625
+      type: 'test'
+      ...
+    1..4
+ok 154 - GET /:sessionId/report
+  ---
+  duration_ms: 7.653959
+  type: 'suite'
+  ...
+# Subtest: capture_excluded > 0 yields Critical floor
+ok 155 - capture_excluded > 0 yields Critical floor
+  ---
+  duration_ms: 0.454542
+  type: 'test'
+  ...
+# Subtest: monitor_only > 0 yields Warning (40, not Critical)
+ok 156 - monitor_only > 0 yields Warning (40, not Critical)
+  ---
+  duration_ms: 0.213583
+  type: 'test'
+  ...
+# Subtest: capture_restricted > 0 yields Warning
+ok 157 - capture_restricted > 0 yields Warning
+  ---
+  duration_ms: 0.130625
+  type: 'test'
+  ...
+# Subtest: scanner_unavailable / permission_denied / scan_error yield Warning
+ok 158 - scanner_unavailable / permission_denied / scan_error yield Warning
+  ---
+  duration_ms: 0.165791
+  type: 'test'
+  ...
+# Subtest: daemon_state untrusted/unpaired/stale/missing map to documented partial risks
+ok 159 - daemon_state untrusted/unpaired/stale/missing map to documented partial risks
+  ---
+  duration_ms: 0.166583
+  type: 'test'
+  ...
+# Subtest: healthy clean record yields zero risk
+ok 160 - healthy clean record yields zero risk
+  ---
+  duration_ms: 0.075042
+  type: 'test'
+  ...
+# Subtest: getManualReviewReason returns documented wording for Critical/Warning/Safe
+ok 161 - getManualReviewReason returns documented wording for Critical/Warning/Safe
+  ---
+  duration_ms: 0.135541
+  type: 'test'
+  ...
+# Subtest: getManualReviewReason device-integrity variant
+ok 162 - getManualReviewReason device-integrity variant
+  ---
+  duration_ms: 0.048375
+  type: 'test'
+  ...
+# Subtest: Linux healthy x11 counts → Safe (daemon_risk 0, no force)
+ok 163 - Linux healthy x11 counts → Safe (daemon_risk 0, no force)
+  ---
+  duration_ms: 0.678333
+  type: 'test'
+  ...
+# Subtest: Linux x11_above_window_count_max > 0 → Warning context
+ok 164 - Linux x11_above_window_count_max > 0 → Warning context
+  ---
+  duration_ms: 0.153125
+  type: 'test'
+  ...
+# Subtest: Linux x11_override_redirect_window_count_max > 0 → Warning context
+ok 165 - Linux x11_override_redirect_window_count_max > 0 → Warning context
+  ---
+  duration_ms: 0.182667
+  type: 'test'
+  ...
+# Subtest: Linux wayland_compositor_restricted → Warning context (not misconduct)
+ok 166 - Linux wayland_compositor_restricted → Warning context (not misconduct)
+  ---
+  duration_ms: 0.135083
+  type: 'test'
+  ...
+# Subtest: Linux xwayland_partial coverage → Warning context
+ok 167 - Linux xwayland_partial coverage → Warning context
+  ---
+  duration_ms: 0.13775
+  type: 'test'
+  ...
+# Subtest: macOS capture_excluded_window_count_max > 0 still forces Critical (no regression)
+ok 168 - macOS capture_excluded_window_count_max > 0 still forces Critical (no regression)
+  ---
+  duration_ms: 0.119708
+  type: 'test'
+  ...
+# Subtest: sessionToken
+    # Subtest: issues a token that round-trips successfully
+    ok 1 - issues a token that round-trips successfully
+      ---
+      duration_ms: 0.788959
+      type: 'test'
+      ...
+    # Subtest: rejects token signed with a different key
+    ok 2 - rejects token signed with a different key
+      ---
+      duration_ms: 0.137666
+      type: 'test'
+      ...
+    # Subtest: rejects malformed tokens
+    ok 3 - rejects malformed tokens
+      ---
+      duration_ms: 0.06
+      type: 'test'
+      ...
+    # Subtest: rejects expired tokens
+    ok 4 - rejects expired tokens
+      ---
+      duration_ms: 0.180042
+      type: 'test'
+      ...
+    # Subtest: rejects tampered payload
+    ok 5 - rejects tampered payload
+      ---
+      duration_ms: 0.080666
+      type: 'test'
+      ...
+    # Subtest: extractBearer pulls token from Authorization header
+    ok 6 - extractBearer pulls token from Authorization header
+      ---
+      duration_ms: 0.107667
+      type: 'test'
+      ...
+    1..6
+ok 169 - sessionToken
+  ---
+  duration_ms: 1.891917
+  type: 'suite'
+  ...
+# Subtest: exams
+    # Subtest: createExam returns an exam with id, title, and created state
+    ok 1 - createExam returns an exam with id, title, and created state
+      ---
+      duration_ms: 0.414333
+      type: 'test'
+      ...
+    # Subtest: getExam retrieves a created exam
+    ok 2 - getExam retrieves a created exam
+      ---
+      duration_ms: 0.122375
+      type: 'test'
+      ...
+    # Subtest: listExams returns all created exams
+    ok 3 - listExams returns all created exams
+      ---
+      duration_ms: 0.07025
+      type: 'test'
+      ...
+    1..3
+ok 170 - exams
+  ---
+  duration_ms: 1.104208
+  type: 'suite'
+  ...
+# Subtest: sessions state machine
+    # Subtest: createSessionRecord starts in created state
+    ok 1 - createSessionRecord starts in created state
+      ---
+      duration_ms: 0.166875
+      type: 'test'
+      ...
+    # Subtest: canTransition allows created → joined
+    ok 2 - canTransition allows created → joined
+      ---
+      duration_ms: 0.107875
+      type: 'test'
+      ...
+    # Subtest: transitionState advances state
+    ok 3 - transitionState advances state
+      ---
+      duration_ms: 0.067541
+      type: 'test'
+      ...
+    # Subtest: transitionState throws on illegal transition
+    ok 4 - transitionState throws on illegal transition
+      ---
+      duration_ms: 0.26375
+      type: 'test'
+      ...
+    1..4
+ok 171 - sessions state machine
+  ---
+  duration_ms: 0.888459
+  type: 'suite'
+  ...
+1..171
+# tests 359
+# suites 50
+# pass 359
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1117.167583
+Captured: 2026-06-04T03:58:52Z
+Exit: 0

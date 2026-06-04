@@ -2,6 +2,27 @@
 
 ## Agent Change Log
 
+### 2026-06-04 (Australia/Sydney) — Voting pilot paper: claim audit + evidence capture
+
+**Raouf:**
+
+- **Scope:** Audit all paper claims against repo evidence; capture Phase C gate evidence files; fix two claim gaps found; write `PAPER_CLAIM_AUDIT.md`.
+- **Issues found and fixed:**
+  1. **Focus-loss/paste claim gap** — consent page disclosed focus-loss/paste as potential collection categories; Phase C only collected session timestamps + audit-chain events. Paper §III.A now explicitly distinguishes consent-page disclosure from Phase C implementation.
+  2. **Privacy audit scope** — Table 2 entry updated to "PASS (code + evidence files)" to clarify that the audit scanned pre-existing evidence files + code, not 30 live Phase C session reports (in-memory store was cleared).
+- **Evidence captured:** All 6 gate outputs saved to `docs/research/mq-voting-pilot/evidence/phase-c-closeout/` at tag `v0.5.0-voting-pilot-phase-c-closeout`. Pre-pilot files (357 tests) superseded by Phase C files (359 tests).
+- **Audit result:** 20 claims audited — all confirmed or fixed. Verdict: Accurate.
+- **PDF rebuilt after fixes:** 4 pages, 0 undefined citations, 0 undefined references.
+- **Files changed:**
+  - `papers/simurgh-voting-pilot/PAPER_CLAIM_AUDIT.md` — new (20-claim audit table, evidence index, verdict)
+  - `papers/simurgh-voting-pilot/main.tex` — §III.A consent disclosure clarified; Table 2 privacy audit note added
+  - `papers/simurgh-voting-pilot/main.pdf` — rebuilt
+  - `docs/research/mq-voting-pilot/evidence/phase-c-closeout/` — 7 files (npm-test, npm-audit, privacy-audit, smoke, security-audit, smoke-closed, README)
+  - `AGENT.md` — this entry
+  - `CHANGELOG.md` — release-log entry
+
+---
+
 ### 2026-06-04 (Australia/Sydney) — Voting pilot paper: related work + PDF build
 
 **Raouf:**

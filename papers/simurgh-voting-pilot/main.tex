@@ -179,13 +179,17 @@ with internet voting in public elections.
 
 \subsection{Consent flow}
 
-Participants accessed a consent page that explained what Simurgh collects
-(session timestamps, focus-loss and paste counts, audit-chain validity signal,
-and an anonymous HMAC-hashed session code) and what it explicitly never
-collects (ballot choice, screen recordings, webcam/audio, microphone audio,
-typed text, clipboard content, raw process names, window titles, and device
-serial identifiers). Participation was voluntary; declining produced no
-consequence.
+Participants accessed a consent page that disclosed the data categories
+Simurgh may collect across its deployments (session timestamps, focus-loss and
+paste counts, audit-chain validity signal, and an anonymous HMAC-hashed session
+code) and what it explicitly never collects (ballot choice, screen recordings,
+webcam/audio, microphone audio, typed text, clipboard content, raw process
+names, window titles, and device serial identifiers). In Phase~C, the
+implemented collection comprised session timestamps, audit-chain lifecycle
+events (\texttt{STARTED}, \texttt{SUBMITTED}), and an anonymous participant
+code; focus-loss and paste counts are exam-integrity features of the broader
+Simurgh system and were not active in the voting pilot. Participation was
+voluntary; declining produced no consequence.
 
 On consent, the server issued an anonymous participant code and a session
 token. No personally identifying information was collected at any step.
@@ -279,7 +283,7 @@ blocked at the report endpoint with \texttt{HTTP 403}.
     Raw process names & No \\
     Raw window titles & No \\
     \texttt{official\_vote\_impact} & \texttt{false} \\
-    Privacy audit (\texttt{tools/privacy-audit.mjs}) & PASS \\
+    Privacy audit (\texttt{tools/privacy-audit.mjs}) & PASS (code + evidence files) \\
     \bottomrule
   \end{tabular}
   \label{tab:privacy}
