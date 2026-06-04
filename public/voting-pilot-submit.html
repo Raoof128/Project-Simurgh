@@ -2,123 +2,548 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mock Ballot — MQ Persian Society Pilot</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#f3efe6" />
+    <title>Mock Ballot — MQ Persian Society · Simurgh</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=JetBrains+Mono:wght@400;500;700&family=Inter+Tight:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
     <style>
+      :root {
+        --paper: #f3efe6;
+        --paper-deep: #ece6d8;
+        --paper-warm: #fdfaf2;
+        --rule: #d6cfbe;
+        --rule-soft: #e3dccb;
+        --ink: #14110d;
+        --ink-soft: #4a463d;
+        --ink-faint: #8a8676;
+        --ox: #6b1a1a;
+        --ox-deep: #4a0f0f;
+        --ox-tint: rgba(107, 26, 26, 0.08);
+        --ox-tint-mid: rgba(107, 26, 26, 0.14);
+        --moss: #2f4a2a;
+        --moss-tint: rgba(47, 74, 42, 0.1);
+        --amber: #8a6a16;
+        --amber-tint: rgba(138, 106, 22, 0.1);
+        --grid: 24px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html,
       body {
-        font-family: system-ui, sans-serif;
-        max-width: 640px;
-        margin: 2rem auto;
-        padding: 1rem;
-        line-height: 1.6;
+        margin: 0;
+        padding: 0;
       }
-      .option {
-        display: block;
-        padding: 0.75rem 1rem;
-        margin: 0.5rem 0;
-        border: 2px solid #ddd;
-        border-radius: 6px;
-        cursor: pointer;
+
+      body {
+        font-family: "Inter Tight", ui-sans-serif, system-ui, sans-serif;
+        font-size: 14px;
+        line-height: 1.55;
+        color: var(--ink);
+        background: var(--paper);
+        min-height: 100vh;
+        font-feature-settings: "ss01", "ss02", "cv11";
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+        background-image:
+          repeating-linear-gradient(
+            0deg,
+            transparent 0 calc(var(--grid) - 1px),
+            rgba(20, 17, 13, 0.035) calc(var(--grid) - 1px) var(--grid)
+          ),
+          repeating-linear-gradient(
+            90deg,
+            transparent 0 calc(var(--grid) - 1px),
+            rgba(20, 17, 13, 0.025) calc(var(--grid) - 1px) var(--grid)
+          );
+        background-attachment: fixed;
       }
-      .option input {
-        margin-right: 0.75rem;
+
+      :focus-visible {
+        outline: 2px solid var(--ox);
+        outline-offset: 2px;
+        border-radius: 2px;
       }
-      .option:has(input:checked) {
-        border-color: #3b6ff5;
-        background: #f0f4ff;
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          transition-duration: 0.01ms !important;
+        }
       }
-      button {
-        padding: 0.75rem 2rem;
-        font-size: 1rem;
-        background: #3b6ff5;
-        color: white;
+
+      /* ── HEADER ── */
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 30;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 14px clamp(16px, 3vw, 28px);
+        background: rgba(243, 239, 230, 0.88);
+        backdrop-filter: saturate(140%) blur(10px);
+        -webkit-backdrop-filter: saturate(140%) blur(10px);
+        border-bottom: 1px solid var(--rule);
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        color: inherit;
+      }
+      .brand .seal {
+        width: 24px;
+        height: 24px;
+        border: 1.5px solid var(--ox);
+        border-radius: 50%;
+        position: relative;
+        flex-shrink: 0;
+      }
+      .brand .seal::before {
+        content: "";
+        position: absolute;
+        inset: 4px;
+        border-radius: 50%;
+        background: var(--ox);
+      }
+      .brand-name {
+        font-family: "Fraunces", serif;
+        font-weight: 700;
+        font-size: 20px;
+        letter-spacing: -0.01em;
+        font-variation-settings: "opsz" 144;
+        line-height: 1;
+      }
+      .brand-sep {
+        width: 1px;
+        height: 18px;
+        background: var(--rule);
+        flex-shrink: 0;
+      }
+      .brand-sub {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 10px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+      }
+      .header-chip {
+        margin-left: auto;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        border: 1px solid var(--rule);
+        border-radius: 999px;
+        background: var(--paper-warm);
+        font-family: "JetBrains Mono", monospace;
+        font-size: 10px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+      }
+      .header-chip .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--moss);
+        box-shadow: 0 0 0 3px rgba(47, 74, 42, 0.18);
+        animation: pulse 2.4s ease-in-out infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          box-shadow: 0 0 0 3px rgba(47, 74, 42, 0.18);
+        }
+        50% {
+          box-shadow: 0 0 0 6px rgba(47, 74, 42, 0);
+        }
+      }
+
+      /* ── PAGE LAYOUT ── */
+      .page {
+        max-width: 560px;
+        margin: 0 auto;
+        padding: clamp(28px, 5vw, 52px) clamp(16px, 4vw, 28px) 60px;
+      }
+
+      /* ── EYEBROW ── */
+      .eyebrow {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 10px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+        margin-bottom: 10px;
+      }
+
+      /* ── HEADING ── */
+      .heading {
+        font-family: "Fraunces", serif;
+        font-weight: 700;
+        font-size: clamp(24px, 5vw, 32px);
+        letter-spacing: -0.02em;
+        font-variation-settings: "opsz" 144;
+        line-height: 1.15;
+        margin: 0 0 6px;
+      }
+      .heading em {
+        font-style: italic;
+        color: var(--ox);
+        font-weight: 500;
+      }
+      .subheading {
+        font-size: 14px;
+        color: var(--ink-soft);
+        margin: 0 0 24px;
+      }
+
+      /* ── PRIVACY BANNER ── */
+      .privacy-banner {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 12px 14px;
+        background: var(--moss-tint);
+        border: 1px solid rgba(47, 74, 42, 0.3);
+        border-radius: 4px;
+        font-size: 12.5px;
+        color: var(--moss);
+        margin-bottom: 24px;
+        line-height: 1.45;
+      }
+      .privacy-banner .pb-icon {
+        font-size: 15px;
+        line-height: 1;
+        margin-top: 1px;
+        flex-shrink: 0;
+      }
+
+      hr {
         border: none;
-        border-radius: 6px;
+        border-top: 1px solid var(--rule);
+        margin: 24px 0;
+      }
+
+      /* ── SECTION LABEL ── */
+      .section-label {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 9.5px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+        margin-bottom: 12px;
+      }
+
+      /* ── BALLOT OPTIONS ── */
+      .ballot-options {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 24px;
+      }
+      .ballot-option {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 14px 16px;
+        border: 1.5px solid var(--rule);
+        border-radius: 4px;
+        background: var(--paper-warm);
         cursor: pointer;
-        margin-top: 1rem;
+        transition:
+          border-color 0.15s,
+          background 0.15s;
+        user-select: none;
+        position: relative;
       }
-      button:disabled {
-        background: #aaa;
+      .ballot-option:hover {
+        border-color: var(--ink-soft);
+        background: var(--paper-deep);
       }
+      .ballot-option input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      .radio-ring {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        border: 1.5px solid var(--rule);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        transition: border-color 0.15s;
+        background: var(--paper);
+      }
+      .radio-ring::after {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--ox);
+        opacity: 0;
+        transition: opacity 0.12s;
+      }
+      .ballot-option:has(input:checked) {
+        border-color: var(--ox);
+        background: var(--ox-tint);
+      }
+      .ballot-option:has(input:checked) .radio-ring {
+        border-color: var(--ox);
+      }
+      .ballot-option:has(input:checked) .radio-ring::after {
+        opacity: 1;
+      }
+      .option-text {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--ink);
+        line-height: 1.3;
+      }
+      .option-letter {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 10px;
+        letter-spacing: 0.1em;
+        color: var(--ink-faint);
+        flex-shrink: 0;
+        width: 14px;
+      }
+
+      /* ── SUBMIT BUTTON ── */
+      .actions {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 11px 24px;
+        font-family: "Inter Tight", sans-serif;
+        font-size: 13.5px;
+        font-weight: 600;
+        border-radius: 3px;
+        border: 1px solid var(--ox-deep);
+        background: var(--ox);
+        color: var(--paper-warm);
+        cursor: pointer;
+        transition: background 0.15s;
+        letter-spacing: 0.01em;
+        line-height: 1;
+      }
+      .btn-primary:hover {
+        background: var(--ox-deep);
+      }
+      .btn-primary:disabled {
+        background: var(--ink-faint);
+        border-color: transparent;
+        cursor: not-allowed;
+        opacity: 0.55;
+      }
+      .btn-withdraw {
+        font-size: 12.5px;
+        color: var(--ink-faint);
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-family: "Inter Tight", sans-serif;
+        padding: 0;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+        transition: color 0.15s;
+      }
+      .btn-withdraw:hover {
+        color: var(--ox);
+      }
+
+      /* ── STATUS ── */
       #status {
-        margin-top: 1rem;
-        color: #555;
+        margin-top: 16px;
+        font-size: 12.5px;
+        color: var(--ink-soft);
+        font-family: "JetBrains Mono", monospace;
+        letter-spacing: 0.02em;
+        min-height: 20px;
       }
-      .notice {
-        background: #f0f4ff;
-        border-left: 4px solid #3b6ff5;
-        padding: 0.75rem;
-        font-size: 0.9rem;
+      #status.err {
+        color: var(--ox);
+      }
+      #status.ok {
+        color: var(--moss);
+      }
+
+      /* ── SUCCESS STATE ── */
+      .success-card {
+        padding: 24px 20px;
+        border: 1px solid rgba(47, 74, 42, 0.35);
+        border-radius: 4px;
+        background: var(--moss-tint);
+        display: none;
+      }
+      .success-card .sc-title {
+        font-family: "Fraunces", serif;
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--moss);
+        margin-bottom: 8px;
+        font-variation-settings: "opsz" 72;
+      }
+      .success-card p {
+        font-size: 13.5px;
+        color: var(--ink-soft);
+        margin: 0 0 12px;
+        line-height: 1.5;
+      }
+      .success-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .success-meta .row {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 10.5px;
+        color: var(--ink-faint);
+        letter-spacing: 0.04em;
+      }
+      .success-meta .row strong {
+        color: var(--ink-soft);
+      }
+
+      /* ── FOOTER ── */
+      .footer {
+        margin-top: 40px;
+        padding-top: 20px;
+        border-top: 1px solid var(--rule);
+        font-size: 12px;
+        color: var(--ink-faint);
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
       }
     </style>
   </head>
+
   <body>
-    <h1>Mock Ballot</h1>
-    <div class="notice">
-      This is a <strong>mock ballot only</strong> — it does not affect the official election. Your
-      selection is not sent to Simurgh.
+    <header>
+      <a class="brand" href="/">
+        <div class="seal" aria-hidden="true"></div>
+        <span class="brand-name">Simurgh</span>
+      </a>
+      <div class="brand-sep" aria-hidden="true"></div>
+      <span class="brand-sub">MQ Persian Society</span>
+      <div class="header-chip">
+        <span class="dot" aria-hidden="true"></span>
+        Session active
+      </div>
+    </header>
+
+    <div class="page">
+      <p class="eyebrow">Step 2 of 2 · Mock ballot</p>
+      <h1 class="heading"><em>Cast</em> your preference</h1>
+      <p class="subheading">
+        Select one option below, then submit. Your choice is not sent to Simurgh.
+      </p>
+
+      <div class="privacy-banner">
+        <span class="pb-icon">🔒</span>
+        <span>
+          <strong>Your selection is discarded in your browser</strong> before the form submits.
+          Simurgh only receives a submit-intent signal — never which option you chose.
+        </span>
+      </div>
+
+      <p class="section-label">Which MQ Persian Society event should we prioritise next?</p>
+
+      <div class="ballot-options" id="ballot-form" role="radiogroup" aria-label="Event preference">
+        <label class="ballot-option">
+          <input type="radio" name="event" value="A" />
+          <div class="radio-ring" aria-hidden="true"></div>
+          <span class="option-letter">A</span>
+          <span class="option-text">Nowruz cultural night</span>
+        </label>
+        <label class="ballot-option">
+          <input type="radio" name="event" value="B" />
+          <div class="radio-ring" aria-hidden="true"></div>
+          <span class="option-letter">B</span>
+          <span class="option-text">Persian movie night</span>
+        </label>
+        <label class="ballot-option">
+          <input type="radio" name="event" value="C" />
+          <div class="radio-ring" aria-hidden="true"></div>
+          <span class="option-letter">C</span>
+          <span class="option-text">Career / networking night</span>
+        </label>
+        <label class="ballot-option">
+          <input type="radio" name="event" value="D" />
+          <div class="radio-ring" aria-hidden="true"></div>
+          <span class="option-letter">D</span>
+          <span class="option-text">Food and music night</span>
+        </label>
+      </div>
+
+      <div
+        style="
+          padding: 14px 16px;
+          background: rgba(138, 106, 22, 0.1);
+          border: 1px solid rgba(138, 106, 22, 0.35);
+          border-radius: 4px;
+          font-size: 13.5px;
+          color: #8a6a16;
+        "
+      >
+        <strong
+          style="
+            font-family: &quot;JetBrains Mono&quot;, monospace;
+            font-size: 9.5px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 5px;
+            opacity: 0.75;
+          "
+          >Collection closed</strong
+        >
+        Phase C data collection is complete. No further submissions are accepted.
+      </div>
+
+      <p id="status"></p>
+
+      <div class="success-card" id="success-card">
+        <div class="sc-title">Submitted.</div>
+        <p>
+          Thank you. Your pilot submission was recorded. Your selected option was discarded in your
+          browser and was never sent to Simurgh or stored anywhere.
+        </p>
+        <div class="success-meta" id="success-meta"></div>
+      </div>
+
+      <div class="footer">
+        <span>Project Simurgh · research pilot · shadow mode only</span>
+      </div>
     </div>
 
-    <h2>Which MQ Persian Society event should we prioritise next?</h2>
-    <form id="ballot-form">
-      <label class="option"
-        ><input type="radio" name="event" value="A" /> Nowruz cultural night</label
-      >
-      <label class="option"
-        ><input type="radio" name="event" value="B" /> Persian movie night</label
-      >
-      <label class="option"
-        ><input type="radio" name="event" value="C" /> Career/networking night</label
-      >
-      <label class="option"
-        ><input type="radio" name="event" value="D" /> Food and music night</label
-      >
-    </form>
-
-    <button id="btn-submit" disabled>Submit</button>
-    <p id="status"></p>
-
     <script>
-      const form = document.getElementById("ballot-form");
-      const btn = document.getElementById("btn-submit");
-      const status = document.getElementById("status");
-
-      form.addEventListener("change", () => {
-        btn.disabled = false;
-      });
-
-      btn.addEventListener("click", async () => {
-        btn.disabled = true;
-        status.textContent = "Submitting…";
-
-        // The selected option exists only in transient browser memory.
-        // It is discarded here — never sent to Simurgh.
-        form.querySelectorAll("input[name=event]").forEach((el) => {
-          el.value = "";
-        });
-
-        const token = sessionStorage.getItem("vp_token");
-        const sessionId = sessionStorage.getItem("vp_session_id");
-
-        try {
-          const res = await fetch("/api/voting-pilot/submit", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            // Only submit_intent is sent — no choice, no candidate, no ballot content
-            body: JSON.stringify({ pilot_session_id: sessionId, submit_intent: true }),
-          });
-          const data = await res.json();
-          if (!res.ok) throw new Error(data.error ?? "unknown");
-          status.textContent =
-            "Thank you. Your pilot submission was recorded. Your selected option was not sent to Simurgh or stored.";
-        } catch (err) {
-          status.textContent = `Error: ${err.message}`;
-          btn.disabled = false;
-        }
-      });
+      // Collection closed — Phase C complete (30 submitted sessions, 1 withdrawn)
+      document.getElementById("ballot-form").style.display = "none";
+      document.querySelector(".privacy-banner").style.display = "none";
     </script>
   </body>
 </html>

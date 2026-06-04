@@ -1,5 +1,20 @@
 ## Change Log
 
+## [voting-pilot-phase-c-closeout] — 2026-06-04 — Phase C member pilot closeout
+
+**Raouf:** Closed Phase C data collection for the MQ Persian Society voting pilot. 31 consented sessions: 30 submitted (primary analysis set), 1 withdrawn (`vp_4fcc741a`, excluded). Both pilot pages replaced with "Collection closed" banners — no new sessions possible. All gates green: 359/359 tests, 0 high vulns, privacy audit PASS, smoke 8/8, security-audit 10/10.
+
+### Added
+
+- `docs/research/mq-voting-pilot/PHASE_C_MEMBER_PILOT_CLOSEOUT.md` — closeout document with session counts, privacy assertions, gate results, paper-safe sentence, and non-claims.
+
+### Changed
+
+- `public/voting-pilot.html` — collection closed; consent/submit buttons and JS logic removed.
+- `public/voting-pilot-submit.html` — collection closed; submit/withdraw buttons and JS logic removed.
+
+---
+
 ## [voting-pilot-phase-c-approval-pack] — 2026-06-04 — Phase C approval pack
 
 **Raouf:** Created five governance documents for Phase C (real member pilot): go/no-go checklist, member pilot protocol, executive approval request, participant notice, and data management addendum. Phase C requires executive written approval and ethics determination before any member participation.

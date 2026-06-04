@@ -2,6 +2,26 @@
 
 ## Agent Change Log
 
+### 2026-06-04 (Australia/Sydney) — Voting pilot Phase C member pilot closeout
+
+**Raouf:**
+
+- **Scope:** Close Phase C data collection, freeze consent/submit pages, create closeout document, run all gates.
+- **Session counts:** 31 consented, 30 submitted (primary analysis set), 1 withdrawn (`vp_4fcc741a` — excluded from report export and analysis).
+- **Collection freeze:** Removed consent/submit buttons and all JS submission logic from `voting-pilot.html` and `voting-pilot-submit.html`. Both pages now show a "Collection closed" banner. No new sessions can be created.
+- **Privacy:** `ballot_choice_recorded_by_simurgh: false` for all 30 submitted sessions. Report export for withdrawn session returns 403. Ballot choice never left the browser.
+- **Gate results:** 359/359 tests; 0 high vulnerabilities; privacy audit PASS (52 files); smoke-voting-pilot 8/8; security-audit-voting-pilot 10/10; prettier clean on modified files.
+- **Files changed:**
+  - `public/voting-pilot.html` — collection closed banner; submit logic removed; prettier applied
+  - `public/voting-pilot-submit.html` — collection closed banner; submit/withdraw logic removed; prettier applied
+  - `docs/research/mq-voting-pilot/PHASE_C_MEMBER_PILOT_CLOSEOUT.md` — new closeout document
+  - `AGENT.md` — this entry
+  - `CHANGELOG.md` — release-log entry
+- **Paper-safe sentence:** Phase C recorded 31 consented pilot sessions. One session was withdrawn before final analysis, leaving 30 submitted sessions in the primary analysis dataset. All 30 submitted sessions completed the consent-to-submit flow and returned `ballot_choice_recorded_by_simurgh: false`.
+- **Non-claims preserved:** Research prototype only. Simurgh did not record ballot choices. No automatic misconduct finding. No effect on official election result.
+
+---
+
 ### 2026-06-04 (Australia/Sydney) — Voting pilot Phase C approval pack
 
 **Raouf:**

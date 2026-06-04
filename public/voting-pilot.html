@@ -2,111 +2,486 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MQ Persian Society Voting Pilot — Project Simurgh</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#f3efe6" />
+    <title>Integrity Pilot — MQ Persian Society · Simurgh</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=JetBrains+Mono:wght@400;500;700&family=Inter+Tight:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
     <style>
+      :root {
+        --paper: #f3efe6;
+        --paper-deep: #ece6d8;
+        --paper-warm: #fdfaf2;
+        --rule: #d6cfbe;
+        --rule-soft: #e3dccb;
+        --ink: #14110d;
+        --ink-soft: #4a463d;
+        --ink-faint: #8a8676;
+        --ox: #6b1a1a;
+        --ox-deep: #4a0f0f;
+        --ox-tint: rgba(107, 26, 26, 0.08);
+        --ox-tint-mid: rgba(107, 26, 26, 0.14);
+        --moss: #2f4a2a;
+        --moss-tint: rgba(47, 74, 42, 0.1);
+        --amber: #8a6a16;
+        --amber-tint: rgba(138, 106, 22, 0.1);
+        --shadow: 0 1px 0 rgba(20, 17, 13, 0.04), 0 12px 28px -18px rgba(20, 17, 13, 0.25);
+        --grid: 24px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html,
       body {
-        font-family: system-ui, sans-serif;
-        max-width: 640px;
-        margin: 2rem auto;
-        padding: 1rem;
-        line-height: 1.6;
+        margin: 0;
+        padding: 0;
       }
-      .notice {
-        background: #f0f4ff;
-        border-left: 4px solid #3b6ff5;
-        padding: 1rem;
-        margin: 1.5rem 0;
+
+      body {
+        font-family: "Inter Tight", ui-sans-serif, system-ui, sans-serif;
+        font-size: 14px;
+        line-height: 1.55;
+        color: var(--ink);
+        background: var(--paper);
+        min-height: 100vh;
+        font-feature-settings: "ss01", "ss02", "cv11";
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+        background-image:
+          repeating-linear-gradient(
+            0deg,
+            transparent 0 calc(var(--grid) - 1px),
+            rgba(20, 17, 13, 0.035) calc(var(--grid) - 1px) var(--grid)
+          ),
+          repeating-linear-gradient(
+            90deg,
+            transparent 0 calc(var(--grid) - 1px),
+            rgba(20, 17, 13, 0.025) calc(var(--grid) - 1px) var(--grid)
+          );
+        background-attachment: fixed;
       }
-      .forbidden {
-        background: #fff0f0;
-        border-left: 4px solid #d0352b;
-        padding: 1rem;
-        margin: 1.5rem 0;
+
+      :focus-visible {
+        outline: 2px solid var(--ox);
+        outline-offset: 2px;
+        border-radius: 2px;
       }
-      button {
-        padding: 0.75rem 2rem;
-        font-size: 1rem;
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+
+      /* ── HEADER ── */
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 30;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 14px clamp(16px, 3vw, 28px);
+        background: rgba(243, 239, 230, 0.88);
+        backdrop-filter: saturate(140%) blur(10px);
+        -webkit-backdrop-filter: saturate(140%) blur(10px);
+        border-bottom: 1px solid var(--rule);
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        color: inherit;
+      }
+      .brand .seal {
+        width: 24px;
+        height: 24px;
+        border: 1.5px solid var(--ox);
+        border-radius: 50%;
+        position: relative;
+        flex-shrink: 0;
+      }
+      .brand .seal::before {
+        content: "";
+        position: absolute;
+        inset: 4px;
+        border-radius: 50%;
+        background: var(--ox);
+      }
+      .brand-name {
+        font-family: "Fraunces", serif;
+        font-weight: 700;
+        font-size: 20px;
+        letter-spacing: -0.01em;
+        font-variation-settings: "opsz" 144;
+        line-height: 1;
+      }
+      .brand-sep {
+        width: 1px;
+        height: 18px;
+        background: var(--rule);
+        flex-shrink: 0;
+      }
+      .brand-sub {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 10px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+      }
+      .header-chip {
+        margin-left: auto;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        border: 1px solid var(--rule);
+        border-radius: 999px;
+        background: var(--paper-warm);
+        font-family: "JetBrains Mono", monospace;
+        font-size: 10px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+      }
+      .header-chip .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--amber);
+      }
+
+      /* ── PAGE LAYOUT ── */
+      .page {
+        max-width: 560px;
+        margin: 0 auto;
+        padding: clamp(28px, 5vw, 56px) clamp(16px, 4vw, 28px) 60px;
+      }
+
+      /* ── EYEBROW ── */
+      .eyebrow {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 10px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+        margin-bottom: 10px;
+      }
+
+      /* ── HEADING ── */
+      .heading {
+        font-family: "Fraunces", serif;
+        font-weight: 700;
+        font-size: clamp(26px, 5vw, 34px);
+        letter-spacing: -0.02em;
+        font-variation-settings: "opsz" 144;
+        line-height: 1.15;
+        margin: 0 0 6px;
+        color: var(--ink);
+      }
+      .heading em {
+        font-style: italic;
+        color: var(--ox);
+        font-weight: 500;
+      }
+      .subheading {
+        font-size: 15px;
+        color: var(--ink-soft);
+        margin: 0 0 28px;
+      }
+
+      /* ── DIVIDER ── */
+      hr {
         border: none;
-        border-radius: 6px;
+        border-top: 1px solid var(--rule);
+        margin: 24px 0;
+      }
+
+      /* ── SECTION LABEL ── */
+      .section-label {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 9.5px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+        margin-bottom: 10px;
+      }
+
+      /* ── NOTICE CARDS ── */
+      .notice {
+        border: 1px solid var(--rule);
+        border-radius: 4px;
+        background: var(--paper-warm);
+        padding: 14px 16px;
+        margin-bottom: 12px;
+        font-size: 13.5px;
+        line-height: 1.5;
+      }
+      .notice.moss {
+        border-color: rgba(47, 74, 42, 0.35);
+        background: var(--moss-tint);
+        color: var(--moss);
+      }
+      .notice.ox {
+        border-color: rgba(107, 26, 26, 0.3);
+        background: var(--ox-tint);
+        color: var(--ox-deep);
+      }
+      .notice.amber {
+        border-color: rgba(138, 106, 22, 0.35);
+        background: var(--amber-tint);
+        color: var(--amber);
+      }
+      .notice-label {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 9.5px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        font-weight: 700;
+        display: block;
+        margin-bottom: 5px;
+        opacity: 0.75;
+      }
+
+      /* ── COLLECT LIST ── */
+      .collect-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+      .collect-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        font-size: 13px;
+        color: var(--ink-soft);
+        padding: 10px 12px;
+        border: 1px solid var(--rule);
+        border-radius: 4px;
+        background: var(--paper-warm);
+      }
+      .collect-item .icon {
+        font-size: 14px;
+        line-height: 1;
+        margin-top: 1px;
+        flex-shrink: 0;
+      }
+      .collect-item.yes .icon {
+        color: var(--moss);
+      }
+      .collect-item.no .icon {
+        color: var(--ox);
+      }
+
+      @media (max-width: 480px) {
+        .collect-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* ── ACTIONS ── */
+      .actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 28px;
+        flex-wrap: wrap;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 11px 22px;
+        font-family: "Inter Tight", sans-serif;
+        font-size: 13.5px;
+        font-weight: 600;
+        border-radius: 3px;
+        border: 1px solid transparent;
         cursor: pointer;
+        transition: all 0.15s ease;
+        letter-spacing: 0.01em;
+        line-height: 1;
       }
-      #btn-agree {
-        background: #3b6ff5;
-        color: white;
+      .btn-primary {
+        background: var(--ox);
+        color: var(--paper-warm);
+        border-color: var(--ox-deep);
       }
-      #btn-decline {
-        background: #eee;
-        color: #333;
-        margin-left: 1rem;
+      .btn-primary:hover {
+        background: var(--ox-deep);
       }
+      .btn-primary:disabled {
+        background: var(--ink-faint);
+        border-color: transparent;
+        cursor: not-allowed;
+        opacity: 0.6;
+      }
+      .btn-ghost {
+        background: var(--paper-warm);
+        color: var(--ink-soft);
+        border-color: var(--rule);
+      }
+      .btn-ghost:hover {
+        color: var(--ink);
+        border-color: var(--ink-soft);
+      }
+
+      /* ── STATUS BAR ── */
       #status {
-        margin-top: 1rem;
-        color: #555;
+        margin-top: 16px;
+        font-size: 13px;
+        color: var(--ink-soft);
+        min-height: 20px;
+        font-family: "JetBrains Mono", monospace;
+        letter-spacing: 0.02em;
+      }
+      #status.err {
+        color: var(--ox);
+      }
+
+      /* ── CODE DISPLAY ── */
+      .code-box {
+        margin-top: 16px;
+        padding: 14px 16px;
+        background: var(--paper-deep);
+        border: 1px solid var(--rule);
+        border-radius: 4px;
+        display: none;
+      }
+      .code-box .code-label {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 9.5px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+        margin-bottom: 6px;
+      }
+      .code-box .code-value {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 18px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        color: var(--ink);
+        word-break: break-all;
+      }
+      .code-box .code-note {
+        margin-top: 6px;
+        font-size: 12px;
+        color: var(--ink-faint);
+      }
+
+      /* ── FOOTER ── */
+      .footer {
+        margin-top: 40px;
+        padding-top: 20px;
+        border-top: 1px solid var(--rule);
+        font-size: 12px;
+        color: var(--ink-faint);
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .footer a {
+        color: inherit;
+        text-decoration: underline;
+        text-underline-offset: 2px;
       }
     </style>
   </head>
+
   <body>
-    <h1>MQ Persian Society — Integrity Pilot</h1>
-    <p>
-      This is an <strong>optional research pilot</strong> for Project Simurgh. It runs beside the
-      official MQ Persian Society event preference poll.
-    </p>
+    <header>
+      <a class="brand" href="/">
+        <div class="seal" aria-hidden="true"></div>
+        <span class="brand-name">Simurgh</span>
+      </a>
+      <div class="brand-sep" aria-hidden="true"></div>
+      <span class="brand-sub">MQ Persian Society</span>
+      <div class="header-chip">
+        <span class="dot" aria-hidden="true"></span>
+        Research Pilot
+      </div>
+    </header>
 
-    <div class="notice">
-      <strong>This pilot does not affect the official election result.</strong>
+    <div class="page">
+      <p class="eyebrow">Optional participation · Shadow mode</p>
+      <h1 class="heading">Integrity <em>Pilot</em></h1>
+      <p class="subheading">
+        Project Simurgh runs alongside the official event preference poll — it does not affect the
+        outcome.
+      </p>
+
+      <div class="notice amber">
+        <span class="notice-label">Important</span>
+        This pilot has <strong>no effect on the official election result</strong>. Your ballot
+        choice is decided entirely by the society's own voting system — not Simurgh.
+      </div>
+
+      <hr />
+
+      <p class="section-label">What Simurgh collects</p>
+      <div class="collect-grid">
+        <div class="collect-item yes">
+          <span class="icon">✓</span>
+          <span>Session timestamps &amp; proof status</span>
+        </div>
+        <div class="collect-item yes">
+          <span class="icon">✓</span>
+          <span>Focus-loss &amp; paste counts</span>
+        </div>
+        <div class="collect-item yes">
+          <span class="icon">✓</span>
+          <span>Audit-chain validity signal</span>
+        </div>
+        <div class="collect-item yes">
+          <span class="icon">✓</span>
+          <span>Anonymous session code (HMAC-hashed)</span>
+        </div>
+      </div>
+
+      <div class="notice ox">
+        <span class="notice-label">Never collected</span>
+        Who you vote for · ballot content · screen recordings · webcam video · microphone audio ·
+        typed text · clipboard content · raw process names · window titles · device serial
+        identifiers
+      </div>
+
+      <hr />
+
+      <div class="notice moss">
+        <span class="notice-label">Voluntary</span>
+        Participation is entirely optional. You can decline now or withdraw at any point during the
+        session with no consequence.
+      </div>
+
+      <div class="notice amber" style="margin-top: 20px">
+        <span class="notice-label">Collection closed</span>
+        Phase C data collection is complete. The pilot has reached its target of
+        <strong>30 submitted sessions</strong> and is now closed. No further participation is
+        possible.
+      </div>
+
+      <div class="footer">
+        <span>Project Simurgh · research pilot · shadow mode only</span>
+        <a href="https://github.com/Raoof128/Project-Simurgh" target="_blank" rel="noopener">
+          Source
+        </a>
+      </div>
     </div>
-
-    <h2>What Simurgh collects</h2>
-    <p>
-      Privacy-preserving session metadata: proof status, timestamps, focus-loss counts, paste
-      counts, and audit-chain validity.
-    </p>
-
-    <div class="forbidden">
-      <strong>Simurgh does NOT collect:</strong> who you vote for, ballot content, screen
-      recordings, webcam video, microphone audio, typed text, clipboard text, raw process names, raw
-      window titles, or device serial identifiers.
-    </div>
-
-    <p>Participation is voluntary. You may decline or stop at any time.</p>
-
-    <button id="btn-agree">Agree — join the pilot</button>
-    <button id="btn-decline">Decline — exit</button>
-    <p id="status"></p>
 
     <script>
-      document.getElementById("btn-decline").addEventListener("click", () => {
-        document.body.replaceChildren(
-          Object.assign(document.createElement("h1"), { textContent: "Thank you." }),
-          Object.assign(document.createElement("p"), {
-            textContent: "No data was recorded. You may close this tab.",
-          })
-        );
-      });
-
-      document.getElementById("btn-agree").addEventListener("click", async () => {
-        const status = document.getElementById("status");
-        status.textContent = "Starting pilot session…";
-        try {
-          const res = await fetch("/api/voting-pilot/consent/accept", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({}),
-          });
-          const data = await res.json();
-          if (!res.ok) throw new Error(data.error ?? "unknown error");
-          // Store token in sessionStorage — not localStorage; survives tab, not browser restart
-          sessionStorage.setItem("vp_token", data.token);
-          sessionStorage.setItem("vp_session_id", data.pilot_session_id);
-          status.textContent = `Pilot started. Your anonymous code: ${data.participant_code} (write this down — it is not stored).`;
-          setTimeout(() => {
-            window.location.href = "/voting-pilot-submit.html";
-          }, 3000);
-        } catch (err) {
-          status.textContent = `Error: ${err.message}`;
-        }
-      });
+      // Collection closed — Phase C complete (30 submitted sessions, 1 withdrawn)
     </script>
   </body>
 </html>
