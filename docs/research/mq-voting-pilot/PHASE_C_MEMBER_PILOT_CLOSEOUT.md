@@ -57,14 +57,30 @@ Both pages (`/voting-pilot.html`, `/voting-pilot-submit.html`) now display a
 **"Collection closed"** banner. The consent/submit buttons and all JavaScript
 submission logic have been removed. No new sessions can be created.
 
+Collection is closed visually and server-side. All voting-pilot write endpoints
+return `410 Gone` when `SIMURGH_VOTING_PILOT_COLLECTION_CLOSED=true`. Report
+access remains protected by token and is not locked — existing sessions can
+still export their audit report.
+
+| Endpoint | Closed state |
+| --- | --- |
+| `POST /api/voting-pilot/consent/accept` | 410 Gone |
+| `POST /api/voting-pilot/submit` | 410 Gone |
+| `POST /api/voting-pilot/withdraw` | 410 Gone |
+| `GET /api/voting-pilot/:id/report` | Active (token required) |
+
+**Tag:** `v0.5.0-voting-pilot-phase-c-closeout`
+
 ---
 
-## Paper-safe sentence
+## Paper-safe summary
 
-Phase C recorded 31 consented pilot sessions. One session was withdrawn before
-final analysis, leaving 30 submitted sessions in the primary analysis dataset.
-All 30 submitted sessions completed the consent-to-submit flow and returned
-`ballot_choice_recorded_by_simurgh: false`.
+Phase C completed with 31 consented pilot sessions, including 30 submitted
+sessions in the primary analysis dataset and one withdrawn session excluded from
+report export and analysis. All submitted sessions returned
+`ballot_choice_recorded_by_simurgh: false`. After collection, the pilot was
+closed both visually and server-side, with all write endpoints returning
+`410 Gone` under the collection-closed configuration.
 
 ---
 

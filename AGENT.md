@@ -2,6 +2,18 @@
 
 ## Agent Change Log
 
+### 2026-06-04 (Australia/Sydney) — Voting pilot Phase C tag + closeout doc final update
+
+**Raouf:**
+
+- **Scope:** Tag `v0.5.0-voting-pilot-phase-c-closeout` on `main` commit `f2803b4`. Update `PHASE_C_MEMBER_PILOT_CLOSEOUT.md` with server-side closure table, tag reference, and reviewer-safe paper summary paragraph.
+- **Files changed:**
+  - `docs/research/mq-voting-pilot/PHASE_C_MEMBER_PILOT_CLOSEOUT.md` — server-side closure table, 410 endpoint map, tag, paper-safe summary paragraph
+  - `AGENT.md` — this entry
+  - `CHANGELOG.md` — release-log entry
+
+---
+
 ### 2026-06-04 (Australia/Sydney) — Voting pilot Phase C server-side collection lock
 
 **Raouf:**

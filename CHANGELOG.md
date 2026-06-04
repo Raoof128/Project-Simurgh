@@ -1,5 +1,11 @@
 ## Change Log
 
+## [v0.5.0-voting-pilot-phase-c-closeout] — 2026-06-04 — Phase C tag + closeout doc final update
+
+**Raouf:** Tagged `v0.5.0-voting-pilot-phase-c-closeout` on `main`. Updated `PHASE_C_MEMBER_PILOT_CLOSEOUT.md` with server-side closure endpoint table, tag reference, and final paper-safe summary paragraph.
+
+---
+
 ## [voting-pilot-phase-c-collection-lock] — 2026-06-04 — Phase C server-side collection lock
 
 **Raouf:** Enforced server-side Phase C collection closure. `SIMURGH_VOTING_PILOT_COLLECTION_CLOSED=true` causes consent/accept, submit, and withdraw to return `410 Gone` with `voting_pilot_collection_closed`. Report export remains open. New `scripts/smoke-voting-pilot-closed.sh` (5 gates, dedicated server on port 33034). Gates: closure smoke 5/5, original smoke 8/8, security-audit 10/10, 359/359 tests, 0 high vulns, privacy audit PASS.
