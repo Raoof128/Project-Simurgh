@@ -1,5 +1,11 @@
 ## Change Log
 
+## [voting-pilot-paper-submission-polish] — 2026-06-04 — Paper blocking fixes + submission polish
+
+**Raouf:** Fixed two blocking citation errors (NIST IR 7770 wrong author → 4 correct authors + DOI; NSWEC year 2022→2023 November, "verify year" TODO note removed from bibliography). Eight submission-readiness fixes: §V.A Dataset paragraph added, "privacy-sensitive data" narrowed, "passive surveillance" → "content-level surveillance", fetch-call precision fix, "no data persisted" scoped correctly, Table II abbreviation note, Governance and Ethics subsection added (§IV), long path cleaned. Build: 4 pages, 121 KB, 0 warnings.
+
+---
+
 ## [voting-pilot-paper-100pct-audit] — 2026-06-04 — Paper 100% audit pass
 
 **Raouf:** Second systematic audit pass. 22 issues resolved: all 12 em dashes removed (count verified 0), British spellings fixed (Minimisation→Minimization), §\ref→Sec.~\ref, grammar fix in §III.C, tense fixes in §IV.B, passive→active in §IV.B, "rank"→"select" (radio buttons), empty TikZ node removed, "establish"→"demonstrate", "official ballot"→"official vote", spurious commas removed. Build: 4 pages, 121 KB, 0 warnings.

@@ -45,10 +45,10 @@ S.~Bell, J.~Benaloh, M.~Byrne, D.~DeBeauvoir, B.~Eakin, G.~Fisher, P.~Kortum,
   Association, 2013.
 
 \bibitem{nistir7770}
-N.~Runyan, ``Security considerations for remote electronic {UOCAVA} voting,''
-  National Institute of Standards and Technology, Gaithersburg, MD, NIST
-  Interagency Report 7770, 2011,
-  \url{https://csrc.nist.gov/pubs/ir/7770/final}.
+N.~Hastings, R.~Peralta, S.~Popoveniuc, and A.~Regenscheid, ``Security
+  considerations for remote electronic {UOCAVA} voting,'' National Institute of
+  Standards and Technology, Gaithersburg, MD, NIST Interagency Report 7770,
+  Feb. 2011.
 
 \bibitem{nationalacademies2018}
 {National Academies of Sciences, Engineering, and Medicine}, \emph{Securing the
@@ -61,11 +61,13 @@ N.~Runyan, ``Security considerations for remote electronic {UOCAVA} voting,''
   \url{https://www.eac.gov/voting-equipment/voluntary-voting-system-guidelines},
   2021, adopted February 2021.
 
-\bibitem{nswec2022tav}
+\bibitem{nswec2023tav}
+\BIBentryALTinterwordspacing
 {NSW Electoral Commission}, ``Technology assisted voting: Final review
-  report,'' NSW Electoral Commission, Tech. Rep., 2022,
-  \url{https://elections.nsw.gov.au} — verify publication year before
-  submission.
+  report,'' NSW Electoral Commission, Tech. Rep., Nov. 2023. [Online].
+  Available:
+  \url{https://elections.nsw.gov.au/technology-assisted-voting-review/review-papers}
+\BIBentrySTDinterwordspacing
 
 \bibitem{dwork2014algorithmic}
 C.~Dwork and A.~Roth, \emph{The Algorithmic Foundations of Differential

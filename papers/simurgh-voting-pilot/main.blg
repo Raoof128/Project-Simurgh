@@ -15,37 +15,37 @@ Database file #1: references.bib
 Done.
 You've used 10 entries,
             4087 wiz_defined-function locations,
-            885 strings with 9380 characters,
-and the built_in function-call counts, 5753 in all, are:
-= -- 448
-> -- 123
+            884 strings with 9397 characters,
+and the built_in function-call counts, 5825 in all, are:
+= -- 445
+> -- 136
 < -- 21
-+ -- 64
-- -- 26
-* -- 253
-:= -- 948
++ -- 70
+- -- 29
+* -- 263
+:= -- 951
 add.period$ -- 23
 call.type$ -- 10
-change.case$ -- 13
+change.case$ -- 11
 chr.to.int$ -- 48
 cite$ -- 10
-duplicate$ -- 443
-empty$ -- 523
-format.name$ -- 29
-if$ -- 1308
+duplicate$ -- 446
+empty$ -- 529
+format.name$ -- 33
+if$ -- 1323
 int.to.chr$ -- 0
 int.to.str$ -- 10
-missing$ -- 101
-newline$ -- 53
+missing$ -- 102
+newline$ -- 55
 num.names$ -- 10
-pop$ -- 239
+pop$ -- 246
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 2
-skip$ -- 444
+skip$ -- 443
 stack$ -- 0
-substring$ -- 130
-swap$ -- 309
+substring$ -- 126
+swap$ -- 317
 text.length$ -- 5
 text.prefix$ -- 0
 top$ -- 5
@@ -53,4 +53,4 @@ type$ -- 10
 warning$ -- 0
 while$ -- 18
 width$ -- 12
-write$ -- 114
+write$ -- 115

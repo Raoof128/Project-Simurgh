@@ -73,7 +73,7 @@ Student-society governance increasingly relies on digital voting tools for
 event preference polls, committee elections, and budget decisions. These tools
 leave a question open that existing cryptographic solutions do not answer: can
 a participant verify their session was handled honestly (no screen capture, no
-ballot recording, no passive surveillance) without revealing their choice?
+ballot recording, no content-level surveillance) without revealing their choice?
 
 End-to-end verifiable voting schemes~\cite{adida2008helios,clarkson2008civitas}
 solve the \emph{outcome} integrity problem (did the tally reflect all ballots?)
@@ -151,7 +151,7 @@ certification scope.
 
 Several Australian jurisdictions have piloted technology-assisted voting,
 including iVote in New South Wales. The NSW Electoral Commission's
-technology-assisted voting review~\cite{nswec2022tav} examined privacy,
+technology-assisted voting review~\cite{nswec2023tav} examined privacy,
 accessibility, and security trade-offs, recommending careful scoping and
 ongoing evaluation before broader deployment.
 
@@ -254,9 +254,10 @@ token. No personally identifying information was collected at any step.
 
 \subsection{Ballot-Field Exclusion}
 
-Before every \texttt{fetch} call, the submit page set all radio button
+Before the submit \texttt{fetch} call, the submit page set all radio button
 \texttt{value} attributes to an empty string, so the ballot field was
-structurally absent from the request body. The server provided a second layer:
+structurally absent from the request body. (The consent \texttt{fetch}
+occurs before any ballot interaction and carries no ballot field.) The server provided a second layer:
 the \texttt{FORBIDDEN\_BALLOT\_FIELDS} set rejected any submission body
 containing a known ballot-choice key with \texttt{HTTP~400}, with no echo of
 the supplied value.
@@ -307,18 +308,34 @@ formed the primary analysis dataset. The participant in one session
 (\texttt{vp\_4fcc741a}) withdrew before submitting; that session is excluded
 from all analysis and its report endpoint returns \texttt{HTTP~403}.
 
+\subsection{Governance and Ethics}
+
+The pilot proceeded after society executive approval, a locked participant
+notice, and a data management addendum. Because the pilot collected no ballot
+choices, no names, no student identifiers, no email addresses, and no
+content-level data, the study reports only aggregate technical outcomes. No
+individual-level analysis, disciplinary action, or re-identification was
+performed. Participation was fully voluntary with no consequence for declining
+or withdrawing.
+
 \subsection{Data Management}
 
-The server held session data in memory only. No data persisted to disk, and the
-store reset on server restart. This is appropriate for a research prototype and
-consistent with the data management addendum, which specified no persistent
-storage of pilot session records.
+The server held live session data in memory only. No live pilot session records
+were persisted by the application; aggregate gate evidence and closeout
+artefacts were separately archived in the repository. The store reset on server
+restart, consistent with the data management addendum, which specified no
+persistent storage of individual pilot session records.
 
 %% ── V. RESULTS ────────────────────────────────────────────────────────────
 \section{Results}
 \label{sec:results}
 
 \subsection{Dataset}
+
+Phase~C recorded 31 consented pilot sessions. Thirty sessions completed the
+submit step and formed the primary analysis dataset; one session was withdrawn
+before submission and excluded from report export and analysis.
+Table~\ref{tab:sessions} summarizes the retained dataset.
 
 \begin{table}[!t]
   \caption{Session Counts}
@@ -361,6 +378,8 @@ storage of pilot session records.
   \end{tabular}
   \label{tab:privacy}
 \end{table}
+{\footnotesize Row 1 abbreviates the full field name
+\texttt{ballot\_choice\_recorded\_by\_simurgh} for column width.}
 
 The \texttt{ballot\_choice\_recorded\_by\_simurgh} field is a behavioral
 guarantee enforced by client-side discard and server-side forbidden-field
@@ -395,9 +414,8 @@ endpoint returned \texttt{HTTP~403}, confirming exclusion from analysis.
   \label{tab:gates}
 \end{table}
 
-Gate evidence files are archived at
-\texttt{docs/research/mq-voting-pilot/evidence/phase-c-closeout/} in the
-repository at tag \texttt{v0.5.0-voting-pilot-phase-c-closeout}.
+Gate evidence files are archived in the repository under the Phase~C closeout
+evidence directory at tag \texttt{v0.5.0-voting-pilot-phase-c-closeout}.
 
 \subsection{Collection Closure}
 
@@ -412,8 +430,9 @@ configuration, while report export remains available with a valid token.
 \subsection{Interpretation}
 
 The pilot shows that a consent-based shadow-mode prototype can operate alongside
-a real student-society voting event without collecting ballot choices or any
-privacy-sensitive data. The privacy assertions in Table~\ref{tab:privacy} hold
+a real student-society voting event without collecting ballot choices, content-level data,
+screen or audio/video recordings, raw local identifiers, or personal device
+identifiers. The privacy assertions in Table~\ref{tab:privacy} hold
 by system design: the ballot field is structurally absent from the server
 request body in every session, not because participants complied with a policy.
 

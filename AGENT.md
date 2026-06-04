@@ -2,6 +2,28 @@
 
 ## Agent Change Log
 
+### 2026-06-04 (Australia/Sydney) — Voting pilot paper: blocking fixes + submission polish
+
+**Raouf:**
+
+- **Scope:** Fix two blocking citation errors and eight submission-readiness issues identified in external audit review.
+- **Blocking fixes:**
+  1. **NIST IR 7770 author** — "Runyan, Nelson" was wrong. Correct authors are Hastings, Nelson; Peralta, Rene; Popoveniuc, Stefan; Regenscheid, Andrew. DOI `10.6028/NIST.IR.7770` added. Month feb added.
+  2. **NSWEC reference** — Year 2022→2023 (final report released November 2023). "verify publication year" note removed (was visible in PDF bibliography). URL updated to specific review page. Key renamed `nswec2022tav`→`nswec2023tav`.
+- **Submission-readiness fixes (8):**
+  3. **§V.A Dataset** — Was empty between heading and table. Added 2-sentence intro paragraph: "Phase C recorded 31 consented pilot sessions. Thirty sessions completed the submit step and formed the primary analysis dataset; one session was withdrawn before submission and excluded."
+  4. **"privacy-sensitive data"** (too broad) → "ballot choices, content-level data, screen or audio/video recordings, raw local identifiers, or personal device identifiers."
+  5. **"no passive surveillance"** → "no content-level surveillance" (pilot does collect metadata; passive surveillance was reviewer bait).
+  6. **"before every fetch call"** → "before the submit fetch call" + parenthetical clarifying consent fetch has no ballot field.
+  7. **"no data persisted to disk"** → "no live pilot session records were persisted by the application; aggregate gate evidence and closeout artefacts were separately archived in the repository." Closes potential "but your repo has evidence files" objection.
+  8. **Table II abbreviation note** — `\footnotesize` note below table: "Row 1 abbreviates the full field name `ballot_choice_recorded_by_simurgh` for column width."
+  9. **§IV Governance and Ethics subsection** — Added: executive approval, participant notice, data management addendum, no individual-level analysis, no re-identification, fully voluntary.
+  10. **Long path string** in §V.D removed — replaced with prose description.
+- **Build result:** 4 pages, 121 KB, 0 warnings, 0 undefined references. Both corrected citations verified in `.bbl`.
+- **Files changed:** `references.bib`, `main.tex`, `main.pdf`, `AGENT.md`, `CHANGELOG.md`.
+
+---
+
 ### 2026-06-04 (Australia/Sydney) — Voting pilot paper: 100% audit pass
 
 **Raouf:**
