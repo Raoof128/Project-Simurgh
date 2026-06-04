@@ -11,6 +11,7 @@
 \usepackage{url}
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric,arrows.meta,positioning,fit,calc,decorations.pathreplacing}
+\usepackage[section]{placeins}
 
 \hypersetup{
   colorlinks=true,
@@ -23,7 +24,7 @@
 
 \begin{document}
 
-\title{Privacy-Preserving Integrity Proofs for Student-Society Voting:\\
+\title{Privacy-Preserving Integrity Proofs for\\Student-Society Voting-Adjacent Workflows:\\
 A Phase C Pilot of \sys{} at Macquarie University%
 \thanks{Voting-adjacent case study, not a production election-security claim.
 Research prototype only. Source:
@@ -56,7 +57,8 @@ key. A 30-session Phase~C pilot (31 consented, 1 withdrawn) confirmed
 session; 359/359 automated tests, 8/8 smoke gates, and 10/10 security-audit
 gates passed at closeout. After data collection ended, all write endpoints
 returned \texttt{HTTP~410 Gone} under a server-side collection-closed flag,
-verifiable by any caller. This study is voting-adjacent: it does not implement
+verifiable by any caller able to reach the pilot API. This study is
+voting-adjacent: it does not implement
 ballot cryptography, voter eligibility verification, coercion resistance, tally
 protection, or public-election certification.
 \end{abstract}
@@ -316,7 +318,9 @@ choices, no names, no student identifiers, no email addresses, and no
 content-level data, the study reports only aggregate technical outcomes. No
 individual-level analysis, disciplinary action, or re-identification was
 performed. Participation was fully voluntary with no consequence for declining
-or withdrawing.
+or withdrawing. This paper does not claim formal institutional human-research
+ethics approval; it reports a society-approved internal pilot with aggregate
+technical outcomes only.
 
 \subsection{Data Management}
 
@@ -327,6 +331,7 @@ restart, consistent with the data management addendum, which specified no
 persistent storage of individual pilot session records.
 
 %% ── V. RESULTS ────────────────────────────────────────────────────────────
+\FloatBarrier
 \section{Results}
 \label{sec:results}
 
@@ -425,6 +430,7 @@ consent/accept, submit, and withdraw are unreachable under the closed
 configuration, while report export remains available with a valid token.
 
 %% ── VI. DISCUSSION ────────────────────────────────────────────────────────
+\FloatBarrier
 \section{Discussion}
 
 \subsection{Interpretation}
@@ -437,8 +443,9 @@ by system design: the ballot field is structurally absent from the server
 request body in every session, not because participants complied with a policy.
 
 The server-side collection-closure mechanism produces a reproducible, auditable
-end-of-collection posture. Any caller with network access can verify closure;
-the mechanism does not depend on the client UI.
+end-of-collection posture. Any caller able to reach the pilot API can verify that write routes return
+\texttt{HTTP~410} under the closed configuration; the mechanism does not
+depend on the client UI.
 
 \subsection{Limitations}
 
@@ -476,9 +483,9 @@ Thirty sessions completed the full consent-to-submit flow in Phase~C of
 \sys{}. In every session, the system collected no ballot choice, screen
 recording, webcam or audio data, typed content, pasted content, or personal
 device identifier. After collection closed, all write endpoints returned
-\texttt{HTTP~410 Gone} under a server-side flag verifiable by any caller,
-confirming that collection closure is enforced at the API layer, not only at
-the UI.
+\texttt{HTTP~410 Gone} under a server-side flag, verifiable by any caller
+able to reach the pilot API, confirming that collection closure is enforced
+at the API layer, not only at the UI.
 
 This pilot demonstrates that privacy-preserving session-integrity evidence is
 structurally achievable alongside a real student-society voting event, without

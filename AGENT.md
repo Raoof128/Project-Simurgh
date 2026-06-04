@@ -2,6 +2,25 @@
 
 ## Agent Change Log
 
+### 2026-06-04 (Australia/Sydney) — Voting pilot paper: external audit fixes — submission-ready v2
+
+**Raouf:**
+
+- **Scope:** Address all remaining issues from external audit review. PDF sanity confirmed first.
+- **PDF sanity check:** `pdftotext` confirmed: Hastings/Peralta/Popoveniuc/Regenscheid present, Nov. 2023 present, "Runyan" absent, "verify publication year" absent. Single correct PDF on disk.
+- **Fixes applied:**
+  1. **Title updated** — "Student-Society Voting" → "Student-Society Voting-Adjacent Workflows" to prevent election-security reviewer expectation.
+  2. **`placeins` package** added (`\usepackage[section]{placeins}`). `\FloatBarrier` added before §V Results and §VI Discussion — prevents tables drifting across section boundaries.
+  3. **"Any caller" precision** — All 3 instances (abstract, §VI.A, conclusion) updated to "any caller able to reach the pilot API" to avoid implying unauthenticated scanning.
+  4. **HREC scope sentence** added to §IV.C Governance: "This paper does not claim formal institutional human-research ethics approval; it reports a society-approved internal pilot with aggregate technical outcomes only."
+  5. **Author block** — NOT changed. Full name and MQ email required from Raouf before submission. Current: "Raouf / MQ Persian Society / Macquarie University / Sydney, Australia". Flag: update to full academic name + institutional email before submitting to any venue.
+- **Build:** 4 pages, 122 KB, 0 Overfull, 0 warnings, 0 undefined references.
+- **Full scorecard:** em dashes 0, British spellings 0, verify notes 0, FloatBarrier 2, HREC sentence 1, title updated 1, PDF references correct.
+- **Files changed:** `main.tex`, `main.pdf`, `AGENT.md`, `CHANGELOG.md`.
+- **Remaining pre-submission action:** Author block — Raouf must supply full academic name and institutional email.
+
+---
+
 ### 2026-06-04 (Australia/Sydney) — Voting pilot paper: final full audit pass — submission-ready
 
 **Raouf:**

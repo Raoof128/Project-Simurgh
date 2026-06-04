@@ -1,5 +1,11 @@
 ## Change Log
 
+## [voting-pilot-paper-external-audit-fixes] — 2026-06-04 — External audit fixes — submission-ready v2
+
+**Raouf:** PDF sanity confirmed (Hastings/Nov. 2023, no Runyan, no TODO). Applied 4 external-audit fixes: title → "Voting-Adjacent Workflows", placeins + FloatBarrier (×2) for float containment, "any caller" → "any caller able to reach the pilot API" (×3), HREC scope sentence added to §IV.C. Author block flagged for update (full name + MQ email needed before submission). Build: 4 pages, 122 KB, 0 Overfull, 0 warnings.
+
+---
+
 ## [voting-pilot-paper-final-audit] — 2026-06-04 — Paper final full audit — submission-ready
 
 **Raouf:** Final systematic audit. One issue found: "artefacts" (British) → "artifacts" (American English, IEEE). Surrounding passive converted to active. Full scorecard: em dashes 0, British spellings 0, Overfull 0, undefined citations 0, TODO notes 0, NIST authors correct, NSWEC Nov. 2023. Build: 4 pages, 121 KB, 0 warnings. Status: submission-ready.
