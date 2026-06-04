@@ -2,6 +2,21 @@
 
 ## Agent Change Log
 
+### 2026-06-04 (Australia/Sydney) — Voting pilot Phase C results pack + paper scaffold
+
+**Raouf:**
+
+- **Scope:** Create Phase C results analysis documents and paper scaffold for the results analysis + paper draft phase.
+- **Files created:**
+  - `docs/research/mq-voting-pilot/results/PHASE_C_RESULTS_ANALYSIS.md` — full results analysis: dataset summary, privacy envelope, integrity flow, safety gates, claims/non-claims, paper-safe headline finding, reviewer-safe wording guide.
+  - `docs/research/mq-voting-pilot/results/PHASE_C_RESULTS_TABLES.md` — five numbered tables ready for paper inclusion (session counts, privacy assertions, integrity flow, safety gates, endpoint closure map).
+  - `docs/research/mq-voting-pilot/results/PAPER_FINDINGS_SUMMARY.md` — paper title, abstract summary, headline finding, key findings by section, wording guide, suggested paper structure, non-claims checklist.
+  - `papers/simurgh-voting-pilot/main.tex` — IEEE-format LaTeX paper scaffold: title, abstract, introduction with scope note, related work (TODOs), system design (consent, ballot-field exclusion, HMAC chain, closure), Phase C pilot, results (4 tables), discussion (findings, limitations, non-claims), conclusion.
+  - `papers/simurgh-voting-pilot/references.bib` — initial BibTeX entries (Simurgh repo, Helios, Dwork 2014).
+- **Non-claims preserved throughout:** research prototype only; voting-adjacent case study, not election security; no automatic misconduct finding; official vote determined by society's own system.
+
+---
+
 ### 2026-06-04 (Australia/Sydney) — Voting pilot Phase C tag + closeout doc final update
 
 **Raouf:**

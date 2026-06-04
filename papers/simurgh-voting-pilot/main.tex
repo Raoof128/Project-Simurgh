@@ -1,0 +1,321 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{url}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  citecolor=black,
+  urlcolor=black
+}
+
+\begin{document}
+
+\title{Privacy-Preserving Integrity Proofs for Student-Society Voting:\\
+A Phase C Pilot of Project Simurgh at Macquarie University%
+\thanks{A voting-adjacent case study, not a production election-security claim.
+Research prototype only. No production deployment. Source:
+\url{https://github.com/Raoof128/Project-Simurgh}.
+Tag: \texttt{v0.5.0-voting-pilot-phase-c-closeout}.}}
+
+\author{
+  \IEEEauthorblockN{Raouf}
+  \IEEEauthorblockA{
+    \textit{MQ Persian Society}\\
+    Macquarie University\\
+    Sydney, Australia
+  }
+}
+
+\maketitle
+
+%% ── ABSTRACT ──────────────────────────────────────────────────────────────
+\begin{abstract}
+Project Simurgh provides session-level integrity evidence for high-stakes
+digital interactions. This paper reports a Phase~C consented shadow-mode pilot
+conducted alongside a real MQ Persian Society event preference poll. Thirty
+sessions completed the full consent-to-submit flow. In all 30 sessions,
+Simurgh collected no ballot choices, screen recordings, webcam or audio data,
+typed content, pasted content, or personal device identifiers. One additional
+consented session was withdrawn and excluded from analysis. After data
+collection closed, all write endpoints were enforced server-side with HTTP~410
+\texttt{Gone} responses, demonstrating a reproducible collection-closure
+posture. The pilot demonstrates that privacy-preserving voting-session
+integrity evidence is achievable without observing or influencing the official
+vote.
+\end{abstract}
+
+\begin{IEEEkeywords}
+privacy-preserving integrity, shadow-mode pilot, student-society voting,
+HMAC audit chain, consent-based telemetry, collection closure
+\end{IEEEkeywords}
+
+%% ── I. INTRODUCTION ───────────────────────────────────────────────────────
+\section{Introduction}
+
+Student-society governance increasingly relies on digital voting tools. While
+these tools simplify logistics, they introduce questions about session
+integrity: can a participant verify that their session was conducted fairly
+without revealing who they voted for?
+
+Project Simurgh is a research prototype designed to answer this question in
+the context of high-stakes digital interactions such as online examinations
+\cite{simurgh2026}. This paper reports a Phase~C pilot in which Simurgh was
+deployed alongside a real MQ Persian Society event preference poll in shadow
+mode. Shadow mode means Simurgh ran in parallel with the official voting
+system, collected only session-level integrity metadata, and had no effect on
+the official election result.
+
+The pilot had three goals:
+\begin{enumerate}
+  \item Verify that the consent-to-submit flow completes without collecting
+    ballot choices or privacy-sensitive data.
+  \item Demonstrate that an HMAC audit chain correctly records session
+    lifecycle events.
+  \item Show that server-side collection closure is enforceable and
+    verifiable after the target dataset is reached.
+\end{enumerate}
+
+\textbf{Important scope note.} This paper does not claim to be a study of
+election security, voting-system integrity, or electoral fraud prevention.
+It is a voting-\emph{adjacent} case study of a privacy-preserving integrity
+prototype. The official election result was determined entirely by the
+society's own voting system.
+
+%% ── II. RELATED WORK ──────────────────────────────────────────────────────
+\section{Related Work}
+
+\subsection{Privacy-preserving audit systems}
+
+TODO: cite verifiable shuffle, mix-net, end-to-end verifiable voting
+(Helios~\cite{adida2008helios}, Civitas, STAR-Vote). Distinguish: those
+systems aim to verify the \emph{outcome} of an election; Simurgh aims to
+verify the \emph{session integrity} of a participant without revealing their
+choice.
+
+\subsection{Consent-based telemetry}
+
+TODO: cite privacy-preserving telemetry literature. Simurgh's ballot-field
+exclusion architecture is structurally related to differential privacy and
+data minimisation principles \cite{dwork2014algorithmic}.
+
+\subsection{Integrity proofs for digital interactions}
+
+TODO: cite online exam integrity literature. Simurgh's HMAC chain approach
+extends prior work on tamper-evident logs.
+
+%% ── III. SYSTEM DESIGN ────────────────────────────────────────────────────
+\section{System Design}
+
+\subsection{Consent flow}
+
+Participants accessed a consent page that explained what Simurgh collects
+(session timestamps, focus-loss and paste counts, audit-chain validity signal,
+and an anonymous HMAC-hashed session code) and what it explicitly never
+collects (ballot choice, screen recordings, webcam/audio, microphone audio,
+typed text, clipboard content, raw process names, window titles, and device
+serial identifiers). Participation was voluntary; declining produced no
+consequence.
+
+On consent, the server issued an anonymous participant code and a session
+token. No personally identifying information was collected at any step.
+
+\subsection{Ballot-field exclusion}
+
+The submit page discarded all radio button values in the browser before the
+\texttt{fetch} call, ensuring the ballot field was structurally absent from
+the request body. A second layer of protection was provided server-side: the
+\texttt{FORBIDDEN\_BALLOT\_FIELDS} set caused any submission body containing
+a known ballot-choice key to be rejected with \texttt{HTTP 400}, with no
+echo of the field value.
+
+\subsection{HMAC audit chain}
+
+Each session maintained an append-only HMAC audit chain recording lifecycle
+events: \texttt{STARTED}, \texttt{SUBMITTED}, and optionally
+\texttt{WITHDRAWN} or \texttt{REPORT\_EXPORTED}. The chain was initialised
+on consent and verified on report export.
+
+\subsection{Collection-closure posture}
+
+After the target dataset was reached, the environment variable
+\texttt{SIMURGH\_VOTING\_PILOT\_COLLECTION\_CLOSED=true} was set. With this
+flag active:
+\begin{itemize}
+  \item \texttt{POST /api/voting-pilot/consent/accept} returns \texttt{410 Gone}.
+  \item \texttt{POST /api/voting-pilot/submit} returns \texttt{410 Gone}.
+  \item \texttt{POST /api/voting-pilot/withdraw} returns \texttt{410 Gone}.
+  \item \texttt{GET /api/voting-pilot/:id/report} remains available,
+    token-protected.
+\end{itemize}
+The closure is enforced before authentication middleware on write routes and
+cannot be bypassed with a valid session token.
+
+%% ── IV. PHASE C PILOT ─────────────────────────────────────────────────────
+\section{Phase C Pilot}
+
+\subsection{Study design}
+
+The pilot ran in shadow mode alongside the MQ Persian Society 2026 event
+preference poll. Participants were members of the society. Participation was
+voluntary and governed by the Phase~C participant notice and data management
+addendum approved by the society executive on 2026-06-04.
+
+\subsection{Data management}
+
+Session data was held in an in-memory store. No data was persisted to disk.
+The store was cleared on server restart. Withdrawn sessions were excluded from
+report export. The withdrawn session (\texttt{vp\_4fcc741a}) was confirmed
+blocked at the report endpoint with \texttt{HTTP 403}.
+
+%% ── V. RESULTS ────────────────────────────────────────────────────────────
+\section{Results}
+
+\subsection{Dataset}
+
+\begin{table}[h]
+  \caption{Session Counts}
+  \centering
+  \begin{tabular}{lr}
+    \toprule
+    Metric & Count \\
+    \midrule
+    Consented pilot sessions & 31 \\
+    Submitted sessions (primary analysis) & 30 \\
+    Withdrawn sessions & 1 \\
+    Official vote impact & 0 \\
+    Ballot choices collected by Simurgh & 0 \\
+    \bottomrule
+  \end{tabular}
+  \label{tab:sessions}
+\end{table}
+
+\subsection{Privacy assertions}
+
+\begin{table}[h]
+  \caption{Privacy Assertions — All 30 Submitted Sessions}
+  \centering
+  \begin{tabular}{ll}
+    \toprule
+    Assertion & Result \\
+    \midrule
+    \texttt{ballot\_choice\_recorded\_by\_simurgh} & \texttt{false} \\
+    Ballot choice transmitted to server & No \\
+    Screen capture & No \\
+    Webcam / audio & No \\
+    Typed content & No \\
+    Pasted content & No \\
+    Personal device identifiers & No \\
+    Raw process names & No \\
+    Raw window titles & No \\
+    \texttt{official\_vote\_impact} & \texttt{false} \\
+    Privacy audit (\texttt{tools/privacy-audit.mjs}) & PASS \\
+    \bottomrule
+  \end{tabular}
+  \label{tab:privacy}
+\end{table}
+
+\subsection{Integrity flow}
+
+All 30 submitted sessions completed the consent-to-submit flow. The HMAC
+audit chain recorded \texttt{STARTED} on consent and \texttt{SUBMITTED} on
+submit for each session. The withdrawn session's audit chain recorded
+\texttt{WITHDRAWN} and its report endpoint returned \texttt{HTTP 403},
+confirming exclusion from analysis.
+
+\subsection{Safety gates}
+
+\begin{table}[h]
+  \caption{Safety Gates at Closeout}
+  \centering
+  \begin{tabular}{ll}
+    \toprule
+    Gate & Result \\
+    \midrule
+    Node tests (\texttt{npm test}) & 359/359 pass \\
+    npm audit (\texttt{--audit-level=high}) & 0 high/critical \\
+    Privacy audit & PASS (52 files) \\
+    \texttt{smoke-voting-pilot.sh} & 8/8 pass \\
+    \texttt{security-audit-voting-pilot.sh} & 10/10 pass \\
+    \texttt{smoke-voting-pilot-closed.sh} & 5/5 pass \\
+    \bottomrule
+  \end{tabular}
+  \label{tab:gates}
+\end{table}
+
+\subsection{Collection closure}
+
+After the 30-session target was reached, all write endpoints returned
+\texttt{HTTP 410 Gone}. The collection-closure smoke suite (\texttt{5/5} gates
+pass) confirmed that consent/accept, submit, and withdraw are unreachable
+under the closed configuration, while report export remains available.
+
+%% ── VI. DISCUSSION ────────────────────────────────────────────────────────
+\section{Discussion}
+
+\subsection{What the results show}
+
+The pilot demonstrates that a consent-based shadow-mode integrity prototype
+can operate alongside a real student-society voting event without collecting
+ballot choices or any other privacy-sensitive information. The privacy
+assertions in Table~\ref{tab:privacy} are enforced by system design — the
+ballot field is structurally absent from the server request body in every
+session — not solely by policy or participant compliance.
+
+The server-side collection-closure mechanism provides a reproducible and
+auditable end-of-collection posture. Closure is verifiable by any party with
+network access to the server and is enforced independently of the client UI.
+
+\subsection{Limitations}
+
+\begin{itemize}
+  \item The 30-session dataset is a proof-of-concept pilot. No statistical
+    power calculation was performed; generalisation of results to other
+    contexts should be treated cautiously.
+  \item Sessions were anonymous. No demographic or behavioural analysis of
+    participants is possible or intended.
+  \item The pilot ran in shadow mode only. No claim is made about the
+    behaviour of Simurgh in a non-shadow deployment.
+  \item The in-memory session store means session data did not survive server
+    restarts. This is appropriate for a research prototype but is not a
+    production data-management posture.
+\end{itemize}
+
+\subsection{Non-claims}
+
+This pilot does not claim to:
+\begin{itemize}
+  \item Secure or audit the official MQ Persian Society election result.
+  \item Detect or prevent election fraud.
+  \item Provide hardware-rooted attestation.
+  \item Replace or improve the society's own voting system.
+  \item Generalise to national, governmental, or binding elections.
+\end{itemize}
+
+%% ── VII. CONCLUSION ───────────────────────────────────────────────────────
+\section{Conclusion}
+
+In a 30-session study pilot, Project Simurgh provided privacy-preserving
+voting-session integrity evidence without collecting ballot choices, screen
+recordings, webcam/audio, typed content, pasted content, or personal device
+identifiers. One additional consented session was withdrawn and excluded from
+analysis. After collection, all write endpoints were closed server-side with
+HTTP~410 responses.
+
+The Phase~C pilot establishes a clean research baseline
+(\texttt{v0.5.0-voting-pilot-phase-c-closeout}) for future work on
+privacy-preserving integrity proofs in voting-adjacent contexts.
+
+%% ── REFERENCES ────────────────────────────────────────────────────────────
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}

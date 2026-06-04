@@ -1,5 +1,19 @@
 ## Change Log
 
+## [voting-pilot-phase-c-results-pack] — 2026-06-04 — Phase C results pack + paper scaffold
+
+**Raouf:** Created Phase C results analysis documents and IEEE-format LaTeX paper scaffold. Three analysis docs (results analysis, results tables, paper findings summary) plus `papers/simurgh-voting-pilot/main.tex` and `references.bib`. All non-claims preserved; wording guide included to prevent reviewer-hostile overclaims.
+
+### Added
+
+- `docs/research/mq-voting-pilot/results/PHASE_C_RESULTS_ANALYSIS.md`
+- `docs/research/mq-voting-pilot/results/PHASE_C_RESULTS_TABLES.md`
+- `docs/research/mq-voting-pilot/results/PAPER_FINDINGS_SUMMARY.md`
+- `papers/simurgh-voting-pilot/main.tex`
+- `papers/simurgh-voting-pilot/references.bib`
+
+---
+
 ## [v0.5.0-voting-pilot-phase-c-closeout] — 2026-06-04 — Phase C tag + closeout doc final update
 
 **Raouf:** Tagged `v0.5.0-voting-pilot-phase-c-closeout` on `main`. Updated `PHASE_C_MEMBER_PILOT_CLOSEOUT.md` with server-side closure endpoint table, tag reference, and final paper-safe summary paragraph.
