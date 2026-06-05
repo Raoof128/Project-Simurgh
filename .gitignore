@@ -49,3 +49,15 @@ tools/simurgh-daemon-windows/**/obj/
 # tmp
 .tmp/
 *.tmp
+
+# LaTeX build artifacts
+*.aux
+*.blg
+*.fdb_latexmk
+*.fls
+*.out
+*.synctex.gz
+*.toc
+*.lof
+*.lot
+*.bbl
