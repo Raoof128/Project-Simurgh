@@ -10,7 +10,6 @@ _Detecting UI-redressing and behavioral spoofing without relying on screen captu
 
 [![Stage 1 Checks](https://github.com/Raoof128/Project-Simurgh/actions/workflows/stage-1-checks.yml/badge.svg?branch=main)](https://github.com/Raoof128/Project-Simurgh/actions/workflows/stage-1-checks.yml)
 [![DOI](https://zenodo.org/badge/1227737305.svg)](https://doi.org/10.5281/zenodo.20195198)
-[![Project Simurgh Preprint](https://zenodo.org/badge/DOI/10.5281/zenodo.20374849.svg)](https://doi.org/10.5281/zenodo.20374849)
 [![Node](https://img.shields.io/badge/node-%E2%89%A522.0-1a1a1a?style=flat-square)](https://nodejs.org)
 [![AI Narrative](https://img.shields.io/badge/AI%20narrative-optional-6b1a1a?style=flat-square)](#2-the-simurgh-engine)
 [![License](https://img.shields.io/badge/license-MIT-d6cfbe?style=flat-square)](#13-status-license)
@@ -24,13 +23,39 @@ _Detecting UI-redressing and behavioral spoofing without relying on screen captu
 
 </div>
 
-## Research Paper
+## Research Papers
 
-Project Simurgh preprint v1.0 is available on Zenodo: **[https://doi.org/10.5281/zenodo.20374849](https://doi.org/10.5281/zenodo.20374849)**
+Two Zenodo preprints document Project Simurgh's architecture and its first real-world deployment. The repository DOI above (`10.5281/zenodo.20195198`) archives the software; the paper DOIs below are separate records.
 
-> Abedini, M. R. (2026). _Project Simurgh: Privacy-Preserving Device Integrity Proofs for Capture-Resistant High-Stakes Sessions_ (v1.0). Zenodo. https://doi.org/10.5281/zenodo.20374849
+---
 
-The paper presents the threat model, architecture, proof protocol, privacy contract, platform implementations (macOS, Windows, Linux), evaluation results (383 automated tests, real-device Windows validation), limitations, and ethical deployment boundaries. It is a companion to the Invisible Window disclosure paper ([10.5281/zenodo.20319832](https://doi.org/10.5281/zenodo.20319832)).
+### Architecture Paper
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20374849.svg)](https://doi.org/10.5281/zenodo.20374849)
+
+**Project Simurgh: Privacy-Preserving Device Integrity Proofs for Capture-Resistant High-Stakes Sessions**
+
+> Abedini, M. R. (2026). Zenodo. <https://doi.org/10.5281/zenodo.20374849>
+
+Presents the full threat model, system architecture, cryptographic audit-chain design, privacy contract, cross-platform device-integrity implementations (macOS, Windows, Linux), evaluation results, limitations, and ethical deployment boundaries. Companion to the Invisible Window disclosure paper ([10.5281/zenodo.20319832](https://doi.org/10.5281/zenodo.20319832)).
+
+Source: [`Papers/project-simurgh/`](Papers/project-simurgh/)
+
+---
+
+### Voting-Adjacent Pilot Paper
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20549736.svg)](https://doi.org/10.5281/zenodo.20549736)
+
+**Privacy-Preserving Integrity Evidence for Student-Society Voting-Adjacent Workflows: A Phase C Pilot of Project Simurgh at Macquarie University**
+
+> Abedini, M. R. (2026). Zenodo. <https://doi.org/10.5281/zenodo.20549736>
+
+A companion case study reporting a 31-session (30 submitted, 1 withdrawn) Phase C shadow-mode pilot alongside a real student-society voting event at Macquarie University. Demonstrates that structural ballot-field exclusion, an HMAC-SHA-256 audit chain, and a collection-closure posture together produce verifiable evidence of what the system collected and what it did not, in a voting-adjacent context. All 359/359 automated tests, 8/8 smoke gates, 10/10 security-audit gates, and 5/5 closure gates passed at closeout. Archived at tag `v0.5.0-voting-pilot-phase-c-closeout`.
+
+Source: [`Papers/simurgh-voting-pilot/`](Papers/simurgh-voting-pilot/)
+
+---
 
 ---
 
@@ -779,6 +804,6 @@ Project Simurgh is designed to support two parallel delivery modes per platform 
 
 ## 13. Status & License
 
-**Status:** Research prototype and technical demonstrator at `v0.4.18`. Stage 1–2.5 closed the macOS Device Shield loop (metadata-only affinity scanning, signed proofs, HMAC audit chain). Stage 2.6/2.7 added the Windows Device Shield (real-device validated on Windows 10 Pro build 19045) and cross-platform unification. Stage 2.8 added the Linux Display Integrity Research path (X11, Wayland portal probe, XWayland, display-server lock, Ubuntu CI). The companion research paper is published as a Zenodo preprint ([10.5281/zenodo.20374849](https://doi.org/10.5281/zenodo.20374849)). Automated validation covers 331 Node.js tests, 33 Rust tests, 11 Windows .NET tests, and 8 macOS Swift tests (383 total). Not deployed in production. Hardware attestation, notarisation, MDM deployment, and institutional pilot remain future work.
+**Status:** Research prototype and technical demonstrator at `v0.4.18`. Stage 1–2.5 closed the macOS Device Shield loop (metadata-only affinity scanning, signed proofs, HMAC audit chain). Stage 2.6/2.7 added the Windows Device Shield (real-device validated on Windows 10 Pro build 19045) and cross-platform unification. Stage 2.8 added the Linux Display Integrity Research path (X11, Wayland portal probe, XWayland, display-server lock, Ubuntu CI). Two companion research papers are published as Zenodo preprints: the architecture paper ([10.5281/zenodo.20374849](https://doi.org/10.5281/zenodo.20374849)) and the voting-adjacent pilot paper ([10.5281/zenodo.20549736](https://doi.org/10.5281/zenodo.20549736)). See the [Research Papers](#research-papers) section for full citations and source links. Automated validation covers 331 Node.js tests, 33 Rust tests, 11 Windows .NET tests, and 8 macOS Swift tests (383 total). Not deployed in production. Hardware attestation, notarisation, MDM deployment, and institutional pilot remain future work.
 
 **License:** MIT © 2026 Raouf Abedini
