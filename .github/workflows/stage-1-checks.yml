@@ -89,7 +89,9 @@ jobs:
       - name: Rust tests (Linux daemon) — Xvfb mandatory
         env:
           SIMURGH_REQUIRE_XVFB_TESTS: "1"
-        run: cargo test --manifest-path tools/simurgh-daemon-linux/Cargo.toml
+        # --test-threads=1: DISPLAY is process-global; serial execution prevents
+        # mutex poisoning if one Xvfb display takes >500 ms to bind on cold CI.
+        run: cargo test --manifest-path tools/simurgh-daemon-linux/Cargo.toml -- --test-threads=1
 
       - name: Run Stage 1 check suite
         run: ./scripts/check.sh

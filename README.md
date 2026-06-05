@@ -9,7 +9,7 @@
 _Detecting UI-redressing and behavioral spoofing without relying on screen capture._
 
 [![Stage 1 Checks](https://github.com/Raoof128/Project-Simurgh/actions/workflows/stage-1-checks.yml/badge.svg?branch=main)](https://github.com/Raoof128/Project-Simurgh/actions/workflows/stage-1-checks.yml)
-[![DOI](https://zenodo.org/badge/1227737305.svg)](https://doi.org/10.5281/zenodo.20195198)
+[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20195198-blue?style=flat-square)](https://doi.org/10.5281/zenodo.20195198)
 [![Node](https://img.shields.io/badge/node-%E2%89%A522.0-1a1a1a?style=flat-square)](https://nodejs.org)
 [![AI Narrative](https://img.shields.io/badge/AI%20narrative-optional-6b1a1a?style=flat-square)](#2-the-simurgh-engine)
 [![License](https://img.shields.io/badge/license-MIT-d6cfbe?style=flat-square)](#13-status-license)
@@ -31,7 +31,7 @@ Two Zenodo preprints document Project Simurgh's architecture and its first real-
 
 ### Architecture Paper
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20374849.svg)](https://doi.org/10.5281/zenodo.20374849)
+[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20374849-blue?style=flat-square)](https://doi.org/10.5281/zenodo.20374849)
 
 **Project Simurgh: Privacy-Preserving Device Integrity Proofs for Capture-Resistant High-Stakes Sessions**
 
@@ -45,7 +45,7 @@ Source: [`Papers/project-simurgh/`](Papers/project-simurgh/)
 
 ### Voting-Adjacent Pilot Paper
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20549736.svg)](https://doi.org/10.5281/zenodo.20549736)
+[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20549736-blue?style=flat-square)](https://doi.org/10.5281/zenodo.20549736)
 
 **Privacy-Preserving Integrity Evidence for Student-Society Voting-Adjacent Workflows: A Phase C Pilot of Project Simurgh at Macquarie University**
 
