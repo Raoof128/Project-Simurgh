@@ -21,6 +21,24 @@
 \providecommand{\BIBdecl}{\relax}
 \BIBdecl
 
+\bibitem{simurgh2026}
+M.~R. Abedini, ``Project simurgh: Privacy-preserving device integrity proofs
+  for capture-resistant high-stakes sessions,'' Zenodo preprint, 2026,
+  \url{https://doi.org/10.5281/zenodo.20374849}. Source:
+  \url{https://github.com/Raoof128/Project-Simurgh}.
+
+\bibitem{abedini2026votingpilot}
+------, ``Privacy-preserving integrity evidence for student-society
+  voting-adjacent workflows: {A} phase~{C} pilot of {Project Simurgh} at
+  {Macquarie University},'' Zenodo preprint, 2026,
+  \url{https://doi.org/10.5281/zenodo.20549736}. Tag:
+  v0.5.0-voting-pilot-phase-c-closeout.
+
+\bibitem{rfc2104}
+H.~Krawczyk, M.~Bellare, and R.~Canetti, ``{HMAC}: Keyed-hashing for message
+  authentication,'' Internet Engineering Task Force, RFC 2104, Feb. 1997,
+  \url{https://www.rfc-editor.org/rfc/rfc2104}.
+
 \bibitem{adida2008helios}
 B.~Adida, ``{Helios}: {Web}-based open-audit voting,'' in \emph{Proceedings of
   the 17th USENIX Security Symposium}.\hskip 1em plus 0.5em minus 0.4em\relax
@@ -31,15 +49,9 @@ M.~R. Clarkson, S.~Chong, and A.~C. Myers, ``Civitas: Toward a secure voting
   system,'' in \emph{Proceedings of the 2008 IEEE Symposium on Security and
   Privacy}.\hskip 1em plus 0.5em minus 0.4em\relax IEEE, 2008, pp. 354--368.
 
-\bibitem{simurgh2026}
-M.~R. Abedini, ``Project simurgh: Privacy-preserving integrity proofs for
-  high-stakes digital interactions,''
-  \url{https://github.com/Raoof128/Project-Simurgh}, 2026, tag:
-  v0.5.0-voting-pilot-phase-c-closeout.
-
 \bibitem{abedini2026invisible}
-------, ``The invisible window: Exploiting {OS}-level display affinity to
-  bypass {WebRTC} proctoring systems,'' 2026, preprint.
+M.~R. Abedini, ``The invisible window: Exploiting {OS}-level display affinity
+  to bypass {WebRTC} proctoring systems,'' Preprint, 2026,
   \url{https://zenodo.org/records/20376495}.
 
 \bibitem{bell2013starvote}
@@ -68,21 +80,21 @@ N.~Hastings, R.~Peralta, S.~Popoveniuc, and A.~Regenscheid, ``Security
   2021, adopted February 2021.
 
 \bibitem{nswec2023tav}
-\BIBentryALTinterwordspacing
 {NSW Electoral Commission}, ``Technology assisted voting: Final review
-  report,'' NSW Electoral Commission, Tech. Rep., Nov. 2023. [Online].
-  Available:
+  report,'' NSW Electoral Commission, Tech. Rep., Nov. 2023,
   \url{https://elections.nsw.gov.au/technology-assisted-voting-review/review-papers}
-\BIBentrySTDinterwordspacing
-
-\bibitem{dwork2014algorithmic}
-C.~Dwork and A.~Roth, \emph{The Algorithmic Foundations of Differential
-  Privacy}, ser. Foundations and Trends in Theoretical Computer Science.\hskip
-  1em plus 0.5em minus 0.4em\relax Now Publishers, 2014, vol.~9, no. 3--4.
+  (archived:
+  \url{https://web.archive.org/web/2024/https://elections.nsw.gov.au/technology-assisted-voting-review/review-papers}).
 
 \bibitem{cavoukian2009privacy}
 A.~Cavoukian, ``Privacy by design: The 7 foundational principles,'' Information
   and Privacy Commissioner of Ontario, Tech. Rep., 2009,
   \url{https://www.ipc.on.ca/wp-content/uploads/resources/7foundationalprinciples.pdf}.
+
+\bibitem{privacyact1988}
+{Australian Government}, ``Privacy act 1988 (cth),''
+  \url{https://www.legislation.gov.au/Series/C2004A03712}, 1988, compilation
+  current at time of access; Australian Privacy Principles (Schedule~1) govern
+  collection, use, and disclosure of personal information.
 
 \end{thebibliography}

@@ -1,20 +1,37 @@
 %% Project Simurgh — Voting Pilot Paper References
 
+%% Project Simurgh main architecture paper (companion to this paper)
 @misc{simurgh2026,
   author       = {Abedini, Mohammad Raouf},
-  title        = {Project Simurgh: Privacy-Preserving Integrity Proofs
-                  for High-Stakes Digital Interactions},
+  title        = {Project Simurgh: Privacy-Preserving Device Integrity
+                  Proofs for Capture-Resistant High-Stakes Sessions},
   year         = {2026},
-  howpublished = {\url{https://github.com/Raoof128/Project-Simurgh}},
-  note         = {Tag: v0.5.0-voting-pilot-phase-c-closeout},
+  howpublished = {Zenodo preprint},
+  doi          = {10.5281/zenodo.20374849},
+  note         = {\url{https://doi.org/10.5281/zenodo.20374849}.
+                  Source: \url{https://github.com/Raoof128/Project-Simurgh}},
 }
 
-@article{abedini2026invisible,
+%% This paper's own Zenodo record (for self-referencing and cross-citation)
+@misc{abedini2026votingpilot,
+  author       = {Abedini, Mohammad Raouf},
+  title        = {Privacy-Preserving Integrity Evidence for Student-Society
+                  Voting-Adjacent Workflows: {A} Phase~{C} Pilot of
+                  {Project Simurgh} at {Macquarie University}},
+  year         = {2026},
+  howpublished = {Zenodo preprint},
+  doi          = {10.5281/zenodo.20549736},
+  note         = {\url{https://doi.org/10.5281/zenodo.20549736}.
+                  Tag: v0.5.0-voting-pilot-phase-c-closeout},
+}
+
+@misc{abedini2026invisible,
   author       = {Abedini, Mohammad Raouf},
   title        = {The Invisible Window: Exploiting {OS}-Level Display
                   Affinity to Bypass {WebRTC} Proctoring Systems},
   year         = {2026},
-  note         = {Preprint. \url{https://zenodo.org/records/20376495}},
+  howpublished = {Preprint},
+  note         = {\url{https://zenodo.org/records/20376495}},
   doi          = {10.5281/zenodo.20376495},
 }
 
@@ -94,20 +111,11 @@
   institution = {NSW Electoral Commission},
   year        = {2023},
   month       = nov,
-  url         = {https://elections.nsw.gov.au/technology-assisted-voting-review/review-papers},
+  note        = {\url{https://elections.nsw.gov.au/technology-assisted-voting-review/review-papers}
+                 (archived: \url{https://web.archive.org/web/2024/https://elections.nsw.gov.au/technology-assisted-voting-review/review-papers})},
 }
 
 %% Privacy and data minimisation
-
-@book{dwork2014algorithmic,
-  author    = {Dwork, Cynthia and Roth, Aaron},
-  title     = {The Algorithmic Foundations of Differential Privacy},
-  publisher = {Now Publishers},
-  year      = {2014},
-  series    = {Foundations and Trends in Theoretical Computer Science},
-  volume    = {9},
-  number    = {3--4},
-}
 
 @techreport{cavoukian2009privacy,
   author      = {Cavoukian, Ann},
@@ -115,4 +123,30 @@
   institution = {Information and Privacy Commissioner of Ontario},
   year        = {2009},
   note        = {\url{https://www.ipc.on.ca/wp-content/uploads/resources/7foundationalprinciples.pdf}},
+}
+
+%% Cryptographic primitives
+
+@techreport{rfc2104,
+  author      = {Krawczyk, Hugo and Bellare, Mihir and Canetti, Ran},
+  title       = {{HMAC}: Keyed-Hashing for Message Authentication},
+  institution = {Internet Engineering Task Force},
+  type        = {RFC},
+  number      = {2104},
+  year        = {1997},
+  month       = feb,
+  doi         = {10.17487/RFC2104},
+  note        = {\url{https://www.rfc-editor.org/rfc/rfc2104}},
+}
+
+%% Australian privacy law
+
+@misc{privacyact1988,
+  author       = {{Australian Government}},
+  title        = {Privacy Act 1988 (Cth)},
+  year         = {1988},
+  howpublished = {\url{https://www.legislation.gov.au/Series/C2004A03712}},
+  note         = {Compilation current at time of access; Australian Privacy
+                  Principles (Schedule~1) govern collection, use, and disclosure
+                  of personal information},
 }
