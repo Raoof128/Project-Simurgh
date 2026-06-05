@@ -2,6 +2,20 @@
 
 ## Agent Change Log
 
+### 2026-06-05 (Australia/Sydney) — README paper source path casing fix
+
+**Raouf:**
+
+- **Scope:** Fix the two README "Source" links that were still broken on GitHub after the anchor repair pass.
+- **Root cause:** The paper source files are tracked under lower-case `papers/...`; README linked to upper-case `Papers/...`. Local macOS checks passed because the filesystem is case-insensitive, but GitHub is case-sensitive and returned 404 for both `/tree/main/Papers/...` URLs.
+- **Changes:**
+  1. `README.md` architecture paper source link now targets `papers/project-simurgh/`.
+  2. `README.md` voting-adjacent pilot paper source link now targets `papers/simurgh-voting-pilot/`.
+- **Verification:** Live pre-fix `curl -I -L` checks to both upper-case GitHub tree URLs returned 404; `git ls-tree -r --name-only HEAD | rg '^papers/'` confirms the lower-case source paths are tracked; `npx --yes markdown-link-check README.md` passes 57/57 links; `npx prettier --check README.md AGENT.md CHANGELOG.md` passes.
+- **Files changed:** `README.md`, `AGENT.md`, `CHANGELOG.md`.
+
+---
+
 ### 2026-06-05 (Australia/Sydney) — README link audit and anchor repair
 
 **Raouf:**

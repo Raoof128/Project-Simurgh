@@ -39,7 +39,7 @@ Two Zenodo preprints document Project Simurgh's architecture and its first real-
 
 Presents the full threat model, system architecture, cryptographic audit-chain design, privacy contract, cross-platform device-integrity implementations (macOS, Windows, Linux), evaluation results, limitations, and ethical deployment boundaries. Companion to the Invisible Window disclosure paper ([10.5281/zenodo.20319832](https://doi.org/10.5281/zenodo.20319832)).
 
-Source: [`Papers/project-simurgh/`](Papers/project-simurgh/)
+Source: [`papers/project-simurgh/`](papers/project-simurgh/)
 
 ---
 
@@ -53,7 +53,7 @@ Source: [`Papers/project-simurgh/`](Papers/project-simurgh/)
 
 A companion case study reporting a 31-session (30 submitted, 1 withdrawn) Phase C shadow-mode pilot alongside a real student-society voting event at Macquarie University. Demonstrates that structural ballot-field exclusion, an HMAC-SHA-256 audit chain, and a collection-closure posture together produce verifiable evidence of what the system collected and what it did not, in a voting-adjacent context. All 359/359 automated tests, 8/8 smoke gates, 10/10 security-audit gates, and 5/5 closure gates passed at closeout. Archived at tag `v0.5.0-voting-pilot-phase-c-closeout`.
 
-Source: [`Papers/simurgh-voting-pilot/`](Papers/simurgh-voting-pilot/)
+Source: [`papers/simurgh-voting-pilot/`](papers/simurgh-voting-pilot/)
 
 ---
 

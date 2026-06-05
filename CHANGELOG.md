@@ -1,5 +1,11 @@
 ## Change Log
 
+## [paper-source-links] — 2026-06-05 — Fix README paper source path casing
+
+**Raouf:** Fixed the two README "Source" links that were live-broken on GitHub: `Papers/project-simurgh/` and `Papers/simurgh-voting-pilot/`. Root cause: the paper source directories are tracked under lower-case `papers/...`, while the README used upper-case `Papers/...`; local macOS checks passed on a case-insensitive filesystem, but GitHub returned 404 because paths are case-sensitive. Updated the two README source links to `papers/project-simurgh/` and `papers/simurgh-voting-pilot/`. Verification: live pre-fix `curl -I -L` checks to the upper-case GitHub tree URLs returned 404; `git ls-tree -r --name-only HEAD | rg '^papers/'` confirms lower-case tracked source paths; `npx --yes markdown-link-check README.md` passes 57/57 links; `npx prettier --check README.md AGENT.md CHANGELOG.md` passes.
+
+---
+
 ## [readme-link-audit] — 2026-06-05 — README link audit and anchor repair
 
 **Raouf:** Audited all 57 Markdown links in `README.md` with `markdown-link-check`. Root cause: stale internal GitHub heading slugs after headings containing `&` and `2026 - 2028` changed. Fixed six README anchor hrefs: License badge, Status badge, Socio-Economic Impact TOC row, Cost & Latency TOC row, Strategic Roadmap TOC row, and Status & License TOC row. Verification: `npx --yes markdown-link-check README.md` passed (57/57 links); `npx prettier --check README.md` passed.
