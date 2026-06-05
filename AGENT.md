@@ -2,6 +2,21 @@
 
 ## Agent Change Log
 
+### 2026-06-05 (Australia/Sydney) — README link audit and anchor repair
+
+**Raouf:**
+
+- **Scope:** Full audit of Markdown links in `README.md`; repair confirmed broken internal anchors.
+- **Root cause:** README headings containing `&` and `2026 - 2028` generate GitHub-compatible double/triple-hyphen slugs, while the badges/table of contents still used older single-hyphen anchors.
+- **Audit result:** `markdown-link-check` found 4 initially broken anchors: `#13-status-license`, `#4-socio-economic-impact-democratic-access`, `#7-cost-latency`, and `#11-strategic-roadmap-2026-2028`.
+- **Changes:**
+  1. License and Status badges now target `#13-status--license`.
+  2. Table of contents rows now target `#4-socio-economic-impact--democratic-access`, `#7-cost--latency`, `#11-strategic-roadmap-2026---2028`, and `#13-status--license`.
+- **Verification:** `npx --yes markdown-link-check README.md` passed with 57/57 links; `npx prettier --check README.md` passed.
+- **Files changed:** `README.md`, `AGENT.md`, `CHANGELOG.md`.
+
+---
+
 ### 2026-06-04 (Australia/Sydney) — Voting pilot paper: author block + companion citation
 
 **Raouf:**
