@@ -1,0 +1,6 @@
+[PASS] consent/accept returns 410 before auth
+[PASS] submit returns 410 before auth
+[PASS] withdraw returns 410 before auth
+[PASS] closure response schema stable
+
+smoke-banking-pilot-closed: 4 passed, 0 failed

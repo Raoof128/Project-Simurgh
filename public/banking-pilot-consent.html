@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Banking Shield Phase A</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #18211f;
+        --muted: #52605c;
+        --line: #d9e1dd;
+        --panel: #f7faf8;
+        --accent: #0c6b58;
+        --danger: #8b2f2f;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family:
+          Inter,
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        color: var(--ink);
+        background: #ffffff;
+      }
+
+      main {
+        width: min(920px, calc(100vw - 32px));
+        margin: 0 auto;
+        padding: 48px 0;
+      }
+
+      h1 {
+        margin: 0 0 8px;
+        font-size: clamp(2rem, 4vw, 3.25rem);
+        line-height: 1.05;
+        letter-spacing: 0;
+      }
+
+      p {
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      section {
+        margin-top: 28px;
+        padding-top: 24px;
+        border-top: 1px solid var(--line);
+      }
+
+      ul {
+        padding-left: 1.2rem;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      button,
+      a.button {
+        display: inline-flex;
+        min-height: 44px;
+        align-items: center;
+        justify-content: center;
+        border: 0;
+        border-radius: 6px;
+        padding: 0 16px;
+        background: var(--accent);
+        color: #ffffff;
+        font: inherit;
+        font-weight: 700;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      button:disabled {
+        cursor: not-allowed;
+        opacity: 0.55;
+      }
+
+      output {
+        display: block;
+        min-height: 44px;
+        margin-top: 16px;
+        padding: 12px 14px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: var(--panel);
+        color: var(--muted);
+        white-space: pre-wrap;
+      }
+
+      .error {
+        border-color: #d7a9a9;
+        color: var(--danger);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Banking Shield Phase A</h1>
+        <p>
+          Synthetic banking-adjacent integrity demo for metadata-only consent and payment-intent
+          evidence.
+        </p>
+      </header>
+
+      <section aria-labelledby="scope-title">
+        <h2 id="scope-title">Synthetic Scope</h2>
+        <ul>
+          <li>
+            No bank connection, account access, payment processing, or real financial decision.
+          </li>
+          <li>
+            No credentials, OTPs, account identifiers, balances, payees, or transaction amounts.
+          </li>
+          <li>No screenshots, audio, app names, process names, or window titles.</li>
+          <li>Local deterministic risk policy is the official result.</li>
+        </ul>
+      </section>
+
+      <section aria-labelledby="start-title">
+        <h2 id="start-title">Start Session</h2>
+        <button id="accept" type="button">Accept Synthetic Consent</button>
+        <a id="continue" class="button" href="/banking-pilot-scenario.html" hidden>Continue</a>
+        <output id="status" aria-live="polite"></output>
+      </section>
+    </main>
+
+    <script>
+      const accept = document.querySelector("#accept");
+      const continueLink = document.querySelector("#continue");
+      const status = document.querySelector("#status");
+
+      accept.addEventListener("click", async () => {
+        accept.disabled = true;
+        status.className = "";
+        status.textContent = "Creating synthetic session...";
+        try {
+          const res = await fetch("/api/banking-pilot/consent/accept", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: "{}",
+          });
+          const body = await res.json();
+          if (!res.ok) throw new Error(body.error || "consent_failed");
+          sessionStorage.setItem("bankingPilotSessionId", body.banking_session_id);
+          sessionStorage.setItem("bankingPilotToken", body.token);
+          status.textContent = `Session ${body.banking_session_id} ready.`;
+          continueLink.hidden = false;
+        } catch (err) {
+          status.className = "error";
+          status.textContent = `Error: ${err.message}`;
+          accept.disabled = false;
+        }
+      });
+    </script>
+  </body>
+</html>

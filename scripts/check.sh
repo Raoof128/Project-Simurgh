@@ -204,6 +204,7 @@ if grep -RIEn "$FORBIDDEN_FIELDS_PATTERN" \
   | grep -v "src/integrity/proofValidator.js" \
   | grep -v "src/device/daemonProof.js" \
   | grep -v "src/device/forbiddenLocalFields.js" \
+  | grep -v "src/bankingPilot/forbiddenBankingFields.js" \
   | grep -v "tools/privacy-audit.mjs" \
   | grep -v "Permissions-Policy" \
   | grep -v "Content-Security-Policy" \
@@ -1319,6 +1320,55 @@ if scripts/smoke-voting-pilot-closed.sh > "$LOG_DIR/vp-closed-smoke.log" 2>&1; t
 else
   fail "Voting pilot collection-closure smoke"
   tail -40 "$LOG_DIR/vp-closed-smoke.log"
+fi
+
+# ── 10s. Banking Shield Phase A synthetic gates ──────────────────────────────
+step "Banking Shield Phase A unit/security tests"
+if node --test tests/unit/bankingPilot/*.test.js tests/security/banking_pilot_security_audit.test.js > "$LOG_DIR/banking-unit-security.log" 2>&1; then
+  pass "Banking Shield Phase A unit/security tests"
+else
+  fail "Banking Shield Phase A unit/security tests"
+  tail -80 "$LOG_DIR/banking-unit-security.log"
+fi
+
+step "Banking Shield Phase A smoke"
+if scripts/smoke-banking-pilot.sh > "$LOG_DIR/banking-smoke.log" 2>&1; then
+  pass "Banking Shield Phase A smoke"
+else
+  fail "Banking Shield Phase A smoke"
+  tail -80 "$LOG_DIR/banking-smoke.log"
+fi
+
+step "Banking Shield Phase A security audit"
+if scripts/security-audit-banking-pilot.sh > "$LOG_DIR/banking-security-audit.log" 2>&1; then
+  pass "Banking Shield Phase A security audit"
+else
+  fail "Banking Shield Phase A security audit"
+  tail -80 "$LOG_DIR/banking-security-audit.log"
+fi
+
+step "Banking Shield Phase A privacy audit"
+if node scripts/privacy-audit-banking-pilot.mjs > "$LOG_DIR/banking-privacy-audit.log" 2>&1; then
+  pass "Banking Shield Phase A privacy audit"
+else
+  fail "Banking Shield Phase A privacy audit"
+  tail -80 "$LOG_DIR/banking-privacy-audit.log"
+fi
+
+step "Banking Shield Phase A collection-closure smoke"
+if scripts/smoke-banking-pilot-closed.sh > "$LOG_DIR/banking-closed-smoke.log" 2>&1; then
+  pass "Banking Shield Phase A collection-closure smoke"
+else
+  fail "Banking Shield Phase A collection-closure smoke"
+  tail -80 "$LOG_DIR/banking-closed-smoke.log"
+fi
+
+step "Banking Shield Phase A full E2E smoke"
+if scripts/smoke-banking-pilot-full-e2e.sh > "$LOG_DIR/banking-full-e2e-smoke.log" 2>&1; then
+  pass "Banking Shield Phase A full E2E smoke"
+else
+  fail "Banking Shield Phase A full E2E smoke"
+  tail -100 "$LOG_DIR/banking-full-e2e-smoke.log"
 fi
 
 # ── 11. Git status sanity ────────────────────────────────

@@ -1,0 +1,47 @@
+privacy-audit-banking-pilot: PASS
+generated fixtures: 4
+attack values absent from generated evidence
+public demo pages use fictional banking labels only
+[PASS] public consent page loads
+[PASS] public scenario page loads
+[PASS] public report page loads
+[PASS] consent accept creates bp_ session id and scoped token
+[PASS] mock_cdr_consent submits with fresh session
+[PASS] mock_confirmation_of_payee submits with fresh session
+[PASS] remote_access_warning submits with fresh session
+[PASS] mock_payment_pause submits with fresh session
+[PASS] mock_ai_agent_finance_action submits with fresh session
+[PASS] one-session-one-submit rejects a second submit
+[PASS] unknown scenario_type rejected
+[PASS] unknown extra field rejected
+[PASS] weak consent_scope_hash rejected
+[PASS] pollution key __proto__ rejected
+[PASS] pollution key prototype rejected
+[PASS] pollution key constructor rejected
+[PASS] top-level account_number rejected
+[PASS] nested otp rejected
+[PASS] array-contained card_number rejected
+[PASS] transaction_amount rejected
+[PASS] payee_name rejected
+[PASS] payment_reference rejected
+[PASS] window_title rejected
+[PASS] process_name rejected
+[PASS] remote_app_name rejected
+[PASS] rejection responses never echo submitted sensitive values
+[PASS] rejected-attempt audit entries contain route, reason, and field name only
+[PASS] prior forbidden attempt escalates risk on later valid submit
+[PASS] over-deep payload rejected with payload_too_deep
+[PASS] report export works for submitted session
+[PASS] report privacy assertions are all false
+[PASS] /audit returns safe audit entries only
+[PASS] /verify returns valid audit-chain status
+[PASS] tampered audit fixture fails verification
+[PASS] token/session mismatch returns 403
+[PASS] withdrawn session report returns 403
+[PASS] withdrawn session keeps audit and verify exports for transparency
+[PASS] closure mode returns 410 before auth for write routes
+[PASS] read routes remain token-protected in closure mode
+[PASS] Sonnet sanitisation fixture contains metadata only with no forbidden field names or values
+[PASS] generated evidence fixtures contain no sensitive values
+
+smoke-banking-pilot-full-e2e: 41 passed, 0 failed

@@ -2,6 +2,41 @@
 
 ## Agent Change Log
 
+### 2026-06-11 (Australia/Sydney) — Banking Shield Phase A audit-fix hardening pass
+
+**Raouf:**
+
+- **Scope:** Full branch audit of `banking-shield-phase-a` followed by fixes for all six audit findings, extended E2E coverage, and a refreshed evidence pack. No push/PR yet.
+- **Fixes applied:**
+  1. **Rate limiting + session capacity cap** — `/api/banking-pilot` now carries per-IP fixed-window rate limits via the shared `createRateLimiter` (consent 60/min, writes 120/min, reads 240/min by default, env-overridable via `SIMURGH_BANKING_PILOT_{CONSENT,WRITE,READ}_RATE_MAX`), plus an in-memory session capacity cap (`SIMURGH_BANKING_PILOT_MAX_SESSIONS`, default 5000) returning 503 `banking_session_capacity_reached`. Closes the unbounded unauthenticated consent-session memory-growth vector flagged as a Phase B follow-up.
+  2. **Key domain separation** — the pepper no longer keys anything directly; participant-code hashing and audit-chain signing each use an HMAC-derived key with a distinct label (`banking-pilot-participant-code-v1`, `banking-pilot-audit-chain-v1`).
+  3. **Depth-cap error naming** — payloads nested beyond 20 levels now return 400 `payload_too_deep` instead of `forbidden_banking_field` with the internal `__max_depth__` sentinel, and no longer skew the `forbidden_fields_rejected` counter.
+  4. **Forbidden-attempt risk escalation wired live** — a session that had a forbidden-field attempt rejected and later submits a valid scenario now scores with `forbiddenPayloadAttempt`, adding the `forbidden_payload_attempt` risk category (+35).
+  5. **Deterministic misconfiguration response** — missing `SIMURGH_BANKING_PILOT_PEPPER`/`TOKEN_SECRET` now returns 503 `banking_pilot_not_configured` instead of a generic Express 500.
+  6. **Withdrawn-session transparency made explicit** — withdrawn sessions keep `/audit` and `/verify` exports (report stays 403); now asserted by unit test, E2E smoke, and the closeout doc. The dual deep-scan (router + scenario policy) is documented as intentional defense in depth.
+- **Files changed:** `src/bankingPilot/index.js`, `src/bankingPilot/forbiddenBankingFields.js`, `src/bankingPilot/bankingScenarioPolicy.js`, `src/bankingPilot/bankingSessionStore.js`, `tests/unit/bankingPilot/router.test.js`, `tests/unit/bankingPilot/bankingHardening.test.js` (new), `scripts/smoke-banking-pilot-full-e2e.sh`, `.env.example`, `docs/research/banking-pilot/BANKING_PILOT_PHASE_A_CLOSEOUT.md`, refreshed `docs/research/banking-pilot/evidence/phase-a-synthetic/*`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `npm test` 389/389 (was 384; +5 new hardening/escalation/transparency/depth tests); Banking unit/security 35/35 (was 30); `scripts/smoke-banking-pilot.sh` 14/14; `scripts/security-audit-banking-pilot.sh` 27/27; `node scripts/privacy-audit-banking-pilot.mjs` PASS; `scripts/smoke-banking-pilot-closed.sh` 4/4; `scripts/smoke-banking-pilot-full-e2e.sh` 41/41 (was 38; +3 gates: risk escalation, payload_too_deep, withdrawn audit/verify transparency) with output captured to the evidence pack; `npx prettier --check .` clean; `npm audit --audit-level=high` no high/critical (existing moderate `qs` advisories remain); `scripts/check.sh --quick` 20 passed / 1 failed, the single failure being the pre-existing local Linux Rust Xvfb prerequisite outside Banking Shield.
+- **Known local blockers:** unchanged — full `scripts/check.sh` still fails only on the two pre-existing local prerequisites outside Banking Shield (.NET SDK 7.0.307 vs `.NET 8.0` Windows daemon projects; local Linux Xvfb `xvfb_integration_tests.rs` `Connection refused`/`PoisonError` results).
+- **Follow-ups:** Phase B/C still require a separate approval pass and updated governance/participant material; the rate-limit hardening item is now implemented and only needs review sign-off.
+
+---
+
+### 2026-06-11 (Australia/Sydney) — Banking Shield Phase A synthetic demo
+
+**Raouf:**
+
+- **Scope:** Implement Stage B1 — Banking Shield Phase A Synthetic Demo as a synthetic-only banking-adjacent research wing with Phase B/C docs roadmap only.
+- **Summary:** Added `/api/banking-pilot` with synthetic consent, five metadata-only scenario submissions, one-session-one-submit semantics, HMAC audit/report/verify exports, closure-before-auth, strict scenario allowlists, recursive forbidden banking-field rejection, prototype-pollution key rejection, strict `consent_scope_hash`, banking-scoped HMAC tokens, local deterministic risk scoring, and default-off Sonnet runtime support with local sanitisation tests.
+- **Privacy posture:** No real bank integration, real CDR, real Confirmation of Payee, real payments, real accounts, real bank branding, or real banking data. Rejected-attempt audit entries store route, reason, and field name only. Reports emit all sensitive collection assertions as `false`.
+- **Docs/evidence:** Added Banking Shield protocol, threat model, data management, participant notice, non-claims, Phase A closeout, claim audit, and Phase A synthetic evidence pack with accepted report, rejected-attempt audit, Sonnet sanitised payload, closure response, and full E2E smoke fixtures.
+- **Files changed:** `.env.example`, `server.js`, `src/bankingPilot/**`, `public/banking-pilot-*.html`, `tests/unit/bankingPilot/**`, `tests/security/banking_pilot_security_audit.test.js`, `tests/e2e/banking_pilot_*_smoke.mjs`, `scripts/smoke-banking-pilot*.sh`, `scripts/security-audit-banking-pilot.sh`, `scripts/privacy-audit-banking-pilot.mjs`, `scripts/check.sh`, `docs/research/banking-pilot/**`, `docs/superpowers/specs/2026-06-11-banking-shield-phase-a-design.md`, `docs/superpowers/plans/2026-06-11-banking-shield-phase-a.md`.
+- **Adjacent harness fix:** `tests/unit/displayServerLockServerWiring.test.js` now uses a unique live-server port per boot to remove a local `ECONNREFUSED` race between two live-server tests.
+- **Verification:** `npm test` passed 384/384 tests; `npm audit --audit-level=high` passed with no high/critical findings while reporting existing moderate `qs` advisories; Banking unit/security tests passed 30/30; `scripts/smoke-banking-pilot.sh` passed 14/14; `scripts/security-audit-banking-pilot.sh` passed 27/27; `node scripts/privacy-audit-banking-pilot.mjs` PASS with 4 generated fixtures and attack values absent; `scripts/smoke-banking-pilot-closed.sh` passed 4/4; `scripts/smoke-banking-pilot-full-e2e.sh` passed 38/38 and captured `docs/research/banking-pilot/evidence/phase-a-synthetic/smoke-banking-pilot-full-e2e.txt`; `npx prettier --check .` passed; `scripts/check.sh --quick` passed the Banking gates but exited 1 on the existing local Linux Xvfb Rust integration step.
+- **Known local blockers:** Fresh full `scripts/check.sh` passed the Banking Shield Phase A unit/security, smoke, security audit, privacy audit, closure smoke, and full E2E smoke gates, then summarized 68 passed and 2 failed steps. The failed steps remain local prerequisites outside Banking Shield: installed .NET SDK 7.0.307 cannot target the Windows daemon `.NET 8.0` projects, and local Linux Xvfb integration tests fail in `xvfb_integration_tests.rs` with `Connection refused`/`PoisonError` results.
+- **Follow-ups:** Before Phase B or Phase C, require a separate approval pass, updated governance/participant material, and rate-limit hardening review.
+
+---
+
 ### 2026-06-05 (Australia/Sydney) — README paper source path casing fix
 
 **Raouf:**

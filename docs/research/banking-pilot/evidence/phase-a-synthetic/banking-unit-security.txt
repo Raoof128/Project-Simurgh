@@ -1,0 +1,248 @@
+TAP version 13
+# Subtest: security audit: forbidden banking fields are detected recursively
+ok 1 - security audit: forbidden banking fields are detected recursively
+  ---
+  duration_ms: 1.033625
+  type: 'test'
+  ...
+# Subtest: security audit: rejected attempt audit payload stores field name only
+ok 2 - security audit: rejected attempt audit payload stores field name only
+  ---
+  duration_ms: 0.794708
+  type: 'test'
+  ...
+# Subtest: security audit: invalid scenario and privacy assertion are rejected
+ok 3 - security audit: invalid scenario and privacy assertion are rejected
+  ---
+  duration_ms: 0.485375
+  type: 'test'
+  ...
+# Subtest: security audit: Sonnet payload does not carry sensitive fields
+ok 4 - security audit: Sonnet payload does not carry sensitive fields
+  ---
+  duration_ms: 0.670667
+  type: 'test'
+  ...
+# Subtest: security audit: tampered HMAC chain fails verification
+ok 5 - security audit: tampered HMAC chain fails verification
+  ---
+  duration_ms: 0.332667
+  type: 'test'
+  ...
+# Subtest: bankingCollectionClosed reads explicit true only
+ok 6 - bankingCollectionClosed reads explicit true only
+  ---
+  duration_ms: 0.352666
+  type: 'test'
+  ...
+# Subtest: rejectBankingWritesIfClosed returns 410 before auth
+ok 7 - rejectBankingWritesIfClosed returns 410 before auth
+  ---
+  duration_ms: 0.369458
+  type: 'test'
+  ...
+# Subtest: banking pilot hardening
+    # Subtest: missing env config returns 503 banking_pilot_not_configured
+    ok 1 - missing env config returns 503 banking_pilot_not_configured
+      ---
+      duration_ms: 31.942167
+      type: 'test'
+      ...
+    # Subtest: session capacity cap then per-IP rate limit on consent
+    ok 2 - session capacity cap then per-IP rate limit on consent
+      ---
+      duration_ms: 9.474125
+      type: 'test'
+      ...
+    1..2
+ok 8 - banking pilot hardening
+  ---
+  duration_ms: 44.508458
+  type: 'suite'
+  ...
+# Subtest: buildBankingNarrativePayload emits metadata only
+ok 9 - buildBankingNarrativePayload emits metadata only
+  ---
+  duration_ms: 1.002667
+  type: 'test'
+  ...
+# Subtest: buildBankingReport emits all sensitive privacy assertions as false
+ok 10 - buildBankingReport emits all sensitive privacy assertions as false
+  ---
+  duration_ms: 0.83575
+  type: 'test'
+  ...
+# Subtest: report, audit, and verify exports do not include raw sensitive values
+ok 11 - report, audit, and verify exports do not include raw sensitive values
+  ---
+  duration_ms: 0.326958
+  type: 'test'
+  ...
+# Subtest: verify export fails after audit tampering
+ok 12 - verify export fails after audit tampering
+  ---
+  duration_ms: 0.094458
+  type: 'test'
+  ...
+# Subtest: scoreBankingRisk returns stable thresholds and recommendation wording
+ok 13 - scoreBankingRisk returns stable thresholds and recommendation wording
+  ---
+  duration_ms: 1.419625
+  type: 'test'
+  ...
+# Subtest: banking risk recommendations never make fraud or scam claims
+ok 14 - banking risk recommendations never make fraud or scam claims
+  ---
+  duration_ms: 0.347417
+  type: 'test'
+  ...
+# Subtest: accepts all five valid Phase A synthetic scenarios
+ok 15 - accepts all five valid Phase A synthetic scenarios
+  ---
+  duration_ms: 0.65325
+  type: 'test'
+  ...
+# Subtest: rejects unknown extra fields and invalid categories
+ok 16 - rejects unknown extra fields and invalid categories
+  ---
+  duration_ms: 0.360291
+  type: 'test'
+  ...
+# Subtest: rejects invalid scenario type and weak consent scope hashes
+ok 17 - rejects invalid scenario type and weak consent scope hashes
+  ---
+  duration_ms: 0.161625
+  type: 'test'
+  ...
+# Subtest: AI-agent scenario requires financial_payload_recorded_by_simurgh to be false boolean
+ok 18 - AI-agent scenario requires financial_payload_recorded_by_simurgh to be false boolean
+  ---
+  duration_ms: 0.073875
+  type: 'test'
+  ...
+# Subtest: FORBIDDEN_BANKING_FIELD_NAMES is frozen and duplicate-free
+ok 19 - FORBIDDEN_BANKING_FIELD_NAMES is frozen and duplicate-free
+  ---
+  duration_ms: 0.372166
+  type: 'test'
+  ...
+# Subtest: recursive guard rejects top-level and nested forbidden banking fields
+ok 20 - recursive guard rejects top-level and nested forbidden banking fields
+  ---
+  duration_ms: 0.090916
+  type: 'test'
+  ...
+# Subtest: recursive guard rejects structural pollution keys
+ok 21 - recursive guard rejects structural pollution keys
+  ---
+  duration_ms: 0.166
+  type: 'test'
+  ...
+# Subtest: recursive guard enforces max depth
+ok 22 - recursive guard enforces max depth
+  ---
+  duration_ms: 0.070833
+  type: 'test'
+  ...
+# Subtest: recursive guard ignores metadata-only payloads
+ok 23 - recursive guard ignores metadata-only payloads
+  ---
+  duration_ms: 0.114083
+  type: 'test'
+  ...
+# Subtest: POST /consent/accept
+    # Subtest: returns banking session id, participant code, and scoped token
+    ok 1 - returns banking session id, participant code, and scoped token
+      ---
+      duration_ms: 32.534208
+      type: 'test'
+      ...
+    1..1
+ok 24 - POST /consent/accept
+  ---
+  duration_ms: 35.470417
+  type: 'suite'
+  ...
+# Subtest: POST /submit
+    # Subtest: submits one valid synthetic scenario
+    ok 1 - submits one valid synthetic scenario
+      ---
+      duration_ms: 5.465083
+      type: 'test'
+      ...
+    # Subtest: rejects forbidden fields without echoing submitted values
+    ok 2 - rejects forbidden fields without echoing submitted values
+      ---
+      duration_ms: 4.663709
+      type: 'test'
+      ...
+    # Subtest: rejects unknown fields, pollution keys, invalid scenarios, and token mismatch
+    ok 3 - rejects unknown fields, pollution keys, invalid scenarios, and token mismatch
+      ---
+      duration_ms: 8.807333
+      type: 'test'
+      ...
+    # Subtest: does not append unauthenticated rejected payloads to any session audit chain
+    ok 4 - does not append unauthenticated rejected payloads to any session audit chain
+      ---
+      duration_ms: 2.639833
+      type: 'test'
+      ...
+    # Subtest: rejects over-deep payloads with payload_too_deep
+    ok 5 - rejects over-deep payloads with payload_too_deep
+      ---
+      duration_ms: 4.510584
+      type: 'test'
+      ...
+    # Subtest: prior forbidden-field attempt escalates risk on later valid submit
+    ok 6 - prior forbidden-field attempt escalates risk on later valid submit
+      ---
+      duration_ms: 3.479666
+      type: 'test'
+      ...
+    # Subtest: rejects double submit on one session
+    ok 7 - rejects double submit on one session
+      ---
+      duration_ms: 2.476917
+      type: 'test'
+      ...
+    1..7
+ok 25 - POST /submit
+  ---
+  duration_ms: 32.494708
+  type: 'suite'
+  ...
+# Subtest: POST /withdraw and GET exports
+    # Subtest: withdraw blocks report export
+    ok 1 - withdraw blocks report export
+      ---
+      duration_ms: 2.377917
+      type: 'test'
+      ...
+    # Subtest: withdrawn session keeps audit and verify exports for transparency
+    ok 2 - withdrawn session keeps audit and verify exports for transparency
+      ---
+      duration_ms: 2.485333
+      type: 'test'
+      ...
+    # Subtest: report, audit, and verify exports are token-bound and safe
+    ok 3 - report, audit, and verify exports are token-bound and safe
+      ---
+      duration_ms: 4.6455
+      type: 'test'
+      ...
+    1..3
+ok 26 - POST /withdraw and GET exports
+  ---
+  duration_ms: 9.62675
+  type: 'suite'
+  ...
+1..26
+# tests 35
+# suites 4
+# pass 35
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 253.130959

@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Banking Shield Report</title>
+    <style>
+      :root {
+        --ink: #18211f;
+        --muted: #52605c;
+        --line: #d9e1dd;
+        --panel: #f7faf8;
+        --accent: #0c6b58;
+        --danger: #8b2f2f;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family:
+          Inter,
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        color: var(--ink);
+        background: #ffffff;
+      }
+
+      main {
+        width: min(1040px, calc(100vw - 32px));
+        margin: 0 auto;
+        padding: 40px 0;
+      }
+
+      h1 {
+        margin: 0 0 8px;
+        font-size: clamp(1.9rem, 4vw, 3rem);
+        line-height: 1.08;
+        letter-spacing: 0;
+      }
+
+      p {
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 20px 0;
+      }
+
+      button,
+      a.button {
+        display: inline-flex;
+        min-height: 44px;
+        align-items: center;
+        justify-content: center;
+        border: 0;
+        border-radius: 6px;
+        padding: 0 14px;
+        background: var(--accent);
+        color: #ffffff;
+        font: inherit;
+        font-weight: 700;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      pre,
+      output {
+        display: block;
+        min-height: 44px;
+        margin-top: 16px;
+        padding: 12px 14px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: var(--panel);
+        color: var(--muted);
+        overflow: auto;
+        white-space: pre-wrap;
+      }
+
+      .error {
+        border-color: #d7a9a9;
+        color: var(--danger);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Phase A Report Export</h1>
+        <p>
+          Token-bound report, safe audit export, and audit-chain verification for the current
+          session.
+        </p>
+      </header>
+
+      <div class="actions">
+        <button type="button" data-export="report">Report</button>
+        <button type="button" data-export="audit">Audit</button>
+        <button type="button" data-export="verify">Verify</button>
+        <a class="button" href="/banking-pilot-consent.html">New Session</a>
+      </div>
+
+      <output id="status" aria-live="polite"></output>
+      <pre id="response" aria-label="Export response"></pre>
+    </main>
+
+    <script>
+      const status = document.querySelector("#status");
+      const response = document.querySelector("#response");
+      const sessionId = sessionStorage.getItem("bankingPilotSessionId");
+      const token = sessionStorage.getItem("bankingPilotToken");
+
+      async function loadExport(kind) {
+        status.className = "";
+        status.textContent = `Loading ${kind}...`;
+        const res = await fetch(`/api/banking-pilot/${sessionId}/${kind}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const body = await res.json();
+        response.textContent = JSON.stringify(body, null, 2);
+        status.className = res.ok ? "" : "error";
+        status.textContent = res.ok ? "Loaded." : `Rejected with ${res.status}.`;
+      }
+
+      if (!sessionId || !token) {
+        status.className = "error";
+        status.textContent = "No synthetic session found.";
+      }
+
+      document.querySelectorAll("[data-export]").forEach((button) => {
+        button.addEventListener("click", () => loadExport(button.dataset.export));
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,47 @@
+{
+  "schema_version": "2026-06-b1-v1",
+  "pilot_mode": "banking_shield_phase_a_synthetic",
+  "phase": "phase_a_synthetic",
+  "synthetic": true,
+  "human_participant": false,
+  "data_source": "synthetic_test_suite",
+  "banking_session_id": "bp_privacy_fixture",
+  "consent": {
+    "accepted": true,
+    "withdrawn": false,
+    "version": "2026-06-b1-v1"
+  },
+  "session_result": {
+    "submitted": true,
+    "withdrawn": false,
+    "scenario_type": "mock_payment_pause"
+  },
+  "risk": {
+    "risk_score": 35,
+    "verdict": "warning",
+    "risk_categories": ["payment_pause_context"],
+    "manual_review_required": true,
+    "manual_review_recommendation": "Manual review recommended. No automatic fraud finding."
+  },
+  "privacy_contract": {
+    "credential_recorded_by_simurgh": false,
+    "otp_recorded_by_simurgh": false,
+    "account_identifier_recorded_by_simurgh": false,
+    "balance_recorded_by_simurgh": false,
+    "transaction_amount_recorded_by_simurgh": false,
+    "payee_recorded_by_simurgh": false,
+    "payment_reference_recorded_by_simurgh": false,
+    "transaction_content_recorded_by_simurgh": false,
+    "screen_capture_recorded_by_simurgh": false,
+    "webcam_audio_recorded_by_simurgh": false,
+    "raw_process_or_window_title_recorded_by_simurgh": false,
+    "remote_access_app_name_recorded_by_simurgh": false,
+    "banking_payload_recorded_by_simurgh": false,
+    "sonnet_received_sensitive_payload": false,
+    "forbidden_fields_rejected": 1
+  },
+  "audit": {
+    "chain_valid": true,
+    "event_count": 3
+  }
+}

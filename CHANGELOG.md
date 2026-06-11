@@ -1,5 +1,64 @@
 ## Change Log
 
+## [banking-shield-phase-a] — 2026-06-11 — Audit-fix hardening pass
+
+**Raouf:** Audited the `banking-shield-phase-a` branch end to end and fixed all six findings before PR. Added per-IP rate limits and a session capacity cap to `/api/banking-pilot`, derived separate participant-code and audit-chain keys from the pepper (domain separation), renamed the payload depth-cap rejection to `payload_too_deep`, wired prior forbidden-field attempts into live risk scoring as `forbidden_payload_attempt`, replaced the missing-env 500 with a deterministic 503 `banking_pilot_not_configured`, and made withdrawn-session audit/verify transparency an asserted invariant. Extended the full E2E smoke from 38 to 41 gates and refreshed the Phase A evidence pack.
+
+### Added
+
+- `tests/unit/bankingPilot/bankingHardening.test.js` — not-configured 503, session capacity cap, and per-IP consent rate-limit coverage.
+- Banking rate-limit / capacity env knobs in `.env.example` — `SIMURGH_BANKING_PILOT_CONSENT_RATE_MAX`, `SIMURGH_BANKING_PILOT_WRITE_RATE_MAX`, `SIMURGH_BANKING_PILOT_READ_RATE_MAX`, `SIMURGH_BANKING_PILOT_MAX_SESSIONS`.
+- Three new full-E2E smoke gates: forbidden-attempt risk escalation, `payload_too_deep` rejection, withdrawn-session audit/verify transparency.
+
+### Changed
+
+- `src/bankingPilot/index.js` — rate limiters on all routes, session capacity cap, derived keys, `payload_too_deep` mapping, live `forbiddenPayloadAttempt` scoring, `banking_pilot_not_configured` guard.
+- `src/bankingPilot/forbiddenBankingFields.js`, `src/bankingPilot/bankingScenarioPolicy.js` — exported `MAX_DEPTH_SENTINEL` and mapped it to `payload_too_deep`.
+- `src/bankingPilot/bankingSessionStore.js` — `size()` accessor for the capacity cap.
+- `docs/research/banking-pilot/BANKING_PILOT_PHASE_A_CLOSEOUT.md` and the Phase A evidence pack — refreshed to current gate counts.
+
+### Verified
+
+- `npm test` — 389/389 pass; Banking unit/security — 35/35 pass.
+- `scripts/smoke-banking-pilot.sh` 14/14; `scripts/security-audit-banking-pilot.sh` 27/27; privacy audit PASS; closure smoke 4/4; full E2E smoke 41/41 (captured to evidence pack).
+- `npx prettier --check .` clean; `npm audit --audit-level=high` no high/critical findings.
+- `scripts/check.sh --quick` — all Banking Shield gates pass; the single failing step is the pre-existing local Linux Rust Xvfb prerequisite outside Banking Shield.
+
+## [banking-shield-phase-a] — 2026-06-11 — Stage B1 synthetic banking-adjacent demo
+
+**Raouf:** Implemented Stage B1 — Banking Shield Phase A Synthetic Demo. Added a new `/api/banking-pilot` subsystem with synthetic consent, five metadata-only scenario submissions, one-session-one-submit enforcement, recursive forbidden banking-field rejection, prototype-pollution key rejection, strict scenario allowlists, strict `consent_scope_hash`, banking-scoped HMAC session tokens, local deterministic risk scoring, token-bound report/audit/verify exports, and closure-before-auth write-route locking. Added public Phase A pages using fictional labels only, Banking Shield research docs with Phase B/C roadmap continuity, smoke/security/privacy scripts, unit/security/e2e test artifacts, and Phase A evidence fixtures. Sonnet runtime support remains off by default; Phase A verifies only the local metadata-only narrative sanitiser.
+
+### Added
+
+- `src/bankingPilot/**` — Banking Shield Phase A router, store, token, guard, scenario policy, risk, audit, report, and narrative sanitiser modules.
+- `public/banking-pilot-consent.html`, `public/banking-pilot-scenario.html`, `public/banking-pilot-report.html` — synthetic Phase A pages.
+- `docs/research/banking-pilot/**` — protocol, threat model, data management, participant notice, non-claims, closeout, claim audit, and evidence pack.
+- `tests/unit/bankingPilot/**`, `tests/security/banking_pilot_security_audit.test.js`, `tests/e2e/banking_pilot_*_smoke.mjs` — Banking Shield test coverage.
+- `scripts/smoke-banking-pilot.sh`, `scripts/smoke-banking-pilot-closed.sh`, `scripts/smoke-banking-pilot-full-e2e.sh`, `scripts/security-audit-banking-pilot.sh`, `scripts/privacy-audit-banking-pilot.mjs` — Phase A gates, full lifecycle E2E smoke, and generated-artifact privacy audit.
+
+### Changed
+
+- `server.js` mounts `/api/banking-pilot`.
+- `.env.example` documents Banking Shield Phase A env vars.
+- `scripts/check.sh` includes Banking Shield Phase A unit/security, smoke, security audit, privacy audit, closure, and full E2E gates, and exempts the banking forbidden-field guard from the global source-grep privacy false-positive.
+- `tests/unit/displayServerLockServerWiring.test.js` uses a unique live-server port per boot to avoid a local `ECONNREFUSED` race between live-server tests.
+
+### Verified
+
+- `npm test` — 384/384 pass.
+- `npm audit --audit-level=high` — pass, no high/critical findings; existing moderate `qs` advisories remain.
+- Banking unit/security tests — 30/30 pass.
+- `scripts/smoke-banking-pilot.sh` — 14/14 pass.
+- `scripts/security-audit-banking-pilot.sh` — 27/27 pass.
+- `node scripts/privacy-audit-banking-pilot.mjs` — PASS, 4 generated fixtures, attack values absent.
+- `scripts/smoke-banking-pilot-closed.sh` — 4/4 pass.
+- `scripts/smoke-banking-pilot-full-e2e.sh` — 38/38 pass; output captured at `docs/research/banking-pilot/evidence/phase-a-synthetic/smoke-banking-pilot-full-e2e.txt`.
+- `npx prettier --check .` — pass.
+- `scripts/check.sh --quick` — Banking gates pass; command exits 1 on the existing local Linux Xvfb Rust integration gate.
+- Full `scripts/check.sh` — Banking Shield Phase A gates pass; command summarizes 68 passed and 2 failed steps because installed .NET SDK 7.0.307 cannot target the Windows daemon `.NET 8.0` projects, and local Linux Xvfb integration tests fail with `Connection refused`/`PoisonError` results in `xvfb_integration_tests.rs`.
+
+---
+
 ## [paper-source-links] — 2026-06-05 — Fix README paper source path casing
 
 **Raouf:** Fixed the two README "Source" links that were live-broken on GitHub: `Papers/project-simurgh/` and `Papers/simurgh-voting-pilot/`. Root cause: the paper source directories are tracked under lower-case `papers/...`, while the README used upper-case `Papers/...`; local macOS checks passed on a case-insensitive filesystem, but GitHub returned 404 because paths are case-sensitive. Updated the two README source links to `papers/project-simurgh/` and `papers/simurgh-voting-pilot/`. Verification: live pre-fix `curl -I -L` checks to the upper-case GitHub tree URLs returned 404; `git ls-tree -r --name-only HEAD | rg '^papers/'` confirms lower-case tracked source paths; `npx --yes markdown-link-check README.md` passes 57/57 links; `npx prettier --check README.md AGENT.md CHANGELOG.md` passes.

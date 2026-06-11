@@ -1,0 +1,41 @@
+{
+  "schema_version": "2026-06-b1-audit-v1",
+  "phase": "phase_a_synthetic",
+  "banking_session_id": "bp_privacy_fixture",
+  "chain_valid": true,
+  "errors": [],
+  "entries": [
+    {
+      "seq": 0,
+      "ts": 1781165616393,
+      "type": "BANKING_CONSENT_ACCEPTED",
+      "payload": {},
+      "prev": "GENESIS",
+      "sig": "281dcf2739b0399f48fb939a09727ce2eb26f046347793a18a384703da276eb4"
+    },
+    {
+      "seq": 1,
+      "ts": 1781165616394,
+      "type": "BANKING_SCENARIO_SUBMITTED",
+      "payload": {
+        "scenario_type": "mock_payment_pause",
+        "risk_score": 35,
+        "verdict": "warning"
+      },
+      "prev": "281dcf2739b0399f48fb939a09727ce2eb26f046347793a18a384703da276eb4",
+      "sig": "1b8ee94e81c137c88a3bb31e76c4738de66c9d0cf32781ca1a8b61c4a98ab6e0"
+    },
+    {
+      "seq": 2,
+      "ts": 1781165616394,
+      "type": "BANKING_FORBIDDEN_FIELD_REJECTED",
+      "payload": {
+        "route": "submit",
+        "reason": "forbidden_banking_field",
+        "field_name": "otp"
+      },
+      "prev": "1b8ee94e81c137c88a3bb31e76c4738de66c9d0cf32781ca1a8b61c4a98ab6e0",
+      "sig": "36dede9bd92b78b05976af2eeea40d486d83d44bfae5eed1c94181d34dbc928d"
+    }
+  ]
+}

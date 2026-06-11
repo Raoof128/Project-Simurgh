@@ -7,6 +7,8 @@ import { spawn } from "node:child_process";
 import crypto from "node:crypto";
 import test from "node:test";
 
+let nextServerPort = 33129;
+
 function b64url(b) {
   return Buffer.from(b).toString("base64url");
 }
@@ -54,7 +56,7 @@ function linuxScanner(overrides = {}) {
 }
 
 async function bootServer() {
-  const port = 33129;
+  const port = nextServerPort++;
   const srv = spawn("node", ["server.js"], {
     env: { ...process.env, PORT: String(port), SIMURGH_DEMO_MODE: "1" },
     stdio: ["ignore", "pipe", "pipe"],
