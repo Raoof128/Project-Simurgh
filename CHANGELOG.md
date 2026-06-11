@@ -1,5 +1,9 @@
 ## Change Log
 
+## [agent-wording-clarification] — 2026-06-11 — Clarify push status in AGENT.md
+
+**Raouf:** Updated push status wording in AGENT.md to clarify that the branch was pushed as dc2c5d8.
+
 ## [banking-shield-phase-a] — 2026-06-11 — Audit-fix hardening pass
 
 **Raouf:** Audited the `banking-shield-phase-a` branch end to end and fixed all six findings before PR. Added per-IP rate limits and a session capacity cap to `/api/banking-pilot`, derived separate participant-code and audit-chain keys from the pepper (domain separation), renamed the payload depth-cap rejection to `payload_too_deep`, wired prior forbidden-field attempts into live risk scoring as `forbidden_payload_attempt`, replaced the missing-env 500 with a deterministic 503 `banking_pilot_not_configured`, and made withdrawn-session audit/verify transparency an asserted invariant. Extended the full E2E smoke from 38 to 41 gates and refreshed the Phase A evidence pack.

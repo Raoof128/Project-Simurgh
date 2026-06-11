@@ -2,11 +2,21 @@
 
 ## Agent Change Log
 
+### 2026-06-11 (Australia/Sydney) — Clarify Banking Shield push status in AGENT.md
+
+**Raouf:**
+- **Scope:** Clarified push status wording in AGENT.md.
+- **Summary:** Updated "No push/PR yet" to "No PR yet at the time of the hardening pass; branch was pushed afterward as dc2c5d8."
+- **Files Changed:** AGENT.md, CHANGELOG.md
+- **Verification:** Git diff review.
+
+---
+
 ### 2026-06-11 (Australia/Sydney) — Banking Shield Phase A audit-fix hardening pass
 
 **Raouf:**
 
-- **Scope:** Full branch audit of `banking-shield-phase-a` followed by fixes for all six audit findings, extended E2E coverage, and a refreshed evidence pack. No push/PR yet.
+- **Scope:** Full branch audit of `banking-shield-phase-a` followed by fixes for all six audit findings, extended E2E coverage, and a refreshed evidence pack. No PR yet at the time of the hardening pass; branch was pushed afterward as dc2c5d8.
 - **Fixes applied:**
   1. **Rate limiting + session capacity cap** — `/api/banking-pilot` now carries per-IP fixed-window rate limits via the shared `createRateLimiter` (consent 60/min, writes 120/min, reads 240/min by default, env-overridable via `SIMURGH_BANKING_PILOT_{CONSENT,WRITE,READ}_RATE_MAX`), plus an in-memory session capacity cap (`SIMURGH_BANKING_PILOT_MAX_SESSIONS`, default 5000) returning 503 `banking_session_capacity_reached`. Closes the unbounded unauthenticated consent-session memory-growth vector flagged as a Phase B follow-up.
   2. **Key domain separation** — the pepper no longer keys anything directly; participant-code hashing and audit-chain signing each use an HMAC-derived key with a distinct label (`banking-pilot-participant-code-v1`, `banking-pilot-audit-chain-v1`).
