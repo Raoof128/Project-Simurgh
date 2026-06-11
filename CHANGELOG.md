@@ -1,5 +1,36 @@
 ## Change Log
 
+## [banking-shield-phase-b] — 2026-06-12 — Internal dry-run scaffold
+
+**Raouf:** Started Stage B2 — Banking Shield Phase B Internal Dry Run as a trusted internal tester comprehension layer using the existing Phase A Banking Shield runtime only. Added the Phase B design spec, implementation plan, protocol pack, aggregate-only evidence templates, current Phase B privacy/smoke gate output, and a dedicated Phase B evidence privacy audit wired into `scripts/check.sh`. No Phase B runtime routes, server states, human-pilot logic, Phase C behavior, real banking integrations, real CDR, real Confirmation of Payee, real payments, real accounts, real balances, real payees, transaction amounts, OTPs, credentials, screenshots, app names, process names, or window titles were added.
+
+### Added
+
+- `docs/superpowers/specs/2026-06-12-banking-shield-phase-b-internal-dry-run-design.md` — Stage B2 design with scope lock, evidence rules, audit model, success criteria, and non-claims.
+- `docs/superpowers/plans/2026-06-12-banking-shield-phase-b-internal-dry-run.md` — commit-sized implementation plan.
+- `docs/research/banking-pilot/phase-b/**` — Phase B protocol, go/no-go checklist, participant notice, feedback form, data-management addendum, tester runbook, closeout scaffold, and claim audit.
+- `docs/research/banking-pilot/evidence/phase-b-internal-dry-run/**` — aggregate-only templates plus current Phase B privacy/smoke gate output.
+- `scripts/privacy-audit-banking-pilot-phase-b.mjs` — evidence-folder privacy audit for Phase B dry-run artifacts.
+
+### Changed
+
+- `scripts/check.sh` now runs the Banking Shield Phase B evidence privacy audit in the Banking Shield section.
+
+### Verified
+
+- `npm test` — 389/389 pass.
+- `scripts/smoke-banking-pilot.sh` — 14/14 pass.
+- `scripts/security-audit-banking-pilot.sh` — 27/27 pass.
+- `node scripts/privacy-audit-banking-pilot.mjs` — PASS.
+- `node scripts/privacy-audit-banking-pilot-phase-b.mjs` — PASS, 6 Phase B evidence files scanned.
+- `scripts/smoke-banking-pilot-closed.sh` — 4/4 pass.
+- `scripts/smoke-banking-pilot-full-e2e.sh` — 41/41 pass.
+- `npx prettier --check .` — pass.
+- `scripts/check.sh --quick` — 21 passed / 1 failed; the failure is the existing local Xvfb prerequisite in `Linux Rust daemon fmt/clippy/test`.
+- Full `scripts/check.sh` — 69 passed / 2 failed; the failed steps are existing local prerequisites outside Banking Shield: installed .NET SDK 7.0.307 cannot target the Windows daemon `.NET 8.0` projects, and local Linux Xvfb integration tests fail because Xvfb is not installed.
+
+---
+
 ## [agent-wording-clarification] — 2026-06-11 — Clarify push status in AGENT.md
 
 **Raouf:** Updated push status wording in AGENT.md to clarify that the branch was pushed as dc2c5d8.

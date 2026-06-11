@@ -2,6 +2,19 @@
 
 ## Agent Change Log
 
+### 2026-06-12 (Australia/Sydney) — Banking Shield Phase B internal dry-run scaffold
+
+**Raouf:**
+
+- **Scope:** Started Stage B2 — Banking Shield Phase B Internal Dry Run as an internal trusted-tester comprehension layer only. No Phase B runtime routes, server states, real banking integrations, real CDR, real Confirmation of Payee, real payments, real accounts, real balances, real payees, transaction amounts, OTPs, credentials, screenshots, app names, process names, or window titles were added.
+- **Summary:** Added the formal Phase B design spec and implementation plan, created the Phase B protocol pack, added aggregate-only evidence templates, captured current Phase B privacy/smoke gate output, and wired a dedicated Phase B evidence privacy audit into `scripts/check.sh`.
+- **Files changed:** `docs/superpowers/specs/2026-06-12-banking-shield-phase-b-internal-dry-run-design.md`, `docs/superpowers/plans/2026-06-12-banking-shield-phase-b-internal-dry-run.md`, `docs/research/banking-pilot/phase-b/**`, `docs/research/banking-pilot/evidence/phase-b-internal-dry-run/**`, `scripts/privacy-audit-banking-pilot-phase-b.mjs`, `scripts/check.sh`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `npm test` passed 389/389; `scripts/smoke-banking-pilot.sh` passed 14/14; `scripts/security-audit-banking-pilot.sh` passed 27/27; `node scripts/privacy-audit-banking-pilot.mjs` PASS; `node scripts/privacy-audit-banking-pilot-phase-b.mjs` PASS over 6 Phase B evidence files; `scripts/smoke-banking-pilot-closed.sh` passed 4/4; `scripts/smoke-banking-pilot-full-e2e.sh` passed 41/41; `npx prettier --check .` passed.
+- **Known local blockers:** `scripts/check.sh --quick` passed 21 steps and failed only `Linux Rust daemon fmt/clippy/test` because `SIMURGH_REQUIRE_XVFB_TESTS` is set but Xvfb is not installed. Full `scripts/check.sh` passed 69 steps and failed 2 existing local prerequisite gates outside Banking Shield: installed .NET SDK 7.0.307 cannot target the Windows daemon `.NET 8.0` projects, and local Linux Xvfb integration tests fail because Xvfb is not installed.
+- **Follow-ups:** Run the trusted internal dry run only after the Phase B go/no-go checklist is completed. After testers finish, replace templates with aggregate-only results, rerun privacy/security/smoke gates, complete the Phase B closeout, and keep all non-claims intact.
+
+---
+
 ### 2026-06-11 (Australia/Sydney) — Clarify Banking Shield push status in AGENT.md
 
 **Raouf:**
