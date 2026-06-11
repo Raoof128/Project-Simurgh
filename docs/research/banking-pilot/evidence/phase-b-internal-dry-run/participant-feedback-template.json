@@ -1,0 +1,74 @@
+{
+  "phase": "phase_b_internal_dry_run",
+  "synthetic": false,
+  "human_participant": true,
+  "data_source": "internal_human_dry_run",
+  "real_banking_data_collected": false,
+  "real_financial_decision_affected": false,
+  "aggregate_only": true,
+  "status": "template_not_executed",
+  "feedback_category_counts": {
+    "consent_wording_clear": 0,
+    "consent_wording_needs_simplification": 0,
+    "fictional_scope_clear": 0,
+    "fictional_scope_needs_repetition": 0,
+    "warning_language_clear": 0,
+    "warning_language_too_strong": 0,
+    "report_understandable": 0,
+    "report_confusing": 0,
+    "audit_understandable": 0,
+    "audit_confusing": 0,
+    "verify_understandable": 0,
+    "verify_confusing": 0,
+    "withdrawal_understandable": 0,
+    "withdrawal_confusing": 0,
+    "non_claims_understandable": 0,
+    "non_claims_need_more_prominence": 0
+  },
+  "comprehension_rating_counts": {
+    "consent_page": {
+      "clear": 0,
+      "partly_clear": 0,
+      "unclear": 0
+    },
+    "scenario_warnings": {
+      "clear": 0,
+      "partly_clear": 0,
+      "unclear": 0
+    },
+    "report_output": {
+      "clear": 0,
+      "partly_clear": 0,
+      "unclear": 0
+    },
+    "audit_output": {
+      "clear": 0,
+      "partly_clear": 0,
+      "unclear": 0
+    },
+    "verify_output": {
+      "clear": 0,
+      "partly_clear": 0,
+      "unclear": 0
+    },
+    "withdrawal_behavior": {
+      "clear": 0,
+      "partly_clear": 0,
+      "unclear": 0
+    },
+    "non_claims": {
+      "clear": 0,
+      "partly_clear": 0,
+      "unclear": 0
+    }
+  },
+  "safe_note_category_counts": {
+    "label_needs_clarification": 0,
+    "scope_needs_repetition": 0,
+    "report_language_needs_clarification": 0,
+    "audit_language_needs_clarification": 0,
+    "verify_language_needs_clarification": 0,
+    "withdrawal_language_needs_clarification": 0,
+    "non_claims_need_more_prominence": 0
+  }
+}

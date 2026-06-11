@@ -1355,6 +1355,14 @@ else
   tail -80 "$LOG_DIR/banking-privacy-audit.log"
 fi
 
+step "Banking Shield Phase B evidence privacy audit"
+if node scripts/privacy-audit-banking-pilot-phase-b.mjs > "$LOG_DIR/banking-phase-b-privacy-audit.log" 2>&1; then
+  pass "Banking Shield Phase B evidence privacy audit"
+else
+  fail "Banking Shield Phase B evidence privacy audit"
+  tail -80 "$LOG_DIR/banking-phase-b-privacy-audit.log"
+fi
+
 step "Banking Shield Phase A collection-closure smoke"
 if scripts/smoke-banking-pilot-closed.sh > "$LOG_DIR/banking-closed-smoke.log" 2>&1; then
   pass "Banking Shield Phase A collection-closure smoke"

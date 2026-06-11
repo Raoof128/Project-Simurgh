@@ -2,6 +2,43 @@
 
 ## Agent Change Log
 
+### 2026-06-12 (Australia/Sydney) — Banking Shield Phase B PR-prep polish
+
+**Raouf:**
+
+- **Scope:** Applied the final three Phase B PR-preparation polish fixes requested after review. No runtime code, routes, states, Phase C logic, real banking integrations, or completed human dry-run results were added.
+- **Summary:** Tightened `BANKING_PILOT_PHASE_B_FEEDBACK_FORM.md` so raw tester free text is not retained as evidence, clarified `BANKING_PILOT_PHASE_B_TESTER_RUNBOOK.md` so testers use five fresh submit sessions plus one separate withdrawal session, and added the PR-safe statement that the PR prepares the Phase B protocol/evidence scaffold but does not report completed human dry-run results. Inspected the dirty Phase A rejected-attempt audit fixture; its diff was timestamp/HMAC churn from local privacy-audit reruns, so it was restored and excluded from the Phase B PR.
+- **Files changed:** `docs/research/banking-pilot/phase-b/BANKING_PILOT_PHASE_B_FEEDBACK_FORM.md`, `docs/research/banking-pilot/phase-b/BANKING_PILOT_PHASE_B_TESTER_RUNBOOK.md`, `docs/research/banking-pilot/phase-b/BANKING_PILOT_PHASE_B_DOC_AUDIT.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `npm test` passed 389/389; `scripts/smoke-banking-pilot.sh` passed 14/14; `scripts/security-audit-banking-pilot.sh` passed 27/27; `node scripts/privacy-audit-banking-pilot.mjs` PASS; `node scripts/privacy-audit-banking-pilot-phase-b.mjs` PASS over 6 evidence files; `scripts/smoke-banking-pilot-closed.sh` passed 4/4; `scripts/smoke-banking-pilot-full-e2e.sh` passed 41/41; `npx prettier --check .` passed.
+- **Follow-ups:** Use the exact PR body sentence: "This PR prepares the Phase B internal dry-run protocol and evidence scaffold. It does not report completed human dry-run results."
+
+---
+
+### 2026-06-12 (Australia/Sydney) — Banking Shield Phase B documentation audit
+
+**Raouf:**
+
+- **Scope:** Audited every Stage B2 Phase B document and evidence scaffold created on `banking-shield-phase-b-dry-run`, one by one. No runtime code, routes, states, real banking integrations, Phase C logic, or human dry-run data were added.
+- **Summary:** Added `BANKING_PILOT_PHASE_B_DOC_AUDIT.md`, tightened participant notice and protocol wording, converted closeout blanks to explicit `not_run` tables, marked the implementation plan execution steps complete, and preserved the aggregate-only evidence contract.
+- **Files changed:** `docs/research/banking-pilot/phase-b/BANKING_PILOT_PHASE_B_DOC_AUDIT.md`, `docs/research/banking-pilot/phase-b/BANKING_PILOT_PHASE_B_CLOSEOUT.md`, `docs/research/banking-pilot/phase-b/BANKING_PILOT_PHASE_B_PARTICIPANT_NOTICE.md`, `docs/research/banking-pilot/phase-b/BANKING_PILOT_PHASE_B_PROTOCOL.md`, `docs/research/banking-pilot/evidence/phase-b-internal-dry-run/closeout-summary.md`, `docs/superpowers/specs/2026-06-12-banking-shield-phase-b-internal-dry-run-design.md`, `docs/superpowers/plans/2026-06-12-banking-shield-phase-b-internal-dry-run.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** Phase B documentation scan found no unresolved draft markers, prohibited claim phrases, em dashes, or selected filler terms; `npx prettier --check` passed across Phase B docs, evidence scaffolds, spec, and plan; `node scripts/privacy-audit-banking-pilot-phase-b.mjs` PASS over 6 evidence files.
+- **Follow-ups:** Keep the one-by-one audit current if future Phase B closeout evidence replaces templates after trusted testers complete the dry run.
+
+---
+
+### 2026-06-12 (Australia/Sydney) — Banking Shield Phase B internal dry-run scaffold
+
+**Raouf:**
+
+- **Scope:** Started Stage B2 — Banking Shield Phase B Internal Dry Run as an internal trusted-tester comprehension layer only. No Phase B runtime routes, server states, real banking integrations, real CDR, real Confirmation of Payee, real payments, real accounts, real balances, real payees, transaction amounts, OTPs, credentials, screenshots, app names, process names, or window titles were added.
+- **Summary:** Added the formal Phase B design spec and implementation plan, created the Phase B protocol pack, added aggregate-only evidence templates, captured current Phase B privacy/smoke gate output, and wired a dedicated Phase B evidence privacy audit into `scripts/check.sh`.
+- **Files changed:** `docs/superpowers/specs/2026-06-12-banking-shield-phase-b-internal-dry-run-design.md`, `docs/superpowers/plans/2026-06-12-banking-shield-phase-b-internal-dry-run.md`, `docs/research/banking-pilot/phase-b/**`, `docs/research/banking-pilot/evidence/phase-b-internal-dry-run/**`, `scripts/privacy-audit-banking-pilot-phase-b.mjs`, `scripts/check.sh`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `npm test` passed 389/389; `scripts/smoke-banking-pilot.sh` passed 14/14; `scripts/security-audit-banking-pilot.sh` passed 27/27; `node scripts/privacy-audit-banking-pilot.mjs` PASS; `node scripts/privacy-audit-banking-pilot-phase-b.mjs` PASS over 6 Phase B evidence files; `scripts/smoke-banking-pilot-closed.sh` passed 4/4; `scripts/smoke-banking-pilot-full-e2e.sh` passed 41/41; `npx prettier --check .` passed.
+- **Known local blockers:** `scripts/check.sh --quick` passed 21 steps and failed only `Linux Rust daemon fmt/clippy/test` because `SIMURGH_REQUIRE_XVFB_TESTS` is set but Xvfb is not installed. Full `scripts/check.sh` passed 69 steps and failed 2 existing local prerequisite gates outside Banking Shield: installed .NET SDK 7.0.307 cannot target the Windows daemon `.NET 8.0` projects, and local Linux Xvfb integration tests fail because Xvfb is not installed.
+- **Follow-ups:** Run the trusted internal dry run only after the Phase B go/no-go checklist is completed. After testers finish, replace templates with aggregate-only results, rerun privacy/security/smoke gates, complete the Phase B closeout, and keep all non-claims intact.
+
+---
+
 ### 2026-06-11 (Australia/Sydney) — Clarify Banking Shield push status in AGENT.md
 
 **Raouf:**

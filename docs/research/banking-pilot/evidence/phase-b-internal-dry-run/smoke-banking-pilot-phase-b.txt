@@ -1,0 +1,16 @@
+[PASS] consent page loads
+[PASS] consent/accept returns bp_ session id
+[PASS] consent/accept returns token
+[PASS] mock_cdr_consent submits
+[PASS] mock_confirmation_of_payee submits
+[PASS] remote_access_warning submits
+[PASS] mock_payment_pause submits
+[PASS] mock_ai_agent_finance_action submits
+[PASS] forbidden banking field rejected
+[PASS] forbidden response does not echo value
+[PASS] report privacy assertions exported
+[PASS] audit chain verifies
+[PASS] withdrawn report returns 403
+[PASS] local Sonnet sanitisation fixture metadata-only
+
+smoke-banking-pilot: 14 passed, 0 failed
