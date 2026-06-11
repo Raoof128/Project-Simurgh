@@ -1,0 +1,4 @@
+privacy-audit-banking-pilot: PASS
+generated fixtures: 4
+attack values absent from generated evidence
+public demo pages use fictional banking labels only

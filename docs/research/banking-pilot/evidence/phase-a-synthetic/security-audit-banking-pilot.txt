@@ -1,0 +1,29 @@
+[PASS] unauthenticated submit returns 401
+[PASS] account_number rejected
+[PASS] account_number did not echo value
+[PASS] nested otp rejected
+[PASS] nested otp did not echo value
+[PASS] array card_number rejected
+[PASS] array card_number did not echo value
+[PASS] transaction_amount rejected
+[PASS] transaction_amount did not echo value
+[PASS] payee_name rejected
+[PASS] payee_name did not echo value
+[PASS] payment_reference rejected
+[PASS] payment_reference did not echo value
+[PASS] window_title rejected
+[PASS] window_title did not echo value
+[PASS] process_name rejected
+[PASS] process_name did not echo value
+[PASS] remote_app_name rejected
+[PASS] remote_app_name did not echo value
+[PASS] __proto__ rejected
+[PASS] prototype rejected
+[PASS] constructor rejected
+[PASS] unknown scenario_type rejected
+[PASS] weak consent hash rejected
+[PASS] AI payload assertion true rejected
+[PASS] AI payload assertion "false" rejected
+[PASS] AI payload assertion omitted rejected
+
+security-audit-banking-pilot: 27 passed, 0 failed
