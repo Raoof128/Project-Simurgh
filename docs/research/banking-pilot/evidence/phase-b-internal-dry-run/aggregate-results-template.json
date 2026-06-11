@@ -1,0 +1,52 @@
+{
+  "phase": "phase_b_internal_dry_run",
+  "synthetic": false,
+  "human_participant": true,
+  "data_source": "internal_human_dry_run",
+  "real_banking_data_collected": false,
+  "real_financial_decision_affected": false,
+  "aggregate_only": true,
+  "status": "template_not_executed",
+  "trusted_testers_target": {
+    "minimum": 2,
+    "maximum": 3
+  },
+  "trusted_testers_completed": 0,
+  "scenario_completion_counts": {
+    "mock_cdr_consent": 0,
+    "mock_confirmation_of_payee": 0,
+    "remote_access_warning": 0,
+    "mock_payment_pause": 0,
+    "mock_ai_agent_finance_action": 0
+  },
+  "flow_completion_counts": {
+    "consent_opened": 0,
+    "consent_accepted": 0,
+    "report_opened": 0,
+    "audit_opened": 0,
+    "verify_opened": 0,
+    "withdrawal_completed": 0,
+    "feedback_completed": 0
+  },
+  "privacy_counts": {
+    "real_banking_values_entered": 0,
+    "sensitive_values_found_in_evidence": 0,
+    "forbidden_payload_structures_found": 0,
+    "sonnet_sensitive_payload_events": 0
+  },
+  "comprehension_counts": {
+    "fictional_only_understood": 0,
+    "no_bank_connection_understood": 0,
+    "no_fraud_detection_understood": 0,
+    "no_financial_advice_understood": 0,
+    "withdrawal_understood": 0,
+    "report_audit_verify_understood": 0
+  },
+  "gate_results": {
+    "phase_b_privacy_audit": "not_run",
+    "phase_a_privacy_audit": "not_run",
+    "phase_a_smoke": "not_run",
+    "phase_a_security_audit": "not_run",
+    "phase_a_full_e2e": "not_run"
+  }
+}

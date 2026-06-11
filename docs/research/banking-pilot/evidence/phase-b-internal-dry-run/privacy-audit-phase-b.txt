@@ -1,0 +1,4 @@
+Banking Shield Phase B privacy audit has not been run for completed dry-run evidence yet.
+
+Current status: template placeholder only.
+Required before closeout: node scripts/privacy-audit-banking-pilot-phase-b.mjs

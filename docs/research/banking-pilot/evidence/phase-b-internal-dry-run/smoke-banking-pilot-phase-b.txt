@@ -1,0 +1,4 @@
+Banking Shield Phase B dry-run smoke evidence has not been captured yet.
+
+Current status: template placeholder only.
+Required before closeout: run the existing Phase A banking smoke/security/privacy/full-E2E gates after the internal dry run.
