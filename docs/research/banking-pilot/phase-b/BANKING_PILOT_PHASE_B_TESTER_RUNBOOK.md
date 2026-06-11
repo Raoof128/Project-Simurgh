@@ -31,7 +31,7 @@ For each tester:
 11. Ask them to complete the feedback form.
 12. Ask them to confirm no real banking data was entered.
 
-Use a fresh session for each scenario when following the Phase A one-session-one-submit model.
+Use five fresh sessions for the five submitted scenarios, plus one separate fresh session for the withdrawal path. Do not attempt withdrawal on a session already used for a submitted scenario.
 
 ## Operator Checks
 

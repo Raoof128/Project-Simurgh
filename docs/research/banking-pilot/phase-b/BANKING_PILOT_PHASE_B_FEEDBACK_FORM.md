@@ -45,14 +45,22 @@ Select any that apply:
 - [ ] non_claims_understandable
 - [ ] non_claims_need_more_prominence
 
-## Optional Safe Notes
+## Optional Safe Process Notes
 
-Use short process notes only. Do not include real banking details.
+Do not store raw tester free text in evidence. Operators may paraphrase safe process feedback into aggregate categories only.
 
-- What part was hardest to understand?
-- What label or sentence should be clearer?
-- Did any page make the prototype sound like real banking security?
-- Did any page make the prototype sound like fraud detection or financial advice?
+Use category-style prompts:
+
+- consent_wording_issue
+- fictional_scope_issue
+- warning_language_issue
+- report_language_issue
+- audit_language_issue
+- verify_language_issue
+- withdrawal_language_issue
+- non_claims_language_issue
+
+Any note must be reviewed by the operator before retention. If a note contains real banking, financial, app, process, window, or personal details, discard it and record only that a stop condition occurred.
 
 ## Final Confirmation
 

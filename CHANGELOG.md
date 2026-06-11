@@ -1,5 +1,28 @@
 ## Change Log
 
+## [banking-shield-phase-b-pr-polish] — 2026-06-12 — Final PR-prep polish
+
+**Raouf:** Applied the final three Phase B PR-preparation polish fixes after review. Tightened feedback-form handling so raw tester free text is not retained as evidence, clarified the tester runbook to use five fresh submitted-scenario sessions plus one separate withdrawal session, and added the PR-safe statement: "This PR prepares the Phase B internal dry-run protocol and evidence scaffold. It does not report completed human dry-run results." No runtime code, routes, states, Phase C logic, real banking integrations, or completed human dry-run results were added.
+
+### Changed
+
+- `BANKING_PILOT_PHASE_B_FEEDBACK_FORM.md` now limits optional notes to operator-reviewed process categories, with discard rules for real banking, financial, app, process, window, or personal details.
+- `BANKING_PILOT_PHASE_B_TESTER_RUNBOOK.md` now states that testers use five fresh sessions for the five submitted scenarios and a separate fresh session for withdrawal.
+- `BANKING_PILOT_PHASE_B_DOC_AUDIT.md` now includes the PR-safe "not completed human results" sentence.
+
+### Verified
+
+- `npm test` — 389/389 pass.
+- `scripts/smoke-banking-pilot.sh` — 14/14 pass.
+- `scripts/security-audit-banking-pilot.sh` — 27/27 pass.
+- `node scripts/privacy-audit-banking-pilot.mjs` — PASS.
+- `node scripts/privacy-audit-banking-pilot-phase-b.mjs` — PASS, 6 Phase B evidence files scanned.
+- `scripts/smoke-banking-pilot-closed.sh` — 4/4 pass.
+- `scripts/smoke-banking-pilot-full-e2e.sh` — 41/41 pass.
+- `npx prettier --check .` — pass.
+
+---
+
 ## [banking-shield-phase-b-doc-audit] — 2026-06-12 — Documentation audit and polish
 
 **Raouf:** Audited every Stage B2 Phase B document and evidence scaffold created on `banking-shield-phase-b-dry-run`, one by one. Added a dedicated documentation audit, tightened participant-facing and protocol wording, replaced blank closeout fields with explicit `not_run` tables, marked the implementation plan tasks complete, and preserved the aggregate-only evidence contract. No runtime code, routes, states, Phase C logic, real banking integrations, or human dry-run data were added.

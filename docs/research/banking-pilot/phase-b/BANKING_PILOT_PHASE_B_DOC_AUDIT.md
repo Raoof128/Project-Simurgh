@@ -18,6 +18,8 @@ The audit checks each file for:
 
 Approved for Phase B internal dry-run preparation.
 
+This PR prepares the Phase B internal dry-run protocol and evidence scaffold. It does not report completed human dry-run results.
+
 The documents describe an internal trusted-tester comprehension dry run. They do not introduce Phase B runtime routes, Phase C logic, real banking integrations, real CDR, real Confirmation of Payee, payment processing, real accounts, real balances, real payees, transaction amounts, OTPs, credentials, screenshots, app names, process names, or window titles.
 
 ## One-by-One Audit
@@ -29,9 +31,9 @@ The documents describe an internal trusted-tester comprehension dry run. They do
 | `BANKING_PILOT_PHASE_B_PROTOCOL.md`                                                   | Approved | Protocol states the Phase B goal, runtime boundary, tester flow, success criteria, stop conditions, and allowed paper wording. It excludes real banking capability claims. |
 | `BANKING_PILOT_PHASE_B_GO_NO_GO_CHECKLIST.md`                                         | Approved | Checklist covers governance, runtime readiness, privacy readiness, tester comprehension, stop conditions, and final decision. It keeps Phase B gated before testers start. |
 | `BANKING_PILOT_PHASE_B_PARTICIPANT_NOTICE.md`                                         | Approved | Participant-facing wording is plain, direct, and clear about fictional-only participation. It now uses mandatory language for privacy assertions.                          |
-| `BANKING_PILOT_PHASE_B_FEEDBACK_FORM.md`                                              | Approved | Form uses ratings, categories, and safe process notes. It blocks real banking data and avoids per-tester sensitive free text.                                              |
+| `BANKING_PILOT_PHASE_B_FEEDBACK_FORM.md`                                              | Approved | Form uses ratings, categories, and safe process-note categories. It blocks raw tester free text from retained evidence.                                                    |
 | `BANKING_PILOT_PHASE_B_DATA_MANAGEMENT_ADDENDUM.md`                                   | Approved | Addendum defines allowed evidence, prohibited evidence, storage, retention, and audit commands. It preserves aggregate-only handling.                                      |
-| `BANKING_PILOT_PHASE_B_TESTER_RUNBOOK.md`                                             | Approved | Runbook gives operators a direct script, ordered dry-run steps, checks, and stop protocol. It keeps each scenario on a fresh Phase A session.                              |
+| `BANKING_PILOT_PHASE_B_TESTER_RUNBOOK.md`                                             | Approved | Runbook gives operators a direct script, ordered dry-run steps, checks, and stop protocol. It requires five fresh submit sessions plus a separate withdrawal session.      |
 | `BANKING_PILOT_PHASE_B_CLOSEOUT.md`                                                   | Approved | Closeout remains unexecuted by design. Blank fields were replaced with auditable `not_run` values and aggregate tables.                                                    |
 | `BANKING_PILOT_PHASE_B_CLAIM_AUDIT.md`                                                | Approved | Claim table separates allowed dry-run claims from disallowed banking-security claims. Status remains `Not yet run` until testers complete the run.                         |
 | `docs/research/banking-pilot/evidence/phase-b-internal-dry-run/README.md`             | Approved | Evidence folder rules define allowed files, prohibited content, metadata contract, and current status.                                                                     |

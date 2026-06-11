@@ -2,6 +2,18 @@
 
 ## Agent Change Log
 
+### 2026-06-12 (Australia/Sydney) — Banking Shield Phase B PR-prep polish
+
+**Raouf:**
+
+- **Scope:** Applied the final three Phase B PR-preparation polish fixes requested after review. No runtime code, routes, states, Phase C logic, real banking integrations, or completed human dry-run results were added.
+- **Summary:** Tightened `BANKING_PILOT_PHASE_B_FEEDBACK_FORM.md` so raw tester free text is not retained as evidence, clarified `BANKING_PILOT_PHASE_B_TESTER_RUNBOOK.md` so testers use five fresh submit sessions plus one separate withdrawal session, and added the PR-safe statement that the PR prepares the Phase B protocol/evidence scaffold but does not report completed human dry-run results. Inspected the dirty Phase A rejected-attempt audit fixture; its diff was timestamp/HMAC churn from local privacy-audit reruns, so it was restored and excluded from the Phase B PR.
+- **Files changed:** `docs/research/banking-pilot/phase-b/BANKING_PILOT_PHASE_B_FEEDBACK_FORM.md`, `docs/research/banking-pilot/phase-b/BANKING_PILOT_PHASE_B_TESTER_RUNBOOK.md`, `docs/research/banking-pilot/phase-b/BANKING_PILOT_PHASE_B_DOC_AUDIT.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `npm test` passed 389/389; `scripts/smoke-banking-pilot.sh` passed 14/14; `scripts/security-audit-banking-pilot.sh` passed 27/27; `node scripts/privacy-audit-banking-pilot.mjs` PASS; `node scripts/privacy-audit-banking-pilot-phase-b.mjs` PASS over 6 evidence files; `scripts/smoke-banking-pilot-closed.sh` passed 4/4; `scripts/smoke-banking-pilot-full-e2e.sh` passed 41/41; `npx prettier --check .` passed.
+- **Follow-ups:** Use the exact PR body sentence: "This PR prepares the Phase B internal dry-run protocol and evidence scaffold. It does not report completed human dry-run results."
+
+---
+
 ### 2026-06-12 (Australia/Sydney) — Banking Shield Phase B documentation audit
 
 **Raouf:**
