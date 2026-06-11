@@ -10,7 +10,7 @@ Approved for protocol scaffolding only. The internal dry run may begin only afte
 
 ## Purpose
 
-Phase B evaluates whether trusted internal testers can safely understand and complete the existing Banking Shield Phase A flow. It tests consent, warning, withdrawal, report, audit, and verification comprehension using fictional banking-adjacent scenarios only.
+Phase B evaluates whether trusted internal testers can understand and complete the existing Banking Shield Phase A flow without entering real banking data. It tests consent, warning, withdrawal, report, audit, and verification comprehension using fictional banking-adjacent scenarios only.
 
 Phase B does not test real banking protection. It does not connect to banks, payment systems, CDR providers, Confirmation of Payee services, or financial institutions.
 
@@ -102,7 +102,7 @@ Stop the dry run immediately if:
 
 ## Non-Claims
 
-Phase B may support this wording:
+If Phase B passes, use this wording:
 
 > Phase A established automated structural privacy and integrity gates. Phase B then evaluated the consent, warning, withdrawal, report, audit, and verification workflow with trusted internal participants using fictional banking-adjacent scenarios only.
 

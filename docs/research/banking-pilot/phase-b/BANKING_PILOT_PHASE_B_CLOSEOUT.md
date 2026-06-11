@@ -2,7 +2,9 @@
 
 ## Status
 
-Not yet executed. This file is the closeout scaffold for the internal dry run.
+Execution status: `not_run`.
+
+Use this closeout scaffold after the internal dry run. Keep all results aggregate-only.
 
 ## Metadata
 
@@ -20,13 +22,15 @@ Not yet executed. This file is the closeout scaffold for the internal dry run.
 
 ## Completion Summary
 
-- Trusted testers completed:
-- Scenario completions:
-- Withdrawal path completed:
-- Reports opened:
-- Audit exports opened:
-- Verify exports opened:
-- Feedback forms completed:
+| Field                     | Value     |
+| ------------------------- | --------- |
+| Trusted testers completed | `not_run` |
+| Scenario completions      | `not_run` |
+| Withdrawal path completed | `not_run` |
+| Reports opened            | `not_run` |
+| Audit exports opened      | `not_run` |
+| Verify exports opened     | `not_run` |
+| Feedback forms completed  | `not_run` |
 
 ## Privacy Summary
 
@@ -40,12 +44,14 @@ Not yet executed. This file is the closeout scaffold for the internal dry run.
 
 Record aggregate counts only:
 
-- Testers understood fictional-only scope:
-- Testers understood no bank connection:
-- Testers understood no fraud detection:
-- Testers understood no financial advice:
-- Testers understood withdrawal behavior:
-- Testers understood report/audit/verify behavior:
+| Comprehension Item                              | Aggregate Count |
+| ----------------------------------------------- | --------------- |
+| Testers understood fictional-only scope         | `not_run`       |
+| Testers understood no bank connection           | `not_run`       |
+| Testers understood no fraud detection           | `not_run`       |
+| Testers understood no financial advice          | `not_run`       |
+| Testers understood withdrawal behavior          | `not_run`       |
+| Testers understood report/audit/verify behavior | `not_run`       |
 
 ## Gate Evidence
 
@@ -62,7 +68,7 @@ Phase B result:
 
 - [ ] Pass.
 - [ ] No pass.
-- [ ] Not yet run.
+- [x] Not run.
 
 ## Paper-Safe Wording
 

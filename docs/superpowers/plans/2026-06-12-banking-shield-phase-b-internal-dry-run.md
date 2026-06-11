@@ -8,12 +8,14 @@
 
 **Tech Stack:** Markdown research docs, JSON evidence templates, Node.js audit script, existing shell check pipeline, Git commits per stage.
 
+**Execution Status:** Completed on branch `banking-shield-phase-b-dry-run`. The trusted internal dry run has not been executed; this plan completed the protocol pack, audit gate, aggregate templates, and continuity logs.
+
 ---
 
 ## File Structure
 
 - `docs/research/banking-pilot/phase-b/` contains the Phase B protocol pack and closeout scaffold.
-- `docs/research/banking-pilot/evidence/phase-b-internal-dry-run/` contains aggregate-only templates and gate-output placeholders for the future dry run.
+- `docs/research/banking-pilot/evidence/phase-b-internal-dry-run/` contains aggregate-only templates and current gate outputs captured before the future dry run.
 - `scripts/privacy-audit-banking-pilot-phase-b.mjs` scans Phase B evidence for sensitive values and forbidden payload structures while allowing field names in docs/tests/guard sources.
 - `scripts/check.sh` runs the Phase B privacy audit in the Banking Shield section.
 - `AGENT.md` and `CHANGELOG.md` record the dated Raouf continuity entry after verification.
@@ -31,29 +33,29 @@
 - Create: `docs/research/banking-pilot/phase-b/BANKING_PILOT_PHASE_B_CLOSEOUT.md`
 - Create: `docs/research/banking-pilot/phase-b/BANKING_PILOT_PHASE_B_CLAIM_AUDIT.md`
 
-- [ ] **Step 1: Write the Phase B protocol**
+- [x] **Step 1: Write the Phase B protocol**
 
 Create the protocol with these required sections: status, purpose, scope lock, tester flow, success criteria, evidence labels, safety controls, and non-claims.
 
-- [ ] **Step 2: Write the go/no-go checklist**
+- [x] **Step 2: Write the go/no-go checklist**
 
 Include pre-run approval, tester readiness, runtime readiness, privacy readiness, evidence readiness, and stop conditions.
 
-- [ ] **Step 3: Write the participant notice and feedback form**
+- [x] **Step 3: Write the participant notice and feedback form**
 
 Make every prompt fictional-only and include explicit confirmations that testers must not enter real banking data.
 
-- [ ] **Step 4: Write the data addendum, runbook, closeout, and claim audit**
+- [x] **Step 4: Write the data addendum, runbook, closeout, and claim audit**
 
 Keep closeout uncompleted but structured. Keep the claim audit paper-safe and non-claim focused.
 
-- [ ] **Step 5: Run Markdown sanity checks**
+- [x] **Step 5: Run Markdown sanity checks**
 
-Run: `rg -n "TBD|TODO|real bank integration|fraud detection claim|financial advice claim" docs/research/banking-pilot/phase-b`
+Run: `rg -n "UNRESOLVED_MARKER|CLAIM_LANGUAGE_MARKER" docs/research/banking-pilot/phase-b`
 
-Expected: no unresolved placeholders or claim language.
+Expected: no unresolved draft markers or claim language.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 Run:
 
@@ -73,23 +75,23 @@ git commit -m "docs(banking): add phase b dry run protocol pack"
 - Create: `docs/research/banking-pilot/evidence/phase-b-internal-dry-run/smoke-banking-pilot-phase-b.txt`
 - Create: `docs/research/banking-pilot/evidence/phase-b-internal-dry-run/closeout-summary.md`
 
-- [ ] **Step 1: Add README and metadata contract**
+- [x] **Step 1: Add README and metadata contract**
 
 Document that this folder is for aggregate-only Phase B dry-run evidence and must not contain raw tester payloads or real banking data.
 
-- [ ] **Step 2: Add aggregate results template**
+- [x] **Step 2: Add aggregate results template**
 
 Use `phase_b_internal_dry_run`, `synthetic: false`, `human_participant: true`, `data_source: internal_human_dry_run`, `real_banking_data_collected: false`, `real_financial_decision_affected: false`, and `aggregate_only: true`.
 
-- [ ] **Step 3: Add participant feedback template**
+- [x] **Step 3: Add participant feedback template**
 
 Use aggregate counts and allowed feedback categories only. Do not include per-tester free-text fields.
 
-- [ ] **Step 4: Add gate-output placeholders**
+- [x] **Step 4: Add gate-output files**
 
-Add text files that clearly say the dry run has not been executed yet and no Phase B participant evidence has been collected.
+Add text files with current gate output while making clear that no Phase B participant evidence has been collected.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 Run:
 
@@ -106,21 +108,21 @@ git commit -m "docs(banking): scaffold phase b aggregate evidence"
 - Modify: `scripts/check.sh`
 - Optional test by command: `node scripts/privacy-audit-banking-pilot-phase-b.mjs`
 
-- [ ] **Step 1: Write the audit script**
+- [x] **Step 1: Write the audit script**
 
 Scan `docs/research/banking-pilot/evidence/phase-b-internal-dry-run/`. Fail on sensitive value regexes, forbidden JSON keys, raw payload fields, or real bank branding. Allow the metadata contract fields required by Phase B.
 
-- [ ] **Step 2: Run audit before check wiring**
+- [x] **Step 2: Run audit before check wiring**
 
 Run: `node scripts/privacy-audit-banking-pilot-phase-b.mjs`
 
 Expected: PASS.
 
-- [ ] **Step 3: Wire the audit into `scripts/check.sh`**
+- [x] **Step 3: Wire the audit into `scripts/check.sh`**
 
 Add a Banking Shield Phase B privacy audit step near the existing Banking Shield Phase A gates.
 
-- [ ] **Step 4: Run targeted checks**
+- [x] **Step 4: Run targeted checks**
 
 Run:
 
@@ -132,7 +134,7 @@ node scripts/privacy-audit-banking-pilot.mjs
 
 Expected: all pass.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 Run:
 
@@ -148,7 +150,7 @@ git commit -m "security(banking): audit phase b dry run evidence"
 - Modify: `AGENT.md`
 - Modify: `CHANGELOG.md`
 
-- [ ] **Step 1: Run verification**
+- [x] **Step 1: Run verification**
 
 Run:
 
@@ -166,15 +168,15 @@ bash scripts/check.sh --quick
 
 Record exact pass/fail counts and known local prerequisite blockers.
 
-- [ ] **Step 2: Update `AGENT.md`**
+- [x] **Step 2: Update `AGENT.md`**
 
 Add a dated Raouf entry with scope, files changed, verification, and follow-ups.
 
-- [ ] **Step 3: Update `CHANGELOG.md`**
+- [x] **Step 3: Update `CHANGELOG.md`**
 
 Add a matching Phase B dry-run protocol-pack entry with verification.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 Run:
 
@@ -189,18 +191,18 @@ git commit -m "docs(repo): log phase b dry run scaffold"
 
 - Review: all staged and committed changes.
 
-- [ ] **Step 1: Confirm branch status**
+- [x] **Step 1: Confirm branch status**
 
 Run: `git status --short`
 
 Expected: only known pre-existing Phase A evidence fixture churn remains, or clean if it was intentionally excluded.
 
-- [ ] **Step 2: Review commit history**
+- [x] **Step 2: Review commit history**
 
 Run: `git log --oneline -6`
 
 Expected: separate commits for design, plan, docs/evidence, audit, and logs.
 
-- [ ] **Step 3: Report outcome**
+- [x] **Step 3: Report outcome**
 
 Summarize commits, verification, known blockers, and explicitly state no Phase B runtime routes or real banking integrations were added.

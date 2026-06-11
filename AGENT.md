@@ -2,6 +2,18 @@
 
 ## Agent Change Log
 
+### 2026-06-12 (Australia/Sydney) — Banking Shield Phase B documentation audit
+
+**Raouf:**
+
+- **Scope:** Audited every Stage B2 Phase B document and evidence scaffold created on `banking-shield-phase-b-dry-run`, one by one. No runtime code, routes, states, real banking integrations, Phase C logic, or human dry-run data were added.
+- **Summary:** Added `BANKING_PILOT_PHASE_B_DOC_AUDIT.md`, tightened participant notice and protocol wording, converted closeout blanks to explicit `not_run` tables, marked the implementation plan execution steps complete, and preserved the aggregate-only evidence contract.
+- **Files changed:** `docs/research/banking-pilot/phase-b/BANKING_PILOT_PHASE_B_DOC_AUDIT.md`, `docs/research/banking-pilot/phase-b/BANKING_PILOT_PHASE_B_CLOSEOUT.md`, `docs/research/banking-pilot/phase-b/BANKING_PILOT_PHASE_B_PARTICIPANT_NOTICE.md`, `docs/research/banking-pilot/phase-b/BANKING_PILOT_PHASE_B_PROTOCOL.md`, `docs/research/banking-pilot/evidence/phase-b-internal-dry-run/closeout-summary.md`, `docs/superpowers/specs/2026-06-12-banking-shield-phase-b-internal-dry-run-design.md`, `docs/superpowers/plans/2026-06-12-banking-shield-phase-b-internal-dry-run.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** Phase B documentation scan found no unresolved draft markers, prohibited claim phrases, em dashes, or selected filler terms; `npx prettier --check` passed across Phase B docs, evidence scaffolds, spec, and plan; `node scripts/privacy-audit-banking-pilot-phase-b.mjs` PASS over 6 evidence files.
+- **Follow-ups:** Keep the one-by-one audit current if future Phase B closeout evidence replaces templates after trusted testers complete the dry run.
+
+---
+
 ### 2026-06-12 (Australia/Sydney) — Banking Shield Phase B internal dry-run scaffold
 
 **Raouf:**

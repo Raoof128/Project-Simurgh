@@ -4,7 +4,7 @@
 
 You are being asked to try a research prototype using fictional banking-adjacent scenarios. The goal is to check whether the consent, warning, withdrawal, report, audit, and verification flow is understandable.
 
-This is not a real banking tool.
+The prototype is a fictional internal dry-run tool.
 
 ## What You Will Do
 
@@ -56,9 +56,9 @@ The prototype does not:
 
 ## Data Handling
 
-The dry run records aggregate-only results. It is intended to keep no real banking data and no per-tester sensitive banking content.
+The dry run records aggregate-only results. Operators must not retain real banking data or per-tester sensitive banking content.
 
-Reports should show all sensitive collection assertions as `false`.
+Reports must show all sensitive collection assertions as `false`.
 
 ## Withdrawal
 

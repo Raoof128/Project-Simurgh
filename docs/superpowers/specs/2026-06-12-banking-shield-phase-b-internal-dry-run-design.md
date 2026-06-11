@@ -62,7 +62,7 @@ Phase B evidence labels must use:
 
 `synthetic: false` means humans interacted with the prototype. It does not mean the banking data is real. Scenario content remains fictional.
 
-Evidence may contain:
+Evidence can contain:
 
 - Aggregate tester counts.
 - Aggregate comprehension outcomes.
@@ -89,7 +89,7 @@ The audit must scan the Phase B evidence folder and fail if it finds high-risk b
 
 ## Tester Flow
 
-Each trusted tester should:
+Each trusted tester must:
 
 1. Read the Phase B participant notice.
 2. Confirm fictional-only participation and non-claims.
@@ -145,7 +145,7 @@ Add `scripts/privacy-audit-banking-pilot-phase-b.mjs` only if the existing Phase
 
 ## Non-Claims
 
-Phase B may support this paper-safe wording:
+If Phase B passes, use this paper-safe wording:
 
 > Phase A established automated structural privacy and integrity gates. Phase B then evaluated the consent, warning, withdrawal, report, audit, and verification workflow with trusted internal participants using fictional banking-adjacent scenarios only.
 

@@ -2,22 +2,24 @@
 
 ## Status
 
-Not yet executed.
+Execution status: `not_run`.
 
 ## Summary
 
-No trusted internal tester evidence has been collected yet. This file is a placeholder for aggregate-only closeout notes after the dry run.
+No trusted internal tester evidence has been collected. Use this file for aggregate-only closeout notes after the dry run.
 
 ## Required Closeout Fields
 
-- Trusted testers completed:
-- Scenario completions:
-- Withdrawal path completions:
-- Report/audit/verify comprehension:
-- Non-claim comprehension:
-- Privacy audit result:
-- Smoke/security gate result:
-- Stop conditions triggered:
+| Field                             | Value     |
+| --------------------------------- | --------- |
+| Trusted testers completed         | `not_run` |
+| Scenario completions              | `not_run` |
+| Withdrawal path completions       | `not_run` |
+| Report/audit/verify comprehension | `not_run` |
+| Non-claim comprehension           | `not_run` |
+| Privacy audit result              | `not_run` |
+| Smoke/security gate result        | `not_run` |
+| Stop conditions triggered         | `not_run` |
 
 ## Privacy Result
 

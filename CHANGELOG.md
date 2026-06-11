@@ -1,5 +1,27 @@
 ## Change Log
 
+## [banking-shield-phase-b-doc-audit] — 2026-06-12 — Documentation audit and polish
+
+**Raouf:** Audited every Stage B2 Phase B document and evidence scaffold created on `banking-shield-phase-b-dry-run`, one by one. Added a dedicated documentation audit, tightened participant-facing and protocol wording, replaced blank closeout fields with explicit `not_run` tables, marked the implementation plan tasks complete, and preserved the aggregate-only evidence contract. No runtime code, routes, states, Phase C logic, real banking integrations, or human dry-run data were added.
+
+### Added
+
+- `docs/research/banking-pilot/phase-b/BANKING_PILOT_PHASE_B_DOC_AUDIT.md` — one-by-one audit covering spec, plan, Phase B protocol docs, and evidence scaffolds.
+
+### Changed
+
+- `BANKING_PILOT_PHASE_B_CLOSEOUT.md` and `closeout-summary.md` now use explicit `not_run` status tables instead of blank fields.
+- `BANKING_PILOT_PHASE_B_PARTICIPANT_NOTICE.md`, `BANKING_PILOT_PHASE_B_PROTOCOL.md`, and the Phase B design spec now use tighter mandatory wording for privacy and flow requirements.
+- `docs/superpowers/plans/2026-06-12-banking-shield-phase-b-internal-dry-run.md` now records execution status and completed steps.
+
+### Verified
+
+- Phase B documentation scan found no unresolved draft markers, prohibited claim phrases, em dashes, or selected filler terms.
+- `npx prettier --check` passed across Phase B docs, evidence scaffolds, spec, and plan.
+- `node scripts/privacy-audit-banking-pilot-phase-b.mjs` — PASS, 6 Phase B evidence files scanned.
+
+---
+
 ## [banking-shield-phase-b] — 2026-06-12 — Internal dry-run scaffold
 
 **Raouf:** Started Stage B2 — Banking Shield Phase B Internal Dry Run as a trusted internal tester comprehension layer using the existing Phase A Banking Shield runtime only. Added the Phase B design spec, implementation plan, protocol pack, aggregate-only evidence templates, current Phase B privacy/smoke gate output, and a dedicated Phase B evidence privacy audit wired into `scripts/check.sh`. No Phase B runtime routes, server states, human-pilot logic, Phase C behavior, real banking integrations, real CDR, real Confirmation of Payee, real payments, real accounts, real balances, real payees, transaction amounts, OTPs, credentials, screenshots, app names, process names, or window titles were added.
