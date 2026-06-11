@@ -4,10 +4,20 @@
 
 Use this checklist before any trusted tester starts the internal dry run.
 
+## Stage B3 Pre-Tester Readiness
+
+Readiness date: 2026-06-12 Australia/Sydney.
+
+Readiness owner: Raouf.
+
+Current decision: `no_go_pending_tester_selection`.
+
+Reason: Runtime, privacy, and evidence scaffolding can be checked now. Human dry-run execution cannot start until 2-3 trusted internal testers are selected, the participant notice is shown to each tester, and each tester confirms the comprehension gates below.
+
 ## Governance
 
-- [ ] Phase B protocol reviewed.
-- [ ] Scope lock reviewed.
+- [x] Phase B protocol reviewed.
+- [x] Scope lock reviewed.
 - [ ] 2-3 trusted internal testers selected.
 - [ ] Testers are told the dry run is voluntary.
 - [ ] Testers are told they may stop at any time.
@@ -15,22 +25,22 @@ Use this checklist before any trusted tester starts the internal dry run.
 
 ## Runtime Readiness
 
-- [ ] Existing Phase A `/api/banking-pilot` runtime is used unchanged.
-- [ ] No Phase B routes are enabled.
-- [ ] No Phase C routes are enabled.
-- [ ] No real bank integration exists.
-- [ ] No real CDR, Confirmation of Payee, or payment-processing integration exists.
-- [ ] Sonnet support remains optional and off by default.
-- [ ] Local deterministic banking risk policy remains the official result.
+- [x] Existing Phase A `/api/banking-pilot` runtime is used unchanged.
+- [x] No Phase B routes are enabled.
+- [x] No Phase C routes are enabled.
+- [x] No real bank integration exists.
+- [x] No real CDR, Confirmation of Payee, or payment-processing integration exists.
+- [x] Sonnet support remains optional and off by default.
+- [x] Local deterministic banking risk policy remains the official result.
 
 ## Privacy Readiness
 
 - [ ] Participant notice reviewed with each tester.
-- [ ] Feedback form excludes real banking details and per-tester sensitive free text.
-- [ ] Evidence folder is aggregate-only.
-- [ ] Phase B privacy audit passes before the dry run.
-- [ ] Existing Phase A privacy audit passes.
-- [ ] Existing security audit passes.
+- [x] Feedback form excludes real banking details and per-tester sensitive free text.
+- [x] Evidence folder is aggregate-only.
+- [x] Phase B privacy audit passes before the dry run.
+- [x] Existing Phase A privacy audit passes.
+- [x] Existing security audit passes.
 
 ## Tester Comprehension Gates
 
@@ -60,8 +70,8 @@ Mark no-go if any item is true:
 ## Final Decision
 
 - [ ] Go: all readiness and comprehension checks passed.
-- [ ] No-go: at least one stop condition was triggered.
+- [x] No-go: tester selection and tester comprehension confirmations are still pending.
 
-Decision date:
+Decision date: 2026-06-12 Australia/Sydney.
 
-Decision owner:
+Decision owner: Raouf.

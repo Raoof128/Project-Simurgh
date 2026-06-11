@@ -2,6 +2,18 @@
 
 ## Agent Change Log
 
+### 2026-06-12 (Australia/Sydney) — Banking Shield Phase B3 pre-tester readiness
+
+**Raouf:**
+
+- **Scope:** Started Stage B3 — Banking Shield Phase B Internal Dry Run Execution + Closeout by completing the parts available before human testers. No human dry-run results were fabricated, no Phase B runtime routes were added, no Phase C logic was added, and the existing Phase A `/api/banking-pilot` runtime remains unchanged.
+- **Summary:** Created branch `banking-shield-phase-b-execution-closeout` from current `main`, updated the Phase B go/no-go checklist with a pre-tester readiness decision of `no_go_pending_tester_selection`, checked verifiable runtime/privacy readiness items, and left tester selection, participant notice review, and tester comprehension gates unchecked until 2-3 trusted internal testers actually run the protocol.
+- **Files changed:** `docs/research/banking-pilot/phase-b/BANKING_PILOT_PHASE_B_GO_NO_GO_CHECKLIST.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `npm test` passed 389/389; `scripts/smoke-banking-pilot.sh` passed 14/14; `scripts/security-audit-banking-pilot.sh` passed 27/27; `node scripts/privacy-audit-banking-pilot.mjs` PASS; `node scripts/privacy-audit-banking-pilot-phase-b.mjs` PASS over 6 evidence files; `scripts/smoke-banking-pilot-closed.sh` passed 4/4; `scripts/smoke-banking-pilot-full-e2e.sh` passed 41/41; `npx prettier --check .` passed. Generated Phase A HMAC fixture churn from privacy-audit reruns was restored and excluded.
+- **Follow-ups:** Select 2-3 trusted internal testers, show the participant notice to each tester, run five fresh submitted sessions plus one separate withdrawal session per tester, record aggregate-only results, then update Phase B closeout, claim audit, and evidence files.
+
+---
+
 ### 2026-06-12 (Australia/Sydney) — Banking Shield Phase B PR-prep polish
 
 **Raouf:**

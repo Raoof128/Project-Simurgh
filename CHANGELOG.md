@@ -1,5 +1,30 @@
 ## Change Log
 
+## [banking-shield-phase-b3-readiness] — 2026-06-12 — Pre-tester readiness checkpoint
+
+**Raouf:** Started Stage B3 — Banking Shield Phase B Internal Dry Run Execution + Closeout by completing the steps available before human testers. Updated the Phase B go/no-go checklist with a pre-tester readiness decision of `no_go_pending_tester_selection`, checked only verifiable runtime/privacy readiness items, and left tester selection, participant notice review, and tester comprehension gates unchecked until 2-3 trusted internal testers run the approved protocol. No human dry-run results were fabricated, no Phase B runtime routes were added, no Phase C logic was added, and the existing Phase A `/api/banking-pilot` runtime remains unchanged.
+
+### Changed
+
+- `docs/research/banking-pilot/phase-b/BANKING_PILOT_PHASE_B_GO_NO_GO_CHECKLIST.md` now records the B3 pre-tester readiness status and makes the current no-go reason explicit.
+
+### Verified
+
+- `npm test` — 389/389 pass.
+- `scripts/smoke-banking-pilot.sh` — 14/14 pass.
+- `scripts/security-audit-banking-pilot.sh` — 27/27 pass.
+- `node scripts/privacy-audit-banking-pilot.mjs` — PASS.
+- `node scripts/privacy-audit-banking-pilot-phase-b.mjs` — PASS, 6 Phase B evidence files scanned.
+- `scripts/smoke-banking-pilot-closed.sh` — 4/4 pass.
+- `scripts/smoke-banking-pilot-full-e2e.sh` — 41/41 pass.
+- `npx prettier --check .` — pass.
+
+### Follow-up
+
+- Select 2-3 trusted internal testers, show the participant notice to each tester, run five fresh submitted sessions plus one separate withdrawal session per tester, record aggregate-only results, then update Phase B closeout, claim audit, and evidence files.
+
+---
+
 ## [banking-shield-phase-b-pr-polish] — 2026-06-12 — Final PR-prep polish
 
 **Raouf:** Applied the final three Phase B PR-preparation polish fixes after review. Tightened feedback-form handling so raw tester free text is not retained as evidence, clarified the tester runbook to use five fresh submitted-scenario sessions plus one separate withdrawal session, and added the PR-safe statement: "This PR prepares the Phase B internal dry-run protocol and evidence scaffold. It does not report completed human dry-run results." No runtime code, routes, states, Phase C logic, real banking integrations, or completed human dry-run results were added.
