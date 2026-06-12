@@ -2,6 +2,18 @@
 
 ## Agent Change Log
 
+### 2026-06-12 (Australia/Sydney) — Banking Shield Simurgh function alignment audit
+
+**Raouf:**
+
+- **Scope:** Completed a targeted full audit of Banking Shield Phase A alignment with the broader Simurgh design and function set before trusted testers use the demo. No Banking Shield runtime routes, Phase B human-result logic, Phase C logic, real banking integrations, or Academic Shield proctoring telemetry were added.
+- **Summary:** Added `BANKING_PILOT_SIMURGH_ALIGNMENT_AUDIT.md` covering visual alignment, public tester flow, local deterministic scoring, HMAC audit/report/verify exports, closure/token/privacy gates, Sonnet narrative boundary, and the explicit reason Banking Shield must not reuse Academic Shield proctoring telemetry. Updated the consent page with a Simurgh functions panel stating that Banking Shield uses local policy, HMAC exports, optional metadata-only Sonnet narrative support, and no Academic Shield proctoring telemetry.
+- **Files changed:** `docs/research/banking-pilot/BANKING_PILOT_SIMURGH_ALIGNMENT_AUDIT.md`, `public/banking-pilot-consent.html`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** Banking unit/security target passed 35/35; `scripts/smoke-banking-pilot.sh` passed 14/14; `node scripts/privacy-audit-banking-pilot.mjs` PASS; `scripts/smoke-banking-pilot-full-e2e.sh` passed 41/41; targeted Prettier check passed; local Playwright screenshot captured the updated consent page. Generated Phase A HMAC fixture churn from audit reruns was restored and excluded.
+- **Follow-ups:** Keep Banking Shield on structural Simurgh reuse only: local scoring, audit chain, report/audit/verify exports, and optional sanitized narrative support. Do not wire Academic Shield `/api/telemetry` or device/proctoring signals into Banking Shield Phase A.
+
+---
+
 ### 2026-06-12 (Australia/Sydney) — Banking Shield Phase A tester UI visual alignment
 
 **Raouf:**

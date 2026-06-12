@@ -1,5 +1,33 @@
 ## Change Log
 
+## [banking-shield-simurgh-alignment-audit] — 2026-06-12 — Function alignment audit
+
+**Raouf:** Completed a targeted full audit of Banking Shield Phase A alignment with the broader Simurgh design and function set. Added a formal audit document and updated the consent page with a visible Simurgh functions panel. The audit confirms that Banking Shield correctly reuses Simurgh structural functions while not importing Academic Shield proctoring telemetry into the banking-adjacent demo.
+
+### Added
+
+- `docs/research/banking-pilot/BANKING_PILOT_SIMURGH_ALIGNMENT_AUDIT.md` — visual, runtime, Sonnet narrative, proctoring-boundary, privacy, security, and verification audit.
+
+### Changed
+
+- `public/banking-pilot-consent.html` now shows the Simurgh functions used by the Banking Shield demo: local deterministic policy, HMAC report/audit/verify exports, optional metadata-only Sonnet narrative support, and no Academic Shield proctoring telemetry.
+
+### Verified
+
+- Banking unit/security target — 35/35 pass.
+- `scripts/smoke-banking-pilot.sh` — 14/14 pass.
+- `node scripts/privacy-audit-banking-pilot.mjs` — PASS.
+- `scripts/smoke-banking-pilot-full-e2e.sh` — 41/41 pass.
+- Targeted Prettier check — pass.
+- Local Playwright screenshot captured the updated consent page.
+
+### Notes
+
+- Do not wire Academic Shield `/api/telemetry`, focus/paste telemetry, device scanner signals, screen capture, app names, process names, or window titles into Banking Shield Phase A.
+- Sonnet remains narrative support only for Banking Shield and must receive sanitized metadata only. The local deterministic banking policy remains the official result.
+
+---
+
 ## [banking-shield-phase-a-ui-alignment] — 2026-06-12 — Tester UI visual alignment
 
 **Raouf:** Restyled the public Banking Shield Phase A tester pages to match the broader Project Simurgh interface language. Added a shared stylesheet with the existing paper/ink/oxblood/moss palette, Simurgh seal header, research-demo panels, privacy boundary banner, responsive scenario grid, and styled JSON output. The Phase A API flow remains unchanged: no new runtime routes, Phase B human-run logic, Phase C logic, real banking integrations, or privacy assertion changes.
