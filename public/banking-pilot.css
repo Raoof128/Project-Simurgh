@@ -295,12 +295,16 @@ body {
 }
 
 .scope-list li {
-  display: grid;
-  grid-template-columns: 16px 1fr;
+  position: relative;
+  display: block;
+  min-height: 24px;
+  padding-left: 26px;
   gap: 10px;
 }
 
 .scope-list li::before {
+  position: absolute;
+  left: 0;
   width: 8px;
   height: 8px;
   margin-top: 8px;

@@ -2,6 +2,18 @@
 
 ## Agent Change Log
 
+### 2026-06-12 (Australia/Sydney) — Banking Shield Stage B4-B AI privacy explanation UI
+
+**Raouf:**
+
+- **Scope:** Surfaced the B4-A privacy-firewalled explanation on the public Banking Shield report page. No backend route semantics, deterministic scoring, official policy result fields, audit-chain verification, withdrawal handling, privacy assertions, live LLM provider, network egress, secrets, Phase C logic, or real banking integrations were changed.
+- **Summary:** Added B4-B plan/spec docs, a Simurgh-styled AI Privacy Explanation panel on `public/banking-pilot-report.html`, receipt/non-claim rendering, disabled/off-path wording, and shared CSS for compact narrative/receipt panels. Extended the full Banking Shield E2E smoke gate so it verifies the B4-B page contract and a flag-on explanation receipt with `sensitive_payload_sent_to_ai:false`, `network_egress_used:false`, `official_result_unchanged:true`, `claim_guard_passed:true`, and a stable `narrative_hash` shape.
+- **Files changed:** `docs/superpowers/specs/2026-06-12-banking-shield-ai-privacy-explanation-ui-design.md`, `docs/superpowers/plans/2026-06-12-banking-shield-ai-privacy-explanation-ui.md`, `public/banking-pilot-report.html`, `public/banking-pilot.css`, `scripts/smoke-banking-pilot-full-e2e.sh`, `docs/research/banking-pilot/phase-b4b/BANKING_PILOT_PHASE_B4B_CLOSEOUT.md`, `docs/research/banking-pilot/phase-b4b/BANKING_PILOT_PHASE_B4B_CLAIM_AUDIT.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `npm test` 413/413; `scripts/smoke-banking-pilot.sh` 14/14; `scripts/smoke-banking-pilot-ai-firewall.sh` 5/5; `scripts/smoke-banking-pilot-full-e2e.sh` 43/43; `scripts/security-audit-banking-pilot.sh` 27/27; `node scripts/privacy-audit-banking-pilot.mjs` PASS; `node scripts/privacy-audit-banking-pilot-phase-b.mjs` PASS; `node scripts/privacy-audit-banking-pilot-ai-firewall.mjs` PASS; `npx prettier --check .` clean; Browser visual check confirmed the populated B4-B panel, visible receipt flags, and no horizontal overflow after fixing the export-legend wrapping.
+- **Follow-ups:** Keep B4-B wording presentation-only. If a later stage adds richer UI behavior, it must continue to display the receipt and must not weaken the B4-A input/output firewall claims.
+
+---
+
 ### 2026-06-12 (Australia/Sydney) — Banking Shield Stage B4-A AI privacy firewall (backend)
 
 **Raouf:**

@@ -1,5 +1,35 @@
 ## Change Log
 
+## [banking-shield-phase-b4b-ai-explanation-ui] — 2026-06-12 — Report-page AI privacy explanation UI
+
+**Raouf:** Surfaced the B4-A metadata-only AI privacy explanation on the public Banking Shield report page. The UI renders the approved narrative, non-claims, and receipt flags while preserving the official deterministic policy result and the no-sensitive-payload boundary. No backend route semantics, scoring, audit verification, withdrawal blocking, privacy assertions, live LLM provider, network egress, secrets, Phase C logic, or real banking integrations were changed.
+
+### Added
+
+- `docs/superpowers/specs/2026-06-12-banking-shield-ai-privacy-explanation-ui-design.md` and `docs/superpowers/plans/2026-06-12-banking-shield-ai-privacy-explanation-ui.md` for the B4-B UI stage.
+- `docs/research/banking-pilot/phase-b4b/` closeout and claim-audit docs.
+- Public report-page AI Privacy Explanation panel with narrative fields, non-claims, receipt flags, disabled/off-path wording, and narrative-hash display.
+
+### Changed
+
+- `public/banking-pilot.css` adds Simurgh-matched compact panel, non-claim, and receipt-grid styling.
+- `scripts/smoke-banking-pilot-full-e2e.sh` now verifies the B4-B page contract and a flag-on safe AI explanation receipt.
+
+### Verified
+
+- `npm test` — 413/413 pass.
+- `scripts/smoke-banking-pilot.sh` — 14/14 pass.
+- `scripts/smoke-banking-pilot-ai-firewall.sh` — 5/5 pass.
+- `scripts/smoke-banking-pilot-full-e2e.sh` — 43/43 pass.
+- `scripts/security-audit-banking-pilot.sh` — 27/27 pass.
+- `node scripts/privacy-audit-banking-pilot.mjs` — PASS.
+- `node scripts/privacy-audit-banking-pilot-phase-b.mjs` — PASS.
+- `node scripts/privacy-audit-banking-pilot-ai-firewall.mjs` — PASS.
+- `npx prettier --check .` — clean.
+- Browser visual check confirmed the populated B4-B panel, visible receipt flags, and no horizontal overflow after fixing the export-legend wrapping.
+
+---
+
 ## [banking-shield-phase-b4a-ai-firewall] — 2026-06-12 — Backend AI privacy firewall
 
 **Raouf:** Wired and hardened a backend-only, mock-only, fail-closed AI explanation layer for Banking Shield that turns the previously-prepared metadata-only payload into a deterministic plain-English narrative behind an input firewall, an output claim firewall, and an evidence receipt — provable entirely offline. The layer is default-off and exposed via a token-bound `GET /api/banking-pilot/:sessionId/ai-privacy-explain`. No public report-page UI (deferred to B4-B), live LLM provider, network egress, secrets, Phase C logic, real banking integrations, API field renames, or privacy-assertion changes were added.

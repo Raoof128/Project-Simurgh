@@ -12,12 +12,12 @@ receipt state.
 
 ## Tasks
 
-- [ ] Add B4-B plan/spec documents.
-- [ ] Add report-page AI explanation UI and Simurgh-matched CSS.
-- [ ] Add smoke assertions for B4-B page contract and flag-on explanation
+- [x] Add B4-B plan/spec documents.
+- [x] Add report-page AI explanation UI and Simurgh-matched CSS.
+- [x] Add smoke assertions for B4-B page contract and flag-on explanation
       response.
-- [ ] Add B4-B closeout/claim-audit docs and update `AGENT.md`/`CHANGELOG.md`.
-- [ ] Run focused and broad verification.
+- [x] Add B4-B closeout/claim-audit docs and update `AGENT.md`/`CHANGELOG.md`.
+- [x] Run focused and broad verification.
 
 ## Constraints
 

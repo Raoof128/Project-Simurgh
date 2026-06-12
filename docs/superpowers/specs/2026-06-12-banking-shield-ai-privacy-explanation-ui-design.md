@@ -1,7 +1,7 @@
 # Stage B4-B - Banking Shield AI Privacy Explanation UI
 
 **Date:** 2026-06-12
-**Status:** Approved inline design
+**Status:** Completed
 **Stage:** B4-B
 **Subtitle:** Public report-page surface for the B4-A privacy-firewalled explanation
 
@@ -83,3 +83,8 @@ Use the existing Simurgh research-demo visual system:
   - flag-on endpoint response used by the UI contract.
   - receipt flags stay false/true as expected.
 - B4-A privacy and no-egress audits remain passing.
+
+## 7. Closeout
+
+B4-B is implemented and closed in
+`docs/research/banking-pilot/phase-b4b/BANKING_PILOT_PHASE_B4B_CLOSEOUT.md`.
