@@ -1,5 +1,31 @@
 ## Change Log
 
+## [banking-shield-phase-a-ui-alignment] — 2026-06-12 — Tester UI visual alignment
+
+**Raouf:** Restyled the public Banking Shield Phase A tester pages to match the broader Project Simurgh interface language. Added a shared stylesheet with the existing paper/ink/oxblood/moss palette, Simurgh seal header, research-demo panels, privacy boundary banner, responsive scenario grid, and styled JSON output. The Phase A API flow remains unchanged: no new runtime routes, Phase B human-run logic, Phase C logic, real banking integrations, or privacy assertion changes.
+
+### Added
+
+- `public/banking-pilot.css` — shared Banking Shield page styling aligned to the Simurgh visual system.
+
+### Changed
+
+- `public/banking-pilot-consent.html`, `public/banking-pilot-scenario.html`, and `public/banking-pilot-report.html` now use the shared Simurgh-style page shell and controls.
+- Hidden button/link behavior is explicitly preserved with a global `[hidden]` CSS rule so consent-gated navigation remains hidden until JavaScript reveals it.
+
+### Verified
+
+- Static page/CSS checks returned 200 for the stylesheet and all three public Banking Shield pages.
+- `npm test` — 389/389 pass.
+- `scripts/smoke-banking-pilot.sh` — 14/14 pass.
+- `scripts/security-audit-banking-pilot.sh` — 27/27 pass.
+- `node scripts/privacy-audit-banking-pilot.mjs` — PASS.
+- `scripts/smoke-banking-pilot-full-e2e.sh` — 41/41 pass.
+- `npx prettier --check public/banking-pilot.css public/banking-pilot-consent.html public/banking-pilot-scenario.html public/banking-pilot-report.html` — pass.
+- Local Playwright screenshots captured for desktop consent and mobile scenario layouts.
+
+---
+
 ## [banking-shield-phase-b3-readiness] — 2026-06-12 — Pre-tester readiness checkpoint
 
 **Raouf:** Started Stage B3 — Banking Shield Phase B Internal Dry Run Execution + Closeout by completing the steps available before human testers. Updated the Phase B go/no-go checklist with a pre-tester readiness decision of `no_go_pending_tester_selection`, checked only verifiable runtime/privacy readiness items, and left tester selection, participant notice review, and tester comprehension gates unchecked until 2-3 trusted internal testers run the approved protocol. No human dry-run results were fabricated, no Phase B runtime routes were added, no Phase C logic was added, and the existing Phase A `/api/banking-pilot` runtime remains unchanged.

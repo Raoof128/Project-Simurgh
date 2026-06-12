@@ -2,6 +2,18 @@
 
 ## Agent Change Log
 
+### 2026-06-12 (Australia/Sydney) — Banking Shield Phase A tester UI visual alignment
+
+**Raouf:**
+
+- **Scope:** Restyled the public Banking Shield Phase A tester pages to match the broader Project Simurgh interface language. No runtime routes, API payloads, scenario states, Phase B human-run logic, Phase C logic, real banking integrations, or privacy assertions were changed.
+- **Summary:** Added a shared Banking Shield stylesheet using the existing Simurgh paper/ink/oxblood/moss visual system, Fraunces/JetBrains Mono/Inter Tight typography, sticky seal header, research-demo panels, privacy boundary banner, responsive scenario grid, and styled JSON output. Reworked the consent, scenario, and report pages to use that shared style while preserving the Phase A synthetic-only controls and existing browser `sessionStorage` token flow. Fixed a frontend hidden-state bug by enforcing `[hidden] { display: none !important; }` so the Continue link stays hidden until consent succeeds.
+- **Files changed:** `public/banking-pilot.css`, `public/banking-pilot-consent.html`, `public/banking-pilot-scenario.html`, `public/banking-pilot-report.html`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** Static page/CSS `curl -I` checks returned 200 for the stylesheet and all three Banking Shield public pages; `npm test` passed 389/389; `scripts/smoke-banking-pilot.sh` passed 14/14; `scripts/security-audit-banking-pilot.sh` passed 27/27; `node scripts/privacy-audit-banking-pilot.mjs` PASS; `scripts/smoke-banking-pilot-full-e2e.sh` passed 41/41; `npx prettier --check public/banking-pilot.css public/banking-pilot-consent.html public/banking-pilot-scenario.html public/banking-pilot-report.html` passed; local Playwright screenshots were captured for desktop consent and mobile scenario pages.
+- **Follow-ups:** Keep tester copy fictional-only during the B3 dry run, and do not record human dry-run results until trusted testers complete the approved Phase B protocol.
+
+---
+
 ### 2026-06-12 (Australia/Sydney) — Banking Shield Phase B3 pre-tester readiness
 
 **Raouf:**
