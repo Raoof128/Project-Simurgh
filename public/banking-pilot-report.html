@@ -26,11 +26,11 @@
 
     <main class="page">
       <section class="hero" aria-labelledby="page-title">
-        <p class="eyebrow">Stage B1 · report</p>
+        <p class="eyebrow">Stage B4-B · report</p>
         <h1 class="heading" id="page-title"><em>Export</em> the safe evidence</h1>
         <p class="subheading">
-          Token-bound report, safe audit export, and audit-chain verification for the current
-          synthetic session.
+          Token-bound report, safe audit export, audit-chain verification, and a privacy-firewalled
+          explanation for the current synthetic session.
         </p>
       </section>
 
@@ -54,11 +54,18 @@
             <strong>Policy outcome</strong> — the local prototype policy result for this fictional
             scenario. It is not fraud detection, financial advice, or a banking decision.
           </li>
+          <li>
+            <strong>AI Privacy Explanation</strong> — a plain-English explanation generated only
+            from approved metadata, with a receipt showing no sensitive payload or network egress.
+          </li>
         </ul>
         <div class="actions">
           <button type="button" data-export="report">Report</button>
           <button class="secondary" type="button" data-export="audit">Audit</button>
           <button class="secondary" type="button" data-export="verify">Verify</button>
+          <button class="secondary" type="button" id="ai-explain-button">
+            AI Privacy Explanation
+          </button>
           <a class="button ghost" href="/banking-pilot-consent.html">New Session</a>
         </div>
         <p class="footer-note">
@@ -66,6 +73,77 @@
         </p>
         <p class="footer-note" id="export-note" aria-live="polite">
           Choose an export above to see a plain-English summary of what it shows.
+        </p>
+      </section>
+
+      <section class="panel ai-panel" aria-labelledby="ai-explain-title">
+        <div class="panel-heading-row">
+          <div>
+            <p class="section-label" id="ai-explain-title">AI privacy explanation</p>
+            <h2 class="panel-title">Metadata-only narrative receipt</h2>
+          </div>
+          <span class="badge moss" id="ai-explain-state">Not loaded</span>
+        </div>
+        <p>
+          This explanation layer uses the B4-A privacy firewall. It is allowed to explain the local
+          prototype policy outcome, but it is not allowed to receive banking payloads or change the
+          official result.
+        </p>
+        <div class="ai-summary-grid" aria-label="AI explanation fields">
+          <article>
+            <span>Summary</span>
+            <p id="ai-summary">Choose AI Privacy Explanation to load the narrative.</p>
+          </article>
+          <article>
+            <span>Policy outcome</span>
+            <p id="ai-policy">No explanation loaded yet.</p>
+          </article>
+          <article>
+            <span>Privacy boundary</span>
+            <p id="ai-privacy">No receipt loaded yet.</p>
+          </article>
+          <article>
+            <span>Audit and verify</span>
+            <p id="ai-audit">No explanation loaded yet.</p>
+          </article>
+          <article>
+            <span>Manual review</span>
+            <p id="ai-manual">No explanation loaded yet.</p>
+          </article>
+        </div>
+        <div>
+          <p class="section-label">Non-claims</p>
+          <ul class="non-claims" id="ai-non-claims" aria-label="AI explanation non-claims">
+            <li>Not loaded.</li>
+          </ul>
+        </div>
+        <div>
+          <p class="section-label">Receipt</p>
+          <dl class="receipt-grid" id="ai-receipt">
+            <div>
+              <dt>Sensitive payload sent to AI</dt>
+              <dd>Not loaded</dd>
+            </div>
+            <div>
+              <dt>Network egress used</dt>
+              <dd>Not loaded</dd>
+            </div>
+            <div>
+              <dt>Official result unchanged</dt>
+              <dd>Not loaded</dd>
+            </div>
+            <div>
+              <dt>Claim guard passed</dt>
+              <dd>Not loaded</dd>
+            </div>
+            <div>
+              <dt>Narrative hash</dt>
+              <dd>Not loaded</dd>
+            </div>
+          </dl>
+        </div>
+        <p class="footer-note" id="ai-explain-note" aria-live="polite">
+          If the feature flag is off, this panel shows the locked receipt instead of a narrative.
         </p>
       </section>
 
@@ -84,6 +162,18 @@
       const status = document.querySelector("#status");
       const response = document.querySelector("#response");
       const exportNote = document.querySelector("#export-note");
+      const aiExplainButton = document.querySelector("#ai-explain-button");
+      const aiExplainState = document.querySelector("#ai-explain-state");
+      const aiExplainNote = document.querySelector("#ai-explain-note");
+      const aiFields = {
+        summary: document.querySelector("#ai-summary"),
+        policy: document.querySelector("#ai-policy"),
+        privacy: document.querySelector("#ai-privacy"),
+        audit: document.querySelector("#ai-audit"),
+        manual: document.querySelector("#ai-manual"),
+        nonClaims: document.querySelector("#ai-non-claims"),
+        receipt: document.querySelector("#ai-receipt"),
+      };
       const sessionId = sessionStorage.getItem("bankingPilotSessionId");
       const token = sessionStorage.getItem("bankingPilotToken");
 
@@ -92,7 +182,62 @@
           "This report is a readable summary of what this fictional session recorded and what it did not record.",
         audit: "This audit shows the step-by-step event history for this fictional session.",
         verify: "This verification checks whether the audit record is internally consistent.",
+        ai: "This AI privacy explanation shows a firewall-approved narrative and receipt for the current fictional session.",
       };
+
+      function setText(node, value) {
+        node.textContent =
+          value === undefined || value === null || value === "" ? "Not available" : String(value);
+      }
+
+      function renderNonClaims(items) {
+        aiFields.nonClaims.replaceChildren();
+        const values =
+          Array.isArray(items) && items.length > 0 ? items : ["No narrative generated."];
+        for (const value of values) {
+          const li = document.createElement("li");
+          li.textContent = value;
+          aiFields.nonClaims.append(li);
+        }
+      }
+
+      function renderReceipt(receipt = {}) {
+        const rows = [
+          ["Sensitive payload sent to AI", receipt.sensitive_payload_sent_to_ai],
+          ["Network egress used", receipt.network_egress_used],
+          ["Official result unchanged", receipt.official_result_unchanged],
+          ["Claim guard passed", receipt.claim_guard_passed],
+          ["Narrative hash", receipt.narrative_hash || "Not generated"],
+        ];
+        aiFields.receipt.replaceChildren();
+        for (const [label, value] of rows) {
+          const row = document.createElement("div");
+          const dt = document.createElement("dt");
+          const dd = document.createElement("dd");
+          dt.textContent = label;
+          dd.textContent = String(value ?? "Not available");
+          row.append(dt, dd);
+          aiFields.receipt.append(row);
+        }
+      }
+
+      function renderAiExplanation(body, statusCode) {
+        const narrative = body.narrative || {};
+        const receipt = body.receipt || body;
+        const generated = receipt.narrative_generated === true;
+        aiExplainState.textContent = generated ? "Generated" : "Locked";
+        aiExplainState.className = generated ? "badge moss" : "badge ox";
+        setText(aiFields.summary, narrative.plain_english_summary);
+        setText(aiFields.policy, narrative.policy_outcome_explanation);
+        setText(aiFields.privacy, narrative.privacy_boundary_note || body.blocked_reason);
+        setText(aiFields.audit, narrative.audit_verify_explanation);
+        setText(aiFields.manual, narrative.manual_review_note);
+        renderNonClaims(narrative.non_claims);
+        renderReceipt(receipt);
+        aiExplainNote.textContent = generated
+          ? "Explanation generated from metadata only. The official policy result remains unchanged."
+          : `Explanation not generated (${statusCode}). Receipt reason: ${body.error || body.blocked_reason || "blocked"}.`;
+      }
 
       async function loadExport(kind) {
         status.className = "";
@@ -107,14 +252,32 @@
         status.textContent = res.ok ? "Loaded." : `Rejected with ${res.status}.`;
       }
 
+      async function loadAiExplanation() {
+        status.className = "";
+        status.textContent = "Loading AI privacy explanation...";
+        if (exportNote) exportNote.textContent = EXPORT_NOTES.ai;
+        const res = await fetch(`/api/banking-pilot/${sessionId}/ai-privacy-explain`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const body = await res.json();
+        renderAiExplanation(body, res.status);
+        response.textContent = JSON.stringify(body, null, 2);
+        status.className = res.ok || res.status === 503 ? "" : "error";
+        status.textContent = res.ok
+          ? "AI privacy explanation loaded."
+          : `AI privacy explanation not generated (${res.status}).`;
+      }
+
       if (!sessionId || !token) {
         status.className = "error";
         status.textContent = "No synthetic session found.";
+        if (aiExplainButton) aiExplainButton.disabled = true;
       }
 
       document.querySelectorAll("[data-export]").forEach((button) => {
         button.addEventListener("click", () => loadExport(button.dataset.export));
       });
+      aiExplainButton.addEventListener("click", loadAiExplanation);
     </script>
   </body>
 </html>
