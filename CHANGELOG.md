@@ -1,5 +1,144 @@
 ## Change Log
 
+## [banking-shield-phase-b3d-closeout] — 2026-06-12 — Phase B internal dry run closeout + claim audit
+
+**Raouf:** Closed the Banking Shield Phase B internal dry run using aggregate-only evidence from the human dry run, the UX copy patch, and the focused copy-validation rerun. The closeout and claim audit move from `not_run`/`Not yet run` to completed, evidence-backed statuses, while all disallowed banking-capability claims stay blocked. No runtime routes, Phase C logic, real banking integrations, API field renames, privacy-assertion changes, raw tester feedback, screenshots, or personal financial details were added.
+
+### Added
+
+- `docs/research/banking-pilot/evidence/phase-b-internal-dry-run/aggregate-results.json` — completed aggregate session, scenario, privacy, comprehension, and copy-validation counts.
+- `docs/research/banking-pilot/evidence/phase-b-internal-dry-run/participant-feedback.json` — completed aggregate comprehension and safe-note category counts (no raw free text).
+
+### Changed
+
+- `docs/research/banking-pilot/phase-b/BANKING_PILOT_PHASE_B_CLOSEOUT.md` — status `completed`; recorded 5 testers, 30 sessions, 25 submitted scenario sessions, 5 withdrawal sessions, comprehension highlights, UX finding, and Pass result.
+- `docs/research/banking-pilot/phase-b/BANKING_PILOT_PHASE_B_CLAIM_AUDIT.md` — Phase B claims moved to evidence-backed statuses; disallowed claims kept blocked.
+- `docs/research/banking-pilot/evidence/phase-b-internal-dry-run/closeout-summary.md` and `README.md` — updated to executed status with aggregate-only results.
+
+### Verified
+
+- `npm test` — 389/389 pass.
+- `scripts/smoke-banking-pilot.sh` — 14/14 pass.
+- `scripts/security-audit-banking-pilot.sh` — 27/27 pass.
+- `node scripts/privacy-audit-banking-pilot.mjs` — PASS.
+- `node scripts/privacy-audit-banking-pilot-phase-b.mjs` — PASS.
+- `scripts/smoke-banking-pilot-closed.sh` — 4/4 pass.
+- `scripts/smoke-banking-pilot-full-e2e.sh` — 41/41 pass.
+- `npx prettier --check .` — clean.
+
+### Notes
+
+- Aggregate-only; no raw tester free text retained. Paper-safe finding: the main Phase B improvement was export-page interpretability, not privacy failure.
+
+---
+
+## [banking-shield-phase-b3b-ux-copy] — 2026-06-12 — Phase B Report/Audit/Verify readability copy patch
+
+**Raouf:** Implemented the narrow Phase B UX copy patch requested after the human dry run. The dry run passed on safety and comprehension basics (no real banking data, no real-security confusion, withdrawal clear, non-claims clear); the one repeated finding was the readability of the Report/Audit/Verify exports. This patch is presentation-only and does not touch runtime routes, API field names, privacy assertions, or retained tester feedback.
+
+### Changed
+
+- `public/banking-pilot-report.html` now shows a plain-English one-liner for each export (Report/Audit/Verify) when it loads, a static export legend defining each export plus "Policy outcome" with its non-claims, Audit-vs-Verify sub-labels, and a note that opening exports adds audit events so report and verify event counts can differ.
+- `public/banking-pilot-scenario.html` now shows one short fictional takeaway sentence per scenario and for the withdrawal action, plus a standing line clarifying that each result is a local prototype policy outcome only — not fraud detection, financial advice, or a real banking decision.
+
+### Verified
+
+- `npm test` — 389/389 pass.
+- `scripts/smoke-banking-pilot.sh` — 14/14 pass.
+- `scripts/security-audit-banking-pilot.sh` — 27/27 pass.
+- `node scripts/privacy-audit-banking-pilot.mjs` — PASS.
+- `node scripts/privacy-audit-banking-pilot-phase-b.mjs` — PASS over 6 evidence files.
+- `scripts/smoke-banking-pilot-closed.sh` — 4/4 pass.
+- `scripts/smoke-banking-pilot-full-e2e.sh` — 41/41 pass.
+- `npx prettier --check .` — clean.
+- Focused copy-validation re-run (3 fresh sessions, one submitted scenario each) confirmed live pages serve the new copy; report `audit.event_count` 4 vs verify `event_count` 6 demonstrates the event-count note, all audit chains valid.
+
+### Notes
+
+- `verdict` remains the API field; the user-facing wording uses "policy outcome". No API field renames were made.
+- This patch is part of Stage B3b. B3c focused copy-validation rerun is complete at agent level; B3d closeout + claim-audit update remains before Phase B is closed.
+
+---
+
+## [banking-shield-simurgh-alignment-audit] — 2026-06-12 — Function alignment audit
+
+**Raouf:** Completed a targeted full audit of Banking Shield Phase A alignment with the broader Simurgh design and function set. Added a formal audit document and updated the consent page with a visible Simurgh functions panel. The audit confirms that Banking Shield correctly reuses Simurgh structural functions while not importing Academic Shield proctoring telemetry into the banking-adjacent demo.
+
+### Added
+
+- `docs/research/banking-pilot/BANKING_PILOT_SIMURGH_ALIGNMENT_AUDIT.md` — visual, runtime, Sonnet narrative, proctoring-boundary, privacy, security, and verification audit.
+
+### Changed
+
+- `public/banking-pilot-consent.html` now shows the Simurgh functions used by the Banking Shield demo: local deterministic policy, HMAC report/audit/verify exports, optional metadata-only Sonnet narrative support, and no Academic Shield proctoring telemetry.
+
+### Verified
+
+- Banking unit/security target — 35/35 pass.
+- `scripts/smoke-banking-pilot.sh` — 14/14 pass.
+- `node scripts/privacy-audit-banking-pilot.mjs` — PASS.
+- `scripts/smoke-banking-pilot-full-e2e.sh` — 41/41 pass.
+- Targeted Prettier check — pass.
+- Local Playwright screenshot captured the updated consent page.
+
+### Notes
+
+- Do not wire Academic Shield `/api/telemetry`, focus/paste telemetry, device scanner signals, screen capture, app names, process names, or window titles into Banking Shield Phase A.
+- Sonnet remains narrative support only for Banking Shield and must receive sanitized metadata only. The local deterministic banking policy remains the official result.
+
+---
+
+## [banking-shield-phase-a-ui-alignment] — 2026-06-12 — Tester UI visual alignment
+
+**Raouf:** Restyled the public Banking Shield Phase A tester pages to match the broader Project Simurgh interface language. Added a shared stylesheet with the existing paper/ink/oxblood/moss palette, Simurgh seal header, research-demo panels, privacy boundary banner, responsive scenario grid, and styled JSON output. The Phase A API flow remains unchanged: no new runtime routes, Phase B human-run logic, Phase C logic, real banking integrations, or privacy assertion changes.
+
+### Added
+
+- `public/banking-pilot.css` — shared Banking Shield page styling aligned to the Simurgh visual system.
+
+### Changed
+
+- `public/banking-pilot-consent.html`, `public/banking-pilot-scenario.html`, and `public/banking-pilot-report.html` now use the shared Simurgh-style page shell and controls.
+- Hidden button/link behavior is explicitly preserved with a global `[hidden]` CSS rule so consent-gated navigation remains hidden until JavaScript reveals it.
+
+### Verified
+
+- Static page/CSS checks returned 200 for the stylesheet and all three public Banking Shield pages.
+- `npm test` — 389/389 pass.
+- `scripts/smoke-banking-pilot.sh` — 14/14 pass.
+- `scripts/security-audit-banking-pilot.sh` — 27/27 pass.
+- `node scripts/privacy-audit-banking-pilot.mjs` — PASS.
+- `scripts/smoke-banking-pilot-full-e2e.sh` — 41/41 pass.
+- `npx prettier --check public/banking-pilot.css public/banking-pilot-consent.html public/banking-pilot-scenario.html public/banking-pilot-report.html` — pass.
+- Local Playwright screenshots captured for desktop consent and mobile scenario layouts.
+
+---
+
+## [banking-shield-phase-b3-readiness] — 2026-06-12 — Pre-tester readiness checkpoint
+
+**Raouf:** Started Stage B3 — Banking Shield Phase B Internal Dry Run Execution + Closeout by completing the steps available before human testers. Updated the Phase B go/no-go checklist with a pre-tester readiness decision of `no_go_pending_tester_selection`, checked only verifiable runtime/privacy readiness items, and left tester selection, participant notice review, and tester comprehension gates unchecked until 2-3 trusted internal testers run the approved protocol. No human dry-run results were fabricated, no Phase B runtime routes were added, no Phase C logic was added, and the existing Phase A `/api/banking-pilot` runtime remains unchanged.
+
+### Changed
+
+- `docs/research/banking-pilot/phase-b/BANKING_PILOT_PHASE_B_GO_NO_GO_CHECKLIST.md` now records the B3 pre-tester readiness status and makes the current no-go reason explicit.
+
+### Verified
+
+- `npm test` — 389/389 pass.
+- `scripts/smoke-banking-pilot.sh` — 14/14 pass.
+- `scripts/security-audit-banking-pilot.sh` — 27/27 pass.
+- `node scripts/privacy-audit-banking-pilot.mjs` — PASS.
+- `node scripts/privacy-audit-banking-pilot-phase-b.mjs` — PASS, 6 Phase B evidence files scanned.
+- `scripts/smoke-banking-pilot-closed.sh` — 4/4 pass.
+- `scripts/smoke-banking-pilot-full-e2e.sh` — 41/41 pass.
+- `npx prettier --check .` — pass.
+
+### Follow-up
+
+- Select 2-3 trusted internal testers, show the participant notice to each tester, run five fresh submitted sessions plus one separate withdrawal session per tester, record aggregate-only results, then update Phase B closeout, claim audit, and evidence files.
+
+---
+
 ## [banking-shield-phase-b-pr-polish] — 2026-06-12 — Final PR-prep polish
 
 **Raouf:** Applied the final three Phase B PR-preparation polish fixes after review. Tightened feedback-form handling so raw tester free text is not retained as evidence, clarified the tester runbook to use five fresh submitted-scenario sessions plus one separate withdrawal session, and added the PR-safe statement: "This PR prepares the Phase B internal dry-run protocol and evidence scaffold. It does not report completed human dry-run results." No runtime code, routes, states, Phase C logic, real banking integrations, or completed human dry-run results were added.

@@ -1,0 +1,79 @@
+{
+  "phase": "phase_b_internal_dry_run",
+  "synthetic": false,
+  "human_participant": true,
+  "data_source": "internal_human_dry_run",
+  "real_banking_data_collected": false,
+  "real_financial_decision_affected": false,
+  "aggregate_only": true,
+  "status": "executed",
+  "trusted_testers_completed": 5,
+  "session_totals": {
+    "total_sessions": 30,
+    "submitted_scenario_sessions": 25,
+    "withdrawal_sessions": 5
+  },
+  "scenario_completion_counts": {
+    "mock_cdr_consent": 5,
+    "mock_confirmation_of_payee": 5,
+    "remote_access_warning": 5,
+    "mock_payment_pause": 5,
+    "mock_ai_agent_finance_action": 5
+  },
+  "deterministic_policy_pattern": {
+    "mock_cdr_consent": "safe",
+    "mock_confirmation_of_payee": "warning",
+    "remote_access_warning": "warning",
+    "mock_payment_pause": "warning",
+    "mock_ai_agent_finance_action": "safe",
+    "identical_pattern_across_testers": true
+  },
+  "flow_completion_counts": {
+    "consent_opened": 30,
+    "consent_accepted": 30,
+    "report_opened": 4,
+    "audit_opened": 4,
+    "verify_opened": 4,
+    "withdrawal_completed": 5,
+    "withdrawal_report_blocked_after": 5,
+    "feedback_completed": 5
+  },
+  "privacy_counts": {
+    "real_banking_values_entered": 0,
+    "sensitive_values_found_in_evidence": 0,
+    "forbidden_payload_structures_found": 0,
+    "sonnet_sensitive_payload_events": 0
+  },
+  "comprehension_counts": {
+    "fictional_only_understood": 5,
+    "no_bank_connection_understood": 5,
+    "no_fraud_detection_understood": 5,
+    "no_financial_advice_understood": 5,
+    "withdrawal_understood": 5,
+    "report_audit_verify_understood_pre_patch": 1,
+    "report_audit_verify_understood_post_patch": 3
+  },
+  "copy_validation_rerun": {
+    "context": "B3c focused rerun after B3b export-page copy patch",
+    "fresh_sessions": 3,
+    "submitted_scenarios": 3,
+    "report_audit_verify_opened_per_session": true,
+    "patched_one_liners_served_live": true,
+    "audit_verify_sublabels_present": true,
+    "policy_outcome_wording_present": true,
+    "event_count_note_observed": {
+      "report_audit_event_count": 4,
+      "verify_event_count": 6,
+      "difference_explained_by_export_events": true
+    },
+    "audit_chain_valid": "3/3"
+  },
+  "gate_results": {
+    "phase_b_privacy_audit": "pass",
+    "phase_a_privacy_audit": "pass",
+    "phase_a_smoke": "pass",
+    "phase_a_security_audit": "pass",
+    "phase_a_full_e2e": "pass"
+  },
+  "stop_conditions_triggered": false
+}
