@@ -1,0 +1,33 @@
+{
+  "narrative": {
+    "plain_english_summary": "This fictional session recorded a payment-pause prompt interaction. It is metadata only.",
+    "policy_outcome_explanation": "The local prototype policy outcome for this fictional session was: warning. The prototype suggests an optional manual look.",
+    "privacy_boundary_note": "This explanation was generated from metadata only. The explanation layer received no credentials, OTPs, account identifiers, balances, payees, payment amounts, transaction text, screenshots, app names, process names, or window titles.",
+    "audit_verify_explanation": "The audit record lists the step-by-step events for this fictional session. Verification checks whether that audit record is internally consistent.",
+    "manual_review_note": "This fictional session is flagged for an optional manual look. No automatic fraud finding is made.",
+    "non_claims": [
+      "not fraud detection",
+      "not scam prevention",
+      "not financial advice",
+      "not a real banking decision",
+      "not payment verification"
+    ],
+    "official_result_unchanged": true
+  },
+  "receipt": {
+    "stage": "B4-A",
+    "provider": "deterministic_mock",
+    "ai_privacy_layer_enabled": true,
+    "input_contract_version": "1.0",
+    "output_contract_version": "1.0",
+    "input_firewall_passed": true,
+    "output_claim_firewall_passed": true,
+    "sensitive_payload_sent_to_ai": false,
+    "network_egress_used": false,
+    "official_result_unchanged": true,
+    "claim_guard_passed": true,
+    "privacy_assertions_preserved": true,
+    "narrative_generated": true,
+    "narrative_hash": "sha256:dfb3afd4056b7a1c0f2e193fcb84253ed29ebae191e25ecd9d777053d0d566b6"
+  }
+}

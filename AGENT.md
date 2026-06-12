@@ -2,6 +2,78 @@
 
 ## Agent Change Log
 
+### 2026-06-12 (Australia/Sydney) — Fix Stage 2.4/2.5 overclaim scan false positive on B4-A denylist
+
+**Raouf:**
+
+- **Scope:** Fixed the CI quality-gate failure on PR #28. The Stage 2.4/2.5 cybersecurity audit's overclaim-wording scan flagged `src/bankingPilot/bankingNarrativeOutputFirewall.js` because the B4-A `FORBIDDEN_CLAIM_PHRASES` denylist literally contains "production ready" — the phrase exists there so the firewall can BLOCK it, the same category as the already-excluded stage27 security tests. No firewall behavior, scan patterns, route logic, or privacy assertions were changed.
+- **Summary:** Added `src/bankingPilot/bankingNarrativeOutputFirewall.js` to the overclaim scan's exclusion list in `scripts/security-audit-stage-2-4-2-5.sh`. The denylist stays readable/greppable instead of being string-obfuscated to dodge the scanner. The other three failing CI audits (2.6/2.7, 2.8A/B, 2.8C/D) were cascades — each re-runs 2.4/2.5 as a no-regression step.
+- **Files changed:** `scripts/security-audit-stage-2-4-2-5.sh`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `scripts/security-audit-stage-2-4-2-5.sh` exit 0 ("Stage 2.4/2.5 cybersecurity audit passed"); full `scripts/check.sh` (the exact CI gate) re-run locally; `npx prettier --check .` clean.
+- **Follow-ups:** If a future module embeds scanner-target phrases as forbidden terms, add it to the same exclusion list rather than obfuscating the strings.
+
+---
+
+### 2026-06-12 (Australia/Sydney) — Banking Shield B4-A/B residual audit-observation polish
+
+**Raouf:**
+
+- **Scope:** Closed the four residual observations from the latest B4-A/B full audit. Conservative hardening/consistency only — no route semantics, scoring, audit-chain verification, withdrawal policy, privacy assertions, live LLM provider, network egress, Phase C logic, or real banking integrations were changed, and the output firewall remains fail-closed. The pre-existing server-level CORS default was deliberately left out of scope (already documented in `server.js` with an override recommendation).
+- **Summary:** (1) The claim scanner's negation window now accepts exactly one article/determiner between a negator and a forbidden phrase ("not a fraud detection tool" passes; "not really a scam protection" still blocks), with the window widened from 12 to 16 chars. (2) Documented the fail-closed receipt semantics of `buildFirewallFailedReceipt`. (3) Added `ok: false` to the ai-privacy-explain 503/403/422 error responses for cross-route consistency. (4) The report page now `encodeURIComponent`s the session id in fetch URLs.
+- **Files changed:** `src/bankingPilot/bankingNarrativeOutputFirewall.js`, `src/bankingPilot/bankingAiPrivacyReceipt.js`, `src/bankingPilot/index.js`, `public/banking-pilot-report.html`, `tests/unit/bankingPilot/bankingNarrativeOutputFirewall.test.js`, `tests/unit/bankingPilot/aiExplainRouter.test.js`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `npm test` 417/417 (two new negation-scanner test blocks), `scripts/smoke-banking-pilot.sh` 14/14, `scripts/smoke-banking-pilot-ai-firewall.sh` 5/5, `scripts/smoke-banking-pilot-full-e2e.sh` 43/43, `scripts/security-audit-banking-pilot.sh` 27/27, all three Banking Shield privacy audits PASS, `npm audit` 0 vulnerabilities, `npx prettier --check .` clean, `git diff --check` clean. Phase A HMAC fixture churn from audit reruns was restored and excluded.
+- **Follow-ups:** None. Keep future narrative copy in single-determiner negated form ("not a …", "no …") so disclaimers pass the scanner without further widening.
+
+---
+
+### 2026-06-12 (Australia/Sydney) — Banking Shield dependency audit cleanup
+
+**Raouf:**
+
+- **Scope:** Cleared the remaining npm dependency advisory found during the B4-A/B full audit. No application code, routes, Banking Shield scoring, privacy assertions, AI explanation behavior, UI copy, or evidence fixtures were changed.
+- **Summary:** Ran `npm audit fix`, updating the lockfile to Express `4.22.2` and `qs` `6.15.2`, removing the vulnerable transitive `body-parser/node_modules/qs` copy and clearing the moderate `qs` advisory chain.
+- **Files changed:** `package-lock.json`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `npm test` 415/415, `scripts/smoke-banking-pilot.sh` 14/14, `scripts/smoke-banking-pilot-ai-firewall.sh` 5/5, `scripts/smoke-banking-pilot-full-e2e.sh` 43/43, `scripts/security-audit-banking-pilot.sh` 27/27, all three Banking Shield privacy audits PASS, `npm audit` reports 0 vulnerabilities, `npx prettier --check .` clean, and `git diff --check` clean.
+- **Follow-ups:** None.
+
+---
+
+### 2026-06-12 (Australia/Sydney) — Banking Shield B4-A/B full audit hardening
+
+**Raouf:**
+
+- **Scope:** Audited the current Banking Shield branch diff across B4-A backend firewall code, B4-B report UI, changed scenario/consent pages, smoke/security/privacy scripts, tests, and closeout docs. No route semantics, scoring logic, audit-chain verification, withdrawal policy, privacy assertions, live LLM provider, network egress, Phase C logic, or real banking integrations were added.
+- **Summary:** Tightened the B4-A output firewall to reject unexpected top-level narrative fields and malformed/over-length `non_claims` entries, matching the exact-schema contract in the spec. Added red/green tests for those schema cases. Added explicit network/JSON failure handling to the B4-B report export and AI explanation UI and to the scenario submit/withdraw UI so failed fetches do not leave tester pages stuck in loading states. Extended the full E2E smoke static contract to require the new failure-state copy.
+- **Files changed:** `src/bankingPilot/bankingNarrativeOutputFirewall.js`, `tests/unit/bankingPilot/bankingNarrativeOutputFirewall.test.js`, `public/banking-pilot-report.html`, `public/banking-pilot-scenario.html`, `scripts/smoke-banking-pilot-full-e2e.sh`, `docs/research/banking-pilot/phase-b4b/BANKING_PILOT_PHASE_B4B_CLOSEOUT.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** Red/green focused output-firewall test; red/green full E2E smoke for B4-B/scenario failure copy; final full gate: `npm test` 415/415, `scripts/smoke-banking-pilot.sh` 14/14, `scripts/smoke-banking-pilot-ai-firewall.sh` 5/5, `scripts/smoke-banking-pilot-full-e2e.sh` 43/43, `scripts/security-audit-banking-pilot.sh` 27/27, all three Banking Shield privacy audits PASS, `npm audit --audit-level=high` found no high/critical advisories (existing moderate `qs` chain remains), `npx prettier --check .` clean, and `git diff --check` clean.
+- **Follow-ups:** None from this audit at the Banking Shield layer; keep future narrative fields behind explicit schema/test updates.
+
+---
+
+### 2026-06-12 (Australia/Sydney) — Banking Shield Stage B4-B AI privacy explanation UI
+
+**Raouf:**
+
+- **Scope:** Surfaced the B4-A privacy-firewalled explanation on the public Banking Shield report page. No backend route semantics, deterministic scoring, official policy result fields, audit-chain verification, withdrawal handling, privacy assertions, live LLM provider, network egress, secrets, Phase C logic, or real banking integrations were changed.
+- **Summary:** Added B4-B plan/spec docs, a Simurgh-styled AI Privacy Explanation panel on `public/banking-pilot-report.html`, receipt/non-claim rendering, disabled/off-path wording, and shared CSS for compact narrative/receipt panels. Extended the full Banking Shield E2E smoke gate so it verifies the B4-B page contract and a flag-on explanation receipt with `sensitive_payload_sent_to_ai:false`, `network_egress_used:false`, `official_result_unchanged:true`, `claim_guard_passed:true`, and a stable `narrative_hash` shape.
+- **Files changed:** `docs/superpowers/specs/2026-06-12-banking-shield-ai-privacy-explanation-ui-design.md`, `docs/superpowers/plans/2026-06-12-banking-shield-ai-privacy-explanation-ui.md`, `public/banking-pilot-report.html`, `public/banking-pilot.css`, `scripts/smoke-banking-pilot-full-e2e.sh`, `docs/research/banking-pilot/phase-b4b/BANKING_PILOT_PHASE_B4B_CLOSEOUT.md`, `docs/research/banking-pilot/phase-b4b/BANKING_PILOT_PHASE_B4B_CLAIM_AUDIT.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `npm test` 413/413; `scripts/smoke-banking-pilot.sh` 14/14; `scripts/smoke-banking-pilot-ai-firewall.sh` 5/5; `scripts/smoke-banking-pilot-full-e2e.sh` 43/43; `scripts/security-audit-banking-pilot.sh` 27/27; `node scripts/privacy-audit-banking-pilot.mjs` PASS; `node scripts/privacy-audit-banking-pilot-phase-b.mjs` PASS; `node scripts/privacy-audit-banking-pilot-ai-firewall.mjs` PASS; `npx prettier --check .` clean; Browser visual check confirmed the populated B4-B panel, visible receipt flags, and no horizontal overflow after fixing the export-legend wrapping.
+- **Follow-ups:** Keep B4-B wording presentation-only. If a later stage adds richer UI behavior, it must continue to display the receipt and must not weaken the B4-A input/output firewall claims.
+
+---
+
+### 2026-06-12 (Australia/Sydney) — Banking Shield Stage B4-A AI privacy firewall (backend)
+
+**Raouf:**
+
+- **Scope:** Wired and hardened a backend-only, mock-only, fail-closed AI explanation layer for Banking Shield. No public report-page UI (deferred to B4-B), no live LLM provider, no network egress, no secrets, no Phase C logic, no real banking integrations, no renamed API fields, and no privacy-assertion changes.
+- **Summary:** Added a deterministic offline narrative generator (enum→template; no randomness, clock, I/O, or network), an output claim firewall (schema + per-field length caps + negation-aware forbidden-claim scanner so disclaimer non-claims like "not fraud detection" pass while affirmative-capability phrasing is blocked + official-result-unchanged check), an AI privacy receipt builder (enabled/disabled-off-path/firewall-failed, with a success-only `narrative_hash`), and an orchestrator running input firewall (allowlist payload reuse + defensive forbidden-field re-scan + byte cap) → generator → output firewall → receipt. Exposed `GET /api/banking-pilot/:sessionId/ai-privacy-explain`: token-bound, path-token matched, read-rate limited, gated by default-off `SIMURGH_BANKING_PILOT_AI_EXPLAIN` (503 when off), blocking withdrawn sessions (403), and appending one `AI_EXPLANATION_EXPORTED` HMAC audit event on success. Added a no-egress static gate proving the four B4-A modules import no network primitive, plus accepted and rejected-claim evidence fixtures.
+- **Files changed:** `src/bankingPilot/bankingNarrativeGenerator.js`, `src/bankingPilot/bankingNarrativeOutputFirewall.js`, `src/bankingPilot/bankingAiPrivacyReceipt.js`, `src/bankingPilot/bankingAiExplain.js`, `src/bankingPilot/bankingAudit.js`, `src/bankingPilot/index.js`, `tests/unit/bankingPilot/{bankingAudit,bankingNarrativeGenerator,bankingNarrativeOutputFirewall,bankingAiPrivacyReceipt,bankingAiExplain,aiExplainRouter}.test.js`, `scripts/smoke-banking-pilot-ai-firewall.sh`, `scripts/privacy-audit-banking-pilot-ai-firewall.mjs`, `docs/research/banking-pilot/phase-b4a/BANKING_PILOT_PHASE_B4A_CLOSEOUT.md`, `docs/research/banking-pilot/phase-b4a/BANKING_PILOT_PHASE_B4A_CLAIM_AUDIT.md`, `docs/research/banking-pilot/evidence/phase-b4a-ai-firewall/{accepted-explanation-fixture,rejected-claim-fixture}.json`, `docs/superpowers/specs/2026-06-12-banking-shield-ai-privacy-firewall-design.md`, `docs/superpowers/plans/2026-06-12-banking-shield-ai-privacy-firewall.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `npm test` 413/413; `scripts/smoke-banking-pilot.sh` 14/14; `scripts/smoke-banking-pilot-ai-firewall.sh` 5/5 (flag on/off, withdrawal, receipt flags); `scripts/smoke-banking-pilot-closed.sh` 4/4; `scripts/smoke-banking-pilot-full-e2e.sh` 41/41; `scripts/security-audit-banking-pilot.sh` 27/27; `node scripts/privacy-audit-banking-pilot.mjs` PASS; `node scripts/privacy-audit-banking-pilot-phase-b.mjs` PASS; `node scripts/privacy-audit-banking-pilot-ai-firewall.mjs` PASS (no-egress + fixtures + attack scan, incl. a negative check confirming the gate fails on an injected network primitive); `npx prettier --check .` clean. Phase A HMAC fixture churn from audit reruns was restored and excluded.
+- **Follow-ups:** B4-B — surface the firewall-approved explanation on the public report page with user-facing labels and UI smoke tests, without changing the privacy boundary or official policy result. Keep all disallowed banking-capability claims blocked.
+
+---
+
 ### 2026-06-12 (Australia/Sydney) — Banking Shield Phase B3d closeout + claim-audit update
 
 **Raouf:**

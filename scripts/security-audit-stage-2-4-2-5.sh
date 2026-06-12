@@ -42,7 +42,7 @@ fi
 
 if grep -RniE "cheating detected|student guilty|confirmed misconduct|hardware attestation verified|production ready|MDM ready" \
   README.md SECURITY.md PRIVACY.md ROADMAP.md docs public src 2>/dev/null \
-  | grep -vE "docs/superpowers/|docs/DEVICE_SHIELD_CONTRACT\.md|docs/DEVICE_SHIELD_PLATFORM_MATRIX\.md|docs/stages/STAGE_2_7_REVIEWER_CHECKLIST\.md|docs/stages/STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD\.md|tests/security/stage27_" \
+  | grep -vE "docs/superpowers/|docs/DEVICE_SHIELD_CONTRACT\.md|docs/DEVICE_SHIELD_PLATFORM_MATRIX\.md|docs/stages/STAGE_2_7_REVIEWER_CHECKLIST\.md|docs/stages/STAGE_2_7_CROSS_PLATFORM_DEVICE_SHIELD\.md|tests/security/stage27_|src/bankingPilot/bankingNarrativeOutputFirewall\.js" \
   | grep -E . >&2; then
   echo "overclaim wording found" >&2
   exit 1
