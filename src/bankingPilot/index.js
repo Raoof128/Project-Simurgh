@@ -19,6 +19,8 @@ import {
   buildBankingReport,
   buildBankingVerifyExport,
 } from "./bankingReportBuilder.js";
+import { buildBankingAiExplanation, isAiExplainEnabled } from "./bankingAiExplain.js";
+import { buildDisabledReceipt } from "./bankingAiPrivacyReceipt.js";
 
 const router = Router();
 const store = createBankingSessionStore();
@@ -327,6 +329,47 @@ router.get(
       ts: new Date().toISOString(),
     });
     res.json(buildBankingVerifyExport(record));
+  }
+);
+
+router.get(
+  "/:sessionId/ai-privacy-explain",
+  limitBankingRead,
+  requireBankingToken,
+  requirePathTokenMatch,
+  (req, res) => {
+    if (!isAiExplainEnabled()) {
+      return res
+        .status(503)
+        .json({ error: "ai_explain_disabled", ...buildDisabledReceipt("ai_explain_disabled") });
+    }
+    const record = store.get(req.params.sessionId);
+    if (!record) return res.status(404).json({ ok: false, error: "session_not_found" });
+    if (record.withdrawn) {
+      return res.status(403).json({
+        error: "ai_explain_blocked_session_withdrawn",
+        ...buildDisabledReceipt("ai_explain_blocked_session_withdrawn"),
+      });
+    }
+    if (!record.submitted) {
+      return res.status(409).json({ ok: false, error: "no_scenario_submitted" });
+    }
+    const result = buildBankingAiExplanation(record);
+    if (!result.ok) {
+      return res
+        .status(result.status)
+        .json({ error: "ai_explain_firewall_failed", receipt: result.receipt });
+    }
+    appendEntry(record.auditChain, record.hmacKey, BANKING_PILOT_EVENTS.AI_EXPLANATION_EXPORTED, {
+      ts: new Date().toISOString(),
+      narrative_hash: result.receipt.narrative_hash,
+    });
+    return res.json({
+      ai_privacy_layer_enabled: true,
+      provider: "deterministic_mock",
+      narrative: result.narrative,
+      receipt: result.receipt,
+    });
   }
 );
 
