@@ -55,25 +55,25 @@ The research claim B4-A earns:
 
 The metadata-only payload is already prepared but unwired. B4-A wires and hardens it.
 
-| Module | Role | Status |
-| --- | --- | --- |
-| `src/bankingPilot/bankingNarrativeSanitiser.js` (`buildBankingNarrativePayload`, `hashBankingSessionId`) | Input firewall — allowlist-only metadata payload | Exists, reused |
-| `src/bankingPilot/bankingNarrativePrompt.js` (`BANKING_NARRATIVE_RECOMMENDATIONS`) | Claim allowlist source of truth | Exists, reused |
-| `src/bankingPilot/forbiddenBankingFields.js` (`containsForbiddenBankingFieldDeep`, `isStructuralPollutionKey`, `MAX_DEPTH_SENTINEL`) | Recursive forbidden-field + prototype-pollution + depth scan | Exists, reused |
-| `src/bankingPilot/bankingReportBuilder.js`, `bankingScenarioPolicy.js`, `bankingRiskScoring.js` | Source of official result fields | Exists, read-only |
-| `src/bankingPilot/index.js` | Express router — new route added here | Exists, extended |
-| `src/bankingPilot/bankingAudit.js` (`BANKING_PILOT_EVENTS`) | Audit event enum — new event added | Exists, extended |
+| Module                                                                                                                               | Role                                                         | Status            |
+| ------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------ | ----------------- |
+| `src/bankingPilot/bankingNarrativeSanitiser.js` (`buildBankingNarrativePayload`, `hashBankingSessionId`)                             | Input firewall — allowlist-only metadata payload             | Exists, reused    |
+| `src/bankingPilot/bankingNarrativePrompt.js` (`BANKING_NARRATIVE_RECOMMENDATIONS`)                                                   | Claim allowlist source of truth                              | Exists, reused    |
+| `src/bankingPilot/forbiddenBankingFields.js` (`containsForbiddenBankingFieldDeep`, `isStructuralPollutionKey`, `MAX_DEPTH_SENTINEL`) | Recursive forbidden-field + prototype-pollution + depth scan | Exists, reused    |
+| `src/bankingPilot/bankingReportBuilder.js`, `bankingScenarioPolicy.js`, `bankingRiskScoring.js`                                      | Source of official result fields                             | Exists, read-only |
+| `src/bankingPilot/index.js`                                                                                                          | Express router — new route added here                        | Exists, extended  |
+| `src/bankingPilot/bankingAudit.js` (`BANKING_PILOT_EVENTS`)                                                                          | Audit event enum — new event added                           | Exists, extended  |
 
 ## 4. New modules
 
 All new modules live in `src/bankingPilot/` and import **no** network primitives.
 
-| Module | Responsibility |
-| --- | --- |
-| `bankingNarrativeGenerator.js` | Deterministic mock narrator: maps allowlisted enum metadata → fixed-template narrative object. Pure function, no free text, no randomness, no I/O. |
+| Module                              | Responsibility                                                                                                                                                       |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `bankingNarrativeGenerator.js`      | Deterministic mock narrator: maps allowlisted enum metadata → fixed-template narrative object. Pure function, no free text, no randomness, no I/O.                   |
 | `bankingNarrativeOutputFirewall.js` | Output claim firewall: schema validation, JSON-only shape, per-field length caps, case-insensitive forbidden-claim scan, official-result-unchanged deep-equal check. |
-| `bankingAiPrivacyReceipt.js` | Builds the privacy receipt for both the enabled (narrative emitted) and disabled/blocked (no narrative) paths. |
-| `bankingAiExplain.js` | Orchestrator: input firewall → generator → output firewall → receipt. Fail-closed on any gate failure. |
+| `bankingAiPrivacyReceipt.js`        | Builds the privacy receipt for both the enabled (narrative emitted) and disabled/blocked (no narrative) paths.                                                       |
+| `bankingAiExplain.js`               | Orchestrator: input firewall → generator → output firewall → receipt. Fail-closed on any gate failure.                                                               |
 
 ## 5. Data flow
 
@@ -127,15 +127,15 @@ Middleware / behaviour:
 
 ### Route response matrix
 
-| Case | HTTP | Narrative | Appends `AI_EXPLANATION_EXPORTED` |
-| --- | ---: | --- | --- |
-| Feature flag off | `503` | none | no |
-| Withdrawn session | `403` | none | no |
-| Token missing/invalid | existing auth code (`401`) | none | no |
-| Path-token mismatch | existing auth code (`403`) | none | no |
-| Input firewall fail | `422` | none | no |
-| Output firewall fail | `422` | none | no |
-| Success | `200` | emitted | yes |
+| Case                  |                       HTTP | Narrative | Appends `AI_EXPLANATION_EXPORTED` |
+| --------------------- | -------------------------: | --------- | --------------------------------- |
+| Feature flag off      |                      `503` | none      | no                                |
+| Withdrawn session     |                      `403` | none      | no                                |
+| Token missing/invalid | existing auth code (`401`) | none      | no                                |
+| Path-token mismatch   | existing auth code (`403`) | none      | no                                |
+| Input firewall fail   |                      `422` | none      | no                                |
+| Output firewall fail  |                      `422` | none      | no                                |
+| Success               |                      `200` | emitted   | yes                               |
 
 ### Enabled success response
 
@@ -179,7 +179,7 @@ Middleware / behaviour:
 `narrative_hash` is the SHA-256 of the canonical serialized narrative object,
 present **only on successful (200) responses**. Because the generator is
 deterministic, this hash is stable and assertable in tests — an evidence
-fingerprint that proves *what* was emitted without storing the text. It is
+fingerprint that proves _what_ was emitted without storing the text. It is
 omitted from disabled/blocked receipts (no narrative exists to hash).
 
 ## 7. The firewalls and receipt

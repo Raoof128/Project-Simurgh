@@ -13,16 +13,19 @@
 ## File Structure
 
 **New source modules (`src/bankingPilot/`):**
+
 - `bankingNarrativeGenerator.js` — pure deterministic enum→template narrator. No I/O, no randomness, no network.
 - `bankingNarrativeOutputFirewall.js` — schema validation, per-field length caps, forbidden-claim scanner, official-result-unchanged check.
 - `bankingAiPrivacyReceipt.js` — `hashNarrative` + enabled/disabled/firewall-failed receipt builders.
 - `bankingAiExplain.js` — orchestrator + `isAiExplainEnabled()` flag reader.
 
 **Modified source:**
+
 - `src/bankingPilot/bankingAudit.js` — add `AI_EXPLANATION_EXPORTED` event.
 - `src/bankingPilot/index.js` — add the `/:sessionId/ai-privacy-explain` route.
 
 **New tests (`tests/unit/bankingPilot/`):**
+
 - `bankingNarrativeGenerator.test.js`
 - `bankingNarrativeOutputFirewall.test.js`
 - `bankingAiPrivacyReceipt.test.js`
@@ -30,10 +33,12 @@
 - `aiExplainRouter.test.js`
 
 **New scripts:**
+
 - `scripts/smoke-banking-pilot-ai-firewall.sh`
 - `scripts/privacy-audit-banking-pilot-ai-firewall.mjs` (fixtures + no-egress gate, mirrors `privacy-audit-banking-pilot-phase-b.mjs`).
 
 **New docs / evidence:**
+
 - `docs/research/banking-pilot/phase-b4a/BANKING_PILOT_PHASE_B4A_CLOSEOUT.md`
 - `docs/research/banking-pilot/phase-b4a/BANKING_PILOT_PHASE_B4A_CLAIM_AUDIT.md`
 - `docs/research/banking-pilot/evidence/phase-b4a-ai-firewall/` (generated fixtures + gate logs)
@@ -45,6 +50,7 @@
 ## Task 1: Add the `AI_EXPLANATION_EXPORTED` audit event
 
 **Files:**
+
 - Modify: `src/bankingPilot/bankingAudit.js:1-11`
 - Test: `tests/unit/bankingPilot/bankingAudit.test.js` (create)
 
@@ -93,6 +99,7 @@ git commit -m "feat(banking): add AI_EXPLANATION_EXPORTED audit event for B4-A"
 ## Task 2: Deterministic narrative generator
 
 **Files:**
+
 - Create: `src/bankingPilot/bankingNarrativeGenerator.js`
 - Test: `tests/unit/bankingPilot/bankingNarrativeGenerator.test.js`
 
@@ -136,7 +143,11 @@ test("generator is deterministic: same input gives byte-identical output", () =>
 
 test("manual_review_note reflects manual_review_required flag", () => {
   const flagged = generateBankingNarrative({ ...basePayload, manual_review_required: true });
-  const clear = generateBankingNarrative({ ...basePayload, verdict: "safe", manual_review_required: false });
+  const clear = generateBankingNarrative({
+    ...basePayload,
+    verdict: "safe",
+    manual_review_required: false,
+  });
   assert.notEqual(flagged.manual_review_note, clear.manual_review_note);
 });
 
@@ -235,6 +246,7 @@ git commit -m "feat(banking): add deterministic offline narrative generator (B4-
 ## Task 3: Output claim firewall
 
 **Files:**
+
 - Create: `src/bankingPilot/bankingNarrativeOutputFirewall.js`
 - Test: `tests/unit/bankingPilot/bankingNarrativeOutputFirewall.test.js`
 
@@ -443,6 +455,7 @@ git commit -m "feat(banking): add output claim firewall (B4-A)"
 ## Task 4: AI privacy receipt builder
 
 **Files:**
+
 - Create: `src/bankingPilot/bankingAiPrivacyReceipt.js`
 - Test: `tests/unit/bankingPilot/bankingAiPrivacyReceipt.test.js`
 
@@ -470,7 +483,11 @@ test("hashNarrative is deterministic and prefixed", () => {
 });
 
 test("enabled receipt asserts the full privacy contract", () => {
-  const r = buildEnabledReceipt({ narrative, officialResultUnchanged: true, claimGuardPassed: true });
+  const r = buildEnabledReceipt({
+    narrative,
+    officialResultUnchanged: true,
+    claimGuardPassed: true,
+  });
   assert.equal(r.ai_privacy_layer_enabled, true);
   assert.equal(r.provider, "deterministic_mock");
   assert.equal(r.sensitive_payload_sent_to_ai, false);
@@ -585,6 +602,7 @@ git commit -m "feat(banking): add AI privacy receipt builder with narrative hash
 ## Task 5: Orchestrator + feature-flag reader
 
 **Files:**
+
 - Create: `src/bankingPilot/bankingAiExplain.js`
 - Test: `tests/unit/bankingPilot/bankingAiExplain.test.js`
 
@@ -599,7 +617,10 @@ Create `tests/unit/bankingPilot/bankingAiExplain.test.js`:
 ```js
 import test from "node:test";
 import assert from "node:assert/strict";
-import { buildBankingAiExplanation, isAiExplainEnabled } from "../../../src/bankingPilot/bankingAiExplain.js";
+import {
+  buildBankingAiExplanation,
+  isAiExplainEnabled,
+} from "../../../src/bankingPilot/bankingAiExplain.js";
 import { scoreBankingRisk } from "../../../src/bankingPilot/bankingRiskScoring.js";
 
 function recordFor(scenarioMetadata) {
@@ -694,10 +715,18 @@ export function buildBankingAiExplanation(record) {
   // Defensive re-scan of the assembled payload + byte cap. Fail-closed.
   const forbidden = containsForbiddenBankingFieldDeep(payload);
   if (forbidden === MAX_DEPTH_SENTINEL || forbidden) {
-    return { ok: false, status: 422, receipt: buildFirewallFailedReceipt({ gate: "input", inputFirewallPassed: false }) };
+    return {
+      ok: false,
+      status: 422,
+      receipt: buildFirewallFailedReceipt({ gate: "input", inputFirewallPassed: false }),
+    };
   }
   if (Buffer.byteLength(JSON.stringify(payload), "utf8") > MAX_NARRATIVE_PAYLOAD_BYTES) {
-    return { ok: false, status: 422, receipt: buildFirewallFailedReceipt({ gate: "input", inputFirewallPassed: false }) };
+    return {
+      ok: false,
+      status: 422,
+      receipt: buildFirewallFailedReceipt({ gate: "input", inputFirewallPassed: false }),
+    };
   }
 
   // GENERATE (deterministic, offline)
@@ -723,7 +752,11 @@ export function buildBankingAiExplanation(record) {
     ok: true,
     status: 200,
     narrative,
-    receipt: buildEnabledReceipt({ narrative, officialResultUnchanged: true, claimGuardPassed: true }),
+    receipt: buildEnabledReceipt({
+      narrative,
+      officialResultUnchanged: true,
+      claimGuardPassed: true,
+    }),
   };
 }
 ```
@@ -751,6 +784,7 @@ git commit -m "feat(banking): add AI explain orchestrator with fail-closed firew
 ## Task 6: Wire the endpoint into the router
 
 **Files:**
+
 - Modify: `src/bankingPilot/index.js` (imports near top; new route after the `/verify` route, before `export default router`)
 - Test: `tests/unit/bankingPilot/aiExplainRouter.test.js`
 
@@ -818,7 +852,10 @@ describe("GET /:sessionId/ai-privacy-explain", () => {
   test("flag off -> 503 ai_explain_disabled with off-path receipt", async () => {
     process.env.SIMURGH_BANKING_PILOT_AI_EXPLAIN = "false";
     const c = await submittedSession();
-    const { status, body } = await getJson(`/${c.banking_session_id}/ai-privacy-explain`, auth(c.token));
+    const { status, body } = await getJson(
+      `/${c.banking_session_id}/ai-privacy-explain`,
+      auth(c.token)
+    );
     assert.equal(status, 503);
     assert.equal(body.error, "ai_explain_disabled");
     assert.equal(body.ai_privacy_layer_enabled, false);
@@ -828,7 +865,10 @@ describe("GET /:sessionId/ai-privacy-explain", () => {
   test("flag on -> 200 narrative + receipt, sensitive payload false", async () => {
     process.env.SIMURGH_BANKING_PILOT_AI_EXPLAIN = "true";
     const c = await submittedSession();
-    const { status, body } = await getJson(`/${c.banking_session_id}/ai-privacy-explain`, auth(c.token));
+    const { status, body } = await getJson(
+      `/${c.banking_session_id}/ai-privacy-explain`,
+      auth(c.token)
+    );
     assert.equal(status, 200);
     assert.equal(body.ai_privacy_layer_enabled, true);
     assert.equal(body.receipt.sensitive_payload_sent_to_ai, false);
@@ -847,7 +887,10 @@ describe("GET /:sessionId/ai-privacy-explain", () => {
     process.env.SIMURGH_BANKING_PILOT_AI_EXPLAIN = "true";
     const c = await submittedSession();
     await postJson("/withdraw", {}, auth(c.token));
-    const { status, body } = await getJson(`/${c.banking_session_id}/ai-privacy-explain`, auth(c.token));
+    const { status, body } = await getJson(
+      `/${c.banking_session_id}/ai-privacy-explain`,
+      auth(c.token)
+    );
     assert.equal(status, 403);
     assert.equal(body.error, "ai_explain_blocked_session_withdrawn");
     assert.equal(body.narrative_generated, false);
@@ -856,7 +899,8 @@ describe("GET /:sessionId/ai-privacy-explain", () => {
   test("success appends exactly one AI_EXPLANATION_EXPORTED audit event", async () => {
     process.env.SIMURGH_BANKING_PILOT_AI_EXPLAIN = "true";
     const c = await submittedSession();
-    const before = (await getJson(`/${c.banking_session_id}/audit`, auth(c.token))).body.entries.length;
+    const before = (await getJson(`/${c.banking_session_id}/audit`, auth(c.token))).body.entries
+      .length;
     await getJson(`/${c.banking_session_id}/ai-privacy-explain`, auth(c.token));
     const after = (await getJson(`/${c.banking_session_id}/audit`, auth(c.token))).body.entries;
     const aiEvents = after.filter((e) => e.type === "BANKING_AI_EXPLANATION_EXPORTED");
@@ -949,6 +993,7 @@ git commit -m "feat(banking): expose GET /ai-privacy-explain with flag, withdraw
 ## Task 7: Smoke script
 
 **Files:**
+
 - Create: `scripts/smoke-banking-pilot-ai-firewall.sh`
 
 - [ ] **Step 1: Write the smoke script**
@@ -1045,10 +1090,12 @@ echo "PASS=$PASS FAIL=$FAIL"
 - [ ] **Step 2: Make it executable and run it**
 
 Run:
+
 ```bash
 chmod +x scripts/smoke-banking-pilot-ai-firewall.sh
 bash scripts/smoke-banking-pilot-ai-firewall.sh
 ```
+
 Expected: ends with `PASS=5 FAIL=0` and exit 0.
 
 - [ ] **Step 3: Commit**
@@ -1063,6 +1110,7 @@ git commit -m "test(banking): add B4-A AI firewall smoke gate (flag on/off, with
 ## Task 8: No-egress static gate + evidence fixtures
 
 **Files:**
+
 - Create: `scripts/privacy-audit-banking-pilot-ai-firewall.mjs`
 - Output dir: `docs/research/banking-pilot/evidence/phase-b4a-ai-firewall/`
 
@@ -1099,7 +1147,8 @@ const aiModules = [
   "src/bankingPilot/bankingAiPrivacyReceipt.js",
   "src/bankingPilot/bankingAiExplain.js",
 ];
-const networkPattern = /\b(fetch|node:http|node:https|node:net|node:dgram|undici|axios|XMLHttpRequest|WebSocket)\b/;
+const networkPattern =
+  /\b(fetch|node:http|node:https|node:net|node:dgram|undici|axios|XMLHttpRequest|WebSocket)\b/;
 for (const file of aiModules) {
   if (networkPattern.test(readFileSync(file, "utf8"))) {
     failures.push(`${file} references a network primitive`);
@@ -1114,7 +1163,11 @@ const acceptedRisk = scoreBankingRisk({
 });
 const acceptedRecord = {
   banking_session_id: "bp_b4a_fixture",
-  scenario_metadata: { scenario_type: "mock_payment_pause", risk_prompt_shown: true, user_action: "pause" },
+  scenario_metadata: {
+    scenario_type: "mock_payment_pause",
+    risk_prompt_shown: true,
+    user_action: "pause",
+  },
   risk: acceptedRisk,
 };
 const accepted = buildBankingAiExplanation(acceptedRecord);
@@ -1167,7 +1220,14 @@ for (const [file, data] of Object.entries(fixtures)) {
 }
 
 // (d) Attack-value scan over generated evidence.
-const attackValues = ["111111", "123456", "4111111111111111", "VerySecretOtp", "MockSensitivePayee", "bp_b4a_fixture"];
+const attackValues = [
+  "111111",
+  "123456",
+  "4111111111111111",
+  "VerySecretOtp",
+  "MockSensitivePayee",
+  "bp_b4a_fixture",
+];
 for (const file of generatedFiles) {
   const text = readFileSync(file, "utf8");
   for (const value of attackValues) {
@@ -1184,7 +1244,9 @@ if (failures.length > 0) {
 console.log("privacy-audit-banking-pilot-ai-firewall: PASS");
 console.log(`ai firewall modules contain no network primitives (${aiModules.length} scanned)`);
 console.log(`generated fixtures: ${generatedFiles.length}`);
-console.log("rejected-claim fixture confirms the output claim guard blocks affirmative-capability phrasing");
+console.log(
+  "rejected-claim fixture confirms the output claim guard blocks affirmative-capability phrasing"
+);
 console.log("attack/raw values absent from generated evidence");
 ```
 
@@ -1196,11 +1258,13 @@ Expected: prints `privacy-audit-banking-pilot-ai-firewall: PASS` and writes two 
 - [ ] **Step 3: Verify the no-egress gate actually bites (temporary negative check)**
 
 Run:
+
 ```bash
 node -e "const fs=require('fs');const p='src/bankingPilot/bankingNarrativeGenerator.js';const s=fs.readFileSync(p,'utf8');fs.writeFileSync(p,s+'\n// fetch\n');" \
   && (node scripts/privacy-audit-banking-pilot-ai-firewall.mjs; echo \"exit=$?\") ; \
   git checkout -- src/bankingPilot/bankingNarrativeGenerator.js
 ```
+
 Expected: the audit prints FAIL with `references a network primitive` and `exit=1`, then the file is restored. (This proves the gate is real.)
 
 - [ ] **Step 4: Re-run clean and commit**
@@ -1218,6 +1282,7 @@ git commit -m "test(banking): add B4-A no-egress static gate and explanation evi
 ## Task 9: Closeout + claim-audit docs
 
 **Files:**
+
 - Create: `docs/research/banking-pilot/phase-b4a/BANKING_PILOT_PHASE_B4A_CLOSEOUT.md`
 - Create: `docs/research/banking-pilot/phase-b4a/BANKING_PILOT_PHASE_B4A_CLAIM_AUDIT.md`
 
@@ -1254,15 +1319,15 @@ secrets, no live LLM. The public report-page surface is deferred to B4-B.
 
 ## Route response matrix
 
-| Case | HTTP | Narrative | Appends AI_EXPLANATION_EXPORTED |
-| --- | ---: | --- | --- |
-| Feature flag off | 503 | none | no |
-| Withdrawn session | 403 | none | no |
-| Token missing/invalid | 401 | none | no |
-| Path-token mismatch | 403 | none | no |
-| No scenario submitted | 409 | none | no |
-| Input/output firewall fail | 422 | none | no |
-| Success | 200 | emitted | yes |
+| Case                       | HTTP | Narrative | Appends AI_EXPLANATION_EXPORTED |
+| -------------------------- | ---: | --------- | ------------------------------- |
+| Feature flag off           |  503 | none      | no                              |
+| Withdrawn session          |  403 | none      | no                              |
+| Token missing/invalid      |  401 | none      | no                              |
+| Path-token mismatch        |  403 | none      | no                              |
+| No scenario submitted      |  409 | none      | no                              |
+| Input/output firewall fail |  422 | none      | no                              |
+| Success                    |  200 | emitted   | yes                             |
 
 ## Gate Evidence
 
@@ -1311,15 +1376,15 @@ firewall from being described as real banking intelligence.
 
 ## Claim Table
 
-| Claim | Evidence | Allowed Status |
-| --- | --- | --- |
+| Claim                                                | Evidence                                                                    | Allowed Status  |
+| ---------------------------------------------------- | --------------------------------------------------------------------------- | --------------- |
 | Narrative layer receives no sensitive banking fields | input firewall + `bankingAiExplain.test.js` (raw id absent) + privacy audit | Evidence-backed |
-| No network egress | no-egress static gate over four modules | Evidence-backed |
-| Narrative is deterministic | generator determinism test + `narrative_hash` | Evidence-backed |
-| Affirmative-capability claims are blocked | output firewall tests + rejected-claim fixture | Evidence-backed |
-| Official policy result unchanged | official-result-unchanged check + tests | Evidence-backed |
-| Layer is default-off | `isAiExplainEnabled` test + router 503 test + smoke | Evidence-backed |
-| Withdrawn sessions are blocked | router 403 test + smoke | Evidence-backed |
+| No network egress                                    | no-egress static gate over four modules                                     | Evidence-backed |
+| Narrative is deterministic                           | generator determinism test + `narrative_hash`                               | Evidence-backed |
+| Affirmative-capability claims are blocked            | output firewall tests + rejected-claim fixture                              | Evidence-backed |
+| Official policy result unchanged                     | official-result-unchanged check + tests                                     | Evidence-backed |
+| Layer is default-off                                 | `isAiExplainEnabled` test + router 503 test + smoke                         | Evidence-backed |
+| Withdrawn sessions are blocked                       | router 403 test + smoke                                                     | Evidence-backed |
 
 ## Disallowed Claims (must stay blocked)
 
@@ -1347,6 +1412,7 @@ git commit -m "docs(banking): add B4-A closeout and claim audit"
 ## Task 10: Change-protocol entries + full gate run
 
 **Files:**
+
 - Modify: `AGENT.md` (prepend a new entry near the top, matching existing `Raouf:` format)
 - Modify: `CHANGELOG.md` (add a new entry matching existing format)
 
@@ -1400,6 +1466,7 @@ git commit -m "docs(banking): record B4-A AI privacy firewall in AGENT and CHANG
 ## Self-Review (completed by plan author)
 
 **Spec coverage:**
+
 - Input firewall → Task 5 (re-scan + byte cap) reusing existing allowlist builder. ✓
 - Output claim firewall (schema, length caps, forbidden-claim scan, official-result-unchanged) → Task 3. ✓
 - AI privacy receipt incl. disabled/off-path + `narrative_hash` → Task 4. ✓
@@ -1426,4 +1493,7 @@ existing modules read during planning.
 
 **Placeholder scan:** no TBD/TODO; every code and test step contains complete
 content.
+
+```
+
 ```
