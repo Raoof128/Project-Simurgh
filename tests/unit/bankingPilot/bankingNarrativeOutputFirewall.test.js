@@ -1,0 +1,75 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import {
+  FORBIDDEN_CLAIM_PHRASES,
+  scanForbiddenClaims,
+  validateNarrativeSchema,
+  checkOfficialResultUnchanged,
+  runOutputFirewall,
+  NARRATIVE_FIELD_MAX_LENGTH,
+} from "../../../src/bankingPilot/bankingNarrativeOutputFirewall.js";
+import { generateBankingNarrative } from "../../../src/bankingPilot/bankingNarrativeGenerator.js";
+
+const goodNarrative = generateBankingNarrative({
+  scenario_type: "mock_payment_pause",
+  risk_score: 35,
+  verdict: "warning",
+  manual_review_required: true,
+});
+
+test("a clean generated narrative passes schema and claim scan", () => {
+  assert.deepEqual(validateNarrativeSchema(goodNarrative), { ok: true });
+  assert.equal(scanForbiddenClaims(goodNarrative), null);
+});
+
+test("required negated non-claims are NOT blocked by the scanner", () => {
+  // The generator's own non_claims contain 'scam', 'fraud', 'payment' words in
+  // negated form; they must survive the scanner.
+  assert.equal(scanForbiddenClaims(goodNarrative), null);
+});
+
+test("each forbidden affirmative-capability phrase is detected", () => {
+  for (const phrase of FORBIDDEN_CLAIM_PHRASES) {
+    const poisoned = { ...goodNarrative, plain_english_summary: `Result: ${phrase}.` };
+    assert.equal(scanForbiddenClaims(poisoned), phrase, `expected to catch: ${phrase}`);
+  }
+});
+
+test("schema rejects a missing string field", () => {
+  const bad = { ...goodNarrative };
+  delete bad.privacy_boundary_note;
+  assert.equal(validateNarrativeSchema(bad).ok, false);
+});
+
+test("schema rejects an over-length field", () => {
+  const bad = {
+    ...goodNarrative,
+    manual_review_note: "x".repeat(NARRATIVE_FIELD_MAX_LENGTH + 1),
+  };
+  assert.equal(validateNarrativeSchema(bad).reason, "field_too_long");
+});
+
+test("official-result-unchanged detects drift", () => {
+  const ok = checkOfficialResultUnchanged(
+    { risk_score: 35, verdict: "warning", manual_review_required: true },
+    { risk_score: 35, verdict: "warning", manual_review_required: true }
+  );
+  assert.equal(ok.ok, true);
+  const drift = checkOfficialResultUnchanged(
+    { risk_score: 35, verdict: "safe", manual_review_required: true },
+    { risk_score: 35, verdict: "warning", manual_review_required: true }
+  );
+  assert.equal(drift.ok, false);
+  assert.equal(drift.field, "verdict");
+});
+
+test("runOutputFirewall blocks a forbidden claim with gate=claim_guard", () => {
+  const poisoned = { ...goodNarrative, manual_review_note: "fraud detected here" };
+  const r = runOutputFirewall({
+    narrative: poisoned,
+    payloadOfficial: { risk_score: 35, verdict: "warning", manual_review_required: true },
+    recordOfficial: { risk_score: 35, verdict: "warning", manual_review_required: true },
+  });
+  assert.equal(r.ok, false);
+  assert.equal(r.gate, "claim_guard");
+});
