@@ -40,12 +40,33 @@
           Reports preserve the Phase A privacy assertions. Audit exports show safe event metadata
           only, and verify checks the HMAC chain status.
         </p>
+        <ul class="scope-list" aria-label="What each export shows">
+          <li>
+            <strong>Report</strong> — a readable summary of what this fictional session recorded and
+            what it did not record.
+          </li>
+          <li><strong>Audit</strong> — a step-by-step event list showing the session history.</li>
+          <li>
+            <strong>Verify</strong> — a chain check showing whether the audit record is internally
+            consistent.
+          </li>
+          <li>
+            <strong>Policy outcome</strong> — the local prototype policy result for this fictional
+            scenario. It is not fraud detection, financial advice, or a banking decision.
+          </li>
+        </ul>
         <div class="actions">
           <button type="button" data-export="report">Report</button>
           <button class="secondary" type="button" data-export="audit">Audit</button>
           <button class="secondary" type="button" data-export="verify">Verify</button>
           <a class="button ghost" href="/banking-pilot-consent.html">New Session</a>
         </div>
+        <p class="footer-note">
+          Audit — lists what happened. Verify — checks whether the audit chain still matches.
+        </p>
+        <p class="footer-note" id="export-note" aria-live="polite">
+          Choose an export above to see a plain-English summary of what it shows.
+        </p>
       </section>
 
       <section class="result-panel" aria-label="Export response">
@@ -53,18 +74,30 @@
         <output id="status" aria-live="polite"></output>
         <p class="section-label">Export response</p>
         <pre id="response" aria-label="Export response"></pre>
+        <p class="footer-note">
+          Opening exports may add audit events, so report and verify event counts can differ.
+        </p>
       </section>
     </main>
 
     <script>
       const status = document.querySelector("#status");
       const response = document.querySelector("#response");
+      const exportNote = document.querySelector("#export-note");
       const sessionId = sessionStorage.getItem("bankingPilotSessionId");
       const token = sessionStorage.getItem("bankingPilotToken");
+
+      const EXPORT_NOTES = {
+        report:
+          "This report is a readable summary of what this fictional session recorded and what it did not record.",
+        audit: "This audit shows the step-by-step event history for this fictional session.",
+        verify: "This verification checks whether the audit record is internally consistent.",
+      };
 
       async function loadExport(kind) {
         status.className = "";
         status.textContent = `Loading ${kind}...`;
+        if (exportNote && EXPORT_NOTES[kind]) exportNote.textContent = EXPORT_NOTES[kind];
         const res = await fetch(`/api/banking-pilot/${sessionId}/${kind}`, {
           headers: { Authorization: `Bearer ${token}` },
         });

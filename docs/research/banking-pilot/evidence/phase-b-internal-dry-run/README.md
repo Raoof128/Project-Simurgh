@@ -42,4 +42,4 @@ All completed evidence must preserve:
 
 ## Current Status
 
-The dry run has not been executed. Current JSON files are templates only.
+The dry run has been executed. `aggregate-results.json` and `participant-feedback.json` hold the completed aggregate-only results (5 trusted internal testers, 30 total sessions, 25 submitted scenario sessions, 5 withdrawal sessions, plus a focused copy-validation rerun of 3 fresh sessions). The `*-template.json` files remain as the empty templates for reference. No raw tester free text is retained.

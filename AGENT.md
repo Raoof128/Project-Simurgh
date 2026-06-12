@@ -2,6 +2,30 @@
 
 ## Agent Change Log
 
+### 2026-06-12 (Australia/Sydney) — Banking Shield Phase B3d closeout + claim-audit update
+
+**Raouf:**
+
+- **Scope:** Closed the Banking Shield Phase B internal dry run using aggregate-only results from B3a (human dry run), B3b (UX copy patch), and B3c (focused copy-validation rerun). No Phase B runtime routes, Phase C logic, real banking integrations, API field renames, or privacy-assertion changes were made; no raw tester feedback, screenshots, or personal financial details were retained.
+- **Summary:** Moved the Phase B closeout and claim audit from `not_run`/`Not yet run` to completed, evidence-backed statuses. Added completed aggregate evidence files (`aggregate-results.json`, `participant-feedback.json`) alongside the retained empty templates, and updated the evidence README and closeout summary. Recorded: 5 trusted testers, 30 total sessions, 25 submitted scenario sessions, 5 withdrawal sessions (all blocking report export afterward), identical deterministic pattern safe/warning/warning/warning/safe, consent/withdrawal/non-claims clear 5/5, and the main finding that the key improvement was export-page interpretability rather than privacy failure. Kept all disallowed banking-capability claims blocked.
+- **Files changed:** `docs/research/banking-pilot/phase-b/BANKING_PILOT_PHASE_B_CLOSEOUT.md`, `docs/research/banking-pilot/phase-b/BANKING_PILOT_PHASE_B_CLAIM_AUDIT.md`, `docs/research/banking-pilot/evidence/phase-b-internal-dry-run/aggregate-results.json`, `docs/research/banking-pilot/evidence/phase-b-internal-dry-run/participant-feedback.json`, `docs/research/banking-pilot/evidence/phase-b-internal-dry-run/closeout-summary.md`, `docs/research/banking-pilot/evidence/phase-b-internal-dry-run/README.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `npm test` 389/389; `scripts/smoke-banking-pilot.sh` 14/14; `scripts/security-audit-banking-pilot.sh` 27/27; `node scripts/privacy-audit-banking-pilot.mjs` PASS; `node scripts/privacy-audit-banking-pilot-phase-b.mjs` PASS; `scripts/smoke-banking-pilot-closed.sh` 4/4; `scripts/smoke-banking-pilot-full-e2e.sh` 41/41; `npx prettier --check .` clean.
+- **Follow-ups:** Stage the branch for PR. Paper-safe finding: Phase A established automated structural privacy and integrity gates; Phase B evaluated the consent, warning, withdrawal, report, audit, and verification workflow with trusted internal participants using fictional banking-adjacent scenarios only, and its main improvement was export-page interpretability, not privacy failure.
+
+---
+
+### 2026-06-12 (Australia/Sydney) — Banking Shield Phase B3b UX copy patch (Report/Audit/Verify readability)
+
+**Raouf:**
+
+- **Scope:** Applied a narrow Phase B UX copy/UI-wording patch after the human dry run found that the main improvement area was interpretability of the Report/Audit/Verify exports, not privacy. No Phase B runtime routes, Phase C logic, real banking integrations, API field names, privacy assertions, or retained raw tester feedback were added.
+- **Summary:** Added plain-English one-liners for the Report, Audit, and Verify exports (shown contextually when each export loads), a static export legend that also defines "Policy outcome" with the non-claims (not fraud detection, not financial advice, not a banking decision), short Audit-vs-Verify sub-labels, and a note explaining that opening exports adds audit events so report and verify event counts can differ. Added one short fictional takeaway sentence per scenario (and the withdrawal action) on the scenario page, plus a standing "policy outcome only" non-claims line. All changes are presentation-only; `verdict` remains the API field while the user-facing explanation uses "policy outcome".
+- **Files changed:** `public/banking-pilot-report.html`, `public/banking-pilot-scenario.html`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `npm test` passed 389/389; `scripts/smoke-banking-pilot.sh` 14/14; `scripts/security-audit-banking-pilot.sh` 27/27; `node scripts/privacy-audit-banking-pilot.mjs` PASS; `node scripts/privacy-audit-banking-pilot-phase-b.mjs` PASS over 6 evidence files; `scripts/smoke-banking-pilot-closed.sh` 4/4; `scripts/smoke-banking-pilot-full-e2e.sh` 41/41; `npx prettier --check .` clean. Focused copy-validation re-run (3 fresh sessions, one submitted scenario each) confirmed the live pages serve the new copy and that report `audit.event_count` (4) differs from verify `event_count` (6), with all audit chains valid.
+- **Follow-ups:** Stage B3c (focused copy-validation rerun) done at agent level; record only aggregate copy-validation results, then proceed to B3d closeout + claim-audit update. Do not close Phase B until B3d is complete.
+
+---
+
 ### 2026-06-12 (Australia/Sydney) — Banking Shield Simurgh function alignment audit
 
 **Raouf:**
