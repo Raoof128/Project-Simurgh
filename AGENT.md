@@ -2,6 +2,18 @@
 
 ## Agent Change Log
 
+### 2026-06-12 (Australia/Sydney) — Stage B5-D: Banking Shield full paper v1.0 with verified citations
+
+**Raouf:**
+
+- **Scope:** Produced the full Banking Shield paper v1.0 from draft v0.1, the reviewer-simulation fix list, and live citation verification. Docs only — no runtime code, gates, scoring, privacy assertions, or evidence fixtures were changed. Claim discipline enforced end-to-end: every banking-capability noun in the paper appears only in negated non-claims, denylist descriptions, fictional-scenario labels, or comprehension-count rows.
+- **Summary:** Added `docs/research/banking-pilot/paper/banking-shield-paper-v1.0.md`: full paper with embedded text figures F1–F4, tables T1–T5 filled from the frozen evidence pack, an LLM-assistance disclosure section, and a references section with 10 DOI-backed citations verified this session through an academic search gateway (tamper-evident logging, warning/rights comprehension, GDPR data-minimisation/design-based regulation, LLM guardrails/TRiSM). The three categories with no verifiable source in the available corpus retain explicit `[CITATION NEEDED]` markers — zero invented citations. Re-ran the claim audit against v1.0 (PASS; recorded in `banking-shield-paper-claim-audit.md`) and updated the B5 closeout: B5-D draft complete, venue selection + camera-ready pending.
+- **Files changed:** `docs/research/banking-pilot/paper/banking-shield-paper-v1.0.md`, `docs/research/banking-pilot/paper/banking-shield-paper-claim-audit.md`, `docs/research/banking-pilot/stage-b5-model-paper/MODEL_REVIEW_CLOSEOUT.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** Mechanical forbidden-claim scan of v1.0 clean (all capability nouns negated/denylist/fictional); `scripts/security-audit-stage-2-4-2-5.sh` exit 0 (docs overclaim gate); `npx prettier --check .` clean; Phase A fixture churn restored.
+- **Follow-ups:** Venue selection + current-CFP check (page limits, AI-use disclosure), LaTeX conversion, final figure artwork, optional broader citation verification against CS-venue indices (the gateway corpus is publisher-limited).
+
+---
+
 ### 2026-06-12 (Australia/Sydney) — Stage B5-A/B/C: Banking Shield model-assisted evidence synthesis + paper draft v0.1
 
 **Raouf:**

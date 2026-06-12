@@ -1,9 +1,30 @@
-# Banking Shield Paper — Claim Audit (draft v0.1)
+# Banking Shield Paper — Claim Audit (v0.1 and v1.0)
 
 Audit date: 2026-06-12. Auditor: Stage B5 claim-prosecutor pass (Pass 2),
-re-run against the polished v0.1 text. Method: scan for any affirmative use of
-the forbidden-claim list; verify every banking-capability noun appears only in
-negated non-claims, denylist descriptions, or fictional-scenario labels.
+re-run against the polished v0.1 text and again against the full v1.0 paper
+(Stage B5-D). Method: scan for any affirmative use of the forbidden-claim
+list; verify every banking-capability noun appears only in negated
+non-claims, denylist descriptions, or fictional-scenario labels.
+
+## v1.0 re-audit (2026-06-12)
+
+A mechanical scan of `banking-shield-paper-v1.0.md` found:
+
+- Zero matches for the CI overclaim scanner's literal patterns.
+- Every occurrence of a capability noun (fraud detection, scam prevention,
+  payment safety, payee verification, financial advice, compliance,
+  bank-grade) sits in a negated non-claim, the claims-vs-non-claims table,
+  a denylist example, a comprehension-count row, or an explicit "no
+  compliance property is claimed" statement.
+- All 10 references carry DOIs verified through an academic search gateway
+  this session; the three categories without a verifiable source retain
+  explicit `[CITATION NEEDED]` markers (open-banking consent UX,
+  payee-confirmation services, per-response AI transparency artifacts).
+- The LLM-assistance disclosure is present (§10).
+
+**Verdict: v1.0 PASSES the claim audit.**
+
+## v0.1 audit (original)
 
 ## Forbidden-claim scan result
 

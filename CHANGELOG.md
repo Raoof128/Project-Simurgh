@@ -1,5 +1,26 @@
 ## Change Log
 
+## [banking-shield-stage-b5d-paper-v1] — 2026-06-12 — Full paper v1.0 with verified citations
+
+**Raouf:** Stage B5-D: full Banking Shield paper v1.0 with embedded figures F1–F4, tables T1–T5 filled from the frozen evidence pack, an LLM-assistance disclosure, and 10 DOI-backed references verified via an academic search gateway; categories without a verifiable source keep explicit `[CITATION NEEDED]` markers (zero invented citations). Claim audit re-run against v1.0: PASS.
+
+### Added
+
+- `docs/research/banking-pilot/paper/banking-shield-paper-v1.0.md` — the full paper.
+
+### Changed
+
+- `docs/research/banking-pilot/paper/banking-shield-paper-claim-audit.md` — v1.0 re-audit section (PASS).
+- `docs/research/banking-pilot/stage-b5-model-paper/MODEL_REVIEW_CLOSEOUT.md` — B5-D marked draft complete; venue selection + camera-ready pending.
+
+### Verified
+
+- Mechanical forbidden-claim scan of v1.0 — clean (capability nouns only in negated/denylist/fictional contexts).
+- `scripts/security-audit-stage-2-4-2-5.sh` — exit 0 (docs overclaim gate).
+- `npx prettier --check .` — clean.
+
+---
+
 ## [banking-shield-stage-b5-model-paper] — 2026-06-12 — Model-assisted evidence synthesis + paper draft v0.1
 
 **Raouf:** Executed Stage B5-A/B/C: a 12-pass, fully logged model-review protocol over a sanitised evidence pack (frozen at `92dabb4`), producing the Banking Shield paper outline, draft v0.1, threat model, claim audits, reviewer simulation, and figure/table plan. Docs only; the model improved the paper and validated nothing — system validation remains with the automated gates.

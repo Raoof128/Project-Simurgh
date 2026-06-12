@@ -3,12 +3,27 @@
 **Date:** 2026-06-12 (Australia/Sydney)
 **Status of sub-stages:**
 
-| Stage | Scope                                            | Status      |
-| ----- | ------------------------------------------------ | ----------- |
-| B5-A  | Model-assisted evidence synthesis (passes 1–8)   | complete    |
-| B5-B  | Paper draft v0.1 (passes 9–10)                   | complete    |
-| B5-C  | Reviewer simulation + claim audit (passes 11–12) | complete    |
-| B5-D  | Preprint v1.0                                    | not started |
+| Stage | Scope                                            | Status                                                  |
+| ----- | ------------------------------------------------ | ------------------------------------------------------- |
+| B5-A  | Model-assisted evidence synthesis (passes 1–8)   | complete                                                |
+| B5-B  | Paper draft v0.1 (passes 9–10)                   | complete                                                |
+| B5-C  | Reviewer simulation + claim audit (passes 11–12) | complete                                                |
+| B5-D  | Preprint v1.0                                    | draft complete — venue selection + camera-ready pending |
+
+## B5-D execution note (2026-06-12)
+
+`paper/banking-shield-paper-v1.0.md` was produced from v0.1 plus the
+reviewer-simulation fix list: text figures F1–F4 embedded, tables T1–T5
+filled from the input pack, an LLM-assistance disclosure section added, and
+citations verified through an academic search gateway (10 DOI-backed
+references across four related-work categories; the three categories without
+a verifiable source in the available corpus retain explicit
+`[CITATION NEEDED]` markers — none invented). The claim audit was re-run
+against v1.0 and passes. Remaining before submission: venue selection and
+current-CFP check (page limits, AI-use disclosure policy), conversion to the
+venue's LaTeX template, final figure artwork, and optional broader citation
+verification against CS-venue indices (the gateway corpus is
+publisher-limited).
 
 ## What was produced
 
