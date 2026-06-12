@@ -2,6 +2,18 @@
 
 ## Agent Change Log
 
+### 2026-06-12 (Australia/Sydney) — Banking Shield B4-A/B full audit hardening
+
+**Raouf:**
+
+- **Scope:** Audited the current Banking Shield branch diff across B4-A backend firewall code, B4-B report UI, changed scenario/consent pages, smoke/security/privacy scripts, tests, and closeout docs. No route semantics, scoring logic, audit-chain verification, withdrawal policy, privacy assertions, live LLM provider, network egress, Phase C logic, or real banking integrations were added.
+- **Summary:** Tightened the B4-A output firewall to reject unexpected top-level narrative fields and malformed/over-length `non_claims` entries, matching the exact-schema contract in the spec. Added red/green tests for those schema cases. Added explicit network/JSON failure handling to the B4-B report export and AI explanation UI and to the scenario submit/withdraw UI so failed fetches do not leave tester pages stuck in loading states. Extended the full E2E smoke static contract to require the new failure-state copy.
+- **Files changed:** `src/bankingPilot/bankingNarrativeOutputFirewall.js`, `tests/unit/bankingPilot/bankingNarrativeOutputFirewall.test.js`, `public/banking-pilot-report.html`, `public/banking-pilot-scenario.html`, `scripts/smoke-banking-pilot-full-e2e.sh`, `docs/research/banking-pilot/phase-b4b/BANKING_PILOT_PHASE_B4B_CLOSEOUT.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** Red/green focused output-firewall test; red/green full E2E smoke for B4-B/scenario failure copy; final full gate: `npm test` 415/415, `scripts/smoke-banking-pilot.sh` 14/14, `scripts/smoke-banking-pilot-ai-firewall.sh` 5/5, `scripts/smoke-banking-pilot-full-e2e.sh` 43/43, `scripts/security-audit-banking-pilot.sh` 27/27, all three Banking Shield privacy audits PASS, `npm audit --audit-level=high` found no high/critical advisories (existing moderate `qs` chain remains), `npx prettier --check .` clean, and `git diff --check` clean.
+- **Follow-ups:** None from this audit at the Banking Shield layer; keep future narrative fields behind explicit schema/test updates.
+
+---
+
 ### 2026-06-12 (Australia/Sydney) — Banking Shield Stage B4-B AI privacy explanation UI
 
 **Raouf:**

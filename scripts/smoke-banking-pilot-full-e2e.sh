@@ -223,13 +223,24 @@ async function expectRejected(payload, expectedError, expectedField, sensitiveVa
 }
 
 await getPage("/banking-pilot-consent.html", "public consent");
-await getPage("/banking-pilot-scenario.html", "public scenario");
+const scenarioPageText = await getPage("/banking-pilot-scenario.html", "public scenario");
+assert.equal(
+  scenarioPageText.includes("Unable to submit scenario."),
+  true,
+  "scenario page missing submit failure copy"
+);
+assert.equal(
+  scenarioPageText.includes("Unable to withdraw session."),
+  true,
+  "scenario page missing withdraw failure copy"
+);
 const reportPageText = await getPage("/banking-pilot-report.html", "public report");
 for (const expected of [
   "AI Privacy Explanation",
   "Metadata-only narrative receipt",
   "Sensitive payload sent to AI",
   "Network egress used",
+  "Unable to load AI privacy explanation.",
 ]) {
   assert.equal(reportPageText.includes(expected), true, `report page missing ${expected}`);
 }

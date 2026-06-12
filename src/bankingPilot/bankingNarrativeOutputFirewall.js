@@ -12,6 +12,12 @@ export const NARRATIVE_REQUIRED_STRING_FIELDS = Object.freeze([
   "manual_review_note",
 ]);
 
+const NARRATIVE_ALLOWED_FIELDS = Object.freeze([
+  ...NARRATIVE_REQUIRED_STRING_FIELDS,
+  "non_claims",
+  "official_result_unchanged",
+]);
+
 // Affirmative-capability phrasings only. Bare words (e.g. "scam", "fraud") are
 // deliberately NOT listed so required negated non-claims pass unharmed.
 export const FORBIDDEN_CLAIM_PHRASES = Object.freeze([
@@ -68,6 +74,11 @@ export function validateNarrativeSchema(narrative) {
   if (!narrative || typeof narrative !== "object" || Array.isArray(narrative)) {
     return { ok: false, reason: "narrative_not_object" };
   }
+  for (const field of Object.keys(narrative)) {
+    if (!NARRATIVE_ALLOWED_FIELDS.includes(field)) {
+      return { ok: false, reason: "unexpected_field", field };
+    }
+  }
   for (const field of NARRATIVE_REQUIRED_STRING_FIELDS) {
     if (typeof narrative[field] !== "string") {
       return { ok: false, reason: "missing_string_field", field };
@@ -78,6 +89,14 @@ export function validateNarrativeSchema(narrative) {
   }
   if (!Array.isArray(narrative.non_claims) || narrative.non_claims.length === 0) {
     return { ok: false, reason: "missing_non_claims" };
+  }
+  for (const nonClaim of narrative.non_claims) {
+    if (typeof nonClaim !== "string") {
+      return { ok: false, reason: "invalid_non_claim", field: "non_claims" };
+    }
+    if (nonClaim.length > NARRATIVE_FIELD_MAX_LENGTH) {
+      return { ok: false, reason: "field_too_long", field: "non_claims" };
+    }
   }
   if (narrative.official_result_unchanged !== true) {
     return { ok: false, reason: "official_result_unchanged_not_true" };

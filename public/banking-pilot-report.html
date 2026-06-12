@@ -239,33 +239,68 @@
           : `Explanation not generated (${statusCode}). Receipt reason: ${body.error || body.blocked_reason || "blocked"}.`;
       }
 
+      function renderAiLoadFailure(message) {
+        aiExplainState.textContent = "Unavailable";
+        aiExplainState.className = "badge ox";
+        setText(aiFields.summary, message);
+        setText(aiFields.policy, "No explanation loaded.");
+        setText(aiFields.privacy, "No receipt loaded.");
+        setText(aiFields.audit, "No explanation loaded.");
+        setText(aiFields.manual, "No explanation loaded.");
+        renderNonClaims(["No narrative generated."]);
+        renderReceipt({});
+        aiExplainNote.textContent = message;
+      }
+
       async function loadExport(kind) {
-        status.className = "";
-        status.textContent = `Loading ${kind}...`;
-        if (exportNote && EXPORT_NOTES[kind]) exportNote.textContent = EXPORT_NOTES[kind];
-        const res = await fetch(`/api/banking-pilot/${sessionId}/${kind}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const body = await res.json();
-        response.textContent = JSON.stringify(body, null, 2);
-        status.className = res.ok ? "" : "error";
-        status.textContent = res.ok ? "Loaded." : `Rejected with ${res.status}.`;
+        try {
+          status.className = "";
+          status.textContent = `Loading ${kind}...`;
+          if (exportNote && EXPORT_NOTES[kind]) exportNote.textContent = EXPORT_NOTES[kind];
+          const res = await fetch(`/api/banking-pilot/${sessionId}/${kind}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          const body = await res.json();
+          response.textContent = JSON.stringify(body, null, 2);
+          status.className = res.ok ? "" : "error";
+          status.textContent = res.ok ? "Loaded." : `Rejected with ${res.status}.`;
+        } catch (error) {
+          status.className = "error";
+          status.textContent = `Unable to load ${kind}.`;
+          response.textContent = JSON.stringify(
+            { ok: false, error: "export_load_failed", message: error.message },
+            null,
+            2
+          );
+        }
       }
 
       async function loadAiExplanation() {
-        status.className = "";
-        status.textContent = "Loading AI privacy explanation...";
-        if (exportNote) exportNote.textContent = EXPORT_NOTES.ai;
-        const res = await fetch(`/api/banking-pilot/${sessionId}/ai-privacy-explain`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const body = await res.json();
-        renderAiExplanation(body, res.status);
-        response.textContent = JSON.stringify(body, null, 2);
-        status.className = res.ok || res.status === 503 ? "" : "error";
-        status.textContent = res.ok
-          ? "AI privacy explanation loaded."
-          : `AI privacy explanation not generated (${res.status}).`;
+        const failureMessage = "Unable to load AI privacy explanation.";
+        try {
+          status.className = "";
+          status.textContent = "Loading AI privacy explanation...";
+          if (exportNote) exportNote.textContent = EXPORT_NOTES.ai;
+          const res = await fetch(`/api/banking-pilot/${sessionId}/ai-privacy-explain`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          const body = await res.json();
+          renderAiExplanation(body, res.status);
+          response.textContent = JSON.stringify(body, null, 2);
+          status.className = res.ok || res.status === 503 ? "" : "error";
+          status.textContent = res.ok
+            ? "AI privacy explanation loaded."
+            : `AI privacy explanation not generated (${res.status}).`;
+        } catch (error) {
+          renderAiLoadFailure(failureMessage);
+          status.className = "error";
+          status.textContent = failureMessage;
+          response.textContent = JSON.stringify(
+            { ok: false, error: "ai_explain_load_failed", message: error.message },
+            null,
+            2
+          );
+        }
       }
 
       if (!sessionId || !token) {

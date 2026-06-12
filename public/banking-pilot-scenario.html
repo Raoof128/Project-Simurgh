@@ -147,15 +147,23 @@
       }
 
       async function post(path, body) {
-        const res = await fetch(path, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(body),
-        });
-        return { ok: res.ok, status: res.status, body: await res.json() };
+        try {
+          const res = await fetch(path, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(body),
+          });
+          return { ok: res.ok, status: res.status, body: await res.json() };
+        } catch (error) {
+          return {
+            ok: false,
+            status: 0,
+            body: { ok: false, error: "request_failed", message: error.message },
+          };
+        }
       }
 
       async function submitScenario(scenario) {
@@ -167,7 +175,11 @@
         const result = await post("/api/banking-pilot/submit", payloadFor(scenario));
         response.textContent = JSON.stringify(result.body, null, 2);
         status.className = result.ok ? "" : "error";
-        status.textContent = result.ok ? "Submitted." : `Rejected with ${result.status}.`;
+        status.textContent = result.ok
+          ? "Submitted."
+          : result.status === 0
+            ? "Unable to submit scenario."
+            : `Rejected with ${result.status}.`;
       }
 
       if (!sessionId || !token) {
@@ -187,7 +199,11 @@
         const result = await post("/api/banking-pilot/withdraw", {});
         response.textContent = JSON.stringify(result.body, null, 2);
         status.className = result.ok ? "" : "error";
-        status.textContent = result.ok ? "Withdrawn." : `Rejected with ${result.status}.`;
+        status.textContent = result.ok
+          ? "Withdrawn."
+          : result.status === 0
+            ? "Unable to withdraw session."
+            : `Rejected with ${result.status}.`;
       });
     </script>
   </body>

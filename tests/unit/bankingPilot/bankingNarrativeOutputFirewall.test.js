@@ -49,6 +49,34 @@ test("schema rejects an over-length field", () => {
   assert.equal(validateNarrativeSchema(bad).reason, "field_too_long");
 });
 
+test("schema rejects extra top-level narrative fields", () => {
+  const bad = { ...goodNarrative, extra_claim_channel: "metadata-only" };
+  assert.deepEqual(validateNarrativeSchema(bad), {
+    ok: false,
+    reason: "unexpected_field",
+    field: "extra_claim_channel",
+  });
+});
+
+test("schema rejects malformed non-claim entries", () => {
+  const badType = { ...goodNarrative, non_claims: ["not fraud detection", 123] };
+  assert.deepEqual(validateNarrativeSchema(badType), {
+    ok: false,
+    reason: "invalid_non_claim",
+    field: "non_claims",
+  });
+
+  const badLength = {
+    ...goodNarrative,
+    non_claims: ["x".repeat(NARRATIVE_FIELD_MAX_LENGTH + 1)],
+  };
+  assert.deepEqual(validateNarrativeSchema(badLength), {
+    ok: false,
+    reason: "field_too_long",
+    field: "non_claims",
+  });
+});
+
 test("official-result-unchanged detects drift", () => {
   const ok = checkOfficialResultUnchanged(
     { risk_score: 35, verdict: "warning", manual_review_required: true },

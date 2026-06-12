@@ -19,6 +19,8 @@ guard, and narrative-hash fields.
   narrative.
 - The UI uses the existing Simurgh Banking Shield visual system.
 - Smoke coverage confirms the page contract and the flag-on explanation receipt.
+- Request/JSON failures are handled with visible failure states instead of
+  leaving the report or scenario page in a loading state.
 
 ## Scope control
 
@@ -34,7 +36,7 @@ B4-B did not change:
 
 ## Gate Evidence
 
-- `npm test` - 413/413 pass.
+- `npm test` - 415/415 pass after audit hardening.
 - `scripts/smoke-banking-pilot.sh` - 14/14 pass.
 - `scripts/smoke-banking-pilot-ai-firewall.sh` - 5/5 pass.
 - `node scripts/privacy-audit-banking-pilot.mjs` - PASS.
@@ -46,6 +48,10 @@ B4-B did not change:
 - `npx prettier --check .` - clean.
 - Browser visual check on `http://127.0.0.1:33111/banking-pilot-report.html` -
   B4-B panel populated, receipt flags visible, no horizontal overflow.
+- Audit hardening added exact-schema checks to the B4-A output firewall and
+  frontend failure-state handling for report/scenario fetches.
+- `npm audit --audit-level=high` - no high/critical advisories; existing
+  moderate `qs` advisory chain remains outside this B4-B surface.
 
 ## Result
 
