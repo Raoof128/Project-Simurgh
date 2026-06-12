@@ -1,5 +1,37 @@
 ## Change Log
 
+## [banking-shield-b4-audit-polish] — 2026-06-12 — Close residual B4-A/B audit observations
+
+**Raouf:** Applied the four residual observations from the B4-A/B full audit follow-up. All changes are conservative hardening/consistency fixes: no route semantics, scoring logic, audit-chain verification, withdrawal policy, privacy assertions, live LLM provider, network egress, Phase C logic, or real banking integrations were added, and the firewall remains fail-closed.
+
+### Changed
+
+- `src/bankingPilot/bankingNarrativeOutputFirewall.js` — the negation-aware claim scanner now accepts one article/determiner between a negator and a forbidden phrase ("not **a** fraud detection tool" is a valid disclaimer), while anything beyond one determiner ("not really a scam protection") stays blocked. Window widened to 16 chars to fit "without any ".
+- `src/bankingPilot/bankingAiPrivacyReceipt.js` — documented the fail-closed semantics of `buildFirewallFailedReceipt` (`output_claim_firewall_passed` is false when the output firewall never ran; gates that did not fail stay true because no narrative escaped).
+- `src/bankingPilot/index.js` — the ai-privacy-explain 503 (disabled), 403 (withdrawn), and 422 (firewall failed) responses now include `ok: false`, matching the error-shape convention of every other banking route.
+- `public/banking-pilot-report.html` — export and AI-explanation fetch URLs now `encodeURIComponent` the session id (belt-and-braces; the id is server-issued and the server enforces token-path match).
+
+### Tests
+
+- `tests/unit/bankingPilot/bankingNarrativeOutputFirewall.test.js` — new red/green cases: negated phrases with one article/determiner pass; affirmative phrases behind a bare article (or with weakened negation) are still blocked.
+- `tests/unit/bankingPilot/aiExplainRouter.test.js` — 503/403 responses now assert `ok: false`.
+
+### Verified
+
+- `npm test` — 417/417 pass.
+- `scripts/smoke-banking-pilot.sh` — 14/14 pass.
+- `scripts/smoke-banking-pilot-ai-firewall.sh` — 5/5 pass.
+- `scripts/smoke-banking-pilot-full-e2e.sh` — 43/43 pass.
+- `scripts/security-audit-banking-pilot.sh` — 27/27 pass.
+- `node scripts/privacy-audit-banking-pilot.mjs` — PASS.
+- `node scripts/privacy-audit-banking-pilot-phase-b.mjs` — PASS.
+- `node scripts/privacy-audit-banking-pilot-ai-firewall.mjs` — PASS.
+- `npm audit` — 0 vulnerabilities.
+- `npx prettier --check .` — clean.
+- `git diff --check` — clean.
+
+---
+
 ## [banking-shield-dependency-audit-cleanup] — 2026-06-12 — Clear npm audit advisory
 
 **Raouf:** Cleared the remaining moderate npm dependency advisory found during

@@ -257,7 +257,7 @@
           status.className = "";
           status.textContent = `Loading ${kind}...`;
           if (exportNote && EXPORT_NOTES[kind]) exportNote.textContent = EXPORT_NOTES[kind];
-          const res = await fetch(`/api/banking-pilot/${sessionId}/${kind}`, {
+          const res = await fetch(`/api/banking-pilot/${encodeURIComponent(sessionId)}/${kind}`, {
             headers: { Authorization: `Bearer ${token}` },
           });
           const body = await res.json();
@@ -281,9 +281,10 @@
           status.className = "";
           status.textContent = "Loading AI privacy explanation...";
           if (exportNote) exportNote.textContent = EXPORT_NOTES.ai;
-          const res = await fetch(`/api/banking-pilot/${sessionId}/ai-privacy-explain`, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
+          const res = await fetch(
+            `/api/banking-pilot/${encodeURIComponent(sessionId)}/ai-privacy-explain`,
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
           const body = await res.json();
           renderAiExplanation(body, res.status);
           response.textContent = JSON.stringify(body, null, 2);

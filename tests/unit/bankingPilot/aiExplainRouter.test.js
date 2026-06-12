@@ -62,6 +62,7 @@ describe("GET /:sessionId/ai-privacy-explain", () => {
       auth(c.token)
     );
     assert.equal(status, 503);
+    assert.equal(body.ok, false);
     assert.equal(body.error, "ai_explain_disabled");
     assert.equal(body.ai_privacy_layer_enabled, false);
     assert.equal(body.narrative_generated, false);
@@ -97,6 +98,7 @@ describe("GET /:sessionId/ai-privacy-explain", () => {
       auth(c.token)
     );
     assert.equal(status, 403);
+    assert.equal(body.ok, false);
     assert.equal(body.error, "ai_explain_blocked_session_withdrawn");
     assert.equal(body.narrative_generated, false);
   });

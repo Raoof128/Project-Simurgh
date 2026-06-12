@@ -339,14 +339,17 @@ router.get(
   requirePathTokenMatch,
   (req, res) => {
     if (!isAiExplainEnabled()) {
-      return res
-        .status(503)
-        .json({ error: "ai_explain_disabled", ...buildDisabledReceipt("ai_explain_disabled") });
+      return res.status(503).json({
+        ok: false,
+        error: "ai_explain_disabled",
+        ...buildDisabledReceipt("ai_explain_disabled"),
+      });
     }
     const record = store.get(req.params.sessionId);
     if (!record) return res.status(404).json({ ok: false, error: "session_not_found" });
     if (record.withdrawn) {
       return res.status(403).json({
+        ok: false,
         error: "ai_explain_blocked_session_withdrawn",
         ...buildDisabledReceipt("ai_explain_blocked_session_withdrawn"),
       });
@@ -358,7 +361,7 @@ router.get(
     if (!result.ok) {
       return res
         .status(result.status)
-        .json({ error: "ai_explain_firewall_failed", receipt: result.receipt });
+        .json({ ok: false, error: "ai_explain_firewall_failed", receipt: result.receipt });
     }
     appendEntry(record.auditChain, record.hmacKey, BANKING_PILOT_EVENTS.AI_EXPLANATION_EXPORTED, {
       ts: new Date().toISOString(),

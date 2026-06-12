@@ -28,6 +28,30 @@ test("required negated non-claims are NOT blocked by the scanner", () => {
   assert.equal(scanForbiddenClaims(goodNarrative), null);
 });
 
+test("negated phrases with one article/determiner are NOT blocked", () => {
+  for (const wording of [
+    "This is not a fraud detection tool.",
+    "This prototype offers no scam protection.",
+    "It is not an aml compliant product.",
+    "This works without any payee verified guarantee.",
+    "It never detects fraud.",
+  ]) {
+    const narrative = { ...goodNarrative, plain_english_summary: wording };
+    assert.equal(scanForbiddenClaims(narrative), null, `expected negated pass: ${wording}`);
+  }
+});
+
+test("affirmative phrases behind a bare article are still blocked", () => {
+  for (const [wording, phrase] of [
+    ["This performs a fraud detection sweep.", "fraud detection"],
+    ["We provide the scam protection you need.", "scam protection"],
+    ["It is not really a fraud detection tool.", "fraud detection"],
+  ]) {
+    const narrative = { ...goodNarrative, plain_english_summary: wording };
+    assert.equal(scanForbiddenClaims(narrative), phrase, `expected to catch: ${wording}`);
+  }
+});
+
 test("each forbidden affirmative-capability phrase is detected", () => {
   for (const phrase of FORBIDDEN_CLAIM_PHRASES) {
     const poisoned = { ...goodNarrative, plain_english_summary: `Result: ${phrase}.` };

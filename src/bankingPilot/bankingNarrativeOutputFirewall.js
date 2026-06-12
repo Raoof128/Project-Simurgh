@@ -53,17 +53,21 @@ export const FORBIDDEN_CLAIM_PHRASES = Object.freeze([
 ]);
 
 // Negators that mark an allowed disclaimer form ("not fraud detection",
-// "does not detect scams"). A forbidden phrase is only flagged when it appears
-// affirmatively — i.e. NOT immediately preceded by one of these.
-const CLAIM_NEGATORS = Object.freeze(["not ", "no ", "n't ", "never ", "without "]);
+// "does not detect scams", "not a fraud detection tool"). A forbidden phrase is
+// only flagged when it appears affirmatively — i.e. NOT preceded by a negator,
+// optionally followed by a single article/determiner ("a", "an", "the", "any").
+// Anything past one determiner ("not really a scam protection") is still
+// flagged: distance weakens negation, and the firewall stays fail-closed.
+const NEGATED_PRECEDING_PATTERN = /(?:\bnot|\bno|n't|\bnever|\bwithout) (?:(?:a|an|the|any) )?$/;
+const NEGATION_WINDOW_CHARS = 16;
 
 export function scanForbiddenClaims(narrative) {
   const haystack = JSON.stringify(narrative).toLowerCase();
   for (const phrase of FORBIDDEN_CLAIM_PHRASES) {
     let idx = haystack.indexOf(phrase);
     while (idx !== -1) {
-      const preceding = haystack.slice(Math.max(0, idx - 12), idx);
-      if (!CLAIM_NEGATORS.some((neg) => preceding.endsWith(neg))) return phrase;
+      const preceding = haystack.slice(Math.max(0, idx - NEGATION_WINDOW_CHARS), idx);
+      if (!NEGATED_PRECEDING_PATTERN.test(preceding)) return phrase;
       idx = haystack.indexOf(phrase, idx + phrase.length);
     }
   }

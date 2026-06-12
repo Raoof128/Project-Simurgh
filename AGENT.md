@@ -2,6 +2,18 @@
 
 ## Agent Change Log
 
+### 2026-06-12 (Australia/Sydney) — Banking Shield B4-A/B residual audit-observation polish
+
+**Raouf:**
+
+- **Scope:** Closed the four residual observations from the latest B4-A/B full audit. Conservative hardening/consistency only — no route semantics, scoring, audit-chain verification, withdrawal policy, privacy assertions, live LLM provider, network egress, Phase C logic, or real banking integrations were changed, and the output firewall remains fail-closed. The pre-existing server-level CORS default was deliberately left out of scope (already documented in `server.js` with an override recommendation).
+- **Summary:** (1) The claim scanner's negation window now accepts exactly one article/determiner between a negator and a forbidden phrase ("not a fraud detection tool" passes; "not really a scam protection" still blocks), with the window widened from 12 to 16 chars. (2) Documented the fail-closed receipt semantics of `buildFirewallFailedReceipt`. (3) Added `ok: false` to the ai-privacy-explain 503/403/422 error responses for cross-route consistency. (4) The report page now `encodeURIComponent`s the session id in fetch URLs.
+- **Files changed:** `src/bankingPilot/bankingNarrativeOutputFirewall.js`, `src/bankingPilot/bankingAiPrivacyReceipt.js`, `src/bankingPilot/index.js`, `public/banking-pilot-report.html`, `tests/unit/bankingPilot/bankingNarrativeOutputFirewall.test.js`, `tests/unit/bankingPilot/aiExplainRouter.test.js`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `npm test` 417/417 (two new negation-scanner test blocks), `scripts/smoke-banking-pilot.sh` 14/14, `scripts/smoke-banking-pilot-ai-firewall.sh` 5/5, `scripts/smoke-banking-pilot-full-e2e.sh` 43/43, `scripts/security-audit-banking-pilot.sh` 27/27, all three Banking Shield privacy audits PASS, `npm audit` 0 vulnerabilities, `npx prettier --check .` clean, `git diff --check` clean. Phase A HMAC fixture churn from audit reruns was restored and excluded.
+- **Follow-ups:** None. Keep future narrative copy in single-determiner negated form ("not a …", "no …") so disclaimers pass the scanner without further widening.
+
+---
+
 ### 2026-06-12 (Australia/Sydney) — Banking Shield dependency audit cleanup
 
 **Raouf:**

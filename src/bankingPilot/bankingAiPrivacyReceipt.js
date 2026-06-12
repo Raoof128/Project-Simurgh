@@ -34,6 +34,11 @@ export function buildDisabledReceipt(blockedReason) {
   };
 }
 
+// Fail-closed semantics: `output_claim_firewall_passed` is false even when the
+// failed gate is "input" (the output firewall never ran, so it did not pass).
+// Conversely `claim_guard_passed` / `official_result_unchanged` stay true for
+// gates that did not fail: no narrative was emitted, so no claim escaped and
+// the official result is untouched.
 export function buildFirewallFailedReceipt({ gate, inputFirewallPassed = true }) {
   return {
     stage: "B4-A",
