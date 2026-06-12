@@ -2,6 +2,18 @@
 
 ## Agent Change Log
 
+### 2026-06-12 (Australia/Sydney) — Stage B5-A/B/C: Banking Shield model-assisted evidence synthesis + paper draft v0.1
+
+**Raouf:**
+
+- **Scope:** Executed Stage B5 (Banking Shield model-assisted evidence synthesis and paper draft) inline using the systems-paper-writing skill and a 12-pass committee protocol (novelty extraction, claim prosecutor, hostile reviewer, methodology audit, threat model, related-work mapping, figure/table planning, abstracts, outline, draft v0.1, four-role reviewer simulation, final polish). Docs only — no runtime code, routes, gates, scoring, privacy assertions, or evidence fixtures were changed. The model was used to improve the paper, never to validate the system; system validation remains exclusively with tests/smokes/audits/fixtures.
+- **Summary:** Created `docs/research/banking-pilot/stage-b5-model-paper/` (protocol, allowed/forbidden input boundaries, sanitised evidence pack frozen at `92dabb4`, 13 versioned prompts, full response log with per-pass rubric scoring, model claim audit, closeout marking B5-A/B/C complete and B5-D not started) and `docs/research/banking-pilot/paper/` (outline with per-section claim boundaries, draft v0.1 with reviewer fixes applied, paper claim audit with all nine forbidden claims at zero affirmative occurrences, figure/table specifications F1–F4/T1–T5). All citations are `[CITATION NEEDED]` placeholders — none invented. Phase B framed throughout as a formative n=5 internal dry run; the mock provider is declared in the abstract.
+- **Files changed:** `docs/research/banking-pilot/stage-b5-model-paper/**` (8 docs + 13 prompts), `docs/research/banking-pilot/paper/**` (3 docs + 2 spec READMEs), `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `scripts/security-audit-stage-2-4-2-5.sh` exit 0 (the docs-scanning overclaim gate; new docs deliberately avoid its literal patterns); `npx prettier --check .` clean; Phase A fixture churn restored. No runtime gates affected (docs-only change).
+- **Follow-ups:** Stage B5-D — verify citations manually (never from model memory), produce F1–F4 artwork, fill T1–T5, revise v0.1 → v1.0 against the reviewer-simulation fix list, re-run the claim audit, check target-venue CFP including AI-use disclosure policy.
+
+---
+
 ### 2026-06-12 (Australia/Sydney) — Fix Stage 2.4/2.5 overclaim scan false positive on B4-A denylist
 
 **Raouf:**

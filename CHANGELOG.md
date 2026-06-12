@@ -1,5 +1,22 @@
 ## Change Log
 
+## [banking-shield-stage-b5-model-paper] — 2026-06-12 — Model-assisted evidence synthesis + paper draft v0.1
+
+**Raouf:** Executed Stage B5-A/B/C: a 12-pass, fully logged model-review protocol over a sanitised evidence pack (frozen at `92dabb4`), producing the Banking Shield paper outline, draft v0.1, threat model, claim audits, reviewer simulation, and figure/table plan. Docs only; the model improved the paper and validated nothing — system validation remains with the automated gates.
+
+### Added
+
+- `docs/research/banking-pilot/stage-b5-model-paper/` — review protocol, allowed/forbidden model-input boundaries, sanitised evidence input pack, 13 versioned prompts, response log with per-pass rubric scores, model claim audit, closeout (B5-A/B/C complete; B5-D next).
+- `docs/research/banking-pilot/paper/` — paper outline with per-section claim boundaries, draft v0.1 (mock provider declared in the abstract; limitations explicit; `[CITATION NEEDED]` placeholders only), paper claim audit (all nine forbidden claims: zero affirmative occurrences), figure/table specifications.
+
+### Verified
+
+- `scripts/security-audit-stage-2-4-2-5.sh` — exit 0 (includes the docs overclaim scan).
+- `npx prettier --check .` — clean.
+- Docs-only change; no runtime gates affected.
+
+---
+
 ## [stage-2-4-2-5-overclaim-scan-exclusion] — 2026-06-12 — Fix CI overclaim scan false positive on B4-A denylist
 
 **Raouf:** The Stage 2.4/2.5 cybersecurity audit's overclaim-wording scan failed CI on PR #28 because the B4-A output-firewall denylist (`FORBIDDEN_CLAIM_PHRASES`) literally contains "production ready" — present so the firewall can block that claim, not assert it. The three downstream stage audits failed only as no-regression cascades of this one.
