@@ -2,6 +2,18 @@
 
 ## Agent Change Log
 
+### 2026-06-12 (Australia/Sydney) — Banking Shield dependency audit cleanup
+
+**Raouf:**
+
+- **Scope:** Cleared the remaining npm dependency advisory found during the B4-A/B full audit. No application code, routes, Banking Shield scoring, privacy assertions, AI explanation behavior, UI copy, or evidence fixtures were changed.
+- **Summary:** Ran `npm audit fix`, updating the lockfile to Express `4.22.2` and `qs` `6.15.2`, removing the vulnerable transitive `body-parser/node_modules/qs` copy and clearing the moderate `qs` advisory chain.
+- **Files changed:** `package-lock.json`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `npm test` 415/415, `scripts/smoke-banking-pilot.sh` 14/14, `scripts/smoke-banking-pilot-ai-firewall.sh` 5/5, `scripts/smoke-banking-pilot-full-e2e.sh` 43/43, `scripts/security-audit-banking-pilot.sh` 27/27, all three Banking Shield privacy audits PASS, `npm audit` reports 0 vulnerabilities, `npx prettier --check .` clean, and `git diff --check` clean.
+- **Follow-ups:** None.
+
+---
+
 ### 2026-06-12 (Australia/Sydney) — Banking Shield B4-A/B full audit hardening
 
 **Raouf:**

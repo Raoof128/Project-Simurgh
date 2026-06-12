@@ -1,5 +1,33 @@
 ## Change Log
 
+## [banking-shield-dependency-audit-cleanup] — 2026-06-12 — Clear npm audit advisory
+
+**Raouf:** Cleared the remaining moderate npm dependency advisory found during
+the B4-A/B full audit. No application code, Banking Shield route behavior,
+scoring, privacy assertions, AI explanation behavior, UI copy, or evidence
+fixtures were changed.
+
+### Changed
+
+- `package-lock.json` now resolves Express to `4.22.2` and `qs` to `6.15.2`,
+  removing the vulnerable transitive `body-parser/node_modules/qs` copy.
+
+### Verified
+
+- `npm test` — 415/415 pass.
+- `scripts/smoke-banking-pilot.sh` — 14/14 pass.
+- `scripts/smoke-banking-pilot-ai-firewall.sh` — 5/5 pass.
+- `scripts/smoke-banking-pilot-full-e2e.sh` — 43/43 pass.
+- `scripts/security-audit-banking-pilot.sh` — 27/27 pass.
+- `node scripts/privacy-audit-banking-pilot.mjs` — PASS.
+- `node scripts/privacy-audit-banking-pilot-phase-b.mjs` — PASS.
+- `node scripts/privacy-audit-banking-pilot-ai-firewall.mjs` — PASS.
+- `npm audit` — 0 vulnerabilities.
+- `npx prettier --check .` — clean.
+- `git diff --check` — clean.
+
+---
+
 ## [banking-shield-b4-audit-hardening] — 2026-06-12 — Full audit hardening pass
 
 **Raouf:** Audited the Banking Shield branch diff across B4-A backend firewall code, B4-B report UI, changed tester pages, smoke/security/privacy scripts, tests, and closeout docs. The audit found and fixed two contract gaps: the output firewall did not reject extra narrative fields / malformed `non_claims`, and changed frontend fetch paths did not consistently handle request or JSON failures. No route semantics, scoring logic, audit-chain verification, withdrawal policy, privacy assertions, live LLM provider, network egress, Phase C logic, or real banking integrations were added.
