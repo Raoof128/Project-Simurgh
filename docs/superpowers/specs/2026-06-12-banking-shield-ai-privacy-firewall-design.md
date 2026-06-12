@@ -120,6 +120,22 @@ Middleware / behaviour:
 - On success (flag on, session active): append `AI_EXPLANATION_EXPORTED` to the
   HMAC audit chain, then return narrative + receipt. (Opening this export grows
   the event count, consistent with the existing event-count note.)
+- **Disabled and withdrawn paths do NOT append `AI_EXPLANATION_EXPORTED`** — no
+  explanation was exported, so no export event is logged. (Dedicated
+  `AI_EXPLANATION_BLOCKED_DISABLED` / `AI_EXPLANATION_BLOCKED_WITHDRAWN` events
+  are a possible future refinement, deferred for B4-A to keep the chain simple.)
+
+### Route response matrix
+
+| Case | HTTP | Narrative | Appends `AI_EXPLANATION_EXPORTED` |
+| --- | ---: | --- | --- |
+| Feature flag off | `503` | none | no |
+| Withdrawn session | `403` | none | no |
+| Token missing/invalid | existing auth code (`401`) | none | no |
+| Path-token mismatch | existing auth code (`403`) | none | no |
+| Input firewall fail | `422` | none | no |
+| Output firewall fail | `422` | none | no |
+| Success | `200` | emitted | yes |
 
 ### Enabled success response
 
@@ -154,10 +170,17 @@ Middleware / behaviour:
     "official_result_unchanged": true,
     "claim_guard_passed": true,
     "privacy_assertions_preserved": true,
-    "narrative_generated": true
+    "narrative_generated": true,
+    "narrative_hash": "sha256:<hex>"
   }
 }
 ```
+
+`narrative_hash` is the SHA-256 of the canonical serialized narrative object,
+present **only on successful (200) responses**. Because the generator is
+deterministic, this hash is stable and assertable in tests — an evidence
+fingerprint that proves *what* was emitted without storing the text. It is
+omitted from disabled/blocked receipts (no narrative exists to hash).
 
 ## 7. The firewalls and receipt
 
@@ -177,13 +200,24 @@ Middleware / behaviour:
 - **Schema**: narrative must be the exact fixed object shape; JSON-only; each
   string field within its length cap.
 - **Forbidden-claim scanner**: case-insensitive scan of every narrative string
-  against a canonical blocklist sourced from the claim-audit disallowed list:
-  `fraud detected`, `fraud detection`, `scam`, `payee verified`, `safe payment`,
-  `payment safe`, `financial advice`, `bank-grade`, `bank grade`, `APRA`, `CDR`,
-  `Confirmation of Payee`, `AML`, `CTF`, `production ready`, `production-ready`,
+  against a canonical blocklist of **affirmative-capability phrases** (not bare
+  words) sourced from the claim-audit disallowed list:
+  `fraud detected`, `fraud detection`, `detects fraud`,
+  `scam detected`, `detects scams`, `scam prevention capability`,
+  `prevents scams`, `scam protection`, `likely scam`, `probably a scam`,
+  `payee verified`, `verifies payees`, `safe payment`, `payment is safe`,
+  `financial advice`, `bank-grade`, `bank grade`, `APRA compliant`,
+  `CDR compliant`, `Confirmation of Payee compliant`, `AML compliant`,
+  `CTF compliant`, `production ready`, `production-ready`,
   `protects your account`, `prevents loss`, `prevents financial loss`,
-  `malware detected`, `reimbursement`. Any hit ⇒ HTTP 422, receipt
+  `malware detected`, `reimbursement assessment`. Any hit ⇒ HTTP 422, receipt
   `claim_guard_passed:false`, no narrative emitted.
+- **Bare words are deliberately NOT blocked.** The required non-claim phrases
+  (`not scam prevention`, `does not detect scams`, `not fraud detection`,
+  `not a banking decision`) must pass the scanner unharmed. The blocklist
+  therefore targets affirmative-capability phrasings only; negated/disclaimer
+  forms are allowed. Unit tests assert both directions: each forbidden phrase is
+  rejected, and each required non-claim phrase is accepted.
 - **Official-result-unchanged**: deep-equal the official fields the narrative
   references (`risk_score`, `verdict`, `manual_review_required`) against the
   source record. Any drift ⇒ fail-closed, `official_result_unchanged:false`.
