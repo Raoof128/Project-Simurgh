@@ -1,0 +1,10 @@
+{
+  "injected_phrase": "fraud detection",
+  "firewall_result": {
+    "ok": false,
+    "gate": "claim_guard",
+    "reason": "forbidden_claim",
+    "phrase": "fraud detection"
+  },
+  "forbidden_phrase_count": 29
+}
