@@ -13,6 +13,7 @@ else
   SIMURGH_BANKING_PILOT_PEPPER="full-e2e-banking-pepper-32-chars" \
   SIMURGH_BANKING_PILOT_TOKEN_SECRET="full-e2e-banking-token-secret-32" \
   SIMURGH_BANKING_PILOT_COLLECTION_CLOSED=false \
+  SIMURGH_BANKING_PILOT_AI_EXPLAIN=true \
   PORT="$PORT" node server.js >"$LOG" 2>&1 &
   PID=$!
   cleanup_normal() {
@@ -107,7 +108,9 @@ async function fetchJson(url, options = {}) {
 async function getPage(path, label) {
   const res = await fetch(`${base}${path}`);
   if (!res.ok) failNow(`${label} page did not load`, { status: res.status });
+  const text = await res.text();
   ok(`${label} page loads`);
+  return text;
 }
 
 async function postJson(path, body, token, rootApi = api) {
@@ -221,7 +224,16 @@ async function expectRejected(payload, expectedError, expectedField, sensitiveVa
 
 await getPage("/banking-pilot-consent.html", "public consent");
 await getPage("/banking-pilot-scenario.html", "public scenario");
-await getPage("/banking-pilot-report.html", "public report");
+const reportPageText = await getPage("/banking-pilot-report.html", "public report");
+for (const expected of [
+  "AI Privacy Explanation",
+  "Metadata-only narrative receipt",
+  "Sensitive payload sent to AI",
+  "Network egress used",
+]) {
+  assert.equal(reportPageText.includes(expected), true, `report page missing ${expected}`);
+}
+ok("public report page exposes the B4-B AI privacy explanation UI contract");
 
 const firstConsent = await accept();
 ok("consent accept creates bp_ session id and scoped token");
@@ -430,6 +442,19 @@ const verify = await getJson(`/${reportSession.banking_session_id}/verify`, repo
 assert.equal(verify.status, 200);
 assert.equal(verify.body.audit_chain_valid, true);
 ok("/verify returns valid audit-chain status");
+
+const aiExplain = await getJson(
+  `/${reportSession.banking_session_id}/ai-privacy-explain`,
+  reportSession.token
+);
+assert.equal(aiExplain.status, 200);
+assert.equal(typeof aiExplain.body.narrative.plain_english_summary, "string");
+assert.equal(aiExplain.body.receipt.sensitive_payload_sent_to_ai, false);
+assert.equal(aiExplain.body.receipt.network_egress_used, false);
+assert.equal(aiExplain.body.receipt.official_result_unchanged, true);
+assert.equal(aiExplain.body.receipt.claim_guard_passed, true);
+assert.match(aiExplain.body.receipt.narrative_hash, /^sha256:[a-f0-9]{64}$/);
+ok("B4-B AI privacy explanation response carries safe narrative receipt");
 
 const chain = createChain();
 const key = "full-e2e-tamper-key";
