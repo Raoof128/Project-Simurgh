@@ -2,6 +2,18 @@
 
 ## Agent Change Log
 
+### 2026-06-12 (Australia/Sydney) — Fix Stage 2.4/2.5 overclaim scan false positive on B4-A denylist
+
+**Raouf:**
+
+- **Scope:** Fixed the CI quality-gate failure on PR #28. The Stage 2.4/2.5 cybersecurity audit's overclaim-wording scan flagged `src/bankingPilot/bankingNarrativeOutputFirewall.js` because the B4-A `FORBIDDEN_CLAIM_PHRASES` denylist literally contains "production ready" — the phrase exists there so the firewall can BLOCK it, the same category as the already-excluded stage27 security tests. No firewall behavior, scan patterns, route logic, or privacy assertions were changed.
+- **Summary:** Added `src/bankingPilot/bankingNarrativeOutputFirewall.js` to the overclaim scan's exclusion list in `scripts/security-audit-stage-2-4-2-5.sh`. The denylist stays readable/greppable instead of being string-obfuscated to dodge the scanner. The other three failing CI audits (2.6/2.7, 2.8A/B, 2.8C/D) were cascades — each re-runs 2.4/2.5 as a no-regression step.
+- **Files changed:** `scripts/security-audit-stage-2-4-2-5.sh`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `scripts/security-audit-stage-2-4-2-5.sh` exit 0 ("Stage 2.4/2.5 cybersecurity audit passed"); full `scripts/check.sh` (the exact CI gate) re-run locally; `npx prettier --check .` clean.
+- **Follow-ups:** If a future module embeds scanner-target phrases as forbidden terms, add it to the same exclusion list rather than obfuscating the strings.
+
+---
+
 ### 2026-06-12 (Australia/Sydney) — Banking Shield B4-A/B residual audit-observation polish
 
 **Raouf:**

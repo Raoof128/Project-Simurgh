@@ -1,5 +1,21 @@
 ## Change Log
 
+## [stage-2-4-2-5-overclaim-scan-exclusion] — 2026-06-12 — Fix CI overclaim scan false positive on B4-A denylist
+
+**Raouf:** The Stage 2.4/2.5 cybersecurity audit's overclaim-wording scan failed CI on PR #28 because the B4-A output-firewall denylist (`FORBIDDEN_CLAIM_PHRASES`) literally contains "production ready" — present so the firewall can block that claim, not assert it. The three downstream stage audits failed only as no-regression cascades of this one.
+
+### Changed
+
+- `scripts/security-audit-stage-2-4-2-5.sh` — added `src/bankingPilot/bankingNarrativeOutputFirewall.js` to the overclaim scan's existing exclusion list (same category as the stage27 security tests already excluded), keeping the denylist readable instead of obfuscating its strings.
+
+### Verified
+
+- `scripts/security-audit-stage-2-4-2-5.sh` — exit 0, "Stage 2.4/2.5 cybersecurity audit passed".
+- Full `scripts/check.sh` (the exact CI quality gate) — re-run locally.
+- `npx prettier --check .` — clean.
+
+---
+
 ## [banking-shield-b4-audit-polish] — 2026-06-12 — Close residual B4-A/B audit observations
 
 **Raouf:** Applied the four residual observations from the B4-A/B full audit follow-up. All changes are conservative hardening/consistency fixes: no route semantics, scoring logic, audit-chain verification, withdrawal policy, privacy assertions, live LLM provider, network egress, Phase C logic, or real banking integrations were added, and the firewall remains fail-closed.
