@@ -1,5 +1,20 @@
 ## Change Log
 
+## [relicense-agpl-3.0] — 2026-06-13 — Relicense code MIT → AGPL-3.0-or-later (papers CC-BY-4.0)
+
+**Raouf:** Relicensed the repository from MIT to AGPL-3.0-or-later to keep the work open for research while preventing closed-source/proprietary capture (strong copyleft + network clause). Research papers under `Papers/` are CC-BY-4.0. Note: a license protects expression, not ideas — research priority rests on the timestamped Zenodo preprints.
+
+### Changed
+
+- `LICENSE` — replaced MIT text with the verbatim official GNU AGPL-3.0 text (fetched from gnu.org).
+- `package.json` — added `"license": "AGPL-3.0-or-later"`.
+- `README.md` — license badge MIT → AGPL-3.0; §13 rewritten as a dual-license statement (code AGPL-3.0-or-later, papers CC-BY-4.0) with copyright notice and the expression-vs-idea caveat.
+- `Papers/banking-shield/README.md` — corrected the stale "MIT" code-license note to AGPL-3.0-or-later.
+
+### Verified
+
+- `npm test` 417/417; `package.json` valid JSON; `npx prettier --check` clean; no fixture churn.
+
 ## [banking-shield-paper-layout-audit-zenodo] — 2026-06-13 — Layout audit + Zenodo deposition prep
 
 **Raouf:** Full layout audit of the compiled preprint and Zenodo deposition preparation.

@@ -2,6 +2,18 @@
 
 ## Agent Change Log
 
+### 2026-06-13 (Australia/Sydney) — Relicense code MIT → AGPL-3.0-or-later
+
+**Raouf:**
+
+- **Scope:** Relicensed the repository from MIT to AGPL-3.0-or-later at the user's request — keep the work open for research while preventing closed-source/proprietary capture. Papers under `Papers/` stay CC-BY-4.0. Flagged honestly that licenses protect expression, not ideas; research priority comes from the timestamped Zenodo preprints.
+- **Summary:** Replaced `LICENSE` with the verbatim official GNU AGPL-3.0 text (fetched from gnu.org, not hand-typed). Added `"license": "AGPL-3.0-or-later"` to `package.json`. Rewrote README §13 as a dual-license statement (code AGPL, papers CC-BY-4.0) with a copyright notice and the expression-vs-idea caveat, and updated the license badge. Fixed the stale MIT note in the banking-shield package README. Left third-party MIT entries in `package-lock.json` and historical MIT mentions in AGENT/CHANGELOG untouched.
+- **Files changed:** `LICENSE`, `package.json`, `README.md`, `Papers/banking-shield/README.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `npm test` 417/417; `package.json` valid JSON; `npx prettier --check` clean; no fixture churn.
+- **Follow-ups:** AGPL is auto-detected by GitHub from `LICENSE`. If desired later, add per-source-file SPDX headers (`SPDX-License-Identifier: AGPL-3.0-or-later`).
+
+---
+
 ### 2026-06-13 (Australia/Sydney) — Banking Shield: layout audit + Zenodo deposition prep
 
 **Raouf:**

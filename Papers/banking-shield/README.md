@@ -55,8 +55,9 @@ upload, so it is a manual step:
    from other papers, mirroring `simurgh-voting-pilot/references.bib`.
 
 License note: `.zenodo.json` declares `cc-by-4.0` for the manuscript text; the
-code in the repository remains under the repository's MIT license. Change the
-`license` field if you prefer a different manuscript license.
+code in the repository is licensed under AGPL-3.0-or-later (see the root
+[`LICENSE`](../../LICENSE)). Change the `license` field if you prefer a different
+manuscript license.
 
 ## Provenance
 

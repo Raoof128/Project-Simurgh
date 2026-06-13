@@ -12,7 +12,7 @@ _Detecting UI-redressing and behavioral spoofing without relying on screen captu
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20195198-blue?style=flat-square)](https://doi.org/10.5281/zenodo.20195198)
 [![Node](https://img.shields.io/badge/node-%E2%89%A522.0-1a1a1a?style=flat-square)](https://nodejs.org)
 [![AI Narrative](https://img.shields.io/badge/AI%20narrative-optional-6b1a1a?style=flat-square)](#2-the-simurgh-engine)
-[![License](https://img.shields.io/badge/license-MIT-d6cfbe?style=flat-square)](#13-status--license)
+[![License](https://img.shields.io/badge/license-AGPL--3.0-d6cfbe?style=flat-square)](#13-status--license)
 [![Status](https://img.shields.io/badge/status-research%20prototype-2f4a2a?style=flat-square)](#13-status--license)
 
 **[Read the Disclosure Paper →](https://raoufabedini.dev/projects/invisible-window-research)**
@@ -806,4 +806,22 @@ Project Simurgh is designed to support two parallel delivery modes per platform 
 
 **Status:** Research prototype and technical demonstrator at `v0.4.18`. Stage 1–2.5 closed the macOS Device Shield loop (metadata-only affinity scanning, signed proofs, HMAC audit chain). Stage 2.6/2.7 added the Windows Device Shield (real-device validated on Windows 10 Pro build 19045) and cross-platform unification. Stage 2.8 added the Linux Display Integrity Research path (X11, Wayland portal probe, XWayland, display-server lock, Ubuntu CI). Two companion research papers are published as Zenodo preprints: the architecture paper ([10.5281/zenodo.20374849](https://doi.org/10.5281/zenodo.20374849)) and the voting-adjacent pilot paper ([10.5281/zenodo.20549736](https://doi.org/10.5281/zenodo.20549736)). See the [Research Papers](#research-papers) section for full citations and source links. Automated validation covers 331 Node.js tests, 33 Rust tests, 11 Windows .NET tests, and 8 macOS Swift tests (383 total). Not deployed in production. Hardware attestation, notarisation, MDM deployment, and institutional pilot remain future work.
 
-**License:** MIT © 2026 Raouf Abedini
+**License.** Dual-licensed to keep the work open for research while preventing
+closed-source capture:
+
+- **Code** (everything except the papers): **GNU Affero General Public License
+  v3.0 or later** (AGPL-3.0-or-later) — see [`LICENSE`](LICENSE). The AGPL is
+  OSI-approved open source: anyone may study, run, modify, and redistribute it,
+  **but** any distributed or network-hosted derivative must also be released
+  under the AGPL with source available. This blocks a third party from taking
+  the work into a proprietary product while keeping it fully usable for research.
+- **Research papers and manuscripts** under `Papers/`: **Creative Commons
+  Attribution 4.0 International** (CC-BY-4.0) — free to share and adapt with
+  attribution.
+
+Copyright © 2026 Mohammad Raouf Abedini. This program is free software: you can
+redistribute it and/or modify it under the terms of the GNU Affero General
+Public License as published by the Free Software Foundation, either version 3 of
+the License, or (at your option) any later version. A license protects this
+expression of the work, not the underlying ideas; research priority rests on the
+timestamped Zenodo preprints cited above.
