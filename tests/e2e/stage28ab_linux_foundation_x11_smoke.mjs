@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// SPDX-License-Identifier: AGPL-3.0-or-later
 // Stage 2.8A + 2.8B umbrella E2E smoke.
 //
 // Boots the Node server and exercises the Linux Device Shield path end to end

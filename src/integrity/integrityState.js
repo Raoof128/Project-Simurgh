@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 // Per-session integrity state with N1 strict node continuity.
 //
 // A session's bound_node_id_hash is set on the FIRST accepted proof and is

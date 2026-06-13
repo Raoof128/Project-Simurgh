@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 // Stage 2.2 v1 pairing schema constants — purely declarative.
 // Validation logic lives in pairingValidator.js.
 import { FORBIDDEN_FIELDS as PROOF_FORBIDDEN_FIELDS } from "./proofSchema.js";

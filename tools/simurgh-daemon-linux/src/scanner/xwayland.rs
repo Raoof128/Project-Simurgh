@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 //! XWayland scanner — reuses the X11 path against $DISPLAY but maps results
 //! into the xwayland-partial coverage shape so reports never claim full
 //! Wayland coverage from XWayland-only visibility.

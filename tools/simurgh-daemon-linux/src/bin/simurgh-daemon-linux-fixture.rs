@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 use base64::{engine::general_purpose::URL_SAFE_NO_PAD, Engine};
 use simurgh_daemon_linux::identity::{load_or_create_identity, IdentityPaths};
 use simurgh_daemon_linux::proof::{build_proof, ProofInputs};

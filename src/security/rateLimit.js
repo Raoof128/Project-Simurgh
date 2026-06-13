@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 // Generic fixed-window rate limiter, keyed by a caller-provided function.
 // Returns Express middleware. Designed for single-process Stage 1 deployments;
 // for multi-process production deployments, swap the in-memory Map for Redis.

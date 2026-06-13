@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// SPDX-License-Identifier: AGPL-3.0-or-later
 // verify-audit — validates a Simurgh audit-chain export.
 //
 // Usage:

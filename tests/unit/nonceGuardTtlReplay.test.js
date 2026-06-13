@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 // Regression test: proof replay after nonce-guard TTL expiry is blocked
 // by the 30-second timestamp window, not by the nonce guard alone.
 //

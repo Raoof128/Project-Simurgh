@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 // simurgh-helper — Countermeasure A from Abedini, 2026 §VI-A
 //
 // Detects on-screen windows that are excluded from screen capture

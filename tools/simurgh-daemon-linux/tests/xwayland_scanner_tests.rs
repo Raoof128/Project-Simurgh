@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 use simurgh_daemon_linux::scanner::xwayland;
 
 /// XWayland scanner inherits the X11 non-local-display refusal as a

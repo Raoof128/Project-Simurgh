@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 import { canonicaliseProofPayload } from "./proofCanonicalise.js";
 import { verifyProofSignature, computeNodeIdHash } from "./proofSignature.js";
 import {

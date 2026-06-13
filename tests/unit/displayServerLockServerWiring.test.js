@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 // Live-server integration: a Linux session that switches display_server
 // mid-session must be rejected with display_server_mismatch on the
 // /api/telemetry handler — not just at the factory level.

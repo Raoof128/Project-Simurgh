@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 import { privacyConfig } from "./privacyConfig.js";
 
 // Fields that must never appear in stored or processed telemetry.

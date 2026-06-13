@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: AGPL-3.0-or-later
 # scripts/smoke-banking-pilot.sh
 # Banking Shield Phase A smoke gates. Requires server running on PORT (default 3030).
 set -euo pipefail

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: AGPL-3.0-or-later
 # scripts/security-audit-banking-pilot.sh
 # Running-server security gates for Banking Shield Phase A.
 set -euo pipefail

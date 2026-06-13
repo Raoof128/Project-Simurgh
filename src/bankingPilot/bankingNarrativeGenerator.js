@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 // Deterministic, offline, metadata-only narrative generator for Banking Shield
 // B4-A. Pure function of the allowlisted payload: no randomness, no clock, no
 // I/O, and no network imports (enforced by the no-egress gate).

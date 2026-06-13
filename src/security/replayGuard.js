@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 // Per-session sequence + timestamp guard. Used to reject duplicate or
 // out-of-order telemetry submissions and stale/future-dated payloads.
 

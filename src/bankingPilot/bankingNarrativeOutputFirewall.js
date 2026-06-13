@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 // Output claim firewall for Banking Shield B4-A. Validates the narrative shape,
 // caps lengths, scans for affirmative-capability claims, and proves the official
 // result the narrative references did not drift from the authoritative record.

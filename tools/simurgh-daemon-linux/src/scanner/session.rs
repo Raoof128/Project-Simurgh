@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 #[derive(Debug, Clone)]
 pub struct SessionEnv {
     pub xdg_session_type: Option<String>,

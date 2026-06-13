@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// SPDX-License-Identifier: AGPL-3.0-or-later
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { FORBIDDEN_BANKING_FIELD_NAMES } from "../src/bankingPilot/forbiddenBankingFields.js";

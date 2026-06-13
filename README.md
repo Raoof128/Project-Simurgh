@@ -12,7 +12,7 @@ _Detecting UI-redressing and behavioral spoofing without relying on screen captu
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20195198-blue?style=flat-square)](https://doi.org/10.5281/zenodo.20195198)
 [![Node](https://img.shields.io/badge/node-%E2%89%A522.0-1a1a1a?style=flat-square)](https://nodejs.org)
 [![AI Narrative](https://img.shields.io/badge/AI%20narrative-optional-6b1a1a?style=flat-square)](#2-the-simurgh-engine)
-[![License](https://img.shields.io/badge/license-MIT-d6cfbe?style=flat-square)](#13-status--license)
+[![License](https://img.shields.io/badge/license-AGPL--3.0-d6cfbe?style=flat-square)](#13-status--license)
 [![Status](https://img.shields.io/badge/status-research%20prototype-2f4a2a?style=flat-square)](#13-status--license)
 
 **[Read the Disclosure Paper →](https://raoufabedini.dev/projects/invisible-window-research)**
@@ -25,7 +25,7 @@ _Detecting UI-redressing and behavioral spoofing without relying on screen captu
 
 ## Research Papers
 
-Two Zenodo preprints document Project Simurgh's architecture and its first real-world deployment. The repository DOI above (`10.5281/zenodo.20195198`) archives the software; the paper DOIs below are separate records.
+Three Zenodo preprints document Project Simurgh's architecture, its first real-world deployment, and a privacy-firewall pilot. The repository DOI above (`10.5281/zenodo.20195198`) archives the software; the paper DOIs below are separate records.
 
 ---
 
@@ -54,6 +54,20 @@ Source: [`papers/project-simurgh/`](papers/project-simurgh/)
 A companion case study reporting a 31-session (30 submitted, 1 withdrawn) Phase C shadow-mode pilot alongside a real student-society voting event at Macquarie University. Demonstrates that structural ballot-field exclusion, an HMAC-SHA-256 audit chain, and a collection-closure posture together produce verifiable evidence of what the system collected and what it did not, in a voting-adjacent context. All 359/359 automated tests, 8/8 smoke gates, 10/10 security-audit gates, and 5/5 closure gates passed at closeout. Archived at tag `v0.5.0-voting-pilot-phase-c-closeout`.
 
 Source: [`papers/simurgh-voting-pilot/`](papers/simurgh-voting-pilot/)
+
+---
+
+### Banking Shield Paper
+
+[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20675513-blue?style=flat-square)](https://doi.org/10.5281/zenodo.20675513)
+
+**Banking Shield: Machine-Checked Absence Claims for Privacy-Sensitive AI Explanations**
+
+> Abedini, M. R. (2026). Zenodo. <https://doi.org/10.5281/zenodo.20675513>
+
+A fictional, non-bank, research-only prototype whose main artifact is bounded _evidence of absence_: gate-backed evidence that sensitive values were not recorded and did not enter an AI-style explanation payload. Combines a fail-closed metadata firewall, per-session tamper-evident HMAC audit chains with withdrawal semantics, and a deterministic offline AI privacy firewall (allowlist input, deterministic mock provider, negation-aware output claim firewall, per-response receipts, static no-egress gate). At the evidence freeze all gates passed (417/417 unit, 43/43 E2E, 27/27 security, three privacy audits) and five trusted internal testers completed 30 formative sessions with zero sensitive values in the evidence. Makes no fraud-detection, payment-safety, compliance, or production-readiness claim.
+
+Source: [`Papers/banking-shield/`](Papers/banking-shield/)
 
 ---
 
@@ -804,6 +818,24 @@ Project Simurgh is designed to support two parallel delivery modes per platform 
 
 ## 13. Status & License
 
-**Status:** Research prototype and technical demonstrator at `v0.4.18`. Stage 1–2.5 closed the macOS Device Shield loop (metadata-only affinity scanning, signed proofs, HMAC audit chain). Stage 2.6/2.7 added the Windows Device Shield (real-device validated on Windows 10 Pro build 19045) and cross-platform unification. Stage 2.8 added the Linux Display Integrity Research path (X11, Wayland portal probe, XWayland, display-server lock, Ubuntu CI). Two companion research papers are published as Zenodo preprints: the architecture paper ([10.5281/zenodo.20374849](https://doi.org/10.5281/zenodo.20374849)) and the voting-adjacent pilot paper ([10.5281/zenodo.20549736](https://doi.org/10.5281/zenodo.20549736)). See the [Research Papers](#research-papers) section for full citations and source links. Automated validation covers 331 Node.js tests, 33 Rust tests, 11 Windows .NET tests, and 8 macOS Swift tests (383 total). Not deployed in production. Hardware attestation, notarisation, MDM deployment, and institutional pilot remain future work.
+**Status:** Research prototype and technical demonstrator at `v0.4.18`. Stage 1–2.5 closed the macOS Device Shield loop (metadata-only affinity scanning, signed proofs, HMAC audit chain). Stage 2.6/2.7 added the Windows Device Shield (real-device validated on Windows 10 Pro build 19045) and cross-platform unification. Stage 2.8 added the Linux Display Integrity Research path (X11, Wayland portal probe, XWayland, display-server lock, Ubuntu CI). Three companion research papers are published as Zenodo preprints: the architecture paper ([10.5281/zenodo.20374849](https://doi.org/10.5281/zenodo.20374849)), the voting-adjacent pilot paper ([10.5281/zenodo.20549736](https://doi.org/10.5281/zenodo.20549736)), and the Banking Shield privacy-firewall preprint ([10.5281/zenodo.20675513](https://doi.org/10.5281/zenodo.20675513)). See the [Research Papers](#research-papers) section for full citations and source links. Automated validation covers 331 Node.js tests, 33 Rust tests, 11 Windows .NET tests, and 8 macOS Swift tests (383 total). Not deployed in production. Hardware attestation, notarisation, MDM deployment, and institutional pilot remain future work.
 
-**License:** MIT © 2026 Raouf Abedini
+**License.** Dual-licensed to keep the work open for research while preventing
+closed-source capture:
+
+- **Code** (everything except the papers): **GNU Affero General Public License
+  v3.0 or later** (AGPL-3.0-or-later) — see [`LICENSE`](LICENSE). The AGPL is
+  OSI-approved open source: anyone may study, run, modify, and redistribute it,
+  **but** any distributed or network-hosted derivative must also be released
+  under the AGPL with source available. This blocks a third party from taking
+  the work into a proprietary product while keeping it fully usable for research.
+- **Research papers and manuscripts** under `Papers/`: **Creative Commons
+  Attribution 4.0 International** (CC-BY-4.0) — free to share and adapt with
+  attribution.
+
+Copyright © 2026 Mohammad Raouf Abedini. This program is free software: you can
+redistribute it and/or modify it under the terms of the GNU Affero General
+Public License as published by the Free Software Foundation, either version 3 of
+the License, or (at your option) any later version. A license protects this
+expression of the work, not the underlying ideas; research priority rests on the
+timestamped Zenodo preprints cited above.

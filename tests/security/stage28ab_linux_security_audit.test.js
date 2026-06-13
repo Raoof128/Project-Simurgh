@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 // Stage 2.8A + 2.8B umbrella cybersecurity audit.
 //
 // Consolidates Linux Device Shield security invariants in a single reviewer-

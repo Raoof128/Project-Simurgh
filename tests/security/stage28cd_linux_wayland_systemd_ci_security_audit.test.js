@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 // Stage 2.8C/D combined cybersecurity audit.
 //
 // 16 dimensions. Lock the doors behind Phase G's smoke. Every dimension is

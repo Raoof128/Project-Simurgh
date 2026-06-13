@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 import { buildBankingNarrativePayload } from "./bankingNarrativeSanitiser.js";
 import { containsForbiddenBankingFieldDeep, MAX_DEPTH_SENTINEL } from "./forbiddenBankingFields.js";
 import { generateBankingNarrative } from "./bankingNarrativeGenerator.js";

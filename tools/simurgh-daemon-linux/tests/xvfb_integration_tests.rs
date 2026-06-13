@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 use simurgh_daemon_linux::scanner::x11::{scan, scan_with_connection};
 use std::process::{Child, Command, Stdio};
 use std::sync::OnceLock;

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 use axum::body::Body;
 use http_body_util::BodyExt;
 use hyper::{Request, StatusCode};

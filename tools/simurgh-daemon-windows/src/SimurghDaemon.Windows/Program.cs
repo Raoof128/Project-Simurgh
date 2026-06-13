@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 using SimurghDaemon.Windows;
 
 if (args.Length > 0 && args[0] == "doctor")

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 export const BANKING_NARRATIVE_SYSTEM_PROMPT = `You are generating a privacy-preserving narrative for a banking-adjacent research prototype.
 
 You receive metadata only. You must not infer fraud, guilt, intent, identity, account ownership, financial loss, or a real-world scam occurrence.

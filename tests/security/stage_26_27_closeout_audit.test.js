@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 // Stage 2.6/2.7 closeout cybersecurity audit.
 //
 // Single comprehensive manifest covering the nine audit dimensions:

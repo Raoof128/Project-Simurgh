@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createChain, appendEntry, verifyChain } from "../../src/audit/hmacChain.js";

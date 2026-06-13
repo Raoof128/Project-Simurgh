@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 import crypto from "node:crypto";
 
 // Session token format: base64url(JSON({ sid, exp })).base64url(HMAC-SHA256(payload, key))

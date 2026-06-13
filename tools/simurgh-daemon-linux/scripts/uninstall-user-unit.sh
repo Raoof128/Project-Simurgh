@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: AGPL-3.0-or-later
 # Uninstall the Project Simurgh Linux Device Shield user unit.
 # Usage: uninstall-user-unit.sh [--check] [--dry-run]
 set -euo pipefail
