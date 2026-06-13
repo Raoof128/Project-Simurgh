@@ -843,3 +843,16 @@ Public License as published by the Free Software Foundation, either version 3 of
 the License, or (at your option) any later version. A license protects this
 expression of the work, not the underlying ideas; research priority rests on the
 timestamped Zenodo preprints cited above.
+
+### Authorship & Ownership
+
+All research, design, implementation, and writing in this repository and its
+associated papers were conducted independently by **Mohammad Raouf Abedini**,
+on his own initiative and using his own resources. The author's affiliation with
+**Macquarie University (MQ)** is solely that of an enrolled student; this work
+was not commissioned, funded, supervised, or owned by the university or by any
+other organisation. All intellectual-property, copyright, and licensing rights in
+the code (AGPL-3.0-or-later) and in the manuscripts (CC-BY-4.0) are held solely
+by Mohammad Raouf Abedini, © 2026. (AI coding assistants were used as tools under
+the author's direction, as noted in [Contributors](#12-contributors); they hold
+no rights in the work.)
