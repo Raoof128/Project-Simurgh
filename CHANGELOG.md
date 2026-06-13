@@ -1,5 +1,23 @@
 ## Change Log
 
+## [banking-shield-paper-latex-preprint] — 2026-06-13 — Full citation/claim audit + LaTeX preprint package in Papers/
+
+**Raouf:** Completed a full citation audit (all 16 references verified to exist via CrossRef DOI content negotiation + URL resolution; zero hallucinated citations) and a full claims audit (every numeric/structural/empirical claim re-verified against live source, gates, and the frozen evidence pack). Built an IEEEtran LaTeX preprint package and moved the paper into the root `Papers/` folder alongside the other papers.
+
+### Added
+
+- `Papers/banking-shield/main.tex` — IEEEtran conference-format paper (4 TikZ figures, 5 booktabs tables) converted from v1.2 markdown; compiles clean with latexmk (7 pages, 0 overfull boxes, 16/16 citations resolved, 0 undefined refs).
+- `Papers/banking-shield/references.bib` — 16 CrossRef-verified entries with corrected version-of-record years.
+- `Papers/banking-shield/Makefile`, `README.md`, `PAPER_CLAIM_AUDIT.md`, `.gitignore`, `main.pdf`.
+
+### Changed
+
+- Moved `docs/research/banking-pilot/paper/` → `Papers/banking-shield/source/` (git rename; drafts v0.1–v1.2, audits, review pack, PDFs). Updated the v1.2 markdown's §8/§11 path references to the new location.
+
+### Verified
+
+- CrossRef metadata for all journal DOIs; institutional URLs resolve (2× 200, 2× 403 Cloudflare bot-block, pages exist). `latexmk` exit 0; `npx prettier --check` clean on all new markdown.
+
 ## [banking-shield-stage-b5-paper-v1.2-citation-sweep] — 2026-06-13 — External-review verification + citation-year fixes
 
 **Raouf:** Verified an external model-generated review of the v1.2 PDF item by item against source and authoritative CrossRef metadata. Confirmed its version, caption, and three citation-year flags; the audit-of-the-review found the same online-vs-version-of-record year defect in two further references the review missed (Scherr, Yeung & Bygrave). Fixed the caption and all five citation years to the version-of-record year already implied by the printed volume/issue.

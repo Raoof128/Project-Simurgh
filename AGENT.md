@@ -2,6 +2,18 @@
 
 ## Agent Change Log
 
+### 2026-06-13 (Australia/Sydney) — Banking Shield: full citation/claim audit + LaTeX preprint package
+
+**Raouf:**
+
+- **Scope:** Three deliverables: (1) full citation audit, (2) full claims audit, (3) LaTeX preprint package moved into the root `Papers/` folder. Docs/paper only — no runtime code, gates, scoring, privacy assertions, or evidence fixtures were changed.
+- **Summary:** (1) All 16 references verified to exist via CrossRef DOI content negotiation (12 DOIs: authors/title/venue/year confirmed) and URL resolution (4 institutional; 2× 200, 2× 403 Cloudflare bot-block with pages confirmed real). Zero hallucinated citations. (2) Every empirical claim re-verified true against live source, gates, and the frozen evidence pack (46 fields, 29 phrases, 4 KB/16 KB/600-char caps, 4-module no-egress, default-off exact "true", textContent-only, domain-separated HMAC keys, all gate counts, all Phase B aggregates, fixture pair). (3) Built `Papers/banking-shield/` (IEEEtran `main.tex` with 4 TikZ figures + 5 booktabs tables, `references.bib`, `Makefile`, `README.md`, `PAPER_CLAIM_AUDIT.md`, `.gitignore`, compiled `main.pdf`); moved `docs/research/banking-pilot/paper/` → `Papers/banking-shield/source/` via git rename and fixed the v1.2 markdown's §8/§11 path references.
+- **Files changed:** `Papers/banking-shield/**` (new package), `docs/research/banking-pilot/paper/` → `Papers/banking-shield/source/` (rename), `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `latexmk` exit 0 (7 pages, 0 overfull boxes, 16/16 citations resolved, 0 undefined refs); CrossRef metadata for all journal DOIs; `npx prettier --check` clean on all new markdown.
+- **Follow-ups:** Regenerate is unnecessary (LaTeX is now canonical); the stale committed source PDFs (v1.1/v1.2) predate the markdown fixes — the LaTeX `main.pdf` supersedes them. Optional open items recorded in `PAPER_CLAIM_AUDIT.md` §4. Zenodo DOI mint + venue selection still pending.
+
+---
+
 ### 2026-06-13 (Australia/Sydney) — Stage B5: external-review verification + citation-year sweep (v1.2)
 
 **Raouf:**

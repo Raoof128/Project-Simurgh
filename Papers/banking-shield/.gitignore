@@ -1,0 +1,10 @@
+# LaTeX build artifacts (keep main.pdf)
+*.aux
+*.log
+*.out
+*.fls
+*.fdb_latexmk
+*.blg
+*.bbl
+*.run.xml
+build.log
