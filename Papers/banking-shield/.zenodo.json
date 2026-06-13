@@ -1,0 +1,39 @@
+{
+  "title": "Banking Shield: Machine-Checked Absence Claims for Privacy-Sensitive AI Explanations",
+  "upload_type": "publication",
+  "publication_type": "preprint",
+  "description": "<p>Author-prepared research preprint. Banking Shield is a fictional, non-bank, research-only banking-adjacent prototype whose main artifact is bounded <em>evidence of absence</em>: gate-backed evidence that sensitive values were not recorded in the frozen evidence pack and did not enter the explanation payload. It combines a fail-closed metadata firewall whose rejections become audit evidence, per-session tamper-evident HMAC audit chains with withdrawal semantics, and a deterministic offline AI-style privacy firewall (allowlist input construction, a deterministic mock narrative provider, a negation-aware output claim firewall, per-response privacy receipts, and a static source no-egress gate over four AI-firewall modules). At the evidence freeze all automated gates passed (417/417 unit tests; 43/43 end-to-end checks; 27/27 security checks; three privacy audits) and five trusted internal testers completed 30 formative sessions with zero sensitive values in the evidence and 5/5 checklist comprehension of the system's non-claims.</p><p><strong>Non-claims:</strong> the prototype makes no fraud-detection, scam-prevention, payment-safety, payee-verification, financial-advice, compliance, or production-readiness claim, and does not evaluate banking effectiveness or live LLM safety. Not yet peer reviewed.</p>",
+  "creators": [
+    {
+      "name": "Abedini, Mohammad Raouf",
+      "affiliation": "Department of Computing, Macquarie University",
+      "orcid": "0009-0000-6214-258X"
+    }
+  ],
+  "keywords": [
+    "data privacy",
+    "data minimisation",
+    "audit trails",
+    "message authentication",
+    "LLM guardrails",
+    "explainability",
+    "privacy by design",
+    "tamper-evident logging"
+  ],
+  "license": "cc-by-4.0",
+  "access_right": "open",
+  "language": "eng",
+  "notes": "Fictional, non-bank, research-only prototype. Empirical facts trace to the Stage B5 evidence pack frozen at repository commit 92dabb4 and re-audited at 3dcf21b. Substantial LLM assistance was used in drafting and is disclosed in the manuscript. Source: https://github.com/Raoof128/Project-Simurgh",
+  "related_identifiers": [
+    {
+      "relation": "isSupplementTo",
+      "identifier": "https://github.com/Raoof128/Project-Simurgh",
+      "scheme": "url"
+    },
+    {
+      "relation": "isPartOf",
+      "identifier": "10.5281/zenodo.20374849",
+      "scheme": "doi"
+    }
+  ]
+}

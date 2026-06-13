@@ -2,6 +2,18 @@
 
 ## Agent Change Log
 
+### 2026-06-13 (Australia/Sydney) — Banking Shield: layout audit + Zenodo deposition prep
+
+**Raouf:**
+
+- **Scope:** Full layout audit of the compiled IEEEtran preprint and Zenodo deposition preparation. Paper/docs only.
+- **Summary:** Layout audit found page 2 nearly blank — the `[section]` FloatBarrier was forcing the full-width Figure 1 out before §II could flow. Switched to plain `\usepackage{placeins}`; the paper reflows to 6 tight pages (from 7 with a near-empty page). Verified all pages visually: 3 TikZ figures + 5 booktabs tables place cleanly, monospace tokens render, references complete with corrected years, balanced two columns. For Zenodo: added a pre-filled `.zenodo.json` deposition metadata file (title, author + ORCID, abstract, keywords, cc-by-4.0, related identifiers), a commented ready-to-fill DOI line in the title `\thanks{}` (no fabricated DOI), and a step-by-step mint guide in the README. Actual minting is a manual authenticated upload the user performs; I cannot mint the DOI.
+- **Files changed:** `Papers/banking-shield/main.tex`, `Papers/banking-shield/main.pdf`, `Papers/banking-shield/.zenodo.json`, `Papers/banking-shield/README.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `latexmk` exit 0 (6 pages, 0 overfull, 0 undefined, 16/16 citations); `.zenodo.json` valid JSON; `npx prettier --check` clean.
+- **Follow-ups:** User mints the Zenodo DOI via web upload of `main.pdf` using `.zenodo.json`, then uncomments the DOI line in `main.tex` and recompiles.
+
+---
+
 ### 2026-06-13 (Australia/Sydney) — Banking Shield: applied external-review wording refinements (preprint)
 
 **Raouf:**

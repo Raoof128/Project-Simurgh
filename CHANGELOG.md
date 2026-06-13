@@ -1,5 +1,23 @@
 ## Change Log
 
+## [banking-shield-paper-layout-audit-zenodo] — 2026-06-13 — Layout audit + Zenodo deposition prep
+
+**Raouf:** Full layout audit of the compiled preprint and Zenodo deposition preparation.
+
+### Fixed
+
+- `Papers/banking-shield/main.tex` — layout: replaced `\usepackage[section]{placeins}` with `\usepackage{placeins}`. The per-section FloatBarrier was forcing the full-width Figure 1 out before §II could flow, leaving page 2 almost blank. Paper now reflows to 6 tight pages (was 7 with a near-empty page).
+
+### Added
+
+- `Papers/banking-shield/.zenodo.json` — pre-filled Zenodo deposition metadata (title, author + ORCID, abstract, keywords, `cc-by-4.0`, related identifiers). Valid JSON.
+- `Papers/banking-shield/main.tex` — commented, ready-to-fill DOI line in the title `\thanks{}` block (no fabricated DOI).
+- `Papers/banking-shield/README.md` — step-by-step Zenodo mint guide.
+
+### Verified
+
+- Visual layout audit of all 6 PDF pages: 3 TikZ figures and 5 booktabs tables place cleanly, monospace tokens render, references complete with corrected years, two-column balance good. `latexmk` exit 0, 0 overfull boxes, 0 undefined refs, 16/16 citations. `npx prettier --check` clean.
+
 ## [banking-shield-paper-wording-refinements] — 2026-06-13 — Applied external-review wording refinements (preprint, no venue)
 
 **Raouf:** Applied the three open judgment-call wording refinements from the external review to both `Papers/banking-shield/main.tex` and `source/banking-shield-paper-v1.2.md`: (1) §4.1 reworded to a data-minimisation _design principle_ with Klein/Yeung cited as GDPR-by-design governance context rather than data-minimisation authorities; (2) related work no longer labels Lee et al. "guardrail practice" (now a life-cycle bias/risk study) with Ray as TRiSM controls; (3) added a one-line "AI-style" clarifier in §4.2. Positioned as a research preprint; no venue targeted.

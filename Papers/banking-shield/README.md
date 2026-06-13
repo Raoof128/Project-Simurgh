@@ -36,6 +36,28 @@ make clean      # remove build artifacts
 Requires a TeX Live distribution with `IEEEtran`, `tikz`, `booktabs`,
 `orcidlink`, and `hyperref`.
 
+## Minting the Zenodo DOI
+
+The preprint is positioned for a Zenodo deposit (same path as the companion
+voting-pilot paper). The deposition metadata is pre-filled in
+[`.zenodo.json`](.zenodo.json) (title, author + ORCID, abstract, keywords,
+`cc-by-4.0` license, related identifiers). Minting requires an authenticated
+upload, so it is a manual step:
+
+1. Build the PDF: `make` (produces `main.pdf`).
+2. Sign in at <https://zenodo.org> and start **New upload**.
+3. Upload `main.pdf`. Copy the fields from `.zenodo.json` into the form
+   (or use the Zenodo REST API with the JSON as the deposition body).
+4. **Reserve DOI** (or publish) to obtain `10.5281/zenodo.<id>`.
+5. In `main.tex`, uncomment the DOI line in the title `\thanks{}` block and fill
+   the id, then re-run `make` so the published PDF carries its own DOI.
+6. Add a self-citation `@misc` entry to `references.bib` if cross-referencing
+   from other papers, mirroring `simurgh-voting-pilot/references.bib`.
+
+License note: `.zenodo.json` declares `cc-by-4.0` for the manuscript text; the
+code in the repository remains under the repository's MIT license. Change the
+`license` field if you prefer a different manuscript license.
+
 ## Provenance
 
 All empirical facts trace to the Stage B5 evidence pack frozen at repo `main`
