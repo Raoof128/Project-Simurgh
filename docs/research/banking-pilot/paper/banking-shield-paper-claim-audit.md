@@ -65,6 +65,45 @@ npx prettier --check docs/research/banking-pilot/paper/banking-shield-paper-v1.1
 **Verdict: v1.1 PASSES the final B5-R claim audit and is ready for Zenodo
 preprint packaging after PDF export.**
 
+## v1.2 post-review writing pass claim audit (2026-06-13)
+
+Scope: `banking-shield-paper-v1.2.md` after the post-review writing revision.
+The edit improves title, abstract, introduction, design narrative, evaluation
+framing, limitations, and conclusion without changing the underlying evidence
+claims.
+
+Checks:
+
+- The v1.2 title states the contribution as machine-checked absence claims for
+  AI-style explanations, not banking protection.
+- The abstract preserves all key caveats: fictional, non-bank, research-only,
+  deterministic mock provider, bounded evidence, and no live-LLM safety
+  evaluation.
+- The introduction keeps the explicit non-claims and frames them as the object
+  of study rather than as defensive boilerplate.
+- Evaluation language remains bounded to the frozen prototype, evidence pack,
+  fixture pair, and five trusted internal testers.
+- Limitations still disclose no formal peer review, no external banking review,
+  no independent security validation, no live LLM validation, project-authored
+  gates, single-node in-memory architecture, server-keyed audit chains, and
+  static-source no-egress scope.
+- No new fraud-detection, scam-prevention, payment-safety, payee-verification,
+  financial-advice, compliance, production-readiness, externally validated,
+  independently verified, or banking-reviewed claim was introduced.
+
+Commands:
+
+```bash
+rg -n "\b47\b|§10|statically proven|proof that|pattern holds|\[CITATION NEEDED\]|externally validated|independently verified|banking reviewed" docs/research/banking-pilot/paper/banking-shield-paper-v1.2.md
+npx prettier --check docs/research/banking-pilot/paper/banking-shield-paper-v1.2.md docs/research/banking-pilot/paper/review/*.md docs/research/banking-pilot/paper/banking-shield-paper-claim-audit.md
+pandoc docs/research/banking-pilot/paper/banking-shield-paper-v1.2.md -o docs/research/banking-pilot/paper/banking-shield-paper-v1.2.pdf --pdf-engine=xelatex --metadata title="Banking Shield" --metadata author="Mohammad Raouf Abedini" --variable monofont="Menlo"
+pdfinfo docs/research/banking-pilot/paper/banking-shield-paper-v1.2.pdf
+git diff --check
+```
+
+**Verdict: v1.2 PASSES the post-review writing-pass claim audit and is the
+preferred preprint manuscript for Zenodo packaging.**
+
 ## v1.0 re-audit (2026-06-12)
 
 A mechanical scan of `banking-shield-paper-v1.0.md` found:

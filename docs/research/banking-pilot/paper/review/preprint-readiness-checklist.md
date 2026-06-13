@@ -1,8 +1,8 @@
 # Banking Shield Preprint Readiness Checklist
 
 Stage: B5-R Banking Shield Independent-Style Review Pack.
-Target paper: `../banking-shield-paper-v1.1.md`.
-Target PDF: `../banking-shield-paper-v1.1.pdf`.
+Target paper: `../banking-shield-paper-v1.2.md`.
+Target PDF: `../banking-shield-paper-v1.2.pdf`.
 Status: ready for Zenodo preprint after final verification and PDF export pass.
 
 ## Paper Scope
@@ -27,7 +27,8 @@ Status: ready for Zenodo preprint after final verification and PDF export pass.
 - [x] Reviewer 4 AI safety review recorded.
 - [x] Reviewer 5 hostile reviewer #2 attack recorded.
 - [x] Author response to every required criticism recorded.
-- [x] v1.1 paper incorporates the required fixes.
+- [x] v1.1 paper incorporates the required B5-R fixes.
+- [x] v1.2 paper incorporates the post-review writing revision.
 
 ## Evidence and Reproducibility
 
@@ -43,13 +44,13 @@ Status: ready for Zenodo preprint after final verification and PDF export pass.
 
 ## Paper Hygiene
 
-- [x] No unresolved `[CITATION NEEDED]` markers in v1.1.
+- [x] No unresolved `[CITATION NEEDED]` markers in v1.2.
 - [x] Forbidden-field count is 46, matching source.
 - [x] No reader-facing "B4-A instead" internal-stage wording.
 - [x] No "externally validated", "peer reviewed", "independently verified", or
       "banking reviewed" claim.
 - [x] LLM assistance and B5-R model-assisted review substitute are disclosed.
-- [x] v1.1 PDF exported with embedded text, no encryption, and no JavaScript.
+- [x] v1.2 PDF exported with embedded text, no encryption, and no JavaScript.
 
 ## Preprint Submission Wording
 
@@ -87,8 +88,8 @@ node scripts/privacy-audit-banking-pilot.mjs
 node scripts/privacy-audit-banking-pilot-phase-b.mjs
 node scripts/privacy-audit-banking-pilot-ai-firewall.mjs
 npm audit --audit-level=moderate
-npx prettier --check docs/research/banking-pilot/paper/banking-shield-paper-v1.1.md docs/research/banking-pilot/paper/review/*.md
-pandoc docs/research/banking-pilot/paper/banking-shield-paper-v1.1.md -o docs/research/banking-pilot/paper/banking-shield-paper-v1.1.pdf --pdf-engine=xelatex --metadata title="Banking Shield" --metadata author="Mohammad Raouf Abedini" --variable monofont="Menlo"
-pdfinfo docs/research/banking-pilot/paper/banking-shield-paper-v1.1.pdf
+npx prettier --check docs/research/banking-pilot/paper/banking-shield-paper-v1.2.md docs/research/banking-pilot/paper/review/*.md
+pandoc docs/research/banking-pilot/paper/banking-shield-paper-v1.2.md -o docs/research/banking-pilot/paper/banking-shield-paper-v1.2.pdf --pdf-engine=xelatex --metadata title="Banking Shield" --metadata author="Mohammad Raouf Abedini" --variable monofont="Menlo"
+pdfinfo docs/research/banking-pilot/paper/banking-shield-paper-v1.2.pdf
 git diff --check
 ```
