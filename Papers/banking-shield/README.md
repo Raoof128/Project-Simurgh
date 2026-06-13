@@ -6,6 +6,9 @@ AI Explanations.
 **Author.** Mohammad Raouf Abedini, Department of Computing, Macquarie
 University.
 
+**DOI.** [10.5281/zenodo.20675513](https://doi.org/10.5281/zenodo.20675513)
+(Zenodo preprint).
+
 **Status.** Author-prepared preprint. Not yet peer reviewed, externally
 bank-reviewed, or independently security-validated. Fictional, non-bank,
 research-only prototype: no fraud-detection, scam-prevention, payment-safety,
@@ -36,23 +39,16 @@ make clean      # remove build artifacts
 Requires a TeX Live distribution with `IEEEtran`, `tikz`, `booktabs`,
 `orcidlink`, and `hyperref`.
 
-## Minting the Zenodo DOI
+## Zenodo deposit
 
-The preprint is positioned for a Zenodo deposit (same path as the companion
-voting-pilot paper). The deposition metadata is pre-filled in
+Published as a Zenodo preprint:
+**[10.5281/zenodo.20675513](https://doi.org/10.5281/zenodo.20675513)**. The DOI
+is embedded in the title footnote of `main.tex` and carried by `main.pdf`; a
+self-citation (`abedini2026bankingshield`) is in `references.bib` for
+cross-referencing from other papers. Deposition metadata is recorded in
 [`.zenodo.json`](.zenodo.json) (title, author + ORCID, abstract, keywords,
-`cc-by-4.0` license, related identifiers). Minting requires an authenticated
-upload, so it is a manual step:
-
-1. Build the PDF: `make` (produces `main.pdf`).
-2. Sign in at <https://zenodo.org> and start **New upload**.
-3. Upload `main.pdf`. Copy the fields from `.zenodo.json` into the form
-   (or use the Zenodo REST API with the JSON as the deposition body).
-4. **Reserve DOI** (or publish) to obtain `10.5281/zenodo.<id>`.
-5. In `main.tex`, uncomment the DOI line in the title `\thanks{}` block and fill
-   the id, then re-run `make` so the published PDF carries its own DOI.
-6. Add a self-citation `@misc` entry to `references.bib` if cross-referencing
-   from other papers, mirroring `simurgh-voting-pilot/references.bib`.
+`cc-by-4.0` license, related identifiers). To publish a revised version, upload
+the rebuilt `main.pdf` as a new version under the same Zenodo concept DOI.
 
 License note: `.zenodo.json` declares `cc-by-4.0` for the manuscript text; the
 code in the repository is licensed under AGPL-3.0-or-later (see the root

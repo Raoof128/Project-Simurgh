@@ -1,5 +1,20 @@
 ## Change Log
 
+## [banking-shield-zenodo-doi] — 2026-06-13 — Wire minted Zenodo DOI 10.5281/zenodo.20675513
+
+**Raouf:** Wired the minted Banking Shield Zenodo DOI (`10.5281/zenodo.20675513`) into the paper and repository.
+
+### Changed
+
+- `Papers/banking-shield/main.tex` — title `\thanks{}` now carries the live DOI with a self-`\cite`; recompiled clean (6 pages, 0 overfull, 0 undefined, 17/17 citations; DOI embedded in `main.pdf`).
+- `Papers/banking-shield/references.bib` — added self-citation `@misc{abedini2026bankingshield}` (mirrors the voting-pilot pattern).
+- `Papers/banking-shield/README.md` — DOI line added; "Zenodo deposit" section updated to published state.
+- `README.md` — added Banking Shield as the third Zenodo preprint (Research Papers section + §13); "Two" → "Three".
+
+### Verified
+
+- `latexmk` exit 0; DOI string present in `main.pdf`; `npx prettier --check` clean; no fixture churn.
+
 ## [spdx-headers] — 2026-06-13 — Add SPDX license headers to first-party code
 
 **Raouf:** Added `SPDX-License-Identifier: AGPL-3.0-or-later` headers to 80 first-party source files for per-file license clarity (follow-up to the relicense). Shebang-aware (inserted after `#!` lines) and idempotent.

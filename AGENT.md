@@ -2,6 +2,18 @@
 
 ## Agent Change Log
 
+### 2026-06-13 (Australia/Sydney) — Banking Shield: wire minted Zenodo DOI
+
+**Raouf:**
+
+- **Scope:** Wired the user-minted Banking Shield Zenodo DOI `10.5281/zenodo.20675513` into the paper and repository. Paper/docs only.
+- **Summary:** Activated the DOI line in the `main.tex` title `\thanks{}` (with a self-`\cite`), added the `abedini2026bankingshield` self-citation to `references.bib` (mirrors voting-pilot), added the DOI to the package README and switched its Zenodo section to published state, and added Banking Shield as the third Zenodo preprint in the root README (Research Papers section + §13, "Two" → "Three"). Recompiled: DOI embedded in `main.pdf`.
+- **Files changed:** `Papers/banking-shield/main.tex`, `main.pdf`, `references.bib`, `README.md`; root `README.md`; `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `latexmk` exit 0 (6 pages, 0 overfull, 0 undefined, 17/17 citations); DOI string present in `main.pdf`; `npx prettier --check` clean; no fixture churn.
+- **Follow-ups:** None outstanding for the preprint; future revisions upload as a new version under the same Zenodo concept DOI.
+
+---
+
 ### 2026-06-13 (Australia/Sydney) — Add SPDX license headers to first-party code
 
 **Raouf:**
