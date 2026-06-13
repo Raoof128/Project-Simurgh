@@ -1,5 +1,25 @@
 ## Change Log
 
+## [readme-audit-presentation] — 2026-06-13 — README professionalization audit + paper-folder casing fix
+
+**Raouf:** Full audit of the root `README.md` for research-presentation readiness, plus the cross-platform folder-casing bug it surfaced.
+
+### Fixed
+
+- **Cross-platform folder bug:** `Papers/banking-shield/` (capital `P`) was the lone paper tracked under a differently-cased directory from `papers/project-simurgh` and `papers/simurgh-voting-pilot`. On GitHub/Linux (case-sensitive) this renders as a second top-level folder — the same class of bug that previously 404'd the voting-pilot paper (AGENT.md prior entry). Renamed `Papers/banking-shield` → `papers/banking-shield` (git two-step through a temp name, required on the case-insensitive macOS FS), updated the live in-package path strings (`main.tex`, `source/banking-shield-paper-v1.2.md`), and rebuilt `main.pdf` (now carries lowercase path; 0 capital-`Papers` occurrences).
+- **Privacy contradiction:** §6 `POST /api/affinity` payload was documented as carrying "process names, PIDs" — directly contradicting the project-wide privacy posture (no raw process names/PIDs). Reworded to metadata-only aggregate summary; raw local fields are rejected server-side.
+- **Stale facts:** Node test count `331` → `417` (verified `npm test` 417/417 on this branch); total `383` → `469`; "current baseline `v0.4.18`" → `v0.5.0` (Stage 2 Device Shield noted as frozen at v0.4.18); removed a doubled horizontal rule; standardized the audit endpoint param name (`:id` → `:sessionId`).
+- **Link labels (second line-by-line pass):** corrected 5 links whose visible label read `docs/STAGE_*.md` while the actual target is `docs/stages/STAGE_*.md` (links worked; labels misled) — Stage 2.3 daemon, 2.5 scanner, 2.5 closeout audit, 1.5 reviewer pack, Stage 2 architecture. Verified every relative link and referenced path in the README resolves (0 broken). Smoothed one residual "inverts this model" phrasing left inconsistent by the SEB-comparison tone edit.
+
+### Changed (tone / structure)
+
+- Toned down marketing-register claims unsuited to a research README: "Cross-Platform **Superiority**" heading → "Cross-Platform **Coverage Compared with**"; removed the unsupported "up to **85%** … through prompt caching" non-sequitur (separated infra savings from the prompt-cache token savings in §7); reframed "fiber in Silicon Valley" / "three orders of magnitude" as a payload-size architectural property, not a measured benchmark; hedged the SEB/CodeSignal comparisons and the "hundreds of thousands of dollars" / "renders this trade-off obsolete" / "entirely" absolutes as design-level expectations.
+- Added an "Implementation-status sections" navigation line to the Table of Contents so the un-numbered narrative sections (Core Philosophy, Academic Shield, Stage 1 Hardening, Windows/Linux Closeout, External Technical Review) are reachable.
+
+### Verified
+
+- `npx prettier --check README.md papers/banking-shield/README.md` clean; no residual `Papers/` references; banking-shield PDF rebuilt; no evidence-fixture churn.
+
 ## [fix-ci-spdx-fallout] — 2026-06-13 — Fix CI: restore script exec bits + Package.swift order
 
 **Raouf:** Fixed two regressions introduced by the SPDX header passes (the temp-file rewrite had side effects).
