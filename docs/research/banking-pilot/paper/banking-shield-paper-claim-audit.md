@@ -6,6 +6,24 @@ re-run against the polished v0.1 text and again against the full v1.0 paper
 list; verify every banking-capability noun appears only in negated
 non-claims, denylist descriptions, or fictional-scenario labels.
 
+## v1.0 final readiness re-audit (2026-06-13)
+
+Final audited revision checks:
+
+- Zero unresolved `[CITATION NEEDED]` markers remain in the active paper.
+- The forbidden-field count is corrected to 46, matching
+  `FORBIDDEN_BANKING_FIELD_NAMES.length`.
+- The evidence provenance now distinguishes the frozen evidence pack
+  (`92dabb4`) from the later implementation re-audit checkout (`3dcf21b`).
+- The internal stage label `B4-A` no longer appears in reader-facing related
+  work prose.
+- Every occurrence of a capability noun (fraud detection, scam prevention,
+  payment safety, payee verification, financial advice, compliance, bank-grade)
+  sits in a negated non-claim, the claims-vs-non-claims table, a denylist
+  example, a related-work contrast, or an explicit no-compliance statement.
+
+**Verdict: final audited v1.0 PASSES the claim and paper-readiness audit.**
+
 ## v1.0 re-audit (2026-06-12)
 
 A mechanical scan of `banking-shield-paper-v1.0.md` found:
@@ -17,9 +35,9 @@ A mechanical scan of `banking-shield-paper-v1.0.md` found:
   a denylist example, a comprehension-count row, or an explicit "no
   compliance property is claimed" statement.
 - All 10 references carry DOIs verified through an academic search gateway
-  this session; the three categories without a verifiable source retain
-  explicit `[CITATION NEEDED]` markers (open-banking consent UX,
-  payee-confirmation services, per-response AI transparency artifacts).
+  this session; the three categories without a verifiable source retained
+  explicit `[CITATION NEEDED]` markers in that revision (open-banking consent
+  UX, payee-confirmation services, per-response AI transparency artifacts).
 - The LLM-assistance disclosure is present (§10).
 
 **Verdict: v1.0 PASSES the claim audit.**

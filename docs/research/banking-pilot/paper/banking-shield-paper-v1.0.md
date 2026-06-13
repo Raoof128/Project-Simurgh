@@ -1,11 +1,12 @@
 # Banking Shield: Metadata-Only Integrity Evidence and a Deterministic AI Privacy Firewall for a Banking-Adjacent Research Prototype
 
-**Version 1.0 — 2026-06-12.** Full paper produced by Stage B5-D from draft
-v0.1, the reviewer-simulation fix list, and citation verification via an
-academic search gateway (verified citations carry DOIs; categories without a
-verified source retain explicit `[CITATION NEEDED]` markers — none are
-invented). All facts trace to the Stage B5 evidence pack (repo `main` @
-`92dabb4`). This paper makes no fraud-detection, scam-prevention,
+**Version 1.0 — final audited revision, 2026-06-13.** Full paper produced by
+Stage B5-D from draft v0.1, the reviewer-simulation fix list, citation
+verification, and a final paper-readiness audit. Academic citations carry DOIs;
+standards and industry scheme citations use stable institutional URLs. All
+empirical facts trace to the Stage B5 evidence pack (repo `main` @ `92dabb4`)
+and were re-audited against checkout `3dcf21b` on 2026-06-13 before these
+paper-only edits. This paper makes no fraud-detection, scam-prevention,
 payment-safety, payee-verification, financial-advice, compliance, or
 production-readiness claims. Substantial LLM assistance was used in drafting
 and is disclosed in §10.
@@ -66,7 +67,7 @@ claim discipline are better than content-level filtering for adding AI-style
 explanations to privacy-sensitive research prototypes.** Contributions:
 
 - **C1** A metadata-only integrity-evidence architecture: a recursive
-  forbidden-field firewall (47 key names, including prototype-pollution keys)
+  forbidden-field firewall (46 key names, including prototype-pollution keys)
   whose rejections are audit events that escalate subsequent policy scoring —
   refusals become evidence (§4.1).
 - **C2** A deterministic, offline AI privacy firewall: allowlist input
@@ -94,7 +95,7 @@ chained. The system is metadata-only by construction (C1)._
                         ▼                         ▼
         ┌────────────────────────────┐  ┌──────────────────────────┐
         │ Forbidden-field firewall   │  │ Exports: Report / Audit  │
-        │ (47 names, depth cap,      │  │ / Verify / AI explanation│
+        │ (46 names, depth cap,      │  │ / Verify / AI explanation│
         │  rejections → audit events)│  │ (withdrawal-gated)       │
         └───────────────┬────────────┘  └────────────┬─────────────┘
                         ▼                            │
@@ -133,7 +134,7 @@ export (403) but preserves audit/verify reads for transparency (C4)._
 
 Three observations from the project's own evidence motivate the design:
 
-- **O1.** Every class of sensitive input the project could imagine (47 field
+- **O1.** Every class of sensitive input the project could imagine (46 field
   names: credentials, OTPs, account identifiers, amounts, payees, device
   telemetry, structural pollution keys) appeared _only_ in attack-style tests
   — and each was rejected and logged, suggesting refusal-as-evidence is
@@ -153,7 +154,7 @@ Three observations from the project's own evidence motivate the design:
 
 **Table 1 — Allowed vs forbidden data (T1).**
 
-| Allowed into the narrative payload (allowlist) | Forbidden everywhere (47-name denylist, classes) |
+| Allowed into the narrative payload (allowlist) | Forbidden everywhere (46-name denylist, classes) |
 | ---------------------------------------------- | ------------------------------------------------ |
 | Hashed session id                              | Credentials and one-time codes                   |
 | Scenario type (enum)                           | Account/card/payment identifiers                 |
@@ -198,7 +199,7 @@ compromise, a malicious operator.
 ### 4.1 Metadata-only integrity evidence (C1)
 
 Every write is filtered by a recursive forbidden-field firewall before
-validation: 47 forbidden key names spanning credentials, financial
+validation: 46 forbidden key names spanning credentials, financial
 identifiers, content fields, device telemetry, and the structural pollution
 keys `__proto__`/`prototype`/`constructor`, with a recursion depth cap and a
 16 KB body limit. A rejected attempt is not silently dropped: it appends a
@@ -325,7 +326,8 @@ gate, fixture, or frozen aggregate (E1–E3)._
  unit tests ─┐
  smoke gates ─┤
  security audit ─┼──► generated, attack-scanned fixtures ──► frozen evidence
- privacy audits ─┤         (accepted + rejected-claim)         pack @ 92dabb4
+ privacy audits ─┤      (accepted + rejected-claim)      pack @ 92dabb4
+ final audit ────┤                                      re-audit @ 3dcf21b
  no-egress gate ─┘                                                  │
  Phase B aggregate JSON (aggregate-only) ───────────────────────────┤
                                                                     ▼
@@ -408,9 +410,8 @@ participants, not tamper-proof against the operator.
 
 ## 8 Related Work
 
-Grouped by approach. Citations below were verified through an academic search
-gateway and carry DOIs; categories for which no source could be verified in
-the available corpus retain explicit markers.
+Grouped by approach. Academic citations below were verified and carry DOIs;
+open-banking and payment-scheme citations use stable institutional sources.
 
 **Tamper-evident logging.** Secure-logging schemes protect log integrity and
 authenticity with hash chains, MACs, and related structures, and survey the
@@ -451,20 +452,28 @@ frameworks (Lee et al. 2024,
 trust/risk/security frameworks catalogue runtime enforcement and output
 filtering controls (Ray 2026,
 [doi:10.1111/exsy.70213](https://doi.org/10.1111/exsy.70213)). These filter
-content from a live model; B4-A instead makes the provider structurally
+content from a live model; Banking Shield instead makes the provider structurally
 unable to receive sensitive input, statically unable to egress, and
 schema-bound on output, with content scanning only as the final layer.
 
-**Open-banking consent UX.** `[CITATION NEEDED]` — studies consent-screen
-efficacy; we evidence the integrity of the flow itself.
+**Open-banking consent UX.** Open-banking customer-experience guidance treats
+consent and access dashboards as critical user-control surfaces
+(Open Banking Implementation Entity n.d.; World Bank n.d.). Banking Shield does
+not evaluate real open-banking consent efficacy; it evidences the integrity of a
+fictional consent-style flow.
 
-**Payee-confirmation services.** `[CITATION NEEDED]` — real name-matching
-services; our payee scenario is fictional and the contribution is the
-metadata boundary.
+**Payee-confirmation services.** Confirmation-of-payee and verification-of-payee
+schemes perform account-name matching before payment initiation (Pay.UK n.d.;
+European Payments Council n.d.). Banking Shield's payee scenario is fictional:
+the contribution is the metadata boundary, not name matching.
 
-**Per-response AI transparency artifacts.** `[CITATION NEEDED]` — model
-documentation is typically per-release; our receipts are per-response and
-machine-checked.
+**Per-response AI transparency artifacts.** Model cards and datasheets document
+models or datasets as release-time artifacts (Mitchell et al. 2019,
+[doi:10.1145/3287560.3287596](https://doi.org/10.1145/3287560.3287596);
+Gebru et al. 2021,
+[doi:10.1145/3458723](https://doi.org/10.1145/3458723)). Banking Shield's
+receipts are narrower: per-response, machine-checked records of what the
+explanation pipeline did and did not receive.
 
 ## 9 Conclusion
 
@@ -489,8 +498,8 @@ model operating under a logged, evidence-pack-constrained protocol
 (`docs/research/banking-pilot/stage-b5-model-paper/`): the model synthesised,
 critiqued, and drafted; it validated nothing. All factual statements trace to
 automated gate results, generated fixtures, and frozen aggregate evidence.
-Citation candidates were verified through an academic search gateway before
-inclusion; unverifiable categories are explicitly marked rather than cited.
+Citation candidates were verified before inclusion; unresolved placeholders are
+not retained in this version.
 
 ## References
 
@@ -501,6 +510,12 @@ inclusion; unverifiable categories are explicitly marked rather than cited.
 - Bradshaw, S., & DeNardis, L. (2019). Privacy by Infrastructure: The
   Unresolved Case of the Domain Name System. _Policy & Internet_, 11(1),
   16–36. [doi:10.1002/poi3.195](https://doi.org/10.1002/poi3.195)
+- European Payments Council. (n.d.). _Verification of Payee_.
+  https://www.europeanpaymentscouncil.eu/what-we-do/other-schemes/verification-payee
+- Gebru, T., Morgenstern, J., Vecchione, B., Vaughan, J. W., Wallach, H.,
+  Daumé III, H., & Crawford, K. (2021). Datasheets for datasets.
+  _Communications of the ACM_, 64(12), 86–92.
+  [doi:10.1145/3458723](https://doi.org/10.1145/3458723)
 - Kim, G., Martel, A., Eisenman, D., Prelip, M., Arevian, A., Johnson, K. L.,
   & Glik, D. (2019). Wireless Emergency Alert messages: Influences on
   protective action behaviour. _Journal of Contingencies and Crisis
@@ -518,6 +533,16 @@ inclusion; unverifiable categories are explicitly marked rather than cited.
   Model: Theoretical Modifications and Additional Evidence. _Risk Analysis_,
   32(4), 616–632.
   [doi:10.1111/j.1539-6924.2011.01647.x](https://doi.org/10.1111/j.1539-6924.2011.01647.x)
+- Mitchell, M., Wu, S., Zaldivar, A., Barnes, P., Vasserman, L., Hutchinson,
+  B., Spitzer, E., Raji, I. D., & Gebru, T. (2019). Model Cards for Model
+  Reporting. _Proceedings of the Conference on Fairness, Accountability, and
+  Transparency_, 220–229.
+  [doi:10.1145/3287560.3287596](https://doi.org/10.1145/3287560.3287596)
+- Open Banking Implementation Entity. (n.d.). _Consent & Data Sharing
+  Management_. Open Banking Customer Experience Guidelines.
+  https://standards.openbanking.org.uk/customer-experience-guidelines/introduction/consent-mgmt/latest/
+- Pay.UK. (n.d.). _Confirmation of Payee_.
+  https://www.wearepay.uk/what-we-do/overlay-services/confirmation-of-payee/
 - Ray, P. P. (2026). A Review of TRiSM Frameworks in Artificial Intelligence
   Systems: Fundamentals, Taxonomy, Use Cases, Key Challenges and Future
   Directions. _Expert Systems_, 43(3).
@@ -529,6 +554,8 @@ inclusion; unverifiable categories are explicitly marked rather than cited.
 - Sree, T. R., & Bhanu, S. M. (2019). Secure logging scheme for forensic
   analysis in cloud. _Concurrency and Computation: Practice and Experience_,
   31(15). [doi:10.1002/cpe.5143](https://doi.org/10.1002/cpe.5143)
+- World Bank. (n.d.). _The Role of Consumer Consent in Open Banking_.
+  https://openknowledge.worldbank.org/entities/publication/5fa1c972-ea32-5504-a60f-42237b7385ac
 - Yeung, K., & Bygrave, L. A. (2021). Demystifying the modernized European
   data protection regime: Cross-disciplinary insights from legal and
   regulatory governance scholarship. _Regulation & Governance_, 16(1),
