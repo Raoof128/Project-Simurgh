@@ -1,5 +1,21 @@
 ## Change Log
 
+## [banking-shield-stage-b5-paper-v1.2-citation-sweep] — 2026-06-13 — External-review verification + citation-year fixes
+
+**Raouf:** Verified an external model-generated review of the v1.2 PDF item by item against source and authoritative CrossRef metadata. Confirmed its version, caption, and three citation-year flags; the audit-of-the-review found the same online-vs-version-of-record year defect in two further references the review missed (Scherr, Yeung & Bygrave). Fixed the caption and all five citation years to the version-of-record year already implied by the printed volume/issue.
+
+### Fixed
+
+- `docs/research/banking-pilot/paper/banking-shield-paper-v1.2.md` — removed internal "(page-one figure candidate)" from the Figure 3 caption; corrected citation years (in-text + reference list): Ali et al. 2021→2022, Lindell & Perry 2011→2012, Klein et al. 2021→2022, Scherr et al. 2015→2016, Yeung & Bygrave 2021→2022. Gebru et al. 2021 left unchanged (genuinely 2021).
+
+### Changed
+
+- `docs/research/banking-pilot/paper/banking-shield-paper-full-audit-2026-06-13.md` — added Addendum 2 (external-review verdict table + open judgment-call recommendations).
+
+### Verified
+
+- CrossRef DOI content negotiation for all journal references; `npx prettier --check` clean. Note: the committed v1.2 PDF predates these markdown fixes and must be regenerated.
+
 ## [banking-shield-stage-b5-paper-v1.2-audit] — 2026-06-13 — Full audit of paper v1.2
 
 **Raouf:** Full paper-writing audit of `banking-shield-paper-v1.2.md`. Re-ran every reproduction gate and re-verified all empirical claims against live source, the frozen evidence pack (`92dabb4`), the re-audit checkout (`3dcf21b`), and HEAD. All gate counts, caps, the 46-field denylist, the four-module no-egress scan, and every Phase B aggregate reproduced exactly; both highest-risk DOIs resolve. Two defects found and fixed.

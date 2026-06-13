@@ -183,3 +183,42 @@ reference now reads v1.2.
 
 Both edits pass `prettier --check`. No other factual, security, overclaim, or
 citation-placeholder blocker was found in v1.2.
+
+## Addendum 2: external-review verification + citation-year sweep (2026-06-13)
+
+An external model-generated review of the v1.2 PDF was checked item by item
+against the source and against authoritative CrossRef metadata (DOI content
+negotiation, `application/vnd.citationstyles.csl+json`). Verdict on its claims:
+
+- **Version v1.1 → v1.2 (§11):** correct; already fixed in markdown (D2 above).
+  The committed v1.2 PDF predates that fix and must be regenerated.
+- **Figure 3 caption "(page-one figure candidate)":** correct; internal planning
+  wording. Removed.
+- **Citation years:** correct in direction. CrossRef confirms each cited year
+  is an online-first date that conflicts with the version-of-record volume/issue
+  the reference list already prints. Klein et al. is an outright error (online
+  and print both 2022). All corrected to the version-of-record year:
+
+  | Reference                           | Was  | Now  | Version-of-record (CrossRef)   |
+  | ----------------------------------- | ---- | ---- | ------------------------------ |
+  | Ali et al. (BCALS, ETT)             | 2021 | 2022 | print 2022-04, vol 33(4)       |
+  | Lindell & Perry (Risk Analysis)     | 2011 | 2012 | print 2012-04, vol 32(4)       |
+  | Klein et al. (CAR)                  | 2021 | 2022 | online + print 2022, vol 39(1) |
+  | Scherr et al. (Applied Cog. Psych.) | 2015 | 2016 | print 2016-03, vol 30(2)       |
+  | Yeung & Bygrave (Reg. & Gov.)       | 2021 | 2022 | print 2022-01, vol 16(1)       |
+
+  The external review flagged the first three; the audit-of-the-review found the
+  same defect in Scherr and Yeung & Bygrave, which it missed. Gebru et al. 2021
+  (CACM 64(12)) is genuinely 2021 and unchanged.
+
+Recommendations from the external review that remain open (judgment calls, not
+applied): tighten the §4.1 data-minimisation sentence so Klein et al. reads as
+GDPR-governance context rather than a data-minimisation authority; soften the
+related-work framing of Lee et al. (BJET) and Ray (TRiSM) to match what those
+sources specifically support; add a one-line clarification that "AI-style"
+denotes the explanation-interface contract, not a live-model evaluation; and the
+PDF-production items (clickable institutional URLs, URL line-wrapping, vector
+figures) to be handled when the v1.2 PDF is regenerated from the corrected
+markdown.
+
+All edits pass `prettier --check`.

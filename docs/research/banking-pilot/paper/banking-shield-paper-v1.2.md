@@ -156,9 +156,9 @@ Three observations from the project evidence shaped the design:
   the Report/Audit/Verify exports. Interpretability, not privacy, was the weak
   point. That result motivated the explanation layer and matches the broader
   finding that warning comprehension depends strongly on text characteristics
-  and terminology (Lindell & Perry 2011,
+  and terminology (Lindell & Perry 2012,
   [doi:10.1111/j.1539-6924.2011.01647.x](https://doi.org/10.1111/j.1539-6924.2011.01647.x);
-  Scherr et al. 2015,
+  Scherr et al. 2016,
   [doi:10.1002/acp.3195](https://doi.org/10.1002/acp.3195)).
 - **O3.** The explanation layer is the riskiest place to improve
   interpretability because it sits at the boundary between internal evidence
@@ -201,7 +201,7 @@ audit chain is tamper-evident, not tamper-proof: the server holds the keys, a
 limitation shared by server-side secure-logging schemes generally, which
 motivates third-party or distributed verification in that literature (Sree &
 Bhanu 2019, [doi:10.1002/cpe.5143](https://doi.org/10.1002/cpe.5143); Ali et
-al. 2021, [doi:10.1002/ett.4272](https://doi.org/10.1002/ett.4272)). Denylist
+al. 2022, [doi:10.1002/ett.4272](https://doi.org/10.1002/ett.4272)). Denylist
 scanning is incomplete by construction. Receipts attest process, not ground
 truth. Withdrawal does not erase the metadata-only audit chain; the prototype
 discloses that choice. The evaluation does not cover DoS beyond rate limiting,
@@ -225,9 +225,9 @@ route, reason, and field name, never the value. The session's later policy
 score escalates after a rejection, so an attack attempt becomes part of the
 integrity record rather than a discarded exception. This operationalises the
 data-minimisation principle, collect only what the stated purpose requires
-(Klein et al. 2021,
+(Klein et al. 2022,
 [doi:10.1111/1911-3846.12735](https://doi.org/10.1111/1911-3846.12735);
-Yeung & Bygrave 2021,
+Yeung & Bygrave 2022,
 [doi:10.1111/rego.12401](https://doi.org/10.1111/rego.12401)) as an
 enforced, evidence-producing mechanism rather than a policy statement; no
 compliance property is claimed or implied. _Alternative considered:_
@@ -239,7 +239,7 @@ signal.
 
 ### 4.2 The deterministic AI privacy firewall (C2)
 
-**Figure 3: The AI privacy firewall (page-one figure candidate).** _The
+**Figure 3: The AI privacy firewall.** _The
 no-egress boundary is source-checked over the four AI-firewall modules; every
 stage fails closed to a receipt, never to a narrative (C2)._
 
@@ -492,19 +492,19 @@ open-banking and payment-scheme citations use stable institutional sources.
 **Tamper-evident logging.** Secure-logging schemes protect log integrity and
 authenticity with hash chains, MACs, and related structures, and survey the
 limits of server-trusted designs (Sree & Bhanu 2019,
-[doi:10.1002/cpe.5143](https://doi.org/10.1002/cpe.5143); Ali et al. 2021,
+[doi:10.1002/cpe.5143](https://doi.org/10.1002/cpe.5143); Ali et al. 2022,
 [doi:10.1002/ett.4272](https://doi.org/10.1002/ett.4272)). We apply standard
 HMAC-chain machinery per-session, with participant-facing verify exports and
 withdrawal semantics; our chain is deliberately scoped as tamper-evident, not
 tamper-proof.
 
 **Warning and rights comprehension.** Warning research shows comprehension
-hinges on reception, attention, and terminology (Lindell & Perry 2011,
+hinges on reception, attention, and terminology (Lindell & Perry 2012,
 [doi:10.1111/j.1539-6924.2011.01647.x](https://doi.org/10.1111/j.1539-6924.2011.01647.x)),
 that recipients frequently take no action on textual alerts (Kim et al. 2019,
 [doi:10.1111/1468-5973.12278](https://doi.org/10.1111/1468-5973.12278)), and
 that text characteristics measurably drive comprehension of rights-style
-warnings (Scherr et al. 2015,
+warnings (Scherr et al. 2016,
 [doi:10.1002/acp.3195](https://doi.org/10.1002/acp.3195)). Banking Shield
 measures comprehension of _non-claims_, what the system does NOT do, as an
 inverted warning problem, in a formative setting only.
@@ -512,9 +512,9 @@ inverted warning problem, in a formative setting only.
 **Data minimisation and design-based regulation.** The GDPR's
 data-minimisation and data-protection-by-design principles require systems to
 hold only what their purpose strictly needs and to hard-wire protection into
-architecture (Klein et al. 2021,
+architecture (Klein et al. 2022,
 [doi:10.1111/1911-3846.12735](https://doi.org/10.1111/1911-3846.12735);
-Yeung & Bygrave 2021,
+Yeung & Bygrave 2022,
 [doi:10.1111/rego.12401](https://doi.org/10.1111/rego.12401); Bradshaw &
 DeNardis 2019, [doi:10.1002/poi3.195](https://doi.org/10.1002/poi3.195)). Our
 firewall is one concrete design-based mechanism, with the additional property
@@ -588,7 +588,7 @@ placeholders are not retained in this version.
 
 ## References
 
-- Ali, A., Khan, A., Ahmed, M., & Jeon, G. (2021). BCALS: Blockchain-based
+- Ali, A., Khan, A., Ahmed, M., & Jeon, G. (2022). BCALS: Blockchain-based
   secure log management system for cloud computing. _Transactions on Emerging
   Telecommunications Technologies_, 33(4).
   [doi:10.1002/ett.4272](https://doi.org/10.1002/ett.4272)
@@ -606,7 +606,7 @@ placeholders are not retained in this version.
   protective action behaviour. _Journal of Contingencies and Crisis
   Management_, 27(4), 374–386.
   [doi:10.1111/1468-5973.12278](https://doi.org/10.1111/1468-5973.12278)
-- Klein, A., Manini, R., & Shi, Y. (2021). Across the Pond: How US Firms'
+- Klein, A., Manini, R., & Shi, Y. (2022). Across the Pond: How US Firms'
   Boards of Directors Adapted to the Passage of the General Data Protection
   Regulation. _Contemporary Accounting Research_, 39(1), 199–233.
   [doi:10.1111/1911-3846.12735](https://doi.org/10.1111/1911-3846.12735)
@@ -614,7 +614,7 @@ placeholders are not retained in this version.
   cycle of large language models in education: A framework for understanding
   sources of bias. _British Journal of Educational Technology_, 55(5),
   1982–2002. [doi:10.1111/bjet.13505](https://doi.org/10.1111/bjet.13505)
-- Lindell, M. K., & Perry, R. W. (2011). The Protective Action Decision
+- Lindell, M. K., & Perry, R. W. (2012). The Protective Action Decision
   Model: Theoretical Modifications and Additional Evidence. _Risk Analysis_,
   32(4), 616–632.
   [doi:10.1111/j.1539-6924.2011.01647.x](https://doi.org/10.1111/j.1539-6924.2011.01647.x)
@@ -632,7 +632,7 @@ placeholders are not retained in this version.
   Systems: Fundamentals, Taxonomy, Use Cases, Key Challenges and Future
   Directions. _Expert Systems_, 43(3).
   [doi:10.1111/exsy.70213](https://doi.org/10.1111/exsy.70213)
-- Scherr, K. C., Agauas, S. J., & Ashby, J. (2015). The Text Matters: Eye
+- Scherr, K. C., Agauas, S. J., & Ashby, J. (2016). The Text Matters: Eye
   Movements Reflect the Cognitive Processing of Interrogation Rights.
   _Applied Cognitive Psychology_, 30(2), 234–241.
   [doi:10.1002/acp.3195](https://doi.org/10.1002/acp.3195)
@@ -641,7 +641,7 @@ placeholders are not retained in this version.
   31(15). [doi:10.1002/cpe.5143](https://doi.org/10.1002/cpe.5143)
 - World Bank. (n.d.). _The Role of Consumer Consent in Open Banking_.
   https://openknowledge.worldbank.org/entities/publication/5fa1c972-ea32-5504-a60f-42237b7385ac
-- Yeung, K., & Bygrave, L. A. (2021). Demystifying the modernized European
+- Yeung, K., & Bygrave, L. A. (2022). Demystifying the modernized European
   data protection regime: Cross-disciplinary insights from legal and
   regulatory governance scholarship. _Regulation & Governance_, 16(1),
   137–155. [doi:10.1111/rego.12401](https://doi.org/10.1111/rego.12401)

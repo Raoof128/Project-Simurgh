@@ -2,6 +2,18 @@
 
 ## Agent Change Log
 
+### 2026-06-13 (Australia/Sydney) — Stage B5: external-review verification + citation-year sweep (v1.2)
+
+**Raouf:**
+
+- **Scope:** Verified an external model-generated review of the v1.2 PDF item by item against source and authoritative CrossRef metadata (DOI content negotiation). Docs only.
+- **Summary:** The review's version, Figure 3 caption, and three citation-year flags are correct; the citation years are online-first dates that conflict with the version-of-record volume/issue the reference list already prints (Klein et al. is an outright error — online and print both 2022). The audit-of-the-review found the same defect in two references the review missed (Scherr 2015→2016, Yeung & Bygrave 2021→2022). Fixed the caption and all five years (in-text + reference list); Gebru et al. 2021 is genuinely 2021 and unchanged. Remaining review items (data-minimisation source fit, Lee/Ray related-work framing, "AI-style" clarifier, and PDF-production polish) are judgment calls logged as open in the audit addendum.
+- **Files changed:** `docs/research/banking-pilot/paper/banking-shield-paper-v1.2.md`, `docs/research/banking-pilot/paper/banking-shield-paper-full-audit-2026-06-13.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** CrossRef metadata for all journal DOIs; `npx prettier --check` clean. The committed v1.2 PDF predates these markdown fixes and must be regenerated before release.
+- **Follow-ups:** Regenerate v1.2 PDF from corrected markdown; optionally apply the open judgment-call recommendations; venue/LaTeX work still pending.
+
+---
+
 ### 2026-06-13 (Australia/Sydney) — Stage B5: full audit of Banking Shield paper v1.2
 
 **Raouf:**
