@@ -1,5 +1,22 @@
 ## Change Log
 
+## [banking-shield-stage-b5-paper-v1.2-audit] — 2026-06-13 — Full audit of paper v1.2
+
+**Raouf:** Full paper-writing audit of `banking-shield-paper-v1.2.md`. Re-ran every reproduction gate and re-verified all empirical claims against live source, the frozen evidence pack (`92dabb4`), the re-audit checkout (`3dcf21b`), and HEAD. All gate counts, caps, the 46-field denylist, the four-module no-egress scan, and every Phase B aggregate reproduced exactly; both highest-risk DOIs resolve. Two defects found and fixed.
+
+### Fixed
+
+- `docs/research/banking-pilot/paper/banking-shield-paper-v1.2.md` — D1: corrected affirmative-claim phrase count 28 → 29 (`FORBIDDEN_CLAIM_PHRASES` has 29 entries at freeze, re-audit, and HEAD); D2: corrected stale "v1.1 preprint candidate" → "v1.2" in §11.
+
+### Changed
+
+- `docs/research/banking-pilot/paper/banking-shield-paper-full-audit-2026-06-13.md` — added v1.2 re-audit addendum documenting D1/D2.
+
+### Verified
+
+- `npm test` (417/417), banking smoke (14/14), AI-firewall smoke (5/5), full E2E (43/43), security audit (27/27), three privacy audits (PASS), no-egress gate (4 modules, PASS), `npm audit` (0 vulns).
+- `npx prettier --check` on both edited docs — clean.
+
 ## [banking-shield-stage-b5d-paper-v1] — 2026-06-12 — Full paper v1.0 with verified citations
 
 **Raouf:** Stage B5-D: full Banking Shield paper v1.0 with embedded figures F1–F4, tables T1–T5 filled from the frozen evidence pack, an LLM-assistance disclosure, and 10 DOI-backed references verified via an academic search gateway; categories without a verifiable source keep explicit `[CITATION NEEDED]` markers (zero invented citations). Claim audit re-run against v1.0: PASS.

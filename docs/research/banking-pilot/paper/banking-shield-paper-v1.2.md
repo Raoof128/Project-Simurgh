@@ -277,7 +277,7 @@ fail-closed stages:
    is not a host-level egress-control claim.
 3. **Output claim firewall.** The narrative must match an exact top-level
    schema (field allowlist), respect 600-character caps per field, contain a
-   non-empty non-claims list, and pass a negation-aware scan over 28
+   non-empty non-claims list, and pass a negation-aware scan over 29
    affirmative-capability phrasings; an equality check proves the narrative
    did not drift the official result.
 4. **Privacy receipt.** Every response, whether successful, blocked, or
@@ -581,7 +581,7 @@ model operating under a logged, evidence-pack-constrained protocol
 critiqued, and drafted; it validated nothing. A second model-assisted
 independent-style review stage (`docs/research/banking-pilot/paper/review/`)
 simulated five hostile reviewer roles and produced an author response before
-this v1.1 preprint candidate. All factual statements trace to automated gate
+this v1.2 preprint candidate. All factual statements trace to automated gate
 results, generated fixtures, frozen aggregate evidence, and explicit audit
 records. Citation candidates were verified before inclusion; unresolved
 placeholders are not retained in this version.

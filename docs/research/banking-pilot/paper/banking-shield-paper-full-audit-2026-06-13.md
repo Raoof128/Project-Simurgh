@@ -152,3 +152,34 @@ Proceed to supervisor or external research review. For formal venue submission,
 the paper should still receive normal human author review for venue formatting,
 reference style, and strategic positioning, but there is no known factual,
 security, overclaim, or citation-placeholder blocker in the active paper.
+
+## Addendum: v1.2 re-audit (2026-06-13)
+
+The body of this audit was performed against
+`banking-shield-paper-v1.0.md`. A subsequent full re-audit of
+`banking-shield-paper-v1.2.md` re-ran every reproduction gate and re-verified
+all empirical claims against live source, the frozen evidence pack (`92dabb4`),
+the re-audit checkout (`3dcf21b`), and HEAD. All gate counts, byte/length caps,
+the 46-field denylist, the four-module no-egress scan, and every Phase B
+aggregate in Tables 4 and 5 reproduced exactly. Both highest-risk DOIs
+(`10.1111/exsy.70213`, `10.1111/bjet.13505`) resolve to live publisher records.
+
+Two defects were found in v1.2 and fixed:
+
+### D1 - Affirmative-claim phrase count corrected (29, not 28)
+
+§4.2 stated the output claim firewall scans "28 affirmative-capability
+phrasings." `FORBIDDEN_CLAIM_PHRASES` contains **29** entries at the freeze
+commit `92dabb4`, the re-audit commit `3dcf21b`, and HEAD
+(`src/bankingPilot/bankingNarrativeOutputFirewall.js:23-53`). This was an
+undercount present since the original draft, not a source drift. The paper now
+says 29. The prior v1.0 audit did not catch this; the count was already 29 at
+freeze.
+
+### D2 - Stale version reference in LLM-assistance disclosure
+
+§11 referred to "this v1.1 preprint candidate" inside the v1.2 document. The
+reference now reads v1.2.
+
+Both edits pass `prettier --check`. No other factual, security, overclaim, or
+citation-placeholder blocker was found in v1.2.

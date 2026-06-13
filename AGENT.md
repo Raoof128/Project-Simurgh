@@ -2,6 +2,18 @@
 
 ## Agent Change Log
 
+### 2026-06-13 (Australia/Sydney) — Stage B5: full audit of Banking Shield paper v1.2
+
+**Raouf:**
+
+- **Scope:** Full paper-writing audit of `banking-shield-paper-v1.2.md` using the ml-paper-writing skill. Docs only — no runtime code, gates, scoring, privacy assertions, or evidence fixtures were changed. Re-ran every reproduction gate and re-verified all empirical claims against live source, the frozen evidence pack (`92dabb4`), the re-audit checkout (`3dcf21b`), and HEAD.
+- **Summary:** All gate counts, byte/length caps, the 46-field denylist, the four-module no-egress scan, and every Phase B aggregate (Tables 4–5) reproduced exactly; the two highest-risk DOIs resolve to live publisher records; overclaim discipline intact; prettier clean. Found and fixed two defects: D1 — §4.2 undercounted the affirmative-claim scan as 28 phrasings when `FORBIDDEN_CLAIM_PHRASES` has 29 at freeze, re-audit, and HEAD (a long-standing undercount the v1.0 audit missed); D2 — §11 still said "this v1.1 preprint candidate" inside the v1.2 document. Added a v1.2 re-audit addendum to the standing full-audit doc.
+- **Files changed:** `docs/research/banking-pilot/paper/banking-shield-paper-v1.2.md`, `docs/research/banking-pilot/paper/banking-shield-paper-full-audit-2026-06-13.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `npm test` 417/417; banking smoke 14/14; AI-firewall smoke 5/5; full E2E 43/43; security audit 27/27; three privacy audits PASS; no-egress gate PASS (4 modules); `npm audit` 0 vulns; `npx prettier --check` clean on both edited docs; Phase A fixture churn restored.
+- **Follow-ups:** Venue selection + CFP/AI-use-disclosure check and LaTeX conversion still pending (carried from B5-D).
+
+---
+
 ### 2026-06-12 (Australia/Sydney) — Stage B5-D: Banking Shield full paper v1.0 with verified citations
 
 **Raouf:**
