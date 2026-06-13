@@ -1,5 +1,18 @@
 ## Change Log
 
+## [spdx-headers] — 2026-06-13 — Add SPDX license headers to first-party code
+
+**Raouf:** Added `SPDX-License-Identifier: AGPL-3.0-or-later` headers to 80 first-party source files for per-file license clarity (follow-up to the relicense). Shebang-aware (inserted after `#!` lines) and idempotent.
+
+### Changed
+
+- `server.js`, `src/**/*.{js,mjs}` (52), `scripts/*.mjs` (3), `scripts/*.sh` (21), `tools/*.mjs` (3) — prepended an SPDX header (`//` for JS, `#` for shell).
+
+### Verified
+
+- `npm test` 417/417; `npx prettier --check .` clean; security audit 27/27; no-egress privacy audit PASS; banking smoke 14/14; no fixture churn.
+- Native subdirs (Rust/Swift/.NET under `tools/`) and `tests/` (82 files) intentionally left for a later pass.
+
 ## [relicense-agpl-3.0] — 2026-06-13 — Relicense code MIT → AGPL-3.0-or-later (papers CC-BY-4.0)
 
 **Raouf:** Relicensed the repository from MIT to AGPL-3.0-or-later to keep the work open for research while preventing closed-source/proprietary capture (strong copyleft + network clause). Research papers under `Papers/` are CC-BY-4.0. Note: a license protects expression, not ideas — research priority rests on the timestamped Zenodo preprints.

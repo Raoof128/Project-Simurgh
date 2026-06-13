@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 // Single source of truth for forbidden raw local field names across the
 // Stage 2.7 cross-platform Device Shield surface. Consumed by:
 //  - src/device/daemonProof.js  (daemon proof + pairing payload rejection)

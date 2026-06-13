@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// SPDX-License-Identifier: AGPL-3.0-or-later
 // Privacy audit — recursively scans the project's data directories and any
 // JSON files passed as arguments for forbidden field names. Exits 1 on any
 // violation so it can be wired into CI.

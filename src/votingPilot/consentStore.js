@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 import { randomUUID, createHmac } from "node:crypto";
 import { createChain, appendEntry } from "../audit/hmacChain.js";
 import { VOTING_PILOT_EVENTS } from "./events.js";

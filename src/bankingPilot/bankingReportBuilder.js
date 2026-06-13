@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 import { verifyChain } from "../audit/hmacChain.js";
 import { sanitiseAuditEntry } from "./bankingAudit.js";
 

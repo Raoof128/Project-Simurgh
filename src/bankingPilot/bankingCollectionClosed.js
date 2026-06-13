@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 export function bankingCollectionClosed() {
   return process.env.SIMURGH_BANKING_PILOT_COLLECTION_CLOSED === "true";
 }

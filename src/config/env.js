@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 // Stage 1 env vars exported as a single config object.
 // Existing legacy vars (API_KEY, INSTRUCTOR_TOKEN, HELPER_SECRET, AUDIT_SECRET)
 // remain in server.js — this module only declares the new flags and limits.

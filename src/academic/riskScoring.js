@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 // Weights must sum to 1.0
 const WEIGHTS = {
   paste_risk: 0.25,

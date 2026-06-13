@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 export const BANKING_RECOMMENDATIONS = Object.freeze({
   safe: "No banking-integrity anomaly detected.",
   warning: "Manual review recommended. No automatic fraud finding.",

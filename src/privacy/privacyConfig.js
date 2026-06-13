@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 export const privacyConfig = {
   // Forbidden — never collected or stored
   collectScreenPixels: false,

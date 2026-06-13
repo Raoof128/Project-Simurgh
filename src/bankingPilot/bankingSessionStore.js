@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 import crypto from "node:crypto";
 import { createChain, appendEntry } from "../audit/hmacChain.js";
 import { BANKING_PILOT_EVENTS } from "./bankingAudit.js";

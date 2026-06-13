@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 // Stage 2.1 v1 proof schema constants — purely declarative.
 // Validation logic lives in proofValidator.js.
 

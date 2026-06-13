@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 export const BANKING_PILOT_EVENTS = Object.freeze({
   CONSENT_ACCEPTED: "BANKING_CONSENT_ACCEPTED",
   STARTED: "BANKING_SESSION_STARTED",

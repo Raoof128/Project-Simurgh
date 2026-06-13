@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: AGPL-3.0-or-later
 # scripts/smoke-banking-pilot-full-e2e.sh
 # Full Banking Shield Phase A E2E smoke gate.
 set -euo pipefail

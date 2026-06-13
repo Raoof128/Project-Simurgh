@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 // Canonical JSON serialiser for Stage 2 integrity proofs.
 //
 // Rules:

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 // src/votingPilot/events.js
 export const VOTING_PILOT_EVENTS = Object.freeze({
   CONSENT_ACCEPTED: "VOTING_PILOT_CONSENT_ACCEPTED",

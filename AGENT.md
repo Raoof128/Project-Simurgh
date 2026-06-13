@@ -2,6 +2,18 @@
 
 ## Agent Change Log
 
+### 2026-06-13 (Australia/Sydney) — Add SPDX license headers to first-party code
+
+**Raouf:**
+
+- **Scope:** Follow-up to the AGPL relicense — added `SPDX-License-Identifier: AGPL-3.0-or-later` headers to 80 first-party source files for per-file clarity. Shebang-aware and idempotent.
+- **Summary:** Prepended the SPDX comment to `server.js`, all `src/**/*.{js,mjs}` (52), `scripts/*.mjs` (3) and `scripts/*.sh` (21), and top-level `tools/*.mjs` (3) — `//` for JS, `#` for shell, inserted after any `#!` shebang. Left the native `tools/` subdirs (Rust/Swift/.NET) and the 82 `tests/` files for a later pass. Confirmed the inserted comments do not disturb the source-scanning privacy/security audits.
+- **Files changed:** 80 source files + `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `npm test` 417/417; `npx prettier --check .` clean; `security-audit-banking-pilot.sh` 27/27; no-egress privacy audit PASS; `smoke-banking-pilot.sh` 14/14; no fixture churn.
+- **Follow-ups:** Optional later pass for `tests/` and native subdirs.
+
+---
+
 ### 2026-06-13 (Australia/Sydney) — Relicense code MIT → AGPL-3.0-or-later
 
 **Raouf:**

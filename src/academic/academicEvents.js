@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 export const EVENTS = Object.freeze({
   EXAM_STARTED: "EXAM_STARTED",
   PRIVACY_ACCEPTED: "PRIVACY_ACCEPTED",

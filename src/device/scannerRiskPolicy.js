@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 // Shared risk policy mapping daemon/scanner state → risk numeric + manual-
 // review wording. Verbatim port of the current behaviour in
 //   src/device/daemonState.js:scoreDaemonRisk

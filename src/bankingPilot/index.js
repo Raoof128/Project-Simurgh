@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 import { Router } from "express";
 import crypto from "node:crypto";
 import { appendEntry } from "../audit/hmacChain.js";

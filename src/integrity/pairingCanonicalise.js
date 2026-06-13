@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 // src/integrity/pairingCanonicalise.js
 //
 // Pairing payloads use the same canonical signing rules as integrity proof payloads:
