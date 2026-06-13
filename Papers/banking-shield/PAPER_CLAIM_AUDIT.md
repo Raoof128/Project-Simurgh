@@ -73,10 +73,20 @@ limitations.
 - Figure 3 caption: removed internal "(page-one figure candidate)".
 - Five citation years corrected (table above).
 
-## 4. Open (not blocking preprint release)
+## 4. External-review wording refinements — applied 2026-06-13
 
-Judgment-call recommendations from the external review, recorded for a future
-revision: tighten the §4.1 data-minimisation sentence so `klein2022pond` reads as
-GDPR-governance context; soften the related-work framing of `lee2024lifecycle`
-and `ray2026trism`; add a one-line clarifier that "AI-style" denotes the
-explanation-interface contract, not a live-model evaluation.
+All three judgment-call recommendations from the external review are now applied
+in both `main.tex` and `source/banking-shield-paper-v1.2.md`:
+
+- §4.1 data minimisation reworded to a data-minimisation _design principle_ in
+  the limited engineering sense; `klein2022pond`/`yeung2022demystifying` now cited
+  as GDPR data-protection-by-design _governance context_, not as
+  data-minimisation authorities.
+- Related work no longer calls `lee2024lifecycle` "guardrail practice": it now
+  reads as a life-cycle bias/risk study, with `ray2026trism` as TRiSM controls;
+  both framed as live-model filtering that Banking Shield contrasts structurally.
+- Added a one-line clarifier in §4.2 that "AI-style" denotes the
+  explanation-interface contract and guardrail pathway, not a live generative
+  model evaluated in this study.
+
+No venue is targeted; the artifact is positioned as a research preprint.

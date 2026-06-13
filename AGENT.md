@@ -2,6 +2,18 @@
 
 ## Agent Change Log
 
+### 2026-06-13 (Australia/Sydney) — Banking Shield: applied external-review wording refinements (preprint)
+
+**Raouf:**
+
+- **Scope:** Applied the three open judgment-call wording refinements from the external review to the LaTeX paper and its source markdown. Paper/docs only. Positioned as a research preprint; no venue targeted.
+- **Summary:** (1) §4.1 reworded to a data-minimisation _design principle_ in the limited engineering sense, with Klein/Yeung recast as GDPR data-protection-by-design governance context rather than data-minimisation authorities; (2) related work no longer calls Lee et al. "guardrail practice" — now a life-cycle bias/risk study, Ray as TRiSM controls, both framed as live-model filtering the prototype contrasts structurally; (3) added a one-line "AI-style" clarifier in §4.2 (explanation-interface contract, not a live-model evaluation). `PAPER_CLAIM_AUDIT.md` §4 marked applied.
+- **Files changed:** `Papers/banking-shield/main.tex`, `Papers/banking-shield/main.pdf`, `Papers/banking-shield/source/banking-shield-paper-v1.2.md`, `Papers/banking-shield/PAPER_CLAIM_AUDIT.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `latexmk` exit 0 (7 pages, 0 overfull, 0 undefined, 16/16 citations); `npx prettier --check` clean.
+- **Follow-ups:** Optional Zenodo DOI mint when ready; no venue selection (research preprint).
+
+---
+
 ### 2026-06-13 (Australia/Sydney) — Banking Shield: full citation/claim audit + LaTeX preprint package
 
 **Raouf:**

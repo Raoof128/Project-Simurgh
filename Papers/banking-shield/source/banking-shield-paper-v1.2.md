@@ -223,14 +223,17 @@ keys `__proto__`/`prototype`/`constructor`; it also enforces a recursion-depth
 cap and a 16 KB body limit. A rejection appends an audit event containing the
 route, reason, and field name, never the value. The session's later policy
 score escalates after a rejection, so an attack attempt becomes part of the
-integrity record rather than a discarded exception. This operationalises the
-data-minimisation principle, collect only what the stated purpose requires
+integrity record rather than a discarded exception. This operationalises a
+data-minimisation design principle, in the limited engineering sense of
+constructing only the metadata the stated prototype purpose requires, as an
+enforced, evidence-producing mechanism rather than a policy statement; we claim
+no regulatory compliance. The broader GDPR data-protection-by-design context
+that motivates this posture is analysed in the governance literature
 (Klein et al. 2022,
 [doi:10.1111/1911-3846.12735](https://doi.org/10.1111/1911-3846.12735);
 Yeung & Bygrave 2022,
-[doi:10.1111/rego.12401](https://doi.org/10.1111/rego.12401)) as an
-enforced, evidence-producing mechanism rather than a policy statement; no
-compliance property is claimed or implied. _Alternative considered:_
+[doi:10.1111/rego.12401](https://doi.org/10.1111/rego.12401)).
+_Alternative considered:_
 schema-level allowlisting alone. The project rejected that as insufficient:
 an allowlist validates shape, but it does not produce evidence of hostile
 attempts. Banking Shield therefore uses both controls. The allowlist defines
@@ -262,8 +265,9 @@ stage fails closed to a receipt, never to a narrative (C2)._
 ```
 
 The explanation endpoint exists to make the report understandable without
-turning the explanation layer into a privacy sink. It therefore has four
-fail-closed stages:
+turning the explanation layer into a privacy sink. We use "AI-style" to denote
+the explanation-interface contract and guardrail pathway, not a live generative
+model evaluated in this study. It therefore has four fail-closed stages:
 
 1. **Input firewall.** The narrative payload is _constructed_, not passed
    through: a hashed session id, scenario/action enums, the policy outcome,
@@ -522,16 +526,16 @@ firewall is one concrete design-based mechanism, with the additional property
 that refusals produce evidence; we claim no compliance status under any
 regulation.
 
-**LLM guardrails and AI risk frameworks.** Guardrail practice moderates live
-model output with content filters, usage monitoring, and evaluation
-frameworks (Lee et al. 2024,
-[doi:10.1111/bjet.13505](https://doi.org/10.1111/bjet.13505)), and AI
-trust/risk/security frameworks catalogue runtime enforcement and output
-filtering controls (Ray 2026,
-[doi:10.1111/exsy.70213](https://doi.org/10.1111/exsy.70213)). These filter
-content from a live model; Banking Shield instead makes the provider structurally
-unable to receive sensitive input, statically unable to egress, and
-schema-bound on output, with content scanning only as the final layer.
+**LLM guardrails and AI risk frameworks.** A growing literature examines bias
+and risk across the life cycle of large language models (Lee et al. 2024,
+[doi:10.1111/bjet.13505](https://doi.org/10.1111/bjet.13505)) and catalogues AI
+trust, risk, and security management (TRiSM) controls, including runtime
+enforcement and output filtering (Ray 2026,
+[doi:10.1111/exsy.70213](https://doi.org/10.1111/exsy.70213)). Such approaches
+typically filter or monitor content emitted by a live model; Banking Shield
+instead makes the provider structurally unable to receive sensitive input,
+statically unable to egress, and schema-bound on output, with content scanning
+only as the final layer.
 
 **Open-banking consent UX.** Open-banking customer-experience guidance treats
 consent and access dashboards as critical user-control surfaces

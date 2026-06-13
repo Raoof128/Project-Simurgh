@@ -309,10 +309,13 @@ a recursion-depth cap and a 16\,KB body limit. A rejection appends an audit
 event containing the route, reason, and field name, never the value. The
 session's later policy score escalates after a rejection, so an attack attempt
 becomes part of the integrity record rather than a discarded exception. This
-operationalises the data-minimisation principle---collect only what the stated
-purpose requires~\cite{klein2022pond,yeung2022demystifying}---as an enforced,
-evidence-producing mechanism rather than a policy statement; no compliance
-property is claimed or implied. \emph{Alternative considered:} schema-level
+operationalises a data-minimisation design principle---in the limited
+engineering sense of constructing only the metadata the stated prototype purpose
+requires---as an enforced, evidence-producing mechanism rather than a policy
+statement; we claim no regulatory compliance. The broader GDPR
+data-protection-by-design context that motivates this posture is analysed in the
+governance literature~\cite{klein2022pond,yeung2022demystifying}.
+\emph{Alternative considered:} schema-level
 allowlisting alone. The project rejected that as insufficient: an allowlist
 validates shape, but it does not produce evidence of hostile attempts. \sys{}
 therefore uses both controls. The allowlist defines the valid shape; the
@@ -357,8 +360,9 @@ narrative (C2).}
 \end{figure*}
 
 The explanation endpoint exists to make the report understandable without turning
-the explanation layer into a privacy sink. It therefore has four fail-closed
-stages:
+the explanation layer into a privacy sink. We use ``AI-style'' to denote the
+explanation-interface contract and guardrail pathway, not a live generative model
+evaluated in this study. It therefore has four fail-closed stages:
 
 \begin{enumerate}
   \item \textbf{Input firewall.} The narrative payload is \emph{constructed},
@@ -626,13 +630,14 @@ firewall is one concrete design-based mechanism, with the additional property
 that refusals produce evidence; we claim no compliance status under any
 regulation.
 
-\textbf{LLM guardrails and AI risk frameworks.} Guardrail practice moderates live
-model output with content filters, usage monitoring, and evaluation
-frameworks~\cite{lee2024lifecycle}, and AI trust/risk/security frameworks
-catalogue runtime enforcement and output filtering controls~\cite{ray2026trism}.
-These filter content from a live model; \sys{} instead makes the provider
-structurally unable to receive sensitive input, statically unable to egress, and
-schema-bound on output, with content scanning only as the final layer.
+\textbf{LLM guardrails and AI risk frameworks.} A growing literature examines
+bias and risk across the life cycle of large language models~\cite{lee2024lifecycle}
+and catalogues AI trust, risk, and security management (TRiSM) controls,
+including runtime enforcement and output filtering~\cite{ray2026trism}. Such
+approaches typically filter or monitor content emitted by a live model; \sys{}
+instead makes the provider structurally unable to receive sensitive input,
+statically unable to egress, and schema-bound on output, with content scanning
+only as the final layer.
 
 \textbf{Open-banking consent UX.} Open-banking customer-experience guidance
 treats consent and access dashboards as critical user-control

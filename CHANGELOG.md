@@ -1,5 +1,19 @@
 ## Change Log
 
+## [banking-shield-paper-wording-refinements] — 2026-06-13 — Applied external-review wording refinements (preprint, no venue)
+
+**Raouf:** Applied the three open judgment-call wording refinements from the external review to both `Papers/banking-shield/main.tex` and `source/banking-shield-paper-v1.2.md`: (1) §4.1 reworded to a data-minimisation _design principle_ with Klein/Yeung cited as GDPR-by-design governance context rather than data-minimisation authorities; (2) related work no longer labels Lee et al. "guardrail practice" (now a life-cycle bias/risk study) with Ray as TRiSM controls; (3) added a one-line "AI-style" clarifier in §4.2. Positioned as a research preprint; no venue targeted.
+
+### Changed
+
+- `Papers/banking-shield/main.tex`, `Papers/banking-shield/main.pdf` — wording refinements; recompiled clean (7 pages, 0 overfull, 0 undefined, 16/16 citations).
+- `Papers/banking-shield/source/banking-shield-paper-v1.2.md` — mirrored the same three edits.
+- `Papers/banking-shield/PAPER_CLAIM_AUDIT.md` — §4 marked applied.
+
+### Verified
+
+- `latexmk` exit 0; `npx prettier --check` clean.
+
 ## [banking-shield-paper-latex-preprint] — 2026-06-13 — Full citation/claim audit + LaTeX preprint package in Papers/
 
 **Raouf:** Completed a full citation audit (all 16 references verified to exist via CrossRef DOI content negotiation + URL resolution; zero hallucinated citations) and a full claims audit (every numeric/structural/empirical claim re-verified against live source, gates, and the frozen evidence pack). Built an IEEEtran LaTeX preprint package and moved the paper into the root `Papers/` folder alongside the other papers.
