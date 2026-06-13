@@ -1,5 +1,18 @@
 ## Change Log
 
+## [fix-ci-spdx-fallout] — 2026-06-13 — Fix CI: restore script exec bits + Package.swift order
+
+**Raouf:** Fixed two regressions introduced by the SPDX header passes (the temp-file rewrite had side effects).
+
+### Fixed
+
+- Restored the executable bit (`100755`) on all 21 `scripts/*.sh` — the first SPDX pass had reset them to `100644`, so CI failed with `./scripts/check.sh: Permission denied` (exit 126).
+- `tools/simurgh-daemon-macos/Package.swift`, `tools/simurgh-node-macos/Package.swift` — moved the `// swift-tools-version:5.9` directive back to line 1 (SPDX header had displaced it to line 2, breaking SwiftPM manifest parsing). Verified with `swift package describe` (exit 0).
+
+### Verified
+
+- `cargo fmt --check` and `cargo clippy -D warnings` (Linux daemon) both exit 0 with the SPDX headers; `npm test` 417/417. The remaining local check.sh failures (.NET 8 SDK absent, Rust Xvfb tests, Swift-on-macOS) are environment-only and pass/skip on the Ubuntu CI runner (which installs xvfb and skips macOS toolchains).
+
 ## [spdx-headers-tests-native] — 2026-06-13 — SPDX headers for tests/ and native tools/ (Rust/Swift/.NET)
 
 **Raouf:** Completed the SPDX header pass — added `SPDX-License-Identifier: AGPL-3.0-or-later` to the remaining 161 git-tracked first-party source files: `tests/**` (74 js + 8 mjs) and the native `tools/` subdirs (23 rs, 28 swift, 22 cs, 6 sh). Comment style `//` for js/mjs/rs/swift/cs, `#` for sh; shebang-aware and idempotent; driven off `git ls-files` so build artifacts (`target/`, `.build/`, `obj/`, .NET `bin/`) and untracked/generated files are excluded.
