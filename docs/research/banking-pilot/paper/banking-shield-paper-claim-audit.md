@@ -24,6 +24,47 @@ Final audited revision checks:
 
 **Verdict: final audited v1.0 PASSES the claim and paper-readiness audit.**
 
+## v1.1 B5-R preprint-candidate claim audit (2026-06-13)
+
+Scope: `banking-shield-paper-v1.1.md` after the Stage B5-R independent-style
+review pack and author response.
+
+Checks performed:
+
+- No unresolved `[CITATION NEEDED]` markers remain in v1.1.
+- No stale `47` forbidden-field count remains in v1.1; the paper uses 46,
+  matching the source.
+- No reader-facing `B4-A instead` wording remains.
+- No stale `§10` LLM-disclosure reference remains after adding the new
+  Reproducibility and Review-Substitute section.
+- The preprint-status paragraph explicitly says the manuscript has not
+  undergone formal peer review, external banking review, or independent security
+  validation.
+- Capability nouns remain confined to negated non-claims, claims-vs-non-claims
+  tables, reviewer critique records, checklist "do not use" wording, or
+  related-work contrasts. The active paper makes no affirmative fraud-detection,
+  scam-prevention, payment-safety, payee-verification, financial-advice,
+  compliance, production-readiness, or bank-grade-security claim.
+- The no-egress claim is narrowed to a static source check over the four
+  AI-firewall modules, not a host-level egress-control guarantee.
+- The HCI evidence is narrowed to internal-test checklist comprehension by five
+  trusted insiders, not representative-user or banking-customer comprehension.
+- The mock-provider limitation is explicit: no live LLM has been filtered or
+  validated.
+
+Verification commands:
+
+```text
+rg -n "\b47\b|§10|statically proven|proof that|pattern holds|\[CITATION NEEDED\]|externally validated|independently verified|banking reviewed" docs/research/banking-pilot/paper/banking-shield-paper-v1.1.md
+# no matches
+
+npx prettier --check docs/research/banking-pilot/paper/banking-shield-paper-v1.1.md docs/research/banking-pilot/paper/review/*.md docs/research/banking-pilot/paper/banking-shield-paper-claim-audit.md
+# All matched files use Prettier code style
+```
+
+**Verdict: v1.1 PASSES the final B5-R claim audit and is ready for Zenodo
+preprint packaging after PDF export.**
+
 ## v1.0 re-audit (2026-06-12)
 
 A mechanical scan of `banking-shield-paper-v1.0.md` found:
