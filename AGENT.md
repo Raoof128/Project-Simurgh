@@ -2,6 +2,18 @@
 
 ## Agent Change Log
 
+### 2026-06-13 (Australia/Sydney) — README professionalization audit + paper-folder casing fix
+
+**Raouf:**
+
+- **Scope:** Full audit of the root `README.md` for research-presentation readiness (factual accuracy, internal consistency, tone, navigability), plus the cross-platform folder-casing bug it surfaced. README + paper-package only — no runtime code, gates, or evidence touched.
+- **Summary:** (1) Renamed `Papers/banking-shield` → `papers/banking-shield` so all three papers share the lowercase `papers/` root (capital `P` would render as a separate folder on case-sensitive GitHub/Linux — the same bug class that previously 404'd the voting-pilot paper); two-step git rename through a temp name on the case-insensitive macOS FS; updated live in-package path strings and rebuilt `main.pdf`. (2) Fixed a privacy contradiction — §6 `/api/affinity` payload claimed "process names, PIDs," contradicting the no-raw-fields posture — to a metadata-only aggregate. (3) Corrected stale facts: 331→417 Node tests (verified), 383→469 total, baseline `v0.4.18`→`v0.5.0`, removed doubled HR, unified audit param name. (4) Toned down marketing-register claims (Superiority→Coverage, removed unsupported 85%/prompt-caching non-sequitur, hedged Silicon-Valley/orders-of-magnitude/SEB/cost absolutes into design-level expectations). (5) Added a TOC navigation line for the un-numbered narrative sections.
+- **Files changed:** `papers/banking-shield/**` (rename + `main.tex`/`source/v1.2.md` path strings + rebuilt `main.pdf`), root `README.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `npx prettier --check` clean; `npm test` 417/417; no residual `Papers/` references; banking-shield PDF carries the lowercase path; no evidence-fixture churn.
+- **Follow-ups:** Append-only `Papers/...` mentions in prior AGENT.md/CHANGELOG history entries left as-is (they record what was true at the time).
+
+---
+
 ### 2026-06-13 (Australia/Sydney) — SPDX headers for tests/ and native tools/ (Rust/Swift/.NET)
 
 **Raouf:**

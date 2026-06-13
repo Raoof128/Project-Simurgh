@@ -67,13 +67,11 @@ Source: [`papers/simurgh-voting-pilot/`](papers/simurgh-voting-pilot/)
 
 A fictional, non-bank, research-only prototype whose main artifact is bounded _evidence of absence_: gate-backed evidence that sensitive values were not recorded and did not enter an AI-style explanation payload. Combines a fail-closed metadata firewall, per-session tamper-evident HMAC audit chains with withdrawal semantics, and a deterministic offline AI privacy firewall (allowlist input, deterministic mock provider, negation-aware output claim firewall, per-response receipts, static no-egress gate). At the evidence freeze all gates passed (417/417 unit, 43/43 E2E, 27/27 security, three privacy audits) and five trusted internal testers completed 30 formative sessions with zero sensitive values in the evidence. Makes no fraud-detection, payment-safety, compliance, or production-readiness claim.
 
-Source: [`Papers/banking-shield/`](Papers/banking-shield/)
+Source: [`papers/banking-shield/`](papers/banking-shield/)
 
 ---
 
----
-
-> **Status: Stage 2 complete — current baseline `v0.4.18`.** Windows Device Shield frozen at `v0.4.13-stage-2-6-2-7-closeout` (real-device validated on Windows 10 Pro build 19045, security-audited). Stage 2.7 unifies macOS and Windows under one cross-platform proof contract. Stage 2.8 Linux Display Integrity Research frozen at `v0.4.16-stage-2-8C-8D-linux-wayland-systemd-ci`. Research paper published on Zenodo ([10.5281/zenodo.20374849](https://doi.org/10.5281/zenodo.20374849)). The system remains a research prototype and does not claim production deployment, MDM/Intune readiness, hardware attestation, kernel-level visibility, or automatic misconduct detection. It does not collect video, audio, biometric data, typed answer content, pasted content, raw process names, raw window titles, HWNDs, PIDs, usernames, serial numbers, MAC addresses, or personal identity data. See [PRIVACY.md](PRIVACY.md), [ETHICS.md](docs/ETHICS.md), and [DISCLAIMER.md](docs/DISCLAIMER.md).
+> **Status: Stage 2 Device Shield complete (frozen at `v0.4.18`); current repository baseline `v0.5.0` (voting-pilot Phase C closeout).** Windows Device Shield frozen at `v0.4.13-stage-2-6-2-7-closeout` (real-device validated on Windows 10 Pro build 19045, security-audited). Stage 2.7 unifies macOS and Windows under one cross-platform proof contract. Stage 2.8 Linux Display Integrity Research frozen at `v0.4.16-stage-2-8C-8D-linux-wayland-systemd-ci`. Research paper published on Zenodo ([10.5281/zenodo.20374849](https://doi.org/10.5281/zenodo.20374849)). The system remains a research prototype and does not claim production deployment, MDM/Intune readiness, hardware attestation, kernel-level visibility, or automatic misconduct detection. It does not collect video, audio, biometric data, typed answer content, pasted content, raw process names, raw window titles, HWNDs, PIDs, usernames, serial numbers, MAC addresses, or personal identity data. See [PRIVACY.md](PRIVACY.md), [ETHICS.md](docs/ETHICS.md), and [DISCLAIMER.md](docs/DISCLAIMER.md).
 
 ---
 
@@ -141,9 +139,9 @@ The current macOS Device Shield baseline includes:
 - recursive rejection of forbidden raw local fields
 - privacy audit and npm audit gates
 
-**Current verification (`v0.4.18` / `main`):**
+**Current verification (`v0.5.0` / `main`):**
 
-- 331/331 Node tests passing
+- 417/417 Node tests passing
 - 33/33 Rust tests passing (`cargo test` with `SIMURGH_REQUIRE_XVFB_TESTS=1`)
 - 11/11 Windows .NET daemon tests passing
 - 8/8 macOS Swift daemon tests passing
@@ -196,6 +194,14 @@ In Persian mythology, the Simurgh is the ultimate protector of pure knowledge �
 | 11  | [Strategic Roadmap](#11-strategic-roadmap-2026---2028)                                         | Four-phase evolution from PoC to Sovereign Shield |
 | 12  | [Contributors](#12-contributors)                                                               | Project contributors                              |
 | 13  | [Status & License](#13-status--license)                                                        | Current status and licensing                      |
+
+**Implementation-status sections** (narrative, outside the numbered guide):
+[The Core Philosophy](#the-core-philosophy) ·
+[Simurgh Academic Shield](#simurgh-academic-shield) ·
+[Stage 1 Security Hardening](#stage-1-security-hardening) ·
+[Windows Device Shield Closeout](#windows-device-shield-closeout) ·
+[Linux Display Integrity Closeout](#linux-display-integrity-closeout) ·
+[External Technical Review](#external-technical-review)
 
 ---
 
@@ -306,7 +312,7 @@ Stage 1 extends the core behavioural telemetry engine into a complete **privacy-
 | AI narrative       | Called only on Warning/Critical; fail-open (local score stands if the provider is unavailable) |
 | Academic events    | Named taxonomy (BULK_PASTE, FOCUS_LOSS, CAPTURE_EXCLUDED_WINDOW, etc.)                         |
 | JSON report export | `GET /api/sessions/:id/report` — includes timeline, risk summary, audit validity               |
-| Audit verification | `GET /api/audit/:id/verify` — HMAC chain integrity check                                       |
+| Audit verification | `GET /api/audit/:sessionId/verify` — HMAC chain integrity check                                |
 
 **Privacy commitment:** Simurgh collects behavioural metadata only. No screen pixels, no webcam frames, no typed content, no paste content. Risk scores are heuristic-based. Any anomaly recommendation requires manual human review — Simurgh never makes automatic misconduct findings.
 
@@ -318,13 +324,13 @@ Simurgh Stage 1 is **privacy-preserving, tamper-evident, hardened, and auditable
 
 ### Authentication boundaries
 
-| Boundary                                                                     | Required                  | Mechanism                                                          |
-| ---------------------------------------------------------------------------- | ------------------------- | ------------------------------------------------------------------ |
-| Instructor APIs (`/api/sessions`, `/report`, `/audit/:id/verify`, SSE, etc.) | Bearer token              | `SIMURGH_INSTRUCTOR_TOKEN`, validated by `requireInstructorAuth`   |
-| Native helper (`/api/affinity`)                                              | Shared secret header      | `SIMURGH_HELPER_SECRET`                                            |
-| Student lifecycle (`privacy-accept`, `start`, `submit`)                      | HMAC session token        | Issued at `/api/exams/:id/join`, verified by `requireSessionToken` |
-| Student telemetry (joined sessions)                                          | HMAC session token        | Bound to sessionId; rejected on mismatch                           |
-| Student telemetry (anonymous demo)                                           | Replay guard + rate limit | No identity binding required                                       |
+| Boundary                                                                            | Required                  | Mechanism                                                          |
+| ----------------------------------------------------------------------------------- | ------------------------- | ------------------------------------------------------------------ |
+| Instructor APIs (`/api/sessions`, `/report`, `/audit/:sessionId/verify`, SSE, etc.) | Bearer token              | `SIMURGH_INSTRUCTOR_TOKEN`, validated by `requireInstructorAuth`   |
+| Native helper (`/api/affinity`)                                                     | Shared secret header      | `SIMURGH_HELPER_SECRET`                                            |
+| Student lifecycle (`privacy-accept`, `start`, `submit`)                             | HMAC session token        | Issued at `/api/exams/:id/join`, verified by `requireSessionToken` |
+| Student telemetry (joined sessions)                                                 | HMAC session token        | Bound to sessionId; rejected on mismatch                           |
+| Student telemetry (anonymous demo)                                                  | Replay guard + rate limit | No identity binding required                                       |
 
 Four separate secrets in production: `SIMURGH_INSTRUCTOR_TOKEN`, `SIMURGH_HELPER_SECRET`, `SIMURGH_AUDIT_SECRET`, `SIMURGH_SESSION_SIGNING_SECRET`. The server refuses to start in non-demo mode if any are missing.
 
@@ -340,14 +346,14 @@ Every joined-session telemetry POST carries `sequence` and `timestamp`. The serv
 
 ### Rate limits
 
-| Endpoint                   | Limit                 | Key                  |
-| -------------------------- | --------------------- | -------------------- |
-| `/api/exams/:id/join`      | 10/min                | per IP               |
-| `/api/affinity`            | 60/min                | per helper secret    |
-| `/api/sessions`            | 60/min                | per instructor token |
-| `/api/sessions/:id/report` | 20/min                | per instructor token |
-| `/api/audit/:id/verify`    | 20/min                | per instructor token |
-| `/api/telemetry`           | 3 burst / 1 per 2.5 s | per session          |
+| Endpoint                       | Limit                 | Key                  |
+| ------------------------------ | --------------------- | -------------------- |
+| `/api/exams/:id/join`          | 10/min                | per IP               |
+| `/api/affinity`                | 60/min                | per helper secret    |
+| `/api/sessions`                | 60/min                | per instructor token |
+| `/api/sessions/:id/report`     | 20/min                | per instructor token |
+| `/api/audit/:sessionId/verify` | 20/min                | per instructor token |
+| `/api/telemetry`               | 3 burst / 1 per 2.5 s | per session          |
 
 ### HTTP security headers
 
@@ -355,7 +361,7 @@ Every joined-session telemetry POST carries `sequence` and `timestamp`. The serv
 
 ### Tamper-evident audit chain
 
-Every academic event is appended to an HMAC-SHA256 linked chain. Any modification of a prior entry invalidates the signatures of every downstream entry. Verified end-to-end via `GET /api/audit/:id/verify`.
+Every academic event is appended to an HMAC-SHA256 linked chain. Any modification of a prior entry invalidates the signatures of every downstream entry. Verified end-to-end via `GET /api/audit/:sessionId/verify`.
 
 ### Stage 1 Verification
 
@@ -397,7 +403,7 @@ Stage 2.2 binds a browser exam session to a macOS node public key. The server is
 
 ### Stage 2.3 macOS Localhost Daemon (merged — v0.4.5)
 
-Stage 2.3 adds a macOS localhost daemon under `tools/simurgh-daemon-macos/`. The browser probes `127.0.0.1:3031`, requests server challenges from `POST /api/device/challenge`, pairs the daemon through `POST /api/device/pair`, and can attach signed `daemon_proof` metadata to `POST /api/telemetry`. The server verifies P-256 signatures, rejects replayed challenges, updates `daemon_risk`, appends daemon audit events, and includes `device_integrity` in reports. Design doc: [`docs/STAGE_2_3_MACOS_LOCALHOST_DAEMON.md`](docs/stages/STAGE_2_3_MACOS_LOCALHOST_DAEMON.md).
+Stage 2.3 adds a macOS localhost daemon under `tools/simurgh-daemon-macos/`. The browser probes `127.0.0.1:3031`, requests server challenges from `POST /api/device/challenge`, pairs the daemon through `POST /api/device/pair`, and can attach signed `daemon_proof` metadata to `POST /api/telemetry`. The server verifies P-256 signatures, rejects replayed challenges, updates `daemon_risk`, appends daemon audit events, and includes `device_integrity` in reports. Design doc: [`docs/stages/STAGE_2_3_MACOS_LOCALHOST_DAEMON.md`](docs/stages/STAGE_2_3_MACOS_LOCALHOST_DAEMON.md).
 
 Stage 2.2/2.3 closeout can be run independently:
 
@@ -425,7 +431,7 @@ This LaunchAgent path is development-only. It is not notarised, not production e
 
 Stage 2.5 replaces the daemon's conservative placeholder scanner with a real CoreGraphics-backed, metadata-only scanner. The scanner enumerates visible window metadata, filters tiny/system noise, counts capture-excluded visible windows conservatively, and attaches only aggregate scanner summaries inside signed daemon proofs.
 
-The server accepts validated scanner fields, rejects forbidden raw local fields, escalates `capture_excluded_window_count > 0` to Critical/manual review, and records privacy-safe scanner audit events. Reports and the instructor dashboard now expose scanner state, visible-window count, maximum capture-excluded count, and manual-review wording. Design doc: [`docs/STAGE_2_5_MACOS_AFFINITY_SCANNER.md`](docs/stages/STAGE_2_5_MACOS_AFFINITY_SCANNER.md).
+The server accepts validated scanner fields, rejects forbidden raw local fields, escalates `capture_excluded_window_count > 0` to Critical/manual review, and records privacy-safe scanner audit events. Reports and the instructor dashboard now expose scanner state, visible-window count, maximum capture-excluded count, and manual-review wording. Design doc: [`docs/stages/STAGE_2_5_MACOS_AFFINITY_SCANNER.md`](docs/stages/STAGE_2_5_MACOS_AFFINITY_SCANNER.md).
 
 Stage 2.5 closeout includes a dedicated E2E smoke pack:
 
@@ -441,7 +447,7 @@ Stage 2.5 closeout also includes a cybersecurity audit gate:
 ./scripts/security-audit-stage-2-4-2-5.sh
 ```
 
-The audit gate verifies recursive raw local-data rejection, SDK token and proof boundaries, daemon loopback/body/method/malformed JSON/origin guards, LaunchAgent dry-run safety, dashboard/report wording, the Stage 2.4/2.5 smoke pack, privacy audit, npm audit, and macOS Swift daemon test/build/doctor redaction checks when available. Details: [`docs/STAGE_2_5_CLOSEOUT_SECURITY_AUDIT.md`](docs/stages/STAGE_2_5_CLOSEOUT_SECURITY_AUDIT.md).
+The audit gate verifies recursive raw local-data rejection, SDK token and proof boundaries, daemon loopback/body/method/malformed JSON/origin guards, LaunchAgent dry-run safety, dashboard/report wording, the Stage 2.4/2.5 smoke pack, privacy audit, npm audit, and macOS Swift daemon test/build/doctor redaction checks when available. Details: [`docs/stages/STAGE_2_5_CLOSEOUT_SECURITY_AUDIT.md`](docs/stages/STAGE_2_5_CLOSEOUT_SECURITY_AUDIT.md).
 
 ### Dashboard
 
@@ -467,17 +473,17 @@ Current proctoring standards (CodeSignal, ProctorU, Examity) are architected for
 
 Traditional proctoring requires continuous, high-speed video streaming. This effectively excludes students in remote villages, developing nations, and rural regions (e.g., Regional Australia, the Global South) where bandwidth is a structural constraint.
 
-**The Simurgh approach:** By transmitting lightweight behavioral JSON (~2 KB per window) instead of HD video, a student on a 3G connection maintains the same integrity rating as a student on fiber in Silicon Valley. The bandwidth requirement drops by approximately **three orders of magnitude**.
+**The Simurgh approach:** By transmitting a lightweight behavioral JSON payload (~2 KB per window) instead of a continuous HD video stream, a student on a constrained connection can be evaluated on the same signal as a student on high-speed fibre. By payload size, the bandwidth requirement is roughly three orders of magnitude lower than continuous HD video (≈2 KB per 5 s versus a multi-Mbps stream) — an architectural property of the design, not a measured field benchmark.
 
 ### Privacy-as-Code vs. Privacy-as-Surveillance
 
-Platforms such as CodeSignal are increasingly scrutinized for invasive data collection practices. Project Simurgh's zero-visual approach eliminates the psychological burden of continuous observation — a factor that research indicates disproportionately affects neurodivergent and socioeconomically disadvantaged students.
+Video-based remote proctoring has drawn sustained criticism for invasive data collection and for the psychological burden of continuous observation, which the literature suggests can disproportionately affect neurodivergent and socioeconomically disadvantaged students. Project Simurgh's zero-visual approach removes the camera and screen-recording channel entirely, collecting behavioral metadata only. (This is a design rationale, not a controlled comparative study.)
 
-### Cross-Platform Superiority over Legacy Lockdown Software
+### Cross-Platform Coverage Compared with Legacy Lockdown Software
 
-The industry's prevailing lockdown solution — Safe Exam Browser (SEB) — was originally designed for Windows and remains functionally constrained to that ecosystem. Its macOS and Linux support is incomplete, its mobile compatibility is non-existent, and its architecture has not evolved to address modern threat vectors such as display-affinity exploits or AI-driven UI spoofing. SEB represents a generation of security thinking built around _restricting the environment_ rather than _verifying behavior_.
+A widely deployed lockdown tool, Safe Exam Browser (SEB), originated on Windows; its macOS and Linux clients are more limited and it offers no mobile client. Architecturally it follows a _lockdown_ model — restricting what the environment can do — rather than the _behavioral-verification_ model Project Simurgh explores. The two approaches are complementary as much as competing: lockdown constrains the environment, whereas Simurgh derives an integrity signal from behavior, which lets it span platforms a lockdown client does not reach.
 
-Project Simurgh inverts this model. Because the integrity signal is derived from lightweight behavioral telemetry transmitted over a standard browser session, the system is inherently **platform-agnostic**:
+Because Simurgh derives its integrity signal from lightweight behavioral telemetry transmitted over a standard browser session — rather than from OS-level lockdown — it is largely **platform-agnostic**:
 
 | Platform     | SEB Support       | Simurgh Support                             |
 | ------------ | ----------------- | ------------------------------------------- |
@@ -502,21 +508,19 @@ Project Simurgh eliminates this barrier entirely. **All intelligence resides ser
 
 ### Institutional Cost Reduction
 
-Beyond software licensing, universities currently bear significant operational costs for examination integrity: hiring teams of **human invigilators**, booking **physical examination venues**, and managing the logistics of large-scale in-person supervision. A single mid-sized university can spend hundreds of thousands of dollars per semester on venue hire and casual invigilation staff alone.
+Beyond software licensing, examination integrity carries recurring operational costs: human invigilators, physical examination venues, and the logistics of large-scale in-person supervision. A behavioral-API model can in principle reduce several of these line items:
 
-Project Simurgh eliminates these line items entirely. By replacing physical supervision with a lightweight behavioral API, institutions can:
+- Less reliance on dedicated examination halls and their booking, maintenance, and scheduling overhead.
+- Lower per-session invigilation cost — fewer staff to recruit, train, and roster.
+- No continuous video ingest, storage, or review pipeline, which is the dominant infrastructure cost of traditional video-based remote proctoring. (Separately, where the optional AI narrative is used, provider-side prompt caching reduces that call's token cost — see §7; the two savings are distinct.)
 
-- Remove the need for dedicated examination halls and their associated booking, maintenance, and scheduling overhead.
-- Eliminate per-session human invigilator costs — no recruitment, no training, no rostering.
-- Reduce proctoring infrastructure costs by up to **85%** relative to traditional video-based remote systems through prompt caching.
-
-This transforms integrity verification from a recurring operational expense into a low-cost, API-driven infrastructure dependency — enabling universities to scale examination capacity without scaling headcount or real estate.
+The intended effect is to move integrity verification from a recurring, supervision-heavy expense toward a lower-cost, API-driven dependency. These are design-level expectations; the prototype has not been costed in a production institutional deployment, so no specific savings percentage is claimed.
 
 ### Public Health Resilience
 
 Large-scale in-person examinations concentrate hundreds of individuals in enclosed venues for extended periods — creating significant epidemiological risk vectors during seasonal influenza outbreaks, respiratory pandemics (as demonstrated by COVID-19), and other communicable disease events. Institutions are frequently forced to choose between maintaining assessment schedules and protecting student and staff health.
 
-Project Simurgh renders this trade-off obsolete. By enabling high-integrity remote examination without visual surveillance, institutions can maintain full assessment continuity while preserving safe social distancing. Students complete examinations from their own environments, eliminating the public health liability of physical congregation entirely. This positions behavioral integrity verification not merely as a cost optimization, but as a critical component of **institutional resilience infrastructure**.
+Project Simurgh helps ease this trade-off. By supporting remote examination without visual surveillance, institutions can maintain assessment continuity while reducing the need for physical congregation. Students complete examinations from their own environments, lowering the public-health exposure of large in-person gatherings. This frames behavioral integrity verification not only as a cost question but as a contributor to institutional resilience.
 
 ---
 
@@ -607,12 +611,12 @@ Example response:
 
 Receives native OS display-affinity metrics from the `simurgh-helper` agent.
 
-| Field            | Value                                                                                                      |
-| ---------------- | ---------------------------------------------------------------------------------------------------------- |
-| **Header**       | `x-simurgh-helper-secret: <SIMURGH_HELPER_SECRET>`                                                         |
-| **Payload**      | JSON object containing an array of capture-excluded windows with process names, PIDs, and fidelity metrics |
-| **Response**     | `200 OK`                                                                                                   |
-| **Auth failure** | `401 invalid_helper_secret`                                                                                |
+| Field            | Value                                                                                                                                                                                                                        |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Header**       | `x-simurgh-helper-secret: <SIMURGH_HELPER_SECRET>`                                                                                                                                                                           |
+| **Payload**      | JSON object containing a metadata-only, aggregate summary of capture-excluded windows (counts and fidelity metrics only — never raw process names, PIDs, window titles, or HWNDs; raw local fields are rejected server-side) |
+| **Response**     | `200 OK`                                                                                                                                                                                                                     |
+| **Auth failure** | `401 invalid_helper_secret`                                                                                                                                                                                                  |
 
 ### `GET /api/sessions`
 
@@ -678,19 +682,19 @@ The `simurgh-helper` native agent authenticates to the server via a shared secre
 
 Stage 1.5 is a validation, audit, documentation, and reviewer-readiness sprint. It does not add major Stage 2 runtime code.
 
-| Review area               | Entry point                                                               |
-| ------------------------- | ------------------------------------------------------------------------- |
-| Main reviewer pack        | [docs/STAGE_1_5_REVIEWER_PACK.md](docs/stages/STAGE_1_5_REVIEWER_PACK.md) |
-| Threat model              | [docs/THREAT_MODEL.md](docs/THREAT_MODEL.md)                              |
-| Validation matrix         | [docs/VALIDATION.md](docs/VALIDATION.md)                                  |
-| Limitations               | [docs/LIMITATIONS.md](docs/LIMITATIONS.md)                                |
-| Stage 2 architecture plan | [docs/STAGE_2_ARCHITECTURE.md](docs/stages/STAGE_2_ARCHITECTURE.md)       |
-| Resource plan             | [docs/RESOURCE_PLAN.md](docs/RESOURCE_PLAN.md)                            |
-| Demo script               | [docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md)                                |
-| Decisions                 | [docs/DECISIONS.md](docs/DECISIONS.md)                                    |
-| Risk register             | [docs/RISK_REGISTER.md](docs/RISK_REGISTER.md)                            |
-| Reviewer checklist        | [docs/REVIEWER_CHECKLIST.md](docs/REVIEWER_CHECKLIST.md)                  |
-| Evidence folder rules     | [docs/evidence/stage-1/README.md](docs/evidence/stage-1/README.md)        |
+| Review area               | Entry point                                                                      |
+| ------------------------- | -------------------------------------------------------------------------------- |
+| Main reviewer pack        | [docs/stages/STAGE_1_5_REVIEWER_PACK.md](docs/stages/STAGE_1_5_REVIEWER_PACK.md) |
+| Threat model              | [docs/THREAT_MODEL.md](docs/THREAT_MODEL.md)                                     |
+| Validation matrix         | [docs/VALIDATION.md](docs/VALIDATION.md)                                         |
+| Limitations               | [docs/LIMITATIONS.md](docs/LIMITATIONS.md)                                       |
+| Stage 2 architecture plan | [docs/stages/STAGE_2_ARCHITECTURE.md](docs/stages/STAGE_2_ARCHITECTURE.md)       |
+| Resource plan             | [docs/RESOURCE_PLAN.md](docs/RESOURCE_PLAN.md)                                   |
+| Demo script               | [docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md)                                       |
+| Decisions                 | [docs/DECISIONS.md](docs/DECISIONS.md)                                           |
+| Risk register             | [docs/RISK_REGISTER.md](docs/RISK_REGISTER.md)                                   |
+| Reviewer checklist        | [docs/REVIEWER_CHECKLIST.md](docs/REVIEWER_CHECKLIST.md)                         |
+| Evidence folder rules     | [docs/evidence/stage-1/README.md](docs/evidence/stage-1/README.md)               |
 
 ### What Stage 1 Proves
 
@@ -818,7 +822,7 @@ Project Simurgh is designed to support two parallel delivery modes per platform 
 
 ## 13. Status & License
 
-**Status:** Research prototype and technical demonstrator at `v0.4.18`. Stage 1–2.5 closed the macOS Device Shield loop (metadata-only affinity scanning, signed proofs, HMAC audit chain). Stage 2.6/2.7 added the Windows Device Shield (real-device validated on Windows 10 Pro build 19045) and cross-platform unification. Stage 2.8 added the Linux Display Integrity Research path (X11, Wayland portal probe, XWayland, display-server lock, Ubuntu CI). Three companion research papers are published as Zenodo preprints: the architecture paper ([10.5281/zenodo.20374849](https://doi.org/10.5281/zenodo.20374849)), the voting-adjacent pilot paper ([10.5281/zenodo.20549736](https://doi.org/10.5281/zenodo.20549736)), and the Banking Shield privacy-firewall preprint ([10.5281/zenodo.20675513](https://doi.org/10.5281/zenodo.20675513)). See the [Research Papers](#research-papers) section for full citations and source links. Automated validation covers 331 Node.js tests, 33 Rust tests, 11 Windows .NET tests, and 8 macOS Swift tests (383 total). Not deployed in production. Hardware attestation, notarisation, MDM deployment, and institutional pilot remain future work.
+**Status:** Research prototype and technical demonstrator; current repository baseline `v0.5.0` (the Stage 2 Device Shield is frozen at `v0.4.18`). Stage 1–2.5 closed the macOS Device Shield loop (metadata-only affinity scanning, signed proofs, HMAC audit chain). Stage 2.6/2.7 added the Windows Device Shield (real-device validated on Windows 10 Pro build 19045) and cross-platform unification. Stage 2.8 added the Linux Display Integrity Research path (X11, Wayland portal probe, XWayland, display-server lock, Ubuntu CI). Three companion research papers are published as Zenodo preprints: the architecture paper ([10.5281/zenodo.20374849](https://doi.org/10.5281/zenodo.20374849)), the voting-adjacent pilot paper ([10.5281/zenodo.20549736](https://doi.org/10.5281/zenodo.20549736)), and the Banking Shield privacy-firewall preprint ([10.5281/zenodo.20675513](https://doi.org/10.5281/zenodo.20675513)). See the [Research Papers](#research-papers) section for full citations and source links. Automated validation covers 417 Node.js tests, 33 Rust tests, 11 Windows .NET tests, and 8 macOS Swift tests (469 total). Not deployed in production. Hardware attestation, notarisation, MDM deployment, and institutional pilot remain future work.
 
 **License.** Dual-licensed to keep the work open for research while preventing
 closed-source capture:
@@ -829,7 +833,7 @@ closed-source capture:
   **but** any distributed or network-hosted derivative must also be released
   under the AGPL with source available. This blocks a third party from taking
   the work into a proprietary product while keeping it fully usable for research.
-- **Research papers and manuscripts** under `Papers/`: **Creative Commons
+- **Research papers and manuscripts** under `papers/`: **Creative Commons
   Attribution 4.0 International** (CC-BY-4.0) — free to share and adapt with
   attribution.
 

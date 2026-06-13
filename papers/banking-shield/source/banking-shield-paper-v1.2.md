@@ -464,7 +464,7 @@ egress-control guarantee.
 
 The artifact includes the paper, evidence pack, final audit, claim audit, and
 Stage B5-R review-substitute pack under
-`Papers/banking-shield/` (LaTeX build) and `Papers/banking-shield/source/`
+`papers/banking-shield/` (LaTeX build) and `papers/banking-shield/source/`
 (markdown drafts, audits, and review pack). The Stage B5-R pack simulates five
 external-style hostile reviews (privacy/security, banking governance, HCI,
 AI safety, and reject-oriented reviewer #2 attack) and records author responses
@@ -584,7 +584,7 @@ This paper was drafted with substantial assistance from a frontier language
 model operating under a logged, evidence-pack-constrained protocol
 (`docs/research/banking-pilot/stage-b5-model-paper/`): the model synthesised,
 critiqued, and drafted; it validated nothing. A second model-assisted
-independent-style review stage (`Papers/banking-shield/source/review/`)
+independent-style review stage (`papers/banking-shield/source/review/`)
 simulated five hostile reviewer roles and produced an author response before
 this v1.2 preprint candidate. All factual statements trace to automated gate
 results, generated fixtures, frozen aggregate evidence, and explicit audit
