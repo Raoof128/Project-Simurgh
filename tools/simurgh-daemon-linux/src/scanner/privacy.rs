@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 #[derive(Debug, Clone, Copy)]
 pub struct RawX11Counts {
     pub managed_window_count: u32,

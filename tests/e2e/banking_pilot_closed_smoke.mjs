@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// SPDX-License-Identifier: AGPL-3.0-or-later
 function assertSmoke(condition, message, detail) {
   if (!condition) {
     throw new Error(detail ? `${message}: ${JSON.stringify(detail)}` : message);

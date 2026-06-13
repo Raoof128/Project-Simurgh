@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 //! Wayland portal probe — `portal_advertised` (cheap DBus name check) and
 //! `portal_active` (no-consent capability probe — property read only, NEVER
 //! a session-creation call). Never starts a ScreenCast session. Falls back

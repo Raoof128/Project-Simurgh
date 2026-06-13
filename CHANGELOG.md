@@ -1,5 +1,21 @@
 ## Change Log
 
+## [spdx-headers-tests-native] — 2026-06-13 — SPDX headers for tests/ and native tools/ (Rust/Swift/.NET)
+
+**Raouf:** Completed the SPDX header pass — added `SPDX-License-Identifier: AGPL-3.0-or-later` to the remaining 161 git-tracked first-party source files: `tests/**` (74 js + 8 mjs) and the native `tools/` subdirs (23 rs, 28 swift, 22 cs, 6 sh). Comment style `//` for js/mjs/rs/swift/cs, `#` for sh; shebang-aware and idempotent; driven off `git ls-files` so build artifacts (`target/`, `.build/`, `obj/`, .NET `bin/`) and untracked/generated files are excluded.
+
+### Fixed
+
+- Restored the executable bit on 8 files (2 e2e `.mjs`, the Linux daemon `install/uninstall/check/doctor` scripts) that the temp-file rewrite had reset — this had briefly broken one test (the stage-2-8d "scripts executable" check).
+
+### Changed
+
+- 161 source files headered (see breakdown above). Hash-pinned fixtures are `.json` and were not touched.
+
+### Verified
+
+- `npm test` 417/417; `cargo check` (Linux daemon) exit 0; `npx prettier --check .` clean; no mode changes; no evidence-fixture churn. Swift/.NET suites not run in this environment (line-comment headers are syntactically safe; no Rust crate-level inner-attribute placement issues).
+
 ## [banking-shield-zenodo-doi] — 2026-06-13 — Wire minted Zenodo DOI 10.5281/zenodo.20675513
 
 **Raouf:** Wired the minted Banking Shield Zenodo DOI (`10.5281/zenodo.20675513`) into the paper and repository.

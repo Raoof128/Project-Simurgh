@@ -2,6 +2,18 @@
 
 ## Agent Change Log
 
+### 2026-06-13 (Australia/Sydney) — SPDX headers for tests/ and native tools/ (Rust/Swift/.NET)
+
+**Raouf:**
+
+- **Scope:** Completed the SPDX header pass over the remaining first-party source the earlier pass deferred. Driven off `git ls-files` so build artifacts (`target/`, `.build/`, `obj/`, .NET `bin/`) and untracked files are excluded.
+- **Summary:** Added `SPDX-License-Identifier: AGPL-3.0-or-later` to 161 files: `tests/**` (74 js + 8 mjs) and native `tools/` (23 rs, 28 swift, 22 cs, 6 sh). Comment style `//` (js/mjs/rs/swift/cs) or `#` (sh); shebang-aware; idempotent. The temp-file rewrite initially reset the executable bit on 8 files (2 e2e `.mjs` and the Linux daemon install/uninstall/check/doctor scripts), which broke one test; restored +x and re-verified. Hash-pinned fixtures are `.json` and untouched.
+- **Files changed:** 161 source files + `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `npm test` 417/417; `cargo check` (Linux daemon) exit 0; `npx prettier --check .` clean; no mode changes; no evidence-fixture churn. Swift/.NET test suites not run in this environment (line-comment headers are syntactically safe; verified no Rust crate-level inner-attribute placement issues).
+- **Follow-ups:** None — all first-party source now carries SPDX headers.
+
+---
+
 ### 2026-06-13 (Australia/Sydney) — Banking Shield: wire minted Zenodo DOI
 
 **Raouf:**

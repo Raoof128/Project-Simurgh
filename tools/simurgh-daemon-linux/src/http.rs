@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 use axum::{routing::get, routing::post, Json, Router};
 use serde::{Deserialize, Serialize};
 use tower_http::limit::RequestBodyLimitLayer;

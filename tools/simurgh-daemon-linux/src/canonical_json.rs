@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 use serde_json::{Map, Value};
 
 pub fn canonicalise(value: &Value) -> String {

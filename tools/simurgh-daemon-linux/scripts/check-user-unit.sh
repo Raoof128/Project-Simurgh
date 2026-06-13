@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: AGPL-3.0-or-later
 # Verify (read-only) whether the Project Simurgh Linux daemon user unit is
 # installed and consistent. Exits 0 if installed cleanly, 1 if not installed,
 # 2 if installed but inconsistent.
