@@ -25,6 +25,7 @@
 
 - Stage 3B: adversarial/obfuscated fixtures expected to lower the block rate to a realistic benchmark; `warning` verdict; full 100+50 corpus.
 - Add `security-audit-llm-shield.sh` / `privacy-audit-llm-shield.mjs` to make the metadata-only claim a standing gate (currently unit-tested only).
+
 ## [readme-audit-presentation] — 2026-06-13 — README professionalization audit + paper-folder casing fix
 
 **Raouf:** Full audit of the root `README.md` for research-presentation readiness, plus the cross-platform folder-casing bug it surfaced.

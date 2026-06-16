@@ -11,6 +11,7 @@
 - **Files changed:** `src/llmShield/{promptNormalise,promptFirewall,mockLlmProvider,safetyReceipt,llmShieldAudit,llmShieldRouter}.js`, `server.js`, `.env.example`, `tests/unit/llmShield/*.test.js`, `tests/e2e/llm_shield_{fixture_runner,direct_jailbreak_smoke,receipt_verify_smoke}.mjs`, `scripts/smoke-llm-shield.sh`, `docs/evidence/stage-3a-llm-shield/**`, `docs/stages/STAGE_3A_LLM_SHIELD.md`, `docs/superpowers/specs/2026-06-16-stage-3a-alpha-llm-shield-design.md`, `docs/superpowers/plans/2026-06-16-stage-3a-alpha-llm-shield.md`, `AGENT.md`, `CHANGELOG.md`.
 - **Verification:** `npm test` 449/449 (32 new `llmShield` tests, no regressions); `scripts/smoke-llm-shield.sh` all gates pass (attack_block_rate 100% 11/11, benign_pass_rate 100% 5/5, false_positive_rate 0%); `npx prettier --check .` clean.
 - **Follow-ups:** Stage 3B adds adversarial/obfuscated fixtures (expected to lower the block rate to a realistic number), the `warning` verdict, and the full 100+50 corpus. Add `security-audit-llm-shield.sh` / `privacy-audit-llm-shield.mjs` so the metadata-only privacy claim becomes a standing gate rather than unit-tested only.
+
 ### 2026-06-13 (Australia/Sydney) — README professionalization audit + paper-folder casing fix
 
 **Raouf:**
