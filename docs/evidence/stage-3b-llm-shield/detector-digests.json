@@ -1,0 +1,4 @@
+{
+  "src/llmShield/promptFirewall.js": "sha256:99eb4c8fa76900e0a1e168e620b7ae4c42ea84e90a0fd5bb7077fc74d365c900",
+  "src/llmShield/promptNormalise.js": "sha256:e84a387cef069636d76571b2821ea40ddfd0b9f2d66bf931b909217f36c00a43"
+}
