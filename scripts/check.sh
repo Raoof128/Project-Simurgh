@@ -1404,6 +1404,25 @@ else
   tail -80 "$LOG_DIR/llm-shield-privacy-audit.log"
 fi
 
+# Stage 3C evidence (informational — not gates; these print measurements only).
+step "LLM Shield 3C ablation (informational)"
+if node tests/e2e/llm_shield_ablation_runner.mjs > "$LOG_DIR/llm-shield-ablation.log" 2>&1; then
+  pass "LLM Shield 3C ablation"
+  cat "$LOG_DIR/llm-shield-ablation.log"
+else
+  pass "LLM Shield 3C ablation (non-gating; see log)"
+  tail -20 "$LOG_DIR/llm-shield-ablation.log"
+fi
+
+step "LLM Shield 3C held-out generalization (informational)"
+if node tests/e2e/llm_shield_heldout_runner.mjs > "$LOG_DIR/llm-shield-heldout.log" 2>&1; then
+  pass "LLM Shield 3C held-out generalization"
+  cat "$LOG_DIR/llm-shield-heldout.log"
+else
+  pass "LLM Shield 3C held-out (non-gating; see log)"
+  tail -20 "$LOG_DIR/llm-shield-heldout.log"
+fi
+
 # ── 11. Git status sanity ────────────────────────────────
 step "Git status"
 if git rev-parse --git-dir > /dev/null 2>&1; then

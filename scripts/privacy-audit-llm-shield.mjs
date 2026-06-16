@@ -54,6 +54,26 @@ for (const f of await readdir("src/llmShield")) {
 }
 ok("no prompt logging in shield source");
 
+// 5. Warning/blocked/safe receipt builders expose no raw-text keys (3C warning tier).
+//    The whole safetyReceipt.js is scanned, so buildWarningReceipt is covered here.
+const receiptSrc = await readFile("src/llmShield/safetyReceipt.js", "utf8");
+/(^|[^_])\binput\s*:|(^|[^_])\boutput\s*:/m.test(
+  receiptSrc.replace(/input_hash|normalised_input_hash/g, "")
+)
+  ? fail("safetyReceipt.js may expose raw input/output")
+  : ok("warning/blocked/safe receipts are hash-only");
+
+// 6. Stage 3C held-out runner is measurement-only: it must not write evidence files
+//    (fixtures may hold payloads, but no generated metrics file should persist them).
+{
+  const heldoutDir = "docs/research/llm-shield/evidence/stage-3c/heldout";
+  const entries = await readdir(heldoutDir);
+  const nonFixture = entries.filter((f) => f.endsWith(".json") === false);
+  nonFixture.length === 0
+    ? ok("held-out dir holds only fixtures (no generated evidence)")
+    : fail(`held-out dir has unexpected generated files: ${nonFixture.join(", ")}`);
+}
+
 console.log("");
 if (failures > 0) {
   console.error(`privacy-audit-llm-shield: ${failures} failure(s)`);
