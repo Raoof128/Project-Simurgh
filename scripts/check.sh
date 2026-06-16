@@ -1380,6 +1380,30 @@ else
   tail -100 "$LOG_DIR/banking-full-e2e-smoke.log"
 fi
 
+step "LLM Shield 3B benchmark smoke"
+if scripts/smoke-llm-shield-bench.sh > "$LOG_DIR/llm-shield-bench-smoke.log" 2>&1; then
+  pass "LLM Shield 3B benchmark smoke"
+else
+  fail "LLM Shield 3B benchmark smoke"
+  tail -80 "$LOG_DIR/llm-shield-bench-smoke.log"
+fi
+
+step "LLM Shield security audit"
+if scripts/security-audit-llm-shield.sh > "$LOG_DIR/llm-shield-security-audit.log" 2>&1; then
+  pass "LLM Shield security audit"
+else
+  fail "LLM Shield security audit"
+  tail -80 "$LOG_DIR/llm-shield-security-audit.log"
+fi
+
+step "LLM Shield privacy audit"
+if node scripts/privacy-audit-llm-shield.mjs > "$LOG_DIR/llm-shield-privacy-audit.log" 2>&1; then
+  pass "LLM Shield privacy audit"
+else
+  fail "LLM Shield privacy audit"
+  tail -80 "$LOG_DIR/llm-shield-privacy-audit.log"
+fi
+
 # ── 11. Git status sanity ────────────────────────────────
 step "Git status"
 if git rev-parse --git-dir > /dev/null 2>&1; then

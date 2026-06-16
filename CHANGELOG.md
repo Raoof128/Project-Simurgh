@@ -1,5 +1,40 @@
 ## Change Log
 
+## [stage-3b-adversarial-llm-shield] — 2026-06-16 — Adversarial LLM Shield benchmark (Stage 3B)
+
+**Raouf:** Added a frozen, style-diverse adversarial benchmark that measures the **unchanged** Stage 3A-alpha detector — recording exactly which attacks are blocked vs missed, catalogued by attack style, rather than claiming jailbreak immunity. The scientific point is the separation `ground_truth` (what a case is) vs `baseline_verdict` (what the unchanged detector does): a malicious prompt with `baseline_verdict: safe` is the benchmark doing its job, not a CI failure. The detector is digest-frozen — `promptFirewall.js`/`promptNormalise.js` are unchanged and the security audit fails if they drift. Hardening is deferred to a later stage measured against this frozen corpus. Baseline result: the naive detector blocks 2/30 obfuscated attacks, passes 10/10 clean-benign, and false-positives on 2/5 hard-negatives.
+
+### Added
+
+- `tests/e2e/llm_shield_bench_lib.mjs` — pure helpers: `ATTACK_STYLES` enum (13), `sortReasonCodes`, `validateCorpus` (unique `case_id` + enum + `payload_hash`), `computeMetrics`.
+- `tests/e2e/llm_shield_bench_runner.mjs` — CI mode (asserts frozen baseline + payload_hash + metrics, writes nothing) and `--update-baseline` writer mode (the only writer).
+- `docs/evidence/stage-3b-llm-shield/fixtures/**` — 30 adversarial (10 styles × 3) + 15 benign (5 normal-task, 5 ai-safety-question, 5 hard-negative).
+- `docs/evidence/stage-3b-llm-shield/{metrics.json,detector-digests.json,README.md}` — committed deterministic metrics, frozen detector hashes, reproduce docs.
+- `scripts/smoke-llm-shield-bench.sh`, `scripts/security-audit-llm-shield.sh` (boundary checks + detector-digest freeze; no `npm audit`), `scripts/privacy-audit-llm-shield.mjs` (raw payloads only in fixtures; generated evidence metadata-only).
+- `tests/unit/llmShield/benchLib.test.js` — 7 unit tests for the pure helpers.
+- `docs/stages/STAGE_3B_LLM_SHIELD_BENCHMARK.md` — stage doc, figures, non-claims.
+
+### Changed
+
+- `scripts/check.sh` — wired in three new gates (bench smoke, security audit, privacy audit).
+
+### Deviation from spec
+
+- `benign_pass_rate == 100%` split into gated `clean_benign_pass_rate` (10 plainly-benign) + measured-not-gated `hard_negative_false_positive_rate` (5 hard-negatives), since hard-negatives exist to surface false positives, not be forced to zero.
+
+### Verified
+
+- `npm test` — 456/456 pass (7 new `benchLib` tests, no regressions).
+- `scripts/smoke-llm-shield-bench.sh` — baseline frozen, no drift.
+- `scripts/security-audit-llm-shield.sh` — 7/7. `node scripts/privacy-audit-llm-shield.mjs` — PASS.
+- `npx prettier --check .` — clean.
+
+### Follow-ups
+
+- Hardening stage: obfuscation normalisation + `warning` verdict, measured against this frozen corpus for an honest before/after delta.
+
+---
+
 ## [stage-3a-alpha-llm-shield] — 2026-06-16 — LLM Shield seed crystal (Stage 3A-alpha)
 
 **Raouf:** Shipped the first slice of the Simurgh LLM Shield: an input-only safety boundary that classifies user input for direct prompt-injection and system-prompt-extraction attempts _before_ model invocation, calls only a deterministic local mock provider for safe input, skips the provider for blocked input, and emits a metadata-only safety receipt linked to a per-session HMAC audit chain. A fourth shield grafted onto the existing spine — reuses `src/audit/hmacChain.js`, `src/security/sessionToken.js`, and `src/storage/memoryStore.js` directly, and mirrors the Banking Shield AI-firewall pattern (construct what is allowed, reject what is not, log rejections without recording prohibited values). No untrusted `contexts[]`, tool gate, output firewall, obfuscation handling, live model, or UI — all explicitly deferred to Stages 3B–3F. Detection is deterministic phrase matching with negation-awareness; the alpha corpus is small and partly denylist-aligned, so the 100% block rate is not broad jailbreak resistance (documented in the stage doc benchmark caveat).

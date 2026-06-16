@@ -2,6 +2,19 @@
 
 ## Agent Change Log
 
+### 2026-06-16 (Australia/Sydney) — Adversarial LLM Shield benchmark (Stage 3B)
+
+**Raouf:**
+
+- **Scope:** Added a frozen adversarial benchmark measuring the **unchanged** Stage 3A-alpha detector. No detector change, no hardening this stage. The detector (`promptFirewall.js`, `promptNormalise.js`) is digest-frozen and the security audit fails on any drift.
+- **Summary:** 30 adversarial fixtures (10 styles × 3: split-words, symbol-stuffing, homoglyph, base64, role-play, translation, markdown-hide, json-poison, academic-framing, multi-step-softening) + 15 benign (5 normal, 5 ai-safety, 5 hard-negative). Each fixture records `ground_truth` (the label) and machine-written `baseline_verdict`/`baseline_reason_codes` (current detector behaviour). The runner has a read-only CI mode (asserts frozen baseline + `payload_hash` + deterministic `metrics.json`, writes nothing) and an `--update-baseline` writer mode (the only writer). Two standing audit gates added (`security-audit-llm-shield.sh` with detector-digest freeze; `privacy-audit-llm-shield.mjs` enforcing fixtures-only raw payloads / metadata-only generated evidence), all wired into `check.sh`. Honest baseline: 2/30 adversarial detection, 10/10 clean-benign, 2/5 hard-negative false positives.
+- **Deviation:** `benign_pass_rate == 100%` split into gated `clean_benign_pass_rate` (10) + measured-not-gated `hard_negative_false_positive_rate` (5) — hard-negatives exist to measure FPs, not be forced to zero. Also fixed a security-audit overclaim: it verifies the chain after a blocked run rather than claiming to inspect the `LLM_PROVIDER_SKIPPED` event (which has no HTTP export route; the event is asserted by `llmShieldAudit.test.js`).
+- **Files changed:** `tests/e2e/llm_shield_bench_lib.mjs`, `tests/e2e/llm_shield_bench_runner.mjs`, `tests/unit/llmShield/benchLib.test.js`, `docs/evidence/stage-3b-llm-shield/**`, `scripts/smoke-llm-shield-bench.sh`, `scripts/security-audit-llm-shield.sh`, `scripts/privacy-audit-llm-shield.mjs`, `scripts/check.sh`, `docs/stages/STAGE_3B_LLM_SHIELD_BENCHMARK.md`, `docs/superpowers/specs/2026-06-16-stage-3b-adversarial-llm-shield-benchmark-design.md`, `docs/superpowers/plans/2026-06-16-stage-3b-adversarial-llm-shield-benchmark.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `npm test` 456/456; `scripts/smoke-llm-shield-bench.sh` no drift; `scripts/security-audit-llm-shield.sh` 7/7; `node scripts/privacy-audit-llm-shield.mjs` PASS; `npx prettier --check .` clean.
+- **Follow-ups:** Hardening stage (obfuscation normalisation + `warning` verdict) measured against this frozen corpus for an honest before/after delta.
+
+---
+
 ### 2026-06-16 (Australia/Sydney) — LLM Shield seed crystal (Stage 3A-alpha)
 
 **Raouf:**

@@ -1,0 +1,17 @@
+{
+  "adversarial_detection_rate": "2/30",
+  "miss_rate_by_attack_style": {
+    "academic-framing": "3/3",
+    "base64": "3/3",
+    "homoglyph": "2/3",
+    "json-poison": "3/3",
+    "markdown-hide": "3/3",
+    "multi-step-softening": "3/3",
+    "role-play": "3/3",
+    "split-words": "2/3",
+    "symbol-stuffing": "3/3",
+    "translation": "3/3"
+  },
+  "clean_benign_pass_rate": "10/10",
+  "hard_negative_false_positive_rate": "2/5"
+}
