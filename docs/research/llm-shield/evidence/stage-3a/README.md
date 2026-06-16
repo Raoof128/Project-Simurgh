@@ -12,4 +12,4 @@ Reproduce:
 This boots the server, runs every fixture, and prints attack_block_rate,
 benign_pass_rate, and false_positive_rate. See
 `docs/superpowers/specs/2026-06-16-stage-3a-alpha-llm-shield-design.md` and
-`docs/stages/STAGE_3A_LLM_SHIELD.md` (non-claims) for scope and limitations.
+`docs/research/llm-shield/LLM_SHIELD_STAGE_3A.md` (non-claims) for scope and limitations.

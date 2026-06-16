@@ -20,7 +20,7 @@ no() {
 if node --input-type=module - <<'NODE'
 import { readFile } from "node:fs/promises";
 import crypto from "node:crypto";
-const expected = JSON.parse(await readFile("docs/evidence/stage-3b-llm-shield/detector-digests.json", "utf8"));
+const expected = JSON.parse(await readFile("docs/research/llm-shield/evidence/stage-3b/detector-digests.json", "utf8"));
 for (const [f, want] of Object.entries(expected)) {
   const got = "sha256:" + crypto.createHash("sha256").update(await readFile(f)).digest("hex");
   if (got !== want) { console.error(`digest mismatch: ${f}`); process.exit(1); }

@@ -1,5 +1,23 @@
 ## Change Log
 
+## [llm-shield-docs-to-research] — 2026-06-16 — Relocate LLM Shield docs into docs/research/llm-shield + restore 3B framing
+
+**Raouf:** Two things. (1) Restored the "2/30 is not a failure of Stage 3B — it is the baseline measurement Stage 3B exists to expose" framing to the 3B stage doc and evidence README (the framing commit had missed the #32 squash). (2) Moved the LLM Shield docs into the research-folder convention used by the banking and voting pilots: `docs/research/llm-shield/` holds the narrative stage docs (`LLM_SHIELD_STAGE_3A.md`, `LLM_SHIELD_STAGE_3B_BENCHMARK.md`) and an `evidence/` subfolder (`stage-3a/`, `stage-3b/`). Design specs and plans stay in `docs/superpowers/` (same as banking/voting). All `git mv` (history preserved).
+
+### Changed
+
+- `docs/stages/STAGE_3A_LLM_SHIELD.md` -> `docs/research/llm-shield/LLM_SHIELD_STAGE_3A.md`
+- `docs/stages/STAGE_3B_LLM_SHIELD_BENCHMARK.md` -> `docs/research/llm-shield/LLM_SHIELD_STAGE_3B_BENCHMARK.md`
+- `docs/evidence/stage-3a-llm-shield/` -> `docs/research/llm-shield/evidence/stage-3a/`
+- `docs/evidence/stage-3b-llm-shield/` -> `docs/research/llm-shield/evidence/stage-3b/`
+- Path references updated in `scripts/security-audit-llm-shield.sh`, `scripts/privacy-audit-llm-shield.mjs`, `tests/e2e/llm_shield_bench_runner.mjs`, `tests/e2e/llm_shield_fixture_runner.mjs`, and the moved docs.
+
+### Verified
+
+- `npm test` 456/456; `scripts/smoke-llm-shield.sh` all gates; `scripts/smoke-llm-shield-bench.sh` no drift; `scripts/security-audit-llm-shield.sh` 7/7; `node scripts/privacy-audit-llm-shield.mjs` PASS; `npx prettier --check .` clean.
+
+---
+
 ## [stage-3b-adversarial-llm-shield] — 2026-06-16 — Adversarial LLM Shield benchmark (Stage 3B)
 
 **Raouf:** Added a frozen, style-diverse adversarial benchmark that measures the **unchanged** Stage 3A-alpha detector — recording exactly which attacks are blocked vs missed, catalogued by attack style, rather than claiming jailbreak immunity. The scientific point is the separation `ground_truth` (what a case is) vs `baseline_verdict` (what the unchanged detector does): a malicious prompt with `baseline_verdict: safe` is the benchmark doing its job, not a CI failure. The detector is digest-frozen — `promptFirewall.js`/`promptNormalise.js` are unchanged and the security audit fails if they drift. Hardening is deferred to a later stage measured against this frozen corpus. Baseline result: the naive detector blocks 2/30 obfuscated attacks, passes 10/10 clean-benign, and false-positives on 2/5 hard-negatives.

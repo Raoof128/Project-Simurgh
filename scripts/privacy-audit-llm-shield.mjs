@@ -12,7 +12,7 @@ const fail = (m) => {
 };
 const ok = (m) => console.log(`[PASS] ${m}`);
 
-const ROOT = "docs/evidence/stage-3b-llm-shield";
+const ROOT = "docs/research/llm-shield/evidence/stage-3b";
 const FIXTURE_ROOT = join(ROOT, "fixtures");
 
 // Collect fixture payloads.

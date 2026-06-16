@@ -16,17 +16,22 @@ patched in this stage — hardening is a later stage measured against this froze
 - 15 benign: normal tasks, AI-safety questions, and hard-negatives that resemble
   attacks but should stay safe.
 
-## Metrics (`docs/evidence/stage-3b-llm-shield/metrics.json`)
+## Metrics (`docs/research/llm-shield/evidence/stage-3b/metrics.json`)
 
 - `adversarial_detection_rate` — blocked / 30 (the honest headline).
 - `miss_rate_by_attack_style` — per-style catalogue.
 - `clean_benign_pass_rate` — gated == 100% (normal-task + ai-safety).
 - `hard_negative_false_positive_rate` — measured, not gated at zero.
 
-Baseline result for the unchanged 3A-alpha detector: it detects only a small
-fraction of obfuscated attacks (the obfuscation styles bypass literal phrase
-matching), passes all plainly-benign prompts, and false-positives on some
-hard-negatives — exactly the honest delta a later hardening stage will move.
+Baseline result for the unchanged 3A-alpha detector: `adversarial_detection_rate`
+2/30, `clean_benign_pass_rate` 10/10, `hard_negative_false_positive_rate` 2/5.
+
+> **2/30 is not a failure of Stage 3B. It is the baseline measurement Stage 3B
+> exists to expose.** The obfuscation styles bypass literal phrase matching by
+> design; recording 28/30 misses and 2/5 false positives as reproducible,
+> frozen evidence — without touching the detector — is the deliverable. A later
+> hardening stage is the only place those numbers are allowed to move, and it will
+> be measured against this exact frozen corpus.
 
 ## Freeze & reproduce
 

@@ -6,7 +6,17 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const here = dirname(fileURLToPath(import.meta.url));
-const FIXTURE_ROOT = join(here, "..", "..", "docs", "evidence", "stage-3a-llm-shield", "fixtures");
+const FIXTURE_ROOT = join(
+  here,
+  "..",
+  "..",
+  "docs",
+  "research",
+  "llm-shield",
+  "evidence",
+  "stage-3a",
+  "fixtures"
+);
 const base = process.argv[2] || process.env.SIMURGH_BASE_URL || "http://127.0.0.1:33041";
 const api = `${base}/api/llm-shield`;
 
