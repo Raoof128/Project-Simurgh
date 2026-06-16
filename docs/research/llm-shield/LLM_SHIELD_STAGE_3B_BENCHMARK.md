@@ -16,7 +16,7 @@ patched in this stage — hardening is a later stage measured against this froze
 - 15 benign: normal tasks, AI-safety questions, and hard-negatives that resemble
   attacks but should stay safe.
 
-## Metrics (`docs/evidence/stage-3b-llm-shield/metrics.json`)
+## Metrics (`docs/research/llm-shield/evidence/stage-3b/metrics.json`)
 
 - `adversarial_detection_rate` — blocked / 30 (the honest headline).
 - `miss_rate_by_attack_style` — per-style catalogue.

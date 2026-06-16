@@ -9,7 +9,7 @@ import { hashPrompt } from "../../src/llmShield/promptNormalise.js";
 import { validateCorpus, sortReasonCodes, computeMetrics } from "./llm_shield_bench_lib.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
-const ROOT = join(here, "..", "..", "docs", "evidence", "stage-3b-llm-shield");
+const ROOT = join(here, "..", "..", "docs", "research", "llm-shield", "evidence", "stage-3b");
 const FIXTURE_ROOT = join(ROOT, "fixtures");
 const METRICS_PATH = join(ROOT, "metrics.json");
 const UPDATE = process.argv.includes("--update-baseline");

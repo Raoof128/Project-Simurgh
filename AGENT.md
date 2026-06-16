@@ -2,6 +2,18 @@
 
 ## Agent Change Log
 
+### 2026-06-16 (Australia/Sydney) — Relocate LLM Shield docs to docs/research/llm-shield + restore 3B framing
+
+**Raouf:**
+
+- **Scope:** Doc reorganisation only (no detector, gate logic, or benchmark-value changes). (1) Restored the "2/30 is not a failure" framing to the 3B stage doc + evidence README (missed in the #32 squash). (2) Moved LLM Shield docs into the research-folder convention used by banking/voting pilots.
+- **Summary:** `docs/research/llm-shield/` now holds `LLM_SHIELD_STAGE_3A.md`, `LLM_SHIELD_STAGE_3B_BENCHMARK.md`, and `evidence/{stage-3a,stage-3b}/` (fixtures, metrics.json, detector-digests.json, READMEs). Design specs/plans stay in `docs/superpowers/` (consistent with banking/voting). All moves via `git mv`. Updated the four code path references (security audit, privacy audit, both e2e runners) and the in-doc path references. Detector digests and the frozen baseline are unchanged — only their location moved.
+- **Files changed:** moved `docs/stages/STAGE_3A_LLM_SHIELD.md`, `docs/stages/STAGE_3B_LLM_SHIELD_BENCHMARK.md`, `docs/evidence/stage-3a-llm-shield/**`, `docs/evidence/stage-3b-llm-shield/**` into `docs/research/llm-shield/`; edited `scripts/security-audit-llm-shield.sh`, `scripts/privacy-audit-llm-shield.mjs`, `tests/e2e/llm_shield_bench_runner.mjs`, `tests/e2e/llm_shield_fixture_runner.mjs`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `npm test` 456/456; `scripts/smoke-llm-shield.sh` all gates; `scripts/smoke-llm-shield-bench.sh` no drift; `scripts/security-audit-llm-shield.sh` 7/7; `node scripts/privacy-audit-llm-shield.mjs` PASS; `npx prettier --check .` clean.
+- **Follow-ups:** Historical specs/plans (`docs/superpowers/**`) and prior changelog entries still cite the old `docs/evidence/...` paths; left as point-in-time records (same as banking specs were not rewritten).
+
+---
+
 ### 2026-06-16 (Australia/Sydney) — Adversarial LLM Shield benchmark (Stage 3B)
 
 **Raouf:**
