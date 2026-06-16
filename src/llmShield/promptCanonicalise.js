@@ -9,13 +9,31 @@
 // Curated confusables (look-alike -> ASCII). Intentionally small and auditable.
 const HOMOGLYPHS = Object.freeze({
   // Cyrillic
-  А: "a", а: "a", Е: "e", е: "e",
-  О: "o", о: "o", Р: "p", р: "p",
-  С: "c", с: "c", Х: "x", х: "x",
-  І: "i", і: "i", Һ: "h", ԁ: "d",
+  А: "a",
+  а: "a",
+  Е: "e",
+  е: "e",
+  О: "o",
+  о: "o",
+  Р: "p",
+  р: "p",
+  С: "c",
+  с: "c",
+  Х: "x",
+  х: "x",
+  І: "i",
+  і: "i",
+  Һ: "h",
+  ԁ: "d",
   // Greek
-  Α: "a", α: "a", Ο: "o", ο: "o",
-  Ε: "e", ε: "e", Ρ: "p", ρ: "p",
+  Α: "a",
+  α: "a",
+  Ο: "o",
+  ο: "o",
+  Ε: "e",
+  ε: "e",
+  Ρ: "p",
+  ρ: "p",
 });
 
 // Leetspeak / symbol substitutions applied only when adjacent to letters (word
@@ -23,7 +41,14 @@ const HOMOGLYPHS = Object.freeze({
 // the attack vocabulary (ignore/instructions) favours 'i'; digits with no letter
 // neighbour (e.g. years like 2026) are left untouched.
 const LEET = Object.freeze({
-  "0": "o", "1": "i", "3": "e", "4": "a", "5": "s", "7": "t", "!": "i", "|": "i",
+  0: "o",
+  1: "i",
+  3: "e",
+  4: "a",
+  5: "s",
+  7: "t",
+  "!": "i",
+  "|": "i",
 });
 
 function foldHomoglyphs(s) {

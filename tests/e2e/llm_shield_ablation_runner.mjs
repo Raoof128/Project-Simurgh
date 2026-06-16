@@ -37,9 +37,18 @@ async function load() {
 // separately in the findings from the digests). The rows show MARGINAL detection
 // added by each stage on a common phrase set — that is the ablation's purpose.
 const CONFIGS = [
-  ["spaced phrase-match only (no canonicalisation)", { canonical: false, heuristics: false, contextGuard: false }],
-  ["+ canonicalisation (homoglyph/leet/compact/base64)", { canonical: true, heuristics: false, contextGuard: false }],
-  ["+ heuristics (role-play/structured/translate)", { canonical: true, heuristics: true, contextGuard: false }],
+  [
+    "spaced phrase-match only (no canonicalisation)",
+    { canonical: false, heuristics: false, contextGuard: false },
+  ],
+  [
+    "+ canonicalisation (homoglyph/leet/compact/base64)",
+    { canonical: true, heuristics: false, contextGuard: false },
+  ],
+  [
+    "+ heuristics (role-play/structured/translate)",
+    { canonical: true, heuristics: true, contextGuard: false },
+  ],
   ["+ context guard (full 3C)", { canonical: true, heuristics: true, contextGuard: true }],
 ];
 

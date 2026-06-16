@@ -1,5 +1,30 @@
 ## Change Log
 
+## [stage-3c-hardening-llm-shield] — 2026-06-16 — LLM Shield hardening (Stage 3C)
+
+**Raouf:** Hardened the LLM Shield detector against the **frozen** Stage 3B corpus with a deterministic canonicalize-then-classify pipeline and a context-sensitive `warning` tier — the first and only stage allowed to change the detector. No corpus payloads edited; the baseline and detector digests were re-frozen via the reviewed `--update-baseline`. Adversarial detection improved **2/30 → 18/30** (blocked 13 + warning 5), clean-benign held at **10/10**, and hard-negative blocked false positives *dropped* **2/5 → 0/5**. An ablation shows canonicalisation drives recall (5→14→18) while the context guard adds zero detection and exists purely to cut false positives (2/5→0/5). A held-out set of 12 new variants, authored after the detector froze and never used to tune it, generalizes to **7/9** adversarial (the two misses are the same semantic styles — academic-framing, multi-step-softening — that miss on the frozen corpus, indicating a real capability ceiling rather than overfitting). Not jailbreak immunity: an application-layer, pre-provider boundary made measurable and auditable.
+
+### Added
+
+- `src/llmShield/promptCanonicalise.js` — homoglyph fold, leet/symbol de-stuffing, base64 decode-for-inspection (decoded before folding; case-sensitive), `signals[]`.
+- `src/llmShield/promptContextGuard.js` — framing-aware deterministic blocked→warning de-escalation (phrase-specific).
+- `warning` verdict end-to-end: warning receipt (`risk_tier`, `signals[]`) + `LLM_INPUT_WARNED` audit event.
+- `tests/e2e/llm_shield_ablation_runner.mjs`, `tests/e2e/llm_shield_heldout_runner.mjs`; `docs/research/llm-shield/evidence/stage-3c/heldout/**` (12 fixtures).
+- `docs/research/llm-shield/{RELATED_WORK.md,STAGE_3C_FINDINGS.md,LLM_SHIELD_STAGE_3C.md}`.
+
+### Changed
+
+- `src/llmShield/promptFirewall.js` (canonical/compact scan + heuristics + warning verdict + ablation `stages` toggle), `safetyReceipt.js` (warning variant, schema `3C`, `signals[]`), `llmShieldAudit.js` (`LLM_INPUT_WARNED` + `recordWarnedRun` + `signals`), `llmShieldRouter.js` (warning route).
+- `tests/e2e/llm_shield_bench_lib.mjs` (warning counts as detection; FP stays blocked-only; `detection_split`).
+- `docs/research/llm-shield/evidence/stage-3b/{fixtures/** (baseline re-snapshot only),metrics.json,detector-digests.json}`.
+- `scripts/{security-audit-llm-shield.sh (schema 3C),privacy-audit-llm-shield.mjs (warning-receipt + held-out checks),check.sh (ablation/held-out informational steps)}`.
+
+### Verified
+
+- Full `npm test`; `scripts/smoke-llm-shield.sh`; `scripts/smoke-llm-shield-bench.sh` no drift; `scripts/security-audit-llm-shield.sh` 7/7; `node scripts/privacy-audit-llm-shield.mjs` PASS; ablation + held-out runners; `npx prettier --check`.
+
+---
+
 ## [llm-shield-docs-to-research] — 2026-06-16 — Relocate LLM Shield docs into docs/research/llm-shield + restore 3B framing
 
 **Raouf:** Two things. (1) Restored the "2/30 is not a failure of Stage 3B — it is the baseline measurement Stage 3B exists to expose" framing to the 3B stage doc and evidence README (the framing commit had missed the #32 squash). (2) Moved the LLM Shield docs into the research-folder convention used by the banking and voting pilots: `docs/research/llm-shield/` holds the narrative stage docs (`LLM_SHIELD_STAGE_3A.md`, `LLM_SHIELD_STAGE_3B_BENCHMARK.md`) and an `evidence/` subfolder (`stage-3a/`, `stage-3b/`). Design specs and plans stay in `docs/superpowers/` (same as banking/voting). All `git mv` (history preserved).

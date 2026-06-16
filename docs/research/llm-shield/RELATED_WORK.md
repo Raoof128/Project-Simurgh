@@ -1,4 +1,5 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
+
 # Simurgh LLM Shield — Related Work and Motivation
 
 This document situates the Simurgh LLM Shield (Stages 3A–3F) within current
@@ -29,13 +30,14 @@ Two statements from Anthropic's own notice anchor this project's framing:
 > attacks."
 
 **Why this matters for Simurgh.** A frontier lab states that perfect resistance
-is not currently achievable and falls back to *defence-in-depth + monitoring +
-rapid mitigation*. Simurgh LLM Shield is an application-layer instantiation of
+is not currently achievable and falls back to _defence-in-depth + monitoring +
+rapid mitigation_. Simurgh LLM Shield is an application-layer instantiation of
 exactly that posture, one layer below the model: it does not claim to prevent
 jailbreaks, but it makes the pre-provider boundary **measurable against a frozen
 corpus** and records every decision as **auditable, metadata-only evidence**.
 
 Sources:
+
 - Anthropic, "Statement on the US government directive to suspend access to Fable 5 and Mythos 5" — https://www.anthropic.com/news/fable-mythos-access
 - TIME — https://time.com/article/2026/06/13/anthropic-fable-mythos-ban-US-security/
 - Fortune — https://fortune.com/2026/06/13/anthropic-disables-fable-mythos-export-controls-national-security-threat/
@@ -50,12 +52,12 @@ kill switches** ("constrain actions, watch behavior, and intervene narrowly"),
 monitoring**, and **treating AI systems as attack surface** under the OWASP LLM
 Top 10. The Shield's mechanisms line up with these recommendations:
 
-| Post-incident guidance (Snyk) | Simurgh LLM Shield mechanism |
-| --- | --- |
-| Guardrails over kill switches; intervene narrowly | `safe` / `warning` / `blocked` tri-state — narrow intervention, not a blanket model shutoff |
-| Insist on evidence and a remediation path | HMAC audit chain + metadata-only receipts (evidence); every bypass becomes a frozen regression fixture (remediation path) |
-| Defence-in-depth + monitoring | Application-layer, pre-provider boundary measured against a frozen corpus |
-| Treat AI as attack surface; OWASP LLM Top 10 | Stage 3C canonicalisation targets OWASP LLM01:2025's documented encoded/multilingual injection scenario |
+| Post-incident guidance (Snyk)                     | Simurgh LLM Shield mechanism                                                                                              |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Guardrails over kill switches; intervene narrowly | `safe` / `warning` / `blocked` tri-state — narrow intervention, not a blanket model shutoff                               |
+| Insist on evidence and a remediation path         | HMAC audit chain + metadata-only receipts (evidence); every bypass becomes a frozen regression fixture (remediation path) |
+| Defence-in-depth + monitoring                     | Application-layer, pre-provider boundary measured against a frozen corpus                                                 |
+| Treat AI as attack surface; OWASP LLM Top 10      | Stage 3C canonicalisation targets OWASP LLM01:2025's documented encoded/multilingual injection scenario                   |
 
 Source: Snyk — https://snyk.io/blog/fable-mythos-suspension-security-takeaways/
 
@@ -64,7 +66,7 @@ Source: Snyk — https://snyk.io/blog/fable-mythos-suspension-security-takeaways
 - **OWASP LLM01:2025 (Prompt Injection).** Recommends layered defences
   including input/output filtering and string-checking against non-allowed
   content, and documents multilingual and encoded injection scenarios. Stage
-  3C's canonicalize-then-classify design is *consistent with* this guidance and
+  3C's canonicalize-then-classify design is _consistent with_ this guidance and
   directly targets the documented encoded/multilingual scenario. We do **not**
   claim OWASP endorses any specific canonicalisation algorithm.
   https://genai.owasp.org/llmrisk/llm01-prompt-injection/
@@ -75,7 +77,7 @@ Source: Snyk — https://snyk.io/blog/fable-mythos-suspension-security-takeaways
 
 ## 4. Detection literature (positioning, not competition)
 
-Simurgh is an *evidence/audit layer*, not a competing state-of-the-art
+Simurgh is an _evidence/audit layer_, not a competing state-of-the-art
 classifier. Recent work supports the design choices rather than being
 out-performed by them:
 

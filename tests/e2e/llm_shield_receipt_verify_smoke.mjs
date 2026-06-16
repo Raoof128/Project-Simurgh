@@ -22,7 +22,7 @@ const safe = await (
 ).json();
 assertSmoke(safe.verdict === "safe" && safe.model_called === true, "safe run failed", safe);
 assertSmoke(safe.receipt?.type === "simurgh.llm_safety_receipt.v1", "missing receipt", safe);
-assertSmoke(safe.receipt?.schema_version === "3A-alpha", "wrong schema_version", safe);
+assertSmoke(safe.receipt?.schema_version === "3C", "wrong schema_version", safe);
 
 const verify = await (
   await fetch(`${api}/${s.session_id}/verify`, {

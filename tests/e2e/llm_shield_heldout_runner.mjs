@@ -33,7 +33,8 @@ for (const f of (await readdir(ROOT)).sort()) {
   fixtures.push(fx);
 }
 const observed = {};
-for (const fx of fixtures) observed[fx.case_id] = classifyPrompt(normalisePrompt(fx.payload)).verdict;
+for (const fx of fixtures)
+  observed[fx.case_id] = classifyPrompt(normalisePrompt(fx.payload)).verdict;
 const m = computeMetrics(fixtures, observed);
 console.log("=== Stage 3C held-out generalization ===");
 console.log(JSON.stringify(m, null, 2));
