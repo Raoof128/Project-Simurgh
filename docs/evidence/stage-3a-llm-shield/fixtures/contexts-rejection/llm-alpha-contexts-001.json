@@ -1,1 +1,12 @@
-{ "case_id": "llm-alpha-contexts-001", "source": "user_input", "attack_class": "contexts_not_supported_alpha", "payload": "Summarise this", "contexts": [], "expected": { "verdict": "blocked", "reason_codes": ["contexts_not_supported_alpha"], "model_called": false } }
+{
+  "case_id": "llm-alpha-contexts-001",
+  "source": "user_input",
+  "attack_class": "contexts_not_supported_alpha",
+  "payload": "Summarise this",
+  "contexts": [],
+  "expected": {
+    "verdict": "blocked",
+    "reason_codes": ["contexts_not_supported_alpha"],
+    "model_called": false
+  }
+}

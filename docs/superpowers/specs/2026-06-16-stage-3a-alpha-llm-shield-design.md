@@ -19,7 +19,7 @@
 ## Research claim earned by this slice
 
 > For a session, direct prompt-injection and system-prompt-extraction attempts in
-> user input are classified and blocked *before* model invocation; benign tasks
+> user input are classified and blocked _before_ model invocation; benign tasks
 > reach a deterministic mock model; every run emits a tamper-evident, metadata-only
 > safety receipt linked to an HMAC audit chain.
 
@@ -36,19 +36,20 @@ reject what is not, record rejections without recording prohibited values).
 
 Reuse map (verified against the codebase):
 
-| Existing module | Reused for |
-| --- | --- |
-| `src/audit/hmacChain.js` (`createChain`/`appendEntry`/`verifyChain`, `CHAIN_CAP`, GENESIS) | per-session audit chain via thin wrapper |
-| `src/bankingPilot/bankingNarrativeOutputFirewall.js` (substring scan + `NEGATED_PRECEDING_PATTERN`) | detection-method pattern for `promptFirewall.js` |
-| `src/bankingPilot/bankingAiPrivacyReceipt.js` (fail-closed enabled/disabled/failed receipt builders, `network_egress_used:false`, narrative hashing) | `safetyReceipt.js` builder pattern |
-| `src/security/sessionToken.js` | session token issue/verify |
-| `src/storage/memoryStore.js` | session + chain storage |
-| `src/privacy/hashIdentity.js` | session-id / input hashing |
-| `src/bankingPilot/index.js` wiring | router wiring into `server.js` |
+| Existing module                                                                                                                                      | Reused for                                       |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| `src/audit/hmacChain.js` (`createChain`/`appendEntry`/`verifyChain`, `CHAIN_CAP`, GENESIS)                                                           | per-session audit chain via thin wrapper         |
+| `src/bankingPilot/bankingNarrativeOutputFirewall.js` (substring scan + `NEGATED_PRECEDING_PATTERN`)                                                  | detection-method pattern for `promptFirewall.js` |
+| `src/bankingPilot/bankingAiPrivacyReceipt.js` (fail-closed enabled/disabled/failed receipt builders, `network_egress_used:false`, narrative hashing) | `safetyReceipt.js` builder pattern               |
+| `src/security/sessionToken.js`                                                                                                                       | session token issue/verify                       |
+| `src/storage/memoryStore.js`                                                                                                                         | session + chain storage                          |
+| `src/privacy/hashIdentity.js`                                                                                                                        | session-id / input hashing                       |
+| `src/bankingPilot/index.js` wiring                                                                                                                   | router wiring into `server.js`                   |
 
 ## Scope
 
 **In scope**
+
 - Single user-input channel (`source = user_input`).
 - Two attack classes: direct jailbreak (`policy_override_attempt`) and
   system-prompt extraction (`system_prompt_exfiltration`).
@@ -58,6 +59,7 @@ Reuse map (verified against the codebase):
 - One smoke gate over a small fixture corpus, emitting a metrics summary.
 
 **Out of scope (each is a named later stage; listed for a clean handoff)**
+
 - Untrusted `contexts[]` + instruction-provenance guard — Stage 3C.
 - Tool invocation gate — Stage 3D.
 - Output firewall for leaked-prompt detection — Stage 3D / 3B.
@@ -194,8 +196,8 @@ Stores hashes, never raw payloads.
 ```
 
 Fail-closed builders mirror Banking Shield (`buildSafeReceipt` / `buildBlockedReceipt`).
-Receipt claim wording: *"the configured Simurgh boundary classified / blocked /
-logged these events for this run"* — never "the model is safe."
+Receipt claim wording: _"the configured Simurgh boundary classified / blocked /
+logged these events for this run"_ — never "the model is safe."
 
 ## Audit events (`llmShieldAudit.js`)
 
@@ -217,6 +219,7 @@ The `LLM_PROVIDER_SKIPPED` event on the blocked path is what makes the
 Smoke and unit tests assert exact ordering, not mere presence.
 
 Blocked path:
+
 ```
 LLM_INPUT_BLOCKED
 LLM_PROVIDER_SKIPPED
@@ -224,6 +227,7 @@ LLM_RECEIPT_EXPORTED
 ```
 
 Safe path:
+
 ```
 LLM_INPUT_ACCEPTED
 LLM_PROVIDER_CALLED
@@ -321,7 +325,7 @@ verbatim:
 - Not a universal content-moderation system.
 - No network-egress guarantee absent host-level controls.
 - Phrase matching is incomplete by construction.
-- Receipts attest *process, not ground truth*.
+- Receipts attest _process, not ground truth_.
 
 ## Non-goals reminder
 

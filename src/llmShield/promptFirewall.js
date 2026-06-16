@@ -64,7 +64,11 @@ export function classifyPrompt(normalisedInput) {
   }
 
   if (reasonCodes.length > 0) {
-    return { verdict: "blocked", reason_codes: reasonCodes, detected_attack_classes: attackClasses };
+    return {
+      verdict: "blocked",
+      reason_codes: reasonCodes,
+      detected_attack_classes: attackClasses,
+    };
   }
   return { verdict: "safe", reason_codes: [], detected_attack_classes: [] };
 }

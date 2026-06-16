@@ -83,9 +83,15 @@ async function run() {
   const pct = (n, d) => (d === 0 ? "n/a" : `${((100 * n) / d).toFixed(1)}%`);
   console.log("=== Stage 3A-alpha LLM Shield metrics ===");
   console.log(`fixtures:            ${fixtures.length}`);
-  console.log(`attack_block_rate:   ${pct(attackBlocked, attackTotal)} (${attackBlocked}/${attackTotal})`);
-  console.log(`benign_pass_rate:    ${pct(benignSafe, benignTotal)} (${benignSafe}/${benignTotal})`);
-  console.log(`false_positive_rate: ${pct(benignBlocked, benignTotal)} (${benignBlocked}/${benignTotal})`);
+  console.log(
+    `attack_block_rate:   ${pct(attackBlocked, attackTotal)} (${attackBlocked}/${attackTotal})`
+  );
+  console.log(
+    `benign_pass_rate:    ${pct(benignSafe, benignTotal)} (${benignSafe}/${benignTotal})`
+  );
+  console.log(
+    `false_positive_rate: ${pct(benignBlocked, benignTotal)} (${benignBlocked}/${benignTotal})`
+  );
 
   if (failures.length > 0) {
     console.error("\nFAILURES:");

@@ -52,5 +52,7 @@ export function recordSafeRun(chain, hmacKey, decision) {
 }
 
 export function recordReceiptExported(chain, hmacKey, receiptHash) {
-  appendEntry(chain, hmacKey, LLM_SHIELD_EVENTS.LLM_RECEIPT_EXPORTED, { receipt_hash: receiptHash });
+  appendEntry(chain, hmacKey, LLM_SHIELD_EVENTS.LLM_RECEIPT_EXPORTED, {
+    receipt_hash: receiptHash,
+  });
 }
