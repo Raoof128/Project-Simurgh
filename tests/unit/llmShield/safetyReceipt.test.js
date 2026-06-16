@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import {
   buildSafeReceipt,
   buildBlockedReceipt,
+  buildWarningReceipt,
   hashReceipt,
   RECEIPT_TYPE,
   RECEIPT_SCHEMA_VERSION,
@@ -52,5 +53,25 @@ describe("safetyReceipt", () => {
 
   test("hashReceipt returns a sha256-prefixed digest", () => {
     assert.match(hashReceipt(buildSafeReceipt(COMMON)), /^sha256:[0-9a-f]{64}$/);
+  });
+});
+
+describe("Stage 3C warning receipt", () => {
+  test("schema version is 3C", () => {
+    assert.equal(RECEIPT_SCHEMA_VERSION, "3C");
+  });
+
+  test("warning receipt: model called, risk_tier warning, signals carried, no raw text", () => {
+    const r = buildWarningReceipt({
+      ...COMMON,
+      reasonCodes: ["role_play_framing"],
+      detectedAttackClasses: [],
+      signals: ["homoglyph_fold"],
+    });
+    assert.equal(r.verdict, "warning");
+    assert.equal(r.model_called, true);
+    assert.equal(r.risk_tier, "warning");
+    assert.deepEqual(r.signals, ["homoglyph_fold"]);
+    assert.equal(r.privacy_mode, "metadata_only");
   });
 });

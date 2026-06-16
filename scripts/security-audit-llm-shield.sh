@@ -33,7 +33,7 @@ grep -q "OVERRIDE_PHRASES" src/llmShield/promptFirewall.js && ok "denylist prese
 
 # 3. Receipt type + schema_version stable
 if grep -q 'simurgh.llm_safety_receipt.v1' src/llmShield/safetyReceipt.js &&
-  grep -q '"3A-alpha"' src/llmShield/safetyReceipt.js; then
+  grep -q '"3C"' src/llmShield/safetyReceipt.js; then
   ok "receipt schema stable"
 else
   no "receipt schema changed"

@@ -8,6 +8,7 @@ import { appendEntry } from "../audit/hmacChain.js";
 export const LLM_SHIELD_EVENTS = Object.freeze({
   LLM_SESSION_CREATED: "LLM_SESSION_CREATED",
   LLM_INPUT_ACCEPTED: "LLM_INPUT_ACCEPTED",
+  LLM_INPUT_WARNED: "LLM_INPUT_WARNED",
   LLM_INPUT_BLOCKED: "LLM_INPUT_BLOCKED",
   LLM_PROVIDER_CALLED: "LLM_PROVIDER_CALLED",
   LLM_PROVIDER_SKIPPED: "LLM_PROVIDER_SKIPPED",
@@ -22,6 +23,7 @@ export function buildDecisionPayload({
   inputHash,
   normalisedInputHash,
   modelCalled,
+  signals = [],
 }) {
   return {
     verdict,
@@ -30,6 +32,7 @@ export function buildDecisionPayload({
     input_hash: inputHash,
     normalised_input_hash: normalisedInputHash,
     model_called: modelCalled,
+    signals,
   };
 }
 
@@ -46,6 +49,13 @@ export function recordBlockedRun(chain, hmacKey, decision) {
 
 export function recordSafeRun(chain, hmacKey, decision) {
   appendEntry(chain, hmacKey, LLM_SHIELD_EVENTS.LLM_INPUT_ACCEPTED, buildDecisionPayload(decision));
+  appendEntry(chain, hmacKey, LLM_SHIELD_EVENTS.LLM_PROVIDER_CALLED, {});
+  appendEntry(chain, hmacKey, LLM_SHIELD_EVENTS.LLM_OUTPUT_ACCEPTED, {});
+  return chain.prevHash;
+}
+
+export function recordWarnedRun(chain, hmacKey, decision) {
+  appendEntry(chain, hmacKey, LLM_SHIELD_EVENTS.LLM_INPUT_WARNED, buildDecisionPayload(decision));
   appendEntry(chain, hmacKey, LLM_SHIELD_EVENTS.LLM_PROVIDER_CALLED, {});
   appendEntry(chain, hmacKey, LLM_SHIELD_EVENTS.LLM_OUTPUT_ACCEPTED, {});
   return chain.prevHash;

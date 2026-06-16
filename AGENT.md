@@ -2,6 +2,19 @@
 
 ## Agent Change Log
 
+### 2026-06-16 (Australia/Sydney) — LLM Shield hardening (Stage 3C)
+
+**Raouf:**
+
+- **Scope:** First and only stage permitted to change the detector. Hardened the LLM Shield against the **frozen** Stage 3B corpus via a deterministic canonicalize-then-classify pipeline + a context-sensitive `warning` tier, then re-froze the baseline and detector digests. No corpus payloads were edited.
+- **Summary:** Added `promptCanonicalise.js` (homoglyph fold, leet/symbol de-stuffing, base64 decode-for-inspection — decoded **before** folding since base64 is case-sensitive; emits `signals[]`) and `promptContextGuard.js` (framing-aware deterministic de-escalation: blocked→warning only when the _matched_ phrase is quoted/educational). Rewrote `promptFirewall.js` to match over canonical + separator-stripped compact views plus heuristics (role-play / structured-hidden-instruction / translate-then-follow), with an internal `stages` toggle (default all-on; router never passes it) powering the ablation. New `warning` verdict: mock provider still called, metadata-only warning receipt (`risk_tier`, `signals[]`) + `LLM_INPUT_WARNED` audit event. Result: adversarial detection **2/30 → 18/30** (blocked 13 + warning 5), clean-benign **10/10** preserved, hard-negative blocked FP **2/5 → 0/5**. Held-out generalization (12 new post-freeze variants): **7/9** adversarial, 2/2 clean, 0/1 hard-neg FP.
+- **Method (fellowship-grade):** ablation runner reports per-stage detection contribution (5→14 canonicalisation, →18 heuristics, context guard adds 0 detection but drops FP 2/5→0/5); held-out set authored **after** the detector froze and never used to tune; both are measurement-only (no CI threshold). Re-freeze verified immutable fixture fields (`case_id/payload/payload_hash/ground_truth/attack_style`) byte-identical to HEAD; only `baseline_verdict`/`baseline_reason_codes` re-snapshotted via `--update-baseline`; digests recomputed over all four detector files.
+- **Deviation:** A role-play-framed input that _also_ contains a literal exfil phrase hard-`blocks` (safer) rather than warns; the warning tier is for role-play framing without a literal denylist hit. Split into two firewall tests covering both paths.
+- **Files changed:** new `src/llmShield/promptCanonicalise.js`, `src/llmShield/promptContextGuard.js`, `docs/research/llm-shield/{RELATED_WORK.md,STAGE_3C_FINDINGS.md,LLM_SHIELD_STAGE_3C.md}`, `docs/research/llm-shield/evidence/stage-3c/heldout/**`, `tests/e2e/llm_shield_ablation_runner.mjs`, `tests/e2e/llm_shield_heldout_runner.mjs`; modified `src/llmShield/{promptFirewall.js,safetyReceipt.js,llmShieldAudit.js,llmShieldRouter.js}`, `tests/e2e/llm_shield_bench_lib.mjs`, the four `tests/unit/llmShield/*` suites, `docs/research/llm-shield/evidence/stage-3b/{fixtures/**,metrics.json,detector-digests.json}`, `scripts/{security-audit-llm-shield.sh,privacy-audit-llm-shield.mjs,check.sh}`, the 3C spec + plan, `AGENT.md`, `CHANGELOG.md`.
+- **Gotchas:** only `--update-baseline` writes baseline fields; receipt schema bumped to `3C` (security audit greps it); held-out is measurement-only — never tune on it; base64 must be decoded before leet-folding (digits would corrupt the blob).
+
+---
+
 ### 2026-06-16 (Australia/Sydney) — Relocate LLM Shield docs to docs/research/llm-shield + restore 3B framing
 
 **Raouf:**

@@ -2,7 +2,7 @@
 // Stage 3A-alpha LLM Shield routes. Input-only: classifies user input before any
 // model invocation, calls the deterministic mock only for safe input, and emits a
 // metadata-only receipt linked to a per-session HMAC chain. No contexts, no tools,
-// no live model — see docs/research/llm-shield/LLM_SHIELD_STAGE_3A.md.
+// no live model — see docs/research/llm-shield/LLM_SHIELD_STAGE_3C.md.
 import { Router } from "express";
 import crypto from "node:crypto";
 import { createChain, verifyChain } from "../audit/hmacChain.js";
@@ -12,10 +12,16 @@ import { stagingConfig } from "../config/env.js";
 import { normalisePrompt, hashPrompt } from "./promptNormalise.js";
 import { classifyPrompt } from "./promptFirewall.js";
 import { callMockProvider } from "./mockLlmProvider.js";
-import { buildSafeReceipt, buildBlockedReceipt, hashReceipt } from "./safetyReceipt.js";
+import {
+  buildSafeReceipt,
+  buildBlockedReceipt,
+  buildWarningReceipt,
+  hashReceipt,
+} from "./safetyReceipt.js";
 import {
   recordSessionCreated,
   recordSafeRun,
+  recordWarnedRun,
   recordBlockedRun,
   recordReceiptExported,
 } from "./llmShieldAudit.js";
@@ -135,7 +141,42 @@ router.post("/:sessionId/run", requireToken, requirePathMatch, (req, res) => {
       normalisedInputHash,
       reasonCodes: verdict.reason_codes,
       detectedAttackClasses: verdict.detected_attack_classes,
+      signals: verdict.signals ?? [],
       ok: true,
+    });
+  }
+
+  if (verdict.verdict === "warning") {
+    // Warning tier: the mock provider is still invoked, but a warning receipt and
+    // a dedicated audit event record that a contextual signal fired.
+    callMockProvider({ task_type: taskType, input: rawInput });
+    const auditEntryHash = recordWarnedRun(record.auditChain, key, {
+      verdict: "warning",
+      reasonCodes: verdict.reason_codes,
+      detectedAttackClasses: verdict.detected_attack_classes,
+      inputHash,
+      normalisedInputHash,
+      modelCalled: true,
+      signals: verdict.signals ?? [],
+    });
+    const receipt = buildWarningReceipt({
+      sessionIdHash,
+      runId,
+      inputHash,
+      normalisedInputHash,
+      auditEntryHash,
+      timestamp,
+      reasonCodes: verdict.reason_codes,
+      detectedAttackClasses: verdict.detected_attack_classes,
+      signals: verdict.signals ?? [],
+    });
+    recordReceiptExported(record.auditChain, key, hashReceipt(receipt));
+    return res.json({
+      ok: true,
+      verdict: "warning",
+      model_called: true,
+      reason_codes: verdict.reason_codes,
+      receipt,
     });
   }
 
@@ -169,6 +210,7 @@ function finishBlocked(res, ctx) {
     inputHash: ctx.inputHash,
     normalisedInputHash: ctx.normalisedInputHash,
     modelCalled: false,
+    signals: ctx.signals ?? [],
   });
   const receipt = buildBlockedReceipt({
     sessionIdHash: ctx.sessionIdHash,
@@ -177,6 +219,7 @@ function finishBlocked(res, ctx) {
     normalisedInputHash: ctx.normalisedInputHash,
     reasonCodes: ctx.reasonCodes,
     detectedAttackClasses: ctx.detectedAttackClasses,
+    signals: ctx.signals ?? [],
     auditEntryHash,
     timestamp: ctx.timestamp,
   });
