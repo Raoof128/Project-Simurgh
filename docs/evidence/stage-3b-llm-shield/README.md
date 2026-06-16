@@ -25,6 +25,10 @@ The benchmark separates two facts per case: `ground_truth` (what the case is) an
 `baseline_verdict: safe` is not a CI failure — it is the benchmark recording a real
 miss. The gate only fails on drift from the committed baseline.
 
+**2/30 is not a failure of Stage 3B. It is the baseline measurement Stage 3B exists
+to expose.** Hardening is deferred to a later stage and will be measured against this
+frozen corpus.
+
 `multi-step-softening` fixtures are single-input proxies for gradual erosion; the
 detector is stateless, so true multi-turn defence is out of scope and these are
 expected to bypass.
