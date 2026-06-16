@@ -1,11 +1,13 @@
 import { test, describe } from "node:test";
 import assert from "node:assert/strict";
-import { createChain } from "../../../src/audit/hmacChain.js";
+import crypto from "node:crypto";
+import { createChain, verifyChain } from "../../../src/audit/hmacChain.js";
 import {
   LLM_SHIELD_EVENTS,
   buildDecisionPayload,
   recordBlockedRun,
   recordSafeRun,
+  recordWarnedRun,
   recordReceiptExported,
 } from "../../../src/llmShield/llmShieldAudit.js";
 
@@ -37,6 +39,7 @@ describe("llmShieldAudit", () => {
       "model_called",
       "normalised_input_hash",
       "reason_codes",
+      "signals",
       "verdict",
     ]);
   });
@@ -77,5 +80,28 @@ describe("llmShieldAudit", () => {
     const last = chain.entries.at(-1);
     assert.equal(last.type, LLM_SHIELD_EVENTS.LLM_RECEIPT_EXPORTED);
     assert.equal(last.payload.receipt_hash, "sha256:receipt");
+  });
+
+  test("recordWarnedRun appends WARNED -> PROVIDER_CALLED -> OUTPUT_ACCEPTED and verifies", () => {
+    const key = crypto.randomBytes(32);
+    const chain = createChain();
+    recordWarnedRun(chain, key, {
+      verdict: "warning",
+      reasonCodes: ["role_play_framing"],
+      detectedAttackClasses: [],
+      inputHash: "sha256:i",
+      normalisedInputHash: "sha256:n",
+      modelCalled: true,
+      signals: ["homoglyph_fold"],
+    });
+    assert.deepEqual(
+      chain.entries.map((e) => e.type),
+      [
+        LLM_SHIELD_EVENTS.LLM_INPUT_WARNED,
+        LLM_SHIELD_EVENTS.LLM_PROVIDER_CALLED,
+        LLM_SHIELD_EVENTS.LLM_OUTPUT_ACCEPTED,
+      ]
+    );
+    assert.equal(verifyChain(chain, key).valid, true);
   });
 });
