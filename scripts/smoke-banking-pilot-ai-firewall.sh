@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: AGPL-3.0-or-later
 # scripts/smoke-banking-pilot-ai-firewall.sh
 # Banking Shield B4-A AI privacy firewall smoke gate.
 # Spins TWO servers: one flag-on (main flow), one flag-off (503 assertion).

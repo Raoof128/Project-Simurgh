@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 import { containsForbiddenLocalFieldDeep } from "./forbiddenLocalFields.js";
 
 export const DAEMON_EVENTS = Object.freeze({

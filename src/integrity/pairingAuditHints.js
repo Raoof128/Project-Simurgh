@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 import { computeNodeIdHash } from "./proofSignature.js";
 
 const NODE_ID_HASH_PATTERN = /^[0-9a-f]{64}$/;

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 export const MAX_BANKING_PAYLOAD_DEPTH = 20;
 
 export const MAX_DEPTH_SENTINEL = "__max_depth__";

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 // Shared platform/scanner schema. Lifts validateScannerFields out of
 // src/device/daemonProof.js so both the proof validator and any future
 // scanner-only consumers share one truth.

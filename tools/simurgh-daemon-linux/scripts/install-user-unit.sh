@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: AGPL-3.0-or-later
 # Install the Project Simurgh Linux Device Shield daemon as a systemd --user
 # service. Research prototype only. No privilege escalation. No system-wide install.
 #

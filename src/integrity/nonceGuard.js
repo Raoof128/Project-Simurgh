@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 // Per-nonce replay protection for Stage 2 integrity proof submissions.
 //
 // Simplified rule: every nonce can only be used once across the lifetime

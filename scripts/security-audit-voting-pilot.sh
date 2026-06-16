@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: AGPL-3.0-or-later
 # scripts/security-audit-voting-pilot.sh
 # Security and privacy gates for the voting pilot.
 set -euo pipefail

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: AGPL-3.0-or-later
 # Full diagnostic of the simurgh-daemon-linux user unit + binary.
 # Does not echo usernames, hostnames, or home paths.
 #

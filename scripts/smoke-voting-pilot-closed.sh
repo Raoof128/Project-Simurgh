@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: AGPL-3.0-or-later
 # scripts/smoke-voting-pilot-closed.sh
 # Verifies server-side Phase C collection closure (SIMURGH_VOTING_PILOT_COLLECTION_CLOSED=true).
 # Starts a temporary server on port 33034, runs closure gates, then shuts down.

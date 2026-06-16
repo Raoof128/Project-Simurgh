@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// SPDX-License-Identifier: AGPL-3.0-or-later
 // Stage 2.8C/D umbrella E2E smoke.
 //
 // Combines PR #21 + PR #22 coverage:

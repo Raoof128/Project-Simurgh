@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 use crate::scanner::privacy::{
     raw_to_summary, scanner_unavailable, RawX11Counts, X11ScannerSummary,
 };

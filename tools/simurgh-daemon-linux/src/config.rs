@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 use std::net::{IpAddr, Ipv4Addr};
 
 pub const DAEMON_VERSION: &str = "2.8.0";

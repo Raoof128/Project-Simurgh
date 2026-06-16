@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 import crypto from "node:crypto";
 
 export const BANKING_TOKEN_VERSION = "banking-pilot-token-v1";

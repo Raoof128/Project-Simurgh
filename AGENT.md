@@ -11,6 +11,147 @@
 - **Files changed:** `src/llmShield/{promptNormalise,promptFirewall,mockLlmProvider,safetyReceipt,llmShieldAudit,llmShieldRouter}.js`, `server.js`, `.env.example`, `tests/unit/llmShield/*.test.js`, `tests/e2e/llm_shield_{fixture_runner,direct_jailbreak_smoke,receipt_verify_smoke}.mjs`, `scripts/smoke-llm-shield.sh`, `docs/evidence/stage-3a-llm-shield/**`, `docs/stages/STAGE_3A_LLM_SHIELD.md`, `docs/superpowers/specs/2026-06-16-stage-3a-alpha-llm-shield-design.md`, `docs/superpowers/plans/2026-06-16-stage-3a-alpha-llm-shield.md`, `AGENT.md`, `CHANGELOG.md`.
 - **Verification:** `npm test` 449/449 (32 new `llmShield` tests, no regressions); `scripts/smoke-llm-shield.sh` all gates pass (attack_block_rate 100% 11/11, benign_pass_rate 100% 5/5, false_positive_rate 0%); `npx prettier --check .` clean.
 - **Follow-ups:** Stage 3B adds adversarial/obfuscated fixtures (expected to lower the block rate to a realistic number), the `warning` verdict, and the full 100+50 corpus. Add `security-audit-llm-shield.sh` / `privacy-audit-llm-shield.mjs` so the metadata-only privacy claim becomes a standing gate rather than unit-tested only.
+### 2026-06-13 (Australia/Sydney) — README professionalization audit + paper-folder casing fix
+
+**Raouf:**
+
+- **Scope:** Full audit of the root `README.md` for research-presentation readiness (factual accuracy, internal consistency, tone, navigability), plus the cross-platform folder-casing bug it surfaced. README + paper-package only — no runtime code, gates, or evidence touched.
+- **Summary:** (1) Renamed `Papers/banking-shield` → `papers/banking-shield` so all three papers share the lowercase `papers/` root (capital `P` would render as a separate folder on case-sensitive GitHub/Linux — the same bug class that previously 404'd the voting-pilot paper); two-step git rename through a temp name on the case-insensitive macOS FS; updated live in-package path strings and rebuilt `main.pdf`. (2) Fixed a privacy contradiction — §6 `/api/affinity` payload claimed "process names, PIDs," contradicting the no-raw-fields posture — to a metadata-only aggregate. (3) Corrected stale facts: 331→417 Node tests (verified), 383→469 total, baseline `v0.4.18`→`v0.5.0`, removed doubled HR, unified audit param name. (4) Toned down marketing-register claims (Superiority→Coverage, removed unsupported 85%/prompt-caching non-sequitur, hedged Silicon-Valley/orders-of-magnitude/SEB/cost absolutes into design-level expectations). (5) Added a TOC navigation line for the un-numbered narrative sections.
+- **Files changed:** `papers/banking-shield/**` (rename + `main.tex`/`source/v1.2.md` path strings + rebuilt `main.pdf`), root `README.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `npx prettier --check` clean; `npm test` 417/417; no residual `Papers/` references; banking-shield PDF carries the lowercase path; no evidence-fixture churn.
+- **Follow-ups:** Append-only `Papers/...` mentions in prior AGENT.md/CHANGELOG history entries left as-is (they record what was true at the time).
+
+---
+
+### 2026-06-13 (Australia/Sydney) — SPDX headers for tests/ and native tools/ (Rust/Swift/.NET)
+
+**Raouf:**
+
+- **Scope:** Completed the SPDX header pass over the remaining first-party source the earlier pass deferred. Driven off `git ls-files` so build artifacts (`target/`, `.build/`, `obj/`, .NET `bin/`) and untracked files are excluded.
+- **Summary:** Added `SPDX-License-Identifier: AGPL-3.0-or-later` to 161 files: `tests/**` (74 js + 8 mjs) and native `tools/` (23 rs, 28 swift, 22 cs, 6 sh). Comment style `//` (js/mjs/rs/swift/cs) or `#` (sh); shebang-aware; idempotent. The temp-file rewrite initially reset the executable bit on 8 files (2 e2e `.mjs` and the Linux daemon install/uninstall/check/doctor scripts), which broke one test; restored +x and re-verified. Hash-pinned fixtures are `.json` and untouched.
+- **Files changed:** 161 source files + `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `npm test` 417/417; `cargo check` (Linux daemon) exit 0; `npx prettier --check .` clean; no mode changes; no evidence-fixture churn. Swift/.NET test suites not run in this environment (line-comment headers are syntactically safe; verified no Rust crate-level inner-attribute placement issues).
+- **Follow-ups:** None — all first-party source now carries SPDX headers.
+
+---
+
+### 2026-06-13 (Australia/Sydney) — Banking Shield: wire minted Zenodo DOI
+
+**Raouf:**
+
+- **Scope:** Wired the user-minted Banking Shield Zenodo DOI `10.5281/zenodo.20675513` into the paper and repository. Paper/docs only.
+- **Summary:** Activated the DOI line in the `main.tex` title `\thanks{}` (with a self-`\cite`), added the `abedini2026bankingshield` self-citation to `references.bib` (mirrors voting-pilot), added the DOI to the package README and switched its Zenodo section to published state, and added Banking Shield as the third Zenodo preprint in the root README (Research Papers section + §13, "Two" → "Three"). Recompiled: DOI embedded in `main.pdf`.
+- **Files changed:** `Papers/banking-shield/main.tex`, `main.pdf`, `references.bib`, `README.md`; root `README.md`; `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `latexmk` exit 0 (6 pages, 0 overfull, 0 undefined, 17/17 citations); DOI string present in `main.pdf`; `npx prettier --check` clean; no fixture churn.
+- **Follow-ups:** None outstanding for the preprint; future revisions upload as a new version under the same Zenodo concept DOI.
+
+---
+
+### 2026-06-13 (Australia/Sydney) — Add SPDX license headers to first-party code
+
+**Raouf:**
+
+- **Scope:** Follow-up to the AGPL relicense — added `SPDX-License-Identifier: AGPL-3.0-or-later` headers to 80 first-party source files for per-file clarity. Shebang-aware and idempotent.
+- **Summary:** Prepended the SPDX comment to `server.js`, all `src/**/*.{js,mjs}` (52), `scripts/*.mjs` (3) and `scripts/*.sh` (21), and top-level `tools/*.mjs` (3) — `//` for JS, `#` for shell, inserted after any `#!` shebang. Left the native `tools/` subdirs (Rust/Swift/.NET) and the 82 `tests/` files for a later pass. Confirmed the inserted comments do not disturb the source-scanning privacy/security audits.
+- **Files changed:** 80 source files + `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `npm test` 417/417; `npx prettier --check .` clean; `security-audit-banking-pilot.sh` 27/27; no-egress privacy audit PASS; `smoke-banking-pilot.sh` 14/14; no fixture churn.
+- **Follow-ups:** Optional later pass for `tests/` and native subdirs.
+
+---
+
+### 2026-06-13 (Australia/Sydney) — Relicense code MIT → AGPL-3.0-or-later
+
+**Raouf:**
+
+- **Scope:** Relicensed the repository from MIT to AGPL-3.0-or-later at the user's request — keep the work open for research while preventing closed-source/proprietary capture. Papers under `Papers/` stay CC-BY-4.0. Flagged honestly that licenses protect expression, not ideas; research priority comes from the timestamped Zenodo preprints.
+- **Summary:** Replaced `LICENSE` with the verbatim official GNU AGPL-3.0 text (fetched from gnu.org, not hand-typed). Added `"license": "AGPL-3.0-or-later"` to `package.json`. Rewrote README §13 as a dual-license statement (code AGPL, papers CC-BY-4.0) with a copyright notice and the expression-vs-idea caveat, and updated the license badge. Fixed the stale MIT note in the banking-shield package README. Left third-party MIT entries in `package-lock.json` and historical MIT mentions in AGENT/CHANGELOG untouched.
+- **Files changed:** `LICENSE`, `package.json`, `README.md`, `Papers/banking-shield/README.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `npm test` 417/417; `package.json` valid JSON; `npx prettier --check` clean; no fixture churn.
+- **Follow-ups:** AGPL is auto-detected by GitHub from `LICENSE`. If desired later, add per-source-file SPDX headers (`SPDX-License-Identifier: AGPL-3.0-or-later`).
+
+---
+
+### 2026-06-13 (Australia/Sydney) — Banking Shield: layout audit + Zenodo deposition prep
+
+**Raouf:**
+
+- **Scope:** Full layout audit of the compiled IEEEtran preprint and Zenodo deposition preparation. Paper/docs only.
+- **Summary:** Layout audit found page 2 nearly blank — the `[section]` FloatBarrier was forcing the full-width Figure 1 out before §II could flow. Switched to plain `\usepackage{placeins}`; the paper reflows to 6 tight pages (from 7 with a near-empty page). Verified all pages visually: 3 TikZ figures + 5 booktabs tables place cleanly, monospace tokens render, references complete with corrected years, balanced two columns. For Zenodo: added a pre-filled `.zenodo.json` deposition metadata file (title, author + ORCID, abstract, keywords, cc-by-4.0, related identifiers), a commented ready-to-fill DOI line in the title `\thanks{}` (no fabricated DOI), and a step-by-step mint guide in the README. Actual minting is a manual authenticated upload the user performs; I cannot mint the DOI.
+- **Files changed:** `Papers/banking-shield/main.tex`, `Papers/banking-shield/main.pdf`, `Papers/banking-shield/.zenodo.json`, `Papers/banking-shield/README.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `latexmk` exit 0 (6 pages, 0 overfull, 0 undefined, 16/16 citations); `.zenodo.json` valid JSON; `npx prettier --check` clean.
+- **Follow-ups:** User mints the Zenodo DOI via web upload of `main.pdf` using `.zenodo.json`, then uncomments the DOI line in `main.tex` and recompiles.
+
+---
+
+### 2026-06-13 (Australia/Sydney) — Banking Shield: applied external-review wording refinements (preprint)
+
+**Raouf:**
+
+- **Scope:** Applied the three open judgment-call wording refinements from the external review to the LaTeX paper and its source markdown. Paper/docs only. Positioned as a research preprint; no venue targeted.
+- **Summary:** (1) §4.1 reworded to a data-minimisation _design principle_ in the limited engineering sense, with Klein/Yeung recast as GDPR data-protection-by-design governance context rather than data-minimisation authorities; (2) related work no longer calls Lee et al. "guardrail practice" — now a life-cycle bias/risk study, Ray as TRiSM controls, both framed as live-model filtering the prototype contrasts structurally; (3) added a one-line "AI-style" clarifier in §4.2 (explanation-interface contract, not a live-model evaluation). `PAPER_CLAIM_AUDIT.md` §4 marked applied.
+- **Files changed:** `Papers/banking-shield/main.tex`, `Papers/banking-shield/main.pdf`, `Papers/banking-shield/source/banking-shield-paper-v1.2.md`, `Papers/banking-shield/PAPER_CLAIM_AUDIT.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `latexmk` exit 0 (7 pages, 0 overfull, 0 undefined, 16/16 citations); `npx prettier --check` clean.
+- **Follow-ups:** Optional Zenodo DOI mint when ready; no venue selection (research preprint).
+
+---
+
+### 2026-06-13 (Australia/Sydney) — Banking Shield: full citation/claim audit + LaTeX preprint package
+
+**Raouf:**
+
+- **Scope:** Three deliverables: (1) full citation audit, (2) full claims audit, (3) LaTeX preprint package moved into the root `Papers/` folder. Docs/paper only — no runtime code, gates, scoring, privacy assertions, or evidence fixtures were changed.
+- **Summary:** (1) All 16 references verified to exist via CrossRef DOI content negotiation (12 DOIs: authors/title/venue/year confirmed) and URL resolution (4 institutional; 2× 200, 2× 403 Cloudflare bot-block with pages confirmed real). Zero hallucinated citations. (2) Every empirical claim re-verified true against live source, gates, and the frozen evidence pack (46 fields, 29 phrases, 4 KB/16 KB/600-char caps, 4-module no-egress, default-off exact "true", textContent-only, domain-separated HMAC keys, all gate counts, all Phase B aggregates, fixture pair). (3) Built `Papers/banking-shield/` (IEEEtran `main.tex` with 4 TikZ figures + 5 booktabs tables, `references.bib`, `Makefile`, `README.md`, `PAPER_CLAIM_AUDIT.md`, `.gitignore`, compiled `main.pdf`); moved `docs/research/banking-pilot/paper/` → `Papers/banking-shield/source/` via git rename and fixed the v1.2 markdown's §8/§11 path references.
+- **Files changed:** `Papers/banking-shield/**` (new package), `docs/research/banking-pilot/paper/` → `Papers/banking-shield/source/` (rename), `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `latexmk` exit 0 (7 pages, 0 overfull boxes, 16/16 citations resolved, 0 undefined refs); CrossRef metadata for all journal DOIs; `npx prettier --check` clean on all new markdown.
+- **Follow-ups:** Regenerate is unnecessary (LaTeX is now canonical); the stale committed source PDFs (v1.1/v1.2) predate the markdown fixes — the LaTeX `main.pdf` supersedes them. Optional open items recorded in `PAPER_CLAIM_AUDIT.md` §4. Zenodo DOI mint + venue selection still pending.
+
+---
+
+### 2026-06-13 (Australia/Sydney) — Stage B5: external-review verification + citation-year sweep (v1.2)
+
+**Raouf:**
+
+- **Scope:** Verified an external model-generated review of the v1.2 PDF item by item against source and authoritative CrossRef metadata (DOI content negotiation). Docs only.
+- **Summary:** The review's version, Figure 3 caption, and three citation-year flags are correct; the citation years are online-first dates that conflict with the version-of-record volume/issue the reference list already prints (Klein et al. is an outright error — online and print both 2022). The audit-of-the-review found the same defect in two references the review missed (Scherr 2015→2016, Yeung & Bygrave 2021→2022). Fixed the caption and all five years (in-text + reference list); Gebru et al. 2021 is genuinely 2021 and unchanged. Remaining review items (data-minimisation source fit, Lee/Ray related-work framing, "AI-style" clarifier, and PDF-production polish) are judgment calls logged as open in the audit addendum.
+- **Files changed:** `docs/research/banking-pilot/paper/banking-shield-paper-v1.2.md`, `docs/research/banking-pilot/paper/banking-shield-paper-full-audit-2026-06-13.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** CrossRef metadata for all journal DOIs; `npx prettier --check` clean. The committed v1.2 PDF predates these markdown fixes and must be regenerated before release.
+- **Follow-ups:** Regenerate v1.2 PDF from corrected markdown; optionally apply the open judgment-call recommendations; venue/LaTeX work still pending.
+
+---
+
+### 2026-06-13 (Australia/Sydney) — Stage B5: full audit of Banking Shield paper v1.2
+
+**Raouf:**
+
+- **Scope:** Full paper-writing audit of `banking-shield-paper-v1.2.md` using the ml-paper-writing skill. Docs only — no runtime code, gates, scoring, privacy assertions, or evidence fixtures were changed. Re-ran every reproduction gate and re-verified all empirical claims against live source, the frozen evidence pack (`92dabb4`), the re-audit checkout (`3dcf21b`), and HEAD.
+- **Summary:** All gate counts, byte/length caps, the 46-field denylist, the four-module no-egress scan, and every Phase B aggregate (Tables 4–5) reproduced exactly; the two highest-risk DOIs resolve to live publisher records; overclaim discipline intact; prettier clean. Found and fixed two defects: D1 — §4.2 undercounted the affirmative-claim scan as 28 phrasings when `FORBIDDEN_CLAIM_PHRASES` has 29 at freeze, re-audit, and HEAD (a long-standing undercount the v1.0 audit missed); D2 — §11 still said "this v1.1 preprint candidate" inside the v1.2 document. Added a v1.2 re-audit addendum to the standing full-audit doc.
+- **Files changed:** `docs/research/banking-pilot/paper/banking-shield-paper-v1.2.md`, `docs/research/banking-pilot/paper/banking-shield-paper-full-audit-2026-06-13.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `npm test` 417/417; banking smoke 14/14; AI-firewall smoke 5/5; full E2E 43/43; security audit 27/27; three privacy audits PASS; no-egress gate PASS (4 modules); `npm audit` 0 vulns; `npx prettier --check` clean on both edited docs; Phase A fixture churn restored.
+- **Follow-ups:** Venue selection + CFP/AI-use-disclosure check and LaTeX conversion still pending (carried from B5-D).
+
+---
+
+### 2026-06-12 (Australia/Sydney) — Stage B5-D: Banking Shield full paper v1.0 with verified citations
+
+**Raouf:**
+
+- **Scope:** Produced the full Banking Shield paper v1.0 from draft v0.1, the reviewer-simulation fix list, and live citation verification. Docs only — no runtime code, gates, scoring, privacy assertions, or evidence fixtures were changed. Claim discipline enforced end-to-end: every banking-capability noun in the paper appears only in negated non-claims, denylist descriptions, fictional-scenario labels, or comprehension-count rows.
+- **Summary:** Added `docs/research/banking-pilot/paper/banking-shield-paper-v1.0.md`: full paper with embedded text figures F1–F4, tables T1–T5 filled from the frozen evidence pack, an LLM-assistance disclosure section, and a references section with 10 DOI-backed citations verified this session through an academic search gateway (tamper-evident logging, warning/rights comprehension, GDPR data-minimisation/design-based regulation, LLM guardrails/TRiSM). The three categories with no verifiable source in the available corpus retain explicit `[CITATION NEEDED]` markers — zero invented citations. Re-ran the claim audit against v1.0 (PASS; recorded in `banking-shield-paper-claim-audit.md`) and updated the B5 closeout: B5-D draft complete, venue selection + camera-ready pending.
+- **Files changed:** `docs/research/banking-pilot/paper/banking-shield-paper-v1.0.md`, `docs/research/banking-pilot/paper/banking-shield-paper-claim-audit.md`, `docs/research/banking-pilot/stage-b5-model-paper/MODEL_REVIEW_CLOSEOUT.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** Mechanical forbidden-claim scan of v1.0 clean (all capability nouns negated/denylist/fictional); `scripts/security-audit-stage-2-4-2-5.sh` exit 0 (docs overclaim gate); `npx prettier --check .` clean; Phase A fixture churn restored.
+- **Follow-ups:** Venue selection + current-CFP check (page limits, AI-use disclosure), LaTeX conversion, final figure artwork, optional broader citation verification against CS-venue indices (the gateway corpus is publisher-limited).
+
+---
+
+### 2026-06-12 (Australia/Sydney) — Stage B5-A/B/C: Banking Shield model-assisted evidence synthesis + paper draft v0.1
+
+**Raouf:**
+
+- **Scope:** Executed Stage B5 (Banking Shield model-assisted evidence synthesis and paper draft) inline using the systems-paper-writing skill and a 12-pass committee protocol (novelty extraction, claim prosecutor, hostile reviewer, methodology audit, threat model, related-work mapping, figure/table planning, abstracts, outline, draft v0.1, four-role reviewer simulation, final polish). Docs only — no runtime code, routes, gates, scoring, privacy assertions, or evidence fixtures were changed. The model was used to improve the paper, never to validate the system; system validation remains exclusively with tests/smokes/audits/fixtures.
+- **Summary:** Created `docs/research/banking-pilot/stage-b5-model-paper/` (protocol, allowed/forbidden input boundaries, sanitised evidence pack frozen at `92dabb4`, 13 versioned prompts, full response log with per-pass rubric scoring, model claim audit, closeout marking B5-A/B/C complete and B5-D not started) and `docs/research/banking-pilot/paper/` (outline with per-section claim boundaries, draft v0.1 with reviewer fixes applied, paper claim audit with all nine forbidden claims at zero affirmative occurrences, figure/table specifications F1–F4/T1–T5). All citations are `[CITATION NEEDED]` placeholders — none invented. Phase B framed throughout as a formative n=5 internal dry run; the mock provider is declared in the abstract.
+- **Files changed:** `docs/research/banking-pilot/stage-b5-model-paper/**` (8 docs + 13 prompts), `docs/research/banking-pilot/paper/**` (3 docs + 2 spec READMEs), `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `scripts/security-audit-stage-2-4-2-5.sh` exit 0 (the docs-scanning overclaim gate; new docs deliberately avoid its literal patterns); `npx prettier --check .` clean; Phase A fixture churn restored. No runtime gates affected (docs-only change).
+- **Follow-ups:** Stage B5-D — verify citations manually (never from model memory), produce F1–F4 artwork, fill T1–T5, revise v0.1 → v1.0 against the reviewer-simulation fix list, re-run the claim audit, check target-venue CFP including AI-use disclosure policy.
 
 ---
 
