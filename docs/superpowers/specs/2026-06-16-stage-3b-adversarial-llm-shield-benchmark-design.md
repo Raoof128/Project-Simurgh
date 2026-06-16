@@ -116,11 +116,21 @@ is out of scope.
 
 Two modes against a live `/api/llm-shield` server:
 
+**Corpus validation (both modes, run first):**
+
+- **Unique `case_id`** across all fixtures — fail on any duplicate.
+- **`attack_style` enum** — each fixture's `attack_style` must be one of the fixed
+  list (fail otherwise): `split-words`, `symbol-stuffing`, `homoglyph`, `base64`,
+  `role-play`, `translation`, `markdown-hide`, `json-poison`, `academic-framing`,
+  `multi-step-softening`, `normal-task`, `ai-safety-question`, `hard-negative`.
+- **`payload_hash`** — recompute `"sha256:" + sha256(payload)`; fail on mismatch.
+
 **Default (CI) mode** — read-only, asserts the frozen state:
 
-1. For every fixture: recompute `sha256(payload)`; fail if `!= payload_hash`.
-2. Run the fixture through `POST /:id/run`; capture observed `verdict` + `reason_codes`.
-3. Assert observed `verdict` == `baseline_verdict` **and** observed `reason_codes`
+1. Run corpus validation (above).
+2. Run each fixture through `POST /:id/run`; capture observed `verdict` + `reason_codes`.
+3. **Sort `reason_codes`** (both observed and committed) before comparing. Assert
+   observed `verdict` == `baseline_verdict` **and** sorted observed `reason_codes`
    == `baseline_reason_codes`. Any drift → fail (forces a reviewed `--update-baseline`).
 4. Compute metrics against `ground_truth`; compare to committed
    `docs/evidence/stage-3b-llm-shield/metrics.json`; fail if changed.
@@ -130,11 +140,14 @@ CI mode writes nothing — the working tree stays clean.
 
 **`--update-baseline` mode** — the only writer:
 
-1. Recompute and write each fixture's `payload_hash`.
-2. Run each fixture; write observed `verdict`/`reason_codes` into `baseline_*`.
-3. Recompute and write `metrics.json`.
+1. Run corpus validation (above).
+2. Recompute and write each fixture's `payload_hash`.
+3. Run each fixture; write observed `verdict` and **sorted** `reason_codes` into `baseline_*`.
+4. Recompute and write `metrics.json`.
 
 Run intentionally when detector behaviour legitimately changes; the diff is reviewed.
+Sorting `reason_codes` before both write and compare keeps the baseline deterministic
+(no noisy ordering drift).
 
 ## Metrics (`docs/evidence/stage-3b-llm-shield/metrics.json`)
 
@@ -163,7 +176,16 @@ Asserts (boots server / runs targeted checks):
 - Phrase denylist is present and non-empty in `promptFirewall.js`.
 - Receipt `type` and `schema_version` are stable (`simurgh.llm_safety_receipt.v1` / `3A-alpha`).
 - **Detector digest freeze:** `sha256(promptFirewall.js)` and `sha256(promptNormalise.js)`
-  equal committed expected digests. Turns "detector unchanged" into a gate.
+  equal the committed expected digests read from
+  `docs/evidence/stage-3b-llm-shield/detector-digests.json` (not hardcoded in the
+  script — cleaner diffs and a reviewable evidence trail). Turns "detector unchanged"
+  into a gate. Example:
+  ```json
+  {
+    "src/llmShield/promptFirewall.js": "sha256:...",
+    "src/llmShield/promptNormalise.js": "sha256:..."
+  }
+  ```
 - **Does NOT run `npm audit`** — that stays its own single `check.sh` step to avoid
   the cascade failure pattern fixed in PR #31.
 
@@ -185,6 +207,7 @@ evidence must be metadata-only.** Asserts:
 
 - `docs/evidence/stage-3b-llm-shield/fixtures/{adversarial,benign}/**` (~45 fixtures)
 - `docs/evidence/stage-3b-llm-shield/metrics.json`
+- `docs/evidence/stage-3b-llm-shield/detector-digests.json`
 - `docs/evidence/stage-3b-llm-shield/README.md`
 - `tests/e2e/llm_shield_bench_runner.mjs`
 - `scripts/smoke-llm-shield-bench.sh` (boots server, runs CI-mode runner)
@@ -195,6 +218,9 @@ evidence must be metadata-only.** Asserts:
 **Modified**
 
 - `scripts/check.sh` — wire in the three new gates (bench smoke, security audit, privacy audit).
+  Runtime: `smoke-llm-shield-bench.sh` boots the server **once** and runs all ~45
+  fixtures over a single session (one process spin-up), so the added CI cost is small
+  — comparable to the existing per-shield smokes.
 - `AGENT.md`, `CHANGELOG.md` — change-protocol entries.
 
 **Unchanged (and digest-frozen):** all `src/llmShield/*`.
