@@ -170,7 +170,10 @@ hardening stage will move.
 Asserts (boots server / runs targeted checks):
 
 - No raw prompt text in audit-entry payloads (decision payloads are hash-only).
-- Blocked path emits `LLM_PROVIDER_SKIPPED`.
+- Blocked input returns `model_called:false` and the session audit chain still
+  verifies after the blocked run. (The `LLM_PROVIDER_SKIPPED` event itself is
+  asserted by `tests/unit/llmShield/llmShieldAudit.test.js` — the audit script does
+  not re-claim it, since there is no audit-export route to inspect events over HTTP.)
 - `contexts[]` is rejected fail-closed (`contexts_not_supported_alpha`).
 - Oversized / non-string input rejected (`payload_too_large` / `invalid_input`).
 - Phrase denylist is present and non-empty in `promptFirewall.js`.
