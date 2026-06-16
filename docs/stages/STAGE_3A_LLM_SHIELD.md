@@ -28,6 +28,15 @@ result, not a policy permission.
 
     bash scripts/smoke-llm-shield.sh
 
+## Benchmark caveat
+
+The alpha fixture corpus is intentionally small (16 cases) and partly aligned with
+the firewall's phrase denylist. The reported 100% attack-block rate must **not** be
+read as broad jailbreak resistance — it reflects that the corpus and the detector
+were designed together for this seed slice. Stage 3B adds adversarial and obfuscated
+fixtures that are expected to bypass the current phrase matching, deliberately
+lowering the metric into a more realistic benchmark.
+
 ## Non-claims
 
 - Not a guarantee against all jailbreaks.

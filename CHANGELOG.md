@@ -1,5 +1,33 @@
 ## Change Log
 
+## [stage-3a-alpha-llm-shield] — 2026-06-16 — LLM Shield seed crystal (Stage 3A-alpha)
+
+**Raouf:** Shipped the first slice of the Simurgh LLM Shield: an input-only safety boundary that classifies user input for direct prompt-injection and system-prompt-extraction attempts _before_ model invocation, calls only a deterministic local mock provider for safe input, skips the provider for blocked input, and emits a metadata-only safety receipt linked to a per-session HMAC audit chain. A fourth shield grafted onto the existing spine — reuses `src/audit/hmacChain.js`, `src/security/sessionToken.js`, and `src/storage/memoryStore.js` directly, and mirrors the Banking Shield AI-firewall pattern (construct what is allowed, reject what is not, log rejections without recording prohibited values). No untrusted `contexts[]`, tool gate, output firewall, obfuscation handling, live model, or UI — all explicitly deferred to Stages 3B–3F. Detection is deterministic phrase matching with negation-awareness; the alpha corpus is small and partly denylist-aligned, so the 100% block rate is not broad jailbreak resistance (documented in the stage doc benchmark caveat).
+
+### Added
+
+- `src/llmShield/promptNormalise.js` — NFKC fold, zero-width/control strip (keeps `\n`/`\t`), raw + normalised hashing.
+- `src/llmShield/promptFirewall.js` — deterministic two-class classification (`policy_override_attempt`, `system_prompt_exfiltration`), negation-aware phrase matching, 4 KB input cap (`payload_too_large`).
+- `src/llmShield/mockLlmProvider.js` — deterministic provider (no network, clock, or randomness; never echoes raw input).
+- `src/llmShield/safetyReceipt.js` — `simurgh.llm_safety_receipt.v1` builders (`schema_version: "3A-alpha"`), metadata-only, `network_egress_used:false`.
+- `src/llmShield/llmShieldAudit.js` — `LLM_*` events with ordered run recorders (blocked path records `LLM_PROVIDER_SKIPPED`, making "blocked before invocation" auditable) and whitelisted decision payloads (no raw text).
+- `src/llmShield/llmShieldRouter.js` — `POST /api/llm-shield/sessions`, `POST /:id/run`, `GET /:id/verify`; token-bound, 16 KB body cap, `contexts[]` fail-closed (`contexts_not_supported_alpha`); mounted in `server.js`.
+- `docs/evidence/stage-3a-llm-shield/fixtures/**` (16 fixtures), `tests/e2e/llm_shield_fixture_runner.mjs` (metrics), two focused e2e smokes, `scripts/smoke-llm-shield.sh`.
+- `docs/stages/STAGE_3A_LLM_SHIELD.md` (non-claims + benchmark caveat), `.env.example` (`SIMURGH_LLM_SHIELD_SECRET`).
+
+### Verified
+
+- `npm test` — 449/449 pass (32 new `llmShield` unit tests, no regressions).
+- `scripts/smoke-llm-shield.sh` — all gates pass; attack_block_rate 100% (11/11), benign_pass_rate 100% (5/5), false_positive_rate 0%.
+- `npx prettier --check .` — clean.
+
+### Follow-ups
+
+- Stage 3B: adversarial/obfuscated fixtures expected to lower the block rate to a realistic benchmark; `warning` verdict; full 100+50 corpus.
+- Add `security-audit-llm-shield.sh` / `privacy-audit-llm-shield.mjs` to make the metadata-only claim a standing gate (currently unit-tested only).
+
+---
+
 ## [stage-2-4-2-5-overclaim-scan-exclusion] — 2026-06-12 — Fix CI overclaim scan false positive on B4-A denylist
 
 **Raouf:** The Stage 2.4/2.5 cybersecurity audit's overclaim-wording scan failed CI on PR #28 because the B4-A output-firewall denylist (`FORBIDDEN_CLAIM_PHRASES`) literally contains "production ready" — present so the firewall can block that claim, not assert it. The three downstream stage audits failed only as no-regression cascades of this one.

@@ -2,6 +2,18 @@
 
 ## Agent Change Log
 
+### 2026-06-16 (Australia/Sydney) — LLM Shield seed crystal (Stage 3A-alpha)
+
+**Raouf:**
+
+- **Scope:** Built the first slice of the Simurgh LLM Shield — an input-only safety boundary for direct prompt-injection and system-prompt-extraction attempts. Classifies user input before model invocation, calls only a deterministic local mock provider for safe input, skips the provider for blocked input, emits a metadata-only safety receipt, and links each run to a per-session HMAC audit chain. Deliberately excluded: untrusted `contexts[]` (fail-closed via `contexts_not_supported_alpha`), instruction-provenance guard, tool gate, output firewall, obfuscation/`warning` verdict, live models, and UI — each is a named later stage (3B–3F). A fourth shield on the existing spine; reuses `hmacChain.js`, `sessionToken.js`, `memoryStore.js` directly and mirrors the Banking Shield AI-firewall pattern. Fail-closed throughout.
+- **Summary:** Six new `src/llmShield/` modules (normalise, firewall, mock provider, receipt, audit, router) built TDD red→green, plus a 16-fixture corpus, a metrics runner, two focused e2e smokes, and a smoke gate. Router mounted at `/api/llm-shield`, gated by `SIMURGH_LLM_SHIELD_SECRET` (503 when unset). Detection is deterministic phrase matching with negation-awareness so benign system-prompt-discussion questions pass. The blocked path records `LLM_PROVIDER_SKIPPED`, making "blocked before invocation" provable from the audit log. Audit payloads are whitelisted (no raw input text). Documented an explicit benchmark caveat: the alpha corpus is small and partly denylist-aligned, so the 100% block rate is not broad jailbreak resistance.
+- **Files changed:** `src/llmShield/{promptNormalise,promptFirewall,mockLlmProvider,safetyReceipt,llmShieldAudit,llmShieldRouter}.js`, `server.js`, `.env.example`, `tests/unit/llmShield/*.test.js`, `tests/e2e/llm_shield_{fixture_runner,direct_jailbreak_smoke,receipt_verify_smoke}.mjs`, `scripts/smoke-llm-shield.sh`, `docs/evidence/stage-3a-llm-shield/**`, `docs/stages/STAGE_3A_LLM_SHIELD.md`, `docs/superpowers/specs/2026-06-16-stage-3a-alpha-llm-shield-design.md`, `docs/superpowers/plans/2026-06-16-stage-3a-alpha-llm-shield.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `npm test` 449/449 (32 new `llmShield` tests, no regressions); `scripts/smoke-llm-shield.sh` all gates pass (attack_block_rate 100% 11/11, benign_pass_rate 100% 5/5, false_positive_rate 0%); `npx prettier --check .` clean.
+- **Follow-ups:** Stage 3B adds adversarial/obfuscated fixtures (expected to lower the block rate to a realistic number), the `warning` verdict, and the full 100+50 corpus. Add `security-audit-llm-shield.sh` / `privacy-audit-llm-shield.mjs` so the metadata-only privacy claim becomes a standing gate rather than unit-tested only.
+
+---
+
 ### 2026-06-12 (Australia/Sydney) — Fix Stage 2.4/2.5 overclaim scan false positive on B4-A denylist
 
 **Raouf:**
