@@ -1,4 +1,6 @@
 {
-  "src/llmShield/promptFirewall.js": "sha256:99eb4c8fa76900e0a1e168e620b7ae4c42ea84e90a0fd5bb7077fc74d365c900",
-  "src/llmShield/promptNormalise.js": "sha256:e84a387cef069636d76571b2821ea40ddfd0b9f2d66bf931b909217f36c00a43"
+  "src/llmShield/promptFirewall.js": "sha256:eb2ea7c5df2d33603901d742a15c6929df80fda95c099d399638a77e801dd38d",
+  "src/llmShield/promptNormalise.js": "sha256:e84a387cef069636d76571b2821ea40ddfd0b9f2d66bf931b909217f36c00a43",
+  "src/llmShield/promptCanonicalise.js": "sha256:2a03512a6c295a7c6598bddad93b9dd2bccf4eec5e8052c518a73fe738dbc042",
+  "src/llmShield/promptContextGuard.js": "sha256:c2c5bbb1032104dce83872cebb24065958588399d66fb2fb0988d3014c3954b4"
 }
