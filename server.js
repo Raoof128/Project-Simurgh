@@ -36,6 +36,7 @@ import {
 import { createReplayGuard } from "./src/security/replayGuard.js";
 import votingPilotRouter from "./src/votingPilot/index.js";
 import bankingPilotRouter from "./src/bankingPilot/index.js";
+import llmShieldRouter from "./src/llmShield/llmShieldRouter.js";
 import {
   createRateLimiter,
   keyByIp,
@@ -478,6 +479,7 @@ app.use((req, res, next) => {
 app.use(express.static(join(__dirname, "public")));
 app.use("/api/voting-pilot", votingPilotRouter);
 app.use("/api/banking-pilot", bankingPilotRouter);
+app.use("/api/llm-shield", llmShieldRouter);
 
 // Instructor route — serves the page only when a valid token is supplied,
 // or in DEMO_MODE. The page reads the token from location.search and reuses
