@@ -4,12 +4,27 @@
 # Full Banking Shield Phase A E2E smoke gate.
 set -euo pipefail
 
+# Wait for a TCP port on 127.0.0.1 to become bindable before launching a server
+# on it. Guards against a slow-to-release orphan from an earlier check.sh step
+# causing an instant "FATAL: port already in use" race in CI.
+wait_port_free() {
+  local port="$1"
+  for _ in {1..40}; do
+    if node -e "const net=require('net');const s=net.createServer();s.once('error',()=>process.exit(1));s.once('listening',()=>s.close(()=>process.exit(0)));s.listen(${port},'127.0.0.1')" >/dev/null 2>&1; then
+      return 0
+    fi
+    sleep 0.25
+  done
+  return 1
+}
+
 if [[ -n "${SIMURGH_BASE_URL:-}" ]]; then
   BASE="$SIMURGH_BASE_URL"
 else
   PORT="${SIMURGH_BANKING_FULL_E2E_PORT:-33039}"
   BASE="http://127.0.0.1:$PORT"
   LOG="${TMPDIR:-/tmp}/simurgh-banking-full-e2e-$PORT.log"
+  wait_port_free "$PORT" || { echo "normal port $PORT never freed up"; exit 1; }
   SIMURGH_DEMO_MODE=1 \
   SIMURGH_BANKING_PILOT_PEPPER="full-e2e-banking-pepper-32-chars" \
   SIMURGH_BANKING_PILOT_TOKEN_SECRET="full-e2e-banking-token-secret-32" \
@@ -38,6 +53,7 @@ else
   CLOSED_PORT="${SIMURGH_BANKING_FULL_E2E_CLOSED_PORT:-33040}"
   CLOSED_BASE="http://127.0.0.1:$CLOSED_PORT"
   CLOSED_LOG="${TMPDIR:-/tmp}/simurgh-banking-full-e2e-closed-$CLOSED_PORT.log"
+  wait_port_free "$CLOSED_PORT" || { echo "closed port $CLOSED_PORT never freed up"; exit 1; }
   SIMURGH_DEMO_MODE=1 \
   SIMURGH_BANKING_PILOT_PEPPER="full-e2e-closed-banking-pepper" \
   SIMURGH_BANKING_PILOT_TOKEN_SECRET="full-e2e-closed-token-secret" \
