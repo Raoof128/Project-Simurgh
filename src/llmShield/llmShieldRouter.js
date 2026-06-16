@@ -2,7 +2,7 @@
 // Stage 3A-alpha LLM Shield routes. Input-only: classifies user input before any
 // model invocation, calls the deterministic mock only for safe input, and emits a
 // metadata-only receipt linked to a per-session HMAC chain. No contexts, no tools,
-// no live model — see docs/stages/STAGE_3A_LLM_SHIELD.md.
+// no live model — see docs/research/llm-shield/LLM_SHIELD_STAGE_3A.md.
 import { Router } from "express";
 import crypto from "node:crypto";
 import { createChain, verifyChain } from "../audit/hmacChain.js";
