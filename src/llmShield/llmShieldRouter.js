@@ -30,6 +30,7 @@ import {
 import { buildStage3dReceipt, hashStage3dReceipt } from "./stage3dReceipt.js";
 import { isValidScenario, getScenario, SCENARIO_NAMES } from "./stage3dMockScenarios.js";
 import { guardContexts } from "./contextProvenanceGuard.js";
+import { gateToolRequest } from "./toolInvocationGate.js";
 
 const router = Router();
 const store = getStore("llm-shield-sessions");
@@ -269,7 +270,10 @@ function handleStage3dRun(req, res, record, ctx) {
   // PHASE-1 STUB — replaced in later phases:
   const scenario = getScenario(scenarioName);
   const providerCalled = inputVerdict !== "blocked" && contextResult.verdict !== "rejected";
-  const toolResult = { verdict: "not_requested", reasonCodes: [], toolNameHash: null };
+  const toolResult = providerCalled
+    ? gateToolRequest(scenario.tool_request)
+    : { verdict: "not_requested", reasonCodes: [], toolNameHash: null, toolCalled: false };
+  // PHASE-1 STUB — replaced in later phases:
   const outputResult = {
     verdict: providerCalled ? "accepted" : "not_called",
     reasonCodes: [],
