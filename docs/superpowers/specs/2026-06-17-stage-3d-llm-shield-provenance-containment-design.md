@@ -195,15 +195,15 @@ never persisted, never in receipt/audit):
 
 Per-context decision rules:
 
-| Case                                          | Result (`context_verdict`)     |
-| --------------------------------------------- | ------------------------------ |
-| No `contexts`                                 | `not_supplied`                 |
-| Valid untrusted reference context             | `demoted` (treated as data)    |
-| Context asserts system/developer authority    | `rejected`                     |
-| Context attempts role escalation              | `rejected`                     |
-| Malformed schema / forbidden field            | `rejected`                     |
-| `trusted` claim without valid signal          | `rejected`                     |
-| Context carries secret/policy markers         | `rejected`                     |
+| Case                                       | Result (`context_verdict`)  |
+| ------------------------------------------ | --------------------------- |
+| No `contexts`                              | `not_supplied`              |
+| Valid untrusted reference context          | `demoted` (treated as data) |
+| Context asserts system/developer authority | `rejected`                  |
+| Context attempts role escalation           | `rejected`                  |
+| Malformed schema / forbidden field         | `rejected`                  |
+| `trusted` claim without valid signal       | `rejected`                  |
+| Context carries secret/policy markers      | `rejected`                  |
 
 Reason codes: `context_schema_invalid`, `context_role_escalation`,
 `context_untrusted_instruction`, `context_signature_missing`,
@@ -219,13 +219,13 @@ only — no real shell, browser, network, file write, or live provider call.
 
 `toolPolicy.js` is a declarative allowlist by tool class:
 
-| Tool class                                          | Verdict          |
-| --------------------------------------------------- | ---------------- |
-| `mock_calculator`, `mock_lookup`                    | allow            |
-| `mock_file_read`                                    | block            |
-| `network_request`, `shell_command`, `secret_access` | block            |
-| `policy_export`, `prompt_export`, `credential_request` | block         |
-| unknown tool                                        | block (fail-closed) |
+| Tool class                                             | Verdict             |
+| ------------------------------------------------------ | ------------------- |
+| `mock_calculator`, `mock_lookup`                       | allow               |
+| `mock_file_read`                                       | block               |
+| `network_request`, `shell_command`, `secret_access`    | block               |
+| `policy_export`, `prompt_export`, `credential_request` | block               |
+| unknown tool                                           | block (fail-closed) |
 
 Stage 3D blocks `mock_file_read` by default. A future stage may introduce
 explicitly allowlisted read-only fixture files, but Stage 3D keeps the tool
@@ -337,12 +337,12 @@ Decision payloads stay whitelisted to hashes/verdict/reason-codes via
 `buildDecisionPayload` (no raw text). Representative ordered paths:
 
 - **Context attack blocked:** `LLM_INPUT_ACCEPTED → LLM_CONTEXT_REJECTED →
-  LLM_PROVIDER_SKIPPED → LLM_STAGE3D_RECEIPT_EXPORTED`
+LLM_PROVIDER_SKIPPED → LLM_STAGE3D_RECEIPT_EXPORTED`
 - **Tool attack blocked:** `LLM_INPUT_ACCEPTED → LLM_CONTEXT_ACCEPTED →
-  LLM_PROVIDER_CALLED → LLM_TOOL_REQUESTED → LLM_TOOL_BLOCKED →
-  LLM_STAGE3D_RECEIPT_EXPORTED`
+LLM_PROVIDER_CALLED → LLM_TOOL_REQUESTED → LLM_TOOL_BLOCKED →
+LLM_STAGE3D_RECEIPT_EXPORTED`
 - **Output leakage blocked:** `LLM_INPUT_ACCEPTED → LLM_PROVIDER_CALLED →
-  LLM_OUTPUT_BLOCKED → LLM_STAGE3D_RECEIPT_EXPORTED`
+LLM_OUTPUT_BLOCKED → LLM_STAGE3D_RECEIPT_EXPORTED`
 
 `verifyChain` (existing `/verify` route) must pass after accepted, demoted,
 blocked, tool-blocked, and output-blocked paths.
@@ -351,14 +351,14 @@ blocked, tool-blocked, and output-blocked paths.
 
 `docs/research/llm-shield/evidence/stage-3d/fixtures/<category>/`:
 
-| Category                         | Count | Goal                  |
-| -------------------------------- | ----: | --------------------- |
-| `clean_benign`                   |    10 | should pass           |
-| `hard_negative`                  |    10 | must not over-block   |
-| `context_provenance`             |    10 | block / demote        |
-| `tool_gate`                      |    10 | block unsafe tool     |
-| `output_firewall`                |    10 | block leaky output    |
-| `multi_turn_softening`           |    10 | accumulate risk       |
+| Category               | Count | Goal                |
+| ---------------------- | ----: | ------------------- |
+| `clean_benign`         |    10 | should pass         |
+| `hard_negative`        |    10 | must not over-block |
+| `context_provenance`   |    10 | block / demote      |
+| `tool_gate`            |    10 | block unsafe tool   |
+| `output_firewall`      |    10 | block leaky output  |
+| `multi_turn_softening` |    10 | accumulate risk     |
 
 Fixture shape carries `mock_provider_output` (raw, fixtures-only) consumed by the
 runner, plus `expected` verdicts/reason_codes and a `payload_hash`. The corpus is
