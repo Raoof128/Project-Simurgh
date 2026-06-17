@@ -79,17 +79,30 @@ describe("POST /:id/run", () => {
     assert.ok(body.reason_codes.includes("policy_override_attempt"));
   });
 
-  test("contexts key is rejected fail-closed", async () => {
+  test("contexts key activates the governed Stage 3D path (no longer fail-closed alpha)", async () => {
     const s = await session();
     const { body } = await postJson(
       `/${s.session_id}/run`,
       { task_type: "summarise", input: "hello", contexts: [] },
       auth(s.session_token)
     );
-    assert.equal(body.ok, false);
-    assert.equal(body.verdict, "blocked");
-    assert.equal(body.model_called, false);
-    assert.deepEqual(body.reason_codes, ["contexts_not_supported_alpha"]);
+    assert.equal(body.ok, true);
+    assert.equal(body.stage, "3D");
+    assert.equal(body.receipt.schema_version, "3D");
+    // Empty contexts array -> not_supplied, benign default scenario.
+    assert.equal(body.context_verdict, "not_supplied");
+    assert.equal(body.receipt.scenario, "benign");
+  });
+
+  test("non-array contexts is rejected as malformed", async () => {
+    const s = await session();
+    const { status, body } = await postJson(
+      `/${s.session_id}/run`,
+      { task_type: "summarise", input: "hello", contexts: "nope" },
+      auth(s.session_token)
+    );
+    assert.equal(status, 400);
+    assert.equal(body.error, "invalid_contexts");
   });
 
   test("missing token returns 401", async () => {

@@ -24,7 +24,11 @@ import {
   recordWarnedRun,
   recordBlockedRun,
   recordReceiptExported,
+  recordStage3dRun,
+  recordStage3dReceiptExported,
 } from "./llmShieldAudit.js";
+import { buildStage3dReceipt, hashStage3dReceipt } from "./stage3dReceipt.js";
+import { isValidScenario, getScenario, SCENARIO_NAMES } from "./stage3dMockScenarios.js";
 
 const router = Router();
 const store = getStore("llm-shield-sessions");
@@ -104,20 +108,22 @@ router.post("/:sessionId/run", requireToken, requirePathMatch, (req, res) => {
   const timestamp = new Date().toISOString();
   const key = auditKey();
 
-  // Fail-closed: alpha has no provenance guard, so any contexts channel is rejected.
-  if (Object.hasOwn(body, "contexts")) {
-    return finishBlocked(res, {
-      record,
-      key,
-      runId,
-      sessionIdHash,
-      timestamp,
-      inputHash: hashPrompt(""),
-      normalisedInputHash: hashPrompt(""),
-      reasonCodes: ["contexts_not_supported_alpha"],
-      detectedAttackClasses: [],
-      ok: false,
-    });
+  // Stage 3D activates additively: a request carrying any 3D field is routed to
+  // the containment handler. Plain { input } requests keep the 3A/3B/3C path
+  // (byte-for-byte) so the frozen benchmark and existing receipt do not drift.
+  const isStage3DRun =
+    Array.isArray(body.contexts) ||
+    body.tool_mode !== undefined ||
+    body.scenario !== undefined ||
+    body.stage3d === true;
+
+  if (isStage3DRun) {
+    return handleStage3dRun(req, res, record, { runId, sessionIdHash, timestamp, key });
+  }
+
+  // A non-array `contexts` value is malformed (the 3D path requires an array).
+  if (Object.hasOwn(body, "contexts") && !Array.isArray(body.contexts)) {
+    return res.status(400).json({ ok: false, error: "invalid_contexts" });
   }
 
   if (typeof body.input !== "string" || body.input.length === 0) {
@@ -229,6 +235,111 @@ function finishBlocked(res, ctx) {
     verdict: "blocked",
     model_called: false,
     reason_codes: ctx.reasonCodes,
+    receipt,
+  });
+}
+
+function handleStage3dRun(req, res, record, ctx) {
+  const body = req.body ?? {};
+
+  if (Object.hasOwn(body, "mock_provider_output")) {
+    return res.status(400).json({ ok: false, error: "mock_provider_output_http_rejected" });
+  }
+
+  const scenarioName = body.scenario === undefined ? "benign" : String(body.scenario);
+  if (!isValidScenario(scenarioName)) {
+    return res
+      .status(400)
+      .json({ ok: false, error: "scenario_not_allowed", allowed: SCENARIO_NAMES });
+  }
+
+  if (typeof body.input !== "string" || body.input.length === 0) {
+    return res.status(400).json({ ok: false, error: "invalid_input" });
+  }
+
+  const taskType = typeof body.task_type === "string" ? body.task_type : "unknown";
+  const rawInput = body.input;
+  const normalised = normalisePrompt(rawInput);
+  const inputHash = hashPrompt(rawInput);
+  const normalisedInputHash = hashPrompt(normalised);
+  const inputVerdict = classifyPrompt(normalised).verdict;
+
+  // PHASE-1 STUB — replaced in later phases:
+  const contextResult = {
+    verdict: "not_supplied",
+    contextCount: 0,
+    contextHashes: [],
+    reasonCodes: [],
+    perContext: [],
+  };
+  const scenario = getScenario(scenarioName);
+  const providerCalled = inputVerdict !== "blocked" && contextResult.verdict !== "rejected";
+  const toolResult = { verdict: "not_requested", reasonCodes: [], toolNameHash: null };
+  const outputResult = {
+    verdict: providerCalled ? "accepted" : "not_called",
+    reasonCodes: [],
+    outputHash: hashPrompt(providerCalled ? scenario.output : ""),
+  };
+  const riskVerdictValue =
+    inputVerdict === "blocked" || contextResult.verdict === "rejected" ? "blocked" : "safe";
+  const riskScoreValue = riskVerdictValue === "blocked" ? 6 : 0;
+  // END PHASE-1 STUB
+
+  const reasonCodes = [
+    ...contextResult.reasonCodes,
+    ...toolResult.reasonCodes,
+    ...outputResult.reasonCodes,
+  ];
+
+  const auditEntryHash = recordStage3dRun(record.auditChain, ctx.key, {
+    inputVerdict,
+    contextVerdict: contextResult.verdict,
+    toolGateVerdict: toolResult.verdict,
+    outputFirewallVerdict: outputResult.verdict,
+    riskVerdict: riskVerdictValue,
+    providerCalled,
+    reasonCodes,
+    signals: [],
+    inputHash,
+    normalisedInputHash,
+    contextHashes: contextResult.contextHashes,
+    toolNameHash: toolResult.toolNameHash,
+    outputHash: outputResult.outputHash,
+  });
+
+  const receipt = buildStage3dReceipt({
+    sessionIdHash: ctx.sessionIdHash,
+    runId: ctx.runId,
+    taskType,
+    inputHash,
+    normalisedInputHash,
+    inputVerdict,
+    contextVerdict: contextResult.verdict,
+    contextCount: contextResult.contextCount,
+    contextHashes: contextResult.contextHashes,
+    providerCalled,
+    scenario: scenarioName,
+    toolGateVerdict: toolResult.verdict,
+    toolNameHash: toolResult.toolNameHash,
+    outputFirewallVerdict: outputResult.verdict,
+    outputHash: outputResult.outputHash,
+    riskScore: riskScoreValue,
+    riskVerdict: riskVerdictValue,
+    reasonCodes,
+    auditEntryHash,
+    timestamp: ctx.timestamp,
+  });
+  recordStage3dReceiptExported(record.auditChain, ctx.key, hashStage3dReceipt(receipt));
+
+  return res.json({
+    ok: true,
+    stage: "3D",
+    input_verdict: inputVerdict,
+    context_verdict: contextResult.verdict,
+    tool_gate_verdict: toolResult.verdict,
+    output_firewall_verdict: outputResult.verdict,
+    risk_verdict: riskVerdictValue,
+    reason_codes: reasonCodes,
     receipt,
   });
 }
