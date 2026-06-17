@@ -35,7 +35,7 @@ npm audit --audit-level=high
 
 ### Results
 
-- `npm test`: 593 pass, 0 fail (589 → 593 with the six new live unit suites).
+- `npm test`: 589 pass, 0 fail (554 → 589 with the six new live unit suites).
 - 3E-live smoke: disabled / missing-key / context-rejected+client-key / rate-limit PASS;
   optional Anthropic SKIP (no env); fixture runner 40/40.
 - 3E-live security audit: PASS (no static SDK import; dynamic import only in adapter; no tools).

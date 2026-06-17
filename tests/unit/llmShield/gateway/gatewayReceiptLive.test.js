@@ -59,7 +59,13 @@ describe("gatewayReceipt live", () => {
     assert.equal(r.api_key_recorded, false);
   });
   test("audit exposes live event names", () => {
-    assert.equal(GATEWAY_EVENTS.LLM_GATEWAY_LIVE_PROVIDER_CALLED, "LLM_GATEWAY_LIVE_PROVIDER_CALLED");
-    assert.equal(GATEWAY_EVENTS.LLM_GATEWAY_LIVE_CONFIG_REJECTED, "LLM_GATEWAY_LIVE_CONFIG_REJECTED");
+    assert.equal(
+      GATEWAY_EVENTS.LLM_GATEWAY_LIVE_PROVIDER_CALLED,
+      "LLM_GATEWAY_LIVE_PROVIDER_CALLED"
+    );
+    assert.equal(
+      GATEWAY_EVENTS.LLM_GATEWAY_LIVE_CONFIG_REJECTED,
+      "LLM_GATEWAY_LIVE_CONFIG_REJECTED"
+    );
   });
 });

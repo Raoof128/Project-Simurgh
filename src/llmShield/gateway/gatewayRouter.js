@@ -22,12 +22,7 @@ import { riskPointsFor, riskVerdict } from "../runRiskAccumulator.js";
 import { getScenario, isValidScenario } from "../stage3dMockScenarios.js";
 import { validateProviderSelection, evaluateLiveProvider } from "./gatewayEnv.js";
 import { getGatewayProvider } from "./providerRegistry.js";
-import {
-  liveLimits,
-  createLiveLedger,
-  checkLiveCall,
-  recordLiveCall,
-} from "./liveCallLedger.js";
+import { liveLimits, createLiveLedger, checkLiveCall, recordLiveCall } from "./liveCallLedger.js";
 import { buildProviderSafeContext } from "./anthropicMessageBuild.js";
 import { selectFixtureEntry, validateRecordedFixture } from "./recordedFixtureProvider.js";
 import { normaliseProviderOutput } from "./providerOutputNormalise.js";
@@ -301,7 +296,7 @@ router.post("/:sessionId/run", requireToken, requirePathMatch, async (req, res) 
     outputHash: outputResult.outputHash,
   });
 
-  if (liveConfig) {
+  if (liveConfig && providerCalled) {
     recordGatewayLiveCall(record.auditChain, key, {
       providerResponseKind: norm.kind,
       providerResponseHash,
@@ -337,7 +332,7 @@ router.post("/:sessionId/run", requireToken, requirePathMatch, async (req, res) 
     reasonCodes,
     auditEntryHash,
     timestamp,
-    networkEgressUsed: Boolean(liveConfig),
+    networkEgressUsed: Boolean(liveConfig) && providerCalled,
     live: liveConfig
       ? {
           provider_model_hash: raw?.provider_model_hash ?? null,

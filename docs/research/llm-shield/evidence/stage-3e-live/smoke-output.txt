@@ -1,0 +1,10 @@
+[PASS] stage3e live-disabled smoke
+[PASS] stage3e live missing-key smoke
+[PASS] stage3e live context-rejected + client-key smoke
+[PASS] stage3e live rate-limit smoke
+SKIP: live provider env not enabled
+stage3e-live fixture runner: 40 passed, 0 failed
+wrote metrics.json
+[PASS] stage3e-live fixture runner
+
+smoke-llm-shield-stage3e-live: passed

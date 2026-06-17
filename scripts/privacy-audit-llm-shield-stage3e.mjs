@@ -98,10 +98,18 @@ nonSynthetic === 0 ? ok("all recorded fixtures are provenance=synthetic") : null
 
 // 3. Gateway receipt builder exposes no raw-text keys.
 const receipt = await readFile("src/llmShield/gateway/gatewayReceipt.js", "utf8");
-const stripped = receipt.replace(
-  /input_hash|normalised_input_hash|output_hash|context_hashes|provider_response_hash/g,
-  ""
-);
+const stripped = receipt
+  // Stage 3E-live adds *_recorded:false / *_body_recorded:false attestation booleans.
+  // These prove the raw field is NOT recorded; strip them before the raw-key scan so
+  // e.g. "provider_response_body_recorded" does not match the raw "provider_response_body".
+  .replace(
+    /provider_request_body_recorded|provider_response_body_recorded|raw_provider_transcript_recorded|api_key_recorded/g,
+    ""
+  )
+  .replace(
+    /input_hash|normalised_input_hash|output_hash|context_hashes|provider_response_hash/g,
+    ""
+  );
 /(^|[^_])\binput\s*:|(^|[^_])\boutput\s*:|provider_response_body|\bapi_key\s*:/m.test(stripped)
   ? fail("gatewayReceipt.js may expose raw input/output/body")
   : ok("gateway receipt is hash-only");

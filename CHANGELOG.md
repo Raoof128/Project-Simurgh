@@ -19,7 +19,7 @@
 
 ### Verified
 
-- `npm test` 593 pass; 3E-live smoke (disabled/missing-key/context-rejected/rate-limit PASS, optional SKIP, fixtures 40/40); security + privacy audits PASS; mock/recorded + 3B no drift; prettier clean; `npm audit` 0 vulns. Tag `v0.7.1-stage-3e-live-anthropic-adapter` after merge.
+- `npm test` 589 pass; 3E-live smoke (disabled/missing-key/context-rejected/rate-limit PASS, optional SKIP, fixtures 40/40); security + privacy audits PASS; mock/recorded + 3B no drift; prettier clean; `npm audit` 0 vulns. Tag `v0.7.1-stage-3e-live-anthropic-adapter` after merge.
 
 ---
 

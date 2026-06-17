@@ -45,8 +45,7 @@ export function checkLiveCall(ledger, limits, now) {
   const minuteCount = inWindow ? ledger.minuteCount : 0;
   if (minuteCount >= limits.maxCallsPerMinute)
     return { ok: false, reason: "gateway_live_rate_limit" };
-  if (dailyCount >= limits.maxDailyCalls)
-    return { ok: false, reason: "gateway_live_daily_limit" };
+  if (dailyCount >= limits.maxDailyCalls) return { ok: false, reason: "gateway_live_daily_limit" };
   return { ok: true };
 }
 

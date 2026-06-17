@@ -20,18 +20,17 @@ grep -q 'simurgh.llm_safety_receipt.v1' src/llmShield/safetyReceipt.js && grep -
   ok "3A/3B/3C receipt schema preserved" || no "3A/3B/3C receipt schema changed"
 grep -q '"3D"' src/llmShield/stage3dReceipt.js && ok "3D receipt schema preserved" || no "3D receipt schema changed"
 
-# Static: no live adapter file, no provider SDK / network imports under gateway/.
-if ls src/llmShield/gateway/*anthropic* src/llmShield/gateway/*openai* >/dev/null 2>&1; then
-  no "a live provider adapter file exists in core"
-else
-  ok "no live provider adapter file in core"
-fi
+# Static: no STATIC provider-SDK import and no network primitives under gateway/.
+# (Stage 3E-live adds the Anthropic adapter, which uses a guarded DYNAMIC
+# import("@anthropic-ai/sdk"); the dedicated 3E-live security audit asserts that
+# dynamic import is confined to anthropicProviderAdapter.js. Here we only forbid
+# STATIC SDK imports + network calls anywhere under gateway/.)
 # Match real imports / network calls, NOT the forbidden-field denylist strings
 # (e.g. "openai_api_key" is a rejected field name, not an import).
-if grep -RInE "from \"(@anthropic-ai/sdk|openai|node-fetch|axios)\"|import\(\"(@anthropic-ai/sdk|openai)\"|node:https?|[^a-z_]fetch\(" src/llmShield/gateway/ >/dev/null; then
-  no "gateway module imports a network/provider SDK"
+if grep -RInE "from \"(@anthropic-ai/sdk|openai|node-fetch|axios)\"|node:https?|[^a-z_]fetch\(" src/llmShield/gateway/ >/dev/null; then
+  no "gateway module statically imports a network/provider SDK"
 else
-  ok "no network/provider SDK imports under gateway/"
+  ok "no static network/provider SDK imports under gateway/"
 fi
 
 # Static: mount order — gateway registered before base router.
@@ -73,8 +72,10 @@ SID=$(echo "$S" | node -e "process.stdin.on('data',d=>console.log(JSON.parse(d).
 TOK=$(echo "$S" | node -e "process.stdin.on('data',d=>console.log(JSON.parse(d).token))")
 post() { curl -s -X POST "$BASE/api/llm-shield/gateway/$SID/run" -H "Content-Type: application/json" -H "Authorization: Bearer $TOK" -d "$1"; }
 
-echo "$(post '{"input":"x","provider_mode":"live","provider":"anthropic"}')" | grep -q "gateway_live_provider_not_implemented" &&
-  ok "live fails closed" || no "live not fail-closed"
+# Stage 3E-live: live is disabled by default (this audit's server runs without the
+# live env), so the fail-closed reason is now gateway_live_provider_disabled.
+echo "$(post '{"input":"x","provider_mode":"live","provider":"anthropic"}')" | grep -q "gateway_live_provider_disabled" &&
+  ok "live fails closed (disabled by default)" || no "live not fail-closed"
 echo "$(post '{"input":"x","provider_mode":"mock","api_key":"sk-x"}')" | grep -q "gateway_forbidden_field" &&
   ok "api_key rejected" || no "api_key not rejected"
 echo "$(post '{"input":"x","provider_mode":"mock","provider_response_body":"y"}')" | grep -q "gateway_forbidden_field" &&

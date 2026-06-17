@@ -209,17 +209,17 @@ SIMURGH_LIVE_PROMPT_CACHE_ENABLED=false
 
 Fail-closed cases:
 
-| Case                                                     | Result                     | Reason code                                 |
-| -------------------------------------------------------- | -------------------------- | ------------------------------------------- |
-| live mode but `SIMURGH_LIVE_PROVIDER_ENABLED !== "true"` | reject                     | `gateway_live_provider_disabled`            |
-| live mode but provider not `anthropic`                   | reject                     | `gateway_provider_not_allowed`              |
-| live mode but model missing                              | reject                     | `gateway_provider_model_missing`            |
-| live mode but API key missing                            | reject                     | `gateway_provider_key_missing`              |
-| client submits API key                                   | reject                     | `gateway_client_key_rejected`               |
-| client submits provider request body                     | reject                     | `gateway_provider_body_rejected`            |
-| client submits provider response body                    | reject                     | `gateway_provider_output_override_rejected` |
-| live-call rate limit exceeded                            | reject / provider skipped  | `gateway_live_rate_limit`                   |
-| live daily limit exceeded                                | reject / provider skipped  | `gateway_live_daily_limit`                  |
+| Case                                                     | Result                    | Reason code                                 |
+| -------------------------------------------------------- | ------------------------- | ------------------------------------------- |
+| live mode but `SIMURGH_LIVE_PROVIDER_ENABLED !== "true"` | reject                    | `gateway_live_provider_disabled`            |
+| live mode but provider not `anthropic`                   | reject                    | `gateway_provider_not_allowed`              |
+| live mode but model missing                              | reject                    | `gateway_provider_model_missing`            |
+| live mode but API key missing                            | reject                    | `gateway_provider_key_missing`              |
+| client submits API key                                   | reject                    | `gateway_client_key_rejected`               |
+| client submits provider request body                     | reject                    | `gateway_provider_body_rejected`            |
+| client submits provider response body                    | reject                    | `gateway_provider_output_override_rejected` |
+| live-call rate limit exceeded                            | reject / provider skipped | `gateway_live_rate_limit`                   |
+| live daily limit exceeded                                | reject / provider skipped | `gateway_live_daily_limit`                  |
 
 Default runtime behavior remains no-network (mock).
 
@@ -347,7 +347,14 @@ gateway_live_context_summary_built
 New module `src/llmShield/gateway/anthropicMessageBuild.js`:
 
 ```js
-buildAnthropicMessageRequest({ model, safeInput, providerSafeContext, maxTokens, temperature, metadata })
+buildAnthropicMessageRequest({
+  model,
+  safeInput,
+  providerSafeContext,
+  maxTokens,
+  temperature,
+  metadata,
+});
 ```
 
 Allowed request fields: `model`, `max_tokens`, `temperature`, `system`, `messages`, `metadata`. Recommended defaults `{ "max_tokens": 1024, "temperature": 0 }`. Temperature is **not** exposed in the HTTP request body in v1.
@@ -373,7 +380,14 @@ New module `src/llmShield/gateway/anthropicProviderAdapter.js`:
 
 ```js
 export async function generateAnthropicOutput({
-  runId, sessionIdHash, inputHash, safeInput, providerSafeContext, providerConfig, limits, signal,
+  runId,
+  sessionIdHash,
+  inputHash,
+  safeInput,
+  providerSafeContext,
+  providerConfig,
+  limits,
+  signal,
 }) {
   return {
     provider: "anthropic",
