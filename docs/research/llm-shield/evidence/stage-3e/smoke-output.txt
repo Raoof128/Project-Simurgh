@@ -1,0 +1,11 @@
+[PASS] stage3e mock gateway smoke
+[PASS] stage3e live-disabled smoke
+[PASS] stage3e recorded fixture smoke
+[PASS] stage3e provider error smoke
+[PASS] stage3e output firewall smoke
+[PASS] stage3e tool request smoke
+[PASS] stage3e rate limit smoke
+stage3e fixture runner: 70 passed, 0 failed
+[PASS] stage3e fixture runner
+
+smoke-llm-shield-stage3e: passed

@@ -1,0 +1,17 @@
+[PASS] 3A/3B/3C receipt schema preserved
+[PASS] 3D receipt schema preserved
+[PASS] no live provider adapter file in core
+[PASS] no network/provider SDK imports under gateway/
+[PASS] gateway router mounted before base router
+[PASS] recorded fixtures synthetic + hash-stamped
+[PASS] live fails closed
+[PASS] api_key rejected
+[PASS] provider_response_body rejected
+[PASS] path-like fixture selector rejected
+[PASS] tool escalation blocked
+[PASS] output leakage blocked
+[PASS] audit chain verifies
+[PASS] Dockerfile uses non-root USER
+[PASS] .dockerignore excludes .env
+
+security-audit-llm-shield-stage3e: 15 passed, 0 failed

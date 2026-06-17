@@ -2,6 +2,19 @@
 
 ## Agent Change Log
 
+### 2026-06-17 (Australia/Sydney) — LLM Shield industry gateway (Stage 3E-core, complete)
+
+**Raouf:**
+
+- **Scope:** Stage 3E-core — wrap the 3D containment core in a no-network HTTP gateway (mock + synthetic recorded_fixture; live is a fail-closed contract, no adapter). Live adapters deferred to Stage 3E-live. No network, no API keys, no transcript capture.
+- **Summary:** New `src/llmShield/gateway/` (10 modules, each unit-tested): env gate (live → `gateway_live_provider_not_implemented`), provider contract/registry/output-normaliser, mock provider (reuses 3D scenarios), recorded-fixture provider (synthetic-only, `provider_output_hash`-verified, opaque `case_id` via manifest, path selectors rejected), `gatewayReceipt` (schema `3E`, new type; `safetyReceipt`/`stage3dReceipt` untouched), `gatewayAudit` (output-hash on every provider-called path), `gatewayRateLimit` (OWASP LLM10 caps), and `gatewayRouter` composing the 3A/3C firewall + 3D context/tool/output/risk boundaries. Mounted at `/api/llm-shield/gateway` **before** the base router (asserted). 70-case synthetic corpus + runner + metrics; OpenAPI 3.1; non-root Docker; four `*-stage3e` gates wired into check.sh.
+- **Review fixes applied:** recorded fixtures verify `provider_output_hash === hashPrompt(synthetic_provider_output)`; config-rejected receipts hash the real session id; audit emits `PROVIDER_OUTPUT_HASHED` on every provider-called path (incl. tool-blocked); privacy audit scans generated evidence only and flags forbidden tokens only in key/value position (excludes openapi.json + fixtures + audit-narration field names).
+- **Gotcha found + fixed:** the `npm test` glob only reached one directory level under `sh`, so `tests/unit/llmShield/gateway/*.test.js` were silently uncounted. Added `tests/unit/**/**/*.test.js` (520 → 554). Future deeper test dirs need the same.
+- **Files changed:** new `src/llmShield/gateway/**`, `tests/unit/llmShield/gateway/**`, `tests/e2e/llm_shield_stage3e_*`, `scripts/*-llm-shield-stage3e.*`, `Dockerfile.gateway`, `docker-compose.gateway.yml`, `.dockerignore`, `evidence/stage-3e/**`, the five `STAGE_3E_CORE*`/stage docs, spec + plan; modified `server.js`, `package.json`, `scripts/check.sh`, `AGENT.md`, `CHANGELOG.md`.
+- **Verified:** `npm test` 554; 3A/3B/3D gates pass, 3B no drift; 3E smoke + security 15/15 + privacy pass; docker SKIP (no docker locally); `npm audit` 0 vulns; prettier clean. Tag `v0.7.0-stage-3e-core-industry-gateway` after merge.
+
+---
+
 ### 2026-06-17 (Australia/Sydney) — LLM Shield containment (Stage 3D, complete)
 
 **Raouf:**

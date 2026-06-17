@@ -57,13 +57,16 @@ try {
 } catch {
   /* optional */
 }
-// Word-boundary match so safe accounting fields (e.g. api_key_leak_count) do not
-// trip, while a real leaked key/value (api_key": "...", api_key=...) still does.
+// Flag a forbidden token only in KEY/VALUE position (api_key": "...", api_key=...),
+// not as a bare word. This avoids false positives on (a) safe accounting fields
+// like api_key_leak_count and (b) audit/gate-output prose that names the forbidden
+// fields in its own assertion labels ("api_key rejected"). A real leaked
+// key/value is always followed by a quote/colon/equals.
 let leaks = 0;
 for (const [name, content] of generated) {
   for (const key of FORBIDDEN) {
-    if (new RegExp(`\\b${key}\\b`).test(content)) {
-      fail(`${name} contains forbidden token "${key}"`);
+    if (new RegExp(`${key}"?\\s*[:=]`).test(content)) {
+      fail(`${name} contains forbidden token "${key}" in key/value position`);
       leaks++;
     }
   }
