@@ -27,6 +27,7 @@
 ## File Structure
 
 **New runtime (`src/llmShield/gateway/`):**
+
 - `gatewayEnv.js` — resolve/validate provider-mode contract; `live` → fail-closed.
 - `providerTypes.js` — shared enums/constants (response kinds, modes, providers).
 - `providerOutputNormalise.js` — coerce a provider's raw return into `{ kind, text, toolRequest }`.
@@ -99,6 +100,7 @@ checkInputCaps({ inputChars, contextChars }, limits) -> { ok:true } | { ok:false
 ```
 
 `decision` for `recordGatewayRun`:
+
 ```text
 { inputVerdict, contextVerdict, providerCalled, providerResponseKind,
   toolGateVerdict, outputFirewallVerdict, riskVerdict, reasonCodes,
@@ -125,6 +127,7 @@ Expected: branch `stage-3e-core-industry-gateway`; 520 pass / 0 fail.
 ## Task 1: `providerTypes.js` + `gatewayEnv.js`
 
 **Files:**
+
 - Create: `src/llmShield/gateway/providerTypes.js`, `src/llmShield/gateway/gatewayEnv.js`
 - Test: `tests/unit/llmShield/gateway/gatewayEnv.test.js`
 
@@ -134,7 +137,10 @@ Expected: branch `stage-3e-core-industry-gateway`; 520 pass / 0 fail.
 // tests/unit/llmShield/gateway/gatewayEnv.test.js
 import { test, describe } from "node:test";
 import assert from "node:assert/strict";
-import { resolveGatewayEnv, validateProviderSelection } from "../../../../src/llmShield/gateway/gatewayEnv.js";
+import {
+  resolveGatewayEnv,
+  validateProviderSelection,
+} from "../../../../src/llmShield/gateway/gatewayEnv.js";
 
 describe("gatewayEnv", () => {
   test("defaults to mock, no network, live disabled", () => {
@@ -145,7 +151,9 @@ describe("gatewayEnv", () => {
   });
 
   test("mock and recorded_fixture selections are allowed", () => {
-    assert.deepEqual(validateProviderSelection({ providerMode: "mock", provider: "mock" }), { ok: true });
+    assert.deepEqual(validateProviderSelection({ providerMode: "mock", provider: "mock" }), {
+      ok: true,
+    });
     assert.deepEqual(
       validateProviderSelection({ providerMode: "recorded_fixture", provider: "recorded_fixture" }),
       { ok: true }
@@ -160,8 +168,14 @@ describe("gatewayEnv", () => {
   });
 
   test("unknown mode and unknown provider are rejected", () => {
-    assert.equal(validateProviderSelection({ providerMode: "nope", provider: "mock" }).reason, "gateway_provider_mode_invalid");
-    assert.equal(validateProviderSelection({ providerMode: "mock", provider: "weird" }).reason, "gateway_provider_not_allowed");
+    assert.equal(
+      validateProviderSelection({ providerMode: "nope", provider: "mock" }).reason,
+      "gateway_provider_mode_invalid"
+    );
+    assert.equal(
+      validateProviderSelection({ providerMode: "mock", provider: "weird" }).reason,
+      "gateway_provider_not_allowed"
+    );
   });
 });
 ```
@@ -244,6 +258,7 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ## Task 2: `providerOutputNormalise.js`
 
 **Files:**
+
 - Create: `src/llmShield/gateway/providerOutputNormalise.js`
 - Test: `tests/unit/llmShield/gateway/providerOutputNormalise.test.js`
 
@@ -257,17 +272,29 @@ import { normaliseProviderOutput } from "../../../../src/llmShield/gateway/provi
 
 describe("providerOutputNormalise", () => {
   test("text output normalises to kind text", () => {
-    const r = normaliseProviderOutput({ provider_response_kind: "text", output_text: "hi", tool_request: null });
+    const r = normaliseProviderOutput({
+      provider_response_kind: "text",
+      output_text: "hi",
+      tool_request: null,
+    });
     assert.deepEqual(r, { kind: "text", text: "hi", toolRequest: null });
   });
   test("tool_request preserved; text coerced to string", () => {
-    const r = normaliseProviderOutput({ provider_response_kind: "tool_request", output_text: 5, tool_request: { tool_class: "shell_command" } });
+    const r = normaliseProviderOutput({
+      provider_response_kind: "tool_request",
+      output_text: 5,
+      tool_request: { tool_class: "shell_command" },
+    });
     assert.equal(r.kind, "tool_request");
     assert.equal(r.text, "5");
     assert.deepEqual(r.toolRequest, { tool_class: "shell_command" });
   });
   test("unknown kind falls back to text (fail-safe, never throws)", () => {
-    const r = normaliseProviderOutput({ provider_response_kind: "weird", output_text: "x", tool_request: null });
+    const r = normaliseProviderOutput({
+      provider_response_kind: "weird",
+      output_text: "x",
+      tool_request: null,
+    });
     assert.equal(r.kind, "text");
   });
   test("missing fields normalise to empty text, null tool", () => {
@@ -295,7 +322,8 @@ import { PROVIDER_RESPONSE_KINDS } from "./providerTypes.js";
 export function normaliseProviderOutput(raw = {}) {
   const k = raw.provider_response_kind;
   const kind = PROVIDER_RESPONSE_KINDS.includes(k) ? k : "text";
-  const text = raw.output_text === undefined || raw.output_text === null ? "" : String(raw.output_text);
+  const text =
+    raw.output_text === undefined || raw.output_text === null ? "" : String(raw.output_text);
   const toolRequest =
     raw.tool_request && typeof raw.tool_request === "object" ? raw.tool_request : null;
   return { kind, text, toolRequest };
@@ -324,6 +352,7 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ## Task 3: `mockGatewayProvider.js`
 
 **Files:**
+
 - Create: `src/llmShield/gateway/mockGatewayProvider.js`
 - Test: `tests/unit/llmShield/gateway/mockGatewayProvider.test.js`
 
@@ -410,6 +439,7 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ## Task 4: `recordedFixtureProvider.js`
 
 **Files:**
+
 - Create: `src/llmShield/gateway/recordedFixtureProvider.js`
 - Test: `tests/unit/llmShield/gateway/recordedFixtureProvider.test.js`
 
@@ -447,10 +477,16 @@ describe("recordedFixtureProvider", () => {
     assert.throws(() => selectFixtureEntry("../x", manifest), /gateway_fixture_selector_invalid/);
   });
   test("selectFixtureEntry rejects unknown case_id", () => {
-    assert.throws(() => selectFixtureEntry("3e_recorded_999", manifest), /gateway_fixture_not_found/);
+    assert.throws(
+      () => selectFixtureEntry("3e_recorded_999", manifest),
+      /gateway_fixture_not_found/
+    );
   });
   test("validateRecordedFixture rejects non-synthetic provenance", () => {
-    assert.throws(() => validateRecordedFixture({ ...goodFixture, provenance: "real" }), /gateway_fixture_provenance_invalid/);
+    assert.throws(
+      () => validateRecordedFixture({ ...goodFixture, provenance: "real" }),
+      /gateway_fixture_provenance_invalid/
+    );
   });
   test("validateRecordedFixture rejects output-hash mismatch", () => {
     assert.throws(
@@ -547,6 +583,7 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ## Task 5: `providerRegistry.js`
 
 **Files:**
+
 - Create: `src/llmShield/gateway/providerRegistry.js`
 - Test: `tests/unit/llmShield/gateway/providerRegistry.test.js`
 
@@ -626,6 +663,7 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ## Task 6: `gatewayReceipt.js`
 
 **Files:**
+
 - Create: `src/llmShield/gateway/gatewayReceipt.js`
 - Test: `tests/unit/llmShield/gateway/gatewayReceipt.test.js`
 
@@ -635,19 +673,38 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 // tests/unit/llmShield/gateway/gatewayReceipt.test.js
 import { test, describe } from "node:test";
 import assert from "node:assert/strict";
-import { GATEWAY_SCHEMA_VERSION, buildGatewayReceipt, hashGatewayReceipt } from "../../../../src/llmShield/gateway/gatewayReceipt.js";
+import {
+  GATEWAY_SCHEMA_VERSION,
+  buildGatewayReceipt,
+  hashGatewayReceipt,
+} from "../../../../src/llmShield/gateway/gatewayReceipt.js";
 
 const ARGS = {
-  sessionIdHash: "sha256:s", runId: "gw_run_001", taskType: "general_qa",
-  inputHash: "sha256:i", normalisedInputHash: "sha256:n",
-  contextVerdict: "not_supplied", contextHashes: [],
-  gatewayVerdict: "blocked", providerMode: "recorded_fixture", provider: "recorded_fixture",
-  providerCalled: true, providerResponseKind: "leaky_text", providerResponseHash: "sha256:p",
-  toolGateVerdict: "not_requested", toolNameHash: null,
-  outputFirewallVerdict: "blocked", outputHash: "sha256:o",
-  riskScore: 5, riskVerdict: "warning", latencyBucket: "0-250ms",
-  inputTokenBucket: "0-1k", outputTokenBucket: "unknown",
-  reasonCodes: ["output_system_prompt_leakage"], auditEntryHash: "sha256:a", timestamp: "2026-06-17T00:00:00.000Z",
+  sessionIdHash: "sha256:s",
+  runId: "gw_run_001",
+  taskType: "general_qa",
+  inputHash: "sha256:i",
+  normalisedInputHash: "sha256:n",
+  contextVerdict: "not_supplied",
+  contextHashes: [],
+  gatewayVerdict: "blocked",
+  providerMode: "recorded_fixture",
+  provider: "recorded_fixture",
+  providerCalled: true,
+  providerResponseKind: "leaky_text",
+  providerResponseHash: "sha256:p",
+  toolGateVerdict: "not_requested",
+  toolNameHash: null,
+  outputFirewallVerdict: "blocked",
+  outputHash: "sha256:o",
+  riskScore: 5,
+  riskVerdict: "warning",
+  latencyBucket: "0-250ms",
+  inputTokenBucket: "0-1k",
+  outputTokenBucket: "unknown",
+  reasonCodes: ["output_system_prompt_leakage"],
+  auditEntryHash: "sha256:a",
+  timestamp: "2026-06-17T00:00:00.000Z",
 };
 
 describe("gatewayReceipt", () => {
@@ -663,7 +720,13 @@ describe("gatewayReceipt", () => {
   });
   test("carries no raw-text keys", () => {
     const json = JSON.stringify(buildGatewayReceipt(ARGS));
-    for (const k of ['"raw_input"', '"raw_provider_output"', '"provider_response_body"', '"api_key"', '"system_prompt"']) {
+    for (const k of [
+      '"raw_input"',
+      '"raw_provider_output"',
+      '"provider_response_body"',
+      '"api_key"',
+      '"system_prompt"',
+    ]) {
       assert.ok(!json.includes(k), `must not contain ${k}`);
     }
   });
@@ -752,6 +815,7 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ## Task 7: `gatewayAudit.js`
 
 **Files:**
+
 - Create: `src/llmShield/gateway/gatewayAudit.js`
 - Test: `tests/unit/llmShield/gateway/gatewayAudit.test.js`
 
@@ -763,44 +827,76 @@ import { test, describe } from "node:test";
 import assert from "node:assert/strict";
 import crypto from "node:crypto";
 import { createChain, verifyChain } from "../../../../src/audit/hmacChain.js";
-import { GATEWAY_EVENTS, recordGatewaySessionCreated, recordGatewayRun, recordGatewayReceiptExported } from "../../../../src/llmShield/gateway/gatewayAudit.js";
+import {
+  GATEWAY_EVENTS,
+  recordGatewaySessionCreated,
+  recordGatewayRun,
+  recordGatewayReceiptExported,
+} from "../../../../src/llmShield/gateway/gatewayAudit.js";
 
 const base = {
-  inputVerdict: "safe", contextVerdict: "not_supplied", providerCalled: true,
-  providerResponseKind: "text", toolGateVerdict: "not_requested", outputFirewallVerdict: "accepted",
-  riskVerdict: "safe", reasonCodes: [], inputHash: "sha256:i", normalisedInputHash: "sha256:n",
-  contextHashes: [], toolNameHash: null, providerResponseHash: "sha256:p", outputHash: "sha256:o",
+  inputVerdict: "safe",
+  contextVerdict: "not_supplied",
+  providerCalled: true,
+  providerResponseKind: "text",
+  toolGateVerdict: "not_requested",
+  outputFirewallVerdict: "accepted",
+  riskVerdict: "safe",
+  reasonCodes: [],
+  inputHash: "sha256:i",
+  normalisedInputHash: "sha256:n",
+  contextHashes: [],
+  toolNameHash: null,
+  providerResponseHash: "sha256:p",
+  outputHash: "sha256:o",
 };
 
 describe("gatewayAudit", () => {
   test("mock accepted run order", () => {
-    const key = crypto.randomBytes(32); const chain = createChain();
+    const key = crypto.randomBytes(32);
+    const chain = createChain();
     recordGatewayRun(chain, key, base);
-    assert.deepEqual(chain.entries.map((e) => e.type), [
-      GATEWAY_EVENTS.LLM_GATEWAY_REQUEST_ACCEPTED,
-      GATEWAY_EVENTS.LLM_GATEWAY_PROVIDER_CALLED,
-      GATEWAY_EVENTS.LLM_GATEWAY_PROVIDER_OUTPUT_HASHED,
-      GATEWAY_EVENTS.LLM_GATEWAY_OUTPUT_ACCEPTED,
-      GATEWAY_EVENTS.LLM_GATEWAY_RISK_ACCUMULATED,
-    ]);
+    assert.deepEqual(
+      chain.entries.map((e) => e.type),
+      [
+        GATEWAY_EVENTS.LLM_GATEWAY_REQUEST_ACCEPTED,
+        GATEWAY_EVENTS.LLM_GATEWAY_PROVIDER_CALLED,
+        GATEWAY_EVENTS.LLM_GATEWAY_PROVIDER_OUTPUT_HASHED,
+        GATEWAY_EVENTS.LLM_GATEWAY_OUTPUT_ACCEPTED,
+        GATEWAY_EVENTS.LLM_GATEWAY_RISK_ACCUMULATED,
+      ]
+    );
     assert.equal(verifyChain(chain, key).valid, true);
   });
   test("output-blocked run emits OUTPUT_BLOCKED not ACCEPTED", () => {
-    const key = crypto.randomBytes(32); const chain = createChain();
-    recordGatewayRun(chain, key, { ...base, outputFirewallVerdict: "blocked", riskVerdict: "warning", reasonCodes: ["output_system_prompt_leakage"] });
+    const key = crypto.randomBytes(32);
+    const chain = createChain();
+    recordGatewayRun(chain, key, {
+      ...base,
+      outputFirewallVerdict: "blocked",
+      riskVerdict: "warning",
+      reasonCodes: ["output_system_prompt_leakage"],
+    });
     const types = chain.entries.map((e) => e.type);
     assert.ok(types.includes(GATEWAY_EVENTS.LLM_GATEWAY_OUTPUT_BLOCKED));
     assert.ok(!types.includes(GATEWAY_EVENTS.LLM_GATEWAY_OUTPUT_ACCEPTED));
   });
   test("provider-skipped run (live fail-closed) emits CONFIG_REJECTED + SKIPPED", () => {
-    const key = crypto.randomBytes(32); const chain = createChain();
-    recordGatewayRun(chain, key, { ...base, providerCalled: false, providerConfigRejected: true, reasonCodes: ["gateway_live_provider_not_implemented"] });
+    const key = crypto.randomBytes(32);
+    const chain = createChain();
+    recordGatewayRun(chain, key, {
+      ...base,
+      providerCalled: false,
+      providerConfigRejected: true,
+      reasonCodes: ["gateway_live_provider_not_implemented"],
+    });
     const types = chain.entries.map((e) => e.type);
     assert.ok(types.includes(GATEWAY_EVENTS.LLM_GATEWAY_PROVIDER_CONFIG_REJECTED));
     assert.ok(types.includes(GATEWAY_EVENTS.LLM_GATEWAY_PROVIDER_SKIPPED));
   });
   test("session created + receipt exported events", () => {
-    const key = crypto.randomBytes(32); const chain = createChain();
+    const key = crypto.randomBytes(32);
+    const chain = createChain();
     recordGatewaySessionCreated(chain, key);
     recordGatewayReceiptExported(chain, key, "sha256:r");
     assert.equal(chain.entries[0].type, GATEWAY_EVENTS.LLM_GATEWAY_SESSION_CREATED);
@@ -866,7 +962,8 @@ export function recordGatewayRun(chain, key, d) {
     appendEntry(chain, key, GATEWAY_EVENTS.LLM_GATEWAY_RISK_ACCUMULATED, {
       risk_verdict: d.riskVerdict,
     });
-    if (d.riskVerdict === "blocked") appendEntry(chain, key, GATEWAY_EVENTS.LLM_GATEWAY_RISK_ESCALATED, {});
+    if (d.riskVerdict === "blocked")
+      appendEntry(chain, key, GATEWAY_EVENTS.LLM_GATEWAY_RISK_ESCALATED, {});
     return chain.prevHash;
   }
 
@@ -884,20 +981,29 @@ export function recordGatewayRun(chain, key, d) {
     appendEntry(chain, key, GATEWAY_EVENTS.LLM_GATEWAY_PROVIDER_TOOL_REQUEST_DETECTED, {
       tool_name_hash: d.toolNameHash,
     });
-    appendEntry(chain, key, GATEWAY_EVENTS.LLM_GATEWAY_TOOL_BLOCKED, { reason_codes: d.reasonCodes ?? [] });
+    appendEntry(chain, key, GATEWAY_EVENTS.LLM_GATEWAY_TOOL_BLOCKED, {
+      reason_codes: d.reasonCodes ?? [],
+    });
   } else if (d.outputFirewallVerdict === "blocked") {
-    appendEntry(chain, key, GATEWAY_EVENTS.LLM_GATEWAY_OUTPUT_BLOCKED, { reason_codes: d.reasonCodes ?? [] });
+    appendEntry(chain, key, GATEWAY_EVENTS.LLM_GATEWAY_OUTPUT_BLOCKED, {
+      reason_codes: d.reasonCodes ?? [],
+    });
   } else {
     appendEntry(chain, key, GATEWAY_EVENTS.LLM_GATEWAY_OUTPUT_ACCEPTED, {});
   }
 
-  appendEntry(chain, key, GATEWAY_EVENTS.LLM_GATEWAY_RISK_ACCUMULATED, { risk_verdict: d.riskVerdict });
-  if (d.riskVerdict === "blocked") appendEntry(chain, key, GATEWAY_EVENTS.LLM_GATEWAY_RISK_ESCALATED, {});
+  appendEntry(chain, key, GATEWAY_EVENTS.LLM_GATEWAY_RISK_ACCUMULATED, {
+    risk_verdict: d.riskVerdict,
+  });
+  if (d.riskVerdict === "blocked")
+    appendEntry(chain, key, GATEWAY_EVENTS.LLM_GATEWAY_RISK_ESCALATED, {});
   return chain.prevHash;
 }
 
 export function recordGatewayReceiptExported(chain, key, receiptHash) {
-  appendEntry(chain, key, GATEWAY_EVENTS.LLM_GATEWAY_RECEIPT_EXPORTED, { receipt_hash: receiptHash });
+  appendEntry(chain, key, GATEWAY_EVENTS.LLM_GATEWAY_RECEIPT_EXPORTED, {
+    receipt_hash: receiptHash,
+  });
 }
 ```
 
@@ -928,6 +1034,7 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ## Task 8: `gatewayRateLimit.js`
 
 **Files:**
+
 - Create: `src/llmShield/gateway/gatewayRateLimit.js`
 - Test: `tests/unit/llmShield/gateway/gatewayRateLimit.test.js`
 
@@ -937,7 +1044,10 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 // tests/unit/llmShield/gateway/gatewayRateLimit.test.js
 import { test, describe } from "node:test";
 import assert from "node:assert/strict";
-import { gatewayLimits, checkInputCaps } from "../../../../src/llmShield/gateway/gatewayRateLimit.js";
+import {
+  gatewayLimits,
+  checkInputCaps,
+} from "../../../../src/llmShield/gateway/gatewayRateLimit.js";
 
 describe("gatewayRateLimit", () => {
   test("defaults present", () => {
@@ -948,11 +1058,17 @@ describe("gatewayRateLimit", () => {
   });
   test("input over cap rejected", () => {
     const l = gatewayLimits({});
-    assert.deepEqual(checkInputCaps({ inputChars: 5000, contextChars: 0 }, l), { ok: false, reason: "gateway_input_too_large" });
+    assert.deepEqual(checkInputCaps({ inputChars: 5000, contextChars: 0 }, l), {
+      ok: false,
+      reason: "gateway_input_too_large",
+    });
   });
   test("context over cap rejected", () => {
     const l = gatewayLimits({});
-    assert.deepEqual(checkInputCaps({ inputChars: 10, contextChars: 20000 }, l), { ok: false, reason: "gateway_context_too_large" });
+    assert.deepEqual(checkInputCaps({ inputChars: 10, contextChars: 20000 }, l), {
+      ok: false,
+      reason: "gateway_context_too_large",
+    });
   });
   test("within caps ok", () => {
     const l = gatewayLimits({});
@@ -989,7 +1105,8 @@ export function gatewayLimits(env = process.env) {
 
 export function checkInputCaps({ inputChars, contextChars }, limits) {
   if (inputChars > limits.maxInputChars) return { ok: false, reason: "gateway_input_too_large" };
-  if (contextChars > limits.maxContextChars) return { ok: false, reason: "gateway_context_too_large" };
+  if (contextChars > limits.maxContextChars)
+    return { ok: false, reason: "gateway_context_too_large" };
   return { ok: true };
 }
 ```
@@ -1014,6 +1131,7 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 This task builds the full run handler composing env gate → input firewall → context guard → provider → tool gate → output firewall → risk → receipt, plus session/verify routes and the static OpenAPI route. It depends on the OpenAPI file (Task 12) for the `/openapi.json` route; until then that route returns 503 — wired fully in Task 12.
 
 **Files:**
+
 - Create: `src/llmShield/gateway/gatewayRouter.js`
 - Modify: `server.js` (mount before base router)
 - Test: `tests/e2e/llm_shield_stage3e_mock_gateway_smoke.mjs`, `tests/e2e/llm_shield_stage3e_live_disabled_smoke.mjs`
@@ -1025,17 +1143,41 @@ This task builds the full run handler composing env gate → input firewall → 
 // SPDX-License-Identifier: AGPL-3.0-or-later
 const base = process.argv[2] || process.env.SIMURGH_BASE_URL || "http://127.0.0.1:33055";
 const api = `${base}/api/llm-shield/gateway`;
-function ok(c, m, d) { if (!c) throw new Error(d ? `${m}: ${JSON.stringify(d)}` : m); }
+function ok(c, m, d) {
+  if (!c) throw new Error(d ? `${m}: ${JSON.stringify(d)}` : m);
+}
 const session = async () => {
-  const s = await (await fetch(`${api}/sessions`, { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" })).json();
-  return { id: s.session_id, token: s.token, auth: { "Content-Type": "application/json", Authorization: `Bearer ${s.token}` } };
+  const s = await (
+    await fetch(`${api}/sessions`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: "{}",
+    })
+  ).json();
+  return {
+    id: s.session_id,
+    token: s.token,
+    auth: { "Content-Type": "application/json", Authorization: `Bearer ${s.token}` },
+  };
 };
-const run = async (s, body) => (await fetch(`${api}/${s.id}/run`, { method: "POST", headers: s.auth, body: JSON.stringify(body) })).json();
+const run = async (s, body) =>
+  (
+    await fetch(`${api}/${s.id}/run`, {
+      method: "POST",
+      headers: s.auth,
+      body: JSON.stringify(body),
+    })
+  ).json();
 
 // benign mock run -> accepted, 3E receipt, no egress
 {
   const s = await session();
-  const r = await run(s, { input: "Summarise widgets.", provider_mode: "mock", provider: "mock", scenario: "benign" });
+  const r = await run(s, {
+    input: "Summarise widgets.",
+    provider_mode: "mock",
+    provider: "mock",
+    scenario: "benign",
+  });
   ok(r.gateway_verdict === "accepted", "benign mock must be accepted", r);
   ok(r.receipt?.schema_version === "3E", "must emit 3E receipt", r);
   ok(r.receipt?.network_egress_used === false, "no egress", r);
@@ -1043,21 +1185,35 @@ const run = async (s, body) => (await fetch(`${api}/${s.id}/run`, { method: "POS
 // tool_escalation scenario -> tool blocked, never executed
 {
   const s = await session();
-  const r = await run(s, { input: "do it", provider_mode: "mock", provider: "mock", scenario: "tool_escalation" });
+  const r = await run(s, {
+    input: "do it",
+    provider_mode: "mock",
+    provider: "mock",
+    scenario: "tool_escalation",
+  });
   ok(r.tool_gate_verdict === "blocked", "tool escalation blocked", r);
   ok(r.receipt?.tool_called === false, "tool never executed", r);
 }
 // policy_leak scenario -> output blocked, raw not echoed
 {
   const s = await session();
-  const r = await run(s, { input: "share config", provider_mode: "mock", provider: "mock", scenario: "policy_leak" });
+  const r = await run(s, {
+    input: "share config",
+    provider_mode: "mock",
+    provider: "mock",
+    scenario: "policy_leak",
+  });
   ok(r.output_firewall_verdict === "blocked", "leak blocked", r);
   ok(!JSON.stringify(r).includes("hidden policy assistant"), "raw output not echoed", r);
 }
 // forbidden field rejected
 {
   const s = await session();
-  const res = await fetch(`${api}/${s.id}/run`, { method: "POST", headers: s.auth, body: JSON.stringify({ input: "x", provider_mode: "mock", api_key: "sk-x" }) });
+  const res = await fetch(`${api}/${s.id}/run`, {
+    method: "POST",
+    headers: s.auth,
+    body: JSON.stringify({ input: "x", provider_mode: "mock", api_key: "sk-x" }),
+  });
   const r = await res.json();
   ok(r.ok === false && r.error === "gateway_forbidden_field", "api_key must be rejected", r);
 }
@@ -1065,7 +1221,9 @@ const run = async (s, body) => (await fetch(`${api}/${s.id}/run`, { method: "POS
 {
   const s = await session();
   await run(s, { input: "x", provider_mode: "mock", provider: "mock", scenario: "benign" });
-  const v = await (await fetch(`${api}/${s.id}/verify`, { headers: { Authorization: `Bearer ${s.token}` } })).json();
+  const v = await (
+    await fetch(`${api}/${s.id}/verify`, { headers: { Authorization: `Bearer ${s.token}` } })
+  ).json();
   ok(v.valid === true, "chain must verify", v);
 }
 console.log("[PASS] stage3e mock gateway smoke");
@@ -1076,23 +1234,41 @@ console.log("[PASS] stage3e mock gateway smoke");
 // SPDX-License-Identifier: AGPL-3.0-or-later
 const base = process.argv[2] || process.env.SIMURGH_BASE_URL || "http://127.0.0.1:33055";
 const api = `${base}/api/llm-shield/gateway`;
-function ok(c, m, d) { if (!c) throw new Error(d ? `${m}: ${JSON.stringify(d)}` : m); }
-const s = await (await fetch(`${api}/sessions`, { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" })).json();
+function ok(c, m, d) {
+  if (!c) throw new Error(d ? `${m}: ${JSON.stringify(d)}` : m);
+}
+const s = await (
+  await fetch(`${api}/sessions`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: "{}",
+  })
+).json();
 const auth = { "Content-Type": "application/json", Authorization: `Bearer ${s.token}` };
-const res = await fetch(`${api}/${s.session_id}/run`, { method: "POST", headers: auth, body: JSON.stringify({ input: "x", provider_mode: "live", provider: "anthropic" }) });
+const res = await fetch(`${api}/${s.session_id}/run`, {
+  method: "POST",
+  headers: auth,
+  body: JSON.stringify({ input: "x", provider_mode: "live", provider: "anthropic" }),
+});
 const r = await res.json();
-ok(r.ok === false && r.error === "gateway_live_provider_not_implemented", "live must fail closed", r);
+ok(
+  r.ok === false && r.error === "gateway_live_provider_not_implemented",
+  "live must fail closed",
+  r
+);
 console.log("[PASS] stage3e live-disabled smoke");
 ```
 
 - [ ] **Step 2: Boot + run to verify they fail**
 
 Run:
+
 ```bash
 SIMURGH_DEMO_MODE=1 SIMURGH_LLM_SHIELD_SECRET="smoke-llm-shield-secret-32-characters" PORT=33055 node server.js >/tmp/s3e.log 2>&1 &
 SRV=$!; sleep 1.5
 node tests/e2e/llm_shield_stage3e_mock_gateway_smoke.mjs http://127.0.0.1:33055; kill $SRV
 ```
+
 Expected: FAIL — gateway routes 404 (not mounted yet).
 
 - [ ] **Step 3: Implement `gatewayRouter.js`**
@@ -1108,7 +1284,11 @@ import crypto from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { createChain, verifyChain } from "../../audit/hmacChain.js";
 import { getStore } from "../../storage/memoryStore.js";
-import { issueSessionToken, verifySessionToken, extractBearer } from "../../security/sessionToken.js";
+import {
+  issueSessionToken,
+  verifySessionToken,
+  extractBearer,
+} from "../../security/sessionToken.js";
 import { stagingConfig } from "../../config/env.js";
 import { normalisePrompt, hashPrompt } from "../promptNormalise.js";
 import { classifyPrompt } from "../promptFirewall.js";
@@ -1122,7 +1302,11 @@ import { getGatewayProvider } from "./providerRegistry.js";
 import { selectFixtureEntry, validateRecordedFixture } from "./recordedFixtureProvider.js";
 import { normaliseProviderOutput } from "./providerOutputNormalise.js";
 import { buildGatewayReceipt, hashGatewayReceipt } from "./gatewayReceipt.js";
-import { recordGatewaySessionCreated, recordGatewayRun, recordGatewayReceiptExported } from "./gatewayAudit.js";
+import {
+  recordGatewaySessionCreated,
+  recordGatewayRun,
+  recordGatewayReceiptExported,
+} from "./gatewayAudit.js";
 import { gatewayLimits, checkInputCaps } from "./gatewayRateLimit.js";
 
 const router = Router();
@@ -1131,9 +1315,17 @@ const BODY_LIMIT_BYTES = 32 * 1024;
 const MAX_SESSIONS = Number(process.env.SIMURGH_GATEWAY_MAX_SESSIONS || 5000);
 const FIXTURE_DIR = "docs/research/llm-shield/evidence/stage-3e/fixtures";
 const FORBIDDEN_FIELDS = [
-  "api_key", "anthropic_api_key", "openai_api_key", "provider_request_body",
-  "provider_response_body", "mock_provider_output", "synthetic_provider_output",
-  "raw_provider_output", "tool_result", "system_prompt", "developer_prompt",
+  "api_key",
+  "anthropic_api_key",
+  "openai_api_key",
+  "provider_request_body",
+  "provider_response_body",
+  "mock_provider_output",
+  "synthetic_provider_output",
+  "raw_provider_output",
+  "tool_result",
+  "system_prompt",
+  "developer_prompt",
 ];
 
 function getSecret() {
@@ -1146,24 +1338,28 @@ const tokenKey = () => deriveKey("llm-shield-gateway-token-v1");
 const auditKey = () => deriveKey("llm-shield-gateway-audit-v1");
 
 function requireConfig(_req, res, next) {
-  if (!process.env.SIMURGH_LLM_SHIELD_SECRET) return res.status(503).json({ ok: false, error: "gateway_not_configured" });
+  if (!process.env.SIMURGH_LLM_SHIELD_SECRET)
+    return res.status(503).json({ ok: false, error: "gateway_not_configured" });
   next();
 }
 function contentLengthWithinLimit(req, res, next) {
   const len = Number(req.headers["content-length"] ?? 0);
-  if (Number.isFinite(len) && len > BODY_LIMIT_BYTES) return res.status(413).json({ ok: false, error: "payload_too_large" });
+  if (Number.isFinite(len) && len > BODY_LIMIT_BYTES)
+    return res.status(413).json({ ok: false, error: "payload_too_large" });
   next();
 }
 function requireToken(req, res, next) {
   const token = extractBearer(req);
   if (!token) return res.status(401).json({ ok: false, error: "token_missing" });
   const result = verifySessionToken(token, tokenKey());
-  if (!result.valid) return res.status(401).json({ ok: false, error: "token_invalid", reason: result.reason });
+  if (!result.valid)
+    return res.status(401).json({ ok: false, error: "token_invalid", reason: result.reason });
   req.gwSessionId = result.sessionId;
   next();
 }
 function requirePathMatch(req, res, next) {
-  if (req.gwSessionId !== req.params.sessionId) return res.status(403).json({ ok: false, error: "forbidden" });
+  if (req.gwSessionId !== req.params.sessionId)
+    return res.status(403).json({ ok: false, error: "forbidden" });
   next();
 }
 
@@ -1171,7 +1367,8 @@ router.use(contentLengthWithinLimit);
 router.use(requireConfig);
 
 router.post("/sessions", (_req, res) => {
-  if (store.size >= MAX_SESSIONS) return res.status(503).json({ ok: false, error: "gateway_session_capacity_reached" });
+  if (store.size >= MAX_SESSIONS)
+    return res.status(503).json({ ok: false, error: "gateway_session_capacity_reached" });
   const sessionId = "gw_sess_" + crypto.randomBytes(12).toString("hex");
   const record = { auditChain: createChain(), runCounter: 0, riskScore: 0 };
   recordGatewaySessionCreated(record.auditChain, auditKey());
@@ -1187,10 +1384,12 @@ router.post("/:sessionId/run", requireToken, requirePathMatch, async (req, res) 
   const key = auditKey();
 
   for (const f of FORBIDDEN_FIELDS) {
-    if (Object.hasOwn(body, f)) return res.status(400).json({ ok: false, error: "gateway_forbidden_field", field: f });
+    if (Object.hasOwn(body, f))
+      return res.status(400).json({ ok: false, error: "gateway_forbidden_field", field: f });
   }
 
-  const providerMode = typeof body.provider_mode === "string" ? body.provider_mode : resolveGatewayEnv().provider_mode;
+  const providerMode =
+    typeof body.provider_mode === "string" ? body.provider_mode : resolveGatewayEnv().provider_mode;
   const provider = typeof body.provider === "string" ? body.provider : "mock";
   const sel = validateProviderSelection({ providerMode, provider });
   if (!sel.ok) {
@@ -1239,22 +1438,37 @@ router.post("/:sessionId/run", requireToken, requirePathMatch, async (req, res) 
     } catch (e) {
       record.runCounter += 1;
       const runId = `gw_run_${String(record.runCounter).padStart(3, "0")}`;
-      return finishConfigRejected(res, record, key, runId, String(e.message || "gateway_provider_error"), req.params.sessionId);
+      return finishConfigRejected(
+        res,
+        record,
+        key,
+        runId,
+        String(e.message || "gateway_provider_error"),
+        req.params.sessionId
+      );
     }
   }
 
-  const norm = providerCalled ? normaliseProviderOutput(raw) : { kind: "text", text: "", toolRequest: null };
+  const norm = providerCalled
+    ? normaliseProviderOutput(raw)
+    : { kind: "text", text: "", toolRequest: null };
   const providerResponseHash = hashPrompt(norm.text);
 
   // ----- tool gate (provider-side tools off; never executed) -----
-  const toolResult = providerCalled && norm.toolRequest
-    ? gateToolRequest(norm.toolRequest)
-    : { verdict: "not_requested", reasonCodes: [], toolNameHash: null, toolCalled: false };
+  const toolResult =
+    providerCalled && norm.toolRequest
+      ? gateToolRequest(norm.toolRequest)
+      : { verdict: "not_requested", reasonCodes: [], toolNameHash: null, toolCalled: false };
 
   // ----- output firewall (only when no tool block) -----
-  const outputResult = providerCalled && toolResult.verdict !== "blocked"
-    ? scanOutput(norm.text, { providerCalled: true })
-    : { verdict: toolResult.verdict === "blocked" ? "not_called" : "not_called", reasonCodes: [], outputHash: providerResponseHash };
+  const outputResult =
+    providerCalled && toolResult.verdict !== "blocked"
+      ? scanOutput(norm.text, { providerCalled: true })
+      : {
+          verdict: toolResult.verdict === "blocked" ? "not_called" : "not_called",
+          reasonCodes: [],
+          outputHash: providerResponseHash,
+        };
 
   // ----- risk -----
   const runPoints =
@@ -1269,16 +1483,25 @@ router.post("/:sessionId/run", requireToken, requirePathMatch, async (req, res) 
         });
   record.riskScore = (record.riskScore ?? 0) + runPoints;
   const riskVerdictValue =
-    inputVerdict === "blocked" || contextResult.verdict === "rejected" ? "blocked" : riskVerdict(record.riskScore);
+    inputVerdict === "blocked" || contextResult.verdict === "rejected"
+      ? "blocked"
+      : riskVerdict(record.riskScore);
 
   const gatewayVerdict =
-    contextResult.verdict === "rejected" || toolResult.verdict === "blocked" || outputResult.verdict === "blocked" || inputVerdict === "blocked"
+    contextResult.verdict === "rejected" ||
+    toolResult.verdict === "blocked" ||
+    outputResult.verdict === "blocked" ||
+    inputVerdict === "blocked"
       ? "blocked"
       : riskVerdictValue === "warning"
         ? "warning"
         : "accepted";
 
-  const reasonCodes = [...contextResult.reasonCodes, ...toolResult.reasonCodes, ...outputResult.reasonCodes];
+  const reasonCodes = [
+    ...contextResult.reasonCodes,
+    ...toolResult.reasonCodes,
+    ...outputResult.reasonCodes,
+  ];
 
   record.runCounter += 1;
   const runId = `gw_run_${String(record.runCounter).padStart(3, "0")}`;
@@ -1286,24 +1509,48 @@ router.post("/:sessionId/run", requireToken, requirePathMatch, async (req, res) 
   const timestamp = new Date().toISOString();
 
   const auditEntryHash = recordGatewayRun(record.auditChain, key, {
-    inputVerdict, contextVerdict: contextResult.verdict, providerCalled,
-    providerResponseKind: norm.kind, toolGateVerdict: toolResult.verdict,
-    outputFirewallVerdict: outputResult.verdict, riskVerdict: riskVerdictValue,
-    reasonCodes, inputHash, normalisedInputHash, contextHashes: contextResult.contextHashes,
-    toolNameHash: toolResult.toolNameHash, providerResponseHash, outputHash: outputResult.outputHash,
+    inputVerdict,
+    contextVerdict: contextResult.verdict,
+    providerCalled,
+    providerResponseKind: norm.kind,
+    toolGateVerdict: toolResult.verdict,
+    outputFirewallVerdict: outputResult.verdict,
+    riskVerdict: riskVerdictValue,
+    reasonCodes,
+    inputHash,
+    normalisedInputHash,
+    contextHashes: contextResult.contextHashes,
+    toolNameHash: toolResult.toolNameHash,
+    providerResponseHash,
+    outputHash: outputResult.outputHash,
   });
 
   const receipt = buildGatewayReceipt({
-    sessionIdHash, runId, taskType, inputHash, normalisedInputHash,
-    contextVerdict: contextResult.verdict, contextHashes: contextResult.contextHashes,
-    gatewayVerdict, providerMode, provider, providerCalled, providerResponseKind: norm.kind,
-    providerResponseHash, toolGateVerdict: toolResult.verdict, toolNameHash: toolResult.toolNameHash,
-    outputFirewallVerdict: outputResult.verdict, outputHash: outputResult.outputHash,
-    riskScore: record.riskScore, riskVerdict: riskVerdictValue,
+    sessionIdHash,
+    runId,
+    taskType,
+    inputHash,
+    normalisedInputHash,
+    contextVerdict: contextResult.verdict,
+    contextHashes: contextResult.contextHashes,
+    gatewayVerdict,
+    providerMode,
+    provider,
+    providerCalled,
+    providerResponseKind: norm.kind,
+    providerResponseHash,
+    toolGateVerdict: toolResult.verdict,
+    toolNameHash: toolResult.toolNameHash,
+    outputFirewallVerdict: outputResult.verdict,
+    outputHash: outputResult.outputHash,
+    riskScore: record.riskScore,
+    riskVerdict: riskVerdictValue,
     latencyBucket: raw?.latency_bucket ?? "0-250ms",
     inputTokenBucket: raw?.usage?.input_tokens_bucket ?? "unknown",
     outputTokenBucket: raw?.usage?.output_tokens_bucket ?? "unknown",
-    reasonCodes, auditEntryHash, timestamp,
+    reasonCodes,
+    auditEntryHash,
+    timestamp,
   });
   recordGatewayReceiptExported(record.auditChain, key, hashGatewayReceipt(receipt));
 
@@ -1326,21 +1573,48 @@ function finishConfigRejected(res, record, key, runId, reason, sessionId) {
   const sessionIdHash = hashPrompt(sessionId);
   const timestamp = new Date().toISOString();
   const auditEntryHash = recordGatewayRun(record.auditChain, key, {
-    inputVerdict: "safe", contextVerdict: "not_supplied", providerCalled: false,
-    providerConfigRejected: true, providerResponseKind: "error",
-    toolGateVerdict: "not_requested", outputFirewallVerdict: "not_called",
-    riskVerdict: "warning", reasonCodes: [reason], inputHash: hashPrompt(""),
-    normalisedInputHash: hashPrompt(""), contextHashes: [], toolNameHash: null,
-    providerResponseHash: hashPrompt(""), outputHash: hashPrompt(""),
+    inputVerdict: "safe",
+    contextVerdict: "not_supplied",
+    providerCalled: false,
+    providerConfigRejected: true,
+    providerResponseKind: "error",
+    toolGateVerdict: "not_requested",
+    outputFirewallVerdict: "not_called",
+    riskVerdict: "warning",
+    reasonCodes: [reason],
+    inputHash: hashPrompt(""),
+    normalisedInputHash: hashPrompt(""),
+    contextHashes: [],
+    toolNameHash: null,
+    providerResponseHash: hashPrompt(""),
+    outputHash: hashPrompt(""),
   });
   const receipt = buildGatewayReceipt({
-    sessionIdHash, runId, taskType: "unknown", inputHash: hashPrompt(""), normalisedInputHash: hashPrompt(""),
-    contextVerdict: "not_supplied", contextHashes: [], gatewayVerdict: "blocked",
-    providerMode: "live", provider: "n/a", providerCalled: false, providerResponseKind: "error",
-    providerResponseHash: hashPrompt(""), toolGateVerdict: "not_requested", toolNameHash: null,
-    outputFirewallVerdict: "not_called", outputHash: hashPrompt(""), riskScore: record.riskScore ?? 0,
-    riskVerdict: "warning", latencyBucket: "0-250ms", inputTokenBucket: "unknown", outputTokenBucket: "unknown",
-    reasonCodes: [reason], auditEntryHash, timestamp,
+    sessionIdHash,
+    runId,
+    taskType: "unknown",
+    inputHash: hashPrompt(""),
+    normalisedInputHash: hashPrompt(""),
+    contextVerdict: "not_supplied",
+    contextHashes: [],
+    gatewayVerdict: "blocked",
+    providerMode: "live",
+    provider: "n/a",
+    providerCalled: false,
+    providerResponseKind: "error",
+    providerResponseHash: hashPrompt(""),
+    toolGateVerdict: "not_requested",
+    toolNameHash: null,
+    outputFirewallVerdict: "not_called",
+    outputHash: hashPrompt(""),
+    riskScore: record.riskScore ?? 0,
+    riskVerdict: "warning",
+    latencyBucket: "0-250ms",
+    inputTokenBucket: "unknown",
+    outputTokenBucket: "unknown",
+    reasonCodes: [reason],
+    auditEntryHash,
+    timestamp,
   });
   recordGatewayReceiptExported(record.auditChain, key, hashGatewayReceipt(receipt));
   return res.status(400).json({ ok: false, error: reason, receipt });
@@ -1368,10 +1642,13 @@ export default router;
 - [ ] **Step 4: Mount in `server.js` BEFORE the base router**
 
 Add import near the other router imports:
+
 ```js
 import gatewayRouter from "./src/llmShield/gateway/gatewayRouter.js";
 ```
+
 Change the mount block so the gateway is registered first:
+
 ```js
 app.use("/api/llm-shield/gateway", gatewayRouter);
 app.use("/api/llm-shield", llmShieldRouter);
@@ -1401,6 +1678,7 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ## Task 10: OpenAPI 3.1 contract
 
 **Files:**
+
 - Create: `docs/research/llm-shield/evidence/stage-3e/openapi.json`
 - Test: `tests/unit/llmShield/gateway/openapi.test.js`
 
@@ -1414,11 +1692,18 @@ import { readFile } from "node:fs/promises";
 
 describe("stage3e openapi", () => {
   test("valid JSON, 3.1, Bearer scheme, four routes, no keys/payloads", async () => {
-    const spec = JSON.parse(await readFile("docs/research/llm-shield/evidence/stage-3e/openapi.json", "utf8"));
+    const spec = JSON.parse(
+      await readFile("docs/research/llm-shield/evidence/stage-3e/openapi.json", "utf8")
+    );
     assert.match(spec.openapi, /^3\.1/);
     assert.ok(spec.components.securitySchemes.GatewayBearer);
     assert.equal(spec.components.securitySchemes.GatewayBearer.scheme, "bearer");
-    for (const p of ["/api/llm-shield/gateway/sessions", "/api/llm-shield/gateway/{sessionId}/run", "/api/llm-shield/gateway/{sessionId}/verify", "/api/llm-shield/gateway/openapi.json"]) {
+    for (const p of [
+      "/api/llm-shield/gateway/sessions",
+      "/api/llm-shield/gateway/{sessionId}/run",
+      "/api/llm-shield/gateway/{sessionId}/verify",
+      "/api/llm-shield/gateway/openapi.json",
+    ]) {
       assert.ok(spec.paths[p], `missing path ${p}`);
     }
     const raw = JSON.stringify(spec);
@@ -1438,13 +1723,18 @@ Expected: FAIL — cannot find file.
 ```json
 {
   "openapi": "3.1.0",
-  "info": { "title": "Simurgh LLM Shield Gateway (Stage 3E-core)", "version": "0.7.0", "description": "No-network provider gateway exposing the Stage 3D containment core. Live mode is a fail-closed contract. Forbidden request fields (rejected): api_key, anthropic_api_key, openai_api_key, provider_request_body, provider_response_body, mock_provider_output, synthetic_provider_output, raw_provider_output, tool_result, system_prompt, developer_prompt." },
+  "info": {
+    "title": "Simurgh LLM Shield Gateway (Stage 3E-core)",
+    "version": "0.7.0",
+    "description": "No-network provider gateway exposing the Stage 3D containment core. Live mode is a fail-closed contract. Forbidden request fields (rejected): api_key, anthropic_api_key, openai_api_key, provider_request_body, provider_response_body, mock_provider_output, synthetic_provider_output, raw_provider_output, tool_result, system_prompt, developer_prompt."
+  },
   "servers": [{ "url": "http://127.0.0.1:33030" }],
   "components": {
     "securitySchemes": { "GatewayBearer": { "type": "http", "scheme": "bearer" } },
     "schemas": {
       "RunRequest": {
-        "type": "object", "required": ["input", "provider_mode"],
+        "type": "object",
+        "required": ["input", "provider_mode"],
         "properties": {
           "task_type": { "type": "string" },
           "input": { "type": "string", "maxLength": 4000 },
@@ -1455,23 +1745,81 @@ Expected: FAIL — cannot find file.
           "case_id": { "type": "string", "pattern": "^3e_[a-z_]+_\\d{3}$" }
         }
       },
-      "GatewayReceipt": { "type": "object", "properties": { "type": { "type": "string" }, "schema_version": { "type": "string", "const": "3E" }, "gateway_verdict": { "type": "string" }, "output_hash": { "type": "string" } } },
-      "Error": { "type": "object", "properties": { "ok": { "type": "boolean" }, "error": { "type": "string" } } }
+      "GatewayReceipt": {
+        "type": "object",
+        "properties": {
+          "type": { "type": "string" },
+          "schema_version": { "type": "string", "const": "3E" },
+          "gateway_verdict": { "type": "string" },
+          "output_hash": { "type": "string" }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": { "ok": { "type": "boolean" }, "error": { "type": "string" } }
+      }
     }
   },
   "security": [{ "GatewayBearer": [] }],
   "paths": {
-    "/api/llm-shield/gateway/sessions": { "post": { "summary": "Create gateway session", "responses": { "200": { "description": "session created" } } } },
+    "/api/llm-shield/gateway/sessions": {
+      "post": {
+        "summary": "Create gateway session",
+        "responses": { "200": { "description": "session created" } }
+      }
+    },
     "/api/llm-shield/gateway/{sessionId}/run": {
       "post": {
         "summary": "Run a gateway request (mock example)",
-        "parameters": [{ "name": "sessionId", "in": "path", "required": true, "schema": { "type": "string" } }],
-        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/RunRequest" }, "example": { "task_type": "general_qa", "input": "Summarise widgets.", "provider_mode": "mock", "provider": "mock", "scenario": "benign" } } } },
-        "responses": { "200": { "description": "accepted or blocked metadata-only receipt", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/GatewayReceipt" } } } }, "400": { "description": "rejected", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } } }
+        "parameters": [
+          { "name": "sessionId", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/RunRequest" },
+              "example": {
+                "task_type": "general_qa",
+                "input": "Summarise widgets.",
+                "provider_mode": "mock",
+                "provider": "mock",
+                "scenario": "benign"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "accepted or blocked metadata-only receipt",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/GatewayReceipt" } }
+            }
+          },
+          "400": {
+            "description": "rejected",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+            }
+          }
+        }
       }
     },
-    "/api/llm-shield/gateway/{sessionId}/verify": { "get": { "summary": "Verify audit chain", "parameters": [{ "name": "sessionId", "in": "path", "required": true, "schema": { "type": "string" } }], "responses": { "200": { "description": "chain validity" } } } },
-    "/api/llm-shield/gateway/openapi.json": { "get": { "summary": "This contract", "responses": { "200": { "description": "OpenAPI document" } } } }
+    "/api/llm-shield/gateway/{sessionId}/verify": {
+      "get": {
+        "summary": "Verify audit chain",
+        "parameters": [
+          { "name": "sessionId", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "chain validity" } }
+      }
+    },
+    "/api/llm-shield/gateway/openapi.json": {
+      "get": {
+        "summary": "This contract",
+        "responses": { "200": { "description": "OpenAPI document" } }
+      }
+    }
   }
 }
 ```
@@ -1498,6 +1846,7 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ## Task 11: `Dockerfile.gateway` + compose + dockerignore + docker smoke
 
 **Files:**
+
 - Create: `Dockerfile.gateway`, `docker-compose.gateway.yml`, `.dockerignore`, `scripts/docker-smoke-llm-shield-stage3e.sh`
 
 - [ ] **Step 1: Write/merge `.dockerignore`**
@@ -1606,6 +1955,7 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ## Task 12: 70-fixture corpus, manifest, runner, metrics
 
 **Files:**
+
 - Create: `docs/research/llm-shield/evidence/stage-3e/fixtures/<category>/*.json`, `fixture-manifest.json`, `README.md`
 - Create: `tests/e2e/llm_shield_stage3e_fixture_runner.mjs`
 
@@ -1613,32 +1963,45 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 
 Seven categories, fixture id pattern `3e_<prefix>_NNN`:
 
-| Dir | prefix | drives |
-| --- | --- | --- |
-| `mock_gateway/` | `mock` | mock-mode default path (scenario field) |
-| `recorded_fixture/` | `recorded` | synthetic replay (`provenance:"synthetic"`, `synthetic_provider_output`, `provider_response_kind`) |
-| `live_disabled/` | `livedisabled` | `provider_mode:"live"` → fail closed |
-| `provider_error/` | `error` | recorded fixture with `provider_response_kind:"error"` |
-| `output_firewall/` | `output` | recorded leaky_text → blocked |
-| `tool_request/` | `tool` | recorded tool_request → blocked |
-| `rate_limit/` | `ratelimit` | oversized input → capped |
+| Dir                 | prefix         | drives                                                                                             |
+| ------------------- | -------------- | -------------------------------------------------------------------------------------------------- |
+| `mock_gateway/`     | `mock`         | mock-mode default path (scenario field)                                                            |
+| `recorded_fixture/` | `recorded`     | synthetic replay (`provenance:"synthetic"`, `synthetic_provider_output`, `provider_response_kind`) |
+| `live_disabled/`    | `livedisabled` | `provider_mode:"live"` → fail closed                                                               |
+| `provider_error/`   | `error`        | recorded fixture with `provider_response_kind:"error"`                                             |
+| `output_firewall/`  | `output`       | recorded leaky_text → blocked                                                                      |
+| `tool_request/`     | `tool`         | recorded tool_request → blocked                                                                    |
+| `rate_limit/`       | `ratelimit`    | oversized input → capped                                                                           |
 
 Canonical recorded fixture (`recorded_fixture/3e_recorded_001.json`). `provider_output_hash`
 MUST equal `hashPrompt(synthetic_provider_output)` — compute it when authoring (e.g.
 `node -e "import('./src/llmShield/promptNormalise.js').then(m=>console.log(m.hashPrompt('Here is a safe general summary.')))"`):
+
 ```json
-{ "case_id": "3e_recorded_001", "category": "recorded_fixture", "provenance": "synthetic",
-  "provider_mode": "recorded_fixture", "provider": "anthropic_shape",
-  "input": "Summarise the safety policy.", "provider_response_kind": "text",
+{
+  "case_id": "3e_recorded_001",
+  "category": "recorded_fixture",
+  "provenance": "synthetic",
+  "provider_mode": "recorded_fixture",
+  "provider": "anthropic_shape",
+  "input": "Summarise the safety policy.",
+  "provider_response_kind": "text",
   "synthetic_provider_output": "Here is a safe general summary.",
   "provider_output_hash": "sha256:<hashPrompt of synthetic_provider_output>",
-  "expected": { "gateway_verdict": "accepted", "tool_gate_verdict": "not_requested", "output_firewall_verdict": "accepted", "reason_codes": [] } }
+  "expected": {
+    "gateway_verdict": "accepted",
+    "tool_gate_verdict": "not_requested",
+    "output_firewall_verdict": "accepted",
+    "reason_codes": []
+  }
+}
 ```
 
 The throwaway generator (Step 4) computes `provider_output_hash` with `hashPrompt`
 for every recorded fixture, so committed hashes always match.
 
 `fixture-manifest.json` maps every `case_id` → relative path, e.g.:
+
 ```json
 { "3e_recorded_001": "recorded_fixture/3e_recorded_001.json" }
 ```
@@ -1678,6 +2041,7 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ## Task 13: Remaining e2e smokes + three gate scripts + check.sh
 
 **Files:**
+
 - Create: `tests/e2e/llm_shield_stage3e_{recorded_fixture,provider_error,output_firewall,tool_request,rate_limit}_smoke.mjs`
 - Create: `scripts/smoke-llm-shield-stage3e.sh`, `scripts/security-audit-llm-shield-stage3e.sh`, `scripts/privacy-audit-llm-shield-stage3e.mjs`
 - Modify: `scripts/check.sh`
@@ -1685,21 +2049,57 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 - [ ] **Step 1: Write the five remaining e2e smokes**
 
 Each boots via the shared smoke script (Step 2) and asserts one category over HTTP. Example `recorded_fixture` smoke selects `case_id: "3e_recorded_001"`:
+
 ```js
 // tests/e2e/llm_shield_stage3e_recorded_fixture_smoke.mjs
 // SPDX-License-Identifier: AGPL-3.0-or-later
 const base = process.argv[2] || "http://127.0.0.1:33055";
 const api = `${base}/api/llm-shield/gateway`;
-function ok(c, m, d) { if (!c) throw new Error(d ? `${m}: ${JSON.stringify(d)}` : m); }
-const s = await (await fetch(`${api}/sessions`, { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" })).json();
+function ok(c, m, d) {
+  if (!c) throw new Error(d ? `${m}: ${JSON.stringify(d)}` : m);
+}
+const s = await (
+  await fetch(`${api}/sessions`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: "{}",
+  })
+).json();
 const auth = { "Content-Type": "application/json", Authorization: `Bearer ${s.token}` };
-const r = await (await fetch(`${api}/${s.session_id}/run`, { method: "POST", headers: auth, body: JSON.stringify({ input: "Summarise the safety policy.", provider_mode: "recorded_fixture", provider: "recorded_fixture", case_id: "3e_recorded_001" }) })).json();
+const r = await (
+  await fetch(`${api}/${s.session_id}/run`, {
+    method: "POST",
+    headers: auth,
+    body: JSON.stringify({
+      input: "Summarise the safety policy.",
+      provider_mode: "recorded_fixture",
+      provider: "recorded_fixture",
+      case_id: "3e_recorded_001",
+    }),
+  })
+).json();
 ok(r.receipt?.schema_version === "3E", "recorded fixture must emit 3E receipt", r);
 // path-like selector rejected
-const bad = await (await fetch(`${api}/${s.session_id}/run`, { method: "POST", headers: auth, body: JSON.stringify({ input: "x", provider_mode: "recorded_fixture", provider: "recorded_fixture", case_id: "../secret" }) })).json();
-ok(bad.ok === false && /gateway_fixture_selector_invalid/.test(bad.error), "path selector must be rejected", bad);
+const bad = await (
+  await fetch(`${api}/${s.session_id}/run`, {
+    method: "POST",
+    headers: auth,
+    body: JSON.stringify({
+      input: "x",
+      provider_mode: "recorded_fixture",
+      provider: "recorded_fixture",
+      case_id: "../secret",
+    }),
+  })
+).json();
+ok(
+  bad.ok === false && /gateway_fixture_selector_invalid/.test(bad.error),
+  "path selector must be rejected",
+  bad
+);
 console.log("[PASS] stage3e recorded fixture smoke");
 ```
+
 The `tool_request`, `output_firewall`, `provider_error` smokes select their respective recorded `case_id`s and assert `tool_gate_verdict`/`output_firewall_verdict`/`provider_response_kind`. The `rate_limit` smoke posts an over-cap input and asserts HTTP 413 `gateway_input_too_large`.
 
 - [ ] **Step 2: Write `scripts/smoke-llm-shield-stage3e.sh`** (boot once, run all 3E e2e + fixture runner). Mirror `scripts/smoke-llm-shield-stage3d.sh`, port `33055`, running the seven 3E e2e files + `llm_shield_stage3e_fixture_runner.mjs`. End: `echo "smoke-llm-shield-stage3e: passed"`.
@@ -1718,18 +2118,24 @@ Run: `chmod +x scripts/smoke-llm-shield-stage3e.sh && bash scripts/smoke-llm-shi
 
 Run: `chmod +x scripts/security-audit-llm-shield-stage3e.sh && bash scripts/security-audit-llm-shield-stage3e.sh` → `0 failed`.
 
-- [ ] **Step 4: Write `scripts/privacy-audit-llm-shield-stage3e.mjs`**. **Scope the forbidden-key scan to GENERATED evidence only** — `metrics.json`, `*-output.txt` gate outputs, and `receipt-samples/**` — and **exclude `openapi.json` and `fixtures/**`** (the OpenAPI deliberately documents forbidden field *names* in its descriptions, and fixtures hold synthetic text by design; scanning them would trip the gate on our own documentation). Assert the scanned files contain none of: `raw_input`, `raw_provider_output`, `provider_request_body`, `provider_response_body`, `api_key`, `authorization`, `x-api-key`, `anthropic_api_key`, `openai_api_key`, `system_prompt`, `developer_prompt`, `tool_args`. Separately assert: every `recorded_fixture/*` fixture has `provenance === "synthetic"`; and `gatewayReceipt.js` exposes no raw-text keys. Mirror `privacy-audit-llm-shield-stage3d.mjs` structure.
+- [ ] **Step 4: Write `scripts/privacy-audit-llm-shield-stage3e.mjs`**. **Scope the forbidden-key scan to GENERATED evidence only** — `metrics.json`, `*-output.txt` gate outputs, and `receipt-samples/**` — and **exclude `openapi.json` and `fixtures/**`** (the OpenAPI deliberately documents forbidden field *names* in its descriptions, and fixtures hold synthetic text by design; scanning them would trip the gate on our own documentation). Assert the scanned files contain none of: `raw_input`, `raw_provider_output`, `provider_request_body`, `provider_response_body`, `api_key`, `authorization`, `x-api-key`, `anthropic_api_key`, `openai_api_key`, `system_prompt`, `developer_prompt`, `tool_args`. Separately assert: every `recorded_fixture/\*`fixture has`provenance === "synthetic"`; and `gatewayReceipt.js`exposes no raw-text keys. Mirror`privacy-audit-llm-shield-stage3d.mjs` structure.
 
 ```js
 // scope: only generated evidence, excluding openapi.json and fixtures/
-const SCAN = ["metrics.json", "smoke-output.txt", "security-audit-output.txt",
-  "privacy-audit-output.txt", "docker-smoke-output.txt"]; // + receipt-samples/*.json
+const SCAN = [
+  "metrics.json",
+  "smoke-output.txt",
+  "security-audit-output.txt",
+  "privacy-audit-output.txt",
+  "docker-smoke-output.txt",
+]; // + receipt-samples/*.json
 // NEVER scan: openapi.json (documents forbidden field names), fixtures/** (synthetic by design)
 ```
 
 Run: `node scripts/privacy-audit-llm-shield-stage3e.mjs` → `passed`.
 
 - [ ] **Step 5: Wire into `scripts/check.sh`** after the 3D steps:
+
 ```bash
 step "LLM Shield 3E-core gateway smoke"
 if scripts/smoke-llm-shield-stage3e.sh > "$LOG_DIR/llm-shield-stage3e-smoke.log" 2>&1; then pass "LLM Shield 3E-core gateway smoke"; else fail "LLM Shield 3E-core gateway smoke"; tail -80 "$LOG_DIR/llm-shield-stage3e-smoke.log"; fi
@@ -1763,6 +2169,7 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ## Task 14: Reviewer docs
 
 **Files:**
+
 - Create: `docs/research/llm-shield/LLM_SHIELD_STAGE_3E_CORE_INDUSTRY_GATEWAY.md`, `STAGE_3E_CORE_THREAT_MODEL.md`, `STAGE_3E_CORE_VALIDATION_MATRIX.md`, `STAGE_3E_CORE_REVIEWER_CHECKLIST.md`, `STAGE_3E_CORE_CLOSEOUT.md`
 
 - [ ] **Step 1: Stage narrative** — steel-thread + two verbatim invariants (from spec §steel-thread) + the four-boundary summary + non-claims verbatim (spec §2) + links to spec/plan.
@@ -1804,6 +2211,7 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ## Self-Review (against the spec)
 
 **1. Spec coverage:**
+
 - §4.1 mount order → Task 9 Step 4 + security audit Task 13 Step 3.
 - §4.2/§6.2 session/token reuse + secret label → Task 9 (`deriveKey("llm-shield-gateway-*")`, `getStore("llmShieldGatewaySessions")`).
 - §7 env gate / live fail-closed → Task 1 + Task 9 + live-disabled smoke (Task 9) + Task 5 registry guard.
