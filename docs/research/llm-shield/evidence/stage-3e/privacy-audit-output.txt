@@ -1,0 +1,5 @@
+[PASS] generated evidence is metadata-only (7 file(s) scanned)
+[PASS] all recorded fixtures are provenance=synthetic
+[PASS] gateway receipt is hash-only
+
+privacy-audit-llm-shield-stage3e: passed

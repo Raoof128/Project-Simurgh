@@ -1,5 +1,28 @@
 ## Change Log
 
+## [stage-3e-core-industry-gateway] — 2026-06-17 — LLM Shield industry gateway (Stage 3E-core)
+
+**Raouf:** Stage 3E-core wraps the Stage 3D containment core in a stable, **no-network** HTTP gateway so external reviewers can test it. New gateway at `/api/llm-shield/gateway/*` (sessions/run/verify/openapi.json), mounted **before** the base router and reusing the existing session/token scheme (`getStore("llmShieldGatewaySessions")`, secret label `llm-shield-gateway`). Two provider modes: `mock` (reuses 3D scenarios) and `recorded_fixture` (synthetic-only, `provenance:"synthetic"` + `provider_output_hash` verified, selected by opaque `case_id` via manifest — path selectors rejected). `live` is a **fail-closed contract** with no adapter (`gateway_live_provider_not_implemented`); live adapters deferred to Stage 3E-live. The run handler composes the 3A/3C input firewall + the 3D context guard / tool gate / output firewall / risk accumulator verbatim around an untrusted provider: provider-side tools off, tool-shaped output gated (never executed), provider output distrusted through the firewall before export (blocked = hash-only), forbidden request fields (`api_key`, `provider_response_body`, `synthetic_provider_output`, …) rejected, denial-of-wallet input/context caps (OWASP LLM10). New `gatewayReceipt` (`type simurgh.llm_gateway_receipt.v1`, schema `3E`) + `gatewayAudit` events (output-hash recorded on every provider-called path); `safetyReceipt.js`/`stage3dReceipt.js` untouched. OpenAPI 3.1 (mock examples only) + non-root Docker (mock default). Not jailbreak immunity; receipts attest process, not ground truth.
+
+### Added
+
+- `src/llmShield/gateway/{gatewayEnv,providerTypes,providerOutputNormalise,mockGatewayProvider,recordedFixtureProvider,providerRegistry,gatewayReceipt,gatewayAudit,gatewayRateLimit,gatewayRouter}.js` (+ unit suites).
+- `tests/e2e/llm_shield_stage3e_*` (7 smokes + fixture runner); 70-case synthetic corpus + manifest + metrics under `evidence/stage-3e/`.
+- `scripts/{smoke,security-audit,privacy-audit,docker-smoke}-llm-shield-stage3e.*`; OpenAPI `openapi.json`; `Dockerfile.gateway`, `docker-compose.gateway.yml`, `.dockerignore`.
+- Reviewer docs: `LLM_SHIELD_STAGE_3E_CORE_INDUSTRY_GATEWAY.md`, `STAGE_3E_CORE_{THREAT_MODEL,VALIDATION_MATRIX,REVIEWER_CHECKLIST,CLOSEOUT}.md`; spec + plan.
+
+### Changed
+
+- `server.js` — mount gateway router before base router.
+- `package.json` — test glob now includes two-level-deep unit tests (`tests/unit/**/**/*.test.js`); the `gateway/` suites were previously uncounted (520 → 554).
+- `scripts/check.sh` — wired the four Stage 3E gates (docker skips if unavailable).
+
+### Verified
+
+- `npm test` 554 pass; 3A/3B/3D gates pass, 3B no drift; 3E smoke + security 15/15 + privacy pass; docker smoke SKIP (no docker locally); `npm audit` 0 vulns; prettier clean. Tag `v0.7.0-stage-3e-core-industry-gateway` after merge.
+
+---
+
 ## [stage-3d-provenance-containment] — 2026-06-17 — LLM Shield containment (Stage 3D)
 
 **Raouf:** Stage 3D repositions the LLM Shield from a jailbreak _detector_ to a jailbreak-_consequence_ container: even when input filtering misses, three downstream boundaries stop the consequence and leave metadata-only, audit-chained evidence. (1) **Context provenance** — untrusted `contexts[]` are demoted to data; context that forges system/developer authority, is malformed/oversize/unsigned-trusted, or carries secret/policy markers is rejected (provider skipped). (2) **Tool gate** — unsafe + unknown tool classes are blocked before any (mock) execution; the gate never executes a tool and hashes the tool name. (3) **Output firewall** — suspected system-prompt/secret/tool-arg/classifier-internal leakage is blocked before export; blocked output is hashed, never stored. A per-session **run risk accumulator** scores each run and accumulates monotonically (thresholds locked 0–2/3–5/6+; weights tunable), so multi-turn softening escalates. Activation is **additive**: only requests carrying `contexts`/`tool_mode`/`scenario`/`stage3d:true` take the 3D path; plain `{ input }` keeps the byte-for-byte 3A/3B/3C path so the frozen Stage 3B benchmark and the `v1`/`3C` receipt do not drift. The live route maps a bounded `scenario` enum to committed canned mock outputs; raw `mock_provider_output` is rejected over HTTP (fixtures-only injection lives in the direct-import fixture runner). Not jailbreak immunity, not live-provider safety, no real tools/network; receipts attest process, not ground truth.
