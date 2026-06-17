@@ -1,5 +1,27 @@
 ## Change Log
 
+## [stage-3d-provenance-containment] — 2026-06-17 — LLM Shield containment (Stage 3D, in progress)
+
+**Raouf:** Phase 1 of the Stage 3D containment boundary. The LLM Shield moves from a jailbreak *detector* toward a jailbreak-*consequence* container: even when input filtering misses, downstream boundaries (context provenance, tool gate, output firewall) must stop the consequence and leave metadata-only evidence. Phase 1 lands the foundation — an **additive** route gate so a request carrying `contexts`/`tool_mode`/`scenario`/`stage3d:true` is routed to a new containment handler, while plain `{ input }` requests keep the byte-for-byte 3A/3B/3C path (no receipt or benchmark drift). New `stage3dReceipt.js` (`schema_version "3D"`, reuses the `v1` type; `safetyReceipt.js` untouched), new Stage 3D audit events + ordered `recordStage3dRun`, and a committed `stage3dMockScenarios.js` allowlist (live route maps a bounded `scenario` enum to canned outputs; raw `mock_provider_output` is rejected over HTTP). The former alpha `contexts_not_supported_alpha` fail-close (and its Stage 3A smoke fixture) is retired — `contexts[]` is now a governed channel. Not jailbreak immunity; receipts attest process, not ground truth.
+
+### Added (phase 1)
+
+- `src/llmShield/stage3dReceipt.js`, `src/llmShield/stage3dMockScenarios.js`.
+- Stage 3D audit events + `recordStage3dRun`/`recordStage3dReceiptExported` in `llmShieldAudit.js`.
+- `tests/e2e/llm_shield_stage3d_activation_smoke.mjs`; unit suites for the receipt and scenarios.
+
+### Changed (phase 1)
+
+- `src/llmShield/llmShieldRouter.js` — additive `isStage3DRun` gate + minimal `handleStage3dRun`.
+- `scripts/security-audit-llm-shield.sh` — `contexts[]` now asserts Stage 3D activation.
+- Removed the superseded `evidence/stage-3a/fixtures/contexts-rejection/` alpha fixture; updated its README.
+
+### Verified (phase 1)
+
+- Full `npm test` (492 pass); `scripts/smoke-llm-shield.sh`; `scripts/smoke-llm-shield-bench.sh` no drift; `scripts/security-audit-llm-shield.sh` 7/7.
+
+---
+
 ## [stage-3c-hardening-llm-shield] — 2026-06-16 — LLM Shield hardening (Stage 3C)
 
 **Raouf:** Hardened the LLM Shield detector against the **frozen** Stage 3B corpus with a deterministic canonicalize-then-classify pipeline and a context-sensitive `warning` tier — the first and only stage allowed to change the detector. No corpus payloads edited; the baseline and detector digests were re-frozen via the reviewed `--update-baseline`. Adversarial detection improved **2/30 → 18/30** (blocked 13 + warning 5), clean-benign held at **10/10**, and hard-negative blocked false positives _dropped_ **2/5 → 0/5**. An ablation shows canonicalisation drives recall (5→14→18) while the context guard adds zero detection and exists purely to cut false positives (2/5→0/5). A held-out set of 12 new variants, authored after the detector froze and never used to tune it, generalizes to **7/9** adversarial (the two misses are the same semantic styles — academic-framing, multi-step-softening — that miss on the frozen corpus, indicating a real capability ceiling rather than overfitting). Not jailbreak immunity: an application-layer, pre-provider boundary made measurable and auditable.
