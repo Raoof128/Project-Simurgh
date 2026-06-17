@@ -1404,6 +1404,30 @@ else
   tail -80 "$LOG_DIR/llm-shield-privacy-audit.log"
 fi
 
+step "LLM Shield 3D containment smoke"
+if scripts/smoke-llm-shield-stage3d.sh > "$LOG_DIR/llm-shield-stage3d-smoke.log" 2>&1; then
+  pass "LLM Shield 3D containment smoke"
+else
+  fail "LLM Shield 3D containment smoke"
+  tail -80 "$LOG_DIR/llm-shield-stage3d-smoke.log"
+fi
+
+step "LLM Shield 3D security audit"
+if scripts/security-audit-llm-shield-stage3d.sh > "$LOG_DIR/llm-shield-stage3d-security-audit.log" 2>&1; then
+  pass "LLM Shield 3D security audit"
+else
+  fail "LLM Shield 3D security audit"
+  tail -80 "$LOG_DIR/llm-shield-stage3d-security-audit.log"
+fi
+
+step "LLM Shield 3D privacy audit"
+if node scripts/privacy-audit-llm-shield-stage3d.mjs > "$LOG_DIR/llm-shield-stage3d-privacy-audit.log" 2>&1; then
+  pass "LLM Shield 3D privacy audit"
+else
+  fail "LLM Shield 3D privacy audit"
+  tail -80 "$LOG_DIR/llm-shield-stage3d-privacy-audit.log"
+fi
+
 # Stage 3C evidence (informational — not gates; these print measurements only).
 step "LLM Shield 3C ablation (informational)"
 if node tests/e2e/llm_shield_ablation_runner.mjs > "$LOG_DIR/llm-shield-ablation.log" 2>&1; then
