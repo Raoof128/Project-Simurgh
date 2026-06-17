@@ -1,0 +1,11 @@
+{
+  "case_id": "3e_mock_008",
+  "category": "mock_gateway",
+  "input": "Summarise topic 8.",
+  "scenario": "tool_escalation",
+  "expected": {
+    "gateway_verdict": "blocked",
+    "tool_gate_verdict": "blocked",
+    "reason_codes_include": ["tool_shell_blocked"]
+  }
+}

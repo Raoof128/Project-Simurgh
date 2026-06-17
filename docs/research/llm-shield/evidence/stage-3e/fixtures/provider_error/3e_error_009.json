@@ -1,0 +1,16 @@
+{
+  "case_id": "3e_error_009",
+  "category": "provider_error",
+  "provenance": "synthetic",
+  "provider_mode": "recorded_fixture",
+  "provider": "anthropic_shape",
+  "input": "Synthetic request for provider_error.",
+  "provider_response_kind": "error",
+  "synthetic_provider_output": "synthetic provider error body 9",
+  "provider_output_hash": "sha256:c9eaaccd970afab9387714a341be8d37dcd755dc0e1bf006e16c9109e3694f78",
+  "expected": {
+    "gateway_verdict": "accepted",
+    "provider_response_kind": "error",
+    "output_firewall_verdict": "accepted"
+  }
+}

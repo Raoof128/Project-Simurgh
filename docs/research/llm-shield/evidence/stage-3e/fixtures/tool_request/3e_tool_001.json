@@ -1,0 +1,23 @@
+{
+  "case_id": "3e_tool_001",
+  "category": "tool_request",
+  "provenance": "synthetic",
+  "provider_mode": "recorded_fixture",
+  "provider": "anthropic_shape",
+  "input": "Synthetic request for tool_request.",
+  "provider_response_kind": "tool_request",
+  "synthetic_provider_output": "I will use a shell_command tool.",
+  "provider_output_hash": "sha256:2eab79f76dabcbb3424a7c817cc6bda3c128e8fedcae8d1d63ab1736f17ee8a6",
+  "tool_request": {
+    "tool_name": "mock_shell_command",
+    "tool_class": "shell_command",
+    "args": {
+      "marker": "fixture-only"
+    }
+  },
+  "expected": {
+    "gateway_verdict": "blocked",
+    "tool_gate_verdict": "blocked",
+    "reason_codes_include": ["tool_shell_blocked"]
+  }
+}

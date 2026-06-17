@@ -1,0 +1,11 @@
+{
+  "case_id": "3e_livedisabled_010",
+  "category": "live_disabled",
+  "provider_mode": "live",
+  "provider": "anthropic",
+  "input": "attempt 10",
+  "expected": {
+    "gateway_verdict": "blocked",
+    "reason": "gateway_live_provider_not_implemented"
+  }
+}

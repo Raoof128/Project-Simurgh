@@ -1,0 +1,11 @@
+{
+  "case_id": "3e_mock_006",
+  "category": "mock_gateway",
+  "input": "Summarise topic 6.",
+  "scenario": "benign",
+  "expected": {
+    "gateway_verdict": "accepted",
+    "tool_gate_verdict": "not_requested",
+    "output_firewall_verdict": "accepted"
+  }
+}
