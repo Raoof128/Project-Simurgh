@@ -41,7 +41,15 @@ npm audit --audit-level=high
 - 3E-live security audit: PASS (no static SDK import; dynamic import only in adapter; no tools).
 - 3E-live privacy audit: PASS (no forbidden raw keys in evidence).
 - Mock/recorded paths and the 3B frozen benchmark show no drift.
+- The 3E-core security + privacy audits were updated for the §5 live contract change
+  (guarded dynamic SDK import allowed in the adapter; `gateway_live_provider_disabled` as the
+  default fail-closed reason; `*_recorded` attestation booleans stripped before the raw-key
+  scan) and both pass.
 - `npx prettier --check .`: clean. `npm audit`: 0 vulnerabilities at the high level.
+- `bash scripts/check.sh`: 85 passed, 2 failed. The two failures are **pre-existing,
+  environment-only**: the Stage 2.6 Windows daemon (.NET) tests and the Linux Rust daemon
+  (`xvfb_integration_tests`, needs a Linux display server) cannot run on the macOS dev host
+  and are unrelated to Stage 3E-live (no 3E-live file touches the .NET/Rust daemons).
 
 ## Non-claims
 
