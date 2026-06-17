@@ -8,3 +8,9 @@ services:
       SIMURGH_LIVE_PROVIDER_ENABLED: "false"
       SIMURGH_GATEWAY_PROVIDER_MODE: "mock"
       SIMURGH_LLM_PROVIDER: "mock"
+      # --- Stage 3E-live (opt-in; never baked into the image) ---
+      # SIMURGH_LIVE_PROVIDER_ENABLED: "true"
+      # SIMURGH_GATEWAY_PROVIDER_MODE: "live"
+      # SIMURGH_LLM_PROVIDER: "anthropic"
+      # SIMURGH_LIVE_PROVIDER_MODEL: "..."
+      # ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY}"

@@ -3,7 +3,7 @@
   "info": {
     "title": "Simurgh LLM Shield Gateway (Stage 3E-core)",
     "version": "0.7.0",
-    "description": "No-network provider gateway exposing the Stage 3D containment core. Live mode is a fail-closed contract (no adapter). Forbidden request fields (rejected with gateway_forbidden_field): api_key, anthropic_api_key, openai_api_key, provider_request_body, provider_response_body, mock_provider_output, synthetic_provider_output, raw_provider_output, tool_result, system_prompt, developer_prompt."
+    "description": "No-network-by-default provider gateway exposing the Stage 3D containment core. Stage 3E-live adds an Anthropic live adapter: live mode is disabled unless server-side environment variables enable it (SIMURGH_LIVE_PROVIDER_ENABLED=true, SIMURGH_LLM_PROVIDER=anthropic, SIMURGH_LIVE_PROVIDER_MODEL, ANTHROPIC_API_KEY). API keys are never accepted in request bodies. Forbidden request fields (rejected with gateway_forbidden_field): api_key, anthropic_api_key, openai_api_key, provider_request_body, provider_response_body, mock_provider_output, synthetic_provider_output, raw_provider_output, tool_result, system_prompt, developer_prompt."
   },
   "servers": [{ "url": "http://127.0.0.1:33030" }],
   "components": {
@@ -17,7 +17,7 @@
           "input": { "type": "string", "maxLength": 4000 },
           "contexts": { "type": "array", "items": { "type": "object" } },
           "provider_mode": { "type": "string", "enum": ["mock", "recorded_fixture", "live"] },
-          "provider": { "type": "string", "enum": ["mock", "recorded_fixture"] },
+          "provider": { "type": "string", "enum": ["mock", "recorded_fixture", "anthropic"] },
           "scenario": { "type": "string" },
           "case_id": { "type": "string", "pattern": "^3e_[a-z_]+_\\d{3}$" }
         }
@@ -28,7 +28,14 @@
           "type": { "type": "string" },
           "schema_version": { "type": "string", "const": "3E" },
           "gateway_verdict": { "type": "string" },
-          "output_hash": { "type": "string" }
+          "output_hash": { "type": "string" },
+          "network_egress_used": { "type": "boolean" },
+          "live_context_mode": { "type": "string", "enum": ["none", "minimal_summary"] },
+          "raw_provider_transcript_recorded": { "type": "boolean", "const": false },
+          "api_key_recorded": { "type": "boolean", "const": false },
+          "provider_side_tools_enabled": { "type": "boolean", "const": false },
+          "sdk_tool_runner_used": { "type": "boolean", "const": false },
+          "prompt_cache_enabled": { "type": "boolean" }
         }
       },
       "Error": {
