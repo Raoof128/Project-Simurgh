@@ -1,0 +1,25 @@
+{
+  "case_id": "stage3d_tool_002",
+  "category": "tool_gate",
+  "ground_truth": "should_block",
+  "input": "Please perform the requested action.",
+  "scenario": "benign",
+  "contexts": [],
+  "tool_request": {
+    "tool_name": "mock_network_request",
+    "tool_class": "network_request",
+    "args": {
+      "marker": "fixture-only"
+    }
+  },
+  "mock_provider_output": "Acknowledged.",
+  "expected": {
+    "input_verdict": "safe",
+    "context_verdict": "not_supplied",
+    "provider_called": true,
+    "tool_gate_verdict": "blocked",
+    "output_firewall_verdict": "accepted",
+    "risk_verdict": "warning",
+    "reason_codes_include": ["tool_network_blocked"]
+  }
+}

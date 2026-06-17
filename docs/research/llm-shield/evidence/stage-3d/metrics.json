@@ -1,0 +1,35 @@
+{
+  "stage": "3D-provenance-containment",
+  "fixture_count": 60,
+  "passed": 60,
+  "failed": 0,
+  "per_category": {
+    "clean_benign": {
+      "total": 10,
+      "passed": 10
+    },
+    "context_provenance": {
+      "total": 10,
+      "passed": 10
+    },
+    "hard_negative": {
+      "total": 10,
+      "passed": 10
+    },
+    "multi_turn_softening": {
+      "total": 10,
+      "passed": 10
+    },
+    "output_firewall": {
+      "total": 10,
+      "passed": 10
+    },
+    "tool_gate": {
+      "total": 10,
+      "passed": 10
+    }
+  },
+  "provider_mode": "mock",
+  "network_egress_used": false,
+  "note": "Per-category rates are derived from frozen fixtures; values reflect the committed corpus, not population-level performance."
+}
