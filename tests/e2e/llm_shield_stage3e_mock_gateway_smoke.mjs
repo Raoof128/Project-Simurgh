@@ -79,4 +79,24 @@ const run = async (s, body) =>
   ).json();
   ok(v.valid === true, "chain must verify", v);
 }
+// openapi route is served by the gateway router
+{
+  const res = await fetch(`${api}/openapi.json`);
+  ok(res.status === 200, "openapi route must return 200", { status: res.status });
+  const spec = await res.json();
+  ok(/^3\.1/.test(spec.openapi), "openapi route must serve a 3.1 contract", spec.openapi);
+}
+// allowed mock tool: gate permits (never executes), output scanned + exported
+{
+  const s = await session();
+  const r = await run(s, {
+    input: "What is 2 plus 2?",
+    provider_mode: "recorded_fixture",
+    provider: "recorded_fixture",
+    case_id: "3e_allowedtool_001",
+  });
+  ok(r.tool_gate_verdict === "allowed", "allowed mock tool must be permitted", r);
+  ok(r.gateway_verdict === "accepted", "allowed-tool benign run must be accepted", r);
+  ok(r.receipt?.tool_called === false, "allowed tool still never executed", r);
+}
 console.log("[PASS] stage3e mock gateway smoke");
