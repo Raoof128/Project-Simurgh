@@ -1468,6 +1468,30 @@ else
   tail -40 "$LOG_DIR/llm-shield-stage3e-docker-smoke.log"
 fi
 
+step "LLM Shield 3E-live gateway smoke"
+if scripts/smoke-llm-shield-stage3e-live.sh > "$LOG_DIR/llm-shield-stage3e-live-smoke.log" 2>&1; then
+  pass "LLM Shield 3E-live gateway smoke"
+else
+  fail "LLM Shield 3E-live gateway smoke"
+  tail -80 "$LOG_DIR/llm-shield-stage3e-live-smoke.log"
+fi
+
+step "LLM Shield 3E-live security audit"
+if scripts/security-audit-llm-shield-stage3e-live.sh > "$LOG_DIR/llm-shield-stage3e-live-security-audit.log" 2>&1; then
+  pass "LLM Shield 3E-live security audit"
+else
+  fail "LLM Shield 3E-live security audit"
+  tail -80 "$LOG_DIR/llm-shield-stage3e-live-security-audit.log"
+fi
+
+step "LLM Shield 3E-live privacy audit"
+if node scripts/privacy-audit-llm-shield-stage3e-live.mjs > "$LOG_DIR/llm-shield-stage3e-live-privacy-audit.log" 2>&1; then
+  pass "LLM Shield 3E-live privacy audit"
+else
+  fail "LLM Shield 3E-live privacy audit"
+  tail -80 "$LOG_DIR/llm-shield-stage3e-live-privacy-audit.log"
+fi
+
 # Stage 3C evidence (informational — not gates; these print measurements only).
 step "LLM Shield 3C ablation (informational)"
 if node tests/e2e/llm_shield_ablation_runner.mjs > "$LOG_DIR/llm-shield-ablation.log" 2>&1; then
