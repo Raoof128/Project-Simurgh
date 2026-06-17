@@ -29,6 +29,7 @@ import {
 } from "./llmShieldAudit.js";
 import { buildStage3dReceipt, hashStage3dReceipt } from "./stage3dReceipt.js";
 import { isValidScenario, getScenario, SCENARIO_NAMES } from "./stage3dMockScenarios.js";
+import { guardContexts } from "./contextProvenanceGuard.js";
 
 const router = Router();
 const store = getStore("llm-shield-sessions");
@@ -264,14 +265,8 @@ function handleStage3dRun(req, res, record, ctx) {
   const normalisedInputHash = hashPrompt(normalised);
   const inputVerdict = classifyPrompt(normalised).verdict;
 
+  const contextResult = guardContexts(body.contexts);
   // PHASE-1 STUB — replaced in later phases:
-  const contextResult = {
-    verdict: "not_supplied",
-    contextCount: 0,
-    contextHashes: [],
-    reasonCodes: [],
-    perContext: [],
-  };
   const scenario = getScenario(scenarioName);
   const providerCalled = inputVerdict !== "blocked" && contextResult.verdict !== "rejected";
   const toolResult = { verdict: "not_requested", reasonCodes: [], toolNameHash: null };
