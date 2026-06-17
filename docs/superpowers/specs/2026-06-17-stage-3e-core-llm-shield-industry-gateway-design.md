@@ -197,8 +197,11 @@ Session creation performs no provider call. Run request:
   "provider_mode": "mock", "provider": "mock", "scenario": "benign" }
 ```
 
-`recorded_fixture` run selects a committed fixture by `case_id` (or
-`fixture_id`) rather than free output. **Forbidden request fields** (presence →
+`recorded_fixture` run selects a committed fixture by `case_id` rather than free
+output. `case_id` is an **opaque fixture identifier, not a path**: it must match a
+strict allowlist pattern (e.g. `^3e_[a-z_]+_\d{3}$`) and resolve through
+`fixture-manifest.json`; path-like selectors and direct file paths are rejected
+(`gateway_fixture_selector_invalid`). **Forbidden request fields** (presence →
 reject before any provider step, `gateway_forbidden_field`):
 
 ```
@@ -423,8 +426,9 @@ recorded providers have no network imports; provider output passes the firewall
 before response; tool-shaped output passes the tool gate; blocked output not
 returned; no raw provider response in receipt samples; OpenAPI has Bearer scheme;
 Dockerfile uses non-root `USER`; `.env` in `.dockerignore`; recordedFixtureProvider
-validates synthetic provenance + fails closed; Stage 3B no drift; Stage 3D gates
-pass.
+validates synthetic provenance + fails closed; recorded_fixture rejects path-like
+fixture selectors and resolves only manifest-listed `case_id` values; Stage 3B no
+drift; Stage 3D gates pass.
 
 ## 26. Privacy-audit assertions
 
