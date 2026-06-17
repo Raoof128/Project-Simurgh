@@ -38,13 +38,28 @@ describe("runRiskAccumulator", () => {
     assert.ok(pts >= 6, `expected >= 6, got ${pts}`);
     assert.equal(riskVerdict(pts), "blocked");
   });
-  test("a single input warning is warning-tier, not blocked", () => {
+  test("a single input warning stays below the block threshold", () => {
+    // One soft signal (+2) is safe-tier under the locked weights; escalation
+    // requires accumulation (e.g. a repeated warning), so a lone warning must
+    // never reach `blocked`.
     const pts = riskPointsFor({
       inputVerdict: "warning",
       contextVerdict: "not_supplied",
       toolGateVerdict: "not_requested",
       outputFirewallVerdict: "accepted",
       repeatedWarning: false,
+    });
+    assert.equal(pts, 2);
+    assert.notEqual(riskVerdict(pts), "blocked");
+  });
+
+  test("a repeated warning accumulates into the warning tier", () => {
+    const pts = riskPointsFor({
+      inputVerdict: "warning",
+      contextVerdict: "not_supplied",
+      toolGateVerdict: "not_requested",
+      outputFirewallVerdict: "accepted",
+      repeatedWarning: true,
     });
     assert.equal(riskVerdict(pts), "warning");
   });
