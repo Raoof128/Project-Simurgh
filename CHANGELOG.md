@@ -1,5 +1,28 @@
 ## Change Log
 
+## [stage-3e-live-anthropic-adapter] — 2026-06-18 — LLM Shield Anthropic live adapter (Stage 3E-live)
+
+**Raouf:** Stage 3E-live activates the first live provider adapter behind the sealed Stage 3E-core gateway — **Anthropic only**, **disabled by default**. The deferred `live` contract becomes a working path: env-gated (`SIMURGH_LIVE_PROVIDER_ENABLED=true` + `SIMURGH_LLM_PROVIDER=anthropic` + `SIMURGH_LIVE_PROVIDER_MODEL` + server-side `ANTHROPIC_API_KEY`), **lazy SDK import** (`import("@anthropic-ai/sdk")` only inside the adapter, only after `liveProviderGuard` passes — no static import under the gateway), **no provider-side tools** (no `tools`/`tool_choice`/MCP/computer-use; no `toolRunner`/`betaZodTool`), and a real request **timeout** via `AbortController`. Untrusted `contexts[]` reach the provider only as a deterministic, bounded `minimal_summary` (500 chars/context, 2 KB total) with an explicit "data, not instruction" boundary; a separate raw-context cap (8000 chars) protects the gateway edge; rejected context skips the provider. The live response is distrusted through the **sealed 3D tail** verbatim — tool-shaped output is sanitized to hashed metadata and **never executed**, refusals still run the output firewall, blocked output is hash-only. Denial-of-wallet caps (OWASP LLM10) via `liveCallLedger` (session/minute/day). Receipt schema stays `"3E"` with **additive** live metadata (egress flag, model/shape hashes, `*_recorded:false`, no-tools booleans); audit chain gains additive live events. Mock/recorded paths and the frozen 3B benchmark are byte-unchanged. Optional live smoke skips without env; CI stays key-free. Not jailbreak immunity; a live call is an observed gateway event, not a proof of model safety.
+
+### Added
+
+- `src/llmShield/gateway/{liveProviderGuard,liveCallLedger,anthropicMessageBuild,anthropicResponseNormalise,anthropicProviderAdapter}.js` (+ unit suites).
+- `tests/e2e/{_live_server, llm_shield_stage3e_live_missing_key_smoke, llm_shield_stage3e_live_context_rejected_smoke, llm_shield_stage3e_live_rate_limit_smoke, llm_shield_stage3e_live_optional_anthropic_smoke, llm_shield_stage3e_live_fixture_runner}.mjs`; 40-case synthetic corpus + manifest + metrics under `evidence/stage-3e-live/`.
+- `scripts/{smoke,security-audit}-llm-shield-stage3e-live.sh`, `scripts/privacy-audit-llm-shield-stage3e-live.mjs`.
+- Reviewer docs: `LLM_SHIELD_STAGE_3E_LIVE_ANTHROPIC_ADAPTER.md`, `STAGE_3E_LIVE_{THREAT_MODEL,VALIDATION_MATRIX,REVIEWER_CHECKLIST,CLOSEOUT}.md`; spec + plan.
+
+### Changed
+
+- `providerTypes.js` (+`GATEWAY_PROVIDERS_LIVE`), `gatewayEnv.js` (re-export guard), `providerRegistry.js` (live→anthropic), `gatewayRouter.js` (env-gated live branch + live caps + live risk bonus + additive audit/receipt), `gatewayReceipt.js`/`gatewayAudit.js` (additive live fields/events).
+- `scripts/check.sh` — wired the three Stage 3E-live gates.
+- `docs/.../stage-3e/openapi.json` + `docker-compose.gateway.yml` — live mode documentation (mock default unchanged; no API key in request body or image).
+
+### Verified
+
+- `npm test` 593 pass; 3E-live smoke (disabled/missing-key/context-rejected/rate-limit PASS, optional SKIP, fixtures 40/40); security + privacy audits PASS; mock/recorded + 3B no drift; prettier clean; `npm audit` 0 vulns. Tag `v0.7.1-stage-3e-live-anthropic-adapter` after merge.
+
+---
+
 ## [stage-3e-core-industry-gateway] — 2026-06-17 — LLM Shield industry gateway (Stage 3E-core)
 
 **Raouf:** Stage 3E-core wraps the Stage 3D containment core in a stable, **no-network** HTTP gateway so external reviewers can test it. New gateway at `/api/llm-shield/gateway/*` (sessions/run/verify/openapi.json), mounted **before** the base router and reusing the existing session/token scheme (`getStore("llmShieldGatewaySessions")`, secret label `llm-shield-gateway`). Two provider modes: `mock` (reuses 3D scenarios) and `recorded_fixture` (synthetic-only, `provenance:"synthetic"` + `provider_output_hash` verified, selected by opaque `case_id` via manifest — path selectors rejected). `live` is a **fail-closed contract** with no adapter (`gateway_live_provider_not_implemented`); live adapters deferred to Stage 3E-live. The run handler composes the 3A/3C input firewall + the 3D context guard / tool gate / output firewall / risk accumulator verbatim around an untrusted provider: provider-side tools off, tool-shaped output gated (never executed), provider output distrusted through the firewall before export (blocked = hash-only), forbidden request fields (`api_key`, `provider_response_body`, `synthetic_provider_output`, …) rejected, denial-of-wallet input/context caps (OWASP LLM10). New `gatewayReceipt` (`type simurgh.llm_gateway_receipt.v1`, schema `3E`) + `gatewayAudit` events (output-hash recorded on every provider-called path); `safetyReceipt.js`/`stage3dReceipt.js` untouched. OpenAPI 3.1 (mock examples only) + non-root Docker (mock default). Not jailbreak immunity; receipts attest process, not ground truth.

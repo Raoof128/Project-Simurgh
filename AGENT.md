@@ -2,6 +2,17 @@
 
 ## Agent Change Log
 
+### 2026-06-18 (Australia/Sydney) — LLM Shield Anthropic live adapter (Stage 3E-live, complete)
+
+**Raouf:**
+
+- **Scope:** Stage 3E-live — turn the deferred `live` fail-closed contract into a working **Anthropic-only** adapter behind the sealed 3E-core gateway. Disabled by default; lazy SDK import; no provider-side tools; no raw transcript persistence; bounded `minimal_summary` context; denial-of-wallet caps; mandatory 3D containment before export.
+- **Summary:** Five new `src/llmShield/gateway/` modules (each unit-tested): `liveProviderGuard` (fail-closed env validation, never returns the key), `liveCallLedger` (OWASP LLM10 session/minute/day caps; call caps accept 0, time/size caps strictly positive), `anthropicMessageBuild` (request payload + deterministic provider-safe context summary, no tools/no cache_control by default), `anthropicResponseNormalise` (text/refusal/error/tool_request; tool-use → sanitized hashed `tool_request`), `anthropicProviderAdapter` (the only `import("@anthropic-ai/sdk")`, dynamic, after the guard; real `AbortController` timeout; output capped). Router gains an env-gated live branch reusing the sealed 3D tail verbatim; receipt/audit get additive live fields/events; receipt schema stays `"3E"`.
+- **Deliberate contract change (spec §5):** `live` no longer throws at the registry / returns `gateway_live_provider_not_implemented`; disabled live now returns `gateway_live_provider_disabled`. Updated the existing `providerRegistry.test.js` and `llm_shield_stage3e_live_disabled_smoke.mjs` accordingly.
+- **Gotchas found + fixed during execution:** (1) the recorded-branch was `if/else`, so appending `else if (live)` was a syntax error — restructured to `if mock / else if recorded_fixture / else if live`; (2) `hashPrompt` returns a `sha256:`-prefixed hash, so hash assertions use `/^sha256:[a-f0-9]{64}$/`; (3) env is process-wide, so live smokes that need enabled env **self-boot** their own server (`tests/e2e/_live_server.mjs`) while the disabled smoke stays on the shared no-live-env server.
+- **Files changed:** new `src/llmShield/gateway/{liveProviderGuard,liveCallLedger,anthropicMessageBuild,anthropicResponseNormalise,anthropicProviderAdapter}.js` + unit suites; `tests/e2e/_live_server.mjs` + four live smokes + optional smoke + fixture runner; `evidence/stage-3e-live/**` (40 fixtures + manifest + metrics); `scripts/{smoke,security-audit}-llm-shield-stage3e-live.sh`, `scripts/privacy-audit-llm-shield-stage3e-live.mjs`; five `STAGE_3E_LIVE*`/narrative docs; spec + plan; modified `providerTypes/gatewayEnv/providerRegistry/gatewayRouter/gatewayReceipt/gatewayAudit.js`, `scripts/check.sh`, `openapi.json`, `docker-compose.gateway.yml`, `AGENT.md`, `CHANGELOG.md`.
+- **Verified:** `npm test` 593; 3E-live smoke (disabled/missing-key/context-rejected/rate-limit PASS, optional SKIP, fixtures 40/40); security + privacy audits PASS; mock/recorded + 3B no drift; prettier clean; `npm audit` 0 vulns. Tag `v0.7.1-stage-3e-live-anthropic-adapter` after merge.
+
 ### 2026-06-17 (Australia/Sydney) — LLM Shield industry gateway (Stage 3E-core, complete)
 
 **Raouf:**
