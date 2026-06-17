@@ -1,6 +1,7 @@
 import { test, describe } from "node:test";
 import assert from "node:assert/strict";
 import {
+  GATEWAY_RECEIPT_TYPE,
   GATEWAY_SCHEMA_VERSION,
   buildGatewayReceipt,
   hashGatewayReceipt,
@@ -37,7 +38,8 @@ const ARGS = {
 describe("gatewayReceipt", () => {
   test("builds a metadata-only 3E gateway receipt", () => {
     const r = buildGatewayReceipt(ARGS);
-    assert.equal(r.type, "simurgh.llm_gateway_receipt.v1");
+    assert.equal(GATEWAY_RECEIPT_TYPE, "simurgh.llm_gateway_receipt.v1");
+    assert.equal(r.type, GATEWAY_RECEIPT_TYPE);
     assert.equal(r.schema_version, "3E");
     assert.equal(GATEWAY_SCHEMA_VERSION, "3E");
     assert.equal(r.network_egress_used, false);
