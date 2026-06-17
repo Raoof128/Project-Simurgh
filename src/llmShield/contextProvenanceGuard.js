@@ -15,8 +15,10 @@ const PURPOSES = new Set(["reference", "task_data", "policy_seed"]);
 const ALLOWED_FIELDS = new Set(["context_id", "source_type", "trust_level", "purpose", "content"]);
 
 // Authority assertion / role escalation markers (canonical, lowercased view).
+// No trailing \b: the `system\s*:` alternative ends in a colon, which is not a
+// word char, so a trailing \b would never match it.
 const AUTHORITY_ASSERTION =
-  /\b(system\s*:|you are (the|now) (the )?system|as the system prompt|developer mode|new system (prompt|instructions)|you must (now )?(ignore|obey)|disregard (your|all) (previous )?(instructions|guidelines))\b/;
+  /\b(system\s*:|you are (the|now) (the )?system|as the system prompt|developer mode|new system (prompt|instructions)|you must (now )?(ignore|obey)|disregard (your|all) (previous )?(instructions|guidelines))/;
 // Secret / policy export markers.
 const SECRET_MARKER =
   /\b(api[_-]?key|secret key|password|bearer [a-z0-9]|hidden policy|system prompt)\b/;
