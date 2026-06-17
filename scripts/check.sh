@@ -1380,6 +1380,14 @@ else
   tail -100 "$LOG_DIR/banking-full-e2e-smoke.log"
 fi
 
+step "LLM Shield 3A input smoke"
+if scripts/smoke-llm-shield.sh > "$LOG_DIR/llm-shield-smoke.log" 2>&1; then
+  pass "LLM Shield 3A input smoke"
+else
+  fail "LLM Shield 3A input smoke"
+  tail -80 "$LOG_DIR/llm-shield-smoke.log"
+fi
+
 step "LLM Shield 3B benchmark smoke"
 if scripts/smoke-llm-shield-bench.sh > "$LOG_DIR/llm-shield-bench-smoke.log" 2>&1; then
   pass "LLM Shield 3B benchmark smoke"
