@@ -3,7 +3,7 @@
 # Stage 3D — LLM Shield Provenance & Containment Boundary (Design)
 
 **Date:** 2026-06-17
-**Status:** Approved (design); ready for implementation plan
+**Status:** Design locked for implementation planning
 **Branch:** `stage-3d-provenance-containment`
 **Release target:** `v0.6.0-stage-3d-llm-containment` (new capability boundary, not a patch)
 **Builds on:** Stage 3A-alpha (input-only shield, `/api/llm-shield`), Stage 3B
@@ -222,10 +222,15 @@ only — no real shell, browser, network, file write, or live provider call.
 | Tool class                                          | Verdict          |
 | --------------------------------------------------- | ---------------- |
 | `mock_calculator`, `mock_lookup`                    | allow            |
-| `mock_file_read`                                    | warning or block |
+| `mock_file_read`                                    | block            |
 | `network_request`, `shell_command`, `secret_access` | block            |
 | `policy_export`, `prompt_export`, `credential_request` | block         |
 | unknown tool                                        | block (fail-closed) |
+
+Stage 3D blocks `mock_file_read` by default. A future stage may introduce
+explicitly allowlisted read-only fixture files, but Stage 3D keeps the tool
+boundary fail-closed: it does not read files, it only evaluates whether a tool
+request would have crossed the boundary.
 
 `toolInvocationGate.js` reads the scenario's `tool_request` (if any), evaluates it
 against the policy, and **never executes** — it only decides allow/warning/block.
@@ -381,8 +386,9 @@ HTTP).
 **Security-audit assertions (new):** plain `{ input }` request emits the existing
 (not 3D) receipt and preserves its schema; HTTP route rejects
 `mock_provider_output` (`mock_provider_output_http_rejected`); unknown scenario
-rejected; scenario output comes only from the committed allowlist and never
-echoes raw input; fixture-runner output injection is unreachable via HTTP;
+rejected; `stage3d: true` with no `scenario` defaults to the committed `benign`
+scenario and emits a Stage 3D receipt; scenario output comes only from the
+committed allowlist and never echoes raw input; fixture-runner output injection is unreachable via HTTP;
 mock-only modules import no network/provider SDK; Stage 3B frozen benchmark has
 no drift.
 
