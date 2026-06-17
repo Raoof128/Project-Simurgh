@@ -25,7 +25,7 @@ export function buildGatewayReceipt(a) {
     provider_called: a.providerCalled,
     provider_response_kind: a.providerResponseKind,
     provider_response_hash: a.providerResponseHash,
-    network_egress_used: false,
+    network_egress_used: a.networkEgressUsed === true,
     tool_gate_verdict: a.toolGateVerdict,
     tool_called: false,
     tool_name_hash: a.toolNameHash ?? null,
@@ -42,6 +42,23 @@ export function buildGatewayReceipt(a) {
     raw_context_recorded: false,
     raw_tool_args_recorded: false,
     api_key_recorded: false,
+    ...(a.live
+      ? {
+          provider_model_hash: a.live.provider_model_hash ?? null,
+          provider_request_shape_hash: a.live.provider_request_shape_hash ?? null,
+          live_provider_response_kind: a.live.provider_response_kind ?? null,
+          live_context_mode: a.live.live_context_mode ?? "none",
+          live_context_sent: a.live.live_context_sent === true,
+          raw_provider_transcript_recorded: false,
+          provider_request_body_recorded: false,
+          provider_response_body_recorded: false,
+          api_key_recorded: false,
+          provider_side_tools_enabled: false,
+          sdk_tool_runner_used: false,
+          prompt_cache_enabled: a.live.prompt_cache_enabled === true,
+          live_test_required_for_ci: false,
+        }
+      : {}),
     timestamp: a.timestamp,
     audit_entry_hash: a.auditEntryHash,
   };
