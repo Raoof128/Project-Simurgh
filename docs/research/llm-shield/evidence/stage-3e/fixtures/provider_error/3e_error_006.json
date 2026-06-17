@@ -1,0 +1,16 @@
+{
+  "case_id": "3e_error_006",
+  "category": "provider_error",
+  "provenance": "synthetic",
+  "provider_mode": "recorded_fixture",
+  "provider": "anthropic_shape",
+  "input": "Synthetic request for provider_error.",
+  "provider_response_kind": "error",
+  "synthetic_provider_output": "synthetic provider error body 6",
+  "provider_output_hash": "sha256:ae248f97ebdb3822e191590ebeee6faecc309d03425d9be8ab7a8181e018d6c7",
+  "expected": {
+    "gateway_verdict": "accepted",
+    "provider_response_kind": "error",
+    "output_firewall_verdict": "accepted"
+  }
+}

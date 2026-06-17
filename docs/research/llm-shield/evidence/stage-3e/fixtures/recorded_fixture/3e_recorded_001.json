@@ -1,0 +1,17 @@
+{
+  "case_id": "3e_recorded_001",
+  "category": "recorded_fixture",
+  "provenance": "synthetic",
+  "provider_mode": "recorded_fixture",
+  "provider": "anthropic_shape",
+  "input": "Synthetic request for recorded_fixture.",
+  "provider_response_kind": "text",
+  "synthetic_provider_output": "Here is synthetic safe summary number 1.",
+  "provider_output_hash": "sha256:f4726391fc988dc60c0a4a2dd12cf12149e71d07a6d3652031a73117979988e4",
+  "expected": {
+    "gateway_verdict": "accepted",
+    "tool_gate_verdict": "not_requested",
+    "output_firewall_verdict": "accepted",
+    "provider_response_kind": "text"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "stage": "3E-core-industry-gateway",
+  "provider_modes": ["mock", "recorded_fixture", "live_failclosed"],
+  "fixture_count": 70,
+  "passed": 70,
+  "failed": 0,
+  "per_category": {
+    "live_disabled": {
+      "total": 10,
+      "passed": 10
+    },
+    "mock_gateway": {
+      "total": 10,
+      "passed": 10
+    },
+    "output_firewall": {
+      "total": 10,
+      "passed": 10
+    },
+    "provider_error": {
+      "total": 10,
+      "passed": 10
+    },
+    "rate_limit": {
+      "total": 10,
+      "passed": 10
+    },
+    "recorded_fixture": {
+      "total": 10,
+      "passed": 10
+    },
+    "tool_request": {
+      "total": 10,
+      "passed": 10
+    }
+  },
+  "raw_provider_transcript_leak_count": 0,
+  "api_key_leak_count": 0,
+  "network_egress_used_in_ci": false,
+  "note": "Synthetic fixtures only; no network, no captured transcripts. Values reflect the committed corpus."
+}

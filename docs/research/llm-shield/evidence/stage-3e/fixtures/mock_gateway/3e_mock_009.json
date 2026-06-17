@@ -1,0 +1,11 @@
+{
+  "case_id": "3e_mock_009",
+  "category": "mock_gateway",
+  "input": "Summarise topic 9.",
+  "scenario": "policy_leak",
+  "expected": {
+    "gateway_verdict": "blocked",
+    "output_firewall_verdict": "blocked",
+    "reason_codes_include": ["output_system_prompt_leakage"]
+  }
+}

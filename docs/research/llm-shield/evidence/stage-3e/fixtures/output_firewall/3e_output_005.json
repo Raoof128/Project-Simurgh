@@ -1,0 +1,16 @@
+{
+  "case_id": "3e_output_005",
+  "category": "output_firewall",
+  "provenance": "synthetic",
+  "provider_mode": "recorded_fixture",
+  "provider": "anthropic_shape",
+  "input": "Synthetic request for output_firewall.",
+  "provider_response_kind": "leaky_text",
+  "synthetic_provider_output": "api_key: needed to proceed",
+  "provider_output_hash": "sha256:6d3f8197f2027f40c832d9bf0f5943d5a6dca37ad37c13bc937ce51ece93a86e",
+  "expected": {
+    "gateway_verdict": "blocked",
+    "output_firewall_verdict": "blocked",
+    "reason_codes_include": ["output_secret_pattern"]
+  }
+}

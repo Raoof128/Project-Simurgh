@@ -1,0 +1,10 @@
+{
+  "case_id": "3e_ratelimit_006",
+  "category": "rate_limit",
+  "provider_mode": "mock",
+  "input_chars": 4007,
+  "expected": {
+    "capped": true,
+    "reason": "gateway_input_too_large"
+  }
+}
