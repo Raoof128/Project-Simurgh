@@ -1,0 +1,11 @@
+[PASS] 3A/3B/3C receipt schema preserved
+[PASS] mock-only modules import no network/provider SDK
+[PASS] plain input keeps 3C receipt
+[PASS] stage3d default benign emits 3D receipt
+[PASS] HTTP rejects mock_provider_output
+[PASS] unknown scenario rejected
+[PASS] tool escalation blocked
+[PASS] output leakage blocked
+[PASS] audit chain verifies after 3D runs
+
+security-audit-llm-shield-stage3d: 9 passed, 0 failed

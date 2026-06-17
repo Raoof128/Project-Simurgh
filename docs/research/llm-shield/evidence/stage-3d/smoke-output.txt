@@ -1,0 +1,9 @@
+[PASS] stage3d activation smoke
+[PASS] stage3d context smoke
+[PASS] stage3d tool gate smoke
+[PASS] stage3d output firewall smoke
+[PASS] stage3d risk smoke
+stage3d fixture runner: 60 passed, 0 failed
+[PASS] stage3d fixture runner
+
+smoke-llm-shield-stage3d: passed
