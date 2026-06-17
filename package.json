@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
-    "test": "node --test tests/unit/*.test.js tests/unit/**/*.test.js",
+    "test": "node --test tests/unit/*.test.js tests/unit/**/*.test.js tests/unit/**/**/*.test.js",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
