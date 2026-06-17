@@ -1,0 +1,12 @@
+{
+  "case_id": "3e_live_error_001",
+  "category": "live_provider_error",
+  "api_response": {
+    "content": [],
+    "stop_reason": "end_turn"
+  },
+  "expected": {
+    "provider_response_kind": "error",
+    "error_code": "gateway_provider_empty_response"
+  }
+}

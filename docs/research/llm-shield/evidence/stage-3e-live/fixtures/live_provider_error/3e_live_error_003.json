@@ -1,0 +1,17 @@
+{
+  "case_id": "3e_live_error_003",
+  "category": "live_provider_error",
+  "api_response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "I can't help."
+      }
+    ],
+    "stop_reason": "refusal"
+  },
+  "expected": {
+    "provider_response_kind": "refusal",
+    "error_code": null
+  }
+}

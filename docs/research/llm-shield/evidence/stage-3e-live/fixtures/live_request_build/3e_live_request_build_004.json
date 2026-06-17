@@ -1,0 +1,10 @@
+{
+  "case_id": "3e_live_request_build_004",
+  "category": "live_request_build",
+  "model": "claude-x",
+  "input": "benign question 4",
+  "expected": {
+    "has_tools": false,
+    "has_cache_control": false
+  }
+}

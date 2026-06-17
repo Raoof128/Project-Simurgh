@@ -1,0 +1,14 @@
+{
+  "case_id": "3e_live_config_002",
+  "category": "live_config",
+  "env": {
+    "SIMURGH_LIVE_PROVIDER_ENABLED": "true",
+    "SIMURGH_LLM_PROVIDER": "openai",
+    "SIMURGH_LIVE_PROVIDER_MODEL": "claude-x",
+    "ANTHROPIC_API_KEY": "sk-test"
+  },
+  "expected": {
+    "ok": false,
+    "reason": "gateway_provider_not_allowed"
+  }
+}

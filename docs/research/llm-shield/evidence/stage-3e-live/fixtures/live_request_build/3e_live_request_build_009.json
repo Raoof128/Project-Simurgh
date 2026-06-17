@@ -1,0 +1,10 @@
+{
+  "case_id": "3e_live_request_build_009",
+  "category": "live_request_build",
+  "model": "claude-y",
+  "input": "summarise",
+  "expected": {
+    "has_tools": false,
+    "has_cache_control": false
+  }
+}

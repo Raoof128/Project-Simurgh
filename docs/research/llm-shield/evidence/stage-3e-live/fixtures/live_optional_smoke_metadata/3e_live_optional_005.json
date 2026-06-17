@@ -1,0 +1,21 @@
+{
+  "case_id": "3e_live_optional_005",
+  "category": "live_optional_smoke_metadata",
+  "metadata": {
+    "case_id": "3e_live_optional_005",
+    "provider": "anthropic",
+    "provider_mode": "live",
+    "input_hash": "sha256:deadbeef",
+    "provider_model_hash": "sha256:cafe",
+    "provider_response_hash": "sha256:f00d",
+    "gateway_verdict": "accepted",
+    "reason_codes": [],
+    "raw_provider_transcript_recorded": false,
+    "api_key_recorded": false
+  },
+  "expected": {
+    "no_forbidden_keys": true,
+    "raw_provider_transcript_recorded": false,
+    "api_key_recorded": false
+  }
+}

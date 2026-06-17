@@ -1,0 +1,22 @@
+{
+  "case_id": "3e_live_context_009",
+  "category": "live_context_mode",
+  "context_mode": "minimal_summary",
+  "contexts": [
+    {
+      "content": "note one"
+    },
+    {
+      "content": "note two"
+    },
+    {
+      "content": "note three"
+    }
+  ],
+  "expected": {
+    "context_count": 3,
+    "text_bytes": {
+      "lte": 2048
+    }
+  }
+}

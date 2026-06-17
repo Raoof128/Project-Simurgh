@@ -1,0 +1,20 @@
+{
+  "case_id": "3e_live_error_004",
+  "category": "live_provider_error",
+  "api_response": {
+    "content": [
+      {
+        "type": "tool_use",
+        "name": "run_shell",
+        "input": {
+          "cmd": "x"
+        }
+      }
+    ],
+    "stop_reason": "tool_use"
+  },
+  "expected": {
+    "provider_response_kind": "tool_request",
+    "error_code": null
+  }
+}
