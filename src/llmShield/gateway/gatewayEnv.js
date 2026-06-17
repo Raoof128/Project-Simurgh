@@ -28,3 +28,8 @@ export function validateProviderSelection({ providerMode, provider }) {
   }
   return { ok: true };
 }
+
+// Stage 3E-live: the router uses gatewayEnv as its single env entry point.
+// validateProviderSelection still hard-rejects `live` (defence in depth for any
+// caller that does not branch); the router branches to evaluateLiveProvider first.
+export { evaluateLiveProvider } from "./liveProviderGuard.js";

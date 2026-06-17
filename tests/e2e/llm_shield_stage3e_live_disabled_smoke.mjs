@@ -19,8 +19,8 @@ const res = await fetch(`${api}/${s.session_id}/run`, {
 });
 const r = await res.json();
 ok(
-  r.ok === false && r.error === "gateway_live_provider_not_implemented",
-  "live must fail closed",
+  r.ok === false && r.error === "gateway_live_provider_disabled",
+  "live must fail closed when SIMURGH_LIVE_PROVIDER_ENABLED is unset",
   r
 );
 console.log("[PASS] stage3e live-disabled smoke");

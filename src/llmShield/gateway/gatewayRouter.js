@@ -20,8 +20,15 @@ import { gateToolRequest } from "../toolInvocationGate.js";
 import { scanOutput } from "../outputLeakageFirewall.js";
 import { riskPointsFor, riskVerdict } from "../runRiskAccumulator.js";
 import { getScenario, isValidScenario } from "../stage3dMockScenarios.js";
-import { validateProviderSelection } from "./gatewayEnv.js";
+import { validateProviderSelection, evaluateLiveProvider } from "./gatewayEnv.js";
 import { getGatewayProvider } from "./providerRegistry.js";
+import {
+  liveLimits,
+  createLiveLedger,
+  checkLiveCall,
+  recordLiveCall,
+} from "./liveCallLedger.js";
+import { buildProviderSafeContext } from "./anthropicMessageBuild.js";
 import { selectFixtureEntry, validateRecordedFixture } from "./recordedFixtureProvider.js";
 import { normaliseProviderOutput } from "./providerOutputNormalise.js";
 import { buildGatewayReceipt, hashGatewayReceipt } from "./gatewayReceipt.js";
@@ -29,6 +36,8 @@ import {
   recordGatewaySessionCreated,
   recordGatewayRun,
   recordGatewayReceiptExported,
+  recordGatewayLiveCall,
+  recordGatewayLiveConfigRejected,
 } from "./gatewayAudit.js";
 import { gatewayLimits, checkInputCaps } from "./gatewayRateLimit.js";
 
@@ -112,8 +121,24 @@ router.post("/:sessionId/run", requireToken, requirePathMatch, async (req, res) 
   }
 
   const providerMode = typeof body.provider_mode === "string" ? body.provider_mode : "mock";
-  const provider = typeof body.provider === "string" ? body.provider : "mock";
-  const sel = validateProviderSelection({ providerMode, provider });
+  let provider = typeof body.provider === "string" ? body.provider : "mock";
+  let liveConfig = null;
+  let sel;
+  if (providerMode === "live") {
+    const g = evaluateLiveProvider(process.env);
+    if (g.ok) {
+      liveConfig = g.config;
+      provider = g.config.provider;
+      sel = { ok: true };
+    } else {
+      record.runCounter += 1;
+      const runId = `gw_run_${String(record.runCounter).padStart(3, "0")}`;
+      recordGatewayLiveConfigRejected(record.auditChain, key, g.reason);
+      return finishConfigRejected(res, record, key, runId, g.reason, req.params.sessionId);
+    }
+  } else {
+    sel = validateProviderSelection({ providerMode, provider });
+  }
   if (!sel.ok) {
     record.runCounter += 1;
     const runId = `gw_run_${String(record.runCounter).padStart(3, "0")}`;
@@ -130,6 +155,17 @@ router.post("/:sessionId/run", requireToken, requirePathMatch, async (req, res) 
     : 0;
   const caps = checkInputCaps({ inputChars: body.input.length, contextChars }, limits);
   if (!caps.ok) return res.status(413).json({ ok: false, error: caps.reason });
+
+  // Stage 3E-live: separate live-specific caps (raw-context reject threshold + input cap).
+  const live = liveConfig
+    ? { limits: liveLimits(process.env), ledger: (record.liveLedger ??= createLiveLedger()) }
+    : null;
+  if (live) {
+    if (body.input.length > live.limits.maxInputChars)
+      return res.status(413).json({ ok: false, error: "gateway_input_too_large" });
+    if (contextChars > live.limits.maxContextChars)
+      return res.status(413).json({ ok: false, error: "gateway_live_context_too_large" });
+  }
 
   const taskType = typeof body.task_type === "string" ? body.task_type : "unknown";
   const rawInput = body.input;
@@ -148,12 +184,31 @@ router.post("/:sessionId/run", requireToken, requirePathMatch, async (req, res) 
       if (providerMode === "mock") {
         const scenarioName = isValidScenario(body.scenario) ? body.scenario : "benign";
         raw = getGatewayProvider("mock").generate({ scenario: getScenario(scenarioName) });
-      } else {
+      } else if (providerMode === "recorded_fixture") {
         const manifest = JSON.parse(await readFile(`${FIXTURE_DIR}/fixture-manifest.json`, "utf8"));
         const rel = selectFixtureEntry(body.case_id, manifest);
         const fixture = JSON.parse(await readFile(`${FIXTURE_DIR}/${rel}`, "utf8"));
         validateRecordedFixture(fixture);
         raw = getGatewayProvider("recorded_fixture").generate({ fixture });
+      } else if (providerMode === "live") {
+        const gate = checkLiveCall(live.ledger, live.limits, Date.now());
+        if (!gate.ok) {
+          record.runCounter += 1;
+          const runId = `gw_run_${String(record.runCounter).padStart(3, "0")}`;
+          return finishConfigRejected(res, record, key, runId, gate.reason, req.params.sessionId);
+        }
+        const psc = buildProviderSafeContext(contextResult.acceptedContexts ?? body.contexts, {
+          contextMode: liveConfig.contextMode,
+        });
+        raw = await getGatewayProvider("live").generate({
+          model: liveConfig.model,
+          safeInput: normalised,
+          providerSafeContext: psc,
+          apiKey: process.env.ANTHROPIC_API_KEY,
+          limits: live.limits,
+        });
+        recordLiveCall(live.ledger, Date.now());
+        liveConfig.__psc = psc;
       }
     } catch (e) {
       record.runCounter += 1;
@@ -198,6 +253,11 @@ router.post("/:sessionId/run", requireToken, requirePathMatch, async (req, res) 
           repeatedWarning: false,
         });
   record.riskScore = (record.riskScore ?? 0) + runPoints;
+  if (liveConfig) {
+    record.riskScore += 1; // live provider call
+    if ((liveConfig.__psc?.context_count ?? 0) > 0) record.riskScore += 1; // context summary sent
+    if (raw?.error_code === "gateway_live_timeout") record.riskScore += 2; // timeout
+  }
   const riskVerdictValue =
     inputVerdict === "blocked" || contextResult.verdict === "rejected"
       ? "blocked"
@@ -241,6 +301,16 @@ router.post("/:sessionId/run", requireToken, requirePathMatch, async (req, res) 
     outputHash: outputResult.outputHash,
   });
 
+  if (liveConfig) {
+    recordGatewayLiveCall(record.auditChain, key, {
+      providerResponseKind: norm.kind,
+      providerResponseHash,
+      errorCode: raw?.error_code ?? null,
+      contextSummaryBuilt: (liveConfig.__psc?.context_count ?? 0) > 0,
+      contextCount: liveConfig.__psc?.context_count ?? 0,
+    });
+  }
+
   const receipt = buildGatewayReceipt({
     sessionIdHash,
     runId,
@@ -267,6 +337,17 @@ router.post("/:sessionId/run", requireToken, requirePathMatch, async (req, res) 
     reasonCodes,
     auditEntryHash,
     timestamp,
+    networkEgressUsed: Boolean(liveConfig),
+    live: liveConfig
+      ? {
+          provider_model_hash: raw?.provider_model_hash ?? null,
+          provider_request_shape_hash: raw?.provider_request_shape_hash ?? null,
+          provider_response_kind: norm.kind,
+          live_context_mode: liveConfig.contextMode,
+          live_context_sent: (liveConfig.__psc?.context_count ?? 0) > 0,
+          prompt_cache_enabled: live.limits.promptCacheEnabled,
+        }
+      : undefined,
   });
   recordGatewayReceiptExported(record.auditChain, key, hashGatewayReceipt(receipt));
 
