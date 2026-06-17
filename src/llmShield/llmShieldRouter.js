@@ -32,6 +32,7 @@ import { isValidScenario, getScenario, SCENARIO_NAMES } from "./stage3dMockScena
 import { guardContexts } from "./contextProvenanceGuard.js";
 import { gateToolRequest } from "./toolInvocationGate.js";
 import { scanOutput } from "./outputLeakageFirewall.js";
+import { riskPointsFor, riskVerdict } from "./runRiskAccumulator.js";
 
 const router = Router();
 const store = getStore("llm-shield-sessions");
@@ -275,11 +276,25 @@ function handleStage3dRun(req, res, record, ctx) {
     ? gateToolRequest(scenario.tool_request)
     : { verdict: "not_requested", reasonCodes: [], toolNameHash: null, toolCalled: false };
   const outputResult = scanOutput(providerCalled ? scenario.output : "", { providerCalled });
-  // PHASE-1 STUB — replaced in later phases:
+
+  const repeatedWarning = (record.warningRunCount ?? 0) > 0 && inputVerdict === "warning";
+  const runPoints =
+    inputVerdict === "blocked"
+      ? 6
+      : riskPointsFor({
+          inputVerdict,
+          contextVerdict: contextResult.verdict,
+          toolGateVerdict: toolResult.verdict,
+          outputFirewallVerdict: outputResult.verdict,
+          repeatedWarning,
+        });
+  record.riskScore = (record.riskScore ?? 0) + runPoints;
+  if (inputVerdict === "warning") record.warningRunCount = (record.warningRunCount ?? 0) + 1;
+  const riskScoreValue = record.riskScore;
   const riskVerdictValue =
-    inputVerdict === "blocked" || contextResult.verdict === "rejected" ? "blocked" : "safe";
-  const riskScoreValue = riskVerdictValue === "blocked" ? 6 : 0;
-  // END PHASE-1 STUB
+    inputVerdict === "blocked" || contextResult.verdict === "rejected"
+      ? "blocked"
+      : riskVerdict(record.riskScore);
 
   const reasonCodes = [
     ...contextResult.reasonCodes,
