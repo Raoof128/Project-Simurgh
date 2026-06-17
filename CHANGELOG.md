@@ -1,24 +1,29 @@
 ## Change Log
 
-## [stage-3d-provenance-containment] — 2026-06-17 — LLM Shield containment (Stage 3D, in progress)
+## [stage-3d-provenance-containment] — 2026-06-17 — LLM Shield containment (Stage 3D)
 
-**Raouf:** Phase 1 of the Stage 3D containment boundary. The LLM Shield moves from a jailbreak *detector* toward a jailbreak-*consequence* container: even when input filtering misses, downstream boundaries (context provenance, tool gate, output firewall) must stop the consequence and leave metadata-only evidence. Phase 1 lands the foundation — an **additive** route gate so a request carrying `contexts`/`tool_mode`/`scenario`/`stage3d:true` is routed to a new containment handler, while plain `{ input }` requests keep the byte-for-byte 3A/3B/3C path (no receipt or benchmark drift). New `stage3dReceipt.js` (`schema_version "3D"`, reuses the `v1` type; `safetyReceipt.js` untouched), new Stage 3D audit events + ordered `recordStage3dRun`, and a committed `stage3dMockScenarios.js` allowlist (live route maps a bounded `scenario` enum to canned outputs; raw `mock_provider_output` is rejected over HTTP). The former alpha `contexts_not_supported_alpha` fail-close (and its Stage 3A smoke fixture) is retired — `contexts[]` is now a governed channel. Not jailbreak immunity; receipts attest process, not ground truth.
+**Raouf:** Stage 3D repositions the LLM Shield from a jailbreak _detector_ to a jailbreak-_consequence_ container: even when input filtering misses, three downstream boundaries stop the consequence and leave metadata-only, audit-chained evidence. (1) **Context provenance** — untrusted `contexts[]` are demoted to data; context that forges system/developer authority, is malformed/oversize/unsigned-trusted, or carries secret/policy markers is rejected (provider skipped). (2) **Tool gate** — unsafe + unknown tool classes are blocked before any (mock) execution; the gate never executes a tool and hashes the tool name. (3) **Output firewall** — suspected system-prompt/secret/tool-arg/classifier-internal leakage is blocked before export; blocked output is hashed, never stored. A per-session **run risk accumulator** scores each run and accumulates monotonically (thresholds locked 0–2/3–5/6+; weights tunable), so multi-turn softening escalates. Activation is **additive**: only requests carrying `contexts`/`tool_mode`/`scenario`/`stage3d:true` take the 3D path; plain `{ input }` keeps the byte-for-byte 3A/3B/3C path so the frozen Stage 3B benchmark and the `v1`/`3C` receipt do not drift. The live route maps a bounded `scenario` enum to committed canned mock outputs; raw `mock_provider_output` is rejected over HTTP (fixtures-only injection lives in the direct-import fixture runner). Not jailbreak immunity, not live-provider safety, no real tools/network; receipts attest process, not ground truth.
 
-### Added (phase 1)
+### Added
 
-- `src/llmShield/stage3dReceipt.js`, `src/llmShield/stage3dMockScenarios.js`.
+- `src/llmShield/{stage3dReceipt.js,stage3dMockScenarios.js,contextCanonicalise.js,contextProvenanceGuard.js,toolPolicy.js,toolInvocationGate.js,outputLeakageFirewall.js,runRiskAccumulator.js}`.
 - Stage 3D audit events + `recordStage3dRun`/`recordStage3dReceiptExported` in `llmShieldAudit.js`.
-- `tests/e2e/llm_shield_stage3d_activation_smoke.mjs`; unit suites for the receipt and scenarios.
+- Unit suites for all eight new modules; e2e smokes (activation, context, tool gate, output firewall, risk) + the direct-import fixture runner.
+- 60-case fixture corpus (`evidence/stage-3d/fixtures/`, 10/category) + `metrics.json` + receipt samples + captured gate outputs.
+- Reviewer docs: `LLM_SHIELD_STAGE_3D_PROVENANCE_CONTAINMENT.md`, `STAGE_3D_{THREAT_MODEL,VALIDATION_MATRIX,REVIEWER_CHECKLIST,CLOSEOUT}.md`; spec + plan under `docs/superpowers/`.
+- Gates: `scripts/{smoke,security-audit}-llm-shield-stage3d.sh`, `scripts/privacy-audit-llm-shield-stage3d.mjs`.
 
-### Changed (phase 1)
+### Changed
 
-- `src/llmShield/llmShieldRouter.js` — additive `isStage3DRun` gate + minimal `handleStage3dRun`.
+- `src/llmShield/llmShieldRouter.js` — additive `isStage3DRun` gate + full `handleStage3dRun` (context → risk → scenario provider → tool gate → output firewall → 3D receipt).
+- `src/llmShield/llmShieldAudit.js` — new Stage 3D events.
 - `scripts/security-audit-llm-shield.sh` — `contexts[]` now asserts Stage 3D activation.
-- Removed the superseded `evidence/stage-3a/fixtures/contexts-rejection/` alpha fixture; updated its README.
+- Retired the superseded `evidence/stage-3a/fixtures/contexts-rejection/` alpha fixture; updated its README and the `router.test.js` contexts assertion.
+- `safetyReceipt.js`, `promptFirewall.js`, `promptCanonicalise.js`, `mockLlmProvider.js` are **unchanged**.
 
-### Verified (phase 1)
+### Verified
 
-- Full `npm test` (492 pass); `scripts/smoke-llm-shield.sh`; `scripts/smoke-llm-shield-bench.sh` no drift; `scripts/security-audit-llm-shield.sh` 7/7.
+- Full `npm test` (520 pass); `scripts/smoke-llm-shield.sh`; `scripts/smoke-llm-shield-bench.sh` no drift; `scripts/smoke-llm-shield-stage3d.sh`; `scripts/security-audit-llm-shield.sh` 7/7; `scripts/security-audit-llm-shield-stage3d.sh` 9/9; both privacy audits PASS; `npm audit --audit-level=high` 0 vulns; `npx prettier --check .` clean. Tag `v0.6.0-stage-3d-llm-containment`.
 
 ---
 

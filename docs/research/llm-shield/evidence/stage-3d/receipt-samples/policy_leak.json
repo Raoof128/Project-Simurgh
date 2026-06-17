@@ -1,0 +1,33 @@
+{
+  "type": "simurgh.llm_safety_receipt.v1",
+  "schema_version": "3D",
+  "session_id_hash": "sha256:b6592e9a3bc6223d7c93873144c9fe4e3afdc4e47a1174a194a5388a710df00f",
+  "run_id": "run_002",
+  "task_type": "unknown",
+  "input_hash": "sha256:45b614768c5e0c3879c36849463d38150967b013a0a0e2d136f12eabccf81884",
+  "normalised_input_hash": "sha256:45b614768c5e0c3879c36849463d38150967b013a0a0e2d136f12eabccf81884",
+  "input_verdict": "safe",
+  "context_verdict": "not_supplied",
+  "context_count": 0,
+  "context_hashes": [],
+  "provider_called": true,
+  "provider_mode": "mock",
+  "scenario": "policy_leak",
+  "tool_gate_verdict": "not_requested",
+  "tool_called": false,
+  "tool_name_hash": null,
+  "output_firewall_verdict": "blocked",
+  "output_hash": "sha256:83af6e0b55aba0613d6d7acc8819adad21bda8d6450863df051b003a39524c97",
+  "risk_score": 10,
+  "risk_verdict": "blocked",
+  "reason_codes": [
+    "tool_not_requested",
+    "output_system_prompt_leakage",
+    "output_hidden_policy_leakage"
+  ],
+  "source_labels": ["user_input", "context"],
+  "privacy_mode": "metadata_only",
+  "network_egress_used": false,
+  "timestamp": "2026-06-17T10:26:10.435Z",
+  "audit_entry_hash": "d2e4a05b6dc3b656e0a9b1a2a144c7685368e5a8698ce13c2acf0b7ec773a511"
+}
