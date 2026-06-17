@@ -1,8 +1,8 @@
 {
   "stage": "3E-core-industry-gateway",
   "provider_modes": ["mock", "recorded_fixture", "live_failclosed"],
-  "fixture_count": 70,
-  "passed": 70,
+  "fixture_count": 71,
+  "passed": 71,
   "failed": 0,
   "per_category": {
     "live_disabled": {
@@ -26,8 +26,8 @@
       "passed": 10
     },
     "recorded_fixture": {
-      "total": 10,
-      "passed": 10
+      "total": 11,
+      "passed": 11
     },
     "tool_request": {
       "total": 10,

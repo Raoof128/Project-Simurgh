@@ -38,5 +38,6 @@
   "3e_tool_007": "tool_request/3e_tool_007.json",
   "3e_tool_008": "tool_request/3e_tool_008.json",
   "3e_tool_009": "tool_request/3e_tool_009.json",
-  "3e_tool_010": "tool_request/3e_tool_010.json"
+  "3e_tool_010": "tool_request/3e_tool_010.json",
+  "3e_allowedtool_001": "recorded_fixture/3e_allowedtool_001.json"
 }
