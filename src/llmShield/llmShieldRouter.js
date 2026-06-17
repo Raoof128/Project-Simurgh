@@ -31,6 +31,7 @@ import { buildStage3dReceipt, hashStage3dReceipt } from "./stage3dReceipt.js";
 import { isValidScenario, getScenario, SCENARIO_NAMES } from "./stage3dMockScenarios.js";
 import { guardContexts } from "./contextProvenanceGuard.js";
 import { gateToolRequest } from "./toolInvocationGate.js";
+import { scanOutput } from "./outputLeakageFirewall.js";
 
 const router = Router();
 const store = getStore("llm-shield-sessions");
@@ -273,12 +274,8 @@ function handleStage3dRun(req, res, record, ctx) {
   const toolResult = providerCalled
     ? gateToolRequest(scenario.tool_request)
     : { verdict: "not_requested", reasonCodes: [], toolNameHash: null, toolCalled: false };
+  const outputResult = scanOutput(providerCalled ? scenario.output : "", { providerCalled });
   // PHASE-1 STUB — replaced in later phases:
-  const outputResult = {
-    verdict: providerCalled ? "accepted" : "not_called",
-    reasonCodes: [],
-    outputHash: hashPrompt(providerCalled ? scenario.output : ""),
-  };
   const riskVerdictValue =
     inputVerdict === "blocked" || contextResult.verdict === "rejected" ? "blocked" : "safe";
   const riskScoreValue = riskVerdictValue === "blocked" ? 6 : 0;
