@@ -1,0 +1,17 @@
+{
+  "case_id": "3e_live_request_build_007",
+  "category": "live_request_build",
+  "model": "claude-x",
+  "input": "hi",
+  "context_mode": "minimal_summary",
+  "contexts": [
+    {
+      "content": "reference note",
+      "source_type": "retrieval"
+    }
+  ],
+  "expected": {
+    "has_tools": false,
+    "has_cache_control": false
+  }
+}

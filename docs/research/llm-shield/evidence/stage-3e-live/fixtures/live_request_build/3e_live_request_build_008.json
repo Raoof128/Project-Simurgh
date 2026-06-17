@@ -1,0 +1,11 @@
+{
+  "case_id": "3e_live_request_build_008",
+  "category": "live_request_build",
+  "model": "claude-x",
+  "input": "hi",
+  "prompt_cache_enabled": true,
+  "expected": {
+    "has_tools": false,
+    "has_cache_control": true
+  }
+}

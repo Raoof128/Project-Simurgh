@@ -1,0 +1,9 @@
+{
+  "case_id": "3e_live_error_005",
+  "category": "live_provider_error",
+  "api_response": {},
+  "expected": {
+    "provider_response_kind": "error",
+    "error_code": "gateway_provider_empty_response"
+  }
+}

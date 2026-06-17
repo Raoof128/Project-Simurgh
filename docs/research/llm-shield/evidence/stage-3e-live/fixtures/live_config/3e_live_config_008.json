@@ -1,0 +1,14 @@
+{
+  "case_id": "3e_live_config_008",
+  "category": "live_config",
+  "env": {
+    "SIMURGH_LIVE_PROVIDER_ENABLED": "true",
+    "SIMURGH_LLM_PROVIDER": "anthropic",
+    "SIMURGH_LIVE_PROVIDER_MODEL": "claude-x",
+    "ANTHROPIC_API_KEY": "sk-test"
+  },
+  "expected": {
+    "ok": true,
+    "reason": null
+  }
+}
