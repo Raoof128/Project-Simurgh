@@ -2,6 +2,18 @@
 
 ## Agent Change Log
 
+### 2026-06-17 (Australia/Sydney) — LLM Shield containment (Stage 3D, phase 1)
+
+**Raouf:**
+
+- **Scope:** Begin Stage 3D — reposition the LLM Shield from a jailbreak detector to a jailbreak-*consequence* container (context / tool / output boundaries + run risk accumulator), verified against the deterministic mock provider. No live provider, no real tools, no network. Phase 1 = foundation only.
+- **Summary:** Added an **additive** route gate (`isStage3DRun`): a request carrying `contexts`/`tool_mode`/`scenario`/`stage3d:true` is routed to a new `handleStage3dRun`; plain `{ input }` keeps the byte-for-byte 3A/3B/3C path so the frozen benchmark and `simurgh.llm_safety_receipt.v1`/schema `3C` receipt do not drift. New `stage3dReceipt.js` builds a `schema_version "3D"` metadata-only receipt (reuses the `v1` type and `hashReceipt`; `safetyReceipt.js` untouched). New Stage 3D audit events + ordered `recordStage3dRun`/`recordStage3dReceiptExported`. New committed `stage3dMockScenarios.js` allowlist — the live route maps a bounded `scenario` enum to canned outputs (synthetic markers only); raw `mock_provider_output` is rejected over HTTP (`mock_provider_output_http_rejected`); unknown scenario → `scenario_not_allowed`.
+- **Deviation from plan:** the plan flagged the *security-audit script* contexts assertion, but two more places encoded the retired alpha behavior — `tests/unit/llmShield/router.test.js` ("contexts rejected fail-closed") and the Stage 3A smoke fixture `evidence/stage-3a/fixtures/contexts-rejection/llm-alpha-contexts-001.json`. Updated the unit test to assert 3D activation and **retired** the alpha fixture (the `contexts_not_supported_alpha` limitation it documented no longer holds; Stage 3D's context-provenance corpus supersedes it). Updated the stage-3a README accordingly.
+- **Files changed:** new `src/llmShield/{stage3dReceipt.js,stage3dMockScenarios.js}`, `tests/unit/llmShield/{stage3dReceipt.test.js,stage3dMockScenarios.test.js}`, `tests/e2e/llm_shield_stage3d_activation_smoke.mjs`; modified `src/llmShield/{llmShieldRouter.js,llmShieldAudit.js}`, `tests/unit/llmShield/{llmShieldAudit.test.js,router.test.js}`, `scripts/security-audit-llm-shield.sh`, `docs/research/llm-shield/evidence/stage-3a/README.md`; removed the stage-3a contexts-rejection fixture.
+- **Gotchas:** Stage 3D response shape uses `input_verdict`/`context_verdict`/… (not the 3A `verdict`/`model_called`); the 3A fixture runner only understands the 3A shape, so 3D cases live in their own corpus/runner. `safetyReceipt.js` must stay at `v1`/`3C` (security audit greps it).
+
+---
+
 ### 2026-06-16 (Australia/Sydney) — LLM Shield hardening (Stage 3C)
 
 **Raouf:**

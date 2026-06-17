@@ -1,9 +1,11 @@
 # Stage 3A-alpha LLM Shield — Evidence
 
 Fixtures for the input-only LLM safety boundary. Two attack classes
-(direct jailbreak, system-prompt extraction), benign-hard prompts including
-system-prompt-discussion cases that must pass as safe, and one contexts-rejection
-fixture protecting the future 3C provenance boundary.
+(direct jailbreak, system-prompt extraction) and benign-hard prompts including
+system-prompt-discussion cases that must pass as safe. (The former
+contexts-rejection fixture documented an alpha-only limitation that Stage 3D
+lifts: `contexts[]` is now a governed provenance channel — see the Stage 3D
+context-provenance corpus under `evidence/stage-3d/`.)
 
 Reproduce:
 
