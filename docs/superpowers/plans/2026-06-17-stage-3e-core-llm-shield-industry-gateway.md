@@ -18,7 +18,7 @@
 - Every new `.js`/`.mjs`/`.sh` starts with `// SPDX-License-Identifier: AGPL-3.0-or-later` (`#` form for bash, after shebang).
 - Run one unit suite: `node --test tests/unit/llmShield/gateway/<name>.test.js`. All tests: `npm test`.
 - Before each task's final commit: `npm run format` then `npx prettier --check .`.
-- **Change-protocol (required):** before the first code change read `AGENT.md`, `agent.md`, `CHANGELOG.md`; after each phase append a `Raouf:` entry to `AGENT.md` + `CHANGELOG.md`.
+- **Change-protocol (required):** before the first code change read `AGENT.md`, `agent.md`, `CHANGELOG.md`. After each **major phase or closeout milestone** append a `Raouf:` entry to `AGENT.md` + `CHANGELOG.md` (phase-level entries only where meaningful — not 12 tiny entries; the mandatory one is the closeout in Task 15).
 - Commit trailer: `Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>`. Neutral messages.
 - **Do NOT modify:** `safetyReceipt.js`, `stage3dReceipt.js`, `promptFirewall.js`, `promptNormalise.js`, `stage3dMockScenarios.js`, `llmShieldRouter.js`. Only `server.js` is touched (mount).
 
@@ -427,11 +427,14 @@ import {
 } from "../../../../src/llmShield/gateway/recordedFixtureProvider.js";
 
 const manifest = { "3e_recorded_001": "recorded_fixture/3e_recorded_001.json" };
+import { hashPrompt } from "../../../../src/llmShield/promptNormalise.js";
+const SYNTH = "SYSTEM PROMPT: synthetic marker";
 const goodFixture = {
   case_id: "3e_recorded_001",
   provenance: "synthetic",
   provider_response_kind: "leaky_text",
-  synthetic_provider_output: "SYSTEM PROMPT: synthetic marker",
+  synthetic_provider_output: SYNTH,
+  provider_output_hash: hashPrompt(SYNTH),
 };
 
 describe("recordedFixtureProvider", () => {
@@ -448,6 +451,12 @@ describe("recordedFixtureProvider", () => {
   });
   test("validateRecordedFixture rejects non-synthetic provenance", () => {
     assert.throws(() => validateRecordedFixture({ ...goodFixture, provenance: "real" }), /gateway_fixture_provenance_invalid/);
+  });
+  test("validateRecordedFixture rejects output-hash mismatch", () => {
+    assert.throws(
+      () => validateRecordedFixture({ ...goodFixture, provider_output_hash: "sha256:deadbeef" }),
+      /gateway_fixture_hash_mismatch/
+    );
   });
   test("generateFromFixture returns no-network leaky_text output", () => {
     validateRecordedFixture(goodFixture);
@@ -475,6 +484,7 @@ Expected: FAIL — cannot find module.
 // hand-authored synthetic (provenance "synthetic"); anything else fails closed.
 // No network, no filesystem in this module (IO is injected by the caller).
 import { PROVIDER_RESPONSE_KINDS } from "./providerTypes.js";
+import { hashPrompt } from "../promptNormalise.js";
 
 export const RECORDED_CASE_ID_RE = /^3e_[a-z_]+_\d{3}$/;
 
@@ -495,6 +505,10 @@ export function validateRecordedFixture(fixture) {
   }
   if (typeof fixture.synthetic_provider_output !== "string") {
     throw new Error("gateway_fixture_output_invalid");
+  }
+  // Frozen-fixture discipline: the committed hash must match the synthetic output.
+  if (hashPrompt(fixture.synthetic_provider_output) !== fixture.provider_output_hash) {
+    throw new Error("gateway_fixture_hash_mismatch");
   }
   return true;
 }
@@ -859,21 +873,22 @@ export function recordGatewayRun(chain, key, d) {
   appendEntry(chain, key, GATEWAY_EVENTS.LLM_GATEWAY_PROVIDER_CALLED, {
     provider_response_kind: d.providerResponseKind,
   });
+  // Every provider-called path records the output-hash reduction, even when the
+  // output is tool-shaped and the tool gate blocks it (the gateway already hashed
+  // norm.text and the receipt carries provider_response_hash).
+  appendEntry(chain, key, GATEWAY_EVENTS.LLM_GATEWAY_PROVIDER_OUTPUT_HASHED, {
+    provider_response_hash: d.providerResponseHash,
+  });
 
   if (d.toolGateVerdict === "blocked") {
     appendEntry(chain, key, GATEWAY_EVENTS.LLM_GATEWAY_PROVIDER_TOOL_REQUEST_DETECTED, {
       tool_name_hash: d.toolNameHash,
     });
     appendEntry(chain, key, GATEWAY_EVENTS.LLM_GATEWAY_TOOL_BLOCKED, { reason_codes: d.reasonCodes ?? [] });
+  } else if (d.outputFirewallVerdict === "blocked") {
+    appendEntry(chain, key, GATEWAY_EVENTS.LLM_GATEWAY_OUTPUT_BLOCKED, { reason_codes: d.reasonCodes ?? [] });
   } else {
-    appendEntry(chain, key, GATEWAY_EVENTS.LLM_GATEWAY_PROVIDER_OUTPUT_HASHED, {
-      provider_response_hash: d.providerResponseHash,
-    });
-    if (d.outputFirewallVerdict === "blocked") {
-      appendEntry(chain, key, GATEWAY_EVENTS.LLM_GATEWAY_OUTPUT_BLOCKED, { reason_codes: d.reasonCodes ?? [] });
-    } else {
-      appendEntry(chain, key, GATEWAY_EVENTS.LLM_GATEWAY_OUTPUT_ACCEPTED, {});
-    }
+    appendEntry(chain, key, GATEWAY_EVENTS.LLM_GATEWAY_OUTPUT_ACCEPTED, {});
   }
 
   appendEntry(chain, key, GATEWAY_EVENTS.LLM_GATEWAY_RISK_ACCUMULATED, { risk_verdict: d.riskVerdict });
@@ -886,7 +901,10 @@ export function recordGatewayReceiptExported(chain, key, receiptHash) {
 }
 ```
 
-> Note: the Task-6 test ordering puts OUTPUT_HASHED before OUTPUT_ACCEPTED in the accepted path and omits OUTPUT_HASHED on the tool-blocked path (tool detection precedes output hashing). The tests above assert exactly that.
+> Note: every provider-called path emits `PROVIDER_OUTPUT_HASHED` immediately after
+> `PROVIDER_CALLED`, then branches to the tool-blocked, output-blocked, or
+> output-accepted events. The accepted-path test asserts
+> CALLED → OUTPUT_HASHED → OUTPUT_ACCEPTED → RISK_ACCUMULATED.
 
 - [ ] **Step 4: Run to verify pass**
 
@@ -1179,7 +1197,7 @@ router.post("/:sessionId/run", requireToken, requirePathMatch, async (req, res) 
     // Record a fail-closed run (provider config rejected) for auditability.
     record.runCounter += 1;
     const runId = `gw_run_${String(record.runCounter).padStart(3, "0")}`;
-    return finishConfigRejected(res, record, key, runId, sel.reason);
+    return finishConfigRejected(res, record, key, runId, sel.reason, req.params.sessionId);
   }
 
   if (typeof body.input !== "string" || body.input.length === 0) {
@@ -1221,7 +1239,7 @@ router.post("/:sessionId/run", requireToken, requirePathMatch, async (req, res) 
     } catch (e) {
       record.runCounter += 1;
       const runId = `gw_run_${String(record.runCounter).padStart(3, "0")}`;
-      return finishConfigRejected(res, record, key, runId, String(e.message || "gateway_provider_error"));
+      return finishConfigRejected(res, record, key, runId, String(e.message || "gateway_provider_error"), req.params.sessionId);
     }
   }
 
@@ -1304,8 +1322,8 @@ router.post("/:sessionId/run", requireToken, requirePathMatch, async (req, res) 
   });
 });
 
-function finishConfigRejected(res, record, key, runId, reason) {
-  const sessionIdHash = hashPrompt("config_rejected");
+function finishConfigRejected(res, record, key, runId, reason, sessionId) {
+  const sessionIdHash = hashPrompt(sessionId);
   const timestamp = new Date().toISOString();
   const auditEntryHash = recordGatewayRun(record.auditChain, key, {
     inputVerdict: "safe", contextVerdict: "not_supplied", providerCalled: false,
@@ -1482,7 +1500,9 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 **Files:**
 - Create: `Dockerfile.gateway`, `docker-compose.gateway.yml`, `.dockerignore`, `scripts/docker-smoke-llm-shield-stage3e.sh`
 
-- [ ] **Step 1: Write `.dockerignore`**
+- [ ] **Step 1: Write/merge `.dockerignore`**
+
+First check if it exists: `cat .dockerignore 2>/dev/null`. If absent, create it with the block below. **If it already exists, append only the missing lines** (do not overwrite existing entries):
 
 ```
 node_modules
@@ -1603,14 +1623,20 @@ Seven categories, fixture id pattern `3e_<prefix>_NNN`:
 | `tool_request/` | `tool` | recorded tool_request → blocked |
 | `rate_limit/` | `ratelimit` | oversized input → capped |
 
-Canonical recorded fixture (`recorded_fixture/3e_recorded_001.json`):
+Canonical recorded fixture (`recorded_fixture/3e_recorded_001.json`). `provider_output_hash`
+MUST equal `hashPrompt(synthetic_provider_output)` — compute it when authoring (e.g.
+`node -e "import('./src/llmShield/promptNormalise.js').then(m=>console.log(m.hashPrompt('Here is a safe general summary.')))"`):
 ```json
 { "case_id": "3e_recorded_001", "category": "recorded_fixture", "provenance": "synthetic",
   "provider_mode": "recorded_fixture", "provider": "anthropic_shape",
   "input": "Summarise the safety policy.", "provider_response_kind": "text",
   "synthetic_provider_output": "Here is a safe general summary.",
+  "provider_output_hash": "sha256:<hashPrompt of synthetic_provider_output>",
   "expected": { "gateway_verdict": "accepted", "tool_gate_verdict": "not_requested", "output_firewall_verdict": "accepted", "reason_codes": [] } }
 ```
+
+The throwaway generator (Step 4) computes `provider_output_hash` with `hashPrompt`
+for every recorded fixture, so committed hashes always match.
 
 `fixture-manifest.json` maps every `case_id` → relative path, e.g.:
 ```json
@@ -1685,13 +1711,21 @@ Run: `chmod +x scripts/smoke-llm-shield-stage3e.sh && bash scripts/smoke-llm-shi
   - No live adapter file under `src/llmShield/gateway/` (`! ls ...anthropic*` ) and no `@anthropic-ai/sdk` import anywhere under `src/llmShield/gateway/`.
   - `grep -n "gatewayRouter" server.js` appears on a line before `"/api/llm-shield"` base mount (mount-order check via `awk`/line numbers).
   - HTTP: `provider_mode:"live"` → `gateway_live_provider_not_implemented`; `api_key`/`provider_response_body`/`synthetic_provider_output` → `gateway_forbidden_field`; `case_id:"../x"` → `gateway_fixture_selector_invalid`; `tool_escalation` → `tool_gate_verdict:blocked`; `policy_leak` → `output_firewall_verdict:blocked`; verify chain valid.
+  - `recordedFixtureProvider` enforces `provider_output_hash === hashPrompt(synthetic_provider_output)` (tamper a fixture in a temp copy → `gateway_fixture_hash_mismatch`), and every committed recorded fixture's hash matches its output.
   - No network imports in `mockGatewayProvider.js`/`recordedFixtureProvider.js` (`! grep -E "anthropic|openai|node:https?|node-fetch|axios"`).
   - Dockerfile has `USER node`; `.dockerignore` contains `.env`.
   - Stage 3B bench no drift (reuse the bench runner) and Stage 3D gates pass.
 
 Run: `chmod +x scripts/security-audit-llm-shield-stage3e.sh && bash scripts/security-audit-llm-shield-stage3e.sh` → `0 failed`.
 
-- [ ] **Step 4: Write `scripts/privacy-audit-llm-shield-stage3e.mjs`** asserting: `metrics.json` + receipt samples contain none of the forbidden keys (`raw_input`, `raw_provider_output`, `provider_request_body`, `provider_response_body`, `api_key`, `authorization`, `x-api-key`, `anthropic_api_key`, `openai_api_key`, `system_prompt`, `developer_prompt`, `tool_args`); every `recorded_fixture/*` fixture has `provenance === "synthetic"`; `gatewayReceipt.js` exposes no raw-text keys. Mirror `privacy-audit-llm-shield-stage3d.mjs`.
+- [ ] **Step 4: Write `scripts/privacy-audit-llm-shield-stage3e.mjs`**. **Scope the forbidden-key scan to GENERATED evidence only** — `metrics.json`, `*-output.txt` gate outputs, and `receipt-samples/**` — and **exclude `openapi.json` and `fixtures/**`** (the OpenAPI deliberately documents forbidden field *names* in its descriptions, and fixtures hold synthetic text by design; scanning them would trip the gate on our own documentation). Assert the scanned files contain none of: `raw_input`, `raw_provider_output`, `provider_request_body`, `provider_response_body`, `api_key`, `authorization`, `x-api-key`, `anthropic_api_key`, `openai_api_key`, `system_prompt`, `developer_prompt`, `tool_args`. Separately assert: every `recorded_fixture/*` fixture has `provenance === "synthetic"`; and `gatewayReceipt.js` exposes no raw-text keys. Mirror `privacy-audit-llm-shield-stage3d.mjs` structure.
+
+```js
+// scope: only generated evidence, excluding openapi.json and fixtures/
+const SCAN = ["metrics.json", "smoke-output.txt", "security-audit-output.txt",
+  "privacy-audit-output.txt", "docker-smoke-output.txt"]; // + receipt-samples/*.json
+// NEVER scan: openapi.json (documents forbidden field names), fixtures/** (synthetic by design)
+```
 
 Run: `node scripts/privacy-audit-llm-shield-stage3e.mjs` → `passed`.
 

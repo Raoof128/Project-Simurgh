@@ -337,7 +337,8 @@ Payloads whitelisted to hashes/verdicts/reason-codes. Representative orders:
 - **live fail-closed:** REQUEST_ACCEPTED → PROVIDER_CONFIG_REJECTED →
   PROVIDER_SKIPPED → RECEIPT_EXPORTED
 - **tool-shaped blocked:** REQUEST_ACCEPTED → PROVIDER_CALLED →
-  PROVIDER_TOOL_REQUEST_DETECTED → TOOL_BLOCKED → RECEIPT_EXPORTED
+  PROVIDER_OUTPUT_HASHED → PROVIDER_TOOL_REQUEST_DETECTED → TOOL_BLOCKED →
+  RECEIPT_EXPORTED (every provider-called path records the output-hash reduction)
 - **output leakage blocked:** REQUEST_ACCEPTED → PROVIDER_CALLED →
   PROVIDER_OUTPUT_HASHED → OUTPUT_BLOCKED → RECEIPT_EXPORTED
 
@@ -432,7 +433,10 @@ drift; Stage 3D gates pass.
 
 ## 26. Privacy-audit assertions
 
-No generated evidence contains: `raw_input`, `raw_context`, `raw_provider_output`,
+The forbidden-key scan covers **generated** evidence only — `metrics.json`,
+`*-output.txt` gate outputs, and `receipt-samples/**` — and **excludes
+`openapi.json`** (which documents forbidden field *names* in its descriptions) and
+**`fixtures/**`** (synthetic by design). Scanned files contain none of: `raw_input`, `raw_context`, `raw_provider_output`,
 `provider_request_body`, `provider_response_body`, `api_key`, `authorization`,
 `cookie`, `x-api-key`, `anthropic_api_key`, `openai_api_key`, `system_prompt`,
 `developer_prompt`, `tool_args`. Every `recorded_fixture` fixture has
