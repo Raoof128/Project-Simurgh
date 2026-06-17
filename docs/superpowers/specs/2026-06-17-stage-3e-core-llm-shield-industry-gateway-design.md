@@ -162,18 +162,22 @@ token/session mechanism is invented.
 Parses/validates provider mode and fail-closed defaults. Default (no env):
 
 ```json
-{ "provider_mode": "mock", "live_provider_enabled": false,
-  "provider": "mock", "network_egress_allowed": false }
+{
+  "provider_mode": "mock",
+  "live_provider_enabled": false,
+  "provider": "mock",
+  "network_egress_allowed": false
+}
 ```
 
 Fail-closed cases and reason codes:
 
-| Case | Result | Reason code |
-| --- | --- | --- |
-| `provider_mode=live` (any config) in core | reject | `gateway_live_provider_not_implemented` |
-| unknown provider mode | reject | `gateway_provider_mode_invalid` |
-| unknown provider | reject | `gateway_provider_not_allowed` |
-| client submits API key in request | reject | `gateway_client_key_rejected` |
+| Case                                             | Result | Reason code                                 |
+| ------------------------------------------------ | ------ | ------------------------------------------- |
+| `provider_mode=live` (any config) in core        | reject | `gateway_live_provider_not_implemented`     |
+| unknown provider mode                            | reject | `gateway_provider_mode_invalid`             |
+| unknown provider                                 | reject | `gateway_provider_not_allowed`              |
+| client submits API key in request                | reject | `gateway_client_key_rejected`               |
 | client submits provider response/output override | reject | `gateway_provider_output_override_rejected` |
 
 Note: the env gate also recognises the future live env vars
@@ -193,8 +197,14 @@ GET  /api/llm-shield/gateway/openapi.json       → committed static OpenAPI JSO
 Session creation performs no provider call. Run request:
 
 ```json
-{ "task_type": "general_qa", "input": "User request", "contexts": [],
-  "provider_mode": "mock", "provider": "mock", "scenario": "benign" }
+{
+  "task_type": "general_qa",
+  "input": "User request",
+  "contexts": [],
+  "provider_mode": "mock",
+  "provider": "mock",
+  "scenario": "benign"
+}
 ```
 
 `recorded_fixture` run selects a committed fixture by `case_id` rather than free
@@ -239,16 +249,24 @@ request, provider response, leaked prompt, copied safety policy, or production l
 synthetic text directly. Fixture shape:
 
 ```json
-{ "case_id": "3e_recorded_001", "category": "recorded_fixture",
-  "provider_mode": "recorded_fixture", "provider": "anthropic_shape",
-  "provenance": "synthetic", "input": "synthetic user request",
-  "input_hash": "sha256:...", "provider_output_hash": "sha256:...",
+{
+  "case_id": "3e_recorded_001",
+  "category": "recorded_fixture",
+  "provider_mode": "recorded_fixture",
+  "provider": "anthropic_shape",
+  "provenance": "synthetic",
+  "input": "synthetic user request",
+  "input_hash": "sha256:...",
+  "provider_output_hash": "sha256:...",
   "provider_response_kind": "text | tool_request | refusal | error | leaky_text",
   "synthetic_provider_output": "fixture-only synthetic provider-shaped output",
-  "expected": { "gateway_verdict": "accepted | warning | blocked",
+  "expected": {
+    "gateway_verdict": "accepted | warning | blocked",
     "tool_gate_verdict": "not_requested | blocked",
     "output_firewall_verdict": "accepted | blocked | not_called",
-    "reason_codes": [] } }
+    "reason_codes": []
+  }
+}
 ```
 
 The recordedFixtureProvider validates `provenance === "synthetic"` and the
@@ -269,9 +287,14 @@ blocked. Accepted may return safe output text; blocked must **not** include the 
 output:
 
 ```json
-{ "ok": false, "gateway_verdict": "blocked", "provider_called": true,
-  "output_exported": false, "reason_codes": ["output_hidden_policy_leakage"],
-  "receipt": { "schema_version": "3E", "output_hash": "sha256:..." } }
+{
+  "ok": false,
+  "gateway_verdict": "blocked",
+  "provider_called": true,
+  "output_exported": false,
+  "reason_codes": ["output_hidden_policy_leakage"],
+  "receipt": { "schema_version": "3E", "output_hash": "sha256:..." }
+}
 ```
 
 ## 13. Context boundary
@@ -295,23 +318,42 @@ output `+2`; provider returned leakage-shaped output `+5`; synthetic provider er
 New builder; **`safetyReceipt.js` and `stage3dReceipt.js` untouched.**
 
 ```json
-{ "type": "simurgh.llm_gateway_receipt.v1", "schema_version": "3E",
-  "session_id_hash": "sha256:...", "run_id": "gw_run_001", "task_type": "general_qa",
-  "input_hash": "sha256:...", "normalised_input_hash": "sha256:...",
-  "context_verdict": "not_supplied|accepted|demoted|rejected", "context_hashes": [],
+{
+  "type": "simurgh.llm_gateway_receipt.v1",
+  "schema_version": "3E",
+  "session_id_hash": "sha256:...",
+  "run_id": "gw_run_001",
+  "task_type": "general_qa",
+  "input_hash": "sha256:...",
+  "normalised_input_hash": "sha256:...",
+  "context_verdict": "not_supplied|accepted|demoted|rejected",
+  "context_hashes": [],
   "gateway_verdict": "accepted|warning|blocked",
-  "provider_mode": "mock|recorded_fixture|live", "provider": "mock|recorded_fixture|...",
-  "provider_called": true, "provider_response_kind": "text|tool_request|refusal|error",
-  "provider_response_hash": "sha256:...", "network_egress_used": false,
-  "tool_gate_verdict": "not_requested|allowed|warning|blocked", "tool_called": false,
+  "provider_mode": "mock|recorded_fixture|live",
+  "provider": "mock|recorded_fixture|...",
+  "provider_called": true,
+  "provider_response_kind": "text|tool_request|refusal|error",
+  "provider_response_hash": "sha256:...",
+  "network_egress_used": false,
+  "tool_gate_verdict": "not_requested|allowed|warning|blocked",
+  "tool_called": false,
   "tool_name_hash": "sha256:...|null",
-  "output_firewall_verdict": "accepted|blocked|not_called", "output_hash": "sha256:...",
-  "risk_score": 4, "risk_verdict": "safe|warning|blocked",
-  "latency_bucket": "0-250ms|...", "input_token_bucket": "0-1k|...|unknown",
-  "output_token_bucket": "0-1k|...|unknown", "reason_codes": [],
-  "privacy_mode": "metadata_only", "raw_provider_transcript_recorded": false,
-  "raw_context_recorded": false, "raw_tool_args_recorded": false,
-  "api_key_recorded": false, "timestamp": "...", "audit_entry_hash": "sha256:..." }
+  "output_firewall_verdict": "accepted|blocked|not_called",
+  "output_hash": "sha256:...",
+  "risk_score": 4,
+  "risk_verdict": "safe|warning|blocked",
+  "latency_bucket": "0-250ms|...",
+  "input_token_bucket": "0-1k|...|unknown",
+  "output_token_bucket": "0-1k|...|unknown",
+  "reason_codes": [],
+  "privacy_mode": "metadata_only",
+  "raw_provider_transcript_recorded": false,
+  "raw_context_recorded": false,
+  "raw_tool_args_recorded": false,
+  "api_key_recorded": false,
+  "timestamp": "...",
+  "audit_entry_hash": "sha256:..."
+}
 ```
 
 Must never include: `raw_input`, `raw_context`, `raw_provider_output`,
@@ -435,13 +477,12 @@ drift; Stage 3D gates pass.
 
 The forbidden-key scan covers **generated** evidence only — `metrics.json`,
 `*-output.txt` gate outputs, and `receipt-samples/**` — and **excludes
-`openapi.json`** (which documents forbidden field *names* in its descriptions) and
+`openapi.json`** (which documents forbidden field _names_ in its descriptions) and
 **`fixtures/**`** (synthetic by design). Scanned files contain none of: `raw_input`, `raw_context`, `raw_provider_output`,
 `provider_request_body`, `provider_response_body`, `api_key`, `authorization`,
 `cookie`, `x-api-key`, `anthropic_api_key`, `openai_api_key`, `system_prompt`,
-`developer_prompt`, `tool_args`. Every `recorded_fixture` fixture has
-`provenance === "synthetic"` (build fails on missing/other). Generated evidence for
-mock/recorded carries `raw_provider_transcript_recorded:false`,
+`developer_prompt`, `tool_args`. Every `recorded_fixture`fixture has`provenance === "synthetic"`(build fails on missing/other). Generated evidence for
+mock/recorded carries`raw_provider_transcript_recorded:false`,
 `api_key_recorded:false`, `network_egress_used:false`. `gatewayReceipt.js` exposes
 no raw-text keys.
 
