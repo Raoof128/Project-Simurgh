@@ -1,0 +1,8 @@
+node_modules
+.git
+.env
+.env.*
+.simurgh_check_logs
+coverage
+tmp
+*.log
