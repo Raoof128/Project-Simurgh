@@ -9,6 +9,8 @@ import {
   recordSafeRun,
   recordWarnedRun,
   recordReceiptExported,
+  recordStage3dRun,
+  recordStage3dReceiptExported,
 } from "../../../src/llmShield/llmShieldAudit.js";
 
 const KEY = "test-llm-shield-audit-key";
@@ -103,5 +105,100 @@ describe("llmShieldAudit", () => {
       ]
     );
     assert.equal(verifyChain(chain, key).valid, true);
+  });
+
+  test("recordStage3dRun: context-rejected path skips provider, in order", () => {
+    const key = crypto.randomBytes(32);
+    const chain = createChain();
+    recordStage3dRun(chain, key, {
+      inputVerdict: "safe",
+      contextVerdict: "rejected",
+      toolGateVerdict: "not_requested",
+      outputFirewallVerdict: "not_called",
+      riskVerdict: "warning",
+      providerCalled: false,
+      reasonCodes: ["context_role_escalation"],
+      signals: [],
+      inputHash: "sha256:i",
+      normalisedInputHash: "sha256:n",
+      contextHashes: ["sha256:c"],
+      toolNameHash: null,
+      outputHash: "sha256:e",
+    });
+    assert.deepEqual(
+      chain.entries.map((e) => e.type),
+      [
+        LLM_SHIELD_EVENTS.LLM_INPUT_ACCEPTED,
+        LLM_SHIELD_EVENTS.LLM_CONTEXT_REJECTED,
+        LLM_SHIELD_EVENTS.LLM_RISK_ACCUMULATED,
+        LLM_SHIELD_EVENTS.LLM_PROVIDER_SKIPPED,
+      ]
+    );
+    assert.equal(verifyChain(chain, key).valid, true);
+  });
+
+  test("recordStage3dRun: tool-blocked path calls provider then blocks tool", () => {
+    const key = crypto.randomBytes(32);
+    const chain = createChain();
+    recordStage3dRun(chain, key, {
+      inputVerdict: "safe",
+      contextVerdict: "accepted",
+      toolGateVerdict: "blocked",
+      outputFirewallVerdict: "accepted",
+      riskVerdict: "blocked",
+      providerCalled: true,
+      reasonCodes: ["tool_shell_blocked"],
+      signals: [],
+      inputHash: "sha256:i",
+      normalisedInputHash: "sha256:n",
+      contextHashes: ["sha256:c"],
+      toolNameHash: "sha256:t",
+      outputHash: "sha256:o",
+    });
+    assert.deepEqual(
+      chain.entries.map((e) => e.type),
+      [
+        LLM_SHIELD_EVENTS.LLM_INPUT_ACCEPTED,
+        LLM_SHIELD_EVENTS.LLM_CONTEXT_ACCEPTED,
+        LLM_SHIELD_EVENTS.LLM_RISK_ACCUMULATED,
+        LLM_SHIELD_EVENTS.LLM_RISK_ESCALATED,
+        LLM_SHIELD_EVENTS.LLM_PROVIDER_CALLED,
+        LLM_SHIELD_EVENTS.LLM_TOOL_REQUESTED,
+        LLM_SHIELD_EVENTS.LLM_TOOL_BLOCKED,
+        LLM_SHIELD_EVENTS.LLM_OUTPUT_ACCEPTED,
+      ]
+    );
+  });
+
+  test("recordStage3dRun: output-blocked path emits LLM_OUTPUT_BLOCKED", () => {
+    const key = crypto.randomBytes(32);
+    const chain = createChain();
+    recordStage3dRun(chain, key, {
+      inputVerdict: "safe",
+      contextVerdict: "not_supplied",
+      toolGateVerdict: "not_requested",
+      outputFirewallVerdict: "blocked",
+      riskVerdict: "blocked",
+      providerCalled: true,
+      reasonCodes: ["output_hidden_policy_leakage"],
+      signals: [],
+      inputHash: "sha256:i",
+      normalisedInputHash: "sha256:n",
+      contextHashes: [],
+      toolNameHash: null,
+      outputHash: "sha256:o",
+    });
+    const types = chain.entries.map((e) => e.type);
+    assert.ok(types.includes(LLM_SHIELD_EVENTS.LLM_OUTPUT_BLOCKED));
+    assert.ok(!types.includes(LLM_SHIELD_EVENTS.LLM_OUTPUT_ACCEPTED));
+  });
+
+  test("recordStage3dReceiptExported appends the 3D export event with hash", () => {
+    const key = crypto.randomBytes(32);
+    const chain = createChain();
+    recordStage3dReceiptExported(chain, key, "sha256:receipt3d");
+    const last = chain.entries.at(-1);
+    assert.equal(last.type, LLM_SHIELD_EVENTS.LLM_STAGE3D_RECEIPT_EXPORTED);
+    assert.equal(last.payload.receipt_hash, "sha256:receipt3d");
   });
 });
