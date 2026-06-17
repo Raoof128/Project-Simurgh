@@ -1,0 +1,104 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Simurgh LLM Shield Gateway (Stage 3E-core)",
+    "version": "0.7.0",
+    "description": "No-network provider gateway exposing the Stage 3D containment core. Live mode is a fail-closed contract (no adapter). Forbidden request fields (rejected with gateway_forbidden_field): api_key, anthropic_api_key, openai_api_key, provider_request_body, provider_response_body, mock_provider_output, synthetic_provider_output, raw_provider_output, tool_result, system_prompt, developer_prompt."
+  },
+  "servers": [{ "url": "http://127.0.0.1:33030" }],
+  "components": {
+    "securitySchemes": { "GatewayBearer": { "type": "http", "scheme": "bearer" } },
+    "schemas": {
+      "RunRequest": {
+        "type": "object",
+        "required": ["input", "provider_mode"],
+        "properties": {
+          "task_type": { "type": "string" },
+          "input": { "type": "string", "maxLength": 4000 },
+          "contexts": { "type": "array", "items": { "type": "object" } },
+          "provider_mode": { "type": "string", "enum": ["mock", "recorded_fixture", "live"] },
+          "provider": { "type": "string", "enum": ["mock", "recorded_fixture"] },
+          "scenario": { "type": "string" },
+          "case_id": { "type": "string", "pattern": "^3e_[a-z_]+_\\d{3}$" }
+        }
+      },
+      "GatewayReceipt": {
+        "type": "object",
+        "properties": {
+          "type": { "type": "string" },
+          "schema_version": { "type": "string", "const": "3E" },
+          "gateway_verdict": { "type": "string" },
+          "output_hash": { "type": "string" }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "ok": { "type": "boolean" },
+          "error": { "type": "string" }
+        }
+      }
+    }
+  },
+  "security": [{ "GatewayBearer": [] }],
+  "paths": {
+    "/api/llm-shield/gateway/sessions": {
+      "post": {
+        "summary": "Create gateway session",
+        "responses": { "200": { "description": "session created" } }
+      }
+    },
+    "/api/llm-shield/gateway/{sessionId}/run": {
+      "post": {
+        "summary": "Run a gateway request (mock example)",
+        "parameters": [
+          { "name": "sessionId", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/RunRequest" },
+              "example": {
+                "task_type": "general_qa",
+                "input": "Summarise widgets.",
+                "provider_mode": "mock",
+                "provider": "mock",
+                "scenario": "benign"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "accepted or blocked metadata-only receipt",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/GatewayReceipt" } }
+            }
+          },
+          "400": {
+            "description": "rejected",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+            }
+          }
+        }
+      }
+    },
+    "/api/llm-shield/gateway/{sessionId}/verify": {
+      "get": {
+        "summary": "Verify audit chain",
+        "parameters": [
+          { "name": "sessionId", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "chain validity" } }
+      }
+    },
+    "/api/llm-shield/gateway/openapi.json": {
+      "get": {
+        "summary": "This contract",
+        "responses": { "200": { "description": "OpenAPI document" } }
+      }
+    }
+  }
+}
