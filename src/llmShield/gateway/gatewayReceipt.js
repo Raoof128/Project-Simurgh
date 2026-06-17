@@ -1,0 +1,48 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Stage 3E metadata-only gateway receipt. New type + schema_version "3E"; reuses
+// hashReceipt. Leaves safetyReceipt.js and stage3dReceipt.js untouched. Hashes and
+// enum codes only — never raw input/context/output/provider body/keys.
+import { hashReceipt } from "../safetyReceipt.js";
+
+export const GATEWAY_RECEIPT_TYPE = "simurgh.llm_gateway_receipt.v1";
+export const GATEWAY_SCHEMA_VERSION = "3E";
+export const hashGatewayReceipt = hashReceipt;
+
+export function buildGatewayReceipt(a) {
+  return {
+    type: GATEWAY_RECEIPT_TYPE,
+    schema_version: GATEWAY_SCHEMA_VERSION,
+    session_id_hash: a.sessionIdHash,
+    run_id: a.runId,
+    task_type: a.taskType,
+    input_hash: a.inputHash,
+    normalised_input_hash: a.normalisedInputHash,
+    context_verdict: a.contextVerdict,
+    context_hashes: a.contextHashes ?? [],
+    gateway_verdict: a.gatewayVerdict,
+    provider_mode: a.providerMode,
+    provider: a.provider,
+    provider_called: a.providerCalled,
+    provider_response_kind: a.providerResponseKind,
+    provider_response_hash: a.providerResponseHash,
+    network_egress_used: false,
+    tool_gate_verdict: a.toolGateVerdict,
+    tool_called: false,
+    tool_name_hash: a.toolNameHash ?? null,
+    output_firewall_verdict: a.outputFirewallVerdict,
+    output_hash: a.outputHash,
+    risk_score: a.riskScore,
+    risk_verdict: a.riskVerdict,
+    latency_bucket: a.latencyBucket,
+    input_token_bucket: a.inputTokenBucket,
+    output_token_bucket: a.outputTokenBucket,
+    reason_codes: a.reasonCodes ?? [],
+    privacy_mode: "metadata_only",
+    raw_provider_transcript_recorded: false,
+    raw_context_recorded: false,
+    raw_tool_args_recorded: false,
+    api_key_recorded: false,
+    timestamp: a.timestamp,
+    audit_entry_hash: a.auditEntryHash,
+  };
+}
