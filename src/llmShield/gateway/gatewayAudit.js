@@ -20,6 +20,17 @@ export const GATEWAY_EVENTS = Object.freeze({
   LLM_GATEWAY_RISK_ACCUMULATED: "LLM_GATEWAY_RISK_ACCUMULATED",
   LLM_GATEWAY_RISK_ESCALATED: "LLM_GATEWAY_RISK_ESCALATED",
   LLM_GATEWAY_RECEIPT_EXPORTED: "LLM_GATEWAY_RECEIPT_EXPORTED",
+  LLM_GATEWAY_LIVE_CONFIG_ACCEPTED: "LLM_GATEWAY_LIVE_CONFIG_ACCEPTED",
+  LLM_GATEWAY_LIVE_CONFIG_REJECTED: "LLM_GATEWAY_LIVE_CONFIG_REJECTED",
+  LLM_GATEWAY_LIVE_RATE_LIMIT_CHECKED: "LLM_GATEWAY_LIVE_RATE_LIMIT_CHECKED",
+  LLM_GATEWAY_LIVE_PROVIDER_IMPORT_STARTED: "LLM_GATEWAY_LIVE_PROVIDER_IMPORT_STARTED",
+  LLM_GATEWAY_LIVE_PROVIDER_IMPORT_OK: "LLM_GATEWAY_LIVE_PROVIDER_IMPORT_OK",
+  LLM_GATEWAY_LIVE_PROVIDER_CALLED: "LLM_GATEWAY_LIVE_PROVIDER_CALLED",
+  LLM_GATEWAY_LIVE_PROVIDER_TIMEOUT: "LLM_GATEWAY_LIVE_PROVIDER_TIMEOUT",
+  LLM_GATEWAY_LIVE_PROVIDER_ERROR: "LLM_GATEWAY_LIVE_PROVIDER_ERROR",
+  LLM_GATEWAY_LIVE_PROVIDER_RESPONSE_HASHED: "LLM_GATEWAY_LIVE_PROVIDER_RESPONSE_HASHED",
+  LLM_GATEWAY_LIVE_CONTEXT_SUMMARY_BUILT: "LLM_GATEWAY_LIVE_CONTEXT_SUMMARY_BUILT",
+  LLM_GATEWAY_LIVE_CONTEXT_REJECTED: "LLM_GATEWAY_LIVE_CONTEXT_REJECTED",
 });
 
 export function recordGatewaySessionCreated(chain, key) {
@@ -88,4 +99,35 @@ export function recordGatewayReceiptExported(chain, key, receiptHash) {
   appendEntry(chain, key, GATEWAY_EVENTS.LLM_GATEWAY_RECEIPT_EXPORTED, {
     receipt_hash: receiptHash,
   });
+}
+
+// Additive live-call annotation events. Emitted alongside (not instead of) the
+// existing provider-called chain. Payloads are hashes / verdicts / reason codes only.
+export function recordGatewayLiveCall(chain, key, d) {
+  appendEntry(chain, key, GATEWAY_EVENTS.LLM_GATEWAY_LIVE_CONFIG_ACCEPTED, {});
+  appendEntry(chain, key, GATEWAY_EVENTS.LLM_GATEWAY_LIVE_RATE_LIMIT_CHECKED, {});
+  appendEntry(chain, key, GATEWAY_EVENTS.LLM_GATEWAY_LIVE_PROVIDER_CALLED, {
+    provider_response_kind: d.providerResponseKind,
+  });
+  if (d.errorCode === "gateway_live_timeout")
+    appendEntry(chain, key, GATEWAY_EVENTS.LLM_GATEWAY_LIVE_PROVIDER_TIMEOUT, {});
+  else if (d.errorCode)
+    appendEntry(chain, key, GATEWAY_EVENTS.LLM_GATEWAY_LIVE_PROVIDER_ERROR, {
+      reason_codes: [d.errorCode],
+    });
+  appendEntry(chain, key, GATEWAY_EVENTS.LLM_GATEWAY_LIVE_PROVIDER_RESPONSE_HASHED, {
+    provider_response_hash: d.providerResponseHash,
+  });
+  if (d.contextSummaryBuilt)
+    appendEntry(chain, key, GATEWAY_EVENTS.LLM_GATEWAY_LIVE_CONTEXT_SUMMARY_BUILT, {
+      context_count: d.contextCount ?? 0,
+    });
+  return chain.prevHash;
+}
+
+export function recordGatewayLiveConfigRejected(chain, key, reason) {
+  appendEntry(chain, key, GATEWAY_EVENTS.LLM_GATEWAY_LIVE_CONFIG_REJECTED, {
+    reason_codes: [reason],
+  });
+  return chain.prevHash;
 }
