@@ -41,6 +41,7 @@ try {
     "receipt must not record raw context",
     rej.receipt
   );
+  ok(rej.receipt.network_egress_used === false, "no egress when provider is skipped", rej.receipt);
 
   // (2) client-supplied api_key -> forbidden-field rejection.
   const key = await (

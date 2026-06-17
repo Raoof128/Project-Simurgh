@@ -37,7 +37,11 @@ describe("generateAnthropicOutput", () => {
 
   test("truncates output to maxOutputChars", async () => {
     const factory = () =>
-      fakeClient({ content: [{ type: "text", text: "x".repeat(50) }], stop_reason: "end_turn", usage: {} });
+      fakeClient({
+        content: [{ type: "text", text: "x".repeat(50) }],
+        stop_reason: "end_turn",
+        usage: {},
+      });
     const r = await generateAnthropicOutput({
       model: "claude-x",
       safeInput: "hi",
