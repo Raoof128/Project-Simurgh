@@ -1,5 +1,26 @@
 ## Change Log
 
+## [ci-xvfb-readiness] — 2026-06-18 — Stabilize Linux daemon Xvfb CI
+
+**Raouf:** Follow-up to the security audit hardening release after the CI quality gate failed in Linux daemon Xvfb integration tests and the commit subject missed the repository's Conventional Commit style. The Xvfb harness now waits for the spawned display to accept an X11 connection instead of relying on a fixed sleep, and the display mutex recovers from poisoning so one startup miss cannot cascade into unrelated failures.
+
+### Changed
+
+- `tools/simurgh-daemon-linux/tests/xvfb_integration_tests.rs` — wait for Xvfb readiness before returning the guard; recover poisoned display mutexes.
+
+### Verified
+
+- `cargo fmt --check --manifest-path tools/simurgh-daemon-linux/Cargo.toml` passed.
+- `cargo clippy --manifest-path tools/simurgh-daemon-linux/Cargo.toml --all-targets -- -D warnings` passed.
+- `cargo test --manifest-path tools/simurgh-daemon-linux/Cargo.toml --test xvfb_integration_tests -- --test-threads=1` passed locally in non-mandatory Xvfb mode.
+- `cargo test --manifest-path tools/simurgh-daemon-linux/Cargo.toml --test proof_endpoint_tests -- --test-threads=1` passed.
+
+### Follow-ups
+
+- Confirm the next GitHub Actions quality-gate run passes on Ubuntu with Xvfb installed.
+
+---
+
 ## [security-audit-hardening] — 2026-06-18 — Security audit hardening patch
 
 **Raouf:** Added the reviewer-facing closeout note for the security audit hardening patch. The document records **6/6 findings addressed**: explicit-only demo mode, bearer-only instructor authentication, removal of raw answer `localStorage` persistence, versioned HMAC student digests, bounded academic timelines, and paired-state daemon proof enforcement. It also records the verification commands/results and the local Windows .NET 8 SDK blocker as environment-only.

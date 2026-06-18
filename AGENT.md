@@ -2,6 +2,16 @@
 
 ## Agent Change Log
 
+### 2026-06-18 (Australia/Sydney) — CI Xvfb readiness and commit-template cleanup
+
+**Raouf:**
+
+- **Scope:** Follow-up to the security audit hardening release after the pushed CI quality gate failed in Linux daemon Xvfb integration tests and the commit subject did not match the repository's Conventional Commit style.
+- **Summary:** Hardened the Linux daemon Xvfb test harness so it waits until the spawned display accepts an X11 connection instead of relying on a fixed 500 ms sleep. The shared display mutex now recovers from poisoning so one startup miss cannot cascade into unrelated test failures. The release commit message was amended to the project template style.
+- **Files changed:** `tools/simurgh-daemon-linux/tests/xvfb_integration_tests.rs`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `cargo fmt --check --manifest-path tools/simurgh-daemon-linux/Cargo.toml` passed; `cargo clippy --manifest-path tools/simurgh-daemon-linux/Cargo.toml --all-targets -- -D warnings` passed; `cargo test --manifest-path tools/simurgh-daemon-linux/Cargo.toml --test xvfb_integration_tests -- --test-threads=1` passed locally in non-mandatory Xvfb mode; `cargo test --manifest-path tools/simurgh-daemon-linux/Cargo.toml --test proof_endpoint_tests -- --test-threads=1` passed. Mandatory Xvfb mode remains locally blocked on this macOS workstation because `Xvfb` is not installed.
+- **Follow-ups:** Confirm the next GitHub Actions quality-gate run passes on Ubuntu with Xvfb installed.
+
 ### 2026-06-18 (Australia/Sydney) — Security audit hardening closeout
 
 **Raouf:**

@@ -2,7 +2,7 @@
 use simurgh_daemon_linux::scanner::x11::{scan, scan_with_connection};
 use std::process::{Child, Command, Stdio};
 use std::sync::OnceLock;
-use std::time::Duration;
+use std::time::{Duration, Instant};
 use x11rb::connection::Connection;
 use x11rb::protocol::xproto::{
     AtomEnum, ConnectionExt, CreateWindowAux, EventMask, PropMode, WindowClass,
@@ -34,14 +34,36 @@ fn start_xvfb(display_num: u32) -> Option<XvfbGuard> {
         return None;
     }
     let display = format!(":{display_num}");
-    let child = Command::new("Xvfb")
+    let mut child = Command::new("Xvfb")
         .args([&display, "-screen", "0", "1024x768x24", "-nolisten", "tcp"])
         .stdout(Stdio::null())
         .stderr(Stdio::null())
         .spawn()
         .ok()?;
-    std::thread::sleep(Duration::from_millis(500));
-    Some(XvfbGuard { child })
+
+    let deadline = Instant::now() + Duration::from_secs(5);
+    while Instant::now() < deadline {
+        if matches!(child.try_wait(), Ok(Some(_))) {
+            return None;
+        }
+        if x11rb::connect(Some(display.as_str())).is_ok() {
+            return Some(XvfbGuard { child });
+        }
+        std::thread::sleep(Duration::from_millis(50));
+    }
+
+    let _ = child.kill();
+    let _ = child.wait();
+    None
+}
+
+fn require_xvfb(display_num: u32) -> XvfbGuard {
+    start_xvfb(display_num).unwrap_or_else(|| {
+        panic!(
+            "Xvfb display :{display_num} did not become ready; \
+             verify xvfb can bind and accept local X11 connections"
+        )
+    })
 }
 
 static DISPLAY_LOCK: OnceLock<std::sync::Mutex<()>> = OnceLock::new();
@@ -49,7 +71,7 @@ fn lock() -> std::sync::MutexGuard<'static, ()> {
     DISPLAY_LOCK
         .get_or_init(|| std::sync::Mutex::new(()))
         .lock()
-        .unwrap()
+        .unwrap_or_else(|poisoned| poisoned.into_inner())
 }
 
 #[test]
@@ -65,7 +87,7 @@ fn scan_returns_summary_against_empty_xvfb_root() {
         return;
     }
     let _g = lock();
-    let _xvfb = start_xvfb(99).expect("Xvfb spawn");
+    let _xvfb = require_xvfb(99);
     std::env::set_var("DISPLAY", ":99");
     let summary = scan();
     assert_eq!(summary.x11_managed_window_count, 0);
@@ -94,7 +116,7 @@ fn scan_counts_managed_above_and_fullscreen_windows() {
         return;
     }
     let _g = lock();
-    let _xvfb = start_xvfb(100).expect("Xvfb spawn");
+    let _xvfb = require_xvfb(100);
     std::env::set_var("DISPLAY", ":100");
 
     let (conn, screen_num) = x11rb::connect(None).expect("connect");
@@ -189,7 +211,7 @@ fn scan_counts_override_redirect_root_children() {
         return;
     }
     let _g = lock();
-    let _xvfb = start_xvfb(101).expect("Xvfb spawn");
+    let _xvfb = require_xvfb(101);
     std::env::set_var("DISPLAY", ":101");
 
     let (conn, screen_num) = x11rb::connect(None).expect("connect");
