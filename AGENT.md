@@ -2,6 +2,16 @@
 
 ## Agent Change Log
 
+### 2026-06-19 (Australia/Sydney) — Stage 3F agentic prompt-injection containment benchmark
+
+**Raouf:**
+
+- **Scope:** Stage 3F — add a deterministic benchmark for agentic prompt-injection consequence containment. This is a benchmark/evidence stage, not detector hardening and not a live-provider safety claim.
+- **Summary:** Added a 240-case synthetic corpus split across direct input injection, context poisoning, tool injection, output leakage, multi-turn softening, benign controls, and hard-negative controls. The read-only runner validates exact corpus counts, unique IDs, fixture hashes, manifest stability, hard safety gates, and generated-evidence privacy. Update mode rewrites only metadata-only evidence: metrics, corpus manifest, detector digests, receipt samples, audit sample, and runner output. Hard gates cover zero unsafe tool execution, zero unsafe output export, zero context authority escalation, full receipt coverage, full audit verification, valid manifest, no detector drift, and no generated-evidence leakage.
+- **Files changed:** `tests/e2e/llm_shield_stage3f_benchmark_{lib,runner}.mjs`, `tests/unit/llmShield/stage3fBenchmarkLib.test.js`, `docs/research/llm-shield/evidence/stage-3f/**`, `scripts/{smoke,security-audit}-llm-shield-stage3f.sh`, `scripts/privacy-audit-llm-shield-stage3f.mjs`, Stage 3F reviewer docs, `scripts/check.sh`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `node --test tests/unit/llmShield/stage3fBenchmarkLib.test.js` passed; `node tests/e2e/llm_shield_stage3f_benchmark_runner.mjs` passed; Stage 3F smoke passed; Stage 3F security audit passed `4/4`; Stage 3F privacy audit passed.
+- **Follow-ups:** Run the full closeout gate before tagging `v0.8.0-stage-3f-agentic-prompt-injection-benchmark`.
+
 ### 2026-06-18 (Australia/Sydney) — CI Xvfb readiness and commit-template cleanup
 
 **Raouf:**

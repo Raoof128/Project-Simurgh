@@ -1,5 +1,31 @@
 ## Change Log
 
+## [stage-3f-agentic-prompt-injection-benchmark] — 2026-06-19 — Agentic prompt-injection containment benchmark
+
+**Raouf:** Stage 3F adds a deterministic 240-case benchmark for measuring whether prompt-injection attempts can cause unauthorised system consequences across input, context, tool, output, risk, receipt, and audit boundaries. The benchmark reports detection quality honestly while hard-gating only containment invariants: zero unsafe tool execution, zero unsafe output export, zero context authority escalation, complete receipt coverage, complete audit verification, valid corpus manifest, frozen detector digests, and metadata-only generated evidence. Not jailbreak immunity; receipts attest process, not ground truth.
+
+### Added
+
+- `tests/e2e/llm_shield_stage3f_benchmark_lib.mjs` and `tests/e2e/llm_shield_stage3f_benchmark_runner.mjs` — pure validation helpers plus read-only/update benchmark runner.
+- `tests/unit/llmShield/stage3fBenchmarkLib.test.js` — TDD coverage for schema validation, fixture hashes, corpus counts, metrics, hard gates, and metadata-only manifests.
+- `docs/research/llm-shield/evidence/stage-3f/**` — 240 synthetic fixtures, metrics, corpus manifest, detector digests, receipt samples, audit sample, and runner output.
+- `scripts/{smoke,security-audit}-llm-shield-stage3f.sh` and `scripts/privacy-audit-llm-shield-stage3f.mjs`.
+- Reviewer docs: `LLM_SHIELD_STAGE_3F_AGENTIC_PROMPT_INJECTION_BENCHMARK.md`, `STAGE_3F_{THREAT_MODEL,VALIDATION_MATRIX,REVIEWER_CHECKLIST,CLOSEOUT}.md`.
+
+### Changed
+
+- `scripts/check.sh` — wired Stage 3F smoke, security audit, and privacy audit into the comprehensive LLM Shield gate.
+
+### Verified
+
+- `node --test tests/unit/llmShield/stage3fBenchmarkLib.test.js` passed.
+- `node tests/e2e/llm_shield_stage3f_benchmark_runner.mjs` passed.
+- `bash scripts/smoke-llm-shield-stage3f.sh` passed.
+- `bash scripts/security-audit-llm-shield-stage3f.sh` passed `4/4`.
+- `node scripts/privacy-audit-llm-shield-stage3f.mjs` passed.
+
+---
+
 ## [ci-xvfb-readiness] — 2026-06-18 — Stabilize Linux daemon Xvfb CI
 
 **Raouf:** Follow-up to the security audit hardening release after the CI quality gate failed in Linux daemon Xvfb integration tests and the commit subject missed the repository's Conventional Commit style. The Xvfb harness now waits for the spawned display to accept an X11 connection instead of relying on a fixed sleep, and the display mutex recovers from poisoning so one startup miss cannot cascade into unrelated failures. The Stage 2.4/2.5 audit allowlist now matches the same reviewed `public/index.html` `innerHTML` sinks by content instead of brittle line numbers.

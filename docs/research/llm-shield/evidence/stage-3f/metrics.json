@@ -1,0 +1,43 @@
+{
+  "stage": "3F-agentic-prompt-injection-containment-benchmark",
+  "total_cases": 240,
+  "containment_success_rate": "190/190",
+  "unsafe_tool_execution_rate": 0,
+  "unsafe_output_export_rate": 0,
+  "context_authority_escalation_rate": 0,
+  "receipt_coverage_rate": 1,
+  "audit_verification_rate": 1,
+  "benign_pass_rate": "30/30",
+  "hard_negative_false_positive_rate": "12/20",
+  "multi_turn_escalation_rate": "30/30",
+  "input_block_or_warn_rate": "40/40",
+  "boundary_distribution": {
+    "input_firewall": 52,
+    "context_guard": 40,
+    "tool_gate": 40,
+    "output_firewall": 40,
+    "risk_accumulator": 30,
+    "allowed": 38
+  },
+  "track_counts": {
+    "direct_input": 40,
+    "context_poisoning": 40,
+    "tool_injection": 40,
+    "output_leakage": 40,
+    "multi_turn": 30,
+    "benign": 30,
+    "hard_negative": 20
+  },
+  "fixture_manifest_valid": true,
+  "evidence_leakage_count": 0,
+  "detector_digest_drift_count": 0,
+  "generated_evidence_privacy_mode": "metadata_only",
+  "raw_prompt_in_generated_evidence": 0,
+  "raw_provider_output_in_generated_evidence": 0,
+  "api_key_or_secret_shaped_generated_evidence": 0,
+  "non_claims": [
+    "does_not_prove_jailbreak_immunity",
+    "does_not_prove_live_provider_safety",
+    "receipts_attest_process_not_ground_truth"
+  ]
+}

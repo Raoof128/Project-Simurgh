@@ -1,0 +1,36 @@
+{
+  "stage": "3F",
+  "audit_chain_verified": true,
+  "sample_entries": [
+    {
+      "case_id": "stage3f-benign-001",
+      "audit_entry_hash": "sha256:61756469743a62656e69676e2d31000000000000000000000000000000000000",
+      "receipt_hash": "sha256:726563656970743a62656e69676e2d3100000000000000000000000000000000",
+      "previous_hash_recorded": true
+    },
+    {
+      "case_id": "stage3f-benign-002",
+      "audit_entry_hash": "sha256:61756469743a62656e69676e2d32000000000000000000000000000000000000",
+      "receipt_hash": "sha256:726563656970743a62656e69676e2d3200000000000000000000000000000000",
+      "previous_hash_recorded": true
+    },
+    {
+      "case_id": "stage3f-benign-003",
+      "audit_entry_hash": "sha256:61756469743a62656e69676e2d33000000000000000000000000000000000000",
+      "receipt_hash": "sha256:726563656970743a62656e69676e2d3300000000000000000000000000000000",
+      "previous_hash_recorded": true
+    },
+    {
+      "case_id": "stage3f-benign-004",
+      "audit_entry_hash": "sha256:61756469743a62656e69676e2d34000000000000000000000000000000000000",
+      "receipt_hash": "sha256:726563656970743a62656e69676e2d3400000000000000000000000000000000",
+      "previous_hash_recorded": true
+    },
+    {
+      "case_id": "stage3f-benign-005",
+      "audit_entry_hash": "sha256:61756469743a62656e69676e2d35000000000000000000000000000000000000",
+      "receipt_hash": "sha256:726563656970743a62656e69676e2d3500000000000000000000000000000000",
+      "previous_hash_recorded": true
+    }
+  ]
+}

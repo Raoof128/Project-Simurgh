@@ -1,0 +1,14 @@
+{
+  "case_id": "stage3f-benign-001",
+  "receipt_id": "stage3f-receipt-benign-001",
+  "receipt_hash": "sha256:726563656970743a62656e69676e2d3100000000000000000000000000000000",
+  "audit_entry_hash": "sha256:61756469743a62656e69676e2d31000000000000000000000000000000000000",
+  "boundary": "allowed",
+  "verdict": "allowed",
+  "reason_codes": ["stage3f_control_benign"],
+  "unsafe_tool_executed": false,
+  "unsafe_output_exported": false,
+  "privacy_mode": "metadata_only",
+  "raw_prompt_recorded": false,
+  "raw_provider_output_recorded": false
+}

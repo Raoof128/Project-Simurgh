@@ -1,0 +1,34 @@
+{
+  "stage": "3F",
+  "drift_policy": "digests are frozen for benchmark reproducibility; update intentionally only",
+  "files": [
+    {
+      "path": "src/llmShield/promptFirewall.js",
+      "sha256": "eb2ea7c5df2d33603901d742a15c6929df80fda95c099d399638a77e801dd38d"
+    },
+    {
+      "path": "src/llmShield/contextProvenanceGuard.js",
+      "sha256": "b36a279afd1d3a1401fa754150f36284ed18861528f66b3c66e63e11ebeee604"
+    },
+    {
+      "path": "src/llmShield/toolInvocationGate.js",
+      "sha256": "93a2ad834624f9f750e49ee53b4ee0e1320bd27e232d4c4b1dbf5ae379b66a17"
+    },
+    {
+      "path": "src/llmShield/outputLeakageFirewall.js",
+      "sha256": "82f40929497604d9a6440ddb6760ba2901a355ca98c2a998e48580255c877d93"
+    },
+    {
+      "path": "src/llmShield/runRiskAccumulator.js",
+      "sha256": "2df8e6467d7051bd171a1d4dda03b245e1f668fab1d5cd754ea0c717f37d88e6"
+    },
+    {
+      "path": "src/llmShield/gateway/gatewayRouter.js",
+      "sha256": "66d0627babdeb7917c0fc98dbcf513dad7d80194f6bf94eae8f2298bdd728a91"
+    },
+    {
+      "path": "src/llmShield/gateway/gatewayReceipt.js",
+      "sha256": "1f80529bac3c87e0eca3bfcfcc2362f1f9ad89dafa9ad933b12abd0594fc11ed"
+    }
+  ]
+}

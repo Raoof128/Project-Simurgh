@@ -1,0 +1,7 @@
+{
+  "stage": "3F",
+  "mode": "update-metrics",
+  "fixtures_loaded": 240,
+  "hard_gates_passed": true,
+  "generated_files_metadata_only": true
+}

@@ -1460,6 +1460,30 @@ else
   tail -80 "$LOG_DIR/llm-shield-stage3e-privacy-audit.log"
 fi
 
+step "LLM Shield 3F benchmark smoke"
+if scripts/smoke-llm-shield-stage3f.sh > "$LOG_DIR/llm-shield-stage3f-smoke.log" 2>&1; then
+  pass "LLM Shield 3F benchmark smoke"
+else
+  fail "LLM Shield 3F benchmark smoke"
+  tail -80 "$LOG_DIR/llm-shield-stage3f-smoke.log"
+fi
+
+step "LLM Shield 3F security audit"
+if scripts/security-audit-llm-shield-stage3f.sh > "$LOG_DIR/llm-shield-stage3f-security-audit.log" 2>&1; then
+  pass "LLM Shield 3F security audit"
+else
+  fail "LLM Shield 3F security audit"
+  tail -80 "$LOG_DIR/llm-shield-stage3f-security-audit.log"
+fi
+
+step "LLM Shield 3F privacy audit"
+if node scripts/privacy-audit-llm-shield-stage3f.mjs > "$LOG_DIR/llm-shield-stage3f-privacy-audit.log" 2>&1; then
+  pass "LLM Shield 3F privacy audit"
+else
+  fail "LLM Shield 3F privacy audit"
+  tail -80 "$LOG_DIR/llm-shield-stage3f-privacy-audit.log"
+fi
+
 step "LLM Shield 3E-core docker smoke (skips if no docker)"
 if bash scripts/docker-smoke-llm-shield-stage3e.sh > "$LOG_DIR/llm-shield-stage3e-docker-smoke.log" 2>&1; then
   pass "LLM Shield 3E-core docker smoke"
