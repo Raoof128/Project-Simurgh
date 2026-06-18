@@ -138,6 +138,13 @@ def test_run_sends_bearer_and_returns_verdict():
     assert r["gateway_verdict"] == "blocked"
     assert t.calls[1]["headers"]["Authorization"] == "Bearer tok"
     assert t.calls[1]["url"].endswith("/gw_sess_1/run")
+
+
+def test_run_without_session_raises():
+    t = _FakeTransport([])
+    c = SimurghClient(base_url="http://x/api/llm-shield/gateway", transport=t)
+    with pytest.raises(GatewayUnavailable):
+        c.run(input="x", contexts=None, scenario="benign")
 ```
 
 - [ ] **Step 3: Run test to verify it fails**
@@ -227,6 +234,8 @@ class SimurghClient:
 
     def run(self, *, input, contexts=None, provider_mode="mock", provider="mock",
             task_type="unknown", scenario=None, case_id=None):
+        if not self.session_id or not self.token:
+            raise GatewayUnavailable("no gateway session; call create_session() first")
         payload = {"input": input, "provider_mode": provider_mode, "provider": provider,
                    "task_type": task_type}
         if contexts:
@@ -559,6 +568,7 @@ function ok(c, m, d) { if (!c) throw new Error(d ? `${m}: ${JSON.stringify(d)}` 
 
 const canary = JSON.parse(
   await readFile("docs/research/llm-shield/evidence/stage-3h/canary/workspace-canary.json", "utf8"));
+ok(canary.cases.length === 30, "Stage 3H canary must contain 30 cases", { got: canary.cases.length });
 
 const s = await (await fetch(`${api}/sessions`, {
   method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" })).json();
@@ -769,6 +779,7 @@ const TRACK_SCENARIO = { benign: "benign", context_poisoning: "context_poisoning
   tool_injection: "tool_escalation", output_leakage: "policy_leak",
   multi_turn: "multi_turn_softening", hard_negative: "hard_negative" };
 const canary = JSON.parse(await readFile(`${EV}/canary/workspace-canary.json`, "utf8"));
+if (canary.cases.length !== 30) throw new Error(`canary must contain 30 cases, got ${canary.cases.length}`);
 
 if (verifyOnly) {
   const committed = JSON.parse(await readFile(`${EV}/metrics.json`, "utf8"));
@@ -1068,7 +1079,7 @@ cd tools/agentdojo-simurgh-adapter && python3 -m pytest tests/ -q
 
 - [ ] **Step 3: Write the adapter README** documenting: `SIMURGH_GATEWAY_BASE_URL`, preflight behaviour, the transport-only / no-safety-logic rule, Layer-1 (CI dry-run, Node) vs Layer-2 (external AgentDojo, `pip install -e .[agentdojo]`, `--run-live`) split, and the AgentDojo defence-hook binding note.
 
-- [ ] **Step 4: Write the closeout + evidence README** mirroring `STAGE_3G_CLOSEOUT.md`: list evidence artifacts (`metrics.json`, `agentdojo-run-manifest.json`, canary fixture), the verification commands, and the release tag target `v1.0.0-stage-3h-agentdojo-external-benchmark`.
+- [ ] **Step 4: Write the closeout + evidence README** mirroring `STAGE_3G_CLOSEOUT.md`: list evidence artifacts (`metrics.json`, `agentdojo-run-manifest.json`, canary fixture), the verification commands, and the release tag target `v1.0.0-stage-3h-agentdojo-harness-core`. The closeout MUST include the honest-framing sentence: *"Stage 3H-core implements the AgentDojo external benchmark harness and CI-safe canary path; full Layer-2 AgentDojo external benchmark execution is supported by design but not claimed unless run separately with the pinned AgentDojo dependency (future tag `v1.1.0-stage-3h-agentdojo-external-run`)."*
 
 - [ ] **Step 5: Append the `Raouf:` changelog + AGENT.md entry** (per raouf-change-protocol) summarising Stage 3H: in-loop AgentDojo mediation harness, real-gateway-only, Node CI dry-run + optional Python/AgentDojo external run, gates wired.
 

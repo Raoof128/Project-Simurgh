@@ -5,7 +5,7 @@
 **Date:** 2026-06-19
 **Status:** Design locked — ready for implementation plan
 **Branch:** `stage-3h-agentdojo-external-benchmark`
-**Release target:** `v1.0.0-stage-3h-agentdojo-external-benchmark`
+**Release target:** `v1.0.0-stage-3h-agentdojo-harness-core` (Layer-1 harness + CI-safe canary). The full external AgentDojo run is a separate later tag `v1.1.0-stage-3h-agentdojo-external-run`.
 **Builds on:** Stage 3F containment benchmark (`v0.8.0`) and Stage 3G live-provider shadow framework (`v0.9.0`)
 **Scope:** AgentDojo only, workspace canary subset first. In-loop mediating defence against the real Node HTTP gateway. No new detector hardening. No additional benchmarks (AgentDyn, InjecAgent, OS-Harm deferred). No provable-security claim.
 
@@ -467,9 +467,15 @@ Stage 3H can close when:
 ## Release
 
 ```text
-Release tag:     v1.0.0-stage-3h-agentdojo-external-benchmark
-Commit message:  Add Stage 3H AgentDojo external benchmark harness
+Release tag:     v1.0.0-stage-3h-agentdojo-harness-core   (Layer-1 harness + CI-safe canary)
+Later tag:       v1.1.0-stage-3h-agentdojo-external-run    (only after a real AgentDojo run)
+Commit message:  Add Stage 3H AgentDojo in-loop benchmark harness (core)
 ```
+
+**Honest framing (must hold in closeout):** Stage 3H-core implements the AgentDojo external
+benchmark **harness** and CI-safe canary path. Full Layer-2 AgentDojo external benchmark execution
+is supported by design but **not claimed** unless run separately with the pinned AgentDojo
+dependency.
 
 ## Closeout paragraph (target)
 
