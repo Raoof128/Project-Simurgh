@@ -21,9 +21,8 @@ tools/simurgh-daemon-macos/scripts/install-launch-agent.sh --check
 tools/simurgh-daemon-macos/scripts/uninstall-launch-agent.sh --check
 
 if grep -RniE "innerHTML\s*=|insertAdjacentHTML|eval\(|new Function\(" public src tests \
-  | grep -v "public/index.html:2918:" \
-  | grep -v "public/index.html:3174:" \
-  | grep -v "public/index.html:3181:" \
+  | grep -v "public/index.html:.*verdictBox.innerHTML" \
+  | grep -v "public/index.html:.*baselineState.innerHTML" \
   | grep -v "public/instructor.html:683:" \
   | grep -v "public/instructor.html:687:" \
   | grep -v "public/instructor.html:.*grid.innerHTML"; then

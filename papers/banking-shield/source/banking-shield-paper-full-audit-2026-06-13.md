@@ -1,7 +1,7 @@
 # Banking Shield Paper Full Audit
 
 Audit date: 2026-06-13.
-Auditor: Codex 5.5, principal software engineering and cybersecurity review.
+Auditor: principal software engineering and cybersecurity review.
 Scope: `docs/research/banking-pilot/paper/banking-shield-paper-v1.0.md` final
 audited revision, supporting source, tests, scripts, fixtures, and prior
 claim-audit notes.

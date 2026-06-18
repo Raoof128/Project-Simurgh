@@ -1,5 +1,47 @@
 ## Change Log
 
+## [ci-xvfb-readiness] — 2026-06-18 — Stabilize Linux daemon Xvfb CI
+
+**Raouf:** Follow-up to the security audit hardening release after the CI quality gate failed in Linux daemon Xvfb integration tests and the commit subject missed the repository's Conventional Commit style. The Xvfb harness now waits for the spawned display to accept an X11 connection instead of relying on a fixed sleep, and the display mutex recovers from poisoning so one startup miss cannot cascade into unrelated failures. The Stage 2.4/2.5 audit allowlist now matches the same reviewed `public/index.html` `innerHTML` sinks by content instead of brittle line numbers.
+
+### Changed
+
+- `tools/simurgh-daemon-linux/tests/xvfb_integration_tests.rs` — wait for Xvfb readiness before returning the guard; recover poisoned display mutexes.
+- `scripts/security-audit-stage-2-4-2-5.sh` — replace shifted `public/index.html` line-number allowlist entries with content-specific allowlist patterns.
+
+### Verified
+
+- `cargo fmt --check --manifest-path tools/simurgh-daemon-linux/Cargo.toml` passed.
+- `cargo clippy --manifest-path tools/simurgh-daemon-linux/Cargo.toml --all-targets -- -D warnings` passed.
+- `cargo test --manifest-path tools/simurgh-daemon-linux/Cargo.toml --test xvfb_integration_tests -- --test-threads=1` passed locally in non-mandatory Xvfb mode.
+- `cargo test --manifest-path tools/simurgh-daemon-linux/Cargo.toml --test proof_endpoint_tests -- --test-threads=1` passed.
+- `npm test` passed `594/594`.
+- `npm audit --audit-level=high` reported `0` vulnerabilities.
+
+### Follow-ups
+
+- Confirm the next GitHub Actions quality-gate run passes on Ubuntu with Xvfb installed.
+
+---
+
+## [security-audit-hardening] — 2026-06-18 — Security audit hardening patch
+
+**Raouf:** Added the reviewer-facing closeout note for the security audit hardening patch. The document records **6/6 findings addressed**: explicit-only demo mode, bearer-only instructor authentication, removal of raw answer `localStorage` persistence, versioned HMAC student digests, bounded academic timelines, and paired-state daemon proof enforcement. It also records the verification commands/results and the local Windows .NET 8 SDK blocker as environment-only.
+
+### Added
+
+- `docs/security/SECURITY_AUDIT_HARDENING_CLOSEOUT_2026_06_18.md` — concise reviewer closeout covering finding status, verification, and the local Windows .NET SDK blocker.
+
+### Verified
+
+- Documentation pass only. `npx prettier --check docs/security/SECURITY_AUDIT_HARDENING_CLOSEOUT_2026_06_18.md AGENT.md CHANGELOG.md` passed; repository-wide tool-name search passed; `git diff --check` passed.
+
+### Follow-ups
+
+- Windows daemon verification remains locally blocked until the workstation has .NET SDK 8.x, or the equivalent Windows CI runner is used.
+
+---
+
 ## [stage-3e-live-anthropic-adapter] — 2026-06-18 — LLM Shield Anthropic live adapter (Stage 3E-live)
 
 **Raouf:** Stage 3E-live activates the first live provider adapter behind the sealed Stage 3E-core gateway — **Anthropic only**, **disabled by default**. The deferred `live` contract becomes a working path: env-gated (`SIMURGH_LIVE_PROVIDER_ENABLED=true` + `SIMURGH_LLM_PROVIDER=anthropic` + `SIMURGH_LIVE_PROVIDER_MODEL` + server-side `ANTHROPIC_API_KEY`), **lazy SDK import** (`import("@anthropic-ai/sdk")` only inside the adapter, only after `liveProviderGuard` passes — no static import under the gateway), **no provider-side tools** (no `tools`/`tool_choice`/MCP/computer-use; no `toolRunner`/`betaZodTool`), and a real request **timeout** via `AbortController`. Untrusted `contexts[]` reach the provider only as a deterministic, bounded `minimal_summary` (500 chars/context, 2 KB total) with an explicit "data, not instruction" boundary; a separate raw-context cap (8000 chars) protects the gateway edge; rejected context skips the provider. The live response is distrusted through the **sealed 3D tail** verbatim — tool-shaped output is sanitized to hashed metadata and **never executed**, refusals still run the output firewall, blocked output is hash-only. Denial-of-wallet caps (OWASP LLM10) via `liveCallLedger` (session/minute/day). Receipt schema stays `"3E"` with **additive** live metadata (egress flag, model/shape hashes, `*_recorded:false`, no-tools booleans); audit chain gains additive live events. Mock/recorded paths and the frozen 3B benchmark are byte-unchanged. Optional live smoke skips without env; CI stays key-free. Not jailbreak immunity; a live call is an observed gateway event, not a proof of model safety.

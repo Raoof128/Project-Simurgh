@@ -72,9 +72,17 @@ const PORT = Number(process.env.PORT) || 3030;
 const MODEL = process.env.SIMURGH_MODEL || "claude-sonnet-4-6";
 
 const apiKey = process.env.ANTHROPIC_API_KEY;
-const DEMO_MODE = process.env.SIMURGH_DEMO_MODE === "1" || !apiKey;
-if (!apiKey) {
-  console.warn("[simurgh] ANTHROPIC_API_KEY not set — running in DEMO_MODE (local heuristic).");
+const DEMO_MODE = process.env.SIMURGH_DEMO_MODE === "1";
+if (!apiKey && !DEMO_MODE) {
+  console.error(
+    "[simurgh] FATAL: ANTHROPIC_API_KEY must be set in non-demo mode. Refusing to start."
+  );
+  process.exit(78);
+}
+if (!apiKey && DEMO_MODE) {
+  console.warn(
+    "[simurgh] ANTHROPIC_API_KEY not set — using local heuristic in explicit demo mode."
+  );
 }
 const client = apiKey ? new Anthropic({ apiKey }) : null;
 
@@ -129,16 +137,10 @@ if (!process.env.SIMURGH_SESSION_SIGNING_SECRET && DEMO_MODE) {
   );
 }
 
-const INSTRUCTOR_TOKEN =
-  process.env.SIMURGH_INSTRUCTOR_TOKEN ||
-  (DEMO_MODE ? "demo" : crypto.randomBytes(24).toString("hex"));
+const INSTRUCTOR_TOKEN = process.env.SIMURGH_INSTRUCTOR_TOKEN || (DEMO_MODE ? "demo" : null);
 if (!process.env.SIMURGH_INSTRUCTOR_TOKEN && !DEMO_MODE) {
-  console.warn(
-    `[simurgh] SIMURGH_INSTRUCTOR_TOKEN not set — generated ephemeral token: ${INSTRUCTOR_TOKEN}`
-  );
-  console.warn(
-    "[simurgh] Set SIMURGH_INSTRUCTOR_TOKEN in production so the instructor URL is stable across restarts."
-  );
+  console.error("[simurgh] FATAL: SIMURGH_INSTRUCTOR_TOKEN must be set in non-demo mode.");
+  process.exit(78);
 }
 
 const ALLOWED_ORIGIN = process.env.SIMURGH_ALLOWED_ORIGIN || "*";
@@ -336,6 +338,7 @@ const examEvictionTimer = setInterval(
       if (!sessions.has(id)) examSessions.delete(id);
     }
     const activeIds = new Set(sessions.keys());
+    timeline.evictMissing(activeIds);
     integrityState.evictMissing(activeIds);
     pairingRegistry.evictMissing(activeIds);
     daemonPairingRegistry.evictMissing(activeIds);
@@ -483,16 +486,9 @@ app.use("/api/banking-pilot", bankingPilotRouter);
 app.use("/api/llm-shield/gateway", gatewayRouter);
 app.use("/api/llm-shield", llmShieldRouter);
 
-// Instructor route — serves the page only when a valid token is supplied,
-// or in DEMO_MODE. The page reads the token from location.search and reuses
-// it for SSE + dashboard fetches.
+// Instructor route — serves the shell page. Data APIs below remain bearer-gated
+// outside explicit demo mode, keeping long-lived tokens out of URLs and logs.
 app.get("/instructor", (req, res) => {
-  if (!DEMO_MODE && req.query.token !== INSTRUCTOR_TOKEN) {
-    return res
-      .status(401)
-      .type("text/plain")
-      .send("Simurgh instructor view requires SIMURGH_INSTRUCTOR_TOKEN as ?token= query param.");
-  }
   res.sendFile(join(__dirname, "public", "instructor.html"));
 });
 
@@ -505,8 +501,7 @@ function requireInstructorAuth(req, res, next) {
   if (DEMO_MODE) return next();
   const auth = req.headers.authorization;
   const bearer = auth && /^Bearer\s+/i.test(auth) ? auth.replace(/^Bearer\s+/i, "") : null;
-  const token = bearer || req.query.token;
-  if (token !== INSTRUCTOR_TOKEN) return res.status(401).json({ error: "auth_required" });
+  if (bearer !== INSTRUCTOR_TOKEN) return res.status(401).json({ error: "auth_required" });
   next();
 }
 
@@ -1168,7 +1163,8 @@ app.get("/api/sessions", limitSessions, requireInstructorAuth, (_req, res) => {
   res.json({ sessions: out, model: MODEL });
 });
 
-// SSE stream — auth-gated (token via ?token= query param).
+// SSE stream — auth-gated. EventSource cannot send bearer headers, so the
+// instructor client falls back to polling outside explicit demo mode.
 app.get("/api/stream/instructor", requireInstructorAuth, (req, res) => {
   res.set({
     "content-type": "text/event-stream",
@@ -1587,8 +1583,7 @@ const server = app.listen(PORT, () => {
       `[simurgh] helper ingest ready at POST /api/affinity (header: x-simurgh-helper-secret)`
     );
   }
-  const tokenSuffix = DEMO_MODE ? "" : `?token=${INSTRUCTOR_TOKEN}`;
-  console.log(`[simurgh] instructor view at http://localhost:${PORT}/instructor${tokenSuffix}`);
+  console.log(`[simurgh] instructor view at http://localhost:${PORT}/instructor`);
 });
 server.on("error", (err) => {
   if (err.code === "EADDRINUSE") {

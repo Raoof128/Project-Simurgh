@@ -59,4 +59,21 @@ describe("academicEvents", () => {
     const timeline = eventTimeline();
     assert.deepEqual(timeline.get("unknown_session"), []);
   });
+
+  test("eventTimeline caps per-session events and evicts missing sessions", () => {
+    const timeline = eventTimeline({ maxEventsPerSession: 2 });
+    timeline.add("sess_a", EVENTS.EXAM_STARTED, { n: 1 });
+    timeline.add("sess_a", EVENTS.PRIVACY_ACCEPTED, { n: 2 });
+    timeline.add("sess_a", EVENTS.TELEMETRY_WINDOW_RECEIVED, { n: 3 });
+    timeline.add("sess_b", EVENTS.EXAM_STARTED, {});
+
+    assert.deepEqual(
+      timeline.get("sess_a").map((event) => event.detail.n),
+      [2, 3]
+    );
+
+    timeline.evictMissing(new Set(["sess_a"]));
+    assert.equal(timeline.get("sess_a").length, 2);
+    assert.deepEqual(timeline.get("sess_b"), []);
+  });
 });

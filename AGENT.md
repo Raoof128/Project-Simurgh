@@ -2,6 +2,26 @@
 
 ## Agent Change Log
 
+### 2026-06-18 (Australia/Sydney) — CI Xvfb readiness and commit-template cleanup
+
+**Raouf:**
+
+- **Scope:** Follow-up to the security audit hardening release after the pushed CI quality gate failed in Linux daemon Xvfb integration tests and the commit subject did not match the repository's Conventional Commit style.
+- **Summary:** Hardened the Linux daemon Xvfb test harness so it waits until the spawned display accepts an X11 connection instead of relying on a fixed 500 ms sleep. The shared display mutex now recovers from poisoning so one startup miss cannot cascade into unrelated test failures. Also replaced the Stage 2.4/2.5 audit's brittle `public/index.html` line-number allowlist with content-specific allowlist patterns for the same reviewed `innerHTML` sinks after the security patch shifted line numbers. The follow-up commit message uses the project Conventional Commit style.
+- **Files changed:** `tools/simurgh-daemon-linux/tests/xvfb_integration_tests.rs`, `scripts/security-audit-stage-2-4-2-5.sh`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `cargo fmt --check --manifest-path tools/simurgh-daemon-linux/Cargo.toml` passed; `cargo clippy --manifest-path tools/simurgh-daemon-linux/Cargo.toml --all-targets -- -D warnings` passed; `cargo test --manifest-path tools/simurgh-daemon-linux/Cargo.toml --test xvfb_integration_tests -- --test-threads=1` passed locally in non-mandatory Xvfb mode; `cargo test --manifest-path tools/simurgh-daemon-linux/Cargo.toml --test proof_endpoint_tests -- --test-threads=1` passed; `npm test` passed `594/594`; `npm audit --audit-level=high` reported `0` vulnerabilities. Mandatory Xvfb mode remains locally blocked on this macOS workstation because `Xvfb` is not installed.
+- **Follow-ups:** Confirm the next GitHub Actions quality-gate run passes on Ubuntu with Xvfb installed.
+
+### 2026-06-18 (Australia/Sydney) — Security audit hardening closeout
+
+**Raouf:**
+
+- **Scope:** Documentation closeout for the repository-wide security audit hardening patch. No runtime code changes in this doc pass.
+- **Summary:** Added a reviewer-facing closeout note under the neutral security-audit release name. The note records **6/6 findings addressed**: explicit-only demo mode, bearer-only instructor authentication, removal of raw answer `localStorage` persistence, versioned HMAC student digests, bounded academic timelines, and paired-state daemon proof enforcement. It also records the successful verification set and the local Windows .NET 8 SDK blocker as environment-only.
+- **Files changed:** `docs/security/SECURITY_AUDIT_HARDENING_CLOSEOUT_2026_06_18.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `npx prettier --check docs/security/SECURITY_AUDIT_HARDENING_CLOSEOUT_2026_06_18.md AGENT.md CHANGELOG.md` passed; repository-wide tool-name search passed; `git diff --check` passed.
+- **Follow-ups:** Install .NET SDK 8.x or use the Windows CI runner to execute the Windows daemon tests locally equivalent to the source patch.
+
 ### 2026-06-18 (Australia/Sydney) — LLM Shield Anthropic live adapter (Stage 3E-live, complete)
 
 **Raouf:**
