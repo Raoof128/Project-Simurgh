@@ -23,10 +23,12 @@ cd "$PROJECT_ROOT"
 echo "Stage 2.6/2.7 closeout E2E smoke"
 
 echo "  [1/3] Stage 2.6 Windows scanner E2E smoke"
-bash scripts/smoke-stage-2-6-windows-scanner.sh > /dev/null
+SIMURGH_STAGE26_PORT="${SIMURGH_STAGE26_CLOSEOUT_PORT:-33146}" \
+  bash scripts/smoke-stage-2-6-windows-scanner.sh > /dev/null
 
 echo "  [2/3] Stage 2.7 cross-platform Device Shield E2E smoke (Scenarios A-G)"
-bash scripts/smoke-stage-2-7-cross-platform-device-shield.sh > /dev/null
+SIMURGH_STAGE27_PORT="${SIMURGH_STAGE27_CLOSEOUT_PORT:-33147}" \
+  bash scripts/smoke-stage-2-7-cross-platform-device-shield.sh > /dev/null
 
 echo "  [3/3] Project privacy audit"
 node tools/privacy-audit.mjs

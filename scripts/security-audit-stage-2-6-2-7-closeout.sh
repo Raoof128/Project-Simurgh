@@ -19,7 +19,10 @@ cd "$PROJECT_ROOT"
 echo "Stage 2.6/2.7 closeout cybersecurity audit"
 
 echo "  [1/5] Stage 2.4/2.5 cybersecurity audit"
-bash scripts/security-audit-stage-2-4-2-5.sh > /dev/null
+SIMURGH_SMOKE_PORT="${SIMURGH_STAGE26_27_AUDIT_SMOKE_PORT:-33160}" \
+  SIMURGH_SMOKE_HARDENED_PORT="${SIMURGH_STAGE26_27_AUDIT_HARDENED_PORT:-33161}" \
+  SIMURGH_SMOKE_DAEMON_PORT="${SIMURGH_STAGE26_27_AUDIT_DAEMON_PORT:-3032}" \
+  bash scripts/security-audit-stage-2-4-2-5.sh > /dev/null
 
 echo "  [2/5] Stage 2.7 cross-platform security audit"
 bash scripts/security-audit-stage-2-7-cross-platform-device-shield.sh > /dev/null

@@ -9,7 +9,10 @@ cd "$PROJECT_ROOT"
 echo "Stage 2.8A + 2.8B Linux cybersecurity audit"
 
 echo "  [1/4] Stage 2.6/2.7 closeout cybersecurity audit (no regression)"
-bash scripts/security-audit-stage-2-6-2-7-closeout.sh
+SIMURGH_STAGE26_27_AUDIT_SMOKE_PORT="${SIMURGH_STAGE28AB_AUDIT_SMOKE_PORT:-33170}" \
+  SIMURGH_STAGE26_27_AUDIT_HARDENED_PORT="${SIMURGH_STAGE28AB_AUDIT_HARDENED_PORT:-33171}" \
+  SIMURGH_STAGE26_27_AUDIT_DAEMON_PORT="${SIMURGH_STAGE28AB_AUDIT_DAEMON_PORT:-3033}" \
+  bash scripts/security-audit-stage-2-6-2-7-closeout.sh
 
 echo "  [2/4] Stage 2.8A + 2.8B Linux security audit suite"
 node --test tests/security/stage28ab_linux_security_audit.test.js

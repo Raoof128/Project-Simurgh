@@ -8,7 +8,10 @@ cd "$PROJECT_ROOT"
 echo "Stage 2.8C/D Linux Wayland + systemd + CI cybersecurity audit"
 
 echo "  [1/5] Stage 2.8A/B audit (no regression)"
-bash scripts/security-audit-stage-2-8a-2-8b-linux.sh
+SIMURGH_STAGE28AB_AUDIT_SMOKE_PORT="${SIMURGH_STAGE28CD_AUDIT_SMOKE_PORT:-33180}" \
+  SIMURGH_STAGE28AB_AUDIT_HARDENED_PORT="${SIMURGH_STAGE28CD_AUDIT_HARDENED_PORT:-33181}" \
+  SIMURGH_STAGE28AB_AUDIT_DAEMON_PORT="${SIMURGH_STAGE28CD_AUDIT_DAEMON_PORT:-3034}" \
+  bash scripts/security-audit-stage-2-8a-2-8b-linux.sh
 
 echo "  [2/5] Stage 2.8C/D audit suite (16 dimensions)"
 node --test tests/security/stage28cd_linux_wayland_systemd_ci_security_audit.test.js
