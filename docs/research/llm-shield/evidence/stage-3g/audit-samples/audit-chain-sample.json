@@ -1,0 +1,36 @@
+{
+  "stage": "3G",
+  "audit_chain_verified": true,
+  "sample_entries": [
+    {
+      "case_id": "stage3f-direct-input-001",
+      "modes_verified": ["mock", "recorded_fixture", "live_shadow"],
+      "receipt_exported": true,
+      "provider_output_hash_present": true
+    },
+    {
+      "case_id": "stage3f-direct-input-002",
+      "modes_verified": ["mock", "recorded_fixture", "live_shadow"],
+      "receipt_exported": true,
+      "provider_output_hash_present": true
+    },
+    {
+      "case_id": "stage3f-direct-input-003",
+      "modes_verified": ["mock", "recorded_fixture", "live_shadow"],
+      "receipt_exported": true,
+      "provider_output_hash_present": true
+    },
+    {
+      "case_id": "stage3f-direct-input-004",
+      "modes_verified": ["mock", "recorded_fixture", "live_shadow"],
+      "receipt_exported": true,
+      "provider_output_hash_present": true
+    },
+    {
+      "case_id": "stage3f-direct-input-005",
+      "modes_verified": ["mock", "recorded_fixture", "live_shadow"],
+      "receipt_exported": true,
+      "provider_output_hash_present": true
+    }
+  ]
+}

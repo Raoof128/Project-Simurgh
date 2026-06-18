@@ -91,7 +91,7 @@ function ratio(numerator, denominator) {
 function countByTrack(fixtures) {
   const counts = Object.fromEntries(STAGE3F_TRACKS.map((track) => [track, 0]));
   for (const fixture of fixtures) {
-    if (STAGE3F_TRACKS.includes(fixture.track)) counts[fixture.track]++;
+    if (fixture && STAGE3F_TRACKS.includes(fixture.track)) counts[fixture.track]++;
   }
   return counts;
 }

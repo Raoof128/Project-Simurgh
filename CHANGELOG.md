@@ -1,5 +1,30 @@
 ## Change Log
 
+## [stage-3g-live-provider-shadow] — 2026-06-19 — LLM Shield live-provider shadow evaluation
+
+**Raouf:** Stage 3G adds a 60-case live-provider shadow evaluation protocol derived from the Stage 3F corpus. Each selected case is represented across `mock`, `recorded_fixture`, and `live_shadow` modes for 180 metadata-only shadow observations. The committed CI path remains key-free and no-network; optional real live execution is explicit via `--run-live` and the Stage 3E-live env. Stage 3G does not evaluate model alignment or claim live-provider jailbreak immunity. It evaluates whether the Stage 3F containment invariants still hold when an external live provider is placed behind the LLM Shield gateway in shadow mode.
+
+### Added
+
+- `tests/e2e/llm_shield_stage3g_live_shadow_{lib,runner}.mjs` and `tests/unit/llmShield/stage3gLiveShadowLib.test.js`.
+- `docs/research/llm-shield/evidence/stage-3g/**` — live-shadow manifest, metrics, provider-output hashes, receipt sample, audit sample, and runner output.
+- `scripts/{smoke,security-audit}-llm-shield-stage3g.sh` and `scripts/privacy-audit-llm-shield-stage3g.mjs`.
+- Reviewer docs: `LLM_SHIELD_STAGE_3G_LIVE_PROVIDER_SHADOW_EVALUATION.md`, `STAGE_3G_{THREAT_MODEL,VALIDATION_MATRIX,CLOSEOUT}.md`.
+
+### Changed
+
+- `scripts/check.sh` — wired Stage 3G smoke, security audit, and privacy audit.
+
+### Verified
+
+- `node --test tests/unit/llmShield/stage3gLiveShadowLib.test.js` passed.
+- `node tests/e2e/llm_shield_stage3g_live_shadow_runner.mjs` passed.
+- `bash scripts/smoke-llm-shield-stage3g.sh` passed.
+- `bash scripts/security-audit-llm-shield-stage3g.sh` passed `4/4`.
+- `node scripts/privacy-audit-llm-shield-stage3g.mjs` passed.
+
+---
+
 ## [stage-3f-agentic-prompt-injection-benchmark] — 2026-06-19 — Agentic prompt-injection containment benchmark
 
 **Raouf:** Stage 3F adds a deterministic 240-case benchmark for measuring whether prompt-injection attempts can cause unauthorised system consequences across input, context, tool, output, risk, receipt, and audit boundaries. The benchmark reports detection quality honestly while hard-gating only containment invariants: zero unsafe tool execution, zero unsafe output export, zero context authority escalation, complete receipt coverage, complete audit verification, valid corpus manifest, frozen detector digests, and metadata-only generated evidence. Not jailbreak immunity; receipts attest process, not ground truth.

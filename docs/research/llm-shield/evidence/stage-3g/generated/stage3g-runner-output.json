@@ -1,0 +1,8 @@
+{
+  "stage": "3G",
+  "mode": "update-metrics",
+  "selected_cases": 60,
+  "shadow_observations": 180,
+  "hard_gates_passed": true,
+  "generated_files_metadata_only": true
+}

@@ -1484,6 +1484,44 @@ else
   tail -80 "$LOG_DIR/llm-shield-stage3f-privacy-audit.log"
 fi
 
+step "LLM Shield 3G live-shadow smoke"
+if scripts/smoke-llm-shield-stage3g.sh > "$LOG_DIR/llm-shield-stage3g-smoke.log" 2>&1; then
+  pass "LLM Shield 3G live-shadow smoke"
+else
+  fail "LLM Shield 3G live-shadow smoke"
+  tail -80 "$LOG_DIR/llm-shield-stage3g-smoke.log"
+fi
+
+step "LLM Shield 3G security audit"
+if scripts/security-audit-llm-shield-stage3g.sh > "$LOG_DIR/llm-shield-stage3g-security-audit.log" 2>&1; then
+  pass "LLM Shield 3G security audit"
+else
+  fail "LLM Shield 3G security audit"
+  tail -80 "$LOG_DIR/llm-shield-stage3g-security-audit.log"
+fi
+
+step "LLM Shield 3G privacy audit"
+if node scripts/privacy-audit-llm-shield-stage3g.mjs > "$LOG_DIR/llm-shield-stage3g-privacy-audit.log" 2>&1; then
+  pass "LLM Shield 3G privacy audit"
+else
+  fail "LLM Shield 3G privacy audit"
+  tail -80 "$LOG_DIR/llm-shield-stage3g-privacy-audit.log"
+fi
+
+step "LLM Shield 3F/3G helper function coverage"
+if node --test --experimental-test-coverage \
+  --test-coverage-include=tests/e2e/llm_shield_stage3f_benchmark_lib.mjs \
+  --test-coverage-include=tests/e2e/llm_shield_stage3g_live_shadow_lib.mjs \
+  --test-coverage-functions=100 \
+  tests/unit/llmShield/stage3fBenchmarkLib.test.js \
+  tests/unit/llmShield/stage3gLiveShadowLib.test.js \
+  > "$LOG_DIR/llm-shield-stage3fg-helper-coverage.log" 2>&1; then
+  pass "LLM Shield 3F/3G helper function coverage"
+else
+  fail "LLM Shield 3F/3G helper function coverage"
+  tail -100 "$LOG_DIR/llm-shield-stage3fg-helper-coverage.log"
+fi
+
 step "LLM Shield 3E-core docker smoke (skips if no docker)"
 if bash scripts/docker-smoke-llm-shield-stage3e.sh > "$LOG_DIR/llm-shield-stage3e-docker-smoke.log" 2>&1; then
   pass "LLM Shield 3E-core docker smoke"
