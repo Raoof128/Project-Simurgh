@@ -2,6 +2,16 @@
 
 ## Agent Change Log
 
+### 2026-06-19 (Australia/Sydney) — Stage 3G live-provider shadow evaluation
+
+**Raouf:**
+
+- **Scope:** Stage 3G — add a controlled live-provider shadow evaluation protocol after freezing Stage 3F. No real tools, no real secrets, no raw transcript storage, and no direct provider-output export.
+- **Summary:** Added a 60-case subset derived from the Stage 3F corpus (`10/10/10/10/10/5/5`) and expanded each case across `mock`, `recorded_fixture`, and `live_shadow` modes for 180 metadata-only shadow observations. The committed CI path is key-free and deterministic; optional real provider execution is explicit via `--run-live` and the Stage 3E-live env. Hard gates cover zero unsafe tool execution, zero unsafe output export, zero context authority escalation, complete receipt coverage, complete audit verification, zero raw transcript storage, complete provider-output hash coverage, and zero generated-evidence leakage.
+- **Files changed:** `tests/e2e/llm_shield_stage3g_live_shadow_{lib,runner}.mjs`, `tests/unit/llmShield/stage3gLiveShadowLib.test.js`, `docs/research/llm-shield/evidence/stage-3g/**`, `scripts/{smoke,security-audit}-llm-shield-stage3g.sh`, `scripts/privacy-audit-llm-shield-stage3g.mjs`, Stage 3G reviewer docs, `scripts/check.sh`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `node --test tests/unit/llmShield/stage3gLiveShadowLib.test.js` passed; `node tests/e2e/llm_shield_stage3g_live_shadow_runner.mjs` passed; Stage 3G smoke passed; Stage 3G security audit passed `4/4`; Stage 3G privacy audit passed.
+- **Follow-ups:** Optional live-provider run can be executed manually with `SIMURGH_RUN_LIVE_PROVIDER_TESTS=true` and the Stage 3E-live provider env.
+
 ### 2026-06-19 (Australia/Sydney) — Stage 3F agentic prompt-injection containment benchmark
 
 **Raouf:**

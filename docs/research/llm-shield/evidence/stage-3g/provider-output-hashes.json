@@ -1,0 +1,1266 @@
+{
+  "stage": "3G",
+  "privacy_mode": "metadata_only",
+  "outputs": [
+    {
+      "case_id": "stage3f-direct-input-001",
+      "mode": "mock",
+      "provider_output_hash": "sha256:f0f172281f5a4972b3fbedd6fba73fadcc64cce90c2ab5667ee06f525af71267",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-direct-input-001",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:f50bd27f228df98a0f1a76c6f92d63218fe0d33d5b216d7cb5d64d63e304ed9a",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-direct-input-001",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:4416310a3659cc5740091bbad00df32222b5c0ece87feb6e43c8c8cd0939da55",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-direct-input-002",
+      "mode": "mock",
+      "provider_output_hash": "sha256:5bec1caf2c6b741c8fd4902d1b4d4c3f67d0d7e4ff7c4519872fbcd7d1be589b",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-direct-input-002",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:1cff42d787397f82e6e50f8eb2d1f81316c34d82b3371589fcc2dfffc3e6ecf3",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-direct-input-002",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:528bf156f306be5cace074d184dab7fb74bd17de64683d004de33be363962166",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-direct-input-003",
+      "mode": "mock",
+      "provider_output_hash": "sha256:749f9fa27ccf926e7ba62184c4ad94e7cd407e2b6305d5b6d0f6a7ebcb73178f",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-direct-input-003",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:ef91c31fabba3b541dec87a84067b8ce23ca5edf97fbee905f6065c5c008a4a3",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-direct-input-003",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:6f310e7b8b15e4de922ede065415f853ae96f946261f5ca6806ee660bb440f9c",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-direct-input-004",
+      "mode": "mock",
+      "provider_output_hash": "sha256:d12ddd9b35dd70a9705ddbac95ca15259216e67335d4576a4a4417518c2b3f92",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-direct-input-004",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:59fbc17f42e39b3672b955e3d0d7bebde66fcb2b642673ab612133a45f8873b3",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-direct-input-004",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:00863291187fbc85685990f4810091c19a7f1f947a1ef8d14996db3cff4636a2",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-direct-input-005",
+      "mode": "mock",
+      "provider_output_hash": "sha256:09f7dd7d0672cf281c692c0a8a9ec3935cd372ef41f6f0fb03944bb5fb748d1a",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-direct-input-005",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:ff563a780eb77fefd6fd572da036afa15a378df9b015235d16684a4c0549f1a3",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-direct-input-005",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:8485070b6b204603041d2c0c657691a0af2f10e933ed9dd3b668b2ab5354cccd",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-direct-input-006",
+      "mode": "mock",
+      "provider_output_hash": "sha256:5fb1d3cdcb17545be2d4e459edbab28381226ba75cfff288f25372c621ca0542",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-direct-input-006",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:90983a552b276b244ff0ad861838bfa117fae28855f416484bb93c1ed4bc3608",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-direct-input-006",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:4fb8e2d5b98450d75817d0e1086f3ddaa395930acca4a7d42b62092e77837162",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-direct-input-007",
+      "mode": "mock",
+      "provider_output_hash": "sha256:ac42df49ee15a1592cdbfe0949c5af95f5f9122c816512e818f500b9ac5af4cc",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-direct-input-007",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:053a1da5cdcc09ac5db83d5fc887af1ac0e49cc258b814acaf457d3034dfd905",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-direct-input-007",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:67f96b91912c4d4d4f2b1412f4f93f34014cd5419e8b36e47927dbd7c0743650",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-direct-input-008",
+      "mode": "mock",
+      "provider_output_hash": "sha256:0abe48fd806a681099eae30850022019b8c7e6a27446bbb23043c13daed561d7",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-direct-input-008",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:590eb00eb40b855da1e0dfc26a983cb5648ecea0bd6ca306d815c8c76c507d55",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-direct-input-008",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:2d727471fa728e35bfa855c0f82626b2ff7ff86763407f3c8a0ebe292ccd1e07",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-direct-input-009",
+      "mode": "mock",
+      "provider_output_hash": "sha256:cd0a880bc24362d5996fe60ec060283a71a9b0d274d63cf10cc93b6030d1c9c8",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-direct-input-009",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:093442871b750fb7b3bc9f664c0db7a38896f67dcc3aeba58bdebcc2ae0afabc",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-direct-input-009",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:967370da96afabf11d2cb4c613d633b1a4cff95f28b86721f61db053b29d6e25",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-direct-input-010",
+      "mode": "mock",
+      "provider_output_hash": "sha256:64212957f2baa18de27638a5767a8785fea26bfd7ef94db16a9298716511e777",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-direct-input-010",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:3f3f23471222b94289746ce809f632c499bfd0d48e023a2509e04a2e64d5d600",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-direct-input-010",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:4c5cc3c8337fed5a7b09694515c4491df9a94df237afdca22ccf450d2d7b2c35",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-context-poisoning-001",
+      "mode": "mock",
+      "provider_output_hash": "sha256:df4e2456a22c176729f7137c7df09c1e514cf88f13ce49e6486b8ff0b80828b1",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-context-poisoning-001",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:3b23667dd3996c0075f8edc62051217ee5d660ac2614f435602e9b6f16613ad8",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-context-poisoning-001",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:c16891f3b96f7aa5a1b5dcd3025092a53011b532e4cbca2a2f5c425db032f0d1",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-context-poisoning-002",
+      "mode": "mock",
+      "provider_output_hash": "sha256:bc83877f074ec182bfa683e5ad386771a3752c8c96bebaa6d0f9ec7a276d20b6",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-context-poisoning-002",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:6aad2f2b9df830a0e69ac60dcb61a8ccd140710f0eb0bc9ec03297148b9ef927",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-context-poisoning-002",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:b1c53e5cea83527a87503a1c9d762b3bd9111f1cb8751bb6432b3e495ddf3dc7",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-context-poisoning-003",
+      "mode": "mock",
+      "provider_output_hash": "sha256:ba735e21182376585d062658941467cf920f1f15400f874bb4575504819bed42",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-context-poisoning-003",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:77f65983d63149f7ae2939b0f6b8a287a544ca9dd9ec515e6d6703e39f53d3b8",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-context-poisoning-003",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:05c632100eb43bbe0435bf5c9451e56139eb4df67b38bac9ec56808cbf42489a",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-context-poisoning-004",
+      "mode": "mock",
+      "provider_output_hash": "sha256:c762d16fb52688e302160ef334d07199b1e4927d4bf0a99bbcd7f0019d88d00d",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-context-poisoning-004",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:ec8bbdc87356c0cb2cfb9cbc34e2658131f01774291b7d637a7ef94bb0b9ace7",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-context-poisoning-004",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:677eeb198e64449ff3a1f9ee031d358acb7e93a66c375735663da0b3e1fe9cbe",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-context-poisoning-005",
+      "mode": "mock",
+      "provider_output_hash": "sha256:d6a422837db510ab92647826a40faf88181eddc5881dcaca30aa118fc53de733",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-context-poisoning-005",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:2988f6285950c2012a64f49ac6c1f9c17d47cf836c1362a598d52cf5cf807c75",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-context-poisoning-005",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:b2b046073fad4c56fb3fe8765c960e59fbab278127c00cf8ded61b999a0a674e",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-context-poisoning-006",
+      "mode": "mock",
+      "provider_output_hash": "sha256:eaed6ef7675c867be5f864d2a3b97a3c0b0e58640f1d4de720cd57c76f753b3c",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-context-poisoning-006",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:86d056b02b033a0baeb481fd8304cdfaa3cb70a549a1b7cd2137f4d255e6ed88",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-context-poisoning-006",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:ab58cd60d1cd7ff7fb10cdf19003b9e3d30762828c5d78a6e651779e6a05baee",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-context-poisoning-007",
+      "mode": "mock",
+      "provider_output_hash": "sha256:ce7063cf6ed19c6aceb6c468b67555f4dc16489f83eb22486c2a2dd9ebce1595",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-context-poisoning-007",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:c06249853681c78381ecbeac5c15d52a2978f70aef767f4106e3192d690379df",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-context-poisoning-007",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:a60c6a91133d9a2a612a05eead00b84b33318b04d8f7fdac6e63ec1183363a0f",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-context-poisoning-008",
+      "mode": "mock",
+      "provider_output_hash": "sha256:1a50073ba5b8f4a5d281bef46809016d68052619c287eab489cd76a353f6f51c",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-context-poisoning-008",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:612d534878e06e0b175726f1603ba7b40e01c41a857e56604a17cdec0bdff234",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-context-poisoning-008",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:6a823a9aa6f739777b452c8f5f143e5c7464f5bc3a7c2b8c52bcc506cdf01de6",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-context-poisoning-009",
+      "mode": "mock",
+      "provider_output_hash": "sha256:6f8b39646e2cfb3b819caa744e1ba9a04d87a6521e169100e7e9d70ce6ee0d37",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-context-poisoning-009",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:cd4785e2037b2012e2bc0fa4827d46b6ab77e33c28fbb42ac48c93738bafea92",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-context-poisoning-009",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:308d1d4ba19c44538679f4a80860e1b6228c98ee7b6994a3f41aac5e1def2e60",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-context-poisoning-010",
+      "mode": "mock",
+      "provider_output_hash": "sha256:37790b547d34ad7355d2d3d6c338023bb1b4be0e4d2692d7a7dd72cb733639cd",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-context-poisoning-010",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:61a925ff19c427175ff5e349c99e1e50816ba3258c7951a1e7c358eba0df8230",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-context-poisoning-010",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:18f042e920098c70fa4b55be67f499d67fcf2ba9120628fc4aafe04fd95a8d79",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-tool-injection-001",
+      "mode": "mock",
+      "provider_output_hash": "sha256:61bac33a2066341eb5cd8a0865ade1760ddb0e916b5694d7f65089781ee1b06a",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-tool-injection-001",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:a0dc13820a8ae0d35a3d2cbfef5e86cf3e9223d9d1e0848cd16a61d5e11e7641",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-tool-injection-001",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:9523bd729c354ae497617d10e1b5d1068f639137ee0b96c5ad0c25b6f9f42565",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-tool-injection-002",
+      "mode": "mock",
+      "provider_output_hash": "sha256:d7ee08426f586159348a7dff63196984ab5e2806959238657388198b6acc4a90",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-tool-injection-002",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:4b65d5a557de892e7af58b464e2e44f76c4163238b045bf385ff16b97c120e46",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-tool-injection-002",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:4ff5b344484320e1ab5e2fdea0dbf993fa1432be84f8e3f1fe05d51b0f1966f0",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-tool-injection-003",
+      "mode": "mock",
+      "provider_output_hash": "sha256:5bed2133d88149b0b02847cb71e7de31510163fd2032c5f1cebe96e59cda349a",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-tool-injection-003",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:2045e1c2165a9ce37b04980bde8f4cb8d29b286a32e10d7c71235f1fe9b4b42e",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-tool-injection-003",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:a0e6bf8ea591091c092c35deb04b389d25207ed0f1e95c8d95268ab2f0259a78",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-tool-injection-004",
+      "mode": "mock",
+      "provider_output_hash": "sha256:84515f6d169c61ee3072bc9224cb0b5e32e7d83dd719ab99cd5b51d45dcabd8a",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-tool-injection-004",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:206cc893385c580b82ef46be228d190815ef5f52c2871baf7a94af93121e2041",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-tool-injection-004",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:8ce21cf0d07b29f56a2382ab264bfb29d6983f82a479200f6d053aec9238bb8a",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-tool-injection-005",
+      "mode": "mock",
+      "provider_output_hash": "sha256:3e2a677be5fa9ba60212362625c2869fc1871cc408612a515df86d6f6982d4f6",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-tool-injection-005",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:9b8c12962c370fb233181003232de6f67c8b7a5995d46d0f183055f94866f347",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-tool-injection-005",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:4d63fe7eb774e075330f418803f217cb293afdf76671fafd9ad86832c728f246",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-tool-injection-006",
+      "mode": "mock",
+      "provider_output_hash": "sha256:463056d583d8fdd5df996c4eddcc5b0bc466916a06a4eb470c314f4e2b57edd1",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-tool-injection-006",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:0591be2cadc2148ae7a713a124f3ab402683f0044f0e80c50b2878d322f5a309",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-tool-injection-006",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:5caaf7e8bf3bc9d77ae37a63ed258a1236425b708e786309b03fe86392ebdf4f",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-tool-injection-007",
+      "mode": "mock",
+      "provider_output_hash": "sha256:34028b4241d82c563bea76f01fd191cd8fe8ce98cc168412d5e70b60d5cf8d05",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-tool-injection-007",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:57df75cfc001634b2a5ec4af6d4e9341ddda1b23bf19da7d4ca62a043fe2b2d5",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-tool-injection-007",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:0280861e44756c833d5d40e9c72097a483ffcb9b04c1b9bc96fecdcb6f0f8025",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-tool-injection-008",
+      "mode": "mock",
+      "provider_output_hash": "sha256:7445f2c4df3fe7484fe0a8d4688cccef4d25452bad8f508507091d31fd1d6e92",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-tool-injection-008",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:70ca9224dbdb77f0511b1d210cdbc76db82c8e2daa33440ad952aa2d152650df",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-tool-injection-008",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:7e821648d251d68933fc188c6523f8a21cd28d53bf50f47c527d9d3a8d165a96",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-tool-injection-009",
+      "mode": "mock",
+      "provider_output_hash": "sha256:94bb7ee59a24eefe270fd49e442b79f39db6ac07cefc6c2b7acc392c20825d1b",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-tool-injection-009",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:43a8ee62a45e42f37c6a6ca859df9f5247304269632d726d457ea0b4977fb15f",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-tool-injection-009",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:61abe31bea546f4c5875f1a9cff179bca187890ef19fe16ecc2e31b7768c6cac",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-tool-injection-010",
+      "mode": "mock",
+      "provider_output_hash": "sha256:83c2d9f06b9a067ea60eed22f8ca22d1d940e7de6db30010492c57b98aa6dd05",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-tool-injection-010",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:f38d24f1e8c6b952710b4aad959e03b0e97df5c9c94f47150c39ae89bcf6d0c6",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-tool-injection-010",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:20ef49e2eb20b360ed8d9d23cdbc8e4b466bae1266ff3c116b51fc9e054b8286",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-output-leakage-001",
+      "mode": "mock",
+      "provider_output_hash": "sha256:f39ad67c2967a93add30bf66239b9e7e382f4ce99527531f03cceaf5fba34f12",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-output-leakage-001",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:d04d2ef02742a2f15b2fd12fefbe2f7944901abd3d0c427797a9e1ae01eed111",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-output-leakage-001",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:6dcff5aef207458dc71f50c1d4504bc902441db9d09161c775ad7a1e01a24dc6",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-output-leakage-002",
+      "mode": "mock",
+      "provider_output_hash": "sha256:f14c41737bfa681943e1d7bc4ae5e583c5b576a5ff82e8ebafb39ee36c4deb37",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-output-leakage-002",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:b8b25e1a47d60fa68efee8466425792290bbaa38189815efdd168f3e698d75fa",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-output-leakage-002",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:790861c67c9fc2993b61839d9b052684a957b4c9a74efd96f445e616f57577e6",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-output-leakage-003",
+      "mode": "mock",
+      "provider_output_hash": "sha256:8933df055f1487f193d4208abf4f476709d61a978fb92e3928fb5f5dbda84286",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-output-leakage-003",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:ae7c6cc0ca583e64ae1658f2ba421436dc86605ecb5e83d8788161a71c24b92a",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-output-leakage-003",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:acb45b07531ff61eed3b7ad06a9c9a1dbb83ba8bf5c1d7e1cb4d2fe30ca4a734",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-output-leakage-004",
+      "mode": "mock",
+      "provider_output_hash": "sha256:4110a322cfdbb4f1c040c619418a7ac1781c6c051609cb8e968a164d38daa5ae",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-output-leakage-004",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:8716665df2c9a935033fc97af367450ffedd23f7faae8403ae3583dc2cb99fa2",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-output-leakage-004",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:80066743c0df20e6609375ca27cb90422ea01625d8981a244fc358ecdd061ea4",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-output-leakage-005",
+      "mode": "mock",
+      "provider_output_hash": "sha256:ee8271576abcfd66302e7ae3d6707ffee8002445938818e65e7a5c5fa1082e0a",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-output-leakage-005",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:f09f3fe6963234f882a36252338d6a040e5803522dddc502ef63981282453750",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-output-leakage-005",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:f2a51c10a429cfeb0ce58a9a9a54f96c8e8d388b85e515e6644dcdcaeb937404",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-output-leakage-006",
+      "mode": "mock",
+      "provider_output_hash": "sha256:2daebb6c9a72daeaac17dc1538ba0bceb7d2135fdc3da205ec93556aceadb833",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-output-leakage-006",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:7ce7f4b4617db17b5a5918e1e5873f73fe28f22d65ca68a9abaf4d2738a4118e",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-output-leakage-006",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:7c45d35ed59b02699ec777750a0342c86ae438e18f210af1536246e89d848c41",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-output-leakage-007",
+      "mode": "mock",
+      "provider_output_hash": "sha256:0d553bea76a63c5f70b8b448e7a3146c973833e37f8fbae78531d9f432bdc3f3",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-output-leakage-007",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:e62b654097589e1e58145f267f0b25fc6d740062fef6a74efe503356ca4d23e7",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-output-leakage-007",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:1d5a3c378a506b67ee9d2e4f8de4f140d28f714fa212f14449e3516b5d0b6aaf",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-output-leakage-008",
+      "mode": "mock",
+      "provider_output_hash": "sha256:dc3b6103148a29c48ffd8e393e57b317ba21d482a7d492deaf752f3e4beb10eb",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-output-leakage-008",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:8c0de97a20d364abfd7f6bd0a6db886411e2c9163142b7e99b736d0aeb38ad95",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-output-leakage-008",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:8e9f99b9784ce2dcd802676f4bd668b25b35776b4c987be7199a2409d7172bd6",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-output-leakage-009",
+      "mode": "mock",
+      "provider_output_hash": "sha256:14bbd59d50a3798d71acbd831d608032a618fbe2bc39f63f612a0be1a0ea8eef",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-output-leakage-009",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:4edf5f48ceae15a67f84c7e98a2f9623602804a2bf21732d640f80aabcd4adf3",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-output-leakage-009",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:8e88570bd08bac4f5a81b976171e1b34e78e10771cce03c147a6b2b6ad5120ac",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-output-leakage-010",
+      "mode": "mock",
+      "provider_output_hash": "sha256:2cec8c4195cbeabdac8743f23035555c9437609f1a7f96830b62bb802597dae4",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-output-leakage-010",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:e9932719cc039820c338ef03d9c20e014ec8dc15b74f95a69d5704b7cd9b8cd8",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-output-leakage-010",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:96fe488a48a76b8f0e1ee9ad6efee25a38a2d0b29e2bc8813f27bd7fcda87520",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-multi-turn-001",
+      "mode": "mock",
+      "provider_output_hash": "sha256:bf172cdcc8b3e6b53408804e6fee9d934ac91724f54e673887d9145962055a1b",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-multi-turn-001",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:0d37201d962ec78ea18a8df3416c8a066691dab71a595677ffa6f41389f799d9",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-multi-turn-001",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:1c8f8d2455ed6c82516e681ceeca9a80fd1773676ccae16dd927ff8980cafdc6",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-multi-turn-002",
+      "mode": "mock",
+      "provider_output_hash": "sha256:8383635bd29f28d1a62467add5f3e9bc68d95cffdd9471f388428c3a24b723a2",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-multi-turn-002",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:5e63fb5c02359a88ceea7174562e5d18c21e4420d36a5dae3169ff8f3a86869a",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-multi-turn-002",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:8759a22baa4f7796e72eb4d5a73d505db87efc1365f8fe23654c7e38b4eeb157",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-multi-turn-003",
+      "mode": "mock",
+      "provider_output_hash": "sha256:b8163d1b78a5d0530613d141adcae93bcfff55e01c9f52b3cd3087a6af57025f",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-multi-turn-003",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:5c0ab1a1c53b6854d019d3b51193d572bb39a388d29c4411f6a38dca0464dd79",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-multi-turn-003",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:6840082263eeabf6f7721bbd68009d7bdb65f9559f3b023664fb958e503c8fa1",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-multi-turn-004",
+      "mode": "mock",
+      "provider_output_hash": "sha256:325dbbd39d05d50fbeb09be81f0d5a1a2f13fed35c7e7cdf43381a39cdfeff3c",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-multi-turn-004",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:971126a8b0d7e915d7e2dc306079d234852f0dae7e312392188b59adf18c5060",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-multi-turn-004",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:26bfa271f96c31c5e5b504f428702452e55ca5aaeaa877238e367ac329be7211",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-multi-turn-005",
+      "mode": "mock",
+      "provider_output_hash": "sha256:98718eb4bcef4975bc77d826d695561f78454021405daa99cd074c52c6875e1e",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-multi-turn-005",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:18daff92a916fd449973299127645ab8ffc82e73955a4ca4bee2964e4d00e878",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-multi-turn-005",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:dffbd8004417ddf4d43ad88fc0830d1dab60b5bb9041bd254d1e39ceb031e218",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-multi-turn-006",
+      "mode": "mock",
+      "provider_output_hash": "sha256:acaeb464e1d478770bf5971b1c92d69f82814aeb03cc5ab0dd2bbf0d505e9ecf",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-multi-turn-006",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:fcc2501602624e752c33890f8076799f1018c25b21fe9aea7c9afeeac7db0914",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-multi-turn-006",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:30dfbeab0c3b9db0bfdbc97b122e6e2d4de1eb10c58c3675f4506fd3b2661a28",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-multi-turn-007",
+      "mode": "mock",
+      "provider_output_hash": "sha256:b15fb40e85346de84ab4b248446b13df668f994665fb5fff90ec48de7980f209",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-multi-turn-007",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:214db6b2dc191aa1ed197d09f6ca344d27d13955b4047e1854fadc8486dd495c",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-multi-turn-007",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:4e2d7a42cbdfc62478726b577ee9ef91e7688e432dbc0e774a411f0ce17068dd",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-multi-turn-008",
+      "mode": "mock",
+      "provider_output_hash": "sha256:42ec899f55216cdcf93df4abff4dadaed45ec53bc3dda29905e729993d2446bb",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-multi-turn-008",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:8e9a6276b1692523cb9fa2e94b79796f398dabea5349667d2686451d3dbf02eb",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-multi-turn-008",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:bf3edb4c9ce619dbdb7c732ee7546c9162d847ea29ab32f1595643163bfa5ba9",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-multi-turn-009",
+      "mode": "mock",
+      "provider_output_hash": "sha256:f4f5b104eee04904f209663c361d241090d22d93fcabd2b6abe3683e0fb01fa9",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-multi-turn-009",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:e28a67354f418d7398c765ccb100bad95bed0c32e08cfda41609efb1d5982d34",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-multi-turn-009",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:bc456ac66a2b2d037c620e137b2dfd8529b949877096529945228f942ac0b555",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-multi-turn-010",
+      "mode": "mock",
+      "provider_output_hash": "sha256:f12a28d8cfc491faf0fb4c88f901c0e7830edd4e4c4d199184850886869c4a63",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-multi-turn-010",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:b694a1ff8354c973036eaf9ecc055b0b5570e5194a19c0b659e5d5886523c72b",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-multi-turn-010",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:9352de17a968916b184b173ad1ec4e35efc568443f80899b4d84ae6baede860d",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-benign-001",
+      "mode": "mock",
+      "provider_output_hash": "sha256:7dbaf71f5970f09f267cbb959ffb2483e8842c36c81c7c323fa161ee27882af0",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-benign-001",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:590dd760c1801682634c428244b8aa43907782c605deff21f27000b151629783",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-benign-001",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:2c1a67087fcb31f29f67d9f00c48d85158114e1ae9aafb697b89342ed8108ffc",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-benign-002",
+      "mode": "mock",
+      "provider_output_hash": "sha256:8ec6b5af93b9bc960666ff8c8e8524fe6f1a7f75e3813ebd3bdf192de3f86f31",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-benign-002",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:17eabf800cb9c6772d264eb523fff308104fcf8979656728aa3c863bcc5a0828",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-benign-002",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:77ebeb78873ca55f5e6bd3b18c3d7362268dd22657835a9b49b002188023b385",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-benign-003",
+      "mode": "mock",
+      "provider_output_hash": "sha256:87254b84a3e1744c0763511d039ffd14b7aadf47f7f945d4afbc0b1d053b9a77",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-benign-003",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:3e391ebe47e20d9a0481dbb3d4856b188c8801500c061bad8b6c1ebfbdc8692c",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-benign-003",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:ff7979459c6e89f617b57550c2d80bf728dbd49aa09f9efaf824065fe7d4a872",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-benign-004",
+      "mode": "mock",
+      "provider_output_hash": "sha256:ec11ea28a9657a0ec4878d576149097bb7a749e393fa31526ce8fe49002b0182",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-benign-004",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:0dbce7abcc815151eddabca3ba9eb25af13cb55fd5aee6b7e04b57374a379f03",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-benign-004",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:4f0572ed0e25388a7708735c66c013d71f9c3f2d200fd4827164c2093651c42e",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-benign-005",
+      "mode": "mock",
+      "provider_output_hash": "sha256:916778c44af2ead8c50fbf0bc26ea5b923da8840a8ce70c78f8b9ed411e89536",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-benign-005",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:b7b0922edbc225a1f23697b1530ff67928617b3b68290d93015aabc3bad94112",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-benign-005",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:f43e0f42c4f801437b3c79f5f9f44d66c589c2aad4a2f396c0947f108d1f43d3",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-hard-negative-001",
+      "mode": "mock",
+      "provider_output_hash": "sha256:d73b37dbb82d14446b7cc3eccf79b0474136acbf718db1a2194e16acda79d4a7",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-hard-negative-001",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:e9633b9929783c2f2e2e8eb98fdd1daea237a63a6969c3164e632a67e2012636",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-hard-negative-001",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:5bc941f40ec4565eed80d99dcb942e65192e180949e359a7f95162ca01c0f0de",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-hard-negative-002",
+      "mode": "mock",
+      "provider_output_hash": "sha256:271af0585d8492f7b99dac98aa09b5ea20e9e9ee7f9af0ad6a5d54f45429c4af",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-hard-negative-002",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:b3bd51310afa4b8eebde868b5abb4cbc24332ed91748b165ae816bfc01fb892a",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-hard-negative-002",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:59dfc88bc9c2c35e2c57e528f522bc3f1924ade74ff4b06a6895c1e4d454af39",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-hard-negative-003",
+      "mode": "mock",
+      "provider_output_hash": "sha256:f4872dfa2b6a675fe35fb1765d19477a4f1a62e39235361604da1634480de9c2",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-hard-negative-003",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:7273c27f35befb3e91a3ec7de046abd71f01e52be70789b7a9c106d9878eadd6",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-hard-negative-003",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:53dd2485453225729b842ad81a746af4c8bd2863cff613c029a24253ac3a8083",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-hard-negative-004",
+      "mode": "mock",
+      "provider_output_hash": "sha256:bbfce6da808fcbf3c13a486460dbece99a57b064bd51b900010a8aa54a1d1e81",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-hard-negative-004",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:985d76fb6c4b875d71dabb4878694920c5b6e58677e6e6e9a073edb6d74bccc5",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-hard-negative-004",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:b4d626db863d5ebd6ae977f3ff0013c114e635959d79fa926e4458d239927970",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-hard-negative-005",
+      "mode": "mock",
+      "provider_output_hash": "sha256:2563d935d4301620a1f684d31d94ff9986fd7c3517fadb5f1a3c9d4c643c9099",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-hard-negative-005",
+      "mode": "recorded_fixture",
+      "provider_output_hash": "sha256:8e61c54179bbed7e9a25c91acc4ff8d21efd054a286f58935aefca9d1456af6f",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    },
+    {
+      "case_id": "stage3f-hard-negative-005",
+      "mode": "live_shadow",
+      "provider_output_hash": "sha256:fbd5a42aa132aad31c3e6f2931c6bfa9a2e6b9c88c1e3b88e4627d9526196911",
+      "raw_provider_output_recorded": false,
+      "raw_provider_transcript_recorded": false
+    }
+  ]
+}

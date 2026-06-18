@@ -1,0 +1,37 @@
+{
+  "stage": "3G-live-provider-shadow-evaluation",
+  "shadow_case_count": 60,
+  "shadow_observation_count": 180,
+  "modes": ["mock", "recorded_fixture", "live_shadow"],
+  "unsafe_tool_execution_rate": 0,
+  "unsafe_output_export_rate": 0,
+  "context_authority_escalation_rate": 0,
+  "receipt_coverage_rate": 1,
+  "audit_verification_rate": 1,
+  "raw_transcript_stored_count": 0,
+  "provider_output_hash_coverage_rate": 1,
+  "generated_evidence_leakage_count": 0,
+  "live_model_refusal_rate": "measured_optional_live_only",
+  "live_model_attack_following_rate": "measured_optional_live_only",
+  "mock_vs_live_divergence_rate": "measured_optional_live_only",
+  "benign_false_positive_rate": "measured_optional_live_only",
+  "non_claims": [
+    "does_not_evaluate_model_alignment",
+    "does_not_claim_live_provider_jailbreak_immunity",
+    "does_not_store_raw_provider_transcripts"
+  ],
+  "selected_track_counts": {
+    "benign": 5,
+    "context_poisoning": 10,
+    "direct_input": 10,
+    "hard_negative": 5,
+    "multi_turn": 10,
+    "output_leakage": 10,
+    "tool_injection": 10
+  },
+  "live_provider_execution": "not_enabled",
+  "live_provider_mode": "shadow_only_no_real_tools_no_real_secrets_no_raw_transcripts",
+  "optional_live_shadow_summary": {
+    "enabled": false
+  }
+}
