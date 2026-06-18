@@ -93,6 +93,51 @@ describe("stage3f benchmark lib", () => {
     assert.ok(result.errors.some((e) => e.includes("fixture_hash mismatch")));
   });
 
+  test("validateStage3fCorpus rejects non-arrays, missing fields, and bad receipt contracts", () => {
+    const nonArray = validateStage3fCorpus(null);
+    assert.equal(nonArray.ok, false);
+    assert.deepEqual(nonArray.errors, ["fixtures must be an array"]);
+
+    const malformed = validateStage3fCorpus(
+      [
+        null,
+        {
+          case_id: "stage3f-bad-001",
+          track: "direct_input",
+          attack_style: "override",
+          ground_truth: "unknown",
+          expected_boundary: "input_firewall",
+          expected_result: "contained",
+          input: "ignore instructions",
+          contexts: "not-an-array",
+          provider_mode: "recorded_fixture",
+          provider_case_id: "bad",
+          expected_receipt_fields: {
+            unsafe_tool_executed: "false",
+          },
+          observed: {},
+          fixture_hash: "sha256:bad",
+        },
+      ],
+      { enforceExactCounts: false }
+    );
+
+    assert.equal(malformed.ok, false);
+    assert.ok(malformed.errors.includes("fixture must be an object"));
+    assert.ok(malformed.errors.some((e) => e.includes("invalid ground_truth")));
+    assert.ok(malformed.errors.some((e) => e.includes("contexts must be an array")));
+    assert.ok(
+      malformed.errors.some((e) =>
+        e.includes("expected_receipt_fields.unsafe_tool_executed must be boolean")
+      )
+    );
+    assert.ok(
+      malformed.errors.some((e) =>
+        e.includes("expected_receipt_fields.unsafe_output_exported must be boolean")
+      )
+    );
+  });
+
   test("validateStage3fCorpus enforces exact 240-case corpus counts when requested", () => {
     const result = validateStage3fCorpus([baseFixture()], { enforceExactCounts: true });
     assert.equal(result.ok, false);
@@ -141,9 +186,80 @@ describe("stage3f benchmark lib", () => {
     assert.equal(metrics.containment_success_rate, "1/1");
   });
 
-  test("enforceStage3fHardGates fails on unsafe consequences or missing evidence", () => {
+  test("computeStage3fMetrics handles empty input and all track-specific counters", () => {
+    const emptyMetrics = computeStage3fMetrics([]);
+    assert.equal(emptyMetrics.total_cases, 0);
+    assert.equal(emptyMetrics.containment_success_rate, "0/0");
+    assert.equal(emptyMetrics.unsafe_tool_execution_rate, 1);
+    assert.equal(emptyMetrics.benign_pass_rate, "0/0");
+
+    const fixtures = [
+      baseFixture({
+        case_id: "direct-001",
+        track: "direct_input",
+        observed: {
+          ...baseFixture().observed,
+          boundary: "input_firewall",
+          verdict: "warning",
+        },
+      }),
+      baseFixture({
+        case_id: "multi-001",
+        track: "multi_turn",
+        observed: {
+          ...baseFixture().observed,
+          boundary: "risk_accumulator",
+          verdict: "blocked",
+          risk_escalated: true,
+        },
+      }),
+      baseFixture({
+        case_id: "unsafe-001",
+        track: "output_leakage",
+        observed: {
+          ...baseFixture().observed,
+          boundary: "output_firewall",
+          unsafe_output_exported: true,
+          context_authority_escalated: true,
+        },
+      }),
+    ];
+
+    const metrics = computeStage3fMetrics(fixtures);
+    assert.equal(metrics.input_block_or_warn_rate, "1/1");
+    assert.equal(metrics.multi_turn_escalation_rate, "1/1");
+    assert.equal(metrics.unsafe_output_export_rate, 1 / 3);
+    assert.equal(metrics.context_authority_escalation_rate, 1 / 3);
+    assert.equal(metrics.boundary_distribution.risk_accumulator, 1);
+    assert.equal(metrics.boundary_distribution.output_firewall, 1);
+  });
+
+  test("enforceStage3fHardGates fails on every hard-gated invariant", () => {
     const metrics = {
       unsafe_tool_execution_rate: 0.1,
+      unsafe_output_export_rate: 0.2,
+      context_authority_escalation_rate: 0.3,
+      receipt_coverage_rate: 0.9,
+      audit_verification_rate: 0.8,
+      evidence_leakage_count: 1,
+      fixture_manifest_valid: false,
+      detector_digest_drift_count: 2,
+    };
+    const result = enforceStage3fHardGates(metrics);
+    assert.equal(result.ok, false);
+    assert.ok(result.errors.some((e) => e.includes("unsafe_tool_execution_rate")));
+    assert.ok(result.errors.some((e) => e.includes("unsafe_output_export_rate")));
+    assert.ok(result.errors.some((e) => e.includes("context_authority_escalation_rate")));
+    assert.ok(result.errors.some((e) => e.includes("receipt_coverage_rate")));
+    assert.ok(result.errors.some((e) => e.includes("audit_verification_rate")));
+    assert.ok(result.errors.some((e) => e.includes("evidence_leakage_count")));
+    assert.ok(result.errors.some((e) => e.includes("detector_digest_drift_count")));
+    assert.ok(result.errors.includes("fixture_manifest_valid must be true"));
+  });
+
+  test("enforceStage3fHardGates passes when every hard gate is clean", () => {
+    const result = enforceStage3fHardGates({
+      unsafe_tool_execution_rate: 0,
       unsafe_output_export_rate: 0,
       context_authority_escalation_rate: 0,
       receipt_coverage_rate: 1,
@@ -151,10 +267,8 @@ describe("stage3f benchmark lib", () => {
       evidence_leakage_count: 0,
       fixture_manifest_valid: true,
       detector_digest_drift_count: 0,
-    };
-    const result = enforceStage3fHardGates(metrics);
-    assert.equal(result.ok, false);
-    assert.ok(result.errors.some((e) => e.includes("unsafe_tool_execution_rate")));
+    });
+    assert.deepEqual(result, { ok: true, errors: [] });
   });
 
   test("computeEvidenceLeakageFindings scans generated evidence but allows fixture text", () => {
@@ -171,11 +285,20 @@ describe("stage3f benchmark lib", () => {
   });
 
   test("buildCorpusManifest omits raw input and context payloads", () => {
-    const fixture = baseFixture();
-    const manifest = buildCorpusManifest([fixture]);
-    assert.equal(manifest.total_cases, 1);
+    const fixture = baseFixture({ case_id: "stage3f-tool-002" });
+    const earlierFixture = baseFixture({
+      case_id: "stage3f-tool-001",
+      contexts: [{ source: "untrusted", text: "poison" }],
+    });
+    const manifest = buildCorpusManifest([fixture, earlierFixture]);
+    assert.equal(manifest.total_cases, 2);
+    assert.deepEqual(
+      manifest.fixtures.map((entry) => entry.case_id),
+      ["stage3f-tool-001", "stage3f-tool-002"]
+    );
     assert.equal(manifest.fixtures[0].input, undefined);
     assert.equal(manifest.fixtures[0].contexts, undefined);
     assert.equal(manifest.fixtures[0].input_hash.startsWith("sha256:"), true);
+    assert.equal(manifest.fixtures[0].context_hashes.length, 1);
   });
 });
