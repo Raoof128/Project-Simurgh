@@ -1,8 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-use axum::{routing::get, routing::post, Json, Router};
+use axum::{http::StatusCode, routing::get, routing::post, Json, Router};
 use serde::{Deserialize, Serialize};
+use std::sync::{Mutex, OnceLock};
 use tower_http::limit::RequestBodyLimitLayer;
 
+use crate::canonical_json::canonicalise;
 use crate::config::{DAEMON_PLATFORM, DAEMON_VERSION, MAX_BODY_BYTES, SCANNER_VERSION};
 use crate::identity::{load_or_create_identity, IdentityPaths};
 use crate::proof::{build_proof, ProofInputs};
@@ -20,6 +22,18 @@ pub struct HealthResponse {
 pub struct LinuxScannerSnapshot {
     pub detection: SessionDetection,
     pub scanner: Option<LinuxScannerSummary>,
+}
+
+#[derive(Clone)]
+struct PairedSession {
+    session_id: String,
+    exam_id: String,
+}
+
+static PAIRED_SESSION: OnceLock<Mutex<Option<PairedSession>>> = OnceLock::new();
+
+fn paired_session() -> &'static Mutex<Option<PairedSession>> {
+    PAIRED_SESSION.get_or_init(|| Mutex::new(None))
 }
 
 pub(crate) fn current_scanner_summary() -> LinuxScannerSnapshot {
@@ -43,6 +57,7 @@ pub fn router() -> Router {
     Router::new()
         .route("/health", get(health))
         .route("/status", get(status))
+        .route("/pair", post(pair))
         .route("/proof", post(proof))
         .layer(RequestBodyLimitLayer::new(MAX_BODY_BYTES))
 }
@@ -111,6 +126,51 @@ async fn status() -> Json<serde_json::Value> {
 }
 
 #[derive(Deserialize)]
+pub struct PairRequest {
+    pub session_id: String,
+    pub exam_id: String,
+    pub challenge: String,
+}
+
+async fn pair(
+    Json(req): Json<PairRequest>,
+) -> Result<Json<serde_json::Value>, (StatusCode, Json<serde_json::Value>)> {
+    let identity = load_or_create_identity(&IdentityPaths::from_xdg()).map_err(|_| {
+        (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            Json(serde_json::json!({ "ok": false, "error": "identity_unavailable" })),
+        )
+    })?;
+    let signed_payload = serde_json::json!({
+        "type": "simurgh.daemon.pair",
+        "session_id": req.session_id,
+        "exam_id": req.exam_id,
+        "challenge": req.challenge,
+        "timestamp": iso8601_utc_now(),
+        "node_id_hash": identity.node_id_hash(),
+        "daemon_version": DAEMON_VERSION,
+        "platform": DAEMON_PLATFORM,
+    });
+    let signature = identity.sign(canonicalise(&signed_payload).as_bytes());
+    *paired_session().lock().map_err(|_| {
+        (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            Json(serde_json::json!({ "ok": false, "error": "pairing_state_unavailable" })),
+        )
+    })? = Some(PairedSession {
+        session_id: req.session_id,
+        exam_id: req.exam_id,
+    });
+    Ok(Json(serde_json::json!({
+        "ok": true,
+        "node_id_hash": identity.node_id_hash(),
+        "public_key": identity.public_key_b64url(),
+        "signed_payload": signed_payload,
+        "signature": signature,
+    })))
+}
+
+#[derive(Deserialize)]
 pub struct ProofRequest {
     pub session_id: String,
     pub exam_id: String,
@@ -120,11 +180,30 @@ pub struct ProofRequest {
 
 async fn proof(
     Json(req): Json<ProofRequest>,
-) -> Result<Json<serde_json::Value>, (axum::http::StatusCode, String)> {
+) -> Result<Json<serde_json::Value>, (StatusCode, Json<serde_json::Value>)> {
+    let paired = paired_session()
+        .lock()
+        .map_err(|_| {
+            (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                Json(serde_json::json!({ "ok": false, "error": "pairing_state_unavailable" })),
+            )
+        })?
+        .clone();
+    if !matches!(
+        paired,
+        Some(PairedSession { ref session_id, ref exam_id })
+            if session_id == &req.session_id && exam_id == &req.exam_id
+    ) {
+        return Err((
+            StatusCode::CONFLICT,
+            Json(serde_json::json!({ "ok": false, "error": "proof_session_not_paired" })),
+        ));
+    }
     let identity = load_or_create_identity(&IdentityPaths::from_xdg()).map_err(|_| {
         (
-            axum::http::StatusCode::INTERNAL_SERVER_ERROR,
-            "identity_unavailable".into(),
+            StatusCode::INTERNAL_SERVER_ERROR,
+            Json(serde_json::json!({ "ok": false, "error": "identity_unavailable" })),
         )
     })?;
     let scan = current_scanner_summary();

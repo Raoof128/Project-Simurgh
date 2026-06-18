@@ -2021,7 +2021,6 @@
       const ALLOWED_LEVELS = new Set(["safe", "warning", "critical"]);
       const WINDOW_MS = 5000;
       const POST_TIMEOUT_MS = 8000;
-      const STORAGE_KEY = "simurgh:answer";
 
       const QUESTIONS = [
         {
@@ -2185,11 +2184,6 @@ OUTPUT FORMAT
         }
       })();
 
-      // restore draft
-      try {
-        const draft = localStorage.getItem(STORAGE_KEY);
-        if (draft) ta.value = draft;
-      } catch {}
       updateCounts();
       // hydrate submit button from restored draft length
       {
@@ -2260,9 +2254,6 @@ OUTPUT FORMAT
       });
       ta.addEventListener("input", () => {
         updateCounts();
-        try {
-          localStorage.setItem(STORAGE_KEY, ta.value);
-        } catch {}
         submitBtn.disabled = ta.value.trim().length < 30;
       });
       ta.addEventListener("paste", (e) => {
@@ -2883,9 +2874,6 @@ OUTPUT FORMAT
 
       resetBtn.addEventListener("click", () => {
         if (!confirm("Start a new session? Your draft will be cleared.")) return;
-        try {
-          localStorage.removeItem(STORAGE_KEY);
-        } catch {}
         ta.value = "";
         ta.readOnly = false;
         submitBtn.textContent = "Submit response";

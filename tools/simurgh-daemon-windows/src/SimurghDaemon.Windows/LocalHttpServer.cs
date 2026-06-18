@@ -113,6 +113,11 @@ public sealed class LocalHttpServer
                     await WriteJsonAsync(context, new { ok = false, error = "invalid_proof_request" }, 400);
                     return;
                 }
+                if (session.SessionId != request.SessionId || session.ExamId != request.ExamId)
+                {
+                    await WriteJsonAsync(context, new { ok = false, error = "proof_session_not_paired" }, 409);
+                    return;
+                }
                 var proof = ProofPayload(
                     identity,
                     scanner.Scan(),

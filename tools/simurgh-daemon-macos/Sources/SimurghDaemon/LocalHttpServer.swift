@@ -95,12 +95,17 @@ final class LocalHttpServer {
                 let session = body["session_id"] as? String ?? ""
                 let exam = body["exam_id"] as? String ?? ""
                 let challenge = body["challenge"] as? String ?? ""
-                state.sessionId = session; state.examId = exam; state.paired = true
+                state.sessionId = session; state.examId = exam; state.paired = true; state.sessionActive = true
                 return response(200, try signer.pair(sessionId: session, examId: exam, challenge: challenge), origin: headers["origin"])
             case ("POST", "/proof"):
-                return response(200, try signer.proof(sessionId: body["session_id"] as? String ?? "", examId: body["exam_id"] as? String ?? "", sequence: body["sequence"] as? Int ?? 0, challenge: body["challenge"] as? String ?? ""), origin: headers["origin"])
+                let session = body["session_id"] as? String ?? ""
+                let exam = body["exam_id"] as? String ?? ""
+                guard state.paired, state.sessionActive, state.sessionId == session, state.examId == exam else {
+                    return response(409, ["ok": false, "error": "proof_session_not_paired"], origin: headers["origin"])
+                }
+                return response(200, try signer.proof(sessionId: session, examId: exam, sequence: body["sequence"] as? Int ?? 0, challenge: body["challenge"] as? String ?? ""), origin: headers["origin"])
             case ("POST", "/session/end"):
-                state.sessionActive = false
+                state.sessionActive = false; state.paired = false; state.sessionId = nil; state.examId = nil
                 return response(200, ["ok": true, "session_active": false], origin: headers["origin"])
             case ("POST", "/shutdown"):
                 DispatchQueue.global().asyncAfter(deadline: .now() + 0.1) {

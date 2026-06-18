@@ -52,19 +52,28 @@ export function createEvent(sessionId, type, detail = {}) {
   return { sessionId, type, detail, ts: Date.now() };
 }
 
-export function eventTimeline() {
+export function eventTimeline({ maxEventsPerSession = 500 } = {}) {
   const store = new Map();
 
   return {
     add(sessionId, type, detail = {}) {
       if (!store.has(sessionId)) store.set(sessionId, []);
-      store.get(sessionId).push(createEvent(sessionId, type, detail));
+      const events = store.get(sessionId);
+      events.push(createEvent(sessionId, type, detail));
+      if (events.length > maxEventsPerSession) {
+        events.splice(0, events.length - maxEventsPerSession);
+      }
     },
     get(sessionId) {
       return [...(store.get(sessionId) ?? [])];
     },
     clear(sessionId) {
       store.delete(sessionId);
+    },
+    evictMissing(activeSessionIds) {
+      for (const sessionId of store.keys()) {
+        if (!activeSessionIds.has(sessionId)) store.delete(sessionId);
+      }
     },
   };
 }

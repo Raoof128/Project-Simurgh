@@ -64,7 +64,7 @@ export const keyByHelperSecret = (req) =>
 export const keyByInstructorToken = (req) => {
   const auth = req.headers.authorization;
   const bearer = auth && /^Bearer\s+/i.test(auth) ? auth.replace(/^Bearer\s+/i, "") : null;
-  return bearer || req.query?.token || null;
+  return bearer || null;
 };
 
 export const keyBySessionToken = (req) => {

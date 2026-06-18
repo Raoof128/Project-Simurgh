@@ -39,6 +39,10 @@ fn isolated_xdg_state() -> (std::sync::MutexGuard<'static, ()>, TempDir) {
 }
 
 async fn post_proof() -> serde_json::Value {
+    let (pair_status, pair_body) =
+        post_pair("sess_proof_test", "exam_proof_test", "Y2hhbGxlbmdl").await;
+    assert_eq!(pair_status, StatusCode::OK);
+    assert_eq!(pair_body["ok"], true);
     let app = router();
     let body = serde_json::json!({
         "session_id": "sess_proof_test",
@@ -60,6 +64,89 @@ async fn post_proof() -> serde_json::Value {
     assert_eq!(resp.status(), StatusCode::OK);
     let bytes = resp.into_body().collect().await.unwrap().to_bytes();
     serde_json::from_slice(&bytes).unwrap()
+}
+
+async fn post_pair(
+    session_id: &str,
+    exam_id: &str,
+    challenge: &str,
+) -> (StatusCode, serde_json::Value) {
+    let app = router();
+    let body = serde_json::json!({
+        "session_id": session_id,
+        "exam_id": exam_id,
+        "challenge": challenge
+    });
+    let resp = app
+        .oneshot(
+            Request::builder()
+                .method("POST")
+                .uri("/pair")
+                .header("content-type", "application/json")
+                .header("x-simurgh-local-client", "browser")
+                .body(Body::from(serde_json::to_vec(&body).unwrap()))
+                .unwrap(),
+        )
+        .await
+        .unwrap();
+    let status = resp.status();
+    let bytes = resp.into_body().collect().await.unwrap().to_bytes();
+    (status, serde_json::from_slice(&bytes).unwrap())
+}
+
+async fn post_proof_with(
+    session_id: &str,
+    exam_id: &str,
+    sequence: u64,
+    challenge: &str,
+) -> (StatusCode, serde_json::Value) {
+    let app = router();
+    let body = serde_json::json!({
+        "session_id": session_id,
+        "exam_id": exam_id,
+        "sequence": sequence,
+        "challenge": challenge
+    });
+    let resp = app
+        .oneshot(
+            Request::builder()
+                .method("POST")
+                .uri("/proof")
+                .header("content-type", "application/json")
+                .header("x-simurgh-local-client", "browser")
+                .body(Body::from(serde_json::to_vec(&body).unwrap()))
+                .unwrap(),
+        )
+        .await
+        .unwrap();
+    let status = resp.status();
+    let bytes = resp.into_body().collect().await.unwrap().to_bytes();
+    (status, serde_json::from_slice(&bytes).unwrap())
+}
+
+#[allow(clippy::await_holding_lock)]
+#[tokio::test]
+async fn post_proof_requires_prior_pairing_for_same_session_and_exam() {
+    let (_guard, _tmp) = isolated_xdg_state();
+
+    let (unpaired_status, unpaired_body) =
+        post_proof_with("sess_unpaired", "exam_unpaired", 1, "Y2hhbGxlbmdl").await;
+    assert_eq!(unpaired_status, StatusCode::CONFLICT);
+    assert_eq!(unpaired_body["error"], "proof_session_not_paired");
+
+    let (pair_status, pair_body) = post_pair("sess_paired", "exam_paired", "Y2hhbGxlbmdl").await;
+    assert_eq!(pair_status, StatusCode::OK);
+    assert_eq!(pair_body["ok"], true);
+
+    let (wrong_exam_status, wrong_exam_body) =
+        post_proof_with("sess_paired", "exam_other", 1, "Y2hhbGxlbmdl").await;
+    assert_eq!(wrong_exam_status, StatusCode::CONFLICT);
+    assert_eq!(wrong_exam_body["error"], "proof_session_not_paired");
+
+    let (proof_status, proof_body) =
+        post_proof_with("sess_paired", "exam_paired", 1, "Y2hhbGxlbmdl").await;
+    assert_eq!(proof_status, StatusCode::OK);
+    assert_eq!(proof_body["ok"], true);
 }
 
 #[allow(clippy::await_holding_lock)]

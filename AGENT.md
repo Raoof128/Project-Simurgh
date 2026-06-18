@@ -2,6 +2,16 @@
 
 ## Agent Change Log
 
+### 2026-06-18 (Australia/Sydney) — Security audit hardening closeout
+
+**Raouf:**
+
+- **Scope:** Documentation closeout for the repository-wide security audit hardening patch. No runtime code changes in this doc pass.
+- **Summary:** Added a reviewer-facing closeout note under the neutral security-audit release name. The note records **6/6 findings addressed**: explicit-only demo mode, bearer-only instructor authentication, removal of raw answer `localStorage` persistence, versioned HMAC student digests, bounded academic timelines, and paired-state daemon proof enforcement. It also records the successful verification set and the local Windows .NET 8 SDK blocker as environment-only.
+- **Files changed:** `docs/security/SECURITY_AUDIT_HARDENING_CLOSEOUT_2026_06_18.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `npx prettier --check docs/security/SECURITY_AUDIT_HARDENING_CLOSEOUT_2026_06_18.md AGENT.md CHANGELOG.md` passed; repository-wide tool-name search passed; `git diff --check` passed.
+- **Follow-ups:** Install .NET SDK 8.x or use the Windows CI runner to execute the Windows daemon tests locally equivalent to the source patch.
+
 ### 2026-06-18 (Australia/Sydney) — LLM Shield Anthropic live adapter (Stage 3E-live, complete)
 
 **Raouf:**

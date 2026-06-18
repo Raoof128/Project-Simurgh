@@ -84,12 +84,12 @@ describe("rateLimit", () => {
     assert.equal(keyByHelperSecret({ headers: {} }), null);
   });
 
-  test("keyByInstructorToken extracts bearer or query", () => {
+  test("keyByInstructorToken extracts bearer only", () => {
     assert.equal(
       keyByInstructorToken({ headers: { authorization: "Bearer T1" }, query: {} }),
       "T1"
     );
-    assert.equal(keyByInstructorToken({ headers: {}, query: { token: "T2" } }), "T2");
+    assert.equal(keyByInstructorToken({ headers: {}, query: { token: "T2" } }), null);
     assert.equal(keyByInstructorToken({ headers: {}, query: {} }), null);
   });
 });

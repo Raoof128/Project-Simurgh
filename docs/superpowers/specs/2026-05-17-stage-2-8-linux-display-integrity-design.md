@@ -593,7 +593,7 @@ Stage 2.8A MUST start red on every one of these. Implementation only begins afte
 [ ] tools/simurgh-daemon-linux/ does not exist (no Cargo.toml)
 ```
 
-Each red test maps directly to a §9 implementation step. Codex / subagent dispatch should not write green code for any item until its red test exists and fails for the documented reason.
+Each red test maps directly to a §9 implementation step. Automated implementation dispatch should not write green code for any item until its red test exists and fails for the documented reason.
 
 ---
 

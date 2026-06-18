@@ -579,15 +579,21 @@
         }
       };
 
-      // Auth — token comes from ?token= query param. The server validates it
-      // for /api/sessions, /api/dashboard, /api/audit, and /api/stream/instructor.
-      const TOKEN = new URLSearchParams(location.search).get("token") || "";
-      // SSE requires the token in the query string because EventSource cannot set headers.
-      // For every other API call we use the Authorization header instead.
-      const tokenQuery = TOKEN ? "?token=" + encodeURIComponent(TOKEN) : "";
+      // Auth — use bearer headers only. Long-lived instructor tokens are never
+      // accepted through URLs because query strings leak via logs and history.
+      let TOKEN = "";
+      try {
+        TOKEN = sessionStorage.getItem("simurgh:instructorToken") || "";
+      } catch {}
+      if (!TOKEN && !new URLSearchParams(location.search).has("token")) {
+        TOKEN = prompt("Instructor token") || "";
+        try {
+          if (TOKEN) sessionStorage.setItem("simurgh:instructorToken", TOKEN);
+        } catch {}
+      }
       const authHeaders = TOKEN ? { authorization: "Bearer " + TOKEN } : {};
-      // Strip the token from the visible URL so it does not get logged/shared.
-      if (TOKEN && typeof history !== "undefined" && history.replaceState) {
+      // Strip any legacy token query from the visible URL without reading it.
+      if (typeof history !== "undefined" && history.replaceState && location.search) {
         try {
           history.replaceState(null, "", location.pathname);
         } catch {}
@@ -719,9 +725,9 @@
 
       async function pullSessions() {
         try {
-          const r = await fetch("/api/sessions" + tokenQuery, { headers: authHeaders });
+          const r = await fetch("/api/sessions", { headers: authHeaders });
           if (r.status === 401) {
-            streamText.textContent = "unauthorised — append ?token=… to URL";
+            streamText.textContent = "unauthorised — bearer token required";
             return;
           }
           if (!r.ok) return;
@@ -740,10 +746,14 @@
       let reconnectAttempt = 0;
       let reconnectTimer = null;
       function connectSSE() {
+        if (TOKEN) {
+          streamText.textContent = "polling";
+          return;
+        }
         try {
           if (es) es.close();
         } catch {}
-        es = new EventSource("/api/stream/instructor" + tokenQuery);
+        es = new EventSource("/api/stream/instructor");
         es.addEventListener("hello", () => {
           reconnectAttempt = 0;
           streamChip.classList.remove("warn", "critical");

@@ -4,11 +4,11 @@ import assert from "node:assert/strict";
 import { hashStudentId } from "../../src/privacy/hashIdentity.js";
 
 describe("hashStudentId", () => {
-  test("returns a 64-char hex string", () => {
+  test("returns a versioned HMAC digest", () => {
     const result = hashStudentId("john.doe@example.com");
     assert.equal(typeof result, "string");
-    assert.equal(result.length, 64);
-    assert.match(result, /^[0-9a-f]{64}$/);
+    assert.equal(result.length, 67);
+    assert.match(result, /^v1:[0-9a-f]{64}$/);
   });
 
   test("same input always produces same hash", () => {
@@ -25,6 +25,6 @@ describe("hashStudentId", () => {
 
   test("coerces non-string input to string", () => {
     const result = hashStudentId(12345);
-    assert.equal(result.length, 64);
+    assert.equal(result.length, 67);
   });
 });
