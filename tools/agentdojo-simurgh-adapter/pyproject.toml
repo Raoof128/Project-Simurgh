@@ -1,0 +1,14 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+[project]
+name = "simurgh-agentdojo-adapter"
+version = "0.0.0"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+# Layer-2 external run only; never imported by CI-safe unit tests.
+agentdojo = ["agentdojo==0.1.30"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
