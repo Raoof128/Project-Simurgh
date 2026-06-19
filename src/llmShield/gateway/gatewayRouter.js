@@ -350,6 +350,7 @@ router.post("/:sessionId/run", requireToken, requirePathMatch, async (req, res) 
   return res.json({
     ok: exported,
     gateway_verdict: gatewayVerdict,
+    input_verdict: inputVerdict,
     provider_called: providerCalled,
     output_exported: exported,
     tool_gate_verdict: toolResult.verdict,
