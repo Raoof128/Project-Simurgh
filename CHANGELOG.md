@@ -1,5 +1,32 @@
 ## Change Log
 
+## [stage-3h-agentdojo-harness-core] — 2026-06-19 — External AgentDojo benchmark harness (core)
+
+**Raouf:** Stage 3H makes the LLM Shield externally benchmark-compatible by inserting Simurgh as an in-loop mediating defence (transport + enforcement only) that calls the real Node HTTP gateway, with AgentDojo's task definitions and scoring logic left unchanged. A Python adapter (`tools/agentdojo-simurgh-adapter/`) forwards each step to the gateway and enforces the returned verdict; it performs no safety classification. The mandatory CI path is a no-AgentDojo, no-network canary dry-run that drives a vendored 30-case workspace fixture through the real gateway, demonstrating containment across three boundaries (context guard, tool gate, output firewall) with benign and hard-negative controls passing cleanly (over-defence 0/10). Stage 3H-core ships the harness; a full Layer-2 AgentDojo external run is supported by design but not claimed unless executed separately with the pinned AgentDojo dependency (future tag `v1.1.0-stage-3h-agentdojo-external-run`). Not jailbreak immunity, not provable security; receipts attest process, not ground truth.
+
+### Added
+
+- `tools/agentdojo-simurgh-adapter/**` — Python adapter (`simurgh_client`, `mapping`, `defence`, `evidence_writer`) + pytest suite; transport/enforcement only, no safety logic.
+- `tests/e2e/llm_shield_stage3h_agentdojo_adapter_smoke.mjs`, `tests/e2e/llm_shield_stage3h_metrics_{lib,runner}.mjs`, `tests/unit/llmShield/stage3hMetricsLib.test.js`.
+- `docs/research/llm-shield/evidence/stage-3h/**` — metrics, run manifest, 30-case workspace canary, README.
+- `scripts/{smoke,security-audit}-llm-shield-stage3h.sh`, `scripts/{privacy,consistency}-audit-llm-shield-stage3h.mjs`.
+- Reviewer docs: `LLM_SHIELD_STAGE_3H_EXTERNAL_AGENTDOJO_BENCHMARK.md`, `STAGE_3H_{THREAT_MODEL,VALIDATION_MATRIX,REVIEWER_CHECKLIST,CLOSEOUT}.md`.
+
+### Changed
+
+- `scripts/check.sh` — wired Stage 3H smoke, security audit, privacy audit, and metrics unit test.
+- `.gitignore` — ignore Python bytecode for the Stage 3H adapter.
+
+### Verified
+
+- `node --test tests/unit/llmShield/stage3hMetricsLib.test.js` passed (3/3).
+- `cd tools/agentdojo-simurgh-adapter && python3 -m pytest tests/ -q` passed (13/13).
+- `bash scripts/smoke-llm-shield-stage3h.sh` passed (30 canary cases, chain valid).
+- `bash scripts/security-audit-llm-shield-stage3h.sh` passed.
+- `node scripts/privacy-audit-llm-shield-stage3h.mjs` and `node scripts/consistency-audit-llm-shield-stage3h.mjs` passed.
+
+---
+
 ## [stage-3g-live-provider-shadow] — 2026-06-19 — LLM Shield live-provider shadow evaluation
 
 **Raouf:** Stage 3G adds a 60-case live-provider shadow evaluation protocol derived from the Stage 3F corpus. Each selected case is represented across `mock`, `recorded_fixture`, and `live_shadow` modes for 180 metadata-only shadow observations. The committed CI path remains key-free and no-network; optional real live execution is explicit via `--run-live` and the Stage 3E-live env. Stage 3G does not evaluate model alignment or claim live-provider jailbreak immunity. It evaluates whether the Stage 3F containment invariants still hold when an external live provider is placed behind the LLM Shield gateway in shadow mode.

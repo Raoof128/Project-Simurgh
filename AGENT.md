@@ -2,6 +2,15 @@
 
 ## Agent Change Log
 
+### 2026-06-19 (Australia/Sydney) — Stage 3H external AgentDojo benchmark harness (core)
+
+**Raouf:**
+
+- **Scope:** Stage 3H — make the LLM Shield externally benchmark-compatible by inserting Simurgh as an in-loop mediating defence (transport + enforcement only) that calls the real Node HTTP gateway, leaving AgentDojo's task definitions and scoring logic unchanged. Harness + CI-safe canary only; full Layer-2 AgentDojo external run is supported by design but not claimed (future tag `v1.1.0-stage-3h-agentdojo-external-run`).
+- **Summary:** Added a Python adapter (`tools/agentdojo-simurgh-adapter/`) — client, mapping, in-loop defence element, evidence writer — that forwards each step to the gateway and enforces the returned verdict without any safety classification in Python. The mandatory CI path is a no-AgentDojo, no-network canary dry-run driving a vendored 30-case workspace fixture through the real gateway, demonstrating containment across three boundaries (context guard, tool gate, output firewall) with benign/hard-negative controls passing cleanly (over-defence 0/10). Hard gates: zero unauthorised/unsafe tool execution, zero unsafe output export, zero context authority escalation, complete receipt coverage, complete audit verification, zero generated-evidence leakage, zero raw transcript committed, AgentDojo version pinned. AgentDojo-native utility/ASR are `measured_external_run_only` in CI. Not jailbreak immunity, not provable security.
+- **Files changed:** `tools/agentdojo-simurgh-adapter/**`, `tests/e2e/llm_shield_stage3h_agentdojo_adapter_smoke.mjs`, `tests/e2e/llm_shield_stage3h_metrics_{lib,runner}.mjs`, `tests/unit/llmShield/stage3hMetricsLib.test.js`, `docs/research/llm-shield/evidence/stage-3h/**`, `scripts/{smoke,security-audit}-llm-shield-stage3h.sh`, `scripts/{privacy,consistency}-audit-llm-shield-stage3h.mjs`, Stage 3H reviewer docs, `scripts/check.sh`, `.gitignore`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `node --test tests/unit/llmShield/stage3hMetricsLib.test.js` passed (3/3); `python3 -m pytest tools/agentdojo-simurgh-adapter/tests` passed (13/13); Stage 3H smoke passed (30 cases, chain valid); Stage 3H security/privacy/consistency audits passed.
+
 ### 2026-06-19 (Australia/Sydney) — Stage 3G live-provider shadow evaluation
 
 **Raouf:**
