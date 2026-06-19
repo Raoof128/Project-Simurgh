@@ -1,5 +1,29 @@
 ## Change Log
 
+## [stage-3i-agentdojo-utility-recovery] — 2026-06-20 — AgentDojo utility recovery via context-provenance calibration
+
+**Raouf:** Stage 3I recovered the Stage 3H-L2 sampled-run benign utility by fixing an adapter context-provenance schema mismatch, without changing the gateway guard. The Layer-2 adapter previously sent `trust_level`/`source_type`/`purpose` values outside the context-provenance guard's allowed enums, so every context was schema-rejected and all defended cases were blocked at the context boundary. The adapter now declares the benign benchmark seed as `synthetic` (accepted) and injection-bearing context as `untrusted` (demoted-to-data, never authority), and the gateway `/run` response exposes `input_verdict` for precise boundary labelling. On the real external AgentDojo pass (`agentdojo==0.1.30`), defended benign utility rose `0/10 → 10/10`, over-defence fell `10/10 → 0/10`, defended Targeted ASR stayed `0/20`, utility under attack `20/20`, with context-authority escalation `0` and receipt/audit coverage `30/30`. The task-permit stack remains deferred; no jailbreak-immunity claim.
+
+### Added
+
+- `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/stage3i_{error_taxonomy,metrics}.py` and `tests/test_stage3i_{error_taxonomy,metrics,context_calibration}.py`.
+- `tests/unit/llmShield/gateway/stage3iContextCalibration.test.js`.
+- `scripts/{privacy,consistency}-audit-llm-shield-stage3i.mjs`, `scripts/smoke-llm-shield-stage3i-phase1.sh`.
+- `docs/research/llm-shield/evidence/stage-3i/**`; Stage 3I spec and Phase 1 / Phase 2–3 plans.
+
+### Changed
+
+- `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/layer2_runner.py` — valid per-kind context provenance, accurate boundary mapping, Stage 3I evidence emission.
+- `src/llmShield/gateway/gatewayRouter.js` — `/run` response exposes metadata-only `input_verdict` (no verdict-logic change).
+- `scripts/consistency-audit-llm-shield-stage3i.mjs` — recovery-compatible (taxonomy correctly empties on full recovery).
+
+### Verified
+
+- `npm test` passed (625/625); adapter `python3 -m pytest tools/agentdojo-simurgh-adapter/tests` passed (50/50).
+- Real external pass `scripts/smoke-llm-shield-stage3h-layer2.sh` (`agentdojo==0.1.30`) passed; Stage 3H-L2 and Stage 3I audits passed.
+
+---
+
 ## [stage-3h-agentdojo-external-run] — 2026-06-19 — Sampled AgentDojo external-number run
 
 **Raouf:** Stage 3H-L2 executes the pinned sampled AgentDojo workspace run in baseline and Simurgh-defended modes, preserving the unchanged AgentDojo scorer and exporting metadata-only Simurgh evidence. The stage reports native Utility, Utility Under Attack, and Targeted ASR with numerator/denominator counts, plus containment, receipt, audit, gateway-contact, and over-defence metrics. In the deterministic ground-truth mode, baseline Targeted ASR was `0/20` and defended Targeted ASR was `0/20`; defended benign utility dropped from `10/10` to `0/10`, and over-defence was `10/10`. Full workspace and all-suite runs remain deferred.
