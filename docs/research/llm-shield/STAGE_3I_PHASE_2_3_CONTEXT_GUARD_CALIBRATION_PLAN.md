@@ -26,6 +26,7 @@ The Phase 1 taxonomy attributed the 10/10 benign over-defence to `context_proven
 
 - License header on every new/edited source file (`// SPDX-License-Identifier: AGPL-3.0-or-later` / `# SPDX-License-Identifier: AGPL-3.0-or-later`).
 - **Containment invariants are immutable.** Untrusted/injected context must remain demoted-to-data or rejected — never accepted as authority. Context that forges authority (`context_role_escalation`, `context_untrusted_instruction`) must still be rejected. No change to `contextProvenanceGuard.js` reject conditions.
+- **`synthetic` guardrail (decided 2026-06-20).** Synthetic provenance is allowed ONLY for Simurgh-generated benchmark seed metadata whose `content` is hash-only or bounded metadata. It must NEVER be used for raw AgentDojo task text, model output, tool output, or attacker-controlled context. All injection-bearing context stays `untrusted` (demoted) or is rejected.
 - No third-party Python deps; AgentDojo stays the opt-in `agentdojo==0.1.30` extra.
 - Metadata-only evidence; hashes/enums only; all artifacts pass `evidence_writer._assert_metadata_only` and the Stage 3I privacy audit.
 - Native AgentDojo scorer unchanged. Stage 3H-L2 sampled identity (10 benign + 20 security) frozen.
@@ -107,7 +108,7 @@ Prove the calibration does not weaken security: an injected context that forges 
 ### Task 4: Re-run external pass + Phase 1 audits; refresh evidence (Phase 3 closeout)
 
 - [ ] **Step 1:** `npm test` — expect green (gateway change is additive).
-- [ ] **Step 2:** Maintainer-operated real external pass (needs `agentdojo==0.1.30`): `bash scripts/smoke-llm-shield-stage3h-layer2.sh` — regenerates `stage-3h-layer2` metrics and overwrites the `stage-3i` fixture with real taxonomy.
+- [ ] **Step 2:** Maintainer-operated real external pass: `bash scripts/smoke-llm-shield-stage3h-layer2.sh` — regenerates `stage-3h-layer2` metrics and overwrites the `stage-3i` fixture with real taxonomy. (No env opt-in exists; the script runs the runner directly and the opt-in is simply having `agentdojo==0.1.30` installed in the adapter venv — without it the runner raises `Layer2Blocked`.)
 - [ ] **Step 3:** Inspect `docs/research/llm-shield/evidence/stage-3h-layer2/metrics.json` — expect `defended.benign_utility` to rise from `0/10` toward the spec target (`≥ 7/10`), `over_defence_rate` to fall (`≤ 3/10`), `defended.targeted_asr` to stay `0/20`, and all containment hard gates to remain clean.
 - [ ] **Step 4:** `bash scripts/smoke-llm-shield-stage3i-phase1.sh` — expect privacy + consistency OK; `benign-recovery-analysis.json` over-defence count drops.
 - [ ] **Step 5:** Commit refreshed evidence `test(llm-shield): refresh stage 3I evidence after context-guard calibration`.
@@ -125,6 +126,6 @@ Prove the calibration does not weaken security: an injected context that forges 
 | `input_verdict` field leaks content              | It is an enum string (`safe`/`warning`/`blocked`), not content; privacy audit re-run                                                                    |
 | Over-defence still high after fix                | Then a second cause exists; re-run the Phase 1 taxonomy to re-locate before any further change (taxonomy-first discipline holds)                        |
 
-## Open question for review
+## Resolved decision (2026-06-20)
 
-Should benign AgentDojo task context be declared `synthetic` (accepted) or `untrusted` (demoted-to-data)? Both let the provider be called and recover utility. `synthetic` is honest (it IS Simurgh-generated benchmark metadata); `untrusted` is more conservative (treats even our own seed as data). Recommendation: `synthetic` for the benign benchmark seed, `untrusted` for anything carrying injection content — but flag for your call before Task 1.
+Benign AgentDojo benchmark seed → `synthetic` (accepted); injection-bearing context → `untrusted` (demoted-to-data). Approved by Raouf, subject to the `synthetic` guardrail in Global Constraints: synthetic is permitted only for hash-only Simurgh-generated benchmark seed metadata, never for raw task text, model/tool output, or attacker-controlled context.
