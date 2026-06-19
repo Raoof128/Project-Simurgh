@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task, AFTER review. Steps use checkbox (`- [ ]`) syntax.
 >
-> **Status: PROPOSED — docs only. Do NOT implement until reviewed.** This plan is the evidence-driven continuation chosen by the Phase 1 decision gate (`decision_gate == "rescope_context_guard_adapter"`). It is NOT the tool-permit stack; that remains deferred.
+> **Status: Tasks 1–3 IMPLEMENTED 2026-06-20 (CI-safe; 625 node tests + 50 adapter tests pass). Task 4 (real external AgentDojo pass) is the remaining maintainer-operated step.** Evidence-driven continuation chosen by the Phase 1 decision gate (`decision_gate == "rescope_context_guard_adapter"`). NOT the tool-permit stack; that remains deferred.
 
 **Goal:** Recover benign AgentDojo task utility by fixing how the adapter integrates with the gateway's context-provenance guard, while preserving every Stage 3D/3E/3F containment invariant — above all, that untrusted/injected context can never become instruction authority.
 
@@ -14,7 +14,7 @@
 
 The Phase 1 taxonomy attributed the 10/10 benign over-defence to `context_provenance_reject`. Tracing the gateway confirms the mechanism is an **adapter integration defect**, not an over-strict guard:
 
-1. **Invalid trust level.** `src/llmShield/contextProvenanceGuard.js:13` accepts only `TRUST_LEVELS = {"trusted", "untrusted", "synthetic"}`. The Layer-2 adapter (`tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/layer2_runner.py`, `_GatewayRecorder.record`) sends `trust_level: "metadata_only"`. That value is not in the set, so the guard returns `verdict: "rejected"` / `reasonCodes: ["context_schema_invalid"]` for **every** context. In `gatewayRouter.js`, `contextResult.verdict === "rejected"` forces `gateway_verdict = "blocked"`, so all 10 benign (and all 20 security) defended cases are blocked at the context boundary. This single mismatch produces benign utility `0/10` and over-defence `10/10`.
+1. **Invalid context provenance schema (three fields).** `src/llmShield/contextProvenanceGuard.js` accepts only `TRUST_LEVELS = {trusted, untrusted, synthetic}`, `SOURCE_TYPES = {retrieval, user_upload, tool_result, system_seed}`, and `PURPOSES = {reference, task_data, policy_seed}`. The Layer-2 adapter (`layer2_runner.py`, `_GatewayRecorder.record`) sent `trust_level: "metadata_only"`, `source_type: "agentdojo_metadata"`, and `purpose: "external_benchmark_receipt"` — **all three invalid**. Any one yields `verdict: "rejected"` / `reasonCodes: ["context_schema_invalid"]`; in `gatewayRouter.js`, `contextResult.verdict === "rejected"` forces `gateway_verdict = "blocked"`, so all 10 benign (and all 20 security) defended cases were blocked at the context boundary. This is the benign utility `0/10` / over-defence `10/10`. **Fix:** benign seed → `system_seed`/`synthetic`/`task_data` (accepted); injection → `tool_result`/`untrusted`/`reference` (demoted). Implemented in Task 1.
 
 2. **Boundary mislabeling.** The `/run` response (`gatewayRouter.js`) exposes `gateway_verdict`, `tool_gate_verdict`, `output_firewall_verdict`, and `receipt`, but **no top-level input verdict**. The adapter's `_blocking_boundary` therefore labels any block that is not tool/output as `"context_guard"`, even when the real cause is the input firewall. This is an `adapter_mapping_error` recorded as `context_provenance_reject`.
 
