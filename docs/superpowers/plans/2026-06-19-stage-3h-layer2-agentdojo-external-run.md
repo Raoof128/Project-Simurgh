@@ -26,8 +26,8 @@ Do not implement Stage 3I capability isolation, detector hardening, full workspa
 - `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/layer2_runner.py` orchestrates baseline + defended sampled runs, failing clearly when AgentDojo cannot run.
 - `tools/agentdojo-simurgh-adapter/tests/test_layer2_*.py` covers manifest, metrics, sanitising, registration, and runner fallback behavior.
 - `scripts/privacy-audit-llm-shield-stage3h-layer2.mjs` recursively scans Layer-2 evidence for forbidden raw content keys and token shapes.
-- `scripts/consistency-audit-llm-shield-stage3h-layer2.mjs` enforces comparison locks, hard gates, sample hash, baseline not-applicable Simurgh metrics, and gateway contact.
-- `scripts/smoke-llm-shield-stage3h-layer2.sh` runs the sampled external run when AgentDojo is installed; otherwise fails as blocked, not as runner-only success.
+- `scripts/consistency-audit-llm-shield-stage3h-layer2.mjs` enforces comparison locks, hard gates, sample hash, baseline not-applicable Simurgh metrics, gateway contact, AgentDojo ID existence, and baseline/defended denominator equality.
+- `scripts/smoke-llm-shield-stage3h-layer2.sh` boots the real Node gateway using the Stage 3H-core smoke pattern, runs the sampled external run against that gateway when AgentDojo is installed, and otherwise fails as blocked, not as runner-only success.
 - `scripts/security-audit-llm-shield-stage3h-layer2.sh` runs consistency plus a no-bypass gateway-contact audit.
 - `docs/research/llm-shield/LLM_SHIELD_STAGE_3H_LAYER2_AGENTDOJO_EXTERNAL_RUN.md` documents the stage.
 - `docs/research/llm-shield/STAGE_3H_LAYER2_{THREAT_MODEL,VALIDATION_MATRIX,REVIEWER_CHECKLIST,CLOSEOUT}.md` mirror the established Stage 3H doc set.
@@ -54,6 +54,7 @@ from simurgh_agentdojo_adapter.layer2_manifest import (
     ManifestError,
     load_sample_manifest,
     sample_manifest_sha256,
+    validate_agentdojo_sample_ids,
     validate_sample_manifest,
 )
 
@@ -131,6 +132,20 @@ def test_load_and_hash_manifest(tmp_path):
     loaded = load_sample_manifest(path)
     assert loaded["agentdojo_version_pin"] == "agentdojo==0.1.30"
     assert len(sample_manifest_sha256(path)) == 64
+
+
+def test_agentdojo_id_validator_reports_success_for_existing_ids():
+    suite = {
+        "user_tasks": {task_id: object() for task_id in _manifest()["benign_task_ids"]},
+        "injection_tasks": {"injection_task_0": object(), "injection_task_1": object()},
+    }
+    assert validate_agentdojo_sample_ids(_manifest(), suite) is True
+
+
+def test_agentdojo_id_validator_rejects_missing_ids():
+    suite = {"user_tasks": {}, "injection_tasks": {}}
+    with pytest.raises(ManifestError, match="missing AgentDojo user task"):
+        validate_agentdojo_sample_ids(_manifest(), suite)
 ```
 
 - [ ] **Step 2: Run the test to verify it fails**
@@ -276,6 +291,33 @@ def validate_sample_manifest(data: dict[str, Any]) -> dict[str, Any]:
     return data
 
 
+def _suite_keys(suite: Any, attr: str) -> set[str]:
+    value = getattr(suite, attr, None)
+    if value is None and isinstance(suite, dict):
+        value = suite.get(attr)
+    if not isinstance(value, dict):
+        raise ManifestError(f"AgentDojo suite missing {attr}")
+    return set(value.keys())
+
+
+def validate_agentdojo_sample_ids(data: dict[str, Any], suite: Any) -> bool:
+    user_ids = _suite_keys(suite, "user_tasks")
+    injection_ids = _suite_keys(suite, "injection_tasks")
+    for task_id in data["benign_task_ids"]:
+        if task_id not in user_ids:
+            raise ManifestError(f"missing AgentDojo user task: {task_id}")
+    for case_id in data["security_case_ids"]:
+        try:
+            user_task_id, injection_task_id = case_id.split("::", 1)
+        except ValueError as exc:
+            raise ManifestError(f"invalid security case id: {case_id}") from exc
+        if user_task_id not in user_ids:
+            raise ManifestError(f"missing AgentDojo user task: {user_task_id}")
+        if injection_task_id not in injection_ids:
+            raise ManifestError(f"missing AgentDojo injection task: {injection_task_id}")
+    return True
+
+
 def load_sample_manifest(path: str | Path) -> dict[str, Any]:
     with Path(path).open() as f:
         return validate_sample_manifest(json.load(f))
@@ -310,6 +352,7 @@ def build_run_manifest(
         "agentdojo_pin_substitution_reason": agentdojo_pin_substitution_reason,
         "sample_manifest_sha256": sample_manifest_sha256(sample_manifest_path),
         "sample_manifest_committed_before_execution": True,
+        "sample_manifest_ids_exist_in_agentdojo": True,
         "attack_family": sample_manifest["attack_family"],
         "provider_mode": provider_mode,
         "model_provider": model_provider,
@@ -417,8 +460,14 @@ def test_simurgh_containment_marks_baseline_not_applicable():
 
 def test_combined_metrics_enforce_utility_preserved_counts():
     native = {
-        "baseline": {"benign_utility": MetricCounts(8, 10).to_json()},
-        "defended": {"benign_utility": MetricCounts(7, 10).to_json()},
+        "baseline": {
+            "benign_utility": MetricCounts(8, 10).to_json(),
+            "utility_under_attack": MetricCounts(12, 20).to_json(),
+        },
+        "defended": {
+            "benign_utility": MetricCounts(7, 10).to_json(),
+            "utility_under_attack": MetricCounts(11, 20).to_json(),
+        },
     }
     containment = {
         "hard_gates": {"defended_gateway_contact_rate": 1.0},
@@ -427,6 +476,7 @@ def test_combined_metrics_enforce_utility_preserved_counts():
     combined = compute_combined_metrics(native, containment)
     assert combined["utility_preserved_rate"]["counts"] == "7/8"
     assert combined["baseline_has_no_simurgh_claims"] is True
+    assert combined["baseline_and_defended_counts_match"] is True
 ```
 
 - [ ] **Step 2: Run the test to verify it fails**
@@ -565,6 +615,14 @@ def compute_combined_metrics(
         "agentdojo_native_metrics": native_results,
         "simurgh_containment_metrics": containment_results,
         "baseline_has_no_simurgh_claims": True,
+        "baseline_and_defended_counts_match": (
+            native_results["baseline"]["benign_utility"]["denominator"]
+            == native_results["defended"]["benign_utility"]["denominator"]
+            == 10
+            and native_results["baseline"]["utility_under_attack"]["denominator"]
+            == native_results["defended"]["utility_under_attack"]["denominator"]
+            == 20
+        ),
         "utility_preserved_rate": MetricCounts(defended_success, baseline_success).to_json(),
     }
 ```
@@ -1216,6 +1274,8 @@ def run_external_agentdojo(*, sample_manifest_path: str | Path, out_dir: str | P
 
 Expected: no fallback to mocked external results. If the real API cannot support the sampled run, keep `Layer2Blocked` and document the blocker.
 
+Hard implementation rule: do not commit Task 5 as complete while `run_external_agentdojo` still always raises `Layer2Blocked`. A committed blocked stub is acceptable only before Task 5 completion, or as a documented blocked closeout with no `v1.1.0-stage-3h-agentdojo-external-run` claim.
+
 - [ ] **Step 7: Run full adapter pytest**
 
 Run:
@@ -1324,9 +1384,13 @@ if (manifest.sample_manifest_sha256 !== sampleHash) fail("sample manifest hash m
 if (manifest.sample_manifest_committed_before_execution !== true)
   fail("sample must be committed before execution");
 if (!manifest.agentdojo_version_pin) fail("AgentDojo version/commit must be pinned");
+if (manifest.sample_manifest_ids_exist_in_agentdojo !== true)
+  fail("sample manifest ids must exist in pinned AgentDojo workspace suite");
 if (manifest.scorer_modified !== false) fail("AgentDojo scorer must be unmodified");
 if (metrics.baseline_has_no_simurgh_claims !== true)
   fail("baseline must not carry Simurgh containment claims");
+if (metrics.baseline_and_defended_counts_match !== true)
+  fail("baseline and defended denominators must match exactly");
 if (containment.baseline_simurgh_metrics !== "not_applicable")
   fail("baseline Simurgh metrics must be not_applicable");
 
@@ -1349,6 +1413,14 @@ for (const section of ["baseline", "defended"]) {
     }
   }
 }
+if (native.baseline.benign_utility.denominator !== 10)
+  fail("baseline benign denominator must be 10");
+if (native.defended.benign_utility.denominator !== 10)
+  fail("defended benign denominator must be 10");
+if (native.baseline.utility_under_attack.denominator !== 20)
+  fail("baseline security denominator must be 20");
+if (native.defended.utility_under_attack.denominator !== 20)
+  fail("defended security denominator must be 20");
 
 for (const entry of runIndex.entries || []) {
   if (!entry.receipt_id && !entry.non_call_reason)
@@ -1412,8 +1484,27 @@ set -euo pipefail
 
 OUT="docs/research/llm-shield/evidence/stage-3h-layer2"
 SAMPLE="$OUT/sample-manifest.json"
+PORT="${SIMURGH_STAGE3H_LAYER2_PORT:-33059}"
+BASE="http://127.0.0.1:$PORT/api/llm-shield/gateway"
+LOG_FILE="${TMPDIR:-/tmp}/simurgh-stage3h-layer2-server.log"
+
+SIMURGH_PORT="$PORT" node server.js > "$LOG_FILE" 2>&1 &
+SERVER_PID=$!
+cleanup() {
+  kill "$SERVER_PID" 2>/dev/null || true
+}
+trap cleanup EXIT
+
+for _ in $(seq 1 40); do
+  if curl -fsS "http://127.0.0.1:$PORT/health" >/dev/null 2>&1; then
+    break
+  fi
+  sleep 0.25
+done
+curl -fsS "http://127.0.0.1:$PORT/health" >/dev/null
 
 cd tools/agentdojo-simurgh-adapter
+SIMURGH_GATEWAY_BASE_URL="$BASE" \
 python3 -m simurgh_agentdojo_adapter.layer2_runner \
   --sample-manifest "../../$SAMPLE" \
   --out "../../$OUT"
@@ -1484,17 +1575,28 @@ git commit -m "test(llm-shield): wire Stage 3H-L2 external-run smoke"
 - Generate/Modify: `docs/research/llm-shield/evidence/stage-3h-layer2/simurgh-containment-results.json`
 - Generate/Modify: `docs/research/llm-shield/evidence/stage-3h-layer2/simurgh-run-index.json`
 
-- [ ] **Step 1: Install pinned optional dependency**
+- [ ] **Step 1: Install pinned optional dependency and verify frozen IDs**
 
 Run:
 
 ```bash
 cd tools/agentdojo-simurgh-adapter
 python3 -m pip install -e '.[agentdojo]'
+python3 - <<'PY'
+from pathlib import Path
+from agentdojo.task_suite.load_suites import get_suite
+from simurgh_agentdojo_adapter.layer2_manifest import (
+    load_sample_manifest,
+    validate_agentdojo_sample_ids,
+)
+sample = load_sample_manifest(Path("../../docs/research/llm-shield/evidence/stage-3h-layer2/sample-manifest.json"))
+suite = get_suite(sample["benchmark_version"], sample["suite"])
+print("sample_manifest_ids_exist_in_agentdojo", validate_agentdojo_sample_ids(sample, suite))
+PY
 cd ../..
 ```
 
-Expected: `agentdojo==0.1.30` installs. If install fails, record the exact dependency error and decide whether to pin a working version/commit with a manifest reason or close blocked.
+Expected: `agentdojo==0.1.30` installs and `sample_manifest_ids_exist_in_agentdojo True` prints. If install or ID validation fails, record the exact error and decide whether to pin a working version/commit with a manifest reason or close blocked.
 
 - [ ] **Step 2: Start or verify the real Node gateway path**
 
