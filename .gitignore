@@ -65,3 +65,6 @@ tools/simurgh-daemon-windows/**/obj/
 # Python (Stage 3H adapter)
 __pycache__/
 *.pyc
+
+# Stage 3I opt-in external-run virtualenvs
+tools/agentdojo-simurgh-adapter/.venv*/

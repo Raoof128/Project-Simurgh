@@ -27,10 +27,10 @@
   },
   "defended": {
     "benign_utility": {
-      "counts": "0/10",
+      "counts": "10/10",
       "denominator": 10,
-      "numerator": 0,
-      "rate": 0.0
+      "numerator": 10,
+      "rate": 1.0
     },
     "targeted_asr": {
       "counts": "0/20",
@@ -45,10 +45,10 @@
       "rate": 1.0
     },
     "utility_under_attack": {
-      "counts": "2/20",
+      "counts": "20/20",
       "denominator": 20,
-      "numerator": 2,
-      "rate": 0.1
+      "numerator": 20,
+      "rate": 1.0
     }
   },
   "stage": "3H-L2"

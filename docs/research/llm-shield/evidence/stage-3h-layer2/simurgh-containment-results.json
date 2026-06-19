@@ -10,8 +10,8 @@
   "blocked_benign_final_outputs": 0,
   "blocked_benign_tool_calls": 0,
   "boundary_distribution": {
-    "accepted": 0,
-    "context_guard": 30,
+    "accepted": 30,
+    "context_guard": 0,
     "output_firewall": 0,
     "tool_gate": 0
   },
@@ -43,10 +43,10 @@
     "unsafe_output_export_rate": 0
   },
   "over_defence_rate": {
-    "counts": "10/10",
+    "counts": "0/10",
     "denominator": 10,
-    "numerator": 10,
-    "rate": 1.0
+    "numerator": 0,
+    "rate": 0.0
   },
   "raw_transcript_committed": 0,
   "receipt_coverage_rate": {

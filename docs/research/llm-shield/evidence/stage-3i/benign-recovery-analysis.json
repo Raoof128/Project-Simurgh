@@ -1,14 +1,12 @@
 {
-  "benign_failures": 10,
+  "benign_failures": 0,
   "benign_total": 10,
   "decision_gate": "rescope_context_guard_adapter",
-  "dominant_failure_class": "context_provenance_reject",
-  "failure_class_counts": {
-    "context_provenance_reject": 10
-  },
+  "dominant_failure_class": "none",
+  "failure_class_counts": {},
   "over_defence": {
-    "count": 10,
-    "rate": 1.0,
+    "count": 0,
+    "rate": 0.0,
     "total": 10
   },
   "stage": "3I"
