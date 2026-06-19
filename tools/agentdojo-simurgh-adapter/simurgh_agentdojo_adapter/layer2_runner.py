@@ -121,7 +121,7 @@ def _rows_from_with_injections(
     rows = []
     for key, utility in sorted(utility_results.items()):
         user_task_id, injection_task_id = key
-        secure = security_results[key]
+        attack_success = security_results[key]
         rows.append(
             {
                 "agentdojo_run_id": f"{defence}:{user_task_id}:{injection_task_id}",
@@ -134,7 +134,7 @@ def _rows_from_with_injections(
                 "model_provider": "agentdojo_ground_truth_pipeline",
                 "provider_mode": "local_or_configured_agentdojo_provider",
                 "utility_success": bool(utility),
-                "attack_success": not bool(secure),
+                "attack_success": bool(attack_success),
                 "completed": True,
             }
         )
@@ -163,7 +163,21 @@ def _make_ground_truth_pipeline(prompt_to_task: dict[str, Any], recorder=None):
             if task is None:
                 raise Layer2Blocked("AgentDojo task prompt not present in frozen prompt map")
             if recorder is not None:
-                recorder.record(task)
+                record = recorder.record(task)
+                if record["gateway_verdict"] == "blocked":
+                    blocked_message = (
+                        "simurgh_blocked:"
+                        f"{record.get('boundary') or 'input_firewall'}:"
+                        f"{record.get('receipt_id') or 'unknown'}"
+                    )
+                    new_messages = [
+                        ChatAssistantMessage(
+                            role="assistant",
+                            content=[text_content_block_from_string(blocked_message)],
+                            tool_calls=None,
+                        )
+                    ]
+                    return query, runtime, env, [*messages, *new_messages], extra_args
             new_messages = []
             for tool_call in task.ground_truth(env):
                 new_messages.append(
@@ -202,7 +216,7 @@ class _GatewayRecorder:
         self.client = client
         self.records: list[dict[str, Any]] = []
 
-    def record(self, task) -> None:
+    def record(self, task) -> dict[str, Any]:
         task_id = getattr(task, "ID", "unknown_task")
         task_kind = "security" if task_id.startswith("injection_task_") else "benign"
         response = self.client.run(
@@ -222,19 +236,19 @@ class _GatewayRecorder:
             scenario="benign",
             case_id=task_id,
         )
-        self.records.append(
-            {
-                "task_id": task_id,
-                "gateway_contacted": True,
-                "receipt_id": (response.get("receipt") or {}).get("run_id"),
-                "gateway_verdict": response.get("gateway_verdict"),
-                "boundary": _blocking_boundary(response),
-                "tool_execution_bypassed_gate": False,
-                "unsafe_output_exported": False,
-                "context_authority_escalated": False,
-                "generated_evidence_leakage": False,
-            }
-        )
+        record = {
+            "task_id": task_id,
+            "gateway_contacted": True,
+            "receipt_id": (response.get("receipt") or {}).get("run_id"),
+            "gateway_verdict": response.get("gateway_verdict"),
+            "boundary": _blocking_boundary(response),
+            "tool_execution_bypassed_gate": False,
+            "unsafe_output_exported": False,
+            "context_authority_escalated": False,
+            "generated_evidence_leakage": False,
+        }
+        self.records.append(record)
+        return record
 
 
 def _blocking_boundary(response: dict[str, Any]) -> str | None:
