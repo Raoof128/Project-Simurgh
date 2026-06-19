@@ -1540,6 +1540,14 @@ else
   tail -80 "$LOG_DIR/llm-shield-stage3h-metrics-unit.log"
 fi
 
+step "LLM Shield 3H-L2 deterministic E2E smoke"
+if scripts/e2e-smoke-llm-shield-stage3h-layer2.sh > "$LOG_DIR/llm-shield-stage3h-layer2-e2e-smoke.log" 2>&1; then
+  pass "LLM Shield 3H-L2 deterministic E2E smoke"
+else
+  fail "LLM Shield 3H-L2 deterministic E2E smoke"
+  tail -80 "$LOG_DIR/llm-shield-stage3h-layer2-e2e-smoke.log"
+fi
+
 if [[ "${SIMURGH_RUN_STAGE3H_LAYER2:-0}" == "1" ]]; then
   step "LLM Shield 3H-L2 AgentDojo external run"
   if scripts/smoke-llm-shield-stage3h-layer2.sh > "$LOG_DIR/llm-shield-stage3h-layer2-smoke.log" 2>&1; then

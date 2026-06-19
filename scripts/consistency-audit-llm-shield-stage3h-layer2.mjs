@@ -2,7 +2,9 @@
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 
-const EV = "docs/research/llm-shield/evidence/stage-3h-layer2";
+const EV =
+  process.env.SIMURGH_STAGE3H_LAYER2_EVIDENCE_DIR ||
+  "docs/research/llm-shield/evidence/stage-3h-layer2";
 const fail = (msg) => {
   console.error(`stage3h-layer2 consistency FAIL: ${msg}`);
   process.exit(1);

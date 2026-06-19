@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 import { readdir, readFile, stat } from "node:fs/promises";
 
-const EV = "docs/research/llm-shield/evidence/stage-3h-layer2";
+const EV =
+  process.env.SIMURGH_STAGE3H_LAYER2_EVIDENCE_DIR ||
+  "docs/research/llm-shield/evidence/stage-3h-layer2";
 const FORBIDDEN = [
   /"api_key"\s*:/i,
   /"anthropic_api_key"\s*:/i,
