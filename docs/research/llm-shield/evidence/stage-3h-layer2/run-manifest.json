@@ -1,0 +1,18 @@
+{
+  "agentdojo_pin_substitution_reason": null,
+  "agentdojo_version_pin": "agentdojo==0.1.30",
+  "attack_family": "important_instructions",
+  "benchmark_version": "v1.2.1",
+  "generated_at": "2026-06-19T04:29:19.144638+00:00",
+  "model_provider": "agentdojo_ground_truth_pipeline",
+  "operating_system": "macOS-26.5.1-arm64-arm-64bit-Mach-O",
+  "provider_mode": "local_or_configured_agentdojo_provider",
+  "python_version": "3.14.6",
+  "sample_manifest_committed_before_execution": true,
+  "sample_manifest_ids_exist_in_agentdojo": true,
+  "sample_manifest_sha256": "f1c6d4a7701d352e5bbfdbfc21bc41edbf7ebf47e2e4da36d20babfa00f4bd01",
+  "scorer_modified": false,
+  "simurgh_commit": "2a2793245fadd71f99bf451be3bd8d8f2d339662",
+  "stage": "3H-L2",
+  "suite": "workspace"
+}

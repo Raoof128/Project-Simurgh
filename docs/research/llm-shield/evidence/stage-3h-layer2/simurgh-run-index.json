@@ -1,0 +1,155 @@
+{
+  "entries": [
+    {
+      "agentdojo_run_id": "simurgh:user_task_0:none",
+      "non_call_reason": null,
+      "receipt_id": "gw_run_001"
+    },
+    {
+      "agentdojo_run_id": "simurgh:user_task_1:none",
+      "non_call_reason": null,
+      "receipt_id": "gw_run_002"
+    },
+    {
+      "agentdojo_run_id": "simurgh:user_task_10:none",
+      "non_call_reason": null,
+      "receipt_id": "gw_run_003"
+    },
+    {
+      "agentdojo_run_id": "simurgh:user_task_2:none",
+      "non_call_reason": null,
+      "receipt_id": "gw_run_004"
+    },
+    {
+      "agentdojo_run_id": "simurgh:user_task_3:none",
+      "non_call_reason": null,
+      "receipt_id": "gw_run_005"
+    },
+    {
+      "agentdojo_run_id": "simurgh:user_task_5:none",
+      "non_call_reason": null,
+      "receipt_id": "gw_run_006"
+    },
+    {
+      "agentdojo_run_id": "simurgh:user_task_6:none",
+      "non_call_reason": null,
+      "receipt_id": "gw_run_007"
+    },
+    {
+      "agentdojo_run_id": "simurgh:user_task_7:none",
+      "non_call_reason": null,
+      "receipt_id": "gw_run_008"
+    },
+    {
+      "agentdojo_run_id": "simurgh:user_task_8:none",
+      "non_call_reason": null,
+      "receipt_id": "gw_run_009"
+    },
+    {
+      "agentdojo_run_id": "simurgh:user_task_9:none",
+      "non_call_reason": null,
+      "receipt_id": "gw_run_010"
+    },
+    {
+      "agentdojo_run_id": "simurgh:user_task_0:injection_task_0",
+      "non_call_reason": null,
+      "receipt_id": "gw_run_013"
+    },
+    {
+      "agentdojo_run_id": "simurgh:user_task_0:injection_task_1",
+      "non_call_reason": null,
+      "receipt_id": "gw_run_014"
+    },
+    {
+      "agentdojo_run_id": "simurgh:user_task_1:injection_task_0",
+      "non_call_reason": null,
+      "receipt_id": "gw_run_015"
+    },
+    {
+      "agentdojo_run_id": "simurgh:user_task_1:injection_task_1",
+      "non_call_reason": null,
+      "receipt_id": "gw_run_016"
+    },
+    {
+      "agentdojo_run_id": "simurgh:user_task_10:injection_task_0",
+      "non_call_reason": null,
+      "receipt_id": "gw_run_017"
+    },
+    {
+      "agentdojo_run_id": "simurgh:user_task_10:injection_task_1",
+      "non_call_reason": null,
+      "receipt_id": "gw_run_018"
+    },
+    {
+      "agentdojo_run_id": "simurgh:user_task_2:injection_task_0",
+      "non_call_reason": null,
+      "receipt_id": "gw_run_019"
+    },
+    {
+      "agentdojo_run_id": "simurgh:user_task_2:injection_task_1",
+      "non_call_reason": null,
+      "receipt_id": "gw_run_020"
+    },
+    {
+      "agentdojo_run_id": "simurgh:user_task_3:injection_task_0",
+      "non_call_reason": null,
+      "receipt_id": "gw_run_021"
+    },
+    {
+      "agentdojo_run_id": "simurgh:user_task_3:injection_task_1",
+      "non_call_reason": null,
+      "receipt_id": "gw_run_022"
+    },
+    {
+      "agentdojo_run_id": "simurgh:user_task_5:injection_task_0",
+      "non_call_reason": null,
+      "receipt_id": "gw_run_023"
+    },
+    {
+      "agentdojo_run_id": "simurgh:user_task_5:injection_task_1",
+      "non_call_reason": null,
+      "receipt_id": "gw_run_024"
+    },
+    {
+      "agentdojo_run_id": "simurgh:user_task_6:injection_task_0",
+      "non_call_reason": null,
+      "receipt_id": "gw_run_025"
+    },
+    {
+      "agentdojo_run_id": "simurgh:user_task_6:injection_task_1",
+      "non_call_reason": null,
+      "receipt_id": "gw_run_026"
+    },
+    {
+      "agentdojo_run_id": "simurgh:user_task_7:injection_task_0",
+      "non_call_reason": null,
+      "receipt_id": "gw_run_027"
+    },
+    {
+      "agentdojo_run_id": "simurgh:user_task_7:injection_task_1",
+      "non_call_reason": null,
+      "receipt_id": "gw_run_028"
+    },
+    {
+      "agentdojo_run_id": "simurgh:user_task_8:injection_task_0",
+      "non_call_reason": null,
+      "receipt_id": "gw_run_029"
+    },
+    {
+      "agentdojo_run_id": "simurgh:user_task_8:injection_task_1",
+      "non_call_reason": null,
+      "receipt_id": "gw_run_030"
+    },
+    {
+      "agentdojo_run_id": "simurgh:user_task_9:injection_task_0",
+      "non_call_reason": null,
+      "receipt_id": "gw_run_031"
+    },
+    {
+      "agentdojo_run_id": "simurgh:user_task_9:injection_task_1",
+      "non_call_reason": null,
+      "receipt_id": "gw_run_032"
+    }
+  ],
+  "stage": "3H-L2"
+}
