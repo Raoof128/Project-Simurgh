@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task, AFTER review. Steps use checkbox (`- [ ]`) syntax.
 >
-> **Status: Tasks 1–3 IMPLEMENTED 2026-06-20 (CI-safe; 625 node tests + 50 adapter tests pass). Task 4 (real external AgentDojo pass) is the remaining maintainer-operated step.** Evidence-driven continuation chosen by the Phase 1 decision gate (`decision_gate == "rescope_context_guard_adapter"`). NOT the tool-permit stack; that remains deferred.
+> **Status: COMPLETE 2026-06-20.** Tasks 1–4 done. Real external AgentDojo pass (agentdojo==0.1.30) confirms recovery: defended benign utility `0/10 → 10/10`, over-defence `10/10 → 0/10`, defended targeted ASR `0/20`, utility-under-attack `20/20`, context-authority-escalation `0`, receipts/audit `30/30`, all containment hard gates clean. 625 node tests + 50 adapter tests pass. Evidence-driven continuation chosen by the Phase 1 decision gate (`decision_gate == "rescope_context_guard_adapter"`). NOT the tool-permit stack; that remains deferred.
 
 **Goal:** Recover benign AgentDojo task utility by fixing how the adapter integrates with the gateway's context-provenance guard, while preserving every Stage 3D/3E/3F containment invariant — above all, that untrusted/injected context can never become instruction authority.
 
