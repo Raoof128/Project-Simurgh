@@ -268,6 +268,7 @@ def run_external_agentdojo(*, sample_manifest_path: str | Path, out_dir: str | P
             benchmark_suite_with_injections,
             benchmark_suite_without_injections,
         )
+        from agentdojo.logging import OutputLogger
         from agentdojo.task_suite.load_suites import get_suite
     except Exception as exc:
         raise Layer2Blocked(f"AgentDojo external run blocked: {exc}") from exc
@@ -288,26 +289,27 @@ def run_external_agentdojo(*, sample_manifest_path: str | Path, out_dir: str | P
     )
 
     baseline_pipeline = _make_ground_truth_pipeline(prompt_to_task)
-    baseline_pipeline.name = "simurgh-layer2-baseline-ground-truth"
-    baseline_benign = benchmark_suite_without_injections(
-        baseline_pipeline,
-        suite,
-        logdir=None,
-        force_rerun=True,
-        user_tasks=sample["benign_task_ids"],
-        benchmark_version=sample["benchmark_version"],
-    )
-    baseline_attack = load_attack(sample["attack_family"], suite, baseline_pipeline)
-    baseline_security = benchmark_suite_with_injections(
-        baseline_pipeline,
-        suite,
-        baseline_attack,
-        logdir=None,
-        force_rerun=True,
-        user_tasks=security_user_ids,
-        injection_tasks=injection_ids,
-        benchmark_version=sample["benchmark_version"],
-    )
+    baseline_pipeline.name = "gpt-4o-2024-05-13-simurgh-layer2-baseline-ground-truth"
+    with OutputLogger(logdir=None):
+        baseline_benign = benchmark_suite_without_injections(
+            baseline_pipeline,
+            suite,
+            logdir=None,
+            force_rerun=True,
+            user_tasks=sample["benign_task_ids"],
+            benchmark_version=sample["benchmark_version"],
+        )
+        baseline_attack = load_attack(sample["attack_family"], suite, baseline_pipeline)
+        baseline_security = benchmark_suite_with_injections(
+            baseline_pipeline,
+            suite,
+            baseline_attack,
+            logdir=None,
+            force_rerun=True,
+            user_tasks=security_user_ids,
+            injection_tasks=injection_ids,
+            benchmark_version=sample["benchmark_version"],
+        )
     baseline_rows = _rows_from_without_injections(
         baseline_benign["utility_results"], defence="none"
     ) + _rows_from_with_injections(
@@ -322,26 +324,27 @@ def run_external_agentdojo(*, sample_manifest_path: str | Path, out_dir: str | P
         client.create_session()
     recorder = _GatewayRecorder(client)
     defended_pipeline = _make_ground_truth_pipeline(prompt_to_task, recorder=recorder)
-    defended_pipeline.name = "simurgh-layer2-defended-ground-truth"
-    defended_benign = benchmark_suite_without_injections(
-        defended_pipeline,
-        suite,
-        logdir=None,
-        force_rerun=True,
-        user_tasks=sample["benign_task_ids"],
-        benchmark_version=sample["benchmark_version"],
-    )
-    defended_attack = load_attack(sample["attack_family"], suite, defended_pipeline)
-    defended_security = benchmark_suite_with_injections(
-        defended_pipeline,
-        suite,
-        defended_attack,
-        logdir=None,
-        force_rerun=True,
-        user_tasks=security_user_ids,
-        injection_tasks=injection_ids,
-        benchmark_version=sample["benchmark_version"],
-    )
+    defended_pipeline.name = "gpt-4o-2024-05-13-simurgh-layer2-defended-ground-truth"
+    with OutputLogger(logdir=None):
+        defended_benign = benchmark_suite_without_injections(
+            defended_pipeline,
+            suite,
+            logdir=None,
+            force_rerun=True,
+            user_tasks=sample["benign_task_ids"],
+            benchmark_version=sample["benchmark_version"],
+        )
+        defended_attack = load_attack(sample["attack_family"], suite, defended_pipeline)
+        defended_security = benchmark_suite_with_injections(
+            defended_pipeline,
+            suite,
+            defended_attack,
+            logdir=None,
+            force_rerun=True,
+            user_tasks=security_user_ids,
+            injection_tasks=injection_ids,
+            benchmark_version=sample["benchmark_version"],
+        )
     verify = client.verify()
     if verify.get("valid") is not True:
         raise Layer2Blocked("Simurgh gateway audit verification failed")
