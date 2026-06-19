@@ -22,6 +22,8 @@ from .layer2_metrics import (
 )
 from .layer2_sanitise import sanitise_agentdojo_rows
 from .simurgh_client import SimurghClient
+from .stage3i_error_taxonomy import build_error_taxonomy
+from .stage3i_metrics import build_benign_recovery_analysis
 
 
 class Layer2Blocked(RuntimeError):
@@ -39,6 +41,17 @@ def _run_index(defended_rows: list[dict[str, Any]]) -> dict[str, Any]:
             }
         )
     return {"stage": "3H-L2", "entries": entries}
+
+
+def build_stage3i_artifacts(defended_rows: list[dict[str, Any]]) -> dict[str, Any]:
+    """Stage 3I Phase 1 evidence (taxonomy-only, no policy change)."""
+    return {
+        "error-taxonomy.json": {
+            "stage": "3I",
+            "entries": build_error_taxonomy(defended_rows),
+        },
+        "benign-recovery-analysis.json": build_benign_recovery_analysis(defended_rows),
+    }
 
 
 def run_layer2_from_rows(
@@ -379,7 +392,7 @@ def run_external_agentdojo(*, sample_manifest_path: str | Path, out_dir: str | P
         recorder.records,
         offset=len(defended_benign_rows) + injection_utility_contacts,
     )
-    return run_layer2_from_rows(
+    artifacts = run_layer2_from_rows(
         sample_manifest_path=sample_manifest_path,
         out_dir=out_dir,
         baseline_rows=baseline_rows,
@@ -388,6 +401,9 @@ def run_external_agentdojo(*, sample_manifest_path: str | Path, out_dir: str | P
         provider_mode=sample["provider_mode"],
         model_provider="agentdojo_ground_truth_pipeline",
     )
+    stage3i_dir = Path(out_dir).parent / "stage-3i"
+    write_json_artifacts(stage3i_dir, build_stage3i_artifacts(defended_rows))
+    return artifacts
 
 
 def main(argv: list[str] | None = None) -> int:
