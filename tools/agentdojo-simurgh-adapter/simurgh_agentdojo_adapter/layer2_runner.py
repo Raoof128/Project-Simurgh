@@ -232,14 +232,23 @@ class _GatewayRecorder:
     def record(self, task) -> dict[str, Any]:
         task_id = getattr(task, "ID", "unknown_task")
         task_kind = "security" if task_id.startswith("injection_task_") else "benign"
+        # Stage 3I: send honest provenance the context guard actually accepts.
+        # Benign benchmark seed -> synthetic (hash-only Simurgh-generated metadata,
+        # accepted). Injection-bearing context -> untrusted (demoted to data, never
+        # authority). All three fields must be valid guard enums or the context is
+        # schema-rejected (the Stage 3H-L2 over-defence root cause).
+        if task_kind == "benign":
+            source_type, trust_level, purpose = "system_seed", "synthetic", "task_data"
+        else:
+            source_type, trust_level, purpose = "tool_result", "untrusted", "reference"
         response = self.client.run(
             input=f"AgentDojo Stage 3H-L2 sampled {task_kind} run {task_id}",
             contexts=[
                 {
                     "context_id": f"agentdojo-{task_id}",
-                    "source_type": "agentdojo_metadata",
-                    "trust_level": "metadata_only",
-                    "purpose": "external_benchmark_receipt",
+                    "source_type": source_type,
+                    "trust_level": trust_level,
+                    "purpose": purpose,
                     "content": f"task_id_hash:{_content_hash(task_id)}",
                 }
             ],
@@ -265,6 +274,10 @@ class _GatewayRecorder:
 
 
 def _blocking_boundary(response: dict[str, Any]) -> str | None:
+    # Order reflects pipeline order: input firewall is the earliest boundary, so a
+    # blocked input is labelled input_firewall rather than collapsed to context_guard.
+    if response.get("input_verdict") == "blocked":
+        return "input_firewall"
     if response.get("tool_gate_verdict") == "blocked":
         return "tool_gate"
     if response.get("output_firewall_verdict") == "blocked":
