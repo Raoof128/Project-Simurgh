@@ -498,6 +498,6 @@ metadata-only receipt generation, and audit-chain verification.
   Injections** (2025) — six patterns; positions filtering vs provable isolation.
   https://arxiv.org/abs/2506.08837
 - Debenedetti et al., **Defeating Prompt Injections by Design (CaMeL)** (2025) — control/data-flow
-  + capabilities; architectural reference for a future Stage 3I. https://arxiv.org/abs/2503.18813
+  - capabilities; architectural reference for a future Stage 3I. https://arxiv.org/abs/2503.18813
 - **AgentDyn** (2026) — deferred later benchmark; 60 open-ended tasks, 560 injection cases.
   https://arxiv.org/abs/2602.03117
