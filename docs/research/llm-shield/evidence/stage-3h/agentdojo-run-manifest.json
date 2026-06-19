@@ -1,0 +1,9 @@
+{
+  "stage": "3H",
+  "suite": "workspace",
+  "mode": "canary_dry_run",
+  "agentdojo_version_pin": "agentdojo==0.1.30",
+  "simurgh_commit": "local",
+  "scorer_modified": false,
+  "generated_at": "2026-06-19T00:02:45.174Z"
+}

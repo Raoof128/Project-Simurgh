@@ -1508,6 +1508,38 @@ else
   tail -80 "$LOG_DIR/llm-shield-stage3g-privacy-audit.log"
 fi
 
+step "LLM Shield 3H AgentDojo harness smoke"
+if scripts/smoke-llm-shield-stage3h.sh > "$LOG_DIR/llm-shield-stage3h-smoke.log" 2>&1; then
+  pass "LLM Shield 3H AgentDojo harness smoke"
+else
+  fail "LLM Shield 3H AgentDojo harness smoke"
+  tail -80 "$LOG_DIR/llm-shield-stage3h-smoke.log"
+fi
+
+step "LLM Shield 3H security audit"
+if scripts/security-audit-llm-shield-stage3h.sh > "$LOG_DIR/llm-shield-stage3h-security-audit.log" 2>&1; then
+  pass "LLM Shield 3H security audit"
+else
+  fail "LLM Shield 3H security audit"
+  tail -80 "$LOG_DIR/llm-shield-stage3h-security-audit.log"
+fi
+
+step "LLM Shield 3H privacy audit"
+if node scripts/privacy-audit-llm-shield-stage3h.mjs > "$LOG_DIR/llm-shield-stage3h-privacy-audit.log" 2>&1; then
+  pass "LLM Shield 3H privacy audit"
+else
+  fail "LLM Shield 3H privacy audit"
+  tail -80 "$LOG_DIR/llm-shield-stage3h-privacy-audit.log"
+fi
+
+step "LLM Shield 3H metrics unit test"
+if node --test tests/unit/llmShield/stage3hMetricsLib.test.js > "$LOG_DIR/llm-shield-stage3h-metrics-unit.log" 2>&1; then
+  pass "LLM Shield 3H metrics unit test"
+else
+  fail "LLM Shield 3H metrics unit test"
+  tail -80 "$LOG_DIR/llm-shield-stage3h-metrics-unit.log"
+fi
+
 step "LLM Shield 3F/3G helper function coverage"
 if node --test --experimental-test-coverage \
   --test-coverage-include=tests/e2e/llm_shield_stage3f_benchmark_lib.mjs \

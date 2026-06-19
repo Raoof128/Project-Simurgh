@@ -61,3 +61,7 @@ tools/simurgh-daemon-windows/**/obj/
 *.lof
 *.lot
 *.bbl
+
+# Python (Stage 3H adapter)
+__pycache__/
+*.pyc
