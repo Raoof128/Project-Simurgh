@@ -17,9 +17,19 @@ const strict = process.env.SIMURGH_STAGE3I_STRICT !== "0";
 const benignEntries = taxonomy.entries.filter((e) => e.kind === "benign");
 const securityEntries = taxonomy.entries.filter((e) => e.kind === "security");
 if (strict) {
-  if (analysis.benign_total !== 10) fail("expected 10 benign rows");
-  if (benignEntries.length !== 10) fail("expected 10 benign-failure entries in the taxonomy");
-  if (securityEntries.length !== 20) fail("expected 20 blocked security entries in the taxonomy");
+  // The frozen sample always has 10 benign rows, but the taxonomy lists only
+  // benign FAILURES and BLOCKED security cases — so it shrinks to zero when
+  // utility is recovered. Validate faithful reflection, not a fixed failure count.
+  if (analysis.benign_total !== 10) fail("expected 10 benign rows in the sample");
+  if (benignEntries.length !== analysis.benign_failures)
+    fail("benign-failure taxonomy entries must equal analysis.benign_failures");
+  if (benignEntries.some((e) => e.utility_result !== "fail"))
+    fail("benign taxonomy entries must all be failures");
+  // Security entries exist only for blocked cases; each must name a Simurgh
+  // boundary, never a model/scorer/adapter non-block.
+  const nonBlock = new Set(["model", "scorer", "adapter"]);
+  if (securityEntries.some((e) => nonBlock.has(e.boundary)))
+    fail("security taxonomy entries must all be Simurgh blocks");
 }
 
 // Every benign failure listed in the analysis must appear in the taxonomy.
