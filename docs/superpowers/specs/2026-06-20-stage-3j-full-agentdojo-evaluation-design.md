@@ -79,6 +79,10 @@ Reuses the Stage 3H adapter (`tools/agentdojo-simurgh-adapter/`) and the Stage 3
 - **3J-E — Audits.** Privacy, consistency, security audits + workspace/all-suite smoke gates.
 - **3J-F — Closeout + PR.** Reviewer docs, closeout, and PR.
 
+## Completion criterion
+
+Stage 3J is not complete until the all-suite pinned lane has executed and passed the containment hard gates. A workspace-only run may be committed as an intermediate checkpoint (and a draft PR is acceptable at that point), but it cannot support the Stage 3J release/tag headline. If the all-suite run proves impractical to execute, the stage must be re-scoped/renamed rather than tagged as the full Stage 3J.
+
 ## Metrics
 
 **AgentDojo-native (unchanged scorer):** `benign_utility`, `utility_under_attack`, `targeted_asr` — reported with numerator/denominator, baseline and defended, globally and per suite.
@@ -103,7 +107,7 @@ native_agentdojo_scorer_changed == false
 python_side_safety_classifier == false
 ```
 
-**Soft / report-only (measured, not gated at first):** `benign_utility`, `utility_under_attack`, `targeted_asr`, per-suite utility loss, per-suite ASR, dominant failure classes, runtime/cost. Rationale: AgentDojo reports that current LLMs solve well under two-thirds of tasks even without attacks, and the deterministic harness may not complete every task; a hard utility gate up front would be dishonest. If a suite shows a utility regression, that is a Stage 3K calibration target, not a Stage 3J failure.
+**Soft / report-only (measured, not gated at first):** `benign_utility`, `utility_under_attack`, `targeted_asr`, per-suite utility loss, per-suite ASR, dominant failure classes, runtime/cost. Rationale: AgentDojo reports that current LLMs solve well under two-thirds of tasks even without attacks, and the deterministic harness may not complete every task; a hard utility gate up front would be dishonest. A utility regression is not a Stage 3J failure unless it is caused by a violated containment/evidence invariant, scorer drift, Python-side safety logic, or metadata leakage; an honest utility regression with clean hard gates is a Stage 3K calibration target, not a Stage 3J failure.
 
 ## File plan
 
