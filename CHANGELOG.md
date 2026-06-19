@@ -1,5 +1,29 @@
 ## Change Log
 
+## [stage-3h-agentdojo-external-run] — 2026-06-19 — Sampled AgentDojo external-number run
+
+**Raouf:** Stage 3H-L2 executes the pinned sampled AgentDojo workspace run in baseline and Simurgh-defended modes, preserving the unchanged AgentDojo scorer and exporting metadata-only Simurgh evidence. The stage reports native Utility, Utility Under Attack, and Targeted ASR with numerator/denominator counts, plus containment, receipt, audit, gateway-contact, and over-defence metrics. In the deterministic ground-truth mode, baseline Targeted ASR was `0/20` and defended Targeted ASR was `0/20`; defended benign utility dropped from `10/10` to `0/10`, and over-defence was `10/10`. Full workspace and all-suite runs remain deferred.
+
+### Added
+
+- `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/layer2_{manifest,metrics,sanitise,runner}.py` and `agentdojo_register.py`.
+- `tools/agentdojo-simurgh-adapter/tests/test_layer2_*.py` and `test_agentdojo_register.py`.
+- `docs/research/llm-shield/evidence/stage-3h-layer2/**` — frozen sample, run manifest, AgentDojo-native results, Simurgh containment metrics, run index, and summary metrics.
+- `scripts/smoke-llm-shield-stage3h-layer2.sh`, `scripts/security-audit-llm-shield-stage3h-layer2.sh`, `scripts/privacy-audit-llm-shield-stage3h-layer2.mjs`, and `scripts/consistency-audit-llm-shield-stage3h-layer2.mjs`.
+- Reviewer docs: `LLM_SHIELD_STAGE_3H_LAYER2_AGENTDOJO_EXTERNAL_RUN.md`, `STAGE_3H_LAYER2_{THREAT_MODEL,VALIDATION_MATRIX,REVIEWER_CHECKLIST,CLOSEOUT}.md`.
+
+### Changed
+
+- `scripts/check.sh` — adds an explicit opt-in `SIMURGH_RUN_STAGE3H_LAYER2=1` gate for the external run.
+
+### Verified
+
+- `/tmp/simurgh-stage3h-l2-venv/bin/python -m pytest tools/agentdojo-simurgh-adapter/tests -q` passed.
+- `SIMURGH_STAGE3H_LAYER2_PYTHON=/tmp/simurgh-stage3h-l2-venv/bin/python SIMURGH_RUN_STAGE3H_LAYER2=1 scripts/smoke-llm-shield-stage3h-layer2.sh` passed.
+- `node scripts/privacy-audit-llm-shield-stage3h-layer2.mjs`, `node scripts/consistency-audit-llm-shield-stage3h-layer2.mjs`, and `scripts/security-audit-llm-shield-stage3h-layer2.sh` passed.
+
+---
+
 ## [stage-3h-agentdojo-harness-core] — 2026-06-19 — External AgentDojo benchmark harness (core)
 
 **Raouf:** Stage 3H makes the LLM Shield externally benchmark-compatible by inserting Simurgh as an in-loop mediating defence (transport + enforcement only) that calls the real Node HTTP gateway, with AgentDojo's task definitions and scoring logic left unchanged. A Python adapter (`tools/agentdojo-simurgh-adapter/`) forwards each step to the gateway and enforces the returned verdict; it performs no safety classification. The mandatory CI path is a no-AgentDojo, no-network canary dry-run that drives a vendored 30-case workspace fixture through the real gateway, demonstrating containment across three boundaries (context guard, tool gate, output firewall) with benign and hard-negative controls passing cleanly (over-defence 0/10). Stage 3H-core ships the harness; a full Layer-2 AgentDojo external run is supported by design but not claimed unless executed separately with the pinned AgentDojo dependency (future tag `v1.1.0-stage-3h-agentdojo-external-run`). Not jailbreak immunity, not provable security; receipts attest process, not ground truth.

@@ -2,6 +2,15 @@
 
 ## Agent Change Log
 
+### 2026-06-19 (Australia/Sydney) — Stage 3H-L2 sampled AgentDojo external run
+
+**Raouf:**
+
+- **Scope:** Required sampled AgentDojo workspace external run: 10 benign tasks and 20 security cases, baseline and Simurgh-defended under identical pinned conditions (`agentdojo==0.1.30`, benchmark `v1.2.1`, attack `important_instructions`).
+- **Summary:** Added Layer-2 manifest, metrics, sanitising, registration, runner, smoke, privacy, consistency, and security audit paths. The run uses AgentDojo's native task suite and scorer with a deterministic ground-truth pipeline so it is key-free and reproducible. Results are intentionally not tuned: baseline Targeted ASR was 0/20 and defended Targeted ASR was 0/20; defended benign utility dropped to 0/10 and over-defence was 10/10. Simurgh evidence remained metadata-only with gateway contact, receipt coverage, and audit verification at 30/30.
+- **Files changed:** `tools/agentdojo-simurgh-adapter/**`, `docs/research/llm-shield/evidence/stage-3h-layer2/**`, `scripts/*stage3h-layer2*`, Stage 3H-L2 reviewer docs, `scripts/check.sh`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** Adapter pytest passed (30/30); Stage 3H-L2 smoke passed; Stage 3H-L2 privacy, consistency, and security audits passed.
+
 ### 2026-06-19 (Australia/Sydney) — Stage 3H external AgentDojo benchmark harness (core)
 
 **Raouf:**
