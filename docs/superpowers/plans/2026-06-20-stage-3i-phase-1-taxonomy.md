@@ -27,8 +27,9 @@
 - Modify: `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/layer2_runner.py` — emit `error-taxonomy.json` + `benign-recovery-analysis.json` into the Stage 3I evidence dir during the opt-in external run (no behaviour change to baseline/defended runs).
 - Create: `tools/agentdojo-simurgh-adapter/tests/test_stage3i_error_taxonomy.py`
 - Create: `tools/agentdojo-simurgh-adapter/tests/test_stage3i_metrics.py`
-- Create: `scripts/privacy-audit-llm-shield-stage3i.mjs` — fails if Stage 3I evidence carries any forbidden raw key.
-- Create: `scripts/consistency-audit-llm-shield-stage3i.mjs` — fails if taxonomy/analysis counts disagree with each other or with the frozen 3H-L2 totals.
+- Create: `scripts/privacy-audit-llm-shield-stage3i.mjs` — fails if Stage 3I evidence carries any forbidden raw key or any raw `user_task_*` / `injection_task_*` identifier.
+- Create: `scripts/consistency-audit-llm-shield-stage3i.mjs` — fails if taxonomy/analysis counts disagree with each other or with the frozen 3H-L2 totals (10 benign + 20 security).
+- Create: `scripts/smoke-llm-shield-stage3i-phase1.sh` — CI-safe Stage 3I gate running both audits against committed evidence.
 
 The classifier and metrics are split because they are reviewed on different criteria (classification correctness vs aggregate/gate correctness) and a reviewer could reject one while approving the other.
 
@@ -132,15 +133,25 @@ def test_build_taxonomy_covers_benign_failures_and_blocked_security_only():
     taxonomy = build_error_taxonomy(rows)
     # benign failure (row 1) + blocked security (row 2); skip passing-benign and accepted-security
     assert len(taxonomy) == 2
-    benign_entry = next(e for e in taxonomy if e["mode"] == "defended" and e["case_id"] == "user_task_1")
+    benign_entry = next(e for e in taxonomy if e["kind"] == "benign")
     assert benign_entry["primary_failure_class"] == "context_provenance_reject"
     assert benign_entry["utility_result"] == "fail"
     assert benign_entry["audit_chain_valid"] is True
-    # hashes only — never raw ids
-    assert benign_entry["task_id_hash"] != "user_task_1"
+    # positional ref + hashes only — never raw ids
+    assert benign_entry["case_ref"] == "benign_000"
+    assert len(benign_entry["case_hash"]) == 64
     assert len(benign_entry["task_id_hash"]) == 64
     assert len(benign_entry["receipt_hash"]) == 64
+    assert "case_id" not in benign_entry
     assert "task_id" not in benign_entry
+    assert "security_case_id" not in benign_entry
+    security_entry = next(e for e in taxonomy if e["kind"] == "security")
+    assert security_entry["case_ref"] == "security_001"
+    # case_hash hashes the security_case_id, not the bare task_id
+    import hashlib
+    assert security_entry["case_hash"] == hashlib.sha256(
+        b"user_task_2::injection_task_0"
+    ).hexdigest()
 ```
 
 - [ ] **Step 2: Run test to verify it fails**
@@ -217,12 +228,18 @@ def build_error_taxonomy(defended_rows: list[dict[str, Any]]) -> list[dict[str, 
         if not (_is_benign_failure(row) or _is_blocked_security(row)):
             continue
         failure_class, boundary = classify_failure(row)
-        case_id = row.get("task_id", "unknown_task")
+        kind = row.get("kind", "case")
+        # positional reference only — never the raw task identifier
+        case_ref = f"{kind}_{len(entries):03d}"
+        raw_case_id = row.get("security_case_id") or row.get("task_id") or "unknown_case"
+        task_id = str(row.get("task_id", "unknown_task"))
         receipt_id = row.get("receipt_id") or "none"
         entries.append(
             {
-                "case_id": case_id,
-                "task_id_hash": _sha256(case_id),
+                "case_ref": case_ref,
+                "case_hash": _sha256(raw_case_id),
+                "task_id_hash": _sha256(task_id),
+                "kind": kind,
                 "mode": "defended",
                 "utility_result": "pass" if row.get("utility_success") else "fail",
                 "primary_failure_class": failure_class,
@@ -561,12 +578,20 @@ for (const name of ["error-taxonomy.json", "benign-recovery-analysis.json"]) {
   for (const key of FORBIDDEN) {
     if (lower.includes(`"${key}"`)) fail(`${name} contains forbidden key ${key}`);
   }
+  // raw AgentDojo identifiers must never appear, in any field or value
+  if (/user_task_\d+/i.test(text)) fail(`${name} contains raw user_task id`);
+  if (/injection_task_\d+/i.test(text)) fail(`${name} contains raw injection_task id`);
   const doc = JSON.parse(text);
   if (name === "error-taxonomy.json") {
     for (const entry of doc.entries) {
-      if (typeof entry.task_id_hash !== "string" || entry.task_id_hash.length !== 64)
-        fail("task_id_hash must be a 64-char sha256");
+      for (const hk of ["case_hash", "task_id_hash", "receipt_hash"]) {
+        if (typeof entry[hk] !== "string" || entry[hk].length !== 64)
+          fail(`${hk} must be a 64-char sha256`);
+      }
+      if ("case_id" in entry) fail("error-taxonomy must not carry raw case_id");
       if ("task_id" in entry) fail("error-taxonomy must not carry raw task_id");
+      if ("security_case_id" in entry)
+        fail("error-taxonomy must not carry raw security_case_id");
     }
   }
 }
@@ -593,8 +618,21 @@ const readJson = async (n) => JSON.parse(await readFile(`${EV}/${n}`, "utf8"));
 const taxonomy = await readJson("error-taxonomy.json");
 const analysis = await readJson("benign-recovery-analysis.json");
 
-// Count benign-failure entries listed in the taxonomy.
-const taxonomyBenignFailures = taxonomy.entries.filter(
+// Closeout coverage: the frozen 3H-L2 sample is 10 benign + 20 security.
+// (Set SIMURGH_STAGE3I_STRICT=0 to relax for a smaller dev fixture.)
+const strict = process.env.SIMURGH_STAGE3I_STRICT !== "0";
+const benignEntries = taxonomy.entries.filter((e) => e.kind === "benign");
+const securityEntries = taxonomy.entries.filter((e) => e.kind === "security");
+if (strict) {
+  if (analysis.benign_total !== 10) fail("expected 10 benign rows");
+  if (benignEntries.length !== 10)
+    fail("expected 10 benign-failure entries in the taxonomy");
+  if (securityEntries.length !== 20)
+    fail("expected 20 blocked security entries in the taxonomy");
+}
+
+// Every benign failure listed in the analysis must appear in the taxonomy.
+const taxonomyBenignFailures = benignEntries.filter(
   (e) => e.utility_result === "fail",
 ).length;
 if (taxonomyBenignFailures < analysis.benign_failures)
@@ -622,7 +660,7 @@ console.log("stage3i consistency OK");
 
 - [ ] **Step 3: Generate a Stage 3I evidence fixture to run the audits against**
 
-The audits need committed evidence. Until the opt-in external run is executed (Step 5), generate a deterministic fixture from the frozen 3H-L2 boundary distribution (all benign defended cases blocked at `context_guard`):
+The audits need committed evidence. Until the opt-in external run is executed (Step 6), generate a deterministic fixture that mirrors the frozen 3H-L2 boundary distribution exactly — 10 benign + 20 security, all blocked at `context_guard` (`context_guard: 30, tool_gate: 0`):
 
 ```bash
 cd /Users/raoof.r12/Desktop/Raouf/Project-Simurgh
@@ -632,38 +670,71 @@ python3 -c "
 from pathlib import Path
 from simurgh_agentdojo_adapter.evidence_writer import write_json_artifacts
 from simurgh_agentdojo_adapter.layer2_runner import build_stage3i_artifacts
-rows = [
+benign = [
     {'kind':'benign','task_id':f'user_task_{i}','utility_success':False,
      'gateway_verdict':'blocked','boundary':'context_guard',
      'receipt_id':f'gw_run_{i:03d}','audit_verified':True}
     for i in range(10)
 ]
+security = [
+    {'kind':'security','task_id':f'user_task_{i}',
+     'security_case_id':f'user_task_{i}::injection_task_{j}',
+     'utility_success':False,'attack_success':False,
+     'gateway_verdict':'blocked','boundary':'context_guard',
+     'receipt_id':f'gw_run_{100+i*2+j:03d}','audit_verified':True}
+    for i in range(10) for j in range(2)
+]
 out = Path('../../docs/research/llm-shield/evidence/stage-3i')
-write_json_artifacts(str(out), build_stage3i_artifacts(rows))
+write_json_artifacts(str(out), build_stage3i_artifacts(benign + security))
 print('wrote', sorted(p.name for p in out.iterdir()))
 "
 ```
 
-Expected: `wrote ['benign-recovery-analysis.json', 'error-taxonomy.json']`
+Expected: `wrote ['benign-recovery-analysis.json', 'error-taxonomy.json']` (10 benign + 20 security taxonomy entries)
 
-- [ ] **Step 4: Run both audits to verify they pass**
+- [ ] **Step 4: Add the Stage 3I Phase 1 smoke gate**
+
+Stage 3H-L2's smoke has no env gate — it runs the external runner directly and only succeeds if `agentdojo==0.1.30` is installed. Phase 1's gate is CI-safe: it runs the two audits against committed evidence, no AgentDojo needed. Create `scripts/smoke-llm-shield-stage3i-phase1.sh`:
+
+```bash
+#!/usr/bin/env bash
+# SPDX-License-Identifier: AGPL-3.0-or-later
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$ROOT"
+
+node scripts/privacy-audit-llm-shield-stage3i.mjs
+node scripts/consistency-audit-llm-shield-stage3i.mjs
+echo "stage3i-phase1 smoke: passed"
+```
+
+Make it executable: `chmod +x scripts/smoke-llm-shield-stage3i-phase1.sh`
+
+- [ ] **Step 5: Run the smoke gate to verify it passes**
 
 Run:
 ```bash
 cd /Users/raoof.r12/Desktop/Raouf/Project-Simurgh
-node scripts/privacy-audit-llm-shield-stage3i.mjs
-node scripts/consistency-audit-llm-shield-stage3i.mjs
+bash scripts/smoke-llm-shield-stage3i-phase1.sh
 ```
-Expected: `stage3i privacy OK` then `stage3i consistency OK`. (The fixture's `decision_gate` will read `rescope_context_guard_adapter`, matching the empirical 3H-L2 root cause.)
+Expected:
+```
+stage3i privacy OK
+stage3i consistency OK
+stage3i-phase1 smoke: passed
+```
+(The fixture's `decision_gate` reads `rescope_context_guard_adapter`, matching the empirical 3H-L2 root cause.)
 
-- [ ] **Step 5: Commit**
+- [ ] **Step 6: Commit**
 
 ```bash
 cd /Users/raoof.r12/Desktop/Raouf/Project-Simurgh
 git add scripts/privacy-audit-llm-shield-stage3i.mjs \
         scripts/consistency-audit-llm-shield-stage3i.mjs \
+        scripts/smoke-llm-shield-stage3i-phase1.sh \
         docs/research/llm-shield/evidence/stage-3i/
-git commit -m "feat(llm-shield): add stage 3I phase-1 privacy + consistency audits with evidence fixture"
+git commit -m "feat(llm-shield): add stage 3I phase-1 audits, smoke gate, and evidence fixture"
 ```
 
 ---
@@ -685,11 +756,15 @@ decision_gate == "rescope_context_guard_adapter"   (expected, per frozen 3H-L2)
       any tool-permit machinery.
 ```
 
-The opt-in external run (maintainer-operated, needs `agentdojo==0.1.30`):
+The opt-in external run (maintainer-operated, needs `agentdojo==0.1.30` installed in the adapter venv). There is no env gate — the Layer-2 runner raises `Layer2Blocked` if AgentDojo is absent, so installing the extra is the opt-in:
 
 ```bash
-SIMURGH_RUN_STAGE3I_AGENTDOJO=1 bash scripts/smoke-llm-shield-stage3h-layer2.sh
-# emits docs/research/llm-shield/evidence/stage-3i/{error-taxonomy,benign-recovery-analysis}.json
+# 1. real external run — Task 3 makes this also emit the stage-3i artifacts
+bash scripts/smoke-llm-shield-stage3h-layer2.sh
+#    -> writes docs/research/llm-shield/evidence/stage-3i/{error-taxonomy,benign-recovery-analysis}.json
+#       (overwriting the dev fixture with the real frozen-run taxonomy)
+# 2. re-run the Stage 3I gate against the now-real evidence
+bash scripts/smoke-llm-shield-stage3i-phase1.sh
 ```
 
 Phases 2–5 (task permits, calibrated policy, utility-recovery run, regression/closeout) get their own implementation plan **after** this checkpoint, because the design doc's decision gate makes their shape depend on the taxonomy output. Writing them now would mean writing TDD tasks for code whose target boundary is not yet decided.
@@ -703,7 +778,8 @@ Phases 2–5 (task permits, calibrated policy, utility-recovery run, regression/
 - "All benign failures have a primary failure class" → Task 1 `build_error_taxonomy` + classifier covers every benign failure path. ✅
 - "No policy behaviour changes yet" → Tasks only read rows and emit evidence; no gateway/policy edits. ✅
 - Over-defence precise definition (Simurgh-boundary-only) → Task 2 `compute_over_defence`. ✅
-- Metadata-only evidence (hashes only, no raw task text) → Task 1 hashing + Task 3 metadata-only-contract test + Task 4 privacy audit. ✅
+- Metadata-only evidence (hashes only, no raw task text or raw ids) → Task 1 emits `case_ref` (positional) + `case_hash`/`task_id_hash`/`receipt_hash` (sha256), never raw `case_id`/`task_id`/`security_case_id`; Task 3 metadata-only-contract test; Task 4 privacy audit greps for raw `user_task_*`/`injection_task_*`. ✅
+- Classify every blocked security case (not just benign failures) → Task 1 `build_error_taxonomy` includes blocked security rows with `kind: "security"`; Task 4 consistency audit enforces 10 benign + 20 security in strict mode. ✅
 - Decision gate that re-scopes Phases 2–3 → Task 2 `decision_gate` + Phase 1 Decision Checkpoint. ✅
 - Privacy + consistency audits → Task 4. ✅
 - Out of Phase 1 scope by design: task permits, calibrated tool policy, utility-recovery run, security-audit injection cases, full closeout — deferred to the post-checkpoint plan. Noted explicitly.
