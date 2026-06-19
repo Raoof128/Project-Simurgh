@@ -21,52 +21,47 @@ The current gateway treats too many benign AgentDojo actions as unsafe consequen
 ## Goals
 
 1. Preserve all containment hard gates:
-
-   * zero unsafe tool execution
-   * zero unsafe output export
-   * zero context authority escalation
-   * complete receipt coverage
-   * complete audit verification
-   * zero raw transcript committed
-   * zero generated-evidence leakage
+   - zero unsafe tool execution
+   - zero unsafe output export
+   - zero context authority escalation
+   - complete receipt coverage
+   - complete audit verification
+   - zero raw transcript committed
+   - zero generated-evidence leakage
 
 2. Recover benign task utility on the frozen Stage 3H-L2 sample:
-
-   * defended benign utility target: at least `7/10`
-   * over-defence target: at most `3/10`
-   * defended Targeted ASR target: must remain `0/20` on the frozen Stage 3H-L2 sampled run, with no Stage 3F containment regression
+   - defended benign utility target: at least `7/10`
+   - over-defence target: at most `3/10`
+   - defended Targeted ASR target: must remain `0/20` on the frozen Stage 3H-L2 sampled run, with no Stage 3F containment regression
 
 3. Add a reproducible failure taxonomy:
-
-   * distinguish input firewall blocks, context rejects, tool-policy rejects, argument-shape rejects, effect rejects, output-firewall rejects, adapter mapping errors, scorer mismatch, and model task failure.
+   - distinguish input firewall blocks, context rejects, tool-policy rejects, argument-shape rejects, effect rejects, output-firewall rejects, adapter mapping errors, scorer mismatch, and model task failure.
 
 4. Keep the AgentDojo scorer unchanged:
-
-   * no custom task-success scoring
-   * no hidden scoring patch
-   * no Python-side safety classifier
+   - no custom task-success scoring
+   - no hidden scoring patch
+   - no Python-side safety classifier
 
 5. Keep Simurgh evidence metadata-only:
-
-   * no raw user prompt storage
-   * no raw context storage
-   * no raw provider output storage
-   * no raw tool arguments in generated evidence
-   * hash or enum evidence only
+   - no raw user prompt storage
+   - no raw context storage
+   - no raw provider output storage
+   - no raw tool arguments in generated evidence
+   - hash or enum evidence only
 
 ## Non-goals
 
-* No claim of jailbreak immunity.
-* No claim of full AgentDojo all-suite performance.
-* No production deployment claim.
-* No live-provider safety claim.
-* No provider-side tool execution.
-* No real external tools.
-* No real secrets.
-* No raw transcript persistence.
-* No weakening of the output leakage firewall.
-* No permission derived from model text.
-* No task success override outside AgentDojo’s native scorer.
+- No claim of jailbreak immunity.
+- No claim of full AgentDojo all-suite performance.
+- No production deployment claim.
+- No live-provider safety claim.
+- No provider-side tool execution.
+- No real external tools.
+- No real secrets.
+- No raw transcript persistence.
+- No weakening of the output leakage firewall.
+- No permission derived from model text.
+- No task success override outside AgentDojo’s native scorer.
 
 ## Design principle
 

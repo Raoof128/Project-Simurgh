@@ -40,10 +40,12 @@ The classifier and metrics are split because they are reviewed on different crit
 Classifies one per-case defended row (the dicts `layer2_runner._merge_defended_gateway_rows` produces — carrying `kind`, `utility_success`, `gateway_verdict`, `boundary`, `task_id`, `receipt_id`, `audit_verified`) into a `primary_failure_class` + `boundary`, and builds the full taxonomy list. No policy logic, no I/O.
 
 **Files:**
+
 - Create: `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/stage3i_error_taxonomy.py`
 - Test: `tools/agentdojo-simurgh-adapter/tests/test_stage3i_error_taxonomy.py`
 
 **Interfaces:**
+
 - Consumes: per-case row dicts identical in shape to `layer2_runner` defended rows.
 - Produces:
   - `SIMURGH_BOUNDARY_FAILURE_CLASSES: frozenset[str]`
@@ -272,10 +274,12 @@ git commit -m "feat(llm-shield): add stage 3I phase-1 error-taxonomy classifier"
 Computes the precise over-defence figure (only Simurgh-boundary blocks among benign failures count) and a benign-recovery analysis that names the dominant failure class and emits the Phase 1 decision-gate verdict that chooses the shape of Phases 2–3.
 
 **Files:**
+
 - Create: `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/stage3i_metrics.py`
 - Test: `tools/agentdojo-simurgh-adapter/tests/test_stage3i_metrics.py`
 
 **Interfaces:**
+
 - Consumes: `build_error_taxonomy` output (Task 1) and the defended rows.
 - Produces:
   - `compute_over_defence(defended_rows: list[dict]) -> dict` → `{"count", "total", "rate"}` where `count` = benign failures whose class is in `SIMURGH_BOUNDARY_FAILURE_CLASSES`, `total` = benign rows.
@@ -435,10 +439,12 @@ git commit -m "feat(llm-shield): add stage 3I phase-1 over-defence metrics and d
 Wire taxonomy + benign-recovery emission into the Layer-2 runner so an opt-in external AgentDojo run writes `error-taxonomy.json` and `benign-recovery-analysis.json` into the Stage 3I evidence dir, through the metadata-only writer. No change to baseline/defended run behaviour or to existing 3H-L2 artifacts.
 
 **Files:**
+
 - Modify: `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/layer2_runner.py` (extend `run_layer2_from_rows` to also build and write the Stage 3I artifacts)
 - Test: `tools/agentdojo-simurgh-adapter/tests/test_stage3i_metrics.py` (add an emission test that exercises the metadata-only contract)
 
 **Interfaces:**
+
 - Consumes: `build_error_taxonomy` (Task 1), `build_benign_recovery_analysis` (Task 2), `evidence_writer.write_json_artifacts`, `evidence_writer.EvidenceLeakage`.
 - Produces: `build_stage3i_artifacts(defended_rows: list[dict]) -> dict[str, Any]` returning `{"error-taxonomy.json": {...}, "benign-recovery-analysis.json": {...}}`.
 
@@ -537,10 +543,12 @@ git commit -m "feat(llm-shield): emit stage 3I phase-1 taxonomy evidence in laye
 Two Node audit scripts mirroring the Stage 3H-L2 ones, run against the committed Stage 3I evidence directory. Privacy audit fails on any forbidden raw key or raw task id; consistency audit fails if taxonomy/analysis counts disagree internally.
 
 **Files:**
+
 - Create: `scripts/privacy-audit-llm-shield-stage3i.mjs`
 - Create: `scripts/consistency-audit-llm-shield-stage3i.mjs`
 
 **Interfaces:**
+
 - Consumes: `docs/research/llm-shield/evidence/stage-3i/error-taxonomy.json` and `benign-recovery-analysis.json` (override dir via `SIMURGH_STAGE3I_EVIDENCE_DIR`).
 - Produces: exit 0 on pass, exit 1 with a `stage3i ... FAIL:` message on failure.
 
@@ -552,9 +560,7 @@ Create `scripts/privacy-audit-llm-shield-stage3i.mjs`:
 // SPDX-License-Identifier: AGPL-3.0-or-later
 import { readFile } from "node:fs/promises";
 
-const EV =
-  process.env.SIMURGH_STAGE3I_EVIDENCE_DIR ||
-  "docs/research/llm-shield/evidence/stage-3i";
+const EV = process.env.SIMURGH_STAGE3I_EVIDENCE_DIR || "docs/research/llm-shield/evidence/stage-3i";
 const FORBIDDEN = [
   "raw_prompt",
   "raw_provider_output",
@@ -590,8 +596,7 @@ for (const name of ["error-taxonomy.json", "benign-recovery-analysis.json"]) {
       }
       if ("case_id" in entry) fail("error-taxonomy must not carry raw case_id");
       if ("task_id" in entry) fail("error-taxonomy must not carry raw task_id");
-      if ("security_case_id" in entry)
-        fail("error-taxonomy must not carry raw security_case_id");
+      if ("security_case_id" in entry) fail("error-taxonomy must not carry raw security_case_id");
     }
   }
 }
@@ -606,9 +611,7 @@ Create `scripts/consistency-audit-llm-shield-stage3i.mjs`:
 // SPDX-License-Identifier: AGPL-3.0-or-later
 import { readFile } from "node:fs/promises";
 
-const EV =
-  process.env.SIMURGH_STAGE3I_EVIDENCE_DIR ||
-  "docs/research/llm-shield/evidence/stage-3i";
+const EV = process.env.SIMURGH_STAGE3I_EVIDENCE_DIR || "docs/research/llm-shield/evidence/stage-3i";
 const fail = (m) => {
   console.error(`stage3i consistency FAIL: ${m}`);
   process.exit(1);
@@ -625,22 +628,17 @@ const benignEntries = taxonomy.entries.filter((e) => e.kind === "benign");
 const securityEntries = taxonomy.entries.filter((e) => e.kind === "security");
 if (strict) {
   if (analysis.benign_total !== 10) fail("expected 10 benign rows");
-  if (benignEntries.length !== 10)
-    fail("expected 10 benign-failure entries in the taxonomy");
-  if (securityEntries.length !== 20)
-    fail("expected 20 blocked security entries in the taxonomy");
+  if (benignEntries.length !== 10) fail("expected 10 benign-failure entries in the taxonomy");
+  if (securityEntries.length !== 20) fail("expected 20 blocked security entries in the taxonomy");
 }
 
 // Every benign failure listed in the analysis must appear in the taxonomy.
-const taxonomyBenignFailures = benignEntries.filter(
-  (e) => e.utility_result === "fail",
-).length;
+const taxonomyBenignFailures = benignEntries.filter((e) => e.utility_result === "fail").length;
 if (taxonomyBenignFailures < analysis.benign_failures)
   fail("analysis reports more benign failures than the taxonomy lists");
 
 const summed = Object.values(analysis.failure_class_counts).reduce((a, b) => a + b, 0);
-if (summed !== analysis.benign_failures)
-  fail("failure_class_counts do not sum to benign_failures");
+if (summed !== analysis.benign_failures) fail("failure_class_counts do not sum to benign_failures");
 
 if (analysis.over_defence.count > analysis.benign_failures)
   fail("over_defence count exceeds benign failures");
@@ -714,16 +712,20 @@ Make it executable: `chmod +x scripts/smoke-llm-shield-stage3i-phase1.sh`
 - [ ] **Step 5: Run the smoke gate to verify it passes**
 
 Run:
+
 ```bash
 cd /Users/raoof.r12/Desktop/Raouf/Project-Simurgh
 bash scripts/smoke-llm-shield-stage3i-phase1.sh
 ```
+
 Expected:
+
 ```
 stage3i privacy OK
 stage3i consistency OK
 stage3i-phase1 smoke: passed
 ```
+
 (The fixture's `decision_gate` reads `rescope_context_guard_adapter`, matching the empirical 3H-L2 root cause.)
 
 - [ ] **Step 6: Commit**
@@ -774,6 +776,7 @@ Phases 2–5 (task permits, calibrated policy, utility-recovery run, regression/
 ## Self-Review
 
 **Spec coverage (Phase 1 scope only):**
+
 - Phase 1 deliverables `stage3i_error_taxonomy.py`, `stage3i_metrics.py`, `error-taxonomy.json`, `benign-recovery-analysis.json` → Tasks 1, 2, 3. ✅
 - "All benign failures have a primary failure class" → Task 1 `build_error_taxonomy` + classifier covers every benign failure path. ✅
 - "No policy behaviour changes yet" → Tasks only read rows and emit evidence; no gateway/policy edits. ✅
