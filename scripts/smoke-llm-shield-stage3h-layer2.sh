@@ -11,6 +11,7 @@ PORT="${SIMURGH_STAGE3H_LAYER2_PORT:-33059}"
 BASE="http://127.0.0.1:$PORT"
 GATEWAY_BASE="$BASE/api/llm-shield/gateway"
 LOG_FILE="${TMPDIR:-/tmp}/simurgh-stage3h-layer2-$PORT.log"
+PYTHON_BIN="${SIMURGH_STAGE3H_LAYER2_PYTHON:-python3}"
 
 SIMURGH_DEMO_MODE=1 \
   SIMURGH_LLM_SHIELD_SECRET="smoke-llm-shield-secret-32-characters" \
@@ -36,7 +37,7 @@ curl -fsS "$BASE/health" >/dev/null || {
 
 cd tools/agentdojo-simurgh-adapter
 SIMURGH_GATEWAY_BASE_URL="$GATEWAY_BASE" \
-  .venv/bin/python -m simurgh_agentdojo_adapter.layer2_runner \
+  "$PYTHON_BIN" -m simurgh_agentdojo_adapter.layer2_runner \
   --sample-manifest "../../$SAMPLE" \
   --out "../../$OUT"
 cd ../..

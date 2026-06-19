@@ -18,8 +18,8 @@
 
 ### Verified
 
-- `cd tools/agentdojo-simurgh-adapter && .venv/bin/python -m pytest tests -q` passed.
-- `SIMURGH_RUN_STAGE3H_LAYER2=1 scripts/smoke-llm-shield-stage3h-layer2.sh` passed.
+- `/tmp/simurgh-stage3h-l2-venv/bin/python -m pytest tools/agentdojo-simurgh-adapter/tests -q` passed.
+- `SIMURGH_STAGE3H_LAYER2_PYTHON=/tmp/simurgh-stage3h-l2-venv/bin/python SIMURGH_RUN_STAGE3H_LAYER2=1 scripts/smoke-llm-shield-stage3h-layer2.sh` passed.
 - `node scripts/privacy-audit-llm-shield-stage3h-layer2.mjs`, `node scripts/consistency-audit-llm-shield-stage3h-layer2.mjs`, and `scripts/security-audit-llm-shield-stage3h-layer2.sh` passed.
 
 ---

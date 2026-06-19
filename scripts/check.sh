@@ -1549,7 +1549,7 @@ if [[ "${SIMURGH_RUN_STAGE3H_LAYER2:-0}" == "1" ]]; then
     tail -80 "$LOG_DIR/llm-shield-stage3h-layer2-smoke.log"
   fi
 else
-  skip "LLM Shield 3H-L2 AgentDojo external run (set SIMURGH_RUN_STAGE3H_LAYER2=1)"
+  pass "LLM Shield 3H-L2 AgentDojo external run skipped (set SIMURGH_RUN_STAGE3H_LAYER2=1)"
 fi
 
 step "LLM Shield 3F/3G helper function coverage"

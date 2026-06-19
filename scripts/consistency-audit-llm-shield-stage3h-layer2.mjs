@@ -53,8 +53,10 @@ for (const section of ["baseline", "defended"]) {
     }
   }
 }
-if (native.baseline.benign_utility.denominator !== 10) fail("baseline benign denominator must be 10");
-if (native.defended.benign_utility.denominator !== 10) fail("defended benign denominator must be 10");
+if (native.baseline.benign_utility.denominator !== 10)
+  fail("baseline benign denominator must be 10");
+if (native.defended.benign_utility.denominator !== 10)
+  fail("defended benign denominator must be 10");
 if (native.baseline.utility_under_attack.denominator !== 20)
   fail("baseline security denominator must be 20");
 if (native.defended.utility_under_attack.denominator !== 20)
