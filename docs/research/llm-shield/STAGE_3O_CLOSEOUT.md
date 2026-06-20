@@ -26,9 +26,13 @@
 - Scoring matrix: 11/11 cells proven from explicit fixtures.
 - Attestation: `verify-byo-attestation.mjs` PASS (schema, digest, fingerprint,
   signature, self-proof); evidence hashes cover the full pack.
-- Zero `src/llmShield` change (policy-drift guard clean).
-- Lib + corpus: 100% function coverage. `npm test` and `scripts/check.sh` green
-  (final counts recorded at freeze).
+- Zero `src/llmShield` change (policy-drift guard clean; `git diff main...HEAD -- src/llmShield/` empty).
+- Lib + corpus: 100% function coverage. `npm test` 701/701 (676 → +25).
+  `scripts/check.sh`: 110 passed; the 4 non-passing steps are pre-existing and
+  environmental (vendored `.venv` secret-scan hits, Stage 2.6 Windows .NET daemon
+  tests, Linux Rust daemon fmt/clippy — none runnable on this darwin host, none
+  touching Stage 3O; `npm run format:check` re-run clean). All Stage 3O steps
+  (smoke + helper coverage) green.
 
 ## Non-claims
 
