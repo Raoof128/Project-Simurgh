@@ -19,7 +19,14 @@
 - No pooled ASR is ever reported; `frontier_status = not_applicable_degenerate`.
 - Stretch (signing the bundle with 3M tooling) is NOT a hard gate and is out of this plan's required scope.
 - All committed JSON evidence is `JSON.stringify(value, null, 2) + "\n"`; run `npx prettier --write` on the evidence dir after any `--update-metrics`.
-- Commit message trailer: `Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>`.
+- **Commit messages are neutral/descriptive with NO `Co-Authored-By` trailer** (project-wide policy for Project-Simurgh; see review fix 1). Example: `git commit -m "feat(llm-shield): add stage 3n metric contract and anti-pooling logic"`.
+
+### Review Fixes (applied during execution — supersede the per-task code where they conflict)
+
+1. **No co-author trailer** on any commit (see constraint above). Strip the trailer from every commit command in this plan.
+2. **Default-mode runner verifies ALL generated JSON files**, not just two. In Task 6 default mode, recompute every generated artifact and compare each committed `*.json` (all 11 JSON files; `runner-output.txt` and `README.md`/`citation-verification.md` excluded) against its recomputation; any mismatch throws "run --update-metrics".
+3. **`all_ledger_rows_hash_to_committed_evidence` is per-row**, not a count. Each normalised row carries `source_files: string[]`; the gate is true iff every file listed by every row exists in `evidence-hashes.json` with a matching sha256. Implemented as lib fn `computeLedgerHashBinding(rows, evidenceHashes)` (unit-tested in Task 5).
+4. **The 3M attestation row is hash-bound.** `evidenceHashes` includes `stage-3m/attestation.bundle.json`, `attestation.signature.json`, `attestation.public-key.json`; the attestation row's `source_files` lists those three, so fix 3 also binds the attestation row.
 
 ### Frozen source files (read-only inputs — never modified by 3N)
 
