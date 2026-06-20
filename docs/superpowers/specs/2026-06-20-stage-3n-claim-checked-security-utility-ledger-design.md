@@ -89,9 +89,10 @@ External anchors (motivation only; verified at write-time per §12):
 ### Frontier determination (recorded fact)
 `src/llmShield` exposes only discrete switches: `promptFirewall` `opts.stages` is a
 canonicalisation feature-toggle (merged from `DEFAULT_STAGES`), and `contextProvenanceGuard`
-keys off discrete `trust_level` enums (`trusted|untrusted|synthetic`). Neither is a continuous
-security/utility strictness dial. Therefore a real Pareto frontier is unavailable and 3N emits
-`frontier_status = not_applicable_degenerate` with `frontier_reason_recorded = true`.
+uses discrete provenance enums such as trust level, source type, and purpose values; these are
+categorical boundary labels, not a continuous security/utility strictness dial. Therefore a
+real Pareto frontier is unavailable and 3N emits `frontier_status = not_applicable_degenerate`
+with `frontier_reason_recorded = true`.
 
 ---
 
@@ -175,6 +176,12 @@ This is what makes the conflict-catch real rather than theatre: a new unbacked n
 silently escape by simply being absent from the map — `claim_evidence_map_complete` asserts the
 registry covers the full surface.
 
+**Definition of the 3N claim surface:** the union of generated ledger rows, per-family panel
+claims, denominator-pooling report claims, and the registered historical conflict claim. It
+does **not** include arbitrary prose outside the generated 3N evidence files. The registry is
+complete iff every claim in this union is present and resolves to `verified` or
+`excluded_from_ledger`.
+
 ---
 
 ## 5. Data flow
@@ -221,10 +228,10 @@ claim_evidence_map_complete                 = true
 claim_consistency_report_generated          = true
 unresolved_numeric_claim_conflicts          = 0
 
-cross_family_pooling_attempts               = 0
-mismatched_denominator_pooling_refused      = true
-pooled_asr_reported                         = false
-per_family_panels_present                   = true
+cross_family_pooling_performed                      = 0
+mismatched_denominator_pooling_refusal_test_passed  = true
+pooled_asr_reported                                 = false
+per_family_panels_present                           = true
 
 frontier_status ∈ {computed, not_applicable_degenerate}
 frontier_reason_recorded                    = true
