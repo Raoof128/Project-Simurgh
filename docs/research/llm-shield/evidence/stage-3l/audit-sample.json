@@ -1,0 +1,5 @@
+{
+  "case_id": "3l-f5_codebase_flaw_fix_reference-input_miss_downstream-000",
+  "audit_chain_valid": true,
+  "payload_hash": "sha256:4c0cfe3cf42b5b98f09fd1cb6efe61325a654c8a2de91ceb93f4d6ca735330f8"
+}
