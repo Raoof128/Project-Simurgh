@@ -9,18 +9,18 @@
 
 ## The leap
 
-| Stage | What it proves |
-|---|---|
-| 3M | The evidence bundle can be verified offline (Ed25519, no shared secret). |
-| **3N** | **The claims made *from* that evidence cannot outrun it.** |
-| 3O (future) | Others can run the same metric contract (BYO-gateway). |
+| Stage       | What it proves                                                           |
+| ----------- | ------------------------------------------------------------------------ |
+| 3M          | The evidence bundle can be verified offline (Ed25519, no shared secret). |
+| **3N**      | **The claims made _from_ that evidence cannot outrun it.**               |
+| 3O (future) | Others can run the same metric contract (BYO-gateway).                   |
 
 Stage 3N is a **measurement / claim-governance** stage. It is not a benchmark and
 it ships **no** change to `src/llmShield/**` (enforced by a policy-drift guard).
 
 ## Why this stage exists
 
-The field has converged on the *security–utility* problem: recent work shows that
+The field has converged on the _security–utility_ problem: recent work shows that
 many agent defences are "either not secure enough or suffer from significant
 over-defence" in dynamic, open-ended environments
 ([AgentDyn, arXiv:2602.03117](https://arxiv.org/abs/2602.03117)), that public
@@ -49,7 +49,7 @@ recovered. But the **committed** files show the already-clean state:
 The `10/10` collapse was a transient bug, found and fixed, and **never frozen as a
 committed artifact**. Rather than hide it, 3N registers that number as an
 `excluded_from_ledger / prose_history` claim, and a CI gate fails if any
-*registered* claim drifts from its committed source field. The conflict becomes
+_registered_ claim drifts from its committed source field. The conflict becomes
 proof of discipline.
 
 ## Three pillars
@@ -79,18 +79,18 @@ than drawing a curve that does not exist.
 
 ## Hard gates
 
-| Gate | Meaning |
-|---|---|
-| `all_ledger_rows_hash_to_committed_evidence` | every ledger row's source files are hash-bound |
-| `prose_only_metric_claims_excluded` | no ghost baseline leaks into a claim |
-| `claim_evidence_map_complete` | closed world: every claim verified or excluded |
-| `unresolved_numeric_claim_conflicts = 0` | no registered number drifts from its field |
-| `cross_family_pooling_performed = 0` | no denominator soup |
-| `mismatched_denominator_pooling_refusal_test_passed` | the refusal test ran and passed |
-| `pooled_asr_reported = false` | no pooled ASR |
-| `frontier_status ∈ {computed, not_applicable_degenerate}` | honest frontier label |
-| `stage3m_attestation_validation_present` | 3M verifier PASS recorded |
-| `source_evidence_hashes_match`, `generated_evidence_leakage = 0`, `src_llmShield_policy_drift = 0`, `overclaim_wording_detected = 0` | integrity / privacy / no-drift |
+| Gate                                                                                                                                 | Meaning                                        |
+| ------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------- |
+| `all_ledger_rows_hash_to_committed_evidence`                                                                                         | every ledger row's source files are hash-bound |
+| `prose_only_metric_claims_excluded`                                                                                                  | no ghost baseline leaks into a claim           |
+| `claim_evidence_map_complete`                                                                                                        | closed world: every claim verified or excluded |
+| `unresolved_numeric_claim_conflicts = 0`                                                                                             | no registered number drifts from its field     |
+| `cross_family_pooling_performed = 0`                                                                                                 | no denominator soup                            |
+| `mismatched_denominator_pooling_refusal_test_passed`                                                                                 | the refusal test ran and passed                |
+| `pooled_asr_reported = false`                                                                                                        | no pooled ASR                                  |
+| `frontier_status ∈ {computed, not_applicable_degenerate}`                                                                            | honest frontier label                          |
+| `stage3m_attestation_validation_present`                                                                                             | 3M verifier PASS recorded                      |
+| `source_evidence_hashes_match`, `generated_evidence_leakage = 0`, `src_llmShield_policy_drift = 0`, `overclaim_wording_detected = 0` | integrity / privacy / no-drift                 |
 
 ## Non-claims
 

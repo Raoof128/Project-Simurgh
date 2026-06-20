@@ -118,8 +118,7 @@ function buildClaimMap() {
       source_type: "prose_history",
       frozen_metric_artifact_present: false,
       status: "excluded_from_ledger",
-      reason:
-        "No committed metrics artifact proves this row; transient pre-3I bug, never frozen.",
+      reason: "No committed metrics artifact proves this row; transient pre-3I bug, never frozen.",
     },
   ];
 }
@@ -221,7 +220,10 @@ async function main() {
     source_index_valid: true,
     metric_contract_schema_valid: METRIC_CONTRACT.length === 5,
     normalised_metrics_schema_valid: normalised.length === 5,
-    all_ledger_rows_hash_to_committed_evidence: computeLedgerHashBinding(normalised, evidenceHashes),
+    all_ledger_rows_hash_to_committed_evidence: computeLedgerHashBinding(
+      normalised,
+      evidenceHashes
+    ),
     prose_only_metric_claims_excluded: claimResult.prose_only_metric_claims_excluded,
     claim_evidence_map_complete: claimResult.claim_evidence_map_complete,
     claim_consistency_report_generated: true,
@@ -269,7 +271,9 @@ async function main() {
   }
   const committedPrivacy = await readJson(join(ROOT, "generated-evidence-privacy-report.json"));
   if (stableJson(committedPrivacy) !== stableJson(privacyReport)) {
-    throw new Error("committed generated-evidence-privacy-report.json drifted; run --update-metrics");
+    throw new Error(
+      "committed generated-evidence-privacy-report.json drifted; run --update-metrics"
+    );
   }
   console.log("stage3n runner: verified committed evidence");
 }
