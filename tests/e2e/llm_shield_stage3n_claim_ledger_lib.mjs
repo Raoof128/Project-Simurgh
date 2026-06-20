@@ -265,3 +265,58 @@ export function compileClaims(claimMap, resolve) {
     prose_only_metric_claims_excluded: proseExcluded,
   };
 }
+
+export const STAGE3N_FORBIDDEN_TOKENS = Object.freeze([
+  "Pliny",
+  "REDACTED-SYNTHETIC",
+  "raw_input",
+  "raw_transcript",
+  "BEGIN PRIVATE KEY",
+]);
+
+export function computeEvidenceLeakageFindings(files) {
+  const findings = [];
+  for (const [name, content] of files) {
+    for (const token of STAGE3N_FORBIDDEN_TOKENS) {
+      if (content.includes(token)) findings.push({ file: name, token });
+    }
+  }
+  return findings;
+}
+
+const BOOLEAN_TRUE_GATES = [
+  "source_index_valid",
+  "metric_contract_schema_valid",
+  "normalised_metrics_schema_valid",
+  "all_ledger_rows_hash_to_committed_evidence",
+  "prose_only_metric_claims_excluded",
+  "claim_evidence_map_complete",
+  "claim_consistency_report_generated",
+  "mismatched_denominator_pooling_refusal_test_passed",
+  "per_family_panels_present",
+  "frontier_reason_recorded",
+  "stage3m_attestation_validation_present",
+  "source_evidence_hashes_match",
+];
+const ZERO_GATES = [
+  "unresolved_numeric_claim_conflicts",
+  "cross_family_pooling_performed",
+  "generated_evidence_leakage",
+  "src_llmShield_policy_drift",
+  "overclaim_wording_detected",
+];
+
+export function enforceStage3nHardGates(g) {
+  const errors = [];
+  for (const k of BOOLEAN_TRUE_GATES) {
+    if (g[k] !== true) errors.push(`${k} must be true (got ${g[k]})`);
+  }
+  for (const k of ZERO_GATES) {
+    if (g[k] !== 0) errors.push(`${k} must be 0 (got ${g[k]})`);
+  }
+  if (g.pooled_asr_reported !== false) errors.push("pooled_asr_reported must be false");
+  if (!["computed", "not_applicable_degenerate"].includes(g.frontier_status)) {
+    errors.push(`frontier_status invalid (got ${g.frontier_status})`);
+  }
+  return { ok: errors.length === 0, errors };
+}

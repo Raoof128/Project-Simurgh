@@ -12,7 +12,32 @@ import {
   computeLedgerHashBinding,
   STAGE3M_ATTESTATION_FILES,
   compileClaims,
+  STAGE3N_FORBIDDEN_TOKENS,
+  computeEvidenceLeakageFindings,
+  enforceStage3nHardGates,
 } from "../../../tests/e2e/llm_shield_stage3n_claim_ledger_lib.mjs";
+
+const CLEAN_GATES = {
+  source_index_valid: true,
+  metric_contract_schema_valid: true,
+  normalised_metrics_schema_valid: true,
+  all_ledger_rows_hash_to_committed_evidence: true,
+  prose_only_metric_claims_excluded: true,
+  claim_evidence_map_complete: true,
+  claim_consistency_report_generated: true,
+  unresolved_numeric_claim_conflicts: 0,
+  cross_family_pooling_performed: 0,
+  mismatched_denominator_pooling_refusal_test_passed: true,
+  pooled_asr_reported: false,
+  per_family_panels_present: true,
+  frontier_status: "not_applicable_degenerate",
+  frontier_reason_recorded: true,
+  stage3m_attestation_validation_present: true,
+  source_evidence_hashes_match: true,
+  generated_evidence_leakage: 0,
+  src_llmShield_policy_drift: 0,
+  overclaim_wording_detected: 0,
+};
 
 const VERIFIED_CLAIM = {
   claim_id: "3n.claim.stage3l_targeted_asr",
@@ -155,4 +180,29 @@ test("compileClaims flags a prose_history claim not excluded", () => {
   const leaky = { claim_id: "y", source_type: "prose_history", status: "verified" };
   const out = compileClaims([leaky], () => ({ actual: 0, actualDenominator: 0 }));
   assert.equal(out.prose_only_metric_claims_excluded, false);
+});
+
+test("leakage scanner finds forbidden tokens", () => {
+  assert.ok(STAGE3N_FORBIDDEN_TOKENS.length > 0);
+  const findings = computeEvidenceLeakageFindings([
+    ["a.json", "clean"],
+    ["b.json", "Pliny here"],
+  ]);
+  assert.equal(findings.length, 1);
+  assert.equal(findings[0].file, "b.json");
+});
+
+test("enforceStage3nHardGates passes a clean gate set", () => {
+  assert.equal(enforceStage3nHardGates(CLEAN_GATES).ok, true);
+});
+
+test("enforceStage3nHardGates fails on a claim conflict", () => {
+  const r = enforceStage3nHardGates({ ...CLEAN_GATES, unresolved_numeric_claim_conflicts: 1 });
+  assert.equal(r.ok, false);
+  assert.ok(r.errors.some((e) => e.includes("unresolved_numeric_claim_conflicts")));
+});
+
+test("enforceStage3nHardGates fails on an invalid frontier_status", () => {
+  const r = enforceStage3nHardGates({ ...CLEAN_GATES, frontier_status: "computed_fake" });
+  assert.equal(r.ok, false);
 });
