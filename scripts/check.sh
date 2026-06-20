@@ -1679,6 +1679,29 @@ else
   tail -100 "$LOG_DIR/llm-shield-stage3n-helper-coverage.log"
 fi
 
+step "LLM Shield 3O BYO-gateway containment benchmark"
+if scripts/smoke-llm-shield-stage3o.sh > "$LOG_DIR/llm-shield-stage3o-smoke.log" 2>&1; then
+  pass "LLM Shield 3O BYO-gateway containment benchmark"
+else
+  fail "LLM Shield 3O BYO-gateway containment benchmark"
+  tail -80 "$LOG_DIR/llm-shield-stage3o-smoke.log"
+fi
+
+step "LLM Shield 3O benchmark helper coverage"
+if node --test --experimental-test-coverage \
+  --test-coverage-include=tools/simurgh-benchmark/byoContractLib.mjs \
+  --test-coverage-include=tools/simurgh-benchmark/corpus.mjs \
+  --test-coverage-functions=100 \
+  tests/unit/llmShield/benchmark/byoContractLib.test.js \
+  tests/unit/llmShield/benchmark/byoCorpus.test.js \
+  tests/unit/llmShield/benchmark/byoSelfProof.test.js \
+  > "$LOG_DIR/llm-shield-stage3o-helper-coverage.log" 2>&1; then
+  pass "LLM Shield 3O benchmark helper coverage"
+else
+  fail "LLM Shield 3O benchmark helper coverage"
+  tail -100 "$LOG_DIR/llm-shield-stage3o-helper-coverage.log"
+fi
+
 step "LLM Shield 3E-core docker smoke (skips if no docker)"
 if bash scripts/docker-smoke-llm-shield-stage3e.sh > "$LOG_DIR/llm-shield-stage3e-docker-smoke.log" 2>&1; then
   pass "LLM Shield 3E-core docker smoke"
