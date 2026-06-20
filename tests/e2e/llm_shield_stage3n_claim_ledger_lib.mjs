@@ -77,6 +77,14 @@ export const METRIC_CONTRACT = Object.freeze([
   },
 ]);
 
+// The three Stage 3M artifacts the attestation row depends on; hash-bound via
+// the ledger so the attestation row is not merely a boolean.
+export const STAGE3M_ATTESTATION_FILES = Object.freeze([
+  "docs/research/llm-shield/evidence/stage-3m/attestation.bundle.json",
+  "docs/research/llm-shield/evidence/stage-3m/attestation.signature.json",
+  "docs/research/llm-shield/evidence/stage-3m/attestation.public-key.json",
+]);
+
 export function evaluatePooling(contract) {
   const refusals = [];
   let pooled = 0;
@@ -104,4 +112,110 @@ export function evaluatePooling(contract) {
     mismatched_denominator_pooling_refusal_test_passed: refusals.length >= 1,
     refusals,
   };
+}
+
+// Map each family to the dotted paths of its committed fields. fable5 stores flat
+// integers; the agentdojo families nest under defended/containment blocks.
+const FIELD_MAP = Object.freeze({
+  agentdojo_layer2: {
+    over_defence_num: "simurgh_containment_metrics.over_defence_rate.numerator",
+    over_defence_den: "simurgh_containment_metrics.over_defence_rate.denominator",
+  },
+  agentdojo_full: {
+    asr_num: "agentdojo_native_metrics.defended.targeted_asr.numerator",
+    asr_den: "agentdojo_native_metrics.defended.targeted_asr.denominator",
+    over_defence_num: "simurgh_containment_metrics.over_defence_rate.numerator",
+    over_defence_den: "simurgh_containment_metrics.over_defence_rate.denominator",
+  },
+  adaptive_readiness: {
+    asr_num: "agentdojo_native_metrics.defended.targeted_asr.numerator",
+    asr_den: "agentdojo_native_metrics.defended.targeted_asr.denominator",
+    over_defence_num: "simurgh_containment_metrics.over_defence_rate.numerator",
+    over_defence_den: "simurgh_containment_metrics.over_defence_rate.denominator",
+  },
+});
+
+function contractFor(family) {
+  return METRIC_CONTRACT.find((c) => c.metric_family === family);
+}
+
+export function normaliseSources(sources) {
+  const rows = STAGE3N_FAMILIES.map((family) => {
+    const src = sources[family];
+    const contract = contractFor(family);
+    if (family === "attestation_validity") {
+      return {
+        family,
+        source_stage: contract.source_stage,
+        role: "attestation",
+        source_files: [...STAGE3M_ATTESTATION_FILES],
+        security: null,
+        utility: null,
+        attestation_valid: src.verifier_pass === true,
+      };
+    }
+    if (family === "fable5_reference_containment") {
+      return {
+        family,
+        source_stage: contract.source_stage,
+        role: "held_line",
+        source_files: [STAGE3N_SOURCE_FILES[family]],
+        security: {
+          targeted_asr_numerator: readPath(src, "malicious_targeted_asr"),
+          targeted_asr_denominator: readPath(src, "malicious_total"),
+        },
+        utility: {
+          over_defence_numerator:
+            readPath(src, "benign_total") - readPath(src, "benign_hard_negative_passed"),
+          over_defence_denominator: readPath(src, "benign_total"),
+        },
+        attestation_valid: null,
+      };
+    }
+    const m = FIELD_MAP[family];
+    return {
+      family,
+      source_stage: contract.source_stage,
+      role: "held_line",
+      source_files: [STAGE3N_SOURCE_FILES[family]],
+      security: m.asr_num
+        ? {
+            targeted_asr_numerator: readPath(src, m.asr_num),
+            targeted_asr_denominator: readPath(src, m.asr_den),
+          }
+        : null,
+      utility: {
+        over_defence_numerator: readPath(src, m.over_defence_num),
+        over_defence_denominator: readPath(src, m.over_defence_den),
+      },
+      attestation_valid: null,
+    };
+  });
+  return Object.freeze(rows);
+}
+
+export function buildPerFamilyPanels(normalised) {
+  return Object.freeze(
+    normalised.map((row) => ({
+      family: row.family,
+      panel: {
+        source_stage: row.source_stage,
+        role: row.role,
+        security: row.security,
+        utility: row.utility,
+        attestation_valid: row.attestation_valid,
+      },
+    }))
+  );
+}
+
+// Review fix 3: per-row hash binding. Every file listed by every row must appear
+// in evidenceHashes with a non-empty sha256.
+export function computeLedgerHashBinding(rows, evidenceHashes) {
+  for (const row of rows) {
+    for (const file of row.source_files) {
+      if (!evidenceHashes[file]) return false;
+    }
+  }
+  return true;
 }

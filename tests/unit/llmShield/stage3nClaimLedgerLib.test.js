@@ -7,7 +7,33 @@ import {
   readPath,
   METRIC_CONTRACT,
   evaluatePooling,
+  normaliseSources,
+  buildPerFamilyPanels,
+  computeLedgerHashBinding,
+  STAGE3M_ATTESTATION_FILES,
 } from "../../../tests/e2e/llm_shield_stage3n_claim_ledger_lib.mjs";
+
+const SAMPLE_SOURCES = {
+  agentdojo_layer2: {
+    simurgh_containment_metrics: { over_defence_rate: { numerator: 0, denominator: 10 } },
+    utility_preserved_rate: { numerator: 10, denominator: 10 },
+  },
+  agentdojo_full: {
+    agentdojo_native_metrics: { defended: { targeted_asr: { numerator: 0, denominator: 949 } } },
+    simurgh_containment_metrics: { over_defence_rate: { numerator: 0, denominator: 97 } },
+  },
+  adaptive_readiness: {
+    agentdojo_native_metrics: { defended: { targeted_asr: { numerator: 0, denominator: 385 } } },
+    simurgh_containment_metrics: { over_defence_rate: { numerator: 0, denominator: 97 } },
+  },
+  fable5_reference_containment: {
+    malicious_targeted_asr: 0,
+    malicious_total: 150,
+    benign_hard_negative_passed: 30,
+    benign_total: 30,
+  },
+  attestation_validity: { verifier_pass: true },
+};
 
 test("STAGE3N_FAMILIES is the five frozen families", () => {
   assert.deepEqual(STAGE3N_FAMILIES, [
@@ -55,4 +81,33 @@ test("evaluatePooling refuses all mismatched denominators and pools none", () =>
   assert.equal(r.cross_family_pooling_performed, 0);
   assert.equal(r.mismatched_denominator_pooling_refusal_test_passed, true);
   assert.ok(r.refusals.length >= 1);
+});
+
+test("normaliseSources produces one row per family with correct roles", () => {
+  const rows = normaliseSources(SAMPLE_SOURCES);
+  assert.equal(rows.length, 5);
+  const att = rows.find((r) => r.family === "attestation_validity");
+  assert.equal(att.role, "attestation");
+  assert.equal(att.attestation_valid, true);
+  assert.deepEqual(att.source_files, STAGE3M_ATTESTATION_FILES);
+  const full = rows.find((r) => r.family === "agentdojo_full");
+  assert.equal(full.role, "held_line");
+  assert.equal(full.security.targeted_asr_denominator, 949);
+  assert.equal(full.utility.over_defence_numerator, 0);
+  assert.equal(full.source_files.length, 1);
+});
+
+test("buildPerFamilyPanels yields one panel per family and no pooled total", () => {
+  const panels = buildPerFamilyPanels(normaliseSources(SAMPLE_SOURCES));
+  assert.equal(panels.length, 5);
+  assert.ok(!panels.some((p) => p.family === "pooled" || p.family === "total"));
+});
+
+test("computeLedgerHashBinding is true only when every row file has a hash", () => {
+  const rows = normaliseSources(SAMPLE_SOURCES);
+  const allFiles = {};
+  for (const row of rows) for (const f of row.source_files) allFiles[f] = "sha256:abc";
+  assert.equal(computeLedgerHashBinding(rows, allFiles), true);
+  delete allFiles[STAGE3M_ATTESTATION_FILES[0]];
+  assert.equal(computeLedgerHashBinding(rows, allFiles), false);
 });
