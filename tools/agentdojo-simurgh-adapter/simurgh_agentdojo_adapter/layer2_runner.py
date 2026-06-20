@@ -458,8 +458,11 @@ def run_all_suites_collect_rows(*, suites):  # pragma: no cover - needs agentdoj
         prompt_to_task.update({t.GOAL: t for t in suite.injection_tasks.values()})
 
         # Baseline (no recorder).
+        # AgentDojo's important_instructions attack requires a recognised model
+        # token in the pipeline name (mirrors run_external_agentdojo); the run is
+        # still the deterministic ground-truth pipeline, no real model is called.
         base_pipe = _make_ground_truth_pipeline(prompt_to_task)
-        base_pipe.name = f"stage3j-{suite_name}-baseline-ground-truth"
+        base_pipe.name = f"gpt-4o-2024-05-13-stage3j-{suite_name}-baseline-ground-truth"
         with OutputLogger(logdir=None):
             base_benign = benchmark_suite_without_injections(
                 base_pipe, suite, logdir=None, force_rerun=True,
@@ -480,7 +483,7 @@ def run_all_suites_collect_rows(*, suites):  # pragma: no cover - needs agentdoj
         # Defended (fresh recorder per suite so offsets restart at 0).
         recorder = _GatewayRecorder(client)
         def_pipe = _make_ground_truth_pipeline(prompt_to_task, recorder=recorder)
-        def_pipe.name = f"stage3j-{suite_name}-defended-ground-truth"
+        def_pipe.name = f"gpt-4o-2024-05-13-stage3j-{suite_name}-defended-ground-truth"
         with OutputLogger(logdir=None):
             def_benign = benchmark_suite_without_injections(
                 def_pipe, suite, logdir=None, force_rerun=True,
