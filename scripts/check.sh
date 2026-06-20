@@ -1659,6 +1659,26 @@ else
   tail -100 "$LOG_DIR/llm-shield-stage3m-helper-coverage.log"
 fi
 
+step "LLM Shield 3N claim-checked security-utility ledger"
+if scripts/smoke-llm-shield-stage3n.sh > "$LOG_DIR/llm-shield-stage3n-smoke.log" 2>&1; then
+  pass "LLM Shield 3N claim-checked security-utility ledger"
+else
+  fail "LLM Shield 3N claim-checked security-utility ledger"
+  tail -80 "$LOG_DIR/llm-shield-stage3n-smoke.log"
+fi
+
+step "LLM Shield 3N claim ledger helper coverage"
+if node --test --experimental-test-coverage \
+  --test-coverage-include=tests/e2e/llm_shield_stage3n_claim_ledger_lib.mjs \
+  --test-coverage-functions=100 \
+  tests/unit/llmShield/stage3nClaimLedgerLib.test.js \
+  > "$LOG_DIR/llm-shield-stage3n-helper-coverage.log" 2>&1; then
+  pass "LLM Shield 3N claim ledger helper coverage"
+else
+  fail "LLM Shield 3N claim ledger helper coverage"
+  tail -100 "$LOG_DIR/llm-shield-stage3n-helper-coverage.log"
+fi
+
 step "LLM Shield 3E-core docker smoke (skips if no docker)"
 if bash scripts/docker-smoke-llm-shield-stage3e.sh > "$LOG_DIR/llm-shield-stage3e-docker-smoke.log" 2>&1; then
   pass "LLM Shield 3E-core docker smoke"

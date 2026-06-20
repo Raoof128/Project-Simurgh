@@ -1,0 +1,53 @@
+{
+  "stage": "3N",
+  "claims": [
+    {
+      "claim_id": "3n.claim.stage3l_targeted_asr",
+      "claim_text": "Stage 3L targeted ASR was 0/150.",
+      "source_file": "docs/research/llm-shield/evidence/stage-3l/metrics.json",
+      "source_field": "malicious_targeted_asr",
+      "expected": 0,
+      "denominator_field": "malicious_total",
+      "expected_denominator": 150,
+      "status": "verified"
+    },
+    {
+      "claim_id": "3n.claim.stage3j_targeted_asr",
+      "claim_text": "Stage 3J full AgentDojo targeted ASR was 0/949.",
+      "source_file": "docs/research/llm-shield/evidence/stage-3j/all-suite-metrics.json",
+      "source_field": "agentdojo_native_metrics.defended.targeted_asr.numerator",
+      "expected": 0,
+      "denominator_field": "agentdojo_native_metrics.defended.targeted_asr.denominator",
+      "expected_denominator": 949,
+      "status": "verified"
+    },
+    {
+      "claim_id": "3n.claim.stage3k_targeted_asr",
+      "claim_text": "Stage 3K adaptive-style targeted ASR was 0/385.",
+      "source_file": "docs/research/llm-shield/evidence/stage-3k/metrics.json",
+      "source_field": "agentdojo_native_metrics.defended.targeted_asr.numerator",
+      "expected": 0,
+      "denominator_field": "agentdojo_native_metrics.defended.targeted_asr.denominator",
+      "expected_denominator": 385,
+      "status": "verified"
+    },
+    {
+      "claim_id": "3n.claim.stage3h_l2_overdefence",
+      "claim_text": "Stage 3H-L2 committed over-defence rate was 0/10.",
+      "source_file": "docs/research/llm-shield/evidence/stage-3h-layer2/metrics.json",
+      "source_field": "simurgh_containment_metrics.over_defence_rate.numerator",
+      "expected": 0,
+      "denominator_field": "simurgh_containment_metrics.over_defence_rate.denominator",
+      "expected_denominator": 10,
+      "status": "verified"
+    },
+    {
+      "claim_id": "3n.claim.stage3h_l2_historical_overdefence",
+      "claim_text": "Historically, defended benign utility dropped to 0/10 and over-defence was 10/10.",
+      "source_type": "prose_history",
+      "frozen_metric_artifact_present": false,
+      "status": "excluded_from_ledger",
+      "reason": "No committed metrics artifact proves this row; transient pre-3I bug, never frozen."
+    }
+  ]
+}

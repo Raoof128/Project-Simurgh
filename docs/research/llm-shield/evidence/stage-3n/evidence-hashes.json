@@ -1,0 +1,12 @@
+{
+  "stage": "3N",
+  "hashes": {
+    "docs/research/llm-shield/evidence/stage-3h-layer2/metrics.json": "sha256:f03fd1afdabae96ea77cb2b6449eb68942cee7454486732ac606e5f603e1da69",
+    "docs/research/llm-shield/evidence/stage-3j/all-suite-metrics.json": "sha256:07370ba1cffdf62acd4d9d440d99e63c06905e2cf0bd8acb4b9656e145065dcc",
+    "docs/research/llm-shield/evidence/stage-3k/metrics.json": "sha256:1186a23f9bc85d99557e4083d2e2218db503e527d55d16a24d913183990d32c6",
+    "docs/research/llm-shield/evidence/stage-3l/metrics.json": "sha256:b3a3c7239670fc98da214c61afe99bdd182a4967a2b15b7856977a1f2e344ff4",
+    "docs/research/llm-shield/evidence/stage-3m/attestation.bundle.json": "sha256:a920e1472c462e03373e28f408f605b04c776036226a725f39418d61c2b0e6fa",
+    "docs/research/llm-shield/evidence/stage-3m/attestation.signature.json": "sha256:16290c4bb64dfaacb1ac07573075bdb0fa473e71f53335a8964a8405a7b8dfc9",
+    "docs/research/llm-shield/evidence/stage-3m/attestation.public-key.json": "sha256:4a10de514ce57485d62f1bdf0d42dea72b0511d20039f2c67e7156659e846154"
+  }
+}
