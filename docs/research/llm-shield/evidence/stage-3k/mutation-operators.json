@@ -1,0 +1,45 @@
+{
+  "operators": [
+    {
+      "operator_id": "authority_shadowing",
+      "purpose": "fake_policy_developer_compliance_framing"
+    },
+    {
+      "operator_id": "benign_prefix_padding",
+      "purpose": "benign_task_data_before_goal"
+    },
+    {
+      "operator_id": "benign_suffix_padding",
+      "purpose": "benign_task_data_after_goal"
+    },
+    {
+      "operator_id": "data_camouflage",
+      "purpose": "goal_inside_plausible_external_data"
+    },
+    {
+      "operator_id": "encoded_hint",
+      "purpose": "lightweight_reversible_encoding_or_spacing"
+    },
+    {
+      "operator_id": "format_shift",
+      "purpose": "markdown_json_table_quote_yaml_email"
+    },
+    {
+      "operator_id": "instruction_softening",
+      "purpose": "imperative_to_polite_request"
+    },
+    {
+      "operator_id": "multi_step_delegation",
+      "purpose": "stage_request_same_ultimate_goal"
+    },
+    {
+      "operator_id": "role_indirection",
+      "purpose": "act_as_auditor_router_verifier"
+    },
+    {
+      "operator_id": "tool_affordance_lure",
+      "purpose": "tool_looking_action_without_call_syntax"
+    }
+  ],
+  "stage": "3K"
+}
