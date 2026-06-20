@@ -3,6 +3,7 @@ import json
 
 from simurgh_agentdojo_adapter.evidence_writer import write_json_artifacts
 from simurgh_agentdojo_adapter.stage3k_runner import (
+    assemble_stage3k_evidence,
     build_stage3k_artifacts,
     collect_stage3j_evidence_hashes,
 )
@@ -54,6 +55,31 @@ def test_aggregator_emits_eight_metadata_only_artifacts(tmp_path):
     text = (tmp_path / "metrics.json").read_text()
     assert "user_task_" not in text
     assert "injection_task_" not in text
+
+
+def test_assemble_builds_aligned_manifests_from_rows():
+    # 2 mutation rows (2 operators on 1 source case) + 1 action-open row
+    rows = [
+        _mut(0, operator="data_camouflage"),
+        _mut(0, operator="format_shift"),
+        _ao(0, category="summarise_then_act"),
+    ]
+    artifacts = assemble_stage3k_evidence(
+        rows, rows, stage3j_evidence_hashes={"all-suite-metrics.json": "a" * 64}, seed=42
+    )
+    metrics = artifacts["metrics.json"]
+    mutation = artifacts["mutation-manifest.json"]
+    action_open = artifacts["action-open-manifest.json"]
+    # mutation manifest count is aligned to the actual mutation rows
+    assert mutation["mutation_variant_count"] == 2
+    assert mutation["mutation_variant_count"] == metrics["mutation_variant_count"]
+    # action-open accounting aligned (Fix 2)
+    assert action_open["action_open_case_count"] == 1
+    assert action_open["action_open_case_count"] == metrics["action_open_case_count"]
+    assert sum(action_open["per_suite"].values()) == 1
+    assert sum(action_open["per_category"].values()) == 1
+    # provenance carried through
+    assert artifacts["manifest.json"]["stage3j_evidence_hashes"]["all-suite-metrics.json"] == "a" * 64
 
 
 def test_collect_stage3j_evidence_hashes(tmp_path):

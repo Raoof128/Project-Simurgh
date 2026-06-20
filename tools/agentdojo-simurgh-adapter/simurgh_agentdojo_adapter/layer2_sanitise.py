@@ -45,6 +45,11 @@ ALLOWLIST = {
     "unsafe_output_exported",
     "context_authority_escalated",
     "generated_evidence_leakage",
+    # Stage 3K descriptive tags (metadata-only enums).
+    "lane",
+    "operator_id",
+    "category",
+    "attacker_goal_completed",
 }
 
 
