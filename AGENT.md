@@ -2,6 +2,15 @@
 
 ## Agent Change Log
 
+### 2026-06-20 (Australia/Sydney) — Stage 3I AgentDojo utility recovery (context-provenance calibration)
+
+**Raouf:**
+
+- **Scope:** Recover Stage 3H-L2 sampled-run benign utility (was `0/10`, over-defence `10/10`) without weakening the context-provenance guard. Taxonomy-first: classify failures, locate the dominant boundary, then calibrate only that boundary.
+- **Summary:** Phase 1 added a no-policy-change error taxonomy + a precise over-defence metric (only Simurgh-boundary blocks count) + a decision gate (verdict: `rescope_context_guard_adapter`). Root cause: the Layer-2 adapter sent three invalid context fields (`trust_level: metadata_only`, `source_type: agentdojo_metadata`, `purpose: external_benchmark_receipt`), all outside the guard's allowed enums, so every context was schema-rejected and blocked. Phase 2 fixed provenance at the adapter (benign seed → `system_seed`/`synthetic`/`task_data` accepted; injection → `tool_result`/`untrusted`/`reference` demoted-to-data) and exposed a metadata-only `input_verdict` on the gateway response for accurate boundary labelling; guard logic unchanged. The real external AgentDojo pass confirmed recovery: benign utility `0/10 → 10/10`, over-defence `10/10 → 0/10`, Targeted ASR `0/20`, utility-under-attack `20/20`, context-authority escalation `0`, receipt/audit `30/30`. The task-permit stack stays deferred.
+- **Files changed:** `tools/agentdojo-simurgh-adapter/**`, `src/llmShield/gateway/gatewayRouter.js`, `scripts/*stage3i*`, `scripts/consistency-audit-llm-shield-stage3i.mjs`, `docs/research/llm-shield/STAGE_3I_PHASE_2_3_CONTEXT_GUARD_CALIBRATION_PLAN.md`, `docs/superpowers/{specs,plans}/*stage-3i*`, `docs/research/llm-shield/evidence/stage-3{h-layer2,i}/**`, `.gitignore`, `README.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `npm test` passed (625/625); adapter pytest passed (50/50); real external pass (`agentdojo==0.1.30`) plus Stage 3H-L2 and Stage 3I audits passed. Merged via PR #41; tagged `v1.2.0-stage-3i-agentdojo-utility-recovery`.
+
 ### 2026-06-19 (Australia/Sydney) — Stage 3H-L2 sampled AgentDojo external run
 
 **Raouf:**
