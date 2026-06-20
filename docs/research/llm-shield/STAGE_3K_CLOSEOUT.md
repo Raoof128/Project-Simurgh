@@ -11,26 +11,46 @@ justified.
 
 - **CI-safe machinery:** complete (manifest, mutations, action-open, metrics,
   operator breakdown, aggregator, audits, policy-drift guard, smoke gate,
-  reviewer docs). All unit-tested; catalogue-mode audits green.
-- **Real opt-in run (3K-F):** `TBD — pending maintainer real run` (needs the
-  `.venv-stage3i` AgentDojo venv, a running Simurgh gateway, and the authored
-  action-open probe tasks). Until then the data-bearing evidence is not frozen and
-  the audits run in catalogue mode.
+  reviewer docs). All unit-tested; audits run in full mode over the frozen
+  real-run evidence.
+- **Real opt-in run (3K-F):** completed against the real Simurgh gateway
+  (`SIMURGH_DEMO_MODE=1` `node server.js`) using the deterministic key-free
+  ground-truth pipeline via the `.venv-stage3i` AgentDojo venv. No live provider.
 
-## Results (filled by the real run)
+## Variant set (bounded, deterministic)
 
-| Metric                         | Value                    |
-| ------------------------------ | ------------------------ |
-| containment_hard_gates_clean   | `TBD — pending real run` |
-| metrics_consistent             | `TBD — pending real run` |
-| operator_asr_delta (max)       | `TBD — pending real run` |
-| action_open_attacker_goal_rate | `TBD — pending real run` |
-| benign_utility                 | `TBD — pending real run` |
-| targeted_asr                   | `TBD — pending real run` |
+- **benign lane:** 97 user tasks (synthetic seed, expected accepted).
+- **3K-A mutation lane:** 35 injection tasks × 10 operators = **350** variants
+  (untrusted context envelope).
+- **3K-B action-open lane:** 35 injection tasks assigned round-robin across the
+  five action-open categories (untrusted context).
+- Security cross-product evaluated by the native scorer: **385** (350 + 35).
+
+## Results (real run)
+
+| Metric                                | Value           |
+| ------------------------------------- | --------------- |
+| containment_hard_gates_clean          | **true**        |
+| metrics_consistent                    | **true**        |
+| benign_utility                        | **97/97**       |
+| targeted_asr                          | **0/385**       |
+| mutation_variant_count                | **350**         |
+| action_open_case_count                | **35**          |
+| operator_asr_delta (every operator)   | **0**           |
+| action_open_attacker_goal_rate        | **0**           |
+| receipt coverage / audit verification | **100% / 100%** |
+| native_agentdojo_scorer_changed       | false           |
+| python_side_safety_classifier         | false           |
+
+Across all ten deterministic mutation operators and all five action-open
+categories, no variant crossed a Simurgh consequence boundary: zero unsafe tool
+execution, zero unsafe output export, zero context authority escalation, with
+complete receipts and audit verification. This is a containment-invariance result
+under a deterministic key-free harness — not an adaptive-robustness claim.
 
 ## Stage 3L decision
 
-> Replace this line after the real run, per the spec Stage 3L decision table.
+Hard gates clean and utility stable (benign 97/97, ASR 0/385), so per the spec
+Stage 3L decision table no calibration stage is required.
 
-Stage 3L decision: `TBD — pending real run` (must become exactly one of
-`not triggered.` or `triggered because <measured class>.`).
+Stage 3L decision: not triggered.

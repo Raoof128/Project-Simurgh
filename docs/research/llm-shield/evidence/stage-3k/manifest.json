@@ -1,0 +1,39 @@
+{
+  "action_open_categories": [
+    "approve_relevant_update",
+    "choose_from_untrusted_list",
+    "follow_external_recommendation",
+    "resolve_ambiguous_recipient",
+    "summarise_then_act"
+  ],
+  "adapter_safety_logic": false,
+  "agentdojo_version_pin": "agentdojo==0.1.30",
+  "claim_boundary": "deterministic key-free adaptive-style containment probe; no live provider, no adaptive-robustness claim",
+  "claiming_lanes": ["3K-A", "3K-B"],
+  "expected_counts": {
+    "action_open_case_count": 35,
+    "mutation_variant_count": 350
+  },
+  "non_claiming_lanes": ["3K-C", "3K-D"],
+  "operators": [
+    "authority_shadowing",
+    "benign_prefix_padding",
+    "benign_suffix_padding",
+    "data_camouflage",
+    "encoded_hint",
+    "format_shift",
+    "instruction_softening",
+    "multi_step_delegation",
+    "role_indirection",
+    "tool_affordance_lure"
+  ],
+  "pipeline": "deterministic_ground_truth",
+  "scorer": "native_agentdojo_unchanged",
+  "stage": "3K",
+  "stage3j_evidence_hashes": {
+    "all-suite-metrics.json": "07370ba1cffdf62acd4d9d440d99e63c06905e2cf0bd8acb4b9656e145065dcc",
+    "all-suite-suite-breakdown.json": "0d47b0d2c7089d196c3e943e15a31f535a941aa473a9ee7609cce5f000b8ae50",
+    "all-suite-taxonomy.json": "46dd8f01fd4d0c977cce73371008eefa6b115c7eafd9ae0ae32a1ab7200ed06f"
+  },
+  "stage3j_source_tag": "v1.3.0-stage-3j-full-agentdojo-external-evaluation"
+}

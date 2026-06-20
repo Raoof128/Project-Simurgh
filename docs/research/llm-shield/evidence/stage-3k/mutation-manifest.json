@@ -1,0 +1,2119 @@
+{
+  "entries": [
+    {
+      "operator_id": "authority_shadowing",
+      "operator_params_hash": "73ba2b4feac0b80fe7c01c0f6d64963221d58ee018cba8206cad79672cd85945",
+      "source_case_hash": "6afb4254585b505ec7f72c72dc7d39cecabf8cf120d2e3f6ecf755a6e72e839b",
+      "variant_hash": "934992f31cc751e94555585f1ab4678c9e3f769f3aa4af7cbc5dd055160c6594"
+    },
+    {
+      "operator_id": "benign_prefix_padding",
+      "operator_params_hash": "4272346eb8e5fb1af40d985c1f04618931abeea2fa0bacfdf4b88f86b0e8d70d",
+      "source_case_hash": "6afb4254585b505ec7f72c72dc7d39cecabf8cf120d2e3f6ecf755a6e72e839b",
+      "variant_hash": "2fb669785628005fcaca4098553e0b6310ae07be51ad5fe4501d796dc2781a31"
+    },
+    {
+      "operator_id": "benign_suffix_padding",
+      "operator_params_hash": "8c78c533777fa799cd60f55a142bb78f1e8a7e35e23ca64958bd44f8816a270d",
+      "source_case_hash": "6afb4254585b505ec7f72c72dc7d39cecabf8cf120d2e3f6ecf755a6e72e839b",
+      "variant_hash": "481be2408fa755f08f4ae200df5676bfb2796d5ad086276bbea0e9dfb6840f0b"
+    },
+    {
+      "operator_id": "data_camouflage",
+      "operator_params_hash": "244013f2e00d9f283da1767e4846b4261f7271b553d80eb2921481b43defbf16",
+      "source_case_hash": "6afb4254585b505ec7f72c72dc7d39cecabf8cf120d2e3f6ecf755a6e72e839b",
+      "variant_hash": "506dda6c9636be7b5dcad1f4e29cba8161fe339beced83ebd549f28fc3376ad5"
+    },
+    {
+      "operator_id": "encoded_hint",
+      "operator_params_hash": "f5793bcd9e95a98a6ce8079243a7f4e3652d4de84d12433995a616721023c49f",
+      "source_case_hash": "6afb4254585b505ec7f72c72dc7d39cecabf8cf120d2e3f6ecf755a6e72e839b",
+      "variant_hash": "de0f6111df34a876e61ca73c6b2374ae828f742b50863f7f5716fc107f89160b"
+    },
+    {
+      "operator_id": "format_shift",
+      "operator_params_hash": "02a16818c530532948e0f2c0614e18a1b585b6e0ecfa80d14f11c98aac3554c4",
+      "source_case_hash": "6afb4254585b505ec7f72c72dc7d39cecabf8cf120d2e3f6ecf755a6e72e839b",
+      "variant_hash": "84448667c98c954c5ec49b00056e6050fe86953efa1cc49b86395e57ebbed8f0"
+    },
+    {
+      "operator_id": "instruction_softening",
+      "operator_params_hash": "e1e11d0e2fb72c695958e6f2920f0434c07a648b38b55adbc03b7a4a69160204",
+      "source_case_hash": "6afb4254585b505ec7f72c72dc7d39cecabf8cf120d2e3f6ecf755a6e72e839b",
+      "variant_hash": "30ed470326e29899640078e6bf8540de8879cb965d5c3c9f8d67e16f07883dcf"
+    },
+    {
+      "operator_id": "multi_step_delegation",
+      "operator_params_hash": "a0c24b968ec9b12d3e20cc5d3f3017d95cbf0afc4d034913d229bb025b258a9e",
+      "source_case_hash": "6afb4254585b505ec7f72c72dc7d39cecabf8cf120d2e3f6ecf755a6e72e839b",
+      "variant_hash": "700b8286ad3f5f82f13fcceb7a191d9c318b1a929c37c3d089910d2d7e59509d"
+    },
+    {
+      "operator_id": "role_indirection",
+      "operator_params_hash": "308c4f14e90be4c720ea7a0a6656cb363be540e3913118f2d7661ae38079696d",
+      "source_case_hash": "6afb4254585b505ec7f72c72dc7d39cecabf8cf120d2e3f6ecf755a6e72e839b",
+      "variant_hash": "c1c309e7fc12c768cee806ff1fb6daedbc5c170c5c69cc72d20c7eb257c18679"
+    },
+    {
+      "operator_id": "tool_affordance_lure",
+      "operator_params_hash": "73355c28c7b19efe29124b62cd9d16351a559151f67eb8e10a6058d6ca027574",
+      "source_case_hash": "6afb4254585b505ec7f72c72dc7d39cecabf8cf120d2e3f6ecf755a6e72e839b",
+      "variant_hash": "23c4080197dc0d88a2ca74ede880756fd05549caed9e606d5cd337f2512505a7"
+    },
+    {
+      "operator_id": "authority_shadowing",
+      "operator_params_hash": "73ba2b4feac0b80fe7c01c0f6d64963221d58ee018cba8206cad79672cd85945",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "3a555c9a8f0a975d1e059e40804b9fcc9fb7a42e29fa2e9fab1d3264a4023ee6"
+    },
+    {
+      "operator_id": "benign_prefix_padding",
+      "operator_params_hash": "4272346eb8e5fb1af40d985c1f04618931abeea2fa0bacfdf4b88f86b0e8d70d",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "c100e1fca1f0c504225c4c8f6cbf6de834c2766a032338e6a15971035018fffe"
+    },
+    {
+      "operator_id": "benign_suffix_padding",
+      "operator_params_hash": "8c78c533777fa799cd60f55a142bb78f1e8a7e35e23ca64958bd44f8816a270d",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "705594617a9673df507aa2c7a3406a5ffdecf9b0503000284803a686145df5bf"
+    },
+    {
+      "operator_id": "data_camouflage",
+      "operator_params_hash": "244013f2e00d9f283da1767e4846b4261f7271b553d80eb2921481b43defbf16",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "77551bd8af81dab15b1f32c890a93a57441321cf7211f4677d576cab3447fd52"
+    },
+    {
+      "operator_id": "encoded_hint",
+      "operator_params_hash": "f5793bcd9e95a98a6ce8079243a7f4e3652d4de84d12433995a616721023c49f",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "49e84587525a5c5314f6f7aa6971d53fb9074b35c7b9dfeed0c1239513c1741e"
+    },
+    {
+      "operator_id": "format_shift",
+      "operator_params_hash": "02a16818c530532948e0f2c0614e18a1b585b6e0ecfa80d14f11c98aac3554c4",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "379c58f912e147bb0d165d65158f98389a8df806a96ec1c06bcbf954cef3e651"
+    },
+    {
+      "operator_id": "instruction_softening",
+      "operator_params_hash": "e1e11d0e2fb72c695958e6f2920f0434c07a648b38b55adbc03b7a4a69160204",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "151af6cf9f49ab2adf57eaf905e2de91d99465eb4dbcc530ef02b35c18a2eefc"
+    },
+    {
+      "operator_id": "multi_step_delegation",
+      "operator_params_hash": "a0c24b968ec9b12d3e20cc5d3f3017d95cbf0afc4d034913d229bb025b258a9e",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "e06518db3936b46d1703b3ceaa52f782afca7e1f09c34eb6f9cf13787a43102c"
+    },
+    {
+      "operator_id": "role_indirection",
+      "operator_params_hash": "308c4f14e90be4c720ea7a0a6656cb363be540e3913118f2d7661ae38079696d",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "c18d31ec00614bb5f8a4596f3fc404fe99e89980008037aa4bb3f8e4cc44b6f2"
+    },
+    {
+      "operator_id": "tool_affordance_lure",
+      "operator_params_hash": "73355c28c7b19efe29124b62cd9d16351a559151f67eb8e10a6058d6ca027574",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "5e4746a2ba27430d4b4cf318e56749b3b00dd4c184eaf783f2cf80ef98e24c3c"
+    },
+    {
+      "operator_id": "authority_shadowing",
+      "operator_params_hash": "73ba2b4feac0b80fe7c01c0f6d64963221d58ee018cba8206cad79672cd85945",
+      "source_case_hash": "cb06f7f85cfdf7d6f45848725a3e14c375b7d49ca2e769e8023079d37b55917d",
+      "variant_hash": "0969b9df1621fafe17c826c45df1d4e3f9319a997866f7cceb2c0356eb0b2d33"
+    },
+    {
+      "operator_id": "benign_prefix_padding",
+      "operator_params_hash": "4272346eb8e5fb1af40d985c1f04618931abeea2fa0bacfdf4b88f86b0e8d70d",
+      "source_case_hash": "cb06f7f85cfdf7d6f45848725a3e14c375b7d49ca2e769e8023079d37b55917d",
+      "variant_hash": "92a0f5994fc72e0eaaa893295727f23d932d85210aa1f7ef2bcdcfe62e6d27a1"
+    },
+    {
+      "operator_id": "benign_suffix_padding",
+      "operator_params_hash": "8c78c533777fa799cd60f55a142bb78f1e8a7e35e23ca64958bd44f8816a270d",
+      "source_case_hash": "cb06f7f85cfdf7d6f45848725a3e14c375b7d49ca2e769e8023079d37b55917d",
+      "variant_hash": "78db2bc7fc3f50fa696da6562e31e0338d88ba7e7cc73608c8fd6a1f1f597bf4"
+    },
+    {
+      "operator_id": "data_camouflage",
+      "operator_params_hash": "244013f2e00d9f283da1767e4846b4261f7271b553d80eb2921481b43defbf16",
+      "source_case_hash": "cb06f7f85cfdf7d6f45848725a3e14c375b7d49ca2e769e8023079d37b55917d",
+      "variant_hash": "ac52672bd4c826feeb684ef269476842df05f69d2c8d78f5b5876ce32d07b3fe"
+    },
+    {
+      "operator_id": "encoded_hint",
+      "operator_params_hash": "f5793bcd9e95a98a6ce8079243a7f4e3652d4de84d12433995a616721023c49f",
+      "source_case_hash": "cb06f7f85cfdf7d6f45848725a3e14c375b7d49ca2e769e8023079d37b55917d",
+      "variant_hash": "2d1eec79dd6b7643800f1d9494d88a7ee4fa7826f321daf1f10f68b82c754a50"
+    },
+    {
+      "operator_id": "format_shift",
+      "operator_params_hash": "02a16818c530532948e0f2c0614e18a1b585b6e0ecfa80d14f11c98aac3554c4",
+      "source_case_hash": "cb06f7f85cfdf7d6f45848725a3e14c375b7d49ca2e769e8023079d37b55917d",
+      "variant_hash": "2cac846d9295120d39e3bc6d9615c8e28e0834d75c6be09b2f2f98258ef98b8e"
+    },
+    {
+      "operator_id": "instruction_softening",
+      "operator_params_hash": "e1e11d0e2fb72c695958e6f2920f0434c07a648b38b55adbc03b7a4a69160204",
+      "source_case_hash": "cb06f7f85cfdf7d6f45848725a3e14c375b7d49ca2e769e8023079d37b55917d",
+      "variant_hash": "171a833427f2eee9c92f33c513c3ed33c427740e24c538e67f293b88c71446e7"
+    },
+    {
+      "operator_id": "multi_step_delegation",
+      "operator_params_hash": "a0c24b968ec9b12d3e20cc5d3f3017d95cbf0afc4d034913d229bb025b258a9e",
+      "source_case_hash": "cb06f7f85cfdf7d6f45848725a3e14c375b7d49ca2e769e8023079d37b55917d",
+      "variant_hash": "88639285ffc3e266a49984fd80693b37ac196a201070cea598dec7cb6fdc3295"
+    },
+    {
+      "operator_id": "role_indirection",
+      "operator_params_hash": "308c4f14e90be4c720ea7a0a6656cb363be540e3913118f2d7661ae38079696d",
+      "source_case_hash": "cb06f7f85cfdf7d6f45848725a3e14c375b7d49ca2e769e8023079d37b55917d",
+      "variant_hash": "64c3f95893fdc1c2389ed2590f45ec63eff0a44eb04a4c173d0202aff07ee5d8"
+    },
+    {
+      "operator_id": "tool_affordance_lure",
+      "operator_params_hash": "73355c28c7b19efe29124b62cd9d16351a559151f67eb8e10a6058d6ca027574",
+      "source_case_hash": "cb06f7f85cfdf7d6f45848725a3e14c375b7d49ca2e769e8023079d37b55917d",
+      "variant_hash": "6ce6d8f559a51e8e3d7b6295ee4b38c70bb5ace428819368951baf66dff55a4e"
+    },
+    {
+      "operator_id": "authority_shadowing",
+      "operator_params_hash": "73ba2b4feac0b80fe7c01c0f6d64963221d58ee018cba8206cad79672cd85945",
+      "source_case_hash": "e2b13220b6b9feab913eb46e1889f5943f415050893da7b219e0f2ca2851c811",
+      "variant_hash": "96eda16952cfc348fd61d85a3c49638367f2812fd36f4185db8bc2b6c7cec04b"
+    },
+    {
+      "operator_id": "benign_prefix_padding",
+      "operator_params_hash": "4272346eb8e5fb1af40d985c1f04618931abeea2fa0bacfdf4b88f86b0e8d70d",
+      "source_case_hash": "e2b13220b6b9feab913eb46e1889f5943f415050893da7b219e0f2ca2851c811",
+      "variant_hash": "10569fb2ed4561d6caaf591f0046fc87d5e0edd46860170532f96f7224124b73"
+    },
+    {
+      "operator_id": "benign_suffix_padding",
+      "operator_params_hash": "8c78c533777fa799cd60f55a142bb78f1e8a7e35e23ca64958bd44f8816a270d",
+      "source_case_hash": "e2b13220b6b9feab913eb46e1889f5943f415050893da7b219e0f2ca2851c811",
+      "variant_hash": "cedb4ec83427b5feaaa4735ea09264a93edf602202bf0f3ee01958d89235cdf8"
+    },
+    {
+      "operator_id": "data_camouflage",
+      "operator_params_hash": "244013f2e00d9f283da1767e4846b4261f7271b553d80eb2921481b43defbf16",
+      "source_case_hash": "e2b13220b6b9feab913eb46e1889f5943f415050893da7b219e0f2ca2851c811",
+      "variant_hash": "d84d150cab65ecceb2a1b38e0638f550f4c6d5f73210ace8d95a4a965d3793a8"
+    },
+    {
+      "operator_id": "encoded_hint",
+      "operator_params_hash": "f5793bcd9e95a98a6ce8079243a7f4e3652d4de84d12433995a616721023c49f",
+      "source_case_hash": "e2b13220b6b9feab913eb46e1889f5943f415050893da7b219e0f2ca2851c811",
+      "variant_hash": "f7294244ec30552de34092953c10344d594b947192574500fd7136782e89c9e6"
+    },
+    {
+      "operator_id": "format_shift",
+      "operator_params_hash": "02a16818c530532948e0f2c0614e18a1b585b6e0ecfa80d14f11c98aac3554c4",
+      "source_case_hash": "e2b13220b6b9feab913eb46e1889f5943f415050893da7b219e0f2ca2851c811",
+      "variant_hash": "a8f25c67b88b73fac52755b72a167a5dc7af15493b353720e1b85f3cc1414646"
+    },
+    {
+      "operator_id": "instruction_softening",
+      "operator_params_hash": "e1e11d0e2fb72c695958e6f2920f0434c07a648b38b55adbc03b7a4a69160204",
+      "source_case_hash": "e2b13220b6b9feab913eb46e1889f5943f415050893da7b219e0f2ca2851c811",
+      "variant_hash": "81ad1da1264f5afc858a7d530a4ff6fba00d0d5c36daa6dc904f36f9c6b09e95"
+    },
+    {
+      "operator_id": "multi_step_delegation",
+      "operator_params_hash": "a0c24b968ec9b12d3e20cc5d3f3017d95cbf0afc4d034913d229bb025b258a9e",
+      "source_case_hash": "e2b13220b6b9feab913eb46e1889f5943f415050893da7b219e0f2ca2851c811",
+      "variant_hash": "ac8996670b4c09cea72efdf3067a8cbc218fa20e656a74019c3cb7507e971995"
+    },
+    {
+      "operator_id": "role_indirection",
+      "operator_params_hash": "308c4f14e90be4c720ea7a0a6656cb363be540e3913118f2d7661ae38079696d",
+      "source_case_hash": "e2b13220b6b9feab913eb46e1889f5943f415050893da7b219e0f2ca2851c811",
+      "variant_hash": "af0a002ba41359d60f0cb4cf195d9791680b4644f74bc2d2c8220f513d00fa7c"
+    },
+    {
+      "operator_id": "tool_affordance_lure",
+      "operator_params_hash": "73355c28c7b19efe29124b62cd9d16351a559151f67eb8e10a6058d6ca027574",
+      "source_case_hash": "e2b13220b6b9feab913eb46e1889f5943f415050893da7b219e0f2ca2851c811",
+      "variant_hash": "b97d7e7aa91e99d942df8176cd22dce773fe94ec90d6c83a01b5b68f2465c88c"
+    },
+    {
+      "operator_id": "authority_shadowing",
+      "operator_params_hash": "73ba2b4feac0b80fe7c01c0f6d64963221d58ee018cba8206cad79672cd85945",
+      "source_case_hash": "ce58bc27ca7102e9ade393f69c2d7015f952d6ccfb60d829d548b39e70ae010a",
+      "variant_hash": "1a068ea9a389ad6f70a2538f9674507b2786a67e286b2cc1fa2c315fb200ff86"
+    },
+    {
+      "operator_id": "benign_prefix_padding",
+      "operator_params_hash": "4272346eb8e5fb1af40d985c1f04618931abeea2fa0bacfdf4b88f86b0e8d70d",
+      "source_case_hash": "ce58bc27ca7102e9ade393f69c2d7015f952d6ccfb60d829d548b39e70ae010a",
+      "variant_hash": "a9ea67d784020c4b692e71f7eb4a6e8963950e690fd23249f30c7bd1e6284f16"
+    },
+    {
+      "operator_id": "benign_suffix_padding",
+      "operator_params_hash": "8c78c533777fa799cd60f55a142bb78f1e8a7e35e23ca64958bd44f8816a270d",
+      "source_case_hash": "ce58bc27ca7102e9ade393f69c2d7015f952d6ccfb60d829d548b39e70ae010a",
+      "variant_hash": "b516b7a18541e30fab9789d62838a95ad58734629f2b7f4d0433cbf1dac4cfa0"
+    },
+    {
+      "operator_id": "data_camouflage",
+      "operator_params_hash": "244013f2e00d9f283da1767e4846b4261f7271b553d80eb2921481b43defbf16",
+      "source_case_hash": "ce58bc27ca7102e9ade393f69c2d7015f952d6ccfb60d829d548b39e70ae010a",
+      "variant_hash": "3c4df584148c68aed729efaa3dfcc084d24a5ca3dbe7f532813510b1bb74f6ff"
+    },
+    {
+      "operator_id": "encoded_hint",
+      "operator_params_hash": "f5793bcd9e95a98a6ce8079243a7f4e3652d4de84d12433995a616721023c49f",
+      "source_case_hash": "ce58bc27ca7102e9ade393f69c2d7015f952d6ccfb60d829d548b39e70ae010a",
+      "variant_hash": "cbc3d1ad650e93b178df0e6e246d41881f2d0f7eae300025acf9744c3e698f28"
+    },
+    {
+      "operator_id": "format_shift",
+      "operator_params_hash": "02a16818c530532948e0f2c0614e18a1b585b6e0ecfa80d14f11c98aac3554c4",
+      "source_case_hash": "ce58bc27ca7102e9ade393f69c2d7015f952d6ccfb60d829d548b39e70ae010a",
+      "variant_hash": "a28cc2199991e3bf04b9e071daedc9d0788d03bf19e80ab20f343bd179a94eea"
+    },
+    {
+      "operator_id": "instruction_softening",
+      "operator_params_hash": "e1e11d0e2fb72c695958e6f2920f0434c07a648b38b55adbc03b7a4a69160204",
+      "source_case_hash": "ce58bc27ca7102e9ade393f69c2d7015f952d6ccfb60d829d548b39e70ae010a",
+      "variant_hash": "9ba316f82fe7b4f330d498fd82dd7151a0a270082ce58b6450f24e368c89d4f2"
+    },
+    {
+      "operator_id": "multi_step_delegation",
+      "operator_params_hash": "a0c24b968ec9b12d3e20cc5d3f3017d95cbf0afc4d034913d229bb025b258a9e",
+      "source_case_hash": "ce58bc27ca7102e9ade393f69c2d7015f952d6ccfb60d829d548b39e70ae010a",
+      "variant_hash": "ee49dc53ed7fbf4d0f1adad61a6df0a31b4f3623840d063fa880f3ac1b655e0f"
+    },
+    {
+      "operator_id": "role_indirection",
+      "operator_params_hash": "308c4f14e90be4c720ea7a0a6656cb363be540e3913118f2d7661ae38079696d",
+      "source_case_hash": "ce58bc27ca7102e9ade393f69c2d7015f952d6ccfb60d829d548b39e70ae010a",
+      "variant_hash": "1a8839d5f3d628c1992634b6db8d73ba4779b3f23a0b5ef130de89caa77b46e2"
+    },
+    {
+      "operator_id": "tool_affordance_lure",
+      "operator_params_hash": "73355c28c7b19efe29124b62cd9d16351a559151f67eb8e10a6058d6ca027574",
+      "source_case_hash": "ce58bc27ca7102e9ade393f69c2d7015f952d6ccfb60d829d548b39e70ae010a",
+      "variant_hash": "745a06cb6740f6ef112fb939a2a1f20f3bf3e4733eccda9a57c277de127bc0da"
+    },
+    {
+      "operator_id": "authority_shadowing",
+      "operator_params_hash": "73ba2b4feac0b80fe7c01c0f6d64963221d58ee018cba8206cad79672cd85945",
+      "source_case_hash": "f48d94aaf2e6739164b8b73c0c6e0110c302195f883aff21f7297ceefadce886",
+      "variant_hash": "109546934ffd173714084d49923628df6df2a288b290cdd246dd9af2cc99b122"
+    },
+    {
+      "operator_id": "benign_prefix_padding",
+      "operator_params_hash": "4272346eb8e5fb1af40d985c1f04618931abeea2fa0bacfdf4b88f86b0e8d70d",
+      "source_case_hash": "f48d94aaf2e6739164b8b73c0c6e0110c302195f883aff21f7297ceefadce886",
+      "variant_hash": "6204a0723a2fc3eb9d18fc0cbc1e0ca426c56906ee84951e936c4448590eb740"
+    },
+    {
+      "operator_id": "benign_suffix_padding",
+      "operator_params_hash": "8c78c533777fa799cd60f55a142bb78f1e8a7e35e23ca64958bd44f8816a270d",
+      "source_case_hash": "f48d94aaf2e6739164b8b73c0c6e0110c302195f883aff21f7297ceefadce886",
+      "variant_hash": "3475311af603ebe0b9b4ee1f44b8ea26890a8a87880b5934039f12eadb8580aa"
+    },
+    {
+      "operator_id": "data_camouflage",
+      "operator_params_hash": "244013f2e00d9f283da1767e4846b4261f7271b553d80eb2921481b43defbf16",
+      "source_case_hash": "f48d94aaf2e6739164b8b73c0c6e0110c302195f883aff21f7297ceefadce886",
+      "variant_hash": "b827a3576809f92e8d54fe7059e34150c5d9049c37c823e4faf12990e6b04e5a"
+    },
+    {
+      "operator_id": "encoded_hint",
+      "operator_params_hash": "f5793bcd9e95a98a6ce8079243a7f4e3652d4de84d12433995a616721023c49f",
+      "source_case_hash": "f48d94aaf2e6739164b8b73c0c6e0110c302195f883aff21f7297ceefadce886",
+      "variant_hash": "f6251c7cde335e66227082da3749ec80b4ca78584667aafe878d6bbaf6b41516"
+    },
+    {
+      "operator_id": "format_shift",
+      "operator_params_hash": "02a16818c530532948e0f2c0614e18a1b585b6e0ecfa80d14f11c98aac3554c4",
+      "source_case_hash": "f48d94aaf2e6739164b8b73c0c6e0110c302195f883aff21f7297ceefadce886",
+      "variant_hash": "ba4dec0215ec9e752ca2aac740d5e2e92d915da80dc8bf7068a6e9c35e51fdce"
+    },
+    {
+      "operator_id": "instruction_softening",
+      "operator_params_hash": "e1e11d0e2fb72c695958e6f2920f0434c07a648b38b55adbc03b7a4a69160204",
+      "source_case_hash": "f48d94aaf2e6739164b8b73c0c6e0110c302195f883aff21f7297ceefadce886",
+      "variant_hash": "ebb6ba04c413f93ff6b0be65dba173fcd71de65aebe6e2060d54a31ac04d3244"
+    },
+    {
+      "operator_id": "multi_step_delegation",
+      "operator_params_hash": "a0c24b968ec9b12d3e20cc5d3f3017d95cbf0afc4d034913d229bb025b258a9e",
+      "source_case_hash": "f48d94aaf2e6739164b8b73c0c6e0110c302195f883aff21f7297ceefadce886",
+      "variant_hash": "a5f281cdd6d65f7a74642eaf14201568e3dd4c0b92c2b59596c5a0c3130d0514"
+    },
+    {
+      "operator_id": "role_indirection",
+      "operator_params_hash": "308c4f14e90be4c720ea7a0a6656cb363be540e3913118f2d7661ae38079696d",
+      "source_case_hash": "f48d94aaf2e6739164b8b73c0c6e0110c302195f883aff21f7297ceefadce886",
+      "variant_hash": "6ad219a107e6972c64e12bc0440dbbde8b34d45a1ee31bcc4a4870072cc61118"
+    },
+    {
+      "operator_id": "tool_affordance_lure",
+      "operator_params_hash": "73355c28c7b19efe29124b62cd9d16351a559151f67eb8e10a6058d6ca027574",
+      "source_case_hash": "f48d94aaf2e6739164b8b73c0c6e0110c302195f883aff21f7297ceefadce886",
+      "variant_hash": "a609f0c23cc48ae8e6467e7f6a62f2b1e812a339c0a07bb3a5d6a30f8701c481"
+    },
+    {
+      "operator_id": "authority_shadowing",
+      "operator_params_hash": "73ba2b4feac0b80fe7c01c0f6d64963221d58ee018cba8206cad79672cd85945",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "074f372b73545999b60584b999b85af5992f5c0b6c36327a56ef4e6ea8090c62"
+    },
+    {
+      "operator_id": "benign_prefix_padding",
+      "operator_params_hash": "4272346eb8e5fb1af40d985c1f04618931abeea2fa0bacfdf4b88f86b0e8d70d",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "968cc4dfd481101f5fba2ddb176b7e0ad1fedebc40675bccc66b78def18a911e"
+    },
+    {
+      "operator_id": "benign_suffix_padding",
+      "operator_params_hash": "8c78c533777fa799cd60f55a142bb78f1e8a7e35e23ca64958bd44f8816a270d",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "b4ff716a07c69de5db7d51db0915c9b770cf0d5816a0020c1759b31916f96477"
+    },
+    {
+      "operator_id": "data_camouflage",
+      "operator_params_hash": "244013f2e00d9f283da1767e4846b4261f7271b553d80eb2921481b43defbf16",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "9760919b7ef8f205fde8ca0ba5c733925be3cfc8fea0426579e91c559feb805a"
+    },
+    {
+      "operator_id": "encoded_hint",
+      "operator_params_hash": "f5793bcd9e95a98a6ce8079243a7f4e3652d4de84d12433995a616721023c49f",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "f691b9924650f824f2878b9bddef3a437fe884a23479f2c801359b6b64ad046f"
+    },
+    {
+      "operator_id": "format_shift",
+      "operator_params_hash": "02a16818c530532948e0f2c0614e18a1b585b6e0ecfa80d14f11c98aac3554c4",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "e55da982b37edb96827b163d465e53da09d344849d03dac2f2c535ba883f8033"
+    },
+    {
+      "operator_id": "instruction_softening",
+      "operator_params_hash": "e1e11d0e2fb72c695958e6f2920f0434c07a648b38b55adbc03b7a4a69160204",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "e20f7ff93ad3adad1023d19fc26120c21b54c63bb27a32b9b4311528f8887bb1"
+    },
+    {
+      "operator_id": "multi_step_delegation",
+      "operator_params_hash": "a0c24b968ec9b12d3e20cc5d3f3017d95cbf0afc4d034913d229bb025b258a9e",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "3a3b90cd9323ca791b615b1b3944960476fe8522aad8b49f232c3ff6615e70ae"
+    },
+    {
+      "operator_id": "role_indirection",
+      "operator_params_hash": "308c4f14e90be4c720ea7a0a6656cb363be540e3913118f2d7661ae38079696d",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "af1eaefb09454b7d7f4d1920d7f51f1a052315c4eac0129b25bcee9eb2002bbe"
+    },
+    {
+      "operator_id": "tool_affordance_lure",
+      "operator_params_hash": "73355c28c7b19efe29124b62cd9d16351a559151f67eb8e10a6058d6ca027574",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "3b040831d87360c968821b37ddbb9f5150eb132255662847b545bd4267e2f023"
+    },
+    {
+      "operator_id": "authority_shadowing",
+      "operator_params_hash": "73ba2b4feac0b80fe7c01c0f6d64963221d58ee018cba8206cad79672cd85945",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "e346bf8c232fa4dfeae96ff857a6d52dbec06c9d372c725417f136adfa27c539"
+    },
+    {
+      "operator_id": "benign_prefix_padding",
+      "operator_params_hash": "4272346eb8e5fb1af40d985c1f04618931abeea2fa0bacfdf4b88f86b0e8d70d",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "be41f1ff4f6f3189052e6b8a5e7a50907ce3e4ce2c1a37bc91ebdb4b04aff1f9"
+    },
+    {
+      "operator_id": "benign_suffix_padding",
+      "operator_params_hash": "8c78c533777fa799cd60f55a142bb78f1e8a7e35e23ca64958bd44f8816a270d",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "7fad3e8b7e66564a70cdd76ea58fc9deff96fdf871914c8d71dd77715d61f4b0"
+    },
+    {
+      "operator_id": "data_camouflage",
+      "operator_params_hash": "244013f2e00d9f283da1767e4846b4261f7271b553d80eb2921481b43defbf16",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "0ad065f5f4976209c0f09c4ced105cbc92d3c700d26b53d564eff0dc09893159"
+    },
+    {
+      "operator_id": "encoded_hint",
+      "operator_params_hash": "f5793bcd9e95a98a6ce8079243a7f4e3652d4de84d12433995a616721023c49f",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "7300347804b7a88e1af36de678b42f977978c9ed616868bd35724feac043ce32"
+    },
+    {
+      "operator_id": "format_shift",
+      "operator_params_hash": "02a16818c530532948e0f2c0614e18a1b585b6e0ecfa80d14f11c98aac3554c4",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "bb107a7896c93e7816c708298a1c2d88b595b4099c944adcceec3181b2a80cf6"
+    },
+    {
+      "operator_id": "instruction_softening",
+      "operator_params_hash": "e1e11d0e2fb72c695958e6f2920f0434c07a648b38b55adbc03b7a4a69160204",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "f2efe62e8811f9cbeed24baa16ad01950c2f51f447b49bb8947638083e6e2720"
+    },
+    {
+      "operator_id": "multi_step_delegation",
+      "operator_params_hash": "a0c24b968ec9b12d3e20cc5d3f3017d95cbf0afc4d034913d229bb025b258a9e",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "6d58b6f5c9b7c4472c5043fe4efd7e72eeaa4940f42439f5cba56e4a3c672529"
+    },
+    {
+      "operator_id": "role_indirection",
+      "operator_params_hash": "308c4f14e90be4c720ea7a0a6656cb363be540e3913118f2d7661ae38079696d",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "5bfc8be17ac42b237572ff1c6069b7626033c1aef123e2af45366f305472ac03"
+    },
+    {
+      "operator_id": "tool_affordance_lure",
+      "operator_params_hash": "73355c28c7b19efe29124b62cd9d16351a559151f67eb8e10a6058d6ca027574",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "928fb1b54935b64dc4ce218dab004d326eb39043d1fdd144eafa4aac5208bece"
+    },
+    {
+      "operator_id": "authority_shadowing",
+      "operator_params_hash": "73ba2b4feac0b80fe7c01c0f6d64963221d58ee018cba8206cad79672cd85945",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "b1eb741ac23033021effc808b6373616256923847407b899a4fc1d0736118bdc"
+    },
+    {
+      "operator_id": "benign_prefix_padding",
+      "operator_params_hash": "4272346eb8e5fb1af40d985c1f04618931abeea2fa0bacfdf4b88f86b0e8d70d",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "33bbe70cbe0d55235e7e1c816c107e45e1f448f013d50b152d7d4faef73c9503"
+    },
+    {
+      "operator_id": "benign_suffix_padding",
+      "operator_params_hash": "8c78c533777fa799cd60f55a142bb78f1e8a7e35e23ca64958bd44f8816a270d",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "86191e049da8d5bd7448ac12c77f777df311e8eb1b6371cbed759a803423f40d"
+    },
+    {
+      "operator_id": "data_camouflage",
+      "operator_params_hash": "244013f2e00d9f283da1767e4846b4261f7271b553d80eb2921481b43defbf16",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "5b6aa9df8905c8a0e2800463b3ee6405605d5b29683eb715970b0af8aa219499"
+    },
+    {
+      "operator_id": "encoded_hint",
+      "operator_params_hash": "f5793bcd9e95a98a6ce8079243a7f4e3652d4de84d12433995a616721023c49f",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "6d1aef65d8496c3eddafe0104dab48f5e01ae84c7263ec592967d73bc21cbd73"
+    },
+    {
+      "operator_id": "format_shift",
+      "operator_params_hash": "02a16818c530532948e0f2c0614e18a1b585b6e0ecfa80d14f11c98aac3554c4",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "065128845c0eac1d57d7181919653540540012b9d9d3303839f62c7a5bbb04d3"
+    },
+    {
+      "operator_id": "instruction_softening",
+      "operator_params_hash": "e1e11d0e2fb72c695958e6f2920f0434c07a648b38b55adbc03b7a4a69160204",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "b11199d655dae9860ef3ab2cb47a2679226e47c0b6ef68780da5b888d4c5d036"
+    },
+    {
+      "operator_id": "multi_step_delegation",
+      "operator_params_hash": "a0c24b968ec9b12d3e20cc5d3f3017d95cbf0afc4d034913d229bb025b258a9e",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "c1a02d224cb7860d5453ed172d019f9a807fd9e169a99d3e1edb6362b93c7aaf"
+    },
+    {
+      "operator_id": "role_indirection",
+      "operator_params_hash": "308c4f14e90be4c720ea7a0a6656cb363be540e3913118f2d7661ae38079696d",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "acb16a4750fde4a95f29c2b5818f8eae52098d7d05415b2f223ed58d4c572aaf"
+    },
+    {
+      "operator_id": "tool_affordance_lure",
+      "operator_params_hash": "73355c28c7b19efe29124b62cd9d16351a559151f67eb8e10a6058d6ca027574",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "8ecdb57519b412feb85b5410c578fa3dd8de518b28946e4a0f367a9830bcfa9b"
+    },
+    {
+      "operator_id": "authority_shadowing",
+      "operator_params_hash": "73ba2b4feac0b80fe7c01c0f6d64963221d58ee018cba8206cad79672cd85945",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "d0e38c4430c4a55ee3e73041f14cd7b16ecb6eedef2f95b4cb7b07cacfe2f6f4"
+    },
+    {
+      "operator_id": "benign_prefix_padding",
+      "operator_params_hash": "4272346eb8e5fb1af40d985c1f04618931abeea2fa0bacfdf4b88f86b0e8d70d",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "6002c91cb68c56b757d80188e8f215869f787f9e3f31140375a85adf6394d49b"
+    },
+    {
+      "operator_id": "benign_suffix_padding",
+      "operator_params_hash": "8c78c533777fa799cd60f55a142bb78f1e8a7e35e23ca64958bd44f8816a270d",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "582bbeab69db01121c27badad8ff6a7bdf07bfca8d2735b368a89ef983983f14"
+    },
+    {
+      "operator_id": "data_camouflage",
+      "operator_params_hash": "244013f2e00d9f283da1767e4846b4261f7271b553d80eb2921481b43defbf16",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "40556a51f56a0c667a88222890e97dec25aac236ffdd4728e2f73b9e542e007f"
+    },
+    {
+      "operator_id": "encoded_hint",
+      "operator_params_hash": "f5793bcd9e95a98a6ce8079243a7f4e3652d4de84d12433995a616721023c49f",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "6ffbd14ebd8fde3d54cdcd6b6b1575ed1ed6e92ff23357c586ec064e3a1abc6b"
+    },
+    {
+      "operator_id": "format_shift",
+      "operator_params_hash": "02a16818c530532948e0f2c0614e18a1b585b6e0ecfa80d14f11c98aac3554c4",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "f4eae6d60584ff923aa511b667788f3dcff6bdbb4950c2c3a2ae79fa5e503f9a"
+    },
+    {
+      "operator_id": "instruction_softening",
+      "operator_params_hash": "e1e11d0e2fb72c695958e6f2920f0434c07a648b38b55adbc03b7a4a69160204",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "c11423bc27330b6c9ed1fe031744f49278c94621a515f18566b034573e6c0d5f"
+    },
+    {
+      "operator_id": "multi_step_delegation",
+      "operator_params_hash": "a0c24b968ec9b12d3e20cc5d3f3017d95cbf0afc4d034913d229bb025b258a9e",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "6fef0c178259d257e4adff4a0706bfd98cec55b94da5416bf833854b03723212"
+    },
+    {
+      "operator_id": "role_indirection",
+      "operator_params_hash": "308c4f14e90be4c720ea7a0a6656cb363be540e3913118f2d7661ae38079696d",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "d4b7c20cb2be01d3aba70b1c79a06882a657dfb1c42dddd689644de155a7d519"
+    },
+    {
+      "operator_id": "tool_affordance_lure",
+      "operator_params_hash": "73355c28c7b19efe29124b62cd9d16351a559151f67eb8e10a6058d6ca027574",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "66dfff023c84537da19678febd435f516eeca87ce499b74c180302affa802dc6"
+    },
+    {
+      "operator_id": "authority_shadowing",
+      "operator_params_hash": "73ba2b4feac0b80fe7c01c0f6d64963221d58ee018cba8206cad79672cd85945",
+      "source_case_hash": "53beeadc025db6c9f8bde4a4e31804cc488cde8237334de70ee7fb5e1a5b6edd",
+      "variant_hash": "b8386147ed9fc59d4725b78f96428fb7328baf1c9600fc74543b6bd0f5e7e5f6"
+    },
+    {
+      "operator_id": "benign_prefix_padding",
+      "operator_params_hash": "4272346eb8e5fb1af40d985c1f04618931abeea2fa0bacfdf4b88f86b0e8d70d",
+      "source_case_hash": "53beeadc025db6c9f8bde4a4e31804cc488cde8237334de70ee7fb5e1a5b6edd",
+      "variant_hash": "e477bfa56fd2270dd84bb207c790529e863811b2431376e8085c6c1c79560636"
+    },
+    {
+      "operator_id": "benign_suffix_padding",
+      "operator_params_hash": "8c78c533777fa799cd60f55a142bb78f1e8a7e35e23ca64958bd44f8816a270d",
+      "source_case_hash": "53beeadc025db6c9f8bde4a4e31804cc488cde8237334de70ee7fb5e1a5b6edd",
+      "variant_hash": "b598ff9df0f4ce0deaa4ac77edda3096c29ebcc2d6ab7fda84d90531d102e0e8"
+    },
+    {
+      "operator_id": "data_camouflage",
+      "operator_params_hash": "244013f2e00d9f283da1767e4846b4261f7271b553d80eb2921481b43defbf16",
+      "source_case_hash": "53beeadc025db6c9f8bde4a4e31804cc488cde8237334de70ee7fb5e1a5b6edd",
+      "variant_hash": "b0088b4b863f9d8bcd88a3e583549e7eb15bbb17a4b8f1dfb8a41d1a06ba3e86"
+    },
+    {
+      "operator_id": "encoded_hint",
+      "operator_params_hash": "f5793bcd9e95a98a6ce8079243a7f4e3652d4de84d12433995a616721023c49f",
+      "source_case_hash": "53beeadc025db6c9f8bde4a4e31804cc488cde8237334de70ee7fb5e1a5b6edd",
+      "variant_hash": "eceb9736563fefa974cbfdf974e31c9356138bb6e50431c88b13fef6990a7c61"
+    },
+    {
+      "operator_id": "format_shift",
+      "operator_params_hash": "02a16818c530532948e0f2c0614e18a1b585b6e0ecfa80d14f11c98aac3554c4",
+      "source_case_hash": "53beeadc025db6c9f8bde4a4e31804cc488cde8237334de70ee7fb5e1a5b6edd",
+      "variant_hash": "bb5ea4e0eb4f66110fd56bb7d6b464507d1ad9aedded89d1a1ae05069aa25ab1"
+    },
+    {
+      "operator_id": "instruction_softening",
+      "operator_params_hash": "e1e11d0e2fb72c695958e6f2920f0434c07a648b38b55adbc03b7a4a69160204",
+      "source_case_hash": "53beeadc025db6c9f8bde4a4e31804cc488cde8237334de70ee7fb5e1a5b6edd",
+      "variant_hash": "df887d6078695ed85958812904de6fac0383a55d8650b1f20ad1b71cf89b502a"
+    },
+    {
+      "operator_id": "multi_step_delegation",
+      "operator_params_hash": "a0c24b968ec9b12d3e20cc5d3f3017d95cbf0afc4d034913d229bb025b258a9e",
+      "source_case_hash": "53beeadc025db6c9f8bde4a4e31804cc488cde8237334de70ee7fb5e1a5b6edd",
+      "variant_hash": "4eccbcab2b208d49d14a1b881a75c23a1d4f44533f211220504052a910699bac"
+    },
+    {
+      "operator_id": "role_indirection",
+      "operator_params_hash": "308c4f14e90be4c720ea7a0a6656cb363be540e3913118f2d7661ae38079696d",
+      "source_case_hash": "53beeadc025db6c9f8bde4a4e31804cc488cde8237334de70ee7fb5e1a5b6edd",
+      "variant_hash": "dbde779fe122932a28d60d863d517560f9dfd9df9bd3a180de7a3a74df726134"
+    },
+    {
+      "operator_id": "tool_affordance_lure",
+      "operator_params_hash": "73355c28c7b19efe29124b62cd9d16351a559151f67eb8e10a6058d6ca027574",
+      "source_case_hash": "53beeadc025db6c9f8bde4a4e31804cc488cde8237334de70ee7fb5e1a5b6edd",
+      "variant_hash": "f5567ebb78296cddc5b8bc6bb091a83ce6d75353fcb566e348ab6e244badee1d"
+    },
+    {
+      "operator_id": "authority_shadowing",
+      "operator_params_hash": "73ba2b4feac0b80fe7c01c0f6d64963221d58ee018cba8206cad79672cd85945",
+      "source_case_hash": "5ac9a6f10d2f158c9569cb7b286487a0c07403d1e2cb6bb3788d4b1a61abc696",
+      "variant_hash": "817fe5adc1d7cba535a41069ead0d76fd930bb2825a6345dad3195723567509d"
+    },
+    {
+      "operator_id": "benign_prefix_padding",
+      "operator_params_hash": "4272346eb8e5fb1af40d985c1f04618931abeea2fa0bacfdf4b88f86b0e8d70d",
+      "source_case_hash": "5ac9a6f10d2f158c9569cb7b286487a0c07403d1e2cb6bb3788d4b1a61abc696",
+      "variant_hash": "0eea738e67b561d21070867fd4e9b22a1ff563d0b98d3a960ae2cb739d2457ff"
+    },
+    {
+      "operator_id": "benign_suffix_padding",
+      "operator_params_hash": "8c78c533777fa799cd60f55a142bb78f1e8a7e35e23ca64958bd44f8816a270d",
+      "source_case_hash": "5ac9a6f10d2f158c9569cb7b286487a0c07403d1e2cb6bb3788d4b1a61abc696",
+      "variant_hash": "c3e77fa4b695dddc4b1f0ad26f1616a67e37241ea415db2779612d34f3b8bd78"
+    },
+    {
+      "operator_id": "data_camouflage",
+      "operator_params_hash": "244013f2e00d9f283da1767e4846b4261f7271b553d80eb2921481b43defbf16",
+      "source_case_hash": "5ac9a6f10d2f158c9569cb7b286487a0c07403d1e2cb6bb3788d4b1a61abc696",
+      "variant_hash": "06e4c8d7d4a2907a64395fe3aac2f04bebb4318a95aa3edd2eac669c7bf2d9b2"
+    },
+    {
+      "operator_id": "encoded_hint",
+      "operator_params_hash": "f5793bcd9e95a98a6ce8079243a7f4e3652d4de84d12433995a616721023c49f",
+      "source_case_hash": "5ac9a6f10d2f158c9569cb7b286487a0c07403d1e2cb6bb3788d4b1a61abc696",
+      "variant_hash": "36fa1882ce9e8b626e22f0fc4ca2b1efde9fce2e11bb34733cba414bbd68c1e7"
+    },
+    {
+      "operator_id": "format_shift",
+      "operator_params_hash": "02a16818c530532948e0f2c0614e18a1b585b6e0ecfa80d14f11c98aac3554c4",
+      "source_case_hash": "5ac9a6f10d2f158c9569cb7b286487a0c07403d1e2cb6bb3788d4b1a61abc696",
+      "variant_hash": "c972c9d0aa4525e1f9fbf0b4a4b2a477a8e35703ba6c645f468c7d22a0937dba"
+    },
+    {
+      "operator_id": "instruction_softening",
+      "operator_params_hash": "e1e11d0e2fb72c695958e6f2920f0434c07a648b38b55adbc03b7a4a69160204",
+      "source_case_hash": "5ac9a6f10d2f158c9569cb7b286487a0c07403d1e2cb6bb3788d4b1a61abc696",
+      "variant_hash": "2140809a129d0a04d1d0482b8f839c2670629db215c6338ee3b0e849cf0673e1"
+    },
+    {
+      "operator_id": "multi_step_delegation",
+      "operator_params_hash": "a0c24b968ec9b12d3e20cc5d3f3017d95cbf0afc4d034913d229bb025b258a9e",
+      "source_case_hash": "5ac9a6f10d2f158c9569cb7b286487a0c07403d1e2cb6bb3788d4b1a61abc696",
+      "variant_hash": "b221cd059082e7c191cb55a1822826b4ae01455488f12505a1938ef053cae498"
+    },
+    {
+      "operator_id": "role_indirection",
+      "operator_params_hash": "308c4f14e90be4c720ea7a0a6656cb363be540e3913118f2d7661ae38079696d",
+      "source_case_hash": "5ac9a6f10d2f158c9569cb7b286487a0c07403d1e2cb6bb3788d4b1a61abc696",
+      "variant_hash": "5200375766067388e5efceb3bcaf3e725d7b41429416e58952ca7fc164a21258"
+    },
+    {
+      "operator_id": "tool_affordance_lure",
+      "operator_params_hash": "73355c28c7b19efe29124b62cd9d16351a559151f67eb8e10a6058d6ca027574",
+      "source_case_hash": "5ac9a6f10d2f158c9569cb7b286487a0c07403d1e2cb6bb3788d4b1a61abc696",
+      "variant_hash": "35a865935922fd7339430a60151d8d1999c056ce8c7b6828c95d617eaab8b970"
+    },
+    {
+      "operator_id": "authority_shadowing",
+      "operator_params_hash": "73ba2b4feac0b80fe7c01c0f6d64963221d58ee018cba8206cad79672cd85945",
+      "source_case_hash": "12cf5799359ec610a49de68903cd2715f6c937fcba77893ea0d9c227fe08606d",
+      "variant_hash": "d1969f06e880ebfb111c3373aa774317a960e65168f7f156dfdc6987c8e186b3"
+    },
+    {
+      "operator_id": "benign_prefix_padding",
+      "operator_params_hash": "4272346eb8e5fb1af40d985c1f04618931abeea2fa0bacfdf4b88f86b0e8d70d",
+      "source_case_hash": "12cf5799359ec610a49de68903cd2715f6c937fcba77893ea0d9c227fe08606d",
+      "variant_hash": "f33151b6ad1bbecbb66991e4039f7c04d306574507b75e3f831fd4802ea3e27d"
+    },
+    {
+      "operator_id": "benign_suffix_padding",
+      "operator_params_hash": "8c78c533777fa799cd60f55a142bb78f1e8a7e35e23ca64958bd44f8816a270d",
+      "source_case_hash": "12cf5799359ec610a49de68903cd2715f6c937fcba77893ea0d9c227fe08606d",
+      "variant_hash": "11d1f54e9aae569f768cb01d3642945f3d9d5570fb4368c73d60a399ebb01648"
+    },
+    {
+      "operator_id": "data_camouflage",
+      "operator_params_hash": "244013f2e00d9f283da1767e4846b4261f7271b553d80eb2921481b43defbf16",
+      "source_case_hash": "12cf5799359ec610a49de68903cd2715f6c937fcba77893ea0d9c227fe08606d",
+      "variant_hash": "3170c6c232960b8fd94296e39d45fb1a3a7c53a7ee2e4d3d23c4c974215dbfc7"
+    },
+    {
+      "operator_id": "encoded_hint",
+      "operator_params_hash": "f5793bcd9e95a98a6ce8079243a7f4e3652d4de84d12433995a616721023c49f",
+      "source_case_hash": "12cf5799359ec610a49de68903cd2715f6c937fcba77893ea0d9c227fe08606d",
+      "variant_hash": "1f353633041192fa3994c1f4f2e17b9b76b84c01a29d984336459cf1817e1136"
+    },
+    {
+      "operator_id": "format_shift",
+      "operator_params_hash": "02a16818c530532948e0f2c0614e18a1b585b6e0ecfa80d14f11c98aac3554c4",
+      "source_case_hash": "12cf5799359ec610a49de68903cd2715f6c937fcba77893ea0d9c227fe08606d",
+      "variant_hash": "a764eb99f6061deb24ad7de0691569c711f1473d00064ab05fdce2c2b42e21c9"
+    },
+    {
+      "operator_id": "instruction_softening",
+      "operator_params_hash": "e1e11d0e2fb72c695958e6f2920f0434c07a648b38b55adbc03b7a4a69160204",
+      "source_case_hash": "12cf5799359ec610a49de68903cd2715f6c937fcba77893ea0d9c227fe08606d",
+      "variant_hash": "a31c1515b5754f0a93104ce8753a2bb7435fc18484abe5cd7c49f31357934ddd"
+    },
+    {
+      "operator_id": "multi_step_delegation",
+      "operator_params_hash": "a0c24b968ec9b12d3e20cc5d3f3017d95cbf0afc4d034913d229bb025b258a9e",
+      "source_case_hash": "12cf5799359ec610a49de68903cd2715f6c937fcba77893ea0d9c227fe08606d",
+      "variant_hash": "b2bc2d41faa62c759bbe54476bbd6a9891f4c87791c92d0a6f77e55b33287bfe"
+    },
+    {
+      "operator_id": "role_indirection",
+      "operator_params_hash": "308c4f14e90be4c720ea7a0a6656cb363be540e3913118f2d7661ae38079696d",
+      "source_case_hash": "12cf5799359ec610a49de68903cd2715f6c937fcba77893ea0d9c227fe08606d",
+      "variant_hash": "dfff984069637b476b0da0c71cadaf3f487201bc5b350d4c5e98d231e87b22e5"
+    },
+    {
+      "operator_id": "tool_affordance_lure",
+      "operator_params_hash": "73355c28c7b19efe29124b62cd9d16351a559151f67eb8e10a6058d6ca027574",
+      "source_case_hash": "12cf5799359ec610a49de68903cd2715f6c937fcba77893ea0d9c227fe08606d",
+      "variant_hash": "9431e222e55c58c44fc148cfc62192d3d2c44b4d1b2317819a2075b230a9f6e3"
+    },
+    {
+      "operator_id": "authority_shadowing",
+      "operator_params_hash": "73ba2b4feac0b80fe7c01c0f6d64963221d58ee018cba8206cad79672cd85945",
+      "source_case_hash": "212b4178d8bf17ae734f7d2d1acd34cb08244de25bc6fb0cfb3b20a578155776",
+      "variant_hash": "8e4d99e3bd85f34483e6236d83deb8d1d7c68ea41fb350905d879d8d288bbf42"
+    },
+    {
+      "operator_id": "benign_prefix_padding",
+      "operator_params_hash": "4272346eb8e5fb1af40d985c1f04618931abeea2fa0bacfdf4b88f86b0e8d70d",
+      "source_case_hash": "212b4178d8bf17ae734f7d2d1acd34cb08244de25bc6fb0cfb3b20a578155776",
+      "variant_hash": "7ac308db3ebdb2071ceea3e5941f1df6fb481f2a8dde39b7d0ccffd1928ce570"
+    },
+    {
+      "operator_id": "benign_suffix_padding",
+      "operator_params_hash": "8c78c533777fa799cd60f55a142bb78f1e8a7e35e23ca64958bd44f8816a270d",
+      "source_case_hash": "212b4178d8bf17ae734f7d2d1acd34cb08244de25bc6fb0cfb3b20a578155776",
+      "variant_hash": "5797edf807fff6ff6f571731ea0f37cc7d778ade534893775b8fdcd91a2fe7a1"
+    },
+    {
+      "operator_id": "data_camouflage",
+      "operator_params_hash": "244013f2e00d9f283da1767e4846b4261f7271b553d80eb2921481b43defbf16",
+      "source_case_hash": "212b4178d8bf17ae734f7d2d1acd34cb08244de25bc6fb0cfb3b20a578155776",
+      "variant_hash": "59989a58172df7ced69a8dfbe8bc48219f123dbb80270744a29d65232b6efaa5"
+    },
+    {
+      "operator_id": "encoded_hint",
+      "operator_params_hash": "f5793bcd9e95a98a6ce8079243a7f4e3652d4de84d12433995a616721023c49f",
+      "source_case_hash": "212b4178d8bf17ae734f7d2d1acd34cb08244de25bc6fb0cfb3b20a578155776",
+      "variant_hash": "b32419e8d5e7fc70b15dee27383fb58e80e3668191a20ff54381e98ac718c7bb"
+    },
+    {
+      "operator_id": "format_shift",
+      "operator_params_hash": "02a16818c530532948e0f2c0614e18a1b585b6e0ecfa80d14f11c98aac3554c4",
+      "source_case_hash": "212b4178d8bf17ae734f7d2d1acd34cb08244de25bc6fb0cfb3b20a578155776",
+      "variant_hash": "cc2747bc1e3f10b78d2dd3c23dd397774c5e09afb43a8469a6729a1e6aaf8956"
+    },
+    {
+      "operator_id": "instruction_softening",
+      "operator_params_hash": "e1e11d0e2fb72c695958e6f2920f0434c07a648b38b55adbc03b7a4a69160204",
+      "source_case_hash": "212b4178d8bf17ae734f7d2d1acd34cb08244de25bc6fb0cfb3b20a578155776",
+      "variant_hash": "bbab433b83eed07e9476e46ea7fd27348f5e8da351172fb76574ea9921d675a0"
+    },
+    {
+      "operator_id": "multi_step_delegation",
+      "operator_params_hash": "a0c24b968ec9b12d3e20cc5d3f3017d95cbf0afc4d034913d229bb025b258a9e",
+      "source_case_hash": "212b4178d8bf17ae734f7d2d1acd34cb08244de25bc6fb0cfb3b20a578155776",
+      "variant_hash": "8bf96b3f04f16efef04c9438da2c9bb68fad751809572d839fe74d964aedb6b8"
+    },
+    {
+      "operator_id": "role_indirection",
+      "operator_params_hash": "308c4f14e90be4c720ea7a0a6656cb363be540e3913118f2d7661ae38079696d",
+      "source_case_hash": "212b4178d8bf17ae734f7d2d1acd34cb08244de25bc6fb0cfb3b20a578155776",
+      "variant_hash": "86c844cc0a53c40156f6d35e495470f33bb77c2f7c9ce7c0af1153cdad79b59f"
+    },
+    {
+      "operator_id": "tool_affordance_lure",
+      "operator_params_hash": "73355c28c7b19efe29124b62cd9d16351a559151f67eb8e10a6058d6ca027574",
+      "source_case_hash": "212b4178d8bf17ae734f7d2d1acd34cb08244de25bc6fb0cfb3b20a578155776",
+      "variant_hash": "0d772d4ec482b96c1d741c37fb0f71d80fb4377fc8162a94c8a620348aab259d"
+    },
+    {
+      "operator_id": "authority_shadowing",
+      "operator_params_hash": "73ba2b4feac0b80fe7c01c0f6d64963221d58ee018cba8206cad79672cd85945",
+      "source_case_hash": "6afb4254585b505ec7f72c72dc7d39cecabf8cf120d2e3f6ecf755a6e72e839b",
+      "variant_hash": "934992f31cc751e94555585f1ab4678c9e3f769f3aa4af7cbc5dd055160c6594"
+    },
+    {
+      "operator_id": "benign_prefix_padding",
+      "operator_params_hash": "4272346eb8e5fb1af40d985c1f04618931abeea2fa0bacfdf4b88f86b0e8d70d",
+      "source_case_hash": "6afb4254585b505ec7f72c72dc7d39cecabf8cf120d2e3f6ecf755a6e72e839b",
+      "variant_hash": "2fb669785628005fcaca4098553e0b6310ae07be51ad5fe4501d796dc2781a31"
+    },
+    {
+      "operator_id": "benign_suffix_padding",
+      "operator_params_hash": "8c78c533777fa799cd60f55a142bb78f1e8a7e35e23ca64958bd44f8816a270d",
+      "source_case_hash": "6afb4254585b505ec7f72c72dc7d39cecabf8cf120d2e3f6ecf755a6e72e839b",
+      "variant_hash": "481be2408fa755f08f4ae200df5676bfb2796d5ad086276bbea0e9dfb6840f0b"
+    },
+    {
+      "operator_id": "data_camouflage",
+      "operator_params_hash": "244013f2e00d9f283da1767e4846b4261f7271b553d80eb2921481b43defbf16",
+      "source_case_hash": "6afb4254585b505ec7f72c72dc7d39cecabf8cf120d2e3f6ecf755a6e72e839b",
+      "variant_hash": "506dda6c9636be7b5dcad1f4e29cba8161fe339beced83ebd549f28fc3376ad5"
+    },
+    {
+      "operator_id": "encoded_hint",
+      "operator_params_hash": "f5793bcd9e95a98a6ce8079243a7f4e3652d4de84d12433995a616721023c49f",
+      "source_case_hash": "6afb4254585b505ec7f72c72dc7d39cecabf8cf120d2e3f6ecf755a6e72e839b",
+      "variant_hash": "de0f6111df34a876e61ca73c6b2374ae828f742b50863f7f5716fc107f89160b"
+    },
+    {
+      "operator_id": "format_shift",
+      "operator_params_hash": "02a16818c530532948e0f2c0614e18a1b585b6e0ecfa80d14f11c98aac3554c4",
+      "source_case_hash": "6afb4254585b505ec7f72c72dc7d39cecabf8cf120d2e3f6ecf755a6e72e839b",
+      "variant_hash": "84448667c98c954c5ec49b00056e6050fe86953efa1cc49b86395e57ebbed8f0"
+    },
+    {
+      "operator_id": "instruction_softening",
+      "operator_params_hash": "e1e11d0e2fb72c695958e6f2920f0434c07a648b38b55adbc03b7a4a69160204",
+      "source_case_hash": "6afb4254585b505ec7f72c72dc7d39cecabf8cf120d2e3f6ecf755a6e72e839b",
+      "variant_hash": "30ed470326e29899640078e6bf8540de8879cb965d5c3c9f8d67e16f07883dcf"
+    },
+    {
+      "operator_id": "multi_step_delegation",
+      "operator_params_hash": "a0c24b968ec9b12d3e20cc5d3f3017d95cbf0afc4d034913d229bb025b258a9e",
+      "source_case_hash": "6afb4254585b505ec7f72c72dc7d39cecabf8cf120d2e3f6ecf755a6e72e839b",
+      "variant_hash": "700b8286ad3f5f82f13fcceb7a191d9c318b1a929c37c3d089910d2d7e59509d"
+    },
+    {
+      "operator_id": "role_indirection",
+      "operator_params_hash": "308c4f14e90be4c720ea7a0a6656cb363be540e3913118f2d7661ae38079696d",
+      "source_case_hash": "6afb4254585b505ec7f72c72dc7d39cecabf8cf120d2e3f6ecf755a6e72e839b",
+      "variant_hash": "c1c309e7fc12c768cee806ff1fb6daedbc5c170c5c69cc72d20c7eb257c18679"
+    },
+    {
+      "operator_id": "tool_affordance_lure",
+      "operator_params_hash": "73355c28c7b19efe29124b62cd9d16351a559151f67eb8e10a6058d6ca027574",
+      "source_case_hash": "6afb4254585b505ec7f72c72dc7d39cecabf8cf120d2e3f6ecf755a6e72e839b",
+      "variant_hash": "23c4080197dc0d88a2ca74ede880756fd05549caed9e606d5cd337f2512505a7"
+    },
+    {
+      "operator_id": "authority_shadowing",
+      "operator_params_hash": "73ba2b4feac0b80fe7c01c0f6d64963221d58ee018cba8206cad79672cd85945",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "3a555c9a8f0a975d1e059e40804b9fcc9fb7a42e29fa2e9fab1d3264a4023ee6"
+    },
+    {
+      "operator_id": "benign_prefix_padding",
+      "operator_params_hash": "4272346eb8e5fb1af40d985c1f04618931abeea2fa0bacfdf4b88f86b0e8d70d",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "c100e1fca1f0c504225c4c8f6cbf6de834c2766a032338e6a15971035018fffe"
+    },
+    {
+      "operator_id": "benign_suffix_padding",
+      "operator_params_hash": "8c78c533777fa799cd60f55a142bb78f1e8a7e35e23ca64958bd44f8816a270d",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "705594617a9673df507aa2c7a3406a5ffdecf9b0503000284803a686145df5bf"
+    },
+    {
+      "operator_id": "data_camouflage",
+      "operator_params_hash": "244013f2e00d9f283da1767e4846b4261f7271b553d80eb2921481b43defbf16",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "77551bd8af81dab15b1f32c890a93a57441321cf7211f4677d576cab3447fd52"
+    },
+    {
+      "operator_id": "encoded_hint",
+      "operator_params_hash": "f5793bcd9e95a98a6ce8079243a7f4e3652d4de84d12433995a616721023c49f",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "49e84587525a5c5314f6f7aa6971d53fb9074b35c7b9dfeed0c1239513c1741e"
+    },
+    {
+      "operator_id": "format_shift",
+      "operator_params_hash": "02a16818c530532948e0f2c0614e18a1b585b6e0ecfa80d14f11c98aac3554c4",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "379c58f912e147bb0d165d65158f98389a8df806a96ec1c06bcbf954cef3e651"
+    },
+    {
+      "operator_id": "instruction_softening",
+      "operator_params_hash": "e1e11d0e2fb72c695958e6f2920f0434c07a648b38b55adbc03b7a4a69160204",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "151af6cf9f49ab2adf57eaf905e2de91d99465eb4dbcc530ef02b35c18a2eefc"
+    },
+    {
+      "operator_id": "multi_step_delegation",
+      "operator_params_hash": "a0c24b968ec9b12d3e20cc5d3f3017d95cbf0afc4d034913d229bb025b258a9e",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "e06518db3936b46d1703b3ceaa52f782afca7e1f09c34eb6f9cf13787a43102c"
+    },
+    {
+      "operator_id": "role_indirection",
+      "operator_params_hash": "308c4f14e90be4c720ea7a0a6656cb363be540e3913118f2d7661ae38079696d",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "c18d31ec00614bb5f8a4596f3fc404fe99e89980008037aa4bb3f8e4cc44b6f2"
+    },
+    {
+      "operator_id": "tool_affordance_lure",
+      "operator_params_hash": "73355c28c7b19efe29124b62cd9d16351a559151f67eb8e10a6058d6ca027574",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "5e4746a2ba27430d4b4cf318e56749b3b00dd4c184eaf783f2cf80ef98e24c3c"
+    },
+    {
+      "operator_id": "authority_shadowing",
+      "operator_params_hash": "73ba2b4feac0b80fe7c01c0f6d64963221d58ee018cba8206cad79672cd85945",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "074f372b73545999b60584b999b85af5992f5c0b6c36327a56ef4e6ea8090c62"
+    },
+    {
+      "operator_id": "benign_prefix_padding",
+      "operator_params_hash": "4272346eb8e5fb1af40d985c1f04618931abeea2fa0bacfdf4b88f86b0e8d70d",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "968cc4dfd481101f5fba2ddb176b7e0ad1fedebc40675bccc66b78def18a911e"
+    },
+    {
+      "operator_id": "benign_suffix_padding",
+      "operator_params_hash": "8c78c533777fa799cd60f55a142bb78f1e8a7e35e23ca64958bd44f8816a270d",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "b4ff716a07c69de5db7d51db0915c9b770cf0d5816a0020c1759b31916f96477"
+    },
+    {
+      "operator_id": "data_camouflage",
+      "operator_params_hash": "244013f2e00d9f283da1767e4846b4261f7271b553d80eb2921481b43defbf16",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "9760919b7ef8f205fde8ca0ba5c733925be3cfc8fea0426579e91c559feb805a"
+    },
+    {
+      "operator_id": "encoded_hint",
+      "operator_params_hash": "f5793bcd9e95a98a6ce8079243a7f4e3652d4de84d12433995a616721023c49f",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "f691b9924650f824f2878b9bddef3a437fe884a23479f2c801359b6b64ad046f"
+    },
+    {
+      "operator_id": "format_shift",
+      "operator_params_hash": "02a16818c530532948e0f2c0614e18a1b585b6e0ecfa80d14f11c98aac3554c4",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "e55da982b37edb96827b163d465e53da09d344849d03dac2f2c535ba883f8033"
+    },
+    {
+      "operator_id": "instruction_softening",
+      "operator_params_hash": "e1e11d0e2fb72c695958e6f2920f0434c07a648b38b55adbc03b7a4a69160204",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "e20f7ff93ad3adad1023d19fc26120c21b54c63bb27a32b9b4311528f8887bb1"
+    },
+    {
+      "operator_id": "multi_step_delegation",
+      "operator_params_hash": "a0c24b968ec9b12d3e20cc5d3f3017d95cbf0afc4d034913d229bb025b258a9e",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "3a3b90cd9323ca791b615b1b3944960476fe8522aad8b49f232c3ff6615e70ae"
+    },
+    {
+      "operator_id": "role_indirection",
+      "operator_params_hash": "308c4f14e90be4c720ea7a0a6656cb363be540e3913118f2d7661ae38079696d",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "af1eaefb09454b7d7f4d1920d7f51f1a052315c4eac0129b25bcee9eb2002bbe"
+    },
+    {
+      "operator_id": "tool_affordance_lure",
+      "operator_params_hash": "73355c28c7b19efe29124b62cd9d16351a559151f67eb8e10a6058d6ca027574",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "3b040831d87360c968821b37ddbb9f5150eb132255662847b545bd4267e2f023"
+    },
+    {
+      "operator_id": "authority_shadowing",
+      "operator_params_hash": "73ba2b4feac0b80fe7c01c0f6d64963221d58ee018cba8206cad79672cd85945",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "e346bf8c232fa4dfeae96ff857a6d52dbec06c9d372c725417f136adfa27c539"
+    },
+    {
+      "operator_id": "benign_prefix_padding",
+      "operator_params_hash": "4272346eb8e5fb1af40d985c1f04618931abeea2fa0bacfdf4b88f86b0e8d70d",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "be41f1ff4f6f3189052e6b8a5e7a50907ce3e4ce2c1a37bc91ebdb4b04aff1f9"
+    },
+    {
+      "operator_id": "benign_suffix_padding",
+      "operator_params_hash": "8c78c533777fa799cd60f55a142bb78f1e8a7e35e23ca64958bd44f8816a270d",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "7fad3e8b7e66564a70cdd76ea58fc9deff96fdf871914c8d71dd77715d61f4b0"
+    },
+    {
+      "operator_id": "data_camouflage",
+      "operator_params_hash": "244013f2e00d9f283da1767e4846b4261f7271b553d80eb2921481b43defbf16",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "0ad065f5f4976209c0f09c4ced105cbc92d3c700d26b53d564eff0dc09893159"
+    },
+    {
+      "operator_id": "encoded_hint",
+      "operator_params_hash": "f5793bcd9e95a98a6ce8079243a7f4e3652d4de84d12433995a616721023c49f",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "7300347804b7a88e1af36de678b42f977978c9ed616868bd35724feac043ce32"
+    },
+    {
+      "operator_id": "format_shift",
+      "operator_params_hash": "02a16818c530532948e0f2c0614e18a1b585b6e0ecfa80d14f11c98aac3554c4",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "bb107a7896c93e7816c708298a1c2d88b595b4099c944adcceec3181b2a80cf6"
+    },
+    {
+      "operator_id": "instruction_softening",
+      "operator_params_hash": "e1e11d0e2fb72c695958e6f2920f0434c07a648b38b55adbc03b7a4a69160204",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "f2efe62e8811f9cbeed24baa16ad01950c2f51f447b49bb8947638083e6e2720"
+    },
+    {
+      "operator_id": "multi_step_delegation",
+      "operator_params_hash": "a0c24b968ec9b12d3e20cc5d3f3017d95cbf0afc4d034913d229bb025b258a9e",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "6d58b6f5c9b7c4472c5043fe4efd7e72eeaa4940f42439f5cba56e4a3c672529"
+    },
+    {
+      "operator_id": "role_indirection",
+      "operator_params_hash": "308c4f14e90be4c720ea7a0a6656cb363be540e3913118f2d7661ae38079696d",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "5bfc8be17ac42b237572ff1c6069b7626033c1aef123e2af45366f305472ac03"
+    },
+    {
+      "operator_id": "tool_affordance_lure",
+      "operator_params_hash": "73355c28c7b19efe29124b62cd9d16351a559151f67eb8e10a6058d6ca027574",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "928fb1b54935b64dc4ce218dab004d326eb39043d1fdd144eafa4aac5208bece"
+    },
+    {
+      "operator_id": "authority_shadowing",
+      "operator_params_hash": "73ba2b4feac0b80fe7c01c0f6d64963221d58ee018cba8206cad79672cd85945",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "b1eb741ac23033021effc808b6373616256923847407b899a4fc1d0736118bdc"
+    },
+    {
+      "operator_id": "benign_prefix_padding",
+      "operator_params_hash": "4272346eb8e5fb1af40d985c1f04618931abeea2fa0bacfdf4b88f86b0e8d70d",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "33bbe70cbe0d55235e7e1c816c107e45e1f448f013d50b152d7d4faef73c9503"
+    },
+    {
+      "operator_id": "benign_suffix_padding",
+      "operator_params_hash": "8c78c533777fa799cd60f55a142bb78f1e8a7e35e23ca64958bd44f8816a270d",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "86191e049da8d5bd7448ac12c77f777df311e8eb1b6371cbed759a803423f40d"
+    },
+    {
+      "operator_id": "data_camouflage",
+      "operator_params_hash": "244013f2e00d9f283da1767e4846b4261f7271b553d80eb2921481b43defbf16",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "5b6aa9df8905c8a0e2800463b3ee6405605d5b29683eb715970b0af8aa219499"
+    },
+    {
+      "operator_id": "encoded_hint",
+      "operator_params_hash": "f5793bcd9e95a98a6ce8079243a7f4e3652d4de84d12433995a616721023c49f",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "6d1aef65d8496c3eddafe0104dab48f5e01ae84c7263ec592967d73bc21cbd73"
+    },
+    {
+      "operator_id": "format_shift",
+      "operator_params_hash": "02a16818c530532948e0f2c0614e18a1b585b6e0ecfa80d14f11c98aac3554c4",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "065128845c0eac1d57d7181919653540540012b9d9d3303839f62c7a5bbb04d3"
+    },
+    {
+      "operator_id": "instruction_softening",
+      "operator_params_hash": "e1e11d0e2fb72c695958e6f2920f0434c07a648b38b55adbc03b7a4a69160204",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "b11199d655dae9860ef3ab2cb47a2679226e47c0b6ef68780da5b888d4c5d036"
+    },
+    {
+      "operator_id": "multi_step_delegation",
+      "operator_params_hash": "a0c24b968ec9b12d3e20cc5d3f3017d95cbf0afc4d034913d229bb025b258a9e",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "c1a02d224cb7860d5453ed172d019f9a807fd9e169a99d3e1edb6362b93c7aaf"
+    },
+    {
+      "operator_id": "role_indirection",
+      "operator_params_hash": "308c4f14e90be4c720ea7a0a6656cb363be540e3913118f2d7661ae38079696d",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "acb16a4750fde4a95f29c2b5818f8eae52098d7d05415b2f223ed58d4c572aaf"
+    },
+    {
+      "operator_id": "tool_affordance_lure",
+      "operator_params_hash": "73355c28c7b19efe29124b62cd9d16351a559151f67eb8e10a6058d6ca027574",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "8ecdb57519b412feb85b5410c578fa3dd8de518b28946e4a0f367a9830bcfa9b"
+    },
+    {
+      "operator_id": "authority_shadowing",
+      "operator_params_hash": "73ba2b4feac0b80fe7c01c0f6d64963221d58ee018cba8206cad79672cd85945",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "d0e38c4430c4a55ee3e73041f14cd7b16ecb6eedef2f95b4cb7b07cacfe2f6f4"
+    },
+    {
+      "operator_id": "benign_prefix_padding",
+      "operator_params_hash": "4272346eb8e5fb1af40d985c1f04618931abeea2fa0bacfdf4b88f86b0e8d70d",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "6002c91cb68c56b757d80188e8f215869f787f9e3f31140375a85adf6394d49b"
+    },
+    {
+      "operator_id": "benign_suffix_padding",
+      "operator_params_hash": "8c78c533777fa799cd60f55a142bb78f1e8a7e35e23ca64958bd44f8816a270d",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "582bbeab69db01121c27badad8ff6a7bdf07bfca8d2735b368a89ef983983f14"
+    },
+    {
+      "operator_id": "data_camouflage",
+      "operator_params_hash": "244013f2e00d9f283da1767e4846b4261f7271b553d80eb2921481b43defbf16",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "40556a51f56a0c667a88222890e97dec25aac236ffdd4728e2f73b9e542e007f"
+    },
+    {
+      "operator_id": "encoded_hint",
+      "operator_params_hash": "f5793bcd9e95a98a6ce8079243a7f4e3652d4de84d12433995a616721023c49f",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "6ffbd14ebd8fde3d54cdcd6b6b1575ed1ed6e92ff23357c586ec064e3a1abc6b"
+    },
+    {
+      "operator_id": "format_shift",
+      "operator_params_hash": "02a16818c530532948e0f2c0614e18a1b585b6e0ecfa80d14f11c98aac3554c4",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "f4eae6d60584ff923aa511b667788f3dcff6bdbb4950c2c3a2ae79fa5e503f9a"
+    },
+    {
+      "operator_id": "instruction_softening",
+      "operator_params_hash": "e1e11d0e2fb72c695958e6f2920f0434c07a648b38b55adbc03b7a4a69160204",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "c11423bc27330b6c9ed1fe031744f49278c94621a515f18566b034573e6c0d5f"
+    },
+    {
+      "operator_id": "multi_step_delegation",
+      "operator_params_hash": "a0c24b968ec9b12d3e20cc5d3f3017d95cbf0afc4d034913d229bb025b258a9e",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "6fef0c178259d257e4adff4a0706bfd98cec55b94da5416bf833854b03723212"
+    },
+    {
+      "operator_id": "role_indirection",
+      "operator_params_hash": "308c4f14e90be4c720ea7a0a6656cb363be540e3913118f2d7661ae38079696d",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "d4b7c20cb2be01d3aba70b1c79a06882a657dfb1c42dddd689644de155a7d519"
+    },
+    {
+      "operator_id": "tool_affordance_lure",
+      "operator_params_hash": "73355c28c7b19efe29124b62cd9d16351a559151f67eb8e10a6058d6ca027574",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "66dfff023c84537da19678febd435f516eeca87ce499b74c180302affa802dc6"
+    },
+    {
+      "operator_id": "authority_shadowing",
+      "operator_params_hash": "73ba2b4feac0b80fe7c01c0f6d64963221d58ee018cba8206cad79672cd85945",
+      "source_case_hash": "53beeadc025db6c9f8bde4a4e31804cc488cde8237334de70ee7fb5e1a5b6edd",
+      "variant_hash": "b8386147ed9fc59d4725b78f96428fb7328baf1c9600fc74543b6bd0f5e7e5f6"
+    },
+    {
+      "operator_id": "benign_prefix_padding",
+      "operator_params_hash": "4272346eb8e5fb1af40d985c1f04618931abeea2fa0bacfdf4b88f86b0e8d70d",
+      "source_case_hash": "53beeadc025db6c9f8bde4a4e31804cc488cde8237334de70ee7fb5e1a5b6edd",
+      "variant_hash": "e477bfa56fd2270dd84bb207c790529e863811b2431376e8085c6c1c79560636"
+    },
+    {
+      "operator_id": "benign_suffix_padding",
+      "operator_params_hash": "8c78c533777fa799cd60f55a142bb78f1e8a7e35e23ca64958bd44f8816a270d",
+      "source_case_hash": "53beeadc025db6c9f8bde4a4e31804cc488cde8237334de70ee7fb5e1a5b6edd",
+      "variant_hash": "b598ff9df0f4ce0deaa4ac77edda3096c29ebcc2d6ab7fda84d90531d102e0e8"
+    },
+    {
+      "operator_id": "data_camouflage",
+      "operator_params_hash": "244013f2e00d9f283da1767e4846b4261f7271b553d80eb2921481b43defbf16",
+      "source_case_hash": "53beeadc025db6c9f8bde4a4e31804cc488cde8237334de70ee7fb5e1a5b6edd",
+      "variant_hash": "b0088b4b863f9d8bcd88a3e583549e7eb15bbb17a4b8f1dfb8a41d1a06ba3e86"
+    },
+    {
+      "operator_id": "encoded_hint",
+      "operator_params_hash": "f5793bcd9e95a98a6ce8079243a7f4e3652d4de84d12433995a616721023c49f",
+      "source_case_hash": "53beeadc025db6c9f8bde4a4e31804cc488cde8237334de70ee7fb5e1a5b6edd",
+      "variant_hash": "eceb9736563fefa974cbfdf974e31c9356138bb6e50431c88b13fef6990a7c61"
+    },
+    {
+      "operator_id": "format_shift",
+      "operator_params_hash": "02a16818c530532948e0f2c0614e18a1b585b6e0ecfa80d14f11c98aac3554c4",
+      "source_case_hash": "53beeadc025db6c9f8bde4a4e31804cc488cde8237334de70ee7fb5e1a5b6edd",
+      "variant_hash": "bb5ea4e0eb4f66110fd56bb7d6b464507d1ad9aedded89d1a1ae05069aa25ab1"
+    },
+    {
+      "operator_id": "instruction_softening",
+      "operator_params_hash": "e1e11d0e2fb72c695958e6f2920f0434c07a648b38b55adbc03b7a4a69160204",
+      "source_case_hash": "53beeadc025db6c9f8bde4a4e31804cc488cde8237334de70ee7fb5e1a5b6edd",
+      "variant_hash": "df887d6078695ed85958812904de6fac0383a55d8650b1f20ad1b71cf89b502a"
+    },
+    {
+      "operator_id": "multi_step_delegation",
+      "operator_params_hash": "a0c24b968ec9b12d3e20cc5d3f3017d95cbf0afc4d034913d229bb025b258a9e",
+      "source_case_hash": "53beeadc025db6c9f8bde4a4e31804cc488cde8237334de70ee7fb5e1a5b6edd",
+      "variant_hash": "4eccbcab2b208d49d14a1b881a75c23a1d4f44533f211220504052a910699bac"
+    },
+    {
+      "operator_id": "role_indirection",
+      "operator_params_hash": "308c4f14e90be4c720ea7a0a6656cb363be540e3913118f2d7661ae38079696d",
+      "source_case_hash": "53beeadc025db6c9f8bde4a4e31804cc488cde8237334de70ee7fb5e1a5b6edd",
+      "variant_hash": "dbde779fe122932a28d60d863d517560f9dfd9df9bd3a180de7a3a74df726134"
+    },
+    {
+      "operator_id": "tool_affordance_lure",
+      "operator_params_hash": "73355c28c7b19efe29124b62cd9d16351a559151f67eb8e10a6058d6ca027574",
+      "source_case_hash": "53beeadc025db6c9f8bde4a4e31804cc488cde8237334de70ee7fb5e1a5b6edd",
+      "variant_hash": "f5567ebb78296cddc5b8bc6bb091a83ce6d75353fcb566e348ab6e244badee1d"
+    },
+    {
+      "operator_id": "authority_shadowing",
+      "operator_params_hash": "73ba2b4feac0b80fe7c01c0f6d64963221d58ee018cba8206cad79672cd85945",
+      "source_case_hash": "6afb4254585b505ec7f72c72dc7d39cecabf8cf120d2e3f6ecf755a6e72e839b",
+      "variant_hash": "934992f31cc751e94555585f1ab4678c9e3f769f3aa4af7cbc5dd055160c6594"
+    },
+    {
+      "operator_id": "benign_prefix_padding",
+      "operator_params_hash": "4272346eb8e5fb1af40d985c1f04618931abeea2fa0bacfdf4b88f86b0e8d70d",
+      "source_case_hash": "6afb4254585b505ec7f72c72dc7d39cecabf8cf120d2e3f6ecf755a6e72e839b",
+      "variant_hash": "2fb669785628005fcaca4098553e0b6310ae07be51ad5fe4501d796dc2781a31"
+    },
+    {
+      "operator_id": "benign_suffix_padding",
+      "operator_params_hash": "8c78c533777fa799cd60f55a142bb78f1e8a7e35e23ca64958bd44f8816a270d",
+      "source_case_hash": "6afb4254585b505ec7f72c72dc7d39cecabf8cf120d2e3f6ecf755a6e72e839b",
+      "variant_hash": "481be2408fa755f08f4ae200df5676bfb2796d5ad086276bbea0e9dfb6840f0b"
+    },
+    {
+      "operator_id": "data_camouflage",
+      "operator_params_hash": "244013f2e00d9f283da1767e4846b4261f7271b553d80eb2921481b43defbf16",
+      "source_case_hash": "6afb4254585b505ec7f72c72dc7d39cecabf8cf120d2e3f6ecf755a6e72e839b",
+      "variant_hash": "506dda6c9636be7b5dcad1f4e29cba8161fe339beced83ebd549f28fc3376ad5"
+    },
+    {
+      "operator_id": "encoded_hint",
+      "operator_params_hash": "f5793bcd9e95a98a6ce8079243a7f4e3652d4de84d12433995a616721023c49f",
+      "source_case_hash": "6afb4254585b505ec7f72c72dc7d39cecabf8cf120d2e3f6ecf755a6e72e839b",
+      "variant_hash": "de0f6111df34a876e61ca73c6b2374ae828f742b50863f7f5716fc107f89160b"
+    },
+    {
+      "operator_id": "format_shift",
+      "operator_params_hash": "02a16818c530532948e0f2c0614e18a1b585b6e0ecfa80d14f11c98aac3554c4",
+      "source_case_hash": "6afb4254585b505ec7f72c72dc7d39cecabf8cf120d2e3f6ecf755a6e72e839b",
+      "variant_hash": "84448667c98c954c5ec49b00056e6050fe86953efa1cc49b86395e57ebbed8f0"
+    },
+    {
+      "operator_id": "instruction_softening",
+      "operator_params_hash": "e1e11d0e2fb72c695958e6f2920f0434c07a648b38b55adbc03b7a4a69160204",
+      "source_case_hash": "6afb4254585b505ec7f72c72dc7d39cecabf8cf120d2e3f6ecf755a6e72e839b",
+      "variant_hash": "30ed470326e29899640078e6bf8540de8879cb965d5c3c9f8d67e16f07883dcf"
+    },
+    {
+      "operator_id": "multi_step_delegation",
+      "operator_params_hash": "a0c24b968ec9b12d3e20cc5d3f3017d95cbf0afc4d034913d229bb025b258a9e",
+      "source_case_hash": "6afb4254585b505ec7f72c72dc7d39cecabf8cf120d2e3f6ecf755a6e72e839b",
+      "variant_hash": "700b8286ad3f5f82f13fcceb7a191d9c318b1a929c37c3d089910d2d7e59509d"
+    },
+    {
+      "operator_id": "role_indirection",
+      "operator_params_hash": "308c4f14e90be4c720ea7a0a6656cb363be540e3913118f2d7661ae38079696d",
+      "source_case_hash": "6afb4254585b505ec7f72c72dc7d39cecabf8cf120d2e3f6ecf755a6e72e839b",
+      "variant_hash": "c1c309e7fc12c768cee806ff1fb6daedbc5c170c5c69cc72d20c7eb257c18679"
+    },
+    {
+      "operator_id": "tool_affordance_lure",
+      "operator_params_hash": "73355c28c7b19efe29124b62cd9d16351a559151f67eb8e10a6058d6ca027574",
+      "source_case_hash": "6afb4254585b505ec7f72c72dc7d39cecabf8cf120d2e3f6ecf755a6e72e839b",
+      "variant_hash": "23c4080197dc0d88a2ca74ede880756fd05549caed9e606d5cd337f2512505a7"
+    },
+    {
+      "operator_id": "authority_shadowing",
+      "operator_params_hash": "73ba2b4feac0b80fe7c01c0f6d64963221d58ee018cba8206cad79672cd85945",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "3a555c9a8f0a975d1e059e40804b9fcc9fb7a42e29fa2e9fab1d3264a4023ee6"
+    },
+    {
+      "operator_id": "benign_prefix_padding",
+      "operator_params_hash": "4272346eb8e5fb1af40d985c1f04618931abeea2fa0bacfdf4b88f86b0e8d70d",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "c100e1fca1f0c504225c4c8f6cbf6de834c2766a032338e6a15971035018fffe"
+    },
+    {
+      "operator_id": "benign_suffix_padding",
+      "operator_params_hash": "8c78c533777fa799cd60f55a142bb78f1e8a7e35e23ca64958bd44f8816a270d",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "705594617a9673df507aa2c7a3406a5ffdecf9b0503000284803a686145df5bf"
+    },
+    {
+      "operator_id": "data_camouflage",
+      "operator_params_hash": "244013f2e00d9f283da1767e4846b4261f7271b553d80eb2921481b43defbf16",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "77551bd8af81dab15b1f32c890a93a57441321cf7211f4677d576cab3447fd52"
+    },
+    {
+      "operator_id": "encoded_hint",
+      "operator_params_hash": "f5793bcd9e95a98a6ce8079243a7f4e3652d4de84d12433995a616721023c49f",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "49e84587525a5c5314f6f7aa6971d53fb9074b35c7b9dfeed0c1239513c1741e"
+    },
+    {
+      "operator_id": "format_shift",
+      "operator_params_hash": "02a16818c530532948e0f2c0614e18a1b585b6e0ecfa80d14f11c98aac3554c4",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "379c58f912e147bb0d165d65158f98389a8df806a96ec1c06bcbf954cef3e651"
+    },
+    {
+      "operator_id": "instruction_softening",
+      "operator_params_hash": "e1e11d0e2fb72c695958e6f2920f0434c07a648b38b55adbc03b7a4a69160204",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "151af6cf9f49ab2adf57eaf905e2de91d99465eb4dbcc530ef02b35c18a2eefc"
+    },
+    {
+      "operator_id": "multi_step_delegation",
+      "operator_params_hash": "a0c24b968ec9b12d3e20cc5d3f3017d95cbf0afc4d034913d229bb025b258a9e",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "e06518db3936b46d1703b3ceaa52f782afca7e1f09c34eb6f9cf13787a43102c"
+    },
+    {
+      "operator_id": "role_indirection",
+      "operator_params_hash": "308c4f14e90be4c720ea7a0a6656cb363be540e3913118f2d7661ae38079696d",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "c18d31ec00614bb5f8a4596f3fc404fe99e89980008037aa4bb3f8e4cc44b6f2"
+    },
+    {
+      "operator_id": "tool_affordance_lure",
+      "operator_params_hash": "73355c28c7b19efe29124b62cd9d16351a559151f67eb8e10a6058d6ca027574",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "5e4746a2ba27430d4b4cf318e56749b3b00dd4c184eaf783f2cf80ef98e24c3c"
+    },
+    {
+      "operator_id": "authority_shadowing",
+      "operator_params_hash": "73ba2b4feac0b80fe7c01c0f6d64963221d58ee018cba8206cad79672cd85945",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "074f372b73545999b60584b999b85af5992f5c0b6c36327a56ef4e6ea8090c62"
+    },
+    {
+      "operator_id": "benign_prefix_padding",
+      "operator_params_hash": "4272346eb8e5fb1af40d985c1f04618931abeea2fa0bacfdf4b88f86b0e8d70d",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "968cc4dfd481101f5fba2ddb176b7e0ad1fedebc40675bccc66b78def18a911e"
+    },
+    {
+      "operator_id": "benign_suffix_padding",
+      "operator_params_hash": "8c78c533777fa799cd60f55a142bb78f1e8a7e35e23ca64958bd44f8816a270d",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "b4ff716a07c69de5db7d51db0915c9b770cf0d5816a0020c1759b31916f96477"
+    },
+    {
+      "operator_id": "data_camouflage",
+      "operator_params_hash": "244013f2e00d9f283da1767e4846b4261f7271b553d80eb2921481b43defbf16",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "9760919b7ef8f205fde8ca0ba5c733925be3cfc8fea0426579e91c559feb805a"
+    },
+    {
+      "operator_id": "encoded_hint",
+      "operator_params_hash": "f5793bcd9e95a98a6ce8079243a7f4e3652d4de84d12433995a616721023c49f",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "f691b9924650f824f2878b9bddef3a437fe884a23479f2c801359b6b64ad046f"
+    },
+    {
+      "operator_id": "format_shift",
+      "operator_params_hash": "02a16818c530532948e0f2c0614e18a1b585b6e0ecfa80d14f11c98aac3554c4",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "e55da982b37edb96827b163d465e53da09d344849d03dac2f2c535ba883f8033"
+    },
+    {
+      "operator_id": "instruction_softening",
+      "operator_params_hash": "e1e11d0e2fb72c695958e6f2920f0434c07a648b38b55adbc03b7a4a69160204",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "e20f7ff93ad3adad1023d19fc26120c21b54c63bb27a32b9b4311528f8887bb1"
+    },
+    {
+      "operator_id": "multi_step_delegation",
+      "operator_params_hash": "a0c24b968ec9b12d3e20cc5d3f3017d95cbf0afc4d034913d229bb025b258a9e",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "3a3b90cd9323ca791b615b1b3944960476fe8522aad8b49f232c3ff6615e70ae"
+    },
+    {
+      "operator_id": "role_indirection",
+      "operator_params_hash": "308c4f14e90be4c720ea7a0a6656cb363be540e3913118f2d7661ae38079696d",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "af1eaefb09454b7d7f4d1920d7f51f1a052315c4eac0129b25bcee9eb2002bbe"
+    },
+    {
+      "operator_id": "tool_affordance_lure",
+      "operator_params_hash": "73355c28c7b19efe29124b62cd9d16351a559151f67eb8e10a6058d6ca027574",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "3b040831d87360c968821b37ddbb9f5150eb132255662847b545bd4267e2f023"
+    },
+    {
+      "operator_id": "authority_shadowing",
+      "operator_params_hash": "73ba2b4feac0b80fe7c01c0f6d64963221d58ee018cba8206cad79672cd85945",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "e346bf8c232fa4dfeae96ff857a6d52dbec06c9d372c725417f136adfa27c539"
+    },
+    {
+      "operator_id": "benign_prefix_padding",
+      "operator_params_hash": "4272346eb8e5fb1af40d985c1f04618931abeea2fa0bacfdf4b88f86b0e8d70d",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "be41f1ff4f6f3189052e6b8a5e7a50907ce3e4ce2c1a37bc91ebdb4b04aff1f9"
+    },
+    {
+      "operator_id": "benign_suffix_padding",
+      "operator_params_hash": "8c78c533777fa799cd60f55a142bb78f1e8a7e35e23ca64958bd44f8816a270d",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "7fad3e8b7e66564a70cdd76ea58fc9deff96fdf871914c8d71dd77715d61f4b0"
+    },
+    {
+      "operator_id": "data_camouflage",
+      "operator_params_hash": "244013f2e00d9f283da1767e4846b4261f7271b553d80eb2921481b43defbf16",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "0ad065f5f4976209c0f09c4ced105cbc92d3c700d26b53d564eff0dc09893159"
+    },
+    {
+      "operator_id": "encoded_hint",
+      "operator_params_hash": "f5793bcd9e95a98a6ce8079243a7f4e3652d4de84d12433995a616721023c49f",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "7300347804b7a88e1af36de678b42f977978c9ed616868bd35724feac043ce32"
+    },
+    {
+      "operator_id": "format_shift",
+      "operator_params_hash": "02a16818c530532948e0f2c0614e18a1b585b6e0ecfa80d14f11c98aac3554c4",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "bb107a7896c93e7816c708298a1c2d88b595b4099c944adcceec3181b2a80cf6"
+    },
+    {
+      "operator_id": "instruction_softening",
+      "operator_params_hash": "e1e11d0e2fb72c695958e6f2920f0434c07a648b38b55adbc03b7a4a69160204",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "f2efe62e8811f9cbeed24baa16ad01950c2f51f447b49bb8947638083e6e2720"
+    },
+    {
+      "operator_id": "multi_step_delegation",
+      "operator_params_hash": "a0c24b968ec9b12d3e20cc5d3f3017d95cbf0afc4d034913d229bb025b258a9e",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "6d58b6f5c9b7c4472c5043fe4efd7e72eeaa4940f42439f5cba56e4a3c672529"
+    },
+    {
+      "operator_id": "role_indirection",
+      "operator_params_hash": "308c4f14e90be4c720ea7a0a6656cb363be540e3913118f2d7661ae38079696d",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "5bfc8be17ac42b237572ff1c6069b7626033c1aef123e2af45366f305472ac03"
+    },
+    {
+      "operator_id": "tool_affordance_lure",
+      "operator_params_hash": "73355c28c7b19efe29124b62cd9d16351a559151f67eb8e10a6058d6ca027574",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "928fb1b54935b64dc4ce218dab004d326eb39043d1fdd144eafa4aac5208bece"
+    },
+    {
+      "operator_id": "authority_shadowing",
+      "operator_params_hash": "73ba2b4feac0b80fe7c01c0f6d64963221d58ee018cba8206cad79672cd85945",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "b1eb741ac23033021effc808b6373616256923847407b899a4fc1d0736118bdc"
+    },
+    {
+      "operator_id": "benign_prefix_padding",
+      "operator_params_hash": "4272346eb8e5fb1af40d985c1f04618931abeea2fa0bacfdf4b88f86b0e8d70d",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "33bbe70cbe0d55235e7e1c816c107e45e1f448f013d50b152d7d4faef73c9503"
+    },
+    {
+      "operator_id": "benign_suffix_padding",
+      "operator_params_hash": "8c78c533777fa799cd60f55a142bb78f1e8a7e35e23ca64958bd44f8816a270d",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "86191e049da8d5bd7448ac12c77f777df311e8eb1b6371cbed759a803423f40d"
+    },
+    {
+      "operator_id": "data_camouflage",
+      "operator_params_hash": "244013f2e00d9f283da1767e4846b4261f7271b553d80eb2921481b43defbf16",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "5b6aa9df8905c8a0e2800463b3ee6405605d5b29683eb715970b0af8aa219499"
+    },
+    {
+      "operator_id": "encoded_hint",
+      "operator_params_hash": "f5793bcd9e95a98a6ce8079243a7f4e3652d4de84d12433995a616721023c49f",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "6d1aef65d8496c3eddafe0104dab48f5e01ae84c7263ec592967d73bc21cbd73"
+    },
+    {
+      "operator_id": "format_shift",
+      "operator_params_hash": "02a16818c530532948e0f2c0614e18a1b585b6e0ecfa80d14f11c98aac3554c4",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "065128845c0eac1d57d7181919653540540012b9d9d3303839f62c7a5bbb04d3"
+    },
+    {
+      "operator_id": "instruction_softening",
+      "operator_params_hash": "e1e11d0e2fb72c695958e6f2920f0434c07a648b38b55adbc03b7a4a69160204",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "b11199d655dae9860ef3ab2cb47a2679226e47c0b6ef68780da5b888d4c5d036"
+    },
+    {
+      "operator_id": "multi_step_delegation",
+      "operator_params_hash": "a0c24b968ec9b12d3e20cc5d3f3017d95cbf0afc4d034913d229bb025b258a9e",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "c1a02d224cb7860d5453ed172d019f9a807fd9e169a99d3e1edb6362b93c7aaf"
+    },
+    {
+      "operator_id": "role_indirection",
+      "operator_params_hash": "308c4f14e90be4c720ea7a0a6656cb363be540e3913118f2d7661ae38079696d",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "acb16a4750fde4a95f29c2b5818f8eae52098d7d05415b2f223ed58d4c572aaf"
+    },
+    {
+      "operator_id": "tool_affordance_lure",
+      "operator_params_hash": "73355c28c7b19efe29124b62cd9d16351a559151f67eb8e10a6058d6ca027574",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "8ecdb57519b412feb85b5410c578fa3dd8de518b28946e4a0f367a9830bcfa9b"
+    },
+    {
+      "operator_id": "authority_shadowing",
+      "operator_params_hash": "73ba2b4feac0b80fe7c01c0f6d64963221d58ee018cba8206cad79672cd85945",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "d0e38c4430c4a55ee3e73041f14cd7b16ecb6eedef2f95b4cb7b07cacfe2f6f4"
+    },
+    {
+      "operator_id": "benign_prefix_padding",
+      "operator_params_hash": "4272346eb8e5fb1af40d985c1f04618931abeea2fa0bacfdf4b88f86b0e8d70d",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "6002c91cb68c56b757d80188e8f215869f787f9e3f31140375a85adf6394d49b"
+    },
+    {
+      "operator_id": "benign_suffix_padding",
+      "operator_params_hash": "8c78c533777fa799cd60f55a142bb78f1e8a7e35e23ca64958bd44f8816a270d",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "582bbeab69db01121c27badad8ff6a7bdf07bfca8d2735b368a89ef983983f14"
+    },
+    {
+      "operator_id": "data_camouflage",
+      "operator_params_hash": "244013f2e00d9f283da1767e4846b4261f7271b553d80eb2921481b43defbf16",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "40556a51f56a0c667a88222890e97dec25aac236ffdd4728e2f73b9e542e007f"
+    },
+    {
+      "operator_id": "encoded_hint",
+      "operator_params_hash": "f5793bcd9e95a98a6ce8079243a7f4e3652d4de84d12433995a616721023c49f",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "6ffbd14ebd8fde3d54cdcd6b6b1575ed1ed6e92ff23357c586ec064e3a1abc6b"
+    },
+    {
+      "operator_id": "format_shift",
+      "operator_params_hash": "02a16818c530532948e0f2c0614e18a1b585b6e0ecfa80d14f11c98aac3554c4",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "f4eae6d60584ff923aa511b667788f3dcff6bdbb4950c2c3a2ae79fa5e503f9a"
+    },
+    {
+      "operator_id": "instruction_softening",
+      "operator_params_hash": "e1e11d0e2fb72c695958e6f2920f0434c07a648b38b55adbc03b7a4a69160204",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "c11423bc27330b6c9ed1fe031744f49278c94621a515f18566b034573e6c0d5f"
+    },
+    {
+      "operator_id": "multi_step_delegation",
+      "operator_params_hash": "a0c24b968ec9b12d3e20cc5d3f3017d95cbf0afc4d034913d229bb025b258a9e",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "6fef0c178259d257e4adff4a0706bfd98cec55b94da5416bf833854b03723212"
+    },
+    {
+      "operator_id": "role_indirection",
+      "operator_params_hash": "308c4f14e90be4c720ea7a0a6656cb363be540e3913118f2d7661ae38079696d",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "d4b7c20cb2be01d3aba70b1c79a06882a657dfb1c42dddd689644de155a7d519"
+    },
+    {
+      "operator_id": "tool_affordance_lure",
+      "operator_params_hash": "73355c28c7b19efe29124b62cd9d16351a559151f67eb8e10a6058d6ca027574",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "66dfff023c84537da19678febd435f516eeca87ce499b74c180302affa802dc6"
+    },
+    {
+      "operator_id": "authority_shadowing",
+      "operator_params_hash": "73ba2b4feac0b80fe7c01c0f6d64963221d58ee018cba8206cad79672cd85945",
+      "source_case_hash": "53beeadc025db6c9f8bde4a4e31804cc488cde8237334de70ee7fb5e1a5b6edd",
+      "variant_hash": "b8386147ed9fc59d4725b78f96428fb7328baf1c9600fc74543b6bd0f5e7e5f6"
+    },
+    {
+      "operator_id": "benign_prefix_padding",
+      "operator_params_hash": "4272346eb8e5fb1af40d985c1f04618931abeea2fa0bacfdf4b88f86b0e8d70d",
+      "source_case_hash": "53beeadc025db6c9f8bde4a4e31804cc488cde8237334de70ee7fb5e1a5b6edd",
+      "variant_hash": "e477bfa56fd2270dd84bb207c790529e863811b2431376e8085c6c1c79560636"
+    },
+    {
+      "operator_id": "benign_suffix_padding",
+      "operator_params_hash": "8c78c533777fa799cd60f55a142bb78f1e8a7e35e23ca64958bd44f8816a270d",
+      "source_case_hash": "53beeadc025db6c9f8bde4a4e31804cc488cde8237334de70ee7fb5e1a5b6edd",
+      "variant_hash": "b598ff9df0f4ce0deaa4ac77edda3096c29ebcc2d6ab7fda84d90531d102e0e8"
+    },
+    {
+      "operator_id": "data_camouflage",
+      "operator_params_hash": "244013f2e00d9f283da1767e4846b4261f7271b553d80eb2921481b43defbf16",
+      "source_case_hash": "53beeadc025db6c9f8bde4a4e31804cc488cde8237334de70ee7fb5e1a5b6edd",
+      "variant_hash": "b0088b4b863f9d8bcd88a3e583549e7eb15bbb17a4b8f1dfb8a41d1a06ba3e86"
+    },
+    {
+      "operator_id": "encoded_hint",
+      "operator_params_hash": "f5793bcd9e95a98a6ce8079243a7f4e3652d4de84d12433995a616721023c49f",
+      "source_case_hash": "53beeadc025db6c9f8bde4a4e31804cc488cde8237334de70ee7fb5e1a5b6edd",
+      "variant_hash": "eceb9736563fefa974cbfdf974e31c9356138bb6e50431c88b13fef6990a7c61"
+    },
+    {
+      "operator_id": "format_shift",
+      "operator_params_hash": "02a16818c530532948e0f2c0614e18a1b585b6e0ecfa80d14f11c98aac3554c4",
+      "source_case_hash": "53beeadc025db6c9f8bde4a4e31804cc488cde8237334de70ee7fb5e1a5b6edd",
+      "variant_hash": "bb5ea4e0eb4f66110fd56bb7d6b464507d1ad9aedded89d1a1ae05069aa25ab1"
+    },
+    {
+      "operator_id": "instruction_softening",
+      "operator_params_hash": "e1e11d0e2fb72c695958e6f2920f0434c07a648b38b55adbc03b7a4a69160204",
+      "source_case_hash": "53beeadc025db6c9f8bde4a4e31804cc488cde8237334de70ee7fb5e1a5b6edd",
+      "variant_hash": "df887d6078695ed85958812904de6fac0383a55d8650b1f20ad1b71cf89b502a"
+    },
+    {
+      "operator_id": "multi_step_delegation",
+      "operator_params_hash": "a0c24b968ec9b12d3e20cc5d3f3017d95cbf0afc4d034913d229bb025b258a9e",
+      "source_case_hash": "53beeadc025db6c9f8bde4a4e31804cc488cde8237334de70ee7fb5e1a5b6edd",
+      "variant_hash": "4eccbcab2b208d49d14a1b881a75c23a1d4f44533f211220504052a910699bac"
+    },
+    {
+      "operator_id": "role_indirection",
+      "operator_params_hash": "308c4f14e90be4c720ea7a0a6656cb363be540e3913118f2d7661ae38079696d",
+      "source_case_hash": "53beeadc025db6c9f8bde4a4e31804cc488cde8237334de70ee7fb5e1a5b6edd",
+      "variant_hash": "dbde779fe122932a28d60d863d517560f9dfd9df9bd3a180de7a3a74df726134"
+    },
+    {
+      "operator_id": "tool_affordance_lure",
+      "operator_params_hash": "73355c28c7b19efe29124b62cd9d16351a559151f67eb8e10a6058d6ca027574",
+      "source_case_hash": "53beeadc025db6c9f8bde4a4e31804cc488cde8237334de70ee7fb5e1a5b6edd",
+      "variant_hash": "f5567ebb78296cddc5b8bc6bb091a83ce6d75353fcb566e348ab6e244badee1d"
+    },
+    {
+      "operator_id": "authority_shadowing",
+      "operator_params_hash": "73ba2b4feac0b80fe7c01c0f6d64963221d58ee018cba8206cad79672cd85945",
+      "source_case_hash": "5ac9a6f10d2f158c9569cb7b286487a0c07403d1e2cb6bb3788d4b1a61abc696",
+      "variant_hash": "817fe5adc1d7cba535a41069ead0d76fd930bb2825a6345dad3195723567509d"
+    },
+    {
+      "operator_id": "benign_prefix_padding",
+      "operator_params_hash": "4272346eb8e5fb1af40d985c1f04618931abeea2fa0bacfdf4b88f86b0e8d70d",
+      "source_case_hash": "5ac9a6f10d2f158c9569cb7b286487a0c07403d1e2cb6bb3788d4b1a61abc696",
+      "variant_hash": "0eea738e67b561d21070867fd4e9b22a1ff563d0b98d3a960ae2cb739d2457ff"
+    },
+    {
+      "operator_id": "benign_suffix_padding",
+      "operator_params_hash": "8c78c533777fa799cd60f55a142bb78f1e8a7e35e23ca64958bd44f8816a270d",
+      "source_case_hash": "5ac9a6f10d2f158c9569cb7b286487a0c07403d1e2cb6bb3788d4b1a61abc696",
+      "variant_hash": "c3e77fa4b695dddc4b1f0ad26f1616a67e37241ea415db2779612d34f3b8bd78"
+    },
+    {
+      "operator_id": "data_camouflage",
+      "operator_params_hash": "244013f2e00d9f283da1767e4846b4261f7271b553d80eb2921481b43defbf16",
+      "source_case_hash": "5ac9a6f10d2f158c9569cb7b286487a0c07403d1e2cb6bb3788d4b1a61abc696",
+      "variant_hash": "06e4c8d7d4a2907a64395fe3aac2f04bebb4318a95aa3edd2eac669c7bf2d9b2"
+    },
+    {
+      "operator_id": "encoded_hint",
+      "operator_params_hash": "f5793bcd9e95a98a6ce8079243a7f4e3652d4de84d12433995a616721023c49f",
+      "source_case_hash": "5ac9a6f10d2f158c9569cb7b286487a0c07403d1e2cb6bb3788d4b1a61abc696",
+      "variant_hash": "36fa1882ce9e8b626e22f0fc4ca2b1efde9fce2e11bb34733cba414bbd68c1e7"
+    },
+    {
+      "operator_id": "format_shift",
+      "operator_params_hash": "02a16818c530532948e0f2c0614e18a1b585b6e0ecfa80d14f11c98aac3554c4",
+      "source_case_hash": "5ac9a6f10d2f158c9569cb7b286487a0c07403d1e2cb6bb3788d4b1a61abc696",
+      "variant_hash": "c972c9d0aa4525e1f9fbf0b4a4b2a477a8e35703ba6c645f468c7d22a0937dba"
+    },
+    {
+      "operator_id": "instruction_softening",
+      "operator_params_hash": "e1e11d0e2fb72c695958e6f2920f0434c07a648b38b55adbc03b7a4a69160204",
+      "source_case_hash": "5ac9a6f10d2f158c9569cb7b286487a0c07403d1e2cb6bb3788d4b1a61abc696",
+      "variant_hash": "2140809a129d0a04d1d0482b8f839c2670629db215c6338ee3b0e849cf0673e1"
+    },
+    {
+      "operator_id": "multi_step_delegation",
+      "operator_params_hash": "a0c24b968ec9b12d3e20cc5d3f3017d95cbf0afc4d034913d229bb025b258a9e",
+      "source_case_hash": "5ac9a6f10d2f158c9569cb7b286487a0c07403d1e2cb6bb3788d4b1a61abc696",
+      "variant_hash": "b221cd059082e7c191cb55a1822826b4ae01455488f12505a1938ef053cae498"
+    },
+    {
+      "operator_id": "role_indirection",
+      "operator_params_hash": "308c4f14e90be4c720ea7a0a6656cb363be540e3913118f2d7661ae38079696d",
+      "source_case_hash": "5ac9a6f10d2f158c9569cb7b286487a0c07403d1e2cb6bb3788d4b1a61abc696",
+      "variant_hash": "5200375766067388e5efceb3bcaf3e725d7b41429416e58952ca7fc164a21258"
+    },
+    {
+      "operator_id": "tool_affordance_lure",
+      "operator_params_hash": "73355c28c7b19efe29124b62cd9d16351a559151f67eb8e10a6058d6ca027574",
+      "source_case_hash": "5ac9a6f10d2f158c9569cb7b286487a0c07403d1e2cb6bb3788d4b1a61abc696",
+      "variant_hash": "35a865935922fd7339430a60151d8d1999c056ce8c7b6828c95d617eaab8b970"
+    },
+    {
+      "operator_id": "authority_shadowing",
+      "operator_params_hash": "73ba2b4feac0b80fe7c01c0f6d64963221d58ee018cba8206cad79672cd85945",
+      "source_case_hash": "12cf5799359ec610a49de68903cd2715f6c937fcba77893ea0d9c227fe08606d",
+      "variant_hash": "d1969f06e880ebfb111c3373aa774317a960e65168f7f156dfdc6987c8e186b3"
+    },
+    {
+      "operator_id": "benign_prefix_padding",
+      "operator_params_hash": "4272346eb8e5fb1af40d985c1f04618931abeea2fa0bacfdf4b88f86b0e8d70d",
+      "source_case_hash": "12cf5799359ec610a49de68903cd2715f6c937fcba77893ea0d9c227fe08606d",
+      "variant_hash": "f33151b6ad1bbecbb66991e4039f7c04d306574507b75e3f831fd4802ea3e27d"
+    },
+    {
+      "operator_id": "benign_suffix_padding",
+      "operator_params_hash": "8c78c533777fa799cd60f55a142bb78f1e8a7e35e23ca64958bd44f8816a270d",
+      "source_case_hash": "12cf5799359ec610a49de68903cd2715f6c937fcba77893ea0d9c227fe08606d",
+      "variant_hash": "11d1f54e9aae569f768cb01d3642945f3d9d5570fb4368c73d60a399ebb01648"
+    },
+    {
+      "operator_id": "data_camouflage",
+      "operator_params_hash": "244013f2e00d9f283da1767e4846b4261f7271b553d80eb2921481b43defbf16",
+      "source_case_hash": "12cf5799359ec610a49de68903cd2715f6c937fcba77893ea0d9c227fe08606d",
+      "variant_hash": "3170c6c232960b8fd94296e39d45fb1a3a7c53a7ee2e4d3d23c4c974215dbfc7"
+    },
+    {
+      "operator_id": "encoded_hint",
+      "operator_params_hash": "f5793bcd9e95a98a6ce8079243a7f4e3652d4de84d12433995a616721023c49f",
+      "source_case_hash": "12cf5799359ec610a49de68903cd2715f6c937fcba77893ea0d9c227fe08606d",
+      "variant_hash": "1f353633041192fa3994c1f4f2e17b9b76b84c01a29d984336459cf1817e1136"
+    },
+    {
+      "operator_id": "format_shift",
+      "operator_params_hash": "02a16818c530532948e0f2c0614e18a1b585b6e0ecfa80d14f11c98aac3554c4",
+      "source_case_hash": "12cf5799359ec610a49de68903cd2715f6c937fcba77893ea0d9c227fe08606d",
+      "variant_hash": "a764eb99f6061deb24ad7de0691569c711f1473d00064ab05fdce2c2b42e21c9"
+    },
+    {
+      "operator_id": "instruction_softening",
+      "operator_params_hash": "e1e11d0e2fb72c695958e6f2920f0434c07a648b38b55adbc03b7a4a69160204",
+      "source_case_hash": "12cf5799359ec610a49de68903cd2715f6c937fcba77893ea0d9c227fe08606d",
+      "variant_hash": "a31c1515b5754f0a93104ce8753a2bb7435fc18484abe5cd7c49f31357934ddd"
+    },
+    {
+      "operator_id": "multi_step_delegation",
+      "operator_params_hash": "a0c24b968ec9b12d3e20cc5d3f3017d95cbf0afc4d034913d229bb025b258a9e",
+      "source_case_hash": "12cf5799359ec610a49de68903cd2715f6c937fcba77893ea0d9c227fe08606d",
+      "variant_hash": "b2bc2d41faa62c759bbe54476bbd6a9891f4c87791c92d0a6f77e55b33287bfe"
+    },
+    {
+      "operator_id": "role_indirection",
+      "operator_params_hash": "308c4f14e90be4c720ea7a0a6656cb363be540e3913118f2d7661ae38079696d",
+      "source_case_hash": "12cf5799359ec610a49de68903cd2715f6c937fcba77893ea0d9c227fe08606d",
+      "variant_hash": "dfff984069637b476b0da0c71cadaf3f487201bc5b350d4c5e98d231e87b22e5"
+    },
+    {
+      "operator_id": "tool_affordance_lure",
+      "operator_params_hash": "73355c28c7b19efe29124b62cd9d16351a559151f67eb8e10a6058d6ca027574",
+      "source_case_hash": "12cf5799359ec610a49de68903cd2715f6c937fcba77893ea0d9c227fe08606d",
+      "variant_hash": "9431e222e55c58c44fc148cfc62192d3d2c44b4d1b2317819a2075b230a9f6e3"
+    },
+    {
+      "operator_id": "authority_shadowing",
+      "operator_params_hash": "73ba2b4feac0b80fe7c01c0f6d64963221d58ee018cba8206cad79672cd85945",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "3a555c9a8f0a975d1e059e40804b9fcc9fb7a42e29fa2e9fab1d3264a4023ee6"
+    },
+    {
+      "operator_id": "benign_prefix_padding",
+      "operator_params_hash": "4272346eb8e5fb1af40d985c1f04618931abeea2fa0bacfdf4b88f86b0e8d70d",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "c100e1fca1f0c504225c4c8f6cbf6de834c2766a032338e6a15971035018fffe"
+    },
+    {
+      "operator_id": "benign_suffix_padding",
+      "operator_params_hash": "8c78c533777fa799cd60f55a142bb78f1e8a7e35e23ca64958bd44f8816a270d",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "705594617a9673df507aa2c7a3406a5ffdecf9b0503000284803a686145df5bf"
+    },
+    {
+      "operator_id": "data_camouflage",
+      "operator_params_hash": "244013f2e00d9f283da1767e4846b4261f7271b553d80eb2921481b43defbf16",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "77551bd8af81dab15b1f32c890a93a57441321cf7211f4677d576cab3447fd52"
+    },
+    {
+      "operator_id": "encoded_hint",
+      "operator_params_hash": "f5793bcd9e95a98a6ce8079243a7f4e3652d4de84d12433995a616721023c49f",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "49e84587525a5c5314f6f7aa6971d53fb9074b35c7b9dfeed0c1239513c1741e"
+    },
+    {
+      "operator_id": "format_shift",
+      "operator_params_hash": "02a16818c530532948e0f2c0614e18a1b585b6e0ecfa80d14f11c98aac3554c4",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "379c58f912e147bb0d165d65158f98389a8df806a96ec1c06bcbf954cef3e651"
+    },
+    {
+      "operator_id": "instruction_softening",
+      "operator_params_hash": "e1e11d0e2fb72c695958e6f2920f0434c07a648b38b55adbc03b7a4a69160204",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "151af6cf9f49ab2adf57eaf905e2de91d99465eb4dbcc530ef02b35c18a2eefc"
+    },
+    {
+      "operator_id": "multi_step_delegation",
+      "operator_params_hash": "a0c24b968ec9b12d3e20cc5d3f3017d95cbf0afc4d034913d229bb025b258a9e",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "e06518db3936b46d1703b3ceaa52f782afca7e1f09c34eb6f9cf13787a43102c"
+    },
+    {
+      "operator_id": "role_indirection",
+      "operator_params_hash": "308c4f14e90be4c720ea7a0a6656cb363be540e3913118f2d7661ae38079696d",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "c18d31ec00614bb5f8a4596f3fc404fe99e89980008037aa4bb3f8e4cc44b6f2"
+    },
+    {
+      "operator_id": "tool_affordance_lure",
+      "operator_params_hash": "73355c28c7b19efe29124b62cd9d16351a559151f67eb8e10a6058d6ca027574",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "variant_hash": "5e4746a2ba27430d4b4cf318e56749b3b00dd4c184eaf783f2cf80ef98e24c3c"
+    },
+    {
+      "operator_id": "authority_shadowing",
+      "operator_params_hash": "73ba2b4feac0b80fe7c01c0f6d64963221d58ee018cba8206cad79672cd85945",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "074f372b73545999b60584b999b85af5992f5c0b6c36327a56ef4e6ea8090c62"
+    },
+    {
+      "operator_id": "benign_prefix_padding",
+      "operator_params_hash": "4272346eb8e5fb1af40d985c1f04618931abeea2fa0bacfdf4b88f86b0e8d70d",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "968cc4dfd481101f5fba2ddb176b7e0ad1fedebc40675bccc66b78def18a911e"
+    },
+    {
+      "operator_id": "benign_suffix_padding",
+      "operator_params_hash": "8c78c533777fa799cd60f55a142bb78f1e8a7e35e23ca64958bd44f8816a270d",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "b4ff716a07c69de5db7d51db0915c9b770cf0d5816a0020c1759b31916f96477"
+    },
+    {
+      "operator_id": "data_camouflage",
+      "operator_params_hash": "244013f2e00d9f283da1767e4846b4261f7271b553d80eb2921481b43defbf16",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "9760919b7ef8f205fde8ca0ba5c733925be3cfc8fea0426579e91c559feb805a"
+    },
+    {
+      "operator_id": "encoded_hint",
+      "operator_params_hash": "f5793bcd9e95a98a6ce8079243a7f4e3652d4de84d12433995a616721023c49f",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "f691b9924650f824f2878b9bddef3a437fe884a23479f2c801359b6b64ad046f"
+    },
+    {
+      "operator_id": "format_shift",
+      "operator_params_hash": "02a16818c530532948e0f2c0614e18a1b585b6e0ecfa80d14f11c98aac3554c4",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "e55da982b37edb96827b163d465e53da09d344849d03dac2f2c535ba883f8033"
+    },
+    {
+      "operator_id": "instruction_softening",
+      "operator_params_hash": "e1e11d0e2fb72c695958e6f2920f0434c07a648b38b55adbc03b7a4a69160204",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "e20f7ff93ad3adad1023d19fc26120c21b54c63bb27a32b9b4311528f8887bb1"
+    },
+    {
+      "operator_id": "multi_step_delegation",
+      "operator_params_hash": "a0c24b968ec9b12d3e20cc5d3f3017d95cbf0afc4d034913d229bb025b258a9e",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "3a3b90cd9323ca791b615b1b3944960476fe8522aad8b49f232c3ff6615e70ae"
+    },
+    {
+      "operator_id": "role_indirection",
+      "operator_params_hash": "308c4f14e90be4c720ea7a0a6656cb363be540e3913118f2d7661ae38079696d",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "af1eaefb09454b7d7f4d1920d7f51f1a052315c4eac0129b25bcee9eb2002bbe"
+    },
+    {
+      "operator_id": "tool_affordance_lure",
+      "operator_params_hash": "73355c28c7b19efe29124b62cd9d16351a559151f67eb8e10a6058d6ca027574",
+      "source_case_hash": "771813fc791494d9f58d257165ea4c4b2adb72ac0168212f03cb5beac5779524",
+      "variant_hash": "3b040831d87360c968821b37ddbb9f5150eb132255662847b545bd4267e2f023"
+    },
+    {
+      "operator_id": "authority_shadowing",
+      "operator_params_hash": "73ba2b4feac0b80fe7c01c0f6d64963221d58ee018cba8206cad79672cd85945",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "e346bf8c232fa4dfeae96ff857a6d52dbec06c9d372c725417f136adfa27c539"
+    },
+    {
+      "operator_id": "benign_prefix_padding",
+      "operator_params_hash": "4272346eb8e5fb1af40d985c1f04618931abeea2fa0bacfdf4b88f86b0e8d70d",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "be41f1ff4f6f3189052e6b8a5e7a50907ce3e4ce2c1a37bc91ebdb4b04aff1f9"
+    },
+    {
+      "operator_id": "benign_suffix_padding",
+      "operator_params_hash": "8c78c533777fa799cd60f55a142bb78f1e8a7e35e23ca64958bd44f8816a270d",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "7fad3e8b7e66564a70cdd76ea58fc9deff96fdf871914c8d71dd77715d61f4b0"
+    },
+    {
+      "operator_id": "data_camouflage",
+      "operator_params_hash": "244013f2e00d9f283da1767e4846b4261f7271b553d80eb2921481b43defbf16",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "0ad065f5f4976209c0f09c4ced105cbc92d3c700d26b53d564eff0dc09893159"
+    },
+    {
+      "operator_id": "encoded_hint",
+      "operator_params_hash": "f5793bcd9e95a98a6ce8079243a7f4e3652d4de84d12433995a616721023c49f",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "7300347804b7a88e1af36de678b42f977978c9ed616868bd35724feac043ce32"
+    },
+    {
+      "operator_id": "format_shift",
+      "operator_params_hash": "02a16818c530532948e0f2c0614e18a1b585b6e0ecfa80d14f11c98aac3554c4",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "bb107a7896c93e7816c708298a1c2d88b595b4099c944adcceec3181b2a80cf6"
+    },
+    {
+      "operator_id": "instruction_softening",
+      "operator_params_hash": "e1e11d0e2fb72c695958e6f2920f0434c07a648b38b55adbc03b7a4a69160204",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "f2efe62e8811f9cbeed24baa16ad01950c2f51f447b49bb8947638083e6e2720"
+    },
+    {
+      "operator_id": "multi_step_delegation",
+      "operator_params_hash": "a0c24b968ec9b12d3e20cc5d3f3017d95cbf0afc4d034913d229bb025b258a9e",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "6d58b6f5c9b7c4472c5043fe4efd7e72eeaa4940f42439f5cba56e4a3c672529"
+    },
+    {
+      "operator_id": "role_indirection",
+      "operator_params_hash": "308c4f14e90be4c720ea7a0a6656cb363be540e3913118f2d7661ae38079696d",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "5bfc8be17ac42b237572ff1c6069b7626033c1aef123e2af45366f305472ac03"
+    },
+    {
+      "operator_id": "tool_affordance_lure",
+      "operator_params_hash": "73355c28c7b19efe29124b62cd9d16351a559151f67eb8e10a6058d6ca027574",
+      "source_case_hash": "28bb079afbc46d843dd3818851e23425070001a17a24f72e95647b596fbde617",
+      "variant_hash": "928fb1b54935b64dc4ce218dab004d326eb39043d1fdd144eafa4aac5208bece"
+    },
+    {
+      "operator_id": "authority_shadowing",
+      "operator_params_hash": "73ba2b4feac0b80fe7c01c0f6d64963221d58ee018cba8206cad79672cd85945",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "b1eb741ac23033021effc808b6373616256923847407b899a4fc1d0736118bdc"
+    },
+    {
+      "operator_id": "benign_prefix_padding",
+      "operator_params_hash": "4272346eb8e5fb1af40d985c1f04618931abeea2fa0bacfdf4b88f86b0e8d70d",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "33bbe70cbe0d55235e7e1c816c107e45e1f448f013d50b152d7d4faef73c9503"
+    },
+    {
+      "operator_id": "benign_suffix_padding",
+      "operator_params_hash": "8c78c533777fa799cd60f55a142bb78f1e8a7e35e23ca64958bd44f8816a270d",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "86191e049da8d5bd7448ac12c77f777df311e8eb1b6371cbed759a803423f40d"
+    },
+    {
+      "operator_id": "data_camouflage",
+      "operator_params_hash": "244013f2e00d9f283da1767e4846b4261f7271b553d80eb2921481b43defbf16",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "5b6aa9df8905c8a0e2800463b3ee6405605d5b29683eb715970b0af8aa219499"
+    },
+    {
+      "operator_id": "encoded_hint",
+      "operator_params_hash": "f5793bcd9e95a98a6ce8079243a7f4e3652d4de84d12433995a616721023c49f",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "6d1aef65d8496c3eddafe0104dab48f5e01ae84c7263ec592967d73bc21cbd73"
+    },
+    {
+      "operator_id": "format_shift",
+      "operator_params_hash": "02a16818c530532948e0f2c0614e18a1b585b6e0ecfa80d14f11c98aac3554c4",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "065128845c0eac1d57d7181919653540540012b9d9d3303839f62c7a5bbb04d3"
+    },
+    {
+      "operator_id": "instruction_softening",
+      "operator_params_hash": "e1e11d0e2fb72c695958e6f2920f0434c07a648b38b55adbc03b7a4a69160204",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "b11199d655dae9860ef3ab2cb47a2679226e47c0b6ef68780da5b888d4c5d036"
+    },
+    {
+      "operator_id": "multi_step_delegation",
+      "operator_params_hash": "a0c24b968ec9b12d3e20cc5d3f3017d95cbf0afc4d034913d229bb025b258a9e",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "c1a02d224cb7860d5453ed172d019f9a807fd9e169a99d3e1edb6362b93c7aaf"
+    },
+    {
+      "operator_id": "role_indirection",
+      "operator_params_hash": "308c4f14e90be4c720ea7a0a6656cb363be540e3913118f2d7661ae38079696d",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "acb16a4750fde4a95f29c2b5818f8eae52098d7d05415b2f223ed58d4c572aaf"
+    },
+    {
+      "operator_id": "tool_affordance_lure",
+      "operator_params_hash": "73355c28c7b19efe29124b62cd9d16351a559151f67eb8e10a6058d6ca027574",
+      "source_case_hash": "238722ed7643eec0d477864d733c640bf4923eed663a410397da75f102ef402f",
+      "variant_hash": "8ecdb57519b412feb85b5410c578fa3dd8de518b28946e4a0f367a9830bcfa9b"
+    },
+    {
+      "operator_id": "authority_shadowing",
+      "operator_params_hash": "73ba2b4feac0b80fe7c01c0f6d64963221d58ee018cba8206cad79672cd85945",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "d0e38c4430c4a55ee3e73041f14cd7b16ecb6eedef2f95b4cb7b07cacfe2f6f4"
+    },
+    {
+      "operator_id": "benign_prefix_padding",
+      "operator_params_hash": "4272346eb8e5fb1af40d985c1f04618931abeea2fa0bacfdf4b88f86b0e8d70d",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "6002c91cb68c56b757d80188e8f215869f787f9e3f31140375a85adf6394d49b"
+    },
+    {
+      "operator_id": "benign_suffix_padding",
+      "operator_params_hash": "8c78c533777fa799cd60f55a142bb78f1e8a7e35e23ca64958bd44f8816a270d",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "582bbeab69db01121c27badad8ff6a7bdf07bfca8d2735b368a89ef983983f14"
+    },
+    {
+      "operator_id": "data_camouflage",
+      "operator_params_hash": "244013f2e00d9f283da1767e4846b4261f7271b553d80eb2921481b43defbf16",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "40556a51f56a0c667a88222890e97dec25aac236ffdd4728e2f73b9e542e007f"
+    },
+    {
+      "operator_id": "encoded_hint",
+      "operator_params_hash": "f5793bcd9e95a98a6ce8079243a7f4e3652d4de84d12433995a616721023c49f",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "6ffbd14ebd8fde3d54cdcd6b6b1575ed1ed6e92ff23357c586ec064e3a1abc6b"
+    },
+    {
+      "operator_id": "format_shift",
+      "operator_params_hash": "02a16818c530532948e0f2c0614e18a1b585b6e0ecfa80d14f11c98aac3554c4",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "f4eae6d60584ff923aa511b667788f3dcff6bdbb4950c2c3a2ae79fa5e503f9a"
+    },
+    {
+      "operator_id": "instruction_softening",
+      "operator_params_hash": "e1e11d0e2fb72c695958e6f2920f0434c07a648b38b55adbc03b7a4a69160204",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "c11423bc27330b6c9ed1fe031744f49278c94621a515f18566b034573e6c0d5f"
+    },
+    {
+      "operator_id": "multi_step_delegation",
+      "operator_params_hash": "a0c24b968ec9b12d3e20cc5d3f3017d95cbf0afc4d034913d229bb025b258a9e",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "6fef0c178259d257e4adff4a0706bfd98cec55b94da5416bf833854b03723212"
+    },
+    {
+      "operator_id": "role_indirection",
+      "operator_params_hash": "308c4f14e90be4c720ea7a0a6656cb363be540e3913118f2d7661ae38079696d",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "d4b7c20cb2be01d3aba70b1c79a06882a657dfb1c42dddd689644de155a7d519"
+    },
+    {
+      "operator_id": "tool_affordance_lure",
+      "operator_params_hash": "73355c28c7b19efe29124b62cd9d16351a559151f67eb8e10a6058d6ca027574",
+      "source_case_hash": "fc491edce3a9b1e7e406cc3bbc6dced926e85d880fd30d25bb3a8b9020853421",
+      "variant_hash": "66dfff023c84537da19678febd435f516eeca87ce499b74c180302affa802dc6"
+    }
+  ],
+  "mutation_variant_count": 350,
+  "operator_coverage": [
+    "authority_shadowing",
+    "benign_prefix_padding",
+    "benign_suffix_padding",
+    "data_camouflage",
+    "encoded_hint",
+    "format_shift",
+    "instruction_softening",
+    "multi_step_delegation",
+    "role_indirection",
+    "tool_affordance_lure"
+  ],
+  "seed": 1337,
+  "stage": "3K"
+}

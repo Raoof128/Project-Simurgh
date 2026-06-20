@@ -7,12 +7,15 @@ Deterministic, key-free, metadata-only adaptive-readiness probe (claiming lanes 
 - `mutation-operators.json` — the 10 enumerated deterministic mutation operators.
 - `action-open-categories.json` — the 5 action-open underspecification categories.
 
-**Produced by Plan 2 (opt-in real run, regenerated against pinned AgentDojo source cases):**
+**Frozen by the Plan 2 real run (deterministic key-free run against the real gateway):**
 
-- `manifest.json`, `mutation-manifest.json`, `source-case-map.json`,
-  `action-open-manifest.json`, `metrics.json`, `suite-breakdown.json`,
-  `operator-breakdown.json`, `taxonomy.json`, `receipt-samples.json`,
-  `audit-sample.json`, and the audit/runner output logs.
+- `manifest.json` — Stage 3J provenance hashes, operator/category catalogues, expected counts, claim boundary.
+- `mutation-manifest.json` — 350 metadata-only mutation variants (35 injection tasks × 10 operators).
+- `source-case-map.json` — source-case-hash → variant count.
+- `action-open-manifest.json` — 35 action-open cases across the five categories.
+- `metrics.json` — containment hard gates clean, benign 97/97, targeted ASR 0/385, all `operator_asr_delta` 0.
+- `suite-breakdown.json`, `operator-breakdown.json`, `taxonomy.json`.
 
 Claim boundary: full-suite adaptive-style containment probe under a deterministic
-key-free harness. NOT adaptive robustness, NOT live-model safety.
+key-free harness. NOT adaptive robustness, NOT live-model safety. See
+`../../STAGE_3K_CLOSEOUT.md` for the Stage 3L decision (not triggered).
