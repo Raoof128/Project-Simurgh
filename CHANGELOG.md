@@ -1,5 +1,28 @@
 ## Change Log
 
+## [stage-3m-verifiable-containment-attestation] — 2026-06-20 — Verifiable containment attestation
+
+**Raouf:** Stage 3M turns the Stage 3L containment evidence into an offline-verifiable run-set attestation. The HMAC audit chain remains internal tamper-evidence; a new Ed25519 signature is the external layer so any third party verifies the exported metadata-only bundle with the published public key — no symmetric secret shared. The signature covers `canonicalJson(parse(bundle))` (not file bytes), so reformatting never breaks verification. The bundle embeds metrics, boundary breakdown, recomputed gate results, policy digests, privacy report, a hash-bound 7-file `referenced_evidence` list, and machine-readable `non_claims`; v1 attests the Stage 3L 180-case run-set only (`simurgh.vca.run_set.v1`). The two-tier offline verifier (portable + `--reproduce`) passes every check; tamper tests cover bundle edits, re-signed bad metrics, decorative gate results, edited evidence, wrong key, fingerprint mismatch, and leakage. Public key committed (fingerprint `sha256:875b59ebbee8e6eb6fe34d6e06d60d74434cbcf5ec17acb18d1c9f68e2a06798`); private key never committed; CI verifies only; zero `src/llmShield` change. Honest boundary: it signs the evidence that exists and does not upgrade the Stage 3L audit sample into a full per-case HMAC chain. No jailbreak-immunity / model-safety claim.
+
+### Added
+
+- `tools/simurgh-attestation/{canonicalise,attestationLib,keygen,sign-attestation,verify-attestation}.mjs` and `tests/unit/llmShield/attestation/{canonicalise,attestationLib,verifyAttestation}.test.js`.
+- `scripts/{smoke,security-audit,privacy-audit,policy-drift-guard}-llm-shield-stage3m.*`.
+- `docs/research/llm-shield/{LLM_SHIELD_STAGE_3M_VERIFIABLE_CONTAINMENT_ATTESTATION,STAGE_3M_THREAT_MODEL,STAGE_3M_VALIDATION_MATRIX,STAGE_3M_REVIEWER_CHECKLIST,STAGE_3M_CLOSEOUT}.md`; `docs/research/llm-shield/evidence/stage-3m/**`.
+- `docs/superpowers/specs/2026-06-20-stage-3m-verifiable-containment-attestation-design.md` and `docs/superpowers/plans/2026-06-20-stage-3m-verifiable-containment-attestation.md`.
+
+### Changed
+
+- `scripts/check.sh` — wired the Stage 3M smoke gate + 100% attestation-helper coverage step.
+- `README.md`, `AGENT.md` — Stage 3M milestone.
+
+### Verified
+
+- `node --test tests/unit/llmShield/attestation/*.test.js` passed (18/18).
+- `scripts/smoke-llm-shield-stage3m.sh` passed (verify portable + `--reproduce`, policy-drift, privacy, security audits).
+
+---
+
 ## [stage-3l-fable5-reference-containment] — 2026-06-20 — Fable-5 reference containment regression
 
 **Raouf:** Stage 3L is a deterministic, key-free measurement stage proving a Fable-5-style failure chain is contained _after input filtering fails_. A 180-case corpus (5 malicious families × {24 input-miss + 6 direct} + 30 benign hard-negatives) runs through the real Simurgh boundary functions in pipeline order, so the observed containment boundary is measured rather than asserted. H1 is enforced as a fixture-validity gate: each input-miss case must pass the input firewall and be contained by its intended downstream boundary; each direct case must be blocked at input. Results: input-miss `120/120` downstream-contained (input-firewall containment `0/120`), direct blocked `30/30`, `case_expectation_mismatches=0`, targeted ASR `0/150`, benign `30/30`, context-authority escalation `0`, unsafe tool/export `0`, receipt/audit `180/180`, generated-evidence leakage `0`, policy-drift `0`. The Fable 5 incident is a payload-redacted public reference event only; no transcript committed, no immunity claimed, no `src/llmShield` change. Stage 3M not triggered.

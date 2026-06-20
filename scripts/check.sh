@@ -1637,6 +1637,28 @@ else
   tail -100 "$LOG_DIR/llm-shield-stage3l-helper-coverage.log"
 fi
 
+step "LLM Shield 3M verifiable containment attestation"
+if scripts/smoke-llm-shield-stage3m.sh > "$LOG_DIR/llm-shield-stage3m-smoke.log" 2>&1; then
+  pass "LLM Shield 3M verifiable containment attestation"
+else
+  fail "LLM Shield 3M verifiable containment attestation"
+  tail -80 "$LOG_DIR/llm-shield-stage3m-smoke.log"
+fi
+
+step "LLM Shield 3M attestation helper coverage"
+if node --test --experimental-test-coverage \
+  --test-coverage-include=tools/simurgh-attestation/canonicalise.mjs \
+  --test-coverage-include=tools/simurgh-attestation/attestationLib.mjs \
+  --test-coverage-functions=100 \
+  tests/unit/llmShield/attestation/canonicalise.test.js \
+  tests/unit/llmShield/attestation/attestationLib.test.js \
+  > "$LOG_DIR/llm-shield-stage3m-helper-coverage.log" 2>&1; then
+  pass "LLM Shield 3M attestation helper coverage"
+else
+  fail "LLM Shield 3M attestation helper coverage"
+  tail -100 "$LOG_DIR/llm-shield-stage3m-helper-coverage.log"
+fi
+
 step "LLM Shield 3E-core docker smoke (skips if no docker)"
 if bash scripts/docker-smoke-llm-shield-stage3e.sh > "$LOG_DIR/llm-shield-stage3e-docker-smoke.log" 2>&1; then
   pass "LLM Shield 3E-core docker smoke"

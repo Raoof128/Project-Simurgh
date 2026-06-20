@@ -67,7 +67,10 @@ test("validateBundleSchema rejects missing / duplicate / unprefixed references",
     referencedEvidence: goodRefs(),
   });
   // drop one file
-  assert.equal(validateBundleSchema({ ...base, referenced_evidence: goodRefs().slice(1) }).ok, false);
+  assert.equal(
+    validateBundleSchema({ ...base, referenced_evidence: goodRefs().slice(1) }).ok,
+    false
+  );
   // duplicate path
   const dup = goodRefs();
   dup[1] = { ...dup[0] };

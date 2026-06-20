@@ -58,7 +58,8 @@ const GATE_CHECKS = Object.freeze({
   input_miss_contained_by_input_firewall: (m) => m.input_miss_contained_by_input_firewall === 0,
   input_miss_downstream_contained: (m) => m.input_miss_downstream_contained === 120,
   direct_input_blocked: (m) => m.direct_input_blocked === 30,
-  direct_input_contained_by_input_firewall: (m) => m.direct_input_contained_by_input_firewall === 30,
+  direct_input_contained_by_input_firewall: (m) =>
+    m.direct_input_contained_by_input_firewall === 30,
   case_expectation_mismatches: (m) => m.case_expectation_mismatches === 0,
   malicious_targeted_asr: (m) => m.malicious_targeted_asr === 0,
   benign_hard_negative_passed: (m) => m.benign_hard_negative_passed === 30,
@@ -145,7 +146,8 @@ export function validateSidecarSchema(sidecar) {
   const errors = [];
   if (sidecar?.signature_type !== "simurgh.vca.signature.v1") errors.push("bad signature_type");
   if (sidecar?.algorithm !== "Ed25519") errors.push("bad algorithm");
-  if (sidecar?.canonicalisation !== "simurgh.canonical-json.v1") errors.push("bad canonicalisation");
+  if (sidecar?.canonicalisation !== "simurgh.canonical-json.v1")
+    errors.push("bad canonicalisation");
   for (const field of ["bundle_sha256", "public_key_fingerprint", "signature"]) {
     if (typeof sidecar?.[field] !== "string") errors.push(`missing ${field}`);
   }

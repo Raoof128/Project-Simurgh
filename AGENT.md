@@ -2,6 +2,15 @@
 
 ## Agent Change Log
 
+### 2026-06-20 (Australia/Sydney) — Stage 3M verifiable containment attestation
+
+**Raouf:**
+
+- **Scope:** Turn the Stage 3L evidence pack into an offline-verifiable, provider-agnostic containment attestation. Evidence/tooling stage; no `src/llmShield/**` change (policy-drift guard enforces).
+- **Summary:** Added a zero-dependency `node:crypto` Ed25519 attestation toolkit (`tools/simurgh-attestation/`): canonical-JSON core, attestation lib (gates, bundle build, schema validators, local leakage scanner), local-only signer reading `SIMURGH_VCA_PRIVATE_KEY_PATH`, and a two-tier offline verifier (portable + `--reproduce`). The HMAC audit chain stays internal tamper-evidence; the Ed25519 signature is the new external layer so a third party verifies the exported bundle with the published public key, no secret shared. The signature covers `canonicalJson(parse(bundle))` (not file bytes), so Prettier reformatting never breaks verification. The bundle embeds metrics, boundary breakdown, recomputed gate results, policy digests, privacy report, a hash-bound 7-file `referenced_evidence` list, and machine-readable `non_claims`. v1 attests the Stage 3L 180-case run-set only (`simurgh.vca.run_set.v1`). Verification (portable + `--reproduce`) passes with every check true; tamper tests cover bundle edits, re-signed bad metrics, decorative gate results, edited evidence, wrong key, fingerprint mismatch, and leakage. Public key committed (fingerprint `sha256:875b59ebbee8e6eb6fe34d6e06d60d74434cbcf5ec17acb18d1c9f68e2a06798`); private key never committed; CI verifies only.
+- **Files changed:** `tools/simurgh-attestation/{canonicalise,attestationLib,keygen,sign-attestation,verify-attestation}.mjs`, `tests/unit/llmShield/attestation/*.test.js`, `scripts/{smoke,security-audit,privacy-audit,policy-drift-guard}-llm-shield-stage3m.*`, `docs/research/llm-shield/{LLM_SHIELD_STAGE_3M_*,STAGE_3M_*}.md`, `docs/research/llm-shield/evidence/stage-3m/**`, `docs/superpowers/{specs,plans}/*stage-3m*`, `scripts/check.sh`, `README.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `node --test tests/unit/llmShield/attestation/*.test.js` passed (18/18); `scripts/smoke-llm-shield-stage3m.sh` passed; wired into `scripts/check.sh` (smoke + 100% helper coverage). Tag target `v1.6.0-stage-3m-verifiable-containment-attestation`.
+
 ### 2026-06-20 (Australia/Sydney) — Stage 3L Fable-5 reference containment regression
 
 **Raouf:**

@@ -3,12 +3,12 @@
 This directory holds the offline-verifiable attestation over the Stage 3L 180-case run-set. It is
 metadata-only: hashes, counts, gate booleans, enum codes, the public key, and an opaque signature.
 
-| File | Contents |
-| --- | --- |
-| `attestation.bundle.json` | Canonical run-set bundle: metrics, boundary breakdown, recomputed gate results, policy digests, privacy report, hash-bound `referenced_evidence`, and machine-readable `non_claims`. |
-| `attestation.signature.json` | Detached `simurgh.vca.signature.v1` sidecar: Ed25519 signature over the canonical bundle bytes, plus `bundle_sha256` and `public_key_fingerprint` anchors. |
-| `attestation.public-key.json` | Ed25519 public key (SPKI PEM) + SHA-256 fingerprint over the DER SPKI bytes. |
-| `verifier-output.txt` | Last verifier run output (not signed; an output of verification). |
+| File                          | Contents                                                                                                                                                                             |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `attestation.bundle.json`     | Canonical run-set bundle: metrics, boundary breakdown, recomputed gate results, policy digests, privacy report, hash-bound `referenced_evidence`, and machine-readable `non_claims`. |
+| `attestation.signature.json`  | Detached `simurgh.vca.signature.v1` sidecar: Ed25519 signature over the canonical bundle bytes, plus `bundle_sha256` and `public_key_fingerprint` anchors.                           |
+| `attestation.public-key.json` | Ed25519 public key (SPKI PEM) + SHA-256 fingerprint over the DER SPKI bytes.                                                                                                         |
+| `verifier-output.txt`         | Last verifier run output (not signed; an output of verification).                                                                                                                    |
 
 ## Public-key fingerprint (trust anchor)
 

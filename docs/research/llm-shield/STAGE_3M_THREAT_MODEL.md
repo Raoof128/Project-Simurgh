@@ -2,14 +2,14 @@
 
 ## In scope — what the attestation defends against
 
-| Threat | Stage 3M defence |
-| --- | --- |
-| Bundle tampering after signing | Ed25519 signature over canonical bundle bytes; any edit fails `signature_valid` + `bundle_digest_match` |
-| Referenced evidence file swapped/edited | `referenced_evidence[].sha256` re-checked against on-disk files (`evidence_file_hashes_match`) |
-| Decorative / lying gate results | `gate_results` must equal recomputed `evaluateGateResults(metrics)` (`gate_results_match`) and pass (`declared_gates_pass`) |
-| Wrong / substituted signing key | `signature_valid` fails under a different public key; `--expected-key-fingerprint` pins the trust anchor |
-| Accidental raw-data leakage into evidence | leakage rescan of the canonical bundle + referenced files (`evidence_leakage_zero`) |
-| Non-reproducible numbers (deterministic run-sets) | `--reproduce` re-runs the Stage 3L producer and matches signed metrics/breakdown/privacy |
+| Threat                                            | Stage 3M defence                                                                                                            |
+| ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| Bundle tampering after signing                    | Ed25519 signature over canonical bundle bytes; any edit fails `signature_valid` + `bundle_digest_match`                     |
+| Referenced evidence file swapped/edited           | `referenced_evidence[].sha256` re-checked against on-disk files (`evidence_file_hashes_match`)                              |
+| Decorative / lying gate results                   | `gate_results` must equal recomputed `evaluateGateResults(metrics)` (`gate_results_match`) and pass (`declared_gates_pass`) |
+| Wrong / substituted signing key                   | `signature_valid` fails under a different public key; `--expected-key-fingerprint` pins the trust anchor                    |
+| Accidental raw-data leakage into evidence         | leakage rescan of the canonical bundle + referenced files (`evidence_leakage_zero`)                                         |
+| Non-reproducible numbers (deterministic run-sets) | `--reproduce` re-runs the Stage 3L producer and matches signed metrics/breakdown/privacy                                    |
 
 ## Out of scope
 

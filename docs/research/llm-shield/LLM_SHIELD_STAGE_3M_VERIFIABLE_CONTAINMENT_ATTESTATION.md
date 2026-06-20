@@ -15,7 +15,7 @@
 The industry has converged on the four-layer agent defence (input validation, runtime filters,
 tool/permission scoping, output validation + logging). Nobody owns the **proof**. Simurgh already
 emits deterministic, metadata-only, HMAC-chained evidence per decision — but an HMAC chain is
-*internal* tamper-evidence: an outsider cannot verify it without the symmetric secret, and sharing
+_internal_ tamper-evidence: an outsider cannot verify it without the symmetric secret, and sharing
 the secret destroys the proof. Stage 3M adds the missing **external** layer so any third party can
 verify an exported evidence bundle offline, with a public key, without receiving any secret.
 

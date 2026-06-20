@@ -50,8 +50,7 @@ export function verifyBundle({
 
   // Fix #3: gate_results must be the honestly recomputed gates, and they must pass.
   const expectedGates = evaluateGateResults(bundle.metrics);
-  checks.gate_results_match =
-    JSON.stringify(bundle.gate_results) === JSON.stringify(expectedGates);
+  checks.gate_results_match = JSON.stringify(bundle.gate_results) === JSON.stringify(expectedGates);
   checks.declared_gates_pass = expectedGates.all_hard_gates_passed === true;
 
   // Fix #2: scan the canonical bundle itself AND the referenced evidence for leakage.
@@ -101,7 +100,8 @@ async function mainCli() {
   const publicKeyPem = JSON.parse(await readFile(arg("--public-key"), "utf8")).public_key_pem;
   const reproduce = process.argv.includes("--reproduce");
   const evidenceFiles = [];
-  for (const ref of bundle.referenced_evidence) evidenceFiles.push([ref.path, await readFile(ref.path)]);
+  for (const ref of bundle.referenced_evidence)
+    evidenceFiles.push([ref.path, await readFile(ref.path)]);
   const reproduced = reproduce ? await reproduceStage3l(bundle) : null;
   const result = verifyBundle({
     bundle,

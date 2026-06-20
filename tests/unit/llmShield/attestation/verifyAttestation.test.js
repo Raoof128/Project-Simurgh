@@ -126,7 +126,9 @@ test("tamper: edited referenced evidence file fails hash binding", () => {
 
 test("tamper: wrong public key fails signature", () => {
   const f = fixture();
-  const other = crypto.generateKeyPairSync("ed25519").publicKey.export({ type: "spki", format: "pem" });
+  const other = crypto
+    .generateKeyPairSync("ed25519")
+    .publicKey.export({ type: "spki", format: "pem" });
   const r = verifyBundle({
     bundle: f.bundle,
     sidecar: f.sidecar,
