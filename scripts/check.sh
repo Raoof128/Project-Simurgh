@@ -1560,6 +1560,29 @@ else
   pass "LLM Shield 3H-L2 AgentDojo external run skipped (set SIMURGH_RUN_STAGE3H_LAYER2=1)"
 fi
 
+step "LLM Shield 3I context-calibration audits"
+if scripts/smoke-llm-shield-stage3i-phase1.sh > "$LOG_DIR/llm-shield-stage3i-phase1-smoke.log" 2>&1; then
+  pass "LLM Shield 3I context-calibration audits"
+else
+  fail "LLM Shield 3I context-calibration audits"
+  tail -80 "$LOG_DIR/llm-shield-stage3i-phase1-smoke.log"
+fi
+
+step "LLM Shield 3J full-evaluation audits (workspace + all-suite)"
+if scripts/smoke-llm-shield-stage3j-workspace.sh > "$LOG_DIR/llm-shield-stage3j-workspace-smoke.log" 2>&1 \
+  && scripts/smoke-llm-shield-stage3j-all-suite.sh > "$LOG_DIR/llm-shield-stage3j-all-suite-smoke.log" 2>&1; then
+  pass "LLM Shield 3J full-evaluation audits"
+else
+  fail "LLM Shield 3J full-evaluation audits"
+  tail -80 "$LOG_DIR/llm-shield-stage3j-all-suite-smoke.log"
+fi
+
+if [[ "${SIMURGH_RUN_STAGE3J_ALL_SUITES:-0}" == "1" ]]; then
+  pass "LLM Shield 3J real all-suite run executed via smoke (SIMURGH_RUN_STAGE3J_ALL_SUITES=1)"
+else
+  pass "LLM Shield 3J real all-suite run skipped (set SIMURGH_RUN_STAGE3J_ALL_SUITES=1)"
+fi
+
 step "LLM Shield 3F/3G helper function coverage"
 if node --test --experimental-test-coverage \
   --test-coverage-include=tests/e2e/llm_shield_stage3f_benchmark_lib.mjs \
