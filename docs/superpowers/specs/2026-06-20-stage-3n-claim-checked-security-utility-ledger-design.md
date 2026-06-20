@@ -4,7 +4,7 @@ Status: Approved design baseline
 Date: 2026-06-20
 Release target: `v1.7.0-stage-3n-claim-checked-security-utility-ledger`
 Branch: `main-stage-3n-claim-checked-security-utility-ledger`
-Type: Derived-evidence / measurement / claim-governance stage. **No `src/llmShield/**` guard changes.**
+Type: Derived-evidence / measurement / claim-governance stage. **No `src/llmShield/**` guard changes.\*\*
 
 ---
 
@@ -42,7 +42,7 @@ The `10/10 → 0/10` recovery describes a **transient bug** that was found and f
 
 Rather than hide this, 3N makes it the centrepiece: a claim that cannot resolve to a frozen
 artifact is **excluded from the ledger and labelled `prose_history`**, and a CI gate fails if
-any *registered* claim's number drifts from its committed source field. The conflict becomes
+any _registered_ claim's number drifts from its committed source field. The conflict becomes
 proof of discipline, not an embarrassment.
 
 External anchors (motivation only; verified at write-time per §12):
@@ -54,7 +54,7 @@ External anchors (motivation only; verified at write-time per §12):
   Supports the no-universal-robustness posture.
 - OWASP AI Agent Security Cheat Sheet — maps to Simurgh's risk classes (prompt injection,
   tool abuse, privilege escalation, data exfiltration).
-- NIST AI RMF (AI 100-1) — Govern/Map/Measure/Manage framing; 3N is a *Measure/Govern*
+- NIST AI RMF (AI 100-1) — Govern/Map/Measure/Manage framing; 3N is a _Measure/Govern_
   evidence layer, **not** a compliance claim.
 - Supporting (pending write-time re-verification, non-load-bearing): AgentDyn `2602.03117`,
   PISmith `2603.13026`, Firewalls `2510.05244`, In-the-Wild `2604.27202`.
@@ -64,11 +64,12 @@ External anchors (motivation only; verified at write-time per §12):
 ## 3. Scope
 
 ### In scope (v1)
+
 - Normalising **frozen, committed** Simurgh evidence into one metric schema.
 - A **metric contract** that declares each row's population/denominator and refuses pooling
   across incompatible denominators.
 - A **held-line ledger**: per-family rows proving over-defence stayed 0 and utility stayed
-  intact *where committed metrics show it*, at rising scale/adversity.
+  intact _where committed metrics show it_, at rising scale/adversity.
 - A **closed-world claim-to-evidence compiler**: every registered claim is either `verified`
   against a committed field or `excluded` with a recorded reason (`prose_history`).
 - Application of the claim compiler to **3N's own ledger rows + the one registered historical
@@ -77,6 +78,7 @@ External anchors (motivation only; verified at write-time per §12):
   policy-drift guard.
 
 ### Out of scope (explicit non-goals)
+
 - No new attacks, no new guard tuning, no `src/llmShield` change.
 - No live provider execution; no AgentDyn integration (future 3O/3P).
 - **No universal claim-policing of the whole repo's prose.** 3N polices only its own
@@ -87,6 +89,7 @@ External anchors (motivation only; verified at write-time per §12):
   in the guard layer, so `frontier_status = not_applicable_degenerate`.
 
 ### Frontier determination (recorded fact)
+
 `src/llmShield` exposes only discrete switches: `promptFirewall` `opts.stages` is a
 canonicalisation feature-toggle (merged from `DEFAULT_STAGES`), and `contextProvenanceGuard`
 uses discrete provenance enums such as trust level, source type, and purpose values; these are
@@ -107,20 +110,22 @@ tests/unit/llmShield/stage3nClaimLedgerLib.test.js     # unit tests incl. tamper
 ```
 
 ### Pillar 1 — Held-line ledger
+
 For each source family, a row built **only** from committed fields:
 
-| Source file | family | key fields used |
-|---|---|---|
-| `stage-3h-layer2/metrics.json` | `agentdojo_layer2` | `simurgh_containment_metrics.over_defence_rate` (0/10), `utility_preserved_rate` (10/10) |
-| `stage-3j/all-suite-metrics.json` | `agentdojo_full` | `agentdojo_native_metrics.defended.targeted_asr` (0/949), `simurgh_containment_metrics.over_defence_rate` (0/97) |
-| `stage-3k/metrics.json` | `adaptive_readiness` | `agentdojo_native_metrics.defended.targeted_asr` (0/385), `mutation_variant_count` (350), `action_open_attacker_goal_rate` (0) |
-| `stage-3l/metrics.json` | `fable5_reference_containment` | `malicious_targeted_asr` (0), `malicious_total` (150), `benign_hard_negative_passed` (30), `input_miss_downstream_contained` (120) |
-| `stage-3m` attestation | `attestation_validity` | verifier PASS over signed 3L pack |
+| Source file                       | family                         | key fields used                                                                                                                    |
+| --------------------------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `stage-3h-layer2/metrics.json`    | `agentdojo_layer2`             | `simurgh_containment_metrics.over_defence_rate` (0/10), `utility_preserved_rate` (10/10)                                           |
+| `stage-3j/all-suite-metrics.json` | `agentdojo_full`               | `agentdojo_native_metrics.defended.targeted_asr` (0/949), `simurgh_containment_metrics.over_defence_rate` (0/97)                   |
+| `stage-3k/metrics.json`           | `adaptive_readiness`           | `agentdojo_native_metrics.defended.targeted_asr` (0/385), `mutation_variant_count` (350), `action_open_attacker_goal_rate` (0)     |
+| `stage-3l/metrics.json`           | `fable5_reference_containment` | `malicious_targeted_asr` (0), `malicious_total` (150), `benign_hard_negative_passed` (30), `input_miss_downstream_contained` (120) |
+| `stage-3m` attestation            | `attestation_validity`         | verifier PASS over signed 3L pack                                                                                                  |
 
 Each row records `role` ∈ {`held_line`, `attestation`}. No `recovery_point`, no
 `regression_baseline` — those would require a frozen `10/10` artifact that does not exist.
 
 ### Pillar 2 — Metric contract
+
 `metric-contract.v1.json` — one entry per family:
 
 ```json
@@ -140,6 +145,7 @@ lists the other in `pooling_allowed_with`. Any attempt emits a `denominator-pool
 entry and increments `pooling_refused`. No pooled ASR is ever reported.
 
 ### Pillar 3 — Closed-world claim-to-evidence compiler
+
 `claim-evidence-map.json` registers every claim 3N makes. Two shapes:
 
 ```json
@@ -244,6 +250,7 @@ overclaim_wording_detected                  = 0
 ```
 
 Optional stretch (NOT a hard gate):
+
 ```
 stage3n_bundle_signed_with_3m_tooling       = true
 ```
@@ -287,6 +294,7 @@ docs/research/llm-shield/
 ## 10. Threat model
 
 In scope:
+
 - Misreporting a source metric (caught: claim compiler field-equality).
 - Ghost baseline / prose-only number leaking into a claim (caught: closed-world rule).
 - Denominator pooling to mask weakness (caught: contract gate + pooling report).
@@ -297,6 +305,7 @@ In scope:
 - Silent guard drift hidden in a measurement PR (caught: policy-drift guard).
 
 Out of scope:
+
 - New attack generation, guard tuning, live provider safety, AgentDyn execution, universal
   robustness, external-system comparison, content-harm/refusal classification.
 

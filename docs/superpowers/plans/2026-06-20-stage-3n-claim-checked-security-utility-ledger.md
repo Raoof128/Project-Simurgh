@@ -30,13 +30,13 @@
 
 ### Frozen source files (read-only inputs — never modified by 3N)
 
-| Family | File | Fields used |
-|---|---|---|
-| `agentdojo_layer2` | `docs/research/llm-shield/evidence/stage-3h-layer2/metrics.json` | `simurgh_containment_metrics.over_defence_rate.{numerator,denominator}` (0/10), `utility_preserved_rate.{numerator,denominator}` (10/10) |
-| `agentdojo_full` | `docs/research/llm-shield/evidence/stage-3j/all-suite-metrics.json` | `agentdojo_native_metrics.defended.targeted_asr.{numerator,denominator}` (0/949), `simurgh_containment_metrics.over_defence_rate.{numerator,denominator}` (0/97) |
-| `adaptive_readiness` | `docs/research/llm-shield/evidence/stage-3k/metrics.json` | `agentdojo_native_metrics.defended.targeted_asr.{numerator,denominator}` (0/385), `mutation_variant_count` (350), `action_open_attacker_goal_rate` (0) |
-| `fable5_reference_containment` | `docs/research/llm-shield/evidence/stage-3l/metrics.json` | `malicious_targeted_asr` (0), `malicious_total` (150), `benign_hard_negative_passed` (30), `benign_total` (30), `input_miss_downstream_contained` (120) |
-| `attestation_validity` | `docs/research/llm-shield/evidence/stage-3m/attestation.{bundle,signature,public-key}.json` | 3M verifier PASS (boolean) |
+| Family                         | File                                                                                        | Fields used                                                                                                                                                      |
+| ------------------------------ | ------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `agentdojo_layer2`             | `docs/research/llm-shield/evidence/stage-3h-layer2/metrics.json`                            | `simurgh_containment_metrics.over_defence_rate.{numerator,denominator}` (0/10), `utility_preserved_rate.{numerator,denominator}` (10/10)                         |
+| `agentdojo_full`               | `docs/research/llm-shield/evidence/stage-3j/all-suite-metrics.json`                         | `agentdojo_native_metrics.defended.targeted_asr.{numerator,denominator}` (0/949), `simurgh_containment_metrics.over_defence_rate.{numerator,denominator}` (0/97) |
+| `adaptive_readiness`           | `docs/research/llm-shield/evidence/stage-3k/metrics.json`                                   | `agentdojo_native_metrics.defended.targeted_asr.{numerator,denominator}` (0/385), `mutation_variant_count` (350), `action_open_attacker_goal_rate` (0)           |
+| `fable5_reference_containment` | `docs/research/llm-shield/evidence/stage-3l/metrics.json`                                   | `malicious_targeted_asr` (0), `malicious_total` (150), `benign_hard_negative_passed` (30), `benign_total` (30), `input_miss_downstream_contained` (120)          |
+| `attestation_validity`         | `docs/research/llm-shield/evidence/stage-3m/attestation.{bundle,signature,public-key}.json` | 3M verifier PASS (boolean)                                                                                                                                       |
 
 ---
 
@@ -59,10 +59,12 @@
 ## Task 1: Pure lib — dotted-path reader + source field map
 
 **Files:**
+
 - Create: `tests/e2e/llm_shield_stage3n_claim_ledger_lib.mjs`
 - Test: `tests/unit/llmShield/stage3nClaimLedgerLib.test.js`
 
 **Interfaces:**
+
 - Consumes: nothing (first task).
 - Produces:
   - `STAGE3N_FAMILIES` (frozen array of 5 family strings).
@@ -164,10 +166,12 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ## Task 2: Metric contract + anti-pooling logic
 
 **Files:**
+
 - Modify: `tests/e2e/llm_shield_stage3n_claim_ledger_lib.mjs`
 - Test: `tests/unit/llmShield/stage3nClaimLedgerLib.test.js`
 
 **Interfaces:**
+
 - Consumes: `STAGE3N_FAMILIES`.
 - Produces:
   - `METRIC_CONTRACT` (frozen array of contract entries: `{source_stage, metric_family, denominator_basis, security_denominator, utility_denominator, pooling_group, pooling_allowed_with}`).
@@ -177,14 +181,22 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 
 ```js
 // append to tests/unit/llmShield/stage3nClaimLedgerLib.test.js
-import { METRIC_CONTRACT, evaluatePooling } from "../../../tests/e2e/llm_shield_stage3n_claim_ledger_lib.mjs";
+import {
+  METRIC_CONTRACT,
+  evaluatePooling,
+} from "../../../tests/e2e/llm_shield_stage3n_claim_ledger_lib.mjs";
 
 test("METRIC_CONTRACT has one entry per family with required keys", () => {
   assert.equal(METRIC_CONTRACT.length, 5);
   for (const e of METRIC_CONTRACT) {
     for (const k of [
-      "source_stage", "metric_family", "denominator_basis",
-      "security_denominator", "utility_denominator", "pooling_group", "pooling_allowed_with",
+      "source_stage",
+      "metric_family",
+      "denominator_basis",
+      "security_denominator",
+      "utility_denominator",
+      "pooling_group",
+      "pooling_allowed_with",
     ]) {
       assert.ok(k in e, `missing ${k}`);
     }
@@ -212,26 +224,51 @@ Expected: FAIL — `METRIC_CONTRACT` / `evaluatePooling` not exported.
 // Each family is its own pooling group with a distinct denominator basis, so no
 // two families may be pooled. This makes "no denominator soup" machine-checkable.
 export const METRIC_CONTRACT = Object.freeze([
-  { source_stage: "3H-L2", metric_family: "agentdojo_layer2",
+  {
+    source_stage: "3H-L2",
+    metric_family: "agentdojo_layer2",
     denominator_basis: "stage3h_l2_overdefence_case_count",
-    security_denominator: 20, utility_denominator: 10,
-    pooling_group: "stage3h_l2_only", pooling_allowed_with: [] },
-  { source_stage: "3J", metric_family: "agentdojo_full",
+    security_denominator: 20,
+    utility_denominator: 10,
+    pooling_group: "stage3h_l2_only",
+    pooling_allowed_with: [],
+  },
+  {
+    source_stage: "3J",
+    metric_family: "agentdojo_full",
     denominator_basis: "agentdojo_full_security_case_count",
-    security_denominator: 949, utility_denominator: 97,
-    pooling_group: "stage3j_only", pooling_allowed_with: [] },
-  { source_stage: "3K", metric_family: "adaptive_readiness",
+    security_denominator: 949,
+    utility_denominator: 97,
+    pooling_group: "stage3j_only",
+    pooling_allowed_with: [],
+  },
+  {
+    source_stage: "3K",
+    metric_family: "adaptive_readiness",
     denominator_basis: "stage3k_adaptive_case_count",
-    security_denominator: 385, utility_denominator: 97,
-    pooling_group: "stage3k_only", pooling_allowed_with: [] },
-  { source_stage: "3L", metric_family: "fable5_reference_containment",
+    security_denominator: 385,
+    utility_denominator: 97,
+    pooling_group: "stage3k_only",
+    pooling_allowed_with: [],
+  },
+  {
+    source_stage: "3L",
+    metric_family: "fable5_reference_containment",
     denominator_basis: "stage3l_malicious_case_count",
-    security_denominator: 150, utility_denominator: 30,
-    pooling_group: "stage3l_only", pooling_allowed_with: [] },
-  { source_stage: "3M", metric_family: "attestation_validity",
+    security_denominator: 150,
+    utility_denominator: 30,
+    pooling_group: "stage3l_only",
+    pooling_allowed_with: [],
+  },
+  {
+    source_stage: "3M",
+    metric_family: "attestation_validity",
     denominator_basis: "stage3m_attestation_runset",
-    security_denominator: 0, utility_denominator: 0,
-    pooling_group: "stage3m_only", pooling_allowed_with: [] },
+    security_denominator: 0,
+    utility_denominator: 0,
+    pooling_group: "stage3m_only",
+    pooling_allowed_with: [],
+  },
 ]);
 
 export function evaluatePooling(contract) {
@@ -283,10 +320,12 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ## Task 3: Normalisation + held-line ledger + per-family panels
 
 **Files:**
+
 - Modify: `tests/e2e/llm_shield_stage3n_claim_ledger_lib.mjs`
 - Test: `tests/unit/llmShield/stage3nClaimLedgerLib.test.js`
 
 **Interfaces:**
+
 - Consumes: `STAGE3N_FAMILIES`, `readPath`, `METRIC_CONTRACT`.
 - Produces:
   - `normaliseSources(sources)` where `sources` is `{ [family]: parsedJsonObject }` (attestation family value is `{ verifier_pass: boolean }`). Returns frozen array of normalised rows: `{ family, source_stage, role, security: {targeted_asr_numerator, targeted_asr_denominator}|null, utility: {over_defence_numerator, over_defence_denominator}|null, attestation_valid: boolean|null }`. `role` is `"attestation"` for `attestation_validity`, else `"held_line"`.
@@ -296,7 +335,10 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 
 ```js
 // append to tests/unit/llmShield/stage3nClaimLedgerLib.test.js
-import { normaliseSources, buildPerFamilyPanels } from "../../../tests/e2e/llm_shield_stage3n_claim_ledger_lib.mjs";
+import {
+  normaliseSources,
+  buildPerFamilyPanels,
+} from "../../../tests/e2e/llm_shield_stage3n_claim_ledger_lib.mjs";
 
 const SAMPLE_SOURCES = {
   agentdojo_layer2: {
@@ -312,8 +354,10 @@ const SAMPLE_SOURCES = {
     simurgh_containment_metrics: { over_defence_rate: { numerator: 0, denominator: 97 } },
   },
   fable5_reference_containment: {
-    malicious_targeted_asr: 0, malicious_total: 150,
-    benign_hard_negative_passed: 30, benign_total: 30,
+    malicious_targeted_asr: 0,
+    malicious_total: 150,
+    benign_hard_negative_passed: 30,
+    benign_total: 30,
   },
   attestation_validity: { verifier_pass: true },
 };
@@ -396,7 +440,8 @@ export function normaliseSources(sources) {
           targeted_asr_denominator: readPath(src, "malicious_total"),
         },
         utility: {
-          over_defence_numerator: readPath(src, "benign_total") - readPath(src, "benign_hard_negative_passed"),
+          over_defence_numerator:
+            readPath(src, "benign_total") - readPath(src, "benign_hard_negative_passed"),
           over_defence_denominator: readPath(src, "benign_total"),
         },
         attestation_valid: null,
@@ -458,10 +503,12 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ## Task 4: Closed-world claim-to-evidence compiler
 
 **Files:**
+
 - Modify: `tests/e2e/llm_shield_stage3n_claim_ledger_lib.mjs`
 - Test: `tests/unit/llmShield/stage3nClaimLedgerLib.test.js`
 
 **Interfaces:**
+
 - Consumes: `readPath`.
 - Produces:
   - `compileClaims(claimMap, sources)` where `claimMap` is an array of claim objects. For `status: "verified"` claims it reads `source_field` (and optional `denominator_field`) from `sources[<derived from source_file>]`... — to keep the lib pure, the runner instead passes a resolver. **Signature:** `compileClaims(claimMap, resolve)` where `resolve(claim)` returns `{ actual, actualDenominator }` for verified claims (the runner supplies the parsed JSON lookup). Returns `{ report: Array, unresolved_numeric_claim_conflicts: number, claim_evidence_map_complete: boolean, prose_only_metric_claims_excluded: boolean }`.
@@ -550,8 +597,7 @@ export function compileClaims(claimMap, resolve) {
       entry.actual = actual;
       const numMismatch = actual !== claim.expected;
       const denMismatch =
-        claim.denominator_field !== undefined &&
-        actualDenominator !== claim.expected_denominator;
+        claim.denominator_field !== undefined && actualDenominator !== claim.expected_denominator;
       if (numMismatch || denMismatch) {
         conflicts += 1;
         entry.conflict = true;
@@ -591,10 +637,12 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ## Task 5: Leakage scanner + hard-gate enforcer
 
 **Files:**
+
 - Modify: `tests/e2e/llm_shield_stage3n_claim_ledger_lib.mjs`
 - Test: `tests/unit/llmShield/stage3nClaimLedgerLib.test.js`
 
 **Interfaces:**
+
 - Consumes: nothing new.
 - Produces:
   - `STAGE3N_FORBIDDEN_TOKENS` (frozen array of payload/transcript markers).
@@ -613,7 +661,10 @@ import {
 
 test("leakage scanner finds forbidden tokens", () => {
   assert.ok(STAGE3N_FORBIDDEN_TOKENS.length > 0);
-  const findings = computeEvidenceLeakageFindings([["a.json", "clean"], ["b.json", "Pliny here"]]);
+  const findings = computeEvidenceLeakageFindings([
+    ["a.json", "clean"],
+    ["b.json", "Pliny here"],
+  ]);
   assert.equal(findings.length, 1);
   assert.equal(findings[0].file, "b.json");
 });
@@ -741,10 +792,12 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ## Task 6: Runner — read frozen evidence, write/verify stage-3n evidence
 
 **Files:**
+
 - Create: `tests/e2e/llm_shield_stage3n_claim_ledger_runner.mjs`
 - Create (via `--update-metrics`, then commit): the 13 files under `docs/research/llm-shield/evidence/stage-3n/`
 
 **Interfaces:**
+
 - Consumes: all lib exports; the existing 3M verifier core (`verifyBundle` or CLI) for the attestation row.
 - Produces: a CLI runner with default (verify committed) and `--update-metrics` (rewrite) modes. The runner assembles `gateInputs` and calls `enforceStage3nHardGates`.
 
@@ -797,9 +850,12 @@ function verifyAttestation() {
       "node",
       [
         "tools/simurgh-attestation/verify-attestation.mjs",
-        "--bundle", `${EV}/attestation.bundle.json`,
-        "--signature", `${EV}/attestation.signature.json`,
-        "--public-key", `${EV}/attestation.public-key.json`,
+        "--bundle",
+        `${EV}/attestation.bundle.json`,
+        "--signature",
+        `${EV}/attestation.signature.json`,
+        "--public-key",
+        `${EV}/attestation.public-key.json`,
       ],
       { stdio: "pipe" }
     );
@@ -977,7 +1033,10 @@ async function main() {
 
   if (UPDATE) {
     await writeJson(join(ROOT, "source-index.json"), sourceIndex);
-    await writeJson(join(ROOT, "metric-contract.v1.json"), { stage: "3N", contract: METRIC_CONTRACT });
+    await writeJson(join(ROOT, "metric-contract.v1.json"), {
+      stage: "3N",
+      contract: METRIC_CONTRACT,
+    });
     await writeJson(join(ROOT, "normalised-metrics.json"), normalisedMetrics);
     await writeJson(join(ROOT, "held-line-ledger.json"), heldLineLedger);
     await writeJson(join(ROOT, "per-family-panels.json"), perFamilyPanels);
@@ -1025,11 +1084,13 @@ main().catch((error) => {
 - [ ] **Step 2: Generate evidence and verify the runner passes**
 
 Run:
+
 ```bash
 node tests/e2e/llm_shield_stage3n_claim_ledger_runner.mjs --update-metrics
 npx prettier --write docs/research/llm-shield/evidence/stage-3n/*.json >/dev/null 2>&1 || true
 node tests/e2e/llm_shield_stage3n_claim_ledger_runner.mjs
 ```
+
 Expected: first prints `stage3n runner: updated evidence, all hard gates pass`; second prints `stage3n runner: verified committed evidence`.
 
 - [ ] **Step 3: Sanity-check the generated numbers**
@@ -1051,6 +1112,7 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ## Task 7: Audit scripts + policy-drift guard
 
 **Files:**
+
 - Create: `scripts/policy-drift-guard-llm-shield-stage3n.sh`
 - Create: `scripts/privacy-audit-llm-shield-stage3n.mjs`
 - Create: `scripts/consistency-audit-llm-shield-stage3n.mjs`
@@ -1058,6 +1120,7 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 - Create: `scripts/smoke-llm-shield-stage3n.sh`
 
 **Interfaces:**
+
 - Consumes: lib exports + runner; mirrors the 3L/3M audit idioms.
 - Produces: five executable scripts; smoke orchestrates them.
 
@@ -1150,8 +1213,13 @@ if (pooling.cross_family_pooling_performed !== 0) {
   console.error("stage3n consistency FAIL: pooling performed");
   process.exit(1);
 }
-const committedPool = JSON.parse(await readFile(join(ROOT, "denominator-pooling-report.json"), "utf8"));
-if (committedPool.cross_family_pooling_performed !== 0 || committedPool.pooled_asr_reported !== false) {
+const committedPool = JSON.parse(
+  await readFile(join(ROOT, "denominator-pooling-report.json"), "utf8")
+);
+if (
+  committedPool.cross_family_pooling_performed !== 0 ||
+  committedPool.pooled_asr_reported !== false
+) {
   console.error("stage3n consistency FAIL: committed pooling report inconsistent");
   process.exit(1);
 }
@@ -1233,10 +1301,12 @@ echo "stage3n smoke: passed"
 - [ ] **Step 6: Make scripts executable and run the smoke**
 
 Run:
+
 ```bash
 chmod +x scripts/smoke-llm-shield-stage3n.sh scripts/policy-drift-guard-llm-shield-stage3n.sh scripts/security-audit-llm-shield-stage3n.sh
 bash scripts/smoke-llm-shield-stage3n.sh
 ```
+
 Expected: ends with `stage3n smoke: passed`.
 
 - [ ] **Step 7: Commit**
@@ -1253,9 +1323,11 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ## Task 8: Wire into check.sh
 
 **Files:**
+
 - Modify: `scripts/check.sh` (add 3N blocks after the 3M blocks, ~line 1660)
 
 **Interfaces:**
+
 - Consumes: smoke + lib; mirrors the 3M `step/pass/fail/$LOG_DIR` idiom.
 
 - [ ] **Step 1: Add the 3N smoke + helper-coverage blocks**
@@ -1286,10 +1358,12 @@ fi
 - [ ] **Step 2: Run the two 3N blocks' commands directly to confirm**
 
 Run:
+
 ```bash
 bash scripts/smoke-llm-shield-stage3n.sh
 node --test --experimental-test-coverage --test-coverage-include=tests/e2e/llm_shield_stage3n_claim_ledger_lib.mjs tests/unit/llmShield/stage3nClaimLedgerLib.test.js
 ```
+
 Expected: smoke passes; test run shows all tests pass and lib coverage ~100%.
 
 - [ ] **Step 3: Commit**
@@ -1306,6 +1380,7 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ## Task 9: Docs quartet + main writeup + citation verification
 
 **Files:**
+
 - Create: `docs/research/llm-shield/LLM_SHIELD_STAGE_3N_CLAIM_CHECKED_SECURITY_UTILITY_LEDGER.md`
 - Create: `docs/research/llm-shield/STAGE_3N_THREAT_MODEL.md`
 - Create: `docs/research/llm-shield/STAGE_3N_VALIDATION_MATRIX.md`
@@ -1333,10 +1408,12 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 - [ ] **Step 8: Verify no overclaim wording leaked, then run the full smoke**
 
 Run:
+
 ```bash
 bash scripts/security-audit-llm-shield-stage3n.sh
 bash scripts/smoke-llm-shield-stage3n.sh
 ```
+
 Expected: both pass.
 
 - [ ] **Step 9: Commit**
@@ -1383,6 +1460,7 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ## Self-Review
 
 **1. Spec coverage:**
+
 - §3 three pillars → Tasks 2 (contract), 3 (ledger/panels), 4 (claim compiler). ✓
 - §3 frontier `not_applicable_degenerate` → runner gateInputs + gate enforcer (Tasks 5, 6). ✓
 - §4 claim surface definition → `buildClaimMap` + closed-world rule (Tasks 4, 6). ✓
