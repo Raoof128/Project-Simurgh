@@ -11,9 +11,11 @@ fail() {
   exit 1
 }
 
-# 1. No banned overclaim wording in 3L docs.
+# 1. No banned overclaim wording in 3L docs. The reviewer checklist is excluded:
+# it deliberately enumerates the prohibited phrases as the thing to avoid.
 if ls docs/research/llm-shield/*STAGE_3L* docs/research/llm-shield/LLM_SHIELD_STAGE_3L* >/dev/null 2>&1; then
   if grep -RniE "jailbreak-proof|claude defeated|fable fixed|universal safety|immune to" \
+    --include='*.md' --exclude='*REVIEWER_CHECKLIST*' \
     docs/research/llm-shield/*STAGE_3L* docs/research/llm-shield/LLM_SHIELD_STAGE_3L* 2>/dev/null; then
     fail "overclaim wording present in 3L docs"
   fi
