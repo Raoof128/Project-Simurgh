@@ -756,3 +756,31 @@ git push origin v1.4.0-stage-3k-adaptive-attack-readiness
 **Type consistency:** `build_stage3k_artifacts` consumes `compute_stage3k_metrics`/`build_suite_breakdown`/`build_operator_breakdown`/`build_error_taxonomy` with their real signatures; the consistency audit reads exactly the keys the aggregator emits (`mutation_variant_count`, `operator_asr_delta`, `containment_hard_gates_clean`, `metrics_consistent`, `per_operator.variant_count`, `source-case-map.entries`); the security audit reads `simurgh_containment_metrics.hard_gates.*` (matching the real Stage 3J shape). ✔
 
 **Boundary check:** no task adds defence logic, tunes detectors, widens context trust/tool policy, or weakens the output firewall. The only `layer2_runner` change (Task 3) is harness row-tagging guarded by a Stage-3J-unchanged assertion + audit. ✔
+
+---
+
+## Review fixes folded in (2026-06-20) — BINDING
+
+These five edits are required and supersede the task text where they conflict.
+
+**Fix 1 — Real run must carry non-empty Stage 3J provenance hashes.**
+Add `collect_stage3j_evidence_hashes(evidence_dir) -> dict[str, str]` to `stage3k_runner.py` (pure: sha256 of `all-suite-metrics.json`, `all-suite-suite-breakdown.json`, `all-suite-taxonomy.json` under `docs/research/llm-shield/evidence/stage-3j`). `run_stage3k` (Task 3) calls it instead of passing `{}`, and raises if the result is empty. Unit-test the collector with a `tmp_path` fixture (it is pure I/O, so CI-testable). The aggregator/import test may still pass `{}`; only the real run requires non-empty.
+
+**Fix 2 — Consistency audit fully validates the action-open lane.**
+Task 5's audit (full mode) additionally asserts:
+`actionOpen.action_open_case_count === metrics.action_open_case_count`,
+`sum(per_suite) === action_open_case_count`, and
+`sum(per_category) === action_open_case_count`.
+
+**Fix 3 — Source-policy drift guard.**
+Add `scripts/policy-drift-guard-llm-shield-stage3k.sh` that fails if the branch's diff vs `main` touches any of: `src/llmShield/**/contextProvenanceGuard*`, `src/llmShield/gateway/gatewayRouter.js`, `src/llmShield/**/tool*`, `src/llmShield/**/output*` (and the firewall files). It greps `git diff --name-only main...HEAD`. The Task 7 smoke runs it; the Task 8 reviewer checklist lists the same files. A justified change must be explicitly allow-listed in the script with a comment.
+
+**Fix 4 — Mandatory row-tagging regression test (not an implementer note).**
+The Stage-3K row tagging is factored into a PURE helper in `layer2_runner.py`:
+`tag_rows_for_stage3k(baseline_rows, defended_rows, *, operator_id_by_case, category_by_case) -> tuple[list, list]`
+— returns rows with ONLY `lane`/`operator_id`/`category` added; it must not read or write `gateway_verdict`, `boundary`, trust, or any policy field. The heavy `run_all_suites_collect_rows` calls this helper for the 3K path; the helper is unit-tested in `tests/test_stage3k_layer2_row_tagging.py` (no AgentDojo import) proving: (a) identity/no-op when given no 3K mapping leaves Stage 3J row shape byte-for-byte; (b) the 3K path adds only the three metadata keys; (c) no gateway/boundary/trust/policy field changes. This test is a required subtask of Task 3 and a merge gate.
+
+**Fix 5 — Closeout requires an explicit Stage 3L decision line.**
+`STAGE_3K_CLOSEOUT.md` (Task 8/9) must end with the literal line:
+`Stage 3L decision: not triggered.` OR `Stage 3L decision: triggered because <measured class>.`
+A consistency check (or reviewer checklist item) verifies the line is present and non-placeholder before merge.
