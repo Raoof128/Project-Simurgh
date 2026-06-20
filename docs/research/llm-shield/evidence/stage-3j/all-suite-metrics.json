@@ -1,0 +1,136 @@
+{
+  "agentdojo_native_metrics": {
+    "baseline": {
+      "benign_utility": {
+        "counts": "97/97",
+        "denominator": 97,
+        "numerator": 97,
+        "rate": 1.0
+      },
+      "targeted_asr": {
+        "counts": "0/949",
+        "denominator": 949,
+        "numerator": 0,
+        "rate": 0.0
+      },
+      "task_completion_rate": {
+        "counts": "1046/1046",
+        "denominator": 1046,
+        "numerator": 1046,
+        "rate": 1.0
+      },
+      "utility_under_attack": {
+        "counts": "949/949",
+        "denominator": 949,
+        "numerator": 949,
+        "rate": 1.0
+      }
+    },
+    "defended": {
+      "benign_utility": {
+        "counts": "97/97",
+        "denominator": 97,
+        "numerator": 97,
+        "rate": 1.0
+      },
+      "targeted_asr": {
+        "counts": "0/949",
+        "denominator": 949,
+        "numerator": 0,
+        "rate": 0.0
+      },
+      "task_completion_rate": {
+        "counts": "1046/1046",
+        "denominator": 1046,
+        "numerator": 1046,
+        "rate": 1.0
+      },
+      "utility_under_attack": {
+        "counts": "949/949",
+        "denominator": 949,
+        "numerator": 949,
+        "rate": 1.0
+      }
+    },
+    "stage": "3H-L2"
+  },
+  "counts": {
+    "benign": 97,
+    "security": 949
+  },
+  "hard_gates_clean": true,
+  "native_agentdojo_scorer_changed": false,
+  "python_side_safety_classifier": false,
+  "simurgh_containment_metrics": {
+    "audit_verification_rate": {
+      "counts": "1046/1046",
+      "denominator": 1046,
+      "numerator": 1046,
+      "rate": 1.0
+    },
+    "baseline_run_count": 1046,
+    "baseline_simurgh_metrics": "not_applicable",
+    "blocked_benign_final_outputs": 0,
+    "blocked_benign_tool_calls": 0,
+    "boundary_distribution": {
+      "accepted": 1046,
+      "context_guard": 0,
+      "output_firewall": 0,
+      "tool_gate": 0
+    },
+    "context_authority_escalation_rate": {
+      "counts": "0/1046",
+      "denominator": 1046,
+      "numerator": 0,
+      "rate": 0.0
+    },
+    "defended_gateway_contact_rate": {
+      "counts": "1046/1046",
+      "denominator": 1046,
+      "numerator": 1046,
+      "rate": 1.0
+    },
+    "generated_evidence_leakage_rate": {
+      "counts": "0/1046",
+      "denominator": 1046,
+      "numerator": 0,
+      "rate": 0.0
+    },
+    "hard_gates": {
+      "audit_verification_rate": 1.0,
+      "context_authority_escalation_rate": 0,
+      "defended_gateway_contact_rate": 1.0,
+      "generated_evidence_leakage_rate": 0,
+      "receipt_coverage_rate": 1.0,
+      "unauthorised_or_unsafe_tool_execution_rate": 0,
+      "unsafe_output_export_rate": 0
+    },
+    "over_defence_rate": {
+      "counts": "0/97",
+      "denominator": 97,
+      "numerator": 0,
+      "rate": 0.0
+    },
+    "raw_transcript_committed": 0,
+    "receipt_coverage_rate": {
+      "counts": "1046/1046",
+      "denominator": 1046,
+      "numerator": 1046,
+      "rate": 1.0
+    },
+    "stage": "3H-L2",
+    "unauthorised_or_unsafe_tool_execution_rate": {
+      "counts": "0/1046",
+      "denominator": 1046,
+      "numerator": 0,
+      "rate": 0.0
+    },
+    "unsafe_output_export_rate": {
+      "counts": "0/1046",
+      "denominator": 1046,
+      "numerator": 0,
+      "rate": 0.0
+    }
+  },
+  "stage": "3J"
+}

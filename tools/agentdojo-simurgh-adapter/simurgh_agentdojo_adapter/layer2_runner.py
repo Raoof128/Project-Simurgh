@@ -419,6 +419,118 @@ def run_external_agentdojo(*, sample_manifest_path: str | Path, out_dir: str | P
     return artifacts
 
 
+def run_all_suites_collect_rows(*, suites):  # pragma: no cover - needs agentdojo
+    """Stage 3J: run full user/injection sets for each suite, baseline + defended.
+
+    Reuses _make_ground_truth_pipeline, _GatewayRecorder, _rows_from_* helpers, and
+    the same offset bookkeeping as run_external_agentdojo (AgentDojo runs injection
+    tasks as utility checks between benign and security contacts). A fresh recorder
+    per suite keeps offsets restarting at 0. Returns (baseline_rows, defended_rows)
+    with defended rows already merged with their gateway records.
+
+    Hard alignment checks (Stage 3J review fix #5): the run aborts if the per-suite
+    record accounting does not balance, or if any merged defended row lacks a receipt.
+    """
+    require_agentdojo()
+    import agentdojo.attacks.important_instructions_attacks  # noqa: F401
+    from agentdojo.attacks.attack_registry import load_attack
+    from agentdojo.benchmark import (
+        benchmark_suite_with_injections,
+        benchmark_suite_without_injections,
+    )
+    from agentdojo.logging import OutputLogger
+    from agentdojo.task_suite.load_suites import get_suite
+
+    benchmark_version = "v1.2.1"
+    baseline_rows: list[dict[str, Any]] = []
+    defended_rows: list[dict[str, Any]] = []
+
+    client = SimurghClient()
+    client.preflight()
+    if not client.session_id:
+        client.create_session()
+
+    for suite_name in suites:
+        suite = get_suite(benchmark_version, suite_name)
+        user_ids = list(suite.user_tasks.keys())
+        injection_ids = list(suite.injection_tasks.keys())
+        prompt_to_task = {t.PROMPT: t for t in suite.user_tasks.values()}
+        prompt_to_task.update({t.GOAL: t for t in suite.injection_tasks.values()})
+
+        # Baseline (no recorder).
+        # AgentDojo's important_instructions attack requires a recognised model
+        # token in the pipeline name (mirrors run_external_agentdojo); the run is
+        # still the deterministic ground-truth pipeline, no real model is called.
+        base_pipe = _make_ground_truth_pipeline(prompt_to_task)
+        base_pipe.name = f"gpt-4o-2024-05-13-stage3j-{suite_name}-baseline-ground-truth"
+        with OutputLogger(logdir=None):
+            base_benign = benchmark_suite_without_injections(
+                base_pipe, suite, logdir=None, force_rerun=True,
+                user_tasks=user_ids, benchmark_version=benchmark_version,
+            )
+            base_attack = load_attack("important_instructions", suite, base_pipe)
+            base_security = benchmark_suite_with_injections(
+                base_pipe, suite, base_attack, logdir=None, force_rerun=True,
+                user_tasks=user_ids, injection_tasks=injection_ids,
+                benchmark_version=benchmark_version,
+            )
+        suite_baseline = _rows_from_without_injections(
+            base_benign["utility_results"], defence="none"
+        ) + _rows_from_with_injections(
+            base_security["utility_results"], base_security["security_results"], defence="none"
+        )
+
+        # Defended (fresh recorder per suite so offsets restart at 0).
+        recorder = _GatewayRecorder(client)
+        def_pipe = _make_ground_truth_pipeline(prompt_to_task, recorder=recorder)
+        def_pipe.name = f"gpt-4o-2024-05-13-stage3j-{suite_name}-defended-ground-truth"
+        with OutputLogger(logdir=None):
+            def_benign = benchmark_suite_without_injections(
+                def_pipe, suite, logdir=None, force_rerun=True,
+                user_tasks=user_ids, benchmark_version=benchmark_version,
+            )
+            def_attack = load_attack("important_instructions", suite, def_pipe)
+            def_security = benchmark_suite_with_injections(
+                def_pipe, suite, def_attack, logdir=None, force_rerun=True,
+                user_tasks=user_ids, injection_tasks=injection_ids,
+                benchmark_version=benchmark_version,
+            )
+        def_benign_rows = _rows_from_without_injections(def_benign["utility_results"], defence="simurgh")
+        def_security_rows = _rows_from_with_injections(
+            def_security["utility_results"], def_security["security_results"], defence="simurgh"
+        )
+        # AgentDojo runs injection-task utility checks between benign and security contacts.
+        injection_utility_contacts = len(injection_ids)
+        expected_records = (
+            len(def_benign_rows) + injection_utility_contacts + len(def_security_rows)
+        )
+        if len(recorder.records) != expected_records:
+            raise Layer2Blocked(
+                f"stage3j alignment: suite {suite_name} expected {expected_records} "
+                f"gateway records, got {len(recorder.records)}"
+            )
+        suite_defended = _merge_defended_gateway_rows(
+            def_benign_rows, recorder.records, offset=0
+        ) + _merge_defended_gateway_rows(
+            def_security_rows,
+            recorder.records,
+            offset=len(def_benign_rows) + injection_utility_contacts,
+        )
+        if any(not row.get("receipt_id") for row in suite_defended):
+            raise Layer2Blocked(f"stage3j alignment: suite {suite_name} has a defended row without a receipt")
+
+        for row in suite_baseline:
+            row["suite"] = suite_name
+        for row in suite_defended:
+            row["suite"] = suite_name
+        baseline_rows.extend(suite_baseline)
+        defended_rows.extend(suite_defended)
+
+    if client.verify().get("valid") is not True:
+        raise Layer2Blocked("Simurgh gateway audit verification failed")
+    return baseline_rows, defended_rows
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--sample-manifest", required=True)
