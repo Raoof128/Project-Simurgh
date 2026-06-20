@@ -46,7 +46,9 @@ async function buildDetectorDigests() {
   for (const path of PROTECTED) {
     files.push({
       path,
-      sha256: createHash("sha256").update(await readFile(path, "utf8")).digest("hex"),
+      sha256: createHash("sha256")
+        .update(await readFile(path, "utf8"))
+        .digest("hex"),
     });
   }
   return { stage: "3L", drift_policy: "digests frozen; update intentionally only", files };
@@ -60,9 +62,11 @@ async function main() {
   const evaluations = corpus.map((fixture) => ({ fixture, result: evaluateStage3lCase(fixture) }));
 
   const inputMiss = enforceInputMissValidity(evaluations);
-  if (!inputMiss.ok) throw new Error(`H1 input-miss fixture-validity FAIL:\n${inputMiss.errors.join("\n")}`);
+  if (!inputMiss.ok)
+    throw new Error(`H1 input-miss fixture-validity FAIL:\n${inputMiss.errors.join("\n")}`);
   const direct = enforceDirectInputValidity(evaluations);
-  if (!direct.ok) throw new Error(`direct-input fixture-validity FAIL:\n${direct.errors.join("\n")}`);
+  if (!direct.ok)
+    throw new Error(`direct-input fixture-validity FAIL:\n${direct.errors.join("\n")}`);
 
   const metrics = computeStage3lMetrics(evaluations);
   const gate = enforceStage3lHardGates(metrics);

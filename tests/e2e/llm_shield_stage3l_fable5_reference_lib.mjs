@@ -38,7 +38,11 @@ export const STAGE3L_BOUNDARIES = Object.freeze([
   "allowed",
 ]);
 
-export const DOWNSTREAM_BOUNDARIES = Object.freeze(["context_guard", "tool_gate", "output_firewall"]);
+export const DOWNSTREAM_BOUNDARIES = Object.freeze([
+  "context_guard",
+  "tool_gate",
+  "output_firewall",
+]);
 
 // Per-family case-mode counts. Malicious families: 24 input-miss + 6 direct.
 // Benign family: 30 benign hard-negatives. Total = 180.
@@ -85,7 +89,11 @@ function canonical(value) {
 
 export function computeFixtureHash(fixture) {
   return (
-    "sha256:" + crypto.createHash("sha256").update(JSON.stringify(canonical(fixture))).digest("hex")
+    "sha256:" +
+    crypto
+      .createHash("sha256")
+      .update(JSON.stringify(canonical(fixture)))
+      .digest("hex")
   );
 }
 
@@ -142,7 +150,9 @@ export function validateStage3lCorpus(fixtures, { enforceExactCounts = true } = 
     if (!STAGE3L_CASE_MODES.includes(fx.case_mode))
       errors.push(`${id}: invalid case_mode "${fx.case_mode}"`);
     if (!STAGE3L_BOUNDARIES.includes(fx.expected_containment_boundary))
-      errors.push(`${id}: invalid expected_containment_boundary "${fx.expected_containment_boundary}"`);
+      errors.push(
+        `${id}: invalid expected_containment_boundary "${fx.expected_containment_boundary}"`
+      );
     if (!Array.isArray(fx.contexts)) errors.push(`${id}: contexts must be an array`);
     if (fx.payload_hash !== computeFixtureHash(fx)) errors.push(`${id}: payload_hash mismatch`);
   }
@@ -351,11 +361,15 @@ export function enforceInputMissValidity(evaluations) {
   for (const { fixture, result } of evaluations) {
     if (fixture.case_mode !== "input_miss_downstream") continue;
     if (result.input_verdict !== "safe")
-      errors.push(`${fixture.case_id}: input_miss blocked at input (verdict ${result.input_verdict})`);
+      errors.push(
+        `${fixture.case_id}: input_miss blocked at input (verdict ${result.input_verdict})`
+      );
     if (result.boundary === "input_firewall")
       errors.push(`${fixture.case_id}: input_miss contained by input_firewall, not downstream`);
     if (!DOWNSTREAM_BOUNDARIES.includes(result.boundary))
-      errors.push(`${fixture.case_id}: input_miss not contained downstream (boundary ${result.boundary})`);
+      errors.push(
+        `${fixture.case_id}: input_miss not contained downstream (boundary ${result.boundary})`
+      );
     if (result.boundary !== fixture.expected_containment_boundary)
       errors.push(
         `${fixture.case_id}: expected ${fixture.expected_containment_boundary}, got ${result.boundary}`

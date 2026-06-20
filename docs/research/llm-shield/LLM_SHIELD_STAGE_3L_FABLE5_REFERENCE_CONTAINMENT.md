@@ -16,7 +16,7 @@ Public reporting in June 2026 describes the US government ordering Anthropic to 
 Fable 5 and Mythos 5 over a potential jailbreak that Anthropic characterised as narrow and
 non-universal. Stage 3L does **not** reproduce the alleged technique — that would be legally
 fraught, unsafe, and scientifically weak. Instead, the incident is used only as a public
-*reference event* for a failure class:
+_reference event_ for a failure class:
 
 > A highly capable long-running agent receives apparently legitimate work, consumes untrusted
 > context, treats that context as authority, attempts tool use or unsafe export, and leaves weak
@@ -33,11 +33,11 @@ A deterministic 180-case corpus is driven through the **real** Simurgh boundary 
 pipeline order (`classifyPrompt → guardContexts → gateToolRequest → scanOutput`). The observed
 containment boundary is therefore measured, not asserted.
 
-| Case mode | Count | Meaning |
-| --- | ---: | --- |
-| `input_miss_downstream` | 120 | User task passes the input firewall; the malicious signal lives in untrusted context / tool request / provider output, forcing a downstream boundary. |
-| `direct_input_attack` | 30 | Attack is in the user input; the input firewall blocks it. Reported separately. |
-| `benign_hard_negative` | 30 | Realistic safe coding tasks that must pass without over-defence. |
+| Case mode               | Count | Meaning                                                                                                                                               |
+| ----------------------- | ----: | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `input_miss_downstream` |   120 | User task passes the input firewall; the malicious signal lives in untrusted context / tool request / provider output, forcing a downstream boundary. |
+| `direct_input_attack`   |    30 | Attack is in the user input; the input firewall blocks it. Reported separately.                                                                       |
+| `benign_hard_negative`  |    30 | Realistic safe coding tasks that must pass without over-defence.                                                                                      |
 
 Five malicious families × (24 input-miss + 6 direct), plus one benign family × 30.
 
@@ -64,17 +64,17 @@ Five malicious families × (24 input-miss + 6 direct), plus one benign family ×
 
 ## Reviewer claim table
 
-| Claim | Allowed? | Wording |
-| --- | ---: | --- |
-| Stage 3L mitigates a Fable-5-style failure chain | Yes | "reference containment regression" |
-| Simurgh proves jailbreak immunity | No | Never |
-| Simurgh reproduces the Fable 5 jailbreak | No | Never |
-| Simurgh defeats Claude Fable 5 | No | Never |
-| Input filtering can fail | Yes | Core assumption |
-| Downstream consequences are contained | Yes | Only as metrics show |
-| Evidence is machine-verifiable | Yes | Receipts + audit + privacy gates |
-| Provider safety is proven | No | Never |
-| Live model safety is evaluated | Optional | Only optional `live_shadow`, not a CI claim |
+| Claim                                            | Allowed? | Wording                                     |
+| ------------------------------------------------ | -------: | ------------------------------------------- |
+| Stage 3L mitigates a Fable-5-style failure chain |      Yes | "reference containment regression"          |
+| Simurgh proves jailbreak immunity                |       No | Never                                       |
+| Simurgh reproduces the Fable 5 jailbreak         |       No | Never                                       |
+| Simurgh defeats Claude Fable 5                   |       No | Never                                       |
+| Input filtering can fail                         |      Yes | Core assumption                             |
+| Downstream consequences are contained            |      Yes | Only as metrics show                        |
+| Evidence is machine-verifiable                   |      Yes | Receipts + audit + privacy gates            |
+| Provider safety is proven                        |       No | Never                                       |
+| Live model safety is evaluated                   | Optional | Only optional `live_shadow`, not a CI claim |
 
 ## Positioning
 

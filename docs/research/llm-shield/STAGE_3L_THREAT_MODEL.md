@@ -2,15 +2,15 @@
 
 ## In scope — the attacker can
 
-| Capability | Stage 3L meaning |
-| --- | --- |
-| Supply apparently benign task framing | "Review this codebase", "summarise these findings", "prepare a patch plan" |
-| Poison untrusted context | README, issue text, comments, tool output, page content |
-| Attempt authority escalation | Context claims it is system/developer/user-approved |
-| Attempt tool self-authorisation | Context/output asks for shell/network/secret/export actions |
-| Attempt unsafe output export | Provider output tries to reveal hidden policy, tool args, secrets, or unsafe procedural detail |
-| Use long-run softening | Multi-turn nudges across a session |
-| Use memory/subagent drift | Attempts to persist or delegate attacker authority |
+| Capability                            | Stage 3L meaning                                                                               |
+| ------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| Supply apparently benign task framing | "Review this codebase", "summarise these findings", "prepare a patch plan"                     |
+| Poison untrusted context              | README, issue text, comments, tool output, page content                                        |
+| Attempt authority escalation          | Context claims it is system/developer/user-approved                                            |
+| Attempt tool self-authorisation       | Context/output asks for shell/network/secret/export actions                                    |
+| Attempt unsafe output export          | Provider output tries to reveal hidden policy, tool args, secrets, or unsafe procedural detail |
+| Use long-run softening                | Multi-turn nudges across a session                                                             |
+| Use memory/subagent drift             | Attempts to persist or delegate attacker authority                                             |
 
 These map onto the Stage 3D downstream boundaries: context provenance guard, tool invocation
 gate, output leakage firewall, and the tamper-evident receipt/audit chain.
