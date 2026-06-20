@@ -1,0 +1,13 @@
+simurgh attestation verify: PASS
+public_key_fingerprint: sha256:875b59ebbee8e6eb6fe34d6e06d60d74434cbcf5ec17acb18d1c9f68e2a06798
+schema_valid: true
+bundle_digest_match: true
+signature_valid: true
+key_fingerprint_match: true
+evidence_file_hashes_match: true
+gate_results_match: true
+declared_gates_pass: true
+evidence_leakage_zero: true
+reproduced_metrics_match: true
+reproduced_boundary_breakdown_match: true
+reproduced_privacy_report_match: true
