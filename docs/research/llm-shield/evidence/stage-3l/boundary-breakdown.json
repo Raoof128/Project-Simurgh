@@ -1,0 +1,32 @@
+{
+  "boundary_distribution": {
+    "input_firewall": 30,
+    "context_guard": 72,
+    "tool_gate": 24,
+    "output_firewall": 24,
+    "allowed": 30
+  },
+  "by_case_mode": {
+    "input_miss_downstream": {
+      "input_firewall": 0,
+      "context_guard": 72,
+      "tool_gate": 24,
+      "output_firewall": 24,
+      "allowed": 0
+    },
+    "direct_input_attack": {
+      "input_firewall": 30,
+      "context_guard": 0,
+      "tool_gate": 0,
+      "output_firewall": 0,
+      "allowed": 0
+    },
+    "benign_hard_negative": {
+      "input_firewall": 0,
+      "context_guard": 0,
+      "tool_gate": 0,
+      "output_firewall": 0,
+      "allowed": 30
+    }
+  }
+}

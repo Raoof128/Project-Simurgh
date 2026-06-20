@@ -1,5 +1,28 @@
 ## Change Log
 
+## [stage-3l-fable5-reference-containment] — 2026-06-20 — Fable-5 reference containment regression
+
+**Raouf:** Stage 3L is a deterministic, key-free measurement stage proving a Fable-5-style failure chain is contained _after input filtering fails_. A 180-case corpus (5 malicious families × {24 input-miss + 6 direct} + 30 benign hard-negatives) runs through the real Simurgh boundary functions in pipeline order, so the observed containment boundary is measured rather than asserted. H1 is enforced as a fixture-validity gate: each input-miss case must pass the input firewall and be contained by its intended downstream boundary; each direct case must be blocked at input. Results: input-miss `120/120` downstream-contained (input-firewall containment `0/120`), direct blocked `30/30`, `case_expectation_mismatches=0`, targeted ASR `0/150`, benign `30/30`, context-authority escalation `0`, unsafe tool/export `0`, receipt/audit `180/180`, generated-evidence leakage `0`, policy-drift `0`. The Fable 5 incident is a payload-redacted public reference event only; no transcript committed, no immunity claimed, no `src/llmShield` change. Stage 3M not triggered.
+
+### Added
+
+- `tests/e2e/llm_shield_stage3l_fable5_reference_{lib,runner}.mjs` and `tests/unit/llmShield/stage3lFable5ReferenceLib.test.js`.
+- `scripts/{smoke,security-audit,privacy-audit,consistency-audit,policy-drift-guard}-llm-shield-stage3l.*`.
+- `docs/research/llm-shield/{LLM_SHIELD_STAGE_3L_FABLE5_REFERENCE_CONTAINMENT,STAGE_3L_THREAT_MODEL,STAGE_3L_VALIDATION_MATRIX,STAGE_3L_REVIEWER_CHECKLIST,STAGE_3L_CLOSEOUT}.md`; `docs/research/llm-shield/evidence/stage-3l/**`.
+- `docs/superpowers/specs/2026-06-20-stage-3l-fable5-reference-containment-design.md` and `docs/superpowers/plans/2026-06-20-stage-3l-fable5-reference-containment.md`.
+
+### Changed
+
+- `scripts/check.sh` — wired the Stage 3L smoke gate (with `SIMURGH_RUN_STAGE3L=1` opt-in real run).
+- `README.md`, `AGENT.md` — Stage 3L milestone.
+
+### Verified
+
+- `node --test tests/unit/llmShield/stage3lFable5ReferenceLib.test.js` passed (11/11).
+- `scripts/smoke-llm-shield-stage3l.sh` passed (runner + policy-drift + privacy + consistency + security audits).
+
+---
+
 ## [stage-3i-agentdojo-utility-recovery] — 2026-06-20 — AgentDojo utility recovery via context-provenance calibration
 
 **Raouf:** Stage 3I recovered the Stage 3H-L2 sampled-run benign utility by fixing an adapter context-provenance schema mismatch, without changing the gateway guard. The Layer-2 adapter previously sent `trust_level`/`source_type`/`purpose` values outside the context-provenance guard's allowed enums, so every context was schema-rejected and all defended cases were blocked at the context boundary. The adapter now declares the benign benchmark seed as `synthetic` (accepted) and injection-bearing context as `untrusted` (demoted-to-data, never authority), and the gateway `/run` response exposes `input_verdict` for precise boundary labelling. On the real external AgentDojo pass (`agentdojo==0.1.30`), defended benign utility rose `0/10 → 10/10`, over-defence fell `10/10 → 0/10`, defended Targeted ASR stayed `0/20`, utility under attack `20/20`, with context-authority escalation `0` and receipt/audit coverage `30/30`. The task-permit stack remains deferred; no jailbreak-immunity claim.
