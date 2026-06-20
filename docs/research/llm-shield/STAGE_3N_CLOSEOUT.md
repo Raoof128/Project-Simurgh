@@ -24,9 +24,12 @@
 - Attestation: Stage 3M verifier PASS, hash-bound.
 - `frontier_status = not_applicable_degenerate` (no strictness knob in the guard
   layer).
-- Zero `src/llmShield` change (policy-drift guard clean).
-- Lib unit tests: 16/16, 100% function coverage. `npm test` and `scripts/check.sh`
-  green (final counts recorded at freeze).
+- Zero `src/llmShield` change (policy-drift guard clean; `git diff main...HEAD -- src/llmShield/` empty).
+- Lib unit tests: 16/16, 100% function coverage. `npm test` 676/676 (660 → +16).
+  `scripts/check.sh`: 108 passed; the 4 non-passing steps are pre-existing and
+  environmental (vendored `.venv` secret-scan hits, Stage 2.6 Windows .NET daemon
+  tests, and Linux Rust daemon fmt/clippy — none runnable on this darwin host, and
+  none touching Stage 3N). All Stage 3N steps (smoke + helper coverage) green.
 
 ## Non-claims
 
