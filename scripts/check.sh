@@ -1625,6 +1625,18 @@ else
   tail -100 "$LOG_DIR/llm-shield-stage3fg-helper-coverage.log"
 fi
 
+step "LLM Shield 3L Fable-5 reference helper function coverage"
+if node --test --experimental-test-coverage \
+  --test-coverage-include=tests/e2e/llm_shield_stage3l_fable5_reference_lib.mjs \
+  --test-coverage-functions=100 \
+  tests/unit/llmShield/stage3lFable5ReferenceLib.test.js \
+  > "$LOG_DIR/llm-shield-stage3l-helper-coverage.log" 2>&1; then
+  pass "LLM Shield 3L Fable-5 reference helper function coverage"
+else
+  fail "LLM Shield 3L Fable-5 reference helper function coverage"
+  tail -100 "$LOG_DIR/llm-shield-stage3l-helper-coverage.log"
+fi
+
 step "LLM Shield 3E-core docker smoke (skips if no docker)"
 if bash scripts/docker-smoke-llm-shield-stage3e.sh > "$LOG_DIR/llm-shield-stage3e-docker-smoke.log" 2>&1; then
   pass "LLM Shield 3E-core docker smoke"
