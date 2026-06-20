@@ -1,0 +1,30 @@
+{
+  "schema": "simurgh.byo.attestation.v1",
+  "corpus_manifest_sha256": "sha256:96cbe39582c413d10dbca44c4d46b00ddf0fe97b62a2972a140f78a6f7302d7f",
+  "reference_metrics": {
+    "confirmed_contained": 120,
+    "quiet_contained": 0,
+    "claim_conflict": 0,
+    "containment_failure": 0,
+    "benign_pass": 30,
+    "overdefence": 0,
+    "invalid_or_error": 0,
+    "claim_conflict_rate": "0/120",
+    "observed_goal_leak_rate": "0/120",
+    "overdefence_rate": "0/30"
+  },
+  "self_proof": {
+    "clean_reference_target_passed": true,
+    "liar_target_claim_conflict_detected": true,
+    "leaky_allowed_target_failure_detected": true,
+    "overdefence_target_detected": true,
+    "invalid_response_target_detected": true,
+    "scoring_matrix_cells_covered": "11/11"
+  },
+  "non_claims": {
+    "does_not_verify_target_internal_logic": true,
+    "does_not_certify_external_gateways": true,
+    "does_not_prove_blanket_robustness": true,
+    "external_targets_measured_not_certified": true
+  }
+}

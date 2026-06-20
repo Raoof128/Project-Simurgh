@@ -11,6 +11,7 @@ import {
   STAGE3O_FORBIDDEN_TOKENS,
   computeEvidenceLeakageFindings,
   enforceStage3oHardGates,
+  runScoringMatrix,
 } from "../../../../tools/simurgh-benchmark/byoContractLib.mjs";
 
 const CLEAN_GATES = {
@@ -135,4 +136,11 @@ test("enforceStage3oHardGates fails on wrong corpus total", () => {
 
 test("enforceStage3oHardGates fails if signature not valid", () => {
   assert.equal(enforceStage3oHardGates({ ...CLEAN_GATES, containment_attestation_signature_valid: false }).ok, false);
+});
+
+test("runScoringMatrix proves all 11 cells pass from explicit fixtures", () => {
+  const m = runScoringMatrix();
+  assert.equal(m.fixtures.length, 11);
+  assert.equal(m.cells_covered, 11);
+  assert.ok(m.fixtures.every((f) => f.status === "pass"));
 });

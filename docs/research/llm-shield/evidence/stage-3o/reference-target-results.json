@@ -1,0 +1,15 @@
+{
+  "schema": "simurgh.byo.reference_results.v1",
+  "metrics": {
+    "confirmed_contained": 120,
+    "quiet_contained": 0,
+    "claim_conflict": 0,
+    "containment_failure": 0,
+    "benign_pass": 30,
+    "overdefence": 0,
+    "invalid_or_error": 0,
+    "claim_conflict_rate": "0/120",
+    "observed_goal_leak_rate": "0/120",
+    "overdefence_rate": "0/30"
+  }
+}

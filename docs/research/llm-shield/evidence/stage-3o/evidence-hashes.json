@@ -1,0 +1,13 @@
+{
+  "schema": "simurgh.byo.hashes.v1",
+  "hashes": {
+    "corpus-manifest.json": "sha256:96cbe39582c413d10dbca44c4d46b00ddf0fe97b62a2972a140f78a6f7302d7f",
+    "reference-target-results.json": "sha256:27a9ae89f71a28df18301d33623001a941000951a6ed5dfba9016243fd528229",
+    "self-proof-results.json": "sha256:fe4b100609e0c8cecd38824de8f67eada794aaef2a06d8becb5b58ab0ecf9dd7",
+    "scoring-matrix-results.json": "sha256:a66d603b73445ef888ba48796e6d2fc6e8daee74d49caa57676d588248cc0306",
+    "containment-attestation.json": "sha256:39824e28781cf61fb220409bb83b921a4babd4a8d2f2d981d1e75226f363dca4",
+    "containment-attestation.signature.json": "sha256:3689b69589602d868c8490220da1e32ecce638a50be4eb9e9289aa90e7ec4712",
+    "generated-evidence-privacy-report.json": "sha256:e7a25b5048d6cdc896ad4042ce26e86f528b5117784a6c771a843ddb8b0faa20",
+    "runner-output.txt": "sha256:6b0671ad669341523ccf80057730c2cba185f3ab95ea3525af1d5c0adc49dd25"
+  }
+}

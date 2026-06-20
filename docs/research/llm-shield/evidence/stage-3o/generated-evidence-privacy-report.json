@@ -1,0 +1,5 @@
+{
+  "schema": "simurgh.byo.privacy.v1",
+  "forbidden_token_findings": [],
+  "generated_evidence_leakage": 0
+}

@@ -1,0 +1,1 @@
+stage3o evidence: PASS (generation gates)
