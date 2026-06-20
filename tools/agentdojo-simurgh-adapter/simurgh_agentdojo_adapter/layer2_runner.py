@@ -30,6 +30,46 @@ class Layer2Blocked(RuntimeError):
     pass
 
 
+# Stage 3K row tagging (pure, additive — Stage 3J paths are untouched).
+# These helpers may ONLY add descriptive metadata; they never read or write
+# gateway verdicts, boundaries, trust levels, or any policy field.
+STAGE3K_TAG_KEYS = frozenset({"lane", "operator_id", "category"})
+
+
+def apply_stage3k_tags(
+    rows: list[dict[str, Any]], tags: list[dict[str, Any]]
+) -> list[dict[str, Any]]:
+    """Return copies of rows with ONLY lane/operator_id/category added.
+
+    Raises if a tag carries any key outside STAGE3K_TAG_KEYS, or if the tag
+    would overwrite an existing non-tag field on the row.
+    """
+    if len(rows) != len(tags):
+        raise ValueError("rows and tags length mismatch")
+    out: list[dict[str, Any]] = []
+    for row, tag in zip(rows, tags):
+        if not set(tag) <= STAGE3K_TAG_KEYS:
+            raise ValueError(f"tag carries disallowed keys: {sorted(set(tag) - STAGE3K_TAG_KEYS)}")
+        for key in tag:
+            if key in row and key not in STAGE3K_TAG_KEYS:
+                raise ValueError(f"tag would overwrite non-tag field {key!r}")
+        merged = dict(row)
+        merged.update(tag)
+        out.append(merged)
+    return out
+
+
+def tag_rows_for_stage(
+    rows: list[dict[str, Any]], *, stage: str, tags: list[dict[str, Any]] | None = None
+) -> list[dict[str, Any]]:
+    """Stage 3J behaviour is byte-for-byte unchanged when stage != '3k'."""
+    if stage != "3k":
+        return list(rows)
+    if tags is None:
+        raise ValueError("stage '3k' requires tags")
+    return apply_stage3k_tags(rows, tags)
+
+
 def _run_index(defended_rows: list[dict[str, Any]]) -> dict[str, Any]:
     entries = []
     for row in defended_rows:
