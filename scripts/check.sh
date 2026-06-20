@@ -1,26 +1,29 @@
 #!/usr/bin/env bash
 # SPDX-License-Identifier: AGPL-3.0-or-later
-# Simurgh comprehensive check script.
 #
-# Runs:
-#   npm install (deps)
-#   node syntax check
-#   unit tests
-#   privacy audit (tools/privacy-audit.mjs + forbidden-field grep)
-#   secret scan
-#   tone check (no "unhackable" / "fully secure" / "proves cheating" / etc.)
-#   forbidden npm package check (no analytics SDKs)
-#   npm audit
-#   server boot smoke + security headers + auth gates (full mode only)
-#   audit chain verify self-test (full mode only)
-#   git status sanity
+# Simurgh comprehensive check script — the single gate for the whole repository.
+#
+# Every check increments PASS/FAIL via the pass()/fail() helpers and is announced
+# by step(); the run ends non-zero if any gate failed. Logs for each step are
+# written under .simurgh_check_logs/ (streamed instead with --verbose).
+#
+# Sections (see the "── N. Title ──" banners below):
+#   1–9   Repo hygiene ...... node version, deps, syntax, format, tests,
+#                             privacy guard, secret scan, tone check, npm audit
+#   10–11 Runtime smokes .... server boot + auth gates, audit-chain self-test
+#                             (both skipped under --quick)
+#   12    Platform & device . Stage 2.1–2.8 integrity/daemon/scanner, Swift &
+#                             Linux-Rust nodes, voting & banking pilots
+#   13    LLM Shield ........ Stage 3A–3O containment pipeline + per-stage audits
+#   14    Git status sanity
 #
 # Usage:
-#   ./scripts/check.sh
-#   ./scripts/check.sh --quick
-#   ./scripts/check.sh --fix
-#   ./scripts/check.sh --verbose
-#   ./scripts/check.sh --quick --verbose
+#   ./scripts/check.sh             # full run
+#   ./scripts/check.sh --quick     # skip slow runtime smokes (server, audit chain)
+#   ./scripts/check.sh --fix       # auto-format (prettier --write) where possible
+#   ./scripts/check.sh --verbose   # stream command output instead of logging to file
+#
+# Exit code: 0 if all gates pass, 1 otherwise.
 
 set -euo pipefail
 
@@ -170,7 +173,7 @@ fi
 step "Tests"
 run_step "npm test" "npm test"
 
-# ── 5. Privacy guard ─────────────────────────────────────
+# ── 6. Privacy guard ─────────────────────────────────────
 step "Privacy guard"
 PRIVACY_FAIL=false
 
@@ -206,7 +209,6 @@ if grep -RIEn "$FORBIDDEN_FIELDS_PATTERN" \
   | grep -v "src/device/daemonProof.js" \
   | grep -v "src/device/forbiddenLocalFields.js" \
   | grep -v "src/bankingPilot/forbiddenBankingFields.js" \
-  | grep -v "tools/privacy-audit.mjs" \
   | grep -v "Permissions-Policy" \
   | grep -v "Content-Security-Policy" \
   | grep -v "/check.sh" > "$PRIVACY_GREP_LOG"; then
@@ -244,7 +246,7 @@ else
   pass "privacy guard (no forbidden fields, no analytics packages)"
 fi
 
-# ── 6. Secret scan ───────────────────────────────────────
+# ── 7. Secret scan ───────────────────────────────────────
 step "Secret scan"
 SECRET_FAIL=false
 SECRET_LOG="$LOG_DIR/secrets.log"
@@ -298,7 +300,7 @@ else
   pass "secret scan (no hardcoded keys or token values)"
 fi
 
-# ── 7. Tone check ────────────────────────────────────────
+# ── 8. Tone check ────────────────────────────────────────
 step "Tone check"
 # Forbidden marketing/overclaim words. "unhackable" / "unbreakable" are allowed
 # only when used as a negation ("not unhackable").
@@ -336,7 +338,7 @@ else
   pass "tone check (hedged language, no overclaim)"
 fi
 
-# ── 8. Dependency vulnerability scan ─────────────────────
+# ── 9. Dependency vulnerability scan ─────────────────────
 step "npm audit"
 if npm audit --audit-level=high > "$LOG_DIR/npm-audit.log" 2>&1; then
   pass "npm audit (0 high/critical vulnerabilities)"
@@ -345,7 +347,7 @@ else
   tail -40 "$LOG_DIR/npm-audit.log" || true
 fi
 
-# ── 9. Server boot smoke + auth gates ────────────────────
+# ── 10. Server boot smoke + auth gates ───────────────────
 if [[ "$QUICK" == true ]]; then
   step "Server boot smoke"
   echo -e "${YELLOW}Skipped because --quick was used.${NC}"
@@ -457,7 +459,7 @@ else
   fi
 fi
 
-# ── 10. Audit chain self-test ────────────────────────────
+# ── 11. Audit chain self-test ────────────────────────────
 if [[ "$QUICK" == true ]]; then
   step "Audit chain self-test"
   echo -e "${YELLOW}Skipped because --quick was used.${NC}"
@@ -519,7 +521,7 @@ import('./src/audit/verifyAudit.js').then(({ verifyAuditExport }) => {
   rm -f "$TMP_CHAIN"
 fi
 
-# ── 10b. Stage 2.1 — integrity proof round-trip ──────────
+# ── 12a. Stage 2.1 — integrity proof round-trip ──────────
 if [[ "$QUICK" == true ]]; then
   step "Stage 2.1 integrity proof round-trip"
   echo -e "${YELLOW}Skipped because --quick was used.${NC}"
@@ -859,7 +861,7 @@ process.stdout.write('OK');
   wait "$S2_PID" 2>/dev/null || true
 fi
 
-# ── 10c. Stage 2.3 hardened daemon-required mode ────────
+# ── 12b. Stage 2.3 hardened daemon-required mode ────────
 if [[ "$QUICK" == true ]]; then
   step "Stage 2.3 hardened daemon-required mode"
   echo -e "${YELLOW}Skipped because --quick was used.${NC}"
@@ -913,7 +915,7 @@ process.stdout.write('OK');
   wait "$REQUIRE_DAEMON_PID" 2>/dev/null || true
 fi
 
-# ── 10c. Golden fixture sync check ───────────────────────
+# ── 12c. Golden fixture sync check ───────────────────────
 step "Golden fixture sync"
 SYNC_OK=true
 if ! diff -q tests/unit/integrity/__fixtures__/golden-proof.json \
@@ -934,7 +936,7 @@ else
   fail "Golden fixture drift between Node and Swift copies — keep them in sync"
 fi
 
-# ── 10d. Swift macOS node — conditional build + test ─────
+# ── 12d. Swift macOS node — conditional build + test ─────
 # Only runs on Darwin (macOS) because the node uses CryptoKit, an Apple-only framework.
 # Ubuntu has Swift but no CryptoKit — skip cleanly there so CI stays green.
 if [[ "$QUICK" == true ]]; then
@@ -977,7 +979,7 @@ else
   echo -e "${YELLOW}Swift toolchain not available or tools/simurgh-node-macos missing — skipping macOS node build/test${NC}"
 fi
 
-# ── 10e. Swift macOS daemon — conditional build + test ───
+# ── 12e. Swift macOS daemon — conditional build + test ───
 if [[ "$QUICK" == true ]]; then
   step "Swift macOS daemon"
   echo -e "${YELLOW}Skipped because --quick was used.${NC}"
@@ -1004,7 +1006,7 @@ else
   echo -e "${YELLOW}Swift toolchain not available or tools/simurgh-daemon-macos missing — skipping macOS daemon build/test${NC}"
 fi
 
-# ── 10f. Stage 2.4 — browser SDK + daemon lifecycle ─────
+# ── 12f. Stage 2.4 — browser SDK + daemon lifecycle ─────
 if [[ "$QUICK" == true ]]; then
   step "Stage 2.4 browser SDK + daemon lifecycle"
   echo -e "${YELLOW}Skipped because --quick was used.${NC}"
@@ -1055,7 +1057,7 @@ else
   fi
 fi
 
-# ── 10g. Stage 2.5 — macOS affinity scanner ─────────────
+# ── 12g. Stage 2.5 — macOS affinity scanner ─────────────
 if [[ "$QUICK" == true ]]; then
   step "Stage 2.5 macOS affinity scanner"
   echo -e "${YELLOW}Skipped because --quick was used.${NC}"
@@ -1102,7 +1104,7 @@ else
   fi
 fi
 
-# ── 10h. Stage 2.2/2.3 closeout E2E smoke ───────────────
+# ── 12h. Stage 2.2/2.3 closeout E2E smoke ───────────────
 if [[ "$QUICK" == true ]]; then
   step "Stage 2.2/2.3 E2E smoke"
   echo -e "${YELLOW}Skipped because --quick was used.${NC}"
@@ -1116,7 +1118,7 @@ else
   fi
 fi
 
-# ── 10i. Stage 2.4/2.5 closeout E2E smoke ───────────────
+# ── 12i. Stage 2.4/2.5 closeout E2E smoke ───────────────
 if [[ "$QUICK" == true ]]; then
   step "Stage 2.4/2.5 E2E smoke"
   echo -e "${YELLOW}Skipped because --quick was used.${NC}"
@@ -1130,7 +1132,7 @@ else
   fi
 fi
 
-# ── 10j. Stage 2.4/2.5 cybersecurity audit ──────────────
+# ── 12j. Stage 2.4/2.5 cybersecurity audit ──────────────
 if [[ "$QUICK" == true ]]; then
   step "Stage 2.4/2.5 cybersecurity audit"
   echo -e "${YELLOW}Skipped because --quick was used.${NC}"
@@ -1144,7 +1146,7 @@ else
   fi
 fi
 
-# ── 10k. Stage 2.6 Windows scanner smoke + daemon tests ──
+# ── 12k. Stage 2.6 Windows scanner smoke + daemon tests ───
 if [[ "$QUICK" == true ]]; then
   step "Stage 2.6 Windows scanner"
   echo -e "${YELLOW}Skipped because --quick was used.${NC}"
@@ -1179,7 +1181,7 @@ else
   fi
 fi
 
-# ── 10l. Stage 2.7 Cross-Platform Device Shield smoke + security audit ──
+# ── 12l. Stage 2.7 Cross-Platform Device Shield smoke + security audit ───
 if [[ "$QUICK" == true ]]; then
   step "Stage 2.7 cross-platform Device Shield"
   echo -e "${YELLOW}Skipped because --quick was used.${NC}"
@@ -1201,7 +1203,7 @@ else
   fi
 fi
 
-# ── 10m. Stage 2.6/2.7 closeout — umbrella E2E smoke + cybersecurity audit ──
+# ── 12m. Stage 2.6/2.7 closeout — umbrella E2E smoke + cybersecurity audit ───
 if [[ "$QUICK" == true ]]; then
   step "Stage 2.6/2.7 closeout"
   echo -e "${YELLOW}Skipped because --quick was used.${NC}"
@@ -1223,7 +1225,7 @@ else
   fi
 fi
 
-# ── 10n. Stage 2.8A/2.8B Linux foundation + X11 scanner ───────────────────
+# ── 12n. Stage 2.8A/2.8B Linux foundation + X11 scanner ───────────────────
 if [[ "$QUICK" == true ]]; then
   step "Stage 2.8A/2.8B Linux"
   echo -e "${YELLOW}Skipped because --quick was used.${NC}"
@@ -1245,7 +1247,7 @@ else
   fi
 fi
 
-# ── 10o. Stage 2.8C/2.8D Linux Wayland + systemd + CI ────────────────────
+# ── 12o. Stage 2.8C/2.8D Linux Wayland + systemd + CI ────────────────────
 if [[ "$QUICK" == true ]]; then
   step "Stage 2.8C/2.8D Linux"
   echo -e "${YELLOW}Skipped because --quick was used.${NC}"
@@ -1267,7 +1269,7 @@ else
   fi
 fi
 
-# ── 10p. Linux Rust daemon fmt + clippy + test (gated on cargo) ──────────
+# ── 12p. Linux Rust daemon fmt + clippy + test (gated on cargo) ──────────
 if command -v cargo >/dev/null 2>&1; then
   step "Linux Rust daemon fmt + clippy + test (Xvfb mandatory in CI)"
   if (cargo fmt --check --manifest-path tools/simurgh-daemon-linux/Cargo.toml \
@@ -1284,7 +1286,7 @@ else
   echo -e "${YELLOW}Skipped — cargo not on PATH (install Rust to run Linux daemon gates).${NC}"
 fi
 
-# ── 10q. Doc-grep safety: no overclaim phrases in Linux closeout docs ──────
+# ── 12q. Doc-grep safety: no overclaim phrases in Linux closeout docs ──────
 step "Doc-grep safety (no overclaim phrases in Linux closeout docs)"
 DOC_GREP_FAIL=false
 DOC_FILES="README.md SECURITY.md PRIVACY.md ROADMAP.md \
@@ -1314,7 +1316,7 @@ else
   fail "Doc-grep safety: overclaim phrases found in Linux closeout docs"
 fi
 
-# ── 10r. Voting pilot Phase C collection-closure smoke ───────────────────────
+# ── 12r. Voting pilot Phase C collection-closure smoke ───────────────────────
 step "Voting pilot Phase C collection-closure smoke"
 if scripts/smoke-voting-pilot-closed.sh > "$LOG_DIR/vp-closed-smoke.log" 2>&1; then
   pass "Voting pilot collection-closure smoke: consent/accept+submit+withdraw→410, report active"
@@ -1323,7 +1325,7 @@ else
   tail -40 "$LOG_DIR/vp-closed-smoke.log"
 fi
 
-# ── 10s. Banking Shield Phase A synthetic gates ──────────────────────────────
+# ── 12s. Banking Shield Phase A synthetic gates ──────────────────────────────
 step "Banking Shield Phase A unit/security tests"
 if node --test tests/unit/bankingPilot/*.test.js tests/security/banking_pilot_security_audit.test.js > "$LOG_DIR/banking-unit-security.log" 2>&1; then
   pass "Banking Shield Phase A unit/security tests"
@@ -1380,6 +1382,13 @@ else
   tail -100 "$LOG_DIR/banking-full-e2e-smoke.log"
 fi
 
+# ── 13. LLM Shield 3A–3O containment pipeline ────────────────────────────────
+# Input firewall (3A) → adversarial benchmark (3B) → containment (3D) → gateway
+# (3E) → benchmark/shadow (3F/3G) → AgentDojo harness (3H) → utility/eval (3I/3J)
+# → adaptive readiness (3K) → reference containment (3L) → attestation (3M) →
+# claim-checked ledger (3N) → BYO-gateway benchmark (3O). Each stage smoke also
+# runs its own security/privacy/consistency audits; helper libs are gated at
+# 100% function coverage.
 step "LLM Shield 3A input smoke"
 if scripts/smoke-llm-shield.sh > "$LOG_DIR/llm-shield-smoke.log" 2>&1; then
   pass "LLM Shield 3A input smoke"
@@ -1753,7 +1762,7 @@ else
   tail -20 "$LOG_DIR/llm-shield-heldout.log"
 fi
 
-# ── 11. Git status sanity ────────────────────────────────
+# ── 14. Git status sanity ────────────────────────────────
 step "Git status"
 if git rev-parse --git-dir > /dev/null 2>&1; then
   if [[ -z "$(git status --porcelain)" ]]; then
