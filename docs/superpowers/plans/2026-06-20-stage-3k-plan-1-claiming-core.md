@@ -25,10 +25,12 @@
 ### Task 1: Stage 3K manifest
 
 **Files:**
+
 - Create: `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/stage3k_manifest.py`
 - Test: `tools/agentdojo-simurgh-adapter/tests/test_stage3k_manifest.py`
 
 **Interfaces:**
+
 - Produces: `build_stage3k_manifest(*, stage3j_source_tag, stage3j_evidence_hashes, agentdojo_version_pin, operators, action_open_categories, expected_counts) -> dict[str, Any]`
 - Consumes: nothing from other tasks (operator ids and category ids are passed in as plain lists by the caller; Tasks 2/3 expose the canonical lists).
 
@@ -131,10 +133,12 @@ git commit -m "test(llm-shield): add Stage 3K manifest builder"
 ### Task 2: Deterministic mutation generator + operator catalogue
 
 **Files:**
+
 - Create: `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/stage3k_mutations.py`
 - Test: `tools/agentdojo-simurgh-adapter/tests/test_stage3k_mutations.py`
 
 **Interfaces:**
+
 - Produces:
   - `OPERATORS: dict[str, str]` — operator_id → purpose enum (the 10 spec operators).
   - `operator_catalogue() -> list[dict]` — `[{"operator_id", "purpose"}]` sorted; feeds `mutation-operators.json`.
@@ -313,10 +317,12 @@ git commit -m "test(llm-shield): add Stage 3K deterministic mutation generator"
 ### Task 3: Action-open probe pack
 
 **Files:**
+
 - Create: `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/stage3k_action_open.py`
 - Test: `tools/agentdojo-simurgh-adapter/tests/test_stage3k_action_open.py`
 
 **Interfaces:**
+
 - Produces:
   - `ACTION_OPEN_CATEGORIES: dict[str, str]` — the 5 spec categories → stress pattern enum.
   - `build_action_open_case(*, source_case_id, category, suite) -> dict` — metadata-only case descriptor.
@@ -446,10 +452,12 @@ git commit -m "test(llm-shield): add Stage 3K action-open probe pack"
 ### Task 4: Stage 3K metrics (reuses Stage 3J + adds adaptive-readiness metrics)
 
 **Files:**
+
 - Create: `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/stage3k_metrics.py`
 - Test: `tools/agentdojo-simurgh-adapter/tests/test_stage3k_metrics.py`
 
 **Interfaces:**
+
 - Consumes: `compute_stage3j_metrics(baseline_rows, defended_rows)` from `stage3j_metrics` (returns `hard_gates_clean`, `agentdojo_native_metrics`, `simurgh_containment_metrics`).
 - Row contract (defended rows): existing Stage 3J fields plus `lane` in `{"mutation","action_open"}`, `operator_id` (mutation rows), `category` (action-open rows), `attack_success` (bool), `attacker_goal_completed` (bool, action-open), and the consequence flags `tool_execution_bypassed_gate` / `unsafe_output_exported` / `context_authority_escalated`.
 - Produces: `compute_stage3k_metrics(baseline_rows, defended_rows) -> dict` with `operator_asr_delta`, `action_open_attacker_goal_rate`, `mutation_variant_count`, `operator_coverage`, `action_open_case_count`, `containment_hard_gates_clean`, and a `metrics_consistent` flag asserting the mutual-exclusion invariant.
@@ -611,12 +619,14 @@ git commit -m "test(llm-shield): add Stage 3K adaptive-readiness metrics"
 ### Task 5: Freeze run-independent catalogue evidence
 
 **Files:**
+
 - Create: `docs/research/llm-shield/evidence/stage-3k/mutation-operators.json`
 - Create: `docs/research/llm-shield/evidence/stage-3k/action-open-categories.json`
 - Create: `docs/research/llm-shield/evidence/stage-3k/README.md`
 - Test: `tools/agentdojo-simurgh-adapter/tests/test_stage3k_evidence_freeze.py`
 
 **Interfaces:**
+
 - Consumes: `operator_catalogue()` (Task 2), `ACTION_OPEN_CATEGORIES` (Task 3), `write_json_artifacts` from `evidence_writer`.
 - Produces: a small generator helper `build_catalogue_artifacts() -> dict[str, Any]` in `stage3k_mutations.py`'s sibling — place it in a new tiny module `stage3k_catalogue.py` to keep mutation/action-open modules pure of cross-imports.
 
@@ -708,10 +718,12 @@ Then create `docs/research/llm-shield/evidence/stage-3k/README.md`:
 Deterministic, key-free, metadata-only adaptive-readiness probe (claiming lanes 3K-A + 3K-B).
 
 **Frozen in Plan 1 (run-independent catalogues):**
+
 - `mutation-operators.json` — the 10 enumerated deterministic mutation operators.
 - `action-open-categories.json` — the 5 action-open underspecification categories.
 
 **Produced by Plan 2 (opt-in real run, regenerated against pinned AgentDojo source cases):**
+
 - `manifest.json`, `mutation-manifest.json`, `source-case-map.json`,
   `action-open-manifest.json`, `metrics.json`, `suite-breakdown.json`,
   `operator-breakdown.json`, `taxonomy.json`, `receipt-samples.json`,
