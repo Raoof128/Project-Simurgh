@@ -1,0 +1,17 @@
+{
+  "stage": "3N",
+  "families": [
+    "agentdojo_layer2",
+    "agentdojo_full",
+    "adaptive_readiness",
+    "fable5_reference_containment",
+    "attestation_validity"
+  ],
+  "source_files": {
+    "agentdojo_layer2": "docs/research/llm-shield/evidence/stage-3h-layer2/metrics.json",
+    "agentdojo_full": "docs/research/llm-shield/evidence/stage-3j/all-suite-metrics.json",
+    "adaptive_readiness": "docs/research/llm-shield/evidence/stage-3k/metrics.json",
+    "fable5_reference_containment": "docs/research/llm-shield/evidence/stage-3l/metrics.json",
+    "attestation_validity": "docs/research/llm-shield/evidence/stage-3m/attestation.bundle.json"
+  }
+}

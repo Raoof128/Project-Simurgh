@@ -1,0 +1,58 @@
+{
+  "stage": "3N",
+  "cross_family_pooling_performed": 0,
+  "mismatched_denominator_pooling_refusal_test_passed": true,
+  "pooled_asr_reported": false,
+  "refusals": [
+    {
+      "a": "agentdojo_layer2",
+      "b": "agentdojo_full",
+      "reason": "denominator_basis mismatch or not mutually pooling-allowed"
+    },
+    {
+      "a": "agentdojo_layer2",
+      "b": "adaptive_readiness",
+      "reason": "denominator_basis mismatch or not mutually pooling-allowed"
+    },
+    {
+      "a": "agentdojo_layer2",
+      "b": "fable5_reference_containment",
+      "reason": "denominator_basis mismatch or not mutually pooling-allowed"
+    },
+    {
+      "a": "agentdojo_layer2",
+      "b": "attestation_validity",
+      "reason": "denominator_basis mismatch or not mutually pooling-allowed"
+    },
+    {
+      "a": "agentdojo_full",
+      "b": "adaptive_readiness",
+      "reason": "denominator_basis mismatch or not mutually pooling-allowed"
+    },
+    {
+      "a": "agentdojo_full",
+      "b": "fable5_reference_containment",
+      "reason": "denominator_basis mismatch or not mutually pooling-allowed"
+    },
+    {
+      "a": "agentdojo_full",
+      "b": "attestation_validity",
+      "reason": "denominator_basis mismatch or not mutually pooling-allowed"
+    },
+    {
+      "a": "adaptive_readiness",
+      "b": "fable5_reference_containment",
+      "reason": "denominator_basis mismatch or not mutually pooling-allowed"
+    },
+    {
+      "a": "adaptive_readiness",
+      "b": "attestation_validity",
+      "reason": "denominator_basis mismatch or not mutually pooling-allowed"
+    },
+    {
+      "a": "fable5_reference_containment",
+      "b": "attestation_validity",
+      "reason": "denominator_basis mismatch or not mutually pooling-allowed"
+    }
+  ]
+}

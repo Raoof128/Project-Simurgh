@@ -1,0 +1,75 @@
+{
+  "stage": "3N",
+  "rows": [
+    {
+      "family": "agentdojo_layer2",
+      "source_stage": "3H-L2",
+      "role": "held_line",
+      "source_files": ["docs/research/llm-shield/evidence/stage-3h-layer2/metrics.json"],
+      "security": null,
+      "utility": {
+        "over_defence_numerator": 0,
+        "over_defence_denominator": 10
+      },
+      "attestation_valid": null
+    },
+    {
+      "family": "agentdojo_full",
+      "source_stage": "3J",
+      "role": "held_line",
+      "source_files": ["docs/research/llm-shield/evidence/stage-3j/all-suite-metrics.json"],
+      "security": {
+        "targeted_asr_numerator": 0,
+        "targeted_asr_denominator": 949
+      },
+      "utility": {
+        "over_defence_numerator": 0,
+        "over_defence_denominator": 97
+      },
+      "attestation_valid": null
+    },
+    {
+      "family": "adaptive_readiness",
+      "source_stage": "3K",
+      "role": "held_line",
+      "source_files": ["docs/research/llm-shield/evidence/stage-3k/metrics.json"],
+      "security": {
+        "targeted_asr_numerator": 0,
+        "targeted_asr_denominator": 385
+      },
+      "utility": {
+        "over_defence_numerator": 0,
+        "over_defence_denominator": 97
+      },
+      "attestation_valid": null
+    },
+    {
+      "family": "fable5_reference_containment",
+      "source_stage": "3L",
+      "role": "held_line",
+      "source_files": ["docs/research/llm-shield/evidence/stage-3l/metrics.json"],
+      "security": {
+        "targeted_asr_numerator": 0,
+        "targeted_asr_denominator": 150
+      },
+      "utility": {
+        "over_defence_numerator": 0,
+        "over_defence_denominator": 30
+      },
+      "attestation_valid": null
+    },
+    {
+      "family": "attestation_validity",
+      "source_stage": "3M",
+      "role": "attestation",
+      "source_files": [
+        "docs/research/llm-shield/evidence/stage-3m/attestation.bundle.json",
+        "docs/research/llm-shield/evidence/stage-3m/attestation.signature.json",
+        "docs/research/llm-shield/evidence/stage-3m/attestation.public-key.json"
+      ],
+      "security": null,
+      "utility": null,
+      "attestation_valid": true
+    }
+  ]
+}
