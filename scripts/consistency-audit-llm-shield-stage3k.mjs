@@ -53,8 +53,13 @@ if (sum(sourceMap.entries) !== mutation.mutation_variant_count)
   fail("source-case-map sum != mutation count");
 
 // operator breakdown sums to global mutation count
-if (sum(Object.fromEntries(Object.entries(operatorBreakdown.per_operator).map(([k, o]) => [k, o.variant_count]))) !==
-  metrics.mutation_variant_count)
+if (
+  sum(
+    Object.fromEntries(
+      Object.entries(operatorBreakdown.per_operator).map(([k, o]) => [k, o.variant_count])
+    )
+  ) !== metrics.mutation_variant_count
+)
   fail("operator breakdown sum != mutation count");
 
 // Fix 2: action-open lane accounting must be as strict as the mutation lane
