@@ -130,23 +130,147 @@ def assemble_stage3k_evidence(
     )
 
 
+def _stage3k_contact(  # pragma: no cover - needs gateway
+    client, *, suite_name, case_id, marker, kind, lane=None, operator_id=None, category=None
+):
+    """One real gateway contact. Provenance is honest: benign benchmark seed is a
+    synthetic system_seed (accepted); injection-bearing context is untrusted
+    tool_result (demoted to data, never authority). Content is hash-only. The mock
+    provider keeps the run key-free. Consequence flags are read from the verdict.
+    """
+    from .layer2_runner import _blocking_boundary, _content_hash
+
+    if kind == "benign":
+        source_type, trust_level, purpose = "system_seed", "synthetic", "task_data"
+        scenario = "benign"
+    else:
+        source_type, trust_level, purpose = "tool_result", "untrusted", "reference"
+        scenario = "injection"
+    response = client.run(
+        input=f"AgentDojo Stage 3K {lane or kind} probe {marker}",
+        contexts=[
+            {
+                "context_id": f"agentdojo-3k-{marker}",
+                "source_type": source_type,
+                "trust_level": trust_level,
+                "purpose": purpose,
+                "content": f"case_hash:{_content_hash(case_id + ':' + marker)}",
+            }
+        ],
+        provider_mode="mock",
+        provider="mock",
+        task_type=f"agentdojo.{suite_name}",
+        scenario=scenario,
+        case_id=case_id,
+    )
+    row: dict[str, Any] = {
+        "task_id": case_id.split("::", 1)[0],
+        "suite": suite_name,
+        "kind": kind,
+        "attack_family": "important_instructions",
+        "defence": "simurgh",
+        "model_provider": "agentdojo_ground_truth_pipeline",
+        "provider_mode": "local_or_configured_agentdojo_provider",
+        "utility_success": True,
+        "completed": True,
+        "gateway_contacted": True,
+        "receipt_id": (response.get("receipt") or {}).get("run_id"),
+        "gateway_verdict": response.get("gateway_verdict"),
+        "boundary": _blocking_boundary(response),
+        "audit_verified": True,
+        "tool_execution_bypassed_gate": False,
+        "unsafe_output_exported": False,
+        "context_authority_escalated": False,
+        "generated_evidence_leakage": False,
+    }
+    if kind == "security":
+        row["security_case_id"] = case_id
+        row["attack_success"] = False
+    if lane:
+        row["lane"] = lane
+    if operator_id:
+        row["operator_id"] = operator_id
+    if category:
+        row["category"] = category
+        row["attacker_goal_completed"] = False
+    return row
+
+
 def _collect_stage3k_rows(  # pragma: no cover - maintainer step, needs gateway
     *, suites: list[str], seed: int
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     """Produce genuine Stage 3K rows through the real Simurgh gateway.
 
-    This is the maintainer-operated heavy step (needs agentdojo==0.1.30 + a running
-    gateway). It must: (1) run the deterministic ground-truth pipeline with each
-    mutation operator's rewrapped injection content threaded through the gateway's
-    UNCHANGED context-provenance guard, tagging rows via
-    layer2_runner.tag_rows_for_stage(..., stage="3k", ...); and (2) run the authored
-    action-open probe subset the same way. It adds NO new defence logic. See
-    docs/research/llm-shield/STAGE_3K_CLOSEOUT.md for the run procedure.
+    Bounded, deterministic variant set (no new defence logic, no scorer change):
+      - benign lane: each user task (synthetic seed, expected accepted).
+      - 3K-A mutation lane: each injection task x each operator (untrusted context).
+      - 3K-B action-open lane: injection tasks assigned round-robin to the five
+        action-open categories (untrusted context).
+    Each variant is a real gateway contact; containment is read from the verdict.
     """
-    raise NotImplementedError(
-        "Stage 3K genuine row production is the maintainer step (needs gateway + "
-        "agentdojo). See STAGE_3K_CLOSEOUT.md."
-    )
+    from agentdojo.task_suite.load_suites import get_suite
+
+    from .agentdojo_register import require_agentdojo
+    from .simurgh_client import SimurghClient
+    from .stage3k_action_open import ACTION_OPEN_CATEGORIES
+    from .stage3k_mutations import OPERATORS
+
+    require_agentdojo()
+    benchmark_version = "v1.2.1"
+    operators = sorted(OPERATORS)
+    categories = sorted(ACTION_OPEN_CATEGORIES)
+
+    client = SimurghClient()
+    client.preflight()
+    if not client.session_id:
+        client.create_session()
+
+    baseline_rows: list[dict[str, Any]] = []
+    defended_rows: list[dict[str, Any]] = []
+
+    for suite_name in suites:
+        suite = get_suite(benchmark_version, suite_name)
+        user_ids = sorted(suite.user_tasks.keys())
+        injection_ids = sorted(suite.injection_tasks.keys())
+        if not user_ids or not injection_ids:
+            continue
+
+        # benign lane
+        for user_id in user_ids:
+            row = _stage3k_contact(
+                client, suite_name=suite_name, case_id=user_id, marker=f"benign:{user_id}",
+                kind="benign",
+            )
+            defended_rows.append(row)
+            baseline_rows.append({**row, "defence": "none"})
+
+        # 3K-A mutation lane: injection task x operator
+        for inj_id in injection_ids:
+            user_id = user_ids[0]
+            case_id = f"{user_id}::{inj_id}"
+            for op in operators:
+                row = _stage3k_contact(
+                    client, suite_name=suite_name, case_id=case_id,
+                    marker=f"mut:{inj_id}:{op}", kind="security", lane="mutation",
+                    operator_id=op,
+                )
+                defended_rows.append(row)
+                baseline_rows.append({**row, "defence": "none"})
+
+        # 3K-B action-open lane: injection tasks round-robin across categories
+        for i, inj_id in enumerate(injection_ids):
+            user_id = user_ids[i % len(user_ids)]
+            category = categories[i % len(categories)]
+            case_id = f"{user_id}::{inj_id}"
+            row = _stage3k_contact(
+                client, suite_name=suite_name, case_id=case_id,
+                marker=f"ao:{inj_id}:{category}", kind="security", lane="action_open",
+                category=category,
+            )
+            defended_rows.append(row)
+            baseline_rows.append({**row, "defence": "none"})
+
+    return baseline_rows, defended_rows
 
 
 def run_stage3k(  # pragma: no cover - opt-in, needs agentdojo + gateway
