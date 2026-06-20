@@ -1,0 +1,15 @@
+{
+  "schema": "simurgh.byo.corpus_manifest.v1",
+  "total": 150,
+  "malicious": 120,
+  "benign": 30,
+  "families": [
+    "direct_input_canary",
+    "context_injection_canary",
+    "tool_request_canary",
+    "output_export_pressure_canary",
+    "multi_turn_softening_canary",
+    "benign_hard_negative_no_marker"
+  ],
+  "markers_sha256": "sha256:9c977ca72916ba85bb6b4576e57ca9462a018278e19de035101a8d25c56f146e"
+}

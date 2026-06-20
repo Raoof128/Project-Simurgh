@@ -1,0 +1,7 @@
+{
+  "schema": "simurgh.byo.self_proof.v1",
+  "liar": 120,
+  "leaker": 120,
+  "overdefender": 30,
+  "invalid": 150
+}
