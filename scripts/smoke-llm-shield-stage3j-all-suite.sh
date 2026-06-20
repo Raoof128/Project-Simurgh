@@ -15,6 +15,9 @@ if [[ "${SIMURGH_RUN_STAGE3J_ALL_SUITES:-0}" == "1" ]]; then
   ( cd tools/agentdojo-simurgh-adapter &&
     "$PY" -m simurgh_agentdojo_adapter.stage3j_full_runner \
       --scope all-suite --suites workspace travel banking slack --out "../../$EV" )
+  # Python json.dumps expands short arrays; prettier collapses them. Normalise so
+  # the regenerated evidence stays repo prettier-clean (semantics unchanged).
+  npx prettier --write "$EV"/*.json >/dev/null 2>&1 || true
 fi
 
 node scripts/privacy-audit-llm-shield-stage3j.mjs

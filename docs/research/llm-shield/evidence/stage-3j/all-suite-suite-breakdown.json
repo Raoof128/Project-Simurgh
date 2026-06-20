@@ -110,10 +110,5 @@
     }
   },
   "stage": "3J",
-  "suites": [
-    "banking",
-    "slack",
-    "travel",
-    "workspace"
-  ]
+  "suites": ["banking", "slack", "travel", "workspace"]
 }
