@@ -41,8 +41,9 @@ def apply_stage3k_tags(
 ) -> list[dict[str, Any]]:
     """Return copies of rows with ONLY lane/operator_id/category added.
 
-    Raises if a tag carries any key outside STAGE3K_TAG_KEYS, or if the tag
-    would overwrite an existing non-tag field on the row.
+    Raises if a tag carries any key outside STAGE3K_TAG_KEYS. Because only the
+    three descriptive tag keys are ever accepted, a tag can never overwrite a
+    Stage 3J data field.
     """
     if len(rows) != len(tags):
         raise ValueError("rows and tags length mismatch")
@@ -50,9 +51,6 @@ def apply_stage3k_tags(
     for row, tag in zip(rows, tags):
         if not set(tag) <= STAGE3K_TAG_KEYS:
             raise ValueError(f"tag carries disallowed keys: {sorted(set(tag) - STAGE3K_TAG_KEYS)}")
-        for key in tag:
-            if key in row and key not in STAGE3K_TAG_KEYS:
-                raise ValueError(f"tag would overwrite non-tag field {key!r}")
         merged = dict(row)
         merged.update(tag)
         out.append(merged)

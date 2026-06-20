@@ -54,10 +54,15 @@ def test_tag_with_disallowed_key_rejected():
         apply_stage3k_tags([_row(0)], [{"lane": "mutation", "gateway_verdict": "blocked"}])
 
 
-def test_tag_cannot_overwrite_non_tag_field():
-    # 'suite' is not a tag key; attempting to set it via tags must fail
+def test_non_tag_field_cannot_be_smuggled_in():
+    # 'suite' is not a tag key; it is rejected as a disallowed key before any merge
     with pytest.raises(ValueError):
         apply_stage3k_tags([_row(0)], [{"lane": "mutation", "suite": "evil"}])
+
+
+def test_rows_tags_length_mismatch_rejected():
+    with pytest.raises(ValueError):
+        apply_stage3k_tags([_row(0), _row(1)], [{"lane": "mutation"}])
 
 
 def test_3k_requires_tags():

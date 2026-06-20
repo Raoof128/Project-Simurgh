@@ -76,3 +76,10 @@ def test_manifest_rejects_non_sha256_hash():
            "operator_id": "data_camouflage", "operator_params_hash": "b" * 64}
     with pytest.raises(ValueError):
         build_mutation_manifest([bad], seed=1)
+
+
+def test_manifest_rejects_well_formed_entry_with_unknown_operator():
+    bad = {"variant_hash": "a" * 64, "source_case_hash": "b" * 64,
+           "operator_id": "not_a_real_operator", "operator_params_hash": "c" * 64}
+    with pytest.raises(ValueError):
+        build_mutation_manifest([bad], seed=1)
