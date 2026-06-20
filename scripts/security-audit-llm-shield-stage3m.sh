@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Stage 3M security audit: no private key material, machine-readable non-claims,
+# no overclaim wording, no guard-logic drift.
+set -euo pipefail
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$ROOT"
+EV="docs/research/llm-shield/evidence/stage-3m"
+fail() {
+  echo "stage3m security audit FAIL: $1"
+  exit 1
+}
+
+# 1. No actual PEM private-key block committed anywhere (anchored: the real
+#    block header, not the bare phrase used as a denylist literal in scripts/docs).
+if git grep -lE "^-----BEGIN ([A-Z]+ )?PRIVATE KEY-----" -- . >/dev/null 2>&1; then
+  fail "private key material committed"
+fi
+
+# 2. Bundle carries machine-readable non-claims, all true.
+node -e '
+const b = require("./'"$EV"'/attestation.bundle.json");
+const nc = b.non_claims || {};
+const req = ["does_not_prove_model_safety","does_not_prove_jailbreak_immunity","does_not_prove_server_uncompromised","does_not_prove_private_key_never_stolen","does_not_upgrade_audit_sample_to_full_chain","attests_only_to_referenced_run_set"];
+for (const k of req) { if (nc[k] !== true) { console.error("non_claim missing/false: "+k); process.exit(1); } }
+' || fail "non_claims"
+
+# 3. No overclaim wording in 3M docs (reviewer checklist excluded — it lists the banned phrases).
+if ls docs/research/llm-shield/*STAGE_3M* docs/research/llm-shield/LLM_SHIELD_STAGE_3M* >/dev/null 2>&1; then
+  if grep -RniE "jailbreak-proof|claude defeated|fable fixed|universal safety|immune to" \
+    --include='*.md' --exclude='*REVIEWER_CHECKLIST*' \
+    docs/research/llm-shield/*STAGE_3M* docs/research/llm-shield/LLM_SHIELD_STAGE_3M* 2>/dev/null; then
+    fail "overclaim wording in 3M docs"
+  fi
+fi
+
+# 4. No src/llmShield drift.
+bash scripts/policy-drift-guard-llm-shield-stage3m.sh >/dev/null || fail "policy drift"
+
+echo "stage3m security audit: passed"
