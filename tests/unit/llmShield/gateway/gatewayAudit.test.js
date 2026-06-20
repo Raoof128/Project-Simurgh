@@ -7,6 +7,8 @@ import {
   recordGatewaySessionCreated,
   recordGatewayRun,
   recordGatewayReceiptExported,
+  recordGatewayLiveCall,
+  recordGatewayLiveConfigRejected,
 } from "../../../../src/llmShield/gateway/gatewayAudit.js";
 
 const base = {
@@ -87,6 +89,60 @@ describe("gatewayAudit", () => {
     assert.ok(types.includes(GATEWAY_EVENTS.LLM_GATEWAY_PROVIDER_CONFIG_REJECTED));
     assert.ok(types.includes(GATEWAY_EVENTS.LLM_GATEWAY_PROVIDER_SKIPPED));
   });
+  test("live call (success + context summary) emits the full live chain", () => {
+    const key = crypto.randomBytes(32);
+    const chain = createChain();
+    recordGatewayLiveCall(chain, key, {
+      providerResponseKind: "text",
+      providerResponseHash: "sha256:lp",
+      contextSummaryBuilt: true,
+      contextCount: 2,
+    });
+    const types = chain.entries.map((e) => e.type);
+    assert.ok(types.includes(GATEWAY_EVENTS.LLM_GATEWAY_LIVE_CONFIG_ACCEPTED));
+    assert.ok(types.includes(GATEWAY_EVENTS.LLM_GATEWAY_LIVE_RATE_LIMIT_CHECKED));
+    assert.ok(types.includes(GATEWAY_EVENTS.LLM_GATEWAY_LIVE_PROVIDER_CALLED));
+    assert.ok(types.includes(GATEWAY_EVENTS.LLM_GATEWAY_LIVE_PROVIDER_RESPONSE_HASHED));
+    assert.ok(types.includes(GATEWAY_EVENTS.LLM_GATEWAY_LIVE_CONTEXT_SUMMARY_BUILT));
+    assert.ok(!types.includes(GATEWAY_EVENTS.LLM_GATEWAY_LIVE_PROVIDER_ERROR));
+    assert.equal(verifyChain(chain, key).valid, true);
+  });
+  test("live call timeout emits PROVIDER_TIMEOUT not generic ERROR", () => {
+    const key = crypto.randomBytes(32);
+    const chain = createChain();
+    recordGatewayLiveCall(chain, key, {
+      providerResponseKind: "error",
+      providerResponseHash: "sha256:lp",
+      errorCode: "gateway_live_timeout",
+    });
+    const types = chain.entries.map((e) => e.type);
+    assert.ok(types.includes(GATEWAY_EVENTS.LLM_GATEWAY_LIVE_PROVIDER_TIMEOUT));
+    assert.ok(!types.includes(GATEWAY_EVENTS.LLM_GATEWAY_LIVE_PROVIDER_ERROR));
+  });
+  test("live call generic error emits PROVIDER_ERROR with reason code", () => {
+    const key = crypto.randomBytes(32);
+    const chain = createChain();
+    recordGatewayLiveCall(chain, key, {
+      providerResponseKind: "error",
+      providerResponseHash: "sha256:lp",
+      errorCode: "gateway_live_provider_error",
+    });
+    const errEntry = chain.entries.find(
+      (e) => e.type === GATEWAY_EVENTS.LLM_GATEWAY_LIVE_PROVIDER_ERROR
+    );
+    assert.ok(errEntry, "PROVIDER_ERROR must be present");
+    assert.deepEqual(errEntry.payload.reason_codes, ["gateway_live_provider_error"]);
+  });
+  test("live config rejected emits LIVE_CONFIG_REJECTED with reason", () => {
+    const key = crypto.randomBytes(32);
+    const chain = createChain();
+    recordGatewayLiveConfigRejected(chain, key, "gateway_live_disabled");
+    const entry = chain.entries.at(-1);
+    assert.equal(entry.type, GATEWAY_EVENTS.LLM_GATEWAY_LIVE_CONFIG_REJECTED);
+    assert.deepEqual(entry.payload.reason_codes, ["gateway_live_disabled"]);
+    assert.equal(verifyChain(chain, key).valid, true);
+  });
+
   test("session created + receipt exported events", () => {
     const key = crypto.randomBytes(32);
     const chain = createChain();

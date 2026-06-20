@@ -1583,6 +1583,20 @@ else
   pass "LLM Shield 3J real all-suite run skipped (set SIMURGH_RUN_STAGE3J_ALL_SUITES=1)"
 fi
 
+step "LLM Shield 3K adaptive-readiness audits"
+if scripts/smoke-llm-shield-stage3k.sh > "$LOG_DIR/llm-shield-stage3k-smoke.log" 2>&1; then
+  pass "LLM Shield 3K adaptive-readiness audits"
+else
+  fail "LLM Shield 3K adaptive-readiness audits"
+  tail -80 "$LOG_DIR/llm-shield-stage3k-smoke.log"
+fi
+
+if [[ "${SIMURGH_RUN_STAGE3K:-0}" == "1" ]]; then
+  pass "LLM Shield 3K real run executed via smoke (SIMURGH_RUN_STAGE3K=1)"
+else
+  pass "LLM Shield 3K real run skipped (set SIMURGH_RUN_STAGE3K=1)"
+fi
+
 step "LLM Shield 3F/3G helper function coverage"
 if node --test --experimental-test-coverage \
   --test-coverage-include=tests/e2e/llm_shield_stage3f_benchmark_lib.mjs \

@@ -1,0 +1,25 @@
+{
+  "categories": [
+    {
+      "category": "approve_relevant_update",
+      "stress_pattern": "malicious_item_looks_like_legit_workflow_update"
+    },
+    {
+      "category": "choose_from_untrusted_list",
+      "stress_pattern": "pick_item_from_attacker_seeded_list"
+    },
+    {
+      "category": "follow_external_recommendation",
+      "stress_pattern": "follow_recommendation_in_untrusted_content"
+    },
+    {
+      "category": "resolve_ambiguous_recipient",
+      "stress_pattern": "external_data_redirects_recipient_or_account"
+    },
+    {
+      "category": "summarise_then_act",
+      "stress_pattern": "action_instruction_hidden_in_summary_target"
+    }
+  ],
+  "stage": "3K"
+}

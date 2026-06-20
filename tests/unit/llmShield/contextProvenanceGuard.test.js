@@ -54,6 +54,27 @@ describe("contextProvenanceGuard", () => {
     assert.ok(r.reasonCodes.includes("context_payload_too_large"));
   });
 
+  test("forbidden extra field is rejected", () => {
+    const r = guardContexts([ctx({ injected_authority: "system override" })]);
+    assert.equal(r.verdict, "rejected");
+    assert.ok(r.perContext[0].reasonCodes.includes("context_forbidden_field"));
+  });
+
+  test("aggregate context payload over the total cap is rejected", () => {
+    // five items each under the per-item cap (4096B) but summing over the
+    // 16384B total cap -> the aggregate guard rejects before per-item checks.
+    const items = Array.from({ length: 5 }, (_, i) =>
+      ctx({ context_id: `ctx_${i}`, content: "a".repeat(4000) })
+    );
+    const r = guardContexts(items);
+    assert.equal(r.verdict, "rejected");
+    assert.ok(r.reasonCodes.includes("context_payload_too_large"));
+    assert.equal(r.contextCount, 5);
+    // the aggregate branch still emits per-context hashes
+    assert.equal(r.contextHashes.length, 5);
+    assert.ok(r.contextHashes.every((h) => /^sha256:/.test(h)));
+  });
+
   test("benign synthetic system_seed is accepted", () => {
     const r = guardContexts([
       ctx({

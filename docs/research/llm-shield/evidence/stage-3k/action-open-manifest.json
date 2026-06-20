@@ -1,0 +1,229 @@
+{
+  "action_open_case_count": 35,
+  "entries": [
+    {
+      "case_hash": "0a38ce86ccec4ecb9bca7f36dc4bc7c4e98a727a352f7f09e2dba9e69d815fe0",
+      "category": "follow_external_recommendation",
+      "source_case_hash": "3786f606b55ac8d00e5c794e245daea0e8e0df098957bc7d82f311068a0820ab",
+      "suite": "banking"
+    },
+    {
+      "case_hash": "0fd4509336b2952bc2a48acd067d0cfce31ea5e15e79c2463ad8eddf68cd3172",
+      "category": "summarise_then_act",
+      "source_case_hash": "b999f47cabe6d60ab4c1d69d9ac27b51e6f6ffb7e43b4bc83330402a82eb6d98",
+      "suite": "travel"
+    },
+    {
+      "case_hash": "11b4634cd8177e5be0d087b5656a19fced9cf44da03e7a135498193d3d359433",
+      "category": "choose_from_untrusted_list",
+      "source_case_hash": "41f455cb1ae5a5a5f31a33b3ddba6a8696910908c6c6578921277c953fe5095e",
+      "suite": "travel"
+    },
+    {
+      "case_hash": "13fe80569f792736f2d11d73ad3282427a4c7c2130b26b58fe89c013becd5b3a",
+      "category": "approve_relevant_update",
+      "source_case_hash": "8ff610d8f8a3ecc6ea2f6281f93d3d048f4e6b82dd4b69f30fbf154ee51083fc",
+      "suite": "workspace"
+    },
+    {
+      "case_hash": "1b8e8bc325e9241872be2a64aceade9357f5b4b59b9d35d73980220b757c05a2",
+      "category": "follow_external_recommendation",
+      "source_case_hash": "f3f0f9bb5a5c58f5056af1cfd4b3d8ea18a4faabd240276475f6d17948462016",
+      "suite": "workspace"
+    },
+    {
+      "case_hash": "25262f1363e34567988d2872cb0bd6c2e09f2f2ab38d819fdd480a3ceb88697a",
+      "category": "summarise_then_act",
+      "source_case_hash": "24162021f10b1f07be9a25bfb30bdd44436f128d66333c77dc9eb21e2e5e1bb5",
+      "suite": "slack"
+    },
+    {
+      "case_hash": "28554c4c1163c9c21775e6b391f0429c54a8cb6deef4876e381c5036a3ab4c5f",
+      "category": "approve_relevant_update",
+      "source_case_hash": "6afb4254585b505ec7f72c72dc7d39cecabf8cf120d2e3f6ecf755a6e72e839b",
+      "suite": "travel"
+    },
+    {
+      "case_hash": "2bc721e6bca0c9475d6c1dba285dde671f88c82d2ad7e74b9cf1419c72270f6e",
+      "category": "approve_relevant_update",
+      "source_case_hash": "6afb4254585b505ec7f72c72dc7d39cecabf8cf120d2e3f6ecf755a6e72e839b",
+      "suite": "banking"
+    },
+    {
+      "case_hash": "305245b11cf7351e5cc484fde0db81bdda65b379a28729cbb5645a4f8165df77",
+      "category": "choose_from_untrusted_list",
+      "source_case_hash": "7b8248b871db02579fc1362a3703fa1afe36ba020b7e9fc8296d603088aeab5e",
+      "suite": "slack"
+    },
+    {
+      "case_hash": "3248c95997251ec68fb98008cc397d2ff13225bf929a15242a9dcbba9e07a9f6",
+      "category": "resolve_ambiguous_recipient",
+      "source_case_hash": "35f60ff382e0928bad3944f40e330ea7cd0584771cdffdfa16306c23c09aa007",
+      "suite": "banking"
+    },
+    {
+      "case_hash": "3515fe7cf0d56b0229f2b129901e07aa45644419fac5f72a01f7b12cc33351f2",
+      "category": "resolve_ambiguous_recipient",
+      "source_case_hash": "3016821f0bb06ded8921f326080f588091197b980a0338db60d1df30c8094e23",
+      "suite": "workspace"
+    },
+    {
+      "case_hash": "39ac24515b78d5a374c7b8df1b68fd9a8e7eaf533872ab8224efe19aff200041",
+      "category": "approve_relevant_update",
+      "source_case_hash": "0e2033c9be6b9ea0ae9b90cc24b6d2831e508ca0c9dfdd05fe1b856bb3514835",
+      "suite": "slack"
+    },
+    {
+      "case_hash": "3e7d58d1ac0cdd8ae3ac70a1a32cc96990f74b2ae5332ebeac8cb71df6936cfb",
+      "category": "approve_relevant_update",
+      "source_case_hash": "a90800c15eebe7bc13ca0200e9ddaeae8d8441ad693b1c1cf7016489afcf821d",
+      "suite": "banking"
+    },
+    {
+      "case_hash": "45afe57f148f2b1c6b403a8521410adae7a2b6bc8ca4696d1d4a2fea1684ecc0",
+      "category": "choose_from_untrusted_list",
+      "source_case_hash": "41f455cb1ae5a5a5f31a33b3ddba6a8696910908c6c6578921277c953fe5095e",
+      "suite": "workspace"
+    },
+    {
+      "case_hash": "485376356f83c0e2b9087f592fdd71e9006ced835f59c0261e15a9092cf1b476",
+      "category": "follow_external_recommendation",
+      "source_case_hash": "00e8a65d6af057877e79de94062a3d94a487bcb1ed6bec1a20ecc2935ea31fef",
+      "suite": "workspace"
+    },
+    {
+      "case_hash": "4b1b5115d4ab4833ec101ba1a3287fddfb2546ca09a26c7e07dc6698bccfbe86",
+      "category": "resolve_ambiguous_recipient",
+      "source_case_hash": "5dbfe306d2b437a6b59064e11448949e5fbacdacb7c44b203afa02f16fc10015",
+      "suite": "workspace"
+    },
+    {
+      "case_hash": "58b5c15b94f15ff248b5de3e30fdeced1a42196a628e8933fb88f154b884dade",
+      "category": "follow_external_recommendation",
+      "source_case_hash": "aae8eb4bd7dd68c3b7d157f03abcf0dc4aa835cb78c97ffcd2cd1565453fe5b1",
+      "suite": "travel"
+    },
+    {
+      "case_hash": "621c33a76b9823602093649854cd706885609c1c3d6a4c86488f2682314cb490",
+      "category": "choose_from_untrusted_list",
+      "source_case_hash": "8373fbdad822637b89db772d1ab5d85fbf6e0c6648418e20a0f05fd93acf0af1",
+      "suite": "workspace"
+    },
+    {
+      "case_hash": "66b8efc4d31910d264812dbdd537d31787677ac4e29bc12af3a9c5d32f4c2386",
+      "category": "approve_relevant_update",
+      "source_case_hash": "6afb4254585b505ec7f72c72dc7d39cecabf8cf120d2e3f6ecf755a6e72e839b",
+      "suite": "workspace"
+    },
+    {
+      "case_hash": "6e607a30bef91580f2a28b540bea1020d4820130a91571ababa3b6c9a7f8e15f",
+      "category": "choose_from_untrusted_list",
+      "source_case_hash": "7df3ce43fe0b2151b2ed6b7cd304368148f02cc8167705e6fa46563ff39e5ec2",
+      "suite": "workspace"
+    },
+    {
+      "case_hash": "7ebc5106a99ad6d9bb45b2a7e6218f984fc2f69b6acc8a37bfad1202172c33a6",
+      "category": "resolve_ambiguous_recipient",
+      "source_case_hash": "c2661f99817af9f0856c903a0e4fde3d4486d225827cfa1f1b8f3a8865f482c4",
+      "suite": "workspace"
+    },
+    {
+      "case_hash": "85c4c385b0df69f764922217f2b7945483682aa03f7ffa0fe78dc90e5930e412",
+      "category": "follow_external_recommendation",
+      "source_case_hash": "8271fb727789940579af3e0f64e8e5a391bef12f4ad5a1b3729b2488f37439ab",
+      "suite": "slack"
+    },
+    {
+      "case_hash": "8611a42db9fe8a4163d69b1fa12739140ce4253fe60899e658091f21ebe98202",
+      "category": "approve_relevant_update",
+      "source_case_hash": "430d80aebf7b9fb51f25909268ecda2f91a20d71257f4d8d5fd0238a3229c62a",
+      "suite": "workspace"
+    },
+    {
+      "case_hash": "9bd930fca7a4ef2daf30009a1afd2ca212e61d508dfead64032c97b3894e883d",
+      "category": "choose_from_untrusted_list",
+      "source_case_hash": "b3b49c7a1dbdaf315c713a2084db922c231bff65680100e9a24fb2a425600f98",
+      "suite": "travel"
+    },
+    {
+      "case_hash": "9df8c31fc344cd8cd37661f32427170922d95afb8cbc3fc8194bea6892ced6f7",
+      "category": "resolve_ambiguous_recipient",
+      "source_case_hash": "e5e951b419c4242d28707e183b9e2b26b611f84566e41c8d66a2de035090641a",
+      "suite": "slack"
+    },
+    {
+      "case_hash": "9fee39b15c837ede31bcfa30fb5dc37a070ada13734eb316966e64b831c6ec4a",
+      "category": "choose_from_untrusted_list",
+      "source_case_hash": "b3b49c7a1dbdaf315c713a2084db922c231bff65680100e9a24fb2a425600f98",
+      "suite": "banking"
+    },
+    {
+      "case_hash": "bc57faf8fedb8daf5cf45a9a668580e1b3c1508babb271d972e5b961e4ecc381",
+      "category": "summarise_then_act",
+      "source_case_hash": "342fcf94d38bb1347c7f4314644d490a8a9b5798895225b045c0b7f901dd8dbc",
+      "suite": "workspace"
+    },
+    {
+      "case_hash": "da82b600da8990c279b2622a9399718a945109887cefbeb289da8dd1af52f9cb",
+      "category": "follow_external_recommendation",
+      "source_case_hash": "aae8eb4bd7dd68c3b7d157f03abcf0dc4aa835cb78c97ffcd2cd1565453fe5b1",
+      "suite": "banking"
+    },
+    {
+      "case_hash": "e25a6e48be0930f6a39112645cc490ac127e3d09f7b85793c86f23d7fa1a1062",
+      "category": "summarise_then_act",
+      "source_case_hash": "c11ec4057273f5076ee0a5bd2c641131566fbf287f5b5e8e9294dc6e780f34e1",
+      "suite": "workspace"
+    },
+    {
+      "case_hash": "ec7ad2dcf743f2bc8414ca76cb4e6bf572aabbd04422a20cc3ddd7e09ea5b016",
+      "category": "approve_relevant_update",
+      "source_case_hash": "a90800c15eebe7bc13ca0200e9ddaeae8d8441ad693b1c1cf7016489afcf821d",
+      "suite": "travel"
+    },
+    {
+      "case_hash": "f260cfc5b4d8b07448bcaa1d40f903e779760ad15a8cecd48a71e4b672995b0e",
+      "category": "resolve_ambiguous_recipient",
+      "source_case_hash": "17f1a5680c379558ccbb2555ed8631f9989b53b5f29659c0c667929a4224822c",
+      "suite": "travel"
+    },
+    {
+      "case_hash": "f2b76279817bb063d1a34791ea4b22630115833136ed497c3751c6dabe3a5f35",
+      "category": "follow_external_recommendation",
+      "source_case_hash": "35f60ff382e0928bad3944f40e330ea7cd0584771cdffdfa16306c23c09aa007",
+      "suite": "workspace"
+    },
+    {
+      "case_hash": "f76f52312f5491c0d522b4a05bb7eede4060d3017754fea1b2cbddcf2a356818",
+      "category": "choose_from_untrusted_list",
+      "source_case_hash": "41f455cb1ae5a5a5f31a33b3ddba6a8696910908c6c6578921277c953fe5095e",
+      "suite": "banking"
+    },
+    {
+      "case_hash": "fdf55c19c3714da2aac015778a05ac28ead608c93093d56d20c4ee280ee12f07",
+      "category": "resolve_ambiguous_recipient",
+      "source_case_hash": "17f1a5680c379558ccbb2555ed8631f9989b53b5f29659c0c667929a4224822c",
+      "suite": "banking"
+    },
+    {
+      "case_hash": "ff32437a9f6bf5dbf93ba2f6b4f13e0ae233f78a40eb570fb5819a14bffd946b",
+      "category": "summarise_then_act",
+      "source_case_hash": "b999f47cabe6d60ab4c1d69d9ac27b51e6f6ffb7e43b4bc83330402a82eb6d98",
+      "suite": "banking"
+    }
+  ],
+  "per_category": {
+    "approve_relevant_update": 8,
+    "choose_from_untrusted_list": 8,
+    "follow_external_recommendation": 7,
+    "resolve_ambiguous_recipient": 7,
+    "summarise_then_act": 5
+  },
+  "per_suite": {
+    "banking": 9,
+    "slack": 5,
+    "travel": 7,
+    "workspace": 14
+  },
+  "stage": "3K"
+}
