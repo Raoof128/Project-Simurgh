@@ -462,9 +462,12 @@ def test_build_stage3j_artifacts_metadata_only(tmp_path):
     from simurgh_agentdojo_adapter.evidence_writer import write_json_artifacts
     from simurgh_agentdojo_adapter.stage3j_full_runner import build_stage3j_artifacts
 
-    rows = [_benign(0, success=True), _sec(0, attack=False)]
-    rows[0]["suite"] = "workspace"
-    rows[1]["suite"] = "workspace"
+    benign = _benign(0, success=True)
+    benign["suite"] = "workspace"
+    # a blocked security case so the taxonomy is non-empty and the raw-id check is real
+    blocked = _sec(0, attack=False)
+    blocked.update({"suite": "workspace", "gateway_verdict": "blocked", "boundary": "context_guard"})
+    rows = [benign, blocked]
     artifacts = build_stage3j_artifacts(rows, rows, scope="workspace")
     assert set(artifacts) == {
         "workspace-metrics.json",
@@ -472,9 +475,13 @@ def test_build_stage3j_artifacts_metadata_only(tmp_path):
         "workspace-taxonomy.json",
     }
     assert artifacts["workspace-metrics.json"]["hard_gates_clean"] is True
+    assert len(artifacts["workspace-taxonomy.json"]["entries"]) >= 1
     # metadata-only contract holds (raises EvidenceLeakage otherwise)
     write_json_artifacts(tmp_path, artifacts)
-    assert "u0" not in (tmp_path / "workspace-taxonomy.json").read_text() or True  # hashes only
+    text = (tmp_path / "workspace-taxonomy.json").read_text()
+    assert "u0" not in text
+    assert "user_task_" not in text
+    assert "injection_task_" not in text
 ```
 
 - [ ] **Step 2: Run test to verify it fails**
@@ -622,7 +629,16 @@ def run_all_suites_collect_rows(*, suites):  # pragma: no cover - needs agentdoj
     return baseline_rows, _merge_defended_gateway_rows(defended_rows, recorder.records, offset=0)
 ```
 
-(Note for the implementer: confirm the recorder/offset merge against `run_external_agentdojo`'s ordering when you run it live in Task 6; the merge is exercised in the opt-in run, not in CI.)
+**Live-run alignment (hard checks — the runner must assert these before writing evidence).** Stage 3J scales from 30 cases to hundreds; a silent row/receipt misalignment would poison the evidence. `run_all_suites_collect_rows` must verify, and `Layer2Blocked` if any fails:
+
+```text
+[ ] defended row count == recorder record count consumed by the merge
+[ ] every defended row receives exactly one gateway receipt (no row left without receipt_id)
+[ ] no recorder record is left unmatched after the merge
+[ ] post-merge receipt_coverage == 100% and audit_verification == 100%
+```
+
+Implement these as explicit assertions in `run_all_suites_collect_rows` (e.g. compare `len(defended_rows)` to the consumed slice of `recorder.records`, and confirm every merged row has a `receipt_id`). Mirror `run_external_agentdojo`'s ordering; the merge is exercised only in the opt-in real run, so these assertions are the safety net CI cannot provide.
 
 - [ ] **Step 4: Run the aggregator test + full adapter suite**
 
@@ -724,8 +740,26 @@ const sumBenign = Object.values(breakdown.per_suite).reduce(
 );
 if (sumBenign !== metrics.counts.benign)
   fail(`suite benign totals (${sumBenign}) != global benign (${metrics.counts.benign})`);
+
+// suite breakdown security counts must sum to the global security count
+const sumSecurity = Object.values(breakdown.per_suite).reduce(
+  (n, s) => n + Number(s.targeted_asr.denominator),
+  0
+);
+if (sumSecurity !== metrics.counts.security)
+  fail(`suite security totals (${sumSecurity}) != global security (${metrics.counts.security})`);
+
 for (const [suite, s] of Object.entries(breakdown.per_suite)) {
   if (s.containment_hard_gates_clean !== true) fail(`suite ${suite} hard gates not clean`);
+}
+
+// Real all-suite lane (SIMURGH_STAGE3J_REAL=1): the frozen benign set is the full
+// 97 user tasks and the executed security set must be non-empty. We never hardcode
+// 949 — AgentDojo's benchmark_suite_with_injections fixes the executed security set.
+if (process.env.SIMURGH_STAGE3J_REAL === "1" && scope === "all-suite") {
+  if (metrics.counts.benign !== 97)
+    fail(`real all-suite benign must be 97, got ${metrics.counts.benign}`);
+  if (!(metrics.counts.security > 0)) fail("real all-suite security must be > 0");
 }
 console.log("stage3j consistency OK");
 ```
@@ -759,7 +793,7 @@ console.log("stage3j security OK");
 '
 ```
 
-Create `scripts/smoke-llm-shield-stage3j-workspace.sh` and `scripts/smoke-llm-shield-stage3j-all-suite.sh` (CI-safe: run the three audits against committed evidence; the heavy run is opt-in, see Task 6):
+Create `scripts/smoke-llm-shield-stage3j-workspace.sh` and `scripts/smoke-llm-shield-stage3j-all-suite.sh`. Default behaviour is CI-safe: audit committed evidence. When the opt-in env flag is set, the script first runs the **real** Stage 3J runner to regenerate evidence, then audits it — so nobody mistakes an audit-only pass for the heavy evaluation. (When a real run executes, set `SIMURGH_STAGE3J_REAL=1` so the consistency audit enforces benign==97 / security>0 on the all-suite lane.)
 
 ```bash
 #!/usr/bin/env bash
@@ -768,13 +802,24 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 export SIMURGH_STAGE3J_SCOPE=workspace   # all-suite variant sets all-suite
+EV="docs/research/llm-shield/evidence/stage-3j"
+PY="${SIMURGH_STAGE3J_PYTHON:-python3}"
+
+# Opt-in real run: regenerate real evidence before auditing.
+if [[ "${SIMURGH_RUN_STAGE3J_WORKSPACE:-0}" == "1" ]]; then
+  export SIMURGH_STAGE3J_REAL=1
+  ( cd tools/agentdojo-simurgh-adapter && SIMURGH_GATEWAY_BASE_URL="${SIMURGH_GATEWAY_BASE_URL:-}" \
+    "$PY" -m simurgh_agentdojo_adapter.stage3j_full_runner \
+      --scope workspace --suites workspace --out "../../$EV" )
+fi
+
 node scripts/privacy-audit-llm-shield-stage3j.mjs
 node scripts/consistency-audit-llm-shield-stage3j.mjs
 bash scripts/security-audit-llm-shield-stage3j.sh
 echo "stage3j-workspace smoke: passed"
 ```
 
-(The all-suite wrapper is identical with `SIMURGH_STAGE3J_SCOPE=all-suite` and the final echo `stage3j-all-suite smoke: passed`.)
+The all-suite wrapper is identical except `SIMURGH_STAGE3J_SCOPE=all-suite`, the opt-in guard is `SIMURGH_RUN_STAGE3J_ALL_SUITES`, the runner call is `--scope all-suite --suites workspace travel banking slack`, and the final echo is `stage3j-all-suite smoke: passed`. (A Simurgh gateway server must be running for the real run, same as the Stage 3H-L2 smoke; reuse that server-start preamble.)
 
 - [ ] **Step 4: Generate a deterministic CI fixture and run the smokes**
 
@@ -794,6 +839,13 @@ for s in suites:
               'audit_verified':True,'gateway_verdict':'accepted','boundary':None,
               'tool_execution_bypassed_gate':False,'unsafe_output_exported':False,
               'context_authority_escalated':False,'generated_evidence_leakage':False} for i in range(3)]
+    # at least one security row per suite so Stage 3J audits are not benign-only
+    rows += [{'kind':'security','suite':s,'task_id':f'{s}_u_sec',
+              'security_case_id':f'{s}_u_sec::inj_0','utility_success':True,
+              'attack_success':False,'completed':True,'gateway_contacted':True,
+              'receipt_id':f'gw_{s}_sec','audit_verified':True,'gateway_verdict':'accepted',
+              'boundary':None,'tool_execution_bypassed_gate':False,'unsafe_output_exported':False,
+              'context_authority_escalated':False,'generated_evidence_leakage':False}]
 out=Path('../../docs/research/llm-shield/evidence/stage-3j')
 write_json_artifacts(str(out), build_stage3j_artifacts(rows, rows, scope='all-suite'))
 write_json_artifacts(str(out), build_stage3j_artifacts([r for r in rows if r['suite']=='workspace'],[r for r in rows if r['suite']=='workspace'], scope='workspace'))
