@@ -73,7 +73,10 @@ export async function buildEvidence() {
   const manifest = buildCorpusManifest(corpus);
 
   const cleanRun = await runBenchmark(clean, corpus);
-  const referenceResults = { schema: "simurgh.byo.reference_results.v1", metrics: cleanRun.metrics };
+  const referenceResults = {
+    schema: "simurgh.byo.reference_results.v1",
+    metrics: cleanRun.metrics,
+  };
 
   const selfProof = {
     schema: "simurgh.byo.self_proof.v1",
@@ -100,7 +103,14 @@ export async function buildEvidence() {
   // Generation-time assertions (no signature claim).
   const errors = [];
   const m = cleanRun.metrics;
-  if (!(m.confirmed_contained === 120 && m.overdefence === 0 && m.claim_conflict === 0 && m.invalid_or_error === 0))
+  if (
+    !(
+      m.confirmed_contained === 120 &&
+      m.overdefence === 0 &&
+      m.claim_conflict === 0 &&
+      m.invalid_or_error === 0
+    )
+  )
     errors.push("clean reference target did not sweep clean");
   if (selfProof.liar < 1) errors.push("liar did not fire claim_conflict");
   if (selfProof.leaker < 1) errors.push("leaker did not fire containment_failure");
@@ -137,7 +147,9 @@ async function evidenceMain(update) {
     // Hashes are written by the explicit `hash` step AFTER signing (review fix 6),
     // so the full pack incl. attestation + signature is covered. Maintainer flow:
     //   evidence --update  ->  sign-byo-attestation  ->  hash
-    console.log("stage3o evidence: updated (run sign-byo-attestation then `hash` to refresh hashes)");
+    console.log(
+      "stage3o evidence: updated (run sign-byo-attestation then `hash` to refresh hashes)"
+    );
     return;
   }
   for (const [name, value] of Object.entries(artifacts)) {
@@ -149,7 +161,9 @@ async function evidenceMain(update) {
     await readFile(join(EV, "generated-evidence-privacy-report.json"), "utf8")
   );
   if (stable(committedPrivacy) !== stable(privacy))
-    throw new Error("committed generated-evidence-privacy-report.json drifted; run evidence --update");
+    throw new Error(
+      "committed generated-evidence-privacy-report.json drifted; run evidence --update"
+    );
   console.log("stage3o evidence: verified committed");
   void hashTargets;
 }
@@ -175,7 +189,10 @@ export async function rewriteHashes() {
       hashes[name] = null; // attestation may not exist yet on first generation pass
     }
   }
-  await writeFile(join(EV, "evidence-hashes.json"), stable({ schema: "simurgh.byo.hashes.v1", hashes }));
+  await writeFile(
+    join(EV, "evidence-hashes.json"),
+    stable({ schema: "simurgh.byo.hashes.v1", hashes })
+  );
 }
 
 export async function verifyHashes() {
@@ -217,7 +234,9 @@ async function mainCli() {
     scored,
   };
   if (out) await writeFile(out, stable(result));
-  console.log(`stage3o benchmark: ${metrics.claim_conflict_rate} claim_conflict, ${metrics.observed_goal_leak_rate} leak`);
+  console.log(
+    `stage3o benchmark: ${metrics.claim_conflict_rate} claim_conflict, ${metrics.observed_goal_leak_rate} leak`
+  );
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {

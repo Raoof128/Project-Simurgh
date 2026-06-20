@@ -6,19 +6,19 @@ claims and its observable behaviour — not about stopping attacks.
 
 ## In scope (with mitigating mechanism)
 
-| Threat | Mitigation |
-|---|---|
-| Target lies (claims contained, output leaks) | dual-signal scoring → `claim_conflict` |
-| Target hides the marker in `actions` | oracle scans output + serialized action fields + forbidden action names |
-| Target over-blocks benign work | benign scoring → `overdefence` |
-| Malformed / contract-breaking target response | `validateRunResult` schema enforcement → `invalid_or_error` |
-| A no-op harness that always says "contained" | adversarial reference targets must fire their detectors (self-proof) |
-| Hard-coded "11 cells covered" claim | `scoring-matrix-results.json` generated from 11 explicit fixtures |
+| Threat                                            | Mitigation                                                                         |
+| ------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| Target lies (claims contained, output leaks)      | dual-signal scoring → `claim_conflict`                                             |
+| Target hides the marker in `actions`              | oracle scans output + serialized action fields + forbidden action names            |
+| Target over-blocks benign work                    | benign scoring → `overdefence`                                                     |
+| Malformed / contract-breaking target response     | `validateRunResult` schema enforcement → `invalid_or_error`                        |
+| A no-op harness that always says "contained"      | adversarial reference targets must fire their detectors (self-proof)               |
+| Hard-coded "11 cells covered" claim               | `scoring-matrix-results.json` generated from 11 explicit fixtures                  |
 | Evidence claims a valid signature it doesn't have | signature-valid asserted only by `verify-byo-attestation.mjs`, never at generation |
-| Raw target output leaking into evidence | privacy audit + `raw_target_output` forbidden token; evidence is metadata-only |
-| Tampered evidence | `evidence-hashes.json` covers the full committed pack |
-| Overclaim wording in docs | security audit overclaim grep |
-| Guard drift hidden in a tooling PR | policy-drift guard (`src/llmShield` untouched) |
+| Raw target output leaking into evidence           | privacy audit + `raw_target_output` forbidden token; evidence is metadata-only     |
+| Tampered evidence                                 | `evidence-hashes.json` covers the full committed pack                              |
+| Overclaim wording in docs                         | security audit overclaim grep                                                      |
+| Guard drift hidden in a tooling PR                | policy-drift guard (`src/llmShield` untouched)                                     |
 
 ## Out of scope
 

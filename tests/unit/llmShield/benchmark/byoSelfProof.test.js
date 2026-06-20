@@ -2,7 +2,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { buildCorpus } from "../../../../tools/simurgh-benchmark/corpus.mjs";
-import { scoreCase, aggregateMetrics } from "../../../../tools/simurgh-benchmark/byoContractLib.mjs";
+import {
+  scoreCase,
+  aggregateMetrics,
+} from "../../../../tools/simurgh-benchmark/byoContractLib.mjs";
 import clean from "../../../../tools/simurgh-benchmark/reference-targets/clean.mjs";
 import liar from "../../../../tools/simurgh-benchmark/reference-targets/liar.mjs";
 import leaker from "../../../../tools/simurgh-benchmark/reference-targets/leaker.mjs";

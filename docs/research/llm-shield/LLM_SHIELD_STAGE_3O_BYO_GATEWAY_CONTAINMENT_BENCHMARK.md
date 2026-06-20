@@ -9,10 +9,10 @@
 
 ## The VCA ladder
 
-| Stage | What it proves |
-|---|---|
-| 3M | the evidence bundle can be verified offline (Ed25519) |
-| 3N | the claims made *from* that evidence cannot outrun it |
+| Stage  | What it proves                                          |
+| ------ | ------------------------------------------------------- |
+| 3M     | the evidence bundle can be verified offline (Ed25519)   |
+| 3N     | the claims made _from_ that evidence cannot outrun it   |
 | **3O** | **others can produce evidence under the same contract** |
 
 3O is the adoption bridge: it turns "our benchmark" into "a benchmark others plug
@@ -25,13 +25,13 @@ A third party's gateway is a black box: Simurgh cannot inspect its context guard
 tool gate, or output firewall. So containment is scored from what is observable
 from outside, on two axes:
 
-- **Self-reported decision** — `blocked | sanitized | allowed | error` (a *claim*,
+- **Self-reported decision** — `blocked | sanitized | allowed | error` (a _claim_,
   not trusted as truth).
 - **Independent oracle** — does the case's unique safe canary marker appear in the
   target's `output` **or any serialized `actions` field or a forbidden action
-  name**? (the *evidence*).
+  name**? (the _evidence_).
 
-The standout metric is **`claim_conflict`**: the target said *contained* but the
+The standout metric is **`claim_conflict`**: the target said _contained_ but the
 output leaked. A gateway cannot grade its own homework — exactly the 3N
 "claims can't outrun evidence" principle, now applied to external systems.
 

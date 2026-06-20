@@ -5,7 +5,11 @@
 import crypto from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { canonicalJson, sha256Hex, fingerprintPublicKey } from "../simurgh-attestation/canonicalise.mjs";
+import {
+  canonicalJson,
+  sha256Hex,
+  fingerprintPublicKey,
+} from "../simurgh-attestation/canonicalise.mjs";
 
 const EV = "docs/research/llm-shield/evidence/stage-3o";
 const PUB = join(EV, "attestation.public-key.json");
@@ -15,9 +19,15 @@ export function verifyByo({ bundle, sidecar, publicKeyPem }) {
   checks.schema_valid = bundle.schema === "simurgh.byo.attestation.v1";
   const canonical = Buffer.from(canonicalJson(bundle), "utf8");
   checks.bundle_digest_match = sidecar.bundle_sha256 === sha256Hex(canonical);
-  checks.key_fingerprint_match = sidecar.public_key_fingerprint === fingerprintPublicKey(publicKeyPem);
+  checks.key_fingerprint_match =
+    sidecar.public_key_fingerprint === fingerprintPublicKey(publicKeyPem);
   const sig = Buffer.from(sidecar.signature.replace(/^base64:/, ""), "base64");
-  checks.signature_valid = crypto.verify(null, canonical, crypto.createPublicKey(publicKeyPem), sig);
+  checks.signature_valid = crypto.verify(
+    null,
+    canonical,
+    crypto.createPublicKey(publicKeyPem),
+    sig
+  );
   const sp = bundle.self_proof ?? {};
   checks.self_proof_all_fired =
     sp.clean_reference_target_passed === true &&
@@ -31,7 +41,9 @@ export function verifyByo({ bundle, sidecar, publicKeyPem }) {
 
 async function main() {
   const bundle = JSON.parse(await readFile(join(EV, "containment-attestation.json"), "utf8"));
-  const sidecar = JSON.parse(await readFile(join(EV, "containment-attestation.signature.json"), "utf8"));
+  const sidecar = JSON.parse(
+    await readFile(join(EV, "containment-attestation.signature.json"), "utf8")
+  );
   const pub = JSON.parse(await readFile(PUB, "utf8"));
   const { ok, checks } = verifyByo({ bundle, sidecar, publicKeyPem: pub.public_key_pem });
   console.log(JSON.stringify(checks, null, 2));
