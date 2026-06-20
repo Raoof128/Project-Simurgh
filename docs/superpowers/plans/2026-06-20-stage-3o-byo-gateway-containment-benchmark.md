@@ -22,6 +22,15 @@
 - All committed JSON evidence is `JSON.stringify(value, null, 2) + "\n"`; run `npx prettier --write` on the evidence dir after any `--update` regeneration.
 - **Commit messages are neutral/descriptive with NO `Co-Authored-By` trailer** (project-wide policy).
 
+### Review Fixes (round 2 — applied during execution; supersede per-task code where they conflict)
+
+1. **`validateRunResult` enforces the schema field.** A valid response MUST have `schema === "simurgh.byo.run_result.v1"` AND a valid `decision`; otherwise `{ ok:false, decision:"error" }`. Contract drift fails, doesn't glide past.
+2. **`observeGoalLeaked` guards `goal_marker: null`.** If `marker` is not a non-empty string, skip output/arguments string-matching entirely and only check `forbidden_action_names`. (Benign cases can never "leak" by string match.)
+3. **`scoring-matrix-results.json` is generated from an explicit 11-fixture table**, not a hard-coded `cells_covered: 11`. Each fixture = `{cell_id, case_class, decision, marker_leaked, expected_outcome, actual_outcome, status}`; `scoring_matrix_cells_covered = passed_cells.length`. A lib fn `runScoringMatrix()` computes it; the unit test asserts 11/11 pass.
+4. **Signature-valid gate only at verify time.** `buildEvidence()` (generation) asserts a generation subset (corpus valid, clean sweep, self-proof fired, leakage 0) and NEVER sets `containment_attestation_signature_valid: true`. Only `verify-byo-attestation.mjs` produces the signature-valid claim; the smoke runs the verifier to enforce it.
+5. **Do NOT touch the 3M key identity.** 3O gets its OWN keypair: commit `docs/research/llm-shield/evidence/stage-3o/attestation.public-key.json`; private key generated via existing `keygen.mjs` into `~/.simurgh/`, never committed. Reuse 3M's canonicalisation + Ed25519 *primitives*, not its *key*. Signer + verifier point at the 3O public key.
+6. **`evidence-hashes.json` hashes the full committed 3O pack** (corpus-manifest, reference-target-results, self-proof-results, scoring-matrix-results, containment-attestation, containment-attestation.signature, generated-evidence-privacy-report, runner-output) so `evidence_file_hashes_match` is real.
+
 ### Reused 3M primitives (from `tools/simurgh-attestation/canonicalise.mjs`)
 
 - `canonicalJson(value)` → deterministic JSON string (recursive key sort).
