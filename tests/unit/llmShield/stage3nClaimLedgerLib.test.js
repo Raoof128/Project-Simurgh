@@ -11,7 +11,25 @@ import {
   buildPerFamilyPanels,
   computeLedgerHashBinding,
   STAGE3M_ATTESTATION_FILES,
+  compileClaims,
 } from "../../../tests/e2e/llm_shield_stage3n_claim_ledger_lib.mjs";
+
+const VERIFIED_CLAIM = {
+  claim_id: "3n.claim.stage3l_targeted_asr",
+  source_file: "docs/research/llm-shield/evidence/stage-3l/metrics.json",
+  source_field: "malicious_targeted_asr",
+  expected: 0,
+  denominator_field: "malicious_total",
+  expected_denominator: 150,
+  status: "verified",
+};
+const EXCLUDED_CLAIM = {
+  claim_id: "3n.claim.stage3h_l2_historical_overdefence",
+  source_type: "prose_history",
+  frozen_metric_artifact_present: false,
+  status: "excluded_from_ledger",
+  reason: "No committed metrics artifact proves this row.",
+};
 
 const SAMPLE_SOURCES = {
   agentdojo_layer2: {
@@ -110,4 +128,31 @@ test("computeLedgerHashBinding is true only when every row file has a hash", () 
   assert.equal(computeLedgerHashBinding(rows, allFiles), true);
   delete allFiles[STAGE3M_ATTESTATION_FILES[0]];
   assert.equal(computeLedgerHashBinding(rows, allFiles), false);
+});
+
+test("compileClaims passes a clean closed world", () => {
+  const out = compileClaims([VERIFIED_CLAIM, EXCLUDED_CLAIM], () => ({
+    actual: 0,
+    actualDenominator: 150,
+  }));
+  assert.equal(out.unresolved_numeric_claim_conflicts, 0);
+  assert.equal(out.claim_evidence_map_complete, true);
+  assert.equal(out.prose_only_metric_claims_excluded, true);
+});
+
+test("compileClaims flags a drifted verified number", () => {
+  const out = compileClaims([VERIFIED_CLAIM], () => ({ actual: 1, actualDenominator: 150 }));
+  assert.equal(out.unresolved_numeric_claim_conflicts, 1);
+});
+
+test("compileClaims flags an unrecognised status (open-world leak)", () => {
+  const bad = { claim_id: "x", status: "assumed" };
+  const out = compileClaims([bad], () => ({ actual: 0, actualDenominator: 0 }));
+  assert.equal(out.claim_evidence_map_complete, false);
+});
+
+test("compileClaims flags a prose_history claim not excluded", () => {
+  const leaky = { claim_id: "y", source_type: "prose_history", status: "verified" };
+  const out = compileClaims([leaky], () => ({ actual: 0, actualDenominator: 0 }));
+  assert.equal(out.prose_only_metric_claims_excluded, false);
 });

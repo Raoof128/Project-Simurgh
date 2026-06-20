@@ -219,3 +219,49 @@ export function computeLedgerHashBinding(rows, evidenceHashes) {
   }
   return true;
 }
+
+// Closed-world claim compiler. Every claim must be `verified` (number matches the
+// committed field) or `excluded_from_ledger` (with a reason). `resolve(claim)`
+// returns the actual committed values for verified claims; the runner supplies it
+// so this stays pure. The machine check is field-equality, never prose parsing.
+export function compileClaims(claimMap, resolve) {
+  let conflicts = 0;
+  let complete = true;
+  let proseExcluded = true;
+  const report = claimMap.map((claim) => {
+    const entry = { claim_id: claim.claim_id, status: claim.status };
+    if (claim.source_type === "prose_history" && claim.status !== "excluded_from_ledger") {
+      proseExcluded = false;
+    }
+    if (claim.status === "excluded_from_ledger") {
+      if (!claim.reason) {
+        complete = false;
+        entry.error = "excluded claim missing reason";
+      }
+      return entry;
+    }
+    if (claim.status === "verified") {
+      const { actual, actualDenominator } = resolve(claim);
+      entry.expected = claim.expected;
+      entry.actual = actual;
+      const numMismatch = actual !== claim.expected;
+      const denMismatch =
+        claim.denominator_field !== undefined && actualDenominator !== claim.expected_denominator;
+      if (numMismatch || denMismatch) {
+        conflicts += 1;
+        entry.conflict = true;
+      }
+      return entry;
+    }
+    // Unrecognised status => open-world leak.
+    complete = false;
+    entry.error = "unrecognised status";
+    return entry;
+  });
+  return {
+    report,
+    unresolved_numeric_claim_conflicts: conflicts,
+    claim_evidence_map_complete: complete,
+    prose_only_metric_claims_excluded: proseExcluded,
+  };
+}
