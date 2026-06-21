@@ -26,20 +26,8 @@ cleanup() {
 }
 trap cleanup EXIT
 
-wait_for_health() {
-  local url="$1"
-  local label="$2"
-  local log_file="$3"
-  for _ in 1 2 3 4 5 6 7 8 9 10 11 12; do
-    if curl -s -m 1 "$url" >/dev/null 2>&1; then
-      return 0
-    fi
-    sleep 0.5
-  done
-  echo "Smoke failed: $label did not become healthy at $url" >&2
-  tail -40 "$log_file" >&2 || true
-  return 1
-}
+# shellcheck source=scripts/lib/smoke-server.sh
+source "$SCRIPT_DIR/lib/smoke-server.sh"
 
 assert_no_forbidden() {
   local label="$1"
@@ -65,8 +53,8 @@ BASE_PID=$!
 SIMURGH_DEMO_MODE=1 SIMURGH_REQUIRE_DAEMON=true PORT="$HARDENED_PORT" node server.js > "$HARDENED_LOG" 2>&1 &
 HARDENED_PID=$!
 
-wait_for_health "http://127.0.0.1:$BASE_PORT/health" "base server" "$BASE_LOG"
-wait_for_health "http://127.0.0.1:$HARDENED_PORT/health" "hardened server" "$HARDENED_LOG"
+wait_for_health "http://127.0.0.1:$BASE_PORT/health" "$BASE_PID" "$BASE_LOG" "base server"
+wait_for_health "http://127.0.0.1:$HARDENED_PORT/health" "$HARDENED_PID" "$HARDENED_LOG" "hardened server"
 
 node tests/e2e/stage22_23_smoke.mjs \
   --base-url "http://127.0.0.1:$BASE_PORT" \
