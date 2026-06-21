@@ -34,9 +34,35 @@ hash-bound campaign of per-target attestations.
 > claim product superiority. Each row states only what target was executed, under what provenance,
 > against what corpus, and what signed evidence was produced.**
 
-Forbidden vocabulary anywhere in 3P evidence, summaries, or schema values: `best`, `beats`,
-`winner`, `leaderboard`, `rank`, `ranking`, `superiority`, `stronger`, `weaker`, `better`,
-`worse`. Enforced by the overclaim gate.
+### Overclaim gate — negation-aware and schema-aware
+
+The overclaim gate blocks **affirmative or comparative** ranking/superiority claims (`best`,
+`beats`, `winner`, `leaderboard`, `rank`, `ranking`, `superiority`, `stronger`, `weaker`,
+`better`, `worse`) while **allowing approved non-claim phrases and explicit false-guard fields**.
+A blind string match would flag the spec's own disclaimers (the guardrail ouroboros), so two
+mitigations apply together:
+
+1. **Schema fields are renamed to boring, non-triggering tokens** so structured data never carries
+   a forbidden substring:
+   - `catalogue_kind: "non_ranking_attestation_catalogue"` (not `..._not_leaderboard`)
+   - `numeric_summary_exported: false` (replaces `aggregate_score_exported`)
+   - `ordering_metric_exported: false` (replaces `ranking_position_exported` /
+     `ranking_exported`)
+2. **Prose `non_claims` are allow-listed** because they must still negate the forbidden concepts.
+   The gate matches these exact phrases and exempts them:
+
+```text
+Allowed exact non-claim phrases:
+- Attestation catalogue, not leaderboard.
+- This attestation is not a leaderboard result.
+- This attestation does not rank defences.
+- The catalogue does not rank targets.
+- The catalogue does not declare a best defence.
+```
+
+The gate fails only on a forbidden token that is **not** inside an allow-listed phrase and **not**
+a renamed false-guard field. Self-proof fixture `ranking-overclaimer` proves the affirmative path
+still trips (`ranking_export_violation`).
 
 ## Inherited discipline
 
@@ -237,8 +263,8 @@ It MUST NOT sign 3L, 3M, or 3O artefacts, and those keys MUST NOT sign 3P artefa
     "corpus_digest": "sha256:..."
   },
   "coverage_profile": {
-    "aggregate_score_exported": false,
-    "ranking_position_exported": false,
+    "numeric_summary_exported": false,
+    "ordering_metric_exported": false,
     "cells": {}
   },
   "non_claims": [
@@ -263,9 +289,9 @@ It MUST NOT sign 3L, 3M, or 3O artefacts, and those keys MUST NOT sign 3P artefa
   "stage": "3P",
   "campaign": {
     "campaign_id": "stage-3p-cross-defence-containment-attestation",
-    "catalogue_kind": "attestation_catalogue_not_leaderboard",
-    "ranking_exported": false,
-    "aggregate_score_exported": false
+    "catalogue_kind": "non_ranking_attestation_catalogue",
+    "ordering_metric_exported": false,
+    "numeric_summary_exported": false
   },
   "corpus": {
     "corpus_digest": "sha256:...",
