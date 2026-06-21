@@ -14,7 +14,7 @@
 #                             (both skipped under --quick)
 #   12    Platform & device . Stage 2.1–2.8 integrity/daemon/scanner, Swift &
 #                             Linux-Rust nodes, voting & banking pilots
-#   13    LLM Shield ........ Stage 3A–3R containment pipeline + per-stage audits
+#   13    LLM Shield ........ Stage 3A–3S containment pipeline + per-stage audits
 #   14    Git status sanity
 #
 # Usage:
@@ -1382,12 +1382,12 @@ else
   tail -100 "$LOG_DIR/banking-full-e2e-smoke.log"
 fi
 
-# ── 13. LLM Shield 3A–3R containment pipeline ────────────────────────────────
+# ── 13. LLM Shield 3A–3S containment pipeline ────────────────────────────────
 # Input firewall (3A) → adversarial benchmark (3B) → containment (3D) → gateway
 # (3E) → benchmark/shadow (3F/3G) → AgentDojo harness (3H) → utility/eval (3I/3J)
 # → adaptive readiness (3K) → reference containment (3L) → attestation (3M) →
 # claim-checked ledger (3N) → BYO-gateway benchmark (3O) → cross-defence
-# attestation (3P) → temporal registry + regression diff (3Q) → trust-preserving fallback (3R). Each stage smoke also
+# attestation (3P) → temporal registry + regression diff (3Q) → trust-preserving fallback (3R) → verifiable defensive narrative (3S). Each stage smoke also
 # runs its own security/privacy/consistency audits; helper libs are gated at
 # 100% function coverage.
 step "LLM Shield 3A input smoke"
@@ -1784,6 +1784,32 @@ if node --test --experimental-test-coverage \
 else
   fail "LLM Shield 3R fallback helper coverage"
   tail -100 "$LOG_DIR/llm-shield-stage3r-helper-coverage.log"
+fi
+
+step "LLM Shield 3S verifiable defensive narrative"
+if scripts/smoke-llm-shield-stage3s.sh > "$LOG_DIR/llm-shield-stage3s-smoke.log" 2>&1; then
+  pass "LLM Shield 3S verifiable defensive narrative"
+else
+  fail "LLM Shield 3S verifiable defensive narrative"
+  tail -80 "$LOG_DIR/llm-shield-stage3s-smoke.log"
+fi
+
+step "LLM Shield 3S narrative helper coverage"
+if node --test --experimental-test-coverage \
+  --test-coverage-include=tools/simurgh-narrative/evidenceDigest.mjs \
+  --test-coverage-include=tools/simurgh-narrative/claimChecker.mjs \
+  --test-coverage-include=tools/simurgh-narrative/renderer.mjs \
+  --test-coverage-include=tools/simurgh-narrative/selfProof.mjs \
+  --test-coverage-functions=100 \
+  tests/unit/llmShield/narrative/evidenceDigest.test.js \
+  tests/unit/llmShield/narrative/claimChecker.test.js \
+  tests/unit/llmShield/narrative/renderer.test.js \
+  tests/unit/llmShield/narrative/narrativeSelfProof.test.js \
+  > "$LOG_DIR/llm-shield-stage3s-helper-coverage.log" 2>&1; then
+  pass "LLM Shield 3S narrative helper coverage"
+else
+  fail "LLM Shield 3S narrative helper coverage"
+  tail -100 "$LOG_DIR/llm-shield-stage3s-helper-coverage.log"
 fi
 
 step "LLM Shield 3E-core docker smoke (skips if no docker)"
