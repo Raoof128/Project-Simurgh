@@ -80,6 +80,8 @@ export const ALLOWED_NONCLAIM_PHRASES = Object.freeze([
   "attestation catalogue, not leaderboard.",
   "this attestation is not a leaderboard result.",
   "this attestation does not rank defences.",
+  "this attestation does not claim product superiority.",
+  "this attestation only describes the observed target under the declared provenance and corpus digest.",
   "the catalogue does not rank targets.",
   "the catalogue does not declare a best defence.",
 ]);
