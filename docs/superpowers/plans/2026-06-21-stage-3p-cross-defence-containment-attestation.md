@@ -452,6 +452,10 @@ test("validateTargetAttestation checks schema, enums, corpus fields", () => {
   const badProv = JSON.parse(JSON.stringify(good));
   badProv.target.provenance = "magic";
   assert.equal(validateTargetAttestation(badProv).ok, false);
+  // even a negated product-name reference in top-level non_claims fails a replica
+  const badNonClaim = JSON.parse(JSON.stringify(good));
+  badNonClaim.non_claims = ["This is not Llama Guard."];
+  assert.equal(validateTargetAttestation(badNonClaim).ok, false);
 });
 
 test("computeEvidenceLeakageFindings finds forbidden tokens", () => {
@@ -654,11 +658,12 @@ function brandHit(text) {
   return BRAND_DENYLIST.some((b) => t.includes(b));
 }
 
-export function checkProvenanceBrand(target) {
+export function checkProvenanceBrand(target, nonClaims = []) {
   if (!target || !PROVENANCE_TYPES.includes(target.provenance))
     return "provenance_brand_denylist_violation";
   const surface = [target.target_id, target.display_name, target.summary]
     .concat(Array.isArray(target.non_claims) ? target.non_claims : [])
+    .concat(Array.isArray(nonClaims) ? nonClaims : [])
     .join(" ");
   const hasBrand = brandHit(surface);
   if (REPLICA_PROVENANCE.includes(target.provenance)) {
@@ -737,7 +742,7 @@ export function validateTargetAttestation(att) {
   const t = att.target ?? {};
   if (!PROVENANCE_TYPES.includes(t.provenance)) errors.push("bad provenance");
   if (!EXECUTION_TRUST_LEVELS.includes(t.execution_trust)) errors.push("bad execution_trust");
-  if (checkProvenanceBrand(t)) errors.push("provenance/brand violation");
+  if (checkProvenanceBrand(t, att.non_claims)) errors.push("provenance/brand violation");
   const c = att.corpus ?? {};
   if (c.corpus_type !== "canary_discrimination_matrix") errors.push("bad corpus_type");
   if (typeof c.corpus_digest !== "string" || !c.corpus_digest.startsWith("sha256:"))
@@ -1000,6 +1005,9 @@ export function verifyCatalogueBinding(catalogue, attestationsById) {
     const corpusDigest = catalogue.corpus?.corpus_digest;
     if (att.corpus?.corpus_digest !== corpusDigest)
       errors.push(`corpus digest mismatch for ${entry.target_id}`);
+    // full matrix-shape equality: total alone can't catch cases_per_cell/evasions tampering
+    if (canonicalJson(att.corpus?.matrix_shape) !== canonicalJson(catalogue.corpus?.matrix_shape))
+      errors.push(`matrix shape mismatch for ${entry.target_id}`);
   }
   return { ok: errors.length === 0, errors };
 }
@@ -1010,7 +1018,8 @@ export function evaluateSelfProofFixture(fixture) {
   let observed = null;
   if (fixture.kind === "target") {
     observed =
-      checkProvenanceBrand(fixture.payload.target) ?? checkRankingOverclaim(fixture.payload);
+      checkProvenanceBrand(fixture.payload.target, fixture.payload.non_claims) ??
+      checkRankingOverclaim(fixture.payload);
   } else if (fixture.kind === "coverage") {
     const r = evaluateCoverageClaims(fixture.payload);
     if (r.claim_conflict.length > 0) observed = "claim_conflict";
@@ -1557,13 +1566,17 @@ const HASH_FILES = () => [
 
 export async function rewriteHashes() {
   const hashes = {};
+  const missing = [];
   for (const name of HASH_FILES()) {
     try {
       hashes[name] = sha(await readFile(join(EV, name), "utf8"));
     } catch {
-      hashes[name] = null;
+      missing.push(name);
     }
   }
+  // Never write null tombstones: hashing runs AFTER signing, so every file must exist.
+  if (missing.length > 0)
+    throw new Error("cannot write evidence hashes, missing files: " + missing.join(", "));
   await mkdir(EV, { recursive: true });
   await writeFile(join(EV, "evidence-hashes.json"), stable({ schema: "simurgh.cross_defence.hashes.v1", hashes }));
 }
@@ -1948,11 +1961,15 @@ git commit -m "feat(stage-3p): signer, CI verify-only verifiers, and signed camp
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
-if git diff --name-only HEAD~1..HEAD 2>/dev/null | grep -q '^src/llmShield/'; then
-  echo "stage3p policy-drift: FAIL — src/llmShield changed in the last commit"
+# Branch-wide scope: diff against the merge-base with origin/main so an early bad
+# commit cannot hide behind later clean commits.
+BASE_REF="${SIMURGH_POLICY_BASE_REF:-origin/main}"
+BASE="$(git merge-base HEAD "$BASE_REF" 2>/dev/null || git rev-parse HEAD~1)"
+if git diff --name-only "$BASE"..HEAD | grep -q '^src/llmShield/'; then
+  echo "stage3p policy-drift: FAIL — src/llmShield changed in this branch"
   exit 1
 fi
-echo "stage3p policy-drift: PASS (no src/llmShield change)"
+echo "stage3p policy-drift: PASS (no src/llmShield change in branch)"
 ```
 
 - [ ] **Step 2: Implement the privacy audit**
@@ -2006,6 +2023,7 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { PLANNED_TARGET_IDS } from "../tools/simurgh-benchmark/simurgh-crossdefence.mjs";
 import { checkSilentDrop } from "../tools/simurgh-benchmark/crossDefenceCatalogue.mjs";
+import { canonicalJson } from "../tools/simurgh-attestation/canonicalise.mjs";
 
 const EV = "docs/research/llm-shield/evidence/stage-3p";
 const errors = [];
@@ -2015,7 +2033,8 @@ const corpusDigest = catalogue.corpus.corpus_digest;
 for (const id of PLANNED_TARGET_IDS) {
   const att = JSON.parse(await readFile(join(EV, "targets", id, "containment-attestation.json"), "utf8"));
   if (att.corpus.corpus_digest !== corpusDigest) errors.push(`${id} corpus digest mismatch`);
-  if (att.corpus.matrix_shape.total_cases !== 180) errors.push(`${id} matrix shape mismatch`);
+  if (canonicalJson(att.corpus.matrix_shape) !== canonicalJson(catalogue.corpus.matrix_shape))
+    errors.push(`${id} matrix shape mismatch`);
   const sc = JSON.parse(await readFile(join(EV, "targets", id, "containment-attestation.signature.json"), "utf8"));
   if (sc.algorithm !== "Ed25519") errors.push(`${id} not Ed25519`);
 }
