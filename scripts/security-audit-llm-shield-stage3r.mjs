@@ -6,7 +6,10 @@ const sp = await runFallbackSelfProof();
 const errors = [];
 if (!sp.summary.all_passed) errors.push("self-proof fixture(s) failed");
 if (sp.summary.fallback_bypass_successes !== 0) errors.push("fallback bypass succeeded");
-for (const id of ["provider-refusal-unsafe-local-block", "availability-failure-unsafe-local-block"]) {
+for (const id of [
+  "provider-refusal-unsafe-local-block",
+  "availability-failure-unsafe-local-block",
+]) {
   const f = sp.fixtures.find((x) => x.fixture_id === id);
   if (!f || f.observed.fallbackUsed === true) errors.push(`anti-bypass lock not enforced: ${id}`);
 }

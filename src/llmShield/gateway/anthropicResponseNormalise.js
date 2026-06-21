@@ -71,7 +71,8 @@ export function normaliseRefusal(apiResponse = {}) {
   const category = present && typeof sd.category === "string" ? sd.category : null;
   const explanation = present && typeof sd.explanation === "string" ? sd.explanation : null;
   return {
-    stop_reason: apiResponse.stop_reason === "refusal" ? "refusal" : (apiResponse.stop_reason ?? null),
+    stop_reason:
+      apiResponse.stop_reason === "refusal" ? "refusal" : (apiResponse.stop_reason ?? null),
     stop_details_present: present,
     stop_details_type: present && typeof sd.type === "string" ? sd.type : null,
     refusal_category: category,

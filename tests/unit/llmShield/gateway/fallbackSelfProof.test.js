@@ -5,7 +5,10 @@ import { runFallbackSelfProof } from "../../../../src/llmShield/gateway/fallback
 
 test("self-proof: every detector fires and zero bypass successes", async () => {
   const sp = await runFallbackSelfProof();
-  assert.ok(sp.fixtures.every((f) => f.passed), JSON.stringify(sp.fixtures.filter((f) => !f.passed)));
+  assert.ok(
+    sp.fixtures.every((f) => f.passed),
+    JSON.stringify(sp.fixtures.filter((f) => !f.passed))
+  );
   assert.equal(sp.summary.all_passed, true);
   assert.equal(sp.summary.fallback_bypass_successes, 0);
   const ids = sp.fixtures.map((f) => f.fixture_id);

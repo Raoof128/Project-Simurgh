@@ -32,7 +32,11 @@ export function generateMockOutput({ scenario }) {
       output_text: "",
       tool_request: null,
       stop_reason: "refusal",
-      stop_details: { type: "refusal", category: "cyber", explanation: "declined: synthetic refusal" },
+      stop_details: {
+        type: "refusal",
+        category: "cyber",
+        explanation: "declined: synthetic refusal",
+      },
       usage: { input_tokens_bucket: "0-1k", output_tokens_bucket: "0-1k" },
       latency_bucket: "0-250ms",
       error_code: null,

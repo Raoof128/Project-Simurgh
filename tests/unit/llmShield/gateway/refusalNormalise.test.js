@@ -1,7 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 import test from "node:test";
 import assert from "node:assert/strict";
-import { normaliseRefusal, isRefusal } from "../../../../src/llmShield/gateway/anthropicResponseNormalise.js";
+import {
+  normaliseRefusal,
+  isRefusal,
+} from "../../../../src/llmShield/gateway/anthropicResponseNormalise.js";
 
 test("isRefusal branches on stop_reason only", () => {
   assert.equal(isRefusal({ stop_reason: "refusal" }), true);
@@ -12,7 +15,11 @@ test("isRefusal branches on stop_reason only", () => {
 test("normaliseRefusal captures category, hashes explanation, never stores raw", () => {
   const r = normaliseRefusal({
     stop_reason: "refusal",
-    stop_details: { type: "refusal", category: "cyber", explanation: "declined because cyber harm" },
+    stop_details: {
+      type: "refusal",
+      category: "cyber",
+      explanation: "declined because cyber harm",
+    },
   });
   assert.equal(r.stop_reason, "refusal");
   assert.equal(r.stop_details_present, true);
@@ -29,7 +36,10 @@ test("normaliseRefusal is null-safe (category/explanation/stop_details may be nu
   assert.equal(r.stop_details_present, false);
   assert.equal(r.refusal_category, null);
   assert.equal(r.refusal_explanation_hash, null);
-  const r2 = normaliseRefusal({ stop_reason: "refusal", stop_details: { type: "refusal", category: null, explanation: null } });
+  const r2 = normaliseRefusal({
+    stop_reason: "refusal",
+    stop_details: { type: "refusal", category: null, explanation: null },
+  });
   assert.equal(r2.refusal_category, null);
   assert.equal(r2.refusal_explanation_hash, null);
 });

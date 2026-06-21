@@ -50,7 +50,13 @@ test("refusal + flag OFF → terminal, no swap", async () => {
   const r = await runFallbackOrchestration({
     preCheck: allowedPre,
     config: cfg({ fallbackOnRefusalEnabled: false }),
-    runAttempt: scripted([{ raw: { provider_response_kind: "refusal" }, riskVerdict: "accepted", refusalMeta: { refusal_category: "cyber" } }]),
+    runAttempt: scripted([
+      {
+        raw: { provider_response_kind: "refusal" },
+        riskVerdict: "accepted",
+        refusalMeta: { refusal_category: "cyber" },
+      },
+    ]),
   });
   assert.equal(r.fallbackUsed, false);
   assert.equal(r.terminalReason, "refusal_fallback_disabled");
@@ -61,7 +67,11 @@ test("refusal + flag ON + pre-check allowed → swap, risk rises, category recor
     preCheck: allowedPre,
     config: cfg({ fallbackOnRefusalEnabled: true }),
     runAttempt: scripted([
-      { raw: { provider_response_kind: "refusal" }, riskVerdict: "accepted", refusalMeta: { refusal_category: "cyber" } },
+      {
+        raw: { provider_response_kind: "refusal" },
+        riskVerdict: "accepted",
+        refusalMeta: { refusal_category: "cyber" },
+      },
       { raw: { provider_response_kind: "text" }, riskVerdict: "accepted" },
     ]),
   });
@@ -85,7 +95,9 @@ test("ANTI-BYPASS (fix #1): AVAILABILITY failure + Simurgh pre-check terminal �
   const r = await runFallbackOrchestration({
     preCheck: { inputVerdict: "blocked", contextVerdict: "accepted" },
     config: cfg(),
-    runAttempt: scripted([{ raw: { error_code: "gateway_provider_unavailable" }, riskVerdict: "blocked" }]),
+    runAttempt: scripted([
+      { raw: { error_code: "gateway_provider_unavailable" }, riskVerdict: "blocked" },
+    ]),
   });
   assert.equal(r.fallbackUsed, false);
   assert.equal(r.terminalReason, "simurgh_precheck_terminal");

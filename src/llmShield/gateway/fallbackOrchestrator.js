@@ -19,7 +19,11 @@ export async function runFallbackOrchestration({ preCheck, config, runAttempt })
   // ----- primary attempt -----
   const primary = await runAttempt(config.primaryModel, 0);
   const primaryOutcome = classifyProviderOutcome(primary.raw);
-  attempts.push({ model: config.primaryModel, outcome: primaryOutcome, riskVerdict: primary.riskVerdict });
+  attempts.push({
+    model: config.primaryModel,
+    outcome: primaryOutcome,
+    riskVerdict: primary.riskVerdict,
+  });
 
   const decision = shouldFallback({
     outcome: primaryOutcome,

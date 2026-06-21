@@ -19,7 +19,9 @@ test("mock can deterministically produce a refusal outcome with stop_details", (
 });
 
 test("default scenario behaviour is unchanged", () => {
-  const raw = generateMockOutput({ scenario: { provider_output_kind: "normal_text", output: "ok", tool_request: null } });
+  const raw = generateMockOutput({
+    scenario: { provider_output_kind: "normal_text", output: "ok", tool_request: null },
+  });
   assert.equal(raw.provider_response_kind, "text");
   assert.equal(raw.output_text, "ok");
 });
