@@ -59,6 +59,11 @@ export function buildGatewayReceipt(a) {
           live_test_required_for_ci: false,
         }
       : {}),
+    fallback_used: a.fallbackUsed === true,
+    fallback_on_refusal_enabled: a.fallbackOnRefusalEnabled === true,
+    fallback_chain: a.fallbackChain ?? [],
+    fallback_budget: a.fallbackBudget ?? null,
+    fallback_terminal_reason: a.fallbackTerminalReason ?? null,
     timestamp: a.timestamp,
     audit_entry_hash: a.auditEntryHash,
   };
