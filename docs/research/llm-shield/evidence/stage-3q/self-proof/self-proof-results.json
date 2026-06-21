@@ -1,0 +1,113 @@
+{
+  "type": "simurgh.temporal.self_proof_results.v1",
+  "stage": "3Q",
+  "purpose": "prove_stage_3q_temporal_integrity_detectors_fire",
+  "pollutes_real_registry": false,
+  "pollutes_real_diffs": false,
+  "fixtures": [
+    {
+      "fixture_id": "clean-baseline",
+      "expected_result": "accepted",
+      "observed_result": "accepted",
+      "expected_detector": null,
+      "observed_detector": null,
+      "passed": true
+    },
+    {
+      "fixture_id": "genuine-regression",
+      "expected_result": "accepted",
+      "observed_result": "accepted",
+      "expected_detector": "regressed",
+      "observed_detector": "regressed",
+      "passed": true
+    },
+    {
+      "fixture_id": "genuine-improvement",
+      "expected_result": "accepted",
+      "observed_result": "accepted",
+      "expected_detector": "improved",
+      "observed_detector": "improved",
+      "passed": true
+    },
+    {
+      "fixture_id": "cross-lineage-diff",
+      "expected_result": "rejected",
+      "observed_result": "rejected",
+      "expected_detector": "cross_target_diff_violation",
+      "observed_detector": "cross_target_diff_violation",
+      "passed": true
+    },
+    {
+      "fixture_id": "corpus-mismatch",
+      "expected_result": "non_comparable",
+      "observed_result": "non_comparable",
+      "expected_detector": "corpus_mismatch",
+      "observed_detector": "corpus_mismatch",
+      "passed": true
+    },
+    {
+      "fixture_id": "before-integrity-failure",
+      "expected_result": "accepted",
+      "observed_result": "accepted",
+      "expected_detector": "integrity_failure",
+      "observed_detector": "integrity_failure",
+      "passed": true
+    },
+    {
+      "fixture_id": "after-integrity-failure",
+      "expected_result": "accepted",
+      "observed_result": "accepted",
+      "expected_detector": "integrity_failure",
+      "observed_detector": "integrity_failure",
+      "passed": true
+    },
+    {
+      "fixture_id": "tampered-past-entry",
+      "expected_result": "rejected",
+      "observed_result": "rejected",
+      "expected_detector": "registry_chain_violation",
+      "observed_detector": "registry_chain_violation",
+      "passed": true
+    },
+    {
+      "fixture_id": "removed-entry-append",
+      "expected_result": "rejected",
+      "observed_result": "rejected",
+      "expected_detector": "append_continuity_violation",
+      "observed_detector": "append_continuity_violation",
+      "passed": true
+    },
+    {
+      "fixture_id": "reordered-entry-append",
+      "expected_result": "rejected",
+      "observed_result": "rejected",
+      "expected_detector": "append_continuity_violation",
+      "observed_detector": "append_continuity_violation",
+      "passed": true
+    },
+    {
+      "fixture_id": "missing-created-at",
+      "expected_result": "rejected",
+      "observed_result": "rejected",
+      "expected_detector": "manifest_timestamp_violation",
+      "observed_detector": "manifest_timestamp_violation",
+      "passed": true
+    },
+    {
+      "fixture_id": "invalid-created-at",
+      "expected_result": "rejected",
+      "observed_result": "rejected",
+      "expected_detector": "manifest_timestamp_violation",
+      "observed_detector": "manifest_timestamp_violation",
+      "passed": true
+    }
+  ],
+  "summary": {
+    "clean_baseline_passed": true,
+    "all_expected_detectors_fired": true,
+    "integrity_laundering_attempts": 3,
+    "integrity_laundering_successes": 0,
+    "unexpected_accepts": 0,
+    "unexpected_rejections": 0
+  }
+}

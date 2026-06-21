@@ -1,0 +1,8 @@
+{
+  "schema": "simurgh.temporal.signature.v1",
+  "algorithm": "Ed25519",
+  "canonicalisation": "simurgh.canonical-json.v1",
+  "bundle_sha256": "sha256:6154789d32e07b3ce6bf4568e3be788edb3c5e50d3b5a54cff90daf49d4a1b19",
+  "public_key_fingerprint": "sha256:97f7eb29d734c59ca4ab2073ba0399e528b9ff72a546a28d04399f53c4e75252",
+  "signature": "base64:WE/6hn/AMdnCf0Nc9Fjw+qUGBut3kpriHH0LTx4EVd1udI9Hh3LGF1y12hbpw9H9YOKP1Yf+UWJhotZiMTyQAw=="
+}
