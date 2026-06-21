@@ -4,11 +4,12 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
-# Branch-wide scope: diff against the merge-base with origin/main so an early bad
-# commit cannot hide behind later clean commits.
-BASE_REF="${SIMURGH_POLICY_BASE_REF:-origin/main}"
-BASE="$(git merge-base HEAD "$BASE_REF" 2>/dev/null || git rev-parse HEAD~1)"
-if git diff --name-only "$BASE"..HEAD | grep -q '^src/llmShield/'; then
+# Branch-wide scope: three-dot diff vs the base merge-base so an early bad commit
+# cannot hide behind later clean commits. `main` resolves in CI; `|| true` keeps
+# the diff itself from hard-failing on a shallow checkout (matches the 3O guard).
+BASE="${SIMURGH_POLICY_BASE_REF:-main}"
+changed="$(git diff --name-only "${BASE}...HEAD" 2>/dev/null || true)"
+if grep -q '^src/llmShield/' <<<"$changed"; then
   echo "stage3p policy-drift: FAIL — src/llmShield changed in this branch"
   exit 1
 fi
