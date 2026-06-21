@@ -53,8 +53,11 @@ only in a versioned id:
 ## Inherited discipline
 
 - **Tooling-only. Zero `src/llmShield/**` change.** The policy-drift guard uses the
-  CI-safe `main...HEAD` three-dot form with `|| true` (the Stage 3P CI lesson:
-  `origin/main` + `HEAD~1` fallback dies on GitHub's shallow checkout).
+  CI-safe `main...HEAD` three-dot form (the Stage 3P CI lesson: `origin/main` +
+  `HEAD~1` fallback dies on GitHub's shallow checkout). **It must not fail open:** if
+  the merge-base is unavailable it emits an explicit warning and falls back to a safe
+  available diff range (e.g. `HEAD~1..HEAD`, or the full tree), and never silently
+  passes without checking any range.
 - **CI is deterministic, offline, and verify-only.** CI never holds a private key.
 - **Metadata-only.** No harmful payloads, secrets, or credentials.
 - **Dedicated Stage 3Q Ed25519 key.** It signs only 3Q artifacts (registry +
@@ -130,6 +133,10 @@ continuity** is proven by comparing against a committed `previous-registry-head.
   "registry_id": "stage-3q-containment-registry",
   "append_model": "single_signed_ledger_with_internal_hash_chain",
   "cross_target_ranking_exported": false,
+  "source": {
+    "timeline_manifest_digest": "sha256:...",
+    "timeline_manifest_path": "docs/research/llm-shield/evidence/stage-3q/registry/timeline-manifest.json"
+  },
   "entries": [
     {
       "entry_body": {
@@ -234,6 +241,23 @@ attestations, byte-compared in CI, and signed locally with the 3Q key.
 }
 ```
 
+**Genesis emptiness:** for the first 3Q release, `diff-manifest.json` may contain
+zero real diffs. The diff engine is proven through the self-proof fixture pack; real
+regression diffs are added only when two valid same-lineage snapshots exist. The
+self-proof pack is the demo room — the real diff layer stays clean (no synthetic
+"demo" diffs in the real catalogue).
+
+### Lineage-binding gate
+
+Lineage must bind to the referenced 3P attestation's own id — a manifest cannot
+quietly relabel a lineage after the fact (no identity cosplay). Strict, no aliases:
+
+```text
+For every timeline snapshot target_attestation, and for each side of every diff:
+  target_lineage_id MUST equal the referenced 3P attestation's target.target_id
+  (lineage_aliases are not supported in 3Q; a mismatch fails as lineage_binding_violation)
+```
+
 ### `regression-diff.json` (`simurgh.temporal.regression_diff.v1`)
 
 ```json
@@ -242,6 +266,11 @@ attestations, byte-compared in CI, and signed locally with the 3Q key.
   "stage": "3Q",
   "diff_id": "keyword-filter-replica-v1-to-v2",
   "target_lineage_id": "keyword-filter-replica",
+  "source": {
+    "diff_manifest_digest": "sha256:...",
+    "diff_manifest_path": "docs/research/llm-shield/evidence/stage-3q/diffs/diff-manifest.json"
+  },
+  "created_at_utc": "2026-06-21T00:00:00Z",
   "before": { "target_version": "v1", "attestation_digest": "sha256:..." },
   "after": { "target_version": "v2", "attestation_digest": "sha256:..." },
   "comparison_scope": {
