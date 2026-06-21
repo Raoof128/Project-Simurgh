@@ -10,7 +10,7 @@
 
 ## Global Constraints
 
-- **Tooling-only. Zero `src/llmShield/**` change** — policy-drift guard fails on any gateway/firewall/receipt/audit/provider change.
+- **Tooling-only. Zero `src/llmShield/**` change\*\* — policy-drift guard fails on any gateway/firewall/receipt/audit/provider change.
 - CI deterministic / offline / **verify-only**; real gateway exercised through the EXISTING `recorded_fixture` path; live Fable opt-in only (`measured_not_certified`).
 - **Pen-not-passport:** no model-generated text becomes evidence; only the signed digest is evidence; only verifier-approved slots render.
 - **Strict single-object schema wall:** model output must be exactly one JSON object with `type:"simurgh.defensive_narrative.model_slots.v1"` — arrays, code fences, prefixes/suffixes, multiple objects → `narrative_schema_violation`.
@@ -27,10 +27,12 @@
 ### Task 1: Evidence digest (pure, source-bound)
 
 **Files:**
+
 - Create: `tools/simurgh-narrative/evidenceDigest.mjs`
 - Test: `tests/unit/llmShield/narrative/evidenceDigest.test.js`
 
 **Interfaces:**
+
 - Consumes: `canonicalJson`, `sha256Hex` from `../simurgh-attestation/canonicalise.mjs`.
 - Produces:
   - `EVIDENCE_DIGEST_SCHEMA = "simurgh.defensive_narrative.evidence_digest.v1"`
@@ -59,7 +61,11 @@ const base = {
   daemon_proof_counts: { valid: 12, missing: 1, replayed: 0 },
   gateway: { fallback_used: true, fallback_bypass_successes: 0, output_firewall_blocks: 0 },
   vca: { attestation_verified: true, claim_conflicts: 0 },
-  privacy: { raw_pixels_captured: false, raw_window_titles_captured: false, typed_content_captured: false },
+  privacy: {
+    raw_pixels_captured: false,
+    raw_window_titles_captured: false,
+    typed_content_captured: false,
+  },
 };
 
 test("digestSourceInput hashes content", () => {
@@ -121,7 +127,11 @@ export function buildEvidenceDigest({
   return {
     type: EVIDENCE_DIGEST_SCHEMA,
     session_hash: sessionHash,
-    source_inputs: (sourceInputs ?? []).map((s) => ({ kind: s.kind, path: s.path, digest: s.digest })),
+    source_inputs: (sourceInputs ?? []).map((s) => ({
+      kind: s.kind,
+      path: s.path,
+      digest: s.digest,
+    })),
     audit_chain_valid: audit_chain_valid === true,
     daemon_proof_counts: {
       valid: daemon_proof_counts?.valid ?? 0,
@@ -173,10 +183,12 @@ git commit -m "feat(stage-3s): deterministic source-bound evidence digest"
 ### Task 2: Claim checker (pure) — strict slot parse + field-equality + walls
 
 **Files:**
+
 - Create: `tools/simurgh-narrative/claimChecker.mjs`
 - Test: `tests/unit/llmShield/narrative/claimChecker.test.js`
 
 **Interfaces:**
+
 - Consumes: `resolveDigestRef` from `./evidenceDigest.mjs`.
 - Produces:
   - `MODEL_SLOTS_SCHEMA = "simurgh.defensive_narrative.model_slots.v1"`
@@ -187,7 +199,7 @@ git commit -m "feat(stage-3s): deterministic source-bound evidence digest"
 
 - [ ] **Step 1: Write the failing test**
 
-```javascript
+````javascript
 // tests/unit/llmShield/narrative/claimChecker.test.js
 // SPDX-License-Identifier: AGPL-3.0-or-later
 import test from "node:test";
@@ -208,22 +220,49 @@ const digest = buildEvidenceDigest({
   daemon_proof_counts: { valid: 12, missing: 1, replayed: 0 },
   gateway: { fallback_used: true, fallback_bypass_successes: 0, output_firewall_blocks: 0 },
   vca: { attestation_verified: true, claim_conflicts: 0 },
-  privacy: { raw_pixels_captured: false, raw_window_titles_captured: false, typed_content_captured: false },
+  privacy: {
+    raw_pixels_captured: false,
+    raw_window_titles_captured: false,
+    typed_content_captured: false,
+  },
 });
-const slot = (o) => ({ slot_id: "s", evidence_ref: "gateway.fallback_used", operator: "==", expected_value: true, severity: "manual_review_recommended", wording: "fallback_observed", ...o });
+const slot = (o) => ({
+  slot_id: "s",
+  evidence_ref: "gateway.fallback_used",
+  operator: "==",
+  expected_value: true,
+  severity: "manual_review_recommended",
+  wording: "fallback_observed",
+  ...o,
+});
 const wrap = (slots) => JSON.stringify({ type: MODEL_SLOTS_SCHEMA, source: {}, slots });
 
 test("parseModelSlots: strict single-object wall", () => {
   assert.equal(parseModelSlots(wrap([slot()])).ok, true);
   // markdown fence / prefix
-  assert.equal(parseModelSlots("```json\n" + wrap([slot()]) + "\n```").violation, "narrative_schema_violation");
-  assert.equal(parseModelSlots("Sure, here is the JSON:\n" + wrap([slot()])).violation, "narrative_schema_violation");
+  assert.equal(
+    parseModelSlots("```json\n" + wrap([slot()]) + "\n```").violation,
+    "narrative_schema_violation"
+  );
+  assert.equal(
+    parseModelSlots("Sure, here is the JSON:\n" + wrap([slot()])).violation,
+    "narrative_schema_violation"
+  );
   // array, not an object
-  assert.equal(parseModelSlots(JSON.stringify([{ type: MODEL_SLOTS_SCHEMA }])).violation, "narrative_schema_violation");
+  assert.equal(
+    parseModelSlots(JSON.stringify([{ type: MODEL_SLOTS_SCHEMA }])).violation,
+    "narrative_schema_violation"
+  );
   // multiple objects
-  assert.equal(parseModelSlots(wrap([slot()]) + "\n" + wrap([slot()])).violation, "narrative_schema_violation");
+  assert.equal(
+    parseModelSlots(wrap([slot()]) + "\n" + wrap([slot()])).violation,
+    "narrative_schema_violation"
+  );
   // wrong type
-  assert.equal(parseModelSlots(JSON.stringify({ type: "x", slots: [] })).violation, "narrative_schema_violation");
+  assert.equal(
+    parseModelSlots(JSON.stringify({ type: "x", slots: [] })).violation,
+    "narrative_schema_violation"
+  );
 });
 
 test("evalOperator", () => {
@@ -242,11 +281,26 @@ test("verifySlots: a supported slot passes", () => {
 });
 
 test("verifySlots: missing ref / bad operator / bad wording / forbidden wording → unsupported_slot", () => {
-  assert.equal(verifySlots([slot({ evidence_ref: "gateway.nope" })], digest).rejected[0].reason, "unsupported_slot");
-  assert.equal(verifySlots([slot({ operator: "~=" })], digest).rejected[0].reason, "unsupported_slot");
-  assert.equal(verifySlots([slot({ wording: "made_up" })], digest).rejected[0].reason, "unsupported_slot");
-  assert.equal(verifySlots([slot({ wording: "cheated" })], digest).rejected[0].reason, "unsupported_slot");
-  assert.equal(verifySlots([slot({ severity: "misconduct_confirmed" })], digest).rejected[0].reason, "unsupported_slot");
+  assert.equal(
+    verifySlots([slot({ evidence_ref: "gateway.nope" })], digest).rejected[0].reason,
+    "unsupported_slot"
+  );
+  assert.equal(
+    verifySlots([slot({ operator: "~=" })], digest).rejected[0].reason,
+    "unsupported_slot"
+  );
+  assert.equal(
+    verifySlots([slot({ wording: "made_up" })], digest).rejected[0].reason,
+    "unsupported_slot"
+  );
+  assert.equal(
+    verifySlots([slot({ wording: "cheated" })], digest).rejected[0].reason,
+    "unsupported_slot"
+  );
+  assert.equal(
+    verifySlots([slot({ severity: "misconduct_confirmed" })], digest).rejected[0].reason,
+    "unsupported_slot"
+  );
 });
 
 test("verifySlots: ref resolves but relation false → narrative_claim_conflict", () => {
@@ -260,7 +314,7 @@ test("ALLOWED_WORDING is frozen + contains the manual-review vocabulary", () => 
   assert.ok(ALLOWED_WORDING.has("manual_review_recommended"));
   assert.throws(() => ALLOWED_WORDING.add("x"));
 });
-```
+````
 
 - [ ] **Step 2: Run to verify it fails**
 
@@ -295,11 +349,25 @@ export const ALLOWED_WORDING = Object.freeze(
   ])
 );
 export const FORBIDDEN_WORDING = Object.freeze(
-  new Set(["cheated", "guilty", "misconduct confirmed", "malicious", "intentional", "fraud", "proved wrongdoing", "caught"])
+  new Set([
+    "cheated",
+    "guilty",
+    "misconduct confirmed",
+    "malicious",
+    "intentional",
+    "fraud",
+    "proved wrongdoing",
+    "caught",
+  ])
 );
 export const ALLOWED_OPERATORS = Object.freeze(new Set(["==", "!=", ">", ">=", "<", "<="]));
 export const ALLOWED_SEVERITY = Object.freeze(
-  new Set(["no_issue_observed", "integrity_signal_present", "manual_review_recommended", "evidence_incomplete"])
+  new Set([
+    "no_issue_observed",
+    "integrity_signal_present",
+    "manual_review_recommended",
+    "evidence_incomplete",
+  ])
 );
 
 // Strict: exactly one JSON object of the right type. No fences, no prefixes, no arrays,
@@ -317,7 +385,8 @@ export function parseModelSlots(outputText) {
   }
   if (!obj || typeof obj !== "object" || Array.isArray(obj))
     return { ok: false, violation: "narrative_schema_violation" };
-  if (obj.type !== MODEL_SLOTS_SCHEMA) return { ok: false, violation: "narrative_schema_violation" };
+  if (obj.type !== MODEL_SLOTS_SCHEMA)
+    return { ok: false, violation: "narrative_schema_violation" };
   if (!Array.isArray(obj.slots)) return { ok: false, violation: "narrative_schema_violation" };
   return { ok: true, slots: obj.slots, source: obj.source ?? null };
 }
@@ -397,10 +466,12 @@ git commit -m "feat(stage-3s): claim checker — strict slot parse, field-equali
 ### Task 3: Deterministic renderer (pure)
 
 **Files:**
+
 - Create: `tools/simurgh-narrative/renderer.mjs`
 - Test: `tests/unit/llmShield/narrative/renderer.test.js`
 
 **Interfaces:**
+
 - Consumes: `FORBIDDEN_WORDING` from `./claimChecker.mjs`.
 - Produces:
   - `WORDING_PROSE: Record<wording,string>` (fixed sentence per allowed wording).
@@ -503,10 +574,12 @@ git commit -m "feat(stage-3s): deterministic renderer (verified slots only, neve
 ### Task 4: Self-proof (pure) — the teeth
 
 **Files:**
+
 - Create: `tools/simurgh-narrative/selfProof.mjs`
 - Test: `tests/unit/llmShield/narrative/narrativeSelfProof.test.js`
 
 **Interfaces:**
+
 - Consumes: `parseModelSlots`, `verifySlots`, `MODEL_SLOTS_SCHEMA` from `./claimChecker.mjs`; `renderNarrative` from `./renderer.mjs`; `buildEvidenceDigest` from `./evidenceDigest.mjs`.
 - Produces: `runNarrativeSelfProof(): { type, stage, fixtures:[{fixture_id,expected,observed,passed}], summary }`.
 
@@ -521,7 +594,10 @@ import { runNarrativeSelfProof } from "../../../../tools/simurgh-narrative/selfP
 
 test("self-proof: every detector fires; nothing unsafe renders", () => {
   const sp = runNarrativeSelfProof();
-  assert.ok(sp.fixtures.every((f) => f.passed), JSON.stringify(sp.fixtures.filter((f) => !f.passed)));
+  assert.ok(
+    sp.fixtures.every((f) => f.passed),
+    JSON.stringify(sp.fixtures.filter((f) => !f.passed))
+  );
   assert.equal(sp.summary.narrative_claim_conflicts_rendered, 0);
   assert.equal(sp.summary.automatic_findings_rendered, 0);
   assert.equal(sp.summary.privacy_overclaims_rendered, 0);
@@ -565,55 +641,130 @@ const DIGEST = buildEvidenceDigest({
   daemon_proof_counts: { valid: 12, missing: 1, replayed: 0 },
   gateway: { fallback_used: true, fallback_bypass_successes: 0, output_firewall_blocks: 0 },
   vca: { attestation_verified: true, claim_conflicts: 0 },
-  privacy: { raw_pixels_captured: false, raw_window_titles_captured: false, typed_content_captured: false },
+  privacy: {
+    raw_pixels_captured: false,
+    raw_window_titles_captured: false,
+    typed_content_captured: false,
+  },
 });
 const wrap = (slots) => JSON.stringify({ type: MODEL_SLOTS_SCHEMA, source: {}, slots });
-const slot = (o) => ({ slot_id: "s1", evidence_ref: "gateway.fallback_used", operator: "==", expected_value: true, severity: "manual_review_recommended", wording: "fallback_observed", ...o });
+const slot = (o) => ({
+  slot_id: "s1",
+  evidence_ref: "gateway.fallback_used",
+  operator: "==",
+  expected_value: true,
+  severity: "manual_review_recommended",
+  wording: "fallback_observed",
+  ...o,
+});
 
 export function runNarrativeSelfProof() {
   const fixtures = [];
   const add = (fixture_id, expected, observed) =>
-    fixtures.push({ fixture_id, expected, observed, passed: JSON.stringify(expected) === JSON.stringify(observed) });
+    fixtures.push({
+      fixture_id,
+      expected,
+      observed,
+      passed: JSON.stringify(expected) === JSON.stringify(observed),
+    });
 
   // helper that runs the full path from a raw model outputText
   const runText = (outputText) => {
     const parsed = parseModelSlots(outputText);
-    if (!parsed.ok) return { result: "schema_violation", verifiedCount: 0, conflicts: 0, rendered: "" };
+    if (!parsed.ok)
+      return { result: "schema_violation", verifiedCount: 0, conflicts: 0, rendered: "" };
     const v = verifySlots(parsed.slots, DIGEST);
     const rendered = renderNarrative(v.verified).rendered_summary;
-    return { result: "ok", verifiedCount: v.verified.length, conflicts: v.conflict_attempts, rejected: v.rejected, rendered };
+    return {
+      result: "ok",
+      verifiedCount: v.verified.length,
+      conflicts: v.conflict_attempts,
+      rejected: v.rejected,
+      rendered,
+    };
   };
 
   let r = runText(wrap([slot()]));
-  add("clean-supported-narrative", { result: "ok", verifiedCount: 1 }, { result: r.result, verifiedCount: r.verifiedCount });
+  add(
+    "clean-supported-narrative",
+    { result: "ok", verifiedCount: 1 },
+    { result: r.result, verifiedCount: r.verifiedCount }
+  );
 
   r = runText(wrap([slot({ evidence_ref: "gateway.does_not_exist" })]));
-  add("unsupported-signal-claim", { verified: 0, reason: "unsupported_slot" }, { verified: r.verifiedCount, reason: r.rejected[0].reason });
+  add(
+    "unsupported-signal-claim",
+    { verified: 0, reason: "unsupported_slot" },
+    { verified: r.verifiedCount, reason: r.rejected[0].reason }
+  );
 
   r = runText(wrap([slot({ severity: "misconduct_confirmed" })]));
-  add("severity-overclaim", { verified: 0, reason: "unsupported_slot" }, { verified: r.verifiedCount, reason: r.rejected[0].reason });
+  add(
+    "severity-overclaim",
+    { verified: 0, reason: "unsupported_slot" },
+    { verified: r.verifiedCount, reason: r.rejected[0].reason }
+  );
 
-  r = runText(wrap([slot({ evidence_ref: "privacy.raw_pixels_captured", expected_value: true, wording: "integrity_signal_present" })]));
+  r = runText(
+    wrap([
+      slot({
+        evidence_ref: "privacy.raw_pixels_captured",
+        expected_value: true,
+        wording: "integrity_signal_present",
+      }),
+    ])
+  );
   // digest says raw_pixels_captured === false → claim that it's true is a conflict
-  add("privacy-overclaim", { verified: 0, reason: "narrative_claim_conflict" }, { verified: r.verifiedCount, reason: r.rejected[0].reason });
+  add(
+    "privacy-overclaim",
+    { verified: 0, reason: "narrative_claim_conflict" },
+    { verified: r.verifiedCount, reason: r.rejected[0].reason }
+  );
 
   r = runText(wrap([slot({ evidence_ref: "nope.missing" })]));
   add("missing-evidence-ref", { reason: "unsupported_slot" }, { reason: r.rejected[0].reason });
 
   r = runText(wrap([slot({ expected_value: false })]));
-  add("field-value-conflict", { reason: "narrative_claim_conflict", conflicts: 1 }, { reason: r.rejected[0].reason, conflicts: r.conflicts });
+  add(
+    "field-value-conflict",
+    { reason: "narrative_claim_conflict", conflicts: 1 },
+    { reason: r.rejected[0].reason, conflicts: r.conflicts }
+  );
 
   r = runText("Sure, here is the JSON:\n" + wrap([slot()]));
   add("freeform-prose-injection", { result: "schema_violation" }, { result: r.result });
 
   r = runText(wrap([slot({ wording: "manual_review_recommended" })]));
-  add("manual-review-wall", { hasReview: true, finding: false }, { hasReview: /manual review/i.test(r.rendered), finding: /misconduct|guilty|cheated/i.test(r.rendered) });
+  add(
+    "manual-review-wall",
+    { hasReview: true, finding: false },
+    {
+      hasReview: /manual review/i.test(r.rendered),
+      finding: /misconduct|guilty|cheated/i.test(r.rendered),
+    }
+  );
 
-  const d1 = renderNarrative([slot(), slot({ slot_id: "s0", wording: "chain_valid" })].map((s) => ({ slot_id: s.slot_id, wording: s.wording })));
-  const d2 = renderNarrative([slot({ slot_id: "s0", wording: "chain_valid" }), slot()].map((s) => ({ slot_id: s.slot_id, wording: s.wording })));
-  add("renderer-determinism", { same: true }, { same: d1.rendered_summary === d2.rendered_summary });
+  const d1 = renderNarrative(
+    [slot(), slot({ slot_id: "s0", wording: "chain_valid" })].map((s) => ({
+      slot_id: s.slot_id,
+      wording: s.wording,
+    }))
+  );
+  const d2 = renderNarrative(
+    [slot({ slot_id: "s0", wording: "chain_valid" }), slot()].map((s) => ({
+      slot_id: s.slot_id,
+      wording: s.wording,
+    }))
+  );
+  add(
+    "renderer-determinism",
+    { same: true },
+    { same: d1.rendered_summary === d2.rendered_summary }
+  );
 
-  const conflictAttempts = fixtures.filter((f) => f.fixture_id === "field-value-conflict" || f.fixture_id === "privacy-overclaim").length;
+  const conflictAttempts = fixtures.filter(
+    (f) => f.fixture_id === "field-value-conflict" || f.fixture_id === "privacy-overclaim"
+  ).length;
   return {
     type: "simurgh.defensive_narrative.self_proof.v1",
     stage: "3S",
@@ -646,12 +797,14 @@ git commit -m "feat(stage-3s): narrative self-proof — the narrative cannot lie
 ### Task 5: Narrative fixture + CLI (gateway-mediated, receipt-bound)
 
 **Files:**
+
 - Create: `tools/simurgh-narrative/simurgh-narrative.mjs`
 - Create (committed fixture): `docs/research/llm-shield/evidence/stage-3e/fixtures/recorded_fixture/3e_narrative_001.json`
 - Modify: `docs/research/llm-shield/evidence/stage-3e/fixtures/fixture-manifest.json` (add `3e_narrative_001`)
 - Test: `tests/unit/llmShield/narrative/narrativeCli.test.js`
 
 **Interfaces:**
+
 - Consumes: digest/claimChecker/renderer/selfProof libs; `hashPrompt` from `src/llmShield/promptNormalise.js`; `_live_server` harness; `canonicalJson`/`sha256Hex`.
 - Produces:
   - `NARRATIVE_CASE_ID = "3e_narrative_001"`
@@ -687,15 +840,37 @@ Add the manifest entry (insert into `fixture-manifest.json`): `"3e_narrative_001
 // SPDX-License-Identifier: AGPL-3.0-or-later
 import test from "node:test";
 import assert from "node:assert/strict";
-import { buildModelSlotsFromGatewayRun, buildVerifiedArtifact } from "../../../../tools/simurgh-narrative/simurgh-narrative.mjs";
+import {
+  buildModelSlotsFromGatewayRun,
+  buildVerifiedArtifact,
+} from "../../../../tools/simurgh-narrative/simurgh-narrative.mjs";
 import { buildEvidenceDigest } from "../../../../tools/simurgh-narrative/evidenceDigest.mjs";
 import { hashPrompt } from "../../../../src/llmShield/promptNormalise.js";
 import { MODEL_SLOTS_SCHEMA } from "../../../../tools/simurgh-narrative/claimChecker.mjs";
 
-const outputText = JSON.stringify({ type: MODEL_SLOTS_SCHEMA, source: {}, slots: [
-  { slot_id: "chain", evidence_ref: "audit_chain_valid", operator: "==", expected_value: true, severity: "integrity_signal_present", wording: "chain_valid" },
-]});
-const digest = buildEvidenceDigest({ sessionHash: "sha256:s", sourceInputs: [], audit_chain_valid: true, daemon_proof_counts: {}, gateway: {}, vca: {}, privacy: {} });
+const outputText = JSON.stringify({
+  type: MODEL_SLOTS_SCHEMA,
+  source: {},
+  slots: [
+    {
+      slot_id: "chain",
+      evidence_ref: "audit_chain_valid",
+      operator: "==",
+      expected_value: true,
+      severity: "integrity_signal_present",
+      wording: "chain_valid",
+    },
+  ],
+});
+const digest = buildEvidenceDigest({
+  sessionHash: "sha256:s",
+  sourceInputs: [],
+  audit_chain_valid: true,
+  daemon_proof_counts: {},
+  gateway: {},
+  vca: {},
+  privacy: {},
+});
 
 test("buildModelSlotsFromGatewayRun binds output hash to the receipt", () => {
   const receipt = { output_hash: hashPrompt(outputText) };
@@ -703,7 +878,10 @@ test("buildModelSlotsFromGatewayRun binds output hash to the receipt", () => {
   assert.equal(r.ok, true);
   assert.equal(r.modelSlots.source.gateway_output_hash, hashPrompt(outputText));
   // mismatch → rejected
-  const bad = buildModelSlotsFromGatewayRun({ outputText, receipt: { output_hash: "sha256:nope" } });
+  const bad = buildModelSlotsFromGatewayRun({
+    outputText,
+    receipt: { output_hash: "sha256:nope" },
+  });
   assert.equal(bad.ok, false);
   assert.equal(bad.violation, "receipt_binding_mismatch");
 });
@@ -799,7 +977,11 @@ async function buildDigestFromSources() {
     daemon_proof_counts: { valid: 0, missing: 0, replayed: 0 },
     gateway: { fallback_used: false, fallback_bypass_successes: 0, output_firewall_blocks: 0 },
     vca: { attestation_verified: true, claim_conflicts: 0 },
-    privacy: { raw_pixels_captured: false, raw_window_titles_captured: false, typed_content_captured: false },
+    privacy: {
+      raw_pixels_captured: false,
+      raw_window_titles_captured: false,
+      typed_content_captured: false,
+    },
   });
 }
 
@@ -812,7 +994,11 @@ async function gatewayDraftSlots() {
     const res = await fetch(`${sess.api}/${sess.sessionId}/run`, {
       method: "POST",
       headers: sess.auth,
-      body: JSON.stringify({ input: "produce a defensive integrity summary", provider_mode: "recorded_fixture", case_id: NARRATIVE_CASE_ID }),
+      body: JSON.stringify({
+        input: "produce a defensive integrity summary",
+        provider_mode: "recorded_fixture",
+        case_id: NARRATIVE_CASE_ID,
+      }),
     });
     const j = await res.json();
     return { outputText: j.output_text ?? j.receipt?.output_text ?? "", receipt: j.receipt };
@@ -852,7 +1038,9 @@ async function writeEvidence() {
   await writeFile(join(EV, "model-slots", "model-slots.json"), stable(modelSlots));
   await writeFile(join(EV, "verified", "verified-narrative-artifact.json"), stable(artifact));
   await writeFile(join(EV, "self-proof", "self-proof-results.json"), stable(selfProof));
-  console.log("stage3s evidence: wrote digest + slots + artifact + self-proof (run sign-3s then hash)");
+  console.log(
+    "stage3s evidence: wrote digest + slots + artifact + self-proof (run sign-3s then hash)"
+  );
 }
 
 async function verifyEvidence() {
@@ -865,7 +1053,8 @@ async function verifyEvidence() {
   ];
   for (const [p, v] of cmp) {
     const committed = JSON.parse(await readFile(p, "utf8"));
-    if (stable(committed) !== stable(v)) throw new Error(`committed ${p} drifted; run build --update`);
+    if (stable(committed) !== stable(v))
+      throw new Error(`committed ${p} drifted; run build --update`);
   }
   console.log("stage3s evidence: verified committed");
 }
@@ -880,8 +1069,12 @@ export async function rewriteHashes() {
       missing.push(name);
     }
   }
-  if (missing.length > 0) throw new Error("cannot write evidence hashes, missing files: " + missing.join(", "));
-  await writeFile(join(EV, "evidence-hashes.json"), stable({ schema: "simurgh.defensive_narrative.hashes.v1", hashes }));
+  if (missing.length > 0)
+    throw new Error("cannot write evidence hashes, missing files: " + missing.join(", "));
+  await writeFile(
+    join(EV, "evidence-hashes.json"),
+    stable({ schema: "simurgh.defensive_narrative.hashes.v1", hashes })
+  );
 }
 
 export async function verifyHashes() {
@@ -939,12 +1132,14 @@ git commit -m "feat(stage-3s): narrative CLI + committed slot fixture (gateway-m
 ### Task 6: Keypair, signer, verifier, committed signed evidence
 
 **Files:**
+
 - Create: `tools/simurgh-narrative/sign-3s-narrative.mjs`
 - Create: `tools/simurgh-narrative/verify-stage3s-narrative.mjs`
 - Test: `tests/unit/llmShield/narrative/narrativeVerify.test.js`
 - Create (generated, committed): key, digest/slots/receipt/artifact + signature, self-proof, hashes.
 
 **Interfaces:**
+
 - `verify-stage3s-narrative.mjs`: `verifyNarrative({ artifact, sidecar, publicKeyPem, digest, modelSlots, receipt }): { ok, checks }` — signature + receipt-binding (`modelSlots.source.gateway_output_hash === receipt.output_hash`) + artifact's `evidence_digest_hash === sha256Hex(canonicalJson(digest))` + `automatic_finding_made === false`.
 
 - [ ] **Step 1: Write the failing verifier test**
@@ -955,14 +1150,21 @@ git commit -m "feat(stage-3s): narrative CLI + committed slot fixture (gateway-m
 import test from "node:test";
 import assert from "node:assert/strict";
 import crypto from "node:crypto";
-import { canonicalJson, sha256Hex, fingerprintPublicKey } from "../../../../tools/simurgh-attestation/canonicalise.mjs";
+import {
+  canonicalJson,
+  sha256Hex,
+  fingerprintPublicKey,
+} from "../../../../tools/simurgh-attestation/canonicalise.mjs";
 import { verifyNarrative } from "../../../../tools/simurgh-narrative/verify-stage3s-narrative.mjs";
 
 test("verifyNarrative accepts a signed, evidence-bound artifact and rejects tampering", () => {
   const { publicKey, privateKey } = crypto.generateKeyPairSync("ed25519");
   const pubPem = publicKey.export({ type: "spki", format: "pem" });
   const privPem = privateKey.export({ type: "pkcs8", format: "pem" });
-  const digest = { type: "simurgh.defensive_narrative.evidence_digest.v1", session_hash: "sha256:s" };
+  const digest = {
+    type: "simurgh.defensive_narrative.evidence_digest.v1",
+    session_hash: "sha256:s",
+  };
   const receipt = { output_hash: "sha256:out" };
   const modelSlots = { source: { gateway_output_hash: "sha256:out" } };
   const artifact = {
@@ -974,13 +1176,42 @@ test("verifyNarrative accepts a signed, evidence-bound artifact and rejects tamp
   };
   const canonical = Buffer.from(canonicalJson(artifact), "utf8");
   const sig = crypto.sign(null, canonical, crypto.createPrivateKey(privPem));
-  const sidecar = { schema: "simurgh.defensive_narrative.signature.v1", algorithm: "Ed25519", bundle_sha256: sha256Hex(canonical), public_key_fingerprint: fingerprintPublicKey(pubPem), signature: "base64:" + sig.toString("base64") };
-  assert.equal(verifyNarrative({ artifact, sidecar, publicKeyPem: pubPem, digest, modelSlots, receipt }).ok, true);
+  const sidecar = {
+    schema: "simurgh.defensive_narrative.signature.v1",
+    algorithm: "Ed25519",
+    bundle_sha256: sha256Hex(canonical),
+    public_key_fingerprint: fingerprintPublicKey(pubPem),
+    signature: "base64:" + sig.toString("base64"),
+  };
+  assert.equal(
+    verifyNarrative({ artifact, sidecar, publicKeyPem: pubPem, digest, modelSlots, receipt }).ok,
+    true
+  );
   // tamper the artifact
   const tampered = { ...artifact, rendered_summary: "cheated" };
-  assert.equal(verifyNarrative({ artifact: tampered, sidecar, publicKeyPem: pubPem, digest, modelSlots, receipt }).ok, false);
+  assert.equal(
+    verifyNarrative({
+      artifact: tampered,
+      sidecar,
+      publicKeyPem: pubPem,
+      digest,
+      modelSlots,
+      receipt,
+    }).ok,
+    false
+  );
   // break receipt binding
-  assert.equal(verifyNarrative({ artifact, sidecar, publicKeyPem: pubPem, digest, modelSlots: { source: { gateway_output_hash: "sha256:other" } }, receipt }).ok, false);
+  assert.equal(
+    verifyNarrative({
+      artifact,
+      sidecar,
+      publicKeyPem: pubPem,
+      digest,
+      modelSlots: { source: { gateway_output_hash: "sha256:other" } },
+      receipt,
+    }).ok,
+    false
+  );
 });
 ```
 
@@ -998,7 +1229,11 @@ Expected: FAIL — module not found.
 import crypto from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { canonicalJson, sha256Hex, fingerprintPublicKey } from "../simurgh-attestation/canonicalise.mjs";
+import {
+  canonicalJson,
+  sha256Hex,
+  fingerprintPublicKey,
+} from "../simurgh-attestation/canonicalise.mjs";
 
 const EV = "docs/research/llm-shield/evidence/stage-3s";
 
@@ -1006,9 +1241,15 @@ export function verifyNarrative({ artifact, sidecar, publicKeyPem, digest, model
   const checks = {};
   const canonical = Buffer.from(canonicalJson(artifact), "utf8");
   checks.bundle_digest_match = sidecar.bundle_sha256 === sha256Hex(canonical);
-  checks.key_fingerprint_match = sidecar.public_key_fingerprint === fingerprintPublicKey(publicKeyPem);
+  checks.key_fingerprint_match =
+    sidecar.public_key_fingerprint === fingerprintPublicKey(publicKeyPem);
   const sig = Buffer.from(sidecar.signature.replace(/^base64:/, ""), "base64");
-  checks.signature_valid = crypto.verify(null, canonical, crypto.createPublicKey(publicKeyPem), sig);
+  checks.signature_valid = crypto.verify(
+    null,
+    canonical,
+    crypto.createPublicKey(publicKeyPem),
+    sig
+  );
   checks.digest_binding = artifact.evidence_digest_hash === sha256Hex(canonicalJson(digest));
   checks.receipt_binding = modelSlots.source.gateway_output_hash === receipt.output_hash;
   checks.no_automatic_finding = artifact.automatic_finding_made === false;
@@ -1025,7 +1266,14 @@ async function main() {
   const modelSlots = await rd("model-slots/model-slots.json");
   const receipt = await rd("model-slots/gateway-receipt.json");
   const pub = await rd("keys/stage3s-public-key.json");
-  const { ok, checks } = verifyNarrative({ artifact, sidecar, publicKeyPem: pub.public_key_pem, digest, modelSlots, receipt });
+  const { ok, checks } = verifyNarrative({
+    artifact,
+    sidecar,
+    publicKeyPem: pub.public_key_pem,
+    digest,
+    modelSlots,
+    receipt,
+  });
   console.log(JSON.stringify(checks, null, 2));
   if (!ok) {
     console.error("stage3s narrative verify: FAIL");
@@ -1033,7 +1281,11 @@ async function main() {
   }
   console.log("stage3s narrative verify: PASS");
 }
-if (import.meta.url === `file://${process.argv[1]}`) main().catch((e) => { console.error(e.message); process.exit(1); });
+if (import.meta.url === `file://${process.argv[1]}`)
+  main().catch((e) => {
+    console.error(e.message);
+    process.exit(1);
+  });
 ```
 
 - [ ] **Step 4: Run the verifier test**
@@ -1052,16 +1304,23 @@ import crypto from "node:crypto";
 import { readFile, writeFile } from "node:fs/promises";
 import { homedir } from "node:os";
 import { join } from "node:path";
-import { canonicalJson, sha256Hex, fingerprintPublicKey } from "../simurgh-attestation/canonicalise.mjs";
+import {
+  canonicalJson,
+  sha256Hex,
+  fingerprintPublicKey,
+} from "../simurgh-attestation/canonicalise.mjs";
 
 const EV = "docs/research/llm-shield/evidence/stage-3s";
 const stable = (v) => JSON.stringify(v, null, 2) + "\n";
 
 async function main() {
-  const keyPath = process.env.SIMURGH_3S_PRIVATE_KEY_PATH || join(homedir(), ".simurgh", "3s-ed25519.pem");
+  const keyPath =
+    process.env.SIMURGH_3S_PRIVATE_KEY_PATH || join(homedir(), ".simurgh", "3s-ed25519.pem");
   const priv = await readFile(keyPath, "utf8");
   const pub = JSON.parse(await readFile(join(EV, "keys", "stage3s-public-key.json"), "utf8"));
-  const artifact = JSON.parse(await readFile(join(EV, "verified", "verified-narrative-artifact.json"), "utf8"));
+  const artifact = JSON.parse(
+    await readFile(join(EV, "verified", "verified-narrative-artifact.json"), "utf8")
+  );
   const canonical = Buffer.from(canonicalJson(artifact), "utf8");
   const signature = crypto.sign(null, canonical, crypto.createPrivateKey(priv));
   const sidecar = {
@@ -1072,10 +1331,16 @@ async function main() {
     public_key_fingerprint: fingerprintPublicKey(pub.public_key_pem),
     signature: "base64:" + signature.toString("base64"),
   };
-  await writeFile(join(EV, "verified", "verified-narrative-artifact.signature.json"), stable(sidecar));
+  await writeFile(
+    join(EV, "verified", "verified-narrative-artifact.signature.json"),
+    stable(sidecar)
+  );
   console.log("stage3s: signed verified artifact; fingerprint", sidecar.public_key_fingerprint);
 }
-main().catch((e) => { console.error(e.message); process.exit(1); });
+main().catch((e) => {
+  console.error(e.message);
+  process.exit(1);
+});
 ```
 
 - [ ] **Step 6: Generate the keypair + produce committed signed evidence**
@@ -1093,6 +1358,7 @@ node tools/simurgh-narrative/simurgh-narrative.mjs build
 node tools/simurgh-narrative/simurgh-narrative.mjs verify-hashes
 node tools/simurgh-narrative/verify-stage3s-narrative.mjs
 ```
+
 Expected: every verify prints PASS; the private key stays at `~/.simurgh/`, never committed.
 
 - [ ] **Step 7: Commit**
@@ -1107,6 +1373,7 @@ git commit -m "feat(stage-3s): signer, CI verify-only verifier, and signed narra
 ### Task 7: Audit scripts + smoke + check.sh wiring
 
 **Files:**
+
 - Create: `scripts/smoke-llm-shield-stage3s.sh`, `scripts/security-audit-llm-shield-stage3s.mjs`, `scripts/privacy-audit-llm-shield-stage3s.mjs`, `scripts/policy-drift-guard-llm-shield-stage3s.sh`, `scripts/consistency-audit-llm-shield-stage3s.mjs`
 - Modify: `scripts/check.sh`
 
@@ -1157,14 +1424,40 @@ import { join } from "node:path";
 const EV = "docs/research/llm-shield/evidence/stage-3s";
 // Fix #1: detect RAW leaked data, never the safe privacy boolean field NAMES
 // (the digest legitimately contains typed_content_captured:false, raw_window_titles_captured:false).
-const FORBIDDEN = ["BEGIN PRIVATE KEY", "raw_transcript", "raw_provider_output", "raw_typed_content", "raw_window_title_value", "process_name:", "window_title:"];
-async function walk(d){const o=[];for(const e of await readdir(d,{withFileTypes:true})){const p=join(d,e.name);if(e.isDirectory())o.push(...(await walk(p)));else if((await stat(p)).isFile())o.push(p);}return o;}
+const FORBIDDEN = [
+  "BEGIN PRIVATE KEY",
+  "raw_transcript",
+  "raw_provider_output",
+  "raw_typed_content",
+  "raw_window_title_value",
+  "process_name:",
+  "window_title:",
+];
+async function walk(d) {
+  const o = [];
+  for (const e of await readdir(d, { withFileTypes: true })) {
+    const p = join(d, e.name);
+    if (e.isDirectory()) o.push(...(await walk(p)));
+    else if ((await stat(p)).isFile()) o.push(p);
+  }
+  return o;
+}
 const findings = [];
-for (const f of await walk(EV)) { const c = await readFile(f, "utf8"); for (const t of FORBIDDEN) if (c.includes(t)) findings.push({ f, t }); }
+for (const f of await walk(EV)) {
+  const c = await readFile(f, "utf8");
+  for (const t of FORBIDDEN) if (c.includes(t)) findings.push({ f, t });
+}
 const digest = JSON.parse(await readFile(join(EV, "digest", "evidence-digest.json"), "utf8"));
-if (digest.privacy.raw_pixels_captured || digest.privacy.raw_window_titles_captured || digest.privacy.typed_content_captured)
+if (
+  digest.privacy.raw_pixels_captured ||
+  digest.privacy.raw_window_titles_captured ||
+  digest.privacy.typed_content_captured
+)
   findings.push({ f: "evidence-digest.json", t: "privacy_overclaim" });
-if (findings.length) { console.error("stage3s privacy: FAIL", JSON.stringify(findings)); process.exit(1); }
+if (findings.length) {
+  console.error("stage3s privacy: FAIL", JSON.stringify(findings));
+  process.exit(1);
+}
 console.log("stage3s privacy: PASS");
 ```
 
@@ -1184,11 +1477,17 @@ if (!sp.summary.all_passed) errors.push("self-proof failed");
 if (sp.summary.narrative_claim_conflicts_rendered !== 0) errors.push("claim conflict rendered");
 if (sp.summary.automatic_findings_rendered !== 0) errors.push("automatic finding rendered");
 if (sp.summary.narrative_claim_conflict_attempts < 1) errors.push("conflict teeth never fired");
-const art = JSON.parse(await readFile(join(EV, "verified", "verified-narrative-artifact.json"), "utf8"));
+const art = JSON.parse(
+  await readFile(join(EV, "verified", "verified-narrative-artifact.json"), "utf8")
+);
 if (art.automatic_finding_made !== false) errors.push("artifact made an automatic finding");
 const lower = String(art.rendered_summary).toLowerCase();
-for (const w of FORBIDDEN_WORDING) if (lower.includes(w)) errors.push(`forbidden wording in artifact: ${w}`);
-if (errors.length) { console.error("stage3s security: FAIL", JSON.stringify(errors)); process.exit(1); }
+for (const w of FORBIDDEN_WORDING)
+  if (lower.includes(w)) errors.push(`forbidden wording in artifact: ${w}`);
+if (errors.length) {
+  console.error("stage3s security: FAIL", JSON.stringify(errors));
+  process.exit(1);
+}
 console.log("stage3s security: PASS");
 ```
 
@@ -1207,16 +1506,27 @@ const rd = (p) => readFile(join(EV, p), "utf8").then(JSON.parse);
 const digest = await rd("digest/evidence-digest.json");
 for (const s of digest.source_inputs) {
   let content;
-  try { content = await readFile(s.path, "utf8"); } catch { errors.push(`source missing: ${s.path}`); continue; }
+  try {
+    content = await readFile(s.path, "utf8");
+  } catch {
+    errors.push(`source missing: ${s.path}`);
+    continue;
+  }
   if (sha256Hex(content) !== s.digest) errors.push(`source digest mismatch: ${s.path}`);
 }
 const modelSlots = await rd("model-slots/model-slots.json");
 const receipt = await rd("model-slots/gateway-receipt.json");
-if (modelSlots.source.gateway_output_hash !== receipt.output_hash) errors.push("receipt-binding mismatch");
-if (modelSlots.source.model_slots_digest !== sha256Hex(canonicalJson(modelSlots.slots))) errors.push("model_slots_digest mismatch");
+if (modelSlots.source.gateway_output_hash !== receipt.output_hash)
+  errors.push("receipt-binding mismatch");
+if (modelSlots.source.model_slots_digest !== sha256Hex(canonicalJson(modelSlots.slots)))
+  errors.push("model_slots_digest mismatch");
 const art = await rd("verified/verified-narrative-artifact.json");
-if (art.evidence_digest_hash !== sha256Hex(canonicalJson(digest))) errors.push("artifact digest-binding mismatch");
-if (errors.length) { console.error("stage3s consistency: FAIL", JSON.stringify(errors)); process.exit(1); }
+if (art.evidence_digest_hash !== sha256Hex(canonicalJson(digest)))
+  errors.push("artifact digest-binding mismatch");
+if (errors.length) {
+  console.error("stage3s consistency: FAIL", JSON.stringify(errors));
+  process.exit(1);
+}
 console.log("stage3s consistency: PASS");
 void hashPrompt;
 ```
@@ -1248,10 +1558,12 @@ Fix #5 (semantics): `source_inputs[].digest` is a file-byte sha256 (`sha256Hex(c
 - [ ] **Step 6: Make executable + run**
 
 Run:
+
 ```bash
 chmod +x scripts/smoke-llm-shield-stage3s.sh scripts/policy-drift-guard-llm-shield-stage3s.sh
 bash scripts/smoke-llm-shield-stage3s.sh
 ```
+
 Expected: `stage3s smoke: passed`.
 
 - [ ] **Step 7: Wire into check.sh**
@@ -1305,6 +1617,7 @@ git commit -m "feat(stage-3s): audit scripts, smoke, and check.sh wiring (3A–3
 ### Task 8: Documentation quartet + stage doc + full verification + finish
 
 **Files:**
+
 - Create: `docs/research/llm-shield/LLM_SHIELD_STAGE_3S_VERIFIABLE_DEFENSIVE_NARRATIVE.md`
 - Create: `docs/research/llm-shield/STAGE_3S_CLOSEOUT.md`, `STAGE_3S_THREAT_MODEL.md`, `STAGE_3S_VALIDATION_MATRIX.md`, `STAGE_3S_REVIEWER_CHECKLIST.md`
 
@@ -1336,6 +1649,7 @@ Run: `npm test` (all pass + new 3S unit tests), `npx prettier --check .` (clean)
 ## Self-Review
 
 **1. Spec coverage:**
+
 - Crown sentence / AI-drafts-Simurgh-verifies → Task 8 + the whole pipeline. ✓
 - Tooling-only / zero src/llmShield / policy-drift → Task 7 step 1 + Global Constraints. ✓
 - recorded_fixture gateway drive → Task 5 (`gatewayDraftSlots`, committed fixture + manifest). ✓

@@ -19,10 +19,13 @@ for (const s of digest.source_inputs) {
 }
 const modelSlots = await rd("model-slots/model-slots.json");
 const receipt = await rd("model-slots/gateway-receipt.json");
-if (modelSlots.source.gateway_output_hash !== receipt.output_hash) errors.push("receipt-binding mismatch");
-if (modelSlots.source.model_slots_digest !== sha256Hex(canonicalJson(modelSlots.slots))) errors.push("model_slots_digest mismatch");
+if (modelSlots.source.gateway_output_hash !== receipt.output_hash)
+  errors.push("receipt-binding mismatch");
+if (modelSlots.source.model_slots_digest !== sha256Hex(canonicalJson(modelSlots.slots)))
+  errors.push("model_slots_digest mismatch");
 const art = await rd("verified/verified-narrative-artifact.json");
-if (art.evidence_digest_hash !== sha256Hex(canonicalJson(digest))) errors.push("artifact digest-binding mismatch");
+if (art.evidence_digest_hash !== sha256Hex(canonicalJson(digest)))
+  errors.push("artifact digest-binding mismatch");
 if (errors.length) {
   console.error("stage3s consistency: FAIL", JSON.stringify(errors));
   process.exit(1);

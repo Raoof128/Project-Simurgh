@@ -4,7 +4,15 @@ import { join } from "node:path";
 const EV = "docs/research/llm-shield/evidence/stage-3s";
 // Detect RAW leaked data, never the safe privacy boolean field NAMES (the digest
 // legitimately contains typed_content_captured:false, raw_window_titles_captured:false).
-const FORBIDDEN = ["BEGIN PRIVATE KEY", "raw_transcript", "raw_provider_output", "raw_typed_content", "raw_window_title_value", "process_name:", "window_title:"];
+const FORBIDDEN = [
+  "BEGIN PRIVATE KEY",
+  "raw_transcript",
+  "raw_provider_output",
+  "raw_typed_content",
+  "raw_window_title_value",
+  "process_name:",
+  "window_title:",
+];
 async function walk(d) {
   const o = [];
   for (const e of await readdir(d, { withFileTypes: true })) {
@@ -20,7 +28,11 @@ for (const f of await walk(EV)) {
   for (const t of FORBIDDEN) if (c.includes(t)) findings.push({ f, t });
 }
 const digest = JSON.parse(await readFile(join(EV, "digest", "evidence-digest.json"), "utf8"));
-if (digest.privacy.raw_pixels_captured || digest.privacy.raw_window_titles_captured || digest.privacy.typed_content_captured)
+if (
+  digest.privacy.raw_pixels_captured ||
+  digest.privacy.raw_window_titles_captured ||
+  digest.privacy.typed_content_captured
+)
   findings.push({ f: "evidence-digest.json", t: "privacy_overclaim" });
 if (findings.length) {
   console.error("stage3s privacy: FAIL", JSON.stringify(findings));

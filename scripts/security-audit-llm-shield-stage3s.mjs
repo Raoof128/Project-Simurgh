@@ -10,7 +10,9 @@ if (!sp.summary.all_passed) errors.push("self-proof failed");
 if (sp.summary.narrative_claim_conflicts_rendered !== 0) errors.push("claim conflict rendered");
 if (sp.summary.automatic_findings_rendered !== 0) errors.push("automatic finding rendered");
 if (sp.summary.narrative_claim_conflict_attempts < 1) errors.push("conflict teeth never fired");
-const art = JSON.parse(await readFile(join(EV, "verified", "verified-narrative-artifact.json"), "utf8"));
+const art = JSON.parse(
+  await readFile(join(EV, "verified", "verified-narrative-artifact.json"), "utf8")
+);
 if (art.automatic_finding_made !== false) errors.push("artifact made an automatic finding");
 const lower = String(art.rendered_summary).toLowerCase();
 for (const w of FORBIDDEN_WORDING) {
