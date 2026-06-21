@@ -53,7 +53,7 @@ FAMILY_ORDER = ["structural", "behavioural", "targeting", "coordination", "volum
 - `tools/simurgh-extraction/metaSet.mjs` — schema, validation (provenance + unique run_id + allowed fields), order-independent digest.
 - `tools/simurgh-extraction/signalFamilies.mjs` — deep-frozen `FAMILY_MAP`, `FAMILY_ORDER`, `familyMapDigest`, `signalToFamily`, `distinctFamilies`.
 - `tools/simurgh-extraction/detector.mjs` — frozen signal matching, total decision function, `runDetector`.
-- `tools/simurgh-extraction/selfProof.mjs` — 10 falsification fixtures + summary counters.
+- `tools/simurgh-extraction/selfProof.mjs` — 11 falsification fixtures + summary counters.
 - `tools/simurgh-extraction/renderer.mjs` — decision→prose, sacred non-claim, throws on accusatory/named-lab wording.
 - `tools/simurgh-extraction/simurgh-extraction.mjs` — CLI: `build [--update]`, `hash`, `verify`, `verify-hashes`.
 - `tools/simurgh-extraction/sign-3t-attestation.mjs` — local-only signer.
@@ -73,7 +73,12 @@ FAMILY_ORDER = ["structural", "behavioural", "targeting", "coordination", "volum
 
 **Interfaces:**
 - Consumes: `canonicalJson`, `sha256Hex` from `../../simurgh-attestation/canonicalise.mjs` (note: from `tools/simurgh-extraction/` the path is `../simurgh-attestation/canonicalise.mjs`).
-- Produces: `META_SET_SCHEMA` (string), `ALLOWED_ROW_FIELDS` (frozen array), `validateMetaSet(set) -> true | throws`, `metaSetDigest(set) -> "sha256:..."`.
+- Produces: `META_SET_SCHEMA` (string), `ALLOWED_ROW_FIELDS` (frozen array), `validateMetaSet(set) -> true | throws`, `normaliseMetaSet(set) -> object`, `metaSetDigest(set) -> "sha256:..."`.
+
+> **Digest convention (applies to ALL 3T files):** `sha256Hex()` from `canonicalise.mjs`
+> ALREADY returns the `sha256:`-prefixed string (verified: `return "sha256:" + crypto…`).
+> NEVER manually prepend `"sha256:"`. Mirrors 3S exactly. A digest is
+> `sha256Hex(canonicalJson(x))` — nothing more.
 
 - [ ] **Step 1: Write the failing test**
 
@@ -144,11 +149,17 @@ test("validateMetaSet rejects an empty run set", () => {
   assert.throws(() => validateMetaSet(set([])), /meta_set_invalid/);
 });
 
-test("metaSetDigest is order-independent and sha256-prefixed", () => {
+test("metaSetDigest is order-independent and sha256-prefixed (single prefix)", () => {
   const a = set([row("s3t_run_001"), row("s3t_run_002")]);
   const b = set([row("s3t_run_002"), row("s3t_run_001")]);
-  assert.match(metaSetDigest(a), /^sha256:[0-9a-f]{64}$/);
+  assert.match(metaSetDigest(a), /^sha256:[0-9a-f]{64}$/); // exactly one prefix, not sha256:sha256:
   assert.equal(metaSetDigest(a), metaSetDigest(b));
+});
+
+test("metaSetDigest binds the full set header, not only rows", () => {
+  const a = set([row("s3t_run_001")]);
+  const b = set([row("s3t_run_001")], { set_id: "different_set" });
+  assert.notEqual(metaSetDigest(a), metaSetDigest(b));
 });
 ```
 
@@ -202,15 +213,33 @@ export function validateMetaSet(set) {
       if (!allowed.has(k)) throw new Error("forbidden_metadata_field");
     }
     if (typeof r.run_id !== "string" || r.run_id.length === 0) throw new Error("meta_set_invalid");
+    for (const h of ["actor_cluster_hash", "session_cluster_hash", "normalized_prompt_hash", "prompt_template_hash"]) {
+      if (typeof r[h] !== "string" || !r[h].startsWith("sha256:")) throw new Error("meta_set_invalid");
+    }
+    if (typeof r.cot_elicitation_flag !== "boolean" || typeof r.tool_use_request_shape !== "boolean")
+      throw new Error("meta_set_invalid");
     if (seen.has(r.run_id)) throw new Error("meta_set_invalid");
     seen.add(r.run_id);
   }
   return true;
 }
 
+// Bind the FULL synthetic/offline provenance header + sorted rows, not only the rows.
+export function normaliseMetaSet(set) {
+  validateMetaSet(set);
+  return {
+    type: set.type,
+    set_id: set.set_id,
+    set_provenance: set.set_provenance,
+    live_traffic_used: set.live_traffic_used,
+    identity_data_used: set.identity_data_used,
+    raw_content_used: set.raw_content_used,
+    runs: [...set.runs].sort((a, b) => a.run_id.localeCompare(b.run_id)),
+  };
+}
+
 export function metaSetDigest(set) {
-  const rows = [...set.runs].sort((a, b) => (a.run_id < b.run_id ? -1 : a.run_id > b.run_id ? 1 : 0));
-  return "sha256:" + sha256Hex(canonicalJson(rows));
+  return sha256Hex(canonicalJson(normaliseMetaSet(set)));
 }
 ```
 
@@ -342,7 +371,7 @@ export function distinctFamilies(firedSignalIds) {
 }
 
 export function familyMapDigest() {
-  return "sha256:" + sha256Hex(canonicalJson(FAMILY_MAP));
+  return sha256Hex(canonicalJson(FAMILY_MAP)); // sha256Hex already prefixes; never double-prefix
 }
 ```
 
@@ -741,7 +770,7 @@ test("self-proof: all falsification fixtures pass with zero failures", () => {
   assert.equal(summary.intent_claims_rendered, 0);
   assert.equal(summary.decision_reproduction_failures, 0);
   assert.equal(summary.duplicate_run_id_failures, 0);
-  assert.ok(fixtures.length >= 10);
+  assert.equal(fixtures.length, 11);
   assert.ok(fixtures.every((f) => f.passed));
 });
 ```
@@ -993,18 +1022,18 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { buildAttestation, deriveForVerify } from "../../../../tools/simurgh-extraction/simurgh-extraction.mjs";
 
-test("buildAttestation binds digest, decision, rendered prose, sacred non-claim", () => {
-  const att = deriveForVerify().attestation;
+test("buildAttestation binds digest, decision, rendered prose, sacred non-claim", async () => {
+  const { attestation: att } = await deriveForVerify();
   assert.equal(att.detector_id, "stage3t_frozen_detector_v1");
   assert.equal(att.decision, "extraction_pattern_observed");
   assert.equal(att.distinct_family_count, 3);
-  assert.match(att.meta_set_digest, /^sha256:/);
+  assert.match(att.meta_set_digest, /^sha256:[0-9a-f]{64}$/);
   assert.ok(att.rendered_summary.includes("manual review"));
   assert.ok(att.non_claims.includes("match_is_not_accusation"));
 });
 
-test("buildAttestation is a pure function of the committed set", () => {
-  const { set } = deriveForVerify();
+test("buildAttestation is a pure function of the committed set", async () => {
+  const { set } = await deriveForVerify();
   assert.equal(JSON.stringify(buildAttestation(set)), JSON.stringify(buildAttestation(set)));
 });
 ```
@@ -1084,7 +1113,7 @@ async function walk(d) {
 async function writeEvidenceHashes() {
   const files = (await walk(EV)).sort();
   const map = {};
-  for (const f of files) map[f] = "sha256:" + sha256Hex(await readFile(f, "utf8"));
+  for (const f of files) map[f] = sha256Hex(await readFile(f, "utf8"));
   await writeFile(join(EV, "evidence-hashes.json"), stable(map));
 }
 
@@ -1121,7 +1150,7 @@ async function main() {
   } else if (cmd === "verify-hashes") {
     const map = await rd("evidence-hashes.json");
     for (const [f, h] of Object.entries(map)) {
-      if ("sha256:" + sha256Hex(await readFile(f, "utf8")) !== h) throw new Error("hash mismatch: " + f);
+      if (sha256Hex(await readFile(f, "utf8")) !== h) throw new Error("hash mismatch: " + f);
     }
     console.log("stage3t: evidence hashes match");
   } else {
@@ -1169,7 +1198,7 @@ git commit -m "feat(3t): CLI + committed synthetic reference set and detector re
 
 **Interfaces:**
 - Consumes: `canonicalJson`, `sha256Hex`, `fingerprintPublicKey`; `deriveForVerify`; `runExtractionSelfProof`.
-- Produces: `verifyExtraction({ attestation, sidecar, publicKeyPem, set, detectorConfig, reproduce }) -> { ok, checks }`.
+- Produces: `verifyExtraction({ attestation, sidecar, publicKeyPem, set, detectorConfig }) -> { ok, checks }`.
 
 - [ ] **Step 1: Generate the dedicated 3T keypair (local only)**
 
@@ -1233,6 +1262,7 @@ import crypto from "node:crypto";
 import { readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { canonicalJson, sha256Hex, fingerprintPublicKey } from "../simurgh-attestation/canonicalise.mjs";
+import { metaSetDigest } from "./metaSet.mjs";
 import { familyMapDigest } from "./signalFamilies.mjs";
 import { runExtractionSelfProof } from "./selfProof.mjs";
 import { deriveForVerify } from "./simurgh-extraction.mjs";
@@ -1241,7 +1271,7 @@ const EV = "docs/research/llm-shield/evidence/stage-3t";
 const stable = (v) => JSON.stringify(v, null, 2) + "\n";
 const rd = (p) => readFile(join(EV, p), "utf8").then(JSON.parse);
 
-export function verifyExtraction({ attestation, sidecar, publicKeyPem, detectorConfig }) {
+export function verifyExtraction({ attestation, sidecar, publicKeyPem, set, detectorConfig }) {
   const checks = {};
   const canonical = Buffer.from(canonicalJson(attestation), "utf8");
   checks.bundle_digest_match = sidecar.bundle_sha256 === sha256Hex(canonical);
@@ -1252,10 +1282,13 @@ export function verifyExtraction({ attestation, sidecar, publicKeyPem, detectorC
     crypto.createPublicKey(publicKeyPem),
     Buffer.from(sidecar.signature.replace(/^base64:/, ""), "base64")
   );
-  checks.meta_set_digest_present = /^sha256:[0-9a-f]{64}$/.test(attestation.meta_set_digest);
+  // Real binding: the attestation's digest must equal the committed set's digest.
+  checks.meta_set_digest_binding = attestation.meta_set_digest === metaSetDigest(set);
   checks.family_map_digest_match =
     attestation.family_map_digest === familyMapDigest() &&
     detectorConfig.family_map_digest === familyMapDigest();
+  checks.detector_id_binding = detectorConfig.detector_id === attestation.detector_id;
+  checks.threshold_lock_present = detectorConfig.threshold_change_requires_new_detector_id === true;
   checks.decision_present = ["no_pattern_observed", "single_signal_observed", "extraction_pattern_observed"].includes(attestation.decision);
   checks.no_intent_claim = attestation.intent_claim_made === false && attestation.non_claims.includes("no_intent_claim");
   checks.match_is_not_accusation = attestation.non_claims.includes("match_is_not_accusation");
@@ -1268,19 +1301,22 @@ async function main() {
   const sidecar = await rd("result/attestation.signature.json");
   const pub = await rd("keys/stage3t-public-key.json");
   const detectorConfig = await rd("meta-set/detector-config.json");
-  const { ok, checks } = verifyExtraction({ attestation, sidecar, publicKeyPem: pub.public_key_pem, detectorConfig });
+  const set = await rd("meta-set/metadata-set.json");
+  const { ok, checks } = verifyExtraction({ attestation, sidecar, publicKeyPem: pub.public_key_pem, set, detectorConfig });
   let reproduced = true;
   if (reproduce) {
-    const { result } = await deriveForVerify();
-    const committed = await rd("result/expected-detector-result.json");
-    reproduced = stable(result) === stable(committed);
+    const { attestation: regenerated, result } = await deriveForVerify();
+    const committedResult = await rd("result/expected-detector-result.json");
+    const committedAttestation = await rd("result/attestation.json");
+    checks.detector_result_reproduces = stable(result) === stable(committedResult);
+    checks.attestation_reproduces = stable(regenerated) === stable(committedAttestation);
     const sp = runExtractionSelfProof();
-    if (!sp.summary.all_passed) reproduced = false;
+    checks.self_proof_passes = sp.summary.all_passed === true;
+    reproduced = checks.detector_result_reproduces && checks.attestation_reproduces && checks.self_proof_passes;
   }
-  const all = { ...checks, ...(reproduce ? { detector_reproduces: reproduced } : {}) };
-  console.log(JSON.stringify(all, null, 2));
+  console.log(JSON.stringify(checks, null, 2));
   if (process.argv.includes("--write")) {
-    await writeFile(join(EV, "result", "verify-report.json"), stable(all));
+    await writeFile(join(EV, "result", "verify-report.json"), stable(checks));
   }
   if (!ok || !reproduced) { console.error("stage3t verify: FAIL"); process.exit(1); }
   console.log("stage3t attestation verify: PASS");
@@ -1313,8 +1349,11 @@ test("committed 3T attestation verifies (portable checks all true)", async () =>
   const sidecar = await rd("result/attestation.signature.json");
   const pub = await rd("keys/stage3t-public-key.json");
   const detectorConfig = await rd("meta-set/detector-config.json");
-  const { ok, checks } = verifyExtraction({ attestation, sidecar, publicKeyPem: pub.public_key_pem, detectorConfig });
+  const set = await rd("meta-set/metadata-set.json");
+  const { ok, checks } = verifyExtraction({ attestation, sidecar, publicKeyPem: pub.public_key_pem, set, detectorConfig });
   assert.equal(ok, true, JSON.stringify(checks));
+  assert.equal(checks.meta_set_digest_binding, true);
+  assert.equal(checks.detector_id_binding, true);
 });
 
 test("a tampered decision breaks the signature", async () => {
@@ -1322,7 +1361,20 @@ test("a tampered decision breaks the signature", async () => {
   const sidecar = await rd("result/attestation.signature.json");
   const pub = await rd("keys/stage3t-public-key.json");
   const detectorConfig = await rd("meta-set/detector-config.json");
-  const { ok } = verifyExtraction({ attestation, sidecar, publicKeyPem: pub.public_key_pem, detectorConfig });
+  const set = await rd("meta-set/metadata-set.json");
+  const { ok } = verifyExtraction({ attestation, sidecar, publicKeyPem: pub.public_key_pem, set, detectorConfig });
+  assert.equal(ok, false);
+});
+
+test("a meta-set with a swapped run breaks the digest binding", async () => {
+  const attestation = await rd("result/attestation.json");
+  const sidecar = await rd("result/attestation.signature.json");
+  const pub = await rd("keys/stage3t-public-key.json");
+  const detectorConfig = await rd("meta-set/detector-config.json");
+  const set = await rd("meta-set/metadata-set.json");
+  set.runs[0].capability_tag = "tampered_capability";
+  const { ok, checks } = verifyExtraction({ attestation, sidecar, publicKeyPem: pub.public_key_pem, set, detectorConfig });
+  assert.equal(checks.meta_set_digest_binding, false);
   assert.equal(ok, false);
 });
 ```
@@ -1381,12 +1433,14 @@ console.log("stage3t security: PASS");
 import { readFile, readdir, stat } from "node:fs/promises";
 import { join } from "node:path";
 const EV = "docs/research/llm-shield/evidence/stage-3t";
-const FORBIDDEN = ["BEGIN PRIVATE KEY", "raw_prompt", "raw_output", "raw_transcript", "@", "ip_address", "api_key", "chain_of_thought_text"];
+const FORBIDDEN = ["BEGIN PRIVATE KEY", "raw_prompt", "raw_output", "raw_transcript", "ip_address", "api_key", "chain_of_thought_text"];
+const EMAIL_RE = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i;
 async function walk(d) { const o=[]; for (const e of await readdir(d,{withFileTypes:true})){const p=join(d,e.name); if(e.isDirectory())o.push(...await walk(p)); else if((await stat(p)).isFile())o.push(p);} return o; }
 const findings = [];
 for (const f of await walk(EV)) {
   const c = await readFile(f, "utf8");
   for (const t of FORBIDDEN) if (c.includes(t)) findings.push({ f, t });
+  if (EMAIL_RE.test(c)) findings.push({ f, t: "email_like_value" });
 }
 const set = JSON.parse(await readFile(join(EV, "meta-set", "metadata-set.json"), "utf8"));
 if (set.set_provenance !== "synthetic_reference" || set.live_traffic_used !== false || set.identity_data_used !== false || set.raw_content_used !== false)
