@@ -1,0 +1,31 @@
+{
+  "schema": "simurgh.cross_defence.hashes.v1",
+  "hashes": {
+    "corpus/matrix-manifest.json": "sha256:c2d1e953a8ad068d77c8282fd6877cd6297075b08592d9de0614e94359d33892",
+    "catalogue/attestation-catalogue.body.json": "sha256:01c8c6398987d11fcea8ac751e10c3c362157551031f8bb042686d8eba097298",
+    "catalogue/attestation-catalogue.json": "sha256:f52dbf4890bb59b07e7e1f3808341a60a42a21f33cfa433679d802148e0a1689",
+    "catalogue/attestation-catalogue.signature.json": "sha256:4ad2e330e6421cd7546fe8505838bc384d6f1aba2cc3f55a2aa053a56dc2d399",
+    "self-proof/self-proof-results.json": "sha256:bccc4e0f805927b1aba5f8d9ed892910902a2c5e9f2c9fe4ce0c0f0719808027",
+    "targets/no-defence-baseline/coverage.json": "sha256:96e3ac9644c58f1a7dfcb01ff9c22e728c13cb26866e59eb588aeac46e1ac9d3",
+    "targets/no-defence-baseline/containment-attestation.json": "sha256:96e3ac9644c58f1a7dfcb01ff9c22e728c13cb26866e59eb588aeac46e1ac9d3",
+    "targets/no-defence-baseline/containment-attestation.signature.json": "sha256:88fe7e3e5560bbd24282f6534b215bbaf19d5ba2333b461631b8f05f226cea95",
+    "targets/keyword-filter-replica/coverage.json": "sha256:5792bf8f2c922803ae6b0e2b89911854861603418d456bd61e6ffbf2e48cc207",
+    "targets/keyword-filter-replica/containment-attestation.json": "sha256:5792bf8f2c922803ae6b0e2b89911854861603418d456bd61e6ffbf2e48cc207",
+    "targets/keyword-filter-replica/containment-attestation.signature.json": "sha256:cdfee60462ba636cf52357d89c67a05283b5eca5a8dd922de340ef7694342a40",
+    "targets/regex-denylist-replica/coverage.json": "sha256:8da6859e99147b4f2b51a705d2ace6f151f6bedfafd0b5e0119e25fa8440a789",
+    "targets/regex-denylist-replica/containment-attestation.json": "sha256:8da6859e99147b4f2b51a705d2ace6f151f6bedfafd0b5e0119e25fa8440a789",
+    "targets/regex-denylist-replica/containment-attestation.signature.json": "sha256:bcbb48ed213b2bc941c14b38e5ec038750187044f6ebe3b78037cf4d29172f67",
+    "targets/llm-judge-replica/coverage.json": "sha256:8953aea0f87a74b7fb9b5c9959f90baa184c0ec58720eded17a98960e646986b",
+    "targets/llm-judge-replica/containment-attestation.json": "sha256:8953aea0f87a74b7fb9b5c9959f90baa184c0ec58720eded17a98960e646986b",
+    "targets/llm-judge-replica/containment-attestation.signature.json": "sha256:f2f26dcf5fc9780b62331a18aeb706c5f4943a7ddfbba7017efabca60642430d",
+    "targets/context-sanitiser-replica/coverage.json": "sha256:cccf571d5a098570bb4f769ff840a27129ee283cc3b87d5812d9ab48d04828fb",
+    "targets/context-sanitiser-replica/containment-attestation.json": "sha256:cccf571d5a098570bb4f769ff840a27129ee283cc3b87d5812d9ab48d04828fb",
+    "targets/context-sanitiser-replica/containment-attestation.signature.json": "sha256:e93cc83c9e1cfbd74a53d04bbf0e19361e437f0e24af1d36eb7e84b893533f2a",
+    "targets/tool-gate-replica/coverage.json": "sha256:cc50656a2c4cbe865ebb0b77b6a100b2bcf29ba1c41e5c696ebe65a4ebda3a8f",
+    "targets/tool-gate-replica/containment-attestation.json": "sha256:cc50656a2c4cbe865ebb0b77b6a100b2bcf29ba1c41e5c696ebe65a4ebda3a8f",
+    "targets/tool-gate-replica/containment-attestation.signature.json": "sha256:8983422d089efe416bda199306e4cd3c6320fb5c8ac2bfe812aa0ff59b1ab08d",
+    "targets/full-gateway-target/coverage.json": "sha256:0b880cabc40155d81904f42c2837e52bb7e6f67c7987ce3bbaa50ce0ed486d28",
+    "targets/full-gateway-target/containment-attestation.json": "sha256:0b880cabc40155d81904f42c2837e52bb7e6f67c7987ce3bbaa50ce0ed486d28",
+    "targets/full-gateway-target/containment-attestation.signature.json": "sha256:416c8d9880ac2f36bb146dc08a6afbecf8737ce4d9893ff80155a31aa8b94295"
+  }
+}
