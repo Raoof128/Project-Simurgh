@@ -14,7 +14,15 @@ use crate::scanner::session::is_local_display;
 
 pub fn scan() -> LinuxScannerSummary {
     let display = std::env::var("DISPLAY").unwrap_or_default();
-    if !is_local_display(&display) {
+    scan_with_display(&display)
+}
+
+/// Display-injected scan. `scan()` is the thin `$DISPLAY`-reading wrapper;
+/// this carries the actual logic. Taking the display explicitly keeps tests
+/// off the process-global `DISPLAY` env var, which races when cargo runs the
+/// tests in a binary across parallel threads.
+pub fn scan_with_display(display: &str) -> LinuxScannerSummary {
+    if !is_local_display(display) {
         return LinuxScannerSummary::unavailable("non_local_display");
     }
     match crate::scanner::x11::scan_inner_public() {
