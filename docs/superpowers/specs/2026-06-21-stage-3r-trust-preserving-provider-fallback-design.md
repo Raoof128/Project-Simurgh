@@ -8,9 +8,10 @@ writing-plans → executing-plans flow.
 > **Roadmap note:** Stage 3R was originally reserved for a temporal live-campaign
 > follow-up to 3Q. The roadmap has been revised: **3R is now Deployment Resilience**
 > (this stage), and the live temporal campaign is deferred to a later stage.
-> **Anchors:** `docs/research/llm-shield/NORTH_STAR_VERIFIABLE_CONTAINMENT_ATTESTATION.md`,
-> Stage 3E (gateway + live Anthropic adapter), the HMAC audit chain (`src/audit`), the VCA
-> ladder (3M–3Q). Grounded in the real Claude Fable 5 fallback contract.
+
+**Anchors:** `docs/research/llm-shield/NORTH_STAR_VERIFIABLE_CONTAINMENT_ATTESTATION.md`,
+Stage 3E (gateway + live Anthropic adapter), the HMAC audit chain (`src/audit`), the VCA
+ladder (3M–3Q). Grounded in the real Claude Fable 5 fallback contract.
 
 ## Crown sentence
 
