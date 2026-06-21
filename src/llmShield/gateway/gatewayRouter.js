@@ -26,6 +26,9 @@ import { liveLimits, createLiveLedger, checkLiveCall, recordLiveCall } from "./l
 import { buildProviderSafeContext } from "./anthropicMessageBuild.js";
 import { selectFixtureEntry, validateRecordedFixture } from "./recordedFixtureProvider.js";
 import { normaliseProviderOutput } from "./providerOutputNormalise.js";
+import { runFallbackOrchestration } from "./fallbackOrchestrator.js";
+import { mergeTrustMonotonic } from "./fallbackPolicy.js";
+import { normaliseRefusal, isRefusal } from "./anthropicResponseNormalise.js";
 import { buildGatewayReceipt, hashGatewayReceipt } from "./gatewayReceipt.js";
 import {
   recordGatewaySessionCreated,
@@ -33,6 +36,7 @@ import {
   recordGatewayReceiptExported,
   recordGatewayLiveCall,
   recordGatewayLiveConfigRejected,
+  recordGatewayFallbackSwap,
 } from "./gatewayAudit.js";
 import { gatewayLimits, checkInputCaps } from "./gatewayRateLimit.js";
 
@@ -172,39 +176,112 @@ router.post("/:sessionId/run", requireToken, requirePathMatch, async (req, res) 
 
   const providerCalled = inputVerdict !== "blocked" && contextResult.verdict !== "rejected";
 
-  // ----- provider (no network) -----
-  let raw = null;
+  // Stage 3R: deployment-resilience fallback config (opt-in refusal fallback; default off).
+  const fallbackOnRefusalEnabled = process.env.SIMURGH_GATEWAY_FALLBACK_ON_REFUSAL === "true";
+  const fallbackBudget = { max_hops: 1, timeout_ms: 30000, max_additional_provider_calls: 1 };
+  const fallbackModel = process.env.SIMURGH_GATEWAY_FALLBACK_MODEL || "claude-opus-4-8";
+  const primaryModel = providerMode === "live" ? liveConfig.model : "mock-primary";
+
+  // Live denial-of-wallet gate stays a terminal config rejection on the primary attempt.
+  if (providerCalled && providerMode === "live") {
+    const gate = checkLiveCall(live.ledger, live.limits, Date.now());
+    if (!gate.ok) {
+      record.runCounter += 1;
+      const runId = `gw_run_${String(record.runCounter).padStart(3, "0")}`;
+      return finishConfigRejected(res, record, key, runId, gate.reason, req.params.sessionId);
+    }
+  }
+
+  // One containment-bounded attempt = provider(model) → normalise → tool gate → output firewall.
+  function runBoundaries(rawOut) {
+    const n = rawOut
+      ? normaliseProviderOutput(rawOut)
+      : { kind: "text", text: "", toolRequest: null };
+    const tool = n.toolRequest
+      ? gateToolRequest(n.toolRequest)
+      : { verdict: "not_requested", reasonCodes: [], toolNameHash: null, toolCalled: false };
+    const out =
+      tool.verdict !== "blocked"
+        ? scanOutput(n.text, { providerCalled: true })
+        : { verdict: "not_called", reasonCodes: [], outputHash: hashPrompt(n.text) };
+    const verdict =
+      tool.verdict === "blocked" || out.verdict === "blocked"
+        ? "blocked"
+        : riskVerdict(
+            riskPointsFor({
+              inputVerdict,
+              contextVerdict: contextResult.verdict,
+              toolGateVerdict: tool.verdict,
+              outputFirewallVerdict: out.verdict,
+              repeatedWarning: false,
+            })
+          );
+    return { norm: n, toolResult: tool, outputResult: out, riskVerdict: verdict };
+  }
+
+  async function callProvider(model, attemptIndex) {
+    if (providerMode === "mock") {
+      if (attemptIndex === 0 && typeof body.scenario_outcome === "string")
+        return getGatewayProvider("mock").generate({
+          scenario: { provider_outcome: body.scenario_outcome },
+        });
+      const scenarioName =
+        attemptIndex === 0 && isValidScenario(body.scenario) ? body.scenario : "benign";
+      return getGatewayProvider("mock").generate({ scenario: getScenario(scenarioName) });
+    }
+    if (providerMode === "recorded_fixture") {
+      const manifest = JSON.parse(await readFile(`${FIXTURE_DIR}/fixture-manifest.json`, "utf8"));
+      const rel = selectFixtureEntry(body.case_id, manifest);
+      const fixture = JSON.parse(await readFile(`${FIXTURE_DIR}/${rel}`, "utf8"));
+      validateRecordedFixture(fixture);
+      return getGatewayProvider("recorded_fixture").generate({ fixture });
+    }
+    // live — fresh approved envelope on every attempt; never partial/refused output.
+    const psc = buildProviderSafeContext(contextResult.acceptedContexts ?? body.contexts, {
+      contextMode: liveConfig.contextMode,
+    });
+    const out = await getGatewayProvider("live").generate({
+      model,
+      safeInput: normalised,
+      providerSafeContext: psc,
+      apiKey: process.env.ANTHROPIC_API_KEY,
+      limits: live.limits,
+    });
+    recordLiveCall(live.ledger, Date.now());
+    liveConfig.__psc = psc;
+    return out;
+  }
+
+  async function runAttempt(model, attemptIndex) {
+    // Genuine provider setup throws (bad fixture path, live SDK error) propagate to the
+    // outer config-rejection handler — unchanged from pre-3R. Deterministic availability
+    // failures arrive as an error_code raw (no throw) and DO drive fallback.
+    const attemptRaw = await callProvider(model, attemptIndex);
+    const refusalMeta = isRefusal(attemptRaw) ? normaliseRefusal(attemptRaw) : null;
+    return { raw: attemptRaw, ...runBoundaries(attemptRaw), refusalMeta };
+  }
+
+  // ----- provider + Stage 3R fallback orchestration (no network in mock/CI) -----
+  let orchestration = null;
+  let finalA = {
+    raw: null,
+    norm: { kind: "text", text: "", toolRequest: null },
+    toolResult: {
+      verdict: "not_requested",
+      reasonCodes: [],
+      toolNameHash: null,
+      toolCalled: false,
+    },
+    outputResult: { verdict: "not_called", reasonCodes: [], outputHash: hashPrompt("") },
+    riskVerdict: "accepted",
+  };
   if (providerCalled) {
     try {
-      if (providerMode === "mock") {
-        const scenarioName = isValidScenario(body.scenario) ? body.scenario : "benign";
-        raw = getGatewayProvider("mock").generate({ scenario: getScenario(scenarioName) });
-      } else if (providerMode === "recorded_fixture") {
-        const manifest = JSON.parse(await readFile(`${FIXTURE_DIR}/fixture-manifest.json`, "utf8"));
-        const rel = selectFixtureEntry(body.case_id, manifest);
-        const fixture = JSON.parse(await readFile(`${FIXTURE_DIR}/${rel}`, "utf8"));
-        validateRecordedFixture(fixture);
-        raw = getGatewayProvider("recorded_fixture").generate({ fixture });
-      } else if (providerMode === "live") {
-        const gate = checkLiveCall(live.ledger, live.limits, Date.now());
-        if (!gate.ok) {
-          record.runCounter += 1;
-          const runId = `gw_run_${String(record.runCounter).padStart(3, "0")}`;
-          return finishConfigRejected(res, record, key, runId, gate.reason, req.params.sessionId);
-        }
-        const psc = buildProviderSafeContext(contextResult.acceptedContexts ?? body.contexts, {
-          contextMode: liveConfig.contextMode,
-        });
-        raw = await getGatewayProvider("live").generate({
-          model: liveConfig.model,
-          safeInput: normalised,
-          providerSafeContext: psc,
-          apiKey: process.env.ANTHROPIC_API_KEY,
-          limits: live.limits,
-        });
-        recordLiveCall(live.ledger, Date.now());
-        liveConfig.__psc = psc;
-      }
+      orchestration = await runFallbackOrchestration({
+        preCheck: { inputVerdict, contextVerdict: contextResult.verdict },
+        config: { fallbackOnRefusalEnabled, budget: fallbackBudget, primaryModel, fallbackModel },
+        runAttempt,
+      });
     } catch (e) {
       record.runCounter += 1;
       const runId = `gw_run_${String(record.runCounter).padStart(3, "0")}`;
@@ -217,26 +294,15 @@ router.post("/:sessionId/run", requireToken, requirePathMatch, async (req, res) 
         req.params.sessionId
       );
     }
+    finalA = orchestration.finalAttempt;
   }
-
-  const norm = providerCalled
-    ? normaliseProviderOutput(raw)
-    : { kind: "text", text: "", toolRequest: null };
+  const raw = finalA.raw;
+  const norm = finalA.norm;
+  const toolResult = finalA.toolResult;
+  const outputResult = finalA.outputResult;
   const providerResponseHash = hashPrompt(norm.text);
 
-  // ----- tool gate (provider-side tools off; never executed) -----
-  const toolResult =
-    providerCalled && norm.toolRequest
-      ? gateToolRequest(norm.toolRequest)
-      : { verdict: "not_requested", reasonCodes: [], toolNameHash: null, toolCalled: false };
-
-  // ----- output firewall (only when no tool block) -----
-  const outputResult =
-    providerCalled && toolResult.verdict !== "blocked"
-      ? scanOutput(norm.text, { providerCalled: true })
-      : { verdict: "not_called", reasonCodes: [], outputHash: providerResponseHash };
-
-  // ----- risk -----
+  // ----- risk (monotonic across any swap; identical to pre-3R when no fallback) -----
   const runPoints =
     inputVerdict === "blocked"
       ? 6
@@ -247,16 +313,18 @@ router.post("/:sessionId/run", requireToken, requirePathMatch, async (req, res) 
           outputFirewallVerdict: outputResult.verdict,
           repeatedWarning: false,
         });
-  record.riskScore = (record.riskScore ?? 0) + runPoints;
+  record.riskScore = (record.riskScore ?? 0) + runPoints + (orchestration?.riskDelta ?? 0);
   if (liveConfig) {
     record.riskScore += 1; // live provider call
     if ((liveConfig.__psc?.context_count ?? 0) > 0) record.riskScore += 1; // context summary sent
     if (raw?.error_code === "gateway_live_timeout") record.riskScore += 2; // timeout
   }
-  const riskVerdictValue =
+  let riskVerdictValue =
     inputVerdict === "blocked" || contextResult.verdict === "rejected"
       ? "blocked"
       : riskVerdict(record.riskScore);
+  if (orchestration?.fallbackUsed)
+    riskVerdictValue = mergeTrustMonotonic(riskVerdictValue, orchestration.finalVerdict);
 
   const gatewayVerdict =
     contextResult.verdict === "rejected" ||
@@ -306,6 +374,18 @@ router.post("/:sessionId/run", requireToken, requirePathMatch, async (req, res) 
     });
   }
 
+  // Stage 3R: every fallback swap is a signed event in the SAME session chain.
+  if (orchestration?.fallbackUsed) {
+    for (const swap of orchestration.fallback_chain)
+      recordGatewayFallbackSwap(record.auditChain, key, {
+        from: swap.from,
+        to: swap.to,
+        trigger: swap.trigger,
+        refusalCategory: swap.refusal_category,
+        riskDelta: swap.risk_delta,
+      });
+  }
+
   const receipt = buildGatewayReceipt({
     sessionIdHash,
     runId,
@@ -333,6 +413,11 @@ router.post("/:sessionId/run", requireToken, requirePathMatch, async (req, res) 
     auditEntryHash,
     timestamp,
     networkEgressUsed: Boolean(liveConfig) && providerCalled,
+    fallbackUsed: orchestration?.fallbackUsed === true,
+    fallbackOnRefusalEnabled,
+    fallbackChain: orchestration?.fallback_chain ?? [],
+    fallbackBudget,
+    fallbackTerminalReason: orchestration?.terminalReason ?? null,
     live: liveConfig
       ? {
           provider_model_hash: raw?.provider_model_hash ?? null,

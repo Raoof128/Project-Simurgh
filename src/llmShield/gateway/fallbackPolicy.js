@@ -27,10 +27,17 @@ export function classifyProviderOutcome(raw) {
 }
 
 // Fail-closed pre-check: a fallback of ANY kind is forbidden unless Simurgh's own
-// pre-check is explicitly non-terminal. Context is binary (accepted|rejected) and
-// input must be "allowed"; any other/unknown value is treated as terminal.
+// pre-check is explicitly non-terminal. Real enums: inputVerdict ∈ {safe,warning,blocked};
+// contextVerdict ∈ {accepted,demoted,rejected,not_supplied}. Only a "safe" input with a
+// non-rejected context is non-terminal. The allow-sets are explicit so an unknown value
+// is treated as terminal (never accidentally allowed).
+const NON_TERMINAL_INPUT_VERDICTS = new Set(["safe"]);
+const NON_TERMINAL_CONTEXT_VERDICTS = new Set(["accepted", "not_supplied", "demoted"]);
 export function preCheckNonTerminal({ inputVerdict, contextVerdict }) {
-  return inputVerdict === "allowed" && contextVerdict === "accepted";
+  return (
+    NON_TERMINAL_INPUT_VERDICTS.has(inputVerdict) &&
+    NON_TERMINAL_CONTEXT_VERDICTS.has(contextVerdict)
+  );
 }
 
 // The refusal anti-bypass gate: refusal fallback only when the flag is on AND the
@@ -47,7 +54,8 @@ export function withinBudget(budgetState, budget) {
 }
 
 export function shouldFallback({ outcome, preCheck, flagEnabled, budgetState, budget }) {
-  if (outcome === "available") return { fallback: false, trigger: null, reason: "primary_available" };
+  if (outcome === "available")
+    return { fallback: false, trigger: null, reason: "primary_available" };
   // Fix #1 — the bypass lock covers EVERY trigger: no fallback after a terminal pre-check.
   if (!preCheckNonTerminal(preCheck))
     return { fallback: false, trigger: null, reason: "simurgh_precheck_terminal" };

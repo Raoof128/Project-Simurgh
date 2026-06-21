@@ -23,23 +23,25 @@ test("classifyProviderOutcome maps raw provider results", () => {
   assert.ok(PROVIDER_OUTCOMES.includes(classifyProviderOutcome({ provider_response_kind: "text" })));
 });
 
-test("preCheckNonTerminal is fail-closed (only allowed+accepted)", () => {
-  assert.equal(preCheckNonTerminal({ inputVerdict: "allowed", contextVerdict: "accepted" }), true);
+test("preCheckNonTerminal is fail-closed (real enums: safe input + non-rejected context)", () => {
+  assert.equal(preCheckNonTerminal({ inputVerdict: "safe", contextVerdict: "accepted" }), true);
+  assert.equal(preCheckNonTerminal({ inputVerdict: "safe", contextVerdict: "not_supplied" }), true);
+  assert.equal(preCheckNonTerminal({ inputVerdict: "safe", contextVerdict: "demoted" }), true);
   assert.equal(preCheckNonTerminal({ inputVerdict: "blocked", contextVerdict: "accepted" }), false);
-  assert.equal(preCheckNonTerminal({ inputVerdict: "allowed", contextVerdict: "rejected" }), false);
-  // unknown / undefined values are terminal (fail-closed), never accidentally allowed
+  assert.equal(preCheckNonTerminal({ inputVerdict: "safe", contextVerdict: "rejected" }), false);
+  // warning input + unknown/undefined values are terminal (fail-closed), never accidentally allowed
   assert.equal(preCheckNonTerminal({ inputVerdict: "warning", contextVerdict: "accepted" }), false);
-  assert.equal(preCheckNonTerminal({ inputVerdict: "allowed", contextVerdict: undefined }), false);
-  assert.equal(preCheckNonTerminal({ inputVerdict: "allowed", contextVerdict: "unknown" }), false);
+  assert.equal(preCheckNonTerminal({ inputVerdict: "safe", contextVerdict: undefined }), false);
+  assert.equal(preCheckNonTerminal({ inputVerdict: "safe", contextVerdict: "unknown" }), false);
 });
 
 test("refusalFallbackAllowed is the anti-bypass gate", () => {
-  assert.equal(refusalFallbackAllowed({ inputVerdict: "allowed", contextVerdict: "accepted", flagEnabled: true }), true);
+  assert.equal(refusalFallbackAllowed({ inputVerdict: "safe", contextVerdict: "accepted", flagEnabled: true }), true);
   // flag off
-  assert.equal(refusalFallbackAllowed({ inputVerdict: "allowed", contextVerdict: "accepted", flagEnabled: false }), false);
+  assert.equal(refusalFallbackAllowed({ inputVerdict: "safe", contextVerdict: "accepted", flagEnabled: false }), false);
   // Simurgh pre-check terminal → never (the bypass lock)
   assert.equal(refusalFallbackAllowed({ inputVerdict: "blocked", contextVerdict: "accepted", flagEnabled: true }), false);
-  assert.equal(refusalFallbackAllowed({ inputVerdict: "allowed", contextVerdict: "rejected", flagEnabled: true }), false);
+  assert.equal(refusalFallbackAllowed({ inputVerdict: "safe", contextVerdict: "rejected", flagEnabled: true }), false);
 });
 
 test("withinBudget respects hops and call ceilings", () => {
@@ -48,7 +50,7 @@ test("withinBudget respects hops and call ceilings", () => {
 });
 
 test("shouldFallback: availability always (within budget, non-terminal pre-check)", () => {
-  const base = { preCheck: { inputVerdict: "allowed", contextVerdict: "accepted" }, flagEnabled: false, budgetState: { hops: 0, additionalProviderCalls: 0 }, budget: DEFAULT_FALLBACK_BUDGET };
+  const base = { preCheck: { inputVerdict: "safe", contextVerdict: "accepted" }, flagEnabled: false, budgetState: { hops: 0, additionalProviderCalls: 0 }, budget: DEFAULT_FALLBACK_BUDGET };
   assert.equal(shouldFallback({ ...base, outcome: "available" }).fallback, false);
   assert.equal(shouldFallback({ ...base, outcome: "unavailable" }).trigger, "availability");
   assert.equal(shouldFallback({ ...base, outcome: "timeout" }).trigger, "availability");
@@ -63,7 +65,7 @@ test("shouldFallback: a Simurgh-terminal pre-check blocks AVAILABILITY fallback 
 });
 
 test("shouldFallback: refusal is opt-in + anti-bypass + reason-coded", () => {
-  const allowed = { inputVerdict: "allowed", contextVerdict: "accepted" };
+  const allowed = { inputVerdict: "safe", contextVerdict: "accepted" };
   const budgetState = { hops: 0, additionalProviderCalls: 0 };
   assert.deepEqual(
     shouldFallback({ outcome: "provider_refusal", preCheck: allowed, flagEnabled: false, budgetState, budget: DEFAULT_FALLBACK_BUDGET }),

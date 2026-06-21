@@ -11,7 +11,7 @@ const cfg = (over = {}) => ({
   fallbackModel: "claude-opus-4-8",
   ...over,
 });
-const allowedPre = { inputVerdict: "allowed", contextVerdict: "accepted" };
+const allowedPre = { inputVerdict: "safe", contextVerdict: "accepted" };
 
 function scripted(list) {
   let i = 0;

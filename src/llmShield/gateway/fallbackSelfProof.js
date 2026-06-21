@@ -11,7 +11,7 @@ const cfg = (over = {}) => ({
   fallbackModel: "claude-opus-4-8",
   ...over,
 });
-const allowed = { inputVerdict: "allowed", contextVerdict: "accepted" };
+const allowed = { inputVerdict: "safe", contextVerdict: "accepted" };
 const scripted = (list) => {
   let i = 0;
   return async () => list[Math.min(i++, list.length - 1)];
