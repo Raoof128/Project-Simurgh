@@ -1,0 +1,7 @@
+{
+  "provenance": "synthetic",
+  "provider_response_kind": "text",
+  "synthetic_provider_output": "{\"type\":\"simurgh.defensive_narrative.model_slots.v1\",\"source\":{},\"slots\":[{\"slot_id\":\"chain\",\"evidence_ref\":\"audit_chain_valid\",\"operator\":\"==\",\"expected_value\":true,\"severity\":\"integrity_signal_present\",\"wording\":\"chain_valid\"}]}",
+  "provider_output_hash": "sha256:60b2f6a7740eb5999a66ffa290f2e517758927a00f1a7c6ef55fb82f217d9d7a",
+  "tool_request": null
+}
