@@ -69,6 +69,10 @@ while 3R remains the deliberate gateway-security-path exception.
 
    This sentence appears in: this spec, the renderer output, the attestation
    `non_claims[]`, and the reviewer checklist.
+5a. **No named labs in evidence:** named third-party labs may appear only in explanatory
+   documentation citing the reference threat; they MUST NOT appear in
+   `metadata-set.json`, `expected-detector-result.json`, `attestation.json`, renderer
+   prose, or `self-proof-results.json`. Enforced by the security audit.
 6. **Production deferred (out-of-scope invariant):**
    > Production telemetry integration is deferred. Stage 3T proves the detector and
    > attestation contract offline before any gateway telemetry fields are added.
@@ -138,6 +142,8 @@ smoke + E2E (honest subprocess coverage). All under `tools/simurgh-extraction/`.
 - `validateMetaSet(set)` — asserts `set_provenance:"synthetic_reference"`,
   `live_traffic_used:false`, `identity_data_used:false`, `raw_content_used:false`, and
   that every row carries only allowed metadata-only fields (no forbidden tokens).
+  Every `run_id` in `metadata-set.json` MUST be unique; duplicate `run_id` values are
+  `meta_set_invalid` (duplicate ordering is ambiguous and could mask collisions).
 - `metaSetDigest(set)` — canonical row sort (by `run_id`) → `canonicalJson` → `sha256Hex`
   (prefix `sha256:`). Order-independent.
 - Row shape (all synthetic, metadata-only):
@@ -171,10 +177,15 @@ smoke + E2E (honest subprocess coverage). All under `tools/simurgh-extraction/`.
   ```
 
 ### `signalFamilies.mjs`
-- `FAMILY_MAP` — frozen object mapping family → member-signal ids (the five families above).
+- `FAMILY_MAP` — **deep-frozen** object mapping family → member-signal ids (the five
+  families above). `Object.freeze` is shallow in JS, so the nested member-signal arrays
+  are frozen too. Any threshold or family-map change requires a new `detector_id`.
+- `FAMILY_ORDER = ["structural", "behavioural", "targeting", "coordination", "volume"]` —
+  the frozen emission order for `matched_families` (never Set-insertion order), so
+  byte-identity is boring/total.
 - `familyMapDigest()` — `sha256Hex(canonicalJson(FAMILY_MAP))`.
-- `distinctFamilies(matchedSignals)` — given the set of fired signal ids, returns the set
-  of distinct families.
+- `distinctFamilies(matchedSignals)` — given the set of fired signal ids, returns the
+  distinct families, emitted sorted by `FAMILY_ORDER`.
 
 ### `detector.mjs`
 - `DETECTOR_ID = "stage3t_frozen_detector_v1"`.
@@ -228,6 +239,7 @@ Falsification harness with the required fixtures and summary counters.
 | `extraction-targeting-plus-coordination` | `extraction_pattern_observed`                            |
 | `threshold-version-lock`                 | changing threshold changes detector id or fails          |
 | `intent-language-rejected`               | no accusatory/attribution/intent wording renders         |
+| `duplicate-run-id-rejected`              | duplicate `run_id` → `meta_set_invalid`                  |
 
 Summary:
 ```json
@@ -237,6 +249,7 @@ Summary:
   "distinct_family_double_count_failures": 0,
   "intent_claims_rendered": 0,
   "decision_reproduction_failures": 0,
+  "duplicate_run_id_failures": 0,
   "all_passed": true
 }
 ```
@@ -317,10 +330,13 @@ non-claim wall checks.
 
 - Unit (100% fn coverage on pure libs): `metaSet`, `signalFamilies`, `detector`, `selfProof`,
   `renderer`.
-- CLI / signer / verifier / E2E exercised by the smoke (honest subprocess coverage).
+- CLI / signer / verifier are exercised by subprocess smoke coverage (no gateway run, no
+  network — so there is no true end-to-end pipeline; the "E2E" label is intentionally
+  avoided).
 - `scripts/` additions: `smoke-llm-shield-stage3t.sh`,
-  `security-audit-llm-shield-stage3t.mjs` (no accusatory/intent wording, sacred non-claim
-  present, `intent_claims_rendered:0`), `privacy-audit-llm-shield-stage3t.mjs` (no forbidden
+  `security-audit-llm-shield-stage3t.mjs` (no accusatory/intent wording, no named labs in
+  evidence artifacts, sacred non-claim present, `intent_claims_rendered:0`),
+  `privacy-audit-llm-shield-stage3t.mjs` (no forbidden
   raw tokens; provenance flags assert synthetic/offline), `consistency-audit-llm-shield-stage3t.mjs`
   (digest re-derives, detector result reproduces, signature verifies, `family_map_digest`
   matches config), `policy-drift-guard-llm-shield-stage3t.sh` (fail-closed, three-dot base).
