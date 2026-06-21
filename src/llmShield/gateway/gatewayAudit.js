@@ -31,7 +31,20 @@ export const GATEWAY_EVENTS = Object.freeze({
   LLM_GATEWAY_LIVE_PROVIDER_RESPONSE_HASHED: "LLM_GATEWAY_LIVE_PROVIDER_RESPONSE_HASHED",
   LLM_GATEWAY_LIVE_CONTEXT_SUMMARY_BUILT: "LLM_GATEWAY_LIVE_CONTEXT_SUMMARY_BUILT",
   LLM_GATEWAY_LIVE_CONTEXT_REJECTED: "LLM_GATEWAY_LIVE_CONTEXT_REJECTED",
+  LLM_GATEWAY_FALLBACK_SWAP: "LLM_GATEWAY_FALLBACK_SWAP",
 });
+
+// Stage 3R: a trust-preserving fallback swap recorded inside the SAME session chain.
+export function recordGatewayFallbackSwap(chain, key, d) {
+  appendEntry(chain, key, GATEWAY_EVENTS.LLM_GATEWAY_FALLBACK_SWAP, {
+    from: d.from,
+    to: d.to,
+    trigger: d.trigger,
+    refusal_category: d.refusalCategory ?? null,
+    risk_delta: d.riskDelta,
+  });
+  return chain.prevHash;
+}
 
 export function recordGatewaySessionCreated(chain, key) {
   appendEntry(chain, key, GATEWAY_EVENTS.LLM_GATEWAY_SESSION_CREATED, {});

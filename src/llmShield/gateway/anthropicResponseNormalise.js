@@ -57,3 +57,26 @@ export function normaliseAnthropicResponse(apiResponse = {}) {
   const kind = apiResponse.stop_reason === "refusal" ? "refusal" : "text";
   return { ...base, provider_response_kind: kind, output_text: text };
 }
+
+// Branch on stop_reason ONLY (stop_details is informational and can be null).
+export function isRefusal(apiResponse = {}) {
+  return apiResponse.stop_reason === "refusal";
+}
+
+// Null-safe, metadata-only refusal shape per the Fable 5 refusal contract. The
+// explanation text is unstable, so it is hashed and never stored raw or parsed.
+export function normaliseRefusal(apiResponse = {}) {
+  const sd = apiResponse.stop_details;
+  const present = sd != null && typeof sd === "object";
+  const category = present && typeof sd.category === "string" ? sd.category : null;
+  const explanation = present && typeof sd.explanation === "string" ? sd.explanation : null;
+  return {
+    stop_reason:
+      apiResponse.stop_reason === "refusal" ? "refusal" : (apiResponse.stop_reason ?? null),
+    stop_details_present: present,
+    stop_details_type: present && typeof sd.type === "string" ? sd.type : null,
+    refusal_category: category,
+    refusal_explanation_recorded: false,
+    refusal_explanation_hash: explanation ? hashPrompt(explanation) : null,
+  };
+}

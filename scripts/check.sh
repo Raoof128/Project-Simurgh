@@ -14,7 +14,7 @@
 #                             (both skipped under --quick)
 #   12    Platform & device . Stage 2.1–2.8 integrity/daemon/scanner, Swift &
 #                             Linux-Rust nodes, voting & banking pilots
-#   13    LLM Shield ........ Stage 3A–3Q containment pipeline + per-stage audits
+#   13    LLM Shield ........ Stage 3A–3R containment pipeline + per-stage audits
 #   14    Git status sanity
 #
 # Usage:
@@ -1382,12 +1382,12 @@ else
   tail -100 "$LOG_DIR/banking-full-e2e-smoke.log"
 fi
 
-# ── 13. LLM Shield 3A–3Q containment pipeline ────────────────────────────────
+# ── 13. LLM Shield 3A–3R containment pipeline ────────────────────────────────
 # Input firewall (3A) → adversarial benchmark (3B) → containment (3D) → gateway
 # (3E) → benchmark/shadow (3F/3G) → AgentDojo harness (3H) → utility/eval (3I/3J)
 # → adaptive readiness (3K) → reference containment (3L) → attestation (3M) →
 # claim-checked ledger (3N) → BYO-gateway benchmark (3O) → cross-defence
-# attestation (3P) → temporal registry + regression diff (3Q). Each stage smoke also
+# attestation (3P) → temporal registry + regression diff (3Q) → trust-preserving fallback (3R). Each stage smoke also
 # runs its own security/privacy/consistency audits; helper libs are gated at
 # 100% function coverage.
 step "LLM Shield 3A input smoke"
@@ -1760,6 +1760,30 @@ if node --test --experimental-test-coverage \
 else
   fail "LLM Shield 3Q temporal helper coverage"
   tail -100 "$LOG_DIR/llm-shield-stage3q-helper-coverage.log"
+fi
+
+step "LLM Shield 3R trust-preserving provider fallback"
+if scripts/smoke-llm-shield-stage3r.sh > "$LOG_DIR/llm-shield-stage3r-smoke.log" 2>&1; then
+  pass "LLM Shield 3R trust-preserving provider fallback"
+else
+  fail "LLM Shield 3R trust-preserving provider fallback"
+  tail -80 "$LOG_DIR/llm-shield-stage3r-smoke.log"
+fi
+
+step "LLM Shield 3R fallback helper coverage"
+if node --test --experimental-test-coverage \
+  --test-coverage-include=src/llmShield/gateway/fallbackPolicy.js \
+  --test-coverage-include=src/llmShield/gateway/fallbackOrchestrator.js \
+  --test-coverage-include=src/llmShield/gateway/fallbackSelfProof.js \
+  --test-coverage-functions=100 \
+  tests/unit/llmShield/gateway/fallbackPolicy.test.js \
+  tests/unit/llmShield/gateway/fallbackOrchestrator.test.js \
+  tests/unit/llmShield/gateway/fallbackSelfProof.test.js \
+  > "$LOG_DIR/llm-shield-stage3r-helper-coverage.log" 2>&1; then
+  pass "LLM Shield 3R fallback helper coverage"
+else
+  fail "LLM Shield 3R fallback helper coverage"
+  tail -100 "$LOG_DIR/llm-shield-stage3r-helper-coverage.log"
 fi
 
 step "LLM Shield 3E-core docker smoke (skips if no docker)"
