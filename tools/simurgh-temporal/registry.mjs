@@ -35,8 +35,14 @@ function baseManifest(n) {
     stage: "3Q",
     registry_id: "self-proof-registry",
     snapshots: Array.from({ length: n }, (_, i) => ({
-      entry_index: i, snapshot_id: `s${i}`, snapshot_label: `v${i}`, created_at_utc: ts,
-      catalogue_digest: `sha256:cat${i}`, catalogue_path: `p${i}`, corpus_digest: corpus, target_attestations: [],
+      entry_index: i,
+      snapshot_id: `s${i}`,
+      snapshot_label: `v${i}`,
+      created_at_utc: ts,
+      catalogue_digest: `sha256:cat${i}`,
+      catalogue_path: `p${i}`,
+      corpus_digest: corpus,
+      target_attestations: [],
     })),
   };
 }
@@ -49,7 +55,12 @@ function removedEntryAppend() {
   const oldReg = buildRegistryFromManifest(baseManifest(2), "sha256:M1");
   const shorter = buildRegistryFromManifest(baseManifest(1), "sha256:M2");
   return {
-    previousHead: { type: "simurgh.temporal.previous_registry_head.v1", stage: "3Q", previous_head_entry_digest: oldReg.head.head_entry_digest, previous_entry_count: 2 },
+    previousHead: {
+      type: "simurgh.temporal.previous_registry_head.v1",
+      stage: "3Q",
+      previous_head_entry_digest: oldReg.head.head_entry_digest,
+      previous_entry_count: 2,
+    },
     registry: shorter,
   };
 }
@@ -59,7 +70,12 @@ function reorderedEntryAppend() {
   unrelated.entries[0].entry_body.snapshot.snapshot_id = "reordered";
   unrelated.entries[0].entry_digest = "sha256:stale"; // breaks continuity + chain
   return {
-    previousHead: { type: "simurgh.temporal.previous_registry_head.v1", stage: "3Q", previous_head_entry_digest: oldReg.head.head_entry_digest, previous_entry_count: 1 },
+    previousHead: {
+      type: "simurgh.temporal.previous_registry_head.v1",
+      stage: "3Q",
+      previous_head_entry_digest: oldReg.head.head_entry_digest,
+      previous_entry_count: 1,
+    },
     registry: unrelated,
   };
 }
@@ -76,35 +92,126 @@ function manifestBadTs() {
 
 export function buildSelfProof() {
   const fixtures = [
-    { fixture_id: "clean-baseline", kind: "diff", expected_result: "accepted", expected_detector: null,
-      payload: { row: { target_lineage_id: "a", diff_id: "d", created_at_utc: ts }, before: spAtt("a", spCell("contained")), after: spAtt("a", spCell("contained")) } },
-    { fixture_id: "genuine-regression", kind: "diff", expected_result: "accepted", expected_detector: "regressed",
-      payload: { row: { target_lineage_id: "a", diff_id: "d", created_at_utc: ts }, before: spAtt("a", spCell("contained")), after: spAtt("a", spCell("allowed")) } },
-    { fixture_id: "genuine-improvement", kind: "diff", expected_result: "accepted", expected_detector: "improved",
-      payload: { row: { target_lineage_id: "a", diff_id: "d", created_at_utc: ts }, before: spAtt("a", spCell("allowed")), after: spAtt("a", spCell("contained")) } },
-    { fixture_id: "cross-lineage-diff", kind: "diff", expected_result: "rejected", expected_detector: "cross_target_diff_violation",
-      payload: { row: { target_lineage_id: "a", diff_id: "d", created_at_utc: ts }, before: spAtt("a", {}), after: spAtt("a", {}), force_after_lineage: "b" } },
-    { fixture_id: "corpus-mismatch", kind: "diff", expected_result: "non_comparable", expected_detector: "corpus_mismatch",
-      payload: { row: { target_lineage_id: "a", diff_id: "d", created_at_utc: ts }, before: spAtt("a", {}, "sha256:c1"), after: spAtt("a", {}, "sha256:c2") } },
-    { fixture_id: "before-integrity-failure", kind: "diff", expected_result: "accepted", expected_detector: "integrity_failure",
-      payload: { row: { target_lineage_id: "a", diff_id: "d", created_at_utc: ts }, before: spAtt("a", spCell("verification_failed")), after: spAtt("a", spCell("allowed")) } },
-    { fixture_id: "after-integrity-failure", kind: "diff", expected_result: "accepted", expected_detector: "integrity_failure",
-      payload: { row: { target_lineage_id: "a", diff_id: "d", created_at_utc: ts }, before: spAtt("a", spCell("contained")), after: spAtt("a", spCell("verification_failed")) } },
-    { fixture_id: "tampered-past-entry", kind: "registry_chain", expected_result: "rejected", expected_detector: "registry_chain_violation",
-      payload: { registry: tamperedRegistry() } },
-    { fixture_id: "removed-entry-append", kind: "append_continuity", expected_result: "rejected", expected_detector: "append_continuity_violation",
-      payload: removedEntryAppend() },
-    { fixture_id: "reordered-entry-append", kind: "append_continuity", expected_result: "rejected", expected_detector: "append_continuity_violation",
-      payload: reorderedEntryAppend() },
-    { fixture_id: "missing-created-at", kind: "manifest", expected_result: "rejected", expected_detector: "manifest_timestamp_violation",
-      payload: { manifest: manifestMissingTs() } },
-    { fixture_id: "invalid-created-at", kind: "manifest", expected_result: "rejected", expected_detector: "manifest_timestamp_violation",
-      payload: { manifest: manifestBadTs() } },
+    {
+      fixture_id: "clean-baseline",
+      kind: "diff",
+      expected_result: "accepted",
+      expected_detector: null,
+      payload: {
+        row: { target_lineage_id: "a", diff_id: "d", created_at_utc: ts },
+        before: spAtt("a", spCell("contained")),
+        after: spAtt("a", spCell("contained")),
+      },
+    },
+    {
+      fixture_id: "genuine-regression",
+      kind: "diff",
+      expected_result: "accepted",
+      expected_detector: "regressed",
+      payload: {
+        row: { target_lineage_id: "a", diff_id: "d", created_at_utc: ts },
+        before: spAtt("a", spCell("contained")),
+        after: spAtt("a", spCell("allowed")),
+      },
+    },
+    {
+      fixture_id: "genuine-improvement",
+      kind: "diff",
+      expected_result: "accepted",
+      expected_detector: "improved",
+      payload: {
+        row: { target_lineage_id: "a", diff_id: "d", created_at_utc: ts },
+        before: spAtt("a", spCell("allowed")),
+        after: spAtt("a", spCell("contained")),
+      },
+    },
+    {
+      fixture_id: "cross-lineage-diff",
+      kind: "diff",
+      expected_result: "rejected",
+      expected_detector: "cross_target_diff_violation",
+      payload: {
+        row: { target_lineage_id: "a", diff_id: "d", created_at_utc: ts },
+        before: spAtt("a", {}),
+        after: spAtt("a", {}),
+        force_after_lineage: "b",
+      },
+    },
+    {
+      fixture_id: "corpus-mismatch",
+      kind: "diff",
+      expected_result: "non_comparable",
+      expected_detector: "corpus_mismatch",
+      payload: {
+        row: { target_lineage_id: "a", diff_id: "d", created_at_utc: ts },
+        before: spAtt("a", {}, "sha256:c1"),
+        after: spAtt("a", {}, "sha256:c2"),
+      },
+    },
+    {
+      fixture_id: "before-integrity-failure",
+      kind: "diff",
+      expected_result: "accepted",
+      expected_detector: "integrity_failure",
+      payload: {
+        row: { target_lineage_id: "a", diff_id: "d", created_at_utc: ts },
+        before: spAtt("a", spCell("verification_failed")),
+        after: spAtt("a", spCell("allowed")),
+      },
+    },
+    {
+      fixture_id: "after-integrity-failure",
+      kind: "diff",
+      expected_result: "accepted",
+      expected_detector: "integrity_failure",
+      payload: {
+        row: { target_lineage_id: "a", diff_id: "d", created_at_utc: ts },
+        before: spAtt("a", spCell("contained")),
+        after: spAtt("a", spCell("verification_failed")),
+      },
+    },
+    {
+      fixture_id: "tampered-past-entry",
+      kind: "registry_chain",
+      expected_result: "rejected",
+      expected_detector: "registry_chain_violation",
+      payload: { registry: tamperedRegistry() },
+    },
+    {
+      fixture_id: "removed-entry-append",
+      kind: "append_continuity",
+      expected_result: "rejected",
+      expected_detector: "append_continuity_violation",
+      payload: removedEntryAppend(),
+    },
+    {
+      fixture_id: "reordered-entry-append",
+      kind: "append_continuity",
+      expected_result: "rejected",
+      expected_detector: "append_continuity_violation",
+      payload: reorderedEntryAppend(),
+    },
+    {
+      fixture_id: "missing-created-at",
+      kind: "manifest",
+      expected_result: "rejected",
+      expected_detector: "manifest_timestamp_violation",
+      payload: { manifest: manifestMissingTs() },
+    },
+    {
+      fixture_id: "invalid-created-at",
+      kind: "manifest",
+      expected_result: "rejected",
+      expected_detector: "manifest_timestamp_violation",
+      payload: { manifest: manifestBadTs() },
+    },
   ];
   const results = fixtures.map(evaluateTemporalSelfProofFixture);
   const launderingIds = ["before-integrity-failure", "after-integrity-failure", "corpus-mismatch"];
   const launderingSuccesses = results.filter(
-    (r) => launderingIds.includes(r.fixture_id) && (r.observed_detector === "regressed" || r.observed_detector === "improved")
+    (r) =>
+      launderingIds.includes(r.fixture_id) &&
+      (r.observed_detector === "regressed" || r.observed_detector === "improved")
   ).length;
   return {
     type: SELF_PROOF_SCHEMA,
@@ -126,11 +233,17 @@ export function buildSelfProof() {
 
 // --- real evidence derivation ---
 export async function deriveRegistry() {
-  const manifest = JSON.parse(await readFile(join(EV, "registry", "timeline-manifest.json"), "utf8"));
+  const manifest = JSON.parse(
+    await readFile(join(EV, "registry", "timeline-manifest.json"), "utf8")
+  );
   const v = validateTimelineManifest(manifest);
   if (!v.ok) throw new Error("timeline manifest invalid: " + v.errors.join("; "));
   const manifestDigest = sha256Hex(canonicalJson(manifest));
-  return { registry: buildRegistryFromManifest(manifest, manifestDigest), manifest, manifestDigest };
+  return {
+    registry: buildRegistryFromManifest(manifest, manifestDigest),
+    manifest,
+    manifestDigest,
+  };
 }
 
 export function diffOutputPath(row) {
@@ -158,7 +271,12 @@ export async function buildDiffList() {
       throw new Error(`diff ${row.diff_id}: before attestation digest mismatch`);
     if (sha256Hex(canonicalJson(after)) !== row.after_attestation_digest)
       throw new Error(`diff ${row.diff_id}: after attestation digest mismatch`);
-    const res = buildRegressionDiff({ diffRow: row, beforeAttestation: before, afterAttestation: after, diffManifestDigest });
+    const res = buildRegressionDiff({
+      diffRow: row,
+      beforeAttestation: before,
+      afterAttestation: after,
+      diffManifestDigest,
+    });
     if (!res.ok) throw new Error(`diff ${row.diff_id} rejected: ${res.violation}`);
     out.push({ row, diff: res.diff });
   }
@@ -210,16 +328,22 @@ async function writeEvidence() {
     await mkdir(dirname(p), { recursive: true });
     await writeFile(p, stable(diff));
   }
-  console.log("stage3q evidence: wrote registry + self-proof + diffs (run sign-3q-registry then `hash`)");
+  console.log(
+    "stage3q evidence: wrote registry + self-proof + diffs (run sign-3q-registry then `hash`)"
+  );
 }
 
 async function verifyEvidence() {
   const { registry } = await deriveRegistry();
   const committed = JSON.parse(await readFile(join(EV, "registry", "registry.json"), "utf8"));
-  if (stable(committed) !== stable(registry)) throw new Error("registry.json drifted; run build --update");
+  if (stable(committed) !== stable(registry))
+    throw new Error("registry.json drifted; run build --update");
   const sp = buildSelfProof();
-  const committedSp = JSON.parse(await readFile(join(EV, "self-proof", "self-proof-results.json"), "utf8"));
-  if (stable(committedSp) !== stable(sp)) throw new Error("self-proof-results.json drifted; run build --update");
+  const committedSp = JSON.parse(
+    await readFile(join(EV, "self-proof", "self-proof-results.json"), "utf8")
+  );
+  if (stable(committedSp) !== stable(sp))
+    throw new Error("self-proof-results.json drifted; run build --update");
   await deriveDiffs();
   console.log("stage3q evidence: verified committed (registry + self-proof + diffs derive clean)");
 }
@@ -234,8 +358,12 @@ export async function rewriteHashes() {
       missing.push(name);
     }
   }
-  if (missing.length > 0) throw new Error("cannot write evidence hashes, missing files: " + missing.join(", "));
-  await writeFile(join(EV, "evidence-hashes.json"), stable({ schema: "simurgh.temporal.hashes.v1", hashes }));
+  if (missing.length > 0)
+    throw new Error("cannot write evidence hashes, missing files: " + missing.join(", "));
+  await writeFile(
+    join(EV, "evidence-hashes.json"),
+    stable({ schema: "simurgh.temporal.hashes.v1", hashes })
+  );
 }
 
 export async function verifyHashes() {
@@ -253,7 +381,9 @@ async function mainCli() {
     const { manifest } = await deriveRegistry();
     const dm = JSON.parse(await readFile(join(EV, "diffs", "diff-manifest.json"), "utf8"));
     if (!validateDiffManifest(dm).ok) throw new Error("diff manifest invalid");
-    console.log(`stage3q manifest-check: PASS (${manifest.snapshots.length} snapshots, ${dm.diffs.length} diffs)`);
+    console.log(
+      `stage3q manifest-check: PASS (${manifest.snapshots.length} snapshots, ${dm.diffs.length} diffs)`
+    );
     return;
   }
   if (sub === "build") {

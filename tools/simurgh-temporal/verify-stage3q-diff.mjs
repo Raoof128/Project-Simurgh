@@ -4,7 +4,11 @@
 import crypto from "node:crypto";
 import { readFile, readdir } from "node:fs/promises";
 import { join } from "node:path";
-import { canonicalJson, sha256Hex, fingerprintPublicKey } from "../simurgh-attestation/canonicalise.mjs";
+import {
+  canonicalJson,
+  sha256Hex,
+  fingerprintPublicKey,
+} from "../simurgh-attestation/canonicalise.mjs";
 import { detectCrossTargetRankingExport } from "./temporalLib.mjs";
 
 const EV = "docs/research/llm-shield/evidence/stage-3q";
@@ -20,9 +24,15 @@ export function verifyDiff({ diff, sidecar, publicKeyPem }) {
   });
   const canonical = Buffer.from(canonicalJson(diff), "utf8");
   checks.bundle_digest_match = sidecar.bundle_sha256 === sha256Hex(canonical);
-  checks.key_fingerprint_match = sidecar.public_key_fingerprint === fingerprintPublicKey(publicKeyPem);
+  checks.key_fingerprint_match =
+    sidecar.public_key_fingerprint === fingerprintPublicKey(publicKeyPem);
   const sig = Buffer.from(sidecar.signature.replace(/^base64:/, ""), "base64");
-  checks.signature_valid = crypto.verify(null, canonical, crypto.createPublicKey(publicKeyPem), sig);
+  checks.signature_valid = crypto.verify(
+    null,
+    canonical,
+    crypto.createPublicKey(publicKeyPem),
+    sig
+  );
   return { ok: Object.values(checks).every(Boolean), checks };
 }
 
@@ -62,4 +72,8 @@ async function main() {
   console.log(`stage3q diff verify: PASS (${files.length} diffs)`);
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) main().catch((e) => { console.error(e.message); process.exit(1); });
+if (import.meta.url === `file://${process.argv[1]}`)
+  main().catch((e) => {
+    console.error(e.message);
+    process.exit(1);
+  });

@@ -20,16 +20,15 @@ integrity failure, and clock gremlins are rejected._
 
 ## The VCA ladder
 
-| Stage  | What it proves                                                          |
-| ------ | ---------------------------------------------------------------------- |
-| 3M     | the evidence bundle verifies offline (Ed25519)                        |
-| 3N     | the claims made _from_ that evidence cannot outrun it                 |
-| 3O     | others can produce evidence under the same contract                   |
-| 3P     | the contract binds many, differently-built targets at one point in time |
+| Stage  | What it proves                                                                                             |
+| ------ | ---------------------------------------------------------------------------------------------------------- |
+| 3M     | the evidence bundle verifies offline (Ed25519)                                                             |
+| 3N     | the claims made _from_ that evidence cannot outrun it                                                      |
+| 3O     | others can produce evidence under the same contract                                                        |
+| 3P     | the contract binds many, differently-built targets at one point in time                                    |
 | **3Q** | **attestations age into a tamper-evident timeline; weakening surfaces as a signed same-target regression** |
 
-3Q is the temporal rung. It is tooling, not a defence, and ships **no
-`src/llmShield/**` change** (policy-drift guard enforced).
+3Q is the temporal rung. It is tooling, not a defence, and ships **no `src/llmShield` change** (policy-drift guard enforced).
 
 ## The temporal non-ranking wall (verbatim)
 
@@ -52,7 +51,7 @@ only in a versioned id:
 
 ## Inherited discipline
 
-- **Tooling-only. Zero `src/llmShield/**` change.** The policy-drift guard uses the
+- **Tooling-only. Zero `src/llmShield` change.** The policy-drift guard uses the
   CI-safe `main...HEAD` three-dot form (the Stage 3P CI lesson: `origin/main` +
   `HEAD~1` fallback dies on GitHub's shallow checkout). **It must not fail open:** if
   the merge-base is unavailable it emits an explicit warning and falls back to a safe
@@ -324,20 +323,20 @@ Unit tests on every gate **and** an end-to-end self-proof pack
 frozen fixtures. **Self-proof fixtures never pollute the real registry or real
 regression diffs.**
 
-| Fixture                    | Input condition                                    | Expected detector / result             |
-| -------------------------- | -------------------------------------------------- | -------------------------------------- |
-| `clean-baseline`           | valid manifest, registry, same-target diff         | accepted                               |
-| `genuine-regression`       | same lineage, same corpus, `contained → allowed`   | `regressed`                            |
-| `genuine-improvement`      | same lineage, same corpus, `allowed → contained`   | `improved` (never `regressed`)         |
-| `cross-lineage-diff`       | `keyword-filter-replica` vs `tool-gate-replica`    | `cross_target_diff_violation`          |
-| `corpus-mismatch`          | same lineage, different `corpus_digest`            | `non_comparable` (never `regressed`)   |
-| `before-integrity-failure` | before snapshot invalid signature / verify failure | `integrity_failure` (never `regressed`)|
-| `after-integrity-failure`  | after snapshot invalid signature / verify failure  | `integrity_failure` (never `improved`) |
-| `tampered-past-entry`      | registry entry body edited after digest            | `registry_chain_violation`             |
-| `removed-entry-append`     | new registry omits an old entry vs previous head   | `append_continuity_violation`          |
-| `reordered-entry-append`   | new registry reorders old entries vs previous head | `append_continuity_violation`          |
-| `missing-created-at`       | manifest row lacks `created_at_utc`                | `manifest_timestamp_violation`         |
-| `invalid-created-at`       | timestamp not UTC / no trailing `Z`                | `manifest_timestamp_violation`         |
+| Fixture                    | Input condition                                    | Expected detector / result              |
+| -------------------------- | -------------------------------------------------- | --------------------------------------- |
+| `clean-baseline`           | valid manifest, registry, same-target diff         | accepted                                |
+| `genuine-regression`       | same lineage, same corpus, `contained → allowed`   | `regressed`                             |
+| `genuine-improvement`      | same lineage, same corpus, `allowed → contained`   | `improved` (never `regressed`)          |
+| `cross-lineage-diff`       | `keyword-filter-replica` vs `tool-gate-replica`    | `cross_target_diff_violation`           |
+| `corpus-mismatch`          | same lineage, different `corpus_digest`            | `non_comparable` (never `regressed`)    |
+| `before-integrity-failure` | before snapshot invalid signature / verify failure | `integrity_failure` (never `regressed`) |
+| `after-integrity-failure`  | after snapshot invalid signature / verify failure  | `integrity_failure` (never `improved`)  |
+| `tampered-past-entry`      | registry entry body edited after digest            | `registry_chain_violation`              |
+| `removed-entry-append`     | new registry omits an old entry vs previous head   | `append_continuity_violation`           |
+| `reordered-entry-append`   | new registry reorders old entries vs previous head | `append_continuity_violation`           |
+| `missing-created-at`       | manifest row lacks `created_at_utc`                | `manifest_timestamp_violation`          |
+| `invalid-created-at`       | timestamp not UTC / no trailing `Z`                | `manifest_timestamp_violation`          |
 
 ### `self-proof-results.json` summary
 
@@ -413,7 +412,7 @@ scripts/consistency-audit-llm-shield-stage3q.mjs    # registry derivable from ma
 
 - 100% function coverage on the pure libs (`temporalLib`, `registryChain`,
   `selfProof`) via `node --test --experimental-test-coverage
-  --test-coverage-functions=100` (scoped `--test-coverage-include`).
+--test-coverage-functions=100` (scoped `--test-coverage-include`).
 - CLI / signer / verifier I/O paths are smoke-covered (honest E2E, not padded).
 - Determinism: `registry build` + diff derivation re-run and byte-compared against
   committed output.

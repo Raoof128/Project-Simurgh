@@ -75,7 +75,10 @@ test("compareCoverageProfiles tallies transitions", () => {
 });
 
 test("lineage + corpus gates", () => {
-  assert.equal(enforceSameTargetLineage({ target_lineage_id: "a" }, { target_lineage_id: "a" }), null);
+  assert.equal(
+    enforceSameTargetLineage({ target_lineage_id: "a" }, { target_lineage_id: "a" }),
+    null
+  );
   assert.equal(
     enforceSameTargetLineage({ target_lineage_id: "a" }, { target_lineage_id: "b" }),
     "cross_target_diff_violation"
@@ -205,8 +208,17 @@ test("buildRegressionDiff emits a same-target diff with source + timestamp", () 
 test("buildRegressionDiff trips cross_target_diff_violation when targets differ (before binding)", () => {
   const before = att("keyword-filter-replica", {});
   const after = att("tool-gate-replica", {});
-  const row = { diff_id: "x", target_lineage_id: "keyword-filter-replica", created_at_utc: "2026-06-21T00:00:00Z" };
-  const res = buildRegressionDiff({ diffRow: row, beforeAttestation: before, afterAttestation: after, diffManifestDigest: "sha256:DM" });
+  const row = {
+    diff_id: "x",
+    target_lineage_id: "keyword-filter-replica",
+    created_at_utc: "2026-06-21T00:00:00Z",
+  };
+  const res = buildRegressionDiff({
+    diffRow: row,
+    beforeAttestation: before,
+    afterAttestation: after,
+    diffManifestDigest: "sha256:DM",
+  });
   assert.equal(res.ok, false);
   assert.equal(res.violation, "cross_target_diff_violation");
 });
@@ -214,8 +226,17 @@ test("buildRegressionDiff trips cross_target_diff_violation when targets differ 
 test("buildRegressionDiff trips lineage_binding_violation when targets agree but manifest relabels", () => {
   const before = att("keyword-filter-replica", {});
   const after = att("keyword-filter-replica", {});
-  const row = { diff_id: "x", target_lineage_id: "relabelled-lineage", created_at_utc: "2026-06-21T00:00:00Z" };
-  const res = buildRegressionDiff({ diffRow: row, beforeAttestation: before, afterAttestation: after, diffManifestDigest: "sha256:DM" });
+  const row = {
+    diff_id: "x",
+    target_lineage_id: "relabelled-lineage",
+    created_at_utc: "2026-06-21T00:00:00Z",
+  };
+  const res = buildRegressionDiff({
+    diffRow: row,
+    beforeAttestation: before,
+    afterAttestation: after,
+    diffManifestDigest: "sha256:DM",
+  });
   assert.equal(res.ok, false);
   assert.equal(res.violation, "lineage_binding_violation");
 });
@@ -223,8 +244,17 @@ test("buildRegressionDiff trips lineage_binding_violation when targets agree but
 test("buildRegressionDiff rejects corpus mismatch", () => {
   const before = att("keyword-filter-replica", {}, "sha256:c1");
   const after = att("keyword-filter-replica", {}, "sha256:c2");
-  const row = { diff_id: "x", target_lineage_id: "keyword-filter-replica", created_at_utc: "2026-06-21T00:00:00Z" };
-  const res = buildRegressionDiff({ diffRow: row, beforeAttestation: before, afterAttestation: after, diffManifestDigest: "sha256:DM" });
+  const row = {
+    diff_id: "x",
+    target_lineage_id: "keyword-filter-replica",
+    created_at_utc: "2026-06-21T00:00:00Z",
+  };
+  const res = buildRegressionDiff({
+    diffRow: row,
+    beforeAttestation: before,
+    afterAttestation: after,
+    diffManifestDigest: "sha256:DM",
+  });
   assert.equal(res.ok, false);
   assert.equal(res.violation, "corpus_mismatch");
 });

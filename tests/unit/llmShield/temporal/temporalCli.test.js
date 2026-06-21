@@ -11,7 +11,10 @@ test("buildSelfProof: clean baseline passes, all detectors fire, zero laundering
   assert.equal(sp.summary.clean_baseline_passed, true);
   assert.equal(sp.summary.all_expected_detectors_fired, true);
   assert.equal(sp.summary.integrity_laundering_successes, 0);
-  assert.ok(sp.fixtures.every((f) => f.passed), "all fixtures pass");
+  assert.ok(
+    sp.fixtures.every((f) => f.passed),
+    "all fixtures pass"
+  );
   const ids = sp.fixtures.map((f) => f.fixture_id);
   for (const id of [
     "before-integrity-failure",

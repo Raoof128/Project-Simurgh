@@ -10,7 +10,7 @@
 
 ## Global Constraints
 
-- Tooling-only. **Zero `src/llmShield/**` change** (policy-drift guard enforced).
+- Tooling-only. **Zero `src/llmShield/**` change\*\* (policy-drift guard enforced).
 - CI is deterministic, offline, and **verify-only** — CI never holds or reads a private key.
 - Metadata-only. No harmful payloads, secrets, or credentials in any artifact.
 - Dedicated **Stage 3Q Ed25519 key**; it signs only 3Q artifacts (registry + regression diffs). 3L/3M/3O/3P keys never sign 3Q and the 3Q key never signs theirs. Private key at `~/.simurgh/3q-ed25519.pem` (override `SIMURGH_3Q_PRIVATE_KEY_PATH`); only the public key is committed.
@@ -31,10 +31,12 @@
 ### Task 1: Temporal lib — timestamp/manifest validation, transition lattice, lineage/corpus gates
 
 **Files:**
+
 - Create: `tools/simurgh-temporal/temporalLib.mjs`
 - Test: `tests/unit/llmShield/temporal/temporalLib.test.js`
 
 **Interfaces:**
+
 - Consumes: nothing (pure).
 - Produces:
   - Constants: `TIMELINE_MANIFEST_SCHEMA="simurgh.temporal.timeline_manifest.v1"`, `DIFF_MANIFEST_SCHEMA="simurgh.temporal.diff_manifest.v1"`, `REGISTRY_SCHEMA="simurgh.temporal.registry.v1"`, `REGRESSION_DIFF_SCHEMA="simurgh.temporal.regression_diff.v1"`, `SELF_PROOF_SCHEMA="simurgh.temporal.self_proof_results.v1"`, `TRANSITIONS` (frozen array), `CELL_RESULTS` (frozen array), `RANKING_FIELD_NAMES` (frozen array).
@@ -121,7 +123,10 @@ test("compareCoverageProfiles tallies transitions", () => {
 });
 
 test("lineage + corpus gates", () => {
-  assert.equal(enforceSameTargetLineage({ target_lineage_id: "a" }, { target_lineage_id: "a" }), null);
+  assert.equal(
+    enforceSameTargetLineage({ target_lineage_id: "a" }, { target_lineage_id: "a" }),
+    null
+  );
   assert.equal(
     enforceSameTargetLineage({ target_lineage_id: "a" }, { target_lineage_id: "b" }),
     "cross_target_diff_violation"
@@ -319,12 +324,16 @@ export function validateTimelineManifest(m) {
       if (!isSha256(s.catalogue_digest)) errors.push(`snapshot ${i} bad catalogue_digest`);
       if (typeof s.catalogue_path !== "string") errors.push(`snapshot ${i} bad catalogue_path`);
       if (!isSha256(s.corpus_digest)) errors.push(`snapshot ${i} bad corpus_digest`);
-      if (!Array.isArray(s.target_attestations)) errors.push(`snapshot ${i} bad target_attestations`);
+      if (!Array.isArray(s.target_attestations))
+        errors.push(`snapshot ${i} bad target_attestations`);
       else
         s.target_attestations.forEach((t, j) => {
-          if (typeof t.target_lineage_id !== "string") errors.push(`snapshot ${i} target ${j} bad lineage`);
-          if (!isSha256(t.target_attestation_digest)) errors.push(`snapshot ${i} target ${j} bad digest`);
-          if (typeof t.target_attestation_path !== "string") errors.push(`snapshot ${i} target ${j} bad path`);
+          if (typeof t.target_lineage_id !== "string")
+            errors.push(`snapshot ${i} target ${j} bad lineage`);
+          if (!isSha256(t.target_attestation_digest))
+            errors.push(`snapshot ${i} target ${j} bad digest`);
+          if (typeof t.target_attestation_path !== "string")
+            errors.push(`snapshot ${i} target ${j} bad path`);
         });
     });
   return { ok: errors.length === 0, errors };
@@ -340,12 +349,18 @@ export function validateDiffManifest(m) {
     diffs.forEach((d, i) => {
       if (typeof d.diff_id !== "string") errors.push(`diff ${i} bad diff_id`);
       if (typeof d.target_lineage_id !== "string") errors.push(`diff ${i} bad target_lineage_id`);
-      if (typeof d.before_target_snapshot_id !== "string") errors.push(`diff ${i} bad before_target_snapshot_id`);
-      if (typeof d.after_target_snapshot_id !== "string") errors.push(`diff ${i} bad after_target_snapshot_id`);
-      if (!isSha256(d.before_attestation_digest)) errors.push(`diff ${i} bad before_attestation_digest`);
-      if (!isSha256(d.after_attestation_digest)) errors.push(`diff ${i} bad after_attestation_digest`);
-      if (typeof d.before_attestation_path !== "string") errors.push(`diff ${i} bad before_attestation_path`);
-      if (typeof d.after_attestation_path !== "string") errors.push(`diff ${i} bad after_attestation_path`);
+      if (typeof d.before_target_snapshot_id !== "string")
+        errors.push(`diff ${i} bad before_target_snapshot_id`);
+      if (typeof d.after_target_snapshot_id !== "string")
+        errors.push(`diff ${i} bad after_target_snapshot_id`);
+      if (!isSha256(d.before_attestation_digest))
+        errors.push(`diff ${i} bad before_attestation_digest`);
+      if (!isSha256(d.after_attestation_digest))
+        errors.push(`diff ${i} bad after_attestation_digest`);
+      if (typeof d.before_attestation_path !== "string")
+        errors.push(`diff ${i} bad before_attestation_path`);
+      if (typeof d.after_attestation_path !== "string")
+        errors.push(`diff ${i} bad after_attestation_path`);
       if (!isSha256(d.corpus_digest)) errors.push(`diff ${i} bad corpus_digest`);
       if (!validateUtcTimestamp(d.created_at_utc)) errors.push(`diff ${i} bad created_at_utc`);
     });
@@ -397,10 +412,12 @@ git commit -m "feat(stage-3q): temporal lib — transition lattice, manifest val
 ### Task 2: Registry chain — build from manifest, verify hash chain, verify append-continuity
 
 **Files:**
+
 - Create: `tools/simurgh-temporal/registryChain.mjs`
 - Test: `tests/unit/llmShield/temporal/registryChain.test.js`
 
 **Interfaces:**
+
 - Consumes: `canonicalJson`, `sha256Hex` from `../simurgh-attestation/canonicalise.mjs`; `REGISTRY_SCHEMA`, `detectCrossTargetRankingExport` from `./temporalLib.mjs`.
 - Produces:
   - `entryDigest(entryBody): string` → `sha256Hex(canonicalJson(entryBody))`.
@@ -636,12 +653,14 @@ git commit -m "feat(stage-3q): registry chain — deterministic build, hash-chai
 ### Task 3: Regression-diff builder + self-proof dispatch
 
 **Files:**
+
 - Create: `tools/simurgh-temporal/selfProof.mjs`
 - Modify: `tools/simurgh-temporal/temporalLib.mjs` (add `buildRegressionDiff`)
 - Test: `tests/unit/llmShield/temporal/temporalSelfProof.test.js`
 - Test (extend): `tests/unit/llmShield/temporal/temporalLib.test.js`
 
 **Interfaces:**
+
 - Consumes: `compareCoverageProfiles`, `enforceSameTargetLineage`, `enforceSameCorpusDigest`, `enforceLineageBinding`, `REGRESSION_DIFF_SCHEMA` from `./temporalLib.mjs`.
 - Produces:
   - `buildRegressionDiff({ diffRow, beforeAttestation, afterAttestation, diffManifestDigest }): { ok, diff?, violation? }` (in `temporalLib.mjs`). Enforces lineage binding (both sides), same lineage, same corpus; emits the signed-ready diff body (minus signature) including `source` + `created_at_utc`. On a gate failure returns `{ ok:false, violation }`.
@@ -694,8 +713,17 @@ test("buildRegressionDiff emits a same-target diff with source + timestamp", () 
 test("buildRegressionDiff trips cross_target_diff_violation when targets differ (before binding)", () => {
   const before = att("keyword-filter-replica", {});
   const after = att("tool-gate-replica", {});
-  const row = { diff_id: "x", target_lineage_id: "keyword-filter-replica", created_at_utc: "2026-06-21T00:00:00Z" };
-  const res = buildRegressionDiff({ diffRow: row, beforeAttestation: before, afterAttestation: after, diffManifestDigest: "sha256:DM" });
+  const row = {
+    diff_id: "x",
+    target_lineage_id: "keyword-filter-replica",
+    created_at_utc: "2026-06-21T00:00:00Z",
+  };
+  const res = buildRegressionDiff({
+    diffRow: row,
+    beforeAttestation: before,
+    afterAttestation: after,
+    diffManifestDigest: "sha256:DM",
+  });
   assert.equal(res.ok, false);
   assert.equal(res.violation, "cross_target_diff_violation");
 });
@@ -703,8 +731,17 @@ test("buildRegressionDiff trips cross_target_diff_violation when targets differ 
 test("buildRegressionDiff trips lineage_binding_violation when targets agree but manifest relabels", () => {
   const before = att("keyword-filter-replica", {});
   const after = att("keyword-filter-replica", {});
-  const row = { diff_id: "x", target_lineage_id: "relabelled-lineage", created_at_utc: "2026-06-21T00:00:00Z" };
-  const res = buildRegressionDiff({ diffRow: row, beforeAttestation: before, afterAttestation: after, diffManifestDigest: "sha256:DM" });
+  const row = {
+    diff_id: "x",
+    target_lineage_id: "relabelled-lineage",
+    created_at_utc: "2026-06-21T00:00:00Z",
+  };
+  const res = buildRegressionDiff({
+    diffRow: row,
+    beforeAttestation: before,
+    afterAttestation: after,
+    diffManifestDigest: "sha256:DM",
+  });
   assert.equal(res.ok, false);
   assert.equal(res.violation, "lineage_binding_violation");
 });
@@ -712,8 +749,17 @@ test("buildRegressionDiff trips lineage_binding_violation when targets agree but
 test("buildRegressionDiff rejects corpus mismatch", () => {
   const before = att("keyword-filter-replica", {}, "sha256:c1");
   const after = att("keyword-filter-replica", {}, "sha256:c2");
-  const row = { diff_id: "x", target_lineage_id: "keyword-filter-replica", created_at_utc: "2026-06-21T00:00:00Z" };
-  const res = buildRegressionDiff({ diffRow: row, beforeAttestation: before, afterAttestation: after, diffManifestDigest: "sha256:DM" });
+  const row = {
+    diff_id: "x",
+    target_lineage_id: "keyword-filter-replica",
+    created_at_utc: "2026-06-21T00:00:00Z",
+  };
+  const res = buildRegressionDiff({
+    diffRow: row,
+    beforeAttestation: before,
+    afterAttestation: after,
+    diffManifestDigest: "sha256:DM",
+  });
   assert.equal(res.ok, false);
   assert.equal(res.violation, "corpus_mismatch");
 });
@@ -728,7 +774,12 @@ Expected: FAIL — `buildRegressionDiff` not exported.
 
 ```javascript
 // append to tools/simurgh-temporal/temporalLib.mjs
-export function buildRegressionDiff({ diffRow, beforeAttestation, afterAttestation, diffManifestDigest }) {
+export function buildRegressionDiff({
+  diffRow,
+  beforeAttestation,
+  afterAttestation,
+  diffManifestDigest,
+}) {
   // 1. cross-target FIRST: comparing two different real targets is the leaderboard sin.
   const beforeMeta = {
     target_lineage_id: beforeAttestation.target.target_id,
@@ -746,7 +797,8 @@ export function buildRegressionDiff({ diffRow, beforeAttestation, afterAttestati
   const ab = enforceLineageBinding(diffRow.target_lineage_id, afterAttestation);
   if (ab) return { ok: false, violation: ab };
   // 3. same corpus.
-  if (!enforceSameCorpusDigest(beforeMeta, afterMeta)) return { ok: false, violation: "corpus_mismatch" };
+  if (!enforceSameCorpusDigest(beforeMeta, afterMeta))
+    return { ok: false, violation: "corpus_mismatch" };
 
   const { cell_transitions, summary } = compareCoverageProfiles(
     beforeAttestation.coverage_profile?.cells ?? {},
@@ -800,26 +852,109 @@ import { evaluateTemporalSelfProofFixture } from "../../../../tools/simurgh-temp
 
 const corpus = "sha256:corpus";
 function att(id, cells, c = corpus) {
-  return { type: "simurgh.cross_defence.target_attestation.v1", stage: "3P", target: { target_id: id }, corpus: { corpus_digest: c }, coverage_profile: { cells } };
+  return {
+    type: "simurgh.cross_defence.target_attestation.v1",
+    stage: "3P",
+    target: { target_id: id },
+    corpus: { corpus_digest: c },
+    coverage_profile: { cells },
+  };
 }
 const cell = (r) => ({ "direct_input::plain_marker": { result: r } });
 
 test("each self-proof fixture trips its detector", () => {
   const cases = [
-    { fixture_id: "clean-baseline", kind: "diff", expected_result: "accepted", expected_detector: null,
-      payload: { row: { target_lineage_id: "a", diff_id: "d", created_at_utc: "2026-06-21T00:00:00Z" }, before: att("a", cell("contained")), after: att("a", cell("contained")) } },
-    { fixture_id: "genuine-regression", kind: "diff", expected_result: "accepted", expected_detector: "regressed",
-      payload: { row: { target_lineage_id: "a", diff_id: "d", created_at_utc: "2026-06-21T00:00:00Z" }, before: att("a", cell("contained")), after: att("a", cell("allowed")) } },
-    { fixture_id: "genuine-improvement", kind: "diff", expected_result: "accepted", expected_detector: "improved",
-      payload: { row: { target_lineage_id: "a", diff_id: "d", created_at_utc: "2026-06-21T00:00:00Z" }, before: att("a", cell("allowed")), after: att("a", cell("contained")) } },
-    { fixture_id: "cross-lineage-diff", kind: "diff", expected_result: "rejected", expected_detector: "cross_target_diff_violation",
-      payload: { row: { target_lineage_id: "a", diff_id: "d", created_at_utc: "2026-06-21T00:00:00Z" }, before: att("a", {}), after: att("a", {}), force_after_lineage: "b" } },
-    { fixture_id: "corpus-mismatch", kind: "diff", expected_result: "non_comparable", expected_detector: "corpus_mismatch",
-      payload: { row: { target_lineage_id: "a", diff_id: "d", created_at_utc: "2026-06-21T00:00:00Z" }, before: att("a", {}, "sha256:c1"), after: att("a", {}, "sha256:c2") } },
-    { fixture_id: "before-integrity-failure", kind: "diff", expected_result: "accepted", expected_detector: "integrity_failure",
-      payload: { row: { target_lineage_id: "a", diff_id: "d", created_at_utc: "2026-06-21T00:00:00Z" }, before: att("a", cell("verification_failed")), after: att("a", cell("allowed")) } },
-    { fixture_id: "missing-created-at", kind: "manifest", expected_result: "rejected", expected_detector: "manifest_timestamp_violation",
-      payload: { manifest: { type: "simurgh.temporal.timeline_manifest.v1", stage: "3Q", registry_id: "r", snapshots: [{ entry_index: 0, snapshot_id: "s", snapshot_label: "v", catalogue_digest: "sha256:a", catalogue_path: "p", corpus_digest: corpus, target_attestations: [] }] } } },
+    {
+      fixture_id: "clean-baseline",
+      kind: "diff",
+      expected_result: "accepted",
+      expected_detector: null,
+      payload: {
+        row: { target_lineage_id: "a", diff_id: "d", created_at_utc: "2026-06-21T00:00:00Z" },
+        before: att("a", cell("contained")),
+        after: att("a", cell("contained")),
+      },
+    },
+    {
+      fixture_id: "genuine-regression",
+      kind: "diff",
+      expected_result: "accepted",
+      expected_detector: "regressed",
+      payload: {
+        row: { target_lineage_id: "a", diff_id: "d", created_at_utc: "2026-06-21T00:00:00Z" },
+        before: att("a", cell("contained")),
+        after: att("a", cell("allowed")),
+      },
+    },
+    {
+      fixture_id: "genuine-improvement",
+      kind: "diff",
+      expected_result: "accepted",
+      expected_detector: "improved",
+      payload: {
+        row: { target_lineage_id: "a", diff_id: "d", created_at_utc: "2026-06-21T00:00:00Z" },
+        before: att("a", cell("allowed")),
+        after: att("a", cell("contained")),
+      },
+    },
+    {
+      fixture_id: "cross-lineage-diff",
+      kind: "diff",
+      expected_result: "rejected",
+      expected_detector: "cross_target_diff_violation",
+      payload: {
+        row: { target_lineage_id: "a", diff_id: "d", created_at_utc: "2026-06-21T00:00:00Z" },
+        before: att("a", {}),
+        after: att("a", {}),
+        force_after_lineage: "b",
+      },
+    },
+    {
+      fixture_id: "corpus-mismatch",
+      kind: "diff",
+      expected_result: "non_comparable",
+      expected_detector: "corpus_mismatch",
+      payload: {
+        row: { target_lineage_id: "a", diff_id: "d", created_at_utc: "2026-06-21T00:00:00Z" },
+        before: att("a", {}, "sha256:c1"),
+        after: att("a", {}, "sha256:c2"),
+      },
+    },
+    {
+      fixture_id: "before-integrity-failure",
+      kind: "diff",
+      expected_result: "accepted",
+      expected_detector: "integrity_failure",
+      payload: {
+        row: { target_lineage_id: "a", diff_id: "d", created_at_utc: "2026-06-21T00:00:00Z" },
+        before: att("a", cell("verification_failed")),
+        after: att("a", cell("allowed")),
+      },
+    },
+    {
+      fixture_id: "missing-created-at",
+      kind: "manifest",
+      expected_result: "rejected",
+      expected_detector: "manifest_timestamp_violation",
+      payload: {
+        manifest: {
+          type: "simurgh.temporal.timeline_manifest.v1",
+          stage: "3Q",
+          registry_id: "r",
+          snapshots: [
+            {
+              entry_index: 0,
+              snapshot_id: "s",
+              snapshot_label: "v",
+              catalogue_digest: "sha256:a",
+              catalogue_path: "p",
+              corpus_digest: corpus,
+              target_attestations: [],
+            },
+          ],
+        },
+      },
+    },
   ];
   for (const c of cases) {
     const r = evaluateTemporalSelfProofFixture(c);
@@ -930,10 +1065,12 @@ git commit -m "feat(stage-3q): regression-diff builder + self-proof fixture disp
 ### Task 4: CLI — manifest-check, build, hash, verify-hashes; deterministic evidence + self-proof pack
 
 **Files:**
+
 - Create: `tools/simurgh-temporal/registry.mjs`
 - Test: `tests/unit/llmShield/temporal/temporalCli.test.js`
 
 **Interfaces:**
+
 - Consumes: temporalLib, registryChain, selfProof modules; `canonicalJson`, `sha256Hex`.
 - Produces:
   - `buildSelfProof(): object` — runs the full fixture set through `evaluateTemporalSelfProofFixture`, returns the `self-proof-results.json` body with `summary.integrity_laundering_successes`.
@@ -959,10 +1096,18 @@ test("buildSelfProof: clean baseline passes, all detectors fire, zero laundering
   assert.equal(sp.summary.all_expected_detectors_fired, true);
   assert.equal(sp.summary.integrity_laundering_successes, 0);
   // every fixture passed
-  assert.ok(sp.fixtures.every((f) => f.passed), "all fixtures pass");
+  assert.ok(
+    sp.fixtures.every((f) => f.passed),
+    "all fixtures pass"
+  );
   // the laundering fixtures exist and did NOT become regressed/improved
   const ids = sp.fixtures.map((f) => f.fixture_id);
-  for (const id of ["before-integrity-failure", "after-integrity-failure", "corpus-mismatch", "cross-lineage-diff"])
+  for (const id of [
+    "before-integrity-failure",
+    "after-integrity-failure",
+    "corpus-mismatch",
+    "cross-lineage-diff",
+  ])
     assert.ok(ids.includes(id), `has ${id}`);
 });
 ```
@@ -1009,35 +1154,126 @@ const ts = "2026-06-21T00:00:00Z";
 
 export function buildSelfProof() {
   const fixtures = [
-    { fixture_id: "clean-baseline", kind: "diff", expected_result: "accepted", expected_detector: null,
-      payload: { row: { target_lineage_id: "a", diff_id: "d", created_at_utc: ts }, before: spAtt("a", spCell("contained")), after: spAtt("a", spCell("contained")) } },
-    { fixture_id: "genuine-regression", kind: "diff", expected_result: "accepted", expected_detector: "regressed",
-      payload: { row: { target_lineage_id: "a", diff_id: "d", created_at_utc: ts }, before: spAtt("a", spCell("contained")), after: spAtt("a", spCell("allowed")) } },
-    { fixture_id: "genuine-improvement", kind: "diff", expected_result: "accepted", expected_detector: "improved",
-      payload: { row: { target_lineage_id: "a", diff_id: "d", created_at_utc: ts }, before: spAtt("a", spCell("allowed")), after: spAtt("a", spCell("contained")) } },
-    { fixture_id: "cross-lineage-diff", kind: "diff", expected_result: "rejected", expected_detector: "cross_target_diff_violation",
-      payload: { row: { target_lineage_id: "a", diff_id: "d", created_at_utc: ts }, before: spAtt("a", {}), after: spAtt("a", {}), force_after_lineage: "b" } },
-    { fixture_id: "corpus-mismatch", kind: "diff", expected_result: "non_comparable", expected_detector: "corpus_mismatch",
-      payload: { row: { target_lineage_id: "a", diff_id: "d", created_at_utc: ts }, before: spAtt("a", {}, "sha256:c1"), after: spAtt("a", {}, "sha256:c2") } },
-    { fixture_id: "before-integrity-failure", kind: "diff", expected_result: "accepted", expected_detector: "integrity_failure",
-      payload: { row: { target_lineage_id: "a", diff_id: "d", created_at_utc: ts }, before: spAtt("a", spCell("verification_failed")), after: spAtt("a", spCell("allowed")) } },
-    { fixture_id: "after-integrity-failure", kind: "diff", expected_result: "accepted", expected_detector: "integrity_failure",
-      payload: { row: { target_lineage_id: "a", diff_id: "d", created_at_utc: ts }, before: spAtt("a", spCell("contained")), after: spAtt("a", spCell("verification_failed")) } },
-    { fixture_id: "tampered-past-entry", kind: "registry_chain", expected_result: "rejected", expected_detector: "registry_chain_violation",
-      payload: { registry: tamperedRegistry() } },
-    { fixture_id: "removed-entry-append", kind: "append_continuity", expected_result: "rejected", expected_detector: "append_continuity_violation",
-      payload: removedEntryAppend() },
-    { fixture_id: "reordered-entry-append", kind: "append_continuity", expected_result: "rejected", expected_detector: "append_continuity_violation",
-      payload: reorderedEntryAppend() },
-    { fixture_id: "missing-created-at", kind: "manifest", expected_result: "rejected", expected_detector: "manifest_timestamp_violation",
-      payload: { manifest: manifestMissingTs() } },
-    { fixture_id: "invalid-created-at", kind: "manifest", expected_result: "rejected", expected_detector: "manifest_timestamp_violation",
-      payload: { manifest: manifestBadTs() } },
+    {
+      fixture_id: "clean-baseline",
+      kind: "diff",
+      expected_result: "accepted",
+      expected_detector: null,
+      payload: {
+        row: { target_lineage_id: "a", diff_id: "d", created_at_utc: ts },
+        before: spAtt("a", spCell("contained")),
+        after: spAtt("a", spCell("contained")),
+      },
+    },
+    {
+      fixture_id: "genuine-regression",
+      kind: "diff",
+      expected_result: "accepted",
+      expected_detector: "regressed",
+      payload: {
+        row: { target_lineage_id: "a", diff_id: "d", created_at_utc: ts },
+        before: spAtt("a", spCell("contained")),
+        after: spAtt("a", spCell("allowed")),
+      },
+    },
+    {
+      fixture_id: "genuine-improvement",
+      kind: "diff",
+      expected_result: "accepted",
+      expected_detector: "improved",
+      payload: {
+        row: { target_lineage_id: "a", diff_id: "d", created_at_utc: ts },
+        before: spAtt("a", spCell("allowed")),
+        after: spAtt("a", spCell("contained")),
+      },
+    },
+    {
+      fixture_id: "cross-lineage-diff",
+      kind: "diff",
+      expected_result: "rejected",
+      expected_detector: "cross_target_diff_violation",
+      payload: {
+        row: { target_lineage_id: "a", diff_id: "d", created_at_utc: ts },
+        before: spAtt("a", {}),
+        after: spAtt("a", {}),
+        force_after_lineage: "b",
+      },
+    },
+    {
+      fixture_id: "corpus-mismatch",
+      kind: "diff",
+      expected_result: "non_comparable",
+      expected_detector: "corpus_mismatch",
+      payload: {
+        row: { target_lineage_id: "a", diff_id: "d", created_at_utc: ts },
+        before: spAtt("a", {}, "sha256:c1"),
+        after: spAtt("a", {}, "sha256:c2"),
+      },
+    },
+    {
+      fixture_id: "before-integrity-failure",
+      kind: "diff",
+      expected_result: "accepted",
+      expected_detector: "integrity_failure",
+      payload: {
+        row: { target_lineage_id: "a", diff_id: "d", created_at_utc: ts },
+        before: spAtt("a", spCell("verification_failed")),
+        after: spAtt("a", spCell("allowed")),
+      },
+    },
+    {
+      fixture_id: "after-integrity-failure",
+      kind: "diff",
+      expected_result: "accepted",
+      expected_detector: "integrity_failure",
+      payload: {
+        row: { target_lineage_id: "a", diff_id: "d", created_at_utc: ts },
+        before: spAtt("a", spCell("contained")),
+        after: spAtt("a", spCell("verification_failed")),
+      },
+    },
+    {
+      fixture_id: "tampered-past-entry",
+      kind: "registry_chain",
+      expected_result: "rejected",
+      expected_detector: "registry_chain_violation",
+      payload: { registry: tamperedRegistry() },
+    },
+    {
+      fixture_id: "removed-entry-append",
+      kind: "append_continuity",
+      expected_result: "rejected",
+      expected_detector: "append_continuity_violation",
+      payload: removedEntryAppend(),
+    },
+    {
+      fixture_id: "reordered-entry-append",
+      kind: "append_continuity",
+      expected_result: "rejected",
+      expected_detector: "append_continuity_violation",
+      payload: reorderedEntryAppend(),
+    },
+    {
+      fixture_id: "missing-created-at",
+      kind: "manifest",
+      expected_result: "rejected",
+      expected_detector: "manifest_timestamp_violation",
+      payload: { manifest: manifestMissingTs() },
+    },
+    {
+      fixture_id: "invalid-created-at",
+      kind: "manifest",
+      expected_result: "rejected",
+      expected_detector: "manifest_timestamp_violation",
+      payload: { manifest: manifestBadTs() },
+    },
   ];
   const results = fixtures.map(evaluateTemporalSelfProofFixture);
   const launderingIds = ["before-integrity-failure", "after-integrity-failure", "corpus-mismatch"];
   const launderingSuccesses = results.filter(
-    (r) => launderingIds.includes(r.fixture_id) && (r.observed_detector === "regressed" || r.observed_detector === "improved")
+    (r) =>
+      launderingIds.includes(r.fixture_id) &&
+      (r.observed_detector === "regressed" || r.observed_detector === "improved")
   ).length;
   return {
     type: SELF_PROOF_SCHEMA,
@@ -1064,8 +1300,14 @@ function baseManifest(n) {
     stage: "3Q",
     registry_id: "self-proof-registry",
     snapshots: Array.from({ length: n }, (_, i) => ({
-      entry_index: i, snapshot_id: `s${i}`, snapshot_label: `v${i}`, created_at_utc: ts,
-      catalogue_digest: `sha256:cat${i}`, catalogue_path: `p${i}`, corpus_digest: corpus, target_attestations: [],
+      entry_index: i,
+      snapshot_id: `s${i}`,
+      snapshot_label: `v${i}`,
+      created_at_utc: ts,
+      catalogue_digest: `sha256:cat${i}`,
+      catalogue_path: `p${i}`,
+      corpus_digest: corpus,
+      target_attestations: [],
     })),
   };
 }
@@ -1078,17 +1320,30 @@ function removedEntryAppend() {
   const oldReg = buildRegistryFromManifest(baseManifest(2), "sha256:M1");
   const shorter = buildRegistryFromManifest(baseManifest(1), "sha256:M2"); // fewer entries than prev count
   return {
-    previousHead: { type: "simurgh.temporal.previous_registry_head.v1", stage: "3Q", previous_head_entry_digest: oldReg.head.head_entry_digest, previous_entry_count: 2 },
+    previousHead: {
+      type: "simurgh.temporal.previous_registry_head.v1",
+      stage: "3Q",
+      previous_head_entry_digest: oldReg.head.head_entry_digest,
+      previous_entry_count: 2,
+    },
     registry: shorter,
   };
 }
 function reorderedEntryAppend() {
   const oldReg = buildRegistryFromManifest(baseManifest(1), "sha256:M1");
-  const unrelated = buildRegistryFromManifest({ ...baseManifest(2), registry_id: "self-proof-registry" }, "sha256:M2");
+  const unrelated = buildRegistryFromManifest(
+    { ...baseManifest(2), registry_id: "self-proof-registry" },
+    "sha256:M2"
+  );
   unrelated.entries[0].entry_body.snapshot.snapshot_id = "reordered";
   unrelated.entries[0].entry_digest = "sha256:stale"; // breaks continuity from old head
   return {
-    previousHead: { type: "simurgh.temporal.previous_registry_head.v1", stage: "3Q", previous_head_entry_digest: oldReg.head.head_entry_digest, previous_entry_count: 1 },
+    previousHead: {
+      type: "simurgh.temporal.previous_registry_head.v1",
+      stage: "3Q",
+      previous_head_entry_digest: oldReg.head.head_entry_digest,
+      previous_entry_count: 1,
+    },
     registry: unrelated,
   };
 }
@@ -1105,11 +1360,17 @@ function manifestBadTs() {
 
 // --- real evidence derivation ---
 export async function deriveRegistry() {
-  const manifest = JSON.parse(await readFile(join(EV, "registry", "timeline-manifest.json"), "utf8"));
+  const manifest = JSON.parse(
+    await readFile(join(EV, "registry", "timeline-manifest.json"), "utf8")
+  );
   const v = validateTimelineManifest(manifest);
   if (!v.ok) throw new Error("timeline manifest invalid: " + v.errors.join("; "));
   const manifestDigest = sha256Hex(canonicalJson(manifest));
-  return { registry: buildRegistryFromManifest(manifest, manifestDigest), manifest, manifestDigest };
+  return {
+    registry: buildRegistryFromManifest(manifest, manifestDigest),
+    manifest,
+    manifestDigest,
+  };
 }
 
 export function diffOutputPath(row) {
@@ -1138,7 +1399,12 @@ export async function buildDiffList() {
       throw new Error(`diff ${row.diff_id}: before attestation digest mismatch`);
     if (sha256Hex(canonicalJson(after)) !== row.after_attestation_digest)
       throw new Error(`diff ${row.diff_id}: after attestation digest mismatch`);
-    const res = buildRegressionDiff({ diffRow: row, beforeAttestation: before, afterAttestation: after, diffManifestDigest });
+    const res = buildRegressionDiff({
+      diffRow: row,
+      beforeAttestation: before,
+      afterAttestation: after,
+      diffManifestDigest,
+    });
     if (!res.ok) throw new Error(`diff ${row.diff_id} rejected: ${res.violation}`);
     out.push({ row, diff: res.diff });
   }
@@ -1191,16 +1457,22 @@ async function writeEvidence() {
     await mkdir(dirname(p), { recursive: true });
     await writeFile(p, stable(diff));
   }
-  console.log("stage3q evidence: wrote registry + self-proof + diffs (run sign-3q-registry then `hash`)");
+  console.log(
+    "stage3q evidence: wrote registry + self-proof + diffs (run sign-3q-registry then `hash`)"
+  );
 }
 
 async function verifyEvidence() {
   const { registry } = await deriveRegistry();
   const committed = JSON.parse(await readFile(join(EV, "registry", "registry.json"), "utf8"));
-  if (stable(committed) !== stable(registry)) throw new Error("registry.json drifted; run build --update");
+  if (stable(committed) !== stable(registry))
+    throw new Error("registry.json drifted; run build --update");
   const sp = buildSelfProof();
-  const committedSp = JSON.parse(await readFile(join(EV, "self-proof", "self-proof-results.json"), "utf8"));
-  if (stable(committedSp) !== stable(sp)) throw new Error("self-proof-results.json drifted; run build --update");
+  const committedSp = JSON.parse(
+    await readFile(join(EV, "self-proof", "self-proof-results.json"), "utf8")
+  );
+  if (stable(committedSp) !== stable(sp))
+    throw new Error("self-proof-results.json drifted; run build --update");
   // derive diffs + byte-compare committed outputs (may be empty at genesis)
   await deriveDiffs();
   console.log("stage3q evidence: verified committed (registry + self-proof + diffs derive clean)");
@@ -1216,8 +1488,12 @@ export async function rewriteHashes() {
       missing.push(name);
     }
   }
-  if (missing.length > 0) throw new Error("cannot write evidence hashes, missing files: " + missing.join(", "));
-  await writeFile(join(EV, "evidence-hashes.json"), stable({ schema: "simurgh.temporal.hashes.v1", hashes }));
+  if (missing.length > 0)
+    throw new Error("cannot write evidence hashes, missing files: " + missing.join(", "));
+  await writeFile(
+    join(EV, "evidence-hashes.json"),
+    stable({ schema: "simurgh.temporal.hashes.v1", hashes })
+  );
 }
 
 export async function verifyHashes() {
@@ -1235,7 +1511,9 @@ async function mainCli() {
     const { manifest } = await deriveRegistry();
     const dm = JSON.parse(await readFile(join(EV, "diffs", "diff-manifest.json"), "utf8"));
     if (!validateDiffManifest(dm).ok) throw new Error("diff manifest invalid");
-    console.log(`stage3q manifest-check: PASS (${manifest.snapshots.length} snapshots, ${dm.diffs.length} diffs)`);
+    console.log(
+      `stage3q manifest-check: PASS (${manifest.snapshots.length} snapshots, ${dm.diffs.length} diffs)`
+    );
     return;
   }
   if (sub === "build") {
@@ -1287,6 +1565,7 @@ git commit -m "feat(stage-3q): CLI — manifest-check, deterministic registry/di
 ### Task 5: Keypair, signer, verifiers, committed signed evidence
 
 **Files:**
+
 - Create: `tools/simurgh-temporal/sign-3q-registry.mjs`
 - Create: `tools/simurgh-temporal/verify-stage3q-registry.mjs`
 - Create: `tools/simurgh-temporal/verify-stage3q-append.mjs`
@@ -1295,6 +1574,7 @@ git commit -m "feat(stage-3q): CLI — manifest-check, deterministic registry/di
 - Create (generated, committed): the timeline manifest, empty diff manifest, registry + signature, previous-registry-head, self-proof, public key, fingerprint, evidence-hashes.
 
 **Interfaces:**
+
 - `verify-stage3q-registry.mjs`: `verifyRegistry({ registry, sidecar, publicKeyPem }): { ok, checks }` — chain + signature + digest + fingerprint + no-ranking.
 - `verify-stage3q-append.mjs`: `verifyAppend({ previousHead, registry }): { ok, checks }`.
 - `verify-stage3q-diff.mjs`: `verifyDiff({ diff, sidecar, publicKeyPem }): { ok, checks }` — signature + lattice sanity (no integrity_failure cell classified as regressed/improved; no cross-target rank field).
@@ -1307,17 +1587,44 @@ git commit -m "feat(stage-3q): CLI — manifest-check, deterministic registry/di
 import test from "node:test";
 import assert from "node:assert/strict";
 import crypto from "node:crypto";
-import { canonicalJson, sha256Hex, fingerprintPublicKey } from "../../../../tools/simurgh-attestation/canonicalise.mjs";
+import {
+  canonicalJson,
+  sha256Hex,
+  fingerprintPublicKey,
+} from "../../../../tools/simurgh-attestation/canonicalise.mjs";
 import { buildRegistryFromManifest } from "../../../../tools/simurgh-temporal/registryChain.mjs";
 import { verifyRegistry } from "../../../../tools/simurgh-temporal/verify-stage3q-registry.mjs";
 
 function sign(obj, privPem, pubPem) {
   const canonical = Buffer.from(canonicalJson(obj), "utf8");
   const signature = crypto.sign(null, canonical, crypto.createPrivateKey(privPem));
-  return { schema: "simurgh.temporal.signature.v1", algorithm: "Ed25519", canonicalisation: "simurgh.canonical-json.v1", bundle_sha256: sha256Hex(canonical), public_key_fingerprint: fingerprintPublicKey(pubPem), signature: "base64:" + signature.toString("base64") };
+  return {
+    schema: "simurgh.temporal.signature.v1",
+    algorithm: "Ed25519",
+    canonicalisation: "simurgh.canonical-json.v1",
+    bundle_sha256: sha256Hex(canonical),
+    public_key_fingerprint: fingerprintPublicKey(pubPem),
+    signature: "base64:" + signature.toString("base64"),
+  };
 }
 function manifest() {
-  return { type: "simurgh.temporal.timeline_manifest.v1", stage: "3Q", registry_id: "r", snapshots: [{ entry_index: 0, snapshot_id: "s0", snapshot_label: "v0", created_at_utc: "2026-06-21T00:00:00Z", catalogue_digest: "sha256:c", catalogue_path: "p", corpus_digest: "sha256:corpus", target_attestations: [] }] };
+  return {
+    type: "simurgh.temporal.timeline_manifest.v1",
+    stage: "3Q",
+    registry_id: "r",
+    snapshots: [
+      {
+        entry_index: 0,
+        snapshot_id: "s0",
+        snapshot_label: "v0",
+        created_at_utc: "2026-06-21T00:00:00Z",
+        catalogue_digest: "sha256:c",
+        catalogue_path: "p",
+        corpus_digest: "sha256:corpus",
+        target_attestations: [],
+      },
+    ],
+  };
 }
 
 test("verifyRegistry accepts a signed valid ledger and rejects tampering", () => {
@@ -1347,7 +1654,11 @@ Expected: FAIL — module not found.
 import crypto from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { canonicalJson, sha256Hex, fingerprintPublicKey } from "../simurgh-attestation/canonicalise.mjs";
+import {
+  canonicalJson,
+  sha256Hex,
+  fingerprintPublicKey,
+} from "../simurgh-attestation/canonicalise.mjs";
 import { verifyRegistryHashChain } from "./registryChain.mjs";
 import { detectCrossTargetRankingExport } from "./temporalLib.mjs";
 
@@ -1359,9 +1670,15 @@ export function verifyRegistry({ registry, sidecar, publicKeyPem }) {
   checks.no_cross_target_ranking = detectCrossTargetRankingExport(registry) === null;
   const canonical = Buffer.from(canonicalJson(registry), "utf8");
   checks.bundle_digest_match = sidecar.bundle_sha256 === sha256Hex(canonical);
-  checks.key_fingerprint_match = sidecar.public_key_fingerprint === fingerprintPublicKey(publicKeyPem);
+  checks.key_fingerprint_match =
+    sidecar.public_key_fingerprint === fingerprintPublicKey(publicKeyPem);
   const sig = Buffer.from(sidecar.signature.replace(/^base64:/, ""), "base64");
-  checks.signature_valid = crypto.verify(null, canonical, crypto.createPublicKey(publicKeyPem), sig);
+  checks.signature_valid = crypto.verify(
+    null,
+    canonical,
+    crypto.createPublicKey(publicKeyPem),
+    sig
+  );
   return { ok: Object.values(checks).every(Boolean), checks };
 }
 
@@ -1388,18 +1705,26 @@ export async function verifyRegistryReferences(registry) {
 
 async function main() {
   const registry = JSON.parse(await readFile(join(EV, "registry", "registry.json"), "utf8"));
-  const sidecar = JSON.parse(await readFile(join(EV, "registry", "registry.signature.json"), "utf8"));
+  const sidecar = JSON.parse(
+    await readFile(join(EV, "registry", "registry.signature.json"), "utf8")
+  );
   const pub = JSON.parse(await readFile(join(EV, "keys", "stage3q-public-key.json"), "utf8"));
   const { ok, checks } = verifyRegistry({ registry, sidecar, publicKeyPem: pub.public_key_pem });
   const refs = await verifyRegistryReferences(registry);
-  console.log(JSON.stringify({ ...checks, references_valid: refs.ok, reference_errors: refs.errors }, null, 2));
+  console.log(
+    JSON.stringify({ ...checks, references_valid: refs.ok, reference_errors: refs.errors }, null, 2)
+  );
   if (!ok || !refs.ok) {
     console.error("stage3q registry verify: FAIL");
     process.exit(1);
   }
   console.log("stage3q registry verify: PASS");
 }
-if (import.meta.url === `file://${process.argv[1]}`) main().catch((e) => { console.error(e.message); process.exit(1); });
+if (import.meta.url === `file://${process.argv[1]}`)
+  main().catch((e) => {
+    console.error(e.message);
+    process.exit(1);
+  });
 ```
 
 ```javascript
@@ -1419,7 +1744,9 @@ export function verifyAppend({ previousHead, registry }) {
 
 async function main() {
   const registry = JSON.parse(await readFile(join(EV, "registry", "registry.json"), "utf8"));
-  const previousHead = JSON.parse(await readFile(join(EV, "registry", "previous-registry-head.json"), "utf8"));
+  const previousHead = JSON.parse(
+    await readFile(join(EV, "registry", "previous-registry-head.json"), "utf8")
+  );
   const { ok, checks, errors } = verifyAppend({ previousHead, registry });
   console.log(JSON.stringify({ checks, errors }, null, 2));
   if (!ok) {
@@ -1428,7 +1755,11 @@ async function main() {
   }
   console.log("stage3q append verify: PASS");
 }
-if (import.meta.url === `file://${process.argv[1]}`) main().catch((e) => { console.error(e.message); process.exit(1); });
+if (import.meta.url === `file://${process.argv[1]}`)
+  main().catch((e) => {
+    console.error(e.message);
+    process.exit(1);
+  });
 ```
 
 ```javascript
@@ -1439,7 +1770,11 @@ if (import.meta.url === `file://${process.argv[1]}`) main().catch((e) => { conso
 import crypto from "node:crypto";
 import { readFile, readdir } from "node:fs/promises";
 import { join } from "node:path";
-import { canonicalJson, sha256Hex, fingerprintPublicKey } from "../simurgh-attestation/canonicalise.mjs";
+import {
+  canonicalJson,
+  sha256Hex,
+  fingerprintPublicKey,
+} from "../simurgh-attestation/canonicalise.mjs";
 import { detectCrossTargetRankingExport } from "./temporalLib.mjs";
 
 const EV = "docs/research/llm-shield/evidence/stage-3q";
@@ -1455,9 +1790,15 @@ export function verifyDiff({ diff, sidecar, publicKeyPem }) {
   });
   const canonical = Buffer.from(canonicalJson(diff), "utf8");
   checks.bundle_digest_match = sidecar.bundle_sha256 === sha256Hex(canonical);
-  checks.key_fingerprint_match = sidecar.public_key_fingerprint === fingerprintPublicKey(publicKeyPem);
+  checks.key_fingerprint_match =
+    sidecar.public_key_fingerprint === fingerprintPublicKey(publicKeyPem);
   const sig = Buffer.from(sidecar.signature.replace(/^base64:/, ""), "base64");
-  checks.signature_valid = crypto.verify(null, canonical, crypto.createPublicKey(publicKeyPem), sig);
+  checks.signature_valid = crypto.verify(
+    null,
+    canonical,
+    crypto.createPublicKey(publicKeyPem),
+    sig
+  );
   return { ok: Object.values(checks).every(Boolean), checks };
 }
 
@@ -1496,7 +1837,11 @@ async function main() {
   }
   console.log(`stage3q diff verify: PASS (${files.length} diffs)`);
 }
-if (import.meta.url === `file://${process.argv[1]}`) main().catch((e) => { console.error(e.message); process.exit(1); });
+if (import.meta.url === `file://${process.argv[1]}`)
+  main().catch((e) => {
+    console.error(e.message);
+    process.exit(1);
+  });
 ```
 
 - [ ] **Step 4: Run the verifier unit test**
@@ -1516,7 +1861,11 @@ import crypto from "node:crypto";
 import { readFile, writeFile, readdir } from "node:fs/promises";
 import { homedir } from "node:os";
 import { join } from "node:path";
-import { canonicalJson, sha256Hex, fingerprintPublicKey } from "../simurgh-attestation/canonicalise.mjs";
+import {
+  canonicalJson,
+  sha256Hex,
+  fingerprintPublicKey,
+} from "../simurgh-attestation/canonicalise.mjs";
 
 const EV = "docs/research/llm-shield/evidence/stage-3q";
 const stable = (v) => JSON.stringify(v, null, 2) + "\n";
@@ -1535,7 +1884,8 @@ function sidecarFor(obj, privPem, pubPem) {
 }
 
 async function main() {
-  const keyPath = process.env.SIMURGH_3Q_PRIVATE_KEY_PATH || join(homedir(), ".simurgh", "3q-ed25519.pem");
+  const keyPath =
+    process.env.SIMURGH_3Q_PRIVATE_KEY_PATH || join(homedir(), ".simurgh", "3q-ed25519.pem");
   const priv = await readFile(keyPath, "utf8");
   const pub = JSON.parse(await readFile(join(EV, "keys", "stage3q-public-key.json"), "utf8"));
   const pubPem = pub.public_key_pem;
@@ -1558,7 +1908,10 @@ async function main() {
     previous_signature_digest: sha256Hex(stable(regSidecar)),
   };
   await writeFile(join(EV, "registry", "current-registry-head.json"), stable(currentHead));
-  await writeFile(join(EV, "registry", "registry-head-digest.txt"), registry.head.head_entry_digest + "\n");
+  await writeFile(
+    join(EV, "registry", "registry-head-digest.txt"),
+    registry.head.head_entry_digest + "\n"
+  );
 
   // sign any committed regression diffs (none at genesis)
   let signed = 0;
@@ -1569,17 +1922,26 @@ async function main() {
         if (!pair.isDirectory()) continue;
         const f = join(EV, "diffs", l.name, pair.name, "regression-diff.json");
         const diff = JSON.parse(await readFile(f, "utf8"));
-        await writeFile(f.replace(/\.json$/, ".signature.json"), stable(sidecarFor(diff, priv, pubPem)));
+        await writeFile(
+          f.replace(/\.json$/, ".signature.json"),
+          stable(sidecarFor(diff, priv, pubPem))
+        );
         signed += 1;
       }
     }
   } catch {
     /* no diffs dir entries */
   }
-  console.log(`stage3q: signed registry + ${signed} diffs; fingerprint`, regSidecar.public_key_fingerprint);
+  console.log(
+    `stage3q: signed registry + ${signed} diffs; fingerprint`,
+    regSidecar.public_key_fingerprint
+  );
 }
 
-main().catch((e) => { console.error(e.message); process.exit(1); });
+main().catch((e) => {
+  console.error(e.message);
+  process.exit(1);
+});
 ```
 
 - [ ] **Step 6: Generate the keypair + author manifests + produce committed signed evidence**
@@ -1632,6 +1994,7 @@ node tools/simurgh-temporal/verify-stage3q-registry.mjs
 node tools/simurgh-temporal/verify-stage3q-append.mjs
 node tools/simurgh-temporal/verify-stage3q-diff.mjs
 ```
+
 Expected: every verify prints PASS; append verify passes because `previous-registry-head.json` records this registry's own genesis head (entry_count 1, first entry from GENESIS).
 
 - [ ] **Step 7: Commit**
@@ -1646,6 +2009,7 @@ git commit -m "feat(stage-3q): signer, CI verify-only verifiers, and signed regi
 ### Task 6: Six verification scripts + smoke + check.sh wiring
 
 **Files:**
+
 - Create: `scripts/smoke-llm-shield-stage3q.sh`
 - Create: `scripts/smoke-llm-shield-stage3q-self-proof.sh`
 - Create: `scripts/security-audit-llm-shield-stage3q.sh`
@@ -1743,10 +2107,12 @@ const errors = [];
 const committed = JSON.parse(await readFile(join(EV, "registry", "registry.json"), "utf8"));
 const { registry, manifestDigest } = await deriveRegistry();
 if (stable(committed) !== stable(registry)) errors.push("registry not derivable from manifest");
-if (committed.source.timeline_manifest_digest !== manifestDigest) errors.push("manifest digest not bound");
+if (committed.source.timeline_manifest_digest !== manifestDigest)
+  errors.push("manifest digest not bound");
 
 const sidecar = JSON.parse(await readFile(join(EV, "registry", "registry.signature.json"), "utf8"));
-if (sidecar.schema !== "simurgh.temporal.signature.v1") errors.push("registry signature wrong schema");
+if (sidecar.schema !== "simurgh.temporal.signature.v1")
+  errors.push("registry signature wrong schema");
 if (sidecar.algorithm !== "Ed25519") errors.push("registry not Ed25519");
 
 const sp = buildSelfProof();
@@ -1839,10 +2205,12 @@ echo "stage3q smoke: passed"
 - [ ] **Step 6: Make executable + run the smoke**
 
 Run:
+
 ```bash
 chmod +x scripts/smoke-llm-shield-stage3q.sh scripts/smoke-llm-shield-stage3q-self-proof.sh scripts/security-audit-llm-shield-stage3q.sh scripts/policy-drift-guard-llm-shield-stage3q.sh
 bash scripts/smoke-llm-shield-stage3q.sh
 ```
+
 Expected: ends with `stage3q smoke: passed`.
 
 - [ ] **Step 7: Wire into check.sh**
@@ -1895,6 +2263,7 @@ git commit -m "feat(stage-3q): six verification scripts, smoke, and check.sh wir
 ### Task 7: Documentation quartet + stage doc
 
 **Files:**
+
 - Create: `docs/research/llm-shield/LLM_SHIELD_STAGE_3Q_ATTESTATION_REGISTRY_REGRESSION_DIFF.md`
 - Create: `docs/research/llm-shield/STAGE_3Q_CLOSEOUT.md`
 - Create: `docs/research/llm-shield/STAGE_3Q_THREAT_MODEL.md`
@@ -1908,6 +2277,7 @@ Create `LLM_SHIELD_STAGE_3Q_ATTESTATION_REGISTRY_REGRESSION_DIFF.md` mirroring t
 - [ ] **Step 2: Write the quartet**
 
 Follow the 3P quartet (`STAGE_3P_*.md`) as the template:
+
 - **Validation matrix:** each hard gate → enforcing script/test → recorded-in file (all gates from the spec: manifest validity + timestamps, registry chain, append-continuity, lineage binding, transition lattice, anti-laundering, signature, hashes, policy-drift fail-closed, security ranking, self-proof + `integrity_laundering_successes==0`).
 - **Threat model:** adversaries = silent weakening, integrity-laundering (both directions), timeline tampering, removed/reordered entry, cross-lineage relabel, corpus swap, clock injection, key leak; mitigations map to the gates.
 - **Reviewer checklist:** the verify commands + the 3Q public-key fingerprint (from `keys/stage3q-key-fingerprint.txt`) + the genesis-empty-diffs note.
@@ -1946,6 +2316,7 @@ Expected: the two new 3Q steps PASS; pre-existing environmental failures (vendor
 ## Self-Review
 
 **1. Spec coverage:**
+
 - Crown sentence / temporal wall → Task 7 docs + Task 1 `enforceSameTargetLineage` + Task 6 security audit. ✓
 - Manifest-derived determinism, no clocks → Task 1 `validateUtcTimestamp`/`validateTimelineManifest`, Task 2 `buildRegistryFromManifest`, Task 4 derivation + byte-compare. ✓
 - Registry substrate (single ledger, entry_body/entry_digest, hash chain, head, source.manifest_digest) → Task 2 + edit #1. ✓

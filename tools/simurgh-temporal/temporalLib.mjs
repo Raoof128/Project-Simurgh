@@ -125,12 +125,16 @@ export function validateTimelineManifest(m) {
       if (!isSha256(s.catalogue_digest)) errors.push(`snapshot ${i} bad catalogue_digest`);
       if (typeof s.catalogue_path !== "string") errors.push(`snapshot ${i} bad catalogue_path`);
       if (!isSha256(s.corpus_digest)) errors.push(`snapshot ${i} bad corpus_digest`);
-      if (!Array.isArray(s.target_attestations)) errors.push(`snapshot ${i} bad target_attestations`);
+      if (!Array.isArray(s.target_attestations))
+        errors.push(`snapshot ${i} bad target_attestations`);
       else
         s.target_attestations.forEach((t, j) => {
-          if (typeof t.target_lineage_id !== "string") errors.push(`snapshot ${i} target ${j} bad lineage`);
-          if (!isSha256(t.target_attestation_digest)) errors.push(`snapshot ${i} target ${j} bad digest`);
-          if (typeof t.target_attestation_path !== "string") errors.push(`snapshot ${i} target ${j} bad path`);
+          if (typeof t.target_lineage_id !== "string")
+            errors.push(`snapshot ${i} target ${j} bad lineage`);
+          if (!isSha256(t.target_attestation_digest))
+            errors.push(`snapshot ${i} target ${j} bad digest`);
+          if (typeof t.target_attestation_path !== "string")
+            errors.push(`snapshot ${i} target ${j} bad path`);
         });
     });
   return { ok: errors.length === 0, errors };
@@ -146,12 +150,18 @@ export function validateDiffManifest(m) {
     diffs.forEach((d, i) => {
       if (typeof d.diff_id !== "string") errors.push(`diff ${i} bad diff_id`);
       if (typeof d.target_lineage_id !== "string") errors.push(`diff ${i} bad target_lineage_id`);
-      if (typeof d.before_target_snapshot_id !== "string") errors.push(`diff ${i} bad before_target_snapshot_id`);
-      if (typeof d.after_target_snapshot_id !== "string") errors.push(`diff ${i} bad after_target_snapshot_id`);
-      if (!isSha256(d.before_attestation_digest)) errors.push(`diff ${i} bad before_attestation_digest`);
-      if (!isSha256(d.after_attestation_digest)) errors.push(`diff ${i} bad after_attestation_digest`);
-      if (typeof d.before_attestation_path !== "string") errors.push(`diff ${i} bad before_attestation_path`);
-      if (typeof d.after_attestation_path !== "string") errors.push(`diff ${i} bad after_attestation_path`);
+      if (typeof d.before_target_snapshot_id !== "string")
+        errors.push(`diff ${i} bad before_target_snapshot_id`);
+      if (typeof d.after_target_snapshot_id !== "string")
+        errors.push(`diff ${i} bad after_target_snapshot_id`);
+      if (!isSha256(d.before_attestation_digest))
+        errors.push(`diff ${i} bad before_attestation_digest`);
+      if (!isSha256(d.after_attestation_digest))
+        errors.push(`diff ${i} bad after_attestation_digest`);
+      if (typeof d.before_attestation_path !== "string")
+        errors.push(`diff ${i} bad before_attestation_path`);
+      if (typeof d.after_attestation_path !== "string")
+        errors.push(`diff ${i} bad after_attestation_path`);
       if (!isSha256(d.corpus_digest)) errors.push(`diff ${i} bad corpus_digest`);
       if (!validateUtcTimestamp(d.created_at_utc)) errors.push(`diff ${i} bad created_at_utc`);
     });
@@ -180,7 +190,12 @@ export function detectCrossTargetRankingExport(value) {
   return hit;
 }
 
-export function buildRegressionDiff({ diffRow, beforeAttestation, afterAttestation, diffManifestDigest }) {
+export function buildRegressionDiff({
+  diffRow,
+  beforeAttestation,
+  afterAttestation,
+  diffManifestDigest,
+}) {
   // 1. cross-target FIRST: comparing two different real targets is the leaderboard sin.
   const beforeMeta = {
     target_lineage_id: beforeAttestation.target.target_id,
@@ -198,7 +213,8 @@ export function buildRegressionDiff({ diffRow, beforeAttestation, afterAttestati
   const ab = enforceLineageBinding(diffRow.target_lineage_id, afterAttestation);
   if (ab) return { ok: false, violation: ab };
   // 3. same corpus.
-  if (!enforceSameCorpusDigest(beforeMeta, afterMeta)) return { ok: false, violation: "corpus_mismatch" };
+  if (!enforceSameCorpusDigest(beforeMeta, afterMeta))
+    return { ok: false, violation: "corpus_mismatch" };
 
   const { cell_transitions, summary } = compareCoverageProfiles(
     beforeAttestation.coverage_profile?.cells ?? {},

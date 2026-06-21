@@ -12,10 +12,12 @@ const errors = [];
 const committed = JSON.parse(await readFile(join(EV, "registry", "registry.json"), "utf8"));
 const { registry, manifestDigest } = await deriveRegistry();
 if (stable(committed) !== stable(registry)) errors.push("registry not derivable from manifest");
-if (committed.source.timeline_manifest_digest !== manifestDigest) errors.push("manifest digest not bound");
+if (committed.source.timeline_manifest_digest !== manifestDigest)
+  errors.push("manifest digest not bound");
 
 const sidecar = JSON.parse(await readFile(join(EV, "registry", "registry.signature.json"), "utf8"));
-if (sidecar.schema !== "simurgh.temporal.signature.v1") errors.push("registry signature wrong schema");
+if (sidecar.schema !== "simurgh.temporal.signature.v1")
+  errors.push("registry signature wrong schema");
 if (sidecar.algorithm !== "Ed25519") errors.push("registry not Ed25519");
 
 const sp = buildSelfProof();

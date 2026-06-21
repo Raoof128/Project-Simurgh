@@ -7,7 +7,11 @@ import crypto from "node:crypto";
 import { readFile, writeFile, readdir } from "node:fs/promises";
 import { homedir } from "node:os";
 import { join } from "node:path";
-import { canonicalJson, sha256Hex, fingerprintPublicKey } from "../simurgh-attestation/canonicalise.mjs";
+import {
+  canonicalJson,
+  sha256Hex,
+  fingerprintPublicKey,
+} from "../simurgh-attestation/canonicalise.mjs";
 
 const EV = "docs/research/llm-shield/evidence/stage-3q";
 const stable = (v) => JSON.stringify(v, null, 2) + "\n";
@@ -26,7 +30,8 @@ function sidecarFor(obj, privPem, pubPem) {
 }
 
 async function main() {
-  const keyPath = process.env.SIMURGH_3Q_PRIVATE_KEY_PATH || join(homedir(), ".simurgh", "3q-ed25519.pem");
+  const keyPath =
+    process.env.SIMURGH_3Q_PRIVATE_KEY_PATH || join(homedir(), ".simurgh", "3q-ed25519.pem");
   const priv = await readFile(keyPath, "utf8");
   const pub = JSON.parse(await readFile(join(EV, "keys", "stage3q-public-key.json"), "utf8"));
   const pubPem = pub.public_key_pem;
@@ -48,7 +53,10 @@ async function main() {
     previous_signature_digest: sha256Hex(stable(regSidecar)),
   };
   await writeFile(join(EV, "registry", "current-registry-head.json"), stable(currentHead));
-  await writeFile(join(EV, "registry", "registry-head-digest.txt"), registry.head.head_entry_digest + "\n");
+  await writeFile(
+    join(EV, "registry", "registry-head-digest.txt"),
+    registry.head.head_entry_digest + "\n"
+  );
 
   // sign any committed regression diffs (none at genesis)
   let signed = 0;
@@ -59,14 +67,23 @@ async function main() {
         if (!pair.isDirectory()) continue;
         const f = join(EV, "diffs", l.name, pair.name, "regression-diff.json");
         const diff = JSON.parse(await readFile(f, "utf8"));
-        await writeFile(f.replace(/\.json$/, ".signature.json"), stable(sidecarFor(diff, priv, pubPem)));
+        await writeFile(
+          f.replace(/\.json$/, ".signature.json"),
+          stable(sidecarFor(diff, priv, pubPem))
+        );
         signed += 1;
       }
     }
   } catch {
     /* no diffs dir entries */
   }
-  console.log(`stage3q: signed registry + ${signed} diffs; fingerprint`, regSidecar.public_key_fingerprint);
+  console.log(
+    `stage3q: signed registry + ${signed} diffs; fingerprint`,
+    regSidecar.public_key_fingerprint
+  );
 }
 
-main().catch((e) => { console.error(e.message); process.exit(1); });
+main().catch((e) => {
+  console.error(e.message);
+  process.exit(1);
+});

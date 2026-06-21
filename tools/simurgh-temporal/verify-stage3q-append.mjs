@@ -13,7 +13,9 @@ export function verifyAppend({ previousHead, registry }) {
 
 async function main() {
   const registry = JSON.parse(await readFile(join(EV, "registry", "registry.json"), "utf8"));
-  const previousHead = JSON.parse(await readFile(join(EV, "registry", "previous-registry-head.json"), "utf8"));
+  const previousHead = JSON.parse(
+    await readFile(join(EV, "registry", "previous-registry-head.json"), "utf8")
+  );
   const { ok, checks, errors } = verifyAppend({ previousHead, registry });
   console.log(JSON.stringify({ checks, errors }, null, 2));
   if (!ok) {
@@ -23,4 +25,8 @@ async function main() {
   console.log("stage3q append verify: PASS");
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) main().catch((e) => { console.error(e.message); process.exit(1); });
+if (import.meta.url === `file://${process.argv[1]}`)
+  main().catch((e) => {
+    console.error(e.message);
+    process.exit(1);
+  });
