@@ -1,0 +1,79 @@
+{
+  "type": "simurgh.cross_defence.attestation_catalogue.v1",
+  "stage": "3P",
+  "campaign": {
+    "campaign_id": "stage-3p-cross-defence-containment-attestation",
+    "catalogue_kind": "non_ranking_attestation_catalogue",
+    "ordering_metric_exported": false,
+    "numeric_summary_exported": false
+  },
+  "corpus": {
+    "corpus_digest": "sha256:c2d1e953a8ad068d77c8282fd6877cd6297075b08592d9de0614e94359d33892",
+    "matrix_shape": {
+      "boundaries": 5,
+      "evasions": 5,
+      "cases_per_cell": 6,
+      "matrix_canaries": 150,
+      "controls": 30,
+      "total_cases": 180
+    }
+  },
+  "targets": [
+    {
+      "target_id": "no-defence-baseline",
+      "provenance": "no_defence_baseline",
+      "execution_trust": "project_generated",
+      "attestation_digest": "sha256:7f93fcdccd470ef2d00d242376a80bab3ea86752144448f6a3c25871ce395efc",
+      "attestation_path": "targets/no-defence-baseline/containment-attestation.json"
+    },
+    {
+      "target_id": "keyword-filter-replica",
+      "provenance": "reference_replica",
+      "execution_trust": "project_generated",
+      "attestation_digest": "sha256:7382184245ee1aa7734e0232405e23cdb59bc22b1a5ba5e9be34cbf171fec208",
+      "attestation_path": "targets/keyword-filter-replica/containment-attestation.json"
+    },
+    {
+      "target_id": "regex-denylist-replica",
+      "provenance": "reference_replica",
+      "execution_trust": "project_generated",
+      "attestation_digest": "sha256:a9eb6545f4f5cd6255f6a3286570f7daac3cdca44e0c99fa9539d017fc1a4109",
+      "attestation_path": "targets/regex-denylist-replica/containment-attestation.json"
+    },
+    {
+      "target_id": "llm-judge-replica",
+      "provenance": "reference_replica",
+      "execution_trust": "project_generated",
+      "attestation_digest": "sha256:bf3116f89d69f51c56a62d022e97fe7c2df705551c1cc065ae10cbb24a8c5534",
+      "attestation_path": "targets/llm-judge-replica/containment-attestation.json"
+    },
+    {
+      "target_id": "context-sanitiser-replica",
+      "provenance": "reference_replica",
+      "execution_trust": "project_generated",
+      "attestation_digest": "sha256:7f7ba376c0cea34f0d089029627e9b897fcf5c27c77dba9a75e9341bdc8ba359",
+      "attestation_path": "targets/context-sanitiser-replica/containment-attestation.json"
+    },
+    {
+      "target_id": "tool-gate-replica",
+      "provenance": "reference_replica",
+      "execution_trust": "project_generated",
+      "attestation_digest": "sha256:f8d03cb162fcd844510e5d820daa490d4afe7e36ddf7a0f5e94f18ed9f76f0ac",
+      "attestation_path": "targets/tool-gate-replica/containment-attestation.json"
+    },
+    {
+      "target_id": "full-gateway-target",
+      "provenance": "reference_replica",
+      "execution_trust": "project_generated",
+      "attestation_digest": "sha256:afd0332263d85a30b9e063bc4084a0a43bef2c83c6ac1ffa9e2196a82fdbe0f4",
+      "attestation_path": "targets/full-gateway-target/containment-attestation.json"
+    }
+  ],
+  "excluded_targets": [],
+  "catalogue_non_claims": [
+    "Attestation catalogue, not leaderboard.",
+    "The catalogue binds target attestations by digest.",
+    "The catalogue does not rank targets.",
+    "The catalogue does not declare a best defence."
+  ]
+}

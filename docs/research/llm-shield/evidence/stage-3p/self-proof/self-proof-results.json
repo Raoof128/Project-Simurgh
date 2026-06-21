@@ -1,0 +1,50 @@
+{
+  "type": "simurgh.cross_defence.self_proof_results.v1",
+  "stage": "3P",
+  "purpose": "prove_stage_3p_integrity_detectors_fire",
+  "pollutes_clean_catalogue": false,
+  "fixtures": [
+    {
+      "fixture_id": "clean-baseline",
+      "expected_detector": null,
+      "observed_detector": null,
+      "passed": true
+    },
+    {
+      "fixture_id": "brand-violator-replica",
+      "expected_detector": "provenance_brand_denylist_violation",
+      "observed_detector": "provenance_brand_denylist_violation",
+      "passed": true
+    },
+    {
+      "fixture_id": "ranking-overclaimer",
+      "expected_detector": "ranking_export_violation",
+      "observed_detector": "ranking_export_violation",
+      "passed": true
+    },
+    {
+      "fixture_id": "claim-conflict-liar",
+      "expected_detector": "claim_conflict",
+      "observed_detector": "claim_conflict",
+      "passed": true
+    },
+    {
+      "fixture_id": "false-full-coverage-claimer",
+      "expected_detector": "unverified_full_coverage_claim",
+      "observed_detector": "unverified_full_coverage_claim",
+      "passed": true
+    },
+    {
+      "fixture_id": "silent-drop-catalogue",
+      "expected_detector": "catalogue_silent_drop",
+      "observed_detector": "catalogue_silent_drop",
+      "passed": true
+    }
+  ],
+  "summary": {
+    "clean_baseline_passed": true,
+    "all_expected_rejections_fired": true,
+    "unexpected_accepts": 0,
+    "unexpected_rejections": 0
+  }
+}

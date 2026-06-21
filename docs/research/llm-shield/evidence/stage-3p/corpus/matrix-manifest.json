@@ -1,0 +1,15 @@
+{
+  "schema": "simurgh.cross_defence.matrix_manifest.v1",
+  "total": 180,
+  "matrix_canaries": 150,
+  "controls": 30,
+  "matrix_shape": {
+    "boundaries": 5,
+    "evasions": 5,
+    "cases_per_cell": 6,
+    "matrix_canaries": 150,
+    "controls": 30,
+    "total_cases": 180
+  },
+  "markers_sha256": "sha256:9658ffe533d0e2bac247600077bf096ce4c1846731e7c7e994c745820f809895"
+}
