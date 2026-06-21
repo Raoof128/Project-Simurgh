@@ -8,9 +8,9 @@ writing-plans → executing-plans flow.
 > **Roadmap note:** Stage 3R was originally reserved for a temporal live-campaign
 > follow-up to 3Q. The roadmap has been revised: **3R is now Deployment Resilience**
 > (this stage), and the live temporal campaign is deferred to a later stage.
-**Anchors:** `docs/research/llm-shield/NORTH_STAR_VERIFIABLE_CONTAINMENT_ATTESTATION.md`,
-Stage 3E (gateway + live Anthropic adapter), the HMAC audit chain (`src/audit`), the VCA
-ladder (3M–3Q). Grounded in the real Claude Fable 5 fallback contract.
+> **Anchors:** `docs/research/llm-shield/NORTH_STAR_VERIFIABLE_CONTAINMENT_ATTESTATION.md`,
+> Stage 3E (gateway + live Anthropic adapter), the HMAC audit chain (`src/audit`), the VCA
+> ladder (3M–3Q). Grounded in the real Claude Fable 5 fallback contract.
 
 ## Crown sentence
 
@@ -22,8 +22,8 @@ ladder (3M–3Q). Grounded in the real Claude Fable 5 fallback contract.
 
 ## What it redeems
 
-The letter's *"resilient Opus fallbacks / hot-swap to Claude Opus without breaking the
-session's underlying trust rating."* Beyond-industry: Anthropic's server-side fallback
+The letter's _"resilient Opus fallbacks / hot-swap to Claude Opus without breaking the
+session's underlying trust rating."_ Beyond-industry: Anthropic's server-side fallback
 collapses the retry into one provider response and reports fallback metadata (a `fallback`
 content block + `message`/`fallback_message` entries in `usage.iterations`), but it does
 **not** create a Simurgh HMAC-chain event, a monotonic risk raise, or a
@@ -57,11 +57,11 @@ the same containment discipline into deployment resilience.**
 
 ## The three "no answer" events (the trigger model)
 
-| Event | Behaviour |
-| ----- | --------- |
-| **Availability failure** (timeout/5xx/unavailable) | Simurgh-orchestrated fallback to the next configured model (`claude-fable-5` → `claude-opus-4-8`), **within budget** (see invariant 6). Pure infra resilience. |
-| **Provider refusal** (`stop_reason:"refusal"`) | **Opt-in** policy fallback (default OFF), audited, risk-raising, capped at **one hop**, and only when Simurgh's own pre-check is non-terminal (anti-bypass invariant). |
-| **Simurgh firewall denial** (input blocked / context rejected / tool blocked / output blocked) | **NEVER** fallback. Terminal. The un-bypassable line. |
+| Event                                                                                          | Behaviour                                                                                                                                                              |
+| ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Availability failure** (timeout/5xx/unavailable)                                             | Simurgh-orchestrated fallback to the next configured model (`claude-fable-5` → `claude-opus-4-8`), **within budget** (see invariant 6). Pure infra resilience.         |
+| **Provider refusal** (`stop_reason:"refusal"`)                                                 | **Opt-in** policy fallback (default OFF), audited, risk-raising, capped at **one hop**, and only when Simurgh's own pre-check is non-terminal (anti-bypass invariant). |
+| **Simurgh firewall denial** (input blocked / context rejected / tool blocked / output blocked) | **NEVER** fallback. Terminal. The un-bypassable line.                                                                                                                  |
 
 ## The anti-bypass invariant (the lock on the cage)
 
@@ -72,11 +72,15 @@ the same containment discipline into deployment resilience.**
 
 ```text
 Simurgh block / context reject / tool|export deny → no fallback (terminal)
-Simurgh uncertainty above threshold              → no fallback (fail-closed) unless explicitly configured
-Refusal fallback allowed ONLY if input firewall = allowed AND context guard != rejected.
+Simurgh uncertainty / unknown verdict            → no fallback (fail-closed)
+NO fallback of ANY kind (availability OR refusal) after a terminal pre-check.
+preCheckNonTerminal := inputVerdict === "allowed" AND contextVerdict === "accepted"  (explicit, fail-closed)
 ```
 
-A provider's safety refusal can never tunnel around Simurgh's own denial.
+**The lock covers every trigger, not just refusal:** an availability failure under a
+terminal pre-check must also never fall back (`shouldFallback` checks
+`preCheckNonTerminal` before any trigger). A provider's safety refusal — or an outage —
+can never tunnel around Simurgh's own denial.
 
 ## The other safety invariants
 
@@ -126,7 +130,7 @@ A provider's safety refusal can never tunnel around Simurgh's own denial.
 
    > Stage 3R implements Simurgh-orchestrated **client-side** fallback by default:
    > `primary call → observe refusal/unavailable → record HMAC event → fallback call →
-   > rescan → final receipt`. Provider-native server-side fallback (the `fallbacks`
+rescan → final receipt`. Provider-native server-side fallback (the `fallbacks`
    > parameter / SDK refusal-fallback middleware) is **disabled** unless explicitly tested
    > and normalised into the same `fallback_chain` evidence contract (parsing the `fallback`
    > block + `usage.iterations`).
@@ -190,26 +194,27 @@ No raw credit tokens are ever stored — booleans or a hash only. 🔐
 - Extend **`anthropicResponseNormalise.js`** with the null-safe refusal shape above.
 - Extend **`mockGatewayProvider.js`** with deterministic `unavailable` / `refusing`
   scenarios (no network) driving both paths in CI; live `claude-fable-5 →
-  claude-opus-4-8` opt-in, disabled by default.
+claude-opus-4-8` opt-in, disabled by default.
 - Extend **`gatewayReceipt.js`** with `fallback_chain`, `fallback_on_refusal_enabled`,
-  `fallback_budget`.
+  `fallback_budget`, `fallback_terminal_reason` (one-hop-cap / terminal evidence).
 - Extend **`gatewayAudit.js`** with `recordGatewayFallbackSwap`.
 - Integrate into the **`gatewayRouter.js`** run handler (replace the inline single-provider
   call with the orchestrator).
 
 ## Self-proof — the teeth
 
-| Fixture | Must prove |
-| ------- | ---------- |
-| `availability-failure-swap` | primary unavailable → fallback fires (within budget), output re-scanned |
-| `refusal-fallback-enabled` | refusal + flag ON + Simurgh pre-check allowed → swap fires, **risk rises** |
-| `refusal-fallback-disabled` | refusal + flag OFF → terminal, no swap |
-| `provider-refusal-unsafe-local-block` | refusal + flag ON **but Simurgh local guard blocks** → **NO fallback** (anti-bypass lock) |
-| `simurgh-block-never-swaps` | input/context/tool/output block → never enters fallback |
-| `trust-never-improves` | clean primary + swap → verdict ≥ warning; swap can't launder |
-| `cap-one-hop` | fallback also fails/refuses → terminal (no second hop, no shopping) |
+| Fixture                                      | Must prove                                                                                                                               |
+| -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `availability-failure-swap`                  | primary unavailable → fallback fires (within budget), output re-scanned                                                                  |
+| `refusal-fallback-enabled`                   | refusal + flag ON + Simurgh pre-check allowed → swap fires, **risk rises**                                                               |
+| `refusal-fallback-disabled`                  | refusal + flag OFF → terminal, no swap                                                                                                   |
+| `provider-refusal-unsafe-local-block`        | refusal + flag ON **but Simurgh local guard blocks** → **NO fallback** (`simurgh_precheck_terminal`)                                     |
+| `availability-failure-unsafe-local-block`    | availability failure + Simurgh local guard blocks → **NO fallback** (fix #1: the lock covers availability too)                           |
+| `simurgh-block-never-swaps`                  | input/context/tool/output block → never enters fallback                                                                                  |
+| `trust-never-improves`                       | clean primary + swap → verdict ≥ warning; swap can't launder                                                                             |
+| `cap-one-hop`                                | fallback also fails/refuses → terminal (no second hop, no shopping)                                                                      |
 | `streaming-refusal-partial-output-discarded` | partial refused output is not used as final answer; the fallback attempt uses the approved envelope; final fallback output is re-scanned |
-| `swap-audited-chain-verifies` | swap recorded in the same HMAC chain; chain still verifies end-to-end |
+| `swap-audited-chain-verifies`                | swap recorded in the same HMAC chain; chain still verifies end-to-end                                                                    |
 
 Unit tests on every `fallbackPolicy` function + an end-to-end self-proof pack;
 `fallback_bypass_successes: 0` in the summary.
@@ -232,7 +237,7 @@ Unit tests on every `fallbackPolicy` function + an end-to-end self-proof pack;
 - 100% function coverage on the pure `fallbackPolicy.js`; orchestrator/router exercised by
   the gateway E2E smoke (honest subprocess coverage).
 - A Stage 3R doc quartet (closeout / threat-model / validation-matrix / reviewer-checklist)
-  + stage doc; wired into `check.sh`.
+  - stage doc; wired into `check.sh`.
 
 ## Non-claims
 
