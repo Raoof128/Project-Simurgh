@@ -18,14 +18,25 @@ export async function startServer(extraEnv = {}) {
     },
     stdio: "ignore",
   });
-  for (let i = 0; i < 80; i++) {
+  // Wait for readiness and ASSERT it: under CI load the boot can exceed the old
+  // 20s window, and silently proceeding produced a confusing ECONNREFUSED in
+  // newSession. Wait up to 40s and fail loudly if the server never becomes healthy.
+  let ready = false;
+  for (let i = 0; i < 160; i++) {
     try {
       const r = await fetch(`${base}/health`);
-      if (r.ok) break;
+      if (r.ok) {
+        ready = true;
+        break;
+      }
     } catch {
       // not up yet
     }
     await new Promise((res) => setTimeout(res, 250));
+  }
+  if (!ready) {
+    child.kill();
+    throw new Error(`live smoke server did not become healthy on ${base}`);
   }
   return { base, stop: () => child.kill() };
 }
