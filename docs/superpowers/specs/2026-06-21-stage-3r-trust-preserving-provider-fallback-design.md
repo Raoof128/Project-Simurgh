@@ -3,8 +3,11 @@
 **Status:** Approved design (brainstorm complete). Implementation follows the normal
 writing-plans → executing-plans flow.
 **Date:** 2026-06-21
-**Naming:** Uses stage id **3R**. The previously-reserved 3R (temporal live-campaign) is
-skipped; the number is reused here. Tag target: `v2.1.0`.
+**Naming:** Uses stage id **3R**. Tag target: `v2.1.0`.
+
+> **Roadmap note:** Stage 3R was originally reserved for a temporal live-campaign
+> follow-up to 3Q. The roadmap has been revised: **3R is now Deployment Resilience**
+> (this stage), and the live temporal campaign is deferred to a later stage.
 **Anchors:** `docs/research/llm-shield/NORTH_STAR_VERIFIABLE_CONTAINMENT_ATTESTATION.md`,
 Stage 3E (gateway + live Anthropic adapter), the HMAC audit chain (`src/audit`), the VCA
 ladder (3M–3Q). Grounded in the real Claude Fable 5 fallback contract.
@@ -20,10 +23,12 @@ ladder (3M–3Q). Grounded in the real Claude Fable 5 fallback contract.
 ## What it redeems
 
 The letter's *"resilient Opus fallbacks / hot-swap to Claude Opus without breaking the
-session's underlying trust rating."* Beyond-industry: Anthropic's `fallbacks` parameter
-swaps **silently** (the refusal vanishes, you get the fallback answer + a credit); Stage
-3R makes every swap a **signed, risk-raising, monotonic audit event** a reviewer can see
-later — the VCA north star applied to model swaps.
+session's underlying trust rating."* Beyond-industry: Anthropic's server-side fallback
+collapses the retry into one provider response and reports fallback metadata (a `fallback`
+content block + `message`/`fallback_message` entries in `usage.iterations`), but it does
+**not** create a Simurgh HMAC-chain event, a monotonic risk raise, or a
+containment-boundary receipt. **Stage 3R adds that missing verifiable control layer** — the
+VCA north star applied to model swaps.
 
 ## Grounding in the real Fable 5 contract (verified against the docs)
 
@@ -110,12 +115,26 @@ A provider's safety refusal can never tunnel around Simurgh's own denial.
    the partial and resend the approved envelope, which may forfeit credit. **Simurgh
    prioritises containment cleanliness over credit** and records which occurred.
 
-6. **Availability fallback is budgeted — denial-of-wallet guard (edit 4).** Availability
-   fallback is automatic only within configured timeout, hop, and cost ceilings. Receipt:
+6. **Availability fallback is budgeted — denial-of-wallet guard.** Availability fallback
+   is automatic only within configured timeout, hop, and cost ceilings. Receipt:
 
    ```json
    "fallback_budget": { "max_hops": 1, "timeout_ms": 30000, "max_additional_provider_calls": 1 }
    ```
+
+7. **Client-side orchestration is the default; one fallback authority per request.**
+
+   > Stage 3R implements Simurgh-orchestrated **client-side** fallback by default:
+   > `primary call → observe refusal/unavailable → record HMAC event → fallback call →
+   > rescan → final receipt`. Provider-native server-side fallback (the `fallbacks`
+   > parameter / SDK refusal-fallback middleware) is **disabled** unless explicitly tested
+   > and normalised into the same `fallback_chain` evidence contract (parsing the `fallback`
+   > block + `usage.iterations`).
+
+   > Stage 3R must **not** combine Simurgh fallback orchestration with provider SDK fallback
+   > middleware or provider-native multi-fallback chains on the same request. **Exactly one
+   > fallback authority is allowed per request**, and Simurgh's cap remains **one hop** — no
+   > double-fallback, no hidden retries, no model-shopping.
 
 ## Normalised refusal shape (edit 3, null-safe, never parsed)
 
