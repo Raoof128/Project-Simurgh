@@ -238,9 +238,15 @@ const NONCOMPARABLE_RESULTS = Object.freeze(["not_applicable"]);
 
 export function validateUtcTimestamp(s) {
   if (typeof s !== "string") return false;
-  if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z$/.test(s)) return false;
-  const t = Date.parse(s);
-  return Number.isFinite(t);
+  const m = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})Z$/.exec(s);
+  if (!m) return false;
+  const [, y, mo, d, h, mi, se] = m.map(Number);
+  if (mo < 1 || mo > 12) return false;
+  if (h > 23 || mi > 59 || se > 59) return false;
+  const leap = (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;
+  const days = [31, leap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  if (d < 1 || d > days[mo - 1]) return false;
+  return true;
 }
 
 export function classifyCellTransition(before, after) {
@@ -293,10 +299,15 @@ export function enforceLineageBinding(lineageId, attestation) {
   return attestation?.target?.target_id === lineageId ? null : "lineage_binding_violation";
 }
 
+function isSha256(v) {
+  return typeof v === "string" && v.startsWith("sha256:");
+}
+
 export function validateTimelineManifest(m) {
   const errors = [];
   if (!m || m.type !== TIMELINE_MANIFEST_SCHEMA) errors.push("bad type");
   if (m?.stage !== "3Q") errors.push("bad stage");
+  if (typeof m?.registry_id !== "string") errors.push("bad registry_id");
   const snaps = Array.isArray(m?.snapshots) ? m.snapshots : null;
   if (!snaps) errors.push("snapshots not an array");
   else
@@ -304,9 +315,17 @@ export function validateTimelineManifest(m) {
       if (s.entry_index !== i) errors.push(`snapshot ${i} entry_index not contiguous`);
       if (!validateUtcTimestamp(s.created_at_utc)) errors.push(`snapshot ${i} bad created_at_utc`);
       if (typeof s.snapshot_id !== "string") errors.push(`snapshot ${i} bad snapshot_id`);
-      if (typeof s.catalogue_digest !== "string" || !s.catalogue_digest.startsWith("sha256:"))
-        errors.push(`snapshot ${i} bad catalogue_digest`);
+      if (typeof s.snapshot_label !== "string") errors.push(`snapshot ${i} bad snapshot_label`);
+      if (!isSha256(s.catalogue_digest)) errors.push(`snapshot ${i} bad catalogue_digest`);
+      if (typeof s.catalogue_path !== "string") errors.push(`snapshot ${i} bad catalogue_path`);
+      if (!isSha256(s.corpus_digest)) errors.push(`snapshot ${i} bad corpus_digest`);
       if (!Array.isArray(s.target_attestations)) errors.push(`snapshot ${i} bad target_attestations`);
+      else
+        s.target_attestations.forEach((t, j) => {
+          if (typeof t.target_lineage_id !== "string") errors.push(`snapshot ${i} target ${j} bad lineage`);
+          if (!isSha256(t.target_attestation_digest)) errors.push(`snapshot ${i} target ${j} bad digest`);
+          if (typeof t.target_attestation_path !== "string") errors.push(`snapshot ${i} target ${j} bad path`);
+        });
     });
   return { ok: errors.length === 0, errors };
 }
@@ -321,6 +340,13 @@ export function validateDiffManifest(m) {
     diffs.forEach((d, i) => {
       if (typeof d.diff_id !== "string") errors.push(`diff ${i} bad diff_id`);
       if (typeof d.target_lineage_id !== "string") errors.push(`diff ${i} bad target_lineage_id`);
+      if (typeof d.before_target_snapshot_id !== "string") errors.push(`diff ${i} bad before_target_snapshot_id`);
+      if (typeof d.after_target_snapshot_id !== "string") errors.push(`diff ${i} bad after_target_snapshot_id`);
+      if (!isSha256(d.before_attestation_digest)) errors.push(`diff ${i} bad before_attestation_digest`);
+      if (!isSha256(d.after_attestation_digest)) errors.push(`diff ${i} bad after_attestation_digest`);
+      if (typeof d.before_attestation_path !== "string") errors.push(`diff ${i} bad before_attestation_path`);
+      if (typeof d.after_attestation_path !== "string") errors.push(`diff ${i} bad after_attestation_path`);
+      if (!isSha256(d.corpus_digest)) errors.push(`diff ${i} bad corpus_digest`);
       if (!validateUtcTimestamp(d.created_at_utc)) errors.push(`diff ${i} bad created_at_utc`);
     });
   return { ok: errors.length === 0, errors };
@@ -572,10 +598,17 @@ export function verifyAppendContinuity(previousHead, newRegistry) {
     if (entries.length > 0 && entries[0].entry_body.previous_entry_digest !== "GENESIS")
       errors.push("genesis append must start from GENESIS");
   } else {
+    // the last PRESERVED entry must be exactly the previous head (no mutation/reorder of the prefix)
+    const lastPreserved = entries[prevCount - 1];
+    if (!lastPreserved) errors.push("previous entries missing vs previous head");
+    else if (lastPreserved.entry_digest !== prevHeadDigest)
+      errors.push("preserved prefix head does not match previous head");
+    // and the first NEW entry must chain from the previous head
     const firstNew = entries[prevCount];
-    if (!firstNew) errors.push("no newly appended entry beyond previous head");
-    else if (firstNew.entry_body.previous_entry_digest !== prevHeadDigest)
-      errors.push("first appended entry does not continue from previous head");
+    if (entries.length > prevCount) {
+      if (firstNew.entry_body.previous_entry_digest !== prevHeadDigest)
+        errors.push("first appended entry does not continue from previous head");
+    }
   }
   return { ok: errors.length === 0, errors };
 }
@@ -658,11 +691,19 @@ test("buildRegressionDiff emits a same-target diff with source + timestamp", () 
   assert.equal(res.diff.summary.regressed_cells, 1);
 });
 
-test("buildRegressionDiff rejects cross-lineage and lineage-binding violations", () => {
+test("buildRegressionDiff trips cross_target_diff_violation when targets differ (before binding)", () => {
   const before = att("keyword-filter-replica", {});
   const after = att("tool-gate-replica", {});
   const row = { diff_id: "x", target_lineage_id: "keyword-filter-replica", created_at_utc: "2026-06-21T00:00:00Z" };
-  // after attestation's target_id != lineage -> lineage_binding_violation
+  const res = buildRegressionDiff({ diffRow: row, beforeAttestation: before, afterAttestation: after, diffManifestDigest: "sha256:DM" });
+  assert.equal(res.ok, false);
+  assert.equal(res.violation, "cross_target_diff_violation");
+});
+
+test("buildRegressionDiff trips lineage_binding_violation when targets agree but manifest relabels", () => {
+  const before = att("keyword-filter-replica", {});
+  const after = att("keyword-filter-replica", {});
+  const row = { diff_id: "x", target_lineage_id: "relabelled-lineage", created_at_utc: "2026-06-21T00:00:00Z" };
   const res = buildRegressionDiff({ diffRow: row, beforeAttestation: before, afterAttestation: after, diffManifestDigest: "sha256:DM" });
   assert.equal(res.ok, false);
   assert.equal(res.violation, "lineage_binding_violation");
@@ -688,11 +729,7 @@ Expected: FAIL — `buildRegressionDiff` not exported.
 ```javascript
 // append to tools/simurgh-temporal/temporalLib.mjs
 export function buildRegressionDiff({ diffRow, beforeAttestation, afterAttestation, diffManifestDigest }) {
-  // lineage binding (both sides) before any comparison
-  const bb = enforceLineageBinding(diffRow.target_lineage_id, beforeAttestation);
-  if (bb) return { ok: false, violation: bb };
-  const ab = enforceLineageBinding(diffRow.target_lineage_id, afterAttestation);
-  if (ab) return { ok: false, violation: ab };
+  // 1. cross-target FIRST: comparing two different real targets is the leaderboard sin.
   const beforeMeta = {
     target_lineage_id: beforeAttestation.target.target_id,
     corpus_digest: beforeAttestation.corpus.corpus_digest,
@@ -703,6 +740,12 @@ export function buildRegressionDiff({ diffRow, beforeAttestation, afterAttestati
   };
   const lineage = enforceSameTargetLineage(beforeMeta, afterMeta);
   if (lineage) return { ok: false, violation: lineage };
+  // 2. lineage binding: the manifest may not relabel the (agreeing) target id.
+  const bb = enforceLineageBinding(diffRow.target_lineage_id, beforeAttestation);
+  if (bb) return { ok: false, violation: bb };
+  const ab = enforceLineageBinding(diffRow.target_lineage_id, afterAttestation);
+  if (ab) return { ok: false, violation: ab };
+  // 3. same corpus.
   if (!enforceSameCorpusDigest(beforeMeta, afterMeta)) return { ok: false, violation: "corpus_mismatch" };
 
   const { cell_transitions, summary } = compareCoverageProfiles(
@@ -939,7 +982,7 @@ Expected: FAIL — module not found.
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { createHash } from "node:crypto";
-import { canonicalJson } from "../simurgh-attestation/canonicalise.mjs";
+import { canonicalJson, sha256Hex } from "../simurgh-attestation/canonicalise.mjs";
 import {
   validateTimelineManifest,
   validateDiffManifest,
@@ -1065,34 +1108,75 @@ export async function deriveRegistry() {
   const manifest = JSON.parse(await readFile(join(EV, "registry", "timeline-manifest.json"), "utf8"));
   const v = validateTimelineManifest(manifest);
   if (!v.ok) throw new Error("timeline manifest invalid: " + v.errors.join("; "));
-  const manifestDigest = sha(stable(manifest));
+  const manifestDigest = sha256Hex(canonicalJson(manifest));
   return { registry: buildRegistryFromManifest(manifest, manifestDigest), manifest, manifestDigest };
 }
 
-export async function deriveDiffs() {
+export function diffOutputPath(row) {
+  return join(
+    EV,
+    "diffs",
+    row.target_lineage_id,
+    `${row.before_target_snapshot_id}__to__${row.after_target_snapshot_id}`,
+    "regression-diff.json"
+  );
+}
+
+// Derive diffs from the diff-manifest (+ pinned-digest checks). No committed compare;
+// used by both the write path and the verify path. Returns [{ row, diff }].
+export async function buildDiffList() {
   const dm = JSON.parse(await readFile(join(EV, "diffs", "diff-manifest.json"), "utf8"));
   const v = validateDiffManifest(dm);
   if (!v.ok) throw new Error("diff manifest invalid: " + v.errors.join("; "));
-  const diffManifestDigest = sha(stable(dm));
+  const diffManifestDigest = sha256Hex(canonicalJson(dm));
   const out = [];
   for (const row of dm.diffs) {
-    const before = JSON.parse(await readFile(join(EV, "..", "stage-3p", "targets", row.target_lineage_id, "containment-attestation.json"), "utf8"));
+    const before = JSON.parse(await readFile(row.before_attestation_path, "utf8"));
     const after = JSON.parse(await readFile(row.after_attestation_path, "utf8"));
+    // referenced attestations must match the digests the manifest pinned (canonical).
+    if (sha256Hex(canonicalJson(before)) !== row.before_attestation_digest)
+      throw new Error(`diff ${row.diff_id}: before attestation digest mismatch`);
+    if (sha256Hex(canonicalJson(after)) !== row.after_attestation_digest)
+      throw new Error(`diff ${row.diff_id}: after attestation digest mismatch`);
     const res = buildRegressionDiff({ diffRow: row, beforeAttestation: before, afterAttestation: after, diffManifestDigest });
     if (!res.ok) throw new Error(`diff ${row.diff_id} rejected: ${res.violation}`);
-    out.push(res.diff);
+    out.push({ row, diff: res.diff });
   }
   return out;
 }
 
-const HASH_FILES = [
+// Verify path: derive + byte-compare each against its committed regression-diff.json.
+export async function deriveDiffs() {
+  const built = await buildDiffList();
+  for (const { row, diff } of built) {
+    const committed = JSON.parse(await readFile(diffOutputPath(row), "utf8"));
+    if (stable(committed) !== stable(diff))
+      throw new Error(`diff ${row.diff_id}: committed regression-diff.json drifted`);
+  }
+  return built.map((b) => b.diff);
+}
+
+const STATIC_HASH_FILES = [
   "registry/timeline-manifest.json",
   "registry/registry.json",
   "registry/registry.signature.json",
   "registry/previous-registry-head.json",
+  "registry/current-registry-head.json",
+  "registry/registry-head-digest.txt",
   "diffs/diff-manifest.json",
   "self-proof/self-proof-results.json",
 ];
+
+// Static files + any committed regression diffs and their sidecars (none at genesis).
+async function hashFiles() {
+  const files = [...STATIC_HASH_FILES];
+  const built = await buildDiffList().catch(() => []);
+  for (const { row } of built) {
+    const rel = diffOutputPath(row).slice(EV.length + 1);
+    files.push(rel, rel.replace(/\.json$/, ".signature.json"));
+  }
+  return files;
+}
 
 async function writeEvidence() {
   const { registry } = await deriveRegistry();
@@ -1101,7 +1185,13 @@ async function writeEvidence() {
   const sp = buildSelfProof();
   await mkdir(join(EV, "self-proof"), { recursive: true });
   await writeFile(join(EV, "self-proof", "self-proof-results.json"), stable(sp));
-  console.log("stage3q evidence: wrote registry + self-proof (run sign-3q-registry then `hash`)");
+  // write any derived regression diffs (zero at genesis)
+  for (const { row, diff } of await buildDiffList()) {
+    const p = diffOutputPath(row);
+    await mkdir(dirname(p), { recursive: true });
+    await writeFile(p, stable(diff));
+  }
+  console.log("stage3q evidence: wrote registry + self-proof + diffs (run sign-3q-registry then `hash`)");
 }
 
 async function verifyEvidence() {
@@ -1111,7 +1201,7 @@ async function verifyEvidence() {
   const sp = buildSelfProof();
   const committedSp = JSON.parse(await readFile(join(EV, "self-proof", "self-proof-results.json"), "utf8"));
   if (stable(committedSp) !== stable(sp)) throw new Error("self-proof-results.json drifted; run build --update");
-  // derive diffs to ensure they re-build cleanly (may be empty at genesis)
+  // derive diffs + byte-compare committed outputs (may be empty at genesis)
   await deriveDiffs();
   console.log("stage3q evidence: verified committed (registry + self-proof + diffs derive clean)");
 }
@@ -1119,7 +1209,7 @@ async function verifyEvidence() {
 export async function rewriteHashes() {
   const hashes = {};
   const missing = [];
-  for (const name of HASH_FILES) {
+  for (const name of await hashFiles()) {
     try {
       hashes[name] = sha(await readFile(join(EV, name), "utf8"));
     } catch {
@@ -1132,7 +1222,7 @@ export async function rewriteHashes() {
 
 export async function verifyHashes() {
   const committed = JSON.parse(await readFile(join(EV, "evidence-hashes.json"), "utf8"));
-  for (const name of HASH_FILES) {
+  for (const name of await hashFiles()) {
     const actual = sha(await readFile(join(EV, name), "utf8"));
     if (committed.hashes[name] !== actual) throw new Error(`evidence hash mismatch: ${name}`);
   }
@@ -1173,8 +1263,6 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     process.exit(1);
   });
 }
-
-void dirname;
 ```
 
 - [ ] **Step 4: Run to verify it passes**
@@ -1277,13 +1365,35 @@ export function verifyRegistry({ registry, sidecar, publicKeyPem }) {
   return { ok: Object.values(checks).every(Boolean), checks };
 }
 
+// The registry signs CLAIMS about 3P evidence; prove the referenced files still match.
+export async function verifyRegistryReferences(registry) {
+  const errors = [];
+  for (const entry of registry.entries ?? []) {
+    const snap = entry.entry_body.snapshot;
+    const catalogue = JSON.parse(await readFile(snap.catalogue_path, "utf8"));
+    if (sha256Hex(canonicalJson(catalogue)) !== snap.catalogue_digest)
+      errors.push(`catalogue digest mismatch in entry ${entry.entry_body.entry_index}`);
+    if (catalogue.corpus?.corpus_digest !== snap.corpus_digest)
+      errors.push(`corpus digest mismatch in entry ${entry.entry_body.entry_index}`);
+    for (const t of snap.target_attestations ?? []) {
+      const att = JSON.parse(await readFile(t.target_attestation_path, "utf8"));
+      if (sha256Hex(canonicalJson(att)) !== t.target_attestation_digest)
+        errors.push(`target ${t.target_lineage_id} attestation digest mismatch`);
+      if (att.target?.target_id !== t.target_lineage_id)
+        errors.push(`target ${t.target_lineage_id} lineage != attestation target_id`);
+    }
+  }
+  return { ok: errors.length === 0, errors };
+}
+
 async function main() {
   const registry = JSON.parse(await readFile(join(EV, "registry", "registry.json"), "utf8"));
   const sidecar = JSON.parse(await readFile(join(EV, "registry", "registry.signature.json"), "utf8"));
   const pub = JSON.parse(await readFile(join(EV, "keys", "stage3q-public-key.json"), "utf8"));
   const { ok, checks } = verifyRegistry({ registry, sidecar, publicKeyPem: pub.public_key_pem });
-  console.log(JSON.stringify(checks, null, 2));
-  if (!ok) {
+  const refs = await verifyRegistryReferences(registry);
+  console.log(JSON.stringify({ ...checks, references_valid: refs.ok, reference_errors: refs.errors }, null, 2));
+  if (!ok || !refs.ok) {
     console.error("stage3q registry verify: FAIL");
     process.exit(1);
   }
@@ -1434,8 +1544,11 @@ async function main() {
   const regSidecar = sidecarFor(registry, priv, pubPem);
   await writeFile(join(EV, "registry", "registry.signature.json"), stable(regSidecar));
 
-  // previous-registry-head.json reflects THIS registry's head for the next append.
-  const head = {
+  // current-registry-head.json reflects THIS registry's head — it becomes the NEXT
+  // release's previous-registry-head.json. The signer must NOT overwrite the
+  // previous-registry-head.json input (that is the prior release's head, deliberately
+  // maintained; genesis form at first release).
+  const currentHead = {
     type: "simurgh.temporal.previous_registry_head.v1",
     stage: "3Q",
     previous_registry_digest: sha256Hex(Buffer.from(canonicalJson(registry), "utf8")),
@@ -1444,7 +1557,8 @@ async function main() {
     previous_entry_count: registry.head.entry_count,
     previous_signature_digest: sha256Hex(stable(regSidecar)),
   };
-  await writeFile(join(EV, "registry", "previous-registry-head.json"), stable(head));
+  await writeFile(join(EV, "registry", "current-registry-head.json"), stable(currentHead));
+  await writeFile(join(EV, "registry", "registry-head-digest.txt"), registry.head.head_entry_digest + "\n");
 
   // sign any committed regression diffs (none at genesis)
   let signed = 0;
@@ -1481,12 +1595,10 @@ node -e "const k=require('./docs/research/llm-shield/evidence/stage-3q/keys/stag
 Author `docs/research/llm-shield/evidence/stage-3q/registry/timeline-manifest.json` with ONE real snapshot pointing at the committed 3P v1.9.0 release (fill the real digests):
 
 ```bash
-node -e '
-const fs=require("fs");
-const cat=fs.readFileSync("docs/research/llm-shield/evidence/stage-3p/catalogue/attestation-catalogue.json","utf8");
-const crypto=require("crypto");
-const sha=s=>"sha256:"+crypto.createHash("sha256").update(s).digest("hex");
-const catObj=JSON.parse(cat);
+node --input-type=module -e '
+import fs from "node:fs";
+import { canonicalJson, sha256Hex } from "./tools/simurgh-attestation/canonicalise.mjs";
+const catObj=JSON.parse(fs.readFileSync("docs/research/llm-shield/evidence/stage-3p/catalogue/attestation-catalogue.json","utf8"));
 const targets=catObj.targets.map(t=>({
   target_lineage_id:t.target_id, target_version:"v1", target_snapshot_id:t.target_id+"@v1",
   target_attestation_digest:t.attestation_digest,
@@ -1494,12 +1606,15 @@ const targets=catObj.targets.map(t=>({
 }));
 const manifest={type:"simurgh.temporal.timeline_manifest.v1",stage:"3Q",registry_id:"stage-3q-containment-registry",
   snapshots:[{entry_index:0,snapshot_id:"stage-3p-release-v1.9.0",snapshot_label:"v1.9.0-stage-3p-cross-defence-containment-attestation",
-    created_at_utc:"2026-06-21T00:00:00Z",catalogue_digest:sha(cat),
+    created_at_utc:"2026-06-21T00:00:00Z",catalogue_digest:sha256Hex(canonicalJson(catObj)),
     catalogue_path:"docs/research/llm-shield/evidence/stage-3p/catalogue/attestation-catalogue.json",
     corpus_digest:catObj.corpus.corpus_digest,target_attestations:targets}]};
 fs.writeFileSync("docs/research/llm-shield/evidence/stage-3q/registry/timeline-manifest.json",JSON.stringify(manifest,null,2)+"\n");
 fs.writeFileSync("docs/research/llm-shield/evidence/stage-3q/diffs/diff-manifest.json",JSON.stringify({type:"simurgh.temporal.diff_manifest.v1",stage:"3Q",diffs:[]},null,2)+"\n");
-console.log("wrote timeline-manifest.json + empty diff-manifest.json");
+// genesis previous-registry-head.json (committed INPUT; the prior release head — none yet)
+const genesis={type:"simurgh.temporal.previous_registry_head.v1",stage:"3Q",previous_head_entry_digest:"GENESIS",previous_entry_count:0};
+fs.writeFileSync("docs/research/llm-shield/evidence/stage-3q/registry/previous-registry-head.json",JSON.stringify(genesis,null,2)+"\n");
+console.log("wrote timeline-manifest.json + empty diff-manifest.json + genesis previous-registry-head.json");
 '
 ```
 
@@ -1848,4 +1963,4 @@ Expected: the two new 3Q steps PASS; pre-existing environmental failures (vendor
 
 **3. Type consistency:** `entry_digest`/`entry_body`, `buildRegistryFromManifest(manifest, manifestDigest)`, `verifyAppendContinuity(previousHead, newRegistry)`, `buildRegressionDiff({diffRow, beforeAttestation, afterAttestation, diffManifestDigest})`, `evaluateTemporalSelfProofFixture(fixture)→{...passed}`, sidecar shape (`bundle_sha256`/`public_key_fingerprint`/`signature`) consistent across signer + all three verifiers; schema constants (`simurgh.temporal.*`) consistent across lib, chain, CLI, verifiers, audits. ✓
 
-> **Note for the implementer:** the regression-diff signature is realised as a sibling `.signature.json` sidecar (faithful to the 3M/3O/3P pattern), as is the registry signature. `previous-registry-head.json` at first release records this registry's own genesis head so append-continuity verifies on day one; the NEXT release's maintainer replaces it with the prior release's head before appending.
+> **Note for the implementer:** the regression-diff signature is realised as a sibling `.signature.json` sidecar (faithful to the 3M/3O/3P pattern), as is the registry signature. `previous-registry-head.json` is a committed INPUT: at first release it is the **genesis** previous head (`previous_head_entry_digest: "GENESIS"`, `previous_entry_count: 0`), so append-continuity verifies because `entries[0].previous_entry_digest == "GENESIS"`. The signer writes the **current** head to `current-registry-head.json` (+ `registry-head-digest.txt`); the next release's maintainer copies that file to `previous-registry-head.json` before appending. The signer never overwrites the previous-head input.
