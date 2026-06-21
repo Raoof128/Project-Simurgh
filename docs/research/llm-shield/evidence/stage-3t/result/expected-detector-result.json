@@ -1,0 +1,26 @@
+{
+  "type": "simurgh.capability_extraction.detector_result.v1",
+  "detector_id": "stage3t_frozen_detector_v1",
+  "meta_set_digest": "sha256:bff905faf3920a57cb8a9332665e3954364d2430aaf6c525197e51d52def07de",
+  "matched": {
+    "repetition_cluster": true,
+    "template_prefix_cluster": false,
+    "cot_elicitation": true,
+    "capability_targeting": true,
+    "task_taxonomy_repeat": false,
+    "hydra_cluster": false,
+    "volume_burst": false,
+    "high_request_count": false
+  },
+  "matched_families": ["structural", "behavioural", "targeting"],
+  "distinct_family_count": 3,
+  "decision": "extraction_pattern_observed",
+  "attestation_claim": "manual_review_recommended",
+  "non_claims": [
+    "no_intent_claim",
+    "no_attribution_claim",
+    "no_complete_distillation_prevention_claim",
+    "metadata_only",
+    "match_is_not_accusation"
+  ]
+}

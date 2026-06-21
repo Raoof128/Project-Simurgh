@@ -1,0 +1,7 @@
+{
+  "docs/research/llm-shield/evidence/stage-3t/meta-set/detector-config.json": "sha256:b1508eeca22feff622659f04ddd58c8437e87d128f9ec5e409ca72d086cd0ec2",
+  "docs/research/llm-shield/evidence/stage-3t/meta-set/metadata-set-manifest.json": "sha256:bf1386aa180b55c368b601065ff8ba8c3285c48b8207005fa552410a1c6ad8b5",
+  "docs/research/llm-shield/evidence/stage-3t/meta-set/metadata-set.json": "sha256:999f84c4c26d89b25c309297f24560434abae3065109b84dbf586568f18ca6ac",
+  "docs/research/llm-shield/evidence/stage-3t/result/attestation.json": "sha256:c6f82ea400214dd940fdf8c704e4b0dcb1abe24a397e3a13a52a12e3654208a1",
+  "docs/research/llm-shield/evidence/stage-3t/result/expected-detector-result.json": "sha256:26845794b1a927c85e705a5caf2938aba00f86818c81eac2ec321c77d34fc71d"
+}

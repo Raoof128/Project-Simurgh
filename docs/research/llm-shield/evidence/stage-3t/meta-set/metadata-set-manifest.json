@@ -1,0 +1,6 @@
+{
+  "set_id": "stage3t_reference_set",
+  "set_file": "metadata-set.json",
+  "expected_decision": "extraction_pattern_observed",
+  "expected_distinct_family_count": 3
+}

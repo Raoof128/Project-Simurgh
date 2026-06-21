@@ -1,0 +1,19 @@
+{
+  "detector_id": "stage3t_frozen_detector_v1",
+  "threshold_rule": "distinct_signal_families >= 2",
+  "decision_function": {
+    "0": "no_pattern_observed",
+    "1": "single_signal_observed",
+    "2_or_more": "extraction_pattern_observed"
+  },
+  "thresholds": {
+    "CLUSTER_MIN": 3,
+    "DOMINANCE": 0.6,
+    "COT_MAJORITY": 0.5,
+    "VOLUME_BURST_FRACTION": 0.6,
+    "HIGH_REQUEST_COUNT": 10,
+    "HYDRA_MIN_ACTORS": 3
+  },
+  "family_map_digest": "sha256:caf0299f6ade6e0cad163568e8cbaaffa1861a57f25ffb1c4f3f78ce5309c491",
+  "threshold_change_requires_new_detector_id": true
+}
