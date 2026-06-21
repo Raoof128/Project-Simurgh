@@ -1,0 +1,68 @@
+{
+  "fixtures": [
+    {
+      "name": "benign-heavy-power-user",
+      "passed": true,
+      "detail": "single_signal_observed"
+    },
+    {
+      "name": "benign-repetition-only",
+      "passed": true,
+      "detail": "single_signal_observed"
+    },
+    {
+      "name": "benign-volume-only",
+      "passed": true,
+      "detail": "single_signal_observed"
+    },
+    {
+      "name": "benign-targeting-only",
+      "passed": true,
+      "detail": "single_signal_observed"
+    },
+    {
+      "name": "structural-double-count-trap",
+      "passed": true,
+      "detail": "1"
+    },
+    {
+      "name": "extraction-structural-plus-behavioural",
+      "passed": true,
+      "detail": "extraction_pattern_observed"
+    },
+    {
+      "name": "extraction-targeting-plus-coordination",
+      "passed": true,
+      "detail": "targeting,coordination"
+    },
+    {
+      "name": "threshold-version-lock",
+      "passed": true,
+      "detail": "stage3t_frozen_detector_v1:2"
+    },
+    {
+      "name": "intent-language-rejected",
+      "passed": true,
+      "detail": "true"
+    },
+    {
+      "name": "duplicate-run-id-rejected",
+      "passed": true,
+      "detail": "true"
+    },
+    {
+      "name": "decision-reproduction",
+      "passed": true,
+      "detail": "stable"
+    }
+  ],
+  "summary": {
+    "benign_escalation_failures": 0,
+    "single_family_escalations": 0,
+    "distinct_family_double_count_failures": 0,
+    "intent_claims_rendered": 0,
+    "decision_reproduction_failures": 0,
+    "duplicate_run_id_failures": 0,
+    "all_passed": true
+  }
+}

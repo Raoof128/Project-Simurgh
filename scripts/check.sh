@@ -1812,6 +1812,34 @@ else
   tail -100 "$LOG_DIR/llm-shield-stage3s-helper-coverage.log"
 fi
 
+step "LLM Shield 3T capability-extraction attestation"
+if scripts/smoke-llm-shield-stage3t.sh > "$LOG_DIR/llm-shield-stage3t-smoke.log" 2>&1; then
+  pass "LLM Shield 3T capability-extraction attestation"
+else
+  fail "LLM Shield 3T capability-extraction attestation"
+  tail -80 "$LOG_DIR/llm-shield-stage3t-smoke.log"
+fi
+
+step "LLM Shield 3T extraction helper coverage"
+if node --test --experimental-test-coverage \
+  --test-coverage-include=tools/simurgh-extraction/metaSet.mjs \
+  --test-coverage-include=tools/simurgh-extraction/signalFamilies.mjs \
+  --test-coverage-include=tools/simurgh-extraction/detector.mjs \
+  --test-coverage-include=tools/simurgh-extraction/renderer.mjs \
+  --test-coverage-include=tools/simurgh-extraction/selfProof.mjs \
+  --test-coverage-functions=100 \
+  tests/unit/llmShield/extraction/metaSet.test.js \
+  tests/unit/llmShield/extraction/signalFamilies.test.js \
+  tests/unit/llmShield/extraction/detector.test.js \
+  tests/unit/llmShield/extraction/renderer.test.js \
+  tests/unit/llmShield/extraction/extractionSelfProof.test.js \
+  > "$LOG_DIR/llm-shield-stage3t-helper-coverage.log" 2>&1; then
+  pass "LLM Shield 3T extraction helper coverage"
+else
+  fail "LLM Shield 3T extraction helper coverage"
+  tail -100 "$LOG_DIR/llm-shield-stage3t-helper-coverage.log"
+fi
+
 step "LLM Shield 3E-core docker smoke (skips if no docker)"
 if bash scripts/docker-smoke-llm-shield-stage3e.sh > "$LOG_DIR/llm-shield-stage3e-docker-smoke.log" 2>&1; then
   pass "LLM Shield 3E-core docker smoke"
