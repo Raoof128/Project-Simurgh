@@ -1,0 +1,18 @@
+{
+  "type": "simurgh.defensive_narrative.model_slots.v1",
+  "source": {
+    "gateway_receipt_digest": "sha256:e171544294a2614a3e68af95ea3e358897a440e478cd3c15225d5d0165bc39fc",
+    "gateway_output_hash": "sha256:60b2f6a7740eb5999a66ffa290f2e517758927a00f1a7c6ef55fb82f217d9d7a",
+    "model_slots_digest": "sha256:97de2e9338b630adec12068faea326cd0c5fa063e538d82c62aef84d4676c6e5"
+  },
+  "slots": [
+    {
+      "slot_id": "chain",
+      "evidence_ref": "audit_chain_valid",
+      "operator": "==",
+      "expected_value": true,
+      "severity": "integrity_signal_present",
+      "wording": "chain_valid"
+    }
+  ]
+}

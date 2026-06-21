@@ -1,0 +1,11 @@
+{
+  "schema": "simurgh.defensive_narrative.hashes.v1",
+  "hashes": {
+    "digest/evidence-digest.json": "sha256:88cb74ad9766ed9575cee19fc2f688bae4ed7c480adfc4d517343069151e6527",
+    "model-slots/gateway-receipt.json": "sha256:da40428eb1749e9896aa7e14bf26f8e1db8f727157d124f2b28a013a841010a9",
+    "model-slots/model-slots.json": "sha256:5e5d330badda9435fe49681e39a6748d2e0ec137422bf919c0eef7d47443796d",
+    "verified/verified-narrative-artifact.json": "sha256:e792ba5e5e54201ff06da6fafe97f9e99a3da610a14224e415dcae9c585ec10c",
+    "verified/verified-narrative-artifact.signature.json": "sha256:a345974e0a734ca55709c909d2805cff19271468203d0f7b5573f3f4d5d0bec2",
+    "self-proof/self-proof-results.json": "sha256:cf1cdd736ff178569c47c52869bdeb93bdddd335b8ed5f4a9409fad4cfbd9836"
+  }
+}
