@@ -1,0 +1,13 @@
+{
+  "schema": "simurgh.temporal.hashes.v1",
+  "hashes": {
+    "registry/timeline-manifest.json": "sha256:895e8709c3b5c02eb830ec7a4fc9541bd2fb930069e62950e5cd421ea8d243f1",
+    "registry/registry.json": "sha256:90a01576bcc3d19c2d3eeef6c835e4a6d26e9803a64864b95ff37ea350f21768",
+    "registry/registry.signature.json": "sha256:c36be3c3f55a3af9f183fa58059c0ad4bb712d9caf766f06703530648e1e9962",
+    "registry/previous-registry-head.json": "sha256:a52a3e5a6fee2cdbb6af1df9a5d8ced248fb3f73cc556b3ce165a84b79a25051",
+    "registry/current-registry-head.json": "sha256:351f8f728f8e8e1e9fc34ef1e50aef36b01eea49002d847d03617ba4b528340d",
+    "registry/registry-head-digest.txt": "sha256:4b09deab167ddc18dfb87847261be9c11de27e8e849450b3e3608f6783807a01",
+    "diffs/diff-manifest.json": "sha256:e3b15e6c2fb6fa6fddcbb25569a7dc3b2f56d8f1f45e4986c47496a7d5056407",
+    "self-proof/self-proof-results.json": "sha256:4c1d5e0f47f6ed0bf78d15418412f0f0a92057af0c0a5e7136e960c612cc4759"
+  }
+}

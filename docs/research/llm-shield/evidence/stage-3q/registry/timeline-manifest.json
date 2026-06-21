@@ -1,0 +1,67 @@
+{
+  "type": "simurgh.temporal.timeline_manifest.v1",
+  "stage": "3Q",
+  "registry_id": "stage-3q-containment-registry",
+  "snapshots": [
+    {
+      "entry_index": 0,
+      "snapshot_id": "stage-3p-release-v1.9.0",
+      "snapshot_label": "v1.9.0-stage-3p-cross-defence-containment-attestation",
+      "created_at_utc": "2026-06-21T00:00:00Z",
+      "catalogue_digest": "sha256:703671ae7d4651fe36c3753812358f7b92221412d22fbdff02af3e7d159a557a",
+      "catalogue_path": "docs/research/llm-shield/evidence/stage-3p/catalogue/attestation-catalogue.json",
+      "corpus_digest": "sha256:c2d1e953a8ad068d77c8282fd6877cd6297075b08592d9de0614e94359d33892",
+      "target_attestations": [
+        {
+          "target_lineage_id": "context-sanitiser-replica",
+          "target_version": "v1",
+          "target_snapshot_id": "context-sanitiser-replica@v1",
+          "target_attestation_digest": "sha256:7f7ba376c0cea34f0d089029627e9b897fcf5c27c77dba9a75e9341bdc8ba359",
+          "target_attestation_path": "docs/research/llm-shield/evidence/stage-3p/targets/context-sanitiser-replica/containment-attestation.json"
+        },
+        {
+          "target_lineage_id": "full-gateway-target",
+          "target_version": "v1",
+          "target_snapshot_id": "full-gateway-target@v1",
+          "target_attestation_digest": "sha256:afd0332263d85a30b9e063bc4084a0a43bef2c83c6ac1ffa9e2196a82fdbe0f4",
+          "target_attestation_path": "docs/research/llm-shield/evidence/stage-3p/targets/full-gateway-target/containment-attestation.json"
+        },
+        {
+          "target_lineage_id": "keyword-filter-replica",
+          "target_version": "v1",
+          "target_snapshot_id": "keyword-filter-replica@v1",
+          "target_attestation_digest": "sha256:7382184245ee1aa7734e0232405e23cdb59bc22b1a5ba5e9be34cbf171fec208",
+          "target_attestation_path": "docs/research/llm-shield/evidence/stage-3p/targets/keyword-filter-replica/containment-attestation.json"
+        },
+        {
+          "target_lineage_id": "llm-judge-replica",
+          "target_version": "v1",
+          "target_snapshot_id": "llm-judge-replica@v1",
+          "target_attestation_digest": "sha256:bf3116f89d69f51c56a62d022e97fe7c2df705551c1cc065ae10cbb24a8c5534",
+          "target_attestation_path": "docs/research/llm-shield/evidence/stage-3p/targets/llm-judge-replica/containment-attestation.json"
+        },
+        {
+          "target_lineage_id": "no-defence-baseline",
+          "target_version": "v1",
+          "target_snapshot_id": "no-defence-baseline@v1",
+          "target_attestation_digest": "sha256:7f93fcdccd470ef2d00d242376a80bab3ea86752144448f6a3c25871ce395efc",
+          "target_attestation_path": "docs/research/llm-shield/evidence/stage-3p/targets/no-defence-baseline/containment-attestation.json"
+        },
+        {
+          "target_lineage_id": "regex-denylist-replica",
+          "target_version": "v1",
+          "target_snapshot_id": "regex-denylist-replica@v1",
+          "target_attestation_digest": "sha256:a9eb6545f4f5cd6255f6a3286570f7daac3cdca44e0c99fa9539d017fc1a4109",
+          "target_attestation_path": "docs/research/llm-shield/evidence/stage-3p/targets/regex-denylist-replica/containment-attestation.json"
+        },
+        {
+          "target_lineage_id": "tool-gate-replica",
+          "target_version": "v1",
+          "target_snapshot_id": "tool-gate-replica@v1",
+          "target_attestation_digest": "sha256:f8d03cb162fcd844510e5d820daa490d4afe7e36ddf7a0f5e94f18ed9f76f0ac",
+          "target_attestation_path": "docs/research/llm-shield/evidence/stage-3p/targets/tool-gate-replica/containment-attestation.json"
+        }
+      ]
+    }
+  ]
+}
