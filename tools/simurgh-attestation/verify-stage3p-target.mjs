@@ -17,9 +17,15 @@ export function verifyTarget({ bundle, sidecar, publicKeyPem }) {
   checks.schema_valid = validateTargetAttestation(bundle).ok;
   const canonical = Buffer.from(canonicalJson(bundle), "utf8");
   checks.bundle_digest_match = sidecar.bundle_sha256 === sha256Hex(canonical);
-  checks.key_fingerprint_match = sidecar.public_key_fingerprint === fingerprintPublicKey(publicKeyPem);
+  checks.key_fingerprint_match =
+    sidecar.public_key_fingerprint === fingerprintPublicKey(publicKeyPem);
   const sig = Buffer.from(sidecar.signature.replace(/^base64:/, ""), "base64");
-  checks.signature_valid = crypto.verify(null, canonical, crypto.createPublicKey(publicKeyPem), sig);
+  checks.signature_valid = crypto.verify(
+    null,
+    canonical,
+    crypto.createPublicKey(publicKeyPem),
+    sig
+  );
   const cc = evaluateCoverageClaims(bundle);
   checks.no_claim_conflict = cc.claim_conflict.length === 0;
   checks.no_unverified_full_coverage = cc.full_coverage_violation === false;

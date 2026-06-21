@@ -117,7 +117,11 @@ test("checkProvenanceBrand blocks brands in replicas, allows mechanism names", (
   // fix #2: top-level non_claims is scanned for replicas
   assert.equal(
     checkProvenanceBrand(
-      { target_id: "clean-replica", display_name: "Clean Replica", provenance: "reference_replica" },
+      {
+        target_id: "clean-replica",
+        display_name: "Clean Replica",
+        provenance: "reference_replica",
+      },
       ["This is not Llama Guard."]
     ),
     "provenance_brand_denylist_violation"
@@ -139,14 +143,19 @@ test("checkRankingOverclaim is negation-aware and schema-aware", () => {
     checkRankingOverclaim({ numeric_summary_exported: false, ordering_metric_exported: false }),
     null
   );
-  assert.equal(checkRankingOverclaim({ catalogue_kind: "non_ranking_attestation_catalogue" }), null);
+  assert.equal(
+    checkRankingOverclaim({ catalogue_kind: "non_ranking_attestation_catalogue" }),
+    null
+  );
 });
 
 test("evaluateCoverageClaims flags claim_conflict and unverified full coverage", () => {
   const conflict = {
     coverage_profile: {
       full_coverage_claimed: false,
-      cells: { "direct_input::plain_marker": { result: "contained", observed_canary_leaked: true } },
+      cells: {
+        "direct_input::plain_marker": { result: "contained", observed_canary_leaked: true },
+      },
     },
   };
   const r1 = evaluateCoverageClaims(conflict);
@@ -181,7 +190,9 @@ test("validateTargetAttestation checks schema, enums, corpus fields", () => {
       full_coverage_claimed: false,
       numeric_summary_exported: false,
       ordering_metric_exported: false,
-      cells: { "direct_input::plain_marker": { result: "contained", observed_canary_leaked: false } },
+      cells: {
+        "direct_input::plain_marker": { result: "contained", observed_canary_leaked: false },
+      },
     },
     non_claims: ["This attestation does not rank defences."],
   };
@@ -236,7 +247,10 @@ const CLEAN_GATES = {
 test("enforceStage3pHardGates accepts clean and rejects a regression", () => {
   assert.equal(enforceStage3pHardGates(CLEAN_GATES).ok, true);
   assert.equal(enforceStage3pHardGates({ ...CLEAN_GATES, matrix_total_cases: 179 }).ok, false);
-  assert.equal(enforceStage3pHardGates({ ...CLEAN_GATES, overclaim_wording_detected: 1 }).ok, false);
+  assert.equal(
+    enforceStage3pHardGates({ ...CLEAN_GATES, overclaim_wording_detected: 1 }).ok,
+    false
+  );
   assert.equal(
     enforceStage3pHardGates({ ...CLEAN_GATES, external_live_target_required_for_ci: true }).ok,
     false

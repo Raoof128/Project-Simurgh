@@ -38,13 +38,48 @@ const stable = (v) => JSON.stringify(v, null, 2) + "\n";
 const sha = (s) => "sha256:" + createHash("sha256").update(s).digest("hex");
 
 const REPLICAS = Object.freeze([
-  { id: "no-defence-baseline", display: "No-Defence Baseline", provenance: "no_defence_baseline", fn: noDefence },
-  { id: "keyword-filter-replica", display: "Keyword Filter Replica", provenance: "reference_replica", fn: keyword },
-  { id: "regex-denylist-replica", display: "Regex Denylist Replica", provenance: "reference_replica", fn: regex },
-  { id: "llm-judge-replica", display: "LLM Judge Replica", provenance: "reference_replica", fn: judge },
-  { id: "context-sanitiser-replica", display: "Context Sanitiser Replica", provenance: "reference_replica", fn: sanitiser },
-  { id: "tool-gate-replica", display: "Tool Gate Replica", provenance: "reference_replica", fn: toolGate },
-  { id: "full-gateway-target", display: "Full Gateway Target", provenance: "reference_replica", fn: fullGateway },
+  {
+    id: "no-defence-baseline",
+    display: "No-Defence Baseline",
+    provenance: "no_defence_baseline",
+    fn: noDefence,
+  },
+  {
+    id: "keyword-filter-replica",
+    display: "Keyword Filter Replica",
+    provenance: "reference_replica",
+    fn: keyword,
+  },
+  {
+    id: "regex-denylist-replica",
+    display: "Regex Denylist Replica",
+    provenance: "reference_replica",
+    fn: regex,
+  },
+  {
+    id: "llm-judge-replica",
+    display: "LLM Judge Replica",
+    provenance: "reference_replica",
+    fn: judge,
+  },
+  {
+    id: "context-sanitiser-replica",
+    display: "Context Sanitiser Replica",
+    provenance: "reference_replica",
+    fn: sanitiser,
+  },
+  {
+    id: "tool-gate-replica",
+    display: "Tool Gate Replica",
+    provenance: "reference_replica",
+    fn: toolGate,
+  },
+  {
+    id: "full-gateway-target",
+    display: "Full Gateway Target",
+    provenance: "reference_replica",
+    fn: fullGateway,
+  },
 ]);
 
 export const PLANNED_TARGET_IDS = Object.freeze(REPLICAS.map((r) => r.id));
@@ -100,9 +135,25 @@ function selfProofTargetAtt(id) {
   return {
     type: TARGET_ATTESTATION_SCHEMA,
     stage: "3P",
-    target: { target_id: id, display_name: id, provenance: "reference_replica", execution_trust: "project_generated", real_product_claimed: false, brand_reference_allowed: false },
-    corpus: { corpus_type: "canary_discrimination_matrix", corpus_digest: "sha256:SELFPROOF", matrix_shape: MATRIX_SHAPE },
-    coverage_profile: { full_coverage_claimed: false, numeric_summary_exported: false, ordering_metric_exported: false, cells: {} },
+    target: {
+      target_id: id,
+      display_name: id,
+      provenance: "reference_replica",
+      execution_trust: "project_generated",
+      real_product_claimed: false,
+      brand_reference_allowed: false,
+    },
+    corpus: {
+      corpus_type: "canary_discrimination_matrix",
+      corpus_digest: "sha256:SELFPROOF",
+      matrix_shape: MATRIX_SHAPE,
+    },
+    coverage_profile: {
+      full_coverage_claimed: false,
+      numeric_summary_exported: false,
+      ordering_metric_exported: false,
+      cells: {},
+    },
     non_claims: ["This attestation does not rank defences."],
   };
 }
@@ -111,12 +162,64 @@ function buildSelfProof() {
   const overclaimer = selfProofTargetAtt("overclaimer");
   overclaimer.coverage_profile.aggregate_score = 0.99;
   const fixtures = [
-    { fixture_id: "clean-baseline", kind: "target", expected_detector: null, payload: selfProofTargetAtt("clean-baseline-replica") },
-    { fixture_id: "brand-violator-replica", kind: "target", expected_detector: "provenance_brand_denylist_violation", payload: selfProofTargetAtt("llama-guard-replica") },
-    { fixture_id: "ranking-overclaimer", kind: "target", expected_detector: "ranking_export_violation", payload: overclaimer },
-    { fixture_id: "claim-conflict-liar", kind: "coverage", expected_detector: "claim_conflict", payload: { coverage_profile: { full_coverage_claimed: false, cells: { "direct_input::plain_marker": { result: "contained", observed_canary_leaked: true } } } } },
-    { fixture_id: "false-full-coverage-claimer", kind: "coverage", expected_detector: "unverified_full_coverage_claim", payload: { coverage_profile: { full_coverage_claimed: true, cells: { "direct_input::plain_marker": { result: "allowed", observed_canary_leaked: true } } } } },
-    { fixture_id: "silent-drop-catalogue", kind: "catalogue_silent_drop", expected_detector: "catalogue_silent_drop", payload: { catalogue: buildCatalogue({ corpusDigest: "sha256:SELFPROOF", matrixShape: MATRIX_SHAPE, targets: [], excludedTargets: [] }), planned_ids: ["dropped-target"] } },
+    {
+      fixture_id: "clean-baseline",
+      kind: "target",
+      expected_detector: null,
+      payload: selfProofTargetAtt("clean-baseline-replica"),
+    },
+    {
+      fixture_id: "brand-violator-replica",
+      kind: "target",
+      expected_detector: "provenance_brand_denylist_violation",
+      payload: selfProofTargetAtt("llama-guard-replica"),
+    },
+    {
+      fixture_id: "ranking-overclaimer",
+      kind: "target",
+      expected_detector: "ranking_export_violation",
+      payload: overclaimer,
+    },
+    {
+      fixture_id: "claim-conflict-liar",
+      kind: "coverage",
+      expected_detector: "claim_conflict",
+      payload: {
+        coverage_profile: {
+          full_coverage_claimed: false,
+          cells: {
+            "direct_input::plain_marker": { result: "contained", observed_canary_leaked: true },
+          },
+        },
+      },
+    },
+    {
+      fixture_id: "false-full-coverage-claimer",
+      kind: "coverage",
+      expected_detector: "unverified_full_coverage_claim",
+      payload: {
+        coverage_profile: {
+          full_coverage_claimed: true,
+          cells: {
+            "direct_input::plain_marker": { result: "allowed", observed_canary_leaked: true },
+          },
+        },
+      },
+    },
+    {
+      fixture_id: "silent-drop-catalogue",
+      kind: "catalogue_silent_drop",
+      expected_detector: "catalogue_silent_drop",
+      payload: {
+        catalogue: buildCatalogue({
+          corpusDigest: "sha256:SELFPROOF",
+          matrixShape: MATRIX_SHAPE,
+          targets: [],
+          excludedTargets: [],
+        }),
+        planned_ids: ["dropped-target"],
+      },
+    },
   ];
   const results = fixtures.map(evaluateSelfProofFixture);
   return {
@@ -162,7 +265,12 @@ export async function buildEvidence() {
     const v = validateTargetAttestation(att);
     if (!v.ok) throw new Error(`target ${r.id} attestation invalid: ${v.errors.join("; ")}`);
     targetAttestations[r.id] = att;
-    catalogueTargets.push({ target_id: r.id, provenance: r.provenance, execution_trust: "project_generated", attestation: att });
+    catalogueTargets.push({
+      target_id: r.id,
+      provenance: r.provenance,
+      execution_trust: "project_generated",
+      attestation: att,
+    });
   }
 
   const catalogue = buildCatalogue({
@@ -221,11 +329,15 @@ async function verifyEvidenceCommitted() {
     [join(EV, "corpus", "matrix-manifest.json"), manifest],
     [join(EV, "catalogue", "attestation-catalogue.body.json"), catalogue],
     [join(EV, "self-proof", "self-proof-results.json"), selfProof],
-    ...Object.entries(targetAttestations).map(([id, a]) => [join(EV, "targets", id, "coverage.json"), a]),
+    ...Object.entries(targetAttestations).map(([id, a]) => [
+      join(EV, "targets", id, "coverage.json"),
+      a,
+    ]),
   ];
   for (const [p, value] of expect) {
     const committed = JSON.parse(await readFile(p, "utf8"));
-    if (stable(committed) !== stable(value)) throw new Error(`committed ${p} drifted; run evidence --update`);
+    if (stable(committed) !== stable(value))
+      throw new Error(`committed ${p} drifted; run evidence --update`);
   }
   console.log("stage3p evidence: verified committed");
 }
@@ -257,7 +369,10 @@ export async function rewriteHashes() {
   if (missing.length > 0)
     throw new Error("cannot write evidence hashes, missing files: " + missing.join(", "));
   await mkdir(EV, { recursive: true });
-  await writeFile(join(EV, "evidence-hashes.json"), stable({ schema: "simurgh.cross_defence.hashes.v1", hashes }));
+  await writeFile(
+    join(EV, "evidence-hashes.json"),
+    stable({ schema: "simurgh.cross_defence.hashes.v1", hashes })
+  );
 }
 
 export async function verifyHashes() {
@@ -275,7 +390,15 @@ async function loadTarget(spec) {
       const res = await fetch(spec, {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ schema: "simurgh.cross_defence.run_request.v1", case_id: kase.case_id, user_task: kase.user_task, contexts: kase.contexts, available_actions: kase.available_actions, boundary_axis: kase.boundary_axis, evasion_axis: kase.evasion_axis }),
+        body: JSON.stringify({
+          schema: "simurgh.cross_defence.run_request.v1",
+          case_id: kase.case_id,
+          user_task: kase.user_task,
+          contexts: kase.contexts,
+          available_actions: kase.available_actions,
+          boundary_axis: kase.boundary_axis,
+          evasion_axis: kase.evasion_axis,
+        }),
       });
       return res.json();
     };
@@ -311,11 +434,18 @@ async function mainCli() {
     schema: "simurgh.cross_defence.run_result_set.v1",
     target_type: isExternal ? "external_target" : "in_process_replica",
     result: isExternal ? "measured_not_certified" : "reference",
-    coverage_profile: { numeric_summary_exported: false, ordering_metric_exported: false, cells: coverage.cells, controls: coverage.controls },
+    coverage_profile: {
+      numeric_summary_exported: false,
+      ordering_metric_exported: false,
+      cells: coverage.cells,
+      controls: coverage.controls,
+    },
   };
   if (out) await writeFile(out, stable(result));
   const contained = Object.values(coverage.cells).filter((c) => c.result === "contained").length;
-  console.log(`stage3p run: ${contained}/25 cells contained, ${coverage.controls.overdefence}/${coverage.controls.total} over-defended`);
+  console.log(
+    `stage3p run: ${contained}/25 cells contained, ${coverage.controls.overdefence}/${coverage.controls.total} over-defended`
+  );
   void RUN_RESULT_SCHEMA;
 }
 

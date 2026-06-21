@@ -14,13 +14,25 @@ import { PLANNED_TARGET_IDS } from "../simurgh-benchmark/simurgh-crossdefence.mj
 
 const EV = "docs/research/llm-shield/evidence/stage-3p";
 
-export function verifyCatalogue({ catalogue, sidecar, attestationsById, publicKeyPem, plannedIds }) {
+export function verifyCatalogue({
+  catalogue,
+  sidecar,
+  attestationsById,
+  publicKeyPem,
+  plannedIds,
+}) {
   const checks = {};
   const canonical = Buffer.from(canonicalJson(catalogue), "utf8");
   checks.bundle_digest_match = sidecar.bundle_sha256 === sha256Hex(canonical);
-  checks.key_fingerprint_match = sidecar.public_key_fingerprint === fingerprintPublicKey(publicKeyPem);
+  checks.key_fingerprint_match =
+    sidecar.public_key_fingerprint === fingerprintPublicKey(publicKeyPem);
   const sig = Buffer.from(sidecar.signature.replace(/^base64:/, ""), "base64");
-  checks.signature_valid = crypto.verify(null, canonical, crypto.createPublicKey(publicKeyPem), sig);
+  checks.signature_valid = crypto.verify(
+    null,
+    canonical,
+    crypto.createPublicKey(publicKeyPem),
+    sig
+  );
   checks.binding_valid = verifyCatalogueBinding(catalogue, attestationsById).ok;
   checks.no_silent_drop = checkSilentDrop(catalogue, plannedIds) === null;
   const ok = Object.values(checks).every(Boolean);

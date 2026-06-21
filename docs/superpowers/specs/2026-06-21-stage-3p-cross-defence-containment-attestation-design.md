@@ -17,11 +17,11 @@ everyone."
 
 ## The VCA ladder
 
-| Stage  | What it proves                                                                      |
-| ------ | ---------------------------------------------------------------------------------- |
-| 3M     | the evidence bundle verifies offline (Ed25519)                                     |
-| 3N     | the claims made _from_ that evidence cannot outrun it                              |
-| 3O     | others can produce evidence under the same contract                                |
+| Stage  | What it proves                                                                                           |
+| ------ | -------------------------------------------------------------------------------------------------------- |
+| 3M     | the evidence bundle verifies offline (Ed25519)                                                           |
+| 3N     | the claims made _from_ that evidence cannot outrun it                                                    |
+| 3O     | others can produce evidence under the same contract                                                      |
 | **3P** | **the contract binds many, differently-built targets — each independently and campaign-wide verifiable** |
 
 3P is the generalisation rung: 3O proved a single external gateway can produce a signed
@@ -66,7 +66,7 @@ still trips (`ranking_export_violation`).
 
 ## Inherited discipline
 
-- **Tooling-only. Zero `src/llmShield/**` change** (policy-drift guard enforced by audit script).
+- **Tooling-only. Zero `src/llmShield/**` change\*\* (policy-drift guard enforced by audit script).
 - **CI is deterministic, offline, and verify-only.** CI never holds a private key; it verifies
   committed signed attestations and re-runs deterministic replicas.
 - **Metadata-only, canary-only.** No harmful payloads, secrets, exploit text, real credentials, or
@@ -103,12 +103,12 @@ Every target carries a signed provenance tag and trust attribution:
 }
 ```
 
-| Provenance            | Meaning                                                              | CI behaviour                  | Product names allowed |
-| --------------------- | ------------------------------------------------------------------- | ----------------------------- | --------------------- |
-| `reference_replica`   | Simurgh-authored deterministic stand-in for a defence **mechanism** | Run in CI                     | Never                 |
-| `no_defence_baseline` | Deliberate empty target (calibration floor)                         | Run in CI                     | No                    |
-| `vendored_oss`        | Real open-source defence run with pinned version/commit/weights     | CI verifies signed bundle only | Yes                   |
-| `live_api`            | Real provider/API run, opt-in, metadata-only                        | CI verifies committed bundle only | Yes               |
+| Provenance            | Meaning                                                             | CI behaviour                      | Product names allowed |
+| --------------------- | ------------------------------------------------------------------- | --------------------------------- | --------------------- |
+| `reference_replica`   | Simurgh-authored deterministic stand-in for a defence **mechanism** | Run in CI                         | Never                 |
+| `no_defence_baseline` | Deliberate empty target (calibration floor)                         | Run in CI                         | No                    |
+| `vendored_oss`        | Real open-source defence run with pinned version/commit/weights     | CI verifies signed bundle only    | Yes                   |
+| `live_api`            | Real provider/API run, opt-in, metadata-only                        | CI verifies committed bundle only | Yes                   |
 
 `execution_trust` ∈ `project_generated | maintainer_generated | third_party_submitted` — answers
 the reviewer's "who ran it?" question.
@@ -394,14 +394,14 @@ live in a separate file and **never pollute the clean catalogue.**
 
 ### Adversarial self-proof fixtures
 
-| Fixture                       | Violation                                                       | Required detector                     |
-| ----------------------------- | -------------------------------------------------------------- | ------------------------------------- |
-| `clean-baseline`              | none                                                            | accepted (happy path)                 |
-| `brand-violator-replica`      | `reference_replica` carries a real product name                | `provenance_brand_denylist_violation` |
-| `ranking-overclaimer`         | exports `aggregate_score` / `rank` / `winner` / `best_target`  | `ranking_export_violation`            |
-| `claim-conflict-liar`         | claims a cell contained but the canary leaked                  | `claim_conflict`                      |
-| `false-full-coverage-claimer` | claims full coverage without every cell verifying              | `unverified_full_coverage_claim`      |
-| `silent-drop-catalogue`       | catalogue omits a known target without an exclusion entry      | `catalogue_silent_drop`               |
+| Fixture                       | Violation                                                     | Required detector                     |
+| ----------------------------- | ------------------------------------------------------------- | ------------------------------------- |
+| `clean-baseline`              | none                                                          | accepted (happy path)                 |
+| `brand-violator-replica`      | `reference_replica` carries a real product name               | `provenance_brand_denylist_violation` |
+| `ranking-overclaimer`         | exports `aggregate_score` / `rank` / `winner` / `best_target` | `ranking_export_violation`            |
+| `claim-conflict-liar`         | claims a cell contained but the canary leaked                 | `claim_conflict`                      |
+| `false-full-coverage-claimer` | claims full coverage without every cell verifying             | `unverified_full_coverage_claim`      |
+| `silent-drop-catalogue`       | catalogue omits a known target without an exclusion entry     | `catalogue_silent_drop`               |
 
 ### `self-proof-results.json` (`simurgh.cross_defence.self_proof_results.v1`)
 
@@ -533,7 +533,7 @@ the 3O wiring.
 
 - 100% function coverage on the pure libs (`crossDefenceLib`, `crossDefenceMatrix`,
   `crossDefenceCatalogue`) via `node --test --experimental-test-coverage
-  --test-coverage-functions=100`.
+--test-coverage-functions=100`.
 - Replica/target modules and the CLI are exercised by the smoke script (subprocess-covered);
   honestly reported as such, not padded with synthetic unit tests.
 - Self-proof: both unit-tested gates and the end-to-end adversarial run.

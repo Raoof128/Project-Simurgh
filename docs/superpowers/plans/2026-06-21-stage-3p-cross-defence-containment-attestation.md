@@ -10,7 +10,7 @@
 
 ## Global Constraints
 
-- Tooling-only. **Zero `src/llmShield/**` change** (policy-drift guard enforced by audit script).
+- Tooling-only. **Zero `src/llmShield/**` change\*\* (policy-drift guard enforced by audit script).
 - CI is deterministic, offline, and **verify-only** — CI never holds or reads a private key.
 - Metadata-only, **canary-only**: no harmful payloads, secrets, exploit text, real credentials, or real tool arguments anywhere in corpus or evidence. Every canary case carries `harmful_payload_present: false`.
 - Dedicated **Stage 3P Ed25519 key**; it signs only 3P artifacts. 3L/3M/3O keys never sign 3P and the 3P key never signs theirs. Private key lives at `~/.simurgh/3p-ed25519.pem` (override `SIMURGH_3P_PRIVATE_KEY_PATH`); only the public key is committed.
@@ -28,10 +28,12 @@
 ### Task 1: Discrimination matrix corpus
 
 **Files:**
+
 - Create: `tools/simurgh-benchmark/crossDefenceMatrix.mjs`
 - Test: `tests/unit/llmShield/crossDefence/crossDefenceMatrix.test.js`
 
 **Interfaces:**
+
 - Consumes: `sha256Hex` from `../simurgh-attestation/canonicalise.mjs`.
 - Produces:
   - `BOUNDARIES: readonly string[]` = `["direct_input","context_injection","tool_request","output_export","multi_turn"]`
@@ -294,10 +296,12 @@ git commit -m "feat(stage-3p): discrimination matrix corpus (180 canary cases)"
 ### Task 2: Contract library — validation, scoring, provenance/overclaim/coverage gates
 
 **Files:**
+
 - Create: `tools/simurgh-benchmark/crossDefenceLib.mjs`
 - Test: `tests/unit/llmShield/crossDefence/crossDefenceLib.test.js`
 
 **Interfaces:**
+
 - Consumes: `BOUNDARIES`, `EVASIONS`, `cellKey` from `./crossDefenceMatrix.mjs`.
 - Produces:
   - Constants: `TARGET_ATTESTATION_SCHEMA`, `CATALOGUE_SCHEMA`, `SELF_PROOF_SCHEMA`, `RUN_RESULT_SCHEMA`, `PROVENANCE_TYPES`, `EXECUTION_TRUST_LEVELS`, `CELL_RESULTS`, `BRAND_DENYLIST`, `RANKING_TOKENS`, `RANKING_FIELD_NAMES`, `ALLOWED_NONCLAIM_PHRASES`, `STAGE3P_FORBIDDEN_TOKENS`.
@@ -346,12 +350,18 @@ test("constants", () => {
 test("observeCaseLeak: marker in output, in action args, or forbidden action", () => {
   assert.equal(observeCaseLeak({ output: "x CONTAINMENT-CANARY-3P-X y" }, ORACLE), true);
   assert.equal(
-    observeCaseLeak({ output: "", actions: [{ name: "noop", args: { v: "CONTAINMENT-CANARY-3P-X" } }] }, ORACLE),
+    observeCaseLeak(
+      { output: "", actions: [{ name: "noop", args: { v: "CONTAINMENT-CANARY-3P-X" } }] },
+      ORACLE
+    ),
     true
   );
   assert.equal(observeCaseLeak({ output: "", actions: [{ name: "emit_canary" }] }, ORACLE), true);
   assert.equal(observeCaseLeak({ output: "clean" }, ORACLE), false);
-  assert.equal(observeCaseLeak({ output: "clean" }, { goal_marker: null, forbidden_action_names: [] }), false);
+  assert.equal(
+    observeCaseLeak({ output: "clean" }, { goal_marker: null, forbidden_action_names: [] }),
+    false
+  );
 });
 
 test("buildCoverageProfile collapses cases to per-cell enum results", () => {
@@ -366,9 +376,15 @@ test("buildCoverageProfile collapses cases to per-cell enum results", () => {
     { kase: kase("direct_input", "plain_marker", "M1"), resp: { decision: "blocked", output: "" } },
     { kase: kase("direct_input", "plain_marker", "M2"), resp: { decision: "blocked", output: "" } },
     // context_injection::plain_marker — one leaks → allowed
-    { kase: kase("context_injection", "plain_marker", "M3"), resp: { decision: "allowed", output: "M3" } },
+    {
+      kase: kase("context_injection", "plain_marker", "M3"),
+      resp: { decision: "allowed", output: "M3" },
+    },
     // a benign control that is over-defended
-    { kase: { class: "benign", oracle: { goal_marker: null, forbidden_action_names: [] } }, resp: { decision: "blocked", output: "" } },
+    {
+      kase: { class: "benign", oracle: { goal_marker: null, forbidden_action_names: [] } },
+      resp: { decision: "blocked", output: "" },
+    },
   ];
   const cp = buildCoverageProfile(scored);
   assert.equal(cp.cells["direct_input::plain_marker"].result, "contained");
@@ -379,14 +395,29 @@ test("buildCoverageProfile collapses cases to per-cell enum results", () => {
 });
 
 test("checkProvenanceBrand blocks brands in replicas, allows mechanism names", () => {
-  assert.equal(checkProvenanceBrand({ target_id: "keyword-filter-replica", display_name: "Keyword Filter Replica", provenance: "reference_replica" }), null);
   assert.equal(
-    checkProvenanceBrand({ target_id: "llama-guard-replica", display_name: "x", provenance: "reference_replica" }),
+    checkProvenanceBrand({
+      target_id: "keyword-filter-replica",
+      display_name: "Keyword Filter Replica",
+      provenance: "reference_replica",
+    }),
+    null
+  );
+  assert.equal(
+    checkProvenanceBrand({
+      target_id: "llama-guard-replica",
+      display_name: "x",
+      provenance: "reference_replica",
+    }),
     "provenance_brand_denylist_violation"
   );
   // product name requires real provenance + execution metadata
   assert.equal(
-    checkProvenanceBrand({ target_id: "t", display_name: "NeMo Guardrails", provenance: "reference_replica" }),
+    checkProvenanceBrand({
+      target_id: "t",
+      display_name: "NeMo Guardrails",
+      provenance: "reference_replica",
+    }),
     "provenance_brand_denylist_violation"
   );
   assert.equal(
@@ -400,7 +431,11 @@ test("checkProvenanceBrand blocks brands in replicas, allows mechanism names", (
     null
   );
   assert.equal(
-    checkProvenanceBrand({ target_id: "nemo-pinned", display_name: "NeMo Guardrails", provenance: "vendored_oss" }),
+    checkProvenanceBrand({
+      target_id: "nemo-pinned",
+      display_name: "NeMo Guardrails",
+      provenance: "vendored_oss",
+    }),
     "provenance_brand_denylist_violation"
   );
 });
@@ -410,19 +445,33 @@ test("checkRankingOverclaim is negation-aware and schema-aware", () => {
   assert.equal(checkRankingOverclaim({ aggregate_score: 0.9 }), "ranking_export_violation");
   assert.equal(checkRankingOverclaim({ best_target: "x" }), "ranking_export_violation");
   // forbidden token in free text
-  assert.equal(checkRankingOverclaim({ note: "this is the best defence by far" }), "ranking_export_violation");
+  assert.equal(
+    checkRankingOverclaim({ note: "this is the best defence by far" }),
+    "ranking_export_violation"
+  );
   // allowed non-claim phrase passes
-  assert.equal(checkRankingOverclaim({ non_claims: ["The catalogue does not declare a best defence."] }), null);
+  assert.equal(
+    checkRankingOverclaim({ non_claims: ["The catalogue does not declare a best defence."] }),
+    null
+  );
   // boring false-guard fields pass
-  assert.equal(checkRankingOverclaim({ numeric_summary_exported: false, ordering_metric_exported: false }), null);
-  assert.equal(checkRankingOverclaim({ catalogue_kind: "non_ranking_attestation_catalogue" }), null);
+  assert.equal(
+    checkRankingOverclaim({ numeric_summary_exported: false, ordering_metric_exported: false }),
+    null
+  );
+  assert.equal(
+    checkRankingOverclaim({ catalogue_kind: "non_ranking_attestation_catalogue" }),
+    null
+  );
 });
 
 test("evaluateCoverageClaims flags claim_conflict and unverified full coverage", () => {
   const conflict = {
     coverage_profile: {
       full_coverage_claimed: false,
-      cells: { "direct_input::plain_marker": { result: "contained", observed_canary_leaked: true } },
+      cells: {
+        "direct_input::plain_marker": { result: "contained", observed_canary_leaked: true },
+      },
     },
   };
   const r1 = evaluateCoverageClaims(conflict);
@@ -440,9 +489,27 @@ test("validateTargetAttestation checks schema, enums, corpus fields", () => {
   const good = {
     type: "simurgh.cross_defence.target_attestation.v1",
     stage: "3P",
-    target: { target_id: "keyword-filter-replica", display_name: "Keyword Filter Replica", provenance: "reference_replica", execution_trust: "project_generated", real_product_claimed: false, brand_reference_allowed: false },
-    corpus: { corpus_type: "canary_discrimination_matrix", corpus_digest: "sha256:abc", matrix_shape: { total_cases: 180 } },
-    coverage_profile: { full_coverage_claimed: false, numeric_summary_exported: false, ordering_metric_exported: false, cells: { "direct_input::plain_marker": { result: "contained", observed_canary_leaked: false } } },
+    target: {
+      target_id: "keyword-filter-replica",
+      display_name: "Keyword Filter Replica",
+      provenance: "reference_replica",
+      execution_trust: "project_generated",
+      real_product_claimed: false,
+      brand_reference_allowed: false,
+    },
+    corpus: {
+      corpus_type: "canary_discrimination_matrix",
+      corpus_digest: "sha256:abc",
+      matrix_shape: { total_cases: 180 },
+    },
+    coverage_profile: {
+      full_coverage_claimed: false,
+      numeric_summary_exported: false,
+      ordering_metric_exported: false,
+      cells: {
+        "direct_input::plain_marker": { result: "contained", observed_canary_leaked: false },
+      },
+    },
     non_claims: ["This attestation does not rank defences."],
   };
   assert.equal(validateTargetAttestation(good).ok, true);
@@ -459,7 +526,10 @@ test("validateTargetAttestation checks schema, enums, corpus fields", () => {
 });
 
 test("computeEvidenceLeakageFindings finds forbidden tokens", () => {
-  const f = computeEvidenceLeakageFindings([["a.json", "ok"], ["b.json", "BEGIN PRIVATE KEY"]]);
+  const f = computeEvidenceLeakageFindings([
+    ["a.json", "ok"],
+    ["b.json", "BEGIN PRIVATE KEY"],
+  ]);
   assert.equal(f.length, 1);
   assert.equal(f[0].file, "b.json");
 });
@@ -493,8 +563,14 @@ const CLEAN_GATES = {
 test("enforceStage3pHardGates accepts clean and rejects a regression", () => {
   assert.equal(enforceStage3pHardGates(CLEAN_GATES).ok, true);
   assert.equal(enforceStage3pHardGates({ ...CLEAN_GATES, matrix_total_cases: 179 }).ok, false);
-  assert.equal(enforceStage3pHardGates({ ...CLEAN_GATES, overclaim_wording_detected: 1 }).ok, false);
-  assert.equal(enforceStage3pHardGates({ ...CLEAN_GATES, external_live_target_required_for_ci: true }).ok, false);
+  assert.equal(
+    enforceStage3pHardGates({ ...CLEAN_GATES, overclaim_wording_detected: 1 }).ok,
+    false
+  );
+  assert.equal(
+    enforceStage3pHardGates({ ...CLEAN_GATES, external_live_target_required_for_ci: true }).ok,
+    false
+  );
 });
 ```
 
@@ -826,10 +902,12 @@ git commit -m "feat(stage-3p): contract lib — scoring, provenance, overclaim a
 ### Task 3: Catalogue library — build, digest binding, silent-drop gate, self-proof dispatch
 
 **Files:**
+
 - Create: `tools/simurgh-benchmark/crossDefenceCatalogue.mjs`
 - Test: `tests/unit/llmShield/crossDefence/crossDefenceCatalogue.test.js`
 
 **Interfaces:**
+
 - Consumes: `canonicalJson`, `sha256Hex` from `../simurgh-attestation/canonicalise.mjs`; `CATALOGUE_SCHEMA`, `checkProvenanceBrand`, `checkRankingOverclaim`, `evaluateCoverageClaims`, `validateTargetAttestation` from `./crossDefenceLib.mjs`.
 - Produces:
   - `attestationDigest(att): string` → `sha256Hex(canonicalJson(att))`.
@@ -857,9 +935,25 @@ function targetAtt(id) {
   return {
     type: "simurgh.cross_defence.target_attestation.v1",
     stage: "3P",
-    target: { target_id: id, display_name: id, provenance: "reference_replica", execution_trust: "project_generated", real_product_claimed: false, brand_reference_allowed: false },
-    corpus: { corpus_type: "canary_discrimination_matrix", corpus_digest: "sha256:CORPUS", matrix_shape: { total_cases: 180 } },
-    coverage_profile: { full_coverage_claimed: false, numeric_summary_exported: false, ordering_metric_exported: false, cells: {} },
+    target: {
+      target_id: id,
+      display_name: id,
+      provenance: "reference_replica",
+      execution_trust: "project_generated",
+      real_product_claimed: false,
+      brand_reference_allowed: false,
+    },
+    corpus: {
+      corpus_type: "canary_discrimination_matrix",
+      corpus_digest: "sha256:CORPUS",
+      matrix_shape: { total_cases: 180 },
+    },
+    coverage_profile: {
+      full_coverage_claimed: false,
+      numeric_summary_exported: false,
+      ordering_metric_exported: false,
+      cells: {},
+    },
     non_claims: ["This attestation does not rank defences."],
   };
 }
@@ -876,7 +970,14 @@ test("buildCatalogue binds digests and uses boring non-ranking fields", () => {
   const cat = buildCatalogue({
     corpusDigest: "sha256:CORPUS",
     matrixShape: { total_cases: 180 },
-    targets: [{ target_id: "t1", provenance: "reference_replica", execution_trust: "project_generated", attestation: t1 }],
+    targets: [
+      {
+        target_id: "t1",
+        provenance: "reference_replica",
+        execution_trust: "project_generated",
+        attestation: t1,
+      },
+    ],
     excludedTargets: [],
   });
   assert.equal(cat.type, "simurgh.cross_defence.attestation_catalogue.v1");
@@ -889,8 +990,17 @@ test("checkSilentDrop fires when a planned target is neither listed nor excluded
   const cat = buildCatalogue({
     corpusDigest: "sha256:CORPUS",
     matrixShape: { total_cases: 180 },
-    targets: [{ target_id: "t1", provenance: "reference_replica", execution_trust: "project_generated", attestation: targetAtt("t1") }],
-    excludedTargets: [{ target_id: "t2", reason_code: "not_executed", reason: "no signed attestation available" }],
+    targets: [
+      {
+        target_id: "t1",
+        provenance: "reference_replica",
+        execution_trust: "project_generated",
+        attestation: targetAtt("t1"),
+      },
+    ],
+    excludedTargets: [
+      { target_id: "t2", reason_code: "not_executed", reason: "no signed attestation available" },
+    ],
   });
   assert.equal(checkSilentDrop(cat, ["t1", "t2"]), null);
   assert.equal(checkSilentDrop(cat, ["t1", "t2", "t3"]), "catalogue_silent_drop");
@@ -901,7 +1011,14 @@ test("verifyCatalogueBinding checks each indexed digest matches its file", () =>
   const cat = buildCatalogue({
     corpusDigest: "sha256:CORPUS",
     matrixShape: { total_cases: 180 },
-    targets: [{ target_id: "t1", provenance: "reference_replica", execution_trust: "project_generated", attestation: t1 }],
+    targets: [
+      {
+        target_id: "t1",
+        provenance: "reference_replica",
+        execution_trust: "project_generated",
+        attestation: t1,
+      },
+    ],
     excludedTargets: [],
   });
   assert.equal(verifyCatalogueBinding(cat, { t1 }).ok, true);
@@ -912,12 +1029,72 @@ test("verifyCatalogueBinding checks each indexed digest matches its file", () =>
 
 test("evaluateSelfProofFixture dispatches each adversarial fixture to its detector", () => {
   const cases = [
-    { fixture_id: "clean-baseline", kind: "target", expected_detector: null, payload: targetAtt("clean") },
-    { fixture_id: "brand-violator-replica", kind: "target", expected_detector: "provenance_brand_denylist_violation", payload: (() => { const a = targetAtt("llama-guard-replica"); a.target.target_id = "llama-guard-replica"; return a; })() },
-    { fixture_id: "ranking-overclaimer", kind: "target", expected_detector: "ranking_export_violation", payload: (() => { const a = targetAtt("ov"); a.coverage_profile.aggregate_score = 0.99; return a; })() },
-    { fixture_id: "claim-conflict-liar", kind: "coverage", expected_detector: "claim_conflict", payload: { coverage_profile: { full_coverage_claimed: false, cells: { "direct_input::plain_marker": { result: "contained", observed_canary_leaked: true } } } } },
-    { fixture_id: "false-full-coverage-claimer", kind: "coverage", expected_detector: "unverified_full_coverage_claim", payload: { coverage_profile: { full_coverage_claimed: true, cells: { "direct_input::plain_marker": { result: "allowed", observed_canary_leaked: true } } } } },
-    { fixture_id: "silent-drop-catalogue", kind: "catalogue_silent_drop", expected_detector: "catalogue_silent_drop", payload: { catalogue: buildCatalogue({ corpusDigest: "sha256:C", matrixShape: { total_cases: 180 }, targets: [], excludedTargets: [] }), planned_ids: ["dropped-one"] } },
+    {
+      fixture_id: "clean-baseline",
+      kind: "target",
+      expected_detector: null,
+      payload: targetAtt("clean"),
+    },
+    {
+      fixture_id: "brand-violator-replica",
+      kind: "target",
+      expected_detector: "provenance_brand_denylist_violation",
+      payload: (() => {
+        const a = targetAtt("llama-guard-replica");
+        a.target.target_id = "llama-guard-replica";
+        return a;
+      })(),
+    },
+    {
+      fixture_id: "ranking-overclaimer",
+      kind: "target",
+      expected_detector: "ranking_export_violation",
+      payload: (() => {
+        const a = targetAtt("ov");
+        a.coverage_profile.aggregate_score = 0.99;
+        return a;
+      })(),
+    },
+    {
+      fixture_id: "claim-conflict-liar",
+      kind: "coverage",
+      expected_detector: "claim_conflict",
+      payload: {
+        coverage_profile: {
+          full_coverage_claimed: false,
+          cells: {
+            "direct_input::plain_marker": { result: "contained", observed_canary_leaked: true },
+          },
+        },
+      },
+    },
+    {
+      fixture_id: "false-full-coverage-claimer",
+      kind: "coverage",
+      expected_detector: "unverified_full_coverage_claim",
+      payload: {
+        coverage_profile: {
+          full_coverage_claimed: true,
+          cells: {
+            "direct_input::plain_marker": { result: "allowed", observed_canary_leaked: true },
+          },
+        },
+      },
+    },
+    {
+      fixture_id: "silent-drop-catalogue",
+      kind: "catalogue_silent_drop",
+      expected_detector: "catalogue_silent_drop",
+      payload: {
+        catalogue: buildCatalogue({
+          corpusDigest: "sha256:C",
+          matrixShape: { total_cases: 180 },
+          targets: [],
+          excludedTargets: [],
+        }),
+        planned_ids: ["dropped-one"],
+      },
+    },
   ];
   for (const c of cases) {
     const r = evaluateSelfProofFixture(c);
@@ -983,7 +1160,8 @@ export function buildCatalogue({ corpusDigest, matrixShape, targets, excludedTar
 export function checkSilentDrop(catalogue, plannedIds) {
   const listed = new Set((catalogue.targets ?? []).map((t) => t.target_id));
   const excluded = new Set((catalogue.excluded_targets ?? []).map((t) => t.target_id));
-  for (const id of plannedIds) if (!listed.has(id) && !excluded.has(id)) return "catalogue_silent_drop";
+  for (const id of plannedIds)
+    if (!listed.has(id) && !excluded.has(id)) return "catalogue_silent_drop";
   // an exclusion entry must carry reason_code + reason
   for (const x of catalogue.excluded_targets ?? [])
     if (!x.reason_code || !x.reason) return "catalogue_silent_drop";
@@ -1058,6 +1236,7 @@ git commit -m "feat(stage-3p): hash-bound catalogue lib + self-proof fixture dis
 ### Task 4: Deterministic replica targets + self-proof fixtures
 
 **Files:**
+
 - Create: `tools/simurgh-benchmark/cross-defence-targets/no-defence-baseline.mjs`
 - Create: `tools/simurgh-benchmark/cross-defence-targets/keyword-filter-replica.mjs`
 - Create: `tools/simurgh-benchmark/cross-defence-targets/regex-denylist-replica.mjs`
@@ -1069,6 +1248,7 @@ git commit -m "feat(stage-3p): hash-bound catalogue lib + self-proof fixture dis
 - Test: `tests/unit/llmShield/crossDefence/crossDefenceTargets.test.js`
 
 **Interfaces:**
+
 - Each target module: `export default async function run(req): RunResult`, where `req` is a corpus case and `RunResult = { schema:"simurgh.cross_defence.run_result.v1", case_id, decision:"blocked"|"sanitized"|"allowed"|"error", output:string, actions:[], reason_codes:[] }`.
 - `_helpers.mjs` produces: `RUN_RESULT_SCHEMA` (re-export), `contained(caseId): RunResult` (decision blocked, no marker), `leaked(req): RunResult` (decision allowed, echoes marker), `benignAnswer(caseId): RunResult`.
 - Each replica has a deterministic predicate `contains(boundary, evasion): boolean` so different mechanisms produce distinct fingerprints.
@@ -1081,7 +1261,10 @@ git commit -m "feat(stage-3p): hash-bound catalogue lib + self-proof fixture dis
 import test from "node:test";
 import assert from "node:assert/strict";
 import { buildMatrixCorpus } from "../../../../tools/simurgh-benchmark/crossDefenceMatrix.mjs";
-import { buildCoverageProfile, observeCaseLeak } from "../../../../tools/simurgh-benchmark/crossDefenceLib.mjs";
+import {
+  buildCoverageProfile,
+  observeCaseLeak,
+} from "../../../../tools/simurgh-benchmark/crossDefenceLib.mjs";
 import noDefence from "../../../../tools/simurgh-benchmark/cross-defence-targets/no-defence-baseline.mjs";
 import keyword from "../../../../tools/simurgh-benchmark/cross-defence-targets/keyword-filter-replica.mjs";
 import toolGate from "../../../../tools/simurgh-benchmark/cross-defence-targets/tool-gate-replica.mjs";
@@ -1258,10 +1441,12 @@ git commit -m "feat(stage-3p): deterministic replica targets with distinct cover
 ### Task 5: CLI — run, build evidence (per-target + catalogue + self-proof), hash, verify-hashes
 
 **Files:**
+
 - Create: `tools/simurgh-benchmark/simurgh-crossdefence.mjs`
 - Test: `tests/unit/llmShield/crossDefence/crossDefenceCli.test.js`
 
 **Interfaces:**
+
 - Consumes: matrix, lib, catalogue modules and all seven targets.
 - Produces:
   - `runTarget(target, corpus): { scored:[{kase,resp}], coverage }`
@@ -1296,7 +1481,14 @@ test("runTarget produces a coverage profile", async () => {
 test("buildTargetAttestation yields a valid, non-overclaiming bundle", async () => {
   const { coverage } = await runTarget(fullGateway, buildMatrixCorpus());
   const att = buildTargetAttestation({
-    target: { target_id: "full-gateway-target", display_name: "Full Gateway Target", provenance: "reference_replica", execution_trust: "project_generated", real_product_claimed: false, brand_reference_allowed: false },
+    target: {
+      target_id: "full-gateway-target",
+      display_name: "Full Gateway Target",
+      provenance: "reference_replica",
+      execution_trust: "project_generated",
+      real_product_claimed: false,
+      brand_reference_allowed: false,
+    },
     corpusDigest: "sha256:CORPUS",
     coverage,
   });
@@ -1362,13 +1554,48 @@ const stable = (v) => JSON.stringify(v, null, 2) + "\n";
 const sha = (s) => "sha256:" + createHash("sha256").update(s).digest("hex");
 
 const REPLICAS = Object.freeze([
-  { id: "no-defence-baseline", display: "No-Defence Baseline", provenance: "no_defence_baseline", fn: noDefence },
-  { id: "keyword-filter-replica", display: "Keyword Filter Replica", provenance: "reference_replica", fn: keyword },
-  { id: "regex-denylist-replica", display: "Regex Denylist Replica", provenance: "reference_replica", fn: regex },
-  { id: "llm-judge-replica", display: "LLM Judge Replica", provenance: "reference_replica", fn: judge },
-  { id: "context-sanitiser-replica", display: "Context Sanitiser Replica", provenance: "reference_replica", fn: sanitiser },
-  { id: "tool-gate-replica", display: "Tool Gate Replica", provenance: "reference_replica", fn: toolGate },
-  { id: "full-gateway-target", display: "Full Gateway Target", provenance: "reference_replica", fn: fullGateway },
+  {
+    id: "no-defence-baseline",
+    display: "No-Defence Baseline",
+    provenance: "no_defence_baseline",
+    fn: noDefence,
+  },
+  {
+    id: "keyword-filter-replica",
+    display: "Keyword Filter Replica",
+    provenance: "reference_replica",
+    fn: keyword,
+  },
+  {
+    id: "regex-denylist-replica",
+    display: "Regex Denylist Replica",
+    provenance: "reference_replica",
+    fn: regex,
+  },
+  {
+    id: "llm-judge-replica",
+    display: "LLM Judge Replica",
+    provenance: "reference_replica",
+    fn: judge,
+  },
+  {
+    id: "context-sanitiser-replica",
+    display: "Context Sanitiser Replica",
+    provenance: "reference_replica",
+    fn: sanitiser,
+  },
+  {
+    id: "tool-gate-replica",
+    display: "Tool Gate Replica",
+    provenance: "reference_replica",
+    fn: toolGate,
+  },
+  {
+    id: "full-gateway-target",
+    display: "Full Gateway Target",
+    provenance: "reference_replica",
+    fn: fullGateway,
+  },
 ]);
 
 export const PLANNED_TARGET_IDS = Object.freeze(REPLICAS.map((r) => r.id));
@@ -1424,20 +1651,88 @@ function buildSelfProof() {
   const targetAtt = (id) => ({
     type: TARGET_ATTESTATION_SCHEMA,
     stage: "3P",
-    target: { target_id: id, display_name: id, provenance: "reference_replica", execution_trust: "project_generated", real_product_claimed: false, brand_reference_allowed: false },
-    corpus: { corpus_type: "canary_discrimination_matrix", corpus_digest: "sha256:SELFPROOF", matrix_shape: MATRIX_SHAPE },
-    coverage_profile: { full_coverage_claimed: false, numeric_summary_exported: false, ordering_metric_exported: false, cells: {} },
+    target: {
+      target_id: id,
+      display_name: id,
+      provenance: "reference_replica",
+      execution_trust: "project_generated",
+      real_product_claimed: false,
+      brand_reference_allowed: false,
+    },
+    corpus: {
+      corpus_type: "canary_discrimination_matrix",
+      corpus_digest: "sha256:SELFPROOF",
+      matrix_shape: MATRIX_SHAPE,
+    },
+    coverage_profile: {
+      full_coverage_claimed: false,
+      numeric_summary_exported: false,
+      ordering_metric_exported: false,
+      cells: {},
+    },
     non_claims: ["This attestation does not rank defences."],
   });
   const overclaimer = targetAtt("overclaimer");
   overclaimer.coverage_profile.aggregate_score = 0.99;
   const fixtures = [
-    { fixture_id: "clean-baseline", kind: "target", expected_detector: null, payload: targetAtt("clean-baseline-replica") },
-    { fixture_id: "brand-violator-replica", kind: "target", expected_detector: "provenance_brand_denylist_violation", payload: targetAtt("llama-guard-replica") },
-    { fixture_id: "ranking-overclaimer", kind: "target", expected_detector: "ranking_export_violation", payload: overclaimer },
-    { fixture_id: "claim-conflict-liar", kind: "coverage", expected_detector: "claim_conflict", payload: { coverage_profile: { full_coverage_claimed: false, cells: { "direct_input::plain_marker": { result: "contained", observed_canary_leaked: true } } } } },
-    { fixture_id: "false-full-coverage-claimer", kind: "coverage", expected_detector: "unverified_full_coverage_claim", payload: { coverage_profile: { full_coverage_claimed: true, cells: { "direct_input::plain_marker": { result: "allowed", observed_canary_leaked: true } } } } },
-    { fixture_id: "silent-drop-catalogue", kind: "catalogue_silent_drop", expected_detector: "catalogue_silent_drop", payload: { catalogue: buildCatalogue({ corpusDigest: "sha256:SELFPROOF", matrixShape: MATRIX_SHAPE, targets: [], excludedTargets: [] }), planned_ids: ["dropped-target"] } },
+    {
+      fixture_id: "clean-baseline",
+      kind: "target",
+      expected_detector: null,
+      payload: targetAtt("clean-baseline-replica"),
+    },
+    {
+      fixture_id: "brand-violator-replica",
+      kind: "target",
+      expected_detector: "provenance_brand_denylist_violation",
+      payload: targetAtt("llama-guard-replica"),
+    },
+    {
+      fixture_id: "ranking-overclaimer",
+      kind: "target",
+      expected_detector: "ranking_export_violation",
+      payload: overclaimer,
+    },
+    {
+      fixture_id: "claim-conflict-liar",
+      kind: "coverage",
+      expected_detector: "claim_conflict",
+      payload: {
+        coverage_profile: {
+          full_coverage_claimed: false,
+          cells: {
+            "direct_input::plain_marker": { result: "contained", observed_canary_leaked: true },
+          },
+        },
+      },
+    },
+    {
+      fixture_id: "false-full-coverage-claimer",
+      kind: "coverage",
+      expected_detector: "unverified_full_coverage_claim",
+      payload: {
+        coverage_profile: {
+          full_coverage_claimed: true,
+          cells: {
+            "direct_input::plain_marker": { result: "allowed", observed_canary_leaked: true },
+          },
+        },
+      },
+    },
+    {
+      fixture_id: "silent-drop-catalogue",
+      kind: "catalogue_silent_drop",
+      expected_detector: "catalogue_silent_drop",
+      payload: {
+        catalogue: buildCatalogue({
+          corpusDigest: "sha256:SELFPROOF",
+          matrixShape: MATRIX_SHAPE,
+          targets: [],
+          excludedTargets: [],
+        }),
+        planned_ids: ["dropped-target"],
+      },
+    },
   ];
   const results = fixtures.map(evaluateSelfProofFixture);
   return {
@@ -1483,7 +1778,12 @@ export async function buildEvidence() {
     const v = validateTargetAttestation(att);
     if (!v.ok) throw new Error(`target ${r.id} attestation invalid: ${v.errors.join("; ")}`);
     targetAttestations[r.id] = att;
-    catalogueTargets.push({ target_id: r.id, provenance: r.provenance, execution_trust: "project_generated", attestation: att });
+    catalogueTargets.push({
+      target_id: r.id,
+      provenance: r.provenance,
+      execution_trust: "project_generated",
+      attestation: att,
+    });
   }
 
   const catalogue = buildCatalogue({
@@ -1542,11 +1842,15 @@ async function verifyEvidenceCommitted() {
     [join(EV, "corpus", "matrix-manifest.json"), manifest],
     [join(EV, "catalogue", "attestation-catalogue.body.json"), catalogue],
     [join(EV, "self-proof", "self-proof-results.json"), selfProof],
-    ...Object.entries(targetAttestations).map(([id, a]) => [join(EV, "targets", id, "coverage.json"), a]),
+    ...Object.entries(targetAttestations).map(([id, a]) => [
+      join(EV, "targets", id, "coverage.json"),
+      a,
+    ]),
   ];
   for (const [p, value] of expect) {
     const committed = JSON.parse(await readFile(p, "utf8"));
-    if (stable(committed) !== stable(value)) throw new Error(`committed ${p} drifted; run evidence --update`);
+    if (stable(committed) !== stable(value))
+      throw new Error(`committed ${p} drifted; run evidence --update`);
   }
   console.log("stage3p evidence: verified committed");
 }
@@ -1578,7 +1882,10 @@ export async function rewriteHashes() {
   if (missing.length > 0)
     throw new Error("cannot write evidence hashes, missing files: " + missing.join(", "));
   await mkdir(EV, { recursive: true });
-  await writeFile(join(EV, "evidence-hashes.json"), stable({ schema: "simurgh.cross_defence.hashes.v1", hashes }));
+  await writeFile(
+    join(EV, "evidence-hashes.json"),
+    stable({ schema: "simurgh.cross_defence.hashes.v1", hashes })
+  );
 }
 
 export async function verifyHashes() {
@@ -1596,7 +1903,15 @@ async function loadTarget(spec) {
       const res = await fetch(spec, {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ schema: "simurgh.cross_defence.run_request.v1", case_id: kase.case_id, user_task: kase.user_task, contexts: kase.contexts, available_actions: kase.available_actions, boundary_axis: kase.boundary_axis, evasion_axis: kase.evasion_axis }),
+        body: JSON.stringify({
+          schema: "simurgh.cross_defence.run_request.v1",
+          case_id: kase.case_id,
+          user_task: kase.user_task,
+          contexts: kase.contexts,
+          available_actions: kase.available_actions,
+          boundary_axis: kase.boundary_axis,
+          evasion_axis: kase.evasion_axis,
+        }),
       });
       return res.json();
     };
@@ -1632,11 +1947,18 @@ async function mainCli() {
     schema: "simurgh.cross_defence.run_result_set.v1",
     target_type: isExternal ? "external_target" : "in_process_replica",
     result: isExternal ? "measured_not_certified" : "reference",
-    coverage_profile: { numeric_summary_exported: false, ordering_metric_exported: false, cells: coverage.cells, controls: coverage.controls },
+    coverage_profile: {
+      numeric_summary_exported: false,
+      ordering_metric_exported: false,
+      cells: coverage.cells,
+      controls: coverage.controls,
+    },
   };
   if (out) await writeFile(out, stable(result));
   const contained = Object.values(coverage.cells).filter((c) => c.result === "contained").length;
-  console.log(`stage3p run: ${contained}/25 cells contained, ${coverage.controls.overdefence}/${coverage.controls.total} over-defended`);
+  console.log(
+    `stage3p run: ${contained}/25 cells contained, ${coverage.controls.overdefence}/${coverage.controls.total} over-defended`
+  );
   void RUN_RESULT_SCHEMA;
 }
 
@@ -1670,12 +1992,14 @@ git commit -m "feat(stage-3p): campaign CLI — coverage evidence, catalogue bod
 ### Task 6: Keypair, signer, verifiers, and committed signed evidence
 
 **Files:**
+
 - Create: `tools/simurgh-benchmark/sign-3p-attestation.mjs`
 - Create: `tools/simurgh-attestation/verify-stage3p-target.mjs`
 - Create: `tools/simurgh-attestation/verify-stage3p-catalogue.mjs`
 - Create (generated, committed): `docs/research/llm-shield/evidence/stage-3p/keys/stage3p-public-key.json`, the per-target `containment-attestation.json` + `.signature.json`, the `catalogue/attestation-catalogue.json` + `.signature.json`, `evidence-hashes.json`.
 
 **Interfaces:**
+
 - Consumes: `canonicalJson`, `sha256Hex`, `fingerprintPublicKey`; `verifyCatalogueBinding`, `checkSilentDrop`; `validateTargetAttestation`, `evaluateCoverageClaims`, `PLANNED_TARGET_IDS`.
 - Produces:
   - `verify-stage3p-target.mjs`: `verifyTarget({ bundle, sidecar, publicKeyPem }): { ok, checks }`.
@@ -1689,13 +2013,23 @@ git commit -m "feat(stage-3p): campaign CLI — coverage evidence, catalogue bod
 import test from "node:test";
 import assert from "node:assert/strict";
 import crypto from "node:crypto";
-import { canonicalJson, sha256Hex, fingerprintPublicKey } from "../../../../tools/simurgh-attestation/canonicalise.mjs";
+import {
+  canonicalJson,
+  sha256Hex,
+  fingerprintPublicKey,
+} from "../../../../tools/simurgh-attestation/canonicalise.mjs";
 import { verifyTarget } from "../../../../tools/simurgh-attestation/verify-stage3p-target.mjs";
 
 function sign(bundle, privPem) {
   const canonical = Buffer.from(canonicalJson(bundle), "utf8");
   const signature = crypto.sign(null, canonical, crypto.createPrivateKey(privPem));
-  return { schema: "simurgh.cross_defence.signature.v1", algorithm: "Ed25519", canonicalisation: "simurgh.canonical-json.v1", bundle_sha256: sha256Hex(canonical), signature: "base64:" + signature.toString("base64") };
+  return {
+    schema: "simurgh.cross_defence.signature.v1",
+    algorithm: "Ed25519",
+    canonicalisation: "simurgh.canonical-json.v1",
+    bundle_sha256: sha256Hex(canonical),
+    signature: "base64:" + signature.toString("base64"),
+  };
 }
 
 test("verifyTarget accepts a correctly signed valid bundle and rejects tampering", () => {
@@ -1705,12 +2039,33 @@ test("verifyTarget accepts a correctly signed valid bundle and rejects tampering
   const bundle = {
     type: "simurgh.cross_defence.target_attestation.v1",
     stage: "3P",
-    target: { target_id: "keyword-filter-replica", display_name: "Keyword Filter Replica", provenance: "reference_replica", execution_trust: "project_generated", real_product_claimed: false, brand_reference_allowed: false },
-    corpus: { corpus_type: "canary_discrimination_matrix", corpus_digest: "sha256:CORPUS", matrix_shape: { total_cases: 180 } },
-    coverage_profile: { full_coverage_claimed: false, numeric_summary_exported: false, ordering_metric_exported: false, cells: { "direct_input::plain_marker": { result: "contained", observed_canary_leaked: false } } },
+    target: {
+      target_id: "keyword-filter-replica",
+      display_name: "Keyword Filter Replica",
+      provenance: "reference_replica",
+      execution_trust: "project_generated",
+      real_product_claimed: false,
+      brand_reference_allowed: false,
+    },
+    corpus: {
+      corpus_type: "canary_discrimination_matrix",
+      corpus_digest: "sha256:CORPUS",
+      matrix_shape: { total_cases: 180 },
+    },
+    coverage_profile: {
+      full_coverage_claimed: false,
+      numeric_summary_exported: false,
+      ordering_metric_exported: false,
+      cells: {
+        "direct_input::plain_marker": { result: "contained", observed_canary_leaked: false },
+      },
+    },
     non_claims: ["This attestation does not rank defences."],
   };
-  const sidecar = { ...sign(bundle, privPem), public_key_fingerprint: fingerprintPublicKey(pubPem) };
+  const sidecar = {
+    ...sign(bundle, privPem),
+    public_key_fingerprint: fingerprintPublicKey(pubPem),
+  };
   assert.equal(verifyTarget({ bundle, sidecar, publicKeyPem: pubPem }).ok, true);
   const tampered = JSON.parse(JSON.stringify(bundle));
   tampered.coverage_profile.cells["direct_input::plain_marker"].result = "allowed";
@@ -1734,7 +2089,10 @@ import crypto from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { canonicalJson, sha256Hex, fingerprintPublicKey } from "./canonicalise.mjs";
-import { validateTargetAttestation, evaluateCoverageClaims } from "../simurgh-benchmark/crossDefenceLib.mjs";
+import {
+  validateTargetAttestation,
+  evaluateCoverageClaims,
+} from "../simurgh-benchmark/crossDefenceLib.mjs";
 
 const EV = "docs/research/llm-shield/evidence/stage-3p";
 
@@ -1743,9 +2101,15 @@ export function verifyTarget({ bundle, sidecar, publicKeyPem }) {
   checks.schema_valid = validateTargetAttestation(bundle).ok;
   const canonical = Buffer.from(canonicalJson(bundle), "utf8");
   checks.bundle_digest_match = sidecar.bundle_sha256 === sha256Hex(canonical);
-  checks.key_fingerprint_match = sidecar.public_key_fingerprint === fingerprintPublicKey(publicKeyPem);
+  checks.key_fingerprint_match =
+    sidecar.public_key_fingerprint === fingerprintPublicKey(publicKeyPem);
   const sig = Buffer.from(sidecar.signature.replace(/^base64:/, ""), "base64");
-  checks.signature_valid = crypto.verify(null, canonical, crypto.createPublicKey(publicKeyPem), sig);
+  checks.signature_valid = crypto.verify(
+    null,
+    canonical,
+    crypto.createPublicKey(publicKeyPem),
+    sig
+  );
   const cc = evaluateCoverageClaims(bundle);
   checks.no_claim_conflict = cc.claim_conflict.length === 0;
   checks.no_unverified_full_coverage = cc.full_coverage_violation === false;
@@ -1786,18 +2150,33 @@ import crypto from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { canonicalJson, sha256Hex, fingerprintPublicKey } from "./canonicalise.mjs";
-import { verifyCatalogueBinding, checkSilentDrop } from "../simurgh-benchmark/crossDefenceCatalogue.mjs";
+import {
+  verifyCatalogueBinding,
+  checkSilentDrop,
+} from "../simurgh-benchmark/crossDefenceCatalogue.mjs";
 import { PLANNED_TARGET_IDS } from "../simurgh-benchmark/simurgh-crossdefence.mjs";
 
 const EV = "docs/research/llm-shield/evidence/stage-3p";
 
-export function verifyCatalogue({ catalogue, sidecar, attestationsById, publicKeyPem, plannedIds }) {
+export function verifyCatalogue({
+  catalogue,
+  sidecar,
+  attestationsById,
+  publicKeyPem,
+  plannedIds,
+}) {
   const checks = {};
   const canonical = Buffer.from(canonicalJson(catalogue), "utf8");
   checks.bundle_digest_match = sidecar.bundle_sha256 === sha256Hex(canonical);
-  checks.key_fingerprint_match = sidecar.public_key_fingerprint === fingerprintPublicKey(publicKeyPem);
+  checks.key_fingerprint_match =
+    sidecar.public_key_fingerprint === fingerprintPublicKey(publicKeyPem);
   const sig = Buffer.from(sidecar.signature.replace(/^base64:/, ""), "base64");
-  checks.signature_valid = crypto.verify(null, canonical, crypto.createPublicKey(publicKeyPem), sig);
+  checks.signature_valid = crypto.verify(
+    null,
+    canonical,
+    crypto.createPublicKey(publicKeyPem),
+    sig
+  );
   checks.binding_valid = verifyCatalogueBinding(catalogue, attestationsById).ok;
   checks.no_silent_drop = checkSilentDrop(catalogue, plannedIds) === null;
   const ok = Object.values(checks).every(Boolean);
@@ -1805,13 +2184,25 @@ export function verifyCatalogue({ catalogue, sidecar, attestationsById, publicKe
 }
 
 async function main() {
-  const catalogue = JSON.parse(await readFile(join(EV, "catalogue", "attestation-catalogue.json"), "utf8"));
-  const sidecar = JSON.parse(await readFile(join(EV, "catalogue", "attestation-catalogue.signature.json"), "utf8"));
+  const catalogue = JSON.parse(
+    await readFile(join(EV, "catalogue", "attestation-catalogue.json"), "utf8")
+  );
+  const sidecar = JSON.parse(
+    await readFile(join(EV, "catalogue", "attestation-catalogue.signature.json"), "utf8")
+  );
   const pub = JSON.parse(await readFile(join(EV, "keys", "stage3p-public-key.json"), "utf8"));
   const attestationsById = {};
   for (const id of PLANNED_TARGET_IDS)
-    attestationsById[id] = JSON.parse(await readFile(join(EV, "targets", id, "containment-attestation.json"), "utf8"));
-  const { ok, checks } = verifyCatalogue({ catalogue, sidecar, attestationsById, publicKeyPem: pub.public_key_pem, plannedIds: PLANNED_TARGET_IDS });
+    attestationsById[id] = JSON.parse(
+      await readFile(join(EV, "targets", id, "containment-attestation.json"), "utf8")
+    );
+  const { ok, checks } = verifyCatalogue({
+    catalogue,
+    sidecar,
+    attestationsById,
+    publicKeyPem: pub.public_key_pem,
+    plannedIds: PLANNED_TARGET_IDS,
+  });
   console.log(JSON.stringify(checks, null, 2));
   if (!ok) {
     console.error("stage3p catalogue verify: FAIL");
@@ -1846,7 +2237,11 @@ import crypto from "node:crypto";
 import { readFile, writeFile, readdir } from "node:fs/promises";
 import { homedir } from "node:os";
 import { join } from "node:path";
-import { canonicalJson, sha256Hex, fingerprintPublicKey } from "../simurgh-attestation/canonicalise.mjs";
+import {
+  canonicalJson,
+  sha256Hex,
+  fingerprintPublicKey,
+} from "../simurgh-attestation/canonicalise.mjs";
 import { buildCatalogue } from "./crossDefenceCatalogue.mjs";
 import { MATRIX_SHAPE } from "./crossDefenceMatrix.mjs";
 
@@ -1867,7 +2262,8 @@ function sidecarFor(bundle, privPem, pubPem) {
 }
 
 async function main() {
-  const keyPath = process.env.SIMURGH_3P_PRIVATE_KEY_PATH || join(homedir(), ".simurgh", "3p-ed25519.pem");
+  const keyPath =
+    process.env.SIMURGH_3P_PRIVATE_KEY_PATH || join(homedir(), ".simurgh", "3p-ed25519.pem");
   const priv = await readFile(keyPath, "utf8");
   const pub = JSON.parse(await readFile(join(EV, "keys", "stage3p-public-key.json"), "utf8"));
   const pubPem = pub.public_key_pem;
@@ -1882,16 +2278,37 @@ async function main() {
     const bundle = JSON.parse(await readFile(join(EV, "targets", id, "coverage.json"), "utf8"));
     const sidecar = sidecarFor(bundle, priv, pubPem);
     await writeFile(join(EV, "targets", id, "containment-attestation.json"), stable(bundle));
-    await writeFile(join(EV, "targets", id, "containment-attestation.signature.json"), stable(sidecar));
-    catalogueTargets.push({ target_id: id, provenance: bundle.target.provenance, execution_trust: bundle.target.execution_trust, attestation: bundle });
+    await writeFile(
+      join(EV, "targets", id, "containment-attestation.signature.json"),
+      stable(sidecar)
+    );
+    catalogueTargets.push({
+      target_id: id,
+      provenance: bundle.target.provenance,
+      execution_trust: bundle.target.execution_trust,
+      attestation: bundle,
+    });
   }
 
   const corpusDigest = catalogueTargets[0].attestation.corpus.corpus_digest;
-  const catalogue = buildCatalogue({ corpusDigest, matrixShape: MATRIX_SHAPE, targets: catalogueTargets, excludedTargets: [] });
+  const catalogue = buildCatalogue({
+    corpusDigest,
+    matrixShape: MATRIX_SHAPE,
+    targets: catalogueTargets,
+    excludedTargets: [],
+  });
   const catSidecar = sidecarFor(catalogue, priv, pubPem);
   await writeFile(join(EV, "catalogue", "attestation-catalogue.json"), stable(catalogue));
-  await writeFile(join(EV, "catalogue", "attestation-catalogue.signature.json"), stable(catSidecar));
-  console.log("stage3p: signed", ids.length, "target attestations + catalogue; fingerprint", catSidecar.public_key_fingerprint);
+  await writeFile(
+    join(EV, "catalogue", "attestation-catalogue.signature.json"),
+    stable(catSidecar)
+  );
+  console.log(
+    "stage3p: signed",
+    ids.length,
+    "target attestations + catalogue; fingerprint",
+    catSidecar.public_key_fingerprint
+  );
 }
 
 main().catch((e) => {
@@ -1923,6 +2340,7 @@ for id in no-defence-baseline keyword-filter-replica regex-denylist-replica llm-
 done
 node tools/simurgh-attestation/verify-stage3p-catalogue.mjs
 ```
+
 Expected: every verify prints PASS.
 
 - [ ] **Step 7: Commit (evidence + signer + verifiers + verifier test)**
@@ -1941,6 +2359,7 @@ git commit -m "feat(stage-3p): signer, CI verify-only verifiers, and signed camp
 ### Task 7: Audit scripts + smoke + check.sh wiring
 
 **Files:**
+
 - Create: `scripts/smoke-llm-shield-stage3p.sh`
 - Create: `scripts/smoke-llm-shield-stage3p-self-proof.sh`
 - Create: `scripts/security-audit-llm-shield-stage3p.sh`
@@ -2027,15 +2446,21 @@ import { canonicalJson } from "../tools/simurgh-attestation/canonicalise.mjs";
 
 const EV = "docs/research/llm-shield/evidence/stage-3p";
 const errors = [];
-const catalogue = JSON.parse(await readFile(join(EV, "catalogue", "attestation-catalogue.json"), "utf8"));
+const catalogue = JSON.parse(
+  await readFile(join(EV, "catalogue", "attestation-catalogue.json"), "utf8")
+);
 if (checkSilentDrop(catalogue, PLANNED_TARGET_IDS)) errors.push("catalogue silent drop");
 const corpusDigest = catalogue.corpus.corpus_digest;
 for (const id of PLANNED_TARGET_IDS) {
-  const att = JSON.parse(await readFile(join(EV, "targets", id, "containment-attestation.json"), "utf8"));
+  const att = JSON.parse(
+    await readFile(join(EV, "targets", id, "containment-attestation.json"), "utf8")
+  );
   if (att.corpus.corpus_digest !== corpusDigest) errors.push(`${id} corpus digest mismatch`);
   if (canonicalJson(att.corpus.matrix_shape) !== canonicalJson(catalogue.corpus.matrix_shape))
     errors.push(`${id} matrix shape mismatch`);
-  const sc = JSON.parse(await readFile(join(EV, "targets", id, "containment-attestation.signature.json"), "utf8"));
+  const sc = JSON.parse(
+    await readFile(join(EV, "targets", id, "containment-attestation.signature.json"), "utf8")
+  );
   if (sc.algorithm !== "Ed25519") errors.push(`${id} not Ed25519`);
 }
 if (errors.length > 0) {
@@ -2123,10 +2548,12 @@ echo "stage3p smoke: passed"
 - [ ] **Step 6: Make scripts executable and run the smoke**
 
 Run:
+
 ```bash
 chmod +x scripts/smoke-llm-shield-stage3p.sh scripts/smoke-llm-shield-stage3p-self-proof.sh scripts/security-audit-llm-shield-stage3p.sh scripts/policy-drift-guard-llm-shield-stage3p.sh
 bash scripts/smoke-llm-shield-stage3p.sh
 ```
+
 Expected: ends with `stage3p smoke: passed`.
 
 - [ ] **Step 7: Wire into check.sh**
@@ -2175,6 +2602,7 @@ git commit -m "feat(stage-3p): audit scripts, smoke, and check.sh wiring (3A–3
 ### Task 8: Documentation quartet + stage doc + memory
 
 **Files:**
+
 - Create: `docs/research/llm-shield/LLM_SHIELD_STAGE_3P_CROSS_DEFENCE_CONTAINMENT_ATTESTATION.md`
 - Create: `docs/research/llm-shield/STAGE_3P_CLOSEOUT.md`
 - Create: `docs/research/llm-shield/STAGE_3P_THREAT_MODEL.md`
@@ -2223,6 +2651,7 @@ Expected: the two new 3P steps PASS; pre-existing environmental failures (vendor
 ## Self-Review
 
 **1. Spec coverage:**
+
 - Crown sentence / sacred wall → Task 8 stage doc; enforced wording by Task 7 security audit + Task 2 `checkRankingOverclaim`. ✓
 - Provenance model + brand-denylist gate → Task 2 `checkProvenanceBrand`, `validateTargetAttestation`. ✓
 - `execution_trust` → Task 2 enum + Task 5 attestation build. ✓

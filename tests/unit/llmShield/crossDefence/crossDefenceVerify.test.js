@@ -45,11 +45,16 @@ test("verifyTarget accepts a correctly signed valid bundle and rejects tampering
       full_coverage_claimed: false,
       numeric_summary_exported: false,
       ordering_metric_exported: false,
-      cells: { "direct_input::plain_marker": { result: "contained", observed_canary_leaked: false } },
+      cells: {
+        "direct_input::plain_marker": { result: "contained", observed_canary_leaked: false },
+      },
     },
     non_claims: ["This attestation does not rank defences."],
   };
-  const sidecar = { ...sign(bundle, privPem), public_key_fingerprint: fingerprintPublicKey(pubPem) };
+  const sidecar = {
+    ...sign(bundle, privPem),
+    public_key_fingerprint: fingerprintPublicKey(pubPem),
+  };
   assert.equal(verifyTarget({ bundle, sidecar, publicKeyPem: pubPem }).ok, true);
   const tampered = JSON.parse(JSON.stringify(bundle));
   tampered.coverage_profile.cells["direct_input::plain_marker"].result = "allowed";

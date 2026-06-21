@@ -162,7 +162,9 @@ test("evaluateSelfProofFixture dispatches each adversarial fixture to its detect
       payload: {
         coverage_profile: {
           full_coverage_claimed: false,
-          cells: { "direct_input::plain_marker": { result: "contained", observed_canary_leaked: true } },
+          cells: {
+            "direct_input::plain_marker": { result: "contained", observed_canary_leaked: true },
+          },
         },
       },
     },
@@ -173,7 +175,9 @@ test("evaluateSelfProofFixture dispatches each adversarial fixture to its detect
       payload: {
         coverage_profile: {
           full_coverage_claimed: true,
-          cells: { "direct_input::plain_marker": { result: "allowed", observed_canary_leaked: true } },
+          cells: {
+            "direct_input::plain_marker": { result: "allowed", observed_canary_leaked: true },
+          },
         },
       },
     },
