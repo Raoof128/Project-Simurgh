@@ -38,7 +38,7 @@ dedicated Stage 3S Ed25519 key
 ```
 
 > **Stage 3S must not modify `src/llmShield/**`. The policy-drift guard fails if gateway,
-> firewall, receipt, audit, or provider code changes in this stage.**
+> firewall, receipt, audit, or provider code changes in this stage.\*\*
 
 ## Pipeline (four steps, two leashes)
 
@@ -75,11 +75,15 @@ Receipt ≠ truth of claims. Claim checker = truth boundary.
    > In CI, the recorded fixture's `output_text` must be valid structured-slot JSON only.
    > Any non-JSON, free prose, markdown, explanation text, or mixed output is rejected as
    > `narrative_schema_violation`. (Applies equally to live model output.)
+   >
+   > The output must contain **exactly one** JSON object with
+   > `type: "simurgh.defensive_narrative.model_slots.v1"`; arrays, markdown code fences,
+   > explanatory prefixes/suffixes (e.g. "Sure, here is the JSON:"), and multiple JSON
+   > objects are all rejected. No wrapper, no vibes — just the object.
 
 2. **Stage 2.5 wall — no automatic finding.** The narrative may state integrity signals,
    provenance, confidence boundaries, and manual-review recommendations only. It must
    never state or imply an automatic misconduct finding.
-
    - **Allowed vocabulary:** `no_issue_observed`, `integrity_signal_present`,
      `manual_review_recommended`, `evidence_incomplete`, `proof_missing`, `proof_valid`,
      `proof_replayed`, `chain_valid`, `chain_invalid`, `fallback_observed`,
@@ -95,19 +99,44 @@ Receipt ≠ truth of claims. Claim checker = truth boundary.
 {
   "type": "simurgh.defensive_narrative.evidence_digest.v1",
   "session_hash": "sha256:...",
+  "source_inputs": [
+    {
+      "kind": "gateway_receipt",
+      "path": "docs/research/llm-shield/evidence/stage-3r/...",
+      "digest": "sha256:..."
+    },
+    {
+      "kind": "vca_attestation",
+      "path": "docs/research/llm-shield/evidence/stage-3q/...",
+      "digest": "sha256:..."
+    }
+  ],
   "audit_chain_valid": true,
   "daemon_proof_counts": { "valid": 12, "missing": 1, "replayed": 0 },
   "gateway": { "fallback_used": true, "fallback_bypass_successes": 0, "output_firewall_blocks": 0 },
   "vca": { "attestation_verified": true, "claim_conflicts": 0 },
-  "privacy": { "raw_pixels_captured": false, "raw_window_titles_captured": false, "typed_content_captured": false }
+  "privacy": {
+    "raw_pixels_captured": false,
+    "raw_window_titles_captured": false,
+    "typed_content_captured": false
+  }
 }
 ```
+
+> **Source-binding:** the consistency audit verifies, for every `source_inputs[]` entry,
+> that the source file exists and its digest matches, and that `evidence-digest.json`
+> re-derives byte-identically from those committed sources.
 
 ### 2. Model structured slots (gateway-mediated; recorded_fixture in CI / live Fable opt-in)
 
 ```json
 {
   "type": "simurgh.defensive_narrative.model_slots.v1",
+  "source": {
+    "gateway_receipt_digest": "sha256:...",
+    "gateway_output_hash": "sha256:...",
+    "model_slots_digest": "sha256:..."
+  },
   "slots": [
     {
       "slot_id": "fallback_observed",
@@ -120,6 +149,12 @@ Receipt ≠ truth of claims. Claim checker = truth boundary.
   ]
 }
 ```
+
+> **Receipt-binding invariant:** `model-slots.json` MUST be byte/canonically derived from
+> the gateway run's `output_text`, and its `gateway_output_hash` MUST match the gateway
+> receipt's provider-response/output hash. A `model-slots.json` whose digest does not match
+> the stored `gateway-receipt.json` is rejected — nobody can swap the slots after the
+> gateway run.
 
 ### 3. Verified rendered artifact (deterministic renderer only)
 
@@ -153,20 +188,29 @@ renderer emits prose only from surviving slots.
 
 ## Self-proof — the teeth
 
-| Fixture | Must prove |
-| ------- | ---------- |
-| `clean-supported-narrative` | supported slots pass and render |
-| `unsupported-signal-claim` | a slot claiming a signal not in the digest → rejected |
-| `severity-overclaim` | a slot escalating to finding/confirmed misconduct → rejected |
-| `privacy-overclaim` | a slot claiming raw pixels/titles/typed content captured → rejected |
-| `missing-evidence-ref` | a nonexistent `evidence_ref` → rejected |
-| `field-value-conflict` | a slot says fallback used when the digest says false → `narrative_claim_conflict` |
-| `freeform-prose-injection` | model output that isn't pure slot JSON → `narrative_schema_violation` |
-| `manual-review-wall` | the narrative uses only manual-review / non-finding language |
-| `renderer-determinism` | the same verified slots render a byte-identical narrative |
+| Fixture                     | Must prove                                                                        |
+| --------------------------- | --------------------------------------------------------------------------------- |
+| `clean-supported-narrative` | supported slots pass and render                                                   |
+| `unsupported-signal-claim`  | a slot claiming a signal not in the digest → rejected                             |
+| `severity-overclaim`        | a slot escalating to finding/confirmed misconduct → rejected                      |
+| `privacy-overclaim`         | a slot claiming raw pixels/titles/typed content captured → rejected               |
+| `missing-evidence-ref`      | a nonexistent `evidence_ref` → rejected                                           |
+| `field-value-conflict`      | a slot says fallback used when the digest says false → `narrative_claim_conflict` |
+| `freeform-prose-injection`  | model output that isn't pure slot JSON → `narrative_schema_violation`             |
+| `manual-review-wall`        | the narrative uses only manual-review / non-finding language                      |
+| `renderer-determinism`      | the same verified slots render a byte-identical narrative                         |
 
-Summary: `narrative_claim_conflicts: 0`, `unsupported_slots_rejected: <n>`,
-`automatic_findings_rendered: 0`, `privacy_overclaims_rendered: 0`.
+Summary (distinguishes attempted-and-caught from rendered, so the teeth visibly fired):
+
+```json
+{
+  "narrative_claim_conflict_attempts": 1,
+  "narrative_claim_conflicts_rendered": 0,
+  "unsupported_slots_rejected": 6,
+  "automatic_findings_rendered": 0,
+  "privacy_overclaims_rendered": 0
+}
+```
 
 ## Architecture & files
 
