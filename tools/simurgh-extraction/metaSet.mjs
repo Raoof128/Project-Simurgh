@@ -45,9 +45,13 @@ export function validateMetaSet(set) {
       "normalized_prompt_hash",
       "prompt_template_hash",
     ]) {
-      if (typeof r[h] !== "string" || !r[h].startsWith("sha256:")) throw new Error("meta_set_invalid");
+      if (typeof r[h] !== "string" || !r[h].startsWith("sha256:"))
+        throw new Error("meta_set_invalid");
     }
-    if (typeof r.cot_elicitation_flag !== "boolean" || typeof r.tool_use_request_shape !== "boolean")
+    if (
+      typeof r.cot_elicitation_flag !== "boolean" ||
+      typeof r.tool_use_request_shape !== "boolean"
+    )
       throw new Error("meta_set_invalid");
     if (seen.has(r.run_id)) throw new Error("meta_set_invalid");
     seen.add(r.run_id);

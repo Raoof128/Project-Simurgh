@@ -29,8 +29,24 @@ test("render contains no forbidden/accusatory wording", () => {
 });
 
 test("render handles each decision branch", () => {
-  assert.match(renderAttestationProse({ ...base, decision: "no_pattern_observed", matched_families: [], distinct_family_count: 0 }).rendered_summary, /no .*pattern/i);
-  assert.match(renderAttestationProse({ ...base, decision: "single_signal_observed", matched_families: ["volume"], distinct_family_count: 1 }).rendered_summary, /single/i);
+  assert.match(
+    renderAttestationProse({
+      ...base,
+      decision: "no_pattern_observed",
+      matched_families: [],
+      distinct_family_count: 0,
+    }).rendered_summary,
+    /no .*pattern/i
+  );
+  assert.match(
+    renderAttestationProse({
+      ...base,
+      decision: "single_signal_observed",
+      matched_families: ["volume"],
+      distinct_family_count: 1,
+    }).rendered_summary,
+    /single/i
+  );
 });
 
 test("render throws if a family name is itself accusatory (defence in depth)", () => {

@@ -64,15 +64,17 @@ while 3R remains the deliberate gateway-security-path exception.
    complete-prevention claim. Forbidden accusatory vocabulary rejected by the renderer
    and the security audit.
 5. **Sacred non-claim (verbatim):**
+
    > A detector match is not an accusation. It is a reproducible metadata-pattern result
    > for manual review.
 
    This sentence appears in: this spec, the renderer output, the attestation
    `non_claims[]`, and the reviewer checklist.
-5a. **No named labs in evidence:** named third-party labs may appear only in explanatory
+   5a. **No named labs in evidence:** named third-party labs may appear only in explanatory
    documentation citing the reference threat; they MUST NOT appear in
    `metadata-set.json`, `expected-detector-result.json`, `attestation.json`, renderer
    prose, or `self-proof-results.json`. Enforced by the security audit.
+
 6. **Production deferred (out-of-scope invariant):**
    > Production telemetry integration is deferred. Stage 3T proves the detector and
    > attestation contract offline before any gateway telemetry fields are added.
@@ -102,19 +104,19 @@ artifact class on the ladder. It is grounded as:
 
 The labelled-corpus FP/FN benchmark posture is **explicitly out of scope** for the
 attestation basis: it would turn 3T into a "we built a better detector" claim, off-crown.
-Only the *silence* half survives, as the self-proof above.
+Only the _silence_ half survives, as the self-proof above.
 
 ---
 
 ## Signal families (frozen map; `family_map_digest` part of detector identity)
 
-| Family           | Example member signals                                    |
-| ---------------- | -------------------------------------------------------- |
+| Family           | Example member signals                                           |
+| ---------------- | ---------------------------------------------------------------- |
 | **Structural**   | repeated normalized-prompt-hash cluster, template-prefix cluster |
-| **Behavioural**  | CoT-elicitation flag, answer-format harvesting shape     |
-| **Targeting**    | narrow-capability concentration, repeated task taxonomy  |
-| **Coordination** | hashed actor cluster, multi-session hydra shape          |
-| **Volume**       | burst time-bucket, high request-count bucket             |
+| **Behavioural**  | CoT-elicitation flag, answer-format harvesting shape             |
+| **Targeting**    | narrow-capability concentration, repeated task taxonomy          |
+| **Coordination** | hashed actor cluster, multi-session hydra shape                  |
+| **Volume**       | burst time-bucket, high request-count bucket                     |
 
 Decision uses `distinct_signal_families` (count of families with ≥1 firing member),
 NOT `matched_boolean_count`.
@@ -138,6 +140,7 @@ Pure libraries are gated at 100% function coverage; CLI/sign/verify are exercise
 smoke + E2E (honest subprocess coverage). All under `tools/simurgh-extraction/`.
 
 ### `metaSet.mjs`
+
 - `META_SET_SCHEMA = "simurgh.capability_extraction.meta_set.v1"`.
 - `validateMetaSet(set)` — asserts `set_provenance:"synthetic_reference"`,
   `live_traffic_used:false`, `identity_data_used:false`, `raw_content_used:false`, and
@@ -177,6 +180,7 @@ smoke + E2E (honest subprocess coverage). All under `tools/simurgh-extraction/`.
   ```
 
 ### `signalFamilies.mjs`
+
 - `FAMILY_MAP` — **deep-frozen** object mapping family → member-signal ids (the five
   families above). `Object.freeze` is shallow in JS, so the nested member-signal arrays
   are frozen too. Any threshold or family-map change requires a new `detector_id`.
@@ -188,6 +192,7 @@ smoke + E2E (honest subprocess coverage). All under `tools/simurgh-extraction/`.
   distinct families, emitted sorted by `FAMILY_ORDER`.
 
 ### `detector.mjs`
+
 - `DETECTOR_ID = "stage3t_frozen_detector_v1"`.
 - `matchSignals(set)` — deterministic per-set signal evaluation producing
   `matched{ <signal_id>: bool }` (e.g., `repetition_cluster`, `template_prefix_cluster`,
@@ -201,16 +206,29 @@ smoke + E2E (honest subprocess coverage). All under `tools/simurgh-extraction/`.
     "type": "simurgh.capability_extraction.detector_result.v1",
     "detector_id": "stage3t_frozen_detector_v1",
     "meta_set_digest": "sha256:...",
-    "matched": { "repetition_cluster": true, "cot_elicitation": true, "hydra_cluster": false, "capability_targeting": true, "volume_burst": false },
+    "matched": {
+      "repetition_cluster": true,
+      "cot_elicitation": true,
+      "hydra_cluster": false,
+      "capability_targeting": true,
+      "volume_burst": false
+    },
     "distinct_family_count": 3,
     "matched_families": ["structural", "behavioural", "targeting"],
     "decision": "extraction_pattern_observed",
     "attestation_claim": "manual_review_recommended",
-    "non_claims": ["no_intent_claim", "no_attribution_claim", "no_complete_distillation_prevention_claim", "metadata_only", "match_is_not_accusation"]
+    "non_claims": [
+      "no_intent_claim",
+      "no_attribution_claim",
+      "no_complete_distillation_prevention_claim",
+      "metadata_only",
+      "match_is_not_accusation"
+    ]
   }
   ```
 
 ### `detector-config.json` (committed, digest-bound)
+
 ```json
 {
   "detector_id": "stage3t_frozen_detector_v1",
@@ -226,22 +244,24 @@ smoke + E2E (honest subprocess coverage). All under `tools/simurgh-extraction/`.
 ```
 
 ### `selfProof.mjs`
+
 Falsification harness with the required fixtures and summary counters.
 
 | Fixture                                  | Expected outcome                                          |
-| ---------------------------------------- | -------------------------------------------------------- |
+| ---------------------------------------- | --------------------------------------------------------- |
 | `benign-heavy-power-user`                | `no_pattern_observed` or at most `single_signal_observed` |
-| `benign-repetition-only`                 | `single_signal_observed`, not extraction                 |
-| `benign-volume-only`                     | `single_signal_observed`, not extraction                 |
-| `benign-targeting-only`                  | `single_signal_observed`, not extraction                 |
-| `structural-double-count-trap`           | structural family count = 1, not 2                       |
-| `extraction-structural-plus-behavioural` | `extraction_pattern_observed`                            |
-| `extraction-targeting-plus-coordination` | `extraction_pattern_observed`                            |
-| `threshold-version-lock`                 | changing threshold changes detector id or fails          |
-| `intent-language-rejected`               | no accusatory/attribution/intent wording renders         |
-| `duplicate-run-id-rejected`              | duplicate `run_id` → `meta_set_invalid`                  |
+| `benign-repetition-only`                 | `single_signal_observed`, not extraction                  |
+| `benign-volume-only`                     | `single_signal_observed`, not extraction                  |
+| `benign-targeting-only`                  | `single_signal_observed`, not extraction                  |
+| `structural-double-count-trap`           | structural family count = 1, not 2                        |
+| `extraction-structural-plus-behavioural` | `extraction_pattern_observed`                             |
+| `extraction-targeting-plus-coordination` | `extraction_pattern_observed`                             |
+| `threshold-version-lock`                 | changing threshold changes detector id or fails           |
+| `intent-language-rejected`               | no accusatory/attribution/intent wording renders          |
+| `duplicate-run-id-rejected`              | duplicate `run_id` → `meta_set_invalid`                   |
 
 Summary:
+
 ```json
 {
   "benign_escalation_failures": 0,
@@ -255,12 +275,14 @@ Summary:
 ```
 
 ### `renderer.mjs`
+
 - `renderAttestationProse(detectorResult)` — emits review-oriented prose from the decision
   only. Appends the sacred non-claim sentence. Throws on any forbidden accusatory wording
   (`distillation attack confirmed`, `abusive actor`, `stolen`, `fraudulent`, `malicious
-  campaign`, attribution to any named lab).
+campaign`, attribution to any named lab).
 
 ### CLI + signing + verifier
+
 - `simurgh-extraction.mjs` — subcommands: `build [--update]` (validate set → run detector →
   write `expected-detector-result.json` + render), `hash`, `verify` (re-derive digest +
   re-run detector + compare byte-for-byte), `verify-hashes`.

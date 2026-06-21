@@ -47,9 +47,18 @@ test("identity constants are frozen at v1 / threshold 2", () => {
 
 test("decide is a total function over distinct family count", () => {
   assert.deepEqual(decide(0), { decision: "no_pattern_observed", attestation_claim: "none" });
-  assert.deepEqual(decide(1), { decision: "single_signal_observed", attestation_claim: "manual_review_only" });
-  assert.deepEqual(decide(2), { decision: "extraction_pattern_observed", attestation_claim: "manual_review_recommended" });
-  assert.deepEqual(decide(5), { decision: "extraction_pattern_observed", attestation_claim: "manual_review_recommended" });
+  assert.deepEqual(decide(1), {
+    decision: "single_signal_observed",
+    attestation_claim: "manual_review_only",
+  });
+  assert.deepEqual(decide(2), {
+    decision: "extraction_pattern_observed",
+    attestation_claim: "manual_review_recommended",
+  });
+  assert.deepEqual(decide(5), {
+    decision: "extraction_pattern_observed",
+    attestation_claim: "manual_review_recommended",
+  });
 });
 
 test("repetition cluster fires structural only (double-count trap)", () => {

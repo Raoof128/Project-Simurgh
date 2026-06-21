@@ -19,7 +19,7 @@ Tick each before approving.
 ## Privacy / metadata-only
 
 - [ ] `set_provenance: "synthetic_reference"`, `live_traffic_used/identity_data_used/
-  raw_content_used` all `false`.
+raw_content_used` all `false`.
 - [ ] No raw prompts/outputs, IPs, emails, account IDs, full timestamps, API keys, or
       chain-of-thought text in any evidence file (`stage3t privacy: PASS`).
 

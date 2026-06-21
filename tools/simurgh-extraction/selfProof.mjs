@@ -70,7 +70,8 @@ export function runExtractionSelfProof() {
   // 3. benign-volume-only: 11 varied rows → high_request_count only
   {
     const res = runDetector(mset(range(11).map((i) => row("v" + i))));
-    const ok = res.decision === "single_signal_observed" && res.matched_families.join() === "volume";
+    const ok =
+      res.decision === "single_signal_observed" && res.matched_families.join() === "volume";
     if (!ok) summary.single_family_escalations++;
     add("benign-volume-only", ok, res.decision);
   }
@@ -78,7 +79,8 @@ export function runExtractionSelfProof() {
   {
     const rows = range(5).map((i) => row("t" + i, { capability_tag: "tool_use" }));
     const res = runDetector(mset(rows));
-    const ok = res.decision === "single_signal_observed" && res.matched_families.join() === "targeting";
+    const ok =
+      res.decision === "single_signal_observed" && res.matched_families.join() === "targeting";
     if (!ok) summary.single_family_escalations++;
     add("benign-targeting-only", ok, res.decision);
   }
@@ -98,7 +100,11 @@ export function runExtractionSelfProof() {
       row("sb" + i, { normalized_prompt_hash: "sha256:same", cot_elicitation_flag: true })
     );
     const res = runDetector(mset(rows));
-    add("extraction-structural-plus-behavioural", res.decision === "extraction_pattern_observed", res.decision);
+    add(
+      "extraction-structural-plus-behavioural",
+      res.decision === "extraction_pattern_observed",
+      res.decision
+    );
   }
   // 7. extraction-targeting-plus-coordination: 6 rows, 3 actors, same capability
   {

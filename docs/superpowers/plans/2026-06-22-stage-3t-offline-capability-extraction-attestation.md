@@ -23,27 +23,29 @@
 - Tag target `v2.3.0` on merge. Branch already exists: `main-stage-3t-offline-capability-extraction-attestation`.
 
 **Frozen detector constants (used identically across tasks):**
+
 ```js
-DETECTOR_ID = "stage3t_frozen_detector_v1"
-THRESHOLD = 2                 // distinct_signal_families >= 2 → extraction_pattern_observed
-CLUSTER_MIN = 3               // ≥3 rows sharing a hash = a cluster
-DOMINANCE = 0.6               // single capability/task share ≥ 0.6 = targeting
-COT_MAJORITY = 0.5            // fraction of rows with cot_elicitation_flag true > 0.5
-VOLUME_BURST_FRACTION = 0.6   // single time_bucket share ≥ 0.6 = burst
-HIGH_REQUEST_COUNT = 10       // total rows ≥ 10
-HYDRA_MIN_ACTORS = 3          // ≥3 distinct actor clusters with sessions ≥ actors
+DETECTOR_ID = "stage3t_frozen_detector_v1";
+THRESHOLD = 2; // distinct_signal_families >= 2 → extraction_pattern_observed
+CLUSTER_MIN = 3; // ≥3 rows sharing a hash = a cluster
+DOMINANCE = 0.6; // single capability/task share ≥ 0.6 = targeting
+COT_MAJORITY = 0.5; // fraction of rows with cot_elicitation_flag true > 0.5
+VOLUME_BURST_FRACTION = 0.6; // single time_bucket share ≥ 0.6 = burst
+HIGH_REQUEST_COUNT = 10; // total rows ≥ 10
+HYDRA_MIN_ACTORS = 3; // ≥3 distinct actor clusters with sessions ≥ actors
 ```
 
 **Signal families (frozen):**
+
 ```js
 FAMILY_MAP = {
-  structural:   ["repetition_cluster", "template_prefix_cluster"],
-  behavioural:  ["cot_elicitation"],
-  targeting:    ["capability_targeting", "task_taxonomy_repeat"],
+  structural: ["repetition_cluster", "template_prefix_cluster"],
+  behavioural: ["cot_elicitation"],
+  targeting: ["capability_targeting", "task_taxonomy_repeat"],
   coordination: ["hydra_cluster"],
-  volume:       ["volume_burst", "high_request_count"],
-}
-FAMILY_ORDER = ["structural", "behavioural", "targeting", "coordination", "volume"]
+  volume: ["volume_burst", "high_request_count"],
+};
+FAMILY_ORDER = ["structural", "behavioural", "targeting", "coordination", "volume"];
 ```
 
 ---
@@ -68,10 +70,12 @@ FAMILY_ORDER = ["structural", "behavioural", "targeting", "coordination", "volum
 ### Task 1: Metadata-set library (pure)
 
 **Files:**
+
 - Create: `tools/simurgh-extraction/metaSet.mjs`
 - Test: `tests/unit/llmShield/extraction/metaSet.test.js`
 
 **Interfaces:**
+
 - Consumes: `canonicalJson`, `sha256Hex` from `../../simurgh-attestation/canonicalise.mjs` (note: from `tools/simurgh-extraction/` the path is `../simurgh-attestation/canonicalise.mjs`).
 - Produces: `META_SET_SCHEMA` (string), `ALLOWED_ROW_FIELDS` (frozen array), `validateMetaSet(set) -> true | throws`, `normaliseMetaSet(set) -> object`, `metaSetDigest(set) -> "sha256:..."`.
 
@@ -128,13 +132,25 @@ test("validateMetaSet accepts a clean synthetic set", () => {
 });
 
 test("validateMetaSet rejects wrong provenance", () => {
-  assert.throws(() => validateMetaSet(set([row("a")], { set_provenance: "live" })), /meta_set_provenance_invalid/);
+  assert.throws(
+    () => validateMetaSet(set([row("a")], { set_provenance: "live" })),
+    /meta_set_provenance_invalid/
+  );
 });
 
 test("validateMetaSet rejects live/identity/raw flags", () => {
-  assert.throws(() => validateMetaSet(set([row("a")], { live_traffic_used: true })), /meta_set_provenance_invalid/);
-  assert.throws(() => validateMetaSet(set([row("a")], { identity_data_used: true })), /meta_set_provenance_invalid/);
-  assert.throws(() => validateMetaSet(set([row("a")], { raw_content_used: true })), /meta_set_provenance_invalid/);
+  assert.throws(
+    () => validateMetaSet(set([row("a")], { live_traffic_used: true })),
+    /meta_set_provenance_invalid/
+  );
+  assert.throws(
+    () => validateMetaSet(set([row("a")], { identity_data_used: true })),
+    /meta_set_provenance_invalid/
+  );
+  assert.throws(
+    () => validateMetaSet(set([row("a")], { raw_content_used: true })),
+    /meta_set_provenance_invalid/
+  );
 });
 
 test("validateMetaSet rejects duplicate run_id", () => {
@@ -142,7 +158,10 @@ test("validateMetaSet rejects duplicate run_id", () => {
 });
 
 test("validateMetaSet rejects an unknown row field", () => {
-  assert.throws(() => validateMetaSet(set([row("a", { raw_prompt: "hello" })])), /forbidden_metadata_field/);
+  assert.throws(
+    () => validateMetaSet(set([row("a", { raw_prompt: "hello" })])),
+    /forbidden_metadata_field/
+  );
 });
 
 test("validateMetaSet rejects an empty run set", () => {
@@ -213,10 +232,19 @@ export function validateMetaSet(set) {
       if (!allowed.has(k)) throw new Error("forbidden_metadata_field");
     }
     if (typeof r.run_id !== "string" || r.run_id.length === 0) throw new Error("meta_set_invalid");
-    for (const h of ["actor_cluster_hash", "session_cluster_hash", "normalized_prompt_hash", "prompt_template_hash"]) {
-      if (typeof r[h] !== "string" || !r[h].startsWith("sha256:")) throw new Error("meta_set_invalid");
+    for (const h of [
+      "actor_cluster_hash",
+      "session_cluster_hash",
+      "normalized_prompt_hash",
+      "prompt_template_hash",
+    ]) {
+      if (typeof r[h] !== "string" || !r[h].startsWith("sha256:"))
+        throw new Error("meta_set_invalid");
     }
-    if (typeof r.cot_elicitation_flag !== "boolean" || typeof r.tool_use_request_shape !== "boolean")
+    if (
+      typeof r.cot_elicitation_flag !== "boolean" ||
+      typeof r.tool_use_request_shape !== "boolean"
+    )
       throw new Error("meta_set_invalid");
     if (seen.has(r.run_id)) throw new Error("meta_set_invalid");
     seen.add(r.run_id);
@@ -265,10 +293,12 @@ git commit -m "feat(3t): synthetic metadata-set schema, validation, order-indepe
 ### Task 2: Signal-families library (pure)
 
 **Files:**
+
 - Create: `tools/simurgh-extraction/signalFamilies.mjs`
 - Test: `tests/unit/llmShield/extraction/signalFamilies.test.js`
 
 **Interfaces:**
+
 - Consumes: `canonicalJson`, `sha256Hex`.
 - Produces: `FAMILY_MAP` (deep-frozen), `FAMILY_ORDER` (frozen array), `familyMapDigest() -> "sha256:..."`, `signalToFamily(signalId) -> string|null`, `distinctFamilies(firedSignalIds: string[]) -> string[]` (sorted by `FAMILY_ORDER`).
 
@@ -302,9 +332,14 @@ test("signalToFamily maps members and returns null for unknown", () => {
 
 test("distinctFamilies counts FAMILIES not booleans and sorts by FAMILY_ORDER", () => {
   // both fired signals are structural → ONE family
-  assert.deepEqual(distinctFamilies(["template_prefix_cluster", "repetition_cluster"]), ["structural"]);
+  assert.deepEqual(distinctFamilies(["template_prefix_cluster", "repetition_cluster"]), [
+    "structural",
+  ]);
   // two families, returned in FAMILY_ORDER regardless of input order
-  assert.deepEqual(distinctFamilies(["cot_elicitation", "repetition_cluster"]), ["structural", "behavioural"]);
+  assert.deepEqual(distinctFamilies(["cot_elicitation", "repetition_cluster"]), [
+    "structural",
+    "behavioural",
+  ]);
 });
 
 test("distinctFamilies ignores unknown signals", () => {
@@ -397,10 +432,12 @@ git commit -m "feat(3t): deep-frozen signal-family map with distinct-family coun
 ### Task 3: Detector library (pure)
 
 **Files:**
+
 - Create: `tools/simurgh-extraction/detector.mjs`
 - Test: `tests/unit/llmShield/extraction/detector.test.js`
 
 **Interfaces:**
+
 - Consumes: `metaSetDigest` (metaSet), `distinctFamilies` (signalFamilies).
 - Produces: `DETECTOR_ID`, `THRESHOLD`, `THRESHOLDS` (frozen constants object), `matchSignals(set) -> {<signalId>: bool}`, `firedSignalIds(matched) -> string[]`, `decide(distinctFamilyCount) -> {decision, attestation_claim}`, `runDetector(set) -> resultObject`.
 
@@ -457,9 +494,18 @@ test("identity constants are frozen at v1 / threshold 2", () => {
 
 test("decide is a total function over distinct family count", () => {
   assert.deepEqual(decide(0), { decision: "no_pattern_observed", attestation_claim: "none" });
-  assert.deepEqual(decide(1), { decision: "single_signal_observed", attestation_claim: "manual_review_only" });
-  assert.deepEqual(decide(2), { decision: "extraction_pattern_observed", attestation_claim: "manual_review_recommended" });
-  assert.deepEqual(decide(5), { decision: "extraction_pattern_observed", attestation_claim: "manual_review_recommended" });
+  assert.deepEqual(decide(1), {
+    decision: "single_signal_observed",
+    attestation_claim: "manual_review_only",
+  });
+  assert.deepEqual(decide(2), {
+    decision: "extraction_pattern_observed",
+    attestation_claim: "manual_review_recommended",
+  });
+  assert.deepEqual(decide(5), {
+    decision: "extraction_pattern_observed",
+    attestation_claim: "manual_review_recommended",
+  });
 });
 
 test("repetition cluster fires structural only (double-count trap)", () => {
@@ -556,7 +602,8 @@ export function matchSignals(set) {
     capability_targeting: n >= THRESHOLDS.CLUSTER_MIN && maxCount(cap) / n >= THRESHOLDS.DOMINANCE,
     task_taxonomy_repeat: n >= THRESHOLDS.CLUSTER_MIN && maxCount(task) / n >= THRESHOLDS.DOMINANCE,
     hydra_cluster: actors.size >= THRESHOLDS.HYDRA_MIN_ACTORS && sessions.size >= actors.size,
-    volume_burst: n >= THRESHOLDS.CLUSTER_MIN && maxCount(tb) / n >= THRESHOLDS.VOLUME_BURST_FRACTION,
+    volume_burst:
+      n >= THRESHOLDS.CLUSTER_MIN && maxCount(tb) / n >= THRESHOLDS.VOLUME_BURST_FRACTION,
     high_request_count: n >= THRESHOLDS.HIGH_REQUEST_COUNT,
   };
 }
@@ -567,7 +614,10 @@ export function firedSignalIds(matched) {
 
 export function decide(distinctFamilyCount) {
   if (distinctFamilyCount >= THRESHOLD)
-    return { decision: "extraction_pattern_observed", attestation_claim: "manual_review_recommended" };
+    return {
+      decision: "extraction_pattern_observed",
+      attestation_claim: "manual_review_recommended",
+    };
   if (distinctFamilyCount === 1)
     return { decision: "single_signal_observed", attestation_claim: "manual_review_only" };
   return { decision: "no_pattern_observed", attestation_claim: "none" };
@@ -619,10 +669,12 @@ git commit -m "feat(3t): frozen deterministic extraction-pattern detector + tota
 ### Task 4: Renderer (pure)
 
 **Files:**
+
 - Create: `tools/simurgh-extraction/renderer.mjs`
 - Test: `tests/unit/llmShield/extraction/renderer.test.js`
 
 **Interfaces:**
+
 - Consumes: a detector result object (from `runDetector`).
 - Produces: `SACRED_NON_CLAIM` (string), `FORBIDDEN_WORDING` (frozen array), `renderAttestationProse(result) -> {rendered_summary, intent_claim_made:false}`. Throws `intent_language_rejected` if forbidden wording would appear.
 
@@ -661,8 +713,24 @@ test("render contains no forbidden/accusatory wording", () => {
 });
 
 test("render handles each decision branch", () => {
-  assert.match(renderAttestationProse({ ...base, decision: "no_pattern_observed", matched_families: [], distinct_family_count: 0 }).rendered_summary, /no .*pattern/i);
-  assert.match(renderAttestationProse({ ...base, decision: "single_signal_observed", matched_families: ["volume"], distinct_family_count: 1 }).rendered_summary, /single/i);
+  assert.match(
+    renderAttestationProse({
+      ...base,
+      decision: "no_pattern_observed",
+      matched_families: [],
+      distinct_family_count: 0,
+    }).rendered_summary,
+    /no .*pattern/i
+  );
+  assert.match(
+    renderAttestationProse({
+      ...base,
+      decision: "single_signal_observed",
+      matched_families: ["volume"],
+      distinct_family_count: 1,
+    }).rendered_summary,
+    /single/i
+  );
 });
 
 test("render throws if a family name is itself accusatory (defence in depth)", () => {
@@ -712,7 +780,8 @@ const DECISION_PROSE = {
 export function renderAttestationProse(result) {
   const head = DECISION_PROSE[result.decision] ?? "Decision not recognised.";
   const families = [...result.matched_families].join(", ");
-  const summary = `${head} Distinct signal families: ${result.distinct_family_count}` +
+  const summary =
+    `${head} Distinct signal families: ${result.distinct_family_count}` +
     (families ? ` (${families}).` : ".") +
     ` ${SACRED_NON_CLAIM}`;
   const lower = summary.toLowerCase();
@@ -745,10 +814,12 @@ git commit -m "feat(3t): non-accusatory attestation renderer with sacred non-cla
 ### Task 5: Self-proof (pure)
 
 **Files:**
+
 - Create: `tools/simurgh-extraction/selfProof.mjs`
 - Test: `tests/unit/llmShield/extraction/extractionSelfProof.test.js`
 
 **Interfaces:**
+
 - Consumes: `validateMetaSet` (metaSet), `runDetector`/`DETECTOR_ID`/`THRESHOLD` (detector), `renderAttestationProse` (renderer).
 - Produces: `runExtractionSelfProof() -> { fixtures: [...], summary: {...} }` with summary counters all `0` and `all_passed:true`.
 
@@ -856,7 +927,8 @@ export function runExtractionSelfProof() {
   // 3. benign-volume-only: 11 varied rows → high_request_count only
   {
     const res = runDetector(mset(range(11).map((i) => row("v" + i))));
-    const ok = res.decision === "single_signal_observed" && res.matched_families.join() === "volume";
+    const ok =
+      res.decision === "single_signal_observed" && res.matched_families.join() === "volume";
     if (!ok) summary.single_family_escalations++;
     add("benign-volume-only", ok, res.decision);
   }
@@ -864,7 +936,8 @@ export function runExtractionSelfProof() {
   {
     const rows = range(5).map((i) => row("t" + i, { capability_tag: "tool_use" }));
     const res = runDetector(mset(rows));
-    const ok = res.decision === "single_signal_observed" && res.matched_families.join() === "targeting";
+    const ok =
+      res.decision === "single_signal_observed" && res.matched_families.join() === "targeting";
     if (!ok) summary.single_family_escalations++;
     add("benign-targeting-only", ok, res.decision);
   }
@@ -884,7 +957,11 @@ export function runExtractionSelfProof() {
       row("sb" + i, { normalized_prompt_hash: "sha256:same", cot_elicitation_flag: true })
     );
     const res = runDetector(mset(rows));
-    add("extraction-structural-plus-behavioural", res.decision === "extraction_pattern_observed", res.decision);
+    add(
+      "extraction-structural-plus-behavioural",
+      res.decision === "extraction_pattern_observed",
+      res.decision
+    );
   }
   // 7. extraction-targeting-plus-coordination: 6 rows, 3 actors, same capability
   {
@@ -892,8 +969,10 @@ export function runExtractionSelfProof() {
       row("tc" + i, { actor_cluster_hash: "sha256:actor_" + (i % 3), capability_tag: "tool_use" })
     );
     const res = runDetector(mset(rows));
-    const ok = res.decision === "extraction_pattern_observed" &&
-      res.matched_families.includes("targeting") && res.matched_families.includes("coordination");
+    const ok =
+      res.decision === "extraction_pattern_observed" &&
+      res.matched_families.includes("targeting") &&
+      res.matched_families.includes("coordination");
     add("extraction-targeting-plus-coordination", ok, res.matched_families.join());
   }
   // 8. threshold-version-lock: threshold frozen at 2, id at v1
@@ -905,11 +984,21 @@ export function runExtractionSelfProof() {
   {
     let threw = false;
     try {
-      renderAttestationProse({ decision: "extraction_pattern_observed", attestation_claim: "x", matched_families: ["attacker"], distinct_family_count: 2 });
+      renderAttestationProse({
+        decision: "extraction_pattern_observed",
+        attestation_claim: "x",
+        matched_families: ["attacker"],
+        distinct_family_count: 2,
+      });
     } catch (e) {
       threw = /intent_language_rejected/.test(e.message);
     }
-    const clean = renderAttestationProse({ decision: "no_pattern_observed", attestation_claim: "none", matched_families: [], distinct_family_count: 0 });
+    const clean = renderAttestationProse({
+      decision: "no_pattern_observed",
+      attestation_claim: "none",
+      matched_families: [],
+      distinct_family_count: 0,
+    });
     const leaked = /attacker|stolen|fraudulent/i.test(clean.rendered_summary);
     if (leaked) summary.intent_claims_rendered++;
     add("intent-language-rejected", threw && !leaked, String(threw));
@@ -927,7 +1016,9 @@ export function runExtractionSelfProof() {
   }
   // 11. decision reproduction: same set → identical result twice
   {
-    const rows = range(4).map((i) => row("rep2_" + i, { normalized_prompt_hash: "sha256:same", cot_elicitation_flag: true }));
+    const rows = range(4).map((i) =>
+      row("rep2_" + i, { normalized_prompt_hash: "sha256:same", cot_elicitation_flag: true })
+    );
     const a = JSON.stringify(runDetector(mset(rows)));
     const b = JSON.stringify(runDetector(mset(rows)));
     if (a !== b) summary.decision_reproduction_failures++;
@@ -960,6 +1051,7 @@ git commit -m "feat(3t): benign-silence self-proof falsification harness"
 ### Task 6: CLI + committed reference set + detector result
 
 **Files:**
+
 - Create: `tools/simurgh-extraction/simurgh-extraction.mjs`
 - Create: `docs/research/llm-shield/evidence/stage-3t/meta-set/metadata-set.json`
 - Create: `docs/research/llm-shield/evidence/stage-3t/meta-set/metadata-set-manifest.json`
@@ -968,6 +1060,7 @@ git commit -m "feat(3t): benign-silence self-proof falsification harness"
 - Test: `tests/unit/llmShield/extraction/extractionCli.test.js`
 
 **Interfaces:**
+
 - Consumes: all pure libs + `familyMapDigest`.
 - Produces: CLI subcommands `build [--update]`, `hash`, `verify`, `verify-hashes`. Exports `buildAttestation(set) -> attestationObject`, `assembleForBuild()`, `deriveForVerify()` for unit testing.
 
@@ -984,30 +1077,152 @@ Create `docs/research/llm-shield/evidence/stage-3t/meta-set/metadata-set.json` �
   "identity_data_used": false,
   "raw_content_used": false,
   "runs": [
-    { "run_id": "s3t_run_001", "actor_cluster_hash": "sha256:synthetic_actor_a", "session_cluster_hash": "sha256:synthetic_session_1", "normalized_prompt_hash": "sha256:synthetic_np_shared", "prompt_template_hash": "sha256:synthetic_tp_001", "task_family": "code_generation", "capability_tag": "tool_use", "input_tokens_bucket": "1k-2k", "output_tokens_bucket": "2k-4k", "time_bucket": "bucket_001", "cot_elicitation_flag": true, "tool_use_request_shape": false },
-    { "run_id": "s3t_run_002", "actor_cluster_hash": "sha256:synthetic_actor_a", "session_cluster_hash": "sha256:synthetic_session_2", "normalized_prompt_hash": "sha256:synthetic_np_shared", "prompt_template_hash": "sha256:synthetic_tp_002", "task_family": "data_analysis", "capability_tag": "tool_use", "input_tokens_bucket": "1k-2k", "output_tokens_bucket": "2k-4k", "time_bucket": "bucket_002", "cot_elicitation_flag": true, "tool_use_request_shape": false },
-    { "run_id": "s3t_run_003", "actor_cluster_hash": "sha256:synthetic_actor_a", "session_cluster_hash": "sha256:synthetic_session_3", "normalized_prompt_hash": "sha256:synthetic_np_shared", "prompt_template_hash": "sha256:synthetic_tp_003", "task_family": "summarisation", "capability_tag": "tool_use", "input_tokens_bucket": "2k-4k", "output_tokens_bucket": "2k-4k", "time_bucket": "bucket_003", "cot_elicitation_flag": true, "tool_use_request_shape": false },
-    { "run_id": "s3t_run_004", "actor_cluster_hash": "sha256:synthetic_actor_a", "session_cluster_hash": "sha256:synthetic_session_4", "normalized_prompt_hash": "sha256:synthetic_np_shared", "prompt_template_hash": "sha256:synthetic_tp_004", "task_family": "code_generation", "capability_tag": "tool_use", "input_tokens_bucket": "1k-2k", "output_tokens_bucket": "4k-8k", "time_bucket": "bucket_004", "cot_elicitation_flag": true, "tool_use_request_shape": false },
-    { "run_id": "s3t_run_005", "actor_cluster_hash": "sha256:synthetic_actor_a", "session_cluster_hash": "sha256:synthetic_session_5", "normalized_prompt_hash": "sha256:synthetic_np_shared", "prompt_template_hash": "sha256:synthetic_tp_005", "task_family": "data_analysis", "capability_tag": "tool_use", "input_tokens_bucket": "1k-2k", "output_tokens_bucket": "2k-4k", "time_bucket": "bucket_005", "cot_elicitation_flag": true, "tool_use_request_shape": false },
-    { "run_id": "s3t_run_006", "actor_cluster_hash": "sha256:synthetic_actor_a", "session_cluster_hash": "sha256:synthetic_session_6", "normalized_prompt_hash": "sha256:synthetic_np_shared", "prompt_template_hash": "sha256:synthetic_tp_006", "task_family": "summarisation", "capability_tag": "tool_use", "input_tokens_bucket": "2k-4k", "output_tokens_bucket": "2k-4k", "time_bucket": "bucket_006", "cot_elicitation_flag": false, "tool_use_request_shape": false },
-    { "run_id": "s3t_run_007", "actor_cluster_hash": "sha256:synthetic_actor_a", "session_cluster_hash": "sha256:synthetic_session_7", "normalized_prompt_hash": "sha256:synthetic_np_shared", "prompt_template_hash": "sha256:synthetic_tp_007", "task_family": "code_generation", "capability_tag": "tool_use", "input_tokens_bucket": "1k-2k", "output_tokens_bucket": "2k-4k", "time_bucket": "bucket_007", "cot_elicitation_flag": true, "tool_use_request_shape": false },
-    { "run_id": "s3t_run_008", "actor_cluster_hash": "sha256:synthetic_actor_a", "session_cluster_hash": "sha256:synthetic_session_8", "normalized_prompt_hash": "sha256:synthetic_np_shared", "prompt_template_hash": "sha256:synthetic_tp_008", "task_family": "data_analysis", "capability_tag": "tool_use", "input_tokens_bucket": "2k-4k", "output_tokens_bucket": "4k-8k", "time_bucket": "bucket_008", "cot_elicitation_flag": true, "tool_use_request_shape": false }
+    {
+      "run_id": "s3t_run_001",
+      "actor_cluster_hash": "sha256:synthetic_actor_a",
+      "session_cluster_hash": "sha256:synthetic_session_1",
+      "normalized_prompt_hash": "sha256:synthetic_np_shared",
+      "prompt_template_hash": "sha256:synthetic_tp_001",
+      "task_family": "code_generation",
+      "capability_tag": "tool_use",
+      "input_tokens_bucket": "1k-2k",
+      "output_tokens_bucket": "2k-4k",
+      "time_bucket": "bucket_001",
+      "cot_elicitation_flag": true,
+      "tool_use_request_shape": false
+    },
+    {
+      "run_id": "s3t_run_002",
+      "actor_cluster_hash": "sha256:synthetic_actor_a",
+      "session_cluster_hash": "sha256:synthetic_session_2",
+      "normalized_prompt_hash": "sha256:synthetic_np_shared",
+      "prompt_template_hash": "sha256:synthetic_tp_002",
+      "task_family": "data_analysis",
+      "capability_tag": "tool_use",
+      "input_tokens_bucket": "1k-2k",
+      "output_tokens_bucket": "2k-4k",
+      "time_bucket": "bucket_002",
+      "cot_elicitation_flag": true,
+      "tool_use_request_shape": false
+    },
+    {
+      "run_id": "s3t_run_003",
+      "actor_cluster_hash": "sha256:synthetic_actor_a",
+      "session_cluster_hash": "sha256:synthetic_session_3",
+      "normalized_prompt_hash": "sha256:synthetic_np_shared",
+      "prompt_template_hash": "sha256:synthetic_tp_003",
+      "task_family": "summarisation",
+      "capability_tag": "tool_use",
+      "input_tokens_bucket": "2k-4k",
+      "output_tokens_bucket": "2k-4k",
+      "time_bucket": "bucket_003",
+      "cot_elicitation_flag": true,
+      "tool_use_request_shape": false
+    },
+    {
+      "run_id": "s3t_run_004",
+      "actor_cluster_hash": "sha256:synthetic_actor_a",
+      "session_cluster_hash": "sha256:synthetic_session_4",
+      "normalized_prompt_hash": "sha256:synthetic_np_shared",
+      "prompt_template_hash": "sha256:synthetic_tp_004",
+      "task_family": "code_generation",
+      "capability_tag": "tool_use",
+      "input_tokens_bucket": "1k-2k",
+      "output_tokens_bucket": "4k-8k",
+      "time_bucket": "bucket_004",
+      "cot_elicitation_flag": true,
+      "tool_use_request_shape": false
+    },
+    {
+      "run_id": "s3t_run_005",
+      "actor_cluster_hash": "sha256:synthetic_actor_a",
+      "session_cluster_hash": "sha256:synthetic_session_5",
+      "normalized_prompt_hash": "sha256:synthetic_np_shared",
+      "prompt_template_hash": "sha256:synthetic_tp_005",
+      "task_family": "data_analysis",
+      "capability_tag": "tool_use",
+      "input_tokens_bucket": "1k-2k",
+      "output_tokens_bucket": "2k-4k",
+      "time_bucket": "bucket_005",
+      "cot_elicitation_flag": true,
+      "tool_use_request_shape": false
+    },
+    {
+      "run_id": "s3t_run_006",
+      "actor_cluster_hash": "sha256:synthetic_actor_a",
+      "session_cluster_hash": "sha256:synthetic_session_6",
+      "normalized_prompt_hash": "sha256:synthetic_np_shared",
+      "prompt_template_hash": "sha256:synthetic_tp_006",
+      "task_family": "summarisation",
+      "capability_tag": "tool_use",
+      "input_tokens_bucket": "2k-4k",
+      "output_tokens_bucket": "2k-4k",
+      "time_bucket": "bucket_006",
+      "cot_elicitation_flag": false,
+      "tool_use_request_shape": false
+    },
+    {
+      "run_id": "s3t_run_007",
+      "actor_cluster_hash": "sha256:synthetic_actor_a",
+      "session_cluster_hash": "sha256:synthetic_session_7",
+      "normalized_prompt_hash": "sha256:synthetic_np_shared",
+      "prompt_template_hash": "sha256:synthetic_tp_007",
+      "task_family": "code_generation",
+      "capability_tag": "tool_use",
+      "input_tokens_bucket": "1k-2k",
+      "output_tokens_bucket": "2k-4k",
+      "time_bucket": "bucket_007",
+      "cot_elicitation_flag": true,
+      "tool_use_request_shape": false
+    },
+    {
+      "run_id": "s3t_run_008",
+      "actor_cluster_hash": "sha256:synthetic_actor_a",
+      "session_cluster_hash": "sha256:synthetic_session_8",
+      "normalized_prompt_hash": "sha256:synthetic_np_shared",
+      "prompt_template_hash": "sha256:synthetic_tp_008",
+      "task_family": "data_analysis",
+      "capability_tag": "tool_use",
+      "input_tokens_bucket": "2k-4k",
+      "output_tokens_bucket": "4k-8k",
+      "time_bucket": "bucket_008",
+      "cot_elicitation_flag": true,
+      "tool_use_request_shape": false
+    }
   ]
 }
 ```
 
 Create `metadata-set-manifest.json`:
+
 ```json
-{ "set_id": "stage3t_reference_set", "set_file": "metadata-set.json", "expected_decision": "extraction_pattern_observed", "expected_distinct_family_count": 3 }
+{
+  "set_id": "stage3t_reference_set",
+  "set_file": "metadata-set.json",
+  "expected_decision": "extraction_pattern_observed",
+  "expected_distinct_family_count": 3
+}
 ```
 
 Create `detector-config.json`:
+
 ```json
 {
   "detector_id": "stage3t_frozen_detector_v1",
   "threshold_rule": "distinct_signal_families >= 2",
-  "decision_function": { "0": "no_pattern_observed", "1": "single_signal_observed", "2_or_more": "extraction_pattern_observed" },
-  "thresholds": { "CLUSTER_MIN": 3, "DOMINANCE": 0.6, "COT_MAJORITY": 0.5, "VOLUME_BURST_FRACTION": 0.6, "HIGH_REQUEST_COUNT": 10, "HYDRA_MIN_ACTORS": 3 },
+  "decision_function": {
+    "0": "no_pattern_observed",
+    "1": "single_signal_observed",
+    "2_or_more": "extraction_pattern_observed"
+  },
+  "thresholds": {
+    "CLUSTER_MIN": 3,
+    "DOMINANCE": 0.6,
+    "COT_MAJORITY": 0.5,
+    "VOLUME_BURST_FRACTION": 0.6,
+    "HIGH_REQUEST_COUNT": 10,
+    "HYDRA_MIN_ACTORS": 3
+  },
   "family_map_digest": "PLACEHOLDER_FILLED_BY_BUILD",
   "threshold_change_requires_new_detector_id": true
 }
@@ -1020,7 +1235,10 @@ Create `detector-config.json`:
 // SPDX-License-Identifier: AGPL-3.0-or-later
 import test from "node:test";
 import assert from "node:assert/strict";
-import { buildAttestation, deriveForVerify } from "../../../../tools/simurgh-extraction/simurgh-extraction.mjs";
+import {
+  buildAttestation,
+  deriveForVerify,
+} from "../../../../tools/simurgh-extraction/simurgh-extraction.mjs";
 
 test("buildAttestation binds digest, decision, rendered prose, sacred non-claim", async () => {
   const { attestation: att } = await deriveForVerify();
@@ -1134,9 +1352,11 @@ async function main() {
       return;
     }
     const committed = await rd("result/attestation.json");
-    if (stable(committed) !== stable(attestation)) throw new Error("attestation drifted from committed set");
+    if (stable(committed) !== stable(attestation))
+      throw new Error("attestation drifted from committed set");
     const cr = await rd("result/expected-detector-result.json");
-    if (stable(cr) !== stable(result)) throw new Error("detector result drifted from committed set");
+    if (stable(cr) !== stable(result))
+      throw new Error("detector result drifted from committed set");
     console.log("stage3t evidence: verified committed");
   } else if (cmd === "hash") {
     const { set, attestation } = await deriveForVerify();
@@ -1191,12 +1411,14 @@ git commit -m "feat(3t): CLI + committed synthetic reference set and detector re
 ### Task 7: Keypair, signer, verifier, signed evidence
 
 **Files:**
+
 - Create: `tools/simurgh-extraction/sign-3t-attestation.mjs`
 - Create: `tools/simurgh-extraction/verify-stage3t-attestation.mjs`
 - Create (committed): `docs/research/llm-shield/evidence/stage-3t/keys/stage3t-public-key.json`, `keys/fingerprint.txt`, `result/attestation.signature.json`, `self-proof/self-proof-results.json`
 - Test: `tests/unit/llmShield/extraction/extractionVerify.test.js`
 
 **Interfaces:**
+
 - Consumes: `canonicalJson`, `sha256Hex`, `fingerprintPublicKey`; `deriveForVerify`; `runExtractionSelfProof`.
 - Produces: `verifyExtraction({ attestation, sidecar, publicKeyPem, set, detectorConfig }) -> { ok, checks }`.
 
@@ -1208,10 +1430,13 @@ node tools/simurgh-attestation/keygen.mjs \
   --out-private ~/.simurgh/3t-ed25519.pem \
   --out-public docs/research/llm-shield/evidence/stage-3t/keys/stage3t-public-key.json
 ```
+
 Then write the fingerprint sidecar:
+
 ```bash
 node -e "const k=require('./docs/research/llm-shield/evidence/stage-3t/keys/stage3t-public-key.json');require('fs').writeFileSync('docs/research/llm-shield/evidence/stage-3t/keys/fingerprint.txt',k.fingerprint+'\n')"
 ```
+
 Expected: only the public key + fingerprint land in the repo; the private key stays in `~/.simurgh` (mode 0600). Confirm `git status` shows NO `.pem`.
 
 - [ ] **Step 2: Write the signer**
@@ -1225,13 +1450,18 @@ import crypto from "node:crypto";
 import { readFile, writeFile } from "node:fs/promises";
 import { homedir } from "node:os";
 import { join } from "node:path";
-import { canonicalJson, sha256Hex, fingerprintPublicKey } from "../simurgh-attestation/canonicalise.mjs";
+import {
+  canonicalJson,
+  sha256Hex,
+  fingerprintPublicKey,
+} from "../simurgh-attestation/canonicalise.mjs";
 
 const EV = "docs/research/llm-shield/evidence/stage-3t";
 const stable = (v) => JSON.stringify(v, null, 2) + "\n";
 
 async function main() {
-  const keyPath = process.env.SIMURGH_3T_PRIVATE_KEY_PATH || join(homedir(), ".simurgh", "3t-ed25519.pem");
+  const keyPath =
+    process.env.SIMURGH_3T_PRIVATE_KEY_PATH || join(homedir(), ".simurgh", "3t-ed25519.pem");
   const priv = await readFile(keyPath, "utf8");
   const pub = JSON.parse(await readFile(join(EV, "keys", "stage3t-public-key.json"), "utf8"));
   const attestation = JSON.parse(await readFile(join(EV, "result", "attestation.json"), "utf8"));
@@ -1248,7 +1478,10 @@ async function main() {
   await writeFile(join(EV, "result", "attestation.signature.json"), stable(sidecar));
   console.log("stage3t: signed attestation; fingerprint", sidecar.public_key_fingerprint);
 }
-main().catch((e) => { console.error("stage3t sign:", e.message); process.exit(1); });
+main().catch((e) => {
+  console.error("stage3t sign:", e.message);
+  process.exit(1);
+});
 ```
 
 - [ ] **Step 3: Write the verifier**
@@ -1261,7 +1494,11 @@ main().catch((e) => { console.error("stage3t sign:", e.message); process.exit(1)
 import crypto from "node:crypto";
 import { readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import { canonicalJson, sha256Hex, fingerprintPublicKey } from "../simurgh-attestation/canonicalise.mjs";
+import {
+  canonicalJson,
+  sha256Hex,
+  fingerprintPublicKey,
+} from "../simurgh-attestation/canonicalise.mjs";
 import { metaSetDigest } from "./metaSet.mjs";
 import { familyMapDigest } from "./signalFamilies.mjs";
 import { runExtractionSelfProof } from "./selfProof.mjs";
@@ -1275,7 +1512,8 @@ export function verifyExtraction({ attestation, sidecar, publicKeyPem, set, dete
   const checks = {};
   const canonical = Buffer.from(canonicalJson(attestation), "utf8");
   checks.bundle_digest_match = sidecar.bundle_sha256 === sha256Hex(canonical);
-  checks.key_fingerprint_match = sidecar.public_key_fingerprint === fingerprintPublicKey(publicKeyPem);
+  checks.key_fingerprint_match =
+    sidecar.public_key_fingerprint === fingerprintPublicKey(publicKeyPem);
   checks.signature_valid = crypto.verify(
     null,
     canonical,
@@ -1289,8 +1527,13 @@ export function verifyExtraction({ attestation, sidecar, publicKeyPem, set, dete
     detectorConfig.family_map_digest === familyMapDigest();
   checks.detector_id_binding = detectorConfig.detector_id === attestation.detector_id;
   checks.threshold_lock_present = detectorConfig.threshold_change_requires_new_detector_id === true;
-  checks.decision_present = ["no_pattern_observed", "single_signal_observed", "extraction_pattern_observed"].includes(attestation.decision);
-  checks.no_intent_claim = attestation.intent_claim_made === false && attestation.non_claims.includes("no_intent_claim");
+  checks.decision_present = [
+    "no_pattern_observed",
+    "single_signal_observed",
+    "extraction_pattern_observed",
+  ].includes(attestation.decision);
+  checks.no_intent_claim =
+    attestation.intent_claim_made === false && attestation.non_claims.includes("no_intent_claim");
   checks.match_is_not_accusation = attestation.non_claims.includes("match_is_not_accusation");
   return { ok: Object.values(checks).every(Boolean), checks };
 }
@@ -1302,7 +1545,13 @@ async function main() {
   const pub = await rd("keys/stage3t-public-key.json");
   const detectorConfig = await rd("meta-set/detector-config.json");
   const set = await rd("meta-set/metadata-set.json");
-  const { ok, checks } = verifyExtraction({ attestation, sidecar, publicKeyPem: pub.public_key_pem, set, detectorConfig });
+  const { ok, checks } = verifyExtraction({
+    attestation,
+    sidecar,
+    publicKeyPem: pub.public_key_pem,
+    set,
+    detectorConfig,
+  });
   let reproduced = true;
   if (reproduce) {
     const { attestation: regenerated, result } = await deriveForVerify();
@@ -1312,16 +1561,26 @@ async function main() {
     checks.attestation_reproduces = stable(regenerated) === stable(committedAttestation);
     const sp = runExtractionSelfProof();
     checks.self_proof_passes = sp.summary.all_passed === true;
-    reproduced = checks.detector_result_reproduces && checks.attestation_reproduces && checks.self_proof_passes;
+    reproduced =
+      checks.detector_result_reproduces &&
+      checks.attestation_reproduces &&
+      checks.self_proof_passes;
   }
   console.log(JSON.stringify(checks, null, 2));
   if (process.argv.includes("--write")) {
     await writeFile(join(EV, "result", "verify-report.json"), stable(checks));
   }
-  if (!ok || !reproduced) { console.error("stage3t verify: FAIL"); process.exit(1); }
+  if (!ok || !reproduced) {
+    console.error("stage3t verify: FAIL");
+    process.exit(1);
+  }
   console.log("stage3t attestation verify: PASS");
 }
-if (import.meta.url === `file://${process.argv[1]}`) main().catch((e) => { console.error("stage3t verify:", e.message); process.exit(1); });
+if (import.meta.url === `file://${process.argv[1]}`)
+  main().catch((e) => {
+    console.error("stage3t verify:", e.message);
+    process.exit(1);
+  });
 ```
 
 - [ ] **Step 4: Sign + write self-proof evidence**
@@ -1350,7 +1609,13 @@ test("committed 3T attestation verifies (portable checks all true)", async () =>
   const pub = await rd("keys/stage3t-public-key.json");
   const detectorConfig = await rd("meta-set/detector-config.json");
   const set = await rd("meta-set/metadata-set.json");
-  const { ok, checks } = verifyExtraction({ attestation, sidecar, publicKeyPem: pub.public_key_pem, set, detectorConfig });
+  const { ok, checks } = verifyExtraction({
+    attestation,
+    sidecar,
+    publicKeyPem: pub.public_key_pem,
+    set,
+    detectorConfig,
+  });
   assert.equal(ok, true, JSON.stringify(checks));
   assert.equal(checks.meta_set_digest_binding, true);
   assert.equal(checks.detector_id_binding, true);
@@ -1362,7 +1627,13 @@ test("a tampered decision breaks the signature", async () => {
   const pub = await rd("keys/stage3t-public-key.json");
   const detectorConfig = await rd("meta-set/detector-config.json");
   const set = await rd("meta-set/metadata-set.json");
-  const { ok } = verifyExtraction({ attestation, sidecar, publicKeyPem: pub.public_key_pem, set, detectorConfig });
+  const { ok } = verifyExtraction({
+    attestation,
+    sidecar,
+    publicKeyPem: pub.public_key_pem,
+    set,
+    detectorConfig,
+  });
   assert.equal(ok, false);
 });
 
@@ -1373,7 +1644,13 @@ test("a meta-set with a swapped run breaks the digest binding", async () => {
   const detectorConfig = await rd("meta-set/detector-config.json");
   const set = await rd("meta-set/metadata-set.json");
   set.runs[0].capability_tag = "tampered_capability";
-  const { ok, checks } = verifyExtraction({ attestation, sidecar, publicKeyPem: pub.public_key_pem, set, detectorConfig });
+  const { ok, checks } = verifyExtraction({
+    attestation,
+    sidecar,
+    publicKeyPem: pub.public_key_pem,
+    set,
+    detectorConfig,
+  });
   assert.equal(checks.meta_set_digest_binding, false);
   assert.equal(ok, false);
 });
@@ -1394,6 +1671,7 @@ git commit -m "feat(3t): Ed25519 signer, two-tier verifier, signed committed evi
 ### Task 8: Audit scripts + smoke + check.sh wiring
 
 **Files:**
+
 - Create: `scripts/security-audit-llm-shield-stage3t.mjs`, `scripts/privacy-audit-llm-shield-stage3t.mjs`, `scripts/consistency-audit-llm-shield-stage3t.mjs`, `scripts/policy-drift-guard-llm-shield-stage3t.sh`, `scripts/smoke-llm-shield-stage3t.sh`
 - Modify: `scripts/check.sh` (add 3T smoke + helper-coverage steps after the 3S steps, ~line 1812)
 
@@ -1413,15 +1691,28 @@ const errors = [];
 const sp = runExtractionSelfProof();
 if (!sp.summary.all_passed) errors.push("self-proof failed");
 if (sp.summary.intent_claims_rendered !== 0) errors.push("intent claim rendered");
-async function walk(d) { const o=[]; for (const e of await readdir(d,{withFileTypes:true})){const p=join(d,e.name); if(e.isDirectory())o.push(...await walk(p)); else if((await stat(p)).isFile())o.push(p);} return o; }
+async function walk(d) {
+  const o = [];
+  for (const e of await readdir(d, { withFileTypes: true })) {
+    const p = join(d, e.name);
+    if (e.isDirectory()) o.push(...(await walk(p)));
+    else if ((await stat(p)).isFile()) o.push(p);
+  }
+  return o;
+}
 for (const f of await walk(EV)) {
   const lower = (await readFile(f, "utf8")).toLowerCase();
-  for (const w of FORBIDDEN_WORDING) if (lower.includes(w)) errors.push(`forbidden/named-lab wording in ${f}: ${w}`);
+  for (const w of FORBIDDEN_WORDING)
+    if (lower.includes(w)) errors.push(`forbidden/named-lab wording in ${f}: ${w}`);
 }
 const att = JSON.parse(await readFile(join(EV, "result", "attestation.json"), "utf8"));
-if (!att.rendered_summary.includes(SACRED_NON_CLAIM)) errors.push("sacred non-claim missing from attestation");
+if (!att.rendered_summary.includes(SACRED_NON_CLAIM))
+  errors.push("sacred non-claim missing from attestation");
 if (att.intent_claim_made !== false) errors.push("attestation made an intent claim");
-if (errors.length) { console.error("stage3t security: FAIL", JSON.stringify(errors)); process.exit(1); }
+if (errors.length) {
+  console.error("stage3t security: FAIL", JSON.stringify(errors));
+  process.exit(1);
+}
 console.log("stage3t security: PASS");
 ```
 
@@ -1433,9 +1724,25 @@ console.log("stage3t security: PASS");
 import { readFile, readdir, stat } from "node:fs/promises";
 import { join } from "node:path";
 const EV = "docs/research/llm-shield/evidence/stage-3t";
-const FORBIDDEN = ["BEGIN PRIVATE KEY", "raw_prompt", "raw_output", "raw_transcript", "ip_address", "api_key", "chain_of_thought_text"];
+const FORBIDDEN = [
+  "BEGIN PRIVATE KEY",
+  "raw_prompt",
+  "raw_output",
+  "raw_transcript",
+  "ip_address",
+  "api_key",
+  "chain_of_thought_text",
+];
 const EMAIL_RE = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i;
-async function walk(d) { const o=[]; for (const e of await readdir(d,{withFileTypes:true})){const p=join(d,e.name); if(e.isDirectory())o.push(...await walk(p)); else if((await stat(p)).isFile())o.push(p);} return o; }
+async function walk(d) {
+  const o = [];
+  for (const e of await readdir(d, { withFileTypes: true })) {
+    const p = join(d, e.name);
+    if (e.isDirectory()) o.push(...(await walk(p)));
+    else if ((await stat(p)).isFile()) o.push(p);
+  }
+  return o;
+}
 const findings = [];
 for (const f of await walk(EV)) {
   const c = await readFile(f, "utf8");
@@ -1443,9 +1750,17 @@ for (const f of await walk(EV)) {
   if (EMAIL_RE.test(c)) findings.push({ f, t: "email_like_value" });
 }
 const set = JSON.parse(await readFile(join(EV, "meta-set", "metadata-set.json"), "utf8"));
-if (set.set_provenance !== "synthetic_reference" || set.live_traffic_used !== false || set.identity_data_used !== false || set.raw_content_used !== false)
+if (
+  set.set_provenance !== "synthetic_reference" ||
+  set.live_traffic_used !== false ||
+  set.identity_data_used !== false ||
+  set.raw_content_used !== false
+)
   findings.push({ f: "metadata-set.json", t: "provenance_not_synthetic_offline" });
-if (findings.length) { console.error("stage3t privacy: FAIL", JSON.stringify(findings)); process.exit(1); }
+if (findings.length) {
+  console.error("stage3t privacy: FAIL", JSON.stringify(findings));
+  process.exit(1);
+}
 console.log("stage3t privacy: PASS");
 ```
 
@@ -1469,13 +1784,17 @@ const set = await rd("meta-set/metadata-set.json");
 const cfg = await rd("meta-set/detector-config.json");
 const att = await rd("result/attestation.json");
 if (att.meta_set_digest !== metaSetDigest(set)) errors.push("meta_set_digest mismatch");
-if (att.family_map_digest !== familyMapDigest()) errors.push("attestation family_map_digest mismatch");
+if (att.family_map_digest !== familyMapDigest())
+  errors.push("attestation family_map_digest mismatch");
 if (cfg.family_map_digest !== familyMapDigest()) errors.push("config family_map_digest mismatch");
 const result = runDetector(set);
 const committed = await rd("result/expected-detector-result.json");
 if (stable(result) !== stable(committed)) errors.push("detector result does not reproduce");
 if (att.decision !== result.decision) errors.push("attestation/result decision mismatch");
-if (errors.length) { console.error("stage3t consistency: FAIL", JSON.stringify(errors)); process.exit(1); }
+if (errors.length) {
+  console.error("stage3t consistency: FAIL", JSON.stringify(errors));
+  process.exit(1);
+}
 console.log("stage3t consistency: PASS");
 ```
 
@@ -1588,6 +1907,7 @@ git commit -m "test(3t): audits, policy-drift guard, smoke, and check.sh wiring"
 ### Task 9: Docs + full-stage verify + finish
 
 **Files:**
+
 - Create: `docs/research/llm-shield/LLM_SHIELD_STAGE_3T_CAPABILITY_EXTRACTION_ATTESTATION.md`, `docs/research/llm-shield/STAGE_3T_CLOSEOUT.md`, `STAGE_3T_THREAT_MODEL.md`, `STAGE_3T_VALIDATION_MATRIX.md`, `STAGE_3T_REVIEWER_CHECKLIST.md`, `docs/research/llm-shield/evidence/stage-3t/README.md`
 
 **Interfaces:** Documentation only.
@@ -1599,11 +1919,13 @@ Write the five docs + evidence README. The main doc leads with the crown sentenc
 - [ ] **Step 2: Full-stage verification**
 
 Run each and confirm green:
+
 ```bash
 bash scripts/smoke-llm-shield-stage3t.sh
 node tools/simurgh-extraction/verify-stage3t-attestation.mjs --reproduce
 npm test
 ```
+
 Expected: smoke passes; verify all-true + `detector_reproduces:true`; `npm test` shows the new extraction tests passing and the suite total increased (no regressions). Confirm the five pure libs report 100% function coverage via the Task 8 helper-coverage command.
 
 - [ ] **Step 3: Prettier + tree-clean check**
@@ -1626,6 +1948,7 @@ Announce and use **superpowers:finishing-a-development-branch** to push `main-st
 ## Self-Review
 
 **1. Spec coverage:**
+
 - Crown + final sign-off sentence → Task 9 docs. ✔
 - Offline/tooling-only/policy-drift → Task 8 guard + Global Constraints. ✔
 - Metadata-only wall + provenance flags → Task 1 validation + Task 8 privacy audit. ✔

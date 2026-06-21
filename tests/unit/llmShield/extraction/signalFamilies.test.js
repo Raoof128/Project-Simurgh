@@ -24,9 +24,14 @@ test("signalToFamily maps members and returns null for unknown", () => {
 
 test("distinctFamilies counts FAMILIES not booleans and sorts by FAMILY_ORDER", () => {
   // both fired signals are structural → ONE family
-  assert.deepEqual(distinctFamilies(["template_prefix_cluster", "repetition_cluster"]), ["structural"]);
+  assert.deepEqual(distinctFamilies(["template_prefix_cluster", "repetition_cluster"]), [
+    "structural",
+  ]);
   // two families, returned in FAMILY_ORDER regardless of input order
-  assert.deepEqual(distinctFamilies(["cot_elicitation", "repetition_cluster"]), ["structural", "behavioural"]);
+  assert.deepEqual(distinctFamilies(["cot_elicitation", "repetition_cluster"]), [
+    "structural",
+    "behavioural",
+  ]);
 });
 
 test("distinctFamilies ignores unknown signals", () => {

@@ -42,13 +42,25 @@ test("validateMetaSet accepts a clean synthetic set", () => {
 });
 
 test("validateMetaSet rejects wrong provenance", () => {
-  assert.throws(() => validateMetaSet(set([row("a")], { set_provenance: "live" })), /meta_set_provenance_invalid/);
+  assert.throws(
+    () => validateMetaSet(set([row("a")], { set_provenance: "live" })),
+    /meta_set_provenance_invalid/
+  );
 });
 
 test("validateMetaSet rejects live/identity/raw flags", () => {
-  assert.throws(() => validateMetaSet(set([row("a")], { live_traffic_used: true })), /meta_set_provenance_invalid/);
-  assert.throws(() => validateMetaSet(set([row("a")], { identity_data_used: true })), /meta_set_provenance_invalid/);
-  assert.throws(() => validateMetaSet(set([row("a")], { raw_content_used: true })), /meta_set_provenance_invalid/);
+  assert.throws(
+    () => validateMetaSet(set([row("a")], { live_traffic_used: true })),
+    /meta_set_provenance_invalid/
+  );
+  assert.throws(
+    () => validateMetaSet(set([row("a")], { identity_data_used: true })),
+    /meta_set_provenance_invalid/
+  );
+  assert.throws(
+    () => validateMetaSet(set([row("a")], { raw_content_used: true })),
+    /meta_set_provenance_invalid/
+  );
 });
 
 test("validateMetaSet rejects duplicate run_id", () => {
@@ -56,7 +68,10 @@ test("validateMetaSet rejects duplicate run_id", () => {
 });
 
 test("validateMetaSet rejects an unknown row field", () => {
-  assert.throws(() => validateMetaSet(set([row("a", { raw_prompt: "hello" })])), /forbidden_metadata_field/);
+  assert.throws(
+    () => validateMetaSet(set([row("a", { raw_prompt: "hello" })])),
+    /forbidden_metadata_field/
+  );
 });
 
 test("validateMetaSet rejects an empty run set", () => {
