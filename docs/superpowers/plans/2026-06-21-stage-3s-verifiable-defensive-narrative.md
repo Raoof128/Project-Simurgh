@@ -768,7 +768,11 @@ export function buildVerifiedArtifact({ digest, modelSlots }) {
     type: "simurgh.defensive_narrative.verified_artifact.v1",
     evidence_digest_hash: sha256Hex(canonicalJson(digest)),
     model_slots_digest: modelSlots.source.model_slots_digest,
+    // Polish: claim_check_passed means "the checking process completed and unsafe slots
+    // were excluded" — NOT "every model claim passed". all_slots_verified makes that explicit.
+    claim_check_completed: true,
     claim_check_passed: true,
+    all_slots_verified: v.rejected.length === 0,
     verified_slots: v.verified.length,
     unsupported_slots_rejected: v.rejected.filter((r) => r.reason === "unsupported_slot").length,
     narrative_claim_conflicts_rendered: 0,
@@ -1129,8 +1133,17 @@ if [ -n "$BASE" ] && changed="$(git diff --name-only "${BASE}...HEAD" 2>/dev/nul
   fi
   echo "stage3s policy-drift: PASS (no src/llmShield change in ${BASE}...HEAD)"
 else
-  echo "stage3s policy-drift: WARN — no base ref resolved; not verified here (verified on local + post-merge)."
-  echo "stage3s policy-drift: PASS (unverified — no base ref)"
+  # Fix #2: no base ref resolved. Fail closed — never pass unverified, especially in CI.
+  wt="$(git diff --name-only HEAD -- src/llmShield 2>/dev/null; git status --porcelain src/llmShield 2>/dev/null)"
+  if grep -q 'src/llmShield' <<<"$wt"; then
+    echo "stage3s policy-drift: FAIL — src/llmShield changed (working tree) and no base ref to verify the branch range"
+    exit 1
+  fi
+  if [ "${CI:-}" = "true" ]; then
+    echo "stage3s policy-drift: FAIL — no base ref resolved in CI; cannot verify zero src/llmShield change (fail-closed)"
+    exit 1
+  fi
+  echo "stage3s policy-drift: WARN — no base ref resolved locally; the branch range is verified on PR/post-merge CI"
 fi
 ```
 
@@ -1142,7 +1155,9 @@ fi
 import { readdir, readFile, stat } from "node:fs/promises";
 import { join } from "node:path";
 const EV = "docs/research/llm-shield/evidence/stage-3s";
-const FORBIDDEN = ["BEGIN PRIVATE KEY", "raw_transcript", "raw_provider_output", "typed_content", "window_title"];
+// Fix #1: detect RAW leaked data, never the safe privacy boolean field NAMES
+// (the digest legitimately contains typed_content_captured:false, raw_window_titles_captured:false).
+const FORBIDDEN = ["BEGIN PRIVATE KEY", "raw_transcript", "raw_provider_output", "raw_typed_content", "raw_window_title_value", "process_name:", "window_title:"];
 async function walk(d){const o=[];for(const e of await readdir(d,{withFileTypes:true})){const p=join(d,e.name);if(e.isDirectory())o.push(...(await walk(p)));else if((await stat(p)).isFile())o.push(p);}return o;}
 const findings = [];
 for (const f of await walk(EV)) { const c = await readFile(f, "utf8"); for (const t of FORBIDDEN) if (c.includes(t)) findings.push({ f, t }); }
@@ -1220,14 +1235,15 @@ export SIMURGH_LLM_SHIELD_SECRET="${SIMURGH_LLM_SHIELD_SECRET:-smoke-llm-shield-
 node tools/simurgh-narrative/simurgh-narrative.mjs build
 node tools/simurgh-narrative/simurgh-narrative.mjs verify-hashes
 node tools/simurgh-narrative/verify-stage3s-narrative.mjs
-node scripts/policy-drift-guard-llm-shield-stage3s.sh
+bash scripts/policy-drift-guard-llm-shield-stage3s.sh
 node scripts/privacy-audit-llm-shield-stage3s.mjs
 node scripts/consistency-audit-llm-shield-stage3s.mjs
 node scripts/security-audit-llm-shield-stage3s.mjs
 echo "stage3s smoke: passed"
 ```
 
-Note: `policy-drift-guard-llm-shield-stage3s.sh` is bash; call it with `bash`. Fix the smoke line to `bash scripts/policy-drift-guard-llm-shield-stage3s.sh`.
+Fix #4 (confirmed): `gatewayReceipt.js` emits the canonical field `output_hash`; receipt-binding uses `receipt.output_hash` only — no permissive fallback.
+Fix #5 (semantics): `source_inputs[].digest` is a file-byte sha256 (`sha256Hex(content)`), NOT a canonical-object digest; the consistency audit re-hashes the file bytes. Documented so reviewers know which semantics apply.
 
 - [ ] **Step 6: Make executable + run**
 
