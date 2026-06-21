@@ -14,7 +14,7 @@
 #                             (both skipped under --quick)
 #   12    Platform & device . Stage 2.1–2.8 integrity/daemon/scanner, Swift &
 #                             Linux-Rust nodes, voting & banking pilots
-#   13    LLM Shield ........ Stage 3A–3P containment pipeline + per-stage audits
+#   13    LLM Shield ........ Stage 3A–3Q containment pipeline + per-stage audits
 #   14    Git status sanity
 #
 # Usage:
@@ -1382,12 +1382,12 @@ else
   tail -100 "$LOG_DIR/banking-full-e2e-smoke.log"
 fi
 
-# ── 13. LLM Shield 3A–3P containment pipeline ────────────────────────────────
+# ── 13. LLM Shield 3A–3Q containment pipeline ────────────────────────────────
 # Input firewall (3A) → adversarial benchmark (3B) → containment (3D) → gateway
 # (3E) → benchmark/shadow (3F/3G) → AgentDojo harness (3H) → utility/eval (3I/3J)
 # → adaptive readiness (3K) → reference containment (3L) → attestation (3M) →
 # claim-checked ledger (3N) → BYO-gateway benchmark (3O) → cross-defence
-# attestation (3P). Each stage smoke also
+# attestation (3P) → temporal registry + regression diff (3Q). Each stage smoke also
 # runs its own security/privacy/consistency audits; helper libs are gated at
 # 100% function coverage.
 step "LLM Shield 3A input smoke"
@@ -1735,6 +1735,31 @@ if node --test --experimental-test-coverage \
 else
   fail "LLM Shield 3P cross-defence helper coverage"
   tail -100 "$LOG_DIR/llm-shield-stage3p-helper-coverage.log"
+fi
+
+step "LLM Shield 3Q attestation registry + regression diff"
+if scripts/smoke-llm-shield-stage3q.sh > "$LOG_DIR/llm-shield-stage3q-smoke.log" 2>&1; then
+  pass "LLM Shield 3Q attestation registry + regression diff"
+else
+  fail "LLM Shield 3Q attestation registry + regression diff"
+  tail -80 "$LOG_DIR/llm-shield-stage3q-smoke.log"
+fi
+
+step "LLM Shield 3Q temporal helper coverage"
+if node --test --experimental-test-coverage \
+  --test-coverage-include=tools/simurgh-temporal/temporalLib.mjs \
+  --test-coverage-include=tools/simurgh-temporal/registryChain.mjs \
+  --test-coverage-include=tools/simurgh-temporal/selfProof.mjs \
+  --test-coverage-functions=100 \
+  tests/unit/llmShield/temporal/temporalLib.test.js \
+  tests/unit/llmShield/temporal/registryChain.test.js \
+  tests/unit/llmShield/temporal/temporalSelfProof.test.js \
+  tests/unit/llmShield/temporal/temporalVerify.test.js \
+  > "$LOG_DIR/llm-shield-stage3q-helper-coverage.log" 2>&1; then
+  pass "LLM Shield 3Q temporal helper coverage"
+else
+  fail "LLM Shield 3Q temporal helper coverage"
+  tail -100 "$LOG_DIR/llm-shield-stage3q-helper-coverage.log"
 fi
 
 step "LLM Shield 3E-core docker smoke (skips if no docker)"
