@@ -1,14 +1,17 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 use simurgh_daemon_linux::scanner::xwayland;
 
+// These tests inject DISPLAY explicitly via `scan_with_display` instead of
+// mutating the process-global `DISPLAY` env var. Cargo runs the tests in a
+// binary across parallel threads, so a shared env var races (one test setting
+// DISPLAY=":0" flips another's non-local-display assertion). Explicit injection
+// makes each case self-contained and deterministic.
+
 /// XWayland scanner inherits the X11 non-local-display refusal as a
 /// privacy/security boundary.
 #[test]
 fn xwayland_refuses_non_local_display() {
-    // Lock DISPLAY for the duration of this test. Other tests in this binary
-    // run sequentially by default (no #[tokio::test] threading here).
-    std::env::set_var("DISPLAY", "host.tld:0");
-    let s = xwayland::scan();
+    let s = xwayland::scan_with_display("host.tld:0");
     assert_eq!(s.scanner_state, "scanner_unavailable");
     assert_eq!(s.scanner_reason, "non_local_display");
     assert_eq!(s.coverage, "unknown");
@@ -20,8 +23,7 @@ fn xwayland_refuses_non_local_display() {
 /// what matters is the coverage label NEVER claims full Wayland parity.
 #[test]
 fn xwayland_local_display_emits_partial_coverage_or_unavailable() {
-    std::env::set_var("DISPLAY", ":0");
-    let s = xwayland::scan();
+    let s = xwayland::scan_with_display(":0");
     match s.scanner_state {
         "xwayland_detected" => {
             assert_eq!(s.coverage, "xwayland_partial");
@@ -42,8 +44,7 @@ fn xwayland_local_display_emits_partial_coverage_or_unavailable() {
 /// or portal_active (those are Wayland-portal-only fields).
 #[test]
 fn xwayland_output_carries_no_portal_fields() {
-    std::env::set_var("DISPLAY", ":0");
-    let s = xwayland::scan();
+    let s = xwayland::scan_with_display(":0");
     assert_eq!(s.portal_advertised, None);
     assert_eq!(s.portal_active, None);
 }

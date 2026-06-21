@@ -1,0 +1,14 @@
+{
+  "type": "simurgh.defensive_narrative.verified_artifact.v1",
+  "evidence_digest_hash": "sha256:305fc2362651f44bc0945c1539a158449482638999207737714f7abd52ed6c3d",
+  "model_slots_digest": "sha256:97de2e9338b630adec12068faea326cd0c5fa063e538d82c62aef84d4676c6e5",
+  "claim_check_completed": true,
+  "claim_check_passed": true,
+  "all_slots_verified": true,
+  "verified_slots": 1,
+  "unsupported_slots_rejected": 0,
+  "narrative_claim_conflicts_rendered": 0,
+  "narrative_claim_conflict_attempts": 0,
+  "automatic_finding_made": false,
+  "rendered_summary": "The audit chain verified end to end. This is not an automatic misconduct finding; it describes integrity signals for manual review. Raw pixels, typed/pasted content, audio, process names, and window titles were not captured."
+}

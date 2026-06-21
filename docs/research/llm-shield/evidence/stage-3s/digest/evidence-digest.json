@@ -1,0 +1,36 @@
+{
+  "type": "simurgh.defensive_narrative.evidence_digest.v1",
+  "session_hash": "sha256:fb4ea434a67a8137cb948db1f613194ef814abe02b4a30eab9b7ccf325653e73",
+  "source_inputs": [
+    {
+      "kind": "temporal_registry",
+      "path": "docs/research/llm-shield/evidence/stage-3q/registry/registry.json",
+      "digest": "sha256:90a01576bcc3d19c2d3eeef6c835e4a6d26e9803a64864b95ff37ea350f21768"
+    },
+    {
+      "kind": "cross_defence_catalogue",
+      "path": "docs/research/llm-shield/evidence/stage-3p/catalogue/attestation-catalogue.json",
+      "digest": "sha256:f52dbf4890bb59b07e7e1f3808341a60a42a21f33cfa433679d802148e0a1689"
+    }
+  ],
+  "audit_chain_valid": true,
+  "daemon_proof_counts": {
+    "valid": 0,
+    "missing": 0,
+    "replayed": 0
+  },
+  "gateway": {
+    "fallback_used": false,
+    "fallback_bypass_successes": 0,
+    "output_firewall_blocks": 0
+  },
+  "vca": {
+    "attestation_verified": true,
+    "claim_conflicts": 0
+  },
+  "privacy": {
+    "raw_pixels_captured": false,
+    "raw_window_titles_captured": false,
+    "typed_content_captured": false
+  }
+}

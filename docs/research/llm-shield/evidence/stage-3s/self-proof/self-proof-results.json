@@ -1,0 +1,115 @@
+{
+  "type": "simurgh.defensive_narrative.self_proof.v1",
+  "stage": "3S",
+  "fixtures": [
+    {
+      "fixture_id": "clean-supported-narrative",
+      "expected": {
+        "result": "ok",
+        "verifiedCount": 1
+      },
+      "observed": {
+        "result": "ok",
+        "verifiedCount": 1
+      },
+      "passed": true
+    },
+    {
+      "fixture_id": "unsupported-signal-claim",
+      "expected": {
+        "verified": 0,
+        "reason": "unsupported_slot"
+      },
+      "observed": {
+        "verified": 0,
+        "reason": "unsupported_slot"
+      },
+      "passed": true
+    },
+    {
+      "fixture_id": "severity-overclaim",
+      "expected": {
+        "verified": 0,
+        "reason": "unsupported_slot"
+      },
+      "observed": {
+        "verified": 0,
+        "reason": "unsupported_slot"
+      },
+      "passed": true
+    },
+    {
+      "fixture_id": "privacy-overclaim",
+      "expected": {
+        "verified": 0,
+        "reason": "narrative_claim_conflict"
+      },
+      "observed": {
+        "verified": 0,
+        "reason": "narrative_claim_conflict"
+      },
+      "passed": true
+    },
+    {
+      "fixture_id": "missing-evidence-ref",
+      "expected": {
+        "reason": "unsupported_slot"
+      },
+      "observed": {
+        "reason": "unsupported_slot"
+      },
+      "passed": true
+    },
+    {
+      "fixture_id": "field-value-conflict",
+      "expected": {
+        "reason": "narrative_claim_conflict",
+        "conflicts": 1
+      },
+      "observed": {
+        "reason": "narrative_claim_conflict",
+        "conflicts": 1
+      },
+      "passed": true
+    },
+    {
+      "fixture_id": "freeform-prose-injection",
+      "expected": {
+        "result": "schema_violation"
+      },
+      "observed": {
+        "result": "schema_violation"
+      },
+      "passed": true
+    },
+    {
+      "fixture_id": "manual-review-wall",
+      "expected": {
+        "hasReview": true,
+        "accusation": false
+      },
+      "observed": {
+        "hasReview": true,
+        "accusation": false
+      },
+      "passed": true
+    },
+    {
+      "fixture_id": "renderer-determinism",
+      "expected": {
+        "same": true
+      },
+      "observed": {
+        "same": true
+      },
+      "passed": true
+    }
+  ],
+  "summary": {
+    "narrative_claim_conflict_attempts": 2,
+    "narrative_claim_conflicts_rendered": 0,
+    "automatic_findings_rendered": 0,
+    "privacy_overclaims_rendered": 0,
+    "all_passed": true
+  }
+}

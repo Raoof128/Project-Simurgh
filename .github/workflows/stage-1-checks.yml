@@ -44,7 +44,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 1
+          # Full history so the policy-drift guards can resolve a real base ref
+          # (origin/main / merge-commit parent) and verify "zero src/llmShield
+          # change" for real. With fetch-depth:1 only the merge commit is present,
+          # so no base resolves: the lenient guards degrade to warn-pass and the
+          # fail-closed Stage 3S guard breaks the build. Full history fixes both.
+          fetch-depth: 0
 
       - name: Set up Node.js 22
         uses: actions/setup-node@v4
