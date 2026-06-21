@@ -37,8 +37,8 @@ live Fable opt-in only (measured_not_certified)
 dedicated Stage 3S Ed25519 key
 ```
 
-> **Stage 3S must not modify `src/llmShield/**`. The policy-drift guard fails if gateway,
-> firewall, receipt, audit, or provider code changes in this stage.\*\*
+> **Stage 3S must not modify `src/llmShield`.** The policy-drift guard fails if gateway,
+> firewall, receipt, audit, or provider code changes in this stage.
 
 ## Pipeline (four steps, two leashes)
 
