@@ -1,0 +1,31 @@
+{
+  "type": "simurgh.capability_extraction.detector_result.v2",
+  "detector_id": "stage3u_extraction_detector_v2",
+  "previous_detector_id": "stage3t_frozen_detector_v1",
+  "meta_set_digest": "sha256:86ed5b25cb97049a6537d6e38afe686f09f2b18b87eda5e33e7744d07da09b16",
+  "matched": {
+    "repetition_cluster": false,
+    "template_prefix_cluster": true,
+    "cot_elicitation": false,
+    "capability_targeting": false,
+    "task_taxonomy_repeat": false,
+    "hydra_cluster": false,
+    "volume_burst": false,
+    "high_request_count": true
+  },
+  "matched_strong_families": ["structural"],
+  "matched_contextual_families": ["volume"],
+  "strong_family_count": 1,
+  "contextual_family_count": 1,
+  "decision": "single_signal_observed",
+  "attestation_claim": "manual_review_only",
+  "non_claims": [
+    "no_intent_claim",
+    "no_attribution_claim",
+    "no_complete_distillation_prevention_claim",
+    "no_general_fp_fn_claim",
+    "no_live_traffic_claim",
+    "metadata_only",
+    "match_is_not_accusation"
+  ]
+}

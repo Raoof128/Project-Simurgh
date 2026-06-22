@@ -1,0 +1,4 @@
+{
+  "note": "Human-readable mirror of METADATA_GRAMMAR in tools/simurgh-extraction/metadataGrammar.mjs. The binding digest is metadata_grammar_digest in detector-config.json (and the attestation).",
+  "schema": "simurgh.capability_extraction.metadata_grammar.v2"
+}

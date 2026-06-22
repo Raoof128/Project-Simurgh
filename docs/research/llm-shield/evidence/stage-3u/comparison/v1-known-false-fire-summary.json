@@ -1,0 +1,8 @@
+{
+  "note": "Detector v1 (3T) escalated these to extraction; v2 contextualises volume.",
+  "v1_false_fire_classes": [
+    "structural_plus_volume",
+    "targeting_plus_volume",
+    "behavioural_plus_volume"
+  ]
+}

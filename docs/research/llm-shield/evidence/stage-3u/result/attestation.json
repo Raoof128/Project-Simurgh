@@ -1,0 +1,56 @@
+{
+  "schema": "simurgh.capability_extraction.attestation.v2",
+  "stage": "3U",
+  "detector_id": "stage3u_extraction_detector_v2",
+  "previous_detector_id": "stage3t_frozen_detector_v1",
+  "hardening_reason": "red_team_a10_a9",
+  "family_map_digest": "sha256:caf0299f6ade6e0cad163568e8cbaaffa1861a57f25ffb1c4f3f78ce5309c491",
+  "metadata_grammar_digest": "sha256:af2762c93a45874ffbc48728ccafe3223708265b69b83ef5792d66dd97de91c9",
+  "meta_set_digest": "sha256:07a509a5fc5067bc7cabfeef248d173095605362f8bd035a27a5e877164c81c6",
+  "detector_result_digest": "sha256:37e898bbba6b3e50b056bd0bb64be97f83883e2193c510cfca758f965ed911d5",
+  "redteam_regression_meta_set_digest": "sha256:86ed5b25cb97049a6537d6e38afe686f09f2b18b87eda5e33e7744d07da09b16",
+  "redteam_regression_result_digest": "sha256:769edf3c3d0ddd3b931457496352016f01c51f5ca6a8a5f63c78c314dc99e289",
+  "matched": {
+    "repetition_cluster": true,
+    "template_prefix_cluster": false,
+    "cot_elicitation": true,
+    "capability_targeting": true,
+    "task_taxonomy_repeat": false,
+    "hydra_cluster": false,
+    "volume_burst": false,
+    "high_request_count": false
+  },
+  "matched_strong_families": ["structural", "behavioural", "targeting"],
+  "matched_contextual_families": [],
+  "strong_family_count": 3,
+  "contextual_family_count": 0,
+  "decision": "extraction_pattern_observed",
+  "attestation_claim": "manual_review_recommended",
+  "red_team_hardening": {
+    "a10_volume_contextualised": true,
+    "a9_metadata_grammar_enforced": true,
+    "benign_volume_escalations": 0,
+    "metadata_payload_acceptance_failures": 0,
+    "redteam_regression_decision": "single_signal_observed"
+  },
+  "non_claims": [
+    "no_intent_claim",
+    "no_attribution_claim",
+    "no_complete_distillation_prevention_claim",
+    "no_general_fp_fn_claim",
+    "no_live_traffic_claim",
+    "metadata_only",
+    "match_is_not_accusation"
+  ],
+  "known_limitations": [
+    "any_two_strong_families_can_co_occur_in_benign_heavy_use",
+    "benign_mono_task_plus_shared_template_can_present_two_strong_families",
+    "hash_fields_are_opaque_256bit_slots_verifier_cannot_confirm_preimage",
+    "dilution_can_avoid_thresholds",
+    "synthetic_reference_set_only",
+    "not_a_live_gateway_detector",
+    "not_a_general_accuracy_benchmark"
+  ],
+  "rendered_summary": "Matched strong families: structural, behavioural, targeting. Matched contextual families: none. Decision: extraction_pattern_observed because at least two strong families matched. A detector match is not an accusation. It is a reproducible metadata-pattern result for manual review.",
+  "intent_claim_made": false
+}
