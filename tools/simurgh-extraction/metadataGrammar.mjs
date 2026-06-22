@@ -21,7 +21,15 @@ export const METADATA_GRAMMAR = deepFreeze({
   prompt_template_hash: { type: "regex", pattern: HASH },
   task_family: {
     type: "enum",
-    values: ["code_generation", "data_analysis", "summarisation", "translation", "qa", "planning", "other"],
+    values: [
+      "code_generation",
+      "data_analysis",
+      "summarisation",
+      "translation",
+      "qa",
+      "planning",
+      "other",
+    ],
   },
   capability_tag: {
     type: "enum",
@@ -47,9 +55,11 @@ export function validateRowGrammar(row) {
     if (rule.type === "boolean") {
       if (typeof v !== "boolean") throw new Error("metadata_grammar_violation");
     } else if (rule.type === "enum") {
-      if (typeof v !== "string" || !rule.values.includes(v)) throw new Error("metadata_grammar_violation");
+      if (typeof v !== "string" || !rule.values.includes(v))
+        throw new Error("metadata_grammar_violation");
     } else if (rule.type === "regex") {
-      if (typeof v !== "string" || !new RegExp(rule.pattern).test(v)) throw new Error("metadata_grammar_violation");
+      if (typeof v !== "string" || !new RegExp(rule.pattern).test(v))
+        throw new Error("metadata_grammar_violation");
     }
   }
   return true;

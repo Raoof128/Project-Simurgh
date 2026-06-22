@@ -36,7 +36,7 @@ found — both in detector semantics and metadata validation, not in the cryptog
   `targeting + volume → extraction_pattern_observed`. Those occur in normal power-user
   behaviour (shared boilerplate template; single-capability workload; burst window). This
   did not break the attestation; it broke the strength of the benign-silence story.
-- **A9 (MEDIUM):** `validateMetaSet` whitelisted field *names* but accepted arbitrary
+- **A9 (MEDIUM):** `validateMetaSet` whitelisted field _names_ but accepted arbitrary
   free-text inside allowed string fields (`task_family`, `capability_tag`, `*_bucket`,
   `time_bucket`), so raw prompt-like payloads could hide inside a tag while passing schema
   validation. Metadata-only was a convention, not a grammar.
@@ -47,12 +47,12 @@ found — both in detector semantics and metadata validation, not in the cryptog
 
 3U fixes the **volume false-fire class only.** It does **NOT** make benign heavy use safe
 in general. A benign mono-task power user with a shared template can still present two
-*strong* families — e.g. a developer who always codes with one boilerplate trips
+_strong_ families — e.g. a developer who always codes with one boilerplate trips
 `structural` (template cluster) + `targeting` (capability dominance) = 2 strong families →
 `extraction_pattern_observed`, with no volume involved.
 
-Therefore the 3U claim is precisely *"volume can no longer act as a corroborating family"*
-— never *"benign heavy use no longer escalates."* This limitation is named explicitly in
+Therefore the 3U claim is precisely _"volume can no longer act as a corroborating family"_
+— never _"benign heavy use no longer escalates."_ This limitation is named explicitly in
 the attestation `known_limitations[]`, the README, and the closeout. Naming it ourselves is
 the credibility move; hiding it would re-earn the A10 critique under a new number.
 
@@ -105,12 +105,12 @@ the credibility move; hiding it would re-earn the A10 critique under a new numbe
 | volume       | **contextual** | volume_burst, high_request_count            |
 
 `volume` is contextual because high volume is common in benign heavy use (CI jobs, batch
-workflows, translators, researchers, accessibility flows). It can raise review *context*
+workflows, translators, researchers, accessibility flows). It can raise review _context_
 but can never independently corroborate extraction.
 
-Signal-matching thresholds are unchanged from 3T (frozen constants: CLUSTER_MIN 3,
+Signal-matching thresholds are unchanged from 3T (frozen constants: CLUSTER*MIN 3,
 DOMINANCE 0.6, COT_MAJORITY 0.5, VOLUME_BURST_FRACTION 0.6, HIGH_REQUEST_COUNT 10,
-HYDRA_MIN_ACTORS 3). Only the *decision* changes.
+HYDRA_MIN_ACTORS 3). Only the \_decision* changes.
 
 ### Total decision function (frozen, versioned)
 
@@ -124,16 +124,16 @@ HYDRA_MIN_ACTORS 3). Only the *decision* changes.
 `extraction_pattern_observed` requires **≥2 distinct STRONG families**. Volume never counts
 toward the extraction threshold.
 
-| Pattern                          | v1 (3T)   | v2 (3U)       |
-| -------------------------------- | --------- | ------------- |
-| volume only                      | single    | single        |
-| structural only                  | single    | single        |
-| structural + volume              | extraction| **single**    |
-| targeting + volume               | extraction| **single**    |
-| behavioural + volume             | extraction| **single**    |
-| structural + behavioural         | extraction| extraction    |
-| targeting + coordination         | extraction| extraction    |
-| behavioural + targeting + volume | extraction| extraction    |
+| Pattern                          | v1 (3T)    | v2 (3U)    |
+| -------------------------------- | ---------- | ---------- |
+| volume only                      | single     | single     |
+| structural only                  | single     | single     |
+| structural + volume              | extraction | **single** |
+| targeting + volume               | extraction | **single** |
+| behavioural + volume             | extraction | **single** |
+| structural + behavioural         | extraction | extraction |
+| targeting + coordination         | extraction | extraction |
+| behavioural + targeting + volume | extraction | extraction |
 
 ---
 
@@ -152,11 +152,11 @@ CLI/sign/verify exercised by subprocess smoke.
   - `actor_cluster_hash` / `session_cluster_hash` / `normalized_prompt_hash` /
     `prompt_template_hash`: `^sha256:[0-9a-f]{64}$`
   - `task_family`: enum `{code_generation, data_analysis, summarisation, translation, qa,
-    planning, other}`
+planning, other}`
   - `capability_tag`: enum `{tool_use, coding, reasoning, translation, summarisation,
-    general}`
+general}`
   - `input_tokens_bucket` / `output_tokens_bucket`: enum `{0-1k, 1k-2k, 2k-4k, 4k-8k,
-    8k-plus}`
+8k-plus}`
   - `time_bucket`: `^bucket_[0-9]{3}$`
   - `cot_elicitation_flag` / `tool_use_request_shape`: boolean
 - **`metaSetV2.mjs`** — `META_SET_SCHEMA_V2 = "simurgh.capability_extraction.meta_set.v2"`,
@@ -170,26 +170,28 @@ CLI/sign/verify exercised by subprocess smoke.
   `strong_family_count`, `contextual_family_count`).
 - **`rendererV2.mjs`** — `SACRED_NON_CLAIM`, `FORBIDDEN_WORDING`,
   `renderAttestationProseV2(result)` → prose that names strong vs contextual families and
-  the *reason* for the decision (see §6), appends the sacred non-claim, throws
+  the _reason_ for the decision (see §6), appends the sacred non-claim, throws
   `intent_language_rejected` on forbidden wording.
 - **`selfProofV2.mjs`** — `runExtractionSelfProofV2()` with the fixtures in §8.
 - **`simurgh-extraction-v2.mjs`** — CLI `build [--update] | hash | verify | write-hashes |
-  verify-hashes` over `stage-3u/` (same determinism discipline as 3T: build/verify compare
+verify-hashes` over `stage-3u/` (same determinism discipline as 3T: build/verify compare
   via `stable()`; `write-hashes` runs AFTER prettier).
 - **`sign-3u-attestation.mjs`** — local-only signer, `SIMURGH_3U_PRIVATE_KEY_PATH` default
   `~/.simurgh/3u-ed25519.pem` (mode 0600, never committed); dedicated 3U key.
 - **`verify-stage3u-attestation.mjs`** — `verifyExtractionV2({attestation, sidecar,
-  publicKeyPem, set, detectorConfig})` two-tier (§13).
+publicKeyPem, set, detectorConfig})` two-tier (§13).
 
 ## 6. rendererV2 prose (the fix made visible)
 
 Extraction case:
+
 > Matched strong families: structural, behavioural. Matched contextual families: volume.
 > Decision: extraction_pattern_observed because at least two strong families matched. A
 > detector match is not an accusation. It is a reproducible metadata-pattern result for
 > manual review.
 
 A10 regression case:
+
 > Matched strong families: structural. Matched contextual families: volume. Decision:
 > single_signal_observed because volume is contextual and cannot independently corroborate.
 > A detector match is not an accusation. It is a reproducible metadata-pattern result for
@@ -210,8 +212,11 @@ A10 regression case:
     "2_or_more_strong_any_contextual": "extraction_pattern_observed"
   },
   "family_strength": {
-    "structural": "strong", "behavioural": "strong", "targeting": "strong",
-    "coordination": "strong", "volume": "contextual"
+    "structural": "strong",
+    "behavioural": "strong",
+    "targeting": "strong",
+    "coordination": "strong",
+    "volume": "contextual"
   },
   "threshold_change_requires_new_detector_id": true,
   "family_strength_change_requires_new_detector_id": true,
@@ -223,32 +228,33 @@ A10 regression case:
 
 ## 8. Self-proof fixtures (§ regression invariant)
 
-| Fixture                                             | Expected                                            |
-| --------------------------------------------------- | --------------------------------------------------- |
-| benign-heavy-power-user                             | not extraction                                      |
-| benign-repetition-only                              | single_signal_observed                              |
-| benign-volume-only                                  | single_signal_observed                              |
-| benign-targeting-only                               | single_signal_observed                              |
-| **benign-template-plus-volume** (A10)               | single_signal_observed (not extraction)             |
-| **benign-single-capability-plus-volume** (A10)      | single_signal_observed (not extraction)             |
-| **benign-behavioural-plus-volume** (A10)            | single_signal_observed (not extraction)             |
-| structural-double-count-trap                        | structural family count = 1                         |
-| extraction-structural-plus-behavioural              | extraction_pattern_observed                         |
-| extraction-targeting-plus-coordination              | extraction_pattern_observed                         |
-| extraction-behavioural-plus-targeting-plus-volume   | extraction_pattern_observed                         |
-| **strong-plus-strong-benign-collision** (R1 honesty)| extraction_pattern_observed — documents that v2 still escalates benign mono-task+template; asserts the known limitation is real, not hidden |
-| **metadata-payload-in-capability-tag-rejected** (A9)| rejected                                            |
-| **metadata-payload-in-task-family-rejected** (A9)   | rejected                                            |
-| **metadata-payload-in-bucket-rejected** (A9)        | rejected                                            |
-| **invalid-hash-value-rejected** (A9)                | rejected                                            |
-| **full-timestamp-time-bucket-rejected** (A9)        | rejected                                            |
-| threshold-version-lock                              | THRESHOLD_STRONG == 2 && id == v2                   |
-| family-strength-version-lock                        | volume is contextual (not strong) in frozen config  |
-| intent-language-rejected                            | no accusatory wording renders                       |
-| duplicate-run-id-rejected                           | rejected                                            |
-| decision-reproduction                               | byte-identical result twice                         |
+| Fixture                                              | Expected                                                                                                                                    |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| benign-heavy-power-user                              | not extraction                                                                                                                              |
+| benign-repetition-only                               | single_signal_observed                                                                                                                      |
+| benign-volume-only                                   | single_signal_observed                                                                                                                      |
+| benign-targeting-only                                | single_signal_observed                                                                                                                      |
+| **benign-template-plus-volume** (A10)                | single_signal_observed (not extraction)                                                                                                     |
+| **benign-single-capability-plus-volume** (A10)       | single_signal_observed (not extraction)                                                                                                     |
+| **benign-behavioural-plus-volume** (A10)             | single_signal_observed (not extraction)                                                                                                     |
+| structural-double-count-trap                         | structural family count = 1                                                                                                                 |
+| extraction-structural-plus-behavioural               | extraction_pattern_observed                                                                                                                 |
+| extraction-targeting-plus-coordination               | extraction_pattern_observed                                                                                                                 |
+| extraction-behavioural-plus-targeting-plus-volume    | extraction_pattern_observed                                                                                                                 |
+| **strong-plus-strong-benign-collision** (R1 honesty) | extraction_pattern_observed — documents that v2 still escalates benign mono-task+template; asserts the known limitation is real, not hidden |
+| **metadata-payload-in-capability-tag-rejected** (A9) | rejected                                                                                                                                    |
+| **metadata-payload-in-task-family-rejected** (A9)    | rejected                                                                                                                                    |
+| **metadata-payload-in-bucket-rejected** (A9)         | rejected                                                                                                                                    |
+| **invalid-hash-value-rejected** (A9)                 | rejected                                                                                                                                    |
+| **full-timestamp-time-bucket-rejected** (A9)         | rejected                                                                                                                                    |
+| threshold-version-lock                               | THRESHOLD_STRONG == 2 && id == v2                                                                                                           |
+| family-strength-version-lock                         | volume is contextual (not strong) in frozen config                                                                                          |
+| intent-language-rejected                             | no accusatory wording renders                                                                                                               |
+| duplicate-run-id-rejected                            | rejected                                                                                                                                    |
+| decision-reproduction                                | byte-identical result twice                                                                                                                 |
 
 Summary counters (all `0`, `all_passed: true`):
+
 ```json
 {
   "benign_escalation_failures": 0,
@@ -267,7 +273,7 @@ Summary counters (all `0`, `all_passed: true`):
 ```
 
 > Note: `strong-plus-strong-benign-collision` is the R1 honesty fixture. It is NOT a
-> failure — it asserts that v2 *still* escalates a benign mono-task+shared-template set
+> failure — it asserts that v2 _still_ escalates a benign mono-task+shared-template set
 > (structural+targeting), proving the documented limitation is faithfully reported rather
 > than silently "fixed." It does not increment any failure counter.
 
@@ -300,6 +306,7 @@ benign_volume_escalations:0, metadata_payload_acceptance_failures:0}`,
 `non_claims[]`, `known_limitations[]`, `rendered_summary`.
 
 `known_limitations[]` MUST include:
+
 ```
 "dilution_can_avoid_thresholds"
 "synthetic_reference_set_only"
@@ -332,7 +339,7 @@ all counters 0; attestation regenerates byte-identically.
 - **v1-freeze guard** (`scripts/v1-freeze-guard-llm-shield-stage3u.sh`, wired into the
   smoke + check.sh): FAILS if any Stage 3T v1 module
   (`tools/simurgh-extraction/{metaSet,signalFamilies,detector,renderer,selfProof,
-  simurgh-extraction,sign-3t-attestation,verify-stage3t-attestation}.mjs`) changed in the
+simurgh-extraction,sign-3t-attestation,verify-stage3t-attestation}.mjs`) changed in the
   branch range, or if any `docs/research/llm-shield/evidence/stage-3t/**` artifact changed;
   and runs `node tools/simurgh-extraction/verify-stage3t-attestation.mjs --reproduce` to
   prove the 3T historical evidence still verifies. Protects the "we did not rewrite

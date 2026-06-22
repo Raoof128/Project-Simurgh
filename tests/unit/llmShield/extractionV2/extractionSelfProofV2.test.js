@@ -44,7 +44,9 @@ test("the A10 regressions explicitly do NOT escalate", () => {
 });
 
 test("the documented limitation fixture DOES escalate (named, not hidden)", () => {
-  const f = runExtractionSelfProofV2().fixtures.find((x) => x.name === "strong-plus-strong-benign-collision");
+  const f = runExtractionSelfProofV2().fixtures.find(
+    (x) => x.name === "strong-plus-strong-benign-collision"
+  );
   assert.ok(f && f.passed);
   assert.equal(f.detail, "extraction_pattern_observed");
 });

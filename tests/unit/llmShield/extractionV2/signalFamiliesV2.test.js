@@ -21,7 +21,10 @@ test("family map + member arrays are deep-frozen", () => {
 
 test("volume is the only contextual family", () => {
   assert.deepEqual([...CONTEXTUAL_FAMILIES], ["volume"]);
-  assert.deepEqual([...STRONG_FAMILIES], ["structural", "behavioural", "targeting", "coordination"]);
+  assert.deepEqual(
+    [...STRONG_FAMILIES],
+    ["structural", "behavioural", "targeting", "coordination"]
+  );
 });
 
 test("signalToFamilyV2 maps members and returns null for unknown", () => {
@@ -31,7 +34,12 @@ test("signalToFamilyV2 maps members and returns null for unknown", () => {
 });
 
 test("splitFamilies separates strong vs contextual, sorted, deduped", () => {
-  const r = splitFamilies(["volume_burst", "cot_elicitation", "repetition_cluster", "template_prefix_cluster"]);
+  const r = splitFamilies([
+    "volume_burst",
+    "cot_elicitation",
+    "repetition_cluster",
+    "template_prefix_cluster",
+  ]);
   assert.deepEqual(r.strong, ["structural", "behavioural"]); // structural counted ONCE
   assert.deepEqual(r.contextual, ["volume"]);
 });

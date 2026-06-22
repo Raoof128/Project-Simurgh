@@ -14,7 +14,15 @@ import {
 } from "../../../../tools/simurgh-extraction/detectorV2.mjs";
 
 const hh = (s) => "sha256:" + crypto.createHash("sha256").update(s).digest("hex");
-const TF = ["code_generation", "data_analysis", "summarisation", "translation", "qa", "planning", "other"];
+const TF = [
+  "code_generation",
+  "data_analysis",
+  "summarisation",
+  "translation",
+  "qa",
+  "planning",
+  "other",
+];
 const CAP = ["tool_use", "coding", "reasoning", "translation", "summarisation", "general"];
 const varied = (i) => ({ task_family: TF[i % TF.length], capability_tag: CAP[i % CAP.length] });
 function row(id, o = {}) {
@@ -52,8 +60,14 @@ test("identity constants", () => {
 
 test("decideV2 is total over strong count", () => {
   assert.deepEqual(decideV2(0), { decision: "no_pattern_observed", attestation_claim: "none" });
-  assert.deepEqual(decideV2(1), { decision: "single_signal_observed", attestation_claim: "manual_review_only" });
-  assert.deepEqual(decideV2(2), { decision: "extraction_pattern_observed", attestation_claim: "manual_review_recommended" });
+  assert.deepEqual(decideV2(1), {
+    decision: "single_signal_observed",
+    attestation_claim: "manual_review_only",
+  });
+  assert.deepEqual(decideV2(2), {
+    decision: "extraction_pattern_observed",
+    attestation_claim: "manual_review_recommended",
+  });
 });
 
 test("A10: structural + volume → single (volume cannot corroborate)", () => {

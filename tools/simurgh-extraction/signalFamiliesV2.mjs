@@ -25,7 +25,12 @@ export const FAMILY_ORDER_V2 = Object.freeze([
   "coordination",
   "volume",
 ]);
-export const STRONG_FAMILIES = Object.freeze(["structural", "behavioural", "targeting", "coordination"]);
+export const STRONG_FAMILIES = Object.freeze([
+  "structural",
+  "behavioural",
+  "targeting",
+  "coordination",
+]);
 export const CONTEXTUAL_FAMILIES = Object.freeze(["volume"]);
 
 export function signalToFamilyV2(signalId) {

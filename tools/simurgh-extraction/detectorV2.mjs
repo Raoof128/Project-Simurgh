@@ -45,7 +45,8 @@ export function matchSignalsV2(set) {
     capability_targeting: n >= THRESHOLDS.CLUSTER_MIN && maxCount(cap) / n >= THRESHOLDS.DOMINANCE,
     task_taxonomy_repeat: n >= THRESHOLDS.CLUSTER_MIN && maxCount(task) / n >= THRESHOLDS.DOMINANCE,
     hydra_cluster: actors.size >= THRESHOLDS.HYDRA_MIN_ACTORS && sessions.size >= actors.size,
-    volume_burst: n >= THRESHOLDS.CLUSTER_MIN && maxCount(tb) / n >= THRESHOLDS.VOLUME_BURST_FRACTION,
+    volume_burst:
+      n >= THRESHOLDS.CLUSTER_MIN && maxCount(tb) / n >= THRESHOLDS.VOLUME_BURST_FRACTION,
     high_request_count: n >= THRESHOLDS.HIGH_REQUEST_COUNT,
   };
 }
@@ -56,7 +57,10 @@ export function firedSignalIds(matched) {
 
 export function decideV2(strongCount) {
   if (strongCount >= THRESHOLD_STRONG)
-    return { decision: "extraction_pattern_observed", attestation_claim: "manual_review_recommended" };
+    return {
+      decision: "extraction_pattern_observed",
+      attestation_claim: "manual_review_recommended",
+    };
   if (strongCount === 1)
     return { decision: "single_signal_observed", attestation_claim: "manual_review_only" };
   return { decision: "no_pattern_observed", attestation_claim: "none" };

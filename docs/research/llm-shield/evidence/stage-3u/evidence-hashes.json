@@ -1,4 +1,5 @@
 {
+  "docs/research/llm-shield/evidence/stage-3u/README.md": "sha256:394d723dd1be96c446c6d337ed216f6a90ec4f2fa63318f2553ad1f03e3aee50",
   "docs/research/llm-shield/evidence/stage-3u/comparison/v1-known-false-fire-summary.json": "sha256:b304d9759cf2505f4aa7fb71d9589ca23cc0e02b601755a9144a191a4594c71a",
   "docs/research/llm-shield/evidence/stage-3u/comparison/v2-hardening-summary.json": "sha256:f922c70e657c8172d31c0ba32d1c6260a3ddd10d53673235bace344916e8b61a",
   "docs/research/llm-shield/evidence/stage-3u/keys/fingerprint.txt": "sha256:5c15e0fa332992cad55e07fc5e578471819535f5c94c329cef93490fbaa3c4ba",
