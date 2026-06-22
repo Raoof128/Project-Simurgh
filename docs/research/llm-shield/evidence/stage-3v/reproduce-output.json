@@ -1,0 +1,14 @@
+{
+  "ok": true,
+  "checks": {
+    "bundle_sha256": true,
+    "fingerprint": true,
+    "signature": true,
+    "type": true,
+    "not_live": true,
+    "zero_unsafe": true,
+    "reproduce": true,
+    "trusted_harness_hashes_recomputed": true,
+    "stage3l_corpus_manifest_recomputed": true
+  }
+}

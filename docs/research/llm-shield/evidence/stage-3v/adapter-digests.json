@@ -1,0 +1,6 @@
+{
+  "external_raw_output_hash": "sha256:6ff51dfaa012e320ed36f74d31fadbbcb1c20096e89b374a94263cc282d1bbd4",
+  "external_normalised_verdict_hash": "sha256:24d5f700d4a295878699908b2c96387781e08c60f008e801666319b7fbddafdc",
+  "adapter_config_hash": "sha256:5c04db228b30ba195c60e7e372afdfa1f591d2ae55b728f4f0fae72649bd8070",
+  "external_defense_manifest_hash": "sha256:c7a0e2f8c8df8781f947e173f7b2f43aeb88471498d77e1665a9e382d8fde0b5"
+}
