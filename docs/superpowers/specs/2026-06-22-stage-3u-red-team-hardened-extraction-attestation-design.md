@@ -78,9 +78,19 @@ the credibility move; hiding it would re-earn the A10 critique under a new numbe
    renderer, README, reviewer checklist, release notes):**
    > A detector match is not an accusation. It is a reproducible metadata-pattern result
    > for manual review.
-7. **No named labs in evidence artifacts** (reference threat lives in docs only).
+7. **No named labs in machine artifacts / evidence outputs** — named third-party labs may
+   appear only in explanatory documentation when discussing the public reference threat.
 8. **Red-team regression invariant:** the exact A10 and A9 failures become permanent
    self-proof fixtures; a future detector cannot regress without a gate failing.
+9. **Synthetic-hash invariant (R/edit-3):** every `sha256:`-prefixed field in v2 evidence
+   is generated deterministically from a stable label via `sha256Hex(canonicalJson(label))`
+   (or a fixed local helper). No human-readable synthetic hash labels (e.g.
+   `sha256:synthetic_actor_a`) are allowed — they would fail the v2 grammar
+   `^sha256:[0-9a-f]{64}$` and undermine the A9 fix.
+10. **Byte-reproducibility invariant (R/edit-4):** Stage 3U evidence artifacts MUST NOT
+    contain generated timestamps, hostnames, usernames, absolute local paths, or any
+    environment-dependent value. Any such field breaks byte-reproducibility (the verifier
+    requires the attestation to regenerate byte-identically) and is out of scope.
 
 ---
 
@@ -319,9 +329,18 @@ all counters 0; attestation regenerates byte-identically.
 
 - `scripts/{security,privacy,consistency}-audit-llm-shield-stage3u.mjs`,
   `policy-drift-guard-llm-shield-stage3u.sh`, `smoke-llm-shield-stage3u.sh`.
+- **v1-freeze guard** (`scripts/v1-freeze-guard-llm-shield-stage3u.sh`, wired into the
+  smoke + check.sh): FAILS if any Stage 3T v1 module
+  (`tools/simurgh-extraction/{metaSet,signalFamilies,detector,renderer,selfProof,
+  simurgh-extraction,sign-3t-attestation,verify-stage3t-attestation}.mjs`) changed in the
+  branch range, or if any `docs/research/llm-shield/evidence/stage-3t/**` artifact changed;
+  and runs `node tools/simurgh-extraction/verify-stage3t-attestation.mjs --reproduce` to
+  prove the 3T historical evidence still verifies. Protects the "we did not rewrite
+  history" claim. (Same three-dot base resolution as the policy-drift guard.)
 - Security audit scopes the accusatory-word scan to **machine artifacts (.json)**; named
-  labs forbidden everywhere; sacred non-claim present; `single_strong_plus_volume_escalations`
-  must be 0.
+  third-party labs are forbidden in machine artifacts and evidence outputs and may appear
+  only in explanatory documentation when discussing the public reference threat; sacred
+  non-claim present; `single_strong_plus_volume_escalations` must be 0.
 - Privacy audit: forbidden raw tokens + email regex + provenance flags + grammar validates.
 - Consistency audit: all digests re-derive; both detector results reproduce; signature
   verifies.
