@@ -57,13 +57,12 @@ HARDENED_LOG="$LOG_DIR/hardened-server.log"
 : > "$OPTIONAL_LOG"
 : > "$HARDENED_LOG"
 
-SIMURGH_DEMO_MODE=1 PORT="$OPTIONAL_PORT" node server.js > "$OPTIONAL_LOG" 2>&1 &
-OPTIONAL_PID=$!
-SIMURGH_DEMO_MODE=1 SIMURGH_REQUIRE_DAEMON=true PORT="$HARDENED_PORT" node server.js > "$HARDENED_LOG" 2>&1 &
-HARDENED_PID=$!
-
-wait_for_health "http://127.0.0.1:$OPTIONAL_PORT/health" "$OPTIONAL_PID" "$OPTIONAL_LOG" "daemon-optional server"
-wait_for_health "http://127.0.0.1:$HARDENED_PORT/health" "$HARDENED_PID" "$HARDENED_LOG" "daemon-required server"
+boot_server "$OPTIONAL_PORT" "$OPTIONAL_LOG" "daemon-optional server" -- \
+  env SIMURGH_DEMO_MODE=1 PORT="$OPTIONAL_PORT" node server.js
+OPTIONAL_PID="$BOOTED_PID"
+boot_server "$HARDENED_PORT" "$HARDENED_LOG" "daemon-required server" -- \
+  env SIMURGH_DEMO_MODE=1 SIMURGH_REQUIRE_DAEMON=true PORT="$HARDENED_PORT" node server.js
+HARDENED_PID="$BOOTED_PID"
 
 node tests/e2e/stage24_25_smoke.mjs \
   --base-url "http://127.0.0.1:$OPTIONAL_PORT" \
@@ -96,7 +95,7 @@ if [[ "$(uname)" == "Darwin" ]] && command -v swift >/dev/null 2>&1; then
   ) > "$DAEMON_LOG" 2>&1 &
   DAEMON_PID=$!
 
-  wait_for_health "http://127.0.0.1:$DAEMON_PORT/health" "macOS daemon" "$DAEMON_LOG"
+  wait_for_health "http://127.0.0.1:$DAEMON_PORT/health" "$DAEMON_PID" "$DAEMON_LOG" "macOS daemon"
   curl -s -m 2 "http://127.0.0.1:$DAEMON_PORT/status" > "$LOG_DIR/daemon-status.json"
   grep -q '"ok":true' "$LOG_DIR/daemon-status.json"
   grep -q '"platform":"macos"' "$LOG_DIR/daemon-status.json"

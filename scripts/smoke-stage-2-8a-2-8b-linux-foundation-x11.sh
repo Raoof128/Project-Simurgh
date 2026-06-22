@@ -26,9 +26,9 @@ source "$SCRIPT_DIR/lib/smoke-server.sh"
 
 echo "Stage 2.8A + 2.8B Linux foundation + X11 scanner smoke"
 node --check tests/e2e/stage28ab_linux_foundation_x11_smoke.mjs
-SIMURGH_DEMO_MODE=1 PORT="$PORT" node server.js > "$LOG_FILE" 2>&1 &
-PID=$!
-wait_for_health "http://127.0.0.1:$PORT/health" "$PID" "$LOG_FILE" "Stage 2.8A/2.8B server"
+boot_server "$PORT" "$LOG_FILE" "Stage 2.8A/2.8B server" -- \
+  env SIMURGH_DEMO_MODE=1 PORT="$PORT" node server.js
+PID="$BOOTED_PID"
 node tests/e2e/stage28ab_linux_foundation_x11_smoke.mjs "http://127.0.0.1:$PORT"
 node tools/privacy-audit.mjs
 echo "Stage 2.8A + 2.8B Linux foundation + X11 scanner smoke: pass"
