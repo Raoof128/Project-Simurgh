@@ -1840,6 +1840,36 @@ else
   tail -100 "$LOG_DIR/llm-shield-stage3t-helper-coverage.log"
 fi
 
+step "LLM Shield 3U red-team-hardened attestation"
+if scripts/smoke-llm-shield-stage3u.sh > "$LOG_DIR/llm-shield-stage3u-smoke.log" 2>&1; then
+  pass "LLM Shield 3U red-team-hardened attestation"
+else
+  fail "LLM Shield 3U red-team-hardened attestation"
+  tail -80 "$LOG_DIR/llm-shield-stage3u-smoke.log"
+fi
+
+step "LLM Shield 3U extraction-v2 helper coverage"
+if node --test --experimental-test-coverage \
+  --test-coverage-include=tools/simurgh-extraction/signalFamiliesV2.mjs \
+  --test-coverage-include=tools/simurgh-extraction/metadataGrammar.mjs \
+  --test-coverage-include=tools/simurgh-extraction/metaSetV2.mjs \
+  --test-coverage-include=tools/simurgh-extraction/detectorV2.mjs \
+  --test-coverage-include=tools/simurgh-extraction/rendererV2.mjs \
+  --test-coverage-include=tools/simurgh-extraction/selfProofV2.mjs \
+  --test-coverage-functions=100 \
+  tests/unit/llmShield/extractionV2/signalFamiliesV2.test.js \
+  tests/unit/llmShield/extractionV2/metadataGrammar.test.js \
+  tests/unit/llmShield/extractionV2/metaSetV2.test.js \
+  tests/unit/llmShield/extractionV2/detectorV2.test.js \
+  tests/unit/llmShield/extractionV2/rendererV2.test.js \
+  tests/unit/llmShield/extractionV2/extractionSelfProofV2.test.js \
+  > "$LOG_DIR/llm-shield-stage3u-helper-coverage.log" 2>&1; then
+  pass "LLM Shield 3U extraction-v2 helper coverage"
+else
+  fail "LLM Shield 3U extraction-v2 helper coverage"
+  tail -100 "$LOG_DIR/llm-shield-stage3u-helper-coverage.log"
+fi
+
 step "LLM Shield 3E-core docker smoke (skips if no docker)"
 if bash scripts/docker-smoke-llm-shield-stage3e.sh > "$LOG_DIR/llm-shield-stage3e-docker-smoke.log" 2>&1; then
   pass "LLM Shield 3E-core docker smoke"
