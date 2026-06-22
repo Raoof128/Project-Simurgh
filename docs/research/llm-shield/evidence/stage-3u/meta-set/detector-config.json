@@ -1,0 +1,24 @@
+{
+  "detector_id": "stage3u_extraction_detector_v2",
+  "previous_detector_id": "stage3t_frozen_detector_v1",
+  "threshold_rule": "strong_signal_families >= 2",
+  "volume_role": "contextual_only",
+  "decision_function": {
+    "0_strong_0_contextual": "no_pattern_observed",
+    "0_strong_with_contextual": "single_signal_observed",
+    "1_strong_any_contextual": "single_signal_observed",
+    "2_or_more_strong_any_contextual": "extraction_pattern_observed"
+  },
+  "family_strength": {
+    "structural": "strong",
+    "behavioural": "strong",
+    "targeting": "strong",
+    "coordination": "strong",
+    "volume": "contextual"
+  },
+  "threshold_change_requires_new_detector_id": true,
+  "family_strength_change_requires_new_detector_id": true,
+  "metadata_grammar_change_requires_new_detector_id": true,
+  "family_map_digest": "sha256:caf0299f6ade6e0cad163568e8cbaaffa1861a57f25ffb1c4f3f78ce5309c491",
+  "metadata_grammar_digest": "sha256:af2762c93a45874ffbc48728ccafe3223708265b69b83ef5792d66dd97de91c9"
+}

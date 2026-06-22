@@ -1,0 +1,7 @@
+{
+  "a10_volume_contextualised": true,
+  "a9_metadata_grammar_enforced": true,
+  "benign_volume_escalations": 0,
+  "metadata_payload_acceptance_failures": 0,
+  "redteam_regression_decision": "single_signal_observed"
+}
