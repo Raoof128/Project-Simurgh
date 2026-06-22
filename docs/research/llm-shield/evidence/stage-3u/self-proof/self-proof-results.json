@@ -1,0 +1,133 @@
+{
+  "fixtures": [
+    {
+      "name": "benign-heavy-power-user",
+      "passed": true,
+      "detail": "single_signal_observed"
+    },
+    {
+      "name": "benign-repetition-only",
+      "passed": true,
+      "detail": "single_signal_observed"
+    },
+    {
+      "name": "benign-volume-only",
+      "passed": true,
+      "detail": "single_signal_observed"
+    },
+    {
+      "name": "benign-targeting-only",
+      "passed": true,
+      "detail": "single_signal_observed"
+    },
+    {
+      "name": "benign-template-plus-volume",
+      "passed": true,
+      "detail": "single_signal_observed"
+    },
+    {
+      "name": "benign-single-capability-plus-volume",
+      "passed": true,
+      "detail": "single_signal_observed"
+    },
+    {
+      "name": "benign-behavioural-plus-volume",
+      "passed": true,
+      "detail": "single_signal_observed"
+    },
+    {
+      "name": "volume-is-contextual",
+      "passed": true,
+      "detail": "contextual"
+    },
+    {
+      "name": "structural-double-count-trap",
+      "passed": true,
+      "detail": "1"
+    },
+    {
+      "name": "extraction-structural-plus-behavioural",
+      "passed": true,
+      "detail": "extraction_pattern_observed"
+    },
+    {
+      "name": "extraction-targeting-plus-coordination",
+      "passed": true,
+      "detail": "extraction_pattern_observed"
+    },
+    {
+      "name": "extraction-behavioural-plus-targeting-plus-volume",
+      "passed": true,
+      "detail": "extraction_pattern_observed"
+    },
+    {
+      "name": "strong-plus-strong-benign-collision",
+      "passed": true,
+      "detail": "extraction_pattern_observed"
+    },
+    {
+      "name": "metadata-payload-in-capability-tag-rejected",
+      "passed": true,
+      "detail": "rejected"
+    },
+    {
+      "name": "metadata-payload-in-task-family-rejected",
+      "passed": true,
+      "detail": "rejected"
+    },
+    {
+      "name": "metadata-payload-in-bucket-rejected",
+      "passed": true,
+      "detail": "rejected"
+    },
+    {
+      "name": "invalid-hash-value-rejected",
+      "passed": true,
+      "detail": "rejected"
+    },
+    {
+      "name": "full-timestamp-time-bucket-rejected",
+      "passed": true,
+      "detail": "rejected"
+    },
+    {
+      "name": "threshold-version-lock",
+      "passed": true,
+      "detail": "stage3u_extraction_detector_v2:2"
+    },
+    {
+      "name": "family-strength-version-lock",
+      "passed": true,
+      "detail": "volume_contextual"
+    },
+    {
+      "name": "duplicate-run-id-rejected",
+      "passed": true,
+      "detail": "rejected"
+    },
+    {
+      "name": "intent-language-rejected",
+      "passed": true,
+      "detail": "rejected"
+    },
+    {
+      "name": "decision-reproduction",
+      "passed": true,
+      "detail": "stable"
+    }
+  ],
+  "summary": {
+    "benign_escalation_failures": 0,
+    "single_family_escalations": 0,
+    "single_strong_plus_volume_escalations": 0,
+    "volume_corroboration_failures": 0,
+    "distinct_family_double_count_failures": 0,
+    "metadata_payload_acceptance_failures": 0,
+    "invalid_bucket_acceptance_failures": 0,
+    "invalid_hash_acceptance_failures": 0,
+    "intent_claims_rendered": 0,
+    "decision_reproduction_failures": 0,
+    "duplicate_run_id_failures": 0,
+    "all_passed": true
+  }
+}

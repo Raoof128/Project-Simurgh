@@ -1,11 +1,15 @@
 {
   "docs/research/llm-shield/evidence/stage-3u/comparison/v1-known-false-fire-summary.json": "sha256:b304d9759cf2505f4aa7fb71d9589ca23cc0e02b601755a9144a191a4594c71a",
   "docs/research/llm-shield/evidence/stage-3u/comparison/v2-hardening-summary.json": "sha256:f922c70e657c8172d31c0ba32d1c6260a3ddd10d53673235bace344916e8b61a",
+  "docs/research/llm-shield/evidence/stage-3u/keys/fingerprint.txt": "sha256:5c15e0fa332992cad55e07fc5e578471819535f5c94c329cef93490fbaa3c4ba",
+  "docs/research/llm-shield/evidence/stage-3u/keys/stage3u-public-key.json": "sha256:ca7564f790d02721a176af2e3c56629fa06902937e7edff38440ba19005f459a",
   "docs/research/llm-shield/evidence/stage-3u/meta-set/detector-config.json": "sha256:322bd345de0cd53f1810a4b11d01a86e9d89e67c3114adf70f9b6be6751148a6",
   "docs/research/llm-shield/evidence/stage-3u/meta-set/metadata-grammar.json": "sha256:bbc26603aa05e64065963978c92ed1aff15d1242a1f31b377fcf49b04765a6b6",
   "docs/research/llm-shield/evidence/stage-3u/meta-set/metadata-set-v2.json": "sha256:b1cd41c0f92a77be98cd99972534e3700cd6e250174af90ac650efd9dcc49b52",
   "docs/research/llm-shield/evidence/stage-3u/meta-set/redteam-a10-regression-set.json": "sha256:98b4920376c5b802cb9169256af2c99bbb390f35bafb77c5617403d5c4111dac",
   "docs/research/llm-shield/evidence/stage-3u/result/attestation.json": "sha256:94625f443e8619aa5505da7ebe92885333fa4acdd17c673fb13646b7f215ec7d",
+  "docs/research/llm-shield/evidence/stage-3u/result/attestation.signature.json": "sha256:48aa083c0580098520cef7456d152c41f4dd361cdc86970d71afd9552c050fdb",
   "docs/research/llm-shield/evidence/stage-3u/result/expected-detector-result-v2.json": "sha256:1cd694ea1caeb249625607ecac25cf1174628adb73cfddd5e0897ff77d5bf0e0",
-  "docs/research/llm-shield/evidence/stage-3u/result/redteam-regression-result.json": "sha256:b476025a71f1e0ea9c28f68c02be3acfbb3739eaeeee9d5371881b31f1df27c7"
+  "docs/research/llm-shield/evidence/stage-3u/result/redteam-regression-result.json": "sha256:b476025a71f1e0ea9c28f68c02be3acfbb3739eaeeee9d5371881b31f1df27c7",
+  "docs/research/llm-shield/evidence/stage-3u/self-proof/self-proof-results.json": "sha256:a567344a5044de31b0de4746c424482546a268506cbe3def2713d0f1b4cb6a00"
 }
