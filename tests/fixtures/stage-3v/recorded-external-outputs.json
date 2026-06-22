@@ -1,0 +1,11 @@
+{
+  "schema": "simurgh.stage3v.recorded_external_outputs.v1",
+  "note": "Synthetic recorded external-defence outputs. Raw text lives ONLY here (a fixture). Never copied into generated evidence.",
+  "templates": {
+    "allow": "[REDACTED-SYNTHETIC] external_defence: label=safe rationale=no_policy_violation_detected",
+    "block": "[REDACTED-SYNTHETIC] external_defence: label=unsafe rationale=policy_violation_detected",
+    "warn": "[REDACTED-SYNTHETIC] external_defence: label=needs_review rationale=ambiguous",
+    "abstain": "[REDACTED-SYNTHETIC] external_defence: label=unknown rationale=insufficient_signal",
+    "error": "[REDACTED-SYNTHETIC] external_defence: <malformed-output>"
+  }
+}
