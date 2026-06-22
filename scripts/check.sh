@@ -1870,6 +1870,73 @@ else
   tail -100 "$LOG_DIR/llm-shield-stage3u-helper-coverage.log"
 fi
 
+# ── LLM Shield 3V-A external-defence attestation ─────────
+step "LLM Shield 3V-A external-defence smoke"
+if scripts/smoke-llm-shield-stage3v.sh > "$LOG_DIR/llm-shield-stage3v-smoke.log" 2>&1; then
+  pass "LLM Shield 3V-A external-defence smoke"
+else
+  fail "LLM Shield 3V-A external-defence smoke"
+  tail -60 "$LOG_DIR/llm-shield-stage3v-smoke.log"
+fi
+
+step "LLM Shield 3V-A security audit"
+if scripts/security-audit-llm-shield-stage3v.sh > "$LOG_DIR/llm-shield-stage3v-security.log" 2>&1; then
+  pass "LLM Shield 3V-A security audit"
+else
+  fail "LLM Shield 3V-A security audit"
+  tail -40 "$LOG_DIR/llm-shield-stage3v-security.log"
+fi
+
+step "LLM Shield 3V-A privacy audit"
+if node scripts/privacy-audit-llm-shield-stage3v.mjs > "$LOG_DIR/llm-shield-stage3v-privacy.log" 2>&1; then
+  pass "LLM Shield 3V-A privacy audit"
+else
+  fail "LLM Shield 3V-A privacy audit"
+  tail -40 "$LOG_DIR/llm-shield-stage3v-privacy.log"
+fi
+
+step "LLM Shield 3V-A consistency audit"
+if node scripts/consistency-audit-llm-shield-stage3v.mjs > "$LOG_DIR/llm-shield-stage3v-consistency.log" 2>&1; then
+  pass "LLM Shield 3V-A consistency audit"
+else
+  fail "LLM Shield 3V-A consistency audit"
+  tail -40 "$LOG_DIR/llm-shield-stage3v-consistency.log"
+fi
+
+step "LLM Shield 3V-A policy-drift guard"
+if scripts/policy-drift-guard-llm-shield-stage3v.sh > "$LOG_DIR/llm-shield-stage3v-policy.log" 2>&1; then
+  pass "LLM Shield 3V-A policy-drift guard"
+else
+  fail "LLM Shield 3V-A policy-drift guard"
+  tail -40 "$LOG_DIR/llm-shield-stage3v-policy.log"
+fi
+
+# Pure-lib function coverage gate (the verifier/runner CLIs are subprocess-covered by the
+# smoke + audits above, matching the 3U precedent — they are not in this 100% gate).
+step "LLM Shield 3V-A external-defence lib coverage"
+if node --test --experimental-test-coverage \
+  --test-coverage-include=tools/external-defense-adapters/normaliseExternalVerdict.mjs \
+  --test-coverage-include=tools/external-defense-adapters/externalDefenseAdapterContract.mjs \
+  --test-coverage-include=tools/external-defense-adapters/harnessHashExternalOutput.mjs \
+  --test-coverage-include=tools/external-defense-adapters/recordedFixtureExternalDefenseAdapter.mjs \
+  --test-coverage-include=tests/e2e/llm_shield_stage3v_metrics_lib.mjs \
+  --test-coverage-functions=100 \
+  tests/unit/llmShield/stage3v/normaliseExternalVerdict.test.js \
+  tests/unit/llmShield/stage3v/adapterContract.test.js \
+  tests/unit/llmShield/stage3v/harnessComputedHashes.test.js \
+  tests/unit/llmShield/stage3v/recordedFixtureAdapter.test.js \
+  tests/unit/llmShield/stage3v/metrics.test.js \
+  tests/unit/llmShield/stage3v/advisoryInvariance.test.js \
+  tests/unit/llmShield/stage3v/bundle.test.js \
+  tests/unit/llmShield/stage3v/verifierExternalDefenseBundle.test.js \
+  tests/unit/llmShield/stage3v/tamper.test.js \
+  > "$LOG_DIR/llm-shield-stage3v-coverage.log" 2>&1; then
+  pass "LLM Shield 3V-A external-defence lib coverage"
+else
+  fail "LLM Shield 3V-A external-defence lib coverage"
+  tail -100 "$LOG_DIR/llm-shield-stage3v-coverage.log"
+fi
+
 step "LLM Shield 3E-core docker smoke (skips if no docker)"
 if bash scripts/docker-smoke-llm-shield-stage3e.sh > "$LOG_DIR/llm-shield-stage3e-docker-smoke.log" 2>&1; then
   pass "LLM Shield 3E-core docker smoke"
