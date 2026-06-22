@@ -73,8 +73,10 @@ Stage 3U signed the residual limitation `hash_fields_are_opaque_256bit_slots_ver
 
 **Invariant:** all external-defence hashes are **gateway-computed**, never adapter-supplied.
 
+> **Terminology (Fix 1):** in 3V-A, "gateway-computed" means computed by the **trusted Simurgh harness / verifier path** — never supplied by the adapter. 3V-A is tooling-only and changes **no production gateway code** (`src/llmShield/**` untouched). The helper is named to reflect this (`harnessHashExternalOutput.mjs`, a *trusted-harness* hash helper); the invariant keeps the name "gateway-computed hashes" because that is the deployment rule 3V-B will inherit.
+
 - The adapter may submit **raw external output** (local-only, fixture file reference inside the controlled evidence workspace) — never an authoritative hash.
-- A dedicated `gatewayHashExternalOutput.mjs` helper computes, from the raw bytes it is given:
+- A dedicated trusted-harness hash helper (`harnessHashExternalOutput.mjs`) computes, from the raw bytes it is given:
   - `external_raw_output_hash`
   - `external_normalised_verdict_hash`
   - `adapter_config_hash`
@@ -101,7 +103,11 @@ This is the strongest technical beat of 3V-A: 3U's documented weakness becomes 3
 }
 ```
 
-Rules: no raw prompt; no raw model output in generated evidence; no adapter-supplied hash; verdict label must be in the closed enum (else normalised to `error` with `error_code: malformed_output`). The contract is **generic** — `target` is a free string so 3V-B can set `"llama_guard"` without contract change.
+Rules: no raw prompt; no raw model output in generated evidence; no adapter-supplied hash; verdict label must be in the closed enum (else normalised to `error` with `error_code: malformed_output`). The contract is **generic** — `target` is a free string so 3V-B can set `"llama_guard"` without contract change. **No code path may hard-code `recorded_fixture`** as the only valid target.
+
+**Fix 3 — 3V-B compatibility gate:** a unit test `contract_accepts_arbitrary_target_name_without_target_specific_code` asserts the contract validates an observation with `"target": "llama_guard"` (an adapter that does not yet exist) with no target-specific branching. This proves 3V-B can plug in without contract change and without ghost stubs.
+
+**Fix 2 — raw-output privacy boundary:** raw recorded external outputs may exist **only** in fixture inputs / controlled test fixtures — **never** in generated evidence, exported bundles, metrics, audit outputs, or signed attestation JSON. The privacy audit (`privacy-audit-llm-shield-stage3v.mjs`) enforces this over every generated artifact.
 
 ## 9. Evidence schema — `simurgh.vca.external_defense_run.v1`
 
@@ -177,7 +183,9 @@ Comparative (clearly marked recorded-fixture, not a vendor benchmark): `external
 17. tampered external verdict fails verification,
 18. tampered gateway hash fails verification,
 19. tampered metrics fail verification,
-20. wrong public key fails verification.
+20. wrong public key fails verification,
+21. contract validates `"target": "llama_guard"` with no target-specific code (3V-B compatibility, Fix 3),
+22. no raw recorded external output appears in any generated/exported/signed artifact (Fix 2).
 
 ## 13. Tooling (additive; reuse only `canonicalise.mjs` + read-only 3L lib)
 
@@ -185,7 +193,7 @@ Comparative (clearly marked recorded-fixture, not a vendor benchmark): `external
 tools/external-defense-adapters/
   externalDefenseAdapterContract.mjs      # schema + validateObservation (throws on forbidden hash/fields)
   recordedFixtureExternalDefenseAdapter.mjs
-  gatewayHashExternalOutput.mjs           # the R2-B closer: gateway-computed hashes
+  harnessHashExternalOutput.mjs           # R2-B closer: trusted-harness ("gateway-computed") hashes; NOT production gateway code
   normaliseExternalVerdict.mjs            # closed-enum normaliser
   externalDefenseManifest.mjs             # fixture manifest + digest
 
@@ -199,9 +207,9 @@ tests/e2e/
   llm_shield_stage3v_tamper_runner.mjs
 
 tests/unit/llmShield/stage3v/
-  adapterContract.test.js
+  adapterContract.test.js                 # incl. contract_accepts_arbitrary_target_name_without_target_specific_code (Fix 3)
   normaliseExternalVerdict.test.js
-  gatewayComputedHashes.test.js
+  harnessComputedHashes.test.js           # trusted-harness ("gateway-computed") hashes + adapter_supplied_hash_forbidden
   advisoryInvariance.test.js              # external verdict cannot move a boundary
   metrics.test.js
   verifierExternalDefenseBundle.test.js
