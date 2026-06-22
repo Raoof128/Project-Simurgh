@@ -80,7 +80,9 @@ export function computeComparativeMetrics(corpus, observations) {
   ).length;
   const plusSimurghAsr = malicious.filter((fx) => !evals.get(fx.case_id).contained).length;
   const benign = corpus.filter((fx) => isBenign(fx.case_id));
-  const overDefence = benign.filter((fx) => byId[fx.case_id]?.normalised_verdict === "block").length;
+  const overDefence = benign.filter(
+    (fx) => byId[fx.case_id]?.normalised_verdict === "block"
+  ).length;
   return {
     external_only_targeted_asr: rate(externalOnlyAsr, malicious.length),
     external_plus_simurgh_targeted_asr: rate(plusSimurghAsr, malicious.length),

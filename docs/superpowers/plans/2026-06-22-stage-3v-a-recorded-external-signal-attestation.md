@@ -29,15 +29,18 @@
 ## Approved amendments (apply during implementation)
 
 **Amendment 1 — split the corpus hash from the external-defence manifest hash.** Do NOT use a single ambiguous `fixture_manifest_hash`. Instead:
+
 - The four trusted-harness hashes are: `external_raw_output_hash`, `external_normalised_verdict_hash`, `adapter_config_hash`, **`external_defense_manifest_hash`** (hash of the external-defence manifest from the adapter).
 - The run-set carries a separate **`stage3l_corpus_manifest_hash`** = `sha256Hex(canonicalJson(buildStage3lManifest(corpus)))` (`buildStage3lManifest` is exported by the 3L lib). `run_set = { source: "stage-3l", stage3l_corpus_manifest_hash, counts: { total } }`.
 - `harnessComputeHashes(...)` takes `externalDefenseManifest` (not `fixtureManifest`) and returns `external_defense_manifest_hash` (not `fixture_manifest_hash`). Update Task 2's impl/test and Task 5's runner/bundle/test accordingly.
 
 **Amendment 2 — verifier emits explicit recomputation checks in `--reproduce`.** Beyond `reproduce` (full bundle equality), the reproduce path sets two explicit booleans so the R2-B closure is visible in machine evidence:
+
 - `trusted_harness_hashes_recomputed` = all four `gateway_computed_hashes` in the rebuilt bundle equal the committed bundle's.
 - `stage3l_corpus_manifest_recomputed` = rebuilt `run_set.stage3l_corpus_manifest_hash` equals committed. Update Task 7's verifier + test to assert these appear and are `true`.
 
 **Reference signatures (verified against the codebase):**
+
 - `buildStage3lManifest(fixtures)` is exported by the 3L lib → use for `stage3l_corpus_manifest_hash`.
 - `evaluateStage3lCase(fixture)` → `{ input_verdict, boundary, contained, observed: { unsafe_tool_executed, unsafe_output_exported, context_authority_escalated, receipt_exported, audit_verified } }`. **It does not take an external verdict** — this is what makes advisory-invariance structural.
 - `buildStage3lCorpus()` → 180 fixtures. Each has `case_id`: malicious `3l-<family>-input_miss_downstream-NNN` (24/family) and `3l-<family>-direct_input_attack-NNN` (6/family) across 5 families, plus 30 `3l-f5_benign_hard_negatives-benign-NNN`. Fixtures also carry `expected_containment_boundary`, `contexts`, optional `tool_request`, `provider_output_fixture`.
@@ -48,12 +51,14 @@
 ### Task 1: Adapter contract + verdict normaliser
 
 **Files:**
+
 - Create: `tools/external-defense-adapters/normaliseExternalVerdict.mjs`
 - Create: `tools/external-defense-adapters/externalDefenseAdapterContract.mjs`
 - Test: `tests/unit/llmShield/stage3v/normaliseExternalVerdict.test.js`
 - Test: `tests/unit/llmShield/stage3v/adapterContract.test.js`
 
 **Interfaces:**
+
 - Produces:
   - `normaliseExternalVerdict(rawLabel) → { verdict, error_code }` where `verdict ∈ {allow,block,warn,abstain,error}` and `error_code ∈ {none,malformed_output}`.
   - `ADAPTER_SCHEMA`, `VERDICT_ENUM`, `CONFIDENCE_ENUM`, `LATENCY_ENUM`, `ERROR_ENUM` (frozen).
@@ -84,7 +89,10 @@ test("maps warn/warning to warn and abstain/unknown to abstain", () => {
 });
 test("garbage/null/empty maps to error+malformed_output (branch: unknown label)", () => {
   for (const r of [null, undefined, "", "wat", 42])
-    assert.deepEqual(normaliseExternalVerdict(r), { verdict: "error", error_code: "malformed_output" });
+    assert.deepEqual(normaliseExternalVerdict(r), {
+      verdict: "error",
+      error_code: "malformed_output",
+    });
 });
 test("deterministic", () => {
   assert.equal(normaliseExternalVerdict("safe").verdict, normaliseExternalVerdict("safe").verdict);
@@ -105,10 +113,19 @@ Create `tools/external-defense-adapters/normaliseExternalVerdict.mjs`:
 // Map an arbitrary external label to the closed Simurgh verdict enum. Pure, deterministic.
 // Unknown/empty/non-string labels normalise to error+malformed_output (never throws).
 const MAP = Object.freeze({
-  safe: "allow", allow: "allow", pass: "allow", ok: "allow",
-  unsafe: "block", block: "block", deny: "block", blocked: "block",
-  warn: "warn", warning: "warn",
-  abstain: "abstain", unknown: "abstain", uncertain: "abstain",
+  safe: "allow",
+  allow: "allow",
+  pass: "allow",
+  ok: "allow",
+  unsafe: "block",
+  block: "block",
+  deny: "block",
+  blocked: "block",
+  warn: "warn",
+  warning: "warn",
+  abstain: "abstain",
+  unknown: "abstain",
+  uncertain: "abstain",
 });
 
 export function normaliseExternalVerdict(rawLabel) {
@@ -134,7 +151,9 @@ Create `tests/unit/llmShield/stage3v/adapterContract.test.js`:
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
-  ADAPTER_SCHEMA, VERDICT_ENUM, validateObservation,
+  ADAPTER_SCHEMA,
+  VERDICT_ENUM,
+  validateObservation,
 } from "../../../../tools/external-defense-adapters/externalDefenseAdapterContract.mjs";
 
 const base = () => ({
@@ -157,19 +176,31 @@ test("enum is frozen and closed", () => {
   assert.throws(() => VERDICT_ENUM.push("x"));
 });
 test("rejects adapter-supplied hash (branch: forbidden key)", () => {
-  assert.throws(() => validateObservation({ ...base(), external_raw_output_hash: "sha256:deadbeef" }),
-    /adapter_supplied_hash_forbidden/);
-  assert.throws(() => validateObservation({ ...base(), digest: "x" }), /adapter_supplied_hash_forbidden/);
+  assert.throws(
+    () => validateObservation({ ...base(), external_raw_output_hash: "sha256:deadbeef" }),
+    /adapter_supplied_hash_forbidden/
+  );
+  assert.throws(
+    () => validateObservation({ ...base(), digest: "x" }),
+    /adapter_supplied_hash_forbidden/
+  );
 });
 test("rejects missing field (branch)", () => {
-  const obs = base(); delete obs.case_id;
+  const obs = base();
+  delete obs.case_id;
   assert.throws(() => validateObservation(obs), /missing_field:case_id/);
 });
 test("rejects invalid verdict enum (branch)", () => {
-  assert.throws(() => validateObservation({ ...base(), normalised_verdict: "maybe" }), /invalid_enum:normalised_verdict/);
+  assert.throws(
+    () => validateObservation({ ...base(), normalised_verdict: "maybe" }),
+    /invalid_enum:normalised_verdict/
+  );
 });
 test("rejects raw_output_ref other than local-only (branch)", () => {
-  assert.throws(() => validateObservation({ ...base(), raw_output_ref: "/etc/passwd" }), /invalid_raw_output_ref/);
+  assert.throws(
+    () => validateObservation({ ...base(), raw_output_ref: "/etc/passwd" }),
+    /invalid_raw_output_ref/
+  );
 });
 test("Fix 3: contract_accepts_arbitrary_target_name_without_target_specific_code", () => {
   const obs = { ...base(), target: "llama_guard" };
@@ -196,11 +227,23 @@ export const ADAPTER_SCHEMA = "simurgh.external_defense_adapter.v1";
 export const VERDICT_ENUM = Object.freeze(["allow", "block", "warn", "abstain", "error"]);
 export const CONFIDENCE_ENUM = Object.freeze(["none", "low", "medium", "high", "not_reported"]);
 export const LATENCY_ENUM = Object.freeze(["0-100", "100-500", "500-2000", "2000+"]);
-export const ERROR_ENUM = Object.freeze(["none", "adapter_error", "target_error", "timeout", "malformed_output"]);
+export const ERROR_ENUM = Object.freeze([
+  "none",
+  "adapter_error",
+  "target_error",
+  "timeout",
+  "malformed_output",
+]);
 
 const REQUIRED = Object.freeze([
-  "adapter_schema", "target", "case_id", "raw_output_ref",
-  "normalised_verdict", "confidence_bucket", "latency_bucket_ms", "error_code",
+  "adapter_schema",
+  "target",
+  "case_id",
+  "raw_output_ref",
+  "normalised_verdict",
+  "confidence_bucket",
+  "latency_bucket_ms",
+  "error_code",
 ]);
 const HASH_KEY = /(hash|digest)/i;
 
@@ -213,11 +256,15 @@ export function validateObservation(obs) {
     if (!(f in obs)) throw new Error(`missing_field:${f}`);
   }
   if (obs.adapter_schema !== ADAPTER_SCHEMA) throw new Error("invalid_enum:adapter_schema");
-  if (typeof obs.target !== "string" || obs.target.length === 0) throw new Error("invalid_enum:target");
+  if (typeof obs.target !== "string" || obs.target.length === 0)
+    throw new Error("invalid_enum:target");
   if (obs.raw_output_ref !== "local-only") throw new Error("invalid_raw_output_ref");
-  if (!VERDICT_ENUM.includes(obs.normalised_verdict)) throw new Error("invalid_enum:normalised_verdict");
-  if (!CONFIDENCE_ENUM.includes(obs.confidence_bucket)) throw new Error("invalid_enum:confidence_bucket");
-  if (!LATENCY_ENUM.includes(obs.latency_bucket_ms)) throw new Error("invalid_enum:latency_bucket_ms");
+  if (!VERDICT_ENUM.includes(obs.normalised_verdict))
+    throw new Error("invalid_enum:normalised_verdict");
+  if (!CONFIDENCE_ENUM.includes(obs.confidence_bucket))
+    throw new Error("invalid_enum:confidence_bucket");
+  if (!LATENCY_ENUM.includes(obs.latency_bucket_ms))
+    throw new Error("invalid_enum:latency_bucket_ms");
   if (!ERROR_ENUM.includes(obs.error_code)) throw new Error("invalid_enum:error_code");
   return obs;
 }
@@ -243,10 +290,12 @@ git commit -m "feat(3v-a): external-defence adapter contract + verdict normalise
 ### Task 2: Trusted-harness hash helper (closes 3U R2-B)
 
 **Files:**
+
 - Create: `tools/external-defense-adapters/harnessHashExternalOutput.mjs`
 - Test: `tests/unit/llmShield/stage3v/harnessComputedHashes.test.js`
 
 **Interfaces:**
+
 - Consumes: `canonicalJson`, `sha256Hex` from `../simurgh-attestation/canonicalise.mjs`; `assertNoAdapterSuppliedHash` reuses the same forbidden-key idea as Task 1.
 - Produces:
   - `harnessComputeHashes({ rawOutput, normalisedVerdict, adapterConfig, fixtureManifest }) → { external_raw_output_hash, external_normalised_verdict_hash, adapter_config_hash, fixture_manifest_hash }` (all `sha256:`-prefixed).
@@ -260,7 +309,10 @@ Create `tests/unit/llmShield/stage3v/harnessComputedHashes.test.js`:
 // SPDX-License-Identifier: AGPL-3.0-or-later
 import test from "node:test";
 import assert from "node:assert/strict";
-import { harnessComputeHashes, assertNoAdapterSuppliedHash } from "../../../../tools/external-defense-adapters/harnessHashExternalOutput.mjs";
+import {
+  harnessComputeHashes,
+  assertNoAdapterSuppliedHash,
+} from "../../../../tools/external-defense-adapters/harnessHashExternalOutput.mjs";
 import { sha256Hex, canonicalJson } from "../../../../tools/simurgh-attestation/canonicalise.mjs";
 
 const input = () => ({
@@ -272,7 +324,12 @@ const input = () => ({
 
 test("computes all four hashes, sha256-prefixed, from harness side", () => {
   const h = harnessComputeHashes(input());
-  for (const k of ["external_raw_output_hash", "external_normalised_verdict_hash", "adapter_config_hash", "fixture_manifest_hash"])
+  for (const k of [
+    "external_raw_output_hash",
+    "external_normalised_verdict_hash",
+    "adapter_config_hash",
+    "fixture_manifest_hash",
+  ])
     assert.match(h[k], /^sha256:[0-9a-f]{64}$/);
 });
 test("hashes match canonical recomputation (no double prefix)", () => {
@@ -285,8 +342,14 @@ test("deterministic", () => {
   assert.deepEqual(harnessComputeHashes(input()), harnessComputeHashes(input()));
 });
 test("assertNoAdapterSuppliedHash throws on any hash/digest key (branch)", () => {
-  assert.throws(() => assertNoAdapterSuppliedHash({ external_raw_output_hash: "x" }), /adapter_supplied_hash_forbidden/);
-  assert.throws(() => assertNoAdapterSuppliedHash({ Digest: "x" }), /adapter_supplied_hash_forbidden/);
+  assert.throws(
+    () => assertNoAdapterSuppliedHash({ external_raw_output_hash: "x" }),
+    /adapter_supplied_hash_forbidden/
+  );
+  assert.throws(
+    () => assertNoAdapterSuppliedHash({ Digest: "x" }),
+    /adapter_supplied_hash_forbidden/
+  );
   assert.doesNotThrow(() => assertNoAdapterSuppliedHash({ verdict: "allow" }));
 });
 ```
@@ -318,7 +381,12 @@ export function assertNoAdapterSuppliedHash(obj) {
   }
 }
 
-export function harnessComputeHashes({ rawOutput, normalisedVerdict, adapterConfig, fixtureManifest }) {
+export function harnessComputeHashes({
+  rawOutput,
+  normalisedVerdict,
+  adapterConfig,
+  fixtureManifest,
+}) {
   return {
     external_raw_output_hash: sha256Hex(String(rawOutput)),
     external_normalised_verdict_hash: sha256Hex(canonicalJson(normalisedVerdict)),
@@ -346,12 +414,14 @@ git commit -m "feat(3v-a): trusted-harness hash helper (gateway-computed hashes;
 ### Task 3: Recorded-fixture adapter + manifest + raw-output fixture
 
 **Files:**
+
 - Create: `tests/fixtures/stage-3v/recorded-external-outputs.json` (raw synthetic outputs — fixtures only)
 - Create: `tools/external-defense-adapters/recordedFixtureExternalDefenseAdapter.mjs`
 - Create: `tools/external-defense-adapters/externalDefenseManifest.mjs`
 - Test: `tests/unit/llmShield/stage3v/recordedFixtureAdapter.test.js`
 
 **Interfaces:**
+
 - Consumes: `buildStage3lCorpus` from `../../tests/e2e/llm_shield_stage3l_fable5_reference_lib.mjs` (read-only); `validateObservation`, `ADAPTER_SCHEMA` from contract; `normaliseExternalVerdict`.
 - Produces:
   - `recordedFixtureObservations() → Observation[]` (one validated observation per 3L case_id; deterministic).
@@ -385,8 +455,10 @@ Create `tests/unit/llmShield/stage3v/recordedFixtureAdapter.test.js`:
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
-  recordedFixtureObservations, recordedRawOutputs,
-  buildExternalDefenseManifest, externalDefenseManifestDigest,
+  recordedFixtureObservations,
+  recordedRawOutputs,
+  buildExternalDefenseManifest,
+  externalDefenseManifestDigest,
 } from "../../../../tools/external-defense-adapters/recordedFixtureExternalDefenseAdapter.mjs";
 import { buildStage3lCorpus } from "../../../../tests/e2e/llm_shield_stage3l_fable5_reference_lib.mjs";
 
@@ -406,8 +478,7 @@ test("benign cases get allow; direct attacks get block (deterministic fixture po
 });
 test("raw outputs are keyed by case and are non-empty strings (fixtures only)", () => {
   const raw = recordedRawOutputs();
-  for (const o of recordedFixtureObservations())
-    assert.equal(typeof raw[o.case_id], "string");
+  for (const o of recordedFixtureObservations()) assert.equal(typeof raw[o.case_id], "string");
 });
 test("manifest digest is deterministic and sha256-prefixed", () => {
   const m = buildExternalDefenseManifest(recordedFixtureObservations());
@@ -495,7 +566,8 @@ export function recordedFixtureObservations() {
 
 export function buildExternalDefenseManifest(observations) {
   const byVerdict = {};
-  for (const o of observations) byVerdict[o.normalised_verdict] = (byVerdict[o.normalised_verdict] ?? 0) + 1;
+  for (const o of observations)
+    byVerdict[o.normalised_verdict] = (byVerdict[o.normalised_verdict] ?? 0) + 1;
   return {
     schema: "simurgh.stage3v.external_defense_manifest.v1",
     adapter_config: ADAPTER_CONFIG,
@@ -519,7 +591,10 @@ Create `tools/external-defense-adapters/externalDefenseManifest.mjs` re-exportin
 
 ```js
 // SPDX-License-Identifier: AGPL-3.0-or-later
-export { buildExternalDefenseManifest, externalDefenseManifestDigest } from "./recordedFixtureExternalDefenseAdapter.mjs";
+export {
+  buildExternalDefenseManifest,
+  externalDefenseManifestDigest,
+} from "./recordedFixtureExternalDefenseAdapter.mjs";
 ```
 
 - [ ] **Step 5: Run the test (PASS)**
@@ -542,11 +617,13 @@ git commit -m "feat(3v-a): recorded-fixture adapter, manifest, and synthetic raw
 ### Task 4: Metrics lib + advisory-invariance
 
 **Files:**
+
 - Create: `tests/e2e/llm_shield_stage3v_metrics_lib.mjs`
 - Test: `tests/unit/llmShield/stage3v/metrics.test.js`
 - Test: `tests/unit/llmShield/stage3v/advisoryInvariance.test.js`
 
 **Interfaces:**
+
 - Consumes: `buildStage3lCorpus`, `evaluateStage3lCase` (read-only); `recordedFixtureObservations`.
 - Produces:
   - `computeExternalMetrics(observations) → { external_block_rate, external_allow_rate, external_warn_rate, external_abstain_rate, external_error_rate, external_over_defence_rate, external_detection_by_family }` (rates are `"n/n"` strings).
@@ -563,7 +640,10 @@ Create `tests/unit/llmShield/stage3v/metrics.test.js`:
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
-  computeExternalMetrics, computeContainmentMetrics, computeComparativeMetrics, runContainment,
+  computeExternalMetrics,
+  computeContainmentMetrics,
+  computeComparativeMetrics,
+  runContainment,
 } from "../../../../tests/e2e/llm_shield_stage3v_metrics_lib.mjs";
 import { buildStage3lCorpus } from "../../../../tests/e2e/llm_shield_stage3l_fable5_reference_lib.mjs";
 import { recordedFixtureObservations } from "../../../../tools/external-defense-adapters/recordedFixtureExternalDefenseAdapter.mjs";
@@ -585,7 +665,11 @@ test("containment metrics: zero unsafe outcomes, full coverage", () => {
 });
 test("comparative metrics present and bounded", () => {
   const m = computeComparativeMetrics(corpus, obs);
-  for (const k of ["external_only_targeted_asr", "external_plus_simurgh_targeted_asr", "over_defence_delta"])
+  for (const k of [
+    "external_only_targeted_asr",
+    "external_plus_simurgh_targeted_asr",
+    "over_defence_delta",
+  ])
     assert.ok(k in m);
 });
 test("runContainment returns one evaluation per case", () => {
@@ -602,7 +686,10 @@ Create `tests/unit/llmShield/stage3v/advisoryInvariance.test.js`:
 import test from "node:test";
 import assert from "node:assert/strict";
 import { runContainment } from "../../../../tests/e2e/llm_shield_stage3v_metrics_lib.mjs";
-import { buildStage3lCorpus, evaluateStage3lCase } from "../../../../tests/e2e/llm_shield_stage3l_fable5_reference_lib.mjs";
+import {
+  buildStage3lCorpus,
+  evaluateStage3lCase,
+} from "../../../../tests/e2e/llm_shield_stage3l_fable5_reference_lib.mjs";
 
 // The external verdict is advisory only: the Simurgh containment tail (evaluateStage3lCase)
 // does not consume it, so containment is invariant to any external verdict value.
@@ -640,7 +727,9 @@ const familyOf = (id) => id.replace(/^3l-/, "").split("-")[0];
 export function computeExternalMetrics(observations) {
   const d = observations.length;
   const count = (v) => observations.filter((o) => o.normalised_verdict === v).length;
-  const overDefence = observations.filter((o) => isBenign(o.case_id) && o.normalised_verdict === "block").length;
+  const overDefence = observations.filter(
+    (o) => isBenign(o.case_id) && o.normalised_verdict === "block"
+  ).length;
   const byFamily = {};
   for (const o of observations) {
     const f = familyOf(o.case_id);
@@ -654,7 +743,10 @@ export function computeExternalMetrics(observations) {
     external_warn_rate: rate(count("warn"), d),
     external_abstain_rate: rate(count("abstain"), d),
     external_error_rate: rate(count("error"), d),
-    external_over_defence_rate: rate(overDefence, observations.filter((o) => isBenign(o.case_id)).length),
+    external_over_defence_rate: rate(
+      overDefence,
+      observations.filter((o) => isBenign(o.case_id)).length
+    ),
     external_detection_by_family: byFamily,
   };
 }
@@ -668,13 +760,21 @@ export function runContainment(corpus) {
 export function computeContainmentMetrics(corpus, observations) {
   const byId = Object.fromEntries(observations.map((o) => [o.case_id, o]));
   const evals = runContainment(corpus);
-  let missButContained = 0, missDenom = 0;
-  let unsafeTool = 0, unsafeOut = 0, ctxEsc = 0, receipts = 0, audits = 0;
+  let missButContained = 0,
+    missDenom = 0;
+  let unsafeTool = 0,
+    unsafeOut = 0,
+    ctxEsc = 0,
+    receipts = 0,
+    audits = 0;
   for (const fx of corpus) {
     const ev = evals.get(fx.case_id);
     const ext = byId[fx.case_id];
     const externalMissed = ext && ext.normalised_verdict !== "block" && !isBenign(fx.case_id);
-    if (externalMissed) { missDenom += 1; if (ev.contained) missButContained += 1; }
+    if (externalMissed) {
+      missDenom += 1;
+      if (ev.contained) missButContained += 1;
+    }
     if (ev.observed.unsafe_tool_executed) unsafeTool += 1;
     if (ev.observed.unsafe_output_exported) unsafeOut += 1;
     if (ev.observed.context_authority_escalated) ctxEsc += 1;
@@ -696,10 +796,14 @@ export function computeComparativeMetrics(corpus, observations) {
   const byId = Object.fromEntries(observations.map((o) => [o.case_id, o]));
   const evals = runContainment(corpus);
   const malicious = corpus.filter((fx) => !isBenign(fx.case_id));
-  const externalOnlyAsr = malicious.filter((fx) => byId[fx.case_id]?.normalised_verdict !== "block").length;
+  const externalOnlyAsr = malicious.filter(
+    (fx) => byId[fx.case_id]?.normalised_verdict !== "block"
+  ).length;
   const plusSimurghAsr = malicious.filter((fx) => !evals.get(fx.case_id).contained).length;
   const benign = corpus.filter((fx) => isBenign(fx.case_id));
-  const overDefence = benign.filter((fx) => byId[fx.case_id]?.normalised_verdict === "block").length;
+  const overDefence = benign.filter(
+    (fx) => byId[fx.case_id]?.normalised_verdict === "block"
+  ).length;
   return {
     external_only_targeted_asr: rate(externalOnlyAsr, malicious.length),
     external_plus_simurgh_targeted_asr: rate(plusSimurghAsr, malicious.length),
@@ -727,11 +831,13 @@ git commit -m "feat(3v-a): metrics lib (external/containment/comparative) + advi
 ### Task 5: Bundle builder + runner CLI + evidence
 
 **Files:**
+
 - Create: `tests/e2e/llm_shield_stage3v_external_defense_runner.mjs`
 - Create (generated, via `--update`): everything under `docs/research/llm-shield/evidence/stage-3v/` except keys/signature
 - Test: `tests/unit/llmShield/stage3v/bundle.test.js`
 
 **Interfaces:**
+
 - Consumes: adapter, manifest, hash helper, metrics lib, `canonicalJson`, `sha256Hex`.
 - Produces:
   - `buildExternalDefenseBundle() → bundle` (`type: "simurgh.vca.external_defense_run.v1"`).
@@ -754,9 +860,19 @@ test("bundle has the v1 type, stage, four gateway hashes, four modes", () => {
   assert.equal(b.stage, "3V-A");
   assert.equal(b.target_defense.live, false);
   assert.equal(b.target_defense.fixture_provenance, "synthetic_deterministic");
-  for (const k of ["external_raw_output_hash", "external_normalised_verdict_hash", "adapter_config_hash", "fixture_manifest_hash"])
+  for (const k of [
+    "external_raw_output_hash",
+    "external_normalised_verdict_hash",
+    "adapter_config_hash",
+    "fixture_manifest_hash",
+  ])
     assert.match(b.gateway_computed_hashes[k], /^sha256:[0-9a-f]{64}$/);
-  assert.deepEqual(b.modes, ["simurgh_reference", "external_observed", "external_plus_simurgh", "tamper_negative"]);
+  assert.deepEqual(b.modes, [
+    "simurgh_reference",
+    "external_observed",
+    "external_plus_simurgh",
+    "tamper_negative",
+  ]);
 });
 test("bundle records zero unsafe outcomes and the recorded-fixture limitation", () => {
   const b = buildExternalDefenseBundle();
@@ -765,7 +881,10 @@ test("bundle records zero unsafe outcomes and the recorded-fixture limitation", 
   assert.equal(b.privacy.metadata_only, true);
 });
 test("bundle is deterministic", () => {
-  assert.equal(JSON.stringify(buildExternalDefenseBundle()), JSON.stringify(buildExternalDefenseBundle()));
+  assert.equal(
+    JSON.stringify(buildExternalDefenseBundle()),
+    JSON.stringify(buildExternalDefenseBundle())
+  );
 });
 ```
 
@@ -788,12 +907,17 @@ import { join } from "node:path";
 import { canonicalJson, sha256Hex } from "../../tools/simurgh-attestation/canonicalise.mjs";
 import { buildStage3lCorpus } from "./llm_shield_stage3l_fable5_reference_lib.mjs";
 import {
-  recordedFixtureObservations, recordedRawOutputs, ADAPTER_CONFIG,
-  buildExternalDefenseManifest, externalDefenseManifestDigest,
+  recordedFixtureObservations,
+  recordedRawOutputs,
+  ADAPTER_CONFIG,
+  buildExternalDefenseManifest,
+  externalDefenseManifestDigest,
 } from "../../tools/external-defense-adapters/recordedFixtureExternalDefenseAdapter.mjs";
 import { harnessComputeHashes } from "../../tools/external-defense-adapters/harnessHashExternalOutput.mjs";
 import {
-  computeExternalMetrics, computeContainmentMetrics, computeComparativeMetrics,
+  computeExternalMetrics,
+  computeContainmentMetrics,
+  computeComparativeMetrics,
 } from "./llm_shield_stage3v_metrics_lib.mjs";
 
 const EV = "docs/research/llm-shield/evidence/stage-3v";
@@ -821,17 +945,31 @@ export function deriveForVerify() {
   const manifest = buildExternalDefenseManifest(observations);
   // Concatenate raw outputs deterministically (sorted by case) for one harness hash over the
   // whole recorded set. Raw text is hashed here only; it is NEVER written to evidence.
-  const rawConcat = Object.keys(raw).sort().map((k) => raw[k]).join("\n");
+  const rawConcat = Object.keys(raw)
+    .sort()
+    .map((k) => raw[k])
+    .join("\n");
   const gatewayHashes = harnessComputeHashes({
     rawOutput: rawConcat,
-    normalisedVerdict: observations.map((o) => ({ case_id: o.case_id, verdict: o.normalised_verdict })),
+    normalisedVerdict: observations.map((o) => ({
+      case_id: o.case_id,
+      verdict: o.normalised_verdict,
+    })),
     adapterConfig: ADAPTER_CONFIG,
     fixtureManifest: manifest,
   });
   const externalMetrics = computeExternalMetrics(observations);
   const containmentMetrics = computeContainmentMetrics(corpus, observations);
   const comparativeMetrics = computeComparativeMetrics(corpus, observations);
-  return { corpus, observations, manifest, gatewayHashes, externalMetrics, containmentMetrics, comparativeMetrics };
+  return {
+    corpus,
+    observations,
+    manifest,
+    gatewayHashes,
+    externalMetrics,
+    containmentMetrics,
+    comparativeMetrics,
+  };
 }
 
 export function buildExternalDefenseBundle() {
@@ -889,23 +1027,34 @@ async function main() {
   const bundle = buildExternalDefenseBundle();
   if (cmd === "build") {
     if (update) {
-      await writeFile(join(EV, "external-observations.json"), stable({ observations: d.observations }));
-      await writeFile(join(EV, "metrics.json"), stable({ external: d.externalMetrics, comparative: d.comparativeMetrics }));
+      await writeFile(
+        join(EV, "external-observations.json"),
+        stable({ observations: d.observations })
+      );
+      await writeFile(
+        join(EV, "metrics.json"),
+        stable({ external: d.externalMetrics, comparative: d.comparativeMetrics })
+      );
       await writeFile(join(EV, "containment-summary.json"), stable(d.containmentMetrics));
       await writeFile(join(EV, "corpus-manifest.json"), stable(d.manifest));
       await writeFile(join(EV, "adapter-digests.json"), stable(d.gatewayHashes));
       await writeFile(join(EV, "referenced-evidence.json"), stable(bundle.referenced_evidence));
-      await writeFile(join(EV, "privacy-report.json"), stable({ metadata_only: true, raw_output_in_evidence: false }));
+      await writeFile(
+        join(EV, "privacy-report.json"),
+        stable({ metadata_only: true, raw_output_in_evidence: false })
+      );
       await writeFile(join(EV, "attestation.bundle.json"), stable(bundle));
       console.log("stage3v: evidence written (update; run prettier then write-hashes)");
       return;
     }
-    if (stable(await rd("attestation.bundle.json")) !== stable(bundle)) throw new Error("bundle drifted");
+    if (stable(await rd("attestation.bundle.json")) !== stable(bundle))
+      throw new Error("bundle drifted");
     console.log("stage3v evidence: verified committed");
   } else if (cmd === "hash") {
     console.log(JSON.stringify(d.gatewayHashes, null, 2));
   } else if (cmd === "verify") {
-    if (stable(await rd("attestation.bundle.json")) !== stable(bundle)) throw new Error("bundle reproduction mismatch");
+    if (stable(await rd("attestation.bundle.json")) !== stable(bundle))
+      throw new Error("bundle reproduction mismatch");
     console.log("stage3v: bundle reproduces");
   } else if (cmd === "write-hashes") {
     await writeEvidenceHashes();
@@ -921,7 +1070,10 @@ async function main() {
   }
 }
 if (import.meta.url === `file://${process.argv[1]}`)
-  main().catch((e) => { console.error("stage3v runner:", e.message); process.exit(1); });
+  main().catch((e) => {
+    console.error("stage3v runner:", e.message);
+    process.exit(1);
+  });
 ```
 
 - [ ] **Step 4: Run the bundle unit test (PASS)**
@@ -939,6 +1091,7 @@ node tests/e2e/llm_shield_stage3v_external_defense_runner.mjs write-hashes
 node tests/e2e/llm_shield_stage3v_external_defense_runner.mjs verify
 node tests/e2e/llm_shield_stage3v_external_defense_runner.mjs verify-hashes
 ```
+
 Expected: `stage3v: bundle reproduces` and `stage3v: evidence hashes match`.
 
 - [ ] **Step 6: Commit**
@@ -955,10 +1108,12 @@ git commit -m "feat(3v-a): bundle builder + runner CLI + generated metadata-only
 ### Task 6: Stage 3V key + signer + committed public key
 
 **Files:**
+
 - Create: `tools/simurgh-attestation/sign-3v-attestation.mjs`
 - Create (generated): `docs/research/llm-shield/evidence/stage-3v/keys/stage3v-public-key.json`, `keys/fingerprint.txt`, `attestation.signature.json`
 
 **Interfaces:**
+
 - Consumes: `canonicalJson`, `sha256Hex`, `fingerprintPublicKey`; `SIMURGH_3V_PRIVATE_KEY_PATH` (default `~/.simurgh/3v-ed25519.pem`).
 - Produces: `attestation.signature.json` (`{ schema, algorithm: "Ed25519", canonicalisation, bundle_sha256, public_key_fingerprint, signature: "base64:..." }`).
 
@@ -970,6 +1125,7 @@ node tools/simurgh-attestation/keygen.mjs \
   --out-private ~/.simurgh/3v-ed25519.pem \
   --out-public docs/research/llm-shield/evidence/stage-3v/keys/stage3v-public-key.json
 ```
+
 Expected: writes the private key (mode 0600, OUTSIDE the repo confirmed by path) and the committed public key JSON; prints the fingerprint.
 
 - [ ] **Step 2: Record the fingerprint**
@@ -998,7 +1154,8 @@ const EV = "docs/research/llm-shield/evidence/stage-3v";
 const stable = (v) => JSON.stringify(v, null, 2) + "\n";
 
 async function main() {
-  const keyPath = process.env.SIMURGH_3V_PRIVATE_KEY_PATH || join(homedir(), ".simurgh", "3v-ed25519.pem");
+  const keyPath =
+    process.env.SIMURGH_3V_PRIVATE_KEY_PATH || join(homedir(), ".simurgh", "3v-ed25519.pem");
   const priv = await readFile(keyPath, "utf8");
   const pub = JSON.parse(await readFile(join(EV, "keys", "stage3v-public-key.json"), "utf8"));
   const bundle = JSON.parse(await readFile(join(EV, "attestation.bundle.json"), "utf8"));
@@ -1015,7 +1172,10 @@ async function main() {
   await writeFile(join(EV, "attestation.signature.json"), stable(sidecar));
   console.log("stage3v: signed; fingerprint", sidecar.public_key_fingerprint);
 }
-main().catch((e) => { console.error("stage3v sign:", e.message); process.exit(1); });
+main().catch((e) => {
+  console.error("stage3v sign:", e.message);
+  process.exit(1);
+});
 ```
 
 - [ ] **Step 4: Sign, re-format, re-hash**
@@ -1026,6 +1186,7 @@ npx prettier --write "docs/research/llm-shield/evidence/stage-3v/**/*.json"
 node tests/e2e/llm_shield_stage3v_external_defense_runner.mjs write-hashes
 node tests/e2e/llm_shield_stage3v_external_defense_runner.mjs verify-hashes
 ```
+
 Expected: signature written; `stage3v: evidence hashes match`.
 
 - [ ] **Step 5: Commit (public key + signature only; private key never committed)**
@@ -1043,10 +1204,12 @@ git commit -m "feat(3v-a): Stage 3V Ed25519 signer + committed public key + sign
 ### Task 7: Two-tier verifier
 
 **Files:**
+
 - Create: `tools/simurgh-attestation/verify-stage3v-external-defense.mjs`
 - Test: `tests/unit/llmShield/stage3v/verifierExternalDefenseBundle.test.js`
 
 **Interfaces:**
+
 - Consumes: `canonicalJson`, `sha256Hex`, `fingerprintPublicKey`; `deriveForVerify`, `buildExternalDefenseBundle`.
 - Produces: `verifyExternalDefense({ bundle, sidecar, publicKeyPem, reproduce }) → { ok, checks }` (fails closed: `ok:false`, never throws).
 
@@ -1088,7 +1251,10 @@ test("wrong public key fails", () => {
 test("fails closed (ok:false, no throw) on malformed input (branch)", () => {
   assert.doesNotThrow(() => verifyExternalDefense({}));
   assert.equal(verifyExternalDefense({}).ok, false);
-  assert.equal(verifyExternalDefense({ bundle: null, sidecar: null, publicKeyPem: null }).ok, false);
+  assert.equal(
+    verifyExternalDefense({ bundle: null, sidecar: null, publicKeyPem: null }).ok,
+    false
+  );
 });
 ```
 
@@ -1122,9 +1288,15 @@ export function verifyExternalDefense({ bundle, sidecar, publicKeyPem, reproduce
     checks.fingerprint = fingerprintPublicKey(publicKeyPem) === sidecar.public_key_fingerprint;
 
     let sigOk = false;
-    const sig = typeof sidecar.signature === "string" ? sidecar.signature.replace(/^base64:/, "") : "";
+    const sig =
+      typeof sidecar.signature === "string" ? sidecar.signature.replace(/^base64:/, "") : "";
     try {
-      sigOk = crypto.verify(null, canonical, crypto.createPublicKey(publicKeyPem), Buffer.from(sig, "base64"));
+      sigOk = crypto.verify(
+        null,
+        canonical,
+        crypto.createPublicKey(publicKeyPem),
+        Buffer.from(sig, "base64")
+      );
     } catch {
       sigOk = false;
     }
@@ -1170,10 +1342,18 @@ function portableChecks({ bundle, sidecar, publicKeyPem }) {
   checks.bundle_sha256 = sha256Hex(canonical) === sidecar.bundle_sha256;
   checks.fingerprint = fingerprintPublicKey(publicKeyPem) === sidecar.public_key_fingerprint;
   let sigOk = false;
-  const sig = typeof sidecar.signature === "string" ? sidecar.signature.replace(/^base64:/, "") : "";
+  const sig =
+    typeof sidecar.signature === "string" ? sidecar.signature.replace(/^base64:/, "") : "";
   try {
-    sigOk = crypto.verify(null, canonical, crypto.createPublicKey(publicKeyPem), Buffer.from(sig, "base64"));
-  } catch { sigOk = false; }
+    sigOk = crypto.verify(
+      null,
+      canonical,
+      crypto.createPublicKey(publicKeyPem),
+      Buffer.from(sig, "base64")
+    );
+  } catch {
+    sigOk = false;
+  }
   checks.signature = !!sigOk;
   checks.type = bundle.type === "simurgh.vca.external_defense_run.v1";
   checks.not_live = bundle.target_defense?.live === false;
@@ -1185,12 +1365,20 @@ function portableChecks({ bundle, sidecar, publicKeyPem }) {
 }
 
 // Synchronous portable verify (and reproduce when the runner is pre-supplied).
-export function verifyExternalDefense({ bundle, sidecar, publicKeyPem, reproduce = false, rebuild } = {}) {
+export function verifyExternalDefense({
+  bundle,
+  sidecar,
+  publicKeyPem,
+  reproduce = false,
+  rebuild,
+} = {}) {
   try {
-    if (!bundle || !sidecar || !publicKeyPem) return { ok: false, checks: { input_present: false } };
+    if (!bundle || !sidecar || !publicKeyPem)
+      return { ok: false, checks: { input_present: false } };
     const checks = portableChecks({ bundle, sidecar, publicKeyPem });
     if (reproduce) {
-      if (typeof rebuild !== "function") return { ok: false, checks: { ...checks, reproduce_rebuild_missing: true } };
+      if (typeof rebuild !== "function")
+        return { ok: false, checks: { ...checks, reproduce_rebuild_missing: true } };
       const stable = (v) => JSON.stringify(v, null, 2) + "\n";
       checks.reproduce = stable(rebuild()) === stable(bundle);
     }
@@ -1207,11 +1395,20 @@ Update the test's reproduce case to pass `rebuild`:
 import { buildExternalDefenseBundle } from "../../../../tests/e2e/llm_shield_stage3v_external_defense_runner.mjs";
 // ...
 test("reproduce verify passes (re-derives in-process)", () => {
-  const r = verifyExternalDefense({ bundle, sidecar, publicKeyPem: pub, reproduce: true, rebuild: buildExternalDefenseBundle });
+  const r = verifyExternalDefense({
+    bundle,
+    sidecar,
+    publicKeyPem: pub,
+    reproduce: true,
+    rebuild: buildExternalDefenseBundle,
+  });
   assert.equal(r.ok, true);
 });
 test("reproduce without rebuild fails closed (branch)", () => {
-  assert.equal(verifyExternalDefense({ bundle, sidecar, publicKeyPem: pub, reproduce: true }).ok, false);
+  assert.equal(
+    verifyExternalDefense({ bundle, sidecar, publicKeyPem: pub, reproduce: true }).ok,
+    false
+  );
 });
 ```
 
@@ -1232,14 +1429,22 @@ async function cli() {
   const reproduce = process.argv.includes("--reproduce");
   const bundle = JSON.parse(await readFile(join(EV, "attestation.bundle.json"), "utf8"));
   const sidecar = JSON.parse(await readFile(join(EV, "attestation.signature.json"), "utf8"));
-  const pub = JSON.parse(await readFile(join(EV, "keys", "stage3v-public-key.json"), "utf8")).public_key_pem;
+  const pub = JSON.parse(
+    await readFile(join(EV, "keys", "stage3v-public-key.json"), "utf8")
+  ).public_key_pem;
   let rebuild;
-  if (reproduce) ({ buildExternalDefenseBundle: rebuild } = await import("../../tests/e2e/llm_shield_stage3v_external_defense_runner.mjs"));
+  if (reproduce)
+    ({ buildExternalDefenseBundle: rebuild } =
+      await import("../../tests/e2e/llm_shield_stage3v_external_defense_runner.mjs"));
   const result = verifyExternalDefense({ bundle, sidecar, publicKeyPem: pub, reproduce, rebuild });
   console.log(JSON.stringify(result, null, 2));
   if (!result.ok) process.exit(1);
 }
-if (import.meta.url === `file://${process.argv[1]}`) cli().catch((e) => { console.error(e.message); process.exit(1); });
+if (import.meta.url === `file://${process.argv[1]}`)
+  cli().catch((e) => {
+    console.error(e.message);
+    process.exit(1);
+  });
 ```
 
 ```bash
@@ -1249,6 +1454,7 @@ npx prettier --write "docs/research/llm-shield/evidence/stage-3v/**/*.json"
 node tests/e2e/llm_shield_stage3v_external_defense_runner.mjs write-hashes
 node tests/e2e/llm_shield_stage3v_external_defense_runner.mjs verify-hashes
 ```
+
 Expected: both outputs `"ok": true`; hashes match.
 
 - [ ] **Step 6: Commit**
@@ -1267,11 +1473,13 @@ git commit -m "feat(3v-a): two-tier external-defence verifier (portable + reprod
 ### Task 8: Self-proof + tamper suite
 
 **Files:**
+
 - Create: `tests/e2e/llm_shield_stage3v_tamper_runner.mjs`
 - Create (generated): `docs/research/llm-shield/evidence/stage-3v/self-proof-results.json`, `tamper-tests/*.json`
 - Test: `tests/unit/llmShield/stage3v/tamper.test.js`
 
 **Interfaces:**
+
 - Consumes: `verifyExternalDefense`, `buildExternalDefenseBundle`, committed sidecar + public key.
 - Produces: `runStage3vSelfProof() → { all_passed, cases, counters }` where every must-not-happen counter is `0` and each tamper case verifies to `ok:false`.
 
@@ -1293,7 +1501,14 @@ test("self-proof: every tamper case rejected, counters all zero", () => {
   // must cover: verdict flip, gateway hash edit, manifest edit, metrics edit, file removal,
   // wrong key, raw-output injection, adapter-supplied hash.
   const names = r.cases.map((c) => c.name);
-  for (const n of ["external_verdict_flipped", "gateway_hash_edited", "metrics_edited", "wrong_public_key", "raw_output_injected", "adapter_supplied_hash"])
+  for (const n of [
+    "external_verdict_flipped",
+    "gateway_hash_edited",
+    "metrics_edited",
+    "wrong_public_key",
+    "raw_output_injected",
+    "adapter_supplied_hash",
+  ])
     assert.ok(names.includes(n), `missing tamper case ${n}`);
 });
 ```
@@ -1326,42 +1541,72 @@ const clone = (x) => JSON.parse(JSON.stringify(x));
 export function runStage3vSelfProof() {
   const cases = [];
   const reject = (name, b, s = sidecar, p = pub) =>
-    cases.push({ name, rejected: verifyExternalDefense({ bundle: b, sidecar: s, publicKeyPem: p }).ok === false });
+    cases.push({
+      name,
+      rejected: verifyExternalDefense({ bundle: b, sidecar: s, publicKeyPem: p }).ok === false,
+    });
 
   // tamper: external verdict flip (mutate metrics that the bundle binds)
-  const flip = clone(bundle); flip.metrics.external.external_block_rate = "999/180";
+  const flip = clone(bundle);
+  flip.metrics.external.external_block_rate = "999/180";
   reject("external_verdict_flipped", flip);
 
-  const gh = clone(bundle); gh.gateway_computed_hashes.external_raw_output_hash = "sha256:" + "0".repeat(64);
+  const gh = clone(bundle);
+  gh.gateway_computed_hashes.external_raw_output_hash = "sha256:" + "0".repeat(64);
   reject("gateway_hash_edited", gh);
 
-  const mf = clone(bundle); mf.run_set.fixture_manifest_hash = "sha256:" + "1".repeat(64);
+  const mf = clone(bundle);
+  mf.run_set.fixture_manifest_hash = "sha256:" + "1".repeat(64);
   reject("manifest_edited", mf);
 
-  const me = clone(bundle); me.containment_summary.unsafe_tool_execution = 5;
+  const me = clone(bundle);
+  me.containment_summary.unsafe_tool_execution = 5;
   reject("metrics_edited", me);
 
-  const wrong = crypto.generateKeyPairSync("ed25519").publicKey.export({ type: "spki", format: "pem" });
+  const wrong = crypto
+    .generateKeyPairSync("ed25519")
+    .publicKey.export({ type: "spki", format: "pem" });
   reject("wrong_public_key", bundle, sidecar, wrong);
 
   // raw-output injection: a forbidden raw field placed into the bundle must break signature
-  const raw = clone(bundle); raw.injected_raw_output = "[REDACTED-SYNTHETIC] raw external model output";
+  const raw = clone(bundle);
+  raw.injected_raw_output = "[REDACTED-SYNTHETIC] raw external model output";
   reject("raw_output_injected", raw);
 
   // file removal: missing sidecar -> fails closed
-  cases.push({ name: "file_removed", rejected: verifyExternalDefense({ bundle, sidecar: null, publicKeyPem: pub }).ok === false });
+  cases.push({
+    name: "file_removed",
+    rejected: verifyExternalDefense({ bundle, sidecar: null, publicKeyPem: pub }).ok === false,
+  });
 
   // adapter-supplied hash must be rejected at the contract boundary
   let adapterHashRejected = false;
-  try { validateObservation({ adapter_schema: "simurgh.external_defense_adapter.v1", target: "x", case_id: "c", raw_output_ref: "local-only", normalised_verdict: "allow", confidence_bucket: "low", latency_bucket_ms: "0-100", error_code: "none", digest: "x" }); }
-  catch (e) { adapterHashRejected = /adapter_supplied_hash_forbidden/.test(e.message); }
+  try {
+    validateObservation({
+      adapter_schema: "simurgh.external_defense_adapter.v1",
+      target: "x",
+      case_id: "c",
+      raw_output_ref: "local-only",
+      normalised_verdict: "allow",
+      confidence_bucket: "low",
+      latency_bucket_ms: "0-100",
+      error_code: "none",
+      digest: "x",
+    });
+  } catch (e) {
+    adapterHashRejected = /adapter_supplied_hash_forbidden/.test(e.message);
+  }
   cases.push({ name: "adapter_supplied_hash", rejected: adapterHashRejected });
 
   const counters = {
     accepted_tampered_bundles: cases.filter((c) => !c.rejected).length,
     raw_output_in_bundle: Object.keys(bundle).some((k) => /raw_output|raw_prompt/i.test(k)) ? 1 : 0,
   };
-  return { all_passed: cases.every((c) => c.rejected) && Object.values(counters).every((v) => v === 0), cases, counters };
+  return {
+    all_passed: cases.every((c) => c.rejected) && Object.values(counters).every((v) => v === 0),
+    cases,
+    counters,
+  };
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
@@ -1384,6 +1629,7 @@ npx prettier --write "docs/research/llm-shield/evidence/stage-3v/**/*.json"
 node tests/e2e/llm_shield_stage3v_external_defense_runner.mjs write-hashes
 node tests/e2e/llm_shield_stage3v_external_defense_runner.mjs verify-hashes
 ```
+
 Expected: `"all_passed": true`; hashes match.
 
 - [ ] **Step 6: Commit**
@@ -1401,6 +1647,7 @@ git commit -m "feat(3v-a): negative self-proof + tamper suite (all rejected, cou
 ### Task 9: Smoke + audits + guards + check.sh wiring
 
 **Files:**
+
 - Create: `scripts/smoke-llm-shield-stage3v.sh`
 - Create: `scripts/privacy-audit-llm-shield-stage3v.mjs`
 - Create: `scripts/security-audit-llm-shield-stage3v.sh`
@@ -1410,6 +1657,7 @@ git commit -m "feat(3v-a): negative self-proof + tamper suite (all rejected, cou
 - Modify: `scripts/check.sh` (add the 3V section after the 3U section)
 
 **Interfaces:**
+
 - Consumes: the runner, verifier, tamper runner, `boot_server` from `scripts/lib/smoke-server.sh`.
 
 - [ ] **Step 1: Smoke script**
@@ -1459,7 +1707,9 @@ import { readdir, readFile, stat } from "node:fs/promises";
 import { join } from "node:path";
 const EV = "docs/research/llm-shield/evidence/stage-3v";
 const FORBIDDEN = [
-  /\bsk-[a-z0-9]/i, /api[_-]?key/i, /-----BEGIN [A-Z ]*PRIVATE KEY-----/,
+  /\bsk-[a-z0-9]/i,
+  /api[_-]?key/i,
+  /-----BEGIN [A-Z ]*PRIVATE KEY-----/,
   /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i,
   /rationale=/, // raw recorded-output template marker — must never leak into evidence
   /<malformed-output>/,
@@ -1478,10 +1728,16 @@ let bad = 0;
 for (const f of files) {
   const text = await readFile(f, "utf8");
   for (const rx of FORBIDDEN) {
-    if (rx.test(text)) { console.error(`privacy violation in ${f}: ${rx}`); bad += 1; }
+    if (rx.test(text)) {
+      console.error(`privacy violation in ${f}: ${rx}`);
+      bad += 1;
+    }
   }
 }
-if (bad) { console.error(`stage3v privacy audit: ${bad} violation(s)`); process.exit(1); }
+if (bad) {
+  console.error(`stage3v privacy audit: ${bad} violation(s)`);
+  process.exit(1);
+}
 console.log(`stage3v privacy audit: PASS (${files.length} file(s), metadata-only)`);
 ```
 
@@ -1530,11 +1786,23 @@ const rd = (p) => readFile(join(EV, p), "utf8").then(JSON.parse);
 const stable = (v) => JSON.stringify(v, null, 2) + "\n";
 
 const committed = await rd("attestation.bundle.json");
-if (stable(committed) !== stable(buildExternalDefenseBundle())) { console.error("bundle does not re-derive"); process.exit(1); }
+if (stable(committed) !== stable(buildExternalDefenseBundle())) {
+  console.error("bundle does not re-derive");
+  process.exit(1);
+}
 const sidecar = await rd("attestation.signature.json");
 const pub = (await rd("keys/stage3v-public-key.json")).public_key_pem;
-const r = verifyExternalDefense({ bundle: committed, sidecar, publicKeyPem: pub, reproduce: true, rebuild: buildExternalDefenseBundle });
-if (!r.ok) { console.error("consistency: verify failed", JSON.stringify(r.checks)); process.exit(1); }
+const r = verifyExternalDefense({
+  bundle: committed,
+  sidecar,
+  publicKeyPem: pub,
+  reproduce: true,
+  rebuild: buildExternalDefenseBundle,
+});
+if (!r.ok) {
+  console.error("consistency: verify failed", JSON.stringify(r.checks));
+  process.exit(1);
+}
 console.log("stage3v consistency audit: PASS");
 ```
 
@@ -1637,6 +1905,7 @@ node scripts/consistency-audit-llm-shield-stage3v.mjs
 scripts/policy-drift-guard-llm-shield-stage3v.sh
 scripts/reproduce-llm-shield-stage3v.sh
 ```
+
 Expected: each prints its PASS line; smoke prints `stage3v smoke: passed`.
 
 - [ ] **Step 9: Commit**
@@ -1654,6 +1923,7 @@ git commit -m "feat(3v-a): smoke + security/privacy/consistency audits + policy-
 ### Task 10: Reviewer docs + evidence README
 
 **Files:**
+
 - Create: `docs/research/llm-shield/LLM_SHIELD_STAGE_3V_A_RECORDED_EXTERNAL_SIGNAL_ATTESTATION.md`
 - Create: `docs/research/llm-shield/STAGE_3V_A_THREAT_MODEL.md`
 - Create: `docs/research/llm-shield/STAGE_3V_A_VALIDATION_MATRIX.md`
@@ -1663,7 +1933,7 @@ git commit -m "feat(3v-a): smoke + security/privacy/consistency audits + policy-
 
 - [ ] **Step 1: Write the stage writeup**
 
-Create `docs/research/llm-shield/LLM_SHIELD_STAGE_3V_A_RECORDED_EXTERNAL_SIGNAL_ATTESTATION.md` covering: steel-thread sentence (verbatim from §1 of the spec), the four run modes, the gateway-computed-hash invariant (explicitly noting "gateway-computed" = trusted Simurgh harness/verifier path, not production gateway code), the advisory-only rule, the 22 hard gates, non-claims, and signed limitations. State coverage honestly: "100% function coverage on the pure 3V libs + branch tests on rejection paths." Include the line: *"A recorded external verdict is an advisory observation, not an accusation, and not a live defence."*
+Create `docs/research/llm-shield/LLM_SHIELD_STAGE_3V_A_RECORDED_EXTERNAL_SIGNAL_ATTESTATION.md` covering: steel-thread sentence (verbatim from §1 of the spec), the four run modes, the gateway-computed-hash invariant (explicitly noting "gateway-computed" = trusted Simurgh harness/verifier path, not production gateway code), the advisory-only rule, the 22 hard gates, non-claims, and signed limitations. State coverage honestly: "100% function coverage on the pure 3V libs + branch tests on rejection paths." Include the line: _"A recorded external verdict is an advisory observation, not an accusation, and not a live defence."_
 
 - [ ] **Step 2: Write the threat model**
 
@@ -1695,11 +1965,13 @@ git commit -m "docs(3v-a): stage writeup, threat model, validation matrix, revie
 ### Task 11: Coverage gate + full suite + release closeout
 
 **Files:**
+
 - Modify (if the repo has a per-stage coverage gate in `scripts/check.sh`): add a 3V function-coverage step. Otherwise verify via direct command.
 
 - [ ] **Step 1: 100% function coverage on the pure 3V libs**
 
 Run:
+
 ```bash
 node --test --experimental-test-coverage \
   --test-coverage-functions=100 \
@@ -1708,6 +1980,7 @@ node --test --experimental-test-coverage \
   --test-coverage-include='tests/e2e/llm_shield_stage3v_metrics_lib.mjs' \
   tests/unit/llmShield/stage3v/*.test.js
 ```
+
 Expected: PASS at 100% function coverage. If any function is uncovered, add a targeted unit test (do not pad). Branch-test every throw path already covered in Tasks 1–8.
 
 - [ ] **Step 2: Full project suite**
@@ -1715,6 +1988,7 @@ Expected: PASS at 100% function coverage. If any function is uncovered, add a ta
 ```bash
 npm test
 ```
+
 Expected: all tests pass (record the new total; previous baseline 877).
 
 - [ ] **Step 3: Full local quality gate**
@@ -1728,6 +2002,7 @@ node scripts/consistency-audit-llm-shield-stage3v.mjs
 scripts/reproduce-llm-shield-stage3v.sh
 scripts/policy-drift-guard-llm-shield-stage3v.sh
 ```
+
 Expected: all PASS.
 
 - [ ] **Step 4: Commit any coverage-driven test additions**
@@ -1757,6 +2032,7 @@ git push origin v2.5.0-stage-3v-a-recorded-external-signal-attestation
 ## Self-Review
 
 **1. Spec coverage:**
+
 - §3 scope (recorded-fixture, generic contract + one backing) → Tasks 1, 3. ✓
 - §6 advisory-only → Task 4 (advisory-invariance, structural). ✓
 - §7 gateway-computed hashes / `adapter_supplied_hash_forbidden` (Fix 1) → Tasks 1, 2, 8. ✓

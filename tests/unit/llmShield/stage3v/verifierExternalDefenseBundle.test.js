@@ -29,7 +29,10 @@ test("reproduce verify passes + emits explicit recompute checks (Amendment 2)", 
   assert.equal(r.checks.reproduce, true);
 });
 test("reproduce without rebuild fails closed (branch)", () => {
-  assert.equal(verifyExternalDefense({ bundle, sidecar, publicKeyPem: pub, reproduce: true }).ok, false);
+  assert.equal(
+    verifyExternalDefense({ bundle, sidecar, publicKeyPem: pub, reproduce: true }).ok,
+    false
+  );
 });
 test("tampered bundle fails (signature mismatch)", () => {
   const bad = { ...bundle, stage: "TAMPERED" };
@@ -43,5 +46,8 @@ test("wrong public key fails", () => {
 test("fails closed (ok:false, no throw) on malformed input (branch)", () => {
   assert.doesNotThrow(() => verifyExternalDefense({}));
   assert.equal(verifyExternalDefense({}).ok, false);
-  assert.equal(verifyExternalDefense({ bundle: null, sidecar: null, publicKeyPem: null }).ok, false);
+  assert.equal(
+    verifyExternalDefense({ bundle: null, sidecar: null, publicKeyPem: null }).ok,
+    false
+  );
 });

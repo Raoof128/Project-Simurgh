@@ -103,7 +103,10 @@ export function buildExternalDefenseBundle() {
     containment_summary: d.containmentMetrics,
     privacy: { metadata_only: true },
     referenced_evidence: [
-      { stage: "3L", external_defense_manifest_hash: d.gatewayHashes.external_defense_manifest_hash },
+      {
+        stage: "3L",
+        external_defense_manifest_hash: d.gatewayHashes.external_defense_manifest_hash,
+      },
     ],
     non_claims: NON_CLAIMS,
     limitations: LIMITATIONS,
@@ -134,7 +137,10 @@ async function main() {
   const bundle = buildExternalDefenseBundle();
   if (cmd === "build") {
     if (update) {
-      await writeFile(join(EV, "external-observations.json"), stable({ observations: d.observations }));
+      await writeFile(
+        join(EV, "external-observations.json"),
+        stable({ observations: d.observations })
+      );
       await writeFile(
         join(EV, "metrics.json"),
         stable({ external: d.externalMetrics, comparative: d.comparativeMetrics })

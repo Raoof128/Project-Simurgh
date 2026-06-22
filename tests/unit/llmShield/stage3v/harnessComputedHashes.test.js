@@ -5,10 +5,7 @@ import {
   harnessComputeHashes,
   assertNoAdapterSuppliedHash,
 } from "../../../../tools/external-defense-adapters/harnessHashExternalOutput.mjs";
-import {
-  sha256Hex,
-  canonicalJson,
-} from "../../../../tools/simurgh-attestation/canonicalise.mjs";
+import { sha256Hex, canonicalJson } from "../../../../tools/simurgh-attestation/canonicalise.mjs";
 
 const input = () => ({
   rawOutput: "[REDACTED-SYNTHETIC] recorded external classifier output",
@@ -32,7 +29,10 @@ test("hashes match canonical recomputation (no double prefix)", () => {
   const h = harnessComputeHashes(i);
   assert.equal(h.external_raw_output_hash, sha256Hex(i.rawOutput));
   assert.equal(h.adapter_config_hash, sha256Hex(canonicalJson(i.adapterConfig)));
-  assert.equal(h.external_defense_manifest_hash, sha256Hex(canonicalJson(i.externalDefenseManifest)));
+  assert.equal(
+    h.external_defense_manifest_hash,
+    sha256Hex(canonicalJson(i.externalDefenseManifest))
+  );
 });
 test("deterministic", () => {
   assert.deepEqual(harnessComputeHashes(input()), harnessComputeHashes(input()));
@@ -42,7 +42,10 @@ test("assertNoAdapterSuppliedHash throws on any hash/digest key (branch)", () =>
     () => assertNoAdapterSuppliedHash({ external_raw_output_hash: "x" }),
     /adapter_supplied_hash_forbidden/
   );
-  assert.throws(() => assertNoAdapterSuppliedHash({ Digest: "x" }), /adapter_supplied_hash_forbidden/);
+  assert.throws(
+    () => assertNoAdapterSuppliedHash({ Digest: "x" }),
+    /adapter_supplied_hash_forbidden/
+  );
   assert.doesNotThrow(() => assertNoAdapterSuppliedHash({ verdict: "allow" }));
   assert.doesNotThrow(() => assertNoAdapterSuppliedHash(null));
 });

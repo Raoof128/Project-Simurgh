@@ -25,19 +25,19 @@ policy-drift guard), additive modules only, fully offline and deterministic.
 
 ## The four run modes
 
-| Mode | Purpose |
-|---|---|
-| `simurgh_reference` | Existing Simurgh-only 3L containment result |
-| `external_observed` | Recorded-fixture external verdict only (external metrics) |
+| Mode                    | Purpose                                                                           |
+| ----------------------- | --------------------------------------------------------------------------------- |
+| `simurgh_reference`     | Existing Simurgh-only 3L containment result                                       |
+| `external_observed`     | Recorded-fixture external verdict only (external metrics)                         |
 | `external_plus_simurgh` | External verdict followed by the Simurgh containment tail — **the release claim** |
-| `tamper_negative` | The verifier must fail on edited evidence |
+| `tamper_negative`       | The verifier must fail on edited evidence                                         |
 
 ## Advisory-only rule (structural)
 
 The Simurgh containment tail is the real Stage 3L boundary driver `evaluateStage3lCase()`,
 which takes **only the fixture** — never the external verdict. So flipping the external verdict
 (`block → allow`) cannot change any boundary outcome. Advisory-invariance is therefore
-*structural*, not asserted by hope (`advisoryInvariance.test.js`).
+_structural_, not asserted by hope (`advisoryInvariance.test.js`).
 
 ## Gateway-computed hashes (closes 3U R2-B)
 

@@ -1,5 +1,5 @@
 {
-  "docs/research/llm-shield/evidence/stage-3v/README.md": "sha256:851c1d5942d96aef4f6656e002653d21f49e585db5e3daea17d0f8bff71d20ca",
+  "docs/research/llm-shield/evidence/stage-3v/README.md": "sha256:83ab8d42ea0a116718472c37493a34867748f0b9fec76802b1ee2db40c899560",
   "docs/research/llm-shield/evidence/stage-3v/adapter-digests.json": "sha256:6b7267be5c62b5a5f97a9fbbb26817d7d7e25c3d07a94f2afb00efc6a2fa4ef3",
   "docs/research/llm-shield/evidence/stage-3v/attestation.bundle.json": "sha256:fe1fdb4a22cd26d44003179d3d9d7c52a00f0358e298381c8bc2d4f59d4b5e3e",
   "docs/research/llm-shield/evidence/stage-3v/attestation.signature.json": "sha256:70aa605af3f2c8e522454b27115902d6ebe39d96aa28d7e20bc8170e567efe4d",

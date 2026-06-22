@@ -13,7 +13,7 @@ Stage 3V-A does **not** claim any external OSS guardrail is unsafe, defeated, or
 
 ## 2. Banger release line
 
-> Industry reports whether a guardrail said yes or no. Stage 3V-A records whether the unsafe consequence could still happen, whether Simurgh contained it *after* the external signal, and whether the evidence still verifies after export — with every external hash computed by the gateway, never trusted from the adapter.
+> Industry reports whether a guardrail said yes or no. Stage 3V-A records whether the unsafe consequence could still happen, whether Simurgh contained it _after_ the external signal, and whether the evidence still verifies after export — with every external hash computed by the gateway, never trusted from the adapter.
 
 ## 3. Scope (locked decisions)
 
@@ -21,11 +21,11 @@ Stage 3V-A does **not** claim any external OSS guardrail is unsafe, defeated, or
 - **Adapter surface (Q2 → Option 1):** Generic `ExternalDefenseAdapter` contract **plus exactly one** working adapter (the recorded-fixture backing). **No** `llamaGuardAdapter` / `nemoGuardrailsAdapter` / `guardrailsAiAdapter` stubs. No "coming soon" modules. One real backing, one generic contract.
 - **Explicit framing:** 3V-A proves the **instrument** (the external-defence attestation machinery) and closes 3U's R2-B with gateway-computed hashes. It does **not** claim to wrap a real live defence yet. 3V-B (v2.6.0) points the same contract at Llama Guard.
 
-**Out of scope for 3V-A:** any live external defence, vendor ranking, model-quality evaluation, NeMo/Guardrails-AI adapters, the comparative `external_only_targeted_asr` vs `external_plus_simurgh_targeted_asr` headline framed against a *real* vendor (we report the metric over the recorded fixture, clearly labelled synthetic).
+**Out of scope for 3V-A:** any live external defence, vendor ranking, model-quality evaluation, NeMo/Guardrails-AI adapters, the comparative `external_only_targeted_asr` vs `external_plus_simurgh_targeted_asr` headline framed against a _real_ vendor (we report the metric over the recorded fixture, clearly labelled synthetic).
 
 ## 4. Tooling-only constraint
 
-3V-A is a **tooling-only** stage in the pattern of 3M/3N/3O/3P/3Q/3S/3T/3U: **zero `src/llmShield` change**, enforced by a fail-closed policy-drift guard (three-dot `origin/main...HEAD`). It *reads* the real Stage 3L boundary drivers in-process for the containment tail but must not modify them or any `src/llmShield/**` file. (3R remains the only deliberate gateway-security-path exception in the ladder.)
+3V-A is a **tooling-only** stage in the pattern of 3M/3N/3O/3P/3Q/3S/3T/3U: **zero `src/llmShield` change**, enforced by a fail-closed policy-drift guard (three-dot `origin/main...HEAD`). It _reads_ the real Stage 3L boundary drivers in-process for the containment tail but must not modify them or any `src/llmShield/**` file. (3R remains the only deliberate gateway-security-path exception in the ladder.)
 
 ## 5. Architecture
 
@@ -73,7 +73,7 @@ Stage 3U signed the residual limitation `hash_fields_are_opaque_256bit_slots_ver
 
 **Invariant:** all external-defence hashes are **gateway-computed**, never adapter-supplied.
 
-> **Terminology (Fix 1):** in 3V-A, "gateway-computed" means computed by the **trusted Simurgh harness / verifier path** — never supplied by the adapter. 3V-A is tooling-only and changes **no production gateway code** (`src/llmShield/**` untouched). The helper is named to reflect this (`harnessHashExternalOutput.mjs`, a *trusted-harness* hash helper); the invariant keeps the name "gateway-computed hashes" because that is the deployment rule 3V-B will inherit.
+> **Terminology (Fix 1):** in 3V-A, "gateway-computed" means computed by the **trusted Simurgh harness / verifier path** — never supplied by the adapter. 3V-A is tooling-only and changes **no production gateway code** (`src/llmShield/**` untouched). The helper is named to reflect this (`harnessHashExternalOutput.mjs`, a _trusted-harness_ hash helper); the invariant keeps the name "gateway-computed hashes" because that is the deployment rule 3V-B will inherit.
 
 - The adapter may submit **raw external output** (local-only, fixture file reference inside the controlled evidence workspace) — never an authoritative hash.
 - A dedicated trusted-harness hash helper (`harnessHashExternalOutput.mjs`) computes, from the raw bytes it is given:
@@ -134,7 +134,7 @@ Rules: no raw prompt; no raw model output in generated evidence; no adapter-supp
   "metrics": {},
   "containment_summary": {},
   "privacy": { "metadata_only": true },
-  "referenced_evidence": [ { "stage": "3L", "digest": "sha256:..." } ],
+  "referenced_evidence": [{ "stage": "3L", "digest": "sha256:..." }],
   "non_claims": [],
   "limitations": [],
   "modes": ["simurgh_reference", "external_observed", "external_plus_simurgh", "tamper_negative"]
@@ -145,12 +145,12 @@ Signature lives in a sidecar `attestation.signature.json` (Ed25519 over `canonic
 
 ## 10. Run modes
 
-| Mode | Purpose |
-|---|---|
-| `simurgh_reference` | Existing Simurgh-only 3L containment result (re-derived, must match committed 3L digests) |
-| `external_observed` | Recorded-fixture external verdict only — external metrics, no Simurgh authority |
-| `external_plus_simurgh` | External verdict followed by the Simurgh containment tail — **the release claim** |
-| `tamper_negative` | Verifier must fail on edited evidence |
+| Mode                    | Purpose                                                                                   |
+| ----------------------- | ----------------------------------------------------------------------------------------- |
+| `simurgh_reference`     | Existing Simurgh-only 3L containment result (re-derived, must match committed 3L digests) |
+| `external_observed`     | Recorded-fixture external verdict only — external metrics, no Simurgh authority           |
+| `external_plus_simurgh` | External verdict followed by the Simurgh containment tail — **the release claim**         |
+| `tamper_negative`       | Verifier must fail on edited evidence                                                     |
 
 ## 11. Metrics
 

@@ -24,7 +24,7 @@ are subprocess-covered by the smoke + audits (3U precedent).
 
 ## Next
 
-**Stage 3V-B (v2.6.0):** plug a real **Llama Guard** run into the *same* contract — live or
+**Stage 3V-B (v2.6.0):** plug a real **Llama Guard** run into the _same_ contract — live or
 captured verdicts — proving the identical machinery wraps a real OSS defence. No contract
 change required (verified by the Fix-3 `target:"llama_guard"` compatibility test).
 
