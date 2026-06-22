@@ -1,9 +1,12 @@
 {
   "docs/research/llm-shield/evidence/stage-3v/adapter-digests.json": "sha256:6b7267be5c62b5a5f97a9fbbb26817d7d7e25c3d07a94f2afb00efc6a2fa4ef3",
   "docs/research/llm-shield/evidence/stage-3v/attestation.bundle.json": "sha256:fe1fdb4a22cd26d44003179d3d9d7c52a00f0358e298381c8bc2d4f59d4b5e3e",
+  "docs/research/llm-shield/evidence/stage-3v/attestation.signature.json": "sha256:70aa605af3f2c8e522454b27115902d6ebe39d96aa28d7e20bc8170e567efe4d",
   "docs/research/llm-shield/evidence/stage-3v/containment-summary.json": "sha256:8d1104d156ba116510640e22a7b3ab9986705b7a469bafd3b7fcdb7d8786627e",
   "docs/research/llm-shield/evidence/stage-3v/corpus-manifest.json": "sha256:ca4853f331e08678187d345cd9c60e87f605ed7071932dbb6fdc8be781d952d4",
   "docs/research/llm-shield/evidence/stage-3v/external-observations.json": "sha256:b3ee2bcd327183a0919c5644589e0499d6b9836b2a0007fbc3576ead5ed6003b",
+  "docs/research/llm-shield/evidence/stage-3v/keys/fingerprint.txt": "sha256:3fade5e38e974898abb094d79482b02fd873124cd54d1a4314580d3d5dbd4bb4",
+  "docs/research/llm-shield/evidence/stage-3v/keys/stage3v-public-key.json": "sha256:c59c9ad1f95e7ef37d8ef27efe3a29e6bdc54117253c73d0710d7131083dcce6",
   "docs/research/llm-shield/evidence/stage-3v/metrics.json": "sha256:294cca6b1476cd06b9813559045b03f3c479bc8154075325be4d6e323494a0eb",
   "docs/research/llm-shield/evidence/stage-3v/privacy-report.json": "sha256:9dfa10f540abb84c7a3e54ebd8b55747e54bdc5e0f86a601aa549d9373243cc6",
   "docs/research/llm-shield/evidence/stage-3v/referenced-evidence.json": "sha256:9306f07e14bf917401c5f25b17d6052cb91bed28b97fe721ac7c98838452ebd4"
