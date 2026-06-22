@@ -1,0 +1,41 @@
+{
+  "all_passed": true,
+  "cases": [
+    {
+      "name": "external_verdict_flipped",
+      "rejected": true
+    },
+    {
+      "name": "gateway_hash_edited",
+      "rejected": true
+    },
+    {
+      "name": "manifest_edited",
+      "rejected": true
+    },
+    {
+      "name": "metrics_edited",
+      "rejected": true
+    },
+    {
+      "name": "wrong_public_key",
+      "rejected": true
+    },
+    {
+      "name": "raw_output_injected",
+      "rejected": true
+    },
+    {
+      "name": "file_removed",
+      "rejected": true
+    },
+    {
+      "name": "adapter_supplied_hash",
+      "rejected": true
+    }
+  ],
+  "counters": {
+    "accepted_tampered_bundles": 0,
+    "raw_output_in_bundle": 0
+  }
+}
