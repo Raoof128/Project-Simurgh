@@ -17,7 +17,13 @@ const rd = (p) => readFile(join(EV, p), "utf8").then(JSON.parse);
 const resultDigest = (result) => sha256Hex(canonicalJson(result));
 
 const KNOWN_LIMITATIONS = [
+  // R2-A: the volume fix removes only the volume false-fire class. ANY two strong families
+  // can co-occur in benign heavy use (researcher CoT+task, developer template+task, etc).
+  "any_two_strong_families_can_co_occur_in_benign_heavy_use",
   "benign_mono_task_plus_shared_template_can_present_two_strong_families",
+  // R2-B: a hash field is bounded to sha256 SHAPE only; a verifier without the preimage
+  // cannot confirm it is a real digest, so each hash field is an opaque 256-bit slot.
+  "hash_fields_are_opaque_256bit_slots_verifier_cannot_confirm_preimage",
   "dilution_can_avoid_thresholds",
   "synthetic_reference_set_only",
   "not_a_live_gateway_detector",

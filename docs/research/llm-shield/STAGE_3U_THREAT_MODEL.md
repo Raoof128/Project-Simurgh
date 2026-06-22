@@ -43,8 +43,21 @@ appear only in explanatory documentation; never in evidence artifacts.
 > A detector match is not an accusation. It is a reproducible metadata-pattern result for
 > manual review.
 
-## Documented limitation (named, not hidden)
+## Documented limitations (named, not hidden)
 
-Benign mono-task users with a shared template can present two strong families
-(`structural + targeting`) and escalate. 3U fixes the volume false-fire class only; it does
-not claim benign heavy use is safe in general.
+A second red-team round (round 2) attacked the v2 hardening itself. The crypto core held
+again and the self-proof was confirmed to catch a reintroduced A10 (volume-as-strong → 3
+escalations). Two residual limitations were found and are named here and in the
+attestation's `known_limitations[]`:
+
+- **Strong+strong benign escalation is broad (R2-A).** 3U fixes the _volume_ false-fire
+  class only. ANY two strong families can co-occur in benign heavy use — researcher
+  (CoT + one task = behavioural + targeting), developer (shared template + one task =
+  structural + targeting), CoT + shared prompt (behavioural + structural) — all escalate.
+  3U does not claim benign heavy use is safe in general.
+- **Hash fields are opaque 256-bit slots (R2-B).** The grammar bounds hash fields to
+  `^sha256:[0-9a-f]{64}$` — _shape_, not authenticity. A verifier without the preimage
+  cannot confirm a hash is a real digest of bounded input, so each hash field can carry 256
+  bits of arbitrary hex. The A9 grammar closes free-text-in-tags; it does not turn a
+  client-supplied hash into a trusted digest. In a real deployment these hashes must be
+  computed by the gateway, not accepted from the client.

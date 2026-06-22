@@ -48,3 +48,16 @@ test("swapped regression set breaks regression result binding", async () => {
   assert.equal(checks.regression_result_digest_binding, false);
   assert.equal(ok, false);
 });
+
+test("malformed attestation (missing fields) returns ok:false, does not throw (R2-D)", async () => {
+  const a = await load();
+  for (const field of ["red_team_hardening", "non_claims", "known_limitations"]) {
+    const broken = { ...a.attestation };
+    delete broken[field];
+    let result;
+    assert.doesNotThrow(() => {
+      result = verifyExtractionV2({ ...a, attestation: broken });
+    }, `missing ${field} must not throw`);
+    assert.equal(result.ok, false, `missing ${field} must be ok:false`);
+  }
+});

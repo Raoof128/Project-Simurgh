@@ -65,6 +65,22 @@ named in the attestation `known_limitations[]`, asserted by a self-proof fixture
 (`strong-plus-strong-benign-collision`, which _expects_ extraction), and stated here. We do
 not hide the boundary; we sign it.
 
+A second red-team round (round 2) hit the v2 hardening directly. The crypto core held again
+and the self-proof was confirmed to have teeth (reintroducing volume-as-strong made it fail
+with 3 escalations). Two residual limitations are now named in `known_limitations[]`:
+
+- **R2-A (breadth):** the limitation above is broad — ANY two strong families can co-occur
+  in benign heavy use (researcher CoT+task, developer template+task, CoT+template), not just
+  the mono-task+template case.
+- **R2-B (hash slots):** the metadata grammar bounds hash fields to sha256 _shape_, not
+  authenticity. A verifier without the preimage cannot confirm a hash is a real digest, so
+  each hash field is an opaque 256-bit slot. A9's grammar closes free-text-in-tags; in a real
+  deployment the gateway (not the client) must compute these hashes.
+
+A round-2 robustness nit was also fixed: `verifyExtractionV2` now returns `ok:false` on a
+malformed attestation (missing `red_team_hardening`/`non_claims`/`known_limitations`) instead
+of throwing.
+
 ## Architecture (additive)
 
 New v2 modules sit beside the frozen 3T modules in `tools/simurgh-extraction/`

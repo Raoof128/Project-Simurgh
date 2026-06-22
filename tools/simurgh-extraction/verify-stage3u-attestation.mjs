@@ -54,7 +54,7 @@ export function verifyExtractionV2({
   checks.regression_result_digest_binding =
     attestation.redteam_regression_result_digest === resultDigest(runDetectorV2(regressionSet));
   checks.regression_did_not_escalate =
-    attestation.red_team_hardening.redteam_regression_decision === "single_signal_observed";
+    attestation.red_team_hardening?.redteam_regression_decision === "single_signal_observed";
   checks.family_map_digest_match =
     attestation.family_map_digest === familyMapDigestV2() &&
     detectorConfig.family_map_digest === familyMapDigestV2();
@@ -67,9 +67,10 @@ export function verifyExtractionV2({
     "extraction_pattern_observed",
   ].includes(attestation.decision);
   checks.no_intent_claim =
-    attestation.intent_claim_made === false && attestation.non_claims.includes("no_intent_claim");
-  checks.match_is_not_accusation = attestation.non_claims.includes("match_is_not_accusation");
-  checks.known_limitation_disclosed = attestation.known_limitations.includes(
+    attestation.intent_claim_made === false &&
+    !!attestation.non_claims?.includes("no_intent_claim");
+  checks.match_is_not_accusation = !!attestation.non_claims?.includes("match_is_not_accusation");
+  checks.known_limitation_disclosed = !!attestation.known_limitations?.includes(
     "benign_mono_task_plus_shared_template_can_present_two_strong_families"
   );
   return { ok: Object.values(checks).every(Boolean), checks };
