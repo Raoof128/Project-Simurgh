@@ -1,0 +1,11 @@
+{
+  "ok": true,
+  "checks": {
+    "bundle_sha256": true,
+    "fingerprint": true,
+    "signature": true,
+    "type": true,
+    "not_live": true,
+    "zero_unsafe": true
+  }
+}
