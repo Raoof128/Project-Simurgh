@@ -48,13 +48,12 @@ HARDENED_LOG="$LOG_DIR/hardened-server.log"
 : > "$BASE_LOG"
 : > "$HARDENED_LOG"
 
-SIMURGH_DEMO_MODE=1 PORT="$BASE_PORT" node server.js > "$BASE_LOG" 2>&1 &
-BASE_PID=$!
-SIMURGH_DEMO_MODE=1 SIMURGH_REQUIRE_DAEMON=true PORT="$HARDENED_PORT" node server.js > "$HARDENED_LOG" 2>&1 &
-HARDENED_PID=$!
-
-wait_for_health "http://127.0.0.1:$BASE_PORT/health" "$BASE_PID" "$BASE_LOG" "base server"
-wait_for_health "http://127.0.0.1:$HARDENED_PORT/health" "$HARDENED_PID" "$HARDENED_LOG" "hardened server"
+boot_server "$BASE_PORT" "$BASE_LOG" "base server" -- \
+  env SIMURGH_DEMO_MODE=1 PORT="$BASE_PORT" node server.js
+BASE_PID="$BOOTED_PID"
+boot_server "$HARDENED_PORT" "$HARDENED_LOG" "hardened server" -- \
+  env SIMURGH_DEMO_MODE=1 SIMURGH_REQUIRE_DAEMON=true PORT="$HARDENED_PORT" node server.js
+HARDENED_PID="$BOOTED_PID"
 
 node tests/e2e/stage22_23_smoke.mjs \
   --base-url "http://127.0.0.1:$BASE_PORT" \

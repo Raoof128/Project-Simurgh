@@ -26,9 +26,9 @@ source "$SCRIPT_DIR/lib/smoke-server.sh"
 
 echo "Stage 2.8C/D Linux Wayland + systemd + CI smoke"
 node --check tests/e2e/stage28cd_linux_wayland_systemd_ci_smoke.mjs
-SIMURGH_DEMO_MODE=1 PORT="$PORT" node server.js > "$LOG_FILE" 2>&1 &
-PID=$!
-wait_for_health "http://127.0.0.1:$PORT/health" "$PID" "$LOG_FILE" "Stage 2.8C/D server"
+boot_server "$PORT" "$LOG_FILE" "Stage 2.8C/D server" -- \
+  env SIMURGH_DEMO_MODE=1 PORT="$PORT" node server.js
+PID="$BOOTED_PID"
 node tests/e2e/stage28cd_linux_wayland_systemd_ci_smoke.mjs "http://127.0.0.1:$PORT"
 node tools/privacy-audit.mjs
 echo "Stage 2.8C/D Linux Wayland + systemd + CI smoke: pass"
