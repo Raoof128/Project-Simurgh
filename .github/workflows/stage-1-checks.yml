@@ -98,6 +98,15 @@ jobs:
         # mutex poisoning if one Xvfb display takes >500 ms to bind on cold CI.
         run: cargo test --manifest-path tools/simurgh-daemon-linux/Cargo.toml -- --test-threads=1
 
+      # The smoke/audit servers bind fixed ports in the 33000-33999 band, which sits
+      # inside Linux's default ephemeral range (32768-60999). Without this, an outbound
+      # curl/fetch in an earlier step can grab e.g. 33170 as a transient source port, and
+      # a later server's listen() on that port then fails with "EADDRINUSE / port already
+      # in use" — an intermittent, port-roulette flake that worsens as the run progresses.
+      # Reserving the band keeps the kernel from ever auto-allocating these ports.
+      - name: Reserve smoke-server ports from the ephemeral range
+        run: sudo sysctl -w net.ipv4.ip_local_reserved_ports=33000-33999
+
       - name: Run Stage 1 check suite
         run: ./scripts/check.sh
 
