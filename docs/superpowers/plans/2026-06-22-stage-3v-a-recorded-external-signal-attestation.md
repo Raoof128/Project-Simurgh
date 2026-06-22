@@ -26,7 +26,19 @@
 - Sacred discipline carried from 3T/3U: a verdict/observation is not an accusation; no named third-party labs in machine artifacts.
 - Branch: `main-stage-3v-a-recorded-external-signal-attestation`. Tag target `v2.5.0-stage-3v-a-recorded-external-signal-attestation`.
 
+## Approved amendments (apply during implementation)
+
+**Amendment 1 — split the corpus hash from the external-defence manifest hash.** Do NOT use a single ambiguous `fixture_manifest_hash`. Instead:
+- The four trusted-harness hashes are: `external_raw_output_hash`, `external_normalised_verdict_hash`, `adapter_config_hash`, **`external_defense_manifest_hash`** (hash of the external-defence manifest from the adapter).
+- The run-set carries a separate **`stage3l_corpus_manifest_hash`** = `sha256Hex(canonicalJson(buildStage3lManifest(corpus)))` (`buildStage3lManifest` is exported by the 3L lib). `run_set = { source: "stage-3l", stage3l_corpus_manifest_hash, counts: { total } }`.
+- `harnessComputeHashes(...)` takes `externalDefenseManifest` (not `fixtureManifest`) and returns `external_defense_manifest_hash` (not `fixture_manifest_hash`). Update Task 2's impl/test and Task 5's runner/bundle/test accordingly.
+
+**Amendment 2 — verifier emits explicit recomputation checks in `--reproduce`.** Beyond `reproduce` (full bundle equality), the reproduce path sets two explicit booleans so the R2-B closure is visible in machine evidence:
+- `trusted_harness_hashes_recomputed` = all four `gateway_computed_hashes` in the rebuilt bundle equal the committed bundle's.
+- `stage3l_corpus_manifest_recomputed` = rebuilt `run_set.stage3l_corpus_manifest_hash` equals committed. Update Task 7's verifier + test to assert these appear and are `true`.
+
 **Reference signatures (verified against the codebase):**
+- `buildStage3lManifest(fixtures)` is exported by the 3L lib → use for `stage3l_corpus_manifest_hash`.
 - `evaluateStage3lCase(fixture)` → `{ input_verdict, boundary, contained, observed: { unsafe_tool_executed, unsafe_output_exported, context_authority_escalated, receipt_exported, audit_verified } }`. **It does not take an external verdict** — this is what makes advisory-invariance structural.
 - `buildStage3lCorpus()` → 180 fixtures. Each has `case_id`: malicious `3l-<family>-input_miss_downstream-NNN` (24/family) and `3l-<family>-direct_input_attack-NNN` (6/family) across 5 families, plus 30 `3l-f5_benign_hard_negatives-benign-NNN`. Fixtures also carry `expected_containment_boundary`, `contexts`, optional `tool_request`, `provider_output_fixture`.
 - `canonicalJson(v)`, `sha256Hex(input)` (already prefixed), `fingerprintPublicKey(pubPem)`.
