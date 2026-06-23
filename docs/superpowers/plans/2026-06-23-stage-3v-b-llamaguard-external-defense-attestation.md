@@ -652,9 +652,9 @@ export function buildSampleCapture() {
     contains_secrets: false,
     capture_provenance: {
       model_id: "meta-llama/Llama-Guard-4-12B",
-      model_revision: "sample-deterministic",
-      weights_digest: "sha256:" + "0".repeat(64),
-      tokenizer_digest: "sha256:" + "0".repeat(64),
+      hf_model_commit: "sample-deterministic",
+      hf_model_snapshot_digest: "sha256:" + "0".repeat(64),
+      tokenizer_config_digest: "sha256:" + "0".repeat(64),
       chat_template_hash: "sha256:" + "0".repeat(64),
       transformers_version: "sample",
       torch_version: "sample",
@@ -697,7 +697,7 @@ git commit -m "feat(3v-b): deterministic sample capture generator + committed sa
 
 **Files:**
 - Create: `tests/e2e/llm_shield_stage3vb_external_defense_runner.mjs`
-- Create (generated): `docs/research/llm-shield/evidence/stage-3v-b/{attestation.bundle.json,external-observations.json,metrics.json,containment-summary.json,corpus-manifest.json,adapter-digests.json,input-manifest.json,referenced-evidence.json,privacy-report.json}`
+- Create (generated): `docs/research/llm-shield/evidence/stage-3v-b/{attestation.bundle.json,external-observations.json,metrics.json,containment-summary.json,corpus-manifest.json,adapter-digests.json,input-manifest.json,capture-summary.json,referenced-evidence.json,privacy-report.json}`
 - Test: `tests/unit/llmShield/stage3vb/bundle.test.js`, `tests/unit/llmShield/stage3vb/advisoryInvariance.test.js`
 
 **Interfaces:**
@@ -853,6 +853,26 @@ export function deriveForVerify() {
   };
 }
 
+export function buildCaptureSummary(d = deriveForVerify()) {
+  const byMode = {};
+  for (const fx of d.corpus) byMode[fx.case_mode] = (byMode[fx.case_mode] ?? 0) + 1;
+  return {
+    schema: "simurgh.stage3vb.capture_summary.v1",
+    total_cases: d.corpus.length,
+    input_miss_downstream: byMode.input_miss_downstream ?? 0,
+    direct_input_attack: byMode.direct_input_attack ?? 0,
+    benign: byMode.benign_hard_negative ?? 0,
+    lg4_allow: d.externalMetrics.external_allow_rate,
+    lg4_block: d.externalMetrics.external_block_rate,
+    lg4_warn: d.externalMetrics.external_warn_rate,
+    lg4_abstain: d.externalMetrics.external_abstain_rate,
+    lg4_error: d.externalMetrics.external_error_rate,
+    external_miss_but_contained: d.containmentMetrics.external_miss_but_contained_rate,
+    external_plus_simurgh_targeted_asr: d.comparativeMetrics.external_plus_simurgh_targeted_asr,
+    model_reexecuted_in_ci: false,
+  };
+}
+
 export function buildExternalDefenseBundle() {
   const d = deriveForVerify();
   return {
@@ -923,6 +943,7 @@ async function main() {
       await writeFile(join(EV, "adapter-digests.json"), stable({ ...d.gatewayHashes, stage3l_corpus_manifest_hash: d.stage3lCorpusManifestHash }));
       await writeFile(join(EV, "referenced-evidence.json"), stable(bundle.referenced_evidence));
       await writeFile(join(EV, "privacy-report.json"), stable({ metadata_only: true, raw_output_in_evidence: false, raw_prompts_in_evidence: false }));
+      await writeFile(join(EV, "capture-summary.json"), stable(buildCaptureSummary(d)));
       await writeFile(join(EV, "attestation.bundle.json"), stable(bundle));
       console.log("stage3vb: evidence written (update; run prettier then write-hashes)");
       return;
@@ -1274,11 +1295,11 @@ export function runStage3vbSelfProof() {
   reject("external_verdict_flipped", flip);
 
   const prov = clone(bundle);
-  prov.capture_provenance.model_revision = "tampered-revision";
+  prov.capture_provenance.hf_model_commit = "tampered-revision";
   reject("provenance_edited", prov);
 
   const wd = clone(bundle);
-  wd.capture_provenance.weights_digest = "sha256:" + "0".repeat(64);
+  wd.capture_provenance.hf_model_snapshot_digest = "sha256:" + "9".repeat(64);
   reject("weights_digest_edited", wd);
 
   const im = clone(bundle);
@@ -1457,6 +1478,27 @@ def main():
     chat_template = getattr(tok, "chat_template", "") or ""
     chat_template_hash = "sha256:" + hashlib.sha256(chat_template.encode("utf-8")).hexdigest()
 
+    # Real, verifiable provenance digests (Fix 1): a snapshot manifest digest over the local HF
+    # snapshot (filename + size + per-file sha256), plus the tokenizer config digest. No fake
+    # sentinel hashes — every digest is a genuine sha256 over real bytes.
+    import os
+    from huggingface_hub import snapshot_download
+
+    snapshot_dir = snapshot_download(args.model_id)
+    manifest = []
+    for root, _dirs, files in os.walk(snapshot_dir):
+        for name in sorted(files):
+            fp = os.path.join(root, name)
+            rel = os.path.relpath(fp, snapshot_dir)
+            manifest.append({"path": rel, "size": os.path.getsize(fp), "sha256": sha256_file(fp)})
+    manifest.sort(key=lambda m: m["path"])
+    snapshot_digest = "sha256:" + hashlib.sha256(
+        json.dumps(manifest, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+    tok_cfg = os.path.join(snapshot_dir, "tokenizer_config.json")
+    tokenizer_config_digest = sha256_file(tok_cfg) if os.path.exists(tok_cfg) else snapshot_digest
+    hf_model_commit = os.path.basename(os.path.realpath(snapshot_dir))
+
     cases = []
     for it in items:
         messages = [{"role": "user", "content": it["user_task"]}]
@@ -1476,9 +1518,9 @@ def main():
         "contains_secrets": False,
         "capture_provenance": {
             "model_id": args.model_id,
-            "model_revision": getattr(model.config, "_name_or_path", args.model_id),
-            "weights_digest": "sha256:see-model-card",
-            "tokenizer_digest": "sha256:see-tokenizer",
+            "hf_model_commit": hf_model_commit,
+            "hf_model_snapshot_digest": snapshot_digest,
+            "tokenizer_config_digest": tokenizer_config_digest,
             "chat_template_hash": chat_template_hash,
             "transformers_version": transformers.__version__,
             "torch_version": torch.__version__,
@@ -1727,12 +1769,18 @@ EV="docs/research/llm-shield/evidence/stage-3v-b"
 node -e '
 const b = require("./'"$EV"'/attestation.bundle.json");
 const c = require("./'"$EV"'/capture-replay/lg4-frozen-capture.json");
+const SHA = /^sha256:[0-9a-f]{64}$/;
+const p = b.capture_provenance || {};
 if (c.live !== true) throw new Error("capture is not live (still sample) — refusing release");
 if (c.capture_environment !== "runpod_gpu") throw new Error("capture_environment is not runpod_gpu");
 if (b.target_defense.live !== true) throw new Error("bundle target_defense.live must be true");
 if (b.capture_mode !== "live_capture_frozen_replay") throw new Error("capture_mode mismatch");
 if (b.model_reexecuted_in_ci !== false) throw new Error("model_reexecuted_in_ci must be false");
-if (!b.capture_provenance || b.capture_provenance.model_revision === "sample-deterministic") throw new Error("capture_provenance is still sample");
+if (!p.hf_model_commit || p.hf_model_commit === "sample-deterministic") throw new Error("hf_model_commit is still sample");
+if (!SHA.test(p.hf_model_snapshot_digest || "")) throw new Error("hf_model_snapshot_digest is not a real sha256");
+if (!SHA.test(p.tokenizer_config_digest || "")) throw new Error("tokenizer_config_digest is not a real sha256");
+if (!SHA.test(p.chat_template_hash || "")) throw new Error("chat_template_hash is not a real sha256");
+if (/^1970/.test(p.captured_at_utc || "1970")) throw new Error("captured_at_utc is still the sample epoch");
 if (!b.gateway_computed_hashes.capture_file_hash) throw new Error("capture_file_hash missing");
 console.log("stage3vb live-release gate: PASS (real capture present)");
 '
@@ -1876,7 +1924,7 @@ git commit -m "feat(3v-b): wire preflights + smoke + audits + policy-drift + cov
 
 - [ ] **Step 1: Write the evidence README**
 
-Create `docs/research/llm-shield/evidence/stage-3v-b/README.md` documenting: the crown + steel-thread sentences (verbatim from the spec), the file inventory table (`attestation.bundle.json`, `attestation.signature.json`, `capture-replay/lg4-frozen-capture.json`, `external-observations.json`, `metrics.json`, `containment-summary.json`, `corpus-manifest.json`, `input-manifest.json`, `adapter-digests.json`, `referenced-evidence.json`, `privacy-report.json`, `evidence-hashes.json`, `keys/stage3vb-public-key.json`, `keys/fingerprint.txt`), how to reproduce (`scripts/reproduce-llm-shield-stage3vb.sh`), and the `live_capture_origin_self_reported` limitation.
+Create `docs/research/llm-shield/evidence/stage-3v-b/README.md` documenting: the crown + steel-thread sentences (verbatim from the spec), the file inventory table (`attestation.bundle.json`, `attestation.signature.json`, `capture-replay/lg4-frozen-capture.json`, `external-observations.json`, `metrics.json`, `containment-summary.json`, `corpus-manifest.json`, `input-manifest.json`, `capture-summary.json`, `adapter-digests.json`, `referenced-evidence.json`, `privacy-report.json`, `evidence-hashes.json`, `keys/stage3vb-public-key.json`, `keys/fingerprint.txt`), how to reproduce (`scripts/reproduce-llm-shield-stage3vb.sh`), and the `live_capture_origin_self_reported` limitation.
 
 - [ ] **Step 2: Write the four reviewer docs**
 
@@ -2006,6 +2054,6 @@ git push origin v2.6.0-stage-3v-b-llamaguard-external-defense-attestation
 - Docs + evidence README → Task 13. ✅
 - Zero src/llmShield change / policy-drift three-dot → Task 11 guard, Task 12 wiring. ✅
 
-**Placeholder scan:** No TBD/TODO; every code step shows complete content. Python `weights_digest`/`tokenizer_digest` use documented `see-model-card` sentinels (model card digests are pinned at real-capture time in Task 14, Step 4 review) — acceptable because they are provenance values, not logic.
+**Placeholder scan:** No TBD/TODO; every code step shows complete content. No fake `sha256:` sentinels (Fix 1): the Python harness computes a real snapshot-manifest digest, tokenizer-config digest, and chat-template hash over actual bytes; the sample generator's `0*64` digests are valid sha256 shape but are blocked from release by the strengthened live-release gate (Fix 2: real-sha256 regex + non-sample `hf_model_commit` + non-1970 timestamp).
 
 **Type consistency:** `frozenCaptureObservations`, `assertCaptureIntegrity`, `harnessComputeStage3vbHashes`, `buildExternalDefenseBundle`, `deriveForVerify`, `verifyExternalDefense`, `runStage3vbSelfProof` names are identical across all referencing tasks. The seven hash keys match exactly between Task 4, Task 6, and the Task 8 `GATEWAY_HASH_KEYS`. Bundle `stage:"3V-B"` and `type:"simurgh.vca.external_defense_run.v1"` consistent. ✅
