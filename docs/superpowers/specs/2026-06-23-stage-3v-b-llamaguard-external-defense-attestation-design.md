@@ -7,8 +7,9 @@
 
 ## Crown sentence
 
-**Stage 3V-B does not claim the model is reproducible. It claims the evidence is reproducible,
-and the live model capture is provenance-bound.**
+**Stage 3V-B does not claim Llama Guard 4 is reproducible. It claims the evidence is reproducible,
+the live capture is provenance-bound, and the committed frozen-capture replay artifact lets
+reviewers reproduce the signed attestation offline.**
 
 ## Steel thread (boundary claim, NOT an anti-Llama-Guard claim)
 
@@ -57,23 +58,56 @@ Raw LG4 output  = local transient capture input, never signed/exported as raw te
 per-case LG4 output → write self-reported capture provenance. No signing, no normalisation,
 no trusted hashes, no authority.
 
-**Bring back to Mac:** raw capture file is local + gitignored under
-`.simurgh/captures/stage-3v-b/lg4-raw-capture.json` (NOT under `tests/fixtures/`).
+**Bring back to Mac:** the unsanitised raw capture lands local + gitignored under
+`.simurgh/captures/stage-3v-b/lg4-raw-capture.json` (NOT under `tests/fixtures/`). The trusted
+harness then transforms it into a **committed, privacy-audited frozen-capture replay artifact**
+(see §4) so reviewers and CI can reproduce the signed attestation offline.
 
 **On Mac (trusted harness):** read raw capture → parse LG4 grammar → normalise to
 `allow|block|warn|abstain|error` → reject any adapter-supplied `hash`/`digest` field
 (`adapter_supplied_hash_forbidden`) → compute all hashes → build VCA bundle → sign locally
 with the 3V-B Ed25519 key.
 
-## 4. Privacy rule (Fix-2 carried from 3V-A)
+## 4. Privacy rule + committed frozen-capture replay artifact (Fix-2 carried, reproducibility restored)
 
-Raw capture contains only `{ "case_id": "...", "raw_lg4_output": "safe" }` plus the provenance
-block. The bundle exports **no** raw prompts, **no** raw LG4 outputs, **no** API keys, **no** HF
-token, **no** RunPod secrets. Prompt binding is by hash only:
+**The contradiction this resolves:** a raw capture that is gitignored-only makes the signed
+bundle *verifiable* but not *reproducible* by reviewers (they could check the signature but never
+recompute `external_raw_output_hash` from the capture). 3V-B therefore commits a sanitised replay
+artifact so the full offline reproduce path works for everyone — without exporting any prompt.
+
+**Committed replay artifact:**
+`docs/research/llm-shield/evidence/stage-3v-b/capture-replay/lg4-frozen-capture.json`
+
+```json
+{
+  "schema": "simurgh.stage3vb.frozen_lg4_capture.v1",
+  "contains_raw_prompts": false,
+  "contains_hf_token": false,
+  "contains_secrets": false,
+  "cases": [ { "case_id": "...", "raw_lg4_output": "safe" } ],
+  "capture_provenance": {}
+}
+```
+
+It contains ONLY `case_id` + raw LG4 *classifier* output (`safe` / `unsafe\n<S-codes>`) +
+provenance. LG4 classifier text is not the prompt, so it is safe to commit **once the privacy
+audit confirms it**.
+
+**Privacy-audit fail-closed rule (locked):** the frozen-capture replay artifact may contain raw
+LG4 classifier text only if the privacy audit confirms it contains no prompt text, no secrets, no
+HF token, no email, and no copied `user_task` content. If any LG4 output echoes the prompt or
+contains sensitive text, the build fails closed and the capture must be redacted/re-run.
+
+**The signed bundle still inlines no raw output.** It references and hashes the committed replay
+artifact via `capture_file_hash`; raw LG4 output is an audited *replay input*, not bundle
+content. Prompt binding stays hash-only:
 
 ```json
 { "input_surface": "user_task", "input_cases": 180, "input_manifest_hash": "sha256:..." }
 ```
+
+The unsanitised `.simurgh/captures/...` file remains gitignored and local; it is the source the
+harness sanitises *from*, never a published artifact.
 
 ## 5. Bundle schema additions (over the 3V-A `simurgh.vca.external_defense_run.v1` shape)
 
@@ -106,7 +140,10 @@ Stage `3V-B`; `target_defense.live: true`.
     "cuda_version": "...",
     "gpu": "...",
     "python_version": "...",
-    "captured_at_utc": "..."
+    "captured_at_utc": "...",
+    "capture_origin": "self_reported_capture_environment",
+    "model_weights_digest_source": "capture_environment_self_reported",
+    "model_weights_recomputed_by_verifier": false
   },
   "gateway_computed_hashes": {
     "external_raw_output_hash": "sha256:...",
@@ -122,8 +159,8 @@ Stage `3V-B`; `target_defense.live: true`.
 
 ### Amendment bolts (locked)
 
-1. **`capture_file_hash`** — binds the local raw capture file (proves the signed evidence was
-   built from a specific frozen capture).
+1. **`capture_file_hash`** — binds the committed frozen-capture replay artifact (§4) (proves the
+   signed evidence was built from a specific frozen capture and that reviewers replay the same one).
 2. **`capture_script_hash`** — binds the RunPod Python capture harness (proves "this exact
    capture harness produced the raw outputs", not just "model X ran").
 3. **`prompt_rendering_hash`** — binds the chat-template rendering logic + `input_manifest_hash`
@@ -185,6 +222,8 @@ If any fixture lacks feedable input text: do NOT silently synthesize — stop an
 - `tools/simurgh-attestation/{sign-3vb-attestation,verify-stage3vb-external-defense}.mjs`.
 - `scripts/{smoke,security-audit,privacy-audit,consistency-audit,policy-drift-guard,reproduce}-llm-shield-stage3vb.*`
   + `scripts/assert-stage3l-feedable-inputs.*` preflight, wired into `scripts/check.sh` after 3V-A.
+- `docs/research/llm-shield/evidence/stage-3v-b/capture-replay/lg4-frozen-capture.json` —
+  committed, privacy-audited sanitised replay artifact (§4); the reproduce path's raw-output source.
 - `docs/research/llm-shield/evidence/stage-3v-b/` + reviewer docs
   (writeup, threat model, validation matrix, reviewer checklist, closeout, evidence README) +
   `keys/stage3vb-public-key.json`.
@@ -205,8 +244,11 @@ If any fixture lacks feedable input text: do NOT silently synthesize — stop an
 - Tooling-only: **zero `src/llmShield` change**; policy-drift guard fail-closed three-dot
   (`origin/main...HEAD` with real-base fallback).
 - Two-tier verifier (portable + `--reproduce`); fails closed (`ok:false`, never throws).
-  `--reproduce` recomputes the seven harness hashes + the stage3l-corpus + input manifests and
-  emits explicit `*_recomputed` booleans.
+  `--reproduce` recomputes the seven harness hashes (incl. `external_raw_output_hash` from the
+  committed frozen-capture replay artifact) + the stage3l-corpus + input manifests and emits
+  explicit `*_recomputed` booleans. The verifier does NOT download or rehash LG4 weights
+  (`model_weights_recomputed_by_verifier: false`); it verifies the evidence and the
+  provenance/replay binding, not the model.
 
 ## 10. Sequencing (locked — Option 1)
 
