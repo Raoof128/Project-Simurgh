@@ -94,6 +94,20 @@ history, with a machine-readable summary and a per-rung reason for every classif
 
 ---
 
+## Architecture & the VCA ladder
+
+The defence acts _after_ the input filter can fail — untrusted input passes through four containment
+boundaries, and every run is sealed into signed, offline-reproducible evidence. The ladder below
+traces the work from the input shield (3A–3C) through containment (3D–3L) to the signed attestation
+arc (3M–3X).
+
+[![Containment architecture and the VCA ladder, 3A to 3X](docs/research/llm-shield/vca-architecture.png)](docs/research/llm-shield/vca-architecture.html)
+
+> Source (self-contained, printable):
+> [`docs/research/llm-shield/vca-architecture.html`](docs/research/llm-shield/vca-architecture.html)
+
+---
+
 ## Capabilities
 
 Everything below is implemented, tested, and (for the attestation work) shipped as signed,

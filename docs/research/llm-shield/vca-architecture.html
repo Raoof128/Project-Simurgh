@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Project Simurgh — Containment Architecture & the VCA Ladder (3A → 3X)</title>
+    <style>
+      :root {
+        --ink: #1b1b1a;
+        --muted: #5f6360;
+        --faint: #8a8d86;
+        --line: #e3e0d7;
+        --paper: #ffffff;
+        --sand: #f6f4ee;
+        --sand-2: #efece3;
+        --forest: #2f4a2a;
+        --forest-2: #3c6135;
+        --forest-soft: #eaf0e6;
+        --forest-edge: #cdddc5;
+        --good: #1f6b3a;
+        --accent: #b08433;
+        --accent-soft: #f4ead2;
+        --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+        --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+        --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--sand);
+        color: var(--ink);
+        font-family: var(--sans);
+        font-size: 14px;
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+      }
+      .board {
+        width: 1180px;
+        margin: 26px auto;
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        box-shadow: 0 22px 60px -34px rgba(27, 27, 26, 0.5);
+        padding: 34px 40px 30px;
+      }
+      .masthead {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 26px;
+      }
+      .masthead img {
+        width: 58px;
+        height: 58px;
+        object-fit: contain;
+      }
+      .eyebrow {
+        margin: 0 0 3px;
+        font-size: 11px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--forest);
+        font-weight: 700;
+      }
+      h1 {
+        font-family: var(--serif);
+        font-weight: 600;
+        font-size: 24px;
+        margin: 0;
+        letter-spacing: -0.01em;
+      }
+      .panel {
+        border: 1px solid var(--line);
+        border-radius: 13px;
+        padding: 22px 24px 24px;
+        margin-bottom: 22px;
+        background: linear-gradient(180deg, #fffefb 0%, #fdfcf9 100%);
+      }
+      .panel:last-of-type {
+        margin-bottom: 0;
+      }
+      .panel-title {
+        display: flex;
+        align-items: baseline;
+        gap: 12px;
+        margin: 0 0 20px;
+      }
+      .panel-title h2 {
+        font-family: var(--serif);
+        font-size: 16px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--forest);
+        margin: 0;
+      }
+      .panel-title .note {
+        font-size: 12.5px;
+        color: var(--muted);
+      }
+
+      /* ---- Architecture pipeline ---- */
+      .pipe {
+        display: flex;
+        align-items: stretch;
+        gap: 0;
+      }
+      .node {
+        flex: 1 1 0;
+        border-radius: 11px;
+        padding: 13px 12px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 78px;
+      }
+      .node .k {
+        font-size: 13.5px;
+        font-weight: 700;
+        line-height: 1.25;
+      }
+      .node .d {
+        font-size: 11px;
+        margin-top: 4px;
+        line-height: 1.3;
+      }
+      .node.io {
+        background: var(--sand-2);
+        border: 1px solid var(--line);
+        color: var(--ink);
+        flex: 0 0 118px;
+      }
+      .node.io .d {
+        color: var(--muted);
+      }
+      .node.bd {
+        background: var(--forest-soft);
+        border: 1px solid var(--forest-edge);
+        color: var(--forest);
+      }
+      .node.bd .d {
+        color: var(--forest-2);
+        opacity: 0.92;
+      }
+      .arrow {
+        flex: 0 0 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--faint);
+        font-size: 17px;
+      }
+      .seal {
+        margin-top: 16px;
+        display: flex;
+        align-items: stretch;
+        gap: 0;
+      }
+      .seal .cap {
+        flex: 0 0 118px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-size: 11px;
+        color: var(--muted);
+      }
+      .seal .strip {
+        flex: 1 1 0;
+        display: flex;
+        align-items: center;
+        gap: 0;
+        background: #1c241b;
+        color: #eef0e4;
+        border-radius: 11px;
+        padding: 13px 18px;
+      }
+      .seal .strip .s {
+        flex: 1 1 0;
+        text-align: center;
+      }
+      .seal .strip .s .k {
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .seal .strip .s .d {
+        font-size: 10.5px;
+        color: #aebaa6;
+        margin-top: 3px;
+      }
+      .seal .strip .sep {
+        flex: 0 0 26px;
+        text-align: center;
+        color: #6f8067;
+        font-size: 15px;
+      }
+      .downlink {
+        display: flex;
+        justify-content: center;
+        color: var(--faint);
+        font-size: 17px;
+        margin: 2px 0 -2px;
+      }
+
+      /* ---- VCA ladder ---- */
+      .arc {
+        margin-bottom: 16px;
+      }
+      .arc:last-child {
+        margin-bottom: 0;
+      }
+      .arc-head {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 9px;
+      }
+      .arc-num {
+        font-family: var(--serif);
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--forest);
+        background: var(--forest-soft);
+        border: 1px solid var(--forest-edge);
+        border-radius: 6px;
+        padding: 2px 8px;
+      }
+      .arc-name {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--ink);
+      }
+      .arc-span {
+        font-size: 11.5px;
+        color: var(--muted);
+        font-family: var(--mono);
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+      }
+      .chip {
+        border: 1px solid var(--line);
+        background: #fbfaf6;
+        border-radius: 8px;
+        padding: 6px 10px;
+        font-size: 11.5px;
+        line-height: 1.3;
+        display: flex;
+        align-items: baseline;
+        gap: 7px;
+      }
+      .chip b {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--forest);
+        font-weight: 700;
+      }
+      .arc.signed .chip {
+        background: var(--forest-soft);
+        border-color: var(--forest-edge);
+        color: var(--forest);
+      }
+      .arc.signed .chip b {
+        color: var(--forest-2);
+      }
+      .chip.star {
+        background: var(--accent-soft);
+        border-color: #e6d3a6;
+        color: #7a5a14;
+        font-weight: 600;
+      }
+      .chip.star b {
+        color: var(--accent);
+      }
+      .legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-top: 16px;
+        padding-top: 14px;
+        border-top: 1px dashed var(--line);
+        font-size: 11.5px;
+        color: var(--muted);
+      }
+      .legend span {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .sw {
+        width: 13px;
+        height: 13px;
+        border-radius: 4px;
+        border: 1px solid var(--line);
+        display: inline-block;
+      }
+      .sw.prior {
+        background: #fbfaf6;
+      }
+      .sw.signed {
+        background: var(--forest-soft);
+        border-color: var(--forest-edge);
+      }
+      .sw.star {
+        background: var(--accent-soft);
+        border-color: #e6d3a6;
+      }
+      footer {
+        margin-top: 22px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 6px 22px;
+        font-size: 11.5px;
+        color: var(--muted);
+      }
+      footer .pill {
+        display: inline-block;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        color: var(--forest);
+        background: var(--forest-soft);
+        border: 1px solid var(--forest-edge);
+        border-radius: 999px;
+        padding: 2px 9px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="board">
+      <div class="masthead">
+        <img src="../../Project-Simurgh-Logo.png" alt="Project Simurgh" />
+        <div>
+          <p class="eyebrow">Project Simurgh · Verifiable Containment Attestation</p>
+          <h1>Containment architecture &amp; the VCA ladder (3A → 3X)</h1>
+        </div>
+      </div>
+
+      <!-- PANEL A: ARCHITECTURE -->
+      <div class="panel">
+        <div class="panel-title">
+          <h2>Containment architecture</h2>
+          <span class="note"
+            >The defence acts after the input filter can fail — every run is sealed into verifiable
+            evidence.</span
+          >
+        </div>
+
+        <div class="pipe">
+          <div class="node io">
+            <div class="k">Untrusted input</div>
+            <div class="d">user turn · context · tool output</div>
+          </div>
+          <div class="arrow">→</div>
+          <div class="node bd">
+            <div class="k">Input firewall</div>
+            <div class="d">normalise &amp; classify direct-input attacks</div>
+          </div>
+          <div class="arrow">→</div>
+          <div class="node bd">
+            <div class="k">Context-provenance guard</div>
+            <div class="d">deny untrusted context authority</div>
+          </div>
+          <div class="arrow">→</div>
+          <div class="node bd">
+            <div class="k">Tool-invocation gate</div>
+            <div class="d">refuse unauthorised tool/shell calls</div>
+          </div>
+          <div class="arrow">→</div>
+          <div class="node bd">
+            <div class="k">Output-leakage firewall</div>
+            <div class="d">block secret &amp; system-prompt export</div>
+          </div>
+          <div class="arrow">→</div>
+          <div class="node io">
+            <div class="k">Model / provider</div>
+            <div class="d">any vendor, agnostic</div>
+          </div>
+        </div>
+
+        <div class="downlink">↓</div>
+
+        <div class="seal">
+          <div class="cap">every run is sealed</div>
+          <div class="strip">
+            <div class="s">
+              <div class="k">Ed25519-signed bundle</div>
+              <div class="d">metadata-only · canonical JSON · no raw prompts</div>
+            </div>
+            <div class="sep">→</div>
+            <div class="s">
+              <div class="k">Offline verifier</div>
+              <div class="d">re-derives byte-for-byte · fails closed</div>
+            </div>
+            <div class="sep">→</div>
+            <div class="s">
+              <div class="k">Negative self-proof</div>
+              <div class="d">tampered evidence rejected · counters zero</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL B: LADDER -->
+      <div class="panel">
+        <div class="panel-title">
+          <h2>The VCA ladder</h2>
+          <span class="note"
+            >Each rung is a tagged release; the attestation arc (3M → 3X) is Ed25519-signed and
+            offline-reproducible.</span
+          >
+        </div>
+
+        <div class="arc">
+          <div class="arc-head">
+            <span class="arc-num">I</span>
+            <span class="arc-name">Input shield</span>
+            <span class="arc-span">3A – 3C</span>
+          </div>
+          <div class="chips">
+            <div class="chip"><b>3A</b> input-only jailbreak shield</div>
+            <div class="chip"><b>3B</b> honest adversarial baseline</div>
+            <div class="chip"><b>3C</b> canonicalise-then-classify hardening</div>
+          </div>
+        </div>
+
+        <div class="arc">
+          <div class="arc-head">
+            <span class="arc-num">II</span>
+            <span class="arc-name">Containment</span>
+            <span class="arc-span">3D – 3L</span>
+          </div>
+          <div class="chips">
+            <div class="chip"><b>3D</b> containment vs mock target</div>
+            <div class="chip"><b>3E</b> live gateway (Anthropic adapter)</div>
+            <div class="chip"><b>3H</b> AgentDojo in-loop defence</div>
+            <div class="chip"><b>3I</b> utility recovery</div>
+            <div class="chip"><b>3J</b> full AgentDojo evaluation</div>
+            <div class="chip"><b>3K</b> adaptive-attack readiness</div>
+            <div class="chip"><b>3L</b> reference containment run-set (180)</div>
+          </div>
+        </div>
+
+        <div class="arc signed">
+          <div class="arc-head">
+            <span class="arc-num">III</span>
+            <span class="arc-name">Verifiable attestation — signed &amp; offline-reproducible</span>
+            <span class="arc-span">3M – 3X</span>
+          </div>
+          <div class="chips">
+            <div class="chip"><b>3M</b> offline containment attestation</div>
+            <div class="chip"><b>3N</b> claim-checked ledger</div>
+            <div class="chip"><b>3O</b> BYO-gateway benchmark</div>
+            <div class="chip"><b>3P</b> cross-defence attestation</div>
+            <div class="chip"><b>3Q</b> registry + regression diff</div>
+            <div class="chip"><b>3R</b> trust-preserving fallback</div>
+            <div class="chip"><b>3S</b> verifiable defensive narrative</div>
+            <div class="chip"><b>3T</b> capability-extraction attestation</div>
+            <div class="chip"><b>3U</b> red-team-hardened extraction</div>
+            <div class="chip"><b>3V</b> recorded external signal</div>
+            <div class="chip star"><b>3V-B</b> ★ live Llama Guard 4 — 138/138 contained</div>
+            <div class="chip"><b>3W</b> witnessed release provenance</div>
+            <div class="chip star"><b>3X</b> ★ public timeline + one-command reproduce</div>
+          </div>
+        </div>
+
+        <div class="legend">
+          <span><i class="sw prior"></i> prior arc (input shield · containment)</span>
+          <span><i class="sw signed"></i> signed &amp; offline-reproducible (3M → 3X)</span>
+          <span><i class="sw star"></i> headline result / external replay</span>
+        </div>
+      </div>
+
+      <footer>
+        <span
+          ><span class="pill">Research prototype</span> &nbsp; AGPL-3.0 · claims bounded by signed
+          evidence and documented non-claims</span
+        >
+        <span>github.com/Raoof128/Project-Simurgh · Mohammad Raouf Abedini</span>
+      </footer>
+    </div>
+  </body>
+</html>
