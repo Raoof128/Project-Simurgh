@@ -1033,22 +1033,39 @@ jobs:
           node-version: "22"
       - name: Install deps
         run: npm ci
-      - name: Re-run 3V-B offline gates and regenerate the witness verdict from REAL results
+      - name: Re-run 3V-B offline gates and regenerate the witness verdict from REAL exit codes
         run: |
-          set -euo pipefail
-          node tools/simurgh-attestation/verify-stage3vb-external-defense.mjs --reproduce > /tmp/v.json
-          node tests/e2e/llm_shield_stage3vb_external_defense_runner.mjs verify
-          node tests/e2e/llm_shield_stage3vb_external_defense_runner.mjs verify-hashes
-          scripts/assert-stage3vb-live-release.sh
-          # Observed verdict computed from actual command exits (ci_observed_not_echoed):
+          # Amendment: ci_observed MUST be built from ACTUAL command exit status, never inferred
+          # from the committed JSON. Do NOT use `set -e` here — capture each exit code explicitly.
+          set +e
+          node tools/simurgh-attestation/verify-stage3vb-external-defense.mjs --reproduce >/dev/null 2>&1; V=$?
+          node tests/e2e/llm_shield_stage3vb_external_defense_runner.mjs verify >/dev/null 2>&1; RP=$?
+          scripts/assert-stage3vb-live-release.sh >/dev/null 2>&1; LR=$?
+          node tests/e2e/llm_shield_stage3vb_external_defense_runner.mjs verify-hashes >/dev/null 2>&1; EH=$?
+          set -e
+          export OBS_VERIFIER=$([ $V -eq 0 ] && echo PASS || echo FAIL)
+          export OBS_REPRODUCE=$([ $RP -eq 0 ] && echo PASS || echo FAIL)
+          export OBS_LIVE_RELEASE=$([ $LR -eq 0 ] && echo PASS || echo FAIL)
+          export OBS_HASHES=$([ $EH -eq 0 ] && echo true || echo false)
           node -e '
             const { buildWitnessVerdict } = require("./tools/simurgh-attestation/stage3wWitnessLib.mjs");
             const fs = require("fs");
             const stable = (v) => JSON.stringify(v, null, 2) + "\n";
-            const regenerated = stable(buildWitnessVerdict()); // observed all-PASS since gates above did not exit non-zero
+            // ci_observed derived from the real exit codes captured above:
+            const observed = {
+              stage3vb_verifier: process.env.OBS_VERIFIER,
+              stage3vb_reproduce: process.env.OBS_REPRODUCE,
+              stage3vb_live_release_gate: process.env.OBS_LIVE_RELEASE,
+              stage3vb_evidence_hashes_match: process.env.OBS_HASHES === "true",
+              model_reexecuted_in_ci: false,
+            };
+            const regenerated = stable(buildWitnessVerdict(observed));
             const committed = fs.readFileSync("docs/research/llm-shield/evidence/stage-3w/github-witness-verdict.json", "utf8");
-            if (regenerated !== committed) { console.error("witness-verdict not byte-identical to committed"); process.exit(1); }
-            console.log("witness-verdict byte-identical; CI-observed == committed");
+            if (regenerated !== committed) {
+              console.error("CI-observed verdict (from real exit codes) is NOT byte-identical to committed");
+              process.exit(1);
+            }
+            console.log("witness-verdict byte-identical; CI-observed (real exit codes) == committed");
           '
       - name: Attest the witness verdict (Sigstore-backed build provenance)
         uses: actions/attest-build-provenance@v3
