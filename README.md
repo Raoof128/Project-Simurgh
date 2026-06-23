@@ -88,6 +88,86 @@ history, with a machine-readable summary and a per-rung reason for every classif
 
 ---
 
+## Capabilities
+
+Everything below is implemented, tested, and (for the attestation work) shipped as signed,
+offline-reproducible evidence. All capabilities are research-prototype grade and bounded by the
+documented non-claims.
+
+### Containment gateway (post-guardrail boundaries)
+
+- **Input firewall** — prompt normalisation and classification of direct-input attacks.
+- **Context-provenance guard** — blocks untrusted/tool-supplied context from gaining developer or
+  system authority.
+- **Tool-invocation gate** — refuses unauthorised or self-authorised tool/shell requests.
+- **Output-leakage firewall** — prevents export of system prompts, secrets, and internal policy.
+- **Containment evaluation** — assumes the input filter can fail and measures whether the downstream
+  context/tool/output/audit boundaries prevent unsafe consequences (Stage 3L: 120/120 input-miss
+  cases contained at their intended boundary; targeted ASR 0/150; 30/30 benign).
+
+### Verifiable attestation & offline reproducibility
+
+- **Ed25519-signed, metadata-only evidence bundles** over canonical JSON (signature survives
+  formatting and merges; raw prompts and model outputs are never exported).
+- **Two-tier verifiers** — a portable signature/structure check plus a `--reproduce` mode that
+  re-derives the bundle byte-for-byte; all verifiers **fail closed** and never throw.
+- **Negative self-proof (tamper) suites** on every rung — mutated evidence is rejected, counters stay
+  zero.
+- **Generic evidence-hashes verifier** with hardened path-containment (rejects self-inclusion,
+  traversal, and escapes).
+- **Claim-checked ledger** (Stage 3N) and **attestation registry + signed regression diff** (Stage
+  3Q) with anti-laundering lattice.
+
+### External-defence evaluation
+
+- **Provider-agnostic adapter contract** that treats any external guardrail as an untrusted advisory
+  signal, with harness-computed hashes (no adapter-supplied hashes).
+- **Live model capture** — a transport-only harness runs a real model once, freezes the output, and
+  attests it; the model is never re-executed in CI (Stage 3V-B: **Llama Guard 4 12B**).
+- **Recorded-fixture mode** (Stage 3V-A) for deterministic, GPU-free evaluation.
+
+### Agent-evaluation integration
+
+- **AgentDojo harness** (Stage 3H–3J) — in-loop mediating defence against a real gateway, scored
+  without altering AgentDojo itself; full four-suite deterministic run reported **benign 97/97, UUA
+  949/949, attack-success 0/949**.
+- **Adaptive-attack readiness probe** (Stage 3K) — deterministic, key-free mutation/action-open
+  campaign.
+
+### Supply-chain & release provenance
+
+- **Witnessed release provenance** (Stage 3W) — a dual-root model: a local Ed25519 root plus an
+  additive GitHub OIDC/Sigstore CI witness that re-verifies from real command exits, corroborating
+  by digest equality without ever gating offline verification.
+- **Public VCA timeline + one-command external reproduction** (Stage 3X).
+
+### Capability-extraction attestation
+
+- **Offline, red-team-hardened distillation/extraction detector** (Stage 3T–3U) over synthetic
+  metadata, with a frozen versioned detector and signed known-limitations — framed as a reproducible
+  recipe, never an accusation.
+
+### Live gateway
+
+- **Provider gateway** (Stage 3E) with an optional, disabled-by-default Anthropic adapter: lazy SDK
+  import, minimal-context summaries, denial-of-wallet caps, no provider tools, and a sealed
+  containment tail.
+
+### Device-integrity proofs (cross-platform)
+
+- **Metadata-only display-affinity scanning** on macOS, Windows, and Linux (X11 + Wayland portal
+  probe), **P-256-signed localhost-daemon proofs** with session/exam/challenge binding, server-side
+  tamper/replay/raw-field rejection, and an **HMAC-SHA-256 tamper-evident audit chain** — collecting
+  no video, audio, biometric, or personal-identity data.
+
+### Engineering & assurance
+
+- A single **quality gate** (`scripts/check.sh`): per-stage smoke, security/privacy/consistency
+  audits, policy-drift guards (tooling stages never touch `src/llmShield`), and **100% function
+  coverage** on the pure attestation libraries — **989 automated tests** in total.
+
+---
+
 ## Reproduce it yourself (offline, no private key)
 
 A reviewer with no prior context can replay the chain in three commands. Network is used only to
