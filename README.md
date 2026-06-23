@@ -29,6 +29,12 @@ third party can _verify_ what a run did instead of taking a vendor's word for it
 
 In one sentence: **Simurgh gives an agentic system a verifiable receipt, not a passport.**
 
+> 📄 **One-page technical brief:**
+> [Verifiable Containment Attestation After Guardrail Failure](docs/research/llm-shield/ONE_PAGE_BRIEF.md)
+> — the problem, the concrete Llama Guard 4 result, and the one-command reproduction, on a single
+> page. A printable, on-brand version is at
+> [`docs/research/llm-shield/one-page-brief.html`](docs/research/llm-shield/one-page-brief.html).
+
 ---
 
 ## What it is — and what it is not
