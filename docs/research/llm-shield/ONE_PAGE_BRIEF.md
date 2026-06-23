@@ -34,15 +34,19 @@ CI):
 | Measure                                                      | Result                        |
 | ------------------------------------------------------------ | ----------------------------- |
 | Llama Guard 4 allowed / blocked                              | 168 / 12                      |
-| Malicious cases it **missed** → **contained by Simurgh**     | **138 / 138**                 |
+| Malicious cases (of 150) Llama Guard 4 **missed**            | 138                           |
+| — of those, **contained by Simurgh**                         | **138 / 138**                 |
 | External-guardrail-plus-Simurgh targeted attack-success rate | **0 / 150**                   |
 | Unsafe tool execution / output export / context escalation   | 0 / 0 / 0                     |
 | Capture determinism                                          | 3 greedy runs, byte-identical |
 
-An input-only guardrail can only judge the user turn. In the 120 downstream-injection cases the
-attack lives in untrusted context, tool requests, or provider output — which it structurally cannot
-see. Simurgh's downstream boundaries contained every case it missed. This is a **boundary claim**,
-not a statement that Llama Guard 4 is weak.
+The 138 misses split two ways, and Simurgh contained each at a different boundary. **120** were
+downstream-injection cases, where the attack lives in untrusted context, tool requests, or provider
+output — which an input-only classifier structurally cannot see; these were contained at Simurgh's
+context, tool, and output boundaries. The other **18** were direct-input attacks Llama Guard 4 could
+see and allowed anyway — it caught only 12 of 30 direct inputs — and these were contained at
+Simurgh's input boundary. Both paths produced zero successful attacks. This is a **boundary claim**
+about where each defence acts, not a ranking of Llama Guard 4.
 
 ## Why it is credible: one-command external reproduction
 
