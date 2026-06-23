@@ -40,6 +40,9 @@ logs/
 .simurgh_check_logs/
 .tools/
 
+# Local-only capture working dir (raw LG4 outputs, prompts, tokens) — never committed
+.simurgh/
+
 # Swift build artifacts inside the macOS node package
 tools/simurgh-node-macos/.build/
 tools/simurgh-node-macos/.swiftpm/
