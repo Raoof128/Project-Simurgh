@@ -1,0 +1,53 @@
+{
+  "all_passed": true,
+  "cases": [
+    {
+      "name": "evidence_root_digest_edited",
+      "rejected": true
+    },
+    {
+      "name": "tag_edited",
+      "rejected": true
+    },
+    {
+      "name": "merge_commit_edited",
+      "rejected": true
+    },
+    {
+      "name": "public_key_fingerprint_edited",
+      "rejected": true
+    },
+    {
+      "name": "replay_tier_flipped",
+      "rejected": true
+    },
+    {
+      "name": "signature_tampered",
+      "rejected": true
+    },
+    {
+      "name": "wrong_public_key",
+      "rejected": true
+    },
+    {
+      "name": "signature_sidecar_missing",
+      "rejected": true
+    },
+    {
+      "name": "eh_self_inclusion",
+      "rejected": true
+    },
+    {
+      "name": "eh_path_traversal",
+      "rejected": true
+    },
+    {
+      "name": "eh_bound_file_missing",
+      "rejected": true
+    }
+  ],
+  "counters": {
+    "accepted_tampered_bundles": 0,
+    "eh_unsafe_accepted": 0
+  }
+}
