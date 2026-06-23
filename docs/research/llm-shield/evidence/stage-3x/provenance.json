@@ -1,0 +1,8 @@
+{
+  "schema": "simurgh.stage3x.provenance.v1",
+  "stage": "3X",
+  "builds_on": "v2.7.0-stage-3w-witnessed-vca-release-provenance",
+  "offline_primary": true,
+  "network_required": false,
+  "reviewer_command": "scripts/reproduce-vca-chain.sh"
+}

@@ -2073,6 +2073,64 @@ else
   tail -100 "$LOG_DIR/llm-shield-stage3w-coverage.log"
 fi
 
+# ── LLM Shield 3X public VCA timeline (offline gates only) ─────────
+step "LLM Shield 3X public-VCA-timeline smoke"
+if scripts/smoke-llm-shield-stage3x.sh > "$LOG_DIR/llm-shield-stage3x-smoke.log" 2>&1; then
+  pass "LLM Shield 3X public-VCA-timeline smoke"
+else
+  fail "LLM Shield 3X public-VCA-timeline smoke"
+  tail -60 "$LOG_DIR/llm-shield-stage3x-smoke.log"
+fi
+
+step "LLM Shield 3X security audit"
+if scripts/security-audit-llm-shield-stage3x.sh > "$LOG_DIR/llm-shield-stage3x-security.log" 2>&1; then
+  pass "LLM Shield 3X security audit"
+else
+  fail "LLM Shield 3X security audit"
+  tail -40 "$LOG_DIR/llm-shield-stage3x-security.log"
+fi
+
+step "LLM Shield 3X privacy audit"
+if node scripts/privacy-audit-llm-shield-stage3x.mjs > "$LOG_DIR/llm-shield-stage3x-privacy.log" 2>&1; then
+  pass "LLM Shield 3X privacy audit"
+else
+  fail "LLM Shield 3X privacy audit"
+  tail -40 "$LOG_DIR/llm-shield-stage3x-privacy.log"
+fi
+
+step "LLM Shield 3X consistency audit (index + evidence-root 10/10 + deep 5/5)"
+if node scripts/consistency-audit-llm-shield-stage3x.mjs > "$LOG_DIR/llm-shield-stage3x-consistency.log" 2>&1; then
+  pass "LLM Shield 3X consistency audit (index + evidence-root 10/10 + deep 5/5)"
+else
+  fail "LLM Shield 3X consistency audit (index + evidence-root 10/10 + deep 5/5)"
+  tail -40 "$LOG_DIR/llm-shield-stage3x-consistency.log"
+fi
+
+step "LLM Shield 3X policy-drift guard"
+if scripts/policy-drift-guard-llm-shield-stage3x.sh > "$LOG_DIR/llm-shield-stage3x-policy.log" 2>&1; then
+  pass "LLM Shield 3X policy-drift guard"
+else
+  fail "LLM Shield 3X policy-drift guard"
+  tail -40 "$LOG_DIR/llm-shield-stage3x-policy.log"
+fi
+
+step "LLM Shield 3X timeline lib coverage"
+if node --test --experimental-test-coverage \
+  --test-coverage-include=tools/simurgh-attestation/verifyEvidenceHashesLib.mjs \
+  --test-coverage-include=tools/simurgh-attestation/stage3xTimelineLib.mjs \
+  --test-coverage-functions=100 \
+  tests/unit/llmShield/stage3x/verifyEvidenceHashes.test.js \
+  tests/unit/llmShield/stage3x/timelineLib.test.js \
+  tests/unit/llmShield/stage3x/build.test.js \
+  tests/unit/llmShield/stage3x/verifier.test.js \
+  tests/unit/llmShield/stage3x/tamper.test.js \
+  > "$LOG_DIR/llm-shield-stage3x-coverage.log" 2>&1; then
+  pass "LLM Shield 3X timeline lib coverage"
+else
+  fail "LLM Shield 3X timeline lib coverage"
+  tail -100 "$LOG_DIR/llm-shield-stage3x-coverage.log"
+fi
+
 step "LLM Shield 3E-core docker smoke (skips if no docker)"
 if bash scripts/docker-smoke-llm-shield-stage3e.sh > "$LOG_DIR/llm-shield-stage3e-docker-smoke.log" 2>&1; then
   pass "LLM Shield 3E-core docker smoke"

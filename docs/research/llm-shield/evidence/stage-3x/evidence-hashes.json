@@ -1,0 +1,10 @@
+{
+  "docs/research/llm-shield/evidence/stage-3x/README.md": "sha256:c3d0e64c750ac1f69efbcab95168b1732b02f0239c883229455362cbfb4be623",
+  "docs/research/llm-shield/evidence/stage-3x/keys/fingerprint.txt": "sha256:d099c8171dc5b77ce5aec6773ff215fafe23d65b279de7b584ae3bf19f2c15b1",
+  "docs/research/llm-shield/evidence/stage-3x/keys/stage3x-public-key.json": "sha256:aa35e1a3b2427a76b03f67f51048d3f887842f852b528c8e3a8300d8fa438ee9",
+  "docs/research/llm-shield/evidence/stage-3x/provenance.json": "sha256:002a432dd81b7aaf348e89d145df8d52ce4703b52f0c136e811a00c489bba8cd",
+  "docs/research/llm-shield/evidence/stage-3x/self-proof-results.json": "sha256:9f035c851a69eec0cc83ac1d8b2dc753ac82fe51a8251ebbd676091d646f9fcd",
+  "docs/research/llm-shield/evidence/stage-3x/timeline.index.json": "sha256:6d561a23284c6ab020520773403d104908585d50c13010426ff014b8bce94e9e",
+  "docs/research/llm-shield/evidence/stage-3x/timeline.signature.json": "sha256:c5aafd4ef456670f5101493d9cacaa5aab656e80bbdc45d77ddf2d8df4152432",
+  "docs/research/llm-shield/evidence/stage-3x/vca-chain-reproduction-results.json": "sha256:4c1f9647b561efdbd6fce437659d1a8a6d38591b0c9836b2ae65ca45eb55902e"
+}
