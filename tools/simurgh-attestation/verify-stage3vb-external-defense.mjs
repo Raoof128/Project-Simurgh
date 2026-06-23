@@ -25,7 +25,8 @@ function portableChecks({ bundle, sidecar, publicKeyPem }) {
   checks.bundle_sha256 = sha256Hex(canonical) === sidecar.bundle_sha256;
   checks.fingerprint = fingerprintPublicKey(publicKeyPem) === sidecar.public_key_fingerprint;
   let sigOk = false;
-  const sig = typeof sidecar.signature === "string" ? sidecar.signature.replace(/^base64:/, "") : "";
+  const sig =
+    typeof sidecar.signature === "string" ? sidecar.signature.replace(/^base64:/, "") : "";
   try {
     sigOk = crypto.verify(
       null,
@@ -68,7 +69,8 @@ export function verifyExternalDefense({
         (k) => rebuilt.gateway_computed_hashes?.[k] === bundle.gateway_computed_hashes?.[k]
       );
       checks.stage3l_corpus_manifest_recomputed =
-        rebuilt.run_set?.stage3l_corpus_manifest_hash === bundle.run_set?.stage3l_corpus_manifest_hash;
+        rebuilt.run_set?.stage3l_corpus_manifest_hash ===
+        bundle.run_set?.stage3l_corpus_manifest_hash;
       checks.input_manifest_recomputed =
         rebuilt.run_set?.input_manifest_hash === bundle.run_set?.input_manifest_hash;
     }
@@ -90,9 +92,8 @@ async function cli() {
   ).public_key_pem;
   let rebuild;
   if (reproduce)
-    ({ buildExternalDefenseBundle: rebuild } = await import(
-      "../../tests/e2e/llm_shield_stage3vb_external_defense_runner.mjs"
-    ));
+    ({ buildExternalDefenseBundle: rebuild } =
+      await import("../../tests/e2e/llm_shield_stage3vb_external_defense_runner.mjs"));
   const result = verifyExternalDefense({ bundle, sidecar, publicKeyPem: pub, reproduce, rebuild });
   console.log(JSON.stringify(result, null, 2));
   if (!result.ok) process.exit(1);

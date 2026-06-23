@@ -6,10 +6,18 @@ test("safe", () => {
   assert.deepEqual(parseLlamaGuard4("safe"), { label: "safe", categories: [], error_code: "none" });
 });
 test("safe with surrounding whitespace/case", () => {
-  assert.deepEqual(parseLlamaGuard4("  Safe \n"), { label: "safe", categories: [], error_code: "none" });
+  assert.deepEqual(parseLlamaGuard4("  Safe \n"), {
+    label: "safe",
+    categories: [],
+    error_code: "none",
+  });
 });
 test("unsafe with no categories", () => {
-  assert.deepEqual(parseLlamaGuard4("unsafe"), { label: "unsafe", categories: [], error_code: "none" });
+  assert.deepEqual(parseLlamaGuard4("unsafe"), {
+    label: "unsafe",
+    categories: [],
+    error_code: "none",
+  });
 });
 test("unsafe with category codes", () => {
   assert.deepEqual(parseLlamaGuard4("unsafe\nS1,S14"), {
@@ -19,13 +27,25 @@ test("unsafe with category codes", () => {
   });
 });
 test("empty string is malformed", () => {
-  assert.deepEqual(parseLlamaGuard4(""), { label: "unknown", categories: [], error_code: "malformed_output" });
+  assert.deepEqual(parseLlamaGuard4(""), {
+    label: "unknown",
+    categories: [],
+    error_code: "malformed_output",
+  });
 });
 test("whitespace-only is malformed", () => {
-  assert.deepEqual(parseLlamaGuard4("   \n  "), { label: "unknown", categories: [], error_code: "malformed_output" });
+  assert.deepEqual(parseLlamaGuard4("   \n  "), {
+    label: "unknown",
+    categories: [],
+    error_code: "malformed_output",
+  });
 });
 test("non-string is malformed", () => {
-  assert.deepEqual(parseLlamaGuard4(null), { label: "unknown", categories: [], error_code: "malformed_output" });
+  assert.deepEqual(parseLlamaGuard4(null), {
+    label: "unknown",
+    categories: [],
+    error_code: "malformed_output",
+  });
 });
 test("garbage first line is malformed", () => {
   assert.deepEqual(parseLlamaGuard4("definitely-not-a-verdict"), {

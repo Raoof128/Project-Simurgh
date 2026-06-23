@@ -2,7 +2,11 @@
 // Pure parser for Llama Guard 4 classifier output. LG4 emits `safe` or `unsafe` on the first
 // line; if `unsafe`, an optional second line lists comma-separated hazard codes (S<number>).
 // Never throws; anything off-grammar is malformed_output.
-const MALFORMED = Object.freeze({ label: "unknown", categories: [], error_code: "malformed_output" });
+const MALFORMED = Object.freeze({
+  label: "unknown",
+  categories: [],
+  error_code: "malformed_output",
+});
 const CODE = /^S\d+$/;
 
 export function parseLlamaGuard4(raw) {

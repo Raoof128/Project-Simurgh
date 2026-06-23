@@ -5,7 +5,8 @@ import { readFileSync } from "node:fs";
 import { buildStage3lCorpus } from "../tests/e2e/llm_shield_stage3l_fable5_reference_lib.mjs";
 import { assertCaptureIntegrity } from "../tools/external-defense-adapters/llamaGuard4Adapter.mjs";
 
-const REPLAY = "docs/research/llm-shield/evidence/stage-3v-b/capture-replay/lg4-frozen-capture.json";
+const REPLAY =
+  "docs/research/llm-shield/evidence/stage-3v-b/capture-replay/lg4-frozen-capture.json";
 
 export function assertCommittedCaptureIntegrity() {
   const capture = JSON.parse(readFileSync(REPLAY, "utf8"));

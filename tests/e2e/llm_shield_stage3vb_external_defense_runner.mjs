@@ -71,7 +71,10 @@ export function deriveForVerify() {
   const captureScriptText = readFileSync(CAPTURE_SCRIPT, "utf8");
   const gatewayHashes = harnessComputeStage3vbHashes({
     rawOutputsConcat: rawConcat,
-    normalisedVerdict: observations.map((o) => ({ case_id: o.case_id, verdict: o.normalised_verdict })),
+    normalisedVerdict: observations.map((o) => ({
+      case_id: o.case_id,
+      verdict: o.normalised_verdict,
+    })),
     adapterConfig: ADAPTER_CONFIG,
     captureProvenance: capture.capture_provenance,
     captureFileObject: capture,
@@ -179,7 +182,10 @@ async function main() {
   const bundle = buildExternalDefenseBundle();
   if (cmd === "build") {
     if (update) {
-      await writeFile(join(EV, "external-observations.json"), stable({ observations: d.observations }));
+      await writeFile(
+        join(EV, "external-observations.json"),
+        stable({ observations: d.observations })
+      );
       await writeFile(
         join(EV, "metrics.json"),
         stable({ external: d.externalMetrics, comparative: d.comparativeMetrics })
@@ -194,14 +200,19 @@ async function main() {
       await writeFile(join(EV, "referenced-evidence.json"), stable(bundle.referenced_evidence));
       await writeFile(
         join(EV, "privacy-report.json"),
-        stable({ metadata_only: true, raw_output_in_evidence: false, raw_prompts_in_evidence: false })
+        stable({
+          metadata_only: true,
+          raw_output_in_evidence: false,
+          raw_prompts_in_evidence: false,
+        })
       );
       await writeFile(join(EV, "capture-summary.json"), stable(buildCaptureSummary(d)));
       await writeFile(join(EV, "attestation.bundle.json"), stable(bundle));
       console.log("stage3vb: evidence written (update; run prettier then write-hashes)");
       return;
     }
-    if (stable(await rd("attestation.bundle.json")) !== stable(bundle)) throw new Error("bundle drifted");
+    if (stable(await rd("attestation.bundle.json")) !== stable(bundle))
+      throw new Error("bundle drifted");
     console.log("stage3vb evidence: verified committed");
   } else if (cmd === "hash") {
     console.log(

@@ -37,11 +37,19 @@ test("labelToVerdict maps grammar labels", () => {
 test("frozenCaptureObservations validates one obs per case", () => {
   const obs = frozenCaptureObservations(okCapture);
   assert.equal(obs.length, 180);
-  assert.equal(obs.every((o) => o.adapter_schema === "simurgh.external_defense_adapter.v1"), true);
-  assert.equal(obs.every((o) => o.raw_output_ref === "local-only"), true);
+  assert.equal(
+    obs.every((o) => o.adapter_schema === "simurgh.external_defense_adapter.v1"),
+    true
+  );
+  assert.equal(
+    obs.every((o) => o.raw_output_ref === "local-only"),
+    true
+  );
 });
 test("malformed raw output normalises to error verdict", () => {
-  const cap = { cases: okCapture.cases.map((c, i) => (i === 0 ? { ...c, raw_lg4_output: "???" } : c)) };
+  const cap = {
+    cases: okCapture.cases.map((c, i) => (i === 0 ? { ...c, raw_lg4_output: "???" } : c)),
+  };
   const obs = frozenCaptureObservations(cap);
   const bad = obs.find((o) => o.case_id === cap.cases[0].case_id);
   assert.equal(bad.normalised_verdict, "error");
@@ -70,6 +78,13 @@ test("capture integrity throws on missing case", () => {
   assert.throws(() => assertCaptureIntegrity(cap, corpus), /capture_integrity_failed/);
 });
 test("capture integrity throws when a prompt is echoed", () => {
-  const cap = { cases: okCapture.cases.map((c, i) => (i === 0 ? { ...c, raw_lg4_output: corpus[0].user_task } : c)) };
-  assert.throws(() => assertCaptureIntegrity(cap, corpus), /capture_integrity_failed:raw_prompt_echoed/);
+  const cap = {
+    cases: okCapture.cases.map((c, i) =>
+      i === 0 ? { ...c, raw_lg4_output: corpus[0].user_task } : c
+    ),
+  };
+  assert.throws(
+    () => assertCaptureIntegrity(cap, corpus),
+    /capture_integrity_failed:raw_prompt_echoed/
+  );
 });

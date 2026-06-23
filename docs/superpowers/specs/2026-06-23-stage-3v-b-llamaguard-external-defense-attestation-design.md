@@ -31,13 +31,13 @@ reproduces the signed attestation byte-identically. It does not re-execute Llama
 
 ## 1. Decisions (all locked during brainstorming)
 
-| # | Decision | Choice |
-|---|---|---|
-| Model + stack | What external defence | `meta-llama/Llama-Guard-4-12B` via HF `transformers` (gated; text-only surface; greedy decode) |
-| Input surface | What we feed LG4 | Option A — the case's real `user_task` string, wrapped as a single `user` turn in LG4's official chat template. Preflight-gated 180/180 feedable. |
-| Reproducibility claim | What 3V-B attests | Option A — replay-reproducible attestation over the frozen capture + signed capture-provenance. `model_reexecuted_in_ci: false`. Re-running the model in CI (B) and capturing logits (C) both rejected. |
-| Topology | Where each step runs | Option A — RunPod Python = transport-only (inference + raw outputs + self-reported provenance). Mac JS trusted harness = normalise + hash + build + sign. Private key never leaves the Mac. |
-| Sequencing | Build vs capture order | Option 1 — build+test the full machine against a small CI-safe sample capture; run the real 180-case RunPod capture as the final controlled act. **Release v2.6.0 only from the real capture.** |
+| #                     | Decision               | Choice                                                                                                                                                                                                  |
+| --------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Model + stack         | What external defence  | `meta-llama/Llama-Guard-4-12B` via HF `transformers` (gated; text-only surface; greedy decode)                                                                                                          |
+| Input surface         | What we feed LG4       | Option A — the case's real `user_task` string, wrapped as a single `user` turn in LG4's official chat template. Preflight-gated 180/180 feedable.                                                       |
+| Reproducibility claim | What 3V-B attests      | Option A — replay-reproducible attestation over the frozen capture + signed capture-provenance. `model_reexecuted_in_ci: false`. Re-running the model in CI (B) and capturing logits (C) both rejected. |
+| Topology              | Where each step runs   | Option A — RunPod Python = transport-only (inference + raw outputs + self-reported provenance). Mac JS trusted harness = normalise + hash + build + sign. Private key never leaves the Mac.             |
+| Sequencing            | Build vs capture order | Option 1 — build+test the full machine against a small CI-safe sample capture; run the real 180-case RunPod capture as the final controlled act. **Release v2.6.0 only from the real capture.**         |
 
 ## 2. Decode parameters (frozen)
 
@@ -71,7 +71,7 @@ with the 3V-B Ed25519 key.
 ## 4. Privacy rule + committed frozen-capture replay artifact (Fix-2 carried, reproducibility restored)
 
 **The contradiction this resolves:** a raw capture that is gitignored-only makes the signed
-bundle *verifiable* but not *reproducible* by reviewers (they could check the signature but never
+bundle _verifiable_ but not _reproducible_ by reviewers (they could check the signature but never
 recompute `external_raw_output_hash` from the capture). 3V-B therefore commits a sanitised replay
 artifact so the full offline reproduce path works for everyone — without exporting any prompt.
 
@@ -84,12 +84,12 @@ artifact so the full offline reproduce path works for everyone — without expor
   "contains_raw_prompts": false,
   "contains_hf_token": false,
   "contains_secrets": false,
-  "cases": [ { "case_id": "...", "raw_lg4_output": "safe" } ],
+  "cases": [{ "case_id": "...", "raw_lg4_output": "safe" }],
   "capture_provenance": {}
 }
 ```
 
-It contains ONLY `case_id` + raw LG4 *classifier* output (`safe` / `unsafe\n<S-codes>`) +
+It contains ONLY `case_id` + raw LG4 _classifier_ output (`safe` / `unsafe\n<S-codes>`) +
 provenance. LG4 classifier text is not the prompt, so it is safe to commit **once the privacy
 audit confirms it**.
 
@@ -99,7 +99,7 @@ HF token, no email, and no copied `user_task` content. If any LG4 output echoes 
 contains sensitive text, the build fails closed and the capture must be redacted/re-run.
 
 **The signed bundle still inlines no raw output.** It references and hashes the committed replay
-artifact via `capture_file_hash`; raw LG4 output is an audited *replay input*, not bundle
+artifact via `capture_file_hash`; raw LG4 output is an audited _replay input_, not bundle
 content. Prompt binding stays hash-only:
 
 ```json
@@ -107,7 +107,7 @@ content. Prompt binding stays hash-only:
 ```
 
 The unsanitised `.simurgh/captures/...` file remains gitignored and local; it is the source the
-harness sanitises *from*, never a published artifact.
+harness sanitises _from_, never a published artifact.
 
 ## 5. Bundle schema additions (over the 3V-A `simurgh.vca.external_defense_run.v1` shape)
 
@@ -184,8 +184,13 @@ All seven hashes are **harness-computed** (trusted Simurgh path), never adapter-
 brainstorming: 180/180 `user_task` non-empty, field `user_task`.
 
 ```json
-{ "stage3l_cases": 180, "feedable_input_cases": 180, "missing_input_cases": 0,
-  "input_surface": "user_task", "synthetic_render_used": false }
+{
+  "stage3l_cases": 180,
+  "feedable_input_cases": 180,
+  "missing_input_cases": 0,
+  "input_surface": "user_task",
+  "synthetic_render_used": false
+}
 ```
 
 If any fixture lacks feedable input text: do NOT silently synthesize — stop and report.
@@ -193,8 +198,14 @@ If any fixture lacks feedable input text: do NOT silently synthesize — stop an
 **(b) Capture-integrity preflight** (capture side, before normalisation/signing).
 
 ```json
-{ "raw_capture_cases": 180, "unique_case_ids": 180, "matches_stage3l_case_ids": true,
-  "missing_outputs": 0, "duplicate_outputs": 0, "raw_prompts_exported": false }
+{
+  "raw_capture_cases": 180,
+  "unique_case_ids": 180,
+  "matches_stage3l_case_ids": true,
+  "missing_outputs": 0,
+  "duplicate_outputs": 0,
+  "raw_prompts_exported": false
+}
 ```
 
 ## 8. Components / files
@@ -207,6 +218,7 @@ If any fixture lacks feedable input text: do NOT silently synthesize — stop an
 `safe` / `unsafe`; category codes route via the grammar parser). Additive only.
 
 **New:**
+
 - `tools/external-defense-adapters/llamaGuard4OutputGrammar.mjs` — pure parser for LG4
   `safe` / `unsafe\n<S-codes>` output → `{ label, categories }`. Handles malformed/empty/
   whitespace → error.
@@ -221,7 +233,7 @@ If any fixture lacks feedable input text: do NOT silently synthesize — stop an
 - `tests/unit/llmShield/stage3vb/*.test.js` — unit + branch tests.
 - `tools/simurgh-attestation/{sign-3vb-attestation,verify-stage3vb-external-defense}.mjs`.
 - `scripts/{smoke,security-audit,privacy-audit,consistency-audit,policy-drift-guard,reproduce}-llm-shield-stage3vb.*`
-  + `scripts/assert-stage3l-feedable-inputs.*` preflight, wired into `scripts/check.sh` after 3V-A.
+  - `scripts/assert-stage3l-feedable-inputs.*` preflight, wired into `scripts/check.sh` after 3V-A.
 - `docs/research/llm-shield/evidence/stage-3v-b/capture-replay/lg4-frozen-capture.json` —
   committed, privacy-audited sanitised replay artifact (§4); the reproduce path's raw-output source.
 - `docs/research/llm-shield/evidence/stage-3v-b/` + reviewer docs
@@ -275,7 +287,7 @@ signed live bundle present. **Build with sample, release with real capture.**
 - Own key `~/.simurgh/3v-b-ed25519.pem` (mode 0600, never committed); only public key committed.
 - Neutral commit messages, no Co-Authored-By trailer (all Project-Simurgh commits).
 - Carry 3T/3U/3V-A lessons: `sha256Hex` already prefixes (never double); run `npm run
-  format:check` then `write-hashes` AFTER prettier; security-audit accusatory-word scan scoped
+format:check` then `write-hashes` AFTER prettier; security-audit accusatory-word scan scoped
   to machine `.json` artifacts (README may negate); deep-freeze enums; verifier fails closed.
 - No reproduction of jailbreak payloads; no named third-party labs in machine JSON artifacts.
 - Sacred non-claim: an external verdict is an advisory observation, not an accusation, and the

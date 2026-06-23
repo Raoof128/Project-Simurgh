@@ -24,7 +24,10 @@ test("computes exactly seven sha256-prefixed hashes", () => {
     "external_raw_output_hash",
     "prompt_rendering_hash",
   ]);
-  assert.equal(Object.values(h).every((v) => v.startsWith("sha256:")), true);
+  assert.equal(
+    Object.values(h).every((v) => v.startsWith("sha256:")),
+    true
+  );
 });
 test("is deterministic", () => {
   assert.deepEqual(harnessComputeStage3vbHashes(base), harnessComputeStage3vbHashes(base));

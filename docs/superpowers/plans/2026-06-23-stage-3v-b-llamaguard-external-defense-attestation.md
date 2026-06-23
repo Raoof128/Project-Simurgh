@@ -10,7 +10,7 @@
 
 ## Global Constraints
 
-- TOOLING-ONLY: **zero changes to `src/llmShield/**`**; additive only. Policy-drift guard fails closed using three-dot `origin/main...HEAD` (real-base fallback `origin/main`→`main`→warn-pass).
+- TOOLING-ONLY: **zero changes to `src/llmShield/**`**; additive only. Policy-drift guard fails closed using three-dot `origin/main...HEAD`(real-base fallback`origin/main`→`main`→warn-pass).
 - Reuse, do not modify: `tools/external-defense-adapters/externalDefenseAdapterContract.mjs` (`ADAPTER_SCHEMA`, `VERDICT_ENUM`, `validateObservation`), `tools/external-defense-adapters/harnessHashExternalOutput.mjs` (`assertNoAdapterSuppliedHash`), `tools/simurgh-attestation/canonicalise.mjs` (`canonicalJson`, `sha256Hex` — **already prefixes `sha256:`**, `fingerprintPublicKey`), `tools/simurgh-attestation/keygen.mjs`, and read-only `tests/e2e/llm_shield_stage3l_fable5_reference_lib.mjs` (`buildStage3lCorpus`, `buildStage3lManifest`, `evaluateStage3lCase`).
 - Reuse 3V-A metrics directly (DRY): `tests/e2e/llm_shield_stage3v_metrics_lib.mjs` (`computeExternalMetrics`, `computeContainmentMetrics`, `computeComparativeMetrics`). Do not duplicate them.
 - Bundle type string is `simurgh.vca.external_defense_run.v1`; stage field is `"3V-B"`.
@@ -30,18 +30,21 @@
 ## File Structure
 
 **New pure libs (100% function-coverage gated):**
+
 - `tools/external-defense-adapters/llamaGuard4OutputGrammar.mjs` — pure LG4 output parser.
 - `tools/external-defense-adapters/llamaGuard4Adapter.mjs` — adapter config, frozen-capture → observations, manifest, prompt-rendering spec, capture-integrity assertion.
 - `tools/external-defense-adapters/captureProvenanceHashes.mjs` — the seven harness-computed hashes.
 - `tools/external-defense-adapters/sampleLlamaGuard4Capture.mjs` — deterministic CI-safe sample capture generator (+ `--write` CLI, CLI excluded from coverage).
 
 **New runner / attestation (subprocess-covered, excluded from the function-coverage gate):**
+
 - `tests/e2e/llm_shield_stage3vb_external_defense_runner.mjs`
 - `tools/simurgh-attestation/sign-3vb-attestation.mjs`
 - `tools/simurgh-attestation/verify-stage3vb-external-defense.mjs`
 - `tests/e2e/llm_shield_stage3vb_tamper_runner.mjs`
 
 **New scripts:**
+
 - `scripts/assert-stage3l-feedable-inputs.mjs` (corpus preflight)
 - `scripts/assert-stage3vb-capture-integrity.mjs` (capture preflight)
 - `scripts/smoke-llm-shield-stage3vb.sh`
@@ -53,6 +56,7 @@
 - `scripts/assert-stage3vb-live-release.sh` (release-only gate; NOT in check.sh)
 
 **Capture harness (RunPod, transport-only):**
+
 - `tools/capture/stage3vb_llama_guard4_capture.py`
 
 **Committed evidence:** `docs/research/llm-shield/evidence/stage-3v-b/` (bundle, signature, derived JSON, `capture-replay/lg4-frozen-capture.json`, `keys/`, `evidence-hashes.json`, `README.md`).
@@ -68,10 +72,12 @@
 ## Task 1: Feedable-input preflight (corpus side)
 
 **Files:**
+
 - Create: `scripts/assert-stage3l-feedable-inputs.mjs`
 - Test: `tests/unit/llmShield/stage3vb/feedableInputs.test.js`
 
 **Interfaces:**
+
 - Consumes: `buildStage3lCorpus()` from `tests/e2e/llm_shield_stage3l_fable5_reference_lib.mjs`.
 - Produces: `assertFeedableInputs()` → `{ stage3l_cases, feedable_input_cases, missing_input_cases, input_surface, synthetic_render_used }`; throws `Error("feedable_input_preflight_failed:<ids>")` if any case lacks a non-empty `user_task`.
 
@@ -149,10 +155,12 @@ git commit -m "feat(3v-b): feedable-input preflight gate (180/180 user_task, fai
 ## Task 2: Llama Guard 4 output grammar parser
 
 **Files:**
+
 - Create: `tools/external-defense-adapters/llamaGuard4OutputGrammar.mjs`
 - Test: `tests/unit/llmShield/stage3vb/llamaGuard4Grammar.test.js`
 
 **Interfaces:**
+
 - Produces: `parseLlamaGuard4(raw)` → `{ label: "safe"|"unsafe"|"unknown", categories: string[], error_code: "none"|"malformed_output" }`. Pure, never throws.
 - LG4 output grammar: first non-empty line is `safe` or `unsafe` (case-insensitive); if `unsafe`, an optional next line is a comma-separated list of hazard codes matching `^S\d+$` each. Anything else → `{ label:"unknown", categories:[], error_code:"malformed_output" }`. Non-string / empty / whitespace-only → malformed.
 
@@ -168,10 +176,18 @@ test("safe", () => {
   assert.deepEqual(parseLlamaGuard4("safe"), { label: "safe", categories: [], error_code: "none" });
 });
 test("safe with surrounding whitespace/case", () => {
-  assert.deepEqual(parseLlamaGuard4("  Safe \n"), { label: "safe", categories: [], error_code: "none" });
+  assert.deepEqual(parseLlamaGuard4("  Safe \n"), {
+    label: "safe",
+    categories: [],
+    error_code: "none",
+  });
 });
 test("unsafe with no categories", () => {
-  assert.deepEqual(parseLlamaGuard4("unsafe"), { label: "unsafe", categories: [], error_code: "none" });
+  assert.deepEqual(parseLlamaGuard4("unsafe"), {
+    label: "unsafe",
+    categories: [],
+    error_code: "none",
+  });
 });
 test("unsafe with category codes", () => {
   assert.deepEqual(parseLlamaGuard4("unsafe\nS1,S14"), {
@@ -181,13 +197,25 @@ test("unsafe with category codes", () => {
   });
 });
 test("empty string is malformed", () => {
-  assert.deepEqual(parseLlamaGuard4(""), { label: "unknown", categories: [], error_code: "malformed_output" });
+  assert.deepEqual(parseLlamaGuard4(""), {
+    label: "unknown",
+    categories: [],
+    error_code: "malformed_output",
+  });
 });
 test("whitespace-only is malformed", () => {
-  assert.deepEqual(parseLlamaGuard4("   \n  "), { label: "unknown", categories: [], error_code: "malformed_output" });
+  assert.deepEqual(parseLlamaGuard4("   \n  "), {
+    label: "unknown",
+    categories: [],
+    error_code: "malformed_output",
+  });
 });
 test("non-string is malformed", () => {
-  assert.deepEqual(parseLlamaGuard4(null), { label: "unknown", categories: [], error_code: "malformed_output" });
+  assert.deepEqual(parseLlamaGuard4(null), {
+    label: "unknown",
+    categories: [],
+    error_code: "malformed_output",
+  });
 });
 test("garbage first line is malformed", () => {
   assert.deepEqual(parseLlamaGuard4("definitely-not-a-verdict"), {
@@ -218,7 +246,11 @@ Expected: FAIL — module not found.
 // Pure parser for Llama Guard 4 classifier output. LG4 emits `safe` or `unsafe` on the first
 // line; if `unsafe`, an optional second line lists comma-separated hazard codes (S<number>).
 // Never throws; anything off-grammar is malformed_output.
-const MALFORMED = Object.freeze({ label: "unknown", categories: [], error_code: "malformed_output" });
+const MALFORMED = Object.freeze({
+  label: "unknown",
+  categories: [],
+  error_code: "malformed_output",
+});
 const CODE = /^S\d+$/;
 
 export function parseLlamaGuard4(raw) {
@@ -258,10 +290,12 @@ git commit -m "feat(3v-b): pure Llama Guard 4 output grammar parser"
 ## Task 3: Llama Guard 4 adapter
 
 **Files:**
+
 - Create: `tools/external-defense-adapters/llamaGuard4Adapter.mjs`
 - Test: `tests/unit/llmShield/stage3vb/llamaGuard4Adapter.test.js`
 
 **Interfaces:**
+
 - Consumes: `parseLlamaGuard4` (Task 2); `ADAPTER_SCHEMA`, `validateObservation` from the contract; `buildStage3lCorpus` (read-only).
 - Produces:
   - `ADAPTER_CONFIG` (frozen): `{ target:"llama_guard_4_12b", surface:"input_only", model_id:"meta-llama/Llama-Guard-4-12B", decode:{do_sample:false,temperature:0,max_new_tokens:64}, version:"lg4-1" }`.
@@ -292,7 +326,11 @@ const okCapture = {
   cases: corpus
     .map((fx) => ({
       case_id: fx.case_id,
-      raw_lg4_output: fx.case_id.includes("benign") ? "safe" : fx.case_id.includes("direct_input_attack") ? "unsafe\nS14" : "safe",
+      raw_lg4_output: fx.case_id.includes("benign")
+        ? "safe"
+        : fx.case_id.includes("direct_input_attack")
+          ? "unsafe\nS14"
+          : "safe",
     }))
     .sort((a, b) => a.case_id.localeCompare(b.case_id)),
 };
@@ -310,11 +348,19 @@ test("labelToVerdict maps grammar labels", () => {
 test("frozenCaptureObservations validates one obs per case", () => {
   const obs = frozenCaptureObservations(okCapture);
   assert.equal(obs.length, 180);
-  assert.equal(obs.every((o) => o.adapter_schema === "simurgh.external_defense_adapter.v1"), true);
-  assert.equal(obs.every((o) => o.raw_output_ref === "local-only"), true);
+  assert.equal(
+    obs.every((o) => o.adapter_schema === "simurgh.external_defense_adapter.v1"),
+    true
+  );
+  assert.equal(
+    obs.every((o) => o.raw_output_ref === "local-only"),
+    true
+  );
 });
 test("malformed raw output normalises to error verdict", () => {
-  const cap = { cases: okCapture.cases.map((c, i) => (i === 0 ? { ...c, raw_lg4_output: "???" } : c)) };
+  const cap = {
+    cases: okCapture.cases.map((c, i) => (i === 0 ? { ...c, raw_lg4_output: "???" } : c)),
+  };
   const obs = frozenCaptureObservations(cap);
   const bad = obs.find((o) => o.case_id === cap.cases[0].case_id);
   assert.equal(bad.normalised_verdict, "error");
@@ -343,8 +389,15 @@ test("capture integrity throws on missing case", () => {
   assert.throws(() => assertCaptureIntegrity(cap, corpus), /capture_integrity_failed/);
 });
 test("capture integrity throws when a prompt is echoed", () => {
-  const cap = { cases: okCapture.cases.map((c, i) => (i === 0 ? { ...c, raw_lg4_output: corpus[0].user_task } : c)) };
-  assert.throws(() => assertCaptureIntegrity(cap, corpus), /capture_integrity_failed:raw_prompt_echoed/);
+  const cap = {
+    cases: okCapture.cases.map((c, i) =>
+      i === 0 ? { ...c, raw_lg4_output: corpus[0].user_task } : c
+    ),
+  };
+  assert.throws(
+    () => assertCaptureIntegrity(cap, corpus),
+    /capture_integrity_failed:raw_prompt_echoed/
+  );
 });
 ```
 
@@ -468,10 +521,12 @@ git commit -m "feat(3v-b): Llama Guard 4 adapter + capture-integrity assertion"
 ## Task 4: Seven harness-computed hashes
 
 **Files:**
+
 - Create: `tools/external-defense-adapters/captureProvenanceHashes.mjs`
 - Test: `tests/unit/llmShield/stage3vb/captureProvenanceHashes.test.js`
 
 **Interfaces:**
+
 - Consumes: `canonicalJson`, `sha256Hex` from canonicalise; `assertNoAdapterSuppliedHash` from `harnessHashExternalOutput.mjs`.
 - Produces: `harnessComputeStage3vbHashes({ rawOutputsConcat, normalisedVerdict, adapterConfig, captureProvenance, captureFileObject, captureScriptText, promptRenderingSpec })` → frozen object with exactly: `external_raw_output_hash`, `external_normalised_verdict_hash`, `adapter_config_hash`, `capture_provenance_hash`, `capture_file_hash`, `capture_script_hash`, `prompt_rendering_hash`. All values prefixed `sha256:` (via `sha256Hex`).
 
@@ -505,7 +560,10 @@ test("computes exactly seven sha256-prefixed hashes", () => {
     "external_raw_output_hash",
     "prompt_rendering_hash",
   ]);
-  assert.equal(Object.values(h).every((v) => v.startsWith("sha256:")), true);
+  assert.equal(
+    Object.values(h).every((v) => v.startsWith("sha256:")),
+    true
+  );
 });
 test("is deterministic", () => {
   assert.deepEqual(harnessComputeStage3vbHashes(base), harnessComputeStage3vbHashes(base));
@@ -575,11 +633,13 @@ git commit -m "feat(3v-b): seven harness-computed capture/provenance hashes"
 ## Task 5: Sample capture generator + committed sample replay artifact
 
 **Files:**
+
 - Create: `tools/external-defense-adapters/sampleLlamaGuard4Capture.mjs`
 - Create: `docs/research/llm-shield/evidence/stage-3v-b/capture-replay/lg4-frozen-capture.json` (generated; sample during build)
 - Test: `tests/unit/llmShield/stage3vb/sampleCapture.test.js`
 
 **Interfaces:**
+
 - Consumes: `buildStage3lCorpus`, `assertCaptureIntegrity`.
 - Produces: `buildSampleCapture()` → frozen-capture object with schema `simurgh.stage3vb.frozen_lg4_capture.v1`, `live:false`, `capture_environment:"sample_deterministic"`, `contains_raw_prompts/hf_token/secrets:false`, a sample `capture_provenance` block (sample values, `capture_origin:"self_reported_capture_environment"`, `model_weights_digest_source:"capture_environment_self_reported"`, `model_weights_recomputed_by_verifier:false`), and 180 `cases` (sorted) of `{case_id, raw_lg4_output}`. Sample policy: benign→`safe`; direct→`unsafe\nS14`; input-miss→deterministic `safe`/`unsafe\nS1`/`safe` rotation by trailing index `%3`. CLI `--write` writes the artifact (CLI line excluded from coverage gate).
 
@@ -629,7 +689,8 @@ import { writeFile, mkdir } from "node:fs/promises";
 import { dirname } from "node:path";
 import { buildStage3lCorpus } from "../../tests/e2e/llm_shield_stage3l_fable5_reference_lib.mjs";
 
-const REPLAY_PATH = "docs/research/llm-shield/evidence/stage-3v-b/capture-replay/lg4-frozen-capture.json";
+const REPLAY_PATH =
+  "docs/research/llm-shield/evidence/stage-3v-b/capture-replay/lg4-frozen-capture.json";
 const stable = (v) => JSON.stringify(v, null, 2) + "\n";
 
 function sampleOutput(caseId) {
@@ -696,11 +757,13 @@ git commit -m "feat(3v-b): deterministic sample capture generator + committed sa
 ## Task 6: Runner — bundle builder + generated evidence + advisory-invariance
 
 **Files:**
+
 - Create: `tests/e2e/llm_shield_stage3vb_external_defense_runner.mjs`
 - Create (generated): `docs/research/llm-shield/evidence/stage-3v-b/{attestation.bundle.json,external-observations.json,metrics.json,containment-summary.json,corpus-manifest.json,adapter-digests.json,input-manifest.json,capture-summary.json,referenced-evidence.json,privacy-report.json}`
 - Test: `tests/unit/llmShield/stage3vb/bundle.test.js`, `tests/unit/llmShield/stage3vb/advisoryInvariance.test.js`
 
 **Interfaces:**
+
 - Consumes: `buildStage3lCorpus`, `buildStage3lManifest`; `frozenCaptureObservations`, `ADAPTER_CONFIG`, `buildExternalDefenseManifest`, `renderLlamaGuard4PromptSpec`, `assertCaptureIntegrity`; `harnessComputeStage3vbHashes`; 3V-A metrics (`computeExternalMetrics`, `computeContainmentMetrics`, `computeComparativeMetrics`); `canonicalJson`, `sha256Hex`.
 - Produces: `loadCapture()` (reads committed replay artifact), `deriveForVerify()`, `buildExternalDefenseBundle()` (type `simurgh.vca.external_defense_run.v1`, stage `3V-B`), CLI `build [--update] | hash | verify | write-hashes | verify-hashes`.
 - Bundle shape (key fields): `target_defense:{name:"llama_guard_4", model_id, surface:"input_only", live:<capture.live>, decode}`, `capture_mode:"live_capture_frozen_replay"`, `model_reexecuted_in_ci:false`, `run_set:{source:"stage-3l", stage3l_corpus_manifest_hash, input_surface:"user_task", input_cases:180, input_manifest_hash, counts}`, `capture_provenance:<from capture>`, `gateway_computed_hashes:<7>`, `metrics`, `containment_summary`, `privacy:{metadata_only:true}`, `non_claims`, `known_limitations` (incl. `live_capture_origin_self_reported`), `modes`.
@@ -739,7 +802,10 @@ import { computeContainmentMetrics } from "../../../../tests/e2e/llm_shield_stag
 // reuses evaluateStage3lCase(fixture) READ-ONLY and never consumes the external verdict.
 test("containment is invariant to the external advisory verdict", () => {
   const d = deriveForVerify();
-  const flipped = d.observations.map((o) => ({ ...o, normalised_verdict: o.normalised_verdict === "block" ? "allow" : "block" }));
+  const flipped = d.observations.map((o) => ({
+    ...o,
+    normalised_verdict: o.normalised_verdict === "block" ? "allow" : "block",
+  }));
   const a = computeContainmentMetrics(d.corpus, d.observations);
   const b = computeContainmentMetrics(d.corpus, flipped);
   assert.deepEqual(a.unsafe_tool_execution, b.unsafe_tool_execution);
@@ -830,7 +896,10 @@ export function deriveForVerify() {
   const captureScriptText = readFileSync(CAPTURE_SCRIPT, "utf8");
   const gatewayHashes = harnessComputeStage3vbHashes({
     rawOutputsConcat: rawConcat,
-    normalisedVerdict: observations.map((o) => ({ case_id: o.case_id, verdict: o.normalised_verdict })),
+    normalisedVerdict: observations.map((o) => ({
+      case_id: o.case_id,
+      verdict: o.normalised_verdict,
+    })),
     adapterConfig: ADAPTER_CONFIG,
     captureProvenance: capture.capture_provenance,
     captureFileObject: capture,
@@ -904,7 +973,10 @@ export function buildExternalDefenseBundle() {
     containment_summary: d.containmentMetrics,
     privacy: { metadata_only: true },
     referenced_evidence: [
-      { stage: "3L", external_defense_manifest_hash: sha256Hex(canonicalJson(d.externalDefenseManifest)) },
+      {
+        stage: "3L",
+        external_defense_manifest_hash: sha256Hex(canonicalJson(d.externalDefenseManifest)),
+      },
     ],
     non_claims: NON_CLAIMS,
     known_limitations: KNOWN_LIMITATIONS,
@@ -935,25 +1007,53 @@ async function main() {
   const bundle = buildExternalDefenseBundle();
   if (cmd === "build") {
     if (update) {
-      await writeFile(join(EV, "external-observations.json"), stable({ observations: d.observations }));
-      await writeFile(join(EV, "metrics.json"), stable({ external: d.externalMetrics, comparative: d.comparativeMetrics }));
+      await writeFile(
+        join(EV, "external-observations.json"),
+        stable({ observations: d.observations })
+      );
+      await writeFile(
+        join(EV, "metrics.json"),
+        stable({ external: d.externalMetrics, comparative: d.comparativeMetrics })
+      );
       await writeFile(join(EV, "containment-summary.json"), stable(d.containmentMetrics));
       await writeFile(join(EV, "corpus-manifest.json"), stable(d.externalDefenseManifest));
       await writeFile(join(EV, "input-manifest.json"), stable(d.inputManifest));
-      await writeFile(join(EV, "adapter-digests.json"), stable({ ...d.gatewayHashes, stage3l_corpus_manifest_hash: d.stage3lCorpusManifestHash }));
+      await writeFile(
+        join(EV, "adapter-digests.json"),
+        stable({ ...d.gatewayHashes, stage3l_corpus_manifest_hash: d.stage3lCorpusManifestHash })
+      );
       await writeFile(join(EV, "referenced-evidence.json"), stable(bundle.referenced_evidence));
-      await writeFile(join(EV, "privacy-report.json"), stable({ metadata_only: true, raw_output_in_evidence: false, raw_prompts_in_evidence: false }));
+      await writeFile(
+        join(EV, "privacy-report.json"),
+        stable({
+          metadata_only: true,
+          raw_output_in_evidence: false,
+          raw_prompts_in_evidence: false,
+        })
+      );
       await writeFile(join(EV, "capture-summary.json"), stable(buildCaptureSummary(d)));
       await writeFile(join(EV, "attestation.bundle.json"), stable(bundle));
       console.log("stage3vb: evidence written (update; run prettier then write-hashes)");
       return;
     }
-    if (stable(await rd("attestation.bundle.json")) !== stable(bundle)) throw new Error("bundle drifted");
+    if (stable(await rd("attestation.bundle.json")) !== stable(bundle))
+      throw new Error("bundle drifted");
     console.log("stage3vb evidence: verified committed");
   } else if (cmd === "hash") {
-    console.log(JSON.stringify({ ...d.gatewayHashes, stage3l_corpus_manifest_hash: d.stage3lCorpusManifestHash, input_manifest_hash: d.inputManifestHash }, null, 2));
+    console.log(
+      JSON.stringify(
+        {
+          ...d.gatewayHashes,
+          stage3l_corpus_manifest_hash: d.stage3lCorpusManifestHash,
+          input_manifest_hash: d.inputManifestHash,
+        },
+        null,
+        2
+      )
+    );
   } else if (cmd === "verify") {
-    if (stable(await rd("attestation.bundle.json")) !== stable(bundle)) throw new Error("bundle reproduction mismatch");
+    if (stable(await rd("attestation.bundle.json")) !== stable(bundle))
+      throw new Error("bundle reproduction mismatch");
     console.log("stage3vb: bundle reproduces");
   } else if (cmd === "write-hashes") {
     await writeEvidenceHashes();
@@ -997,11 +1097,13 @@ git commit -m "feat(3v-b): external-defence bundle runner + generated metadata-o
 ## Task 7: 3V-B Ed25519 key + signer
 
 **Files:**
+
 - Create: `tools/simurgh-attestation/sign-3vb-attestation.mjs`
 - Create (committed): `docs/research/llm-shield/evidence/stage-3v-b/keys/stage3vb-public-key.json`, `keys/fingerprint.txt`
 - Create (NOT committed): `~/.simurgh/3v-b-ed25519.pem`
 
 **Interfaces:**
+
 - Consumes: `canonicalJson`, `sha256Hex`, `fingerprintPublicKey`; `keygen.mjs`.
 - Produces: signature sidecar `docs/research/llm-shield/evidence/stage-3v-b/attestation.signature.json` with schema `simurgh.vca.external_defense_run.signature.v1` over `canonicalJson(bundle)`.
 
@@ -1077,10 +1179,12 @@ git commit -m "feat(3v-b): own Ed25519 key + local signer; sign sample bundle"
 ## Task 8: Two-tier verifier
 
 **Files:**
+
 - Create: `tools/simurgh-attestation/verify-stage3vb-external-defense.mjs`
 - Test: `tests/unit/llmShield/stage3vb/verifier.test.js`
 
 **Interfaces:**
+
 - Consumes: `canonicalJson`, `sha256Hex`, `fingerprintPublicKey`; the runner's `buildExternalDefenseBundle` (for `--reproduce` rebuild).
 - Produces: `verifyExternalDefense({ bundle, sidecar, publicKeyPem, reproduce, rebuild })` → `{ ok, checks }`. Portable checks: `bundle_sha256`, `fingerprint`, `signature`, `type`, `stage_is_3vb`, `model_not_reexecuted` (`model_reexecuted_in_ci === false`), `zero_unsafe`. `--reproduce` adds `reproduce`, `trusted_harness_hashes_recomputed` (all seven), `stage3l_corpus_manifest_recomputed`, `input_manifest_recomputed`. Fails closed; never throws. CLI reads committed evidence; on `--reproduce` imports the runner's `buildExternalDefenseBundle`.
 
@@ -1104,7 +1208,13 @@ test("portable verify passes on committed evidence", () => {
   assert.equal(r.ok, true);
 });
 test("reproduce verify recomputes seven hashes + manifests", () => {
-  const r = verifyExternalDefense({ bundle, sidecar, publicKeyPem: pub, reproduce: true, rebuild: buildExternalDefenseBundle });
+  const r = verifyExternalDefense({
+    bundle,
+    sidecar,
+    publicKeyPem: pub,
+    reproduce: true,
+    rebuild: buildExternalDefenseBundle,
+  });
   assert.equal(r.ok, true);
   assert.equal(r.checks.trusted_harness_hashes_recomputed, true);
   assert.equal(r.checks.stage3l_corpus_manifest_recomputed, true);
@@ -1157,9 +1267,15 @@ function portableChecks({ bundle, sidecar, publicKeyPem }) {
   checks.bundle_sha256 = sha256Hex(canonical) === sidecar.bundle_sha256;
   checks.fingerprint = fingerprintPublicKey(publicKeyPem) === sidecar.public_key_fingerprint;
   let sigOk = false;
-  const sig = typeof sidecar.signature === "string" ? sidecar.signature.replace(/^base64:/, "") : "";
+  const sig =
+    typeof sidecar.signature === "string" ? sidecar.signature.replace(/^base64:/, "") : "";
   try {
-    sigOk = crypto.verify(null, canonical, crypto.createPublicKey(publicKeyPem), Buffer.from(sig, "base64"));
+    sigOk = crypto.verify(
+      null,
+      canonical,
+      crypto.createPublicKey(publicKeyPem),
+      Buffer.from(sig, "base64")
+    );
   } catch {
     sigOk = false;
   }
@@ -1174,12 +1290,20 @@ function portableChecks({ bundle, sidecar, publicKeyPem }) {
   return checks;
 }
 
-export function verifyExternalDefense({ bundle, sidecar, publicKeyPem, reproduce = false, rebuild } = {}) {
+export function verifyExternalDefense({
+  bundle,
+  sidecar,
+  publicKeyPem,
+  reproduce = false,
+  rebuild,
+} = {}) {
   try {
-    if (!bundle || !sidecar || !publicKeyPem) return { ok: false, checks: { input_present: false } };
+    if (!bundle || !sidecar || !publicKeyPem)
+      return { ok: false, checks: { input_present: false } };
     const checks = portableChecks({ bundle, sidecar, publicKeyPem });
     if (reproduce) {
-      if (typeof rebuild !== "function") return { ok: false, checks: { ...checks, reproduce_rebuild_missing: true } };
+      if (typeof rebuild !== "function")
+        return { ok: false, checks: { ...checks, reproduce_rebuild_missing: true } };
       const rebuilt = rebuild();
       const stable = (v) => JSON.stringify(v, null, 2) + "\n";
       checks.reproduce = stable(rebuilt) === stable(bundle);
@@ -1187,7 +1311,8 @@ export function verifyExternalDefense({ bundle, sidecar, publicKeyPem, reproduce
         (k) => rebuilt.gateway_computed_hashes?.[k] === bundle.gateway_computed_hashes?.[k]
       );
       checks.stage3l_corpus_manifest_recomputed =
-        rebuilt.run_set?.stage3l_corpus_manifest_hash === bundle.run_set?.stage3l_corpus_manifest_hash;
+        rebuilt.run_set?.stage3l_corpus_manifest_hash ===
+        bundle.run_set?.stage3l_corpus_manifest_hash;
       checks.input_manifest_recomputed =
         rebuilt.run_set?.input_manifest_hash === bundle.run_set?.input_manifest_hash;
     }
@@ -1204,10 +1329,13 @@ async function cli() {
   const reproduce = process.argv.includes("--reproduce");
   const bundle = JSON.parse(await readFile(join(EV, "attestation.bundle.json"), "utf8"));
   const sidecar = JSON.parse(await readFile(join(EV, "attestation.signature.json"), "utf8"));
-  const pub = JSON.parse(await readFile(join(EV, "keys", "stage3vb-public-key.json"), "utf8")).public_key_pem;
+  const pub = JSON.parse(
+    await readFile(join(EV, "keys", "stage3vb-public-key.json"), "utf8")
+  ).public_key_pem;
   let rebuild;
   if (reproduce)
-    ({ buildExternalDefenseBundle: rebuild } = await import("../../tests/e2e/llm_shield_stage3vb_external_defense_runner.mjs"));
+    ({ buildExternalDefenseBundle: rebuild } =
+      await import("../../tests/e2e/llm_shield_stage3vb_external_defense_runner.mjs"));
   const result = verifyExternalDefense({ bundle, sidecar, publicKeyPem: pub, reproduce, rebuild });
   console.log(JSON.stringify(result, null, 2));
   if (!result.ok) process.exit(1);
@@ -1238,10 +1366,12 @@ git commit -m "feat(3v-b): two-tier verifier (portable + reproduce, fails closed
 ## Task 9: Tamper / negative self-proof suite
 
 **Files:**
+
 - Create: `tests/e2e/llm_shield_stage3vb_tamper_runner.mjs`
 - Test: `tests/unit/llmShield/stage3vb/tamper.test.js`
 
 **Interfaces:**
+
 - Consumes: `verifyExternalDefense`; `validateObservation`.
 - Produces: `runStage3vbSelfProof()` → `{ all_passed, cases, counters }`. ≥9 cases: `external_verdict_flipped`, `provenance_edited`, `weights_digest_edited`, `input_manifest_edited`, `capture_file_hash_edited`, `wrong_public_key`, `raw_output_injected`, `file_removed`, `adapter_supplied_hash`. Counters `accepted_tampered_bundles` and `raw_output_in_bundle` stay 0.
 
@@ -1288,7 +1418,10 @@ const clone = (x) => JSON.parse(JSON.stringify(x));
 export function runStage3vbSelfProof() {
   const cases = [];
   const reject = (name, b, s = sidecar, p = pub) =>
-    cases.push({ name, rejected: verifyExternalDefense({ bundle: b, sidecar: s, publicKeyPem: p }).ok === false });
+    cases.push({
+      name,
+      rejected: verifyExternalDefense({ bundle: b, sidecar: s, publicKeyPem: p }).ok === false,
+    });
 
   const flip = clone(bundle);
   flip.metrics.external.external_block_rate = "999/180";
@@ -1310,7 +1443,9 @@ export function runStage3vbSelfProof() {
   cf.gateway_computed_hashes.capture_file_hash = "sha256:" + "2".repeat(64);
   reject("capture_file_hash_edited", cf);
 
-  const wrong = crypto.generateKeyPairSync("ed25519").publicKey.export({ type: "spki", format: "pem" });
+  const wrong = crypto
+    .generateKeyPairSync("ed25519")
+    .publicKey.export({ type: "spki", format: "pem" });
   reject("wrong_public_key", bundle, sidecar, wrong);
 
   const raw = clone(bundle);
@@ -1377,11 +1512,13 @@ git commit -m "feat(3v-b): negative self-proof tamper suite (>=9 cases, counters
 ## Task 10: Capture-integrity preflight script + RunPod capture harness
 
 **Files:**
+
 - Create: `scripts/assert-stage3vb-capture-integrity.mjs`
 - Create: `tools/capture/stage3vb_llama_guard4_capture.py`
 - Test: `tests/unit/llmShield/stage3vb/captureIntegrityScript.test.js`
 
 **Interfaces:**
+
 - `scripts/assert-stage3vb-capture-integrity.mjs`: reads the committed replay artifact, runs `assertCaptureIntegrity` against `buildStage3lCorpus()`, prints the report; exit 1 on failure.
 - `tools/capture/stage3vb_llama_guard4_capture.py`: transport-only. Reads case `{case_id, user_task}` pairs from stdin/JSON, runs LG4 greedy, writes `{schema, live:true, capture_environment:"runpod_gpu", contains_*:false, capture_provenance{...}, cases:[{case_id, raw_lg4_output}]}` to an output path. No signing, no normalisation, no hashing.
 
@@ -1417,7 +1554,8 @@ import { readFileSync } from "node:fs";
 import { buildStage3lCorpus } from "../tests/e2e/llm_shield_stage3l_fable5_reference_lib.mjs";
 import { assertCaptureIntegrity } from "../tools/external-defense-adapters/llamaGuard4Adapter.mjs";
 
-const REPLAY = "docs/research/llm-shield/evidence/stage-3v-b/capture-replay/lg4-frozen-capture.json";
+const REPLAY =
+  "docs/research/llm-shield/evidence/stage-3v-b/capture-replay/lg4-frozen-capture.json";
 
 export function assertCommittedCaptureIntegrity() {
   const capture = JSON.parse(readFileSync(REPLAY, "utf8"));
@@ -1563,6 +1701,7 @@ git commit -m "feat(3v-b): capture-integrity preflight + RunPod transport-only c
 ## Task 11: Gate scripts (smoke, audits, policy-drift, reproduce, release gate)
 
 **Files:**
+
 - Create: `scripts/smoke-llm-shield-stage3vb.sh`, `scripts/security-audit-llm-shield-stage3vb.sh`, `scripts/privacy-audit-llm-shield-stage3vb.mjs`, `scripts/consistency-audit-llm-shield-stage3vb.mjs`, `scripts/policy-drift-guard-llm-shield-stage3vb.sh`, `scripts/reproduce-llm-shield-stage3vb.sh`, `scripts/assert-stage3vb-live-release.sh`
 
 **Interfaces:** each script exits non-zero on failure. `assert-stage3vb-live-release.sh` is release-only (NOT wired into check.sh).
@@ -1713,7 +1852,13 @@ if (stable(committed) !== stable(buildExternalDefenseBundle())) {
 }
 const sidecar = await rd("attestation.signature.json");
 const pub = (await rd("keys/stage3vb-public-key.json")).public_key_pem;
-const r = verifyExternalDefense({ bundle: committed, sidecar, publicKeyPem: pub, reproduce: true, rebuild: buildExternalDefenseBundle });
+const r = verifyExternalDefense({
+  bundle: committed,
+  sidecar,
+  publicKeyPem: pub,
+  reproduce: true,
+  rebuild: buildExternalDefenseBundle,
+});
 if (!r.ok) {
   console.error("consistency: verify failed", JSON.stringify(r.checks));
   process.exit(1);
@@ -1804,6 +1949,7 @@ git commit -m "feat(3v-b): smoke + security/privacy/consistency audits + policy-
 ## Task 12: Wire gates into check.sh + coverage gate
 
 **Files:**
+
 - Modify: `scripts/check.sh` (insert after the 3V-A coverage block that ends ~line 1938, before the `3E-core docker smoke` step)
 
 **Interfaces:** adds steps using the repo's existing `step`/`pass`/`fail` helpers, mirroring the 3V-A block exactly.
@@ -1917,6 +2063,7 @@ git commit -m "feat(3v-b): wire preflights + smoke + audits + policy-drift + cov
 ## Task 13: Reviewer docs + evidence README + format + write-hashes
 
 **Files:**
+
 - Create: `docs/research/llm-shield/LLM_SHIELD_STAGE_3V_B_WRITEUP.md`, `docs/research/llm-shield/STAGE_3V_B_THREAT_MODEL.md`, `STAGE_3V_B_VALIDATION_MATRIX.md`, `STAGE_3V_B_REVIEWER_CHECKLIST.md`, `STAGE_3V_B_CLOSEOUT.md`
 - Create: `docs/research/llm-shield/evidence/stage-3v-b/README.md`
 
@@ -1963,6 +2110,7 @@ git commit -m "docs(3v-b): writeup, threat model, validation matrix, reviewer ch
 > (Tasks 1–13) is green on the sample.
 
 **Files:**
+
 - Replace (committed): `docs/research/llm-shield/evidence/stage-3v-b/capture-replay/lg4-frozen-capture.json` (real capture)
 - Regenerate: all `docs/research/llm-shield/evidence/stage-3v-b/*.json` + signature + evidence-hashes
 
@@ -2039,6 +2187,7 @@ git push origin v2.6.0-stage-3v-b-llamaguard-external-defense-attestation
 ## Self-Review
 
 **Spec coverage:**
+
 - LG4 12B via HF transformers, greedy decode → Task 10 Python + `ADAPTER_CONFIG.decode` (Task 3). ✅
 - Option A input (`user_task`, input-only) + feedable preflight → Task 1, Task 6 `inputManifest`. ✅
 - Replay-reproducible / `model_reexecuted_in_ci:false` → Task 6 bundle, Task 8 `model_not_reexecuted` check. ✅
