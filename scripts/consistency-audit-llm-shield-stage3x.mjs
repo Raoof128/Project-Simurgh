@@ -20,7 +20,13 @@ if (stable(committed) !== stable(buildIndexFile())) {
 }
 const sidecar = await rd("timeline.signature.json");
 const pub = (await rd("keys/stage3x-public-key.json")).public_key_pem;
-const r = verifyTimeline({ index: committed, sidecar, publicKeyPem: pub, reproduce: true, rebuild: buildIndexFile });
+const r = verifyTimeline({
+  index: committed,
+  sidecar,
+  publicKeyPem: pub,
+  reproduce: true,
+  rebuild: buildIndexFile,
+});
 if (!r.ok) {
   console.error("consistency: verify failed", JSON.stringify(r.checks));
   process.exit(1);

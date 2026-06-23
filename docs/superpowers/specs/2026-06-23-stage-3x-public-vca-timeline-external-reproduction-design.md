@@ -27,16 +27,16 @@ signed reasons.
 
 ## Locked decisions
 
-| Item | Choice |
-|---|---|
-| Stage name | Stage 3X — Public VCA Timeline & External Reproduction Packet |
-| Tag | `v2.8.0-stage-3x-public-vca-timeline-external-reproduction` |
-| Model | mixed-tier timeline + generic evidence-hashes verifier |
-| Signed root | own 3X Ed25519 key |
-| Primary reviewer command | `scripts/reproduce-vca-chain.sh` |
-| Per-push gate | generic EH verification (10 dirs) + timeline verifier + tamper + policy-drift + audits |
-| Reviewer replay | full tier-appropriate delegated replay (incl. the 3 reproduce scripts) |
-| Sacred non-claim | no uniform 12/12 full reproduction |
+| Item                     | Choice                                                                                 |
+| ------------------------ | -------------------------------------------------------------------------------------- |
+| Stage name               | Stage 3X — Public VCA Timeline & External Reproduction Packet                          |
+| Tag                      | `v2.8.0-stage-3x-public-vca-timeline-external-reproduction`                            |
+| Model                    | mixed-tier timeline + generic evidence-hashes verifier                                 |
+| Signed root              | own 3X Ed25519 key                                                                     |
+| Primary reviewer command | `scripts/reproduce-vca-chain.sh`                                                       |
+| Per-push gate            | generic EH verification (10 dirs) + timeline verifier + tamper + policy-drift + audits |
+| Reviewer replay          | full tier-appropriate delegated replay (incl. the 3 reproduce scripts)                 |
+| Sacred non-claim         | no uniform 12/12 full reproduction                                                     |
 
 ## 1. Replay tiers
 
@@ -100,6 +100,7 @@ signed reasons.
   "replay_surface_reason": "Stage 3M predates the project-wide evidence-hashes.json pattern; 3X binds its tag, merge commit, headline, public key fingerprint, and available attestation metadata, but does not claim generic evidence-hash replay for this rung."
 }
 ```
+
 ```json
 {
   "stage": "3R",
@@ -130,7 +131,9 @@ Top-level index blocks (Amendment 2 — machine-readable summaries):
     "claims_live_model_reexecution": false,
     "claims_external_origin_truth": false
   },
-  "rungs": [ /* per-rung entries above, ordered 3M..3W */ ],
+  "rungs": [
+    /* per-rung entries above, ordered 3M..3W */
+  ],
   "non_claims": [
     "does_not_reexecute_live_models",
     "does_not_prove_original_gpu_capture",
@@ -167,9 +170,27 @@ Signed into `timeline.signature.json` (schema `simurgh.vca.public_timeline.signa
   "offline_only": true,
   "network_required": false,
   "results": [
-    { "stage": "3M", "replay_tier": "index_only", "tag_commit_pinned": true, "evidence_root_digest_matched": null, "reproduce_passed": null },
-    { "stage": "3U", "replay_tier": "evidence_hashes", "tag_commit_pinned": true, "evidence_root_digest_matched": true, "reproduce_passed": null },
-    { "stage": "3W", "replay_tier": "reproduce", "tag_commit_pinned": true, "evidence_root_digest_matched": true, "reproduce_passed": true }
+    {
+      "stage": "3M",
+      "replay_tier": "index_only",
+      "tag_commit_pinned": true,
+      "evidence_root_digest_matched": null,
+      "reproduce_passed": null
+    },
+    {
+      "stage": "3U",
+      "replay_tier": "evidence_hashes",
+      "tag_commit_pinned": true,
+      "evidence_root_digest_matched": true,
+      "reproduce_passed": null
+    },
+    {
+      "stage": "3W",
+      "replay_tier": "reproduce",
+      "tag_commit_pinned": true,
+      "evidence_root_digest_matched": true,
+      "reproduce_passed": true
+    }
   ],
   "non_claims": [
     "does_not_reexecute_live_models",
@@ -186,11 +207,13 @@ Signed into `timeline.signature.json` (schema `simurgh.vca.public_timeline.signa
 ## 5. Components / files
 
 **Pure libs (100% function-coverage gated):**
+
 - `tools/simurgh-attestation/verifyEvidenceHashesLib.mjs`.
 - `tools/simurgh-attestation/stage3xTimelineLib.mjs` (`VCA_RUNGS` frozen table, `buildTimelineIndex()`,
   `buildChainSummary()`).
 
 **Runner / attestation (subprocess-covered, excluded from function-coverage gate):**
+
 - `tools/simurgh-attestation/build-3x-timeline.mjs` — CLI build/hash/verify/write-hashes/verify-hashes.
 - `tools/simurgh-attestation/sign-3x-timeline.mjs` — local signer (`SIMURGH_3X_PRIVATE_KEY_PATH`,
   default `~/.simurgh/3x-ed25519.pem`).
@@ -224,7 +247,7 @@ path-traversal key (`../x`) → `ok:false`.
 
 ## 7. Invariants (carried)
 
-- Tooling-only: **zero `src/llmShield/**` change**; policy-drift fail-closed three-dot.
+- Tooling-only: **zero `src/llmShield/**` change\*\*; policy-drift fail-closed three-dot.
 - Offline-primary; no network anywhere in the gate or the core verifier.
 - `sha256Hex` already prefixes `sha256:` — never double-prefix. `npm run format:check` + prettier, then
   `write-hashes` AFTER prettier. `evidence-hashes.json` excludes itself.

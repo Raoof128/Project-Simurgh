@@ -34,7 +34,8 @@ export function runStage3xSelfProof() {
   reject("merge_commit_edited", mc);
 
   const fp = clone(index);
-  fp.rungs.find((r) => r.public_key_fingerprint).public_key_fingerprint = "sha256:" + "1".repeat(64);
+  fp.rungs.find((r) => r.public_key_fingerprint).public_key_fingerprint =
+    "sha256:" + "1".repeat(64);
   reject("public_key_fingerprint_edited", fp);
 
   const rt = clone(index);
@@ -56,7 +57,9 @@ export function runStage3xSelfProof() {
   });
 
   // generic EH hardening self-proofs
-  const ehSelf = verifyEvidenceHashes("x", { _injectMap: { "x/evidence-hashes.json": "sha256:y" } });
+  const ehSelf = verifyEvidenceHashes("x", {
+    _injectMap: { "x/evidence-hashes.json": "sha256:y" },
+  });
   cases.push({
     name: "eh_self_inclusion",
     rejected: ehSelf.ok === false && ehSelf.reason === "self_inclusion",

@@ -10,7 +10,7 @@
 
 ## Global Constraints
 
-- **No `src/llmShield/**` changes** — policy-drift fail-closed three-dot `origin/main...HEAD` (real-base fallback `origin/main`→`main`→warn-pass).
+- **No `src/llmShield/**`changes** — policy-drift fail-closed three-dot`origin/main...HEAD`(real-base fallback`origin/main`→`main`→warn-pass).
 - **No new model run / guard comparison / provider / GPU-capture proof / production-readiness claim.**
 - **Does NOT reduce `live_capture_origin_self_reported`. Does NOT claim uniform 12/12 full reproduction.**
 - **Offline-primary** — no network in the gate or the core verifier; the heavy delegated replay never enters the ordinary push gate.
@@ -23,20 +23,20 @@
 
 ## Ground-truth rung table (verified on disk)
 
-| Stage | Tag | evidence_dir | replay_tier | EH? | reproduce script | key file |
-|---|---|---|---|---|---|---|
-| 3M | v1.6.0-stage-3m-verifiable-containment-attestation | stage-3m | index_only | no | — | attestation.public-key.json |
-| 3N | v1.7.0-stage-3n-claim-checked-security-utility-ledger | stage-3n | evidence_hashes | yes | — | none |
-| 3O | v1.8.0-stage-3o-byo-gateway-containment-benchmark | stage-3o | evidence_hashes | yes | — | none |
-| 3P | v1.9.0-stage-3p-cross-defence-containment-attestation | stage-3p | evidence_hashes | yes | — | keys/stage3p-public-key.json |
-| 3Q | v2.0.0-stage-3q-attestation-registry-regression-diff | stage-3q | evidence_hashes | yes | — | keys/stage3q-public-key.json |
-| 3R | v2.1.0-stage-3r-trust-preserving-provider-fallback | (none) | index_only | no | — | none |
-| 3S | v2.2.0-stage-3s-verifiable-defensive-narrative | stage-3s | evidence_hashes | yes | — | keys/stage3s-public-key.json |
-| 3T | v2.3.0-stage-3t-offline-capability-extraction-attestation | stage-3t | evidence_hashes | yes | — | keys/stage3t-public-key.json |
-| 3U | v2.4.0-stage-3u-red-team-hardened-extraction-attestation | stage-3u | evidence_hashes | yes | — | keys/stage3u-public-key.json |
-| 3V | v2.5.0-stage-3v-a-recorded-external-signal-attestation | stage-3v | reproduce | yes | reproduce-llm-shield-stage3v.sh | keys/stage3v-public-key.json |
-| 3V-B | v2.6.0-stage-3v-b-llamaguard-external-defense-attestation | stage-3v-b | reproduce | yes | reproduce-llm-shield-stage3vb.sh | keys/stage3vb-public-key.json |
-| 3W | v2.7.0-stage-3w-witnessed-vca-release-provenance | stage-3w | reproduce | yes | reproduce-llm-shield-stage3w.sh | keys/stage3w-public-key.json |
+| Stage | Tag                                                       | evidence_dir | replay_tier     | EH? | reproduce script                 | key file                      |
+| ----- | --------------------------------------------------------- | ------------ | --------------- | --- | -------------------------------- | ----------------------------- |
+| 3M    | v1.6.0-stage-3m-verifiable-containment-attestation        | stage-3m     | index_only      | no  | —                                | attestation.public-key.json   |
+| 3N    | v1.7.0-stage-3n-claim-checked-security-utility-ledger     | stage-3n     | evidence_hashes | yes | —                                | none                          |
+| 3O    | v1.8.0-stage-3o-byo-gateway-containment-benchmark         | stage-3o     | evidence_hashes | yes | —                                | none                          |
+| 3P    | v1.9.0-stage-3p-cross-defence-containment-attestation     | stage-3p     | evidence_hashes | yes | —                                | keys/stage3p-public-key.json  |
+| 3Q    | v2.0.0-stage-3q-attestation-registry-regression-diff      | stage-3q     | evidence_hashes | yes | —                                | keys/stage3q-public-key.json  |
+| 3R    | v2.1.0-stage-3r-trust-preserving-provider-fallback        | (none)       | index_only      | no  | —                                | none                          |
+| 3S    | v2.2.0-stage-3s-verifiable-defensive-narrative            | stage-3s     | evidence_hashes | yes | —                                | keys/stage3s-public-key.json  |
+| 3T    | v2.3.0-stage-3t-offline-capability-extraction-attestation | stage-3t     | evidence_hashes | yes | —                                | keys/stage3t-public-key.json  |
+| 3U    | v2.4.0-stage-3u-red-team-hardened-extraction-attestation  | stage-3u     | evidence_hashes | yes | —                                | keys/stage3u-public-key.json  |
+| 3V    | v2.5.0-stage-3v-a-recorded-external-signal-attestation    | stage-3v     | reproduce       | yes | reproduce-llm-shield-stage3v.sh  | keys/stage3v-public-key.json  |
+| 3V-B  | v2.6.0-stage-3v-b-llamaguard-external-defense-attestation | stage-3v-b   | reproduce       | yes | reproduce-llm-shield-stage3vb.sh | keys/stage3vb-public-key.json |
+| 3W    | v2.7.0-stage-3w-witnessed-vca-release-provenance          | stage-3w     | reproduce       | yes | reproduce-llm-shield-stage3w.sh  | keys/stage3w-public-key.json  |
 
 Counts: tag+commit-pinned 12 · evidence_hashes_available 10 · full_reproduce_available 3 · index_only 2.
 
@@ -45,10 +45,12 @@ Counts: tag+commit-pinned 12 · evidence_hashes_available 10 · full_reproduce_a
 ## File Structure
 
 **New pure libs (100% function-coverage gated):**
+
 - `tools/simurgh-attestation/verifyEvidenceHashesLib.mjs` — generic EH verifier.
 - `tools/simurgh-attestation/stage3xTimelineLib.mjs` — `VCA_RUNGS`, `resolveFingerprint`, `buildChainSummary`, `buildTimelineIndex`.
 
 **New runner / attestation (subprocess-covered):**
+
 - `tools/simurgh-attestation/build-3x-timeline.mjs`, `sign-3x-timeline.mjs`, `verify-stage3x-timeline.mjs`.
 - `tests/e2e/llm_shield_stage3x_tamper_runner.mjs`.
 
@@ -69,10 +71,12 @@ Counts: tag+commit-pinned 12 · evidence_hashes_available 10 · full_reproduce_a
 ## Task 1: Generic evidence-hashes verifier (pure lib)
 
 **Files:**
+
 - Create: `tools/simurgh-attestation/verifyEvidenceHashesLib.mjs`
 - Test: `tests/unit/llmShield/stage3x/verifyEvidenceHashes.test.js`
 
 **Interfaces:**
+
 - Consumes: `sha256Hex` from `./canonicalise.mjs`.
 - Produces: `verifyEvidenceHashes(stageDir)` → `{ ok, checked, mismatches, reason }`. Never throws, no network. `ok:false` with `reason` on: missing map, self-inclusion (`evidence-hashes.json` listed), absolute path or `..` traversal in any key, any digest mismatch.
 
@@ -118,7 +122,9 @@ test("rejects absolute path", () => {
 });
 test("reports mismatch on a bad digest", () => {
   const r = verifyEvidenceHashes("docs/research/llm-shield/evidence/stage-3w", {
-    _injectMap: { "docs/research/llm-shield/evidence/stage-3w/provenance.json": "sha256:" + "0".repeat(64) },
+    _injectMap: {
+      "docs/research/llm-shield/evidence/stage-3w/provenance.json": "sha256:" + "0".repeat(64),
+    },
   });
   assert.equal(r.ok, false);
   assert.equal(r.reason, "digest_mismatch");
@@ -180,8 +186,7 @@ export function verifyEvidenceHashes(stageDir, { _injectMap } = {}) {
       }
       if (actual !== expected) mismatches.push(p);
     }
-    if (mismatches.length > 0)
-      return { ok: false, checked, mismatches, reason: "digest_mismatch" };
+    if (mismatches.length > 0) return { ok: false, checked, mismatches, reason: "digest_mismatch" };
     return { ok: true, checked, mismatches: [], reason: "ok" };
   } catch {
     return { ok: false, checked: 0, mismatches: [], reason: "threw" };
@@ -206,10 +211,12 @@ git commit -m "feat(3x): generic offline evidence-hashes verifier (rejects self-
 ## Task 2: Timeline library (rung table + index builder)
 
 **Files:**
+
 - Create: `tools/simurgh-attestation/stage3xTimelineLib.mjs`
 - Test: `tests/unit/llmShield/stage3x/timelineLib.test.js`
 
 **Interfaces:**
+
 - Consumes: `canonicalJson`, `sha256Hex`, `fingerprintPublicKey`; `node:child_process` `execFileSync` for `git rev-parse`; `node:fs`.
 - Produces:
   - `VCA_RUNGS` (frozen array of 12, each `{ stage, tag, headline, replay_tier, evidence_dir|null, full_reproduce_available, evidence_hashes_available, reproduce_command|null, index_only_reason|null, replay_surface_reason }`).
@@ -300,23 +307,162 @@ const EV = "docs/research/llm-shield/evidence";
 
 export const VCA_RUNGS = Object.freeze(
   [
-    ["3M", "v1.6.0-stage-3m-verifiable-containment-attestation", "Offline-verifiable provider-agnostic containment attestation", "index_only", "stage-3m", false, false, null, "index_only_for_3x_chain_hashing", "Stage 3M predates the project-wide evidence-hashes.json pattern; 3X binds its tag, merge commit, headline, public key fingerprint, and available attestation metadata, but does not claim generic evidence-hash replay for this rung."],
-    ["3N", "v1.7.0-stage-3n-claim-checked-security-utility-ledger", "Claim-checked security/utility ledger", "evidence_hashes", "stage-3n", false, true, null, null, "Stage 3N exposes a committed evidence-hashes.json; 3X re-verifies every listed digest offline."],
-    ["3O", "v1.8.0-stage-3o-byo-gateway-containment-benchmark", "BYO-gateway containment benchmark", "evidence_hashes", "stage-3o", false, true, null, null, "Stage 3O exposes a committed evidence-hashes.json; 3X re-verifies every listed digest offline."],
-    ["3P", "v1.9.0-stage-3p-cross-defence-containment-attestation", "Cross-defence containment attestation", "evidence_hashes", "stage-3p", false, true, null, null, "Stage 3P exposes a committed evidence-hashes.json; 3X re-verifies every listed digest offline."],
-    ["3Q", "v2.0.0-stage-3q-attestation-registry-regression-diff", "Attestation registry + regression diff", "evidence_hashes", "stage-3q", false, true, null, null, "Stage 3Q exposes a committed evidence-hashes.json; 3X re-verifies every listed digest offline."],
-    ["3R", "v2.1.0-stage-3r-trust-preserving-provider-fallback", "Trust-preserving provider fallback", "index_only", null, false, false, null, "index_only_source_feature_stage_no_evidence_directory", "Stage 3R was a source feature stage under src/llmShield/gateway rather than an evidence-directory stage; 3X binds its tag, merge commit, and headline but does not claim evidence-directory replay."],
-    ["3S", "v2.2.0-stage-3s-verifiable-defensive-narrative", "Verifiable defensive narrative", "evidence_hashes", "stage-3s", false, true, null, null, "Stage 3S exposes a committed evidence-hashes.json; 3X re-verifies every listed digest offline."],
-    ["3T", "v2.3.0-stage-3t-offline-capability-extraction-attestation", "Offline capability-extraction attestation", "evidence_hashes", "stage-3t", false, true, null, null, "Stage 3T exposes a committed evidence-hashes.json; 3X re-verifies every listed digest offline."],
-    ["3U", "v2.4.0-stage-3u-red-team-hardened-extraction-attestation", "Red-team-hardened extraction attestation", "evidence_hashes", "stage-3u", false, true, null, null, "Stage 3U exposes a committed evidence-hashes.json; 3X re-verifies every listed digest offline."],
-    ["3V", "v2.5.0-stage-3v-a-recorded-external-signal-attestation", "Recorded external-signal containment attestation", "reproduce", "stage-3v", true, true, "scripts/reproduce-llm-shield-stage3v.sh", null, "Stage 3V exposes a full offline reproduce script; 3X delegates replay to it."],
-    ["3V-B", "v2.6.0-stage-3v-b-llamaguard-external-defense-attestation", "Live Llama Guard 4 external-defence containment attestation", "reproduce", "stage-3v-b", true, true, "scripts/reproduce-llm-shield-stage3vb.sh", null, "Stage 3V-B exposes a full offline reproduce script; 3X delegates replay to it."],
-    ["3W", "v2.7.0-stage-3w-witnessed-vca-release-provenance", "Witnessed VCA release provenance", "reproduce", "stage-3w", true, true, "scripts/reproduce-llm-shield-stage3w.sh", null, "Stage 3W exposes a full offline reproduce script; 3X delegates replay to it."],
+    [
+      "3M",
+      "v1.6.0-stage-3m-verifiable-containment-attestation",
+      "Offline-verifiable provider-agnostic containment attestation",
+      "index_only",
+      "stage-3m",
+      false,
+      false,
+      null,
+      "index_only_for_3x_chain_hashing",
+      "Stage 3M predates the project-wide evidence-hashes.json pattern; 3X binds its tag, merge commit, headline, public key fingerprint, and available attestation metadata, but does not claim generic evidence-hash replay for this rung.",
+    ],
+    [
+      "3N",
+      "v1.7.0-stage-3n-claim-checked-security-utility-ledger",
+      "Claim-checked security/utility ledger",
+      "evidence_hashes",
+      "stage-3n",
+      false,
+      true,
+      null,
+      null,
+      "Stage 3N exposes a committed evidence-hashes.json; 3X re-verifies every listed digest offline.",
+    ],
+    [
+      "3O",
+      "v1.8.0-stage-3o-byo-gateway-containment-benchmark",
+      "BYO-gateway containment benchmark",
+      "evidence_hashes",
+      "stage-3o",
+      false,
+      true,
+      null,
+      null,
+      "Stage 3O exposes a committed evidence-hashes.json; 3X re-verifies every listed digest offline.",
+    ],
+    [
+      "3P",
+      "v1.9.0-stage-3p-cross-defence-containment-attestation",
+      "Cross-defence containment attestation",
+      "evidence_hashes",
+      "stage-3p",
+      false,
+      true,
+      null,
+      null,
+      "Stage 3P exposes a committed evidence-hashes.json; 3X re-verifies every listed digest offline.",
+    ],
+    [
+      "3Q",
+      "v2.0.0-stage-3q-attestation-registry-regression-diff",
+      "Attestation registry + regression diff",
+      "evidence_hashes",
+      "stage-3q",
+      false,
+      true,
+      null,
+      null,
+      "Stage 3Q exposes a committed evidence-hashes.json; 3X re-verifies every listed digest offline.",
+    ],
+    [
+      "3R",
+      "v2.1.0-stage-3r-trust-preserving-provider-fallback",
+      "Trust-preserving provider fallback",
+      "index_only",
+      null,
+      false,
+      false,
+      null,
+      "index_only_source_feature_stage_no_evidence_directory",
+      "Stage 3R was a source feature stage under src/llmShield/gateway rather than an evidence-directory stage; 3X binds its tag, merge commit, and headline but does not claim evidence-directory replay.",
+    ],
+    [
+      "3S",
+      "v2.2.0-stage-3s-verifiable-defensive-narrative",
+      "Verifiable defensive narrative",
+      "evidence_hashes",
+      "stage-3s",
+      false,
+      true,
+      null,
+      null,
+      "Stage 3S exposes a committed evidence-hashes.json; 3X re-verifies every listed digest offline.",
+    ],
+    [
+      "3T",
+      "v2.3.0-stage-3t-offline-capability-extraction-attestation",
+      "Offline capability-extraction attestation",
+      "evidence_hashes",
+      "stage-3t",
+      false,
+      true,
+      null,
+      null,
+      "Stage 3T exposes a committed evidence-hashes.json; 3X re-verifies every listed digest offline.",
+    ],
+    [
+      "3U",
+      "v2.4.0-stage-3u-red-team-hardened-extraction-attestation",
+      "Red-team-hardened extraction attestation",
+      "evidence_hashes",
+      "stage-3u",
+      false,
+      true,
+      null,
+      null,
+      "Stage 3U exposes a committed evidence-hashes.json; 3X re-verifies every listed digest offline.",
+    ],
+    [
+      "3V",
+      "v2.5.0-stage-3v-a-recorded-external-signal-attestation",
+      "Recorded external-signal containment attestation",
+      "reproduce",
+      "stage-3v",
+      true,
+      true,
+      "scripts/reproduce-llm-shield-stage3v.sh",
+      null,
+      "Stage 3V exposes a full offline reproduce script; 3X delegates replay to it.",
+    ],
+    [
+      "3V-B",
+      "v2.6.0-stage-3v-b-llamaguard-external-defense-attestation",
+      "Live Llama Guard 4 external-defence containment attestation",
+      "reproduce",
+      "stage-3v-b",
+      true,
+      true,
+      "scripts/reproduce-llm-shield-stage3vb.sh",
+      null,
+      "Stage 3V-B exposes a full offline reproduce script; 3X delegates replay to it.",
+    ],
+    [
+      "3W",
+      "v2.7.0-stage-3w-witnessed-vca-release-provenance",
+      "Witnessed VCA release provenance",
+      "reproduce",
+      "stage-3w",
+      true,
+      true,
+      "scripts/reproduce-llm-shield-stage3w.sh",
+      null,
+      "Stage 3W exposes a full offline reproduce script; 3X delegates replay to it.",
+    ],
   ].map((r) =>
     Object.freeze({
-      stage: r[0], tag: r[1], headline: r[2], replay_tier: r[3], evidence_dir: r[4] ? `${EV}/${r[4]}` : null,
-      full_reproduce_available: r[5], evidence_hashes_available: r[6], reproduce_command: r[7],
-      index_only_reason: r[8], replay_surface_reason: r[9],
+      stage: r[0],
+      tag: r[1],
+      headline: r[2],
+      replay_tier: r[3],
+      evidence_dir: r[4] ? `${EV}/${r[4]}` : null,
+      full_reproduce_available: r[5],
+      evidence_hashes_available: r[6],
+      reproduce_command: r[7],
+      index_only_reason: r[8],
+      replay_surface_reason: r[9],
     })
   )
 );
@@ -416,11 +562,13 @@ git commit -m "feat(3x): public VCA timeline lib — frozen rung table, tier cla
 ## Task 3: Runner — build timeline evidence
 
 **Files:**
+
 - Create: `tools/simurgh-attestation/build-3x-timeline.mjs`
 - Create (generated): `docs/research/llm-shield/evidence/stage-3x/{timeline.index.json,provenance.json}`
 - Test: `tests/unit/llmShield/stage3x/build.test.js`
 
 **Interfaces:**
+
 - Consumes: `buildTimelineIndex`, `canonicalJson`, `sha256Hex`.
 - Produces: `buildIndexFile()` → index object; CLI `build [--update] | hash | verify | write-hashes | verify-hashes`. `write-hashes` walks the 3X evidence dir, **excludes `evidence-hashes.json`**.
 
@@ -555,6 +703,7 @@ git commit -m "feat(3x): runner + generated timeline index + provenance"
 ## Task 4: 3X Ed25519 key + signer
 
 **Files:**
+
 - Create: `tools/simurgh-attestation/sign-3x-timeline.mjs`
 - Create (committed): `docs/research/llm-shield/evidence/stage-3x/keys/stage3x-public-key.json`, `keys/fingerprint.txt`
 - Create (NOT committed): `~/.simurgh/3x-ed25519.pem`
@@ -628,10 +777,12 @@ git status --porcelain | grep -i pem && echo "ABORT: key staged" || git commit -
 ## Task 5: Two-tier verifier
 
 **Files:**
+
 - Create: `tools/simurgh-attestation/verify-stage3x-timeline.mjs`
 - Test: `tests/unit/llmShield/stage3x/verifier.test.js`
 
 **Interfaces:**
+
 - Produces: `verifyTimeline({ index, sidecar, publicKeyPem, reproduce, rebuild })` → `{ ok, checks }`. Portable: `bundle_sha256`, `fingerprint`, `signature`, `schema` (`simurgh.vca.public_timeline.v1`), `not_uniform_claim` (`claim_summary.claims_uniform_full_reproduction === false`). `--reproduce`: `reproduce` (byte-stable), `evidence_root_digests_recomputed`, `merge_commits_recomputed`, `chain_summary_recomputed`. Fails closed; never throws.
 
 - [ ] **Step 1: Write the failing test**
@@ -653,7 +804,13 @@ test("portable verify passes on committed evidence", () => {
   assert.equal(verifyTimeline({ index, sidecar, publicKeyPem: pub }).ok, true);
 });
 test("reproduce recomputes digests + commits + chain summary", () => {
-  const r = verifyTimeline({ index, sidecar, publicKeyPem: pub, reproduce: true, rebuild: buildIndexFile });
+  const r = verifyTimeline({
+    index,
+    sidecar,
+    publicKeyPem: pub,
+    reproduce: true,
+    rebuild: buildIndexFile,
+  });
   assert.equal(r.ok, true);
   assert.equal(r.checks.evidence_root_digests_recomputed, true);
   assert.equal(r.checks.merge_commits_recomputed, true);
@@ -691,9 +848,15 @@ function portableChecks({ index, sidecar, publicKeyPem }) {
   checks.bundle_sha256 = sha256Hex(canonical) === sidecar.bundle_sha256;
   checks.fingerprint = fingerprintPublicKey(publicKeyPem) === sidecar.public_key_fingerprint;
   let sigOk = false;
-  const sig = typeof sidecar.signature === "string" ? sidecar.signature.replace(/^base64:/, "") : "";
+  const sig =
+    typeof sidecar.signature === "string" ? sidecar.signature.replace(/^base64:/, "") : "";
   try {
-    sigOk = crypto.verify(null, canonical, crypto.createPublicKey(publicKeyPem), Buffer.from(sig, "base64"));
+    sigOk = crypto.verify(
+      null,
+      canonical,
+      crypto.createPublicKey(publicKeyPem),
+      Buffer.from(sig, "base64")
+    );
   } catch {
     sigOk = false;
   }
@@ -738,7 +901,9 @@ async function cli() {
   const reproduce = process.argv.includes("--reproduce");
   const index = JSON.parse(await readFile(join(EV, "timeline.index.json"), "utf8"));
   const sidecar = JSON.parse(await readFile(join(EV, "timeline.signature.json"), "utf8"));
-  const pub = JSON.parse(await readFile(join(EV, "keys", "stage3x-public-key.json"), "utf8")).public_key_pem;
+  const pub = JSON.parse(
+    await readFile(join(EV, "keys", "stage3x-public-key.json"), "utf8")
+  ).public_key_pem;
   let rebuild;
   if (reproduce) ({ buildIndexFile: rebuild } = await import("./build-3x-timeline.mjs"));
   const result = verifyTimeline({ index, sidecar, publicKeyPem: pub, reproduce, rebuild });
@@ -771,11 +936,13 @@ git commit -m "feat(3x): two-tier offline timeline verifier (recomputes digests/
 ## Task 6: Tamper / negative self-proof
 
 **Files:**
+
 - Create: `tests/e2e/llm_shield_stage3x_tamper_runner.mjs`
 - Create (generated): `docs/research/llm-shield/evidence/stage-3x/self-proof-results.json`
 - Test: `tests/unit/llmShield/stage3x/tamper.test.js`
 
 **Interfaces:**
+
 - Produces: `runStage3xSelfProof()` → `{ all_passed, cases, counters }`. ≥9 cases: `evidence_root_digest_edited`, `tag_edited`, `merge_commit_edited`, `public_key_fingerprint_edited`, `replay_tier_flipped`, `signature_tampered`, `wrong_public_key`, `file_removed`, plus generic-EH self-proofs `eh_self_inclusion` + `eh_path_traversal`. Counters `accepted_tampered_bundles` and `eh_unsafe_accepted` stay 0.
 
 - [ ] **Step 1: Write the failing test**
@@ -821,7 +988,10 @@ const clone = (x) => JSON.parse(JSON.stringify(x));
 export function runStage3xSelfProof() {
   const cases = [];
   const reject = (name, idx, s = sidecar, p = pub) =>
-    cases.push({ name, rejected: verifyTimeline({ index: idx, sidecar: s, publicKeyPem: p }).ok === false });
+    cases.push({
+      name,
+      rejected: verifyTimeline({ index: idx, sidecar: s, publicKeyPem: p }).ok === false,
+    });
 
   const ehStage = index.rungs.find((r) => r.evidence_root_digest);
   const d = clone(index);
@@ -849,7 +1019,9 @@ export function runStage3xSelfProof() {
   st.signature = "base64:" + Buffer.from("nope").toString("base64");
   reject("signature_tampered", index, st);
 
-  const wrong = crypto.generateKeyPairSync("ed25519").publicKey.export({ type: "spki", format: "pem" });
+  const wrong = crypto
+    .generateKeyPairSync("ed25519")
+    .publicKey.export({ type: "spki", format: "pem" });
   reject("wrong_public_key", index, sidecar, wrong);
 
   cases.push({
@@ -858,10 +1030,18 @@ export function runStage3xSelfProof() {
   });
 
   // generic EH hardening self-proofs
-  const ehSelf = verifyEvidenceHashes("x", { _injectMap: { "x/evidence-hashes.json": "sha256:y" } });
-  cases.push({ name: "eh_self_inclusion", rejected: ehSelf.ok === false && ehSelf.reason === "self_inclusion" });
+  const ehSelf = verifyEvidenceHashes("x", {
+    _injectMap: { "x/evidence-hashes.json": "sha256:y" },
+  });
+  cases.push({
+    name: "eh_self_inclusion",
+    rejected: ehSelf.ok === false && ehSelf.reason === "self_inclusion",
+  });
   const ehTrav = verifyEvidenceHashes("x", { _injectMap: { "../../etc/passwd": "sha256:y" } });
-  cases.push({ name: "eh_path_traversal", rejected: ehTrav.ok === false && ehTrav.reason === "unsafe_path" });
+  cases.push({
+    name: "eh_path_traversal",
+    rejected: ehTrav.ok === false && ehTrav.reason === "unsafe_path",
+  });
 
   const counters = {
     accepted_tampered_bundles: cases.filter((c) => !c.rejected).length,
@@ -901,6 +1081,7 @@ git commit -m "feat(3x): negative self-proof tamper suite (>=9 cases incl EH har
 ## Task 7: Reviewer command — full delegated replay
 
 **Files:**
+
 - Create: `scripts/reproduce-vca-chain.sh`
 - Create (generated): `docs/research/llm-shield/evidence/stage-3x/vca-chain-reproduction-results.json`
 
@@ -998,6 +1179,7 @@ git commit -m "feat(3x): reviewer command reproduce-vca-chain.sh + results artif
 ## Task 8: Offline gate scripts
 
 **Files:**
+
 - Create: `scripts/smoke-llm-shield-stage3x.sh`, `scripts/security-audit-llm-shield-stage3x.sh`, `scripts/privacy-audit-llm-shield-stage3x.mjs`, `scripts/consistency-audit-llm-shield-stage3x.mjs`, `scripts/policy-drift-guard-llm-shield-stage3x.sh`, `scripts/reproduce-llm-shield-stage3x.sh`
 
 - [ ] **Step 1: smoke + reproduce + policy-drift**
@@ -1095,7 +1277,13 @@ echo "Stage 3X security audit: pass"
 import { readdir, readFile, stat } from "node:fs/promises";
 import { join } from "node:path";
 const EV = "docs/research/llm-shield/evidence/stage-3x";
-const FORBIDDEN = [/\bsk-[a-z0-9]/i, /api[_-]?key/i, /hf_[A-Za-z0-9]{10,}/, /-----BEGIN [A-Z ]*PRIVATE KEY-----/, /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i];
+const FORBIDDEN = [
+  /\bsk-[a-z0-9]/i,
+  /api[_-]?key/i,
+  /hf_[A-Za-z0-9]{10,}/,
+  /-----BEGIN [A-Z ]*PRIVATE KEY-----/,
+  /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i,
+];
 async function walk(d) {
   const out = [];
   for (const e of await readdir(d, { withFileTypes: true })) {
@@ -1109,9 +1297,16 @@ const files = await walk(EV);
 let bad = 0;
 for (const f of files) {
   const t = await readFile(f, "utf8");
-  for (const rx of FORBIDDEN) if (rx.test(t)) { console.error(`privacy violation in ${f}: ${rx}`); bad += 1; }
+  for (const rx of FORBIDDEN)
+    if (rx.test(t)) {
+      console.error(`privacy violation in ${f}: ${rx}`);
+      bad += 1;
+    }
 }
-if (bad) { console.error(`stage3x privacy audit: ${bad} violation(s)`); process.exit(1); }
+if (bad) {
+  console.error(`stage3x privacy audit: ${bad} violation(s)`);
+  process.exit(1);
+}
 console.log(`stage3x privacy audit: PASS (${files.length} file(s), metadata-only)`);
 ```
 
@@ -1130,14 +1325,29 @@ const rd = (p) => readFile(join(EV, p), "utf8").then(JSON.parse);
 const stable = (v) => JSON.stringify(v, null, 2) + "\n";
 
 const committed = await rd("timeline.index.json");
-if (stable(committed) !== stable(buildIndexFile())) { console.error("index does not re-derive"); process.exit(1); }
+if (stable(committed) !== stable(buildIndexFile())) {
+  console.error("index does not re-derive");
+  process.exit(1);
+}
 const sidecar = await rd("timeline.signature.json");
 const pub = (await rd("keys/stage3x-public-key.json")).public_key_pem;
-const r = verifyTimeline({ index: committed, sidecar, publicKeyPem: pub, reproduce: true, rebuild: buildIndexFile });
-if (!r.ok) { console.error("consistency: verify failed", JSON.stringify(r.checks)); process.exit(1); }
+const r = verifyTimeline({
+  index: committed,
+  sidecar,
+  publicKeyPem: pub,
+  reproduce: true,
+  rebuild: buildIndexFile,
+});
+if (!r.ok) {
+  console.error("consistency: verify failed", JSON.stringify(r.checks));
+  process.exit(1);
+}
 let ehFail = 0;
 for (const rung of committed.rungs.filter((x) => x.replay_tier === "evidence_hashes")) {
-  if (!verifyEvidenceHashes(rung.evidence_dir).ok) { console.error("EH re-verify failed:", rung.stage); ehFail += 1; }
+  if (!verifyEvidenceHashes(rung.evidence_dir).ok) {
+    console.error("EH re-verify failed:", rung.stage);
+    ehFail += 1;
+  }
 }
 if (ehFail) process.exit(1);
 console.log("stage3x consistency audit: PASS (index + signature + 10/10 EH dirs)");
@@ -1162,6 +1372,7 @@ git commit -m "feat(3x): offline smoke + security/privacy/consistency(EH 10/10) 
 ## Task 9: Wire offline gates into check.sh + coverage
 
 **Files:**
+
 - Modify: `scripts/check.sh` (insert after the 3W coverage block, ~line 2074, before "3E-core docker smoke")
 
 - [ ] **Step 1: Insert the 3X offline gate block** (mirror the 3W block exactly, swapping 3w→3x and adding a generic-EH chain step)
@@ -1243,6 +1454,7 @@ git commit -m "feat(3x): wire offline smoke + audits + policy-drift + coverage i
 ## Task 10: Reviewer docs + evidence README + format + re-hash
 
 **Files:**
+
 - Create: `docs/research/llm-shield/LLM_SHIELD_STAGE_3X_WRITEUP.md`, `STAGE_3X_THREAT_MODEL.md`, `STAGE_3X_VALIDATION_MATRIX.md`, `STAGE_3X_REVIEWER_CHECKLIST.md`, `STAGE_3X_CLOSEOUT.md`
 - Create: `docs/research/llm-shield/evidence/stage-3x/README.md`
 
@@ -1310,6 +1522,7 @@ gh release create v2.8.0-stage-3x-public-vca-timeline-external-reproduction --ti
 ## Self-Review
 
 **Spec coverage:**
+
 - Generic EH verifier (self-inclusion + traversal + digest match, fails closed) → Task 1. ✅
 - Timeline lib (frozen 12-rung table, tiers, fingerprints incl. 3M `attestation.public-key.json`, chain_summary, claim_summary, index) → Task 2. ✅
 - Runner + evidence → Task 3. Own key + signer → Task 4. Two-tier verifier (recompute digests/commits/summary, fails closed) → Task 5. ✅
