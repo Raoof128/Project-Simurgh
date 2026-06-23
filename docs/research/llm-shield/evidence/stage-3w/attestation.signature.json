@@ -1,0 +1,8 @@
+{
+  "schema": "simurgh.vca.release_witness.signature.v1",
+  "algorithm": "Ed25519",
+  "canonicalisation": "simurgh.canonical-json.v1",
+  "bundle_sha256": "sha256:d1abebaaa91b60151619696f1f1fa8a893605018d739b807307036f91e1caa99",
+  "public_key_fingerprint": "sha256:66522533e2b4b0ca10ffe4d527679460a7187b42a722b48481b5fc6c68d571bf",
+  "signature": "base64:8xIzzITEGd9yZEy9Is30brsNMXzpY2PTkgjiAzWqmyrR9Dso22GRond8pFYDca8+K36a5v1Lb7hS2oc3bVf4CQ=="
+}
