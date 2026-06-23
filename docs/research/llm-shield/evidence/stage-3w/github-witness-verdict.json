@@ -1,0 +1,37 @@
+{
+  "schema": "simurgh.stage3w.github_witness_verdict.v1",
+  "witness_claim": "verify_and_attest_verdict",
+  "verification_mode": "ci_observed_not_echoed",
+  "witness_root": "github_oidc_sigstore",
+  "repo": "Raoof128/Project-Simurgh",
+  "commit": "b645d80",
+  "tag": "v2.6.0-stage-3v-b-llamaguard-external-defense-attestation",
+  "verified_stage": "3V-B",
+  "expected": {
+    "stage3vb_verifier": "PASS",
+    "stage3vb_reproduce": "PASS",
+    "stage3vb_live_release_gate": "PASS",
+    "stage3vb_evidence_hashes_match": true,
+    "model_reexecuted_in_ci": false
+  },
+  "ci_observed": {
+    "stage3vb_verifier": "PASS",
+    "stage3vb_reproduce": "PASS",
+    "stage3vb_live_release_gate": "PASS",
+    "stage3vb_evidence_hashes_match": true,
+    "model_reexecuted_in_ci": false
+  },
+  "expected_equals_observed": true,
+  "subjects": {
+    "stage3vb_attestation_bundle_sha256": "sha256:75c06eae3c401dea55ff78377e5f4bc145bc36a089363bcaa8a5580795f083fb",
+    "stage3vb_signature_sha256": "sha256:aa6e2324bd532f653802818de62e3ebec3d7f23d151eec9e90fd9096f18fe58a",
+    "stage3vb_capture_replay_sha256": "sha256:a1de949c5085e269a6829531cdf17cf06f2c5f6676bb0850bcdc8b366187b8c5",
+    "stage3vb_evidence_hashes_sha256": "sha256:39eb0781a9fcdc58537994302b9e6fb775b288340daf402ae7ea6dc6804501e0"
+  },
+  "non_claims": [
+    "does_not_prove_live_capture_origin",
+    "does_not_reexecute_llama_guard_4",
+    "does_not_reduce_live_capture_origin_self_reported",
+    "does_not_rank_external_defences"
+  ]
+}

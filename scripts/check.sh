@@ -2017,6 +2017,62 @@ else
   tail -100 "$LOG_DIR/llm-shield-stage3vb-coverage.log"
 fi
 
+# ── LLM Shield 3W witnessed VCA release provenance (offline gates only) ─────────
+step "LLM Shield 3W witnessed-release smoke"
+if scripts/smoke-llm-shield-stage3w.sh > "$LOG_DIR/llm-shield-stage3w-smoke.log" 2>&1; then
+  pass "LLM Shield 3W witnessed-release smoke"
+else
+  fail "LLM Shield 3W witnessed-release smoke"
+  tail -60 "$LOG_DIR/llm-shield-stage3w-smoke.log"
+fi
+
+step "LLM Shield 3W security audit"
+if scripts/security-audit-llm-shield-stage3w.sh > "$LOG_DIR/llm-shield-stage3w-security.log" 2>&1; then
+  pass "LLM Shield 3W security audit"
+else
+  fail "LLM Shield 3W security audit"
+  tail -40 "$LOG_DIR/llm-shield-stage3w-security.log"
+fi
+
+step "LLM Shield 3W privacy audit"
+if node scripts/privacy-audit-llm-shield-stage3w.mjs > "$LOG_DIR/llm-shield-stage3w-privacy.log" 2>&1; then
+  pass "LLM Shield 3W privacy audit"
+else
+  fail "LLM Shield 3W privacy audit"
+  tail -40 "$LOG_DIR/llm-shield-stage3w-privacy.log"
+fi
+
+step "LLM Shield 3W consistency audit"
+if node scripts/consistency-audit-llm-shield-stage3w.mjs > "$LOG_DIR/llm-shield-stage3w-consistency.log" 2>&1; then
+  pass "LLM Shield 3W consistency audit"
+else
+  fail "LLM Shield 3W consistency audit"
+  tail -40 "$LOG_DIR/llm-shield-stage3w-consistency.log"
+fi
+
+step "LLM Shield 3W policy-drift guard"
+if scripts/policy-drift-guard-llm-shield-stage3w.sh > "$LOG_DIR/llm-shield-stage3w-policy.log" 2>&1; then
+  pass "LLM Shield 3W policy-drift guard"
+else
+  fail "LLM Shield 3W policy-drift guard"
+  tail -40 "$LOG_DIR/llm-shield-stage3w-policy.log"
+fi
+
+step "LLM Shield 3W witness lib coverage"
+if node --test --experimental-test-coverage \
+  --test-coverage-include=tools/simurgh-attestation/stage3wWitnessLib.mjs \
+  --test-coverage-functions=100 \
+  tests/unit/llmShield/stage3w/witnessLib.test.js \
+  tests/unit/llmShield/stage3w/bundle.test.js \
+  tests/unit/llmShield/stage3w/verifier.test.js \
+  tests/unit/llmShield/stage3w/tamper.test.js \
+  > "$LOG_DIR/llm-shield-stage3w-coverage.log" 2>&1; then
+  pass "LLM Shield 3W witness lib coverage"
+else
+  fail "LLM Shield 3W witness lib coverage"
+  tail -100 "$LOG_DIR/llm-shield-stage3w-coverage.log"
+fi
+
 step "LLM Shield 3E-core docker smoke (skips if no docker)"
 if bash scripts/docker-smoke-llm-shield-stage3e.sh > "$LOG_DIR/llm-shield-stage3e-docker-smoke.log" 2>&1; then
   pass "LLM Shield 3E-core docker smoke"

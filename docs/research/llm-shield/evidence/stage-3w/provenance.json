@@ -1,0 +1,10 @@
+{
+  "schema": "simurgh.stage3w.provenance.v1",
+  "witnessed_stage": "3V-B",
+  "witnessed_tag": "v2.6.0-stage-3v-b-llamaguard-external-defense-attestation",
+  "witnessed_commit": "b645d80",
+  "offline_root": "simurgh_ed25519",
+  "online_root": "github_oidc_sigstore",
+  "corroboration": "digest_equality_no_signature_nesting",
+  "sigstore_required_for_offline_verification": false
+}

@@ -1,0 +1,68 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Stage 3W online witness. SEPARATE from the offline quality gate (stage-1-checks.yml). A clean
+# GitHub runner re-runs the 3V-B offline gates, builds the witness-verdict from REAL exit codes,
+# asserts it is byte-identical to the committed file, then signs it via GitHub artifact
+# attestations (OIDC/Sigstore). Offline verification never depends on this workflow.
+# Release-hardening option: pin actions/attest-build-provenance to a full commit SHA before tagging.
+name: Stage 3W Witness
+on:
+  push:
+    tags:
+      - "v2.7.0-stage-3w-*"
+  workflow_dispatch: {}
+
+permissions:
+  id-token: write
+  attestations: write
+  contents: read
+
+jobs:
+  witness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install deps
+        run: npm ci
+      - name: Re-run 3V-B offline gates and regenerate the witness verdict from REAL exit codes
+        run: |
+          # Amendment: ci_observed MUST be built from ACTUAL command exit status, never inferred
+          # from the committed JSON. Do NOT use `set -e` here — capture each exit code explicitly.
+          set +e
+          node tools/simurgh-attestation/verify-stage3vb-external-defense.mjs --reproduce >/dev/null 2>&1; V=$?
+          node tests/e2e/llm_shield_stage3vb_external_defense_runner.mjs verify >/dev/null 2>&1; RP=$?
+          scripts/assert-stage3vb-live-release.sh >/dev/null 2>&1; LR=$?
+          node tests/e2e/llm_shield_stage3vb_external_defense_runner.mjs verify-hashes >/dev/null 2>&1; EH=$?
+          set -e
+          export OBS_VERIFIER=$([ $V -eq 0 ] && echo PASS || echo FAIL)
+          export OBS_REPRODUCE=$([ $RP -eq 0 ] && echo PASS || echo FAIL)
+          export OBS_LIVE_RELEASE=$([ $LR -eq 0 ] && echo PASS || echo FAIL)
+          export OBS_HASHES=$([ $EH -eq 0 ] && echo true || echo false)
+          node -e '
+            const { buildWitnessVerdict } = require("./tools/simurgh-attestation/stage3wWitnessLib.mjs");
+            const fs = require("fs");
+            const stable = (v) => JSON.stringify(v, null, 2) + "\n";
+            const observed = {
+              stage3vb_verifier: process.env.OBS_VERIFIER,
+              stage3vb_reproduce: process.env.OBS_REPRODUCE,
+              stage3vb_live_release_gate: process.env.OBS_LIVE_RELEASE,
+              stage3vb_evidence_hashes_match: process.env.OBS_HASHES === "true",
+              model_reexecuted_in_ci: false,
+            };
+            const regenerated = stable(buildWitnessVerdict(observed));
+            const committed = fs.readFileSync("docs/research/llm-shield/evidence/stage-3w/github-witness-verdict.json", "utf8");
+            if (regenerated !== committed) {
+              console.error("CI-observed verdict (from real exit codes) is NOT byte-identical to committed");
+              process.exit(1);
+            }
+            console.log("witness-verdict byte-identical; CI-observed (real exit codes) == committed");
+          '
+      - name: Attest the witness verdict (Sigstore-backed build provenance)
+        uses: actions/attest-build-provenance@v3
+        with:
+          subject-path: docs/research/llm-shield/evidence/stage-3w/github-witness-verdict.json

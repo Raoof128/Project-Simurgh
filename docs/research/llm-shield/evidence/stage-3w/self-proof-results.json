@@ -1,0 +1,45 @@
+{
+  "all_passed": true,
+  "cases": [
+    {
+      "name": "subject_digest_edited",
+      "rejected": true
+    },
+    {
+      "name": "release_commit_edited",
+      "rejected": true
+    },
+    {
+      "name": "tag_edited",
+      "rejected": true
+    },
+    {
+      "name": "witness_verdict_file_edited",
+      "rejected": true
+    },
+    {
+      "name": "ci_observed_flipped",
+      "rejected": true
+    },
+    {
+      "name": "signature_tampered",
+      "rejected": true
+    },
+    {
+      "name": "wrong_public_key",
+      "rejected": true
+    },
+    {
+      "name": "file_removed",
+      "rejected": true
+    },
+    {
+      "name": "forbidden_raw_field_injected",
+      "rejected": true
+    }
+  ],
+  "counters": {
+    "accepted_tampered_bundles": 0,
+    "raw_field_in_bundle": 0
+  }
+}
