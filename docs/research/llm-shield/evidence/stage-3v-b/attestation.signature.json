@@ -1,0 +1,8 @@
+{
+  "schema": "simurgh.vca.external_defense_run.signature.v1",
+  "algorithm": "Ed25519",
+  "canonicalisation": "simurgh.canonical-json.v1",
+  "bundle_sha256": "sha256:0c4f396cfafcb69e4c8dc1f9a443ddf46c602fa52d8a8747adb7f290135c00f5",
+  "public_key_fingerprint": "sha256:04e2573569b8389142f4399a99abfa48a13861a468b885f5bc26cadac55f36b9",
+  "signature": "base64:8D4FcxWvT/6p6wU5XB6JTFrR6QE8rwpa25zqwq8Vu1FPl4ZlJP+i00hoXxKBeQzDVk2jOgtYxgW67zJA0C7UAA=="
+}
