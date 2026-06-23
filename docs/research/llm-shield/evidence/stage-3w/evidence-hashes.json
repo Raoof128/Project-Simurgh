@@ -1,4 +1,5 @@
 {
+  "docs/research/llm-shield/evidence/stage-3w/README.md": "sha256:8739ae664c3192c7fbda562820205406dc850156957b8f19eca7e3ac26893fa7",
   "docs/research/llm-shield/evidence/stage-3w/attestation.bundle.json": "sha256:b3cbe3c93a997518ba07521711307de6b17d43022a0c0790d58756a88b837bc8",
   "docs/research/llm-shield/evidence/stage-3w/attestation.signature.json": "sha256:dd0f7963f8456f23d8363cc30f18a9521376b0b0226941d6e2fa9cb7b8f78d2c",
   "docs/research/llm-shield/evidence/stage-3w/github-witness-verdict.json": "sha256:0466700707e44a96948451f1d1b03ea17bf7d2c849cdd610ffb1e0c39bcefc35",

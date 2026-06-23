@@ -50,13 +50,18 @@ export function verifyWitness({
       const stable = (v) => JSON.stringify(v, null, 2) + "\n";
       const rebuilt = rebuild();
       checks.reproduce = stable(rebuilt) === stable(bundle);
-      const rebuiltSubjects = Object.fromEntries(rebuilt.subject.map((s) => [s.name, s.digest.sha256]));
-      const bundleSubjects = Object.fromEntries(bundle.subject.map((s) => [s.name, s.digest.sha256]));
+      const rebuiltSubjects = Object.fromEntries(
+        rebuilt.subject.map((s) => [s.name, s.digest.sha256])
+      );
+      const bundleSubjects = Object.fromEntries(
+        bundle.subject.map((s) => [s.name, s.digest.sha256])
+      );
       checks.subjects_recomputed = Object.keys(rebuiltSubjects).every(
         (k) => rebuiltSubjects[k] === bundleSubjects[k]
       );
       const verdictDigest = "sha256:" + sha256Hex(stable(rebuildVerdict())).replace(/^sha256:/, "");
-      const boundVerdict = "sha256:" + (bundleSubjects["stage-3w/github-witness-verdict.json"] || "");
+      const boundVerdict =
+        "sha256:" + (bundleSubjects["stage-3w/github-witness-verdict.json"] || "");
       checks.witness_verdict_recomputed = verdictDigest === boundVerdict;
     }
     return { ok: Object.values(checks).every(Boolean), checks };
@@ -77,10 +82,16 @@ async function cli() {
   ).public_key_pem;
   let rebuild, rebuildVerdict;
   if (reproduce)
-    ({ buildBundle: rebuild, buildWitnessVerdictFile: rebuildVerdict } = await import(
-      "./build-3w-witness.mjs"
-    ));
-  const result = verifyWitness({ bundle, sidecar, publicKeyPem: pub, reproduce, rebuild, rebuildVerdict });
+    ({ buildBundle: rebuild, buildWitnessVerdictFile: rebuildVerdict } =
+      await import("./build-3w-witness.mjs"));
+  const result = verifyWitness({
+    bundle,
+    sidecar,
+    publicKeyPem: pub,
+    reproduce,
+    rebuild,
+    rebuildVerdict,
+  });
   console.log(JSON.stringify(result, null, 2));
   if (!result.ok) process.exit(1);
 }

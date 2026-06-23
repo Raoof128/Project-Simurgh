@@ -56,5 +56,7 @@ test("buildReleaseWitnessStatement binds 3V-B subjects + witness-verdict file, n
   assert.equal(stmt.predicate.release_commit, "b645d80");
   assert.equal(stmt.predicate.model_reexecuted_in_ci, false);
   assert.equal(stmt.predicate.online_witness.required_for_offline_verification, false);
-  assert.ok(stmt.predicate.non_claims.includes("does_not_reduce_live_capture_origin_self_reported"));
+  assert.ok(
+    stmt.predicate.non_claims.includes("does_not_reduce_live_capture_origin_self_reported")
+  );
 });

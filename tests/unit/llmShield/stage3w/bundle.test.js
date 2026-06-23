@@ -1,6 +1,9 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { buildBundle, buildWitnessVerdictFile } from "../../../../tools/simurgh-attestation/build-3w-witness.mjs";
+import {
+  buildBundle,
+  buildWitnessVerdictFile,
+} from "../../../../tools/simurgh-attestation/build-3w-witness.mjs";
 
 test("bundle is an in-toto release-witness binding the witness-verdict file", () => {
   const b = buildBundle();

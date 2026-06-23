@@ -4,13 +4,13 @@
 
 **Goal:** Bind the sealed Stage 3V-B v2.6.0 release into a dual-root provenance witness — an offline-verifiable Simurgh Ed25519 in-toto bundle and an additive GitHub OIDC/Sigstore CI witness — that corroborate by digest equality.
 
-**Architecture:** Two independent roots witness the same sealed 3V-B bytes. The offline root is an in-toto Statement v1 signed with a new 3W Ed25519 key, fully verifiable with a committed public key and no network. The online root is a deterministic `github-witness-verdict.json` that a clean GitHub runner regenerates from *real* command results, asserts byte-identical, and signs via `actions/attest-build-provenance`. Neither root signs or depends on the other.
+**Architecture:** Two independent roots witness the same sealed 3V-B bytes. The offline root is an in-toto Statement v1 signed with a new 3W Ed25519 key, fully verifiable with a committed public key and no network. The online root is a deterministic `github-witness-verdict.json` that a clean GitHub runner regenerates from _real_ command results, asserts byte-identical, and signs via `actions/attest-build-provenance`. Neither root signs or depends on the other.
 
 **Tech Stack:** Node.js ESM (`node:test`, `node:crypto` Ed25519), bash gates, GitHub Actions (artifact attestations), the existing `tools/simurgh-attestation/canonicalise.mjs` + `keygen.mjs`.
 
 ## Global Constraints
 
-- **No `src/llmShield/**` changes** — policy-drift fail-closed three-dot `origin/main...HEAD` (real-base fallback `origin/main`→`main`→warn-pass).
+- **No `src/llmShield/**`changes** — policy-drift fail-closed three-dot`origin/main...HEAD`(real-base fallback`origin/main`→`main`→warn-pass).
 - **No model runs.** No comparison against other guards.
 - **No reduction of `live_capture_origin_self_reported`** — sacred non-claim, stays signed and unchanged; 3W is orthogonal release/build provenance.
 - **No online dependency in the offline verifier** — Sigstore / Rekor / `gh attestation verify` NEVER gate offline verification; they live in reviewer docs only.
@@ -37,15 +37,18 @@
 ## File Structure
 
 **New pure lib (100% function-coverage gated):**
+
 - `tools/simurgh-attestation/stage3wWitnessLib.mjs` — `WITNESSED_3VB`, `computeStage3vbSubjects()`, `buildWitnessVerdict(observed)`, `buildReleaseWitnessStatement(subjects, witnessVerdictDigest)`.
 
 **New runner / attestation (subprocess-covered, excluded from coverage gate):**
+
 - `tools/simurgh-attestation/build-3w-witness.mjs` — CLI build/hash/verify/write-hashes/verify-hashes.
 - `tools/simurgh-attestation/sign-3w-witness.mjs` — local signer.
 - `tools/simurgh-attestation/verify-stage3w-witness.mjs` — two-tier verifier, fails closed.
 - `tests/e2e/llm_shield_stage3w_tamper_runner.mjs` — negative self-proof.
 
 **New scripts (offline gates → check.sh):**
+
 - `scripts/{smoke,security-audit,privacy-audit,consistency-audit,policy-drift-guard,reproduce}-llm-shield-stage3w.*`.
 
 **New CI (online, NOT in check.sh):** `.github/workflows/stage-3w-witness.yml`.
@@ -63,10 +66,12 @@
 ## Task 1: Pure witness library
 
 **Files:**
+
 - Create: `tools/simurgh-attestation/stage3wWitnessLib.mjs`
 - Test: `tests/unit/llmShield/stage3w/witnessLib.test.js`
 
 **Interfaces:**
+
 - Consumes: `canonicalJson`, `sha256Hex` from `./canonicalise.mjs`; reads committed 3V-B evidence files.
 - Produces:
   - `WITNESSED_3VB` (frozen): `{ commit:"b645d80", tag:"v2.6.0-stage-3v-b-llamaguard-external-defense-attestation", release_url:"https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.6.0-stage-3v-b-llamaguard-external-defense-attestation" }`.
@@ -136,7 +141,9 @@ test("buildReleaseWitnessStatement binds 3V-B subjects + witness-verdict file, n
   assert.equal(stmt.predicate.release_commit, "b645d80");
   assert.equal(stmt.predicate.model_reexecuted_in_ci, false);
   assert.equal(stmt.predicate.online_witness.required_for_offline_verification, false);
-  assert.ok(stmt.predicate.non_claims.includes("does_not_reduce_live_capture_origin_self_reported"));
+  assert.ok(
+    stmt.predicate.non_claims.includes("does_not_reduce_live_capture_origin_self_reported")
+  );
 });
 ```
 
@@ -280,11 +287,13 @@ git commit -m "feat(3w): pure witness lib — 3V-B subjects, deterministic CI ve
 ## Task 2: Runner — build evidence + bundle
 
 **Files:**
+
 - Create: `tools/simurgh-attestation/build-3w-witness.mjs`
 - Create (generated): `docs/research/llm-shield/evidence/stage-3w/{github-witness-verdict.json,provenance.json,attestation.bundle.json}`
 - Test: `tests/unit/llmShield/stage3w/bundle.test.js`
 
 **Interfaces:**
+
 - Consumes: `stage3wWitnessLib` (Task 1); `canonicalJson`, `sha256Hex`.
 - Produces: `buildWitnessVerdictFile()` → verdict object; `buildBundle()` → in-toto statement (the offline bundle); CLI `build [--update] | hash | verify | write-hashes | verify-hashes`.
 - The bundle's witness-verdict subject digest = `sha256Hex(stable(buildWitnessVerdictFile()))` (binds the committed file's exact bytes). `write-hashes` walks the 3W evidence dir, **excludes `evidence-hashes.json`**, and never includes any Sigstore object (none exist in the dir).
@@ -295,7 +304,10 @@ git commit -m "feat(3w): pure witness lib — 3V-B subjects, deterministic CI ve
 // tests/unit/llmShield/stage3w/bundle.test.js
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { buildBundle, buildWitnessVerdictFile } from "../../../../tools/simurgh-attestation/build-3w-witness.mjs";
+import {
+  buildBundle,
+  buildWitnessVerdictFile,
+} from "../../../../tools/simurgh-attestation/build-3w-witness.mjs";
 
 test("bundle is an in-toto release-witness binding the witness-verdict file", () => {
   const b = buildBundle();
@@ -398,7 +410,10 @@ async function main() {
   } else if (cmd === "hash") {
     console.log(
       JSON.stringify(
-        { witness_verdict_sha256: sha256Hex(stable(verdict)), bundle_sha256: sha256Hex(canonicalJson(bundle)) },
+        {
+          witness_verdict_sha256: sha256Hex(stable(verdict)),
+          bundle_sha256: sha256Hex(canonicalJson(bundle)),
+        },
         null,
         2
       )
@@ -451,11 +466,13 @@ git commit -m "feat(3w): runner + generated offline bundle, witness-verdict, pro
 ## Task 3: 3W Ed25519 key + signer
 
 **Files:**
+
 - Create: `tools/simurgh-attestation/sign-3w-witness.mjs`
 - Create (committed): `docs/research/llm-shield/evidence/stage-3w/keys/stage3w-public-key.json`, `keys/fingerprint.txt`
 - Create (NOT committed): `~/.simurgh/3w-ed25519.pem`
 
 **Interfaces:**
+
 - Consumes: `canonicalJson`, `sha256Hex`, `fingerprintPublicKey`; `keygen.mjs`.
 - Produces: `attestation.signature.json` (schema `simurgh.vca.release_witness.signature.v1`) over `canonicalJson(bundle)`.
 
@@ -531,10 +548,12 @@ git status --porcelain | grep -i pem && echo "ABORT: private key staged" || git 
 ## Task 4: Two-tier offline verifier
 
 **Files:**
+
 - Create: `tools/simurgh-attestation/verify-stage3w-witness.mjs`
 - Test: `tests/unit/llmShield/stage3w/verifier.test.js`
 
 **Interfaces:**
+
 - Consumes: `canonicalJson`, `sha256Hex`, `fingerprintPublicKey`; the runner's `buildBundle` + `buildWitnessVerdictFile` for `--reproduce`.
 - Produces: `verifyWitness({ bundle, sidecar, publicKeyPem, reproduce, rebuild, rebuildVerdict })` → `{ ok, checks }`. Portable: `bundle_sha256`, `fingerprint`, `signature`, `type`, `witnessed_stage` (3V-B), `model_not_reexecuted`. `--reproduce`: `reproduce` (bundle byte-stable), `subjects_recomputed` (every 3V-B subject digest recomputed matches), `witness_verdict_recomputed` (committed witness-verdict bytes hash matches the digest bound in the bundle subject). Fails closed; never throws. **No network, no Sigstore.**
 
@@ -546,7 +565,10 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { verifyWitness } from "../../../../tools/simurgh-attestation/verify-stage3w-witness.mjs";
-import { buildBundle, buildWitnessVerdictFile } from "../../../../tools/simurgh-attestation/build-3w-witness.mjs";
+import {
+  buildBundle,
+  buildWitnessVerdictFile,
+} from "../../../../tools/simurgh-attestation/build-3w-witness.mjs";
 
 const EV = "docs/research/llm-shield/evidence/stage-3w";
 const bundle = JSON.parse(readFileSync(`${EV}/attestation.bundle.json`, "utf8"));
@@ -558,8 +580,12 @@ test("portable verify passes on committed evidence", () => {
 });
 test("reproduce recomputes subjects + witness-verdict", () => {
   const r = verifyWitness({
-    bundle, sidecar, publicKeyPem: pub, reproduce: true,
-    rebuild: buildBundle, rebuildVerdict: buildWitnessVerdictFile,
+    bundle,
+    sidecar,
+    publicKeyPem: pub,
+    reproduce: true,
+    rebuild: buildBundle,
+    rebuildVerdict: buildWitnessVerdictFile,
   });
   assert.equal(r.ok, true);
   assert.equal(r.checks.subjects_recomputed, true);
@@ -598,22 +624,37 @@ function portableChecks({ bundle, sidecar, publicKeyPem }) {
   checks.bundle_sha256 = sha256Hex(canonical) === sidecar.bundle_sha256;
   checks.fingerprint = fingerprintPublicKey(publicKeyPem) === sidecar.public_key_fingerprint;
   let sigOk = false;
-  const sig = typeof sidecar.signature === "string" ? sidecar.signature.replace(/^base64:/, "") : "";
+  const sig =
+    typeof sidecar.signature === "string" ? sidecar.signature.replace(/^base64:/, "") : "";
   try {
-    sigOk = crypto.verify(null, canonical, crypto.createPublicKey(publicKeyPem), Buffer.from(sig, "base64"));
+    sigOk = crypto.verify(
+      null,
+      canonical,
+      crypto.createPublicKey(publicKeyPem),
+      Buffer.from(sig, "base64")
+    );
   } catch {
     sigOk = false;
   }
   checks.signature = !!sigOk;
-  checks.type = bundle.predicateType === "https://project-simurgh.dev/predicates/vca-release-witness/v1";
+  checks.type =
+    bundle.predicateType === "https://project-simurgh.dev/predicates/vca-release-witness/v1";
   checks.witnessed_stage = bundle.predicate?.witnessed_stage === "3V-B";
   checks.model_not_reexecuted = bundle.predicate?.model_reexecuted_in_ci === false;
   return checks;
 }
 
-export function verifyWitness({ bundle, sidecar, publicKeyPem, reproduce = false, rebuild, rebuildVerdict } = {}) {
+export function verifyWitness({
+  bundle,
+  sidecar,
+  publicKeyPem,
+  reproduce = false,
+  rebuild,
+  rebuildVerdict,
+} = {}) {
   try {
-    if (!bundle || !sidecar || !publicKeyPem) return { ok: false, checks: { input_present: false } };
+    if (!bundle || !sidecar || !publicKeyPem)
+      return { ok: false, checks: { input_present: false } };
     const checks = portableChecks({ bundle, sidecar, publicKeyPem });
     if (reproduce) {
       if (typeof rebuild !== "function" || typeof rebuildVerdict !== "function")
@@ -621,8 +662,12 @@ export function verifyWitness({ bundle, sidecar, publicKeyPem, reproduce = false
       const stable = (v) => JSON.stringify(v, null, 2) + "\n";
       const rebuilt = rebuild();
       checks.reproduce = stable(rebuilt) === stable(bundle);
-      const rebuiltSubjects = Object.fromEntries(rebuilt.subject.map((s) => [s.name, s.digest.sha256]));
-      const bundleSubjects = Object.fromEntries(bundle.subject.map((s) => [s.name, s.digest.sha256]));
+      const rebuiltSubjects = Object.fromEntries(
+        rebuilt.subject.map((s) => [s.name, s.digest.sha256])
+      );
+      const bundleSubjects = Object.fromEntries(
+        bundle.subject.map((s) => [s.name, s.digest.sha256])
+      );
       checks.subjects_recomputed = Object.keys(rebuiltSubjects).every(
         (k) => rebuiltSubjects[k] === bundleSubjects[k]
       );
@@ -644,11 +689,21 @@ async function cli() {
   const reproduce = process.argv.includes("--reproduce");
   const bundle = JSON.parse(await readFile(join(EV, "attestation.bundle.json"), "utf8"));
   const sidecar = JSON.parse(await readFile(join(EV, "attestation.signature.json"), "utf8"));
-  const pub = JSON.parse(await readFile(join(EV, "keys", "stage3w-public-key.json"), "utf8")).public_key_pem;
+  const pub = JSON.parse(
+    await readFile(join(EV, "keys", "stage3w-public-key.json"), "utf8")
+  ).public_key_pem;
   let rebuild, rebuildVerdict;
   if (reproduce)
-    ({ buildBundle: rebuild, buildWitnessVerdictFile: rebuildVerdict } = await import("./build-3w-witness.mjs"));
-  const result = verifyWitness({ bundle, sidecar, publicKeyPem: pub, reproduce, rebuild, rebuildVerdict });
+    ({ buildBundle: rebuild, buildWitnessVerdictFile: rebuildVerdict } =
+      await import("./build-3w-witness.mjs"));
+  const result = verifyWitness({
+    bundle,
+    sidecar,
+    publicKeyPem: pub,
+    reproduce,
+    rebuild,
+    rebuildVerdict,
+  });
   console.log(JSON.stringify(result, null, 2));
   if (!result.ok) process.exit(1);
 }
@@ -678,11 +733,13 @@ git commit -m "feat(3w): two-tier offline verifier (portable + reproduce, no net
 ## Task 5: Tamper / negative self-proof
 
 **Files:**
+
 - Create: `tests/e2e/llm_shield_stage3w_tamper_runner.mjs`
 - Create (generated): `docs/research/llm-shield/evidence/stage-3w/self-proof-results.json`
 - Test: `tests/unit/llmShield/stage3w/tamper.test.js`
 
 **Interfaces:**
+
 - Consumes: `verifyWitness`; the committed evidence.
 - Produces: `runStage3wSelfProof()` → `{ all_passed, cases, counters }`. ≥9 cases: `subject_digest_edited`, `release_commit_edited`, `tag_edited`, `witness_verdict_file_edited` (recompute its digest vs bound subject), `ci_observed_flipped`, `signature_tampered`, `wrong_public_key`, `file_removed`, `forbidden_raw_field_injected`. Counters `accepted_tampered_bundles` and `raw_field_in_bundle` stay 0.
 
@@ -718,7 +775,10 @@ Expected: FAIL — module not found.
 import crypto from "node:crypto";
 import { readFileSync, writeFileSync } from "node:fs";
 import { verifyWitness } from "../../tools/simurgh-attestation/verify-stage3w-witness.mjs";
-import { buildBundle, buildWitnessVerdictFile } from "../../tools/simurgh-attestation/build-3w-witness.mjs";
+import {
+  buildBundle,
+  buildWitnessVerdictFile,
+} from "../../tools/simurgh-attestation/build-3w-witness.mjs";
 import { sha256Hex } from "../../tools/simurgh-attestation/canonicalise.mjs";
 
 const EV = "docs/research/llm-shield/evidence/stage-3w";
@@ -732,8 +792,7 @@ export function runStage3wSelfProof() {
   const reject = (name, b, s = sidecar, p = pub, opts = {}) =>
     cases.push({
       name,
-      rejected:
-        verifyWitness({ bundle: b, sidecar: s, publicKeyPem: p, ...opts }).ok === false,
+      rejected: verifyWitness({ bundle: b, sidecar: s, publicKeyPem: p, ...opts }).ok === false,
     });
 
   const subj = clone(bundle);
@@ -759,7 +818,9 @@ export function runStage3wSelfProof() {
   const co = clone(bundle);
   // flipping a ci_observed boolean lives in the verdict file; emulate via subject mismatch:
   co.subject = co.subject.map((s) =>
-    s.name === "stage-3w/github-witness-verdict.json" ? { ...s, digest: { sha256: "1".repeat(64) } } : s
+    s.name === "stage-3w/github-witness-verdict.json"
+      ? { ...s, digest: { sha256: "1".repeat(64) } }
+      : s
   );
   reject("ci_observed_flipped", co);
 
@@ -767,7 +828,9 @@ export function runStage3wSelfProof() {
   st.signature = "base64:" + Buffer.from("nope").toString("base64");
   reject("signature_tampered", bundle, st);
 
-  const wrong = crypto.generateKeyPairSync("ed25519").publicKey.export({ type: "spki", format: "pem" });
+  const wrong = crypto
+    .generateKeyPairSync("ed25519")
+    .publicKey.export({ type: "spki", format: "pem" });
   reject("wrong_public_key", bundle, sidecar, wrong);
 
   cases.push({
@@ -817,6 +880,7 @@ git commit -m "feat(3w): negative self-proof tamper suite (>=9 cases, counters z
 ## Task 6: Offline gate scripts
 
 **Files:**
+
 - Create: `scripts/smoke-llm-shield-stage3w.sh`, `scripts/security-audit-llm-shield-stage3w.sh`, `scripts/privacy-audit-llm-shield-stage3w.mjs`, `scripts/consistency-audit-llm-shield-stage3w.mjs`, `scripts/policy-drift-guard-llm-shield-stage3w.sh`, `scripts/reproduce-llm-shield-stage3w.sh`
 
 **Interfaces:** each exits non-zero on failure. All OFFLINE — none invoke Sigstore / `gh attestation`.
@@ -948,9 +1012,16 @@ const files = await walk(EV);
 let bad = 0;
 for (const f of files) {
   const text = await readFile(f, "utf8");
-  for (const rx of FORBIDDEN) if (rx.test(text)) { console.error(`privacy violation in ${f}: ${rx}`); bad += 1; }
+  for (const rx of FORBIDDEN)
+    if (rx.test(text)) {
+      console.error(`privacy violation in ${f}: ${rx}`);
+      bad += 1;
+    }
 }
-if (bad) { console.error(`stage3w privacy audit: ${bad} violation(s)`); process.exit(1); }
+if (bad) {
+  console.error(`stage3w privacy audit: ${bad} violation(s)`);
+  process.exit(1);
+}
 console.log(`stage3w privacy audit: PASS (${files.length} file(s), metadata-only)`);
 ```
 
@@ -960,17 +1031,33 @@ console.log(`stage3w privacy audit: PASS (${files.length} file(s), metadata-only
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { verifyWitness } from "../tools/simurgh-attestation/verify-stage3w-witness.mjs";
-import { buildBundle, buildWitnessVerdictFile } from "../tools/simurgh-attestation/build-3w-witness.mjs";
+import {
+  buildBundle,
+  buildWitnessVerdictFile,
+} from "../tools/simurgh-attestation/build-3w-witness.mjs";
 const EV = "docs/research/llm-shield/evidence/stage-3w";
 const rd = (p) => readFile(join(EV, p), "utf8").then(JSON.parse);
 const stable = (v) => JSON.stringify(v, null, 2) + "\n";
 
 const committed = await rd("attestation.bundle.json");
-if (stable(committed) !== stable(buildBundle())) { console.error("bundle does not re-derive"); process.exit(1); }
+if (stable(committed) !== stable(buildBundle())) {
+  console.error("bundle does not re-derive");
+  process.exit(1);
+}
 const sidecar = await rd("attestation.signature.json");
 const pub = (await rd("keys/stage3w-public-key.json")).public_key_pem;
-const r = verifyWitness({ bundle: committed, sidecar, publicKeyPem: pub, reproduce: true, rebuild: buildBundle, rebuildVerdict: buildWitnessVerdictFile });
-if (!r.ok) { console.error("consistency: verify failed", JSON.stringify(r.checks)); process.exit(1); }
+const r = verifyWitness({
+  bundle: committed,
+  sidecar,
+  publicKeyPem: pub,
+  reproduce: true,
+  rebuild: buildBundle,
+  rebuildVerdict: buildWitnessVerdictFile,
+});
+if (!r.ok) {
+  console.error("consistency: verify failed", JSON.stringify(r.checks));
+  process.exit(1);
+}
 console.log("stage3w consistency audit: PASS");
 ```
 
@@ -994,6 +1081,7 @@ git commit -m "feat(3w): offline smoke + security/privacy/consistency audits + p
 ## Task 7: Online CI witness workflow
 
 **Files:**
+
 - Create: `.github/workflows/stage-3w-witness.yml`
 
 **Interfaces:** standalone GitHub Actions workflow; not referenced by `check.sh`. Produces a Sigstore-backed build-provenance attestation over the committed witness-verdict file after asserting CI-observed reality matches it.
@@ -1092,6 +1180,7 @@ git commit -m "feat(3w): online CI witness workflow (attest-build-provenance ove
 ## Task 8: Wire offline gates into check.sh + coverage
 
 **Files:**
+
 - Modify: `scripts/check.sh` (insert after the 3V-B coverage block, ~line 2018, before "3E-core docker smoke")
 
 - [ ] **Step 1: Insert the 3W offline gate block**
@@ -1173,6 +1262,7 @@ git commit -m "feat(3w): wire offline smoke + audits + policy-drift + coverage i
 ## Task 9: Reviewer docs + evidence README + format + re-hash
 
 **Files:**
+
 - Create: `docs/research/llm-shield/LLM_SHIELD_STAGE_3W_WRITEUP.md`, `STAGE_3W_THREAT_MODEL.md`, `STAGE_3W_VALIDATION_MATRIX.md`, `STAGE_3W_REVIEWER_CHECKLIST.md`, `STAGE_3W_CLOSEOUT.md`
 - Create: `docs/research/llm-shield/evidence/stage-3w/README.md`
 
@@ -1252,6 +1342,7 @@ Run: `gh attestation verify docs/research/llm-shield/evidence/stage-3w/github-wi
 ## Self-Review
 
 **Spec coverage:**
+
 - Pure lib (subjects, deterministic verdict, in-toto statement) → Task 1. ✅
 - Committed evidence + runner → Task 2. ✅
 - Own 3W key + signer → Task 3. ✅

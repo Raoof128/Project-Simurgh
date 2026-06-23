@@ -2,7 +2,10 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { verifyWitness } from "../../../../tools/simurgh-attestation/verify-stage3w-witness.mjs";
-import { buildBundle, buildWitnessVerdictFile } from "../../../../tools/simurgh-attestation/build-3w-witness.mjs";
+import {
+  buildBundle,
+  buildWitnessVerdictFile,
+} from "../../../../tools/simurgh-attestation/build-3w-witness.mjs";
 
 const EV = "docs/research/llm-shield/evidence/stage-3w";
 const bundle = JSON.parse(readFileSync(`${EV}/attestation.bundle.json`, "utf8"));

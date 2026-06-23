@@ -21,18 +21,18 @@ as a provenance object — by two roots that never depend on each other.**
 
 ## Locked decisions
 
-| Item | Choice |
-|---|---|
-| Stage name | Stage 3W — Witnessed VCA Release Provenance |
-| Tag | `v2.7.0-stage-3w-witnessed-vca-release-provenance` |
-| Witness claim | verify-and-attest verdict (one CI witness artifact) |
-| Layer coupling | independent corroboration (digest equality, no signature nesting) |
-| Offline root | Simurgh Ed25519, primary, network-free, replay-verifiable |
-| Online root | GitHub OIDC/Sigstore, additive only |
-| Workflow | new `.github/workflows/stage-3w-witness.yml` |
-| Action | `actions/attest-build-provenance@v3` (release-hardening option: pin to full commit SHA before final tag) |
-| CI invariant | observed verdicts MUST be computed from actual command results, never echoed |
-| Sacred non-claim | no reduction of `live_capture_origin_self_reported` |
+| Item             | Choice                                                                                                   |
+| ---------------- | -------------------------------------------------------------------------------------------------------- |
+| Stage name       | Stage 3W — Witnessed VCA Release Provenance                                                              |
+| Tag              | `v2.7.0-stage-3w-witnessed-vca-release-provenance`                                                       |
+| Witness claim    | verify-and-attest verdict (one CI witness artifact)                                                      |
+| Layer coupling   | independent corroboration (digest equality, no signature nesting)                                        |
+| Offline root     | Simurgh Ed25519, primary, network-free, replay-verifiable                                                |
+| Online root      | GitHub OIDC/Sigstore, additive only                                                                      |
+| Workflow         | new `.github/workflows/stage-3w-witness.yml`                                                             |
+| Action           | `actions/attest-build-provenance@v3` (release-hardening option: pin to full commit SHA before final tag) |
+| CI invariant     | observed verdicts MUST be computed from actual command results, never echoed                             |
+| Sacred non-claim | no reduction of `live_capture_origin_self_reported`                                                      |
 
 ## 1. Architecture — two independent roots, one set of bytes
 
@@ -175,11 +175,13 @@ core verifier.
 `sha256Hex` already prefixes `sha256:`, `fingerprintPublicKey`), `tools/simurgh-attestation/keygen.mjs`.
 
 **New pure libs (100% function-coverage gated):**
+
 - `tools/simurgh-attestation/stage3wWitnessLib.mjs` — `computeStage3vbSubjects()` (read committed
   3V-B files, return name→sha256), `buildWitnessVerdict(observed)` (deterministic verdict JSON),
   `buildReleaseWitnessStatement(subjects, witnessVerdictDigest)` (in-toto statement).
 
 **New runner / attestation (subprocess-covered, excluded from function-coverage gate):**
+
 - `tools/simurgh-attestation/build-3w-witness.mjs` — CLI: build [--update] | hash | verify |
   write-hashes | verify-hashes (mirrors 3V-B runner; reads committed 3V-B evidence + witness-verdict).
 - `tools/simurgh-attestation/sign-3w-witness.mjs` — local signer (`SIMURGH_3W_PRIVATE_KEY_PATH`,
@@ -190,6 +192,7 @@ core verifier.
 - `tests/unit/llmShield/stage3w/*.test.js`.
 
 **New scripts (offline gates wired into `check.sh` after the 3V-B section):**
+
 - `scripts/{smoke,security-audit,privacy-audit,consistency-audit,policy-drift-guard,reproduce}-llm-shield-stage3w.*`.
 - Smoke reserved port `33210` via `boot_server` (consistent with 3V-A/3V-B pattern).
 
@@ -218,7 +221,7 @@ inject a forbidden raw field.
 ## 8. Invariants (carried)
 
 - Tooling-only: **zero `src/llmShield/**` change**; policy-drift fail-closed three-dot
-  (`origin/main...HEAD`, real-base fallback).
+(`origin/main...HEAD`, real-base fallback).
 - Offline core verifies with the committed public key and **no network**; Sigstore is
   additive-online-only and never a dependency of offline verification.
 - `sha256Hex` already prefixes `sha256:` — never double-prefix. Run `npm run format:check` and
