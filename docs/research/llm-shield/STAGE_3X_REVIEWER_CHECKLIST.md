@@ -2,6 +2,10 @@
 
 For an external reviewer with no private context. Run from the repo root, offline.
 
+> **Clone note:** use a full clone, or run `git fetch --tags` before reproducing if you used a
+> shallow/tag-only clone. Stage 3X verifies 12 historical release tags, so they must be present
+> locally. The reviewer command preflights this and prints an exact instruction if any are missing.
+
 ## One command
 
 - [ ] `scripts/reproduce-vca-chain.sh` → `Stage 3X VCA chain reproduction: PASS` with

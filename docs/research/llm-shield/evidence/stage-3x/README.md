@@ -43,7 +43,15 @@ deep-walked, because their historical path conventions would require relaxing th
 
 ## Reproduce offline (one command, no network)
 
+Use a **full clone** (or run `git fetch --tags` first if you used a shallow/tag-only clone): Stage
+3X verifies 12 historical release tags, so those tags must be present locally. The command performs
+no network access itself; if tags are missing it stops with a clear instruction rather than failing
+cryptically.
+
 ```bash
+git clone https://github.com/Raoof128/Project-Simurgh.git
+cd Project-Simurgh
+npm ci
 scripts/reproduce-vca-chain.sh
 ```
 

@@ -11,6 +11,22 @@ set -uo pipefail
 cd "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 echo "Stage 3X — VCA chain external reproduction"
+
+# Preflight: the timeline pins 12 historical release tags; all must be present locally. We do NOT
+# auto-fetch (offline-primary stays sacred) — a shallow/tag-only clone gets a clear instruction.
+MISSING=""
+for t in $(node -e 'const i=require("./docs/research/llm-shield/evidence/stage-3x/timeline.index.json");process.stdout.write(i.rungs.map((r)=>r.tag).join(" "))'); do
+  git rev-parse --verify --quiet "${t}^{commit}" >/dev/null || MISSING="$MISSING $t"
+done
+if [ -n "$MISSING" ]; then
+  echo "Missing release tags. This is likely a shallow clone." >&2
+  echo "Run: git fetch --tags" >&2
+  echo "Then re-run: scripts/reproduce-vca-chain.sh" >&2
+  echo "(Stage 3X verifies 12 historical release tags; they must be present locally.)" >&2
+  echo "Missing:${MISSING}" >&2
+  exit 2
+fi
+
 if ! node tools/simurgh-attestation/verify-stage3x-timeline.mjs --reproduce >/dev/null; then
   echo "timeline verify FAILED" >&2
   exit 1
