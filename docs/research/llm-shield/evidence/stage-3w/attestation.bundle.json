@@ -1,0 +1,59 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicateType": "https://project-simurgh.dev/predicates/vca-release-witness/v1",
+  "subject": [
+    {
+      "name": "stage-3v-b/attestation.bundle.json",
+      "digest": {
+        "sha256": "75c06eae3c401dea55ff78377e5f4bc145bc36a089363bcaa8a5580795f083fb"
+      }
+    },
+    {
+      "name": "stage-3v-b/attestation.signature.json",
+      "digest": {
+        "sha256": "aa6e2324bd532f653802818de62e3ebec3d7f23d151eec9e90fd9096f18fe58a"
+      }
+    },
+    {
+      "name": "stage-3v-b/capture-replay/lg4-frozen-capture.json",
+      "digest": {
+        "sha256": "a1de949c5085e269a6829531cdf17cf06f2c5f6676bb0850bcdc8b366187b8c5"
+      }
+    },
+    {
+      "name": "stage-3v-b/evidence-hashes.json",
+      "digest": {
+        "sha256": "39eb0781a9fcdc58537994302b9e6fb775b288340daf402ae7ea6dc6804501e0"
+      }
+    },
+    {
+      "name": "stage-3w/github-witness-verdict.json",
+      "digest": {
+        "sha256": "0466700707e44a96948451f1d1b03ea17bf7d2c849cdd610ffb1e0c39bcefc35"
+      }
+    }
+  ],
+  "predicate": {
+    "stage": "3W",
+    "witnessed_stage": "3V-B",
+    "release_commit": "b645d80",
+    "tag": "v2.6.0-stage-3v-b-llamaguard-external-defense-attestation",
+    "release_url": "https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.6.0-stage-3v-b-llamaguard-external-defense-attestation",
+    "offline_reproduce_passed": true,
+    "live_release_gate_passed": true,
+    "model_reexecuted_in_ci": false,
+    "online_witness": {
+      "provider": "github_artifact_attestations",
+      "workflow": ".github/workflows/stage-3w-witness.yml",
+      "subject": "docs/research/llm-shield/evidence/stage-3w/github-witness-verdict.json",
+      "required_for_offline_verification": false
+    },
+    "non_claims": [
+      "does_not_reduce_live_capture_origin_self_reported",
+      "does_not_prove_live_capture_origin",
+      "does_not_reexecute_llama_guard_4",
+      "sigstore_not_required_for_offline_verification",
+      "does_not_rank_external_defences"
+    ]
+  }
+}
