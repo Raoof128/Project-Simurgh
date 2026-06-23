@@ -1,0 +1,137 @@
+{
+  "schema": "simurgh.vca.chain_reproduction_results.v1",
+  "timeline_verified": true,
+  "rungs_total": 12,
+  "rungs_passed": 12,
+  "rungs_failed": 0,
+  "offline_only": true,
+  "network_required": false,
+  "tier_summary": {
+    "reproduce": {
+      "total": 3,
+      "passed": 3
+    },
+    "evidence_hashes": {
+      "total": 7,
+      "passed": 7
+    },
+    "index_only": {
+      "total": 2,
+      "passed": 2
+    }
+  },
+  "evidence_root_pinned_summary": {
+    "total": 10,
+    "passed": 10
+  },
+  "deep_per_file_rewalk_summary": {
+    "total": 5,
+    "passed": 5
+  },
+  "results": [
+    {
+      "stage": "3M",
+      "replay_tier": "index_only",
+      "tag_commit_pinned": true,
+      "evidence_root_digest_matched": null,
+      "deep_rewalk_passed": null,
+      "reproduce_passed": null
+    },
+    {
+      "stage": "3N",
+      "replay_tier": "evidence_hashes",
+      "tag_commit_pinned": true,
+      "evidence_root_digest_matched": true,
+      "deep_rewalk_passed": null,
+      "reproduce_passed": null
+    },
+    {
+      "stage": "3O",
+      "replay_tier": "evidence_hashes",
+      "tag_commit_pinned": true,
+      "evidence_root_digest_matched": true,
+      "deep_rewalk_passed": null,
+      "reproduce_passed": null
+    },
+    {
+      "stage": "3P",
+      "replay_tier": "evidence_hashes",
+      "tag_commit_pinned": true,
+      "evidence_root_digest_matched": true,
+      "deep_rewalk_passed": null,
+      "reproduce_passed": null
+    },
+    {
+      "stage": "3Q",
+      "replay_tier": "evidence_hashes",
+      "tag_commit_pinned": true,
+      "evidence_root_digest_matched": true,
+      "deep_rewalk_passed": null,
+      "reproduce_passed": null
+    },
+    {
+      "stage": "3R",
+      "replay_tier": "index_only",
+      "tag_commit_pinned": true,
+      "evidence_root_digest_matched": null,
+      "deep_rewalk_passed": null,
+      "reproduce_passed": null
+    },
+    {
+      "stage": "3S",
+      "replay_tier": "evidence_hashes",
+      "tag_commit_pinned": true,
+      "evidence_root_digest_matched": true,
+      "deep_rewalk_passed": null,
+      "reproduce_passed": null
+    },
+    {
+      "stage": "3T",
+      "replay_tier": "evidence_hashes",
+      "tag_commit_pinned": true,
+      "evidence_root_digest_matched": true,
+      "deep_rewalk_passed": true,
+      "reproduce_passed": null
+    },
+    {
+      "stage": "3U",
+      "replay_tier": "evidence_hashes",
+      "tag_commit_pinned": true,
+      "evidence_root_digest_matched": true,
+      "deep_rewalk_passed": true,
+      "reproduce_passed": null
+    },
+    {
+      "stage": "3V",
+      "replay_tier": "reproduce",
+      "tag_commit_pinned": true,
+      "evidence_root_digest_matched": true,
+      "deep_rewalk_passed": true,
+      "reproduce_passed": true
+    },
+    {
+      "stage": "3V-B",
+      "replay_tier": "reproduce",
+      "tag_commit_pinned": true,
+      "evidence_root_digest_matched": true,
+      "deep_rewalk_passed": true,
+      "reproduce_passed": true
+    },
+    {
+      "stage": "3W",
+      "replay_tier": "reproduce",
+      "tag_commit_pinned": true,
+      "evidence_root_digest_matched": true,
+      "deep_rewalk_passed": true,
+      "reproduce_passed": true
+    }
+  ],
+  "non_claims": [
+    "does_not_reexecute_live_models",
+    "does_not_prove_original_gpu_capture",
+    "does_not_reduce_live_capture_origin_self_reported",
+    "does_not_claim_production_readiness",
+    "does_not_claim_general_jailbreak_resistance",
+    "does_not_claim_uniform_12_12_full_reproduction"
+  ]
+}

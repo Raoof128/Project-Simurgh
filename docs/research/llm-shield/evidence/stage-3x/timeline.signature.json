@@ -2,7 +2,7 @@
   "schema": "simurgh.vca.public_timeline.signature.v1",
   "algorithm": "Ed25519",
   "canonicalisation": "simurgh.canonical-json.v1",
-  "bundle_sha256": "sha256:e617d6ef8cb7a9ab29dd08e7a2d851e3932e57d36929bbe33b44afbcafce0f40",
+  "bundle_sha256": "sha256:523ccaa2e857c57e9f4134fca0b66a4cc5caffcec3fc25800cf7f8fcc83c588c",
   "public_key_fingerprint": "sha256:55b769e7c1d6e1844be302d8b31fdcd26032fec526c9971a42ae8ff348ff1049",
-  "signature": "base64:nEwxQhhslBLSj6DQGCwN+rCo8LfA921/wYBYw5QwfOVFJ6VwNYGMOkpw79zL90Kyv/aGp6JgGVaxPyg0YdiVBw=="
+  "signature": "base64:bytJsi6+vsr/CsG3kqqUtkBxob1XdE3JlQWLKVc+exHD5zqdpzs0ckuYIViPm0tKb15EaVo7hQ8ODRKemu7SCA=="
 }

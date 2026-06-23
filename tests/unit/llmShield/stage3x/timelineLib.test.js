@@ -16,10 +16,21 @@ test("chain summary matches the locked counts", () => {
   assert.deepEqual(buildChainSummary(), {
     rungs_total: 12,
     tag_commit_pinned: 12,
-    evidence_hashes_reverified: 10,
+    evidence_root_pinned: 10,
+    deep_per_file_rewalk_available: 5,
     full_reproduce_available: 3,
     index_only: 2,
   });
+});
+test("deep_rewalk_mode + chain_integrity_mode per rung", () => {
+  const idx = buildTimelineIndex();
+  const by = Object.fromEntries(idx.rungs.map((r) => [r.stage, r]));
+  assert.equal(by["3U"].deep_rewalk_mode, "strict_current_format");
+  assert.equal(by["3U"].chain_integrity_mode, "evidence_root_digest");
+  assert.equal(by["3N"].deep_rewalk_mode, "not_applicable_cross_stage_manifest");
+  assert.equal(by["3P"].deep_rewalk_mode, "not_applicable_stage_relative_legacy_manifest");
+  assert.equal(by["3M"].chain_integrity_mode, "tag_commit_only");
+  assert.equal(by["3M"].deep_rewalk_mode, "not_applicable_index_only");
 });
 test("index: schema, claim_summary false, non-claims, deterministic", () => {
   const idx = buildTimelineIndex();
