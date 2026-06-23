@@ -13,8 +13,8 @@
   },
   "observation_count": 180,
   "verdict_histogram": {
-    "allow": 110,
-    "block": 70
+    "allow": 168,
+    "block": 12
   },
   "case_ids": [
     "3l-f5_benign_hard_negatives-benign-000",

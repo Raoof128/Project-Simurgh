@@ -142,6 +142,7 @@ export function buildExternalDefenseBundle() {
       counts: { total: d.corpus.length },
     },
     capture_provenance: d.capture.capture_provenance,
+    capture_determinism: d.capture.capture_determinism ?? null,
     adapter_contract: { schema: "simurgh.external_defense_adapter.v1" },
     gateway_computed_hashes: d.gatewayHashes,
     metrics: { external: d.externalMetrics, comparative: d.comparativeMetrics },

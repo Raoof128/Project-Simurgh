@@ -12,6 +12,14 @@ never re-executed in CI.
 reproducible, the live capture is provenance-bound, and the committed frozen-capture replay
 artifact lets reviewers reproduce the signed attestation offline.
 
+**Headline (real, live Llama Guard 4 12B, input-only, 8-bit, greedy).** Over the Stage 3L
+180-case run-set, Llama Guard 4 allowed 168 and blocked 12. Of the 150 malicious cases it missed
+138 (it caught 12 of the 30 direct-input attacks and, as an input-only content-safety classifier,
+could not see any of the 120 downstream-injection cases). Simurgh contained all 138 it missed
+(`external_miss_but_contained 138/138`), the external-plus-Simurgh targeted attack-success rate is
+0/150, and there were zero unsafe tool executions, output exports, or context escalations. The
+capture is deterministic: three independent greedy runs produced byte-identical case content.
+
 ## Method
 
 1. **Input (Option A).** Each Stage 3L case exposes a non-empty `user_task`. A fail-closed

@@ -2,13 +2,25 @@
 # Stage 3V-B RunPod capture harness. TRANSPORT-ONLY: runs Llama Guard 4 once over the supplied
 # {case_id, user_task} pairs and writes raw classifier outputs + self-reported provenance. It
 # performs NO normalisation, NO hashing of evidence, NO signing — those happen in the Mac JS
-# trusted harness. Determinism: greedy decode (do_sample=False). Requires HF license acceptance
-# + token in env.
+# trusted harness. Determinism: greedy decode (do_sample=False).
+#
+# Environment (validated on an RTX 3090 24GB):
+#   * Llama Guard 4 is a Llama-4-based multimodal model -> AutoProcessor + Llama4ForConditionalGeneration.
+#   * REQUIRES Meta's preview transformers, per the official model card:
+#       pip install 'git+https://github.com/huggingface/transformers@v4.51.3-LlamaGuard-preview' hf_xet
+#     The released PyPI builds (4.51.3, 4.53, 5.x) crash on this checkpoint's
+#     attention_chunk_size=None; forcing a chunk size to dodge the crash makes generation
+#     degenerate (token-0 spam). The preview build handles None natively — NO override here.
+#   * 8-bit (bitsandbytes): ~13GB, fits 24GB at near-full-precision quality (4-bit degraded output).
+#   * HF license acceptance + HF_TOKEN in env are required (gated repo).
 import argparse
 import datetime
 import hashlib
 import json
+import os
 import sys
+
+TRANSFORMERS_INSTALL_REF = "git+https://github.com/huggingface/transformers@v4.51.3-LlamaGuard-preview"
 
 
 def sha256_file(path):
@@ -25,30 +37,39 @@ def main():
     ap.add_argument("--out", required=True, help="output capture JSON path")
     ap.add_argument("--model-id", default="meta-llama/Llama-Guard-4-12B")
     ap.add_argument("--gpu", default="unknown")
+    ap.add_argument("--max-new-tokens", type=int, default=20)
+    ap.add_argument("--quant", choices=["8bit", "4bit"], default="8bit")
     args = ap.parse_args()
-
-    import os
 
     import torch
     import transformers
-    from transformers import AutoModelForCausalLM, AutoTokenizer
+    from transformers import AutoProcessor, BitsAndBytesConfig, Llama4ForConditionalGeneration
     from huggingface_hub import snapshot_download
 
     with open(args.inputs, "r", encoding="utf-8") as f:
         items = json.load(f)
 
-    tok = AutoTokenizer.from_pretrained(args.model_id)
-    model = AutoModelForCausalLM.from_pretrained(
-        args.model_id, torch_dtype=torch.bfloat16, device_map="auto"
+    if args.quant == "8bit":
+        bnb = BitsAndBytesConfig(load_in_8bit=True)
+        quant_label = "bnb-8bit"
+    else:
+        bnb = BitsAndBytesConfig(
+            load_in_4bit=True, bnb_4bit_quant_type="nf4", bnb_4bit_compute_dtype=torch.bfloat16
+        )
+        quant_label = "bnb-4bit-nf4-bf16-compute"
+    processor = AutoProcessor.from_pretrained(args.model_id)
+    model = Llama4ForConditionalGeneration.from_pretrained(
+        args.model_id, quantization_config=bnb, device_map="cuda", torch_dtype=torch.bfloat16
     )
     model.eval()
 
-    chat_template = getattr(tok, "chat_template", "") or ""
+    chat_template = getattr(processor, "chat_template", None) or getattr(
+        getattr(processor, "tokenizer", None), "chat_template", ""
+    ) or ""
     chat_template_hash = "sha256:" + hashlib.sha256(chat_template.encode("utf-8")).hexdigest()
 
-    # Real, verifiable provenance digests (Fix 1): a snapshot manifest digest over the local HF
-    # snapshot (filename + size + per-file sha256), plus the tokenizer config digest. No fake
-    # sentinel hashes — every digest is a genuine sha256 over real bytes.
+    # Real, verifiable provenance digests (no fake sentinels): a snapshot-manifest digest over the
+    # local HF snapshot (filename + size + per-file sha256), plus the tokenizer-config digest.
     snapshot_dir = snapshot_download(args.model_id)
     manifest = []
     for root, _dirs, files in os.walk(snapshot_dir):
@@ -64,16 +85,21 @@ def main():
     tokenizer_config_digest = sha256_file(tok_cfg) if os.path.exists(tok_cfg) else snapshot_digest
     hf_model_commit = os.path.basename(os.path.realpath(snapshot_dir))
 
+    def classify(text):
+        messages = [{"role": "user", "content": [{"type": "text", "text": text}]}]
+        inp = processor.apply_chat_template(
+            messages, tokenize=True, add_generation_prompt=True, return_tensors="pt", return_dict=True
+        ).to(model.device)
+        n = inp["input_ids"].shape[-1]
+        with torch.no_grad():
+            out = model.generate(**inp, max_new_tokens=args.max_new_tokens, do_sample=False)
+        return processor.batch_decode(out[:, n:], skip_special_tokens=True)[0].strip()
+
     cases = []
     for it in items:
-        messages = [{"role": "user", "content": it["user_task"]}]
-        ids = tok.apply_chat_template(messages, return_tensors="pt").to(model.device)
-        with torch.no_grad():
-            out = model.generate(ids, max_new_tokens=64, do_sample=False, temperature=0.0)
-        text = tok.decode(out[0][ids.shape[-1]:], skip_special_tokens=True).strip()
-        cases.append({"case_id": it["case_id"], "raw_lg4_output": text})
-
+        cases.append({"case_id": it["case_id"], "raw_lg4_output": classify(it["user_task"])})
     cases.sort(key=lambda c: c["case_id"])
+
     capture = {
         "schema": "simurgh.stage3vb.frozen_lg4_capture.v1",
         "live": True,
@@ -87,7 +113,10 @@ def main():
             "hf_model_snapshot_digest": snapshot_digest,
             "tokenizer_config_digest": tokenizer_config_digest,
             "chat_template_hash": chat_template_hash,
+            "quantization": quant_label,
+            "decode": {"do_sample": False, "temperature": 0, "max_new_tokens": args.max_new_tokens},
             "transformers_version": transformers.__version__,
+            "transformers_install_ref": TRANSFORMERS_INSTALL_REF,
             "torch_version": torch.__version__,
             "cuda_version": torch.version.cuda or "cpu",
             "gpu": args.gpu,

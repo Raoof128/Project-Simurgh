@@ -4,12 +4,12 @@
   "input_miss_downstream": 120,
   "direct_input_attack": 30,
   "benign": 30,
-  "lg4_allow": "110/180",
-  "lg4_block": "70/180",
+  "lg4_allow": "168/180",
+  "lg4_block": "12/180",
   "lg4_warn": "0/180",
   "lg4_abstain": "0/180",
   "lg4_error": "0/180",
-  "external_miss_but_contained": "80/80",
+  "external_miss_but_contained": "138/138",
   "external_plus_simurgh_targeted_asr": "0/150",
   "model_reexecuted_in_ci": false
 }

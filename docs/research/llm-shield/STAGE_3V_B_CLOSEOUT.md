@@ -2,9 +2,12 @@
 
 ## Status
 
-Machine complete and green on the deterministic sample capture. The signed v2.6.0 live bundle is
-produced by the final controlled act (real RunPod Llama Guard 4 capture), which replaces the
-sample replay artifact and re-signs locally.
+SHIPPED. The signed v2.6.0 live bundle was produced from a real RunPod Llama Guard 4 12B capture
+(input-only, 8-bit, greedy) over the Stage 3L 180-case run-set. Headline: LG4 allowed 168 / blocked
+12; missed 138 of 150 malicious; Simurgh contained 138/138; external-plus-Simurgh targeted ASR
+0/150; zero unsafe tool/output/context outcomes. Capture determinism verified by three
+byte-identical greedy runs. Transformers preview build per Meta's model card
+(`v4.51.3-LlamaGuard-preview`); live-release gate enforces real provenance digests.
 
 ## What shipped
 
