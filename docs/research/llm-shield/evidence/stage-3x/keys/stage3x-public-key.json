@@ -1,0 +1,6 @@
+{
+  "key_type": "Ed25519",
+  "format": "spki-pem",
+  "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAAc22/7yjT4AzHQkPkJZMYIpRXVWw5wKLuRXTsVnNwEs=\n-----END PUBLIC KEY-----\n",
+  "fingerprint": "sha256:55b769e7c1d6e1844be302d8b31fdcd26032fec526c9971a42ae8ff348ff1049"
+}
