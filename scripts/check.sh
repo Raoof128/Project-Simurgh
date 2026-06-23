@@ -1937,6 +1937,86 @@ else
   tail -100 "$LOG_DIR/llm-shield-stage3v-coverage.log"
 fi
 
+# ── LLM Shield 3V-B live-capture external-defence attestation ─────────
+step "LLM Shield 3V-B feedable-input preflight"
+if node scripts/assert-stage3l-feedable-inputs.mjs > "$LOG_DIR/llm-shield-stage3vb-feedable.log" 2>&1; then
+  pass "LLM Shield 3V-B feedable-input preflight"
+else
+  fail "LLM Shield 3V-B feedable-input preflight"
+  tail -40 "$LOG_DIR/llm-shield-stage3vb-feedable.log"
+fi
+
+step "LLM Shield 3V-B capture-integrity preflight"
+if node scripts/assert-stage3vb-capture-integrity.mjs > "$LOG_DIR/llm-shield-stage3vb-capture.log" 2>&1; then
+  pass "LLM Shield 3V-B capture-integrity preflight"
+else
+  fail "LLM Shield 3V-B capture-integrity preflight"
+  tail -40 "$LOG_DIR/llm-shield-stage3vb-capture.log"
+fi
+
+step "LLM Shield 3V-B external-defence smoke"
+if scripts/smoke-llm-shield-stage3vb.sh > "$LOG_DIR/llm-shield-stage3vb-smoke.log" 2>&1; then
+  pass "LLM Shield 3V-B external-defence smoke"
+else
+  fail "LLM Shield 3V-B external-defence smoke"
+  tail -60 "$LOG_DIR/llm-shield-stage3vb-smoke.log"
+fi
+
+step "LLM Shield 3V-B security audit"
+if scripts/security-audit-llm-shield-stage3vb.sh > "$LOG_DIR/llm-shield-stage3vb-security.log" 2>&1; then
+  pass "LLM Shield 3V-B security audit"
+else
+  fail "LLM Shield 3V-B security audit"
+  tail -40 "$LOG_DIR/llm-shield-stage3vb-security.log"
+fi
+
+step "LLM Shield 3V-B privacy audit"
+if node scripts/privacy-audit-llm-shield-stage3vb.mjs > "$LOG_DIR/llm-shield-stage3vb-privacy.log" 2>&1; then
+  pass "LLM Shield 3V-B privacy audit"
+else
+  fail "LLM Shield 3V-B privacy audit"
+  tail -40 "$LOG_DIR/llm-shield-stage3vb-privacy.log"
+fi
+
+step "LLM Shield 3V-B consistency audit"
+if node scripts/consistency-audit-llm-shield-stage3vb.mjs > "$LOG_DIR/llm-shield-stage3vb-consistency.log" 2>&1; then
+  pass "LLM Shield 3V-B consistency audit"
+else
+  fail "LLM Shield 3V-B consistency audit"
+  tail -40 "$LOG_DIR/llm-shield-stage3vb-consistency.log"
+fi
+
+step "LLM Shield 3V-B policy-drift guard"
+if scripts/policy-drift-guard-llm-shield-stage3vb.sh > "$LOG_DIR/llm-shield-stage3vb-policy.log" 2>&1; then
+  pass "LLM Shield 3V-B policy-drift guard"
+else
+  fail "LLM Shield 3V-B policy-drift guard"
+  tail -40 "$LOG_DIR/llm-shield-stage3vb-policy.log"
+fi
+
+step "LLM Shield 3V-B external-defence lib coverage"
+if node --test --experimental-test-coverage \
+  --test-coverage-include=tools/external-defense-adapters/llamaGuard4OutputGrammar.mjs \
+  --test-coverage-include=tools/external-defense-adapters/llamaGuard4Adapter.mjs \
+  --test-coverage-include=tools/external-defense-adapters/captureProvenanceHashes.mjs \
+  --test-coverage-functions=100 \
+  tests/unit/llmShield/stage3vb/feedableInputs.test.js \
+  tests/unit/llmShield/stage3vb/llamaGuard4Grammar.test.js \
+  tests/unit/llmShield/stage3vb/llamaGuard4Adapter.test.js \
+  tests/unit/llmShield/stage3vb/captureProvenanceHashes.test.js \
+  tests/unit/llmShield/stage3vb/sampleCapture.test.js \
+  tests/unit/llmShield/stage3vb/bundle.test.js \
+  tests/unit/llmShield/stage3vb/advisoryInvariance.test.js \
+  tests/unit/llmShield/stage3vb/verifier.test.js \
+  tests/unit/llmShield/stage3vb/captureIntegrityScript.test.js \
+  tests/unit/llmShield/stage3vb/tamper.test.js \
+  > "$LOG_DIR/llm-shield-stage3vb-coverage.log" 2>&1; then
+  pass "LLM Shield 3V-B external-defence lib coverage"
+else
+  fail "LLM Shield 3V-B external-defence lib coverage"
+  tail -100 "$LOG_DIR/llm-shield-stage3vb-coverage.log"
+fi
+
 step "LLM Shield 3E-core docker smoke (skips if no docker)"
 if bash scripts/docker-smoke-llm-shield-stage3e.sh > "$LOG_DIR/llm-shield-stage3e-docker-smoke.log" 2>&1; then
   pass "LLM Shield 3E-core docker smoke"

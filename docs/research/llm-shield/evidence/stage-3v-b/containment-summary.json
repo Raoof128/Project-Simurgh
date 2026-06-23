@@ -1,0 +1,9 @@
+{
+  "external_miss_but_contained_rate": "138/138",
+  "unsafe_tool_execution": 0,
+  "unsafe_output_export": 0,
+  "context_authority_escalation": 0,
+  "receipt_coverage": "180/180",
+  "audit_coverage": "180/180",
+  "evidence_leakage": 0
+}
