@@ -2,6 +2,15 @@
 
 ## Agent Change Log
 
+### 2026-06-24 (Australia/Sydney) — AISec 2026 paper reviewer-hardening (integrity pass)
+
+**Raouf:**
+
+- **Scope:** Strict line-by-line reviewer pass on `Papers/llm-shield-aisec2026/`; fix overclaims and raise rigour without new runs. No `src/llmShield/**` change.
+- **Summary:** Corrected an overclaim the evidence-depth pass introduced — Stage 3V-A was presented as a second external "guardrail comparator" but is a synthetic self-authored fixture (`fixture_provenance: synthetic_deterministic`); reframed it honestly as an **advisory-invariance check** (no ASR/detection claim) and removed the misleading comparator table. The real Llama Guard 4 12B capture is now the single labelled external reference and leads the eval (138/150 framed as the input-only structural blind spot). Added exact 95% Clopper-Pearson CIs to all small-n rates and demoted self-authored perfect counts to fixture-validity. Added an **honest-producer trust-boundary** subsection (a dishonest gateway signing a clean receipt is outside what a signature detects → producer-independent witnessing is the open problem). Replaced the contentless JSON-signing figure with a context-provenance authority-decision figure. Collapsed 5 contributions to 3. Abstract reframed around the real finding.
+- **Files changed:** `Papers/llm-shield-aisec2026/main.tex`, `.../artifact/reproduce-paper-claims.sh`, `.../audit/repo-claim-audit.md`, `.../dist/llm-shield-aisec2026-anonymous.tar.gz`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `make` clean (0 undefined refs, 6 pages, all 8 floats referenced); reproduce script 6/6; 12/12 numeric+provenance claims match frozen evidence; overclaim + PDF identity scans clean; anonymous tarball rebuilt + rescanned.
+
 ### 2026-06-24 (Australia/Sydney) — AISec 2026 paper evidence-depth revision
 
 **Raouf:**

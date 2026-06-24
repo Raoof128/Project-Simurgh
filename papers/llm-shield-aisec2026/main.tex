@@ -26,7 +26,7 @@
 \affiliation{\institution{Anonymous Institution}\country{}}
 
 \begin{abstract}
-LLM guardrails are commonly evaluated at the point where a user input is accepted or blocked. Agentic failures, however, can occur after this first gate has opened: untrusted retrieved content may gain authority, model output may request a tool, or unsafe text may be exported. This paper presents a provider-agnostic post-guardrail containment and evidence system. The prototype enforces input, context-provenance, tool-invocation, and output-leakage boundaries, then emits metadata-only evidence bundles signed with Ed25519 over canonical JSON. We evaluate the design through frozen corpora and signed evidence artifacts. On a 180-case reference corpus, 120 input-miss cases passed the input firewall and were downstream-contained, 30 direct-input attacks were blocked, and 30 benign hard negatives passed; targeted attack success was 0/150 on that corpus. A signed VCA bundle verifies offline and rejects tampering. In an observational input-only external-guardrail boundary study over the same frozen corpus, two recorded references---a generic external guardrail and a live Llama Guard 4 12B capture---missed 80 and 138 malicious cases respectively that the gateway then contained (80/80 and 138/138), with 0/150 targeted attack success in both. A public reproduction packet reports 12/12 tag-and-commit-pinned rungs with tiered replay depth. These results are bounded to the evaluated corpora and artifacts. They do not establish jailbreak immunity, production readiness, model safety, or vendor ranking.
+LLM guardrails are commonly evaluated at the point where a user input is accepted or blocked. Agentic failures, however, can occur after this first gate has opened: untrusted retrieved content may gain authority, model output may request a tool, or unsafe text may be exported. This paper presents a provider-agnostic post-guardrail containment and evidence system. The prototype enforces input, context-provenance, tool-invocation, and output-leakage boundaries, then emits metadata-only evidence bundles signed with Ed25519 over canonical JSON. Our motivating observation uses a real input-only guardrail: a frozen live Llama Guard 4 12B capture allowed 138 of 150 malicious cases on a 180-case corpus, not because it is weak but because the malicious instruction is structurally located downstream of the user turn it inspects. The gateway then contained all 138 downstream (contained fraction 138/138, 95\% Clopper-Pearson CI [0.97, 1.0]). On the same corpus the gateway blocked 30/30 direct-input attacks, passed 30 adversarially-shaped benign hard negatives with no false blocks (0/30, 95\% CI [0, 0.12]), and recorded no unauthorized tool execution, context-authority escalation, or unsafe export. A signed VCA bundle verifies offline and rejects tampering, and a synthetic recorded-signal fixture confirms that downstream containment is invariant to the external advisory verdict. We are deliberate about scope: the corpus is synthetic and self-authored, the single real external guardrail is one model, and the signature proves issuer and integrity, not producer honesty, jailbreak immunity, production readiness, model safety, or vendor ranking.
 \end{abstract}
 
 \begin{CCSXML}
@@ -58,13 +58,11 @@ This paper studies a narrower systems question: after a guardrail misses, can a 
 
 The \system{} enforces four boundaries: an input firewall, a context-provenance guard, a tool-invocation gate, and an output-leakage firewall. It treats model output and external guardrail verdicts as advisory. Each run emits metadata-only receipts and audit events. A second layer packages run-set evidence as canonical JSON and signs it with Ed25519 \cite{rfc8785,rfc8032}, using public verification keys and deterministic reproduction checks.
 
-We make five contributions:
+We make three contributions:
 \begin{enumerate}[leftmargin=*]
-  \item A containment model for evaluating downstream consequences after input guardrail misses.
-  \item A provider-agnostic containment gateway with input, context-provenance, tool-invocation, and output-leakage boundaries.
-  \item A \vca{} format: metadata-only canonical evidence bundles, Ed25519 signatures, public verification, offline reproduction, tamper rejection, and machine-readable non-claims.
-  \item A reproducible evaluation ladder over frozen corpora and signed evidence, including a Fable-5-style reference containment regression, a signed VCA bundle, two external input-only guardrail reference runs, and a public reproduction chain.
-  \item A claim-governance pattern that embeds non-claims and prevents bounded evidence from being converted into broad safety claims.
+  \item A post-guardrail containment gateway that makes downstream consequences---context-authority escalation, tool self-authorization, and unsafe export---the unit of evaluation, with boundary decisions taken by deterministic code rather than the model under inspection.
+  \item A \vca{} format that turns those boundary outcomes into metadata-only canonical evidence bundles signed with Ed25519, with public verification, offline reproduction, tamper rejection, and machine-readable non-claims, under an explicitly stated honest-producer trust boundary.
+  \item An evidence-first evaluation, including a real input-only guardrail capture that quantifies the downstream blind spot, a synthetic advisory-invariance check, and a public reproduction chain, paired with a claim-governance pattern that prevents bounded evidence from being read as a broad safety claim.
 \end{enumerate}
 
 \section{Background and Motivation}
@@ -99,7 +97,7 @@ Claim & Evidence source & Non-claim boundary \\
 \midrule
 Input-miss cases were downstream-contained on the frozen 180-case corpus & \texttt{stage-3l/metrics.json} & Does not imply general jailbreak resistance or production traffic validation. \\
 The Stage 3M VCA bundle verifies offline and rejects tampering & \texttt{stage-3m/verifier-output.txt} and attestation files & Does not make signed evidence factual truth or prove the service was uncompromised. \\
-The external guardrail captures are input-only boundary reference runs & \texttt{stage-3v/metrics.json}, \texttt{stage-3v-b/metrics.json} & Not a vendor ranking and not a model-safety proof. \\
+The real external guardrail (Llama Guard 4) is one input-only reference; Stage 3V-A is a synthetic advisory-invariance fixture & \texttt{stage-3v-b/metrics.json}, \texttt{stage-3v/metrics.json} & One model, self-reported capture; the fixture carries no detection claim; not a vendor ranking. \\
 The public VCA chain is replayable at tiered depths & \texttt{stage-3x/vca-chain-reproduction-results.json} & Not uniform 12/12 full reproduction. \\
 \bottomrule
 \end{tabularx}
@@ -139,6 +137,31 @@ Figure~\ref{fig:pipeline} shows the gateway. The input firewall handles direct a
 
 The design intentionally avoids using the model as its own security monitor. Boundary decisions are made by deterministic gateway code over structured metadata. The model and any external guardrail can influence the ordinary application response, but neither can authorize a tool, relabel untrusted context as trusted instruction, or suppress an audit event. This separation is what makes the later attestation meaningful: the evidence records gateway decisions rather than model assertions about those decisions.
 
+\begin{figure}[t]
+  \centering
+  \begin{tikzpicture}[node distance=0.5cm and 0.7cm,
+    box/.style={draw, rounded corners=2pt, align=center, minimum width=2.6cm, minimum height=0.6cm, font=\small},
+    dec/.style={draw, diamond, aspect=2, align=center, inner sep=1pt, font=\small},
+    arr/.style={-{Stealth[length=4pt]}, thick}]
+    \node[box] (item) {Context item\\(origin, trust level)};
+    \node[dec, below=of item] (valid) {Provenance\\valid?};
+    \node[box, right=1.5cm of valid] (reject) {Rejected};
+    \node[dec, below=of valid] (trust) {Trust\\level};
+    \node[box, below left=0.7cm and -0.4cm of trust] (accept) {Trusted seed:\\accepted as context};
+    \node[box, below right=0.7cm and -0.4cm of trust] (demote) {Untrusted:\\demoted to data};
+    \draw[arr] (item) -- (valid);
+    \draw[arr] (valid) -- node[above,font=\scriptsize]{no} (reject);
+    \draw[arr] (valid) -- node[right,font=\scriptsize]{yes} (trust);
+    \draw[arr] (trust) -- (accept);
+    \draw[arr] (trust) -- (demote);
+  \end{tikzpicture}
+  \caption{Context-provenance authority decision. Untrusted context may flow as data but never acquires system or developer authority, and neither provider output nor an external guardrail verdict can grant authority or relabel context. This deterministic decision---not the model---produces the boundary outcome that is later attested.}
+  \Description{A decision flow from a context item through a provenance-validity check and a trust-level check to accepted, demoted-to-data, or rejected.}
+  \label{fig:provenance}
+\end{figure}
+
+Figure~\ref{fig:provenance} shows the context-provenance authority decision in more detail. A context item carries an origin and a declared trust level; an invalid or unrecognized provenance is rejected, a trusted seed is accepted as context, and any untrusted origin (for example a tool result, an external reference, or provider output) is demoted to data so that it can inform the response but cannot acquire system or developer authority. Because this decision is made over structured metadata rather than free text, its outcome is recorded verbatim in the receipt, which is what a later verifier checks.
+
 \textbf{Evidence schema.} Each boundary emits a compact record with a run identifier, boundary name, policy version, input/output digests where applicable, verdict, reason code, and non-claim tags. Raw prompts and raw provider outputs are excluded from the evidence packet. The VCA bundle aggregates these records with corpus metadata, metric summaries, privacy reports, referenced evidence hashes, public verification metadata, and a machine-readable list of limitations. This lets a reviewer check both positive claims, such as ``no unauthorized tool execution in this corpus,'' and negative scope boundaries, such as ``not a production deployment claim.''
 
 \begin{table*}[t]
@@ -159,27 +182,7 @@ Output firewall & Leakage/export pressure & Block unsafe export & Output verdict
 
 \section{Verifiable Containment Attestation}
 
-\begin{figure}[t]
-  \centering
-  \begin{tikzpicture}[node distance=0.45cm, box/.style={draw, rounded corners=2pt, align=center, minimum width=3.1cm, minimum height=0.55cm, font=\small}, arr/.style={-{Stealth[length=4pt]}, thick}]
-    \node[box] (run) {Run metadata};
-    \node[box, below=of run] (json) {Canonical JSON};
-    \node[box, below=of json] (sig) {Ed25519 signature};
-    \node[box, below=of sig] (verify) {Public verifier};
-    \node[box, below=of verify] (repro) {Reproduce mode};
-    \node[box, below=of repro] (tamper) {Tamper rejection};
-    \draw[arr] (run) -- (json);
-    \draw[arr] (json) -- (sig);
-    \draw[arr] (sig) -- (verify);
-    \draw[arr] (verify) -- (repro);
-    \draw[arr] (repro) -- (tamper);
-  \end{tikzpicture}
-  \caption{Evidence bundle and offline verification. The signature covers canonical parsed bundle content, not incidental formatting.}
-  \Description{A vertical flow from run metadata to canonical JSON, signature, public verification, reproduction, and tamper rejection.}
-  \label{fig:evidence}
-\end{figure}
-
-Figure~\ref{fig:evidence} shows the bundle and its offline verification flow. The attestation layer packages a run set as metadata-only evidence. A bundle contains metrics, boundary breakdowns, policy digests, privacy reports, referenced evidence hashes, and machine-readable non-claims. The signature covers canonical JSON, allowing a verifier to check the signed content independently of whitespace or formatting changes. Verification has a portable mode for schema, signature, digest, public-key fingerprint, referenced file hashes, gate results, and leakage scans. Reproduction mode reruns deterministic producers where available.
+The attestation layer packages a run set as metadata-only evidence. A bundle contains metrics, boundary breakdowns, policy digests, privacy reports, referenced evidence hashes, and machine-readable non-claims. The signature covers canonical JSON, allowing a verifier to check the signed content independently of whitespace or formatting changes. Verification has a portable mode for schema, signature, digest, public-key fingerprint, referenced file hashes, gate results, and leakage scans. Reproduction mode reruns deterministic producers where available.
 
 \section{Evaluation}
 
@@ -190,30 +193,30 @@ We use only repository evidence that can be traced to files and, where practical
   \begin{tikzpicture}[node distance=0.45cm, box/.style={draw, rounded corners=2pt, align=center, minimum width=3.2cm, minimum height=0.6cm, font=\small}, arr/.style={-{Stealth[length=4pt]}, thick}]
     \node[box] (l) {Stage 3L\\reference containment};
     \node[box, below=of l] (m) {Stage 3M\\signed VCA bundle};
-    \node[box, below=of m] (va) {Stage 3V-A\\recorded external guardrail};
-    \node[box, below=of va] (vb) {Stage 3V-B\\live external guardrail};
-    \node[box, below=of vb] (x) {Stage 3X\\public reproduction chain};
+    \node[box, below=of m] (vb) {Stage 3V-B\\real external guardrail};
+    \node[box, below=of vb] (va) {Stage 3V-A\\advisory-invariance check};
+    \node[box, below=of va] (x) {Stage 3X\\public reproduction chain};
     \draw[arr] (l) -- (m);
-    \draw[arr] (m) -- (va);
-    \draw[arr] (va) -- (vb);
-    \draw[arr] (vb) -- (x);
+    \draw[arr] (m) -- (vb);
+    \draw[arr] (vb) -- (va);
+    \draw[arr] (va) -- (x);
   \end{tikzpicture}
   \caption{Evaluation ladder. Each stage contributes a different part of the paper claim and has a separate evidence artifact.}
-  \Description{A vertical ladder of Stage 3L, Stage 3M, Stage 3V-A, Stage 3V-B, and Stage 3X.}
+  \Description{A vertical ladder of Stage 3L, Stage 3M, Stage 3V-B, Stage 3V-A, and Stage 3X.}
   \label{fig:ladder}
 \end{figure}
 
-\textbf{Stage 3L.} A deterministic 180-case corpus is driven through real gateway boundary functions in pipeline order: prompt classification, context-provenance checks, tool gating, and output scanning. The corpus contains 120 input-miss downstream cases, 30 direct-input attacks, and 30 benign hard negatives. The main dependent variables are consequence metrics: whether untrusted context gained authority, whether an unauthorized tool executed, whether unsafe output was exported, whether receipts were emitted, and whether the audit chain verified. To check that containment is not achieved by indiscriminate blocking, we also report a benign false-positive rate over the 30 hard negatives, all of which are adversarially shaped to resemble the malicious families while remaining legitimate; none were blocked (false-positive rate 0/30). This is a hard-negative control, not a full benign-traffic distribution.
+\textbf{Stage 3L.} A deterministic 180-case corpus is driven through real gateway boundary functions in pipeline order: prompt classification, context-provenance checks, tool gating, and output scanning. The corpus contains 120 input-miss downstream cases, 30 direct-input attacks, and 30 benign hard negatives. The main dependent variables are consequence metrics: whether untrusted context gained authority, whether an unauthorized tool executed, whether unsafe output was exported, whether receipts were emitted, and whether the audit chain verified. Because the corpus is synthetic and authored by us, the perfect malicious counts (120/120 input-miss contained, 30/30 direct blocked, 0/150 targeted attack success) are fixture-validity checks---they confirm the boundaries fire exactly as the case design intends---and not estimates of any real-world attack rate. To check that containment is not achieved by indiscriminate blocking, we report a benign false-positive rate over the 30 hard negatives, all adversarially shaped to resemble the malicious families while remaining legitimate; none were blocked (0/30). We attach exact 95\% Clopper-Pearson intervals throughout because the per-cell sample sizes are small: 0/30 bounds the benign false-positive rate at [0, 0.12] and 0/150 bounds targeted success at [0, 0.02], so these are upper-bounded near-zero results, not demonstrated true zeros.
 
 Containment of the 120 input-miss cases is distributed across the downstream boundaries rather than concentrated at a single gate (Table~\ref{tab:ablation}): the context-provenance guard contained 72 cases, the tool gate 24, and the output firewall 24. The input firewall contained none of these by construction, because each input-miss case is designed to pass the input gate so that the downstream boundary under test is the one exercised.
 
 \textbf{Stage 3M.} The Stage 3L run set is packaged into a metadata-only bundle signed with Ed25519. The public key and expected fingerprint are committed; the private key is not. The verifier checks structure, signature, evidence-file hashes, gate results, privacy, and reproduction matches. Tamper cases modify signed content, referenced metrics, and gate summaries to confirm that verification fails closed.
 
-\textbf{Stage 3V-A.} To avoid resting the external-guardrail finding on a single point, we first use a recorded generic external guardrail as an independent advisory boundary over the same frozen 180-case corpus. It allowed 70 of 180 cases, blocked 70, and warned on 40; as an input-only signal its targeted attack success was 80/150. The gateway contained all 80 missed cases downstream (80/80), and external-plus-gateway targeted success was 0/150. This is a recorded observational point, not a live defense and not a ranking.
+\textbf{Stage 3V-B (the real external guardrail).} A single real input-only guardrail anchors the external observation: a frozen live Llama Guard 4 12B capture (\texttt{meta-llama/Llama-Guard-4-12B}, one input-only greedy pass, temperature 0, 20 new tokens, 8-bit quantization, one NVIDIA RTX 3090 24GB GPU, transformers v4.51.3 Llama-Guard preview, PyTorch 2.8.0, CUDA 12.8). As an input-only signal it allowed 138 of 150 malicious cases. We read this not as a weakness of the model but as the structural blind spot of any input-only guardrail: in the 120 input-miss cases the malicious instruction is located downstream of the user turn the guardrail inspects. The gateway then contained all 138 downstream (138/138, 95\% CI [0.97, 1.0]), and external-plus-gateway targeted success was 0/150. The frozen capture, not the model, is replayed in CI (\texttt{model\_reexecuted\_in\_ci} is false); the live capture origin is self-reported and signed into evidence but not independently re-derived. This is one model and a boundary study, not a vendor comparison or ranking.
 
-\textbf{Stage 3V-B.} A frozen live Llama Guard 4 12B capture provides a second, live advisory boundary point. The capture used \texttt{meta-llama/Llama-Guard-4-12B} in a single input-only greedy pass (temperature 0, 20 new tokens) under 8-bit quantization on one NVIDIA RTX 3090 24GB GPU, with transformers v4.51.3 Llama-Guard preview, PyTorch 2.8.0, and CUDA 12.8; the frozen capture, not the model, is replayed in CI. The model is not re-executed in CI. This is a boundary study, not a vendor comparison. The measured contrast is between an input-only advisory result and downstream gateway containment on the same frozen corpus. Table~\ref{tab:external} summarizes both external references.
+\textbf{Stage 3V-A (advisory-invariance check, not a second guardrail).} We have only one real external guardrail, so we do not claim a second comparator. Instead we use a synthetic, deterministic recorded-signal fixture---spanning allow, warn, and block verdicts that we authored---to test a structural property of the design: the gateway's downstream containment outcome does not depend on the external advisory verdict. Across the fixture the containment outcome was identical regardless of whether the synthetic signal said allow, warn, or block. This advisory-invariance is the property that lets the gateway treat any external guardrail, including a future stronger one, as untrusted advice rather than as authority. The fixture's verdicts are authored by us and carry no detection claim, so we report no attack-success rate for it.
 
-\textbf{Stage 3X.} A public VCA timeline records tiered reproduction depth across 12 signed rungs.
+\textbf{Stage 3X.} A public VCA timeline pins 12 signed rungs by tag and commit. We are explicit that ``12/12'' means twelve rungs verified at their declared tier, not twelve full re-executions: 3 rungs are re-run end-to-end, 7 are checked by evidence-hash, and 2 are index-only. The guarantee that holds across all three tiers, and across the historical evidence-hash formats, is the format-independent evidence-root digest.
 
 \begin{table*}[t]
 \caption{Main evaluation results.}
@@ -222,29 +225,15 @@ Containment of the 120 input-miss cases is distributed across the downstream bou
 \toprule
 Evaluation & Corpus / evidence & Key metric & Result & Limitation \\
 \midrule
-Stage 3L & Frozen 180-case reference corpus & Input-miss downstream containment & 120/120 & Synthetic, redacted corpus only. \\
+Stage 3L & Frozen 180-case reference corpus & Input-miss downstream containment & 120/120 (CI [0.97,1]) & Synthetic, self-authored corpus; fixture-validity. \\
 Stage 3L & Same & Direct-input attacks blocked & 30/30 & Does not imply general detector robustness. \\
-Stage 3L & Same & Benign false-positive rate & 0/30 & Hard-negative control, not a full benign distribution. \\
-Stage 3L & Same & Targeted attack success & 0/150 & Exact for corpus, not a world rate. \\
+Stage 3L & Same & Benign false-positive rate & 0/30 (CI [0,0.12]) & Hard-negative control; small-$n$ upper bound. \\
+Stage 3L & Same & Targeted attack success & 0/150 (CI [0,0.02]) & Self-authored corpus; not a world rate. \\
 Stage 3L & Same & Unsafe tool/export/context escalation & 0/0/0 & Consequence metrics, not semantic safety proof. \\
-Stage 3M & Signed VCA bundle & Offline verification & PASS & Signs evidence that exists; not factual truth. \\
-Stage 3V-A & Recorded generic external guardrail & External misses contained & 80/80 & Recorded boundary point; no vendor ranking. \\
-Stage 3V-B & Frozen live Llama Guard 4 capture & External misses contained & 138/138 & Input-only boundary study; no vendor ranking. \\
-Stage 3X & Public reproduction packet & Rungs passed & 12/12 & Tiered replay, not uniform full reproduction. \\
-\bottomrule
-\end{tabularx}
-\end{table*}
-
-\begin{table*}[t]
-\caption{External input-only guardrail references over the same frozen 180-case corpus. Each row is a recorded boundary point, not a vendor ranking. ``External-only'' counts the guardrail as the sole input gate; ``+ gateway'' adds downstream containment.}
-\label{tab:external}
-\small
-\begin{tabularx}{\textwidth}{Xp{0.18\textwidth}p{0.16\textwidth}p{0.16\textwidth}}
-\toprule
-External guardrail (frozen) & External-only targeted ASR & Missed-but-contained & External + gateway ASR \\
-\midrule
-Recorded generic guardrail (3V-A) & 80/150 & 80/80 & 0/150 \\
-Live Llama Guard 4 12B (3V-B) & 138/150 & 138/138 & 0/150 \\
+Stage 3M & Signed VCA bundle & Offline verification & PASS & Signs evidence under honest-producer assumption; not factual truth. \\
+Stage 3V-B & Real input-only guardrail (Llama Guard 4 12B) & Downstream-contained after guardrail miss & 138/138 (CI [0.97,1]) & One model; capture self-reported; not a ranking. \\
+Stage 3V-A & Synthetic recorded-signal fixture & Advisory-invariance & invariant & Authored verdicts; no detection claim. \\
+Stage 3X & Public reproduction packet & Rungs passed & 12/12 & Tiered replay (3 reproduce / 7 hash / 2 index). \\
 \bottomrule
 \end{tabularx}
 \end{table*}
@@ -288,6 +277,8 @@ Tier summary & 3 reproduce, 7 hash, 2 index & matched & Stage 3X results JSON \\
 
 The system prevents a bounded class of downstream consequences in the evaluated corpora: untrusted context gaining authority, unauthorized tool execution, and unsafe output export. It does so by separating model text from policy authority. The evidence layer makes the resulting containment claim checkable offline.
 
+\textbf{The honest-producer trust boundary.} The sharpest limit of any attestation is that it binds integrity and issuer, not truth. The gateway and its evidence producer sit inside the trusted computing base: a signature proves that the bundle was issued by the key holder and not modified afterward, but it cannot prove that the gateway emitted a faithful receipt for the run it actually performed. A gateway that executed an unsafe action and then signed a clean receipt would pass every check in this paper. We state this assumption explicitly rather than hide it: VCA is meaningful only insofar as the producer is honest and the signing key is uncompromised. Two design choices narrow, but do not close, this gap. First, boundary outcomes are computed by deterministic code over structured metadata, so the receipt records a mechanical decision rather than a model self-report. Second, the bundle binds referenced evidence by hash and the verifier recomputes those hashes, so post-hoc edits are rejected. Closing the gap requires an independent oracle that observes consequences without trusting the producer; we regard producer-independent witnessing as the central direction for future work.
+
 The system does not prove semantic harmlessness. An attacker outside the threat model could compromise the signing key, the host, or the evidence producer. A malicious operator could choose not to record evidence. A broader real-world deployment would also need operational key management, monitoring, and incident response. These are deployment concerns outside the paper's research prototype claim.
 
 \section{Ethics and Responsible Release}
@@ -296,7 +287,7 @@ This is defensive research. The paper and artifact avoid releasing raw harmful j
 
 \section{Limitations and Future Work}
 
-The main external-validity limitation is that the evaluation uses frozen synthetic corpora and replay artifacts, not production traffic. The live model capture origin is self-reported and signed into evidence, but the verifier does not rehash model weights or prove the original GPU environment. Stage 3X reports uneven replay depth; this is honest, but it means the public chain is not uniformly fully reproduced. Future work should include third-party artifact evaluation, broader public benchmarks, deployment key-management analysis, and independent replication on additional agent stacks.
+The main external-validity limitation is that the evaluation uses frozen synthetic corpora and replay artifacts, not production traffic; the perfect per-cell counts are fixture-validity checks on a self-authored corpus, reported with 95\% Clopper-Pearson intervals that remain upper-bounded near-zero results on small samples rather than demonstrated true zeros. The external observation rests on a single real guardrail (one model); the second external artifact is a synthetic advisory-invariance fixture, not an independent guardrail, so we make no multi-guardrail or comparative claim. The live model capture origin is self-reported and signed into evidence, but the verifier does not rehash model weights or prove the original GPU environment. Stage 3X reports uneven replay depth; this is honest, but it means the public chain is not uniformly fully reproduced. Most fundamentally, as the security analysis states, the attestation assumes an honest evidence producer: a compromised or dishonest gateway is outside what a signature can detect. Future work should therefore prioritize producer-independent witnessing, alongside third-party artifact evaluation, broader and non-synthetic benchmarks, additional real external guardrails, deployment key-management analysis, and independent replication on further agent stacks.
 
 \section{Conclusion}
 

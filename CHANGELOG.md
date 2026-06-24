@@ -1,5 +1,22 @@
 ## Change Log
 
+## [aisec-2026-paper-reviewer-hardening] — 2026-06-24 — AISec paper reviewer-hardening (integrity pass)
+
+**Raouf:** Acted on a strict line-by-line reviewer pass and corrected an overclaim the prior revision introduced. Stage 3V-A had been dressed as a second external "guardrail comparator"; investigation showed it is a synthetic, self-authored fixture (`fixture_provenance: synthetic_deterministic`), so it is now honestly reframed as an **advisory-invariance check** with no detection/ASR claim, and the misleading comparator table was removed. The **real** Llama Guard 4 12B capture is now the single, clearly-labelled external reference and leads the evaluation (its 138/150 allow rate framed as the structural input-only blind spot, not a vendor weakness). Added exact 95% Clopper-Pearson intervals to all small-n rates (0/30 → [0,0.12], 0/150 → [0,0.02], 138/138 → [0.97,1]); demoted the self-authored perfect counts to fixture-validity. Added a **honest-producer trust-boundary** subsection to the security analysis (a dishonest gateway that signs a clean receipt is outside what a signature detects; producer-independent witnessing is the open problem). Replaced the contentless JSON-signing flowchart (Fig 2) with a context-provenance authority-decision figure. Collapsed five contributions to three. Abstract reframed around the real finding. All 12 numeric/provenance claims cross-check against frozen evidence; identity and overclaim scans clean.
+
+### Changed
+
+- `Papers/llm-shield-aisec2026/main.tex` — abstract, contributions (5→3), new provenance figure (replaces JSON flowchart), Stage 3L CIs + fixture-validity framing, Stage 3V-B/3V-A reorder + honest reframing, removed comparator table, results-table CIs, honest-producer security subsection, limitations.
+- `Papers/llm-shield-aisec2026/artifact/reproduce-paper-claims.sh` — 3V-A check now asserts synthetic provenance + advisory-invariance (no ASR claim); label fixes.
+- `Papers/llm-shield-aisec2026/audit/repo-claim-audit.md` — 3V-A row reframed as synthetic advisory-invariance.
+- `Papers/llm-shield-aisec2026/dist/llm-shield-aisec2026-anonymous.tar.gz` — rebuilt.
+
+### Verified
+
+- `make` clean (0 undefined refs, 6 pages, all 8 floats referenced); reproduce script 6/6; 12/12 numbers match evidence; overclaim + identity scans clean.
+
+---
+
 ## [aisec-2026-paper-evidence-depth] — 2026-06-24 — AISec paper evidence-depth revision
 
 **Raouf:** Deepened the AISec 2026 LLM Shield paper on the reviewer Evidence axis using only already-frozen evidence (no new runs, no `src/llmShield` change). Added a benign false-positive rate `0/30` (hard-negative control), a per-boundary ablation of the 120 input-miss cases (context-guard `72`, tool-gate `24`, output-firewall `24`), a second external-guardrail reference (Stage 3V-A recorded generic: external-only ASR `80/150`, contained `80/80`, external+gateway `0/150`) alongside the live Llama Guard 4 point in a new comparator table, and the Stage 3V-B compute environment in-paper (LG4-12B, input-only greedy, bnb-8bit, RTX 3090 24GB, transformers preview). Abstract and claims table updated for two external references. The reviewer reproduction script (now 6/6) and the repo-claim-audit ledger were extended; the anonymous tarball rebuilt and re-scanned.
