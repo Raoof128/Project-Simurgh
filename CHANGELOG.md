@@ -1,5 +1,21 @@
 ## Change Log
 
+## [stage-1-live-verified-inconclusive] — 2026-06-24 — Live OpenAI AgentDojo harness verified (result inconclusive, honestly)
+
+**Raouf:** Ran the Stage 1-LIVE harness end-to-end against the real OpenAI API on a user-supplied burner key (since revoked). The harness WORKS: fixed two first-run bugs live (AgentDojo `NullLogger` does not set logdir on __enter__ -> use `OutputLogger`; `SuiteResults` is a TypedDict -> subscript access), added an injection-task cap and a model flag. HONEST OUTCOME: the result is inconclusive and NOT dressed up. gpt-4o-mini (12x6): benign utility 1/12 (~8%), targeted ASR 0/72 -- the agent is too weak to do its own tasks, so it is also never productively hijacked (degenerate, same failure mode as deterministic 3J). gpt-4o-2024-05-13 (the capable model) could not run: the test key's org is on a 30k TPM tier and each AgentDojo call is ~30k tokens -> immediate 429. Conclusion: a valid live-agent test needs a capable model + adequate rate limits = genuine future work. NO live evidence numbers committed (the degenerate run is not a result). The key never touched any committed file (verified). No `src/llmShield` change; no paper results claim.
+
+### Changed
+
+- `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/stage1_live_runner.py` -- live-run fixes (OutputLogger context, TypedDict access, `--max-injection-tasks`, model flag).
+- `docs/research/llm-shield/evidence/stage-1-live/README.md` -- honest live findings recorded.
+
+### Verified
+
+- Harness ran live (real OpenAI calls, 84/84 task completion on the mini run); module still import-safe; no key in repo (`grep sk-proj` clean).
+
+---
+
+
 ## [stage-1-live-agentdojo-prep] — 2026-06-24 — Live OpenAI AgentDojo runner (prepared, keyed, opt-in)
 
 **Raouf:** Prepared the one external-validity experiment that needs a paid API: AgentDojo with a REAL OpenAI agent. Stages 3H-3J used a deterministic ground-truth pipeline, so baseline ASR was trivially 0/949 (no LLM to fool, guards never fired). This runner swaps in a live OpenAI model so the baseline ASR is non-zero and the defended run has something real to contain. Gated and safe: `scripts/run-llm-shield-live-agentdojo.sh` no-ops without `OPENAI_API_KEY` (never runs in CI / never spends), the module is import-safe (lazy agentdojo/openai imports), and it reuses the already-unit-tested `build_stage3j_artifacts` aggregator. HONEST STATUS: the live pipeline construction is UNVERIFIED until the first keyed run and may need iteration; NO evidence numbers are committed (the evidence dir holds only a README). Metadata-only output. No `src/llmShield` change.

@@ -33,7 +33,7 @@ BENCHMARK_VERSION = "v1.2"
 def _rows_from_results(results, *, defence: str, model: str) -> list[dict[str, Any]]:  # pragma: no cover - opt-in
     """Flatten AgentDojo SuiteResults into the row shape build_stage3j_artifacts expects."""
     rows: list[dict[str, Any]] = []
-    for (user_task_id, injection_task_id), utility in sorted(results.utility_results.items()):
+    for (user_task_id, injection_task_id), utility in sorted(results["utility_results"].items()):
         is_security = bool(injection_task_id)
         row: dict[str, Any] = {
             "agentdojo_run_id": f"{defence}:{user_task_id}:{injection_task_id or 'none'}",
@@ -49,13 +49,18 @@ def _rows_from_results(results, *, defence: str, model: str) -> list[dict[str, A
         }
         if is_security:
             row["security_case_id"] = f"{user_task_id}::{injection_task_id}"
-            row["attack_success"] = bool(results.security_results[(user_task_id, injection_task_id)])
+            row["attack_success"] = bool(results["security_results"][(user_task_id, injection_task_id)])
         rows.append(row)
     return rows
 
 
 def run_live(
-    *, model: str, out_dir: str | Path, max_user_tasks: int | None, defended: bool
+    *,
+    model: str,
+    out_dir: str | Path,
+    max_user_tasks: int | None,
+    defended: bool,
+    max_injection_tasks: int | None = None,
 ) -> dict[str, Any]:  # pragma: no cover - opt-in, needs OPENAI_API_KEY + live network
     if not os.environ.get("OPENAI_API_KEY"):
         raise SystemExit("OPENAI_API_KEY not set; this is an opt-in keyed run.")
@@ -67,12 +72,16 @@ def run_live(
         benchmark_suite_with_injections,
         benchmark_suite_without_injections,
     )
+    from agentdojo.logging import OutputLogger
     from agentdojo.task_suite.load_suites import get_suite
 
     suite = get_suite(BENCHMARK_VERSION, SUITE)
     user_tasks = list(suite.user_tasks.keys())
     if max_user_tasks:
         user_tasks = user_tasks[:max_user_tasks]
+    injection_tasks = list(suite.injection_tasks.keys())
+    if max_injection_tasks:
+        injection_tasks = injection_tasks[:max_injection_tasks]
 
     def build_pipeline() -> Any:
         pipeline = AgentPipeline.from_config(
@@ -89,13 +98,23 @@ def run_live(
 
     defence_label = "simurgh_defended" if defended else "baseline"
     pipeline = build_pipeline()
-    benign = benchmark_suite_without_injections(
-        pipeline, suite, logdir=None, force_rerun=True, user_tasks=user_tasks
-    )
-    attack = load_attack(ATTACK, suite, pipeline)
-    security = benchmark_suite_with_injections(
-        pipeline, suite, attack, logdir=None, force_rerun=True, user_tasks=user_tasks
-    )
+    # Benchmark functions require an active logging context (the default NullLogger
+    # only gets its logdir attribute on __enter__). logdir=None keeps traces out of
+    # the repo; our committed evidence is the aggregated metadata only.
+    with OutputLogger(None):
+        benign = benchmark_suite_without_injections(
+            pipeline, suite, logdir=None, force_rerun=True, user_tasks=user_tasks
+        )
+        attack = load_attack(ATTACK, suite, pipeline)
+        security = benchmark_suite_with_injections(
+            pipeline,
+            suite,
+            attack,
+            logdir=None,
+            force_rerun=True,
+            user_tasks=user_tasks,
+            injection_tasks=injection_tasks,
+        )
     rows = _rows_from_results(benign, defence=defence_label, model=model) + _rows_from_results(
         security, defence=defence_label, model=model
     )
@@ -123,9 +142,16 @@ def main(argv: list[str] | None = None) -> int:  # pragma: no cover - opt-in
     p.add_argument("--model", default="gpt-4o-mini-2024-07-18")
     p.add_argument("--out", required=True)
     p.add_argument("--max-user-tasks", type=int, default=5, help="cost control")
+    p.add_argument("--max-injection-tasks", type=int, default=None, help="cost control")
     p.add_argument("--defended", action="store_true")
     args = p.parse_args(argv)
-    run_live(model=args.model, out_dir=args.out, max_user_tasks=args.max_user_tasks, defended=args.defended)
+    run_live(
+        model=args.model,
+        out_dir=args.out,
+        max_user_tasks=args.max_user_tasks,
+        defended=args.defended,
+        max_injection_tasks=args.max_injection_tasks,
+    )
     return 0
 
 
