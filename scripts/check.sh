@@ -263,6 +263,7 @@ if grep -RIEn \
     --include='*' \
     --exclude-dir=node_modules \
     --exclude-dir=.git \
+    --exclude-dir='.venv*' \
     --exclude="$LOG_DIR" \
     2>/dev/null \
   | grep -v "check.sh:" \
@@ -279,6 +280,7 @@ if grep -RIEn \
     --exclude-dir=node_modules \
     --exclude-dir=.git \
     --exclude-dir="$LOG_DIR" \
+    --exclude-dir='.venv*' \
     --exclude=.env.example \
     --exclude=check.sh \
     2>/dev/null >> "$SECRET_LOG"; then : ; fi
@@ -1169,7 +1171,7 @@ else
       DOTNET_BIN=".tools/dotnet/dotnet.exe"
     fi
   fi
-  if [[ -n "$DOTNET_BIN" ]]; then
+  if [[ -n "$DOTNET_BIN" ]] && "$DOTNET_BIN" --list-sdks 2>/dev/null | grep -Eq '^(8|9|[1-9][0-9])\.'; then
     if "$DOTNET_BIN" test tools/simurgh-daemon-windows/SimurghDaemon.Windows.sln > "$LOG_DIR/stage26-dotnet-test.log" 2>&1; then
       pass "Stage 2.6 Windows daemon .NET tests"
     else
@@ -1177,7 +1179,7 @@ else
       tail -80 "$LOG_DIR/stage26-dotnet-test.log"
     fi
   else
-    echo -e "${YELLOW}.NET SDK unavailable — skipping Stage 2.6 Windows daemon .NET tests${NC}"
+    echo -e "${YELLOW}.NET SDK 8+ unavailable — skipping Stage 2.6 Windows daemon .NET tests${NC}"
   fi
 fi
 
@@ -1274,7 +1276,11 @@ if command -v cargo >/dev/null 2>&1; then
   step "Linux Rust daemon fmt + clippy + test (Xvfb mandatory in CI)"
   if (cargo fmt --check --manifest-path tools/simurgh-daemon-linux/Cargo.toml \
       && cargo clippy --manifest-path tools/simurgh-daemon-linux/Cargo.toml --all-targets -- -D warnings \
-      && SIMURGH_REQUIRE_XVFB_TESTS=1 cargo test --manifest-path tools/simurgh-daemon-linux/Cargo.toml) \
+      && if [[ "$(uname -s)" == "Linux" || "${CI:-}" == "true" ]]; then
+        env SIMURGH_REQUIRE_XVFB_TESTS=1 cargo test --manifest-path tools/simurgh-daemon-linux/Cargo.toml
+      else
+        cargo test --manifest-path tools/simurgh-daemon-linux/Cargo.toml
+      fi) \
       > "$LOG_DIR/stage28-rust-gates.log" 2>&1; then
     pass "Linux Rust daemon: fmt + clippy + test"
   else

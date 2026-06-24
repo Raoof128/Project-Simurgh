@@ -57,13 +57,22 @@ fn start_xvfb(display_num: u32) -> Option<XvfbGuard> {
     None
 }
 
-fn require_xvfb(display_num: u32) -> XvfbGuard {
-    start_xvfb(display_num).unwrap_or_else(|| {
-        panic!(
-            "Xvfb display :{display_num} did not become ready; \
-             verify xvfb can bind and accept local X11 connections"
-        )
-    })
+fn require_xvfb(display_num: u32) -> Option<XvfbGuard> {
+    match start_xvfb(display_num) {
+        Some(guard) => Some(guard),
+        None if std::env::var("SIMURGH_REQUIRE_XVFB_TESTS").is_ok() => {
+            panic!(
+                "Xvfb display :{display_num} did not become ready; \
+                 verify xvfb can bind and accept local X11 connections"
+            )
+        }
+        None => {
+            eprintln!(
+                "Xvfb display :{display_num} did not become ready; skipping local integration case"
+            );
+            None
+        }
+    }
 }
 
 static DISPLAY_LOCK: OnceLock<std::sync::Mutex<()>> = OnceLock::new();
@@ -87,7 +96,9 @@ fn scan_returns_summary_against_empty_xvfb_root() {
         return;
     }
     let _g = lock();
-    let _xvfb = require_xvfb(99);
+    let Some(_xvfb) = require_xvfb(99) else {
+        return;
+    };
     std::env::set_var("DISPLAY", ":99");
     let summary = scan();
     assert_eq!(summary.x11_managed_window_count, 0);
@@ -116,7 +127,9 @@ fn scan_counts_managed_above_and_fullscreen_windows() {
         return;
     }
     let _g = lock();
-    let _xvfb = require_xvfb(100);
+    let Some(_xvfb) = require_xvfb(100) else {
+        return;
+    };
     std::env::set_var("DISPLAY", ":100");
 
     let (conn, screen_num) = x11rb::connect(None).expect("connect");
@@ -211,7 +224,9 @@ fn scan_counts_override_redirect_root_children() {
         return;
     }
     let _g = lock();
-    let _xvfb = require_xvfb(101);
+    let Some(_xvfb) = require_xvfb(101) else {
+        return;
+    };
     std::env::set_var("DISPLAY", ":101");
 
     let (conn, screen_num) = x11rb::connect(None).expect("connect");
