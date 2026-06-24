@@ -1,5 +1,16 @@
 ## Change Log
 
+## [stage-1-live-model-agnostic] — 2026-06-24 — Live runner accepts any OpenAI model + reasoning effort
+
+**Raouf:** Made the Stage 1-LIVE runner model-agnostic so it can use current/future OpenAI models (e.g. a gpt-5.x reasoning model) that AgentDojo 0.1.30  models enum does not know. Builds the OpenAI LLM element directly with the raw model string and passes it as PipelineConfig(llm=<element>), which bypasses the enum; added --reasoning-effort (none/low/medium/high/xhigh) plumbed into OpenAILLM. Import-safe; no key used. Still opt-in and gated; no live numbers committed.
+
+### Changed
+
+- `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/stage1_live_runner.py` — raw-model OpenAILLM construction + reasoning_effort flag.
+
+---
+
+
 ## [stage-1-live-verified-inconclusive] — 2026-06-24 — Live OpenAI AgentDojo harness verified (result inconclusive, honestly)
 
 **Raouf:** Ran the Stage 1-LIVE harness end-to-end against the real OpenAI API on a user-supplied burner key (since revoked). The harness WORKS: fixed two first-run bugs live (AgentDojo `NullLogger` does not set logdir on __enter__ -> use `OutputLogger`; `SuiteResults` is a TypedDict -> subscript access), added an injection-task cap and a model flag. HONEST OUTCOME: the result is inconclusive and NOT dressed up. gpt-4o-mini (12x6): benign utility 1/12 (~8%), targeted ASR 0/72 -- the agent is too weak to do its own tasks, so it is also never productively hijacked (degenerate, same failure mode as deterministic 3J). gpt-4o-2024-05-13 (the capable model) could not run: the test key's org is on a 30k TPM tier and each AgentDojo call is ~30k tokens -> immediate 429. Conclusion: a valid live-agent test needs a capable model + adequate rate limits = genuine future work. NO live evidence numbers committed (the degenerate run is not a result). The key never touched any committed file (verified). No `src/llmShield` change; no paper results claim.

@@ -61,6 +61,7 @@ def run_live(
     max_user_tasks: int | None,
     defended: bool,
     max_injection_tasks: int | None = None,
+    reasoning_effort: str | None = None,
 ) -> dict[str, Any]:  # pragma: no cover - opt-in, needs OPENAI_API_KEY + live network
     if not os.environ.get("OPENAI_API_KEY"):
         raise SystemExit("OPENAI_API_KEY not set; this is an opt-in keyed run.")
@@ -84,8 +85,18 @@ def run_live(
         injection_tasks = injection_tasks[:max_injection_tasks]
 
     def build_pipeline() -> Any:
+        # Build the OpenAI LLM element directly with the RAW model string. This
+        # bypasses AgentDojo 0.1.30's ModelsEnum (which only knows 2024-era names),
+        # so any current/future OpenAI model (e.g. a gpt-5.x reasoning model) works,
+        # and lets us pass reasoning_effort. PipelineConfig(llm=<element>) skips the enum.
+        import openai
+        from agentdojo.agent_pipeline.llms.openai_llm import OpenAILLM
+
+        llm = OpenAILLM(openai.OpenAI(), model, reasoning_effort=reasoning_effort or None)
+        if not getattr(llm, "name", None):
+            llm.name = model
         pipeline = AgentPipeline.from_config(
-            PipelineConfig(llm=model, defense=None, system_message_name=None, system_message=None)
+            PipelineConfig(llm=llm, defense=None, system_message_name=None, system_message=None)
         )
         if defended:
             # Insert the in-loop Simurgh mediating defence (routes each step through the
@@ -143,6 +154,12 @@ def main(argv: list[str] | None = None) -> int:  # pragma: no cover - opt-in
     p.add_argument("--out", required=True)
     p.add_argument("--max-user-tasks", type=int, default=5, help="cost control")
     p.add_argument("--max-injection-tasks", type=int, default=None, help="cost control")
+    p.add_argument(
+        "--reasoning-effort",
+        default=None,
+        choices=["none", "low", "medium", "high", "xhigh"],
+        help="for reasoning models (e.g. gpt-5.x)",
+    )
     p.add_argument("--defended", action="store_true")
     args = p.parse_args(argv)
     run_live(
@@ -151,6 +168,7 @@ def main(argv: list[str] | None = None) -> int:  # pragma: no cover - opt-in
         max_user_tasks=args.max_user_tasks,
         defended=args.defended,
         max_injection_tasks=args.max_injection_tasks,
+        reasoning_effort=args.reasoning_effort,
     )
     return 0
 
