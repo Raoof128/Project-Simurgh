@@ -1,0 +1,16 @@
+{
+  "schema": "simurgh.stage3z.witness_metrics.v1",
+  "total_runs": 4,
+  "corroborated": 2,
+  "conflicts": 2,
+  "conflicting_run_ids": ["r3", "r4"],
+  "all_fixture_expectations_met": true,
+  "false_accusations": 0,
+  "missed_lies": 0,
+  "falsification": {
+    "claim": "A signed clean receipt for a real leak passes the signature check but is caught by the independent witness.",
+    "plain_vca_signature_valid": true,
+    "witness_caught_lie": true,
+    "holds": true
+  }
+}

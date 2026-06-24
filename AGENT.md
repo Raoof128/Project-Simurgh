@@ -2,6 +2,16 @@
 
 ## Agent Change Log
 
+### 2026-06-24 (Australia/Sydney) — Stage 3Z producer-independent witness
+
+**Raouf:**
+
+- **Scope:** Close the honest-producer gap with a built, falsifiable mechanism. Pure offline/key-free; no `src/llmShield` change.
+- **Summary:** Witness cross-checks a signed gateway receipt against an INDEPENDENT consequence oracle (canary sightings at real sinks, channel not derived from the receipt). Self-proof: dishonest gateway signs a clean receipt for a real canary leak — Ed25519 signature verifies (plain verifier fooled) but witness raises claim_conflict. 4 fixtures: 2 corroborated, 2 caught, **0 false accusations, 0 missed lies**, falsification holds.
+- **Files:** `tools/simurgh-attestation/independentWitnessLib.mjs`, `tests/e2e/llm_shield_stage3z_witness_runner.mjs`, `tests/unit/llmShield/stage3zWitness.test.js`, `scripts/reproduce-llm-shield-stage3z.sh`, `docs/research/llm-shield/evidence/stage-3z/**`, `Papers/llm-shield-aisec2026/main.tex`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** reproduce PASS; unit 7/7; paper builds clean (7 pages).
+
+
 ### 2026-06-24 (Australia/Sydney) — Stage 3Y third-party injection corpus (external validity)
 
 **Raouf:**

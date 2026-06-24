@@ -1,5 +1,22 @@
 ## Change Log
 
+## [stage-3z-producer-independent-witness] — 2026-06-24 — Producer-independent witness (honest-producer gap closed)
+
+**Raouf:** Stage 3Z turns the paper's deepest acknowledged hole — the honest-producer gap — from "future work" into a built, falsifiable mechanism. A VCA signature proves issuer+integrity, not truth: a gateway can sign a CLEAN receipt for a dirty run and pass every signature/structure check. The witness cross-checks each signed receipt against an INDEPENDENT consequence oracle (canary/honeytoken sightings at the real export/tool sinks) whose channel is not derived from the receipt. Falsifiable self-proof: a dishonest gateway signs a clean receipt for a run that leaks a canary — its Ed25519 signature still verifies (plain verifier fooled) yet the witness raises a claim_conflict. 4 fixtures: 2 corroborated, 2 caught, **0 false accusations, 0 missed lies**. Sacred rule preserved: a conservative over-claim is a note, never an accusation. Pure offline/deterministic/key-free; no `src/llmShield` change.
+
+### Added
+
+- `tools/simurgh-attestation/independentWitnessLib.mjs` (pure cross-check lib), `tests/e2e/llm_shield_stage3z_witness_runner.mjs` (self-proof + signature-vs-witness demo), `tests/unit/llmShield/stage3zWitness.test.js` (7/7).
+- `scripts/reproduce-llm-shield-stage3z.sh`, `docs/research/llm-shield/evidence/stage-3z/{metrics,self-proof-results}.json`, `README.md`.
+- Paper: honest-producer subsection upgraded to "built + demonstrated", Stage 3Z eval paragraph + results rows + ladder node, limitations updated.
+
+### Verified
+
+- `scripts/reproduce-llm-shield-stage3z.sh` PASS (falsification holds); `node --test` 7/7; paper builds clean (0 undefined refs, 7 pages).
+
+---
+
+
 ## [stage-3y-thirdparty-injection-corpus] — 2026-06-24 — Third-party attack corpus, component external validity
 
 **Raouf:** Stage 3Y answers the reviewer's deepest critique (Stage 3L is self-authored) with **independently-authored** attacks: 175 payloads rendered from the AgentDojo benchmark (Debenedetti et al., NeurIPS 2024) — 35 injection-task goals × 5 published attack envelopes — driven through the REAL Simurgh boundaries. The result is honest and includes misses: the deterministic input firewall detects only **35/175** (95% CI [0.14, 0.27]) — just the `injecagent` override-phrase family — and misses **140/175** [0.73, 0.86] (even `ignore_previous` evades it via a word insertion + the `iunstructions` typo in AgentDojo's own string). The same 175 payloads as untrusted context are structurally contained **175/175** [0.98, 1.0] with **0** cases of untrusted context gaining authority. That is the paper's thesis under third-party attacks: input guardrails miss; downstream structural containment holds. Evidence is metadata-only (per-case SHA-256 + verdicts, no raw payload text); reproduction needs the Stage 3I AgentDojo venv. No live-agent or production claim. No `src/llmShield` change.
