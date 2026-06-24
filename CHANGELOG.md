@@ -1,5 +1,22 @@
 ## Change Log
 
+## [stage-1-live-agentdojo-prep] — 2026-06-24 — Live OpenAI AgentDojo runner (prepared, keyed, opt-in)
+
+**Raouf:** Prepared the one external-validity experiment that needs a paid API: AgentDojo with a REAL OpenAI agent. Stages 3H-3J used a deterministic ground-truth pipeline, so baseline ASR was trivially 0/949 (no LLM to fool, guards never fired). This runner swaps in a live OpenAI model so the baseline ASR is non-zero and the defended run has something real to contain. Gated and safe: `scripts/run-llm-shield-live-agentdojo.sh` no-ops without `OPENAI_API_KEY` (never runs in CI / never spends), the module is import-safe (lazy agentdojo/openai imports), and it reuses the already-unit-tested `build_stage3j_artifacts` aggregator. HONEST STATUS: the live pipeline construction is UNVERIFIED until the first keyed run and may need iteration; NO evidence numbers are committed (the evidence dir holds only a README). Metadata-only output. No `src/llmShield` change.
+
+### Added
+
+- `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/stage1_live_runner.py` (opt-in, pragma no cover).
+- `scripts/run-llm-shield-live-agentdojo.sh` (key-gated no-op-safe wrapper).
+- `docs/research/llm-shield/evidence/stage-1-live/README.md` (status + run instructions; no numbers).
+
+### Verified
+
+- Wrapper no-ops cleanly without `OPENAI_API_KEY` (exit 0); module imports without agentdojo; `--help` works. Live path intentionally unrun.
+
+---
+
+
 ## [stage-3z-producer-independent-witness] — 2026-06-24 — Producer-independent witness (honest-producer gap closed)
 
 **Raouf:** Stage 3Z turns the paper's deepest acknowledged hole — the honest-producer gap — from "future work" into a built, falsifiable mechanism. A VCA signature proves issuer+integrity, not truth: a gateway can sign a CLEAN receipt for a dirty run and pass every signature/structure check. The witness cross-checks each signed receipt against an INDEPENDENT consequence oracle (canary/honeytoken sightings at the real export/tool sinks) whose channel is not derived from the receipt. Falsifiable self-proof: a dishonest gateway signs a clean receipt for a run that leaks a canary — its Ed25519 signature still verifies (plain verifier fooled) yet the witness raises a claim_conflict. 4 fixtures: 2 corroborated, 2 caught, **0 false accusations, 0 missed lies**. Sacred rule preserved: a conservative over-claim is a note, never an accusation. Pure offline/deterministic/key-free; no `src/llmShield` change.

@@ -2,6 +2,16 @@
 
 ## Agent Change Log
 
+### 2026-06-24 (Australia/Sydney) — Stage 1-LIVE AgentDojo runner prep (keyed, opt-in)
+
+**Raouf:**
+
+- **Scope:** Prepare the live OpenAI AgentDojo experiment so it runs the moment a key is provided. No `src/llmShield` change.
+- **Summary:** Live runner swaps the deterministic 3H-3J pipeline for a real OpenAI agent (non-zero baseline ASR, so the defended run actually contains something). Key-gated wrapper no-ops without `OPENAI_API_KEY`; module import-safe (lazy imports); reuses tested aggregator. HONEST: live path UNVERIFIED until first keyed run; no evidence numbers committed.
+- **Files:** `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/stage1_live_runner.py`, `scripts/run-llm-shield-live-agentdojo.sh`, `docs/research/llm-shield/evidence/stage-1-live/README.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** wrapper no-op exit 0 without key; module imports; `--help` ok.
+
+
 ### 2026-06-24 (Australia/Sydney) — Stage 3Z producer-independent witness
 
 **Raouf:**
