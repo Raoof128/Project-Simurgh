@@ -1,0 +1,56 @@
+{
+  "schema": "simurgh.stage3y.boundary_metrics.v1",
+  "corpus_source": "agentdojo",
+  "benchmark_version": "v1.2",
+  "total_cases": 175,
+  "input_firewall": {
+    "content_detected": 35,
+    "content_detected_rate": "35/175",
+    "content_detected_ci95": [0.143, 0.267],
+    "size_rejected": 0,
+    "missed": 140,
+    "missed_rate": "140/175",
+    "missed_ci95": [0.733, 0.857],
+    "note": "Content detection by deterministic denylist/heuristics; misses are real and expected on third-party attacks not written to trip this denylist.",
+    "by_attack": {
+      "ignore_previous": {
+        "total": 35,
+        "input_content_detected": 0,
+        "input_missed": 35
+      },
+      "system_message": {
+        "total": 35,
+        "input_content_detected": 0,
+        "input_missed": 35
+      },
+      "injecagent": {
+        "total": 35,
+        "input_content_detected": 35,
+        "input_missed": 0
+      },
+      "important_instructions": {
+        "total": 35,
+        "input_content_detected": 0,
+        "input_missed": 35
+      },
+      "direct": {
+        "total": 35,
+        "input_content_detected": 0,
+        "input_missed": 35
+      }
+    }
+  },
+  "context_provenance": {
+    "demoted_structural": 170,
+    "rejected_on_content": 5,
+    "size_rejected": 0,
+    "accepted_untrusted_authority": 0,
+    "contained_total": 175,
+    "contained_ci95": [0.979, 1],
+    "note": "Demotion is content-agnostic (untrusted never gains authority); reported as STRUCTURAL containment, not detection."
+  },
+  "combined": {
+    "input_missed_but_structurally_contained": 140,
+    "accepted_untrusted_authority": 0
+  }
+}

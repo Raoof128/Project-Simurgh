@@ -1,5 +1,22 @@
 ## Change Log
 
+## [stage-3y-thirdparty-injection-corpus] — 2026-06-24 — Third-party attack corpus, component external validity
+
+**Raouf:** Stage 3Y answers the reviewer's deepest critique (Stage 3L is self-authored) with **independently-authored** attacks: 175 payloads rendered from the AgentDojo benchmark (Debenedetti et al., NeurIPS 2024) — 35 injection-task goals × 5 published attack envelopes — driven through the REAL Simurgh boundaries. The result is honest and includes misses: the deterministic input firewall detects only **35/175** (95% CI [0.14, 0.27]) — just the `injecagent` override-phrase family — and misses **140/175** [0.73, 0.86] (even `ignore_previous` evades it via a word insertion + the `iunstructions` typo in AgentDojo's own string). The same 175 payloads as untrusted context are structurally contained **175/175** [0.98, 1.0] with **0** cases of untrusted context gaining authority. That is the paper's thesis under third-party attacks: input guardrails miss; downstream structural containment holds. Evidence is metadata-only (per-case SHA-256 + verdicts, no raw payload text); reproduction needs the Stage 3I AgentDojo venv. No live-agent or production claim. No `src/llmShield` change.
+
+### Added
+
+- `tests/e2e/llm_shield_stage3y_corpus_extract.py` (corpus renderer, metadata-only manifest), `tests/e2e/llm_shield_stage3y_boundary_runner.mjs` (boundary driver + Clopper-Pearson CIs, `evaluateCases` export), `tests/unit/llmShield/stage3yBoundaryRunner.test.js` (hermetic, 3/3).
+- `scripts/reproduce-llm-shield-stage3y.sh` (extract → drive → privacy check).
+- `docs/research/llm-shield/evidence/stage-3y/{corpus-provenance,metrics,per-case-verdicts}.json`, `README.md`.
+- Paper Stage 3Y subsection + Table (`tab:thirdparty`), ladder node, abstract sentence.
+
+### Verified
+
+- `scripts/reproduce-llm-shield-stage3y.sh` PASS (175 cases, privacy check clean); `node --test` 3/3; paper builds clean (0 undefined refs, 6 pages).
+
+---
+
 ## [aisec-2026-paper-reviewer-hardening] — 2026-06-24 — AISec paper reviewer-hardening (integrity pass)
 
 **Raouf:** Acted on a strict line-by-line reviewer pass and corrected an overclaim the prior revision introduced. Stage 3V-A had been dressed as a second external "guardrail comparator"; investigation showed it is a synthetic, self-authored fixture (`fixture_provenance: synthetic_deterministic`), so it is now honestly reframed as an **advisory-invariance check** with no detection/ASR claim, and the misleading comparator table was removed. The **real** Llama Guard 4 12B capture is now the single, clearly-labelled external reference and leads the evaluation (its 138/150 allow rate framed as the structural input-only blind spot, not a vendor weakness). Added exact 95% Clopper-Pearson intervals to all small-n rates (0/30 → [0,0.12], 0/150 → [0,0.02], 138/138 → [0.97,1]); demoted the self-authored perfect counts to fixture-validity. Added a **honest-producer trust-boundary** subsection to the security analysis (a dishonest gateway that signs a clean receipt is outside what a signature detects; producer-independent witnessing is the open problem). Replaced the contentless JSON-signing flowchart (Fig 2) with a context-provenance authority-decision figure. Collapsed five contributions to three. Abstract reframed around the real finding. All 12 numeric/provenance claims cross-check against frozen evidence; identity and overclaim scans clean.

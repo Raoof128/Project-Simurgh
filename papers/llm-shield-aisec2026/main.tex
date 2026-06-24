@@ -26,7 +26,7 @@
 \affiliation{\institution{Anonymous Institution}\country{}}
 
 \begin{abstract}
-LLM guardrails are commonly evaluated at the point where a user input is accepted or blocked. Agentic failures, however, can occur after this first gate has opened: untrusted retrieved content may gain authority, model output may request a tool, or unsafe text may be exported. This paper presents a provider-agnostic post-guardrail containment and evidence system. The prototype enforces input, context-provenance, tool-invocation, and output-leakage boundaries, then emits metadata-only evidence bundles signed with Ed25519 over canonical JSON. Our motivating observation uses a real input-only guardrail: a frozen live Llama Guard 4 12B capture allowed 138 of 150 malicious cases on a 180-case corpus, not because it is weak but because the malicious instruction is structurally located downstream of the user turn it inspects. The gateway then contained all 138 downstream (contained fraction 138/138, 95\% Clopper-Pearson CI [0.97, 1.0]). On the same corpus the gateway blocked 30/30 direct-input attacks, passed 30 adversarially-shaped benign hard negatives with no false blocks (0/30, 95\% CI [0, 0.12]), and recorded no unauthorized tool execution, context-authority escalation, or unsafe export. A signed VCA bundle verifies offline and rejects tampering, and a synthetic recorded-signal fixture confirms that downstream containment is invariant to the external advisory verdict. We are deliberate about scope: the corpus is synthetic and self-authored, the single real external guardrail is one model, and the signature proves issuer and integrity, not producer honesty, jailbreak immunity, production readiness, model safety, or vendor ranking.
+LLM guardrails are commonly evaluated at the point where a user input is accepted or blocked. Agentic failures, however, can occur after this first gate has opened: untrusted retrieved content may gain authority, model output may request a tool, or unsafe text may be exported. This paper presents a provider-agnostic post-guardrail containment and evidence system. The prototype enforces input, context-provenance, tool-invocation, and output-leakage boundaries, then emits metadata-only evidence bundles signed with Ed25519 over canonical JSON. Our motivating observation uses a real input-only guardrail: a frozen live Llama Guard 4 12B capture allowed 138 of 150 malicious cases on a 180-case corpus, not because it is weak but because the malicious instruction is structurally located downstream of the user turn it inspects. The gateway then contained all 138 downstream (contained fraction 138/138, 95\% Clopper-Pearson CI [0.97, 1.0]). On the same corpus the gateway blocked 30/30 direct-input attacks, passed 30 adversarially-shaped benign hard negatives with no false blocks (0/30, 95\% CI [0, 0.12]), and recorded no unauthorized tool execution, context-authority escalation, or unsafe export. On an independently-authored attack corpus rendered from the AgentDojo benchmark (175 payloads we did not write), the deterministic input firewall detects only 35/175 (95\% CI [0.14, 0.27]) yet all 175 are structurally contained downstream with no untrusted context gaining authority---the same thesis under third-party attacks. A signed VCA bundle verifies offline and rejects tampering, and a synthetic recorded-signal fixture confirms that downstream containment is invariant to the external advisory verdict. We are deliberate about scope: the corpus is synthetic and self-authored, the single real external guardrail is one model, and the signature proves issuer and integrity, not producer honesty, jailbreak immunity, production readiness, model safety, or vendor ranking.
 \end{abstract}
 
 \begin{CCSXML}
@@ -195,14 +195,16 @@ We use only repository evidence that can be traced to files and, where practical
     \node[box, below=of l] (m) {Stage 3M\\signed VCA bundle};
     \node[box, below=of m] (vb) {Stage 3V-B\\real external guardrail};
     \node[box, below=of vb] (va) {Stage 3V-A\\advisory-invariance check};
-    \node[box, below=of va] (x) {Stage 3X\\public reproduction chain};
+    \node[box, below=of va] (y) {Stage 3Y\\third-party attack corpus};
+    \node[box, below=of y] (x) {Stage 3X\\public reproduction chain};
     \draw[arr] (l) -- (m);
     \draw[arr] (m) -- (vb);
     \draw[arr] (vb) -- (va);
-    \draw[arr] (va) -- (x);
+    \draw[arr] (va) -- (y);
+    \draw[arr] (y) -- (x);
   \end{tikzpicture}
   \caption{Evaluation ladder. Each stage contributes a different part of the paper claim and has a separate evidence artifact.}
-  \Description{A vertical ladder of Stage 3L, Stage 3M, Stage 3V-B, Stage 3V-A, and Stage 3X.}
+  \Description{A vertical ladder of Stage 3L, Stage 3M, Stage 3V-B, Stage 3V-A, Stage 3Y, and Stage 3X.}
   \label{fig:ladder}
 \end{figure}
 
@@ -215,6 +217,8 @@ Containment of the 120 input-miss cases is distributed across the downstream bou
 \textbf{Stage 3V-B (the real external guardrail).} A single real input-only guardrail anchors the external observation: a frozen live Llama Guard 4 12B capture (\texttt{meta-llama/Llama-Guard-4-12B}, one input-only greedy pass, temperature 0, 20 new tokens, 8-bit quantization, one NVIDIA RTX 3090 24GB GPU, transformers v4.51.3 Llama-Guard preview, PyTorch 2.8.0, CUDA 12.8). As an input-only signal it allowed 138 of 150 malicious cases. We read this not as a weakness of the model but as the structural blind spot of any input-only guardrail: in the 120 input-miss cases the malicious instruction is located downstream of the user turn the guardrail inspects. The gateway then contained all 138 downstream (138/138, 95\% CI [0.97, 1.0]), and external-plus-gateway targeted success was 0/150. The frozen capture, not the model, is replayed in CI (\texttt{model\_reexecuted\_in\_ci} is false); the live capture origin is self-reported and signed into evidence but not independently re-derived. This is one model and a boundary study, not a vendor comparison or ranking.
 
 \textbf{Stage 3V-A (advisory-invariance check, not a second guardrail).} We have only one real external guardrail, so we do not claim a second comparator. Instead we use a synthetic, deterministic recorded-signal fixture---spanning allow, warn, and block verdicts that we authored---to test a structural property of the design: the gateway's downstream containment outcome does not depend on the external advisory verdict. Across the fixture the containment outcome was identical regardless of whether the synthetic signal said allow, warn, or block. This advisory-invariance is the property that lets the gateway treat any external guardrail, including a future stronger one, as untrusted advice rather than as authority. The fixture's verdicts are authored by us and carry no detection claim, so we report no attack-success rate for it.
+
+\textbf{Stage 3Y (independently-authored attack corpus).} To break the self-authored circularity of Stage 3L, we render a third-party attack corpus from the AgentDojo benchmark~\cite{debenedetti2024agentdojo}: 35 injection-task goals across four suites combined with five published attack envelopes (\texttt{ignore\_previous}, \texttt{system\_message}, \texttt{injecagent}, \texttt{important\_instructions}, \texttt{direct}), for 175 payloads authored by the AgentDojo team, not by us. We drive them through the real boundaries and separate content detection from structural containment (Table~\ref{tab:thirdparty}). The deterministic input firewall detects only 35/175 (95\% CI [0.14, 0.27])---just the \texttt{injecagent} family, which contains an explicit override phrase---and misses 140/175 [0.73, 0.86]; even \texttt{ignore\_previous} evades it because of a word insertion and a typo in AgentDojo's own string. The same 175 payloads, arriving as untrusted context, are structurally contained 175/175 [0.98, 1.0] with zero cases of untrusted context gaining authority, because provenance demotion is content-agnostic. This result is deliberately unflattering to the input layer and is the paper's thesis under independently-authored attacks: input guardrails miss, and downstream structural containment is what holds. Evidence is metadata-only; raw payloads are not committed.
 
 \textbf{Stage 3X.} A public VCA timeline pins 12 signed rungs by tag and commit. We are explicit that ``12/12'' means twelve rungs verified at their declared tier, not twelve full re-executions: 3 rungs are re-run end-to-end, 7 are checked by evidence-hash, and 2 are index-only. The guarantee that holds across all three tiers, and across the historical evidence-hash formats, is the format-independent evidence-root digest.
 
@@ -234,6 +238,22 @@ Stage 3M & Signed VCA bundle & Offline verification & PASS & Signs evidence unde
 Stage 3V-B & Real input-only guardrail (Llama Guard 4 12B) & Downstream-contained after guardrail miss & 138/138 (CI [0.97,1]) & One model; capture self-reported; not a ranking. \\
 Stage 3V-A & Synthetic recorded-signal fixture & Advisory-invariance & invariant & Authored verdicts; no detection claim. \\
 Stage 3X & Public reproduction packet & Rungs passed & 12/12 & Tiered replay (3 reproduce / 7 hash / 2 index). \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+\begin{table*}[t]
+\caption{Stage 3Y: independently-authored AgentDojo attack corpus (175 payloads) through the real boundaries. Content detection is by the deterministic input firewall; structural containment is content-agnostic provenance demotion. Intervals are 95\% Clopper-Pearson.}
+\label{tab:thirdparty}
+\small
+\begin{tabularx}{\textwidth}{Xp{0.16\textwidth}p{0.20\textwidth}X}
+\toprule
+Boundary & Metric & Result (95\% CI) & Reading \\
+\midrule
+Input firewall & Content detection & 35/175 [0.14, 0.27] & Only \texttt{injecagent} (explicit override phrase). \\
+Input firewall & Missed & 140/175 [0.73, 0.86] & Four of five envelopes evade the denylist. \\
+Context provenance & Structural containment & 175/175 [0.98, 1.0] & Untrusted demoted (170) or rejected (5). \\
+Context provenance & Untrusted gained authority & 0 & Core invariant holds on third-party attacks. \\
 \bottomrule
 \end{tabularx}
 \end{table*}

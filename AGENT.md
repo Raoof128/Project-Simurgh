@@ -2,6 +2,15 @@
 
 ## Agent Change Log
 
+### 2026-06-24 (Australia/Sydney) — Stage 3Y third-party injection corpus (external validity)
+
+**Raouf:**
+
+- **Scope:** Break the Stage 3L self-authored-corpus circularity with independently-authored attacks. No `src/llmShield` change.
+- **Summary:** 175 payloads rendered from AgentDojo (35 injection goals × 5 published envelopes) driven through the real boundaries. Honest result incl. misses: input firewall content-detects **35/175** (CI [0.14,0.27]), misses **140/175**; same payloads structurally contained **175/175** with **0** untrusted-authority. Thesis under third-party attacks: input guardrails miss, downstream structural containment holds. Metadata-only evidence (no raw payloads).
+- **Files:** `tests/e2e/llm_shield_stage3y_*`, `tests/unit/llmShield/stage3yBoundaryRunner.test.js`, `scripts/reproduce-llm-shield-stage3y.sh`, `docs/research/llm-shield/evidence/stage-3y/**`, `Papers/llm-shield-aisec2026/main.tex`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** reproduce PASS (175, privacy clean); unit 3/3; paper builds clean (6 pages).
+
 ### 2026-06-24 (Australia/Sydney) — AISec 2026 paper reviewer-hardening (integrity pass)
 
 **Raouf:**
