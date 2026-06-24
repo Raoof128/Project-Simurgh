@@ -2,6 +2,17 @@
 
 ## Agent Change Log
 
+### 2026-06-24 (Australia/Sydney) — AISec 2026 paper evidence-depth revision
+
+**Raouf:**
+
+- **Scope:** Strengthen the AISec 2026 LLM Shield paper (`Papers/llm-shield-aisec2026/`) on the reviewer Evidence axis without any new runs — every number traces to already-frozen evidence. No `src/llmShield/**` change.
+- **Summary:** Four additions to `main.tex`: (1) benign false-positive rate `0/30` over the hard-negative control, surfaced in text and Table 3, to show containment is not indiscriminate blocking; (2) a per-boundary ablation (Table 5) of the 120 input-miss cases — context-provenance guard `72`, tool gate `24`, output firewall `24` — sourced from `stage-3l/boundary-breakdown.json`; (3) a second external-guardrail reference point, Stage 3V-A recorded generic guardrail (external-only ASR `80/150`, missed-but-contained `80/80`, external+gateway `0/150`), added to the evaluation ladder and a new comparator Table 4 alongside the live Llama Guard 4 point; (4) the Stage 3V-B compute environment in-paper (LG4-12B, single input-only greedy pass, bnb-8bit, RTX 3090 24GB, transformers v4.51.3 Llama-Guard preview, PyTorch 2.8.0/CUDA 12.8). Abstract and the claims table updated to reflect two external references. The reviewer reproduction script and the repo-claim-audit ledger were extended to cover the new claims; the anonymous tarball was rebuilt and re-scanned.
+- **Files changed:** `Papers/llm-shield-aisec2026/main.tex`, `Papers/llm-shield-aisec2026/artifact/reproduce-paper-claims.sh`, `Papers/llm-shield-aisec2026/audit/repo-claim-audit.md`, `Papers/llm-shield-aisec2026/dist/llm-shield-aisec2026-anonymous.tar.gz`, `AGENT.md`, `CHANGELOG.md`.
+- **Audit hardening (same session):** A second full reviewer-grade audit fixed a broken evidence path in the claims table (`vca-chain-results.json` → `vca-chain-reproduction-results.json`), normalised one British "defence" → "defense", refreshed the stale ladder-figure `\Description` to include Stage 3V-A, pluralised contribution C4 to "two external ... reference runs", and added in-text references for four previously unreferenced floats (`tab:boundaries`, `fig:evidence`, `tab:results`, `tab:repro`). Holistic cross-check: all 19 numeric claims in the paper match frozen evidence; all 6 citations exist and resolve (no `[?]`, no bibtex warnings); identity scan clean.
+- **Venue compliance (re-verified live 2026-06-24):** Confirmed against the live AISec '26 CFP (aisec.cc) + ACM CCS'26 formatting rules it defers to: deadline 2026-07-24 23:59 AoE, HotCRP `aisec26.hotcrp.com`, ≤10 content / ≤12 overall pages, anonymized `sigconf`, GenAI paragraph after references. CCS'26 forbids altering rights-management/formatting defaults, so removed a `\renewcommand\footnotetextcopyrightpermission` override; the ACM default copyright block now renders. Submitting as systems/security research (not a benchmark paper), so the benchmark-link rejection rule does not apply.
+- **Verification:** `make` builds `main.pdf` clean (0 undefined references, 5 pages, all 9 floats referenced); `artifact/reproduce-paper-claims.sh` passes 6/6 against frozen evidence; overclaim scan clean; PDF identity scan clean; `build-anonymous-submission.sh` identity scan passed.
+
 ### 2026-06-20 (Australia/Sydney) — Stage 3M verifiable containment attestation
 
 **Raouf:**

@@ -20,6 +20,15 @@ Verified requirements from official CFP:
 
 Recommendation: Submit as original systems/security research with an anonymous artifact, not as a pure benchmark paper.
 
+### Formatting compliance (re-verified against live CFP 2026-06-24)
+
+- AISec '26 defers to the **ACM CCS'26 main formatting instructions** (unaltered official `sigconf` template).
+- CCS'26 forbids altering rights-management information and formatting defaults (no `savetrees`, negative `\vspace`, `titlesec`, font/margin changes, or removing the copyright/permission block). `main.tex` was corrected to drop a `\renewcommand\footnotetextcopyrightpermission` override so the ACM default copyright block now renders.
+- Class line is `\documentclass[sigconf,anonymous,review]{acmart}`; CCS/CCS-style CCS-concepts, keywords, and CCSXML are retained unaltered.
+- GenAI paragraph is placed **after** the references (does not count toward the page limit), as required.
+- Page budget: 5 content pages (limit 10 content / 12 overall).
+- Benchmark-link rejection rule does **not** apply because the paper is submitted as systems/security research, not a benchmark paper; no de-anonymising artifact link appears in the PDF.
+
 ## Backup: NDSS 2027
 
 Official source: https://www.ndss-symposium.org/ndss2027/submissions/call-for-papers/

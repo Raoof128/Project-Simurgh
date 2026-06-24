@@ -1,5 +1,25 @@
 ## Change Log
 
+## [aisec-2026-paper-evidence-depth] — 2026-06-24 — AISec paper evidence-depth revision
+
+**Raouf:** Deepened the AISec 2026 LLM Shield paper on the reviewer Evidence axis using only already-frozen evidence (no new runs, no `src/llmShield` change). Added a benign false-positive rate `0/30` (hard-negative control), a per-boundary ablation of the 120 input-miss cases (context-guard `72`, tool-gate `24`, output-firewall `24`), a second external-guardrail reference (Stage 3V-A recorded generic: external-only ASR `80/150`, contained `80/80`, external+gateway `0/150`) alongside the live Llama Guard 4 point in a new comparator table, and the Stage 3V-B compute environment in-paper (LG4-12B, input-only greedy, bnb-8bit, RTX 3090 24GB, transformers preview). Abstract and claims table updated for two external references. The reviewer reproduction script (now 6/6) and the repo-claim-audit ledger were extended; the anonymous tarball rebuilt and re-scanned.
+
+### Changed
+
+- `Papers/llm-shield-aisec2026/main.tex` — FPR row + text, ablation Table 5, Stage 3V-A paragraph + comparator Table 4, Stage 3V-B compute sentence, abstract, claims table.
+- `Papers/llm-shield-aisec2026/artifact/reproduce-paper-claims.sh` — added benign-FPR, ablation, and Stage 3V-A checks (6 steps).
+- `Papers/llm-shield-aisec2026/audit/repo-claim-audit.md` — added the four new claim rows with evidence paths.
+- `Papers/llm-shield-aisec2026/dist/llm-shield-aisec2026-anonymous.tar.gz` — rebuilt.
+
+A follow-up full reviewer-grade audit hardened the draft: fixed a broken evidence path in the claims table (`vca-chain-results.json` → `vca-chain-reproduction-results.json`), normalised one British spelling, refreshed the ladder-figure accessibility description, pluralised contribution C4, and added in-text references for four previously unreferenced floats. All 19 numeric claims cross-check against frozen evidence; all 6 citations resolve.
+
+### Verified
+
+- `make` builds `main.pdf` clean (0 undefined references, 5 pages, all 9 floats referenced).
+- `artifact/reproduce-paper-claims.sh` passes 6/6; overclaim and PDF identity scans clean; 19/19 numbers match evidence; 6/6 citations resolve.
+
+---
+
 ## [stage-3m-verifiable-containment-attestation] — 2026-06-20 — Verifiable containment attestation
 
 **Raouf:** Stage 3M turns the Stage 3L containment evidence into an offline-verifiable run-set attestation. The HMAC audit chain remains internal tamper-evidence; a new Ed25519 signature is the external layer so any third party verifies the exported metadata-only bundle with the published public key — no symmetric secret shared. The signature covers `canonicalJson(parse(bundle))` (not file bytes), so reformatting never breaks verification. The bundle embeds metrics, boundary breakdown, recomputed gate results, policy digests, privacy report, a hash-bound 7-file `referenced_evidence` list, and machine-readable `non_claims`; v1 attests the Stage 3L 180-case run-set only (`simurgh.vca.run_set.v1`). The two-tier offline verifier (portable + `--reproduce`) passes every check; tamper tests cover bundle edits, re-signed bad metrics, decorative gate results, edited evidence, wrong key, fingerprint mismatch, and leakage. Public key committed (fingerprint `sha256:875b59ebbee8e6eb6fe34d6e06d60d74434cbcf5ec17acb18d1c9f68e2a06798`); private key never committed; CI verifies only; zero `src/llmShield` change. Honest boundary: it signs the evidence that exists and does not upgrade the Stage 3L audit sample into a full per-case HMAC chain. No jailbreak-immunity / model-safety claim.
