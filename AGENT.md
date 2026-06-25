@@ -2,6 +2,16 @@
 
 ## Agent Change Log
 
+### 2026-06-25 (Australia/Sydney) — Stage 1-LIVE egress tool-gate: scoped containment WIN
+
+**Raouf:**
+
+- **Scope:** Egress tool-gate A/B on Llama-3.3-70B-FP8, by PRE-REGISTERED class (frozen before results). No `src/llmShield` change.
+- **Result (clean win in scope):** overall ASR **9/140 → 4/140**; egress fully contained (`egress` 5/40→0/40, `egress_mass_recipient` 1/10→0/10); **all 4 remaining successes are `delete_only`** (the predicted out-of-jurisdiction gap). Benign utility **7/10→7/10, 0 false blocks**. Honest cost: utility-under-attack 91→74; heavy retry of blocked egress (1111/1574). Baseline variance honest (9 vs 10; greedy not bit-deterministic under concurrent batching).
+- **Next (running concurrently):** `authority` mode (egress + destructive-mutation gate) to close the `delete_only` gap.
+- **Files:** `docs/research/llm-shield/evidence/stage-1-live/llama-3.3-70b-fp8/egress-gate/` (+ RESULTS.md, byclass-output.txt), `AGENT.md`, `CHANGELOG.md`.
+
+
 ### 2026-06-25 (Australia/Sydney) — Stage 1-LIVE Llama-3.3-70B A/B (non-zero baseline + honest negative containment)
 
 **Raouf:**

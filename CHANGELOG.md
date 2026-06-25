@@ -1,5 +1,16 @@
 ## Change Log
 
+## [stage-1-live-egress-gate] — 2026-06-25 — Egress tool-gate: scoped containment WIN (by pre-registered class)
+
+**Raouf:** Ran the egress tool-gate A/B (`--defence-mode toolgate`) on Llama-3.3-70B-FP8, same 10×14 set, analysed against the PRE-REGISTERED class taxonomy (frozen before results). RESULT — a clean, scoped, honest win: overall ASR **9/140 → 4/140**, and by class the egress gate eliminated EVERY egress-based attack (`egress` 5/40→0/40, `egress_mass_recipient` 1/10→0/10) while **all 4 remaining defended successes are `delete_only`** — exactly the out-of-jurisdiction gap predicted. Benign utility held **7/10→7/10 with ZERO false-block regressions** (no tax on normal operation). Honest cost: utility-under-attack 91→74 (blocking an injected egress sometimes also derails the agent's legit task; the model retried blocked egress heavily — 1111 blocks/1574 gated). `egress_plus_delete` was already 0/80 at baseline (Llama never completed those multi-step goals undefended). Honest baseline variance noted: same-session baseline 9/140 vs the earlier 10/140 (greedy is not bit-deterministic under vLLM concurrent batching; A/B uses the same-session baseline). The `delete_only` survivors directly size Stage 4C (mutation gate), evaluated next in `authority` mode. Evidence metadata-only. No `src/llmShield` change.
+
+### Added
+
+- `docs/research/llm-shield/evidence/stage-1-live/llama-3.3-70b-fp8/egress-gate/` — baseline + tool-gate per-case rows, metrics, manifest, verbatim by-class analyzer output, RESULTS.md.
+
+---
+
+
 ## [stage-1-live-llama-ab] — 2026-06-25 — Live Llama-3.3-70B A/B: non-zero baseline + HONEST negative containment result
 
 **Raouf:** Ran the first Stage 1-LIVE A/B with a non-zero baseline, on a self-hosted open model. Served `RedHatAI/Llama-3.3-70B-Instruct-FP8-dynamic` (FP8 quant of official Meta Llama-3.3-70B-Instruct) via vLLM on an H100 (greedy, tool-calling), drove the pinned AgentDojo workspace suite (10 user × all 14 injection goals = 140 attack cases + 10 benign, canonical important_instructions). Built a REAL in-loop mediating defence (`live_defence.py`): every tool output is routed through the gateway context-provenance guard (`guardContexts`) and rewritten before the model sees it — demoted → wrapped as untrusted data; rejected → withheld; chunked to ≤4KB so size never false-rejects. RESULT (reported honestly, NOT a containment win): baseline targeted ASR **10/140 (7.1%)**, defended **8/140 (5.7%)** — only 2 of 10 contained, within noise (overlapping 95% CIs); benign utility **8/10 → 6/10**; utility-under-attack **78/140 → 65/140**; 550 tool outputs mediated (531 demoted, 19 rejected). CONCLUSION: `important_instructions` does not match the gateway's content-rejection rules so it is demoted (advisory), and Llama largely obeyed the injection anyway while the wrapping cost utility — **demotion-only provenance wrapping is advisory, not live behavioural containment.** Next stage (separate): action-level tool-gate defence that blocks the malicious tool call itself. Also found+fixed an AgentDojo tool-output serialization bug (modern reasoning models read malformed tool results as empty). All evidence metadata-only; HF/OpenAI keys never touched a committed file. No `src/llmShield` change.
