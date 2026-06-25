@@ -1,51 +1,102 @@
-# Stage 1-LIVE — AgentDojo with a real OpenAI agent (prepared, not yet run)
+# Stage 1-LIVE — AgentDojo with a real agent (run, with caveats)
 
-This is the **prepared, keyed** experiment. It is the only one of the three external-
-validity directions that needs a paid API and so is left runnable behind a key.
+This is the **keyed** external-validity experiment: the pinned AgentDojo benchmark
+driven by a **live model** instead of the deterministic Stage 3H–3J pipeline. It runs
+against either an OpenAI-hosted model or a self-hosted OpenAI-compatible endpoint
+(vLLM on RunPod) — see `RUNPOD-LLAMA-RUNBOOK.md`.
+
+## Results by model
+
+- **`gpt-5.4-mini/`** — frontier OpenAI model. Benign 5/5, **targeted ASR 0** (natively
+  resists `injecagent` and the canonical `important_instructions`). Honest null: a
+  zero baseline means there is nothing for a downstream layer to contain. (Also where the
+  AgentDojo tool-serialization bug was found and fixed.)
+- **`llama-3.3-70b-fp8/`** — self-hosted open model, the first run with a **non-zero
+  baseline** (ASR 10/140) and the first live A/B of an in-loop gateway defence. Honest
+  finding: **provenance demotion alone does not contain a live model** (ASR 10→8, within
+  noise) and costs utility (benign 8/10 → 6/10). Demotion is advisory, not live behavioural
+  containment; action-level (tool-gate) containment is the next step. See its README.
 
 ## Why it matters
 
-Stages 3H-3J ran AgentDojo with a deterministic ground-truth pipeline, so the
+Stages 3H–3J ran AgentDojo with a deterministic ground-truth pipeline, so the
 **baseline (undefended) attack success was trivially 0/949** — no LLM was present to
-be fooled, and Simurgh's guards never fired. That run therefore cannot show the
-defense doing anything. This stage replaces the deterministic agent with a **live
-OpenAI model**, so the baseline ASR is expected to be **non-zero**, giving the
-defended run something real to contain.
+be fooled, and Simurgh's guards never fired. This stage replaces the deterministic
+agent with a real model so the baseline ASR can, in principle, be non-zero, giving a
+downstream containment layer something real to contain.
 
 ## How to run (opt-in, costs tokens)
 
 ```bash
 export OPENAI_API_KEY=sk-...
-scripts/run-llm-shield-live-agentdojo.sh                # baseline (undefended)
-scripts/run-llm-shield-live-agentdojo.sh --defended     # routed through the local gateway
+scripts/run-llm-shield-live-agentdojo.sh --model gpt-5.4-mini --max-user-tasks 5 --max-injection-tasks 6
+scripts/run-llm-shield-live-agentdojo.sh --model gpt-5.4-mini --defended   # routes through the local gateway
 ```
 
-Cost control: defaults to the `workspace` suite, `gpt-4o-mini`, and `--max-user-tasks 5`.
-Defended runs also need the local gateway on `127.0.0.1:33030`.
+Defended runs also need the local Simurgh gateway on `127.0.0.1:33030`. Output
+(metadata-only) lands in this directory.
+
+## What we found (run live 2026-06-25, model `gpt-5.4-mini`)
+
+### 1. A real AgentDojo bug had to be fixed first
+
+AgentDojo 0.1.30's `_message_to_openai` serializes **tool results** as its internal
+content blocks `[{"type":"text","content": ...}]`. OpenAI's schema requires the key
+`text`, not `content`. Older chat models tolerated the malformed part; a modern
+reasoning model (gpt-5.4-mini) reads it as an **empty** tool result and refuses
+("I couldn't retrieve …"), collapsing benign utility to ~0.
+
+This is what made the earlier exploratory runs look degenerate. It is **not** a
+property of the model and **not** Simurgh catching anything — it is a library
+incompatibility. The runner now repairs it (`make_modern_model_compatible`), changing
+only tool-output serialization, never scoring, environments, tasks, or attack
+payloads.
+
+| gpt-5.4-mini, workspace, 5 user tasks | benign utility |
+| --- | --- |
+| AgentDojo 0.1.30 as-shipped            | **0/5** |
+| with the serialization fix             | **5/5** |
+
+A second, smaller fix registers the live model name so AgentDojo's canonical
+`important_instructions` attack (which otherwise hard-fails on post-2024 model
+strings) can name it. This only fills the `{model}` slot of the jailbreak text.
+
+### 2. The honest security result
+
+With the fix applied, against `gpt-5.4-mini` on the `workspace` suite:
+
+- **Benign utility: 5/5** — the model is strong and completes its own tasks.
+- **Targeted ASR: 0** — `0/30` with `injecagent`, and `0/42` with the canonical
+  `important_instructions` attack covering **all 14 injection goals** (×3 user tasks).
+- **Utility-under-attack: 25–42 / case** — the model keeps doing its real task and
+  ignores the injected instructions.
+
+The committed artifacts here are a 5×6 baseline slice (benign 5/5, ASR 0/30,
+utility-under-attack 29/30) produced by the committed runner.
+
+### 3. What this does and does not show
+
+- It **does** show the live harness is now valid for current models, and that a
+  frontier-class model natively resists AgentDojo's stock workspace attacks.
+- It **does not** show a Simurgh containment win, and we will not present it as one.
+  A **zero baseline ASR means there is no successful attack for a downstream
+  containment layer to catch** — a defended run would also be 0, exactly like the
+  deterministic Stage 3J. Demonstrating live containment requires a **non-zero**
+  baseline, i.e. a capable-but-foolable weaker model or a stronger adaptive attack.
+  That remains genuine future work.
 
 ## Honesty / status
 
-- **Harness verified live (2026-06-24).** The runner was executed end-to-end against
-  the real OpenAI API and the pinned AgentDojo `workspace` suite. Two first-run bugs
-  were fixed during that session: AgentDojo's `NullLogger` does not register a logdir
-  on `__enter__` (use `OutputLogger`), and `SuiteResults` is a `TypedDict` (subscript,
-  not attribute access).
-- **The result on the available key was inconclusive, and we will not dress it up.**
-  - `gpt-4o-mini-2024-07-18`, 12 user x 6 injection tasks: benign utility **1/12 (~8%)**,
-    targeted ASR **0/72**. The agent is too weak to complete its own tasks, so it is
-    also never productively hijacked -- a degenerate test, not a defense result (the
-    same failure mode as the deterministic Stage 3J pipeline, for a different reason).
-  - `gpt-4o-2024-05-13` (the capable model that would be a valid test) could not run:
-    the test key's org is on a 30k tokens/min tier and each AgentDojo call is ~30k
-    tokens, so it 429s immediately.
-- **Conclusion:** a valid live-agent evaluation needs a capable model (gpt-4o class)
-  with adequate rate limits. That is genuine future work, not something this key tier
-  supports. The metrics aggregator it reuses (`build_stage3j_artifacts`) is unit-tested.
-- **No live evidence numbers are committed here** -- the degenerate run is not a result.
-  Output, when a valid run happens, is metadata-only (no raw prompts, provider bodies,
-  or API keys; the test key never touched any committed file).
+- **Harness verified live (2026-06-25)** end-to-end against the real OpenAI API and the
+  pinned AgentDojo `workspace` suite, via the committed runner.
+- Earlier exploratory note (kept for the record): `gpt-4o-mini-2024-07-18` looked
+  degenerate (benign ~1/12) and `gpt-4o-2024-05-13` 429'd on the test key's 30k-TPM
+  tier. The benign-utility collapse is now explained by the serialization bug above,
+  not (only) model weakness.
+- **No raw prompts, provider bodies, or API keys** are committed. The test key never
+  touched any committed file. Committed output is aggregated metadata only.
 
-## What a successful run will write here
+## Files written by a run
 
 `workspace-live-metrics.json`, `workspace-live-suite-breakdown.json`,
 `workspace-live-taxonomy.json`, `live-manifest.json` — all metadata-only.

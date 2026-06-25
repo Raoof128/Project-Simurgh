@@ -2,6 +2,41 @@
 
 ## Agent Change Log
 
+### 2026-06-25 (Australia/Sydney) — Stage 1-LIVE Llama-3.3-70B A/B (non-zero baseline + honest negative containment)
+
+**Raouf:**
+
+- **Scope:** First live A/B with a non-zero baseline, on a self-hosted open model (Llama-3.3-70B-FP8 via vLLM on a RunPod H100, greedy). AgentDojo workspace, 10 user × 14 injection = 140 attack cases. No `src/llmShield` change.
+- **Built:** `live_defence.py` — REAL in-loop mediator routing every tool output through the gateway `guardContexts` (demoted → wrapped as untrusted data; rejected → withheld; chunked ≤4KB). Replaces the broken `SimurghDefence` pipeline append.
+- **Result (HONEST, not a win):** baseline ASR **10/140**, defended **8/140** (2 of 10 contained — within noise); benign **8/10 → 6/10**; uua **78/140 → 65/140**; 550 mediated (531 demoted, 19 rejected). `important_instructions` is demoted not rejected; Llama largely obeyed anyway and wrapping cost utility. **Demotion-only provenance wrapping is advisory, not live behavioural containment.**
+- **Next stage (separate):** action-level tool-gate defence (block the malicious tool call itself). Restart staged at `/workspace/setup_and_serve.sh` on the pod's persistent volume.
+- **Files:** `live_defence.py`, `stage1_live_runner.py` (defended wiring + mediation manifest), `docs/research/llm-shield/evidence/stage-1-live/llama-3.3-70b-fp8/` + `gpt-5.4-mini/` + README, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** committed runner produced both arms; defended smoke 2×2 contained (3/4→1/4) then full run honestly weak; no HF/OpenAI key in any committed file (grep-clean).
+
+
+### 2026-06-25 (Australia/Sydney) — Stage 1-LIVE ready for self-hosted open model (RunPod/vLLM)
+
+**Raouf:**
+
+- **Scope:** Make the live runner target a self-hosted OpenAI-compatible endpoint so a capable-but-foolable open model (Llama-3.3-70B-Instruct) can produce a NON-ZERO baseline ASR (gpt-5.4-mini = 0, too aligned). Code only; pod not up yet. No `src/llmShield` change.
+- **Why open/offline:** OpenAI legacy GPT-4 family all retire 2026-10-23 (rots fast); offline open weights = no deprecation, no rate limits, free, reproducible, and matches the 3V-B frozen-capture method. AgentDojo "inverse scaling" → 70B-class (≈42–54% utility) is the foolable sweet spot.
+- **Added:** `--base-url`/`--api-key` (self-hosted needs no real key; manifest stores endpoint HOST only), `--greedy` (temperature=0/seed=0 via `force_greedy_decoding()`), `vllm:` vs `openai:` provider label, RunPod runbook.
+- **Files:** `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/stage1_live_runner.py`, `scripts/run-llm-shield-live-agentdojo.sh`, `docs/research/llm-shield/evidence/stage-1-live/RUNPOD-LLAMA-RUNBOOK.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** module imports; `--help` shows new flags; serialization+greedy patches idempotent. Live numbers pending the pod.
+- **Need from Raouf when pod is up:** the `/v1` proxy base URL, confirmed model id, and that `vllm serve` came up (`/v1/models` returns the id).
+
+
+### 2026-06-25 (Australia/Sydney) — Stage 1-LIVE run on gpt-5.4-mini (real result, honest 0-ASR)
+
+**Raouf:**
+
+- **Scope:** Execute the keyed live AgentDojo run on `gpt-5.4-mini` (burner key, since revoked) and record the honest outcome. No `src/llmShield` change.
+- **Root cause found:** AgentDojo 0.1.30 tool-output serialization bug — internal blocks `[{"type":"text","content":...}]` vs OpenAI's required `text` key → modern reasoning model sees EMPTY tool results and refuses; benign utility collapses to ~0. Verified by message trace + direct API probe. Runner now repairs serialization (plain-string tool content) and registers the live model name so the canonical `important_instructions` attack runs on post-2024 strings. Benchmark scoring/envs/tasks/payloads untouched.
+- **Result (honest):** benign utility **0/5 → 5/5** after fix; targeted ASR **0/30** (injecagent) and **0/42** (canonical, all 14 injection goals); utility-under-attack 25–42/case. Frontier model natively resists → **baseline ASR 0 = nothing to contain; NOT a Simurgh win.** Live non-zero baseline = future work (weaker-capable model or stronger adaptive attack).
+- **Files:** `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/stage1_live_runner.py`, `docs/research/llm-shield/evidence/stage-1-live/README.md` + metadata-only artifacts, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** committed runner reproduces benign 5/5, ASR 0/30 via the real code path; no key in any committed file (grep-clean).
+
+
 ### 2026-06-24 (Australia/Sydney) — Stage 1-LIVE AgentDojo runner prep (keyed, opt-in)
 
 **Raouf:**

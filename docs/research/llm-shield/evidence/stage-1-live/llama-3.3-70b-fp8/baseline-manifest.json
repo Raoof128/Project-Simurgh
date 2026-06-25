@@ -1,0 +1,13 @@
+{
+  "attack": "important_instructions",
+  "benchmark_version": "v1.2",
+  "decoding": "greedy",
+  "defence": "baseline",
+  "endpoint_host": "localhost",
+  "model": "vllm:Llama-3.3-70B-Instruct-FP8",
+  "note": "Live keyed run; metadata-only. Baseline ASR may be zero when the live model natively resists the attack (e.g. gpt-5.4-mini scored 0 ASR on the workspace suite). A zero baseline means there is no successful attack for a downstream containment layer to catch; it is reported honestly, never as a defence win.",
+  "provider_mode": "live",
+  "stage": "1-LIVE",
+  "suite": "workspace",
+  "user_tasks_run": 10
+}

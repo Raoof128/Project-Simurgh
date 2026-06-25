@@ -9,14 +9,25 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
-if [ -z "${OPENAI_API_KEY:-}" ]; then
-  cat <<'MSG'
-[stage-1-live] OPENAI_API_KEY is not set -- nothing to run (this is intentional).
+# A self-hosted OpenAI-compatible endpoint (vLLM on RunPod) is selected with --base-url
+# and needs no real OpenAI key; only the OpenAI-hosted path requires OPENAI_API_KEY.
+case " $* " in *" --base-url "*) HAS_BASE_URL=1 ;; *) HAS_BASE_URL=0 ;; esac
 
-To run the live AgentDojo agent evaluation (costs OpenAI tokens):
+if [ -z "${OPENAI_API_KEY:-}" ] && [ "$HAS_BASE_URL" -eq 0 ]; then
+  cat <<'MSG'
+[stage-1-live] OPENAI_API_KEY is not set and no --base-url given -- nothing to run (intentional).
+
+OpenAI-hosted (costs tokens):
   export OPENAI_API_KEY=sk-...
-  scripts/run-llm-shield-live-agentdojo.sh                 # baseline (undefended)
-  scripts/run-llm-shield-live-agentdojo.sh --defended      # routed through the local gateway
+  scripts/run-llm-shield-live-agentdojo.sh --model gpt-4o-2024-05-13
+
+Self-hosted open model on RunPod (vLLM, no real key needed):
+  # On the pod:  vllm serve meta-llama/Llama-3.3-70B-Instruct \
+  #                --enable-auto-tool-choice --tool-call-parser llama3_json
+  scripts/run-llm-shield-live-agentdojo.sh \
+    --model meta-llama/Llama-3.3-70B-Instruct \
+    --base-url https://<pod>-8000.proxy.runpod.net/v1 --greedy
+  scripts/run-llm-shield-live-agentdojo.sh ... --base-url ... --defended   # through the gateway
 
 Defended runs also need the local Simurgh gateway running on 127.0.0.1:33030.
 Output (metadata-only) lands in docs/research/llm-shield/evidence/stage-1-live/.

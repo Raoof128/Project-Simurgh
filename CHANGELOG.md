@@ -1,5 +1,55 @@
 ## Change Log
 
+## [stage-1-live-llama-ab] — 2026-06-25 — Live Llama-3.3-70B A/B: non-zero baseline + HONEST negative containment result
+
+**Raouf:** Ran the first Stage 1-LIVE A/B with a non-zero baseline, on a self-hosted open model. Served `RedHatAI/Llama-3.3-70B-Instruct-FP8-dynamic` (FP8 quant of official Meta Llama-3.3-70B-Instruct) via vLLM on an H100 (greedy, tool-calling), drove the pinned AgentDojo workspace suite (10 user × all 14 injection goals = 140 attack cases + 10 benign, canonical important_instructions). Built a REAL in-loop mediating defence (`live_defence.py`): every tool output is routed through the gateway context-provenance guard (`guardContexts`) and rewritten before the model sees it — demoted → wrapped as untrusted data; rejected → withheld; chunked to ≤4KB so size never false-rejects. RESULT (reported honestly, NOT a containment win): baseline targeted ASR **10/140 (7.1%)**, defended **8/140 (5.7%)** — only 2 of 10 contained, within noise (overlapping 95% CIs); benign utility **8/10 → 6/10**; utility-under-attack **78/140 → 65/140**; 550 tool outputs mediated (531 demoted, 19 rejected). CONCLUSION: `important_instructions` does not match the gateway's content-rejection rules so it is demoted (advisory), and Llama largely obeyed the injection anyway while the wrapping cost utility — **demotion-only provenance wrapping is advisory, not live behavioural containment.** Next stage (separate): action-level tool-gate defence that blocks the malicious tool call itself. Also found+fixed an AgentDojo tool-output serialization bug (modern reasoning models read malformed tool results as empty). All evidence metadata-only; HF/OpenAI keys never touched a committed file. No `src/llmShield` change.
+
+### Added
+
+- `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/live_defence.py` — in-loop gateway mediator (provenance-demotion of tool outputs) + defended pipeline builder.
+- `docs/research/llm-shield/evidence/stage-1-live/llama-3.3-70b-fp8/` — baseline + defended A/B metadata-only evidence + honest-finding README.
+- `docs/research/llm-shield/evidence/stage-1-live/gpt-5.4-mini/` — relocated gpt-5.4-mini artifacts.
+
+### Changed
+
+- `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/stage1_live_runner.py` — `--defended` now builds the real in-loop pipeline (replaces the broken `SimurghDefence` append); records per-tool-output mediation tally in the manifest.
+- `docs/research/llm-shield/evidence/stage-1-live/README.md` — per-model results index.
+
+---
+
+
+## [stage-1-live-byo-endpoint] — 2026-06-25 — Runner ready for a self-hosted open model (vLLM/RunPod) for a non-zero baseline
+
+**Raouf:** Prepared the Stage 1-LIVE runner to target a self-hosted OpenAI-compatible endpoint so we can drive AgentDojo with a capable-but-foolable open model (Llama-3.3-70B-Instruct) and finally get a **non-zero baseline ASR** (gpt-5.4-mini was too aligned: 0 ASR). Web-checked the model choice (AgentDojo "inverse scaling": GPT-4o 69% util / 53% ASR, Command-R+ 28% / ~1%; open 70B-class ≈ 42–54% util sits in the foolable zone) and the OpenAI deprecation cliff (legacy GPT-4 family all retire 2026-10-23), which is why offline open weights is the better, reproducible path. Added `--base-url`/`--api-key` (no real OpenAI key needed for a self-hosted endpoint; manifest records endpoint HOST only, never credentials), `--greedy` (temperature=0/seed=0 deterministic decoding via a `force_greedy_decoding()` patch, for byte-reproducible replay à la 3V-B), provider-label provenance (`vllm:` vs `openai:`), and a RunPod runbook (vLLM tool-calling serve command + exact run steps). No live numbers yet (pod not up). No `src/llmShield` change.
+
+### Changed
+
+- `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/stage1_live_runner.py` — `force_greedy_decoding()`, endpoint/api-key threading, provider label, manifest endpoint_host/decoding fields, CLI flags.
+- `scripts/run-llm-shield-live-agentdojo.sh` — allow `--base-url` runs without `OPENAI_API_KEY`; self-hosted usage help.
+
+### Added
+
+- `docs/research/llm-shield/evidence/stage-1-live/RUNPOD-LLAMA-RUNBOOK.md` — turnkey RunPod + vLLM runbook for the Llama-3.3-70B agent run.
+
+---
+
+
+## [stage-1-live-gpt54mini-real-result] — 2026-06-25 — Live AgentDojo run on gpt-5.4-mini: harness bug found+fixed, honest 0-ASR baseline
+
+**Raouf:** Ran the Stage 1-LIVE harness live on a user-supplied burner key (since revoked) with `gpt-5.4-mini`. Diagnosed why strong/new models looked degenerate: **AgentDojo 0.1.30 has a tool-output serialization bug** — it sends tool results as its internal content blocks `[{"type":"text","content":...}]`, but OpenAI's schema requires the key `text`; a modern reasoning model reads the malformed part as an EMPTY tool result and refuses, collapsing benign utility. Proven by trace + a direct minimal API probe. The runner now repairs this (`make_modern_model_compatible`): flatten tool content to a plain string, and register the live model name so the canonical `important_instructions` attack can run on post-2024 model strings. Scoring, environments, tasks, and attack payloads are untouched. RESULT (honest): with the fix, `gpt-5.4-mini` workspace benign utility **0/5 → 5/5**; targeted ASR **0/30** (injecagent) and **0/42** (canonical important_instructions, all 14 injection goals × 3 user tasks); utility-under-attack 25–42/case. The frontier model natively resists these attacks, so **baseline ASR is 0 — there is nothing for a downstream containment layer to catch, and this is NOT presented as a Simurgh win** (a defended run would also be 0, like deterministic 3J). A live non-zero baseline needs a capable-but-foolable weaker model or a stronger adaptive attack = genuine future work. Committed artifacts are metadata-only (5×6 baseline slice); the key never touched any committed file (verified). No `src/llmShield` change.
+
+### Changed
+
+- `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/stage1_live_runner.py` — `make_modern_model_compatible()` (tool-serialization fix + model-name registration); default attack → `important_instructions`; honest manifest note.
+- `docs/research/llm-shield/evidence/stage-1-live/README.md` — real findings (bug + fix, 0-ASR honesty).
+
+### Added
+
+- `docs/research/llm-shield/evidence/stage-1-live/workspace-live-{metrics,suite-breakdown,taxonomy}.json`, `live-manifest.json` — metadata-only baseline artifacts.
+
+---
+
+
 ## [stage-1-live-model-agnostic] — 2026-06-24 — Live runner accepts any OpenAI model + reasoning effort
 
 **Raouf:** Made the Stage 1-LIVE runner model-agnostic so it can use current/future OpenAI models (e.g. a gpt-5.x reasoning model) that AgentDojo 0.1.30  models enum does not know. Builds the OpenAI LLM element directly with the raw model string and passes it as PipelineConfig(llm=<element>), which bypasses the enum; added --reasoning-effort (none/low/medium/high/xhigh) plumbed into OpenAILLM. Import-safe; no key used. Still opt-in and gated; no live numbers committed.
