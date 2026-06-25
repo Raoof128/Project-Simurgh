@@ -1,8 +1,29 @@
-# Stage 1-LIVE — Llama-3.3-70B-FP8 live agent: baseline vs in-loop gateway defence
+# Stage 1-LIVE — Llama-3.3-70B-FP8 live agent: baseline vs in-loop defences
 
-Run live on 2026-06-25. The first Stage 1-LIVE run with a **non-zero baseline ASR**, and
-the first live A/B of an in-loop Simurgh gateway defence. Metadata-only; no prompts,
-provider bodies, or keys are committed.
+Run live on 2026-06-25. The first Stage 1-LIVE run with a **non-zero baseline ASR**, and a
+sequence of three live A/Bs of in-loop Simurgh defences. Metadata-only; no prompts, provider
+bodies, or keys are committed.
+
+## Three-experiment arc (all on the same 10×14 = 140-attack set; class labels pre-registered)
+
+| Defence | Mechanism | ASR | Benign | Verdict |
+| --- | --- | --- | --- | --- |
+| Demotion (this dir, below) | advisory: wrap untrusted tool output as "data, don't obey" | 10/140 → 8/140 | 8/10→6/10 | **failed** — advisory, not containment |
+| Egress gate (`egress-gate/`) | structural: block egress to a destination not in the trusted task | 9/140 → **4/140** | 7/10→7/10 (0 false blocks) | **scoped win** — all egress contained; `delete_only` survives |
+| Authority gate (`authority-gate/`) | egress + destructive-mutation gate | 9/140 → **0/140** | 7/10→6/10 (1 regr., likely noise) | **full containment in declared taxonomy** |
+
+Headline: **demotion (asking the model nicely) fails; structural action-gating succeeds.**
+Within a declared action taxonomy (egress + destructive mutation) and a task-grounded
+authorisation policy, a fooled live agent achieved **0 unauthorised side-effects** (all 9
+baseline successes contained), at a cost of ≤1 over-blocked benign task. This is CaMeL's
+capability-gating lineage; Simurgh's lane is the pre-registered, metadata-only,
+by-class **evidence + explicit non-claims**, not the gating idea. Non-claims: not jailbreak
+immunity, not injection prevention, taxonomy excludes non-destructive mutation / financial /
+code (future capability-kernel families).
+
+---
+
+## (Below) Experiment 1 — demotion A/B (the honest negative result)
 
 ## Setup
 

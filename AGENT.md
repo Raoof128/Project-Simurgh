@@ -2,6 +2,16 @@
 
 ## Agent Change Log
 
+### 2026-06-25 (Australia/Sydney) — Stage 1-LIVE authority gate (egress + mutation): FULL containment in taxonomy
+
+**Raouf:**
+
+- **Scope:** Authority gate A/B (egress + destructive-mutation) on Llama-3.3-70B-FP8, by PRE-REGISTERED class. No `src/llmShield` change.
+- **Result:** **ASR 9/140 → 0/140** (all 9 baseline successes contained). `delete_only` 3/10→0/10 (mutation gate closed the egress-gate gap); egress classes stay 0. Honest cost: 1 benign regression (`user_task_8`, recipients are task-named so likely nondeterminism not a true false-block; flagged for per-action attribution); uua 91→80.
+- **Arc complete:** demotion (advisory, failed) → egress gate (scoped win) → authority gate (full containment in declared taxonomy). Non-claims kept (not immunity; excludes non-destructive mutation/financial/code = future kernel families).
+- **Files:** `docs/research/llm-shield/evidence/stage-1-live/llama-3.3-70b-fp8/authority-gate/` (+ RESULTS.md, byclass-output.txt), `AGENT.md`, `CHANGELOG.md`.
+
+
 ### 2026-06-25 (Australia/Sydney) — Stage 1-LIVE egress tool-gate: scoped containment WIN
 
 **Raouf:**
