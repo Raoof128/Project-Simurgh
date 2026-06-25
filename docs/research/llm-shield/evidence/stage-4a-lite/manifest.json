@@ -1,0 +1,38 @@
+{
+  "corpus_provenance": "model-free; reconstructed from AgentDojo workspace v1.2 ground truth; NOT a live trace",
+  "frozen_1live_commit": "37f2de0",
+  "frozen_1live_tag": "v2.9.0-stage-1-live-authority-gate",
+  "inheritance_statement": "The live authority-gate result is inherited only through differential equivalence to the gate that produced the frozen evidence, not through replay of the live model or reconstruction of live per-action traces.",
+  "inherited_evidence": [
+    {
+      "path": "docs/research/llm-shield/evidence/stage-1-live/llama-3.3-70b-fp8/authority-gate/authority-metrics.json",
+      "sha256": "sha256:b88eaa35700970c84fa1e724aadfa7d67165ea840c128d6c20a43ea2c200f3d9"
+    },
+    {
+      "path": "docs/research/llm-shield/evidence/stage-1-live/llama-3.3-70b-fp8/authority-gate/authority-per-case-rows.json",
+      "sha256": "sha256:e0ae1becca5ea63e6b28270dff89f50b3c2e1358e89e1263e2152b9c31e36088"
+    },
+    {
+      "path": "docs/research/llm-shield/evidence/stage-1-live/llama-3.3-70b-fp8/authority-gate/authority-manifest.json",
+      "sha256": "sha256:47e2fd0b0d30a4c9709f93105fbea9fcc80a71a5a3ce89b9f0d380d39da8bdfe"
+    },
+    {
+      "path": "docs/research/llm-shield/evidence/stage-1-live/llama-3.3-70b-fp8/authority-gate/baseline-metrics.json",
+      "sha256": "sha256:1f7b137fdad0033349b7dae11068ba0bc47a80eba77a1b006972d48edcd990ad"
+    },
+    {
+      "path": "docs/research/llm-shield/evidence/stage-1-live/llama-3.3-70b-fp8/authority-gate/baseline-per-case-rows.json",
+      "sha256": "sha256:f405d883ff3633526651e25c66a601188d21c8f1933c06703b9ccf7dd82345b2"
+    }
+  ],
+  "inherited_result": "ASR 9/140 -> 0/140 within the declared taxonomy",
+  "non_claims": {
+    "no_src_llmshield_change": true,
+    "not_a_live_per_action_replay": true,
+    "not_injection_prevention": true,
+    "not_jailbreak_immunity": true,
+    "taxonomy_excludes_nondestructive_mutation_financial_code": true
+  },
+  "schema": "simurgh.stage4a.manifest.v1",
+  "stage": "4A-lite"
+}

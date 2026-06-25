@@ -1,0 +1,13 @@
+{
+  "by_family": {
+    "destructive_mutation": 10,
+    "egress": 16
+  },
+  "by_verdict": {
+    "allow": 3,
+    "block": 23
+  },
+  "requires_confirmation_count": 0,
+  "schema": "simurgh.authority_decision_summary.v1",
+  "total_decisions": 26
+}
