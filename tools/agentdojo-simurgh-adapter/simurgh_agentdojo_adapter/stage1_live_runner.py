@@ -360,9 +360,9 @@ def main(argv: list[str] | None = None) -> int:  # pragma: no cover - opt-in
     p.add_argument(
         "--defence-mode",
         default="demote",
-        choices=["demote", "toolgate", "both"],
-        help="defended-arm mechanism: demote (advisory context demotion), toolgate "
-        "(structural egress-action gate), or both (defence in depth)",
+        choices=["demote", "toolgate", "authority", "both"],
+        help="defended-arm mechanism: demote (advisory context demotion), toolgate (egress "
+        "gate), authority (egress + destructive-mutation gate), or both (authority + demotion)",
     )
     args = p.parse_args(argv)
     run_live(
