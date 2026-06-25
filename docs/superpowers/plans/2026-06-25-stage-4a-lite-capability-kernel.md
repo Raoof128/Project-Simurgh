@@ -10,7 +10,7 @@
 
 ## Global Constraints
 
-- **No `src/llmShield/**` change.** The final `git diff` against `main` must show an empty `src/llmShield` diff. This is the policy-drift discipline; violating it reclassifies the stage.
+- **No `src/llmShield/**`change.** The final`git diff`against`main`must show an empty`src/llmShield` diff. This is the policy-drift discipline; violating it reclassifies the stage.
 - **Kernel is pure and dependency-free:** `capability_kernel.py` does no I/O, no network, no model calls, and imports nothing outside the Python stdlib. It must never import `agentdojo`.
 - **Metadata-only evidence:** never persist raw destinations, raw file names, raw tool args, prompts, or provider bodies. Targets/paths are hashed `sha256:...`. Every record carries `privacy: {raw_prompt_recorded:false, raw_tool_args_recorded:false, raw_destination_recorded:false}`.
 - **Fresh Stage 4A Ed25519 key only.** Never reuse 3M/3X/any prior key. Private key is written to `~/.simurgh/4a-ed25519.pem` (mode 0600), **never committed**. Only `keys/stage4a-public-key.json` + `keys/fingerprint.txt` are committed.
@@ -27,6 +27,7 @@
 ## File Structure
 
 **Create:**
+
 - `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/capability_kernel.py` — pure kernel (Action/Policy/AuthorityDecision + `authorise`).
 - `tools/agentdojo-simurgh-adapter/tests/test_capability_kernel.py` — kernel unit tests.
 - `tools/agentdojo-simurgh-adapter/tests/test_capability_kernel_equivalence.py` — exhaustive differential old-vs-new.
@@ -48,6 +49,7 @@
 - `tests/unit/llmShield/stage4a/lib.test.js` — bundle-builder + summary-shape tests.
 
 **Modify:**
+
 - `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/live_defence.py` — `gate_tool_call` → thin shim over kernel; preserve old logic as `_legacy_gate_tool_call` for differential testing.
 
 ---
@@ -55,10 +57,12 @@
 ### Task 1: Capability Kernel core
 
 **Files:**
+
 - Create: `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/capability_kernel.py`
 - Test: `tools/agentdojo-simurgh-adapter/tests/test_capability_kernel.py`
 
 **Interfaces:**
+
 - Consumes: nothing (stdlib only).
 - Produces:
   - `Action` dataclass: `Action(family: str, verb: str, target_kind: str, target: str)`.
@@ -287,10 +291,12 @@ git commit -m "Raouf: add minimal capability kernel (Stage 4A-lite core)"
 ### Task 2: Refactor `gate_tool_call` to a thin shim + exhaustive differential equivalence
 
 **Files:**
+
 - Modify: `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/live_defence.py` (replace body of `gate_tool_call`; add `_legacy_gate_tool_call`)
 - Test: `tools/agentdojo-simurgh-adapter/tests/test_capability_kernel_equivalence.py`
 
 **Interfaces:**
+
 - Consumes: `actions_for`, `authorise` from Task 1.
 - Produces: `gate_tool_call(function, args, trusted_text, *, gate_mutation=False) -> tuple[str, str, list]` (UNCHANGED signature/return contract: `decision ∈ {"allowed","blocked"}`, `family ∈ {"egress","mutation","none"}`, `detail` list). Adds module-level `_legacy_gate_tool_call(...)` with the verbatim pre-refactor logic, retained for the differential test only.
 
@@ -435,11 +441,13 @@ git commit -m "Raouf: gate_tool_call becomes a thin shim over the capability ker
 ### Task 3: Model-free authority-decision corpus + emitter
 
 **Files:**
+
 - Create: `docs/research/llm-shield/evidence/stage-4a-lite/corpus-actions.json`
 - Create: `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/authority_evidence.py`
 - Test: `tools/agentdojo-simurgh-adapter/tests/test_authority_evidence.py`
 
 **Interfaces:**
+
 - Consumes: `actions_for`, `authorise`, `POLICY_VERSION`, `CAPABILITY_ID` from Task 1.
 - Produces:
   - `build_corpus(prereg: dict) -> list[dict]` — derive the full model-free corpus deterministically from the committed pre-registered injection taxonomy.
@@ -550,6 +558,7 @@ ev.mkdir(parents=True, exist_ok=True)
 print('corpus rows:', len(build_corpus(prereg)))
 "
 ```
+
 Expected: `corpus rows: 25` (22 injection actions across the 14 tasks + 3 benign), written to `docs/research/llm-shield/evidence/stage-4a-lite/corpus-actions.json`.
 
 - [ ] **Step 2: Write the failing test**
@@ -737,6 +746,7 @@ print('decisions:', len(decisions))
 print('summary:', summarise(decisions))
 "
 ```
+
 Expected: prints `decisions: N` (N ≥ 6) and a summary with `requires_confirmation_count: 0`.
 
 - [ ] **Step 7: Commit**
@@ -751,10 +761,12 @@ git commit -m "Raouf: model-free authority-decision corpus + emitter (Stage 4A-l
 ### Task 4: Manifest with digest binding to frozen 1-LIVE evidence
 
 **Files:**
+
 - Create: `docs/research/llm-shield/evidence/stage-4a-lite/manifest.json` (generated, then committed)
 - Test: `tools/agentdojo-simurgh-adapter/tests/test_authority_evidence.py` (extend with a manifest-integrity test)
 
 **Interfaces:**
+
 - Consumes: `sha256_target` (reused for file hashing via a small helper) from Task 3.
 - Produces: `build_manifest(root: pathlib.Path) -> dict` in `authority_evidence.py` — computes sha256 of the frozen 1-LIVE authority-gate evidence files and returns the manifest dict.
 
@@ -852,6 +864,7 @@ ev = root / 'docs/research/llm-shield/evidence/stage-4a-lite'
 print('manifest written')
 "
 ```
+
 Expected: `manifest written`; `manifest.json` lists 5 inherited evidence files each with a sha256.
 
 - [ ] **Step 6: Commit**
@@ -866,6 +879,7 @@ git commit -m "Raouf: manifest digest-binds frozen 1-LIVE authority evidence (St
 ### Task 5: Fresh Stage 4A key + bundle builder + signer
 
 **Files:**
+
 - Create: `docs/research/llm-shield/evidence/stage-4a-lite/keys/stage4a-public-key.json`, `keys/fingerprint.txt`
 - Create: `tools/simurgh-attestation/stage4aAuthorityLib.mjs`
 - Create: `tools/simurgh-attestation/build-4a-authority.mjs`
@@ -873,6 +887,7 @@ git commit -m "Raouf: manifest digest-binds frozen 1-LIVE authority evidence (St
 - Create: `docs/research/llm-shield/evidence/stage-4a-lite/authority-bundle.json` (generated), `authority-bundle.signature.json` (generated)
 
 **Interfaces:**
+
 - Consumes: `canonicalJson`, `sha256Hex`, `fingerprintPublicKey` from `./canonicalise.mjs`; `keygen.mjs`.
 - Produces: `buildBundle({ summary, manifest, decisions }) -> object` (pure, in `stage4aAuthorityLib.mjs`) with schema `simurgh.stage4a.authority_bundle.v1` containing `summary`, `manifest`, `decisions_sha256`, `non_claims`.
 
@@ -885,6 +900,7 @@ node tools/simurgh-attestation/keygen.mjs \
   --out-public docs/research/llm-shield/evidence/stage-4a-lite/keys/stage4a-public-key.json
 node -e "const k=require('fs').readFileSync('docs/research/llm-shield/evidence/stage-4a-lite/keys/stage4a-public-key.json','utf8');console.log(JSON.parse(k).fingerprint)" > docs/research/llm-shield/evidence/stage-4a-lite/keys/fingerprint.txt
 ```
+
 Expected: prints the fingerprint; `~/.simurgh/4a-ed25519.pem` exists (mode 600, never committed); public key + fingerprint committed.
 
 - [ ] **Step 2: Write the bundle builder lib (pure)**
@@ -987,6 +1003,7 @@ main().catch((e) => {
 node tools/simurgh-attestation/build-4a-authority.mjs
 node tools/simurgh-attestation/sign-stage4a-authority.mjs
 ```
+
 Expected: `authority-bundle.json` and `authority-bundle.signature.json` written; signer prints the fingerprint (matching `keys/fingerprint.txt`).
 
 - [ ] **Step 6: Commit**
@@ -1001,10 +1018,12 @@ git commit -m "Raouf: fresh Stage 4A key, bundle builder + local signer"
 ### Task 6: Two-tier verifier + tamper tests
 
 **Files:**
+
 - Create: `tools/simurgh-attestation/verify-stage4a-authority.mjs`
 - Test: `tests/unit/llmShield/stage4a/verifier.test.js`, `tests/unit/llmShield/stage4a/lib.test.js`
 
 **Interfaces:**
+
 - Consumes: `buildBundle` from `stage4aAuthorityLib.mjs`; `canonicalJson`, `sha256Hex`, `fingerprintPublicKey` from `canonicalise.mjs`.
 - Produces: `verifyAuthority({ bundle, sidecar, publicKeyPem, decisions, manifest, reproduce }) -> { ok: boolean, checks: object, reason?: string }`. Fails closed (never throws) on null/garbage input.
 
@@ -1057,7 +1076,8 @@ export function verifyAuthority({
     checks.non_claim_no_live_replay = bundle.non_claims?.not_a_live_per_action_replay === true;
 
     if (reproduce) {
-      if (!decisions || !manifest) return { ok: false, reason: "reproduce needs decisions+manifest", checks };
+      if (!decisions || !manifest)
+        return { ok: false, reason: "reproduce needs decisions+manifest", checks };
       checks.decisions_sha256_recomputed =
         sha256Hex(canonicalJson(decisions)) === bundle.decisions_sha256;
       const rebuilt = buildBundle({ summary: bundle.summary, manifest, decisions });
@@ -1092,7 +1112,14 @@ test("portable verify passes on committed evidence", () => {
   assert.equal(verifyAuthority({ bundle, sidecar, publicKeyPem: pub }).ok, true);
 });
 test("reproduce recomputes decisions digest and rebuilds bundle", () => {
-  const r = verifyAuthority({ bundle, sidecar, publicKeyPem: pub, decisions, manifest, reproduce: true });
+  const r = verifyAuthority({
+    bundle,
+    sidecar,
+    publicKeyPem: pub,
+    decisions,
+    manifest,
+    reproduce: true,
+  });
   assert.equal(r.ok, true);
   assert.equal(r.checks.decisions_sha256_recomputed, true);
   assert.equal(r.checks.bundle_rebuild_matches, true);
@@ -1122,7 +1149,14 @@ test("rejects the wrong key", async () => {
 test("reproduce rejects a tampered decisions file (digest mismatch)", () => {
   const d = JSON.parse(JSON.stringify(decisions));
   d[0].decision.verdict = "allow";
-  const r = verifyAuthority({ bundle, sidecar, publicKeyPem: pub, decisions: d, manifest, reproduce: true });
+  const r = verifyAuthority({
+    bundle,
+    sidecar,
+    publicKeyPem: pub,
+    decisions: d,
+    manifest,
+    reproduce: true,
+  });
   assert.equal(r.ok, false);
 });
 
@@ -1138,7 +1172,10 @@ async function importWrongKey() {
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { buildBundle, STAGE4A_BUNDLE_SCHEMA } from "../../../../tools/simurgh-attestation/stage4aAuthorityLib.mjs";
+import {
+  buildBundle,
+  STAGE4A_BUNDLE_SCHEMA,
+} from "../../../../tools/simurgh-attestation/stage4aAuthorityLib.mjs";
 
 const EV = "docs/research/llm-shield/evidence/stage-4a-lite";
 const summary = JSON.parse(readFileSync(`${EV}/authority-decision-summary.json`, "utf8"));
@@ -1172,16 +1209,18 @@ git commit -m "Raouf: Stage 4A two-tier verifier + tamper tests"
 ### Task 7: RESULTS.md, non-claims, and final integrity gate
 
 **Files:**
+
 - Create: `docs/research/llm-shield/evidence/stage-4a-lite/RESULTS.md`
 - Verify: empty `src/llmShield` diff; full Python + Node suites green.
 
 **Interfaces:**
+
 - Consumes: all prior artifacts.
 - Produces: human-readable RESULTS.md with the honest framing + non-claims.
 
 - [ ] **Step 1: Write RESULTS.md**
 
-```markdown
+````markdown
 # Stage 4A-lite — Minimal Capability Kernel (results)
 
 Stage 4A-lite is an **evidence-architecture** stage. It refactors the two hard-coded
@@ -1232,7 +1271,9 @@ artifact. **No live model was re-run.**
 # portable
 node -e "import('./tools/simurgh-attestation/verify-stage4a-authority.mjs').then(async m=>{const fs=require('fs');const EV='docs/research/llm-shield/evidence/stage-4a-lite';const r=m.verifyAuthority({bundle:JSON.parse(fs.readFileSync(EV+'/authority-bundle.json')),sidecar:JSON.parse(fs.readFileSync(EV+'/authority-bundle.signature.json')),publicKeyPem:JSON.parse(fs.readFileSync(EV+'/keys/stage4a-public-key.json')).public_key_pem});console.log(r.ok?'OK':'FAIL',r.checks)})"
 ```
-```
+````
+
+````
 
 - [ ] **Step 2: Assert the no-`src/llmShield`-change discipline**
 
@@ -1244,7 +1285,8 @@ Expected: **empty output** (no `src/llmShield` change in this stage).
 Run:
 ```bash
 cd tools/agentdojo-simurgh-adapter && python -m pytest tests/ -q && cd ../.. && npm test
-```
+````
+
 Expected: all Python adapter tests PASS; full `npm test` PASS (new stage4a tests included, no regressions).
 
 - [ ] **Step 4: Confirm the private key is not staged anywhere**
@@ -1264,6 +1306,7 @@ git commit -m "Raouf: Stage 4A-lite results + non-claims; final integrity gate"
 ## Self-Review
 
 **Spec coverage:**
+
 - Scope A (abstraction + evidence, no B/C) → Tasks 1–2 (kernel + shim), no new families/over-block fix anywhere. ✓
 - Adapter-side Python kernel, no `src/llmShield` change → Task 1 (pure module), Task 7 Step 2 (empty-diff gate). ✓
 - `gate_tool_call` thin shim → Task 2. ✓

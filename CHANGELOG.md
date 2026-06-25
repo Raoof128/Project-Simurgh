@@ -10,7 +10,6 @@
 
 ---
 
-
 ## [stage-1-live-egress-gate] — 2026-06-25 — Egress tool-gate: scoped containment WIN (by pre-registered class)
 
 **Raouf:** Ran the egress tool-gate A/B (`--defence-mode toolgate`) on Llama-3.3-70B-FP8, same 10×14 set, analysed against the PRE-REGISTERED class taxonomy (frozen before results). RESULT — a clean, scoped, honest win: overall ASR **9/140 → 4/140**, and by class the egress gate eliminated EVERY egress-based attack (`egress` 5/40→0/40, `egress_mass_recipient` 1/10→0/10) while **all 4 remaining defended successes are `delete_only`** — exactly the out-of-jurisdiction gap predicted. Benign utility held **7/10→7/10 with ZERO false-block regressions** (no tax on normal operation). Honest cost: utility-under-attack 91→74 (blocking an injected egress sometimes also derails the agent's legit task; the model retried blocked egress heavily — 1111 blocks/1574 gated). `egress_plus_delete` was already 0/80 at baseline (Llama never completed those multi-step goals undefended). Honest baseline variance noted: same-session baseline 9/140 vs the earlier 10/140 (greedy is not bit-deterministic under vLLM concurrent batching; A/B uses the same-session baseline). The `delete_only` survivors directly size Stage 4C (mutation gate), evaluated next in `authority` mode. Evidence metadata-only. No `src/llmShield` change.
@@ -20,7 +19,6 @@
 - `docs/research/llm-shield/evidence/stage-1-live/llama-3.3-70b-fp8/egress-gate/` — baseline + tool-gate per-case rows, metrics, manifest, verbatim by-class analyzer output, RESULTS.md.
 
 ---
-
 
 ## [stage-1-live-llama-ab] — 2026-06-25 — Live Llama-3.3-70B A/B: non-zero baseline + HONEST negative containment result
 
@@ -39,7 +37,6 @@
 
 ---
 
-
 ## [stage-1-live-byo-endpoint] — 2026-06-25 — Runner ready for a self-hosted open model (vLLM/RunPod) for a non-zero baseline
 
 **Raouf:** Prepared the Stage 1-LIVE runner to target a self-hosted OpenAI-compatible endpoint so we can drive AgentDojo with a capable-but-foolable open model (Llama-3.3-70B-Instruct) and finally get a **non-zero baseline ASR** (gpt-5.4-mini was too aligned: 0 ASR). Web-checked the model choice (AgentDojo "inverse scaling": GPT-4o 69% util / 53% ASR, Command-R+ 28% / ~1%; open 70B-class ≈ 42–54% util sits in the foolable zone) and the OpenAI deprecation cliff (legacy GPT-4 family all retire 2026-10-23), which is why offline open weights is the better, reproducible path. Added `--base-url`/`--api-key` (no real OpenAI key needed for a self-hosted endpoint; manifest records endpoint HOST only, never credentials), `--greedy` (temperature=0/seed=0 deterministic decoding via a `force_greedy_decoding()` patch, for byte-reproducible replay à la 3V-B), provider-label provenance (`vllm:` vs `openai:`), and a RunPod runbook (vLLM tool-calling serve command + exact run steps). No live numbers yet (pod not up). No `src/llmShield` change.
@@ -54,7 +51,6 @@
 - `docs/research/llm-shield/evidence/stage-1-live/RUNPOD-LLAMA-RUNBOOK.md` — turnkey RunPod + vLLM runbook for the Llama-3.3-70B agent run.
 
 ---
-
 
 ## [stage-1-live-gpt54mini-real-result] — 2026-06-25 — Live AgentDojo run on gpt-5.4-mini: harness bug found+fixed, honest 0-ASR baseline
 
@@ -71,10 +67,9 @@
 
 ---
 
-
 ## [stage-1-live-model-agnostic] — 2026-06-24 — Live runner accepts any OpenAI model + reasoning effort
 
-**Raouf:** Made the Stage 1-LIVE runner model-agnostic so it can use current/future OpenAI models (e.g. a gpt-5.x reasoning model) that AgentDojo 0.1.30  models enum does not know. Builds the OpenAI LLM element directly with the raw model string and passes it as PipelineConfig(llm=<element>), which bypasses the enum; added --reasoning-effort (none/low/medium/high/xhigh) plumbed into OpenAILLM. Import-safe; no key used. Still opt-in and gated; no live numbers committed.
+**Raouf:** Made the Stage 1-LIVE runner model-agnostic so it can use current/future OpenAI models (e.g. a gpt-5.x reasoning model) that AgentDojo 0.1.30 models enum does not know. Builds the OpenAI LLM element directly with the raw model string and passes it as PipelineConfig(llm=<element>), which bypasses the enum; added --reasoning-effort (none/low/medium/high/xhigh) plumbed into OpenAILLM. Import-safe; no key used. Still opt-in and gated; no live numbers committed.
 
 ### Changed
 
@@ -82,10 +77,9 @@
 
 ---
 
-
 ## [stage-1-live-verified-inconclusive] — 2026-06-24 — Live OpenAI AgentDojo harness verified (result inconclusive, honestly)
 
-**Raouf:** Ran the Stage 1-LIVE harness end-to-end against the real OpenAI API on a user-supplied burner key (since revoked). The harness WORKS: fixed two first-run bugs live (AgentDojo `NullLogger` does not set logdir on __enter__ -> use `OutputLogger`; `SuiteResults` is a TypedDict -> subscript access), added an injection-task cap and a model flag. HONEST OUTCOME: the result is inconclusive and NOT dressed up. gpt-4o-mini (12x6): benign utility 1/12 (~8%), targeted ASR 0/72 -- the agent is too weak to do its own tasks, so it is also never productively hijacked (degenerate, same failure mode as deterministic 3J). gpt-4o-2024-05-13 (the capable model) could not run: the test key's org is on a 30k TPM tier and each AgentDojo call is ~30k tokens -> immediate 429. Conclusion: a valid live-agent test needs a capable model + adequate rate limits = genuine future work. NO live evidence numbers committed (the degenerate run is not a result). The key never touched any committed file (verified). No `src/llmShield` change; no paper results claim.
+**Raouf:** Ran the Stage 1-LIVE harness end-to-end against the real OpenAI API on a user-supplied burner key (since revoked). The harness WORKS: fixed two first-run bugs live (AgentDojo `NullLogger` does not set logdir on **enter** -> use `OutputLogger`; `SuiteResults` is a TypedDict -> subscript access), added an injection-task cap and a model flag. HONEST OUTCOME: the result is inconclusive and NOT dressed up. gpt-4o-mini (12x6): benign utility 1/12 (~8%), targeted ASR 0/72 -- the agent is too weak to do its own tasks, so it is also never productively hijacked (degenerate, same failure mode as deterministic 3J). gpt-4o-2024-05-13 (the capable model) could not run: the test key's org is on a 30k TPM tier and each AgentDojo call is ~30k tokens -> immediate 429. Conclusion: a valid live-agent test needs a capable model + adequate rate limits = genuine future work. NO live evidence numbers committed (the degenerate run is not a result). The key never touched any committed file (verified). No `src/llmShield` change; no paper results claim.
 
 ### Changed
 
@@ -97,7 +91,6 @@
 - Harness ran live (real OpenAI calls, 84/84 task completion on the mini run); module still import-safe; no key in repo (`grep sk-proj` clean).
 
 ---
-
 
 ## [stage-1-live-agentdojo-prep] — 2026-06-24 — Live OpenAI AgentDojo runner (prepared, keyed, opt-in)
 
@@ -115,7 +108,6 @@
 
 ---
 
-
 ## [stage-3z-producer-independent-witness] — 2026-06-24 — Producer-independent witness (honest-producer gap closed)
 
 **Raouf:** Stage 3Z turns the paper's deepest acknowledged hole — the honest-producer gap — from "future work" into a built, falsifiable mechanism. A VCA signature proves issuer+integrity, not truth: a gateway can sign a CLEAN receipt for a dirty run and pass every signature/structure check. The witness cross-checks each signed receipt against an INDEPENDENT consequence oracle (canary/honeytoken sightings at the real export/tool sinks) whose channel is not derived from the receipt. Falsifiable self-proof: a dishonest gateway signs a clean receipt for a run that leaks a canary — its Ed25519 signature still verifies (plain verifier fooled) yet the witness raises a claim_conflict. 4 fixtures: 2 corroborated, 2 caught, **0 false accusations, 0 missed lies**. Sacred rule preserved: a conservative over-claim is a note, never an accusation. Pure offline/deterministic/key-free; no `src/llmShield` change.
@@ -131,7 +123,6 @@
 - `scripts/reproduce-llm-shield-stage3z.sh` PASS (falsification holds); `node --test` 7/7; paper builds clean (0 undefined refs, 7 pages).
 
 ---
-
 
 ## [stage-3y-thirdparty-injection-corpus] — 2026-06-24 — Third-party attack corpus, component external validity
 

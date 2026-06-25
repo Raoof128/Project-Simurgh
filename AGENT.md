@@ -11,7 +11,6 @@
 - **Arc complete:** demotion (advisory, failed) → egress gate (scoped win) → authority gate (full containment in declared taxonomy). Non-claims kept (not immunity; excludes non-destructive mutation/financial/code = future kernel families).
 - **Files:** `docs/research/llm-shield/evidence/stage-1-live/llama-3.3-70b-fp8/authority-gate/` (+ RESULTS.md, byclass-output.txt), `AGENT.md`, `CHANGELOG.md`.
 
-
 ### 2026-06-25 (Australia/Sydney) — Stage 1-LIVE egress tool-gate: scoped containment WIN
 
 **Raouf:**
@@ -20,7 +19,6 @@
 - **Result (clean win in scope):** overall ASR **9/140 → 4/140**; egress fully contained (`egress` 5/40→0/40, `egress_mass_recipient` 1/10→0/10); **all 4 remaining successes are `delete_only`** (the predicted out-of-jurisdiction gap). Benign utility **7/10→7/10, 0 false blocks**. Honest cost: utility-under-attack 91→74; heavy retry of blocked egress (1111/1574). Baseline variance honest (9 vs 10; greedy not bit-deterministic under concurrent batching).
 - **Next (running concurrently):** `authority` mode (egress + destructive-mutation gate) to close the `delete_only` gap.
 - **Files:** `docs/research/llm-shield/evidence/stage-1-live/llama-3.3-70b-fp8/egress-gate/` (+ RESULTS.md, byclass-output.txt), `AGENT.md`, `CHANGELOG.md`.
-
 
 ### 2026-06-25 (Australia/Sydney) — Stage 1-LIVE Llama-3.3-70B A/B (non-zero baseline + honest negative containment)
 
@@ -33,7 +31,6 @@
 - **Files:** `live_defence.py`, `stage1_live_runner.py` (defended wiring + mediation manifest), `docs/research/llm-shield/evidence/stage-1-live/llama-3.3-70b-fp8/` + `gpt-5.4-mini/` + README, `AGENT.md`, `CHANGELOG.md`.
 - **Verification:** committed runner produced both arms; defended smoke 2×2 contained (3/4→1/4) then full run honestly weak; no HF/OpenAI key in any committed file (grep-clean).
 
-
 ### 2026-06-25 (Australia/Sydney) — Stage 1-LIVE ready for self-hosted open model (RunPod/vLLM)
 
 **Raouf:**
@@ -45,7 +42,6 @@
 - **Verification:** module imports; `--help` shows new flags; serialization+greedy patches idempotent. Live numbers pending the pod.
 - **Need from Raouf when pod is up:** the `/v1` proxy base URL, confirmed model id, and that `vllm serve` came up (`/v1/models` returns the id).
 
-
 ### 2026-06-25 (Australia/Sydney) — Stage 1-LIVE run on gpt-5.4-mini (real result, honest 0-ASR)
 
 **Raouf:**
@@ -56,7 +52,6 @@
 - **Files:** `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/stage1_live_runner.py`, `docs/research/llm-shield/evidence/stage-1-live/README.md` + metadata-only artifacts, `AGENT.md`, `CHANGELOG.md`.
 - **Verification:** committed runner reproduces benign 5/5, ASR 0/30 via the real code path; no key in any committed file (grep-clean).
 
-
 ### 2026-06-24 (Australia/Sydney) — Stage 1-LIVE AgentDojo runner prep (keyed, opt-in)
 
 **Raouf:**
@@ -66,7 +61,6 @@
 - **Files:** `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/stage1_live_runner.py`, `scripts/run-llm-shield-live-agentdojo.sh`, `docs/research/llm-shield/evidence/stage-1-live/README.md`, `AGENT.md`, `CHANGELOG.md`.
 - **Verification:** wrapper no-op exit 0 without key; module imports; `--help` ok.
 
-
 ### 2026-06-24 (Australia/Sydney) — Stage 3Z producer-independent witness
 
 **Raouf:**
@@ -75,7 +69,6 @@
 - **Summary:** Witness cross-checks a signed gateway receipt against an INDEPENDENT consequence oracle (canary sightings at real sinks, channel not derived from the receipt). Self-proof: dishonest gateway signs a clean receipt for a real canary leak — Ed25519 signature verifies (plain verifier fooled) but witness raises claim_conflict. 4 fixtures: 2 corroborated, 2 caught, **0 false accusations, 0 missed lies**, falsification holds.
 - **Files:** `tools/simurgh-attestation/independentWitnessLib.mjs`, `tests/e2e/llm_shield_stage3z_witness_runner.mjs`, `tests/unit/llmShield/stage3zWitness.test.js`, `scripts/reproduce-llm-shield-stage3z.sh`, `docs/research/llm-shield/evidence/stage-3z/**`, `Papers/llm-shield-aisec2026/main.tex`, `AGENT.md`, `CHANGELOG.md`.
 - **Verification:** reproduce PASS; unit 7/7; paper builds clean (7 pages).
-
 
 ### 2026-06-24 (Australia/Sydney) — Stage 3Y third-party injection corpus (external validity)
 

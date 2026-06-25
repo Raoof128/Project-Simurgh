@@ -18,7 +18,11 @@ test("[stage-4] reproduce script is strict-mode and offline (no network)", () =>
   const src = readFileSync(SH, "utf8");
   assert.match(src, /^#!\/usr\/bin\/env bash/, "missing bash shebang");
   assert.match(src, /set -euo pipefail/, "missing strict mode");
-  assert.doesNotMatch(src, /\b(curl|wget|nc|ssh|npm install|pip install)\b/, "script must stay offline");
+  assert.doesNotMatch(
+    src,
+    /\b(curl|wget|nc|ssh|npm install|pip install)\b/,
+    "script must stay offline"
+  );
   assert.doesNotMatch(src, /ed25519\.pem/, "script must never read a private key");
   assert.match(src, /reproduction: PASS/, "script must end in a PASS sentinel");
 });
@@ -34,7 +38,9 @@ test("[stage-4] reproduce script runs green end-to-end (offline, public keys onl
   try {
     out = execFileSync("bash", [SH], { encoding: "utf8", timeout: 120000 });
   } catch (e) {
-    assert.fail(`reproduce script failed (exit ${e.status}):\n${e.stdout || ""}\n${e.stderr || ""}`);
+    assert.fail(
+      `reproduce script failed (exit ${e.status}):\n${e.stdout || ""}\n${e.stderr || ""}`
+    );
   }
   assert.match(out, /STAGE-4 CHAIN CHECK: ALL PASSED/, "python chain check did not pass");
   assert.match(out, /signed bundles: 3\/3 verify/, "signed-bundle reproduce-verify did not pass");

@@ -18,13 +18,13 @@ only as transient harness input during reproduction.
 
 ## Result (honest, and it includes misses)
 
-| Boundary | Metric | Result (95% CI) | Reading |
-| --- | --- | --- | --- |
-| Input firewall | Content detection | **35/175** [0.14, 0.27] | Only the `injecagent` family trips the denylist. |
-| Input firewall | **Missed** | **140/175** [0.73, 0.86] | `ignore_previous`, `system_message`, `important_instructions`, `direct` evade it. |
-| Context provenance | Structural containment | **175/175** [0.98, 1.0] | Untrusted context is demoted (170) or rejected (5); content-agnostic. |
-| Context provenance | Untrusted gained authority | **0** | The core invariant holds on third-party attacks. |
-| Combined | Input-missed-but-contained | **140** | The paper's thesis, shown with external attacks. |
+| Boundary           | Metric                     | Result (95% CI)          | Reading                                                                           |
+| ------------------ | -------------------------- | ------------------------ | --------------------------------------------------------------------------------- |
+| Input firewall     | Content detection          | **35/175** [0.14, 0.27]  | Only the `injecagent` family trips the denylist.                                  |
+| Input firewall     | **Missed**                 | **140/175** [0.73, 0.86] | `ignore_previous`, `system_message`, `important_instructions`, `direct` evade it. |
+| Context provenance | Structural containment     | **175/175** [0.98, 1.0]  | Untrusted context is demoted (170) or rejected (5); content-agnostic.             |
+| Context provenance | Untrusted gained authority | **0**                    | The core invariant holds on third-party attacks.                                  |
+| Combined           | Input-missed-but-contained | **140**                  | The paper's thesis, shown with external attacks.                                  |
 
 The headline is deliberately unflattering to the input layer: a denylist/heuristic
 input firewall detects only ~20% of independently-authored agent-injection envelopes

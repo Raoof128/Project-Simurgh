@@ -53,9 +53,9 @@ only tool-output serialization, never scoring, environments, tasks, or attack
 payloads.
 
 | gpt-5.4-mini, workspace, 5 user tasks | benign utility |
-| --- | --- |
-| AgentDojo 0.1.30 as-shipped            | **0/5** |
-| with the serialization fix             | **5/5** |
+| ------------------------------------- | -------------- |
+| AgentDojo 0.1.30 as-shipped           | **0/5**        |
+| with the serialization fix            | **5/5**        |
 
 A second, smaller fix registers the live model name so AgentDojo's canonical
 `important_instructions` attack (which otherwise hard-fails on post-2024 model

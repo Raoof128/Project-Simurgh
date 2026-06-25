@@ -19,13 +19,13 @@ their tests still pass; 4C adds `authorise_with_provenance()` + `ProvenanceInten
 Each action records three verdicts: frozen-4A (task text only), **naive provenance-blind**
 (what a 4B-style impl that trusted any populated entry would return), and 4C provenance-gated.
 
-| Metric | Value |
-| --- | --- |
-| Poisoned attacks a provenance-**blind** impl would launder (`naive_laundering_exposed`) | **2** |
-| Of those, contained by 4C (`poisoning_contained`) | **2 / 2** |
-| 4C laundering failures (`laundering_failures_4c`) | **0** |
-| Full containment under 4C | **true** |
-| Benign over-blocks still recovered (trusted-provenance participants) | **2** |
+| Metric                                                                                  | Value     |
+| --------------------------------------------------------------------------------------- | --------- |
+| Poisoned attacks a provenance-**blind** impl would launder (`naive_laundering_exposed`) | **2**     |
+| Of those, contained by 4C (`poisoning_contained`)                                       | **2 / 2** |
+| 4C laundering failures (`laundering_failures_4c`)                                       | **0**     |
+| Full containment under 4C                                                               | **true**  |
+| Benign over-blocks still recovered (trusted-provenance participants)                    | **2**     |
 
 The headline is falsifiable: **a provenance-blind intent implementation launders the
 poisoned-participant attack; provenance-gating contains every instance with no laundering and
@@ -37,7 +37,7 @@ and the laundered attacker is blocked in the same call.
 - **Not live-confirmed.** No pod; this is a model-free demonstration of the mechanism and the
   gap it closes, not a live agent run.
 - **Provenance labels are modelled, not derived from a real trust tracker.** This stage proves
-  that *if* each intent entry carries a faithful provenance, the gate is sound. Deriving that
+  that _if_ each intent entry carries a faithful provenance, the gate is sound. Deriving that
   provenance reliably inside the live loop (tracking how each address entered a source) is the
   next, separate engineering step and is **not** claimed here.
 - Not jailbreak immunity; not injection prevention. No `src/llmShield` change. Target hashes

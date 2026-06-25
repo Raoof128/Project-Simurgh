@@ -6,11 +6,11 @@ bodies, or keys are committed.
 
 ## Three-experiment arc (all on the same 10×14 = 140-attack set; class labels pre-registered)
 
-| Defence | Mechanism | ASR | Benign | Verdict |
-| --- | --- | --- | --- | --- |
-| Demotion (this dir, below) | advisory: wrap untrusted tool output as "data, don't obey" | 10/140 → 8/140 | 8/10→6/10 | **failed** — advisory, not containment |
-| Egress gate (`egress-gate/`) | structural: block egress to a destination not in the trusted task | 9/140 → **4/140** | 7/10→7/10 (0 false blocks) | **scoped win** — all egress contained; `delete_only` survives |
-| Authority gate (`authority-gate/`) | egress + destructive-mutation gate | 9/140 → **0/140** | 7/10→6/10 (1 regr., likely noise) | **full containment in declared taxonomy** |
+| Defence                            | Mechanism                                                         | ASR               | Benign                            | Verdict                                                       |
+| ---------------------------------- | ----------------------------------------------------------------- | ----------------- | --------------------------------- | ------------------------------------------------------------- |
+| Demotion (this dir, below)         | advisory: wrap untrusted tool output as "data, don't obey"        | 10/140 → 8/140    | 8/10→6/10                         | **failed** — advisory, not containment                        |
+| Egress gate (`egress-gate/`)       | structural: block egress to a destination not in the trusted task | 9/140 → **4/140** | 7/10→7/10 (0 false blocks)        | **scoped win** — all egress contained; `delete_only` survives |
+| Authority gate (`authority-gate/`) | egress + destructive-mutation gate                                | 9/140 → **0/140** | 7/10→6/10 (1 regr., likely noise) | **full containment in declared taxonomy**                     |
 
 Headline: **demotion (asking the model nicely) fails; structural action-gating succeeds.**
 Within a declared action taxonomy (egress + destructive mutation) and a task-grounded
@@ -39,13 +39,13 @@ code (future capability-kernel families).
 
 ## Result (honest A/B)
 
-| Metric | Baseline (undefended) | Defended (in-loop gateway) |
-| --- | --- | --- |
-| Targeted ASR | **10/140 (7.1%)** | **8/140 (5.7%)** |
-| Benign utility | **8/10** | **6/10** |
-| Utility-under-attack | 78/140 (56%) | 65/140 (46%) |
-| Task completion | 150/150 | 150/150 |
-| Tool outputs mediated | — | 550 (531 demoted, 19 rejected, 0 accepted) |
+| Metric                | Baseline (undefended) | Defended (in-loop gateway)                 |
+| --------------------- | --------------------- | ------------------------------------------ |
+| Targeted ASR          | **10/140 (7.1%)**     | **8/140 (5.7%)**                           |
+| Benign utility        | **8/10**              | **6/10**                                   |
+| Utility-under-attack  | 78/140 (56%)          | 65/140 (46%)                               |
+| Task completion       | 150/150               | 150/150                                    |
+| Tool outputs mediated | —                     | 550 (531 demoted, 19 rejected, 0 accepted) |
 
 ## Conclusion — this is NOT a containment win, and we do not present it as one
 
@@ -67,8 +67,8 @@ tasks. In short:
 This is a deliberately reported negative result. It separates cleanly from the next stage:
 
 - **demotion failed** (advisory only) → **action-level containment is next**: route the
-  agent's *tool calls* through the tool-invocation gate / output-leakage firewall so the
-  malicious *action* is blocked regardless of whether the model was fooled. That is the
+  agent's _tool calls_ through the tool-invocation gate / output-leakage firewall so the
+  malicious _action_ is blocked regardless of whether the model was fooled. That is the
   faithful enforcement of "untrusted content must not gain authority to act," and is left as
   the next Stage 1-LIVE step (tool-gate defence). No claim is made about it here.
 

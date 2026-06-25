@@ -4,7 +4,7 @@ Stage 4B is the first capability **policy upgrade** on top of the 4A-lite kernel
 addresses the one documented 4A cost — the over-block of legitimate "email my meeting
 participants / my contact group" actions whose addresses are not literally typed into the
 task string — by grounding egress in two **trusted intent sources** in addition to the task
-text, *without* widening authority to an attacker address that appears in no source.
+text, _without_ widening authority to an attacker address that appears in no source.
 
 This is **additive**: the frozen 4A `authorise()` (task-string grounding) is untouched and
 all its tests still pass; 4B adds `authorise_with_intent()` + `IntentContext`. There is **no
@@ -24,12 +24,12 @@ Over a model-free corpus that exercises the recovery and its limits, metrics are
 against **ground-truth per-target malice** (`must_block`), so a legitimate participant inside
 an otherwise-malicious case is correctly allowed, never counted as laundering:
 
-| Metric | Value |
-| --- | --- |
-| Recovered over-blocks (benign block→allow via a trusted source) | **4** |
+| Metric                                                            | Value     |
+| ----------------------------------------------------------------- | --------- |
+| Recovered over-blocks (benign block→allow via a trusted source)   | **4**     |
 | Sustained containment (must-block targets still blocked under 4B) | **3 / 3** |
-| Laundering failures (must-block target 4A blocked but 4B allows) | **0** |
-| Full containment preserved | **true** |
+| Laundering failures (must-block target 4A blocked but 4B allows)  | **0**     |
+| Full containment preserved                                        | **true**  |
 
 The attacker address (`mark.black-2134@gmail.com`), present in no intent source, stays
 blocked — including in the mixed-recipient case where a legitimate participant is allowed in

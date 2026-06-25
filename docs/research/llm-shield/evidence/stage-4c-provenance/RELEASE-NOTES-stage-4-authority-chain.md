@@ -30,15 +30,15 @@ This is an evidence-architecture arc. No `src/llmShield` change; no live model w
 
 ## Fresh-clone E2E (verified)
 
-| Check | Result |
-| --- | --- |
-| Regenerate all 10 evidence files from source | byte-identical to committed |
-| Manifest digest chain 4A→1-LIVE, 4B→4A, 4C→4B | all bind correctly |
-| Adapter unit suite | 128 passed |
-| Signed bundle reproduce-verify (signature + digest + rebuild), 3 stages | 3/3 verify |
-| Node tamper-test suites (stage4a/b/c) | 27 passed |
-| Negative control — tampered headline result | rejected |
-| Differential equivalence · empty `src/llmShield` · no private key committed | all pass |
+| Check                                                                       | Result                      |
+| --------------------------------------------------------------------------- | --------------------------- |
+| Regenerate all 10 evidence files from source                                | byte-identical to committed |
+| Manifest digest chain 4A→1-LIVE, 4B→4A, 4C→4B                               | all bind correctly          |
+| Adapter unit suite                                                          | 128 passed                  |
+| Signed bundle reproduce-verify (signature + digest + rebuild), 3 stages     | 3/3 verify                  |
+| Node tamper-test suites (stage4a/b/c)                                       | 27 passed                   |
+| Negative control — tampered headline result                                 | rejected                    |
+| Differential equivalence · empty `src/llmShield` · no private key committed | all pass                    |
 
 ## What this is
 

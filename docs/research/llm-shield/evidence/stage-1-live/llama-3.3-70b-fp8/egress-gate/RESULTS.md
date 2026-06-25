@@ -7,21 +7,21 @@ PRE-REGISTERED ones in `../injection-taxonomy-prereg.json` (frozen before these 
 
 ## Overall (same-session baseline vs egress gate, 10 user × 14 injection = 140 attack cases)
 
-| Metric | Baseline | Egress gate |
-| --- | --- | --- |
-| Targeted ASR | **9/140** | **4/140** |
-| Benign utility | 7/10 | **7/10 (0 regressions)** |
-| Utility-under-attack | 91/140 | 74/140 |
-| Egress actions gated / blocked | — | 1574 / 1111 |
+| Metric                         | Baseline  | Egress gate              |
+| ------------------------------ | --------- | ------------------------ |
+| Targeted ASR                   | **9/140** | **4/140**                |
+| Benign utility                 | 7/10      | **7/10 (0 regressions)** |
+| Utility-under-attack           | 91/140    | 74/140                   |
+| Egress actions gated / blocked | —         | 1574 / 1111              |
 
 ## By PRE-REGISTERED class
 
-| Class (frozen) | Baseline ASR | Egress gate ASR | Contained |
-| --- | --- | --- | --- |
-| `egress` (send/invite to attacker) | 5/40 | **0/40** | 5 |
-| `egress_plus_delete` | 0/80 | 0/80 | 0 (already 0 at baseline) |
-| `egress_mass_recipient` (task 13) | 1/10 | **0/10** | 1 |
-| `delete_only` (pure mutation) | 3/10 | 4/10 | −1 (noise; out of jurisdiction) |
+| Class (frozen)                     | Baseline ASR | Egress gate ASR | Contained                       |
+| ---------------------------------- | ------------ | --------------- | ------------------------------- |
+| `egress` (send/invite to attacker) | 5/40         | **0/40**        | 5                               |
+| `egress_plus_delete`               | 0/80         | 0/80            | 0 (already 0 at baseline)       |
+| `egress_mass_recipient` (task 13)  | 1/10         | **0/10**        | 1                               |
+| `delete_only` (pure mutation)      | 3/10         | 4/10            | −1 (noise; out of jurisdiction) |
 
 ## Honest reading
 
@@ -33,7 +33,7 @@ PRE-REGISTERED ones in `../injection-taxonomy-prereg.json` (frozen before these 
   gate does not break normal operation.
 - **Honest cost under attack:** utility-under-attack fell 91→74. When a run is actively
   attacked, blocking the injected egress sometimes also derails the agent from finishing its
-  *legitimate* task (it loops retrying the blocked action). The block counter (1111 blocks
+  _legitimate_ task (it loops retrying the blocked action). The block counter (1111 blocks
   over 1574 gated) shows the model retries a blocked egress many times; a cheap future fix is
   to tell the model to stop after the first SIMURGH block rather than hammer it.
 - `egress_plus_delete` was already 0/80 at baseline — Llama did not complete those

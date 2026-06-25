@@ -5,7 +5,7 @@ Goal: drive AgentDojo with a **capable-but-foolable open model** so the baseline
 Simurgh gateway (`--defended`) for a real **live-agent containment** data point.
 
 Why Llama-3.3-70B-Instruct: AgentDojo's published utility is ~42% (capable enough to do
-tasks, so it can be *productively* hijacked) and it sits in the foolable zone — the
+tasks, so it can be _productively_ hijacked) and it sits in the foolable zone — the
 "inverse scaling" finding is that capable-but-not-frontier models take real ASR. Reuses
 the Stage 3V-B RunPod + 8-bit flow. (Qwen2.5-72B-Instruct, ~54% utility, is the
 alternative — same steps, `--tool-call-parser hermes`.)

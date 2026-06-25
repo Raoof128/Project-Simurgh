@@ -24,13 +24,14 @@ It makes **no** new behavioural claim and adds **no** new action families.
 ## Scope decision (recorded)
 
 **Chosen scope: A — pure abstraction + evidence.** Rejected for this stage:
+
 - **B** (typed intent-sources to fix the `user_task_8` over-block) — deferred so
   that "kernel abstraction works" and "capability precision improves utility"
   stay separate, independently-attributable rungs.
 - **C** (financial/code/secret families) — deferred; without live AgentDojo
   signal those would be unit-test-only claims, too weak for this rung.
 
-The kernel *interface* is designed to make B and C pure policy/data additions
+The kernel _interface_ is designed to make B and C pure policy/data additions
 later, but neither is implemented now.
 
 ## Architecture fork (recorded)
@@ -118,7 +119,7 @@ The corpus covers every branch: grounded/ungrounded egress across all
 `EGRESS_DEST_ARGS` tools and arg shapes (str, comma/semicolon string, list,
 nested list, None); local-part vs full-address grounding; destructive mutation
 with and without destructive intent in the task; `gate_mutation` on and off;
-non-gated tools (read/search) always allowed. This is the *only* basis on which
+non-gated tools (read/search) always allowed. This is the _only_ basis on which
 the frozen live result is carried forward.
 
 ### Leg 2 — Model-free authority-decision corpus (the signed VCA artifact)
@@ -222,7 +223,7 @@ The Stage 4A **private key is never committed.**
    and that the taxonomy excludes non-destructive mutation / financial / code.
 8. Stage 4A private key is never committed.
 9. Headline equivalence is preserved: the live `9/140 → 0/140` (inside the
-   declared taxonomy) is inherited *through differential equivalence only*.
+   declared taxonomy) is inherited _through differential equivalence only_.
 10. `authority_decision_summary.requires_confirmation_count == 0` — no
     confirmation-flow evidence is claimed in this stage (the verdict exists in the
     type for forward-compatibility but is never emitted in 4A-lite).

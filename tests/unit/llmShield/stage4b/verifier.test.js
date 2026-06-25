@@ -18,7 +18,14 @@ test("portable verify passes on committed evidence", () => {
   assert.equal(verifyIntent({ bundle, sidecar, publicKeyPem: pub }).ok, true);
 });
 test("reproduce recomputes digest and rebuilds bundle", () => {
-  const r = verifyIntent({ bundle, sidecar, publicKeyPem: pub, decisions, manifest, reproduce: true });
+  const r = verifyIntent({
+    bundle,
+    sidecar,
+    publicKeyPem: pub,
+    decisions,
+    manifest,
+    reproduce: true,
+  });
   assert.equal(r.ok, true);
   assert.equal(r.checks.decisions_sha256_recomputed, true);
   assert.equal(r.checks.bundle_rebuild_matches, true);
@@ -50,13 +57,24 @@ test("rejects the wrong key", async () => {
   const c = await import("node:crypto");
   const { publicKey } = c.generateKeyPairSync("ed25519");
   assert.equal(
-    verifyIntent({ bundle, sidecar, publicKeyPem: publicKey.export({ type: "spki", format: "pem" }) }).ok,
+    verifyIntent({
+      bundle,
+      sidecar,
+      publicKeyPem: publicKey.export({ type: "spki", format: "pem" }),
+    }).ok,
     false
   );
 });
 test("reproduce rejects tampered decisions", () => {
   const d = JSON.parse(JSON.stringify(decisions));
   d[0].decision_4b.verdict = d[0].decision_4b.verdict === "allow" ? "block" : "allow";
-  const r = verifyIntent({ bundle, sidecar, publicKeyPem: pub, decisions: d, manifest, reproduce: true });
+  const r = verifyIntent({
+    bundle,
+    sidecar,
+    publicKeyPem: pub,
+    decisions: d,
+    manifest,
+    reproduce: true,
+  });
   assert.equal(r.ok, false);
 });

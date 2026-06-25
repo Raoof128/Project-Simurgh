@@ -18,7 +18,14 @@ test("portable verify passes on committed evidence", () => {
   assert.equal(verifyProvenance({ bundle, sidecar, publicKeyPem: pub }).ok, true);
 });
 test("reproduce recomputes digest and rebuilds bundle", () => {
-  const r = verifyProvenance({ bundle, sidecar, publicKeyPem: pub, decisions, manifest, reproduce: true });
+  const r = verifyProvenance({
+    bundle,
+    sidecar,
+    publicKeyPem: pub,
+    decisions,
+    manifest,
+    reproduce: true,
+  });
   assert.equal(r.ok, true);
   assert.equal(r.checks.bundle_rebuild_matches, true);
 });
@@ -49,13 +56,24 @@ test("rejects wrong key", async () => {
   const c = await import("node:crypto");
   const { publicKey } = c.generateKeyPairSync("ed25519");
   assert.equal(
-    verifyProvenance({ bundle, sidecar, publicKeyPem: publicKey.export({ type: "spki", format: "pem" }) }).ok,
+    verifyProvenance({
+      bundle,
+      sidecar,
+      publicKeyPem: publicKey.export({ type: "spki", format: "pem" }),
+    }).ok,
     false
   );
 });
 test("reproduce rejects tampered decisions", () => {
   const d = JSON.parse(JSON.stringify(decisions));
   d[0].decision_4c.verdict = d[0].decision_4c.verdict === "allow" ? "block" : "allow";
-  const r = verifyProvenance({ bundle, sidecar, publicKeyPem: pub, decisions: d, manifest, reproduce: true });
+  const r = verifyProvenance({
+    bundle,
+    sidecar,
+    publicKeyPem: pub,
+    decisions: d,
+    manifest,
+    reproduce: true,
+  });
   assert.equal(r.ok, false);
 });
