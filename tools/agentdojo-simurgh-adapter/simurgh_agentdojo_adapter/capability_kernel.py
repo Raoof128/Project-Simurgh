@@ -1,0 +1,111 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+"""Minimal Capability Kernel (Stage 4A-lite).
+
+Pure, dependency-free authorization authority for the adapter-side gates. A proposed
+tool call is mapped to zero or more typed Actions; each Action is authorised against the
+trusted user-task text by a single task-grounded capability. Today exactly two families
+exist (egress, destructive_mutation); adding a family later is data, not new control flow.
+
+No I/O, no network, no model calls. Never imports agentdojo.
+"""
+from __future__ import annotations
+
+import re
+from dataclasses import dataclass, field
+
+POLICY_VERSION = "stage4a-lite.authority-policy.v1"
+CAPABILITY_ID = "task_grounded_authority.v1"
+
+# tool -> argument names carrying an external egress destination
+EGRESS_DEST_ARGS: dict[str, tuple[str, ...]] = {
+    "send_email": ("recipients", "cc", "bcc"),
+    "share_file": ("email",),
+    "add_calendar_event_participants": ("participants",),
+    "create_calendar_event": ("participants",),
+}
+_EGRESS_VERB = {
+    "send_email": ("send", "email"),
+    "share_file": ("share", "file"),
+    "add_calendar_event_participants": ("invite", "calendar"),
+    "create_calendar_event": ("invite", "calendar"),
+}
+MUTATION_DESTRUCTIVE: dict[str, tuple[str, str, str]] = {
+    # tool -> (verb, target_kind, target-arg-name)
+    "delete_file": ("delete", "file", "file_id"),
+    "delete_email": ("delete", "email", "email_id"),
+    "cancel_calendar_event": ("cancel", "calendar", "event_id"),
+}
+DESTRUCTIVE_INTENT = re.compile(
+    r"\b(delete|deleting|remove|removing|cancel|clear|erase|trash|discard)\b", re.I
+)
+
+
+@dataclass(frozen=True)
+class Action:
+    family: str  # "egress" | "destructive_mutation"
+    verb: str
+    target_kind: str  # "email" | "file" | "calendar" | "unknown"
+    target: str
+
+
+@dataclass
+class AuthorityDecision:
+    verdict: str  # "allow" | "block" | "requires_confirmation"
+    reason: str
+    family: str
+    blocked_targets: list[str] = field(default_factory=list)
+    would_execute: bool = False
+
+
+def split_destinations(arg_value) -> list[str]:
+    out: list[str] = []
+    if arg_value is None:
+        return out
+    if isinstance(arg_value, str):
+        out.extend(p.strip() for p in arg_value.replace(";", ",").split(",") if p.strip())
+    elif isinstance(arg_value, (list, tuple)):
+        for v in arg_value:
+            out.extend(split_destinations(v))
+    else:
+        out.append(str(arg_value))
+    return out
+
+
+def is_grounded(dest: str, trusted_text: str) -> bool:
+    t = (trusted_text or "").lower()
+    d = (dest or "").lower().strip()
+    if not d:
+        return True
+    if d in t:
+        return True
+    local = d.split("@", 1)[0]
+    return len(local) > 2 and local in t
+
+
+def actions_for(function: str, args: dict) -> list[Action]:
+    args = args or {}
+    if function in EGRESS_DEST_ARGS:
+        verb, kind = _EGRESS_VERB[function]
+        acts: list[Action] = []
+        for a in EGRESS_DEST_ARGS[function]:
+            for dest in split_destinations(args.get(a)):
+                acts.append(Action("egress", verb, kind, dest))
+        return acts
+    if function in MUTATION_DESTRUCTIVE:
+        verb, kind, target_arg = MUTATION_DESTRUCTIVE[function]
+        return [Action("destructive_mutation", verb, kind, str(args.get(target_arg, "")))]
+    return []
+
+
+def authorise(action: Action, *, trusted_text: str) -> AuthorityDecision:
+    if action.family == "egress":
+        if is_grounded(action.target, trusted_text):
+            return AuthorityDecision("allow", "task_grounded", "egress")
+        return AuthorityDecision("block", "ungrounded_destination", "egress", [action.target])
+    if action.family == "destructive_mutation":
+        if DESTRUCTIVE_INTENT.search(trusted_text or ""):
+            return AuthorityDecision("allow", "task_grounded", "destructive_mutation")
+        return AuthorityDecision(
+            "block", "destructive_mutation_not_authorised", "destructive_mutation", [action.target]
+        )
+    return AuthorityDecision("allow", "non_gated", "none")
