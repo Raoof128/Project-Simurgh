@@ -1,0 +1,12 @@
+{
+  "benign_recovered": 2,
+  "full_containment_4c": true,
+  "laundering_failures_4c": 0,
+  "must_block_total": 3,
+  "naive_laundering_exposed": 2,
+  "no_laundering_4c": true,
+  "poisoning_contained": 2,
+  "provenance_closes_naive_gap": true,
+  "schema": "simurgh.provenance_authority_summary.v1",
+  "total_decisions": 6
+}

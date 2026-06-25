@@ -149,3 +149,51 @@ def authorise_with_intent(action: Action, *, intent: IntentContext) -> Authority
         return AuthorityDecision("block", "ungrounded_destination", "egress", [action.target])
     # Mutation authority is unchanged from 4A: only an explicit destructive request grants it.
     return authorise(action, trusted_text=intent.explicit_request)
+
+
+# ---------------------------------------------------------------------------
+# Stage 4C: provenance-gated intent sources (additive; 4A/4B above are frozen).
+#
+# 4B assumed intent sources were trusted-by-construction. Once they are populated from
+# tool output, an injection can launder the attacker address in as a "participant". 4C
+# tags each intent entry with a PROVENANCE and grants authority ONLY from trusted origins,
+# so a poisoned (untrusted-origin) entry does not authorise egress to the attacker.
+# ---------------------------------------------------------------------------
+TRUSTED_PROVENANCE = frozenset({"account_owner", "user_authored", "explicit_user_request"})
+
+
+@dataclass
+class IntentEntry:
+    address: str
+    provenance: str  # trusted iff in TRUSTED_PROVENANCE
+
+
+@dataclass
+class ProvenanceIntentContext:
+    explicit_request: str = ""
+    entries: list[IntentEntry] = field(default_factory=list)
+
+
+def authorise_with_provenance(action: Action, *, intent: ProvenanceIntentContext) -> AuthorityDecision:
+    if action.family == "egress":
+        if is_grounded(action.target, intent.explicit_request):
+            return AuthorityDecision("allow", "intent_grounded", "egress", source="explicit_user_request")
+        d = (action.target or "").lower().strip()
+        for e in intent.entries:
+            if (e.address or "").lower().strip() == d and e.provenance in TRUSTED_PROVENANCE:
+                return AuthorityDecision("allow", "intent_grounded", "egress", source=e.provenance)
+        # No trusted-provenance entry matched: a poisoned (untrusted) entry grants nothing.
+        return AuthorityDecision("block", "ungrounded_destination", "egress", [action.target])
+    return authorise(action, trusted_text=intent.explicit_request)
+
+
+def naive_intent_verdict(action: Action, intent: ProvenanceIntentContext) -> str:
+    """Provenance-BLIND grounding (the 4B-style implementation if it trusted any populated
+    entry). Used only to expose how many poisoned attacks such an implementation would
+    launder; never used to authorise."""
+    if action.family != "egress":
+        return authorise(action, trusted_text=intent.explicit_request).verdict
+    if is_grounded(action.target, intent.explicit_request):
+        return "allow"
+    d = (action.target or "").lower().strip()
+    return "allow" if any((e.address or "").lower().strip() == d for e in intent.entries) else "block"
