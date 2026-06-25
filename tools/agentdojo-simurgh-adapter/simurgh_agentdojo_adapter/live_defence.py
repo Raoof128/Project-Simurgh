@@ -153,6 +153,8 @@ def build_mediator(client, sink: list):  # pragma: no cover - exercised only in 
 
 import re
 
+from .capability_kernel import actions_for, authorise
+
 # tool -> argument names that carry an external destination
 EGRESS_DEST_ARGS = {
     "send_email": ("recipients", "cc", "bcc"),
@@ -207,14 +209,11 @@ def _grounded(dest: str, trusted_text: str) -> bool:
     return len(local) > 2 and local in t
 
 
-def gate_tool_call(
+def _legacy_gate_tool_call(
     function: str, args: dict, trusted_text: str, *, gate_mutation: bool = False
 ) -> tuple[str, str, list]:
-    """Authority check for one proposed tool call.
-
-    Returns (decision, family, detail) where decision is 'allowed' or 'blocked' and family is
-    'egress', 'mutation', or 'none'. Read/search/non-gated tools are always allowed.
-    """
+    """PRESERVED pre-Stage-4A gate logic. Test-only; the differential test measures the
+    kernel shim against THIS, the behaviour that produced the frozen 1-LIVE evidence."""
     dest_args = EGRESS_DEST_ARGS.get(function)
     if dest_args:
         unauthorized: list[str] = []
@@ -227,6 +226,35 @@ def gate_tool_call(
         if DESTRUCTIVE_INTENT.search(trusted_text or ""):
             return "allowed", "mutation", []  # user explicitly asked to delete/cancel
         return "blocked", "mutation", [function]
+    return "allowed", "none", []
+
+
+def gate_tool_call(
+    function: str, args: dict, trusted_text: str, *, gate_mutation: bool = False
+) -> tuple[str, str, list]:
+    """Authority check for one proposed tool call, delegated to the Capability Kernel.
+
+    Thin shim: map (function, args) to typed kernel Actions, authorise each, and translate
+    back to the legacy (decision, family, detail) contract that the live pipeline consumes.
+    Returns (decision, family, detail) where decision is 'allowed' or 'blocked' and family is
+    'egress', 'mutation', or 'none'. The family label tracks the TOOL (an egress tool is
+    'egress' even with no destinations), matching the legacy contract. Behaviourally identical
+    to _legacy_gate_tool_call (proven by tests/test_capability_kernel_equivalence.py)."""
+    acts = actions_for(function, args)
+    if function in EGRESS_DEST_ARGS:
+        blocked: list[str] = []
+        for act in acts:  # every action of an egress tool is family 'egress'
+            decision = authorise(act, trusted_text=trusted_text)
+            if decision.verdict == "block":
+                blocked.extend(decision.blocked_targets)
+        return ("blocked" if blocked else "allowed", "egress", blocked)
+    if gate_mutation and function in MUTATION_DESTRUCTIVE:
+        blocked = []
+        for act in acts:  # exactly one destructive-mutation action
+            decision = authorise(act, trusted_text=trusted_text)
+            if decision.verdict == "block":
+                blocked.append(function)  # legacy detail is [function], not the target id
+        return ("blocked" if blocked else "allowed", "mutation", blocked)
     return "allowed", "none", []
 
 
