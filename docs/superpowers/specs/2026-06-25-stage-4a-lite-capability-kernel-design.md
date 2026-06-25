@@ -85,6 +85,11 @@ its body becomes: build the typed `Action`(s) from `(function, args)`, call
 live pipeline (`build_gated_tools_executor`, `build_defended_pipeline`) is
 **behaviourally untouched**. No `src/llmShield` change.
 
+For differential testing, the pre-refactor gate logic must be preserved as a
+test-only legacy function or fixture before replacement, so equivalence is
+measured against the actual previous behaviour rather than a reconstructed
+approximation.
+
 ### 3. Node attestation (`tools/simurgh-attestation/`)
 
 - `sign-stage4a-authority.mjs` — canonical-JSON (RFC 8785-style, same helper used
@@ -171,7 +176,9 @@ requirement):
 ```
 
 Targets and file paths are hashed (`sha256:...`). No raw addresses, file names, or
-tool args are persisted. The bird keeps receipts, not gossip.
+tool args are persisted. The bird keeps receipts, not gossip. Target hashes are
+metadata-minimisation identifiers, not a secrecy guarantee against dictionary
+reconstruction of known public targets.
 
 ---
 
@@ -216,6 +223,9 @@ The Stage 4A **private key is never committed.**
 8. Stage 4A private key is never committed.
 9. Headline equivalence is preserved: the live `9/140 → 0/140` (inside the
    declared taxonomy) is inherited *through differential equivalence only*.
+10. `authority_decision_summary.requires_confirmation_count == 0` — no
+    confirmation-flow evidence is claimed in this stage (the verdict exists in the
+    type for forward-compatibility but is never emitted in 4A-lite).
 
 ## Explicit non-goals for this stage
 
