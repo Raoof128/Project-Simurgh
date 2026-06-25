@@ -134,17 +134,151 @@ def build_mediator(client, sink: list):  # pragma: no cover - exercised only in 
     return SimurghContextMediator()
 
 
-def build_defended_pipeline(llm, base_system_message: str, client, sink: list):  # pragma: no cover - live only
-    """Assemble the defended AgentDojo pipeline (mirrors AgentDojo's own spotlighting wiring)."""
+# ---------------------------------------------------------------------------
+# Action-level egress-provenance gate (the "tool-gate" defence).
+#
+# The demotion defence is advisory: it asks the model not to obey injected text.
+# This gate enforces structurally instead — it blocks the malicious ACTION itself,
+# regardless of whether the model was fooled. An indirect prompt injection in
+# AgentDojo's workspace suite exfiltrates by an egress action (send_email,
+# share_file, calendar invite) addressed to an attacker destination. The rule:
+# an egress action's destinations must be GROUNDED in the user's trusted task; a
+# destination that appears nowhere in the task is untrusted-induced and is blocked.
+#
+# This is an adapter-side policy that prototypes a future gateway egress boundary;
+# it makes NO use of the attack labels (it only compares the action's destinations
+# against the user's own task text). It is deliberately scoped to egress: read and
+# search actions are never blocked, so benign information-gathering is untouched.
+# ---------------------------------------------------------------------------
+
+# tool -> argument names that carry an external destination
+EGRESS_DEST_ARGS = {
+    "send_email": ("recipients", "cc", "bcc"),
+    "share_file": ("email",),
+    "add_calendar_event_participants": ("participants",),
+    "create_calendar_event": ("participants",),
+}
+GATE_BLOCK_TEXT = (
+    "[SIMURGH egress gate: this action was BLOCKED because it sends to a destination that is "
+    "not grounded in your original task (untrusted-induced egress). No data was sent. Continue "
+    "the user's original task without it.]"
+)
+
+
+def _destinations(arg_value) -> list[str]:
+    """Flatten an egress argument (str, comma string, or list) into address strings."""
+    out: list[str] = []
+    if arg_value is None:
+        return out
+    if isinstance(arg_value, str):
+        parts = [p.strip() for p in arg_value.replace(";", ",").split(",")]
+        out.extend(p for p in parts if p)
+    elif isinstance(arg_value, (list, tuple)):
+        for v in arg_value:
+            out.extend(_destinations(v))
+    else:
+        out.append(str(arg_value))
+    return out
+
+
+def _grounded(dest: str, trusted_text: str) -> bool:
+    """A destination is authorized iff its address, or its local-part token, appears in the
+    user's trusted task text (case-insensitive)."""
+    t = trusted_text.lower()
+    d = dest.lower().strip()
+    if not d:
+        return True
+    if d in t:
+        return True
+    local = d.split("@", 1)[0]
+    return len(local) > 2 and local in t
+
+
+def gate_tool_call(function: str, args: dict, trusted_text: str) -> tuple[str, list]:
+    """Return ('allowed'|'blocked', unauthorized_destinations). Non-egress tools always allowed."""
+    dest_args = EGRESS_DEST_ARGS.get(function)
+    if not dest_args:
+        return "allowed", []
+    unauthorized: list[str] = []
+    for a in dest_args:
+        for dest in _destinations((args or {}).get(a)):
+            if not _grounded(dest, trusted_text):
+                unauthorized.append(dest)
+    return ("blocked", unauthorized) if unauthorized else ("allowed", [])
+
+
+def build_gated_tools_executor(sink: list):  # pragma: no cover - live only
+    """A ToolsExecutor that blocks untrusted-induced egress actions before they execute."""
+    from agentdojo.agent_pipeline.tool_execution import ToolsExecutor
+    from agentdojo.types import ChatToolResultMessage, text_content_block_from_string
+
+    class SimurghGatedToolsExecutor(ToolsExecutor):
+        def query(self, query, runtime, env, messages=(), extra_args=None):
+            extra_args = extra_args or {}
+            if (
+                not messages
+                or messages[-1]["role"] != "assistant"
+                or not messages[-1].get("tool_calls")
+            ):
+                return ToolsExecutor.query(self, query, runtime, env, messages, extra_args)
+            trusted = str(query or "")
+            blocked_results = []
+            survivors = []
+            for tc in messages[-1]["tool_calls"]:
+                decision, bad = gate_tool_call(tc.function, dict(getattr(tc, "args", {}) or {}), trusted)
+                sink.append({"kind": "action", "tool": tc.function, "decision": decision, "unauthorized": bad})
+                if decision == "blocked":
+                    blocked_results.append(
+                        ChatToolResultMessage(
+                            role="tool",
+                            content=[text_content_block_from_string(GATE_BLOCK_TEXT)],
+                            tool_call_id=tc.id,
+                            tool_call=tc,
+                            error=None,
+                        )
+                    )
+                else:
+                    survivors.append(tc)
+            if not blocked_results:
+                return ToolsExecutor.query(self, query, runtime, env, messages, extra_args)
+            # Execute only the surviving (allowed) calls, then append the blocked sentinels.
+            head = dict(messages[-1])
+            head["tool_calls"] = survivors
+            base_msgs = [*messages[:-1], head]
+            if survivors:
+                _, runtime, env, base_msgs, extra_args = ToolsExecutor.query(
+                    self, query, runtime, env, base_msgs, extra_args
+                )
+            return query, runtime, env, [*base_msgs, *blocked_results], extra_args
+
+    return SimurghGatedToolsExecutor()
+
+
+def build_defended_pipeline(  # pragma: no cover - live only
+    llm, base_system_message: str, client, sink: list, mode: str = "demote"
+):
+    """Assemble the defended AgentDojo pipeline.
+
+    mode: "demote"   -> context provenance demotion only (advisory; the weak baseline defence)
+          "toolgate" -> action-level egress gate only (structural containment)
+          "both"     -> egress gate + demotion (defence in depth)
+    """
     from agentdojo.agent_pipeline.agent_pipeline import AgentPipeline
     from agentdojo.agent_pipeline.basic_elements import InitQuery, SystemMessage
     from agentdojo.agent_pipeline.tool_execution import ToolsExecutionLoop, ToolsExecutor
 
-    system_component = SystemMessage((base_system_message or "") + SYSTEM_SUFFIX)
+    use_demote = mode in ("demote", "both")
+    use_gate = mode in ("toolgate", "both")
+
+    sys_text = (base_system_message or "") + (SYSTEM_SUFFIX if use_demote else "")
+    system_component = SystemMessage(sys_text)
     init = InitQuery()
-    mediator = build_mediator(client, sink)
-    # ToolsExecutor produces tool outputs -> mediator rewrites them -> llm sees demoted/withheld data.
-    tools_loop = ToolsExecutionLoop([ToolsExecutor(), mediator, llm])
+    executor = build_gated_tools_executor(sink) if use_gate else ToolsExecutor()
+    loop_elems = [executor]
+    if use_demote:
+        loop_elems.append(build_mediator(client, sink))
+    loop_elems.append(llm)
+    tools_loop = ToolsExecutionLoop(loop_elems)
     pipeline = AgentPipeline([system_component, init, llm, tools_loop])
     # The attack registry reads pipeline.name to resolve the model; inherit it from the llm.
     pipeline.name = getattr(llm, "name", None) or "simurgh-defended-agent"

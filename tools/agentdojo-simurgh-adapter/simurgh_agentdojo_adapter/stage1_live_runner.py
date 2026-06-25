@@ -166,6 +166,7 @@ def run_live(
     base_url: str | None = None,
     api_key: str | None = None,
     greedy: bool = False,
+    defence_mode: str = "demote",
 ) -> dict[str, Any]:  # pragma: no cover - opt-in, needs a live endpoint
     # An OpenAI-compatible self-hosted endpoint (e.g. vLLM on RunPod) needs only a
     # base_url and accepts a dummy key; OpenAI-hosted runs still require a real key.
@@ -228,11 +229,17 @@ def run_live(
         from agentdojo.agent_pipeline.agent_pipeline import load_system_message
 
         from .live_defence import build_defended_pipeline
-        from .simurgh_client import SimurghClient
 
-        client = SimurghClient()
-        client.create_session()  # raises GatewayUnavailable if the local gateway is down
-        return build_defended_pipeline(llm, load_system_message(None), client, mediation_sink)
+        client = None
+        if defence_mode in ("demote", "both"):
+            # The demotion path needs the real local gateway; the egress gate does not.
+            from .simurgh_client import SimurghClient
+
+            client = SimurghClient()
+            client.create_session()  # raises GatewayUnavailable if the local gateway is down
+        return build_defended_pipeline(
+            llm, load_system_message(None), client, mediation_sink, mode=defence_mode
+        )
 
     defence_label = "simurgh_defended" if defended else "baseline"
     pipeline = build_pipeline()
@@ -260,6 +267,23 @@ def run_live(
     # When only one arm is run, both baseline/defended inputs are the same arm; the
     # aggregator still emits valid metadata-only metrics for the arm we have.
     artifacts = build_stage3j_artifacts(rows, rows, scope="workspace-live")
+    # Per-case rows (metadata-only: ids + booleans, no payloads) so a by-class
+    # breakdown (egress / mutation / etc.) can be computed downstream.
+    artifacts["per-case-rows.json"] = {
+        "stage": "1-LIVE",
+        "defence": defence_label,
+        "defence_mode": defence_mode if defended else "none",
+        "rows": [
+            {
+                "user_task": r["task_id"],
+                "injection_task": r["security_case_id"].split("::", 1)[1] if r.get("security_case_id") else None,
+                "kind": r["kind"],
+                "attack_success": r.get("attack_success"),
+                "utility_success": r.get("utility_success"),
+            }
+            for r in rows
+        ],
+    }
     # Record the endpoint HOST only (never the key or full URL with credentials).
     endpoint = "api.openai.com"
     if base_url:
@@ -278,10 +302,13 @@ def run_live(
         "defence": defence_label,
         "user_tasks_run": len(user_tasks),
         "mediation": {
-            "tool_outputs_mediated": len(mediation_sink),
-            "demoted": sum(1 for s in mediation_sink if s["decision"] == "demoted"),
-            "rejected": sum(1 for s in mediation_sink if s["decision"] == "rejected"),
-            "accepted": sum(1 for s in mediation_sink if s["decision"] == "accepted"),
+            "defence_mode": defence_mode,
+            "context_demoted": sum(1 for s in mediation_sink if s.get("decision") == "demoted"),
+            "context_rejected": sum(1 for s in mediation_sink if s.get("decision") == "rejected"),
+            "egress_actions_gated": sum(1 for s in mediation_sink if s.get("kind") == "action"),
+            "egress_actions_blocked": sum(
+                1 for s in mediation_sink if s.get("kind") == "action" and s.get("decision") == "blocked"
+            ),
         }
         if defended
         else None,
@@ -330,6 +357,13 @@ def main(argv: list[str] | None = None) -> int:  # pragma: no cover - opt-in
         "offline replay; recommended for self-hosted endpoints, not OpenAI reasoning models",
     )
     p.add_argument("--defended", action="store_true")
+    p.add_argument(
+        "--defence-mode",
+        default="demote",
+        choices=["demote", "toolgate", "both"],
+        help="defended-arm mechanism: demote (advisory context demotion), toolgate "
+        "(structural egress-action gate), or both (defence in depth)",
+    )
     args = p.parse_args(argv)
     run_live(
         model=args.model,
@@ -341,6 +375,7 @@ def main(argv: list[str] | None = None) -> int:  # pragma: no cover - opt-in
         base_url=args.base_url,
         api_key=args.api_key,
         greedy=args.greedy,
+        defence_mode=args.defence_mode,
     )
     return 0
 
