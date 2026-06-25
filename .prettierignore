@@ -32,3 +32,20 @@ tools/**/Cargo.lock
 
 # git internals
 .git
+
+# Stage-4 authority-chain evidence is generated deterministically by the committed Python
+# generators and byte-compared by scripts/reproduce-llm-shield-stage4-authority-chain.sh.
+# Prettier reflows JSON arrays differently from json.dumps, which would break that exact
+# byte-identity check; integrity of the signed bundles is canonical-JSON (whitespace-independent).
+docs/research/llm-shield/evidence/stage-4a-lite/corpus-actions.json
+docs/research/llm-shield/evidence/stage-4a-lite/authority-decisions.json
+docs/research/llm-shield/evidence/stage-4a-lite/authority-decision-summary.json
+docs/research/llm-shield/evidence/stage-4a-lite/manifest.json
+docs/research/llm-shield/evidence/stage-4b-intent/intent-corpus.json
+docs/research/llm-shield/evidence/stage-4b-intent/intent-decisions.json
+docs/research/llm-shield/evidence/stage-4b-intent/intent-decision-summary.json
+docs/research/llm-shield/evidence/stage-4b-intent/manifest.json
+docs/research/llm-shield/evidence/stage-4c-provenance/provenance-corpus.json
+docs/research/llm-shield/evidence/stage-4c-provenance/provenance-decisions.json
+docs/research/llm-shield/evidence/stage-4c-provenance/provenance-decision-summary.json
+docs/research/llm-shield/evidence/stage-4c-provenance/manifest.json

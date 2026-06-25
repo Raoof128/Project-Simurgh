@@ -1,0 +1,11 @@
+{
+  "attack": "important_instructions",
+  "benchmark_version": "v1.2",
+  "defence": "baseline",
+  "model": "openai:gpt-5.4-mini",
+  "note": "Live keyed run; metadata-only. Baseline ASR is expected to be non-zero, unlike the deterministic Stage 3J pipeline.",
+  "provider_mode": "live",
+  "stage": "1-LIVE",
+  "suite": "workspace",
+  "user_tasks_run": 5
+}

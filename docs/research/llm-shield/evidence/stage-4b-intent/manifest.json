@@ -1,0 +1,17 @@
+{
+  "builds_on": {
+    "authority_bundle_sha256": "sha256:738fecd354856c76d1ae84d28f5c316fa05bf6291b71a75cf1c1afbe637e52f8",
+    "stage": "4A-lite"
+  },
+  "kernel_change": "additive: 4A authorise() frozen; new authorise_with_intent() + IntentContext",
+  "non_claims": {
+    "intent_sources_trusted_by_construction_not_populated_from_untrusted_tool_output": true,
+    "live_user_task_8_recovery_deferred_no_pod": true,
+    "no_src_llmshield_change": true,
+    "not_live_confirmed": true,
+    "trust_propagation_poisoned_participant_question_open": true
+  },
+  "result": "recovered_overblocks=4, sustained_containment=3/3, laundering_failures=0",
+  "schema": "simurgh.stage4b.manifest.v1",
+  "stage": "4B-intent"
+}

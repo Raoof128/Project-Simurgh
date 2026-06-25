@@ -1,5 +1,183 @@
 ## Change Log
 
+## [stage-1-live-authority-gate] — 2026-06-25 — Authority gate (egress + mutation): FULL containment within taxonomy
+
+**Raouf:** Ran the authority gate A/B (`--defence-mode authority` = egress + destructive-mutation gate) on Llama-3.3-70B-FP8, same 10×14 set, against the PRE-REGISTERED authority predictions. RESULT — the bounded-consequence thesis proven: **ASR 9/140 → 0/140**; every one of the 9 baseline attack successes contained. By class: `egress` 5/40→0/40, `egress_mass_recipient` 1/10→0/10, and the mutation gate closed the gap `delete_only` 3/10→**0/10** (which the egress-only gate could not). Honest cost: **1 benign regression (`user_task_8`)** — but that task names both recipients explicitly so neither gate should block it; it passed under the egress-only gate (0 regressions) and failed only here, so most likely run-to-run greedy/batching nondeterminism (same drift as baseline 9↔10), NOT a confirmed false-block; reported transparently, flagged for per-action attribution. Utility-under-attack 91→80. Closes the three-experiment Llama arc: demotion (advisory, failed) → egress gate (scoped win) → authority gate (full containment in declared taxonomy). Explicit non-claims kept (not immunity; taxonomy excludes non-destructive mutation/financial/code). Evidence metadata-only. No `src/llmShield` change.
+
+### Added
+
+- `docs/research/llm-shield/evidence/stage-1-live/llama-3.3-70b-fp8/authority-gate/` — baseline + authority per-case rows, metrics, manifest, verbatim by-class output, RESULTS.md.
+
+---
+
+## [stage-1-live-egress-gate] — 2026-06-25 — Egress tool-gate: scoped containment WIN (by pre-registered class)
+
+**Raouf:** Ran the egress tool-gate A/B (`--defence-mode toolgate`) on Llama-3.3-70B-FP8, same 10×14 set, analysed against the PRE-REGISTERED class taxonomy (frozen before results). RESULT — a clean, scoped, honest win: overall ASR **9/140 → 4/140**, and by class the egress gate eliminated EVERY egress-based attack (`egress` 5/40→0/40, `egress_mass_recipient` 1/10→0/10) while **all 4 remaining defended successes are `delete_only`** — exactly the out-of-jurisdiction gap predicted. Benign utility held **7/10→7/10 with ZERO false-block regressions** (no tax on normal operation). Honest cost: utility-under-attack 91→74 (blocking an injected egress sometimes also derails the agent's legit task; the model retried blocked egress heavily — 1111 blocks/1574 gated). `egress_plus_delete` was already 0/80 at baseline (Llama never completed those multi-step goals undefended). Honest baseline variance noted: same-session baseline 9/140 vs the earlier 10/140 (greedy is not bit-deterministic under vLLM concurrent batching; A/B uses the same-session baseline). The `delete_only` survivors directly size Stage 4C (mutation gate), evaluated next in `authority` mode. Evidence metadata-only. No `src/llmShield` change.
+
+### Added
+
+- `docs/research/llm-shield/evidence/stage-1-live/llama-3.3-70b-fp8/egress-gate/` — baseline + tool-gate per-case rows, metrics, manifest, verbatim by-class analyzer output, RESULTS.md.
+
+---
+
+## [stage-1-live-llama-ab] — 2026-06-25 — Live Llama-3.3-70B A/B: non-zero baseline + HONEST negative containment result
+
+**Raouf:** Ran the first Stage 1-LIVE A/B with a non-zero baseline, on a self-hosted open model. Served `RedHatAI/Llama-3.3-70B-Instruct-FP8-dynamic` (FP8 quant of official Meta Llama-3.3-70B-Instruct) via vLLM on an H100 (greedy, tool-calling), drove the pinned AgentDojo workspace suite (10 user × all 14 injection goals = 140 attack cases + 10 benign, canonical important_instructions). Built a REAL in-loop mediating defence (`live_defence.py`): every tool output is routed through the gateway context-provenance guard (`guardContexts`) and rewritten before the model sees it — demoted → wrapped as untrusted data; rejected → withheld; chunked to ≤4KB so size never false-rejects. RESULT (reported honestly, NOT a containment win): baseline targeted ASR **10/140 (7.1%)**, defended **8/140 (5.7%)** — only 2 of 10 contained, within noise (overlapping 95% CIs); benign utility **8/10 → 6/10**; utility-under-attack **78/140 → 65/140**; 550 tool outputs mediated (531 demoted, 19 rejected). CONCLUSION: `important_instructions` does not match the gateway's content-rejection rules so it is demoted (advisory), and Llama largely obeyed the injection anyway while the wrapping cost utility — **demotion-only provenance wrapping is advisory, not live behavioural containment.** Next stage (separate): action-level tool-gate defence that blocks the malicious tool call itself. Also found+fixed an AgentDojo tool-output serialization bug (modern reasoning models read malformed tool results as empty). All evidence metadata-only; HF/OpenAI keys never touched a committed file. No `src/llmShield` change.
+
+### Added
+
+- `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/live_defence.py` — in-loop gateway mediator (provenance-demotion of tool outputs) + defended pipeline builder.
+- `docs/research/llm-shield/evidence/stage-1-live/llama-3.3-70b-fp8/` — baseline + defended A/B metadata-only evidence + honest-finding README.
+- `docs/research/llm-shield/evidence/stage-1-live/gpt-5.4-mini/` — relocated gpt-5.4-mini artifacts.
+
+### Changed
+
+- `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/stage1_live_runner.py` — `--defended` now builds the real in-loop pipeline (replaces the broken `SimurghDefence` append); records per-tool-output mediation tally in the manifest.
+- `docs/research/llm-shield/evidence/stage-1-live/README.md` — per-model results index.
+
+---
+
+## [stage-1-live-byo-endpoint] — 2026-06-25 — Runner ready for a self-hosted open model (vLLM/RunPod) for a non-zero baseline
+
+**Raouf:** Prepared the Stage 1-LIVE runner to target a self-hosted OpenAI-compatible endpoint so we can drive AgentDojo with a capable-but-foolable open model (Llama-3.3-70B-Instruct) and finally get a **non-zero baseline ASR** (gpt-5.4-mini was too aligned: 0 ASR). Web-checked the model choice (AgentDojo "inverse scaling": GPT-4o 69% util / 53% ASR, Command-R+ 28% / ~1%; open 70B-class ≈ 42–54% util sits in the foolable zone) and the OpenAI deprecation cliff (legacy GPT-4 family all retire 2026-10-23), which is why offline open weights is the better, reproducible path. Added `--base-url`/`--api-key` (no real OpenAI key needed for a self-hosted endpoint; manifest records endpoint HOST only, never credentials), `--greedy` (temperature=0/seed=0 deterministic decoding via a `force_greedy_decoding()` patch, for byte-reproducible replay à la 3V-B), provider-label provenance (`vllm:` vs `openai:`), and a RunPod runbook (vLLM tool-calling serve command + exact run steps). No live numbers yet (pod not up). No `src/llmShield` change.
+
+### Changed
+
+- `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/stage1_live_runner.py` — `force_greedy_decoding()`, endpoint/api-key threading, provider label, manifest endpoint_host/decoding fields, CLI flags.
+- `scripts/run-llm-shield-live-agentdojo.sh` — allow `--base-url` runs without `OPENAI_API_KEY`; self-hosted usage help.
+
+### Added
+
+- `docs/research/llm-shield/evidence/stage-1-live/RUNPOD-LLAMA-RUNBOOK.md` — turnkey RunPod + vLLM runbook for the Llama-3.3-70B agent run.
+
+---
+
+## [stage-1-live-gpt54mini-real-result] — 2026-06-25 — Live AgentDojo run on gpt-5.4-mini: harness bug found+fixed, honest 0-ASR baseline
+
+**Raouf:** Ran the Stage 1-LIVE harness live on a user-supplied burner key (since revoked) with `gpt-5.4-mini`. Diagnosed why strong/new models looked degenerate: **AgentDojo 0.1.30 has a tool-output serialization bug** — it sends tool results as its internal content blocks `[{"type":"text","content":...}]`, but OpenAI's schema requires the key `text`; a modern reasoning model reads the malformed part as an EMPTY tool result and refuses, collapsing benign utility. Proven by trace + a direct minimal API probe. The runner now repairs this (`make_modern_model_compatible`): flatten tool content to a plain string, and register the live model name so the canonical `important_instructions` attack can run on post-2024 model strings. Scoring, environments, tasks, and attack payloads are untouched. RESULT (honest): with the fix, `gpt-5.4-mini` workspace benign utility **0/5 → 5/5**; targeted ASR **0/30** (injecagent) and **0/42** (canonical important_instructions, all 14 injection goals × 3 user tasks); utility-under-attack 25–42/case. The frontier model natively resists these attacks, so **baseline ASR is 0 — there is nothing for a downstream containment layer to catch, and this is NOT presented as a Simurgh win** (a defended run would also be 0, like deterministic 3J). A live non-zero baseline needs a capable-but-foolable weaker model or a stronger adaptive attack = genuine future work. Committed artifacts are metadata-only (5×6 baseline slice); the key never touched any committed file (verified). No `src/llmShield` change.
+
+### Changed
+
+- `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/stage1_live_runner.py` — `make_modern_model_compatible()` (tool-serialization fix + model-name registration); default attack → `important_instructions`; honest manifest note.
+- `docs/research/llm-shield/evidence/stage-1-live/README.md` — real findings (bug + fix, 0-ASR honesty).
+
+### Added
+
+- `docs/research/llm-shield/evidence/stage-1-live/workspace-live-{metrics,suite-breakdown,taxonomy}.json`, `live-manifest.json` — metadata-only baseline artifacts.
+
+---
+
+## [stage-1-live-model-agnostic] — 2026-06-24 — Live runner accepts any OpenAI model + reasoning effort
+
+**Raouf:** Made the Stage 1-LIVE runner model-agnostic so it can use current/future OpenAI models (e.g. a gpt-5.x reasoning model) that AgentDojo 0.1.30 models enum does not know. Builds the OpenAI LLM element directly with the raw model string and passes it as PipelineConfig(llm=<element>), which bypasses the enum; added --reasoning-effort (none/low/medium/high/xhigh) plumbed into OpenAILLM. Import-safe; no key used. Still opt-in and gated; no live numbers committed.
+
+### Changed
+
+- `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/stage1_live_runner.py` — raw-model OpenAILLM construction + reasoning_effort flag.
+
+---
+
+## [stage-1-live-verified-inconclusive] — 2026-06-24 — Live OpenAI AgentDojo harness verified (result inconclusive, honestly)
+
+**Raouf:** Ran the Stage 1-LIVE harness end-to-end against the real OpenAI API on a user-supplied burner key (since revoked). The harness WORKS: fixed two first-run bugs live (AgentDojo `NullLogger` does not set logdir on **enter** -> use `OutputLogger`; `SuiteResults` is a TypedDict -> subscript access), added an injection-task cap and a model flag. HONEST OUTCOME: the result is inconclusive and NOT dressed up. gpt-4o-mini (12x6): benign utility 1/12 (~8%), targeted ASR 0/72 -- the agent is too weak to do its own tasks, so it is also never productively hijacked (degenerate, same failure mode as deterministic 3J). gpt-4o-2024-05-13 (the capable model) could not run: the test key's org is on a 30k TPM tier and each AgentDojo call is ~30k tokens -> immediate 429. Conclusion: a valid live-agent test needs a capable model + adequate rate limits = genuine future work. NO live evidence numbers committed (the degenerate run is not a result). The key never touched any committed file (verified). No `src/llmShield` change; no paper results claim.
+
+### Changed
+
+- `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/stage1_live_runner.py` -- live-run fixes (OutputLogger context, TypedDict access, `--max-injection-tasks`, model flag).
+- `docs/research/llm-shield/evidence/stage-1-live/README.md` -- honest live findings recorded.
+
+### Verified
+
+- Harness ran live (real OpenAI calls, 84/84 task completion on the mini run); module still import-safe; no key in repo (`grep sk-proj` clean).
+
+---
+
+## [stage-1-live-agentdojo-prep] — 2026-06-24 — Live OpenAI AgentDojo runner (prepared, keyed, opt-in)
+
+**Raouf:** Prepared the one external-validity experiment that needs a paid API: AgentDojo with a REAL OpenAI agent. Stages 3H-3J used a deterministic ground-truth pipeline, so baseline ASR was trivially 0/949 (no LLM to fool, guards never fired). This runner swaps in a live OpenAI model so the baseline ASR is non-zero and the defended run has something real to contain. Gated and safe: `scripts/run-llm-shield-live-agentdojo.sh` no-ops without `OPENAI_API_KEY` (never runs in CI / never spends), the module is import-safe (lazy agentdojo/openai imports), and it reuses the already-unit-tested `build_stage3j_artifacts` aggregator. HONEST STATUS: the live pipeline construction is UNVERIFIED until the first keyed run and may need iteration; NO evidence numbers are committed (the evidence dir holds only a README). Metadata-only output. No `src/llmShield` change.
+
+### Added
+
+- `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/stage1_live_runner.py` (opt-in, pragma no cover).
+- `scripts/run-llm-shield-live-agentdojo.sh` (key-gated no-op-safe wrapper).
+- `docs/research/llm-shield/evidence/stage-1-live/README.md` (status + run instructions; no numbers).
+
+### Verified
+
+- Wrapper no-ops cleanly without `OPENAI_API_KEY` (exit 0); module imports without agentdojo; `--help` works. Live path intentionally unrun.
+
+---
+
+## [stage-3z-producer-independent-witness] — 2026-06-24 — Producer-independent witness (honest-producer gap closed)
+
+**Raouf:** Stage 3Z turns the paper's deepest acknowledged hole — the honest-producer gap — from "future work" into a built, falsifiable mechanism. A VCA signature proves issuer+integrity, not truth: a gateway can sign a CLEAN receipt for a dirty run and pass every signature/structure check. The witness cross-checks each signed receipt against an INDEPENDENT consequence oracle (canary/honeytoken sightings at the real export/tool sinks) whose channel is not derived from the receipt. Falsifiable self-proof: a dishonest gateway signs a clean receipt for a run that leaks a canary — its Ed25519 signature still verifies (plain verifier fooled) yet the witness raises a claim_conflict. 4 fixtures: 2 corroborated, 2 caught, **0 false accusations, 0 missed lies**. Sacred rule preserved: a conservative over-claim is a note, never an accusation. Pure offline/deterministic/key-free; no `src/llmShield` change.
+
+### Added
+
+- `tools/simurgh-attestation/independentWitnessLib.mjs` (pure cross-check lib), `tests/e2e/llm_shield_stage3z_witness_runner.mjs` (self-proof + signature-vs-witness demo), `tests/unit/llmShield/stage3zWitness.test.js` (7/7).
+- `scripts/reproduce-llm-shield-stage3z.sh`, `docs/research/llm-shield/evidence/stage-3z/{metrics,self-proof-results}.json`, `README.md`.
+- Paper: honest-producer subsection upgraded to "built + demonstrated", Stage 3Z eval paragraph + results rows + ladder node, limitations updated.
+
+### Verified
+
+- `scripts/reproduce-llm-shield-stage3z.sh` PASS (falsification holds); `node --test` 7/7; paper builds clean (0 undefined refs, 7 pages).
+
+---
+
+## [stage-3y-thirdparty-injection-corpus] — 2026-06-24 — Third-party attack corpus, component external validity
+
+**Raouf:** Stage 3Y answers the reviewer's deepest critique (Stage 3L is self-authored) with **independently-authored** attacks: 175 payloads rendered from the AgentDojo benchmark (Debenedetti et al., NeurIPS 2024) — 35 injection-task goals × 5 published attack envelopes — driven through the REAL Simurgh boundaries. The result is honest and includes misses: the deterministic input firewall detects only **35/175** (95% CI [0.14, 0.27]) — just the `injecagent` override-phrase family — and misses **140/175** [0.73, 0.86] (even `ignore_previous` evades it via a word insertion + the `iunstructions` typo in AgentDojo's own string). The same 175 payloads as untrusted context are structurally contained **175/175** [0.98, 1.0] with **0** cases of untrusted context gaining authority. That is the paper's thesis under third-party attacks: input guardrails miss; downstream structural containment holds. Evidence is metadata-only (per-case SHA-256 + verdicts, no raw payload text); reproduction needs the Stage 3I AgentDojo venv. No live-agent or production claim. No `src/llmShield` change.
+
+### Added
+
+- `tests/e2e/llm_shield_stage3y_corpus_extract.py` (corpus renderer, metadata-only manifest), `tests/e2e/llm_shield_stage3y_boundary_runner.mjs` (boundary driver + Clopper-Pearson CIs, `evaluateCases` export), `tests/unit/llmShield/stage3yBoundaryRunner.test.js` (hermetic, 3/3).
+- `scripts/reproduce-llm-shield-stage3y.sh` (extract → drive → privacy check).
+- `docs/research/llm-shield/evidence/stage-3y/{corpus-provenance,metrics,per-case-verdicts}.json`, `README.md`.
+- Paper Stage 3Y subsection + Table (`tab:thirdparty`), ladder node, abstract sentence.
+
+### Verified
+
+- `scripts/reproduce-llm-shield-stage3y.sh` PASS (175 cases, privacy check clean); `node --test` 3/3; paper builds clean (0 undefined refs, 6 pages).
+
+---
+
+## [aisec-2026-paper-reviewer-hardening] — 2026-06-24 — AISec paper reviewer-hardening (integrity pass)
+
+**Raouf:** Acted on a strict line-by-line reviewer pass and corrected an overclaim the prior revision introduced. Stage 3V-A had been dressed as a second external "guardrail comparator"; investigation showed it is a synthetic, self-authored fixture (`fixture_provenance: synthetic_deterministic`), so it is now honestly reframed as an **advisory-invariance check** with no detection/ASR claim, and the misleading comparator table was removed. The **real** Llama Guard 4 12B capture is now the single, clearly-labelled external reference and leads the evaluation (its 138/150 allow rate framed as the structural input-only blind spot, not a vendor weakness). Added exact 95% Clopper-Pearson intervals to all small-n rates (0/30 → [0,0.12], 0/150 → [0,0.02], 138/138 → [0.97,1]); demoted the self-authored perfect counts to fixture-validity. Added a **honest-producer trust-boundary** subsection to the security analysis (a dishonest gateway that signs a clean receipt is outside what a signature detects; producer-independent witnessing is the open problem). Replaced the contentless JSON-signing flowchart (Fig 2) with a context-provenance authority-decision figure. Collapsed five contributions to three. Abstract reframed around the real finding. All 12 numeric/provenance claims cross-check against frozen evidence; identity and overclaim scans clean.
+
+### Changed
+
+- `Papers/llm-shield-aisec2026/main.tex` — abstract, contributions (5→3), new provenance figure (replaces JSON flowchart), Stage 3L CIs + fixture-validity framing, Stage 3V-B/3V-A reorder + honest reframing, removed comparator table, results-table CIs, honest-producer security subsection, limitations.
+- `Papers/llm-shield-aisec2026/artifact/reproduce-paper-claims.sh` — 3V-A check now asserts synthetic provenance + advisory-invariance (no ASR claim); label fixes.
+- `Papers/llm-shield-aisec2026/audit/repo-claim-audit.md` — 3V-A row reframed as synthetic advisory-invariance.
+- `Papers/llm-shield-aisec2026/dist/llm-shield-aisec2026-anonymous.tar.gz` — rebuilt.
+
+### Verified
+
+- `make` clean (0 undefined refs, 6 pages, all 8 floats referenced); reproduce script 6/6; 12/12 numbers match evidence; overclaim + identity scans clean.
+
+---
+
+## [aisec-2026-paper-evidence-depth] — 2026-06-24 — AISec paper evidence-depth revision
+
+**Raouf:** Deepened the AISec 2026 LLM Shield paper on the reviewer Evidence axis using only already-frozen evidence (no new runs, no `src/llmShield` change). Added a benign false-positive rate `0/30` (hard-negative control), a per-boundary ablation of the 120 input-miss cases (context-guard `72`, tool-gate `24`, output-firewall `24`), a second external-guardrail reference (Stage 3V-A recorded generic: external-only ASR `80/150`, contained `80/80`, external+gateway `0/150`) alongside the live Llama Guard 4 point in a new comparator table, and the Stage 3V-B compute environment in-paper (LG4-12B, input-only greedy, bnb-8bit, RTX 3090 24GB, transformers preview). Abstract and claims table updated for two external references. The reviewer reproduction script (now 6/6) and the repo-claim-audit ledger were extended; the anonymous tarball rebuilt and re-scanned.
+
+### Changed
+
+- `Papers/llm-shield-aisec2026/main.tex` — FPR row + text, ablation Table 5, Stage 3V-A paragraph + comparator Table 4, Stage 3V-B compute sentence, abstract, claims table.
+- `Papers/llm-shield-aisec2026/artifact/reproduce-paper-claims.sh` — added benign-FPR, ablation, and Stage 3V-A checks (6 steps).
+- `Papers/llm-shield-aisec2026/audit/repo-claim-audit.md` — added the four new claim rows with evidence paths.
+- `Papers/llm-shield-aisec2026/dist/llm-shield-aisec2026-anonymous.tar.gz` — rebuilt.
+
+A follow-up full reviewer-grade audit hardened the draft: fixed a broken evidence path in the claims table (`vca-chain-results.json` → `vca-chain-reproduction-results.json`), normalised one British spelling, refreshed the ladder-figure accessibility description, pluralised contribution C4, and added in-text references for four previously unreferenced floats. All 19 numeric claims cross-check against frozen evidence; all 6 citations resolve.
+
+### Verified
+
+- `make` builds `main.pdf` clean (0 undefined references, 5 pages, all 9 floats referenced).
+- `artifact/reproduce-paper-claims.sh` passes 6/6; overclaim and PDF identity scans clean; 19/19 numbers match evidence; 6/6 citations resolve.
+
+---
+
 ## [stage-3m-verifiable-containment-attestation] — 2026-06-20 — Verifiable containment attestation
 
 **Raouf:** Stage 3M turns the Stage 3L containment evidence into an offline-verifiable run-set attestation. The HMAC audit chain remains internal tamper-evidence; a new Ed25519 signature is the external layer so any third party verifies the exported metadata-only bundle with the published public key — no symmetric secret shared. The signature covers `canonicalJson(parse(bundle))` (not file bytes), so reformatting never breaks verification. The bundle embeds metrics, boundary breakdown, recomputed gate results, policy digests, privacy report, a hash-bound 7-file `referenced_evidence` list, and machine-readable `non_claims`; v1 attests the Stage 3L 180-case run-set only (`simurgh.vca.run_set.v1`). The two-tier offline verifier (portable + `--reproduce`) passes every check; tamper tests cover bundle edits, re-signed bad metrics, decorative gate results, edited evidence, wrong key, fingerprint mismatch, and leakage. Public key committed (fingerprint `sha256:875b59ebbee8e6eb6fe34d6e06d60d74434cbcf5ec17acb18d1c9f68e2a06798`); private key never committed; CI verifies only; zero `src/llmShield` change. Honest boundary: it signs the evidence that exists and does not upgrade the Stage 3L audit sample into a full per-case HMAC chain. No jailbreak-immunity / model-safety claim.

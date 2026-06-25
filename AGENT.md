@@ -2,6 +2,103 @@
 
 ## Agent Change Log
 
+### 2026-06-25 (Australia/Sydney) — Stage 1-LIVE authority gate (egress + mutation): FULL containment in taxonomy
+
+**Raouf:**
+
+- **Scope:** Authority gate A/B (egress + destructive-mutation) on Llama-3.3-70B-FP8, by PRE-REGISTERED class. No `src/llmShield` change.
+- **Result:** **ASR 9/140 → 0/140** (all 9 baseline successes contained). `delete_only` 3/10→0/10 (mutation gate closed the egress-gate gap); egress classes stay 0. Honest cost: 1 benign regression (`user_task_8`, recipients are task-named so likely nondeterminism not a true false-block; flagged for per-action attribution); uua 91→80.
+- **Arc complete:** demotion (advisory, failed) → egress gate (scoped win) → authority gate (full containment in declared taxonomy). Non-claims kept (not immunity; excludes non-destructive mutation/financial/code = future kernel families).
+- **Files:** `docs/research/llm-shield/evidence/stage-1-live/llama-3.3-70b-fp8/authority-gate/` (+ RESULTS.md, byclass-output.txt), `AGENT.md`, `CHANGELOG.md`.
+
+### 2026-06-25 (Australia/Sydney) — Stage 1-LIVE egress tool-gate: scoped containment WIN
+
+**Raouf:**
+
+- **Scope:** Egress tool-gate A/B on Llama-3.3-70B-FP8, by PRE-REGISTERED class (frozen before results). No `src/llmShield` change.
+- **Result (clean win in scope):** overall ASR **9/140 → 4/140**; egress fully contained (`egress` 5/40→0/40, `egress_mass_recipient` 1/10→0/10); **all 4 remaining successes are `delete_only`** (the predicted out-of-jurisdiction gap). Benign utility **7/10→7/10, 0 false blocks**. Honest cost: utility-under-attack 91→74; heavy retry of blocked egress (1111/1574). Baseline variance honest (9 vs 10; greedy not bit-deterministic under concurrent batching).
+- **Next (running concurrently):** `authority` mode (egress + destructive-mutation gate) to close the `delete_only` gap.
+- **Files:** `docs/research/llm-shield/evidence/stage-1-live/llama-3.3-70b-fp8/egress-gate/` (+ RESULTS.md, byclass-output.txt), `AGENT.md`, `CHANGELOG.md`.
+
+### 2026-06-25 (Australia/Sydney) — Stage 1-LIVE Llama-3.3-70B A/B (non-zero baseline + honest negative containment)
+
+**Raouf:**
+
+- **Scope:** First live A/B with a non-zero baseline, on a self-hosted open model (Llama-3.3-70B-FP8 via vLLM on a RunPod H100, greedy). AgentDojo workspace, 10 user × 14 injection = 140 attack cases. No `src/llmShield` change.
+- **Built:** `live_defence.py` — REAL in-loop mediator routing every tool output through the gateway `guardContexts` (demoted → wrapped as untrusted data; rejected → withheld; chunked ≤4KB). Replaces the broken `SimurghDefence` pipeline append.
+- **Result (HONEST, not a win):** baseline ASR **10/140**, defended **8/140** (2 of 10 contained — within noise); benign **8/10 → 6/10**; uua **78/140 → 65/140**; 550 mediated (531 demoted, 19 rejected). `important_instructions` is demoted not rejected; Llama largely obeyed anyway and wrapping cost utility. **Demotion-only provenance wrapping is advisory, not live behavioural containment.**
+- **Next stage (separate):** action-level tool-gate defence (block the malicious tool call itself). Restart staged at `/workspace/setup_and_serve.sh` on the pod's persistent volume.
+- **Files:** `live_defence.py`, `stage1_live_runner.py` (defended wiring + mediation manifest), `docs/research/llm-shield/evidence/stage-1-live/llama-3.3-70b-fp8/` + `gpt-5.4-mini/` + README, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** committed runner produced both arms; defended smoke 2×2 contained (3/4→1/4) then full run honestly weak; no HF/OpenAI key in any committed file (grep-clean).
+
+### 2026-06-25 (Australia/Sydney) — Stage 1-LIVE ready for self-hosted open model (RunPod/vLLM)
+
+**Raouf:**
+
+- **Scope:** Make the live runner target a self-hosted OpenAI-compatible endpoint so a capable-but-foolable open model (Llama-3.3-70B-Instruct) can produce a NON-ZERO baseline ASR (gpt-5.4-mini = 0, too aligned). Code only; pod not up yet. No `src/llmShield` change.
+- **Why open/offline:** OpenAI legacy GPT-4 family all retire 2026-10-23 (rots fast); offline open weights = no deprecation, no rate limits, free, reproducible, and matches the 3V-B frozen-capture method. AgentDojo "inverse scaling" → 70B-class (≈42–54% utility) is the foolable sweet spot.
+- **Added:** `--base-url`/`--api-key` (self-hosted needs no real key; manifest stores endpoint HOST only), `--greedy` (temperature=0/seed=0 via `force_greedy_decoding()`), `vllm:` vs `openai:` provider label, RunPod runbook.
+- **Files:** `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/stage1_live_runner.py`, `scripts/run-llm-shield-live-agentdojo.sh`, `docs/research/llm-shield/evidence/stage-1-live/RUNPOD-LLAMA-RUNBOOK.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** module imports; `--help` shows new flags; serialization+greedy patches idempotent. Live numbers pending the pod.
+- **Need from Raouf when pod is up:** the `/v1` proxy base URL, confirmed model id, and that `vllm serve` came up (`/v1/models` returns the id).
+
+### 2026-06-25 (Australia/Sydney) — Stage 1-LIVE run on gpt-5.4-mini (real result, honest 0-ASR)
+
+**Raouf:**
+
+- **Scope:** Execute the keyed live AgentDojo run on `gpt-5.4-mini` (burner key, since revoked) and record the honest outcome. No `src/llmShield` change.
+- **Root cause found:** AgentDojo 0.1.30 tool-output serialization bug — internal blocks `[{"type":"text","content":...}]` vs OpenAI's required `text` key → modern reasoning model sees EMPTY tool results and refuses; benign utility collapses to ~0. Verified by message trace + direct API probe. Runner now repairs serialization (plain-string tool content) and registers the live model name so the canonical `important_instructions` attack runs on post-2024 strings. Benchmark scoring/envs/tasks/payloads untouched.
+- **Result (honest):** benign utility **0/5 → 5/5** after fix; targeted ASR **0/30** (injecagent) and **0/42** (canonical, all 14 injection goals); utility-under-attack 25–42/case. Frontier model natively resists → **baseline ASR 0 = nothing to contain; NOT a Simurgh win.** Live non-zero baseline = future work (weaker-capable model or stronger adaptive attack).
+- **Files:** `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/stage1_live_runner.py`, `docs/research/llm-shield/evidence/stage-1-live/README.md` + metadata-only artifacts, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** committed runner reproduces benign 5/5, ASR 0/30 via the real code path; no key in any committed file (grep-clean).
+
+### 2026-06-24 (Australia/Sydney) — Stage 1-LIVE AgentDojo runner prep (keyed, opt-in)
+
+**Raouf:**
+
+- **Scope:** Prepare the live OpenAI AgentDojo experiment so it runs the moment a key is provided. No `src/llmShield` change.
+- **Summary:** Live runner swaps the deterministic 3H-3J pipeline for a real OpenAI agent (non-zero baseline ASR, so the defended run actually contains something). Key-gated wrapper no-ops without `OPENAI_API_KEY`; module import-safe (lazy imports); reuses tested aggregator. HONEST: live path UNVERIFIED until first keyed run; no evidence numbers committed.
+- **Files:** `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/stage1_live_runner.py`, `scripts/run-llm-shield-live-agentdojo.sh`, `docs/research/llm-shield/evidence/stage-1-live/README.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** wrapper no-op exit 0 without key; module imports; `--help` ok.
+
+### 2026-06-24 (Australia/Sydney) — Stage 3Z producer-independent witness
+
+**Raouf:**
+
+- **Scope:** Close the honest-producer gap with a built, falsifiable mechanism. Pure offline/key-free; no `src/llmShield` change.
+- **Summary:** Witness cross-checks a signed gateway receipt against an INDEPENDENT consequence oracle (canary sightings at real sinks, channel not derived from the receipt). Self-proof: dishonest gateway signs a clean receipt for a real canary leak — Ed25519 signature verifies (plain verifier fooled) but witness raises claim_conflict. 4 fixtures: 2 corroborated, 2 caught, **0 false accusations, 0 missed lies**, falsification holds.
+- **Files:** `tools/simurgh-attestation/independentWitnessLib.mjs`, `tests/e2e/llm_shield_stage3z_witness_runner.mjs`, `tests/unit/llmShield/stage3zWitness.test.js`, `scripts/reproduce-llm-shield-stage3z.sh`, `docs/research/llm-shield/evidence/stage-3z/**`, `Papers/llm-shield-aisec2026/main.tex`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** reproduce PASS; unit 7/7; paper builds clean (7 pages).
+
+### 2026-06-24 (Australia/Sydney) — Stage 3Y third-party injection corpus (external validity)
+
+**Raouf:**
+
+- **Scope:** Break the Stage 3L self-authored-corpus circularity with independently-authored attacks. No `src/llmShield` change.
+- **Summary:** 175 payloads rendered from AgentDojo (35 injection goals × 5 published envelopes) driven through the real boundaries. Honest result incl. misses: input firewall content-detects **35/175** (CI [0.14,0.27]), misses **140/175**; same payloads structurally contained **175/175** with **0** untrusted-authority. Thesis under third-party attacks: input guardrails miss, downstream structural containment holds. Metadata-only evidence (no raw payloads).
+- **Files:** `tests/e2e/llm_shield_stage3y_*`, `tests/unit/llmShield/stage3yBoundaryRunner.test.js`, `scripts/reproduce-llm-shield-stage3y.sh`, `docs/research/llm-shield/evidence/stage-3y/**`, `Papers/llm-shield-aisec2026/main.tex`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** reproduce PASS (175, privacy clean); unit 3/3; paper builds clean (6 pages).
+
+### 2026-06-24 (Australia/Sydney) — AISec 2026 paper reviewer-hardening (integrity pass)
+
+**Raouf:**
+
+- **Scope:** Strict line-by-line reviewer pass on `Papers/llm-shield-aisec2026/`; fix overclaims and raise rigour without new runs. No `src/llmShield/**` change.
+- **Summary:** Corrected an overclaim the evidence-depth pass introduced — Stage 3V-A was presented as a second external "guardrail comparator" but is a synthetic self-authored fixture (`fixture_provenance: synthetic_deterministic`); reframed it honestly as an **advisory-invariance check** (no ASR/detection claim) and removed the misleading comparator table. The real Llama Guard 4 12B capture is now the single labelled external reference and leads the eval (138/150 framed as the input-only structural blind spot). Added exact 95% Clopper-Pearson CIs to all small-n rates and demoted self-authored perfect counts to fixture-validity. Added an **honest-producer trust-boundary** subsection (a dishonest gateway signing a clean receipt is outside what a signature detects → producer-independent witnessing is the open problem). Replaced the contentless JSON-signing figure with a context-provenance authority-decision figure. Collapsed 5 contributions to 3. Abstract reframed around the real finding.
+- **Files changed:** `Papers/llm-shield-aisec2026/main.tex`, `.../artifact/reproduce-paper-claims.sh`, `.../audit/repo-claim-audit.md`, `.../dist/llm-shield-aisec2026-anonymous.tar.gz`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `make` clean (0 undefined refs, 6 pages, all 8 floats referenced); reproduce script 6/6; 12/12 numeric+provenance claims match frozen evidence; overclaim + PDF identity scans clean; anonymous tarball rebuilt + rescanned.
+
+### 2026-06-24 (Australia/Sydney) — AISec 2026 paper evidence-depth revision
+
+**Raouf:**
+
+- **Scope:** Strengthen the AISec 2026 LLM Shield paper (`Papers/llm-shield-aisec2026/`) on the reviewer Evidence axis without any new runs — every number traces to already-frozen evidence. No `src/llmShield/**` change.
+- **Summary:** Four additions to `main.tex`: (1) benign false-positive rate `0/30` over the hard-negative control, surfaced in text and Table 3, to show containment is not indiscriminate blocking; (2) a per-boundary ablation (Table 5) of the 120 input-miss cases — context-provenance guard `72`, tool gate `24`, output firewall `24` — sourced from `stage-3l/boundary-breakdown.json`; (3) a second external-guardrail reference point, Stage 3V-A recorded generic guardrail (external-only ASR `80/150`, missed-but-contained `80/80`, external+gateway `0/150`), added to the evaluation ladder and a new comparator Table 4 alongside the live Llama Guard 4 point; (4) the Stage 3V-B compute environment in-paper (LG4-12B, single input-only greedy pass, bnb-8bit, RTX 3090 24GB, transformers v4.51.3 Llama-Guard preview, PyTorch 2.8.0/CUDA 12.8). Abstract and the claims table updated to reflect two external references. The reviewer reproduction script and the repo-claim-audit ledger were extended to cover the new claims; the anonymous tarball was rebuilt and re-scanned.
+- **Files changed:** `Papers/llm-shield-aisec2026/main.tex`, `Papers/llm-shield-aisec2026/artifact/reproduce-paper-claims.sh`, `Papers/llm-shield-aisec2026/audit/repo-claim-audit.md`, `Papers/llm-shield-aisec2026/dist/llm-shield-aisec2026-anonymous.tar.gz`, `AGENT.md`, `CHANGELOG.md`.
+- **Audit hardening (same session):** A second full reviewer-grade audit fixed a broken evidence path in the claims table (`vca-chain-results.json` → `vca-chain-reproduction-results.json`), normalised one British "defence" → "defense", refreshed the stale ladder-figure `\Description` to include Stage 3V-A, pluralised contribution C4 to "two external ... reference runs", and added in-text references for four previously unreferenced floats (`tab:boundaries`, `fig:evidence`, `tab:results`, `tab:repro`). Holistic cross-check: all 19 numeric claims in the paper match frozen evidence; all 6 citations exist and resolve (no `[?]`, no bibtex warnings); identity scan clean.
+- **Venue compliance (re-verified live 2026-06-24):** Confirmed against the live AISec '26 CFP (aisec.cc) + ACM CCS'26 formatting rules it defers to: deadline 2026-07-24 23:59 AoE, HotCRP `aisec26.hotcrp.com`, ≤10 content / ≤12 overall pages, anonymized `sigconf`, GenAI paragraph after references. CCS'26 forbids altering rights-management/formatting defaults, so removed a `\renewcommand\footnotetextcopyrightpermission` override; the ACM default copyright block now renders. Submitting as systems/security research (not a benchmark paper), so the benchmark-link rejection rule does not apply.
+- **Verification:** `make` builds `main.pdf` clean (0 undefined references, 5 pages, all 9 floats referenced); `artifact/reproduce-paper-claims.sh` passes 6/6 against frozen evidence; overclaim scan clean; PDF identity scan clean; `build-anonymous-submission.sh` identity scan passed.
+
 ### 2026-06-20 (Australia/Sydney) — Stage 3M verifiable containment attestation
 
 **Raouf:**

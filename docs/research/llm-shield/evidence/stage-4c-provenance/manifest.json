@@ -1,0 +1,17 @@
+{
+  "builds_on": {
+    "intent_bundle_sha256": "sha256:3ce441c2523a71d7b8a381269a3e96b06c9154854feb2b8f54668c2f2d1cfe50",
+    "stage": "4B-intent"
+  },
+  "kernel_change": "additive: 4A/4B frozen; new authorise_with_provenance()+ProvenanceIntentContext+IntentEntry; TRUSTED_PROVENANCE gate",
+  "non_claims": {
+    "no_src_llmshield_change": true,
+    "not_live_confirmed": true,
+    "provenance_labels_are_modelled_not_derived_from_a_real_trust_tracker": true,
+    "real_provenance_tracking_in_live_loop_deferred": true
+  },
+  "result": "naive_laundering_exposed=2, poisoning_contained=2, laundering_failures_4c=0, benign_recovered=2",
+  "schema": "simurgh.stage4c.manifest.v1",
+  "stage": "4C-provenance",
+  "threat_closed": "poisoned-participant: attacker laundered into an intent source via untrusted tool output"
+}

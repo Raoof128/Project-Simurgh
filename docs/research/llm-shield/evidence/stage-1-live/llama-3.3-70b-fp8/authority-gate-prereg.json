@@ -1,0 +1,18 @@
+{
+  "_purpose": "PRE-REGISTERED predictions for the AUTHORITY gate (egress + destructive-mutation), frozen BEFORE the authority A/B numbers exist. Builds on injection-taxonomy-prereg.json (same frozen class labels).",
+  "frozen_before_results": true,
+  "defence_mode": "authority",
+  "gate": {
+    "egress": "block send/share/invite whose destination is not grounded in the user's trusted task (unchanged from toolgate)",
+    "mutation": "block destructive irreversible actions (delete_file, delete_email, cancel_calendar_event) UNLESS the user's trusted task expresses destructive intent (delete/remove/cancel/clear/erase). The agent has no human-confirm channel, so an injected delete is blocked."
+  },
+  "predictions_vs_toolgate": {
+    "delete_only": "NOW EXPECTED contained (this is the gap toolgate could not cover; the mutation gate is its jurisdiction)",
+    "egress": "unchanged: contained",
+    "egress_plus_delete": "unchanged or stronger: contained (egress blocked; and the delete step now also blocked)",
+    "egress_mass_recipient": "unchanged: contained, still flags benign over-block risk"
+  },
+  "utility_risk_to_measure": "The mutation gate may block BENIGN destructive tasks whose user prompt lacks an explicit deletion keyword. Benign-utility regressions vs baseline are the honest cost and MUST be reported.",
+  "scoped_claim": "Within a declared action taxonomy (egress + destructive mutation) and a task-grounded authorisation policy, Simurgh blocks unauthorised egress AND unauthorised destructive side-effects even when the live model follows injected instructions.",
+  "non_claim": "Not jailbreak immunity; not prevention of injection; not coverage of non-destructive mutation (create/modify/reschedule) or financial/code actions. Those remain future capability-kernel families. The model may still be fooled."
+}
