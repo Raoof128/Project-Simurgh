@@ -1,0 +1,10 @@
+{
+  "full_containment_preserved": true,
+  "laundering_failures": 0,
+  "must_block_total": 3,
+  "no_laundering": true,
+  "recovered_overblocks": 4,
+  "schema": "simurgh.intent_authority_summary.v1",
+  "sustained_containment": 3,
+  "total_decisions": 8
+}

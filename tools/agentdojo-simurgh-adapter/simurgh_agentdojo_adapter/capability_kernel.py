@@ -55,6 +55,10 @@ class AuthorityDecision:
     family: str
     blocked_targets: list[str] = field(default_factory=list)
     would_execute: bool = False
+    # Stage 4B: which trusted intent source granted authority (additive; 4A always
+    # uses the default). One of: trusted_user_task | explicit_user_request |
+    # current_meeting_participants | selected_contact_group.
+    source: str = "trusted_user_task"
 
 
 def split_destinations(arg_value) -> list[str]:
@@ -109,3 +113,39 @@ def authorise(action: Action, *, trusted_text: str) -> AuthorityDecision:
             "block", "destructive_mutation_not_authorised", "destructive_mutation", [action.target]
         )
     return AuthorityDecision("allow", "non_gated", "none")
+
+
+# ---------------------------------------------------------------------------
+# Stage 4B: typed intent-source grounding (additive; the 4A `authorise` above is frozen).
+#
+# 4A grounds egress only in the literal task string, which over-blocks legitimate
+# "email my meeting participants / my contact group" actions whose addresses are not
+# typed into the task. 4B adds two TRUSTED intent sources so those actions are
+# authorised by the source that legitimately holds them, WITHOUT widening authority to
+# an attacker address that appears in no source. The sources are trusted-by-construction
+# here; populating them from (untrusted) tool outputs is a separate trust-propagation
+# question and is explicitly NOT done in this stage (see RESULTS non-claims).
+# ---------------------------------------------------------------------------
+@dataclass
+class IntentContext:
+    explicit_request: str = ""
+    meeting_participants: list[str] = field(default_factory=list)
+    contacts: list[str] = field(default_factory=list)
+
+
+def _addr_in(dest: str, trusted_list: list[str]) -> bool:
+    d = (dest or "").lower().strip()
+    return any(d == (a or "").lower().strip() for a in trusted_list)
+
+
+def authorise_with_intent(action: Action, *, intent: IntentContext) -> AuthorityDecision:
+    if action.family == "egress":
+        if is_grounded(action.target, intent.explicit_request):
+            return AuthorityDecision("allow", "intent_grounded", "egress", source="explicit_user_request")
+        if _addr_in(action.target, intent.meeting_participants):
+            return AuthorityDecision("allow", "intent_grounded", "egress", source="current_meeting_participants")
+        if _addr_in(action.target, intent.contacts):
+            return AuthorityDecision("allow", "intent_grounded", "egress", source="selected_contact_group")
+        return AuthorityDecision("block", "ungrounded_destination", "egress", [action.target])
+    # Mutation authority is unchanged from 4A: only an explicit destructive request grants it.
+    return authorise(action, trusted_text=intent.explicit_request)
