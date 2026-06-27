@@ -3,24 +3,25 @@
 import crypto from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
+import { pathToFileURL } from "node:url";
 import { buildEvidencePack, signPack } from "./packBuilder.mjs";
 
-function arg(name) {
-  const i = process.argv.indexOf(name);
-  return i === -1 ? null : process.argv[i + 1];
+export function arg(argv, name) {
+  const i = argv.indexOf(name);
+  return i === -1 ? null : argv[i + 1];
 }
 
-const stable = (v) => JSON.stringify(v, null, 2) + "\n";
+export const stable = (v) => JSON.stringify(v, null, 2) + "\n";
 
-async function main() {
-  const runPath = arg("--run-record");
-  const outPath = arg("--out");
-  const sigPath = arg("--sig");
+export async function main({ argv = process.argv.slice(2), env = process.env } = {}) {
+  const runPath = arg(argv, "--run-record");
+  const outPath = arg(argv, "--out");
+  const sigPath = arg(argv, "--sig");
   if (!runPath || !outPath || !sigPath) {
     throw new Error("usage: build-stage4d-pack --run-record <json> --out <pack> --sig <sig>");
   }
   const privateKeyPath =
-    process.env.SIMURGH_4D_PRIVATE_KEY_PATH ||
+    env.SIMURGH_4D_PRIVATE_KEY_PATH ||
     "tools/simurgh-attestation/stage4d/fixtures/keys/stage4d-test-private.pem";
   const privateKey = crypto.createPrivateKey(await readFile(privateKeyPath, "utf8"));
   const publicKey = crypto.createPublicKey(privateKey);
@@ -40,9 +41,12 @@ async function main() {
     stable(pack.completeness_manifest)
   );
   await writeFile(join(dirname(outPath), "non-claims.json"), stable(pack.non_claims));
+  return 0;
 }
 
-main().catch((e) => {
-  console.error("stage4d build:", e.message);
-  process.exit(2);
-});
+if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+  main().catch((e) => {
+    console.error("stage4d build:", e.message);
+    process.exit(2);
+  });
+}

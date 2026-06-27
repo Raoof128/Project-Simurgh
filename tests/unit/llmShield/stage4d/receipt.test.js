@@ -8,7 +8,10 @@ import {
   validateReceiptPayload,
   verifyReceipt,
 } from "../../../../tools/simurgh-attestation/stage4d/receipt.mjs";
-import { createStage4dSigner } from "../../../../tools/simurgh-attestation/stage4d/signer.mjs";
+import {
+  createStage4dSigner,
+  loadSignerFromPem,
+} from "../../../../tools/simurgh-attestation/stage4d/signer.mjs";
 
 const payload = {
   receipt_version: "simurgh.receipt.v1",
@@ -68,4 +71,16 @@ test("stage4d signer rejects wrong run id before signing", () => {
   const { privateKey } = crypto.generateKeyPairSync("ed25519");
   const signer = createStage4dSigner({ privateKey, runId: "stage4d-browser-inject-01" });
   assert.throws(() => signer.signReceipt({ ...payload, run_id: "wrong-run" }), /run_id_mismatch/);
+});
+
+test("stage4d signer loads deterministic test PEM and signs valid receipts", async () => {
+  const signer = await loadSignerFromPem({
+    privateKeyPath: "tools/simurgh-attestation/stage4d/fixtures/keys/stage4d-test-private.pem",
+    runId: "stage4d-browser-inject-01",
+  });
+  const publicKeyPem = await import("node:fs/promises").then(({ readFile }) =>
+    readFile("tools/simurgh-attestation/stage4d/fixtures/keys/stage4d-test-public.pem", "utf8")
+  );
+  const receipt = signer.signReceipt(payload);
+  assert.equal(verifyReceipt(receipt, publicKeyPem).ok, true);
 });
