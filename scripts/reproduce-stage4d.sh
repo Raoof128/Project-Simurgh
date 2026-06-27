@@ -38,6 +38,7 @@ echo "Stage 4D offline mode: network/model/provider/live API access disabled"
 )
 
 node --test \
+  tests/unit/llmShield/stage4d/cli.test.js \
   tests/unit/llmShield/stage4d/crypto.test.js \
   tests/unit/llmShield/stage4d/receipt.test.js \
   tests/unit/llmShield/stage4d/pack.test.js \
