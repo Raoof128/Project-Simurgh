@@ -11,8 +11,15 @@ fail() {
   exit 1
 }
 
-# 1. No actual PEM private-key block committed anywhere (anchored).
-if git grep -lE "^-----BEGIN ([A-Z]+ )?PRIVATE KEY-----" -- . >/dev/null 2>&1; then
+# 1. No actual PEM private-key block committed anywhere except the Stage 4D
+#    deterministic test fixture key, which exists solely to reproduce signed
+#    golden bytes in a clean clone.
+PRIVATE_KEY_MATCHES="$(
+  git grep -lE "^-----BEGIN ([A-Z]+ )?PRIVATE KEY-----" -- . \
+    | grep -v -x "tools/simurgh-attestation/stage4d/fixtures/keys/stage4d-test-private.pem" || true
+)"
+if [[ -n "$PRIVATE_KEY_MATCHES" ]]; then
+  echo "$PRIVATE_KEY_MATCHES"
   fail "private key material committed"
 fi
 

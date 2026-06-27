@@ -809,9 +809,7 @@ Create the deterministic test-only signing key fixtures. This key is for reprodu
 
 ```text
 # tools/simurgh-attestation/stage4d/fixtures/keys/stage4d-test-private.pem
------BEGIN PRIVATE KEY-----
-MC4CAQAwBQYDK2VwBCIEIB0gn+lGtVmK5uRxGZ+CahE1+s+k8cmA2ErsNR9nsEVx
------END PRIVATE KEY-----
+<deterministic Ed25519 test-only PEM fixture; do not paste key material into docs>
 ```
 
 ```text
