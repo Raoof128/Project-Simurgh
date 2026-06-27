@@ -3,6 +3,13 @@ import assert from "node:assert/strict";
 import crypto from "node:crypto";
 import { test } from "node:test";
 import { buildEvidencePack, signPack } from "../../../../tools/simurgh-attestation/stage4d/packBuilder.mjs";
+import {
+  corruptDecision,
+  dropOneReceipt,
+  injectRawSecret,
+  signedLyingDecision,
+  swapEmbeddedKey,
+} from "../../../../tools/simurgh-attestation/stage4d/tamper.mjs";
 import { verifyEvidencePack } from "../../../../tools/simurgh-attestation/stage4d/verifyPack.mjs";
 
 function oneActionRecord(overrides = {}) {
@@ -125,4 +132,38 @@ test("verifyEvidencePack rejects validly signed raw-content evidence at privacy 
   });
   assert.equal(result.ok, false);
   assert.equal(result.first_failure.reason, "privacy_leak_detected");
+});
+
+test("required falsifiers fail with stable reasons", () => {
+  const { publicKey, privateKey } = crypto.generateKeyPairSync("ed25519");
+  const publicKeyPem = publicKey.export({ type: "spki", format: "pem" });
+  const pack = buildEvidencePack({ runRecord: oneActionRecord(), privateKey, publicKey });
+  const signature = signPack(pack, privateKey);
+
+  assert.equal(
+    verifyEvidencePack({ pack: dropOneReceipt(pack), signature, publicKeyPem }).first_failure.reason,
+    "pack_hash_mismatch"
+  );
+  assert.equal(
+    verifyEvidencePack({ pack: corruptDecision(pack), signature, publicKeyPem }).first_failure.reason,
+    "pack_hash_mismatch"
+  );
+  assert.equal(
+    verifyEvidencePack({ pack: swapEmbeddedKey(pack), signature, publicKeyPem }).first_failure.reason,
+    "pack_hash_mismatch"
+  );
+  assert.equal(
+    verifyEvidencePack({ pack: injectRawSecret(pack), signature, publicKeyPem }).first_failure.reason,
+    "pack_hash_mismatch"
+  );
+
+  const lying = signedLyingDecision({ pack, privateKey });
+  assert.equal(
+    verifyEvidencePack({
+      pack: lying.pack,
+      signature: lying.signature,
+      publicKeyPem,
+    }).first_failure.reason,
+    "replayed_decision_mismatch"
+  );
 });
