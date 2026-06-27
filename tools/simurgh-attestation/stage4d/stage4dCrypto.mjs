@@ -28,7 +28,9 @@ export function domainBytes(domain, payload) {
 }
 
 export function publicKeyFingerprint(publicKeyPemOrKeyObject) {
-  const der = crypto.createPublicKey(publicKeyPemOrKeyObject).export({ type: "spki", format: "der" });
+  const der = crypto
+    .createPublicKey(publicKeyPemOrKeyObject)
+    .export({ type: "spki", format: "der" });
   return sha256HexRaw(der);
 }
 

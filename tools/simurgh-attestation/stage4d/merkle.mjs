@@ -12,7 +12,9 @@ function hexToBytes(hex) {
 
 export function merkleRoot(hexLeaves) {
   if (!Array.isArray(hexLeaves) || hexLeaves.length === 0) return "0".repeat(64);
-  let level = hexLeaves.map((leaf) => hashBytes(Buffer.concat([Buffer.from([0x00]), hexToBytes(leaf)])));
+  let level = hexLeaves.map((leaf) =>
+    hashBytes(Buffer.concat([Buffer.from([0x00]), hexToBytes(leaf)]))
+  );
   while (level.length > 1) {
     const next = [];
     for (let i = 0; i < level.length; i += 2) {

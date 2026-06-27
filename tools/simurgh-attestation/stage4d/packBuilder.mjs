@@ -26,7 +26,10 @@ function observationHashes(observationLog) {
 }
 
 function signerPublicKeyObject(publicKey) {
-  const key = typeof publicKey === "string" || Buffer.isBuffer(publicKey) ? crypto.createPublicKey(publicKey) : publicKey;
+  const key =
+    typeof publicKey === "string" || Buffer.isBuffer(publicKey)
+      ? crypto.createPublicKey(publicKey)
+      : publicKey;
   const pem = key.export({ type: "spki", format: "pem" });
   return {
     key_type: "Ed25519",
@@ -60,7 +63,10 @@ export function buildEvidencePack({ runRecord, privateKey, publicKey }) {
     const decision = runRecord.decisions[i];
     const material = runRecord.replay_material[decision.action_id];
     const observed = runRecord.action_observation_log[i];
-    const derivedPolicyFeatures = derivePolicyFeatures(material.policy_features_source, runRecord.sink_registry);
+    const derivedPolicyFeatures = derivePolicyFeatures(
+      material.policy_features_source,
+      runRecord.sink_registry
+    );
     const payload = {
       receipt_version: "simurgh.receipt.v1",
       run_id: runRecord.run_manifest.run_id,

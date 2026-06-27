@@ -4,7 +4,10 @@ import { readFile } from "node:fs/promises";
 import { buildReceipt, signReceiptPayload, validateReceiptPayload } from "./receipt.mjs";
 
 export function createStage4dSigner({ privateKey, runId }) {
-  const key = typeof privateKey === "string" || Buffer.isBuffer(privateKey) ? crypto.createPrivateKey(privateKey) : privateKey;
+  const key =
+    typeof privateKey === "string" || Buffer.isBuffer(privateKey)
+      ? crypto.createPrivateKey(privateKey)
+      : privateKey;
   return {
     signReceipt(payload) {
       const valid = validateReceiptPayload(payload);

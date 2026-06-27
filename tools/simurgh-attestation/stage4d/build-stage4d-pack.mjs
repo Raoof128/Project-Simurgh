@@ -30,9 +30,15 @@ async function main() {
   await mkdir(dirname(outPath), { recursive: true });
   await writeFile(outPath, stable(pack));
   await writeFile(sigPath, signature + "\n");
-  await writeFile(join(dirname(outPath), "signer.pub"), publicKey.export({ type: "spki", format: "pem" }));
+  await writeFile(
+    join(dirname(outPath), "signer.pub"),
+    publicKey.export({ type: "spki", format: "pem" })
+  );
   await writeFile(join(dirname(outPath), "run-manifest.json"), stable(pack.run_manifest));
-  await writeFile(join(dirname(outPath), "completeness-manifest.json"), stable(pack.completeness_manifest));
+  await writeFile(
+    join(dirname(outPath), "completeness-manifest.json"),
+    stable(pack.completeness_manifest)
+  );
   await writeFile(join(dirname(outPath), "non-claims.json"), stable(pack.non_claims));
 }
 

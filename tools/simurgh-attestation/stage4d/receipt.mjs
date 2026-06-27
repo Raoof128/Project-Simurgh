@@ -40,14 +40,16 @@ export function validateReceiptPayload(payload) {
   for (const key of REQUIRED) {
     if (!(key in payload)) return { ok: false, reason: "schema_invalid", key };
   }
-  if (payload.receipt_version !== "simurgh.receipt.v1") return { ok: false, reason: "schema_invalid" };
+  if (payload.receipt_version !== "simurgh.receipt.v1")
+    return { ok: false, reason: "schema_invalid" };
   if (!Number.isInteger(payload.step_index) || payload.step_index < 0) {
     return { ok: false, reason: "schema_invalid" };
   }
   if (!isHex64(payload.observation_event_hash) || !isHex64(payload.prev_receipt_hash)) {
     return { ok: false, reason: "schema_invalid" };
   }
-  if (!["allow", "block"].includes(payload.decision)) return { ok: false, reason: "schema_invalid" };
+  if (!["allow", "block"].includes(payload.decision))
+    return { ok: false, reason: "schema_invalid" };
   if (!payload.decision_input || typeof payload.decision_input !== "object") {
     return { ok: false, reason: "schema_invalid" };
   }

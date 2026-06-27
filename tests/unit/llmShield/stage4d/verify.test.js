@@ -2,12 +2,18 @@
 import assert from "node:assert/strict";
 import crypto from "node:crypto";
 import { test } from "node:test";
-import { buildEvidencePack, signPack } from "../../../../tools/simurgh-attestation/stage4d/packBuilder.mjs";
+import {
+  buildEvidencePack,
+  signPack,
+} from "../../../../tools/simurgh-attestation/stage4d/packBuilder.mjs";
 import {
   corruptDecision,
   dropOneReceipt,
   injectRawSecret,
+  signedDropOneReceipt,
+  signedEmbeddedKeyMismatch,
   signedLyingDecision,
+  signedRawSecret,
   swapEmbeddedKey,
 } from "../../../../tools/simurgh-attestation/stage4d/tamper.mjs";
 import { verifyEvidencePack } from "../../../../tools/simurgh-attestation/stage4d/verifyPack.mjs";
@@ -141,20 +147,34 @@ test("required falsifiers fail with stable reasons", () => {
   const signature = signPack(pack, privateKey);
 
   assert.equal(
-    verifyEvidencePack({ pack: dropOneReceipt(pack), signature, publicKeyPem }).first_failure.reason,
+    verifyEvidencePack({ pack: dropOneReceipt(pack), signature, publicKeyPem }).first_failure
+      .reason,
     "pack_hash_mismatch"
   );
   assert.equal(
-    verifyEvidencePack({ pack: corruptDecision(pack), signature, publicKeyPem }).first_failure.reason,
+    verifyEvidencePack({ pack: corruptDecision(pack), signature, publicKeyPem }).first_failure
+      .reason,
     "pack_hash_mismatch"
   );
   assert.equal(
-    verifyEvidencePack({ pack: swapEmbeddedKey(pack), signature, publicKeyPem }).first_failure.reason,
+    verifyEvidencePack({ pack: swapEmbeddedKey(pack), signature, publicKeyPem }).first_failure
+      .reason,
     "pack_hash_mismatch"
   );
   assert.equal(
-    verifyEvidencePack({ pack: injectRawSecret(pack), signature, publicKeyPem }).first_failure.reason,
+    verifyEvidencePack({ pack: injectRawSecret(pack), signature, publicKeyPem }).first_failure
+      .reason,
     "pack_hash_mismatch"
+  );
+
+  const missingReceipt = signedDropOneReceipt({ pack, privateKey });
+  assert.equal(
+    verifyEvidencePack({
+      pack: missingReceipt.pack,
+      signature: missingReceipt.signature,
+      publicKeyPem,
+    }).first_failure.reason,
+    "missing_receipt_for_observed_action"
   );
 
   const lying = signedLyingDecision({ pack, privateKey });
@@ -165,5 +185,25 @@ test("required falsifiers fail with stable reasons", () => {
       publicKeyPem,
     }).first_failure.reason,
     "replayed_decision_mismatch"
+  );
+
+  const embeddedMismatch = signedEmbeddedKeyMismatch({ pack, privateKey });
+  assert.equal(
+    verifyEvidencePack({
+      pack: embeddedMismatch.pack,
+      signature: embeddedMismatch.signature,
+      publicKeyPem,
+    }).first_failure.reason,
+    "embedded_key_mismatch"
+  );
+
+  const rawSecret = signedRawSecret({ pack, privateKey });
+  assert.equal(
+    verifyEvidencePack({
+      pack: rawSecret.pack,
+      signature: rawSecret.signature,
+      publicKeyPem,
+    }).first_failure.reason,
+    "privacy_leak_detected"
   );
 });

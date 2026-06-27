@@ -52,7 +52,8 @@ function packWithoutHash(pack) {
 function checkSize(pack) {
   const json = JSON.stringify(pack);
   if (json.length > LIMITS.maxPackBytes) return false;
-  if (Array.isArray(pack.receipts) && pack.receipts.length > LIMITS.maxReceiptsPerPack) return false;
+  if (Array.isArray(pack.receipts) && pack.receipts.length > LIMITS.maxReceiptsPerPack)
+    return false;
   for (const receipt of pack.receipts || []) {
     if (JSON.stringify(receipt).length > LIMITS.maxReceiptBytes) return false;
   }
@@ -96,8 +97,10 @@ function verifyReceipts(pack, publicKeyPem, layers) {
     const payload = receipt.receipt_payload;
     const check = verifyReceipt(receipt, publicKeyPem);
     if (!check.ok) return fail("tamper", check.reason, payload?.action_id, layers);
-    if (payload.step_index !== i) return fail("tamper", "non_contiguous_step_index", payload.action_id, layers);
-    if (payload.prev_receipt_hash !== prev) return fail("tamper", "chain_break", payload.action_id, layers);
+    if (payload.step_index !== i)
+      return fail("tamper", "non_contiguous_step_index", payload.action_id, layers);
+    if (payload.prev_receipt_hash !== prev)
+      return fail("tamper", "chain_break", payload.action_id, layers);
     prev = receipt.receipt_hash;
   }
   const receiptHashes = pack.receipts.map((r) => r.receipt_hash);
@@ -113,7 +116,10 @@ function verifyCompleteness(pack, layers) {
   const receipts = pack.receipts;
   const manifest = pack.completeness_manifest;
   const eventHashes = events.map((event) => sha256Canonical(event));
-  if (merkleRoot(eventHashes) !== pack.observation_log_root || merkleRoot(eventHashes) !== manifest.observation_log_root) {
+  if (
+    merkleRoot(eventHashes) !== pack.observation_log_root ||
+    merkleRoot(eventHashes) !== manifest.observation_log_root
+  ) {
     return fail("observation_binding", "observation_log_root_mismatch", null, layers);
   }
   layers.observation_binding = true;
@@ -125,7 +131,10 @@ function verifyCompleteness(pack, layers) {
   }
   const eventIds = events.map((event) => event.action_id);
   const receiptIds = receipts.map((receipt) => receipt.receipt_payload.action_id);
-  if (new Set(eventIds).size !== eventIds.length || new Set(receiptIds).size !== receiptIds.length) {
+  if (
+    new Set(eventIds).size !== eventIds.length ||
+    new Set(receiptIds).size !== receiptIds.length
+  ) {
     return fail("completeness", "duplicate_action_id", null, layers);
   }
   for (let i = 0; i < events.length; i += 1) {
@@ -144,7 +153,9 @@ function verifyCompleteness(pack, layers) {
   if (manifest.ordered_action_ids.join("\0") !== eventIds.join("\0")) {
     return fail("completeness", "missing_receipt_for_observed_action", null, layers);
   }
-  if (manifest.ordered_receipt_hashes.join("\0") !== receipts.map((r) => r.receipt_hash).join("\0")) {
+  if (
+    manifest.ordered_receipt_hashes.join("\0") !== receipts.map((r) => r.receipt_hash).join("\0")
+  ) {
     return fail("completeness", "merkle_root_mismatch", null, layers);
   }
   layers.completeness = true;
@@ -156,36 +167,58 @@ function verifyReplay(pack, layers) {
     const payload = receipt.receipt_payload;
     const actionId = payload.action_id;
     const material = pack.replay_material[actionId];
-    if (!material) return fail("decision_replay", "missing_receipt_for_observed_action", actionId, layers);
+    if (!material)
+      return fail("decision_replay", "missing_receipt_for_observed_action", actionId, layers);
     if (payload.decision_input.policy_hash !== sha256Canonical(pack.policy_bundle)) {
       return fail("decision_replay", "policy_hash_mismatch", actionId, layers);
     }
     if (payload.decision_input.sink_registry_hash !== sha256Canonical(pack.sink_registry)) {
       return fail("decision_replay", "sink_registry_hash_mismatch", actionId, layers);
     }
-    if (payload.decision_input.consequence_lattice_hash !== sha256Canonical(pack.consequence_lattice)) {
+    if (
+      payload.decision_input.consequence_lattice_hash !== sha256Canonical(pack.consequence_lattice)
+    ) {
       return fail("decision_replay", "consequence_lattice_hash_mismatch", actionId, layers);
     }
-    if (payload.decision_input.resolved_args_digest !== sha256Canonical(material.resolved_args_redacted)) {
+    if (
+      payload.decision_input.resolved_args_digest !==
+      sha256Canonical(material.resolved_args_redacted)
+    ) {
       return fail("decision_replay", "resolved_args_digest_mismatch", actionId, layers);
     }
-    const derivedFeatures = derivePolicyFeatures(material.policy_features_source, pack.sink_registry);
+    const derivedFeatures = derivePolicyFeatures(
+      material.policy_features_source,
+      pack.sink_registry
+    );
     if (payload.decision_input.policy_features_digest !== sha256Canonical(derivedFeatures)) {
       return fail("decision_replay", "policy_features_digest_mismatch", actionId, layers);
     }
-    if (payload.decision_input.taint_labels_digest !== sha256Canonical(material.taint_derivation_inputs)) {
+    if (
+      payload.decision_input.taint_labels_digest !==
+      sha256Canonical(material.taint_derivation_inputs)
+    ) {
       return fail("decision_replay", "taint_digest_mismatch", actionId, layers);
     }
     if (payload.decision_input.context_digest !== sha256Canonical(material.decision_context)) {
       return fail("decision_replay", "context_digest_mismatch", actionId, layers);
     }
-    if (payload.decision_input.untrusted_reached_authority !== deriveUntrustedReachedAuthority(material.taint_derivation_inputs)) {
+    if (
+      payload.decision_input.untrusted_reached_authority !==
+      deriveUntrustedReachedAuthority(material.taint_derivation_inputs)
+    ) {
       return fail("decision_replay", "taint_authority_mismatch", actionId, layers);
     }
-    if (payload.input_integrity_summary !== deriveIntegritySummary(material.taint_derivation_inputs)) {
+    if (
+      payload.input_integrity_summary !== deriveIntegritySummary(material.taint_derivation_inputs)
+    ) {
       return fail("decision_replay", "integrity_summary_mismatch", actionId, layers);
     }
-    const replayed = decide(pack.policy_bundle, payload.decision_input, material, pack.sink_registry);
+    const replayed = decide(
+      pack.policy_bundle,
+      payload.decision_input,
+      material,
+      pack.sink_registry
+    );
     if (replayed.decision !== payload.decision) {
       return fail("decision_replay", "replayed_decision_mismatch", actionId, layers);
     }
