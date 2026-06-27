@@ -1,0 +1,10 @@
+{
+  "not_model_safety": true,
+  "not_jailbreak_immunity": true,
+  "not_policy_correctness": true,
+  "not_complete_for_unmediated_actions": true,
+  "not_kernel_enforced": true,
+  "not_live_model_identity_proof": true,
+  "not_production_certification": true,
+  "not_ground_truth_outside_mediated_surface": true
+}
