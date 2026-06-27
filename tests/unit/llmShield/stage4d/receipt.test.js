@@ -8,6 +8,7 @@ import {
   validateReceiptPayload,
   verifyReceipt,
 } from "../../../../tools/simurgh-attestation/stage4d/receipt.mjs";
+import { createStage4dSigner } from "../../../../tools/simurgh-attestation/stage4d/signer.mjs";
 
 const payload = {
   receipt_version: "simurgh.receipt.v1",
@@ -52,4 +53,19 @@ test("buildReceipt signs and verifies with the receipt domain", () => {
   assert.equal(verifyReceipt(receipt, publicKey).ok, true);
   receipt.receipt_payload.decision = "block";
   assert.equal(verifyReceipt(receipt, publicKey).ok, false);
+});
+
+test("stage4d signer rejects arbitrary payload types", () => {
+  const { privateKey } = crypto.generateKeyPairSync("ed25519");
+  const signer = createStage4dSigner({ privateKey, runId: "stage4d-browser-inject-01" });
+  assert.throws(
+    () => signer.signReceipt({ payload_type: "arbitrary", run_id: "stage4d-browser-inject-01" }),
+    /schema_invalid/
+  );
+});
+
+test("stage4d signer rejects wrong run id before signing", () => {
+  const { privateKey } = crypto.generateKeyPairSync("ed25519");
+  const signer = createStage4dSigner({ privateKey, runId: "stage4d-browser-inject-01" });
+  assert.throws(() => signer.signReceipt({ ...payload, run_id: "wrong-run" }), /run_id_mismatch/);
 });
