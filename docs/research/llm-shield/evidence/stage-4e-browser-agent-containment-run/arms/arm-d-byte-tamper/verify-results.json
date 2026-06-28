@@ -1,0 +1,17 @@
+{
+  "ok": false,
+  "exit_code": 1,
+  "layers": {
+    "pack_signature": true,
+    "tamper": false,
+    "observation_binding": null,
+    "completeness": null,
+    "decision_replay": null,
+    "privacy": null
+  },
+  "first_failure": {
+    "layer": "tamper",
+    "action_id": "act_000",
+    "reason": "receipt_signature_invalid"
+  }
+}

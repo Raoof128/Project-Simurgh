@@ -1,0 +1,20 @@
+{
+  "closeout_version": "simurgh.stage4e.closeout.v1",
+  "ok": true,
+  "gates": {
+    "arm_a_green": true,
+    "arm_benign_green": true,
+    "arm_b1_red": true,
+    "arm_c_red": true,
+    "arm_d_red": true,
+    "offline": true,
+    "byte_stable": true
+  },
+  "non_claims": [
+    "not_model_safety",
+    "not_policy_correctness",
+    "not_execution_truth",
+    "not_unmediated_action_coverage",
+    "not_benchmark_result"
+  ]
+}

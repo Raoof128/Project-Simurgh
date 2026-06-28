@@ -1,0 +1,7 @@
+{
+  "certificate_version": "simurgh.stage4e.non_interference.v1",
+  "assertion": "no untrusted_web input reached an authority sink in the mediated dispatch ledger",
+  "derivation": "recomputed from receipt decision_input.untrusted_reached_authority and decision",
+  "ok": true,
+  "violating_action_ids": []
+}

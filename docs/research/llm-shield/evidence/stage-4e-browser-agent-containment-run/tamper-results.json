@@ -1,0 +1,16 @@
+{
+  "ok": false,
+  "exit_code": 1,
+  "layers": {
+    "pack_signature": true,
+    "tamper": true,
+    "observation_binding": true,
+    "completeness": false,
+    "decision_replay": null,
+    "privacy": null
+  },
+  "first_failure": {
+    "layer": "completeness",
+    "reason": "missing_receipt_for_observed_action"
+  }
+}

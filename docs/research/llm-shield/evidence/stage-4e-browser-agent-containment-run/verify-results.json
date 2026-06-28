@@ -1,0 +1,15 @@
+{
+  "ok": true,
+  "exit_code": 0,
+  "layers": {
+    "pack_signature": true,
+    "tamper": true,
+    "observation_binding": true,
+    "completeness": true,
+    "decision_replay": true,
+    "privacy": true
+  },
+  "first_failure": null,
+  "session_merkle_root": "8da706ddd4cff08ee999022a57a21f7f6309fccffd34dd960be3f514e34a0009",
+  "pack_hash": "cc7dda9bc3dd6daf2d78a0a42dc8325d0959f494f1fb4a5bcd7d7b07c7f352bc"
+}
