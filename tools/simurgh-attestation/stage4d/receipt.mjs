@@ -1,9 +1,15 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 import crypto from "node:crypto";
+import { readFileSync } from "node:fs";
 import { RECEIPT_DOMAIN } from "./constants.mjs";
+import { validateAgainstSchema } from "./schemaValidator.mjs";
 import { domainBytes, isHex64, sha256Canonical } from "./stage4dCrypto.mjs";
 
-const REQUIRED = [
+export const RECEIPT_SCHEMA = JSON.parse(
+  readFileSync(new URL("./schemas/receipt.schema.json", import.meta.url), "utf8")
+);
+
+export const REQUIRED = [
   "receipt_version",
   "run_id",
   "parent_session",
@@ -23,7 +29,7 @@ const REQUIRED = [
   "prev_receipt_hash",
 ];
 
-const DIGEST_FIELDS = [
+export const DIGEST_FIELDS = [
   "policy_hash",
   "sink_registry_hash",
   "consequence_lattice_hash",
@@ -37,6 +43,8 @@ export function validateReceiptPayload(payload) {
   if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
     return { ok: false, reason: "schema_invalid" };
   }
+  const schemaResult = validateAgainstSchema(payload, RECEIPT_SCHEMA);
+  if (!schemaResult.ok) return schemaResult;
   for (const key of REQUIRED) {
     if (!(key in payload)) return { ok: false, reason: "schema_invalid", key };
   }

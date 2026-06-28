@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://project-simurgh.local/stage4d/receipt.schema.json",
+  "title": "Project Simurgh Stage 4D Receipt Payload",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "receipt_version",
+    "run_id",
+    "parent_session",
+    "action_id",
+    "step_index",
+    "observation_event_hash",
+    "action_type",
+    "sink_id",
+    "consequence_class",
+    "boundary_id",
+    "input_integrity_summary",
+    "decision",
+    "decision_reason_code",
+    "decision_input",
+    "model_identity_committed",
+    "model_identity_origin",
+    "prev_receipt_hash"
+  ],
+  "properties": {
+    "receipt_version": { "const": "simurgh.receipt.v1" },
+    "run_id": { "type": "string", "minLength": 1 },
+    "parent_session": { "type": "string", "minLength": 1 },
+    "action_id": { "type": "string", "pattern": "^act_[0-9]{3}$" },
+    "step_index": { "type": "integer", "minimum": 0 },
+    "observation_event_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "action_type": { "type": "string", "minLength": 1 },
+    "sink_id": {
+      "type": "string",
+      "enum": ["egress", "authority_escalation", "secret_export", "destructive_mutation"]
+    },
+    "consequence_class": { "type": "string", "minLength": 1 },
+    "boundary_id": { "type": "string", "minLength": 1 },
+    "input_integrity_summary": { "type": "string", "minLength": 1 },
+    "decision": { "type": "string", "enum": ["allow", "block"] },
+    "decision_reason_code": { "type": "string", "minLength": 1 },
+    "decision_input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy_version",
+        "policy_hash",
+        "sink_registry_version",
+        "sink_registry_hash",
+        "consequence_lattice_hash",
+        "resolved_args_digest",
+        "policy_features_digest",
+        "taint_labels_digest",
+        "context_digest",
+        "untrusted_reached_authority",
+        "policy_mode"
+      ],
+      "properties": {
+        "policy_version": { "type": "string", "minLength": 1 },
+        "policy_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "sink_registry_version": { "type": "string", "minLength": 1 },
+        "sink_registry_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "consequence_lattice_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "resolved_args_digest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "policy_features_digest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "taint_labels_digest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "context_digest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "untrusted_reached_authority": { "type": "boolean" },
+        "policy_mode": { "type": "string", "enum": ["balanced", "permissive", "strict"] }
+      }
+    },
+    "model_identity_committed": { "type": "string", "minLength": 1 },
+    "model_identity_origin": { "type": "string", "enum": ["self_reported", "tee_attested"] },
+    "prev_receipt_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+  }
+}

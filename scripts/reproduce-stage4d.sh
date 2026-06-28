@@ -21,6 +21,15 @@ cleanup() {
 }
 trap cleanup EXIT
 
+golden_cmp() {
+  local expected="$1"
+  local actual="$2"
+  if ! cmp "$expected" "$actual"; then
+    echo "Stage 4D golden mismatch: $expected != $actual" >&2
+    exit 3
+  fi
+}
+
 export SIMURGH_4D_PRIVATE_KEY_PATH="$PRIVATE_KEY"
 export SIMURGH_STAGE4D_OFFLINE=1
 export NO_NETWORK=1
@@ -65,12 +74,12 @@ node tools/simurgh-attestation/stage4d/verify-stage4d-pack.mjs \
   --pubkey "$TMP_DIR/signer.pub" \
   --results "$VERIFY_RESULTS"
 
-cmp "$EV/evidence-pack.json" "$PACK"
-cmp "$EV/evidence-pack.sig" "$SIG"
-cmp "$EV/signer.pub" "$TMP_DIR/signer.pub"
-cmp "$EV/run-manifest.json" "$TMP_DIR/run-manifest.json"
-cmp "$EV/completeness-manifest.json" "$TMP_DIR/completeness-manifest.json"
-cmp "$EV/non-claims.json" "$TMP_DIR/non-claims.json"
+golden_cmp "$EV/evidence-pack.json" "$PACK"
+golden_cmp "$EV/evidence-pack.sig" "$SIG"
+golden_cmp "$EV/signer.pub" "$TMP_DIR/signer.pub"
+golden_cmp "$EV/run-manifest.json" "$TMP_DIR/run-manifest.json"
+golden_cmp "$EV/completeness-manifest.json" "$TMP_DIR/completeness-manifest.json"
+golden_cmp "$EV/non-claims.json" "$TMP_DIR/non-claims.json"
 
 node -e "const fs=require('node:fs'); const r=JSON.parse(fs.readFileSync(process.argv[1],'utf8')); if (r.ok !== true || r.exit_code !== 0) process.exit(1);" "$VERIFY_RESULTS"
 

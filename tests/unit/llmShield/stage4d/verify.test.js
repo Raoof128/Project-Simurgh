@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 import assert from "node:assert/strict";
 import crypto from "node:crypto";
+import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import {
   buildEvidencePack,
@@ -14,6 +15,7 @@ import {
   signedEmbeddedKeyMismatch,
   signedLyingDecision,
   signedRawSecret,
+  signedReceiptSignatureFlip,
   swapEmbeddedKey,
 } from "../../../../tools/simurgh-attestation/stage4d/tamper.mjs";
 import { verifyEvidencePack } from "../../../../tools/simurgh-attestation/stage4d/verifyPack.mjs";
@@ -206,4 +208,40 @@ test("required falsifiers fail with stable reasons", () => {
     }).first_failure.reason,
     "privacy_leak_detected"
   );
+});
+
+test("full Stage 4D signed falsifiers reach receipt and replay gates", () => {
+  const pack = JSON.parse(
+    readFileSync(
+      "docs/research/llm-shield/evidence/stage-4d-decision-replay-evidence-pack/evidence-pack.json",
+      "utf8"
+    )
+  );
+  const privateKey = crypto.createPrivateKey(
+    readFileSync("tools/simurgh-attestation/stage4d/fixtures/keys/stage4d-test-private.pem", "utf8")
+  );
+  const publicKeyPem = readFileSync(
+    "docs/research/llm-shield/evidence/stage-4d-decision-replay-evidence-pack/signer.pub",
+    "utf8"
+  );
+
+  const flippedReceipt = signedReceiptSignatureFlip({ pack, privateKey });
+  const tamperResult = verifyEvidencePack({
+    pack: flippedReceipt.pack,
+    signature: flippedReceipt.signature,
+    publicKeyPem,
+  });
+  assert.equal(tamperResult.first_failure.layer, "tamper");
+  assert.equal(tamperResult.first_failure.action_id, "act_000");
+  assert.equal(tamperResult.first_failure.reason, "receipt_signature_invalid");
+
+  const lying = signedLyingDecision({ pack, privateKey });
+  const replayResult = verifyEvidencePack({
+    pack: lying.pack,
+    signature: lying.signature,
+    publicKeyPem,
+  });
+  assert.equal(replayResult.first_failure.layer, "decision_replay");
+  assert.equal(replayResult.first_failure.action_id, "act_000");
+  assert.equal(replayResult.first_failure.reason, "replayed_decision_mismatch");
 });

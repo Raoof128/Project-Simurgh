@@ -81,3 +81,10 @@ test("stage4d CLIs expose stable setup failures", async () => {
     await rm(tmp, { recursive: true, force: true });
   }
 });
+
+test("stage4d pack builder keeps private-key access inside signer process", async () => {
+  const source = await readFile("tools/simurgh-attestation/stage4d/build-stage4d-pack.mjs", "utf8");
+  assert.match(source, /withSignerProcess/);
+  assert.doesNotMatch(source, /createPrivateKey/);
+  assert.doesNotMatch(source, /readFile\(privateKeyPath/);
+});

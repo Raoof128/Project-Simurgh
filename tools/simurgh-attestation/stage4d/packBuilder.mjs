@@ -39,68 +39,8 @@ function signerPublicKeyObject(publicKey) {
   };
 }
 
-export function tallySinks(events, decisions) {
-  const out = {};
-  for (const event of events) out[event.sink_id] = { observed: 0, allow: 0, block: 0 };
-  for (const event of events) out[event.sink_id].observed += 1;
-  for (const decision of decisions) {
-    const event = events.find((e) => e.action_id === decision.action_id);
-    out[event.sink_id][decision.decision] += 1;
-  }
-  return out;
-}
-
-export function buildEvidencePack({ runRecord, privateKey, publicKey }) {
+function buildPackObject({ runRecord, publicKey, receipts, obsHashes }) {
   const pub = signerPublicKeyObject(publicKey);
-  const signer = createStage4dSigner({ privateKey, runId: runRecord.run_manifest.run_id });
-  const obsHashes = observationHashes(runRecord.action_observation_log);
-  const policyHash = digest(runRecord.policy_bundle);
-  const sinkHash = digest(runRecord.sink_registry);
-  const latticeHash = digest(runRecord.consequence_lattice);
-  const receipts = [];
-
-  for (let i = 0; i < runRecord.decisions.length; i += 1) {
-    const decision = runRecord.decisions[i];
-    const material = runRecord.replay_material[decision.action_id];
-    const observed = runRecord.action_observation_log[i];
-    const derivedPolicyFeatures = derivePolicyFeatures(
-      material.policy_features_source,
-      runRecord.sink_registry
-    );
-    const payload = {
-      receipt_version: "simurgh.receipt.v1",
-      run_id: runRecord.run_manifest.run_id,
-      parent_session: runRecord.run_manifest.parent_session,
-      action_id: decision.action_id,
-      step_index: i,
-      observation_event_hash: obsHashes[i],
-      action_type: observed.action_type,
-      sink_id: observed.sink_id,
-      consequence_class: observed.consequence_class,
-      boundary_id: observed.boundary_id,
-      input_integrity_summary: decision.input_integrity_summary,
-      decision: decision.decision,
-      decision_reason_code: decision.decision_reason_code,
-      decision_input: {
-        policy_version: runRecord.policy_bundle.policy_version,
-        policy_hash: policyHash,
-        sink_registry_version: runRecord.sink_registry.registry_version,
-        sink_registry_hash: sinkHash,
-        consequence_lattice_hash: latticeHash,
-        resolved_args_digest: digest(material.resolved_args_redacted),
-        policy_features_digest: digest(derivedPolicyFeatures),
-        taint_labels_digest: digest(material.taint_derivation_inputs),
-        context_digest: digest(material.decision_context),
-        untrusted_reached_authority: decision.decision_input.untrusted_reached_authority,
-        policy_mode: decision.decision_input.policy_mode,
-      },
-      model_identity_committed: runRecord.run_manifest.model_identity_committed,
-      model_identity_origin: runRecord.run_manifest.model_identity_origin,
-      prev_receipt_hash: i === 0 ? ZERO_HASH : receipts[i - 1].receipt_hash,
-    };
-    receipts.push(signer.signReceipt(payload));
-  }
-
   const orderedReceiptHashes = receipts.map((r) => r.receipt_hash);
   const completeness = {
     manifest_version: "simurgh.completeness.v1",
@@ -133,6 +73,125 @@ export function buildEvidencePack({ runRecord, privateKey, publicKey }) {
     signer_public_key_fingerprint: pub.fingerprint,
   };
   return { ...withoutHash, pack_hash: digest(withoutHash) };
+}
+
+function receiptPayload({
+  runRecord,
+  decision,
+  material,
+  observed,
+  obsHash,
+  policyHash,
+  sinkHash,
+  latticeHash,
+  prevHash,
+  stepIndex,
+}) {
+  const derivedPolicyFeatures = derivePolicyFeatures(
+    material.policy_features_source,
+    runRecord.sink_registry
+  );
+  return {
+    receipt_version: "simurgh.receipt.v1",
+    run_id: runRecord.run_manifest.run_id,
+    parent_session: runRecord.run_manifest.parent_session,
+    action_id: decision.action_id,
+    step_index: stepIndex,
+    observation_event_hash: obsHash,
+    action_type: observed.action_type,
+    sink_id: observed.sink_id,
+    consequence_class: observed.consequence_class,
+    boundary_id: observed.boundary_id,
+    input_integrity_summary: decision.input_integrity_summary,
+    decision: decision.decision,
+    decision_reason_code: decision.decision_reason_code,
+    decision_input: {
+      policy_version: runRecord.policy_bundle.policy_version,
+      policy_hash: policyHash,
+      sink_registry_version: runRecord.sink_registry.registry_version,
+      sink_registry_hash: sinkHash,
+      consequence_lattice_hash: latticeHash,
+      resolved_args_digest: digest(material.resolved_args_redacted),
+      policy_features_digest: digest(derivedPolicyFeatures),
+      taint_labels_digest: digest(material.taint_derivation_inputs),
+      context_digest: digest(material.decision_context),
+      untrusted_reached_authority: decision.decision_input.untrusted_reached_authority,
+      policy_mode: decision.decision_input.policy_mode,
+    },
+    model_identity_committed: runRecord.run_manifest.model_identity_committed,
+    model_identity_origin: runRecord.run_manifest.model_identity_origin,
+    prev_receipt_hash: prevHash,
+  };
+}
+
+export function tallySinks(events, decisions) {
+  const out = {};
+  for (const event of events) out[event.sink_id] = { observed: 0, allow: 0, block: 0 };
+  for (const event of events) out[event.sink_id].observed += 1;
+  for (const decision of decisions) {
+    const event = events.find((e) => e.action_id === decision.action_id);
+    out[event.sink_id][decision.decision] += 1;
+  }
+  return out;
+}
+
+export function buildEvidencePack({ runRecord, privateKey, publicKey }) {
+  const signer = createStage4dSigner({ privateKey, runId: runRecord.run_manifest.run_id });
+  const obsHashes = observationHashes(runRecord.action_observation_log);
+  const policyHash = digest(runRecord.policy_bundle);
+  const sinkHash = digest(runRecord.sink_registry);
+  const latticeHash = digest(runRecord.consequence_lattice);
+  const receipts = [];
+
+  for (let i = 0; i < runRecord.decisions.length; i += 1) {
+    const decision = runRecord.decisions[i];
+    const material = runRecord.replay_material[decision.action_id];
+    const observed = runRecord.action_observation_log[i];
+    const payload = receiptPayload({
+      runRecord,
+      decision,
+      material,
+      observed,
+      obsHash: obsHashes[i],
+      policyHash,
+      sinkHash,
+      latticeHash,
+      prevHash: i === 0 ? ZERO_HASH : receipts[i - 1].receipt_hash,
+      stepIndex: i,
+    });
+    receipts.push(signer.signReceipt(payload));
+  }
+
+  return buildPackObject({ runRecord, publicKey, receipts, obsHashes });
+}
+
+export async function buildEvidencePackWithSigner({ runRecord, publicKey, signReceipt }) {
+  const obsHashes = observationHashes(runRecord.action_observation_log);
+  const policyHash = digest(runRecord.policy_bundle);
+  const sinkHash = digest(runRecord.sink_registry);
+  const latticeHash = digest(runRecord.consequence_lattice);
+  const receipts = [];
+
+  for (let i = 0; i < runRecord.decisions.length; i += 1) {
+    const decision = runRecord.decisions[i];
+    const material = runRecord.replay_material[decision.action_id];
+    const observed = runRecord.action_observation_log[i];
+    const payload = receiptPayload({
+      runRecord,
+      decision,
+      material,
+      observed,
+      obsHash: obsHashes[i],
+      policyHash,
+      sinkHash,
+      latticeHash,
+      prevHash: i === 0 ? ZERO_HASH : receipts[i - 1].receipt_hash,
+      stepIndex: i,
+    });
+    receipts.push(await signReceipt(payload));
+  }
+
+  return buildPackObject({ runRecord, publicKey, receipts, obsHashes });
 }
 
 export function signPack(pack, privateKey) {

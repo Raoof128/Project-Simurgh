@@ -4,6 +4,8 @@ import crypto from "node:crypto";
 import { test } from "node:test";
 import {
   buildReceipt,
+  RECEIPT_SCHEMA,
+  REQUIRED,
   signReceiptPayload,
   validateReceiptPayload,
   verifyReceipt,
@@ -12,6 +14,7 @@ import {
   createStage4dSigner,
   loadSignerFromPem,
 } from "../../../../tools/simurgh-attestation/stage4d/signer.mjs";
+import { Stage4dSignerProcess } from "../../../../tools/simurgh-attestation/stage4d/signer-client.mjs";
 
 const payload = {
   receipt_version: "simurgh.receipt.v1",
@@ -49,6 +52,18 @@ test("validateReceiptPayload accepts the full Stage 4D shape", () => {
   assert.equal(validateReceiptPayload(payload).ok, true);
 });
 
+test("receipt schema is draft 2020-12 and backs required-field validation", () => {
+  assert.equal(RECEIPT_SCHEMA.$schema, "https://json-schema.org/draft/2020-12/schema");
+  assert.deepEqual(RECEIPT_SCHEMA.required, REQUIRED);
+  const missingModelOrigin = structuredClone(payload);
+  delete missingModelOrigin.model_identity_origin;
+  assert.deepEqual(validateReceiptPayload(missingModelOrigin), {
+    ok: false,
+    reason: "schema_invalid",
+    key: "model_identity_origin",
+  });
+});
+
 test("buildReceipt signs and verifies with the receipt domain", () => {
   const { publicKey, privateKey } = crypto.generateKeyPairSync("ed25519");
   const signature = signReceiptPayload(payload, privateKey);
@@ -83,4 +98,19 @@ test("stage4d signer loads deterministic test PEM and signs valid receipts", asy
   );
   const receipt = signer.signReceipt(payload);
   assert.equal(verifyReceipt(receipt, publicKeyPem).ok, true);
+});
+
+test("stage4d signer process rejects unsupported payload types", async () => {
+  const signer = new Stage4dSignerProcess({
+    privateKeyPath: "tools/simurgh-attestation/stage4d/fixtures/keys/stage4d-test-private.pem",
+    runId: "stage4d-browser-inject-01",
+  });
+  try {
+    await assert.rejects(
+      () => signer.request({ type: "arbitrary_payload", payload }),
+      /unsupported_signer_payload_type/
+    );
+  } finally {
+    signer.close();
+  }
 });
