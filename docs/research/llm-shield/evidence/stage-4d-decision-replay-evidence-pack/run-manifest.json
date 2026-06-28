@@ -1,0 +1,8 @@
+{
+  "fixture_id": "browser_inject_01",
+  "mode": "recorded_fixture",
+  "model_identity_committed": "self-reported-fixture-model",
+  "model_identity_origin": "self_reported",
+  "parent_session": "session_stage4d_browser_inject_01",
+  "run_id": "stage4d-browser-inject-01"
+}

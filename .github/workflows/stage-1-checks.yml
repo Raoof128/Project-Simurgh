@@ -60,6 +60,9 @@ jobs:
       - name: Install dependencies (npm ci)
         run: npm ci
 
+      - name: Install Python test dependencies
+        run: python3 -m pip install "pytest>=8.0"
+
       - name: Install Linux daemon test dependencies (xvfb, dbus, shellcheck)
         run: |
           sudo apt-get update

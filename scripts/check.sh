@@ -14,7 +14,8 @@
 #                             (both skipped under --quick)
 #   12    Platform & device . Stage 2.1–2.8 integrity/daemon/scanner, Swift &
 #                             Linux-Rust nodes, voting & banking pilots
-#   13    LLM Shield ........ Stage 3A–3S containment pipeline + per-stage audits
+#   13    LLM Shield ........ Stage 3A–3S containment pipeline + per-stage audits,
+#                             Stage 4D decision-replay evidence pack
 #   14    Git status sanity
 #
 # Usage:
@@ -1681,6 +1682,14 @@ if scripts/smoke-llm-shield-stage3n.sh > "$LOG_DIR/llm-shield-stage3n-smoke.log"
 else
   fail "LLM Shield 3N claim-checked security-utility ledger"
   tail -80 "$LOG_DIR/llm-shield-stage3n-smoke.log"
+fi
+
+step "LLM Shield Stage 4D decision-replay evidence pack"
+if scripts/reproduce-stage4d.sh > "$LOG_DIR/llm-shield-stage4d-reproduce.log" 2>&1; then
+  pass "LLM Shield Stage 4D decision-replay evidence pack"
+else
+  fail "LLM Shield Stage 4D decision-replay evidence pack"
+  tail -100 "$LOG_DIR/llm-shield-stage4d-reproduce.log"
 fi
 
 step "LLM Shield 3N claim ledger helper coverage"
