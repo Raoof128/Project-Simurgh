@@ -8,6 +8,27 @@ import { FAILURE_REASONS, STAGE4F_VERSIONS } from "./constants.mjs";
 import { derivePointMetrics } from "./metrics.mjs";
 import { paretoFrontier } from "./frontier.mjs";
 
+const FORBIDDEN_KEYS = new Set([
+  "raw_prompt",
+  "raw_model_output",
+  "secret",
+  "api_key",
+  "hidden_instruction",
+  "private_key",
+  "raw_page_text",
+  "raw_email_body",
+  "private_user_content",
+]);
+
+const FORBIDDEN_VALUE_PATTERNS = [
+  /-----BEGIN (?:RSA |EC |OPENSSH |)?PRIVATE KEY-----/,
+  /\bsk-(?:proj-)?[A-Za-z0-9_-]{24,}\b/,
+  /\b(?:api[_-]?key|hidden instruction|raw prompt|raw model output)\b/i,
+  /\b(?:raw page text|raw email body|private user content)\b/i,
+];
+
+const MAX_FREE_TEXT_LENGTH = 512;
+
 async function readJson(path) {
   return JSON.parse(await readFile(path, "utf8"));
 }
@@ -24,6 +45,30 @@ function result({ ok, failed_layer = null, first_failure = null }) {
 
 function fail(failed_layer, reason, context = {}) {
   return result({ ok: false, failed_layer, first_failure: { reason, ...context } });
+}
+
+export function privacyAuditObject(value) {
+  const stack = [{ path: "$", value }];
+  while (stack.length > 0) {
+    const current = stack.pop();
+    if (current && typeof current.value === "object") {
+      for (const [key, child] of Object.entries(current.value)) {
+        const nextPath = `${current.path}.${key}`;
+        if (FORBIDDEN_KEYS.has(key)) {
+          return { ok: false, reason: FAILURE_REASONS.privacy_leak_detected, path: nextPath };
+        }
+        stack.push({ path: nextPath, value: child });
+      }
+    } else if (typeof current.value === "string") {
+      if (current.value.length > MAX_FREE_TEXT_LENGTH) {
+        return { ok: false, reason: FAILURE_REASONS.privacy_leak_detected, path: current.path };
+      }
+      if (FORBIDDEN_VALUE_PATTERNS.some((pattern) => pattern.test(current.value))) {
+        return { ok: false, reason: FAILURE_REASONS.privacy_leak_detected, path: current.path };
+      }
+    }
+  }
+  return { ok: true };
 }
 
 function gridHashFromDocument(grid) {
@@ -186,6 +231,10 @@ export async function verifyFrontier({ evidenceDir, suitePath, gridPath, pubkeyP
     }
     if (frontierSig.trim() !== canonicalHash(certificate)) {
       return fail("certificate", FAILURE_REASONS.frontier_signature_invalid);
+    }
+    const privacy = privacyAuditObject({ cellSet, metrics, frontier, certificate });
+    if (!privacy.ok) {
+      return fail("privacy", privacy.reason, { path: privacy.path });
     }
     const ok = result({ ok: true });
     if (outPath) await writeFile(outPath, `${JSON.stringify(ok, null, 2)}\n`);
