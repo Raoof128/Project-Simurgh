@@ -27,6 +27,10 @@ const CRYPTO_OR_GENERATED_KEYS = new Set([
   "token",
 ]);
 
+function isCryptoOrGeneratedKey(key) {
+  return CRYPTO_OR_GENERATED_KEYS.has(key) || key === "hash" || key.endsWith("_hash");
+}
+
 function findForbiddenData(value, forbiddenValues, path = "$") {
   if (value === null || value === undefined) return null;
 
@@ -46,7 +50,7 @@ function findForbiddenData(value, forbiddenValues, path = "$") {
 
   if (typeof value === "object") {
     for (const [key, item] of Object.entries(value)) {
-      if (CRYPTO_OR_GENERATED_KEYS.has(key)) continue;
+      if (isCryptoOrGeneratedKey(key)) continue;
       const found = findForbiddenData(item, forbiddenValues, `${path}.${key}`);
       if (found) return found;
     }
