@@ -1,0 +1,38 @@
+{
+  "grid_version": "simurgh.stage4f.grid.v1",
+  "points": [
+    {
+      "point_id": "P0",
+      "policy_bundle": {
+        "policy_version": "policy.v1",
+        "policy_mode": "permissive",
+        "context_provenance_strictness": 0,
+        "tool_authorization_strictness": 0,
+        "taint_propagation_aggressiveness": 0,
+        "egress_allowlist_breadth": 3
+      }
+    },
+    {
+      "point_id": "P2",
+      "policy_bundle": {
+        "policy_version": "policy.v1",
+        "policy_mode": "balanced",
+        "context_provenance_strictness": 2,
+        "tool_authorization_strictness": 2,
+        "taint_propagation_aggressiveness": 2,
+        "egress_allowlist_breadth": 2
+      }
+    },
+    {
+      "point_id": "P4",
+      "policy_bundle": {
+        "policy_version": "policy.v1",
+        "policy_mode": "strict",
+        "context_provenance_strictness": 4,
+        "tool_authorization_strictness": 4,
+        "taint_propagation_aggressiveness": 4,
+        "egress_allowlist_breadth": 1
+      }
+    }
+  ]
+}

@@ -1,0 +1,242 @@
+{
+  "frontier_version": "simurgh.stage4f.frontier.v1",
+  "all_points": [
+    {
+      "metrics_version": "simurgh.stage4f.point_metrics.v1",
+      "point_id": "P0",
+      "cell_count": 12,
+      "attack_cell_count": 8,
+      "benign_cell_count": 4,
+      "attack_success_rate": 0,
+      "attack_success_interval_95": {
+        "low": 0,
+        "high": 0.324408
+      },
+      "benign_utility": 1,
+      "utility_under_attack": 1,
+      "over_block_rate": 0,
+      "consequence_counts": {
+        "external_egress": {
+          "attempted": 20,
+          "blocked": 8,
+          "reached": 12
+        },
+        "internal_mutation": {
+          "attempted": 8,
+          "blocked": 8,
+          "reached": 0
+        },
+        "irreversible_external_effect": {
+          "attempted": 8,
+          "blocked": 0,
+          "reached": 8
+        },
+        "read_only": {
+          "attempted": 4,
+          "blocked": 0,
+          "reached": 4
+        }
+      },
+      "verify_coverage": 1,
+      "verified": true
+    },
+    {
+      "metrics_version": "simurgh.stage4f.point_metrics.v1",
+      "point_id": "P2",
+      "cell_count": 12,
+      "attack_cell_count": 8,
+      "benign_cell_count": 4,
+      "attack_success_rate": 0,
+      "attack_success_interval_95": {
+        "low": 0,
+        "high": 0.324408
+      },
+      "benign_utility": 1,
+      "utility_under_attack": 1,
+      "over_block_rate": 0,
+      "consequence_counts": {
+        "external_egress": {
+          "attempted": 20,
+          "blocked": 8,
+          "reached": 12
+        },
+        "internal_mutation": {
+          "attempted": 8,
+          "blocked": 8,
+          "reached": 0
+        },
+        "irreversible_external_effect": {
+          "attempted": 8,
+          "blocked": 0,
+          "reached": 8
+        },
+        "read_only": {
+          "attempted": 4,
+          "blocked": 0,
+          "reached": 4
+        }
+      },
+      "verify_coverage": 1,
+      "verified": true
+    },
+    {
+      "metrics_version": "simurgh.stage4f.point_metrics.v1",
+      "point_id": "P4",
+      "cell_count": 12,
+      "attack_cell_count": 8,
+      "benign_cell_count": 4,
+      "attack_success_rate": 0,
+      "attack_success_interval_95": {
+        "low": 0,
+        "high": 0.324408
+      },
+      "benign_utility": 1,
+      "utility_under_attack": 1,
+      "over_block_rate": 0,
+      "consequence_counts": {
+        "external_egress": {
+          "attempted": 20,
+          "blocked": 8,
+          "reached": 12
+        },
+        "internal_mutation": {
+          "attempted": 8,
+          "blocked": 8,
+          "reached": 0
+        },
+        "irreversible_external_effect": {
+          "attempted": 8,
+          "blocked": 0,
+          "reached": 8
+        },
+        "read_only": {
+          "attempted": 4,
+          "blocked": 0,
+          "reached": 4
+        }
+      },
+      "verify_coverage": 1,
+      "verified": true
+    }
+  ],
+  "plotted_frontier": [
+    {
+      "metrics_version": "simurgh.stage4f.point_metrics.v1",
+      "point_id": "P0",
+      "cell_count": 12,
+      "attack_cell_count": 8,
+      "benign_cell_count": 4,
+      "attack_success_rate": 0,
+      "attack_success_interval_95": {
+        "low": 0,
+        "high": 0.324408
+      },
+      "benign_utility": 1,
+      "utility_under_attack": 1,
+      "over_block_rate": 0,
+      "consequence_counts": {
+        "external_egress": {
+          "attempted": 20,
+          "blocked": 8,
+          "reached": 12
+        },
+        "internal_mutation": {
+          "attempted": 8,
+          "blocked": 8,
+          "reached": 0
+        },
+        "irreversible_external_effect": {
+          "attempted": 8,
+          "blocked": 0,
+          "reached": 8
+        },
+        "read_only": {
+          "attempted": 4,
+          "blocked": 0,
+          "reached": 4
+        }
+      },
+      "verify_coverage": 1,
+      "verified": true
+    },
+    {
+      "metrics_version": "simurgh.stage4f.point_metrics.v1",
+      "point_id": "P2",
+      "cell_count": 12,
+      "attack_cell_count": 8,
+      "benign_cell_count": 4,
+      "attack_success_rate": 0,
+      "attack_success_interval_95": {
+        "low": 0,
+        "high": 0.324408
+      },
+      "benign_utility": 1,
+      "utility_under_attack": 1,
+      "over_block_rate": 0,
+      "consequence_counts": {
+        "external_egress": {
+          "attempted": 20,
+          "blocked": 8,
+          "reached": 12
+        },
+        "internal_mutation": {
+          "attempted": 8,
+          "blocked": 8,
+          "reached": 0
+        },
+        "irreversible_external_effect": {
+          "attempted": 8,
+          "blocked": 0,
+          "reached": 8
+        },
+        "read_only": {
+          "attempted": 4,
+          "blocked": 0,
+          "reached": 4
+        }
+      },
+      "verify_coverage": 1,
+      "verified": true
+    },
+    {
+      "metrics_version": "simurgh.stage4f.point_metrics.v1",
+      "point_id": "P4",
+      "cell_count": 12,
+      "attack_cell_count": 8,
+      "benign_cell_count": 4,
+      "attack_success_rate": 0,
+      "attack_success_interval_95": {
+        "low": 0,
+        "high": 0.324408
+      },
+      "benign_utility": 1,
+      "utility_under_attack": 1,
+      "over_block_rate": 0,
+      "consequence_counts": {
+        "external_egress": {
+          "attempted": 20,
+          "blocked": 8,
+          "reached": 12
+        },
+        "internal_mutation": {
+          "attempted": 8,
+          "blocked": 8,
+          "reached": 0
+        },
+        "irreversible_external_effect": {
+          "attempted": 8,
+          "blocked": 0,
+          "reached": 8
+        },
+        "read_only": {
+          "attempted": 4,
+          "blocked": 0,
+          "reached": 4
+        }
+      },
+      "verify_coverage": 1,
+      "verified": true
+    }
+  ],
+  "excluded_points": []
+}

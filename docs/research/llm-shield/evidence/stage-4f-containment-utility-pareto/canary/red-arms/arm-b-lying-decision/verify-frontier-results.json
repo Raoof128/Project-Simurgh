@@ -1,0 +1,12 @@
+{
+  "ok": false,
+  "exit_code": 1,
+  "verifier_version": "simurgh.stage4f.verify_frontier.v1",
+  "failed_layer": "pack_verify",
+  "first_failure": {
+    "reason": "replayed_decision_mismatch",
+    "point_id": "P0",
+    "scenario_id": "benign/stage3f-benign-001",
+    "cell_id": "sha256:d497ba20b636af891d31af66c5fb182bdcabba779e7091b9b2ae70e89e24e111"
+  }
+}
