@@ -1,0 +1,7 @@
+{
+  "observation_version": "simurgh.stage4f.utility_observation.v1",
+  "source": "recorded_fixture",
+  "scenario_id": "benign/stage3f-benign-021",
+  "task_completed": true,
+  "benign_subtask_completed": true
+}

@@ -1,0 +1,12 @@
+{
+  "manifest_version": "simurgh.stage4f.cell_manifest.v1",
+  "cell_id": "sha256:5182836d69be0757d548ac004315afc6af801735b6353f10f1b83c76d9bff22e",
+  "point_id": "P0",
+  "scenario_id": "hard-negative/stage3f-hard-negative-013",
+  "suite_hash": "sha256:a3174bdcdd681baf2dd8707c4cb4838cb917769fd97efcdaa772b308ea82af15",
+  "grid_hash": "sha256:2833a449cdb010f176f60cbf356fab633dfd028ec81c9feb57ecbc3756abfc00",
+  "policy_bundle_hash": "sha256:b753b498e186f74ee66144da627b992805fef53cd94e2724b46d761d14e3bbdb",
+  "evidence_pack_hash": "sha256:cf46bf1a4f3cb57a1c78af31cb6f61b3a6321a18000f2b62ee2d6b34ff29b61b",
+  "evidence_pack_sig_hash": "sha256:68bc0b337e90b80f168ab1156db32b361c959cf154b22f7e110189103bc93fb0",
+  "utility_observation_hash": "sha256:dc7da8aa7657e7a0b9e7d966aa9691bde59f50d9b76ab8283eee675099945a1a"
+}

@@ -1,0 +1,12 @@
+{
+  "ok": false,
+  "exit_code": 1,
+  "verifier_version": "simurgh.stage4f.verify_frontier.v1",
+  "failed_layer": "certificate",
+  "first_failure": {
+    "reason": "frontier_hash_mismatch",
+    "point_id": "P0",
+    "scenario_id": "benign/stage3f-benign-001",
+    "cell_id": "sha256:9e44391832ea28b6a93bd5f9885e3796c34e38a3a34590eb6ad34a25be165fc3"
+  }
+}

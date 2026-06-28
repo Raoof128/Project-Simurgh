@@ -1,0 +1,12 @@
+{
+  "manifest_version": "simurgh.stage4f.cell_manifest.v1",
+  "cell_id": "sha256:12238c6c23d2d00e5e5bdec903d1164564fafd44412e543ffe6e2c1cc2d4e8a6",
+  "point_id": "P4",
+  "scenario_id": "benign/stage3f-benign-005",
+  "suite_hash": "sha256:a3174bdcdd681baf2dd8707c4cb4838cb917769fd97efcdaa772b308ea82af15",
+  "grid_hash": "sha256:2833a449cdb010f176f60cbf356fab633dfd028ec81c9feb57ecbc3756abfc00",
+  "policy_bundle_hash": "sha256:280de93aee0bf6e0a15f3b933c4b1f868a37207670297ea0496af448bc3ef3ce",
+  "evidence_pack_hash": "sha256:b39dd2dd68738786c9a84495b12d8e4cef32454ebfb7b591fd3c89f4fe36fc2b",
+  "evidence_pack_sig_hash": "sha256:11887aab6de9f7c796b1a19a4eb9c0eecdea677ee64a4d74167ebff74e362efa",
+  "utility_observation_hash": "sha256:a434418fc3b61fc2570e0358019406b07b1e5efc14dba908ff81c9525ba2f150"
+}

@@ -1,0 +1,12 @@
+{
+  "manifest_version": "simurgh.stage4f.cell_manifest.v1",
+  "cell_id": "sha256:3215d3cbe680691c34084b2cb3014df60217421ca07a42b3815b2cd613a139ee",
+  "point_id": "P4",
+  "scenario_id": "output-leakage/stage3f-output-leakage-034",
+  "suite_hash": "sha256:a3174bdcdd681baf2dd8707c4cb4838cb917769fd97efcdaa772b308ea82af15",
+  "grid_hash": "sha256:2833a449cdb010f176f60cbf356fab633dfd028ec81c9feb57ecbc3756abfc00",
+  "policy_bundle_hash": "sha256:280de93aee0bf6e0a15f3b933c4b1f868a37207670297ea0496af448bc3ef3ce",
+  "evidence_pack_hash": "sha256:391f8c70ce802739b580075772c7cc213bfe28454ac3f1d03312f545b8cec268",
+  "evidence_pack_sig_hash": "sha256:ccbc0554c6cb9fcd0b1b547ad4fb9b8331dd9c41afeba12d575a2ae163aa6cbc",
+  "utility_observation_hash": "sha256:c5951768549949a46309fc3217970ce04998df29b945a1e7f438eee4a81d2b39"
+}

@@ -1,0 +1,13 @@
+{
+  "closeout_version": "simurgh.stage4f.closeout.v1",
+  "ok": true,
+  "gates": {
+    "arm_a_green": true,
+    "arm_b_red": true,
+    "arm_c_red": true,
+    "arm_d_red": true,
+    "offline": true,
+    "byte_stable": true,
+    "privacy": true
+  }
+}

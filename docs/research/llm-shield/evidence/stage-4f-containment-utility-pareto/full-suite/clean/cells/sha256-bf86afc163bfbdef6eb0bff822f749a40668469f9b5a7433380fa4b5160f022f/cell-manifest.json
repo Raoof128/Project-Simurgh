@@ -1,0 +1,12 @@
+{
+  "manifest_version": "simurgh.stage4f.cell_manifest.v1",
+  "cell_id": "sha256:bf86afc163bfbdef6eb0bff822f749a40668469f9b5a7433380fa4b5160f022f",
+  "point_id": "P2",
+  "scenario_id": "tool-injection/stage3f-tool-injection-016",
+  "suite_hash": "sha256:a3174bdcdd681baf2dd8707c4cb4838cb917769fd97efcdaa772b308ea82af15",
+  "grid_hash": "sha256:2833a449cdb010f176f60cbf356fab633dfd028ec81c9feb57ecbc3756abfc00",
+  "policy_bundle_hash": "sha256:ecf40c1a91d88dd4a85827d28bde424d1c9cf7a8b172b5c7a4160b269a91c3c6",
+  "evidence_pack_hash": "sha256:94bb2e0d7106943d0e3264ac165504c28f49df80f45ffaabafcff1841ce3b75c",
+  "evidence_pack_sig_hash": "sha256:7910f3c9434ed8d29db62fbec3b79709fd04b63379551de8bbb1d4d59d37d47e",
+  "utility_observation_hash": "sha256:eea18dc41b7fc5cac376b41dea1e4ba781a0c0afc55237a66be20070c89b4a4a"
+}

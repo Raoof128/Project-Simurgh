@@ -1,0 +1,1688 @@
+{
+  "fixture_root": "docs/research/llm-shield/evidence/stage-3f/fixtures",
+  "manifest_version": "simurgh.stage4f.suite_manifest.v1",
+  "scenarios": [
+    {
+      "fixture_hash": "sha256:ee4d0d35fb4606166425390aa9f180ede8dffc209ec9534f0ae1010cf51355a2",
+      "fixture_path": "benign/stage3f-benign-001.json",
+      "label": "benign",
+      "scenario_id": "benign/stage3f-benign-001",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:c857a606cc8a3fdc7a5a778e807a6436149c80ed94477f6f0dec695215346589",
+      "fixture_path": "benign/stage3f-benign-002.json",
+      "label": "benign",
+      "scenario_id": "benign/stage3f-benign-002",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:d54a2714d912ee1369c7d9b38970a49bfca69daa77a426d71612a33417664099",
+      "fixture_path": "benign/stage3f-benign-003.json",
+      "label": "benign",
+      "scenario_id": "benign/stage3f-benign-003",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:6f0cc9a3d24e83db7b540a74ea7ee64326e582504945db4df2bb69453c2a4f75",
+      "fixture_path": "benign/stage3f-benign-004.json",
+      "label": "benign",
+      "scenario_id": "benign/stage3f-benign-004",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:88fdb6b741d137b6c0da50a88f2278f89cf027d228d7eb9994738966a9392464",
+      "fixture_path": "benign/stage3f-benign-005.json",
+      "label": "benign",
+      "scenario_id": "benign/stage3f-benign-005",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:cb3b3cd25f40b642840732c012d26956ed3a89099ba99c5960f1f2b113df30db",
+      "fixture_path": "benign/stage3f-benign-006.json",
+      "label": "benign",
+      "scenario_id": "benign/stage3f-benign-006",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:5395bae32122fa2203458d49089123443cf2e528696e2d0541a68cdc61289c11",
+      "fixture_path": "benign/stage3f-benign-007.json",
+      "label": "benign",
+      "scenario_id": "benign/stage3f-benign-007",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:17da2dda1bd3369ccd2e01f0887644923343e44c623a77ab01af0c0ad00dfb2c",
+      "fixture_path": "benign/stage3f-benign-008.json",
+      "label": "benign",
+      "scenario_id": "benign/stage3f-benign-008",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:93b9e4f9511a7d2dfbb503435cead25c44ff36447c9dac6228f1daf7ad231d88",
+      "fixture_path": "benign/stage3f-benign-009.json",
+      "label": "benign",
+      "scenario_id": "benign/stage3f-benign-009",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:9a493bd35092116e95d69aea3cbb6764b23dc6e229d038b77bebc45018d03b5f",
+      "fixture_path": "benign/stage3f-benign-010.json",
+      "label": "benign",
+      "scenario_id": "benign/stage3f-benign-010",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:a769077781791fc71ba7d242582b34a96a8a5083f1282f08e90c3241afdce45b",
+      "fixture_path": "benign/stage3f-benign-011.json",
+      "label": "benign",
+      "scenario_id": "benign/stage3f-benign-011",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:e131cdf5f86f52b54e6d5880e088afed6ff454a0099f1e8b83bfe158a8ccba4d",
+      "fixture_path": "benign/stage3f-benign-012.json",
+      "label": "benign",
+      "scenario_id": "benign/stage3f-benign-012",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:94dad7c025b26d36a33a6c573eaf7538adbac09177b4021e17ca51b535f00f37",
+      "fixture_path": "benign/stage3f-benign-013.json",
+      "label": "benign",
+      "scenario_id": "benign/stage3f-benign-013",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:4b4847a39494d4b1a58212d36677499146c77159367c234a04e9a4e745697bab",
+      "fixture_path": "benign/stage3f-benign-014.json",
+      "label": "benign",
+      "scenario_id": "benign/stage3f-benign-014",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:0774a3e26f241c0abf95dbba5aa4d9d49fc0214cd02403f0728cc743716506d3",
+      "fixture_path": "benign/stage3f-benign-015.json",
+      "label": "benign",
+      "scenario_id": "benign/stage3f-benign-015",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:9aef198094db3182da0cefb099e8db50776c4657dc8b3958795a7dda91f0fd78",
+      "fixture_path": "benign/stage3f-benign-016.json",
+      "label": "benign",
+      "scenario_id": "benign/stage3f-benign-016",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:7edb98d6e9fdffcf2dedda3aee3b7b8385811d7a35b97f69e8dbea171ca40111",
+      "fixture_path": "benign/stage3f-benign-017.json",
+      "label": "benign",
+      "scenario_id": "benign/stage3f-benign-017",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:c71fada181e95aa2f889adca7a822922b1f704e54c69374b2260acaa9f6eeef3",
+      "fixture_path": "benign/stage3f-benign-018.json",
+      "label": "benign",
+      "scenario_id": "benign/stage3f-benign-018",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:7bc532b411ae422abbed65b15cda1020797df839931cd2019abf42d8f838a194",
+      "fixture_path": "benign/stage3f-benign-019.json",
+      "label": "benign",
+      "scenario_id": "benign/stage3f-benign-019",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:b4a01edba9f232dbca58874d1909f29db87c0fbf584286039d077f0bff809269",
+      "fixture_path": "benign/stage3f-benign-020.json",
+      "label": "benign",
+      "scenario_id": "benign/stage3f-benign-020",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:768e93b862b0ea6ea8f8a7543751a5e943e325e59da2c615e5765d68ba6a677b",
+      "fixture_path": "benign/stage3f-benign-021.json",
+      "label": "benign",
+      "scenario_id": "benign/stage3f-benign-021",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:a0f06aa384fdd8b5b519d27f56b64affd70a7336738aa5cff288f1fccf506880",
+      "fixture_path": "benign/stage3f-benign-022.json",
+      "label": "benign",
+      "scenario_id": "benign/stage3f-benign-022",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:08bc315f65b42639102add4d12bd8afb72398d021752ef93870abab028a1ea86",
+      "fixture_path": "benign/stage3f-benign-023.json",
+      "label": "benign",
+      "scenario_id": "benign/stage3f-benign-023",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:79a25ed7e8c0d46451945b6e5a7715b70f4bad0848e95e953daf05649784f0b1",
+      "fixture_path": "benign/stage3f-benign-024.json",
+      "label": "benign",
+      "scenario_id": "benign/stage3f-benign-024",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:7407a7682f3f7ca4a646246556adb71eb86855b504bbba47bcb1ae7921005384",
+      "fixture_path": "benign/stage3f-benign-025.json",
+      "label": "benign",
+      "scenario_id": "benign/stage3f-benign-025",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:a0f8c882c2635f12e484dc382203ff3e46cb0fb6f0ea87ce32e82036805ccc7d",
+      "fixture_path": "benign/stage3f-benign-026.json",
+      "label": "benign",
+      "scenario_id": "benign/stage3f-benign-026",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:77af2d81a3e97b27de9e6076f54c6885f190eeb0690d5b7d97964998d41d2501",
+      "fixture_path": "benign/stage3f-benign-027.json",
+      "label": "benign",
+      "scenario_id": "benign/stage3f-benign-027",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:1709574304847bb77c3af9af803ebb7662715cfb06bc90d7c38bc1a165c80f4f",
+      "fixture_path": "benign/stage3f-benign-028.json",
+      "label": "benign",
+      "scenario_id": "benign/stage3f-benign-028",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:e90d012d65aa56e814106b4e56dfb6f129b392b398802dbc5b2c2421c0ccaa9c",
+      "fixture_path": "benign/stage3f-benign-029.json",
+      "label": "benign",
+      "scenario_id": "benign/stage3f-benign-029",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:5ee9d74158980a39811cba4f1daae52c77a475769c060b4f0bc19b79ebad343b",
+      "fixture_path": "benign/stage3f-benign-030.json",
+      "label": "benign",
+      "scenario_id": "benign/stage3f-benign-030",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:6b5b036377833027e83e4b3ec772902f7d74c5460e03c3232d3ad58ed133c0b8",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-001.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-001",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:8ba5579069822fb641d03eb5466f8eb8e61b820f8b0f2bdb57bae522ea5caebb",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-002.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-002",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:b173dec03b9e4074ab776b8756cfebb4736e2a9c2a9c4093b50bbe0c2dea9d50",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-003.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-003",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:6a79dbf2857edaef08b9863a7d37fc318f037f1e59050e15799f6c5cf747c4fe",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-004.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-004",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:f15249544a13d6f4ed34c2ff3d919a806198242333e5c2b3ef009f840e6ea8a6",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-005.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-005",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:c922e53696598d9e0803341b5c7b8de19e8769a11e16e4256ac195dc9ca99846",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-006.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-006",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:225e2d0b61104f1f2977f053a9160a82817c05b1e0d4d364a58048d8ac3ecbbf",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-007.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-007",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:a10aefee664124cac0a2afadc251a8c924a2f2ba0c174c8cf872367dd98f6613",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-008.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-008",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:8fd188815a688eed79e3727d6480e2c293d5a5a53116969a356e65df0770f88b",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-009.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-009",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:826463be65b28fa2cbc613615c0ffcfd71c294dcfefa3de8eed3eeaf81ec2a4d",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-010.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-010",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:a7330089305c352f2031b6026f446cb85e6b16804cfc858c8188d816de079f4e",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-011.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-011",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:d36a1887632375a3b4d0000baec800a39a9a87d044f6f1c2dc7e66b6808893bc",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-012.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-012",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:ea85730bc8ee41aba2b128547c175e491541d871b0d51544a1a45b9ece94ce89",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-013.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-013",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:ea61e676ed1234589dc63c84d567aa2576bf79b8467b3fddae1c573a6e29af5b",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-014.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-014",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:4ce02a670e25b657f6c6c0aa5e338cc2a597ab5e902a6e5b25d4e39ed5ffd4fe",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-015.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-015",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:f415b220b5803ffb5b58ca999e69af001d77542b06ff6de0c34e6b1c67455b46",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-016.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-016",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:4b26f3fc8148990977ba200f03e3445a861f808218840e40d39d84a7bde00fca",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-017.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-017",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:3292eb3a96eabe353e26489996ccbfff2da73d4bd897010c095fa7d42e8c15b3",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-018.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-018",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:7e569a3b8d091b978c8982f8141b766000000310fb6bd890f7db8a39d8593872",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-019.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-019",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:0bac82ad708cd5862d873c23934d80762070d7599aa24b5a2adac2b93f64d42b",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-020.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-020",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:aa4e1dd3d3c49769e0440a1ffd9001701ac7da55396e9bfdf9e274c81626fb2c",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-021.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-021",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:7a3f25698b9d6444fcfa59d54bc86b0b1129caea02e6faf07966303293279b04",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-022.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-022",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:bba7eca67fa44d64807a26391ccabcb4351a60d58468fc2116b2c01729d0d471",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-023.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-023",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:4cf3df804f121d09967ebd767f67b9fc139ae9bb8e3b9fa68103ed5488ec39f6",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-024.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-024",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:ea8184331be7b26ddc8592f60def41a325d56ed2c7847a26a414c1bfefa79136",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-025.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-025",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:166f189f69cc9b05beb1dd3ad9f8c6893a22c987fab4a9521f43ec82831b1b27",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-026.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-026",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:9dded96433c94e9917315e427fb65d2fad4ebe2927945e1af2469cbb4ca4d37a",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-027.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-027",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:59c073c7a56a83578c7c1a6c2eeb085de51759721e79a62ae8671742e8bb02b5",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-028.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-028",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:4918f268a451a0d463c8e0cb745d7ec714f638e51374f2607e8dd87cffe97c30",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-029.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-029",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:a229b3a1400912bf1fb2a895f6c1337ad6aca220f2b83c79ec2219dba2c67666",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-030.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-030",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:f9ccaba8c1b5685c50bf0be8224b11d72eab5d2d01265858f0480fa3552fd36a",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-031.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-031",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:a690e9cc99e88175e7e12fce2ac16d3d25102b7bb50a5100d096ecc59c7d9f57",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-032.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-032",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:fbc294716d6f47fab78b2aae092dcc4c64b3de99a741ba106e02ba5f8020772d",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-033.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-033",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:c102800fc23f2df08e28c0b16222fa4ceb17f90520bf85cffc89528d636f775c",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-034.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-034",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:577bbb19a863bc71440d6212512f16d92ccd5cbc65ffdf5414b176ab57b4852a",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-035.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-035",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:b25ece21b027f8bb2369cbaf359d85e5a956c4209b5edc82545736458e90747e",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-036.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-036",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:f6a90598d8a6b708a3078ee40052c44ec80817f770a795687049d97227c713d2",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-037.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-037",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:3dc8608e1be404aad6ffdbb933ab9147b68887088c612f819e79a0804c0b2e38",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-038.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-038",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:b5a0bcde1c69229ba39d1750eddca059026e8025ef15984a690b076aab4946fe",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-039.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-039",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:0690a6c4a08bff594781311efc61e800d09932d67c7f240c750a5d12aa2d49a2",
+      "fixture_path": "context-poisoning/stage3f-context-poisoning-040.json",
+      "label": "attack",
+      "scenario_id": "context-poisoning/stage3f-context-poisoning-040",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:effe3baf47cdc7e031f7479cad03d8b48fcd1219ed9037355b45f4c8741cd1d1",
+      "fixture_path": "direct-input/stage3f-direct-input-001.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-001",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:3738b4c051d6b4b8c332e0ea2bfa5e3345dd03d4a448b7e78ea4a1b1aa82937f",
+      "fixture_path": "direct-input/stage3f-direct-input-002.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-002",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:eb081bcf7ea75a945371383cc97cda685c7c3269ce626489f4e110acab105b40",
+      "fixture_path": "direct-input/stage3f-direct-input-003.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-003",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:9aa931f16a58527690969533fcf66dae3434393950e6b4b3ae6a535bae674f6b",
+      "fixture_path": "direct-input/stage3f-direct-input-004.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-004",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:1f48d0bd08941b5e92d109096dcf46cd6d0c5d1b2ca01e1e8898cf34906ac8af",
+      "fixture_path": "direct-input/stage3f-direct-input-005.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-005",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:a4d173e01bde7d76769be39a162fcdfb43bf2ff99dcafddf9d4b39593b962176",
+      "fixture_path": "direct-input/stage3f-direct-input-006.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-006",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:f5c59116901e1f946ac4d4de6953475f5bc123c3e1c7730a0ac77ee3bcdbc851",
+      "fixture_path": "direct-input/stage3f-direct-input-007.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-007",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:cc09487d7a20aab233849026049fa13606e1d975444cf7f36ff798136541bd4f",
+      "fixture_path": "direct-input/stage3f-direct-input-008.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-008",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:1f07a30b5296455ec177b1ebe2fea4b4295b9fb7808a939c6d15d09647f81ecd",
+      "fixture_path": "direct-input/stage3f-direct-input-009.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-009",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:ec3b9cb7f91593465eb7e82603e0abf76cafc9dbbc36011ec6367b9206366545",
+      "fixture_path": "direct-input/stage3f-direct-input-010.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-010",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:a50a53cc0f2d5fb04239cfbe18f5a10d900b84d0c852accfbfdd1ec5c818a137",
+      "fixture_path": "direct-input/stage3f-direct-input-011.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-011",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:32a42ce4df6eb770bd7ca3f6f5e9f0ac3c9f32476111b7d6f3865e4b85a42b76",
+      "fixture_path": "direct-input/stage3f-direct-input-012.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-012",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:a4e64e55ce1b5c5dff48a34ebde59ac5c42cf877bbcecd67c90ead9ece363497",
+      "fixture_path": "direct-input/stage3f-direct-input-013.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-013",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:14e9ed90242bc44291454ece11997842d763bbb6718fc009078a266892649247",
+      "fixture_path": "direct-input/stage3f-direct-input-014.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-014",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:7130f156cc9508748afbc82f678a69da1797d56210dab6cf17fff242c6b24d88",
+      "fixture_path": "direct-input/stage3f-direct-input-015.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-015",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:6fa61c9e818150acaf06a192a17b72d20b7238762915d19a49e41e4f6072d31f",
+      "fixture_path": "direct-input/stage3f-direct-input-016.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-016",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:a17d6616917a3bd53cef78ceec432628018d0f896c14f09f468b4bf82a3ca7b7",
+      "fixture_path": "direct-input/stage3f-direct-input-017.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-017",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:0cae6043aa14d65efef8e46cd3cb2aca3641eaa2e75591f3a1ef867155583226",
+      "fixture_path": "direct-input/stage3f-direct-input-018.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-018",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:af8df0d3ca6e7dd8c4063be5b1d666366f6dc95eff795f25b72825b40a45f948",
+      "fixture_path": "direct-input/stage3f-direct-input-019.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-019",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:8b1cd4e251c400b430e75887ec84cba7694c14e5cdc73f931d850089448a71a4",
+      "fixture_path": "direct-input/stage3f-direct-input-020.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-020",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:acd0ef85b4b1f16bb9736c3336b7c871b5d10d74fce5efc2a0adb03d2b3c13a4",
+      "fixture_path": "direct-input/stage3f-direct-input-021.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-021",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:32a0a4d70301831536b73708a9ceb52eef6f527e03eb7785332d9053d8ee9110",
+      "fixture_path": "direct-input/stage3f-direct-input-022.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-022",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:6bb568a31252ed9255dc3f5c4fd9153bfc07733a338bd03e881afe906fb6f697",
+      "fixture_path": "direct-input/stage3f-direct-input-023.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-023",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:f115ba672bfdc2464a55dab2dd6df968ddae714f39632638a92107c2ba145fb6",
+      "fixture_path": "direct-input/stage3f-direct-input-024.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-024",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:41cf473e6ab3835d914e8be3feab928776be0aa7c7e53dd362d47077a4028cab",
+      "fixture_path": "direct-input/stage3f-direct-input-025.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-025",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:72d456d55f471c01c4abb9fe2fa4cd94d233709f8dfa8597261027962b35745c",
+      "fixture_path": "direct-input/stage3f-direct-input-026.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-026",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:5487c31f3d62d307bb771e3702fa57a4dd4d5c223f2bb6ce84e09329d24e8bc1",
+      "fixture_path": "direct-input/stage3f-direct-input-027.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-027",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:f905ac02b947e36aa68a74019b1bf4bc517209e79611c38308a81e591bd00d3a",
+      "fixture_path": "direct-input/stage3f-direct-input-028.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-028",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:13f577e09c1785e0f919b478e2f5ec9ce3e56eccc458d3789971a05ea9d041f7",
+      "fixture_path": "direct-input/stage3f-direct-input-029.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-029",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:ef15cea3c4dd95b08d1c79bf958fb1e639d016d99039411d687e8ec773240669",
+      "fixture_path": "direct-input/stage3f-direct-input-030.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-030",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:a106745d111bd1650b0ff17ccd0ab5f7844ad3b47182931c43a20ba6dba3303b",
+      "fixture_path": "direct-input/stage3f-direct-input-031.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-031",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:d07d59ea2660bdada347fe56ca2ebd291ae456165a059596206cff6431ef0f62",
+      "fixture_path": "direct-input/stage3f-direct-input-032.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-032",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:7071f9a3d856a075e8343b28d811ac9e7af5777e04dc1eaa3b359aaa98c30774",
+      "fixture_path": "direct-input/stage3f-direct-input-033.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-033",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:570f970feec2757b0d5fb1328e4c5c24cf3812a082cacc5c64dfff0b56201cb3",
+      "fixture_path": "direct-input/stage3f-direct-input-034.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-034",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:bc8526634668ab924dc180d1bcb915fecd1ba910370d1df928a1030e0849bcb7",
+      "fixture_path": "direct-input/stage3f-direct-input-035.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-035",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:cfd6ad03667310a67e5a2f89f6e736623b0795834fb4bbd9cab62428a6a75323",
+      "fixture_path": "direct-input/stage3f-direct-input-036.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-036",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:06354a513322117440992a952c7f4d7182fdff0a5b722f46218191833be920a0",
+      "fixture_path": "direct-input/stage3f-direct-input-037.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-037",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:4dae7f66f0df3d59d7daaba930031e8a27aa0454f8d4d19bb6903e5fade3e151",
+      "fixture_path": "direct-input/stage3f-direct-input-038.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-038",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:635d36026cefb75d363a1bb1ccf070364066c43d291f4da6dae7beac4abe5966",
+      "fixture_path": "direct-input/stage3f-direct-input-039.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-039",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:e16ddc9234f2854d29dea8641637250cc711e225569c2e8b5a0d3ea918be0bd3",
+      "fixture_path": "direct-input/stage3f-direct-input-040.json",
+      "label": "attack",
+      "scenario_id": "direct-input/stage3f-direct-input-040",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:937ff6819bb7ace701459f2d40319fa3459c126e6efba4cbf02df28ceb458cd3",
+      "fixture_path": "hard-negative/stage3f-hard-negative-001.json",
+      "label": "benign",
+      "scenario_id": "hard-negative/stage3f-hard-negative-001",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:132291c3abbb850ff2252c28f40494f5f32960ede80dfebecd0cebe596542d49",
+      "fixture_path": "hard-negative/stage3f-hard-negative-002.json",
+      "label": "benign",
+      "scenario_id": "hard-negative/stage3f-hard-negative-002",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:d8b877acc98e08ef59f4f2b4b9605066ed0545f9a80f222000dce9d20d0ee48e",
+      "fixture_path": "hard-negative/stage3f-hard-negative-003.json",
+      "label": "benign",
+      "scenario_id": "hard-negative/stage3f-hard-negative-003",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:783562c73f4120a1b0b690ce589b2dd913c280d1aefc89c1f9dfeace2bc6b0c1",
+      "fixture_path": "hard-negative/stage3f-hard-negative-004.json",
+      "label": "benign",
+      "scenario_id": "hard-negative/stage3f-hard-negative-004",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:6b2a0bc63a342efc268fb55035bb575525f63fc33f459e7c04454d3cd6e34a73",
+      "fixture_path": "hard-negative/stage3f-hard-negative-005.json",
+      "label": "benign",
+      "scenario_id": "hard-negative/stage3f-hard-negative-005",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:1c7822c054a00b4bbf09e30cac97c17a09a8e327d56a01ec4ba3cb8661cec8bb",
+      "fixture_path": "hard-negative/stage3f-hard-negative-006.json",
+      "label": "benign",
+      "scenario_id": "hard-negative/stage3f-hard-negative-006",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:7934de5401e4d5ca6969ded3f9238a25883a01f3a8b4e6ab448181dd245893dc",
+      "fixture_path": "hard-negative/stage3f-hard-negative-007.json",
+      "label": "benign",
+      "scenario_id": "hard-negative/stage3f-hard-negative-007",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:3b60ddb67f1432d800f8e0e1cf22071a3bd09c5f5916a77bd72ed5aea810bf75",
+      "fixture_path": "hard-negative/stage3f-hard-negative-008.json",
+      "label": "benign",
+      "scenario_id": "hard-negative/stage3f-hard-negative-008",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:4e8360be12de76b66480f6e71f423622722d95fd405fcb88dadeb07b28f87a57",
+      "fixture_path": "hard-negative/stage3f-hard-negative-009.json",
+      "label": "benign",
+      "scenario_id": "hard-negative/stage3f-hard-negative-009",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:50da5f2cf6262ea830678c2809f9a2a943726f3870ffa740bed84bc989bd352d",
+      "fixture_path": "hard-negative/stage3f-hard-negative-010.json",
+      "label": "benign",
+      "scenario_id": "hard-negative/stage3f-hard-negative-010",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:d1d5ee3390070349d9781be990d777b6c4bef3f1c2a8d517100b792c74475919",
+      "fixture_path": "hard-negative/stage3f-hard-negative-011.json",
+      "label": "benign",
+      "scenario_id": "hard-negative/stage3f-hard-negative-011",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:3da2790ee074742f8cb04c14144c0cb133014149eff4f579ddbfd080bb43cf3a",
+      "fixture_path": "hard-negative/stage3f-hard-negative-012.json",
+      "label": "benign",
+      "scenario_id": "hard-negative/stage3f-hard-negative-012",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:bd3102af8c8854c8eb0039249333e5d3c56b26c48ee78517cf364b8108168c34",
+      "fixture_path": "hard-negative/stage3f-hard-negative-013.json",
+      "label": "benign",
+      "scenario_id": "hard-negative/stage3f-hard-negative-013",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:f10e8e1dd4a4ede01ff313ad2428c375c312c74e081cb623856f465ab7e800b8",
+      "fixture_path": "hard-negative/stage3f-hard-negative-014.json",
+      "label": "benign",
+      "scenario_id": "hard-negative/stage3f-hard-negative-014",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:c6cddb885978e702e31dda39ecc2f1f91004cfc973cd3f9f76bf39baf99c5c82",
+      "fixture_path": "hard-negative/stage3f-hard-negative-015.json",
+      "label": "benign",
+      "scenario_id": "hard-negative/stage3f-hard-negative-015",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:05ead2891e1caa8ea17d375a9eea81a6e28dbfd81d58a20b588cf004fa7d0c53",
+      "fixture_path": "hard-negative/stage3f-hard-negative-016.json",
+      "label": "benign",
+      "scenario_id": "hard-negative/stage3f-hard-negative-016",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:8693c6e3832b630d23402d4bd13a926c33c157898b626430043e8dba06dc5e7e",
+      "fixture_path": "hard-negative/stage3f-hard-negative-017.json",
+      "label": "benign",
+      "scenario_id": "hard-negative/stage3f-hard-negative-017",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:350147bf680c72173a12ac06f890e2cddf7c65516df0d128e81838595e4cf01d",
+      "fixture_path": "hard-negative/stage3f-hard-negative-018.json",
+      "label": "benign",
+      "scenario_id": "hard-negative/stage3f-hard-negative-018",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:92c4be728d97aa031da6c71047aaaef7a91437a9a8a318b8f1f4fc892ac372cb",
+      "fixture_path": "hard-negative/stage3f-hard-negative-019.json",
+      "label": "benign",
+      "scenario_id": "hard-negative/stage3f-hard-negative-019",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:cf0896cdfae0496e7d4f036d5b24df22c93278815f8b8b1fa8c43b70b7cf5fca",
+      "fixture_path": "hard-negative/stage3f-hard-negative-020.json",
+      "label": "benign",
+      "scenario_id": "hard-negative/stage3f-hard-negative-020",
+      "utility_class": "benign"
+    },
+    {
+      "fixture_hash": "sha256:2611cd5864d5bfe20870e4bbcb3b6527b78042067936b81a07b31774017935e6",
+      "fixture_path": "multi-turn/stage3f-multi-turn-001.json",
+      "label": "attack",
+      "scenario_id": "multi-turn/stage3f-multi-turn-001",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:e3824f90ec5a25dee745d8e40f267f0c46a9acafc87988dea08d949d5ca3ef63",
+      "fixture_path": "multi-turn/stage3f-multi-turn-002.json",
+      "label": "attack",
+      "scenario_id": "multi-turn/stage3f-multi-turn-002",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:bb4afb1064ba542caf0f9ede4bef61ec6933de46652a6d5267182feb9258290c",
+      "fixture_path": "multi-turn/stage3f-multi-turn-003.json",
+      "label": "attack",
+      "scenario_id": "multi-turn/stage3f-multi-turn-003",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:5637532d1d2081b227eddcea6bd241c229e3b3fb6b16f6e3845fcef1faee4398",
+      "fixture_path": "multi-turn/stage3f-multi-turn-004.json",
+      "label": "attack",
+      "scenario_id": "multi-turn/stage3f-multi-turn-004",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:daf7195e8a9fb426b0ea653dec63c4e7d4918a26edab107180bdfb5e02a2402e",
+      "fixture_path": "multi-turn/stage3f-multi-turn-005.json",
+      "label": "attack",
+      "scenario_id": "multi-turn/stage3f-multi-turn-005",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:7beee6f895f8153f945afd5fe7210db251c34d8f29068a99900f73fcbdfa9300",
+      "fixture_path": "multi-turn/stage3f-multi-turn-006.json",
+      "label": "attack",
+      "scenario_id": "multi-turn/stage3f-multi-turn-006",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:afe36466d26f59a26fea6bded9023500889a0c6986cfa37adfdb085246179731",
+      "fixture_path": "multi-turn/stage3f-multi-turn-007.json",
+      "label": "attack",
+      "scenario_id": "multi-turn/stage3f-multi-turn-007",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:c8e612eb7c8d08ed7c6f6d1efd066144bd2ce59be72c88b1767d7fdabce62576",
+      "fixture_path": "multi-turn/stage3f-multi-turn-008.json",
+      "label": "attack",
+      "scenario_id": "multi-turn/stage3f-multi-turn-008",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:aafeb309835a787764d8872c47f706ed12274a952524e9c58e72f5c15987dbf6",
+      "fixture_path": "multi-turn/stage3f-multi-turn-009.json",
+      "label": "attack",
+      "scenario_id": "multi-turn/stage3f-multi-turn-009",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:d09efa070e563c51842cb7deef3739e3cd9962894a28ecfaf514fa8ec5ef4f37",
+      "fixture_path": "multi-turn/stage3f-multi-turn-010.json",
+      "label": "attack",
+      "scenario_id": "multi-turn/stage3f-multi-turn-010",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:46dbb3f0cb90ca79e552b5a9296ed46e2c9b66c8a5ed7b21a7661dec2b4dde27",
+      "fixture_path": "multi-turn/stage3f-multi-turn-011.json",
+      "label": "attack",
+      "scenario_id": "multi-turn/stage3f-multi-turn-011",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:7e7a1d0fb40e6a0ba33695821c8258eed257467217ee119537322c3ab38b9750",
+      "fixture_path": "multi-turn/stage3f-multi-turn-012.json",
+      "label": "attack",
+      "scenario_id": "multi-turn/stage3f-multi-turn-012",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:1e7fc4a1e42844246123fdc0e5ba972f7081ce71aaa376751c25f8121b5ef8b8",
+      "fixture_path": "multi-turn/stage3f-multi-turn-013.json",
+      "label": "attack",
+      "scenario_id": "multi-turn/stage3f-multi-turn-013",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:ab8533d9c4fe2a90a9e36f0fdfcce33404031f88da25b859590474a5c84734ff",
+      "fixture_path": "multi-turn/stage3f-multi-turn-014.json",
+      "label": "attack",
+      "scenario_id": "multi-turn/stage3f-multi-turn-014",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:28b5e8e2042bfa7913e59be277eeed6d5fe43a9305b7382ebbf5af1b0c02b3d9",
+      "fixture_path": "multi-turn/stage3f-multi-turn-015.json",
+      "label": "attack",
+      "scenario_id": "multi-turn/stage3f-multi-turn-015",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:f922b6ef18ec675b7d4d799dba70bfe744994545ca13222bfed941640b6b7d63",
+      "fixture_path": "multi-turn/stage3f-multi-turn-016.json",
+      "label": "attack",
+      "scenario_id": "multi-turn/stage3f-multi-turn-016",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:3db838327827f7243a131503c1de1a37314fc20987949975671bf21e2327f0de",
+      "fixture_path": "multi-turn/stage3f-multi-turn-017.json",
+      "label": "attack",
+      "scenario_id": "multi-turn/stage3f-multi-turn-017",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:9fc1680d29fc1d188055fade6b49a2fa430a1e3220c879dfb85f9765aa4a2486",
+      "fixture_path": "multi-turn/stage3f-multi-turn-018.json",
+      "label": "attack",
+      "scenario_id": "multi-turn/stage3f-multi-turn-018",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:bb4d1094a68c1edb91e6661d57ef614c4eaf051267c0faa9f7b998bc3799264d",
+      "fixture_path": "multi-turn/stage3f-multi-turn-019.json",
+      "label": "attack",
+      "scenario_id": "multi-turn/stage3f-multi-turn-019",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:a761aa65b35b11ad4fa908a555f9516a9449033ce1576dfd531236fe35d4fe4c",
+      "fixture_path": "multi-turn/stage3f-multi-turn-020.json",
+      "label": "attack",
+      "scenario_id": "multi-turn/stage3f-multi-turn-020",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:5bee77f2246c8d8f0a73ba03fd23d25a08226b4811e38911efd0b2b209e12ada",
+      "fixture_path": "multi-turn/stage3f-multi-turn-021.json",
+      "label": "attack",
+      "scenario_id": "multi-turn/stage3f-multi-turn-021",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:af815b1b3a6c226bd43fffe829eb7f6dace8fcc69d5af0c57716b3077f4ba151",
+      "fixture_path": "multi-turn/stage3f-multi-turn-022.json",
+      "label": "attack",
+      "scenario_id": "multi-turn/stage3f-multi-turn-022",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:5cfb9e565a6bdcf419a32a6cf8bd779e78814b2a532ef6afff1e17dda4c682a6",
+      "fixture_path": "multi-turn/stage3f-multi-turn-023.json",
+      "label": "attack",
+      "scenario_id": "multi-turn/stage3f-multi-turn-023",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:f07785b04347d3687514a12f0d814e906f728178e8d57ddb56183066e8bb6a46",
+      "fixture_path": "multi-turn/stage3f-multi-turn-024.json",
+      "label": "attack",
+      "scenario_id": "multi-turn/stage3f-multi-turn-024",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:876a730963cc279974d496e8fe1f74a46a5eb1740351120a92dbfe9f26fe699b",
+      "fixture_path": "multi-turn/stage3f-multi-turn-025.json",
+      "label": "attack",
+      "scenario_id": "multi-turn/stage3f-multi-turn-025",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:6a2d7dd2406a76bba375d9b14e4fb2aa00921d13350c9709324086a2668e3863",
+      "fixture_path": "multi-turn/stage3f-multi-turn-026.json",
+      "label": "attack",
+      "scenario_id": "multi-turn/stage3f-multi-turn-026",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:24071f1af946101d6d163547649f7f5f65c56b2b5d5b7ef062c2da0af33b1820",
+      "fixture_path": "multi-turn/stage3f-multi-turn-027.json",
+      "label": "attack",
+      "scenario_id": "multi-turn/stage3f-multi-turn-027",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:9de8d10e730e1a18b899a32d96046563250af84b139f2587e99ec792e52a79d5",
+      "fixture_path": "multi-turn/stage3f-multi-turn-028.json",
+      "label": "attack",
+      "scenario_id": "multi-turn/stage3f-multi-turn-028",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:e1af08a1587804602846bba9a83a5772064b4c4af8dbfc8228a7dd463c965938",
+      "fixture_path": "multi-turn/stage3f-multi-turn-029.json",
+      "label": "attack",
+      "scenario_id": "multi-turn/stage3f-multi-turn-029",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:d90b71129661225e9906361e22bdaa14238cb26d720bc09ad9d4b2f8a1f7046c",
+      "fixture_path": "multi-turn/stage3f-multi-turn-030.json",
+      "label": "attack",
+      "scenario_id": "multi-turn/stage3f-multi-turn-030",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:02929d929bd69ad8aef8136a96b1c102a10a2494d7f04946c73609fc445b757f",
+      "fixture_path": "output-leakage/stage3f-output-leakage-001.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-001",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:6840328bfbea6e2d3c772238960cd936f5981aeee0fa74e754765a5b3f287e49",
+      "fixture_path": "output-leakage/stage3f-output-leakage-002.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-002",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:07b2115cd30090487b2b32d4def9eb9e0fd1b5f3da9371a97f3188c1f6a38d03",
+      "fixture_path": "output-leakage/stage3f-output-leakage-003.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-003",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:49b5bcfdd815dadef8e0da357b041eadcafa30ed342555f795aacb75bab78161",
+      "fixture_path": "output-leakage/stage3f-output-leakage-004.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-004",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:f69fcca340ba815341e47eea05b8628620a7ac8c7e5e399d48e289a95ce8baf8",
+      "fixture_path": "output-leakage/stage3f-output-leakage-005.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-005",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:9ec01e6c76a49c6292014ee093cb5ae1d996ecb3bb1205af91a486723faeed11",
+      "fixture_path": "output-leakage/stage3f-output-leakage-006.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-006",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:1c81566a58a567d338dd060a3752bc8d6c53a1296bdcc2d2de66de7c833dae08",
+      "fixture_path": "output-leakage/stage3f-output-leakage-007.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-007",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:705ff191576a0472e6404267b67a3ee6745228655c84ee79721d2acb6c8c62b3",
+      "fixture_path": "output-leakage/stage3f-output-leakage-008.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-008",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:d8962773fe37f57f5928be3757e00b4fa064a6ee7d0e094d1adc25a78b45130b",
+      "fixture_path": "output-leakage/stage3f-output-leakage-009.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-009",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:98b8a8f6292311bad43055a4efb5eb00cea4db03c13a0180c5ddfc713e01984c",
+      "fixture_path": "output-leakage/stage3f-output-leakage-010.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-010",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:d27e2b55a6ca8f2c60c83b2d385f831fd788f56677283475e2aef7727364cd7b",
+      "fixture_path": "output-leakage/stage3f-output-leakage-011.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-011",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:9734f95fa86b1e47426a92864422f0a156aef8db929719ef241a21edc70f16cf",
+      "fixture_path": "output-leakage/stage3f-output-leakage-012.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-012",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:043e3eb2be2cd401b4d516e44831e49c982f7bed342e9d2694a88a5056cda894",
+      "fixture_path": "output-leakage/stage3f-output-leakage-013.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-013",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:8d0f0e83f1a697364935dbb7bbe551fa18447c00bb007618b2626f5dbb7b1cdc",
+      "fixture_path": "output-leakage/stage3f-output-leakage-014.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-014",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:79bd9ffe514366479817bcf4bc9a5c5748595c36560e3dffd660fbe682d87502",
+      "fixture_path": "output-leakage/stage3f-output-leakage-015.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-015",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:571de7ab7ece2e39b5bf112b3ccbab8e1ad3ad31207d2661580864d3960aceef",
+      "fixture_path": "output-leakage/stage3f-output-leakage-016.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-016",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:600fde803ab85e408045a064f2b212f014551740159e49b56e696cf345f91910",
+      "fixture_path": "output-leakage/stage3f-output-leakage-017.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-017",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:ea0b443346239d775983dd048ab2998a05d8bca9baf7b402def62d932f5f8712",
+      "fixture_path": "output-leakage/stage3f-output-leakage-018.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-018",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:9e495fc033bbcf20ea4a375c5fbae7cdc5a13ad2ccb788de0d30e4f95b4b7767",
+      "fixture_path": "output-leakage/stage3f-output-leakage-019.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-019",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:2c01038bb6986d08f853f5d8c4a8eb4679c496769beff748e72359ce100abba2",
+      "fixture_path": "output-leakage/stage3f-output-leakage-020.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-020",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:08422f1fa4d75affba9bd2d6a16846caf36bceb1d7db023a2d9d7f987fadc948",
+      "fixture_path": "output-leakage/stage3f-output-leakage-021.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-021",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:f5183ade06ccba7d0c3a94334954cf8e05dde6eb4a8c4fe5440002664c9a8393",
+      "fixture_path": "output-leakage/stage3f-output-leakage-022.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-022",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:5748682233cd99939ad552ded3cf5c57d298782368f94afe34275c4c04a7ab31",
+      "fixture_path": "output-leakage/stage3f-output-leakage-023.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-023",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:c579987719c3ac8e6d0dba2bc6c83c425a5b9e9152942f624bb99f70a36c3739",
+      "fixture_path": "output-leakage/stage3f-output-leakage-024.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-024",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:18418656ce1f4f08aa71ee1fa4f48da2154403446482e07729873d2dccd032a6",
+      "fixture_path": "output-leakage/stage3f-output-leakage-025.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-025",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:7eb18e721b5eaa1f782d5f062e5da0841ed11524fd0952d415c2a10138323d82",
+      "fixture_path": "output-leakage/stage3f-output-leakage-026.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-026",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:c713f2fbf56b00b3b964ba8baf13dd7d442e0bcba124a65ffdba0ab9748fb849",
+      "fixture_path": "output-leakage/stage3f-output-leakage-027.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-027",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:e70676b49337284af7bcd6e161d7cc68c6bd260d5a08f71d73eb9fb1145f0866",
+      "fixture_path": "output-leakage/stage3f-output-leakage-028.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-028",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:826b28c616d7444a2520532d187f4fba0453ee63053bd23b56faa504fd15fdf4",
+      "fixture_path": "output-leakage/stage3f-output-leakage-029.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-029",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:d8c8341dd0409e29b0c0c33d2a37009805ff5672f1c8d1ba8b5b0ed6ab6f35af",
+      "fixture_path": "output-leakage/stage3f-output-leakage-030.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-030",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:62e8a65c455502939888b6755fa6cb59dbe1fb9f4f54a4f8ccf600d8971236c2",
+      "fixture_path": "output-leakage/stage3f-output-leakage-031.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-031",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:3222854fb92865df3a1bf5d7b900cd5d2eec7d752ab22bc78b3a39172a22f029",
+      "fixture_path": "output-leakage/stage3f-output-leakage-032.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-032",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:8613c3f5ae44b57e741ba43102b57b5c7e511769f204875a02cee885e8de0cf2",
+      "fixture_path": "output-leakage/stage3f-output-leakage-033.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-033",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:36597205eb8645145cf106c2714e458e12c3c50f08dd6ac1735d96c847fd231c",
+      "fixture_path": "output-leakage/stage3f-output-leakage-034.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-034",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:4d362076013787fd5c5e9b083c4dd5afd37c13fe0977cd11fd8744ac6549d494",
+      "fixture_path": "output-leakage/stage3f-output-leakage-035.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-035",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:0f3fc70c98b6626e8304599f11676d7931c23854dd514c94bb97bba779074997",
+      "fixture_path": "output-leakage/stage3f-output-leakage-036.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-036",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:dfb780cf708576e646ccbc12dd16bd3246cbb5963f2ac821e1f9b142fdfc23a6",
+      "fixture_path": "output-leakage/stage3f-output-leakage-037.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-037",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:b9eec151668b8e7bfc03711f1666b56f63f3bb874dc5f202549bf21cc6ede2c3",
+      "fixture_path": "output-leakage/stage3f-output-leakage-038.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-038",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:b997fb5702724396d6b3873a9e821bc39baf4317bdd7d6dfba4b7629acfc14f9",
+      "fixture_path": "output-leakage/stage3f-output-leakage-039.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-039",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:d954dbe23fe13326484ad20c1053970be190740e1a3e516b41e31b475c4cf1a7",
+      "fixture_path": "output-leakage/stage3f-output-leakage-040.json",
+      "label": "attack",
+      "scenario_id": "output-leakage/stage3f-output-leakage-040",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:23eaf956a4b01db6d0b941b6a13198e58c3ac1f56dab57994dac89ae2e928022",
+      "fixture_path": "tool-injection/stage3f-tool-injection-001.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-001",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:faa91444af6e538aa4b2b6f31419ecff7861f5c8ecc355689509264ba9df5fdd",
+      "fixture_path": "tool-injection/stage3f-tool-injection-002.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-002",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:25bb72345c0145ea7ebc6a27f5957454a8c6b4dd9e1134ac390b4283bac546ef",
+      "fixture_path": "tool-injection/stage3f-tool-injection-003.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-003",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:3210a49fcebf0cb85aec7c926926c33fdcb25dbe88931543bc069d2c1a8bf75b",
+      "fixture_path": "tool-injection/stage3f-tool-injection-004.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-004",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:7ed9e5bbf73ce2b09aa574735df2e3652951cc34afe600346416b58dcbc86ce4",
+      "fixture_path": "tool-injection/stage3f-tool-injection-005.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-005",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:f0c983d580d26781c386c5c9eea2b18fc1bb499c32ab4f3e8357100b9a9c5654",
+      "fixture_path": "tool-injection/stage3f-tool-injection-006.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-006",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:11febffc18236280487d1547ea7847fcce671e2af524dbb1748180ca59f7ed8d",
+      "fixture_path": "tool-injection/stage3f-tool-injection-007.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-007",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:916f403ef6b68937d72301cd05a7421ac520072fb28fe74623b87fa86dab7df9",
+      "fixture_path": "tool-injection/stage3f-tool-injection-008.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-008",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:dd5a44903b2d02978427ec4ecc0b43c8c9c0d01522446df623f5ead8ec0394d1",
+      "fixture_path": "tool-injection/stage3f-tool-injection-009.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-009",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:89811915eb07adae6a5c5345b2ad8e9770a2fa2112da256d30c25970fda0775b",
+      "fixture_path": "tool-injection/stage3f-tool-injection-010.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-010",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:bfacd58a4d5542d8a71478f0478e33c6766a928baf65f86012827cae264326bc",
+      "fixture_path": "tool-injection/stage3f-tool-injection-011.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-011",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:cab70045bf6de816a4be82fe39ffdf75f96f03b6ebedb76ba6c7150dcab8dc4b",
+      "fixture_path": "tool-injection/stage3f-tool-injection-012.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-012",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:7cdf44654f5fd1736370869fbb7ed37a8e29dbad327f167e0534d50be5a4657f",
+      "fixture_path": "tool-injection/stage3f-tool-injection-013.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-013",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:9acaee036831f7ba0866e89b47d6e96e20660394d954d3ecfe2ff0b8b2177adc",
+      "fixture_path": "tool-injection/stage3f-tool-injection-014.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-014",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:8e7ff5ee20834fdc76d379584e63786795a8d34a5220230add88bf43ef9fc14c",
+      "fixture_path": "tool-injection/stage3f-tool-injection-015.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-015",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:abf83d76436f59f2833a43d6ef23ab06c1be7a162b74b9e8e15b1ced018cc349",
+      "fixture_path": "tool-injection/stage3f-tool-injection-016.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-016",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:40ff8c265c804eaf946b571843f9461f0c99115fa1de79b6d078566432634b08",
+      "fixture_path": "tool-injection/stage3f-tool-injection-017.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-017",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:78c6c3404842f25ded240cf92ebd69fc4484af4b826b2a58d6d434c4b7e563bd",
+      "fixture_path": "tool-injection/stage3f-tool-injection-018.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-018",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:7c066461d0b30c304236d72b2c78ac53b4253dc11460edfd44d3427f6be70b5d",
+      "fixture_path": "tool-injection/stage3f-tool-injection-019.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-019",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:3e03f59da2eedf52926e644a49dbb4300765894b45e64be3d113f0f24dbcd3d7",
+      "fixture_path": "tool-injection/stage3f-tool-injection-020.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-020",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:fe324b9b6b2cf52d456e635e6089472cdd64c3ba0f3cd0f54296e9be3c58ab05",
+      "fixture_path": "tool-injection/stage3f-tool-injection-021.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-021",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:a834016d2c8617820b9ab03f047761c9229a61d8c30897be6f99df0d36ec0afc",
+      "fixture_path": "tool-injection/stage3f-tool-injection-022.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-022",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:c4328e5f2aeb7051620f7365630e2c11839c409eb770dae7fe179d94052d518c",
+      "fixture_path": "tool-injection/stage3f-tool-injection-023.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-023",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:7f9e8f04135251c0636cf96c562fe41e23ef76ef55b62e9cb1925b8385b4396f",
+      "fixture_path": "tool-injection/stage3f-tool-injection-024.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-024",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:9c0a22a8545747be3c04253854efe6b4b8fbc046e682254520b9655b53e6c059",
+      "fixture_path": "tool-injection/stage3f-tool-injection-025.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-025",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:fea436b45404dca1e368bab0fd02769e217f1c7b49c75e7f673018fc7d030786",
+      "fixture_path": "tool-injection/stage3f-tool-injection-026.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-026",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:e69e6303518762b47236c8062866f336fa1477523eb5d3943a57c29ce7515a83",
+      "fixture_path": "tool-injection/stage3f-tool-injection-027.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-027",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:978fedb4c807f1081871f66da624c6872f257fb1fd68e56355f7899f02de7ae3",
+      "fixture_path": "tool-injection/stage3f-tool-injection-028.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-028",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:8e3c7f8505ef82fcbe0b401286e897593a8f36cb685d3e99c40d58f48344ba49",
+      "fixture_path": "tool-injection/stage3f-tool-injection-029.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-029",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:d9c5f948531b870f4166515712c63f0a83a03dda99b84591facbb7b1576d3c19",
+      "fixture_path": "tool-injection/stage3f-tool-injection-030.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-030",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:bfae38386c0c337809649cc9c9c009d152408b3235f2128a43fa6727a8230b4e",
+      "fixture_path": "tool-injection/stage3f-tool-injection-031.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-031",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:dd521ba57c2d76050e8b0c2dbaaa28e6e3a0af40a20847dd7ccfc9e854753f9a",
+      "fixture_path": "tool-injection/stage3f-tool-injection-032.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-032",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:23a4a6c7ffbf243d4e28c463b266b02a9696c405da62dd5af01fe66d0c7c19f7",
+      "fixture_path": "tool-injection/stage3f-tool-injection-033.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-033",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:05a4cd0401bcb09cfb1b75fb3f7cf07c84a9b645b20874a46e182658ab232c93",
+      "fixture_path": "tool-injection/stage3f-tool-injection-034.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-034",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:ecc4c02586c2bf91d8d605d4bfbcf34232df7d01b10b76661934ea70109fa66c",
+      "fixture_path": "tool-injection/stage3f-tool-injection-035.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-035",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:0418b06b24593b503c90e5cef57efd6ba751780c17d95f75336d6c9227a1f74d",
+      "fixture_path": "tool-injection/stage3f-tool-injection-036.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-036",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:b5eb939ee9b038c7199ebc5790135a772844c53fa03f16920e531c8d1a54dde7",
+      "fixture_path": "tool-injection/stage3f-tool-injection-037.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-037",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:9947f9443c575251285977e1114aabe908f5060fabe14cbcec57035dbbb42cb1",
+      "fixture_path": "tool-injection/stage3f-tool-injection-038.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-038",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:ab6f78dc0cf414dc12255232b8cf5d91ab80cae1034d9e4edf1412f0ab2f9699",
+      "fixture_path": "tool-injection/stage3f-tool-injection-039.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-039",
+      "utility_class": "attack"
+    },
+    {
+      "fixture_hash": "sha256:e31131897f7b9e4b2af94cb3f39db25faa000d3c7de98a89b3e36fefb5c68831",
+      "fixture_path": "tool-injection/stage3f-tool-injection-040.json",
+      "label": "attack",
+      "scenario_id": "tool-injection/stage3f-tool-injection-040",
+      "utility_class": "attack"
+    }
+  ],
+  "suite_hash": "sha256:a3174bdcdd681baf2dd8707c4cb4838cb917769fd97efcdaa772b308ea82af15",
+  "suite_id": "suite_full_v1"
+}

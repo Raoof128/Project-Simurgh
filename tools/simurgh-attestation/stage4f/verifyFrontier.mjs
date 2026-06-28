@@ -144,7 +144,13 @@ async function readCells({ evidenceDir, suiteById, publicKeyPem }) {
   return { ok: true, cells };
 }
 
-export async function verifyFrontier({ evidenceDir, suitePath, gridPath, pubkeyPath, outPath = null }) {
+export async function verifyFrontier({
+  evidenceDir,
+  suitePath,
+  gridPath,
+  pubkeyPath,
+  outPath = null,
+}) {
   try {
     const [suite, grid, pubkey] = await Promise.all([
       readJson(suitePath),
@@ -218,7 +224,9 @@ export async function verifyFrontier({ evidenceDir, suitePath, gridPath, pubkeyP
     if (canonicalHash(recomputedMetrics) !== canonicalHash(metrics)) {
       return fail("metrics", FAILURE_REASONS.metric_digest_mismatch);
     }
-    const recomputedFrontier = paretoFrontier(points.map((point) => ({ ...point, verified: true })));
+    const recomputedFrontier = paretoFrontier(
+      points.map((point) => ({ ...point, verified: true }))
+    );
     if (canonicalHash(recomputedFrontier) !== canonicalHash(frontier)) {
       return fail("frontier", FAILURE_REASONS.frontier_hash_mismatch);
     }

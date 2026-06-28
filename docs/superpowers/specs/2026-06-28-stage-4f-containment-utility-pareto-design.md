@@ -112,7 +112,7 @@ The Stage 4F flow is:
    intervals, and verify coverage.
 7. The frontier builder computes `all_points`, `plotted_frontier`, and
    `excluded_points`. Dominance is deterministic over `{ASR down, over_block
-   down, benign_utility up, utility_under_attack up}`. Equal vectors are
+down, benign_utility up, utility_under_attack up}`. Equal vectors are
    retained and ordered by ascending `point_id`. Only green dominated points may
    be excluded with `reason == "dominated"`.
 8. The certificate builder computes point Merkle roots over ascending `cell_id`,
@@ -306,7 +306,7 @@ Test coverage maps directly to gates:
    intervals, dominance, Merkle roots, frontier certificate signatures, size
    limits, and failure taxonomy.
 2. **Integration tests** for `sweep -> per-cell 4D packs -> aggregate ->
-   verify-frontier`, external suite/grid/pubkey trust, exact cell-set equality,
+verify-frontier`, external suite/grid/pubkey trust, exact cell-set equality,
    packs-only metric derivation, dominated-point exclusion, and
    ugly-but-honest frontier acceptance.
 3. **Adversarial tests** for signed lying-decision cell, dropped scenario,

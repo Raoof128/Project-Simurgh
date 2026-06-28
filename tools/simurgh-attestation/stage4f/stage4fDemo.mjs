@@ -5,7 +5,11 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import { promisify } from "node:util";
 import { buildEvidencePackWithSigner } from "../stage4d/packBuilder.mjs";
-import { decide, deriveIntegritySummary, deriveUntrustedReachedAuthority } from "../stage4d/replay.mjs";
+import {
+  decide,
+  deriveIntegritySummary,
+  deriveUntrustedReachedAuthority,
+} from "../stage4d/replay.mjs";
 import { withSignerProcess } from "../stage4d/signer-client.mjs";
 import { sha256Canonical } from "../stage4d/stage4dCrypto.mjs";
 import { canonicalHash, stripHashPrefix } from "./canonical.mjs";
@@ -19,8 +23,10 @@ const clone = (value) => JSON.parse(JSON.stringify(value));
 export const stable = (value) => `${JSON.stringify(value, null, 2)}\n`;
 
 const TEMPLATE_PATHS = Object.freeze({
-  attack: "docs/research/llm-shield/evidence/stage-4e-browser-agent-containment-run/attack-run-record.json",
-  benign: "docs/research/llm-shield/evidence/stage-4e-browser-agent-containment-run/benign-run-record.json",
+  attack:
+    "docs/research/llm-shield/evidence/stage-4e-browser-agent-containment-run/attack-run-record.json",
+  benign:
+    "docs/research/llm-shield/evidence/stage-4e-browser-agent-containment-run/benign-run-record.json",
 });
 
 function safeId(value) {
@@ -119,15 +125,18 @@ function utilityObservation({ scenario, pack }) {
 }
 
 async function buildSignedPack({ runRecord, privateKeyPath, publicKeyPem }) {
-  return withSignerProcess({ privateKeyPath, runId: runRecord.run_manifest.run_id }, async (signer) => {
-    const publicKey = publicKeyPem ?? (await signer.publicKey()).public_key_pem;
-    const pack = await buildEvidencePackWithSigner({
-      runRecord,
-      publicKey,
-      signReceipt: (payload) => signer.signReceipt(payload),
-    });
-    return { pack, signature: await signer.signPack(pack), publicKeyPem: publicKey };
-  });
+  return withSignerProcess(
+    { privateKeyPath, runId: runRecord.run_manifest.run_id },
+    async (signer) => {
+      const publicKey = publicKeyPem ?? (await signer.publicKey()).public_key_pem;
+      const pack = await buildEvidencePackWithSigner({
+        runRecord,
+        publicKey,
+        signReceipt: (payload) => signer.signReceipt(payload),
+      });
+      return { pack, signature: await signer.signPack(pack), publicKeyPem: publicKey };
+    }
+  );
 }
 
 function verifyResult({ ok, reason = null, layer = null, cell = null }) {
@@ -178,6 +187,24 @@ function closeout({ cleanVerify, redArms }) {
       privacy: true,
     },
   };
+}
+
+function laneReadme(suiteId) {
+  const laneName = suiteId === "suite_full_v1" ? "Full-Suite" : "Canary";
+  const claim =
+    suiteId === "suite_full_v1"
+      ? "This lane is the full Stage 3F fixture corpus release closeout artifact."
+      : "This lane is the deterministic canary used for default CI and machinery checks.";
+  return [
+    `# Stage 4F ${laneName} Lane`,
+    "",
+    claim,
+    "",
+    "The clean artifacts must verify green, the red arms must fail with pre-registered reasons, and the golden output must remain byte-stable across repeated recorded-fixture runs.",
+    "",
+    "The lane-local public key is reviewer convenience material only. `verify-frontier` trusts the external `--pubkey` argument.",
+    "",
+  ].join("\n");
 }
 
 export async function buildStage4fDemo({ suiteId, outDir, privateKeyPath, fixtureRoot }) {
@@ -327,6 +354,7 @@ export async function buildStage4fDemo({ suiteId, outDir, privateKeyPath, fixtur
     await writeJson(join(redDir, relativePath), value);
   }
   await writeJson(join(outDir, "golden", "golden-results.json"), clean["golden-results.json"]);
+  await writeText(join(outDir, "README.md"), laneReadme(suiteId));
 
   return { clean, redArms };
 }

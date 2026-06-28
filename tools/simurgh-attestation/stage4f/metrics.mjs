@@ -40,8 +40,7 @@ export function derivePointMetrics(pointId, cells) {
     cell.pack.receipts.some((receipt) => {
       const payload = receipt.receipt_payload;
       return (
-        payload.decision === "allow" &&
-        payload.decision_input?.untrusted_reached_authority === true
+        payload.decision === "allow" && payload.decision_input?.untrusted_reached_authority === true
       );
     })
   ).length;

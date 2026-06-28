@@ -356,8 +356,10 @@ if [[ "$QUICK" == true ]]; then
   echo -e "${YELLOW}Skipped because --quick was used.${NC}"
 else
   step "Server boot smoke"
-  # Use an off-band port so we don't collide with a running dev server.
-  SMOKE_PORT=33030
+  # Use an off-band per-run port/session namespace so repeated local checks do
+  # not collide with an older smoke server or persisted in-memory sessions.
+  SMOKE_PORT="${SIMURGH_CHECK_SMOKE_PORT:-$((33030 + (RANDOM % 1000)))}"
+  SMOKE_RUN_ID="check_${SMOKE_PORT}_$$"
   SMOKE_LOG="$LOG_DIR/smoke.log"
   : > "$SMOKE_LOG"
 
@@ -395,7 +397,7 @@ else
     # Negative test: telemetry with negative number must be rejected
     NEG_RESPONSE="$(curl -s -X POST "http://localhost:$SMOKE_PORT/api/telemetry" \
       -H 'Content-Type: application/json' \
-      -d '{"sessionId":"check_neg","telemetry":{"keystrokes":-1,"chars_typed":5,"effective_wpm":50,"focus_losses":0,"time_off_window_ms":0,"pastes":0,"paste_payload_chars":0,"max_idle_gap_ms":0,"window_seconds":5}}' 2>/dev/null)"
+      -d '{"sessionId":"'"${SMOKE_RUN_ID}"'_neg","telemetry":{"keystrokes":-1,"chars_typed":5,"effective_wpm":50,"focus_losses":0,"time_off_window_ms":0,"pastes":0,"paste_payload_chars":0,"max_idle_gap_ms":0,"window_seconds":5}}' 2>/dev/null)"
     if echo "$NEG_RESPONSE" | grep -q '"error"'; then
       pass "telemetry rejects negative numbers"
     else
@@ -406,7 +408,7 @@ else
 
     # Negative test: replay (duplicate sequence) must be rejected
     NOW_MS="$(node -p 'Date.now()')"
-    BODY='{"sessionId":"check_replay","sequence":1,"timestamp":'"$NOW_MS"',"telemetry":{"keystrokes":5,"chars_typed":20,"effective_wpm":40,"focus_losses":0,"time_off_window_ms":0,"pastes":0,"paste_payload_chars":0,"max_idle_gap_ms":0,"window_seconds":5}}'
+    BODY='{"sessionId":"'"${SMOKE_RUN_ID}"'_replay","sequence":1,"timestamp":'"$NOW_MS"',"telemetry":{"keystrokes":5,"chars_typed":20,"effective_wpm":40,"focus_losses":0,"time_off_window_ms":0,"pastes":0,"paste_payload_chars":0,"max_idle_gap_ms":0,"window_seconds":5}}'
     curl -s -X POST "http://localhost:$SMOKE_PORT/api/telemetry" -H 'Content-Type: application/json' -d "$BODY" >/dev/null 2>&1
     REPLAY_RESPONSE="$(curl -s -X POST "http://localhost:$SMOKE_PORT/api/telemetry" -H 'Content-Type: application/json' -d "$BODY" 2>/dev/null)"
     if echo "$REPLAY_RESPONSE" | grep -q "sequence_replay_or_rollback"; then
@@ -420,12 +422,12 @@ else
     # Negative test: joined session without token must be rejected (401)
     EXAM_RESPONSE="$(curl -s -X POST "http://localhost:$SMOKE_PORT/api/exams" \
       -H 'Content-Type: application/json' \
-      -d '{"title":"check smoke","durationMinutes":60}' 2>/dev/null)"
+      -d '{"title":"'"${SMOKE_RUN_ID}"' smoke","durationMinutes":60}' 2>/dev/null)"
     EXAM_ID="$(echo "$EXAM_RESPONSE" | node -e 'let d="";process.stdin.on("data",c=>d+=c).on("end",()=>{try{process.stdout.write(JSON.parse(d).id||"")}catch{}})' 2>/dev/null)"
     if [[ -n "$EXAM_ID" ]]; then
       JOIN_RESPONSE="$(curl -s -X POST "http://localhost:$SMOKE_PORT/api/exams/$EXAM_ID/join" \
         -H 'Content-Type: application/json' \
-        -d '{"studentId":"check@test","sessionId":"check_joined"}' 2>/dev/null)"
+        -d '{"studentId":"check@test","sessionId":"'"${SMOKE_RUN_ID}"'_joined"}' 2>/dev/null)"
       TOK="$(echo "$JOIN_RESPONSE" | node -e 'let d="";process.stdin.on("data",c=>d+=c).on("end",()=>{try{process.stdout.write(JSON.parse(d).sessionToken||"")}catch{}})' 2>/dev/null)"
       if [[ -n "$TOK" ]]; then
         pass "/join issues sessionToken"
@@ -438,7 +440,7 @@ else
       # Joined-session telemetry without token → 401
       NOTOKEN_RESPONSE="$(curl -s -X POST "http://localhost:$SMOKE_PORT/api/telemetry" \
         -H 'Content-Type: application/json' \
-        -d '{"sessionId":"check_joined","sequence":1,"timestamp":'"$(node -p 'Date.now()')"',"telemetry":{"keystrokes":1,"chars_typed":1,"effective_wpm":10,"focus_losses":0,"time_off_window_ms":0,"pastes":0,"paste_payload_chars":0,"max_idle_gap_ms":0,"window_seconds":5}}' 2>/dev/null)"
+        -d '{"sessionId":"'"${SMOKE_RUN_ID}"'_joined","sequence":1,"timestamp":'"$(node -p 'Date.now()')"',"telemetry":{"keystrokes":1,"chars_typed":1,"effective_wpm":10,"focus_losses":0,"time_off_window_ms":0,"pastes":0,"paste_payload_chars":0,"max_idle_gap_ms":0,"window_seconds":5}}' 2>/dev/null)"
       if echo "$NOTOKEN_RESPONSE" | grep -q "session_token_required"; then
         pass "joined-session telemetry requires token"
       else

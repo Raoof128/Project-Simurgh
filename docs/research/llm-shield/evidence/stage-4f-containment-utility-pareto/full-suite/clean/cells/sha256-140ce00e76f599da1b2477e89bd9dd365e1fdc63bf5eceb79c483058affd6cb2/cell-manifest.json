@@ -1,0 +1,12 @@
+{
+  "manifest_version": "simurgh.stage4f.cell_manifest.v1",
+  "cell_id": "sha256:140ce00e76f599da1b2477e89bd9dd365e1fdc63bf5eceb79c483058affd6cb2",
+  "point_id": "P4",
+  "scenario_id": "context-poisoning/stage3f-context-poisoning-020",
+  "suite_hash": "sha256:a3174bdcdd681baf2dd8707c4cb4838cb917769fd97efcdaa772b308ea82af15",
+  "grid_hash": "sha256:2833a449cdb010f176f60cbf356fab633dfd028ec81c9feb57ecbc3756abfc00",
+  "policy_bundle_hash": "sha256:280de93aee0bf6e0a15f3b933c4b1f868a37207670297ea0496af448bc3ef3ce",
+  "evidence_pack_hash": "sha256:df3ffdfc7e57cea466ebf17599d4dfc4d794d32c0c4e15747b5194210a8be0a3",
+  "evidence_pack_sig_hash": "sha256:6ef7d94a86c8e65a5e02c741b0ba045aefdde6884848bdd37deb1ff27815bc73",
+  "utility_observation_hash": "sha256:bcd86b30bcb5940e956825f54c16e5861dea50fab92ae3a43ac086f31c535c52"
+}

@@ -1,0 +1,12 @@
+{
+  "manifest_version": "simurgh.stage4f.cell_manifest.v1",
+  "cell_id": "sha256:74bb6ada4a995cb5f6091532ce3bf541b66e8151b22a0347801ea4714550c127",
+  "point_id": "P4",
+  "scenario_id": "direct-input/stage3f-direct-input-010",
+  "suite_hash": "sha256:a3174bdcdd681baf2dd8707c4cb4838cb917769fd97efcdaa772b308ea82af15",
+  "grid_hash": "sha256:2833a449cdb010f176f60cbf356fab633dfd028ec81c9feb57ecbc3756abfc00",
+  "policy_bundle_hash": "sha256:280de93aee0bf6e0a15f3b933c4b1f868a37207670297ea0496af448bc3ef3ce",
+  "evidence_pack_hash": "sha256:5319d002ac12e65ce4339998f2678f52f1b839340f931b4ddc410e7b822d16c6",
+  "evidence_pack_sig_hash": "sha256:cee05723bbf3e444b5ac70250cb0f43778b9dc2ace8dc1691e8106bc5bed31bf",
+  "utility_observation_hash": "sha256:0d3e7b3bf63b263535ef85a0df709ff272e0a00795620dc15e7573ae88227767"
+}

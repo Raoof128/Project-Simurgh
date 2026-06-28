@@ -43,7 +43,12 @@ export function compareCellSets(expected, sealed) {
   };
 }
 
-export function buildCellSetManifest({ suite_hash, grid_hash, expected_cell_ids, sealed_cell_ids }) {
+export function buildCellSetManifest({
+  suite_hash,
+  grid_hash,
+  expected_cell_ids,
+  sealed_cell_ids,
+}) {
   return {
     manifest_version: "simurgh.stage4f.cell_set_manifest.v1",
     suite_hash,
