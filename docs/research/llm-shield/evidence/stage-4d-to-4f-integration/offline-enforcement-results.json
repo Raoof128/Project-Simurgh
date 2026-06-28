@@ -1,0 +1,29 @@
+{
+  "checked_files": [
+    "scripts/reproduce-stage4d-to-4f.sh",
+    "tools/simurgh-attestation/stage4d-to-4f/constants.mjs",
+    "tools/simurgh-attestation/stage4d-to-4f/stableJson.mjs",
+    "tools/simurgh-attestation/stage4d-to-4f/privacyScan.mjs",
+    "tools/simurgh-attestation/stage4d-to-4f/offlineGuards.mjs",
+    "tools/simurgh-attestation/stage4d-to-4f/oracle.mjs",
+    "tools/simurgh-attestation/stage4d-to-4f/keySubstitution.mjs",
+    "tools/simurgh-attestation/stage4d-to-4f/commandResults.mjs",
+    "tools/simurgh-attestation/stage4d-to-4f/artifactAudit.mjs",
+    "tools/simurgh-attestation/stage4d-to-4f/integrationReport.mjs",
+    "tools/simurgh-attestation/stage4d-to-4f/build-integration-report.mjs"
+  ],
+  "failures": [],
+  "forbidden_sources_checked": [
+    "net",
+    "tls",
+    "http",
+    "https",
+    "dns",
+    "fetch",
+    "WebSocket",
+    "browser automation",
+    "provider SDKs",
+    "child-process network commands"
+  ],
+  "ok": true
+}

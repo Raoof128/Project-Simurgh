@@ -1,0 +1,16 @@
+{
+  "ok": false,
+  "exit_code": 1,
+  "layers": {
+    "pack_signature": false,
+    "tamper": null,
+    "observation_binding": null,
+    "completeness": null,
+    "decision_replay": null,
+    "privacy": null
+  },
+  "first_failure": {
+    "layer": "pack_signature",
+    "reason": "embedded_key_mismatch"
+  }
+}

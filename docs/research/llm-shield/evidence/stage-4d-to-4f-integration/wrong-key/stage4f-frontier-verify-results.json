@@ -1,0 +1,13 @@
+{
+  "ok": false,
+  "exit_code": 1,
+  "verifier_version": "simurgh.stage4f.verify_frontier.v1",
+  "failed_layer": "pack_verify",
+  "first_failure": {
+    "reason": "pack_verify_failed",
+    "cell_id": "sha256:0bc24c4c319df1e4eae25cf43308650f0f0890ac1cc1a039b43539eaa9f52e72",
+    "point_id": "P4",
+    "scenario_id": "direct-input/stage3f-direct-input-002",
+    "pack_reason": "embedded_key_mismatch"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "entries": [
+    {
+      "class": "stage4d_pack",
+      "method": "observed_wrong_key_verification",
+      "observed_exit": 1,
+      "observed_reason": "embedded_key_mismatch",
+      "ok": true,
+      "path": "docs/research/llm-shield/evidence/stage-4d-to-4f-integration/wrong-key/stage4d-pack-verify-results.json"
+    },
+    {
+      "class": "stage4e_scenario_pack",
+      "method": "observed_wrong_key_verification",
+      "observed_exit": 1,
+      "observed_reason": "embedded_key_mismatch",
+      "ok": true,
+      "path": "docs/research/llm-shield/evidence/stage-4d-to-4f-integration/wrong-key/stage4e-pack-verify-results.json"
+    },
+    {
+      "class": "stage4f_cell_frontier",
+      "method": "observed_wrong_key_verification",
+      "observed_exit": 1,
+      "observed_reason": "pack_verify_failed",
+      "ok": true,
+      "path": "docs/research/llm-shield/evidence/stage-4d-to-4f-integration/wrong-key/stage4f-frontier-verify-results.json"
+    }
+  ],
+  "failures": [],
+  "ok": true
+}

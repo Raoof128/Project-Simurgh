@@ -1,0 +1,11 @@
+{
+  "lang": "C",
+  "lc_all": "C",
+  "no_network": "1",
+  "node_runtime": "required",
+  "node_version_recorded": false,
+  "provider_env_scrubbed": true,
+  "pythonhashseed": "0",
+  "source_date_epoch": "0",
+  "tz": "UTC"
+}

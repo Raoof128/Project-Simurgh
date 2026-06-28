@@ -1,0 +1,6 @@
+{
+  "claim_full_suite": false,
+  "command": "scripts/reproduce-stage4d-to-4f.sh",
+  "full_suite_ran": false,
+  "manifest_version": "simurgh.stage4d_to_4f.integration_manifest.v1"
+}
