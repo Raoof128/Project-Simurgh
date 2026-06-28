@@ -52,3 +52,4 @@ docs/research/llm-shield/evidence/stage-4c-provenance/manifest.json
 docs/research/llm-shield/evidence/stage-4d-decision-replay-evidence-pack/completeness-manifest.json
 docs/research/llm-shield/evidence/stage-4d-decision-replay-evidence-pack/evidence-pack.json
 docs/research/llm-shield/evidence/stage-4e-browser-agent-containment-run/**/*.json
+docs/research/llm-shield/evidence/stage-4f-containment-utility-pareto/**/*.json

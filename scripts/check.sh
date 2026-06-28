@@ -1700,6 +1700,14 @@ else
   tail -100 "$LOG_DIR/llm-shield-stage4e-reproduce.log"
 fi
 
+step "LLM Shield Stage 4F containment-utility Pareto canary"
+if scripts/reproduce-stage4f.sh > "$LOG_DIR/llm-shield-stage4f-reproduce.log" 2>&1; then
+  pass "LLM Shield Stage 4F containment-utility Pareto canary"
+else
+  fail "LLM Shield Stage 4F containment-utility Pareto canary"
+  tail -100 "$LOG_DIR/llm-shield-stage4f-reproduce.log"
+fi
+
 step "LLM Shield 3N claim ledger helper coverage"
 if node --test --experimental-test-coverage \
   --test-coverage-include=tests/e2e/llm_shield_stage3n_claim_ledger_lib.mjs \
