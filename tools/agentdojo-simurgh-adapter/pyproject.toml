@@ -12,3 +12,4 @@ agentdojo = ["agentdojo==0.1.30"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["."]
