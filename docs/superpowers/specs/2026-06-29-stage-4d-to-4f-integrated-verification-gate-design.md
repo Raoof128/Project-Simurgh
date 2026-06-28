@@ -79,6 +79,9 @@ evidence directory.
 The wrapper must not mutate stage evidence, stage goldens, frontier artifacts,
 or stage closeout files during verification.
 
+The wrapper must fail if any Stage 4D, Stage 4E, or Stage 4F evidence artifact
+is modified during integration verification.
+
 Online release hygiene belongs in a separate command, such as:
 
 ```bash
@@ -166,6 +169,12 @@ The wrapper runs with provider and browser environment variables scrubbed. If a
 verifier attempts to read or require them, the gate fails with
 `forbidden_provider_env`, `forbidden_browser_automation`, or
 `forbidden_live_api_access`.
+
+Environment flags alone are not sufficient proof of offline enforcement. The
+implementation must either run verifier paths inside a no-network sandbox,
+container, or profile, or install test-time guards that fail any attempted use of
+`net`, `tls`, `http`, `https`, DNS, `fetch`, WebSocket, browser automation,
+provider SDKs, or child-process network commands.
 
 The offline acceptance command must not run `git fetch`, origin sync, GitHub
 release checks, package registry checks, `npm audit`, or any live
@@ -269,6 +278,7 @@ unexpected_red_arm_success
 unexpected_red_arm_reason
 missing_red_arm_result
 stage_result_schema_missing
+stage_artifact_mutation_attempted
 key_substitution_not_tested
 external_pubkey_mismatch
 privacy_leak_detected
