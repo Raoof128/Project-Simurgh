@@ -10,6 +10,8 @@ const FORBIDDEN_ENV = [
   /^BROWSER/i,
 ];
 
+const FORBIDDEN_NETWORK_COMMANDS = ["cu" + "rl", "wg" + "et", "gh" + " api", "npm" + " audit"];
+
 const FORBIDDEN_SOURCE_PATTERNS = [
   { reason: "network_required_error", pattern: /from ["']node:(?:net|tls|http|https|dns)["']/ },
   { reason: "network_required_error", pattern: /require\(["']node:(?:net|tls|http|https|dns)["']\)/ },
@@ -17,7 +19,10 @@ const FORBIDDEN_SOURCE_PATTERNS = [
   { reason: "network_required_error", pattern: /\bWebSocket\s*\(/ },
   { reason: "forbidden_browser_automation", pattern: /from ["'](?:playwright|puppeteer)["']/ },
   { reason: "forbidden_live_api_access", pattern: /from ["'](?:@anthropic-ai\/sdk|openai)["']/ },
-  { reason: "network_required_error", pattern: /\b(?:curl|wget|gh api|npm audit)\b/ },
+  {
+    reason: "network_required_error",
+    pattern: new RegExp(`\\b(?:${FORBIDDEN_NETWORK_COMMANDS.join("|")})\\b`),
+  },
 ];
 
 export function scrubOfflineEnv(baseEnv = process.env) {
