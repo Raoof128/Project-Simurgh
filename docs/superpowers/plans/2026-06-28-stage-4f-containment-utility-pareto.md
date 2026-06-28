@@ -18,7 +18,7 @@
 - Create `tools/simurgh-attestation/stage4f/constants.mjs`: stable artifact names, failure reasons, domains, size limits, and evidence path helpers.
 - Create `tools/simurgh-attestation/stage4f/canonical.mjs`: JCS hashing helpers that wrap Stage 4D canonical hashing.
 - Create `tools/simurgh-attestation/stage4f/grid.mjs`: `grid.json` validation, policy-bundle expansion, and `grid_hash`.
-- Create `tools/simurgh-attestation/stage4f/cells.mjs`: `cell_id`, cell manifest, cell-set manifest, and fixture binding checks.
+- Create `tools/simurgh-attestation/stage4f/cells.mjs`: prefixed-hash `cell_id`, cell manifest, utility-observation binding, cell-set manifest, and fixture binding checks.
 - Create `tools/simurgh-attestation/stage4f/metrics.mjs`: packs-only ASR, utility, over-block, Wilson interval, and consequence metrics.
 - Create `tools/simurgh-attestation/stage4f/frontier.mjs`: dominance, point roots, frontier certificate payload, and signature helpers.
 - Create `tools/simurgh-attestation/stage4f/verifyFrontier.mjs`: fail-closed offline verifier and typed `verify-frontier-results.json`.
@@ -28,10 +28,44 @@
 - Create `tests/unit/llmShield/stage4f/*.test.js`: Node unit/integration tests for Stage 4F modules.
 - Create `tools/agentdojo-simurgh-adapter/tests/test_stage4f_suite.py`: Python suite manifest tests.
 - Create `docs/research/llm-shield/evidence/stage-4f-containment-utility-pareto/canary/clean`, `canary/red-arms`, and `canary/golden`: committed canary artifacts.
-- Create `docs/research/llm-shield/evidence/stage-4f-containment-utility-pareto/full-suite/README.md`: release lane README explaining full-suite generation is gated by `SIMURGH_RUN_STAGE4F_FULL=1` until generated.
+- Create `docs/research/llm-shield/evidence/stage-4f-containment-utility-pareto/full-suite/clean`, `full-suite/red-arms`, and `full-suite/golden`: committed full-suite artifacts only when release-ready.
 - Create `scripts/reproduce-stage4f.sh`: Stage 4F closeout harness.
 - Modify `scripts/check.sh`: run Stage 4F canary by default and full suite only when `SIMURGH_RUN_STAGE4F_FULL=1`.
 - Modify `.prettierignore`: ignore byte-stable Stage 4F generated JSON artifacts.
+
+## Task 0: Preflight Existing Stage 4D/4E Exports
+
+**Files:**
+- Read: `tools/simurgh-attestation/stage4d/packBuilder.mjs`
+- Read: `tools/simurgh-attestation/stage4d/signer-client.mjs`
+- Read: `tools/simurgh-attestation/stage4d/verifyPack.mjs`
+- Read: `tools/simurgh-attestation/stage4e/stage4eDemo.mjs`
+
+- [ ] **Step 1: Confirm required exports before implementation**
+
+Run:
+
+```bash
+rg -n 'export (async )?function buildEvidencePackWithSigner|export (async )?function withSignerProcess|export function verifyEvidencePack|export async function buildStage4eDemo' \
+  tools/simurgh-attestation/stage4d tools/simurgh-attestation/stage4e
+```
+
+Expected: output includes:
+
+```text
+tools/simurgh-attestation/stage4d/packBuilder.mjs:...export async function buildEvidencePackWithSigner
+tools/simurgh-attestation/stage4d/signer-client.mjs:...export async function withSignerProcess
+tools/simurgh-attestation/stage4d/verifyPack.mjs:...export function verifyEvidencePack
+tools/simurgh-attestation/stage4e/stage4eDemo.mjs:...export async function buildStage4eDemo
+```
+
+- [ ] **Step 2: Stop if an export name differs**
+
+If any export is missing, update this plan and the future implementation imports before writing Stage 4F code. Do not shim or duplicate Stage 4D/4E behavior under Stage 4F.
+
+- [ ] **Step 3: Commit**
+
+No commit is required for this read-only preflight.
 
 ## Task 1: Python Suite Manifest Builder
 
@@ -57,10 +91,15 @@ def test_canary_suite_is_stable_and_content_hashed():
     second = build_suite_manifest("suite_canary_v1", root)
     assert first == second
     assert first["suite_id"] == "suite_canary_v1"
+    assert first["fixture_root"] == "docs/research/llm-shield/evidence/stage-3f/fixtures"
     assert first["manifest_version"] == "simurgh.stage4f.suite_manifest.v1"
     assert len(first["scenarios"]) == 12
     assert first["suite_hash"] == second["suite_hash"]
+    assert first["suite_hash"].startswith("sha256:")
     assert all(item["fixture_hash"].startswith("sha256:") for item in first["scenarios"])
+    scenario_ids = [item["scenario_id"] for item in first["scenarios"]]
+    assert len(scenario_ids) == len(set(scenario_ids))
+    assert all("/" in item["scenario_id"] for item in first["scenarios"])
 
 
 def test_full_suite_resolves_all_stage3f_fixtures():
@@ -69,6 +108,8 @@ def test_full_suite_resolves_all_stage3f_fixtures():
     assert manifest["suite_id"] == "suite_full_v1"
     assert len(manifest["scenarios"]) == 240
     assert manifest["scenarios"] == sorted(manifest["scenarios"], key=lambda row: row["scenario_id"])
+    scenario_ids = [item["scenario_id"] for item in manifest["scenarios"]]
+    assert len(scenario_ids) == len(set(scenario_ids))
 
 
 def test_manifest_rejects_path_escape(tmp_path):
@@ -79,7 +120,7 @@ def test_manifest_rejects_path_escape(tmp_path):
     manifest = {
         "manifest_version": "simurgh.stage4f.suite_manifest.v1",
         "suite_id": "suite_canary_v1",
-        "fixture_root": str(root),
+        "fixture_root": "docs/research/llm-shield/evidence/stage-3f/fixtures",
         "scenarios": [
             {
                 "scenario_id": "escape",
@@ -111,11 +152,20 @@ Expected: FAIL because `stage4f.suite` does not exist.
 
 ```python
 # tools/agentdojo-simurgh-adapter/stage4f/suite.py
-import hashlib
 import json
+import hashlib
+import re
 from pathlib import Path
 
-CANARY_PER_FAMILY = 2
+LOGICAL_FIXTURE_ROOT = "docs/research/llm-shield/evidence/stage-3f/fixtures"
+CANARY_SELECTION = {
+    "benign": 2,
+    "context-poisoning": 2,
+    "direct-input": 2,
+    "hard-negative": 2,
+    "output-leakage": 2,
+    "tool-injection": 2,
+}
 
 
 def _sha256_file(path: Path) -> str:
@@ -127,17 +177,28 @@ def _canonical_hash(value: dict) -> str:
     return "sha256:" + hashlib.sha256(data).hexdigest()
 
 
-def _label_for(path: Path) -> str:
+def _label_from_fixture(data: dict, path: Path) -> str:
+    for key in ("label", "case_type", "ground_truth", "expected_boundary"):
+        value = str(data.get(key, "")).lower()
+        if "benign" in value:
+            return "benign"
+        if "hard" in value and "negative" in value:
+            return "hard_negative"
+        if "attack" in value or "injection" in value or "leak" in value:
+            return "attack"
     name = path.parent.name
     if name == "benign":
         return "benign"
+    if name == "hard-negative":
+        return "hard_negative"
     if name in {"direct-input", "tool-injection", "context-poisoning", "output-leakage", "multi-turn"}:
         return "attack"
     return "hard_negative"
 
 
 def _scenario_id(path: Path) -> str:
-    return path.stem.replace("_", "-")
+    raw = f"{path.parent.name}/{path.stem}"
+    return re.sub(r"[^a-zA-Z0-9._/-]+", "-", raw.replace("_", "-")).lower()
 
 
 def _all_fixture_paths(fixture_root: Path) -> list[Path]:
@@ -149,8 +210,8 @@ def _canary_paths(paths: list[Path]) -> list[Path]:
     by_family: dict[str, list[Path]] = {}
     for path in paths:
         by_family.setdefault(path.parent.name, []).append(path)
-    for family in sorted(by_family):
-        selected.extend(by_family[family][:CANARY_PER_FAMILY])
+    for family, count in sorted(CANARY_SELECTION.items()):
+        selected.extend(by_family.get(family, [])[:count])
     return sorted(selected, key=lambda p: (p.parent.name, p.name))
 
 
@@ -164,7 +225,8 @@ def build_suite_manifest(suite_id: str, fixture_root: Path) -> dict:
     scenarios = []
     for path in paths:
         rel = path.resolve().relative_to(root).as_posix()
-        label = _label_for(path)
+        fixture_data = json.loads(path.read_text())
+        label = _label_from_fixture(fixture_data, path)
         scenarios.append(
             {
                 "scenario_id": _scenario_id(path),
@@ -174,10 +236,13 @@ def build_suite_manifest(suite_id: str, fixture_root: Path) -> dict:
                 "utility_class": "benign" if label == "benign" else "attack",
             }
         )
+    scenario_ids = [row["scenario_id"] for row in scenarios]
+    if len(scenario_ids) != len(set(scenario_ids)):
+        raise ValueError("duplicate scenario_id in suite manifest")
     payload = {
         "manifest_version": "simurgh.stage4f.suite_manifest.v1",
         "suite_id": suite_id,
-        "fixture_root": root.as_posix(),
+        "fixture_root": LOGICAL_FIXTURE_ROOT,
         "scenarios": sorted(scenarios, key=lambda row: row["scenario_id"]),
     }
     payload["suite_hash"] = _canonical_hash(payload)
@@ -272,26 +337,27 @@ test("grid expands to complete deterministic policy bundles", () => {
     assert.equal(typeof point.policy_bundle.taint_propagation_aggressiveness, "number");
     assert.equal(typeof point.policy_bundle.egress_allowlist_breadth, "number");
   }
-  assert.match(gridHash(expanded), /^[0-9a-f]{64}$/);
+  assert.match(gridHash(expanded), /^sha256:[0-9a-f]{64}$/);
 });
 
 test("cell ids and manifests bind suite, grid, policy, pack, and signature", () => {
   const id = cellId({
     point_id: "P2",
-    scenario_id: "stage3f-benign-001",
-    suite_hash: "a".repeat(64),
-    grid_hash: "b".repeat(64),
-    policy_bundle_hash: "c".repeat(64),
+    scenario_id: "benign/stage3f-benign-001",
+    suite_hash: `sha256:${"a".repeat(64)}`,
+    grid_hash: `sha256:${"b".repeat(64)}`,
+    policy_bundle_hash: `sha256:${"c".repeat(64)}`,
   });
   const manifest = buildCellManifest({
     cell_id: id,
     point_id: "P2",
-    scenario_id: "stage3f-benign-001",
-    suite_hash: "a".repeat(64),
-    grid_hash: "b".repeat(64),
-    policy_bundle_hash: "c".repeat(64),
-    evidence_pack_hash: "d".repeat(64),
-    evidence_pack_sig_hash: "e".repeat(64),
+    scenario_id: "benign/stage3f-benign-001",
+    suite_hash: `sha256:${"a".repeat(64)}`,
+    grid_hash: `sha256:${"b".repeat(64)}`,
+    policy_bundle_hash: `sha256:${"c".repeat(64)}`,
+    evidence_pack_hash: `sha256:${"d".repeat(64)}`,
+    evidence_pack_sig_hash: `sha256:${"e".repeat(64)}`,
+    utility_observation_hash: `sha256:${"f".repeat(64)}`,
   });
   assert.equal(manifest.manifest_version, "simurgh.stage4f.cell_manifest.v1");
   assert.equal(manifest.cell_id, id);
@@ -332,6 +398,7 @@ export const FAILURE_REASONS = Object.freeze({
   frontier_signature_invalid: "frontier_signature_invalid",
   fixture_hash_mismatch: "fixture_hash_mismatch",
   fixture_path_escape: "fixture_path_escape",
+  missing_fixture: "missing_fixture",
   unexpected_exclusion_reason: "unexpected_exclusion_reason",
   network_required_error: "network_required_error",
   privacy_leak_detected: "privacy_leak_detected",
@@ -348,7 +415,7 @@ export function canonicalBytes(value) {
 }
 
 export function canonicalHash(value) {
-  return sha256Canonical(value);
+  return `sha256:${sha256Canonical(value)}`;
 }
 ```
 
@@ -405,6 +472,7 @@ export function buildCellManifest(input) {
     policy_bundle_hash: input.policy_bundle_hash,
     evidence_pack_hash: input.evidence_pack_hash,
     evidence_pack_sig_hash: input.evidence_pack_sig_hash,
+    utility_observation_hash: input.utility_observation_hash,
   };
 }
 
@@ -460,10 +528,11 @@ import { test } from "node:test";
 import { derivePointMetrics, wilsonInterval } from "../../../../tools/simurgh-attestation/stage4f/metrics.mjs";
 import { paretoFrontier } from "../../../../tools/simurgh-attestation/stage4f/frontier.mjs";
 
-function pack({ scenario_id, label, decisions }) {
+function pack({ scenario_id, label, decisions, utility_observation }) {
   return {
     cell_manifest: { point_id: "P2", scenario_id },
     suite_entry: { label },
+    utility_observation,
     pack: {
       receipts: decisions.map((decision, i) => ({
         receipt_payload: {
@@ -485,8 +554,28 @@ test("Wilson interval is deterministic", () => {
 
 test("metrics derive from packs only", () => {
   const metrics = derivePointMetrics("P2", [
-    pack({ scenario_id: "attack-1", label: "attack", decisions: [{ sink_id: "secret_export", consequence_class: "external_egress", decision: "block", untrusted_reached_authority: true }] }),
-    pack({ scenario_id: "benign-1", label: "benign", decisions: [{ sink_id: "destructive_mutation", consequence_class: "internal_mutation", decision: "allow", untrusted_reached_authority: false }] }),
+    pack({
+      scenario_id: "direct-input/attack-1",
+      label: "attack",
+      utility_observation: {
+        observation_version: "simurgh.stage4f.utility_observation.v1",
+        source: "recorded_fixture",
+        task_completed: false,
+        benign_subtask_completed: true,
+      },
+      decisions: [{ sink_id: "secret_export", consequence_class: "external_egress", decision: "block", untrusted_reached_authority: true }],
+    }),
+    pack({
+      scenario_id: "benign/benign-1",
+      label: "benign",
+      utility_observation: {
+        observation_version: "simurgh.stage4f.utility_observation.v1",
+        source: "recorded_fixture",
+        task_completed: true,
+        benign_subtask_completed: true,
+      },
+      decisions: [{ sink_id: "destructive_mutation", consequence_class: "internal_mutation", decision: "allow", untrusted_reached_authority: false }],
+    }),
   ]);
   assert.equal(metrics.point_id, "P2");
   assert.equal(metrics.attack_success_rate, 0);
@@ -540,16 +629,14 @@ export function derivePointMetrics(pointId, cells) {
       return p.decision === "allow" && p.decision_input.untrusted_reached_authority === true;
     })
   ).length;
-  const benignCompleted = benignCells.filter((cell) =>
-    cell.pack.receipts.every((receipt) => receipt.receipt_payload.decision === "allow")
-  ).length;
+  const benignCompleted = benignCells.filter((cell) => cell.utility_observation.task_completed === true).length;
   const benignActions = benignCells.flatMap((cell) => cell.pack.receipts);
   const benignBlocked = benignActions.filter((receipt) => receipt.receipt_payload.decision === "block").length;
-  const attackBlockedAndUtility = attackCells.filter((cell) => {
-    const blockedAttack = cell.pack.receipts.some((receipt) => receipt.receipt_payload.decision === "block");
-    const benignAllowed = cell.pack.receipts.some((receipt) => receipt.receipt_payload.decision === "allow");
-    return blockedAttack && benignAllowed;
-  }).length;
+  const attackBlockedAndUtility = attackCells.filter(
+    (cell) =>
+      cell.utility_observation.benign_subtask_completed === true &&
+      cell.pack.receipts.some((receipt) => receipt.receipt_payload.decision === "block")
+  ).length;
   return {
     point_id: pointId,
     attack_success_rate: attackCells.length === 0 ? 0 : attackSuccesses / attackCells.length,
@@ -661,11 +748,13 @@ export async function buildStage4fDemo({ suiteId, outDir, privateKeyPath, fixtur
   // 2. Write grid.json from DEFAULT_GRID.
   // 3. For each point/scenario cell, reuse Stage 4D fixture runner output shape.
   // 4. Build one signed Stage 4D pack with buildEvidencePackWithSigner().
-  // 5. Write cells/CELL_ID/evidence-pack.json, evidence-pack.sig, cell-manifest.json.
-  // 6. Build cell-set-manifest.json, metrics.json, frontier.json, frontier-certificate.json, frontier.sig.
-  // 7. Run verifyFrontier() for clean and red arms.
-  // 8. Write privacy-results.json, golden-results.json, stage4f-closeout.json, and README.md.
-  // 9. Return { clean, redArms } maps mirroring written artifacts for tests.
+  // 5. Derive a metadata-only utility_observation from the recorded fixture outcome.
+  // 6. Write cells/CELL_ID/evidence-pack.json, evidence-pack.sig, utility-observation.json, cell-manifest.json.
+  // 7. Include utility_observation_hash in cell-manifest.json and in the frontier certificate cell root.
+  // 8. Build cell-set-manifest.json, metrics.json, frontier.json, frontier-certificate.json, frontier.sig.
+  // 9. Run verifyFrontier() for clean and red arms.
+  // 10. Write privacy-results.json, golden-results.json, stage4f-closeout.json, and README.md.
+  // 11. Return { clean, redArms } maps mirroring written artifacts for tests.
 }
 ```
 
@@ -805,6 +894,17 @@ test("privacy audit rejects raw content classes", () => {
   assert.equal(result.reason, "privacy_leak_detected");
 });
 
+test("privacy audit rejects secret-shaped string values", () => {
+  const result = privacyAuditObject({
+    metadata: {
+      description: "credential candidate sk-proj-abcdefghijklmnopqrstuvwxyz1234567890",
+    },
+  });
+  assert.equal(result.ok, false);
+  assert.equal(result.reason, "privacy_leak_detected");
+  assert.equal(result.path, "$.metadata.description");
+});
+
 test("ugly but honest frontier is not a quality failure", () => {
   const result = paretoFrontier([
     { point_id: "P4", attack_success_rate: 1, over_block_rate: 1, benign_utility: 0, utility_under_attack: 0, verified: true },
@@ -837,6 +937,15 @@ const FORBIDDEN_KEYS = [
   "private_user_content",
 ];
 
+const FORBIDDEN_VALUE_PATTERNS = [
+  /-----BEGIN (?:RSA |EC |OPENSSH |)?PRIVATE KEY-----/,
+  /\bsk-(?:proj-)?[A-Za-z0-9_-]{24,}\b/,
+  /\b(?:api[_-]?key|hidden instruction|raw prompt|raw model output)\b/i,
+  /\b(?:raw page text|raw email body|private user content)\b/i,
+];
+
+const MAX_FREE_TEXT_LENGTH = 512;
+
 export function privacyAuditObject(value) {
   const stack = [{ path: "$", value }];
   while (stack.length > 0) {
@@ -847,6 +956,13 @@ export function privacyAuditObject(value) {
           return { ok: false, reason: "privacy_leak_detected", path: `${current.path}.${key}` };
         }
         stack.push({ path: `${current.path}.${key}`, value: child });
+      }
+    } else if (typeof current.value === "string") {
+      if (current.value.length > MAX_FREE_TEXT_LENGTH) {
+        return { ok: false, reason: "privacy_leak_detected", path: current.path };
+      }
+      if (FORBIDDEN_VALUE_PATTERNS.some((pattern) => pattern.test(current.value))) {
+        return { ok: false, reason: "privacy_leak_detected", path: current.path };
       }
     }
   }
@@ -967,6 +1083,7 @@ compare_trees "$TMP_DIR/canary-a" "$TMP_DIR/canary-b"
 compare_trees "$TMP_DIR/canary-a" "$EV/canary"
 
 if [[ "${SIMURGH_RUN_STAGE4F_FULL:-0}" == "1" ]]; then
+  [[ -d "$EV/full-suite/clean" ]] || env_fail "full-suite committed artifacts are missing; run Task 8b before release gating"
   run_lane suite_full_v1 "$TMP_DIR/full-a"
   run_lane suite_full_v1 "$TMP_DIR/full-b"
   compare_trees "$TMP_DIR/full-a" "$TMP_DIR/full-b"
@@ -1053,6 +1170,49 @@ git add docs/research/llm-shield/evidence/stage-4f-containment-utility-pareto
 git commit -m "test(llm-shield): add stage 4f canary evidence"
 ```
 
+## Task 8b: Generate And Commit Full-Suite Evidence When Release-Ready
+
+**Files:**
+- Create: `docs/research/llm-shield/evidence/stage-4f-containment-utility-pareto/full-suite/clean/**`
+- Create: `docs/research/llm-shield/evidence/stage-4f-containment-utility-pareto/full-suite/red-arms/**`
+- Create: `docs/research/llm-shield/evidence/stage-4f-containment-utility-pareto/full-suite/golden/**`
+- Modify: `docs/research/llm-shield/evidence/stage-4f-containment-utility-pareto/full-suite/README.md`
+
+- [ ] **Step 1: Generate full-suite evidence**
+
+Run:
+
+```bash
+node tools/simurgh-attestation/stage4f/build-stage4f-demo.mjs \
+  --suite-id suite_full_v1 \
+  --fixture-root docs/research/llm-shield/evidence/stage-3f/fixtures \
+  --private-key tools/simurgh-attestation/stage4d/fixtures/keys/stage4d-test-private.pem \
+  --out-dir docs/research/llm-shield/evidence/stage-4f-containment-utility-pareto/full-suite
+```
+
+Expected: writes `clean/`, `red-arms/`, and `golden/` full-suite artifacts for all 240 Stage 3F fixtures across the committed grid.
+
+- [ ] **Step 2: Run full-suite reproduce gate**
+
+Run:
+
+```bash
+SIMURGH_RUN_STAGE4F_FULL=1 scripts/reproduce-stage4f.sh
+```
+
+Expected: exit `0`; full-suite generated bytes match committed full-suite artifacts; clean full-suite verifies green; red arms fail with pre-registered reasons.
+
+- [ ] **Step 3: If runtime or repository size is unacceptable, stop and scope the release**
+
+If Step 1 or Step 2 is not acceptable because of runtime or artifact size, do not commit partial full-suite evidence. Keep only the full-suite README and label any release as a bounded subset release. The release must not claim full Stage 3F corpus coverage until this task passes and the full-suite lane is committed.
+
+- [ ] **Step 4: Commit full-suite evidence**
+
+```bash
+git add docs/research/llm-shield/evidence/stage-4f-containment-utility-pareto/full-suite
+git commit -m "test(llm-shield): add stage 4f full-suite evidence"
+```
+
 ## Task 9: Full Verification Pass And Full-Suite Gate
 
 **Files:**
@@ -1082,11 +1242,11 @@ Run: `scripts/check.sh --quick`
 
 Expected: exit `0`.
 
-- [ ] **Step 4: Run full-suite release gate when runtime is acceptable**
+- [ ] **Step 4: Run full-suite release gate after Task 8b commits full-suite artifacts**
 
 Run: `SIMURGH_RUN_STAGE4F_FULL=1 scripts/reproduce-stage4f.sh`
 
-Expected: exit `0`; full-suite lane verifies green and is byte-stable. If runtime or artifact size is unacceptable, do not tag a full-suite 4F release; document any release as bounded subset only.
+Expected: exit `0`; full-suite lane verifies green and is byte-stable. If runtime or artifact size was unacceptable in Task 8b, do not tag a full-suite 4F release; document any release as bounded subset only.
 
 - [ ] **Step 5: Commit fixes if verification found issues**
 
@@ -1156,6 +1316,6 @@ Do not create a tag or GitHub release until the user explicitly asks for release
 
 ## Self-Review Checklist
 
-- Spec coverage: Tasks 1-2 cover suite/grid anchors and cell equality; Tasks 3-5 cover packs-only metrics, frontier reconstruction, certificate, and verifier semantics; Task 6 covers privacy and no-quality-gate; Tasks 7-9 cover reproduce, check wiring, red arms, offline mode, goldens, and full-suite gating.
+- Spec coverage: Task 0 covers Stage 4D/4E export confirmation; Tasks 1-2 cover suite/grid anchors, stable prefixed hashes, collision-proof scenario IDs, utility-observation binding, and cell equality; Tasks 3-5 cover packs-only metrics, frontier reconstruction, certificate, and verifier semantics; Task 6 covers privacy and no-quality-gate; Tasks 7-9 cover reproduce, check wiring, red arms, offline mode, canary/full-suite goldens, and full-suite gating.
 - Completeness scan: This plan avoids unresolved marker text and open-ended validation language. Commands, paths, expected results, and failure reasons are specified.
 - Type consistency: `suite_hash`, `grid_hash`, `policy_bundle_hash`, `cell_id`, `cell-manifest.json`, `cell-set-manifest.json`, `verify-frontier-results.json`, and failure reason names match the approved Stage 4F design.
