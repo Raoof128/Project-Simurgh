@@ -1,0 +1,26 @@
+[
+  {
+    "label": "stage4d_reproduce",
+    "command": "scripts/reproduce-stage4d.sh",
+    "exit_code": 0,
+    "expected_green": true,
+    "log_hash": "sha256:1faee3664051091735129f97235282650a5b1cbcc67077d82c7d48863bde6f88",
+    "log_name": "stage4d_reproduce.log"
+  },
+  {
+    "label": "stage4e_reproduce",
+    "command": "scripts/reproduce-stage4e.sh",
+    "exit_code": 0,
+    "expected_green": true,
+    "log_hash": "sha256:d5cbffdc85d21297c09e6bc06a37af1f131a952d03cd8d38b1e94cd6268f380f",
+    "log_name": "stage4e_reproduce.log"
+  },
+  {
+    "label": "stage4f_canary_reproduce",
+    "command": "scripts/reproduce-stage4f.sh",
+    "exit_code": 0,
+    "expected_green": true,
+    "log_hash": "sha256:4b4d58066485f404c5e5116d99ece2532e626da5f34740128e4426812ceab59c",
+    "log_name": "stage4f_canary_reproduce.log"
+  }
+]

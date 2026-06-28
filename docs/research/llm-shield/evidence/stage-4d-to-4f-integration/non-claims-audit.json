@@ -1,0 +1,15 @@
+{
+  "non_claims": [
+    "not_model_safety",
+    "not_policy_correctness",
+    "not_production_readiness",
+    "not_live_inference_integrity",
+    "not_statistical_robustness",
+    "not_real_world_exhaustiveness",
+    "not_unmediated_action_coverage",
+    "not_lying_executor_truth",
+    "not_bypass_proof_enforcement"
+  ],
+  "ok": true,
+  "required_sentence": "Determinism is not statistical robustness."
+}

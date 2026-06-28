@@ -1,0 +1,36 @@
+{
+  "entries": [
+    {
+      "covered": true,
+      "covered_by": [
+        "Stage 4E arm B1",
+        "Stage 4F arm B"
+      ],
+      "id": "lying_decision"
+    },
+    {
+      "covered": true,
+      "covered_by": [
+        "Stage 4E arm C",
+        "Stage 4F arm C"
+      ],
+      "id": "dropped_receipt_or_cell"
+    },
+    {
+      "covered": true,
+      "covered_by": [
+        "Stage 4E arm D",
+        "Stage 4F arm D"
+      ],
+      "id": "byte_tamper"
+    },
+    {
+      "covered": true,
+      "covered_by": [
+        "key-substitution-results.json"
+      ],
+      "id": "key_substitution"
+    }
+  ],
+  "ok": true
+}

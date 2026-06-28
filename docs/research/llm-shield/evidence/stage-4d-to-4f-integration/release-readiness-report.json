@@ -1,0 +1,19 @@
+{
+  "artifacts": [
+    "integration-manifest.json",
+    "environment-pins.json",
+    "offline-enforcement-results.json",
+    "expected-result-oracle.json",
+    "stage-command-results.json",
+    "dod-coverage-matrix.json",
+    "falsifier-coverage-matrix.json",
+    "key-substitution-results.json",
+    "privacy-scan-results.json",
+    "golden-stability-summary.json",
+    "non-claims-audit.json",
+    "release-readiness-report.json",
+    "README.md"
+  ],
+  "failures": [],
+  "ok": true
+}

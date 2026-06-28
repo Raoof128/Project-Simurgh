@@ -1,0 +1,71 @@
+{
+  "entries": [
+    {
+      "covered": true,
+      "covered_by": [
+        "Stage 4D verify-results.json"
+      ],
+      "id": "receipt_integrity"
+    },
+    {
+      "covered": true,
+      "covered_by": [
+        "Stage 4D tamper-results.json",
+        "Stage 4E arm C",
+        "Stage 4F arm C"
+      ],
+      "id": "completeness"
+    },
+    {
+      "covered": true,
+      "covered_by": [
+        "Stage 4E arm B1",
+        "Stage 4F arm B"
+      ],
+      "id": "decision_replay"
+    },
+    {
+      "covered": true,
+      "covered_by": [
+        "key-substitution-results.json"
+      ],
+      "id": "external_key_trust"
+    },
+    {
+      "covered": true,
+      "covered_by": [
+        "offline-enforcement-results.json"
+      ],
+      "id": "offline_verification"
+    },
+    {
+      "covered": true,
+      "covered_by": [
+        "golden-stability-summary.json"
+      ],
+      "id": "golden_byte_stability"
+    },
+    {
+      "covered": true,
+      "covered_by": [
+        "privacy-scan-results.json"
+      ],
+      "id": "privacy"
+    },
+    {
+      "covered": true,
+      "covered_by": [
+        "Stage 4F verify-frontier-results.json"
+      ],
+      "id": "packs_only_frontier_metrics"
+    },
+    {
+      "covered": true,
+      "covered_by": [
+        "non-claims-audit.json"
+      ],
+      "id": "non_claims"
+    }
+  ],
+  "ok": true
+}
