@@ -33,6 +33,91 @@
 - Modify `scripts/check.sh`: run Stage 4F canary by default and full suite only when `SIMURGH_RUN_STAGE4F_FULL=1`.
 - Modify `.prettierignore`: ignore byte-stable Stage 4F generated JSON artifacts.
 
+## Inherited 4D/4E DoD Context
+
+Stage 4F lifts the Stage 4D receipt spine and Stage 4E flagship demo posture to
+a statistical sweep. The implementation must not weaken or fork these existing
+gates. Stage 4F tasks should reuse the Stage 4D crypto/verifier unchanged and
+exercise the same falsifiability matrix across many cells and operating points.
+
+### Stage 4D - Evidence Pack Core DoD
+
+Stage 4D is the receipt spine. Its load-bearing properties are
+emission-completeness, out-of-process signing, decision-replay, and
+tamper-evidence.
+
+| Gate | Requirement | Falsifier that must fail |
+| --- | --- | --- |
+| G1 | Every action produces a schema-valid receipt | Remove a required field -> schema check fails |
+| G2 | Emission-completeness holds: `observed_action_count == receipt_count` | Drop one receipt -> `verify` exits non-zero |
+| G3 | Tamper-evidence holds: hash-chain, Merkle root, and signature | Flip one byte in any receipt -> signature or Merkle verification fails |
+| G4 | Decision-replay holds: recompute `decide()` from committed decision inputs | Corrupt a recorded `decision` -> replay mismatch fails |
+| G5 | Out-of-process signing holds: signer key never enters the agent process | Signer key present in agent env or memory -> design test fails |
+| G6 | Byte-stability and determinism hold | Two `recorded_fixture` runs differ -> golden mismatch |
+| G7 | Offline verifiability holds | `verify` requires network -> verification fails |
+
+The Stage 4D verifier layers are:
+
+1. **L1 tamper:** schema, hash-chain, signature, and Merkle checks.
+2. **L2 completeness:** count, uniqueness, and every high-risk sink decided.
+3. **L3 decision-replay:** policy-hash match, recomputed digests, and
+   deterministic `decide()` equality.
+
+Any failed Stage 4D assertion exits non-zero. Stage 4F must treat a failed
+per-cell Stage 4D pack as an invalid cell; the aggregator must not silently drop
+that cell and continue green.
+
+### Stage 4E - Browser-Agent Containment Run DoD
+
+Stage 4E is one legible scene on the Stage 4D spine: benign task succeeds, an
+injected page induces an unauthorized sink attempt, Simurgh blocks it, the pack
+verifies offline, and receipt omission turns verification red.
+
+| Gate | Requirement | Falsifier that must fail |
+| --- | --- | --- |
+| E1 | Benign arm: task completes, receipts emitted, verify green | Break the benign run -> utility metric red |
+| E2 | Attack arm: unauthorized sink is blocked with receipt `decision: block` | Force-allow the unauthorized sink -> it reaches the Stage 4E mediated dispatch ledger and ASR becomes greater than zero |
+| E3 | Exact benign-action preservation: every authorized benign action passes; over-block count is reported, not statistically gated on the single benign control | Block any authorized benign action -> benign-preservation gate fails while over-block remains reported |
+| E4 | Tamper demo: drop one receipt for an action still present in the observation log -> `verify` exits non-zero | Verify stays green after dropping an observed action receipt -> completeness is broken |
+| E5 | Whole demo verifies offline with network disabled | Any network dependency -> failure |
+| E6 | `recorded_fixture` tier is byte-stable | Two runs differ -> golden mismatch |
+
+Stage 4E's four-arm falsifiability matrix is:
+
+- **Arm A:** honest gateway -> green.
+- **Arm B1:** validly signed lying decision record, with signature and Merkle
+  intact but recorded decision not equal to deterministic replay -> red through
+  decision-replay.
+- **Arm B2:** lying executor -> out of scope until dispatch attestation;
+  decision-replay proves the record, not execution truth.
+- **Arm C:** observed-but-unreceipted action -> red through
+  emission-completeness.
+- **Arm D:** byte tamper -> red through hash-chain, Merkle, or signature.
+
+Core Stage 4E Tier A shipping DoD is Arm A green; Arms B1, C, and D red; offline
+reproducible; byte-stable golden including red arms; every falsifier tested.
+Arm B2 and Tier C real Claude Computer Use are not Stage 4E shipping gates.
+
+### 4F Nesting Rule
+
+Stage 4F does not replace 4D or 4E. It scales their proof posture:
+
+- Stage 4D G2 maps to Stage 4E Arm C and Stage 4F dropped-cell /
+  missing-receipt completeness checks.
+- Stage 4D G3 maps to Stage 4E Arm D and Stage 4F byte-tamper aggregate and
+  per-cell pack verification checks.
+- Stage 4D G4 maps to Stage 4E Arm B1 and Stage 4F signed lying-decision cell
+  checks.
+- Stage 4D G5 maps to Stage 4E key-isolation tests and Stage 4F
+  out-of-process frontier/cell signing tests.
+- Stage 4D G6/G7 and Stage 4E E5/E6 map to Stage 4F offline reproduce and
+  golden determinism gates.
+
+Therefore Tasks 4-7 must preserve the exact Stage 4E red-arm semantics per
+cell, and Tasks 7-9 must prove the same offline/byte-stable behavior at the
+frontier level. A Stage 4F clean frontier may only verify green when every
+expected cell's inherited 4D/4E obligations are satisfied.
+
 ## Task 0: Preflight Existing Stage 4D/4E Exports
 
 **Files:**
