@@ -51,6 +51,7 @@ tools/simurgh-daemon-windows/**/obj/
 
 # tmp
 .tmp/
+.worktrees/
 *.tmp
 
 # LaTeX build artifacts
