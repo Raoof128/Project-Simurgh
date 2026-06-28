@@ -28,9 +28,11 @@ external `--suite` / `--grid` anchors, exact cell-set equality, signed frontier
 roots, red arms, byte-stable goldens, and `verify-frontier` semantics.
 
 Final Stage 4F closeout uses `suite_full_v1`, the full existing Stage 3F fixture
-corpus, if runtime and repository size remain acceptable. The canary is
-development scaffolding; the full suite is the release claim unless a release
-explicitly documents a bounded subset claim.
+corpus, for the full release claim. The canary is development scaffolding; the
+full suite is the release claim unless a release explicitly documents a bounded
+subset claim. If full-suite runtime or repository size is not acceptable, the
+release must be labelled as a bounded subset release and must not claim full
+Stage 3F corpus coverage.
 
 Rejected alternatives:
 
@@ -77,7 +79,7 @@ The Stage 4F flow is:
    as ordered manifests with stable scenario IDs, fixture paths, fixture hashes,
    labels (`attack`, `benign`, `hard_negative`), and expected utility/security
    classification.
-2. `grid.yaml` defines three initial operating points: `P0` permissive, `P2`
+2. `grid.json` defines three initial operating points: `P0` permissive, `P2`
    balanced, and `P4` strict. Each point expands to a complete canonical policy
    bundle before hashing; hidden defaults are forbidden.
 3. The sweep driver computes the exact cross-product of the external suite
@@ -213,8 +215,11 @@ Stable failure reasons include:
 - `metric_digest_mismatch`
 - `frontier_hash_mismatch`
 - `frontier_signature_invalid`
+- `fixture_hash_mismatch`
+- `fixture_path_escape`
 - `unexpected_exclusion_reason`
 - `network_required_error`
+- `privacy_leak_detected`
 - `golden_mismatch`
 
 A direct `verify-frontier` invocation over a malformed, incomplete, laundered,
@@ -264,8 +269,9 @@ Each lane contains:
 - `suite-manifest.json`
 - `grid.json`
 - `signer.pub`
-- per-cell signed Stage 4D packs and signatures
-- per-cell `cell-manifest.json`
+- `cells/<cell_id>/evidence-pack.json`
+- `cells/<cell_id>/evidence-pack.sig`
+- `cells/<cell_id>/cell-manifest.json`
 - `cell-set-manifest.json`
 - `metrics.json`
 - `frontier.json`
