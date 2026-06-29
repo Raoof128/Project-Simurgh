@@ -9,15 +9,24 @@ import { certificateDigest, buildDfiCertificate } from "./dfiCertificate.mjs";
 import { RAW_VERIFIER_CODES, stage4CodeForRawCode } from "./exitCodes.mjs";
 import { buildSignedPackManifest, verifyPackBinding } from "./packBinding.mjs";
 
-const stable = (value) => JSON.stringify(value, null, 2) + "\n";
 const WRONG_BASE_PACK_PUBLIC_KEY_PEM = `-----BEGIN PUBLIC KEY-----
 MCowBQYDK2VwAyEAuqH7hI0ASnLLnjkeMnVAi6IeKvwhxC7+cif/RoiTa/8=
 -----END PUBLIC KEY-----
 `;
 
+async function stable(value) {
+  const json = JSON.stringify(value, null, 2) + "\n";
+  try {
+    const prettier = await import("prettier");
+    return await prettier.format(json, { parser: "json" });
+  } catch {
+    return json;
+  }
+}
+
 async function writeJson(path, value) {
   await mkdir(dirname(path), { recursive: true });
-  await writeFile(path, stable(value));
+  await writeFile(path, await stable(value));
 }
 
 export async function main({ root = process.cwd() } = {}) {

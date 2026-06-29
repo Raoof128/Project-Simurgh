@@ -29,9 +29,5 @@
       "status": "not_in_scope"
     }
   },
-  "non_claims": [
-    "dfi_soundness",
-    "derivation_validity",
-    "implicit_flow_security"
-  ]
+  "non_claims": ["dfi_soundness", "derivation_validity", "implicit_flow_security"]
 }

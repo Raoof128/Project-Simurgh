@@ -56,12 +56,7 @@
   },
   "consequence_lattice": {
     "lattice_version": "consequence_lattice.v1",
-    "order": [
-      "read_only",
-      "internal_mutation",
-      "external_egress",
-      "irreversible_external_effect"
-    ]
+    "order": ["read_only", "internal_mutation", "external_egress", "irreversible_external_effect"]
   },
   "action_observation_log": [
     {
@@ -119,9 +114,7 @@
       },
       "policy_features_source": {
         "external_effect": true,
-        "input_sources": [
-          "user_task"
-        ],
+        "input_sources": ["user_task"],
         "requires_authority": true,
         "sink_id": "egress",
         "user_explicitly_authorised": true
@@ -150,10 +143,7 @@
       },
       "policy_features_source": {
         "external_effect": false,
-        "input_sources": [
-          "web_context_01",
-          "user_task"
-        ],
+        "input_sources": ["web_context_01", "user_task"],
         "requires_authority": true,
         "sink_id": "authority_escalation",
         "user_explicitly_authorised": false
@@ -185,10 +175,7 @@
       },
       "policy_features_source": {
         "external_effect": true,
-        "input_sources": [
-          "web_context_01",
-          "user_task"
-        ],
+        "input_sources": ["web_context_01", "user_task"],
         "requires_authority": true,
         "sink_id": "secret_export",
         "user_explicitly_authorised": false
@@ -221,9 +208,7 @@
       },
       "policy_features_source": {
         "external_effect": false,
-        "input_sources": [
-          "user_task"
-        ],
+        "input_sources": ["user_task"],
         "requires_authority": true,
         "sink_id": "destructive_mutation",
         "user_explicitly_authorised": true
@@ -394,12 +379,7 @@
     "observation_log_root": "58aad00e21f0389cfd8ea64bce0701743f83e1ba7a904be07284f8becc952777",
     "observed_action_count": 4,
     "receipt_count": 4,
-    "ordered_action_ids": [
-      "act_000",
-      "act_001",
-      "act_002",
-      "act_003"
-    ],
+    "ordered_action_ids": ["act_000", "act_001", "act_002", "act_003"],
     "ordered_observation_event_hashes": [
       "e6cc9c4fc6f0b68d9811ecf79c0a9b43d4a8d9d1e56123fd0505741fe03e04d3",
       "a42974c15d452983c47c9e4128adf0a390689cb2e12d817af4c9ab28a857e36e",
