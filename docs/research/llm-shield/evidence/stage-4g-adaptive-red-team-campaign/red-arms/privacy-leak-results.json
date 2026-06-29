@@ -1,0 +1,7 @@
+{
+  "ok": false,
+  "campaign_verified": false,
+  "first_failure": {
+    "reason": "privacy_leak_detected"
+  }
+}

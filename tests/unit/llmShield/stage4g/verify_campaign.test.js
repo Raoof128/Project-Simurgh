@@ -51,9 +51,7 @@ function fixtureCampaign() {
     reason_codes: envelope.payload.reason_codes,
   }));
   const campaign_id = campaignIdFromConfig({ ...config, seed });
-  const campaign_merkle_root = campaignMerkleRoot(
-    attempts.map((attempt) => attempt.record_hash)
-  );
+  const campaign_merkle_root = campaignMerkleRoot(attempts.map((attempt) => attempt.record_hash));
   const manifest = {
     manifest_version: "simurgh.stage4g.campaign.v1",
     campaign_id,
@@ -69,7 +67,10 @@ function fixtureCampaign() {
     counts: { resolved: 2, caught: 0, escaped: 1, out_of_scope: 1, aborted: 0 },
     golden_digest: campaignIdFromConfig({ ...config, seed, driver_hash: campaign_merkle_root }),
   };
-  const signedManifest = { payload: manifest, signature: signCampaignPayload(manifest, privateKey) };
+  const signedManifest = {
+    payload: manifest,
+    signature: signCampaignPayload(manifest, privateKey),
+  };
   return { signedManifest, records, publicKey, privateKey };
 }
 

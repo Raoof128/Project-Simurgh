@@ -1,0 +1,81 @@
+{
+  "payload": {
+    "manifest_version": "simurgh.stage4g.campaign.v1",
+    "campaign_id": "sha256:941d54f000fd1be4c31ce0d7e3ac0db70d75c3d81bcc3cdf2ea34d30a8c91d0b",
+    "seed": "sha256:ce3b40629765d5a57f1e97955bd638a2f009e23358701d059561ad46e34e3422",
+    "budget": {
+      "queries_total": 4,
+      "per_class": {
+        "I": 1,
+        "II": 1,
+        "III": 1,
+        "IV": 1
+      }
+    },
+    "library_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "target_commit": "0123456789abcdef0123456789abcdef01234567",
+    "policy_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "driver_hash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "campaign_merkle_root": "sha256:c385ca0deaa2d1654f499b241fcf7ad9a92058bb695efac15ee9c38ec417aba4",
+    "attempt_count": 4,
+    "attempts": [
+      {
+        "id": "a0001",
+        "target_class": "I",
+        "resolved_class": "I",
+        "verdict": "caught",
+        "record_type": "EP",
+        "record_ref": "stage4g://records/a0001",
+        "record_hash": "sha256:c058530f78e27dbe7b55068f0c143995d6e0a59f2a14625bac6b3f219f0fe399",
+        "reason_codes": [
+          "decision_replay_blocked"
+        ]
+      },
+      {
+        "id": "a0002",
+        "target_class": "II",
+        "resolved_class": "II",
+        "verdict": "caught",
+        "record_type": "EP",
+        "record_ref": "stage4g://records/a0002",
+        "record_hash": "sha256:669712bee70822bb466386921f683b6e75b3a465a68395c7ac906f2a122fbf15",
+        "reason_codes": [
+          "verifier_deception_rejected"
+        ]
+      },
+      {
+        "id": "a0003",
+        "target_class": "III",
+        "resolved_class": "III",
+        "verdict": "out_of_scope",
+        "record_type": "CR",
+        "record_ref": "stage4g://records/a0003",
+        "record_hash": "sha256:5e9457897ca505943bc364559f341ebd78ddaabca24feeff8b552880f40d57de",
+        "reason_codes": [
+          "unmediated_action"
+        ]
+      },
+      {
+        "id": "a0004",
+        "target_class": "IV",
+        "resolved_class": "IV",
+        "verdict": "escaped",
+        "record_type": "CR",
+        "record_ref": "stage4g://records/a0004",
+        "record_hash": "sha256:82e22159be67aeee5825153f895d8f2077055d390feac6ef3f9e7b42ed713edb",
+        "reason_codes": [
+          "boundary_escape_recorded"
+        ]
+      }
+    ],
+    "counts": {
+      "resolved": 4,
+      "caught": 2,
+      "escaped": 1,
+      "out_of_scope": 1,
+      "aborted": 0
+    },
+    "golden_digest": "sha256:448d57d7a32288233149db32bbb691b17f54dc79907e98d3915d3fed903286a0"
+  },
+  "signature": "6ac4HxoGewRqmMyN4ViVRqyn7Eu0P2fjfZAFAYD2kvNBlSSZwPp1mEGxp0kV9dAihrlU7wW02kyX5EvXtiefBA=="
+}

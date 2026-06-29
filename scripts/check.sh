@@ -1710,6 +1710,14 @@ else
   tail -100 "$LOG_DIR/llm-shield-stage4f-reproduce.log"
 fi
 
+step "LLM Shield Stage 4G adaptive red-team campaign"
+if scripts/reproduce-stage4g.sh > "$LOG_DIR/llm-shield-stage4g-reproduce.log" 2>&1; then
+  pass "LLM Shield Stage 4G adaptive red-team campaign"
+else
+  fail "LLM Shield Stage 4G adaptive red-team campaign"
+  tail -100 "$LOG_DIR/llm-shield-stage4g-reproduce.log"
+fi
+
 step "LLM Shield 3N claim ledger helper coverage"
 if node --test --experimental-test-coverage \
   --test-coverage-include=tests/e2e/llm_shield_stage3n_claim_ledger_lib.mjs \

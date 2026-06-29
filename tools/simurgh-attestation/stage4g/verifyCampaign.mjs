@@ -130,5 +130,10 @@ export function verifyCampaign({ signedManifest, records, publicKey }) {
     return fail("verdict_mismatch", { field: "counts" });
   }
 
-  return { ok: true, campaign_verified: true, security_escapes: securityEscapes, first_failure: null };
+  return {
+    ok: true,
+    campaign_verified: true,
+    security_escapes: securityEscapes,
+    first_failure: null,
+  };
 }
