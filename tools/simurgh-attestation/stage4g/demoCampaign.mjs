@@ -6,6 +6,7 @@ import {
   campaignHash,
   campaignIdFromConfig,
   campaignMerkleRoot,
+  goldenDigestForCampaign,
   signCampaignPayload,
 } from "./campaignCrypto.mjs";
 import { buildCampaignRecord, buildEvidencePackRecord, signRecordEnvelope } from "./records.mjs";
@@ -77,10 +78,7 @@ function manifestFor({ cfg, seed, attempts, records }) {
   };
   return {
     ...manifestBase,
-    golden_digest: campaignHash({
-      manifest: { ...manifestBase, golden_digest: "sha256:" + "0".repeat(64) },
-      records,
-    }),
+    golden_digest: goldenDigestForCampaign({ manifest: manifestBase, records }),
   };
 }
 

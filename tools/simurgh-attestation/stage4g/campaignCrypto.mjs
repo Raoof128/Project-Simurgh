@@ -8,6 +8,13 @@ export function campaignHash(payload) {
   return `sha256:${sha256Canonical(payload)}`;
 }
 
+export function goldenDigestForCampaign({ manifest, records }) {
+  return campaignHash({
+    manifest: { ...manifest, golden_digest: "sha256:" + "0".repeat(64) },
+    records,
+  });
+}
+
 export function campaignIdFromConfig({
   seed,
   budget,

@@ -3,12 +3,15 @@ import assert from "node:assert/strict";
 import { generateKeyPairSync } from "node:crypto";
 import { test } from "node:test";
 import {
+  campaignHash,
   campaignIdFromConfig,
   campaignMerkleRoot,
+  goldenDigestForCampaign,
   signCampaignPayload,
 } from "../../../../tools/simurgh-attestation/stage4g/campaignCrypto.mjs";
 import {
   buildCampaignRecord,
+  recordHash,
   signRecordEnvelope,
 } from "../../../../tools/simurgh-attestation/stage4g/records.mjs";
 import {
@@ -52,7 +55,7 @@ function fixtureCampaign() {
   }));
   const campaign_id = campaignIdFromConfig({ ...config, seed });
   const campaign_merkle_root = campaignMerkleRoot(attempts.map((attempt) => attempt.record_hash));
-  const manifest = {
+  const manifestBase = {
     manifest_version: "simurgh.stage4g.campaign.v1",
     campaign_id,
     seed,
@@ -65,7 +68,10 @@ function fixtureCampaign() {
     attempt_count: attempts.length,
     attempts,
     counts: { resolved: 2, caught: 0, escaped: 1, out_of_scope: 1, aborted: 0 },
-    golden_digest: campaignIdFromConfig({ ...config, seed, driver_hash: campaign_merkle_root }),
+  };
+  const manifest = {
+    ...manifestBase,
+    golden_digest: goldenDigestForCampaign({ manifest: manifestBase, records }),
   };
   const signedManifest = {
     payload: manifest,
@@ -127,4 +133,44 @@ test("verifyCampaign rejects manifest shrinking, class relabeling, and privacy l
   const leakResult = verifyCampaign(leakCampaign);
   assert.equal(leakResult.ok, false);
   assert.equal(leakResult.first_failure.reason, "privacy_leak_detected");
+});
+
+test("verifyCampaign rejects re-signed records whose sealed inputs drift from the schedule", () => {
+  const campaign = fixtureCampaign();
+  campaign.records[0] = signRecordEnvelope(
+    {
+      ...campaign.records[0].payload,
+      sealed_inputs_hash: campaignHash({ forged: "not-the-precommitted-slot" }),
+    },
+    campaign.privateKey
+  );
+  campaign.signedManifest.payload.attempts[0].record_hash = recordHash(campaign.records[0].payload);
+  campaign.signedManifest.payload.campaign_merkle_root = campaignMerkleRoot(
+    campaign.signedManifest.payload.attempts.map((attempt) => attempt.record_hash)
+  );
+  campaign.signedManifest.payload.golden_digest = goldenDigestForCampaign({
+    manifest: campaign.signedManifest.payload,
+    records: campaign.records,
+  });
+  campaign.signedManifest.signature = signCampaignPayload(
+    campaign.signedManifest.payload,
+    campaign.privateKey
+  );
+
+  const result = verifyCampaign(campaign);
+  assert.equal(result.ok, false);
+  assert.equal(result.first_failure.reason, "attempt_schedule_mismatch");
+});
+
+test("verifyCampaign rejects re-signed manifests with forged golden digests", () => {
+  const campaign = fixtureCampaign();
+  campaign.signedManifest.payload.golden_digest = "sha256:" + "1".repeat(64);
+  campaign.signedManifest.signature = signCampaignPayload(
+    campaign.signedManifest.payload,
+    campaign.privateKey
+  );
+
+  const result = verifyCampaign(campaign);
+  assert.equal(result.ok, false);
+  assert.equal(result.first_failure.reason, "golden_mismatch");
 });
