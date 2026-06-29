@@ -12,6 +12,44 @@ import {
   RAW_VERIFIER_CODES,
   stage4CodeForRawCode,
 } from "../../../../tools/simurgh-attestation/stage4h/exitCodes.mjs";
+import {
+  validateDfiCertificate,
+  validateSignedPackManifest,
+} from "../../../../tools/simurgh-attestation/stage4h/schema.mjs";
+
+const digest = (char) => `sha256:${char.repeat(64)}`;
+
+function validCertificate() {
+  return {
+    type: CERTIFICATE_TYPE,
+    proof_system: "simurgh-ifc-lattice-v0",
+    claim: "explicit_data_flow_integrity",
+    scope: {
+      explicit_data_edges: true,
+      control_dependence_edges: false,
+      implicit_flow_security: false,
+    },
+    run_id_hash: digest("1"),
+    base_pack_digest: digest("2"),
+    replay_root: digest("3"),
+    premise_digest: digest("4"),
+    policy_digest: digest("5"),
+    lattice_digest: digest("6"),
+    checker_version: CHECKER_VERSION,
+    derivation: {
+      derived_node_labels: [],
+      lattice_steps: [],
+      sink_safety_claims: [],
+      premise_refs: [],
+    },
+    summary: {
+      sources_checked: 0,
+      edges_checked: 0,
+      authority_sinks_checked: 0,
+      violations: 0,
+    },
+  };
+}
 
 test("Stage 4H constants pin certificate type, checker version, domain, and evidence root", () => {
   assert.equal(CERTIFICATE_TYPE, "simurgh.vca.dfi_certificate.v1");
@@ -38,4 +76,47 @@ test("Stage 4H wrapper maps raw and harness codes to Stage 4 run-level codes", (
   assert.equal(stage4CodeForRawCode(27), 1);
   assert.equal(stage4CodeForRawCode(28), 2);
   assert.equal(stage4CodeForRawCode(29), 3);
+});
+
+test("Stage 4H schema accepts the minimal strict 4H.0 certificate", () => {
+  assert.deepEqual(validateDfiCertificate(validCertificate()), { ok: true });
+});
+
+test("Stage 4H schema rejects unknown fields at every schema-owned level", () => {
+  assert.equal(validateDfiCertificate({ ...validCertificate(), extra: true }).ok, false);
+  assert.equal(
+    validateDfiCertificate({
+      ...validCertificate(),
+      derivation: { ...validCertificate().derivation, hidden_premise: [] },
+    }).ok,
+    false
+  );
+  assert.equal(
+    validateDfiCertificate({
+      ...validCertificate(),
+      summary: { ...validCertificate().summary, raw_prompt: "secret" },
+    }).ok,
+    false
+  );
+});
+
+test("Stage 4H schema rejects self-binding or malformed digest fields", () => {
+  assert.equal(
+    validateDfiCertificate({ ...validCertificate(), certificate_digest: digest("7") }).ok,
+    false
+  );
+  assert.equal(validateDfiCertificate({ ...validCertificate(), premise_digest: "abc" }).ok, false);
+});
+
+test("Stage 4H schema validates a signed manifest with certificate digest outside certificate", () => {
+  const manifest = {
+    manifest_version: "simurgh.vca.signed_pack_manifest.v1",
+    base_pack_digest: digest("2"),
+    certificate_digest: digest("7"),
+    signed_pack_manifest_digest: digest("8"),
+    merkle_root: digest("9"),
+    signature: "base64:ZmFrZQ==",
+  };
+  assert.deepEqual(validateSignedPackManifest(manifest), { ok: true });
+  assert.equal(validateSignedPackManifest({ ...manifest, unexpected: true }).ok, false);
 });
