@@ -1,11 +1,11 @@
 {
-  "ok": true,
-  "code": 0,
-  "stage4_code": 0,
+  "ok": false,
+  "code": 25,
+  "stage4_code": 1,
   "gate": "Q2/Q5",
   "certificate_digest": "sha256:6f4603c04e0a2ddd64a8d5d2c702a8eb24a1e752b39e7a56bfa1b8b4b2b41894",
   "premise_digest": "sha256:506a28f6b699ed648bb47398f5b869f8d0af0b9ffdfc37a642cd0713a2ed6993",
   "base_pack_digest": "sha256:09b0c8b1d396580a989ce3a4a34edd1c0640fc340dc15494af4cf9a28d64ff3a",
-  "recomputed_premise_digest": "sha256:506a28f6b699ed648bb47398f5b869f8d0af0b9ffdfc37a642cd0713a2ed6993",
-  "note": "premise digest, manifest digest binding, and Ed25519 signature accepted"
+  "recomputed_premise_digest": null,
+  "note": "base_pack_verify_failed:embedded_key_mismatch"
 }
