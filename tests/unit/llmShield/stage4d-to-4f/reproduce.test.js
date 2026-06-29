@@ -15,6 +15,14 @@ test("integrated reproduce script runs stage gates and scrubs offline env", asyn
   assert.match(source, /SOURCE_DATE_EPOCH=0/);
   assert.match(source, /stage-command-results\.input\.json/);
   assert.match(source, /stage_artifact_mutation_attempted/);
+  assert.match(
+    source,
+    /run_offline node tools\/simurgh-attestation\/stage4d\/verify-stage4d-pack\.mjs/
+  );
+  assert.match(
+    source,
+    /run_offline node tools\/simurgh-attestation\/stage4f\/verify-stage4f-frontier\.mjs/
+  );
   assert.doesNotMatch(source, /git fetch/);
   assert.doesNotMatch(source, /npm audit/);
 });
