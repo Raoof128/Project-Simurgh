@@ -1,0 +1,37 @@
+{
+  "stage": "4H.0",
+  "status": "digest_binding_foundation_only",
+  "gates": {
+    "Q0": {
+      "status": "not_in_scope"
+    },
+    "Q1": {
+      "status": "not_in_scope"
+    },
+    "Q2": {
+      "status": "pass",
+      "raw_verifier_code": 0
+    },
+    "Q3": {
+      "status": "not_in_scope"
+    },
+    "Q4": {
+      "status": "not_in_scope"
+    },
+    "Q5": {
+      "status": "pass",
+      "raw_verifier_code": 0
+    },
+    "Q6": {
+      "status": "not_in_scope"
+    },
+    "Q7": {
+      "status": "not_in_scope"
+    }
+  },
+  "non_claims": [
+    "dfi_soundness",
+    "derivation_validity",
+    "implicit_flow_security"
+  ]
+}
