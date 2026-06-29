@@ -83,19 +83,19 @@ node -e "const fs=require('node:fs'); const rows=fs.readFileSync(process.argv[1]
 node -e "const {generateKeyPairSync}=require('node:crypto'); const fs=require('node:fs'); const {publicKey}=generateKeyPairSync('ed25519'); fs.writeFileSync(process.argv[1], publicKey.export({type:'spki',format:'pem'}));" \
   "$TMP_DIR/wrong-signer.pub"
 
-node tools/simurgh-attestation/stage4d/verify-stage4d-pack.mjs \
+run_offline node tools/simurgh-attestation/stage4d/verify-stage4d-pack.mjs \
   docs/research/llm-shield/evidence/stage-4d-decision-replay-evidence-pack/evidence-pack.json \
   --sig docs/research/llm-shield/evidence/stage-4d-decision-replay-evidence-pack/evidence-pack.sig \
   --pubkey "$TMP_DIR/wrong-signer.pub" \
   --results "$INTEGRATION_DIR/wrong-key/stage4d-pack-verify-results.json" || true
 
-node tools/simurgh-attestation/stage4d/verify-stage4d-pack.mjs \
+run_offline node tools/simurgh-attestation/stage4d/verify-stage4d-pack.mjs \
   docs/research/llm-shield/evidence/stage-4e-browser-agent-containment-run/evidence-pack.json \
   --sig docs/research/llm-shield/evidence/stage-4e-browser-agent-containment-run/evidence-pack.sig \
   --pubkey "$TMP_DIR/wrong-signer.pub" \
   --results "$INTEGRATION_DIR/wrong-key/stage4e-pack-verify-results.json" || true
 
-node tools/simurgh-attestation/stage4f/verify-stage4f-frontier.mjs \
+run_offline node tools/simurgh-attestation/stage4f/verify-stage4f-frontier.mjs \
   --evidence-dir docs/research/llm-shield/evidence/stage-4f-containment-utility-pareto/canary/clean \
   --suite docs/research/llm-shield/evidence/stage-4f-containment-utility-pareto/canary/clean/suite-manifest.json \
   --grid docs/research/llm-shield/evidence/stage-4f-containment-utility-pareto/canary/clean/grid.json \
