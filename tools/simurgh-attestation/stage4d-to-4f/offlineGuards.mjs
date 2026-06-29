@@ -14,7 +14,10 @@ const FORBIDDEN_NETWORK_COMMANDS = ["cu" + "rl", "wg" + "et", "gh" + " api", "np
 
 const FORBIDDEN_SOURCE_PATTERNS = [
   { reason: "network_required_error", pattern: /from ["']node:(?:net|tls|http|https|dns)["']/ },
-  { reason: "network_required_error", pattern: /require\(["']node:(?:net|tls|http|https|dns)["']\)/ },
+  {
+    reason: "network_required_error",
+    pattern: /require\(["']node:(?:net|tls|http|https|dns)["']\)/,
+  },
   { reason: "network_required_error", pattern: /\bfetch\s*\(/ },
   { reason: "network_required_error", pattern: /\bWebSocket\s*\(/ },
   { reason: "forbidden_browser_automation", pattern: /from ["'](?:playwright|puppeteer)["']/ },

@@ -38,7 +38,8 @@ export async function buildIntegrationReport({
     }
   }
   for (const failure of offlineEnforcement.failures ?? []) failures.push(failure);
-  if (claimFullSuite && !fullSuiteRan) failures.push({ reason: "full_suite_claim_without_full_suite" });
+  if (claimFullSuite && !fullSuiteRan)
+    failures.push({ reason: "full_suite_claim_without_full_suite" });
 
   const keyCoverage = requireKeySubstitutionCoverage(keySubstitution ?? []);
   for (const failure of keyCoverage.failures) failures.push(failure);
