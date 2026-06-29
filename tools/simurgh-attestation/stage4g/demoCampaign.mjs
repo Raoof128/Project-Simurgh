@@ -8,11 +8,7 @@ import {
   campaignMerkleRoot,
   signCampaignPayload,
 } from "./campaignCrypto.mjs";
-import {
-  buildCampaignRecord,
-  buildEvidencePackRecord,
-  signRecordEnvelope,
-} from "./records.mjs";
+import { buildCampaignRecord, buildEvidencePackRecord, signRecordEnvelope } from "./records.mjs";
 import { deriveCanonicalSeed, deriveSchedule } from "./schedule.mjs";
 import { verifyCampaign } from "./verifyCampaign.mjs";
 
@@ -108,7 +104,10 @@ export async function buildStage4gDemo({ outDir }) {
     reason_codes: envelope.payload.reason_codes,
   }));
   const manifest = manifestFor({ cfg, seed, attempts, records });
-  const signedManifest = { payload: manifest, signature: signCampaignPayload(manifest, privateKey) };
+  const signedManifest = {
+    payload: manifest,
+    signature: signCampaignPayload(manifest, privateKey),
+  };
   const clean = verifyCampaign({ signedManifest, records, publicKey });
 
   const missing = verifyCampaign({ signedManifest, records: records.slice(0, -1), publicKey });

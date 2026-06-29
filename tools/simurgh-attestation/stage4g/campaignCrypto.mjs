@@ -1,11 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 import { sign, verify } from "node:crypto";
 import { merkleRoot } from "../stage4d/merkle.mjs";
-import {
-  canonicalJson,
-  domainBytes,
-  sha256Canonical,
-} from "../stage4d/stage4dCrypto.mjs";
+import { canonicalJson, domainBytes, sha256Canonical } from "../stage4d/stage4dCrypto.mjs";
 import { CAMPAIGN_DOMAIN, CAMPAIGN_RECORD_DOMAIN } from "./constants.mjs";
 
 export function campaignHash(payload) {
@@ -49,9 +45,7 @@ export function verifyCampaignSignature(payload, signature, publicKey) {
 }
 
 export function signCampaignRecord(payload, privateKey) {
-  return sign(null, domainBytes(CAMPAIGN_RECORD_DOMAIN, payload), privateKey).toString(
-    "base64"
-  );
+  return sign(null, domainBytes(CAMPAIGN_RECORD_DOMAIN, payload), privateKey).toString("base64");
 }
 
 export function verifyCampaignRecordSignature(payload, signature, publicKey) {

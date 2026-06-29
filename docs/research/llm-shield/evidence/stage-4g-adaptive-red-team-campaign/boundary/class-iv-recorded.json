@@ -1,0 +1,12 @@
+{
+  "record_version": "simurgh.stage4g.record.v1",
+  "attempt_id": "a0004",
+  "target_class": "IV",
+  "resolved_class": "IV",
+  "verdict": "escaped",
+  "record_type": "CR",
+  "reason_codes": [
+    "boundary_escape_recorded"
+  ],
+  "sealed_inputs_hash": "sha256:bda3607cb9b1b64f6ebd4f4e26a358b6677abdc253c7eff4710b5984c864d3f7"
+}

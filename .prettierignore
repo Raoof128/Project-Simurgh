@@ -54,4 +54,5 @@ docs/research/llm-shield/evidence/stage-4d-decision-replay-evidence-pack/evidenc
 docs/research/llm-shield/evidence/stage-4e-browser-agent-containment-run/**/*.json
 docs/research/llm-shield/evidence/stage-4f-containment-utility-pareto/**/*.json
 docs/research/llm-shield/evidence/stage-4d-to-4f-integration/**/*.json
+docs/research/llm-shield/evidence/stage-4g-adaptive-red-team-campaign/**/*.json
 tools/agentdojo-simurgh-adapter/.pytest_cache

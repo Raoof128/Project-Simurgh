@@ -1,0 +1,5 @@
+{
+  "campaign_verified": true,
+  "security_escapes": 1,
+  "claim_scope": "within the canonical precommitted campaign for this build configuration"
+}

@@ -156,7 +156,10 @@ test("campaign signatures are domain separated and tamper evident", () => {
   const payload = { manifest_version: "simurgh.stage4g.campaign.v1", campaign_id: "sha256:abc" };
   const signature = signCampaignPayload(payload, privateKey);
   assert.equal(verifyCampaignSignature(payload, signature, publicKey), true);
-  assert.equal(verifyCampaignSignature({ ...payload, campaign_id: "sha256:def" }, signature, publicKey), false);
+  assert.equal(
+    verifyCampaignSignature({ ...payload, campaign_id: "sha256:def" }, signature, publicKey),
+    false
+  );
   assert.match(campaignHash(payload), /^sha256:[a-f0-9]{64}$/);
   assert.match(
     campaignIdFromConfig({
@@ -169,7 +172,10 @@ test("campaign signatures are domain separated and tamper evident", () => {
     }),
     /^sha256:[a-f0-9]{64}$/
   );
-  assert.match(campaignMerkleRoot(["sha256:" + "a".repeat(64), "sha256:" + "b".repeat(64)]), /^sha256:[a-f0-9]{64}$/);
+  assert.match(
+    campaignMerkleRoot(["sha256:" + "a".repeat(64), "sha256:" + "b".repeat(64)]),
+    /^sha256:[a-f0-9]{64}$/
+  );
 });
 
 test("schema validators accept minimal valid objects and reject ambiguous ones", () => {
@@ -201,7 +207,13 @@ test("schema validators accept minimal valid objects and reject ambiguous ones",
   };
   assert.equal(validateCampaignManifest(manifest).ok, true);
   assert.equal(validateCampaignManifest({ ...manifest, attempt_count: -1 }).ok, false);
-  assert.equal(validateCampaignManifest({ ...manifest, attempts: [{ ...manifest.attempts[0], target_class: "V" }] }).ok, false);
+  assert.equal(
+    validateCampaignManifest({
+      ...manifest,
+      attempts: [{ ...manifest.attempts[0], target_class: "V" }],
+    }).ok,
+    false
+  );
 
   const record = {
     record_version: "simurgh.stage4g.record.v1",
@@ -290,18 +302,21 @@ export const FAILURE_REASONS = Object.freeze([
 // SPDX-License-Identifier: AGPL-3.0-or-later
 import { sign, verify } from "node:crypto";
 import { merkleRoot } from "../stage4d/merkle.mjs";
-import {
-  canonicalJson,
-  domainBytes,
-  sha256Canonical,
-} from "../stage4d/stage4dCrypto.mjs";
+import { canonicalJson, domainBytes, sha256Canonical } from "../stage4d/stage4dCrypto.mjs";
 import { CAMPAIGN_DOMAIN, CAMPAIGN_RECORD_DOMAIN } from "./constants.mjs";
 
 export function campaignHash(payload) {
   return `sha256:${sha256Canonical(payload)}`;
 }
 
-export function campaignIdFromConfig({ seed, budget, library_hash, target_commit, policy_hash, driver_hash }) {
+export function campaignIdFromConfig({
+  seed,
+  budget,
+  library_hash,
+  target_commit,
+  policy_hash,
+  driver_hash,
+}) {
   return campaignHash({ seed, budget, library_hash, target_commit, policy_hash, driver_hash });
 }
 
@@ -319,7 +334,12 @@ export function signCampaignPayload(payload, privateKey) {
 
 export function verifyCampaignSignature(payload, signature, publicKey) {
   try {
-    return verify(null, domainBytes(CAMPAIGN_DOMAIN, payload), publicKey, Buffer.from(signature, "base64"));
+    return verify(
+      null,
+      domainBytes(CAMPAIGN_DOMAIN, payload),
+      publicKey,
+      Buffer.from(signature, "base64")
+    );
   } catch {
     return false;
   }
@@ -331,7 +351,12 @@ export function signCampaignRecord(payload, privateKey) {
 
 export function verifyCampaignRecordSignature(payload, signature, publicKey) {
   try {
-    return verify(null, domainBytes(CAMPAIGN_RECORD_DOMAIN, payload), publicKey, Buffer.from(signature, "base64"));
+    return verify(
+      null,
+      domainBytes(CAMPAIGN_RECORD_DOMAIN, payload),
+      publicKey,
+      Buffer.from(signature, "base64")
+    );
   } catch {
     return false;
   }
@@ -360,31 +385,55 @@ function isObject(value) {
 function validateAttempt(attempt, index) {
   if (!isObject(attempt)) return fail("attempt_not_object", `attempts.${index}`);
   if (!ATTEMPT.test(attempt.id)) return fail("attempt_id_invalid", `attempts.${index}.id`);
-  if (!ATTACK_CLASSES.includes(attempt.target_class)) return fail("target_class_invalid", `attempts.${index}.target_class`);
-  if (!ATTACK_CLASSES.includes(attempt.resolved_class)) return fail("resolved_class_invalid", `attempts.${index}.resolved_class`);
-  if (!VERDICTS.includes(attempt.verdict)) return fail("verdict_invalid", `attempts.${index}.verdict`);
-  if (!RECORD_TYPES.includes(attempt.record_type)) return fail("record_type_invalid", `attempts.${index}.record_type`);
-  if (typeof attempt.record_ref !== "string" || attempt.record_ref.length === 0) return fail("record_ref_invalid", `attempts.${index}.record_ref`);
-  if (!HEX.test(attempt.record_hash)) return fail("record_hash_invalid", `attempts.${index}.record_hash`);
-  if (!Array.isArray(attempt.reason_codes)) return fail("reason_codes_invalid", `attempts.${index}.reason_codes`);
+  if (!ATTACK_CLASSES.includes(attempt.target_class))
+    return fail("target_class_invalid", `attempts.${index}.target_class`);
+  if (!ATTACK_CLASSES.includes(attempt.resolved_class))
+    return fail("resolved_class_invalid", `attempts.${index}.resolved_class`);
+  if (!VERDICTS.includes(attempt.verdict))
+    return fail("verdict_invalid", `attempts.${index}.verdict`);
+  if (!RECORD_TYPES.includes(attempt.record_type))
+    return fail("record_type_invalid", `attempts.${index}.record_type`);
+  if (typeof attempt.record_ref !== "string" || attempt.record_ref.length === 0)
+    return fail("record_ref_invalid", `attempts.${index}.record_ref`);
+  if (!HEX.test(attempt.record_hash))
+    return fail("record_hash_invalid", `attempts.${index}.record_hash`);
+  if (!Array.isArray(attempt.reason_codes))
+    return fail("reason_codes_invalid", `attempts.${index}.reason_codes`);
   return { ok: true };
 }
 
 export function validateCampaignManifest(manifest) {
   if (!isObject(manifest)) return fail("manifest_not_object", "$");
-  if (manifest.manifest_version !== "simurgh.stage4g.campaign.v1") return fail("version_invalid", "manifest_version");
-  for (const field of ["campaign_id", "seed", "library_hash", "policy_hash", "driver_hash", "campaign_merkle_root", "golden_digest"]) {
+  if (manifest.manifest_version !== "simurgh.stage4g.campaign.v1")
+    return fail("version_invalid", "manifest_version");
+  for (const field of [
+    "campaign_id",
+    "seed",
+    "library_hash",
+    "policy_hash",
+    "driver_hash",
+    "campaign_merkle_root",
+    "golden_digest",
+  ]) {
     if (!HEX.test(manifest[field])) return fail("digest_invalid", field);
   }
   if (!COMMIT.test(manifest.target_commit)) return fail("target_commit_invalid", "target_commit");
-  if (!isObject(manifest.budget) || !Number.isInteger(manifest.budget.queries_total) || manifest.budget.queries_total < 0) return fail("budget_invalid", "budget");
+  if (
+    !isObject(manifest.budget) ||
+    !Number.isInteger(manifest.budget.queries_total) ||
+    manifest.budget.queries_total < 0
+  )
+    return fail("budget_invalid", "budget");
   if (!isObject(manifest.budget.per_class)) return fail("per_class_invalid", "budget.per_class");
   for (const klass of ATTACK_CLASSES) {
-    if (!Number.isInteger(manifest.budget.per_class[klass]) || manifest.budget.per_class[klass] < 0) return fail("per_class_count_invalid", `budget.per_class.${klass}`);
+    if (!Number.isInteger(manifest.budget.per_class[klass]) || manifest.budget.per_class[klass] < 0)
+      return fail("per_class_count_invalid", `budget.per_class.${klass}`);
   }
-  if (!Number.isInteger(manifest.attempt_count) || manifest.attempt_count < 0) return fail("attempt_count_invalid", "attempt_count");
+  if (!Number.isInteger(manifest.attempt_count) || manifest.attempt_count < 0)
+    return fail("attempt_count_invalid", "attempt_count");
   if (!Array.isArray(manifest.attempts)) return fail("attempts_invalid", "attempts");
-  if (manifest.attempts.length !== manifest.attempt_count) return fail("attempt_count_mismatch", "attempts");
+  if (manifest.attempts.length !== manifest.attempt_count)
+    return fail("attempt_count_mismatch", "attempts");
   for (let i = 0; i < manifest.attempts.length; i += 1) {
     const result = validateAttempt(manifest.attempts[i], i);
     if (!result.ok) return result;
@@ -395,18 +444,24 @@ export function validateCampaignManifest(manifest) {
 
 export function validateCampaignRecord(record) {
   if (!isObject(record)) return fail("record_not_object", "$");
-  if (record.record_version !== "simurgh.stage4g.record.v1") return fail("record_version_invalid", "record_version");
+  if (record.record_version !== "simurgh.stage4g.record.v1")
+    return fail("record_version_invalid", "record_version");
   if (!ATTEMPT.test(record.attempt_id)) return fail("attempt_id_invalid", "attempt_id");
-  if (!ATTACK_CLASSES.includes(record.target_class)) return fail("target_class_invalid", "target_class");
-  if (!ATTACK_CLASSES.includes(record.resolved_class)) return fail("resolved_class_invalid", "resolved_class");
+  if (!ATTACK_CLASSES.includes(record.target_class))
+    return fail("target_class_invalid", "target_class");
+  if (!ATTACK_CLASSES.includes(record.resolved_class))
+    return fail("resolved_class_invalid", "resolved_class");
   if (!VERDICTS.includes(record.verdict)) return fail("verdict_invalid", "verdict");
   if (!RECORD_TYPES.includes(record.record_type)) return fail("record_type_invalid", "record_type");
   if (!Array.isArray(record.reason_codes)) return fail("reason_codes_invalid", "reason_codes");
-  if (!HEX.test(record.sealed_inputs_hash)) return fail("sealed_inputs_hash_invalid", "sealed_inputs_hash");
+  if (!HEX.test(record.sealed_inputs_hash))
+    return fail("sealed_inputs_hash_invalid", "sealed_inputs_hash");
   if (record.record_type === "EP") {
     if (!["I", "II"].includes(record.target_class)) return fail("ep_class_invalid", "target_class");
-    if (!HEX.test(record.evidence_pack_hash)) return fail("evidence_pack_hash_invalid", "evidence_pack_hash");
-    if (!HEX.test(record.evidence_pack_sig_hash)) return fail("evidence_pack_sig_hash_invalid", "evidence_pack_sig_hash");
+    if (!HEX.test(record.evidence_pack_hash))
+      return fail("evidence_pack_hash_invalid", "evidence_pack_hash");
+    if (!HEX.test(record.evidence_pack_sig_hash))
+      return fail("evidence_pack_sig_hash_invalid", "evidence_pack_sig_hash");
   }
   return { ok: true };
 }
@@ -473,8 +528,14 @@ test("canonical seed and schedule are deterministic per build configuration", ()
   const first = deriveSchedule({ ...base, seed });
   const second = deriveSchedule({ ...base, seed });
   assert.deepEqual(first, second);
-  assert.deepEqual(first.map((row) => row.id), ["a0001", "a0002", "a0003", "a0004"]);
-  assert.deepEqual(first.map((row) => row.target_class), ["I", "II", "III", "IV"]);
+  assert.deepEqual(
+    first.map((row) => row.id),
+    ["a0001", "a0002", "a0003", "a0004"]
+  );
+  assert.deepEqual(
+    first.map((row) => row.target_class),
+    ["I", "II", "III", "IV"]
+  );
   assert.match(scheduleDigest(first), /^sha256:[a-f0-9]{64}$/);
 });
 
@@ -492,7 +553,10 @@ test("campaign records and abort records are hashable and signable", () => {
   assert.match(recordHash(record), /^sha256:[a-f0-9]{64}$/);
   const envelope = signRecordEnvelope(record, privateKey);
   assert.equal(verifyRecordEnvelope(envelope, publicKey).ok, true);
-  assert.equal(verifyRecordEnvelope({ ...envelope, payload: { ...record, verdict: "caught" } }, publicKey).ok, false);
+  assert.equal(
+    verifyRecordEnvelope({ ...envelope, payload: { ...record, verdict: "caught" } }, publicKey).ok,
+    false
+  );
 
   const abort = buildAbortRecord({
     attempt_id: "a0004",
@@ -536,11 +600,24 @@ Expected: FAIL with `ERR_MODULE_NOT_FOUND` for `schedule.mjs`.
 import { sha256Canonical } from "../stage4d/stage4dCrypto.mjs";
 import { ATTACK_CLASSES } from "./constants.mjs";
 
-export function deriveCanonicalSeed({ target_commit, library_hash, policy_hash, driver_hash, budget }) {
+export function deriveCanonicalSeed({
+  target_commit,
+  library_hash,
+  policy_hash,
+  driver_hash,
+  budget,
+}) {
   return `sha256:${sha256Canonical({ target_commit, library_hash, policy_hash, driver_hash, budget })}`;
 }
 
-export function deriveSchedule({ seed, budget, library_hash, target_commit, policy_hash, driver_hash }) {
+export function deriveSchedule({
+  seed,
+  budget,
+  library_hash,
+  target_commit,
+  policy_hash,
+  driver_hash,
+}) {
   const rows = [];
   for (const klass of ATTACK_CLASSES) {
     const count = budget.per_class[klass] ?? 0;
@@ -563,7 +640,9 @@ export function deriveSchedule({ seed, budget, library_hash, target_commit, poli
     }
   }
   if (rows.length !== budget.queries_total) {
-    throw new Error(`budget queries_total ${budget.queries_total} does not equal derived schedule ${rows.length}`);
+    throw new Error(
+      `budget queries_total ${budget.queries_total} does not equal derived schedule ${rows.length}`
+    );
   }
   return rows;
 }
@@ -578,14 +657,25 @@ export function scheduleDigest(schedule) {
 ```js
 // tools/simurgh-attestation/stage4g/records.mjs
 // SPDX-License-Identifier: AGPL-3.0-or-later
-import { campaignHash, signCampaignRecord, verifyCampaignRecordSignature } from "./campaignCrypto.mjs";
+import {
+  campaignHash,
+  signCampaignRecord,
+  verifyCampaignRecordSignature,
+} from "./campaignCrypto.mjs";
 import { validateCampaignRecord } from "./schemas.mjs";
 
 export function recordHash(record) {
   return campaignHash(record);
 }
 
-export function buildCampaignRecord({ attempt_id, target_class, resolved_class, verdict, reason_codes, sealed_inputs_hash }) {
+export function buildCampaignRecord({
+  attempt_id,
+  target_class,
+  resolved_class,
+  verdict,
+  reason_codes,
+  sealed_inputs_hash,
+}) {
   return {
     record_version: "simurgh.stage4g.record.v1",
     attempt_id,
@@ -653,8 +743,10 @@ export function signRecordEnvelope(payload, privateKey) {
 export function verifyRecordEnvelope(envelope, publicKey) {
   const validation = validateCampaignRecord(envelope?.payload);
   if (!validation.ok) return validation;
-  if (envelope.record_hash !== recordHash(envelope.payload)) return { ok: false, reason: "record_hash_mismatch" };
-  if (!verifyCampaignRecordSignature(envelope.payload, envelope.signature, publicKey)) return { ok: false, reason: "record_signature_invalid" };
+  if (envelope.record_hash !== recordHash(envelope.payload))
+    return { ok: false, reason: "record_hash_mismatch" };
+  if (!verifyCampaignRecordSignature(envelope.payload, envelope.signature, publicKey))
+    return { ok: false, reason: "record_signature_invalid" };
   return { ok: true };
 }
 ```
@@ -697,8 +789,14 @@ import {
   campaignMerkleRoot,
   signCampaignPayload,
 } from "../../../../tools/simurgh-attestation/stage4g/campaignCrypto.mjs";
-import { buildCampaignRecord, signRecordEnvelope } from "../../../../tools/simurgh-attestation/stage4g/records.mjs";
-import { deriveCanonicalSeed, deriveSchedule } from "../../../../tools/simurgh-attestation/stage4g/schedule.mjs";
+import {
+  buildCampaignRecord,
+  signRecordEnvelope,
+} from "../../../../tools/simurgh-attestation/stage4g/records.mjs";
+import {
+  deriveCanonicalSeed,
+  deriveSchedule,
+} from "../../../../tools/simurgh-attestation/stage4g/schedule.mjs";
 import { verifyCampaign } from "../../../../tools/simurgh-attestation/stage4g/verifyCampaign.mjs";
 
 function fixtureCampaign() {
@@ -718,7 +816,8 @@ function fixtureCampaign() {
       target_class: slot.target_class,
       resolved_class: slot.target_class,
       verdict: slot.target_class === "III" ? "out_of_scope" : "escaped",
-      reason_codes: slot.target_class === "III" ? ["unmediated_action"] : ["boundary_escape_recorded"],
+      reason_codes:
+        slot.target_class === "III" ? ["unmediated_action"] : ["boundary_escape_recorded"],
       sealed_inputs_hash: slot.schedule_hash,
     });
     return signRecordEnvelope(record, privateKey);
@@ -750,7 +849,10 @@ function fixtureCampaign() {
     counts: { resolved: 2, caught: 0, escaped: 1, out_of_scope: 1, aborted: 0 },
     golden_digest: campaignIdFromConfig({ ...config, seed, driver_hash: campaign_merkle_root }),
   };
-  const signedManifest = { payload: manifest, signature: signCampaignPayload(manifest, privateKey) };
+  const signedManifest = {
+    payload: manifest,
+    signature: signCampaignPayload(manifest, privateKey),
+  };
   return { signedManifest, records, publicKey, privateKey };
 }
 
@@ -774,15 +876,27 @@ test("verifyCampaign rejects manifest shrinking, class relabeling, and privacy l
   const shrunk = fixtureCampaign();
   shrunk.signedManifest.payload.attempts.pop();
   shrunk.signedManifest.payload.attempt_count = 1;
-  shrunk.signedManifest.payload.counts = { resolved: 1, caught: 0, escaped: 0, out_of_scope: 1, aborted: 0 };
-  shrunk.signedManifest.signature = signCampaignPayload(shrunk.signedManifest.payload, shrunk.privateKey);
+  shrunk.signedManifest.payload.counts = {
+    resolved: 1,
+    caught: 0,
+    escaped: 0,
+    out_of_scope: 1,
+    aborted: 0,
+  };
+  shrunk.signedManifest.signature = signCampaignPayload(
+    shrunk.signedManifest.payload,
+    shrunk.privateKey
+  );
   const shrinkResult = verifyCampaign(shrunk);
   assert.equal(shrinkResult.ok, false);
   assert.equal(shrinkResult.first_failure.reason, "attempt_schedule_mismatch");
 
   const campaign = fixtureCampaign();
   campaign.signedManifest.payload.attempts[0].resolved_class = "I";
-  campaign.signedManifest.signature = signCampaignPayload(campaign.signedManifest.payload, campaign.privateKey);
+  campaign.signedManifest.signature = signCampaignPayload(
+    campaign.signedManifest.payload,
+    campaign.privateKey
+  );
   const classResult = verifyCampaign(campaign);
   assert.equal(classResult.ok, false);
   assert.equal(classResult.first_failure.reason, "class_mismatch");
@@ -830,7 +944,11 @@ export function recomputeRecordOutcome(record) {
 ```js
 // tools/simurgh-attestation/stage4g/verifyCampaign.mjs
 // SPDX-License-Identifier: AGPL-3.0-or-later
-import { campaignIdFromConfig, campaignMerkleRoot, verifyCampaignSignature } from "./campaignCrypto.mjs";
+import {
+  campaignIdFromConfig,
+  campaignMerkleRoot,
+  verifyCampaignSignature,
+} from "./campaignCrypto.mjs";
 import { LIMITS } from "./constants.mjs";
 import { recomputeRecordOutcome } from "./classifier.mjs";
 import { recordHash, verifyRecordEnvelope } from "./records.mjs";
@@ -843,18 +961,24 @@ function fail(reason, detail = {}) {
 
 function containsPrivacyLeak(value) {
   const text = JSON.stringify(value);
-  return /sk-proj-|BEGIN PRIVATE KEY|raw_prompt|raw_model_output|provider_transcript|\/tmp\/simurgh/i.test(text);
+  return /sk-proj-|BEGIN PRIVATE KEY|raw_prompt|raw_model_output|provider_transcript|\/tmp\/simurgh/i.test(
+    text
+  );
 }
 
 export function verifyCampaign({ signedManifest, records, publicKey }) {
-  const encoded = Buffer.byteLength(JSON.stringify(signedManifest), "utf8") + Buffer.byteLength(JSON.stringify(records), "utf8");
+  const encoded =
+    Buffer.byteLength(JSON.stringify(signedManifest), "utf8") +
+    Buffer.byteLength(JSON.stringify(records), "utf8");
   if (encoded > LIMITS.maxCampaignBytes) return fail("oversized_campaign");
-  if (containsPrivacyLeak(signedManifest) || containsPrivacyLeak(records)) return fail("privacy_leak_detected");
+  if (containsPrivacyLeak(signedManifest) || containsPrivacyLeak(records))
+    return fail("privacy_leak_detected");
 
   const manifest = signedManifest?.payload;
   const schema = validateCampaignManifest(manifest);
   if (!schema.ok) return fail("stage_result_schema_missing", schema);
-  if (!verifyCampaignSignature(manifest, signedManifest.signature, publicKey)) return fail("campaign_signature_invalid");
+  if (!verifyCampaignSignature(manifest, signedManifest.signature, publicKey))
+    return fail("campaign_signature_invalid");
   const expectedCampaignId = campaignIdFromConfig({
     seed: manifest.seed,
     budget: manifest.budget,
@@ -864,8 +988,11 @@ export function verifyCampaign({ signedManifest, records, publicKey }) {
     driver_hash: manifest.driver_hash,
   });
   if (manifest.campaign_id !== expectedCampaignId) return fail("campaign_hash_mismatch");
-  const expectedMerkleRoot = campaignMerkleRoot(manifest.attempts.map((attempt) => attempt.record_hash));
-  if (manifest.campaign_merkle_root !== expectedMerkleRoot) return fail("campaign_merkle_root_mismatch");
+  const expectedMerkleRoot = campaignMerkleRoot(
+    manifest.attempts.map((attempt) => attempt.record_hash)
+  );
+  if (manifest.campaign_merkle_root !== expectedMerkleRoot)
+    return fail("campaign_merkle_root_mismatch");
 
   let expectedSchedule;
   try {
@@ -889,8 +1016,10 @@ export function verifyCampaign({ signedManifest, records, publicKey }) {
   const byAttempt = new Map();
   for (const envelope of records) {
     const recordBytes = Buffer.byteLength(JSON.stringify(envelope), "utf8");
-    if (recordBytes > LIMITS.maxRecordBytes) return fail("oversized_campaign", { attempt_id: envelope?.payload?.attempt_id });
-    if (containsPrivacyLeak(envelope)) return fail("privacy_leak_detected", { attempt_id: envelope?.payload?.attempt_id });
+    if (recordBytes > LIMITS.maxRecordBytes)
+      return fail("oversized_campaign", { attempt_id: envelope?.payload?.attempt_id });
+    if (containsPrivacyLeak(envelope))
+      return fail("privacy_leak_detected", { attempt_id: envelope?.payload?.attempt_id });
     const verified = verifyRecordEnvelope(envelope, publicKey);
     if (!verified.ok) return fail(verified.reason, { attempt_id: envelope?.payload?.attempt_id });
     const attemptId = envelope.payload.attempt_id;
@@ -903,14 +1032,18 @@ export function verifyCampaign({ signedManifest, records, publicKey }) {
   for (const attempt of manifest.attempts) {
     const envelope = byAttempt.get(attempt.id);
     if (!envelope) return fail("missing_attempt", { attempt_id: attempt.id });
-    if (attempt.record_hash !== recordHash(envelope.payload)) return fail("record_hash_mismatch", { attempt_id: attempt.id });
+    if (attempt.record_hash !== recordHash(envelope.payload))
+      return fail("record_hash_mismatch", { attempt_id: attempt.id });
     const recomputed = recomputeRecordOutcome(envelope.payload);
-    if (attempt.resolved_class !== recomputed.resolved_class) return fail("class_mismatch", { attempt_id: attempt.id });
-    if (attempt.verdict !== recomputed.verdict) return fail("verdict_mismatch", { attempt_id: attempt.id });
+    if (attempt.resolved_class !== recomputed.resolved_class)
+      return fail("class_mismatch", { attempt_id: attempt.id });
+    if (attempt.verdict !== recomputed.verdict)
+      return fail("verdict_mismatch", { attempt_id: attempt.id });
     if (attempt.target_class === "II" && attempt.verdict === "caught") {
       continue;
     }
-    if (attempt.target_class === "II" && attempt.verdict !== "caught") return fail("class_ii_verifier_deception_passed", { attempt_id: attempt.id });
+    if (attempt.target_class === "II" && attempt.verdict !== "caught")
+      return fail("class_ii_verifier_deception_passed", { attempt_id: attempt.id });
     if (attempt.verdict === "escaped") securityEscapes += 1;
     recomputedCounts.resolved += 1;
     if (attempt.verdict === "caught") recomputedCounts.caught += 1;
@@ -920,14 +1053,20 @@ export function verifyCampaign({ signedManifest, records, publicKey }) {
   }
 
   for (const attemptId of byAttempt.keys()) {
-    if (!manifest.attempts.some((attempt) => attempt.id === attemptId)) return fail("extra_attempt", { attempt_id: attemptId });
+    if (!manifest.attempts.some((attempt) => attempt.id === attemptId))
+      return fail("extra_attempt", { attempt_id: attemptId });
   }
 
   if (JSON.stringify(manifest.counts) !== JSON.stringify(recomputedCounts)) {
     return fail("verdict_mismatch", { field: "counts" });
   }
 
-  return { ok: true, campaign_verified: true, security_escapes: securityEscapes, first_failure: null };
+  return {
+    ok: true,
+    campaign_verified: true,
+    security_escapes: securityEscapes,
+    first_failure: null,
+  };
 }
 ```
 
@@ -1003,13 +1142,19 @@ Expected: FAIL with `ERR_MODULE_NOT_FOUND` for `demoCampaign.mjs`.
 import { createPrivateKey, createPublicKey } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import { campaignHash, campaignIdFromConfig, campaignMerkleRoot, signCampaignPayload } from "./campaignCrypto.mjs";
+import {
+  campaignHash,
+  campaignIdFromConfig,
+  campaignMerkleRoot,
+  signCampaignPayload,
+} from "./campaignCrypto.mjs";
 import { buildCampaignRecord, buildEvidencePackRecord, signRecordEnvelope } from "./records.mjs";
 import { deriveCanonicalSeed, deriveSchedule } from "./schedule.mjs";
 import { verifyCampaign } from "./verifyCampaign.mjs";
 
 const stable = (value) => `${JSON.stringify(value, null, 2)}\n`;
-const TEST_PRIVATE_KEY_PATH = "tools/simurgh-attestation/stage4d/fixtures/keys/stage4d-test-private.pem";
+const TEST_PRIVATE_KEY_PATH =
+  "tools/simurgh-attestation/stage4d/fixtures/keys/stage4d-test-private.pem";
 
 function config() {
   return {
@@ -1029,7 +1174,9 @@ function recordFor(slot, privateKey) {
     IV: { resolved_class: "IV", verdict: "escaped", reason_codes: ["boundary_escape_recorded"] },
   };
   const outcome = byClass[slot.target_class];
-  const builder = ["I", "II"].includes(slot.target_class) ? buildEvidencePackRecord : buildCampaignRecord;
+  const builder = ["I", "II"].includes(slot.target_class)
+    ? buildEvidencePackRecord
+    : buildCampaignRecord;
   return signRecordEnvelope(
     builder({
       attempt_id: slot.id,
@@ -1080,9 +1227,15 @@ export async function buildStage4gDemo({ outDir }) {
   };
   const manifest = {
     ...manifestBase,
-    golden_digest: campaignHash({ manifest: { ...manifestBase, golden_digest: "sha256:" + "0".repeat(64) }, records }),
+    golden_digest: campaignHash({
+      manifest: { ...manifestBase, golden_digest: "sha256:" + "0".repeat(64) },
+      records,
+    }),
   };
-  const signedManifest = { payload: manifest, signature: signCampaignPayload(manifest, privateKey) };
+  const signedManifest = {
+    payload: manifest,
+    signature: signCampaignPayload(manifest, privateKey),
+  };
   const clean = verifyCampaign({ signedManifest, records, publicKey });
 
   const missing = verifyCampaign({ signedManifest, records: records.slice(0, -1), publicKey });
@@ -1105,15 +1258,27 @@ export async function buildStage4gDemo({ outDir }) {
   await writeFile(join(outDir, "red-arms", "missing-attempt-results.json"), stable(missing));
   await writeFile(join(outDir, "red-arms", "class-relabel-results.json"), stable(classRelabel));
   await writeFile(join(outDir, "red-arms", "privacy-leak-results.json"), stable(privacyLeak));
-  await writeFile(join(outDir, "boundary", "class-iv-recorded.json"), stable(records.find((r) => r.payload.target_class === "IV").payload));
-  await writeFile(join(outDir, "golden", "golden-summary.json"), stable({ byte_stable: true, golden_digest: manifest.golden_digest }));
-  await writeFile(join(outDir, "reports", "stage4g-report.json"), stable({
-    campaign_verified: clean.campaign_verified,
-    security_escapes: clean.security_escapes,
-    claim_scope: "within the canonical precommitted campaign for this build configuration",
-  }));
+  await writeFile(
+    join(outDir, "boundary", "class-iv-recorded.json"),
+    stable(records.find((r) => r.payload.target_class === "IV").payload)
+  );
+  await writeFile(
+    join(outDir, "golden", "golden-summary.json"),
+    stable({ byte_stable: true, golden_digest: manifest.golden_digest })
+  );
+  await writeFile(
+    join(outDir, "reports", "stage4g-report.json"),
+    stable({
+      campaign_verified: clean.campaign_verified,
+      security_escapes: clean.security_escapes,
+      claim_scope: "within the canonical precommitted campaign for this build configuration",
+    })
+  );
   await writeFile(join(outDir, "public-key.pem"), publicKeyPem);
-  await writeFile(join(outDir, "README.md"), "# Stage 4G Adaptive Red-Team Campaign\n\nThis artifact is verified within the canonical precommitted campaign for this build configuration.\n");
+  await writeFile(
+    join(outDir, "README.md"),
+    "# Stage 4G Adaptive Red-Team Campaign\n\nThis artifact is verified within the canonical precommitted campaign for this build configuration.\n"
+  );
 
   return {
     clean,
@@ -1136,7 +1301,11 @@ function arg(argv, name, fallback) {
 }
 
 export async function main({ argv = process.argv.slice(2) } = {}) {
-  const outDir = arg(argv, "--out", "docs/research/llm-shield/evidence/stage-4g-adaptive-red-team-campaign");
+  const outDir = arg(
+    argv,
+    "--out",
+    "docs/research/llm-shield/evidence/stage-4g-adaptive-red-team-campaign"
+  );
   const result = await buildStage4gDemo({ outDir });
   if (!result.clean.ok) process.exitCode = 1;
 }
@@ -1160,8 +1329,14 @@ function arg(argv, name, fallback) {
 }
 
 export async function main({ argv = process.argv.slice(2) } = {}) {
-  const dir = arg(argv, "--dir", "docs/research/llm-shield/evidence/stage-4g-adaptive-red-team-campaign");
-  const signedManifest = JSON.parse(await readFile(join(dir, "clean", "campaign-manifest.json"), "utf8"));
+  const dir = arg(
+    argv,
+    "--dir",
+    "docs/research/llm-shield/evidence/stage-4g-adaptive-red-team-campaign"
+  );
+  const signedManifest = JSON.parse(
+    await readFile(join(dir, "clean", "campaign-manifest.json"), "utf8")
+  );
   const records = JSON.parse(await readFile(join(dir, "records", "records.json"), "utf8"));
   const publicKey = createPublicKey(await readFile(join(dir, "public-key.pem"), "utf8"));
   const result = verifyCampaign({ signedManifest, records, publicKey });

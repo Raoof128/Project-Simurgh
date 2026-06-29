@@ -1,0 +1,8 @@
+{
+  "ok": false,
+  "campaign_verified": false,
+  "first_failure": {
+    "reason": "missing_attempt",
+    "attempt_id": "a0004"
+  }
+}
