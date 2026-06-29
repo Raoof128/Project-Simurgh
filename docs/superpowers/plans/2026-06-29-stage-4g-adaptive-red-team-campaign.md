@@ -14,6 +14,22 @@
 
 This plan implements one subsystem: the Stage 4G campaign artifact and verifier. It does not implement live-model adaptive search, kernel sandboxing, transparency-log anchoring, or new containment policy behavior. Live-provider probes and transparency-log anti-shopping are explicitly outside this implementation claim.
 
+## Review-Driven Corrections Applied Before Execution
+
+The attached plan review identified P0 issues that must be fixed before any implementation work starts. These corrections are binding for every task below. If an older snippet appears to conflict with this section, update the snippet before writing code.
+
+- Stage 4G evidence generation must use the existing deterministic Stage 4D test signer at `tools/simurgh-attestation/stage4d/fixtures/keys/stage4d-test-private.pem`; committed Stage 4G artifacts may contain the derived public key and signatures, never a production private key.
+- `campaign_id` must be computed as `sha256(seed || budget || library_hash || target_commit || policy_hash || driver_hash)` through canonical JSON, not filled with a zero hash.
+- `golden_digest` must be computed from the canonical generated artifact set after replacing `golden_digest` with a stable sentinel during digesting; it may not be a constant placeholder.
+- `verifyCampaign()` must recompute the canonical schedule from `seed`, `budget`, `library_hash`, `target_commit`, `policy_hash`, and `driver_hash`, then compare expected attempts against manifest attempts and sealed records.
+- Relabel red arms must use a validly re-signed lying manifest so the expected failure is `class_mismatch`, not `campaign_signature_invalid`.
+- `scripts/reproduce-stage4g.sh` must build two clean campaigns, diff their canonical artifact sets, and fail with `golden_mismatch` if bytes differ.
+- Class I and Class II gateway-mediated attempts must use `EP` records in the full Stage 4G claim. Class III and Class IV use `CR`; aborts use `abort`.
+- Campaign manifests must include and verify a real Merkle root over scheduled attempt record hashes.
+- Counts in `manifest.counts` are advisory and must be recomputed by the verifier.
+- Python library generation must fail on missing fixtures instead of silently using zero hashes.
+- Reproduce logs must stay inside `$TMP_DIR`, never hardcoded under `/tmp`.
+
 ## File Structure
 
 - Create `tools/simurgh-attestation/stage4g/constants.mjs`: campaign domains, versions, class names, failure reasons, limits, stable evidence paths, and artifact names.
@@ -112,7 +128,9 @@ import {
   STAGE4G_EVIDENCE_DIR,
 } from "../../../../tools/simurgh-attestation/stage4g/constants.mjs";
 import {
+  campaignIdFromConfig,
   campaignHash,
+  campaignMerkleRoot,
   signCampaignPayload,
   verifyCampaignSignature,
 } from "../../../../tools/simurgh-attestation/stage4g/campaignCrypto.mjs";
@@ -140,6 +158,18 @@ test("campaign signatures are domain separated and tamper evident", () => {
   assert.equal(verifyCampaignSignature(payload, signature, publicKey), true);
   assert.equal(verifyCampaignSignature({ ...payload, campaign_id: "sha256:def" }, signature, publicKey), false);
   assert.match(campaignHash(payload), /^sha256:[a-f0-9]{64}$/);
+  assert.match(
+    campaignIdFromConfig({
+      seed: "sha256:" + "1".repeat(64),
+      budget: { queries_total: 1, per_class: { I: 1, II: 0, III: 0, IV: 0 } },
+      library_hash: "sha256:" + "2".repeat(64),
+      target_commit: "0123456789abcdef0123456789abcdef01234567",
+      policy_hash: "sha256:" + "3".repeat(64),
+      driver_hash: "sha256:" + "4".repeat(64),
+    }),
+    /^sha256:[a-f0-9]{64}$/
+  );
+  assert.match(campaignMerkleRoot(["sha256:" + "a".repeat(64), "sha256:" + "b".repeat(64)]), /^sha256:[a-f0-9]{64}$/);
 });
 
 test("schema validators accept minimal valid objects and reject ambiguous ones", () => {
@@ -152,6 +182,7 @@ test("schema validators accept minimal valid objects and reject ambiguous ones",
     target_commit: "0123456789abcdef0123456789abcdef01234567",
     policy_hash: "sha256:" + "d".repeat(64),
     driver_hash: "sha256:" + "e".repeat(64),
+    campaign_merkle_root: "sha256:" + "9".repeat(64),
     attempt_count: 1,
     attempts: [
       {
@@ -258,6 +289,7 @@ export const FAILURE_REASONS = Object.freeze([
 // tools/simurgh-attestation/stage4g/campaignCrypto.mjs
 // SPDX-License-Identifier: AGPL-3.0-or-later
 import { sign, verify } from "node:crypto";
+import { merkleRoot } from "../stage4d/merkle.mjs";
 import {
   canonicalJson,
   domainBytes,
@@ -267,6 +299,14 @@ import { CAMPAIGN_DOMAIN, CAMPAIGN_RECORD_DOMAIN } from "./constants.mjs";
 
 export function campaignHash(payload) {
   return `sha256:${sha256Canonical(payload)}`;
+}
+
+export function campaignIdFromConfig({ seed, budget, library_hash, target_commit, policy_hash, driver_hash }) {
+  return campaignHash({ seed, budget, library_hash, target_commit, policy_hash, driver_hash });
+}
+
+export function campaignMerkleRoot(recordHashes) {
+  return `sha256:${merkleRoot(recordHashes.map((value) => value.replace(/^sha256:/, "")))}`;
 }
 
 export function canonicalBytes(payload) {
@@ -333,7 +373,7 @@ function validateAttempt(attempt, index) {
 export function validateCampaignManifest(manifest) {
   if (!isObject(manifest)) return fail("manifest_not_object", "$");
   if (manifest.manifest_version !== "simurgh.stage4g.campaign.v1") return fail("version_invalid", "manifest_version");
-  for (const field of ["campaign_id", "seed", "library_hash", "policy_hash", "driver_hash", "golden_digest"]) {
+  for (const field of ["campaign_id", "seed", "library_hash", "policy_hash", "driver_hash", "campaign_merkle_root", "golden_digest"]) {
     if (!HEX.test(manifest[field])) return fail("digest_invalid", field);
   }
   if (!COMMIT.test(manifest.target_commit)) return fail("target_commit_invalid", "target_commit");
@@ -363,6 +403,11 @@ export function validateCampaignRecord(record) {
   if (!RECORD_TYPES.includes(record.record_type)) return fail("record_type_invalid", "record_type");
   if (!Array.isArray(record.reason_codes)) return fail("reason_codes_invalid", "reason_codes");
   if (!HEX.test(record.sealed_inputs_hash)) return fail("sealed_inputs_hash_invalid", "sealed_inputs_hash");
+  if (record.record_type === "EP") {
+    if (!["I", "II"].includes(record.target_class)) return fail("ep_class_invalid", "target_class");
+    if (!HEX.test(record.evidence_pack_hash)) return fail("evidence_pack_hash_invalid", "evidence_pack_hash");
+    if (!HEX.test(record.evidence_pack_sig_hash)) return fail("evidence_pack_sig_hash_invalid", "evidence_pack_sig_hash");
+  }
   return { ok: true };
 }
 ```
@@ -408,6 +453,7 @@ import {
 import {
   buildAbortRecord,
   buildCampaignRecord,
+  buildEvidencePackRecord,
   recordHash,
   signRecordEnvelope,
   verifyRecordEnvelope,
@@ -456,6 +502,19 @@ test("campaign records and abort records are hashable and signable", () => {
   });
   assert.equal(abort.record_type, "abort");
   assert.equal(abort.verdict, "aborted");
+
+  const ep = buildEvidencePackRecord({
+    attempt_id: "a0001",
+    target_class: "I",
+    resolved_class: "I",
+    verdict: "caught",
+    reason_codes: ["decision_replay_blocked"],
+    sealed_inputs_hash: "sha256:" + "f".repeat(64),
+    evidence_pack_hash: "sha256:" + "1".repeat(64),
+    evidence_pack_sig_hash: "sha256:" + "2".repeat(64),
+  });
+  assert.equal(ep.record_type, "EP");
+  assert.equal(ep.target_class, "I");
 });
 ```
 
@@ -539,6 +598,33 @@ export function buildCampaignRecord({ attempt_id, target_class, resolved_class, 
   };
 }
 
+export function buildEvidencePackRecord({
+  attempt_id,
+  target_class,
+  resolved_class,
+  verdict,
+  reason_codes,
+  sealed_inputs_hash,
+  evidence_pack_hash,
+  evidence_pack_sig_hash,
+}) {
+  if (!["I", "II"].includes(target_class)) {
+    throw new Error("ep_record_requires_gateway_mediated_class");
+  }
+  return {
+    record_version: "simurgh.stage4g.record.v1",
+    attempt_id,
+    target_class,
+    resolved_class,
+    verdict,
+    record_type: "EP",
+    reason_codes,
+    sealed_inputs_hash,
+    evidence_pack_hash,
+    evidence_pack_sig_hash,
+  };
+}
+
 export function buildAbortRecord({ attempt_id, target_class, reason_codes, sealed_inputs_hash }) {
   return {
     record_version: "simurgh.stage4g.record.v1",
@@ -606,7 +692,11 @@ git commit -m "feat(llm-shield): add stage 4g schedule and records"
 import assert from "node:assert/strict";
 import { generateKeyPairSync } from "node:crypto";
 import { test } from "node:test";
-import { signCampaignPayload } from "../../../../tools/simurgh-attestation/stage4g/campaignCrypto.mjs";
+import {
+  campaignIdFromConfig,
+  campaignMerkleRoot,
+  signCampaignPayload,
+} from "../../../../tools/simurgh-attestation/stage4g/campaignCrypto.mjs";
 import { buildCampaignRecord, signRecordEnvelope } from "../../../../tools/simurgh-attestation/stage4g/records.mjs";
 import { deriveCanonicalSeed, deriveSchedule } from "../../../../tools/simurgh-attestation/stage4g/schedule.mjs";
 import { verifyCampaign } from "../../../../tools/simurgh-attestation/stage4g/verifyCampaign.mjs";
@@ -643,22 +733,25 @@ function fixtureCampaign() {
     record_hash: envelope.record_hash,
     reason_codes: envelope.payload.reason_codes,
   }));
+  const campaign_id = campaignIdFromConfig({ ...config, seed });
+  const campaign_merkle_root = campaignMerkleRoot(attempts.map((attempt) => attempt.record_hash));
   const manifest = {
     manifest_version: "simurgh.stage4g.campaign.v1",
-    campaign_id: "sha256:" + "0".repeat(64),
+    campaign_id,
     seed,
     budget: config.budget,
     library_hash: config.library_hash,
     target_commit: config.target_commit,
     policy_hash: config.policy_hash,
     driver_hash: config.driver_hash,
+    campaign_merkle_root,
     attempt_count: attempts.length,
     attempts,
     counts: { resolved: 2, caught: 0, escaped: 1, out_of_scope: 1, aborted: 0 },
-    golden_digest: "sha256:" + "1".repeat(64),
+    golden_digest: campaignIdFromConfig({ ...config, seed, driver_hash: campaign_merkle_root }),
   };
   const signedManifest = { payload: manifest, signature: signCampaignPayload(manifest, privateKey) };
-  return { signedManifest, records, publicKey };
+  return { signedManifest, records, publicKey, privateKey };
 }
 
 test("verifyCampaign accepts a complete canonical campaign", () => {
@@ -677,9 +770,19 @@ test("verifyCampaign rejects missing scheduled attempts", () => {
   assert.equal(result.first_failure.reason, "missing_attempt");
 });
 
-test("verifyCampaign rejects class relabeling and privacy leaks", () => {
+test("verifyCampaign rejects manifest shrinking, class relabeling, and privacy leaks", () => {
+  const shrunk = fixtureCampaign();
+  shrunk.signedManifest.payload.attempts.pop();
+  shrunk.signedManifest.payload.attempt_count = 1;
+  shrunk.signedManifest.payload.counts = { resolved: 1, caught: 0, escaped: 0, out_of_scope: 1, aborted: 0 };
+  shrunk.signedManifest.signature = signCampaignPayload(shrunk.signedManifest.payload, shrunk.privateKey);
+  const shrinkResult = verifyCampaign(shrunk);
+  assert.equal(shrinkResult.ok, false);
+  assert.equal(shrinkResult.first_failure.reason, "attempt_schedule_mismatch");
+
   const campaign = fixtureCampaign();
   campaign.signedManifest.payload.attempts[0].resolved_class = "I";
+  campaign.signedManifest.signature = signCampaignPayload(campaign.signedManifest.payload, campaign.privateKey);
   const classResult = verifyCampaign(campaign);
   assert.equal(classResult.ok, false);
   assert.equal(classResult.first_failure.reason, "class_mismatch");
@@ -727,10 +830,11 @@ export function recomputeRecordOutcome(record) {
 ```js
 // tools/simurgh-attestation/stage4g/verifyCampaign.mjs
 // SPDX-License-Identifier: AGPL-3.0-or-later
-import { verifyCampaignSignature } from "./campaignCrypto.mjs";
+import { campaignIdFromConfig, campaignMerkleRoot, verifyCampaignSignature } from "./campaignCrypto.mjs";
 import { LIMITS } from "./constants.mjs";
 import { recomputeRecordOutcome } from "./classifier.mjs";
 import { recordHash, verifyRecordEnvelope } from "./records.mjs";
+import { deriveSchedule } from "./schedule.mjs";
 import { validateCampaignManifest } from "./schemas.mjs";
 
 function fail(reason, detail = {}) {
@@ -751,6 +855,36 @@ export function verifyCampaign({ signedManifest, records, publicKey }) {
   const schema = validateCampaignManifest(manifest);
   if (!schema.ok) return fail("stage_result_schema_missing", schema);
   if (!verifyCampaignSignature(manifest, signedManifest.signature, publicKey)) return fail("campaign_signature_invalid");
+  const expectedCampaignId = campaignIdFromConfig({
+    seed: manifest.seed,
+    budget: manifest.budget,
+    library_hash: manifest.library_hash,
+    target_commit: manifest.target_commit,
+    policy_hash: manifest.policy_hash,
+    driver_hash: manifest.driver_hash,
+  });
+  if (manifest.campaign_id !== expectedCampaignId) return fail("campaign_hash_mismatch");
+  const expectedMerkleRoot = campaignMerkleRoot(manifest.attempts.map((attempt) => attempt.record_hash));
+  if (manifest.campaign_merkle_root !== expectedMerkleRoot) return fail("campaign_merkle_root_mismatch");
+
+  let expectedSchedule;
+  try {
+    expectedSchedule = deriveSchedule({
+      seed: manifest.seed,
+      budget: manifest.budget,
+      library_hash: manifest.library_hash,
+      target_commit: manifest.target_commit,
+      policy_hash: manifest.policy_hash,
+      driver_hash: manifest.driver_hash,
+    });
+  } catch (error) {
+    return fail("attempt_schedule_mismatch", { message: error.message });
+  }
+  const expectedIds = expectedSchedule.map((slot) => slot.id);
+  const manifestIds = manifest.attempts.map((attempt) => attempt.id);
+  if (JSON.stringify(expectedIds) !== JSON.stringify(manifestIds)) {
+    return fail("attempt_schedule_mismatch", { expected: expectedIds, observed: manifestIds });
+  }
 
   const byAttempt = new Map();
   for (const envelope of records) {
@@ -765,6 +899,7 @@ export function verifyCampaign({ signedManifest, records, publicKey }) {
   }
 
   let securityEscapes = 0;
+  const recomputedCounts = { resolved: 0, caught: 0, escaped: 0, out_of_scope: 0, aborted: 0 };
   for (const attempt of manifest.attempts) {
     const envelope = byAttempt.get(attempt.id);
     if (!envelope) return fail("missing_attempt", { attempt_id: attempt.id });
@@ -777,10 +912,19 @@ export function verifyCampaign({ signedManifest, records, publicKey }) {
     }
     if (attempt.target_class === "II" && attempt.verdict !== "caught") return fail("class_ii_verifier_deception_passed", { attempt_id: attempt.id });
     if (attempt.verdict === "escaped") securityEscapes += 1;
+    recomputedCounts.resolved += 1;
+    if (attempt.verdict === "caught") recomputedCounts.caught += 1;
+    if (attempt.verdict === "escaped") recomputedCounts.escaped += 1;
+    if (attempt.verdict === "out_of_scope") recomputedCounts.out_of_scope += 1;
+    if (attempt.verdict === "aborted") recomputedCounts.aborted += 1;
   }
 
   for (const attemptId of byAttempt.keys()) {
     if (!manifest.attempts.some((attempt) => attempt.id === attemptId)) return fail("extra_attempt", { attempt_id: attemptId });
+  }
+
+  if (JSON.stringify(manifest.counts) !== JSON.stringify(recomputedCounts)) {
+    return fail("verdict_mismatch", { field: "counts" });
   }
 
   return { ok: true, campaign_verified: true, security_escapes: securityEscapes, first_failure: null };
@@ -856,15 +1000,16 @@ Expected: FAIL with `ERR_MODULE_NOT_FOUND` for `demoCampaign.mjs`.
 ```js
 // tools/simurgh-attestation/stage4g/demoCampaign.mjs
 // SPDX-License-Identifier: AGPL-3.0-or-later
-import { generateKeyPairSync } from "node:crypto";
-import { mkdir, writeFile } from "node:fs/promises";
+import { createPrivateKey, createPublicKey } from "node:crypto";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import { signCampaignPayload } from "./campaignCrypto.mjs";
-import { buildCampaignRecord, signRecordEnvelope } from "./records.mjs";
+import { campaignHash, campaignIdFromConfig, campaignMerkleRoot, signCampaignPayload } from "./campaignCrypto.mjs";
+import { buildCampaignRecord, buildEvidencePackRecord, signRecordEnvelope } from "./records.mjs";
 import { deriveCanonicalSeed, deriveSchedule } from "./schedule.mjs";
 import { verifyCampaign } from "./verifyCampaign.mjs";
 
 const stable = (value) => `${JSON.stringify(value, null, 2)}\n`;
+const TEST_PRIVATE_KEY_PATH = "tools/simurgh-attestation/stage4d/fixtures/keys/stage4d-test-private.pem";
 
 function config() {
   return {
@@ -884,21 +1029,26 @@ function recordFor(slot, privateKey) {
     IV: { resolved_class: "IV", verdict: "escaped", reason_codes: ["boundary_escape_recorded"] },
   };
   const outcome = byClass[slot.target_class];
+  const builder = ["I", "II"].includes(slot.target_class) ? buildEvidencePackRecord : buildCampaignRecord;
   return signRecordEnvelope(
-    buildCampaignRecord({
+    builder({
       attempt_id: slot.id,
       target_class: slot.target_class,
       resolved_class: outcome.resolved_class,
       verdict: outcome.verdict,
       reason_codes: outcome.reason_codes,
       sealed_inputs_hash: slot.schedule_hash,
+      evidence_pack_hash: campaignHash({ kind: "stage4g-demo-ep", attempt_id: slot.id }),
+      evidence_pack_sig_hash: campaignHash({ kind: "stage4g-demo-ep-sig", attempt_id: slot.id }),
     }),
     privateKey
   );
 }
 
 export async function buildStage4gDemo({ outDir }) {
-  const { privateKey, publicKey } = generateKeyPairSync("ed25519");
+  const privateKeyPem = await readFile(TEST_PRIVATE_KEY_PATH, "utf8");
+  const privateKey = createPrivateKey(privateKeyPem);
+  const publicKey = createPublicKey(privateKey);
   const publicKeyPem = publicKey.export({ type: "spki", format: "pem" });
   const cfg = config();
   const seed = deriveCanonicalSeed(cfg);
@@ -914,19 +1064,23 @@ export async function buildStage4gDemo({ outDir }) {
     record_hash: envelope.record_hash,
     reason_codes: envelope.payload.reason_codes,
   }));
-  const manifest = {
+  const manifestBase = {
     manifest_version: "simurgh.stage4g.campaign.v1",
-    campaign_id: "sha256:" + "0".repeat(64),
+    campaign_id: campaignIdFromConfig({ ...cfg, seed }),
     seed,
     budget: cfg.budget,
     library_hash: cfg.library_hash,
     target_commit: cfg.target_commit,
     policy_hash: cfg.policy_hash,
     driver_hash: cfg.driver_hash,
+    campaign_merkle_root: campaignMerkleRoot(attempts.map((attempt) => attempt.record_hash)),
     attempt_count: attempts.length,
     attempts,
     counts: { resolved: 4, caught: 2, escaped: 1, out_of_scope: 1, aborted: 0 },
-    golden_digest: "sha256:" + "1".repeat(64),
+  };
+  const manifest = {
+    ...manifestBase,
+    golden_digest: campaignHash({ manifest: { ...manifestBase, golden_digest: "sha256:" + "0".repeat(64) }, records }),
   };
   const signedManifest = { payload: manifest, signature: signCampaignPayload(manifest, privateKey) };
   const clean = verifyCampaign({ signedManifest, records, publicKey });
@@ -934,6 +1088,7 @@ export async function buildStage4gDemo({ outDir }) {
   const missing = verifyCampaign({ signedManifest, records: records.slice(0, -1), publicKey });
   const relabelManifest = structuredClone(signedManifest);
   relabelManifest.payload.attempts[0].resolved_class = "III";
+  relabelManifest.signature = signCampaignPayload(relabelManifest.payload, privateKey);
   const classRelabel = verifyCampaign({ signedManifest: relabelManifest, records, publicKey });
   const leakRecords = structuredClone(records);
   leakRecords[0].payload.raw_prompt = "sk-proj-secret";
@@ -1066,6 +1221,17 @@ def test_library_manifest_is_stable_and_class_covered():
     assert classes == {"I", "II", "III", "IV"}
 
 
+def test_library_manifest_requires_fixtures(tmp_path):
+    empty = tmp_path / "fixtures"
+    empty.mkdir()
+    try:
+        build_library_manifest(empty)
+    except FileNotFoundError as exc:
+        assert "Stage 4G requires at least one committed fixture" in str(exc)
+    else:
+        raise AssertionError("missing fixtures should fail closed")
+
+
 def test_library_manifest_rejects_path_escape(tmp_path):
     root = tmp_path / "fixtures"
     root.mkdir()
@@ -1124,15 +1290,17 @@ def _sha256_json(value: object) -> str:
 def build_library_manifest(fixture_root: Path) -> dict:
     fixture_root = fixture_root.resolve()
     fixtures = sorted(fixture_root.glob("*.json"))
+    if not fixtures:
+        raise FileNotFoundError(f"Stage 4G requires at least one committed fixture under {fixture_root}")
     templates = []
     for index, klass in enumerate(ATTACK_CLASSES):
-        fixture = fixtures[index % len(fixtures)] if fixtures else fixture_root / f"class-{klass.lower()}.json"
+        fixture = fixtures[index % len(fixtures)]
         templates.append(
             {
                 "template_id": f"class-{klass.lower()}-template",
                 "target_class": klass,
                 "fixture_path": fixture.name,
-                "fixture_hash": _sha256_file(fixture) if fixture.exists() else "sha256:" + "0" * 64,
+                "fixture_hash": _sha256_file(fixture),
             }
         )
     manifest = {
@@ -1258,14 +1426,22 @@ unset ANTHROPIC_API_KEY OPENAI_API_KEY BROWSERBASE_API_KEY
 echo "Stage 4G Adaptive Red-Team Campaign: start"
 echo "Stage 4G claim scope: within the canonical precommitted campaign for this build configuration"
 
-node tools/simurgh-attestation/stage4g/build-stage4g-demo.mjs --out "$TMP_DIR/generated"
-node tools/simurgh-attestation/stage4g/verify-stage4g-campaign.mjs --dir "$TMP_DIR/generated" >/tmp/simurgh-stage4g-verify.log
+node tools/simurgh-attestation/stage4g/build-stage4g-demo.mjs --out "$TMP_DIR/run-1"
+node tools/simurgh-attestation/stage4g/build-stage4g-demo.mjs --out "$TMP_DIR/run-2"
+
+if ! diff -ru "$TMP_DIR/run-1" "$TMP_DIR/run-2" >"$TMP_DIR/golden-diff.log"; then
+  echo "Stage 4G golden_mismatch: repeated clean builds emitted different bytes" >&2
+  cat "$TMP_DIR/golden-diff.log" >&2
+  exit 3
+fi
+
+node tools/simurgh-attestation/stage4g/verify-stage4g-campaign.mjs --dir "$TMP_DIR/run-1" >"$TMP_DIR/verify-run-1.log"
 
 rm -rf "$EV"
 mkdir -p "$(dirname "$EV")"
-cp -R "$TMP_DIR/generated" "$EV"
+cp -R "$TMP_DIR/run-1" "$EV"
 
-node tools/simurgh-attestation/stage4g/verify-stage4g-campaign.mjs --dir "$EV" >/tmp/simurgh-stage4g-verify-committed.log
+node tools/simurgh-attestation/stage4g/verify-stage4g-campaign.mjs --dir "$EV" >"$TMP_DIR/verify-committed.log"
 
 echo "Stage 4G clean campaign verify: GREEN"
 echo "Stage 4G red arm missing attempt: RED"
@@ -1406,5 +1582,6 @@ If there are no changes, no commit is needed.
 ## Self-Review Checklist
 
 - Spec coverage: Tasks 1-3 implement H1, H2, H4, H5, and H8; Task 4 implements clean/red-arm/boundary artifacts; Task 5 implements the deterministic library hash; Task 6 implements H3, H6, H7, artifacts, and reproduce; Task 7 verifies scoped wording and full gates.
+- Review fixes: the plan now requires deterministic fixture-backed signing, computed campaign IDs, computed golden digests, schedule recomputation, validly signed relabel red arms, two-run byte-diff reproduction, EP records for Class I/II, real campaign Merkle roots, recomputed counts, fail-closed fixture discovery, and `$TMP_DIR` logs.
 - Placeholder scan: the plan has no placeholder markers or open-ended validation steps.
 - Type consistency: attempt classes are `I`, `II`, `III`, `IV`; verdicts are `caught`, `escaped`, `out_of_scope`, `aborted`, `verifier_failed`; record types are `EP`, `CR`, and `abort`; direct verifier failures return `first_failure.reason`.
