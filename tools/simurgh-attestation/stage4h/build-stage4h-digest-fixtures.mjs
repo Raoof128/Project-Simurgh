@@ -10,6 +10,10 @@ import { RAW_VERIFIER_CODES, stage4CodeForRawCode } from "./exitCodes.mjs";
 import { buildSignedPackManifest, verifyPackBinding } from "./packBinding.mjs";
 
 const stable = (value) => JSON.stringify(value, null, 2) + "\n";
+const WRONG_BASE_PACK_PUBLIC_KEY_PEM = `-----BEGIN PUBLIC KEY-----
+MCowBQYDK2VwAyEAuqH7hI0ASnLLnjkeMnVAi6IeKvwhxC7+cif/RoiTa/8=
+-----END PUBLIC KEY-----
+`;
 
 async function writeJson(path, value) {
   await mkdir(dirname(path), { recursive: true });
@@ -28,13 +32,6 @@ export async function main({ root = process.cwd() } = {}) {
   );
   const manifestPublicKeyPem = await readFile(
     join(root, "tools/simurgh-attestation/stage4d/fixtures/keys/stage4d-test-public.pem"),
-    "utf8"
-  );
-  const wrongBasePackPublicKeyPem = await readFile(
-    join(
-      root,
-      "docs/research/llm-shield/evidence/stage-4g-adaptive-red-team-campaign/public-key.pem"
-    ),
     "utf8"
   );
   const manifestPrivateKey = createPrivateKey(manifestPrivateKeyPem);
@@ -81,7 +78,7 @@ export async function main({ root = process.cwd() } = {}) {
   await writeFile(join(fixtureRoot, "clean-base-pack.sig"), signature);
   await writeFile(join(fixtureRoot, "wrong-base-pack.sig"), "base64:ZmFrZQ==\n");
   await writeFile(join(fixtureRoot, "clean-signer.pub"), signerPub);
-  await writeFile(join(fixtureRoot, "wrong-base-pack.pub"), wrongBasePackPublicKeyPem);
+  await writeFile(join(fixtureRoot, "wrong-base-pack.pub"), WRONG_BASE_PACK_PUBLIC_KEY_PEM);
   await writeJson(join(fixtureRoot, "clean-dfi-certificate.json"), certificate);
   await writeJson(join(fixtureRoot, "malformed-certificate.json"), malformedCertificate);
   await writeJson(join(fixtureRoot, "clean-signed-pack-manifest.json"), manifest);
