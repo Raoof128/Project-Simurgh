@@ -11,7 +11,15 @@ import { RAW_VERIFIER_CODES, stage4CodeForRawCode } from "./exitCodes.mjs";
 import { verifyPackBinding } from "./packBinding.mjs";
 import { validateDfiCertificate, validateSignedPackManifest } from "./schema.mjs";
 
-const stable = (value) => JSON.stringify(value, null, 2) + "\n";
+async function stable(value) {
+  const json = JSON.stringify(value, null, 2) + "\n";
+  try {
+    const prettier = await import("prettier");
+    return await prettier.format(json, { parser: "json" });
+  } catch {
+    return json;
+  }
+}
 
 function arg(argv, name) {
   const index = argv.indexOf(name);
@@ -36,7 +44,7 @@ function codeForBindingReason(reason) {
 
 async function writeResult(outPath, result) {
   await mkdir(dirname(outPath), { recursive: true });
-  await writeFile(outPath, stable(result));
+  await writeFile(outPath, await stable(result));
 }
 
 function baseResult({ code, reason, certificate, premises = null }) {

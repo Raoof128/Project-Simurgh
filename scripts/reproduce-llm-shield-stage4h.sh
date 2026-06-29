@@ -15,6 +15,10 @@ node --test \
   tests/unit/llmShield/stage4h/reproduce.test.js
 
 node tools/simurgh-attestation/stage4h/build-stage4h-digest-fixtures.mjs
+npx prettier --write \
+  docs/research/llm-shield/evidence/stage-4h/*.json \
+  tests/fixtures/llmShield/stage4h/*.json \
+  tests/fixtures/llmShield/stage4h/expected-results/*.json >/dev/null
 
 node tools/simurgh-attestation/stage4h/verify-stage4h-digest-binding.mjs \
   --base-pack tests/fixtures/llmShield/stage4h/clean-base-pack.json \
@@ -24,5 +28,6 @@ node tools/simurgh-attestation/stage4h/verify-stage4h-digest-binding.mjs \
   --manifest tests/fixtures/llmShield/stage4h/clean-signed-pack-manifest.json \
   --manifest-pubkey tests/fixtures/llmShield/stage4h/manifest-verifier.pub \
   --out docs/research/llm-shield/evidence/stage-4h/verifier-results.json
+npx prettier --write docs/research/llm-shield/evidence/stage-4h/verifier-results.json >/dev/null
 
 echo "Stage 4H.0 Q2/Q5 digest foundation: PASS"
