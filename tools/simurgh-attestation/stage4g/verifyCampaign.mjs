@@ -2,6 +2,7 @@
 import {
   campaignIdFromConfig,
   campaignMerkleRoot,
+  goldenDigestForCampaign,
   verifyCampaignSignature,
 } from "./campaignCrypto.mjs";
 import { recomputeRecordOutcome } from "./classifier.mjs";
@@ -72,6 +73,13 @@ export function verifyCampaign({ signedManifest, records, publicKey }) {
   if (JSON.stringify(expectedIds) !== JSON.stringify(manifestIds)) {
     return fail("attempt_schedule_mismatch", { expected: expectedIds, observed: manifestIds });
   }
+  const expectedScheduleById = new Map(expectedSchedule.map((slot) => [slot.id, slot]));
+  for (const attempt of manifest.attempts) {
+    const expectedSlot = expectedScheduleById.get(attempt.id);
+    if (!expectedSlot || attempt.target_class !== expectedSlot.target_class) {
+      return fail("attempt_schedule_mismatch", { attempt_id: attempt.id });
+    }
+  }
 
   const byAttempt = new Map();
   for (const envelope of records) {
@@ -85,6 +93,10 @@ export function verifyCampaign({ signedManifest, records, publicKey }) {
     const verified = verifyRecordEnvelope(envelope, publicKey);
     if (!verified.ok) return fail(verified.reason, { attempt_id: envelope?.payload?.attempt_id });
     const attemptId = envelope.payload.attempt_id;
+    const expectedSlot = expectedScheduleById.get(attemptId);
+    if (!expectedSlot || envelope.payload.sealed_inputs_hash !== expectedSlot.schedule_hash) {
+      return fail("attempt_schedule_mismatch", { attempt_id: attemptId });
+    }
     if (byAttempt.has(attemptId)) return fail("duplicate_attempt", { attempt_id: attemptId });
     byAttempt.set(attemptId, envelope);
   }
@@ -128,6 +140,11 @@ export function verifyCampaign({ signedManifest, records, publicKey }) {
 
   if (JSON.stringify(manifest.counts) !== JSON.stringify(recomputedCounts)) {
     return fail("verdict_mismatch", { field: "counts" });
+  }
+
+  const expectedGoldenDigest = goldenDigestForCampaign({ manifest, records });
+  if (manifest.golden_digest !== expectedGoldenDigest) {
+    return fail("golden_mismatch");
   }
 
   return {
