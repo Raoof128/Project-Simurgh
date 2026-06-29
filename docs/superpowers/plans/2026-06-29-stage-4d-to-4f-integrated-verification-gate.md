@@ -34,6 +34,7 @@ This plan implements one cross-stage integration subsystem. It does not reopen S
 ## Task 0: Preflight Current Stage Result Shapes
 
 **Files:**
+
 - Read: `scripts/reproduce-stage4d.sh`
 - Read: `scripts/reproduce-stage4e.sh`
 - Read: `scripts/reproduce-stage4f.sh`
@@ -95,6 +96,7 @@ No commit is required for this read-only preflight.
 ## Task 1: Constants And Stable JSON Foundation
 
 **Files:**
+
 - Create: `tools/simurgh-attestation/stage4d-to-4f/constants.mjs`
 - Create: `tools/simurgh-attestation/stage4d-to-4f/stableJson.mjs`
 - Test: `tests/unit/llmShield/stage4d-to-4f/stableJson.test.js`
@@ -109,8 +111,15 @@ import { mkdtemp, readFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
-import { stableStringify, writeStableJson } from "../../../../tools/simurgh-attestation/stage4d-to-4f/stableJson.mjs";
-import { FAILURE_REASONS, INTEGRATION_EVIDENCE_DIR, REQUIRED_ARTIFACTS } from "../../../../tools/simurgh-attestation/stage4d-to-4f/constants.mjs";
+import {
+  stableStringify,
+  writeStableJson,
+} from "../../../../tools/simurgh-attestation/stage4d-to-4f/stableJson.mjs";
+import {
+  FAILURE_REASONS,
+  INTEGRATION_EVIDENCE_DIR,
+  REQUIRED_ARTIFACTS,
+} from "../../../../tools/simurgh-attestation/stage4d-to-4f/constants.mjs";
 
 test("stableStringify sorts object keys recursively", () => {
   assert.equal(
@@ -127,7 +136,10 @@ test("writeStableJson writes deterministic trailing-newline JSON", async () => {
 });
 
 test("constants define required integration artifacts and stable failure reasons", () => {
-  assert.equal(INTEGRATION_EVIDENCE_DIR, "docs/research/llm-shield/evidence/stage-4d-to-4f-integration");
+  assert.equal(
+    INTEGRATION_EVIDENCE_DIR,
+    "docs/research/llm-shield/evidence/stage-4d-to-4f-integration"
+  );
   assert.ok(REQUIRED_ARTIFACTS.includes("expected-result-oracle.json"));
   assert.ok(FAILURE_REASONS.includes("stage_artifact_mutation_attempted"));
   assert.ok(FAILURE_REASONS.includes("full_suite_claim_without_full_suite"));
@@ -286,6 +298,7 @@ git commit -m "feat(llm-shield): add integrated gate stable json foundation"
 ## Task 2: Expected-Result Oracle
 
 **Files:**
+
 - Create: `tools/simurgh-attestation/stage4d-to-4f/oracle.mjs`
 - Test: `tests/unit/llmShield/stage4d-to-4f/oracle.test.js`
 
@@ -299,7 +312,10 @@ import { mkdtemp, mkdir, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
-import { evaluateOracle, resultReason } from "../../../../tools/simurgh-attestation/stage4d-to-4f/oracle.mjs";
+import {
+  evaluateOracle,
+  resultReason,
+} from "../../../../tools/simurgh-attestation/stage4d-to-4f/oracle.mjs";
 
 async function writeJson(root, rel, value) {
   const path = join(root, rel);
@@ -308,7 +324,10 @@ async function writeJson(root, rel, value) {
 }
 
 test("resultReason reads first_failure.reason", () => {
-  assert.equal(resultReason({ first_failure: { reason: "replayed_decision_mismatch" } }), "replayed_decision_mismatch");
+  assert.equal(
+    resultReason({ first_failure: { reason: "replayed_decision_mismatch" } }),
+    "replayed_decision_mismatch"
+  );
   assert.equal(resultReason({ failed_reason: "missing_cell" }), "missing_cell");
   assert.equal(resultReason({}), null);
 });
@@ -324,12 +343,29 @@ test("evaluateOracle accepts clean green and red expected failure", async () => 
   const result = await evaluateOracle({
     root,
     expectations: [
-      { stage: "4D", arm: "clean", artifact_kind: "clean", path: "clean.json", expected_exit: 0, expected_reason: null },
-      { stage: "4E", arm: "red", artifact_kind: "red_arm", path: "red.json", expected_exit: 1, expected_reason: "replayed_decision_mismatch" },
+      {
+        stage: "4D",
+        arm: "clean",
+        artifact_kind: "clean",
+        path: "clean.json",
+        expected_exit: 0,
+        expected_reason: null,
+      },
+      {
+        stage: "4E",
+        arm: "red",
+        artifact_kind: "red_arm",
+        path: "red.json",
+        expected_exit: 1,
+        expected_reason: "replayed_decision_mismatch",
+      },
     ],
   });
   assert.equal(result.ok, true);
-  assert.equal(result.entries.every((entry) => entry.pass), true);
+  assert.equal(
+    result.entries.every((entry) => entry.pass),
+    true
+  );
 });
 
 test("evaluateOracle rejects red arm success and wrong reason", async () => {
@@ -343,15 +379,29 @@ test("evaluateOracle rejects red arm success and wrong reason", async () => {
   const result = await evaluateOracle({
     root,
     expectations: [
-      { stage: "4F", arm: "red-success", artifact_kind: "red_arm", path: "red-success.json", expected_exit: 1, expected_reason: "missing_cell" },
-      { stage: "4F", arm: "wrong-reason", artifact_kind: "red_arm", path: "wrong-reason.json", expected_exit: 1, expected_reason: "missing_cell" },
+      {
+        stage: "4F",
+        arm: "red-success",
+        artifact_kind: "red_arm",
+        path: "red-success.json",
+        expected_exit: 1,
+        expected_reason: "missing_cell",
+      },
+      {
+        stage: "4F",
+        arm: "wrong-reason",
+        artifact_kind: "red_arm",
+        path: "wrong-reason.json",
+        expected_exit: 1,
+        expected_reason: "missing_cell",
+      },
     ],
   });
   assert.equal(result.ok, false);
-  assert.deepEqual(result.failures.map((failure) => failure.reason), [
-    "unexpected_red_arm_success",
-    "unexpected_red_arm_reason",
-  ]);
+  assert.deepEqual(
+    result.failures.map((failure) => failure.reason),
+    ["unexpected_red_arm_success", "unexpected_red_arm_reason"]
+  );
 });
 ```
 
@@ -409,8 +459,14 @@ export async function evaluateOracle({ root = ".", expectations }) {
       if (observed_exit !== 0 || result.ok !== true) reason = "unexpected_clean_failure";
     } else if (observed_exit === 0 || result.ok === true) {
       reason = "unexpected_red_arm_success";
-    } else if (observed_exit !== expectation.expected_exit || observed_reason !== expectation.expected_reason) {
-      reason = observed_reason === "stage_result_schema_missing" ? "stage_result_schema_missing" : "unexpected_red_arm_reason";
+    } else if (
+      observed_exit !== expectation.expected_exit ||
+      observed_reason !== expectation.expected_reason
+    ) {
+      reason =
+        observed_reason === "stage_result_schema_missing"
+          ? "stage_result_schema_missing"
+          : "unexpected_red_arm_reason";
     }
     const entry = {
       stage: expectation.stage,
@@ -451,6 +507,7 @@ git commit -m "feat(llm-shield): add integrated red arm oracle"
 ## Task 3: Privacy Scanner And Stable Artifact Audit
 
 **Files:**
+
 - Create: `tools/simurgh-attestation/stage4d-to-4f/privacyScan.mjs`
 - Create: `tools/simurgh-attestation/stage4d-to-4f/artifactAudit.mjs`
 - Test: `tests/unit/llmShield/stage4d-to-4f/privacyScan.test.js`
@@ -507,7 +564,11 @@ import { mkdtemp, mkdir, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
-import { auditStableArtifacts, snapshotFiles, compareSnapshots } from "../../../../tools/simurgh-attestation/stage4d-to-4f/artifactAudit.mjs";
+import {
+  auditStableArtifacts,
+  snapshotFiles,
+  compareSnapshots,
+} from "../../../../tools/simurgh-attestation/stage4d-to-4f/artifactAudit.mjs";
 
 async function writeText(root, rel, text) {
   const path = join(root, rel);
@@ -517,18 +578,25 @@ async function writeText(root, rel, text) {
 
 test("artifact audit rejects volatile fields and raw logs", async () => {
   const root = await mkdtemp(join(tmpdir(), "simurgh-audit-"));
-  await writeText(root, "bad.json", JSON.stringify({
-    timestamp: "2026-06-29T00:00:00Z",
-    stdout: "raw output",
-    path: "/Users/example/project",
-  }, null, 2));
+  await writeText(
+    root,
+    "bad.json",
+    JSON.stringify(
+      {
+        timestamp: "2026-06-29T00:00:00Z",
+        stdout: "raw output",
+        path: "/Users/example/project",
+      },
+      null,
+      2
+    )
+  );
   const result = await auditStableArtifacts({ root, files: ["bad.json"] });
   assert.equal(result.ok, false);
-  assert.deepEqual(result.failures.map((failure) => failure.reason), [
-    "volatile_artifact_field",
-    "raw_log_in_stable_artifact",
-    "volatile_artifact_field",
-  ]);
+  assert.deepEqual(
+    result.failures.map((failure) => failure.reason),
+    ["volatile_artifact_field", "raw_log_in_stable_artifact", "volatile_artifact_field"]
+  );
 });
 
 test("snapshot comparison detects stage artifact mutation", async () => {
@@ -562,8 +630,10 @@ Expected: FAIL with missing module errors.
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
-const BLOCKED_KEY = /(api[_-]?key|secret|private[_-]?key|transcript|raw[_-]?prompt|raw[_-]?model|authorization|token)/i;
-const BLOCKED_VALUE = /(sk-[a-zA-Z0-9_-]{8,}|BEGIN (?:OPENSSH |RSA |EC |)PRIVATE KEY|raw model transcript|raw prompt|anthropic[_-]?api|openai[_-]?api)/i;
+const BLOCKED_KEY =
+  /(api[_-]?key|secret|private[_-]?key|transcript|raw[_-]?prompt|raw[_-]?model|authorization|token)/i;
+const BLOCKED_VALUE =
+  /(sk-[a-zA-Z0-9_-]{8,}|BEGIN (?:OPENSSH |RSA |EC |)PRIVATE KEY|raw model transcript|raw prompt|anthropic[_-]?api|openai[_-]?api)/i;
 
 function walk(value, path = "$", failures = []) {
   if (Array.isArray(value)) {
@@ -572,7 +642,8 @@ function walk(value, path = "$", failures = []) {
   }
   if (value && typeof value === "object") {
     for (const [key, nested] of Object.entries(value)) {
-      if (BLOCKED_KEY.test(key)) failures.push({ reason: "privacy_leak_detected", path: `${path}.${key}`, match: "key" });
+      if (BLOCKED_KEY.test(key))
+        failures.push({ reason: "privacy_leak_detected", path: `${path}.${key}`, match: "key" });
       walk(nested, `${path}.${key}`, failures);
     }
     return failures;
@@ -607,7 +678,13 @@ import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
-const VOLATILE_KEYS = new Set(["timestamp", "duration", "duration_ms", "wall_clock_ms", "machine_id"]);
+const VOLATILE_KEYS = new Set([
+  "timestamp",
+  "duration",
+  "duration_ms",
+  "wall_clock_ms",
+  "machine_id",
+]);
 const RAW_LOG_KEYS = new Set(["stdout", "stderr", "raw_stdout", "raw_stderr"]);
 const ABSOLUTE_PATH = /(^|")\/(?:Users|home|tmp|var|private)\//;
 
@@ -622,8 +699,10 @@ function auditValue(value, path = "$", failures = []) {
   }
   if (value && typeof value === "object") {
     for (const [key, nested] of Object.entries(value)) {
-      if (VOLATILE_KEYS.has(key)) failures.push({ reason: "volatile_artifact_field", path: `${path}.${key}` });
-      if (RAW_LOG_KEYS.has(key)) failures.push({ reason: "raw_log_in_stable_artifact", path: `${path}.${key}` });
+      if (VOLATILE_KEYS.has(key))
+        failures.push({ reason: "volatile_artifact_field", path: `${path}.${key}` });
+      if (RAW_LOG_KEYS.has(key))
+        failures.push({ reason: "raw_log_in_stable_artifact", path: `${path}.${key}` });
       auditValue(nested, `${path}.${key}`, failures);
     }
     return failures;
@@ -689,6 +768,7 @@ git commit -m "feat(llm-shield): audit integrated gate artifacts"
 ## Task 4: Offline Guards And Environment Scrubbing
 
 **Files:**
+
 - Create: `tools/simurgh-attestation/stage4d-to-4f/offlineGuards.mjs`
 - Test: `tests/unit/llmShield/stage4d-to-4f/offlineGuards.test.js`
 
@@ -732,13 +812,14 @@ test("assertNoForbiddenProviderEnv fails when a verifier requires provider env",
 });
 
 test("source scanner finds network and browser automation imports", () => {
-  const result = scanSourceForForbiddenNetworkUse('import https from "node:https";\\nconst net = require("node:net");\\nawait fetch("https://example.com");');
+  const result = scanSourceForForbiddenNetworkUse(
+    'import https from "node:https";\\nconst net = require("node:net");\\nawait fetch("https://example.com");'
+  );
   assert.equal(result.ok, false);
-  assert.deepEqual(result.failures.map((failure) => failure.reason), [
-    "network_required_error",
-    "network_required_error",
-    "network_required_error",
-  ]);
+  assert.deepEqual(
+    result.failures.map((failure) => failure.reason),
+    ["network_required_error", "network_required_error", "network_required_error"]
+  );
 });
 ```
 
@@ -832,6 +913,7 @@ git commit -m "feat(llm-shield): add integrated offline guards"
 ## Task 5: Command Results And Key-Substitution Checks
 
 **Files:**
+
 - Create: `tools/simurgh-attestation/stage4d-to-4f/commandResults.mjs`
 - Create: `tools/simurgh-attestation/stage4d-to-4f/keySubstitution.mjs`
 - Test: `tests/unit/llmShield/stage4d-to-4f/commandResults.test.js`
@@ -878,7 +960,10 @@ import { mkdtemp, mkdir, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
-import { evaluateWrongKeyResult, requireKeySubstitutionCoverage } from "../../../../tools/simurgh-attestation/stage4d-to-4f/keySubstitution.mjs";
+import {
+  evaluateWrongKeyResult,
+  requireKeySubstitutionCoverage,
+} from "../../../../tools/simurgh-attestation/stage4d-to-4f/keySubstitution.mjs";
 
 async function writeJson(root, rel, value) {
   const path = join(root, rel);
@@ -989,13 +1074,14 @@ function reasonOf(result) {
 export async function evaluateWrongKeyResult({ root = ".", klass, path }) {
   const result = JSON.parse(await readFile(join(root, path), "utf8"));
   const observedReason = reasonOf(result);
-  const ok = result.ok === false && result.exit_code !== 0 && (
-    observedReason === "external_pubkey_mismatch" ||
-    observedReason === "embedded_key_mismatch" ||
-    observedReason === "signature_verification_failed" ||
-    observedReason === "frontier_signature_invalid" ||
-    observedReason === "pack_verify_failed"
-  );
+  const ok =
+    result.ok === false &&
+    result.exit_code !== 0 &&
+    (observedReason === "external_pubkey_mismatch" ||
+      observedReason === "embedded_key_mismatch" ||
+      observedReason === "signature_verification_failed" ||
+      observedReason === "frontier_signature_invalid" ||
+      observedReason === "pack_verify_failed");
   return {
     class: klass,
     ok,
@@ -1011,7 +1097,8 @@ export function requireKeySubstitutionCoverage(entries) {
   const failures = [];
   for (const klass of REQUIRED_CLASSES) {
     const entry = byClass.get(klass);
-    if (!entry || entry.ok !== true) failures.push({ reason: "key_substitution_not_tested", class: klass });
+    if (!entry || entry.ok !== true)
+      failures.push({ reason: "key_substitution_not_tested", class: klass });
   }
   return { ok: failures.length === 0, failures };
 }
@@ -1041,6 +1128,7 @@ git commit -m "feat(llm-shield): record integrated gate evidence inputs"
 ## Task 6: Integration Report Builder
 
 **Files:**
+
 - Create: `tools/simurgh-attestation/stage4d-to-4f/integrationReport.mjs`
 - Create: `tools/simurgh-attestation/stage4d-to-4f/build-integration-report.mjs`
 - Test: `tests/unit/llmShield/stage4d-to-4f/integrationReport.test.js`
@@ -1083,27 +1171,99 @@ test("buildIntegrationReport writes stable summaries and rejects false full-suit
     fullSuiteRan: false,
     claimFullSuite: true,
     stageCommandResults: [
-      { label: "stage4d_reproduce", command: "scripts/reproduce-stage4d.sh", exit_code: 0, expected_green: true, log_hash: "sha256:" + "a".repeat(64), log_name: "stage4d_reproduce.log" },
-      { label: "stage4e_reproduce", command: "scripts/reproduce-stage4e.sh", exit_code: 0, expected_green: true, log_hash: "sha256:" + "b".repeat(64), log_name: "stage4e_reproduce.log" },
-      { label: "stage4f_canary_reproduce", command: "scripts/reproduce-stage4f.sh", exit_code: 0, expected_green: true, log_hash: "sha256:" + "c".repeat(64), log_name: "stage4f_canary_reproduce.log" },
+      {
+        label: "stage4d_reproduce",
+        command: "scripts/reproduce-stage4d.sh",
+        exit_code: 0,
+        expected_green: true,
+        log_hash: "sha256:" + "a".repeat(64),
+        log_name: "stage4d_reproduce.log",
+      },
+      {
+        label: "stage4e_reproduce",
+        command: "scripts/reproduce-stage4e.sh",
+        exit_code: 0,
+        expected_green: true,
+        log_hash: "sha256:" + "b".repeat(64),
+        log_name: "stage4e_reproduce.log",
+      },
+      {
+        label: "stage4f_canary_reproduce",
+        command: "scripts/reproduce-stage4f.sh",
+        exit_code: 0,
+        expected_green: true,
+        log_hash: "sha256:" + "c".repeat(64),
+        log_name: "stage4f_canary_reproduce.log",
+      },
     ],
     keySubstitution: [
-      { class: "stage4d_pack", ok: true, method: "observed_wrong_key_verification", observed_exit: 1, observed_reason: "embedded_key_mismatch" },
-      { class: "stage4e_scenario_pack", ok: true, method: "observed_wrong_key_verification", observed_exit: 1, observed_reason: "embedded_key_mismatch" },
-      { class: "stage4f_cell_frontier", ok: true, method: "observed_wrong_key_verification", observed_exit: 1, observed_reason: "pack_verify_failed" },
+      {
+        class: "stage4d_pack",
+        ok: true,
+        method: "observed_wrong_key_verification",
+        observed_exit: 1,
+        observed_reason: "embedded_key_mismatch",
+      },
+      {
+        class: "stage4e_scenario_pack",
+        ok: true,
+        method: "observed_wrong_key_verification",
+        observed_exit: 1,
+        observed_reason: "embedded_key_mismatch",
+      },
+      {
+        class: "stage4f_cell_frontier",
+        ok: true,
+        method: "observed_wrong_key_verification",
+        observed_exit: 1,
+        observed_reason: "pack_verify_failed",
+      },
     ],
-    offlineEnforcement: { ok: true, checked_files: ["sample.mjs"], forbidden_sources_checked: ["net"], failures: [] },
+    offlineEnforcement: {
+      ok: true,
+      checked_files: ["sample.mjs"],
+      forbidden_sources_checked: ["net"],
+      failures: [],
+    },
     expectations: [
-      { stage: "4D", arm: "clean", artifact_kind: "clean", path: "stage4d/verify-results.json", expected_exit: 0, expected_reason: null },
-      { stage: "4E", arm: "arm-b1", artifact_kind: "red_arm", path: "stage4e/arms/arm-b1/verify-results.json", expected_exit: 1, expected_reason: "replayed_decision_mismatch" },
-      { stage: "4F", arm: "arm-c", artifact_kind: "red_arm", path: "stage4f/red-arms/arm-c/verify-frontier-results.json", expected_exit: 1, expected_reason: "missing_cell" },
+      {
+        stage: "4D",
+        arm: "clean",
+        artifact_kind: "clean",
+        path: "stage4d/verify-results.json",
+        expected_exit: 0,
+        expected_reason: null,
+      },
+      {
+        stage: "4E",
+        arm: "arm-b1",
+        artifact_kind: "red_arm",
+        path: "stage4e/arms/arm-b1/verify-results.json",
+        expected_exit: 1,
+        expected_reason: "replayed_decision_mismatch",
+      },
+      {
+        stage: "4F",
+        arm: "arm-c",
+        artifact_kind: "red_arm",
+        path: "stage4f/red-arms/arm-c/verify-frontier-results.json",
+        expected_exit: 1,
+        expected_reason: "missing_cell",
+      },
     ],
   });
   assert.equal(report.ok, false);
-  assert.ok(report.failures.some((failure) => failure.reason === "full_suite_claim_without_full_suite"));
-  const readiness = JSON.parse(await readFile(join(outDir, "release-readiness-report.json"), "utf8"));
+  assert.ok(
+    report.failures.some((failure) => failure.reason === "full_suite_claim_without_full_suite")
+  );
+  const readiness = JSON.parse(
+    await readFile(join(outDir, "release-readiness-report.json"), "utf8")
+  );
   assert.equal(readiness.ok, false);
-  assert.equal(readiness.failures.some((failure) => failure.reason === "full_suite_claim_without_full_suite"), true);
+  assert.equal(
+    readiness.failures.some((failure) => failure.reason === "full_suite_claim_without_full_suite"),
+    true
+  );
 });
 ```
 
@@ -1156,7 +1316,8 @@ export async function buildIntegrationReport({
     failures.push({ reason: "stage_result_schema_missing", detail: "stage-command-results-empty" });
   }
   for (const commandResult of stageCommandResults ?? []) {
-    if (commandResult.exit_code !== 0) failures.push({ reason: "unexpected_clean_failure", label: commandResult.label });
+    if (commandResult.exit_code !== 0)
+      failures.push({ reason: "unexpected_clean_failure", label: commandResult.label });
   }
   for (const failure of offlineEnforcement.failures ?? []) failures.push(failure);
   if (claimFullSuite && !fullSuiteRan) {
@@ -1171,7 +1332,11 @@ export async function buildIntegrationReport({
   };
   const dodCoverage = [
     matrixEntry("receipt_integrity", ["Stage 4D verify-results.json"]),
-    matrixEntry("completeness", ["Stage 4D tamper-results.json", "Stage 4E arm C", "Stage 4F arm C"]),
+    matrixEntry("completeness", [
+      "Stage 4D tamper-results.json",
+      "Stage 4E arm C",
+      "Stage 4F arm C",
+    ]),
     matrixEntry("decision_replay", ["Stage 4E arm B1", "Stage 4F arm B"]),
     matrixEntry("external_key_trust", ["key-substitution-results.json"]),
     matrixEntry("offline_verification", ["offline-enforcement-results.json"]),
@@ -1206,17 +1371,39 @@ export async function buildIntegrationReport({
     },
     "offline-enforcement-results.json": offlineEnforcement,
     "expected-result-oracle.json": oracle,
-    "stage-command-results.json": { ok: stageCommandResults.every((entry) => entry.exit_code === 0), commands: stageCommandResults },
-    "dod-coverage-matrix.json": { ok: dodCoverage.every((entry) => entry.covered), entries: dodCoverage },
-    "falsifier-coverage-matrix.json": { ok: falsifierCoverage.every((entry) => entry.covered), entries: falsifierCoverage },
-    "key-substitution-results.json": { ok: keyCoverage.ok, entries: keySubstitution, failures: keyCoverage.failures },
-    "golden-stability-summary.json": { ok: true, stages: ["4D", "4E", "4F canary"].concat(fullSuiteRan ? ["4F full-suite"] : []) },
+    "stage-command-results.json": {
+      ok: stageCommandResults.every((entry) => entry.exit_code === 0),
+      commands: stageCommandResults,
+    },
+    "dod-coverage-matrix.json": {
+      ok: dodCoverage.every((entry) => entry.covered),
+      entries: dodCoverage,
+    },
+    "falsifier-coverage-matrix.json": {
+      ok: falsifierCoverage.every((entry) => entry.covered),
+      entries: falsifierCoverage,
+    },
+    "key-substitution-results.json": {
+      ok: keyCoverage.ok,
+      entries: keySubstitution,
+      failures: keyCoverage.failures,
+    },
+    "golden-stability-summary.json": {
+      ok: true,
+      stages: ["4D", "4E", "4F canary"].concat(fullSuiteRan ? ["4F full-suite"] : []),
+    },
     "non-claims-audit.json": nonClaimsAudit,
   };
-  for (const [name, value] of Object.entries(artifacts)) await writeStableJson(join(outDir, name), value);
-  const privacy = await scanJsonPrivacy({ root: ".", files: Object.keys(artifacts).map((file) => artifactRel(outDir, file)) });
+  for (const [name, value] of Object.entries(artifacts))
+    await writeStableJson(join(outDir, name), value);
+  const privacy = await scanJsonPrivacy({
+    root: ".",
+    files: Object.keys(artifacts).map((file) => artifactRel(outDir, file)),
+  });
   await writeStableJson(join(outDir, "privacy-scan-results.json"), privacy);
-  const firstAuditFiles = Object.keys(artifacts).concat(["privacy-scan-results.json"]).map((file) => artifactRel(outDir, file));
+  const firstAuditFiles = Object.keys(artifacts)
+    .concat(["privacy-scan-results.json"])
+    .map((file) => artifactRel(outDir, file));
   const audit = await auditStableArtifacts({ root: ".", files: firstAuditFiles });
   for (const failure of privacy.failures) failures.push(failure);
   for (const failure of audit.failures) failures.push(failure);
@@ -1237,7 +1424,11 @@ export async function buildIntegrationReport({
       artifacts: REQUIRED_ARTIFACTS,
     });
   }
-  await writeFile(join(outDir, "README.md"), "# Stage 4D-4F Integration Evidence\n\nRun `scripts/reproduce-stage4d-to-4f.sh` to regenerate this reviewer-facing integration gate.\n", "utf8");
+  await writeFile(
+    join(outDir, "README.md"),
+    "# Stage 4D-4F Integration Evidence\n\nRun `scripts/reproduce-stage4d-to-4f.sh` to regenerate this reviewer-facing integration gate.\n",
+    "utf8"
+  );
   return readiness;
 }
 ```
@@ -1382,6 +1573,7 @@ git commit -m "feat(llm-shield): build integrated gate reports"
 ## Task 7: Wrapper Script And Mutation Protection
 
 **Files:**
+
 - Create: `scripts/reproduce-stage4d-to-4f.sh`
 - Test: `tests/unit/llmShield/stage4d-to-4f/reproduce.test.js`
 
@@ -1577,6 +1769,7 @@ git commit -m "feat(llm-shield): add integrated reproduce gate"
 ## Task 8: Generate Integration Evidence And README
 
 **Files:**
+
 - Create: `docs/research/llm-shield/evidence/stage-4d-to-4f-integration/README.md`
 - Create: `docs/research/llm-shield/evidence/stage-4d-to-4f-integration/*.json`
 
@@ -1636,6 +1829,7 @@ git commit -m "test(llm-shield): add integrated gate evidence"
 ## Task 9: Full Verification And Final Commit
 
 **Files:**
+
 - Modify only if needed: `.prettierignore`
 - Read: `docs/research/llm-shield/evidence/stage-4d-to-4f-integration/release-readiness-report.json`
 

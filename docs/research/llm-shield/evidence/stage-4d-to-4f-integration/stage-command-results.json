@@ -5,7 +5,7 @@
       "exit_code": 0,
       "expected_green": true,
       "label": "stage4d_reproduce",
-      "log_hash": "sha256:1faee3664051091735129f97235282650a5b1cbcc67077d82c7d48863bde6f88",
+      "log_hash": "sha256:21825363990d0fbdb5b2397ebc28b985958e12b815a12e2af34b9c8ca0d69037",
       "log_name": "stage4d_reproduce.log"
     },
     {
@@ -13,7 +13,7 @@
       "exit_code": 0,
       "expected_green": true,
       "label": "stage4e_reproduce",
-      "log_hash": "sha256:d5cbffdc85d21297c09e6bc06a37af1f131a952d03cd8d38b1e94cd6268f380f",
+      "log_hash": "sha256:24f15fa9b9e08ff5c1c82f0ad9e7e0030759f05a85bee8f41f57d4cac0d02d6d",
       "log_name": "stage4e_reproduce.log"
     },
     {
@@ -21,7 +21,7 @@
       "exit_code": 0,
       "expected_green": true,
       "label": "stage4f_canary_reproduce",
-      "log_hash": "sha256:4b4d58066485f404c5e5116d99ece2532e626da5f34740128e4426812ceab59c",
+      "log_hash": "sha256:56b69d300addf543f058b68be40ab39b032a15a1d2e575dbd9988cf8a86c1340",
       "log_name": "stage4f_canary_reproduce.log"
     }
   ],

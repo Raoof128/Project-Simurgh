@@ -117,7 +117,9 @@ test("buildIntegrationReport writes stable summaries and rejects false full-suit
   assert.ok(
     report.failures.some((failure) => failure.reason === "full_suite_claim_without_full_suite")
   );
-  const readiness = JSON.parse(await readFile(join(outDir, "release-readiness-report.json"), "utf8"));
+  const readiness = JSON.parse(
+    await readFile(join(outDir, "release-readiness-report.json"), "utf8")
+  );
   assert.equal(readiness.ok, false);
   assert.equal(
     readiness.failures.some((failure) => failure.reason === "full_suite_claim_without_full_suite"),

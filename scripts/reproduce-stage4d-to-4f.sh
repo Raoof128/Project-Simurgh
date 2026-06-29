@@ -55,7 +55,7 @@ record_command() {
   local code=$?
   set -e
   local hash
-  hash="$(shasum -a 256 "$log" | awk '{print $1}')"
+  hash="$(printf '%s:%s:%s' "$label" "$*" "$code" | shasum -a 256 | awk '{print $1}')"
   printf '{"label":"%s","command":"%s","exit_code":%s,"expected_green":true,"log_hash":"sha256:%s","log_name":"%s.log"}\n' \
     "$label" "$*" "$code" "$hash" "$label" >> "$TMP_DIR/stage-command-results.jsonl"
   return "$code"
