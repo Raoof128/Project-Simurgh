@@ -2,6 +2,16 @@
 
 ## Agent Change Log
 
+### 2026-06-30 (Australia/Sydney) — Stage 4H.2 one-edge-delta plan patch
+
+**Raouf:**
+
+- **Scope:** Documentation-only correction to the Stage 4H.2 implementation plan before execution. No verifier code, fixture builder, tests, or evidence files changed in this commit.
+- **Summary:** Patched the planned Q0/Q4 fixture helper so the one-edge-delta claim is true at the Stage 4H DFI/canonical-premise layer: non-essential replay fields stay constant, `policy_features_source.input_sources` only mirrors the DFI source set, and the plan now includes a focused one-edge-delta audit test plus q-gate wording for the narrowed claim.
+- **Files changed:** `docs/superpowers/plans/2026-06-30-stage-4h-2-discrimination-q0-q4.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** Prettier check, `git diff --check`, and one-edge-delta wording scan pass; stale dirty-vs-clean conditional replay-field changes are absent from the planned helper.
+- **Follow-ups:** Execute the implementation plan only after this patch is reviewed; keep Q3/Q6/Q7 out of scope.
+
 ### 2026-06-30 (Australia/Sydney) — Stage 4H.2 implementation plan
 
 **Raouf:**

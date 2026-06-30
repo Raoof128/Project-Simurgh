@@ -1,5 +1,17 @@
 ## Change Log
 
+## [stage-4h-2-discrimination-plan-patch] — 2026-06-30 — one-edge-delta correction
+
+**Raouf:** Patched the Stage 4H.2 implementation plan before execution so the planned Q0/Q4 fixture helper preserves the one-edge-delta claim at the Stage 4H DFI/canonical-premise layer. Non-essential replay fields now stay constant between Q0 and Q4; `policy_features_source.input_sources` is documented as a direct mirror of the same DFI source set; the plan adds a focused one-edge-delta audit test and q-gate wording for the narrowed claim. This is documentation-only: no verifier code, fixture builder, tests, or evidence regeneration in this commit.
+
+### Changed
+
+- `docs/superpowers/plans/2026-06-30-stage-4h-2-discrimination-q0-q4.md` — corrected the planned Q0/Q4 helper and added the one-edge-delta audit requirement.
+
+### Verified
+
+- Prettier check, `git diff --check`, and one-edge-delta wording scan pass; stale dirty-vs-clean conditional replay-field changes are absent from the planned helper.
+
 ## [stage-4h-2-discrimination-plan] — 2026-06-30 — Q0/Q4 implementation plan
 
 **Raouf:** Added the Stage 4H.2 implementation plan for Q0 clean positive acceptance and Q4 dishonest-producer laundering discrimination. This is planning-only: no verifier code, fixture builder, tests, or evidence regeneration in this commit. The plan keeps the approved Rev 3 scope and raw-code ledger (`0`, `22`, `24`, `26`), pins the check order, names the fixture matrix, requires Q4c true partial coverage with `derivation_scope_incomplete`, keeps Q3/Q6/Q7 out of scope, and requires reviewer-grade E2E smoke coverage through the real fixture builder and real verifier CLI.

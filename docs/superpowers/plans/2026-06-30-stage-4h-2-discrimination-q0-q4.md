@@ -312,9 +312,22 @@ Expected: FAIL because the generated Q0/Q4 fixture files do not exist yet.
 
 In `tools/simurgh-attestation/stage4h/build-stage4h-digest-fixtures.mjs`, add this helper after `stage4dRunRecord`:
 
+The helper must keep Q0 and Q4 identical except for fixture identifiers,
+derived signatures/hashes, and the Stage 4H DFI/canonical-premise delta into
+`action:a1`. `policy_features_source.input_sources` may mirror that delta
+because it is the direct metadata summary of the same source set; all other
+replay material, resolved argument digests, decision context, policy,
+registry, lattice, observations, and decision summaries stay constant.
+
 ```js
 function stage4h2DiscriminationRunRecord({ runId, dirty }) {
   const parent = `session_${runId}`;
+  const actionA1Sources = dirty
+    ? [
+        { source_id: "doc1", label: "untrusted_web" },
+        { source_id: "sys", label: "trusted" },
+      ]
+    : [{ source_id: "sys", label: "trusted" }];
   const replayMaterial = {
     a0: {
       decision_context: {
@@ -330,7 +343,7 @@ function stage4h2DiscriminationRunRecord({ runId, dirty }) {
         user_explicitly_authorised: true,
       },
       resolved_args_redacted: {
-        body_digest: dirty ? "3".repeat(64) : "4".repeat(64),
+        body_digest: "3".repeat(64),
         contains_secret_marker: false,
         recipient_scope: "local_fixture",
         tool_name: "draft_note",
@@ -348,25 +361,20 @@ function stage4h2DiscriminationRunRecord({ runId, dirty }) {
       },
       policy_features_source: {
         external_effect: true,
-        input_sources: dirty ? ["doc1", "sys"] : ["sys"],
+        input_sources: actionA1Sources.map((source) => source.source_id).sort(),
         requires_authority: true,
         sink_id: "egress",
         user_explicitly_authorised: true,
       },
       resolved_args_redacted: {
-        body_digest: dirty ? "5".repeat(64) : "6".repeat(64),
+        body_digest: "5".repeat(64),
         contains_secret_marker: false,
         recipient_scope: "fixture_contact",
         tool_name: "send_email",
       },
       taint_derivation_inputs: {
         authority_sink: true,
-        sources: dirty
-          ? [
-              { source_id: "doc1", label: "untrusted_web" },
-              { source_id: "sys", label: "trusted" },
-            ]
-          : [{ source_id: "sys", label: "trusted" }],
+        sources: actionA1Sources,
       },
     },
   };
@@ -447,17 +455,64 @@ function stage4h2DiscriminationRunRecord({ runId, dirty }) {
       },
       {
         action_id: "a1",
-        input_integrity_summary: dirty ? "contains_untrusted" : "trusted_only",
+        input_integrity_summary: "stage4h2_dfi_source_set_mirrors_replay_material",
         decision: "allow",
         decision_reason_code: "POLICY_ALLOWED",
         decision_input: {
-          untrusted_reached_authority: dirty,
+          untrusted_reached_authority: "stage4h2_dfi_source_set_mirrors_replay_material",
           policy_mode: "permissive",
         },
       },
     ],
   };
 }
+```
+
+- [ ] **Step 3a: Add a one-edge-delta audit to the focused discrimination test**
+
+Append this test to `tests/unit/llmShield/stage4h/discrimination.test.js` after
+the Q4a test:
+
+```js
+test("Stage 4H.2 Q0/Q4 base packs differ only by the DFI edge into action:a1", () => {
+  const cleanPack = readJson(`${fixtureRoot}/q0-clean-disconnected-untrusted-base-pack.json`);
+  const dirtyPack = readJson(`${fixtureRoot}/q4-dirty-one-edge-delta-base-pack.json`);
+  const cleanPremises = buildPremiseSet(cleanPack);
+  const dirtyPremises = buildPremiseSet(dirtyPack);
+
+  const cleanA1Edges = cleanPremises.explicit_edges
+    .filter((edge) => edge.stable_fields.to === "action:a1")
+    .map((edge) => ({
+      from: edge.stable_fields.from,
+      label: edge.stable_fields.label,
+      to: edge.stable_fields.to,
+    }));
+  const dirtyA1Edges = dirtyPremises.explicit_edges
+    .filter((edge) => edge.stable_fields.to === "action:a1")
+    .map((edge) => ({
+      from: edge.stable_fields.from,
+      label: edge.stable_fields.label,
+      to: edge.stable_fields.to,
+    }));
+
+  assert.deepEqual(cleanA1Edges, [{ from: "source:sys", label: "trusted", to: "action:a1" }]);
+  assert.deepEqual(dirtyA1Edges, [
+    { from: "source:doc1", label: "untrusted_web", to: "action:a1" },
+    { from: "source:sys", label: "trusted", to: "action:a1" },
+  ]);
+
+  const cleanWithoutA1Edges = cleanPremises.explicit_edges.filter(
+    (edge) => edge.stable_fields.to !== "action:a1"
+  );
+  const dirtyWithoutA1Edges = dirtyPremises.explicit_edges.filter(
+    (edge) => edge.stable_fields.to !== "action:a1"
+  );
+  assert.equal(cleanWithoutA1Edges.length, dirtyWithoutA1Edges.length);
+  assert.deepEqual(
+    cleanWithoutA1Edges.map((edge) => edge.stable_fields),
+    dirtyWithoutA1Edges.map((edge) => edge.stable_fields)
+  );
+});
 ```
 
 - [ ] **Step 4: Generate Q0/Q4 base packs and certificates**
@@ -701,6 +756,8 @@ const qGateResults = {
     q4a: "forged clean premise digest over dirty replay fails Q2 with raw 22",
     q4b: "structurally complete forged-safe derivation over honest dirty premises fails sink-safety with raw 24",
     q4c: "true partial derivation omission over honest dirty premises fails coverage with raw 26",
+    one_edge_delta:
+      "the only Stage 4H DFI/canonical-premise difference is the added untrusted source edge into action:a1; policy_features_source.input_sources mirrors the same source set",
   },
   non_claims: [
     "implicit_flow_security",
