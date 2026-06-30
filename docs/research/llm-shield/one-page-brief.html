@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Verifiable Containment Attestation After Guardrail Failure — Project Simurgh</title>
+    <title>Verifiable Containment Attestation After Guardrail Failure - Project Simurgh</title>
     <meta
       name="description"
-      content="Project Simurgh: signed, offline-reproducible evidence of what an LLM/agentic system did after a guardrail missed. One-page technical brief."
+      content="Project Simurgh technical brief: signed, offline-reproducible containment evidence for LLM and agentic systems after guardrail failure."
     />
     <style>
       :root {
@@ -18,7 +18,8 @@
         --forest: #2f4a2a;
         --forest-2: #3c6135;
         --good: #1f6b3a;
-        --accent: #b08433;
+        --accent: #a56b2a;
+        --warn: #7d4b21;
         --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
         --serif:
           "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
@@ -40,7 +41,7 @@
         -webkit-font-smoothing: antialiased;
       }
       .sheet {
-        max-width: 860px;
+        max-width: 920px;
         margin: 28px auto;
         background: var(--paper);
         border: 1px solid var(--line);
@@ -76,15 +77,15 @@
       h1 {
         font-family: var(--serif);
         font-weight: 600;
-        font-size: 25px;
+        font-size: 27px;
         line-height: 1.18;
-        margin: 0 0 6px;
-        letter-spacing: -0.01em;
+        margin: 0 0 7px;
       }
       .sub {
         margin: 0;
         color: var(--muted);
         font-size: 13.5px;
+        max-width: 700px;
       }
       main {
         padding: 26px 40px 12px;
@@ -120,6 +121,9 @@
         font-family: var(--serif);
         font-size: 16px;
         color: var(--ink);
+      }
+      .metrics-wrap {
+        overflow-x: auto;
       }
       table.metrics {
         width: 100%;
@@ -157,7 +161,7 @@
       }
       .card {
         border: 1px solid var(--line);
-        border-radius: 10px;
+        border-radius: 8px;
         padding: 14px 16px;
         background: #fcfbf8;
       }
@@ -168,8 +172,8 @@
         text-transform: uppercase;
         color: var(--forest);
       }
-      .card.no h3 {
-        color: var(--accent);
+      .card.warning h3 {
+        color: var(--warn);
       }
       .card ul {
         margin: 0;
@@ -179,6 +183,13 @@
         margin-bottom: 5px;
         font-size: 13px;
         line-height: 1.45;
+      }
+      .compact-list {
+        margin: 0;
+        padding-left: 18px;
+      }
+      .compact-list li {
+        margin-bottom: 6px;
       }
       pre {
         margin: 0;
@@ -191,8 +202,9 @@
         line-height: 1.6;
         overflow-x: auto;
       }
-      pre .c {
-        color: #93a98c;
+      pre code {
+        font: inherit;
+        color: inherit;
       }
       .hint {
         font-size: 12.5px;
@@ -228,11 +240,14 @@
         border-radius: 999px;
         padding: 2px 9px;
       }
-      @media (max-width: 620px) {
+      @media (max-width: 700px) {
         header.head {
           flex-direction: column;
           text-align: center;
           padding: 26px 22px 20px;
+        }
+        h1 {
+          font-size: 24px;
         }
         main {
           padding: 22px 22px 8px;
@@ -270,9 +285,6 @@
           color: #1c241b;
           border: 1px solid var(--line);
         }
-        pre .c {
-          color: #6b7a66;
-        }
         @page {
           margin: 12mm;
         }
@@ -287,133 +299,214 @@
           <p class="eyebrow">Project Simurgh · Technical Brief</p>
           <h1>Verifiable Containment Attestation After Guardrail Failure</h1>
           <p class="sub">
-            Signed, offline-reproducible evidence of what an LLM or agentic system did once a
-            guardrail missed — a receipt, not a passport.
+            A receipt for what an AI deployment did, one a third party can verify offline and a
+            dishonest operator cannot fake.
           </p>
         </div>
       </header>
 
       <main>
         <section>
-          <h2>The problem</h2>
+          <h2>The measurement gap in agent security</h2>
           <p class="lede">
-            Input guardrails and content classifiers are the dominant first line of defence for LLM
-            and agentic systems. They are necessary, and they will sometimes miss. When one does,
-            two questions follow that current tooling answers poorly:
-            <strong>what actually happened downstream</strong> once the bad input was through, and
-            <strong>can a third party verify that answer</strong> without trusting the vendor who
-            produced it?
+            Capability evaluations show what a frontier model can do. They do not show what a
+            deployed system allowed it to do after the model was connected to tools, files, context,
+            and external systems. Agent-security policy discussions now circle that operational
+            question: when a guardrail fails, what happened next?
           </p>
           <p>
-            Most defences optimise the first line — stop the input. Project Simurgh assumes that
-            line will occasionally fail and instead produces signed, offline-reproducible evidence
-            of the consequences.
+            Most defences optimise the first line: stopping the bad input. Simurgh assumes that line
+            will sometimes fail and produces
+            <strong>signed, offline-reproducible evidence of the consequences</strong>. It is a
+            receipt, not a passport.
           </p>
         </section>
 
         <section>
-          <h2>The claim, stated precisely</h2>
+          <h2>What Simurgh proves</h2>
           <p class="claim">
-            After a guardrail misses, did untrusted context gain authority, did an unauthorised tool
-            execute, was unsafe output exported? Simurgh's gateway boundaries contain those
-            consequences, and every run is sealed into an
+            After a guardrail, router, or agent boundary is stressed: did untrusted context gain
+            authority, did an unauthorised tool fire, was unsafe output exported? Each run is sealed
+            into an
             <strong
-              >Ed25519-signed, metadata-only evidence bundle that re-derives byte-for-byte
+              >Ed25519-signed, metadata-only evidence pack that re-derives byte-for-byte
               offline</strong
-            >. The evidence is the deliverable; the model is not.
+            >.
+          </p>
+          <p>
+            The verifier is <strong>producer-independent</strong>. It trusts only the signer's
+            public key and runs with no network, so an outside reviewer can confirm a real
+            containment claim and falsify a dishonest one. The threat model is a
+            <strong>dishonest producer</strong>: an operator who wants to look contained.
           </p>
         </section>
 
         <section>
-          <h2>The concrete result</h2>
+          <h2>Headline result: real, live Llama Guard 4</h2>
           <p>
-            A real, live <strong>Llama Guard 4 12B</strong> was run once as an input-only
-            content-safety classifier over a synthetic 180-case reference set, captured, frozen, and
-            signed (the model is <strong>not</strong> re-executed in CI — 8-bit, greedy decoding,
-            three byte-identical runs).
+            A real <strong>Llama Guard 4 12B</strong>
+            (<code>meta-llama/Llama-Guard-4-12B</code>, input-only, 8-bit, greedy) was captured once
+            on GPU over a 180-case run-set, then frozen, hash-bound, and signed. The model is
+            <strong>never re-executed in CI</strong>; reviewers replay the frozen capture.
           </p>
-          <table class="metrics">
-            <tr>
-              <td class="lbl">Llama Guard 4 allowed / blocked</td>
-              <td class="val">168 / 12</td>
-            </tr>
-            <tr>
-              <td class="lbl">Malicious cases (of 150) Llama Guard 4 missed</td>
-              <td class="val">138</td>
-            </tr>
-            <tr class="sub-row">
-              <td class="lbl">— of those, contained by Simurgh</td>
-              <td class="val hero">138 / 138</td>
-            </tr>
-            <tr>
-              <td class="lbl">External-guardrail-plus-Simurgh targeted attack-success rate</td>
-              <td class="val hero">0 / 150</td>
-            </tr>
-            <tr>
-              <td class="lbl">Unsafe tool execution / output export / context escalation</td>
-              <td class="val">0 / 0 / 0</td>
-            </tr>
-          </table>
+          <div class="metrics-wrap">
+            <table class="metrics">
+              <tr>
+                <td class="lbl">Llama Guard 4 allowed / blocked</td>
+                <td class="val">168 / 12</td>
+              </tr>
+              <tr>
+                <td class="lbl">Malicious cases (of 150) Llama Guard 4 missed</td>
+                <td class="val">138</td>
+              </tr>
+              <tr class="sub-row">
+                <td class="lbl">Missed malicious cases contained by Simurgh</td>
+                <td class="val hero">138 / 138</td>
+              </tr>
+              <tr>
+                <td class="lbl">External-guardrail-plus-Simurgh targeted attack-success rate</td>
+                <td class="val hero">0 / 150</td>
+              </tr>
+              <tr>
+                <td class="lbl">Unsafe tool execution / output export / context escalation</td>
+                <td class="val">0 / 0 / 0</td>
+              </tr>
+              <tr>
+                <td class="lbl">Capture determinism</td>
+                <td class="val">3 greedy runs</td>
+              </tr>
+            </table>
+          </div>
           <p style="margin-top: 12px">
-            The 138 misses split two ways, and Simurgh contained each at a different boundary.
-            <strong>120</strong> were downstream-injection cases, where the attack lives in
-            untrusted context, tool requests, or provider output — which an input-only classifier
-            structurally cannot see; these were contained at Simurgh's context, tool, and output
-            boundaries. The other <strong>18</strong> were direct-input attacks Llama Guard 4 could
-            see and allowed anyway — it caught only 12 of 30 direct inputs — and these were
-            contained at Simurgh's input boundary. Both paths produced zero successful attacks. This
-            is a <strong>boundary claim</strong> about where each defence acts, not a ranking of
-            Llama Guard 4.
+            The 138 misses split cleanly. <strong>120</strong> were downstream-injection cases an
+            input-only classifier structurally cannot see, because the attack lives in untrusted
+            context, tool calls, or provider output. The other <strong>18</strong> were direct-input
+            attacks Llama Guard 4 saw and allowed anyway; it caught 12 of 30 direct inputs. Simurgh
+            contained both paths, producing zero successful attacks. This is a
+            <strong>boundary claim</strong> about where each defence acts, not a ranking of Llama
+            Guard 4.
           </p>
         </section>
 
         <section>
-          <h2>Why it is credible — one-command external reproduction</h2>
+          <h2>Live-agent containment</h2>
           <p>
-            The entire 12-rung release chain is tag-and-commit pinned and replayable by a reviewer
-            with no prior context, fully offline after dependency install:
+            The same evidence spine was driven against a live agent, not just a classifier. A
+            self-hosted <strong>Llama-3.3-70B</strong> model ran the AgentDojo workspace suite: 10
+            user tasks x 14 injection goals = <strong>140 attack cases</strong>, scored against an
+            attack taxonomy pre-registered and frozen before results.
           </p>
-          <pre><span class="c"># clone, install, then verify — offline from here</span>
-git clone https://github.com/Raoof128/Project-Simurgh.git
-cd Project-Simurgh &amp;&amp; npm ci
-scripts/reproduce-vca-chain.sh   <span class="c"># → Stage 3X VCA chain reproduction: PASS (12/12)</span></pre>
-          <p class="hint">
-            The chain is honest about its own unevenness: 12/12 tag-and-commit pinned, 10/12
-            evidence-root chain-checked, 5/12 deep per-file re-walked, 3/12 fully reproduced, 2/12
-            index-only with signed reasons. It does <strong>not</strong> claim uniform 12/12
-            reproduction.
+          <p>
+            Simurgh's authority gate, covering egress and destructive mutation, cut targeted
+            attack-success rate from <strong>9/140 to 0/140</strong>. It contained every baseline
+            success, including the destructive-delete class an egress-only gate leaves open. The
+            claim stays within the declared taxonomy; non-destructive mutation, financial actions,
+            and code actions remain named future work.
           </p>
         </section>
 
         <section>
           <div class="grid2">
             <div class="card">
-              <h3>What it is</h3>
+              <h3>Recomputable evaluation</h3>
               <ul>
-                <li>A research prototype for verifiable containment attestation.</li>
-                <li>Evidence of downstream consequences after a guardrail misses.</li>
-                <li>Offline-reproducible from committed public keys and release tags.</li>
-                <li>Complementary to model-level guardrails — it acts post-filter.</li>
+                <li>
+                  <strong>v2.15.0</strong> publishes a containment-utility Pareto frontier that
+                  re-derives offline from signed packs alone.
+                </li>
+                <li>
+                  Invalid or under-counted evidence is structurally excluded from the frontier,
+                  never silently accepted.
+                </li>
+                <li>
+                  <strong>v2.17.0</strong> adds an adaptive four-class red-team campaign over the
+                  evidence layer.
+                </li>
               </ul>
             </div>
-            <div class="card no">
-              <h3>What it is not</h3>
+            <div class="card warning">
+              <h3>Attacking the proof</h3>
               <ul>
-                <li>Not a jailbreak detector or a claim of jailbreak immunity.</li>
-                <li>Not validated on production traffic — a synthetic 180-case set.</li>
-                <li>Not production-ready; it ranks or labels no vendor as unsafe.</li>
-                <li>Live-capture origin is self-reported; signed ≠ ground truth.</li>
+                <li>
+                  Eight attack classes hit the attestation core: tamper, key-swap, metadata swap,
+                  laundering, collision, replay, self-mutation, and policy drift.
+                </li>
+                <li>
+                  The cryptographic trust root held. Two detector-semantics issues became frozen
+                  detector-v2 fixtures and passed a second red-team round.
+                </li>
               </ul>
             </div>
           </div>
         </section>
+
+        <section>
+          <h2>Independent roots and witness checks</h2>
+          <p>
+            A second provenance root signs the release verdict with
+            <strong>GitHub's OIDC identity</strong>, not the developer's key. The two roots
+            corroborate by digest equality, never nested signatures, and the runner recomputes its
+            verdict from real command exit codes. A one-byte divergence fails closed before signing.
+          </p>
+          <p>
+            Because a valid signature proves only who signed, a producer-independent witness checks
+            each signed receipt against canary sightings at the real export and tool sinks. A
+            gateway that signs a clean receipt for a run that leaked is caught: its Ed25519
+            signature still verifies, but the witness raises a conflict. Across the fixtures, the
+            witness produced <strong>zero false accusations and zero missed lies</strong>.
+          </p>
+        </section>
+
+        <section>
+          <h2>Reproduce it yourself: one offline command</h2>
+          <p>
+            The release ladder is <strong>12 signed rungs</strong>, externally replayable by a
+            reviewer with no prior context, fully offline after dependency install:
+          </p>
+          <pre><code>git clone https://github.com/Raoof128/Project-Simurgh.git
+cd Project-Simurgh &amp;&amp; npm ci
+scripts/reproduce-vca-chain.sh</code></pre>
+          <p class="hint">
+            All 12 rungs are tag-and-commit pinned; 10/12 are evidence-root chain-checked; 5
+            current-format manifests are deep per-file re-walked; 3/12 fully reproduce; and 2/12 are
+            index-only with signed reasons. The receipt records what each rung did and did not
+            prove.
+          </p>
+        </section>
+
+        <section>
+          <h2>What this is not</h2>
+          <ul class="compact-list">
+            <li>
+              Not a jailbreak detector, and not a claim of jailbreak immunity or general jailbreak
+              resistance.
+            </li>
+            <li>
+              Not a model-level guardrail or a replacement for one; it is complementary,
+              post-filter.
+            </li>
+            <li>
+              Not a model-inference-integrity proof; completeness holds only for gateway-mediated
+              actions.
+            </li>
+            <li>
+              Signed evidence is reproducible, not ground truth; a live capture's origin is
+              self-reported and signed as such.
+            </li>
+            <li>
+              Not validated on production traffic, not production-ready, and it ranks no vendor as
+              unsafe.
+            </li>
+            <li>Live Claude Computer Use remains a documented next step, not a completed demo.</li>
+          </ul>
+        </section>
       </main>
 
       <footer class="foot">
-        <span
-          ><span class="pill">Research prototype</span> &nbsp; AGPL-3.0 · LLM-assisted methodology,
-          disclosed</span
-        >
+        <span>
+          <span class="pill">Research prototype</span> &nbsp; AGPL-3.0 · LLM-assisted methodology,
+          disclosed
+        </span>
         <span>
           <a href="https://github.com/Raoof128/Project-Simurgh"
             >github.com/Raoof128/Project-Simurgh</a
