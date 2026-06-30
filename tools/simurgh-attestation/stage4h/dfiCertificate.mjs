@@ -154,11 +154,22 @@ function uniqueRefs(refs) {
   return new Set(refs).size === refs.length;
 }
 
+function derivationScopeIncomplete(section, node) {
+  return tamper("derivation_scope_incomplete", {
+    missing: section,
+    node,
+  });
+}
+
 function theatre(section, node) {
   return tamper("proof_object_carries_no_independently_checkable_derivation", {
     missing: section,
     node,
   });
+}
+
+function missingCoverage(section, node, entries) {
+  return entries.length === 0 ? theatre(section, node) : derivationScopeIncomplete(section, node);
 }
 
 export function validateDerivation({ premises, certificate }) {
@@ -183,7 +194,9 @@ export function validateDerivation({ premises, certificate }) {
     labelByNode.set(label.node, label);
   }
   for (const node of nodeLabel.keys()) {
-    if (!labelByNode.has(node)) return theatre("derived_node_labels", node);
+    if (!labelByNode.has(node)) {
+      return missingCoverage("derived_node_labels", node, derivation.derived_node_labels);
+    }
   }
   for (const node of labelByNode.keys()) {
     if (!nodeLabel.has(node)) return tamper("extra_node_label", { node });
@@ -210,7 +223,9 @@ export function validateDerivation({ premises, certificate }) {
     stepByNode.set(step.node, step);
   }
   for (const node of incomingByNode.keys()) {
-    if (!stepByNode.has(node)) return theatre("lattice_steps", node);
+    if (!stepByNode.has(node)) {
+      return missingCoverage("lattice_steps", node, derivation.lattice_steps);
+    }
   }
   for (const [node, step] of stepByNode) {
     if (!incomingByNode.has(node)) return tamper("extra_lattice_step", { node });
@@ -228,7 +243,9 @@ export function validateDerivation({ premises, certificate }) {
     claimByNode.set(claim.node, claim);
   }
   for (const node of authoritySinkNodes) {
-    if (!claimByNode.has(node)) return theatre("sink_safety_claims", node);
+    if (!claimByNode.has(node)) {
+      return missingCoverage("sink_safety_claims", node, derivation.sink_safety_claims);
+    }
   }
   for (const [node, claim] of claimByNode) {
     if (!authoritySinkNodes.has(node)) return tamper("extra_sink_safety_claim", { node });

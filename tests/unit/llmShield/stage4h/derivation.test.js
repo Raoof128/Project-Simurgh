@@ -279,3 +279,43 @@ test("Stage 4H.1 premise_refs are exact and load-bearing", () => {
     "proof_object_carries_no_independently_checkable_derivation"
   );
 });
+
+test("Stage 4H.2 rejects true partial lattice coverage with derivation_scope_incomplete", () => {
+  const pack = inlinePack("trusted");
+  pack.action_observation_log.push({ action_id: "a0", step_index: 1 });
+  pack.replay_material.a0 = {
+    taint_derivation_inputs: {
+      authority_sink: false,
+      sources: [{ source_id: "doc1", label: "trusted" }],
+    },
+  };
+  pack.receipts.push({
+    receipt_payload: {
+      action_id: "a0",
+      step_index: 1,
+      decision: "allow",
+      decision_reason_code: "POLICY_ALLOWED",
+    },
+  });
+
+  const premises = buildPremiseSet(pack);
+  const certificate = certFor(premises, buildDerivation(premises));
+  assert.equal(
+    certificate.derivation.lattice_steps.some((step) => step.node === "action:a0"),
+    true
+  );
+  assert.equal(
+    certificate.derivation.lattice_steps.some((step) => step.node === "action:a1"),
+    true
+  );
+
+  certificate.derivation.lattice_steps = certificate.derivation.lattice_steps.filter(
+    (step) => step.node !== "action:a1"
+  );
+
+  const result = validateDerivation({ premises, certificate });
+  assert.equal(result.code, 26);
+  assert.equal(result.reason, "derivation_scope_incomplete");
+  assert.equal(result.missing, "lattice_steps");
+  assert.equal(result.node, "action:a1");
+});
