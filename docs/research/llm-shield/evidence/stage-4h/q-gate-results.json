@@ -1,12 +1,21 @@
 {
-  "stage": "4H.0",
-  "status": "digest_binding_foundation_only",
+  "stage": "4H.1",
+  "status": "lattice_derivation_validator",
   "gates": {
     "Q0": {
       "status": "not_in_scope"
     },
     "Q1": {
-      "status": "not_in_scope"
+      "status": "pass",
+      "expected_results": {
+        "q1-clean": 0,
+        "q1-real-dirty": 24,
+        "q1-forged-safe-dirty": 24,
+        "q1-theatre-stripped-derived-labels": 26,
+        "q1-theatre-stripped-lattice-steps": 26,
+        "q1-theatre-stripped-sink-claims": 26,
+        "q1-unbound-certificate-mutation": 25
+      }
     },
     "Q2": {
       "status": "pass",
@@ -29,5 +38,16 @@
       "status": "not_in_scope"
     }
   },
-  "non_claims": ["dfi_soundness", "derivation_validity", "implicit_flow_security"]
+  "q1_positive_base_pack": "q1-clean-base-pack.json",
+  "q1_dirty_base_pack": "q1-real-dirty-base-pack.json",
+  "q1_dirty_source": "real_stage4d_pack",
+  "non_claims": [
+    "implicit_flow_security",
+    "control_dependence_security",
+    "model_safety",
+    "execution_truth",
+    "provider_behaviour_correctness",
+    "future_run_guarantees",
+    "public_priority"
+  ]
 }

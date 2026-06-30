@@ -15,23 +15,7 @@
   "lattice_digest": "sha256:21ca828d9d8b3be4f009a6ebb2e0413c7de24d580248a25fd784a1ea2795b84b",
   "checker_version": "4h-v0",
   "derivation": {
-    "derived_node_labels": [
-      {
-        "node": "action:act_000",
-        "label": "trusted",
-        "premise_refs": [
-          "premise:sha256:1a2ba79494f06bd6801739a0bad06f8d0a1019ba823b8182ae1f8cd189b6f00a",
-          "premise:sha256:ef23bcdf90fb22ee88a9333d1ee33429f6d7705d7b7dc2d44cb75de3d23aad18"
-        ]
-      },
-      {
-        "node": "source:doc1",
-        "label": "trusted",
-        "premise_refs": [
-          "premise:sha256:8c4b59cde6add3596fb7b7f4f54e3c29bbec5e55dbc991bd61d051ae554ce2d7"
-        ]
-      }
-    ],
+    "derived_node_labels": [],
     "lattice_steps": [
       {
         "op": "combine",

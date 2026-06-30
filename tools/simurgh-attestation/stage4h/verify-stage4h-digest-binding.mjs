@@ -6,7 +6,7 @@ import { dirname } from "node:path";
 import { pathToFileURL } from "node:url";
 import { verifyEvidencePack } from "../stage4d/verifyPack.mjs";
 import { buildPremiseSet, premiseDigest } from "./canonicalPremises.mjs";
-import { certificateDigest } from "./dfiCertificate.mjs";
+import { certificateDigest, validateDerivation } from "./dfiCertificate.mjs";
 import { RAW_VERIFIER_CODES, stage4CodeForRawCode } from "./exitCodes.mjs";
 import { verifyPackBinding } from "./packBinding.mjs";
 import { validateDfiCertificate, validateSignedPackManifest } from "./schema.mjs";
@@ -52,14 +52,15 @@ function baseResult({ code, reason, certificate, premises = null }) {
     ok: code === RAW_VERIFIER_CODES.OK,
     code,
     stage4_code: stage4CodeForRawCode(code),
-    gate: "Q2/Q5",
+    gate: "Q1/Q2/Q5",
     certificate_digest: certificate ? certificateDigest(certificate) : null,
     premise_digest: certificate?.premise_digest ?? null,
     base_pack_digest: certificate?.base_pack_digest ?? null,
     recomputed_premise_digest: premises ? premiseDigest(premises) : null,
+    falsifier: code === RAW_VERIFIER_CODES.OK ? null : reason,
     note:
       code === RAW_VERIFIER_CODES.OK
-        ? "premise digest, manifest digest binding, and Ed25519 signature accepted"
+        ? "explicit-flow derivation, premise digest, manifest digest binding, and Ed25519 signature accepted"
         : reason,
   };
 }
@@ -68,8 +69,8 @@ async function finish({ outPath, code, reason, certificate, premises = null }) {
   await writeResult(outPath, baseResult({ code, reason, certificate, premises }));
   console.log(
     code === RAW_VERIFIER_CODES.OK
-      ? "Stage 4H.0 digest binding: PASS"
-      : `Stage 4H.0 digest binding: FAIL ${reason}`
+      ? "Stage 4H.1 Q1/Q2/Q5 explicit-flow integrity: PASS"
+      : `Stage 4H.1 Q1/Q2/Q5 explicit-flow integrity: FAIL ${reason}`
   );
   if (code !== RAW_VERIFIER_CODES.OK) process.exitCode = code;
   return code;
@@ -172,6 +173,17 @@ export async function main({ argv = process.argv.slice(2) } = {}) {
       outPath,
       code: codeForBindingReason(reason),
       reason,
+      certificate,
+      premises,
+    });
+  }
+
+  const derivation = validateDerivation({ premises, certificate });
+  if (!derivation.ok) {
+    return finish({
+      outPath,
+      code: derivation.code,
+      reason: derivation.reason,
       certificate,
       premises,
     });

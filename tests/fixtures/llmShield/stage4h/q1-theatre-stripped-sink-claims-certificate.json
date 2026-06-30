@@ -40,13 +40,7 @@
         "result": "trusted"
       }
     ],
-    "sink_safety_claims": [
-      {
-        "node": "action:act_000",
-        "node_label": "trusted",
-        "safe": true
-      }
-    ],
+    "sink_safety_claims": [],
     "premise_refs": [
       "premise:sha256:1a2ba79494f06bd6801739a0bad06f8d0a1019ba823b8182ae1f8cd189b6f00a",
       "premise:sha256:8c4b59cde6add3596fb7b7f4f54e3c29bbec5e55dbc991bd61d051ae554ce2d7",

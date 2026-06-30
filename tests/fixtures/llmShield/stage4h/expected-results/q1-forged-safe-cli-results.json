@@ -1,0 +1,12 @@
+{
+  "ok": false,
+  "code": 24,
+  "stage4_code": 1,
+  "gate": "Q1/Q2/Q5",
+  "certificate_digest": "sha256:1769da66eb94e1bd572f24fde8bfb5b8590cb69a6b9a0644665a5941b30aa7d0",
+  "premise_digest": "sha256:506a28f6b699ed648bb47398f5b869f8d0af0b9ffdfc37a642cd0713a2ed6993",
+  "base_pack_digest": "sha256:09b0c8b1d396580a989ce3a4a34edd1c0640fc340dc15494af4cf9a28d64ff3a",
+  "recomputed_premise_digest": "sha256:506a28f6b699ed648bb47398f5b869f8d0af0b9ffdfc37a642cd0713a2ed6993",
+  "falsifier": "proof_accepts_bad_flow",
+  "note": "proof_accepts_bad_flow"
+}

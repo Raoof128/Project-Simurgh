@@ -1,0 +1,8 @@
+{
+  "manifest_version": "simurgh.vca.signed_pack_manifest.v1",
+  "base_pack_digest": "sha256:7214c1f156402f463a372fa5151b5f39d60732f59819852755d0f0a3963312d5",
+  "certificate_digest": "sha256:3ecfe7cebabfe8f7859ef28d68637d2d913f4623b51313cda977e6af55bc6dd6",
+  "merkle_root": "sha256:2e832837f5b7a6228b20e10effc5caf5a074d51dfc01795e196accbf25644b1e",
+  "signed_pack_manifest_digest": "sha256:aff54a0dbbd5f385456d86a77849e4eb4f16d2881a319e4cd1295b82f63c332d",
+  "signature": "base64:KjzgZSy/oMWwSzm2LLiKXaRyTbaR1vJqfw+evP8y1YbZMSAte+mbUlwrm97iaSP3Q5Gb+SGxN0RMaGr6gLvgAw=="
+}

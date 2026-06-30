@@ -10,7 +10,7 @@
   "run_id_hash": "sha256:d86ec33527aeb41686dd8cf40e3066e02d70529cb1f4719055a9aa6a07ddbfda",
   "base_pack_digest": "sha256:09b0c8b1d396580a989ce3a4a34edd1c0640fc340dc15494af4cf9a28d64ff3a",
   "replay_root": "sha256:82bdb2615941e8edb952e880559e9d16b5a0f18ef118061afcd31dba633c1f50",
-  "premise_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "premise_digest": "sha256:506a28f6b699ed648bb47398f5b869f8d0af0b9ffdfc37a642cd0713a2ed6993",
   "policy_digest": "sha256:fb6677836ec7a02f1ddb268e4d937708975be2c6bfa571fea071182bc1c898b4",
   "lattice_digest": "sha256:1eab7a35623b111e57fcd1d15fc6e82e5d7be4a43a39fabb0b5dcd91bc73a145",
   "checker_version": "4h-v0",
@@ -104,12 +104,12 @@
       {
         "node": "action:act_001",
         "node_label": "untrusted",
-        "safe": false
+        "safe": true
       },
       {
         "node": "action:act_002",
         "node_label": "untrusted",
-        "safe": false
+        "safe": true
       },
       {
         "node": "action:act_003",
@@ -140,6 +140,6 @@
     "sources_checked": 6,
     "edges_checked": 6,
     "authority_sinks_checked": 4,
-    "violations": 2
+    "violations": 0
   }
 }
