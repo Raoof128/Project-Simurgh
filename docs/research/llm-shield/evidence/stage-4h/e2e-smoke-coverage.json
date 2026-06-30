@@ -1,0 +1,43 @@
+{
+  "stage": "4H.1",
+  "scope": "Q1/Q2/Q5 full E2E smoke",
+  "modules_exercised": [
+    "constants.mjs",
+    "schema.mjs",
+    "canonicalPremises.mjs",
+    "packBinding.mjs",
+    "dfiCertificate.mjs",
+    "verify-stage4h-digest-binding.mjs",
+    "build-stage4h-digest-fixtures.mjs",
+    "exitCodes.mjs"
+  ],
+  "functions_exercised": [
+    "validateDfiCertificate",
+    "buildPremiseSet",
+    "premiseDigest",
+    "verifyPackBinding",
+    "buildDfiCertificate",
+    "certificateDigest",
+    "normalizeIntegrityLabel",
+    "combineIntegrity",
+    "integrityLte",
+    "recomputeGraph",
+    "buildDerivation",
+    "validateDerivation",
+    "stage4CodeForRawCode",
+    "verify-stage4h-digest-binding CLI",
+    "build-stage4h-digest-fixtures builder"
+  ],
+  "fixture_matrix": {
+    "4h0-clean": 0,
+    "q1-clean": 0,
+    "q1-real-dirty": 24,
+    "q1-forged-safe-dirty": 24,
+    "q1-theatre-stripped-derived-labels": 26,
+    "q1-theatre-stripped-lattice-steps": 26,
+    "q1-theatre-stripped-sink-claims": 26,
+    "q1-unbound-certificate-mutation": 25
+  },
+  "non_scope_gates": ["Q0", "Q3", "Q4", "Q6", "Q7"],
+  "metadata_only": true
+}

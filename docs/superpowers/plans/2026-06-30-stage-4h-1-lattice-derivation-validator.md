@@ -1702,7 +1702,143 @@ git add tests/unit/llmShield/stage4h/premiseBinding.test.js \
 git commit -m "test(llm-shield): guard stage 4h.1 scope and digests"
 ```
 
-## Task 6: Final Verification And Closeout
+## Task 6: Add Full Reviewer E2E Smoke For 4H.0 And 4H.1
+
+**Purpose:** Add one reviewer-facing E2E smoke suite that exercises the real fixture builder, committed files, CLI process boundary, signed manifests, output JSON, raw verifier codes, q-gate evidence, metadata-only evidence scan, and 4H.0 compatibility path.
+
+This test is not a replacement for unit tests. It is the integration smoke that proves the Stage 4H.0 and 4H.1 public verifier paths work together.
+
+**Files:**
+
+- Create: `tests/e2e/llmShield/stage4hFullSmoke.test.js`
+- Modify: `tools/simurgh-attestation/stage4h/build-stage4h-digest-fixtures.mjs`
+- Modify: `scripts/reproduce-llm-shield-stage4h.sh`
+- Modify: `tests/unit/llmShield/stage4h/reproduce.test.js`
+- Modify: `docs/research/llm-shield/evidence/stage-4h/e2e-smoke-coverage.json`
+
+- [ ] **Step 1: Add generated E2E coverage manifest**
+
+Extend `build-stage4h-digest-fixtures.mjs` to write:
+
+```text
+docs/research/llm-shield/evidence/stage-4h/e2e-smoke-coverage.json
+```
+
+The manifest must include:
+
+```json
+{
+  "stage": "4H.1",
+  "scope": "Q1/Q2/Q5 full E2E smoke",
+  "fixture_matrix": {
+    "4h0-clean": 0,
+    "q1-clean": 0,
+    "q1-real-dirty": 24,
+    "q1-forged-safe-dirty": 24,
+    "q1-theatre-stripped-derived-labels": 26,
+    "q1-theatre-stripped-lattice-steps": 26,
+    "q1-theatre-stripped-sink-claims": 26,
+    "q1-unbound-certificate-mutation": 25
+  },
+  "non_scope_gates": ["Q0", "Q3", "Q4", "Q6", "Q7"],
+  "metadata_only": true
+}
+```
+
+Also list the Stage 4H modules/functions exercised by the smoke suite, including schema validation, premise construction, pack binding, certificate digesting, label normalization, lattice operations, graph recomputation, derivation building/validation, exit-code mapping, the verifier CLI, and the fixture builder.
+
+- [ ] **Step 2: Add real CLI E2E smoke**
+
+Create `tests/e2e/llmShield/stage4hFullSmoke.test.js` using `spawnSync(process.execPath, ...)`, not imported verifier functions.
+
+The full 4H.1 matrix must assert process exit code and output JSON `code` for:
+
+```text
+q1-clean -> 0
+q1-real-dirty -> 24
+q1-forged-safe-dirty -> 24
+q1-theatre-stripped-derived-labels -> 26
+q1-theatre-stripped-lattice-steps -> 26
+q1-theatre-stripped-sink-claims -> 26
+q1-unbound-certificate-mutation -> 25
+```
+
+The same test must assert:
+
+```text
+Q1/Q2/Q5 pass
+Q0/Q3/Q4/Q6/Q7 remain not_in_scope
+e2e-smoke-coverage.json exists
+all evidence JSON is metadata-only
+the coverage manifest names the expected Stage 4H functions
+```
+
+- [ ] **Step 3: Add 4H.0 compatibility E2E smoke**
+
+In the same E2E file, add a test that runs the verifier CLI against:
+
+```text
+clean-base-pack.json
+clean-base-pack.sig
+clean-signer.pub
+clean-dfi-certificate.json
+clean-signed-pack-manifest.json
+```
+
+Expected:
+
+```text
+raw 0
+base_pack_digest present
+premise_digest present
+certificate_digest present in verifier output only
+certificate_digest absent from certificate
+```
+
+- [ ] **Step 4: Wire E2E into reproduce**
+
+Modify `scripts/reproduce-llm-shield-stage4h.sh` to run:
+
+```bash
+node --test tests/e2e/llmShield/stage4hFullSmoke.test.js
+```
+
+Run it after the Stage 4H unit suite.
+
+- [ ] **Step 5: Extend committed evidence checks**
+
+Update `tests/unit/llmShield/stage4h/reproduce.test.js` so the committed-evidence existence and metadata-only scans include:
+
+```text
+docs/research/llm-shield/evidence/stage-4h/e2e-smoke-coverage.json
+```
+
+- [ ] **Step 6: Run E2E and reproduce**
+
+Run:
+
+```bash
+node tools/simurgh-attestation/stage4h/build-stage4h-digest-fixtures.mjs
+node --test tests/e2e/llmShield/stage4hFullSmoke.test.js
+scripts/reproduce-llm-shield-stage4h.sh
+```
+
+Expected: all pass, with expected nonzero dirty fixture codes recorded as successful raw-code assertions.
+
+- [ ] **Step 7: Commit Task 6**
+
+Run:
+
+```bash
+git add tests/e2e/llmShield/stage4hFullSmoke.test.js \
+  tools/simurgh-attestation/stage4h/build-stage4h-digest-fixtures.mjs \
+  scripts/reproduce-llm-shield-stage4h.sh \
+  tests/unit/llmShield/stage4h/reproduce.test.js \
+  docs/research/llm-shield/evidence/stage-4h
+git commit -m "test(llm-shield): add full stage 4h reviewer e2e smoke"
+```
+
+## Task 7: Final Verification And Closeout
 
 **Files:**
 
@@ -1794,5 +1930,6 @@ Before opening a PR, confirm:
 - [ ] Every `derived_node_label.premise_refs` exactly equals `refsByNode[node]`, and top-level `derivation.premise_refs` exactly equals the union of all derived-node refs.
 - [ ] Every Q1-mutated certificate that must reach Q1 has a matching signed manifest.
 - [ ] The unbound certificate mutation fixture records raw `25`.
+- [ ] Full reviewer E2E smoke passes for both 4H.0 compatibility and 4H.1 Q1/Q2/Q5 matrix, using real CLI child processes, committed fixtures, signed manifests, output JSON assertions, metadata-only scans, and deterministic rerun checks.
 - [ ] Fixtures and evidence contain no raw prompts, raw outputs, tool args, provider transcripts, secrets, absolute paths, stack traces, or host identifiers.
 - [ ] No release tag is created from the feature branch.

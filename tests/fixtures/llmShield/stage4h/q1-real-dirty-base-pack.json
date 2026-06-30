@@ -55,7 +55,12 @@
   },
   "consequence_lattice": {
     "lattice_version": "consequence_lattice.v1",
-    "order": ["read_only", "internal_mutation", "external_egress", "irreversible_external_effect"]
+    "order": [
+      "read_only",
+      "internal_mutation",
+      "external_egress",
+      "irreversible_external_effect"
+    ]
   },
   "action_observation_log": [
     {
