@@ -2,7 +2,7 @@
   "ok": false,
   "code": 22,
   "stage4_code": 1,
-  "gate": "Q1/Q2/Q5",
+  "gate": "Q0/Q1/Q2/Q4/Q5",
   "certificate_digest": "sha256:fbf97bbe1a23912dbaeb6528456710e8f452a28d5dadf133c463ddf1484ad87f",
   "premise_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
   "base_pack_digest": "sha256:7214c1f156402f463a372fa5151b5f39d60732f59819852755d0f0a3963312d5",

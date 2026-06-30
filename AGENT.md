@@ -2,6 +2,16 @@
 
 ## Agent Change Log
 
+### 2026-06-30 (Australia/Sydney) — Stage 4H.2 Q0/Q4 verifier discrimination
+
+**Raouf:**
+
+- **Scope:** Stage 4H.2 implementation only: Q0 clean positive fixture and Q4 dishonest-producer laundering matrix. Q3/Q6/Q7 remain out of scope; no release tag.
+- **Summary:** Added deterministic signed Q0/Q4 fixtures and expected CLI results proving the verifier is neither reject-all nor accept-all: Q0 clean acceptance raw `0`, Q4a forged premise digest raw `22`, Q4b structurally complete forged-safe derivation over honest dirty premises raw `24`, and Q4c true partial derivation omission raw `26` with `derivation_scope_incomplete`. Extended the reviewer-grade Stage 4H E2E smoke and evidence to Q0/Q1/Q2/Q4/Q5 while preserving metadata-only non-claims.
+- **Files changed:** `tools/simurgh-attestation/stage4h/*`, `tests/unit/llmShield/stage4h/*`, `tests/e2e/llmShield/stage4hFullSmoke.test.js`, `tests/fixtures/llmShield/stage4h/*`, `scripts/reproduce-llm-shield-stage4h.sh`, `docs/research/llm-shield/evidence/stage-4h/*`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** `scripts/reproduce-llm-shield-stage4h.sh`, targeted Stage 4H unit/e2e tests, `npm run format:check`, `npm test` (`1143/1143`), `./scripts/check.sh` (`155/0`, local .NET 8 Windows daemon tests skipped because SDK unavailable), metadata/privacy scan, claim-boundary scan, and `git diff --check` pass.
+- **Follow-ups:** Review Stage 4H.2 evidence; write the next design spec before implementing Q3, Q6, Q7, release tagging, or full Stage 4H closeout.
+
 ### 2026-06-30 (Australia/Sydney) — Stage 4H.2 boolean summary plan patch
 
 **Raouf:**
