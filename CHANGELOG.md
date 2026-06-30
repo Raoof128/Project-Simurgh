@@ -1,5 +1,17 @@
 ## Change Log
 
+## [stage-4h-2-discrimination-plan] — 2026-06-30 — Q0/Q4 implementation plan
+
+**Raouf:** Added the Stage 4H.2 implementation plan for Q0 clean positive acceptance and Q4 dishonest-producer laundering discrimination. This is planning-only: no verifier code, fixture builder, tests, or evidence regeneration in this commit. The plan keeps the approved Rev 3 scope and raw-code ledger (`0`, `22`, `24`, `26`), pins the check order, names the fixture matrix, requires Q4c true partial coverage with `derivation_scope_incomplete`, keeps Q3/Q6/Q7 out of scope, and requires reviewer-grade E2E smoke coverage through the real fixture builder and real verifier CLI.
+
+### Added
+
+- `docs/superpowers/plans/2026-06-30-stage-4h-2-discrimination-q0-q4.md` — task-by-task implementation plan for 4H.2 Q0/Q4 verifier discrimination.
+
+### Verified
+
+- Prettier check and `git diff --check` pass on the plan/log files; self-review confirms the plan maps every 4H.2 acceptance criterion to implementation tasks and preserves the Q0/Q4 scope boundary.
+
 ## [stage-4h-2-discrimination-design] — 2026-06-30 — Q0/Q4 verifier-discrimination design
 
 **Raouf:** Added the repo-native Stage 4H.2 design spec for the Q0 clean positive fixture and Q4 dishonest-producer laundering matrix. This is design-only: no implementation plan, verifier code, fixture builder, or evidence regeneration in this commit. The spec preserves the approved Rev 3 scope, locks the Q2-vs-Q4 raw-code ledger (`0`, `22`, `24`, `26`), pins the verifier check order, names the Q0/Q4 fixtures, requires true Q4c partial coverage with `derivation_scope_incomplete`, keeps Q3/Q6/Q7 out of scope, and requires the reviewer-grade Stage 4H E2E smoke to cover the Q0/Q4 real CLI matrix before 4H.2 can be accepted.
