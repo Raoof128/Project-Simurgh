@@ -1,0 +1,168 @@
+{
+  "pack_version": "simurgh.evidence_pack.v1",
+  "run_manifest": {
+    "fixture_id": "stage4h1-q1-clean",
+    "mode": "stage4h1_synthetic_fixture",
+    "model_identity_committed": "self-reported-fixture-model",
+    "model_identity_origin": "self_reported",
+    "parent_session": "session_stage4h1-q1-clean",
+    "run_id": "stage4h1-q1-clean"
+  },
+  "policy_bundle": {
+    "policy_version": "policy.v1",
+    "modes": {
+      "balanced": {
+        "block_authority_escalation": true,
+        "block_untrusted_to_destructive_mutation": true,
+        "block_untrusted_to_external_egress": true,
+        "block_untrusted_to_secret_export": true
+      },
+      "permissive": {
+        "block_authority_escalation": true,
+        "block_untrusted_to_destructive_mutation": true,
+        "block_untrusted_to_external_egress": false,
+        "block_untrusted_to_secret_export": true
+      },
+      "strict": {
+        "block_any_untrusted_to_authority_sink": true
+      }
+    }
+  },
+  "sink_registry": {
+    "registry_version": "sinks.v1",
+    "sinks": [
+      {
+        "default_consequence_class": "external_egress",
+        "description": "Synthetic Stage 4H.1 authority sink fixture",
+        "sink_id": "egress"
+      }
+    ]
+  },
+  "consequence_lattice": {
+    "lattice_version": "consequence_lattice.v1",
+    "order": ["read_only", "external_egress"]
+  },
+  "action_observation_log": [
+    {
+      "action_id": "act_000",
+      "action_type": "tool_call",
+      "boundary_id": "gateway_mediator_v1",
+      "consequence_class": "external_egress",
+      "event_version": "simurgh.stage4d.observation.v1",
+      "parent_session": "session_stage4h1-q1-clean",
+      "run_id": "stage4h1-q1-clean",
+      "sink_id": "egress",
+      "step_index": 0
+    }
+  ],
+  "observation_log_root": "42898b73f9cfe3d0c708cf274ba08b261969a9a04b226f69b63134b2dff35664",
+  "replay_material": {
+    "act_000": {
+      "decision_context": {
+        "policy_mode": "permissive",
+        "prior_decision_count": 0,
+        "rate_limit_bucket": "stage4h1_fixture_bucket"
+      },
+      "policy_features_source": {
+        "external_effect": true,
+        "input_sources": ["doc1"],
+        "requires_authority": true,
+        "sink_id": "egress",
+        "user_explicitly_authorised": true
+      },
+      "resolved_args_redacted": {
+        "body_digest": "1111111111111111111111111111111111111111111111111111111111111111",
+        "contains_secret_marker": false,
+        "recipient_scope": "fixture_contact",
+        "tool_name": "send_email"
+      },
+      "taint_derivation_inputs": {
+        "authority_sink": true,
+        "sources": [
+          {
+            "source_id": "doc1",
+            "label": "trusted"
+          }
+        ]
+      }
+    }
+  },
+  "receipts": [
+    {
+      "receipt_payload": {
+        "receipt_version": "simurgh.receipt.v1",
+        "run_id": "stage4h1-q1-clean",
+        "parent_session": "session_stage4h1-q1-clean",
+        "action_id": "act_000",
+        "step_index": 0,
+        "observation_event_hash": "7e38368217b313a195e6d7366c0967853c541a9395b8bc5043f5f6e128db5583",
+        "action_type": "tool_call",
+        "sink_id": "egress",
+        "consequence_class": "external_egress",
+        "boundary_id": "gateway_mediator_v1",
+        "input_integrity_summary": "trusted_only",
+        "decision": "allow",
+        "decision_reason_code": "POLICY_ALLOWED",
+        "decision_input": {
+          "policy_version": "policy.v1",
+          "policy_hash": "fb6677836ec7a02f1ddb268e4d937708975be2c6bfa571fea071182bc1c898b4",
+          "sink_registry_version": "sinks.v1",
+          "sink_registry_hash": "87586c06793022feeb0fb37ca0f2642b6f5695348f3f697598e904a9ef0be069",
+          "consequence_lattice_hash": "21ca828d9d8b3be4f009a6ebb2e0413c7de24d580248a25fd784a1ea2795b84b",
+          "resolved_args_digest": "1329d862edc67cb46c5c9db728edd1a31bda4c4434ad0c5cd737c51b86a8a187",
+          "policy_features_digest": "1e31491ceee6b541dc0c8af8fba0470ff835f8638b6c8f97edc7742cd5a3250a",
+          "taint_labels_digest": "80dd220f27c88719e4e35100742ea6c3e91ca15c24058ee6e416a3f19999bf0c",
+          "context_digest": "66241cc47da00956f33c01fe42c56b953ecb9966ee04ce0312f0b3ece70cc2e4",
+          "untrusted_reached_authority": false,
+          "policy_mode": "permissive"
+        },
+        "model_identity_committed": "self-reported-fixture-model",
+        "model_identity_origin": "self_reported",
+        "prev_receipt_hash": "0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "receipt_hash": "80a759d43e96fc4ae8e99c17ba54dcfad4b00ba14e0c2ed3a3091f77f3ea0573",
+      "signature": "7cDj42skLBYZtJilVAiAX3x/QH2dtbyoDpDNEDK24WSrvzGzo/8pg6CCGzOeIHvYYD2om7ebiAIzC77XkNgUCA=="
+    }
+  ],
+  "completeness_manifest": {
+    "manifest_version": "simurgh.completeness.v1",
+    "run_id": "stage4h1-q1-clean",
+    "observation_source": "gateway_mediator_v1",
+    "observed_action_log_hash": "819bd2665ab58e71d4b572fbb093534f37833dffac83c0bab0dd0fcf820a0b51",
+    "observation_log_root": "42898b73f9cfe3d0c708cf274ba08b261969a9a04b226f69b63134b2dff35664",
+    "observed_action_count": 1,
+    "receipt_count": 1,
+    "ordered_action_ids": ["act_000"],
+    "ordered_observation_event_hashes": [
+      "7e38368217b313a195e6d7366c0967853c541a9395b8bc5043f5f6e128db5583"
+    ],
+    "ordered_receipt_hashes": ["80a759d43e96fc4ae8e99c17ba54dcfad4b00ba14e0c2ed3a3091f77f3ea0573"],
+    "per_sink_tally": {
+      "egress": {
+        "observed": 1,
+        "allow": 1,
+        "block": 0
+      }
+    },
+    "session_merkle_root": "4cb0fa82397575bc2e1d58bcd10585f4b7a263db54085ed0d95ccfad506e51d6"
+  },
+  "non_claims": {
+    "not_model_safety": true,
+    "not_jailbreak_immunity": true,
+    "not_policy_correctness": true,
+    "not_complete_for_unmediated_actions": true,
+    "not_kernel_enforced": true,
+    "not_live_model_identity_proof": true,
+    "not_production_certification": true,
+    "not_ground_truth_outside_mediated_surface": true
+  },
+  "signer_public_key": {
+    "key_type": "Ed25519",
+    "format": "spki-pem",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAL/YWlzbBaFdJonQG0JfUHvME3CyHMwBvtV6d/0o+E0w=\n-----END PUBLIC KEY-----\n",
+    "fingerprint": "19fecfefe8b7a7f4c289c9845c2eca54384dbc550dd351cb463861d714a97bb9"
+  },
+  "signer_key_id": "simurgh-stage4d-test-key-v1",
+  "signer_public_key_fingerprint": "19fecfefe8b7a7f4c289c9845c2eca54384dbc550dd351cb463861d714a97bb9",
+  "pack_hash": "31382a37b879f727321077df187eea06205a7de713b32cd5202189d67ed3992d"
+}

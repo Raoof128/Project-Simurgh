@@ -32,14 +32,7 @@
         ]
       }
     ],
-    "lattice_steps": [
-      {
-        "op": "combine",
-        "node": "action:act_000",
-        "inputs": ["trusted"],
-        "result": "trusted"
-      }
-    ],
+    "lattice_steps": [],
     "sink_safety_claims": [
       {
         "node": "action:act_000",

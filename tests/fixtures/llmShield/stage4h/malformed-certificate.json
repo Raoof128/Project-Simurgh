@@ -15,16 +15,132 @@
   "lattice_digest": "sha256:1eab7a35623b111e57fcd1d15fc6e82e5d7be4a43a39fabb0b5dcd91bc73a145",
   "checker_version": "4h-v0",
   "derivation": {
-    "derived_node_labels": [],
-    "lattice_steps": [],
-    "sink_safety_claims": [],
-    "premise_refs": []
+    "derived_node_labels": [
+      {
+        "node": "action:act_000",
+        "label": "trusted",
+        "premise_refs": [
+          "premise:sha256:1a2ba79494f06bd6801739a0bad06f8d0a1019ba823b8182ae1f8cd189b6f00a",
+          "premise:sha256:8f21a45c8c87fcbdda8706603b01f8a4b06c8a5035d9c3aef528d4b45f556588"
+        ]
+      },
+      {
+        "node": "action:act_001",
+        "label": "untrusted",
+        "premise_refs": [
+          "premise:sha256:6c978dd15709dc4be8c8a08781f1ac5e1584c01c16512d213e79d21948922845",
+          "premise:sha256:7791722bc803311ee094b528018d02e97e7e85e84b0b1ed00ba467ec949fe6f6",
+          "premise:sha256:c52e68c0e0b6944c44d51664714db861ee96579d859aba4d2e17a5d74e484357"
+        ]
+      },
+      {
+        "node": "action:act_002",
+        "label": "untrusted",
+        "premise_refs": [
+          "premise:sha256:7f19faf6868fb552e095a7a5f4f28ae2892766074c40879467de6b187d50ca22",
+          "premise:sha256:cb62c483ed35060dbbe8383e845845fbe431391d0ca340b5c5301fe30de1d519",
+          "premise:sha256:e65f3575d79d0025e892dce09080ec600a9a63b471f50073a14509fddcca8d3c"
+        ]
+      },
+      {
+        "node": "action:act_003",
+        "label": "trusted",
+        "premise_refs": [
+          "premise:sha256:b660188254218682c5222050b9cf6cf1df4aa9fddd66ce636e4abd8d582c941e",
+          "premise:sha256:d4aacbbc419037608c311c73608d7528623e390be03225c2b147b2697d25d1ce"
+        ]
+      },
+      {
+        "node": "source:user_task",
+        "label": "trusted",
+        "premise_refs": [
+          "premise:sha256:267f37ad8cdac25a2594863d7039ab3352bc0c85e8c9110fbee66aa75c1d5c02",
+          "premise:sha256:363cbfe538b00dba1b951000434fbd915958801a28020c73227d69238b33a9d1",
+          "premise:sha256:4c9f71113e4ed18b02cfadd4f4ce8d9695884f798aafb7e63e465f41e36f29bf",
+          "premise:sha256:fcee496706b614afe232aeb54c745539ca1ade0f3df97141bfaab0b880a9dcec"
+        ]
+      },
+      {
+        "node": "source:web_context_01",
+        "label": "untrusted",
+        "premise_refs": [
+          "premise:sha256:3bba977909193ba8a61889b1c196d4b8e3a4230d1d0081202d03f29e6629edef",
+          "premise:sha256:c98677d1947a64e361c1855387d6f57fc396aa358b25a584c7f8452fa5b01063"
+        ]
+      }
+    ],
+    "lattice_steps": [
+      {
+        "op": "combine",
+        "node": "action:act_000",
+        "inputs": ["trusted"],
+        "result": "trusted"
+      },
+      {
+        "op": "combine",
+        "node": "action:act_001",
+        "inputs": ["trusted", "untrusted"],
+        "result": "untrusted"
+      },
+      {
+        "op": "combine",
+        "node": "action:act_002",
+        "inputs": ["trusted", "untrusted"],
+        "result": "untrusted"
+      },
+      {
+        "op": "combine",
+        "node": "action:act_003",
+        "inputs": ["trusted"],
+        "result": "trusted"
+      }
+    ],
+    "sink_safety_claims": [
+      {
+        "node": "action:act_000",
+        "node_label": "trusted",
+        "safe": true
+      },
+      {
+        "node": "action:act_001",
+        "node_label": "untrusted",
+        "safe": false
+      },
+      {
+        "node": "action:act_002",
+        "node_label": "untrusted",
+        "safe": false
+      },
+      {
+        "node": "action:act_003",
+        "node_label": "trusted",
+        "safe": true
+      }
+    ],
+    "premise_refs": [
+      "premise:sha256:1a2ba79494f06bd6801739a0bad06f8d0a1019ba823b8182ae1f8cd189b6f00a",
+      "premise:sha256:267f37ad8cdac25a2594863d7039ab3352bc0c85e8c9110fbee66aa75c1d5c02",
+      "premise:sha256:363cbfe538b00dba1b951000434fbd915958801a28020c73227d69238b33a9d1",
+      "premise:sha256:3bba977909193ba8a61889b1c196d4b8e3a4230d1d0081202d03f29e6629edef",
+      "premise:sha256:4c9f71113e4ed18b02cfadd4f4ce8d9695884f798aafb7e63e465f41e36f29bf",
+      "premise:sha256:6c978dd15709dc4be8c8a08781f1ac5e1584c01c16512d213e79d21948922845",
+      "premise:sha256:7791722bc803311ee094b528018d02e97e7e85e84b0b1ed00ba467ec949fe6f6",
+      "premise:sha256:7f19faf6868fb552e095a7a5f4f28ae2892766074c40879467de6b187d50ca22",
+      "premise:sha256:8f21a45c8c87fcbdda8706603b01f8a4b06c8a5035d9c3aef528d4b45f556588",
+      "premise:sha256:b660188254218682c5222050b9cf6cf1df4aa9fddd66ce636e4abd8d582c941e",
+      "premise:sha256:c52e68c0e0b6944c44d51664714db861ee96579d859aba4d2e17a5d74e484357",
+      "premise:sha256:c98677d1947a64e361c1855387d6f57fc396aa358b25a584c7f8452fa5b01063",
+      "premise:sha256:cb62c483ed35060dbbe8383e845845fbe431391d0ca340b5c5301fe30de1d519",
+      "premise:sha256:d4aacbbc419037608c311c73608d7528623e390be03225c2b147b2697d25d1ce",
+      "premise:sha256:e65f3575d79d0025e892dce09080ec600a9a63b471f50073a14509fddcca8d3c",
+      "premise:sha256:fcee496706b614afe232aeb54c745539ca1ade0f3df97141bfaab0b880a9dcec"
+    ]
   },
   "summary": {
     "sources_checked": 6,
     "edges_checked": 6,
-    "authority_sinks_checked": 8,
-    "violations": 0
+    "authority_sinks_checked": 4,
+    "violations": 2
   },
   "unexpected": true
 }
