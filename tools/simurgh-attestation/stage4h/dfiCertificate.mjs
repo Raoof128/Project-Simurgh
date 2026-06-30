@@ -4,6 +4,7 @@ import {
   CERTIFICATE_TYPE,
   CLAIM,
   DEFAULT_SCOPE,
+  INTEGRITY_LABELS,
   PROOF_SYSTEM,
 } from "./constants.mjs";
 import { buildPremiseSet, digest, premiseDigest } from "./canonicalPremises.mjs";
@@ -11,6 +12,27 @@ import { validateDfiCertificate } from "./schema.mjs";
 
 export function certificateDigest(certificate) {
   return digest(certificate);
+}
+
+export function normalizeIntegrityLabel(label) {
+  return label === "trusted" ? "trusted" : "untrusted";
+}
+
+export function combineIntegrity(labels) {
+  for (const label of labels) {
+    if (!INTEGRITY_LABELS.includes(label)) {
+      throw new Error(`unknown integrity label: ${label}`);
+    }
+    if (label === "untrusted") return "untrusted";
+  }
+  return "trusted";
+}
+
+export function integrityLte(a, b) {
+  if (!INTEGRITY_LABELS.includes(a) || !INTEGRITY_LABELS.includes(b)) {
+    throw new Error("unknown integrity label");
+  }
+  return a === b || (a === "untrusted" && b === "trusted");
 }
 
 export function buildDfiCertificate({ pack }) {
