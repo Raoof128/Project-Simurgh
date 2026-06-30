@@ -149,6 +149,32 @@ test("Stage 4H.1 Q1 expected results use the locked raw codes", () => {
   }
 });
 
+test("Stage 4H.1 evidence does not claim broader or out-of-scope gates", () => {
+  const haystack = [
+    readFileSync(`${evidenceRoot}/README.md`, "utf8"),
+    readFileSync(`${evidenceRoot}/q-gate-results.json`, "utf8"),
+    readFileSync(`${evidenceRoot}/verifier-results.json`, "utf8"),
+  ].join("\n");
+  for (const forbidden of [
+    "Q0 pass",
+    "Q3 pass",
+    "Q4 pass",
+    "Q6 pass",
+    "Q7 pass",
+    "first proof",
+    "public priority",
+    "jailbreak-proof",
+    "jailbreak resistance",
+    "model-safe",
+    "execution truth",
+    "future-run guarantee",
+    "full non-interference",
+    "implicit-flow proof",
+  ]) {
+    assert.equal(haystack.includes(forbidden), false, `${forbidden} absent`);
+  }
+});
+
 test("Stage 4H.1 verifier CLI rejects forged premise digest with code 22", () => {
   assert.throws(
     () =>

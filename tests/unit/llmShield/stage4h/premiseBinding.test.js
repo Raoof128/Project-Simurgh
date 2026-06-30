@@ -11,6 +11,7 @@ import {
 
 const STAGE4D_PACK_PATH =
   "docs/research/llm-shield/evidence/stage-4d-decision-replay-evidence-pack/evidence-pack.json";
+const fixtureRoot = "tests/fixtures/llmShield/stage4h";
 
 function loadPack() {
   return JSON.parse(readFileSync(STAGE4D_PACK_PATH, "utf8"));
@@ -54,4 +55,18 @@ test("Stage 4H base-pack view ignores non-view top-level metadata", () => {
   const withExtra = { ...pack, stage4h_certificate: { should_not_bind: true } };
   assert.deepEqual(basePackView(withExtra), basePackView(pack));
   assert.equal(buildPremiseSet(withExtra).base_pack_digest, buildPremiseSet(pack).base_pack_digest);
+});
+
+test("Stage 4H.1 does not alter 4H.0 digest surfaces", () => {
+  const pack = JSON.parse(readFileSync(`${fixtureRoot}/q1-clean-base-pack.json`, "utf8"));
+  const certificate = JSON.parse(
+    readFileSync(`${fixtureRoot}/q1-clean-dfi-certificate.json`, "utf8")
+  );
+  const premises = buildPremiseSet(pack);
+
+  assert.equal(certificate.base_pack_digest, premises.base_pack_digest);
+  assert.equal(certificate.replay_root, premises.replay_root);
+  assert.equal(certificate.policy_digest, premises.policy_digest);
+  assert.equal(certificate.lattice_digest, premises.lattice_digest);
+  assert.equal(certificate.premise_digest, premiseDigest(premises));
 });
