@@ -1,6 +1,6 @@
 {
-  "stage": "4H.1",
-  "scope": "Q1/Q2/Q5 full E2E smoke",
+  "stage": "4H.2",
+  "scope": "Q0/Q1/Q2/Q4/Q5 full E2E smoke",
   "modules_exercised": [
     "constants.mjs",
     "schema.mjs",
@@ -36,8 +36,12 @@
     "q1-theatre-stripped-derived-labels": 26,
     "q1-theatre-stripped-lattice-steps": 26,
     "q1-theatre-stripped-sink-claims": 26,
-    "q1-unbound-certificate-mutation": 25
+    "q1-unbound-certificate-mutation": 25,
+    "q0-clean-disconnected-untrusted": 0,
+    "q4a-forged-premise-digest": 22,
+    "q4b-clean-derivation-over-dirty-replay": 24,
+    "q4c-derivation-scope-omission": 26
   },
-  "non_scope_gates": ["Q0", "Q3", "Q4", "Q6", "Q7"],
+  "non_scope_gates": ["Q3", "Q6", "Q7"],
   "metadata_only": true
 }

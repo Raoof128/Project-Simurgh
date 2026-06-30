@@ -52,7 +52,7 @@ function baseResult({ code, reason, certificate, premises = null }) {
     ok: code === RAW_VERIFIER_CODES.OK,
     code,
     stage4_code: stage4CodeForRawCode(code),
-    gate: "Q1/Q2/Q5",
+    gate: "Q0/Q1/Q2/Q4/Q5",
     certificate_digest: certificate ? certificateDigest(certificate) : null,
     premise_digest: certificate?.premise_digest ?? null,
     base_pack_digest: certificate?.base_pack_digest ?? null,
@@ -69,8 +69,8 @@ async function finish({ outPath, code, reason, certificate, premises = null }) {
   await writeResult(outPath, baseResult({ code, reason, certificate, premises }));
   console.log(
     code === RAW_VERIFIER_CODES.OK
-      ? "Stage 4H.1 Q1/Q2/Q5 explicit-flow integrity: PASS"
-      : `Stage 4H.1 Q1/Q2/Q5 explicit-flow integrity: FAIL ${reason}`
+      ? "Stage 4H.2 Q0/Q1/Q2/Q4/Q5 verifier discrimination: PASS"
+      : `Stage 4H.2 Q0/Q1/Q2/Q4/Q5 verifier discrimination: FAIL ${reason}`
   );
   if (code !== RAW_VERIFIER_CODES.OK) process.exitCode = code;
   return code;

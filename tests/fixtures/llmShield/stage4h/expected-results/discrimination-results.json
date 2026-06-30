@@ -1,0 +1,19 @@
+{
+  "stage": "4H.2",
+  "gate": "Q0/Q4",
+  "expected_results": {
+    "Q0": {
+      "q0-clean-disconnected-untrusted": 0
+    },
+    "Q4": {
+      "q4a-forged-premise-digest": 22,
+      "q4b-clean-derivation-over-dirty-replay": 24,
+      "q4c-derivation-scope-omission": 26
+    }
+  },
+  "reasons": {
+    "q4a-forged-premise-digest": "premise_digest_mismatch",
+    "q4b-clean-derivation-over-dirty-replay": "proof_accepts_bad_flow",
+    "q4c-derivation-scope-omission": "derivation_scope_incomplete"
+  }
+}

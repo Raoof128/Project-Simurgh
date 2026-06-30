@@ -1,9 +1,12 @@
 {
-  "stage": "4H.1",
-  "status": "lattice_derivation_validator",
+  "stage": "4H.2",
+  "status": "discrimination_q0_q4",
   "gates": {
     "Q0": {
-      "status": "not_in_scope"
+      "status": "pass",
+      "expected_results": {
+        "q0-clean-disconnected-untrusted": 0
+      }
     },
     "Q1": {
       "status": "pass",
@@ -25,7 +28,12 @@
       "status": "not_in_scope"
     },
     "Q4": {
-      "status": "not_in_scope"
+      "status": "pass",
+      "expected_results": {
+        "q4a-forged-premise-digest": 22,
+        "q4b-clean-derivation-over-dirty-replay": 24,
+        "q4c-derivation-scope-omission": 26
+      }
     },
     "Q5": {
       "status": "pass",
@@ -38,9 +46,17 @@
       "status": "not_in_scope"
     }
   },
+  "q0_positive_base_pack": "q0-clean-disconnected-untrusted-base-pack.json",
   "q1_positive_base_pack": "q1-clean-base-pack.json",
   "q1_dirty_base_pack": "q1-real-dirty-base-pack.json",
   "q1_dirty_source": "real_stage4d_pack",
+  "q4_dirty_base_pack": "q4-dirty-one-edge-delta-base-pack.json",
+  "q4_boundary": {
+    "q4a": "forged clean premise digest over dirty replay fails Q2 with raw 22",
+    "q4b": "structurally complete forged-safe derivation over honest dirty premises fails sink-safety with raw 24",
+    "q4c": "true partial derivation omission over honest dirty premises fails coverage with raw 26",
+    "one_edge_delta": "the only Stage 4H DFI/canonical-premise difference is the added untrusted source edge into action:act_001; directly mirrored summary metadata may differ only to truthfully reflect the same source-set change"
+  },
   "non_claims": [
     "implicit_flow_security",
     "control_dependence_security",
@@ -48,6 +64,10 @@
     "execution_truth",
     "provider_behaviour_correctness",
     "future_run_guarantees",
-    "public_priority"
+    "full_stage_4h_completion",
+    "public_priority",
+    "jailbreak_immunity",
+    "general_jailbreak_resistance",
+    "production_readiness"
   ]
 }
