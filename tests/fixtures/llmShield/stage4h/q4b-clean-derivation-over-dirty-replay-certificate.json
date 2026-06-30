@@ -1,0 +1,88 @@
+{
+  "type": "simurgh.vca.dfi_certificate.v1",
+  "proof_system": "simurgh-ifc-lattice-v0",
+  "claim": "explicit_data_flow_integrity",
+  "scope": {
+    "explicit_data_edges": true,
+    "control_dependence_edges": false,
+    "implicit_flow_security": false
+  },
+  "run_id_hash": "sha256:89213fba2bc2b6957c97f6411afc8822e35663cbadbb3f285fcbbd7398d5a56a",
+  "base_pack_digest": "sha256:45b821ca17998ccc27bdbb4f84a9f959d19f79a27a19222e8539112ee0968bd7",
+  "replay_root": "sha256:f14f4fec5f0d6bb9b9a482f12fbda3bef30a2fd17815fd323f2f225012a7ba84",
+  "premise_digest": "sha256:4b7f6f5f72a2acf8039fdca5156318dff9a4a0bb358c0780dd4454fabf395e7a",
+  "policy_digest": "sha256:c4ba186dd6a5302d9b629d18c57ab46cbe7ace1b3b57b3ffd24d5c5aee6fc1f7",
+  "lattice_digest": "sha256:dd1fb9f020bbf425bb269cc21c482b7b5d1f1fd38b2581e81b07648c46c220f0",
+  "checker_version": "4h-v0",
+  "derivation": {
+    "derived_node_labels": [
+      {
+        "node": "action:act_000",
+        "label": "untrusted",
+        "premise_refs": [
+          "premise:sha256:5dbc85a038bbfff9fcb2bbc58741f178beeeb580fe66780782829b0ca957b22c"
+        ]
+      },
+      {
+        "node": "action:act_001",
+        "label": "untrusted",
+        "premise_refs": [
+          "premise:sha256:05ec48684ca866b9127f7be6119e3fff50cfb4bc6313d5be09535dc4a7bc3a95",
+          "premise:sha256:073fd5b51338b8b129e943d8eb185b7653a8e83af5133517b92cdb206e57a30e",
+          "premise:sha256:6c978dd15709dc4be8c8a08781f1ac5e1584c01c16512d213e79d21948922845"
+        ]
+      },
+      {
+        "node": "source:doc1",
+        "label": "untrusted",
+        "premise_refs": [
+          "premise:sha256:c681dac8cb78046d8f80dcdfa778b1077add7792d21da2e25d596a3742c26d59",
+          "premise:sha256:da373b8c563475ce4f04760d7c30d9bc507e0ba02bb7a1008428922b7f01a12b"
+        ]
+      },
+      {
+        "node": "source:sys",
+        "label": "trusted",
+        "premise_refs": [
+          "premise:sha256:aa65674727a31ce6329faf9077b13221b3348e5d5335acd75174be5dfb35708a"
+        ]
+      }
+    ],
+    "lattice_steps": [
+      {
+        "op": "combine",
+        "node": "action:act_000",
+        "inputs": ["untrusted"],
+        "result": "untrusted"
+      },
+      {
+        "op": "combine",
+        "node": "action:act_001",
+        "inputs": ["trusted", "untrusted"],
+        "result": "untrusted"
+      }
+    ],
+    "sink_safety_claims": [
+      {
+        "node": "action:act_001",
+        "node_label": "untrusted",
+        "safe": true
+      }
+    ],
+    "premise_refs": [
+      "premise:sha256:05ec48684ca866b9127f7be6119e3fff50cfb4bc6313d5be09535dc4a7bc3a95",
+      "premise:sha256:073fd5b51338b8b129e943d8eb185b7653a8e83af5133517b92cdb206e57a30e",
+      "premise:sha256:5dbc85a038bbfff9fcb2bbc58741f178beeeb580fe66780782829b0ca957b22c",
+      "premise:sha256:6c978dd15709dc4be8c8a08781f1ac5e1584c01c16512d213e79d21948922845",
+      "premise:sha256:aa65674727a31ce6329faf9077b13221b3348e5d5335acd75174be5dfb35708a",
+      "premise:sha256:c681dac8cb78046d8f80dcdfa778b1077add7792d21da2e25d596a3742c26d59",
+      "premise:sha256:da373b8c563475ce4f04760d7c30d9bc507e0ba02bb7a1008428922b7f01a12b"
+    ]
+  },
+  "summary": {
+    "sources_checked": 3,
+    "edges_checked": 3,
+    "authority_sinks_checked": 1,
+    "violations": 0
+  }
+}
