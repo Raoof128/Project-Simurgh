@@ -18,11 +18,12 @@ MCowBQYDK2VwAyEAuqH7hI0ASnLLnjkeMnVAi6IeKvwhxC7+cif/RoiTa/8=
 -----END PUBLIC KEY-----
 `;
 
-async function stable(value) {
+async function stable(path, value) {
   const json = JSON.stringify(value, null, 2) + "\n";
   try {
     const prettier = await import("prettier");
-    return await prettier.format(json, { parser: "json" });
+    const options = (await prettier.resolveConfig(path)) || {};
+    return await prettier.format(json, { ...options, parser: "json" });
   } catch {
     return json;
   }
@@ -30,7 +31,7 @@ async function stable(value) {
 
 async function writeJson(path, value) {
   await mkdir(dirname(path), { recursive: true });
-  await writeFile(path, await stable(value));
+  await writeFile(path, await stable(path, value));
 }
 
 function stage4dRunRecord({ runId, sourceLabel }) {
