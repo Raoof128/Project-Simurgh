@@ -1,5 +1,17 @@
 ## Change Log
 
+## [stage-4h-2-discrimination-design] — 2026-06-30 — Q0/Q4 verifier-discrimination design
+
+**Raouf:** Added the repo-native Stage 4H.2 design spec for the Q0 clean positive fixture and Q4 dishonest-producer laundering matrix. This is design-only: no implementation plan, verifier code, fixture builder, or evidence regeneration in this commit. The spec preserves the approved Rev 3 scope, locks the Q2-vs-Q4 raw-code ledger (`0`, `22`, `24`, `26`), pins the verifier check order, names the Q0/Q4 fixtures, requires true Q4c partial coverage with `derivation_scope_incomplete`, keeps Q3/Q6/Q7 out of scope, and requires the reviewer-grade Stage 4H E2E smoke to cover the Q0/Q4 real CLI matrix before 4H.2 can be accepted.
+
+### Added
+
+- `docs/superpowers/specs/2026-06-30-stage-4h-2-discrimination-q0-q4-design.md` — design contract for 4H.2 verifier discrimination.
+
+### Verified
+
+- Prettier check and `git diff --check` pass on the design/log files; design self-review confirms the Rev 3 Q0/Q4 scope, raw-code ledger, check order, fixture names, non-claims, and E2E smoke requirement remain intact.
+
 ## [stage-1-live-authority-gate] — 2026-06-25 — Authority gate (egress + mutation): FULL containment within taxonomy
 
 **Raouf:** Ran the authority gate A/B (`--defence-mode authority` = egress + destructive-mutation gate) on Llama-3.3-70B-FP8, same 10×14 set, against the PRE-REGISTERED authority predictions. RESULT — the bounded-consequence thesis proven: **ASR 9/140 → 0/140**; every one of the 9 baseline attack successes contained. By class: `egress` 5/40→0/40, `egress_mass_recipient` 1/10→0/10, and the mutation gate closed the gap `delete_only` 3/10→**0/10** (which the egress-only gate could not). Honest cost: **1 benign regression (`user_task_8`)** — but that task names both recipients explicitly so neither gate should block it; it passed under the egress-only gate (0 regressions) and failed only here, so most likely run-to-run greedy/batching nondeterminism (same drift as baseline 9↔10), NOT a confirmed false-block; reported transparently, flagged for per-action attribution. Utility-under-attack 91→80. Closes the three-experiment Llama arc: demotion (advisory, failed) → egress gate (scoped win) → authority gate (full containment in declared taxonomy). Explicit non-claims kept (not immunity; taxonomy excludes non-destructive mutation/financial/code). Evidence metadata-only. No `src/llmShield` change.

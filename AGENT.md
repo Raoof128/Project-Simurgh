@@ -2,6 +2,16 @@
 
 ## Agent Change Log
 
+### 2026-06-30 (Australia/Sydney) — Stage 4H.2 discrimination design spec
+
+**Raouf:**
+
+- **Scope:** Design-only formalisation for Stage 4H.2 Q0 clean positive fixture and Q4 dishonest-producer laundering matrix. No implementation plan or verifier code change in this commit.
+- **Summary:** Added the repo-native 4H.2 design contract preserving the approved Rev 3 scope: Q0 proves the verifier is not reject-all; Q4 proves it is not accept-all. Locked the Q2-vs-Q4 raw-code ledger (`0`, `22`, `24`, `26`), check order, fixture names, true Q4c partial-coverage omission, Q3/Q6/Q7 non-scope boundary, and reviewer-grade E2E smoke requirement for the Q0/Q4 CLI matrix.
+- **Files changed:** `docs/superpowers/specs/2026-06-30-stage-4h-2-discrimination-q0-q4-design.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** Prettier check and `git diff --check` pass on the design/log files; design self-review confirms the Rev 3 Q0/Q4 scope, raw-code ledger, check order, fixture names, non-claims, and E2E smoke requirement remain intact.
+- **Follow-ups:** Review and approve the design spec, then write the Stage 4H.2 implementation plan.
+
 ### 2026-06-25 (Australia/Sydney) — Stage 1-LIVE authority gate (egress + mutation): FULL containment in taxonomy
 
 **Raouf:**
