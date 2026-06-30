@@ -2,11 +2,11 @@
   "ok": true,
   "code": 0,
   "stage4_code": 0,
-  "gate": "Q1/Q2/Q5",
-  "certificate_digest": "sha256:190676857c7004ea0402b252559944daafe5461a47270f58308095dc3ac4d6c9",
-  "premise_digest": "sha256:79852a5eb31804ad9f6a64547f1e15cf0b06eccf56e35a23f0439ef58ecb2fb1",
-  "base_pack_digest": "sha256:7214c1f156402f463a372fa5151b5f39d60732f59819852755d0f0a3963312d5",
-  "recomputed_premise_digest": "sha256:79852a5eb31804ad9f6a64547f1e15cf0b06eccf56e35a23f0439ef58ecb2fb1",
+  "gate": "Q0/Q1/Q2/Q4/Q5",
+  "certificate_digest": "sha256:641f6a83ace8cf7137aeb537e581ff618115232e8a85183ff5d26e037e6cb213",
+  "premise_digest": "sha256:3b540b19e79cbe29f52a9848ae0beda626f7f29fcca3885222096486b0509e1c",
+  "base_pack_digest": "sha256:36a7b964b629844cdd558b7b45bc34e7c080687155acc35127c8672aa72593db",
+  "recomputed_premise_digest": "sha256:3b540b19e79cbe29f52a9848ae0beda626f7f29fcca3885222096486b0509e1c",
   "falsifier": null,
   "note": "explicit-flow derivation, premise digest, manifest digest binding, and Ed25519 signature accepted"
 }

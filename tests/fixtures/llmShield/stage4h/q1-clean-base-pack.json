@@ -136,9 +136,7 @@
     "ordered_observation_event_hashes": [
       "7e38368217b313a195e6d7366c0967853c541a9395b8bc5043f5f6e128db5583"
     ],
-    "ordered_receipt_hashes": [
-      "80a759d43e96fc4ae8e99c17ba54dcfad4b00ba14e0c2ed3a3091f77f3ea0573"
-    ],
+    "ordered_receipt_hashes": ["80a759d43e96fc4ae8e99c17ba54dcfad4b00ba14e0c2ed3a3091f77f3ea0573"],
     "per_sink_tally": {
       "egress": {
         "observed": 1,

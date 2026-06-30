@@ -1,5 +1,23 @@
 ## Change Log
 
+## [stage-4h-2-discrimination] — 2026-06-30 — Q0/Q4 verifier discrimination
+
+**Raouf:** Implemented Stage 4H.2 only: Q0 clean positive acceptance plus Q4 dishonest-producer laundering discrimination. The signed fixture matrix proves the verifier is not reject-all (`q0-clean-disconnected-untrusted` accepts with raw `0`) and not accept-all (`q4a-forged-premise-digest` raw `22`, `q4b-clean-derivation-over-dirty-replay` raw `24` with `proof_accepts_bad_flow`, `q4c-derivation-scope-omission` raw `26` with `derivation_scope_incomplete`). Q1/Q2/Q5 remain green; Q3/Q6/Q7 remain `not_in_scope`. No release tag.
+
+### Added
+
+- Stage 4H.2 Q0/Q4 signed fixtures, certificates, manifests, expected CLI results, and discrimination evidence.
+- Reviewer-grade Stage 4H E2E smoke coverage for the Q0/Q4 real builder plus real verifier CLI matrix.
+
+### Verified
+
+- `scripts/reproduce-llm-shield-stage4h.sh`
+- targeted Stage 4H unit/e2e tests
+- `npm run format:check`
+- `npm test` (`1143/1143`)
+- `./scripts/check.sh` (`155/0`, local .NET 8 Windows daemon tests skipped because SDK unavailable)
+- metadata/privacy scan, claim-boundary scan, and `git diff --check`
+
 ## [stage-4h-2-discrimination-plan-boolean-patch] — 2026-06-30 — boolean summary correction
 
 **Raouf:** Patched the Stage 4H.2 implementation plan before inline execution so `decision_input.untrusted_reached_authority` remains a boolean in the planned Q0/Q4 helper. The one-edge-delta claim is narrowed to the Stage 4H DFI/canonical-premise edge, while directly mirrored decision/policy summary metadata may differ only to truthfully reflect the same source-set change. This is documentation-only: no verifier code, fixture builder, tests, or evidence regeneration in this commit.
