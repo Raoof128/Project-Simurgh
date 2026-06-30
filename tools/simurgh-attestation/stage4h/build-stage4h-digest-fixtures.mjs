@@ -133,6 +133,148 @@ function stage4dRunRecord({ runId, sourceLabel }) {
   };
 }
 
+function stage4h2DiscriminationRunRecord({ runId, dirty }) {
+  const parent = `session_${runId}`;
+  const actionA1Sources = dirty
+    ? [
+        { source_id: "doc1", label: "untrusted_web" },
+        { source_id: "sys", label: "trusted" },
+      ]
+    : [{ source_id: "sys", label: "trusted" }];
+  const replayMaterial = {
+    act_000: {
+      decision_context: {
+        policy_mode: "permissive",
+        prior_decision_count: 0,
+        rate_limit_bucket: "stage4h2_fixture_bucket",
+      },
+      policy_features_source: {
+        external_effect: false,
+        input_sources: ["doc1"],
+        requires_authority: false,
+        sink_id: "egress",
+        user_explicitly_authorised: true,
+      },
+      resolved_args_redacted: {
+        body_digest: "3".repeat(64),
+        contains_secret_marker: false,
+        recipient_scope: "fixture_contact",
+        tool_name: "draft_note",
+      },
+      taint_derivation_inputs: {
+        authority_sink: false,
+        sources: [{ source_id: "doc1", label: "untrusted_web" }],
+      },
+    },
+    act_001: {
+      decision_context: {
+        policy_mode: "permissive",
+        prior_decision_count: 1,
+        rate_limit_bucket: "stage4h2_fixture_bucket",
+      },
+      policy_features_source: {
+        external_effect: true,
+        input_sources: actionA1Sources.map((source) => source.source_id).sort(),
+        requires_authority: true,
+        sink_id: "egress",
+        user_explicitly_authorised: true,
+      },
+      resolved_args_redacted: {
+        body_digest: "5".repeat(64),
+        contains_secret_marker: false,
+        recipient_scope: "fixture_contact",
+        tool_name: "send_email",
+      },
+      taint_derivation_inputs: {
+        authority_sink: true,
+        sources: actionA1Sources,
+      },
+    },
+  };
+
+  return {
+    run_manifest: {
+      fixture_id: runId,
+      mode: "stage4h2_synthetic_discrimination_fixture",
+      model_identity_committed: "self-reported-fixture-model",
+      model_identity_origin: "self_reported",
+      parent_session: parent,
+      run_id: runId,
+    },
+    policy_bundle: {
+      policy_version: "policy.v1",
+      modes: {
+        permissive: {
+          block_authority_escalation: true,
+          block_untrusted_to_external_egress: false,
+          block_untrusted_to_secret_export: true,
+        },
+      },
+    },
+    sink_registry: {
+      registry_version: "sinks.v1",
+      sinks: [
+        {
+          default_consequence_class: "external_egress",
+          description: "Synthetic Stage 4H.2 authority sink fixture",
+          sink_id: "egress",
+        },
+      ],
+    },
+    consequence_lattice: {
+      lattice_version: "consequence_lattice.v1",
+      order: ["read_only", "local_only", "external_egress"],
+    },
+    action_observation_log: [
+      {
+        action_id: "act_000",
+        action_type: "tool_call",
+        boundary_id: "gateway_mediator_v1",
+        consequence_class: "read_only",
+        event_version: "simurgh.stage4d.observation.v1",
+        parent_session: parent,
+        run_id: runId,
+        sink_id: "egress",
+        step_index: 0,
+      },
+      {
+        action_id: "act_001",
+        action_type: "tool_call",
+        boundary_id: "gateway_mediator_v1",
+        consequence_class: "external_egress",
+        event_version: "simurgh.stage4d.observation.v1",
+        parent_session: parent,
+        run_id: runId,
+        sink_id: "egress",
+        step_index: 1,
+      },
+    ],
+    replay_material: replayMaterial,
+    decisions: [
+      {
+        action_id: "act_000",
+        input_integrity_summary: "contains_untrusted",
+        decision: "allow",
+        decision_reason_code: "POLICY_ALLOWED",
+        decision_input: {
+          untrusted_reached_authority: false,
+          policy_mode: "permissive",
+        },
+      },
+      {
+        action_id: "act_001",
+        input_integrity_summary: dirty ? "contains_untrusted" : "trusted_only",
+        decision: "allow",
+        decision_reason_code: "POLICY_ALLOWED",
+        decision_input: {
+          untrusted_reached_authority: dirty,
+          policy_mode: "permissive",
+        },
+      },
+    ],
+  };
+}
+
 function buildSignedStage4dPack({ runRecord, privateKey, publicKey }) {
   const pack = buildEvidencePack({ runRecord, privateKey, publicKey });
   const signature = `base64:${signPack(pack, privateKey)}`;
@@ -208,6 +350,53 @@ export async function main({ root = process.cwd() } = {}) {
         privateKey: stage4dPrivateKey,
         publicKey: stage4dPublicKey,
       });
+  const q0Clean = buildSignedStage4dPack({
+    runRecord: stage4h2DiscriminationRunRecord({
+      runId: "q0-clean-disconnected-untrusted",
+      dirty: false,
+    }),
+    privateKey: stage4dPrivateKey,
+    publicKey: stage4dPublicKey,
+  });
+  const q4Dirty = buildSignedStage4dPack({
+    runRecord: stage4h2DiscriminationRunRecord({
+      runId: "q4-dirty-one-edge-delta",
+      dirty: true,
+    }),
+    privateKey: stage4dPrivateKey,
+    publicKey: stage4dPublicKey,
+  });
+
+  const q0Certificate = buildDfiCertificate({ pack: q0Clean.pack });
+  const q0Manifest = signManifest(q0Certificate, manifestPrivateKey);
+  const q4DirtyCertificate = buildDfiCertificate({ pack: q4Dirty.pack });
+  const q4DirtyManifest = signManifest(q4DirtyCertificate, manifestPrivateKey);
+
+  const q4aForgedPremiseDigestCertificate = structuredClone(q4DirtyCertificate);
+  q4aForgedPremiseDigestCertificate.premise_digest = q0Certificate.premise_digest;
+  const q4aForgedPremiseDigestManifest = signManifest(
+    q4aForgedPremiseDigestCertificate,
+    manifestPrivateKey
+  );
+
+  const q4bForgedSafeCertificate = structuredClone(q4DirtyCertificate);
+  for (const claim of q4bForgedSafeCertificate.derivation.sink_safety_claims) {
+    if (claim.node === "action:act_001") {
+      claim.safe = true;
+    }
+  }
+  q4bForgedSafeCertificate.summary.violations = 0;
+  const q4bForgedSafeManifest = signManifest(q4bForgedSafeCertificate, manifestPrivateKey);
+
+  const q4cPartialOmissionCertificate = structuredClone(q4DirtyCertificate);
+  q4cPartialOmissionCertificate.derivation.lattice_steps =
+    q4cPartialOmissionCertificate.derivation.lattice_steps.filter(
+      (step) => step.node !== "action:act_001"
+    );
+  const q4cPartialOmissionManifest = signManifest(
+    q4cPartialOmissionCertificate,
+    manifestPrivateKey
+  );
 
   const q1CleanCertificate = buildDfiCertificate({ pack: q1Clean.pack });
   const q1CleanManifest = signManifest(q1CleanCertificate, manifestPrivateKey);
@@ -338,6 +527,66 @@ export async function main({ root = process.cwd() } = {}) {
   await writeJson(
     join(fixtureRoot, "q1-unbound-certificate-mutation-certificate.json"),
     q1UnboundCertificateMutation
+  );
+
+  await writeJson(
+    join(fixtureRoot, "q0-clean-disconnected-untrusted-base-pack.json"),
+    q0Clean.pack
+  );
+  await writeFile(
+    join(fixtureRoot, "q0-clean-disconnected-untrusted-base-pack.sig"),
+    `${q0Clean.signature.trim()}\n`
+  );
+  await writeFile(
+    join(fixtureRoot, "q0-clean-disconnected-untrusted-signer.pub"),
+    q0Clean.publicKeyPem
+  );
+  await writeJson(
+    join(fixtureRoot, "q0-clean-disconnected-untrusted-dfi-certificate.json"),
+    q0Certificate
+  );
+  await writeJson(
+    join(fixtureRoot, "q0-clean-disconnected-untrusted-signed-pack-manifest.json"),
+    q0Manifest
+  );
+
+  await writeJson(join(fixtureRoot, "q4-dirty-one-edge-delta-base-pack.json"), q4Dirty.pack);
+  await writeFile(
+    join(fixtureRoot, "q4-dirty-one-edge-delta-base-pack.sig"),
+    `${q4Dirty.signature.trim()}\n`
+  );
+  await writeFile(join(fixtureRoot, "q4-dirty-one-edge-delta-signer.pub"), q4Dirty.publicKeyPem);
+  await writeJson(
+    join(fixtureRoot, "q4-dirty-one-edge-delta-dfi-certificate.json"),
+    q4DirtyCertificate
+  );
+  await writeJson(
+    join(fixtureRoot, "q4-dirty-one-edge-delta-signed-pack-manifest.json"),
+    q4DirtyManifest
+  );
+  await writeJson(
+    join(fixtureRoot, "q4a-forged-premise-digest-certificate.json"),
+    q4aForgedPremiseDigestCertificate
+  );
+  await writeJson(
+    join(fixtureRoot, "q4a-forged-premise-digest-signed-pack-manifest.json"),
+    q4aForgedPremiseDigestManifest
+  );
+  await writeJson(
+    join(fixtureRoot, "q4b-clean-derivation-over-dirty-replay-certificate.json"),
+    q4bForgedSafeCertificate
+  );
+  await writeJson(
+    join(fixtureRoot, "q4b-clean-derivation-over-dirty-replay-signed-pack-manifest.json"),
+    q4bForgedSafeManifest
+  );
+  await writeJson(
+    join(fixtureRoot, "q4c-derivation-scope-omission-certificate.json"),
+    q4cPartialOmissionCertificate
+  );
+  await writeJson(
+    join(fixtureRoot, "q4c-derivation-scope-omission-signed-pack-manifest.json"),
+    q4cPartialOmissionManifest
   );
 
   const manifestPub = join(fixtureRoot, "manifest-verifier.pub");
