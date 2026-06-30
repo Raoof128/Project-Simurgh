@@ -61,7 +61,7 @@ function assertMetadataOnlyJson(path) {
   }
 }
 
-test("Stage 4H.0/4H.1 full reviewer E2E smoke covers builder, CLI, evidence, and raw-code matrix", () => {
+test("Stage 4H.2 full reviewer E2E smoke covers builder, CLI, evidence, and Q0/Q4 raw-code matrix", () => {
   const tmp = mkdtempSync(join(tmpdir(), "stage4h-e2e-"));
   try {
     const build = runNode([builder]);
@@ -131,6 +131,45 @@ test("Stage 4H.0/4H.1 full reviewer E2E smoke covers builder, CLI, evidence, and
         certificate: `${fixtureRoot}/q1-unbound-certificate-mutation-certificate.json`,
         manifest: `${fixtureRoot}/q1-clean-signed-pack-manifest.json`,
       },
+      {
+        name: "q0-clean-disconnected-untrusted",
+        expectedCode: 0,
+        basePack: `${fixtureRoot}/q0-clean-disconnected-untrusted-base-pack.json`,
+        basePackSig: `${fixtureRoot}/q0-clean-disconnected-untrusted-base-pack.sig`,
+        basePackPubkey: `${fixtureRoot}/q0-clean-disconnected-untrusted-signer.pub`,
+        certificate: `${fixtureRoot}/q0-clean-disconnected-untrusted-dfi-certificate.json`,
+        manifest: `${fixtureRoot}/q0-clean-disconnected-untrusted-signed-pack-manifest.json`,
+      },
+      {
+        name: "q4a-forged-premise-digest",
+        expectedCode: 22,
+        expectedFalsifier: "premise_digest_mismatch",
+        basePack: `${fixtureRoot}/q4-dirty-one-edge-delta-base-pack.json`,
+        basePackSig: `${fixtureRoot}/q4-dirty-one-edge-delta-base-pack.sig`,
+        basePackPubkey: `${fixtureRoot}/q4-dirty-one-edge-delta-signer.pub`,
+        certificate: `${fixtureRoot}/q4a-forged-premise-digest-certificate.json`,
+        manifest: `${fixtureRoot}/q4a-forged-premise-digest-signed-pack-manifest.json`,
+      },
+      {
+        name: "q4b-clean-derivation-over-dirty-replay",
+        expectedCode: 24,
+        expectedFalsifier: "proof_accepts_bad_flow",
+        basePack: `${fixtureRoot}/q4-dirty-one-edge-delta-base-pack.json`,
+        basePackSig: `${fixtureRoot}/q4-dirty-one-edge-delta-base-pack.sig`,
+        basePackPubkey: `${fixtureRoot}/q4-dirty-one-edge-delta-signer.pub`,
+        certificate: `${fixtureRoot}/q4b-clean-derivation-over-dirty-replay-certificate.json`,
+        manifest: `${fixtureRoot}/q4b-clean-derivation-over-dirty-replay-signed-pack-manifest.json`,
+      },
+      {
+        name: "q4c-derivation-scope-omission",
+        expectedCode: 26,
+        expectedFalsifier: "derivation_scope_incomplete",
+        basePack: `${fixtureRoot}/q4-dirty-one-edge-delta-base-pack.json`,
+        basePackSig: `${fixtureRoot}/q4-dirty-one-edge-delta-base-pack.sig`,
+        basePackPubkey: `${fixtureRoot}/q4-dirty-one-edge-delta-signer.pub`,
+        certificate: `${fixtureRoot}/q4c-derivation-scope-omission-certificate.json`,
+        manifest: `${fixtureRoot}/q4c-derivation-scope-omission-signed-pack-manifest.json`,
+      },
     ];
 
     for (const fixture of cases) {
@@ -154,8 +193,11 @@ test("Stage 4H.0/4H.1 full reviewer E2E smoke covers builder, CLI, evidence, and
 
       const json = readJson(out);
       assert.equal(json.code, fixture.expectedCode, `${fixture.name} raw code`);
+      if (fixture.expectedFalsifier) {
+        assert.equal(json.falsifier, fixture.expectedFalsifier, `${fixture.name} falsifier`);
+      }
       assert.equal(typeof json.stage4_code, "number", `${fixture.name} has stage4_code`);
-      assert.equal(json.gate, "Q1/Q2/Q5", `${fixture.name} gate`);
+      assert.equal(json.gate, "Q0/Q1/Q2/Q4/Q5", `${fixture.name} gate`);
       assert.match(json.certificate_digest || "", /^sha256:[a-f0-9]{64}$/);
       assert.match(json.base_pack_digest || "", /^sha256:[a-f0-9]{64}$/);
       assertMetadataOnlyJson(out);
@@ -172,9 +214,19 @@ test("Stage 4H.0/4H.1 full reviewer E2E smoke covers builder, CLI, evidence, and
       "q1-theatre-stripped-sink-claims": 26,
       "q1-unbound-certificate-mutation": 25,
     });
+    assert.equal(qGate.gates.Q0.status, "pass");
+    assert.deepEqual(qGate.gates.Q0.expected_results, {
+      "q0-clean-disconnected-untrusted": 0,
+    });
     assert.equal(qGate.gates.Q2.status, "pass");
+    assert.equal(qGate.gates.Q4.status, "pass");
+    assert.deepEqual(qGate.gates.Q4.expected_results, {
+      "q4a-forged-premise-digest": 22,
+      "q4b-clean-derivation-over-dirty-replay": 24,
+      "q4c-derivation-scope-omission": 26,
+    });
     assert.equal(qGate.gates.Q5.status, "pass");
-    for (const gate of ["Q0", "Q3", "Q4", "Q6", "Q7"]) {
+    for (const gate of ["Q3", "Q6", "Q7"]) {
       assert.equal(qGate.gates[gate].status, "not_in_scope", `${gate} not in scope`);
     }
 
@@ -188,6 +240,10 @@ test("Stage 4H.0/4H.1 full reviewer E2E smoke covers builder, CLI, evidence, and
       "q1-theatre-stripped-lattice-steps": 26,
       "q1-theatre-stripped-sink-claims": 26,
       "q1-unbound-certificate-mutation": 25,
+      "q0-clean-disconnected-untrusted": 0,
+      "q4a-forged-premise-digest": 22,
+      "q4b-clean-derivation-over-dirty-replay": 24,
+      "q4c-derivation-scope-omission": 26,
     });
     assert.equal(coverage.metadata_only, true);
     for (const fn of [
