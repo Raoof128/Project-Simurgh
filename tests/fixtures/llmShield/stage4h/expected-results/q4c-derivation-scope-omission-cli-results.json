@@ -1,0 +1,12 @@
+{
+  "ok": false,
+  "code": 26,
+  "stage4_code": 1,
+  "gate": "Q0/Q1/Q2/Q4/Q5",
+  "certificate_digest": "sha256:e943c330a4c77771d2c3d3fd534ed2d05fbed798cd575957f650f38559b614e4",
+  "premise_digest": "sha256:4b7f6f5f72a2acf8039fdca5156318dff9a4a0bb358c0780dd4454fabf395e7a",
+  "base_pack_digest": "sha256:45b821ca17998ccc27bdbb4f84a9f959d19f79a27a19222e8539112ee0968bd7",
+  "recomputed_premise_digest": "sha256:4b7f6f5f72a2acf8039fdca5156318dff9a4a0bb358c0780dd4454fabf395e7a",
+  "falsifier": "derivation_scope_incomplete",
+  "note": "derivation_scope_incomplete"
+}

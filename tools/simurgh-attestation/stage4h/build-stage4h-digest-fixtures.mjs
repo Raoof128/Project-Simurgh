@@ -653,6 +653,42 @@ export async function main({ root = process.cwd() } = {}) {
       cert: "q1-unbound-certificate-mutation-certificate.json",
       manifest: "q1-clean-signed-pack-manifest.json",
     },
+    {
+      out: "q0-clean-disconnected-untrusted-cli-results.json",
+      code: RAW_VERIFIER_CODES.OK,
+      base: "q0-clean-disconnected-untrusted-base-pack.json",
+      sig: "q0-clean-disconnected-untrusted-base-pack.sig",
+      pub: "q0-clean-disconnected-untrusted-signer.pub",
+      cert: "q0-clean-disconnected-untrusted-dfi-certificate.json",
+      manifest: "q0-clean-disconnected-untrusted-signed-pack-manifest.json",
+    },
+    {
+      out: "q4a-forged-premise-digest-cli-results.json",
+      code: RAW_VERIFIER_CODES.PREMISE_DIGEST_MISMATCH,
+      base: "q4-dirty-one-edge-delta-base-pack.json",
+      sig: "q4-dirty-one-edge-delta-base-pack.sig",
+      pub: "q4-dirty-one-edge-delta-signer.pub",
+      cert: "q4a-forged-premise-digest-certificate.json",
+      manifest: "q4a-forged-premise-digest-signed-pack-manifest.json",
+    },
+    {
+      out: "q4b-clean-derivation-over-dirty-replay-cli-results.json",
+      code: RAW_VERIFIER_CODES.EXPLICIT_FLOW_INTEGRITY_VIOLATION,
+      base: "q4-dirty-one-edge-delta-base-pack.json",
+      sig: "q4-dirty-one-edge-delta-base-pack.sig",
+      pub: "q4-dirty-one-edge-delta-signer.pub",
+      cert: "q4b-clean-derivation-over-dirty-replay-certificate.json",
+      manifest: "q4b-clean-derivation-over-dirty-replay-signed-pack-manifest.json",
+    },
+    {
+      out: "q4c-derivation-scope-omission-cli-results.json",
+      code: RAW_VERIFIER_CODES.PROOF_TAMPER_DETECTED,
+      base: "q4-dirty-one-edge-delta-base-pack.json",
+      sig: "q4-dirty-one-edge-delta-base-pack.sig",
+      pub: "q4-dirty-one-edge-delta-signer.pub",
+      cert: "q4c-derivation-scope-omission-certificate.json",
+      manifest: "q4c-derivation-scope-omission-signed-pack-manifest.json",
+    },
   ];
 
   for (const testCase of cliCases) {
@@ -678,7 +714,7 @@ export async function main({ root = process.cwd() } = {}) {
   }
 
   const verifierResults = await readJson(
-    join(fixtureRoot, "expected-results/q1-clean-cli-results.json")
+    join(fixtureRoot, "expected-results/q0-clean-disconnected-untrusted-cli-results.json")
   );
   const q1ExpectedResults = {
     "q1-clean": RAW_VERIFIER_CODES.OK,
@@ -689,22 +725,52 @@ export async function main({ root = process.cwd() } = {}) {
     "q1-theatre-stripped-sink-claims": RAW_VERIFIER_CODES.PROOF_TAMPER_DETECTED,
     "q1-unbound-certificate-mutation": RAW_VERIFIER_CODES.PACK_BINDING_MISMATCH,
   };
+  const q0ExpectedResults = {
+    "q0-clean-disconnected-untrusted": RAW_VERIFIER_CODES.OK,
+  };
+  const q4ExpectedResults = {
+    "q4a-forged-premise-digest": RAW_VERIFIER_CODES.PREMISE_DIGEST_MISMATCH,
+    "q4b-clean-derivation-over-dirty-replay": RAW_VERIFIER_CODES.EXPLICIT_FLOW_INTEGRITY_VIOLATION,
+    "q4c-derivation-scope-omission": RAW_VERIFIER_CODES.PROOF_TAMPER_DETECTED,
+  };
+  await writeJson(join(fixtureRoot, "expected-results/discrimination-results.json"), {
+    stage: "4H.2",
+    gate: "Q0/Q4",
+    expected_results: {
+      Q0: q0ExpectedResults,
+      Q4: q4ExpectedResults,
+    },
+    reasons: {
+      "q4a-forged-premise-digest": "premise_digest_mismatch",
+      "q4b-clean-derivation-over-dirty-replay": "proof_accepts_bad_flow",
+      "q4c-derivation-scope-omission": "derivation_scope_incomplete",
+    },
+  });
   const qGateResults = {
-    stage: "4H.1",
-    status: "lattice_derivation_validator",
+    stage: "4H.2",
+    status: "discrimination_q0_q4",
     gates: {
-      Q0: { status: "not_in_scope" },
+      Q0: { status: "pass", expected_results: q0ExpectedResults },
       Q1: { status: "pass", expected_results: q1ExpectedResults },
       Q2: { status: "pass", raw_verifier_code: 0 },
       Q3: { status: "not_in_scope" },
-      Q4: { status: "not_in_scope" },
+      Q4: { status: "pass", expected_results: q4ExpectedResults },
       Q5: { status: "pass", raw_verifier_code: 0 },
       Q6: { status: "not_in_scope" },
       Q7: { status: "not_in_scope" },
     },
+    q0_positive_base_pack: "q0-clean-disconnected-untrusted-base-pack.json",
     q1_positive_base_pack: "q1-clean-base-pack.json",
     q1_dirty_base_pack: "q1-real-dirty-base-pack.json",
     q1_dirty_source: realDirtyApplicable ? "real_stage4d_pack" : "synthetic_replacement",
+    q4_dirty_base_pack: "q4-dirty-one-edge-delta-base-pack.json",
+    q4_boundary: {
+      q4a: "forged clean premise digest over dirty replay fails Q2 with raw 22",
+      q4b: "structurally complete forged-safe derivation over honest dirty premises fails sink-safety with raw 24",
+      q4c: "true partial derivation omission over honest dirty premises fails coverage with raw 26",
+      one_edge_delta:
+        "the only Stage 4H DFI/canonical-premise difference is the added untrusted source edge into action:act_001; directly mirrored summary metadata may differ only to truthfully reflect the same source-set change",
+    },
     non_claims: [
       "implicit_flow_security",
       "control_dependence_security",
@@ -712,12 +778,16 @@ export async function main({ root = process.cwd() } = {}) {
       "execution_truth",
       "provider_behaviour_correctness",
       "future_run_guarantees",
+      "full_stage_4h_completion",
       "public_priority",
+      "jailbreak_immunity",
+      "general_jailbreak_resistance",
+      "production_readiness",
     ],
   };
   const e2eSmokeCoverage = {
-    stage: "4H.1",
-    scope: "Q1/Q2/Q5 full E2E smoke",
+    stage: "4H.2",
+    scope: "Q0/Q1/Q2/Q4/Q5 full E2E smoke",
     modules_exercised: [
       "constants.mjs",
       "schema.mjs",
@@ -754,19 +824,24 @@ export async function main({ root = process.cwd() } = {}) {
       "q1-theatre-stripped-lattice-steps": RAW_VERIFIER_CODES.PROOF_TAMPER_DETECTED,
       "q1-theatre-stripped-sink-claims": RAW_VERIFIER_CODES.PROOF_TAMPER_DETECTED,
       "q1-unbound-certificate-mutation": RAW_VERIFIER_CODES.PACK_BINDING_MISMATCH,
+      "q0-clean-disconnected-untrusted": RAW_VERIFIER_CODES.OK,
+      "q4a-forged-premise-digest": RAW_VERIFIER_CODES.PREMISE_DIGEST_MISMATCH,
+      "q4b-clean-derivation-over-dirty-replay":
+        RAW_VERIFIER_CODES.EXPLICIT_FLOW_INTEGRITY_VIOLATION,
+      "q4c-derivation-scope-omission": RAW_VERIFIER_CODES.PROOF_TAMPER_DETECTED,
     },
-    non_scope_gates: ["Q0", "Q3", "Q4", "Q6", "Q7"],
+    non_scope_gates: ["Q3", "Q6", "Q7"],
     metadata_only: true,
   };
 
-  await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "certificate.json"), q1CleanCertificate);
-  await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "signed-pack-manifest.json"), q1CleanManifest);
+  await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "certificate.json"), q0Certificate);
+  await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "signed-pack-manifest.json"), q0Manifest);
   await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "verifier-results.json"), verifierResults);
   await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "q-gate-results.json"), qGateResults);
   await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "e2e-smoke-coverage.json"), e2eSmokeCoverage);
   await writeFile(
     join(root, STAGE4H_EVIDENCE_DIR, "README.md"),
-    "# Stage 4H Evidence\n\nStage 4H.1 evidence covers explicit data-flow integrity derivation validation (Q1) plus the Stage 4H.0 digest/binding foundation (Q2/Q5). Q0, Q3, Q4, Q6, and Q7 remain not in scope for 4H.1.\n"
+    "# Stage 4H Evidence\n\nStage 4H.2 evidence covers verifier discrimination through Q0 clean acceptance and Q4 dishonest-producer laundering rejection, while preserving the Stage 4H.1 Q1 explicit-flow derivation validator and the Stage 4H.0 Q2/Q5 digest/binding foundation. Q3, Q6, and Q7 remain not in scope for 4H.2. This evidence does not claim full Stage 4H completion, implicit-flow security, model safety, jailbreak immunity, or production readiness.\n"
   );
   return 0;
 }
