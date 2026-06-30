@@ -315,9 +315,11 @@ In `tools/simurgh-attestation/stage4h/build-stage4h-digest-fixtures.mjs`, add th
 The helper must keep Q0 and Q4 identical except for fixture identifiers,
 derived signatures/hashes, and the Stage 4H DFI/canonical-premise delta into
 `action:a1`. `policy_features_source.input_sources` may mirror that delta
-because it is the direct metadata summary of the same source set; all other
-replay material, resolved argument digests, decision context, policy,
-registry, lattice, observations, and decision summaries stay constant.
+because it is the direct metadata summary of the same source set. Boolean
+decision summary fields must stay boolean and may differ only to truthfully
+reflect the same source-set change. All other replay material, resolved
+argument digests, decision context, policy, registry, lattice, and observations
+stay constant.
 
 ```js
 function stage4h2DiscriminationRunRecord({ runId, dirty }) {
@@ -455,11 +457,11 @@ function stage4h2DiscriminationRunRecord({ runId, dirty }) {
       },
       {
         action_id: "a1",
-        input_integrity_summary: "stage4h2_dfi_source_set_mirrors_replay_material",
+        input_integrity_summary: dirty ? "contains_untrusted" : "trusted_only",
         decision: "allow",
         decision_reason_code: "POLICY_ALLOWED",
         decision_input: {
-          untrusted_reached_authority: "stage4h2_dfi_source_set_mirrors_replay_material",
+          untrusted_reached_authority: dirty,
           policy_mode: "permissive",
         },
       },
@@ -757,7 +759,7 @@ const qGateResults = {
     q4b: "structurally complete forged-safe derivation over honest dirty premises fails sink-safety with raw 24",
     q4c: "true partial derivation omission over honest dirty premises fails coverage with raw 26",
     one_edge_delta:
-      "the only Stage 4H DFI/canonical-premise difference is the added untrusted source edge into action:a1; policy_features_source.input_sources mirrors the same source set",
+      "the only Stage 4H DFI/canonical-premise difference is the added untrusted source edge into action:a1; directly mirrored summary metadata may differ only to truthfully reflect the same source-set change",
   },
   non_claims: [
     "implicit_flow_security",
