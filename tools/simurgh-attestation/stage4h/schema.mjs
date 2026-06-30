@@ -4,12 +4,14 @@ import {
   CHECKER_VERSION,
   CLAIM,
   DEFAULT_SCOPE,
+  INTEGRITY_LABELS,
   MANIFEST_VERSION,
   PROOF_SYSTEM,
 } from "./constants.mjs";
 
 const DIGEST_RE = /^sha256:[a-f0-9]{64}$/;
 const BASE64_RE = /^base64:[A-Za-z0-9+/]+={0,2}$/;
+const PREMISE_REF_RE = /^premise:sha256:[a-f0-9]{64}$/;
 
 function keysExactly(value, keys) {
   if (!value || typeof value !== "object" || Array.isArray(value)) return false;
@@ -28,6 +30,42 @@ function ok() {
 
 function fail(reason, field) {
   return { ok: false, reason, field };
+}
+
+function validIntegrityLabel(label) {
+  return INTEGRITY_LABELS.includes(label);
+}
+
+function validPremiseRefs(refs) {
+  return (
+    Array.isArray(refs) && refs.every((ref) => typeof ref === "string" && PREMISE_REF_RE.test(ref))
+  );
+}
+
+function validDerivationEntries(derivation) {
+  for (const label of derivation.derived_node_labels) {
+    if (!keysExactly(label, ["node", "label", "premise_refs"])) return false;
+    if (typeof label.node !== "string") return false;
+    if (!validIntegrityLabel(label.label)) return false;
+    if (!validPremiseRefs(label.premise_refs)) return false;
+  }
+
+  for (const step of derivation.lattice_steps) {
+    if (!keysExactly(step, ["op", "node", "inputs", "result"])) return false;
+    if (step.op !== "combine") return false;
+    if (typeof step.node !== "string") return false;
+    if (!Array.isArray(step.inputs) || !step.inputs.every(validIntegrityLabel)) return false;
+    if (!validIntegrityLabel(step.result)) return false;
+  }
+
+  for (const claim of derivation.sink_safety_claims) {
+    if (!keysExactly(claim, ["node", "node_label", "safe"])) return false;
+    if (typeof claim.node !== "string") return false;
+    if (!validIntegrityLabel(claim.node_label)) return false;
+    if (typeof claim.safe !== "boolean") return false;
+  }
+
+  return validPremiseRefs(derivation.premise_refs);
 }
 
 export function isSha256Digest(value) {
@@ -85,6 +123,9 @@ export function validateDfiCertificate(cert) {
     if (!Array.isArray(cert.derivation[field])) {
       return fail("schema_invalid", `derivation.${field}`);
     }
+  }
+  if (!validDerivationEntries(cert.derivation)) {
+    return fail("schema_invalid", "derivation");
   }
   if (
     !keysExactly(cert.summary, [

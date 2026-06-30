@@ -120,3 +120,45 @@ test("Stage 4H schema validates a signed manifest with certificate digest outsid
   assert.deepEqual(validateSignedPackManifest(manifest), { ok: true });
   assert.equal(validateSignedPackManifest({ ...manifest, unexpected: true }).ok, false);
 });
+
+test("Stage 4H.1 schema validates non-empty derivation entry shapes", () => {
+  const premiseRef = `premise:${digest("a")}`;
+  const cert = {
+    ...validCertificate(),
+    derivation: {
+      derived_node_labels: [{ node: "action:a1", label: "trusted", premise_refs: [premiseRef] }],
+      lattice_steps: [{ op: "combine", node: "action:a1", inputs: ["trusted"], result: "trusted" }],
+      sink_safety_claims: [{ node: "action:a1", node_label: "trusted", safe: true }],
+      premise_refs: [premiseRef],
+    },
+  };
+  assert.deepEqual(validateDfiCertificate(cert), { ok: true });
+});
+
+test("Stage 4H.1 schema rejects unknown derivation entry fields", () => {
+  const cert = {
+    ...validCertificate(),
+    derivation: {
+      derived_node_labels: [
+        { node: "action:a1", label: "trusted", premise_refs: [], smuggled: true },
+      ],
+      lattice_steps: [],
+      sink_safety_claims: [],
+      premise_refs: [],
+    },
+  };
+  assert.equal(validateDfiCertificate(cert).ok, false);
+});
+
+test("Stage 4H.1 schema rejects raw Stage 4D labels inside derivation entries", () => {
+  const cert = {
+    ...validCertificate(),
+    derivation: {
+      derived_node_labels: [{ node: "source:web", label: "untrusted_web", premise_refs: [] }],
+      lattice_steps: [],
+      sink_safety_claims: [],
+      premise_refs: [],
+    },
+  };
+  assert.equal(validateDfiCertificate(cert).ok, false);
+});
