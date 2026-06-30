@@ -1,5 +1,17 @@
 ## Change Log
 
+## [stage-4h-2-discrimination-plan-boolean-patch] — 2026-06-30 — boolean summary correction
+
+**Raouf:** Patched the Stage 4H.2 implementation plan before inline execution so `decision_input.untrusted_reached_authority` remains a boolean in the planned Q0/Q4 helper. The one-edge-delta claim is narrowed to the Stage 4H DFI/canonical-premise edge, while directly mirrored decision/policy summary metadata may differ only to truthfully reflect the same source-set change. This is documentation-only: no verifier code, fixture builder, tests, or evidence regeneration in this commit.
+
+### Changed
+
+- `docs/superpowers/plans/2026-06-30-stage-4h-2-discrimination-q0-q4.md` — kept `untrusted_reached_authority` boolean and narrowed one-edge-delta wording.
+
+### Verified
+
+- Prettier check, `git diff --check`, and boolean-field scan pass; the planned helper keeps `untrusted_reached_authority` boolean and has no string assignment for that field.
+
 ## [stage-4h-2-discrimination-plan-patch] — 2026-06-30 — one-edge-delta correction
 
 **Raouf:** Patched the Stage 4H.2 implementation plan before execution so the planned Q0/Q4 fixture helper preserves the one-edge-delta claim at the Stage 4H DFI/canonical-premise layer. Non-essential replay fields now stay constant between Q0 and Q4; `policy_features_source.input_sources` is documented as a direct mirror of the same DFI source set; the plan adds a focused one-edge-delta audit test and q-gate wording for the narrowed claim. This is documentation-only: no verifier code, fixture builder, tests, or evidence regeneration in this commit.

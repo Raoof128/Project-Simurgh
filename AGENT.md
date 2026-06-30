@@ -2,6 +2,16 @@
 
 ## Agent Change Log
 
+### 2026-06-30 (Australia/Sydney) — Stage 4H.2 boolean summary plan patch
+
+**Raouf:**
+
+- **Scope:** Documentation-only correction before inline execution. No verifier code, fixture builder, tests, or evidence files changed in this commit.
+- **Summary:** Patched the Stage 4H.2 plan so `decision_input.untrusted_reached_authority` remains boolean in the planned Q0/Q4 helper. The one-edge-delta claim is now narrowed to the Stage 4H DFI/canonical-premise edge, while allowing directly mirrored summary metadata to differ only when required to truthfully reflect the same source-set change.
+- **Files changed:** `docs/superpowers/plans/2026-06-30-stage-4h-2-discrimination-q0-q4.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** Prettier check, `git diff --check`, and boolean-field scan pass; the planned helper keeps `untrusted_reached_authority` boolean and has no string assignment for that field.
+- **Follow-ups:** Execute the implementation plan inline after this patch; keep Q3/Q6/Q7 out of scope.
+
 ### 2026-06-30 (Australia/Sydney) — Stage 4H.2 one-edge-delta plan patch
 
 **Raouf:**
