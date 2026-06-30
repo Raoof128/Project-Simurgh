@@ -2,6 +2,16 @@
 
 ## Agent Change Log
 
+### 2026-06-30 (Australia/Sydney) — Stage 4H.2 implementation plan
+
+**Raouf:**
+
+- **Scope:** Planning-only follow-up to the approved Stage 4H.2 design spec. No verifier code, fixture builder, tests, or evidence files changed in this commit.
+- **Summary:** Added the repo-native implementation plan for the Q0 clean positive fixture and Q4 dishonest-producer laundering matrix. The plan preserves the Rev 3 raw-code ledger (`0`, `22`, `24`, `26`), check order, fixture names, Q4c true partial-coverage reason, Q3/Q6/Q7 non-scope boundary, E2E smoke requirement, metadata-only constraints, and no-release-tag boundary.
+- **Files changed:** `docs/superpowers/plans/2026-06-30-stage-4h-2-discrimination-q0-q4.md`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** Prettier check and `git diff --check` pass on the plan/log files; self-review confirms the plan maps every 4H.2 acceptance criterion to implementation tasks and preserves the Q0/Q4 scope boundary.
+- **Follow-ups:** Choose subagent-driven or inline execution; implementation must use the plan task by task and keep Q3/Q6/Q7 out of scope.
+
 ### 2026-06-30 (Australia/Sydney) — Stage 4H.2 discrimination design spec
 
 **Raouf:**
