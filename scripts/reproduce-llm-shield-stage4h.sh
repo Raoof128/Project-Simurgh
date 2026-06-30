@@ -14,6 +14,7 @@ node --test \
   tests/unit/llmShield/stage4h/packBinding.test.js \
   tests/unit/llmShield/stage4h/derivation.test.js \
   tests/unit/llmShield/stage4h/reproduce.test.js
+node --test tests/e2e/llmShield/stage4hFullSmoke.test.js
 
 npx prettier --write \
   docs/research/llm-shield/evidence/stage-4h/*.json \

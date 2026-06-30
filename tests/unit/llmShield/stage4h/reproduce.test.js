@@ -55,6 +55,7 @@ test("Stage 4H.1 committed fixtures and evidence are present and scoped", () => 
     `${evidenceRoot}/signed-pack-manifest.json`,
     `${evidenceRoot}/verifier-results.json`,
     `${evidenceRoot}/q-gate-results.json`,
+    `${evidenceRoot}/e2e-smoke-coverage.json`,
     `${evidenceRoot}/README.md`,
   ]) {
     assert.equal(existsSync(path), true, `${path} exists`);
@@ -94,6 +95,7 @@ test("Stage 4H.1 committed fixtures and evidence are metadata-only", () => {
     readFileSync(`${fixtureRoot}/expected-results/q1-real-dirty-cli-results.json`, "utf8"),
     readFileSync(`${evidenceRoot}/verifier-results.json`, "utf8"),
     readFileSync(`${evidenceRoot}/q-gate-results.json`, "utf8"),
+    readFileSync(`${evidenceRoot}/e2e-smoke-coverage.json`, "utf8"),
   ].join("\n");
   for (const forbidden of [
     "raw_prompt",

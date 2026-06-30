@@ -189,28 +189,6 @@ export async function main({ root = process.cwd() } = {}) {
   const manifestPublicKey = createPublicKey(manifestPublicKeyPem);
   const fixtureRoot = join(root, "tests/fixtures/llmShield/stage4h");
 
-  const certificate = buildDfiCertificate({ pack });
-  const forgedPremiseDigestCertificate = {
-    ...certificate,
-    premise_digest: `sha256:${"0".repeat(64)}`,
-  };
-  const malformedCertificate = { ...certificate, unexpected: true };
-  const tamperedBasePack = {
-    ...pack,
-    run_manifest: { ...pack.run_manifest, stage4h_tamper: true },
-  };
-  const manifest = buildSignedPackManifest({ certificate, privateKey: manifestPrivateKey });
-  const binding = verifyPackBinding({ certificate, manifest, publicKey: manifestPublicKey });
-  const q2q5Results = {
-    ok: binding.ok,
-    code: binding.ok ? RAW_VERIFIER_CODES.OK : RAW_VERIFIER_CODES.PACK_BINDING_MISMATCH,
-    stage4_code: stage4CodeForRawCode(binding.ok ? 0 : RAW_VERIFIER_CODES.PACK_BINDING_MISMATCH),
-    gate: "Q2/Q5",
-    certificate_digest: certificateDigest(certificate),
-    premise_digest: certificate.premise_digest,
-    base_pack_digest: certificate.base_pack_digest,
-  };
-
   const stage4dPrivateKey = createPrivateKey(manifestPrivateKeyPem);
   const stage4dPublicKey = createPublicKey(manifestPublicKeyPem);
   const q1Clean = buildSignedStage4dPack({
@@ -232,6 +210,29 @@ export async function main({ root = process.cwd() } = {}) {
 
   const q1CleanCertificate = buildDfiCertificate({ pack: q1Clean.pack });
   const q1CleanManifest = signManifest(q1CleanCertificate, manifestPrivateKey);
+  const forgedPremiseDigestCertificate = {
+    ...q1CleanCertificate,
+    premise_digest: `sha256:${"0".repeat(64)}`,
+  };
+  const malformedCertificate = { ...q1CleanCertificate, unexpected: true };
+  const tamperedBasePack = {
+    ...q1Clean.pack,
+    run_manifest: { ...q1Clean.pack.run_manifest, stage4h_tamper: true },
+  };
+  const binding = verifyPackBinding({
+    certificate: q1CleanCertificate,
+    manifest: q1CleanManifest,
+    publicKey: manifestPublicKey,
+  });
+  const q2q5Results = {
+    ok: binding.ok,
+    code: binding.ok ? RAW_VERIFIER_CODES.OK : RAW_VERIFIER_CODES.PACK_BINDING_MISMATCH,
+    stage4_code: stage4CodeForRawCode(binding.ok ? 0 : RAW_VERIFIER_CODES.PACK_BINDING_MISMATCH),
+    gate: "Q2/Q5",
+    certificate_digest: certificateDigest(q1CleanCertificate),
+    premise_digest: q1CleanCertificate.premise_digest,
+    base_pack_digest: q1CleanCertificate.base_pack_digest,
+  };
   const q1DirtyCertificate = buildDfiCertificate({ pack: q1Dirty.pack });
   const q1DirtyManifest = signManifest(q1DirtyCertificate, manifestPrivateKey);
 
@@ -269,15 +270,15 @@ export async function main({ root = process.cwd() } = {}) {
   const q1UnboundCertificateMutation = structuredClone(q1CleanCertificate);
   q1UnboundCertificateMutation.summary.sources_checked += 1;
 
-  await writeJson(join(fixtureRoot, "clean-base-pack.json"), pack);
+  await writeJson(join(fixtureRoot, "clean-base-pack.json"), q1Clean.pack);
   await writeJson(join(fixtureRoot, "tampered-base-pack.json"), tamperedBasePack);
-  await writeFile(join(fixtureRoot, "clean-base-pack.sig"), `${signature}\n`);
+  await writeFile(join(fixtureRoot, "clean-base-pack.sig"), `${q1Clean.signature.trim()}\n`);
   await writeFile(join(fixtureRoot, "wrong-base-pack.sig"), "base64:ZmFrZQ==\n");
-  await writeFile(join(fixtureRoot, "clean-signer.pub"), signerPub);
+  await writeFile(join(fixtureRoot, "clean-signer.pub"), q1Clean.publicKeyPem);
   await writeFile(join(fixtureRoot, "wrong-base-pack.pub"), WRONG_BASE_PACK_PUBLIC_KEY_PEM);
-  await writeJson(join(fixtureRoot, "clean-dfi-certificate.json"), certificate);
+  await writeJson(join(fixtureRoot, "clean-dfi-certificate.json"), q1CleanCertificate);
   await writeJson(join(fixtureRoot, "malformed-certificate.json"), malformedCertificate);
-  await writeJson(join(fixtureRoot, "clean-signed-pack-manifest.json"), manifest);
+  await writeJson(join(fixtureRoot, "clean-signed-pack-manifest.json"), q1CleanManifest);
   await writeFile(join(fixtureRoot, "manifest-verifier.pub"), manifestPublicKeyPem);
   await writeJson(
     join(fixtureRoot, "forged-premise-digest-certificate.json"),
@@ -465,11 +466,55 @@ export async function main({ root = process.cwd() } = {}) {
       "public_priority",
     ],
   };
+  const e2eSmokeCoverage = {
+    stage: "4H.1",
+    scope: "Q1/Q2/Q5 full E2E smoke",
+    modules_exercised: [
+      "constants.mjs",
+      "schema.mjs",
+      "canonicalPremises.mjs",
+      "packBinding.mjs",
+      "dfiCertificate.mjs",
+      "verify-stage4h-digest-binding.mjs",
+      "build-stage4h-digest-fixtures.mjs",
+      "exitCodes.mjs",
+    ],
+    functions_exercised: [
+      "validateDfiCertificate",
+      "buildPremiseSet",
+      "premiseDigest",
+      "verifyPackBinding",
+      "buildDfiCertificate",
+      "certificateDigest",
+      "normalizeIntegrityLabel",
+      "combineIntegrity",
+      "integrityLte",
+      "recomputeGraph",
+      "buildDerivation",
+      "validateDerivation",
+      "stage4CodeForRawCode",
+      "verify-stage4h-digest-binding CLI",
+      "build-stage4h-digest-fixtures builder",
+    ],
+    fixture_matrix: {
+      "4h0-clean": RAW_VERIFIER_CODES.OK,
+      "q1-clean": RAW_VERIFIER_CODES.OK,
+      "q1-real-dirty": RAW_VERIFIER_CODES.EXPLICIT_FLOW_INTEGRITY_VIOLATION,
+      "q1-forged-safe-dirty": RAW_VERIFIER_CODES.EXPLICIT_FLOW_INTEGRITY_VIOLATION,
+      "q1-theatre-stripped-derived-labels": RAW_VERIFIER_CODES.PROOF_TAMPER_DETECTED,
+      "q1-theatre-stripped-lattice-steps": RAW_VERIFIER_CODES.PROOF_TAMPER_DETECTED,
+      "q1-theatre-stripped-sink-claims": RAW_VERIFIER_CODES.PROOF_TAMPER_DETECTED,
+      "q1-unbound-certificate-mutation": RAW_VERIFIER_CODES.PACK_BINDING_MISMATCH,
+    },
+    non_scope_gates: ["Q0", "Q3", "Q4", "Q6", "Q7"],
+    metadata_only: true,
+  };
 
   await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "certificate.json"), q1CleanCertificate);
   await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "signed-pack-manifest.json"), q1CleanManifest);
   await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "verifier-results.json"), verifierResults);
   await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "q-gate-results.json"), qGateResults);
+  await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "e2e-smoke-coverage.json"), e2eSmokeCoverage);
   await writeFile(
     join(root, STAGE4H_EVIDENCE_DIR, "README.md"),
     "# Stage 4H Evidence\n\nStage 4H.1 evidence covers explicit data-flow integrity derivation validation (Q1) plus the Stage 4H.0 digest/binding foundation (Q2/Q5). Q0, Q3, Q4, Q6, and Q7 remain not in scope for 4H.1.\n"
