@@ -656,6 +656,25 @@ const summary = {
   non_claim: "released-artifact audit only; no new runtime claim"
 };
 
+function assertEqual(actual, expected, name) {
+  if (actual !== expected) {
+    throw new Error(`${name}: expected ${expected}, got ${actual}`);
+  }
+}
+
+assertEqual(summary.raw_code_matrix.q0_clean, 0, "q0_clean");
+assertEqual(summary.raw_code_matrix.q4a_forged_premise, 22, "q4a_forged_premise");
+assertEqual(summary.raw_code_matrix.q4b_dirty_replay, 24, "q4b_dirty_replay");
+assertEqual(summary.raw_code_matrix.q4c_partial_omission, 26, "q4c_partial_omission");
+assertEqual(summary.raw_code_matrix.q3_egress, 28, "q3_egress");
+assertEqual(summary.raw_code_matrix.q3_egress_typed_exit, 2, "q3_egress_typed_exit");
+assertEqual(
+  summary.raw_code_matrix.internal_fail_closed_typed_exit,
+  3,
+  "internal_fail_closed_typed_exit"
+);
+assertEqual(summary.raw_code_matrix.unknown_raw_typed_exit, 3, "unknown_raw_typed_exit");
+
 const functionSummary = {
   stage: "4H",
   audit: "function_path_coverage",
