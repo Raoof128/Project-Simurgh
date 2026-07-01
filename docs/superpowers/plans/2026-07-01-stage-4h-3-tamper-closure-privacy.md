@@ -175,12 +175,39 @@ test("Stage 4H.3 checkBinding reports real pack/certificate binding mismatch", (
   assert.equal(result.reason, "pack_binding_mismatch");
 });
 
+test("Stage 4H.3 schema owns nested unknown keys before Q7", () => {
+  const ctx = cleanContext();
+  ctx.certificate.derivation.lattice_steps[0].leak = "raw";
+  const result = diagnose(ctx);
+  assert.equal(result.code, 20);
+  assert.equal(result.reason, "unknown_field");
+});
+
 test("Stage 4H.3 no_short_circuit_masking: clean through step 8 reaches step 9 proof missing", () => {
   const ctx = cleanContext();
   ctx.certificate.derivation.lattice_steps.pop();
   const result = diagnose(ctx);
   assert.equal(result.code, 26);
   assert.equal(result.reason, "proof_step_missing");
+});
+
+test("Stage 4H.3 validator distinguishes Q6 proof-step reasons without breaking Q4c", () => {
+  const ctx = cleanContext();
+  const missing = structuredClone(ctx);
+  missing.certificate.derivation.lattice_steps.pop();
+  assert.equal(diagnose(missing).reason, "proof_step_missing");
+
+  const unsound = structuredClone(ctx);
+  unsound.certificate.derivation.lattice_steps[0].result =
+    unsound.certificate.derivation.lattice_steps[0].result === "trusted" ? "untrusted" : "trusted";
+  assert.equal(diagnose(unsound).reason, "proof_step_unsound");
+
+  const dirtyPack = readJson(`${fixtureRoot}/q4-dirty-one-edge-delta-base-pack.json`);
+  const q4c = readJson(`${fixtureRoot}/q4c-derivation-scope-omission-certificate.json`);
+  assert.equal(
+    diagnose({ pack: dirtyPack, certificate: q4c, manifest: null }).reason,
+    "derivation_scope_incomplete"
+  );
 });
 ```
 
@@ -299,7 +326,35 @@ export function checkLatticeDigest(certificate) {
 
 Ensure `INTEGRITY_LATTICE_DIGEST` is imported from `./constants.mjs`.
 
-- [ ] **Step 6: Add `checkBinding()` and `diagnose()` to `dfiCertificate.mjs`**
+- [ ] **Step 6: Split Q6 proof-step reasons inside `validateDerivation()`**
+
+Update `validateDerivation()` so Q6-specific proof-step failures have explicit
+reason strings, while Q4c remains stable. The implementation may use the
+expected-node set, fixture intent, or a narrow helper flag from the Q6 harness,
+but these tests are mandatory:
+
+```text
+Q6 proof-step deletion -> 26 / proof_step_missing
+Q6 structurally invalid lattice step -> 26 / proof_step_unsound
+Q4c existing partial derivation omission -> 26 / derivation_scope_incomplete
+```
+
+Update lattice-step invalidity returns from:
+
+```js
+return tamper("lattice_step_invalid", { node });
+```
+
+to:
+
+```js
+return tamper("proof_step_unsound", { node });
+```
+
+Do not implement a broad remap from every `derivation_scope_incomplete` to
+`proof_step_missing`; that would regress the Stage 4H.2 Q4c ledger.
+
+- [ ] **Step 7: Add `checkBinding()` and `diagnose()` to `dfiCertificate.mjs`**
 
 Import `certificateDigest` dependencies already in this file as needed and add this
 binding helper near `validateDerivation()`. This must be the shared binding
@@ -405,7 +460,7 @@ This is a test-facing diagnostic helper that shares the real binding step with
 the CLI. Task 4 will wire the CLI to the full pinned order including Q7 and
 Stage 4D verification.
 
-- [ ] **Step 7: Run the focused tests**
+- [ ] **Step 8: Run the focused tests**
 
 Run:
 
@@ -417,7 +472,7 @@ node --test tests/unit/llmShield/stage4h/diagnosticSoundness.test.js \
 
 Expected: PASS. If `discrimination.test.js` shows Q4c reason drift, restore the narrow `tamper()` behavior from Step 4 and handle Q6-specific labels in Task 3.
 
-- [ ] **Step 8: Commit Task 1**
+- [ ] **Step 9: Commit Task 1**
 
 Run:
 
@@ -457,7 +512,10 @@ import {
   covertCapacityBits,
   privacyGate,
 } from "../../../../tools/simurgh-attestation/stage4h/privacyGate.mjs";
-import { validateJsonTextNoDuplicateKeys } from "../../../../tools/simurgh-attestation/stage4h/schema.mjs";
+import {
+  validateDfiCertificate,
+  validateJsonTextNoDuplicateKeys,
+} from "../../../../tools/simurgh-attestation/stage4h/schema.mjs";
 
 const fixtureRoot = "tests/fixtures/llmShield/stage4h";
 
@@ -596,6 +654,20 @@ test("Q7 auxiliary unknown-field flag does not override schema ownership", () =>
   const result = privacyGate(cert);
   assert.equal(result.ok, true);
   assert.equal(result.auxiliaryFlags.includes("freeform_field_present"), true);
+});
+
+test("schema rejects nested unknown keys as 20/unknown_field before Q7 owns values", () => {
+  const cert = cleanCert();
+  cert.derivation.lattice_steps[0].leak = "raw";
+  const schema = validateDfiCertificate(cert);
+  assert.equal(schema.ok, false);
+  assert.equal(schema.reason, "unknown_field");
+  assert.equal(schema.field, "derivation.lattice_steps[].leak");
+});
+
+test("duplicate-key scanner ignores key-like text inside string values", () => {
+  const raw = `{"summary":{"note":"not a key: {sources_checked:2}"}}`;
+  assert.deepEqual(validateJsonTextNoDuplicateKeys(raw), { ok: true });
 });
 ```
 
@@ -861,6 +933,53 @@ export function validateJsonTextNoDuplicateKeys(raw) {
 }
 ```
 
+In the same file, expose exact nested-key ownership for schema validation:
+
+```js
+export const CERTIFICATE_ALLOWED_KEYS = Object.freeze([
+  "type",
+  "proof_system",
+  "claim",
+  "scope",
+  "run_id_hash",
+  "base_pack_digest",
+  "replay_root",
+  "premise_digest",
+  "policy_digest",
+  "lattice_digest",
+  "checker_version",
+  "derivation",
+  "summary",
+]);
+
+export const DERIVATION_ALLOWED_KEYS = Object.freeze([
+  "derived_node_labels",
+  "lattice_steps",
+  "sink_safety_claims",
+  "premise_refs",
+]);
+
+export const DERIVED_NODE_LABEL_ALLOWED_KEYS = Object.freeze(["node", "label", "premise_refs"]);
+export const LATTICE_STEP_ALLOWED_KEYS = Object.freeze(["op", "node", "inputs", "result"]);
+export const SINK_SAFETY_CLAIM_ALLOWED_KEYS = Object.freeze(["node", "node_label", "safe"]);
+```
+
+Update `keysExactly()` and `validDerivationEntries()` so every unknown key
+returns `fail("unknown_field", path)` rather than a generic schema error. The
+schema must hard-reject unknown keys at these paths:
+
+```text
+certificate
+summary
+derivation
+derived_node_labels[]
+sink_safety_claims[]
+lattice_steps[]
+```
+
+Q7 may keep auxiliary `freeform_field_present`, but raw verifier diagnosis for
+unknown keys must be `20 / unknown_field`.
+
 - [ ] **Step 5: Run Q7 tests**
 
 Run:
@@ -965,6 +1084,17 @@ test("Q6 pure tamper arms are silent under Q7", () => {
     assert.equal(q7.ok, true, arm.arm);
   }
 });
+
+test("Q6 Layer-B semantic arms repair earlier binding before target failure", () => {
+  const ctx = buildCleanTamperContext();
+  for (const arm of mutationFamily().filter(
+    (entry) => entry.layer === "B" && entry.arm !== "binding"
+  )) {
+    const mutated = applyMutation(ctx, arm);
+    assert.notEqual(mutated.diagnosis.code, 25, arm.arm);
+    assert.notEqual(mutated.diagnosis.reason, "pack_binding_mismatch", arm.arm);
+  }
+});
 ```
 
 - [ ] **Step 2: Run the Q6 test to verify it fails**
@@ -985,7 +1115,7 @@ Create `tools/simurgh-attestation/stage4h/tamperClosure.mjs`:
 // SPDX-License-Identifier: AGPL-3.0-or-later
 import { readFileSync } from "node:fs";
 import { buildPremiseSet } from "./canonicalPremises.mjs";
-import { diagnose } from "./dfiCertificate.mjs";
+import { certificateDigest, diagnose } from "./dfiCertificate.mjs";
 
 const fixtureRoot = "tests/fixtures/llmShield/stage4h";
 
@@ -1058,8 +1188,19 @@ function mutateContext(ctx, arm) {
   return next;
 }
 
+function repairEarlierBindings(ctx, arm) {
+  if (arm.layer !== "B" || arm.arm === "binding") return ctx;
+  if (ctx.manifest?.certificate_digest) {
+    ctx.manifest.certificate_digest = certificateDigest(ctx.certificate);
+  }
+  if (ctx.manifest?.base_pack_digest) {
+    ctx.manifest.base_pack_digest = ctx.certificate.base_pack_digest;
+  }
+  return ctx;
+}
+
 export function applyMutation(ctx, arm) {
-  const mutated = mutateContext(ctx, arm);
+  const mutated = repairEarlierBindings(mutateContext(ctx, arm), arm);
   const diagnosis = diagnose(mutated);
   return {
     ...mutated,
@@ -1092,8 +1233,13 @@ export function buildTamperMatrix(ctx = buildCleanTamperContext()) {
 
 This implementation must not post-process or remap verdicts. If a Q6 arm does
 not produce its expected code and reason, fix the shared verifier step that owns
-that layer. Task 4 must replace any in-memory-only fixture shortcuts with
-CLI-backed fixture generation and real manifest re-signing where required.
+that layer. For every Layer-B arm except `binding`, mutate the target field and
+then repair every earlier-layer commitment required for steps 1-8 to pass. For
+certificate mutations such as `lattice-digest`, `lattice-step`, and
+`proof-step`, that means recomputing `manifest.certificate_digest` before
+diagnosis so `checkBinding()` does not hide the intended raw `26` failure. Task
+4 must replace any in-memory-only fixture shortcuts with CLI-backed fixture
+generation and real manifest re-signing where required.
 
 - [ ] **Step 4: Run Q6 tests**
 
@@ -1332,6 +1478,15 @@ first-failing-step verifier path used by
 `verify-stage4h-digest-binding.mjs`. Do not repair codes, rewrite reasons, or
 post-process Layer A/B outcomes inside `tamperClosure.mjs` or the fixture
 builder.
+
+Layer-B repair rule: for every Q6 Layer-B arm except the actual `binding` arm,
+the fixture builder must mutate the target field, then recompute all
+earlier-layer commitments and signatures required for steps 1-8 to pass. Only
+the intended target layer may remain inconsistent. For example, the
+`lattice-digest` arm mutates `certificate.lattice_digest`, recomputes
+`manifest.certificate_digest`, re-signs the manifest with the test manifest key,
+and does not repair `certificate.lattice_digest` itself; the first failure must
+be `26 / lattice_digest_mismatch`, not `25 / pack_binding_mismatch`.
 
 At the end of the builder, before writing `q-gate-results.json`, compute:
 
