@@ -84,6 +84,9 @@ test("Stage 4H.2 committed fixtures and evidence are present and scoped", () => 
     `${evidenceRoot}/e2e-smoke-coverage.json`,
     `${evidenceRoot}/tamper-results.json`,
     `${evidenceRoot}/privacy-report.json`,
+    `${evidenceRoot}/offline-report.json`,
+    `${evidenceRoot}/hermeticity-attestation.json`,
+    `${evidenceRoot}/exit-map.json`,
     `${evidenceRoot}/README.md`,
   ]) {
     assert.equal(existsSync(path), true, `${path} exists`);
@@ -112,11 +115,14 @@ test("Stage 4H.2 committed fixtures and evidence are present and scoped", () => 
     "q4c-derivation-scope-omission": 26,
   });
   assert.equal(qGate.gates.Q5.status, "pass");
-  assert.equal(qGate.gates.Q3.status, "not_in_scope");
   assert.equal(qGate.gates.Q6.status, "pass");
   assert.equal(qGate.gates.Q6.tampered_accepted_count, 0);
   assert.equal(qGate.gates.Q7.status, "pass");
   assert.equal(qGate.gates.Q7.accepted_negative_count, 0);
+  assert.equal(qGate.gates.Q3.status, "pass");
+  assert.equal(qGate.gates.Q3.clean_run_hits, 0);
+  assert.equal(qGate.gates.Q3.egress_double_caught, true);
+  assert.equal(qGate.gates.Q3.egress_double_raw_code, 28);
 
   const tamper = readJson(`${evidenceRoot}/tamper-results.json`);
   assert.equal(tamper.stage, "4H.3");
@@ -145,6 +151,18 @@ test("Stage 4H.2 committed fixtures and evidence are present and scoped", () => 
     privacy.results.some((result) => result.name === "unknown-field" && result.code === 20),
     true
   );
+
+  const offline = readJson(`${evidenceRoot}/offline-report.json`);
+  assert.equal(offline.q3_status, "pass");
+  assert.equal(offline.clean_run_hits, 0);
+  assert.equal(offline.egress_double_caught, true);
+  assert.match(offline.hermeticity_attestation_digest, /^sha256:[a-f0-9]{64}$/);
+
+  const attestation = readJson(`${evidenceRoot}/hermeticity-attestation.json`);
+  assert.equal("hermeticity_attestation_digest" in attestation, false);
+
+  const exitMap = readJson(`${evidenceRoot}/exit-map.json`);
+  assert.equal(exitMap.unknown_raw_maps_to, 3);
 });
 
 test("Stage 4H.2 committed fixtures and evidence are metadata-only", () => {
@@ -206,7 +224,7 @@ test("Stage 4H.2 verifier CLI accepts committed Q0 clean fixture", () => {
     ],
     { encoding: "utf8" }
   );
-  assert.match(output, /Stage 4H\.3 verifier discrimination: PASS/);
+  assert.match(output, /Stage 4H\.5 verifier: PASS/);
 });
 
 test("Stage 4H.2 expected results use the locked raw codes", () => {
@@ -246,7 +264,6 @@ test("Stage 4H.2 evidence does not claim broader or out-of-scope gates", () => {
     readFileSync(`${evidenceRoot}/verifier-results.json`, "utf8"),
   ].join("\n");
   for (const forbidden of [
-    "Q3 pass",
     "first proof",
     "public priority",
     "jailbreak-proof",
@@ -261,7 +278,8 @@ test("Stage 4H.2 evidence does not claim broader or out-of-scope gates", () => {
   }
 });
 
-test("Stage 4H.1 verifier CLI rejects forged premise digest with code 22", () => {
+test("Stage 4H.1 verifier CLI rejects forged premise digest with raw code 22", () => {
+  const out = `${fixtureRoot}/expected-results/forged-premise-cli-results.json`;
   assert.throws(
     () =>
       execFileSync(
@@ -281,15 +299,16 @@ test("Stage 4H.1 verifier CLI rejects forged premise digest with code 22", () =>
           "--manifest-pubkey",
           `${fixtureRoot}/manifest-verifier.pub`,
           "--out",
-          `${fixtureRoot}/expected-results/forged-premise-cli-results.json`,
+          out,
         ],
         { encoding: "utf8" }
       ),
-    (error) => error.status === 22
+    (error) => error.status === 1 && readJson(out).code === 22
   );
 });
 
-test("Stage 4H.1 verifier CLI rejects malformed certificate schema with code 20 before Q2", () => {
+test("Stage 4H.1 verifier CLI rejects malformed certificate schema with raw code 20 before Q2", () => {
+  const out = `${fixtureRoot}/expected-results/malformed-cli-results.json`;
   assert.throws(
     () =>
       execFileSync(
@@ -309,15 +328,16 @@ test("Stage 4H.1 verifier CLI rejects malformed certificate schema with code 20 
           "--manifest-pubkey",
           `${fixtureRoot}/manifest-verifier.pub`,
           "--out",
-          `${fixtureRoot}/expected-results/malformed-cli-results.json`,
+          out,
         ],
         { encoding: "utf8" }
       ),
-    (error) => error.status === 20
+    (error) => error.status === 1 && readJson(out).code === 20
   );
 });
 
-test("Stage 4H.1 verifier CLI rejects invalid base-pack signature with code 25", () => {
+test("Stage 4H.1 verifier CLI rejects invalid base-pack signature with raw code 25", () => {
+  const out = `${fixtureRoot}/expected-results/wrong-base-pack-sig-results.json`;
   assert.throws(
     () =>
       execFileSync(
@@ -337,10 +357,10 @@ test("Stage 4H.1 verifier CLI rejects invalid base-pack signature with code 25",
           "--manifest-pubkey",
           `${fixtureRoot}/manifest-verifier.pub`,
           "--out",
-          `${fixtureRoot}/expected-results/wrong-base-pack-sig-results.json`,
+          out,
         ],
         { encoding: "utf8" }
       ),
-    (error) => error.status === 25
+    (error) => error.status === 1 && readJson(out).code === 25
   );
 });
