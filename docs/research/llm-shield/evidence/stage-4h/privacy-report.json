@@ -2,6 +2,8 @@
   "stage": "4H.3",
   "gate": "Q7",
   "status": "pass",
+  "bounded_leakage": true,
+  "allowlist": "authoritative_schema_plus_q7_defence_in_depth",
   "results": [
     {
       "name": "clean",
