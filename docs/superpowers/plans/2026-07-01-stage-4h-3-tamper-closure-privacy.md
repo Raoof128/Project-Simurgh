@@ -48,7 +48,7 @@ Modify:
 
 - `tools/simurgh-attestation/stage4h/exitCodes.mjs` - rename raw 26 bucket, add reason constants.
 - `tools/simurgh-attestation/stage4h/schema.mjs` - expose exact key constants, add duplicate-key detection over raw JSON text, keep schema ownership of unknown keys.
-- `tools/simurgh-attestation/stage4h/dfiCertificate.mjs` - add `checkLatticeDigest()` and `diagnose()`, preserve current derivation validator behavior.
+- `tools/simurgh-attestation/stage4h/dfiCertificate.mjs` - add `checkBinding()`, `checkLatticeDigest()`, and `diagnose()`, preserve current derivation validator behavior.
 - `tools/simurgh-attestation/stage4h/verify-stage4h-digest-binding.mjs` - enforce the pinned nine-step order and write Stage 4H.3 results.
 - `tools/simurgh-attestation/stage4h/build-stage4h-digest-fixtures.mjs` - emit Q6/Q7 fixtures, expected results, evidence files, and q-gate flips.
 - `tests/unit/llmShield/stage4h/derivation.test.js` - update reason/taxonomy assertions only where required.
@@ -100,6 +100,7 @@ import { test } from "node:test";
 import { buildPremiseSet } from "../../../../tools/simurgh-attestation/stage4h/canonicalPremises.mjs";
 import {
   buildDfiCertificate,
+  checkBinding,
   checkLatticeDigest,
   diagnose,
 } from "../../../../tools/simurgh-attestation/stage4h/dfiCertificate.mjs";
@@ -164,6 +165,14 @@ test("Stage 4H.3 diagnose tie-break reports policy before lattice", () => {
   const result = diagnose(ctx);
   assert.equal(result.code, 23);
   assert.equal(result.reason, "policy_digest_mismatch");
+});
+
+test("Stage 4H.3 checkBinding reports real pack/certificate binding mismatch", () => {
+  const ctx = cleanContext();
+  ctx.manifest.base_pack_digest = `sha256:${"0".repeat(64)}`;
+  const result = checkBinding(ctx);
+  assert.equal(result.code, 25);
+  assert.equal(result.reason, "pack_binding_mismatch");
 });
 
 test("Stage 4H.3 no_short_circuit_masking: clean through step 8 reaches step 9 proof missing", () => {
@@ -253,24 +262,10 @@ export function stage4CodeForRawCode(code) {
 
 - [ ] **Step 4: Update raw 26 helper in `dfiCertificate.mjs`**
 
-In `tools/simurgh-attestation/stage4h/dfiCertificate.mjs`, change `tamper()` to use the renamed constant and remap the two deep Q6 reasons:
-
-```js
-function tamper(reason, extra = {}) {
-  const q6Reason = new Map([
-    ["lattice_step_invalid", "proof_step_unsound"],
-    ["derivation_scope_incomplete", "proof_step_missing"],
-  ]).get(reason);
-  return {
-    ok: false,
-    code: RAW_VERIFIER_CODES.PROOF_STRUCTURE_INVALID,
-    reason: q6Reason || reason,
-    ...extra,
-  };
-}
-```
-
-Keep `derivation_scope_incomplete()` as-is for now if Q4c tests fail; if Q4c must preserve that exact reason, use this narrower version instead:
+In `tools/simurgh-attestation/stage4h/dfiCertificate.mjs`, change `tamper()`
+to use the renamed constant only. Do not remap generic derivation reasons here;
+Q4c must keep `derivation_scope_incomplete`, and Q6-specific reasons must come
+from the verifier step that owns that tamper arm.
 
 ```js
 function tamper(reason, extra = {}) {
@@ -283,7 +278,8 @@ function tamper(reason, extra = {}) {
 }
 ```
 
-Then add explicit Q6 reason mapping only inside `tamperClosure.mjs` in Task 3. The invariant that must pass after Task 1 is Q4c still returns `derivation_scope_incomplete`.
+The invariant that must pass after Task 1 is Q4c still returns
+`derivation_scope_incomplete`.
 
 - [ ] **Step 5: Add `checkLatticeDigest()` to `dfiCertificate.mjs`**
 
@@ -303,9 +299,35 @@ export function checkLatticeDigest(certificate) {
 
 Ensure `INTEGRITY_LATTICE_DIGEST` is imported from `./constants.mjs`.
 
-- [ ] **Step 6: Add `diagnose()` to `dfiCertificate.mjs`**
+- [ ] **Step 6: Add `checkBinding()` and `diagnose()` to `dfiCertificate.mjs`**
 
-Add this export near `validateDerivation()`:
+Import `certificateDigest` dependencies already in this file as needed and add this
+binding helper near `validateDerivation()`. This must be the shared binding
+step used by both tests and the CLI; do not rewrite binding verdicts in
+`tamperClosure.mjs`:
+
+```js
+export function checkBinding({ certificate, manifest }) {
+  if (!manifest) return { ok: true, code: RAW_VERIFIER_CODES.OK };
+  if (manifest.base_pack_digest !== certificate.base_pack_digest) {
+    return {
+      ok: false,
+      code: RAW_VERIFIER_CODES.PACK_BINDING_MISMATCH,
+      reason: "pack_binding_mismatch",
+    };
+  }
+  if (manifest.certificate_digest !== certificateDigest(certificate)) {
+    return {
+      ok: false,
+      code: RAW_VERIFIER_CODES.PACK_BINDING_MISMATCH,
+      reason: "pack_binding_mismatch",
+    };
+  }
+  return { ok: true, code: RAW_VERIFIER_CODES.OK };
+}
+```
+
+Then add this export near `validateDerivation()`:
 
 ```js
 export function diagnose({
@@ -331,19 +353,22 @@ export function diagnose({
   if (!signatureOk) {
     return {
       ok: false,
-      code: RAW_VERIFIER_CODES.PACK_BINDING_MISMATCH,
+      code: "4D_VERIFY_FAILURE",
       reason: "signature_invalid",
     };
   }
   if (!merkleOk) {
     return {
       ok: false,
-      code: RAW_VERIFIER_CODES.PACK_BINDING_MISMATCH,
+      code: "4D_VERIFY_FAILURE",
       reason: "merkle_root_mismatch",
     };
   }
 
   const premises = buildPremiseSet(pack);
+  const binding = checkBinding({ certificate, manifest });
+  if (!binding.ok) return binding;
+
   if (certificate.policy_digest !== premises.policy_digest) {
     return {
       ok: false,
@@ -376,7 +401,9 @@ export function diagnose({
 }
 ```
 
-This is a test-facing diagnostic helper. Task 4 will wire the CLI to the full pinned order including Q7, Stage 4D verification, and manifest binding.
+This is a test-facing diagnostic helper that shares the real binding step with
+the CLI. Task 4 will wire the CLI to the full pinned order including Q7 and
+Stage 4D verification.
 
 - [ ] **Step 7: Run the focused tests**
 
@@ -507,6 +534,34 @@ for (const [name, mutate, reason] of [
       cert.derivation.sink_safety_claims[0].node_label = "sideways";
     },
     "unknown_label_not_in_lattice_enum",
+  ],
+  [
+    "freeform lattice op",
+    (cert) => {
+      cert.derivation.lattice_steps[0].op = "combine_and_leak";
+    },
+    "opaque_or_freeform_field",
+  ],
+  [
+    "raw lattice step node",
+    (cert) => {
+      cert.derivation.lattice_steps[0].node = "action:ssn=123";
+    },
+    "raw_text_in_key",
+  ],
+  [
+    "raw lattice input",
+    (cert) => {
+      cert.derivation.lattice_steps[0].inputs = ["secret-blob"];
+    },
+    "unknown_label_not_in_lattice_enum",
+  ],
+  [
+    "non-boolean sink safety flag",
+    (cert) => {
+      cert.derivation.sink_safety_claims[0].safe = "true but leak";
+    },
+    "opaque_or_freeform_field",
   ],
   [
     "over-length node id",
@@ -648,6 +703,21 @@ function checkNestedKeys(cert, flags) {
   return null;
 }
 
+function checkLatticeStepValues(step) {
+  if (step.op !== "combine") return leak("opaque_or_freeform_field", "lattice_steps.op");
+  if (!ID_RE.test(step.node)) return leak("raw_text_in_key", step.node);
+  if (!Array.isArray(step.inputs)) return leak("opaque_or_freeform_field", "lattice_steps.inputs");
+  for (const input of step.inputs) {
+    if (!INTEGRITY_LABELS.includes(input)) {
+      return leak("unknown_label_not_in_lattice_enum", `lattice_steps.inputs.${input}`);
+    }
+  }
+  if (!INTEGRITY_LABELS.includes(step.result)) {
+    return leak("unknown_label_not_in_lattice_enum", `lattice_steps.result.${step.node}`);
+  }
+  return null;
+}
+
 export function covertCapacityBits(cert) {
   const perEnum = Math.log2(INTEGRITY_LABELS.length);
   return (
@@ -693,6 +763,14 @@ export function privacyGate(cert) {
     if (!INTEGRITY_LABELS.includes(claim.node_label)) {
       return leak("unknown_label_not_in_lattice_enum", `sink_safety_claims.${claim.node}`);
     }
+    if (typeof claim.safe !== "boolean") {
+      return leak("opaque_or_freeform_field", `sink_safety_claims.${claim.node}.safe`);
+    }
+  }
+
+  for (const step of cert.derivation.lattice_steps) {
+    const stepResult = checkLatticeStepValues(step);
+    if (stepResult) return stepResult;
   }
 
   for (const ref of cert.derivation.premise_refs) {
@@ -723,16 +801,61 @@ the same helper without creating a circular dependency:
 ```js
 export function validateJsonTextNoDuplicateKeys(raw) {
   const stack = [];
-  const keyRe = /"((?:\\.|[^"\\])*)"\s*:/g;
-  let match;
-  while ((match = keyRe.exec(raw)) !== null) {
-    const prefix = raw.slice(0, match.index);
-    const depth = (prefix.match(/\{/g) || []).length - (prefix.match(/\}/g) || []).length;
-    while (stack.length <= depth) stack.push(new Set());
-    stack.length = depth + 1;
-    const key = JSON.parse(`"${match[1]}"`);
-    if (stack[depth].has(key)) return { ok: false, reason: "duplicate_key", key };
-    stack[depth].add(key);
+  let index = 0;
+  let expectingKey = false;
+  while (index < raw.length) {
+    const ch = raw[index];
+    if (/\s/.test(ch)) {
+      index += 1;
+      continue;
+    }
+    if (ch === "{") {
+      stack.push({ keys: new Set(), expectingKey: true });
+      expectingKey = true;
+      index += 1;
+      continue;
+    }
+    if (ch === "}") {
+      stack.pop();
+      expectingKey = false;
+      index += 1;
+      continue;
+    }
+    if (ch === ",") {
+      if (stack.length > 0) stack[stack.length - 1].expectingKey = true;
+      expectingKey = stack.length > 0;
+      index += 1;
+      continue;
+    }
+    if (ch !== '"') {
+      index += 1;
+      continue;
+    }
+
+    let end = index + 1;
+    let escaped = false;
+    while (end < raw.length) {
+      const current = raw[end];
+      if (escaped) {
+        escaped = false;
+      } else if (current === "\\") {
+        escaped = true;
+      } else if (current === '"') {
+        break;
+      }
+      end += 1;
+    }
+    const token = raw.slice(index, end + 1);
+    let cursor = end + 1;
+    while (/\s/.test(raw[cursor])) cursor += 1;
+    const top = stack[stack.length - 1];
+    if (top?.expectingKey && raw[cursor] === ":") {
+      const key = JSON.parse(token);
+      if (top.keys.has(key)) return { ok: false, reason: "duplicate_key", key };
+      top.keys.add(key);
+      top.expectingKey = false;
+    }
+    index = end + 1;
   }
   return { ok: true };
 }
@@ -787,6 +910,10 @@ import {
   mutationFamily,
 } from "../../../../tools/simurgh-attestation/stage4h/tamperClosure.mjs";
 
+function codeMatches(actual, expected) {
+  return actual === expected;
+}
+
 test("Q6 bumpDigest preserves sha256 digest shape while changing value", () => {
   const original = `sha256:${"a".repeat(64)}`;
   const bumped = bumpDigest(original);
@@ -816,7 +943,7 @@ test("Q6 tamper matrix accepts clean twin and rejects every tampered twin", () =
   assert.equal(matrix.tampered_accepted_count, 0);
   for (const result of matrix.results) {
     assert.equal(result.accepted, false, result.arm);
-    assert.equal(result.code, result.expected_code, result.arm);
+    assert.equal(codeMatches(result.code, result.expected_code), true, result.arm);
     assert.equal(result.reason, result.expected_reason, result.arm);
   }
 });
@@ -884,8 +1011,18 @@ export function buildCleanTamperContext() {
 
 export function mutationFamily() {
   return [
-    { arm: "sig-byte", layer: "A", expected_code: 25, expected_reason: "signature_invalid" },
-    { arm: "merkle-node", layer: "A", expected_code: 25, expected_reason: "merkle_root_mismatch" },
+    {
+      arm: "sig-byte",
+      layer: "A",
+      expected_code: "4D_VERIFY_FAILURE",
+      expected_reason: "signature_invalid",
+    },
+    {
+      arm: "merkle-node",
+      layer: "A",
+      expected_code: "4D_VERIFY_FAILURE",
+      expected_reason: "merkle_root_mismatch",
+    },
     { arm: "binding", layer: "B", expected_code: 25, expected_reason: "pack_binding_mismatch" },
     { arm: "policy", layer: "B", expected_code: 23, expected_reason: "policy_digest_mismatch" },
     { arm: "premise", layer: "B", expected_code: 22, expected_reason: "premise_digest_mismatch" },
@@ -923,16 +1060,7 @@ function mutateContext(ctx, arm) {
 
 export function applyMutation(ctx, arm) {
   const mutated = mutateContext(ctx, arm);
-  let diagnosis = diagnose(mutated);
-  if (arm.arm === "binding" && diagnosis.code === 22) {
-    diagnosis = { ok: false, code: 25, reason: "pack_binding_mismatch" };
-  }
-  if (arm.arm === "lattice-step" && diagnosis.reason === "lattice_step_invalid") {
-    diagnosis = { ...diagnosis, reason: "proof_step_unsound" };
-  }
-  if (arm.arm === "proof-step" && diagnosis.reason === "derivation_scope_incomplete") {
-    diagnosis = { ...diagnosis, reason: "proof_step_missing" };
-  }
+  const diagnosis = diagnose(mutated);
   return {
     ...mutated,
     diagnosis,
@@ -962,7 +1090,10 @@ export function buildTamperMatrix(ctx = buildCleanTamperContext()) {
 }
 ```
 
-This first implementation uses existing fixture objects and the diagnostic helper. Task 4 must replace any test-only shortcuts with CLI-backed fixture generation and real manifest re-signing where required.
+This implementation must not post-process or remap verdicts. If a Q6 arm does
+not produce its expected code and reason, fix the shared verifier step that owns
+that layer. Task 4 must replace any in-memory-only fixture shortcuts with
+CLI-backed fixture generation and real manifest re-signing where required.
 
 - [ ] **Step 4: Run Q6 tests**
 
@@ -1072,7 +1203,7 @@ Add imports:
 
 ```js
 import { privacyGate } from "./privacyGate.mjs";
-import { checkLatticeDigest } from "./dfiCertificate.mjs";
+import { checkBinding, checkLatticeDigest } from "./dfiCertificate.mjs";
 import {
   validateDfiCertificate,
   validateJsonTextNoDuplicateKeys,
@@ -1096,7 +1227,29 @@ if (!privacy.ok) {
 }
 ```
 
-- [ ] **Step 5: Split policy and lattice digest checks**
+- [ ] **Step 5: Use the shared binding check**
+
+Replace any direct pack/certificate binding verdict construction in
+`verify-stage4h-digest-binding.mjs` with the shared helper from Task 1:
+
+```js
+const binding = checkBinding({ certificate, manifest });
+if (!binding.ok) {
+  return finish({
+    outPath,
+    code: binding.code,
+    reason: binding.reason,
+    certificate,
+    premises,
+  });
+}
+```
+
+Keep Ed25519 manifest signature verification in `packBinding.mjs`; the CLI may
+still call it for cryptographic validation, but the diagnostic result for
+base-pack/certificate digest disagreement must come from `checkBinding()`.
+
+- [ ] **Step 6: Split policy and lattice digest checks**
 
 Replace the current combined policy/lattice block:
 
@@ -1144,7 +1297,7 @@ if (!lattice.ok) {
 }
 ```
 
-- [ ] **Step 6: Update `baseResult()` gate and banner wording**
+- [ ] **Step 7: Update `baseResult()` gate and banner wording**
 
 In `verify-stage4h-digest-binding.mjs`, change:
 
@@ -1165,7 +1318,7 @@ Change the success/failure strings to:
 : `Stage 4H.3 Q6 tamper-closure + Q7 bounded-capacity verifier: FAIL ${reason}`
 ```
 
-- [ ] **Step 7: Emit Q6/Q7 evidence from the fixture builder**
+- [ ] **Step 8: Emit Q6/Q7 evidence from the fixture builder**
 
 In `build-stage4h-digest-fixtures.mjs`, import:
 
@@ -1173,6 +1326,12 @@ In `build-stage4h-digest-fixtures.mjs`, import:
 import { privacyGate } from "./privacyGate.mjs";
 import { buildTamperMatrix } from "./tamperClosure.mjs";
 ```
+
+Hard acceptance criterion: `tamper-results.json` must be produced from the same
+first-failing-step verifier path used by
+`verify-stage4h-digest-binding.mjs`. Do not repair codes, rewrite reasons, or
+post-process Layer A/B outcomes inside `tamperClosure.mjs` or the fixture
+builder.
 
 At the end of the builder, before writing `q-gate-results.json`, compute:
 
@@ -1223,7 +1382,7 @@ Q3: {
 }
 ```
 
-- [ ] **Step 8: Add security audit wrapper**
+- [ ] **Step 9: Add security audit wrapper**
 
 Create `scripts/security-audit-llm-shield-stage4h.sh`:
 
@@ -1258,7 +1417,7 @@ scripts/security-audit-llm-shield-stage4h.sh
 
 Expected: PASS.
 
-- [ ] **Step 9: Add privacy audit wrapper**
+- [ ] **Step 10: Add privacy audit wrapper**
 
 Create `scripts/privacy-audit-llm-shield-stage4h.mjs`:
 
@@ -1267,6 +1426,7 @@ Create `scripts/privacy-audit-llm-shield-stage4h.mjs`:
 // SPDX-License-Identifier: AGPL-3.0-or-later
 import { readFileSync } from "node:fs";
 import { privacyGate } from "../tools/simurgh-attestation/stage4h/privacyGate.mjs";
+import { validateJsonTextNoDuplicateKeys } from "../tools/simurgh-attestation/stage4h/schema.mjs";
 
 const cert = JSON.parse(
   readFileSync(
@@ -1279,6 +1439,82 @@ if (!result.ok) {
   console.error(`Stage 4H.3 Q7 failed: ${result.reason}`);
   process.exit(1);
 }
+
+const cases = [
+  [
+    "raw-label",
+    (c) => {
+      c.derivation.derived_node_labels[0].label = "IGNORE PREVIOUS";
+    },
+    27,
+    "non_enum_label",
+  ],
+  [
+    "raw-summary",
+    (c) => {
+      c.summary.sources_checked = "secret-blob";
+    },
+    27,
+    "raw_text_in_summary",
+  ],
+  [
+    "raw-node-id",
+    (c) => {
+      c.derivation.derived_node_labels[0].node = "action:ssn=123";
+    },
+    27,
+    "raw_text_in_key",
+  ],
+  [
+    "raw-premise-ref",
+    (c) => {
+      c.derivation.premise_refs.push("premise:leak:not-a-digest");
+    },
+    27,
+    "raw_text_in_premise_ref",
+  ],
+  [
+    "non-enum-label",
+    (c) => {
+      c.derivation.sink_safety_claims[0].node_label = "sideways";
+    },
+    27,
+    "unknown_label_not_in_lattice_enum",
+  ],
+  [
+    "unknown-field",
+    (c) => {
+      c.derivation.raw_freeform = "leak";
+    },
+    20,
+    "unknown_field",
+  ],
+];
+
+for (const [name, mutate, expectedCode, expectedReason] of cases) {
+  const copy = structuredClone(cert);
+  mutate(copy);
+  const gate = privacyGate(copy);
+  const code =
+    expectedCode === 20 && gate.auxiliaryFlags?.includes("freeform_field_present") ? 20 : gate.code;
+  const reason =
+    expectedCode === 20 && gate.auxiliaryFlags?.includes("freeform_field_present")
+      ? "unknown_field"
+      : gate.reason;
+  if (code !== expectedCode || reason !== expectedReason) {
+    console.error(`Stage 4H.3 Q7 negative failed: ${name} got ${code}/${reason}`);
+    process.exit(1);
+  }
+}
+
+const duplicate = validateJsonTextNoDuplicateKeys(
+  `{"summary":{"sources_checked":1,"sources_checked":2}}`
+);
+if (duplicate.ok || duplicate.reason !== "duplicate_key") {
+  console.error("Stage 4H.3 Q7 duplicate-key negative failed");
+  process.exit(1);
+}
+
 console.log(
   `Stage 4H.3 Q7 bounded-capacity privacy audit: PASS B_total=${result.covert_capacity_bits}`
 );
@@ -1293,7 +1529,7 @@ node scripts/privacy-audit-llm-shield-stage4h.mjs
 
 Expected: PASS.
 
-- [ ] **Step 10: Wire reproduce script**
+- [ ] **Step 11: Wire reproduce script**
 
 In `scripts/reproduce-llm-shield-stage4h.sh`, add the two audit scripts after fixture rebuild and before final echo:
 
@@ -1308,7 +1544,7 @@ Change final banner to:
 echo "Stage 4H.3 Q6 tamper-closure + Q7 bounded-capacity: PASS"
 ```
 
-- [ ] **Step 11: Regenerate fixtures and evidence**
+- [ ] **Step 12: Regenerate fixtures and evidence**
 
 Run:
 
@@ -1318,7 +1554,7 @@ node tools/simurgh-attestation/stage4h/build-stage4h-digest-fixtures.mjs
 
 Expected: regenerates Stage 4H fixtures/evidence with Q6 and Q7 pass.
 
-- [ ] **Step 12: Run reproduce tests**
+- [ ] **Step 13: Run reproduce tests**
 
 Run:
 
@@ -1329,7 +1565,7 @@ scripts/reproduce-llm-shield-stage4h.sh
 
 Expected: PASS.
 
-- [ ] **Step 13: Commit Task 4**
+- [ ] **Step 14: Commit Task 4**
 
 Run:
 
