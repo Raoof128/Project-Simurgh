@@ -7,11 +7,45 @@ export const RAW_VERIFIER_CODES = Object.freeze({
   POLICY_DIGEST_MISMATCH: 23,
   EXPLICIT_FLOW_INTEGRITY_VIOLATION: 24,
   PACK_BINDING_MISMATCH: 25,
-  PROOF_TAMPER_DETECTED: 26,
+  PROOF_STRUCTURE_INVALID: 26,
   PRIVACY_LEAK_DETECTED: 27,
   CHECKER_NOT_OFFLINE: 28,
   INTERNAL_ERROR_FAIL_CLOSED: 29,
 });
+
+export const PROOF_TAMPER_DETECTED = RAW_VERIFIER_CODES.PROOF_STRUCTURE_INVALID;
+
+export const STRUCTURE_REASONS = Object.freeze([
+  "derivation_scope_incomplete",
+  "proof_tamper_detected",
+  "lattice_digest_mismatch",
+  "proof_step_missing",
+  "proof_step_unsound",
+  "proof_object_carries_no_independently_checkable_derivation",
+  "unknown_premise_ref",
+  "duplicate_premise_ref",
+  "duplicate_node_label",
+  "duplicate_lattice_step",
+  "duplicate_sink_safety_claim",
+  "extra_node_label",
+  "extra_lattice_step",
+  "extra_sink_safety_claim",
+  "node_label_unjustified",
+  "lattice_step_invalid",
+  "violation_count_mismatch",
+  "sink_not_in_graph",
+]);
+
+export const PRIVACY_REASONS = Object.freeze([
+  "non_enum_label",
+  "unknown_label_not_in_lattice_enum",
+  "opaque_or_freeform_field",
+  "raw_text_in_summary",
+  "raw_text_in_key",
+  "raw_text_in_premise_ref",
+  "over_length_field",
+  "freeform_field_present",
+]);
 
 export const HARNESS_CODES = Object.freeze({
   CLEAN_RUN_FALSELY_REJECTED: 19,
