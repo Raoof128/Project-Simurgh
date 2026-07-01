@@ -83,3 +83,26 @@ test("Stage 4H.5 reproduce summary uses typed wrapper exit", () => {
   assert.equal(summary.run_level_exit, 0);
   assert.equal(summary.typed_exit_source, "stage4CodeForRawCode");
 });
+
+test("Stage 4H.5 closeout docs cover every Q gate and non-claim", () => {
+  const files = [
+    "docs/research/llm-shield/STAGE_4H_CLOSEOUT.md",
+    "docs/research/llm-shield/STAGE_4H_REVIEWER_CHECKLIST.md",
+    "docs/research/llm-shield/STAGE_4H_VALIDATION_MATRIX.md",
+    "docs/research/llm-shield/STAGE_4H_THREAT_MODEL.md",
+  ];
+  for (const path of files) assert.equal(existsSync(path), true, `${path} exists`);
+  const haystack = files.map((path) => readFileSync(path, "utf8")).join("\n");
+  for (const gate of ["Q0", "Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "Q7"]) {
+    assert.equal(haystack.includes(gate), true, `${gate} documented`);
+  }
+  for (const phrase of [
+    "not kernel sandboxing",
+    "not model safety",
+    "not execution truth",
+    "not implicit-flow security",
+    "not multi-field collusion closure",
+  ]) {
+    assert.equal(haystack.includes(phrase), true, `${phrase} documented`);
+  }
+});
