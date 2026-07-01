@@ -1,0 +1,6 @@
+{
+  "base_tag": "v2.18.0-stage-4h-proof-carrying-containment",
+  "base_commit": "7a2039136d44cf179cca5836a33596a7620c87e5",
+  "audit_scope": "stage_4h_full_chain_e2e",
+  "runtime_logic_changes": false
+}
