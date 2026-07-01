@@ -16,6 +16,16 @@ export function certificateDigest(certificate) {
   return digest(certificate);
 }
 
+export function checkLatticeDigest(certificate, expectedDigest) {
+  return certificate.lattice_digest === expectedDigest
+    ? { ok: true, code: RAW_VERIFIER_CODES.OK }
+    : {
+        ok: false,
+        code: RAW_VERIFIER_CODES.PROOF_STRUCTURE_INVALID,
+        reason: "lattice_digest_mismatch",
+      };
+}
+
 export function normalizeIntegrityLabel(label) {
   return label === "trusted" ? "trusted" : "untrusted";
 }
@@ -123,7 +133,7 @@ export function buildDerivation(premises) {
 }
 
 function tamper(reason, extra = {}) {
-  return { ok: false, code: RAW_VERIFIER_CODES.PROOF_TAMPER_DETECTED, reason, ...extra };
+  return { ok: false, code: RAW_VERIFIER_CODES.PROOF_STRUCTURE_INVALID, reason, ...extra };
 }
 
 function unsafe(reason, extra = {}) {
@@ -230,10 +240,10 @@ export function validateDerivation({ premises, certificate }) {
   for (const [node, step] of stepByNode) {
     if (!incomingByNode.has(node)) return tamper("extra_lattice_step", { node });
     const expectedInputs = incomingByNode.get(node);
-    if (!sameArray(step.inputs, expectedInputs)) return tamper("lattice_step_invalid", { node });
+    if (!sameArray(step.inputs, expectedInputs)) return tamper("proof_step_unsound", { node });
     if (combineIntegrity(step.inputs) !== step.result)
-      return tamper("lattice_step_invalid", { node });
-    if (step.result !== nodeLabel.get(node)) return tamper("lattice_step_invalid", { node });
+      return tamper("proof_step_unsound", { node });
+    if (step.result !== nodeLabel.get(node)) return tamper("proof_step_unsound", { node });
   }
 
   const claimByNode = new Map();
@@ -262,6 +272,97 @@ export function validateDerivation({ premises, certificate }) {
   }
   if (violations > 0) return unsafe("explicit_flow_integrity_violation", { violations });
   return { ok: true, code: RAW_VERIFIER_CODES.OK, violations: 0 };
+}
+
+export function checkBinding({ certificate, manifest }) {
+  if (!manifest) return { ok: true, code: RAW_VERIFIER_CODES.OK };
+  if (manifest.base_pack_digest !== certificate.base_pack_digest) {
+    return {
+      ok: false,
+      code: RAW_VERIFIER_CODES.PACK_BINDING_MISMATCH,
+      reason: "pack_binding_mismatch",
+    };
+  }
+  if (manifest.certificate_digest !== certificateDigest(certificate)) {
+    return {
+      ok: false,
+      code: RAW_VERIFIER_CODES.PACK_BINDING_MISMATCH,
+      reason: "pack_binding_mismatch",
+    };
+  }
+  return { ok: true, code: RAW_VERIFIER_CODES.OK };
+}
+
+export function diagnose({
+  pack,
+  certificate,
+  manifest = null,
+  signatureOk = true,
+  merkleOk = true,
+}) {
+  const schema = validateDfiCertificate(certificate);
+  if (!schema.ok) {
+    return {
+      ok: false,
+      code:
+        schema.reason === "proof_system_unsupported"
+          ? RAW_VERIFIER_CODES.PROOF_SYSTEM_UNSUPPORTED
+          : RAW_VERIFIER_CODES.SCHEMA_INVALID,
+      reason: schema.reason === "schema_invalid" ? "unknown_field" : schema.reason,
+      field: schema.field,
+    };
+  }
+
+  if (!signatureOk) {
+    return { ok: false, code: "4D_VERIFY_FAILURE", reason: "signature_invalid" };
+  }
+  if (!merkleOk) {
+    return { ok: false, code: "4D_VERIFY_FAILURE", reason: "merkle_root_mismatch" };
+  }
+
+  const premises = buildPremiseSet(pack);
+  const binding = checkBinding({ certificate, manifest });
+  if (!binding.ok) return binding;
+
+  if (certificate.policy_digest !== premises.policy_digest) {
+    return {
+      ok: false,
+      code: RAW_VERIFIER_CODES.POLICY_DIGEST_MISMATCH,
+      reason: "policy_digest_mismatch",
+    };
+  }
+  if (
+    certificate.base_pack_digest !== premises.base_pack_digest ||
+    certificate.replay_root !== premises.replay_root ||
+    certificate.premise_digest !== premiseDigest(premises)
+  ) {
+    return {
+      ok: false,
+      code: RAW_VERIFIER_CODES.PREMISE_DIGEST_MISMATCH,
+      reason: "premise_digest_mismatch",
+    };
+  }
+
+  const sinkSafety = validateDerivation({ premises, certificate });
+  if (!sinkSafety.ok && sinkSafety.code === RAW_VERIFIER_CODES.EXPLICIT_FLOW_INTEGRITY_VIOLATION) {
+    return sinkSafety;
+  }
+
+  const lattice = checkLatticeDigest(certificate, premises.lattice_digest);
+  if (!lattice.ok) return lattice;
+  if (!sinkSafety.ok) {
+    if (
+      manifest &&
+      sinkSafety.reason === "derivation_scope_incomplete" &&
+      sinkSafety.missing === "lattice_steps" &&
+      certificate.summary.violations === 0
+    ) {
+      return { ...sinkSafety, reason: "proof_step_missing" };
+    }
+    return sinkSafety;
+  }
+
+  return { ok: true, code: RAW_VERIFIER_CODES.OK, manifest };
 }
 
 export function buildDfiCertificate({ pack }) {

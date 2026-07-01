@@ -619,7 +619,7 @@ export async function main({ root = process.cwd() } = {}) {
     },
     {
       out: "q1-theatre-stripped-derived-labels-cli-results.json",
-      code: RAW_VERIFIER_CODES.PROOF_TAMPER_DETECTED,
+      code: RAW_VERIFIER_CODES.PROOF_STRUCTURE_INVALID,
       base: "q1-clean-base-pack.json",
       sig: "q1-clean-base-pack.sig",
       pub: "q1-clean-signer.pub",
@@ -628,7 +628,7 @@ export async function main({ root = process.cwd() } = {}) {
     },
     {
       out: "q1-theatre-stripped-lattice-steps-cli-results.json",
-      code: RAW_VERIFIER_CODES.PROOF_TAMPER_DETECTED,
+      code: RAW_VERIFIER_CODES.PROOF_STRUCTURE_INVALID,
       base: "q1-clean-base-pack.json",
       sig: "q1-clean-base-pack.sig",
       pub: "q1-clean-signer.pub",
@@ -637,7 +637,7 @@ export async function main({ root = process.cwd() } = {}) {
     },
     {
       out: "q1-theatre-stripped-sink-claims-cli-results.json",
-      code: RAW_VERIFIER_CODES.PROOF_TAMPER_DETECTED,
+      code: RAW_VERIFIER_CODES.PROOF_STRUCTURE_INVALID,
       base: "q1-clean-base-pack.json",
       sig: "q1-clean-base-pack.sig",
       pub: "q1-clean-signer.pub",
@@ -682,7 +682,7 @@ export async function main({ root = process.cwd() } = {}) {
     },
     {
       out: "q4c-derivation-scope-omission-cli-results.json",
-      code: RAW_VERIFIER_CODES.PROOF_TAMPER_DETECTED,
+      code: RAW_VERIFIER_CODES.PROOF_STRUCTURE_INVALID,
       base: "q4-dirty-one-edge-delta-base-pack.json",
       sig: "q4-dirty-one-edge-delta-base-pack.sig",
       pub: "q4-dirty-one-edge-delta-signer.pub",
@@ -720,9 +720,9 @@ export async function main({ root = process.cwd() } = {}) {
     "q1-clean": RAW_VERIFIER_CODES.OK,
     "q1-real-dirty": RAW_VERIFIER_CODES.EXPLICIT_FLOW_INTEGRITY_VIOLATION,
     "q1-forged-safe-dirty": RAW_VERIFIER_CODES.EXPLICIT_FLOW_INTEGRITY_VIOLATION,
-    "q1-theatre-stripped-derived-labels": RAW_VERIFIER_CODES.PROOF_TAMPER_DETECTED,
-    "q1-theatre-stripped-lattice-steps": RAW_VERIFIER_CODES.PROOF_TAMPER_DETECTED,
-    "q1-theatre-stripped-sink-claims": RAW_VERIFIER_CODES.PROOF_TAMPER_DETECTED,
+    "q1-theatre-stripped-derived-labels": RAW_VERIFIER_CODES.PROOF_STRUCTURE_INVALID,
+    "q1-theatre-stripped-lattice-steps": RAW_VERIFIER_CODES.PROOF_STRUCTURE_INVALID,
+    "q1-theatre-stripped-sink-claims": RAW_VERIFIER_CODES.PROOF_STRUCTURE_INVALID,
     "q1-unbound-certificate-mutation": RAW_VERIFIER_CODES.PACK_BINDING_MISMATCH,
   };
   const q0ExpectedResults = {
@@ -731,7 +731,7 @@ export async function main({ root = process.cwd() } = {}) {
   const q4ExpectedResults = {
     "q4a-forged-premise-digest": RAW_VERIFIER_CODES.PREMISE_DIGEST_MISMATCH,
     "q4b-clean-derivation-over-dirty-replay": RAW_VERIFIER_CODES.EXPLICIT_FLOW_INTEGRITY_VIOLATION,
-    "q4c-derivation-scope-omission": RAW_VERIFIER_CODES.PROOF_TAMPER_DETECTED,
+    "q4c-derivation-scope-omission": RAW_VERIFIER_CODES.PROOF_STRUCTURE_INVALID,
   };
   await writeJson(join(fixtureRoot, "expected-results/discrimination-results.json"), {
     stage: "4H.2",
@@ -820,15 +820,15 @@ export async function main({ root = process.cwd() } = {}) {
       "q1-clean": RAW_VERIFIER_CODES.OK,
       "q1-real-dirty": RAW_VERIFIER_CODES.EXPLICIT_FLOW_INTEGRITY_VIOLATION,
       "q1-forged-safe-dirty": RAW_VERIFIER_CODES.EXPLICIT_FLOW_INTEGRITY_VIOLATION,
-      "q1-theatre-stripped-derived-labels": RAW_VERIFIER_CODES.PROOF_TAMPER_DETECTED,
-      "q1-theatre-stripped-lattice-steps": RAW_VERIFIER_CODES.PROOF_TAMPER_DETECTED,
-      "q1-theatre-stripped-sink-claims": RAW_VERIFIER_CODES.PROOF_TAMPER_DETECTED,
+      "q1-theatre-stripped-derived-labels": RAW_VERIFIER_CODES.PROOF_STRUCTURE_INVALID,
+      "q1-theatre-stripped-lattice-steps": RAW_VERIFIER_CODES.PROOF_STRUCTURE_INVALID,
+      "q1-theatre-stripped-sink-claims": RAW_VERIFIER_CODES.PROOF_STRUCTURE_INVALID,
       "q1-unbound-certificate-mutation": RAW_VERIFIER_CODES.PACK_BINDING_MISMATCH,
       "q0-clean-disconnected-untrusted": RAW_VERIFIER_CODES.OK,
       "q4a-forged-premise-digest": RAW_VERIFIER_CODES.PREMISE_DIGEST_MISMATCH,
       "q4b-clean-derivation-over-dirty-replay":
         RAW_VERIFIER_CODES.EXPLICIT_FLOW_INTEGRITY_VIOLATION,
-      "q4c-derivation-scope-omission": RAW_VERIFIER_CODES.PROOF_TAMPER_DETECTED,
+      "q4c-derivation-scope-omission": RAW_VERIFIER_CODES.PROOF_STRUCTURE_INVALID,
     },
     non_scope_gates: ["Q3", "Q6", "Q7"],
     metadata_only: true,
