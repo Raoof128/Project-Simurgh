@@ -159,3 +159,4 @@ This audit does not implement PCTA or Stage 4J work. It does not create a new re
 - Use deterministic environment pins in the full-chain script.
 - Record optional `unshare` skip clearly when unavailable.
 - Keep evidence bounded to function-path exercise and cold replay over the released Stage 4H artifact.
+- Do not modify existing released Stage 4H evidence files outside `docs/research/llm-shield/evidence/stage-4h/full-e2e-audit/` unless a real bug is found and explicitly documented.
