@@ -7,6 +7,6 @@
   "premise_digest": "sha256:79852a5eb31804ad9f6a64547f1e15cf0b06eccf56e35a23f0439ef58ecb2fb1",
   "base_pack_digest": "sha256:7214c1f156402f463a372fa5151b5f39d60732f59819852755d0f0a3963312d5",
   "recomputed_premise_digest": null,
-  "falsifier": "schema_invalid",
-  "note": "schema_invalid"
+  "falsifier": "unknown_field",
+  "note": "unknown_field"
 }
