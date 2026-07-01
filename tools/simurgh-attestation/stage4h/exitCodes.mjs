@@ -51,9 +51,35 @@ export const HARNESS_CODES = Object.freeze({
   CLEAN_RUN_FALSELY_REJECTED: 19,
 });
 
+export const OFFLINE_REASONS = Object.freeze([
+  "fetch_invoked",
+  "http_client_invoked",
+  "socket_connect_invoked",
+  "dns_invoked",
+  "udp_invoked",
+  "subprocess_invoked",
+  "model_client_present",
+  "forbidden_builtin_imported",
+  "hermeticity_falsifier_not_tested",
+]);
+
+export const RUN_LEVEL_BY_RAW = Object.freeze({
+  0: 0,
+  19: 1,
+  20: 1,
+  21: 1,
+  22: 1,
+  23: 1,
+  24: 1,
+  25: 1,
+  26: 1,
+  27: 1,
+  28: 2,
+  29: 3,
+});
+
 export function stage4CodeForRawCode(code) {
-  if (code === 0) return 0;
-  if (code >= 19 && code <= 27) return 1;
-  if (code === 28) return 2;
-  return 3;
+  return Object.prototype.hasOwnProperty.call(RUN_LEVEL_BY_RAW, code)
+    ? RUN_LEVEL_BY_RAW[code]
+    : 3;
 }
