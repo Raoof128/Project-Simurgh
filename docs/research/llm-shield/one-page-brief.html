@@ -337,7 +337,28 @@
             The verifier is <strong>producer-independent</strong>. It trusts only the signer's
             public key and runs with no network, so an outside reviewer can confirm a real
             containment claim and falsify a dishonest one. The threat model is a
-            <strong>dishonest producer</strong>: an operator who wants to look contained.
+            <strong>dishonest producer</strong>: an operator who wants to look contained. That
+            offline-falsifiable stance is the core difference from receipt-only logging.
+          </p>
+        </section>
+
+        <section>
+          <h2>Latest: Stage 4H proof-carrying containment</h2>
+          <p>
+            Stage 4H (<code>v2.18.0-stage-4h-proof-carrying-containment</code>) turns the
+            attestation spine into a proof-carrying containment checker. It binds signed evidence
+            digests, an explicit-flow DFI certificate, an independently checkable derivation proof,
+            Q0/Q4 discrimination fixtures, Q6/Q7 tamper and privacy gates, Q3 offline-hermetic
+            preflight, typed fail-closed exits, byte-stable reproduction, and anti-theatre deletion
+            into one released checker path.
+          </p>
+          <p>
+            The released worktree verified <code>scripts/reproduce-llm-shield-stage4h.sh</code>,
+            <code>npm test</code> (<code>1202</code> passing), <code>npm run format:check</code>,
+            and <code>git diff --check</code>. A follow-up full-chain audit exercises 4H.0 through
+            4H.5 and the public Stage 4H checker surface before Stage 4J/PCTA. This is still a
+            bounded released-artifact claim: no kernel sandboxing, execution-truth, implicit-flow
+            security, deployment-safety, or future-run guarantee is claimed.
           </p>
         </section>
 
@@ -380,11 +401,12 @@
           <p style="margin-top: 12px">
             The 138 misses split cleanly. <strong>120</strong> were downstream-injection cases an
             input-only classifier structurally cannot see, because the attack lives in untrusted
-            context, tool calls, or provider output. The other <strong>18</strong> were direct-input
-            attacks Llama Guard 4 saw and allowed anyway; it caught 12 of 30 direct inputs. Simurgh
-            contained both paths, producing zero successful attacks. This is a
-            <strong>boundary claim</strong> about where each defence acts, not a ranking of Llama
-            Guard 4.
+            context, tool calls, or provider output. Simurgh contained those cases at its context,
+            tool, and output boundaries. The other <strong>18</strong> were direct-input attacks
+            Llama Guard 4 saw and allowed anyway; it caught 12 of 30 direct inputs. Simurgh
+            contained those at the input boundary. Both paths produced zero successful attacks. This
+            is a <strong>boundary claim</strong> about where each defence acts, not a ranking of
+            Llama Guard 4.
           </p>
         </section>
 
@@ -400,8 +422,10 @@
             Simurgh's authority gate, covering egress and destructive mutation, cut targeted
             attack-success rate from <strong>9/140 to 0/140</strong>. It contained every baseline
             success, including the destructive-delete class an egress-only gate leaves open. The
-            claim stays within the declared taxonomy; non-destructive mutation, financial actions,
-            and code actions remain named future work.
+            benign utility held, with one borderline regression reported as likely run-to-run
+            nondeterminism. Containment is claimed
+            <strong>only within the declared taxonomy</strong>; non-destructive mutation, financial
+            actions, and code actions remain named future work.
           </p>
         </section>
 
@@ -465,11 +489,16 @@
           </p>
           <pre><code>git clone https://github.com/Raoof128/Project-Simurgh.git
 cd Project-Simurgh &amp;&amp; npm ci
-scripts/reproduce-vca-chain.sh</code></pre>
+scripts/reproduce-vca-chain.sh
+scripts/reproduce-llm-shield-stage4h.sh</code></pre>
           <p class="hint">
-            All 12 rungs are tag-and-commit pinned; 10/12 are evidence-root chain-checked; 5
-            current-format manifests are deep per-file re-walked; 3/12 fully reproduce; and 2/12 are
-            index-only with signed reasons. The receipt records what each rung did and did not
+            The first command replays the public VCA ladder. The Stage 4H command replays the
+            proof-carrying containment checker, including typed exits, offline preflight,
+            byte-stable evidence, and anti-theatre deletion. The replay refuses the fake-clean
+            story. All 12 Stage 3X rungs are tag-and-commit pinned; 10/12 are evidence-root
+            chain-checked; 5 current-format manifests are deep per-file re-walked under hardened
+            containment rules; 3/12 fully reproduce; and 2/12 are index-only with signed reasons. It
+            does not claim a uniform 12/12; the receipt records what each rung did and did not
             prove.
           </p>
         </section>
@@ -496,6 +525,11 @@ scripts/reproduce-vca-chain.sh</code></pre>
             <li>
               Not validated on production traffic, not production-ready, and it ranks no vendor as
               unsafe.
+            </li>
+            <li>
+              Stage 4H is deterministic offline checker reproduction over signed evidence; it is not
+              kernel sandboxing, execution truth, implicit-flow security, deployment safety, or a
+              future-run guarantee.
             </li>
             <li>Live Claude Computer Use remains a documented next step, not a completed demo.</li>
           </ul>

@@ -28,6 +28,20 @@ network, so an outside reviewer can confirm a real containment claim and **falsi
 one**. The threat model is a **dishonest producer**: an operator who wants to look contained. That
 offline-falsifiable stance is the core difference from receipt-only logging.
 
+## Latest: Stage 4H proof-carrying containment
+
+Stage 4H (`v2.18.0-stage-4h-proof-carrying-containment`) turns the attestation spine into a
+proof-carrying containment checker. It binds signed evidence digests, an explicit-flow DFI
+certificate, an independently checkable derivation proof, Q0/Q4 discrimination fixtures, Q6/Q7
+tamper and privacy gates, Q3 offline-hermetic preflight, typed fail-closed exits, byte-stable
+reproduction, and anti-theatre deletion into one released checker path.
+
+The released worktree verified `scripts/reproduce-llm-shield-stage4h.sh`, `npm test` (`1202`
+passing), `npm run format:check`, and `git diff --check`. A follow-up full-chain audit exercises
+4H.0 through 4H.5 and the public Stage 4H checker surface before Stage 4J/PCTA. This is still a
+bounded released-artifact claim: no kernel sandboxing, execution-truth, implicit-flow security,
+deployment-safety, or future-run guarantee is claimed.
+
 ## Headline result: real, live Llama Guard 4
 
 A real **Llama Guard 4 12B** (`meta-llama/Llama-Guard-4-12B`, input-only, 8-bit, greedy) was
@@ -111,9 +125,12 @@ context, fully offline after dependency install:
 git clone https://github.com/Raoof128/Project-Simurgh.git
 cd Project-Simurgh && npm ci
 scripts/reproduce-vca-chain.sh
+scripts/reproduce-llm-shield-stage4h.sh
 ```
 
-The replay refuses the fake-clean story. All 12 rungs are tag-and-commit pinned; 10/12 are
+The first command replays the public VCA ladder. The Stage 4H command replays the proof-carrying
+containment checker, including typed exits, offline preflight, byte-stable evidence, and
+anti-theatre deletion. The replay refuses the fake-clean story. All 12 Stage 3X rungs are tag-and-commit pinned; 10/12 are
 evidence-root chain-checked; 5 current-format manifests are deep per-file re-walked under hardened
 containment rules; 3/12 fully reproduce; and 2/12 are index-only **with signed reasons**. It does
 not claim a uniform 12/12; the receipt records what each rung did and did not prove.
@@ -127,6 +144,8 @@ not claim a uniform 12/12; the receipt records what each rung did and did not pr
 - Determinism is not statistical robustness. Signed evidence is reproducible, not ground truth; a
   live capture's origin is self-reported and signed as such.
 - Not validated on production traffic, not production-ready, and it ranks no vendor as unsafe.
+- Stage 4H is deterministic offline checker reproduction over signed evidence; it is not kernel
+  sandboxing, execution truth, implicit-flow security, deployment safety, or a future-run guarantee.
 - Live Claude Computer Use remains a documented next step, not a completed demo.
 
 ## Status & contact

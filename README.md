@@ -13,7 +13,7 @@ proof of what happened after a guardrail missed — not another jailbreak detect
 [![Node](https://img.shields.io/badge/node-%E2%89%A522.0-1a1a1a?style=flat-square)](https://nodejs.org)
 [![License](https://img.shields.io/badge/license-AGPL--3.0-d6cfbe?style=flat-square)](#license)
 [![Status](https://img.shields.io/badge/status-research%20prototype-2f4a2a?style=flat-square)](#status)
-[![Latest](https://img.shields.io/badge/release-v2.8.1-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases)
+[![Latest](https://img.shields.io/badge/release-v2.18.0-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.18.0-stage-4h-proof-carrying-containment)
 
 </div>
 
@@ -56,9 +56,9 @@ unsafe.
 
 ## Flagship: Verifiable Containment Attestation (LLM Shield)
 
-The current work is a ladder of signed, independently reproducible research rungs (**Stage 3A → 3X**,
-releases `v1.6.0` → `v2.8.1`). Each rung produces an Ed25519-signed, metadata-only evidence bundle
-that re-derives byte-for-byte offline.
+The current work is a ladder of signed, independently reproducible research rungs (**Stage 3A → 4H**,
+releases `v1.6.0` → `v2.18.0`). The attestation rungs produce Ed25519-signed,
+metadata-only evidence bundles and offline checkers that re-derive their bounded claims byte-for-byte.
 
 ### The concrete result (Stage 3V-B)
 
@@ -92,14 +92,30 @@ Stage 3X turns the whole chain into a public, externally replayable timeline:
 It does **not** claim uniform 12/12 reproduction — the chain tells the truth about its own uneven
 history, with a machine-readable summary and a per-rung reason for every classification.
 
+### Proof-carrying containment (Stage 4H)
+
+Stage 4H adds a proof-carrying containment checker on top of the VCA spine. It verifies a signed
+evidence digest and binding foundation (4H.0), an explicit-flow DFI certificate with an
+independently checkable derivation proof (4H.1), a Q0/Q4 discrimination ledger that distinguishes
+clean, forged, unsound, and partial derivations (4H.2), Q6/Q7 tamper-closure and bounded-capacity
+privacy gates (4H.3), a Q3 offline-hermetic checker preflight plus a total typed exit wrapper
+(4H.4), and a final one-command reproduce path with byte-stable evidence, anti-theatre deletion,
+reviewer smokes, and closeout docs (4H.5).
+
+Released as [`v2.18.0-stage-4h-proof-carrying-containment`](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.18.0-stage-4h-proof-carrying-containment)
+at commit `7a2039136d44cf179cca5836a33596a7620c87e5`. The release worktree verified
+`scripts/reproduce-llm-shield-stage4h.sh`, `npm test` (`1202` passing), `npm run format:check`,
+and `git diff --check`. A follow-up full-chain audit exercises 4H.0 → 4H.5 and the public Stage 4H
+checker surface before Stage 4J/PCTA; it is a released-artifact audit, not a new runtime claim.
+
 ---
 
 ## Architecture & the VCA ladder
 
 The defence acts _after_ the input filter can fail — untrusted input passes through four containment
 boundaries, and every run is sealed into signed, offline-reproducible evidence. The ladder below
-traces the work from the input shield (3A–3C) through containment (3D–3L) to the signed attestation
-arc (3M–3X).
+traces the work from the input shield (3A–3C) through containment (3D–3L), signed attestation
+(3M–3X), and proof-carrying containment (4H).
 
 [![Containment architecture and the VCA ladder, 3A to 3X](docs/research/llm-shield/vca-architecture.png)](docs/research/llm-shield/vca-architecture.html)
 
@@ -137,6 +153,9 @@ documented non-claims.
   traversal, and escapes).
 - **Claim-checked ledger** (Stage 3N) and **attestation registry + signed regression diff** (Stage
   3Q) with anti-laundering lattice.
+- **Proof-carrying containment checker** (Stage 4H) — signed digest binding, DFI derivation proof,
+  Q0/Q4 discrimination, Q6/Q7 tamper/privacy gates, Q3 offline preflight, total typed exits,
+  byte-stable reproduction, and anti-theatre deletion.
 
 ### External-defence evaluation
 
@@ -183,8 +202,9 @@ documented non-claims.
 ### Engineering & assurance
 
 - A single **quality gate** (`scripts/check.sh`): per-stage smoke, security/privacy/consistency
-  audits, policy-drift guards (tooling stages never touch `src/llmShield`), and **100% function
-  coverage** on the pure attestation libraries — **989 automated tests** in total.
+  audits, policy-drift guards (tooling stages never touch `src/llmShield`), and function-path
+  coverage on the pure attestation/checker libraries. The Stage 4H release baseline verified
+  **1202 automated tests** passing.
 
 ---
 
@@ -205,6 +225,16 @@ Expected: `Stage 3X VCA chain reproduction: PASS` with `rungs_passed: 12, rungs_
 > Use a full clone (or run `git fetch --tags` after a shallow clone): Stage 3X verifies 12 historical
 > release tags, so they must be present locally. The reviewer command preflights this and prints an
 > exact instruction if any are missing.
+
+Replay the released Stage 4H proof-carrying containment checker:
+
+```bash
+scripts/reproduce-llm-shield-stage4h.sh
+```
+
+Expected: `Stage 4H.5 final reproduce: PASS`. This verifies the signed Stage 4H evidence, typed
+fail-closed exits, offline preflight, byte-stable evidence, and anti-theatre deletion without a
+private key.
 
 Verify a single signed rung directly, and confirm it fails closed under tampering:
 
@@ -244,10 +274,10 @@ claim. See [`PRIVACY.md`](PRIVACY.md), [`docs/ETHICS.md`](docs/ETHICS.md), and
 | Path                                 | Contents                                                                                              |
 | ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
 | `src/llmShield/`                     | Containment gateway boundaries (input firewall, context-provenance guard, tool gate, output firewall) |
-| `tools/simurgh-attestation/`         | Ed25519 signing, canonical-JSON, two-tier verifiers, the public VCA timeline                          |
+| `tools/simurgh-attestation/`         | Ed25519 signing, canonical-JSON, two-tier verifiers, public VCA timeline, Stage 4H checker tooling    |
 | `tools/external-defense-adapters/`   | Adapter contract + Llama Guard 4 adapter (Stage 3V)                                                   |
 | `tools/capture/`                     | Transport-only model-capture harness (run once, then frozen)                                          |
-| `docs/research/llm-shield/evidence/` | Per-stage signed evidence bundles (3M → 3X)                                                           |
+| `docs/research/llm-shield/evidence/` | Per-stage signed evidence bundles and checker evidence (3M → 4H)                                      |
 | `scripts/`                           | Quality gates, per-stage smoke/audits, and `reproduce-vca-chain.sh`                                   |
 | `papers/`                            | Published research preprints                                                                          |
 
@@ -255,11 +285,12 @@ claim. See [`PRIVACY.md`](PRIVACY.md), [`docs/ETHICS.md`](docs/ETHICS.md), and
 
 ## Verification
 
-The full quality gate (`scripts/check.sh`) runs on every push. The current suite is **989 automated
-tests** plus per-stage smoke gates, security/privacy/consistency audits, policy-drift guards, and
-100% function coverage on the pure attestation libraries. Every VCA rung is signed with its own
-Ed25519 key (private keys are never committed), reproduces byte-identically including its signature,
-and ships a negative self-proof (tamper) suite that the verifiers reject while failing closed.
+The full quality gate (`scripts/check.sh`) runs on every push. The Stage 4H release baseline was
+verified with **1202 automated tests** plus per-stage smoke gates, security/privacy/consistency
+audits, policy-drift guards, typed-exit checks, and checker/reproduce smokes. Every VCA rung is
+signed with its own Ed25519 key (private keys are never committed), reproduces byte-identically
+including its signature where claimed, and ships a negative self-proof (tamper) suite that the
+verifiers reject while failing closed.
 
 ---
 
