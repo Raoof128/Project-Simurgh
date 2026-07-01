@@ -77,7 +77,12 @@ export async function installDenials(hits) {
   }
   patchWritable(net, "connect", () => hit(hits, "socket_connect_invoked"), restores);
   patchWritable(net, "createConnection", () => hit(hits, "socket_connect_invoked"), restores);
-  patchWritable(net.Socket.prototype, "connect", () => hit(hits, "socket_connect_invoked"), restores);
+  patchWritable(
+    net.Socket.prototype,
+    "connect",
+    () => hit(hits, "socket_connect_invoked"),
+    restores
+  );
   patchWritable(tls, "connect", () => hit(hits, "socket_connect_invoked"), restores);
   patchWritable(dns, "lookup", () => hit(hits, "dns_invoked"), restores);
   patchWritable(dns, "resolve", () => hit(hits, "dns_invoked"), restores);
@@ -144,9 +149,7 @@ function isLocalSpecifier(specifier) {
 
 async function resolveLocalImport(specifier, parentUrl) {
   const parentPath = new URL(parentUrl).pathname;
-  const rawPath = specifier.startsWith("/")
-    ? specifier
-    : resolve(dirname(parentPath), specifier);
+  const rawPath = specifier.startsWith("/") ? specifier : resolve(dirname(parentPath), specifier);
   const candidates = extname(rawPath)
     ? [rawPath]
     : [

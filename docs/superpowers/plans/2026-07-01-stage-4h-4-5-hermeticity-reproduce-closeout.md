@@ -67,10 +67,7 @@ import {
 } from "../../../../tools/simurgh-attestation/stage4h/exitCodes.mjs";
 
 test("Stage 4H.4 exit wrapper is total over every raw verifier and harness code", () => {
-  const rawCodes = [
-    ...Object.values(RAW_VERIFIER_CODES),
-    ...Object.values(HARNESS_CODES),
-  ];
+  const rawCodes = [...Object.values(RAW_VERIFIER_CODES), ...Object.values(HARNESS_CODES)];
   for (const raw of rawCodes) {
     assert.equal([0, 1, 2, 3].includes(stage4CodeForRawCode(raw)), true, String(raw));
   }
@@ -92,34 +89,40 @@ test("Stage 4H.4 exit wrapper fails closed on unknown raw codes", () => {
 });
 
 test("Stage 4H.4 exit map is explicit and collision-bounded", () => {
-  assert.deepEqual(RUN_LEVEL_BY_RAW, Object.freeze({
-    0: 0,
-    19: 1,
-    20: 1,
-    21: 1,
-    22: 1,
-    23: 1,
-    24: 1,
-    25: 1,
-    26: 1,
-    27: 1,
-    28: 2,
-    29: 3,
-  }));
+  assert.deepEqual(
+    RUN_LEVEL_BY_RAW,
+    Object.freeze({
+      0: 0,
+      19: 1,
+      20: 1,
+      21: 1,
+      22: 1,
+      23: 1,
+      24: 1,
+      25: 1,
+      26: 1,
+      27: 1,
+      28: 2,
+      29: 3,
+    })
+  );
 });
 
 test("Stage 4H.4 offline reason list covers every denied surface", () => {
-  assert.deepEqual(OFFLINE_REASONS, Object.freeze([
-    "fetch_invoked",
-    "http_client_invoked",
-    "socket_connect_invoked",
-    "dns_invoked",
-    "udp_invoked",
-    "subprocess_invoked",
-    "model_client_present",
-    "forbidden_builtin_imported",
-    "hermeticity_falsifier_not_tested",
-  ]));
+  assert.deepEqual(
+    OFFLINE_REASONS,
+    Object.freeze([
+      "fetch_invoked",
+      "http_client_invoked",
+      "socket_connect_invoked",
+      "dns_invoked",
+      "udp_invoked",
+      "subprocess_invoked",
+      "model_client_present",
+      "forbidden_builtin_imported",
+      "hermeticity_falsifier_not_tested",
+    ])
+  );
 });
 ```
 
@@ -166,9 +169,7 @@ export const RUN_LEVEL_BY_RAW = Object.freeze({
 });
 
 export function stage4CodeForRawCode(code) {
-  return Object.prototype.hasOwnProperty.call(RUN_LEVEL_BY_RAW, code)
-    ? RUN_LEVEL_BY_RAW[code]
-    : 3;
+  return Object.prototype.hasOwnProperty.call(RUN_LEVEL_BY_RAW, code) ? RUN_LEVEL_BY_RAW[code] : 3;
 }
 ```
 
@@ -264,9 +265,8 @@ import {
 
 async function runEgress(surface) {
   return runOffline(async () => {
-    const { attemptEgress } = await import(
-      "../../../fixtures/llmShield/stage4h/offline/egress-double.mjs"
-    );
+    const { attemptEgress } =
+      await import("../../../fixtures/llmShield/stage4h/offline/egress-double.mjs");
     return attemptEgress(surface);
   });
 }
@@ -451,7 +451,12 @@ export async function installDenials(hits) {
   }
   patchWritable(net, "connect", () => hit(hits, "socket_connect_invoked"), restores);
   patchWritable(net, "createConnection", () => hit(hits, "socket_connect_invoked"), restores);
-  patchWritable(net.Socket.prototype, "connect", () => hit(hits, "socket_connect_invoked"), restores);
+  patchWritable(
+    net.Socket.prototype,
+    "connect",
+    () => hit(hits, "socket_connect_invoked"),
+    restores
+  );
   patchWritable(tls, "connect", () => hit(hits, "socket_connect_invoked"), restores);
   patchWritable(dns, "lookup", () => hit(hits, "dns_invoked"), restores);
   patchWritable(dns, "resolve", () => hit(hits, "dns_invoked"), restores);
@@ -518,12 +523,16 @@ function isLocalSpecifier(specifier) {
 
 async function resolveLocalImport(specifier, parentUrl) {
   const parentPath = new URL(parentUrl).pathname;
-  const rawPath = specifier.startsWith("/")
-    ? specifier
-    : resolve(dirname(parentPath), specifier);
+  const rawPath = specifier.startsWith("/") ? specifier : resolve(dirname(parentPath), specifier);
   const candidates = extname(rawPath)
     ? [rawPath]
-    : [`${rawPath}.mjs`, `${rawPath}.js`, `${rawPath}.cjs`, `${rawPath}/index.mjs`, `${rawPath}/index.js`];
+    : [
+        `${rawPath}.mjs`,
+        `${rawPath}.js`,
+        `${rawPath}.cjs`,
+        `${rawPath}/index.mjs`,
+        `${rawPath}/index.js`,
+      ];
   for (const candidate of candidates) {
     try {
       await readFile(candidate, "utf8");
@@ -594,10 +603,10 @@ git commit -m "feat(llm-shield): add stage 4h offline harness"
 Add this block inside the first test in `tests/unit/llmShield/stage4h/reproduce.test.js`, after the existing Q7 assertions:
 
 ```js
-  assert.equal(qGate.gates.Q3.status, "pass");
-  assert.equal(qGate.gates.Q3.clean_run_hits, 0);
-  assert.equal(qGate.gates.Q3.egress_double_caught, true);
-  assert.equal(qGate.gates.Q3.egress_double_raw_code, 28);
+assert.equal(qGate.gates.Q3.status, "pass");
+assert.equal(qGate.gates.Q3.clean_run_hits, 0);
+assert.equal(qGate.gates.Q3.egress_double_caught, true);
+assert.equal(qGate.gates.Q3.egress_double_raw_code, 28);
 ```
 
 Add these expected files to the fixture/evidence presence list:
@@ -632,8 +641,14 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
 import { pathToFileURL } from "node:url";
 import { privacyGate } from "../tools/simurgh-attestation/stage4h/privacyGate.mjs";
-import { buildCleanTamperContext, buildTamperMatrix } from "../tools/simurgh-attestation/stage4h/tamperClosure.mjs";
-import { RUN_LEVEL_BY_RAW, stage4CodeForRawCode } from "../tools/simurgh-attestation/stage4h/exitCodes.mjs";
+import {
+  buildCleanTamperContext,
+  buildTamperMatrix,
+} from "../tools/simurgh-attestation/stage4h/tamperClosure.mjs";
+import {
+  RUN_LEVEL_BY_RAW,
+  stage4CodeForRawCode,
+} from "../tools/simurgh-attestation/stage4h/exitCodes.mjs";
 import { runOffline } from "../tools/simurgh-attestation/stage4h/offlineHarness.mjs";
 
 const evidenceRoot = "docs/research/llm-shield/evidence/stage-4h";
@@ -656,7 +671,7 @@ function sortJson(value) {
     return Object.fromEntries(
       Object.entries(value)
         .sort(([left], [right]) => left.localeCompare(right))
-        .map(([key, nested]) => [key, sortJson(nested)]),
+        .map(([key, nested]) => [key, sortJson(nested)])
     );
   }
   return value;
@@ -687,9 +702,8 @@ function digest(value) {
 
 async function runEgressDouble(surface) {
   return runOffline(async () => {
-    const { attemptEgress } = await import(
-      "../tests/fixtures/llmShield/stage4h/offline/egress-double.mjs"
-    );
+    const { attemptEgress } =
+      await import("../tests/fixtures/llmShield/stage4h/offline/egress-double.mjs");
     return attemptEgress(surface);
   });
 }
@@ -698,8 +712,8 @@ export async function buildOfflineReport() {
   const clean = await runOffline(async () => buildTamperMatrix(buildCleanTamperContext()));
   const egressResults = Object.fromEntries(
     await Promise.all(
-      deniedSurfaces.map(async (surface) => [surface, await runEgressDouble(surface)]),
-    ),
+      deniedSurfaces.map(async (surface) => [surface, await runEgressDouble(surface)])
+    )
   );
   const q7CleanPath = `${fixtureRoot}/privacy/q7-clean-certificate.json`;
   const q7Clean = JSON.parse(await readFile(q7CleanPath, "utf8"));
@@ -718,9 +732,10 @@ export async function buildOfflineReport() {
       Object.entries(egressResults).map(([surface, result]) => [
         surface,
         { code: result.code, reason: result.reason },
-      ]),
+      ])
     ),
-    q3_status: clean.hits.length === 0 && q7.hits.length === 0 && egressDoubleCaught ? "pass" : "fail",
+    q3_status:
+      clean.hits.length === 0 && q7.hits.length === 0 && egressDoubleCaught ? "pass" : "fail",
     run_level_exit: clean.hits.length === 0 && q7.hits.length === 0 && egressDoubleCaught ? 0 : 2,
   };
   return report;
@@ -780,9 +795,7 @@ async function runVerifierCore(args) {
 
 async function runStage4h5Verifier(args) {
   const scan = await scanForModelClients(new URL(import.meta.url).pathname, {
-    allowedPaths: [
-      new URL("./offlineHarness.mjs", import.meta.url).pathname,
-    ],
+    allowedPaths: [new URL("./offlineHarness.mjs", import.meta.url).pathname],
   });
   if (!scan.ok) {
     return finish({
@@ -867,10 +880,10 @@ git commit -m "feat(llm-shield): add stage 4h q3 offline audit"
 Patch `tests/e2e/llmShield/stage4hFullSmoke.test.js` so it expects:
 
 ```js
-    assert.equal(qGate.gates.Q3.status, "pass", "Q3 pass");
-    assert.equal(qGate.gates.Q3.clean_run_hits, 0);
-    assert.equal(qGate.gates.Q3.egress_double_caught, true);
-    assert.equal(qGate.gates.Q3.egress_double_raw_code, 28);
+assert.equal(qGate.gates.Q3.status, "pass", "Q3 pass");
+assert.equal(qGate.gates.Q3.clean_run_hits, 0);
+assert.equal(qGate.gates.Q3.egress_double_caught, true);
+assert.equal(qGate.gates.Q3.egress_double_raw_code, 28);
 ```
 
 Add these files to the metadata-only existence list:
@@ -885,12 +898,12 @@ Add these files to the metadata-only existence list:
 Add an acyclic attestation assertion:
 
 ```js
-    const attestation = readJson(`${evidenceRoot}/hermeticity-attestation.json`);
-    const offline = readJson(`${evidenceRoot}/offline-report.json`);
-    const manifest = readJson(`${evidenceRoot}/signed-pack-manifest.json`);
-    assert.equal("hermeticity_attestation_digest" in attestation, false);
-    assert.match(offline.hermeticity_attestation_digest, /^sha256:[0-9a-f]{64}$/);
-    assert.equal(manifest.hermeticity_attestation_digest, offline.hermeticity_attestation_digest);
+const attestation = readJson(`${evidenceRoot}/hermeticity-attestation.json`);
+const offline = readJson(`${evidenceRoot}/offline-report.json`);
+const manifest = readJson(`${evidenceRoot}/signed-pack-manifest.json`);
+assert.equal("hermeticity_attestation_digest" in attestation, false);
+assert.match(offline.hermeticity_attestation_digest, /^sha256:[0-9a-f]{64}$/);
+assert.equal(manifest.hermeticity_attestation_digest, offline.hermeticity_attestation_digest);
 ```
 
 - [ ] **Step 2: Run E2E and verify it fails**
@@ -981,7 +994,10 @@ Then write:
 
 ```js
 await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "offline-report.json"), offlineReportWithDigest);
-await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "hermeticity-attestation.json"), hermeticityAttestation);
+await writeJson(
+  join(root, STAGE4H_EVIDENCE_DIR, "hermeticity-attestation.json"),
+  hermeticityAttestation
+);
 await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "exit-map.json"), exitMap);
 ```
 
@@ -1435,14 +1451,14 @@ Stage 4H proof-carrying explicit data-flow integrity is closed through 4H.5.
 
 ## Milestone Ledger
 
-| Milestone | Status | Evidence |
-| --- | --- | --- |
-| 4H.0 digest and binding foundation | pass | `docs/research/llm-shield/evidence/stage-4h/verifier-results.json` |
-| 4H.1 lattice and derivation validator | pass | `q-gate-results.json` Q1 |
-| 4H.2 Q0/Q4 discrimination | pass | `q-gate-results.json` Q0/Q4 |
-| 4H.3 Q6/Q7 tamper and privacy | pass | `tamper-results.json`, `privacy-report.json` |
-| 4H.4 Q3 offline hermeticity and wrapper | pass | `offline-report.json`, `exit-map.json` |
-| 4H.5 reproduce and reviewer closeout | pass | `reproduce-summary.json` |
+| Milestone                               | Status | Evidence                                                           |
+| --------------------------------------- | ------ | ------------------------------------------------------------------ |
+| 4H.0 digest and binding foundation      | pass   | `docs/research/llm-shield/evidence/stage-4h/verifier-results.json` |
+| 4H.1 lattice and derivation validator   | pass   | `q-gate-results.json` Q1                                           |
+| 4H.2 Q0/Q4 discrimination               | pass   | `q-gate-results.json` Q0/Q4                                        |
+| 4H.3 Q6/Q7 tamper and privacy           | pass   | `tamper-results.json`, `privacy-report.json`                       |
+| 4H.4 Q3 offline hermeticity and wrapper | pass   | `offline-report.json`, `exit-map.json`                             |
+| 4H.5 reproduce and reviewer closeout    | pass   | `reproduce-summary.json`                                           |
 
 ## Q-Gate Ledger
 
@@ -1477,6 +1493,9 @@ Expected clean exit: `0`.
 This evidence covers Q0-Q7 for Stage 4H.5. It proves deterministic offline checker reproduction over signed, bounded Stage 4H evidence.
 
 Non-claims: not kernel sandboxing, not model safety, not execution truth, not implicit-flow security, not multi-field collusion closure, not statistical robustness, and not future-run guarantee.
+
+```
+
 ```
 ````
 

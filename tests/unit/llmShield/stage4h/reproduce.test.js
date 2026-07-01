@@ -375,9 +375,8 @@ async function runReviewerSmoke(id, tmp) {
   }
   if (id === "T4") {
     const result = await runOffline(async () => {
-      const { attemptEgress } = await import(
-        "../../../fixtures/llmShield/stage4h/offline/egress-double.mjs"
-      );
+      const { attemptEgress } =
+        await import("../../../fixtures/llmShield/stage4h/offline/egress-double.mjs");
       return attemptEgress("fetch");
     });
     return { raw: result.code, usedSharedVerifierPath: true };
