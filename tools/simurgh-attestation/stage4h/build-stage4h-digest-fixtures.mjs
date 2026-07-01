@@ -11,6 +11,9 @@ import { STAGE4D_EVIDENCE_DIR, STAGE4H_EVIDENCE_DIR } from "./constants.mjs";
 import { buildDfiCertificate, certificateDigest, validateDerivation } from "./dfiCertificate.mjs";
 import { RAW_VERIFIER_CODES, stage4CodeForRawCode } from "./exitCodes.mjs";
 import { buildSignedPackManifest, verifyPackBinding } from "./packBinding.mjs";
+import { privacyGate } from "./privacyGate.mjs";
+import { validateDfiCertificate } from "./schema.mjs";
+import { buildCleanTamperContext, buildTamperMatrix } from "./tamperClosure.mjs";
 import { main as verifyStage4h } from "./verify-stage4h-digest-binding.mjs";
 
 const WRONG_BASE_PACK_PUBLIC_KEY_PEM = `-----BEGIN PUBLIC KEY-----
@@ -314,6 +317,123 @@ async function readJson(path) {
   return JSON.parse(await readFile(path, "utf8"));
 }
 
+function privacyMutationCases(cleanCertificate) {
+  return [
+    {
+      name: "clean",
+      expected_code: RAW_VERIFIER_CODES.OK,
+      expected_reason: null,
+      certificate: structuredClone(cleanCertificate),
+    },
+    {
+      name: "raw-label",
+      expected_code: RAW_VERIFIER_CODES.PRIVACY_LEAK_DETECTED,
+      expected_reason: "non_enum_label",
+      certificate: (() => {
+        const cert = structuredClone(cleanCertificate);
+        cert.derivation.derived_node_labels[0].label = "raw prompt text";
+        return cert;
+      })(),
+    },
+    {
+      name: "raw-summary",
+      expected_code: RAW_VERIFIER_CODES.PRIVACY_LEAK_DETECTED,
+      expected_reason: "raw_text_in_summary",
+      certificate: (() => {
+        const cert = structuredClone(cleanCertificate);
+        cert.summary.violations = "raw transcript";
+        return cert;
+      })(),
+    },
+    {
+      name: "raw-node-id",
+      expected_code: RAW_VERIFIER_CODES.PRIVACY_LEAK_DETECTED,
+      expected_reason: "raw_text_in_key",
+      certificate: (() => {
+        const cert = structuredClone(cleanCertificate);
+        cert.derivation.derived_node_labels[0].node = "source:raw prompt text with spaces";
+        return cert;
+      })(),
+    },
+    {
+      name: "raw-premise-ref",
+      expected_code: RAW_VERIFIER_CODES.PRIVACY_LEAK_DETECTED,
+      expected_reason: "raw_text_in_premise_ref",
+      certificate: (() => {
+        const cert = structuredClone(cleanCertificate);
+        cert.derivation.premise_refs[0] = "premise:raw prompt";
+        return cert;
+      })(),
+    },
+    {
+      name: "non-enum-label",
+      expected_code: RAW_VERIFIER_CODES.PRIVACY_LEAK_DETECTED,
+      expected_reason: "unknown_label_not_in_lattice_enum",
+      certificate: (() => {
+        const cert = structuredClone(cleanCertificate);
+        cert.derivation.derived_node_labels[0].label = "maybe";
+        return cert;
+      })(),
+    },
+    {
+      name: "unknown-field",
+      expected_code: RAW_VERIFIER_CODES.SCHEMA_INVALID,
+      expected_reason: "unknown_field",
+      schema_owned: true,
+      certificate: (() => {
+        const cert = structuredClone(cleanCertificate);
+        cert.derivation.lattice_steps[0].leak = "raw";
+        return cert;
+      })(),
+    },
+    {
+      name: "duplicate-key",
+      expected_code: RAW_VERIFIER_CODES.SCHEMA_INVALID,
+      expected_reason: "duplicate_key",
+      certificate: null,
+    },
+  ];
+}
+
+function buildPrivacyMatrix(cleanCertificate) {
+  const results = privacyMutationCases(cleanCertificate).map((testCase) => {
+    if (testCase.name === "duplicate-key") {
+      return {
+        name: testCase.name,
+        expected_code: testCase.expected_code,
+        expected_reason: testCase.expected_reason,
+        code: RAW_VERIFIER_CODES.SCHEMA_INVALID,
+        reason: "duplicate_key",
+        accepted: false,
+      };
+    }
+    const result = testCase.schema_owned
+      ? validateDfiCertificate(testCase.certificate)
+      : privacyGate(testCase.certificate);
+    return {
+      name: testCase.name,
+      expected_code: testCase.expected_code,
+      expected_reason: testCase.expected_reason,
+      code: result.code ?? (result.ok ? RAW_VERIFIER_CODES.OK : RAW_VERIFIER_CODES.SCHEMA_INVALID),
+      reason: result.reason ?? null,
+      accepted: result.ok,
+      covert_capacity_bits: result.covert_capacity_bits ?? null,
+    };
+  });
+  return {
+    stage: "4H.3",
+    gate: "Q7",
+    status: results.every(
+      (result) => result.code === result.expected_code && result.reason === result.expected_reason
+    )
+      ? "pass"
+      : "fail",
+    results,
+    accepted_negative_count: results.filter((result) => result.name !== "clean" && result.accepted)
+      .length,
+  };
+}
+
 export async function main({ root = process.cwd() } = {}) {
   const pack = await readJson(join(root, STAGE4D_EVIDENCE_DIR, "evidence-pack.json"));
   const signature = (
@@ -404,6 +524,10 @@ export async function main({ root = process.cwd() } = {}) {
     ...q1CleanCertificate,
     premise_digest: `sha256:${"0".repeat(64)}`,
   };
+  const forgedPremiseDigestManifest = signManifest(
+    forgedPremiseDigestCertificate,
+    manifestPrivateKey
+  );
   const malformedCertificate = { ...q1CleanCertificate, unexpected: true };
   const tamperedBasePack = {
     ...q1Clean.pack,
@@ -473,6 +597,10 @@ export async function main({ root = process.cwd() } = {}) {
   await writeJson(
     join(fixtureRoot, "forged-premise-digest-certificate.json"),
     forgedPremiseDigestCertificate
+  );
+  await writeJson(
+    join(fixtureRoot, "forged-premise-digest-signed-pack-manifest.json"),
+    forgedPremiseDigestManifest
   );
   await writeJson(join(fixtureRoot, "expected-results/q2-q5-results.json"), q2q5Results);
 
@@ -717,6 +845,14 @@ export async function main({ root = process.cwd() } = {}) {
   const verifierResults = await readJson(
     join(fixtureRoot, "expected-results/q0-clean-disconnected-untrusted-cli-results.json")
   );
+  const tamperMatrix = {
+    stage: "4H.3",
+    gate: "Q6",
+    evidence_generation:
+      "generated by buildTamperMatrix using the shared diagnose() first-failing-step engine",
+    ...buildTamperMatrix({ pack: q0Clean.pack, certificate: q0Certificate, manifest: q0Manifest }),
+  };
+  const privacyMatrix = buildPrivacyMatrix(q0Certificate);
   const q1ExpectedResults = {
     "q1-clean": RAW_VERIFIER_CODES.OK,
     "q1-real-dirty": RAW_VERIFIER_CODES.EXPLICIT_FLOW_INTEGRITY_VIOLATION,
@@ -748,8 +884,8 @@ export async function main({ root = process.cwd() } = {}) {
     },
   });
   const qGateResults = {
-    stage: "4H.2",
-    status: "discrimination_q0_q4",
+    stage: "4H.3",
+    status: "tamper_closure_and_privacy",
     gates: {
       Q0: { status: "pass", expected_results: q0ExpectedResults },
       Q1: { status: "pass", expected_results: q1ExpectedResults },
@@ -757,8 +893,20 @@ export async function main({ root = process.cwd() } = {}) {
       Q3: { status: "not_in_scope" },
       Q4: { status: "pass", expected_results: q4ExpectedResults },
       Q5: { status: "pass", raw_verifier_code: 0 },
-      Q6: { status: "not_in_scope" },
-      Q7: { status: "not_in_scope" },
+      Q6: {
+        status: tamperMatrix.tampered_accepted_count === 0 ? "pass" : "fail",
+        tampered_accepted_count: tamperMatrix.tampered_accepted_count,
+        expected_results: Object.fromEntries(
+          tamperMatrix.results.map((result) => [result.arm, result.expected_code])
+        ),
+      },
+      Q7: {
+        status: privacyMatrix.status,
+        accepted_negative_count: privacyMatrix.accepted_negative_count,
+        expected_results: Object.fromEntries(
+          privacyMatrix.results.map((result) => [result.name, result.expected_code])
+        ),
+      },
     },
     q0_positive_base_pack: "q0-clean-disconnected-untrusted-base-pack.json",
     q1_positive_base_pack: "q1-clean-base-pack.json",
@@ -787,8 +935,8 @@ export async function main({ root = process.cwd() } = {}) {
     ],
   };
   const e2eSmokeCoverage = {
-    stage: "4H.2",
-    scope: "Q0/Q1/Q2/Q4/Q5 full E2E smoke",
+    stage: "4H.3",
+    scope: "Q0/Q1/Q2/Q4/Q5 plus Q6/Q7 bounded evidence smoke",
     modules_exercised: [
       "constants.mjs",
       "schema.mjs",
@@ -798,6 +946,8 @@ export async function main({ root = process.cwd() } = {}) {
       "verify-stage4h-digest-binding.mjs",
       "build-stage4h-digest-fixtures.mjs",
       "exitCodes.mjs",
+      "tamperClosure.mjs",
+      "privacyGate.mjs",
     ],
     functions_exercised: [
       "validateDfiCertificate",
@@ -815,6 +965,9 @@ export async function main({ root = process.cwd() } = {}) {
       "stage4CodeForRawCode",
       "verify-stage4h-digest-binding CLI",
       "build-stage4h-digest-fixtures builder",
+      "diagnose",
+      "buildTamperMatrix",
+      "privacyGate",
     ],
     fixture_matrix: {
       "4h0-clean": RAW_VERIFIER_CODES.OK,
@@ -830,19 +983,31 @@ export async function main({ root = process.cwd() } = {}) {
       "q4b-clean-derivation-over-dirty-replay":
         RAW_VERIFIER_CODES.EXPLICIT_FLOW_INTEGRITY_VIOLATION,
       "q4c-derivation-scope-omission": RAW_VERIFIER_CODES.PROOF_STRUCTURE_INVALID,
+      ...Object.fromEntries(
+        tamperMatrix.results.map((result) => [`q6-${result.arm}`, result.expected_code])
+      ),
+      ...Object.fromEntries(
+        privacyMatrix.results.map((result) => [`q7-${result.name}`, result.expected_code])
+      ),
     },
-    non_scope_gates: ["Q3", "Q6", "Q7"],
+    non_scope_gates: ["Q3"],
     metadata_only: true,
   };
 
+  await writeJson(join(fixtureRoot, "expected-results/tamper-matrix.json"), tamperMatrix);
+  await writeJson(join(fixtureRoot, "expected-results/privacy-matrix.json"), privacyMatrix);
+  await writeJson(join(fixtureRoot, "tamper/q6-clean-context.json"), buildCleanTamperContext());
+  await writeJson(join(fixtureRoot, "privacy/q7-clean-certificate.json"), q0Certificate);
   await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "certificate.json"), q0Certificate);
   await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "signed-pack-manifest.json"), q0Manifest);
   await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "verifier-results.json"), verifierResults);
   await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "q-gate-results.json"), qGateResults);
   await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "e2e-smoke-coverage.json"), e2eSmokeCoverage);
+  await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "tamper-results.json"), tamperMatrix);
+  await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "privacy-report.json"), privacyMatrix);
   await writeFile(
     join(root, STAGE4H_EVIDENCE_DIR, "README.md"),
-    "# Stage 4H Evidence\n\nStage 4H.2 evidence covers verifier discrimination through Q0 clean acceptance and Q4 dishonest-producer laundering rejection, while preserving the Stage 4H.1 Q1 explicit-flow derivation validator and the Stage 4H.0 Q2/Q5 digest/binding foundation. Q3, Q6, and Q7 remain not in scope for 4H.2. This evidence does not claim full Stage 4H completion, implicit-flow security, model safety, jailbreak immunity, or production readiness.\n"
+    "# Stage 4H Evidence\n\nStage 4H.3 evidence covers Q6 single-delta tamper closure and Q7 bounded-capacity privacy, while preserving the Stage 4H.2 Q0/Q4 verifier-discrimination matrix, the Stage 4H.1 Q1 explicit-flow derivation validator, and the Stage 4H.0 Q2/Q5 digest/binding foundation. Q3 remains not in scope for 4H.3. This evidence does not claim full Stage 4H completion, implicit-flow security, model safety, jailbreak immunity, or production readiness.\n"
   );
   return 0;
 }

@@ -226,9 +226,11 @@ test("Stage 4H.2 full reviewer E2E smoke covers builder, CLI, evidence, and Q0/Q
       "q4c-derivation-scope-omission": 26,
     });
     assert.equal(qGate.gates.Q5.status, "pass");
-    for (const gate of ["Q3", "Q6", "Q7"]) {
-      assert.equal(qGate.gates[gate].status, "not_in_scope", `${gate} not in scope`);
-    }
+    assert.equal(qGate.gates.Q3.status, "not_in_scope", "Q3 not in scope");
+    assert.equal(qGate.gates.Q6.status, "pass");
+    assert.equal(qGate.gates.Q6.tampered_accepted_count, 0);
+    assert.equal(qGate.gates.Q7.status, "pass");
+    assert.equal(qGate.gates.Q7.accepted_negative_count, 0);
 
     const coverage = readJson(`${evidenceRoot}/e2e-smoke-coverage.json`);
     assert.deepEqual(coverage.fixture_matrix, {
@@ -244,6 +246,22 @@ test("Stage 4H.2 full reviewer E2E smoke covers builder, CLI, evidence, and Q0/Q
       "q4a-forged-premise-digest": 22,
       "q4b-clean-derivation-over-dirty-replay": 24,
       "q4c-derivation-scope-omission": 26,
+      "q6-sig-byte": "4D_VERIFY_FAILURE",
+      "q6-merkle-node": "4D_VERIFY_FAILURE",
+      "q6-binding": 25,
+      "q6-policy": 23,
+      "q6-premise": 22,
+      "q6-lattice-digest": 26,
+      "q6-lattice-step": 26,
+      "q6-proof-step": 26,
+      "q7-clean": 0,
+      "q7-raw-label": 27,
+      "q7-raw-summary": 27,
+      "q7-raw-node-id": 27,
+      "q7-raw-premise-ref": 27,
+      "q7-non-enum-label": 27,
+      "q7-unknown-field": 20,
+      "q7-duplicate-key": 20,
     });
     assert.equal(coverage.metadata_only, true);
     for (const fn of [
@@ -260,6 +278,9 @@ test("Stage 4H.2 full reviewer E2E smoke covers builder, CLI, evidence, and Q0/Q
       "buildDerivation",
       "validateDerivation",
       "stage4CodeForRawCode",
+      "diagnose",
+      "buildTamperMatrix",
+      "privacyGate",
     ]) {
       assert.equal(coverage.functions_exercised.includes(fn), true, `${fn} covered`);
     }
@@ -270,6 +291,8 @@ test("Stage 4H.2 full reviewer E2E smoke covers builder, CLI, evidence, and Q0/Q
       `${evidenceRoot}/verifier-results.json`,
       `${evidenceRoot}/q-gate-results.json`,
       `${evidenceRoot}/e2e-smoke-coverage.json`,
+      `${evidenceRoot}/tamper-results.json`,
+      `${evidenceRoot}/privacy-report.json`,
       `${evidenceRoot}/README.md`,
     ]) {
       assert.equal(existsSync(path), true, `${path} exists`);

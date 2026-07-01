@@ -24,6 +24,7 @@ test("Stage 4H.2 committed fixtures and evidence are present and scoped", () => 
     `${fixtureRoot}/clean-signed-pack-manifest.json`,
     `${fixtureRoot}/manifest-verifier.pub`,
     `${fixtureRoot}/forged-premise-digest-certificate.json`,
+    `${fixtureRoot}/forged-premise-digest-signed-pack-manifest.json`,
     `${fixtureRoot}/expected-results/q2-q5-results.json`,
     `${fixtureRoot}/q1-clean-base-pack.json`,
     `${fixtureRoot}/q1-clean-base-pack.sig`,
@@ -71,12 +72,18 @@ test("Stage 4H.2 committed fixtures and evidence are present and scoped", () => 
     `${fixtureRoot}/expected-results/q4a-forged-premise-digest-cli-results.json`,
     `${fixtureRoot}/expected-results/q4b-clean-derivation-over-dirty-replay-cli-results.json`,
     `${fixtureRoot}/expected-results/q4c-derivation-scope-omission-cli-results.json`,
+    `${fixtureRoot}/expected-results/tamper-matrix.json`,
+    `${fixtureRoot}/expected-results/privacy-matrix.json`,
+    `${fixtureRoot}/tamper/q6-clean-context.json`,
+    `${fixtureRoot}/privacy/q7-clean-certificate.json`,
     `${fixtureRoot}/expected-results/discrimination-results.json`,
     `${evidenceRoot}/certificate.json`,
     `${evidenceRoot}/signed-pack-manifest.json`,
     `${evidenceRoot}/verifier-results.json`,
     `${evidenceRoot}/q-gate-results.json`,
     `${evidenceRoot}/e2e-smoke-coverage.json`,
+    `${evidenceRoot}/tamper-results.json`,
+    `${evidenceRoot}/privacy-report.json`,
     `${evidenceRoot}/README.md`,
   ]) {
     assert.equal(existsSync(path), true, `${path} exists`);
@@ -106,8 +113,38 @@ test("Stage 4H.2 committed fixtures and evidence are present and scoped", () => 
   });
   assert.equal(qGate.gates.Q5.status, "pass");
   assert.equal(qGate.gates.Q3.status, "not_in_scope");
-  assert.equal(qGate.gates.Q6.status, "not_in_scope");
-  assert.equal(qGate.gates.Q7.status, "not_in_scope");
+  assert.equal(qGate.gates.Q6.status, "pass");
+  assert.equal(qGate.gates.Q6.tampered_accepted_count, 0);
+  assert.equal(qGate.gates.Q7.status, "pass");
+  assert.equal(qGate.gates.Q7.accepted_negative_count, 0);
+
+  const tamper = readJson(`${evidenceRoot}/tamper-results.json`);
+  assert.equal(tamper.stage, "4H.3");
+  assert.equal(tamper.gate, "Q6");
+  assert.equal(tamper.tampered_accepted_count, 0);
+  assert.deepEqual(
+    tamper.results.map((result) => result.arm),
+    [
+      "sig-byte",
+      "merkle-node",
+      "binding",
+      "policy",
+      "premise",
+      "lattice-digest",
+      "lattice-step",
+      "proof-step",
+    ]
+  );
+
+  const privacy = readJson(`${evidenceRoot}/privacy-report.json`);
+  assert.equal(privacy.stage, "4H.3");
+  assert.equal(privacy.gate, "Q7");
+  assert.equal(privacy.status, "pass");
+  assert.equal(privacy.accepted_negative_count, 0);
+  assert.equal(
+    privacy.results.some((result) => result.name === "unknown-field" && result.code === 20),
+    true
+  );
 });
 
 test("Stage 4H.2 committed fixtures and evidence are metadata-only", () => {
@@ -131,6 +168,8 @@ test("Stage 4H.2 committed fixtures and evidence are metadata-only", () => {
     readFileSync(`${evidenceRoot}/verifier-results.json`, "utf8"),
     readFileSync(`${evidenceRoot}/q-gate-results.json`, "utf8"),
     readFileSync(`${evidenceRoot}/e2e-smoke-coverage.json`, "utf8"),
+    readFileSync(`${evidenceRoot}/tamper-results.json`, "utf8"),
+    readFileSync(`${evidenceRoot}/privacy-report.json`, "utf8"),
   ].join("\n");
   for (const forbidden of [
     "raw_prompt",
@@ -167,7 +206,7 @@ test("Stage 4H.2 verifier CLI accepts committed Q0 clean fixture", () => {
     ],
     { encoding: "utf8" }
   );
-  assert.match(output, /Stage 4H\.2 Q0\/Q1\/Q2\/Q4\/Q5 verifier discrimination: PASS/);
+  assert.match(output, /Stage 4H\.3 verifier discrimination: PASS/);
 });
 
 test("Stage 4H.2 expected results use the locked raw codes", () => {
@@ -208,8 +247,6 @@ test("Stage 4H.2 evidence does not claim broader or out-of-scope gates", () => {
   ].join("\n");
   for (const forbidden of [
     "Q3 pass",
-    "Q6 pass",
-    "Q7 pass",
     "first proof",
     "public priority",
     "jailbreak-proof",
@@ -240,7 +277,7 @@ test("Stage 4H.1 verifier CLI rejects forged premise digest with code 22", () =>
           "--certificate",
           `${fixtureRoot}/forged-premise-digest-certificate.json`,
           "--manifest",
-          `${fixtureRoot}/clean-signed-pack-manifest.json`,
+          `${fixtureRoot}/forged-premise-digest-signed-pack-manifest.json`,
           "--manifest-pubkey",
           `${fixtureRoot}/manifest-verifier.pub`,
           "--out",

@@ -1,6 +1,6 @@
 {
-  "stage": "4H.2",
-  "scope": "Q0/Q1/Q2/Q4/Q5 full E2E smoke",
+  "stage": "4H.3",
+  "scope": "Q0/Q1/Q2/Q4/Q5 plus Q6/Q7 bounded evidence smoke",
   "modules_exercised": [
     "constants.mjs",
     "schema.mjs",
@@ -9,7 +9,9 @@
     "dfiCertificate.mjs",
     "verify-stage4h-digest-binding.mjs",
     "build-stage4h-digest-fixtures.mjs",
-    "exitCodes.mjs"
+    "exitCodes.mjs",
+    "tamperClosure.mjs",
+    "privacyGate.mjs"
   ],
   "functions_exercised": [
     "validateDfiCertificate",
@@ -26,7 +28,10 @@
     "validateDerivation",
     "stage4CodeForRawCode",
     "verify-stage4h-digest-binding CLI",
-    "build-stage4h-digest-fixtures builder"
+    "build-stage4h-digest-fixtures builder",
+    "diagnose",
+    "buildTamperMatrix",
+    "privacyGate"
   ],
   "fixture_matrix": {
     "4h0-clean": 0,
@@ -40,8 +45,24 @@
     "q0-clean-disconnected-untrusted": 0,
     "q4a-forged-premise-digest": 22,
     "q4b-clean-derivation-over-dirty-replay": 24,
-    "q4c-derivation-scope-omission": 26
+    "q4c-derivation-scope-omission": 26,
+    "q6-sig-byte": "4D_VERIFY_FAILURE",
+    "q6-merkle-node": "4D_VERIFY_FAILURE",
+    "q6-binding": 25,
+    "q6-policy": 23,
+    "q6-premise": 22,
+    "q6-lattice-digest": 26,
+    "q6-lattice-step": 26,
+    "q6-proof-step": 26,
+    "q7-clean": 0,
+    "q7-raw-label": 27,
+    "q7-raw-summary": 27,
+    "q7-raw-node-id": 27,
+    "q7-raw-premise-ref": 27,
+    "q7-non-enum-label": 27,
+    "q7-unknown-field": 20,
+    "q7-duplicate-key": 20
   },
-  "non_scope_gates": ["Q3", "Q6", "Q7"],
+  "non_scope_gates": ["Q3"],
   "metadata_only": true
 }
