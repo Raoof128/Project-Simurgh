@@ -59,6 +59,17 @@ The denied surfaces are:
 
 Runtime interception catches calls. Static dependency-path scanning catches pre-captured imports. The scan is limited to the checker dependency path and excludes the harness, the egress-double fixture, and tests that intentionally import denied surfaces.
 
+The egress double must be dynamically loaded under `runOffline`, after denials are installed. It must not be statically imported before the harness runs. The accepted pattern is:
+
+```js
+await runOffline(async () => {
+  const { attemptEgress } = await import(
+    "../../../fixtures/llmShield/stage4h/offline/egress-double.mjs"
+  );
+  return attemptEgress("fetch");
+});
+```
+
 Q3 pass is a conjunction:
 
 ```json
@@ -140,7 +151,7 @@ The reviewer checklist will include:
 | --- | --- | --- |
 | T1 clean reproduces | run the one command | `0` |
 | T2 tamper caught | flip one premise digest byte | `1` via raw `22` |
-| T3 signature load-bearing | corrupt the pack signature | `1` via raw `25` |
+| T3 signature load-bearing | corrupt the pack signature | `1` via normalized raw `25` |
 | T4 offline enforced | run egress double | `2` via raw `28` |
 | T5 gate not theatre | delete derivation/proof material | `1` via raw `26` or `24`, never `0` |
 | T6 privacy holds | exceed Q7 bounded-capacity budget | `1` via raw `27` |
@@ -193,6 +204,8 @@ Implementation should happen in two parts:
 
 Part B consumes the Part A harness and wrapper unchanged. If Part B reveals a wrapper or Q3 harness issue, the implementation should fix Part A first rather than adding local shell-script exceptions.
 
+Stage 4D signature or Merkle failures must be normalized to numeric raw codes before wrapper routing. If a lower-level verifier reports a symbolic result such as `4D_VERIFY_FAILURE`, the Stage 4H reproduce path must convert it to raw `25 / pack_binding_mismatch` or to a canonical crypto failure object that still resolves to raw `25`. A non-numeric symbolic value must not reach `stage4CodeForRawCode` unless the intended outcome is fail-closed typed exit `3`.
+
 ## Acceptance Criteria
 
 - `q-gate-results.json` reports Q0-Q7 `pass`.
@@ -205,4 +218,3 @@ Part B consumes the Part A harness and wrapper unchanged. If Part B reveals a wr
 - Deleting derivation/proof material cannot be accepted as clean.
 - Evidence remains metadata-only.
 - Overclaim scans match only explicit non-claims, not positive claims.
-
