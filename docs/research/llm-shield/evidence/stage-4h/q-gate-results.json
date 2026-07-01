@@ -1,6 +1,6 @@
 {
-  "stage": "4H.2",
-  "status": "discrimination_q0_q4",
+  "stage": "4H.3",
+  "status": "tamper_closure_and_privacy",
   "gates": {
     "Q0": {
       "status": "pass",
@@ -40,10 +40,32 @@
       "raw_verifier_code": 0
     },
     "Q6": {
-      "status": "not_in_scope"
+      "status": "pass",
+      "tampered_accepted_count": 0,
+      "expected_results": {
+        "sig-byte": "4D_VERIFY_FAILURE",
+        "merkle-node": "4D_VERIFY_FAILURE",
+        "binding": 25,
+        "policy": 23,
+        "premise": 22,
+        "lattice-digest": 26,
+        "lattice-step": 26,
+        "proof-step": 26
+      }
     },
     "Q7": {
-      "status": "not_in_scope"
+      "status": "pass",
+      "accepted_negative_count": 0,
+      "expected_results": {
+        "clean": 0,
+        "raw-label": 27,
+        "raw-summary": 27,
+        "raw-node-id": 27,
+        "raw-premise-ref": 27,
+        "non-enum-label": 27,
+        "unknown-field": 20,
+        "duplicate-key": 20
+      }
     }
   },
   "q0_positive_base_pack": "q0-clean-disconnected-untrusted-base-pack.json",

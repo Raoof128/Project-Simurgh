@@ -1,0 +1,79 @@
+{
+  "stage": "4H.3",
+  "gate": "Q7",
+  "status": "pass",
+  "results": [
+    {
+      "name": "clean",
+      "expected_code": 0,
+      "expected_reason": null,
+      "code": 0,
+      "reason": null,
+      "accepted": true,
+      "covert_capacity_bits": 5
+    },
+    {
+      "name": "raw-label",
+      "expected_code": 27,
+      "expected_reason": "non_enum_label",
+      "code": 27,
+      "reason": "non_enum_label",
+      "accepted": false,
+      "covert_capacity_bits": null
+    },
+    {
+      "name": "raw-summary",
+      "expected_code": 27,
+      "expected_reason": "raw_text_in_summary",
+      "code": 27,
+      "reason": "raw_text_in_summary",
+      "accepted": false,
+      "covert_capacity_bits": null
+    },
+    {
+      "name": "raw-node-id",
+      "expected_code": 27,
+      "expected_reason": "raw_text_in_key",
+      "code": 27,
+      "reason": "raw_text_in_key",
+      "accepted": false,
+      "covert_capacity_bits": null
+    },
+    {
+      "name": "raw-premise-ref",
+      "expected_code": 27,
+      "expected_reason": "raw_text_in_premise_ref",
+      "code": 27,
+      "reason": "raw_text_in_premise_ref",
+      "accepted": false,
+      "covert_capacity_bits": null
+    },
+    {
+      "name": "non-enum-label",
+      "expected_code": 27,
+      "expected_reason": "unknown_label_not_in_lattice_enum",
+      "code": 27,
+      "reason": "unknown_label_not_in_lattice_enum",
+      "accepted": false,
+      "covert_capacity_bits": null
+    },
+    {
+      "name": "unknown-field",
+      "expected_code": 20,
+      "expected_reason": "unknown_field",
+      "code": 20,
+      "reason": "unknown_field",
+      "accepted": false,
+      "covert_capacity_bits": null
+    },
+    {
+      "name": "duplicate-key",
+      "expected_code": 20,
+      "expected_reason": "duplicate_key",
+      "code": 20,
+      "reason": "duplicate_key",
+      "accepted": false
+    }
+  ],
+  "accepted_negative_count": 0
+}
