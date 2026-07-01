@@ -34,9 +34,9 @@ Create:
 Modify:
 
 - `tools/simurgh-attestation/stage4h/exitCodes.mjs` - total wrapper and `OFFLINE_REASONS`.
-- `tools/simurgh-attestation/stage4h/verify-stage4h-digest-binding.mjs` - wrapper-facing process exit and optional offline preflight integration point.
-- `tools/simurgh-attestation/stage4h/packBinding.mjs` - manifest schema/binding support for `hermeticity_attestation_digest` if the implementation chooses to bind it directly in the manifest object.
-- `tools/simurgh-attestation/stage4h/schema.mjs` - signed manifest schema support for the new digest field if bound directly in the manifest.
+- `tools/simurgh-attestation/stage4h/verify-stage4h-digest-binding.mjs` - mandatory Q3 offline preflight around the real checker path and wrapper-facing process exit.
+- `tools/simurgh-attestation/stage4h/packBinding.mjs` - manifest schema/binding support for `hermeticity_attestation_digest`; the manifest owns this digest.
+- `tools/simurgh-attestation/stage4h/schema.mjs` - signed manifest schema support for the new digest field.
 - `tools/simurgh-attestation/stage4h/build-stage4h-digest-fixtures.mjs` - Q3 evidence, stage label, manifest binding, exit map, reproduce summary.
 - `scripts/reproduce-llm-shield-stage4h.sh` - final typed-exit one-command pipeline.
 - `tests/unit/llmShield/stage4h/reproduce.test.js` - Q3 pass, new evidence files, typed negative smokes.
@@ -333,6 +333,23 @@ test("Q3 static scan rejects provider/model imports in checker dependency path",
   }
 });
 
+test("Q3 static scan recursively follows local checker imports", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "stage4h-recursive-scan-"));
+  try {
+    const target = join(dir, "checker.mjs");
+    const dependency = join(dir, "dependency.mjs");
+    writeFileSync(target, 'import "./dependency.mjs"; export const ok = true;\n');
+    writeFileSync(dependency, 'import net from "node:net"; export const leak = net;\n');
+    const result = await scanForModelClients(target, { allowedPaths: [] });
+    assert.equal(result.ok, false);
+    assert.equal(result.reason, "forbidden_builtin_imported");
+    assert.equal(result.matches[0].specifier, "node:net");
+    assert.match(result.matches[0].file, /dependency\.mjs$/);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test("OfflineViolationError exposes the denied reason", () => {
   const error = new OfflineViolationError("fetch_invoked");
   assert.equal(error.name, "OfflineViolationError");
@@ -357,8 +374,12 @@ Create `tools/simurgh-attestation/stage4h/offlineHarness.mjs` with this structur
 ```js
 // SPDX-License-Identifier: AGPL-3.0-or-later
 import { readFile } from "node:fs/promises";
+import { createRequire, syncBuiltinESMExports } from "node:module";
+import { dirname, extname, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { RAW_VERIFIER_CODES } from "./exitCodes.mjs";
+
+const require = createRequire(import.meta.url);
 
 const FORBIDDEN_BUILTINS = new Map([
   ["node:http", "forbidden_builtin_imported"],
@@ -415,14 +436,14 @@ export async function installDenials(hits) {
     patchWritable(globalThis, "fetch", () => hit(hits, "fetch_invoked"), restores);
   }
 
-  const http = await import("node:http");
-  const https = await import("node:https");
-  const net = await import("node:net");
-  const tls = await import("node:tls");
-  const dns = await import("node:dns");
-  const dnsPromises = await import("node:dns/promises");
-  const dgram = await import("node:dgram");
-  const childProcess = await import("node:child_process");
+  const http = require("node:http");
+  const https = require("node:https");
+  const net = require("node:net");
+  const tls = require("node:tls");
+  const dns = require("node:dns");
+  const dnsPromises = require("node:dns/promises");
+  const dgram = require("node:dgram");
+  const childProcess = require("node:child_process");
 
   for (const mod of [http, https]) {
     patchWritable(mod, "request", () => hit(hits, "http_client_invoked"), restores);
@@ -430,6 +451,7 @@ export async function installDenials(hits) {
   }
   patchWritable(net, "connect", () => hit(hits, "socket_connect_invoked"), restores);
   patchWritable(net, "createConnection", () => hit(hits, "socket_connect_invoked"), restores);
+  patchWritable(net.Socket.prototype, "connect", () => hit(hits, "socket_connect_invoked"), restores);
   patchWritable(tls, "connect", () => hit(hits, "socket_connect_invoked"), restores);
   patchWritable(dns, "lookup", () => hit(hits, "dns_invoked"), restores);
   patchWritable(dns, "resolve", () => hit(hits, "dns_invoked"), restores);
@@ -439,11 +461,13 @@ export async function installDenials(hits) {
   for (const key of ["spawn", "exec", "execFile", "fork"]) {
     patchWritable(childProcess, key, () => hit(hits, "subprocess_invoked"), restores);
   }
+  syncBuiltinESMExports();
   return restores;
 }
 
 export function restoreDenials(restores) {
   for (const restore of restores.reverse()) restore();
+  syncBuiltinESMExports();
 }
 
 export async function runOffline(fn) {
@@ -478,17 +502,58 @@ function importSpecifiers(source) {
   return specifiers;
 }
 
+function shouldSkipScan(url, allowed) {
+  const path = new URL(url).pathname;
+  return (
+    allowed.has(url) ||
+    path.endsWith("/tools/simurgh-attestation/stage4h/offlineHarness.mjs") ||
+    path.includes("/tests/fixtures/llmShield/stage4h/offline/egress-double.mjs") ||
+    path.includes("/tests/")
+  );
+}
+
+function isLocalSpecifier(specifier) {
+  return specifier.startsWith("./") || specifier.startsWith("../") || specifier.startsWith("/");
+}
+
+async function resolveLocalImport(specifier, parentUrl) {
+  const parentPath = new URL(parentUrl).pathname;
+  const rawPath = specifier.startsWith("/")
+    ? specifier
+    : resolve(dirname(parentPath), specifier);
+  const candidates = extname(rawPath)
+    ? [rawPath]
+    : [`${rawPath}.mjs`, `${rawPath}.js`, `${rawPath}.cjs`, `${rawPath}/index.mjs`, `${rawPath}/index.js`];
+  for (const candidate of candidates) {
+    try {
+      await readFile(candidate, "utf8");
+      return pathToFileURL(candidate).href;
+    } catch {
+      continue;
+    }
+  }
+  return null;
+}
+
 export async function scanForModelClients(entryPath, { allowedPaths = [] } = {}) {
-  const url = entryPath.startsWith("file:") ? entryPath : pathToFileURL(entryPath).href;
+  const firstUrl = entryPath.startsWith("file:") ? entryPath : pathToFileURL(entryPath).href;
   const allowed = new Set(allowedPaths.map((path) => pathToFileURL(path).href));
-  if (allowed.has(url)) return { ok: true, matches: [] };
-  const source = await readFile(new URL(url), "utf8");
   const matches = [];
-  for (const specifier of importSpecifiers(source)) {
-    if (FORBIDDEN_BUILTINS.has(specifier)) {
-      matches.push({ specifier, reason: "forbidden_builtin_imported" });
-    } else if (FORBIDDEN_MODEL_RE.test(specifier)) {
-      matches.push({ specifier, reason: "model_client_present" });
+  const seen = new Set();
+  const stack = [firstUrl];
+  while (stack.length > 0) {
+    const url = stack.pop();
+    if (!url || seen.has(url) || shouldSkipScan(url, allowed)) continue;
+    seen.add(url);
+    const source = await readFile(new URL(url), "utf8");
+    for (const specifier of importSpecifiers(source)) {
+      if (FORBIDDEN_BUILTINS.has(specifier)) {
+        matches.push({ file: url, specifier, reason: "forbidden_builtin_imported" });
+      } else if (FORBIDDEN_MODEL_RE.test(specifier)) {
+        matches.push({ file: url, specifier, reason: "model_client_present" });
+      } else if (isLocalSpecifier(specifier)) {
+        stack.push(await resolveLocalImport(specifier, url));
+      }
     }
   }
   return matches.length === 0
@@ -497,7 +562,7 @@ export async function scanForModelClients(entryPath, { allowedPaths = [] } = {})
 }
 ```
 
-Implementation rule for Node builtins: patch writable runtime surfaces, keep `globalThis.fetch` runtime denial in all environments, and treat the dependency-path static scan as the authoritative enforcement for imported immutable builtins. Tests may use `mock.method()` from `node:test` where a builtin namespace is immutable.
+Implementation rule for Node builtins: mutate CommonJS builtin exports through `createRequire()`, call `syncBuiltinESMExports()` after patch and restore, patch lower-level connection primitives where available, keep `globalThis.fetch` runtime denial in all environments, and treat the recursive dependency-path static scan as authoritative for imported immutable builtins. The recursive scan must exclude `offlineHarness.mjs`, the egress-double fixture, and test files, so the harness can test itself without weakening the checker path.
 
 - [ ] **Step 5: Run tests**
 
@@ -573,6 +638,17 @@ import { runOffline } from "../tools/simurgh-attestation/stage4h/offlineHarness.
 
 const evidenceRoot = "docs/research/llm-shield/evidence/stage-4h";
 const fixtureRoot = "tests/fixtures/llmShield/stage4h";
+const deniedSurfaces = Object.freeze([
+  "fetch",
+  "http",
+  "https",
+  "net",
+  "tls",
+  "dns",
+  "dns-promises",
+  "dgram",
+  "child_process",
+]);
 
 function sortJson(value) {
   if (Array.isArray(value)) return value.map(sortJson);
@@ -620,29 +696,32 @@ async function runEgressDouble(surface) {
 
 export async function buildOfflineReport() {
   const clean = await runOffline(async () => buildTamperMatrix(buildCleanTamperContext()));
-  const egress = await runEgressDouble("fetch");
-  const q7Clean = JSON.parse(await readFile(`${fixtureRoot}/privacy/q7-clean-certificate.json`, "utf8"));
+  const egressResults = Object.fromEntries(
+    await Promise.all(
+      deniedSurfaces.map(async (surface) => [surface, await runEgressDouble(surface)]),
+    ),
+  );
+  const q7CleanPath = `${fixtureRoot}/privacy/q7-clean-certificate.json`;
+  const q7Clean = JSON.parse(await readFile(q7CleanPath, "utf8"));
   const q7 = await runOffline(async () => privacyGate(q7Clean));
+  const egressDoubleCaught = deniedSurfaces.every((surface) => egressResults[surface].code === 28);
   const report = {
     stage: "4H.5",
     gate: "Q3",
-    denied_surfaces: [
-      "fetch",
-      "http",
-      "https",
-      "net",
-      "tls",
-      "dns",
-      "dns-promises",
-      "dgram",
-      "child_process",
-    ],
+    denied_surfaces: deniedSurfaces,
     clean_run_hits: clean.hits.length + q7.hits.length,
-    egress_double_caught: egress.code === 28,
-    egress_double_raw_code: egress.code,
-    egress_double_reason: egress.reason,
-    q3_status: clean.hits.length === 0 && q7.hits.length === 0 && egress.code === 28 ? "pass" : "fail",
-    run_level_exit: clean.hits.length === 0 && q7.hits.length === 0 && egress.code === 28 ? 0 : 2,
+    q7_clean_fixture: q7CleanPath,
+    egress_double_caught: egressDoubleCaught,
+    egress_double_raw_code: egressResults.fetch.code,
+    egress_double_reason: egressResults.fetch.reason,
+    egress_double_results: Object.fromEntries(
+      Object.entries(egressResults).map(([surface, result]) => [
+        surface,
+        { code: result.code, reason: result.reason },
+      ]),
+    ),
+    q3_status: clean.hits.length === 0 && q7.hits.length === 0 && egressDoubleCaught ? "pass" : "fail",
+    run_level_exit: clean.hits.length === 0 && q7.hits.length === 0 && egressDoubleCaught ? 0 : 2,
   };
   return report;
 }
@@ -658,18 +737,20 @@ export async function main() {
     denied_surfaces: offlineReport.denied_surfaces,
     node_major: Number(process.versions.node.split(".")[0]),
   };
+  const hermeticityAttestationDigest = digest(attestation);
+  const offlineReportWithDigest = {
+    ...offlineReport,
+    hermeticity_attestation_digest: hermeticityAttestationDigest,
+  };
   const exitMap = {
     stage: "4H.5",
     run_level_by_raw: RUN_LEVEL_BY_RAW,
     unknown_raw_maps_to: stage4CodeForRawCode(999),
   };
-  await writeJson(`${evidenceRoot}/offline-report.json`, offlineReport);
-  await writeJson(`${evidenceRoot}/hermeticity-attestation.json`, {
-    ...attestation,
-    hermeticity_attestation_digest: digest(attestation),
-  });
+  await writeJson(`${evidenceRoot}/offline-report.json`, offlineReportWithDigest);
+  await writeJson(`${evidenceRoot}/hermeticity-attestation.json`, attestation);
   await writeJson(`${evidenceRoot}/exit-map.json`, exitMap);
-  await writeJson(`${fixtureRoot}/expected-results/offline-matrix.json`, offlineReport);
+  await writeJson(`${fixtureRoot}/expected-results/offline-matrix.json`, offlineReportWithDigest);
   await writeJson(`${fixtureRoot}/expected-results/exit-map.json`, exitMap);
   if (offlineReport.q3_status !== "pass") {
     process.exit(stage4CodeForRawCode(28));
@@ -686,7 +767,45 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
 
 - [ ] **Step 4: Normalize Stage 4D crypto failures before wrapper routing**
 
-Patch `tools/simurgh-attestation/stage4h/verify-stage4h-digest-binding.mjs`:
+Patch `tools/simurgh-attestation/stage4h/verify-stage4h-digest-binding.mjs`. This file must run the real checker path under Q3 preflight for Stage 4H.5; the offline audit script is evidence generation, not a substitute for checker coverage.
+
+First, factor the current verification body into a core function and wrap it:
+
+```js
+import { runOffline, scanForModelClients } from "./offlineHarness.mjs";
+
+async function runVerifierCore(args) {
+  // Move the existing verifier step engine here without changing Q0/Q1/Q2/Q4/Q5/Q6/Q7 first-failing semantics.
+}
+
+async function runStage4h5Verifier(args) {
+  const scan = await scanForModelClients(new URL(import.meta.url).pathname, {
+    allowedPaths: [
+      new URL("./offlineHarness.mjs", import.meta.url).pathname,
+    ],
+  });
+  if (!scan.ok) {
+    return finish({
+      outPath: args.out,
+      code: RAW_VERIFIER_CODES.CHECKER_NOT_OFFLINE,
+      reason: scan.reason,
+      certificate: null,
+    });
+  }
+  const offline = await runOffline(() => runVerifierCore(args));
+  if (!offline.ok) {
+    return finish({
+      outPath: args.out,
+      code: RAW_VERIFIER_CODES.CHECKER_NOT_OFFLINE,
+      reason: offline.reason,
+      certificate: null,
+    });
+  }
+  return offline.value;
+}
+```
+
+Then normalize symbolic Stage 4D crypto failures before wrapper routing:
 
 ```js
 function normalizeVerifierRawCode(code) {
@@ -763,6 +882,17 @@ Add these files to the metadata-only existence list:
       `${evidenceRoot}/reproduce-summary.json`,
 ```
 
+Add an acyclic attestation assertion:
+
+```js
+    const attestation = readJson(`${evidenceRoot}/hermeticity-attestation.json`);
+    const offline = readJson(`${evidenceRoot}/offline-report.json`);
+    const manifest = readJson(`${evidenceRoot}/signed-pack-manifest.json`);
+    assert.equal("hermeticity_attestation_digest" in attestation, false);
+    assert.match(offline.hermeticity_attestation_digest, /^sha256:[0-9a-f]{64}$/);
+    assert.equal(manifest.hermeticity_attestation_digest, offline.hermeticity_attestation_digest);
+```
+
 - [ ] **Step 2: Run E2E and verify it fails**
 
 Run:
@@ -796,7 +926,10 @@ Keep compatibility by allowing older test manifests only in fixture migration if
 Patch `tools/simurgh-attestation/stage4h/packBinding.mjs`:
 
 ```js
-export function buildSignedPackManifest({ certificate, privateKey, hermeticityAttestationDigest = null }) {
+export function buildSignedPackManifest({ certificate, privateKey, hermeticityAttestationDigest }) {
+  if (!/^sha256:[0-9a-f]{64}$/.test(hermeticityAttestationDigest)) {
+    throw new Error("hermeticity_attestation_digest is required for Stage 4H.5 manifests");
+  }
   const certCheck = validateDfiCertificate(certificate);
   if (!certCheck.ok) throw new Error(`invalid certificate: ${certCheck.reason}:${certCheck.field}`);
   const certDigest = certificateDigest(certificate);
@@ -804,11 +937,11 @@ export function buildSignedPackManifest({ certificate, privateKey, hermeticityAt
     manifest_version: MANIFEST_VERSION,
     base_pack_digest: certificate.base_pack_digest,
     certificate_digest: certDigest,
-    hermeticity_attestation_digest: hermeticityAttestationDigest ?? `sha256:${"0".repeat(64)}`,
+    hermeticity_attestation_digest: hermeticityAttestationDigest,
     merkle_root: `sha256:${merkleRoot([
       certificate.base_pack_digest.replace(/^sha256:/, ""),
       certDigest.replace(/^sha256:/, ""),
-      (hermeticityAttestationDigest ?? `sha256:${"0".repeat(64)}`).replace(/^sha256:/, ""),
+      hermeticityAttestationDigest.replace(/^sha256:/, ""),
     ])}`,
   };
   const signed_pack_manifest_digest = manifestDigest(payload);
@@ -838,18 +971,21 @@ const hermeticityAttestation = {
 };
 const hermeticityAttestationDigest = digest(hermeticityAttestation);
 const q0Manifest = signManifest(q0Certificate, manifestPrivateKey, hermeticityAttestationDigest);
+const offlineReportWithDigest = {
+  ...offlineReport,
+  hermeticity_attestation_digest: hermeticityAttestationDigest,
+};
 ```
 
 Then write:
 
 ```js
-await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "offline-report.json"), offlineReport);
-await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "hermeticity-attestation.json"), {
-  ...hermeticityAttestation,
-  hermeticity_attestation_digest: hermeticityAttestationDigest,
-});
+await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "offline-report.json"), offlineReportWithDigest);
+await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "hermeticity-attestation.json"), hermeticityAttestation);
 await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "exit-map.json"), exitMap);
 ```
+
+`hermeticity-attestation.json` must not contain `hermeticity_attestation_digest`; the digest is owned by `signed-pack-manifest.json` and may be repeated in `offline-report.json` only as convenience evidence.
 
 Set:
 
@@ -903,6 +1039,38 @@ test("Stage 4H.5 reproduce script routes every step through typed wrapper", () =
   assert.match(script, /stage4CodeForRawCode/);
 });
 ```
+
+Add explicit reviewer negative-smoke tests for T2-T6. These tests must execute the same CLI or shared verifier/audit paths used by reproduce, read the emitted JSON raw code, and route that raw code through `stage4CodeForRawCode()`:
+
+```js
+test("Stage 4H.5 reviewer T2-T6 smokes route through typed exits", () => {
+  const cases = [
+    { id: "T2", description: "premise digest flip", raw: 22, typed: 1 },
+    { id: "T3", description: "signature corruption", raw: 25, typed: 1 },
+    { id: "T4", description: "egress double", raw: 28, typed: 2 },
+    { id: "T5", description: "proof deletion", rawAnyOf: [24, 26], typed: 1 },
+    { id: "T6", description: "Q7 privacy budget violation", raw: 27, typed: 1 },
+  ];
+  for (const item of cases) {
+    const result = runReviewerSmoke(item.id);
+    if (item.rawAnyOf) {
+      assert.equal(item.rawAnyOf.includes(result.raw), true, `${item.id} raw ${result.raw}`);
+    } else {
+      assert.equal(result.raw, item.raw, item.description);
+    }
+    assert.equal(stage4CodeForRawCode(result.raw), item.typed, item.id);
+    assert.equal(result.usedSharedVerifierPath, true, item.id);
+  }
+});
+```
+
+Implement `runReviewerSmoke()` in the test file with focused fixture generation:
+
+- `T2`: flip a premise digest and verify raw `22`.
+- `T3`: corrupt the base-pack signature and verify symbolic Stage 4D failure normalizes to raw `25`.
+- `T4`: invoke the dynamically imported egress double under `runOffline()` and verify raw `28`.
+- `T5`: delete proof material, repair/re-sign all earlier bindings, then verify first failure is raw `26` or `24`, never `25`.
+- `T6`: run a Q7 privacy-negative fixture and verify raw `27`.
 
 - [ ] **Step 2: Run and verify it fails**
 
@@ -964,6 +1132,28 @@ run_step() {
   fi
 }
 
+run_offline_audit() {
+  local log
+  log="$(mktemp)"
+  if command -v unshare >/dev/null 2>&1; then
+    if unshare -rn node scripts/offline-audit-llm-shield-stage4h.mjs >"$log" 2>&1; then
+      rm -f "$log"
+      return 0
+    fi
+    if grep -Eiq "operation not permitted|permission denied|not allowed" "$log"; then
+      echo "unshare permission denied; OS ring skipped; in-process Q3 harness remains authoritative"
+      rm -f "$log"
+      node scripts/offline-audit-llm-shield-stage4h.mjs
+      return $?
+    fi
+    cat "$log" >&2
+    rm -f "$log"
+    return 1
+  fi
+  echo "unshare unavailable; OS ring skipped; in-process Q3 harness remains authoritative"
+  node scripts/offline-audit-llm-shield-stage4h.mjs
+}
+
 echo "[1/8] scrub and pin deterministic environment"
 unset OPENAI_API_KEY ANTHROPIC_API_KEY GOOGLE_API_KEY BROWSERBASE_API_KEY
 export TZ=UTC LC_ALL=C LANG=C SOURCE_DATE_EPOCH=0 PYTHONHASHSEED=0 NO_NETWORK=1
@@ -982,12 +1172,7 @@ run_step 25 node tools/simurgh-attestation/stage4h/verify-stage4h-digest-binding
   --out docs/research/llm-shield/evidence/stage-4h/verifier-results.json
 
 echo "[4/8] run Q3 offline audit"
-if command -v unshare >/dev/null 2>&1; then
-  run_step 28 unshare -rn node scripts/offline-audit-llm-shield-stage4h.mjs
-else
-  echo "unshare unavailable; OS ring skipped; in-process Q3 harness remains authoritative"
-  run_step 28 node scripts/offline-audit-llm-shield-stage4h.mjs
-fi
+run_step 28 run_offline_audit
 
 echo "[5/8] replay Q0-Q7 unit matrix"
 run_step 29 node --test \
@@ -1031,7 +1216,7 @@ Run:
 scripts/reproduce-llm-shield-stage4h.sh
 ```
 
-Expected: exit `0`. If `unshare -rn` is present but denied by host permissions, adjust the script to treat only `unshare` command absence and permission denial as OS-ring skip, then run the in-process audit.
+Expected: exit `0`. If `unshare -rn` is absent or denied by host permissions, the script records the OS-ring skip and runs the in-process audit.
 
 - [ ] **Step 5: Commit**
 
@@ -1045,6 +1230,7 @@ git commit -m "feat(llm-shield): finalize stage 4h typed reproduce"
 **Files:**
 
 - Create: `tests/unit/llmShield/stage4h/closeout.test.js`
+- Modify: `tools/simurgh-attestation/stage4h/tamperClosure.mjs`
 - Modify: `scripts/reproduce-llm-shield-stage4h.sh`
 
 - [ ] **Step 1: Write closeout tests**
@@ -1054,11 +1240,12 @@ Create `tests/unit/llmShield/stage4h/closeout.test.js`:
 ```js
 // SPDX-License-Identifier: AGPL-3.0-or-later
 import assert from "node:assert/strict";
-import { execFileSync, spawnSync } from "node:child_process";
-import { copyFileSync, existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { spawnSync } from "node:child_process";
+import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
+import { buildProofDeletionClosureFixture } from "../../../../tools/simurgh-attestation/stage4h/tamperClosure.mjs";
 
 const fixtureRoot = "tests/fixtures/llmShield/stage4h";
 const evidenceRoot = "docs/research/llm-shield/evidence/stage-4h";
@@ -1095,31 +1282,29 @@ test("Stage 4H.5 Q3 pass is a conjunction, not a single green flag", () => {
 test("Stage 4H.5 anti-theatre deletion rejects missing proof material", () => {
   const tmp = mkdtempSync(join(tmpdir(), "stage4h-delete-"));
   try {
-    const certPath = join(tmp, "certificate.json");
     const outPath = join(tmp, "deleted-proof-result.json");
-    const cert = readJson(`${fixtureRoot}/q0-clean-disconnected-untrusted-dfi-certificate.json`);
-    cert.derivation.lattice_steps = [];
-    writeFileSync(certPath, `${JSON.stringify(cert, null, 2)}\n`);
+    const deleted = buildProofDeletionClosureFixture({ outputDir: tmp });
     const result = spawnSync(process.execPath, [
       "tools/simurgh-attestation/stage4h/verify-stage4h-digest-binding.mjs",
       "--base-pack",
-      `${fixtureRoot}/q0-clean-disconnected-untrusted-base-pack.json`,
+      deleted.basePackPath,
       "--base-pack-sig",
-      `${fixtureRoot}/q0-clean-disconnected-untrusted-base-pack.sig`,
+      deleted.basePackSigPath,
       "--base-pack-pubkey",
-      `${fixtureRoot}/q0-clean-disconnected-untrusted-signer.pub`,
+      deleted.basePackPubkeyPath,
       "--certificate",
-      certPath,
+      deleted.certificatePath,
       "--manifest",
-      `${fixtureRoot}/q0-clean-disconnected-untrusted-signed-pack-manifest.json`,
+      deleted.manifestPath,
       "--manifest-pubkey",
-      `${fixtureRoot}/manifest-verifier.pub`,
+      deleted.manifestPubkeyPath,
       "--out",
       outPath,
     ]);
     assert.notEqual(result.status, 0);
     const json = readJson(outPath);
     assert.equal([24, 26].includes(json.code), true, `code ${json.code}`);
+    assert.notEqual(json.code, 25, "proof deletion must repair earlier bindings");
   } finally {
     rmSync(tmp, { recursive: true, force: true });
   }
@@ -1132,6 +1317,8 @@ test("Stage 4H.5 reproduce summary uses typed wrapper exit", () => {
   assert.equal(summary.typed_exit_source, "stage4CodeForRawCode");
 });
 ```
+
+Before this test can pass, add `buildProofDeletionClosureFixture()` to `tamperClosure.mjs`. It must delete the target proof material, then recompute and re-sign every earlier commitment/signature required for signature, Merkle, and pack/cert binding steps to pass. The intended first failure must be raw `26` or raw `24`; raw `25 / pack_binding_mismatch` is not acceptable for T5.
 
 - [ ] **Step 2: Run and verify initial failure**
 
@@ -1152,6 +1339,7 @@ byte_stable_check() {
   local first second
   first="$(mktemp -d)"
   second="$(mktemp -d)"
+  trap 'rm -rf "$first" "$second"' RETURN
   node tools/simurgh-attestation/stage4h/build-stage4h-digest-fixtures.mjs >/dev/null
   cp docs/research/llm-shield/evidence/stage-4h/*.json "$first/"
   node tools/simurgh-attestation/stage4h/build-stage4h-digest-fixtures.mjs >/dev/null
