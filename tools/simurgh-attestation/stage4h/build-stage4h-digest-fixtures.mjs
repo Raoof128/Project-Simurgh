@@ -427,6 +427,8 @@ function buildPrivacyMatrix(cleanCertificate) {
     )
       ? "pass"
       : "fail",
+    bounded_leakage: true,
+    allowlist: "authoritative_schema_plus_q7_defence_in_depth",
     results,
     accepted_negative_count: results.filter((result) => result.name !== "clean" && result.accepted)
       .length,
@@ -901,6 +903,8 @@ export async function main({ root = process.cwd() } = {}) {
       },
       Q7: {
         status: privacyMatrix.status,
+        bounded_leakage: privacyMatrix.bounded_leakage,
+        allowlist: privacyMatrix.allowlist,
         accepted_negative_count: privacyMatrix.accepted_negative_count,
         expected_results: Object.fromEntries(
           privacyMatrix.results.map((result) => [result.name, result.expected_code])
