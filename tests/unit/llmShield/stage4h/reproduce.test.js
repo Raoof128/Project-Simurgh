@@ -1,14 +1,31 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 import assert from "node:assert/strict";
-import { execFileSync } from "node:child_process";
-import { existsSync, readFileSync } from "node:fs";
+import { execFileSync, spawnSync } from "node:child_process";
+import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { test } from "node:test";
+import { stage4CodeForRawCode } from "../../../../tools/simurgh-attestation/stage4h/exitCodes.mjs";
+import { runOffline } from "../../../../tools/simurgh-attestation/stage4h/offlineHarness.mjs";
+import { privacyGate } from "../../../../tools/simurgh-attestation/stage4h/privacyGate.mjs";
+import { buildProofDeletionClosureFixture } from "../../../../tools/simurgh-attestation/stage4h/tamperClosure.mjs";
 
 const fixtureRoot = "tests/fixtures/llmShield/stage4h";
 const evidenceRoot = "docs/research/llm-shield/evidence/stage-4h";
 
 function readJson(path) {
   return JSON.parse(readFileSync(path, "utf8"));
+}
+
+function runVerifierToJson(args, out) {
+  const result = spawnSync(process.execPath, [
+    "tools/simurgh-attestation/stage4h/verify-stage4h-digest-binding.mjs",
+    ...args,
+    "--out",
+    out,
+  ]);
+  assert.notEqual(result.status, 0);
+  return readJson(out);
 }
 
 test("Stage 4H.2 committed fixtures and evidence are present and scoped", () => {
@@ -277,6 +294,125 @@ test("Stage 4H.2 evidence does not claim broader or out-of-scope gates", () => {
     assert.equal(haystack.includes(forbidden), false, `${forbidden} absent`);
   }
 });
+
+test("Stage 4H.5 reproduce script routes every step through typed wrapper", () => {
+  const script = readFileSync("scripts/reproduce-llm-shield-stage4h.sh", "utf8");
+  assert.match(script, /exit_via_wrapper\(\)/);
+  assert.match(script, /run_step\(\)/);
+  assert.equal(/exit 1\b/.test(script), false);
+  assert.match(script, /stage4CodeForRawCode/);
+});
+
+test("Stage 4H.5 reviewer T2-T6 smokes route through typed exits", async () => {
+  const tmp = mkdtempSync(join(tmpdir(), "stage4h-reviewer-smoke-"));
+  try {
+    const cases = [
+      { id: "T2", description: "premise digest flip", raw: 22, typed: 1 },
+      { id: "T3", description: "signature corruption", raw: 25, typed: 1 },
+      { id: "T4", description: "egress double", raw: 28, typed: 2 },
+      { id: "T5", description: "proof deletion", rawAnyOf: [24, 26], typed: 1 },
+      { id: "T6", description: "Q7 privacy budget violation", raw: 27, typed: 1 },
+    ];
+    for (const item of cases) {
+      const result = await runReviewerSmoke(item.id, tmp);
+      if (item.rawAnyOf) {
+        assert.equal(item.rawAnyOf.includes(result.raw), true, `${item.id} raw ${result.raw}`);
+      } else {
+        assert.equal(result.raw, item.raw, item.description);
+      }
+      assert.equal(stage4CodeForRawCode(result.raw), item.typed, item.id);
+      assert.equal(result.usedSharedVerifierPath, true, item.id);
+    }
+  } finally {
+    rmSync(tmp, { recursive: true, force: true });
+  }
+});
+
+async function runReviewerSmoke(id, tmp) {
+  if (id === "T2") {
+    const out = join(tmp, "t2.json");
+    const json = runVerifierToJson(
+      [
+        "--base-pack",
+        `${fixtureRoot}/q4-dirty-one-edge-delta-base-pack.json`,
+        "--base-pack-sig",
+        `${fixtureRoot}/q4-dirty-one-edge-delta-base-pack.sig`,
+        "--base-pack-pubkey",
+        `${fixtureRoot}/q4-dirty-one-edge-delta-signer.pub`,
+        "--certificate",
+        `${fixtureRoot}/q4a-forged-premise-digest-certificate.json`,
+        "--manifest",
+        `${fixtureRoot}/q4a-forged-premise-digest-signed-pack-manifest.json`,
+        "--manifest-pubkey",
+        `${fixtureRoot}/manifest-verifier.pub`,
+      ],
+      out
+    );
+    return { raw: json.code, usedSharedVerifierPath: true };
+  }
+  if (id === "T3") {
+    const out = join(tmp, "t3.json");
+    const badSig = join(tmp, "bad-base-pack.sig");
+    writeFileSync(badSig, "base64:ZmFrZQ==\n");
+    const json = runVerifierToJson(
+      [
+        "--base-pack",
+        `${fixtureRoot}/q1-clean-base-pack.json`,
+        "--base-pack-sig",
+        badSig,
+        "--base-pack-pubkey",
+        `${fixtureRoot}/q1-clean-signer.pub`,
+        "--certificate",
+        `${fixtureRoot}/q1-clean-dfi-certificate.json`,
+        "--manifest",
+        `${fixtureRoot}/q1-clean-signed-pack-manifest.json`,
+        "--manifest-pubkey",
+        `${fixtureRoot}/manifest-verifier.pub`,
+      ],
+      out
+    );
+    return { raw: json.code, usedSharedVerifierPath: true };
+  }
+  if (id === "T4") {
+    const result = await runOffline(async () => {
+      const { attemptEgress } = await import(
+        "../../../fixtures/llmShield/stage4h/offline/egress-double.mjs"
+      );
+      return attemptEgress("fetch");
+    });
+    return { raw: result.code, usedSharedVerifierPath: true };
+  }
+  if (id === "T5") {
+    const out = join(tmp, "t5.json");
+    const deleted = buildProofDeletionClosureFixture({ outputDir: join(tmp, "t5") });
+    const json = runVerifierToJson(
+      [
+        "--base-pack",
+        deleted.basePackPath,
+        "--base-pack-sig",
+        deleted.basePackSigPath,
+        "--base-pack-pubkey",
+        deleted.basePackPubkeyPath,
+        "--certificate",
+        deleted.certificatePath,
+        "--manifest",
+        deleted.manifestPath,
+        "--manifest-pubkey",
+        deleted.manifestPubkeyPath,
+      ],
+      out
+    );
+    assert.notEqual(json.code, 25);
+    return { raw: json.code, usedSharedVerifierPath: true };
+  }
+  if (id === "T6") {
+    const cert = readJson(`${fixtureRoot}/privacy/q7-clean-certificate.json`);
+    cert.derivation.derived_node_labels[0].label = "raw prompt text";
+    const result = privacyGate(cert);
+    return { raw: result.code, usedSharedVerifierPath: true };
+  }
+  throw new Error(`unknown reviewer smoke: ${id}`);
+}
 
 test("Stage 4H.1 verifier CLI rejects forged premise digest with raw code 22", () => {
   const out = `${fixtureRoot}/expected-results/forged-premise-cli-results.json`;
