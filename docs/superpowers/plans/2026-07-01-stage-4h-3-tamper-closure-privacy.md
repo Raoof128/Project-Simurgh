@@ -1238,8 +1238,10 @@ then repair every earlier-layer commitment required for steps 1-8 to pass. For
 certificate mutations such as `lattice-digest`, `lattice-step`, and
 `proof-step`, that means recomputing `manifest.certificate_digest` before
 diagnosis so `checkBinding()` does not hide the intended raw `26` failure. Task
-4 must replace any in-memory-only fixture shortcuts with CLI-backed fixture
-generation and real manifest re-signing where required.
+3 unit helpers may use in-memory contexts only for focused unit tests. Task 4
+evidence generation must use CLI-backed/generated signed fixtures or the exact
+shared verifier step engine. No in-memory-only tamper result may be written to
+evidence.
 
 - [ ] **Step 4: Run Q6 tests**
 
