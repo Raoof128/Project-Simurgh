@@ -1,6 +1,6 @@
 {
-  "stage": "4H.3",
-  "scope": "Q0/Q1/Q2/Q4/Q5 plus Q6/Q7 bounded evidence smoke",
+  "stage": "4H.5",
+  "scope": "Q0/Q1/Q2/Q3/Q4/Q5 plus Q6/Q7 bounded evidence smoke and typed closeout evidence",
   "modules_exercised": [
     "constants.mjs",
     "schema.mjs",
@@ -11,7 +11,9 @@
     "build-stage4h-digest-fixtures.mjs",
     "exitCodes.mjs",
     "tamperClosure.mjs",
-    "privacyGate.mjs"
+    "privacyGate.mjs",
+    "offlineHarness.mjs",
+    "offline-audit-llm-shield-stage4h.mjs"
   ],
   "functions_exercised": [
     "validateDfiCertificate",
@@ -31,7 +33,9 @@
     "build-stage4h-digest-fixtures builder",
     "diagnose",
     "buildTamperMatrix",
-    "privacyGate"
+    "privacyGate",
+    "runOffline",
+    "scanForModelClients"
   ],
   "fixture_matrix": {
     "4h0-clean": 0,
@@ -61,8 +65,9 @@
     "q7-raw-premise-ref": 27,
     "q7-non-enum-label": 27,
     "q7-unknown-field": 20,
-    "q7-duplicate-key": 20
+    "q7-duplicate-key": 20,
+    "q3-egress-double": 28
   },
-  "non_scope_gates": ["Q3"],
+  "non_scope_gates": [],
   "metadata_only": true
 }

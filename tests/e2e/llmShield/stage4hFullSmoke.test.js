@@ -5,6 +5,7 @@ import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
+import { stage4CodeForRawCode } from "../../../tools/simurgh-attestation/stage4h/exitCodes.mjs";
 
 const fixtureRoot = "tests/fixtures/llmShield/stage4h";
 const evidenceRoot = "docs/research/llm-shield/evidence/stage-4h";
@@ -187,7 +188,7 @@ test("Stage 4H.2 full reviewer E2E smoke covers builder, CLI, evidence, and Q0/Q
       const result = runVerifier({ ...fixture, out });
       assert.equal(
         result.status,
-        fixture.expectedCode,
+        stage4CodeForRawCode(fixture.expectedCode),
         `${fixture.name} process exit code\nstdout:\n${result.stdout}\nstderr:\n${result.stderr}`
       );
 
@@ -226,7 +227,10 @@ test("Stage 4H.2 full reviewer E2E smoke covers builder, CLI, evidence, and Q0/Q
       "q4c-derivation-scope-omission": 26,
     });
     assert.equal(qGate.gates.Q5.status, "pass");
-    assert.equal(qGate.gates.Q3.status, "not_in_scope", "Q3 not in scope");
+    assert.equal(qGate.gates.Q3.status, "pass", "Q3 pass");
+    assert.equal(qGate.gates.Q3.clean_run_hits, 0);
+    assert.equal(qGate.gates.Q3.egress_double_caught, true);
+    assert.equal(qGate.gates.Q3.egress_double_raw_code, 28);
     assert.equal(qGate.gates.Q6.status, "pass");
     assert.equal(qGate.gates.Q6.tampered_accepted_count, 0);
     assert.equal(qGate.gates.Q7.status, "pass");
@@ -262,6 +266,7 @@ test("Stage 4H.2 full reviewer E2E smoke covers builder, CLI, evidence, and Q0/Q
       "q7-non-enum-label": 27,
       "q7-unknown-field": 20,
       "q7-duplicate-key": 20,
+      "q3-egress-double": 28,
     });
     assert.equal(coverage.metadata_only, true);
     for (const fn of [
@@ -281,6 +286,8 @@ test("Stage 4H.2 full reviewer E2E smoke covers builder, CLI, evidence, and Q0/Q
       "diagnose",
       "buildTamperMatrix",
       "privacyGate",
+      "runOffline",
+      "scanForModelClients",
     ]) {
       assert.equal(coverage.functions_exercised.includes(fn), true, `${fn} covered`);
     }
@@ -293,11 +300,21 @@ test("Stage 4H.2 full reviewer E2E smoke covers builder, CLI, evidence, and Q0/Q
       `${evidenceRoot}/e2e-smoke-coverage.json`,
       `${evidenceRoot}/tamper-results.json`,
       `${evidenceRoot}/privacy-report.json`,
+      `${evidenceRoot}/offline-report.json`,
+      `${evidenceRoot}/hermeticity-attestation.json`,
+      `${evidenceRoot}/exit-map.json`,
       `${evidenceRoot}/README.md`,
     ]) {
       assert.equal(existsSync(path), true, `${path} exists`);
       assertMetadataOnlyJson(path);
     }
+
+    const attestation = readJson(`${evidenceRoot}/hermeticity-attestation.json`);
+    const offline = readJson(`${evidenceRoot}/offline-report.json`);
+    const manifest = readJson(`${evidenceRoot}/signed-pack-manifest.json`);
+    assert.equal("hermeticity_attestation_digest" in attestation, false);
+    assert.match(offline.hermeticity_attestation_digest, /^sha256:[a-f0-9]{64}$/);
+    assert.equal(manifest.hermeticity_attestation_digest, offline.hermeticity_attestation_digest);
   } finally {
     rmSync(tmp, { recursive: true, force: true });
   }

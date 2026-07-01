@@ -19,20 +19,31 @@ function loadPack() {
   return JSON.parse(readFileSync(STAGE4D_PACK_PATH, "utf8"));
 }
 
+const hermeticityAttestationDigest = `sha256:${"a".repeat(64)}`;
+
 test("Stage 4H certificate digest is external and manifest-bound", () => {
   const { privateKey, publicKey } = generateKeyPairSync("ed25519");
   const pack = loadPack();
   const certificate = buildDfiCertificate({ pack });
   assert.equal(Object.hasOwn(certificate, "certificate_digest"), false);
-  const manifest = buildSignedPackManifest({ certificate, privateKey });
+  const manifest = buildSignedPackManifest({
+    certificate,
+    privateKey,
+    hermeticityAttestationDigest,
+  });
   assert.equal(manifest.certificate_digest, certificateDigest(certificate));
+  assert.equal(manifest.hermeticity_attestation_digest, hermeticityAttestationDigest);
   assert.equal(verifyPackBinding({ certificate, manifest, publicKey }).ok, true);
 });
 
 test("Stage 4H pack binding rejects certificate, digest, and signature tampering", () => {
   const { privateKey, publicKey } = generateKeyPairSync("ed25519");
   const certificate = buildDfiCertificate({ pack: loadPack() });
-  const manifest = buildSignedPackManifest({ certificate, privateKey });
+  const manifest = buildSignedPackManifest({
+    certificate,
+    privateKey,
+    hermeticityAttestationDigest,
+  });
   assert.equal(
     verifyPackBinding({
       certificate: { ...certificate, premise_digest: `sha256:${"0".repeat(64)}` },

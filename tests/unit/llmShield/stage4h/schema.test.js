@@ -113,6 +113,7 @@ test("Stage 4H schema validates a signed manifest with certificate digest outsid
     manifest_version: "simurgh.vca.signed_pack_manifest.v1",
     base_pack_digest: digest("2"),
     certificate_digest: digest("7"),
+    hermeticity_attestation_digest: digest("a"),
     signed_pack_manifest_digest: digest("8"),
     merkle_root: digest("9"),
     signature: "base64:ZmFrZQ==",

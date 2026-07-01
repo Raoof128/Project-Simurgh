@@ -1,5 +1,6 @@
 {
-  "clean_run_hits": 0,
+  "stage": "4H.5",
+  "gate": "Q3",
   "denied_surfaces": [
     "fetch",
     "http",
@@ -11,26 +12,12 @@
     "dgram",
     "child_process"
   ],
+  "clean_run_hits": 0,
+  "q7_clean_fixture": "tests/fixtures/llmShield/stage4h/privacy/q7-clean-certificate.json",
   "egress_double_caught": true,
   "egress_double_raw_code": 28,
   "egress_double_reason": "fetch_invoked",
   "egress_double_results": {
-    "child_process": {
-      "code": 28,
-      "reason": "subprocess_invoked"
-    },
-    "dgram": {
-      "code": 28,
-      "reason": "udp_invoked"
-    },
-    "dns": {
-      "code": 28,
-      "reason": "dns_invoked"
-    },
-    "dns-promises": {
-      "code": 28,
-      "reason": "dns_invoked"
-    },
     "fetch": {
       "code": 28,
       "reason": "fetch_invoked"
@@ -50,12 +37,25 @@
     "tls": {
       "code": 28,
       "reason": "socket_connect_invoked"
+    },
+    "dns": {
+      "code": 28,
+      "reason": "dns_invoked"
+    },
+    "dns-promises": {
+      "code": 28,
+      "reason": "dns_invoked"
+    },
+    "dgram": {
+      "code": 28,
+      "reason": "udp_invoked"
+    },
+    "child_process": {
+      "code": 28,
+      "reason": "subprocess_invoked"
     }
   },
-  "gate": "Q3",
-  "hermeticity_attestation_digest": "sha256:fa9e8890ef17a9e0adc2354e4e39f22014b09d40a4a8f1223b972d4c89c45d41",
   "q3_status": "pass",
-  "q7_clean_fixture": "tests/fixtures/llmShield/stage4h/privacy/q7-clean-certificate.json",
   "run_level_exit": 0,
-  "stage": "4H.5"
+  "hermeticity_attestation_digest": "sha256:977681ab700247ff89b3ec4687a05ffc0050be9aa8ea10b59ccf9f388afb1cf8"
 }

@@ -2,7 +2,8 @@
   "manifest_version": "simurgh.vca.signed_pack_manifest.v1",
   "base_pack_digest": "sha256:36a7b964b629844cdd558b7b45bc34e7c080687155acc35127c8672aa72593db",
   "certificate_digest": "sha256:641f6a83ace8cf7137aeb537e581ff618115232e8a85183ff5d26e037e6cb213",
-  "merkle_root": "sha256:a22c99907a3cd2d14136a8a19f7184858c1692684a918a1c5bead11597e9ed4c",
-  "signed_pack_manifest_digest": "sha256:d83c0d11b2d3c96aa4c8382cd59743ce05d3e87e19aa077d0d424ccdf204d76e",
-  "signature": "base64:bE/Bn1Mktbt44QcioN+/HvF4OSqK/17caBOED4ePZ7zb4DIgr4N6n2iyebO+JXQgdJHZpYjo1nEUfPTy++4VBA=="
+  "hermeticity_attestation_digest": "sha256:977681ab700247ff89b3ec4687a05ffc0050be9aa8ea10b59ccf9f388afb1cf8",
+  "merkle_root": "sha256:7191e1acabda40464248c749ce9de4635301fcce382df4e4c23564196f444763",
+  "signed_pack_manifest_digest": "sha256:b5959e40241ca3070fbf4219651c7679b7ceedf44743c3f2c20d6ea77d9e1e92",
+  "signature": "base64:DeveaiqTYfPrkLFqj2+VPvyoyGE679gEAMKcnNAa35WyQxuRj/DMIiXUg2hAaawP8QqBOzkqdWMyIV2h/XweDQ=="
 }

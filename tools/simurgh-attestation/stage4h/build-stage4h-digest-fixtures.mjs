@@ -6,10 +6,15 @@ import { dirname, join } from "node:path";
 import { pathToFileURL } from "node:url";
 import { buildEvidencePack, signPack } from "../stage4d/packBuilder.mjs";
 import { verifyEvidencePack } from "../stage4d/verifyPack.mjs";
-import { buildPremiseSet } from "./canonicalPremises.mjs";
+import {
+  buildHermeticityAttestation,
+  buildOfflineReport,
+} from "../../../scripts/offline-audit-llm-shield-stage4h.mjs";
+import { buildPremiseSet, digest } from "./canonicalPremises.mjs";
 import { STAGE4D_EVIDENCE_DIR, STAGE4H_EVIDENCE_DIR } from "./constants.mjs";
 import { buildDfiCertificate, certificateDigest, validateDerivation } from "./dfiCertificate.mjs";
 import { RAW_VERIFIER_CODES, stage4CodeForRawCode } from "./exitCodes.mjs";
+import { RUN_LEVEL_BY_RAW } from "./exitCodes.mjs";
 import { buildSignedPackManifest, verifyPackBinding } from "./packBinding.mjs";
 import { privacyGate } from "./privacyGate.mjs";
 import { validateDfiCertificate } from "./schema.mjs";
@@ -300,8 +305,14 @@ function hasNormalizedUnsafeAuthorityFlow(pack) {
   return result.code === RAW_VERIFIER_CODES.EXPLICIT_FLOW_INTEGRITY_VIOLATION;
 }
 
+let activeHermeticityAttestationDigest = null;
+
 function signManifest(certificate, privateKey) {
-  return buildSignedPackManifest({ certificate, privateKey });
+  return buildSignedPackManifest({
+    certificate,
+    privateKey,
+    hermeticityAttestationDigest: activeHermeticityAttestationDigest,
+  });
 }
 
 async function runCliFixture(argv, expectedCode) {
@@ -453,6 +464,19 @@ export async function main({ root = process.cwd() } = {}) {
   const manifestPrivateKey = createPrivateKey(manifestPrivateKeyPem);
   const manifestPublicKey = createPublicKey(manifestPublicKeyPem);
   const fixtureRoot = join(root, "tests/fixtures/llmShield/stage4h");
+  const offlineReport = await buildOfflineReport();
+  const hermeticityAttestation = buildHermeticityAttestation(offlineReport);
+  const hermeticityAttestationDigest = digest(hermeticityAttestation);
+  activeHermeticityAttestationDigest = hermeticityAttestationDigest;
+  const offlineReportWithDigest = {
+    ...offlineReport,
+    hermeticity_attestation_digest: hermeticityAttestationDigest,
+  };
+  const exitMap = {
+    stage: "4H.5",
+    run_level_by_raw: RUN_LEVEL_BY_RAW,
+    unknown_raw_maps_to: stage4CodeForRawCode(999),
+  };
 
   const stage4dPrivateKey = createPrivateKey(manifestPrivateKeyPem);
   const stage4dPublicKey = createPublicKey(manifestPublicKeyPem);
@@ -886,13 +910,18 @@ export async function main({ root = process.cwd() } = {}) {
     },
   });
   const qGateResults = {
-    stage: "4H.3",
-    status: "tamper_closure_and_privacy",
+    stage: "4H.5",
+    status: "final_4h_closeout",
     gates: {
       Q0: { status: "pass", expected_results: q0ExpectedResults },
       Q1: { status: "pass", expected_results: q1ExpectedResults },
       Q2: { status: "pass", raw_verifier_code: 0 },
-      Q3: { status: "not_in_scope" },
+      Q3: {
+        status: offlineReport.q3_status,
+        clean_run_hits: offlineReport.clean_run_hits,
+        egress_double_caught: offlineReport.egress_double_caught,
+        egress_double_raw_code: offlineReport.egress_double_raw_code,
+      },
       Q4: { status: "pass", expected_results: q4ExpectedResults },
       Q5: { status: "pass", raw_verifier_code: 0 },
       Q6: {
@@ -931,7 +960,6 @@ export async function main({ root = process.cwd() } = {}) {
       "execution_truth",
       "provider_behaviour_correctness",
       "future_run_guarantees",
-      "full_stage_4h_completion",
       "public_priority",
       "jailbreak_immunity",
       "general_jailbreak_resistance",
@@ -939,8 +967,8 @@ export async function main({ root = process.cwd() } = {}) {
     ],
   };
   const e2eSmokeCoverage = {
-    stage: "4H.3",
-    scope: "Q0/Q1/Q2/Q4/Q5 plus Q6/Q7 bounded evidence smoke",
+    stage: "4H.5",
+    scope: "Q0/Q1/Q2/Q3/Q4/Q5 plus Q6/Q7 bounded evidence smoke and typed closeout evidence",
     modules_exercised: [
       "constants.mjs",
       "schema.mjs",
@@ -952,6 +980,8 @@ export async function main({ root = process.cwd() } = {}) {
       "exitCodes.mjs",
       "tamperClosure.mjs",
       "privacyGate.mjs",
+      "offlineHarness.mjs",
+      "offline-audit-llm-shield-stage4h.mjs",
     ],
     functions_exercised: [
       "validateDfiCertificate",
@@ -972,6 +1002,8 @@ export async function main({ root = process.cwd() } = {}) {
       "diagnose",
       "buildTamperMatrix",
       "privacyGate",
+      "runOffline",
+      "scanForModelClients",
     ],
     fixture_matrix: {
       "4h0-clean": RAW_VERIFIER_CODES.OK,
@@ -993,13 +1025,16 @@ export async function main({ root = process.cwd() } = {}) {
       ...Object.fromEntries(
         privacyMatrix.results.map((result) => [`q7-${result.name}`, result.expected_code])
       ),
+      "q3-egress-double": RAW_VERIFIER_CODES.CHECKER_NOT_OFFLINE,
     },
-    non_scope_gates: ["Q3"],
+    non_scope_gates: [],
     metadata_only: true,
   };
 
   await writeJson(join(fixtureRoot, "expected-results/tamper-matrix.json"), tamperMatrix);
   await writeJson(join(fixtureRoot, "expected-results/privacy-matrix.json"), privacyMatrix);
+  await writeJson(join(fixtureRoot, "expected-results/offline-matrix.json"), offlineReportWithDigest);
+  await writeJson(join(fixtureRoot, "expected-results/exit-map.json"), exitMap);
   await writeJson(join(fixtureRoot, "tamper/q6-clean-context.json"), buildCleanTamperContext());
   await writeJson(join(fixtureRoot, "privacy/q7-clean-certificate.json"), q0Certificate);
   await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "certificate.json"), q0Certificate);
@@ -1009,9 +1044,12 @@ export async function main({ root = process.cwd() } = {}) {
   await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "e2e-smoke-coverage.json"), e2eSmokeCoverage);
   await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "tamper-results.json"), tamperMatrix);
   await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "privacy-report.json"), privacyMatrix);
+  await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "offline-report.json"), offlineReportWithDigest);
+  await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "hermeticity-attestation.json"), hermeticityAttestation);
+  await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "exit-map.json"), exitMap);
   await writeFile(
     join(root, STAGE4H_EVIDENCE_DIR, "README.md"),
-    "# Stage 4H Evidence\n\nStage 4H.3 evidence covers Q6 single-delta tamper closure and Q7 bounded-capacity privacy, while preserving the Stage 4H.2 Q0/Q4 verifier-discrimination matrix, the Stage 4H.1 Q1 explicit-flow derivation validator, and the Stage 4H.0 Q2/Q5 digest/binding foundation. Q3 remains not in scope for 4H.3. This evidence does not claim full Stage 4H completion, implicit-flow security, model safety, jailbreak immunity, or production readiness.\n"
+    "# Stage 4H Evidence\n\nRun:\n\n```bash\nscripts/reproduce-llm-shield-stage4h.sh\n```\n\nExpected clean exit: `0`.\n\nThis evidence covers Q0-Q7 for Stage 4H.5. It proves deterministic offline checker reproduction over signed, bounded Stage 4H evidence.\n\nNon-claims: not kernel sandboxing, not model safety, not execution truth, not implicit-flow security, not multi-field collusion closure, not statistical robustness, and not future-run guarantee.\n"
   );
   return 0;
 }
