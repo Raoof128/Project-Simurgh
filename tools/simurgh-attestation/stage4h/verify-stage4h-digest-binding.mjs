@@ -27,7 +27,7 @@ function arg(argv, name) {
 }
 
 function codeForBindingReason(reason) {
-  if (reason === "schema_invalid") {
+  if (reason === "schema_invalid" || reason === "unknown_field" || reason === "duplicate_key") {
     return RAW_VERIFIER_CODES.SCHEMA_INVALID;
   }
   if (reason === "proof_system_unsupported") {
