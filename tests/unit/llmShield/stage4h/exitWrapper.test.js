@@ -10,10 +10,7 @@ import {
 } from "../../../../tools/simurgh-attestation/stage4h/exitCodes.mjs";
 
 test("Stage 4H.4 exit wrapper is total over every raw verifier and harness code", () => {
-  const rawCodes = [
-    ...Object.values(RAW_VERIFIER_CODES),
-    ...Object.values(HARNESS_CODES),
-  ];
+  const rawCodes = [...Object.values(RAW_VERIFIER_CODES), ...Object.values(HARNESS_CODES)];
   for (const raw of rawCodes) {
     assert.equal([0, 1, 2, 3].includes(stage4CodeForRawCode(raw)), true, String(raw));
   }
@@ -35,32 +32,38 @@ test("Stage 4H.4 exit wrapper fails closed on unknown raw codes", () => {
 });
 
 test("Stage 4H.4 exit map is explicit and collision-bounded", () => {
-  assert.deepEqual(RUN_LEVEL_BY_RAW, Object.freeze({
-    0: 0,
-    19: 1,
-    20: 1,
-    21: 1,
-    22: 1,
-    23: 1,
-    24: 1,
-    25: 1,
-    26: 1,
-    27: 1,
-    28: 2,
-    29: 3,
-  }));
+  assert.deepEqual(
+    RUN_LEVEL_BY_RAW,
+    Object.freeze({
+      0: 0,
+      19: 1,
+      20: 1,
+      21: 1,
+      22: 1,
+      23: 1,
+      24: 1,
+      25: 1,
+      26: 1,
+      27: 1,
+      28: 2,
+      29: 3,
+    })
+  );
 });
 
 test("Stage 4H.4 offline reason list covers every denied surface", () => {
-  assert.deepEqual(OFFLINE_REASONS, Object.freeze([
-    "fetch_invoked",
-    "http_client_invoked",
-    "socket_connect_invoked",
-    "dns_invoked",
-    "udp_invoked",
-    "subprocess_invoked",
-    "model_client_present",
-    "forbidden_builtin_imported",
-    "hermeticity_falsifier_not_tested",
-  ]));
+  assert.deepEqual(
+    OFFLINE_REASONS,
+    Object.freeze([
+      "fetch_invoked",
+      "http_client_invoked",
+      "socket_connect_invoked",
+      "dns_invoked",
+      "udp_invoked",
+      "subprocess_invoked",
+      "model_client_present",
+      "forbidden_builtin_imported",
+      "hermeticity_falsifier_not_tested",
+    ])
+  );
 });

@@ -66,9 +66,8 @@ async function readJson(path) {
 
 async function runEgressDouble(surface) {
   return runOffline(async () => {
-    const { attemptEgress } = await import(
-      "../tests/fixtures/llmShield/stage4h/offline/egress-double.mjs"
-    );
+    const { attemptEgress } =
+      await import("../tests/fixtures/llmShield/stage4h/offline/egress-double.mjs");
     return attemptEgress(surface);
   });
 }
@@ -99,7 +98,8 @@ export async function buildOfflineReport() {
         { code: result.code, reason: result.reason },
       ])
     ),
-    q3_status: clean.hits.length === 0 && q7.hits.length === 0 && egressDoubleCaught ? "pass" : "fail",
+    q3_status:
+      clean.hits.length === 0 && q7.hits.length === 0 && egressDoubleCaught ? "pass" : "fail",
     run_level_exit: clean.hits.length === 0 && q7.hits.length === 0 && egressDoubleCaught ? 0 : 2,
   };
 }

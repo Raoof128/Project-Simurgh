@@ -23,21 +23,21 @@ The run-level wrapper is the only exit adapter. Internal raw codes `{0,19,20..29
 
 The wrapper is a total function from internal raw verifier or harness codes to reviewer-facing run-level exits.
 
-| Internal raw code | Meaning | Run-level exit |
-| --- | --- | --- |
-| `0` | verifier accepted an expected-good certificate | `0` |
-| `19` | `clean_run_falsely_rejected` | `1` |
-| `20` | `schema_invalid` | `1` |
-| `21` | `proof_system_unsupported` | `1` |
-| `22` | `premise_digest_mismatch` | `1` |
-| `23` | `policy_digest_mismatch` | `1` |
-| `24` | `explicit_flow_integrity_violation` | `1` |
-| `25` | `pack_binding_mismatch` | `1` |
-| `26` | `proof_structure_invalid` | `1` |
-| `27` | `privacy_leak_detected` | `1` |
-| `28` | `checker_not_offline` | `2` |
-| `29` | `internal_error_fail_closed` | `3` |
-| any other value | unmapped or exhaustiveness breach | `3` |
+| Internal raw code | Meaning                                        | Run-level exit |
+| ----------------- | ---------------------------------------------- | -------------- |
+| `0`               | verifier accepted an expected-good certificate | `0`            |
+| `19`              | `clean_run_falsely_rejected`                   | `1`            |
+| `20`              | `schema_invalid`                               | `1`            |
+| `21`              | `proof_system_unsupported`                     | `1`            |
+| `22`              | `premise_digest_mismatch`                      | `1`            |
+| `23`              | `policy_digest_mismatch`                       | `1`            |
+| `24`              | `explicit_flow_integrity_violation`            | `1`            |
+| `25`              | `pack_binding_mismatch`                        | `1`            |
+| `26`              | `proof_structure_invalid`                      | `1`            |
+| `27`              | `privacy_leak_detected`                        | `1`            |
+| `28`              | `checker_not_offline`                          | `2`            |
+| `29`              | `internal_error_fail_closed`                   | `3`            |
+| any other value   | unmapped or exhaustiveness breach              | `3`            |
 
 Locked rule: `0 -> 0`; `{19,20,21,22,23,24,25,26,27} -> 1`; `28 -> 2`; `29 -> 3`; unknown values -> `3`.
 
@@ -47,14 +47,14 @@ Q3 is enforced by an in-process capability-denial harness, not by an advisory en
 
 The denied surfaces are:
 
-| Capability class | Surface | Breach reason |
-| --- | --- | --- |
-| HTTP(S) fetch | `globalThis.fetch` | `fetch_invoked` |
-| Node HTTP client | `node:http`, `node:https` `request` and `get` | `http_client_invoked` |
-| Raw sockets | `node:net`, `node:tls` connect paths | `socket_connect_invoked` |
-| DNS | `node:dns`, `node:dns/promises` lookup and resolve paths | `dns_invoked` |
-| UDP | `node:dgram` socket creation | `udp_invoked` |
-| Subprocess | `node:child_process` spawn, exec, execFile, fork | `subprocess_invoked` |
+| Capability class       | Surface                                                    | Breach reason                                          |
+| ---------------------- | ---------------------------------------------------------- | ------------------------------------------------------ |
+| HTTP(S) fetch          | `globalThis.fetch`                                         | `fetch_invoked`                                        |
+| Node HTTP client       | `node:http`, `node:https` `request` and `get`              | `http_client_invoked`                                  |
+| Raw sockets            | `node:net`, `node:tls` connect paths                       | `socket_connect_invoked`                               |
+| DNS                    | `node:dns`, `node:dns/promises` lookup and resolve paths   | `dns_invoked`                                          |
+| UDP                    | `node:dgram` socket creation                               | `udp_invoked`                                          |
+| Subprocess             | `node:child_process` spawn, exec, execFile, fork           | `subprocess_invoked`                                   |
 | Provider/model clients | checker dependency-path imports of provider/model packages | `model_client_present` or `forbidden_builtin_imported` |
 
 Runtime interception catches calls. Static dependency-path scanning catches pre-captured imports. The scan is limited to the checker dependency path and excludes the harness, the egress-double fixture, and tests that intentionally import denied surfaces.
@@ -63,9 +63,8 @@ The egress double must be dynamically loaded under `runOffline`, after denials a
 
 ```js
 await runOffline(async () => {
-  const { attemptEgress } = await import(
-    "../../../fixtures/llmShield/stage4h/offline/egress-double.mjs"
-  );
+  const { attemptEgress } =
+    await import("../../../fixtures/llmShield/stage4h/offline/egress-double.mjs");
   return attemptEgress("fetch");
 });
 ```
@@ -147,14 +146,14 @@ Any test that observes Q3 changing an existing Q0/Q1/Q2/Q4/Q5/Q6/Q7 raw result m
 
 The reviewer checklist will include:
 
-| Test | Action | Expected typed exit |
-| --- | --- | --- |
-| T1 clean reproduces | run the one command | `0` |
-| T2 tamper caught | flip one premise digest byte | `1` via raw `22` |
-| T3 signature load-bearing | corrupt the pack signature | `1` via normalized raw `25` |
-| T4 offline enforced | run egress double | `2` via raw `28` |
-| T5 gate not theatre | delete derivation/proof material | `1` via raw `26` or `24`, never `0` |
-| T6 privacy holds | exceed Q7 bounded-capacity budget | `1` via raw `27` |
+| Test                      | Action                            | Expected typed exit                 |
+| ------------------------- | --------------------------------- | ----------------------------------- |
+| T1 clean reproduces       | run the one command               | `0`                                 |
+| T2 tamper caught          | flip one premise digest byte      | `1` via raw `22`                    |
+| T3 signature load-bearing | corrupt the pack signature        | `1` via normalized raw `25`         |
+| T4 offline enforced       | run egress double                 | `2` via raw `28`                    |
+| T5 gate not theatre       | delete derivation/proof material  | `1` via raw `26` or `24`, never `0` |
+| T6 privacy holds          | exceed Q7 bounded-capacity budget | `1` via raw `27`                    |
 
 ## Closeout Documents
 

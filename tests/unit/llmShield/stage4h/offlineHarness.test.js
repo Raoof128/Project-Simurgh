@@ -12,9 +12,8 @@ import {
 
 async function runEgress(surface) {
   return runOffline(async () => {
-    const { attemptEgress } = await import(
-      "../../../fixtures/llmShield/stage4h/offline/egress-double.mjs"
-    );
+    const { attemptEgress } =
+      await import("../../../fixtures/llmShield/stage4h/offline/egress-double.mjs");
     return attemptEgress(surface);
   });
 }

@@ -79,7 +79,5 @@ export const RUN_LEVEL_BY_RAW = Object.freeze({
 });
 
 export function stage4CodeForRawCode(code) {
-  return Object.prototype.hasOwnProperty.call(RUN_LEVEL_BY_RAW, code)
-    ? RUN_LEVEL_BY_RAW[code]
-    : 3;
+  return Object.prototype.hasOwnProperty.call(RUN_LEVEL_BY_RAW, code) ? RUN_LEVEL_BY_RAW[code] : 3;
 }

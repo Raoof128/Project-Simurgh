@@ -4,14 +4,14 @@ Stage 4H proof-carrying explicit data-flow integrity is closed through 4H.5.
 
 ## Milestone Ledger
 
-| Milestone | Status | Evidence |
-| --- | --- | --- |
-| 4H.0 digest and binding foundation | pass | `docs/research/llm-shield/evidence/stage-4h/verifier-results.json` |
-| 4H.1 lattice and derivation validator | pass | `q-gate-results.json` Q1 |
-| 4H.2 Q0/Q4 discrimination | pass | `q-gate-results.json` Q0/Q4 |
-| 4H.3 Q6/Q7 tamper and privacy | pass | `tamper-results.json`, `privacy-report.json` |
-| 4H.4 Q3 offline hermeticity and wrapper | pass | `offline-report.json`, `exit-map.json` |
-| 4H.5 reproduce and reviewer closeout | pass | `reproduce-summary.json` |
+| Milestone                               | Status | Evidence                                                           |
+| --------------------------------------- | ------ | ------------------------------------------------------------------ |
+| 4H.0 digest and binding foundation      | pass   | `docs/research/llm-shield/evidence/stage-4h/verifier-results.json` |
+| 4H.1 lattice and derivation validator   | pass   | `q-gate-results.json` Q1                                           |
+| 4H.2 Q0/Q4 discrimination               | pass   | `q-gate-results.json` Q0/Q4                                        |
+| 4H.3 Q6/Q7 tamper and privacy           | pass   | `tamper-results.json`, `privacy-report.json`                       |
+| 4H.4 Q3 offline hermeticity and wrapper | pass   | `offline-report.json`, `exit-map.json`                             |
+| 4H.5 reproduce and reviewer closeout    | pass   | `reproduce-summary.json`                                           |
 
 ## Q-Gate Ledger
 

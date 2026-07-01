@@ -1033,7 +1033,10 @@ export async function main({ root = process.cwd() } = {}) {
 
   await writeJson(join(fixtureRoot, "expected-results/tamper-matrix.json"), tamperMatrix);
   await writeJson(join(fixtureRoot, "expected-results/privacy-matrix.json"), privacyMatrix);
-  await writeJson(join(fixtureRoot, "expected-results/offline-matrix.json"), offlineReportWithDigest);
+  await writeJson(
+    join(fixtureRoot, "expected-results/offline-matrix.json"),
+    offlineReportWithDigest
+  );
   await writeJson(join(fixtureRoot, "expected-results/exit-map.json"), exitMap);
   await writeJson(join(fixtureRoot, "tamper/q6-clean-context.json"), buildCleanTamperContext());
   await writeJson(join(fixtureRoot, "privacy/q7-clean-certificate.json"), q0Certificate);
@@ -1045,7 +1048,10 @@ export async function main({ root = process.cwd() } = {}) {
   await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "tamper-results.json"), tamperMatrix);
   await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "privacy-report.json"), privacyMatrix);
   await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "offline-report.json"), offlineReportWithDigest);
-  await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "hermeticity-attestation.json"), hermeticityAttestation);
+  await writeJson(
+    join(root, STAGE4H_EVIDENCE_DIR, "hermeticity-attestation.json"),
+    hermeticityAttestation
+  );
   await writeJson(join(root, STAGE4H_EVIDENCE_DIR, "exit-map.json"), exitMap);
   await writeFile(
     join(root, STAGE4H_EVIDENCE_DIR, "README.md"),
