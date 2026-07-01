@@ -8,6 +8,7 @@ import { verifyEvidencePack } from "../stage4d/verifyPack.mjs";
 import { buildPremiseSet, premiseDigest } from "./canonicalPremises.mjs";
 import { certificateDigest, diagnose } from "./dfiCertificate.mjs";
 import { RAW_VERIFIER_CODES, stage4CodeForRawCode } from "./exitCodes.mjs";
+import { runOffline, scanForModelClients } from "./offlineHarness.mjs";
 import { verifyPackBinding } from "./packBinding.mjs";
 import { validateDfiCertificate, validateSignedPackManifest } from "./schema.mjs";
 
@@ -52,7 +53,7 @@ function baseResult({ code, reason, certificate, premises = null }) {
     ok: code === RAW_VERIFIER_CODES.OK,
     code,
     stage4_code: stage4CodeForRawCode(code),
-    gate: "Q0/Q1/Q2/Q4/Q5",
+    gate: code === RAW_VERIFIER_CODES.CHECKER_NOT_OFFLINE ? "Q3" : "Q0/Q1/Q2/Q4/Q5",
     certificate_digest: certificate ? certificateDigest(certificate) : null,
     premise_digest: certificate?.premise_digest ?? null,
     base_pack_digest: certificate?.base_pack_digest ?? null,
@@ -65,18 +66,24 @@ function baseResult({ code, reason, certificate, premises = null }) {
   };
 }
 
-async function finish({ outPath, code, reason, certificate, premises = null }) {
-  await writeResult(outPath, baseResult({ code, reason, certificate, premises }));
-  console.log(
-    code === RAW_VERIFIER_CODES.OK
-      ? "Stage 4H.3 verifier discrimination: PASS"
-      : `Stage 4H.3 verifier discrimination: FAIL ${reason}`
-  );
-  if (code !== RAW_VERIFIER_CODES.OK) process.exitCode = code;
-  return code;
+function normalizeVerifierRawCode(code) {
+  if (code === "4D_VERIFY_FAILURE") return RAW_VERIFIER_CODES.PACK_BINDING_MISMATCH;
+  return Number.isInteger(code) ? code : RAW_VERIFIER_CODES.INTERNAL_ERROR_FAIL_CLOSED;
 }
 
-export async function main({ argv = process.argv.slice(2) } = {}) {
+async function finish({ outPath, code, reason, certificate, premises = null }) {
+  const rawCode = normalizeVerifierRawCode(code);
+  await writeResult(outPath, baseResult({ code: rawCode, reason, certificate, premises }));
+  console.log(
+    rawCode === RAW_VERIFIER_CODES.OK
+      ? "Stage 4H.5 verifier: PASS"
+      : `Stage 4H.5 verifier: FAIL ${reason}`
+  );
+  process.exitCode = stage4CodeForRawCode(rawCode);
+  return rawCode;
+}
+
+export async function runVerifierCore({ argv = process.argv.slice(2) } = {}) {
   const basePackPath = arg(argv, "--base-pack");
   const basePackSigPath = arg(argv, "--base-pack-sig");
   const basePackPubkeyPath = arg(argv, "--base-pack-pubkey");
@@ -175,9 +182,40 @@ export async function main({ argv = process.argv.slice(2) } = {}) {
   });
 }
 
+export async function main({ argv = process.argv.slice(2) } = {}) {
+  const outPath = arg(argv, "--out");
+  const scan = await scanForModelClients(new URL(import.meta.url).pathname, {
+    allowedPaths: [new URL("./offlineHarness.mjs", import.meta.url).pathname],
+  });
+  if (!scan.ok && outPath) {
+    return finish({
+      outPath,
+      code: RAW_VERIFIER_CODES.CHECKER_NOT_OFFLINE,
+      reason: scan.reason,
+      certificate: null,
+    });
+  }
+  if (!scan.ok) {
+    throw new Error(`Stage 4H checker static offline scan failed: ${scan.reason}`);
+  }
+  const offline = await runOffline(() => runVerifierCore({ argv }));
+  if (!offline.ok && outPath) {
+    return finish({
+      outPath,
+      code: RAW_VERIFIER_CODES.CHECKER_NOT_OFFLINE,
+      reason: offline.reason,
+      certificate: null,
+    });
+  }
+  if (!offline.ok) {
+    throw new Error(`Stage 4H checker offline preflight failed: ${offline.reason}`);
+  }
+  return offline.value;
+}
+
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   main().catch((error) => {
     console.error(`stage4h verify: ${error.message}`);
-    process.exit(29);
+    process.exit(stage4CodeForRawCode(RAW_VERIFIER_CODES.INTERNAL_ERROR_FAIL_CLOSED));
   });
 }

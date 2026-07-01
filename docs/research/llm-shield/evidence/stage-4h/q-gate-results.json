@@ -1,85 +1,75 @@
 {
-  "stage": "4H.3",
-  "status": "tamper_closure_and_privacy",
   "gates": {
     "Q0": {
-      "status": "pass",
       "expected_results": {
         "q0-clean-disconnected-untrusted": 0
-      }
+      },
+      "status": "pass"
     },
     "Q1": {
-      "status": "pass",
       "expected_results": {
         "q1-clean": 0,
-        "q1-real-dirty": 24,
         "q1-forged-safe-dirty": 24,
+        "q1-real-dirty": 24,
         "q1-theatre-stripped-derived-labels": 26,
         "q1-theatre-stripped-lattice-steps": 26,
         "q1-theatre-stripped-sink-claims": 26,
         "q1-unbound-certificate-mutation": 25
-      }
+      },
+      "status": "pass"
     },
     "Q2": {
-      "status": "pass",
-      "raw_verifier_code": 0
+      "raw_verifier_code": 0,
+      "status": "pass"
     },
     "Q3": {
-      "status": "not_in_scope"
+      "clean_run_hits": 0,
+      "egress_double_caught": true,
+      "egress_double_raw_code": 28,
+      "status": "pass"
     },
     "Q4": {
-      "status": "pass",
       "expected_results": {
         "q4a-forged-premise-digest": 22,
         "q4b-clean-derivation-over-dirty-replay": 24,
         "q4c-derivation-scope-omission": 26
-      }
+      },
+      "status": "pass"
     },
     "Q5": {
-      "status": "pass",
-      "raw_verifier_code": 0
+      "raw_verifier_code": 0,
+      "status": "pass"
     },
     "Q6": {
-      "status": "pass",
-      "tampered_accepted_count": 0,
       "expected_results": {
-        "sig-byte": "4D_VERIFY_FAILURE",
-        "merkle-node": "4D_VERIFY_FAILURE",
         "binding": 25,
-        "policy": 23,
-        "premise": 22,
         "lattice-digest": 26,
         "lattice-step": 26,
-        "proof-step": 26
-      }
+        "merkle-node": "4D_VERIFY_FAILURE",
+        "policy": 23,
+        "premise": 22,
+        "proof-step": 26,
+        "sig-byte": "4D_VERIFY_FAILURE"
+      },
+      "status": "pass",
+      "tampered_accepted_count": 0
     },
     "Q7": {
-      "status": "pass",
-      "bounded_leakage": true,
-      "allowlist": "authoritative_schema_plus_q7_defence_in_depth",
       "accepted_negative_count": 0,
+      "allowlist": "authoritative_schema_plus_q7_defence_in_depth",
+      "bounded_leakage": true,
       "expected_results": {
         "clean": 0,
+        "duplicate-key": 20,
+        "non-enum-label": 27,
         "raw-label": 27,
-        "raw-summary": 27,
         "raw-node-id": 27,
         "raw-premise-ref": 27,
-        "non-enum-label": 27,
-        "unknown-field": 20,
-        "duplicate-key": 20
-      }
+        "raw-summary": 27,
+        "unknown-field": 20
+      },
+      "status": "pass"
     }
-  },
-  "q0_positive_base_pack": "q0-clean-disconnected-untrusted-base-pack.json",
-  "q1_positive_base_pack": "q1-clean-base-pack.json",
-  "q1_dirty_base_pack": "q1-real-dirty-base-pack.json",
-  "q1_dirty_source": "real_stage4d_pack",
-  "q4_dirty_base_pack": "q4-dirty-one-edge-delta-base-pack.json",
-  "q4_boundary": {
-    "q4a": "forged clean premise digest over dirty replay fails Q2 with raw 22",
-    "q4b": "structurally complete forged-safe derivation over honest dirty premises fails sink-safety with raw 24",
-    "q4c": "true partial derivation omission over honest dirty premises fails coverage with raw 26",
-    "one_edge_delta": "the only Stage 4H DFI/canonical-premise difference is the added untrusted source edge into action:act_001; directly mirrored summary metadata may differ only to truthfully reflect the same source-set change"
   },
   "non_claims": [
     "implicit_flow_security",
@@ -93,5 +83,18 @@
     "jailbreak_immunity",
     "general_jailbreak_resistance",
     "production_readiness"
-  ]
+  ],
+  "q0_positive_base_pack": "q0-clean-disconnected-untrusted-base-pack.json",
+  "q1_dirty_base_pack": "q1-real-dirty-base-pack.json",
+  "q1_dirty_source": "real_stage4d_pack",
+  "q1_positive_base_pack": "q1-clean-base-pack.json",
+  "q4_boundary": {
+    "one_edge_delta": "the only Stage 4H DFI/canonical-premise difference is the added untrusted source edge into action:act_001; directly mirrored summary metadata may differ only to truthfully reflect the same source-set change",
+    "q4a": "forged clean premise digest over dirty replay fails Q2 with raw 22",
+    "q4b": "structurally complete forged-safe derivation over honest dirty premises fails sink-safety with raw 24",
+    "q4c": "true partial derivation omission over honest dirty premises fails coverage with raw 26"
+  },
+  "q4_dirty_base_pack": "q4-dirty-one-edge-delta-base-pack.json",
+  "stage": "4H.5",
+  "status": "final_4h_closeout"
 }

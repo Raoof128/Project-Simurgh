@@ -1,0 +1,19 @@
+{
+  "clean_run_hits": 0,
+  "denied_surfaces": [
+    "fetch",
+    "http",
+    "https",
+    "net",
+    "tls",
+    "dns",
+    "dns-promises",
+    "dgram",
+    "child_process"
+  ],
+  "egress_double_caught": true,
+  "egress_double_raw_code": 28,
+  "gate": "Q3",
+  "node_major": 26,
+  "stage": "4H.5"
+}
