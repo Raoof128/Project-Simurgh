@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 // SPDX-License-Identifier: AGPL-3.0-or-later
-import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
 import { pathToFileURL } from "node:url";
+import { digest } from "../tools/simurgh-attestation/stage4h/canonicalPremises.mjs";
 import {
   RUN_LEVEL_BY_RAW,
   stage4CodeForRawCode,
@@ -62,10 +62,6 @@ async function writeJson(path, value) {
 
 async function readJson(path) {
   return JSON.parse(await readFile(path, "utf8"));
-}
-
-function digest(value) {
-  return `sha256:${createHash("sha256").update(canonicalJson(value)).digest("hex")}`;
 }
 
 async function runEgressDouble(surface) {
