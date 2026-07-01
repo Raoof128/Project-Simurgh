@@ -49,6 +49,7 @@ const MANIFEST_ALLOWED_KEYS = Object.freeze([
   "manifest_version",
   "base_pack_digest",
   "certificate_digest",
+  "hermeticity_attestation_digest",
   "signed_pack_manifest_digest",
   "merkle_root",
   "signature",
@@ -256,6 +257,7 @@ export function validateSignedPackManifest(manifest) {
   for (const field of [
     "base_pack_digest",
     "certificate_digest",
+    "hermeticity_attestation_digest",
     "signed_pack_manifest_digest",
     "merkle_root",
   ]) {

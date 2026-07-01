@@ -269,8 +269,8 @@ test("Stage 4H.2 evidence does not claim broader or out-of-scope gates", () => {
     "jailbreak-proof",
     "jailbreak resistance",
     "model-safe",
-    "execution truth",
-    "future-run guarantee",
+    "proves execution truth",
+    "guarantees future runs",
     "full non-interference",
     "implicit-flow proof",
   ]) {

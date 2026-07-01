@@ -16,7 +16,10 @@ function manifestDigest(payload) {
   return digest(payload);
 }
 
-export function buildSignedPackManifest({ certificate, privateKey }) {
+export function buildSignedPackManifest({ certificate, privateKey, hermeticityAttestationDigest }) {
+  if (!/^sha256:[0-9a-f]{64}$/.test(hermeticityAttestationDigest)) {
+    throw new Error("hermeticity_attestation_digest is required for Stage 4H.5 manifests");
+  }
   const certCheck = validateDfiCertificate(certificate);
   if (!certCheck.ok) throw new Error(`invalid certificate: ${certCheck.reason}:${certCheck.field}`);
   const certDigest = certificateDigest(certificate);
@@ -24,9 +27,11 @@ export function buildSignedPackManifest({ certificate, privateKey }) {
     manifest_version: MANIFEST_VERSION,
     base_pack_digest: certificate.base_pack_digest,
     certificate_digest: certDigest,
+    hermeticity_attestation_digest: hermeticityAttestationDigest,
     merkle_root: `sha256:${merkleRoot([
       certificate.base_pack_digest.replace(/^sha256:/, ""),
       certDigest.replace(/^sha256:/, ""),
+      hermeticityAttestationDigest.replace(/^sha256:/, ""),
     ])}`,
   };
   const signed_pack_manifest_digest = manifestDigest(payload);
@@ -54,6 +59,7 @@ export function verifyPackBinding({ certificate, manifest, publicKey }) {
   const expectedRoot = `sha256:${merkleRoot([
     manifest.base_pack_digest.replace(/^sha256:/, ""),
     manifest.certificate_digest.replace(/^sha256:/, ""),
+    manifest.hermeticity_attestation_digest.replace(/^sha256:/, ""),
   ])}`;
   if (manifest.merkle_root !== expectedRoot) return { ok: false, reason: "merkle_root_mismatch" };
   try {

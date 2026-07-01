@@ -1,5 +1,9 @@
 {
+  "stage": "4H.5",
+  "gate": "Q3",
   "clean_run_hits": 0,
+  "egress_double_caught": true,
+  "egress_double_raw_code": 28,
   "denied_surfaces": [
     "fetch",
     "http",
@@ -11,9 +15,5 @@
     "dgram",
     "child_process"
   ],
-  "egress_double_caught": true,
-  "egress_double_raw_code": 28,
-  "gate": "Q3",
-  "node_major": 26,
-  "stage": "4H.5"
+  "node_major": 26
 }
