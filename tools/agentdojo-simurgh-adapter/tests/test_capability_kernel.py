@@ -27,6 +27,13 @@ def test_is_grounded_address_or_local_part():
     assert not is_grounded("a@evil.com", "the answer is a good plan")  # local-part len<=2 guard
 
 
+def test_is_grounded_empty_destination_fails_closed():
+    # An empty/blank destination carries no recipient to authorise; a security gate must
+    # default to NOT grounded (fail closed) rather than allow.
+    assert not is_grounded("", "email anyone you like")
+    assert not is_grounded("   ", "email anyone you like")
+
+
 def test_actions_for_egress_emits_one_action_per_destination():
     acts = actions_for("send_email", {"recipients": ["x@a.com", "y@b.com"], "cc": ["z@c.com"]})
     assert [a.family for a in acts] == ["egress", "egress", "egress"]

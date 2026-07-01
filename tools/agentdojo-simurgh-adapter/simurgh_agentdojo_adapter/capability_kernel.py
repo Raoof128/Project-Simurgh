@@ -79,7 +79,7 @@ def is_grounded(dest: str, trusted_text: str) -> bool:
     t = (trusted_text or "").lower()
     d = (dest or "").lower().strip()
     if not d:
-        return True
+        return False  # empty destination carries no recipient: fail closed, never authorise
     if d in t:
         return True
     local = d.split("@", 1)[0]
