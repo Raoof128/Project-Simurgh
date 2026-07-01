@@ -1,0 +1,7 @@
+{
+  "stage": "4H.5",
+  "raw_code": 0,
+  "run_level_exit": 0,
+  "q0_to_q7": "pass",
+  "typed_exit_source": "stage4CodeForRawCode"
+}

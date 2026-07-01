@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-import { readFileSync } from "node:fs";
+import { createPrivateKey } from "node:crypto";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
 import { certificateDigest, diagnose } from "./dfiCertificate.mjs";
+import { buildSignedPackManifest } from "./packBinding.mjs";
 
 const fixtureRoot = "tests/fixtures/llmShield/stage4h";
 
@@ -115,5 +118,48 @@ export function buildTamperMatrix(ctx = buildCleanTamperContext()) {
     clean,
     results,
     tampered_accepted_count: results.filter((result) => result.accepted).length,
+  };
+}
+
+export function buildProofDeletionClosureFixture({ outputDir }) {
+  mkdirSync(outputDir, { recursive: true });
+  const basePackPath = `${fixtureRoot}/q0-clean-disconnected-untrusted-base-pack.json`;
+  const basePackSigPath = `${fixtureRoot}/q0-clean-disconnected-untrusted-base-pack.sig`;
+  const basePackPubkeyPath = `${fixtureRoot}/q0-clean-disconnected-untrusted-signer.pub`;
+  const manifestPubkeyPath = `${fixtureRoot}/manifest-verifier.pub`;
+  const certificate = readJson(
+    `${fixtureRoot}/q0-clean-disconnected-untrusted-dfi-certificate.json`
+  );
+  const currentManifest = readJson(
+    `${fixtureRoot}/q0-clean-disconnected-untrusted-signed-pack-manifest.json`
+  );
+  certificate.derivation.lattice_steps = [];
+  const privateKey = createPrivateKey(
+    readFileSync("tools/simurgh-attestation/stage4d/fixtures/keys/stage4d-test-private.pem", "utf8")
+  );
+  const manifest = buildSignedPackManifest({
+    certificate,
+    privateKey,
+    hermeticityAttestationDigest: currentManifest.hermeticity_attestation_digest,
+  });
+  const deletedBasePackPath = join(outputDir, "base-pack.json");
+  const deletedBasePackSigPath = join(outputDir, "base-pack.sig");
+  const deletedBasePackPubkeyPath = join(outputDir, "base-pack.pub");
+  const deletedCertificatePath = join(outputDir, "certificate.json");
+  const deletedManifestPath = join(outputDir, "manifest.json");
+  const deletedManifestPubkeyPath = join(outputDir, "manifest.pub");
+  writeFileSync(deletedBasePackPath, readFileSync(basePackPath, "utf8"));
+  writeFileSync(deletedBasePackSigPath, readFileSync(basePackSigPath, "utf8"));
+  writeFileSync(deletedBasePackPubkeyPath, readFileSync(basePackPubkeyPath, "utf8"));
+  writeFileSync(deletedCertificatePath, `${JSON.stringify(certificate, null, 2)}\n`);
+  writeFileSync(deletedManifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
+  writeFileSync(deletedManifestPubkeyPath, readFileSync(manifestPubkeyPath, "utf8"));
+  return {
+    basePackPath: deletedBasePackPath,
+    basePackSigPath: deletedBasePackSigPath,
+    basePackPubkeyPath: deletedBasePackPubkeyPath,
+    certificatePath: deletedCertificatePath,
+    manifestPath: deletedManifestPath,
+    manifestPubkeyPath: deletedManifestPubkeyPath,
   };
 }
