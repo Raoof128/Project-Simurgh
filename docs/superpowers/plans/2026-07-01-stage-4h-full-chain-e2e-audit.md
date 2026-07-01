@@ -120,6 +120,77 @@ import { runVerifierCore } from "../../../../tools/simurgh-attestation/stage4h/v
 
 const fixtureRoot = "tests/fixtures/llmShield/stage4h";
 
+const expectedPublicExports = Object.freeze({
+  canonicalPremises: ["basePackView", "buildPremiseSet", "digest", "premiseDigest", "premiseId"],
+  constants: [
+    "CERTIFICATE_TYPE",
+    "CHECKER_VERSION",
+    "CLAIM",
+    "DEFAULT_SCOPE",
+    "INTEGRITY_LABELS",
+    "INTEGRITY_LATTICE",
+    "INTEGRITY_LATTICE_DIGEST",
+    "MANIFEST_DOMAIN",
+    "MANIFEST_VERSION",
+    "PROOF_SYSTEM",
+    "REQUIRED_SINK_INTEGRITY",
+    "STAGE4D_EVIDENCE_DIR",
+    "STAGE4H_EVIDENCE_DIR",
+  ],
+  dfiCertificate: [
+    "buildDerivation",
+    "buildDfiCertificate",
+    "certificateDigest",
+    "checkBinding",
+    "checkLatticeDigest",
+    "combineIntegrity",
+    "diagnose",
+    "integrityLte",
+    "normalizeIntegrityLabel",
+    "recomputeGraph",
+    "validateDerivation",
+  ],
+  exitCodes: [
+    "HARNESS_CODES",
+    "OFFLINE_REASONS",
+    "PRIVACY_REASONS",
+    "PROOF_TAMPER_DETECTED",
+    "RAW_VERIFIER_CODES",
+    "RUN_LEVEL_BY_RAW",
+    "STRUCTURE_REASONS",
+    "stage4CodeForRawCode",
+  ],
+  offlineHarness: [
+    "OfflineViolationError",
+    "installDenials",
+    "restoreDenials",
+    "runOffline",
+    "scanForModelClients",
+  ],
+  packBinding: ["buildSignedPackManifest", "verifyPackBinding"],
+  privacyGate: ["allowedKeysByPath", "covertCapacityBits", "privacyGate"],
+  schema: [
+    "CERTIFICATE_ALLOWED_KEYS",
+    "DERIVATION_ALLOWED_KEYS",
+    "DERIVED_NODE_LABEL_ALLOWED_KEYS",
+    "LATTICE_STEP_ALLOWED_KEYS",
+    "SINK_SAFETY_CLAIM_ALLOWED_KEYS",
+    "isSha256Digest",
+    "validateDfiCertificate",
+    "validateJsonTextNoDuplicateKeys",
+    "validateSignedPackManifest",
+  ],
+  tamperClosure: [
+    "applyMutation",
+    "buildCleanTamperContext",
+    "buildProofDeletionClosureFixture",
+    "buildTamperMatrix",
+    "bumpDigest",
+    "mutationFamily",
+  ],
+  verifierCli: ["main", "runVerifierCore"],
+});
+
 function readJson(path) {
   return JSON.parse(readFileSync(path, "utf8"));
 }
@@ -135,6 +206,29 @@ function cleanCertificate() {
 function cleanManifest() {
   return readJson(`${fixtureRoot}/q1-clean-signed-pack-manifest.json`);
 }
+
+test("Stage 4H public checker surface export inventory is frozen", async () => {
+  const modules = {
+    canonicalPremises:
+      await import("../../../../tools/simurgh-attestation/stage4h/canonicalPremises.mjs"),
+    constants: await import("../../../../tools/simurgh-attestation/stage4h/constants.mjs"),
+    dfiCertificate:
+      await import("../../../../tools/simurgh-attestation/stage4h/dfiCertificate.mjs"),
+    exitCodes: await import("../../../../tools/simurgh-attestation/stage4h/exitCodes.mjs"),
+    offlineHarness:
+      await import("../../../../tools/simurgh-attestation/stage4h/offlineHarness.mjs"),
+    packBinding: await import("../../../../tools/simurgh-attestation/stage4h/packBinding.mjs"),
+    privacyGate: await import("../../../../tools/simurgh-attestation/stage4h/privacyGate.mjs"),
+    schema: await import("../../../../tools/simurgh-attestation/stage4h/schema.mjs"),
+    tamperClosure: await import("../../../../tools/simurgh-attestation/stage4h/tamperClosure.mjs"),
+    verifierCli:
+      await import("../../../../tools/simurgh-attestation/stage4h/verify-stage4h-digest-binding.mjs"),
+  };
+
+  for (const [name, expected] of Object.entries(expectedPublicExports)) {
+    assert.deepEqual(Object.keys(modules[name]).sort(), [...expected].sort(), name);
+  }
+});
 
 test("Stage 4H full function coverage exercises canonical premise helpers", () => {
   const pack = cleanPack();
@@ -219,7 +313,10 @@ test("Stage 4H full function coverage exercises privacy, tamper, and exit helper
   assert.equal(stage4CodeForRawCode(9999), 3);
   assert.equal(allowedKeysByPath.certificate.includes("derivation"), true);
   assert.equal(covertCapacityBits(certificate) >= 0, true);
-  assert.deepEqual(privacyGate(certificate), { ok: true, capacity_bits: 0, flags: [] });
+  const privacy = privacyGate(certificate);
+  assert.equal(privacy.ok, true);
+  assert.equal(privacy.capacity_bits, 0);
+  assert.deepEqual(privacy.flags, []);
   assert.deepEqual(arms, [
     "sig-byte",
     "merkle-node",
@@ -457,8 +554,8 @@ run_step() {
 assert_no_released_evidence_drift() {
   local drift
   drift="$(
-    git diff --name-only -- docs/research/llm-shield/evidence/stage-4h \
-      | grep -v '^docs/research/llm-shield/evidence/stage-4h/full-e2e-audit/' || true
+    git status --porcelain -- docs/research/llm-shield/evidence/stage-4h \
+      | grep -v 'docs/research/llm-shield/evidence/stage-4h/full-e2e-audit/' || true
   )"
   if [[ -n "$drift" ]]; then
     echo "Released Stage 4H evidence drift outside full-e2e-audit:" | tee -a "$COMMAND_OUTPUT"
@@ -517,8 +614,20 @@ const summary = {
     clean_run_hits: offline.clean_run_hits,
     egress_double_caught: offline.egress_double_caught,
     egress_double_raw_code: offline.egress_double_raw_code,
+    egress_double_typed_exit: 2,
     unshare_note:
       "unshare is optional; when unavailable, in-process Q3 harness remains authoritative"
+  },
+  raw_code_matrix: {
+    q0_clean: qGate.gates.Q0.expected_results["q0-clean-disconnected-untrusted"],
+    q4a_forged_premise: qGate.gates.Q4.expected_results["q4a-forged-premise-digest"],
+    q4b_dirty_replay: qGate.gates.Q4.expected_results["q4b-clean-derivation-over-dirty-replay"],
+    q4c_partial_omission: qGate.gates.Q4.expected_results["q4c-derivation-scope-omission"],
+    q3_egress: offline.egress_double_raw_code,
+    q3_egress_typed_exit: 2,
+    internal_fail_closed: 29,
+    internal_fail_closed_typed_exit: 3,
+    unknown_raw_typed_exit: 3
   },
   q_gates: {
     q0: qGate.gates.Q0.status,
@@ -610,8 +719,8 @@ Stage 4H full-chain E2E: PASS
 Run:
 
 ```bash
-git diff --name-only -- docs/research/llm-shield/evidence/stage-4h \
-  | grep -v '^docs/research/llm-shield/evidence/stage-4h/full-e2e-audit/' || true
+git status --porcelain -- docs/research/llm-shield/evidence/stage-4h \
+  | grep -v 'docs/research/llm-shield/evidence/stage-4h/full-e2e-audit/' || true
 ```
 
 Expected: no output.
@@ -826,8 +935,8 @@ All matched files use Prettier code style!
 Run:
 
 ```bash
-git diff --name-only HEAD -- docs/research/llm-shield/evidence/stage-4h \
-  | grep -v '^docs/research/llm-shield/evidence/stage-4h/full-e2e-audit/' || true
+git status --porcelain -- docs/research/llm-shield/evidence/stage-4h \
+  | grep -v 'docs/research/llm-shield/evidence/stage-4h/full-e2e-audit/' || true
 ```
 
 Expected: no output.
