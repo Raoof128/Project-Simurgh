@@ -1,0 +1,59 @@
+{
+  "stage": "4H",
+  "audit": "full_chain_e2e",
+  "status": "pass",
+  "base_tag": "v2.18.0-stage-4h-proof-carrying-containment",
+  "base_commit": "7a2039136d44cf179cca5836a33596a7620c87e5",
+  "runtime_logic_changes": false,
+  "levels": {
+    "4H.0": "signed_digest_binding_exercised",
+    "4H.1": "dfi_certificate_derivation_exercised",
+    "4H.2": "q0_q4_discrimination_exercised",
+    "4H.3": "q6_q7_exercised",
+    "4H.4": "q3_typed_exit_exercised",
+    "4H.5": "reproduce_byte_stability_antitheatre_exercised"
+  },
+  "q3": {
+    "clean_run_hits": 0,
+    "egress_double_caught": true,
+    "egress_double_raw_code": 28,
+    "egress_double_typed_exit": 2,
+    "unshare_note": "unshare is optional; when unavailable, in-process Q3 harness remains authoritative"
+  },
+  "raw_code_matrix": {
+    "q0_clean": 0,
+    "q4a_forged_premise": 22,
+    "q4b_dirty_replay": 24,
+    "q4c_partial_omission": 26,
+    "q3_egress": 28,
+    "q3_egress_typed_exit": 2,
+    "internal_fail_closed": 29,
+    "internal_fail_closed_typed_exit": 3,
+    "unknown_raw_typed_exit": 3
+  },
+  "q_gates": {
+    "q0": "pass",
+    "q1": "pass",
+    "q2": "pass",
+    "q3": "pass",
+    "q4": "pass",
+    "q5": "pass",
+    "q6": "pass",
+    "q7": "pass"
+  },
+  "tamper": {
+    "tampered_accepted_count": 0
+  },
+  "privacy": {
+    "accepted_negative_count": 0,
+    "bounded_leakage": true
+  },
+  "commands": [
+    "scripts/reproduce-llm-shield-stage4h.sh",
+    "node --test tests/unit/llmShield/stage4h/*.test.js",
+    "node --test tests/e2e/llmShield/stage4hFullSmoke.test.js",
+    "npm run format:check",
+    "git diff --check"
+  ],
+  "non_claim": "released-artifact audit only; no new runtime claim"
+}

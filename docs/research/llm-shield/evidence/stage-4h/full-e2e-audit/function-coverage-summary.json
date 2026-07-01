@@ -1,0 +1,19 @@
+{
+  "stage": "4H",
+  "audit": "function_path_coverage",
+  "status": "pass",
+  "public_checker_surface": [
+    "canonicalPremises",
+    "dfiCertificate",
+    "exitCodes",
+    "offlineHarness",
+    "packBinding",
+    "privacyGate",
+    "schema",
+    "tamperClosure",
+    "verify-stage4h-digest-binding"
+  ],
+  "strongest_focus": "4H.1 DFI certificate and derivation proof",
+  "tested_file": "tests/unit/llmShield/stage4h/fullFunctionCoverage.test.js",
+  "coverage_claim": "Exercises exported Stage 4H verifier/helper paths public to the Stage 4H checker surface; does not claim private branch exhaustiveness"
+}
