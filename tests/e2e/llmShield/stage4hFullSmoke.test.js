@@ -348,3 +348,42 @@ test("Stage 4H.0 compatibility E2E smoke preserves Q2/Q5 digest foundation", () 
     rmSync(tmp, { recursive: true, force: true });
   }
 });
+
+test("Stage 4H full-chain E2E explicitly covers digest tamper and typed exits", () => {
+  const tmp = mkdtempSync(join(tmpdir(), "stage4h-explicit-e2e-"));
+  try {
+    const cleanOut = join(tmp, "stage4h0-clean.json");
+    const cleanResult = runVerifier({
+      basePack: `${fixtureRoot}/clean-base-pack.json`,
+      basePackSig: `${fixtureRoot}/clean-base-pack.sig`,
+      basePackPubkey: `${fixtureRoot}/clean-signer.pub`,
+      certificate: `${fixtureRoot}/clean-dfi-certificate.json`,
+      manifest: `${fixtureRoot}/clean-signed-pack-manifest.json`,
+      out: cleanOut,
+    });
+    assert.equal(cleanResult.status, 0, cleanResult.stderr || cleanResult.stdout);
+    assert.equal(readJson(cleanOut).code, 0);
+
+    const tamperedOut = join(tmp, "stage4h0-tampered.json");
+    const tamperedResult = runVerifier({
+      basePack: `${fixtureRoot}/tampered-base-pack.json`,
+      basePackSig: `${fixtureRoot}/clean-base-pack.sig`,
+      basePackPubkey: `${fixtureRoot}/clean-signer.pub`,
+      certificate: `${fixtureRoot}/clean-dfi-certificate.json`,
+      manifest: `${fixtureRoot}/clean-signed-pack-manifest.json`,
+      out: tamperedOut,
+    });
+    assert.notEqual(tamperedResult.status, 0);
+    assert.notEqual(readJson(tamperedOut).code, 0);
+
+    assert.equal(stage4CodeForRawCode(28), 2);
+    assert.equal(stage4CodeForRawCode(29), 3);
+    assert.equal(stage4CodeForRawCode(9999), 3);
+
+    const offline = readJson(`${evidenceRoot}/offline-report.json`);
+    assert.equal(offline.egress_double_raw_code, 28);
+    assert.equal(stage4CodeForRawCode(offline.egress_double_raw_code), 2);
+  } finally {
+    rmSync(tmp, { recursive: true, force: true });
+  }
+});
