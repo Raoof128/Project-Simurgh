@@ -2,7 +2,7 @@
 
 > **Status: DRAFT companion brief for Stage 4J (PCTA).** This is positioning material, not part of the executable plan. Two things must happen before any external / Anthropic-facing use:
 >
-> 1. **Citations & incident facts are NOT yet independently verified** — the June 2026 Fable 5 / Mythos 5 dates, the outlet corroboration in §13, and arXiv 2501.18837 / 2605.24248. See the **Verification checklist** at the end. The method note's hedge is deliberate; do not drop it.
+> 1. **Incident facts are NOT yet independently verified** — the day-level June 2026 Fable 5 / Mythos 5 dates and the outlet corroboration in §13. Both arXiv citations (2501.18837 and 2605.24248) were independently verified 2026-07-02 (see the **Verification checklist** at the end). The method note's hedge on incident dates is deliberate; do not drop it.
 > 2. ~~The §10 "Measured" column awaits the J5 reproduce.~~ **DONE 2026-07-02:** the column is
 >    filled from the real J5 reproduce (`p-gate-results.json`, observed-not-asserted, all ten
 >    gates equal Expected; provenance note under the §10 table). One naming update landed with
@@ -34,7 +34,7 @@ From the Redeploying Fable 5 post (Jun 30, 2026):
 - A deliberately **widened "safety margin"** — for Fable 5, larger than any prior launch — over-blocks _probably-benign_ requests so that fewer genuinely harmful ones slip through.
 - Purpose: absorb **minor jailbreaks** (ones that only nibble into the margin) and reinforce **defense-in-depth**.
 - Conceded costs, in their own words: classifiers **can be jailbroken**; the margin generates **false positives** on benign coding/debugging; and it is **"probably impossible to make any model fully robust."**
-- The classifier is the production lineage of Anthropic's Constitutional Classifiers research (arXiv 2501.18837 — _pending verification_), which documents the same robustness-for-overrefusal tradeoff (a reported ~0.38% refusal-rate increase for large robustness gains).
+- The classifier is the production lineage of Anthropic's Constitutional Classifiers research (arXiv 2501.18837 — _verified 2026-07-02_), which documents the same robustness-for-overrefusal tradeoff (the abstract's absolute 0.38% production-traffic refusal increase for large robustness gains).
 - Paired with a proposed **four-criteria jailbreak-severity framework** — _capability gain · breadth · ease of weaponization · discoverability_ — explicitly modeled on CVSS and developed with Amazon, Microsoft, and Google, alongside independent testing (CAISI, HackerOne, government pre-release access) (AI Weekly).
 
 > The mechanism is a **conservative threshold shift**: trade precision (accept more false positives) for recall (miss fewer attacks), and lean on layering to catch what leaks.
@@ -149,7 +149,7 @@ observed results equal Expected. Byte-stable golden:
 
 ## 11. Why now — the policy & standards demand signal
 
-_(Policy citations pending verification — see banner.)_ Regulators and industry are actively asking for PCTA's category of evidence — verifiable, agent-level security assurance:
+_(Regulatory-landscape items below are as reported and pending independent verification; the arXiv references are verified — see the checklist.)_ Regulators and industry are actively asking for PCTA's category of evidence — verifiable, agent-level security assurance:
 
 - **Executive Order "Promoting Advanced Artificial Intelligence Innovation and Security" (2 Jun 2026)** establishes a voluntary review framework for "covered frontier" models and an interagency **AI cybersecurity vulnerability clearinghouse** (White House; Holland & Knight).
 - **NIST/CAISI RFI, "Mitigating Risks of AI Agent Systems" (Jan 2026)** explicitly seeks methodologies to **measure** secure development and deployment of agentic systems (CAISI RFI) — PCTA is a concrete candidate primitive.
@@ -195,8 +195,8 @@ Adopting both is not two isolated tools; it is a **single, legible security stor
 ## Verification checklist (must clear before external / Anthropic-facing use)
 
 - [ ] **Incident facts (§Context, §13).** Confirm the 9 Jun launch/split, 12 Jun suspension, 26–30 Jun restoration, and the CNBC/BBC/NBC/Hacker News/Fortune corroboration against primary sources. Memory records Jun-12 lockdown / Jun-18 severity framework / Jun-26 Lutnick as web-verified 2026-06-27; the day-level dates here are finer and unconfirmed.
-- [ ] **arXiv 2501.18837 (Constitutional Classifiers)** — confirm title, authors, and the ~0.38% refusal-rate figure.
-- [ ] **arXiv 2605.24248 (MCP attested tool-admission)** — the one reference still unverified across the whole PCTA effort; verify or drop before publication.
+- [x] **arXiv 2501.18837 (Constitutional Classifiers)** — verified 2026-07-02: "Constitutional Classifiers: Defending against Universal Jailbreaks across Thousands of Hours of Red Teaming" (Sharma, Tong, Mu, Wei et al., Anthropic; submitted 2025-01-31). The abstract states "an absolute 0.38% increase in production-traffic refusals," confirming the ~0.38% figure.
+- [x] **arXiv 2605.24248 (MCP attested tool-admission)** — verified 2026-07-02: "Attested Tool-Server Admission: A Security Extension to the Model Context Protocol" (Alfredo Metere, Enclawed LLC; v1 2026-05-22, v2 2026-06-01, cs.CR). Real and directly relevant as MCP-admission prior art.
 - [x] **§9/§10 P-gate numbering.** DONE 2026-07-02: the labels here now match the built stage's
       validation matrix one-to-one (P0→0 … P8→38, plus P4-pre→24). Note the built gate order is
       P4-pre→P1→P2→P3→P7→**P8→P4**→P5→P6 — P8 runs before P4 by design (38-over-34 precedence
@@ -204,4 +204,4 @@ Adopting both is not two isolated tools; it is a **single, legible security stor
 - [x] **§10 Measured column** DONE 2026-07-02: filled from the real J5 reproduce
       (`p-gate-results.json`; all observed = expected; golden hash in the §10 provenance note).
 
-_Method note: incident facts above are corroborated by multiple independent outlets (see §13), not a single company post; names and dates are as reported as of 2 Jul 2026 and pending independent verification. The broader academic positioning (FIDES, classic Proof-Carrying Authorization, MCP admission) and its citation hygiene live in the consolidated PCTA plan; one reference (arXiv 2605.24248) remains to be independently verified before external use._
+_Method note: incident facts above are corroborated by multiple independent outlets (see §13), not a single company post; day-level names and dates are as reported as of 2 Jul 2026 and pending independent verification. The broader academic positioning (FIDES, classic Proof-Carrying Authorization, MCP admission) and its citation hygiene live in the consolidated PCTA plan; both arXiv references (2501.18837, 2605.24248) were independently verified 2026-07-02._
