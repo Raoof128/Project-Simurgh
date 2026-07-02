@@ -1,0 +1,38 @@
+{
+  "clean-authorized": {
+    "raw": 0,
+    "typed": 0
+  },
+  "missing-proof": {
+    "raw": 31,
+    "typed": 1
+  },
+  "forged-sig": {
+    "raw": 32,
+    "typed": 1
+  },
+  "stale-proof": {
+    "raw": 33,
+    "typed": 1
+  },
+  "dirty-cert-reverify": {
+    "raw": 24,
+    "typed": 1
+  },
+  "untrusted-authority": {
+    "raw": 34,
+    "typed": 1
+  },
+  "action-mismatch": {
+    "raw": 35,
+    "typed": 1
+  },
+  "enforcement-gap": {
+    "raw": 36,
+    "typed": 1
+  },
+  "digest-mismatch": {
+    "raw": 37,
+    "typed": 1
+  }
+}
