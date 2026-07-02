@@ -4,7 +4,7 @@
 
 **Goal:** Ship an offline, third-party-reproducible verifier that attests, per tool call, that enforcement was required, a valid signed authority proof accompanied the action, untrusted context never became authority (into the declared authority-sink set), and the host recorded applying exactly the authorized action (`recorded_allowed`, not proof of execution) — all replayable offline under a dishonest producer within the §0.6 scope.
 
-**Architecture:** New module `tools/simurgh-attestation/stage4j/` that *consumes* the merged Stage 4H DFI certificate and reuses 4H verbatim (exit wrapper, offline harness, canonical hashing, Ed25519 pack verify, signed-pack manifest). PCTA never dispatches; it verifies post-hoc. The verifier runs P0–P8 gates inside `runOffline`, re-runs the 4H verifier as a mandatory pre-verify, and routes every exit through `stage4CodeForRawCode`.
+**Architecture:** New module `tools/simurgh-attestation/stage4j/` that _consumes_ the merged Stage 4H DFI certificate and reuses 4H verbatim (exit wrapper, offline harness, canonical hashing, Ed25519 pack verify, signed-pack manifest). PCTA never dispatches; it verifies post-hoc. The verifier runs P0–P8 gates inside `runOffline`, re-runs the 4H verifier as a mandatory pre-verify, and routes every exit through `stage4CodeForRawCode`.
 
 **Tech Stack:** Node.js ESM, `node:test`, `node:assert/strict`, `node:crypto` (Ed25519), Bash (`set -euo pipefail`), Prettier, shellcheck. Spec: `docs/superpowers/specs/2026-07-02-stage-4j-pcta-design.md`.
 
@@ -43,10 +43,12 @@
 ### Task J1: Extend the exit-code wrapper (31–38, still total)
 
 **Files:**
+
 - Modify: `tools/simurgh-attestation/stage4h/exitCodes.mjs`
 - Test: `tests/unit/llmShield/stage4j/exitWrapper.pcta.test.js`
 
 **Interfaces:**
+
 - Consumes: existing `RAW_VERIFIER_CODES`, `RUN_LEVEL_BY_RAW`, `stage4CodeForRawCode` from `exitCodes.mjs`.
 - Produces: `PCTA_RAW_CODES` (object 31–38), `PCTA_REASONS` (frozen array); `stage4CodeForRawCode(r)===1` for `r∈{31..38}`.
 
@@ -78,11 +80,18 @@ test("reused bands keep their mapping and wrapper stays total", () => {
 });
 
 test("PCTA code + reason inventories are frozen and complete", () => {
-  assert.deepEqual(Object.values(PCTA_RAW_CODES).sort((a, b) => a - b), [31, 32, 33, 34, 35, 36, 37, 38]);
+  assert.deepEqual(
+    Object.values(PCTA_RAW_CODES).sort((a, b) => a - b),
+    [31, 32, 33, 34, 35, 36, 37, 38]
+  );
   assert.equal(Object.isFrozen(PCTA_REASONS), true);
   assert.equal(PCTA_REASONS.length, 8);
   for (let r = 31; r <= 38; r += 1) {
-    assert.equal(Object.prototype.hasOwnProperty.call(RUN_LEVEL_BY_RAW, r), true, `ledger has ${r}`);
+    assert.equal(
+      Object.prototype.hasOwnProperty.call(RUN_LEVEL_BY_RAW, r),
+      true,
+      `ledger has ${r}`
+    );
   }
 });
 ```
@@ -157,10 +166,12 @@ git commit -m "feat(llm-shield): extend stage4 exit wrapper with pcta codes 31-3
 ### Task J2: Authorization-proof schema, canonicalization, envelope + acyclic binding
 
 **Files:**
+
 - Create: `tools/simurgh-attestation/stage4j/authorizationProof.mjs`
 - Test: `tests/unit/llmShield/stage4j/authorizationProof.test.js`
 
 **Interfaces:**
+
 - Consumes: `canonicalJson`, `sha256Canonical`, `publicKeyFingerprint` from `../stage4d/stage4dCrypto.mjs`; `digest` from `../stage4h/canonicalPremises.mjs`; `certificateDigest` from `../stage4h/dfiCertificate.mjs`; `node:crypto` `sign`/`verify`/`createPublicKey`.
 - Produces:
   - `PCTA_SCHEMA` (string), `ACTION_CLASSES`, `AUTHORITY_SOURCES` (frozen arrays)
@@ -247,10 +258,18 @@ test("validateProofShape accepts a clean proof and rejects malformed ones", () =
   const proof = signedProof(cleanPayload(), privateKey, publicKey);
   assert.deepEqual(validateProofShape(proof), { ok: true });
 
-  const badClass = signedProof({ ...cleanPayload(), action_class: "nonsense" }, privateKey, publicKey);
+  const badClass = signedProof(
+    { ...cleanPayload(), action_class: "nonsense" },
+    privateKey,
+    publicKey
+  );
   assert.equal(validateProofShape(badClass).ok, false);
 
-  const badSource = signedProof({ ...cleanPayload(), authority_source: "nonsense" }, privateKey, publicKey);
+  const badSource = signedProof(
+    { ...cleanPayload(), authority_source: "nonsense" },
+    privateKey,
+    publicKey
+  );
   assert.equal(validateProofShape(badSource).ok, false);
 });
 
@@ -277,11 +296,29 @@ test("PCTA manifest binds acyclically to the 4H run-root and verifies", () => {
   const pm = buildPctaManifest({ proof, runRoot, dfiCertificateDigest: dfiDigest, privateKey });
   assert.equal(pm.run_root, runRoot);
   assert.match(pm.pcta_proof_digest, /^sha256:[a-f0-9]{64}$/);
-  assert.deepEqual(verifyPctaManifest({ pctaManifest: pm, proof, runRoot, dfiCertificateDigest: dfiDigest, publicKey }), { ok: true });
+  assert.deepEqual(
+    verifyPctaManifest({
+      pctaManifest: pm,
+      proof,
+      runRoot,
+      dfiCertificateDigest: dfiDigest,
+      publicKey,
+    }),
+    { ok: true }
+  );
 
   // tamper: swap the proof digest -> reject
   const tampered = { ...pm, pcta_proof_digest: `sha256:${"f".repeat(64)}` };
-  assert.equal(verifyPctaManifest({ pctaManifest: tampered, proof, runRoot, dfiCertificateDigest: dfiDigest, publicKey }).ok, false);
+  assert.equal(
+    verifyPctaManifest({
+      pctaManifest: tampered,
+      proof,
+      runRoot,
+      dfiCertificateDigest: dfiDigest,
+      publicKey,
+    }).ok,
+    false
+  );
 });
 ```
 
@@ -331,17 +368,24 @@ export function validateProofShape(proof) {
   if (!isDigest(public_key_fingerprint)) return { ok: false, reason: "schema_invalid" };
   if (payload.schema !== PCTA_SCHEMA) return { ok: false, reason: "schema_invalid" };
   if (typeof payload.tool !== "string") return { ok: false, reason: "schema_invalid" };
-  if (!ACTION_CLASSES.includes(payload.action_class)) return { ok: false, reason: "schema_invalid" };
+  if (!ACTION_CLASSES.includes(payload.action_class))
+    return { ok: false, reason: "schema_invalid" };
   if (!AUTHORITY_SOURCES.includes(payload.authority_source)) {
     return { ok: false, reason: "schema_invalid" };
   }
-  for (const f of ["authorized_action_digest", "user_intent_digest", "policy_digest", "dfi_certificate_digest"]) {
+  for (const f of [
+    "authorized_action_digest",
+    "user_intent_digest",
+    "policy_digest",
+    "dfi_certificate_digest",
+  ]) {
     if (!isDigest(payload[f])) return { ok: false, reason: "schema_invalid" };
   }
   if (typeof payload.untrusted_context_reached_authority !== "boolean") {
     return { ok: false, reason: "schema_invalid" };
   }
-  if (!Number.isInteger(payload.epoch) || payload.epoch < 0) return { ok: false, reason: "schema_invalid" };
+  if (!Number.isInteger(payload.epoch) || payload.epoch < 0)
+    return { ok: false, reason: "schema_invalid" };
   if (typeof payload.nonce !== "string" || payload.nonce.length === 0) {
     return { ok: false, reason: "schema_invalid" };
   }
@@ -351,7 +395,8 @@ export function validateProofShape(proof) {
   if (typeof e.required !== "boolean" || typeof e.applied !== "boolean") {
     return { ok: false, reason: "schema_invalid" };
   }
-  if (!ACTION_CLASSES.includes(e.applied_action_class)) return { ok: false, reason: "schema_invalid" };
+  if (!ACTION_CLASSES.includes(e.applied_action_class))
+    return { ok: false, reason: "schema_invalid" };
   if (!isDigest(e.applied_action_digest)) return { ok: false, reason: "schema_invalid" };
   return { ok: true };
 }
@@ -360,9 +405,7 @@ export function verifyProofSignature(proof, pinnedKeyset) {
   const fail = { ok: false, reason: "authorization_signature_invalid" };
   if (!pinnedKeyset || !pinnedKeyset.has(proof.public_key_fingerprint)) return fail;
   try {
-    const pub = pinnedKeyset.get
-      ? pinnedKeyset.get(proof.public_key_fingerprint)
-      : null;
+    const pub = pinnedKeyset.get ? pinnedKeyset.get(proof.public_key_fingerprint) : null;
     if (!pub) return fail; // pinned keyset must resolve fingerprint -> public key (see verifier)
     const ok = verify(
       null,
@@ -388,13 +431,22 @@ export function buildPctaManifest({ proof, runRoot, dfiCertificateDigest, privat
   const pcta_manifest_digest = `sha256:${sha256Canonical(payload)}`;
   const signature = `ed25519:${sign(
     null,
-    Buffer.concat([Buffer.from(PCTA_MANIFEST_DOMAIN, "utf8"), Buffer.from(canonicalJson(payload), "utf8")]),
+    Buffer.concat([
+      Buffer.from(PCTA_MANIFEST_DOMAIN, "utf8"),
+      Buffer.from(canonicalJson(payload), "utf8"),
+    ]),
     privateKey
   ).toString("base64")}`;
   return { ...payload, pcta_manifest_digest, signature };
 }
 
-export function verifyPctaManifest({ pctaManifest, proof, runRoot, dfiCertificateDigest, publicKey }) {
+export function verifyPctaManifest({
+  pctaManifest,
+  proof,
+  runRoot,
+  dfiCertificateDigest,
+  publicKey,
+}) {
   if (pctaManifest.run_root !== runRoot) return { ok: false, reason: "run_root_mismatch" };
   if (pctaManifest.dfi_certificate_digest !== dfiCertificateDigest) {
     return { ok: false, reason: "dfi_binding_mismatch" };
@@ -409,8 +461,13 @@ export function verifyPctaManifest({ pctaManifest, proof, runRoot, dfiCertificat
   try {
     const ok = verify(
       null,
-      Buffer.concat([Buffer.from(PCTA_MANIFEST_DOMAIN, "utf8"), Buffer.from(canonicalJson(payload), "utf8")]),
-      createPublicKey(publicKey.export ? publicKey.export({ type: "spki", format: "pem" }) : publicKey),
+      Buffer.concat([
+        Buffer.from(PCTA_MANIFEST_DOMAIN, "utf8"),
+        Buffer.from(canonicalJson(payload), "utf8"),
+      ]),
+      createPublicKey(
+        publicKey.export ? publicKey.export({ type: "spki", format: "pem" }) : publicKey
+      ),
       Buffer.from(signature.replace(/^ed25519:/, ""), "base64")
     );
     return ok ? { ok: true } : { ok: false, reason: "pcta_manifest_signature_invalid" };
@@ -439,10 +496,12 @@ git commit -m "feat(llm-shield): add pcta authorization-proof schema, canonical 
 ### Task J3: Authority-source lattice + P4 untrusted-authority resolver
 
 **Files:**
+
 - Create: `tools/simurgh-attestation/stage4j/authoritySource.mjs`
 - Test: `tests/unit/llmShield/stage4j/authoritySource.test.js`
 
 **Interfaces:**
+
 - Consumes: nothing from 4H directly (pure); receives the bound cert's `sink_safety_claims` and the target `action_id`/sink node from the verifier.
 - Produces:
   - `AUTHORITY_RANK` (frozen object), `canCarry(source, hasHigherProof) -> boolean`
@@ -561,16 +620,19 @@ git commit -m "feat(llm-shield): add pcta authority-source lattice + untrusted-a
 ### Task J4: PCTA verifier (P0–P8) + mandatory 4H re-verify + offline pre-flight + fixtures
 
 **Files:**
+
 - Create: `tools/simurgh-attestation/stage4j/verify-stage4j-pcta.mjs`
 - Create: `tools/simurgh-attestation/stage4j/build-stage4j-fixtures.mjs`
 - Create: `tests/fixtures/llmShield/stage4j/*` (emitted by the build script)
 - Test: `tests/unit/llmShield/stage4j/verifier.test.js`
 
 **Interfaces:**
+
 - Consumes: `runOffline` (`../stage4h/offlineHarness.mjs`); `verifyEvidencePack` (`../stage4d/verifyPack.mjs`); `diagnose`, `certificateDigest` (`../stage4h/dfiCertificate.mjs`); `stage4CodeForRawCode`, `PCTA_RAW_CODES` (`../stage4h/exitCodes.mjs`); J2/J3 exports.
 - Produces: `runPctaCore({argv}) -> {rawCode, reason}`; `main({argv})`; emits `p-gate-results.json`, `authorization-proof.json`, `offline-report.json`, `pcta-manifest.json`.
 
 **Gate order inside `runPctaCore` (each returns a raw code; first failure wins):**
+
 1. **P4-pre** — run `diagnose({pack, certificate, manifest})` (the 4H verifier). If not ok, return the 4H raw code verbatim (20–26 band).
 2. **P1** — proof present for the recorded-allowed action? else `31`.
 3. **P2** — `validateProofShape` + `verifyProofSignature` against the pinned keyset. else `32`.
@@ -617,13 +679,16 @@ function main() {
   // authority-sink action from the cert's sink_safety_claims (act_001 in the clean fixture)
   const sinkNode = cert.derivation.sink_safety_claims[0].node; // "action:act_001"
   const actionId = sinkNode.replace(/^action:/, "");
-  const receipt = pack.receipts.find((r) => r.receipt_payload.action_id === actionId).receipt_payload;
+  const receipt = pack.receipts.find(
+    (r) => r.receipt_payload.action_id === actionId
+  ).receipt_payload;
   const actionDigest = `sha256:${receipt.decision_input.resolved_args_digest}`;
 
   const base = {
     schema: PCTA_SCHEMA,
     tool: "send_email",
-    action_class: receipt.consequence_class === "read_only" ? "external_egress" : receipt.consequence_class,
+    action_class:
+      receipt.consequence_class === "read_only" ? "external_egress" : receipt.consequence_class,
     authorized_action_digest: actionDigest,
     user_intent_digest: `sha256:${"1".repeat(64)}`,
     policy_digest: cert.policy_digest,
@@ -636,7 +701,8 @@ function main() {
     enforcement: {
       required: true,
       applied: true,
-      applied_action_class: receipt.consequence_class === "read_only" ? "external_egress" : receipt.consequence_class,
+      applied_action_class:
+        receipt.consequence_class === "read_only" ? "external_egress" : receipt.consequence_class,
       applied_action_digest: actionDigest,
     },
   };
@@ -644,41 +710,109 @@ function main() {
   const runRoot = manifest.signed_pack_manifest_digest;
   const dfiDigest = certificateDigest(cert);
   const clean = signProof(base, privateKey, publicKey);
-  const pctaManifest = buildPctaManifest({ proof: clean, runRoot, dfiCertificateDigest: dfiDigest, privateKey });
+  const pctaManifest = buildPctaManifest({
+    proof: clean,
+    runRoot,
+    dfiCertificateDigest: dfiDigest,
+    privateKey,
+  });
 
   const write = (name, obj) => writeFileSync(`${OUT}/${name}`, `${JSON.stringify(obj, null, 2)}\n`);
-  write("clean-authorized.json", { proof: clean, pcta_manifest: pctaManifest, action_id: actionId });
+  write("clean-authorized.json", {
+    proof: clean,
+    pcta_manifest: pctaManifest,
+    action_id: actionId,
+  });
 
   // Negative fixtures (single-field deltas; the verifier test drives these). Digests recomputed here.
   write("missing-proof.json", { proof: null, pcta_manifest: pctaManifest, action_id: actionId });
-  write("forged-sig.json", { proof: { ...clean, signature: `ed25519:${Buffer.from("x").toString("base64")}` }, pcta_manifest: pctaManifest, action_id: actionId });
-  write("stale-proof.json", { proof: signProof({ ...base, epoch: 1 }, privateKey, publicKey), pcta_manifest: pctaManifest, action_id: actionId });
-  write("action-mismatch.json", { proof: signProof({ ...base, enforcement: { ...base.enforcement, applied_action_digest: `sha256:${"9".repeat(64)}` } }, privateKey, publicKey), pcta_manifest: pctaManifest, action_id: actionId });
-  write("enforcement-gap.json", { proof: signProof({ ...base, enforcement: { ...base.enforcement, applied: false } }, privateKey, publicKey), pcta_manifest: pctaManifest, action_id: actionId });
-  write("digest-mismatch.json", { proof: signProof({ ...base, policy_digest: `sha256:${"7".repeat(64)}` }, privateKey, publicKey), pcta_manifest: pctaManifest, action_id: actionId });
+  write("forged-sig.json", {
+    proof: { ...clean, signature: `ed25519:${Buffer.from("x").toString("base64")}` },
+    pcta_manifest: pctaManifest,
+    action_id: actionId,
+  });
+  write("stale-proof.json", {
+    proof: signProof({ ...base, epoch: 1 }, privateKey, publicKey),
+    pcta_manifest: pctaManifest,
+    action_id: actionId,
+  });
+  write("action-mismatch.json", {
+    proof: signProof(
+      {
+        ...base,
+        enforcement: { ...base.enforcement, applied_action_digest: `sha256:${"9".repeat(64)}` },
+      },
+      privateKey,
+      publicKey
+    ),
+    pcta_manifest: pctaManifest,
+    action_id: actionId,
+  });
+  write("enforcement-gap.json", {
+    proof: signProof(
+      { ...base, enforcement: { ...base.enforcement, applied: false } },
+      privateKey,
+      publicKey
+    ),
+    pcta_manifest: pctaManifest,
+    action_id: actionId,
+  });
+  write("digest-mismatch.json", {
+    proof: signProof({ ...base, policy_digest: `sha256:${"7".repeat(64)}` }, privateKey, publicKey),
+    pcta_manifest: pctaManifest,
+    action_id: actionId,
+  });
 
   // untrusted-authority: bind to the DIRTY cert whose act_001 sink is safe:false
   const dCert = readJson(`${H}/q4-dirty-one-edge-delta-dfi-certificate.json`);
   const dManifest = readJson(`${H}/q4-dirty-one-edge-delta-signed-pack-manifest.json`);
   const dPack = readJson(`${H}/q4-dirty-one-edge-delta-base-pack.json`);
-  const dActionId = dCert.derivation.sink_safety_claims.find((c) => c.safe === false).node.replace(/^action:/, "");
-  const dReceipt = dPack.receipts.find((r) => r.receipt_payload.action_id === dActionId).receipt_payload;
+  const dActionId = dCert.derivation.sink_safety_claims
+    .find((c) => c.safe === false)
+    .node.replace(/^action:/, "");
+  const dReceipt = dPack.receipts.find(
+    (r) => r.receipt_payload.action_id === dActionId
+  ).receipt_payload;
   const dDigest = `sha256:${dReceipt.decision_input.resolved_args_digest}`;
-  const dBase = { ...base, dfi_certificate_digest: certificateDigest(dCert), policy_digest: dCert.policy_digest, authorized_action_digest: dDigest, enforcement: { ...base.enforcement, applied_action_digest: dDigest }, untrusted_context_reached_authority: false };
+  const dBase = {
+    ...base,
+    dfi_certificate_digest: certificateDigest(dCert),
+    policy_digest: dCert.policy_digest,
+    authorized_action_digest: dDigest,
+    enforcement: { ...base.enforcement, applied_action_digest: dDigest },
+    untrusted_context_reached_authority: false,
+  };
   const dProof = signProof(dBase, privateKey, publicKey);
-  const dPctaManifest = buildPctaManifest({ proof: dProof, runRoot: dManifest.signed_pack_manifest_digest, dfiCertificateDigest: certificateDigest(dCert), privateKey });
-  write("untrusted-authority.json", { proof: dProof, pcta_manifest: dPctaManifest, action_id: dActionId, dfi: "q4-dirty-one-edge-delta" });
+  const dPctaManifest = buildPctaManifest({
+    proof: dProof,
+    runRoot: dManifest.signed_pack_manifest_digest,
+    dfiCertificateDigest: certificateDigest(dCert),
+    privateKey,
+  });
+  write("untrusted-authority.json", {
+    proof: dProof,
+    pcta_manifest: dPctaManifest,
+    action_id: dActionId,
+    dfi: "q4-dirty-one-edge-delta",
+  });
 
-  writeFileSync(`${OUT}/expected-results/pcta-matrix.json`, `${JSON.stringify({
-    "clean-authorized": { raw: 0, typed: 0 },
-    "missing-proof": { raw: 31, typed: 1 },
-    "forged-sig": { raw: 32, typed: 1 },
-    "stale-proof": { raw: 33, typed: 1 },
-    "untrusted-authority": { raw: 34, typed: 1 },
-    "action-mismatch": { raw: 35, typed: 1 },
-    "enforcement-gap": { raw: 36, typed: 1 },
-    "digest-mismatch": { raw: 37, typed: 1 },
-  }, null, 2)}\n`);
+  writeFileSync(
+    `${OUT}/expected-results/pcta-matrix.json`,
+    `${JSON.stringify(
+      {
+        "clean-authorized": { raw: 0, typed: 0 },
+        "missing-proof": { raw: 31, typed: 1 },
+        "forged-sig": { raw: 32, typed: 1 },
+        "stale-proof": { raw: 33, typed: 1 },
+        "untrusted-authority": { raw: 34, typed: 1 },
+        "action-mismatch": { raw: 35, typed: 1 },
+        "enforcement-gap": { raw: 36, typed: 1 },
+        "digest-mismatch": { raw: 37, typed: 1 },
+      },
+      null,
+      2
+    )}\n`
+  );
   console.log("stage4j fixtures written");
 }
 
@@ -752,9 +886,10 @@ function loadPinnedKeyset(pubkeyPath) {
 
 // Locate the 4H substrate for a fixture's DFI binding.
 function loadDfiSubstrate(fixture) {
-  const base = fixture.dfi === "q4-dirty-one-edge-delta"
-    ? "tests/fixtures/llmShield/stage4h/q4-dirty-one-edge-delta"
-    : "tests/fixtures/llmShield/stage4h/q0-clean-disconnected-untrusted";
+  const base =
+    fixture.dfi === "q4-dirty-one-edge-delta"
+      ? "tests/fixtures/llmShield/stage4h/q4-dirty-one-edge-delta"
+      : "tests/fixtures/llmShield/stage4h/q0-clean-disconnected-untrusted";
   return {
     pack: readJson(`${base}-base-pack.json`),
     sig: readFileSync(`${base}-base-pack.sig`, "utf8").trim(),
@@ -775,10 +910,17 @@ export async function runPctaCore({ fixture, pinnedPubkeyPath, epochWindow = 315
     signature: substrate.sig,
     publicKeyPem: substrate.signerPub,
   });
-  if (!packOk.ok) return finish(fixture, RAW_VERIFIER_CODES.PACK_BINDING_MISMATCH, "base_pack_verify_failed");
-  const dfi = diagnose({ pack: substrate.pack, certificate: substrate.cert, manifest: substrate.manifest });
+  if (!packOk.ok)
+    return finish(fixture, RAW_VERIFIER_CODES.PACK_BINDING_MISMATCH, "base_pack_verify_failed");
+  const dfi = diagnose({
+    pack: substrate.pack,
+    certificate: substrate.cert,
+    manifest: substrate.manifest,
+  });
   if (!dfi.ok) {
-    const raw = Number.isInteger(dfi.code) ? dfi.code : RAW_VERIFIER_CODES.INTERNAL_ERROR_FAIL_CLOSED;
+    const raw = Number.isInteger(dfi.code)
+      ? dfi.code
+      : RAW_VERIFIER_CODES.INTERNAL_ERROR_FAIL_CLOSED;
     return finish(fixture, raw, `dfi_reverify_failed:${dfi.reason}`);
   }
 
@@ -786,11 +928,17 @@ export async function runPctaCore({ fixture, pinnedPubkeyPath, epochWindow = 315
   const receipt = substrate.pack.receipts
     .map((r) => r.receipt_payload)
     .find((p) => p.action_id === f.action_id);
-  if (!f.proof) return finish(fixture, PCTA_RAW_CODES.AUTHORIZATION_PROOF_MISSING, "authorization_proof_missing");
+  if (!f.proof)
+    return finish(
+      fixture,
+      PCTA_RAW_CODES.AUTHORIZATION_PROOF_MISSING,
+      "authorization_proof_missing"
+    );
 
   // P2 — shape + signature + pinned key.
   const shape = validateProofShape(f.proof);
-  if (!shape.ok) return finish(fixture, PCTA_RAW_CODES.AUTHORIZATION_SIGNATURE_INVALID, shape.reason);
+  if (!shape.ok)
+    return finish(fixture, PCTA_RAW_CODES.AUTHORIZATION_SIGNATURE_INVALID, shape.reason);
   const sig = verifyProofSignature(f.proof, pinned);
   if (!sig.ok) return finish(fixture, PCTA_RAW_CODES.AUTHORIZATION_SIGNATURE_INVALID, sig.reason);
 
@@ -804,14 +952,24 @@ export async function runPctaCore({ fixture, pinnedPubkeyPath, epochWindow = 315
 
   // P7 — policy/intent digest binding.
   if (p.policy_digest !== substrate.cert.policy_digest) {
-    return finish(fixture, PCTA_RAW_CODES.PCTA_POLICY_OR_INTENT_DIGEST_MISMATCH, "pcta_policy_or_intent_digest_mismatch");
+    return finish(
+      fixture,
+      PCTA_RAW_CODES.PCTA_POLICY_OR_INTENT_DIGEST_MISMATCH,
+      "pcta_policy_or_intent_digest_mismatch"
+    );
   }
   if (p.dfi_certificate_digest !== certificateDigest(substrate.cert)) {
-    return finish(fixture, PCTA_RAW_CODES.PCTA_POLICY_OR_INTENT_DIGEST_MISMATCH, "dfi_certificate_digest_mismatch");
+    return finish(
+      fixture,
+      PCTA_RAW_CODES.PCTA_POLICY_OR_INTENT_DIGEST_MISMATCH,
+      "dfi_certificate_digest_mismatch"
+    );
   }
 
   // P4 — authority non-derivability, read from the RE-VERIFIED cert's authority-sink claim.
-  const claim = substrate.cert.derivation.sink_safety_claims.find((c) => c.node === `action:${f.action_id}`);
+  const claim = substrate.cert.derivation.sink_safety_claims.find(
+    (c) => c.node === `action:${f.action_id}`
+  );
   const p4 = resolveP4({ authoritySource: p.authority_source, sinkSafetyClaim: claim });
   if (!p4.ok) return finish(fixture, PCTA_RAW_CODES.AUTHORITY_FROM_UNTRUSTED_CONTEXT, p4.reason);
 
@@ -819,7 +977,11 @@ export async function runPctaCore({ fixture, pinnedPubkeyPath, epochWindow = 315
   const material = substrate.pack.replay_material[f.action_id];
   const flaggedAuthority = material?.taint_derivation_inputs?.authority_sink === true;
   if (HIGH_CONSEQUENCE.has(receipt.consequence_class) && !flaggedAuthority) {
-    return finish(fixture, PCTA_RAW_CODES.AUTHORITY_SINK_UNDERDECLARED, "authority_sink_underdeclared");
+    return finish(
+      fixture,
+      PCTA_RAW_CODES.AUTHORITY_SINK_UNDERDECLARED,
+      "authority_sink_underdeclared"
+    );
   }
 
   // P5 — applied == authorized == receipt.resolved_args_digest (4H digest space).
@@ -832,9 +994,14 @@ export async function runPctaCore({ fixture, pinnedPubkeyPath, epochWindow = 315
   }
 
   // P6 — enforcement.applied must be supported by a recorded allow-decision.
-  const appliedSupported = receipt.decision === "allow" && receiptDigest === p.authorized_action_digest;
+  const appliedSupported =
+    receipt.decision === "allow" && receiptDigest === p.authorized_action_digest;
   if (p.enforcement.required && !(p.enforcement.applied && appliedSupported)) {
-    return finish(fixture, PCTA_RAW_CODES.ENFORCEMENT_REQUIRED_NOT_APPLIED, "enforcement_required_not_applied");
+    return finish(
+      fixture,
+      PCTA_RAW_CODES.ENFORCEMENT_REQUIRED_NOT_APPLIED,
+      "enforcement_required_not_applied"
+    );
   }
 
   return finish(fixture, RAW_VERIFIER_CODES.OK, null);
@@ -845,7 +1012,10 @@ function finish(fixture, rawCode, reason) {
 }
 
 export async function main({ argv = process.argv.slice(2) } = {}) {
-  const get = (n) => { const i = argv.indexOf(n); return i === -1 ? null : argv[i + 1]; };
+  const get = (n) => {
+    const i = argv.indexOf(n);
+    return i === -1 ? null : argv[i + 1];
+  };
   const fixture = get("--fixture");
   const pinnedPubkeyPath = get("--pinned-pubkey");
   const outPath = get("--out");
@@ -859,7 +1029,9 @@ export async function main({ argv = process.argv.slice(2) } = {}) {
     return r;
   }
   const offline = await runOffline(() => runPctaCore({ fixture, pinnedPubkeyPath }));
-  const r = offline.ok ? offline.value : finish(fixture, RAW_VERIFIER_CODES.CHECKER_NOT_OFFLINE, offline.reason);
+  const r = offline.ok
+    ? offline.value
+    : finish(fixture, RAW_VERIFIER_CODES.CHECKER_NOT_OFFLINE, offline.reason);
   if (outPath) emit(outPath, r);
   process.exitCode = stage4CodeForRawCode(r.rawCode);
   return r;
@@ -896,10 +1068,12 @@ git commit -m "feat(llm-shield): add stage 4j pcta verifier (p0-p8) with mandato
 ### Task J5: One-command reproduce + anti-theatre deletion + byte-stable golden + comprehensive E2E
 
 **Files:**
+
 - Create: `scripts/reproduce-llm-shield-stage4j.sh`
 - Create: `tests/e2e/llmShield/stage4jFullSmoke.test.js`
 
 **Interfaces:**
+
 - Consumes: J4's `runPctaCore`, the CLI `main`, `build-stage4j-fixtures.mjs`, `stage4CodeForRawCode`.
 - Produces: `docs/research/llm-shield/evidence/stage-4j/{p-gate-results.json,offline-report.json,reproduce-summary.json}`.
 
@@ -933,7 +1107,10 @@ test("E2E: every P-gate P0-P8 produces its mapped raw + typed exit", async () =>
 test("E2E: mandatory 4H re-verify surfaces a 4H band code, not a PCTA code", async () => {
   // The untrusted-authority fixture binds to a dirty cert with a real safe:false sink.
   // Point a proof at a cert whose stored claim would fail 4H recompute -> 4H band (<=26), typed 1.
-  const { rawCode } = await runPctaCore({ fixture: `${FX}/untrusted-authority.json`, pinnedPubkeyPath: PUB });
+  const { rawCode } = await runPctaCore({
+    fixture: `${FX}/untrusted-authority.json`,
+    pinnedPubkeyPath: PUB,
+  });
   // untrusted-authority is caught at P4 (34); the re-verify path itself is exercised by construction.
   assert.equal([34].includes(rawCode) || (rawCode >= 20 && rawCode <= 26), true);
   assert.equal(stage4CodeForRawCode(rawCode), 1);
@@ -961,9 +1138,12 @@ test("E2E: offline pre-flight — an egress attempt inside the verifier flips to
   const out = join(mkdtempSync(join(tmpdir(), "pcta-offline-")), "r.json");
   execFileSync(process.execPath, [
     "tools/simurgh-attestation/stage4j/verify-stage4j-pcta.mjs",
-    "--fixture", `${FX}/clean-authorized.json`,
-    "--pinned-pubkey", PUB,
-    "--out", out,
+    "--fixture",
+    `${FX}/clean-authorized.json`,
+    "--pinned-pubkey",
+    PUB,
+    "--out",
+    out,
   ]);
   const r = JSON.parse(readFileSync(out, "utf8"));
   assert.equal(r.rawCode, 0);
@@ -974,7 +1154,10 @@ test("E2E: anti-theatre deletion — removing the proof flips clean 0 -> 31 (nev
   const tmp = mkdtempSync(join(tmpdir(), "pcta-antitheatre-"));
   try {
     const clean = JSON.parse(readFileSync(`${FX}/clean-authorized.json`, "utf8"));
-    const before = await runPctaCore({ fixture: `${FX}/clean-authorized.json`, pinnedPubkeyPath: PUB });
+    const before = await runPctaCore({
+      fixture: `${FX}/clean-authorized.json`,
+      pinnedPubkeyPath: PUB,
+    });
     assert.equal(before.rawCode, 0);
     clean.proof = null; // delete the authorization proof
     const p = join(tmp, "deleted.json");
@@ -1058,11 +1241,14 @@ git commit -m "feat(llm-shield): add stage 4j reproduce, comprehensive e2e, anti
 ### Task J6: Evidence docs + closeout + reviewer checklist + validation matrix + overclaim guard
 
 **Files:**
+
 - Create: `docs/research/llm-shield/STAGE_4J_CLOSEOUT.md`, `STAGE_4J_REVIEWER_CHECKLIST.md`, `STAGE_4J_VALIDATION_MATRIX.md`, `STAGE_4J_THREAT_MODEL.md`
 - Create: `docs/research/llm-shield/evidence/stage-4j/README.md`
+- Modify: `docs/research/llm-shield/STAGE_4J_POSITIONING_BRIEF.md` (companion pitch, already drafted — fill its §10 Measured column here; do NOT add it to the overclaim guard scope, it legitimately quotes "blocks"/"prevents" describing Anthropic's classifier)
 - Test: `tests/unit/llmShield/stage4j/closeout.test.js`
 
 **Interfaces:**
+
 - Consumes: the emitted evidence + the spec's §0.5/§0.6.
 - Produces: reviewer T1–T7 doc; validation-matrix rows (one per gate → fixture → evidence → raw → typed).
 
@@ -1078,15 +1264,28 @@ import { readFileSync } from "node:fs";
 import { test } from "node:test";
 
 test("no overclaim wording outside non-claims/deferral notes", () => {
-  const banned = "reference monitor|gateway|blocks the tool|prevents|non-bypassable|first proof-carrying|kernel.sandbox";
+  const banned =
+    "reference monitor|gateway|blocks the tool|prevents|non-bypassable|first proof-carrying|kernel.sandbox";
   // rg exits 1 when no matches; we only fail on matches that are NOT inside a non_claims/deferral line.
   let out = "";
   try {
-    out = execFileSync("rg", ["-n", "-i", banned, "docs/research/llm-shield/STAGE_4J_CLOSEOUT.md", "docs/research/llm-shield/STAGE_4J_THREAT_MODEL.md"], { encoding: "utf8" });
+    out = execFileSync(
+      "rg",
+      [
+        "-n",
+        "-i",
+        banned,
+        "docs/research/llm-shield/STAGE_4J_CLOSEOUT.md",
+        "docs/research/llm-shield/STAGE_4J_THREAT_MODEL.md",
+      ],
+      { encoding: "utf8" }
+    );
   } catch (e) {
     out = e.stdout || "";
   }
-  const offending = out.split("\n").filter((l) => l && !/non.claim|defer|R6|4M|not a|never/i.test(l));
+  const offending = out
+    .split("\n")
+    .filter((l) => l && !/non.claim|defer|R6|4M|not a|never/i.test(l));
   assert.deepEqual(offending, [], `overclaim wording:\n${offending.join("\n")}`);
 });
 
@@ -1102,7 +1301,8 @@ test("validation matrix names all eight gates P1..P8", () => {
 
 test("reviewer checklist covers T1-T7", () => {
   const c = readFileSync("docs/research/llm-shield/STAGE_4J_REVIEWER_CHECKLIST.md", "utf8");
-  for (const t of ["T1", "T2", "T3", "T4", "T5", "T6", "T7"]) assert.equal(c.includes(t), true, `missing ${t}`);
+  for (const t of ["T1", "T2", "T3", "T4", "T5", "T6", "T7"])
+    assert.equal(c.includes(t), true, `missing ${t}`);
 });
 ```
 
@@ -1118,17 +1318,17 @@ Create `docs/research/llm-shield/STAGE_4J_VALIDATION_MATRIX.md` with one row per
 ```md
 # Stage 4J PCTA — Validation Matrix
 
-| Gate | Falsifies | Fixture | Evidence | Raw | Typed |
-| --- | --- | --- | --- | --- | --- |
-| P1 | no proof for a recorded-allowed action | missing-proof.json | p-gate-results.json | 31 | 1 |
-| P2 | forged sig or unpinned key | forged-sig.json | p-gate-results.json | 32 | 1 |
-| P3 | stale epoch / pack-local nonce replay | stale-proof.json | p-gate-results.json | 33 | 1 |
-| P4 | authority from untrusted context (declaration ignored) | untrusted-authority.json | p-gate-results.json | 34 | 1 |
-| P5 | applied ≠ authorized (4H digest space) | action-mismatch.json | p-gate-results.json | 35 | 1 |
-| P6 | required ∧ ¬applied_supported | enforcement-gap.json | p-gate-results.json | 36 | 1 |
-| P7 | policy/intent digest mismatch | digest-mismatch.json | p-gate-results.json | 37 | 1 |
-| P8 | high-consequence class flagged non-authority | sink-underdeclared (built on demand) | p-gate-results.json | 38 | 1 |
-| P4-pre | stored safe=true fails 4H recompute | 4H dirty cert | offline-report.json | 20–26 | 1 |
+| Gate   | Falsifies                                              | Fixture                              | Evidence            | Raw   | Typed |
+| ------ | ------------------------------------------------------ | ------------------------------------ | ------------------- | ----- | ----- |
+| P1     | no proof for a recorded-allowed action                 | missing-proof.json                   | p-gate-results.json | 31    | 1     |
+| P2     | forged sig or unpinned key                             | forged-sig.json                      | p-gate-results.json | 32    | 1     |
+| P3     | stale epoch / pack-local nonce replay                  | stale-proof.json                     | p-gate-results.json | 33    | 1     |
+| P4     | authority from untrusted context (declaration ignored) | untrusted-authority.json             | p-gate-results.json | 34    | 1     |
+| P5     | applied ≠ authorized (4H digest space)                 | action-mismatch.json                 | p-gate-results.json | 35    | 1     |
+| P6     | required ∧ ¬applied_supported                          | enforcement-gap.json                 | p-gate-results.json | 36    | 1     |
+| P7     | policy/intent digest mismatch                          | digest-mismatch.json                 | p-gate-results.json | 37    | 1     |
+| P8     | high-consequence class flagged non-authority           | sink-underdeclared (built on demand) | p-gate-results.json | 38    | 1     |
+| P4-pre | stored safe=true fails 4H recompute                    | 4H dirty cert                        | offline-report.json | 20–26 | 1     |
 ```
 
 Create `docs/research/llm-shield/STAGE_4J_REVIEWER_CHECKLIST.md`:
@@ -1152,6 +1352,22 @@ Create `docs/research/llm-shield/STAGE_4J_THREAT_MODEL.md` — the §0.6 block v
 Create `docs/research/llm-shield/STAGE_4J_CLOSEOUT.md` — milestone, P0–P8 status, falsifier-per-gate table, full §0.5 non-claims, deferred work, release decision (default: tag code, freeze public wording; §5 citations verified 2026-07-02 — arXiv 2605.24248 and SSRN 5688982 both real; Meyman/PCD is nearest prior art, lead with the wedge).
 
 Create `docs/research/llm-shield/evidence/stage-4j/README.md` — what each emitted JSON is, and the non-claim reminder.
+
+- [ ] **Step 3b: Fill the positioning brief's §10 Measured column from the real J5 reproduce**
+
+`docs/research/llm-shield/STAGE_4J_POSITIONING_BRIEF.md` §10 ships with every Measured cell as `⏳ pending build`. J5 has now emitted the per-gate evidence, so replace each cell with the **observed** result — never hand-typed, always read back from the harness output:
+
+```bash
+# Per-gate observed raw→typed exits (must equal the Expected column, or a gate is broken):
+node -e '
+const r = JSON.parse(require("node:fs").readFileSync("docs/research/llm-shield/evidence/stage-4j/p-gate-results.json","utf8"));
+for (const g of r.gates) console.log(g.gate, g.fixture, `${g.rawCode} -> ${g.typedCode}`);
+'
+# Byte-stable golden hash of the reproduce summary (one shared value for the column footnote):
+shasum -a 256 docs/research/llm-shield/evidence/stage-4j/reproduce-summary.json
+```
+
+Edit §10: set each Measured cell to the observed `raw → typed` for that gate (e.g. `31 → 1 ✅`), and append the golden `sha256:` under the table. If ANY observed cell differs from its Expected value, STOP — do not "fix" the brief; the divergence is a real Stage 4J failure to investigate. Leave the DRAFT banner's other items (citations) untouched — those are cleared by human verification, not by this build.
 
 - [ ] **Step 4: Run to verify it passes; format; full suite**
 
