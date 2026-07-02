@@ -1,0 +1,158 @@
+{
+  "pack_version": "simurgh.evidence_pack.v1",
+  "run_manifest": {
+    "fixture_id": "stage4j_p8_underdeclared",
+    "mode": "stage4j_p8_underdeclared_fixture",
+    "model_identity_committed": "self-reported-fixture-model",
+    "model_identity_origin": "self_reported",
+    "parent_session": "session_stage4j_p8_underdeclared",
+    "run_id": "stage4j_p8_underdeclared"
+  },
+  "policy_bundle": {
+    "policy_version": "policy.v1",
+    "modes": {
+      "permissive": {
+        "block_authority_escalation": true,
+        "block_untrusted_to_external_egress": false,
+        "block_untrusted_to_secret_export": true
+      }
+    }
+  },
+  "sink_registry": {
+    "registry_version": "sinks.v1",
+    "sinks": [
+      {
+        "default_consequence_class": "external_egress",
+        "description": "Stage 4J P8 under-declared authority sink fixture",
+        "sink_id": "egress"
+      }
+    ]
+  },
+  "consequence_lattice": {
+    "lattice_version": "consequence_lattice.v1",
+    "order": ["read_only", "external_egress"]
+  },
+  "action_observation_log": [
+    {
+      "action_id": "act_001",
+      "action_type": "tool_call",
+      "boundary_id": "gateway_mediator_v1",
+      "consequence_class": "external_egress",
+      "event_version": "simurgh.stage4d.observation.v1",
+      "parent_session": "session_stage4j_p8_underdeclared",
+      "run_id": "stage4j_p8_underdeclared",
+      "sink_id": "egress",
+      "step_index": 0
+    }
+  ],
+  "observation_log_root": "76257179942f94f3e674eb5bf5859ea08aeac388c01aa8fa2cdafe59e86c698e",
+  "replay_material": {
+    "act_001": {
+      "decision_context": {
+        "policy_mode": "permissive",
+        "prior_decision_count": 0,
+        "rate_limit_bucket": "stage4j_p8_fixture_bucket"
+      },
+      "policy_features_source": {
+        "external_effect": true,
+        "input_sources": ["sys"],
+        "requires_authority": true,
+        "sink_id": "egress",
+        "user_explicitly_authorised": true
+      },
+      "resolved_args_redacted": {
+        "body_digest": "6666666666666666666666666666666666666666666666666666666666666666",
+        "contains_secret_marker": false,
+        "recipient_scope": "fixture_contact",
+        "tool_name": "send_email"
+      },
+      "taint_derivation_inputs": {
+        "authority_sink": false,
+        "sources": [
+          {
+            "source_id": "sys",
+            "label": "trusted"
+          }
+        ]
+      }
+    }
+  },
+  "receipts": [
+    {
+      "receipt_payload": {
+        "receipt_version": "simurgh.receipt.v1",
+        "run_id": "stage4j_p8_underdeclared",
+        "parent_session": "session_stage4j_p8_underdeclared",
+        "action_id": "act_001",
+        "step_index": 0,
+        "observation_event_hash": "490c84509654f59b195878a1778bd4d64c8419f3afa13d557470655cf72c0728",
+        "action_type": "tool_call",
+        "sink_id": "egress",
+        "consequence_class": "external_egress",
+        "boundary_id": "gateway_mediator_v1",
+        "input_integrity_summary": "trusted_only",
+        "decision": "allow",
+        "decision_reason_code": "POLICY_ALLOWED",
+        "decision_input": {
+          "policy_version": "policy.v1",
+          "policy_hash": "c4ba186dd6a5302d9b629d18c57ab46cbe7ace1b3b57b3ffd24d5c5aee6fc1f7",
+          "sink_registry_version": "sinks.v1",
+          "sink_registry_hash": "fbb93b2c9767fd701d928ef8956fcc9383b8c8ccfdec39c90b8b96c340ed1f51",
+          "consequence_lattice_hash": "21ca828d9d8b3be4f009a6ebb2e0413c7de24d580248a25fd784a1ea2795b84b",
+          "resolved_args_digest": "ca435be46404693c0286ff18562e936d103d845dbf501dd741685896bb11111a",
+          "policy_features_digest": "1e31491ceee6b541dc0c8af8fba0470ff835f8638b6c8f97edc7742cd5a3250a",
+          "taint_labels_digest": "42e29159471c6f54411a8131ea66f6798924984f37175a8b6c6cf05e7b9ccd71",
+          "context_digest": "1d4497a21229bf1e00b65b18f0fd328300fc24459bc8bf30666da0f4f705e6cd",
+          "untrusted_reached_authority": false,
+          "policy_mode": "permissive"
+        },
+        "model_identity_committed": "self-reported-fixture-model",
+        "model_identity_origin": "self_reported",
+        "prev_receipt_hash": "0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "receipt_hash": "8b6d35a477767ca95fc98cb1cdab7a901d3842af769341bf3156a243772b212b",
+      "signature": "m7jplUXxr+RHG7eo8A7UuNPbGn8RFByyvxtxUpS060ozvEZGCm5xgYkFXlSu3ELG2W04BHYMJ//vido8FJ8CAg=="
+    }
+  ],
+  "completeness_manifest": {
+    "manifest_version": "simurgh.completeness.v1",
+    "run_id": "stage4j_p8_underdeclared",
+    "observation_source": "gateway_mediator_v1",
+    "observed_action_log_hash": "c3c392c89e08c3f97026d56d17c7223405f2a69f5a560c24df1eab20234a0dfe",
+    "observation_log_root": "76257179942f94f3e674eb5bf5859ea08aeac388c01aa8fa2cdafe59e86c698e",
+    "observed_action_count": 1,
+    "receipt_count": 1,
+    "ordered_action_ids": ["act_001"],
+    "ordered_observation_event_hashes": [
+      "490c84509654f59b195878a1778bd4d64c8419f3afa13d557470655cf72c0728"
+    ],
+    "ordered_receipt_hashes": ["8b6d35a477767ca95fc98cb1cdab7a901d3842af769341bf3156a243772b212b"],
+    "per_sink_tally": {
+      "egress": {
+        "observed": 1,
+        "allow": 1,
+        "block": 0
+      }
+    },
+    "session_merkle_root": "10b2e47129bce032e3fade9a48c3a9c05fcf92f7abfa53dda67fb688fdf5e2b7"
+  },
+  "non_claims": {
+    "not_model_safety": true,
+    "not_jailbreak_immunity": true,
+    "not_policy_correctness": true,
+    "not_complete_for_unmediated_actions": true,
+    "not_kernel_enforced": true,
+    "not_live_model_identity_proof": true,
+    "not_production_certification": true,
+    "not_ground_truth_outside_mediated_surface": true
+  },
+  "signer_public_key": {
+    "key_type": "Ed25519",
+    "format": "spki-pem",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAm/UWig+wO3PnInf6iAPvjtoWRfAdQ0Fu+AADWQajFXs=\n-----END PUBLIC KEY-----\n",
+    "fingerprint": "1b3741ebb4d83bedeca5ab1a669e58784465f4f029ae439768d33604f79d6eed"
+  },
+  "signer_key_id": "simurgh-stage4d-test-key-v1",
+  "signer_public_key_fingerprint": "1b3741ebb4d83bedeca5ab1a669e58784465f4f029ae439768d33604f79d6eed",
+  "pack_hash": "312c6947237089e2b31b83fc121d21e07a7dabef87513f56d8fd30b9b9290145"
+}
