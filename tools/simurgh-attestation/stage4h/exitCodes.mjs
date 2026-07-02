@@ -71,6 +71,15 @@ export const PCTA_REASONS = Object.freeze([
   "authority_sink_underdeclared",
 ]);
 
+// Stage 4K EBA raw code (30). Fills the slot the 4J spec reserved for extraction-budget
+// accounting. Raw 30 means EXACTLY extraction_budget_exceeded — harness/self-test failures
+// are 29. Raw 39 is reserved in prose (v1 extraction_scope_violation) and NOT mapped here.
+export const EBA_RAW_CODES = Object.freeze({
+  EXTRACTION_BUDGET_EXCEEDED: 30,
+});
+
+export const EBA_REASONS = Object.freeze(["extraction_budget_exceeded"]);
+
 export const HARNESS_CODES = Object.freeze({
   CLEAN_RUN_FALSELY_REJECTED: 19,
 });
@@ -100,6 +109,7 @@ export const RUN_LEVEL_BY_RAW = Object.freeze({
   27: 1,
   28: 2,
   29: 3,
+  30: 1,
   31: 1,
   32: 1,
   33: 1,
