@@ -1,0 +1,76 @@
+{
+  "schema": "simurgh.pcta.p-gate-results.v1",
+  "source": "observed by re-running the committed fixture matrix; never hand-written",
+  "gates": [
+    {
+      "gate": "P0",
+      "fixture": "clean-authorized.json",
+      "rawCode": 0,
+      "typedCode": 0,
+      "reason": null
+    },
+    {
+      "gate": "P1",
+      "fixture": "missing-proof.json",
+      "rawCode": 31,
+      "typedCode": 1,
+      "reason": "authorization_proof_missing"
+    },
+    {
+      "gate": "P2",
+      "fixture": "forged-sig.json",
+      "rawCode": 32,
+      "typedCode": 1,
+      "reason": "authorization_signature_invalid"
+    },
+    {
+      "gate": "P3",
+      "fixture": "stale-proof.json",
+      "rawCode": 33,
+      "typedCode": 1,
+      "reason": "authorization_proof_stale"
+    },
+    {
+      "gate": "P4-pre",
+      "fixture": "dirty-cert-reverify.json",
+      "rawCode": 24,
+      "typedCode": 1,
+      "reason": "dfi_reverify_failed:explicit_flow_integrity_violation"
+    },
+    {
+      "gate": "P4",
+      "fixture": "untrusted-authority.json",
+      "rawCode": 34,
+      "typedCode": 1,
+      "reason": "authority_from_untrusted_context"
+    },
+    {
+      "gate": "P5",
+      "fixture": "action-mismatch.json",
+      "rawCode": 35,
+      "typedCode": 1,
+      "reason": "authorized_action_mismatch"
+    },
+    {
+      "gate": "P6",
+      "fixture": "enforcement-gap.json",
+      "rawCode": 36,
+      "typedCode": 1,
+      "reason": "enforcement_required_not_applied"
+    },
+    {
+      "gate": "P7",
+      "fixture": "digest-mismatch.json",
+      "rawCode": 37,
+      "typedCode": 1,
+      "reason": "pcta_policy_or_intent_digest_mismatch"
+    },
+    {
+      "gate": "P8",
+      "fixture": "sink-underdeclared.json",
+      "rawCode": 38,
+      "typedCode": 1,
+      "reason": "authority_sink_underdeclared"
+    }
+  ]
+}

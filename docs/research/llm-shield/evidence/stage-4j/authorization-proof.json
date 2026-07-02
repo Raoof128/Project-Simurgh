@@ -1,0 +1,24 @@
+{
+  "payload": {
+    "schema": "simurgh.pcta.authorization.v1",
+    "tool": "send_email",
+    "action_class": "external_egress",
+    "authorized_action_digest": "sha256:d399595de50e433a50afafb33e22a51ee13b7bab9878faadf70b1c90b7c21ec9",
+    "user_intent_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+    "policy_digest": "sha256:c4ba186dd6a5302d9b629d18c57ab46cbe7ace1b3b57b3ffd24d5c5aee6fc1f7",
+    "authority_source": "user_confirmed",
+    "untrusted_context_reached_authority": false,
+    "dfi_certificate_digest": "sha256:641f6a83ace8cf7137aeb537e581ff618115232e8a85183ff5d26e037e6cb213",
+    "epoch": 1782892800,
+    "nonce": "nonce000",
+    "nonce_scope": "signed_pack",
+    "enforcement": {
+      "required": true,
+      "applied": true,
+      "applied_action_class": "external_egress",
+      "applied_action_digest": "sha256:d399595de50e433a50afafb33e22a51ee13b7bab9878faadf70b1c90b7c21ec9"
+    }
+  },
+  "signature": "ed25519:KnPAHth33i270lkbW/WYsKkRLND++twDBg2v1ZaAC9p339t6CFs+A9UoDgIJp7GpDem3lboF5yp8+qgA2K9ODw==",
+  "public_key_fingerprint": "sha256:c6733bc11182d06357d4ce6cf1e186ed2bbf823f470ca355db819acd07650c0a"
+}
