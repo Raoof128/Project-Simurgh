@@ -3,7 +3,11 @@
 > **Status: DRAFT companion brief for Stage 4J (PCTA).** This is positioning material, not part of the executable plan. Two things must happen before any external / Anthropic-facing use:
 >
 > 1. **Citations & incident facts are NOT yet independently verified** — the June 2026 Fable 5 / Mythos 5 dates, the outlet corroboration in §13, and arXiv 2501.18837 / 2605.24248. See the **Verification checklist** at the end. The method note's hedge is deliberate; do not drop it.
-> 2. **The §10 "Measured" column is filled by the Stage 4J executing agent** from the real J5 reproduce run (`scripts/reproduce-llm-shield-stage4j.sh` + `docs/research/llm-shield/evidence/stage-4j/p-gate-results.json`). Until Stage 4J is built it stays `⏳ pending`. Fabricating those numbers would fail PCTA's own T1–T7.
+> 2. ~~The §10 "Measured" column awaits the J5 reproduce.~~ **DONE 2026-07-02:** the column is
+>    filled from the real J5 reproduce (`p-gate-results.json`, observed-not-asserted, all ten
+>    gates equal Expected; provenance note under the §10 table). One naming update landed with
+>    the build: the T7 fixture is `sink-underdeclared.json`, and a `P4-pre` row (`24 → 1`, the
+>    mandatory 4H re-verify surfacing the 4H band) was added for completeness.
 
 ---
 
@@ -116,19 +120,32 @@ From the Redeploying Fable 5 post (Jun 30, 2026):
 
 Because every PCTA check is a recompute (not a judgment), its outcomes are **fixed and reproducible** — a hostile reviewer runs the harness and gets exactly these exits. This is the honest analogue of a benchmark: not a score we assert, but a result _they_ reproduce.
 
-| Reviewer test / gate                       | Fixture                             | Expected raw → typed | Deterministic? | Measured (J5 reproduce) |
-| ------------------------------------------ | ----------------------------------- | -------------------- | -------------- | ----------------------- |
-| T1 / P0 · clean authorized call            | `clean-authorized.json`             | `0 → 0`              | Yes            | ⏳ pending build        |
-| T2 / P1 · strip the proof                  | `missing-proof.json`                | `31 → 1`             | Yes            | ⏳ pending build        |
-| T3 / P2 · corrupt / unpinned signature     | `forged-sig.json`                   | `32 → 1`             | Yes            | ⏳ pending build        |
-| T4 / P3 · replay stale proof               | `stale-proof.json`                  | `33 → 1`             | Yes            | ⏳ pending build        |
-| T5 / P4 · authority from untrusted context | `untrusted-authority.json`          | `34 → 1`             | Yes            | ⏳ pending build        |
-| T6 / P5 · applied ≠ authorized action      | `action-mismatch.json`              | `35 → 1`             | Yes            | ⏳ pending build        |
-| P6 · enforcement required, not applied     | `enforcement-gap.json`              | `36 → 1`             | Yes            | ⏳ pending build        |
-| P7 · intent / policy digest mismatch       | `digest-mismatch.json`              | `37 → 1`             | Yes            | ⏳ pending build        |
-| T7 / P8 · under-declared authority sink    | `authority-sink-underdeclared.json` | `38 → 1`             | Yes            | ⏳ pending build        |
+| Reviewer test / gate                       | Fixture                    | Expected raw → typed | Deterministic? | Measured (J5 reproduce) |
+| ------------------------------------------ | -------------------------- | -------------------- | -------------- | ----------------------- |
+| T1 / P0 · clean authorized call            | `clean-authorized.json`    | `0 → 0`              | Yes            | `0 → 0` ✅              |
+| T2 / P1 · strip the proof                  | `missing-proof.json`       | `31 → 1`             | Yes            | `31 → 1` ✅             |
+| T3 / P2 · corrupt / unpinned signature     | `forged-sig.json`          | `32 → 1`             | Yes            | `32 → 1` ✅             |
+| T4 / P3 · replay stale proof               | `stale-proof.json`         | `33 → 1`             | Yes            | `33 → 1` ✅             |
+| P4-pre · dirty cert fails the 4H recompute | `dirty-cert-reverify.json` | `24 → 1` (4H band)   | Yes            | `24 → 1` ✅             |
+| T5 / P4 · authority from untrusted context | `untrusted-authority.json` | `34 → 1`             | Yes            | `34 → 1` ✅             |
+| T6 / P5 · applied ≠ authorized action      | `action-mismatch.json`     | `35 → 1`             | Yes            | `35 → 1` ✅             |
+| P6 · enforcement required, not applied     | `enforcement-gap.json`     | `36 → 1`             | Yes            | `36 → 1` ✅             |
+| P7 · intent / policy digest mismatch       | `digest-mismatch.json`     | `37 → 1`             | Yes            | `37 → 1` ✅             |
+| T7 / P8 · under-declared authority sink    | `sink-underdeclared.json`  | `38 → 1`             | Yes            | `38 → 1` ✅             |
 
-> The **Measured** column is intentionally empty until Stage 4J's J5 one-command reproduce runs — it will be filled with the observed exit, the byte-stable golden hash, and wall-clock timing from the actual harness. We do not pre-populate it: an attestation project that fabricates its own benchmark row would fail its own T1–T7. What _is_ already asserted (the Expected column) is fixed by the exit-code ledger §0.3 of the plan.
+**Measured provenance (filled 2026-07-02, Stage 4J J5 reproduce):** every Measured cell is read
+back from `docs/research/llm-shield/evidence/stage-4j/p-gate-results.json` — emitted by the
+harness, refused at emission if it disagrees with the expected matrix, never hand-typed. All
+observed results equal Expected. Byte-stable golden:
+`sha256:070c24154e76715590e762c7472ccad1717f1458c47da2999f3baff38d975570`
+(`reproduce-summary.json`; Node 26). Reproduce:
+`PATH=/opt/homebrew/bin:$PATH scripts/reproduce-llm-shield-stage4j.sh`.
+
+> The **Measured** column was deliberately left empty until Stage 4J's J5 one-command reproduce
+> ran — we did not pre-populate it: an attestation project that fabricates its own benchmark row
+> would fail its own T1–T7. It is now filled exclusively from the harness-emitted
+> `p-gate-results.json` (see the provenance note above); the Expected column was and remains
+> fixed by the exit-code ledger §0.3 of the plan.
 
 ## 11. Why now — the policy & standards demand signal
 
@@ -180,7 +197,11 @@ Adopting both is not two isolated tools; it is a **single, legible security stor
 - [ ] **Incident facts (§Context, §13).** Confirm the 9 Jun launch/split, 12 Jun suspension, 26–30 Jun restoration, and the CNBC/BBC/NBC/Hacker News/Fortune corroboration against primary sources. Memory records Jun-12 lockdown / Jun-18 severity framework / Jun-26 Lutnick as web-verified 2026-06-27; the day-level dates here are finer and unconfirmed.
 - [ ] **arXiv 2501.18837 (Constitutional Classifiers)** — confirm title, authors, and the ~0.38% refusal-rate figure.
 - [ ] **arXiv 2605.24248 (MCP attested tool-admission)** — the one reference still unverified across the whole PCTA effort; verify or drop before publication.
-- [ ] **§9/§10 P-gate numbering.** Reason-codes (31–38) match the plan's exit ledger §0.3 exactly. Reconcile the P-*number*↔code labels (P1..P8 here) against the plan's actual P0–P8 gate definitions and gate order (P4-pre→P1→P2→P3→P7→P4→P8→P5→P6) so a reviewer reading both docs hits no contradiction.
-- [ ] **§10 Measured column** filled by the Stage 4J executing agent from the real J5 reproduce (see banner).
+- [x] **§9/§10 P-gate numbering.** DONE 2026-07-02: the labels here now match the built stage's
+      validation matrix one-to-one (P0→0 … P8→38, plus P4-pre→24). Note the built gate order is
+      P4-pre→P1→P2→P3→P7→**P8→P4**→P5→P6 — P8 runs before P4 by design (38-over-34 precedence
+      for under-declared high-consequence sinks; see `STAGE_4J_THREAT_MODEL.md`).
+- [x] **§10 Measured column** DONE 2026-07-02: filled from the real J5 reproduce
+      (`p-gate-results.json`; all observed = expected; golden hash in the §10 provenance note).
 
 _Method note: incident facts above are corroborated by multiple independent outlets (see §13), not a single company post; names and dates are as reported as of 2 Jul 2026 and pending independent verification. The broader academic positioning (FIDES, classic Proof-Carrying Authorization, MCP admission) and its citation hygiene live in the consolidated PCTA plan; one reference (arXiv 2605.24248) remains to be independently verified before external use._
