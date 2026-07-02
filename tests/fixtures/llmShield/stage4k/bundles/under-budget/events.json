@@ -1,0 +1,82 @@
+[
+  {
+    "event_id": "ev_consumer_alpha_session_a_00",
+    "consumer_id": "consumer_alpha",
+    "session_id": "session_a",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  {
+    "event_id": "ev_consumer_alpha_session_a_01",
+    "consumer_id": "consumer_alpha",
+    "session_id": "session_a",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  {
+    "event_id": "ev_consumer_alpha_session_a_02",
+    "consumer_id": "consumer_alpha",
+    "session_id": "session_a",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+  },
+  {
+    "event_id": "ev_consumer_alpha_session_a_03",
+    "consumer_id": "consumer_alpha",
+    "session_id": "session_a",
+    "window": "2026-07",
+    "signal_class": "tool_use_trajectory",
+    "response_id_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+  },
+  {
+    "event_id": "ev_consumer_alpha_session_b_00",
+    "consumer_id": "consumer_alpha",
+    "session_id": "session_b",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  {
+    "event_id": "ev_consumer_alpha_session_b_01",
+    "consumer_id": "consumer_alpha",
+    "session_id": "session_b",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  {
+    "event_id": "ev_consumer_alpha_session_b_02",
+    "consumer_id": "consumer_alpha",
+    "session_id": "session_b",
+    "window": "2026-07",
+    "signal_class": "reasoning_trace",
+    "response_id_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+  },
+  {
+    "event_id": "ev_consumer_beta_session_c_00",
+    "consumer_id": "consumer_beta",
+    "session_id": "session_c",
+    "window": "2026-07",
+    "signal_class": "reasoning_trace",
+    "response_id_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  {
+    "event_id": "ev_consumer_beta_session_c_01",
+    "consumer_id": "consumer_beta",
+    "session_id": "session_c",
+    "window": "2026-07",
+    "signal_class": "reasoning_trace",
+    "response_id_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  {
+    "event_id": "ev_consumer_beta_session_c_02",
+    "consumer_id": "consumer_beta",
+    "session_id": "session_c",
+    "window": "2026-07",
+    "signal_class": "tool_use_trajectory",
+    "response_id_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+  }
+]

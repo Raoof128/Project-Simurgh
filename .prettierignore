@@ -55,4 +55,10 @@ docs/research/llm-shield/evidence/stage-4e-browser-agent-containment-run/**/*.js
 docs/research/llm-shield/evidence/stage-4f-containment-utility-pareto/**/*.json
 docs/research/llm-shield/evidence/stage-4d-to-4f-integration/**/*.json
 docs/research/llm-shield/evidence/stage-4g-adaptive-red-team-campaign/**/*.json
+# Stage 4K EBA deterministic fixtures + evidence: emitted by the committed builder/emitter as
+# JSON.stringify(v, null, 2) and byte-compared verbatim by the reproduce script and E2E tests.
+# Prettier collapses single-element arrays (session_ids, denied_over_budget) onto one line,
+# which would break that byte-identity; integrity is guaranteed by the signed manifest.
+tests/fixtures/llmShield/stage4k/**/*.json
+docs/research/llm-shield/evidence/stage-4k/**/*.json
 tools/agentdojo-simurgh-adapter/.pytest_cache

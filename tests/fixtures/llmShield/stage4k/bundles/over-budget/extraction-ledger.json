@@ -1,0 +1,20 @@
+{
+  "schema": "simurgh.eba.ledger.v1",
+  "entries": [
+    {
+      "consumer_id_digest": "sha256:9dd2dfa4c4f4088695743c27860cd9f142b4268c65172006b0b0e379b51f2cee",
+      "window": "2026-07",
+      "session_ids": [
+        "sha256:2ae39738a5f428e4214fd56a7a45c230895881ffdcb22a950a12dfc650d50b1f",
+        "sha256:984867e715ab146502de0f86ac35428ebf849340aa75f586f2b1e089886becf4"
+      ],
+      "class_counts": {
+        "final_answer": 0,
+        "reasoning_trace": 2,
+        "reward_like_judgment": 3,
+        "tool_use_trajectory": 0
+      },
+      "weighted_total": 18
+    }
+  ]
+}
