@@ -68,5 +68,7 @@ Non-Claims below.
 
 ## Release decision
 
-Default: land as Stage 4K / Banger EP9. Tag only on Raouf's explicit confirmation (repo tags
-have already reached v2.19; run `git tag --sort=-creatordate` before choosing a version).
+Shipped 2026-07-02 as Stage 4K / Banger EP9: PR #79 merged, tag+release
+`v2.20.0-stage-4k-eba` published on merge commit `8c729d7e`. Verified on merged main before
+tagging: 1271/1271 unit tests, e2e 19 pass + 1 skip (pre-26 node guard), reproduce
+byte-idempotent (`stage4k reproduce: ALL GREEN`), and zero `src/llmShield` diffs.
