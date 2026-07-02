@@ -1,7 +1,7 @@
 # Stage 4K — Verifiable Extraction-Budget Attestation (EBA) — Design Spec
 
-**Date:** 2026-07-02 · **Owner:** Raouf · **Rev:** 2 (amended from the 2026-07-01 ACPR draft; 8 review amendments folded in — see §7)
-**Status:** Design approved pending user review.
+**Date:** 2026-07-02 · **Owner:** Raouf · **Rev:** 3 (Rev 2 = 8 review amendments, see §7; Rev 3 = plan-approval patches: §0.1A event schema + ordering lock, §0.3 key/byte-stability clarification)
+**Status:** APPROVED for plan-writing (user sign-off 2026-07-02).
 **Next step:** `writing-plans` turns this design into the task-by-task TDD implementation plan (K1→K6). This spec is the WHAT/WHY; the plan is the HOW.
 
 ---
@@ -71,6 +71,30 @@ _Why:_ if `E` is heuristic, the attestation is theatre. It MUST be precommitted,
 - **Consumer digest is pseudonymous, not anonymous:** `consumer_id_digest = sha256(FIXTURE_SALT || consumer_id)` with `FIXTURE_SALT` a **pinned constant in `constants.mjs`** (a random salt would break the byte-stable golden; a committed salt provides NO protection against brute-forcing guessable IDs). Carry `consumer_digest_is_pseudonymous_not_anonymous` (§0.5); never present the salt as identity protection.
 - Canonical JSON (repo `canonicalJson`) + SHA-256; deterministic key order; no timestamps beyond the declared `window` label. `E` is pure and offline — no network, no model, no clock.
 
+### 0.1A Event schema + deterministic ordering lock [Part A]
+
+_Why:_ without a frozen event schema and sort order, two honest implementations can compute the same counts yet produce different byte-stable ledgers — breaking the reviewer reproduction story.
+
+Each input event has **exactly** these fields:
+
+```json
+{
+  "event_id": "string",
+  "consumer_id": "string",
+  "session_id": "string",
+  "window": "string",
+  "signal_class": "one of the frozen signal classes",
+  "response_id_digest": "string"
+}
+```
+
+**Locked rules:**
+
+- No prompt, output, transcript, tool args, plaintext response body, or additional identity fields are allowed. **Unknown fields fail closed** (`29 → 3`) unless explicitly allowlisted in `constants.mjs`.
+- Events are sorted before aggregation by, in order: (1) `consumer_id_digest`, (2) `window`, (3) `session_id`, (4) `event_id`, (5) `response_id_digest`, (6) `signal_class`. The sort is a frozen constant of the ledger builder — never locale-dependent (byte-wise lexicographic).
+- **Duplicate `event_id` within the same consumer/window/session is a schema violation** and routes `29 → 3` (double-counting must be impossible by construction, not by convention).
+- `session_ids` in the ledger output are the sorted digests of the distinct `session_id` values aggregated (order inherited from the event sort).
+
 ### 0.2 Extraction-budget gate + new exit code `30` [Part A]
 
 | Raw code        | Meaning                                                                        | Run-level (wrapper) |
@@ -107,7 +131,7 @@ _Why:_ if `E` is heuristic, the attestation is theatre. It MUST be precommitted,
 
 **Locked rules:**
 
-- **Churn-safe reproduce (4J lesson):** fixture builds draw a fresh Ed25519 key per run, so rebuilds are non-idempotent. The reproduce script NEVER rewrites committed fixtures — it regenerates into `STAGE4K_FIXTURE_OUT` temp dirs and **byte-compares the deterministic artifacts** (ledger, attestation, exposure matrix) against the committed ones.
+- **Churn-safe reproduce (4J lesson):** fixture generation may create a fresh temporary 4K signing key, so rebuilds are non-idempotent on signature bytes. The reproduce script NEVER rewrites committed fixtures — it regenerates into `STAGE4K_FIXTURE_OUT` temp dirs. **Committed golden comparisons are limited to the deterministic public artifacts**: canonical ledger, attestation payload, exposure matrix, and verifier result. Signature-bearing committed fixtures use the pinned committed keypair (public key committed as `eba-signer.pub`); temp regenerations sign with their own fresh key and are verified against their own substrate, never byte-compared on signatures.
 - The script's final exit is ALWAYS routed through the wrapper (Node one-liner over `stage4CodeForRawCode`) — never a bare `exit 1`; every step goes through a `set -euo pipefail`-safe `run_step` helper so a failing command can never exit before the raw code is set.
 - Evidence-refusal rule (4J pattern): the evidence emitter exits non-zero if any observed verdict diverges from the expected matrix — evidence contradicting the contract is never written.
 - shellcheck is **not installed on this machine**: run it best-effort/CI-side; absence is named in the closeout deferred-work section, never silently skipped.
