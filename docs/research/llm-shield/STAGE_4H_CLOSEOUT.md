@@ -27,6 +27,10 @@ Stage 4H proves deterministic, model-free re-derivation that rejects validly sig
 
 This is not kernel sandboxing, not model safety, not execution truth, not implicit-flow security, not multi-field collusion closure, not statistical robustness, and not future-run guarantee.
 
+## Scope Of This Closeout
+
+This closeout covers the 4H core milestone ladder (4H.0–4H.5), which is the artifact tagged `v2.18.0-stage-4h-proof-carrying-containment`. The later full-chain end-to-end audit (branch `stage-4h-full-chain-e2e-audit`) is a separate, unmerged addendum and is not part of this tagged closeout.
+
 ## Release Decision
 
 Implementation may be tagged after verification as "Stage 4H proof-carrying containment v0". Public-priority "first ..." wording remains frozen unless explicitly approved later.
