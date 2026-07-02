@@ -1,0 +1,54 @@
+{
+  "type": "simurgh.vca.dfi_certificate.v1",
+  "proof_system": "simurgh-ifc-lattice-v0",
+  "claim": "explicit_data_flow_integrity",
+  "scope": {
+    "explicit_data_edges": true,
+    "control_dependence_edges": false,
+    "implicit_flow_security": false
+  },
+  "run_id_hash": "sha256:ea99cc1927ef5c25bec147484caa822fb20cbed6f814c711d5259a09853b13e3",
+  "base_pack_digest": "sha256:53d57ad8e196c2a49338634a3e25f9eaa9f66a86775b679623e2a3992dc02f43",
+  "replay_root": "sha256:4e2a3e2deb0d9ceab415d874be51e40fbdb894b4f2fd95e97bc417ec598052a6",
+  "premise_digest": "sha256:b412f77b2e7b82492bc697710b8bbfd02a5ddf32709bea8a87959de8ea02b8f9",
+  "policy_digest": "sha256:c4ba186dd6a5302d9b629d18c57ab46cbe7ace1b3b57b3ffd24d5c5aee6fc1f7",
+  "lattice_digest": "sha256:21ca828d9d8b3be4f009a6ebb2e0413c7de24d580248a25fd784a1ea2795b84b",
+  "checker_version": "4h-v0",
+  "derivation": {
+    "derived_node_labels": [
+      {
+        "node": "action:act_001",
+        "label": "trusted",
+        "premise_refs": [
+          "premise:sha256:05ec48684ca866b9127f7be6119e3fff50cfb4bc6313d5be09535dc4a7bc3a95"
+        ]
+      },
+      {
+        "node": "source:sys",
+        "label": "trusted",
+        "premise_refs": [
+          "premise:sha256:aa65674727a31ce6329faf9077b13221b3348e5d5335acd75174be5dfb35708a"
+        ]
+      }
+    ],
+    "lattice_steps": [
+      {
+        "op": "combine",
+        "node": "action:act_001",
+        "inputs": ["trusted"],
+        "result": "trusted"
+      }
+    ],
+    "sink_safety_claims": [],
+    "premise_refs": [
+      "premise:sha256:05ec48684ca866b9127f7be6119e3fff50cfb4bc6313d5be09535dc4a7bc3a95",
+      "premise:sha256:aa65674727a31ce6329faf9077b13221b3348e5d5335acd75174be5dfb35708a"
+    ]
+  },
+  "summary": {
+    "sources_checked": 1,
+    "edges_checked": 1,
+    "authority_sinks_checked": 0,
+    "violations": 0
+  }
+}

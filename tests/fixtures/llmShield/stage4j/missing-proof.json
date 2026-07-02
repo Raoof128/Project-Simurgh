@@ -6,7 +6,7 @@
     "dfi_certificate_digest": "sha256:641f6a83ace8cf7137aeb537e581ff618115232e8a85183ff5d26e037e6cb213",
     "pcta_proof_digest": "sha256:8df1eab0722e5d249bb3df124b6395e514f19b06e2c14dda5a76692b2ed7532f",
     "pcta_manifest_digest": "sha256:3217e7a91c977c4eea4e65a58040e1182ccace017a4b482ac4e150aade229b78",
-    "signature": "ed25519:bs9Hw2ZLBZrN0pgmCtviOOl8wr5aBvjSUesN/8PCTOh8Tn9RUudZIBNAj082DrKBKyhnAb579mLyMvywUrcHBQ=="
+    "signature": "ed25519:chRqYPE18bQzkYMHNbluGL+pDitMhMxISG2ZsHYrj2oBQAoEqOv92BeGaIHjztb83FdaJhScNe9bwrindy3RDQ=="
   },
   "action_id": "act_001"
 }

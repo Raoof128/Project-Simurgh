@@ -34,5 +34,9 @@
   "digest-mismatch": {
     "raw": 37,
     "typed": 1
+  },
+  "sink-underdeclared": {
+    "raw": 38,
+    "typed": 1
   }
 }

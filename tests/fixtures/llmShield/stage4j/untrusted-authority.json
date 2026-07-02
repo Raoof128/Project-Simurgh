@@ -20,8 +20,8 @@
         "applied_action_digest": "sha256:d399595de50e433a50afafb33e22a51ee13b7bab9878faadf70b1c90b7c21ec9"
       }
     },
-    "signature": "ed25519:G4dkJA1lN8uFMiIFfBEYv0B07Gd//jrblwJNKfAh5AlN0obzPx0BTHLScGaRlMGFvwR6nj9/iLGyozyrxbaDCw==",
-    "public_key_fingerprint": "sha256:ce785a41ec20e3c82b97603e671d93c5e4711e67639a38dfe6868fdd339bfcd3"
+    "signature": "ed25519:w/+7C5JRr2vCsxt8oj31d48OwXxfsLrZKx8W38TlvQSuhr4OsjDkRrCOiK+JrovZKNbKFw7q0KC+/dnhj59ZAQ==",
+    "public_key_fingerprint": "sha256:c6733bc11182d06357d4ce6cf1e186ed2bbf823f470ca355db819acd07650c0a"
   },
   "pcta_manifest": {
     "manifest_version": "simurgh.pcta.manifest.v1",
@@ -29,7 +29,7 @@
     "dfi_certificate_digest": "sha256:641f6a83ace8cf7137aeb537e581ff618115232e8a85183ff5d26e037e6cb213",
     "pcta_proof_digest": "sha256:52a10f5a334ba651b8e0571203a5fa00cfa3f9b6dfc501d9db3bec564daaafab",
     "pcta_manifest_digest": "sha256:1f37559e8f5efa2e1cf67f1e49ad1c8832515fb24d6cd797a75855b69e578f6d",
-    "signature": "ed25519:Pf7prezorqFEBRJAlSRXJseLcFh7qrmQME/rfopUYlY/8UD5VPbiH9g6Q5ZM5ukDf9KcNQq8b6R1lVPBPydWDQ=="
+    "signature": "ed25519:NEDb7sUnVDfjKes6xRE+GeTFaefbmUCFC8tt09ghKGni7JDYval4m8r7bml6AhZuQxWyIbXtrqFUYzIkd5X8CA=="
   },
   "action_id": "act_001"
 }

@@ -27,7 +27,9 @@ function loadDfiSubstrate(fixture) {
   const base =
     fixture.dfi === "q4-dirty-one-edge-delta"
       ? "tests/fixtures/llmShield/stage4h/q4-dirty-one-edge-delta"
-      : "tests/fixtures/llmShield/stage4h/q0-clean-disconnected-untrusted";
+      : fixture.dfi === "stage4j-underdeclared-egress"
+        ? "tests/fixtures/llmShield/stage4j/substrate/underdeclared-egress"
+        : "tests/fixtures/llmShield/stage4h/q0-clean-disconnected-untrusted";
   return {
     pack: readJson(`${base}-base-pack.json`),
     sig: readFileSync(`${base}-base-pack.sig`, "utf8").trim(),
@@ -106,23 +108,28 @@ export async function runPctaCore({ fixture, pinnedPubkeyPath, epochWindow = 315
     );
   }
 
-  // P4 — authority non-derivability, read from the RE-VERIFIED cert's authority-sink claim.
-  const claim = substrate.cert.derivation.sink_safety_claims.find(
-    (c) => c.node === `action:${f.action_id}`
-  );
-  const p4 = resolveP4({ authoritySource: p.authority_source, sinkSafetyClaim: claim });
-  if (!p4.ok) return finish(fixture, PCTA_RAW_CODES.AUTHORITY_FROM_UNTRUSTED_CONTEXT, p4.reason);
-
-  // P8 — authority-sink under-declaration cross-check.
+  // P8 — authority-sink under-declaration cross-check. Runs BEFORE P4 by design: sink
+  // membership in the cert's claims derives from the SAME authority_sink flag P8 reads
+  // (canonicalPremises.mjs), so an under-declared high-consequence action has no claim and a
+  // P4-first order would report the generic 34 — 38 is the correct root-cause diagnosis.
+  // Receipt null-guard is load-bearing: a bogus/no-receipt action_id must SKIP P8 and fall
+  // through to P4's missing-claim rejection (34), never crash.
   const material = substrate.pack.replay_material[f.action_id];
   const flaggedAuthority = material?.taint_derivation_inputs?.authority_sink === true;
-  if (HIGH_CONSEQUENCE.has(receipt.consequence_class) && !flaggedAuthority) {
+  if (receipt && HIGH_CONSEQUENCE.has(receipt.consequence_class) && !flaggedAuthority) {
     return finish(
       fixture,
       PCTA_RAW_CODES.AUTHORITY_SINK_UNDERDECLARED,
       "authority_sink_underdeclared"
     );
   }
+
+  // P4 — authority non-derivability, read from the RE-VERIFIED cert's authority-sink claim.
+  const claim = substrate.cert.derivation.sink_safety_claims.find(
+    (c) => c.node === `action:${f.action_id}`
+  );
+  const p4 = resolveP4({ authoritySource: p.authority_source, sinkSafetyClaim: claim });
+  if (!p4.ok) return finish(fixture, PCTA_RAW_CODES.AUTHORITY_FROM_UNTRUSTED_CONTEXT, p4.reason);
 
   // P5 — applied == authorized == receipt.resolved_args_digest (4H digest space).
   const receiptDigest = `sha256:${receipt.decision_input.resolved_args_digest}`;

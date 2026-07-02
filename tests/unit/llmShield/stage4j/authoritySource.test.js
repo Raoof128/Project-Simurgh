@@ -47,3 +47,13 @@ test("P4 rejects an untrusted_context authority source outright", () => {
   assert.equal(r.ok, false);
   assert.equal(r.reason, "authority_from_untrusted_context");
 });
+
+test("P4 missing claim rejects with its OWN reason (not mislabelled as untrusted-context)", () => {
+  const r = resolveP4({
+    authoritySource: "user_confirmed",
+    declaredUntrustedReachedAuthority: false,
+    sinkSafetyClaim: undefined, // action absent from the re-verified cert's sink claims
+  });
+  assert.equal(r.ok, false);
+  assert.equal(r.reason, "no_authority_sink_claim");
+});

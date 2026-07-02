@@ -15,12 +15,17 @@ export function canCarry(source, hasHigherRankedProof) {
 
 // P4: DFI-derived truth beats the declaration. The sinkSafetyClaim comes from a 4H certificate
 // that the verifier has ALREADY re-run through validateDerivation (precondition 1), so its
-// `safe` field is the recomputed truth, not a producer assertion.
+// `safe` field is the recomputed truth, not a producer assertion. Both rejection paths map to
+// raw 34, but each carries its own reason: a MISSING claim (action absent from the cert's
+// authority-sink set) is "no_authority_sink_claim", not mislabelled untrusted-context.
 export function resolveP4({ authoritySource, sinkSafetyClaim }) {
   if (authoritySource === "untrusted_context") {
     return { ok: false, reason: "authority_from_untrusted_context" };
   }
-  if (!sinkSafetyClaim || sinkSafetyClaim.safe !== true) {
+  if (!sinkSafetyClaim) {
+    return { ok: false, reason: "no_authority_sink_claim" };
+  }
+  if (sinkSafetyClaim.safe !== true) {
     return { ok: false, reason: "authority_from_untrusted_context" };
   }
   return { ok: true };
