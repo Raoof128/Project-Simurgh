@@ -12,11 +12,11 @@ PCTA v0 — a **Provenance-Carrying Tool Attestation** unit bound to the merged 
 
 ## "Attest, don't own" (the spine, locked)
 
-Simurgh does **not** dispatch or block tools — the host runtime performs allow/deny. PCTA is an *attested enforcement hook*: it verifies, post-hoc and offline, that the host's authorization decision carried a valid proof, that authority never derived from untrusted context, and that what executed matches what was authorized. **Verifiable receipt, not a passport; not a reference monitor; not a gateway.**
+Simurgh does **not** dispatch or block tools — the host runtime performs allow/deny. PCTA is an _attested enforcement hook_: it verifies, post-hoc and offline, that the host's authorization decision carried a valid proof, that authority never derived from untrusted context, and that what executed matches what was authorized. **Verifiable receipt, not a passport; not a reference monitor; not a gateway.**
 
 ## Naming note (deliberate)
 
-"PCTA" expands to **Provenance-Carrying Tool Attestation** — *not* "proof-carrying authorization," which is Bauer's established term (Princeton TR-677-03, 2003, building on Appel & Felten's Proof-Carrying Authentication, CCS'99) for an **inline guard that checks a submitted proof and decides** — architecturally the opposite of what Simurgh does. We keep the letters, drop the colliding phrase, and position explicitly against classic PCA in §5.
+"PCTA" expands to **Provenance-Carrying Tool Attestation** — _not_ "proof-carrying authorization," which is Bauer's established term (Princeton TR-677-03, 2003, building on Appel & Felten's Proof-Carrying Authentication, CCS'99) for an **inline guard that checks a submitted proof and decides** — architecturally the opposite of what Simurgh does. We keep the letters, drop the colliding phrase, and position explicitly against classic PCA in §5.
 
 ---
 
@@ -53,65 +53,65 @@ One canonical, signable unit per tool call; digest bound into the same Ed25519-s
 }
 ```
 
-- **DFI binding.** `dfi_certificate_digest` MUST reference the 4H DFI certificate for the *same run*. PCTA is built on 4H's explicit-flow-integrity proof and **requires that certificate to be valid** (see §0.6 / P4 precondition 1).
+- **DFI binding.** `dfi_certificate_digest` MUST reference the 4H DFI certificate for the _same run_. PCTA is built on 4H's explicit-flow-integrity proof and **requires that certificate to be valid** (see §0.6 / P4 precondition 1).
 - **Run-root binding.** The PCTA proof roots into the existing 4H **signed-pack manifest** as the single declared-run object. The 4H manifest already commits `base_pack_digest + certificate_digest + hermeticity_attestation_digest` under one `merkle_root` (verified: `base_pack_digest` IS under the root); the PCTA proof digest is bound into that manifest acyclically. No new `run_pack_digest` is introduced.
 - **Signed envelope (P2).** Acyclic canonical `payload` + `ed25519` signature **outside** the payload + `public_key_fingerprint`. A signature is accepted only if it verifies **and** the fingerprint is in the reviewer-side **pinned keyset** (valid signature under an unpinned key still fails `32` — forged ≠ merely malformed).
 - **Two-digest-space carve-out (load-bearing).** There are two digest spaces and they must not be conflated:
   - **Proof-envelope digest** (the PCTA proof's own canonical digest, for manifest binding) = **RFC 8785 JCS + SHA-256**.
-  - **Action-comparison digests** (`authorized_action_digest`, `enforcement.applied_action_digest`) = **4H's `sha256Canonical`**, computed over the *same* resolved-action object as the 4H receipt's `resolved_args_digest`, and compared **inside 4H's digest space** — reuse the receipt's `resolved_args_digest` directly, do NOT recompute with JCS. (Mismatched canonicalizers here are a silent-failure mode: P5/P6 would never match. This carve-out prevents it.)
+  - **Action-comparison digests** (`authorized_action_digest`, `enforcement.applied_action_digest`) = **4H's `sha256Canonical`**, computed over the _same_ resolved-action object as the 4H receipt's `resolved_args_digest`, and compared **inside 4H's digest space** — reuse the receipt's `resolved_args_digest` directly, do NOT recompute with JCS. (Mismatched canonicalizers here are a silent-failure mode: P5/P6 would never match. This carve-out prevents it.)
 - **Action-digest binding (P5).** `action_class` equality is necessary but not sufficient; reject (`35`) whenever `applied_action_digest ≠ authorized_action_digest` in 4H's digest space.
 - **Replay scope (P3).** `nonce_scope: "signed_pack"` — nonce uniqueness + epoch freshness recomputed **within the signed pack** (pack-local replay only; not global anti-replay in v0).
 
 ### 0.2 Authority-source lattice (frozen)
 
-| Authority source | Rank | Can carry a tool action? |
-| --- | --- | --- |
-| `user_confirmed` | 3 (highest) | Yes |
-| `policy_preauthorized` | 2 | Yes (within policy scope; scope-verification deferred — see non-claims) |
-| `agent_derived` | 1 | Only with a higher-ranked proof present |
-| `untrusted_context` | 0 (lowest) | **NEVER — hard reject (`34`)** |
+| Authority source       | Rank        | Can carry a tool action?                                                |
+| ---------------------- | ----------- | ----------------------------------------------------------------------- |
+| `user_confirmed`       | 3 (highest) | Yes                                                                     |
+| `policy_preauthorized` | 2           | Yes (within policy scope; scope-verification deferred — see non-claims) |
+| `agent_derived`        | 1           | Only with a higher-ranked proof present                                 |
+| `untrusted_context`    | 0 (lowest)  | **NEVER — hard reject (`34`)**                                          |
 
 **Killer invariant (P4), read-not-walk.** An authorization proof whose `authority_source` resolves — through the bound 4H DFI certificate's **authority-requiring sink** claim — to `untrusted_context` is rejected (`34 authority_from_untrusted_context`), **even when the proof declares `untrusted_context_reached_authority:false`**. DFI-derived truth always beats the producer's declaration.
 
-Implementation: **P4 reads the bound certificate's `sink_safety_claim` for the authority-requiring sink** rather than re-walking a lattice — sound *only because* PCTA re-runs 4H's `validateDerivation` in the same offline pass (P4 precondition 1, §0.6), which cryptographically forces stored `safe` to equal the recomputed value. The protected object is the host-declared **authority-requiring action sink** (4H's `authority_sink:true` flag), not a separate "authority-granting edge" (which 4H does not model). *Untrusted context can influence answer text, but cannot become authority into a declared authority sink.*
+Implementation: **P4 reads the bound certificate's `sink_safety_claim` for the authority-requiring sink** rather than re-walking a lattice — sound _only because_ PCTA re-runs 4H's `validateDerivation` in the same offline pass (P4 precondition 1, §0.6), which cryptographically forces stored `safe` to equal the recomputed value. The protected object is the host-declared **authority-requiring action sink** (4H's `authority_sink:true` flag), not a separate "authority-granting edge" (which 4H does not model). _Untrusted context can influence answer text, but cannot become authority into a declared authority sink._
 
 ### 0.3 Exit-code ledger — extends 4H §0.1 (frozen, total, fail-closed)
 
-| Raw code | Meaning (gate) | Run-level |
-| --- | --- | --- |
-| `0` | verifier accepted a well-formed authorized call (P0) | `0` |
-| `31` | `authorization_proof_missing` (P1) | `1` |
-| `32` | `authorization_signature_invalid` — bad sig or unpinned key (P2) | `1` |
-| `33` | `authorization_proof_stale` — epoch/pack-local nonce replay (P3) | `1` |
-| `34` | `authority_from_untrusted_context` (P4 — killer invariant) | `1` |
-| `35` | `authorized_action_mismatch` — applied ≠ proven, or executed sans proof (P5) | `1` |
-| `36` | `enforcement_required_not_applied` (P6) | `1` |
-| `37` | `pcta_policy_or_intent_digest_mismatch` (P7) | `1` |
-| `38` | `authority_sink_underdeclared` — high-consequence class flagged non-authority (P8) | `1` |
-| `28` | `checker_not_offline` (reused 4H Q3 pre-flight) | `2` |
-| `20–26` (4H band) | surfaced verbatim when the **mandatory 4H re-verify fails** (P4 precondition 1) | per 4H |
-| `29` / unmapped | internal error / exhaustiveness breach | `3` (fail-closed) |
+| Raw code          | Meaning (gate)                                                                     | Run-level         |
+| ----------------- | ---------------------------------------------------------------------------------- | ----------------- |
+| `0`               | verifier accepted a well-formed authorized call (P0)                               | `0`               |
+| `31`              | `authorization_proof_missing` (P1)                                                 | `1`               |
+| `32`              | `authorization_signature_invalid` — bad sig or unpinned key (P2)                   | `1`               |
+| `33`              | `authorization_proof_stale` — epoch/pack-local nonce replay (P3)                   | `1`               |
+| `34`              | `authority_from_untrusted_context` (P4 — killer invariant)                         | `1`               |
+| `35`              | `authorized_action_mismatch` — applied ≠ proven, or executed sans proof (P5)       | `1`               |
+| `36`              | `enforcement_required_not_applied` (P6)                                            | `1`               |
+| `37`              | `pcta_policy_or_intent_digest_mismatch` (P7)                                       | `1`               |
+| `38`              | `authority_sink_underdeclared` — high-consequence class flagged non-authority (P8) | `1`               |
+| `28`              | `checker_not_offline` (reused 4H Q3 pre-flight)                                    | `2`               |
+| `20–26` (4H band) | surfaced verbatim when the **mandatory 4H re-verify fails** (P4 precondition 1)    | per 4H            |
+| `29` / unmapped   | internal error / exhaustiveness breach                                             | `3` (fail-closed) |
 
 **Locked rule:** `0→0`; `{31..38}→1`; `28→2`; `29→3`; **unknown → 3**. 4H raw codes retain their existing 4H mappings. (`30 extraction_budget_exceeded` stays EBA/4K's; PCTA does not use it.) Q0–Q7 mappings unchanged.
 
 **4H re-verify note (P4 precondition 1).** PCTA's "verify signed pack" step means **run the 4H verifier** (which runs `validateDerivation`), not check a digest. If the re-verify fails — e.g. a certificate whose stored `sink_safety_claim.safe=true` fails 4H's recompute — PCTA surfaces the **underlying 4H raw code (20–26 band)** through the shared wrapper, NOT a PCTA `31–38` code. It is a 4H-layer failure detected during the required re-verify; layering is preserved.
 
-**`38` extends the frozen band deliberately.** P8 is the one local cross-check on the authority-sink *membership* gap (§0.6). It is a v0 include; it can be deferred by dropping `38`/P8 and marking the membership gap a pure named residual — that is the only knob if the band must stay `31–37`.
+**`38` extends the frozen band deliberately.** P8 is the one local cross-check on the authority-sink _membership_ gap (§0.6). It is a v0 include; it can be deferred by dropping `38`/P8 and marking the membership gap a pure named residual — that is the only knob if the band must stay `31–37`.
 
 ### 0.4 P-gate ledger (the verifier — one falsifier per gate)
 
-| Gate | Falsifies | Fixture | Raw → typed exit |
-| --- | --- | --- | --- |
-| **P0** | positive control: well-formed, `user_confirmed`, DFI-clean call accepted | `clean-authorized.json` | `0 → 0` |
-| **P1** | no authority proof for an executed (recorded-allowed) action | `missing-proof.json` | `31 → 1` |
-| **P2** | forged/invalid signature or signer key not pinned | `forged-sig.json` | `32 → 1` |
-| **P3** | stale epoch / duplicate nonce within the pack | `stale-proof.json` | `33 → 1` |
-| **P4** | authority resolves to untrusted via the bound cert's authority-sink claim (declaration ignored) | `untrusted-authority.json` | `34 → 1` |
-| **P4-pre** | bound cert's stored `safe=true` fails 4H re-verify (stored ≠ recomputed) | `stale-derivation-cert.json` | 4H band `24`/`26` → `1` |
-| **P5** | `applied_action_digest ≠ authorized_action_digest` (or recorded-allowed sans proof) | `action-mismatch.json` | `35 → 1` |
-| **P6** | enforcement required but no receipt supports `applied` (`¬applied_supported`) | `enforcement-gap.json` | `36 → 1` |
-| **P7** | intent/policy digest mismatch | `digest-mismatch.json` | `37 → 1` |
-| **P8** | receipt declares high-consequence class but `authority_sink:false` | `sink-underdeclared.json` | `38 → 1` |
+| Gate       | Falsifies                                                                                       | Fixture                      | Raw → typed exit        |
+| ---------- | ----------------------------------------------------------------------------------------------- | ---------------------------- | ----------------------- |
+| **P0**     | positive control: well-formed, `user_confirmed`, DFI-clean call accepted                        | `clean-authorized.json`      | `0 → 0`                 |
+| **P1**     | no authority proof for an executed (recorded-allowed) action                                    | `missing-proof.json`         | `31 → 1`                |
+| **P2**     | forged/invalid signature or signer key not pinned                                               | `forged-sig.json`            | `32 → 1`                |
+| **P3**     | stale epoch / duplicate nonce within the pack                                                   | `stale-proof.json`           | `33 → 1`                |
+| **P4**     | authority resolves to untrusted via the bound cert's authority-sink claim (declaration ignored) | `untrusted-authority.json`   | `34 → 1`                |
+| **P4-pre** | bound cert's stored `safe=true` fails 4H re-verify (stored ≠ recomputed)                        | `stale-derivation-cert.json` | 4H band `24`/`26` → `1` |
+| **P5**     | `applied_action_digest ≠ authorized_action_digest` (or recorded-allowed sans proof)             | `action-mismatch.json`       | `35 → 1`                |
+| **P6**     | enforcement required but no receipt supports `applied` (`¬applied_supported`)                   | `enforcement-gap.json`       | `36 → 1`                |
+| **P7**     | intent/policy digest mismatch                                                                   | `digest-mismatch.json`       | `37 → 1`                |
+| **P8**     | receipt declares high-consequence class but `authority_sink:false`                              | `sink-underdeclared.json`    | `38 → 1`                |
 
 Fixtures for P5/P6 are constructed from real **decision-receipts** (fields `decision`, `resolved_args_digest`, `sink_id`, `consequence_class`), not synthetic execution records, so they exercise the actual `applied_supported` recompute path.
 
@@ -120,10 +120,10 @@ Fixtures for P5/P6 are constructed from real **decision-receipts** (fields `deci
 ### 0.5 Honesty ceiling / non-claims (state up front)
 
 - `not_runtime_gateway` / `not_reference_monitor` — Simurgh does not dispatch or block; the host performs allow/deny.
-- `host_owns_dispatch` — a tool that ran without a proof is *detected post-hoc* (`31`/`35`), not *prevented* inline.
+- `host_owns_dispatch` — a tool that ran without a proof is _detected post-hoc_ (`31`/`35`), not _prevented_ inline.
 - `authority_source` is **declared-then-provenance-checked**, not ground-truth intent.
 - **`applied` is faithfulness-of-record — specifically "recorded-as-allowed"**, not kernel execution-truth (execution-truth gap = R6/4M). Correspondingly, T2's left side is `recorded_allowed(action,k)`, not `executed(...)`.
-- **`authority_sink` membership is host-declared.** P4 recomputes untrusted-non-reachability *into* declared authority sinks; it does not derive *which* actions require authority. Under-declaration shrinks P4 coverage (P8 is a partial, non-closing cross-check; full closer = R6/4M).
+- **`authority_sink` membership is host-declared.** P4 recomputes untrusted-non-reachability _into_ declared authority sinks; it does not derive _which_ actions require authority. Under-declaration shrinks P4 coverage (P8 is a partial, non-closing cross-check; full closer = R6/4M).
 - `pack_local_replay_only` (no cross-pack anti-replay in v0).
 - `policy_scope_deferred` — v0 headlines only `user_confirmed`; `policy_preauthorized` stays lattice-valid but its scope is unverified until a later stage.
 - **single-delta** (`not_multifield_collusion`); **explicit-flow only** (`implicit_flow_security=false`); **not model safety / not execution truth**; **process-boundary, not a kernel sandbox** (R6/4M); `attestation_assumes_reviewer_runtime`.
@@ -131,15 +131,15 @@ Fixtures for P5/P6 are constructed from real **decision-receipts** (fields `deci
 
 ### 0.6 Dishonest-producer threat model (the scope of "under a dishonest producer")
 
-**v0 scope = A (correctly-scoped boundary, not "least work").** PCTA v0 attests **consistency + provenance of the declared evidence, relative to the pinned 4H manifest root**. Both attack classes beyond this line are outside what any offline single-producer recompute can *ever* close, so the honest v0 job is to make the boundary loud and precise, not to overreach it.
+**v0 scope = A (correctly-scoped boundary, not "least work").** PCTA v0 attests **consistency + provenance of the declared evidence, relative to the pinned 4H manifest root**. Both attack classes beyond this line are outside what any offline single-producer recompute can _ever_ close, so the honest v0 job is to make the boundary loud and precise, not to overreach it.
 
-| Attack | Closes it | Where it belongs |
-| --- | --- | --- |
-| Forge signature / unpinned key | P2 pinned keyset | **v0 (A)** ✅ |
-| Internally inconsistent evidence (digest/premise/derivation mismatch) | offline recomputation (P4 re-verify, P5, P7, DFI binding) | **v0 (A)** ✅ |
-| **Applied-action reality** ("said bob@company, really sent attacker@evil") | non-fabricable transcript of the outbound call — zkTLS/DECO (a witnessable TLS event) | **deferred**, T2/P5 surface |
-| **Internal-flow reality** ("was authority actually clean") AND **authority-sink-set completeness** ("is this action honestly flagged") | attested runtime (TEE/eBPF) = **R6/4M** — zkTLS cannot see the internal graph | **deferred**, T1/P4 surface |
-| Post-hoc swap / backdate / fork | commit-before-challenge protocol (not a mere anchor) | **witness/DAP line** (3W → WIE/4O), not PCTA |
+| Attack                                                                                                                                 | Closes it                                                                             | Where it belongs                             |
+| -------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- | -------------------------------------------- |
+| Forge signature / unpinned key                                                                                                         | P2 pinned keyset                                                                      | **v0 (A)** ✅                                |
+| Internally inconsistent evidence (digest/premise/derivation mismatch)                                                                  | offline recomputation (P4 re-verify, P5, P7, DFI binding)                             | **v0 (A)** ✅                                |
+| **Applied-action reality** ("said bob@company, really sent attacker@evil")                                                             | non-fabricable transcript of the outbound call — zkTLS/DECO (a witnessable TLS event) | **deferred**, T2/P5 surface                  |
+| **Internal-flow reality** ("was authority actually clean") AND **authority-sink-set completeness** ("is this action honestly flagged") | attested runtime (TEE/eBPF) = **R6/4M** — zkTLS cannot see the internal graph         | **deferred**, T1/P4 surface                  |
+| Post-hoc swap / backdate / fork                                                                                                        | commit-before-challenge protocol (not a mere anchor)                                  | **witness/DAP line** (3W → WIE/4O), not PCTA |
 
 **Two omission surfaces, two deferred closers** — this is the same T1/T2 decomposition projected onto the omission axis:
 
@@ -148,7 +148,7 @@ Fixtures for P5/P6 are constructed from real **decision-receipts** (fields `deci
 
 **Relocations / exclusions.** A transparency-log/timestamp **anchor is NOT an omission defense** and does not belong in PCTA — against a single producer who fabricates at authoring time and signs honestly, anti-swap buys nothing. Anchoring only pays off inside a commit-before-challenge protocol, which is the witness/DAP line.
 
-**Frozen claim (scoped).** *Simurgh proves that — with respect to the declared explicit-flow graph and the declared authority-sink set, and under a producer who cannot forge crypto or present internally inconsistent evidence — the host achieved complete mediation with clean-provenance authority for this run, without being the mediator.* **Prove mediation ≠ perform mediation.**
+**Frozen claim (scoped).** _Simurgh proves that — with respect to the declared explicit-flow graph and the declared authority-sink set, and under a producer who cannot forge crypto or present internally inconsistent evidence — the host achieved complete mediation with clean-provenance authority for this run, without being the mediator._ **Prove mediation ≠ perform mediation.**
 
 ---
 
@@ -167,7 +167,7 @@ New modules:
 - `verify-stage4j-pcta.mjs` — the P0–P8 verifier; offline pre-flight; `process.exitCode = stage4CodeForRawCode(rawCode)` on every path.
 - `build-stage4j-fixtures.mjs` — builds the §0.4 fixtures (P5/P6 from real receipts).
 
-**Invariant preserved:** no change to 4H's pinned nine-step verifier, `canonicalPremises.mjs`, or Q0–Q7. PCTA *consumes* the DFI certificate; it never modifies it.
+**Invariant preserved:** no change to 4H's pinned nine-step verifier, `canonicalPremises.mjs`, or Q0–Q7. PCTA _consumes_ the DFI certificate; it never modifies it.
 
 **Tech/pins (unchanged):** Node.js ESM, `node:test`, `node:assert/strict`; RFC 8785 JCS + SHA-256 (proof envelope) + 4H `sha256Canonical` (action digests) + RFC 8032 Ed25519 + RFC 6962/9162 Merkle; determinism pins `TZ=UTC`, `LC_ALL=C`, `LANG=C`, `SOURCE_DATE_EPOCH=0`, `PYTHONHASHSEED=0`, `env -u` scrub, `NO_NETWORK=1` advisory (harness is the enforced boundary); Prettier + shellcheck.
 
@@ -196,16 +196,16 @@ TDD, J1→J6 in order; J1 (shared exit-wrapper extension) is a hard dependency f
 
 ## 5. Frontier positioning (credit, then the wedge)
 
-The capability canon — **OCap / macaroons / Biscuit / UCAN / SPIFFE-SVID / Zanzibar** — proves authority **possession**. **Attested MCP tool-server admission (arXiv 2605.24248, Metere)** and **inline IFC systems / reference monitors — FIDES (arXiv 2505.23643, Costa & Köpf et al.; an IFC *planner*), MVAR (github.com/mvar-security/mvar), and classic Proof-Carrying Authorization (Bauer, Princeton 2003; Appel & Felten, CCS'99)** — are **inline, trusted enforcers that *decide***. None prove authority provenance offline, and none expose a third-party-recomputable faithfulness check. PCTA never decides — it proves.
+The capability canon — **OCap / macaroons / Biscuit / UCAN / SPIFFE-SVID / Zanzibar** — proves authority **possession**. **Attested MCP tool-server admission (arXiv 2605.24248, Metere)** and **inline IFC systems / reference monitors — FIDES (arXiv 2505.23643, Costa & Köpf et al.; an IFC _planner_), MVAR (github.com/mvar-security/mvar), and classic Proof-Carrying Authorization (Bauer, Princeton 2003; Appel & Felten, CCS'99)** — are **inline, trusted enforcers that _decide_**. None prove authority provenance offline, and none expose a third-party-recomputable faithfulness check. PCTA never decides — it proves.
 
-**Closest prior art on the proof/replay axis — differentiate hardest here — is Meyman's Proof-Carrying Decisions (4TS, SSRN 5688982, 2025):** cryptographically-signed, deterministically-replayable decision artifacts for adversarial inspection *without trusting organizational self-assessment* — the same "prove, don't claim" spirit as PCTA. **The wedge:** 4TS/PCD proves governance-gate custody, lineage, and replay *of a decision*; PCTA proves two properties 4TS/PCD does not — **authority non-derivability (T1)** against an *independent* IFC flow-integrity certificate, and the **applied-action faithfulness biconditional (T2)** — scoped by the §0.6 dishonest-producer threat model. PCD asks "can you replay this decision's gates?"; PCTA asks "did untrusted context reach authority, and did exactly the authorized action execute?", bound to a flow-integrity proof PCD does not carry.
+**Closest prior art on the proof/replay axis — differentiate hardest here — is Meyman's Proof-Carrying Decisions (4TS, SSRN 5688982, 2025):** cryptographically-signed, deterministically-replayable decision artifacts for adversarial inspection _without trusting organizational self-assessment_ — the same "prove, don't claim" spirit as PCTA. **The wedge:** 4TS/PCD proves governance-gate custody, lineage, and replay _of a decision_; PCTA proves two properties 4TS/PCD does not — **authority non-derivability (T1)** against an _independent_ IFC flow-integrity certificate, and the **applied-action faithfulness biconditional (T2)** — scoped by the §0.6 dishonest-producer threat model. PCD asks "can you replay this decision's gates?"; PCTA asks "did untrusted context reach authority, and did exactly the authorized action execute?", bound to a flow-integrity proof PCD does not carry.
 
-> *(Citations verified 2026-07-02: arXiv 2605.24248 (Metere) and SSRN 5688982 (Meyman, 4TS/Proof-Carrying Decisions) are both real. Lead any external use with the Meyman wedge above — it is the nearest prior art. Re-run the full §5 prior-art sweep before publication.)*
+> _(Citations verified 2026-07-02: arXiv 2605.24248 (Metere) and SSRN 5688982 (Meyman, 4TS/Proof-Carrying Decisions) are both real. Lead any external use with the Meyman wedge above — it is the nearest prior art. Re-run the full §5 prior-art sweep before publication.)_
 
-**Frozen claim (razor-specific, scoped to §0.6).** PCTA decomposes reference-monitor *complete mediation* (Anderson) into two independently-falsifiable properties an untrusting reviewer recomputes offline from the signed pack, under a dishonest producer (§0.6 scope) — the formal core of "attest, don't own." Prove mediation ≠ perform mediation.
+**Frozen claim (razor-specific, scoped to §0.6).** PCTA decomposes reference-monitor _complete mediation_ (Anderson) into two independently-falsifiable properties an untrusting reviewer recomputes offline from the signed pack, under a dishonest producer (§0.6 scope) — the formal core of "attest, don't own." Prove mediation ≠ perform mediation.
 
-- **T1 · Authority Non-Derivability.** Predicate: for the host-declared authority-sink set in the 4H DFI certificate bound by `dfi_certificate_digest`, **no untrusted-context source reaches any authority-requiring sink** — recomputed offline via the mandatory 4H re-verify. Novelty: retarget IFC non-interference off the answer channel onto the authority-requiring sink as the protected object. **FIDES contrast (closest prior art):** FIDES's Trusted-Action rule enforces this integrity condition *inline, as the planner*; T1's contribution is that the condition is recomputed **post-hoc, offline, producer-independently** from the signed pack by an untrusting reviewer. FIDES *is* the mediator; PCTA *attests* that mediation held without being it. Load-bearing falsifier = P4 declaration-override (`34`). Honest ceilings (§0.5): authority-sink *membership* is declared, not derived; internal-flow reality is R6/4M.
-- **T2 · Applied-Action Faithfulness.** Biconditional: `recorded_allowed(action,k) ⇔ ∃ a valid bound proof with applied_action_digest = authorized_action_digest (action_class=k) AND applied_supported`. Two falsifier directions: (i) recorded-allowed sans proof → `35`; (ii) digest/class mismatch or `required ∧ ¬applied_supported` → `35`/`36`. Converts complete mediation from a property a *trusted monitor guarantees* into a biconditional the *adversary's own reviewer verifies offline*. Honest ceiling: `applied` = recorded-as-allowed, not execution-truth (R6/4M); applied-action reality closer = zkTLS/DECO.
+- **T1 · Authority Non-Derivability.** Predicate: for the host-declared authority-sink set in the 4H DFI certificate bound by `dfi_certificate_digest`, **no untrusted-context source reaches any authority-requiring sink** — recomputed offline via the mandatory 4H re-verify. Novelty: retarget IFC non-interference off the answer channel onto the authority-requiring sink as the protected object. **FIDES contrast (closest prior art):** FIDES's Trusted-Action rule enforces this integrity condition _inline, as the planner_; T1's contribution is that the condition is recomputed **post-hoc, offline, producer-independently** from the signed pack by an untrusting reviewer. FIDES _is_ the mediator; PCTA _attests_ that mediation held without being it. Load-bearing falsifier = P4 declaration-override (`34`). Honest ceilings (§0.5): authority-sink _membership_ is declared, not derived; internal-flow reality is R6/4M.
+- **T2 · Applied-Action Faithfulness.** Biconditional: `recorded_allowed(action,k) ⇔ ∃ a valid bound proof with applied_action_digest = authorized_action_digest (action_class=k) AND applied_supported`. Two falsifier directions: (i) recorded-allowed sans proof → `35`; (ii) digest/class mismatch or `required ∧ ¬applied_supported` → `35`/`36`. Converts complete mediation from a property a _trusted monitor guarantees_ into a biconditional the _adversary's own reviewer verifies offline_. Honest ceiling: `applied` = recorded-as-allowed, not execution-truth (R6/4M); applied-action reality closer = zkTLS/DECO.
 
 **Empty-cell (PCTA-only under the full conjunction):** post-hoc + producer-independent + offline-recomputable + authority-provenance-integrity (T1) + applied-faithfulness biconditional (T2) + bound to an independent 4H DFI certificate, under a dishonest producer (§0.6 scope).
 
