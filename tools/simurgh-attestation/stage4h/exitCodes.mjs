@@ -47,6 +47,30 @@ export const PRIVACY_REASONS = Object.freeze([
   "freeform_field_present",
 ]);
 
+// Stage 4J PCTA raw codes (31-38). Additive: each maps to run-level 1 (contained
+// finding). The wrapper stays total — 4H band codes keep their 4H mapping, unknown → 3.
+export const PCTA_RAW_CODES = Object.freeze({
+  AUTHORIZATION_PROOF_MISSING: 31,
+  AUTHORIZATION_SIGNATURE_INVALID: 32,
+  AUTHORIZATION_PROOF_STALE: 33,
+  AUTHORITY_FROM_UNTRUSTED_CONTEXT: 34,
+  AUTHORIZED_ACTION_MISMATCH: 35,
+  ENFORCEMENT_REQUIRED_NOT_APPLIED: 36,
+  PCTA_POLICY_OR_INTENT_DIGEST_MISMATCH: 37,
+  AUTHORITY_SINK_UNDERDECLARED: 38,
+});
+
+export const PCTA_REASONS = Object.freeze([
+  "authorization_proof_missing",
+  "authorization_signature_invalid",
+  "authorization_proof_stale",
+  "authority_from_untrusted_context",
+  "authorized_action_mismatch",
+  "enforcement_required_not_applied",
+  "pcta_policy_or_intent_digest_mismatch",
+  "authority_sink_underdeclared",
+]);
+
 export const HARNESS_CODES = Object.freeze({
   CLEAN_RUN_FALSELY_REJECTED: 19,
 });
@@ -76,6 +100,14 @@ export const RUN_LEVEL_BY_RAW = Object.freeze({
   27: 1,
   28: 2,
   29: 3,
+  31: 1,
+  32: 1,
+  33: 1,
+  34: 1,
+  35: 1,
+  36: 1,
+  37: 1,
+  38: 1,
 });
 
 export function stage4CodeForRawCode(code) {

@@ -47,6 +47,15 @@ test("Stage 4H.4 exit map is explicit and collision-bounded", () => {
       27: 1,
       28: 2,
       29: 3,
+      // Stage 4J PCTA codes (reviewed extension of the shared ledger; spec §0.3).
+      31: 1,
+      32: 1,
+      33: 1,
+      34: 1,
+      35: 1,
+      36: 1,
+      37: 1,
+      38: 1,
     })
   );
 });
