@@ -1,0 +1,7 @@
+{
+  "rawCode": 0,
+  "reason": null,
+  "typed": 0,
+  "fixture": "tests/fixtures/llmShield/stage4j/clean-authorized.json",
+  "ok": true
+}

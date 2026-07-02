@@ -22,13 +22,15 @@ function loadPinnedKeyset(pubkeyPath) {
   return new Map([[fp, key]]);
 }
 
-// Locate the 4H substrate for a fixture's DFI binding.
-function loadDfiSubstrate(fixture) {
+// Locate the 4H substrate for a fixture's DFI binding. The stage4j-owned substrate resolves
+// RELATIVE TO THE FIXTURE FILE so a temp-regenerated fixture set is self-contained (its
+// proofs bind to its own freshly-built substrate, not the committed one).
+function loadDfiSubstrate(fixture, fixtureDir) {
   const base =
     fixture.dfi === "q4-dirty-one-edge-delta"
       ? "tests/fixtures/llmShield/stage4h/q4-dirty-one-edge-delta"
       : fixture.dfi === "stage4j-underdeclared-egress"
-        ? "tests/fixtures/llmShield/stage4j/substrate/underdeclared-egress"
+        ? `${fixtureDir}/substrate/underdeclared-egress`
         : "tests/fixtures/llmShield/stage4h/q0-clean-disconnected-untrusted";
   return {
     pack: readJson(`${base}-base-pack.json`),
@@ -41,7 +43,7 @@ function loadDfiSubstrate(fixture) {
 
 export async function runPctaCore({ fixture, pinnedPubkeyPath, epochWindow = 315360000 } = {}) {
   const f = readJson(fixture);
-  const substrate = loadDfiSubstrate(f);
+  const substrate = loadDfiSubstrate(f, dirname(fixture));
   const pinned = loadPinnedKeyset(pinnedPubkeyPath);
 
   // P4-pre — mandatory 4H re-verify (signature-authentic ≠ verifier-passed).
@@ -189,7 +191,8 @@ function emit(outPath, r) {
   writeFileSync(outPath, `${JSON.stringify({ ...r, ok: r.rawCode === 0 }, null, 2)}\n`);
 }
 
-if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+// argv[1] is undefined under `node -e` importers — guard so importing never crashes.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   main().catch((e) => {
     console.error(`stage4j pcta: ${e.message}`);
     process.exit(3);

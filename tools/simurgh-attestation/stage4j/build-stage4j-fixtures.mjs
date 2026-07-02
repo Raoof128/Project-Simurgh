@@ -9,7 +9,10 @@ import { buildSignedPackManifest } from "../stage4h/packBinding.mjs";
 import { PCTA_SCHEMA, buildPctaManifest, computeProofDigest } from "./authorizationProof.mjs";
 
 const H = "tests/fixtures/llmShield/stage4h";
-const OUT = "tests/fixtures/llmShield/stage4j";
+// Overridable so the reproduce script can regenerate into a TEMP dir and byte-compare the
+// deterministic matrix without churning committed fixtures (fresh keys per build otherwise
+// rewrite every signature → dirty tree on CI).
+const OUT = process.env.STAGE4J_FIXTURE_OUT || "tests/fixtures/llmShield/stage4j";
 const readJson = (p) => JSON.parse(readFileSync(p, "utf8"));
 
 function signProof(payload, priv, pub) {
