@@ -1,0 +1,29 @@
+{
+  "schema": "simurgh.eba.attestation.v1",
+  "class_weights": {
+    "final_answer": 1,
+    "tool_use_trajectory": 2,
+    "reasoning_trace": 3,
+    "reward_like_judgment": 4
+  },
+  "budget_policy_digest": "sha256:014478174dabe33029d62427af170c694c3f200d338080bba3028a4407363f7d",
+  "ledger_digest": "sha256:7e9ed26de6fa4d6576bd1ad9e38c798ca978de4bd0e594ffafff07a7c92e4e97",
+  "dfi_certificate_digest": "sha256:641f6a83ace8cf7137aeb537e581ff618115232e8a85183ff5d26e037e6cb213",
+  "per_consumer": [
+    {
+      "consumer_id_digest": "sha256:6853c86e5934ee206a968e376336eb6b3bc86582a069ae957e2d755c7374ed3c",
+      "window": "2026-07",
+      "weighted_total": 8,
+      "budget": 8,
+      "under_budget": true
+    },
+    {
+      "consumer_id_digest": "sha256:ebca42b445c1abc5ff7d320e9a0319e91ce5a596b9c8d7d472e9103305f2feca",
+      "window": "2026-07",
+      "weighted_total": 10,
+      "budget": 12,
+      "under_budget": true
+    }
+  ],
+  "denied_over_budget": []
+}

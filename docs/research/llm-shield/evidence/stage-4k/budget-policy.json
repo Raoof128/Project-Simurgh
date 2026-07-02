@@ -1,0 +1,14 @@
+{
+  "schema": "simurgh.eba.budget-policy.v1",
+  "window": "2026-07",
+  "class_weights": {
+    "final_answer": 1,
+    "tool_use_trajectory": 2,
+    "reasoning_trace": 3,
+    "reward_like_judgment": 4
+  },
+  "budgets": {
+    "sha256:ebca42b445c1abc5ff7d320e9a0319e91ce5a596b9c8d7d472e9103305f2feca": 12,
+    "sha256:6853c86e5934ee206a968e376336eb6b3bc86582a069ae957e2d755c7374ed3c": 8
+  }
+}

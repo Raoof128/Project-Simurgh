@@ -1,0 +1,23 @@
+{
+  "stage": "4K",
+  "gate": "Q8",
+  "matrix_rows": 2,
+  "results": {
+    "under-budget": {
+      "raw": 0,
+      "typed": 0,
+      "reason": null
+    },
+    "over-budget": {
+      "raw": 30,
+      "typed": 1,
+      "reason": "extraction_budget_exceeded"
+    }
+  },
+  "conjunction": {
+    "clean_run_all_under_budget": true,
+    "over_budget_double_caught": true,
+    "over_budget_double_raw_code": 30,
+    "q8_status": "pass"
+  }
+}
