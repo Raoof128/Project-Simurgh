@@ -52,8 +52,11 @@ reproduce script (tool unavailable on the build machine at closeout — script i
 
 ## Release decision
 
-Default posture: tag the code, freeze public wording. §5 citations verified 2026-07-02 —
-arXiv 2605.24248 and SSRN 5688982 both real; Meyman/PCD is the nearest prior art, lead with
-the wedge. The positioning brief's §10 Measured column is filled only from
-`p-gate-results.json` (observed, not asserted); its remaining verification checklist items
-(incident dates, 2501.18837) stay open for human sign-off before any external use.
+Default posture: tag the code, freeze public wording. §5 citations independently verified
+2026-07-02: arXiv 2605.24248 (Metere, "Attested Tool-Server Admission: A Security Extension to
+the Model Context Protocol", v1 2026-05-22 / v2 2026-06-01, cs.CR — the nearest MCP-admission
+prior art; lead with the wedge) and arXiv 2501.18837 (Sharma et al., "Constitutional
+Classifiers", 2025-01-31; abstract states the absolute 0.38% production-refusal increase) are
+both real. SSRN 5688982 was recorded real at authoring (not re-checked here). The positioning
+brief's §10 Measured column is filled only from `p-gate-results.json` (observed, not asserted);
+only the day-level incident dates stay open for human sign-off before any external use.
