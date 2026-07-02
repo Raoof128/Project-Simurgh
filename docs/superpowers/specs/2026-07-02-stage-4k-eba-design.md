@@ -87,6 +87,8 @@ _Why:_ if `E` is heuristic, the attestation is theatre. It MUST be precommitted,
 - Extend `RUN_LEVEL_BY_RAW` with `30: 1`; `stage4CodeForRawCode()` stays **total** and **fails closed to `3`** on unknown codes. All existing mappings (4H band, `28→2`, `29→3`, 4J band `31–38→1`) unchanged.
 - **Raw `30` means exactly one thing:** a bound consumer's cumulative `weighted_total > B`. A harness that fails its own falsifier (over-budget fixture NOT caught, deletion NOT fail-closed) is an **internal error: `29 → 3`** — never `30`. Gate semantics and harness self-test are separate channels.
 - Boundary `weighted_total === B` **passes** (budget is inclusive).
+- **Unknown signal class fails closed:** any event whose `signal_class` is not in the frozen class list is a schema violation — the verifier rejects with `29 → 3`, never silently skips or zero-weights it.
+- **Raw `39` is reserved (prose-only, not in the v0 ledger)** for `extraction_scope_violation` — the v1 authorized-distillation scope check (see §8 / EBA+ doc). v0 does not implement or emit it; reserving it now prevents a future stage from folding scope violations into `30`.
 - **Known mechanical gotcha (from 4J):** extending `RUN_LEVEL_BY_RAW` trips the 4H `exitWrapper` exhaustiveness test (it pins the exact object — update the pin, non-weakening) AND regenerates both derived `exit-map.json` copies (`docs/research/llm-shield/evidence/stage-4h/` + `tests/fixtures/llmShield/stage4h/expected-results/`). Commit all three together in the same ledger commit.
 
 ### 0.3 One-command pipeline contract — `scripts/reproduce-llm-shield-stage4k.sh` (frozen step order) [Part B]
@@ -191,9 +193,13 @@ _Why:_ if `E` is heuristic, the attestation is theatre. It MUST be precommitted,
 8. Lever-6 "first …" phrasing frozen pending prior-art sweep; added to the overclaim-guard regex.
    Plus framing: Q8 is a **conceptual sibling** of Q7, never "generalizes Q7."
 
-## 8. v2 candidates (explicitly out of v1; decide after this ships)
+## 8. Expansion path: EBA+ (v1) and v2 candidates — explicitly out of v0
 
-ZK proof-of-exposure (retires `attestation_assumes_reviewer_runtime` — sharpest lever); verifiable-DP accounting; query-complexity-grounded `B`; QIF-grounded `E` (retires `weights_are_declared_policy`); VKD retrieval-completeness (omission closure, ties EP7 transparency log); producer-independent positioning claim (gated on prior-art sweep). Sources logged in the ACPR session notes (2026-07-01).
+**The named v1/v2 expansion path is `docs/research/llm-shield/STAGE_4K_EBA_PLUS_ARCHITECTURE.md` ("EBA+ — Attested Distillation-Control Plane", DRAFT — its §18 source ledger is unverified and gates any external use).** Where that document and this spec disagree, this spec is normative for v0.
+
+**v1 (EBA+, each with its honesty guard named):** authorized-distillation scope ledger — scope violations emit **raw `39 extraction_scope_violation`** (reserved in §0.2, never folded into `30`); signal-surface expansion (`stored_completion`, `fine_tune_file`, `batch_export`, `external_egress`) as a **versioned E-v2** (3T→3U additive pattern; PCTA owns egress _authority_, EBA owns signal _exposure_ — no shared surface claims); consumer-binding ledger — cluster digests are **declared, trusted inputs** (4C modelled-labels lesson), never presented as Sybil detection; countermeasure receipts — **producer self-reports, recorded-not-verified** (3O self-report/oracle distinction); ZDR-compatible mode fixture.
+
+**v2 (only after v0/v1):** ZK proof-of-exposure (retires `attestation_assumes_reviewer_runtime` — sharpest lever); verifiable-DP accounting; query-complexity-grounded `B`; QIF-grounded `E` (retires `weights_are_declared_policy`); VKD retrieval-completeness (omission closure, ties EP7 transparency log); producer-independent positioning claim (gated on prior-art sweep). Sources logged in the ACPR session notes (2026-07-01) + the EBA+ §18 source ledger.
 
 ## 9. Self-review checklist (must all hold at closeout)
 
