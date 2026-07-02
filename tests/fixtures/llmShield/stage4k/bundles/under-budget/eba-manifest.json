@@ -1,0 +1,9 @@
+{
+  "schema": "simurgh.eba.manifest.v1",
+  "ledger_digest": "sha256:7e9ed26de6fa4d6576bd1ad9e38c798ca978de4bd0e594ffafff07a7c92e4e97",
+  "attestation_digest": "sha256:741f097a088ef26612918ae83a487f2ff0ff471f2f8c184cd704cb7fd0cd65a3",
+  "budget_policy_digest": "sha256:014478174dabe33029d62427af170c694c3f200d338080bba3028a4407363f7d",
+  "dfi_certificate_digest": "sha256:641f6a83ace8cf7137aeb537e581ff618115232e8a85183ff5d26e037e6cb213",
+  "signature": "ed25519:S67juTV7A/zd+GUGiRXGScjb96X8vFMu0xRtBh4c9VimOXldW3eckqt9ZzBQOegv7rPRBdfXjZgzAS1BWQlODg==",
+  "public_key_fingerprint": "sha256:b18b79e06276fc633be1c26ab957d73d56a1efe6d195e9b918d06d776ecf6437"
+}

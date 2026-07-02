@@ -1,0 +1,12 @@
+{
+  "under-budget": {
+    "raw": 0,
+    "typed": 0,
+    "reason": null
+  },
+  "over-budget": {
+    "raw": 30,
+    "typed": 1,
+    "reason": "extraction_budget_exceeded"
+  }
+}
