@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Ship an offline, third-party-reproducible verifier that attests, per tool call, that enforcement was required, a valid signed authority proof accompanied the action, untrusted context never became authority (into the declared authority-sink set), and the host applied exactly the authorized action — all replayable offline under a dishonest producer within the §0.6 scope.
+**Goal:** Ship an offline, third-party-reproducible verifier that attests, per tool call, that enforcement was required, a valid signed authority proof accompanied the action, untrusted context never became authority (into the declared authority-sink set), and the host recorded applying exactly the authorized action (`recorded_allowed`, not proof of execution) — all replayable offline under a dishonest producer within the §0.6 scope.
 
 **Architecture:** New module `tools/simurgh-attestation/stage4j/` that *consumes* the merged Stage 4H DFI certificate and reuses 4H verbatim (exit wrapper, offline harness, canonical hashing, Ed25519 pack verify, signed-pack manifest). PCTA never dispatches; it verifies post-hoc. The verifier runs P0–P8 gates inside `runOffline`, re-runs the 4H verifier as a mandatory pre-verify, and routes every exit through `stage4CodeForRawCode`.
 
