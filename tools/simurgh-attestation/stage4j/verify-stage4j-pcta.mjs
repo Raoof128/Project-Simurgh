@@ -82,7 +82,9 @@ export async function runPctaCore({ fixture, pinnedPubkeyPath, epochWindow = 315
 
   const p = f.proof.payload;
 
-  // P3 — pack-local freshness (epoch window; nonce uniqueness within the pack).
+  // P3 — pack-local freshness: epoch window only. Nonce uniqueness is structural here (one
+  // proof per fixture run); a multi-proof pack needs an explicit nonce-set check — deferred,
+  // named in the threat model. The anchor is the pack-local epoch the fixtures commit to.
   const anchor = 1782892800;
   if (Math.abs(p.epoch - anchor) > epochWindow) {
     return finish(fixture, PCTA_RAW_CODES.AUTHORIZATION_PROOF_STALE, "authorization_proof_stale");
