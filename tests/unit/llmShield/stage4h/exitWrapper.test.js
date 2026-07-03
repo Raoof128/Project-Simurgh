@@ -58,6 +58,11 @@ test("Stage 4H.4 exit map is explicit and collision-bounded", () => {
       36: 1,
       37: 1,
       38: 1,
+      // Stage 4L CCB codes (reviewed extension of the shared ledger; 4L spec §2). Raw 39
+      // stays reserved (v1 extraction_scope_violation) and is deliberately unmapped.
+      40: 1,
+      41: 1,
+      42: 1,
     })
   );
 });
