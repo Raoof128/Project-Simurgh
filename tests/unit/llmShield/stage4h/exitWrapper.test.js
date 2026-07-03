@@ -63,6 +63,11 @@ test("Stage 4H.4 exit map is explicit and collision-bounded", () => {
       40: 1,
       41: 1,
       42: 1,
+      // Stage 4M VXD codes (reviewed extension of the shared ledger; 4M spec §3).
+      43: 1,
+      44: 1,
+      45: 1,
+      46: 1,
     })
   );
 });

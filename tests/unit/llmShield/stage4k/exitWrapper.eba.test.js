@@ -32,8 +32,9 @@ test("existing bands unchanged: 4H, 28/29, PCTA 31-38", () => {
 test("wrapper stays total and fail-closed: unknown codes (incl. reserved 39) map to 3", () => {
   // NOTE: do not probe with the STRING "30" — JS object keys are strings, so hasOwnProperty
   // treats "30" as the mapped numeric key 30 and returns 1. Probe with non-numeric strings.
-  // 40-42 are Stage 4L CCB codes (mapped to 1); 39 stays reserved/unmapped, 43+ unknown.
-  for (const raw of [39, 43, 999, -1, undefined, null, "thirty"]) {
+  // 40-42 are Stage 4L CCB codes, 43-46 are Stage 4M VXD codes (all mapped to 1); 39 stays
+  // reserved/unmapped, 47+ unknown.
+  for (const raw of [39, 47, 999, -1, undefined, null, "thirty"]) {
     assert.equal(stage4CodeForRawCode(raw), 3, String(raw));
   }
   assert.equal(Object.prototype.hasOwnProperty.call(RUN_LEVEL_BY_RAW, 39), false);

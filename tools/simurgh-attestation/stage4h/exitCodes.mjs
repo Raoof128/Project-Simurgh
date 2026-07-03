@@ -94,6 +94,46 @@ export const CCB_REASONS = Object.freeze([
   "cluster_assignment_mismatch",
 ]);
 
+// Stage 4M VXD raw codes (43-46). Raw 39 stays reserved (v1 extraction_scope_violation,
+// prose only). Additive: each maps to run-level 1; unknown codes still fail closed to 3.
+// Every VXD gate result MUST carry a `reason` from the closed enums below (spec §3).
+export const VXD_RAW_CODES = Object.freeze({
+  MERGE_EVENT_INVALID: 43,
+  ANTI_MONOTONICITY_VIOLATION: 44,
+  DISCLOSURE_CLAIM_CONFLICT: 45,
+  RESPONDENT_CONTEST_INVALID: 46,
+});
+
+export const VXD_REASONS_43 = Object.freeze([
+  "budget_inflation",
+  "duplicate_old_cluster",
+  "graph_version_mismatch",
+  "invalid_merge_basis",
+  "non_coarsening_split",
+  "omitted_old_cluster",
+  "parent_digest_mismatch",
+  "raw_identity_exported",
+  "schema_invalid",
+  "sequence_gap",
+  "unknown_old_cluster",
+]);
+
+export const VXD_REASONS_45 = Object.freeze([
+  "claim_recompute_mismatch",
+  "commitment_sequenced_after_disclosure",
+  "pincer_slot_not_null",
+  "schema_invalid",
+  "unknown_claim_kind",
+]);
+
+export const VXD_REASONS_46 = Object.freeze([
+  "dangling_contest_digest",
+  "dangling_record_reference",
+  "schema_invalid",
+  "signature_invalid",
+  "unknown_contest_type",
+]);
+
 export const HARNESS_CODES = Object.freeze({
   CLEAN_RUN_FALSELY_REJECTED: 19,
 });
@@ -135,6 +175,11 @@ export const RUN_LEVEL_BY_RAW = Object.freeze({
   40: 1,
   41: 1,
   42: 1,
+  // Stage 4M VXD codes (reviewed extension of the shared ledger; 4M spec §3).
+  43: 1,
+  44: 1,
+  45: 1,
+  46: 1,
 });
 
 export function stage4CodeForRawCode(code) {
