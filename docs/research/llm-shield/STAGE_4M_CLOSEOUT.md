@@ -60,7 +60,7 @@ for 4H/4K/4L refreshed in the same commit as the additive codes.
 
 - `bash scripts/reproduce-llm-shield-stage4m.sh` — **ALL GREEN**, exit 0, twice, byte-idempotent
   on deterministic files, clean tree after. **Requires Node 26** (byte-stable reproduce).
-- `node --test tests/unit/llmShield/stage4m/*.test.js` — 43 pass, 0 fail.
+- `node --test tests/unit/llmShield/stage4m/*.test.js` — 48 pass, 0 fail.
 - `node --test --test-concurrency=1 tests/e2e/llmShield/stage4m/vxdFullNet.test.js` — 5 pass, 0
   fail (closed export surface, tamper matrix, cross-stage invariants, dual-safety arms).
 - `git diff main...HEAD -- src/llmShield` — empty (enforced by the E2E net's zero-src guard).
