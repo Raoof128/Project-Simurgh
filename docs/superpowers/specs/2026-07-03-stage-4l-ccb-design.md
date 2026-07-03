@@ -368,5 +368,11 @@ release gates pass on merged `main` before tagging.
 - **OWASP LLM10 / NIST MEASURE 2.7 mapping note**: docs-only companion PR (carries Q8's
   "enforcement of declared budget, NOT prevention" non-claim into the mapping table).
 - **4P/CPC**: consumes `corroborating_commitments`.
+- **Deferred v1 — cross-pack cluster-view non-equivocation**: the v0 pack already commits the
+  assignment root (as `assignment_ledger_digest`, signed in the manifest); v1 compares signed
+  roots across independently shared packs for the same window and emits
+  `cluster_view_equivocation` when a provider shows different cluster views to different
+  auditors. No new v0 field is needed — `assignment_ledger_digest` IS the root, and 4M's
+  `graph_version_digest` is the epoch-chaining hook.
 - **Roadmap reconciliation**: one canonical taxonomy (4L→4M/VXD→VFR→4P/CPC→4Q/ACB) resolving the
   §9 draft labels; lands with the program brief in L6 or the docs companion PR.
