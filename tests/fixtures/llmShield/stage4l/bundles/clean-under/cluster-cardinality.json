@@ -1,0 +1,11 @@
+{
+  "schema": "simurgh.ccb.cluster_cardinality.v1",
+  "window": "2026-07",
+  "assignment_ledger_digest": "sha256:0276445c43f644b82968d5b40d74e35cf3fe460030467548a758daea99c2d780",
+  "histogram": {
+    "1": 0,
+    "3": 1
+  },
+  "cluster_count": 1,
+  "consumer_count": 3
+}

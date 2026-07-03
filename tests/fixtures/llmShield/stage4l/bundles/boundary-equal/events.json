@@ -1,0 +1,18 @@
+[
+  {
+    "event_id": "ev_consumer_x_000",
+    "consumer_id": "consumer_x",
+    "session_id": "session_consumer_x",
+    "window": "2026-07",
+    "signal_class": "reward_like_judgment",
+    "response_id_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  {
+    "event_id": "ev_consumer_y_001",
+    "consumer_id": "consumer_y",
+    "session_id": "session_consumer_y",
+    "window": "2026-07",
+    "signal_class": "reward_like_judgment",
+    "response_id_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+  }
+]

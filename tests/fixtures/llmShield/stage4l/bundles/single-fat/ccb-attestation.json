@@ -1,0 +1,49 @@
+{
+  "schema": "simurgh.ccb.cluster_budget_attestation.v1",
+  "window": "2026-07",
+  "q9_status": "over_budget",
+  "exposure_ledger_digest": "sha256:b7741cd40c400d07575fb84eb7d5ddabe9634e59a08534d4909c71fbd4272785",
+  "assignment_ledger_digest": "sha256:803bbbf981e084b3768900209e48c9a8a76a61fc943adabccdc6a49c0882dcb0",
+  "cluster_budget_policy_digest": "sha256:fbd235ed709dc683df6ab834d87f0c9461601c464d6626d97282bf6acca0ce8c",
+  "cluster_cardinality_digest": "sha256:e5290398029d42582004b4ba92a58108eb9b306353a9a61a90a209746c7b5807",
+  "eba_manifest_digest": "sha256:b9814f7a652902b0fb6a278d4ef796e17e5320c2dbc27ead3514501e67db4a29",
+  "cluster_totals": [
+    {
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "consumer_count": 1,
+      "cluster_weighted_total": 100,
+      "budget": 80,
+      "under_budget": false
+    }
+  ],
+  "per_account": [
+    {
+      "consumer_id_digest": "sha256:3c469ad943069687fc6ad7fc6e1ac6e68d1b8e9960e9251de48868fff5bccf0f",
+      "weighted_total": 100
+    }
+  ],
+  "denied_over_cluster_budget": [
+    "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208"
+  ],
+  "known_limitations": [
+    "singleton_cluster_evasion_not_detected_but_ledgered",
+    "basis_digests_opaque_slots",
+    "graph_version_not_verified_in_4l"
+  ],
+  "corroborating_commitments": [],
+  "non_claims": [
+    "not_sybil_closure",
+    "not_structuring_closure_without_provider_binding",
+    "not_identity_truth",
+    "provider_cluster_graph_assumed",
+    "not_capability_transfer_proof",
+    "budget_is_declared_policy_not_safety_bound",
+    "raw_identity_not_exported",
+    "ledger_is_metadata_only",
+    "attestation_assumes_reviewer_runtime",
+    "not_model_safety",
+    "not_kernel_sandboxing",
+    "determinism_not_statistical_robustness",
+    "complements_not_replaces_prevention_credentials"
+  ]
+}

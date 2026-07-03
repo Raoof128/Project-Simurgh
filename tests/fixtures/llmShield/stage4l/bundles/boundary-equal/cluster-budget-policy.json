@@ -1,0 +1,28 @@
+{
+  "schema": "simurgh.ccb.cluster_budget_policy.v1",
+  "window": "2026-07",
+  "class_weights": {
+    "final_answer": 1,
+    "tool_use_trajectory": 2,
+    "reasoning_trace": 3,
+    "reward_like_judgment": 4
+  },
+  "budgets": {
+    "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208": 8
+  },
+  "non_claims": [
+    "not_sybil_closure",
+    "not_structuring_closure_without_provider_binding",
+    "not_identity_truth",
+    "provider_cluster_graph_assumed",
+    "not_capability_transfer_proof",
+    "budget_is_declared_policy_not_safety_bound",
+    "raw_identity_not_exported",
+    "ledger_is_metadata_only",
+    "attestation_assumes_reviewer_runtime",
+    "not_model_safety",
+    "not_kernel_sandboxing",
+    "determinism_not_statistical_robustness",
+    "complements_not_replaces_prevention_credentials"
+  ]
+}

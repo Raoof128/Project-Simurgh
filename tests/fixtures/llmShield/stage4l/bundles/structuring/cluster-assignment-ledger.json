@@ -1,0 +1,1805 @@
+{
+  "schema": "simurgh.ccb.assignment-ledger.v1",
+  "entries": [
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:0123391e86961a978637f50d9b85ade00f5080f8a83a33140dff7e4927b561a6",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:046ed9b2c3ffd4a3607554666d13d76f623d35e5ab96ccb31774acf81b5e7b60",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:049aff25f5b602c2e9d7e963980e797e7d4c3ad44609e6ec31350fa5a0f06804",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:053367c6b86db041aabb3069b028c53c7559edf59d9331bf35f6bc238e243806",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:05a8eabb0d294ccb87fb14950ade734a3a6f9afc738f3012c3af10268a8f6738",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:070814444ed50720b8d265336e5ba43a58893eae840c8403e90c5f8d71959849",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:0789e5f427c79bd4dbb46ced44b5c03d2342ace39e5d05e672f67d1126e722ad",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:08d419df53861595ee9d4a7878d9ac08f83141f8dbddf450cf376eba0ea9af24",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:0cc8630eb63215c8abe51c067795a0aff05aeb19ad88e41248863678c077d444",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:0e037f7d8e9ef3677d82a6f4f1987f06a74b464d3296e5ea8fc87af97839fdc7",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:0fc530b1f0933935a4f0c64a2098152000af10d997c2f131f108f7adeb06f9a2",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:108f4a61ce24432885f9812b3731594f353525001472d13f67277a60cf03d772",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:1669eaa1397e664c79dc07c41a07dd2ab4a562a9825f001540da27fc83879585",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:180f28fc9362199fd72afb08b84ea4c27effa65006f8f44bcfc8fdda830cb225",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:188f8f40905328eb8dc125b53f5df3537044a0162e89acec07335762cbb1a3ea",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:219df75d395ed3fbf3c64998b88fa4c21eaec217c47e22d9397a06e755c3104a",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:2323ae0218b2818bad480dc0e77b461ef4a02a4f7c996abb3185e548245e062a",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:26fd9fc5f337c2324eb87f1ffab05dd3c6aae09d7e81bdf6d4b564f106eaa0b0",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:30792bb06487f15135dcbf8ad8b6305d7e56be6d29d6f39ecaf8fc1a4e427370",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:30ace755e5bc1a9bea1ce439e73f2f63ccb77d380d694b4e691cd2cad3c8afe7",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:33fd8205cb44be70b958ed20b9f13e367dcabd5a1f0e15e9e22e2f8af62acca4",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:3448276ccbe88faa5163b38f0a152a92f99ca24dadcb06fa4fd5c8bb1a5971d1",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:35fe9184eb7568d421fc2bf59c33f81f87c844bd79f05d28be34853b3967351e",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:36bfb91c3c6e2b59277374f97566d517bb55bcdeb58bcb5d48b5556e40da6af8",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:423c018528a3ea4fb7190b00e6f14bec1a2a8dd81f381e6d99d0f86cecdc257c",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:460463b7c9b205538bd55e412949c6839ae29c3ed16350b7037c00ededeae143",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:49104dc8840f4d81028eb7cb758d8fc53f2a4ce21aab4c44ddd7d4889cc04d1a",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:495204c72c9b77902875faacb1cc161566674bbb0c672cdf39ccf99a05361920",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:4a2770a45de0b61dfec8e0ca9ff29c4d8d91b96ece50f1984a53a1acd4933439",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:4a65e56b84d28ad39f002d54a1df28c9ec92aff6393af57c1ed707d3e2000eaa",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:4f7419ed9d033cfb2e6307d10ffe80ab7bc3149ddc50b493f4146771f209d12e",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:5189390b4d6cd26fb38d56dec6beaf6e355d4c811df12e29f55674c28c337f92",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:55e8daa65d191818263b68130ce4ebcdedbbfc7c12cc997c7b21677bc3cd1988",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:59405d9838b158650fb0251e082267918392921e09f385092c6b3fe5db69e586",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:5f2862bf23ce9af49f946cf1b063a9ccf31e9c39ab8b3d124b372658cc901af4",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:61c7d8c5dca02ac416365e42cd5d2333dbfd17dd43ed4fc7adee0fb457f7a1e1",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:654ed7881e3b2faa143151f71cf16d947ad094187ee667c5bb42d8749e8dc521",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:66585c660cf4790b2bf9953b2c1040fb7adda81e4ce594a82f84e31a8b41375b",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:6b264af7b89d646d3c3d971007b6e9f61f1ac7098cfe7080dadb9863bb18a801",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:6d503287d294bfe9cb839da48fbb947bdadbdab25fa718fd360c94882c661190",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:6ed0a446da3c3d784d43f2aa66cc4c72fe5d47397f32b7038ea95dcaf4c9aa2d",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:6ee1a7186e7811aa55ce39eea233bf7738e03832c7d5be21b4f72956cd182aa2",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:73366bff866498d17176c41af279f4d00582345674c8457526200821e6c9ec99",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:79b3f262b3aab322697179650bce809b882a7ccaefc59f12fdea0a917b26f272",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:7a7da76e83f0e108914b2a714317ac55a32b922414f1a0567fbaa3c7043b24ef",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:8933923d7d50efbfbede37ba862d8c772c1bc9aecb5d19b2bf9ae50481e6d7f8",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:8c128a15981f19db549d8f524c0def28cea79c75e16b4b10de5bec6872e86b58",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:8c880d0cd6dd28f4baf098a0653c1e29631f5f5173390af5dd87028a85e2116b",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:8cb367c99ffb78a0c2def1d8ee72ea36e26d1260665ade75ecfa5fc70019ebc0",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:912ac49e31760d1e7251cd6f998a6d2f7c7529e18906249090657c59e6226ef2",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:9219b4ba89f4b39812cb89b426a86e722153ac2b1488fa33dfe46e0ccd8b9762",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:92825eab599e8fdb7bd2986e7b06bdf34c55731bddedf9ed74b024d59784e72d",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:93a5ddb800f94692213df1bb41c19d4d3683c582ebce1ee525e5c92e61521b7a",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:95462b9d602bec8a91f33c30c38772aa8d52e977e16ef66ef9083e390ab768d8",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:96c4708aaeac900816570b9495383ac21ab5cb19cfad53369ccfb9c8e4ebd9dc",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:9a0a6f7359a21e8c826e6d4292d414fe2a021ac96f4875236f6679879db76447",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:9a42675ed5fd977a1c4b7076b30da21f7c6499559da29fc681983f50c8ff15c0",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:9b6c4ef3e6e367aed65b2c6e8b130419fe29c8367e8082b7441462a89f8aea17",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:9ec74867d39271eced07ac7d5a8195224511b7b758bcee7482d1e872cb5cbac1",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:a158d3ddfe3c4637568d4a105287000e6e3f5cfc3468078c031189ede82195e2",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:a57c7aee08a10f68898ec6b1e54d39284f06ba8b60d3e4786b52248a9bfbd938",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:a9d86a4de9606057fe5f4b531fa3de08b5ad45ad233262f55a20e054dc7790db",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:aa45deb975d1030beaf0dd2de3665f7e6be90be6e196f35fe2ed526aa560a239",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:adb28af169a4554d843a782ffe3346b6151b1443d618731e219f00ebfc04664b",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:b0814bf8593da72826f7ea8ab41cce86e9b53ae1443e6a5e3d46c7b32f6a311c",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:b115b4722d94ec7a16677f9ddde4f61d4f5997ecbd4f4ca5df2b33aa9448c355",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:b2e42a265b3436f1888fa9b4050452fc8728eb345890d53286bf54aee04b9480",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:b5437168f954ab9124d1d0890918621d28f4224f726e0a12edca6904c1566392",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:b669919464b56b8a1c0c06c3cfedb43784d1619c4e2beb3a5bdeb0dee9963edf",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:b94456a4c994c7ff3dbd3a14ea89ad57c1c915204adffd4180706e15855db13b",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:bbd863644e8a7cb21c0f43771bf8e4fd3ef2d0b90e0a14422dd7837f85eb7525",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:bd68f1a7e4aeb7584a1b021ee571f5e9447f99ee526910599b93c16e83768abb",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:c0275b734991d4a3e3eb64a482f86240fe2bae63abfcf62145cb861b07c98a2b",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:c119408d080d4d78282b8b9aa86cf05ceefda674c7b332ebde82bb562124b117",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:c24521e0ed6d4377d256c0cf99bbfd28885b124771693829693de6dca229fbf4",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:c2fae973533b18822d7791853538bb256859924717dd9159752fff6fb98d2f0a",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:c8153866cedde9d48da03c69f13608e7e7d47081740bc5431360a17a776c5c25",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:c853775a221c2c2fca86f4bfc291099d061e22f61c59406eeb809327558373fd",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:cd6e571db20d3ef8e1ac2779d0af5941cd879ce256602799353df4146b456874",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:d8d07e07d7fedd32d7ebbfc864cf28b0f54fb7f6d32bf17c8c8458260bfbc253",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:d95307a8c57b4d497dddb4b7327e1e63752f51fca137d8b4af1e89c473464329",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:db7f31da0eb8ca7ea1ea1a166a2eb136a65d61bb1363966370b03dbd45136ccb",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:dc99eb9cecb7ef7311f521330f3688ef10e525f04a9f3959acb47ca0cabcbd5a",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:dd60c80efef3960c9cfd1b414ec3f8831766f635064ef85ced0b846801dbb30e",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:deb6ecd94f1ad76c6954cd77f2121bccd598318b9f283a968995be7e0afcc247",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:dffe96f13dd48a3d708b5a2a0711f165fa071d84d189820bd872191291e2263b",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:e14af8525fd2712037ea3b6c8378cbe93a9886f562c9961233443258bb579ac4",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:e710c9c0c898dc876bed958aa1885e48cec83d7fcde31b26b16f3943c51b5c95",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:e7d4ccddc54864518b8ba5c4b803128f5403150fc78fa88419cb5b25d1fad401",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:e8431019d8f0f03f3313cccf319946cc21c05b3280809bf5e28416ddeb575aee",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:ee25206fb858dbeaafe5d8d10f91f2bf98ba5348ea1fe7aab04eb357780e3688",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:f1d7b1654f1e36caf1266c2ff1209cf1c8a33f702cc511b9bfd6ac577b497c33",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:f24b67daa395e255a92a2acb2134facbfbf97fea31747b890b9d66b83a22cc1f",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:f3ac1f33464bf365e3f0b70f435a90cebaf01b582b37b450bdfc220ad754700c",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:f59c34f335aaf6a088105e3a400058a53794010b221fb547e78409dc24e3f445",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:f836ab77265e6d54c3af5d19117b1836fe6974cae77966a98010fa189021c6ef",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:f8e0da75aac35ddee75ebbc9715308aa513ad58316177f723486eee90b75c10f",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:f9d5861ed883e48686adf99501c6991000bc3e79290353a68320ae8027ab99eb",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:fb353b20d337056b8d0f97f08b3ee52acf43a64dafd6089678a0e75e9e35494c",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    },
+    {
+      "schema": "simurgh.ccb.cluster_assignment.v1",
+      "window": "2026-07",
+      "consumer_id_digest": "sha256:ff0611fbbecc6d05d57a7deaeb0a1e8444b5a84faac36e054fe2d9aa1ba954d6",
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "binding_level": "cluster",
+      "cluster_basis": [
+        "payment_graph",
+        "traffic_shape"
+      ],
+      "basis_digests": {
+        "payment_graph": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "traffic_shape": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "binding_policy_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "raw_identity_exported": false
+    }
+  ]
+}
