@@ -21,13 +21,14 @@ Stage 4L upgrades the _subject_ of the budget: for each provider-declared cluste
 recompute the sum of committed exposure across the cluster's members and verify
 `cluster_weighted_total ≤ B_cluster`.
 
-The crown demonstration:
+The crown demonstration (magnitudes are weighted exposure — the gate sums
+`weighted_total`, not raw request counts; the committed fixtures realise each row):
 
-| Scenario                                         | Per-account budget | Cluster budget | Outcome                                 |
-| ------------------------------------------------ | ------------------ | -------------- | --------------------------------------- |
-| 1 account × 100 requests                         | fails              | fails          | both catch                              |
-| 100 accounts × 1 request, one shared cluster     | passes             | fails          | **CCB catches what per-account misses** |
-| 100 accounts × 1 request, 100 singleton clusters | passes             | passes         | **not caught — see §4**                 |
+| Scenario                                                            | Per-account check | Cluster check | Outcome                                 |
+| ------------------------------------------------------------------- | ----------------- | ------------- | --------------------------------------- |
+| 1 account, weighted exposure 100, B 80                              | fails             | fails         | both catch                              |
+| 100 accounts × weighted 1, one shared cluster (Σ 100), B_cluster 80 | passes            | fails         | **CCB catches what per-account misses** |
+| 100 accounts × weighted 1, 100 singleton clusters, each B 5         | passes            | passes        | **not caught — see §4**                 |
 
 ## 2. What CCB does NOT claim
 
@@ -65,6 +66,11 @@ The canonical framing is Brundage et al. 2020, _Toward Trustworthy AI Developmen
 Supporting Verifiable Claims_ (arXiv:2004.07213): CCB is a concrete software mechanism for
 verifiable **enforcement** claims. Positioning line: ARC-style credentials _prevent_
 per-credential overuse privately; CCB is the auditable evidence layer that prevention lacks.
+
+Citations independently verified 2026-07-03: arXiv:2602.03812 (Xu et al., _Antidistillation
+Fingerprinting_), arXiv:2603.14283 (_AEX: Non-Intrusive Multi-Hop Attestation and Provenance for
+LLM APIs_), IETF `draft-hillier-scitt-arp` (Attestation Reconciliation Protocol, 2026), and
+arXiv:2004.07213 (Brundage et al.) all confirmed against their source registries.
 
 ## 4. The honest hole, and why it is not silent: F9 + the cardinality commitment
 
