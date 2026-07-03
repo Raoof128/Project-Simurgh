@@ -8,6 +8,13 @@ timeline, Stage 3N closed-world claim compiler, Stage 3O dual-signal/`claim_conf
 **Tag target:** `v2.22.0-stage-4m-vxd` (verify on merged `main` before tagging; check
 `git tag --sort=-creatordate` first — standing 4J lesson).
 
+**Motto (project-standing, ordering rule):** _AnthropicSafe First, then ReviewerSafe._ Both
+properties are mandatory every stage; the order is the tie-break. When making the provider's
+enforcement replayable would expose sensitive content or structural metadata to competitors or
+the adversary, provider-safety wins and the audience-tier model reconciles the rest (public
+tier = aggregates + roots; auditor tier = full ledgers; respondent tier = a slice). We never
+drop reviewer-safety — we recompute at the tier that holds the data.
+
 ---
 
 ## 0. Program context (framing, not build scope)
