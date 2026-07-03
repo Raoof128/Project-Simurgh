@@ -14,8 +14,9 @@
 #                             (both skipped under --quick)
 #   12    Platform & device . Stage 2.1–2.8 integrity/daemon/scanner, Swift &
 #                             Linux-Rust nodes, voting & banking pilots
-#   13    LLM Shield ........ Stage 3A–3S containment pipeline + per-stage audits,
-#                             Stage 4D decision-replay evidence pack
+#   13    LLM Shield ........ Stage 3A–3S containment pipeline + per-stage audits
+#                             (Stage 4D–4L end-to-end reproduce lives in the second
+#                             gate, scripts/check-e2e.sh, run on Node 26)
 #   14    Git status sanity
 #
 # Usage:
@@ -1686,37 +1687,9 @@ else
   tail -80 "$LOG_DIR/llm-shield-stage3n-smoke.log"
 fi
 
-step "LLM Shield Stage 4D decision-replay evidence pack"
-if scripts/reproduce-stage4d.sh > "$LOG_DIR/llm-shield-stage4d-reproduce.log" 2>&1; then
-  pass "LLM Shield Stage 4D decision-replay evidence pack"
-else
-  fail "LLM Shield Stage 4D decision-replay evidence pack"
-  tail -100 "$LOG_DIR/llm-shield-stage4d-reproduce.log"
-fi
-
-step "LLM Shield Stage 4E browser-agent containment run"
-if scripts/reproduce-stage4e.sh > "$LOG_DIR/llm-shield-stage4e-reproduce.log" 2>&1; then
-  pass "LLM Shield Stage 4E browser-agent containment run"
-else
-  fail "LLM Shield Stage 4E browser-agent containment run"
-  tail -100 "$LOG_DIR/llm-shield-stage4e-reproduce.log"
-fi
-
-step "LLM Shield Stage 4F containment-utility Pareto canary"
-if scripts/reproduce-stage4f.sh > "$LOG_DIR/llm-shield-stage4f-reproduce.log" 2>&1; then
-  pass "LLM Shield Stage 4F containment-utility Pareto canary"
-else
-  fail "LLM Shield Stage 4F containment-utility Pareto canary"
-  tail -100 "$LOG_DIR/llm-shield-stage4f-reproduce.log"
-fi
-
-step "LLM Shield Stage 4G adaptive red-team campaign"
-if scripts/reproduce-stage4g.sh > "$LOG_DIR/llm-shield-stage4g-reproduce.log" 2>&1; then
-  pass "LLM Shield Stage 4G adaptive red-team campaign"
-else
-  fail "LLM Shield Stage 4G adaptive red-team campaign"
-  tail -100 "$LOG_DIR/llm-shield-stage4g-reproduce.log"
-fi
+# LLM Shield end-to-end reproduce (Stage 4D–4L) moved to scripts/check-e2e.sh — it
+# runs as a separate CI step on Node 26 so byte-stable reproduce is gated. The base
+# gate here stays unit tests + static checks + platform smokes.
 
 step "LLM Shield 3N claim ledger helper coverage"
 if node --test --experimental-test-coverage \
