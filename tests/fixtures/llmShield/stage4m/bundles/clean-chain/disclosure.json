@@ -1,0 +1,81 @@
+{
+  "schema": "simurgh.vxd.disclosure_claim.v1",
+  "chain_position": 5,
+  "claims": [
+    {
+      "kind": "window_range",
+      "value": [
+        "2026-05",
+        "2026-06"
+      ],
+      "bound_commitments": [
+        {
+          "digest": "sha256:290ac9670405f6eb63acde277ccccc356e0045aae7ec45547e5d248796adb884",
+          "chain_position": 0
+        },
+        {
+          "digest": "sha256:3bce1f51a94c0039c9af13e0f3c947ef2995f294fccf59d1cd3918636c104bc1",
+          "chain_position": 1
+        }
+      ]
+    },
+    {
+      "kind": "consumer_count",
+      "value": 8,
+      "bound_commitments": [
+        {
+          "digest": "sha256:290ac9670405f6eb63acde277ccccc356e0045aae7ec45547e5d248796adb884",
+          "chain_position": 0
+        },
+        {
+          "digest": "sha256:3bce1f51a94c0039c9af13e0f3c947ef2995f294fccf59d1cd3918636c104bc1",
+          "chain_position": 1
+        }
+      ]
+    },
+    {
+      "kind": "exposure_total",
+      "value": 12,
+      "bound_commitments": [
+        {
+          "digest": "sha256:290ac9670405f6eb63acde277ccccc356e0045aae7ec45547e5d248796adb884",
+          "chain_position": 0
+        },
+        {
+          "digest": "sha256:3bce1f51a94c0039c9af13e0f3c947ef2995f294fccf59d1cd3918636c104bc1",
+          "chain_position": 1
+        }
+      ]
+    },
+    {
+      "kind": "cluster_count",
+      "value": 6,
+      "bound_commitments": [
+        {
+          "digest": "sha256:290ac9670405f6eb63acde277ccccc356e0045aae7ec45547e5d248796adb884",
+          "chain_position": 0
+        },
+        {
+          "digest": "sha256:3bce1f51a94c0039c9af13e0f3c947ef2995f294fccf59d1cd3918636c104bc1",
+          "chain_position": 1
+        }
+      ]
+    },
+    {
+      "kind": "breach_count",
+      "value": 0,
+      "bound_commitments": [
+        {
+          "digest": "sha256:700c858345e1687582ffa37e4e417dab8932160cb8553b7450cc155131b11671",
+          "chain_position": 3
+        },
+        {
+          "digest": "sha256:232ddd6d6d9f5baa6886f86794af7b7dd6aa733266a61c6386894c025f4f3e13",
+          "chain_position": 4
+        }
+      ]
+    }
+  ],
+  "demand_side_evidence_digest": null,
+  "prose_history_digest": "sha256:7777777777777777777777777777777777777777777777777777777777777777"
+}

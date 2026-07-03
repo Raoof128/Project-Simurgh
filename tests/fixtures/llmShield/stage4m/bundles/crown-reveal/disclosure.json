@@ -1,0 +1,28 @@
+{
+  "schema": "simurgh.vxd.disclosure_claim.v1",
+  "chain_position": 3,
+  "claims": [
+    {
+      "kind": "breach_count",
+      "value": 1,
+      "bound_commitments": [
+        {
+          "digest": "sha256:37f275944a71e7622994e32a6c643e97e477693f635dfc430866f321f90f0aba",
+          "chain_position": 2
+        }
+      ]
+    },
+    {
+      "kind": "consumer_count",
+      "value": 100,
+      "bound_commitments": [
+        {
+          "digest": "sha256:f36f6e44b345afc0488206858a37ae32d965885f31d0def6bba4911b6102f7bd",
+          "chain_position": 0
+        }
+      ]
+    }
+  ],
+  "demand_side_evidence_digest": null,
+  "prose_history_digest": "sha256:7777777777777777777777777777777777777777777777777777777777777777"
+}

@@ -66,3 +66,5 @@ tools/agentdojo-simurgh-adapter/.pytest_cache
 # stage 4L deterministic fixtures + evidence (prettier collapses single-element arrays)
 tests/fixtures/llmShield/stage4l
 docs/research/llm-shield/evidence/stage-4l
+tests/fixtures/llmShield/stage4m/
+docs/research/llm-shield/evidence/stage-4m/

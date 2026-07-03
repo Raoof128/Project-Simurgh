@@ -1,0 +1,58 @@
+{
+  "schema": "simurgh.vxd.attestation.v1",
+  "windows_root": "sha256:f36f6e44b345afc0488206858a37ae32d965885f31d0def6bba4911b6102f7bd",
+  "merge_chain_root": "sha256:fe42847a3de9b0fe477ea3bf6fdc81a90cb9386bcd4d99f7eb7ef6652709fa36",
+  "rescore_root": "sha256:37f275944a71e7622994e32a6c643e97e477693f635dfc430866f321f90f0aba",
+  "disclosure_root": "sha256:1705b528338b1d0d8d285e230b458d14c565e27da76f15bd011ed6e9bc3b012f",
+  "contest_root": "sha256:dd7eb5620f5b1ec3df37c20879991357db8e7f3e09e916698f1070067dab20a5",
+  "chain_digest": "sha256:c2c01e58fee89dd00ece4d2554946a48a92902e09037edbe14759eef1d920035",
+  "aggregates": {
+    "window_count": 1,
+    "breach_count": 1,
+    "newly_revealed_count": 1,
+    "exposure_mass_total": 300,
+    "cluster_size_histogram": {
+      "1": 100
+    }
+  },
+  "source_ccb_manifest_digest": "sha256:a79485508d210724958c02447656863c362e95b394054effbdf22d0468802946",
+  "lean_proof_digest": "sha256:1dc5db9937b516f46b4e7a22dd8bb8a33634d6b31a518ee4792e4e2a01cace7c",
+  "demand_side_evidence_digest": null,
+  "corroborating_commitments": [],
+  "known_limitations": [
+    "merge_evidence_not_verified",
+    "no_merge_no_reveal",
+    "demand_side_evidence_digest_reserved_unbound",
+    "basis_digests_opaque_slots",
+    "respondent_key_binding_out_of_band",
+    "proof_is_of_model_not_implementation",
+    "acknowledgement_is_receipt_not_ruling",
+    "browser_verifier_is_projection_not_normative",
+    "disclosure_is_adversary_feedback_bounded_not_eliminated",
+    "tier_r_slice_machinery_deferred",
+    "bundle_recipient_vetting_out_of_band",
+    "window_budgets_assumed_consistent_with_graph_policy",
+    "singleton_contradiction_not_yet_bound_to_4l_cardinality_digest"
+  ],
+  "non_claims": [
+    "not_sybil_closure",
+    "not_structuring_closure_without_provider_binding",
+    "not_identity_truth",
+    "provider_cluster_graph_assumed",
+    "not_capability_transfer_proof",
+    "budget_is_declared_policy_not_safety_bound",
+    "raw_identity_not_exported",
+    "ledger_is_metadata_only",
+    "attestation_assumes_reviewer_runtime",
+    "not_model_safety",
+    "not_kernel_sandboxing",
+    "determinism_not_statistical_robustness",
+    "complements_not_replaces_prevention_credentials",
+    "not_legal_compliance_certification",
+    "contest_is_recorded_not_adjudicated",
+    "merge_evidence_not_verified",
+    "retro_rescoring_is_arithmetic_not_new_measurement",
+    "disclosure_binding_is_chain_ordering_not_truth",
+    "projection_is_output_surface_not_filing"
+  ]
+}

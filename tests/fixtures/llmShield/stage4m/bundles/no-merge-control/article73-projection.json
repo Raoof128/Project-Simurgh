@@ -1,0 +1,12 @@
+{
+  "schema": "simurgh.vxd.article73_projection.v1",
+  "attestation_digest": "sha256:010f666afeb3fa57a027f109a87268be9d2e34dcdeb02e3288e1aa283df3024a",
+  "incident_description": "not_projected",
+  "temporal_scope": "not_projected",
+  "affected_counts": "not_projected",
+  "corrective_context": "not_projected",
+  "non_claims": [
+    "not_legal_compliance_certification",
+    "projection_is_output_surface_not_filing"
+  ]
+}

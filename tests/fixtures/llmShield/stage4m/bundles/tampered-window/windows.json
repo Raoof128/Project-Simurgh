@@ -1,0 +1,28 @@
+[
+  {
+    "schema": "simurgh.vxd.window_commitment.v1",
+    "window": "2026-05",
+    "source_attestation_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+    "graph_version_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "clusters": [
+      {
+        "cluster_commitment": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+        "cluster_weighted_total": 1,
+        "budget": 5,
+        "cluster_size": 1
+      },
+      {
+        "cluster_commitment": "sha256:0101010101010101010101010101010101010101010101010101010101010101",
+        "cluster_weighted_total": 1,
+        "budget": 5,
+        "cluster_size": 1
+      },
+      {
+        "cluster_commitment": "sha256:0202020202020202020202020202020202020202020202020202020202020202",
+        "cluster_weighted_total": 1,
+        "budget": 5,
+        "cluster_size": 1
+      }
+    ]
+  }
+]
