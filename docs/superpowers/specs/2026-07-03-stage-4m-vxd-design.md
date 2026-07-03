@@ -652,3 +652,41 @@ before tagging.
   (`cluster_view_equivocation`, deferred v1 from 4L).
 - **Live regulator filing** — the projection is an output surface; transmitting it anywhere is a
   human act outside the evidence format.
+
+---
+
+## 9. Implementation reconciliation (2026-07-03, as-built)
+
+Recorded during inline execution so the spec matches the shipped artifact (docs-accuracy
+discipline). Deviations, all intentional:
+
+- **Window commitments are cluster-level only.** 4M window inputs
+  (`simurgh.vxd.window_commitment.v1`) carry `{cluster_commitment, cluster_weighted_total,
+budget, cluster_size}` and NO consumer identifiers. This is strictly stronger than the spec's
+  per-window-salt idea; **V21** is realized as "zero consumer-level identifiers
+  (`consumer_id_digest`, `session_id`, raw-identity keys) in any 4M artifact." Cluster
+  commitments legitimately persist across windows — that persistence is the retro-score join, not
+  a leak.
+- **The attestation IS the Tier-P payload.** No separate `tier-p.json`; Tier-P verification runs
+  the verifier over a bundle whose ledger files are absent (`--tier p`), and ledger-level checks
+  report `not_in_tier`. An aggregate-only leak guard in `buildVxdAttestation` refuses any cluster
+  commitment that would enter the attestation.
+- **Browser HTML + Lean digests live in evidence/docs, not the manifest.** The manifest binds the
+  attestation (which includes `lean_proof_digest`); the `.html` digest is recorded in the
+  closeout and its determinism is gated by `browserParity.test.js` (avoids a fixture-rebuild
+  circularity). The `.lean` file's digest is committed via `lean_proof_digest` in the attestation.
+- **`prior_cardinality_contradiction` → `singleton_merge_contradiction`.** Honest structural
+  predicate over committed window `cluster_size`; tighter binding to 4L's per-window cardinality
+  digest is deferred (signed `singleton_contradiction_not_yet_bound_to_4l_cardinality_digest`).
+- **Budget non-inflation lives in `validateMergeChain`** (event validation, raw 43), not in
+  re-scoring — an inflationary merge is invalid regardless of windows.
+- **`chain_digest` is verified in `attestation_roots`** alongside the five Merkle roots (surfaced
+  by the E2E tamper matrix; a cosmetic chain tamper is now caught, raw 22).
+- **`verifyDisclosure` is tier-aware** (`tier: "a" | "p"`): Tier P checks chain ordering only,
+  because the ledger records needed to recompute claim values are absent by design.
+- **Fixture placeholder note:** cluster commitments use `CL(i)=byte(i).repeat(32)` for i<100
+  (bytes `00`–`63`); tests must pick placeholder digests outside that range (e.g. `ab`/`cd`) to
+  avoid collision with a window cluster.
+- **Lean gate stays mandatory but is CI-only** — no Lean toolchain on the dev machine, so the
+  proof is gated by `.github/workflows/stage-4m-lean-proof.yml`; confirm that run is green before
+  tagging.
