@@ -7,7 +7,7 @@
     }
   ],
   "contest_type": "merge_evidence_disputed",
-  "respondent_public_key": "ed25519:MCowBQYDK2VwAyEAS1yCKbyT3bfN3Md1+7n+dP1EU9GCb0gFBCx9XHFZC4k=",
+  "respondent_public_key": "ed25519:MCowBQYDK2VwAyEA/B2lV0x5PLfncrOg2xvcwMF5qty/eXviCttNJ6sXXgM=",
   "statement_digest": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
-  "signature": "ed25519:UNSKPIk84w4MJnLELG/Wsr1yW7qhLdGWOw8y8w2DTnbHMSAKLqCC+DcXJ2ZKrpBncfDmQE+DgPVMU5czdXQbBA=="
+  "signature": "ed25519:duR0pz3QC5R3mawXdIVszb72c+ouRQdlIyYHWwFuQD//u1Ws4jb0ttOnb3TbrZl99SaINe0CWW6MOoJJ6qw3BA=="
 }

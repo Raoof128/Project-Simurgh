@@ -66,7 +66,10 @@ function recompute(kind, boundRecords) {
   }
 }
 
-export function verifyDisclosure({ disclosure, chain, recordsByDigest }) {
+// tier "a" (default) recomputes every claim value from the bound ledger records; tier "p"
+// (public) verifies only chain ordering + (digest, position) consistency, because the ledger
+// records are absent from a Tier-P bundle by design (spec §4.0).
+export function verifyDisclosure({ disclosure, chain, recordsByDigest, tier = "a" }) {
   const d = disclosure;
   if (!d || typeof d !== "object" || Array.isArray(d)) return fail("schema_invalid");
   const keys = Object.keys(d).sort();
@@ -107,10 +110,15 @@ export function verifyDisclosure({ disclosure, chain, recordsByDigest }) {
         return fail("commitment_sequenced_after_disclosure");
       const entry = chainEntryAt(chain, b.chain_position);
       if (!entry || entry.digest !== b.digest) return fail("commitment_sequenced_after_disclosure");
-      const record = recordsByDigest.get(b.digest);
-      if (!record) return fail("commitment_sequenced_after_disclosure");
-      boundRecords.push(record);
+      if (tier === "a") {
+        const record = recordsByDigest.get(b.digest);
+        if (!record) return fail("commitment_sequenced_after_disclosure");
+        boundRecords.push(record);
+      }
     }
+    // Tier P stops after chain-ordering checks — the ledger records needed to recompute the
+    // claim value are not part of the public tier.
+    if (tier !== "a") continue;
     const expected = recompute(claim.kind, boundRecords);
     const matches =
       claim.kind === "window_range"

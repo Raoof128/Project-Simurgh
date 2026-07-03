@@ -4,8 +4,8 @@
   "merge_chain_root": "sha256:fe42847a3de9b0fe477ea3bf6fdc81a90cb9386bcd4d99f7eb7ef6652709fa36",
   "rescore_root": "sha256:37f275944a71e7622994e32a6c643e97e477693f635dfc430866f321f90f0aba",
   "disclosure_root": "sha256:1705b528338b1d0d8d285e230b458d14c565e27da76f15bd011ed6e9bc3b012f",
-  "contest_root": "sha256:dd7eb5620f5b1ec3df37c20879991357db8e7f3e09e916698f1070067dab20a5",
-  "chain_digest": "sha256:c2c01e58fee89dd00ece4d2554946a48a92902e09037edbe14759eef1d920035",
+  "contest_root": "sha256:4877072592dc0ff927c7e2541e1bf67b84851a935997480e955c4e026c4508ca",
+  "chain_digest": "sha256:9e050af907f51645fe1dd94e78049a5cd41311948dcde58bdb3ae35aaf474748",
   "aggregates": {
     "window_count": 1,
     "breach_count": 1,

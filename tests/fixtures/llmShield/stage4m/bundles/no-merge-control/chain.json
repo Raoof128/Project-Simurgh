@@ -5,11 +5,6 @@
       "position": 0,
       "kind": "window_commitment",
       "digest": "sha256:290ac9670405f6eb63acde277ccccc356e0045aae7ec45547e5d248796adb884"
-    },
-    {
-      "position": 1,
-      "kind": "disclosure_claim",
-      "digest": "sha256:9d1b4d54eb2e0683ffd39ac0d60bb8e2889762fd155e1f9aeea5d618a7d4d2c7"
     }
   ]
 }

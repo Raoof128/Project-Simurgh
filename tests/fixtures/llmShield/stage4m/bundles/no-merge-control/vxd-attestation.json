@@ -3,9 +3,9 @@
   "windows_root": "sha256:290ac9670405f6eb63acde277ccccc356e0045aae7ec45547e5d248796adb884",
   "merge_chain_root": "sha256:5244252d2125ec00206ac9bdaa76790c919836363c2e3846242e24cf6df7797c",
   "rescore_root": "sha256:5244252d2125ec00206ac9bdaa76790c919836363c2e3846242e24cf6df7797c",
-  "disclosure_root": "sha256:9d1b4d54eb2e0683ffd39ac0d60bb8e2889762fd155e1f9aeea5d618a7d4d2c7",
+  "disclosure_root": "sha256:5244252d2125ec00206ac9bdaa76790c919836363c2e3846242e24cf6df7797c",
   "contest_root": "sha256:5244252d2125ec00206ac9bdaa76790c919836363c2e3846242e24cf6df7797c",
-  "chain_digest": "sha256:34371f30c53155dcc7cb656a31b6c467a64867fa95fdc7060db55f8cd4ed3b22",
+  "chain_digest": "sha256:9d164a9a74090dfcd3b248c225625bfb990cfa43d2f8e28c34b8a7191abbc77f",
   "aggregates": {
     "window_count": 1,
     "breach_count": 0,

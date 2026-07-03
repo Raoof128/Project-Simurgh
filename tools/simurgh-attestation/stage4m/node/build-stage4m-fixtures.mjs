@@ -300,7 +300,8 @@ async function main() {
       windows,
       mergeEvents: [],
       keys,
-      claimSpecs: [{ kind: "breach_count", value: 0, bound: "rescores" }],
+      // negative control: windows only, no merge, no disclosure (nothing to reveal or claim).
+      claimSpecs: null,
     });
     if (art.records.length !== 0)
       throw new Error("build_refused: no-merge-control produced records");

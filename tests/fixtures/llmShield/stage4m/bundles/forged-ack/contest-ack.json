@@ -2,6 +2,6 @@
   "schema": "simurgh.vxd.contest_acknowledgement.v1",
   "contest_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
   "statement_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
-  "respondent_public_key": "ed25519:MCowBQYDK2VwAyEAdUJL1Zw6E/F8nei92QKwjxXbUE2zQGC1UjLl3N9ex7w=",
-  "signature": "ed25519:qV/n6i9V6mhJXYL1960rES/66zYvXTtz1TBhvN77JHabdkHFLCZsWZFbo5HJFV9vfUOBevF8UPL6EQdsl8RODA=="
+  "respondent_public_key": "ed25519:MCowBQYDK2VwAyEAHv8zZ8S0wG9Pi1Dhk6NrfY4GrWPMrBo7rrpwFCMrWM0=",
+  "signature": "ed25519:EhldU1DU2Pjj6SF5oIFmgKWvk6gYrHNYjOETcw6hqHC29XKxXZuC5rxp6Vw1D0qqmjs6ULbOMb3C6lEx1NfiDA=="
 }

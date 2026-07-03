@@ -1,6 +1,6 @@
 {
   "schema": "simurgh.vxd.article73_projection.v1",
-  "attestation_digest": "sha256:6da5a5d875790d80258734a3c5034883b73b5a0fc18769442232bff4e31f8412",
+  "attestation_digest": "sha256:d7c65e4c3a097deaefebd3a0785e2f2bf1bcc3e6f5de3c837a07e6885ce11eb1",
   "incident_description": "not_projected",
   "temporal_scope": "not_projected",
   "affected_counts": "not_projected",
