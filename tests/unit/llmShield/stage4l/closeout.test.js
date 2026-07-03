@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 import assert from "node:assert/strict";
-import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
+import { join } from "node:path";
 import { test } from "node:test";
 import { CCB_NON_CLAIMS } from "../../../../tools/simurgh-attestation/stage4l/constants.mjs";
 
@@ -26,30 +26,27 @@ test("threat model states the anti-monotonicity lemma and the ledgered-evasion l
   assert.ok(/ledgered/i.test(t));
 });
 
-test("overclaim grep finds nothing outside non-claims context", () => {
-  // rg exits 1 when nothing matches: that is the PASSING case for forbidden phrases
+test("no overclaim phrases outside non-claims context", () => {
+  // Pure-JS scan (no external `rg`/`grep` dependency — CI runners do not reliably ship
+  // ripgrep, and a unit test must not fail-closed on a missing binary).
   const forbidden =
-    "sybil (solved|closed)|prevents distillation|capability transfer proven|identity truth proven|non-bypassable|model safe";
-  let out = "";
-  try {
-    out = execFileSync(
-      "rg",
-      [
-        "-n",
-        "-i",
-        forbidden,
-        "docs/research/llm-shield/STAGE_4L_THREAT_MODEL.md",
-        "docs/research/llm-shield/STAGE_4L_CLOSEOUT.md",
-        "tools/simurgh-attestation/stage4l",
-        "scripts/reproduce-llm-shield-stage4l.sh",
-      ],
-      { encoding: "utf8" }
-    );
-  } catch (e) {
-    if (e.status === 1) return; // no matches: pass
-    throw e;
+    /sybil (solved|closed)|prevents distillation|capability transfer proven|identity truth proven|non-bypassable|model safe/i;
+  const targets = [
+    "docs/research/llm-shield/STAGE_4L_THREAT_MODEL.md",
+    "docs/research/llm-shield/STAGE_4L_CLOSEOUT.md",
+    "scripts/reproduce-llm-shield-stage4l.sh",
+    ...readdirSync("tools/simurgh-attestation/stage4l").map((f) =>
+      join("tools/simurgh-attestation/stage4l", f)
+    ),
+  ];
+  const hits = [];
+  for (const p of targets) {
+    const lines = readFileSync(p, "utf8").split("\n");
+    lines.forEach((line, i) => {
+      if (forbidden.test(line)) hits.push(`${p}:${i + 1}: ${line.trim()}`);
+    });
   }
-  assert.fail(`overclaim phrases found:\n${out}`);
+  assert.equal(hits.length, 0, `overclaim phrases found:\n${hits.join("\n")}`);
 });
 
 test("attestation constants carry all thirteen non-claims", () => {
