@@ -1,0 +1,18 @@
+[
+  {
+    "schema": "simurgh.vxd.retro_rescore.v1",
+    "window": "2026-05",
+    "merge_event_digest": "sha256:fe42847a3de9b0fe477ea3bf6fdc81a90cb9386bcd4d99f7eb7ef6652709fa36",
+    "breached_before": [],
+    "breached_after": [
+      "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+    ],
+    "newly_revealed": [
+      "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+    ],
+    "monotonicity_ok": true,
+    "findings": [
+      "singleton_merge_contradiction:sha256:f36f6e44b345afc0488206858a37ae32d965885f31d0def6bba4911b6102f7bd"
+    ]
+  }
+]

@@ -1,0 +1,6 @@
+{
+  "schema": "simurgh.vxd.manifest.v1",
+  "attestation_digest": "sha256:6da5a5d875790d80258734a3c5034883b73b5a0fc18769442232bff4e31f8412",
+  "signature": "ed25519:v6dkBvA52h7zXbvpH7T9bLvbmIda1moJWrGedrDoyEam24J1DKwy5k9RNzjUivBChiF9W3gxxN2Hk7eUE8cqAg==",
+  "public_key_fingerprint": "sha256:ec3cfef76cabb97e9d5e0c0234ba60737c9964c2f20ded564b02c9d6b87a8c4a"
+}

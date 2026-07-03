@@ -1,0 +1,18 @@
+{
+  "schema": "simurgh.vxd.disclosure_claim.v1",
+  "chain_position": 3,
+  "claims": [
+    {
+      "kind": "breach_count",
+      "value": 1,
+      "bound_commitments": [
+        {
+          "digest": "sha256:37f275944a71e7622994e32a6c643e97e477693f635dfc430866f321f90f0aba",
+          "chain_position": 2
+        }
+      ]
+    }
+  ],
+  "demand_side_evidence_digest": null,
+  "prose_history_digest": "sha256:7777777777777777777777777777777777777777777777777777777777777777"
+}

@@ -1,0 +1,22 @@
+[
+  {
+    "schema": "simurgh.vxd.retro_rescore.v1",
+    "window": "2026-05",
+    "merge_event_digest": "sha256:29afc7a292c9abf6ca2af3e2038c0ba3872ccab47e3380c8af104c460a3a5f75",
+    "breached_before": [],
+    "breached_after": [],
+    "newly_revealed": [],
+    "monotonicity_ok": true,
+    "findings": []
+  },
+  {
+    "schema": "simurgh.vxd.retro_rescore.v1",
+    "window": "2026-06",
+    "merge_event_digest": "sha256:29afc7a292c9abf6ca2af3e2038c0ba3872ccab47e3380c8af104c460a3a5f75",
+    "breached_before": [],
+    "breached_after": [],
+    "newly_revealed": [],
+    "monotonicity_ok": true,
+    "findings": []
+  }
+]

@@ -1,0 +1,35 @@
+{
+  "schema": "simurgh.vxd.chain.v1",
+  "entries": [
+    {
+      "position": 0,
+      "kind": "window_commitment",
+      "digest": "sha256:f36f6e44b345afc0488206858a37ae32d965885f31d0def6bba4911b6102f7bd"
+    },
+    {
+      "position": 1,
+      "kind": "merge_event",
+      "digest": "sha256:fe42847a3de9b0fe477ea3bf6fdc81a90cb9386bcd4d99f7eb7ef6652709fa36"
+    },
+    {
+      "position": 2,
+      "kind": "rescore_record",
+      "digest": "sha256:37f275944a71e7622994e32a6c643e97e477693f635dfc430866f321f90f0aba"
+    },
+    {
+      "position": 3,
+      "kind": "disclosure_claim",
+      "digest": "sha256:143527f1580056f8fe35ebe42ec834330d2e467e0190a73861d95b6a8f0fc5a0"
+    },
+    {
+      "position": 4,
+      "kind": "respondent_contest",
+      "digest": "sha256:b8fd2a00d8a319ce6e74d7a4f7bddbd1d25507b9e8acfd34548aea27de8b9f9c"
+    },
+    {
+      "position": 5,
+      "kind": "contest_acknowledgement",
+      "digest": "sha256:1fddee5a73ba7eb5a9dd88526915c55eefd89fc95d945002fb106b01180da6c2"
+    }
+  ]
+}

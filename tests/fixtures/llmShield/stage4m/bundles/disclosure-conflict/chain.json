@@ -1,0 +1,35 @@
+{
+  "schema": "simurgh.vxd.chain.v1",
+  "entries": [
+    {
+      "position": 0,
+      "kind": "window_commitment",
+      "digest": "sha256:290ac9670405f6eb63acde277ccccc356e0045aae7ec45547e5d248796adb884"
+    },
+    {
+      "position": 1,
+      "kind": "window_commitment",
+      "digest": "sha256:3bce1f51a94c0039c9af13e0f3c947ef2995f294fccf59d1cd3918636c104bc1"
+    },
+    {
+      "position": 2,
+      "kind": "merge_event",
+      "digest": "sha256:29afc7a292c9abf6ca2af3e2038c0ba3872ccab47e3380c8af104c460a3a5f75"
+    },
+    {
+      "position": 3,
+      "kind": "rescore_record",
+      "digest": "sha256:700c858345e1687582ffa37e4e417dab8932160cb8553b7450cc155131b11671"
+    },
+    {
+      "position": 4,
+      "kind": "rescore_record",
+      "digest": "sha256:232ddd6d6d9f5baa6886f86794af7b7dd6aa733266a61c6386894c025f4f3e13"
+    },
+    {
+      "position": 5,
+      "kind": "disclosure_claim",
+      "digest": "sha256:bb4c759b45968c5672cd136ad58b40427bdd0ae740e74ec279e436617605a5ad"
+    }
+  ]
+}

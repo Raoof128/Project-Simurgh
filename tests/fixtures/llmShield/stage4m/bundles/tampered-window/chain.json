@@ -1,0 +1,20 @@
+{
+  "schema": "simurgh.vxd.chain.v1",
+  "entries": [
+    {
+      "position": 0,
+      "kind": "window_commitment",
+      "digest": "sha256:b5e3672d9be05845c9a7cc5e990b7a9622a82f4400f2ff6cfa89e8f78fe24b84"
+    },
+    {
+      "position": 1,
+      "kind": "merge_event",
+      "digest": "sha256:660b1ebbc70a0c74676fd32547747b9f2d02fbb899e00abc134a572eedc3991c"
+    },
+    {
+      "position": 2,
+      "kind": "rescore_record",
+      "digest": "sha256:cd56ca1b23b2f51f77a65c8606046e1bdd40ca4cd80411e111339cf0b2750286"
+    }
+  ]
+}

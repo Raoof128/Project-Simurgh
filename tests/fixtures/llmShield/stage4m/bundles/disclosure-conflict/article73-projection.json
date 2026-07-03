@@ -1,0 +1,15 @@
+{
+  "schema": "simurgh.vxd.article73_projection.v1",
+  "attestation_digest": "sha256:c275bdd3529d4128c3fe96cb2f335d260fff7648b50d554b9642d0acc9a1ec89",
+  "incident_description": "not_projected",
+  "temporal_scope": "not_projected",
+  "affected_counts": {
+    "value": 8,
+    "source_digest": "sha256:b7cf0772dcd81a1d02ddb964b3b228a4142df9fe52593f1a4651e50a77808251"
+  },
+  "corrective_context": "not_projected",
+  "non_claims": [
+    "not_legal_compliance_certification",
+    "projection_is_output_surface_not_filing"
+  ]
+}

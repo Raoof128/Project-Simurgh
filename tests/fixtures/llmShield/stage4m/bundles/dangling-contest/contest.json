@@ -1,0 +1,13 @@
+{
+  "schema": "simurgh.vxd.respondent_contest.v1",
+  "contested_records": [
+    {
+      "window": "2026-05",
+      "record_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"
+    }
+  ],
+  "contest_type": "merge_evidence_disputed",
+  "respondent_public_key": "ed25519:MCowBQYDK2VwAyEAS1yCKbyT3bfN3Md1+7n+dP1EU9GCb0gFBCx9XHFZC4k=",
+  "statement_digest": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+  "signature": "ed25519:dbB0L7xg+oZz1fOw2o/u4RkXUNHJ4DJzE84zGYGlbNTnJIkgnJi29TVSMU77dHPY153lkksCVx2lZGUUEoQGDg=="
+}

@@ -1,0 +1,54 @@
+{
+  "clean-chain": {
+    "raw": 0,
+    "reason": null
+  },
+  "crown-reveal": {
+    "raw": 0,
+    "reason": null
+  },
+  "no-merge-control": {
+    "raw": 0,
+    "reason": null
+  },
+  "split-event": {
+    "raw": 43,
+    "reason": "non_coarsening_split"
+  },
+  "inflated-budget": {
+    "raw": 43,
+    "reason": "budget_inflation"
+  },
+  "broken-chain": {
+    "raw": 43,
+    "reason": "parent_digest_mismatch"
+  },
+  "tampered-window": {
+    "raw": 44,
+    "reason": "anti_monotonicity_violation"
+  },
+  "disclosure-conflict": {
+    "raw": 45,
+    "reason": "claim_recompute_mismatch"
+  },
+  "disclosure-backdated": {
+    "raw": 45,
+    "reason": "commitment_sequenced_after_disclosure"
+  },
+  "pincer-violated": {
+    "raw": 45,
+    "reason": "pincer_slot_not_null"
+  },
+  "forged-contest": {
+    "raw": 46,
+    "reason": "signature_invalid"
+  },
+  "dangling-contest": {
+    "raw": 46,
+    "reason": "dangling_record_reference"
+  },
+  "forged-ack": {
+    "raw": 46,
+    "reason": "dangling_contest_digest"
+  }
+}
