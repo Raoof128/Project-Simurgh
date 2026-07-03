@@ -1,0 +1,1064 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Simurgh Stage 4M / VXD — offline verifier</title>
+<style>
+  body { font-family: ui-monospace, monospace; margin: 2rem; max-width: 60rem; }
+  h1 { font-size: 1.1rem; }
+  #drop { border: 2px dashed #888; padding: 2rem; text-align: center; border-radius: 8px; }
+  textarea { width: 100%; height: 4rem; }
+  pre { background: #f4f4f4; padding: 1rem; overflow: auto; border-radius: 6px; }
+  .muted { color: #666; font-size: 0.85rem; }
+</style>
+</head>
+<body>
+<h1>Simurgh Stage 4M / VXD — offline verifier</h1>
+<p class="muted">Drag a bundle's JSON files onto the box, paste the pinned signer key, and click
+verify. Everything recomputes locally: no network, no upload. AnthropicSafe First, then
+ReviewerSafe.</p>
+<div id="drop">Drop bundle .json files here</div>
+<p><label>Pinned signer key (SPKI base64, from vxd-signer.pub):<br />
+<textarea id="pinned" placeholder="MCowBQYDK2Vw..."></textarea></label></p>
+<p>Tier: <select id="tier"><option value="a">A (auditor, full ledgers)</option>
+<option value="p">P (public, aggregates only)</option></select>
+<button id="verify">Verify</button></p>
+<h2>Verdict</h2>
+<pre id="verdict">(none yet)</pre>
+<h2>Signed non-claims</h2>
+<pre id="nonclaims">[
+  "not_sybil_closure",
+  "not_structuring_closure_without_provider_binding",
+  "not_identity_truth",
+  "provider_cluster_graph_assumed",
+  "not_capability_transfer_proof",
+  "budget_is_declared_policy_not_safety_bound",
+  "raw_identity_not_exported",
+  "ledger_is_metadata_only",
+  "attestation_assumes_reviewer_runtime",
+  "not_model_safety",
+  "not_kernel_sandboxing",
+  "determinism_not_statistical_robustness",
+  "complements_not_replaces_prevention_credentials",
+  "not_legal_compliance_certification",
+  "contest_is_recorded_not_adjudicated",
+  "merge_evidence_not_verified",
+  "retro_rescoring_is_arithmetic_not_new_measurement",
+  "disclosure_binding_is_chain_ordering_not_truth",
+  "projection_is_output_surface_not_filing"
+]</pre>
+<script type="module">
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Stage 4M frozen constants (spec §3-§4). Changing ANY value invalidates every committed digest.
+const VXD_MERGE_EVENT_SCHEMA = "simurgh.ccb.cluster_merge_event.v1"; // name 4L reserved
+const VXD_RESCORE_SCHEMA = "simurgh.vxd.retro_rescore.v1";
+const VXD_DISCLOSURE_SCHEMA = "simurgh.vxd.disclosure_claim.v1";
+const VXD_CONTEST_SCHEMA = "simurgh.vxd.respondent_contest.v1";
+const VXD_ACK_SCHEMA = "simurgh.vxd.contest_acknowledgement.v1";
+const VXD_WINDOW_SCHEMA = "simurgh.vxd.window_commitment.v1";
+const VXD_CHAIN_SCHEMA = "simurgh.vxd.chain.v1";
+const VXD_ATTESTATION_SCHEMA = "simurgh.vxd.attestation.v1";
+const VXD_MANIFEST_SCHEMA = "simurgh.vxd.manifest.v1";
+const VXD_TIER_P_SCHEMA = "simurgh.vxd.tier_p.v1";
+const VXD_PROJECTION_SCHEMA = "simurgh.vxd.article73_projection.v1";
+const VXD_VERDICT_SCHEMA = "simurgh.vxd.verdict.v1";
+const VXD_MANIFEST_DOMAIN = "SIMURGH_STAGE4M_VXD_MANIFEST_V1\0";
+const VXD_CONTEST_DOMAIN = "SIMURGH_STAGE4M_VXD_CONTEST_V1\0";
+
+// 4L lineage: enum + denylist carried verbatim (spec §4.1).
+const MERGE_BASIS_ENUM = Object.freeze([
+  "device_commitment",
+  "network_bucket",
+  "org_binding",
+  "payment_graph",
+  "reseller_path",
+  "traffic_shape",
+]);
+const RAW_IDENTITY_DENYLIST = Object.freeze([
+  "account_id",
+  "address",
+  "card",
+  "device_id",
+  "email",
+  "ip",
+  "name",
+  "org_name",
+  "phone",
+  "plaintext",
+  "raw",
+  "user_id",
+]);
+
+const CONTEST_TYPES = Object.freeze([
+  "arithmetic_error_alleged",
+  "assignment_disputed",
+  "merge_evidence_disputed",
+  "window_boundary_disputed",
+]);
+
+const CLAIM_KINDS = Object.freeze([
+  "breach_count",
+  "cluster_count",
+  "consumer_count",
+  "exposure_total",
+  "window_range",
+]);
+
+// Chain entry kinds (spec §4.3): positions are indices into the single bundle chain.
+const CHAIN_KINDS = Object.freeze([
+  "contest_acknowledgement",
+  "disclosure_claim",
+  "merge_event",
+  "rescore_record",
+  "respondent_contest",
+  "window_commitment",
+]);
+
+const VXD_NON_CLAIMS = Object.freeze([
+  // 4L thirteen verbatim
+  "not_sybil_closure",
+  "not_structuring_closure_without_provider_binding",
+  "not_identity_truth",
+  "provider_cluster_graph_assumed",
+  "not_capability_transfer_proof",
+  "budget_is_declared_policy_not_safety_bound",
+  "raw_identity_not_exported",
+  "ledger_is_metadata_only",
+  "attestation_assumes_reviewer_runtime",
+  "not_model_safety",
+  "not_kernel_sandboxing",
+  "determinism_not_statistical_robustness",
+  "complements_not_replaces_prevention_credentials",
+  // 4M additions (spec §1)
+  "not_legal_compliance_certification",
+  "contest_is_recorded_not_adjudicated",
+  "merge_evidence_not_verified",
+  "retro_rescoring_is_arithmetic_not_new_measurement",
+  "disclosure_binding_is_chain_ordering_not_truth",
+  "projection_is_output_surface_not_filing",
+]);
+
+const VXD_KNOWN_LIMITATIONS = Object.freeze([
+  "merge_evidence_not_verified",
+  "no_merge_no_reveal",
+  "demand_side_evidence_digest_reserved_unbound",
+  "basis_digests_opaque_slots",
+  "respondent_key_binding_out_of_band",
+  "proof_is_of_model_not_implementation",
+  "acknowledgement_is_receipt_not_ruling",
+  "browser_verifier_is_projection_not_normative",
+  "disclosure_is_adversary_feedback_bounded_not_eliminated",
+  "tier_r_slice_machinery_deferred",
+  "bundle_recipient_vetting_out_of_band",
+  "window_budgets_assumed_consistent_with_graph_policy",
+  "singleton_contradiction_not_yet_bound_to_4l_cardinality_digest",
+]);
+
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// IO-free canonical JSON + pure-JS SHA-256 + sorted-leaf Merkle root. Runs unchanged in
+// Node and the browser. The sha256 here is tested byte-for-byte against node:crypto.
+
+const DIGEST_RE = /^sha256:[a-f0-9]{64}$/;
+
+function normalise(value) {
+  if (Array.isArray(value)) return value.map(normalise);
+  if (value && typeof value === "object") {
+    const out = {};
+    for (const key of Object.keys(value).sort()) out[key] = normalise(value[key]);
+    return out;
+  }
+  return value;
+}
+
+function canonicalJson(value) {
+  return JSON.stringify(normalise(value));
+}
+
+// Pure-JS SHA-256 (FIPS 180-4) over a UTF-8 string. No dependencies.
+const K = new Uint32Array([
+  0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
+  0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
+  0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+  0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
+  0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
+  0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+  0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+  0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2,
+]);
+
+function utf8Bytes(str) {
+  const out = [];
+  for (let i = 0; i < str.length; i++) {
+    let c = str.codePointAt(i);
+    if (c > 0xffff) i++;
+    if (c < 0x80) out.push(c);
+    else if (c < 0x800) out.push(0xc0 | (c >> 6), 0x80 | (c & 63));
+    else if (c < 0x10000) out.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));
+    else
+      out.push(0xf0 | (c >> 18), 0x80 | ((c >> 12) & 63), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));
+  }
+  return out;
+}
+
+function sha256Hex(str) {
+  const bytes = utf8Bytes(str);
+  const bitLen = bytes.length * 8;
+  bytes.push(0x80);
+  while (bytes.length % 64 !== 56) bytes.push(0);
+  for (let i = 7; i >= 0; i--) bytes.push(Math.floor(bitLen / 2 ** (8 * i)) & 0xff);
+  const h = new Uint32Array([
+    0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19,
+  ]);
+  const w = new Uint32Array(64);
+  const rotr = (x, n) => (x >>> n) | (x << (32 - n));
+  for (let off = 0; off < bytes.length; off += 64) {
+    for (let t = 0; t < 16; t++) {
+      const i = off + t * 4;
+      w[t] = (bytes[i] << 24) | (bytes[i + 1] << 16) | (bytes[i + 2] << 8) | bytes[i + 3];
+    }
+    for (let t = 16; t < 64; t++) {
+      const s0 = rotr(w[t - 15], 7) ^ rotr(w[t - 15], 18) ^ (w[t - 15] >>> 3);
+      const s1 = rotr(w[t - 2], 17) ^ rotr(w[t - 2], 19) ^ (w[t - 2] >>> 10);
+      w[t] = (w[t - 16] + s0 + w[t - 7] + s1) | 0;
+    }
+    let [a, b, c, d, e, f, g, hh] = h;
+    for (let t = 0; t < 64; t++) {
+      const S1 = rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25);
+      const ch = (e & f) ^ (~e & g);
+      const t1 = (hh + S1 + ch + K[t] + w[t]) | 0;
+      const S0 = rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22);
+      const maj = (a & b) ^ (a & c) ^ (b & c);
+      const t2 = (S0 + maj) | 0;
+      hh = g;
+      g = f;
+      f = e;
+      e = (d + t1) | 0;
+      d = c;
+      c = b;
+      b = a;
+      a = (t1 + t2) | 0;
+    }
+    h[0] = (h[0] + a) | 0;
+    h[1] = (h[1] + b) | 0;
+    h[2] = (h[2] + c) | 0;
+    h[3] = (h[3] + d) | 0;
+    h[4] = (h[4] + e) | 0;
+    h[5] = (h[5] + f) | 0;
+    h[6] = (h[6] + g) | 0;
+    h[7] = (h[7] + hh) | 0;
+  }
+  return [...h].map((x) => (x >>> 0).toString(16).padStart(8, "0")).join("");
+}
+
+const recordDigest = (value) => `sha256:${sha256Hex(canonicalJson(value))}`;
+
+// Sorted-leaf Merkle root (spec §4.0): leaves are record digests, sorted lexicographically,
+// pair-hashed upward; odd node promotes. Empty ledger commits the frozen empty-root.
+function merkleRootSorted(digests) {
+  for (const d of digests) {
+    if (!DIGEST_RE.test(d)) throw new Error(`merkle_leaf_invalid: ${d}`);
+  }
+  if (digests.length === 0) return `sha256:${sha256Hex("vxd-empty")}`;
+  let level = [...digests].sort();
+  while (level.length > 1) {
+    const next = [];
+    for (let i = 0; i < level.length; i += 2) {
+      if (i + 1 === level.length) next.push(level[i]);
+      else next.push(`sha256:${sha256Hex(`${level[i]}|${level[i + 1]}`)}`);
+    }
+    level = next;
+  }
+  return level[0];
+}
+
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
+
+const fail = (reason, detail) => ({ ok: false, rawCode: 43, reason, detail: detail ?? null });
+
+function rawIdentityKey(obj) {
+  for (const k of Object.keys(obj)) {
+    if (RAW_IDENTITY_DENYLIST.includes(k.toLowerCase())) return k;
+  }
+  return null;
+}
+
+const WINDOW_FIELDS = [
+  "clusters",
+  "graph_version_digest",
+  "schema",
+  "source_attestation_digest",
+  "window",
+];
+const CLUSTER_FIELDS = ["budget", "cluster_commitment", "cluster_size", "cluster_weighted_total"];
+const EVENT_FIELDS = [
+  "carried_cluster_commitments",
+  "merges",
+  "new_graph_version_digest",
+  "old_graph_version_digest",
+  "parent_event_digest",
+  "raw_identity_exported",
+  "schema",
+  "sequence",
+];
+const MERGE_FIELDS = [
+  "merge_basis",
+  "merged_cluster_commitments",
+  "new_budget",
+  "new_cluster_commitment",
+];
+
+function exactKeys(obj, fields) {
+  const keys = Object.keys(obj).sort();
+  if (keys.length !== fields.length) return false;
+  return keys.every((k, i) => k === fields[i]);
+}
+
+const nonNegInt = (n) => Number.isInteger(n) && n >= 0;
+
+function validateWindowCommitment(w) {
+  if (!w || typeof w !== "object" || Array.isArray(w)) return fail("schema_invalid");
+  if (rawIdentityKey(w)) return fail("raw_identity_exported", rawIdentityKey(w));
+  if (!exactKeys(w, WINDOW_FIELDS)) return fail("schema_invalid", "window_fields");
+  if (w.schema !== VXD_WINDOW_SCHEMA) return fail("schema_invalid", "schema");
+  if (typeof w.window !== "string" || w.window.length === 0)
+    return fail("schema_invalid", "window");
+  if (!DIGEST_RE.test(w.source_attestation_digest)) {
+    return fail("schema_invalid", "source_attestation_digest");
+  }
+  if (!DIGEST_RE.test(w.graph_version_digest))
+    return fail("schema_invalid", "graph_version_digest");
+  if (!Array.isArray(w.clusters) || w.clusters.length === 0)
+    return fail("schema_invalid", "clusters");
+  const seen = new Set();
+  for (const c of w.clusters) {
+    if (!c || typeof c !== "object" || Array.isArray(c)) return fail("schema_invalid");
+    if (rawIdentityKey(c)) return fail("raw_identity_exported", rawIdentityKey(c));
+    if (!exactKeys(c, CLUSTER_FIELDS)) return fail("schema_invalid", "cluster_fields");
+    if (!DIGEST_RE.test(c.cluster_commitment)) return fail("schema_invalid", "cluster_commitment");
+    if (
+      !nonNegInt(c.cluster_weighted_total) ||
+      !nonNegInt(c.budget) ||
+      !nonNegInt(c.cluster_size) ||
+      c.cluster_size < 1
+    ) {
+      return fail("schema_invalid", "cluster_numbers");
+    }
+    if (seen.has(c.cluster_commitment)) return fail("schema_invalid", "duplicate_cluster");
+    seen.add(c.cluster_commitment);
+  }
+  return { ok: true };
+}
+
+function validateEventShape(event) {
+  if (!event || typeof event !== "object" || Array.isArray(event)) return fail("schema_invalid");
+  const rk = rawIdentityKey(event);
+  if (rk) return fail("raw_identity_exported", rk);
+  if (!exactKeys(event, EVENT_FIELDS)) return fail("schema_invalid", "event_fields");
+  if (event.schema !== VXD_MERGE_EVENT_SCHEMA) return fail("schema_invalid", "schema");
+  if (event.raw_identity_exported !== false) return fail("raw_identity_exported", "flag");
+  if (!Number.isInteger(event.sequence) || event.sequence < 1) {
+    return fail("schema_invalid", "sequence");
+  }
+  if (event.parent_event_digest !== null && !DIGEST_RE.test(event.parent_event_digest)) {
+    return fail("schema_invalid", "parent_event_digest");
+  }
+  for (const f of ["old_graph_version_digest", "new_graph_version_digest"]) {
+    if (!DIGEST_RE.test(event[f])) return fail("schema_invalid", f);
+  }
+  if (!Array.isArray(event.merges) || event.merges.length === 0) {
+    return fail("schema_invalid", "merges");
+  }
+  if (!Array.isArray(event.carried_cluster_commitments)) return fail("schema_invalid", "carried");
+  for (const m of event.merges) {
+    if (!m || typeof m !== "object" || Array.isArray(m)) return fail("schema_invalid");
+    const mrk = rawIdentityKey(m);
+    if (mrk) return fail("raw_identity_exported", mrk);
+    if (!exactKeys(m, MERGE_FIELDS)) return fail("schema_invalid", "merge_fields");
+    if (!DIGEST_RE.test(m.new_cluster_commitment)) {
+      return fail("schema_invalid", "new_cluster_commitment");
+    }
+    if (!nonNegInt(m.new_budget)) return fail("schema_invalid", "new_budget");
+    if (!Array.isArray(m.merged_cluster_commitments) || m.merged_cluster_commitments.length < 2) {
+      return fail("schema_invalid", "merged_cluster_commitments");
+    }
+    if (!Array.isArray(m.merge_basis) || m.merge_basis.length === 0) {
+      return fail("schema_invalid", "merge_basis");
+    }
+    for (const b of m.merge_basis) {
+      if (!MERGE_BASIS_ENUM.includes(b)) return fail("invalid_merge_basis", b);
+    }
+  }
+  return { ok: true };
+}
+
+// Walks the chain from genesis. Coarsening-only: every old commitment lands in exactly one
+// new bucket (spec §2 image function is total and single-valued; `imageMap` IS the spec's
+// `image_i` for one epoch). Budget non-inflation (spec §2) is enforced HERE at event-validation
+// time, using the budget state threaded from genesis — so an inflationary merge is a raw-43
+// invalid EVENT regardless of which windows exist (fixes the "zero-window bypass").
+// `genesis = { graphVersionDigest, clusters: string[], budgets: { [commitment]: number } }`.
+function validateMergeChain(events, genesis) {
+  if (!Array.isArray(events)) throw new Error("events_must_be_array");
+  let clusters = [...genesis.clusters];
+  let budgetByCluster = new Map(Object.entries(genesis.budgets));
+  let expectedOldGraph = genesis.graphVersionDigest;
+  let expectedParent = null;
+  let expectedSequence = 1;
+  const epochs = [];
+  for (const event of events) {
+    const shape = validateEventShape(event);
+    if (!shape.ok) return shape;
+    if (event.parent_event_digest !== expectedParent) return fail("parent_digest_mismatch");
+    if (event.sequence !== expectedSequence) return fail("sequence_gap");
+    if (event.old_graph_version_digest !== expectedOldGraph) return fail("graph_version_mismatch");
+    const oldSet = new Set(clusters);
+    const claimed = new Set();
+    const imageMap = new Map();
+    const mergedBudgets = new Map();
+    const nextBudgets = new Map();
+    const newClusters = [];
+    for (const m of event.merges) {
+      if (imageMap.has(m.new_cluster_commitment) || oldSet.has(m.new_cluster_commitment)) {
+        // a new bucket id may not collide with another bucket or an old commitment
+        return fail("schema_invalid", "new_cluster_collision");
+      }
+      for (const c of m.merged_cluster_commitments) {
+        if (!oldSet.has(c)) return fail("unknown_old_cluster", c);
+        if (claimed.has(c)) {
+          // same old commitment in two buckets = the partition splits, not coarsens
+          return fail(
+            event.merges.filter((x) => x.merged_cluster_commitments.includes(c)).length > 1
+              ? "non_coarsening_split"
+              : "duplicate_old_cluster",
+            c
+          );
+        }
+        claimed.add(c);
+        imageMap.set(c, m.new_cluster_commitment);
+      }
+      // Budget non-inflation: the merged bucket may not exceed ANY constituent's budget.
+      const minConstituentBudget = Math.min(
+        ...m.merged_cluster_commitments.map((c) => budgetByCluster.get(c))
+      );
+      if (m.new_budget > minConstituentBudget) {
+        return fail("budget_inflation", m.new_cluster_commitment);
+      }
+      mergedBudgets.set(m.new_cluster_commitment, m.new_budget);
+      nextBudgets.set(m.new_cluster_commitment, m.new_budget);
+      newClusters.push(m.new_cluster_commitment);
+    }
+    for (const c of event.carried_cluster_commitments) {
+      if (!oldSet.has(c)) return fail("unknown_old_cluster", c);
+      if (claimed.has(c)) return fail("duplicate_old_cluster", c);
+      claimed.add(c);
+      imageMap.set(c, c);
+      nextBudgets.set(c, budgetByCluster.get(c));
+      newClusters.push(c);
+    }
+    if (claimed.size !== oldSet.size) {
+      const missing = clusters.find((c) => !claimed.has(c));
+      return fail("omitted_old_cluster", missing);
+    }
+    const eventDigest = recordDigest(event);
+    epochs.push({
+      event,
+      eventDigest,
+      imageMap,
+      clusters: newClusters,
+      mergedBudgets,
+      budgets: nextBudgets,
+    });
+    clusters = newClusters;
+    budgetByCluster = nextBudgets;
+    expectedOldGraph = event.new_graph_version_digest;
+    expectedParent = eventDigest;
+    expectedSequence += 1;
+  }
+  return { ok: true, epochs };
+}
+
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Retroactive re-scoring (spec §4.2). Pure arithmetic over committed cluster-level window
+// totals; no re-measurement. Monotonicity is stated and checked through the merge image —
+// old and new cluster commitments are DIFFERENT identifier spaces (spec §2).
+
+
+function breachedClusters(clusters) {
+  return clusters
+    .filter((c) => c.cluster_weighted_total > c.budget)
+    .map((c) => c.cluster_commitment)
+    .sort();
+}
+
+// Applies ONE epoch to ONE window commitment. Returns the re-score record plus the
+// post-merge window state (so rescoreAll can fold epoch i+1 on top of epoch i).
+function rescoreWindow({ windowCommitment, epoch }) {
+  const byCommitment = new Map(windowCommitment.clusters.map((c) => [c.cluster_commitment, c]));
+  const before = breachedClusters(windowCommitment.clusters);
+  const afterClusters = [];
+  const findings = [];
+  for (const m of epoch.event.merges) {
+    const present = m.merged_cluster_commitments.filter((c) => byCommitment.has(c));
+    if (present.length === 0) continue; // no exposure from this window flows into the bucket
+    // Budget non-inflation was already enforced by validateMergeChain (Task 3, reviewer fix);
+    // by the time we re-score, m.new_budget is guaranteed <= every constituent budget.
+    const total = present.reduce((s, c) => s + byCommitment.get(c).cluster_weighted_total, 0);
+    const size = present.reduce((s, c) => s + byCommitment.get(c).cluster_size, 0);
+    afterClusters.push({
+      cluster_commitment: m.new_cluster_commitment,
+      cluster_weighted_total: total,
+      budget: m.new_budget,
+      cluster_size: size,
+    });
+    const singletons = present.filter((c) => byCommitment.get(c).cluster_size === 1);
+    if (singletons.length >= 2) {
+      findings.push(`singleton_merge_contradiction:${recordDigest(windowCommitment)}`);
+    }
+  }
+  for (const c of epoch.event.carried_cluster_commitments) {
+    if (byCommitment.has(c)) afterClusters.push({ ...byCommitment.get(c) });
+  }
+  const after = breachedClusters(afterClusters);
+  const imageOfBefore = before.map((b) => epoch.imageMap.get(b)).filter(Boolean);
+  const newlyRevealed = after.filter((a) => !imageOfBefore.includes(a)).sort();
+  const monotonicityOk = imageOfBefore.every((i) => after.includes(i));
+  const record = {
+    schema: VXD_RESCORE_SCHEMA,
+    window: windowCommitment.window,
+    merge_event_digest: epoch.eventDigest,
+    breached_before: before,
+    breached_after: after,
+    newly_revealed: newlyRevealed,
+    monotonicity_ok: monotonicityOk,
+    findings: [...findings].sort(),
+  };
+  return {
+    ok: true,
+    record,
+    nextWindowState: {
+      ...windowCommitment,
+      graph_version_digest: epoch.event.new_graph_version_digest,
+      clusters: afterClusters,
+    },
+  };
+}
+
+function rescoreAll({ windows, epochs }) {
+  const records = [];
+  for (const w of windows) {
+    let state = w;
+    for (const epoch of epochs) {
+      const r = rescoreWindow({ windowCommitment: state, epoch });
+      if (!r.ok) return r;
+      records.push(r.record);
+      state = r.nextWindowState;
+    }
+  }
+  return { ok: true, records };
+}
+
+// The V5 arm. ONLY the monotonicity predicate lives here: every committed breached_before
+// member's image must appear in the RECOMPUTED breached_after. All other drift between the
+// committed and recomputed records is a digest mismatch handled by the CLI (raw 22 lineage).
+function verifyRescoreRecord({ committed, recomputed, epoch }) {
+  for (const b of committed.breached_before) {
+    const image = epoch.imageMap.get(b) ?? b;
+    if (!recomputed.breached_after.includes(image)) {
+      return {
+        ok: false,
+        rawCode: 44,
+        reason: "anti_monotonicity_violation",
+        offending: { window: committed.window, old_cluster_commitment: b, image_commitment: image },
+      };
+    }
+  }
+  return { ok: true };
+}
+
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Bundle chain + disclosure-claim binding (spec §4.3). Ordering is chain position, never
+// wall-clock. Chain positions are NEVER trusted from claim JSON — every (digest, position)
+// pair is checked against the reconstructed chain.
+
+
+const fail = (reason) => ({ ok: false, rawCode: 45, reason });
+
+function buildChain(entries) {
+  for (const e of entries) {
+    if (!CHAIN_KINDS.includes(e.kind)) throw new Error(`chain_kind_invalid: ${e.kind}`);
+    if (!DIGEST_RE.test(e.digest)) throw new Error(`chain_digest_invalid: ${e.digest}`);
+  }
+  return {
+    schema: VXD_CHAIN_SCHEMA,
+    entries: entries.map((e, position) => ({ position, kind: e.kind, digest: e.digest })),
+  };
+}
+
+const chainDigest = (chain) => recordDigest(chain);
+
+const DISCLOSURE_FIELDS = [
+  "chain_position",
+  "claims",
+  "demand_side_evidence_digest",
+  "prose_history_digest",
+  "schema",
+];
+const CLAIM_FIELDS = ["bound_commitments", "kind", "value"];
+
+function chainEntryAt(chain, position) {
+  const e = chain.entries[position];
+  return e && e.position === position ? e : null;
+}
+
+// Frozen closed-world recomputation rules — one per claim kind (spec §4.3).
+function recompute(kind, boundRecords) {
+  const windows = boundRecords.filter((r) => r.schema === "simurgh.vxd.window_commitment.v1");
+  const rescores = boundRecords.filter((r) => r.schema === "simurgh.vxd.retro_rescore.v1");
+  switch (kind) {
+    case "breach_count": {
+      const distinct = new Set(rescores.flatMap((r) => r.breached_after));
+      return distinct.size;
+    }
+    case "cluster_count":
+      return windows.reduce((s, w) => s + w.clusters.length, 0);
+    case "consumer_count":
+      return windows.reduce((s, w) => s + w.clusters.reduce((t, c) => t + c.cluster_size, 0), 0);
+    case "exposure_total":
+      return windows.reduce(
+        (s, w) => s + w.clusters.reduce((t, c) => t + c.cluster_weighted_total, 0),
+        0
+      );
+    case "window_range": {
+      const ws = windows.map((w) => w.window).sort();
+      return [ws[0], ws[ws.length - 1]];
+    }
+    default:
+      return undefined; // unreachable — kind gated before recompute
+  }
+}
+
+// tier "a" (default) recomputes every claim value from the bound ledger records; tier "p"
+// (public) verifies only chain ordering + (digest, position) consistency, because the ledger
+// records are absent from a Tier-P bundle by design (spec §4.0).
+function verifyDisclosure({ disclosure, chain, recordsByDigest, tier = "a" }) {
+  const d = disclosure;
+  if (!d || typeof d !== "object" || Array.isArray(d)) return fail("schema_invalid");
+  const keys = Object.keys(d).sort();
+  if (
+    keys.length !== DISCLOSURE_FIELDS.length ||
+    !keys.every((k, i) => k === DISCLOSURE_FIELDS[i])
+  ) {
+    return fail("schema_invalid");
+  }
+  if (d.schema !== VXD_DISCLOSURE_SCHEMA) return fail("schema_invalid");
+  if (!Number.isInteger(d.chain_position) || d.chain_position < 0) return fail("schema_invalid");
+  if (!DIGEST_RE.test(d.prose_history_digest)) return fail("schema_invalid");
+  if (d.demand_side_evidence_digest !== null) return fail("pincer_slot_not_null");
+  if (!Array.isArray(d.claims) || d.claims.length === 0) return fail("schema_invalid");
+
+  // The disclosure must actually SIT at its declared chain position.
+  const own = chainEntryAt(chain, d.chain_position);
+  if (!own || own.kind !== "disclosure_claim" || own.digest !== recordDigest(d)) {
+    return fail("commitment_sequenced_after_disclosure");
+  }
+
+  for (const claim of d.claims) {
+    if (!claim || typeof claim !== "object" || Array.isArray(claim)) return fail("schema_invalid");
+    const ck = Object.keys(claim).sort();
+    if (ck.length !== CLAIM_FIELDS.length || !ck.every((k, i) => k === CLAIM_FIELDS[i])) {
+      return fail("schema_invalid");
+    }
+    if (!CLAIM_KINDS.includes(claim.kind)) return fail("unknown_claim_kind");
+    if (!Array.isArray(claim.bound_commitments) || claim.bound_commitments.length === 0) {
+      return fail("schema_invalid");
+    }
+    const boundRecords = [];
+    for (const b of claim.bound_commitments) {
+      if (!b || !DIGEST_RE.test(b.digest) || !Number.isInteger(b.chain_position)) {
+        return fail("schema_invalid");
+      }
+      if (b.chain_position >= d.chain_position)
+        return fail("commitment_sequenced_after_disclosure");
+      const entry = chainEntryAt(chain, b.chain_position);
+      if (!entry || entry.digest !== b.digest) return fail("commitment_sequenced_after_disclosure");
+      if (tier === "a") {
+        const record = recordsByDigest.get(b.digest);
+        if (!record) return fail("commitment_sequenced_after_disclosure");
+        boundRecords.push(record);
+      }
+    }
+    // Tier P stops after chain-ordering checks — the ledger records needed to recompute the
+    // claim value are not part of the public tier.
+    if (tier !== "a") continue;
+    const expected = recompute(claim.kind, boundRecords);
+    const matches =
+      claim.kind === "window_range"
+        ? JSON.stringify(claim.value) === JSON.stringify(expected)
+        : claim.value === expected;
+    if (!matches) return fail("claim_recompute_mismatch");
+  }
+  return { ok: true };
+}
+
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Respondent path (spec §4.4): the accused runs the SAME verification and files a signed
+// contest. Contest is recorded, never adjudicated. Signature verification is an injected
+// async callback so this file runs unchanged in the browser.
+
+
+const fail = (reason) => ({ ok: false, rawCode: 46, reason });
+
+function contestSigningPayload(record) {
+  const { signature, ...payload } = record;
+  return `${VXD_CONTEST_DOMAIN}${canonicalJson(payload)}`;
+}
+
+function implicationReport({ records, respondentClusters }) {
+  const referenced = [];
+  const matched = new Set();
+  for (const record of records) {
+    const haystack = canonicalJson(record);
+    for (const cluster of respondentClusters) {
+      if (haystack.includes(cluster)) {
+        referenced.push({
+          record_digest: recordDigest(record),
+          schema: record.schema,
+          window: typeof record.window === "string" ? record.window : null,
+          matched_cluster: cluster,
+        });
+        matched.add(cluster);
+      }
+    }
+  }
+  return {
+    referenced,
+    not_referenced_in_bundle: respondentClusters.filter((c) => !matched.has(c)).sort(),
+  };
+}
+
+const CONTEST_FIELDS = [
+  "contest_type",
+  "contested_records",
+  "respondent_public_key",
+  "schema",
+  "signature",
+  "statement_digest",
+];
+const ACK_FIELDS = [
+  "contest_digest",
+  "respondent_public_key",
+  "schema",
+  "signature",
+  "statement_digest",
+];
+const KEY_RE = /^ed25519:[A-Za-z0-9+/=]+$/;
+
+async function checkSignature(record, keyB64, verifySig) {
+  if (typeof record.signature !== "string" || !record.signature.startsWith("ed25519:"))
+    return false;
+  return verifySig({
+    publicKeySpkiB64: keyB64,
+    message: contestSigningPayload(record),
+    signatureB64: record.signature.slice("ed25519:".length),
+  });
+}
+
+async function validateContest({ contest, recordsByDigest, verifySig }) {
+  if (!contest || typeof contest !== "object" || Array.isArray(contest))
+    return fail("schema_invalid");
+  const keys = Object.keys(contest).sort();
+  if (keys.length !== CONTEST_FIELDS.length || !keys.every((k, i) => k === CONTEST_FIELDS[i])) {
+    return fail("schema_invalid");
+  }
+  if (contest.schema !== VXD_CONTEST_SCHEMA) return fail("schema_invalid");
+  if (!DIGEST_RE.test(contest.statement_digest)) return fail("schema_invalid");
+  if (!KEY_RE.test(contest.respondent_public_key)) return fail("schema_invalid");
+  if (!CONTEST_TYPES.includes(contest.contest_type)) return fail("unknown_contest_type");
+  if (!Array.isArray(contest.contested_records) || contest.contested_records.length === 0) {
+    return fail("schema_invalid");
+  }
+  for (const cr of contest.contested_records) {
+    if (!cr || typeof cr.window !== "string" || !DIGEST_RE.test(cr.record_digest)) {
+      return fail("schema_invalid");
+    }
+    if (!recordsByDigest.has(cr.record_digest)) return fail("dangling_record_reference");
+  }
+  const keyB64 = contest.respondent_public_key.slice("ed25519:".length);
+  const ok = await checkSignature(contest, keyB64, verifySig);
+  return ok ? { ok: true } : fail("signature_invalid");
+}
+
+async function validateAcknowledgement({
+  ack,
+  contestDigests,
+  verifySig,
+  providerPublicKeySpkiB64,
+}) {
+  if (!ack || typeof ack !== "object" || Array.isArray(ack)) return fail("schema_invalid");
+  const keys = Object.keys(ack).sort();
+  if (keys.length !== ACK_FIELDS.length || !keys.every((k, i) => k === ACK_FIELDS[i])) {
+    return fail("schema_invalid");
+  }
+  if (ack.schema !== VXD_ACK_SCHEMA) return fail("schema_invalid");
+  if (!DIGEST_RE.test(ack.statement_digest)) return fail("schema_invalid");
+  if (!DIGEST_RE.test(ack.contest_digest)) return fail("schema_invalid");
+  if (!contestDigests.has(ack.contest_digest)) return fail("dangling_contest_digest");
+  const ok = await checkSignature(ack, providerPublicKeySpkiB64, verifySig);
+  return ok ? { ok: true } : fail("signature_invalid");
+}
+
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Tier-aware verifier core (spec §4.0, §4.6). IO-free: takes an already-loaded bundle and an
+// injected async signature-verify callback, so the SAME function runs in Node and the browser
+// (parity by construction, V16). Manifest signature is verified by the adapter and passed in as
+// `manifestCheck` — this keeps PEM/DER handling out of core while the verdict stays identical.
+
+
+
+
+
+
+const LEDGER_CHECKS = [
+  "windows_valid",
+  "merge_chain_valid",
+  "rescore_recompute",
+  "monotonicity",
+  "attestation_roots",
+];
+
+async function verifyBundleCore({
+  bundle,
+  tier,
+  verifySig,
+  providerPublicKeySpkiB64,
+  manifestCheck,
+}) {
+  const checks = [];
+  const mark = (name, status) => checks.push({ name, status });
+  const skipLedger = tier === "p";
+  let newlyRevealed = [];
+  let findings = [];
+
+  const verdict = (rawCode, reason) => ({
+    schema: VXD_VERDICT_SCHEMA,
+    tier,
+    rawCode,
+    reason,
+    checks,
+    newly_revealed: newlyRevealed,
+    findings,
+  });
+  const failCheck = (name, rawCode, reason) => {
+    mark(name, "failed");
+    return verdict(rawCode, reason);
+  };
+
+  const { windows, mergeEvents, rescoreRecords, disclosure, chain, contests, acks, attestation } =
+    bundle;
+
+  // 1. windows_valid (Tier A)
+  if (skipLedger) mark("windows_valid", "not_in_tier");
+  else {
+    for (const w of windows) {
+      const r = validateWindowCommitment(w);
+      if (!r.ok) return failCheck("windows_valid", r.rawCode, r.reason);
+    }
+    mark("windows_valid", "ok");
+  }
+
+  // 2. merge_chain_valid (Tier A)
+  let epochs = [];
+  if (skipLedger) mark("merge_chain_valid", "not_in_tier");
+  else {
+    const genesis = {
+      graphVersionDigest: windows[0]?.graph_version_digest,
+      clusters: (windows[0]?.clusters ?? []).map((c) => c.cluster_commitment),
+      budgets: Object.fromEntries(
+        (windows[0]?.clusters ?? []).map((c) => [c.cluster_commitment, c.budget])
+      ),
+    };
+    const chk = validateMergeChain(mergeEvents, genesis);
+    if (!chk.ok) return failCheck("merge_chain_valid", chk.rawCode, chk.reason);
+    epochs = chk.epochs;
+    mark("merge_chain_valid", "ok");
+  }
+
+  // 3+4. rescore_recompute + monotonicity (Tier A). Recompute from windows+epochs; compare to
+  // committed. Monotonicity violation -> 44 (checked FIRST); any other drift -> 22.
+  if (skipLedger) {
+    mark("rescore_recompute", "not_in_tier");
+    mark("monotonicity", "not_in_tier");
+  } else {
+    const recomputed = rescoreAll({ windows, epochs }).records;
+    // monotonicity: per committed record against its recomputed sibling by index
+    for (let i = 0; i < rescoreRecords.length; i++) {
+      const rec = recomputed[i];
+      const epoch = epochs[i % Math.max(epochs.length, 1)];
+      if (rec && epoch) {
+        const mv = verifyRescoreRecord({ committed: rescoreRecords[i], recomputed: rec, epoch });
+        if (!mv.ok) return failCheck("monotonicity", mv.rawCode, mv.reason);
+      }
+    }
+    mark("monotonicity", "ok");
+    // remaining drift (counts, newly_revealed, etc.) -> 22 digest-lineage
+    if (canonicalJson(rescoreRecords) !== canonicalJson(recomputed)) {
+      return failCheck("rescore_recompute", 22, "rescore_digest_mismatch");
+    }
+    mark("rescore_recompute", "ok");
+    newlyRevealed = [...new Set(recomputed.flatMap((r) => r.newly_revealed))].sort();
+    findings = [...new Set(recomputed.flatMap((r) => r.findings))].sort();
+  }
+
+  // 5. disclosure_binding (both tiers)
+  if (disclosure) {
+    const recordsByDigest = new Map();
+    for (const w of windows) recordsByDigest.set(recordDigest(w), w);
+    for (const r of rescoreRecords) recordsByDigest.set(recordDigest(r), r);
+    const dr = verifyDisclosure({ disclosure, chain, recordsByDigest, tier });
+    if (!dr.ok) return failCheck("disclosure_binding", dr.rawCode, dr.reason);
+    mark("disclosure_binding", "ok");
+  } else mark("disclosure_binding", "not_in_tier");
+
+  // 6. contests_valid (both tiers)
+  if (contests.length || acks.length) {
+    const recordsByDigest = new Map();
+    for (const r of rescoreRecords) recordsByDigest.set(recordDigest(r), r);
+    for (const w of windows) recordsByDigest.set(recordDigest(w), w);
+    for (const contest of contests) {
+      const cr = await validateContest({ contest, recordsByDigest, verifySig });
+      if (!cr.ok) return failCheck("contests_valid", cr.rawCode, cr.reason);
+    }
+    const contestDigests = new Set(contests.map(recordDigest));
+    for (const ack of acks) {
+      const ar = await validateAcknowledgement({
+        ack,
+        contestDigests,
+        verifySig,
+        providerPublicKeySpkiB64,
+      });
+      if (!ar.ok) return failCheck("contests_valid", ar.rawCode, ar.reason);
+    }
+    mark("contests_valid", "ok");
+  } else mark("contests_valid", "not_in_tier");
+
+  // 7. attestation_roots (Tier A): the signed roots must recompute from the ledger records
+  // (V20: a tampered ledger cannot hide behind a public root).
+  if (skipLedger) mark("attestation_roots", "not_in_tier");
+  else if (attestation) {
+    const roots = {
+      windows_root: merkleRootSorted(windows.map(recordDigest)),
+      merge_chain_root: merkleRootSorted(mergeEvents.map(recordDigest)),
+      rescore_root: merkleRootSorted(rescoreRecords.map(recordDigest)),
+      disclosure_root: merkleRootSorted(disclosure ? [recordDigest(disclosure)] : []),
+      contest_root: merkleRootSorted([...contests, ...acks].map(recordDigest)),
+    };
+    for (const [k, v] of Object.entries(roots)) {
+      if (attestation[k] !== v)
+        return failCheck("attestation_roots", 22, "attestation_chain_mismatch");
+    }
+    mark("attestation_roots", "ok");
+  } else mark("attestation_roots", "not_in_tier");
+
+  // 8. manifest_signature (both tiers): adapter-supplied result, mapped to raw 25 on failure.
+  if (manifestCheck && manifestCheck.ok) mark("manifest_signature", "ok");
+  else
+    return failCheck(
+      "manifest_signature",
+      25,
+      manifestCheck ? manifestCheck.reason : "manifest_absent"
+    );
+
+  return verdict(0, null);
+}
+
+{ LEDGER_CHECKS };
+
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Browser adapter: identical verifySig contract over WebCrypto. Runs in Node 26 too
+// (globalThis.crypto.subtle), which is exactly what makes V16 parity honest. No node imports.
+async function webcryptoVerifyEd25519({ publicKeySpkiB64, message, signatureB64 }) {
+  try {
+    const der = Uint8Array.from(atob(publicKeySpkiB64), (c) => c.charCodeAt(0));
+    const sig = Uint8Array.from(atob(signatureB64), (c) => c.charCodeAt(0));
+    const key = await globalThis.crypto.subtle.importKey("spki", der, { name: "Ed25519" }, false, [
+      "verify",
+    ]);
+    return globalThis.crypto.subtle.verify(
+      { name: "Ed25519" },
+      key,
+      sig,
+      new TextEncoder().encode(message)
+    );
+  } catch {
+    return false;
+  }
+}
+
+
+const files = {};
+const NAME_TO_KEY = {
+  "windows.json": ["windows", true],
+  "merge-events.json": ["mergeEvents", true],
+  "rescore-records.json": ["rescoreRecords", true],
+  "disclosure.json": ["disclosure", false],
+  "chain.json": ["chain", false],
+  "contest.json": ["contests", "maybeArray"],
+  "contest-ack.json": ["acks", "maybeArray"],
+  "vxd-attestation.json": ["attestation", false],
+  "vxd-manifest.json": ["manifest", false],
+};
+const drop = document.getElementById("drop");
+drop.addEventListener("dragover", (e) => e.preventDefault());
+drop.addEventListener("drop", async (e) => {
+  e.preventDefault();
+  for (const f of e.dataTransfer.files) files[f.name] = JSON.parse(await f.text());
+  drop.textContent = Object.keys(files).sort().join(", ") || "Drop bundle .json files here";
+});
+
+function spkiB64FromPem(pem) {
+  return pem.replace(/-----[^-]+-----/g, "").replace(/\s+/g, "");
+}
+
+async function nodelessManifestCheck(bundle, pinnedSpkiB64) {
+  if (!bundle.manifest || !bundle.attestation) return { ok: false, reason: "manifest_absent" };
+  const digest = recordDigest(bundle.attestation);
+  if (bundle.manifest.attestation_digest !== digest)
+    return { ok: false, reason: "attestation_digest_mismatch" };
+  const sig = bundle.manifest.signature;
+  if (typeof sig !== "string" || !sig.startsWith("ed25519:"))
+    return { ok: false, reason: "signature_malformed" };
+  // domain-separated payload identical to node buildVxdManifest.
+  const payload = { schema: bundle.manifest.schema, attestation_digest: bundle.manifest.attestation_digest };
+  const message = "SIMURGH_STAGE4M_VXD_MANIFEST_V1\u0000" + canonicalJson(payload);
+  const ok = await webcryptoVerifyEd25519({
+    publicKeySpkiB64: pinnedSpkiB64,
+    message,
+    signatureB64: sig.slice("ed25519:".length),
+  });
+  return ok ? { ok: true } : { ok: false, reason: "signature_invalid" };
+}
+
+document.getElementById("verify").addEventListener("click", async () => {
+  const bundle = { windows: [], mergeEvents: [], rescoreRecords: [], disclosure: null,
+    chain: null, contests: [], acks: [], attestation: null, manifest: null, present: new Set() };
+  for (const [name, val] of Object.entries(files)) {
+    const map = NAME_TO_KEY[name];
+    if (!map) continue;
+    const [key, mode] = map;
+    bundle.present.add(name);
+    bundle[key] = mode === "maybeArray" ? (Array.isArray(val) ? val : [val]) : val;
+  }
+  const pinnedSpkiB64 = spkiB64FromPem(document.getElementById("pinned").value.trim());
+  const manifestCheck = await nodelessManifestCheck(bundle, pinnedSpkiB64);
+  const ackKey = bundle.acks[0]?.respondent_public_key?.slice("ed25519:".length);
+  const verdict = await verifyBundleCore({
+    bundle, tier: document.getElementById("tier").value,
+    verifySig: webcryptoVerifyEd25519, providerPublicKeySpkiB64: ackKey, manifestCheck,
+  });
+  document.getElementById("verdict").textContent = canonicalJson(verdict);
+});
+</script>
+</body>
+</html>
