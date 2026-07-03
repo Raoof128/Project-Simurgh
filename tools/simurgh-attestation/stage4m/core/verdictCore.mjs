@@ -6,7 +6,7 @@
 import { canonicalJson, merkleRootSorted, recordDigest } from "./canonical.mjs";
 import { validateMergeChain, validateWindowCommitment } from "./mergeLatticeCore.mjs";
 import { rescoreAll, verifyRescoreRecord } from "./retroScoreCore.mjs";
-import { verifyDisclosure } from "./disclosureCore.mjs";
+import { chainDigest, verifyDisclosure } from "./disclosureCore.mjs";
 import { validateAcknowledgement, validateContest } from "./respondentCore.mjs";
 import { VXD_VERDICT_SCHEMA } from "../constants.mjs";
 
@@ -143,6 +143,7 @@ export async function verifyBundleCore({
       rescore_root: merkleRootSorted(rescoreRecords.map(recordDigest)),
       disclosure_root: merkleRootSorted(disclosure ? [recordDigest(disclosure)] : []),
       contest_root: merkleRootSorted([...contests, ...acks].map(recordDigest)),
+      chain_digest: chain ? chainDigest(chain) : merkleRootSorted([]),
     };
     for (const [k, v] of Object.entries(roots)) {
       if (attestation[k] !== v)
