@@ -34,15 +34,25 @@ recompute. Simurgh is the replay layer underneath them.
   rights effective 2026-08-01). All of it is procedural machinery. **No cryptographic
   implementation exists** in which the accused runs the same verifier over the same evidence and
   files a machine-verifiable contest. The respondent path is that implementation.
+- The demand signal is quantified in providers' own publications: a frontier lab's transparency
+  hub self-reports ~1.45M account bans in H2 2025 with 52,000 appeals and a 3.3% overturn rate —
+  ban counts, appeal counts, and overturn rates are all self-attested, and the appeal channel is
+  procedurally opaque to the appellant. Privacy-preserving usage-analysis systems (Clio,
+  arXiv:2412.13678) explicitly feed enforcement actions (network bans) whose evidence is never
+  externally replayable. 4M's disclosure binding + respondent path are the missing evidence
+  layer under exactly this class of published statistics. (Cited as public self-published demand
+  signal only; fixtures stay synthetic and brand-free.)
 
 **Adjacent lanes (position against, never claim to replace).** The 4L table (ARC credentials,
 antidistillation fingerprinting, TEE attested inference, DSA transparency-report research)
 carries forward unchanged. Two lanes are load-bearing for 4M specifically:
 
-| Lane                                                                            | Proves                                                                                   | Cannot do                                                                                            |
-| ------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| SCITT ARP (draft-hillier-scitt-arp) "Retroactive Evaluation Subsystem"          | Re-evaluates historical attestations when a policy version transitions (cross-sovereign) | No identity-cluster partition lattice; no monotonicity theorem; no incentive analysis; no respondent |
-| Contestability / right-to-contest legal literature (Columbia LR; Lawfare; ADMT) | Contestability is legally required and normatively grounded                              | Purely procedural; no executable verifier path for the accused; no evidence format                   |
+| Lane                                                                            | Proves                                                                                   | Cannot do                                                                                             |
+| ------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| SCITT ARP (draft-hillier-scitt-arp) "Retroactive Evaluation Subsystem"          | Re-evaluates historical attestations when a policy version transitions (cross-sovereign) | No identity-cluster partition lattice; no monotonicity theorem; no incentive analysis; no respondent  |
+| Contestability / right-to-contest legal literature (Columbia LR; Lawfare; ADMT) | Contestability is legally required and normatively grounded                              | Purely procedural; no executable verifier path for the accused; no evidence format                    |
+| ADIC replay certificates (GhostDrift, Lean 4 `verifierBool_sound`, 2026)        | AI decisions replayable as certificates; machine-checked **verifier soundness**          | Proves the checker, not a domain property; no identity clusters; no disclosure binding; no respondent |
+| Audit games (Blocki et al., IJCAI 2013 lineage)                                 | Stackelberg audit-resource allocation with punishment parameters (equilibrium results)   | Probabilistic deterrence, not structural exclusion; no evidence artifact; no retroactivity            |
 
 **Program sequence** (this spec builds only the first item): **4M/VXD** (this spec) → 4N
 Extraction Seismograph (candidate) → VFR (own stage, never merged here) → OWASP LLM10 / NIST
@@ -130,6 +140,14 @@ later merges must surface their own prior misstatement (the "ledgered lie" pays 
 (b) Seeded property tests: generated partitions and merge chains (deterministic seeds, no
 randomness at verify time) asserting `breaches(P_new, w) ⊇ breaches(P_old, w)` structurally.
 (c) The verifier enforces the same superset predicate on every real bundle; violation → raw 44.
+(d) **Machine-checked proof (Lean 4):** `proofs/stage4m/AntiMonotonicity.lean` formalizes the
+lemma over finite partitions with non-negative exposure and non-inflating budgets, checked in CI
+(pinned Lean toolchain; the `.lean` source digest is committed into the evidence manifest so the
+theorem text itself is tamper-evident). Positioning vs ADIC: they machine-check that _the
+verifier is sound_; 4M machine-checks a _domain property_ — that the world cannot be laundered.
+Signed limitation `proof_is_of_model_not_implementation`: the theorem is about the mathematical
+model; the bridge to the running `.mjs` is the property suite + verifier predicate, stated
+honestly, never blurred.
 
 ---
 
@@ -282,6 +300,11 @@ commitments. From that report the respondent can file:
   contests** — symmetric honesty: the accuser's evidence is replayable, and so is the objection.
 - `statement_digest` is an opaque commitment to the respondent's free-text argument; the verifier
   never evaluates it (`contest_is_recorded_not_adjudicated`).
+- **Optional `simurgh.vxd.contest_acknowledgement.v1`** — a provider-signed receipt that a
+  specific contest digest was received, chained after the contest it acknowledges. Purely a
+  receipt (`acknowledgement_is_receipt_not_ruling`); it converts "we have an appeals process"
+  from an assertion into a chain-verifiable fact — the published-appeals gap (52k appeals, 3.3%
+  overturn, all self-attested) is the demand signal. Malformed/dangling acknowledgement → raw 46.
 
 ### 4.5 `article73Projection.mjs` — `simurgh.vxd.article73_projection.v1`
 
@@ -309,11 +332,33 @@ recomputation. Signs `known_limitations`:
 - `basis_digests_opaque_slots` — carried from 4L (3U R2-B lineage).
 - `respondent_key_binding_out_of_band` — we verify the contest is internally consistent and
   signed; binding the respondent key to a real-world identity is outside the format.
+- `proof_is_of_model_not_implementation` — the Lean theorem is about the mathematical model;
+  the property suite + verifier predicate are the stated bridge to the running code.
+- `acknowledgement_is_receipt_not_ruling` — an acknowledgement proves receipt of a contest,
+  never its merit.
+- `browser_verifier_is_projection_not_normative` — the Node verifier is normative; the HTML is
+  a parity-gated projection of it.
 
 All digests bound acyclically into `signed-pack-manifest.json`; verifier recomputes everything,
 never trusts committed JSON.
 
-### 4.7 Fixture hygiene (hard rules, carried forward)
+### 4.7 `verify-stage4m.html` — single-file browser verifier ("the microscope, handed over")
+
+A self-contained HTML file (no network, no build-time CDN, no framework) embedding the same
+verification logic: drag a bundle onto the page, watch every digest, signature (WebCrypto
+Ed25519), lattice rule, re-score sum, and disclosure binding recompute locally — usable by a
+staffer, journalist, or respondent with zero toolchain. Rules:
+
+- Generated deterministically from the same source modules by a build script; the emitted HTML's
+  digest is committed into the evidence manifest (tamper-evident artifact, 3W witness lineage).
+- **Parity is gated:** the browser verifier and `verify-stage4m.mjs` MUST produce identical
+  verdicts and identical finding sets on every fixture in the falsifier matrix (V16).
+- It renders verdicts and findings only — no advice, no adjudication language; the same
+  non-claims block is displayed verbatim in the page footer.
+- Node verifier remains the normative implementation; the HTML is a projection of it
+  (`browser_verifier_is_projection_not_normative` signed limitation).
+
+### 4.8 Fixture hygiene (hard rules, carried forward)
 
 Synthetic magnitudes only (3–100 consumers, totals ≤ a few hundred); no real incident figures,
 lab, or company names — brand-denylist audit (3P lineage). No `verified_*` field names (3S).
@@ -343,6 +388,9 @@ lesson); e2e wired into `check-e2e.sh` since `npm test` is unit-only.
 | V13         | projection tamper           | edit one projected field after signing                                                                    | signature/digest failure                                                                                                          |
 | V14         | post-sign merge tamper      | flip one byte of a signed merge event                                                                     | signature/digest failure                                                                                                          |
 | **V15**     | **no-merge control**        | 4L F9 fixture with NO merge event                                                                         | exit 0; nothing revealed — documented negative control for the signed `no_merge_no_reveal` limitation                             |
+| V16         | browser parity              | run `verify-stage4m.html` logic against every fixture above (headless)                                    | verdicts + finding sets byte-identical to the Node verifier                                                                       |
+| V17         | acknowledgement forgery     | contest acknowledgement with invalid signature or dangling contest digest                                 | raw 46                                                                                                                            |
+| V18         | proof-text tamper           | edit `AntiMonotonicity.lean` after manifest commit                                                        | manifest digest failure; CI Lean check red on broken proof                                                                        |
 
 Any red arm coming back green, or V-CROWN/V15 deviating from their pinned outcomes, is a stage
 failure.
@@ -361,26 +409,36 @@ Branch: `stage-4m-vxd` off clean `main`. Neutral commit messages, no assistant a
 - **M2 — retroactive re-scorer.** Pure-arithmetic re-scoring over committed 4K/4L ledgers;
   monotonicity predicate; findings plumbing. Done when: V-CROWN pins exactly; V5 → 44; V15
   control documented; 4L Q9 and 4K Q8 results byte-unchanged.
-- **M3 — property tests for the lemma.** Seeded generated partitions/merge chains asserting the
-  superset predicate structurally; written proof drafted into the threat model. Done when:
-  property suite green and deterministic across two runs.
+- **M3 — property tests + machine-checked proof.** Seeded generated partitions/merge chains
+  asserting the superset predicate structurally; written proof drafted into the threat model;
+  `proofs/stage4m/AntiMonotonicity.lean` checked under a pinned Lean 4 toolchain in CI (own
+  workflow job; failure blocks release, absence of the toolchain locally never blocks
+  `npm test`). Done when: property suite green and deterministic across two runs; Lean check
+  green; V18 red on a deliberately broken proof.
 - **M4 — disclosure-claim binding.** Closed-world claim kinds, chain-position ordering,
   prose_history exclusion, reserved-null pincer slot. Done when: V6 green; V7/V8/V9 → 45.
 - **M5 — respondent path.** `--as-respondent` implication report; contest schema, signing,
-  chain append; contest verifier. Done when: V10 green and chained; V11/V12 → 46.
+  chain append; contest verifier; optional acknowledgement receipt. Done when: V10 green and
+  chained; V11/V12/V17 → 46.
 - **M6 — Article-73/55 projection.** Template-shaped surface, recomputable-slots-only rule,
   `not_projected` defaults, golden files. Done when: V13 red; projection byte-stable.
-- **M7 — attestation + one-command reproduce.** stage4m key; manifest binding; exit-map golden
-  refresh for 4K/4H in its own commit; `scripts/reproduce-llm-shield-stage4m.sh`: scrub/pin env →
-  rebuild 4K/4L fixtures → build merge chain → re-score → disclosure → contest → projection →
-  full falsifier matrix (V1–V15) → byte-stable golden diff (two runs, Node 26) → clean tree
+- **M6b — browser verifier.** Deterministic build of `verify-stage4m.html` from the source
+  modules; digest committed to manifest; headless parity harness. Done when: V16 parity exact on
+  all fixtures; page renders non-claims verbatim.
+- **M7 — attestation + one-command reproduce.** stage4m key; manifest binding (incl. `.lean` and
+  `.html` digests); exit-map golden refresh for 4K/4H in its own commit;
+  `scripts/reproduce-llm-shield-stage4m.sh`: scrub/pin env → rebuild 4K/4L fixtures → build merge
+  chain → re-score → disclosure → contest → projection → browser build →
+  full falsifier matrix (V1–V18) → byte-stable golden diff (two runs, Node 26) → clean tree
   after. Exit only via `stage4CodeForRawCode`.
 - **M8 — MANDATORY full E2E net (K7-style) + reviewer docs.** Composes **every** stage4m export
   through the real pipeline: build → sign → verify (both roles) → falsifier sweep; tamper matrix
   over every emitted artifact; cross-stage invariants (4L Q9, 4K Q8, 4H chain byte-unchanged;
   zero-src-diff guard; wrapper exhaustiveness incl. unknown-code→3). In the release gate from day
   one, never a bolt-on (standing rule 2026-07-02). Docs: `STAGE_4M_THREAT_MODEL.md` (lemma proof;
-  incentive theorem; SCITT-ARP + contestability positioning; citations),
+  incentive theorem positioned against audit-games equilibria — structural exclusion, not
+  probabilistic deterrence; SCITT-ARP + ADIC + contestability positioning; transparency-hub
+  appeals statistics as public demand signal; citations verified before merge),
   `STAGE_4M_REVIEWER_CHECKLIST.md`, `STAGE_4M_CLOSEOUT.md`, evidence README. Overclaim grep
   (pure-JS scan, 4L lesson) extended with: `breaches? (prevented|impossible)`,
   `contest.*(upheld|adjudicated|resolved)`, `legally compliant|Article 73 certified|regulator
@@ -388,7 +446,8 @@ approved`, `identity (proven|confirmed)` — matches only inside explicit non-cl
 
 ### File structure
 
-Create: `tools/simurgh-attestation/stage4m/{constants,mergeLattice,retroScore,disclosureBinding,respondentPath,article73Projection,build-stage4m-fixtures,build-stage4m-attestation,verify-stage4m}.mjs`,
+Create: `tools/simurgh-attestation/stage4m/{constants,mergeLattice,retroScore,disclosureBinding,respondentPath,article73Projection,build-stage4m-fixtures,build-stage4m-attestation,verify-stage4m,build-browser-verifier}.mjs`,
+`proofs/stage4m/AntiMonotonicity.lean` (+ pinned toolchain file + CI job),
 `scripts/reproduce-llm-shield-stage4m.sh`, `tests/unit/llmShield/stage4m/*.test.js`,
 `tests/e2e/llmShield/stage4m/*.test.js` (explicit globs — bare-dir `node --test` fails),
 `tests/fixtures/llmShield/stage4m/`, `docs/research/llm-shield/evidence/stage-4m/`, the three
@@ -399,23 +458,24 @@ stage docs. Modify: `stage4h/exitCodes.mjs` (codes 43–46 only) + the 4K/4H exi
 
 ## 7. Acceptance gates
 
-| Gate                | Requirement                                                                                                     | Falsifier              |
-| ------------------- | --------------------------------------------------------------------------------------------------------------- | ---------------------- |
-| M-G1 lattice        | coarsening-only, budget non-inflation, chain integrity, genesis bound to 4L                                     | V2/V3/V4 red           |
-| M-G2 monotonicity   | lemma proved in docs, property-tested, verifier-enforced on real bundles                                        | V5 red                 |
-| M-G3 re-score truth | every re-scored total recomputes from committed ledgers; V-CROWN reveals exactly one cluster with contradiction | V-CROWN pinned         |
-| M-G4 disclosure     | claims recompute from strictly-prior chain positions; closed world; pincer slot null                            | V7/V8/V9 red           |
-| M-G5 respondent     | `--as-respondent` yields identical verification + implication report; valid contest chains; invalid rejected    | V10 green, V11/V12 red |
-| M-G6 projection     | recomputable-slots-only; `not_projected` default; template-shaped; signed non-claims embedded                   | V13 red                |
-| M-G7 byte stability | two full runs byte-identical (Node 26); clean tree after reproduce                                              | golden diff red        |
-| M-G8 offline        | no network/model/clock dependency; ordering by chain position only                                              | offline audit red      |
-| M-G9 honesty        | non-claims + signed known_limitations (incl. `no_merge_no_reveal`); overclaim grep clean; brand denylist clean  | grep red               |
-| M-G10 E2E net       | M8 full-chain net green; 4L/4K/4H byte-unchanged; zero-src-diff guard green                                     | any net arm red        |
+| Gate                 | Requirement                                                                                                     | Falsifier              |
+| -------------------- | --------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| M-G1 lattice         | coarsening-only, budget non-inflation, chain integrity, genesis bound to 4L                                     | V2/V3/V4 red           |
+| M-G2 monotonicity    | lemma proved in docs, property-tested, verifier-enforced on real bundles                                        | V5 red                 |
+| M-G3 re-score truth  | every re-scored total recomputes from committed ledgers; V-CROWN reveals exactly one cluster with contradiction | V-CROWN pinned         |
+| M-G4 disclosure      | claims recompute from strictly-prior chain positions; closed world; pincer slot null                            | V7/V8/V9 red           |
+| M-G5 respondent      | `--as-respondent` yields identical verification + implication report; valid contest chains; invalid rejected    | V10 green, V11/V12 red |
+| M-G6 projection      | recomputable-slots-only; `not_projected` default; template-shaped; signed non-claims embedded                   | V13 red                |
+| M-G7 byte stability  | two full runs byte-identical (Node 26); clean tree after reproduce                                              | golden diff red        |
+| M-G8 offline         | no network/model/clock dependency; ordering by chain position only                                              | offline audit red      |
+| M-G9 honesty         | non-claims + signed known_limitations (incl. `no_merge_no_reveal`); overclaim grep clean; brand denylist clean  | grep red               |
+| M-G10 E2E net        | M8 full-chain net green; 4L/4K/4H byte-unchanged; zero-src-diff guard green                                     | any net arm red        |
+| M-G11 proof + parity | Lean check green in CI; `.lean` + `.html` digests in manifest; browser verdicts identical to Node               | V16/V18 red            |
 
 Done when: V1/V6/V10/V15 exit 0 with pinned contents; V2/V3/V4→43; V5→44; V7/V8/V9→45;
-V11/V12→46; V13/V14 signature-fail; V-CROWN reveals exactly the merged singleton cluster with its
-`prior_cardinality_contradiction` finding; one command reproduces offline; release gates pass on
-merged `main` before tagging.
+V11/V12/V17→46; V13/V14 signature-fail; V16 parity exact; V18 red; V-CROWN reveals exactly the
+merged singleton cluster with its `prior_cardinality_contradiction` finding; one command
+reproduces offline; release gates pass on merged `main` before tagging.
 
 ---
 
@@ -427,8 +487,23 @@ merged `main` before tagging.
   seam we cannot recompute would be the one mushy joint in an otherwise tight stage.
 - **Contest adjudication** — any ruling on whether a contest is _correct_. Permanently out of
   lane (`contest_is_recorded_not_adjudicated`); Simurgh is the pen, never the judge (3S lineage).
-- **4N Extraction Seismograph** — public per-window heartbeat; composes from 3Q/3X + 4L windows
-  - this stage's merge chain. The `no_merge_no_reveal` limitation is its demand signal.
+- **4N Extraction Seismograph** — public per-window heartbeat; composes from 3Q/3X plus 4L
+  windows plus this stage's merge chain. The `no_merge_no_reveal` limitation is its demand
+  signal. **SCITT-compatible receipts** (COSE-enveloped signed statements anchorable in IETF
+  transparency services) belong here, not in 4M — 4M carries a docs-level SCITT mapping note only.
+- **DSA statement-of-reasons projection** — a second projection surface
+  (`simurgh.vxd.dsa_sor_projection.v1`) targeting the DSA Transparency Database's harmonised
+  machine-readable templates (Implementing Regulation in force 2025-07-01; academic literature
+  documents the database as self-reported and unverifiable). Same recomputable-slots-only rule as
+  §4.5 — would make VXD a regulation-agnostic projection layer. **OWNER DECISION: fold into 4M
+  (adds ~1 golden surface) or ship in the docs companion / 4M-b.** Not blocking; §4.5 is the
+  template pattern either way.
+- **ZK compliance lane** — proving cluster-budget compliance in zero knowledge (zkAudit lineage,
+  arXiv:2510.26576) would hide cluster structure entirely but replaces third-party recomputation
+  with proof-system trust — a different trust model than Simurgh's replay lane, noted as
+  complementary future work (`VXD-ZK`), never a silent swap.
+- **Public falsification challenge** — releasing the signed bundle with a standing "find a
+  monotonicity violation" invitation is a release-notes/closeout idea, not spec content.
 - **VFR** — verifiable friction receipts; own stage, never merged into 4M (standing rule).
 - **4P/CPC** — cross-provider corroboration by digest equality; consumes the still-reserved
   `corroborating_commitments`. 4M's merge chain gives it the epoch hooks
