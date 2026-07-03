@@ -68,7 +68,7 @@ export function computeClusterCardinality(assignmentLedger) {
     members.set(a.cluster_commitment, (members.get(a.cluster_commitment) || 0) + 1);
   }
   // Singleton slot is the load-bearing claim (spec §3.4): always present, even as 0.
-  const histogram = { "1": 0 };
+  const histogram = { 1: 0 };
   for (const size of members.values()) {
     const k = String(size);
     histogram[k] = (histogram[k] || 0) + 1;

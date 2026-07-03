@@ -15,21 +15,22 @@ recompute. Simurgh is the replay layer underneath them.
 **Why now.** Enforcement claims about coordinated extraction campaigns are feeding directly into
 US policy (proposed sanctions amendments) and EU obligations (AI Act Art. 73/55 incident
 reporting, enforcement from 2026-08-02) while remaining self-attested and unverifiable. The
-canonical framing is Brundage et al. 2020 (*Toward Trustworthy AI Development: Mechanisms for
-Supporting Verifiable Claims*, arXiv:2004.07213): Simurgh implements the concrete software
+canonical framing is Brundage et al. 2020 (_Toward Trustworthy AI Development: Mechanisms for
+Supporting Verifiable Claims_, arXiv:2004.07213): Simurgh implements the concrete software
 mechanism for verifiable **enforcement** claims that report called for.
 
 **Adjacent lanes (position against, never claim to replace):**
 
-| Lane | Proves | Cannot do |
-| --- | --- | --- |
-| Anonymous rate-limited credentials (IETF ARC draft; Cloudflare deployment; k-TAA) | Per-credential limits without identity (prevention) | Third-party evidence enforcement held; cluster level; post-hoc disclosure |
-| Antidistillation fingerprinting (arXiv:2602.03812) | Student model learned from target (detection, statistical) | Quantify campaign scale; attest provider enforcement |
-| TEE attested inference (AEX arXiv:2603.14283; commercial TEE serving) | Per-request computation integrity (hardware trust) | Fleet-wide account-level policy enforcement without infra change |
-| SCITT / draft-hillier-scitt-arp (IETF) | Supply-chain claim reconciliation; retroactive policy re-evaluation | Identity-cluster budgets; incentive analysis; extraction domain |
-| DSA transparency-report research | Documents that reports are unverifiable | No tooling exists (demand signal, not competition) |
+| Lane                                                                              | Proves                                                              | Cannot do                                                                 |
+| --------------------------------------------------------------------------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| Anonymous rate-limited credentials (IETF ARC draft; Cloudflare deployment; k-TAA) | Per-credential limits without identity (prevention)                 | Third-party evidence enforcement held; cluster level; post-hoc disclosure |
+| Antidistillation fingerprinting (arXiv:2602.03812)                                | Student model learned from target (detection, statistical)          | Quantify campaign scale; attest provider enforcement                      |
+| TEE attested inference (AEX arXiv:2603.14283; commercial TEE serving)             | Per-request computation integrity (hardware trust)                  | Fleet-wide account-level policy enforcement without infra change          |
+| SCITT / draft-hillier-scitt-arp (IETF)                                            | Supply-chain claim reconciliation; retroactive policy re-evaluation | Identity-cluster budgets; incentive analysis; extraction domain           |
+| DSA transparency-report research                                                  | Documents that reports are unverifiable                             | No tooling exists (demand signal, not competition)                        |
 
 **Program sequence** (this spec builds only the first item):
+
 1. **4L / CCB** — anti-structuring cluster-budget replay (this spec).
 2. **4M / VXD** — retroactive re-scoring over signed cluster-merge events (monotone
    anti-laundering lattice; enforcement and audit-evasion become mutually exclusive) + disclosure
@@ -38,8 +39,8 @@ mechanism for verifiable **enforcement** claims that report called for.
    of consumers; fraud-graph improvements only ever **coarsen** the partition (merge-only
    lattice); exposure is additive over blocks. **Anti-monotonicity lemma:** once any merged
    cluster exceeds its budget in a committed window, every further coarsening containing it also
-   exceeds it — retroactive breaches can never be un-discovered by learning more. *Breaches are
-   monotone under truth.* This makes the mutual-exclusion incentive argument provable, not
+   exceeds it — retroactive breaches can never be un-discovered by learning more. _Breaches are
+   monotone under truth._ This makes the mutual-exclusion incentive argument provable, not
    rhetorical.
    **4M hard requirement — respondent path (adversarial verifiability / due process for the
    accused):** every disclosure carries respondent slots; the accused party can run the same
@@ -80,7 +81,7 @@ campaign into many sub-threshold accounts, organizations, payment paths, or prox
 account appears compliant while the campaign exceeds the declared extraction budget. The term
 comes from compute-KYC / BIS regulatory language and ties 4L to live policy vocabulary.
 
-**Positioning line vs prevention tech.** ARC-style anonymous rate-limited credentials *prevent*
+**Positioning line vs prevention tech.** ARC-style anonymous rate-limited credentials _prevent_
 per-credential overuse privately; CCB is the **auditable evidence layer** that prevention lacks —
 it proves, replayably, what the enforcement actually was.
 
@@ -105,7 +106,7 @@ attestation):**
 ]
 ```
 
-Plain English: CCB proves budget enforcement *given* a provider-supplied cluster commitment. It
+Plain English: CCB proves budget enforcement _given_ a provider-supplied cluster commitment. It
 does not prove the cluster graph is complete or correct, does not identify real-world actors,
 does not solve cross-cluster collusion, does not show a student model learned anything, and does
 not replace provider fraud detection or prevention credentials. It makes the provider's
@@ -122,14 +123,14 @@ Q8 (Stage 4K, raw 30) is untouched. Q9 is additive. **Zero `src/llmShield` chang
 Raw **39 is reserved** in `tools/simurgh-attestation/stage4h/exitCodes.mjs` (v1
 `extraction_scope_violation` prose slot) and MUST NOT be used. 4L takes **40–42**:
 
-| Raw | Meaning | Run-level |
-| ---: | --- | ---: |
-| 0 | all gates pass | 0 |
-| **40** | `cluster_commitment_missing` — an exposure-bearing consumer lacks an assignment for the window | 1 |
-| **41** | `cluster_budget_exceeded` — cluster cumulative exposure exceeds declared cluster budget | 1 |
-| **42** | `cluster_assignment_mismatch` — duplicate/extra assignment, digest that fails to recompute, or schema-invalid assignment (including raw-identity keys) | 1 |
-| 28 | checker not offline (inherited Q3) | 2 |
-| 29 / unmapped | internal error / exhaustiveness breach | 3 |
+|           Raw | Meaning                                                                                                                                                | Run-level |
+| ------------: | ------------------------------------------------------------------------------------------------------------------------------------------------------ | --------: |
+|             0 | all gates pass                                                                                                                                         |         0 |
+|        **40** | `cluster_commitment_missing` — an exposure-bearing consumer lacks an assignment for the window                                                         |         1 |
+|        **41** | `cluster_budget_exceeded` — cluster cumulative exposure exceeds declared cluster budget                                                                |         1 |
+|        **42** | `cluster_assignment_mismatch` — duplicate/extra assignment, digest that fails to recompute, or schema-invalid assignment (including raw-identity keys) |         1 |
+|            28 | checker not offline (inherited Q3)                                                                                                                     |         2 |
+| 29 / unmapped | internal error / exhaustiveness breach                                                                                                                 |         3 |
 
 Wrapper rule: extend `RUN_LEVEL_BY_RAW` with `40→1, 41→1, 42→1`; unknown codes still fail closed
 to 3; exit only via `stage4CodeForRawCode()`.
@@ -185,6 +186,7 @@ context as the 4K fixture rebuild, or L2 completeness cannot join.
 ```
 
 Rules:
+
 - `cluster_basis` enum only: `payment_graph`, `traffic_shape`, `device_commitment`,
   `network_bucket`, `org_binding`, `reseller_path`. Nothing else.
 - Raw-identity keys rejected by name and alias: `email`, `name`, `ip`, `phone`, `card`,
@@ -235,6 +237,7 @@ and commits it as a first-class signed artifact:
 ```
 
 Rules:
+
 - Histogram keys are cluster sizes (stringified integers), values are counts; zero-count sizes
   MAY be omitted except size `1`, which MUST always be present (even as `"1": 0`) — singleton
   count is the load-bearing claim.
@@ -246,7 +249,7 @@ Rules:
 It converts evasion into a **signed, falsifiable public claim**: a provider that under-clusters
 must put "these 100 accounts are 100 independent actors" on the permanent record. When a later
 merge event (4M), a fingerprint match, or partner corroboration contradicts it, that is a
-provable prior misstatement, not a vague miss. Evasion is not prevented; it is *ledgered*.
+provable prior misstatement, not a vague miss. Evasion is not prevented; it is _ledgered_.
 
 ### 3.5 Fixture hygiene (hard rules)
 
@@ -262,20 +265,20 @@ provable prior misstatement, not a vague miss. Evasion is not prevented; it is *
 
 ## 4. Falsifier matrix (each arm has exactly ONE expected outcome)
 
-| # | Falsifier | Action | Expected |
-| --- | --- | --- | --- |
-| F1 | clean | one-command reproduce | exit 0 |
-| **F-STRUCTURE** | **crown**: structuring | 100 accounts × 1 exposure, every account under B_account, shared commitment over B_cluster | raw 41 |
-| F2b | single fat account | 1 account × total 100 / B 80 | raw 41 |
-| F2c | boundary | total == B_cluster | exit 0 |
-| F3 | missing assignment | delete one consumer's assignment | raw 40 |
-| F4 | duplicate assignment | assign one consumer to two clusters | raw 42 |
-| F5 | commitment tamper | flip one byte of a cluster_commitment | raw 42 |
-| F6 | post-sign budget tamper | lower B_cluster after signing | signature/digest failure |
-| F7 | raw-identity leak | add `email` key to an assignment | raw 42 (pinned; no "or") |
-| F8 | per-account control | account-only checker on the F-STRUCTURE fixture | PASSES (documented negative control: the failure mode 4L exists to fix) |
-| **F9** | **singleton-cluster evasion** | 100 accounts, 100 singleton clusters, each under budget | **PASSES Q9 — expected-green arm, signed into `known_limitations`**; MUST also show the emitted cardinality commitment recording `"1": 100` (the evasion is ledgered; 4M's retroactive layer is its answer) |
-| F10 | cardinality tamper | edit histogram (or its counts/digest) after build | raw 42 |
+| #               | Falsifier                     | Action                                                                                     | Expected                                                                                                                                                                                                    |
+| --------------- | ----------------------------- | ------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| F1              | clean                         | one-command reproduce                                                                      | exit 0                                                                                                                                                                                                      |
+| **F-STRUCTURE** | **crown**: structuring        | 100 accounts × 1 exposure, every account under B_account, shared commitment over B_cluster | raw 41                                                                                                                                                                                                      |
+| F2b             | single fat account            | 1 account × total 100 / B 80                                                               | raw 41                                                                                                                                                                                                      |
+| F2c             | boundary                      | total == B_cluster                                                                         | exit 0                                                                                                                                                                                                      |
+| F3              | missing assignment            | delete one consumer's assignment                                                           | raw 40                                                                                                                                                                                                      |
+| F4              | duplicate assignment          | assign one consumer to two clusters                                                        | raw 42                                                                                                                                                                                                      |
+| F5              | commitment tamper             | flip one byte of a cluster_commitment                                                      | raw 42                                                                                                                                                                                                      |
+| F6              | post-sign budget tamper       | lower B_cluster after signing                                                              | signature/digest failure                                                                                                                                                                                    |
+| F7              | raw-identity leak             | add `email` key to an assignment                                                           | raw 42 (pinned; no "or")                                                                                                                                                                                    |
+| F8              | per-account control           | account-only checker on the F-STRUCTURE fixture                                            | PASSES (documented negative control: the failure mode 4L exists to fix)                                                                                                                                     |
+| **F9**          | **singleton-cluster evasion** | 100 accounts, 100 singleton clusters, each under budget                                    | **PASSES Q9 — expected-green arm, signed into `known_limitations`**; MUST also show the emitted cardinality commitment recording `"1": 100` (the evasion is ledgered; 4M's retroactive layer is its answer) |
+| F10             | cardinality tamper            | edit histogram (or its counts/digest) after build                                          | raw 42                                                                                                                                                                                                      |
 
 Any red arm coming back green, or F8/F9 coming back red, is a stage failure.
 
@@ -315,6 +318,7 @@ Branch: `stage-4l-ccb` off clean `main`. Neutral commit messages, no assistant a
   rg -n "sybil.*(solved|closed)|structuring.*(solved|closed|prevented)|identity.*(proven|truth)|prevents distillation|capability transfer proven|raw identity exported|non-bypassable|model safe|first .*sybil" \
     docs/research/llm-shield tools/simurgh-attestation/stage4l tests/fixtures/llmShield/stage4l scripts/reproduce-llm-shield-stage4l.sh
   ```
+
 - **L7 — MANDATORY full E2E net (K7-style).** Composes **every** stage4l export through the real
   pipeline: build → sign → verify → falsifier sweep, plus tamper matrix over every emitted
   artifact, plus cross-stage invariants (4K bundle digests still verify; Q8 result byte-identical
@@ -334,17 +338,17 @@ the 4L pack; Q8 semantics untouched.
 
 ## 6. Acceptance gates
 
-| Gate | Requirement | Falsifier |
-| --- | --- | --- |
-| L-G1 schema | exact-key, metadata-only, denylist enforced | F7 red |
-| L-G2 completeness | exact bijection with 4K consumers | F3/F4 red |
-| L-G3 aggregation | cluster totals recompute from exposure ledger | F5 red |
-| L-G4 enforcement | cluster total ≤ B_cluster; boundary passes | F-STRUCTURE red |
-| L-G5 binding | attestation + cardinality digests bound in manifest; own key | F6/F10 red |
-| L-G6 byte stability | two full runs byte-identical (Node 26) | golden diff red |
-| L-G7 offline | no network/model/clock dependency | offline audit red |
-| L-G8 honesty | non-claims + signed known_limitations incl. F9; overclaim grep clean; brand denylist clean | grep red |
-| L-G9 E2E net | L7 full-chain net green; Q0–Q8 byte-unchanged | any net arm red |
+| Gate                | Requirement                                                                                | Falsifier         |
+| ------------------- | ------------------------------------------------------------------------------------------ | ----------------- |
+| L-G1 schema         | exact-key, metadata-only, denylist enforced                                                | F7 red            |
+| L-G2 completeness   | exact bijection with 4K consumers                                                          | F3/F4 red         |
+| L-G3 aggregation    | cluster totals recompute from exposure ledger                                              | F5 red            |
+| L-G4 enforcement    | cluster total ≤ B_cluster; boundary passes                                                 | F-STRUCTURE red   |
+| L-G5 binding        | attestation + cardinality digests bound in manifest; own key                               | F6/F10 red        |
+| L-G6 byte stability | two full runs byte-identical (Node 26)                                                     | golden diff red   |
+| L-G7 offline        | no network/model/clock dependency                                                          | offline audit red |
+| L-G8 honesty        | non-claims + signed known_limitations incl. F9; overclaim grep clean; brand denylist clean | grep red          |
+| L-G9 E2E net        | L7 full-chain net green; Q0–Q8 byte-unchanged                                              | any net arm red   |
 
 Done when: F1/F2c exit 0; F2b + F-STRUCTURE exit 41; F3→40; F4/F5/F7/F10→42; F6 signature-fails;
 F8 passes as control; F9 passes, is signed as a limitation, AND its cardinality commitment

@@ -51,7 +51,7 @@ draft that allocated 39/40/41.
 
 ## Verification (on this branch, Node 26.4.0)
 
-- `npm test` — **1309 pass / 0 fail** (whole repository).
+- `npm test` — **1313 pass / 0 fail** (whole repository).
 - `bash scripts/reproduce-llm-shield-stage4l.sh` — ALL GREEN, exit 0, byte-idempotent across two
   runs, clean tree after.
 - `git diff main...HEAD -- src/llmShield` — **empty** (zero product-code change; enforced by the

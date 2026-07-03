@@ -69,7 +69,10 @@ test("every raw-identity key is rejected, top-level and nested", () => {
 
 test("raw_identity_exported must be exactly false", () => {
   const a = { ...withCommitment(), raw_identity_exported: true };
-  assert.throws(() => validateAssignment(a), (e) => e.reason === "raw_identity_exported_not_false");
+  assert.throws(
+    () => validateAssignment(a),
+    (e) => e.reason === "raw_identity_exported_not_false"
+  );
 });
 
 test("cluster_basis entries must come from the frozen enum", () => {
@@ -77,7 +80,10 @@ test("cluster_basis entries must come from the frozen enum", () => {
   a.cluster_basis = ["payment_graph", "made_up_basis"];
   a.basis_digests = { payment_graph: D("b"), made_up_basis: D("c") };
   a.cluster_commitment = clusterCommitmentDigest(a);
-  assert.throws(() => validateAssignment(a), (e) => e.reason === "unknown_cluster_basis");
+  assert.throws(
+    () => validateAssignment(a),
+    (e) => e.reason === "unknown_cluster_basis"
+  );
   assert.ok(CLUSTER_BASIS_ENUM.includes("payment_graph"));
 });
 
@@ -85,20 +91,32 @@ test("basis_digests keys must be a subset of cluster_basis, values sha256", () =
   const missing = withCommitment();
   missing.basis_digests = { payment_graph: D("b") }; // traffic_shape missing
   missing.cluster_commitment = clusterCommitmentDigest(missing);
-  assert.throws(() => validateAssignment(missing), (e) => e.reason === "basis_digest_missing");
+  assert.throws(
+    () => validateAssignment(missing),
+    (e) => e.reason === "basis_digest_missing"
+  );
   const badVal = withCommitment();
   badVal.basis_digests = { ...badVal.basis_digests, payment_graph: "not-a-digest" };
   badVal.cluster_commitment = clusterCommitmentDigest(badVal);
-  assert.throws(() => validateAssignment(badVal), (e) => e.reason === "schema_invalid_digest");
+  assert.throws(
+    () => validateAssignment(badVal),
+    (e) => e.reason === "schema_invalid_digest"
+  );
 });
 
 test("stale commitment (byte flip) is rejected", () => {
   const a = withCommitment();
   a.cluster_commitment = D("0");
-  assert.throws(() => validateAssignment(a), (e) => e.reason === "commitment_recompute_mismatch");
+  assert.throws(
+    () => validateAssignment(a),
+    (e) => e.reason === "commitment_recompute_mismatch"
+  );
 });
 
 test("binding_level must be exactly 'cluster'", () => {
   const a = { ...withCommitment(), binding_level: "account" };
-  assert.throws(() => validateAssignment(a), (e) => e.reason === "invalid_binding_level");
+  assert.throws(
+    () => validateAssignment(a),
+    (e) => e.reason === "invalid_binding_level"
+  );
 });
