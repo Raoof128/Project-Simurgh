@@ -117,8 +117,13 @@ test("cross-stage: Q8 untouched, src/llmShield untouched, wrapper total", async 
     [40, 1],
     [41, 1],
     [42, 1],
+    // Stage 4M VXD codes are now mapped (43-46 -> 1); 39 stays reserved, 47 stays unknown.
+    [43, 1],
+    [44, 1],
+    [45, 1],
+    [46, 1],
     [39, 3],
-    [43, 3],
+    [47, 3],
   ]) {
     assert.equal(stage4CodeForRawCode(code), level, `code ${code}`);
   }
