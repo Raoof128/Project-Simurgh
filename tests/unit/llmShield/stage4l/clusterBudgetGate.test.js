@@ -46,7 +46,14 @@ const policy = (budgets) => ({
 
 test("aggregation sums weighted totals per cluster commitment", () => {
   const ledger = buildAssignmentLedger([asg(D("a"), "1"), asg(D("b"), "1"), asg(D("c"), "2")]);
-  const totals = aggregateClusterExposure(exposure([[D("a"), 3], [D("b"), 4], [D("c"), 5]]), ledger);
+  const totals = aggregateClusterExposure(
+    exposure([
+      [D("a"), 3],
+      [D("b"), 4],
+      [D("c"), 5],
+    ]),
+    ledger
+  );
   assert.equal(totals.length, 2);
   const shared = totals.find((t) => t.consumer_count === 2);
   assert.equal(shared.cluster_weighted_total, 7);
@@ -69,7 +76,13 @@ test("F-STRUCTURE: 100 x 1 in one cluster exceeds B_cluster 80 -> raw 41", () =>
 
 test("boundary == B_cluster passes (Q8 semantics)", () => {
   const ledger = buildAssignmentLedger([asg(D("a"), "1"), asg(D("b"), "1")]);
-  const totals = aggregateClusterExposure(exposure([[D("a"), 4], [D("b"), 4]]), ledger);
+  const totals = aggregateClusterExposure(
+    exposure([
+      [D("a"), 4],
+      [D("b"), 4],
+    ]),
+    ledger
+  );
   const r = checkClusterBudgets(totals, policy({ [totals[0].cluster_commitment]: 8 }));
   assert.deepEqual(r, { ok: true, rawCode: 0, reason: null, offending: [] });
 });

@@ -76,7 +76,7 @@ test("cardinality histogram: singleton slot always present, counts recompute", (
   assert.equal(card.schema, "simurgh.ccb.cluster_cardinality.v1");
   assert.equal(card.window, W);
   assert.equal(card.assignment_ledger_digest, assignmentLedgerDigest(ledger));
-  assert.deepEqual(card.histogram, { "1": 1, "2": 1 });
+  assert.deepEqual(card.histogram, { 1: 1, 2: 1 });
   assert.equal(card.cluster_count, 2);
   assert.equal(card.consumer_count, 3);
   assert.equal(typeof cardinalityDigest(card), "string");
@@ -84,5 +84,5 @@ test("cardinality histogram: singleton slot always present, counts recompute", (
 
 test("cardinality of all-singletons records the evasion shape", () => {
   const ledger = buildAssignmentLedger([asg(D("a"), "1"), asg(D("b"), "2"), asg(D("c"), "3")]);
-  assert.deepEqual(computeClusterCardinality(ledger).histogram, { "1": 3 });
+  assert.deepEqual(computeClusterCardinality(ledger).histogram, { 1: 3 });
 });
