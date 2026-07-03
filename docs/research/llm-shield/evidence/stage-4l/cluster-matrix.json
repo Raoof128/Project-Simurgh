@@ -1,0 +1,37 @@
+{
+  "clean-under": {
+    "raw": 0,
+    "typed": 0,
+    "reason": null
+  },
+  "boundary-equal": {
+    "raw": 0,
+    "typed": 0,
+    "reason": null
+  },
+  "single-fat": {
+    "raw": 41,
+    "typed": 1,
+    "reason": "cluster_budget_exceeded"
+  },
+  "structuring": {
+    "raw": 41,
+    "typed": 1,
+    "reason": "cluster_budget_exceeded"
+  },
+  "singleton-evasion": {
+    "raw": 0,
+    "typed": 0,
+    "reason": null
+  },
+  "missing-assignment": {
+    "raw": 40,
+    "typed": 1,
+    "reason": "cluster_commitment_missing"
+  },
+  "duplicate-assignment": {
+    "raw": 42,
+    "typed": 1,
+    "reason": "cluster_assignment_mismatch"
+  }
+}
