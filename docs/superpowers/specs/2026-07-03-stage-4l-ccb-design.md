@@ -34,6 +34,13 @@ mechanism for verifiable **enforcement** claims that report called for.
 2. **4M / VXD** — retroactive re-scoring over signed cluster-merge events (monotone
    anti-laundering lattice; enforcement and audit-evasion become mutually exclusive) + disclosure
    binding + Article-73 template projection as an output surface. Seeded here, specced after 4L ships.
+   Formal spine (state in 4L threat model, prove in 4M): cluster assignments are a **partition**
+   of consumers; fraud-graph improvements only ever **coarsen** the partition (merge-only
+   lattice); exposure is additive over blocks. **Anti-monotonicity lemma:** once any merged
+   cluster exceeds its budget in a committed window, every further coarsening containing it also
+   exceeds it — retroactive breaches can never be un-discovered by learning more. *Breaches are
+   monotone under truth.* This makes the mutual-exclusion incentive argument provable, not
+   rhetorical.
 3. **VFR** — verifiable friction receipts, its own later stage (never merged into 4M).
 4. **Docs-only companion PR** — "Q8/Q9 as the evidence contract for OWASP LLM10:2025 /
    NIST AI RMF MEASURE 2.7" mapping note + roadmap reconciliation (one canonical taxonomy).
@@ -184,13 +191,44 @@ non-claims block.
 As drafted (q9_status, ledger/policy digests, per-cluster totals with per-account contrast
 preserved), plus:
 
-- `known_limitations` (SIGNED, 3U pattern): `singleton_cluster_evasion_not_detected` (F9),
+- `known_limitations` (SIGNED, 3U pattern): `singleton_cluster_evasion_not_detected_but_ledgered`
+  (F9 — see §3.4: evasion is not detected, but it forces a signed cardinality claim),
   `basis_digests_opaque_slots` (R2-B lineage), `graph_version_not_verified_in_4l`.
 - `corroborating_commitments: []` — reserved empty array, the 4P/CPC hook. 4L validates it is
   present and empty; any non-empty value fails closed.
 - `falsifiers` summary keyed to F1–F9 below.
 
-### 3.4 Fixture hygiene (hard rules)
+### 3.4 `simurgh.ccb.cluster_cardinality.v1` — the cardinality commitment ("the liar must ledger the lie")
+
+Every window, the builder recomputes the **cluster-size histogram** from the assignment ledger
+and commits it as a first-class signed artifact:
+
+```json
+{
+  "schema": "simurgh.ccb.cluster_cardinality.v1",
+  "window": "<window-id>",
+  "assignment_ledger_digest": "sha256:...",
+  "histogram": { "1": 100, "2": 0, "5": 1 },
+  "cluster_count": 101,
+  "consumer_count": 105
+}
+```
+
+Rules:
+- Histogram keys are cluster sizes (stringified integers), values are counts; zero-count sizes
+  MAY be omitted except size `1`, which MUST always be present (even as `"1": 0`) — singleton
+  count is the load-bearing claim.
+- The verifier recomputes the histogram from the assignment ledger; any inconsistency (counts,
+  `cluster_count`, `consumer_count`, or `assignment_ledger_digest` mismatch) → raw 42.
+- `cluster_cardinality_digest` is bound into the signed pack manifest alongside the attestation.
+
+**Why this exists.** It does not detect singleton-cluster evasion (F9 remains expected-green).
+It converts evasion into a **signed, falsifiable public claim**: a provider that under-clusters
+must put "these 100 accounts are 100 independent actors" on the permanent record. When a later
+merge event (4M), a fingerprint match, or partner corroboration contradicts it, that is a
+provable prior misstatement, not a vague miss. Evasion is not prevented; it is *ledgered*.
+
+### 3.5 Fixture hygiene (hard rules)
 
 - **Synthetic magnitudes only** (e.g., 3–100 consumers, totals ≤ a few hundred). No real incident
   figures, no lab/company names — brand-denylist check in the security audit (3P lineage).
@@ -216,7 +254,8 @@ preserved), plus:
 | F6 | post-sign budget tamper | lower B_cluster after signing | signature/digest failure |
 | F7 | raw-identity leak | add `email` key to an assignment | raw 42 (pinned; no "or") |
 | F8 | per-account control | account-only checker on the F-STRUCTURE fixture | PASSES (documented negative control: the failure mode 4L exists to fix) |
-| **F9** | **singleton-cluster evasion** | 100 accounts, 100 singleton clusters, each under budget | **PASSES Q9 — expected-green arm, signed into `known_limitations`** (the honest hole; 4M's retroactive layer is its answer) |
+| **F9** | **singleton-cluster evasion** | 100 accounts, 100 singleton clusters, each under budget | **PASSES Q9 — expected-green arm, signed into `known_limitations`**; MUST also show the emitted cardinality commitment recording `"1": 100` (the evasion is ledgered; 4M's retroactive layer is its answer) |
+| F10 | cardinality tamper | edit histogram (or its counts/digest) after build | raw 42 |
 
 Any red arm coming back green, or F8/F9 coming back red, is a stage failure.
 
@@ -232,20 +271,23 @@ Branch: `stage-4l-ccb` off clean `main`. Neutral commit messages, no assistant a
   builds. Done when: clean validates; unknown field / raw-identity key / `true` flag all fail.
 - **L2 — assignment-ledger completeness.** Exact bijection with 4K exposure consumers per window;
   `assignment_ledger_digest`. Done when: F3→40; F4/extra/dangling/digest-tamper→42.
-- **L3 — cluster aggregation gate.** `aggregateClusterExposure()` + `checkClusterBudgets()`;
-  boundary == passes; reuse 4K weights digest; preserve per-account totals. Done when:
-  F-STRUCTURE and F2b→41; F2c/F1 pass; F8 control documented; Q0–Q8 semantics unchanged.
+- **L3 — cluster aggregation gate + cardinality commitment.** `aggregateClusterExposure()` +
+  `checkClusterBudgets()` + `computeClusterCardinality()` (histogram recomputed from the
+  assignment ledger, §3.4); boundary == passes; reuse 4K weights digest; preserve per-account
+  totals. Done when: F-STRUCTURE and F2b→41; F2c/F1 pass; F8 control documented; F10→42;
+  Q0–Q8 semantics unchanged.
 - **L4 — attestation + signed-pack binding.** Emit assignment ledger, policy, attestation,
-  summary; own **stage4l Ed25519 key** (no reuse of 4A–4K keys); bind
-  `cluster_budget_attestation_digest` into `signed-pack-manifest.json` acyclically; verifier
-  recomputes everything, never trusts committed JSON. Done when: F5/F6 red; clean pack verifies
-  offline.
+  `cluster-cardinality.json`, summary; own **stage4l Ed25519 key** (no reuse of 4A–4K keys);
+  bind `cluster_budget_attestation_digest` AND `cluster_cardinality_digest` into
+  `signed-pack-manifest.json` acyclically; verifier recomputes everything, never trusts
+  committed JSON. Done when: F5/F6/F10 red; clean pack verifies offline.
 - **L5 — one-command reproduce + falsifiers.** `scripts/reproduce-llm-shield-stage4l.sh`:
   scrub/pin env → rebuild 4K fixtures → rebuild 4L assignments → verify manifest → completeness →
   Q9 → replay Q0–Q8 unchanged → falsifier matrix (F1–F9) → byte-stable golden diff (two runs,
   Node 26) → emit summary → exit via `stage4CodeForRawCode`. Clean tree after reproduce.
 - **L6 — reviewer docs.** `STAGE_4L_THREAT_MODEL.md` (structuring; adjacent-lanes table;
-  Brundage/ARC/fingerprinting/TEE/SCITT citations), `STAGE_4L_REVIEWER_CHECKLIST.md`,
+  Brundage/ARC/fingerprinting/TEE/SCITT citations; one paragraph stating the partition-lattice
+  anti-monotonicity lemma from §0 with proof deferred to 4M), `STAGE_4L_REVIEWER_CHECKLIST.md`,
   `STAGE_4L_CLOSEOUT.md`, evidence README. Overclaim grep (extended with structuring terms) must
   match only inside explicit non-claims:
 
@@ -278,23 +320,30 @@ the 4L pack; Q8 semantics untouched.
 | L-G2 completeness | exact bijection with 4K consumers | F3/F4 red |
 | L-G3 aggregation | cluster totals recompute from exposure ledger | F5 red |
 | L-G4 enforcement | cluster total ≤ B_cluster; boundary passes | F-STRUCTURE red |
-| L-G5 binding | attestation digest bound in manifest; own key | F6 red |
+| L-G5 binding | attestation + cardinality digests bound in manifest; own key | F6/F10 red |
 | L-G6 byte stability | two full runs byte-identical (Node 26) | golden diff red |
 | L-G7 offline | no network/model/clock dependency | offline audit red |
 | L-G8 honesty | non-claims + signed known_limitations incl. F9; overclaim grep clean; brand denylist clean | grep red |
 | L-G9 E2E net | L7 full-chain net green; Q0–Q8 byte-unchanged | any net arm red |
 
-Done when: F1/F2c exit 0; F2b + F-STRUCTURE exit 41; F3→40; F4/F5/F7→42; F6 signature-fails;
-F8 passes as control; F9 passes and is signed as a limitation; no raw identity in evidence;
-one command reproduces offline; release gates pass on merged `main` before tagging.
+Done when: F1/F2c exit 0; F2b + F-STRUCTURE exit 41; F3→40; F4/F5/F7/F10→42; F6 signature-fails;
+F8 passes as control; F9 passes, is signed as a limitation, AND its cardinality commitment
+records the singleton count; no raw identity in evidence; one command reproduces offline;
+release gates pass on merged `main` before tagging.
 
 ---
 
 ## 7. Out of scope (explicitly deferred, seeded here)
 
 - **4M/VXD**: signed `cluster_merge_event.v1` (reserved name), monotone merge lattice,
-  retroactive re-scoring of past committed windows, disclosure-claim binding, Article-73 template
-  projection (with `not_legal_compliance_certification`). Consumes `graph_version_digest`.
+  retroactive re-scoring of past committed windows (proving the anti-monotonicity lemma from §0
+  as its formal core), disclosure-claim binding, Article-73 template projection (with
+  `not_legal_compliance_certification`). Consumes `graph_version_digest` and the §3.4 cardinality
+  commitments (a merge event that contradicts a prior committed histogram is the "ledgered lie"
+  surfacing). Reserved field name for the 4M attestation: `demand_side_evidence_digest` — binds
+  demand-side evidence (e.g., an antidistillation-fingerprint match report) to the supply-side
+  exposure ledgers in one signed disclosure, so a future disclosure carries both halves of the
+  pincer. 4L defines the name only.
 - **VFR**: separate stage; never merged into 4M.
 - **OWASP LLM10 / NIST MEASURE 2.7 mapping note**: docs-only companion PR (carries Q8's
   "enforcement of declared budget, NOT prevention" non-claim into the mapping table).
