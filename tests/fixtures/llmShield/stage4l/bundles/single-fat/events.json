@@ -1,0 +1,202 @@
+[
+  {
+    "event_id": "ev_consumer_x_000",
+    "consumer_id": "consumer_x",
+    "session_id": "session_consumer_x",
+    "window": "2026-07",
+    "signal_class": "reward_like_judgment",
+    "response_id_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  {
+    "event_id": "ev_consumer_x_001",
+    "consumer_id": "consumer_x",
+    "session_id": "session_consumer_x",
+    "window": "2026-07",
+    "signal_class": "reward_like_judgment",
+    "response_id_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  {
+    "event_id": "ev_consumer_x_002",
+    "consumer_id": "consumer_x",
+    "session_id": "session_consumer_x",
+    "window": "2026-07",
+    "signal_class": "reward_like_judgment",
+    "response_id_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+  },
+  {
+    "event_id": "ev_consumer_x_003",
+    "consumer_id": "consumer_x",
+    "session_id": "session_consumer_x",
+    "window": "2026-07",
+    "signal_class": "reward_like_judgment",
+    "response_id_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+  },
+  {
+    "event_id": "ev_consumer_x_004",
+    "consumer_id": "consumer_x",
+    "session_id": "session_consumer_x",
+    "window": "2026-07",
+    "signal_class": "reward_like_judgment",
+    "response_id_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"
+  },
+  {
+    "event_id": "ev_consumer_x_005",
+    "consumer_id": "consumer_x",
+    "session_id": "session_consumer_x",
+    "window": "2026-07",
+    "signal_class": "reward_like_judgment",
+    "response_id_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666"
+  },
+  {
+    "event_id": "ev_consumer_x_006",
+    "consumer_id": "consumer_x",
+    "session_id": "session_consumer_x",
+    "window": "2026-07",
+    "signal_class": "reward_like_judgment",
+    "response_id_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  {
+    "event_id": "ev_consumer_x_007",
+    "consumer_id": "consumer_x",
+    "session_id": "session_consumer_x",
+    "window": "2026-07",
+    "signal_class": "reward_like_judgment",
+    "response_id_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  {
+    "event_id": "ev_consumer_x_008",
+    "consumer_id": "consumer_x",
+    "session_id": "session_consumer_x",
+    "window": "2026-07",
+    "signal_class": "reward_like_judgment",
+    "response_id_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+  },
+  {
+    "event_id": "ev_consumer_x_009",
+    "consumer_id": "consumer_x",
+    "session_id": "session_consumer_x",
+    "window": "2026-07",
+    "signal_class": "reward_like_judgment",
+    "response_id_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+  },
+  {
+    "event_id": "ev_consumer_x_010",
+    "consumer_id": "consumer_x",
+    "session_id": "session_consumer_x",
+    "window": "2026-07",
+    "signal_class": "reward_like_judgment",
+    "response_id_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"
+  },
+  {
+    "event_id": "ev_consumer_x_011",
+    "consumer_id": "consumer_x",
+    "session_id": "session_consumer_x",
+    "window": "2026-07",
+    "signal_class": "reward_like_judgment",
+    "response_id_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666"
+  },
+  {
+    "event_id": "ev_consumer_x_012",
+    "consumer_id": "consumer_x",
+    "session_id": "session_consumer_x",
+    "window": "2026-07",
+    "signal_class": "reward_like_judgment",
+    "response_id_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  {
+    "event_id": "ev_consumer_x_013",
+    "consumer_id": "consumer_x",
+    "session_id": "session_consumer_x",
+    "window": "2026-07",
+    "signal_class": "reward_like_judgment",
+    "response_id_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  {
+    "event_id": "ev_consumer_x_014",
+    "consumer_id": "consumer_x",
+    "session_id": "session_consumer_x",
+    "window": "2026-07",
+    "signal_class": "reward_like_judgment",
+    "response_id_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+  },
+  {
+    "event_id": "ev_consumer_x_015",
+    "consumer_id": "consumer_x",
+    "session_id": "session_consumer_x",
+    "window": "2026-07",
+    "signal_class": "reward_like_judgment",
+    "response_id_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+  },
+  {
+    "event_id": "ev_consumer_x_016",
+    "consumer_id": "consumer_x",
+    "session_id": "session_consumer_x",
+    "window": "2026-07",
+    "signal_class": "reward_like_judgment",
+    "response_id_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"
+  },
+  {
+    "event_id": "ev_consumer_x_017",
+    "consumer_id": "consumer_x",
+    "session_id": "session_consumer_x",
+    "window": "2026-07",
+    "signal_class": "reward_like_judgment",
+    "response_id_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666"
+  },
+  {
+    "event_id": "ev_consumer_x_018",
+    "consumer_id": "consumer_x",
+    "session_id": "session_consumer_x",
+    "window": "2026-07",
+    "signal_class": "reward_like_judgment",
+    "response_id_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  {
+    "event_id": "ev_consumer_x_019",
+    "consumer_id": "consumer_x",
+    "session_id": "session_consumer_x",
+    "window": "2026-07",
+    "signal_class": "reward_like_judgment",
+    "response_id_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  {
+    "event_id": "ev_consumer_x_020",
+    "consumer_id": "consumer_x",
+    "session_id": "session_consumer_x",
+    "window": "2026-07",
+    "signal_class": "reward_like_judgment",
+    "response_id_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+  },
+  {
+    "event_id": "ev_consumer_x_021",
+    "consumer_id": "consumer_x",
+    "session_id": "session_consumer_x",
+    "window": "2026-07",
+    "signal_class": "reward_like_judgment",
+    "response_id_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+  },
+  {
+    "event_id": "ev_consumer_x_022",
+    "consumer_id": "consumer_x",
+    "session_id": "session_consumer_x",
+    "window": "2026-07",
+    "signal_class": "reward_like_judgment",
+    "response_id_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"
+  },
+  {
+    "event_id": "ev_consumer_x_023",
+    "consumer_id": "consumer_x",
+    "session_id": "session_consumer_x",
+    "window": "2026-07",
+    "signal_class": "reward_like_judgment",
+    "response_id_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666"
+  },
+  {
+    "event_id": "ev_consumer_x_024",
+    "consumer_id": "consumer_x",
+    "session_id": "session_consumer_x",
+    "window": "2026-07",
+    "signal_class": "reward_like_judgment",
+    "response_id_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  }
+]

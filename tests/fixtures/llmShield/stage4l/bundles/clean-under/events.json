@@ -1,0 +1,26 @@
+[
+  {
+    "event_id": "ev_consumer_x_000",
+    "consumer_id": "consumer_x",
+    "session_id": "session_consumer_x",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  {
+    "event_id": "ev_consumer_y_001",
+    "consumer_id": "consumer_y",
+    "session_id": "session_consumer_y",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  {
+    "event_id": "ev_consumer_z_002",
+    "consumer_id": "consumer_z",
+    "session_id": "session_consumer_z",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+  }
+]

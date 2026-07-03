@@ -1,0 +1,802 @@
+[
+  {
+    "event_id": "ev_consumer_000_000",
+    "consumer_id": "consumer_000",
+    "session_id": "session_consumer_000",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  {
+    "event_id": "ev_consumer_001_001",
+    "consumer_id": "consumer_001",
+    "session_id": "session_consumer_001",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  {
+    "event_id": "ev_consumer_002_002",
+    "consumer_id": "consumer_002",
+    "session_id": "session_consumer_002",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+  },
+  {
+    "event_id": "ev_consumer_003_003",
+    "consumer_id": "consumer_003",
+    "session_id": "session_consumer_003",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+  },
+  {
+    "event_id": "ev_consumer_004_004",
+    "consumer_id": "consumer_004",
+    "session_id": "session_consumer_004",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"
+  },
+  {
+    "event_id": "ev_consumer_005_005",
+    "consumer_id": "consumer_005",
+    "session_id": "session_consumer_005",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666"
+  },
+  {
+    "event_id": "ev_consumer_006_006",
+    "consumer_id": "consumer_006",
+    "session_id": "session_consumer_006",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  {
+    "event_id": "ev_consumer_007_007",
+    "consumer_id": "consumer_007",
+    "session_id": "session_consumer_007",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  {
+    "event_id": "ev_consumer_008_008",
+    "consumer_id": "consumer_008",
+    "session_id": "session_consumer_008",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+  },
+  {
+    "event_id": "ev_consumer_009_009",
+    "consumer_id": "consumer_009",
+    "session_id": "session_consumer_009",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+  },
+  {
+    "event_id": "ev_consumer_010_010",
+    "consumer_id": "consumer_010",
+    "session_id": "session_consumer_010",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"
+  },
+  {
+    "event_id": "ev_consumer_011_011",
+    "consumer_id": "consumer_011",
+    "session_id": "session_consumer_011",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666"
+  },
+  {
+    "event_id": "ev_consumer_012_012",
+    "consumer_id": "consumer_012",
+    "session_id": "session_consumer_012",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  {
+    "event_id": "ev_consumer_013_013",
+    "consumer_id": "consumer_013",
+    "session_id": "session_consumer_013",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  {
+    "event_id": "ev_consumer_014_014",
+    "consumer_id": "consumer_014",
+    "session_id": "session_consumer_014",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+  },
+  {
+    "event_id": "ev_consumer_015_015",
+    "consumer_id": "consumer_015",
+    "session_id": "session_consumer_015",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+  },
+  {
+    "event_id": "ev_consumer_016_016",
+    "consumer_id": "consumer_016",
+    "session_id": "session_consumer_016",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"
+  },
+  {
+    "event_id": "ev_consumer_017_017",
+    "consumer_id": "consumer_017",
+    "session_id": "session_consumer_017",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666"
+  },
+  {
+    "event_id": "ev_consumer_018_018",
+    "consumer_id": "consumer_018",
+    "session_id": "session_consumer_018",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  {
+    "event_id": "ev_consumer_019_019",
+    "consumer_id": "consumer_019",
+    "session_id": "session_consumer_019",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  {
+    "event_id": "ev_consumer_020_020",
+    "consumer_id": "consumer_020",
+    "session_id": "session_consumer_020",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+  },
+  {
+    "event_id": "ev_consumer_021_021",
+    "consumer_id": "consumer_021",
+    "session_id": "session_consumer_021",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+  },
+  {
+    "event_id": "ev_consumer_022_022",
+    "consumer_id": "consumer_022",
+    "session_id": "session_consumer_022",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"
+  },
+  {
+    "event_id": "ev_consumer_023_023",
+    "consumer_id": "consumer_023",
+    "session_id": "session_consumer_023",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666"
+  },
+  {
+    "event_id": "ev_consumer_024_024",
+    "consumer_id": "consumer_024",
+    "session_id": "session_consumer_024",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  {
+    "event_id": "ev_consumer_025_025",
+    "consumer_id": "consumer_025",
+    "session_id": "session_consumer_025",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  {
+    "event_id": "ev_consumer_026_026",
+    "consumer_id": "consumer_026",
+    "session_id": "session_consumer_026",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+  },
+  {
+    "event_id": "ev_consumer_027_027",
+    "consumer_id": "consumer_027",
+    "session_id": "session_consumer_027",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+  },
+  {
+    "event_id": "ev_consumer_028_028",
+    "consumer_id": "consumer_028",
+    "session_id": "session_consumer_028",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"
+  },
+  {
+    "event_id": "ev_consumer_029_029",
+    "consumer_id": "consumer_029",
+    "session_id": "session_consumer_029",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666"
+  },
+  {
+    "event_id": "ev_consumer_030_030",
+    "consumer_id": "consumer_030",
+    "session_id": "session_consumer_030",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  {
+    "event_id": "ev_consumer_031_031",
+    "consumer_id": "consumer_031",
+    "session_id": "session_consumer_031",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  {
+    "event_id": "ev_consumer_032_032",
+    "consumer_id": "consumer_032",
+    "session_id": "session_consumer_032",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+  },
+  {
+    "event_id": "ev_consumer_033_033",
+    "consumer_id": "consumer_033",
+    "session_id": "session_consumer_033",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+  },
+  {
+    "event_id": "ev_consumer_034_034",
+    "consumer_id": "consumer_034",
+    "session_id": "session_consumer_034",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"
+  },
+  {
+    "event_id": "ev_consumer_035_035",
+    "consumer_id": "consumer_035",
+    "session_id": "session_consumer_035",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666"
+  },
+  {
+    "event_id": "ev_consumer_036_036",
+    "consumer_id": "consumer_036",
+    "session_id": "session_consumer_036",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  {
+    "event_id": "ev_consumer_037_037",
+    "consumer_id": "consumer_037",
+    "session_id": "session_consumer_037",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  {
+    "event_id": "ev_consumer_038_038",
+    "consumer_id": "consumer_038",
+    "session_id": "session_consumer_038",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+  },
+  {
+    "event_id": "ev_consumer_039_039",
+    "consumer_id": "consumer_039",
+    "session_id": "session_consumer_039",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+  },
+  {
+    "event_id": "ev_consumer_040_040",
+    "consumer_id": "consumer_040",
+    "session_id": "session_consumer_040",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"
+  },
+  {
+    "event_id": "ev_consumer_041_041",
+    "consumer_id": "consumer_041",
+    "session_id": "session_consumer_041",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666"
+  },
+  {
+    "event_id": "ev_consumer_042_042",
+    "consumer_id": "consumer_042",
+    "session_id": "session_consumer_042",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  {
+    "event_id": "ev_consumer_043_043",
+    "consumer_id": "consumer_043",
+    "session_id": "session_consumer_043",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  {
+    "event_id": "ev_consumer_044_044",
+    "consumer_id": "consumer_044",
+    "session_id": "session_consumer_044",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+  },
+  {
+    "event_id": "ev_consumer_045_045",
+    "consumer_id": "consumer_045",
+    "session_id": "session_consumer_045",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+  },
+  {
+    "event_id": "ev_consumer_046_046",
+    "consumer_id": "consumer_046",
+    "session_id": "session_consumer_046",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"
+  },
+  {
+    "event_id": "ev_consumer_047_047",
+    "consumer_id": "consumer_047",
+    "session_id": "session_consumer_047",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666"
+  },
+  {
+    "event_id": "ev_consumer_048_048",
+    "consumer_id": "consumer_048",
+    "session_id": "session_consumer_048",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  {
+    "event_id": "ev_consumer_049_049",
+    "consumer_id": "consumer_049",
+    "session_id": "session_consumer_049",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  {
+    "event_id": "ev_consumer_050_050",
+    "consumer_id": "consumer_050",
+    "session_id": "session_consumer_050",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+  },
+  {
+    "event_id": "ev_consumer_051_051",
+    "consumer_id": "consumer_051",
+    "session_id": "session_consumer_051",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+  },
+  {
+    "event_id": "ev_consumer_052_052",
+    "consumer_id": "consumer_052",
+    "session_id": "session_consumer_052",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"
+  },
+  {
+    "event_id": "ev_consumer_053_053",
+    "consumer_id": "consumer_053",
+    "session_id": "session_consumer_053",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666"
+  },
+  {
+    "event_id": "ev_consumer_054_054",
+    "consumer_id": "consumer_054",
+    "session_id": "session_consumer_054",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  {
+    "event_id": "ev_consumer_055_055",
+    "consumer_id": "consumer_055",
+    "session_id": "session_consumer_055",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  {
+    "event_id": "ev_consumer_056_056",
+    "consumer_id": "consumer_056",
+    "session_id": "session_consumer_056",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+  },
+  {
+    "event_id": "ev_consumer_057_057",
+    "consumer_id": "consumer_057",
+    "session_id": "session_consumer_057",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+  },
+  {
+    "event_id": "ev_consumer_058_058",
+    "consumer_id": "consumer_058",
+    "session_id": "session_consumer_058",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"
+  },
+  {
+    "event_id": "ev_consumer_059_059",
+    "consumer_id": "consumer_059",
+    "session_id": "session_consumer_059",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666"
+  },
+  {
+    "event_id": "ev_consumer_060_060",
+    "consumer_id": "consumer_060",
+    "session_id": "session_consumer_060",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  {
+    "event_id": "ev_consumer_061_061",
+    "consumer_id": "consumer_061",
+    "session_id": "session_consumer_061",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  {
+    "event_id": "ev_consumer_062_062",
+    "consumer_id": "consumer_062",
+    "session_id": "session_consumer_062",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+  },
+  {
+    "event_id": "ev_consumer_063_063",
+    "consumer_id": "consumer_063",
+    "session_id": "session_consumer_063",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+  },
+  {
+    "event_id": "ev_consumer_064_064",
+    "consumer_id": "consumer_064",
+    "session_id": "session_consumer_064",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"
+  },
+  {
+    "event_id": "ev_consumer_065_065",
+    "consumer_id": "consumer_065",
+    "session_id": "session_consumer_065",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666"
+  },
+  {
+    "event_id": "ev_consumer_066_066",
+    "consumer_id": "consumer_066",
+    "session_id": "session_consumer_066",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  {
+    "event_id": "ev_consumer_067_067",
+    "consumer_id": "consumer_067",
+    "session_id": "session_consumer_067",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  {
+    "event_id": "ev_consumer_068_068",
+    "consumer_id": "consumer_068",
+    "session_id": "session_consumer_068",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+  },
+  {
+    "event_id": "ev_consumer_069_069",
+    "consumer_id": "consumer_069",
+    "session_id": "session_consumer_069",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+  },
+  {
+    "event_id": "ev_consumer_070_070",
+    "consumer_id": "consumer_070",
+    "session_id": "session_consumer_070",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"
+  },
+  {
+    "event_id": "ev_consumer_071_071",
+    "consumer_id": "consumer_071",
+    "session_id": "session_consumer_071",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666"
+  },
+  {
+    "event_id": "ev_consumer_072_072",
+    "consumer_id": "consumer_072",
+    "session_id": "session_consumer_072",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  {
+    "event_id": "ev_consumer_073_073",
+    "consumer_id": "consumer_073",
+    "session_id": "session_consumer_073",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  {
+    "event_id": "ev_consumer_074_074",
+    "consumer_id": "consumer_074",
+    "session_id": "session_consumer_074",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+  },
+  {
+    "event_id": "ev_consumer_075_075",
+    "consumer_id": "consumer_075",
+    "session_id": "session_consumer_075",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+  },
+  {
+    "event_id": "ev_consumer_076_076",
+    "consumer_id": "consumer_076",
+    "session_id": "session_consumer_076",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"
+  },
+  {
+    "event_id": "ev_consumer_077_077",
+    "consumer_id": "consumer_077",
+    "session_id": "session_consumer_077",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666"
+  },
+  {
+    "event_id": "ev_consumer_078_078",
+    "consumer_id": "consumer_078",
+    "session_id": "session_consumer_078",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  {
+    "event_id": "ev_consumer_079_079",
+    "consumer_id": "consumer_079",
+    "session_id": "session_consumer_079",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  {
+    "event_id": "ev_consumer_080_080",
+    "consumer_id": "consumer_080",
+    "session_id": "session_consumer_080",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+  },
+  {
+    "event_id": "ev_consumer_081_081",
+    "consumer_id": "consumer_081",
+    "session_id": "session_consumer_081",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+  },
+  {
+    "event_id": "ev_consumer_082_082",
+    "consumer_id": "consumer_082",
+    "session_id": "session_consumer_082",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"
+  },
+  {
+    "event_id": "ev_consumer_083_083",
+    "consumer_id": "consumer_083",
+    "session_id": "session_consumer_083",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666"
+  },
+  {
+    "event_id": "ev_consumer_084_084",
+    "consumer_id": "consumer_084",
+    "session_id": "session_consumer_084",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  {
+    "event_id": "ev_consumer_085_085",
+    "consumer_id": "consumer_085",
+    "session_id": "session_consumer_085",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  {
+    "event_id": "ev_consumer_086_086",
+    "consumer_id": "consumer_086",
+    "session_id": "session_consumer_086",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+  },
+  {
+    "event_id": "ev_consumer_087_087",
+    "consumer_id": "consumer_087",
+    "session_id": "session_consumer_087",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+  },
+  {
+    "event_id": "ev_consumer_088_088",
+    "consumer_id": "consumer_088",
+    "session_id": "session_consumer_088",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"
+  },
+  {
+    "event_id": "ev_consumer_089_089",
+    "consumer_id": "consumer_089",
+    "session_id": "session_consumer_089",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666"
+  },
+  {
+    "event_id": "ev_consumer_090_090",
+    "consumer_id": "consumer_090",
+    "session_id": "session_consumer_090",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  {
+    "event_id": "ev_consumer_091_091",
+    "consumer_id": "consumer_091",
+    "session_id": "session_consumer_091",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  {
+    "event_id": "ev_consumer_092_092",
+    "consumer_id": "consumer_092",
+    "session_id": "session_consumer_092",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+  },
+  {
+    "event_id": "ev_consumer_093_093",
+    "consumer_id": "consumer_093",
+    "session_id": "session_consumer_093",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+  },
+  {
+    "event_id": "ev_consumer_094_094",
+    "consumer_id": "consumer_094",
+    "session_id": "session_consumer_094",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"
+  },
+  {
+    "event_id": "ev_consumer_095_095",
+    "consumer_id": "consumer_095",
+    "session_id": "session_consumer_095",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666"
+  },
+  {
+    "event_id": "ev_consumer_096_096",
+    "consumer_id": "consumer_096",
+    "session_id": "session_consumer_096",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  {
+    "event_id": "ev_consumer_097_097",
+    "consumer_id": "consumer_097",
+    "session_id": "session_consumer_097",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  {
+    "event_id": "ev_consumer_098_098",
+    "consumer_id": "consumer_098",
+    "session_id": "session_consumer_098",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+  },
+  {
+    "event_id": "ev_consumer_099_099",
+    "consumer_id": "consumer_099",
+    "session_id": "session_consumer_099",
+    "window": "2026-07",
+    "signal_class": "final_answer",
+    "response_id_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+  }
+]

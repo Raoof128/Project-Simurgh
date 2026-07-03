@@ -1,0 +1,55 @@
+{
+  "schema": "simurgh.ccb.cluster_budget_attestation.v1",
+  "window": "2026-07",
+  "q9_status": "pass",
+  "exposure_ledger_digest": "sha256:7d5d78b94b08ded313e1ca517b895b6fd597b6297eb6a47ea1b8b7f2217a7da0",
+  "assignment_ledger_digest": "sha256:0276445c43f644b82968d5b40d74e35cf3fe460030467548a758daea99c2d780",
+  "cluster_budget_policy_digest": "sha256:fbd235ed709dc683df6ab834d87f0c9461601c464d6626d97282bf6acca0ce8c",
+  "cluster_cardinality_digest": "sha256:0dc353b5e6914f0e3b0d312e462d71f1dc7873550858ceeb7b6cd2d09dbef772",
+  "eba_manifest_digest": "sha256:b9814f7a652902b0fb6a278d4ef796e17e5320c2dbc27ead3514501e67db4a29",
+  "cluster_totals": [
+    {
+      "cluster_commitment": "sha256:bd7e6e5db9c603874a871d8500892eddfdad7e1c70d3d5ed7f7376d98c2f2208",
+      "consumer_count": 3,
+      "cluster_weighted_total": 3,
+      "budget": 80,
+      "under_budget": true
+    }
+  ],
+  "per_account": [
+    {
+      "consumer_id_digest": "sha256:2ae54a493b4723a2bf95481ccdeae5da28f5f7c750034ceda4963c3bcb2ffc9f",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:3c469ad943069687fc6ad7fc6e1ac6e68d1b8e9960e9251de48868fff5bccf0f",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:c873bd6ce892b02fd70e8e9dc667604774ef8686cfd97fc81ea0cb2f6c732e44",
+      "weighted_total": 1
+    }
+  ],
+  "denied_over_cluster_budget": [],
+  "known_limitations": [
+    "singleton_cluster_evasion_not_detected_but_ledgered",
+    "basis_digests_opaque_slots",
+    "graph_version_not_verified_in_4l"
+  ],
+  "corroborating_commitments": [],
+  "non_claims": [
+    "not_sybil_closure",
+    "not_structuring_closure_without_provider_binding",
+    "not_identity_truth",
+    "provider_cluster_graph_assumed",
+    "not_capability_transfer_proof",
+    "budget_is_declared_policy_not_safety_bound",
+    "raw_identity_not_exported",
+    "ledger_is_metadata_only",
+    "attestation_assumes_reviewer_runtime",
+    "not_model_safety",
+    "not_kernel_sandboxing",
+    "determinism_not_statistical_robustness",
+    "complements_not_replaces_prevention_credentials"
+  ]
+}

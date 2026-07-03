@@ -1,0 +1,1136 @@
+{
+  "schema": "simurgh.ccb.cluster_budget_attestation.v1",
+  "window": "2026-07",
+  "q9_status": "pass",
+  "exposure_ledger_digest": "sha256:6dc676b467123b05f0c998634281a66e6f1bb30e21743f8af940cc39c0d2fc70",
+  "assignment_ledger_digest": "sha256:8d338d212801f0c7a484fb6d6bbce05d29081b0738ab18faaf95a0655a32a3f6",
+  "cluster_budget_policy_digest": "sha256:4a89041cafd5d014dcf10f947a768c9210ae1fb0ffa9e66176f08022a360df41",
+  "cluster_cardinality_digest": "sha256:3cbb1ff33fca7b03c572b377246aaf15fba1b37cebdac0b13103c63b00b70b75",
+  "eba_manifest_digest": "sha256:b9814f7a652902b0fb6a278d4ef796e17e5320c2dbc27ead3514501e67db4a29",
+  "cluster_totals": [
+    {
+      "cluster_commitment": "sha256:0173f7f2786e582c42f34d094f29ec1e5ac916c076149dbd4b53112a71fb1686",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:078ec0dad89afdb21f4dc0678896b34ca90f94cc904537b6dcb16687f49816ba",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:07b1078178a5655419010da8a4cf5e2b1b40545e2d2ba4ffc482f1d25d64578d",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:085d6e1079b5be68a88ed74f81abcfbd040081a14abe6d62bbb226b157326287",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:08e27b9fa606fac4a6157b486d4355552daa12dc54e421e818554a1ab1556446",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:0b3bd9864f8c66d2f7c7275f4b514fba460e3270d3954cb84369387f531b3a04",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:0b6dd6e32a312fc25ccec5667db57c6503e57e0f4aa213483c610dc51d124989",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:0eb389162df2b6adbf76fc509c85a2b22a6f81ab3b2698c7468890f692775d4b",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:0ec840e72da5207aa5d5faf7521a386a0506f713a42cced6c00606b830cd25c0",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:14f9cc33bf8da8c70959ce19a3a3bb337b7aa1bdb6fed4cad9062fdb5dc9d824",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:19845bee070ff65e6b79742cb80ab9405ef8adf85ad308d955f22f93e0d64a56",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:1b48634cd01ae6bdcdf784cb155a667de27d6be67a1d464771ec948c1f2a6d55",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:1b71f0f82f3dd6d8051e012cf0492783cd81730ff63953ebfd3c0abe23eeb687",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:1b76c7ac4f2188a61aea8b855a9d4227edbc1da6ab37ed7ee550eb78f47d53f3",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:2609e8d307d7b925a010702b73cec8095a3646aead16fe41b90efe8626d59839",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:2b1f18c442cd64875a0ca3f331dddbd91a8d7c6289d76acc63e41bb00a976bfc",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:2d9cce4ab95f8d7190dbb5813783d44df3717d5b4d4eafbb57ee16155f83571c",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:2f1679816b7781faaf6a584904f521a9b3da201211dea9529df983849b7f2c9c",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:2f9be2c7b945a8f563c17b3b090cba6433395c28e837e2fffba6daf253e9d554",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:30e0ab98e900ade2810a2c1e57d6978b1d5744f401cf12bda593b9401eca83d5",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:31f3d04a4dd37c5dc530a8a58e57028ce26356c60c4107788347da74694000b8",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:33c0a6deae263545307728b0938ca1e71372cf1228f96c214842b310873d1dd6",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:3673389f7c77094b1bd9ca69b00e08ea3c30091aab16722412a01e1511a8e14e",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:39013d634d23e2a5ee5430b3d65df230ca7ff0d1b1b2d81b40ecd41d9a9fa2cc",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:3ca6adf4fe0eb1a04502b15d04bdde06092b1a5fb3b18d910ae044074d50fd0a",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:3fcd6190ae3e471bb152fab02e352d705642dd33c27311513ad4d6505d8e02d1",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:4027b3ebbcd1e867a29355321de122799e501a03dbe278042ab01868bbefa0aa",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:40842b907f268ee2db9d9607f5e9795499136b94bc0bb7c15f9bc196ccaa9971",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:425e5d40e1ac9f9648df80c8f7a1162481a059263233969f426d47b91ef522e8",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:44e5b8b2b41ce8a4f6a57c6d0df690e4ebb2deb0194981920e4ad9f050d9ee70",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:49ded9704f97fc5b8ff32af21f11c9161a8a0d146ee76c93fb4ec0c786e76ed7",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:4a66681b622d503cdcbe24889d36fde43c8cfe9b46c22c218e05b1be25e06667",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:4e09f862ea00fb905b21b8f5ea6850e6016f479e12aee6d34be939f8b336b925",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:517340d17cc53df35efbe4e5aba9c6b7f947c0460d9d10fb05209832e4107173",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:51dacac41c0196440fdc7e7339c96a4616d713c8e0cb931f260a8eb3dbd2900d",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:534d361a6d0435ddd6543c6d565554f9608f393592cbaf83aa01d1af19706b5b",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:554831cea72fefbc50c3ad5bfcef812d3f49f53260b8d3776226232275c2e22f",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:5575fd7ee332f7d526570fe4d97fe3a23943c01be58a70306fd8a0307f1f0a9b",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:55c0d3db68db124a4a76ef0f7d926c2286db6aac0f84054c30b38467f32ce25c",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:5aa185c9d45296fff0a0a0a56241caa7cf1a705a250192eb7e1a48175893436c",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:5c3fbcf3d185cf5046b3239615f5b2b61436c8fe1da77973ba1a703a746e1e4f",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:60b71d6989941da64f73ab210b9d94edbb5e263d8adf9f465fc17d4ae359ae06",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:63626926ec1715e78301aefbe4a9e489a69a4b1bbdee9b9e1af10977b6c30f71",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:67018bb3c60f02001093c26eb6fed89031ef16bd5913470aa0ab29c531cfaf73",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:6927763a495dcfe7bca9f2408a3d1772e97265e0398866c1f35e7d1efda123ef",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:695d164120ebfe1e33a916714021342e2c05984b83b7e3550751a202fc6a6a28",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:717e3ce43094a7de25d57290a505c1bed3711736e71f0c9d98ccf346d391a5c7",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:73367b2cad674c3623010427ebd47f22285627addcbcaf0641fbaa837ad63cb3",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:76573e2621e88f9b0bc6148a5ac6e85c3cb781adcf1914625eb53169691617e1",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:781fc368ab8f11d885fb293a52cd7e07ae6285e2047bd4a56e55f624e2bd54b2",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:81e8a46aa070b377b5f4f1abf5058bee58a5fde12fed4f8563bc60fb12f71591",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:829365e5441acf3ecea67f5834e9128368227a0541cefaf8be0b20066be478de",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:871b69cc41ce79d76ac1a71370d23aeddce52b2eda83e65d1357c204bcd74940",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:89bc78e6792803bb91dc4c2d01fafffeeaa61edef9f69687a18d01c405494480",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:8afac0e64772ecc0e7a810cfcec7d71a68bd918e04972c8e99f7c8d260528eba",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:8fea0241bff703856ee7a56bf696b0ce57df5117d5d4ccf4bb014d1a00208f0f",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:9185875bf65942c2c3d04f5faf7ed8de7f7bc8b8d356f35f2477b2a636e082d2",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:934d6796cf85a83c4e55ce971820de86cce261e47e1eee137599633b9ba407c4",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:946e2eeaf0eab828bea5e9e6c22a448079cd5d1d80f6e49a2b03a11f3fb3cce9",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:96ece6c0b9d87f6b37682f399aebddcbd22ea5e7584cb3969d5e6a97e5d64a2f",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:977944a4585917c09f6e3d6d72bbe846402b99d6ce7e1f8dbe0565cae6562a36",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:9a2336bff20ee975a30867b6a03fc875d35698b411f3577c041e9290602f6a58",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:9b8a595e4d2bc7793e7dad43ac0768e8f6216f2530c78845f976c5d277b2d632",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:9be08b8619f355c4a6313e0c2192f9d692a576ab44887173751bf796fee86dec",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:9c92cd44e51308fe5c8d189107abec43c34672e78640f4fb552a7c27debf9059",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:9e1d238cd74e4d23d488ed0af13aa042c79ca00c99970eca9c2d00601623ac7c",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:a0f323d8a8b607a5a8b63e6c9d947c972f55a169670c6d07d821ef4ed39e4981",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:a3b8e6cfb02a8b2eb25f5e2fad57eca77eb5f6276322008c015871b8db9a57d7",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:a536257c13d99b6f66c2b77957d48af6f04a8ca166d8036ae555e248ca952bb7",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:a6b3246ad18ebad61bf56aa1583262e06708be1a1a207c89664ef14e65b8d8f6",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:a7361bcbe1084a7171e0f19fc370c99e289fa296f433367e130ca4cba974b59e",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:a88868bed581839a624148f0d7cd387da6f3204bb9d006d2f5b93f714405d7c4",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:ad05f18c8dd9af26e949d1291e77a1bcfb0412bed43393d962208029207717b2",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:af3b44257537099aeba5ec6d0a0d318569edbff1119e65dc7cb64f569a21650a",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:b427bacfa799ef1e2e887e2f2a3d477151737deb0a06a28ec4ddbe63c65c77c1",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:b55a2733d2c9e4726e32bc5d8311ac1e3377a30080df9397cd6f7be0e90715cb",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:b81b86668448c86ea6a61dff5472c6c907ee500f3618fb4056a6e3f1fb5b904c",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:ba7f881c59d9da35082efb8626164cfb0d60c542d68acf15d9b51ada93a0c2a4",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:bcbf3ca7e7d069bb0e36426e01766e58e157c4c971e3903033aaa376e56c9211",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:bdb26af35ce1857b73398a8a80e3877d49e95234df4d45f8baa1e47f259d5dd3",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:becf8eade682394cc4ea717a157f40dcf8c1f68e5ffe4371a89a0288a3d1fe6b",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:bf7895699291def77dc280017d5c6fbd38a25b16bf99a5f7914ba42befe914d2",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:c3788e33df9e8fbde8fea79ae0319afd8777b8597465d176a583608edea5977c",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:c5dcdb1d73c5bacbbc9d1a5d7786aaf6a5c222ad34a45132f448e66fbb9678e0",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:c8182482cb4e0f8d3a521ecdd27f3ba112e5068d4d024400a12e2168eeeea7f2",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:d0f40d5636a72394a42eeaa5ab498112cccd754c4f4a47097e1e663a40c46977",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:d30dad72734598e56185d8ac08ff9e55e466f577625d0b49b57edb6ee1092f36",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:d35da9cdfb649a2380db43eb044f2a2bfca1c4e97db96806f786f249ed2d5906",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:d3621789ba27de490692e1510b0e736f2beb440e7fd17ea368aa49122cd9a719",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:d957237aa868ca355a807337403e2bf03bb956491812dd99495ccebf7bc26229",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:d98c9227db8bb69b4e1c329b92904aca60b5cfdd7c64fb9b0d65c94c99fd086f",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:e39fd30fd181fe480b4158eea15916174200b0d1473b2cc447b8205caf2fadd0",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:ea8de0a064fd4334503d32e9df9da32d3b38cc3f45a33c79ae6bd731ef791ba4",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:ebb2378cf5b9b06c78e73c672c1324d80d95b16c3318486b90394f2009c7d6ce",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:ec2e914b5b675547f3ed2d10a34a7e3c909f68f0a26e1fc7a8e423ca21f93981",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:ed0477ec5ae4ef61e979ea49b0b4c0e869fbf0e71191460b3254b490799136ee",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:f0f6da269f5370b81d1361deff2ea8419e3dd295d276d0e2331dd06c77a236e8",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:f503d00c705886d13eeea8cbef0a4d44e5a4951f340672a3f45d11d4f2b09545",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:f763dfc5869eba0a8d1c5a54a6f9304e0d88cf3ef825e96224bade901ec54a2d",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    },
+    {
+      "cluster_commitment": "sha256:ff204047bb94ea190c5157f5fbdacb51c7f78e88da94e430b153bf603bf35f91",
+      "consumer_count": 1,
+      "cluster_weighted_total": 1,
+      "budget": 5,
+      "under_budget": true
+    }
+  ],
+  "per_account": [
+    {
+      "consumer_id_digest": "sha256:0123391e86961a978637f50d9b85ade00f5080f8a83a33140dff7e4927b561a6",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:046ed9b2c3ffd4a3607554666d13d76f623d35e5ab96ccb31774acf81b5e7b60",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:049aff25f5b602c2e9d7e963980e797e7d4c3ad44609e6ec31350fa5a0f06804",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:053367c6b86db041aabb3069b028c53c7559edf59d9331bf35f6bc238e243806",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:05a8eabb0d294ccb87fb14950ade734a3a6f9afc738f3012c3af10268a8f6738",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:070814444ed50720b8d265336e5ba43a58893eae840c8403e90c5f8d71959849",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:0789e5f427c79bd4dbb46ced44b5c03d2342ace39e5d05e672f67d1126e722ad",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:08d419df53861595ee9d4a7878d9ac08f83141f8dbddf450cf376eba0ea9af24",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:0cc8630eb63215c8abe51c067795a0aff05aeb19ad88e41248863678c077d444",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:0e037f7d8e9ef3677d82a6f4f1987f06a74b464d3296e5ea8fc87af97839fdc7",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:0fc530b1f0933935a4f0c64a2098152000af10d997c2f131f108f7adeb06f9a2",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:108f4a61ce24432885f9812b3731594f353525001472d13f67277a60cf03d772",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:1669eaa1397e664c79dc07c41a07dd2ab4a562a9825f001540da27fc83879585",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:180f28fc9362199fd72afb08b84ea4c27effa65006f8f44bcfc8fdda830cb225",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:188f8f40905328eb8dc125b53f5df3537044a0162e89acec07335762cbb1a3ea",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:219df75d395ed3fbf3c64998b88fa4c21eaec217c47e22d9397a06e755c3104a",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:2323ae0218b2818bad480dc0e77b461ef4a02a4f7c996abb3185e548245e062a",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:26fd9fc5f337c2324eb87f1ffab05dd3c6aae09d7e81bdf6d4b564f106eaa0b0",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:30792bb06487f15135dcbf8ad8b6305d7e56be6d29d6f39ecaf8fc1a4e427370",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:30ace755e5bc1a9bea1ce439e73f2f63ccb77d380d694b4e691cd2cad3c8afe7",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:33fd8205cb44be70b958ed20b9f13e367dcabd5a1f0e15e9e22e2f8af62acca4",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:3448276ccbe88faa5163b38f0a152a92f99ca24dadcb06fa4fd5c8bb1a5971d1",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:35fe9184eb7568d421fc2bf59c33f81f87c844bd79f05d28be34853b3967351e",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:36bfb91c3c6e2b59277374f97566d517bb55bcdeb58bcb5d48b5556e40da6af8",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:423c018528a3ea4fb7190b00e6f14bec1a2a8dd81f381e6d99d0f86cecdc257c",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:460463b7c9b205538bd55e412949c6839ae29c3ed16350b7037c00ededeae143",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:49104dc8840f4d81028eb7cb758d8fc53f2a4ce21aab4c44ddd7d4889cc04d1a",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:495204c72c9b77902875faacb1cc161566674bbb0c672cdf39ccf99a05361920",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:4a2770a45de0b61dfec8e0ca9ff29c4d8d91b96ece50f1984a53a1acd4933439",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:4a65e56b84d28ad39f002d54a1df28c9ec92aff6393af57c1ed707d3e2000eaa",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:4f7419ed9d033cfb2e6307d10ffe80ab7bc3149ddc50b493f4146771f209d12e",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:5189390b4d6cd26fb38d56dec6beaf6e355d4c811df12e29f55674c28c337f92",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:55e8daa65d191818263b68130ce4ebcdedbbfc7c12cc997c7b21677bc3cd1988",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:59405d9838b158650fb0251e082267918392921e09f385092c6b3fe5db69e586",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:5f2862bf23ce9af49f946cf1b063a9ccf31e9c39ab8b3d124b372658cc901af4",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:61c7d8c5dca02ac416365e42cd5d2333dbfd17dd43ed4fc7adee0fb457f7a1e1",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:654ed7881e3b2faa143151f71cf16d947ad094187ee667c5bb42d8749e8dc521",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:66585c660cf4790b2bf9953b2c1040fb7adda81e4ce594a82f84e31a8b41375b",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:6b264af7b89d646d3c3d971007b6e9f61f1ac7098cfe7080dadb9863bb18a801",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:6d503287d294bfe9cb839da48fbb947bdadbdab25fa718fd360c94882c661190",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:6ed0a446da3c3d784d43f2aa66cc4c72fe5d47397f32b7038ea95dcaf4c9aa2d",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:6ee1a7186e7811aa55ce39eea233bf7738e03832c7d5be21b4f72956cd182aa2",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:73366bff866498d17176c41af279f4d00582345674c8457526200821e6c9ec99",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:79b3f262b3aab322697179650bce809b882a7ccaefc59f12fdea0a917b26f272",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:7a7da76e83f0e108914b2a714317ac55a32b922414f1a0567fbaa3c7043b24ef",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:8933923d7d50efbfbede37ba862d8c772c1bc9aecb5d19b2bf9ae50481e6d7f8",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:8c128a15981f19db549d8f524c0def28cea79c75e16b4b10de5bec6872e86b58",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:8c880d0cd6dd28f4baf098a0653c1e29631f5f5173390af5dd87028a85e2116b",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:8cb367c99ffb78a0c2def1d8ee72ea36e26d1260665ade75ecfa5fc70019ebc0",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:912ac49e31760d1e7251cd6f998a6d2f7c7529e18906249090657c59e6226ef2",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:9219b4ba89f4b39812cb89b426a86e722153ac2b1488fa33dfe46e0ccd8b9762",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:92825eab599e8fdb7bd2986e7b06bdf34c55731bddedf9ed74b024d59784e72d",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:93a5ddb800f94692213df1bb41c19d4d3683c582ebce1ee525e5c92e61521b7a",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:95462b9d602bec8a91f33c30c38772aa8d52e977e16ef66ef9083e390ab768d8",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:96c4708aaeac900816570b9495383ac21ab5cb19cfad53369ccfb9c8e4ebd9dc",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:9a0a6f7359a21e8c826e6d4292d414fe2a021ac96f4875236f6679879db76447",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:9a42675ed5fd977a1c4b7076b30da21f7c6499559da29fc681983f50c8ff15c0",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:9b6c4ef3e6e367aed65b2c6e8b130419fe29c8367e8082b7441462a89f8aea17",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:9ec74867d39271eced07ac7d5a8195224511b7b758bcee7482d1e872cb5cbac1",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:a158d3ddfe3c4637568d4a105287000e6e3f5cfc3468078c031189ede82195e2",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:a57c7aee08a10f68898ec6b1e54d39284f06ba8b60d3e4786b52248a9bfbd938",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:a9d86a4de9606057fe5f4b531fa3de08b5ad45ad233262f55a20e054dc7790db",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:aa45deb975d1030beaf0dd2de3665f7e6be90be6e196f35fe2ed526aa560a239",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:adb28af169a4554d843a782ffe3346b6151b1443d618731e219f00ebfc04664b",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:b0814bf8593da72826f7ea8ab41cce86e9b53ae1443e6a5e3d46c7b32f6a311c",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:b115b4722d94ec7a16677f9ddde4f61d4f5997ecbd4f4ca5df2b33aa9448c355",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:b2e42a265b3436f1888fa9b4050452fc8728eb345890d53286bf54aee04b9480",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:b5437168f954ab9124d1d0890918621d28f4224f726e0a12edca6904c1566392",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:b669919464b56b8a1c0c06c3cfedb43784d1619c4e2beb3a5bdeb0dee9963edf",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:b94456a4c994c7ff3dbd3a14ea89ad57c1c915204adffd4180706e15855db13b",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:bbd863644e8a7cb21c0f43771bf8e4fd3ef2d0b90e0a14422dd7837f85eb7525",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:bd68f1a7e4aeb7584a1b021ee571f5e9447f99ee526910599b93c16e83768abb",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:c0275b734991d4a3e3eb64a482f86240fe2bae63abfcf62145cb861b07c98a2b",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:c119408d080d4d78282b8b9aa86cf05ceefda674c7b332ebde82bb562124b117",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:c24521e0ed6d4377d256c0cf99bbfd28885b124771693829693de6dca229fbf4",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:c2fae973533b18822d7791853538bb256859924717dd9159752fff6fb98d2f0a",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:c8153866cedde9d48da03c69f13608e7e7d47081740bc5431360a17a776c5c25",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:c853775a221c2c2fca86f4bfc291099d061e22f61c59406eeb809327558373fd",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:cd6e571db20d3ef8e1ac2779d0af5941cd879ce256602799353df4146b456874",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:d8d07e07d7fedd32d7ebbfc864cf28b0f54fb7f6d32bf17c8c8458260bfbc253",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:d95307a8c57b4d497dddb4b7327e1e63752f51fca137d8b4af1e89c473464329",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:db7f31da0eb8ca7ea1ea1a166a2eb136a65d61bb1363966370b03dbd45136ccb",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:dc99eb9cecb7ef7311f521330f3688ef10e525f04a9f3959acb47ca0cabcbd5a",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:dd60c80efef3960c9cfd1b414ec3f8831766f635064ef85ced0b846801dbb30e",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:deb6ecd94f1ad76c6954cd77f2121bccd598318b9f283a968995be7e0afcc247",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:dffe96f13dd48a3d708b5a2a0711f165fa071d84d189820bd872191291e2263b",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:e14af8525fd2712037ea3b6c8378cbe93a9886f562c9961233443258bb579ac4",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:e710c9c0c898dc876bed958aa1885e48cec83d7fcde31b26b16f3943c51b5c95",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:e7d4ccddc54864518b8ba5c4b803128f5403150fc78fa88419cb5b25d1fad401",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:e8431019d8f0f03f3313cccf319946cc21c05b3280809bf5e28416ddeb575aee",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:ee25206fb858dbeaafe5d8d10f91f2bf98ba5348ea1fe7aab04eb357780e3688",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:f1d7b1654f1e36caf1266c2ff1209cf1c8a33f702cc511b9bfd6ac577b497c33",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:f24b67daa395e255a92a2acb2134facbfbf97fea31747b890b9d66b83a22cc1f",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:f3ac1f33464bf365e3f0b70f435a90cebaf01b582b37b450bdfc220ad754700c",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:f59c34f335aaf6a088105e3a400058a53794010b221fb547e78409dc24e3f445",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:f836ab77265e6d54c3af5d19117b1836fe6974cae77966a98010fa189021c6ef",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:f8e0da75aac35ddee75ebbc9715308aa513ad58316177f723486eee90b75c10f",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:f9d5861ed883e48686adf99501c6991000bc3e79290353a68320ae8027ab99eb",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:fb353b20d337056b8d0f97f08b3ee52acf43a64dafd6089678a0e75e9e35494c",
+      "weighted_total": 1
+    },
+    {
+      "consumer_id_digest": "sha256:ff0611fbbecc6d05d57a7deaeb0a1e8444b5a84faac36e054fe2d9aa1ba954d6",
+      "weighted_total": 1
+    }
+  ],
+  "denied_over_cluster_budget": [],
+  "known_limitations": [
+    "singleton_cluster_evasion_not_detected_but_ledgered",
+    "basis_digests_opaque_slots",
+    "graph_version_not_verified_in_4l"
+  ],
+  "corroborating_commitments": [],
+  "non_claims": [
+    "not_sybil_closure",
+    "not_structuring_closure_without_provider_binding",
+    "not_identity_truth",
+    "provider_cluster_graph_assumed",
+    "not_capability_transfer_proof",
+    "budget_is_declared_policy_not_safety_bound",
+    "raw_identity_not_exported",
+    "ledger_is_metadata_only",
+    "attestation_assumes_reviewer_runtime",
+    "not_model_safety",
+    "not_kernel_sandboxing",
+    "determinism_not_statistical_robustness",
+    "complements_not_replaces_prevention_credentials"
+  ]
+}

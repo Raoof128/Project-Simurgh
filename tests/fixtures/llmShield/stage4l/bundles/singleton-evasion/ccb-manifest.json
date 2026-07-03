@@ -1,0 +1,10 @@
+{
+  "schema": "simurgh.ccb.manifest.v1",
+  "assignment_ledger_digest": "sha256:8d338d212801f0c7a484fb6d6bbce05d29081b0738ab18faaf95a0655a32a3f6",
+  "attestation_digest": "sha256:5114f6063e328ab30af2c07a40993bef743205a64e7edb702c6f174a76d12da0",
+  "cluster_budget_policy_digest": "sha256:4a89041cafd5d014dcf10f947a768c9210ae1fb0ffa9e66176f08022a360df41",
+  "cluster_cardinality_digest": "sha256:3cbb1ff33fca7b03c572b377246aaf15fba1b37cebdac0b13103c63b00b70b75",
+  "eba_manifest_digest": "sha256:b9814f7a652902b0fb6a278d4ef796e17e5320c2dbc27ead3514501e67db4a29",
+  "signature": "ed25519:ePI5noEDRgTOrENMIPnloc7DECU4Up7J6s5APDLB3kPV0WNDuCJEBqlxrZd/T6CHO1wQg8gj8rKuWoho9fvFDQ==",
+  "public_key_fingerprint": "sha256:2bb1424389d41e44d374076048c22bb3a71ce0082fc7d4ddb0291a2a0a881888"
+}
