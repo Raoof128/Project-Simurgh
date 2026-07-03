@@ -41,10 +41,30 @@ mechanism for verifiable **enforcement** claims that report called for.
    exceeds it — retroactive breaches can never be un-discovered by learning more. *Breaches are
    monotone under truth.* This makes the mutual-exclusion incentive argument provable, not
    rhetorical.
-3. **VFR** — verifiable friction receipts, its own later stage (never merged into 4M).
-4. **Docs-only companion PR** — "Q8/Q9 as the evidence contract for OWASP LLM10:2025 /
+   **4M hard requirement — respondent path (adversarial verifiability / due process for the
+   accused):** every disclosure carries respondent slots; the accused party can run the same
+   offline verifier in `--as-respondent` mode over the public pack, see exactly which committed
+   windows and cluster claims implicate them, and file a **signed contest** bound to the same
+   digests, chained into the same public timeline as the disclosure. Symmetric honesty: the
+   accuser's evidence is replayable, and so is the objection. Game-theoretic property (state in
+   4M threat model): once a contestable format exists, choosing an uncontestable one is itself
+   evidence of weakness — a truthful accuser gains from giving the accused a microscope. No AI
+   enforcement-disclosure format currently offers the accused any verification path.
+3. **4N (candidate) — Public Extraction-Telemetry Heartbeat ("Extraction Seismograph").**
+   Certificate-Transparency logic applied to extraction pressure: every window, the provider
+   publishes to a public append-only log one digest plus three coarse aggregates — total exposure
+   mass, the §3.4 cluster-size histogram, and the budget-breach count. No identities, no content;
+   three integers and a hash per window. Composes directly from shipped machinery: 3Q hash-chained
+   registry + 3X public timeline over 4L window commitments. Changes disclosure from episodic
+   prose into an annotation on pre-existing public evidence (a spike on a chart committed before
+   the incident was known). Strategic property: **pre-incident commitments cannot be backdated** —
+   every uncommitted window is disclosure-credibility a provider can never recover, so the first
+   mover gains a credibility asset no competitor can retroactively match.
+4. **VFR** — verifiable friction receipts, its own later stage (never merged into 4M; letter
+   assigned in the roadmap reconciliation).
+5. **Docs-only companion PR** — "Q8/Q9 as the evidence contract for OWASP LLM10:2025 /
    NIST AI RMF MEASURE 2.7" mapping note + roadmap reconciliation (one canonical taxonomy).
-5. **4P / CPC** — cross-provider corroboration by digest equality (FMF sharing gap). Seeded here.
+6. **4P / CPC** — cross-provider corroboration by digest equality (FMF sharing gap). Seeded here.
 
 ---
 
