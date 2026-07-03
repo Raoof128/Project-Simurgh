@@ -52,7 +52,7 @@ prospective policy commitment, never a retroactive laundering-safe property of t
 β(B′) ≥ β(B″), so B″ breaches too. _Proof:_ additivity with e ≥ 0 gives the exposure inequality;
 budget non-inflation along the merge chain gives the budget inequality. ∎ Machine-checked in
 `proofs/stage4m/AntiMonotonicity.lean` (`anti_monotonicity`), gated by CI
-(`.github/workflows/stage-4m-lean-proof.yml`). Signed limitation
+(`.github/workflows/stage-4-lean-proofs.yml`). Signed limitation
 `proof_is_of_model_not_implementation`: the theorem is of the model; the bridge to the running
 `.mjs` is the property suite (`antiMonotonicity.property.test.js`, 200 seeded cases) plus the
 verifier predicate (`verifyRescoreRecord`).
