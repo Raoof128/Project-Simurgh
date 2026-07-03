@@ -62,3 +62,7 @@ docs/research/llm-shield/evidence/stage-4g-adaptive-red-team-campaign/**/*.json
 tests/fixtures/llmShield/stage4k/**/*.json
 docs/research/llm-shield/evidence/stage-4k/**/*.json
 tools/agentdojo-simurgh-adapter/.pytest_cache
+
+# stage 4L deterministic fixtures + evidence (prettier collapses single-element arrays)
+tests/fixtures/llmShield/stage4l
+docs/research/llm-shield/evidence/stage-4l
