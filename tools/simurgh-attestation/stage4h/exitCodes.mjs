@@ -80,6 +80,20 @@ export const EBA_RAW_CODES = Object.freeze({
 
 export const EBA_REASONS = Object.freeze(["extraction_budget_exceeded"]);
 
+// Stage 4L CCB raw codes (40-42). Raw 39 stays reserved (v1 extraction_scope_violation,
+// prose only). Additive: each maps to run-level 1; unknown codes still fail closed to 3.
+export const CCB_RAW_CODES = Object.freeze({
+  CLUSTER_COMMITMENT_MISSING: 40,
+  CLUSTER_BUDGET_EXCEEDED: 41,
+  CLUSTER_ASSIGNMENT_MISMATCH: 42,
+});
+
+export const CCB_REASONS = Object.freeze([
+  "cluster_commitment_missing",
+  "cluster_budget_exceeded",
+  "cluster_assignment_mismatch",
+]);
+
 export const HARNESS_CODES = Object.freeze({
   CLEAN_RUN_FALSELY_REJECTED: 19,
 });
@@ -118,6 +132,9 @@ export const RUN_LEVEL_BY_RAW = Object.freeze({
   36: 1,
   37: 1,
   38: 1,
+  40: 1,
+  41: 1,
+  42: 1,
 });
 
 export function stage4CodeForRawCode(code) {
