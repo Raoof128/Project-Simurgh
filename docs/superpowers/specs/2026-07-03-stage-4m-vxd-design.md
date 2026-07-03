@@ -122,6 +122,23 @@ merged block B′ = B₁ ∪ … ∪ Bₖ, a budget β(B′) ≤ min(β(B₁), �
 this is rejected (raw 43). This is the anti-laundering condition: a breach cannot be washed by
 merging into a bigger-budget cluster.
 
+**Why non-inflation is the right semantics (state in threat model, verbatim).** In 4M, `budget`
+is not a per-account allowance or an additive consumption quota — it is a **risk-bound
+commitment for a provider-declared cluster view**. A later merge is an admission that the prior
+clusters were aliases of the same underlying actor or control group; the newly acknowledged
+single actor may not receive a _larger_ allowance by virtue of the provider's improved graph
+knowledge. If the provider wants a higher budget for the merged cluster, that is a **new policy
+commitment** made prospectively under 4L's policy schema — never a retroactive, laundering-safe
+property of the merge itself. Without this rule the lemma fails and re-clustering becomes a
+breach-laundering primitive.
+
+**Merge image function (the identifier bridge).** Each valid merge event i induces a total
+function `image_i` from old cluster commitments to new cluster commitments: for carried
+clusters, `image_i(c) = c`; for merged clusters, `image_i(c) = new_cluster_commitment` for every
+constituent c. Composition along the chain gives `image(c)` for any epoch pair. All cross-epoch
+verifier predicates are stated through `image` — old and new cluster commitments are different
+identifier spaces and are never compared by raw set operations.
+
 **Lemma (breaches are monotone under truth).** Fix a committed window w. If block B′ breaches
 (E(B′, w) > β(B′)) and B″ ⊇ B′ is any block of any further coarsening in the lattice, then
 E(B″, w) ≥ E(B′, w) > β(B′) ≥ β(B″), so B″ breaches too.
@@ -138,8 +155,9 @@ later merges must surface their own prior misstatement (the "ledgered lie" pays 
 
 **Enforcement.** (a) Written proof in `STAGE_4M_THREAT_MODEL.md` (this section, expanded).
 (b) Seeded property tests: generated partitions and merge chains (deterministic seeds, no
-randomness at verify time) asserting `breaches(P_new, w) ⊇ breaches(P_old, w)` structurally.
-(c) The verifier enforces the same superset predicate on every real bundle; violation → raw 44.
+randomness at verify time) asserting the image-mapped monotonicity predicate
+`{ image(b) | b ∈ breaches(P_old, w) } ⊆ breaches(P_new, w)` structurally.
+(c) The verifier enforces the same image-mapped predicate on every real bundle; violation → raw 44.
 (d) **Machine-checked proof (Lean 4):** `proofs/stage4m/AntiMonotonicity.lean` formalizes the
 lemma over finite partitions with non-negative exposure and non-inflating budgets, checked in CI
 (pinned Lean toolchain; the `.lean` source digest is committed into the evidence manifest so the
@@ -171,6 +189,19 @@ Wrapper rule: extend `RUN_LEVEL_BY_RAW` with `43→1, 44→1, 45→1, 46→1`; u
 closed to 3; exit only via `stage4CodeForRawCode()`. **Known cost (plan for it, once):** additive
 raw codes break the 4K and 4H exit-map goldens — refresh them deliberately in their own commit
 (the `b28559c1` lesson), never as a drive-by.
+
+**Reason taxonomy (machine-readable, mandatory).** Raw 43 covers many structurally distinct
+failures, so every 4M gate result MUST carry a `reason` from a closed enum (exhaustive; unknown
+reason = internal error → 29). For 43:
+`non_coarsening_split | duplicate_old_cluster | omitted_old_cluster | unknown_old_cluster |
+budget_inflation | parent_digest_mismatch | sequence_gap | graph_version_mismatch |
+raw_identity_exported | invalid_merge_basis | schema_invalid`. For 45:
+`claim_recompute_mismatch | commitment_sequenced_after_disclosure | pincer_slot_not_null |
+unknown_claim_kind | schema_invalid`. For 46:
+`signature_invalid | dangling_record_reference | unknown_contest_type |
+dangling_contest_digest | schema_invalid`. Raw 44 carries the offending
+`(window, old_cluster_commitment, image_commitment)` triple. The external code stays simple;
+the reason keeps reviewers and falsifier arms precise (each V-arm pins its exact reason).
 
 ---
 
@@ -241,7 +272,13 @@ budgets, and emit:
 ```
 
 - Verifier recomputes every total from the committed ledgers; any arithmetic mismatch → digest
-  failure. `breached_after ⊉ breached_before` → raw **44** (tamper evidence, per §2).
+  failure.
+- **Monotonicity predicate (via the §2 merge image — never raw set comparison):**
+  `breached_before` holds OLD cluster commitments, `breached_after` holds NEW cluster
+  commitments; they are different identifier spaces. `monotonicity_ok` means: for every
+  `b ∈ breached_before`, `image_i(b) ∈ breached_after`. Any old breached cluster whose image is
+  absent from `breached_after` → raw **44** (tamper evidence, per §2). `newly_revealed` is
+  defined as `breached_after ∖ { image_i(b) | b ∈ breached_before }`.
 - **A revealed breach exits 0.** Re-scoring is truth-preserving _evidence production_;
   enforcement semantics live in 4L's Q9 (raw 41) and are not re-litigated here. The verifier's
   claim is "this revelation is correctly computed and monotone", not "punish this cluster". The
@@ -271,6 +308,10 @@ sequenced strictly before the disclosure's own chain entry:
 
 - Each claim kind has exactly one recomputation rule against the bound commitments; mismatch →
   raw **45**. A bound `chain_position ≥` the disclosure's own → raw **45** (backdating).
+- **Chain positions are never trusted from claim JSON.** The verifier reconstructs the 3Q chain
+  from genesis to the disclosure's entry and checks that every claimed `(digest, chain_position)`
+  pair is the digest actually present at that position in the reconstructed chain; any mismatch →
+  raw **45** (`commitment_sequenced_after_disclosure` or `claim_recompute_mismatch` per case).
 - Anything not expressible as an enum'd claim is excluded as `prose_history` (digest-committed,
   never verified — 3N's honest boundary, carried forward).
 - `demand_side_evidence_digest` is **present and null** — the reserved pincer slot from 4L. Any
@@ -278,10 +319,14 @@ sequenced strictly before the disclosure's own chain entry:
 
 ### 4.4 `respondentPath.mjs` — `simurgh.vxd.respondent_contest.v1` + verifier `--as-respondent`
 
-`verify-stage4m.mjs --as-respondent <bundle>` runs the **identical** verification pipeline and
-additionally emits a machine-readable implication report: exactly which windows, cluster
-commitments, merge events, and disclosure claims reference the respondent-supplied cluster
-commitments. From that report the respondent can file:
+`verify-stage4m.mjs --as-respondent <bundle> --respondent-clusters <json>` runs the
+**identical** verification pipeline and additionally emits a machine-readable implication
+report. The `--respondent-clusters` JSON is the respondent's explicit input — the cluster
+commitments and/or notice digests the respondent received out-of-band (the verifier cannot know
+which records are "theirs" otherwise); unknown commitments in that input are reported as
+`not_referenced_in_bundle`, never guessed. The report lists exactly which windows, cluster
+commitments, merge events, and disclosure claims reference the supplied commitments. From that
+report the respondent can file:
 
 ```json
 {
@@ -349,10 +394,17 @@ verification logic: drag a bundle onto the page, watch every digest, signature (
 Ed25519), lattice rule, re-score sum, and disclosure binding recompute locally — usable by a
 staffer, journalist, or respondent with zero toolchain. Rules:
 
-- Generated deterministically from the same source modules by a build script; the emitted HTML's
+- **Scope constraint (keeps M6b from becoming a mini-project):** all verification logic lives in
+  a pure, IO-free `stage4m/core/` layer (`canonical`, `mergeLatticeCore`, `retroScoreCore`,
+  `disclosureCore`, `respondentCore`, `verdictCore`) shared verbatim by both frontends. Node-only
+  concerns (fs bundle loading, key handling, exit wrapper) live in `stage4m/node/`; the browser
+  build (`stage4m/browser/`) embeds ONLY the core plus a thin drag-and-drop adapter. No logic is
+  ever duplicated across frontends.
+- Generated deterministically from the core modules by a build script; the emitted HTML's
   digest is committed into the evidence manifest (tamper-evident artifact, 3W witness lineage).
-- **Parity is gated:** the browser verifier and `verify-stage4m.mjs` MUST produce identical
-  verdicts and identical finding sets on every fixture in the falsifier matrix (V16).
+- **Parity is gated over canonical verdict objects** (not console output): the browser verifier
+  and `verify-stage4m.mjs` MUST produce byte-identical canonical verdict/finding JSON on every
+  fixture in the falsifier matrix (V16).
 - It renders verdicts and findings only — no advice, no adjudication language; the same
   non-claims block is displayed verbatim in the page footer.
 - Node verifier remains the normative implementation; the HTML is a projection of it
@@ -413,8 +465,12 @@ Branch: `stage-4m-vxd` off clean `main`. Neutral commit messages, no assistant a
   asserting the superset predicate structurally; written proof drafted into the threat model;
   `proofs/stage4m/AntiMonotonicity.lean` checked under a pinned Lean 4 toolchain in CI (own
   workflow job; failure blocks release, absence of the toolchain locally never blocks
-  `npm test`). Done when: property suite green and deterministic across two runs; Lean check
-  green; V18 red on a deliberately broken proof.
+  `npm test`). The Lean gate is **mandatory** (delivery-risk accepted knowingly: the theorem is
+  small and M3 lands it early); if the CI toolchain proves unworkable mid-build, descoping to a
+  soft gate requires explicit owner sign-off plus a signed
+  `lean_proof_toolchain_unavailable` limitation — never a silent downgrade. Done when: property
+  suite green and deterministic across two runs; Lean check green; V18 red on a deliberately
+  broken proof.
 - **M4 — disclosure-claim binding.** Closed-world claim kinds, chain-position ordering,
   prose_history exclusion, reserved-null pincer slot. Done when: V6 green; V7/V8/V9 → 45.
 - **M5 — respondent path.** `--as-respondent` implication report; contest schema, signing,
@@ -422,9 +478,10 @@ Branch: `stage-4m-vxd` off clean `main`. Neutral commit messages, no assistant a
   chained; V11/V12/V17 → 46.
 - **M6 — Article-73/55 projection.** Template-shaped surface, recomputable-slots-only rule,
   `not_projected` defaults, golden files. Done when: V13 red; projection byte-stable.
-- **M6b — browser verifier.** Deterministic build of `verify-stage4m.html` from the source
-  modules; digest committed to manifest; headless parity harness. Done when: V16 parity exact on
-  all fixtures; page renders non-claims verbatim.
+- **M6b — browser verifier.** Deterministic build of `verify-stage4m.html` from the shared
+  `core/` modules only (§4.7 split); digest committed to manifest; headless parity harness over
+  canonical verdict objects. Done when: V16 parity exact on all fixtures; page renders
+  non-claims verbatim.
 - **M7 — attestation + one-command reproduce.** stage4m key; manifest binding (incl. `.lean` and
   `.html` digests); exit-map golden refresh for 4K/4H in its own commit;
   `scripts/reproduce-llm-shield-stage4m.sh`: scrub/pin env → rebuild 4K/4L fixtures → build merge
@@ -446,7 +503,11 @@ approved`, `identity (proven|confirmed)` — matches only inside explicit non-cl
 
 ### File structure
 
-Create: `tools/simurgh-attestation/stage4m/{constants,mergeLattice,retroScore,disclosureBinding,respondentPath,article73Projection,build-stage4m-fixtures,build-stage4m-attestation,verify-stage4m,build-browser-verifier}.mjs`,
+Create: `tools/simurgh-attestation/stage4m/core/{canonical,mergeLatticeCore,retroScoreCore,disclosureCore,respondentCore,verdictCore}.mjs`
+(pure, IO-free, shared by both frontends),
+`tools/simurgh-attestation/stage4m/node/{verify-stage4m,build-stage4m-fixtures,build-stage4m-attestation,article73Projection,signing-node,fs-bundle-loader}.mjs`,
+`tools/simurgh-attestation/stage4m/browser/{build-browser-verifier,browser-adapter}.mjs`,
+`tools/simurgh-attestation/stage4m/constants.mjs`,
 `proofs/stage4m/AntiMonotonicity.lean` (+ pinned toolchain file + CI job),
 `scripts/reproduce-llm-shield-stage4m.sh`, `tests/unit/llmShield/stage4m/*.test.js`,
 `tests/e2e/llmShield/stage4m/*.test.js` (explicit globs — bare-dir `node --test` fails),
@@ -495,9 +556,9 @@ reproduces offline; release gates pass on merged `main` before tagging.
   (`simurgh.vxd.dsa_sor_projection.v1`) targeting the DSA Transparency Database's harmonised
   machine-readable templates (Implementing Regulation in force 2025-07-01; academic literature
   documents the database as self-reported and unverifiable). Same recomputable-slots-only rule as
-  §4.5 — would make VXD a regulation-agnostic projection layer. **OWNER DECISION: fold into 4M
-  (adds ~1 golden surface) or ship in the docs companion / 4M-b.** Not blocking; §4.5 is the
-  template pattern either way.
+  §4.5 — would make VXD a regulation-agnostic projection layer. **DECIDED (owner review
+  2026-07-03): deferred to the docs companion / 4M-b.** Not folded into 4M — no extra surface
+  area or golden suite this stage; §4.5 is the template pattern it will reuse.
 - **ZK compliance lane** — proving cluster-budget compliance in zero knowledge (zkAudit lineage,
   arXiv:2510.26576) would hide cluster structure entirely but replaces third-party recomputation
   with proof-system trust — a different trust model than Simurgh's replay lane, noted as
