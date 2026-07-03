@@ -1,6 +1,6 @@
 {
   "schema": "simurgh.vxd.manifest.v1",
-  "attestation_digest": "sha256:010f666afeb3fa57a027f109a87268be9d2e34dcdeb02e3288e1aa283df3024a",
-  "signature": "ed25519:fHEbVucJB4xjlzd2PRudO62RAaC0viMaIDBW7UEs3+licOi1REYakZauoXFTWJwjhdZ1ICylszcTmEvJq/8EDw==",
-  "public_key_fingerprint": "sha256:ec3cfef76cabb97e9d5e0c0234ba60737c9964c2f20ded564b02c9d6b87a8c4a"
+  "attestation_digest": "sha256:08b8f81509e4909a56d32b73b57e26dbca1caa6417d79354b82768c1cf01fc2f",
+  "signature": "ed25519:MkUjElScQflTSFBu4Bs7b2JU6G2jL+hm/6CVXc5oXmgiiDqyH42E3IQtvs+UCCfvWxebdLZG2kxEKYRjzT7HCw==",
+  "public_key_fingerprint": "sha256:24bacea330ff1f70e26bed28e1fe371768ea80c1b3f249ecf0e591bf35cb3aa3"
 }

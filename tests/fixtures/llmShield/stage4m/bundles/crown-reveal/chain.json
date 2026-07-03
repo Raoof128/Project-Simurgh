@@ -24,12 +24,12 @@
     {
       "position": 4,
       "kind": "respondent_contest",
-      "digest": "sha256:b8fd2a00d8a319ce6e74d7a4f7bddbd1d25507b9e8acfd34548aea27de8b9f9c"
+      "digest": "sha256:f797333aecd5274cefde74e4d9664646ef14fa8fef633ca8de3c33d39aa7e468"
     },
     {
       "position": 5,
       "kind": "contest_acknowledgement",
-      "digest": "sha256:1fddee5a73ba7eb5a9dd88526915c55eefd89fc95d945002fb106b01180da6c2"
+      "digest": "sha256:7f963dbf94f936f3ea233481cd4e9b0a58ce1a4c2db7bd912da0eafdf8c63d2f"
     }
   ]
 }
