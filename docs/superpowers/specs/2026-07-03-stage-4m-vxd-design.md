@@ -212,6 +212,49 @@ changes** (enforced by the E2E net's zero-src-diff guard). Own **stage4m Ed25519
 of 4A–4L keys). Canonicalization: RFC 8785 JCS + SHA-256, same path as 4H/4K/4L. No wall-clock
 anywhere: ordering is chain position; merge events carry sequence indices, not timestamps.
 
+### 4.0 Audience tiers + data-egress model (dual safety: provider-safe AND reviewer-safe)
+
+**Design finding (state in threat model):** a 4A–4L retro-audit (2026-07-03) found the stage-4
+line fully reviewer-safe and strongly content-safe (4D `privacy.mjs` walker, 4H `privacyGate.mjs`
+allowlist, 4K pseudonymity limitation, 4L identity denylist) but with **no audience model and no
+structural-egress treatment**: every prior artifact assumed a single vetted reviewer. 4M is the
+first stage whose artifacts are public and adversarially received, so the audience model becomes
+part of the format here — by design, not retrofit.
+
+**Three tiers (defined in this stage; Tier R machinery built in the follow-up stage):**
+
+- **Tier P — public.** Aggregates and roots only: chain digests, cardinality histograms, breach
+  counts, total exposure mass, merge-event digests, disclosure claims bound to committed roots.
+  Verifiable by anyone (incl. the §4.7 browser verifier): chain integrity + claim binding. NO
+  cluster topology, NO per-cluster volumes.
+- **Tier A — auditor.** Full ledgers for a vetted auditor/regulator. Binding rule: every Tier-P
+  root MUST recompute as the Merkle root over the corresponding Tier-A records — the public tier
+  can never tell a different story than the audited one (V20).
+- **Tier R — respondent (seeded here, built next stage).** The accused receives only the records
+  referencing their cluster commitments, with inclusion proofs to the Tier-P roots and — because
+  leaves are sorted — non-membership proofs that nothing implicating them was withheld:
+  **completeness for the accused, privacy for everyone else.** In 4M v0 the respondent path
+  operates on a vetted full bundle (limitation signed).
+
+**Structural mechanisms this stage ships:**
+
+- **Sorted-leaf Merkle roots replace flat ledger digests.** Every 4M ledger (merge-event chain
+  index, re-score set, disclosure set, contest registry) is committed as the Merkle root over
+  lexicographically sorted canonical record digests. Near-zero verifier cost now; makes Tier-R
+  slices possible later without a format break.
+- **Per-window salt derivation** for consumer digests in 4M fixtures: a bundle holder cannot
+  link one account's behaviour across windows (Q9/re-score verification is per-window, so
+  nothing breaks). Cross-window linkage stays a provider-internal capability.
+- **Structural-egress statement** in the threat model: what the artifact's _shape_ still reveals
+  per tier (cluster count, size histogram, merge cadence = detection latency) and why each
+  residual is accepted or aggregated away.
+
+**Honesty rails (signed, §4.6):** tiers BOUND leakage, they never eliminate it — publishing
+enforcement evidence always feeds the adversary something
+(`disclosure_is_adversary_feedback_bounded_not_eliminated`); Tier-R slice machinery is deferred
+(`tier_r_slice_machinery_deferred`); recipient vetting for Tier A is a human act outside the
+format (`bundle_recipient_vetting_out_of_band`).
+
 ### 4.1 `mergeLattice.mjs` — `simurgh.ccb.cluster_merge_event.v1` (the name 4L reserved)
 
 ```json
@@ -383,6 +426,13 @@ recomputation. Signs `known_limitations`:
   never its merit.
 - `browser_verifier_is_projection_not_normative` — the Node verifier is normative; the HTML is
   a parity-gated projection of it.
+- `disclosure_is_adversary_feedback_bounded_not_eliminated` — publishing enforcement evidence
+  always teaches the adversary something; tiers and aggregation bound the channel, never close it.
+- `tier_r_slice_machinery_deferred` — the respondent slice (inclusion + non-membership proofs)
+  is seeded via sorted-leaf Merkle roots but built in the follow-up stage; 4M v0 respondent path
+  assumes a vetted full bundle.
+- `bundle_recipient_vetting_out_of_band` — who qualifies for Tier A is a human/legal decision
+  outside the evidence format.
 
 All digests bound acyclically into `signed-pack-manifest.json`; verifier recomputes everything,
 never trusts committed JSON.
@@ -414,6 +464,8 @@ staffer, journalist, or respondent with zero toolchain. Rules:
 
 Synthetic magnitudes only (3–100 consumers, totals ≤ a few hundred); no real incident figures,
 lab, or company names — brand-denylist audit (3P lineage). No `verified_*` field names (3S).
+Consumer digests derive with **per-window salts** (`FIXTURE_SALT\0window\0id`), so no digest
+repeats across windows (V21).
 Deterministic fixtures + evidence JSON in `.prettierignore`; `npm run format:check` before push;
 recompute byte-hash manifests AFTER formatting (4K/3T lessons). No `rg` in unit tests (4L CI
 lesson); e2e wired into `check-e2e.sh` since `npm test` is unit-only.
@@ -443,6 +495,9 @@ lesson); e2e wired into `check-e2e.sh` since `npm test` is unit-only.
 | V16         | browser parity              | run `verify-stage4m.html` logic against every fixture above (headless)                                    | verdicts + finding sets byte-identical to the Node verifier                                                                       |
 | V17         | acknowledgement forgery     | contest acknowledgement with invalid signature or dangling contest digest                                 | raw 46                                                                                                                            |
 | V18         | proof-text tamper           | edit `AntiMonotonicity.lean` after manifest commit                                                        | manifest digest failure; CI Lean check red on broken proof                                                                        |
+| V19         | public-tier sufficiency     | verify Tier-P artifact alone (aggregates + roots, no ledgers)                                             | exit 0 on chain integrity + claim binding; verifier reports ledger-level checks as `not_in_tier`, never silently passes them      |
+| V20         | tier equivocation           | Tier-P root ≠ Merkle root recomputed over the Tier-A ledger records                                       | digest failure (the public story may never diverge from the audited one)                                                          |
+| V21         | cross-window linkage probe  | grep any consumer digest across two window fixtures                                                       | zero repeats — per-window salt derivation holds                                                                                   |
 
 Any red arm coming back green, or V-CROWN/V15 deviating from their pinned outcomes, is a stage
 failure.
@@ -482,12 +537,13 @@ Branch: `stage-4m-vxd` off clean `main`. Neutral commit messages, no assistant a
   `core/` modules only (§4.7 split); digest committed to manifest; headless parity harness over
   canonical verdict objects. Done when: V16 parity exact on all fixtures; page renders
   non-claims verbatim.
-- **M7 — attestation + one-command reproduce.** stage4m key; manifest binding (incl. `.lean` and
-  `.html` digests); exit-map golden refresh for 4K/4H in its own commit;
-  `scripts/reproduce-llm-shield-stage4m.sh`: scrub/pin env → rebuild 4K/4L fixtures → build merge
-  chain → re-score → disclosure → contest → projection → browser build →
-  full falsifier matrix (V1–V18) → byte-stable golden diff (two runs, Node 26) → clean tree
-  after. Exit only via `stage4CodeForRawCode`.
+- **M7 — attestation + tiers + one-command reproduce.** stage4m key; sorted-leaf Merkle roots
+  for all 4M ledgers; Tier-P public artifact emission + tier-aware verifier (`not_in_tier`
+  reporting); manifest binding (incl. `.lean` and `.html` digests); exit-map golden refresh for
+  4K/4H in its own commit; `scripts/reproduce-llm-shield-stage4m.sh`: scrub/pin env → rebuild
+  4K/4L fixtures → build merge chain → re-score → disclosure → contest → projection → browser
+  build → full falsifier matrix (V1–V21) → byte-stable golden diff (two runs, Node 26) → clean
+  tree after. Exit only via `stage4CodeForRawCode`.
 - **M8 — MANDATORY full E2E net (K7-style) + reviewer docs.** Composes **every** stage4m export
   through the real pipeline: build → sign → verify (both roles) → falsifier sweep; tamper matrix
   over every emitted artifact; cross-stage invariants (4L Q9, 4K Q8, 4H chain byte-unchanged;
@@ -496,10 +552,19 @@ Branch: `stage-4m-vxd` off clean `main`. Neutral commit messages, no assistant a
   incentive theorem positioned against audit-games equilibria — structural exclusion, not
   probabilistic deterrence; SCITT-ARP + ADIC + contestability positioning; transparency-hub
   appeals statistics as public demand signal; citations verified before merge),
-  `STAGE_4M_REVIEWER_CHECKLIST.md`, `STAGE_4M_CLOSEOUT.md`, evidence README. Overclaim grep
+  `STAGE_4M_REVIEWER_CHECKLIST.md`, `STAGE_4M_CLOSEOUT.md`, evidence README. Threat model MUST
+  include the §4.0 data-egress section: audience tiers, structural-egress statement per tier,
+  and the 4A–4L audience-model audit finding (dated 2026-07-03). Overclaim grep
   (pure-JS scan, 4L lesson) extended with: `breaches? (prevented|impossible)`,
   `contest.*(upheld|adjudicated|resolved)`, `legally compliant|Article 73 certified|regulator
-approved`, `identity (proven|confirmed)` — matches only inside explicit non-claims.
+approved`, `identity (proven|confirmed)`, `leak.*(eliminated|impossible)|fully anonymous` —
+  matches only inside explicit non-claims.
+- **M9 — comprehensive docs-accuracy pass (MANDATORY, last).** After all code and the E2E net
+  are green: re-read every document this stage touched (spec, plan, threat model, closeout,
+  reviewer checklist, evidence READMEs) and verify every claim — counts, exit codes, reasons,
+  file paths, table rows, falsifier outcomes — against the code and test output as actually
+  built; fix drift. No tag until this pass is clean (standing rule 2026-07-03: docs that
+  contradict the shipped artifact are unbacked claims).
 
 ### File structure
 
@@ -532,11 +597,14 @@ stage docs. Modify: `stage4h/exitCodes.mjs` (codes 43–46 only) + the 4K/4H exi
 | M-G9 honesty         | non-claims + signed known_limitations (incl. `no_merge_no_reveal`); overclaim grep clean; brand denylist clean  | grep red               |
 | M-G10 E2E net        | M8 full-chain net green; 4L/4K/4H byte-unchanged; zero-src-diff guard green                                     | any net arm red        |
 | M-G11 proof + parity | Lean check green in CI; `.lean` + `.html` digests in manifest; browser verdicts identical to Node               | V16/V18 red            |
+| M-G12 dual safety    | Tier-P verifies alone (`not_in_tier` honest); Tier-P roots recompute from Tier-A; per-window salts hold         | V19 green, V20/V21 red |
+| M-G13 docs accuracy  | M9 pass clean — every doc claim verified against shipped code/test output                                       | any drift found        |
 
-Done when: V1/V6/V10/V15 exit 0 with pinned contents; V2/V3/V4→43; V5→44; V7/V8/V9→45;
-V11/V12/V17→46; V13/V14 signature-fail; V16 parity exact; V18 red; V-CROWN reveals exactly the
-merged singleton cluster with its `prior_cardinality_contradiction` finding; one command
-reproduces offline; release gates pass on merged `main` before tagging.
+Done when: V1/V6/V10/V15/V19 exit 0 with pinned contents; V2/V3/V4→43; V5→44; V7/V8/V9→45;
+V11/V12/V17→46; V13/V14/V20 signature/digest-fail; V16 parity exact; V18 red; V21 zero repeats;
+V-CROWN reveals exactly the merged singleton cluster with its `prior_cardinality_contradiction`
+finding; one command reproduces offline; M9 docs pass clean; release gates pass on merged `main`
+before tagging.
 
 ---
 
@@ -559,6 +627,11 @@ reproduces offline; release gates pass on merged `main` before tagging.
   §4.5 — would make VXD a regulation-agnostic projection layer. **DECIDED (owner review
   2026-07-03): deferred to the docs companion / 4M-b.** Not folded into 4M — no extra surface
   area or golden suite this stage; §4.5 is the template pattern it will reuse.
+- **Tier-R respondent slice machinery** — inclusion + non-membership proofs over this stage's
+  sorted-leaf Merkle roots, so the accused verifies "these are ALL records implicating me"
+  without seeing anyone else's clusters ("completeness for the accused, privacy for everyone
+  else"). Own follow-up stage (candidate name: SRD — Selective Respondent Disclosure); 4M ships
+  the roots that make it a pure addition, never a format break.
 - **ZK compliance lane** — proving cluster-budget compliance in zero knowledge (zkAudit lineage,
   arXiv:2510.26576) would hide cluster structure entirely but replaces third-party recomputation
   with proof-system trust — a different trust model than Simurgh's replay lane, noted as
