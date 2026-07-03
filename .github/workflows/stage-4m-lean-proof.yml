@@ -1,0 +1,18 @@
+name: stage-4m-lean-proof
+on:
+  push:
+    paths: ["proofs/stage4m/**"]
+  pull_request:
+    paths: ["proofs/stage4m/**"]
+jobs:
+  lean-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install elan (pinned toolchain from proofs/stage4m/lean-toolchain)
+        run: |
+          curl -sSfL https://github.com/leanprover/elan/releases/latest/download/elan-x86_64-unknown-linux-gnu.tar.gz | tar xz
+          ./elan-init -y --default-toolchain "$(cat proofs/stage4m/lean-toolchain)"
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Type-check the anti-monotonicity proof
+        run: lean proofs/stage4m/AntiMonotonicity.lean
