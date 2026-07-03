@@ -1,9 +1,9 @@
-name: stage-4m-lean-proof
+name: stage-4-lean-proofs
 on:
   push:
-    paths: ["proofs/stage4m/**"]
+    paths: ["proofs/**"]
   pull_request:
-    paths: ["proofs/stage4m/**"]
+    paths: ["proofs/**"]
 jobs:
   lean-check:
     runs-on: ubuntu-latest
@@ -14,5 +14,8 @@ jobs:
           curl -sSfL https://github.com/leanprover/elan/releases/latest/download/elan-x86_64-unknown-linux-gnu.tar.gz | tar xz
           ./elan-init -y --default-toolchain "$(cat proofs/stage4m/lean-toolchain)"
           echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
-      - name: Type-check the anti-monotonicity proof
-        run: lean proofs/stage4m/AntiMonotonicity.lean
+      - name: Type-check the Stage 4 formal core (exit lattice, structuring, anti-monotonicity)
+        run: |
+          lean proofs/stage4/ExitLattice.lean
+          lean proofs/stage4/Structuring.lean
+          lean proofs/stage4m/AntiMonotonicity.lean

@@ -17,7 +17,7 @@ One command per acceptance gate. Run on **Node 26**.
 | M-G8  | offline: no network/model/clock; ordering by chain position only       | (reproduce step 1 pins env; verifier runs under `runOffline`)                                                  |
 | M-G9  | honesty: non-claims + signed limitations; overclaim scan clean         | `node --test tests/unit/llmShield/stage4m/closeout.test.js`                                                    |
 | M-G10 | E2E net: full-chain green; 4L/4K/4H byte-unchanged; zero-src guard     | `node --test --test-concurrency=1 tests/e2e/llmShield/stage4m/vxdFullNet.test.js`                              |
-| M-G11 | proof + parity: Lean CI green; browser verdicts identical to node      | `.github/workflows/stage-4m-lean-proof.yml` + `node --test tests/unit/llmShield/stage4m/browserParity.test.js` |
+| M-G11 | proof + parity: Lean CI green; browser verdicts identical to node      | `.github/workflows/stage-4-lean-proofs.yml` + `node --test tests/unit/llmShield/stage4m/browserParity.test.js` |
 | M-G12 | dual safety: Tier-P verifies alone; equivocation fails; per-window V21 | reproduce steps 7–9 (V19/V20/V21)                                                                              |
 | M-G13 | docs accuracy: every doc claim verified against shipped code           | `bash scripts/check.sh && bash scripts/check-e2e.sh`                                                           |
 

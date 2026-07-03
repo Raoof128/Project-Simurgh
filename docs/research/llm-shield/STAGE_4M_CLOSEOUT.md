@@ -67,9 +67,13 @@ for 4H/4K/4L refreshed in the same commit as the additive codes.
 - Browser verifier: `docs/research/llm-shield/evidence/stage-4m/verify-stage4m.html`, sha256
   `76860c0b7a0542610d7ad7adb3fd940d944e139e5c1f83db774c18249ad8a445`.
 - Lean proof (`proofs/stage4m/AntiMonotonicity.lean`) is gated by
-  `.github/workflows/stage-4m-lean-proof.yml`; V18 (deliberately broken proof → red) is the CI
-  arm. **Not verified on the local dev machine** (no Lean toolchain locally); confirm the CI run
-  is green before tagging.
+  `.github/workflows/stage-4-lean-proofs.yml`. **Verified locally** on 2026-07-03 under
+  `leanprover/lean4:v4.15.0` (installed via elan): `lean proofs/stage4m/AntiMonotonicity.lean`
+  exits 0 with no `sorry`; the V18 arm (closing `omega` → `trivial`) reproduces a real type error
+  (`tactic 'assumption' failed`, goal `⊢ sumExposure cs > newBudget`), so a broken proof is
+  demonstrably rejected. It sits inside the wider **Stage 4 formal core** (`proofs/README.md`):
+  `ExitLattice.lean` (wrapper totality + fail-closed, 4H..4M) and `Structuring.lean` (per-account
+  budgets miss what cluster budgets catch, 4K→4L) also type-check clean.
 
 ## Non-claims (19, signed) and known limitations (13, signed)
 

@@ -688,5 +688,5 @@ budget, cluster_size}` and NO consumer identifiers. This is strictly stronger th
   (bytes `00`–`63`); tests must pick placeholder digests outside that range (e.g. `ab`/`cd`) to
   avoid collision with a window cluster.
 - **Lean gate stays mandatory but is CI-only** — no Lean toolchain on the dev machine, so the
-  proof is gated by `.github/workflows/stage-4m-lean-proof.yml`; confirm that run is green before
+  proof is gated by `.github/workflows/stage-4-lean-proofs.yml`; confirm that run is green before
   tagging.
