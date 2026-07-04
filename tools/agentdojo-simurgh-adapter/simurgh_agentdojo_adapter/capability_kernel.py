@@ -197,3 +197,76 @@ def naive_intent_verdict(action: Action, intent: ProvenanceIntentContext) -> str
         return "allow"
     d = (action.target or "").lower().strip()
     return "allow" if any((e.address or "").lower().strip() == d for e in intent.entries) else "block"
+
+
+# ---------------------------------------------------------------------------
+# Stage 4O: manifest-bound authorisation (additive; 4A/4B/4C above are frozen).
+# A call is authorised ONLY against a signed, epoch-chained tool-manifest commitment
+# (Monotone Consent Law, 4O spec §6/§6a). Fail-closed: no/invalid commitment refuses.
+# ---------------------------------------------------------------------------
+import hashlib as _hashlib  # noqa: E402
+from . import manifest_surface as _ms  # noqa: E402
+
+KERNEL_ENTRYPOINT_V1 = "authorise_with_manifest.v1"
+
+
+@dataclass(frozen=True)
+class ManifestBindings:
+    action_digest: str
+    manifest_digest: str
+    manifest_entry_digest: str
+    kernel_entrypoint: str
+    receipt_digest: str
+    run_id_digest: str
+
+
+@dataclass(frozen=True)
+class ManifestAuthorityDecision:
+    decision: AuthorityDecision
+    manifest_bindings: "ManifestBindings | None"
+    raw_code: int
+    reason: str
+
+
+def action_digest(action: Action) -> str:
+    target_digest = "sha256:" + _hashlib.sha256((action.target or "").encode("utf-8")).hexdigest()
+    return _ms.domain_digest(
+        _ms.DOMAINS["ACTION"],
+        _ms.ACTION_SCHEMA,
+        {
+            "family": action.family,
+            "verb": action.verb,
+            "target_kind": action.target_kind,
+            "target_digest": target_digest,
+        },
+    )
+
+
+def _refuse_all(_env) -> bool:
+    return False  # fail closed unless the caller supplies real signature verification
+
+
+def _blocked(action: Action, raw: int, reason: str) -> "ManifestAuthorityDecision":
+    return ManifestAuthorityDecision(
+        AuthorityDecision("block", reason, action.family, [action.target]), None, raw, reason
+    )
+
+
+def authorise_with_manifest(
+    action: Action, *, manifest_chain: list, receipt: dict, verify_commitment_signature=_refuse_all
+) -> "ManifestAuthorityDecision":
+    out = _ms.gate_tool_call(
+        chain=manifest_chain,
+        receipt=receipt,
+        action_digest_value=action_digest(action),
+        verify_commitment_signature=verify_commitment_signature,
+        kernel_entrypoint=KERNEL_ENTRYPOINT_V1,
+    )
+    if out["raw"] != 0:
+        return _blocked(action, out["raw"], out["reason"])
+    return ManifestAuthorityDecision(
+        AuthorityDecision("allow", "manifest_bound", action.family),
+        ManifestBindings(**out["bindings"]),
+        0,
+        "accepted",
+    )
