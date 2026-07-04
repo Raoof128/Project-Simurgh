@@ -1,5 +1,6 @@
 {
   "arm": "destructive-under-harmless-name",
+  "evaluator": "gate",
   "chain": [
     {
       "schema": "simurgh.tool_manifest_commitment.v1",

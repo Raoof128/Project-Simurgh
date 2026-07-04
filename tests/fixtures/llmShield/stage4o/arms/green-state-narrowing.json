@@ -1,5 +1,6 @@
 {
   "arm": "green-state-narrowing",
+  "evaluator": "gate",
   "chain": [
     {
       "schema": "simurgh.tool_manifest_commitment.v1",

@@ -12,6 +12,7 @@ import { join } from "node:path";
 import { createPrivateKey, sign as edSign } from "node:crypto";
 import { domainDigest } from "../core/digest.mjs";
 import { surfacePath } from "../core/merkleSurface.mjs";
+import { buildTimelineRecord, parseFeed } from "../core/timelineCore.mjs";
 import {
   computeToolsetRoot,
   toolEntryDigest,
@@ -114,9 +115,18 @@ const cleanChain = [c0, c1, c2];
 write("chains/clean-chain.json", { chain: cleanChain });
 
 // --- Arms ------------------------------------------------------------------------------
+// evaluator: "gate" (default) -> run through gateToolCall; "timeline" -> verifyTimelineRecord.
 const arms = [];
 const add = (arm, chain, receipt, action_digest, expected_raw, expected_reason) =>
-  arms.push({ arm, chain, receipt, action_digest, expected_raw, expected_reason });
+  arms.push({
+    arm,
+    evaluator: "gate",
+    chain,
+    receipt,
+    action_digest,
+    expected_raw,
+    expected_reason,
+  });
 
 // Head for the healthy arms is a signed genesis with two tools. Genesis validity window
 // is [0,9], so the receipt's run_epoch must sit inside it (stale-replay overrides to 999).
@@ -256,12 +266,28 @@ add(
   "accepted"
 );
 
+// Timeline arm (raw 66, attestation-level): a timeline record whose toolset_root does not
+// match the committed chain head for its epoch. Verified by verifyTimelineRecord, not the gate.
+const feed = parseFeed(
+  readFileSync("docs/research/llm-shield/evidence/stage-4n/heartbeat-feed.jsonl", "utf8")
+);
+const goodTimeline = buildTimelineRecord({ chainHeadEnvelope: c0, stage4nRecord: feed[0] });
+arms.push({
+  arm: "timeline-root-mismatch",
+  evaluator: "timeline",
+  chain: cleanChain,
+  timeline_record: { ...goodTimeline, toolset_root: "sha256:" + "e".repeat(64) },
+  expected_raw: 66,
+  expected_reason: "timeline_root_mismatch",
+});
+
 arms.sort((a, b) => (a.arm < b.arm ? -1 : 1));
 for (const a of arms) write(`arms/${a.arm}.json`, a);
 write(
   "expected-results/vtsa-matrix.json",
   arms.map((a) => ({
     arm: a.arm,
+    evaluator: a.evaluator,
     expected_raw: a.expected_raw,
     expected_reason: a.expected_reason,
   }))

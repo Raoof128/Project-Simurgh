@@ -1,5 +1,6 @@
 {
   "arm": "missing-manifest",
+  "evaluator": "gate",
   "chain": null,
   "receipt": {
     "schema": "simurgh.tool_receipt.v1",
