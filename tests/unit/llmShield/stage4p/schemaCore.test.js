@@ -131,3 +131,67 @@ test("cpc signal: two exact variants; cross-variant contamination is raw 79", ()
     reason: "schema_invalid",
   });
 });
+
+test("hop receipt: extra key, missing key, bad digest, bad transform digest, negative index, bad signature all fail raw 67", () => {
+  for (const bad of [
+    { ...goodHop(), surprise: 1 },
+    (() => {
+      const h = goodHop();
+      delete h.input_digest;
+      return h;
+    })(),
+    { ...goodHop(), relay_identity_digest: "sha256:xyz" },
+    { ...goodHop(), transform_digest: "nope" },
+    { ...goodHop(), hop_index: -1 },
+    { ...goodHop(), signature: "not base64!!" },
+  ]) {
+    const r = validateHopReceipt(bad);
+    assert.equal(r.ok, false);
+    assert.equal(r.raw, 67);
+    assert.equal(r.reason, "schema_invalid");
+  }
+});
+
+test("custody receipt: extra key, missing key, bad digest, bad receipt_epoch all fail raw 77", () => {
+  for (const bad of [
+    { ...goodReceipt(), surprise: 1 },
+    (() => {
+      const r = goodReceipt();
+      delete r.model_identity_digest;
+      return r;
+    })(),
+    { ...goodReceipt(), relay_chain_digest: "sha256:xyz" },
+    { ...goodReceipt(), receipt_epoch: -1 },
+    { ...goodReceipt(), receipt_epoch: "twelve" },
+  ]) {
+    const r = validateCustodyReceipt(bad);
+    assert.equal(r.ok, false);
+    assert.equal(r.raw, 77);
+    assert.equal(r.reason, "receipt_schema_invalid");
+  }
+});
+
+test("cpc signal matchable: bad evidence_kind enum, zero entropy floor, zero disclosure budget all fail raw 67", () => {
+  const matchable = {
+    schema: "simurgh.custody_class_signal.v1",
+    signal_mode: "matchable",
+    failure_class: "undeclared_proxy_hop",
+    stage4n_window_anchor_digest: D("9"),
+    evidence_kind: "relay_spki_sha256",
+    windowed_evidence_commitment: D("8"),
+    custody_class_digest: D("0"),
+    entropy_floor_bits: 96,
+    disclosure_budget_max_signals_per_window: 4,
+    public_linkability: "bounded",
+  };
+  for (const bad of [
+    { ...matchable, evidence_kind: "psychic_hunch" },
+    { ...matchable, entropy_floor_bits: 0 },
+    { ...matchable, disclosure_budget_max_signals_per_window: 0 },
+  ]) {
+    const r = validateCpcSignal(bad);
+    assert.equal(r.ok, false);
+    assert.equal(r.raw, 67);
+    assert.equal(r.reason, "schema_invalid");
+  }
+});
