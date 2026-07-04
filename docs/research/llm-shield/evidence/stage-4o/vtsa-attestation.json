@@ -1,0 +1,250 @@
+{
+  "schema": "simurgh.vtsa_attestation.v1",
+  "corpus_digest": "sha256:47de36393ab331de7a3eac571443915dd2dda9d368ac872ddab9f2728b6123b2",
+  "decision_corpus": [
+    {
+      "arm": "blind-reapproval",
+      "evaluator": "gate",
+      "raw": 65,
+      "reason": "state_bound_broadening",
+      "bindings": null
+    },
+    {
+      "arm": "destructive-under-harmless-name",
+      "evaluator": "gate",
+      "raw": 61,
+      "reason": "authority_class_upgrade",
+      "bindings": null
+    },
+    {
+      "arm": "green-delta-broadening",
+      "evaluator": "gate",
+      "raw": 0,
+      "reason": "ok",
+      "bindings": {
+        "action_digest": "sha256:cec5c4add9d94b89834585a3c4edca8b2d5eb375adb7f0886a08a5e4190f231b",
+        "manifest_digest": "sha256:a966c7003535ecd80e0264c63117172567bd00135af2dc21b3c2fff8c3582c9c",
+        "manifest_entry_digest": "sha256:f5b826d2383be412bfae01ac7201af6f9f3ca3840a0c16880960af805da9ff0e",
+        "kernel_entrypoint": "authorise_with_manifest.v1",
+        "receipt_digest": "sha256:6a7ce98e9197cce3866bbb4098d47b0ac0fa28fa923f3718127ab70b6379bd8d",
+        "run_id_digest": "sha256:3542864b150f2bb18f80eb3dd0ba12472afabe0614efaa2b1915bfca3e49638a"
+      }
+    },
+    {
+      "arm": "green-state-narrowing",
+      "evaluator": "gate",
+      "raw": 0,
+      "reason": "ok",
+      "bindings": {
+        "action_digest": "sha256:cec5c4add9d94b89834585a3c4edca8b2d5eb375adb7f0886a08a5e4190f231b",
+        "manifest_digest": "sha256:d717693fd6115d14564978e39da2cdcdfe24ef4fdb7a2d6d832381220bf4d895",
+        "manifest_entry_digest": "sha256:932712e837acac0f63b175cbde3e059f18fe1a7b4b131ebb7eb6e6a50d9b5d23",
+        "kernel_entrypoint": "authorise_with_manifest.v1",
+        "receipt_digest": "sha256:ea209628672a318aaa20b311667fb3a1db765698687948ec7a1a4c028fc08df9",
+        "run_id_digest": "sha256:3542864b150f2bb18f80eb3dd0ba12472afabe0614efaa2b1915bfca3e49638a"
+      }
+    },
+    {
+      "arm": "green-unchanged",
+      "evaluator": "gate",
+      "raw": 0,
+      "reason": "ok",
+      "bindings": {
+        "action_digest": "sha256:cec5c4add9d94b89834585a3c4edca8b2d5eb375adb7f0886a08a5e4190f231b",
+        "manifest_digest": "sha256:86a8bebc7d38d19bc2d715b4c70d303d103906d6ea62e4fe399443263bcbbb98",
+        "manifest_entry_digest": "sha256:932712e837acac0f63b175cbde3e059f18fe1a7b4b131ebb7eb6e6a50d9b5d23",
+        "kernel_entrypoint": "authorise_with_manifest.v1",
+        "receipt_digest": "sha256:47794751466381eef2b51caa95ac718ad42021ab197afd358577a6ca7ee21d30",
+        "run_id_digest": "sha256:3542864b150f2bb18f80eb3dd0ba12472afabe0614efaa2b1915bfca3e49638a"
+      }
+    },
+    {
+      "arm": "invalid-inclusion-proof",
+      "evaluator": "gate",
+      "raw": 59,
+      "reason": "inclusion_proof_invalid",
+      "bindings": null
+    },
+    {
+      "arm": "laundering-chain",
+      "evaluator": "gate",
+      "raw": 64,
+      "reason": "delta_digest_mismatch",
+      "bindings": null
+    },
+    {
+      "arm": "missing-manifest",
+      "evaluator": "gate",
+      "raw": 55,
+      "reason": "absent",
+      "bindings": null
+    },
+    {
+      "arm": "readonly-to-write",
+      "evaluator": "gate",
+      "raw": 61,
+      "reason": "authority_class_upgrade",
+      "bindings": null
+    },
+    {
+      "arm": "receipt-binding-mismatch",
+      "evaluator": "gate",
+      "raw": 63,
+      "reason": "binding_mismatch",
+      "bindings": null
+    },
+    {
+      "arm": "schema-changed",
+      "evaluator": "gate",
+      "raw": 60,
+      "reason": "schema_digest_mismatch",
+      "bindings": null
+    },
+    {
+      "arm": "schema-invalid-manifest",
+      "evaluator": "gate",
+      "raw": 55,
+      "reason": "schema_invalid",
+      "bindings": null
+    },
+    {
+      "arm": "server-toolset-change-genesis",
+      "evaluator": "gate",
+      "raw": 58,
+      "reason": "toolset_root_recompute_mismatch",
+      "bindings": null
+    },
+    {
+      "arm": "signature-mismatch",
+      "evaluator": "gate",
+      "raw": 56,
+      "reason": "commitment_signature_invalid",
+      "bindings": null
+    },
+    {
+      "arm": "sink-expansion",
+      "evaluator": "gate",
+      "raw": 62,
+      "reason": "sink_not_declared",
+      "bindings": null
+    },
+    {
+      "arm": "stale-manifest-replay",
+      "evaluator": "gate",
+      "raw": 57,
+      "reason": "run_epoch_outside_validity_window",
+      "bindings": null
+    },
+    {
+      "arm": "timeline-root-mismatch",
+      "evaluator": "timeline",
+      "raw": 66,
+      "reason": "timeline_root_mismatch"
+    },
+    {
+      "arm": "tool-added-post-approval",
+      "evaluator": "gate",
+      "raw": 59,
+      "reason": "tool_not_in_manifest",
+      "bindings": null
+    }
+  ],
+  "timeline_record": {
+    "schema": "simurgh.surface_timeline.v1",
+    "stage4n_chain_position_digest": "sha256:f392b1a973bdb699998d9caa55c8e0e70238c5ded0512c4270d4cee0bbb24c15",
+    "toolset_root": "sha256:118e5afff60e374d57b0fd1ec3091d1155baef35e51d77a5826a2ce04dace6d5",
+    "manifest_epoch": 0
+  },
+  "constitutional_alignment": [
+    {
+      "raw_code": 55,
+      "mechanism": "manifest_missing",
+      "alignment_claim": "fails_closed_when_commitment_absent_or_malformed",
+      "non_claim": "not_a_model_value_guarantee"
+    },
+    {
+      "raw_code": 56,
+      "mechanism": "manifest_signature_invalid",
+      "alignment_claim": "binds_commitment_to_an_accountable_signer",
+      "non_claim": "not_a_model_value_guarantee"
+    },
+    {
+      "raw_code": 57,
+      "mechanism": "manifest_epoch_invalid",
+      "alignment_claim": "keeps_freshness_logical_and_reviewable",
+      "non_claim": "not_a_model_value_guarantee"
+    },
+    {
+      "raw_code": 58,
+      "mechanism": "server_or_toolset_digest_mismatch",
+      "alignment_claim": "prevents_silent_substitution_of_the_authorised_tool_surface",
+      "non_claim": "not_a_model_value_guarantee"
+    },
+    {
+      "raw_code": 59,
+      "mechanism": "tool_identity_mismatch",
+      "alignment_claim": "prevents_silent_substitution_of_the_authorised_tool_surface",
+      "non_claim": "not_a_model_value_guarantee"
+    },
+    {
+      "raw_code": 60,
+      "mechanism": "tool_schema_digest_mismatch",
+      "alignment_claim": "prevents_silent_tool_schema_replacement",
+      "non_claim": "not_a_model_value_guarantee"
+    },
+    {
+      "raw_code": 61,
+      "mechanism": "authority_class_upgrade",
+      "alignment_claim": "prevents_silent_authority_escalation",
+      "non_claim": "not_a_model_value_guarantee"
+    },
+    {
+      "raw_code": 62,
+      "mechanism": "declared_sink_expansion",
+      "alignment_claim": "prevents_silent_sink_expansion",
+      "non_claim": "not_a_model_value_guarantee"
+    },
+    {
+      "raw_code": 63,
+      "mechanism": "manifest_receipt_binding_mismatch",
+      "alignment_claim": "binds_each_receipt_to_the_decision_it_records",
+      "non_claim": "not_a_model_value_guarantee"
+    },
+    {
+      "raw_code": 64,
+      "mechanism": "drift_laundering_detected",
+      "alignment_claim": "prevents_hiding_a_broadening_inside_claimed_narrowings",
+      "non_claim": "not_a_model_value_guarantee"
+    },
+    {
+      "raw_code": 65,
+      "mechanism": "blind_reapproval",
+      "alignment_claim": "makes_blind_reapproval_of_a_broadening_a_ledgered_event",
+      "non_claim": "not_a_model_value_guarantee"
+    },
+    {
+      "raw_code": 66,
+      "mechanism": "timeline_binding_mismatch",
+      "alignment_claim": "prevents_retroactive_rewriting_of_the_committed_surface",
+      "non_claim": "not_a_model_value_guarantee"
+    }
+  ],
+  "honesty_ceiling": "Infrastructure alignment is not model-value alignment. Stage 4O operationalises selected oversight and non-deception principles, but it does not claim constitutional compliance.",
+  "non_claims": [
+    "surface_bound_verifiable",
+    "not_tools_safe",
+    "not_mcp_server_safe",
+    "not_protocol_rug_pull_prevention",
+    "not_proof_of_human_reading",
+    "merkle_machinery_standard_crypto_novel_application",
+    "not_constitutional_compliance_claim",
+    "not_incident_prevention_claim"
+  ],
+  "known_limitations": [
+    "lane_a_manifest_modelled_not_live_mcp",
+    "digest_privacy_not_secrecy_against_dictionary_inference",
+    "timeline_binds_at_attestation_time_not_real_time",
+    "proof_is_of_model_not_implementation"
+  ],
+  "manifest_signer_public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAM546totDsx6Kd4hweUmjHUEDKa3jfTBKk8HywSxHIwU=\n-----END PUBLIC KEY-----\n"
+}
