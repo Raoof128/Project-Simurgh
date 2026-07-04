@@ -1,5 +1,13 @@
 ## Change Log
 
+## [stage-4o-monotone-consent-law] — 2026-07-04 — Stage 4O spec amended with Monotone Consent Law
+
+**Raouf:** Extended the committed 4O design with four inventions composing into one law — "a tool surface may narrow silently, but may broaden only under delta-bound consent, and drift can never launder across epochs": I1 drift algebra with path-independent verdicts (raw 64 `drift_laundering_detected`, Lean `NoDriftLaundering`), I2 delta-bound consent making blind re-approval a machine-distinguishable ledgered class (raw 65 `blind_reapproval`), I3 Merkle toolset root + per-call inclusion proofs enabling selective surface disclosure (standard crypto, novel application — labelled honestly), I4 time-anchored surfaces binding toolset roots to 4N chain positions, 4O→4N reference only (raw 66 `timeline_binding_mismatch`). Raw block now 55–66; Lean theorem `MonotoneConsent` (three legs); new non-claims incl. `not_proof_of_human_reading`. Prior-art searches run 2026-07-04: no prior art found for I1/I2/I4. Design only — no implementation, no tag.
+
+### Changed
+
+- `docs/superpowers/specs/2026-07-04-stage-4o-vtsa-design.md` — amended in place (spec was same-day and unimplemented; no migration needed).
+
 ## [stage-4o-vtsa-design] — 2026-07-04 — Stage 4O VTSA design spec
 
 **Raouf:** Approved and wrote the Stage 4O design spec (Verifiable Tool-Surface Attestation): manifest-bound kernel entry point `authorise_with_manifest` (existing three entry points byte-frozen), `simurgh.tool_manifest.v1` schema with domain-separated digests, closed raw-code block 55–63 (first failure wins, all run-level `1`), hybrid Lane A modelled manifest (normative) + Lane B digest-only real-MCP capture fixture (external validity only), two keypairs (manifest vs attestation), logical epochs (no wall clock), Lean `NoSilentToolSwap` over the recorded dispatch surface, kernel↔verifier parity test. Design only — no implementation, no tag.
