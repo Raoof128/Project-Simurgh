@@ -23,7 +23,9 @@
 - No network in any test or in the reproduce script. Lane B capture and F1 research run manually at capture time only.
 - Determinism env for reproduce: `TZ=UTC LC_ALL=C LANG=C SOURCE_DATE_EPOCH=0 PYTHONHASHSEED=0`.
 - Version target v2.24.0; re-verify with `git tag --sort=-creatordate | head -3` before any tag; tagging itself is NOT part of this plan (happens at PR/finish flow).
-- Spec delta to record (Task 16): a 12th digest domain `SIMURGH_STAGE4O_MANIFEST_COMMITMENT_V1` (the spec's §5 list has 11; commitments need their own domain for `previous_manifest_digest`).
+- Spec deltas to record (Task 16): (a) a 12th digest domain `SIMURGH_STAGE4O_MANIFEST_COMMITMENT_V1` (the spec's §5 list has 11; commitments need their own domain for `previous_manifest_digest`); (b) the Python kernel parameter is `manifest_chain`, not `manifest` (it is the commitment chain, not one manifest); (c) malformed receipt ⇒ raw 63 precedes 57 (57 needs `run_epoch`); (d) Python parity skips attestation-level raw 66.
+- **Test helpers live in real modules, never in `.test.js` files.** `node --test` executes every file it globs AND every file a test imports — importing a helper from `foo.test.js` double-registers that file's tests. Shared JS builders (`mkEntry`, `mkManifest`, `mkEnvelope`, `validWorld`) live in `tests/unit/llmShield/stage4o/helpers.mjs`; shared Python builders live in `tools/agentdojo-simurgh-adapter/tests/_stage4o_helpers.py`. No test file exports helpers.
+- **Committed fixture keys scream that they are fake.** Private test keys are named `INSECURE_FIXTURE_ONLY_manifest-signer.pem` / `INSECURE_FIXTURE_ONLY_attestation-signer.pem` under `tests/fixtures/llmShield/stage4o/test-keys/`, each paired with a `<name>.meta.json` carrying `{"purpose":"committed-test-fixture-key","not_secret":true,"do_not_use_for_evidence":true}`. Production evidence keys are generated outside the repo and never committed.
 
 ## File Structure
 
@@ -46,7 +48,7 @@
 - `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/manifest_surface.py` — canonical JSON, digests, Merkle, schema validation, drift classifier, chain validation (mirror of Node core).
 - Modify (append only): `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/capability_kernel.py` — `ManifestBindings`, `ManifestAuthorityDecision`, `authorise_with_manifest`.
 
-**Tests:** `tests/unit/llmShield/stage4o/*.test.js`, `tests/e2e/llmShield/stage4o/vtsaFullNet.test.js`, `tools/agentdojo-simurgh-adapter/tests/test_manifest_surface.py`, `tools/agentdojo-simurgh-adapter/tests/test_capability_kernel_manifest.py`.
+**Tests:** `tests/unit/llmShield/stage4o/helpers.mjs` (shared JS builders), `tests/unit/llmShield/stage4o/*.test.js`, `tests/e2e/llmShield/stage4o/vtsaFullNet.test.js`, `tools/agentdojo-simurgh-adapter/tests/_stage4o_helpers.py` (shared Python builders), `tools/agentdojo-simurgh-adapter/tests/test_manifest_surface.py`, `tools/agentdojo-simurgh-adapter/tests/test_capability_kernel_manifest.py`.
 
 **Other:** `proofs/stage4o/MonotoneConsent.lean` + `proofs/stage4o/lean-toolchain`; `scripts/reproduce-llm-shield-stage4o.sh`; fixtures `tests/fixtures/llmShield/stage4o/`; evidence `docs/research/llm-shield/evidence/stage-4o/`; docs `docs/research/llm-shield/STAGE_4O_{THREAT_MODEL,VALIDATION_MATRIX,REVIEWER_CHECKLIST,CLOSEOUT}.md`.
 
@@ -488,10 +490,12 @@ git commit -m "feat(llm-shield): stage 4o domain-separated digests and manifest-
 
 **Files:**
 - Create: `tools/simurgh-attestation/stage4o/core/manifestCore.mjs`
+- Create: `tests/unit/llmShield/stage4o/helpers.mjs` (shared builders — NOT a test file)
 - Test: `tests/unit/llmShield/stage4o/manifestCore.test.js`
 
 **Interfaces:**
 - Consumes: Task 2 constants; Task 3 `domainDigest`, `surfaceRoot`.
+- Produces (helpers, imported by Tasks 4/5/6/9): `mkEntry(i, over?) -> entry`, `mkManifest(entries) -> manifest`, `mkEnvelope(manifest, epoch, prevEnv|null, consent) -> envelope`, `validWorld() -> {chain, receipt, actionDigest}`. `mkEnvelope`/`validWorld` may be added in this task even though they are first *used* in Tasks 5/6 (all their deps exist by Task 4).
 - Produces:
   - `toolEntryDigest(entry) -> digest`
   - `validateManifest(m) -> {ok:true} | {ok:false, reason:"schema_invalid", detail:string}` (exact keys `schema, server_id_digest, toolset_digest, tools`; each entry exact keys `tool_name_digest, tool_schema_digest, authority_class, declared_sinks, risk_class`; digests match `DIGEST_RE`; enums closed; `tools` non-empty, ordered ascending by `tool_name_digest`, unique)
@@ -501,18 +505,20 @@ git commit -m "feat(llm-shield): stage 4o domain-separated digests and manifest-
   - `commitmentDigest(envelope) -> digest` (over envelope minus `signature`)
   - `validateEnvelope(env) -> {ok:true} | {ok:false, reason, detail}` (exact keys `schema, manifest, manifest_epoch, valid_from_epoch, valid_until_epoch, previous_manifest_digest, delta_digest, consent_binding, signer_public_key_pem, signature`; epoch-0 genesis rules; epochs non-negative ints, `valid_from_epoch <= valid_until_epoch`)
 
-- [ ] **Step 1: Write failing tests** `tests/unit/llmShield/stage4o/manifestCore.test.js` (build a helper `mkManifest()` returning a valid 3-tool manifest with `tool_name_digest` values generated via `domainDigest(DOMAINS.SERVER_ID, "n", i)` and sorted; then):
+- [ ] **Step 0: Create the shared helpers module** `tests/unit/llmShield/stage4o/helpers.mjs` (imported by this and later tasks; contains NO `test()` calls):
 
 ```js
 // SPDX-License-Identifier: AGPL-3.0-or-later
-import { test } from "node:test";
-import assert from "node:assert/strict";
-import {
-  toolEntryDigest, validateManifest, computeToolsetRoot, deltaObject, deltaDigest,
-  commitmentDigest, validateEnvelope,
-} from "../../../../tools/simurgh-attestation/stage4o/core/manifestCore.mjs";
+// Shared Stage 4O test builders. NOT a test file (no test() calls) so importing it never
+// double-registers tests. Motto: AnthropicSafe First, then ReviewerSafe.
 import { domainDigest } from "../../../../tools/simurgh-attestation/stage4o/core/digest.mjs";
-import { DOMAINS, TOOL_MANIFEST_SCHEMA, COMMITMENT_SCHEMA, GENESIS } from "../../../../tools/simurgh-attestation/stage4o/constants.mjs";
+import { surfacePath } from "../../../../tools/simurgh-attestation/stage4o/core/merkleSurface.mjs";
+import {
+  computeToolsetRoot, toolEntryDigest, deltaDigest, commitmentDigest,
+} from "../../../../tools/simurgh-attestation/stage4o/core/manifestCore.mjs";
+import {
+  DOMAINS, TOOL_MANIFEST_SCHEMA, COMMITMENT_SCHEMA, RECEIPT_SCHEMA, ACTION_SCHEMA, GENESIS,
+} from "../../../../tools/simurgh-attestation/stage4o/constants.mjs";
 
 export function mkEntry(i, over = {}) {
   return {
@@ -530,6 +536,45 @@ export function mkManifest(entries) {
   m.toolset_digest = computeToolsetRoot(m);
   return m;
 }
+export function mkEnvelope(manifest, epoch, prevEnv, consent) {
+  return {
+    schema: COMMITMENT_SCHEMA, manifest, manifest_epoch: epoch,
+    valid_from_epoch: epoch * 10, valid_until_epoch: epoch * 10 + 9,
+    previous_manifest_digest: prevEnv ? commitmentDigest(prevEnv) : GENESIS,
+    delta_digest: prevEnv ? deltaDigest(prevEnv.manifest, manifest) : GENESIS,
+    consent_binding: consent, signer_public_key_pem: "PEM", signature: "sig",
+  };
+}
+export function validWorld() {
+  const m0 = mkManifest([mkEntry(1)]);
+  const m1 = mkManifest([mkEntry(1), mkEntry(2)]);
+  const e0 = mkEnvelope(m0, 0, null, "state");
+  const e1 = mkEnvelope(m1, 1, e0, "delta");
+  const idx = m1.tools.findIndex((t) => t.tool_name_digest === mkEntry(1).tool_name_digest);
+  const entry = m1.tools[idx];
+  const receipt = {
+    schema: RECEIPT_SCHEMA, tool_name_digest: entry.tool_name_digest,
+    tool_schema_digest: entry.tool_schema_digest, authority_class: entry.authority_class,
+    sinks_used: [], inclusion_proof: surfacePath(m1.tools.map(toolEntryDigest), idx),
+    run_epoch: 12, run_id_digest: domainDigest(DOMAINS.RECEIPT, "run", "run-1"),
+  };
+  const actionDigest = domainDigest(DOMAINS.ACTION, ACTION_SCHEMA, { family: "egress" });
+  return { chain: [e0, e1], receipt, actionDigest };
+}
+```
+
+- [ ] **Step 1: Write failing tests** `tests/unit/llmShield/stage4o/manifestCore.test.js` (imports builders from `./helpers.mjs`):
+
+```js
+// SPDX-License-Identifier: AGPL-3.0-or-later
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import {
+  toolEntryDigest, validateManifest, computeToolsetRoot, deltaObject, deltaDigest,
+  commitmentDigest, validateEnvelope,
+} from "../../../../tools/simurgh-attestation/stage4o/core/manifestCore.mjs";
+import { COMMITMENT_SCHEMA, GENESIS } from "../../../../tools/simurgh-attestation/stage4o/constants.mjs";
+import { mkEntry, mkManifest } from "./helpers.mjs";
 
 test("valid manifest passes; unknown key, bad enum, unsorted, duplicate all fail exact-key validation", () => {
   const m = mkManifest([mkEntry(1), mkEntry(2)]);
@@ -664,7 +709,7 @@ export function commitmentDigest(env) {
 - [ ] **Step 5: Commit**
 
 ```bash
-git add tools/simurgh-attestation/stage4o/core/manifestCore.mjs tests/unit/llmShield/stage4o/manifestCore.test.js
+git add tools/simurgh-attestation/stage4o/core/manifestCore.mjs tests/unit/llmShield/stage4o/helpers.mjs tests/unit/llmShield/stage4o/manifestCore.test.js
 git commit -m "feat(llm-shield): stage 4o manifest schema validation, delta digests, commitment envelope"
 ```
 
@@ -689,20 +734,9 @@ git commit -m "feat(llm-shield): stage 4o manifest schema validation, delta dige
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { classifyDrift, validateChain } from "../../../../tools/simurgh-attestation/stage4o/core/driftCore.mjs";
-import { deltaDigest, commitmentDigest, computeToolsetRoot } from "../../../../tools/simurgh-attestation/stage4o/core/manifestCore.mjs";
-import { COMMITMENT_SCHEMA, GENESIS } from "../../../../tools/simurgh-attestation/stage4o/constants.mjs";
-import { mkEntry, mkManifest } from "./manifestCore.test.js";
+import { mkEntry, mkManifest, mkEnvelope } from "./helpers.mjs";
 
 const M = (entries) => mkManifest(entries);
-export function mkEnvelope(manifest, epoch, prevEnv, consent) {
-  return {
-    schema: COMMITMENT_SCHEMA, manifest, manifest_epoch: epoch,
-    valid_from_epoch: epoch * 10, valid_until_epoch: epoch * 10 + 9,
-    previous_manifest_digest: prevEnv ? commitmentDigest(prevEnv) : GENESIS,
-    delta_digest: prevEnv ? deltaDigest(prevEnv.manifest, manifest) : GENESIS,
-    consent_binding: consent, signer_public_key_pem: "PEM", signature: "sig",
-  };
-}
 
 test("classifier: equal / narrowing / broadening / incomparable", () => {
   const base = M([mkEntry(1), mkEntry(2)]);
@@ -842,37 +876,11 @@ git commit -m "feat(llm-shield): stage 4o drift lattice classifier and monotone-
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { gateToolCall, receiptDigest } from "../../../../tools/simurgh-attestation/stage4o/core/decisionCore.mjs";
-import { surfacePath } from "../../../../tools/simurgh-attestation/stage4o/core/merkleSurface.mjs";
-import { toolEntryDigest } from "../../../../tools/simurgh-attestation/stage4o/core/manifestCore.mjs";
-import { RECEIPT_SCHEMA } from "../../../../tools/simurgh-attestation/stage4o/constants.mjs";
-import { domainDigest } from "../../../../tools/simurgh-attestation/stage4o/core/digest.mjs";
-import { DOMAINS } from "../../../../tools/simurgh-attestation/stage4o/constants.mjs";
-import { mkEntry, mkManifest } from "./manifestCore.test.js";
-import { mkEnvelope } from "./driftCore.test.js";
+import { mkEntry, mkManifest, mkEnvelope, validWorld } from "./helpers.mjs";
 
 const sigOK = () => true;
 const sigBAD = () => false;
-
-function world() {
-  const m0 = mkManifest([mkEntry(1)]);
-  const m1 = mkManifest([mkEntry(1), mkEntry(2)]);
-  const e0 = mkEnvelope(m0, 0, null, "state");
-  const e1 = mkEnvelope(m1, 1, e0, "delta");
-  const entryIdx = m1.tools.findIndex((t) => t.tool_name_digest === mkEntry(1).tool_name_digest);
-  const entry = m1.tools[entryIdx];
-  const receipt = {
-    schema: RECEIPT_SCHEMA,
-    tool_name_digest: entry.tool_name_digest,
-    tool_schema_digest: entry.tool_schema_digest,
-    authority_class: entry.authority_class,
-    sinks_used: [],
-    inclusion_proof: surfacePath(m1.tools.map(toolEntryDigest), entryIdx),
-    run_epoch: 12,
-    run_id_digest: domainDigest(DOMAINS.RECEIPT, "run", "run-1"),
-  };
-  const actionDigest = domainDigest(DOMAINS.ACTION, "simurgh.tool_action.v1", { family: "egress" });
-  return { chain: [e0, e1], receipt, actionDigest };
-}
+const world = validWorld; // { chain, receipt, actionDigest }
 
 test("GREEN: accepted with complete six-field bindings", () => {
   const w = world();
@@ -1043,6 +1051,7 @@ git commit -m "feat(llm-shield): stage 4o twelve-check manifest-bound gate with 
 
 **Files:**
 - Create: `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/manifest_surface.py`
+- Create: `tools/agentdojo-simurgh-adapter/tests/_stage4o_helpers.py` (shared Python builders `mk_entry`, `mk_manifest`, `mk_envelope`, `valid_world`; leading underscore + no `test_` prefix so pytest never collects it)
 - Test: `tools/agentdojo-simurgh-adapter/tests/test_manifest_surface.py`
 
 **Interfaces:**
@@ -1056,7 +1065,7 @@ git commit -m "feat(llm-shield): stage 4o twelve-check manifest-bound gate with 
   - `classify_drift(prev_m, next_m) -> str`, `validate_chain(chain: list[dict]) -> dict` (`{"ok": True, "classifications": [...]}` or `{"ok": False, "raw": 64|65, "reason": str}`)
   - Constants mirrored: `DOMAINS` (dict, 12 keys), `AUTHORITY_ORDER`, `RISK_CLASSES`, `GENESIS`, schema ids — values identical strings to Task 2.
 
-- [ ] **Step 1: Write failing tests** `tests/test_manifest_surface.py` — port the Task 4/5 test scenarios to pytest (same `mk_entry`/`mk_manifest`/`mk_envelope` helpers, same assertions: exact-key validation arms, delta determinism, classifier's six cases, chain arms 64/65). Plus the canonical-JSON contract test:
+- [ ] **Step 1: Write `tests/_stage4o_helpers.py`** (the Python mirror of `helpers.mjs` — `mk_entry`, `mk_manifest`, `mk_envelope`, `valid_world`, importing from `simurgh_agentdojo_adapter.manifest_surface`), then the failing tests `tests/test_manifest_surface.py` — port the Task 4/5 scenarios to pytest (import builders from `_stage4o_helpers`; same assertions: exact-key validation arms, delta determinism, classifier's six cases, chain arms 64/65). Plus the canonical-JSON contract test:
 
 ```python
 # SPDX-License-Identifier: AGPL-3.0-or-later
@@ -1121,7 +1130,7 @@ def domain_digest(domain: str, schema: str, value) -> str:
 - [ ] **Step 5: Commit**
 
 ```bash
-git add tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/manifest_surface.py tools/agentdojo-simurgh-adapter/tests/test_manifest_surface.py
+git add tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/manifest_surface.py tools/agentdojo-simurgh-adapter/tests/_stage4o_helpers.py tools/agentdojo-simurgh-adapter/tests/test_manifest_surface.py
 git commit -m "feat(llm-shield): stage 4o python manifest-surface mirror (digests, merkle, lattice, chain)"
 ```
 
@@ -1139,7 +1148,7 @@ git commit -m "feat(llm-shield): stage 4o python manifest-surface mirror (digest
   - `ManifestBindings` frozen dataclass: `action_digest, manifest_digest, manifest_entry_digest, kernel_entrypoint, receipt_digest, run_id_digest` (all `str`).
   - `ManifestAuthorityDecision` frozen dataclass: `decision: AuthorityDecision`, `manifest_bindings: ManifestBindings | None`, `raw_code: int`, `reason: str`.
   - `action_digest(action: Action) -> str`.
-  - `authorise_with_manifest(action: Action, *, manifest: list[dict], receipt: dict, verify_commitment_signature=None) -> ManifestAuthorityDecision` — `manifest` is the commitment CHAIN (genesis-first); `verify_commitment_signature` defaults to a fail-closed `lambda env: False`?? NO — default must fail closed but the modelled Lane A corpus uses harness-verified signatures: default `None` means "signature already verified by the caller" is NOT acceptable (fail-open). Default is `_REFUSE = lambda env: False` so a caller who does not supply verification gets raw 56 — fail closed. The fixture harness and verifier inject the real Ed25519 check.
+  - `authorise_with_manifest(action: Action, *, manifest_chain: list[dict], receipt: dict, verify_commitment_signature=_refuse_all) -> ManifestAuthorityDecision` — `manifest_chain` is the commitment CHAIN (genesis-first), NOT one manifest (spec delta, recorded in Task 16). `verify_commitment_signature` defaults to a fail-closed `_refuse_all` (`lambda env: False`): a caller who supplies no verification gets raw 56 — never fail-open. The fixture harness and verifier inject the real Ed25519 check.
 
 - [ ] **Step 1: Write failing tests** `tests/test_capability_kernel_manifest.py`:
 
@@ -1149,14 +1158,14 @@ from simurgh_agentdojo_adapter.capability_kernel import (
     Action, authorise_with_manifest, ManifestBindings, action_digest,
 )
 from simurgh_agentdojo_adapter import manifest_surface as ms
-# mk_entry / mk_manifest / mk_envelope / mk_receipt helpers as in test_manifest_surface.py
+from tests._stage4o_helpers import valid_world  # shared builders; NOT a test module
 
 SIG_OK = lambda env: True
 
 def test_green_accept_carries_six_bindings():
     chain, receipt = valid_world()
     act = Action("egress", "send", "email", "alice@example.com")
-    out = authorise_with_manifest(act, manifest=chain, receipt=receipt, verify_commitment_signature=SIG_OK)
+    out = authorise_with_manifest(act, manifest_chain=chain, receipt=receipt, verify_commitment_signature=SIG_OK)
     assert out.raw_code == 0
     assert out.decision.verdict == "allow" and out.decision.reason == "manifest_bound"
     assert out.manifest_bindings.kernel_entrypoint == "authorise_with_manifest.v1"
@@ -1164,7 +1173,7 @@ def test_green_accept_carries_six_bindings():
 
 def test_default_signature_check_fails_closed_to_56():
     chain, receipt = valid_world()
-    out = authorise_with_manifest(Action("egress", "send", "email", "x"), manifest=chain, receipt=receipt)
+    out = authorise_with_manifest(Action("egress", "send", "email", "x"), manifest_chain=chain, receipt=receipt)
     assert out.raw_code == 56
 
 def test_each_raw_code_in_isolation_and_first_failure_order():
@@ -1237,10 +1246,10 @@ def _blocked(action: Action, raw: int, reason: str) -> ManifestAuthorityDecision
 
 
 def authorise_with_manifest(
-    action: Action, *, manifest: list, receipt: dict, verify_commitment_signature=_refuse_all
+    action: Action, *, manifest_chain: list, receipt: dict, verify_commitment_signature=_refuse_all
 ) -> ManifestAuthorityDecision:
     out = _ms.gate_tool_call(
-        chain=manifest, receipt=receipt, action_digest_value=action_digest(action),
+        chain=manifest_chain, receipt=receipt, action_digest_value=action_digest(action),
         verify_commitment_signature=verify_commitment_signature,
         kernel_entrypoint=KERNEL_ENTRYPOINT_V1,
     )
@@ -1280,10 +1289,10 @@ git commit -m "feat(llm-shield): stage 4o authorise_with_manifest kernel entry p
 - Test: `tests/unit/llmShield/stage4o/fixtures.test.js`, plus Python `tools/agentdojo-simurgh-adapter/tests/test_stage4o_parity.py`
 
 **Interfaces:**
-- Consumes: everything from Tasks 2–6; `node:crypto` Ed25519 (deterministic test keys: generate once with `--ephemeral`, then commit the PUBLIC pems in `*.pub` JSON files and the PRIVATE pems under `tests/fixtures/llmShield/stage4o/test-keys/` — these are FIXTURE keys for the modelled corpus, never production secrets; mark them clearly `"purpose": "committed-test-fixture-key"` following the stage4n `--ephemeral`/`--private-key` split for the real evidence signing).
+- Consumes: everything from Tasks 2–6; `node:crypto` Ed25519. Deterministic FIXTURE keys, generated once and committed under `tests/fixtures/llmShield/stage4o/test-keys/` with scream-labels: `INSECURE_FIXTURE_ONLY_manifest-signer.pem`, `INSECURE_FIXTURE_ONLY_attestation-signer.pem`, each paired with `<name>.meta.json` = `{"purpose":"committed-test-fixture-key","not_secret":true,"do_not_use_for_evidence":true}`. Public pems are committed in `vtsa-manifest-signer.pub` / `vtsa-signer.pub` JSON. These are for the MODELLED Lane A corpus only; production evidence signing (Task 11) uses real keys generated outside the repo via the stage4n `--ephemeral`/`--*-key` split.
 - Produces:
   - `tests/fixtures/llmShield/stage4o/chains/clean-chain.json` — 3-epoch chain: genesis (2 tools) → epoch 1 delta-bound broadening (adds `egress` tool) → epoch 2 state-bound narrowing (drops it). Signed with the manifest fixture key.
-  - `arms/<name>.json` — one file per tamper arm, each `{arm, chain, receipt, action, expected_raw, expected_reason}`; the 15 arms of spec §7 EXACTLY: `missing-manifest(55/absent)`, `schema-invalid-manifest(55/schema_invalid)`, `signature-mismatch(56)`, `stale-manifest-replay(57)`, `laundering-chain(64/composition or prev/delta per construction — construct as: epoch chain where a broadening envelope's manifest bodies were swapped after delta computation ⇒ 64/delta_digest_mismatch)`, `blind-reapproval(65/state_bound_broadening)`, `server-toolset-change(58/toolset_root_recompute_mismatch)`, `tool-added-post-approval(59/tool_not_in_manifest)`, `invalid-inclusion-proof(59/inclusion_proof_invalid)`, `schema-changed(60)`, `readonly-to-write(61)`, `destructive-under-harmless-name(61 — authority_class changes, name digest preserved)`, `sink-expansion(62)`, `receipt-binding-mismatch(63)`, `timeline-root-mismatch(66 — consumed by Task 10)`; plus GREEN arms `green-unchanged(0)`, `green-state-narrowing(0)`, `green-delta-broadening(0)`.
+  - `arms/<name>.json` — one file per tamper arm, each `{arm, chain, receipt, action, expected_raw, expected_reason}`; the 15 arms of spec §7 EXACTLY: `missing-manifest(55/absent)`, `schema-invalid-manifest(55/schema_invalid)`, `signature-mismatch(56)`, `stale-manifest-replay(57)`, `laundering-chain(64/composition or prev/delta per construction — construct as: epoch chain where a broadening envelope's manifest bodies were swapped after delta computation ⇒ 64/delta_digest_mismatch)`, `blind-reapproval(65/state_bound_broadening)`, `server-toolset-change-genesis(58/toolset_root_recompute_mismatch)` — **must be a single genesis envelope** (epoch 0, no delta) whose `toolset_digest` is set to a valid-format wrong root and then **re-signed** so the commitment signature is authentic but internally inconsistent; single-envelope construction is what lets 58 fire without 64/65 tripping first (documented-order trap noted in Task 6), `tool-added-post-approval(59/tool_not_in_manifest)`, `invalid-inclusion-proof(59/inclusion_proof_invalid)`, `schema-changed(60)`, `readonly-to-write(61)`, `destructive-under-harmless-name(61 — authority_class changes, name digest preserved)`, `sink-expansion(62)`, `receipt-binding-mismatch(63)`, `timeline-root-mismatch(66 — consumed by Task 10)`; plus GREEN arms `green-unchanged(0)`, `green-state-narrowing(0)`, `green-delta-broadening(0)`.
   - `expected-results/vtsa-matrix.json` — `[{arm, expected_raw, expected_reason}]` sorted by arm name.
   - `parity/canonical-parity.json` — ≥12 vectors: `{description, domain, schema, value, digest}` including nested objects, arrays, unicode string `"café ☕"`, empty arrays.
   - Honours `STAGE4O_FIXTURE_OUT` env var for temp regeneration (reproduce-script `cmp` pattern).
@@ -1319,7 +1328,7 @@ test("every committed arm yields exactly its expected raw code and reason", () =
 });
 ```
 
-- [ ] **Step 2: Write the builder** `build-stage4o-fixtures.mjs` — constructs the clean chain and every arm programmatically (never hand-edited JSON), signs commitments with the committed fixture private key (`test-keys/manifest-signer.pem`), writes with `JSON.stringify(x, null, 2) + "\n"`, sorted arm order, to `process.env.STAGE4O_FIXTURE_OUT ?? "tests/fixtures/llmShield/stage4o"`. Also emits the parity vectors by calling `domainDigest` on the 12 committed inputs.
+- [ ] **Step 2: Write the builder** `build-stage4o-fixtures.mjs` — constructs the clean chain and every arm programmatically (never hand-edited JSON), signs commitments with the committed fixture private key (`test-keys/INSECURE_FIXTURE_ONLY_manifest-signer.pem`), writes with `JSON.stringify(x, null, 2) + "\n"`, sorted arm order, to `process.env.STAGE4O_FIXTURE_OUT ?? "tests/fixtures/llmShield/stage4o"`. The `signature-mismatch` arm uses the literal string `"TAMPERED"` as its signature (so both the Node Ed25519 verify and the Python injected stub detect it — see Step 4). Also emits the parity vectors by calling `domainDigest` on the 12 committed inputs.
 
 - [ ] **Step 3: Generate + run:**
 
@@ -1746,7 +1755,7 @@ git commit -m "test(llm-shield): stage 4o all-functions e2e net with tamper matr
 
 - [ ] **Step 1: Write the four docs** mirroring the STAGE_4N_* structure: threat model (rug-pull adversary, laundering adversary, blind-approver, retro-rewriter — each mapped to its raw codes); validation matrix (every spec §7 arm → test file → raw code → status); reviewer checklist (one-command reproduce, what to `cmp`, how to verify both signatures offline, selective-disclosure walk-through); closeout (what shipped, non-claims verbatim, **four-axis re-score against shipped evidence with the spec-time targets from spec §18 and honest deltas**, known limitations incl. the F1 gate outcome).
 
-- [ ] **Step 2: Spec deltas commit** — amend spec §5 (12th domain `MANIFEST_COMMITMENT_V1`), §6 note (malformed receipt ⇒ 63 precedes 57, with the reason), §11.2 outcome (fixture shipped or limitation recorded). One commit: `docs(llm-shield): record stage 4o spec deltas from implementation`.
+- [ ] **Step 2: Spec deltas commit** — amend spec §5 (12th domain `MANIFEST_COMMITMENT_V1`), §6 (kernel param `manifest_chain` not `manifest`; malformed receipt ⇒ 63 precedes 57, with the reason), §11.2 outcome (fixture shipped or limitation recorded). One commit: `docs(llm-shield): record stage 4o spec deltas from implementation`.
 
 - [ ] **Step 3: Docs-accuracy pass** — for EVERY claim in the four docs + spec, point to the shipped line of code or committed artifact; fix any drift. Run the repo's overclaim scan (locate via `ls scripts | grep -i overclaim` / the stage-1 workflow) and satisfy it — remember 4N's lesson: honest negations can trip it; use the pellet vocabulary.
 
@@ -1775,5 +1784,5 @@ git commit -m "docs(llm-shield): stage 4o threat model, validation matrix, revie
 ## Self-Review (performed at plan-writing time)
 
 1. **Spec coverage:** §2 claims/pellets → Tasks 2, 11, 16; §4 schema → Task 4; §5/5a digests+Merkle → Tasks 3, 7; §6/6a chain+kernel → Tasks 5, 6, 8; §7 matrix → Task 9; §8 verifier → Task 11; §9 timeline → Task 10; §10 Lane B → Task 12; §11 boosters → Tasks 10 (C1), 12 (F1); §12 proofs → Task 13; §13 error handling/reproduce → Task 14; §14 testing incl. parity → Tasks 9, 15; §15 risk register → Tasks 1 (goldens, prettierignore), 11 (keys); §16 release boundary → Task 16; §18 re-score → Task 16. No gaps.
-2. **Known deliberate deviations (recorded for the spec-delta commit):** (a) 12th digest domain for commitments; (b) malformed receipt ⇒ 63 before 57 (57 needs `run_epoch`); (c) Python parity skips raw-66 rows (66 is attestation-level, not kernel-level).
+2. **Known deliberate deviations (recorded for the spec-delta commit, Task 16):** (a) 12th digest domain for commitments; (b) Python kernel param is `manifest_chain`, not `manifest`; (c) malformed receipt ⇒ 63 before 57 (57 needs `run_epoch`); (d) Python parity skips raw-66 rows (66 is attestation-level, not kernel-level).
 3. **Type consistency:** `gateToolCall` (Node) ↔ `gate_tool_call` (Python) signatures pinned in Tasks 6/8; `ManifestBindings` field names identical across spec, kernel, decisionCore, and verifier; `VTSA_CHECK_ORDER` referenced, never re-derived.
