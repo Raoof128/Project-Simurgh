@@ -1358,10 +1358,10 @@ The function walks EXACTLY `VOCA_CHECK_ORDER = [67, 68, 69, 78, 70, 71, 72, 73, 
 - 78: `verifyHopChain` fail (also covers embedded 67 from hop schema — return whatever it returns).
 - 70: `observed.endpoint_digest !== envelope.declared_endpoint_digest`.
 - 71: any chain `relay_identity_digest` not in `envelope.declared_relay_digests`; if `relay_policy === "direct_only"` and hops.length > 1 → `relay_policy_direct_only`. (One hop = the declared origin itself; ≥2 = a relay is present.)
+- **Receipt-parseability gate (runs HERE, after 71 and before 72):** `validateCustodyReceipt` fail → its result (raw 77 `receipt_schema_invalid`). This runs ONCE before any receipt field is compared, so a malformed receipt never gets misread by the 72/75 content checks (MF3 follow-up).
 - 72: `observed.model_identity_digest !== envelope.model_identity_digest` OR `custodyReceipt.model_identity_digest !== envelope.model_identity_digest`.
 - 73: `observed.account_pool_observed === true` while `envelope.account_boundary !== "declared_pool"`.
 - 74: `trace_custody_observed` stricter-set check: allowed pairs are (`provider_only` declared → observed `provider_only`), (`declared_relay` → `provider_only` or `declared_relay`), (`no_trace_retained` → `provider_only`), (`unknown_disallowed` → nothing, observed `unknown` always fails).
-- **Receipt-parseability gate (after 71, before 72):** `validateCustodyReceipt` fail → its result (raw 77 `receipt_schema_invalid`). This runs ONCE before any receipt field is compared, so a malformed receipt never gets misread by the 72/75 content checks (MF3 follow-up).
 - 75: `custodyReceipt.tool_surface_digest !== stage4o_surface_commitment_digest` OR `observed.tool_surface_digest !== stage4o_surface_commitment_digest`.
 - 76: any `observed.transform_digests` entry not in `envelope.declared_transform_digests`.
 - 77: binding only (schema already passed the gate): `custodyReceipt.request_digest !== requestDigest` OR `custodyReceipt.response_digest !== responseDigest` OR `custodyReceipt.custody_path_digest !== <recomputed>` OR `custodyReceipt.receipt_epoch !== envelope.run_epoch` (MF3 — receipt-to-run binding) → `binding_mismatch`.
@@ -1652,7 +1652,7 @@ export function verifyCustody(input) {
 - [ ] **Step 4: Run tests to verify they pass**
 
 Run: `node --test tests/unit/llmShield/stage4p/custodyCore.test.js`
-Expected: PASS (3 tests, 13/13 raw arms + 3 doubly-broken).
+Expected: PASS (4 tests — green, 13/13 raw arms, 3 doubly-broken, MF3 receipt-77 arms).
 
 - [ ] **Step 5: Commit**
 
@@ -1985,7 +1985,7 @@ git commit -m "feat(llm-shield): stage 4p lane b relay captures over the 4o harn
 
 **Interfaces:**
 
-- Consumes: everything above. Mirror the 4O builder (`build-stage4o-attestation.mjs`) for arg parsing, key handling (`--key <pem-path>` for the REAL stage4p attestation key, generated via `tools/simurgh-attestation/keygen.mjs` with the private key OUTSIDE the repo; committed `.pub` JSON alongside the bundle), and the sign-canonical rule: signature over `canonicalJson(JSON.parse(bundleJson))` — prettier/merge-safe (3M lesson).
+- Consumes: everything above. Mirror the 4O builder (`build-stage4o-attestation.mjs`) for arg parsing and key handling (`--key <pem-path>` for the REAL stage4p attestation key, generated via `tools/simurgh-attestation/keygen.mjs` with the private key OUTSIDE the repo; committed `.pub` JSON alongside the bundle). The sign-canonical rule is defined precisely in the two-stage block below: the signature is over `canonicalJson({ ...body1, bundle_digest })` — prettier/merge-safe (3M lesson), and `bundle_digest` sits inside the signed payload.
 - Produces bundle `simurgh.voca_attestation.v1` via a **two-stage digest (MF5)** that breaks the disclosure↔digest circularity:
 
 ```text
@@ -2005,7 +2005,10 @@ vendor_custody_disclosure = projectVendorDisclosure(body0_digest, body0.disclosu
 body1 = { ...body0, vendor_custody_disclosure, signer_public_key_pem }
 bundle_digest = domainDigest(ATTESTATION_BUNDLE, SCHEMAS.ATTESTATION, body1)
 
-signature = Ed25519.sign(bundle_digest, privateKey)
+# Sign the canonical JSON of the payload (prettier/merge-safe, 3M lesson) — NOT the raw
+# digest string. bundle_digest is inside the signed payload, so it is signature-protected.
+signed_payload = canonicalJson({ ...body1, bundle_digest })
+signature = Ed25519.sign(signed_payload, privateKey)
 attestation = { ...body1, bundle_digest, signature }
 ```
 
@@ -2019,7 +2022,7 @@ string array), `enforcement_commitment` (synthetic pincer fixture), `pincer_corr
 `disclosure_subject`, `vendor_custody_disclosure`, `signer_public_key_pem`,
 `bundle_digest`, `signature`.
 
-- Verifier `verify-stage4p.mjs`: two-tier (3M pattern) — `--offline` recomputes every arm from committed fixtures, **reconstructs `body0`/`body1` and recomputes both `body0_digest` and `bundle_digest` in the same two stages**, re-projects the vendor disclosure from `body0_digest` and deep-equals it, verifies Ed25519 over `bundle_digest`, checks non-claims list byte-equality, checks `corroborating_commitments` contains EXACTLY the matchable arms' digests and nothing degraded, re-checks pincer/contest/bridge. Exit code ALWAYS routed through `stage4CodeForRawCode`.
+- Verifier `verify-stage4p.mjs`: two-tier (3M pattern) — `--offline` recomputes every arm from committed fixtures, **reconstructs `body0`/`body1` and recomputes both `body0_digest` and `bundle_digest` in the same two stages**, re-projects the vendor disclosure from `body0_digest` and deep-equals it, verifies Ed25519 over `canonicalJson({ ...body1, bundle_digest })`, checks non-claims list byte-equality, checks `corroborating_commitments` contains EXACTLY the matchable arms' digests and nothing degraded, re-checks pincer/contest/bridge. Exit code ALWAYS routed through `stage4CodeForRawCode`.
 
 - [ ] **Step 1: Write the failing test** — `attestation.test.js`: run builder in-process (export a `buildBundle({keyPem})` function from the builder; CLI wraps it) with a THROWAWAY key generated in the test, then: bundle validates (schema + 16 non-claims byte-equal to `VOCA_NON_CLAIMS`), verifier passes, `vendor_custody_disclosure.attestation_digest === body0_digest` (recomputed), tamper matrix — flip one arm's `raw`, drop a non-claim, mutate `corroborating_commitments`, inject a degraded signal's window into `corroborating_commitments`, mutate a disclosure field, corrupt signature — each tamper must fail verification with a nonzero raw.
 
