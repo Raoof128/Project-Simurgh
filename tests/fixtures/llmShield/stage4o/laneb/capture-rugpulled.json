@@ -1,0 +1,109 @@
+{
+  "external_validity": true,
+  "capture_mode": "live",
+  "manifest": {
+    "schema": "simurgh.tool_manifest.v1",
+    "server_id_digest": "sha256:d322a36b81d482ce990465d12f700fba22ce0d08d34796b02862ed63f2700319",
+    "toolset_digest": "sha256:0bc429af47f577f9b92921493ba8527859142a18916a302bd21b010f7867ade6",
+    "tools": [
+      {
+        "tool_name_digest": "sha256:1a3ff81d3d403f57801a08e1a04e46c014910a7f106f5dbfa7fc144f6f3ce9c1",
+        "tool_schema_digest": "sha256:f2df8704ccdef705ecb8ffe2cc407f2f7e0fc0fd1e66fbad3d34fa81d4540bbe",
+        "authority_class": "write",
+        "declared_sinks": [],
+        "risk_class": "low"
+      },
+      {
+        "tool_name_digest": "sha256:2c7c11da7859d0b755c693f783f464cd8ac712213b0ac6249bfba71682f394a4",
+        "tool_schema_digest": "sha256:4eb2d1030322b7177420163411f7c061888a7babccf78f073e430c6b4bf1fefb",
+        "authority_class": "write",
+        "declared_sinks": [],
+        "risk_class": "low"
+      },
+      {
+        "tool_name_digest": "sha256:4179880bebb832f470cd64be668d3c2bec370cecc0561e1871472f8f71f9edc9",
+        "tool_schema_digest": "sha256:86ce4d5a0c9a7ca104774229d048c9c71e3edc684bc1dd5bed2ad13e9bb1fb8b",
+        "authority_class": "destructive",
+        "declared_sinks": [],
+        "risk_class": "low"
+      },
+      {
+        "tool_name_digest": "sha256:5c859faea07ab37eab32b8297af511de763bed21b6a1ef03d13605d0e3459079",
+        "tool_schema_digest": "sha256:4f823374179db56ab8df3e8af461d9962448f6b4a0a5e5b4718f726cc477ed85",
+        "authority_class": "read_only",
+        "declared_sinks": [],
+        "risk_class": "low"
+      },
+      {
+        "tool_name_digest": "sha256:5e83d780e0db6b458b50b9de4af5d0b3695b1575020dfee3c2424840ba2f9693",
+        "tool_schema_digest": "sha256:4eb2d1030322b7177420163411f7c061888a7babccf78f073e430c6b4bf1fefb",
+        "authority_class": "read_only",
+        "declared_sinks": [],
+        "risk_class": "low"
+      },
+      {
+        "tool_name_digest": "sha256:685a18787f680d06a61ba336053b9a36427c392dd646bcc7b54970b39aeb855f",
+        "tool_schema_digest": "sha256:4eb2d1030322b7177420163411f7c061888a7babccf78f073e430c6b4bf1fefb",
+        "authority_class": "read_only",
+        "declared_sinks": [],
+        "risk_class": "low"
+      },
+      {
+        "tool_name_digest": "sha256:6f7f64073dbd0b748c85f28d0e4b4ad58e9c02cc94b77dc7b4ae98ee87734f35",
+        "tool_schema_digest": "sha256:4eb2d1030322b7177420163411f7c061888a7babccf78f073e430c6b4bf1fefb",
+        "authority_class": "read_only",
+        "declared_sinks": [],
+        "risk_class": "low"
+      },
+      {
+        "tool_name_digest": "sha256:849453f29012a7018ba82bf212def7dbefdc3ac3aaa8c9d13e2a903dba11351b",
+        "tool_schema_digest": "sha256:2231682182f4ccbbd8c791edc46789d6b56106cb7aa6ad6d078b132626e1247a",
+        "authority_class": "read_only",
+        "declared_sinks": [],
+        "risk_class": "low"
+      },
+      {
+        "tool_name_digest": "sha256:860dcdaba932a4c7f1dcf7c2a643369cffa693078b578c6a0e10869c9872c53d",
+        "tool_schema_digest": "sha256:bee659a100c77fd49e9f4353aaf5f5901bed8639508e54246a58c428e42f6e48",
+        "authority_class": "read_only",
+        "declared_sinks": [],
+        "risk_class": "low"
+      },
+      {
+        "tool_name_digest": "sha256:9a618438a8ac0410a3a86f88ebd068bd703fc1979659febf1ee80c519b7103d1",
+        "tool_schema_digest": "sha256:86ce4d5a0c9a7ca104774229d048c9c71e3edc684bc1dd5bed2ad13e9bb1fb8b",
+        "authority_class": "read_only",
+        "declared_sinks": [],
+        "risk_class": "low"
+      },
+      {
+        "tool_name_digest": "sha256:a2a348febe4e7fd8aa4f988299e1298ca914e32c609ad22b15bd2f1302b3c4d1",
+        "tool_schema_digest": "sha256:ce11a592f7acbf97538443fdc4cf146d46a7d31f7130ab11f0b709e3ebb2abf5",
+        "authority_class": "write",
+        "declared_sinks": [],
+        "risk_class": "low"
+      },
+      {
+        "tool_name_digest": "sha256:aedbad51627f349d9fc422862fc7a9a556a2c3ba4139206aa10f18e5e51a636c",
+        "tool_schema_digest": "sha256:56f766f60d70c03369dccbed06603f2084a16435d490a6bb3a9ba32ce2f91ab6",
+        "authority_class": "read_only",
+        "declared_sinks": [],
+        "risk_class": "low"
+      },
+      {
+        "tool_name_digest": "sha256:b99659af63fd6ce5ad19fd5b37f77a9f31d0af368cb78df5b24e141af2d8fe33",
+        "tool_schema_digest": "sha256:25210d3e73be08e8d09cf8b23ac39f6ab10d01f2c0fa61c9939d30eeb6d7b8b1",
+        "authority_class": "write",
+        "declared_sinks": [],
+        "risk_class": "low"
+      },
+      {
+        "tool_name_digest": "sha256:ee8aa0a77931e9ced2ce533dba47738c3b719e56a514f8def3b3c1db120aa012",
+        "tool_schema_digest": "sha256:935aeab8a128c4af9dca68d59998f0870e80d861691f45009f4a1c46f2c6323e",
+        "authority_class": "read_only",
+        "declared_sinks": [],
+        "risk_class": "low"
+      }
+    ]
+  }
+}

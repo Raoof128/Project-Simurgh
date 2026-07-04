@@ -31,6 +31,11 @@ const KNOWN_LIMITATIONS = Object.freeze([
   "digest_privacy_not_secrecy_against_dictionary_inference",
   "timeline_binds_at_attestation_time_not_real_time",
   "proof_is_of_model_not_implementation",
+  // F1 hard gate (4O spec §11.2): the May-2026 Claude Code MCP-poisoning disclosure
+  // (GMO Flatt Security) is a vulnerability narrative, not a tool-definition changelog —
+  // it publishes no concrete before/after tool surfaces. Per the gate we do NOT
+  // approximate; the retro fixture is withheld and recorded here instead.
+  "retro_fixture_public_data_insufficient",
 ]);
 
 const arg = (name) => {

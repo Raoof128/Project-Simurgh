@@ -244,7 +244,8 @@
     "lane_a_manifest_modelled_not_live_mcp",
     "digest_privacy_not_secrecy_against_dictionary_inference",
     "timeline_binds_at_attestation_time_not_real_time",
-    "proof_is_of_model_not_implementation"
+    "proof_is_of_model_not_implementation",
+    "retro_fixture_public_data_insufficient"
   ],
   "manifest_signer_public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAM546totDsx6Kd4hweUmjHUEDKa3jfTBKk8HywSxHIwU=\n-----END PUBLIC KEY-----\n"
 }
