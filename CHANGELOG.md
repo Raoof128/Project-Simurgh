@@ -1,5 +1,18 @@
 ## Change Log
 
+## [stage-4o-vtsa-design] — 2026-07-04 — Stage 4O VTSA design spec
+
+**Raouf:** Approved and wrote the Stage 4O design spec (Verifiable Tool-Surface Attestation): manifest-bound kernel entry point `authorise_with_manifest` (existing three entry points byte-frozen), `simurgh.tool_manifest.v1` schema with domain-separated digests, closed raw-code block 55–63 (first failure wins, all run-level `1`), hybrid Lane A modelled manifest (normative) + Lane B digest-only real-MCP capture fixture (external validity only), two keypairs (manifest vs attestation), logical epochs (no wall clock), Lean `NoSilentToolSwap` over the recorded dispatch surface, kernel↔verifier parity test. Design only — no implementation, no tag.
+
+### Added
+
+- `docs/superpowers/specs/2026-07-04-stage-4o-vtsa-design.md`
+
+### Verified
+
+- Raw 29 `INTERNAL_ERROR_FAIL_CLOSED` → run-level 3 confirmed in `tools/simurgh-attestation/stage4h/exitCodes.mjs` before citing it as the verifier artifact-failure path.
+- Latest tag `v2.23.0-stage-4n-extraction-seismograph` confirmed before pinning the v2.24.0 target.
+
 ## [stage-4h-2-discrimination] — 2026-06-30 — Q0/Q4 verifier discrimination
 
 **Raouf:** Implemented Stage 4H.2 only: Q0 clean positive acceptance plus Q4 dishonest-producer laundering discrimination. The signed fixture matrix proves the verifier is not reject-all (`q0-clean-disconnected-untrusted` accepts with raw `0`) and not accept-all (`q4a-forged-premise-digest` raw `22`, `q4b-clean-derivation-over-dirty-replay` raw `24` with `proof_accepts_bad_flow`, `q4c-derivation-scope-omission` raw `26` with `derivation_scope_incomplete`). Q1/Q2/Q5 remain green; Q3/Q6/Q7 remain `not_in_scope`. No release tag.
