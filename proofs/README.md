@@ -9,23 +9,27 @@ elan toolchain install leanprover/lean4:v4.15.0
 lean proofs/stage4/ExitLattice.lean
 lean proofs/stage4/Structuring.lean
 lean proofs/stage4m/AntiMonotonicity.lean
+lean proofs/stage4n/TemporalCompleteness.lean
 ```
 
-All three type-check with exit 0 and no `sorry`. CI gate:
+All four files type-check with exit 0 and no `sorry`. CI gate:
 `.github/workflows/stage-4-lean-proofs.yml`.
 
 ## What is formally proven (machine-checked)
 
-| Theorem                                             | File                            | Stage(s) | Statement                                                                                                                                                                                     |
-| --------------------------------------------------- | ------------------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `fail_closed`, `total`, `new_code_fails_closed`     | `stage4/ExitLattice.lean`       | 4H → 4M  | The typed-exit wrapper is total and fail-closed: any unmapped raw code → run-level 3; a new code can never silently downgrade severity.                                                       |
-| `structuring_defeats_per_account`                   | `stage4/Structuring.lean`       | 4K → 4L  | `n ≥ 2` accounts each at exposure 1 satisfy a per-account budget of 1, yet exceed a cluster budget of `n−1`. Per-account accounting provably misses structuring; the cluster gate catches it. |
-| `member_le_total`, `passing_cluster_bounds_members` | `stage4/Structuring.lean`       | 4L       | Cluster exposure is additive; a passing cluster (total ≤ budget) is a real, structuring-proof bound on every member.                                                                          |
-| `anti_monotonicity`                                 | `stage4m/AntiMonotonicity.lean` | 4M       | Breaches are monotone under truth: a breached constituent forces the merged (non-inflating) bucket to breach.                                                                                 |
+| Theorem                                                     | File                                | Stage(s) | Statement                                                                                                                                                                                      |
+| ----------------------------------------------------------- | ----------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `fail_closed`, `total`, `new_code_fails_closed`             | `stage4/ExitLattice.lean`           | 4H → 4M  | The typed-exit wrapper is total and fail-closed: any unmapped raw code → run-level 3; a new code can never silently downgrade severity.                                                        |
+| `structuring_defeats_per_account`                           | `stage4/Structuring.lean`           | 4K → 4L  | `n ≥ 2` accounts each at exposure 1 satisfy a per-account budget of 1, yet exceed a cluster budget of `n−1`. Per-account accounting provably misses structuring; the cluster gate catches it.  |
+| `member_le_total`, `passing_cluster_bounds_members`         | `stage4/Structuring.lean`           | 4L       | Cluster exposure is additive; a passing cluster (total ≤ budget) is a real, structuring-proof bound on every member.                                                                           |
+| `anti_monotonicity`                                         | `stage4m/AntiMonotonicity.lean`     | 4M       | Breaches are monotone under truth: a breached constituent forces the merged (non-inflating) bucket to breach.                                                                                  |
+| `expected_present`, `omission_detectable`, `no_silent_fork` | `stage4n/TemporalCompleteness.lean` | 4N       | A position-perfect chain covering slot k contains expected k; omitting an expected record forces a too-short chain or a detectable discontinuity; two well-formed chains cannot fork silently. |
 
 Together these formalize the **extraction-containment spine**: the exit lattice is total and
-fail-closed (4H..4M), the cluster gate catches structuring that per-account budgets miss
-(4K→4L), and improving the fraud graph can only reveal more past breaches, never erase them (4M).
+fail-closed (4H..4N), the cluster gate catches structuring that per-account budgets miss
+(4K→4L), improving the fraud graph can only reveal more past breaches, never erase them (4M),
+and a position-perfect public heartbeat chain cannot omit an expected window without a
+detectable discontinuity — silence is never invisible (4N).
 
 ## Honesty rails (what this is NOT)
 
