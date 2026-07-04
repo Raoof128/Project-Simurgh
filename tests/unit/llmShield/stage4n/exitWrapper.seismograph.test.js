@@ -31,7 +31,7 @@ test("seismograph raw codes are 47-54 and map to run-level 1", () => {
 });
 
 test("raw 39 stays reserved and unknown codes fail closed to 3", () => {
-  for (const raw of [39, 55, 99, 999, -1, undefined, null, "forty-seven"]) {
+  for (const raw of [39, 67, 99, 999, -1, undefined, null, "forty-seven"]) {
     assert.equal(stage4CodeForRawCode(raw), 3);
   }
 });
