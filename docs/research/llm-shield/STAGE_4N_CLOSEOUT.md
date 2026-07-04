@@ -4,9 +4,11 @@
 
 ## What shipped
 
-The first public, offline-recomputable extraction-telemetry heartbeat over the 4K/4L/4M
+A public, offline-recomputable extraction-telemetry heartbeat over the 4K/4L/4M
 containment-evidence spine. One hash-chained record per synthetic reporting window in a
-single append-only JSONL feed, with the feed root signed by the stage manifest. Silence,
+single append-only JSONL feed, with the feed root signed by the stage manifest. (Not a
+first-of-its-kind transparency log — see the honest prior-art positioning below; the
+genuine contribution is temporal completeness, stated as the defensible delta.) Silence,
 reordering, equivocation, early/overdue reveals, budget-exceeding disclosure, and public
 linkability leaks are all machine-detectable offline at exact raw exit codes 47–54.
 
