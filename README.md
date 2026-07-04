@@ -54,6 +54,32 @@ unsafe.
 
 ---
 
+## Design alignment with Claude's Constitution
+
+In January 2026 Anthropic published
+[Claude's Constitution](https://www.anthropic.com/constitution) (CC0 1.0), a public statement of the
+values and safety commitments intended to shape its models. Simurgh is independent work, but it
+shares the constitution's starting assumption — that no single safeguard is the last line of defence
+and that human oversight of AI should not rest on trust alone — and several of its design principles
+map directly onto the constitution's commitments:
+
+| Constitution commitment                                                | Simurgh mechanism                                                                                                                |
+| ---------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| The model "is not the only safeguard"; hard constraints are a backstop | Containment measured _after_ the guardrail misses; four post-guardrail boundaries; explicit non-claims of immunity               |
+| Honesty: calibrated, non-deceptive, no misleading selective emphasis   | "Boundary held, verifiable" — never "model safe"; claim-checked ledger (Stage 3N); completeness rules against selective omission |
+| Instructions embedded in content are information, not commands         | Intent-source grounding (Stage 4B) and provenance gating (Stage 4C): authority and egress only from trusted provenance           |
+| Supporting, not undermining, human oversight of AI                     | Ed25519-signed, offline-reproducible evidence a third party can recompute without trusting any vendor, model, or lab             |
+| Legitimacy tests for power: process, accountability, transparency      | Chain-position disclosure binding, a respondent contest path, and an independent browser verifier (Stage 4M)                     |
+| Behaving consistently whether or not one is being tested               | Byte-reproducible evidence and tamper suites: the verified behaviour _is_ the behaviour, with no demonstration mode              |
+
+One boundary is worth stating plainly: the constitution assigns good judgment to the model itself,
+while Simurgh deliberately builds the mechanical verification layer around it. The two are
+complements — a verifiable receipt is not a substitute for good values, and this mapping is a
+statement of design orientation, not an endorsement by Anthropic and not a compliance or
+certification claim.
+
+---
+
 ## Flagship: Verifiable Containment Attestation (LLM Shield)
 
 The current work is a ladder of signed, independently reproducible research rungs (**Stage 3A → 4H**,
