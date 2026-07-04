@@ -55,6 +55,8 @@ not_mcp_server_safe
 not_protocol_rug_pull_prevention
 not_proof_of_human_reading
 merkle_machinery_standard_crypto_novel_application
+not_constitutional_compliance_claim
+not_incident_prevention_claim
 ```
 
 Prose non-claims: 4O does NOT prove MCP servers are safe; does NOT prevent rug pulls at
@@ -99,14 +101,14 @@ verifiable" — never "tools safe."**
 - **Attestation:** stage4o-attestation Ed25519 key signs `canonicalJson(parse(bundle))`
   over the decision corpus, drift ledger, timeline record, and non-claims; two-tier
   verifier, offline primary.
-- **Proofs:** `proofs/stage4o` Lean theorem `MonotoneConsent` with three legs (§11).
+- **Proofs:** `proofs/stage4o` Lean theorem `MonotoneConsent` with three legs (§12).
 - **Rule:** the modelled manifest is normative; the real-MCP capture is only an
   external-validity fixture; the verifier remains fully offline and byte-reproducible.
 
 ## 4. Manifest schema (normative)
 
 `simurgh.tool_manifest.v1`, exact-key schema validation (unknown keys, missing keys, bad
-types, malformed `sha256:` values, or out-of-enum values ⇒ schema-invalid, §12):
+types, malformed `sha256:` values, or out-of-enum values ⇒ schema-invalid, §13):
 
 ```json
 {
@@ -280,7 +282,7 @@ All twelve map to run-level `1`. Ledger layout stays:
 `39 reserved · 47–54 Stage 4N · 55–66 Stage 4O · unknown → 3`. Deterministic ordering is
 a byte-reproducibility requirement: a multiply-broken arm always ledgers the same single
 code. Codes are registered in `tools/simurgh-attestation/stage4h/exitCodes.mjs` (the
-known golden-breaking edit, §14). Raw 61/62 are **per-call vs committed entry** checks;
+known golden-breaking edit, §15). Raw 61/62 are **per-call vs committed entry** checks;
 raw 64/65 are **manifest vs manifest** (epoch chain) checks — distinct objects, no
 overlap.
 
@@ -316,7 +318,7 @@ Two-tier, offline primary. Rules:
    (§6) — from bundle bytes.
 2. Verify the manifest-commitment signature (stage4o-manifest key) and the bundle
    attestation signature (stage4o-attestation key) — separate keypairs, separate failure
-   semantics (§12).
+   semantics (§13).
 3. Reject any receipt whose action or manifest binding differs from the decision corpus
    (anti-laundering: authorising one manifest entry while recording another call).
 4. Verify every receipt's inclusion proof against the committed root; support the
@@ -367,7 +369,59 @@ real-time claim (recorded in non-claims, §2).
 - CI egress check over `docs/research/llm-shield/evidence/stage-4o/`: no tool names,
   descriptions, schemas, or hostnames anywhere in the bundle.
 
-## 11. Proofs
+## 11. Boosters included in 4O (Banger Package)
+
+Two additions chosen deliberately over six parked alternatives (§17): best
+engineering-to-impact ratio without turning the stage into a hydra.
+
+### 11.1 Machine-readable constitutional alignment map (C1)
+
+The attestation bundle carries a signed `constitutional_alignment` array annotating each
+raw code with the Claude-constitution principle it operationalises, in claim-checked
+form (3N lineage — field-equality checks over the shipped mechanism, never free prose):
+
+```json
+"constitutional_alignment": [
+  {
+    "raw_code": 59,
+    "mechanism": "tool_identity_mismatch",
+    "alignment_claim": "prevents silent substitution of the authorised tool surface",
+    "non_claim": "not a model-value guarantee"
+  }
+]
+```
+
+One entry per code 55–66 (e.g. 65 `blind_reapproval` → informed human oversight;
+no-silent-third-path → no deception by omission; §17's contest path stays parked). The
+3N-style claim compiler verifies every `mechanism` field against the shipped code and
+every `alignment_claim` against a closed vocabulary; unverifiable prose is excluded.
+
+**Honesty ceiling (frozen wording):**
+
+> Infrastructure alignment is not model-value alignment. Stage 4O operationalises
+> selected oversight and non-deception principles, but it does not claim constitutional
+> compliance.
+
+### 11.2 Public-disclosure-derived retro-detection fixture (F1)
+
+A Lane B-class fixture derived from the public disclosures of a real 2026 incident
+(primary candidate: the May 2026 Claude Code MCP tool-poisoning; fallback: a disclosed
+ToxicSkills skill), marked `retro_fixture: true` and `external_validity: true`.
+
+**Hard inclusion gate:** F1 ships only if public disclosures provide enough
+before/after tool-surface data to construct a digest-only fixture **without guessing**.
+If the public data is incomplete, F1 is dropped from v2.24.0 and the gap is recorded in
+known_limitations — never approximated.
+
+**Claim discipline (frozen wording):** this is a *public-disclosure-derived retro
+fixture*, never an "exact reconstruction". The claim is:
+
+> Given the publicly disclosed before/after tool-surface deltas, 4O ledgers the
+> corresponding manifest drift class.
+
+Never: "4O proves the original incident would have been stopped."
+
+## 12. Proofs
 
 `proofs/stage4o` contains the Lean theorem `MonotoneConsent` with three legs:
 
@@ -387,7 +441,7 @@ third path. All lemmas are stated over the *recorded dispatch surface* — 4O do
 cannot prove what a remote MCP server actually did internally (4J discipline: recorded
 state, not proof of remote execution).
 
-## 12. Error handling
+## 13. Error handling
 
 - **Schema failures (closed block preserved):** absent commitment and schema-invalid
   commitment both ledger raw 55 with closed-enum detail
@@ -402,7 +456,7 @@ state, not proof of remote execution).
   moved into place last, only after successful generation and byte comparison; any step
   failing aborts with no partial bundle written.
 
-## 13. Testing
+## 14. Testing
 
 | Layer | Tests |
 | --- | --- |
@@ -413,13 +467,14 @@ state, not proof of remote execution).
 | **Kernel↔verifier parity** | the same multiply-broken manifest/action/receipt arms fed through the Python kernel and the Node verifier fixture path must yield the same first raw code |
 | Selective disclosure | single receipt + inclusion proof + envelope verifies without `tools[]`; tampered proof fails |
 | Timeline | valid 4N chain-position reference accepted; root mismatch and absent position ⇒ 66 |
+| Boosters (§11) | every `constitutional_alignment` entry passes the claim compiler (mechanism field-equality + closed alignment vocabulary); retro fixture ledgers its expected drift class from disclosure-derived digests only |
 | Cross-stage | 4N chain untouched; 4H exit-map regenerated and re-verified; K7-style all-functions E2E net composing every 4O export with the tamper matrix and cross-stage invariants — mandatory before tag, in scope from the start |
 
 Gotcha guards: explicit `*.test.js` globs (bare-dir `node --test` fails); e2e wired into
 the reproduce script and a CI stage job (`npm test` gates tests/unit only); no shelling
 to `rg` in unit tests (Linux CI lacks it).
 
-## 14. Risk register
+## 15. Risk register
 
 - **Golden blast radius (budgeted, single commit):** registering codes 55–66 breaks the
   known exit-ledger goldens (4K exitWrapper snapshot, 4H exitWrapper snapshot +
@@ -441,11 +496,13 @@ to `rg` in unit tests (Linux CI lacks it).
   (codes 64–65) stay in 4O; I4 (code 66) may split to a 4O.1 follow-up. I3 is a schema
   decision and cannot be split out.
 
-## 15. Release boundary
+## 16. Release boundary
 
 Ships in v2.24.0: kernel entry point, schema/digest/Merkle/delta modules, drift-algebra
 classifier, decision harness, tamper matrix, Lane B digest-only fixtures, timeline
-record, attestation + verifier (`tools/simurgh-attestation/stage4o/`), `proofs/stage4o`,
+record, the signed `constitutional_alignment` map (§11.1), the F1 retro fixture iff its
+hard inclusion gate passes (§11.2), attestation + verifier
+(`tools/simurgh-attestation/stage4o/`), `proofs/stage4o`,
 `scripts/reproduce-llm-shield-stage4o.sh`, evidence bundle under
 `docs/research/llm-shield/evidence/stage-4o/`, and the 4N-pattern doc set (threat model,
 validation matrix, reviewer checklist, closeout). A comprehensive docs-accuracy pass
@@ -453,7 +510,27 @@ validation matrix, reviewer checklist, closeout). A comprehensive docs-accuracy 
 
 Never shipped: raw captures, private keys, any non-digest tool metadata.
 
-## 16. Four-axis scorecard (spec-time; re-score at closeout)
+## 17. Roadmap — parked boosters, NOT 4O claims
+
+Nothing in this section is a Stage 4O claim or deliverable. Parked deliberately so the
+law ships:
+
+- **4O.1 "Reflexive & Retro":** reflexive harness-surface attestation (the verifier's
+  own declared tool surface under the same manifest machinery — deserves its own proof
+  boundary); Claude Code / MCP proxy sample integration (product-facing, scope-
+  expanding); zero-utility-tax benign-suite eval pack (needs careful benign framing);
+  respondent contest path for an operator ledgered with `blind_reapproval` (4M
+  pattern — due process for the accused).
+- **4P candidate "Herd Drift Evidence":** multi-operator rug-pull correlation over
+  public drift-event digests without inventory disclosure — novel enough to be its own
+  stage.
+- **4P/4Q candidate:** proof-carrying verdicts — Lean-implemented drift classifier in
+  three-way parity (Python ↔ Node ↔ Lean); heavy.
+- **Post-spec outreach (not spec content):** fellows-thread framing — NIST RFI asks
+  (secure tool calling, audit trails, attestation) answered byte-reproducibly; existing
+  channel only.
+
+## 18. Four-axis scorecard (spec-time; re-score at closeout)
 
 Standing rule: every stage SPEC and PLAN carries this scorecard, scored with brutal
 evidence honesty. Spec-time scores below reflect a committed design with **zero
@@ -466,12 +543,15 @@ implementation**; the closeout re-score against shipped evidence is part of the 
 | Good for Anthropic | 7.5/10 | Answers their own NIST RFI asks (secure tool calling, audit trails, attestation); fills the operator-side gap their shared-responsibility model names; delta-bound consent attacks their own 93%-unread-approvals stat. Not higher: benefit mechanism is a reference design that demonstrates the gap — actual value is contingent on visibility/adoption. |
 | Constitution alignment | 9/10 | Delta-bound consent operationalises *informed* human oversight; the non-claims discipline is constitutional honesty as engineering; no-silent-third-path makes "no deception, even by omission" machine-checkable. Not higher: standing tension — the constitution governs model values; this is external infrastructure ("makes clauses machine-checkable", not "is the constitution"). |
 
-**Overall: 8.3/10 as a design.** What moves it higher, in order: (1) shipped
-byte-reproducible with the tamper matrix green; (2) Lane B capture from a real public
-MCP server so external validity is not hypothetical; (3) an outside party running the
-verifier or citing the law.
+**Overall: 8.3/10 as a design** (pre-booster). With the §11 boosters included, the
+spec-time targets are Novelty 9 / Frontier 9.5 / Good-for-Anthropic 9 / Constitution 9.5
+(~9.3 overall) — targets, not scores, until the closeout re-score against shipped
+evidence. What moves it higher, in order: (1) shipped byte-reproducible with the tamper
+matrix green; (2) the F1 retro fixture surviving its hard inclusion gate; (3) an outside
+party running the verifier or citing the law — the last half-point can only be awarded
+externally, and claiming it ourselves would violate the honesty this stage attests.
 
-## 17. References
+## 19. References
 
 - Anthropic, *Trustworthy Agents in Practice* (April 2026) — four-layer shared
   responsibility model; tool supply-chain compromise threat vector.

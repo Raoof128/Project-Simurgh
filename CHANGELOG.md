@@ -1,5 +1,13 @@
 ## Change Log
 
+## [stage-4o-banger-package] — 2026-07-04 — Stage 4O boosters (C1 constitution map, F1 retro fixture) + 4O.1/4P roadmap
+
+**Raouf:** Folded the Banger Package into the 4O spec: §11.1 signed machine-readable `constitutional_alignment` map (one claim-checked entry per raw code 55–66, honesty ceiling "infrastructure alignment is not model-value alignment... does not claim constitutional compliance") and §11.2 public-disclosure-derived retro-detection fixture (primary: May 2026 Claude Code MCP poisoning) with a hard inclusion gate — ships only if public before/after data suffices WITHOUT guessing, wording "retro fixture" never "exact reconstruction", claim "ledgers the corresponding manifest drift class" never "would have been stopped". Parked in §17 (roadmap, NOT 4O claims): 4O.1 Reflexive & Retro (reflexive harness-surface attestation, Claude Code/MCP proxy sample, zero-utility-tax eval pack, blind_reapproval contest path), 4P Herd Drift Evidence, 4P/4Q proof-carrying Lean verdicts. New non-claim pellets: `not_constitutional_compliance_claim`, `not_incident_prevention_claim`. Scorecard §18: post-booster spec-time targets ~9.3 (targets, not scores, until closeout re-score). Sections renumbered 11→19. Standing rule added this session: every SPEC+PLAN carries the four-axis scorecard.
+
+### Changed
+
+- `docs/superpowers/specs/2026-07-04-stage-4o-vtsa-design.md` — §11 boosters, §17 roadmap, §18 scorecard note, pellets, release boundary, cross-reference renumbering.
+
 ## [stage-4o-monotone-consent-law] — 2026-07-04 — Stage 4O spec amended with Monotone Consent Law
 
 **Raouf:** Extended the committed 4O design with four inventions composing into one law — "a tool surface may narrow silently, but may broaden only under delta-bound consent, and drift can never launder across epochs": I1 drift algebra with path-independent verdicts (raw 64 `drift_laundering_detected`, Lean `NoDriftLaundering`), I2 delta-bound consent making blind re-approval a machine-distinguishable ledgered class (raw 65 `blind_reapproval`), I3 Merkle toolset root + per-call inclusion proofs enabling selective surface disclosure (standard crypto, novel application — labelled honestly), I4 time-anchored surfaces binding toolset roots to 4N chain positions, 4O→4N reference only (raw 66 `timeline_binding_mismatch`). Raw block now 55–66; Lean theorem `MonotoneConsent` (three legs); new non-claims incl. `not_proof_of_human_reading`. Prior-art searches run 2026-07-04: no prior art found for I1/I2/I4. Design only — no implementation, no tag.
