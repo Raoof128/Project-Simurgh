@@ -1,0 +1,107 @@
+{
+  "chain": [
+    {
+      "schema": "simurgh.tool_manifest_commitment.v1",
+      "manifest": {
+        "schema": "simurgh.tool_manifest.v1",
+        "server_id_digest": "sha256:7679bd4af4548c09a562694c8b15709ed338aac6cfba45faeccab195f6bcd7f0",
+        "toolset_digest": "sha256:118e5afff60e374d57b0fd1ec3091d1155baef35e51d77a5826a2ce04dace6d5",
+        "tools": [
+          {
+            "tool_name_digest": "sha256:344de450273876ac7527745f720aaa4217c225becc814d13a5fdd49f818f3a10",
+            "tool_schema_digest": "sha256:0f8709c97a1f707617e77e11c884c24e88097f8bd769cdf7b99d9127899d49b1",
+            "authority_class": "read_only",
+            "declared_sinks": [],
+            "risk_class": "low"
+          },
+          {
+            "tool_name_digest": "sha256:40b4a9bbee350ab64c8226b454dbbd3dbdee4c326d58e60dbb3fbd1352fbf14a",
+            "tool_schema_digest": "sha256:7a7dba592097c07f7ab6fd2d10cf51198ffbbc6ad284ca5a1fb27df07be3a1b2",
+            "authority_class": "read_only",
+            "declared_sinks": [],
+            "risk_class": "low"
+          }
+        ]
+      },
+      "manifest_epoch": 0,
+      "valid_from_epoch": 0,
+      "valid_until_epoch": 9,
+      "previous_manifest_digest": "genesis",
+      "delta_digest": "genesis",
+      "consent_binding": "state",
+      "signer_public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAM546totDsx6Kd4hweUmjHUEDKa3jfTBKk8HywSxHIwU=\n-----END PUBLIC KEY-----\n",
+      "signature": "yomE+Mb+qcOJtD8lUIi1X92f3jZgQfgKgDJzCHFkqnbYxPxLxiBbvuZzxKn8YUXstIHsHN6nyBuNSoptMvc9Dg=="
+    },
+    {
+      "schema": "simurgh.tool_manifest_commitment.v1",
+      "manifest": {
+        "schema": "simurgh.tool_manifest.v1",
+        "server_id_digest": "sha256:7679bd4af4548c09a562694c8b15709ed338aac6cfba45faeccab195f6bcd7f0",
+        "toolset_digest": "sha256:70b26f2a82193c364a878819d225ce98833dc7da47bf16e3f8fd7ac533f84801",
+        "tools": [
+          {
+            "tool_name_digest": "sha256:344de450273876ac7527745f720aaa4217c225becc814d13a5fdd49f818f3a10",
+            "tool_schema_digest": "sha256:0f8709c97a1f707617e77e11c884c24e88097f8bd769cdf7b99d9127899d49b1",
+            "authority_class": "read_only",
+            "declared_sinks": [],
+            "risk_class": "low"
+          },
+          {
+            "tool_name_digest": "sha256:40b4a9bbee350ab64c8226b454dbbd3dbdee4c326d58e60dbb3fbd1352fbf14a",
+            "tool_schema_digest": "sha256:7a7dba592097c07f7ab6fd2d10cf51198ffbbc6ad284ca5a1fb27df07be3a1b2",
+            "authority_class": "read_only",
+            "declared_sinks": [],
+            "risk_class": "low"
+          },
+          {
+            "tool_name_digest": "sha256:dfd4962eba80a7eb2e23104bad9f20957825c51dc8d7c4bc0e2742f02ded15e6",
+            "tool_schema_digest": "sha256:a4cccd7135f7fee6b262090d4c330d1679f9061b2328d97aaf2db8f58e3a0f3d",
+            "authority_class": "egress",
+            "declared_sinks": [],
+            "risk_class": "low"
+          }
+        ]
+      },
+      "manifest_epoch": 1,
+      "valid_from_epoch": 10,
+      "valid_until_epoch": 19,
+      "previous_manifest_digest": "sha256:86a8bebc7d38d19bc2d715b4c70d303d103906d6ea62e4fe399443263bcbbb98",
+      "delta_digest": "sha256:329424cce15fea6810dab0f90c4c7c1d23906062ec6efbdfbe548d615e35ddd5",
+      "consent_binding": "delta",
+      "signer_public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAM546totDsx6Kd4hweUmjHUEDKa3jfTBKk8HywSxHIwU=\n-----END PUBLIC KEY-----\n",
+      "signature": "eRmg5P9rCmotDFKvzz45XztpRLU4C2w+exPfbcEIPd3oBgpegw2uSkq6fXyqFgMrcvklip4OIoEpu9niIuCIBg=="
+    },
+    {
+      "schema": "simurgh.tool_manifest_commitment.v1",
+      "manifest": {
+        "schema": "simurgh.tool_manifest.v1",
+        "server_id_digest": "sha256:7679bd4af4548c09a562694c8b15709ed338aac6cfba45faeccab195f6bcd7f0",
+        "toolset_digest": "sha256:118e5afff60e374d57b0fd1ec3091d1155baef35e51d77a5826a2ce04dace6d5",
+        "tools": [
+          {
+            "tool_name_digest": "sha256:344de450273876ac7527745f720aaa4217c225becc814d13a5fdd49f818f3a10",
+            "tool_schema_digest": "sha256:0f8709c97a1f707617e77e11c884c24e88097f8bd769cdf7b99d9127899d49b1",
+            "authority_class": "read_only",
+            "declared_sinks": [],
+            "risk_class": "low"
+          },
+          {
+            "tool_name_digest": "sha256:40b4a9bbee350ab64c8226b454dbbd3dbdee4c326d58e60dbb3fbd1352fbf14a",
+            "tool_schema_digest": "sha256:7a7dba592097c07f7ab6fd2d10cf51198ffbbc6ad284ca5a1fb27df07be3a1b2",
+            "authority_class": "read_only",
+            "declared_sinks": [],
+            "risk_class": "low"
+          }
+        ]
+      },
+      "manifest_epoch": 2,
+      "valid_from_epoch": 20,
+      "valid_until_epoch": 29,
+      "previous_manifest_digest": "sha256:a966c7003535ecd80e0264c63117172567bd00135af2dc21b3c2fff8c3582c9c",
+      "delta_digest": "sha256:3c291554d98ea4fa232942d18d4e5fdccb11b7d2a807c75d73eeeed43a812a5b",
+      "consent_binding": "state",
+      "signer_public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAM546totDsx6Kd4hweUmjHUEDKa3jfTBKk8HywSxHIwU=\n-----END PUBLIC KEY-----\n",
+      "signature": "EnAThZb/HvYnTmwdkkPeaMS1/MXumoCIFpSdluvYxElaKRehxm7AjERlb0UmhiWbC9yvxSKAPN7nbuGJHuXoCQ=="
+    }
+  ]
+}
