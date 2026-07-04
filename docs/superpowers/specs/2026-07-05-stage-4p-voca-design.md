@@ -273,12 +273,21 @@ Matchable:
   "failure_class": "undeclared_proxy_hop",
   "stage4n_window_anchor_digest": "sha256:...",
   "evidence_kind": "relay_spki_sha256",
+  "windowed_evidence_commitment": "sha256:...",
   "custody_class_digest": "sha256:...",
   "entropy_floor_bits": 96,
   "disclosure_budget_max_signals_per_window": 4,
   "public_linkability": "bounded"
 }
 ```
+
+`windowed_evidence_commitment` is the **published, window-bound** commitment the
+verifier needs to recompute `custody_class_digest` — without it, CPC would be
+trust-the-builder. The **raw** `observed_evidence_digest` (`H(relay SPKI)`, 128-bit)
+is NEVER published: it is window-independent, so publishing it would let anyone
+link two operators across windows by digest equality and defeat §9 arm 3. Binding
+the window into the published commitment keeps CPC both verifier-grade and
+cross-window-unlinkable.
 
 Degraded:
 
@@ -297,24 +306,36 @@ Degraded:
 Rules: a matchable signal MUST contain `custody_class_digest`; a degraded signal
 MUST NOT; both variants exact-key validate; violations are raw 79.
 
-### 6.5 CPC digest construction
+### 6.5 CPC digest construction (two-step, verifier-grade)
 
 ```text
-custody_class_digest =
+windowed_evidence_commitment =                         # PUBLISHED
+  sha256(canonicalJson({
+    domain: "SIMURGH_STAGE4P_WINDOWED_EVIDENCE_V1",
+    stage4n_window_anchor_digest,
+    observed_evidence_digest                           # PRIVATE input, never published
+  }))
+
+custody_class_digest =                                 # PUBLISHED
   sha256(canonicalJson({
     domain: "SIMURGH_STAGE4P_CUSTODY_CLASS_V1",
     stage4n_window_anchor_digest,
     failure_class,
     evidence_kind,
-    observed_evidence_digest,
+    windowed_evidence_commitment,
     entropy_floor_bits,
     disclosure_budget_max_signals_per_window
   }))
 ```
 
-The 4N anchor is a **public temporal domain separator / window nonce** — it
-prevents timeless precomputation and cross-window linkage, not post-window
-dictionaries (see `window_anchor_is_public`).
+The verifier recomputes `custody_class_digest` from the published
+`windowed_evidence_commitment` and asserts equality — a forged or mismatched
+digest is raw 79 `custody_class_recompute_mismatch`. It cannot derive
+`windowed_evidence_commitment` (that needs the private `observed_evidence_digest`),
+which is exactly what preserves cross-window unlinkability. The 4N anchor is a
+**public temporal domain separator / window nonce** — it prevents timeless
+precomputation and cross-window linkage, not post-window dictionaries against
+low-entropy evidence (see `window_anchor_is_public`).
 
 ### 6.6 Deterministic entropy buckets (no probabilistic guessing)
 
@@ -358,7 +379,7 @@ raw 75 check: custody_receipt.tool_surface_digest === stage4o_surface_commitment
 | --- | -------------------------------- | ------------------------------------------------------ |
 | 67  | custody_envelope_missing         | fails_closed_when_custody_envelope_absent_or_malformed |
 | 68  | custody_signature_invalid        | binds_custody_evidence_to_an_accountable_signer        |
-| 69  | custody_epoch_invalid            | keeps_custody_freshness_logical_and_reviewable         |
+| 69  | custody_epoch_invalid            | keeps_envelope_freshness_logical_and_reviewable        |
 | 70  | endpoint_origin_mismatch         | prevents_silent_substitution_of_the_declared_endpoint  |
 | 71  | undeclared_proxy_hop             | makes_every_relay_hop_a_declared_and_signed_event      |
 | 72  | model_identity_mismatch          | ledgers_declared_vs_observed_model_identity_divergence |
@@ -380,8 +401,16 @@ raw 75 check: custody_receipt.tool_surface_digest === stage4o_surface_commitment
 mask every downstream mismatch (same precedence argument as 4O drift-laundering).
 Determinism is testable: the tamper matrix includes doubly-broken arms asserting
 exactly the earlier code fires. Raw 78 re-derives the chain linkage and catches:
-missing hop, reordered hop, duplicated hop, non-linking previous digest, terminal
-response mismatch.
+missing hop, reordered hop, duplicated hop (same relay/transform/input/output
+content replayed in the chain — detected via a content-only replay digest, not the
+previous-link receipt digest), non-linking previous digest, terminal response
+mismatch.
+
+**Epoch split (raw 69 vs raw 77):** raw 69 is an **envelope-only** property —
+`run_epoch ∈ [valid_from_epoch, valid_until_epoch]` — needing no receipt. The
+`receipt_epoch === run_epoch` consistency is a **receipt-binding** property and is
+checked at raw 77 (after the receipt is schema-validated), so a malformed receipt
+fails 77 `receipt_schema_invalid`, never 69.
 
 ### 7.2 Exit mapping and schema failures
 
