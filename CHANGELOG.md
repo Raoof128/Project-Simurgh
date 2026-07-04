@@ -1,5 +1,24 @@
 ## Change Log
 
+## [v2.24.0-stage-4o-vtsa] — 2026-07-04 — Stage 4O VTSA + Monotone Consent Law (shipped)
+
+**Raouf:** Shipped Stage 4O — Verifiable Tool-Surface Attestation over the Monotone Consent Law: a committed tool surface may narrow silently, but may broaden only under delta-bound consent, and drift can never launder across manifest epochs. Added the fourth additive Capability Kernel entry point `authorise_with_manifest` (the frozen three byte-unchanged) with a six-field `ManifestBindings` sidecar; Node cores + a byte-parity Python mirror for domain-separated digests, a manifest-order Merkle surface with inclusion proofs, exact-key manifest/commitment validation, the drift lattice + Monotone-Consent chain validation, the 12-check gate, timeline binding to 4N chain positions, and the constitutional alignment map. Raw codes 55–66 (documented first-failure order 55→56→57→64→65→58→59→60→61→62→63→66). Signed byte-reproducible evidence bundle with two Ed25519 keypairs (manifest vs attestation), an 18-arm decision corpus, selective-disclosure verifier, live digest-only Lane B capture of `@modelcontextprotocol/server-filesystem`, and `proofs/stage4o/MonotoneConsent.lean` (machine-checked, no `sorry`). Kernel↔verifier parity gate (Node and Python agree on every first raw code). F1 retro fixture withheld per its hard gate (public disclosure insufficient — recorded as a known limitation, not approximated). Four-axis shipped re-score ~8.9 (Novelty 9 / Frontier 9 / Anthropic 8 / Constitution 9.5). One command: `scripts/reproduce-llm-shield-stage4o.sh`.
+
+### Added
+
+- `tools/simurgh-attestation/stage4o/` (constants, cores, builders, verifier, capture), `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/manifest_surface.py`, `authorise_with_manifest` in `capability_kernel.py`.
+- `tests/unit/llmShield/stage4o/`, `tests/e2e/llmShield/stage4o/vtsaFullNet.test.js`, Python parity + kernel tests, `tests/fixtures/llmShield/stage4o/`, `docs/research/llm-shield/evidence/stage-4o/`.
+- `proofs/stage4o/MonotoneConsent.lean`, `scripts/reproduce-llm-shield-stage4o.sh`, four STAGE*4O*\* reviewer docs.
+
+### Changed
+
+- Registered raw codes 55–66 in the shared exit ledger; regenerated the affected 4H/4K/4N exit-map goldens in one mechanical commit.
+- Wired the 4O reproduce into `scripts/check-e2e.sh` and the 4O proof into the Lean CI workflow.
+
+### Verified
+
+- `scripts/reproduce-llm-shield-stage4o.sh` (exit 0); full Node unit + e2e suites; adapter pytest incl. byte-parity; `lean proofs/stage4o/MonotoneConsent.lean` (no `sorry`); latest tag `v2.23.0` confirmed before pinning v2.24.0.
+
 ## [stage-4o-banger-package] — 2026-07-04 — Stage 4O boosters (C1 constitution map, F1 retro fixture) + 4O.1/4P roadmap
 
 **Raouf:** Folded the Banger Package into the 4O spec: §11.1 signed machine-readable `constitutional_alignment` map (one claim-checked entry per raw code 55–66, honesty ceiling "infrastructure alignment is not model-value alignment... does not claim constitutional compliance") and §11.2 public-disclosure-derived retro-detection fixture (primary: May 2026 Claude Code MCP poisoning) with a hard inclusion gate — ships only if public before/after data suffices WITHOUT guessing, wording "retro fixture" never "exact reconstruction", claim "ledgers the corresponding manifest drift class" never "would have been stopped". Parked in §17 (roadmap, NOT 4O claims): 4O.1 Reflexive & Retro (reflexive harness-surface attestation, Claude Code/MCP proxy sample, zero-utility-tax eval pack, blind_reapproval contest path), 4P Herd Drift Evidence, 4P/4Q proof-carrying Lean verdicts. New non-claim pellets: `not_constitutional_compliance_claim`, `not_incident_prevention_claim`. Scorecard §18: post-booster spec-time targets ~9.3 (targets, not scores, until closeout re-score). Sections renumbered 11→19. Standing rule added this session: every SPEC+PLAN carries the four-axis scorecard.

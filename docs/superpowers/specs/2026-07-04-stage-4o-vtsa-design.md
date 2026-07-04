@@ -11,7 +11,7 @@
 
 ## 1. Motivation
 
-Anthropic's April 2026 *Trustworthy Agents in Practice* framework assigns the Tools layer
+Anthropic's April 2026 _Trustworthy Agents in Practice_ framework assigns the Tools layer
 (MCP servers, skills, plugins) to deploying organisations and names **tool supply-chain
 compromise — tools changing behaviour after initial approval ("rug pulls")** — as a primary
 agent-specific threat vector ("static approval doesn't survive that kind of velocity").
@@ -28,9 +28,9 @@ receipts proving which tool surface a run was gated against, with approval-time 
 run-time drift as a ledgered, machine-detectable event. ETDI tries to stop the rug pull;
 4O proves whether one happened.
 
-Spine position: 4A–4C gate *what a call may do*; 4N attests *the committed reporting
-window and chain position of events, not wall-clock time*; **4O attests *what surface the
-calls ran on***.
+Spine position: 4A–4C gate _what a call may do_; 4N attests _the committed reporting
+window and chain position of events, not wall-clock time_; **4O attests _what surface the
+calls ran on_**.
 
 ## 2. Claims and non-claims
 
@@ -201,7 +201,7 @@ from the **stage4o-attestation key** that signs the evidence bundle; two keypair
   is the domain-separated digest of the predecessor commitment and `delta_digest` is the
   domain-separated (`SIMURGH_STAGE4O_DELTA_V1`) digest of the canonical delta object:
   `{removed: [entry digests], added: [entry digests], changed: [{tool_name_digest,
-  before_entry_digest, after_entry_digest}]}`, all arrays sorted.
+before_entry_digest, after_entry_digest}]}`, all arrays sorted.
 - `consent_binding ∈ {state, delta}` records what the approval signature bound. The
   signature covers the full envelope including `consent_binding` and `delta_digest`.
 
@@ -263,20 +263,20 @@ validation (64, 65), per-call surface validation (58–63); timeline binding (66
 attestation-level and evaluated last. Numeric code order is historical (55–63 were
 allocated before 64–66); the **documented order below is normative**:
 
-| Order | Raw | Name | Check |
-| --- | --- | --- | --- |
-| 1 | 55 | `manifest_missing` | no commitment supplied, or commitment fails exact-key schema validation (`manifest_defect ∈ {absent, schema_invalid}`) |
-| 2 | 56 | `manifest_signature_invalid` | tool-manifest commitment signature invalid |
-| 3 | 57 | `manifest_epoch_invalid` | `run_epoch` outside `[valid_from_epoch, valid_until_epoch]` |
-| 4 | 64 | `drift_laundering_detected` | recomputed step/direct drift classifications inconsistent across the epoch chain (§6a) |
-| 5 | 65 | `blind_reapproval` | broadening or incomparable step with `consent_binding = "state"` (§6a) |
-| 6 | 58 | `server_or_toolset_digest_mismatch` | server identity changed, or recomputed Merkle root ≠ committed `toolset_digest` |
-| 7 | 59 | `tool_identity_mismatch` | call's tool-name digest not in manifest, or inclusion proof invalid (§5a) |
-| 8 | 60 | `tool_schema_digest_mismatch` | tool present, schema digest differs |
-| 9 | 61 | `authority_class_upgrade` | call's authority class moved up the escalation order vs the committed entry |
-| 10 | 62 | `declared_sink_expansion` | run-time sink set ⊄ declared sinks |
-| 11 | 63 | `manifest_receipt_binding_mismatch` | receipt malformed, or receipt's action/manifest binding ≠ decision |
-| 12 | 66 | `timeline_binding_mismatch` | timeline record's toolset root ≠ manifest chain's root for that epoch, or referenced 4N chain position absent (§9) |
+| Order | Raw | Name                                | Check                                                                                                                  |
+| ----- | --- | ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| 1     | 55  | `manifest_missing`                  | no commitment supplied, or commitment fails exact-key schema validation (`manifest_defect ∈ {absent, schema_invalid}`) |
+| 2     | 56  | `manifest_signature_invalid`        | tool-manifest commitment signature invalid                                                                             |
+| 3     | 57  | `manifest_epoch_invalid`            | `run_epoch` outside `[valid_from_epoch, valid_until_epoch]`                                                            |
+| 4     | 64  | `drift_laundering_detected`         | recomputed step/direct drift classifications inconsistent across the epoch chain (§6a)                                 |
+| 5     | 65  | `blind_reapproval`                  | broadening or incomparable step with `consent_binding = "state"` (§6a)                                                 |
+| 6     | 58  | `server_or_toolset_digest_mismatch` | server identity changed, or recomputed Merkle root ≠ committed `toolset_digest`                                        |
+| 7     | 59  | `tool_identity_mismatch`            | call's tool-name digest not in manifest, or inclusion proof invalid (§5a)                                              |
+| 8     | 60  | `tool_schema_digest_mismatch`       | tool present, schema digest differs                                                                                    |
+| 9     | 61  | `authority_class_upgrade`           | call's authority class moved up the escalation order vs the committed entry                                            |
+| 10    | 62  | `declared_sink_expansion`           | run-time sink set ⊄ declared sinks                                                                                     |
+| 11    | 63  | `manifest_receipt_binding_mismatch` | receipt malformed, or receipt's action/manifest binding ≠ decision                                                     |
+| 12    | 66  | `timeline_binding_mismatch`         | timeline record's toolset root ≠ manifest chain's root for that epoch, or referenced 4N chain position absent (§9)     |
 
 All twelve map to run-level `1`. Ledger layout stays:
 `39 reserved · 47–54 Stage 4N · 55–66 Stage 4O · unknown → 3`. Deterministic ordering is
@@ -288,23 +288,23 @@ overlap.
 
 ## 7. Tamper matrix (Lane A, normative)
 
-| Tamper arm | Expected raw |
-| --- | ---: |
-| missing manifest | 55 |
-| schema-invalid manifest | 55 (`manifest_defect: schema_invalid`) |
-| signature mismatch | 56 |
-| stale manifest replay | 57 |
-| laundering chain (two claimed "narrowings" composing to a broadening) | 64 |
-| blind (state-bound) re-approval of a broadening | 65 |
-| server identity / toolset change | 58 |
-| tool added post-approval | 59 |
-| invalid inclusion proof | 59 |
-| schema changed | 60 |
-| `read_only → write` | 61 |
-| destructive-under-harmless-name | 61 (canonical arm: changes `authority_class` while preserving the name digest) |
-| sink expansion | 62 |
-| receipt/action/manifest binding mismatch | 63 |
-| timeline root mismatch / absent 4N chain position | 66 |
+| Tamper arm                                                            |                                                                   Expected raw |
+| --------------------------------------------------------------------- | -----------------------------------------------------------------------------: |
+| missing manifest                                                      |                                                                             55 |
+| schema-invalid manifest                                               |                                         55 (`manifest_defect: schema_invalid`) |
+| signature mismatch                                                    |                                                                             56 |
+| stale manifest replay                                                 |                                                                             57 |
+| laundering chain (two claimed "narrowings" composing to a broadening) |                                                                             64 |
+| blind (state-bound) re-approval of a broadening                       |                                                                             65 |
+| server identity / toolset change                                      |                                                                             58 |
+| tool added post-approval                                              |                                                                             59 |
+| invalid inclusion proof                                               |                                                                             59 |
+| schema changed                                                        |                                                                             60 |
+| `read_only → write`                                                   |                                                                             61 |
+| destructive-under-harmless-name                                       | 61 (canonical arm: changes `authority_class` while preserving the name digest) |
+| sink expansion                                                        |                                                                             62 |
+| receipt/action/manifest binding mismatch                              |                                                                             63 |
+| timeline root mismatch / absent 4N chain position                     |                                                                             66 |
 
 Expected-GREEN benign arms: manifest unchanged ⇒ calls authorised; **state-bound
 narrowing re-approval ⇒ accepted** (proves the Monotone Consent Law is not reject-all);
@@ -413,8 +413,8 @@ before/after tool-surface data to construct a digest-only fixture **without gues
 If the public data is incomplete, F1 is dropped from v2.24.0 and the gap is recorded in
 known_limitations — never approximated.
 
-**Claim discipline (frozen wording):** this is a *public-disclosure-derived retro
-fixture*, never an "exact reconstruction". The claim is:
+**Claim discipline (frozen wording):** this is a _public-disclosure-derived retro
+fixture_, never an "exact reconstruction". The claim is:
 
 > Given the publicly disclosed before/after tool-surface deltas, 4O ledgers the
 > corresponding manifest drift class.
@@ -437,7 +437,7 @@ Never: "4O proves the original incident would have been stopped."
 
 Contrapositive of the theorem: any committed surface difference is either refused by the
 kernel or appears as a ledgered drift event under raw codes 55–66; there is no silent
-third path. All lemmas are stated over the *recorded dispatch surface* — 4O does not and
+third path. All lemmas are stated over the _recorded dispatch surface_ — 4O does not and
 cannot prove what a remote MCP server actually did internally (4J discipline: recorded
 state, not proof of remote execution).
 
@@ -458,17 +458,17 @@ state, not proof of remote execution).
 
 ## 14. Testing
 
-| Layer | Tests |
-| --- | --- |
-| Kernel (Python) | each raw code triggered in isolation; first-failure ordering on multiply-broken arms; benign GREEN arms; differential equivalence: the three frozen entry points byte-identical on the 4A 26-decision + 4B/4C corpora |
-| Digest/schema (Node) | exact-key validation; domain separation (same value, different domain ⇒ different digest); Merkle root recompute; leaf/node domain separation; inclusion-proof verify (valid, invalid, wrong index, truncated path); delta-digest recompute; signer/verifier round-trip for both keypairs |
-| Drift algebra | property tests: `⊑` reflexive/antisymmetric/transitive on generated manifests; narrowing∘narrowing = narrowing; laundering chains always detected; consent rule on every classification |
-| Tamper matrix (e2e) | §7 table verbatim — every arm asserts its exact expected raw code; GREEN anti-theatre arms including state-bound narrowing and delta-bound broadening |
-| **Kernel↔verifier parity** | the same multiply-broken manifest/action/receipt arms fed through the Python kernel and the Node verifier fixture path must yield the same first raw code |
-| Selective disclosure | single receipt + inclusion proof + envelope verifies without `tools[]`; tampered proof fails |
-| Timeline | valid 4N chain-position reference accepted; root mismatch and absent position ⇒ 66 |
-| Boosters (§11) | every `constitutional_alignment` entry passes the claim compiler (mechanism field-equality + closed alignment vocabulary); retro fixture ledgers its expected drift class from disclosure-derived digests only |
-| Cross-stage | 4N chain untouched; 4H exit-map regenerated and re-verified; K7-style all-functions E2E net composing every 4O export with the tamper matrix and cross-stage invariants — mandatory before tag, in scope from the start |
+| Layer                      | Tests                                                                                                                                                                                                                                                                                     |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Kernel (Python)            | each raw code triggered in isolation; first-failure ordering on multiply-broken arms; benign GREEN arms; differential equivalence: the three frozen entry points byte-identical on the 4A 26-decision + 4B/4C corpora                                                                     |
+| Digest/schema (Node)       | exact-key validation; domain separation (same value, different domain ⇒ different digest); Merkle root recompute; leaf/node domain separation; inclusion-proof verify (valid, invalid, wrong index, truncated path); delta-digest recompute; signer/verifier round-trip for both keypairs |
+| Drift algebra              | property tests: `⊑` reflexive/antisymmetric/transitive on generated manifests; narrowing∘narrowing = narrowing; laundering chains always detected; consent rule on every classification                                                                                                   |
+| Tamper matrix (e2e)        | §7 table verbatim — every arm asserts its exact expected raw code; GREEN anti-theatre arms including state-bound narrowing and delta-bound broadening                                                                                                                                     |
+| **Kernel↔verifier parity** | the same multiply-broken manifest/action/receipt arms fed through the Python kernel and the Node verifier fixture path must yield the same first raw code                                                                                                                                 |
+| Selective disclosure       | single receipt + inclusion proof + envelope verifies without `tools[]`; tampered proof fails                                                                                                                                                                                              |
+| Timeline                   | valid 4N chain-position reference accepted; root mismatch and absent position ⇒ 66                                                                                                                                                                                                        |
+| Boosters (§11)             | every `constitutional_alignment` entry passes the claim compiler (mechanism field-equality + closed alignment vocabulary); retro fixture ledgers its expected drift class from disclosure-derived digests only                                                                            |
+| Cross-stage                | 4N chain untouched; 4H exit-map regenerated and re-verified; K7-style all-functions E2E net composing every 4O export with the tamper matrix and cross-stage invariants — mandatory before tag, in scope from the start                                                                   |
 
 Gotcha guards: explicit `*.test.js` globs (bare-dir `node --test` fails); e2e wired into
 the reproduce script and a CI stage job (`npm test` gates tests/unit only); no shelling
@@ -536,12 +536,12 @@ Standing rule: every stage SPEC and PLAN carries this scorecard, scored with bru
 evidence honesty. Spec-time scores below reflect a committed design with **zero
 implementation**; the closeout re-score against shipped evidence is part of the stage.
 
-| Axis | Score | Defence |
-| --- | --- | --- |
-| Novelty | 8/10 | Three mechanisms with no prior art found (2026-07-04 searches): path-independent drift verdicts, delta-bound consent as a machine-distinguishable evidence class, time-anchored surfaces. Not higher: mechanism-level novelty, not paradigm-level — the lattice/anti-laundering reasoning is 4L/4M lineage reapplied; I3 is honestly-labelled standard crypto. |
-| Frontier | 9/10 | Sits on the field's live wound: tool drift is Anthropic's #1 named agent threat vector (April 2026), incidents are months old, ETDI is a draft, nobody ships the verification side. Not higher: Lane A is modelled — frontier of evidence, not of production deployment in real MCP hosts. |
-| Good for Anthropic | 7.5/10 | Answers their own NIST RFI asks (secure tool calling, audit trails, attestation); fills the operator-side gap their shared-responsibility model names; delta-bound consent attacks their own 93%-unread-approvals stat. Not higher: benefit mechanism is a reference design that demonstrates the gap — actual value is contingent on visibility/adoption. |
-| Constitution alignment | 9/10 | Delta-bound consent operationalises *informed* human oversight; the non-claims discipline is constitutional honesty as engineering; no-silent-third-path makes "no deception, even by omission" machine-checkable. Not higher: standing tension — the constitution governs model values; this is external infrastructure ("makes clauses machine-checkable", not "is the constitution"). |
+| Axis                   | Score  | Defence                                                                                                                                                                                                                                                                                                                                                                                  |
+| ---------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Novelty                | 8/10   | Three mechanisms with no prior art found (2026-07-04 searches): path-independent drift verdicts, delta-bound consent as a machine-distinguishable evidence class, time-anchored surfaces. Not higher: mechanism-level novelty, not paradigm-level — the lattice/anti-laundering reasoning is 4L/4M lineage reapplied; I3 is honestly-labelled standard crypto.                           |
+| Frontier               | 9/10   | Sits on the field's live wound: tool drift is Anthropic's #1 named agent threat vector (April 2026), incidents are months old, ETDI is a draft, nobody ships the verification side. Not higher: Lane A is modelled — frontier of evidence, not of production deployment in real MCP hosts.                                                                                               |
+| Good for Anthropic     | 7.5/10 | Answers their own NIST RFI asks (secure tool calling, audit trails, attestation); fills the operator-side gap their shared-responsibility model names; delta-bound consent attacks their own 93%-unread-approvals stat. Not higher: benefit mechanism is a reference design that demonstrates the gap — actual value is contingent on visibility/adoption.                               |
+| Constitution alignment | 9/10   | Delta-bound consent operationalises _informed_ human oversight; the non-claims discipline is constitutional honesty as engineering; no-silent-third-path makes "no deception, even by omission" machine-checkable. Not higher: standing tension — the constitution governs model values; this is external infrastructure ("makes clauses machine-checkable", not "is the constitution"). |
 
 **Overall: 8.3/10 as a design** (pre-booster). With the §11 boosters included, the
 spec-time targets are Novelty 9 / Frontier 9.5 / Good-for-Anthropic 9 / Constitution 9.5
@@ -551,15 +551,39 @@ matrix green; (2) the F1 retro fixture surviving its hard inclusion gate; (3) an
 party running the verifier or citing the law — the last half-point can only be awarded
 externally, and claiming it ourselves would violate the honesty this stage attests.
 
+## 18b. Implementation deltas (recorded at closeout, 2026-07-04)
+
+The design shipped as specified. Four small deltas were surfaced during implementation and
+are recorded here for audit (they were pre-declared in the plan's self-review):
+
+1. **12th digest domain.** Commitments need their own domain for the signed envelope /
+   `previous_manifest_digest` linkage, so the §5 domain list gains
+   `SIMURGH_STAGE4O_MANIFEST_COMMITMENT_V1` (12 domains total).
+2. **Kernel parameter name.** The Python entry point is
+   `authorise_with_manifest(action, *, manifest_chain, receipt, verify_commitment_signature)` —
+   `manifest_chain`, not `manifest`, because it is the commitment chain (genesis-first),
+   not a single manifest.
+3. **Malformed receipt ordering.** A malformed receipt ledgers raw 63 _before_ the epoch
+   check (57), because 57 must read `run_epoch` off the receipt — an object that does not
+   validate cannot be read. Documented in `decisionCore` and mirrored in Python.
+4. **Timeline arm evaluator.** Raw 66 is attestation-level (verified by the Node verifier /
+   timeline core), not kernel-level; the tamper matrix tags it `evaluator: "timeline"` and
+   the Python kernel parity gate skips raw-66 rows.
+
+**F1 outcome (§11.2 hard gate):** the public disclosure of the May-2026 incident is a
+vulnerability narrative without concrete before/after tool surfaces, so the retro fixture
+was **withheld** and the outcome recorded as `retro_fixture_public_data_insufficient` in
+the bundle's known limitations — not approximated.
+
 ## 19. References
 
-- Anthropic, *Trustworthy Agents in Practice* (April 2026) — four-layer shared
+- Anthropic, _Trustworthy Agents in Practice_ (April 2026) — four-layer shared
   responsibility model; tool supply-chain compromise threat vector.
 - Anthropic, NIST RFI response on agentic security — secure tool calling, audit trails,
   attestation, incident reporting asks.
-- ETDI: *Mitigating Tool Squatting and Rug Pull Attacks in MCP* (arXiv 2506.01333) —
+- ETDI: _Mitigating Tool Squatting and Rug Pull Attacks in MCP_ (arXiv 2506.01333) —
   prevention-side prior art.
 - RFC 6962 (Certificate Transparency) — Merkle inclusion-proof machinery reused by §5a
   (standard technique, novel application here).
-- GMO Flatt Security, *Poisoning Claude Code* (May 2026 incident; fixed in Claude Code
-  2.1.128); Snyk *ToxicSkills* study (2026).
+- GMO Flatt Security, _Poisoning Claude Code_ (May 2026 incident; fixed in Claude Code
+  2.1.128); Snyk _ToxicSkills_ study (2026).

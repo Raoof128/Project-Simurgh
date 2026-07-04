@@ -30,6 +30,7 @@
 ## File Structure
 
 **Node (mirrors stage4n layout):**
+
 - `tools/simurgh-attestation/stage4o/constants.mjs` — frozen schemas, domains, enums, non-claims, constitutional vocabulary.
 - `tools/simurgh-attestation/stage4o/core/digest.mjs` — domain-separated digests.
 - `tools/simurgh-attestation/stage4o/core/merkleSurface.mjs` — leaf/node domain-separated Merkle root, path, verify (manifest order, odd promotes).
@@ -45,6 +46,7 @@
 - Modify: `tools/simurgh-attestation/stage4h/exitCodes.mjs` — VTSA codes 55–66.
 
 **Python:**
+
 - `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/manifest_surface.py` — canonical JSON, digests, Merkle, schema validation, drift classifier, chain validation (mirror of Node core).
 - Modify (append only): `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/capability_kernel.py` — `ManifestBindings`, `ManifestAuthorityDecision`, `authorise_with_manifest`.
 
@@ -57,11 +59,13 @@
 ### Task 1: Raw codes 55–66 + golden blast radius (single regeneration commit) + prettierignore
 
 **Files:**
+
 - Modify: `tools/simurgh-attestation/stage4h/exitCodes.mjs` (after the `SEISMOGRAPH_REASONS_54` block; and inside `RUN_LEVEL_BY_RAW`)
 - Modify: `.prettierignore` (append)
 - Test: `tests/unit/llmShield/stage4o/exitWrapper.vtsa.test.js`
 
 **Interfaces:**
+
 - Produces: `VTSA_RAW_CODES` (frozen map, names below), `VTSA_CHECK_ORDER` (frozen array `[55,56,57,64,65,58,59,60,61,62,63,66]`), `VTSA_REASONS_55` … `VTSA_REASONS_66` (frozen string arrays), and `RUN_LEVEL_BY_RAW[55..66] === 1`. Every later task imports these.
 
 - [ ] **Step 1: Append to `.prettierignore`** (before any fixture exists):
@@ -146,7 +150,10 @@ export const VTSA_CHECK_ORDER = Object.freeze([55, 56, 57, 64, 65, 58, 59, 60, 6
 export const VTSA_REASONS_55 = Object.freeze(["absent", "schema_invalid"]);
 export const VTSA_REASONS_56 = Object.freeze(["commitment_signature_invalid"]);
 export const VTSA_REASONS_57 = Object.freeze(["run_epoch_outside_validity_window"]);
-export const VTSA_REASONS_58 = Object.freeze(["server_id_mismatch", "toolset_root_recompute_mismatch"]);
+export const VTSA_REASONS_58 = Object.freeze([
+  "server_id_mismatch",
+  "toolset_root_recompute_mismatch",
+]);
 export const VTSA_REASONS_59 = Object.freeze(["tool_not_in_manifest", "inclusion_proof_invalid"]);
 export const VTSA_REASONS_60 = Object.freeze(["schema_digest_mismatch"]);
 export const VTSA_REASONS_61 = Object.freeze(["authority_class_upgrade"]);
@@ -158,11 +165,11 @@ export const VTSA_REASONS_64 = Object.freeze([
   "delta_digest_mismatch",
   "composition_mismatch",
 ]);
-export const VTSA_REASONS_65 = Object.freeze(["state_bound_broadening", "state_bound_incomparable"]);
-export const VTSA_REASONS_66 = Object.freeze([
-  "timeline_root_mismatch",
-  "chain_position_absent",
+export const VTSA_REASONS_65 = Object.freeze([
+  "state_bound_broadening",
+  "state_bound_incomparable",
 ]);
+export const VTSA_REASONS_66 = Object.freeze(["timeline_root_mismatch", "chain_position_absent"]);
 ```
 
 And inside `RUN_LEVEL_BY_RAW`, after the 4N entries (`54: 1,`):
@@ -214,10 +221,12 @@ git commit -m "feat(llm-shield): register stage 4o vtsa raw codes 55-66 and rege
 ### Task 2: Stage 4O frozen constants
 
 **Files:**
+
 - Create: `tools/simurgh-attestation/stage4o/constants.mjs`
 - Test: `tests/unit/llmShield/stage4o/constants.test.js`
 
 **Interfaces:**
+
 - Produces (all `Object.freeze`d): `TOOL_MANIFEST_SCHEMA = "simurgh.tool_manifest.v1"`, `COMMITMENT_SCHEMA = "simurgh.tool_manifest_commitment.v1"`, `RECEIPT_SCHEMA = "simurgh.tool_receipt.v1"`, `ACTION_SCHEMA = "simurgh.tool_action.v1"`, `TIMELINE_SCHEMA = "simurgh.surface_timeline.v1"`, `ATTESTATION_SCHEMA = "simurgh.vtsa_attestation.v1"`, `DOMAINS` (12 keys), `AUTHORITY_ORDER = ["read_only","write","egress","destructive"]`, `RISK_CLASSES = ["low","medium","high"]`, `CONSENT_BINDINGS = ["state","delta"]`, `GENESIS = "genesis"`, `KERNEL_ENTRYPOINT = "authorise_with_manifest.v1"`, `VTSA_NON_CLAIMS` (8 pellets), `HONESTY_CEILING` (frozen sentence), `ALIGNMENT_VOCABULARY` (closed list of allowed `alignment_claim` strings).
 
 - [ ] **Step 1: Write the failing test** `tests/unit/llmShield/stage4o/constants.test.js`:
@@ -230,8 +239,18 @@ import * as C from "../../../../tools/simurgh-attestation/stage4o/constants.mjs"
 
 test("domains are the spec list plus the commitment domain, all NUL-free uppercase", () => {
   assert.deepEqual(Object.keys(C.DOMAINS).sort(), [
-    "ACTION", "ATTESTATION_BUNDLE", "DECISION_CORPUS", "DELTA", "MANIFEST_COMMITMENT",
-    "MERKLE_LEAF", "MERKLE_NODE", "RECEIPT", "SERVER_ID", "TIMELINE", "TOOLSET", "TOOL_ENTRY",
+    "ACTION",
+    "ATTESTATION_BUNDLE",
+    "DECISION_CORPUS",
+    "DELTA",
+    "MANIFEST_COMMITMENT",
+    "MERKLE_LEAF",
+    "MERKLE_NODE",
+    "RECEIPT",
+    "SERVER_ID",
+    "TIMELINE",
+    "TOOLSET",
+    "TOOL_ENTRY",
   ]);
   for (const v of Object.values(C.DOMAINS)) assert.match(v, /^SIMURGH_STAGE4O_[A-Z_]+_V1$/);
 });
@@ -331,11 +350,13 @@ git commit -m "feat(llm-shield): stage 4o frozen constants (schemas, domains, en
 ### Task 3: Node digest + Merkle surface cores
 
 **Files:**
+
 - Create: `tools/simurgh-attestation/stage4o/core/digest.mjs`
 - Create: `tools/simurgh-attestation/stage4o/core/merkleSurface.mjs`
 - Test: `tests/unit/llmShield/stage4o/digest.test.js`, `tests/unit/llmShield/stage4o/merkleSurface.test.js`
 
 **Interfaces:**
+
 - Consumes: `canonicalJson`, `sha256Hex`, `DIGEST_RE` from `tools/simurgh-attestation/stage4m/core/canonical.mjs`; `DOMAINS` from Task 2.
 - Produces: `domainDigest(domain, schema, value) -> "sha256:<hex>"`; `surfaceLeaf(entryDigest) -> digest`; `surfaceRoot(entryDigests: string[]) -> digest` (manifest order, odd promotes); `surfacePath(entryDigests, index) -> [{sibling, side}]`; `verifySurfacePath(entryDigest, path, root) -> boolean`.
 
@@ -370,7 +391,10 @@ and `tests/unit/llmShield/stage4o/merkleSurface.test.js`:
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
-  surfaceLeaf, surfaceRoot, surfacePath, verifySurfacePath,
+  surfaceLeaf,
+  surfaceRoot,
+  surfacePath,
+  verifySurfacePath,
 } from "../../../../tools/simurgh-attestation/stage4o/core/merkleSurface.mjs";
 import { domainDigest } from "../../../../tools/simurgh-attestation/stage4o/core/digest.mjs";
 import { DOMAINS } from "../../../../tools/simurgh-attestation/stage4o/constants.mjs";
@@ -430,7 +454,8 @@ export const surfaceLeaf = (entryDigest) =>
 const node = (a, b) => domainDigest(DOMAINS.MERKLE_NODE, TOOL_MANIFEST_SCHEMA, [a, b]);
 
 function levels(entryDigests) {
-  for (const d of entryDigests) if (!DIGEST_RE.test(d)) throw new Error(`merkle_leaf_invalid: ${d}`);
+  for (const d of entryDigests)
+    if (!DIGEST_RE.test(d)) throw new Error(`merkle_leaf_invalid: ${d}`);
   if (entryDigests.length === 0) throw new Error("merkle_empty");
   const all = [entryDigests.map(surfaceLeaf)];
   while (all[all.length - 1].length > 1) {
@@ -475,7 +500,7 @@ export function verifySurfacePath(entryDigest, path, root) {
 ```
 
 - [ ] **Step 4: Run both tests — PASS.**
-`node --test tests/unit/llmShield/stage4o/digest.test.js tests/unit/llmShield/stage4o/merkleSurface.test.js`
+      `node --test tests/unit/llmShield/stage4o/digest.test.js tests/unit/llmShield/stage4o/merkleSurface.test.js`
 
 - [ ] **Step 5: Commit**
 
@@ -489,13 +514,15 @@ git commit -m "feat(llm-shield): stage 4o domain-separated digests and manifest-
 ### Task 4: Manifest core (exact-key validation, entry/toolset/delta digests, envelope)
 
 **Files:**
+
 - Create: `tools/simurgh-attestation/stage4o/core/manifestCore.mjs`
 - Create: `tests/unit/llmShield/stage4o/helpers.mjs` (shared builders — NOT a test file)
 - Test: `tests/unit/llmShield/stage4o/manifestCore.test.js`
 
 **Interfaces:**
+
 - Consumes: Task 2 constants; Task 3 `domainDigest`, `surfaceRoot`.
-- Produces (helpers, imported by Tasks 4/5/6/9): `mkEntry(i, over?) -> entry`, `mkManifest(entries) -> manifest`, `mkEnvelope(manifest, epoch, prevEnv|null, consent) -> envelope`, `validWorld() -> {chain, receipt, actionDigest}`. `mkEnvelope`/`validWorld` may be added in this task even though they are first *used* in Tasks 5/6 (all their deps exist by Task 4).
+- Produces (helpers, imported by Tasks 4/5/6/9): `mkEntry(i, over?) -> entry`, `mkManifest(entries) -> manifest`, `mkEnvelope(manifest, epoch, prevEnv|null, consent) -> envelope`, `validWorld() -> {chain, receipt, actionDigest}`. `mkEnvelope`/`validWorld` may be added in this task even though they are first _used_ in Tasks 5/6 (all their deps exist by Task 4).
 - Produces:
   - `toolEntryDigest(entry) -> digest`
   - `validateManifest(m) -> {ok:true} | {ok:false, reason:"schema_invalid", detail:string}` (exact keys `schema, server_id_digest, toolset_digest, tools`; each entry exact keys `tool_name_digest, tool_schema_digest, authority_class, declared_sinks, risk_class`; digests match `DIGEST_RE`; enums closed; `tools` non-empty, ordered ascending by `tool_name_digest`, unique)
@@ -514,10 +541,18 @@ git commit -m "feat(llm-shield): stage 4o domain-separated digests and manifest-
 import { domainDigest } from "../../../../tools/simurgh-attestation/stage4o/core/digest.mjs";
 import { surfacePath } from "../../../../tools/simurgh-attestation/stage4o/core/merkleSurface.mjs";
 import {
-  computeToolsetRoot, toolEntryDigest, deltaDigest, commitmentDigest,
+  computeToolsetRoot,
+  toolEntryDigest,
+  deltaDigest,
+  commitmentDigest,
 } from "../../../../tools/simurgh-attestation/stage4o/core/manifestCore.mjs";
 import {
-  DOMAINS, TOOL_MANIFEST_SCHEMA, COMMITMENT_SCHEMA, RECEIPT_SCHEMA, ACTION_SCHEMA, GENESIS,
+  DOMAINS,
+  TOOL_MANIFEST_SCHEMA,
+  COMMITMENT_SCHEMA,
+  RECEIPT_SCHEMA,
+  ACTION_SCHEMA,
+  GENESIS,
 } from "../../../../tools/simurgh-attestation/stage4o/constants.mjs";
 
 export function mkEntry(i, over = {}) {
@@ -532,17 +567,27 @@ export function mkEntry(i, over = {}) {
 }
 export function mkManifest(entries) {
   const tools = [...entries].sort((a, b) => (a.tool_name_digest < b.tool_name_digest ? -1 : 1));
-  const m = { schema: TOOL_MANIFEST_SCHEMA, server_id_digest: domainDigest(DOMAINS.SERVER_ID, "test", "srv"), toolset_digest: "sha256:" + "0".repeat(64), tools };
+  const m = {
+    schema: TOOL_MANIFEST_SCHEMA,
+    server_id_digest: domainDigest(DOMAINS.SERVER_ID, "test", "srv"),
+    toolset_digest: "sha256:" + "0".repeat(64),
+    tools,
+  };
   m.toolset_digest = computeToolsetRoot(m);
   return m;
 }
 export function mkEnvelope(manifest, epoch, prevEnv, consent) {
   return {
-    schema: COMMITMENT_SCHEMA, manifest, manifest_epoch: epoch,
-    valid_from_epoch: epoch * 10, valid_until_epoch: epoch * 10 + 9,
+    schema: COMMITMENT_SCHEMA,
+    manifest,
+    manifest_epoch: epoch,
+    valid_from_epoch: epoch * 10,
+    valid_until_epoch: epoch * 10 + 9,
     previous_manifest_digest: prevEnv ? commitmentDigest(prevEnv) : GENESIS,
     delta_digest: prevEnv ? deltaDigest(prevEnv.manifest, manifest) : GENESIS,
-    consent_binding: consent, signer_public_key_pem: "PEM", signature: "sig",
+    consent_binding: consent,
+    signer_public_key_pem: "PEM",
+    signature: "sig",
   };
 }
 export function validWorld() {
@@ -553,10 +598,14 @@ export function validWorld() {
   const idx = m1.tools.findIndex((t) => t.tool_name_digest === mkEntry(1).tool_name_digest);
   const entry = m1.tools[idx];
   const receipt = {
-    schema: RECEIPT_SCHEMA, tool_name_digest: entry.tool_name_digest,
-    tool_schema_digest: entry.tool_schema_digest, authority_class: entry.authority_class,
-    sinks_used: [], inclusion_proof: surfacePath(m1.tools.map(toolEntryDigest), idx),
-    run_epoch: 12, run_id_digest: domainDigest(DOMAINS.RECEIPT, "run", "run-1"),
+    schema: RECEIPT_SCHEMA,
+    tool_name_digest: entry.tool_name_digest,
+    tool_schema_digest: entry.tool_schema_digest,
+    authority_class: entry.authority_class,
+    sinks_used: [],
+    inclusion_proof: surfacePath(m1.tools.map(toolEntryDigest), idx),
+    run_epoch: 12,
+    run_id_digest: domainDigest(DOMAINS.RECEIPT, "run", "run-1"),
   };
   const actionDigest = domainDigest(DOMAINS.ACTION, ACTION_SCHEMA, { family: "egress" });
   return { chain: [e0, e1], receipt, actionDigest };
@@ -570,10 +619,18 @@ export function validWorld() {
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
-  toolEntryDigest, validateManifest, computeToolsetRoot, deltaObject, deltaDigest,
-  commitmentDigest, validateEnvelope,
+  toolEntryDigest,
+  validateManifest,
+  computeToolsetRoot,
+  deltaObject,
+  deltaDigest,
+  commitmentDigest,
+  validateEnvelope,
 } from "../../../../tools/simurgh-attestation/stage4o/core/manifestCore.mjs";
-import { COMMITMENT_SCHEMA, GENESIS } from "../../../../tools/simurgh-attestation/stage4o/constants.mjs";
+import {
+  COMMITMENT_SCHEMA,
+  GENESIS,
+} from "../../../../tools/simurgh-attestation/stage4o/constants.mjs";
 import { mkEntry, mkManifest } from "./helpers.mjs";
 
 test("valid manifest passes; unknown key, bad enum, unsorted, duplicate all fail exact-key validation", () => {
@@ -601,13 +658,22 @@ test("delta object is sorted and delta digest deterministic", () => {
 test("envelope: genesis rules enforced at epoch 0; epoch fields sane", () => {
   const m = mkManifest([mkEntry(1)]);
   const env = {
-    schema: COMMITMENT_SCHEMA, manifest: m, manifest_epoch: 0,
-    valid_from_epoch: 0, valid_until_epoch: 10,
-    previous_manifest_digest: GENESIS, delta_digest: GENESIS,
-    consent_binding: "state", signer_public_key_pem: "PEM", signature: "sig",
+    schema: COMMITMENT_SCHEMA,
+    manifest: m,
+    manifest_epoch: 0,
+    valid_from_epoch: 0,
+    valid_until_epoch: 10,
+    previous_manifest_digest: GENESIS,
+    delta_digest: GENESIS,
+    consent_binding: "state",
+    signer_public_key_pem: "PEM",
+    signature: "sig",
   };
   assert.deepEqual(validateEnvelope(env), { ok: true });
-  assert.equal(validateEnvelope({ ...env, previous_manifest_digest: "sha256:" + "a".repeat(64) }).ok, false);
+  assert.equal(
+    validateEnvelope({ ...env, previous_manifest_digest: "sha256:" + "a".repeat(64) }).ok,
+    false
+  );
   assert.equal(validateEnvelope({ ...env, valid_until_epoch: -1 }).ok, false);
   assert.match(commitmentDigest(env), /^sha256:/);
   assert.equal(commitmentDigest(env), commitmentDigest({ ...env, signature: "other" }));
@@ -625,59 +691,95 @@ import { DIGEST_RE } from "../../stage4m/core/canonical.mjs";
 import { domainDigest } from "./digest.mjs";
 import { surfaceRoot } from "./merkleSurface.mjs";
 import {
-  DOMAINS, TOOL_MANIFEST_SCHEMA, COMMITMENT_SCHEMA, AUTHORITY_ORDER, RISK_CLASSES,
-  CONSENT_BINDINGS, GENESIS,
+  DOMAINS,
+  TOOL_MANIFEST_SCHEMA,
+  COMMITMENT_SCHEMA,
+  AUTHORITY_ORDER,
+  RISK_CLASSES,
+  CONSENT_BINDINGS,
+  GENESIS,
 } from "../constants.mjs";
 
 const fail = (detail) => ({ ok: false, reason: "schema_invalid", detail });
 const exactKeys = (obj, keys) =>
-  obj && typeof obj === "object" && !Array.isArray(obj) &&
-  Object.keys(obj).length === keys.length && keys.every((k) => k in obj);
+  obj &&
+  typeof obj === "object" &&
+  !Array.isArray(obj) &&
+  Object.keys(obj).length === keys.length &&
+  keys.every((k) => k in obj);
 
-const ENTRY_KEYS = ["tool_name_digest", "tool_schema_digest", "authority_class", "declared_sinks", "risk_class"];
+const ENTRY_KEYS = [
+  "tool_name_digest",
+  "tool_schema_digest",
+  "authority_class",
+  "declared_sinks",
+  "risk_class",
+];
 
 export function validateManifest(m) {
-  if (!exactKeys(m, ["schema", "server_id_digest", "toolset_digest", "tools"])) return fail("manifest_keys");
+  if (!exactKeys(m, ["schema", "server_id_digest", "toolset_digest", "tools"]))
+    return fail("manifest_keys");
   if (m.schema !== TOOL_MANIFEST_SCHEMA) return fail("manifest_schema_id");
-  if (!DIGEST_RE.test(m.server_id_digest) || !DIGEST_RE.test(m.toolset_digest)) return fail("manifest_digest_format");
+  if (!DIGEST_RE.test(m.server_id_digest) || !DIGEST_RE.test(m.toolset_digest))
+    return fail("manifest_digest_format");
   if (!Array.isArray(m.tools) || m.tools.length === 0) return fail("tools_empty");
   let prev = "";
   for (const t of m.tools) {
     if (!exactKeys(t, ENTRY_KEYS)) return fail("entry_keys");
-    if (!DIGEST_RE.test(t.tool_name_digest) || !DIGEST_RE.test(t.tool_schema_digest)) return fail("entry_digest_format");
+    if (!DIGEST_RE.test(t.tool_name_digest) || !DIGEST_RE.test(t.tool_schema_digest))
+      return fail("entry_digest_format");
     if (!AUTHORITY_ORDER.includes(t.authority_class)) return fail("authority_class_enum");
     if (!RISK_CLASSES.includes(t.risk_class)) return fail("risk_class_enum");
-    if (!Array.isArray(t.declared_sinks) || t.declared_sinks.some((s) => !DIGEST_RE.test(s))) return fail("sinks_format");
+    if (!Array.isArray(t.declared_sinks) || t.declared_sinks.some((s) => !DIGEST_RE.test(s)))
+      return fail("sinks_format");
     if (t.tool_name_digest <= prev) return fail("tools_not_sorted_unique");
     prev = t.tool_name_digest;
   }
   return { ok: true };
 }
 
-export const toolEntryDigest = (entry) => domainDigest(DOMAINS.TOOL_ENTRY, TOOL_MANIFEST_SCHEMA, entry);
+export const toolEntryDigest = (entry) =>
+  domainDigest(DOMAINS.TOOL_ENTRY, TOOL_MANIFEST_SCHEMA, entry);
 export const computeToolsetRoot = (m) => surfaceRoot(m.tools.map(toolEntryDigest));
 
 export function deltaObject(prevM, nextM) {
   const pb = new Map(prevM.tools.map((t) => [t.tool_name_digest, t]));
   const nb = new Map(nextM.tools.map((t) => [t.tool_name_digest, t]));
-  const removed = [], added = [], changed = [];
+  const removed = [],
+    added = [],
+    changed = [];
   for (const [name, t] of pb) if (!nb.has(name)) removed.push(toolEntryDigest(t));
   for (const [name, t] of nb) if (!pb.has(name)) added.push(toolEntryDigest(t));
   for (const [name, t] of pb) {
     const n = nb.get(name);
     if (n && toolEntryDigest(t) !== toolEntryDigest(n)) {
-      changed.push({ tool_name_digest: name, before_entry_digest: toolEntryDigest(t), after_entry_digest: toolEntryDigest(n) });
+      changed.push({
+        tool_name_digest: name,
+        before_entry_digest: toolEntryDigest(t),
+        after_entry_digest: toolEntryDigest(n),
+      });
     }
   }
-  removed.sort(); added.sort();
+  removed.sort();
+  added.sort();
   changed.sort((a, b) => (a.tool_name_digest < b.tool_name_digest ? -1 : 1));
   return { removed, added, changed };
 }
 export const deltaDigest = (prevM, nextM) =>
   domainDigest(DOMAINS.DELTA, TOOL_MANIFEST_SCHEMA, deltaObject(prevM, nextM));
 
-const ENV_KEYS = ["schema", "manifest", "manifest_epoch", "valid_from_epoch", "valid_until_epoch",
-  "previous_manifest_digest", "delta_digest", "consent_binding", "signer_public_key_pem", "signature"];
+const ENV_KEYS = [
+  "schema",
+  "manifest",
+  "manifest_epoch",
+  "valid_from_epoch",
+  "valid_until_epoch",
+  "previous_manifest_digest",
+  "delta_digest",
+  "consent_binding",
+  "signer_public_key_pem",
+  "signature",
+];
 const isEpoch = (n) => Number.isInteger(n) && n >= 0;
 
 export function validateEnvelope(env) {
@@ -685,15 +787,18 @@ export function validateEnvelope(env) {
   if (env.schema !== COMMITMENT_SCHEMA) return fail("envelope_schema_id");
   const mv = validateManifest(env.manifest);
   if (!mv.ok) return mv;
-  if (![env.manifest_epoch, env.valid_from_epoch, env.valid_until_epoch].every(isEpoch)) return fail("epoch_format");
+  if (![env.manifest_epoch, env.valid_from_epoch, env.valid_until_epoch].every(isEpoch))
+    return fail("epoch_format");
   if (env.valid_from_epoch > env.valid_until_epoch) return fail("epoch_window_inverted");
   if (!CONSENT_BINDINGS.includes(env.consent_binding)) return fail("consent_binding_enum");
   if (env.manifest_epoch === 0) {
-    if (env.previous_manifest_digest !== GENESIS || env.delta_digest !== GENESIS) return fail("genesis_rules");
+    if (env.previous_manifest_digest !== GENESIS || env.delta_digest !== GENESIS)
+      return fail("genesis_rules");
   } else if (!DIGEST_RE.test(env.previous_manifest_digest) || !DIGEST_RE.test(env.delta_digest)) {
     return fail("chain_digest_format");
   }
-  if (typeof env.signer_public_key_pem !== "string" || typeof env.signature !== "string") return fail("signature_format");
+  if (typeof env.signer_public_key_pem !== "string" || typeof env.signature !== "string")
+    return fail("signature_format");
   return { ok: true };
 }
 
@@ -718,10 +823,12 @@ git commit -m "feat(llm-shield): stage 4o manifest schema validation, delta dige
 ### Task 5: Drift core — lattice classifier + epoch-chain validation (raw 64/65)
 
 **Files:**
+
 - Create: `tools/simurgh-attestation/stage4o/core/driftCore.mjs`
 - Test: `tests/unit/llmShield/stage4o/driftCore.test.js`
 
 **Interfaces:**
+
 - Consumes: Task 4 (`toolEntryDigest`, `deltaDigest`, `commitmentDigest`, `validateEnvelope`), Task 2 (`AUTHORITY_ORDER`, `GENESIS`).
 - Produces:
   - `classifyDrift(prevManifest, nextManifest) -> "equal" | "narrowing" | "broadening" | "incomparable"`
@@ -733,7 +840,10 @@ git commit -m "feat(llm-shield): stage 4o manifest schema validation, delta dige
 // SPDX-License-Identifier: AGPL-3.0-or-later
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { classifyDrift, validateChain } from "../../../../tools/simurgh-attestation/stage4o/core/driftCore.mjs";
+import {
+  classifyDrift,
+  validateChain,
+} from "../../../../tools/simurgh-attestation/stage4o/core/driftCore.mjs";
 import { mkEntry, mkManifest, mkEnvelope } from "./helpers.mjs";
 
 const M = (entries) => mkManifest(entries);
@@ -743,11 +853,23 @@ test("classifier: equal / narrowing / broadening / incomparable", () => {
   assert.equal(classifyDrift(base, M([mkEntry(1), mkEntry(2)])), "equal");
   assert.equal(classifyDrift(base, M([mkEntry(1)])), "narrowing");
   assert.equal(classifyDrift(base, M([mkEntry(1), mkEntry(2), mkEntry(3)])), "broadening");
-  assert.equal(classifyDrift(base, M([mkEntry(1), mkEntry(2, { authority_class: "write" })])), "broadening");
-  assert.equal(classifyDrift(M([mkEntry(1, { authority_class: "write" }), mkEntry(2)]), M([mkEntry(1), mkEntry(2)])), "narrowing");
+  assert.equal(
+    classifyDrift(base, M([mkEntry(1), mkEntry(2, { authority_class: "write" })])),
+    "broadening"
+  );
+  assert.equal(
+    classifyDrift(
+      M([mkEntry(1, { authority_class: "write" }), mkEntry(2)]),
+      M([mkEntry(1), mkEntry(2)])
+    ),
+    "narrowing"
+  );
   // schema change => incomparable (directionally undecidable from digests)
   assert.equal(
-    classifyDrift(base, M([mkEntry(1, { tool_schema_digest: mkEntry(9).tool_schema_digest }), mkEntry(2)])),
+    classifyDrift(
+      base,
+      M([mkEntry(1, { tool_schema_digest: mkEntry(9).tool_schema_digest }), mkEntry(2)])
+    ),
     "incomparable"
   );
   // mixed add+remove => incomparable
@@ -760,14 +882,30 @@ test("chain: laundering (state-bound broadening) => 65; broken linkage => 64", (
   const e0 = mkEnvelope(m0, 0, null, "state");
   assert.equal(validateChain([e0]).ok, true);
   const blind = mkEnvelope(m1, 1, e0, "state");
-  assert.deepEqual(validateChain([e0, blind]), { ok: false, raw: 65, reason: "state_bound_broadening" });
+  assert.deepEqual(validateChain([e0, blind]), {
+    ok: false,
+    raw: 65,
+    reason: "state_bound_broadening",
+  });
   const informed = mkEnvelope(m1, 1, e0, "delta");
   assert.equal(validateChain([e0, informed]).ok, true);
   const badLink = { ...informed, previous_manifest_digest: "sha256:" + "b".repeat(64) };
-  assert.deepEqual(validateChain([e0, badLink]), { ok: false, raw: 64, reason: "prev_digest_mismatch" });
+  assert.deepEqual(validateChain([e0, badLink]), {
+    ok: false,
+    raw: 64,
+    reason: "prev_digest_mismatch",
+  });
   const badDelta = { ...informed, delta_digest: "sha256:" + "c".repeat(64) };
-  assert.deepEqual(validateChain([e0, badDelta]), { ok: false, raw: 64, reason: "delta_digest_mismatch" });
-  assert.deepEqual(validateChain([informed]), { ok: false, raw: 64, reason: "ancestry_incomplete" });
+  assert.deepEqual(validateChain([e0, badDelta]), {
+    ok: false,
+    raw: 64,
+    reason: "delta_digest_mismatch",
+  });
+  assert.deepEqual(validateChain([informed]), {
+    ok: false,
+    raw: 64,
+    reason: "ancestry_incomplete",
+  });
 });
 ```
 
@@ -779,7 +917,12 @@ test("chain: laundering (state-bound broadening) => 65; broken linkage => 64", (
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Drift algebra + Monotone Consent Law chain validation (4O spec §6a). The verifier
 // NEVER trusts claimed classifications: everything below is recomputed from bodies.
-import { toolEntryDigest, deltaDigest, commitmentDigest, validateEnvelope } from "./manifestCore.mjs";
+import {
+  toolEntryDigest,
+  deltaDigest,
+  commitmentDigest,
+  validateEnvelope,
+} from "./manifestCore.mjs";
 import { AUTHORITY_ORDER, GENESIS } from "../constants.mjs";
 
 const rank = (c) => AUTHORITY_ORDER.indexOf(c);
@@ -812,33 +955,44 @@ export function classifyDrift(prevM, nextM) {
 }
 
 export function validateChain(chain) {
-  if (!Array.isArray(chain) || chain.length === 0) return { ok: false, raw: 64, reason: "ancestry_incomplete" };
+  if (!Array.isArray(chain) || chain.length === 0)
+    return { ok: false, raw: 64, reason: "ancestry_incomplete" };
   const classifications = [];
   for (let i = 0; i < chain.length; i++) {
     const env = chain[i];
     const v = validateEnvelope(env);
     if (!v.ok) return { ok: false, raw: 64, reason: "ancestry_incomplete" };
     if (i === 0) {
-      if (env.manifest_epoch !== 0 || env.previous_manifest_digest !== GENESIS || env.delta_digest !== GENESIS) {
+      if (
+        env.manifest_epoch !== 0 ||
+        env.previous_manifest_digest !== GENESIS ||
+        env.delta_digest !== GENESIS
+      ) {
         return { ok: false, raw: 64, reason: "ancestry_incomplete" };
       }
       classifications.push("equal");
       continue;
     }
     const prev = chain[i - 1];
-    if (env.manifest_epoch !== prev.manifest_epoch + 1) return { ok: false, raw: 64, reason: "ancestry_incomplete" };
-    if (env.previous_manifest_digest !== commitmentDigest(prev)) return { ok: false, raw: 64, reason: "prev_digest_mismatch" };
-    if (env.delta_digest !== deltaDigest(prev.manifest, env.manifest)) return { ok: false, raw: 64, reason: "delta_digest_mismatch" };
+    if (env.manifest_epoch !== prev.manifest_epoch + 1)
+      return { ok: false, raw: 64, reason: "ancestry_incomplete" };
+    if (env.previous_manifest_digest !== commitmentDigest(prev))
+      return { ok: false, raw: 64, reason: "prev_digest_mismatch" };
+    if (env.delta_digest !== deltaDigest(prev.manifest, env.manifest))
+      return { ok: false, raw: 64, reason: "delta_digest_mismatch" };
     const cls = classifyDrift(prev.manifest, env.manifest);
     classifications.push(cls);
-    if (cls === "broadening" && env.consent_binding !== "delta") return { ok: false, raw: 65, reason: "state_bound_broadening" };
-    if (cls === "incomparable" && env.consent_binding !== "delta") return { ok: false, raw: 65, reason: "state_bound_incomparable" };
+    if (cls === "broadening" && env.consent_binding !== "delta")
+      return { ok: false, raw: 65, reason: "state_bound_broadening" };
+    if (cls === "incomparable" && env.consent_binding !== "delta")
+      return { ok: false, raw: 65, reason: "state_bound_incomparable" };
   }
   // Path independence (defense in depth; ⊑ is transitive, spec §12 NoDriftLaundering):
   // an all-{equal,narrowing} chain must classify {equal,narrowing} end-to-end.
   if (chain.length > 1 && classifications.every((c) => c === "equal" || c === "narrowing")) {
     const direct = classifyDrift(chain[0].manifest, chain.at(-1).manifest);
-    if (direct !== "equal" && direct !== "narrowing") return { ok: false, raw: 64, reason: "composition_mismatch" };
+    if (direct !== "equal" && direct !== "narrowing")
+      return { ok: false, raw: 64, reason: "composition_mismatch" };
   }
   return { ok: true, classifications };
 }
@@ -858,10 +1012,12 @@ git commit -m "feat(llm-shield): stage 4o drift lattice classifier and monotone-
 ### Task 6: Decision core — the 12-check ordered gate (Node)
 
 **Files:**
+
 - Create: `tools/simurgh-attestation/stage4o/core/decisionCore.mjs`
 - Test: `tests/unit/llmShield/stage4o/decisionCore.test.js`
 
 **Interfaces:**
+
 - Consumes: Tasks 2–5; `verifySurfacePath` from Task 3.
 - Produces:
   - `validateReceipt(r) -> {ok} | {ok:false,...}` — exact keys `schema, tool_name_digest, tool_schema_digest, authority_class, sinks_used, inclusion_proof, run_epoch, run_id_digest`.
@@ -875,7 +1031,10 @@ git commit -m "feat(llm-shield): stage 4o drift lattice classifier and monotone-
 // SPDX-License-Identifier: AGPL-3.0-or-later
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { gateToolCall, receiptDigest } from "../../../../tools/simurgh-attestation/stage4o/core/decisionCore.mjs";
+import {
+  gateToolCall,
+  receiptDigest,
+} from "../../../../tools/simurgh-attestation/stage4o/core/decisionCore.mjs";
 import { mkEntry, mkManifest, mkEnvelope, validWorld } from "./helpers.mjs";
 
 const sigOK = () => true;
@@ -888,17 +1047,37 @@ test("GREEN: accepted with complete six-field bindings", () => {
   assert.equal(out.raw, 0);
   assert.equal(out.bindings.kernel_entrypoint, "authorise_with_manifest.v1");
   assert.deepEqual(Object.keys(out.bindings).sort(), [
-    "action_digest", "kernel_entrypoint", "manifest_digest", "manifest_entry_digest", "receipt_digest", "run_id_digest",
+    "action_digest",
+    "kernel_entrypoint",
+    "manifest_digest",
+    "manifest_entry_digest",
+    "receipt_digest",
+    "run_id_digest",
   ]);
   assert.equal(out.bindings.receipt_digest, receiptDigest(w.receipt));
 });
 
 test("55 absent / 55 schema_invalid / 56 / 57 / 59 identity / 59 proof / 60 / 61 / 62 / 63", () => {
   const w = world();
-  assert.equal(gateToolCall({ chain: null, receipt: w.receipt, actionDigest: w.actionDigest, verifyCommitmentSignature: sigOK }).raw, 55);
+  assert.equal(
+    gateToolCall({
+      chain: null,
+      receipt: w.receipt,
+      actionDigest: w.actionDigest,
+      verifyCommitmentSignature: sigOK,
+    }).raw,
+    55
+  );
   const badHead = [{ ...w.chain[0], extra: 1 }, w.chain[1]];
   assert.deepEqual(
-    (({ raw, reason }) => ({ raw, reason }))(gateToolCall({ chain: badHead, receipt: w.receipt, actionDigest: w.actionDigest, verifyCommitmentSignature: sigOK })),
+    (({ raw, reason }) => ({ raw, reason }))(
+      gateToolCall({
+        chain: badHead,
+        receipt: w.receipt,
+        actionDigest: w.actionDigest,
+        verifyCommitmentSignature: sigOK,
+      })
+    ),
     { raw: 55, reason: "schema_invalid" }
   );
   assert.equal(gateToolCall({ ...w, verifyCommitmentSignature: sigBAD }).raw, 56);
@@ -909,20 +1088,29 @@ test("55 absent / 55 schema_invalid / 56 / 57 / 59 identity / 59 proof / 60 / 61
   const badProof = { ...w.receipt, inclusion_proof: [] };
   assert.equal(gateToolCall({ ...w, receipt: badProof, verifyCommitmentSignature: sigOK }).raw, 59);
   const badSchema = { ...w.receipt, tool_schema_digest: mkEntry(9).tool_schema_digest };
-  assert.equal(gateToolCall({ ...w, receipt: badSchema, verifyCommitmentSignature: sigOK }).raw, 60);
+  assert.equal(
+    gateToolCall({ ...w, receipt: badSchema, verifyCommitmentSignature: sigOK }).raw,
+    60
+  );
   const upgraded = { ...w.receipt, authority_class: "write" };
   assert.equal(gateToolCall({ ...w, receipt: upgraded, verifyCommitmentSignature: sigOK }).raw, 61);
   const sink = { ...w.receipt, sinks_used: [mkEntry(9).tool_schema_digest] };
   assert.equal(gateToolCall({ ...w, receipt: sink, verifyCommitmentSignature: sigOK }).raw, 62);
   const malformed = { ...w.receipt };
   delete malformed.run_id_digest;
-  assert.equal(gateToolCall({ ...w, receipt: malformed, verifyCommitmentSignature: sigOK }).raw, 63);
+  assert.equal(
+    gateToolCall({ ...w, receipt: malformed, verifyCommitmentSignature: sigOK }).raw,
+    63
+  );
 });
 
 test("first failure wins in DOCUMENTED order: bad signature + authority upgrade => 56", () => {
   const w = world();
   const upgraded = { ...w.receipt, authority_class: "destructive" };
-  assert.equal(gateToolCall({ ...w, receipt: upgraded, verifyCommitmentSignature: sigBAD }).raw, 56);
+  assert.equal(
+    gateToolCall({ ...w, receipt: upgraded, verifyCommitmentSignature: sigBAD }).raw,
+    56
+  );
 });
 ```
 
@@ -936,7 +1124,12 @@ test("58: committed toolset root does not recompute from the manifest body", () 
   // keep the head intact; call is gated against the head (epoch 1), so tamper the head instead:
   const chain2 = structuredClone(w.chain);
   chain2[1].manifest.toolset_digest = "sha256:" + "d".repeat(64);
-  const out = gateToolCall({ chain: chain2, receipt: w.receipt, actionDigest: w.actionDigest, verifyCommitmentSignature: () => true });
+  const out = gateToolCall({
+    chain: chain2,
+    receipt: w.receipt,
+    actionDigest: w.actionDigest,
+    verifyCommitmentSignature: () => true,
+  });
   assert.equal(out.raw, 64); // delta digest breaks first — documented order is normative
 });
 ```
@@ -952,25 +1145,47 @@ test("58: committed toolset root does not recompute from the manifest body", () 
 // Crypto is injected so this core stays pure and browser-safe.
 import { DIGEST_RE } from "../../stage4m/core/canonical.mjs";
 import { domainDigest } from "./digest.mjs";
-import { validateEnvelope, commitmentDigest, computeToolsetRoot, toolEntryDigest } from "./manifestCore.mjs";
+import {
+  validateEnvelope,
+  commitmentDigest,
+  computeToolsetRoot,
+  toolEntryDigest,
+} from "./manifestCore.mjs";
 import { validateChain } from "./driftCore.mjs";
 import { verifySurfacePath } from "./merkleSurface.mjs";
 import { DOMAINS, RECEIPT_SCHEMA, KERNEL_ENTRYPOINT, AUTHORITY_ORDER } from "../constants.mjs";
 
-const RECEIPT_KEYS = ["schema", "tool_name_digest", "tool_schema_digest", "authority_class",
-  "sinks_used", "inclusion_proof", "run_epoch", "run_id_digest"];
+const RECEIPT_KEYS = [
+  "schema",
+  "tool_name_digest",
+  "tool_schema_digest",
+  "authority_class",
+  "sinks_used",
+  "inclusion_proof",
+  "run_epoch",
+  "run_id_digest",
+];
 const rank = (c) => AUTHORITY_ORDER.indexOf(c);
 const R = (raw, name, reason) => ({ raw, name, reason });
 
 export const receiptDigest = (receipt) => domainDigest(DOMAINS.RECEIPT, RECEIPT_SCHEMA, receipt);
 
 export function validateReceipt(r) {
-  const ok = r && typeof r === "object" && !Array.isArray(r) &&
-    Object.keys(r).length === RECEIPT_KEYS.length && RECEIPT_KEYS.every((k) => k in r) &&
-    r.schema === RECEIPT_SCHEMA && DIGEST_RE.test(r.tool_name_digest) &&
-    DIGEST_RE.test(r.tool_schema_digest) && AUTHORITY_ORDER.includes(r.authority_class) &&
-    Array.isArray(r.sinks_used) && r.sinks_used.every((s) => DIGEST_RE.test(s)) &&
-    Array.isArray(r.inclusion_proof) && Number.isInteger(r.run_epoch) && r.run_epoch >= 0 &&
+  const ok =
+    r &&
+    typeof r === "object" &&
+    !Array.isArray(r) &&
+    Object.keys(r).length === RECEIPT_KEYS.length &&
+    RECEIPT_KEYS.every((k) => k in r) &&
+    r.schema === RECEIPT_SCHEMA &&
+    DIGEST_RE.test(r.tool_name_digest) &&
+    DIGEST_RE.test(r.tool_schema_digest) &&
+    AUTHORITY_ORDER.includes(r.authority_class) &&
+    Array.isArray(r.sinks_used) &&
+    r.sinks_used.every((s) => DIGEST_RE.test(s)) &&
+    Array.isArray(r.inclusion_proof) &&
+    Number.isInteger(r.run_epoch) &&
+    r.run_epoch >= 0 &&
     DIGEST_RE.test(r.run_id_digest);
   return ok ? { ok: true } : { ok: false };
 }
@@ -978,15 +1193,18 @@ export function validateReceipt(r) {
 export function gateToolCall({ chain, receipt, actionDigest, verifyCommitmentSignature }) {
   // 55 — commitment absent or schema-invalid (manifest_defect enum in reason)
   if (!Array.isArray(chain) || chain.length === 0) return R(55, "manifest_missing", "absent");
-  for (const env of chain) if (!validateEnvelope(env).ok) return R(55, "manifest_missing", "schema_invalid");
+  for (const env of chain)
+    if (!validateEnvelope(env).ok) return R(55, "manifest_missing", "schema_invalid");
   const head = chain[chain.length - 1];
   // 56 — tool-manifest commitment signature (NEVER the attestation-bundle signature)
   for (const env of chain) {
-    if (!verifyCommitmentSignature(env)) return R(56, "manifest_signature_invalid", "commitment_signature_invalid");
+    if (!verifyCommitmentSignature(env))
+      return R(56, "manifest_signature_invalid", "commitment_signature_invalid");
   }
   // 63 (receipt malformed) is documented as part of check 9, but epoch check 57 needs
   // run_epoch — a malformed receipt therefore fails closed at 63 BEFORE 57 can read it.
-  if (!validateReceipt(receipt).ok) return R(63, "manifest_receipt_binding_mismatch", "receipt_schema_invalid");
+  if (!validateReceipt(receipt).ok)
+    return R(63, "manifest_receipt_binding_mismatch", "receipt_schema_invalid");
   // 57 — logical freshness
   if (receipt.run_epoch < head.valid_from_epoch || receipt.run_epoch > head.valid_until_epoch) {
     return R(57, "manifest_epoch_invalid", "run_epoch_outside_validity_window");
@@ -994,7 +1212,11 @@ export function gateToolCall({ chain, receipt, actionDigest, verifyCommitmentSig
   // 64 / 65 — epoch-chain phase
   const chainResult = validateChain(chain);
   if (!chainResult.ok) {
-    return R(chainResult.raw, chainResult.raw === 64 ? "drift_laundering_detected" : "blind_reapproval", chainResult.reason);
+    return R(
+      chainResult.raw,
+      chainResult.raw === 64 ? "drift_laundering_detected" : "blind_reapproval",
+      chainResult.reason
+    );
   }
   // 58 — recomputed toolset root vs committed
   if (computeToolsetRoot(head.manifest) !== head.manifest.toolset_digest) {
@@ -1003,7 +1225,13 @@ export function gateToolCall({ chain, receipt, actionDigest, verifyCommitmentSig
   // 59 — identity + inclusion proof
   const entry = head.manifest.tools.find((t) => t.tool_name_digest === receipt.tool_name_digest);
   if (!entry) return R(59, "tool_identity_mismatch", "tool_not_in_manifest");
-  if (!verifySurfacePath(toolEntryDigest(entry), receipt.inclusion_proof, head.manifest.toolset_digest)) {
+  if (
+    !verifySurfacePath(
+      toolEntryDigest(entry),
+      receipt.inclusion_proof,
+      head.manifest.toolset_digest
+    )
+  ) {
     return R(59, "tool_identity_mismatch", "inclusion_proof_invalid");
   }
   // 60 — schema digest
@@ -1019,7 +1247,8 @@ export function gateToolCall({ chain, receipt, actionDigest, verifyCommitmentSig
     return R(62, "declared_sink_expansion", "sink_not_declared");
   }
   // 63 — binding
-  if (!DIGEST_RE.test(actionDigest)) return R(63, "manifest_receipt_binding_mismatch", "binding_mismatch");
+  if (!DIGEST_RE.test(actionDigest))
+    return R(63, "manifest_receipt_binding_mismatch", "binding_mismatch");
   return {
     raw: 0,
     name: "accepted",
@@ -1036,7 +1265,7 @@ export function gateToolCall({ chain, receipt, actionDigest, verifyCommitmentSig
 ```
 
 - [ ] **Step 4: Run — PASS.** `node --test tests/unit/llmShield/stage4o/decisionCore.test.js`
-(Note the deliberate, documented deviation: a malformed receipt ⇒ 63 fires before 57 because 57 needs `run_epoch`. This mirrors "an object that does not parse cannot be checked" and is asserted in the tests; record it in the closeout docs-accuracy pass.)
+      (Note the deliberate, documented deviation: a malformed receipt ⇒ 63 fires before 57 because 57 needs `run_epoch`. This mirrors "an object that does not parse cannot be checked" and is asserted in the tests; record it in the closeout docs-accuracy pass.)
 
 - [ ] **Step 5: Commit**
 
@@ -1050,11 +1279,13 @@ git commit -m "feat(llm-shield): stage 4o twelve-check manifest-bound gate with 
 ### Task 7: Python mirror — `manifest_surface.py`
 
 **Files:**
+
 - Create: `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/manifest_surface.py`
 - Create: `tools/agentdojo-simurgh-adapter/tests/_stage4o_helpers.py` (shared Python builders `mk_entry`, `mk_manifest`, `mk_envelope`, `valid_world`; leading underscore + no `test_` prefix so pytest never collects it)
 - Test: `tools/agentdojo-simurgh-adapter/tests/test_manifest_surface.py`
 
 **Interfaces:**
+
 - Consumes: nothing repo-internal (pure stdlib: `json`, `hashlib`, `dataclasses`).
 - Produces (exact names; Task 8 and the parity fixtures depend on them):
   - `canonical_json(value) -> str` (recursive key-sort, `json.dumps(..., separators=(",", ":"), ensure_ascii=False)`) — must byte-match Node `canonicalJson`.
@@ -1139,10 +1370,12 @@ git commit -m "feat(llm-shield): stage 4o python manifest-surface mirror (digest
 ### Task 8: Kernel entry point — `authorise_with_manifest` (append-only)
 
 **Files:**
+
 - Modify (APPEND ONLY, after line 199): `tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/capability_kernel.py`
 - Test: `tools/agentdojo-simurgh-adapter/tests/test_capability_kernel_manifest.py`
 
 **Interfaces:**
+
 - Consumes: Task 7 module; existing `Action`, `AuthorityDecision`.
 - Produces:
   - `ManifestBindings` frozen dataclass: `action_digest, manifest_digest, manifest_entry_digest, kernel_entrypoint, receipt_digest, run_id_digest` (all `str`).
@@ -1284,11 +1517,13 @@ git commit -m "feat(llm-shield): stage 4o authorise_with_manifest kernel entry p
 ### Task 9: Deterministic fixtures — chains, tamper matrix, receipts, expected matrix, parity vectors
 
 **Files:**
+
 - Create: `tools/simurgh-attestation/stage4o/node/build-stage4o-fixtures.mjs`
 - Create (generated, committed): `tests/fixtures/llmShield/stage4o/{chains/,arms/,expected-results/vtsa-matrix.json,parity/canonical-parity.json,vtsa-signer.pub,vtsa-manifest-signer.pub}`
 - Test: `tests/unit/llmShield/stage4o/fixtures.test.js`, plus Python `tools/agentdojo-simurgh-adapter/tests/test_stage4o_parity.py`
 
 **Interfaces:**
+
 - Consumes: everything from Tasks 2–6; `node:crypto` Ed25519. Deterministic FIXTURE keys, generated once and committed under `tests/fixtures/llmShield/stage4o/test-keys/` with scream-labels: `INSECURE_FIXTURE_ONLY_manifest-signer.pem`, `INSECURE_FIXTURE_ONLY_attestation-signer.pem`, each paired with `<name>.meta.json` = `{"purpose":"committed-test-fixture-key","not_secret":true,"do_not_use_for_evidence":true}`. Public pems are committed in `vtsa-manifest-signer.pub` / `vtsa-signer.pub` JSON. These are for the MODELLED Lane A corpus only; production evidence signing (Task 11) uses real keys generated outside the repo via the stage4n `--ephemeral`/`--*-key` split.
 - Produces:
   - `tests/fixtures/llmShield/stage4o/chains/clean-chain.json` — 3-epoch chain: genesis (2 tools) → epoch 1 delta-bound broadening (adds `egress` tool) → epoch 2 state-bound narrowing (drops it). Signed with the manifest fixture key.
@@ -1311,7 +1546,12 @@ import { createPublicKey, verify } from "node:crypto";
 const FIX = "tests/fixtures/llmShield/stage4o";
 const pub = JSON.parse(readFileSync(`${FIX}/vtsa-manifest-signer.pub`, "utf8")).public_key_pem;
 const sigCheck = (env) =>
-  verify(null, Buffer.from(commitmentDigest(env)), createPublicKey(pub), Buffer.from(env.signature, "base64"));
+  verify(
+    null,
+    Buffer.from(commitmentDigest(env)),
+    createPublicKey(pub),
+    Buffer.from(env.signature, "base64")
+  );
 
 test("every committed arm yields exactly its expected raw code and reason", () => {
   const matrix = JSON.parse(readFileSync(`${FIX}/expected-results/vtsa-matrix.json`, "utf8"));
@@ -1319,7 +1559,9 @@ test("every committed arm yields exactly its expected raw code and reason", () =
   for (const row of matrix) {
     const arm = JSON.parse(readFileSync(`${FIX}/arms/${row.arm}.json`, "utf8"));
     const out = gateToolCall({
-      chain: arm.chain, receipt: arm.receipt, actionDigest: arm.action_digest,
+      chain: arm.chain,
+      receipt: arm.receipt,
+      actionDigest: arm.action_digest,
       verifyCommitmentSignature: sigCheck,
     });
     assert.equal(out.raw, row.expected_raw, `${row.arm}: raw`);
@@ -1386,10 +1628,12 @@ git commit -m "test(llm-shield): stage 4o tamper-matrix fixtures with kernel-ver
 ### Task 10: Timeline core (raw 66) + constitution core (§11.1)
 
 **Files:**
+
 - Create: `tools/simurgh-attestation/stage4o/core/timelineCore.mjs`, `tools/simurgh-attestation/stage4o/core/constitutionCore.mjs`
 - Test: `tests/unit/llmShield/stage4o/timelineCore.test.js`, `tests/unit/llmShield/stage4o/constitutionCore.test.js`
 
 **Interfaces:**
+
 - Consumes: frozen 4N feed `docs/research/llm-shield/evidence/stage-4n/heartbeat-feed.jsonl` (read-only fixture input); Task 2/3/4 exports; `VTSA_RAW_CODES`.
 - Produces:
   - `buildTimelineRecord({ chainHead, stage4nRecord }) -> { schema: TIMELINE_SCHEMA, stage4n_chain_position_digest, toolset_root, manifest_epoch }` where `stage4n_chain_position_digest = domainDigest(DOMAINS.TIMELINE, TIMELINE_SCHEMA, { window: stage4nRecord.window, record_digest: stage4nRecord.record_digest })` (use the exact field names present in the 4N feed — inspect the first line of the committed feed and adapt at implementation time; assert the chosen fields exist).
@@ -1407,12 +1651,17 @@ git commit -m "test(llm-shield): stage 4o tamper-matrix fixtures with kernel-ver
 export function checkAlignmentMap(map) {
   if (!Array.isArray(map) || map.length !== 12) return { ok: false, detail: "count" };
   const codes = new Set();
-  const byCode = Object.fromEntries(Object.entries(VTSA_RAW_CODES).map(([k, v]) => [v, k.toLowerCase()]));
+  const byCode = Object.fromEntries(
+    Object.entries(VTSA_RAW_CODES).map(([k, v]) => [v, k.toLowerCase()])
+  );
   for (const e of map) {
-    if (!exact(e, ["raw_code", "mechanism", "alignment_claim", "non_claim"])) return { ok: false, detail: "keys" };
+    if (!exact(e, ["raw_code", "mechanism", "alignment_claim", "non_claim"]))
+      return { ok: false, detail: "keys" };
     if (byCode[e.raw_code] !== e.mechanism) return { ok: false, detail: `mechanism:${e.raw_code}` };
-    if (!ALIGNMENT_VOCABULARY.includes(e.alignment_claim)) return { ok: false, detail: `vocabulary:${e.raw_code}` };
-    if (e.non_claim !== "not_a_model_value_guarantee") return { ok: false, detail: `non_claim:${e.raw_code}` };
+    if (!ALIGNMENT_VOCABULARY.includes(e.alignment_claim))
+      return { ok: false, detail: `vocabulary:${e.raw_code}` };
+    if (e.non_claim !== "not_a_model_value_guarantee")
+      return { ok: false, detail: `non_claim:${e.raw_code}` };
     codes.add(e.raw_code);
   }
   return codes.size === 12 ? { ok: true } : { ok: false, detail: "duplicate_codes" };
@@ -1433,11 +1682,13 @@ git commit -m "feat(llm-shield): stage 4o timeline binding to 4n chain positions
 ### Task 11: Attestation builder (two keypairs) + offline verifier CLI (+ selective disclosure)
 
 **Files:**
+
 - Create: `tools/simurgh-attestation/stage4o/node/build-stage4o-attestation.mjs`, `tools/simurgh-attestation/stage4o/node/verify-stage4o.mjs`
 - Create (generated, committed): `docs/research/llm-shield/evidence/stage-4o/{vtsa-attestation.json,vtsa-manifest.json,clean-chain.json,decision-corpus.json,README.md}`
 - Test: `tests/unit/llmShield/stage4o/attestation.test.js`, `tests/unit/llmShield/stage4o/verifier.test.js`
 
 **Interfaces:**
+
 - Consumes: all cores; fixture chain + arms; 4N feed; `node:crypto` Ed25519.
 - Produces:
   - Builder CLI: `node build-stage4o-attestation.mjs [--ephemeral | --manifest-key <pem> --attestation-key <pem>] [--out-dir <dir>]` — replays ALL arms through `gateToolCall` (with real Ed25519 commitment verification via the fixture public key), assembles `decision-corpus.json` (per-arm `{arm, raw, name, reason, bindings|null}` + `corpus_digest = domainDigest(DECISION_CORPUS, ...)`), the timeline record, the alignment map, non-claims, known_limitations, then `vtsa-attestation.json` (unsigned body) + `vtsa-manifest.json` (`attestation_digest = domainDigest(ATTESTATION_BUNDLE, ATTESTATION_SCHEMA, canonical(parse(attestation)))`, Ed25519 signature by the ATTESTATION key, both public-key pems + fingerprints). Follows the stage4n `--ephemeral` / real-key CLI split exactly.
@@ -1474,12 +1725,14 @@ git commit -m "feat(llm-shield): stage 4o dual-key attestation builder and offli
 ### Task 12: Lane B capture script + captured fixture + F1 retro fixture (hard gate)
 
 **Files:**
+
 - Create: `tools/simurgh-attestation/stage4o/node/capture-mcp-manifest.mjs`
 - Create: `tests/fixtures/llmShield/stage4o/laneb/{capture-manifest.json,capture-rugpulled.json,README.md}`
 - Create (gate-dependent): `tests/fixtures/llmShield/stage4o/retro/{retro-fixture.json,README.md}` OR a `known_limitations` entry
 - Test: `tests/unit/llmShield/stage4o/laneb.test.js`
 
 **Interfaces:**
+
 - Consumes: manifestCore, driftCore; a real MCP server run LOCALLY at capture time (use `npx -y @modelcontextprotocol/server-filesystem /tmp` over stdio — public reference server, approved for digest-level disclosure).
 - Produces: digest-only captured manifest (real tool names/schemas hashed through `domainDigest` at capture time, raw strings discarded); a rug-pulled variant (one tool's `authority_class` raised, name digest preserved — the canonical 61 arm); fixture files marked `"external_validity": true`.
 
@@ -1511,9 +1764,11 @@ git commit -m "feat(llm-shield): stage 4o lane-b digest-only mcp capture fixture
 ### Task 13: Lean proofs — `MonotoneConsent`
 
 **Files:**
+
 - Create: `proofs/stage4o/MonotoneConsent.lean`, `proofs/stage4o/lean-toolchain` (copy `proofs/stage4n/lean-toolchain` byte-for-byte), `proofs/stage4o/lakefile.toml` if stage4n has one (mirror its build layout exactly — check `ls proofs/stage4n` first).
 
 **Interfaces:**
+
 - Consumes: nothing (self-contained model; mathlib-free).
 - Produces: machine-checked `NoSilentToolSwap`, `NoDriftLaundering` (narrowing transitivity + contrapositive), `DeltaBoundBroadening`, and the umbrella `theorem monotone_consent`.
 
@@ -1651,10 +1906,12 @@ git commit -m "feat(proofs): stage 4o machine-checked monotone-consent, no-drift
 ### Task 14: Reproduce script + egress check
 
 **Files:**
+
 - Create: `scripts/reproduce-llm-shield-stage4o.sh` (executable)
 - Test: covered by running it; plus `tests/unit/llmShield/stage4o/closeout.test.js` (asserts script exists, is executable, pins Node 26, routes exits through `stage4CodeForRawCode` — mirror `tests/unit/llmShield/stage4n/closeout.test.js`'s structure).
 
 **Interfaces:**
+
 - Consumes: every builder/verifier above; the exit wrapper.
 - Produces: one-command byte-idempotent reproduce, exit ALWAYS via `stage4CodeForRawCode`.
 
@@ -1722,9 +1979,11 @@ git commit -m "feat(llm-shield): stage 4o one-command reproduce with byte-idempo
 ### Task 15: K7-style all-functions E2E net
 
 **Files:**
+
 - Create: `tests/e2e/llmShield/stage4o/vtsaFullNet.test.js`
 
 **Interfaces:**
+
 - Consumes: EVERY export of every stage4o module (constants, digest, merkleSurface, manifestCore, driftCore, decisionCore, timelineCore, constitutionCore, both CLIs via `node:child_process` `execFileSync`), committed fixtures + evidence, the 4N feed.
 
 - [ ] **Step 1: Write the net** (mirror `tests/e2e/llmShield/stage4n/seismographFullNet.test.js`'s composition style):
@@ -1750,10 +2009,11 @@ git commit -m "test(llm-shield): stage 4o all-functions e2e net with tamper matr
 ### Task 16: Docs set, CI wiring, closeout re-score, docs-accuracy pass
 
 **Files:**
+
 - Create: `docs/research/llm-shield/STAGE_4O_THREAT_MODEL.md`, `STAGE_4O_VALIDATION_MATRIX.md`, `STAGE_4O_REVIEWER_CHECKLIST.md`, `STAGE_4O_CLOSEOUT.md`
 - Modify: `.github/workflows/stage-1-checks.yml` (add the stage4o e2e + pytest job step, mirroring how the stage4n steps are wired — inspect and copy that block), `CHANGELOG.md`, `docs/superpowers/specs/2026-07-04-stage-4o-vtsa-design.md` (spec deltas)
 
-- [ ] **Step 1: Write the four docs** mirroring the STAGE_4N_* structure: threat model (rug-pull adversary, laundering adversary, blind-approver, retro-rewriter — each mapped to its raw codes); validation matrix (every spec §7 arm → test file → raw code → status); reviewer checklist (one-command reproduce, what to `cmp`, how to verify both signatures offline, selective-disclosure walk-through); closeout (what shipped, non-claims verbatim, **four-axis re-score against shipped evidence with the spec-time targets from spec §18 and honest deltas**, known limitations incl. the F1 gate outcome).
+- [ ] **Step 1: Write the four docs** mirroring the STAGE*4N*\* structure: threat model (rug-pull adversary, laundering adversary, blind-approver, retro-rewriter — each mapped to its raw codes); validation matrix (every spec §7 arm → test file → raw code → status); reviewer checklist (one-command reproduce, what to `cmp`, how to verify both signatures offline, selective-disclosure walk-through); closeout (what shipped, non-claims verbatim, **four-axis re-score against shipped evidence with the spec-time targets from spec §18 and honest deltas**, known limitations incl. the F1 gate outcome).
 
 - [ ] **Step 2: Spec deltas commit** — amend spec §5 (12th domain `MANIFEST_COMMITMENT_V1`), §6 (kernel param `manifest_chain` not `manifest`; malformed receipt ⇒ 63 precedes 57, with the reason), §11.2 outcome (fixture shipped or limitation recorded). One commit: `docs(llm-shield): record stage 4o spec deltas from implementation`.
 
