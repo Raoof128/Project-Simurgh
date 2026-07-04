@@ -201,6 +201,7 @@ export const VOCA_REASONS_79 = Object.freeze([
   "window_anchor_not_in_feed",
   "disclosure_budget_exceeded",
   "custody_class_recompute_mismatch",
+  "declared_budget_mismatch",
 ]);
 ```
 
@@ -1123,7 +1124,7 @@ git commit -m "feat(llm-shield): stage 4p previous-link hop chain, raw 78 launde
 - Consumes: `windowedEvidenceCommitment`, `custodyClassDigest` (Task 2), `validateCpcSignal` (Task 3), `ENTROPY_BITS_BY_KIND`, `ENTROPY_FLOOR_BITS` (Task 1).
 - Produces:
   - `buildCpcSignal({ failure_class, stage4n_window_anchor_digest, evidence_kind, observed_evidence_digest, disclosure_budget_max_signals_per_window }) -> signal` — takes the PRIVATE `observed_evidence_digest`, computes the window-bound `windowed_evidence_commitment` internally, and PUBLISHES that commitment (not the raw digest) in the matchable variant. Degraded variant when the bucket is below floor (never throws for `low_entropy_or_unknown`; throws only on unknown kind).
-  - `verifyCpcEmission({ signals, declared_cap, anchor_digests }) -> { ok: true } | { ok: false, raw: 79, reason }` — reasons: `window_anchor_not_in_feed` (anchor not in the supplied set of recomputed 4N record digests), `below_floor_digest_emitted` (matchable signal whose `evidence_kind` bucket < floor), `custody_class_recompute_mismatch` (MF1 — `custody_class_digest !== custodyClassDigest(published fields incl. windowed_evidence_commitment)`), `disclosure_budget_exceeded` (matchable count per anchor > `declared_cap`), plus schema-variant failures surfaced from `validateCpcSignal`.
+  - `verifyCpcEmission({ signals, declared_cap, anchor_digests }) -> { ok: true } | { ok: false, raw: 79, reason }` — per-signal reasons in order: `window_anchor_not_in_feed` (anchor not in the supplied set of recomputed 4N record digests), `below_floor_digest_emitted` (matchable signal whose `evidence_kind` bucket < floor), `declared_budget_mismatch` (signal's `disclosure_budget_max_signals_per_window !== declared_cap` — a signal cannot advertise a budget different from the operator's declared cap even if self-consistent with its own digest), `custody_class_recompute_mismatch` (MF1 — `custody_class_digest !== custodyClassDigest(published fields incl. windowed_evidence_commitment)`), `disclosure_budget_exceeded` (matchable count per anchor > `declared_cap`), plus schema-variant failures surfaced from `validateCpcSignal`.
 
 - [ ] **Step 1: Write the failing test**
 
@@ -1178,11 +1179,13 @@ test("verifyCpcEmission: anchor membership, budget cap, tampered below-floor dig
   assert.deepEqual(verifyCpcEmission({ signals: ok2, declared_cap: 2, anchor_digests: [ANCHOR] }), {
     ok: true,
   });
-  assert.deepEqual(verifyCpcEmission({ signals: ok2, declared_cap: 1, anchor_digests: [ANCHOR] }), {
-    ok: false,
-    raw: 79,
-    reason: "disclosure_budget_exceeded",
-  });
+  // Exceed the cap with THREE budget-2 signals against declared_cap 2 (each signal's
+  // advertised budget equals the cap, so the count check — not the mismatch check — fires).
+  const three = [...ok2, buildCpcSignal({ ...base, failure_class: "account_pool_ambiguity" })];
+  assert.deepEqual(
+    verifyCpcEmission({ signals: three, declared_cap: 2, anchor_digests: [ANCHOR] }),
+    { ok: false, raw: 79, reason: "disclosure_budget_exceeded" }
+  );
   assert.deepEqual(
     verifyCpcEmission({ signals: [ok2[0]], declared_cap: 2, anchor_digests: [D("z")] }),
     { ok: false, raw: 79, reason: "window_anchor_not_in_feed" }
@@ -1199,6 +1202,11 @@ test("verifyCpcEmission: anchor membership, budget cap, tampered below-floor dig
   assert.deepEqual(
     verifyCpcEmission({ signals: [badDigest], declared_cap: 2, anchor_digests: [ANCHOR] }),
     { ok: false, raw: 79, reason: "custody_class_recompute_mismatch" }
+  );
+  // Valid signal (budget 2) verified against a different declared cap -> mismatch.
+  assert.deepEqual(
+    verifyCpcEmission({ signals: [ok2[0]], declared_cap: 5, anchor_digests: [ANCHOR] }),
+    { ok: false, raw: 79, reason: "declared_budget_mismatch" }
   );
 });
 ```
@@ -1271,6 +1279,11 @@ export function verifyCpcEmission({ signals, declared_cap, anchor_digests }) {
     if (sig.signal_mode !== "matchable") continue;
     if (ENTROPY_BITS_BY_KIND[sig.evidence_kind] < sig.entropy_floor_bits)
       return { ok: false, raw: 79, reason: "below_floor_digest_emitted" };
+    // A signal's advertised per-window budget must equal the operator's declared cap.
+    // The budget is baked into the class digest, so a self-consistent signal can advertise
+    // an inflated cap that passes recompute; enforce agreement explicitly.
+    if (sig.disclosure_budget_max_signals_per_window !== declared_cap)
+      return { ok: false, raw: 79, reason: "declared_budget_mismatch" };
     // Verifier-grade recompute from the PUBLISHED window-bound commitment (MF1). No
     // raw evidence needed; a digest that does not recompute is a forged match token.
     const recomputed = custodyClassDigest({
@@ -1348,9 +1361,10 @@ The function walks EXACTLY `VOCA_CHECK_ORDER = [67, 68, 69, 78, 70, 71, 72, 73, 
 - 72: `observed.model_identity_digest !== envelope.model_identity_digest` OR `custodyReceipt.model_identity_digest !== envelope.model_identity_digest`.
 - 73: `observed.account_pool_observed === true` while `envelope.account_boundary !== "declared_pool"`.
 - 74: `trace_custody_observed` stricter-set check: allowed pairs are (`provider_only` declared → observed `provider_only`), (`declared_relay` → `provider_only` or `declared_relay`), (`no_trace_retained` → `provider_only`), (`unknown_disallowed` → nothing, observed `unknown` always fails).
+- **Receipt-parseability gate (after 71, before 72):** `validateCustodyReceipt` fail → its result (raw 77 `receipt_schema_invalid`). This runs ONCE before any receipt field is compared, so a malformed receipt never gets misread by the 72/75 content checks (MF3 follow-up).
 - 75: `custodyReceipt.tool_surface_digest !== stage4o_surface_commitment_digest` OR `observed.tool_surface_digest !== stage4o_surface_commitment_digest`.
 - 76: any `observed.transform_digests` entry not in `envelope.declared_transform_digests`.
-- 77: `validateCustodyReceipt` fail → its result (`receipt_schema_invalid`); else binding: `custodyReceipt.request_digest !== requestDigest` OR `custodyReceipt.response_digest !== responseDigest` OR `custodyReceipt.custody_path_digest !== <recomputed>` OR `custodyReceipt.receipt_epoch !== envelope.run_epoch` (MF3 — receipt-to-run binding lives here, after the receipt is schema-valid) → `binding_mismatch`.
+- 77: binding only (schema already passed the gate): `custodyReceipt.request_digest !== requestDigest` OR `custodyReceipt.response_digest !== responseDigest` OR `custodyReceipt.custody_path_digest !== <recomputed>` OR `custodyReceipt.receipt_epoch !== envelope.run_epoch` (MF3 — receipt-to-run binding) → `binding_mismatch`.
 - 79: `verifyCpcEmission` fail.
 - All pass → `{ raw: 0, custody_path_digest }`.
 
@@ -1524,6 +1538,14 @@ test("MF3: receipt epoch problems are raw 77, never raw 69", () => {
   const rb = verifyCustody(b);
   assert.equal(rb.raw, 77);
   assert.equal(rb.reason, "receipt_schema_invalid");
+  // missing receipt field the 72 check would read -> caught by the parseability gate as
+  // 77, never misread as 72 (MF3 follow-up).
+  let c = greenInput();
+  c = { ...c, custodyReceipt: { ...c.custodyReceipt } };
+  delete c.custodyReceipt.model_identity_digest;
+  const rc = verifyCustody(c);
+  assert.equal(rc.raw, 77);
+  assert.equal(rc.reason, "receipt_schema_invalid");
 });
 ```
 
@@ -1579,6 +1601,12 @@ export function verifyCustody(input) {
     return { raw: 71, reason: "relay_policy_direct_only" };
   for (const rid of chain.relay_identity_digests)
     if (!env.declared_relay_digests.includes(rid)) return { raw: 71, reason: "relay_not_declared" };
+  // Receipt-parseability precondition (MF3 follow-up): the receipt is read by the
+  // content checks below (72 model, 75 surface). Validate its shape ONCE here, before
+  // any receipt field is compared, so a malformed receipt fails 77 receipt_schema_invalid
+  // instead of being misread as a 72/75 content mismatch (or throwing).
+  const receiptShape = validateCustodyReceipt(input.custodyReceipt);
+  if (!receiptShape.ok) return { raw: receiptShape.raw, reason: receiptShape.reason };
   // 72
   if (
     input.observed.model_identity_digest !== env.model_identity_digest ||
@@ -1601,9 +1629,7 @@ export function verifyCustody(input) {
   for (const t of input.observed.transform_digests)
     if (!env.declared_transform_digests.includes(t))
       return { raw: 76, reason: "transform_not_declared" };
-  // 77 — receipt schema THEN binding (incl. receipt_epoch===run_epoch, MF3)
-  const vr = validateCustodyReceipt(input.custodyReceipt);
-  if (!vr.ok) return { raw: vr.raw, reason: vr.reason };
+  // 77 — binding only (schema already validated at the receipt-parseability gate above)
   const recomputedPath = custodyPathDigest(input.hops.map(hopReceiptDigest));
   if (
     input.custodyReceipt.request_digest !== input.requestDigest ||
@@ -1652,8 +1678,8 @@ git commit -m "feat(llm-shield): stage 4p custody verifier, 13/13 raw arms, firs
   - `validateEnforcementCommitment(c) -> {ok:true}|{ok:false, raw:67, reason:"schema_invalid"}` — exact keys `["schema","stage4n_window_anchor_digest","custody_class_digest","action_class","count_commitment","signer_public_key","signature"]`, `action_class` from `ENUMS.action_class`.
   - `pincerCorroborated({ commitment, signals }) -> boolean` — true iff some matchable signal shares BOTH `custody_class_digest` AND `stage4n_window_anchor_digest` with the commitment (spec §11.1).
   - `validateRelayContest(contest, { signerKeyDigest }) -> {ok:true}|{ok:false, raw, reason}` — exact keys per §11.2; `signerKeyDigest !== contest.relay_identity_digest` → `{ok:false, raw:68, reason:"contest_signer_mismatch"}` (68-class per closed-ledger rule §11).
-  - `projectVendorDisclosure(attestationDigest, attestationBody) -> disclosure` — MF5 two-arg form: `attestationDigest` is the `body0_digest` computed BEFORE the disclosure exists (see Task 11), `attestationBody` is `body0`. Derives `declared_provider_family`, `declared_relay_count`, `trace_custody_class`, `verification_result` ("verified" iff `attestationBody.raw === 0` else "custody_failure"), and sets `attestation_digest: attestationDigest`. Passing the pre-disclosure digest as an argument (not reading a `bundle_digest` off the body) is what breaks the circular-digest knot (MF5).
-  - `verifyVendorDisclosure(disclosure, attestationDigest, attestationBody) -> {ok:true}|{ok:false, raw:67, reason:"schema_invalid"}` — recompute `projectVendorDisclosure(attestationDigest, attestationBody)` and deep-equal; ANY extra/underivable field fails closed (spec §11.3 test).
+  - `projectVendorDisclosure(attestationDigest, subject) -> disclosure` — MF5 two-arg form: `attestationDigest` is the `body0_digest` computed BEFORE the disclosure exists (see Task 11); `subject` is the headline custody subject `{ provider_family, declared_relay_digests, trace_custody, verification_raw }` carried in `body0.disclosure_subject` (the disclosure projects ONE custody exchange, not the whole multi-arm bundle). Derives `declared_provider_family: subject.provider_family`, `declared_relay_count: subject.declared_relay_digests.length`, `trace_custody_class: subject.trace_custody`, `verification_result` ("verified" iff `subject.verification_raw === 0` else "custody_failure"), and `attestation_digest: attestationDigest`. Passing the pre-disclosure digest as an argument (not reading a `bundle_digest` off the body) is what breaks the circular-digest knot (MF5).
+  - `verifyVendorDisclosure(disclosure, attestationDigest, subject) -> {ok:true}|{ok:false, raw:67, reason:"schema_invalid"}` — recompute `projectVendorDisclosure(attestationDigest, subject)` and deep-equal; ANY extra/underivable field fails closed (spec §11.3 test).
   - `validateExtractionBridge(bridge, { knownCpcDigests, known3tDigests }) -> {ok:true}|{ok:false, raw:67, reason:"schema_invalid"}` — exact keys `["cpc_custody_class_digest","stage3t_attestation_digest","bridge_mode"]`, `bridge_mode === "digest_binding_only"`, and both digests must be members of the supplied known sets (both sides verify independently, spec §11.4).
 
 - [ ] **Step 1: Write the failing test** — cover: pincer match / window-mismatch / class-mismatch (3 arms), contest valid + signer-mismatch (2 arms), disclosure recompute + underivable-field rejection, bridge accept + unknown-digest rejection:
@@ -1727,23 +1753,29 @@ test("relay contest: valid chains; wrong signer key is 68-class", () => {
 });
 
 test("vendor disclosure: recomputes field-for-field; underivable field fails closed", () => {
-  const body0 = {
-    raw: 0,
-    envelope: {
-      provider_family: "self_hosted",
-      declared_relay_digests: [D("1"), D("2")],
-      trace_custody: "declared_relay",
-    },
+  // The disclosure projects a SINGLE headline custody subject, not the whole multi-arm
+  // bundle. body0 carries this subject explicitly so derivation is deterministic.
+  const subject = {
+    provider_family: "self_hosted",
+    declared_relay_digests: [D("1"), D("2")],
+    trace_custody: "declared_relay",
+    verification_raw: 0,
   };
   const body0Digest = D("9"); // stands in for body0_digest (MF5 two-stage)
-  const disc = projectVendorDisclosure(body0Digest, body0);
+  const disc = projectVendorDisclosure(body0Digest, subject);
   assert.equal(disc.schema, "simurgh.vendor_custody_disclosure.v1");
+  assert.equal(disc.declared_provider_family, "self_hosted");
   assert.equal(disc.declared_relay_count, 2);
+  assert.equal(disc.trace_custody_class, "declared_relay");
   assert.equal(disc.verification_result, "verified");
   assert.equal(disc.attestation_digest, body0Digest);
-  assert.deepEqual(verifyVendorDisclosure(disc, body0Digest, body0), { ok: true });
+  assert.deepEqual(verifyVendorDisclosure(disc, body0Digest, subject), { ok: true });
   assert.equal(
-    verifyVendorDisclosure({ ...disc, marketing_grade: "A+" }, body0Digest, body0).ok,
+    projectVendorDisclosure(body0Digest, { ...subject, verification_raw: 75 }).verification_result,
+    "custody_failure"
+  );
+  assert.equal(
+    verifyVendorDisclosure({ ...disc, marketing_grade: "A+" }, body0Digest, subject).ok,
     false
   );
 });
@@ -1766,7 +1798,7 @@ test("extraction bridge: both digests must verify independently", () => {
 Run: `node --test tests/unit/llmShield/stage4p/inventionCore.test.js`
 Expected: FAIL — module not found.
 
-- [ ] **Step 3: Implement `core/inventionCore.mjs`** — straightforward validators following schemaCore's `exactKeys` style (duplicate the tiny helper locally rather than exporting it; DRY yields to core-module independence here), `projectVendorDisclosure(attestationDigest, attestationBody)` building the five-field object (`attestation_digest` = the passed digest, NOT read from the body — MF5), `verifyVendorDisclosure` via `canonicalJson` equality of the recomputed projection, `pincerCorroborated` as a `.some()` over matchable signals comparing BOTH `custody_class_digest` AND `stage4n_window_anchor_digest`.
+- [ ] **Step 3: Implement `core/inventionCore.mjs`** — straightforward validators following schemaCore's `exactKeys` style (duplicate the tiny helper locally rather than exporting it; DRY yields to core-module independence here), `projectVendorDisclosure(attestationDigest, subject)` building the five-field object (`attestation_digest` = the passed digest, NOT read from the body — MF5; `verification_result` from `subject.verification_raw`), `verifyVendorDisclosure` via `canonicalJson` equality of the recomputed projection, `pincerCorroborated` as a `.some()` over matchable signals comparing BOTH `custody_class_digest` AND `stage4n_window_anchor_digest`.
 
 - [ ] **Step 4: Run tests to verify they pass**
 
@@ -1960,11 +1992,15 @@ git commit -m "feat(llm-shield): stage 4p lane b relay captures over the 4o harn
 body0 = { schema, non_claims, safety_rail, arms, cpc_signals, corroborating_commitments,
           enforcement_commitment, pincer_corroborated, relay_contests,
           custody_extraction_bridge, metrics,
-          stage4n_window_anchor_digest, stage4o_surface_commitment_digest }
+          stage4n_window_anchor_digest, stage4o_surface_commitment_digest,
+          disclosure_subject }
+        # disclosure_subject = headline clean arm's { provider_family, declared_relay_digests,
+        #   trace_custody, verification_raw } — the single custody exchange the disclosure
+        #   projects (verification_raw = that arm's raw, 0 for the green-declared-relay arm).
         # NOTE: no vendor_custody_disclosure, no bundle_digest, no signer key, no signature
 body0_digest = domainDigest(ATTESTATION_BUNDLE, SCHEMAS.ATTESTATION, body0)
 
-vendor_custody_disclosure = projectVendorDisclosure(body0_digest, body0)
+vendor_custody_disclosure = projectVendorDisclosure(body0_digest, body0.disclosure_subject)
 
 body1 = { ...body0, vendor_custody_disclosure, signer_public_key_pem }
 bundle_digest = domainDigest(ATTESTATION_BUNDLE, SCHEMAS.ATTESTATION, body1)
@@ -1980,7 +2016,8 @@ entropy-passing `custody_class_digest` strings — 4L slot payoff §1.4, schema-
 string array), `enforcement_commitment` (synthetic pincer fixture), `pincer_corroborated`,
 `relay_contests` (valid contest fixture), `custody_extraction_bridge` (digest_binding_only),
 `metrics`, `stage4n_window_anchor_digest`, `stage4o_surface_commitment_digest`,
-`vendor_custody_disclosure`, `signer_public_key_pem`, `bundle_digest`, `signature`.
+`disclosure_subject`, `vendor_custody_disclosure`, `signer_public_key_pem`,
+`bundle_digest`, `signature`.
 
 - Verifier `verify-stage4p.mjs`: two-tier (3M pattern) — `--offline` recomputes every arm from committed fixtures, **reconstructs `body0`/`body1` and recomputes both `body0_digest` and `bundle_digest` in the same two stages**, re-projects the vendor disclosure from `body0_digest` and deep-equals it, verifies Ed25519 over `bundle_digest`, checks non-claims list byte-equality, checks `corroborating_commitments` contains EXACTLY the matchable arms' digests and nothing degraded, re-checks pincer/contest/bridge. Exit code ALWAYS routed through `stage4CodeForRawCode`.
 
