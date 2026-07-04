@@ -1,0 +1,58 @@
+{
+  "schema": "simurgh.seismograph.genesis_policy.v1",
+  "stage": "4N",
+  "chain_id": "stage4n-extraction-seismograph-v0",
+  "scope": {
+    "lane": "extraction",
+    "source_stages": [
+      "4K",
+      "4L",
+      "4M"
+    ],
+    "reserved_exit_families": []
+  },
+  "publication": {
+    "surface": "in_repo_jsonl",
+    "feed_path": "docs/research/llm-shield/evidence/stage-4n/heartbeat-feed.jsonl",
+    "append_only": true
+  },
+  "window_policy": {
+    "clock": "synthetic",
+    "cadence": "P1D",
+    "genesis_window": "synthetic-0000",
+    "max_overdue_heartbeats": 0
+  },
+  "reveal_policy": {
+    "aggregate_reveal_delay_windows": 2,
+    "freshest_oracle_non_claim": true
+  },
+  "band_policy": {
+    "dimensions": {
+      "breach_count": [
+        "0",
+        "1-5",
+        ">5"
+      ],
+      "consumer_count": [
+        "0",
+        "1-10",
+        ">10"
+      ]
+    },
+    "band_vector_space_size": 9,
+    "leakage_bits_per_reveal_max": 4
+  },
+  "non_claims": [
+    "band_not_count",
+    "quiet_trace_not_safe_model",
+    "reporting_liveness_not_detection_guarantee",
+    "synthetic_clock_not_deployment_sla",
+    "equivocation_detection_requires_two_artifacts",
+    "inclusion_proofs_are_bilateral_not_public"
+  ],
+  "crypto": {
+    "canonicalization": "RFC8785_JCS",
+    "digest": "SHA-256",
+    "signature": "Ed25519"
+  }
+}

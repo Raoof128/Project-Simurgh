@@ -1,0 +1,25 @@
+{
+  "schema": "simurgh.seismograph.inclusion_proof.v1",
+  "stage": "4N",
+  "distribution": "bilateral_only",
+  "window_id": "synthetic-0003",
+  "heartbeat_digest": "sha256:8b46ab9e6ebca35d7b3ff09e55cb51a07e5eccee66546cde94f06d49476dfd62",
+  "bundle_digest": "sha256:24818f4685d62677abbc7e2838654f5fc893feff90dc0b9b8c1bca7aea940aff",
+  "bundle_tier": "Tier-A",
+  "included_under": "stage4m_disclosure_root",
+  "proof_path": [
+    {
+      "sibling": "sha256:787bed3d52001e8b6066e22674f519c245799e837af06246f6374e11537a7f1f",
+      "side": "right"
+    },
+    {
+      "sibling": "sha256:61963e189fb238244aa6bd38c8b07817b912aae706b7fc64ba6ef7525163cedf",
+      "side": "right"
+    },
+    {
+      "sibling": "sha256:ba108d2c8f7a034d3294250bbdd859edb2b2e4cbca33a287ff47a870dec7bf4f",
+      "side": "left"
+    }
+  ],
+  "root": "sha256:75dce8144999cdcbb4a405f55462697a8020da7e0dfc7b2faa008fd084e3ed2c"
+}

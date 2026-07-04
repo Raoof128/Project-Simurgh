@@ -1,0 +1,62 @@
+{
+  "t0-clean": {
+    "raw": 0,
+    "reason": null,
+    "gate": null
+  },
+  "t1-drop-heartbeat": {
+    "raw": 47,
+    "reason": "heartbeat_absent_for_expected_window",
+    "gate": "Q11"
+  },
+  "t2-fork": {
+    "raw": 48,
+    "reason": "cross_artifact_digest_mismatch",
+    "gate": "Q17"
+  },
+  "t3-reorder": {
+    "raw": 49,
+    "reason": "interleave_order_violation",
+    "gate": "Q10"
+  },
+  "t4-mutate-4k-root": {
+    "raw": 50,
+    "reason": "source_root_mismatch",
+    "gate": "Q15"
+  },
+  "t5-absent-heartbeat": {
+    "raw": 51,
+    "reason": "referenced_heartbeat_absent",
+    "gate": "Q12"
+  },
+  "t6-early-reveal": {
+    "raw": 52,
+    "reason": "reveal_early",
+    "gate": "Q13"
+  },
+  "t7-drop-due-reveal": {
+    "raw": 52,
+    "reason": "reveal_overdue",
+    "gate": "Q13"
+  },
+  "t8-reveal-band-mismatch": {
+    "raw": 50,
+    "reason": "reveal_commitment_mismatch",
+    "gate": "Q13"
+  },
+  "t9-undeclared-dimension": {
+    "raw": 53,
+    "reason": "undeclared_band_dimension",
+    "gate": "Q14"
+  },
+  "t10-raw-count": {
+    "raw": 54,
+    "reason": "raw_count_public",
+    "gate": "Q16"
+  },
+  "t11-proof-material-public": {
+    "raw": 54,
+    "reason": "inclusion_proof_material_public",
+    "gate": "Q16"
+  }
+}
