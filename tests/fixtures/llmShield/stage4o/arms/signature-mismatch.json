@@ -1,0 +1,55 @@
+{
+  "arm": "signature-mismatch",
+  "chain": [
+    {
+      "schema": "simurgh.tool_manifest_commitment.v1",
+      "manifest": {
+        "schema": "simurgh.tool_manifest.v1",
+        "server_id_digest": "sha256:7679bd4af4548c09a562694c8b15709ed338aac6cfba45faeccab195f6bcd7f0",
+        "toolset_digest": "sha256:118e5afff60e374d57b0fd1ec3091d1155baef35e51d77a5826a2ce04dace6d5",
+        "tools": [
+          {
+            "tool_name_digest": "sha256:344de450273876ac7527745f720aaa4217c225becc814d13a5fdd49f818f3a10",
+            "tool_schema_digest": "sha256:0f8709c97a1f707617e77e11c884c24e88097f8bd769cdf7b99d9127899d49b1",
+            "authority_class": "read_only",
+            "declared_sinks": [],
+            "risk_class": "low"
+          },
+          {
+            "tool_name_digest": "sha256:40b4a9bbee350ab64c8226b454dbbd3dbdee4c326d58e60dbb3fbd1352fbf14a",
+            "tool_schema_digest": "sha256:7a7dba592097c07f7ab6fd2d10cf51198ffbbc6ad284ca5a1fb27df07be3a1b2",
+            "authority_class": "read_only",
+            "declared_sinks": [],
+            "risk_class": "low"
+          }
+        ]
+      },
+      "manifest_epoch": 0,
+      "valid_from_epoch": 0,
+      "valid_until_epoch": 9,
+      "previous_manifest_digest": "genesis",
+      "delta_digest": "genesis",
+      "consent_binding": "state",
+      "signer_public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAM546totDsx6Kd4hweUmjHUEDKa3jfTBKk8HywSxHIwU=\n-----END PUBLIC KEY-----\n",
+      "signature": "TAMPERED"
+    }
+  ],
+  "receipt": {
+    "schema": "simurgh.tool_receipt.v1",
+    "tool_name_digest": "sha256:344de450273876ac7527745f720aaa4217c225becc814d13a5fdd49f818f3a10",
+    "tool_schema_digest": "sha256:0f8709c97a1f707617e77e11c884c24e88097f8bd769cdf7b99d9127899d49b1",
+    "authority_class": "read_only",
+    "sinks_used": [],
+    "inclusion_proof": [
+      {
+        "sibling": "sha256:c56b9468e563383b445aa336261b930591fa255f039c91d50b1c945f0faa4f13",
+        "side": "right"
+      }
+    ],
+    "run_epoch": 5,
+    "run_id_digest": "sha256:3542864b150f2bb18f80eb3dd0ba12472afabe0614efaa2b1915bfca3e49638a"
+  },
+  "action_digest": "sha256:cec5c4add9d94b89834585a3c4edca8b2d5eb375adb7f0886a08a5e4190f231b",
+  "expected_raw": 56,
+  "expected_reason": "commitment_signature_invalid"
+}

@@ -1,0 +1,5 @@
+{
+  "purpose": "committed-test-fixture-key",
+  "not_secret": true,
+  "do_not_use_for_evidence": true
+}
