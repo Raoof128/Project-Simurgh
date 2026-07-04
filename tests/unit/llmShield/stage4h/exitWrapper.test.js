@@ -68,6 +68,15 @@ test("Stage 4H.4 exit map is explicit and collision-bounded", () => {
       44: 1,
       45: 1,
       46: 1,
+      // Stage 4N Seismograph codes (reviewed extension of the shared ledger; 4N spec §7).
+      47: 1,
+      48: 1,
+      49: 1,
+      50: 1,
+      51: 1,
+      52: 1,
+      53: 1,
+      54: 1,
     })
   );
 });
