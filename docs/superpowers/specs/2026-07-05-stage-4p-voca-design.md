@@ -84,9 +84,11 @@ window_anchor_is_public
 match_is_not_attribution
 private_custody_corroboration_deferred
 disclosure_budget_is_not_privacy_proof
+not_enforcement_verification
+not_legal_compliance_certification
 ```
 
-Expanded meanings of the four load-bearing additions:
+Expanded meanings of the six load-bearing additions:
 
 - `not_model_substitution_oracle` — 4P classifies model identity mismatch inside
   controlled/legal evidence lanes; it cannot tell what a hostile hidden upstream
@@ -98,6 +100,10 @@ Expanded meanings of the four load-bearing additions:
 - `disclosure_budget_is_not_privacy_proof` — the budget limits emitted public
   match tokens. It is not an information-theoretic privacy proof and does not
   prevent linkage outside the declared evidence system.
+- `not_enforcement_verification` — pincer corroboration (§11.1) is mutual
+  consistency between two committed artifacts, not proof either side is truthful.
+- `not_legal_compliance_certification` — the vendor custody disclosure (§11.3) is
+  an evidence surface, not a certification (4M Article-73 projection lineage).
 
 **Honesty rails:** "custody verified," never "provider honest." No real company
 names in synthetic fixtures, evidence payloads, or generated custody examples.
@@ -453,6 +459,9 @@ Otherwise, it emits degraded non-matchable telemetry only.
 3. **4L:** entropy-passing CPC digests populate a forward-compatible
    `corroborating_commitments` field satisfying the reserved 4L slot schema.
    4P does not rewrite or regenerate old 4L evidence.
+4. **3T:** the optional `custody_extraction_bridge` (§11.4) binds a CPC
+   custody-class digest to a 3T extraction-attestation digest — digest binding of
+   two independently verifiable artifacts, never causal proof.
 
 ```text
 4N = public temporal anchor
@@ -460,7 +469,105 @@ Otherwise, it emits degraded non-matchable telemetry only.
 4P = custody-class corroboration
 ```
 
-## 11. Lean proofs
+## 11. Invention layer (U1–U5)
+
+**Closed-ledger rule:** none of these artifacts adds a raw code. Artifact-level
+failures map to existing semantics — signature failures reject as 68-class,
+window/epoch failures as 69-class, emission-rule violations as raw 79. The
+ledger stays 67–79 and the §7.3 blast radius does not grow.
+
+### 11.1 U2 — Dual-side enforcement pincer
+
+The documented credibility gap: provider enforcement claims against proxy
+networks are self-attested prose. 4P's CPC layer builds the demand side
+(operator herd evidence); this artifact adds the supply-side counterpart:
+
+```json
+{
+  "schema": "simurgh.enforcement_window_commitment.v1",
+  "stage4n_window_anchor_digest": "sha256:...",
+  "custody_class_digest": "sha256:...",
+  "action_class": "account_cluster_ban|rate_restriction|key_revocation|other_declared",
+  "count_commitment": "sha256:...",
+  "signer_public_key": "base64...",
+  "signature": "base64..."
+}
+```
+
+Corroboration rule: a custody class is **pincer-corroborated** in window W iff a
+provider `enforcement_window_commitment` and at least one operator matchable CPC
+signal commit the same `custody_class_digest` under the same 4N window anchor.
+Neither side reveals raw data; `count_commitment` is a commitment, not a revealed
+figure — no third-party incident figure is ever adopted. Fixtures are synthetic
+on BOTH sides. Non-claim: `not_enforcement_verification`.
+
+Tests: pincer arms 3/3 — match (same class + window ⇒ corroborated),
+window-mismatch (no corroboration), class-mismatch (no corroboration).
+
+### 11.2 U3 — Relay respondent path v1
+
+```json
+{
+  "schema": "simurgh.relay_contest.v1",
+  "contested_custody_class_digest": "sha256:...",
+  "stage4n_window_anchor_digest": "sha256:...",
+  "relay_identity_digest": "sha256:...",
+  "counter_evidence_digest": "sha256:...",
+  "signature": "base64..."
+}
+```
+
+Rules: a contest must be signed by the key whose digest is
+`relay_identity_digest`; it chains append-only into the same timeline (3Q
+lineage) and never deletes or mutates the contested signal; the verifier includes
+contests in replay. 4M line, verbatim: once a contestable format exists, choosing
+an uncontestable one is evidence of weakness.
+
+Constitution mapping: model-identity custody makes the constitution's
+honesty-about-identity clauses enforceable at infrastructure level — "users know
+which model they are actually talking to" becomes a recomputable property of the
+custody chain, not an aspiration.
+
+Tests: contest arms 2/2 — valid contest chains and appears in replay; a contest
+signed by a key not matching `relay_identity_digest` is rejected.
+
+### 11.3 U4 — Vendor custody disclosure projection
+
+Industry gap: enterprise AI subprocessor lists are prose; middleware re-routes
+silently; no procurement team can recompute the claim.
+`simurgh.vendor_custody_disclosure.v1` is an **output projection** (4M
+Article-73 pattern) with fields `declared_provider_family`,
+`declared_relay_count`, `trace_custody_class`, `verification_result`,
+`attestation_digest` — every field recomputable from the attestation, nothing
+added. Non-claim: `not_legal_compliance_certification`. This makes the
+router/aggregator ecosystem attestable: an honest aggregator can prove it is a
+declared relay, and silence becomes the signal.
+
+Test: projection recomputes field-for-field from the attestation; a projection
+carrying any field not derivable from the attestation fails closed.
+
+### 11.4 U5 — Custody–extraction bridge
+
+One optional attestation field:
+
+```json
+{
+  "custody_extraction_bridge": {
+    "cpc_custody_class_digest": "sha256:...",
+    "stage3t_attestation_digest": "sha256:...",
+    "bridge_mode": "digest_binding_only"
+  }
+}
+```
+
+Binds upstream custody evidence (how they got in) to downstream extraction
+evidence (what they took — 3T/3U lineage) by digest. The verifier checks both
+referenced digests verify independently before accepting the binding. One
+synthetic fixture arm. The bridge is a digest binding, **not causal proof**.
+
+U1 (`GhostTrilemma`) lives in the Lean section (§12).
+
+## 12. Lean proofs
 
 `proofs/stage4p/OriginCustody.lean` — self-contained core Lean 4 (no mathlib),
 leanprover/lean4:v4.15.0, gated by the existing `.github/workflows/stage-4-lean-proofs.yml`
@@ -478,10 +585,26 @@ leanprover/lean4:v4.15.0, gated by the existing `.github/workflows/stage-4-lean-
 emission gating, not non-disclosure. Codes 67–79 also enter
 `proofs/stage4/ExitLattice.lean` totality/fail-closed coverage.
 
+U1 — `GhostTrilemma`, the sixth theorem and the stage's centrepiece:
+
+```text
+For any recorded exchange mediated by an undeclared relay r, exactly one holds:
+  vanish       r produces no valid hop → chain linkage fails → absence/71/78, ledgered
+  forge        r signs a hop with a declared key it does not own → excluded by the
+               signature-soundness assumption
+  self_ledger  r signs with its own key → r's relay_identity_digest enters the
+               evidence permanently
+```
+
+"The proxy must either vanish, break cryptography, or write itself into the
+evidence." Proved as a case analysis over the previous-link chain, under the same
+recorded-model boundary. This is the machine-checked laundering-cost structure of
+proxy-mediated model access — absence-as-signal upgraded from prose to theorem.
+
 **Signed proof boundary (4J/4O lineage):** the proofs are over the recorded
 custody model, not physical network truth.
 
-## 12. Testing matrix and E2E net
+## 13. Testing matrix and E2E net
 
 | Layer            | Tests                                                                                         |
 | ---------------- | --------------------------------------------------------------------------------------------- |
@@ -500,7 +623,8 @@ custody model, not physical network truth.
 **K7-style all-functions E2E net (mandatory before tag):** composes every stage4p
 export — core validation, all digest constructors, chain-link check, entropy gate,
 CPC construction, check order, builder, verifier, Lane B replay — plus the
-per-field tamper matrix, signature tamper, and all three cross-stage invariants,
+per-field tamper matrix, signature tamper, all cross-stage invariants (§10), and
+the invention-layer arms (§11),
 then the full-chain regression (regenerated 4h exit-map golden, 4k/4l wrappers,
 4l full-chain e2e green). The 4P e2e net is explicitly wired into
 `scripts/check-e2e.sh` (name verified in-repo; `npm test` gates unit only).
@@ -518,6 +642,8 @@ green-arm acceptance: all Lane A green arms accepted (exact counts fixed in the
                       implementation plan and frozen into the attestation)
 Lane B arms classified: 6/6
 CPC fixture arms: 5/5
+invention-layer arms: pincer 3/3, contest 2/2, disclosure recompute pass,
+                      bridge binding pass
 privacy scan: pass
 byte-identical reproduction: pass (twice, Node 26)
 ```
@@ -525,7 +651,7 @@ byte-identical reproduction: pass (twice, Node 26)
 Do **not** measure "proxy detection rate" in the wild; that claim requires
 real-world deployment.
 
-## 13. Reproduce and CI discipline
+## 14. Reproduce and CI discipline
 
 - `scripts/reproduce-llm-shield-stage4p.sh` (naming verified against the
   4H–4O lineage): one command, offline, egress-gated, byte-idempotent twice under
@@ -537,28 +663,29 @@ real-world deployment.
 - Spec/plan committed on a branch, never local main (4O rebase-merge gotcha).
 - Neutral commit/PR/release messages throughout.
 
-## 14. Four-axis scorecard (honest; re-score at closeout)
+## 15. Four-axis scorecard (honest; re-score at closeout)
 
-| Axis               | Score   | Why / what moves it higher                                                                                                                                                                                                                                                                                                                                                                    |
-| ------------------ | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Novelty            | **8.0** | 4N-window-anchored, entropy-gated custody-class corroboration is new (AEX attests request-output relations and concedes the endpoint-trust gap; RATS/SCITT/in-toto do not touch LLM proxy custody). The envelope/receipt machinery itself is AEX/in-toto-adjacent — that honesty costs a point. Higher: 4P.1 VOPRF/PSI private matching; a genuine second operator corroborating in the wild. |
-| Frontier           | **8.0** | The wound is live (May-2026 grey-market coverage; CISPA 17-proxy audit) and nobody has a recomputable evidence format for it. Not higher because Lane B is MCP-shaped; HTTP resale shape deferred to 4P.1.                                                                                                                                                                                    |
-| Good-for-Anthropic | **9.0** | Directly the Claude grey-market story, answered in Anthropic's interest without disputing or adopting anyone's figures — the replay format enforcement claims lack. Higher: a real cross-operator CPC pilot.                                                                                                                                                                                  |
-| Constitution       | **8.0** | Makes "declared custody" machine-checkable infrastructure; tensions (public anchor, budget-not-privacy-proof) signed as non-claims rather than hidden. Higher: respondent path for accused relays (4M lineage) — future work.                                                                                                                                                                 |
+| Axis               | Score   | Why / what moves it higher                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| ------------------ | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Novelty            | **9.0** | U1 `GhostTrilemma` (the laundering-cost trichotomy as a machine-checked theorem) and the U2 dual-side pincer are firsts; 4N-window-anchored, entropy-gated custody-class corroboration is new (AEX attests request-output relations and concedes the endpoint-trust gap; RATS/SCITT/in-toto do not touch LLM proxy custody). The envelope/receipt machinery itself is AEX/in-toto-adjacent — that honesty costs a point. Higher: 4P.1 VOPRF/PSI private matching; a genuine second operator corroborating in the wild. |
+| Frontier           | **9.0** | The wound is live (May-2026 grey-market coverage; CISPA 17-proxy audit) and nobody has a recomputable evidence format for it. U4 turns prose subprocessor lists into recomputable custody disclosures and makes the router/aggregator ecosystem attestable — an unclaimed gap. Not higher because Lane B is MCP-shaped; HTTP resale shape deferred to 4P.1.                                                                                                                                                            |
+| Good-for-Anthropic | **9.5** | The U2 pincer is the missing-appendix format for self-attested enforcement claims: provider commitments and operator herd evidence corroborate by digest equality with no raw data revealed. Directly the Claude grey-market story, answered in Anthropic's interest without disputing or adopting anyone's figures. 10 requires a real operator/provider pilot — adoption cannot be self-awarded.                                                                                                                     |
+| Constitution       | **9.0** | Respondent path now IN scope (contestable format) and model-identity custody makes the identity-honesty clauses enforceable infrastructure. Tensions (public anchor, budget-not-privacy-proof) signed as non-claims rather than hidden. 10 requires the contested case exercised for real. Remaining gaps across all axes are pilot-shaped, not design-shaped.                                                                                                                                                         |
 
 **Closeout source discipline:** any closeout score citing AEX, ChinaTalk, Tom's
 Hardware, CISPA, RATS, SCITT, or in-toto must include a source-map entry and must
 not adopt third-party incident figures as Simurgh measurements.
 
-## 15. Deferred to 4P.1 (signed as limitations, not silently dropped)
+## 16. Deferred to 4P.1 (signed as limitations, not silently dropped)
 
 ```text
 http_resale_shape_deferred_to_4p1        HTTP proxy-custody extension (resale shape)
 private_custody_corroboration_deferred   VOPRF/PSI private matching upgrade
-respondent_path_for_relays               accused-relay contest path (4M lineage)
 ```
 
-## 16. Suggested implementation shape (feeds writing-plans)
+The accused-relay respondent path, originally deferred, moved IN scope as §11.2.
+
+## 17. Suggested implementation shape (feeds writing-plans)
 
 1. Constants, digest core, schema validation (core).
 2. Hop-chain verification + check order + raw-code matrix (core).
@@ -567,14 +694,16 @@ respondent_path_for_relays               accused-relay contest path (4M lineage)
 5. Lane A corpus + Lane C fixture.
 6. Lane B relay over the 4O harness; frozen captures.
 7. CPC five-arm fixture.
-8. Golden regenerations (§7.3 blast radius).
-9. Lean proofs + exit-lattice extension.
-10. K7 E2E net + reproduce script + privacy/overclaim scans.
-11. Docs (threat model, validation matrix, reviewer checklist) + docs-accuracy
+8. Invention layer (§11): enforcement pincer commitment, relay contest, vendor
+   disclosure projection, extraction bridge — schemas + fixture arms.
+9. Golden regenerations (§7.3 blast radius).
+10. Lean proofs (six theorems incl. `GhostTrilemma`) + exit-lattice extension.
+11. K7 E2E net + reproduce script + privacy/overclaim scans.
+12. Docs (threat model, validation matrix, reviewer checklist) + docs-accuracy
     pass verifying every doc claim against shipped code.
-12. Closeout: four-axis re-score.
+13. Closeout: four-axis re-score.
 
-## 17. Final safety rail (frozen)
+## 18. Final safety rail (frozen)
 
 Stage 4P proves properties of recorded custody evidence. It does not prove
 physical network truth, provider honesty, real-world attribution, or model
