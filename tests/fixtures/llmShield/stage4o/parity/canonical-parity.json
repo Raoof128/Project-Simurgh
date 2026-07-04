@@ -1,0 +1,112 @@
+[
+  {
+    "description": "empty object",
+    "domain": "SIMURGH_STAGE4O_TOOL_ENTRY_V1",
+    "schema": "s",
+    "value": {},
+    "digest": "sha256:e829d5b5ec01ccb4c23b0ae2aae7bfe511c185c6708efd1335dcb3e6b222daa9"
+  },
+  {
+    "description": "nested key sort",
+    "domain": "SIMURGH_STAGE4O_DELTA_V1",
+    "schema": "s",
+    "value": {
+      "b": 2,
+      "a": {
+        "y": 0,
+        "x": 1
+      }
+    },
+    "digest": "sha256:be15526222247c141b7e45779e10d667ab3978fe267bc23b06683262ea3becc2"
+  },
+  {
+    "description": "array of objects",
+    "domain": "SIMURGH_STAGE4O_ACTION_V1",
+    "schema": "s",
+    "value": [
+      1,
+      {
+        "z": 9,
+        "a": 1
+      },
+      2
+    ],
+    "digest": "sha256:fbf4dcf25aacb9ada9fec3786fe5098808ab67684d71d53fc96f5770e3a7534f"
+  },
+  {
+    "description": "unicode string",
+    "domain": "SIMURGH_STAGE4O_SERVER_ID_V1",
+    "schema": "s",
+    "value": "café ☕ 日本",
+    "digest": "sha256:040c27b096d8b73ccc7aa6ae7b4d70a4acfccc63aedfd701448db2ee2c9ab13d"
+  },
+  {
+    "description": "empty array",
+    "domain": "SIMURGH_STAGE4O_TOOLSET_V1",
+    "schema": "s",
+    "value": [],
+    "digest": "sha256:2af396dfc47b71ecb987bb53f8565a5c7d613d309bccaf7836f8d2deda847f86"
+  },
+  {
+    "description": "boolean and null",
+    "domain": "SIMURGH_STAGE4O_RECEIPT_V1",
+    "schema": "s",
+    "value": {
+      "a": true,
+      "b": false,
+      "c": null
+    },
+    "digest": "sha256:40533e3164bcd6f0296774171a05dc296c6e8c1366a6c1231de30db9fb7f3a7c"
+  },
+  {
+    "description": "integer",
+    "domain": "SIMURGH_STAGE4O_TIMELINE_V1",
+    "schema": "s",
+    "value": 42,
+    "digest": "sha256:ada31d5598bfed5bee630f6827d357e12c48045288b1837feea090527d33cdea"
+  },
+  {
+    "description": "merkle leaf domain",
+    "domain": "SIMURGH_STAGE4O_MERKLE_LEAF_V1",
+    "schema": "simurgh.tool_manifest.v1",
+    "value": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "digest": "sha256:b2f57ded38189066d7ab302343ae778816ab6df21b22a45545075bf14f1a8b6f"
+  },
+  {
+    "description": "merkle node domain",
+    "domain": "SIMURGH_STAGE4O_MERKLE_NODE_V1",
+    "schema": "simurgh.tool_manifest.v1",
+    "value": [
+      "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    ],
+    "digest": "sha256:3646653343f3d1c224c1f3af2786673a4ca0337068214e0f957495f89e337790"
+  },
+  {
+    "description": "commitment domain",
+    "domain": "SIMURGH_STAGE4O_MANIFEST_COMMITMENT_V1",
+    "schema": "simurgh.tool_manifest_commitment.v1",
+    "value": {
+      "epoch": 0
+    },
+    "digest": "sha256:2f2753ea2bc1a186e5d6642ad1e99638d56d0a5e88503c49635bb9973f9407ac"
+  },
+  {
+    "description": "decision corpus domain",
+    "domain": "SIMURGH_STAGE4O_DECISION_CORPUS_V1",
+    "schema": "s",
+    "value": {
+      "arms": 18
+    },
+    "digest": "sha256:9ec54b9941be6dcecc8f58d6d53c2480128331e85e0935be018304a46a9a715a"
+  },
+  {
+    "description": "attestation bundle domain",
+    "domain": "SIMURGH_STAGE4O_ATTESTATION_BUNDLE_V1",
+    "schema": "s",
+    "value": {
+      "v": 1
+    },
+    "digest": "sha256:8547fe390a05b84cff85ba5f3d5e474850ba98807ff98d79516daaf0a089117d"
+  }
+]

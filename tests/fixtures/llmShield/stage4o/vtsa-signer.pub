@@ -1,0 +1,5 @@
+{
+  "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEATGFUumml72FNeXdqJyleB9mXKh/W3l6N7dqcK0D62mw=\n-----END PUBLIC KEY-----\n",
+  "role": "attestation",
+  "purpose": "committed-test-fixture-key"
+}

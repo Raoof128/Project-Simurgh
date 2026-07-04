@@ -1,0 +1,87 @@
+[
+  {
+    "arm": "blind-reapproval",
+    "expected_raw": 65,
+    "expected_reason": "state_bound_broadening"
+  },
+  {
+    "arm": "destructive-under-harmless-name",
+    "expected_raw": 61,
+    "expected_reason": "authority_class_upgrade"
+  },
+  {
+    "arm": "green-delta-broadening",
+    "expected_raw": 0,
+    "expected_reason": "accepted"
+  },
+  {
+    "arm": "green-state-narrowing",
+    "expected_raw": 0,
+    "expected_reason": "accepted"
+  },
+  {
+    "arm": "green-unchanged",
+    "expected_raw": 0,
+    "expected_reason": "accepted"
+  },
+  {
+    "arm": "invalid-inclusion-proof",
+    "expected_raw": 59,
+    "expected_reason": "inclusion_proof_invalid"
+  },
+  {
+    "arm": "laundering-chain",
+    "expected_raw": 64,
+    "expected_reason": "delta_digest_mismatch"
+  },
+  {
+    "arm": "missing-manifest",
+    "expected_raw": 55,
+    "expected_reason": "absent"
+  },
+  {
+    "arm": "readonly-to-write",
+    "expected_raw": 61,
+    "expected_reason": "authority_class_upgrade"
+  },
+  {
+    "arm": "receipt-binding-mismatch",
+    "expected_raw": 63,
+    "expected_reason": "binding_mismatch"
+  },
+  {
+    "arm": "schema-changed",
+    "expected_raw": 60,
+    "expected_reason": "schema_digest_mismatch"
+  },
+  {
+    "arm": "schema-invalid-manifest",
+    "expected_raw": 55,
+    "expected_reason": "schema_invalid"
+  },
+  {
+    "arm": "server-toolset-change-genesis",
+    "expected_raw": 58,
+    "expected_reason": "toolset_root_recompute_mismatch"
+  },
+  {
+    "arm": "signature-mismatch",
+    "expected_raw": 56,
+    "expected_reason": "commitment_signature_invalid"
+  },
+  {
+    "arm": "sink-expansion",
+    "expected_raw": 62,
+    "expected_reason": "sink_not_declared"
+  },
+  {
+    "arm": "stale-manifest-replay",
+    "expected_raw": 57,
+    "expected_reason": "run_epoch_outside_validity_window"
+  },
+  {
+    "arm": "tool-added-post-approval",
+    "expected_raw": 59,
+    "expected_reason": "tool_not_in_manifest"
+  }
+]

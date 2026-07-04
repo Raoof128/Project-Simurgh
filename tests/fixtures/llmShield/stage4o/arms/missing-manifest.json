@@ -1,0 +1,22 @@
+{
+  "arm": "missing-manifest",
+  "chain": null,
+  "receipt": {
+    "schema": "simurgh.tool_receipt.v1",
+    "tool_name_digest": "sha256:344de450273876ac7527745f720aaa4217c225becc814d13a5fdd49f818f3a10",
+    "tool_schema_digest": "sha256:0f8709c97a1f707617e77e11c884c24e88097f8bd769cdf7b99d9127899d49b1",
+    "authority_class": "read_only",
+    "sinks_used": [],
+    "inclusion_proof": [
+      {
+        "sibling": "sha256:c56b9468e563383b445aa336261b930591fa255f039c91d50b1c945f0faa4f13",
+        "side": "right"
+      }
+    ],
+    "run_epoch": 5,
+    "run_id_digest": "sha256:3542864b150f2bb18f80eb3dd0ba12472afabe0614efaa2b1915bfca3e49638a"
+  },
+  "action_digest": "sha256:cec5c4add9d94b89834585a3c4edca8b2d5eb375adb7f0886a08a5e4190f231b",
+  "expected_raw": 55,
+  "expected_reason": "absent"
+}
