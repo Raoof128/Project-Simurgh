@@ -225,6 +225,59 @@ export const VTSA_REASONS_65 = Object.freeze([
 ]);
 export const VTSA_REASONS_66 = Object.freeze(["timeline_root_mismatch", "chain_position_absent"]);
 
+// Stage 4P VOCA codes (reviewed extension of the shared ledger; 4P spec §7). NUMERIC
+// order is allocation order; the NORMATIVE first-failure order is VOCA_CHECK_ORDER
+// (4P spec §7.1 — 78 runs right after structural validity because laundering masks
+// downstream mismatches).
+export const VOCA_RAW_CODES = Object.freeze({
+  CUSTODY_ENVELOPE_MISSING: 67,
+  CUSTODY_SIGNATURE_INVALID: 68,
+  CUSTODY_EPOCH_INVALID: 69,
+  ENDPOINT_ORIGIN_MISMATCH: 70,
+  UNDECLARED_PROXY_HOP: 71,
+  MODEL_IDENTITY_MISMATCH: 72,
+  ACCOUNT_POOL_AMBIGUITY: 73,
+  TRACE_CUSTODY_VIOLATION: 74,
+  CUSTODY_SURFACE_REWRITE: 75,
+  RELAY_TRANSFORM_UNBOUND: 76,
+  CUSTODY_RECEIPT_BINDING_MISMATCH: 77,
+  CUSTODY_PATH_LAUNDERING: 78,
+  CPC_EMISSION_VIOLATION: 79,
+});
+export const VOCA_CHECK_ORDER = Object.freeze([67, 68, 69, 78, 70, 71, 72, 73, 74, 75, 76, 77, 79]);
+
+export const VOCA_REASONS_67 = Object.freeze(["absent", "schema_invalid"]);
+export const VOCA_REASONS_68 = Object.freeze([
+  "envelope_signature_invalid",
+  "hop_signature_invalid",
+  "receipt_signature_invalid",
+]);
+export const VOCA_REASONS_69 = Object.freeze(["run_epoch_outside_validity_window"]);
+export const VOCA_REASONS_70 = Object.freeze(["declared_endpoint_digest_mismatch"]);
+export const VOCA_REASONS_71 = Object.freeze(["relay_not_declared", "relay_policy_direct_only"]);
+export const VOCA_REASONS_72 = Object.freeze(["model_identity_digest_mismatch"]);
+export const VOCA_REASONS_73 = Object.freeze(["account_boundary_undeclared_pool"]);
+export const VOCA_REASONS_74 = Object.freeze(["trace_custody_expanded_beyond_declaration"]);
+export const VOCA_REASONS_75 = Object.freeze(["stage4o_surface_binding_mismatch"]);
+export const VOCA_REASONS_76 = Object.freeze(["transform_not_declared"]);
+export const VOCA_REASONS_77 = Object.freeze(["receipt_schema_invalid", "binding_mismatch"]);
+export const VOCA_REASONS_78 = Object.freeze([
+  "missing_hop",
+  "reordered_hop",
+  "duplicated_hop",
+  "non_linking_previous_digest",
+  "terminal_response_mismatch",
+]);
+export const VOCA_REASONS_79 = Object.freeze([
+  "below_floor_digest_emitted",
+  "matchable_missing_digest",
+  "degraded_carries_digest",
+  "window_anchor_not_in_feed",
+  "disclosure_budget_exceeded",
+  "custody_class_recompute_mismatch",
+  "declared_budget_mismatch",
+]);
+
 export const HARNESS_CODES = Object.freeze({
   CLEAN_RUN_FALSELY_REJECTED: 19,
 });
@@ -293,6 +346,20 @@ export const RUN_LEVEL_BY_RAW = Object.freeze({
   64: 1,
   65: 1,
   66: 1,
+  // Stage 4P VOCA codes (reviewed extension of the shared ledger; 4P spec §7.2).
+  67: 1,
+  68: 1,
+  69: 1,
+  70: 1,
+  71: 1,
+  72: 1,
+  73: 1,
+  74: 1,
+  75: 1,
+  76: 1,
+  77: 1,
+  78: 1,
+  79: 1,
 });
 
 export function stage4CodeForRawCode(code) {
