@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 """Stage 4O: authorise_with_manifest kernel entry point (additive; 4A/4B/4C frozen)."""
+import pathlib
 import subprocess
 import sys
 
@@ -90,10 +91,11 @@ def test_each_raw_code_in_isolation_and_first_failure_order():
 
 
 def test_frozen_entry_points_untouched():
+    adapter_root = pathlib.Path(__file__).resolve().parents[1]  # tests/ -> adapter root
     r = subprocess.run(
         [sys.executable, "-m", "pytest", "-q",
          "tests/test_capability_kernel.py", "tests/test_capability_kernel_intent.py",
          "tests/test_capability_kernel_provenance.py", "tests/test_capability_kernel_equivalence.py"],
-        capture_output=True, text=True,
+        cwd=adapter_root, capture_output=True, text=True,
     )
     assert r.returncode == 0, r.stdout + r.stderr
