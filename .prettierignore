@@ -68,3 +68,5 @@ tests/fixtures/llmShield/stage4l
 docs/research/llm-shield/evidence/stage-4l
 tests/fixtures/llmShield/stage4m/
 docs/research/llm-shield/evidence/stage-4m/
+tests/fixtures/llmShield/stage4n/
+docs/research/llm-shield/evidence/stage-4n/heartbeat-feed.jsonl
