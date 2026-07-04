@@ -1,0 +1,34 @@
+{
+  "schema": "simurgh.seismograph.attestation.v1",
+  "chain_id": "stage4n-extraction-seismograph-v0",
+  "as_of_window": "synthetic-0006",
+  "genesis_policy_digest": "sha256:f06070e17a3594f0c6e5a098e0b533adf1b0e5aaff8dc59c76f1680e69a07588",
+  "feed_root": "sha256:ee30488ad76171d5d66e5942b73da1166deb6c1bd759bdc55e14ad15526e5d29",
+  "chain_head_digest": "sha256:afd3ee1123e0bd0576140d57dd1fe86fac28cfbf68621697b23526a88dd5b1ea",
+  "record_counts": {
+    "heartbeat": 7,
+    "aggregate_reveal": 5
+  },
+  "source_roots": {
+    "stage4k_exposure_root": "sha256:d11056d081f2998521511e060aede23b47b35d7b29d0e855df516427e1fe8ac3",
+    "stage4l_cluster_budget_root": "sha256:674eeb814853bbd189f657074fdbea64834287055e2238081be706d960f5cd1a",
+    "stage4m_disclosure_root": "sha256:75dce8144999cdcbb4a405f55462697a8020da7e0dfc7b2faa008fd084e3ed2c"
+  },
+  "known_limitations": [
+    "detection_completeness_not_claimed",
+    "inherits_4l_provider_supplied_cluster_commitment_assumption",
+    "private_side_modelled_in_repo_synthetic_v0",
+    "proof_is_of_model_not_implementation",
+    "publication_refusal_only_made_visible_not_prevented",
+    "respondent_contests_anchored_not_adjudicated",
+    "reveal_commitment_binding_not_hiding_low_entropy_v0"
+  ],
+  "non_claims": [
+    "band_not_count",
+    "quiet_trace_not_safe_model",
+    "reporting_liveness_not_detection_guarantee",
+    "synthetic_clock_not_deployment_sla",
+    "equivocation_detection_requires_two_artifacts",
+    "inclusion_proofs_are_bilateral_not_public"
+  ]
+}

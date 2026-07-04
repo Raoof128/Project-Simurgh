@@ -1,0 +1,6 @@
+{
+  "schema": "simurgh.seismograph.manifest.v1",
+  "attestation_digest": "sha256:faf09bc1616f778edd6852d82c43d1b2a8117c3d1edddf691511196c8d9a89dc",
+  "signature": "ed25519:ncsbOCsn8+Fnww/QekOLOT8w7pHlITJDCLF0JW8kWvMiH5g7v2MpQGHLZOOSBBn4reeuHFxr2b6nsZDvhQ7ABQ==",
+  "public_key_fingerprint": "sha256:3ab2a18402161e446b723b18e5698818649471d24466ec8561b365ee3f192b14"
+}
