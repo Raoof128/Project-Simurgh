@@ -1,5 +1,6 @@
 {
   "arm": "invalid-inclusion-proof",
+  "evaluator": "gate",
   "chain": [
     {
       "schema": "simurgh.tool_manifest_commitment.v1",

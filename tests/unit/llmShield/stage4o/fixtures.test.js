@@ -6,6 +6,10 @@ import { readFileSync } from "node:fs";
 import { createPublicKey, verify as edVerify } from "node:crypto";
 import { gateToolCall } from "../../../../tools/simurgh-attestation/stage4o/core/decisionCore.mjs";
 import { commitmentDigest } from "../../../../tools/simurgh-attestation/stage4o/core/manifestCore.mjs";
+import {
+  verifyTimelineRecord,
+  parseFeed,
+} from "../../../../tools/simurgh-attestation/stage4o/core/timelineCore.mjs";
 
 const FIX = "tests/fixtures/llmShield/stage4o";
 const pub = JSON.parse(readFileSync(`${FIX}/vtsa-manifest-signer.pub`, "utf8")).public_key_pem;
@@ -24,24 +28,41 @@ const sigCheck = (env) => {
   }
 };
 
+const feed = parseFeed(
+  readFileSync("docs/research/llm-shield/evidence/stage-4n/heartbeat-feed.jsonl", "utf8")
+);
+
 test("every committed arm yields exactly its expected raw code and reason", () => {
   const matrix = JSON.parse(readFileSync(`${FIX}/expected-results/vtsa-matrix.json`, "utf8"));
-  // 17 kernel-level arms here; Task 10 adds the attestation-level timeline arm (66) -> 18.
-  assert.ok(matrix.length >= 17, `expected >=17 arms, got ${matrix.length}`);
+  assert.ok(matrix.length >= 18, `expected >=18 arms, got ${matrix.length}`);
   const seen = new Set();
   let accepts = 0;
   for (const row of matrix) {
     const arm = JSON.parse(readFileSync(`${FIX}/arms/${row.arm}.json`, "utf8"));
-    const out = gateToolCall({
-      chain: arm.chain,
-      receipt: arm.receipt,
-      actionDigest: arm.action_digest,
-      verifyCommitmentSignature: sigCheck,
-    });
-    assert.equal(out.raw, row.expected_raw, `${row.arm}: raw`);
-    if (row.expected_raw !== 0) assert.equal(out.reason, row.expected_reason, `${row.arm}: reason`);
+    let raw;
+    let reason;
+    if (row.evaluator === "timeline") {
+      const out = verifyTimelineRecord({
+        record: arm.timeline_record,
+        chain: arm.chain,
+        stage4nRecords: feed,
+      });
+      raw = out.ok ? 0 : out.raw;
+      reason = out.reason;
+    } else {
+      const out = gateToolCall({
+        chain: arm.chain,
+        receipt: arm.receipt,
+        actionDigest: arm.action_digest,
+        verifyCommitmentSignature: sigCheck,
+      });
+      raw = out.raw;
+      reason = out.reason;
+    }
+    assert.equal(raw, row.expected_raw, `${row.arm}: raw`);
+    if (row.expected_raw !== 0) assert.equal(reason, row.expected_reason, `${row.arm}: reason`);
     else accepts += 1;
-    seen.add(out.raw);
+    seen.add(raw);
   }
   // Anti-theatre: not reject-all (>=3 GREEN accepts) and broad coverage (>=10 distinct codes).
   assert.ok(accepts >= 3, `expected >=3 GREEN accepts, got ${accepts}`);
