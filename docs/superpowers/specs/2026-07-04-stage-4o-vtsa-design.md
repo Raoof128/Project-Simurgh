@@ -453,7 +453,25 @@ validation matrix, reviewer checklist, closeout). A comprehensive docs-accuracy 
 
 Never shipped: raw captures, private keys, any non-digest tool metadata.
 
-## 16. References
+## 16. Four-axis scorecard (spec-time; re-score at closeout)
+
+Standing rule: every stage SPEC and PLAN carries this scorecard, scored with brutal
+evidence honesty. Spec-time scores below reflect a committed design with **zero
+implementation**; the closeout re-score against shipped evidence is part of the stage.
+
+| Axis | Score | Defence |
+| --- | --- | --- |
+| Novelty | 8/10 | Three mechanisms with no prior art found (2026-07-04 searches): path-independent drift verdicts, delta-bound consent as a machine-distinguishable evidence class, time-anchored surfaces. Not higher: mechanism-level novelty, not paradigm-level — the lattice/anti-laundering reasoning is 4L/4M lineage reapplied; I3 is honestly-labelled standard crypto. |
+| Frontier | 9/10 | Sits on the field's live wound: tool drift is Anthropic's #1 named agent threat vector (April 2026), incidents are months old, ETDI is a draft, nobody ships the verification side. Not higher: Lane A is modelled — frontier of evidence, not of production deployment in real MCP hosts. |
+| Good for Anthropic | 7.5/10 | Answers their own NIST RFI asks (secure tool calling, audit trails, attestation); fills the operator-side gap their shared-responsibility model names; delta-bound consent attacks their own 93%-unread-approvals stat. Not higher: benefit mechanism is a reference design that demonstrates the gap — actual value is contingent on visibility/adoption. |
+| Constitution alignment | 9/10 | Delta-bound consent operationalises *informed* human oversight; the non-claims discipline is constitutional honesty as engineering; no-silent-third-path makes "no deception, even by omission" machine-checkable. Not higher: standing tension — the constitution governs model values; this is external infrastructure ("makes clauses machine-checkable", not "is the constitution"). |
+
+**Overall: 8.3/10 as a design.** What moves it higher, in order: (1) shipped
+byte-reproducible with the tamper matrix green; (2) Lane B capture from a real public
+MCP server so external validity is not hypothetical; (3) an outside party running the
+verifier or citing the law.
+
+## 17. References
 
 - Anthropic, *Trustworthy Agents in Practice* (April 2026) — four-layer shared
   responsibility model; tool supply-chain compromise threat vector.
