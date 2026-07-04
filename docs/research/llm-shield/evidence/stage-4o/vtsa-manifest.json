@@ -1,7 +1,7 @@
 {
   "schema": "simurgh.vtsa_attestation_manifest.v1",
-  "attestation_digest": "sha256:1cbfe5c2c22aac2b7cda083a21a87548dc307c2f8f6c94b7cfffbf8d5456f314",
-  "signature": "MfNatR32bY+nCovZH7HOnBpdoUrqd9f5lngBQARkpvUkB0SRVW1MgmHQ19J0pRgFz5wAXWn8oSKuvDVXVdm8AQ==",
+  "attestation_digest": "sha256:b06c4dbaefa90ece721d4a2b64c3c8511bf0dcc7b390ae91ee8c8273f69a7a29",
+  "signature": "kHGfyvC6WwzLZX63raTR3TF2MSmjKgNFQXY7PpeHrFhH4MCYVv2CYs2TaOygKb5xaei5plgm1vq9CdHaHRqzCw==",
   "attestation_signer_public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEATGFUumml72FNeXdqJyleB9mXKh/W3l6N7dqcK0D62mw=\n-----END PUBLIC KEY-----\n",
   "attestation_signer_fingerprint": "sha256:4e4cca430f427e4bbb6d8a49d365dfdb49c3490f377c6bc2dcedf4eb73686484",
   "manifest_signer_public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAM546totDsx6Kd4hweUmjHUEDKa3jfTBKk8HywSxHIwU=\n-----END PUBLIC KEY-----\n",
