@@ -21,8 +21,8 @@ test("raw 39 stays reserved (unmapped -> fail-closed 3)", () => {
 });
 
 test("unknown codes still fail closed to 3", () => {
-  // 43-46 became Stage 4M VXD codes (mapped to 1); probe with a genuinely-unknown code.
-  assert.equal(stage4CodeForRawCode(47), 3);
+  // 43-46 (VXD) and 47-54 (Seismograph) are now mapped to 1; probe with a genuinely-unknown code.
+  assert.equal(stage4CodeForRawCode(99), 3);
   assert.equal(stage4CodeForRawCode(-1), 3);
 });
 

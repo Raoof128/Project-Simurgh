@@ -134,6 +134,54 @@ export const VXD_REASONS_46 = Object.freeze([
   "unknown_contest_type",
 ]);
 
+// Stage 4N Extraction Seismograph raw codes (47-54). Raw 39 stays reserved (v1
+// extraction_scope_violation, prose only). Additive: each maps to run-level 1; unknown
+// codes still fail closed to 3. Every 4N gate result MUST carry a `reason` from the
+// closed enums below (4N spec §6-§7).
+export const SEISMOGRAPH_RAW_CODES = Object.freeze({
+  HEARTBEAT_MISSING: 47,
+  HEARTBEAT_EQUIVOCATION: 48,
+  HEARTBEAT_CHAIN_ORDER_INVALID: 49,
+  HEARTBEAT_COMMITMENT_MISMATCH: 50,
+  HEARTBEAT_INCLUSION_PROOF_INVALID: 51,
+  HEARTBEAT_REVEAL_SCHEDULE_VIOLATION: 52,
+  HEARTBEAT_REVEAL_BUDGET_EXCEEDED: 53,
+  HEARTBEAT_PUBLIC_DISCLOSURE_VIOLATION: 54,
+});
+
+export const SEISMOGRAPH_REASONS_47 = Object.freeze(["heartbeat_absent_for_expected_window"]);
+export const SEISMOGRAPH_REASONS_48 = Object.freeze(["cross_artifact_digest_mismatch"]);
+export const SEISMOGRAPH_REASONS_49 = Object.freeze([
+  "duplicate_record",
+  "interleave_order_violation",
+  "position_discontinuity",
+  "prev_digest_mismatch",
+  "schema_invalid",
+  "window_outside_schedule",
+]);
+export const SEISMOGRAPH_REASONS_50 = Object.freeze([
+  "private_evidence_root_mismatch",
+  "reveal_commitment_mismatch",
+  "source_root_mismatch",
+]);
+export const SEISMOGRAPH_REASONS_51 = Object.freeze([
+  "proof_path_invalid",
+  "referenced_heartbeat_absent",
+  "unknown_tier",
+]);
+export const SEISMOGRAPH_REASONS_52 = Object.freeze(["reveal_early", "reveal_overdue"]);
+export const SEISMOGRAPH_REASONS_53 = Object.freeze([
+  "band_vector_space_exceeds_budget",
+  "self_leakage_recompute_mismatch",
+  "undeclared_band_dimension",
+]);
+export const SEISMOGRAPH_REASONS_54 = Object.freeze([
+  "inclusion_proof_material_public",
+  "raw_count_public",
+  "respondent_material_public",
+  "tier_label_public",
+]);
+
 export const HARNESS_CODES = Object.freeze({
   CLEAN_RUN_FALSELY_REJECTED: 19,
 });
@@ -180,6 +228,15 @@ export const RUN_LEVEL_BY_RAW = Object.freeze({
   44: 1,
   45: 1,
   46: 1,
+  // Stage 4N Seismograph codes (reviewed extension of the shared ledger; 4N spec §7).
+  47: 1,
+  48: 1,
+  49: 1,
+  50: 1,
+  51: 1,
+  52: 1,
+  53: 1,
+  54: 1,
 });
 
 export function stage4CodeForRawCode(code) {
