@@ -182,6 +182,49 @@ export const SEISMOGRAPH_REASONS_54 = Object.freeze([
   "tier_label_public",
 ]);
 
+// Stage 4O VTSA raw codes (55-66). Additive; each maps to run-level 1; unknown codes
+// still fail closed to 3. NUMERIC order is historical: 55-63 were allocated before
+// 64-66. The NORMATIVE first-failure check order is VTSA_CHECK_ORDER (4O spec §6).
+export const VTSA_RAW_CODES = Object.freeze({
+  MANIFEST_MISSING: 55,
+  MANIFEST_SIGNATURE_INVALID: 56,
+  MANIFEST_EPOCH_INVALID: 57,
+  SERVER_OR_TOOLSET_DIGEST_MISMATCH: 58,
+  TOOL_IDENTITY_MISMATCH: 59,
+  TOOL_SCHEMA_DIGEST_MISMATCH: 60,
+  AUTHORITY_CLASS_UPGRADE: 61,
+  DECLARED_SINK_EXPANSION: 62,
+  MANIFEST_RECEIPT_BINDING_MISMATCH: 63,
+  DRIFT_LAUNDERING_DETECTED: 64,
+  BLIND_REAPPROVAL: 65,
+  TIMELINE_BINDING_MISMATCH: 66,
+});
+export const VTSA_CHECK_ORDER = Object.freeze([55, 56, 57, 64, 65, 58, 59, 60, 61, 62, 63, 66]);
+
+export const VTSA_REASONS_55 = Object.freeze(["absent", "schema_invalid"]);
+export const VTSA_REASONS_56 = Object.freeze(["commitment_signature_invalid"]);
+export const VTSA_REASONS_57 = Object.freeze(["run_epoch_outside_validity_window"]);
+export const VTSA_REASONS_58 = Object.freeze([
+  "server_id_mismatch",
+  "toolset_root_recompute_mismatch",
+]);
+export const VTSA_REASONS_59 = Object.freeze(["tool_not_in_manifest", "inclusion_proof_invalid"]);
+export const VTSA_REASONS_60 = Object.freeze(["schema_digest_mismatch"]);
+export const VTSA_REASONS_61 = Object.freeze(["authority_class_upgrade"]);
+export const VTSA_REASONS_62 = Object.freeze(["sink_not_declared"]);
+export const VTSA_REASONS_63 = Object.freeze(["receipt_schema_invalid", "binding_mismatch"]);
+export const VTSA_REASONS_64 = Object.freeze([
+  "ancestry_incomplete",
+  "prev_digest_mismatch",
+  "delta_digest_mismatch",
+  "composition_mismatch",
+]);
+export const VTSA_REASONS_65 = Object.freeze([
+  "state_bound_broadening",
+  "state_bound_incomparable",
+]);
+export const VTSA_REASONS_66 = Object.freeze(["timeline_root_mismatch", "chain_position_absent"]);
+
 export const HARNESS_CODES = Object.freeze({
   CLEAN_RUN_FALSELY_REJECTED: 19,
 });
@@ -237,6 +280,19 @@ export const RUN_LEVEL_BY_RAW = Object.freeze({
   52: 1,
   53: 1,
   54: 1,
+  // Stage 4O VTSA codes (reviewed extension of the shared ledger; 4O spec §6).
+  55: 1,
+  56: 1,
+  57: 1,
+  58: 1,
+  59: 1,
+  60: 1,
+  61: 1,
+  62: 1,
+  63: 1,
+  64: 1,
+  65: 1,
+  66: 1,
 });
 
 export function stage4CodeForRawCode(code) {

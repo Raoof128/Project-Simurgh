@@ -70,3 +70,7 @@ tests/fixtures/llmShield/stage4m/
 docs/research/llm-shield/evidence/stage-4m/
 tests/fixtures/llmShield/stage4n/
 docs/research/llm-shield/evidence/stage-4n/
+
+# stage 4O deterministic fixtures + evidence (byte-identity via signed manifest)
+tests/fixtures/llmShield/stage4o/
+docs/research/llm-shield/evidence/stage-4o/
