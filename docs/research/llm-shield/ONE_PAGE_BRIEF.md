@@ -28,19 +28,32 @@ network, so an outside reviewer can confirm a real containment claim and **falsi
 one**. The threat model is a **dishonest producer**: an operator who wants to look contained. That
 offline-falsifiable stance is the core difference from receipt-only logging.
 
-## Latest: Stage 4H proof-carrying containment
+## Latest: Stage 4Q — verifiable friction receipts
 
-Stage 4H (`v2.18.0-stage-4h-proof-carrying-containment`) turns the attestation spine into a
-proof-carrying containment checker. It binds signed evidence digests, an explicit-flow DFI
-certificate, an independently checkable derivation proof, Q0/Q4 discrimination fixtures, Q6/Q7
-tamper and privacy gates, Q3 offline-hermetic preflight, typed fail-closed exits, byte-stable
-reproduction, and anti-theatre deletion into one released checker path.
+The same signed-evidence spine now attests **agent oversight**, not just containment. Stage 4Q
+(`v2.26.0-stage-4q-vfr`) produces a signed, epoch-bound, ordered proof that an **approval-gate
+friction checkpoint preceded a protected authority crossing** (tool execution, unsafe export,
+privilege expansion, consent broadening, or disclosure escalation). Enforcement is a **two-key
+pincer**: the crossing must embed the approval's digest, the approval must appear earlier in the
+recorded run chain, and it must be signed by a key **distinct from the tool/harness signer** — so a
+dishonest operator cannot backdate approval, launder run order, or self-approve.
 
-The released worktree verified `scripts/reproduce-llm-shield-stage4h.sh`, `npm test` (`1202`
-passing), `npm run format:check`, and `git diff --check`. A follow-up full-chain audit exercises
-4H.0 through 4H.5 and the public Stage 4H checker surface before Stage 4J/PCTA. This is still a
-bounded released-artifact claim: no kernel sandboxing, execution-truth, implicit-flow security,
-deployment-safety, or future-run guarantee is claimed.
+Its completeness closure, **No Silent Exemption**, is the sharp part. An operator may leave a
+crossing _unbound_ only by embedding a **signed, policy-falsifiable exemption** — a receipt of
+absence — which policy then judges against an affirmative allowlist that is **empty (refuse) by
+default**. Even absence leaves a signed feather in the ledger; there is no quiet gap. Internet
+survey found prior art for proof-of-non-execution and proof-that-oversight-ran, but none making an
+unbound crossing sign a policy-falsifiable exemption, and this claim ships as a **signed,
+attackable novelty source-map** rather than an assertion.
+
+The stage is exercised by a 15-case normative corpus and a **10-arm live approval-gated capture**
+in which the approver runs as a genuinely separate OS process holding a distinct key (with a
+human-at-terminal ceremony arm), carries **JS↔Python byte-parity**, and closes with **five
+machine-checked Lean theorems** (`frictionPrecedence`, `failClosed`, `sameKeyFails`,
+`frictionCoverage`, `noSilentExemption`). A reviewer can also **be their own approver**: mint a
+fresh key and confirm the evidence is decision-equivalent. Scope is honest and signed: this proves
+_recorded-run oversight order_, not physical time; a **key ceremony and process separation**, not
+that a human mind deliberated; and _enforcement evidence_, not proof that friction prevented harm.
 
 ## Headline result: real, live Llama Guard 4
 
@@ -124,13 +137,17 @@ context, fully offline after dependency install:
 ```bash
 git clone https://github.com/Raoof128/Project-Simurgh.git
 cd Project-Simurgh && npm ci
-scripts/reproduce-vca-chain.sh
-scripts/reproduce-llm-shield-stage4h.sh
+scripts/reproduce-vca-chain.sh            # public VCA ladder
+scripts/reproduce-llm-shield-stage4h.sh   # proof-carrying containment checker
+scripts/reproduce-llm-shield-stage4q.sh   # verifiable friction receipts (Node >= 26)
 ```
 
 The first command replays the public VCA ladder. The Stage 4H command replays the proof-carrying
 containment checker, including typed exits, offline preflight, byte-stable evidence, and
-anti-theatre deletion. The replay refuses the fake-clean story. All 12 Stage 3X rungs are tag-and-commit pinned; 10/12 are
+anti-theatre deletion. The Stage 4Q command runs all ten friction gates — unit suites, JS↔Python
+parity, both fixture lanes with byte-idempotency, offline attestation verification,
+be-your-own-approver decision-equivalence, privacy scan, key audits, and the K7 all-functions net.
+Each replay refuses the fake-clean story. All 12 Stage 3X rungs are tag-and-commit pinned; 10/12 are
 evidence-root chain-checked; 5 current-format manifests are deep per-file re-walked under hardened
 containment rules; 3/12 fully reproduce; and 2/12 are index-only **with signed reasons**. It does
 not claim a uniform 12/12; the receipt records what each rung did and did not prove.
@@ -146,6 +163,8 @@ not claim a uniform 12/12; the receipt records what each rung did and did not pr
 - Not validated on production traffic, not production-ready, and it ranks no vendor as unsafe.
 - Stage 4H is deterministic offline checker reproduction over signed evidence; it is not kernel
   sandboxing, execution truth, implicit-flow security, deployment safety, or a future-run guarantee.
+- Stage 4Q proves _recorded-run_ oversight order, not physical time; a cryptographic key ceremony
+  and process separation, not proof that a human deliberated or that friction prevented harm.
 - Live Claude Computer Use remains a documented next step, not a completed demo.
 
 ## Status & contact
