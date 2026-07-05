@@ -206,6 +206,7 @@ def naive_intent_verdict(action: Action, intent: ProvenanceIntentContext) -> str
 # ---------------------------------------------------------------------------
 import hashlib as _hashlib  # noqa: E402
 from . import manifest_surface as _ms  # noqa: E402
+from . import friction_surface as _fs  # noqa: E402
 
 KERNEL_ENTRYPOINT_V1 = "authorise_with_manifest.v1"
 
@@ -269,4 +270,61 @@ def authorise_with_manifest(
         ManifestBindings(**out["bindings"]),
         0,
         "accepted",
+    )
+
+
+# --- Stage 4Q: friction precedence (fifth additive family member) ----------------------
+# The four functions above stay FROZEN. authorise_with_friction is a thin shim over the
+# pure friction_surface.decide, mirroring the Node pincerCore. 4Q spec §2.1.
+
+
+@dataclass(frozen=True)
+class FrictionContext:
+    envelope: dict
+    approval_receipt: object  # simurgh.vfr_approval_receipt.v1 dict, or None
+    exemption: object  # simurgh.vfr_approval_exemption.v1 dict, or None (Freeze 5)
+    crossing: dict
+    chain_entries: tuple
+    verify_signature: object = None
+
+
+@dataclass
+class FrictionAuthorityDecision:
+    decision: AuthorityDecision
+    raw_code: int
+    reason: str
+    receipt_digest: str = ""
+    crossing_digest: str = ""
+
+
+def authorise_with_friction(
+    action: Action, *, friction: FrictionContext, chain_verdict=None, display_expected=None
+) -> "FrictionAuthorityDecision":
+    out = _fs.decide(
+        envelope=friction.envelope,
+        receipt=friction.approval_receipt,
+        exemption=friction.exemption,
+        crossing=friction.crossing,
+        chain_entries=list(friction.chain_entries),
+        chain_verdict=chain_verdict or {"raw": 0},
+        verify_signature=friction.verify_signature,
+        display_expected=display_expected,
+    )
+    if out["raw"] != 0:
+        return FrictionAuthorityDecision(
+            AuthorityDecision("block", out["reason"], action.family, [action.target]),
+            out["raw"],
+            out["reason"],
+        )
+    # Preserve the exact GREEN reason so Freeze 5's accepted_exempt is never erased.
+    allow_reason = out["reason"]  # "accepted" | "accepted_exempt"
+    decision_reason = (
+        "friction_exemption_bound" if allow_reason == "accepted_exempt" else "friction_receipt_bound"
+    )
+    return FrictionAuthorityDecision(
+        AuthorityDecision("allow", decision_reason, action.family),
+        0,
+        allow_reason,
+        out["receipt_digest"],
+        out["crossing_digest"],
     )
