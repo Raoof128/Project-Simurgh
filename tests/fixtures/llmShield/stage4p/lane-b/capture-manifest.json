@@ -1,0 +1,50 @@
+[
+  {
+    "arm": "clean-declared-relay",
+    "custody_path_digest": "sha256:61de8cc3bb1ea5d1efb574332444ad3460b688fcc505dade3173f86e7845ced6",
+    "expected": {
+      "raw": 0,
+      "reason": "accepted"
+    }
+  },
+  {
+    "arm": "undeclared-relay",
+    "custody_path_digest": "sha256:43e19d6a275532e636f36509c2fbf49dfa19a935b63575e02254db6fa8adf806",
+    "expected": {
+      "raw": 71,
+      "reason": "relay_not_declared"
+    }
+  },
+  {
+    "arm": "model-swap",
+    "custody_path_digest": "sha256:e17c3aa389df15fd030ae710dd0ddd62d18760f1153b8611590e8b0b6ccef130",
+    "expected": {
+      "raw": 72,
+      "reason": "model_identity_digest_mismatch"
+    }
+  },
+  {
+    "arm": "trace-custodian-change",
+    "custody_path_digest": "sha256:7cba39037bbf5932d5519c53b23cb570a595d11ee49005588f82d4bd2ce379a7",
+    "expected": {
+      "raw": 74,
+      "reason": "trace_custody_expanded_beyond_declaration"
+    }
+  },
+  {
+    "arm": "tool-surface-rewrite",
+    "custody_path_digest": "sha256:70e2a7459d08979ebd4101a924a2ed204bad11c07ec04d78cf66d2cd0b44b4a6",
+    "expected": {
+      "raw": 75,
+      "reason": "stage4o_surface_binding_mismatch"
+    }
+  },
+  {
+    "arm": "dropped-hop",
+    "custody_path_digest": "sha256:07b15ef05b5e66e5bd9dc3e5a7528a4ee52368440bfb199655f50886e086e84e",
+    "expected": {
+      "raw": 78,
+      "reason": "missing_hop"
+    }
+  }
+]
