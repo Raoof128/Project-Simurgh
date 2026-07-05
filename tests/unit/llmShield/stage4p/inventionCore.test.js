@@ -53,12 +53,12 @@ test("relay contest: valid chains; wrong signer key is 68-class", () => {
     schema: "simurgh.relay_contest.v1",
     contested_custody_class_digest: D("b"),
     stage4n_window_anchor_digest: D("a"),
-    relay_identity_digest: D("r"),
+    relay_identity_digest: D("d"),
     counter_evidence_digest: D("e"),
     signature: "QUJD",
   };
-  assert.deepEqual(validateRelayContest(contest, { signerKeyDigest: D("r") }), { ok: true });
-  assert.deepEqual(validateRelayContest(contest, { signerKeyDigest: D("x") }), {
+  assert.deepEqual(validateRelayContest(contest, { signerKeyDigest: D("d") }), { ok: true });
+  assert.deepEqual(validateRelayContest(contest, { signerKeyDigest: D("f") }), {
     ok: false,
     raw: 68,
     reason: "contest_signer_mismatch",
@@ -96,10 +96,10 @@ test("vendor disclosure: recomputes field-for-field; underivable field fails clo
 test("extraction bridge: both digests must verify independently", () => {
   const bridge = {
     cpc_custody_class_digest: D("b"),
-    stage3t_attestation_digest: D("t"),
+    stage3t_attestation_digest: D("8"),
     bridge_mode: "digest_binding_only",
   };
-  const ctx = { knownCpcDigests: [D("b")], known3tDigests: [D("t")] };
+  const ctx = { knownCpcDigests: [D("b")], known3tDigests: [D("8")] };
   assert.deepEqual(validateExtractionBridge(bridge, ctx), { ok: true });
   assert.equal(validateExtractionBridge(bridge, { ...ctx, known3tDigests: [] }).ok, false);
   assert.equal(validateExtractionBridge({ ...bridge, bridge_mode: "causal_proof" }, ctx).ok, false);

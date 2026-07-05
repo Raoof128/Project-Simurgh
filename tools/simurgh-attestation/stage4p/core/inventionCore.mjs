@@ -8,7 +8,6 @@ import { SCHEMAS, ENUMS } from "../constants.mjs";
 
 const fail67 = { ok: false, raw: 67, reason: "schema_invalid" };
 const isDigest = (v) => typeof v === "string" && DIGEST_RE.test(v);
-const isNonEmptyString = (v) => typeof v === "string" && v.length > 0;
 const isB64 = (v) => typeof v === "string" && v.length > 0 && /^[A-Za-z0-9+/=]+$/.test(v);
 
 // Duplicated locally (not imported from schemaCore) — core-module independence over DRY.
@@ -64,18 +63,18 @@ const CONTEST_KEYS = [
   "signature",
 ];
 
-// §11.2 — a named relay's contest of a custody-class match. relay_identity_digest is an
-// opaque identity token (not necessarily a sha256 content digest), so it is checked for
-// presence/type only; contested_custody_class_digest, stage4n_window_anchor_digest, and
-// counter_evidence_digest are content digests and are DIGEST_RE-checked. A contest whose
-// signer key does not match the claimed relay identity is a 68-class signature failure,
-// not a schema failure — the closed-ledger rule keeps this off a new raw code.
+// §11.2 — a named relay's contest of a custody-class match. All four content fields —
+// contested_custody_class_digest, stage4n_window_anchor_digest, relay_identity_digest, and
+// counter_evidence_digest — are sha256 digests and are uniformly DIGEST_RE-checked, matching
+// every other digest field in this module. A contest whose signer key does not match the
+// claimed relay identity is a 68-class signature failure, not a schema failure — the
+// closed-ledger rule keeps this off a new raw code.
 export function validateRelayContest(contest, { signerKeyDigest }) {
   if (!exactKeys(contest, CONTEST_KEYS)) return fail67;
   if (contest.schema !== SCHEMAS.CONTEST) return fail67;
   if (!isDigest(contest.contested_custody_class_digest)) return fail67;
   if (!isDigest(contest.stage4n_window_anchor_digest)) return fail67;
-  if (!isNonEmptyString(contest.relay_identity_digest)) return fail67;
+  if (!isDigest(contest.relay_identity_digest)) return fail67;
   if (!isDigest(contest.counter_evidence_digest)) return fail67;
   if (!isB64(contest.signature)) return fail67;
   if (signerKeyDigest !== contest.relay_identity_digest)
@@ -112,13 +111,14 @@ const BRIDGE_KEYS = ["cpc_custody_class_digest", "stage3t_attestation_digest", "
 
 // §11.4 — binds a Stage 4L/4P custody-class digest to a Stage 3T extraction-attestation
 // digest. digest_binding_only means exactly that: no causal claim, just two independently
-// verifiable memberships. Both digests must be found in their own supplied known set —
+// verifiable memberships. Both fields are sha256 digests and are DIGEST_RE-checked for
+// shape, in addition to (not instead of) the independent known-set membership checks —
 // neither side is trusted on the other's say-so.
 export function validateExtractionBridge(bridge, { knownCpcDigests, known3tDigests }) {
   if (!exactKeys(bridge, BRIDGE_KEYS)) return fail67;
   if (!ENUMS.bridge_mode.includes(bridge.bridge_mode)) return fail67;
-  if (!isNonEmptyString(bridge.cpc_custody_class_digest)) return fail67;
-  if (!isNonEmptyString(bridge.stage3t_attestation_digest)) return fail67;
+  if (!isDigest(bridge.cpc_custody_class_digest)) return fail67;
+  if (!isDigest(bridge.stage3t_attestation_digest)) return fail67;
   if (!knownCpcDigests.includes(bridge.cpc_custody_class_digest)) return fail67;
   if (!known3tDigests.includes(bridge.stage3t_attestation_digest)) return fail67;
   return { ok: true };
