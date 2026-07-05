@@ -56,7 +56,9 @@ export function verifyCpcEmission({ signals, declared_cap, anchor_digests }) {
     if (!anchors.has(sig.stage4n_window_anchor_digest))
       return { ok: false, raw: 79, reason: "window_anchor_not_in_feed" };
     if (sig.signal_mode !== "matchable") continue;
-    if (ENTROPY_BITS_BY_KIND[sig.evidence_kind] < sig.entropy_floor_bits)
+    // Enforce the stage's actual entropy floor (module constant), not the signal's
+    // self-declared floor — defense-in-depth so a forged low floor can never widen it.
+    if (ENTROPY_BITS_BY_KIND[sig.evidence_kind] < ENTROPY_FLOOR_BITS)
       return { ok: false, raw: 79, reason: "below_floor_digest_emitted" };
     // A signal's advertised per-window budget must equal the operator's declared cap.
     // The budget is baked into the class digest, so a self-consistent signal can advertise

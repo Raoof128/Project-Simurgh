@@ -5,7 +5,6 @@
 import { validateEnvelope, validateCustodyReceipt } from "./schemaCore.mjs";
 import { verifyHopChain } from "./chainCore.mjs";
 import { verifyCpcEmission } from "./cpcCore.mjs";
-import { custodyPathDigest, hopReceiptDigest } from "./digest.mjs";
 
 const TRACE_ALLOWED = Object.freeze({
   provider_only: ["provider_only"],
@@ -70,12 +69,12 @@ export function verifyCustody(input) {
   for (const t of input.observed.transform_digests)
     if (!env.declared_transform_digests.includes(t))
       return { raw: 76, reason: "transform_not_declared" };
-  // 77 — binding only (schema already validated at the receipt-parseability gate above)
-  const recomputedPath = custodyPathDigest(input.hops.map(hopReceiptDigest));
+  // 77 — binding only (schema already validated at the receipt-parseability gate above).
+  // Reuse the custody path digest already computed by verifyHopChain (same hops, same fn).
   if (
     input.custodyReceipt.request_digest !== input.requestDigest ||
     input.custodyReceipt.response_digest !== input.responseDigest ||
-    input.custodyReceipt.custody_path_digest !== recomputedPath ||
+    input.custodyReceipt.custody_path_digest !== chain.custody_path_digest ||
     input.custodyReceipt.receipt_epoch !== env.run_epoch
   )
     return { raw: 77, reason: "binding_mismatch" };
