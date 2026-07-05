@@ -1,0 +1,865 @@
+{
+  "schema": "simurgh.vfr_lane_a_corpus.v1",
+  "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+  "public_keys": {
+    "sha256:1d28291f71031b755dc3812b88347c2d1d65abb90eade85d6a7637c29560f865": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEASSgsZCd6XzxatUrJj0o0Mv/LN9zjwOlyRm1XQSLjFsw=\n-----END PUBLIC KEY-----\n",
+    "sha256:483379e47b5f045e4f2b79405e6c81ceb8a61ec28ba50a67777e55a4ff47dce0": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAM9iNFFyAU9U9XN59uvoNfYF9Ep5hRdXaXLWyfkTYIXE=\n-----END PUBLIC KEY-----\n",
+    "sha256:04ec30c35ae52578b2ff2712918db458358f01d69010948f5b2fc7ba3d22a22c": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAO+WaWxKw6Scw0OvJkpreqFVs0GUC1o4KPd1RMAX2tdc=\n-----END PUBLIC KEY-----\n"
+  },
+  "cases": [
+    {
+      "case_id": "green_pincer_complete",
+      "envelope": {
+        "schema": "simurgh.vfr_friction_envelope.v1",
+        "policy_id": "vfr-default.v1",
+        "boundary_kinds_requiring_approval": [
+          "tool_execution",
+          "unsafe_export"
+        ],
+        "admissible_exemption_boundary_kinds": [],
+        "approver_public_key_digest": "sha256:1d28291f71031b755dc3812b88347c2d1d65abb90eade85d6a7637c29560f865",
+        "harness_public_key_digest": "sha256:483379e47b5f045e4f2b79405e6c81ceb8a61ec28ba50a67777e55a4ff47dce0",
+        "max_window_straddle": 1,
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "stage4n_window_anchor_digest": "sha256:3c2d373790fd8e8a9f51714219699bd8e6bd39ca7399ac2659070a9fdbefef2f"
+      },
+      "receipt": {
+        "schema": "simurgh.vfr_approval_receipt.v1",
+        "action_digest": "sha256:eaa0f5b3ab1a888d8d2ae7e0b7e799cfc5376a73e6070b6b06e56f846421c4fd",
+        "request_digest": "sha256:9497c9f8c3197f5924964cbcb5b0aa933995aeffdbce3a32218651380e911c60",
+        "boundary_kind": "tool_execution",
+        "stage4n_window_anchor_digest": "sha256:3c2d373790fd8e8a9f51714219699bd8e6bd39ca7399ac2659070a9fdbefef2f",
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "receipt_epoch": 10,
+        "valid_from_epoch": 10,
+        "valid_until_epoch": 11,
+        "nonce_digest": "sha256:fcc24cc8d955db7e2326372d7d762f3ec2bca4493a8cf0a1d9964a20225d6b0d",
+        "approval_display_digest": "sha256:b382f3fe58483f5d5b44bb89e97d5ab59e0db660c387e5093afec45f42a598d8",
+        "approver_public_key_digest": "sha256:1d28291f71031b755dc3812b88347c2d1d65abb90eade85d6a7637c29560f865",
+        "signature": "WSkpDxRo0iPyEOt0qyoNelGyqoL/PZbIX3xJLE2fffFrRli4H83yhPEftHnLwhG1YKL/t5OqfBg7en5kWetXAw=="
+      },
+      "exemption": null,
+      "crossing": {
+        "schema": "simurgh.vfr_boundary_crossing.v1",
+        "action_digest": "sha256:eaa0f5b3ab1a888d8d2ae7e0b7e799cfc5376a73e6070b6b06e56f846421c4fd",
+        "request_digest": "sha256:9497c9f8c3197f5924964cbcb5b0aa933995aeffdbce3a32218651380e911c60",
+        "boundary_kind": "tool_execution",
+        "crossing_epoch": 10,
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "approval_binding_kind": "receipt",
+        "approval_binding_digest": "sha256:593c380a1727f827675f2c147b451922e60ad12e9a57adab0d4abb62c4d91fc0",
+        "harness_public_key_digest": "sha256:483379e47b5f045e4f2b79405e6c81ceb8a61ec28ba50a67777e55a4ff47dce0",
+        "signature": "py6atonl9pZe1lOQTsT7YDVwV7Yco+eShRsTBOraztXeDwaTc+uPUNVmPugwlNaYM6ioHDu8AXePewt0rXOUCw=="
+      },
+      "chain_events": [
+        {
+          "entry_kind": "approval",
+          "entry_digest": "sha256:593c380a1727f827675f2c147b451922e60ad12e9a57adab0d4abb62c4d91fc0",
+          "raw_code": 0
+        },
+        {
+          "entry_kind": "crossing",
+          "entry_digest": "sha256:47362fcff0e1332f52678cb2da2633c9e0703828e65e924fe2864433c2b591a7",
+          "raw_code": 0
+        }
+      ],
+      "display_expected": "sha256:b382f3fe58483f5d5b44bb89e97d5ab59e0db660c387e5093afec45f42a598d8"
+    },
+    {
+      "case_id": "green_refusal_bearing",
+      "envelope": {
+        "schema": "simurgh.vfr_friction_envelope.v1",
+        "policy_id": "vfr-default.v1",
+        "boundary_kinds_requiring_approval": [
+          "tool_execution",
+          "unsafe_export"
+        ],
+        "admissible_exemption_boundary_kinds": [],
+        "approver_public_key_digest": "sha256:1d28291f71031b755dc3812b88347c2d1d65abb90eade85d6a7637c29560f865",
+        "harness_public_key_digest": "sha256:483379e47b5f045e4f2b79405e6c81ceb8a61ec28ba50a67777e55a4ff47dce0",
+        "max_window_straddle": 1,
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "stage4n_window_anchor_digest": "sha256:3c2d373790fd8e8a9f51714219699bd8e6bd39ca7399ac2659070a9fdbefef2f"
+      },
+      "receipt": {
+        "schema": "simurgh.vfr_approval_receipt.v1",
+        "action_digest": "sha256:eaa0f5b3ab1a888d8d2ae7e0b7e799cfc5376a73e6070b6b06e56f846421c4fd",
+        "request_digest": "sha256:9497c9f8c3197f5924964cbcb5b0aa933995aeffdbce3a32218651380e911c60",
+        "boundary_kind": "tool_execution",
+        "stage4n_window_anchor_digest": "sha256:3c2d373790fd8e8a9f51714219699bd8e6bd39ca7399ac2659070a9fdbefef2f",
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "receipt_epoch": 10,
+        "valid_from_epoch": 10,
+        "valid_until_epoch": 11,
+        "nonce_digest": "sha256:fcc24cc8d955db7e2326372d7d762f3ec2bca4493a8cf0a1d9964a20225d6b0d",
+        "approval_display_digest": "sha256:b382f3fe58483f5d5b44bb89e97d5ab59e0db660c387e5093afec45f42a598d8",
+        "approver_public_key_digest": "sha256:1d28291f71031b755dc3812b88347c2d1d65abb90eade85d6a7637c29560f865",
+        "signature": "WSkpDxRo0iPyEOt0qyoNelGyqoL/PZbIX3xJLE2fffFrRli4H83yhPEftHnLwhG1YKL/t5OqfBg7en5kWetXAw=="
+      },
+      "exemption": null,
+      "crossing": {
+        "schema": "simurgh.vfr_boundary_crossing.v1",
+        "action_digest": "sha256:eaa0f5b3ab1a888d8d2ae7e0b7e799cfc5376a73e6070b6b06e56f846421c4fd",
+        "request_digest": "sha256:9497c9f8c3197f5924964cbcb5b0aa933995aeffdbce3a32218651380e911c60",
+        "boundary_kind": "tool_execution",
+        "crossing_epoch": 10,
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "approval_binding_kind": "receipt",
+        "approval_binding_digest": "sha256:593c380a1727f827675f2c147b451922e60ad12e9a57adab0d4abb62c4d91fc0",
+        "harness_public_key_digest": "sha256:483379e47b5f045e4f2b79405e6c81ceb8a61ec28ba50a67777e55a4ff47dce0",
+        "signature": "py6atonl9pZe1lOQTsT7YDVwV7Yco+eShRsTBOraztXeDwaTc+uPUNVmPugwlNaYM6ioHDu8AXePewt0rXOUCw=="
+      },
+      "chain_events": [
+        {
+          "entry_kind": "approval",
+          "entry_digest": "sha256:593c380a1727f827675f2c147b451922e60ad12e9a57adab0d4abb62c4d91fc0",
+          "raw_code": 0
+        },
+        {
+          "entry_kind": "refusal",
+          "entry_digest": "sha256:5c1dc52e32605d2b9717263faa1d63ecb369fd1a1467066d4bf7e7b604f5b6d6",
+          "raw_code": 83
+        },
+        {
+          "entry_kind": "crossing",
+          "entry_digest": "sha256:47362fcff0e1332f52678cb2da2633c9e0703828e65e924fe2864433c2b591a7",
+          "raw_code": 0
+        }
+      ],
+      "display_expected": "sha256:b382f3fe58483f5d5b44bb89e97d5ab59e0db660c387e5093afec45f42a598d8"
+    },
+    {
+      "case_id": "green_exempt",
+      "envelope": {
+        "schema": "simurgh.vfr_friction_envelope.v1",
+        "policy_id": "vfr-default.v1",
+        "boundary_kinds_requiring_approval": [
+          "tool_execution",
+          "unsafe_export"
+        ],
+        "admissible_exemption_boundary_kinds": [
+          "tool_execution"
+        ],
+        "approver_public_key_digest": "sha256:1d28291f71031b755dc3812b88347c2d1d65abb90eade85d6a7637c29560f865",
+        "harness_public_key_digest": "sha256:483379e47b5f045e4f2b79405e6c81ceb8a61ec28ba50a67777e55a4ff47dce0",
+        "max_window_straddle": 1,
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "stage4n_window_anchor_digest": "sha256:3c2d373790fd8e8a9f51714219699bd8e6bd39ca7399ac2659070a9fdbefef2f"
+      },
+      "receipt": null,
+      "exemption": {
+        "schema": "simurgh.vfr_approval_exemption.v1",
+        "action_digest": "sha256:dcfa430dccdf29cf75a9c0abba03661f5fa8fc1f520a09de95ab2cd3c2030fe3",
+        "request_digest": "sha256:9497c9f8c3197f5924964cbcb5b0aa933995aeffdbce3a32218651380e911c60",
+        "boundary_kind": "tool_execution",
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "stage4n_window_anchor_digest": "sha256:3c2d373790fd8e8a9f51714219699bd8e6bd39ca7399ac2659070a9fdbefef2f",
+        "exemption_reason": "approval_not_present",
+        "exemption_policy_id": "vfr-default.v1",
+        "harness_public_key_digest": "sha256:483379e47b5f045e4f2b79405e6c81ceb8a61ec28ba50a67777e55a4ff47dce0",
+        "signature": "AkpKT6LhsoJKbB/L6UpKFSuL1VybyWPqQLmYe4cBOpILKF4i4fhxbnULRHJPEpFZN/fuQaZFUhZ5zdZyAb4wCg=="
+      },
+      "crossing": {
+        "schema": "simurgh.vfr_boundary_crossing.v1",
+        "action_digest": "sha256:dcfa430dccdf29cf75a9c0abba03661f5fa8fc1f520a09de95ab2cd3c2030fe3",
+        "request_digest": "sha256:9497c9f8c3197f5924964cbcb5b0aa933995aeffdbce3a32218651380e911c60",
+        "boundary_kind": "tool_execution",
+        "crossing_epoch": 10,
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "approval_binding_kind": "exemption",
+        "approval_binding_digest": "sha256:66a094b1dbd3c0b423b4d44797e7270d51b2533ea0111ea10acd292ae6d2c46e",
+        "harness_public_key_digest": "sha256:483379e47b5f045e4f2b79405e6c81ceb8a61ec28ba50a67777e55a4ff47dce0",
+        "signature": "gzO305s+qByTR960PW6nykSniir4rdyzh1Jaa+GH6cFi+dVZwwRO6CvFa/AxHygBUBUJ9ayTUKfeWV9CbPjCBA=="
+      },
+      "chain_events": [
+        {
+          "entry_kind": "crossing",
+          "entry_digest": "sha256:b1453b9edff5594d5c802972d555791a87088ffc16eb021a788dfcce56014b48",
+          "raw_code": 0
+        }
+      ]
+    },
+    {
+      "case_id": "code_80_envelope_malformed",
+      "envelope": {
+        "schema": "simurgh.vfr_friction_envelope.v1",
+        "policy_id": "vfr-default.v1",
+        "boundary_kinds_requiring_approval": [
+          "tool_execution",
+          "unsafe_export"
+        ],
+        "admissible_exemption_boundary_kinds": [],
+        "approver_public_key_digest": "sha256:1d28291f71031b755dc3812b88347c2d1d65abb90eade85d6a7637c29560f865",
+        "harness_public_key_digest": "sha256:483379e47b5f045e4f2b79405e6c81ceb8a61ec28ba50a67777e55a4ff47dce0",
+        "max_window_straddle": 1,
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "stage4n_window_anchor_digest": "sha256:3c2d373790fd8e8a9f51714219699bd8e6bd39ca7399ac2659070a9fdbefef2f",
+        "smuggled_key": true
+      },
+      "receipt": {
+        "schema": "simurgh.vfr_approval_receipt.v1",
+        "action_digest": "sha256:eaa0f5b3ab1a888d8d2ae7e0b7e799cfc5376a73e6070b6b06e56f846421c4fd",
+        "request_digest": "sha256:9497c9f8c3197f5924964cbcb5b0aa933995aeffdbce3a32218651380e911c60",
+        "boundary_kind": "tool_execution",
+        "stage4n_window_anchor_digest": "sha256:3c2d373790fd8e8a9f51714219699bd8e6bd39ca7399ac2659070a9fdbefef2f",
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "receipt_epoch": 10,
+        "valid_from_epoch": 10,
+        "valid_until_epoch": 11,
+        "nonce_digest": "sha256:fcc24cc8d955db7e2326372d7d762f3ec2bca4493a8cf0a1d9964a20225d6b0d",
+        "approval_display_digest": "sha256:b382f3fe58483f5d5b44bb89e97d5ab59e0db660c387e5093afec45f42a598d8",
+        "approver_public_key_digest": "sha256:1d28291f71031b755dc3812b88347c2d1d65abb90eade85d6a7637c29560f865",
+        "signature": "WSkpDxRo0iPyEOt0qyoNelGyqoL/PZbIX3xJLE2fffFrRli4H83yhPEftHnLwhG1YKL/t5OqfBg7en5kWetXAw=="
+      },
+      "exemption": null,
+      "crossing": {
+        "schema": "simurgh.vfr_boundary_crossing.v1",
+        "action_digest": "sha256:eaa0f5b3ab1a888d8d2ae7e0b7e799cfc5376a73e6070b6b06e56f846421c4fd",
+        "request_digest": "sha256:9497c9f8c3197f5924964cbcb5b0aa933995aeffdbce3a32218651380e911c60",
+        "boundary_kind": "tool_execution",
+        "crossing_epoch": 10,
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "approval_binding_kind": "receipt",
+        "approval_binding_digest": "sha256:593c380a1727f827675f2c147b451922e60ad12e9a57adab0d4abb62c4d91fc0",
+        "harness_public_key_digest": "sha256:483379e47b5f045e4f2b79405e6c81ceb8a61ec28ba50a67777e55a4ff47dce0",
+        "signature": "py6atonl9pZe1lOQTsT7YDVwV7Yco+eShRsTBOraztXeDwaTc+uPUNVmPugwlNaYM6ioHDu8AXePewt0rXOUCw=="
+      },
+      "chain_events": [
+        {
+          "entry_kind": "approval",
+          "entry_digest": "sha256:593c380a1727f827675f2c147b451922e60ad12e9a57adab0d4abb62c4d91fc0",
+          "raw_code": 0
+        },
+        {
+          "entry_kind": "crossing",
+          "entry_digest": "sha256:47362fcff0e1332f52678cb2da2633c9e0703828e65e924fe2864433c2b591a7",
+          "raw_code": 0
+        }
+      ],
+      "display_expected": "sha256:b382f3fe58483f5d5b44bb89e97d5ab59e0db660c387e5093afec45f42a598d8"
+    },
+    {
+      "case_id": "code_81_signature_invalid",
+      "envelope": {
+        "schema": "simurgh.vfr_friction_envelope.v1",
+        "policy_id": "vfr-default.v1",
+        "boundary_kinds_requiring_approval": [
+          "tool_execution",
+          "unsafe_export"
+        ],
+        "admissible_exemption_boundary_kinds": [],
+        "approver_public_key_digest": "sha256:1d28291f71031b755dc3812b88347c2d1d65abb90eade85d6a7637c29560f865",
+        "harness_public_key_digest": "sha256:483379e47b5f045e4f2b79405e6c81ceb8a61ec28ba50a67777e55a4ff47dce0",
+        "max_window_straddle": 1,
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "stage4n_window_anchor_digest": "sha256:3c2d373790fd8e8a9f51714219699bd8e6bd39ca7399ac2659070a9fdbefef2f"
+      },
+      "receipt": {
+        "schema": "simurgh.vfr_approval_receipt.v1",
+        "action_digest": "sha256:eaa0f5b3ab1a888d8d2ae7e0b7e799cfc5376a73e6070b6b06e56f846421c4fd",
+        "request_digest": "sha256:9497c9f8c3197f5924964cbcb5b0aa933995aeffdbce3a32218651380e911c60",
+        "boundary_kind": "tool_execution",
+        "stage4n_window_anchor_digest": "sha256:3c2d373790fd8e8a9f51714219699bd8e6bd39ca7399ac2659070a9fdbefef2f",
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "receipt_epoch": 10,
+        "valid_from_epoch": 10,
+        "valid_until_epoch": 11,
+        "nonce_digest": "sha256:fcc24cc8d955db7e2326372d7d762f3ec2bca4493a8cf0a1d9964a20225d6b0d",
+        "approval_display_digest": "sha256:b382f3fe58483f5d5b44bb89e97d5ab59e0db660c387e5093afec45f42a598d8",
+        "approver_public_key_digest": "sha256:1d28291f71031b755dc3812b88347c2d1d65abb90eade85d6a7637c29560f865",
+        "signature": "WSkpDxRo0iPyEOt0qyoNelGyqoL/PZbIX3xJLE2fffFrRli4H83yhPEftHnLwhG1YKL/t5OqfBg7en5kWetXAwAA"
+      },
+      "exemption": null,
+      "crossing": {
+        "schema": "simurgh.vfr_boundary_crossing.v1",
+        "action_digest": "sha256:eaa0f5b3ab1a888d8d2ae7e0b7e799cfc5376a73e6070b6b06e56f846421c4fd",
+        "request_digest": "sha256:9497c9f8c3197f5924964cbcb5b0aa933995aeffdbce3a32218651380e911c60",
+        "boundary_kind": "tool_execution",
+        "crossing_epoch": 10,
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "approval_binding_kind": "receipt",
+        "approval_binding_digest": "sha256:593c380a1727f827675f2c147b451922e60ad12e9a57adab0d4abb62c4d91fc0",
+        "harness_public_key_digest": "sha256:483379e47b5f045e4f2b79405e6c81ceb8a61ec28ba50a67777e55a4ff47dce0",
+        "signature": "py6atonl9pZe1lOQTsT7YDVwV7Yco+eShRsTBOraztXeDwaTc+uPUNVmPugwlNaYM6ioHDu8AXePewt0rXOUCw=="
+      },
+      "chain_events": [
+        {
+          "entry_kind": "approval",
+          "entry_digest": "sha256:593c380a1727f827675f2c147b451922e60ad12e9a57adab0d4abb62c4d91fc0",
+          "raw_code": 0
+        },
+        {
+          "entry_kind": "crossing",
+          "entry_digest": "sha256:47362fcff0e1332f52678cb2da2633c9e0703828e65e924fe2864433c2b591a7",
+          "raw_code": 0
+        }
+      ],
+      "display_expected": "sha256:b382f3fe58483f5d5b44bb89e97d5ab59e0db660c387e5093afec45f42a598d8"
+    },
+    {
+      "case_id": "code_82_window_straddle_exceeded",
+      "envelope": {
+        "schema": "simurgh.vfr_friction_envelope.v1",
+        "policy_id": "vfr-default.v1",
+        "boundary_kinds_requiring_approval": [
+          "tool_execution",
+          "unsafe_export"
+        ],
+        "admissible_exemption_boundary_kinds": [],
+        "approver_public_key_digest": "sha256:1d28291f71031b755dc3812b88347c2d1d65abb90eade85d6a7637c29560f865",
+        "harness_public_key_digest": "sha256:483379e47b5f045e4f2b79405e6c81ceb8a61ec28ba50a67777e55a4ff47dce0",
+        "max_window_straddle": 1,
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "stage4n_window_anchor_digest": "sha256:3c2d373790fd8e8a9f51714219699bd8e6bd39ca7399ac2659070a9fdbefef2f"
+      },
+      "receipt": {
+        "schema": "simurgh.vfr_approval_receipt.v1",
+        "action_digest": "sha256:eaa0f5b3ab1a888d8d2ae7e0b7e799cfc5376a73e6070b6b06e56f846421c4fd",
+        "request_digest": "sha256:9497c9f8c3197f5924964cbcb5b0aa933995aeffdbce3a32218651380e911c60",
+        "boundary_kind": "tool_execution",
+        "stage4n_window_anchor_digest": "sha256:3c2d373790fd8e8a9f51714219699bd8e6bd39ca7399ac2659070a9fdbefef2f",
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "receipt_epoch": 10,
+        "valid_from_epoch": 10,
+        "valid_until_epoch": 12,
+        "nonce_digest": "sha256:fcc24cc8d955db7e2326372d7d762f3ec2bca4493a8cf0a1d9964a20225d6b0d",
+        "approval_display_digest": "sha256:b382f3fe58483f5d5b44bb89e97d5ab59e0db660c387e5093afec45f42a598d8",
+        "approver_public_key_digest": "sha256:1d28291f71031b755dc3812b88347c2d1d65abb90eade85d6a7637c29560f865",
+        "signature": "zwPc2cgpUW5w68S489p8RD0FNE/PYWDXeibDdNH4WCcczDrPzxU9ZDliOiQ0n2A0upLGXenrAoN3dkqLubhnCQ=="
+      },
+      "exemption": null,
+      "crossing": {
+        "schema": "simurgh.vfr_boundary_crossing.v1",
+        "action_digest": "sha256:eaa0f5b3ab1a888d8d2ae7e0b7e799cfc5376a73e6070b6b06e56f846421c4fd",
+        "request_digest": "sha256:9497c9f8c3197f5924964cbcb5b0aa933995aeffdbce3a32218651380e911c60",
+        "boundary_kind": "tool_execution",
+        "crossing_epoch": 12,
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "approval_binding_kind": "receipt",
+        "approval_binding_digest": "sha256:e21b9d9ea4edb7f495bd6565b46c0eac4c2d9e79f8f58d33fdc9b8f4e4b297a4",
+        "harness_public_key_digest": "sha256:483379e47b5f045e4f2b79405e6c81ceb8a61ec28ba50a67777e55a4ff47dce0",
+        "signature": "oGL9SARKptHswK1/O+5ViOS0Y+so5ejw8rltKGVfTp91hNPD8NUWg4rE6y24Oa1KIEI9V7K/SZ52Rzjez74/Bw=="
+      },
+      "chain_events": [
+        {
+          "entry_kind": "approval",
+          "entry_digest": "sha256:e21b9d9ea4edb7f495bd6565b46c0eac4c2d9e79f8f58d33fdc9b8f4e4b297a4",
+          "raw_code": 0
+        },
+        {
+          "entry_kind": "crossing",
+          "entry_digest": "sha256:9248348b75836b374c10f317c39c5049e913a0cae06d8933b019faf51de18025",
+          "raw_code": 0
+        }
+      ],
+      "display_expected": "sha256:b382f3fe58483f5d5b44bb89e97d5ab59e0db660c387e5093afec45f42a598d8"
+    },
+    {
+      "case_id": "code_83_receipt_missing",
+      "envelope": {
+        "schema": "simurgh.vfr_friction_envelope.v1",
+        "policy_id": "vfr-default.v1",
+        "boundary_kinds_requiring_approval": [
+          "tool_execution",
+          "unsafe_export"
+        ],
+        "admissible_exemption_boundary_kinds": [],
+        "approver_public_key_digest": "sha256:1d28291f71031b755dc3812b88347c2d1d65abb90eade85d6a7637c29560f865",
+        "harness_public_key_digest": "sha256:483379e47b5f045e4f2b79405e6c81ceb8a61ec28ba50a67777e55a4ff47dce0",
+        "max_window_straddle": 1,
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "stage4n_window_anchor_digest": "sha256:3c2d373790fd8e8a9f51714219699bd8e6bd39ca7399ac2659070a9fdbefef2f"
+      },
+      "receipt": null,
+      "exemption": null,
+      "crossing": {
+        "schema": "simurgh.vfr_boundary_crossing.v1",
+        "action_digest": "sha256:eaa0f5b3ab1a888d8d2ae7e0b7e799cfc5376a73e6070b6b06e56f846421c4fd",
+        "request_digest": "sha256:9497c9f8c3197f5924964cbcb5b0aa933995aeffdbce3a32218651380e911c60",
+        "boundary_kind": "tool_execution",
+        "crossing_epoch": 10,
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "approval_binding_kind": "receipt",
+        "approval_binding_digest": "sha256:4ca2d821beb2180774b4d96011ad6855c4e75d3e628c413c5a8751a6d7cff082",
+        "harness_public_key_digest": "sha256:483379e47b5f045e4f2b79405e6c81ceb8a61ec28ba50a67777e55a4ff47dce0",
+        "signature": "5o1CokAlSKG85OCXKNSIWial/nxVtJuMGWNzNHIdZNxKZzWZcfQYJqUKQnUXFGeHlOolFd2t9Fb56FBC0SvVDg=="
+      },
+      "chain_events": [
+        {
+          "entry_kind": "crossing",
+          "entry_digest": "sha256:a9802533080827849c951013610deab3345f7e58c4e18ee49d753c880f86ecb6",
+          "raw_code": 0
+        }
+      ]
+    },
+    {
+      "case_id": "code_84_binding_digest_mismatch",
+      "envelope": {
+        "schema": "simurgh.vfr_friction_envelope.v1",
+        "policy_id": "vfr-default.v1",
+        "boundary_kinds_requiring_approval": [
+          "tool_execution",
+          "unsafe_export"
+        ],
+        "admissible_exemption_boundary_kinds": [],
+        "approver_public_key_digest": "sha256:1d28291f71031b755dc3812b88347c2d1d65abb90eade85d6a7637c29560f865",
+        "harness_public_key_digest": "sha256:483379e47b5f045e4f2b79405e6c81ceb8a61ec28ba50a67777e55a4ff47dce0",
+        "max_window_straddle": 1,
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "stage4n_window_anchor_digest": "sha256:3c2d373790fd8e8a9f51714219699bd8e6bd39ca7399ac2659070a9fdbefef2f"
+      },
+      "receipt": {
+        "schema": "simurgh.vfr_approval_receipt.v1",
+        "action_digest": "sha256:eaa0f5b3ab1a888d8d2ae7e0b7e799cfc5376a73e6070b6b06e56f846421c4fd",
+        "request_digest": "sha256:9497c9f8c3197f5924964cbcb5b0aa933995aeffdbce3a32218651380e911c60",
+        "boundary_kind": "tool_execution",
+        "stage4n_window_anchor_digest": "sha256:3c2d373790fd8e8a9f51714219699bd8e6bd39ca7399ac2659070a9fdbefef2f",
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "receipt_epoch": 10,
+        "valid_from_epoch": 10,
+        "valid_until_epoch": 11,
+        "nonce_digest": "sha256:fcc24cc8d955db7e2326372d7d762f3ec2bca4493a8cf0a1d9964a20225d6b0d",
+        "approval_display_digest": "sha256:b382f3fe58483f5d5b44bb89e97d5ab59e0db660c387e5093afec45f42a598d8",
+        "approver_public_key_digest": "sha256:1d28291f71031b755dc3812b88347c2d1d65abb90eade85d6a7637c29560f865",
+        "signature": "WSkpDxRo0iPyEOt0qyoNelGyqoL/PZbIX3xJLE2fffFrRli4H83yhPEftHnLwhG1YKL/t5OqfBg7en5kWetXAw=="
+      },
+      "exemption": null,
+      "crossing": {
+        "schema": "simurgh.vfr_boundary_crossing.v1",
+        "action_digest": "sha256:eaa0f5b3ab1a888d8d2ae7e0b7e799cfc5376a73e6070b6b06e56f846421c4fd",
+        "request_digest": "sha256:9497c9f8c3197f5924964cbcb5b0aa933995aeffdbce3a32218651380e911c60",
+        "boundary_kind": "tool_execution",
+        "crossing_epoch": 10,
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "approval_binding_kind": "receipt",
+        "approval_binding_digest": "sha256:1599ed3f317913af7f203b3e3c75c5623278455bef79d203644dcd85d0722fef",
+        "harness_public_key_digest": "sha256:483379e47b5f045e4f2b79405e6c81ceb8a61ec28ba50a67777e55a4ff47dce0",
+        "signature": "4wDuJWQ65A+UREEA8DKzN86CzgCvEmKqeTd6Qore3ipg4KMWLIUXj6Z3Zhm07eeAdlgBcw2k4N1ewc44KsNXBQ=="
+      },
+      "chain_events": [
+        {
+          "entry_kind": "approval",
+          "entry_digest": "sha256:593c380a1727f827675f2c147b451922e60ad12e9a57adab0d4abb62c4d91fc0",
+          "raw_code": 0
+        },
+        {
+          "entry_kind": "crossing",
+          "entry_digest": "sha256:d5468ef064de7fd9cb0dae10acab6d84f4f2c776cb5d6650306d858a93cedff1",
+          "raw_code": 0
+        }
+      ],
+      "display_expected": "sha256:b382f3fe58483f5d5b44bb89e97d5ab59e0db660c387e5093afec45f42a598d8"
+    },
+    {
+      "case_id": "code_85_approval_not_before_crossing",
+      "envelope": {
+        "schema": "simurgh.vfr_friction_envelope.v1",
+        "policy_id": "vfr-default.v1",
+        "boundary_kinds_requiring_approval": [
+          "tool_execution",
+          "unsafe_export"
+        ],
+        "admissible_exemption_boundary_kinds": [],
+        "approver_public_key_digest": "sha256:1d28291f71031b755dc3812b88347c2d1d65abb90eade85d6a7637c29560f865",
+        "harness_public_key_digest": "sha256:483379e47b5f045e4f2b79405e6c81ceb8a61ec28ba50a67777e55a4ff47dce0",
+        "max_window_straddle": 1,
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "stage4n_window_anchor_digest": "sha256:3c2d373790fd8e8a9f51714219699bd8e6bd39ca7399ac2659070a9fdbefef2f"
+      },
+      "receipt": {
+        "schema": "simurgh.vfr_approval_receipt.v1",
+        "action_digest": "sha256:eaa0f5b3ab1a888d8d2ae7e0b7e799cfc5376a73e6070b6b06e56f846421c4fd",
+        "request_digest": "sha256:9497c9f8c3197f5924964cbcb5b0aa933995aeffdbce3a32218651380e911c60",
+        "boundary_kind": "tool_execution",
+        "stage4n_window_anchor_digest": "sha256:3c2d373790fd8e8a9f51714219699bd8e6bd39ca7399ac2659070a9fdbefef2f",
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "receipt_epoch": 10,
+        "valid_from_epoch": 10,
+        "valid_until_epoch": 11,
+        "nonce_digest": "sha256:fcc24cc8d955db7e2326372d7d762f3ec2bca4493a8cf0a1d9964a20225d6b0d",
+        "approval_display_digest": "sha256:b382f3fe58483f5d5b44bb89e97d5ab59e0db660c387e5093afec45f42a598d8",
+        "approver_public_key_digest": "sha256:1d28291f71031b755dc3812b88347c2d1d65abb90eade85d6a7637c29560f865",
+        "signature": "WSkpDxRo0iPyEOt0qyoNelGyqoL/PZbIX3xJLE2fffFrRli4H83yhPEftHnLwhG1YKL/t5OqfBg7en5kWetXAw=="
+      },
+      "exemption": null,
+      "crossing": {
+        "schema": "simurgh.vfr_boundary_crossing.v1",
+        "action_digest": "sha256:eaa0f5b3ab1a888d8d2ae7e0b7e799cfc5376a73e6070b6b06e56f846421c4fd",
+        "request_digest": "sha256:9497c9f8c3197f5924964cbcb5b0aa933995aeffdbce3a32218651380e911c60",
+        "boundary_kind": "tool_execution",
+        "crossing_epoch": 10,
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "approval_binding_kind": "receipt",
+        "approval_binding_digest": "sha256:593c380a1727f827675f2c147b451922e60ad12e9a57adab0d4abb62c4d91fc0",
+        "harness_public_key_digest": "sha256:483379e47b5f045e4f2b79405e6c81ceb8a61ec28ba50a67777e55a4ff47dce0",
+        "signature": "py6atonl9pZe1lOQTsT7YDVwV7Yco+eShRsTBOraztXeDwaTc+uPUNVmPugwlNaYM6ioHDu8AXePewt0rXOUCw=="
+      },
+      "chain_events": [
+        {
+          "entry_kind": "crossing",
+          "entry_digest": "sha256:47362fcff0e1332f52678cb2da2633c9e0703828e65e924fe2864433c2b591a7",
+          "raw_code": 0
+        },
+        {
+          "entry_kind": "approval",
+          "entry_digest": "sha256:593c380a1727f827675f2c147b451922e60ad12e9a57adab0d4abb62c4d91fc0",
+          "raw_code": 0
+        }
+      ],
+      "display_expected": "sha256:b382f3fe58483f5d5b44bb89e97d5ab59e0db660c387e5093afec45f42a598d8"
+    },
+    {
+      "case_id": "code_86_approver_key_not_distinct",
+      "envelope": {
+        "schema": "simurgh.vfr_friction_envelope.v1",
+        "policy_id": "vfr-default.v1",
+        "boundary_kinds_requiring_approval": [
+          "tool_execution",
+          "unsafe_export"
+        ],
+        "admissible_exemption_boundary_kinds": [],
+        "approver_public_key_digest": "sha256:1d28291f71031b755dc3812b88347c2d1d65abb90eade85d6a7637c29560f865",
+        "harness_public_key_digest": "sha256:483379e47b5f045e4f2b79405e6c81ceb8a61ec28ba50a67777e55a4ff47dce0",
+        "max_window_straddle": 1,
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "stage4n_window_anchor_digest": "sha256:3c2d373790fd8e8a9f51714219699bd8e6bd39ca7399ac2659070a9fdbefef2f"
+      },
+      "receipt": {
+        "schema": "simurgh.vfr_approval_receipt.v1",
+        "action_digest": "sha256:eaa0f5b3ab1a888d8d2ae7e0b7e799cfc5376a73e6070b6b06e56f846421c4fd",
+        "request_digest": "sha256:9497c9f8c3197f5924964cbcb5b0aa933995aeffdbce3a32218651380e911c60",
+        "boundary_kind": "tool_execution",
+        "stage4n_window_anchor_digest": "sha256:3c2d373790fd8e8a9f51714219699bd8e6bd39ca7399ac2659070a9fdbefef2f",
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "receipt_epoch": 10,
+        "valid_from_epoch": 10,
+        "valid_until_epoch": 11,
+        "nonce_digest": "sha256:fcc24cc8d955db7e2326372d7d762f3ec2bca4493a8cf0a1d9964a20225d6b0d",
+        "approval_display_digest": "sha256:b382f3fe58483f5d5b44bb89e97d5ab59e0db660c387e5093afec45f42a598d8",
+        "approver_public_key_digest": "sha256:483379e47b5f045e4f2b79405e6c81ceb8a61ec28ba50a67777e55a4ff47dce0",
+        "signature": "hQ/jlmRwYfhbnjGgWY/yFz6zgxd8qhSsWsopU6SXF3T808/vI/jNv4j/HLRuEOF0du+bpYcB5JfvVDhicko0DA=="
+      },
+      "exemption": null,
+      "crossing": {
+        "schema": "simurgh.vfr_boundary_crossing.v1",
+        "action_digest": "sha256:eaa0f5b3ab1a888d8d2ae7e0b7e799cfc5376a73e6070b6b06e56f846421c4fd",
+        "request_digest": "sha256:9497c9f8c3197f5924964cbcb5b0aa933995aeffdbce3a32218651380e911c60",
+        "boundary_kind": "tool_execution",
+        "crossing_epoch": 10,
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "approval_binding_kind": "receipt",
+        "approval_binding_digest": "sha256:2ee35739e96bfb3790d3e17c9404f7422bbe1644396936672ff41dd335745ac7",
+        "harness_public_key_digest": "sha256:483379e47b5f045e4f2b79405e6c81ceb8a61ec28ba50a67777e55a4ff47dce0",
+        "signature": "jSwWgyEfZYRxLlPB1nLsSjHtbgRBsgR0KpdzT6ymK7TLKvP7//5/QlmHTWHPEyX6Zju7QzZC8E967+1MX4ydAw=="
+      },
+      "chain_events": [
+        {
+          "entry_kind": "approval",
+          "entry_digest": "sha256:2ee35739e96bfb3790d3e17c9404f7422bbe1644396936672ff41dd335745ac7",
+          "raw_code": 0
+        },
+        {
+          "entry_kind": "crossing",
+          "entry_digest": "sha256:6e82305de5c9659d2b94b1a796d1a1aee545e01bf3e0a8b98e82649b085b1182",
+          "raw_code": 0
+        }
+      ],
+      "display_expected": "sha256:b382f3fe58483f5d5b44bb89e97d5ab59e0db660c387e5093afec45f42a598d8"
+    },
+    {
+      "case_id": "code_87_boundary_kind_not_covered",
+      "envelope": {
+        "schema": "simurgh.vfr_friction_envelope.v1",
+        "policy_id": "vfr-default.v1",
+        "boundary_kinds_requiring_approval": [
+          "tool_execution"
+        ],
+        "admissible_exemption_boundary_kinds": [],
+        "approver_public_key_digest": "sha256:1d28291f71031b755dc3812b88347c2d1d65abb90eade85d6a7637c29560f865",
+        "harness_public_key_digest": "sha256:483379e47b5f045e4f2b79405e6c81ceb8a61ec28ba50a67777e55a4ff47dce0",
+        "max_window_straddle": 1,
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "stage4n_window_anchor_digest": "sha256:3c2d373790fd8e8a9f51714219699bd8e6bd39ca7399ac2659070a9fdbefef2f"
+      },
+      "receipt": {
+        "schema": "simurgh.vfr_approval_receipt.v1",
+        "action_digest": "sha256:eaa0f5b3ab1a888d8d2ae7e0b7e799cfc5376a73e6070b6b06e56f846421c4fd",
+        "request_digest": "sha256:9497c9f8c3197f5924964cbcb5b0aa933995aeffdbce3a32218651380e911c60",
+        "boundary_kind": "privilege_expansion",
+        "stage4n_window_anchor_digest": "sha256:3c2d373790fd8e8a9f51714219699bd8e6bd39ca7399ac2659070a9fdbefef2f",
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "receipt_epoch": 10,
+        "valid_from_epoch": 10,
+        "valid_until_epoch": 11,
+        "nonce_digest": "sha256:fcc24cc8d955db7e2326372d7d762f3ec2bca4493a8cf0a1d9964a20225d6b0d",
+        "approval_display_digest": "sha256:b382f3fe58483f5d5b44bb89e97d5ab59e0db660c387e5093afec45f42a598d8",
+        "approver_public_key_digest": "sha256:1d28291f71031b755dc3812b88347c2d1d65abb90eade85d6a7637c29560f865",
+        "signature": "0hgq/1JUTJHJ4C+WjAjFC1HwEXcO1UadPUgAif7PzezO/NlDo9gGBwas0EjD6r/lyBofaRw/DulnU9b/PSMbBA=="
+      },
+      "exemption": null,
+      "crossing": {
+        "schema": "simurgh.vfr_boundary_crossing.v1",
+        "action_digest": "sha256:eaa0f5b3ab1a888d8d2ae7e0b7e799cfc5376a73e6070b6b06e56f846421c4fd",
+        "request_digest": "sha256:9497c9f8c3197f5924964cbcb5b0aa933995aeffdbce3a32218651380e911c60",
+        "boundary_kind": "privilege_expansion",
+        "crossing_epoch": 10,
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "approval_binding_kind": "receipt",
+        "approval_binding_digest": "sha256:9ed2d6c49dd998f76c512f5beed3aae759c632d8782ad66ea25c6e8272201e09",
+        "harness_public_key_digest": "sha256:483379e47b5f045e4f2b79405e6c81ceb8a61ec28ba50a67777e55a4ff47dce0",
+        "signature": "EgbxBtNY22S5SdIhgxKRfz+wIf/UMqwt2AG0VWJmWPKjrw28xtHYcF009RKsrtVeLf3EiQwQey0bb/lsFMYiAQ=="
+      },
+      "chain_events": [
+        {
+          "entry_kind": "approval",
+          "entry_digest": "sha256:9ed2d6c49dd998f76c512f5beed3aae759c632d8782ad66ea25c6e8272201e09",
+          "raw_code": 0
+        },
+        {
+          "entry_kind": "crossing",
+          "entry_digest": "sha256:e230f9129d46ca12ac183e24a70f73b499f6423935f121ef65d1f728966142b6",
+          "raw_code": 0
+        }
+      ],
+      "display_expected": "sha256:b382f3fe58483f5d5b44bb89e97d5ab59e0db660c387e5093afec45f42a598d8"
+    },
+    {
+      "case_id": "code_88_display_mismatch",
+      "envelope": {
+        "schema": "simurgh.vfr_friction_envelope.v1",
+        "policy_id": "vfr-default.v1",
+        "boundary_kinds_requiring_approval": [
+          "tool_execution",
+          "unsafe_export"
+        ],
+        "admissible_exemption_boundary_kinds": [],
+        "approver_public_key_digest": "sha256:1d28291f71031b755dc3812b88347c2d1d65abb90eade85d6a7637c29560f865",
+        "harness_public_key_digest": "sha256:483379e47b5f045e4f2b79405e6c81ceb8a61ec28ba50a67777e55a4ff47dce0",
+        "max_window_straddle": 1,
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "stage4n_window_anchor_digest": "sha256:3c2d373790fd8e8a9f51714219699bd8e6bd39ca7399ac2659070a9fdbefef2f"
+      },
+      "receipt": {
+        "schema": "simurgh.vfr_approval_receipt.v1",
+        "action_digest": "sha256:eaa0f5b3ab1a888d8d2ae7e0b7e799cfc5376a73e6070b6b06e56f846421c4fd",
+        "request_digest": "sha256:9497c9f8c3197f5924964cbcb5b0aa933995aeffdbce3a32218651380e911c60",
+        "boundary_kind": "tool_execution",
+        "stage4n_window_anchor_digest": "sha256:3c2d373790fd8e8a9f51714219699bd8e6bd39ca7399ac2659070a9fdbefef2f",
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "receipt_epoch": 10,
+        "valid_from_epoch": 10,
+        "valid_until_epoch": 11,
+        "nonce_digest": "sha256:fcc24cc8d955db7e2326372d7d762f3ec2bca4493a8cf0a1d9964a20225d6b0d",
+        "approval_display_digest": "sha256:b382f3fe58483f5d5b44bb89e97d5ab59e0db660c387e5093afec45f42a598d8",
+        "approver_public_key_digest": "sha256:1d28291f71031b755dc3812b88347c2d1d65abb90eade85d6a7637c29560f865",
+        "signature": "WSkpDxRo0iPyEOt0qyoNelGyqoL/PZbIX3xJLE2fffFrRli4H83yhPEftHnLwhG1YKL/t5OqfBg7en5kWetXAw=="
+      },
+      "exemption": null,
+      "crossing": {
+        "schema": "simurgh.vfr_boundary_crossing.v1",
+        "action_digest": "sha256:eaa0f5b3ab1a888d8d2ae7e0b7e799cfc5376a73e6070b6b06e56f846421c4fd",
+        "request_digest": "sha256:9497c9f8c3197f5924964cbcb5b0aa933995aeffdbce3a32218651380e911c60",
+        "boundary_kind": "tool_execution",
+        "crossing_epoch": 10,
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "approval_binding_kind": "receipt",
+        "approval_binding_digest": "sha256:593c380a1727f827675f2c147b451922e60ad12e9a57adab0d4abb62c4d91fc0",
+        "harness_public_key_digest": "sha256:483379e47b5f045e4f2b79405e6c81ceb8a61ec28ba50a67777e55a4ff47dce0",
+        "signature": "py6atonl9pZe1lOQTsT7YDVwV7Yco+eShRsTBOraztXeDwaTc+uPUNVmPugwlNaYM6ioHDu8AXePewt0rXOUCw=="
+      },
+      "chain_events": [
+        {
+          "entry_kind": "approval",
+          "entry_digest": "sha256:593c380a1727f827675f2c147b451922e60ad12e9a57adab0d4abb62c4d91fc0",
+          "raw_code": 0
+        },
+        {
+          "entry_kind": "crossing",
+          "entry_digest": "sha256:47362fcff0e1332f52678cb2da2633c9e0703828e65e924fe2864433c2b591a7",
+          "raw_code": 0
+        }
+      ],
+      "display_expected": "sha256:a426e27951deaf6c8ab402e9d1a18eb83315a3b1835b10d03297b4a409edbf45"
+    },
+    {
+      "case_id": "code_89_census_mismatch",
+      "envelope": {
+        "schema": "simurgh.vfr_friction_envelope.v1",
+        "policy_id": "vfr-default.v1",
+        "boundary_kinds_requiring_approval": [
+          "tool_execution",
+          "unsafe_export"
+        ],
+        "admissible_exemption_boundary_kinds": [],
+        "approver_public_key_digest": "sha256:1d28291f71031b755dc3812b88347c2d1d65abb90eade85d6a7637c29560f865",
+        "harness_public_key_digest": "sha256:483379e47b5f045e4f2b79405e6c81ceb8a61ec28ba50a67777e55a4ff47dce0",
+        "max_window_straddle": 1,
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "stage4n_window_anchor_digest": "sha256:3c2d373790fd8e8a9f51714219699bd8e6bd39ca7399ac2659070a9fdbefef2f"
+      },
+      "receipt": {
+        "schema": "simurgh.vfr_approval_receipt.v1",
+        "action_digest": "sha256:eaa0f5b3ab1a888d8d2ae7e0b7e799cfc5376a73e6070b6b06e56f846421c4fd",
+        "request_digest": "sha256:9497c9f8c3197f5924964cbcb5b0aa933995aeffdbce3a32218651380e911c60",
+        "boundary_kind": "tool_execution",
+        "stage4n_window_anchor_digest": "sha256:3c2d373790fd8e8a9f51714219699bd8e6bd39ca7399ac2659070a9fdbefef2f",
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "receipt_epoch": 10,
+        "valid_from_epoch": 10,
+        "valid_until_epoch": 11,
+        "nonce_digest": "sha256:fcc24cc8d955db7e2326372d7d762f3ec2bca4493a8cf0a1d9964a20225d6b0d",
+        "approval_display_digest": "sha256:b382f3fe58483f5d5b44bb89e97d5ab59e0db660c387e5093afec45f42a598d8",
+        "approver_public_key_digest": "sha256:1d28291f71031b755dc3812b88347c2d1d65abb90eade85d6a7637c29560f865",
+        "signature": "WSkpDxRo0iPyEOt0qyoNelGyqoL/PZbIX3xJLE2fffFrRli4H83yhPEftHnLwhG1YKL/t5OqfBg7en5kWetXAw=="
+      },
+      "exemption": null,
+      "crossing": {
+        "schema": "simurgh.vfr_boundary_crossing.v1",
+        "action_digest": "sha256:eaa0f5b3ab1a888d8d2ae7e0b7e799cfc5376a73e6070b6b06e56f846421c4fd",
+        "request_digest": "sha256:9497c9f8c3197f5924964cbcb5b0aa933995aeffdbce3a32218651380e911c60",
+        "boundary_kind": "tool_execution",
+        "crossing_epoch": 10,
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "approval_binding_kind": "receipt",
+        "approval_binding_digest": "sha256:593c380a1727f827675f2c147b451922e60ad12e9a57adab0d4abb62c4d91fc0",
+        "harness_public_key_digest": "sha256:483379e47b5f045e4f2b79405e6c81ceb8a61ec28ba50a67777e55a4ff47dce0",
+        "signature": "py6atonl9pZe1lOQTsT7YDVwV7Yco+eShRsTBOraztXeDwaTc+uPUNVmPugwlNaYM6ioHDu8AXePewt0rXOUCw=="
+      },
+      "chain_events": [
+        {
+          "entry_kind": "approval",
+          "entry_digest": "sha256:593c380a1727f827675f2c147b451922e60ad12e9a57adab0d4abb62c4d91fc0",
+          "raw_code": 0
+        },
+        {
+          "entry_kind": "crossing",
+          "entry_digest": "sha256:47362fcff0e1332f52678cb2da2633c9e0703828e65e924fe2864433c2b591a7",
+          "raw_code": 0
+        },
+        {
+          "entry_kind": "crossing",
+          "entry_digest": "sha256:edd2c03299da6a31a876277bd68584cb2754e80990776af3c3696bb74ddd249d",
+          "raw_code": 0
+        }
+      ],
+      "census": {
+        "committed_crossings": 1
+      },
+      "display_expected": "sha256:b382f3fe58483f5d5b44bb89e97d5ab59e0db660c387e5093afec45f42a598d8"
+    },
+    {
+      "case_id": "exemption_refused",
+      "envelope": {
+        "schema": "simurgh.vfr_friction_envelope.v1",
+        "policy_id": "vfr-default.v1",
+        "boundary_kinds_requiring_approval": [
+          "tool_execution",
+          "unsafe_export"
+        ],
+        "admissible_exemption_boundary_kinds": [],
+        "approver_public_key_digest": "sha256:1d28291f71031b755dc3812b88347c2d1d65abb90eade85d6a7637c29560f865",
+        "harness_public_key_digest": "sha256:483379e47b5f045e4f2b79405e6c81ceb8a61ec28ba50a67777e55a4ff47dce0",
+        "max_window_straddle": 1,
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "stage4n_window_anchor_digest": "sha256:3c2d373790fd8e8a9f51714219699bd8e6bd39ca7399ac2659070a9fdbefef2f"
+      },
+      "receipt": null,
+      "exemption": {
+        "schema": "simurgh.vfr_approval_exemption.v1",
+        "action_digest": "sha256:dcfa430dccdf29cf75a9c0abba03661f5fa8fc1f520a09de95ab2cd3c2030fe3",
+        "request_digest": "sha256:9497c9f8c3197f5924964cbcb5b0aa933995aeffdbce3a32218651380e911c60",
+        "boundary_kind": "tool_execution",
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "stage4n_window_anchor_digest": "sha256:3c2d373790fd8e8a9f51714219699bd8e6bd39ca7399ac2659070a9fdbefef2f",
+        "exemption_reason": "approval_not_present",
+        "exemption_policy_id": "vfr-default.v1",
+        "harness_public_key_digest": "sha256:483379e47b5f045e4f2b79405e6c81ceb8a61ec28ba50a67777e55a4ff47dce0",
+        "signature": "AkpKT6LhsoJKbB/L6UpKFSuL1VybyWPqQLmYe4cBOpILKF4i4fhxbnULRHJPEpFZN/fuQaZFUhZ5zdZyAb4wCg=="
+      },
+      "crossing": {
+        "schema": "simurgh.vfr_boundary_crossing.v1",
+        "action_digest": "sha256:dcfa430dccdf29cf75a9c0abba03661f5fa8fc1f520a09de95ab2cd3c2030fe3",
+        "request_digest": "sha256:9497c9f8c3197f5924964cbcb5b0aa933995aeffdbce3a32218651380e911c60",
+        "boundary_kind": "tool_execution",
+        "crossing_epoch": 10,
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "approval_binding_kind": "exemption",
+        "approval_binding_digest": "sha256:66a094b1dbd3c0b423b4d44797e7270d51b2533ea0111ea10acd292ae6d2c46e",
+        "harness_public_key_digest": "sha256:483379e47b5f045e4f2b79405e6c81ceb8a61ec28ba50a67777e55a4ff47dce0",
+        "signature": "gzO305s+qByTR960PW6nykSniir4rdyzh1Jaa+GH6cFi+dVZwwRO6CvFa/AxHygBUBUJ9ayTUKfeWV9CbPjCBA=="
+      },
+      "chain_events": [
+        {
+          "entry_kind": "crossing",
+          "entry_digest": "sha256:b1453b9edff5594d5c802972d555791a87088ffc16eb021a788dfcce56014b48",
+          "raw_code": 0
+        }
+      ]
+    },
+    {
+      "case_id": "exemption_conflict",
+      "envelope": {
+        "schema": "simurgh.vfr_friction_envelope.v1",
+        "policy_id": "vfr-default.v1",
+        "boundary_kinds_requiring_approval": [
+          "tool_execution",
+          "unsafe_export"
+        ],
+        "admissible_exemption_boundary_kinds": [
+          "tool_execution"
+        ],
+        "approver_public_key_digest": "sha256:1d28291f71031b755dc3812b88347c2d1d65abb90eade85d6a7637c29560f865",
+        "harness_public_key_digest": "sha256:483379e47b5f045e4f2b79405e6c81ceb8a61ec28ba50a67777e55a4ff47dce0",
+        "max_window_straddle": 1,
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "stage4n_window_anchor_digest": "sha256:3c2d373790fd8e8a9f51714219699bd8e6bd39ca7399ac2659070a9fdbefef2f"
+      },
+      "receipt": {
+        "schema": "simurgh.vfr_approval_receipt.v1",
+        "action_digest": "sha256:eaa0f5b3ab1a888d8d2ae7e0b7e799cfc5376a73e6070b6b06e56f846421c4fd",
+        "request_digest": "sha256:9497c9f8c3197f5924964cbcb5b0aa933995aeffdbce3a32218651380e911c60",
+        "boundary_kind": "tool_execution",
+        "stage4n_window_anchor_digest": "sha256:3c2d373790fd8e8a9f51714219699bd8e6bd39ca7399ac2659070a9fdbefef2f",
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "receipt_epoch": 10,
+        "valid_from_epoch": 10,
+        "valid_until_epoch": 11,
+        "nonce_digest": "sha256:fcc24cc8d955db7e2326372d7d762f3ec2bca4493a8cf0a1d9964a20225d6b0d",
+        "approval_display_digest": "sha256:b382f3fe58483f5d5b44bb89e97d5ab59e0db660c387e5093afec45f42a598d8",
+        "approver_public_key_digest": "sha256:1d28291f71031b755dc3812b88347c2d1d65abb90eade85d6a7637c29560f865",
+        "signature": "WSkpDxRo0iPyEOt0qyoNelGyqoL/PZbIX3xJLE2fffFrRli4H83yhPEftHnLwhG1YKL/t5OqfBg7en5kWetXAw=="
+      },
+      "exemption": {
+        "schema": "simurgh.vfr_approval_exemption.v1",
+        "action_digest": "sha256:dcfa430dccdf29cf75a9c0abba03661f5fa8fc1f520a09de95ab2cd3c2030fe3",
+        "request_digest": "sha256:9497c9f8c3197f5924964cbcb5b0aa933995aeffdbce3a32218651380e911c60",
+        "boundary_kind": "tool_execution",
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "stage4n_window_anchor_digest": "sha256:3c2d373790fd8e8a9f51714219699bd8e6bd39ca7399ac2659070a9fdbefef2f",
+        "exemption_reason": "approval_not_present",
+        "exemption_policy_id": "vfr-default.v1",
+        "harness_public_key_digest": "sha256:483379e47b5f045e4f2b79405e6c81ceb8a61ec28ba50a67777e55a4ff47dce0",
+        "signature": "AkpKT6LhsoJKbB/L6UpKFSuL1VybyWPqQLmYe4cBOpILKF4i4fhxbnULRHJPEpFZN/fuQaZFUhZ5zdZyAb4wCg=="
+      },
+      "crossing": {
+        "schema": "simurgh.vfr_boundary_crossing.v1",
+        "action_digest": "sha256:eaa0f5b3ab1a888d8d2ae7e0b7e799cfc5376a73e6070b6b06e56f846421c4fd",
+        "request_digest": "sha256:9497c9f8c3197f5924964cbcb5b0aa933995aeffdbce3a32218651380e911c60",
+        "boundary_kind": "tool_execution",
+        "crossing_epoch": 10,
+        "run_id_digest": "sha256:dc3e7bf9b1d309fe1f7522d8d6430d5d69034e9cd935e1ea55e5ac6217a182ff",
+        "approval_binding_kind": "exemption",
+        "approval_binding_digest": "sha256:66a094b1dbd3c0b423b4d44797e7270d51b2533ea0111ea10acd292ae6d2c46e",
+        "harness_public_key_digest": "sha256:483379e47b5f045e4f2b79405e6c81ceb8a61ec28ba50a67777e55a4ff47dce0",
+        "signature": "dsbkdiU2/QMlybMu/ae75gYygrWTa046HvMuPYMEanjfChrlf9zBRDd7zW0gUvJW5YFfnP1mJnwAolvKaN0GDg=="
+      },
+      "chain_events": [
+        {
+          "entry_kind": "crossing",
+          "entry_digest": "sha256:7f5e73a1d63c34784281a754579cbe8f2d98fd35acb0f6a0b3180b3b4369084f",
+          "raw_code": 0
+        }
+      ]
+    }
+  ]
+}

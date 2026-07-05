@@ -1,0 +1,77 @@
+[
+  {
+    "case_id": "green_pincer_complete",
+    "raw": 0,
+    "reason": "accepted"
+  },
+  {
+    "case_id": "green_refusal_bearing",
+    "raw": 0,
+    "reason": "accepted"
+  },
+  {
+    "case_id": "green_exempt",
+    "raw": 0,
+    "reason": "accepted_exempt"
+  },
+  {
+    "case_id": "code_80_envelope_malformed",
+    "raw": 80,
+    "reason": "schema_invalid"
+  },
+  {
+    "case_id": "code_81_signature_invalid",
+    "raw": 81,
+    "reason": "approval_signature_invalid"
+  },
+  {
+    "case_id": "code_82_window_straddle_exceeded",
+    "raw": 82,
+    "reason": "window_straddle_exceeded"
+  },
+  {
+    "case_id": "code_83_receipt_missing",
+    "raw": 83,
+    "reason": "absent"
+  },
+  {
+    "case_id": "code_84_binding_digest_mismatch",
+    "raw": 84,
+    "reason": "approval_binding_digest_mismatch"
+  },
+  {
+    "case_id": "code_85_approval_not_before_crossing",
+    "raw": 85,
+    "reason": "approval_not_before_crossing"
+  },
+  {
+    "case_id": "code_86_approver_key_not_distinct",
+    "raw": 86,
+    "reason": "approver_key_equals_harness_key"
+  },
+  {
+    "case_id": "code_87_boundary_kind_not_covered",
+    "raw": 87,
+    "reason": "boundary_kind_not_covered"
+  },
+  {
+    "case_id": "code_88_display_mismatch",
+    "raw": 88,
+    "reason": "display_digest_mismatch"
+  },
+  {
+    "case_id": "code_89_census_mismatch",
+    "raw": 89,
+    "reason": "census_mismatch"
+  },
+  {
+    "case_id": "exemption_refused",
+    "raw": 87,
+    "reason": "approval_exemption_not_permitted_by_policy"
+  },
+  {
+    "case_id": "exemption_conflict",
+    "raw": 84,
+    "reason": "binding_kind_conflict"
+  }
+]

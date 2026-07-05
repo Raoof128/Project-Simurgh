@@ -28,7 +28,11 @@ DOMAINS = {
     "APPROVAL_RECEIPT": "SIMURGH_STAGE4Q_APPROVAL_RECEIPT_V1",
     "APPROVAL_EXEMPTION": "SIMURGH_STAGE4Q_APPROVAL_EXEMPTION_V1",
     "BOUNDARY_CROSSING": "SIMURGH_STAGE4Q_BOUNDARY_CROSSING_V1",
+    "CHAIN_ENTRY": "SIMURGH_STAGE4Q_CHAIN_ENTRY_V1",
+    "CHAIN_ENTRY_REPLAY": "SIMURGH_STAGE4Q_CHAIN_ENTRY_REPLAY_V1",
+    "CHAIN_ROOT": "SIMURGH_STAGE4Q_CHAIN_ROOT_V1",
 }
+GENESIS = "sha256:" + hashlib.sha256(b"SIMURGH_STAGE4Q_GENESIS_V1").hexdigest()
 BOUNDARY_KINDS = (
     "tool_execution",
     "unsafe_export",
@@ -188,6 +192,78 @@ def positions_of(chain_entries, entry_digest) -> int:
         if e.get("entry_digest") == entry_digest:
             return i
     return -1
+
+
+# ---- run chain (Python mirror of chainCore.mjs) ---------------------------------------
+def chain_entry_digest(entry: dict) -> str:
+    return domain_digest(DOMAINS["CHAIN_ENTRY"], SCHEMAS["RUN_CHAIN_ENTRY"], entry)
+
+
+def chain_entry_replay_digest(entry: dict) -> str:
+    return domain_digest(
+        DOMAINS["CHAIN_ENTRY_REPLAY"],
+        SCHEMAS["RUN_CHAIN_ENTRY"],
+        {"entry_kind": entry["entry_kind"], "entry_digest": entry["entry_digest"], "raw_code": entry["raw_code"]},
+    )
+
+
+def chain_root_digest(entry_digests) -> str:
+    acc = GENESIS
+    for d in entry_digests:
+        acc = domain_digest(DOMAINS["CHAIN_ROOT"], SCHEMAS["RUN_CHAIN_ENTRY"], {"previous": acc, "entry": d})
+    return acc
+
+
+def build_chain(events):
+    entries = []
+    previous = GENESIS
+    for i, ev in enumerate(events):
+        rec = {
+            "schema": SCHEMAS["RUN_CHAIN_ENTRY"],
+            "entry_kind": ev["entry_kind"],
+            "entry_digest": ev["entry_digest"],
+            "raw_code": ev["raw_code"],
+            "previous_entry_digest": previous,
+            "chain_position": i,
+        }
+        entries.append(rec)
+        previous = chain_entry_digest(rec)
+    return entries, chain_root_digest([chain_entry_digest(e) for e in entries])
+
+
+def _census_count(entries) -> int:
+    n = 0
+    for e in entries:
+        if e["entry_kind"] == "crossing":
+            n += 1
+        elif e["entry_kind"] == "refusal" and e["raw_code"] != 80:
+            n += 1
+    return n
+
+
+def verify_chain(entries, expected_root=None, census=None) -> dict:
+    seen = set()
+    previous = GENESIS
+    for i, e in enumerate(entries):
+        if e.get("chain_position") != i:
+            return {"raw": 89, "reason": "reordered_entry"}
+        if e.get("previous_entry_digest") != previous:
+            return {"raw": 89, "reason": "non_linking_previous_digest"}
+        replay = chain_entry_replay_digest(e)
+        if replay in seen:
+            return {"raw": 89, "reason": "duplicated_entry"}
+        seen.add(replay)
+        previous = chain_entry_digest(e)
+    root = chain_root_digest([chain_entry_digest(e) for e in entries])
+    if expected_root is not None and root != expected_root:
+        return {"raw": 89, "reason": "refusal_entry_removed"}
+    if census:
+        counted = _census_count(entries)
+        if census.get("committed_crossings") != counted:
+            return {"raw": 89, "reason": "census_mismatch"}
+        if census.get("laneb_observed") is not None and census["laneb_observed"] != counted:
+            return {"raw": 89, "reason": "census_mismatch"}
+    return {"raw": 0}
 
 
 def _refuse(raw, reason):
