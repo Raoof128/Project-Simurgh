@@ -1,0 +1,353 @@
+{
+  "schema": "simurgh.voca_attestation.v1",
+  "non_claims": [
+    "not_provider_identity_oracle",
+    "not_proxy_blocking_system",
+    "not_grey_market_investigation",
+    "not_law_enforcement_claim",
+    "not_model_safety_claim",
+    "not_proof_of_actual_provider_execution",
+    "not_detection_of_all_proxies",
+    "not_a_replacement_for_provider_abuse_detection",
+    "not_model_substitution_oracle",
+    "http_resale_shape_deferred_to_4p1",
+    "window_anchor_is_public",
+    "match_is_not_attribution",
+    "private_custody_corroboration_deferred",
+    "disclosure_budget_is_not_privacy_proof",
+    "not_enforcement_verification",
+    "not_legal_compliance_certification"
+  ],
+  "safety_rail": "Stage 4P proves properties of recorded custody evidence. It does not prove physical network truth, provider honesty, real-world attribution, or model execution identity outside the evidence supplied to the verifier.",
+  "arms": [
+    {
+      "arm": "endpoint-beats-relay",
+      "lane": "A",
+      "raw": 70,
+      "reason": "declared_endpoint_digest_mismatch"
+    },
+    {
+      "arm": "epoch-edge-high",
+      "lane": "A",
+      "raw": 0,
+      "reason": "accepted"
+    },
+    {
+      "arm": "epoch-edge-low",
+      "lane": "A",
+      "raw": 0,
+      "reason": "accepted"
+    },
+    {
+      "arm": "fault-67",
+      "lane": "A",
+      "raw": 67,
+      "reason": "absent"
+    },
+    {
+      "arm": "fault-68",
+      "lane": "A",
+      "raw": 68,
+      "reason": "hop_signature_invalid"
+    },
+    {
+      "arm": "fault-69",
+      "lane": "A",
+      "raw": 69,
+      "reason": "run_epoch_outside_validity_window"
+    },
+    {
+      "arm": "fault-70",
+      "lane": "A",
+      "raw": 70,
+      "reason": "declared_endpoint_digest_mismatch"
+    },
+    {
+      "arm": "fault-71",
+      "lane": "A",
+      "raw": 71,
+      "reason": "relay_not_declared"
+    },
+    {
+      "arm": "fault-72",
+      "lane": "A",
+      "raw": 72,
+      "reason": "model_identity_digest_mismatch"
+    },
+    {
+      "arm": "fault-73",
+      "lane": "A",
+      "raw": 73,
+      "reason": "account_boundary_undeclared_pool"
+    },
+    {
+      "arm": "fault-74",
+      "lane": "A",
+      "raw": 74,
+      "reason": "trace_custody_expanded_beyond_declaration"
+    },
+    {
+      "arm": "fault-75",
+      "lane": "A",
+      "raw": 75,
+      "reason": "stage4o_surface_binding_mismatch"
+    },
+    {
+      "arm": "fault-76",
+      "lane": "A",
+      "raw": 76,
+      "reason": "transform_not_declared"
+    },
+    {
+      "arm": "fault-77",
+      "lane": "A",
+      "raw": 77,
+      "reason": "binding_mismatch"
+    },
+    {
+      "arm": "fault-78",
+      "lane": "A",
+      "raw": 78,
+      "reason": "missing_hop"
+    },
+    {
+      "arm": "fault-78-duplicated-hop",
+      "lane": "A",
+      "raw": 78,
+      "reason": "duplicated_hop"
+    },
+    {
+      "arm": "fault-78-non-linking-hop",
+      "lane": "A",
+      "raw": 78,
+      "reason": "non_linking_previous_digest"
+    },
+    {
+      "arm": "fault-78-reordered-hop",
+      "lane": "A",
+      "raw": 78,
+      "reason": "reordered_hop"
+    },
+    {
+      "arm": "fault-79",
+      "lane": "A",
+      "raw": 79,
+      "reason": "window_anchor_not_in_feed"
+    },
+    {
+      "arm": "green-declared-relay",
+      "lane": "A",
+      "raw": 0,
+      "reason": "accepted"
+    },
+    {
+      "arm": "green-direct",
+      "lane": "A",
+      "raw": 0,
+      "reason": "accepted"
+    },
+    {
+      "arm": "laundering-beats-model-swap",
+      "lane": "A",
+      "raw": 78,
+      "reason": "terminal_response_mismatch"
+    },
+    {
+      "arm": "malformed-receipt",
+      "lane": "A",
+      "raw": 77,
+      "reason": "receipt_schema_invalid"
+    },
+    {
+      "arm": "signature-beats-laundering",
+      "lane": "A",
+      "raw": 68,
+      "reason": "receipt_signature_invalid"
+    },
+    {
+      "arm": "unknown-enum",
+      "lane": "A",
+      "raw": 67,
+      "reason": "schema_invalid"
+    },
+    {
+      "arm": "clean-declared-relay",
+      "lane": "B",
+      "raw": 0,
+      "reason": "accepted"
+    },
+    {
+      "arm": "dropped-hop",
+      "lane": "B",
+      "raw": 78,
+      "reason": "missing_hop"
+    },
+    {
+      "arm": "model-swap",
+      "lane": "B",
+      "raw": 72,
+      "reason": "model_identity_digest_mismatch"
+    },
+    {
+      "arm": "tool-surface-rewrite",
+      "lane": "B",
+      "raw": 75,
+      "reason": "stage4o_surface_binding_mismatch"
+    },
+    {
+      "arm": "trace-custodian-change",
+      "lane": "B",
+      "raw": 74,
+      "reason": "trace_custody_expanded_beyond_declaration"
+    },
+    {
+      "arm": "undeclared-relay",
+      "lane": "B",
+      "raw": 71,
+      "reason": "relay_not_declared"
+    },
+    {
+      "arm": "public-report-motivated",
+      "lane": "C",
+      "raw": 71,
+      "reason": "relay_not_declared"
+    }
+  ],
+  "cpc_signals": [
+    {
+      "arm": "match",
+      "signal": {
+        "schema": "simurgh.custody_class_signal.v1",
+        "signal_mode": "matchable",
+        "failure_class": "undeclared_proxy_hop",
+        "stage4n_window_anchor_digest": "sha256:f59a5718ea6125a90e181430fb2f5d21f7b350b77dda2d0c09ad0533eeb22535",
+        "evidence_kind": "relay_spki_sha256",
+        "windowed_evidence_commitment": "sha256:6152c7afd475d0076de1020dd81d58a78076d1cb277535dd9dd29698dbaf476b",
+        "custody_class_digest": "sha256:f26242c23175cf65263f285de36fee9705ce6588d4014f1025e91b066520ee4e",
+        "entropy_floor_bits": 96,
+        "disclosure_budget_max_signals_per_window": 2,
+        "public_linkability": "bounded"
+      }
+    },
+    {
+      "arm": "differ",
+      "signal": {
+        "schema": "simurgh.custody_class_signal.v1",
+        "signal_mode": "matchable",
+        "failure_class": "undeclared_proxy_hop",
+        "stage4n_window_anchor_digest": "sha256:f59a5718ea6125a90e181430fb2f5d21f7b350b77dda2d0c09ad0533eeb22535",
+        "evidence_kind": "relay_spki_sha256",
+        "windowed_evidence_commitment": "sha256:6152c7afd475d0076de1020dd81d58a78076d1cb277535dd9dd29698dbaf476b",
+        "custody_class_digest": "sha256:f26242c23175cf65263f285de36fee9705ce6588d4014f1025e91b066520ee4e",
+        "entropy_floor_bits": 96,
+        "disclosure_budget_max_signals_per_window": 2,
+        "public_linkability": "bounded"
+      }
+    },
+    {
+      "arm": "cross-window",
+      "signal": {
+        "schema": "simurgh.custody_class_signal.v1",
+        "signal_mode": "matchable",
+        "failure_class": "undeclared_proxy_hop",
+        "stage4n_window_anchor_digest": "sha256:f59a5718ea6125a90e181430fb2f5d21f7b350b77dda2d0c09ad0533eeb22535",
+        "evidence_kind": "relay_spki_sha256",
+        "windowed_evidence_commitment": "sha256:6152c7afd475d0076de1020dd81d58a78076d1cb277535dd9dd29698dbaf476b",
+        "custody_class_digest": "sha256:f26242c23175cf65263f285de36fee9705ce6588d4014f1025e91b066520ee4e",
+        "entropy_floor_bits": 96,
+        "disclosure_budget_max_signals_per_window": 2,
+        "public_linkability": "bounded"
+      }
+    },
+    {
+      "arm": "degraded",
+      "signal": {
+        "schema": "simurgh.custody_class_signal.v1",
+        "signal_mode": "degraded_non_matchable",
+        "coarse_failure_class": "undeclared_proxy_hop",
+        "stage4n_window_anchor_digest": "sha256:f59a5718ea6125a90e181430fb2f5d21f7b350b77dda2d0c09ad0533eeb22535",
+        "entropy_floor_bits": 96,
+        "observed_entropy_bits": 0,
+        "public_linkability": "none"
+      }
+    },
+    {
+      "arm": "budget",
+      "signal": {
+        "schema": "simurgh.custody_class_signal.v1",
+        "signal_mode": "matchable",
+        "failure_class": "undeclared_proxy_hop",
+        "stage4n_window_anchor_digest": "sha256:f59a5718ea6125a90e181430fb2f5d21f7b350b77dda2d0c09ad0533eeb22535",
+        "evidence_kind": "relay_spki_sha256",
+        "windowed_evidence_commitment": "sha256:6152c7afd475d0076de1020dd81d58a78076d1cb277535dd9dd29698dbaf476b",
+        "custody_class_digest": "sha256:f26242c23175cf65263f285de36fee9705ce6588d4014f1025e91b066520ee4e",
+        "entropy_floor_bits": 96,
+        "disclosure_budget_max_signals_per_window": 2,
+        "public_linkability": "bounded"
+      }
+    }
+  ],
+  "corroborating_commitments": [
+    "sha256:f26242c23175cf65263f285de36fee9705ce6588d4014f1025e91b066520ee4e"
+  ],
+  "enforcement_commitment": {
+    "schema": "simurgh.enforcement_window_commitment.v1",
+    "stage4n_window_anchor_digest": "sha256:f59a5718ea6125a90e181430fb2f5d21f7b350b77dda2d0c09ad0533eeb22535",
+    "custody_class_digest": "sha256:ad8c904cd3fc01fcf6d4589f6d832f12547fca34eabe8be48c7ef46e7e6829b9",
+    "action_class": "account_cluster_ban",
+    "count_commitment": "sha256:3ddb39256d7384f5ff5c041d626cc521a4d289c19c58e0e34007b585760570af",
+    "signer_public_key": "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUNvd0JRWURLMlZ3QXlFQUlhbExOOVN2TUU1RHNzR2htYW1tVXZhQmVjR0tRbXJybWszWDhFVGlZNDg9Ci0tLS0tRU5EIFBVQkxJQyBLRVktLS0tLQo=",
+    "signature": "2i4Kwh4Cx0ju2dNyLxdxJur9UV5riHpXqA4scYxyiSIfv7wglRq7lMf/9PdMnseD3jOch64obGas0YWrQq3VCw=="
+  },
+  "pincer_corroborated": true,
+  "relay_contests": [
+    {
+      "schema": "simurgh.relay_contest.v1",
+      "contested_custody_class_digest": "sha256:ad8c904cd3fc01fcf6d4589f6d832f12547fca34eabe8be48c7ef46e7e6829b9",
+      "stage4n_window_anchor_digest": "sha256:f59a5718ea6125a90e181430fb2f5d21f7b350b77dda2d0c09ad0533eeb22535",
+      "relay_identity_digest": "sha256:9cf9fd8770621bf788aa71576975c0a83665cf8bfdb12361683f5cae5c127a01",
+      "counter_evidence_digest": "sha256:7f893d514af6d14c9af991d38e77db7a0759a9ad6c9bdfdbaf98aeac4ac562bc",
+      "signature": "D1rLiOjfxgCqkICJvYn8w+0LqFjEs5vyRqyW+OX0WP2BGu2G16kmvsOO4fFzUIH4rUobo42Bj2rsvFukb2QNBg=="
+    }
+  ],
+  "custody_extraction_bridge": {
+    "cpc_custody_class_digest": "sha256:f26242c23175cf65263f285de36fee9705ce6588d4014f1025e91b066520ee4e",
+    "stage3t_attestation_digest": "sha256:2e1e5fe55b38479544d06b6a8e8f31a7218cace1eef7d8843eb1c4c50345ac65",
+    "bridge_mode": "digest_binding_only"
+  },
+  "metrics": {
+    "raw_code_coverage": "14/13",
+    "first_failure_determinism": "pass",
+    "lane_a_arms_total": 25,
+    "lane_a_green_arms_accepted": 4,
+    "lane_b_arms_classified": "6/6",
+    "lane_c_arms_total": 1,
+    "cpc_fixture_arms": "5/5",
+    "invention_layer_pincer": "3/3",
+    "invention_layer_contest": "2/2",
+    "invention_layer_disclosure_recompute": "pass",
+    "invention_layer_bridge_binding": "pass"
+  },
+  "stage4n_window_anchor_digest": "sha256:f59a5718ea6125a90e181430fb2f5d21f7b350b77dda2d0c09ad0533eeb22535",
+  "stage4o_surface_commitment_digest": "sha256:e81eaa057f43fac0ff6f546a5d013ae0896a0b83fc9f815cbfdea9c8a3af8a66",
+  "disclosure_subject": {
+    "provider_family": "self_hosted",
+    "declared_relay_digests": [
+      "sha256:bba3fec96497af2bf0cd62e2f1bdba158c81b181a5b12ce054a0bb460f5e4ad9",
+      "sha256:f101d41617ac8db4f785fae0447ee51db839ffea67905d4ac0be4f63dd7b5219"
+    ],
+    "trace_custody": "declared_relay",
+    "verification_raw": 0
+  },
+  "vendor_custody_disclosure": {
+    "schema": "simurgh.vendor_custody_disclosure.v1",
+    "declared_provider_family": "self_hosted",
+    "declared_relay_count": 2,
+    "trace_custody_class": "declared_relay",
+    "verification_result": "verified",
+    "attestation_digest": "sha256:53933fd0b87d9d4ade8f004867178ba46fd5d5d171d53356a871160a25ba7852"
+  },
+  "signer_public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAOoOcW+aW435+XmWUbwJ7vomoOst6zyRKQzwtbI/UcKU=\n-----END PUBLIC KEY-----\n",
+  "bundle_digest": "sha256:30ed31b3aad9774be51f6cbc691010722e1c7472b3d60096bb0f41fdcf26bfe9",
+  "signature": "yReMvInqRkDwwf8mOtUfuMgBR2S3h4F68A2XZmUNBFAxe0AfOucQaXE/sSXUfjWo5jg7PloGNXtb+ojBmFFHBQ=="
+}
