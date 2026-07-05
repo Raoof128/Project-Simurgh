@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Simurgh — a recomputable evidence layer for Anthropic's assurance stack</title>
+    <title>Project Simurgh — recomputable evidence for AI safety and cybersecurity assurance</title>
     <meta
       name="description"
       content="Project Simurgh brief for an Anthropic reviewer: a recomputable, offline-verifiable evidence layer for oversight, containment, and completeness — no model-safety claim."
@@ -299,9 +299,9 @@
           <p class="eyebrow">Project Simurgh · Technical Brief</p>
           <h1>Recomputable evidence for AI safety and cybersecurity assurance</h1>
           <p class="sub">
-            We do not claim a model is safe. We make one specific, verifiable claim recomputable by an
-            outsider: a declared boundary held, oversight preceded a consequential action, and the record
-            is complete — with no selective omission.
+            We do not claim a model is safe. We make one specific, verifiable claim recomputable by
+            an outsider: a declared boundary held, oversight preceded a consequential action, and
+            the record is complete — with no selective omission.
           </p>
         </div>
       </header>
@@ -313,13 +313,16 @@
             The Responsible Scaling Policy and the June 2026 Advanced AI Framework lean on
             <strong>independent third-party verification</strong>; the framework proposes mandatory
             third-party testing with governments able to block deployments that fail; and after the
-            February 2026 move away from universal pre-release verification, the stated bet is a robust
-            third-party evaluation ecosystem.
+            February 2026 move away from universal pre-release verification, the stated bet is a
+            robust third-party evaluation ecosystem.
           </p>
           <p>
             That ecosystem is only as strong as its evidence format — today, prose and trusted logs.
-            Simurgh is the missing layer: <strong>an outsider with only a public key re-derives the
-            verdict byte-for-byte, with no model, no network, and no producer access.</strong>
+            Simurgh is the missing layer:
+            <strong
+              >an outsider with only a public key re-derives the verdict byte-for-byte, with no
+              model, no network, and no producer access.</strong
+            >
           </p>
         </section>
 
@@ -328,17 +331,31 @@
           <p class="claim">
             Many current agent-logging approaches still depend heavily on producer-controlled
             telemetry — they record what the system chose to record. Simurgh targets a narrower,
-            harder property: <strong>independently recomputable evidence of boundary
-            completeness</strong> — proof that nothing was quietly dropped, the thing a dishonest or
-            careless operator exploits.
+            harder property:
+            <strong>independently recomputable evidence of boundary completeness</strong> — proof
+            that nothing was quietly dropped, the thing a dishonest or careless operator exploits.
           </p>
           <p class="hint">Laundering move &rarr; the Simurgh blade that makes it non-repudiable:</p>
           <table class="metrics">
             <tbody>
-              <tr><td>Drop an action / reorder events</td><td class="val">anti-laundering lattice (3Q); run-chain order + census (4Q raw 89)</td></tr>
-              <tr><td>Backdate the audit clock</td><td class="val">temporal-completeness heartbeat (4N)</td></tr>
-              <tr><td>Hide the real model behind a proxy</td><td class="val">No-Ghost-Provider custody (4P)</td></tr>
-              <tr><td>Quietly skip approval on a consequential action</td><td class="val"><strong>No Silent Exemption (4Q)</strong></td></tr>
+              <tr>
+                <td>Drop an action / reorder events</td>
+                <td class="val">
+                  anti-laundering lattice (3Q); run-chain order + census (4Q raw 89)
+                </td>
+              </tr>
+              <tr>
+                <td>Backdate the audit clock</td>
+                <td class="val">temporal-completeness heartbeat (4N)</td>
+              </tr>
+              <tr>
+                <td>Hide the real model behind a proxy</td>
+                <td class="val">No-Ghost-Provider custody (4P)</td>
+              </tr>
+              <tr>
+                <td>Quietly skip approval on a consequential action</td>
+                <td class="val"><strong>No Silent Exemption (4Q)</strong></td>
+              </tr>
             </tbody>
           </table>
         </section>
@@ -346,34 +363,37 @@
         <section>
           <h2>Four problem &rarr; mechanism mappings</h2>
           <p>
-            <strong>1 · &ldquo;Human oversight before consequential action&rdquo; — asserted today,
-            verifiable with 4Q.</strong> A signed, epoch-bound, ordered proof that an approval-gate
-            checkpoint <em>preceded</em> a protected authority crossing, enforced by a two-key pincer
-            (embed the approval digest, be earlier in the run chain, be signed by a key <strong>distinct
-            from the tool/harness signer</strong>) — so an operator cannot backdate, reorder, or
-            self-approve. A signed <code>constitution_projection</code> maps each boundary to the clause
-            it operationalizes.
+            <strong
+              >1 · &ldquo;Human oversight before consequential action&rdquo; — asserted today,
+              verifiable with 4Q.</strong
+            >
+            A signed, epoch-bound, ordered proof that an approval-gate checkpoint
+            <em>preceded</em> a protected authority crossing, enforced by a two-key pincer (embed
+            the approval digest, be earlier in the run chain, be signed by a key
+            <strong>distinct from the tool/harness signer</strong>) — so an operator cannot
+            backdate, reorder, or self-approve. A signed <code>constitution_projection</code> maps
+            each boundary to the clause it operationalizes.
           </p>
           <p>
-            <strong>2 · No quiet gaps — No Silent Exemption.</strong> An unbound action is permitted only
-            with a <strong>signed, policy-falsifiable exemption</strong>, judged against an affirmative
-            allowlist that is <strong>empty (refuse) by default</strong>. Even absence leaves a signed
-            feather in the ledger. To my knowledge this is a novel contribution; I treat it as
-            <strong>attackable rather than assumed</strong>, shipping it as a signed novelty source-map
-            an outsider can falsify.
+            <strong>2 · No quiet gaps — No Silent Exemption.</strong> An unbound action is permitted
+            only with a <strong>signed, policy-falsifiable exemption</strong>, judged against an
+            affirmative allowlist that is <strong>empty (refuse) by default</strong>. Even absence
+            leaves a signed feather in the ledger. To my knowledge this is a novel contribution; I
+            treat it as <strong>attackable rather than assumed</strong>, shipping it as a signed
+            novelty source-map an outsider can falsify.
           </p>
           <p>
-            <strong>3 · The third-party ecosystem needs a substrate — be your own verifier.</strong> The
-            verifier is producer-independent and fully offline. For 4Q a reviewer can <strong>be their
-            own approver</strong>: mint a fresh key and confirm the evidence is decision-equivalent,
-            proving the machinery has no hidden dependence on our key.
+            <strong>3 · The third-party ecosystem needs a substrate — be your own verifier.</strong>
+            The verifier is producer-independent and fully offline. For 4Q a reviewer can
+            <strong>be their own approver</strong>: mint a fresh key and confirm the evidence is
+            decision-equivalent, proving the machinery has no hidden dependence on our key.
           </p>
           <p>
-            <strong>4 · Multi-agent accountability the regulators lack — the forward wedge.</strong> EU
-            AI Act Article 73 guidance (binding August 2026) gives, in its critics&rsquo; words, &ldquo;no
-            tools to pin accountability of multi-agent incidents.&rdquo; Our post-4Q north star
-            (delegation-chain completeness + an Incident Capsule) aims to be the first serious-incident
-            report a regulator can <em>rerun</em>.
+            <strong>4 · Multi-agent accountability the regulators lack — the forward wedge.</strong>
+            EU AI Act Article 73 guidance (binding August 2026) gives, in its critics&rsquo; words,
+            &ldquo;no tools to pin accountability of multi-agent incidents.&rdquo; Our post-4Q north
+            star (delegation-chain completeness + an Incident Capsule) aims to be the first
+            serious-incident report a regulator can <em>rerun</em>.
           </p>
         </section>
 
@@ -382,13 +402,13 @@
           <p>
             Stage 4Q is merged to <code>main</code> and tagged <code>v2.26.0-stage-4q-vfr</code>;
             everything below reproduces from that tag via the command that follows. It comprises a
-            15-case normative corpus and a 10-arm live
-            approval-gated capture over a <strong>genuinely separate approver process</strong> (with a
-            human-at-terminal ceremony arm); <strong>JS&harr;Python byte-parity</strong>;
+            15-case normative corpus and a 10-arm live approval-gated capture over a
+            <strong>genuinely separate approver process</strong> (with a human-at-terminal ceremony
+            arm); <strong>JS&harr;Python byte-parity</strong>;
             <strong>five machine-checked Lean theorems</strong>; a signed offline attestation with a
-            two-tier verifier; and a one-command reproduce across ten gates. Repository baseline at this
-            branch: <strong>1559 automated tests</strong>, byte-stable reproduction, private keys never
-            committed.
+            two-tier verifier; and a one-command reproduce across ten gates. Repository baseline at
+            this branch: <strong>1559 automated tests</strong>, byte-stable reproduction, private
+            keys never committed.
           </p>
           <pre><code>git clone https://github.com/Raoof128/Project-Simurgh.git
 cd Project-Simurgh
@@ -399,13 +419,17 @@ scripts/reproduce-llm-shield-stage4q.sh   # ten gates, offline, Node &gt;= 26</c
         <section>
           <h2>The discipline that should earn trust</h2>
           <p>
-            Every claim is <strong>&ldquo;boundary held / oversight preceded / record is complete —
-            verifiable,&rdquo;</strong> never <strong>&ldquo;the model is safe.&rdquo;</strong> Simurgh is
-            the infrastructure side of the constitution, not a competing safety claim. Limitations are
-            <strong>signed into the artifacts</strong> as machine-readable non-claims: recorded-run order,
-            not physical time; a key ceremony and process separation, not proof a human deliberated;
-            enforcement evidence, not proof that friction prevented harm; a synthetic reference corpus,
-            not production traffic; and no vendor is ranked or labelled unsafe.
+            Every claim is
+            <strong
+              >&ldquo;boundary held / oversight preceded / record is complete —
+              verifiable,&rdquo;</strong
+            >
+            never <strong>&ldquo;the model is safe.&rdquo;</strong> Simurgh is the infrastructure
+            side of the constitution, not a competing safety claim. Limitations are
+            <strong>signed into the artifacts</strong> as machine-readable non-claims: recorded-run
+            order, not physical time; a key ceremony and process separation, not proof a human
+            deliberated; enforcement evidence, not proof that friction prevented harm; a synthetic
+            reference corpus, not production traffic; and no vendor is ranked or labelled unsafe.
           </p>
         </section>
       </main>

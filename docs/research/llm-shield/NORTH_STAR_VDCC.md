@@ -21,17 +21,17 @@ Four independent fronts, one missing layer:
 1. **Recorders exist — evidence does not.** The "flight recorder for agents"
    category exploded in spring 2026 (Vorlon Flight Recorder, Microsoft AgentRx,
    AIR Blackbox, Causality). Every product is telemetry that trusts the system
-   writing it. From the A2A ecosystem analysis: *"Audit trails depend on
-   trusting the systems that write them, not cryptographic evidence."* None has
+   writing it. From the A2A ecosystem analysis: _"Audit trails depend on
+   trusting the systems that write them, not cryptographic evidence."_ None has
    a completeness invariant; none can prove nothing was omitted.
 2. **Identity exists — the execution story does not.** A2A v1.0.0 (2026-03-12)
    agent cards are self-declared with no attestation binding; the spec "solves
    communication only." OAuth on-behalf-of chains prove who originated a
-   request but give *"zero indication of how many autonomous loops occurred
-   during execution."*
+   request but give _"zero indication of how many autonomous loops occurred
+   during execution."_
 3. **Regulators are publicly unarmed.** EU AI Act Article 73 guidance becomes
-   legally binding August 2026. TechPolicy.press on the draft: the EU has *"no
-   tools to pin accountability of multi-agent incidents"*; guidelines assume
+   legally binding August 2026. TechPolicy.press on the draft: the EU has _"no
+   tools to pin accountability of multi-agent incidents"_; guidelines assume
    single-agent, single-occurrence failures.
 4. **Insurers price blind.** Lloyd's-backed Testudo began underwriting AI
    liability in early 2026; market's own admission: pricing is "qualitative
@@ -84,15 +84,15 @@ regulatory clock (binding August 2026) sets the timing.
 
 ## 3. Prior art — and the exact difference
 
-| Prior art | What it does | What it does NOT do |
-|---|---|---|
-| Vorlon / AgentRx / AIR Blackbox / Causality | Agent telemetry, replay, forensics UX | Trust-the-writer; no completeness invariant; not offline-recomputable by a hostile verifier |
-| A2A v1.0.0 / MCP | Inter-agent communication | Self-declared identity; no attestation binding; no execution evidence |
-| Entra Agent ID / agentic IAM / OAuth OBO | Runtime identity + authz | Session-level; no per-hop evidence; zero visibility into autonomous loops |
-| SentinelAgent / AIP / Authenticated Delegation (arXiv) | Formal delegation policy, non-escalation, identity across MCP/A2A | Runtime enforcement, not recomputable incident evidence with completeness |
-| SCITT / in-toto / AIVS draft | Artifact notarization, supply-chain statements | Artifacts, not delegation chains; no hop cardinality; no negative-space proof |
-| Notarized Agents (arXiv 2606.04193) | Receiver-attested confidential receipts per action | Per-action; no chain completeness; no cross-org census |
-| Governing Actions, Not Agents (arXiv 2606.26298) | Institutional attestation as governance model | Philosophy/model; no recomputation machinery |
+| Prior art                                              | What it does                                                      | What it does NOT do                                                                         |
+| ------------------------------------------------------ | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| Vorlon / AgentRx / AIR Blackbox / Causality            | Agent telemetry, replay, forensics UX                             | Trust-the-writer; no completeness invariant; not offline-recomputable by a hostile verifier |
+| A2A v1.0.0 / MCP                                       | Inter-agent communication                                         | Self-declared identity; no attestation binding; no execution evidence                       |
+| Entra Agent ID / agentic IAM / OAuth OBO               | Runtime identity + authz                                          | Session-level; no per-hop evidence; zero visibility into autonomous loops                   |
+| SentinelAgent / AIP / Authenticated Delegation (arXiv) | Formal delegation policy, non-escalation, identity across MCP/A2A | Runtime enforcement, not recomputable incident evidence with completeness                   |
+| SCITT / in-toto / AIVS draft                           | Artifact notarization, supply-chain statements                    | Artifacts, not delegation chains; no hop cardinality; no negative-space proof               |
+| Notarized Agents (arXiv 2606.04193)                    | Receiver-attested confidential receipts per action                | Per-action; no chain completeness; no cross-org census                                      |
+| Governing Actions, Not Agents (arXiv 2606.26298)       | Institutional attestation as governance model                     | Philosophy/model; no recomputation machinery                                                |
 
 Closest kin: Notarized Agents + SCITT. The difference is always the same
 sentence: **they attest what was recorded; VDCC proves the record is complete.**

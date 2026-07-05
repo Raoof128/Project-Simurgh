@@ -346,22 +346,25 @@
           <h2>Latest: Stage 4Q &mdash; verifiable friction receipts</h2>
           <p>
             The same signed-evidence spine now attests <strong>agent oversight</strong>, not just
-            containment. Stage 4Q (<code>v2.26.0-stage-4q-vfr</code>) produces a signed, epoch-bound,
-            ordered proof that an <strong>approval-gate friction checkpoint preceded a protected
-            authority crossing</strong> (tool execution, unsafe export, privilege expansion, consent
-            broadening, or disclosure escalation). Enforcement is a <strong>two-key pincer</strong>:
-            the crossing must embed the approval&rsquo;s digest, the approval must appear earlier in
-            the recorded run chain, and it must be signed by a key <strong>distinct from the
-            tool/harness signer</strong> &mdash; so a dishonest operator cannot backdate approval,
-            launder run order, or self-approve.
+            containment. Stage 4Q (<code>v2.26.0-stage-4q-vfr</code>) produces a signed,
+            epoch-bound, ordered proof that an
+            <strong
+              >approval-gate friction checkpoint preceded a protected authority crossing</strong
+            >
+            (tool execution, unsafe export, privilege expansion, consent broadening, or disclosure
+            escalation). Enforcement is a <strong>two-key pincer</strong>: the crossing must embed
+            the approval&rsquo;s digest, the approval must appear earlier in the recorded run chain,
+            and it must be signed by a key
+            <strong>distinct from the tool/harness signer</strong> &mdash; so a dishonest operator
+            cannot backdate approval, launder run order, or self-approve.
           </p>
           <p>
             Its completeness closure, <strong>No Silent Exemption</strong>, is the sharp part. An
             operator may leave a crossing <em>unbound</em> only by embedding a signed,
             policy-falsifiable exemption &mdash; a receipt of absence &mdash; which policy judges
-            against an affirmative allowlist that is <strong>empty (refuse) by default</strong>. Even
-            absence leaves a signed feather in the ledger. The stage ships a 15-case corpus, a 10-arm
-            live approval-gated capture over a genuinely separate approver process (with a
+            against an affirmative allowlist that is <strong>empty (refuse) by default</strong>.
+            Even absence leaves a signed feather in the ledger. The stage ships a 15-case corpus, a
+            10-arm live approval-gated capture over a genuinely separate approver process (with a
             human-at-terminal ceremony arm), <strong>JS&harr;Python byte-parity</strong>, and
             <strong>five machine-checked Lean theorems</strong>. A reviewer can
             <strong>be their own approver</strong> and confirm the evidence is decision-equivalent.
