@@ -44,7 +44,8 @@ test("all 13 codes map to run-level 1; unknown fails closed to 3", () => {
     assert.equal(RUN_LEVEL_BY_RAW[code], 1);
     assert.equal(stage4CodeForRawCode(code), 1);
   }
-  assert.equal(stage4CodeForRawCode(80), 3);
+  // 80-89 are Stage 4Q VFR codes (mapped to 1); 90+ is unknown.
+  assert.equal(stage4CodeForRawCode(90), 3);
 });
 
 test("constants: schemas, domains, enums, non-claims frozen", () => {
