@@ -52,7 +52,7 @@ laundering, or same-key approval/tool signing fails closed.
 Lean theorem name: `frictionPrecedence` — named for what construction actually
 proves (the 4P `CpcEmissionBounded` lesson), NOT "NoBackdating".
 
-### 1.3 Signed non-claims / honesty rails (10 rails)
+### 1.3 Signed non-claims / honesty rails (11 rails)
 
 ```text
 not_general_friction_taxonomy
@@ -65,7 +65,13 @@ pincer_ordering_is_recorded_run_order_not_physical_time_truth
 friction_receipt_is_enforcement_evidence_not_prevention
 approver_key_separation_is_cryptographic_not_organisational
 display_digest_is_rendering_commitment_not_comprehension_proof
+exemption_claim_is_falsifiable_declaration_not_self_granted_bypass
 ```
+
+Rail 11 is added by the No Silent Exemption mechanism (§2.7, decided during
+planning): a crossing that declines to bind an approval must sign an explicit
+exemption claim, which policy then judges. The claim is a falsifiable
+declaration a reviewer can reject, never a self-granted bypass.
 
 Rail 8 exists because VFR proves the friction receipt existed and preceded the
 crossing; it does NOT prove the friction stopped harm, changed behaviour, or
@@ -164,6 +170,7 @@ Approval receipt minimum exact-key shape:
   "boundary_kind": "tool_execution",
   "stage4n_window_anchor_digest": "sha256:...",
   "run_id_digest": "sha256:...",
+  "receipt_epoch": 10,
   "valid_from_epoch": 10,
   "valid_until_epoch": 20,
   "nonce_digest": "sha256:...",
@@ -177,6 +184,9 @@ Approval receipt minimum exact-key shape:
 shown to the approver. Executing an action other than the one displayed fails as
 raw 88 (existing semantics: internal fields do not match the crossing being
 authorised). Rail 10 scopes the claim: rendering commitment, not comprehension.
+`receipt_epoch` (added during planning, plan Freeze 3) is the epoch at which the
+receipt was minted and is the base for the window-straddle check (§3.3), with the
+structural constraint `valid_from_epoch ≤ receipt_epoch ≤ valid_until_epoch`.
 
 **Replay/run binding (frozen):** the receipt is bound to the action, the request,
 the protected boundary kind, the epoch/window (`stage4n_window_anchor_digest`),
@@ -244,6 +254,34 @@ Additive raw codes have broken SIX goldens historically (4H exit-map.json, 4H
 exitWrapper inline map, 4K/4H exitWrapper snapshots, 4L e2e net, shared
 exit-code goldens). The plan enumerates and updates all of them in the SAME
 commit that introduces codes 80–89.
+
+### 2.7 No Silent Exemption (added during planning; zero new raw codes)
+
+Internet survey (2026-07-05) found prior art for proof-of-non-execution
+(Proof-Carrying Agent Actions, arXiv 2606.04104) and proof-that-oversight-ran
+(OVERT), but none making an _unbound_ crossing sign an explicit,
+policy-falsifiable exemption. 4Q closes this at the binding level: a crossing may
+decline to bind an approval ONLY by embedding a distinguished, well-formed
+`NO_APPROVAL_BINDING` sentinel digest in `approval_receipt_digest`. Because the
+crossing is signed by the harness key, the exemption is a non-repudiable, signed
+declaration — never a silent gap. The pincer then judges it:
+
+```text
+crossing.approval_receipt_digest === NO_APPROVAL_BINDING (evaluated right after the structural tier):
+  crossing signature invalid        → raw 81 crossing_signature_invalid
+  a receipt is also supplied         → raw 84 exemption_asserted_but_receipt_supplied
+  boundary_kind requires approval    → raw 87 exemption_claimed_for_protected_boundary
+  otherwise                          → GREEN reason "accepted_exempt"
+```
+
+This is the completeness invariant applied to the approval binding: the negative
+space ("no approval") is itself signed and falsifiable. It makes BOTH raw-84
+reasons reachable (normal-path wrong digest + exemption-path contradiction),
+replacing the unreachable `crossing_missing_receipt_digest`. An exempt crossing
+is schema-valid, so it is still census-counted and ledgered — exemptions never
+escape the census. Carried by rail 11
+(`exemption_claim_is_falsifiable_declaration_not_self_granted_bypass`) and the
+Lean theorem `noSilentExemption`.
 
 ---
 
@@ -340,8 +378,13 @@ fully prettier-ignored from day one (the 4N `cmp` lesson).
 
 **BYO-approver mode (invention §6.5, 3O lineage):** the reproduce script accepts
 `--approver-key <path>`; a reviewer mints their OWN approver key, re-runs the
-Lane A corpus, and obtains byte-identical evidence except signature fields —
-proving the machinery has no hidden dependence on the project's approver key.
+Lane A corpus, and obtains **decision-equivalent** evidence — the same per-case
+`{raw, reason}`, same boundary_kind, same census count, same check-order
+behaviour — proving the machinery has no hidden dependence on the project's
+approver key. The derived digests (receipt digest, chain root, evidence digests)
+necessarily differ, since changing the key cascades through them; byte identity
+is cryptographically impossible and is NOT claimed. This is the 3O
+contract-equivalence lineage: same contract under a foreign key, not same bytes.
 
 ---
 
@@ -350,7 +393,7 @@ proving the machinery has no hidden dependence on the project's approver key.
 ### 4.1 Lean proofs (`proofs/`, Lean 4.15.0, same core as 4M–4P)
 
 Model: abstract run chain (list of entries), receipts and crossings as
-structures, an `accept` predicate encoding the kernel's pincer rule. Three
+structures, an `accept` predicate encoding the kernel's pincer rule. Five
 obligations:
 
 ```text
@@ -366,9 +409,14 @@ sameKeyFails:
 frictionCoverage:
   chainComplete ∧ census = countCrossings ⇒
     ∀ c ∈ crossings, accepted c ⇒ hasValidReceipt c
+
+noSilentExemption:
+  acceptExempt ⇒ exemptionClaimed ∧ ¬boundaryProtected
 ```
 
 `sameKeyFails` makes the two-key pincer machine-visible, not just tested.
+`noSilentExemption` (§2.7) machine-checks that an unbound crossing is accepted
+only via an explicit exemption claim over a non-protected boundary.
 `frictionCoverage` (invention §6.1) lifts the law from per-crossing (∃ receipt)
 to run-level totality (∀ crossings) under the committed census. Honest
 scoping stated in the proof header: the theorems are about the decision
@@ -459,6 +507,11 @@ explicitly rather than papered over (the 4P Lane C lesson).
 5. `approval_display_digest` commits what was rendered, never what the approver
    read or understood —
    `display_digest_is_rendering_commitment_not_comprehension_proof` carries this.
+6. A No Silent Exemption claim (§2.7) is only as trustworthy as the harness key
+   that signs it: it makes the no-approval state explicit and policy-falsifiable,
+   but does not itself prove the exemption was appropriate —
+   `exemption_claim_is_falsifiable_declaration_not_self_granted_bypass` carries
+   this.
 
 ### 5.3 Deferred, by name
 
@@ -505,8 +558,11 @@ approval-gate friction only.
 4. **4N heartbeat straddle anchoring** — receipts minted in window W authorize
    crossings in W or W+1 only; beyond = 82. Publicly anchors ordering to the
    shipped 4N heartbeat (rail 7 note).
-5. **BYO-approver reproduce mode** — 3O lineage; reviewer-minted approver key
-   yields byte-identical evidence except signatures (§3.5).
+5. **BYO-approver reproduce mode** — 3O lineage; a reviewer-minted approver key
+   yields **decision-equivalent** evidence (same per-case `{raw, reason}`), NOT
+   byte-identical — changing the key necessarily cascades through the receipt
+   digest and every downstream digest, so byte identity is cryptographically
+   impossible and claiming it would be false (§3.5).
 6. **Signed `novelty_source_map`** — prior-art audit (SCITT, in-toto,
    transparency logs, GitHub required reviews, OPA audit; per row: what it
    orders / what it doesn't) SIGNED into the attestation. Makes the firstness
@@ -517,18 +573,25 @@ approval-gate friction only.
    of the five frozen boundary kinds mapped to the constitution clause it
    operationalizes; each Lane A arm annotated by clause.
 
-### 6.9 Plan-time freezes (from spec marking; MUST be frozen before code)
+### 6.9 Plan-time freezes (from spec marking; RESOLVED in the plan)
 
-1. Raw 87's policy envelope: exact keys of the declared policy object.
-2. `FrictionContext`: exact fields, including the chain-references shape.
-3. 4N epoch mapping: how `valid_from_epoch` integers map to concrete 4N window
-   indices (one paragraph, one worked example, including the window-boundary
-   case: a receipt minted at the last tick of window W exercised near the
-   W+1/W+2 boundary).
-4. Census unit of counting (invention 1): the exact definition of one
-   "attempted protected crossing", identical for Lane A and Lane B (kernel call
-   vs tool-call attempt vs malformed envelope), so raw 89 can never fire on an
-   honest run from counting-rule divergence.
+All four freezes below are resolved in the implementation plan's "Resolved §6.9
+plan-time freezes" header. Summary:
+
+1. Raw 87's policy envelope: exact keys of the declared policy object — RESOLVED.
+2. `FrictionContext`: exact fields, including the chain-references shape —
+   RESOLVED.
+3. 4N epoch mapping: RESOLVED with an explicit `receipt_epoch` field (the mint
+   epoch and straddle base), the constraint `valid_from_epoch ≤ receipt_epoch ≤
+valid_until_epoch`, and the worked boundary example (receipt_epoch 10,
+   valid_until 11: crossing 11 GREEN, crossing 12 → raw 82 straddle).
+4. Census unit of counting (invention 1): one "attempted protected crossing" =
+   one gate call whose crossing schema-parses with a frozen boundary_kind;
+   identical for Lane A and Lane B; malformed crossings are ledgered (raw 80) but
+   not counted — RESOLVED.
+
+A second review pass added five must-fix corrections and the No Silent Exemption
+mechanism (§2.7, rail 11, `noSilentExemption`), all folded into the plan.
 
 ---
 
@@ -537,12 +600,12 @@ approval-gate friction only.
 ```text
 Stage 4Q — VFR: Verifiable Friction Receipts
 Target: v2.26.0-stage-4q-vfr
-Law: Friction Precedence Law
-Theorems: frictionPrecedence (+ failClosed, sameKeyFails, frictionCoverage)
-Core mechanism: two-key pincer ordering + friction coverage commitment
+Law: Friction Precedence Law (+ No Silent Exemption, §2.7)
+Theorems: frictionPrecedence (+ failClosed, sameKeyFails, frictionCoverage, noSilentExemption)
+Core mechanism: two-key pincer ordering + friction coverage commitment + signed negative binding
 Scope: approval gate only
 Lanes: Lane A kernel + Lane B 4O MCP live capture replay (incl. human arm)
-Rails: 10 signed non-claims
-Raw codes: 80–89 (inventions add ZERO new codes)
+Rails: 11 signed non-claims
+Raw codes: 80–89 (inventions AND No Silent Exemption add ZERO new codes)
 Next stage starts at: 90
 ```
