@@ -78,3 +78,5 @@ docs/research/llm-shield/evidence/stage-4o/
 # stage 4P deterministic fixtures + evidence (byte-identity via signed bundle)
 tests/fixtures/llmShield/stage4p/
 docs/research/llm-shield/evidence/stage-4p/
+tests/fixtures/llmShield/stage4q/
+docs/research/llm-shield/evidence/stage-4q/
