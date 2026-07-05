@@ -33,9 +33,9 @@ test("wrapper stays total and fail-closed: unknown codes (incl. reserved 39) map
   // NOTE: do not probe with the STRING "30" — JS object keys are strings, so hasOwnProperty
   // treats "30" as the mapped numeric key 30 and returns 1. Probe with non-numeric strings.
   // 40-42 are Stage 4L CCB codes, 43-46 are Stage 4M VXD codes, 47-54 are Stage 4N
-  // Seismograph codes, 55-66 are Stage 4O VTSA codes, 67-79 are Stage 4P VOCA codes (all
-  // mapped to 1); 39 stays reserved/unmapped, 80+ unknown.
-  for (const raw of [39, 80, 999, -1, undefined, null, "thirty"]) {
+  // Seismograph codes, 55-66 are Stage 4O VTSA codes, 67-79 are Stage 4P VOCA codes,
+  // 80-89 are Stage 4Q VFR codes (all mapped to 1); 39 stays reserved/unmapped, 90+ unknown.
+  for (const raw of [39, 90, 999, -1, undefined, null, "thirty"]) {
     assert.equal(stage4CodeForRawCode(raw), 3, String(raw));
   }
   assert.equal(Object.prototype.hasOwnProperty.call(RUN_LEVEL_BY_RAW, 39), false);
