@@ -129,8 +129,9 @@ the closeout re-score is the number of record.
    `FrictionAuthorityDecision` carrying exactly one raw code. Reuses the existing
    `action_digest()` for binding. Lane A is the claim source.
 2. **Approval receipt** — canonicalJson-signed JSON (schema §2.2), signed by the
-   approver key. The crossing record embeds `approval_receipt_digest` (causal
-   half of the pincer).
+   approver key. The crossing record binds it via a variant `approval_binding_kind`
+   (`receipt`｜`exemption`) + `approval_binding_digest` (causal half of the pincer;
+   §2.7). For the receipt path the digest equals `approvalReceiptDigest(receipt)`.
 3. **Run chain** — 3Q-style hash-chained ledger entries for both the approval
    event and the crossing event. The verifier independently recomputes chain
    positions and requires `position(approval) < position(crossing)` AND digest
@@ -234,12 +235,15 @@ Rationale:
 
 ```text
 84 approval_digest_not_bound_to_crossing
-The crossing record does not embed the approval_receipt_digest, or embeds the
-wrong one.
+The crossing's approval_binding_digest does not resolve to a valid bound object:
+either the object is unresolved/absent (approval_binding_unresolved), the digest
+does not match the recomputed receipt/exemption digest (approval_binding_digest_mismatch),
+or both a receipt and an exemption were supplied (binding_kind_conflict).
 
 88 friction_receipt_binding_mismatch
-The approval receipt exists and is embedded, but its internal fields do not match
-the crossing/action/request/boundary/window being authorised.
+The bound object (receipt OR exemption) exists and its digest matches, but its
+internal fields do not match the crossing/action/request/boundary/window being
+authorised.
 ```
 
 ### 2.5 82 / 88 replay semantics (frozen)
@@ -260,28 +264,41 @@ commit that introduces codes 80–89.
 Internet survey (2026-07-05) found prior art for proof-of-non-execution
 (Proof-Carrying Agent Actions, arXiv 2606.04104) and proof-that-oversight-ran
 (OVERT), but none making an _unbound_ crossing sign an explicit,
-policy-falsifiable exemption. 4Q closes this at the binding level: a crossing may
-decline to bind an approval ONLY by embedding a distinguished, well-formed
-`NO_APPROVAL_BINDING` sentinel digest in `approval_receipt_digest`. Because the
-crossing is signed by the harness key, the exemption is a non-repudiable, signed
-declaration — never a silent gap. The pincer then judges it:
+policy-falsifiable exemption. 4Q closes this at the binding level. The crossing
+carries a **variant binding** — never an overloaded `approval_receipt_digest`:
+`approval_binding_kind` ∈ {`receipt`, `exemption`} plus an `approval_binding_digest`.
+A crossing may decline to bind an approval ONLY by setting
+`approval_binding_kind: "exemption"` and pointing `approval_binding_digest` at a
+signed sixth-schema exemption object (`simurgh.vfr_approval_exemption.v1`) — a
+"receipt of absence" binding action/request/boundary/run/window and carrying its
+reason + policy id, harness-signed. Because it is signed, the exemption is a
+non-repudiable declaration — never a silent gap. The pincer judges the exemption
+path (right after the structural tier):
 
 ```text
-crossing.approval_receipt_digest === NO_APPROVAL_BINDING (evaluated right after the structural tier):
-  crossing signature invalid        → raw 81 crossing_signature_invalid
-  a receipt is also supplied         → raw 84 exemption_asserted_but_receipt_supplied
-  boundary_kind requires approval    → raw 87 exemption_claimed_for_protected_boundary
-  otherwise                          → GREEN reason "accepted_exempt"
+crossing.approval_binding_kind === "exemption":
+  a receipt is also supplied                          → raw 84 binding_kind_conflict
+  no valid signed exemption resolves the binding      → raw 84 approval_binding_unresolved
+  exemption signature invalid                         → raw 81 exemption_signature_invalid
+  approval_binding_digest != approvalExemptionDigest  → raw 84 approval_binding_digest_mismatch
+  exemption fields do not bind this crossing          → raw 88 friction_receipt_binding_mismatch
+  boundary_kind ∉ admissible_exemption_boundary_kinds → raw 87 approval_exemption_not_permitted_by_policy
+  otherwise                                           → GREEN reason "accepted_exempt"
 ```
 
-This is the completeness invariant applied to the approval binding: the negative
-space ("no approval") is itself signed and falsifiable. It makes BOTH raw-84
-reasons reachable (normal-path wrong digest + exemption-path contradiction),
-replacing the unreachable `crossing_missing_receipt_digest`. An exempt crossing
-is schema-valid, so it is still census-counted and ledgered — exemptions never
-escape the census. Carried by rail 11
-(`exemption_claim_is_falsifiable_declaration_not_self_granted_bypass`) and the
-Lean theorem `noSilentExemption`.
+Policy is an **affirmative allowlist**: the envelope's
+`admissible_exemption_boundary_kinds` defaults to `[]`, so under `vfr-default.v1`
+every exemption is refused (raw 87) — fail-closed by omission. This is the
+completeness invariant applied to the approval binding: the negative space ("no
+approval") is itself signed, bound, and policy-falsifiable. It makes the raw-84
+reasons reachable under the explicit variant, replacing the unreachable
+`crossing_missing_receipt_digest`. An exempt crossing is schema-valid, so it is
+still census-counted and ledgered — exemptions never escape the census. The
+Friction Precedence Law is PARAMETERISED: the pincer conjunction is proven for
+the approval path (`acceptWithApproval`), while the exemption path proves a
+different obligation (`noSilentExemption`): accepted only if a signed exemption is
+bound AND policy admits it. Carried by rail 11
+(`exemption_claim_is_falsifiable_declaration_not_self_granted_bypass`).
 
 ---
 
@@ -411,7 +428,7 @@ frictionCoverage:
     ∀ c ∈ crossings, accepted c ⇒ hasValidReceipt c
 
 noSilentExemption:
-  acceptExempt ⇒ exemptionClaimed ∧ ¬boundaryProtected
+  acceptExempt ⇒ exemptionSignedBound ∧ policyAdmitsExemption
 ```
 
 `sameKeyFails` makes the two-key pincer machine-visible, not just tested.
