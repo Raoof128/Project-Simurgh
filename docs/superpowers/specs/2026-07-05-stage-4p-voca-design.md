@@ -774,3 +774,14 @@ implementation estimate did, rather than after a hypothetical pilot attempt.
 
 Source discipline honoured: AEX / ChinaTalk / Tom's Hardware / CISPA / RATS / SCITT /
 in-toto cited via §3 source map only; no third-party incident figure adopted.
+
+**Spec delta (Lane C):** §8 anticipated a distinct `public_report_custody_data_insufficient`
+green outcome for facts-insufficient cases. The shipped Lane C did not need it: the single
+committed fixture (`tests/fixtures/llmShield/stage4p/lane-c/public-report-motivated`) has
+sufficient synthetic custody facts, so it runs the ordinary undeclared-relay path and
+asserts `{raw: 71, reason: "relay_not_declared"}`, carrying a
+`source_note: "public_report_motivated_synthetic"` provenance label instead. No separate
+"insufficient" reason code was added to the closed ledger (67–79). The §8 discipline still
+holds — Lane C is motivated by public reporting, not an incident reconstruction — but the
+`public_report_custody_data_insufficient` string exists only as design language in §8, not
+as shipped code.
