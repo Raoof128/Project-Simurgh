@@ -34,6 +34,12 @@ In one sentence: **Simurgh gives an agentic system a verifiable receipt, not a p
 > — the problem, the concrete Llama Guard 4 result, and the one-command reproduction, on a single
 > page. A printable, on-brand version is at
 > [`docs/research/llm-shield/one-page-brief.html`](docs/research/llm-shield/one-page-brief.html).
+>
+> 🔎 **For reviewers from AI labs / assurance teams:**
+> [Simurgh — a recomputable evidence layer for Anthropic's assurance stack](docs/research/llm-shield/ANTHROPIC_BRIEF.md)
+> maps four named problems (third-party verification, verifiable oversight, completeness vs.
+> selective omission, multi-agent accountability) to concrete mechanisms — printable version at
+> [`docs/research/llm-shield/anthropic-brief.html`](docs/research/llm-shield/anthropic-brief.html).
 
 > 🆕 **Latest — Stage 4Q · Verifiable Friction Receipts (`v2.26.0-stage-4q-vfr`).** A signed,
 > epoch-bound, ordered proof that an approval-gate friction checkpoint _preceded_ a protected
