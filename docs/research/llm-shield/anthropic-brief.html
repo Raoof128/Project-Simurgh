@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Simurgh — a recomputable evidence layer for Anthropic's assurance stack</title>
+    <meta
+      name="description"
+      content="Project Simurgh brief for an Anthropic reviewer: a recomputable, offline-verifiable evidence layer for oversight, containment, and completeness — no model-safety claim."
+    />
+    <style>
+      :root {
+        --ink: #1b1b1a;
+        --muted: #5f6360;
+        --line: #e3e0d7;
+        --paper: #ffffff;
+        --sand: #f6f4ee;
+        --forest: #2f4a2a;
+        --forest-2: #3c6135;
+        --good: #1f6b3a;
+        --accent: #a56b2a;
+        --warn: #7d4b21;
+        --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+        --serif:
+          "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+        --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        -webkit-text-size-adjust: 100%;
+      }
+      body {
+        margin: 0;
+        background: var(--sand);
+        color: var(--ink);
+        font-family: var(--sans);
+        font-size: 15px;
+        line-height: 1.58;
+        -webkit-font-smoothing: antialiased;
+      }
+      .sheet {
+        max-width: 920px;
+        margin: 28px auto;
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        box-shadow: 0 18px 50px -28px rgba(27, 27, 26, 0.45);
+        overflow: hidden;
+      }
+      header.head {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 30px 40px 24px;
+        background: linear-gradient(180deg, #fbfaf6 0%, #ffffff 100%);
+        border-bottom: 1px solid var(--line);
+      }
+      header.head img {
+        width: 76px;
+        height: 76px;
+        flex: 0 0 auto;
+        object-fit: contain;
+      }
+      .titlewrap {
+        min-width: 0;
+      }
+      .eyebrow {
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--forest);
+        font-weight: 700;
+        margin: 0 0 6px;
+      }
+      h1 {
+        font-family: var(--serif);
+        font-weight: 600;
+        font-size: 27px;
+        line-height: 1.18;
+        margin: 0 0 7px;
+      }
+      .sub {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13.5px;
+        max-width: 700px;
+      }
+      main {
+        padding: 26px 40px 12px;
+      }
+      section {
+        margin: 0 0 22px;
+      }
+      h2 {
+        font-family: var(--serif);
+        font-size: 15px;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        color: var(--forest);
+        margin: 0 0 10px;
+        padding-bottom: 6px;
+        border-bottom: 1px solid var(--line);
+      }
+      p {
+        margin: 0 0 11px;
+      }
+      strong {
+        color: var(--ink);
+      }
+      .lede {
+        font-size: 16px;
+        line-height: 1.6;
+      }
+      .claim {
+        background: var(--sand);
+        border-left: 3px solid var(--forest);
+        border-radius: 0 8px 8px 0;
+        padding: 14px 18px;
+        font-family: var(--serif);
+        font-size: 16px;
+        color: var(--ink);
+      }
+      .metrics-wrap {
+        overflow-x: auto;
+      }
+      table.metrics {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+        margin-top: 4px;
+      }
+      table.metrics td {
+        padding: 9px 12px;
+        border-bottom: 1px solid var(--line);
+        vertical-align: middle;
+      }
+      table.metrics tr:last-child td {
+        border-bottom: none;
+      }
+      table.metrics td.val {
+        text-align: right;
+        font-family: var(--mono);
+        white-space: nowrap;
+        font-variant-numeric: tabular-nums;
+      }
+      td.val.hero {
+        color: var(--good);
+        font-weight: 700;
+        font-size: 15px;
+      }
+      tr.sub-row td.lbl {
+        padding-left: 26px;
+        color: var(--muted);
+      }
+      .grid2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      .card {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 14px 16px;
+        background: #fcfbf8;
+      }
+      .card h3 {
+        margin: 0 0 8px;
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--forest);
+      }
+      .card.warning h3 {
+        color: var(--warn);
+      }
+      .card ul {
+        margin: 0;
+        padding-left: 17px;
+      }
+      .card li {
+        margin-bottom: 5px;
+        font-size: 13px;
+        line-height: 1.45;
+      }
+      .compact-list {
+        margin: 0;
+        padding-left: 18px;
+      }
+      .compact-list li {
+        margin-bottom: 6px;
+      }
+      pre {
+        margin: 0;
+        background: #1c241b;
+        color: #e9ead9;
+        border-radius: 9px;
+        padding: 14px 16px;
+        font-family: var(--mono);
+        font-size: 12.5px;
+        line-height: 1.6;
+        overflow-x: auto;
+      }
+      pre code {
+        font: inherit;
+        color: inherit;
+      }
+      .hint {
+        font-size: 12.5px;
+        color: var(--muted);
+        margin-top: 8px;
+      }
+      footer.foot {
+        padding: 18px 40px 26px;
+        border-top: 1px solid var(--line);
+        background: #fbfaf6;
+        font-size: 12.5px;
+        color: var(--muted);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 22px;
+        justify-content: space-between;
+      }
+      footer.foot a {
+        color: var(--forest-2);
+        text-decoration: none;
+      }
+      footer.foot a:hover {
+        text-decoration: underline;
+      }
+      .pill {
+        display: inline-block;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        color: var(--forest);
+        background: #eaf0e6;
+        border: 1px solid #d4e0cd;
+        border-radius: 999px;
+        padding: 2px 9px;
+      }
+      @media (max-width: 700px) {
+        header.head {
+          flex-direction: column;
+          text-align: center;
+          padding: 26px 22px 20px;
+        }
+        h1 {
+          font-size: 24px;
+        }
+        main {
+          padding: 22px 22px 8px;
+        }
+        footer.foot {
+          padding: 18px 22px 24px;
+        }
+        .grid2 {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media print {
+        body {
+          background: #fff;
+          font-size: 10.5pt;
+          line-height: 1.4;
+        }
+        .sheet {
+          margin: 0;
+          border: none;
+          border-radius: 0;
+          box-shadow: none;
+          max-width: none;
+        }
+        header.head,
+        footer.foot {
+          background: #fff;
+        }
+        section {
+          margin-bottom: 13px;
+          break-inside: avoid;
+        }
+        pre {
+          background: #f2f1ea;
+          color: #1c241b;
+          border: 1px solid var(--line);
+        }
+        @page {
+          margin: 12mm;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <article class="sheet">
+      <header class="head">
+        <img src="../../Project-Simurgh-Logo.png" alt="Project Simurgh" />
+        <div class="titlewrap">
+          <p class="eyebrow">Project Simurgh · Brief for an Anthropic reviewer</p>
+          <h1>A recomputable evidence layer for Anthropic's assurance stack</h1>
+          <p class="sub">
+            We do not claim a model is safe. We make one specific, verifiable claim recomputable by an
+            outsider: a declared boundary held, oversight preceded a consequential action, and the record
+            is complete — with no selective omission.
+          </p>
+        </div>
+      </header>
+
+      <main>
+        <section>
+          <h2>Why this is Anthropic-shaped</h2>
+          <p class="lede">
+            The Responsible Scaling Policy and the June 2026 Advanced AI Framework lean on
+            <strong>independent third-party verification</strong>; the framework proposes mandatory
+            third-party testing with governments able to block deployments that fail; and after the
+            February 2026 move away from universal pre-release verification, the stated bet is a robust
+            third-party evaluation ecosystem.
+          </p>
+          <p>
+            That ecosystem is only as strong as its evidence format — today, prose and trusted logs.
+            Simurgh is the missing layer: <strong>an outsider with only a public key re-derives the
+            verdict byte-for-byte, with no model, no network, and no producer access.</strong>
+          </p>
+        </section>
+
+        <section>
+          <h2>The one moat: completeness (no selective omission)</h2>
+          <p class="claim">
+            Every agent &ldquo;flight recorder&rdquo; on the market is <strong>trust-the-writer
+            telemetry</strong> — it logs what the system chose to log. The property none of them have is
+            the one a dishonest or careless operator exploits: <strong>proof that nothing was quietly
+            dropped.</strong>
+          </p>
+          <p class="hint">Laundering move &rarr; the Simurgh blade that makes it non-repudiable:</p>
+          <table class="metrics">
+            <tbody>
+              <tr><td>Drop an action / reorder events</td><td class="val">anti-laundering lattice (3Q); run-chain order + census (4Q raw 89)</td></tr>
+              <tr><td>Backdate the audit clock</td><td class="val">temporal-completeness heartbeat (4N)</td></tr>
+              <tr><td>Hide the real model behind a proxy</td><td class="val">No-Ghost-Provider custody (4P)</td></tr>
+              <tr><td>Quietly skip approval on a consequential action</td><td class="val"><strong>No Silent Exemption (4Q)</strong></td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section>
+          <h2>Four problem &rarr; mechanism mappings</h2>
+          <p>
+            <strong>1 · &ldquo;Human oversight before consequential action&rdquo; — asserted today,
+            verifiable with 4Q.</strong> A signed, epoch-bound, ordered proof that an approval-gate
+            checkpoint <em>preceded</em> a protected authority crossing, enforced by a two-key pincer
+            (embed the approval digest, be earlier in the run chain, be signed by a key <strong>distinct
+            from the tool/harness signer</strong>) — so an operator cannot backdate, reorder, or
+            self-approve. A signed <code>constitution_projection</code> maps each boundary to the clause
+            it operationalizes.
+          </p>
+          <p>
+            <strong>2 · No quiet gaps — No Silent Exemption.</strong> An unbound action is permitted only
+            with a <strong>signed, policy-falsifiable exemption</strong>, judged against an affirmative
+            allowlist that is <strong>empty (refuse) by default</strong>. Even absence leaves a signed
+            feather in the ledger. We ship the firstness claim as a <strong>signed, attackable novelty
+            source-map</strong>, not an assertion.
+          </p>
+          <p>
+            <strong>3 · The third-party ecosystem needs a substrate — be your own verifier.</strong> The
+            verifier is producer-independent and fully offline. For 4Q a reviewer can <strong>be their
+            own approver</strong>: mint a fresh key and confirm the evidence is decision-equivalent,
+            proving the machinery has no hidden dependence on our key.
+          </p>
+          <p>
+            <strong>4 · Multi-agent accountability the regulators lack — the forward wedge.</strong> EU
+            AI Act Article 73 guidance (binding August 2026) gives, in its critics&rsquo; words, &ldquo;no
+            tools to pin accountability of multi-agent incidents.&rdquo; Our post-4Q north star
+            (delegation-chain completeness + an Incident Capsule) aims to be the first serious-incident
+            report a regulator can <em>rerun</em>.
+          </p>
+        </section>
+
+        <section>
+          <h2>What we shipped (Stage 4Q)</h2>
+          <p>
+            A 15-case normative corpus and a 10-arm live approval-gated capture over a <strong>genuinely
+            separate approver process</strong> (with a human-at-terminal ceremony arm);
+            <strong>JS&harr;Python byte-parity</strong>; <strong>five machine-checked Lean
+            theorems</strong>; a signed offline attestation with a two-tier verifier; a one-command
+            reproduce across ten gates. Current baseline: <strong>1559 automated tests</strong>,
+            byte-stable reproduction, private keys never committed.
+          </p>
+          <pre><code>git clone https://github.com/Raoof128/Project-Simurgh.git &amp;&amp; cd Project-Simurgh &amp;&amp; npm ci
+scripts/reproduce-llm-shield-stage4q.sh   # ten friction gates, fully offline (Node &gt;= 26)</code></pre>
+        </section>
+
+        <section>
+          <h2>The discipline that should earn trust</h2>
+          <p>
+            Every claim is <strong>&ldquo;boundary held / oversight preceded / record is complete —
+            verifiable,&rdquo;</strong> never <strong>&ldquo;the model is safe.&rdquo;</strong> Simurgh is
+            the infrastructure side of the constitution, not a competing safety claim. Limitations are
+            <strong>signed into the artifacts</strong> as machine-readable non-claims: recorded-run order,
+            not physical time; a key ceremony and process separation, not proof a human deliberated;
+            enforcement evidence, not proof that friction prevented harm; a synthetic reference corpus,
+            not production traffic; and no vendor is ranked or labelled unsafe.
+          </p>
+        </section>
+      </main>
+
+      <footer class="foot">
+        Research prototype and technical demonstrator, AGPL-3.0. Methodology is LLM-assisted and
+        disclosed. Repository: https://github.com/Raoof128/Project-Simurgh · Author: Mohammad Raouf
+        Abedini. Technical feedback on the attestation contract and reproduction packet is welcome.
+      </footer>
+    </article>
+  </body>
+</html>
