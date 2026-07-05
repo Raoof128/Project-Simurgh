@@ -26,12 +26,18 @@ const ANCHOR_PATH = join(REPO, "tests/fixtures/llmShield/stage4q/stage4n-anchor.
 const FEED = "tests/fixtures/llmShield/stage4n/feed/heartbeat-feed.jsonl";
 
 // ---- keys ------------------------------------------------------------------------------
+// The approver key path is overridable (BYO-approver, §3.5): a reviewer points at their OWN
+// approver key and gets DECISION-equivalent evidence. harness + human stay committed.
 const KEY_NAMES = ["approver", "harness", "human-terminal"];
+const KEY_PATHS = {
+  approver:
+    process.env.STAGE4Q_APPROVER_KEY_PATH || join(KEY_DIR, "INSECURE_FIXTURE_ONLY_approver.pem"),
+  harness: join(KEY_DIR, "INSECURE_FIXTURE_ONLY_harness.pem"),
+  "human-terminal": join(KEY_DIR, "INSECURE_FIXTURE_ONLY_human-terminal.pem"),
+};
 const keys = {};
 for (const name of KEY_NAMES) {
-  const priv = createPrivateKey(
-    readFileSync(join(KEY_DIR, `INSECURE_FIXTURE_ONLY_${name}.pem`), "utf8")
-  );
+  const priv = createPrivateKey(readFileSync(KEY_PATHS[name], "utf8"));
   const pub = createPublicKey(priv);
   const pubPem = pub.export({ type: "spki", format: "pem" });
   keys[name] = { priv, pub, pubPem, digest: publicKeyDigest(pubPem) };
@@ -417,9 +423,8 @@ export function replayCorpus(corpus) {
   });
 }
 
-function main() {
-  const cases = buildCases();
-  const corpus = {
+export function buildCorpus() {
+  return {
     schema: "simurgh.vfr_lane_a_corpus.v1",
     run_id_digest: RUN_ID,
     public_keys: {
@@ -427,14 +432,29 @@ function main() {
       [HARNESS]: keys.harness.pubPem,
       [keys["human-terminal"].digest]: keys["human-terminal"].pubPem,
     },
-    cases,
+    cases: buildCases(),
   };
+}
+
+function main() {
+  const corpus = buildCorpus();
   const expected = replayCorpus(corpus);
   const stable = (v) => JSON.stringify(v, null, 2) + "\n";
+  const emitIdx = process.argv.indexOf("--emit-corpus");
+  if (emitIdx !== -1) {
+    // BYO / off-repo mode: write corpus + expected to the given dir, never the committed tree.
+    const outDir = process.argv[emitIdx + 1];
+    writeFileSync(join(outDir, "corpus.json"), stable(corpus));
+    writeFileSync(join(outDir, "expected-decisions.json"), stable(expected));
+    console.log(`stage4q: emitted Lane-A corpus to ${outDir}`);
+    return;
+  }
   writeFileSync(join(LANE_A, "corpus.json"), stable(corpus));
   writeFileSync(join(LANE_A, "expected-decisions.json"), stable(expected));
   writeFileSync(ANCHOR_PATH, stable(ANCHOR));
-  console.log(`stage4q: wrote ${cases.length} Lane-A cases + expected decisions + 4N anchor`);
+  console.log(
+    `stage4q: wrote ${corpus.cases.length} Lane-A cases + expected decisions + 4N anchor`
+  );
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) main();
