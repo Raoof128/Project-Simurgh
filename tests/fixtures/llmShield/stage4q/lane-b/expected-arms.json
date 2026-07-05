@@ -1,0 +1,52 @@
+[
+  {
+    "arm_id": "approved_and_ordered",
+    "raw": 0,
+    "reason": "accepted"
+  },
+  {
+    "arm_id": "human_at_terminal",
+    "raw": 0,
+    "reason": "accepted"
+  },
+  {
+    "arm_id": "refusal_bearing_run",
+    "raw": 0,
+    "reason": "accepted"
+  },
+  {
+    "arm_id": "no_receipt",
+    "raw": 83,
+    "reason": "absent"
+  },
+  {
+    "arm_id": "wrong_embedded_digest",
+    "raw": 84,
+    "reason": "approval_binding_digest_mismatch"
+  },
+  {
+    "arm_id": "receipt_after_crossing",
+    "raw": 85,
+    "reason": "approval_not_before_crossing"
+  },
+  {
+    "arm_id": "harness_signer_as_approver",
+    "raw": 86,
+    "reason": "approver_key_equals_harness_key"
+  },
+  {
+    "arm_id": "expired_epoch",
+    "raw": 82,
+    "reason": "run_epoch_outside_validity_window"
+  },
+  {
+    "arm_id": "display_executed_mismatch",
+    "raw": 88,
+    "reason": "display_digest_mismatch"
+  },
+  {
+    "arm_id": "census_mismatch",
+    "raw": 89,
+    "reason": "census_mismatch"
+  }
+]
