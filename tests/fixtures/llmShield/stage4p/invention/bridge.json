@@ -1,0 +1,16 @@
+{
+  "bridge": {
+    "cpc_custody_class_digest": "sha256:f26242c23175cf65263f285de36fee9705ce6588d4014f1025e91b066520ee4e",
+    "stage3t_attestation_digest": "sha256:2e1e5fe55b38479544d06b6a8e8f31a7218cace1eef7d8843eb1c4c50345ac65",
+    "bridge_mode": "digest_binding_only"
+  },
+  "known_cpc_digests": [
+    "sha256:f26242c23175cf65263f285de36fee9705ce6588d4014f1025e91b066520ee4e"
+  ],
+  "known_3t_digests": [
+    "sha256:2e1e5fe55b38479544d06b6a8e8f31a7218cace1eef7d8843eb1c4c50345ac65"
+  ],
+  "expected": {
+    "ok": true
+  }
+}

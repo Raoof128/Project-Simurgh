@@ -1,0 +1,7 @@
+{
+  "source_path": "tests/fixtures/llmShield/stage4n/feed/heartbeat-feed.jsonl",
+  "current_window_id": "synthetic-0000",
+  "record_digest": "sha256:f59a5718ea6125a90e181430fb2f5d21f7b350b77dda2d0c09ad0533eeb22535",
+  "next_window_id": "synthetic-0001",
+  "next_record_digest": "sha256:f83bb0ee44eb359b25b943a85e1a1c5c640bc2fe03105d9c4313573fed6121d0"
+}

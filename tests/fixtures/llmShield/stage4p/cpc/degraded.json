@@ -1,0 +1,20 @@
+{
+  "operator_a": {
+    "input": {
+      "failure_class": "undeclared_proxy_hop",
+      "stage4n_window_anchor_digest": "sha256:f59a5718ea6125a90e181430fb2f5d21f7b350b77dda2d0c09ad0533eeb22535",
+      "evidence_kind": "low_entropy_or_unknown",
+      "observed_evidence_digest": "sha256:a16c27ec7259f9c1a38e18b650d067bfd49a36cfd1c6294e1033927ea59710b8",
+      "disclosure_budget_max_signals_per_window": 2
+    },
+    "signal": {
+      "schema": "simurgh.custody_class_signal.v1",
+      "signal_mode": "degraded_non_matchable",
+      "coarse_failure_class": "undeclared_proxy_hop",
+      "stage4n_window_anchor_digest": "sha256:f59a5718ea6125a90e181430fb2f5d21f7b350b77dda2d0c09ad0533eeb22535",
+      "entropy_floor_bits": 96,
+      "observed_entropy_bits": 0,
+      "public_linkability": "none"
+    }
+  }
+}

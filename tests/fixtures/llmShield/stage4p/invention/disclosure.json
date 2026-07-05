@@ -1,0 +1,23 @@
+{
+  "attestation_digest": "sha256:491859b4667d1de532b844bc8ba06c901aa484aea5604af447a72abfe07a2694",
+  "subject": {
+    "provider_family": "self_hosted",
+    "declared_relay_digests": [
+      "sha256:bba3fec96497af2bf0cd62e2f1bdba158c81b181a5b12ce054a0bb460f5e4ad9",
+      "sha256:f101d41617ac8db4f785fae0447ee51db839ffea67905d4ac0be4f63dd7b5219"
+    ],
+    "trace_custody": "declared_relay",
+    "verification_raw": 0
+  },
+  "disclosure": {
+    "schema": "simurgh.vendor_custody_disclosure.v1",
+    "declared_provider_family": "self_hosted",
+    "declared_relay_count": 2,
+    "trace_custody_class": "declared_relay",
+    "verification_result": "verified",
+    "attestation_digest": "sha256:491859b4667d1de532b844bc8ba06c901aa484aea5604af447a72abfe07a2694"
+  },
+  "expected": {
+    "ok": true
+  }
+}

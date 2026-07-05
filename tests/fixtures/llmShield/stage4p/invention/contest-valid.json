@@ -1,0 +1,14 @@
+{
+  "contest": {
+    "schema": "simurgh.relay_contest.v1",
+    "contested_custody_class_digest": "sha256:ad8c904cd3fc01fcf6d4589f6d832f12547fca34eabe8be48c7ef46e7e6829b9",
+    "stage4n_window_anchor_digest": "sha256:f59a5718ea6125a90e181430fb2f5d21f7b350b77dda2d0c09ad0533eeb22535",
+    "relay_identity_digest": "sha256:9cf9fd8770621bf788aa71576975c0a83665cf8bfdb12361683f5cae5c127a01",
+    "counter_evidence_digest": "sha256:7f893d514af6d14c9af991d38e77db7a0759a9ad6c9bdfdbaf98aeac4ac562bc",
+    "signature": "D1rLiOjfxgCqkICJvYn8w+0LqFjEs5vyRqyW+OX0WP2BGu2G16kmvsOO4fFzUIH4rUobo42Bj2rsvFukb2QNBg=="
+  },
+  "signer_key_digest": "sha256:9cf9fd8770621bf788aa71576975c0a83665cf8bfdb12361683f5cae5c127a01",
+  "expected": {
+    "ok": true
+  }
+}

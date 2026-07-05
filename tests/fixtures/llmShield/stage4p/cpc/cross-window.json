@@ -1,0 +1,44 @@
+{
+  "operator_a": {
+    "input": {
+      "failure_class": "undeclared_proxy_hop",
+      "stage4n_window_anchor_digest": "sha256:f59a5718ea6125a90e181430fb2f5d21f7b350b77dda2d0c09ad0533eeb22535",
+      "evidence_kind": "relay_spki_sha256",
+      "observed_evidence_digest": "sha256:a16c27ec7259f9c1a38e18b650d067bfd49a36cfd1c6294e1033927ea59710b8",
+      "disclosure_budget_max_signals_per_window": 2
+    },
+    "signal": {
+      "schema": "simurgh.custody_class_signal.v1",
+      "signal_mode": "matchable",
+      "failure_class": "undeclared_proxy_hop",
+      "stage4n_window_anchor_digest": "sha256:f59a5718ea6125a90e181430fb2f5d21f7b350b77dda2d0c09ad0533eeb22535",
+      "evidence_kind": "relay_spki_sha256",
+      "windowed_evidence_commitment": "sha256:6152c7afd475d0076de1020dd81d58a78076d1cb277535dd9dd29698dbaf476b",
+      "custody_class_digest": "sha256:f26242c23175cf65263f285de36fee9705ce6588d4014f1025e91b066520ee4e",
+      "entropy_floor_bits": 96,
+      "disclosure_budget_max_signals_per_window": 2,
+      "public_linkability": "bounded"
+    }
+  },
+  "operator_b": {
+    "input": {
+      "failure_class": "undeclared_proxy_hop",
+      "stage4n_window_anchor_digest": "sha256:f83bb0ee44eb359b25b943a85e1a1c5c640bc2fe03105d9c4313573fed6121d0",
+      "evidence_kind": "relay_spki_sha256",
+      "observed_evidence_digest": "sha256:a16c27ec7259f9c1a38e18b650d067bfd49a36cfd1c6294e1033927ea59710b8",
+      "disclosure_budget_max_signals_per_window": 2
+    },
+    "signal": {
+      "schema": "simurgh.custody_class_signal.v1",
+      "signal_mode": "matchable",
+      "failure_class": "undeclared_proxy_hop",
+      "stage4n_window_anchor_digest": "sha256:f83bb0ee44eb359b25b943a85e1a1c5c640bc2fe03105d9c4313573fed6121d0",
+      "evidence_kind": "relay_spki_sha256",
+      "windowed_evidence_commitment": "sha256:b097de1327d7e9ac1422de87eacf74de6fc52df88690356651dd0a35bcc3c04b",
+      "custody_class_digest": "sha256:0fa42296bc0c96b7a5c88fc79f07519b3497e7b2e38b358c2e0be2f0f79a8033",
+      "entropy_floor_bits": 96,
+      "disclosure_budget_max_signals_per_window": 2,
+      "public_linkability": "bounded"
+    }
+  }
+}
