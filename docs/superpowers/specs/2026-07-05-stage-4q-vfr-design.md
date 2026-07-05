@@ -428,7 +428,7 @@ frictionCoverage:
     ∀ c ∈ crossings, accepted c ⇒ hasValidReceipt c
 
 noSilentExemption:
-  acceptExempt ⇒ exemptionSignedBound ∧ policyAdmitsExemption
+  acceptExempt ⇒ exemptionSignedBound ∧ policyAdmitsExemption ∧ censusHonest
 ```
 
 `sameKeyFails` makes the two-key pincer machine-visible, not just tested.
