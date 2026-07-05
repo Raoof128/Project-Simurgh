@@ -1,6 +1,6 @@
-# Simurgh — a recomputable evidence layer for Anthropic's assurance stack
+# Project Simurgh — recomputable evidence for AI safety and cybersecurity assurance
 
-**Project Simurgh · one-page brief for an Anthropic reviewer**
+**One-page technical brief**
 
 _We do not claim a model is safe. We make one specific, verifiable claim recomputable by an
 outsider: that a declared boundary held, that oversight preceded a consequential action, and that
@@ -8,10 +8,10 @@ the record is complete — with no selective omission._
 
 ---
 
-## Why this is Anthropic-shaped
+## Alignment with Anthropic's public safety direction
 
-Anthropic's public direction names problems that need an evidence substrate none of the current
-tools provide: the Responsible Scaling Policy and the June 2026 Advanced AI Framework lean on
+Anthropic's public direction names problems that would benefit from a recomputable evidence
+substrate: the Responsible Scaling Policy and the June 2026 Advanced AI Framework lean on
 **independent third-party verification**; the framework proposes mandatory third-party testing with
 governments able to block deployments that fail; and after the February 2026 move away from
 universal pre-release verification, the stated bet is a **robust third-party evaluation ecosystem**.
@@ -21,11 +21,11 @@ verdict byte-for-byte, with no model, no network, and no producer access.**
 
 ## The one moat: completeness (no selective omission)
 
-Every other agent "flight recorder" (Vorlon, Microsoft AgentRx, AIR Blackbox) is **trust-the-writer
-telemetry** — it logs what the system chose to log. The property none of them have is the one a
-dishonest or careless operator exploits: **proof that nothing was quietly dropped.** Simurgh's
-spine is built around a Completeness Invariant, and each stage adds one anti-laundering blade so an
-operator cannot make a bad run _look_ clean:
+Many current agent-logging approaches still depend heavily on producer-controlled telemetry — they
+record what the system chose to record. Simurgh targets a narrower, harder property: **independently
+recomputable evidence of boundary completeness** — proof that nothing was quietly dropped, the thing
+a dishonest or careless operator exploits. The spine is built around a Completeness Invariant, and
+each stage adds one anti-laundering blade so an operator cannot make a bad run _look_ clean:
 
 | Laundering move                                 | Simurgh blade                                                      |
 | ----------------------------------------------- | ------------------------------------------------------------------ |
@@ -48,8 +48,9 @@ operator cannot make a bad run _look_ clean:
    only by embedding a **signed, policy-falsifiable exemption**, judged against an affirmative
    allowlist that is **empty (refuse) by default**. Even the absence of approval leaves a signed
    feather in the ledger. Prior art has proof-of-non-execution and proof-that-oversight-ran; making
-   an _unbound_ action sign a policy-falsifiable exemption appears to be new — and we ship that as a
-   **signed, attackable novelty source-map**, not an assertion.
+   an _unbound_ action sign a policy-falsifiable exemption is, to my knowledge, a novel contribution
+   — and I treat it as **attackable rather than assumed**, shipping it as a **signed novelty
+   source-map** an outsider can falsify, not as an assertion.
 
 3. **The third-party ecosystem needs a substrate — be your own verifier.** The verifier is
    producer-independent and fully offline. A reviewer runs one command; for 4Q they can **be their
@@ -63,14 +64,16 @@ operator cannot make a bad run _look_ clean:
    Capsule**) aims to be the first serious-incident report a regulator can _rerun_. A working,
    independent verification layer strengthens Anthropic's hand when governments ask for one.
 
-## What we actually shipped (Stage 4Q, this release)
+## What Stage 4Q includes (released as `v2.26.0-stage-4q-vfr`)
 
-15-case normative corpus + a 10-arm live approval-gated capture over a **genuinely separate approver
-process** (with a human-at-terminal ceremony arm); **JS↔Python byte-parity**; **five machine-checked
-Lean theorems** (`frictionPrecedence`, `failClosed`, `sameKeyFails`, `frictionCoverage`,
-`noSilentExemption`); a signed offline attestation with a two-tier verifier; a one-command reproduce
-across ten gates. Current baseline: **1559 automated tests**, byte-stable reproduction, private
-keys never committed.
+Stage 4Q is merged to `main` and tagged `v2.26.0-stage-4q-vfr`; everything below reproduces from
+that tag by the command that follows. It comprises a 15-case normative corpus and a 10-arm live
+approval-gated capture over a
+**genuinely separate approver process** (with a human-at-terminal ceremony arm); **JS↔Python
+byte-parity**; **five machine-checked Lean theorems** (`frictionPrecedence`, `failClosed`,
+`sameKeyFails`, `frictionCoverage`, `noSilentExemption`); a signed offline attestation with a
+two-tier verifier; and a one-command reproduce across ten gates. Repository baseline at this branch:
+**1559 automated tests**, byte-stable reproduction, private keys never committed.
 
 ```bash
 git clone https://github.com/Raoof128/Project-Simurgh.git && cd Project-Simurgh && npm ci
