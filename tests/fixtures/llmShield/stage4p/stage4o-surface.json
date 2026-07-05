@@ -1,0 +1,6 @@
+{
+  "stage4o_manifest_digest": "sha256:86a8bebc7d38d19bc2d715b4c70d303d103906d6ea62e4fe399443263bcbbb98",
+  "stage4o_toolset_digest": "sha256:118e5afff60e374d57b0fd1ec3091d1155baef35e51d77a5826a2ce04dace6d5",
+  "stage4o_manifest_epoch": 0,
+  "commitment_digest": "sha256:e81eaa057f43fac0ff6f546a5d013ae0896a0b83fc9f815cbfdea9c8a3af8a66"
+}

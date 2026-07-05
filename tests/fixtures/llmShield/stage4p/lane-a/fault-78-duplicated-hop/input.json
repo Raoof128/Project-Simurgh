@@ -1,0 +1,84 @@
+{
+  "envelope": {
+    "schema": "simurgh.origin_custody_envelope.v1",
+    "run_epoch": 15,
+    "declared_endpoint_digest": "sha256:7fb1895b7188787e3c569ca3d888478285b23cad09f36c175ee259906050e735",
+    "provider_family": "self_hosted",
+    "provider_identity_digest": "sha256:afaa85a9c4e33971fe55ced92139b3eef23b31c73edc323c5023c39e62473576",
+    "model_identity_digest": "sha256:c9d39bcbdf729336e4ad74d1916dee69e6cfce13b4faf460f2138c406c42278b",
+    "relay_policy": "declared_relays_allowed",
+    "declared_relay_digests": [
+      "sha256:bba3fec96497af2bf0cd62e2f1bdba158c81b181a5b12ce054a0bb460f5e4ad9",
+      "sha256:f101d41617ac8db4f785fae0447ee51db839ffea67905d4ac0be4f63dd7b5219"
+    ],
+    "declared_transform_digests": [
+      "sha256:0b04ce41de6813b978594532b42da43cf10fc6232b61c8bcd47df132232623d4"
+    ],
+    "account_boundary": "single_declared",
+    "trace_custody": "declared_relay",
+    "tool_surface_digest": "sha256:e81eaa057f43fac0ff6f546a5d013ae0896a0b83fc9f815cbfdea9c8a3af8a66",
+    "valid_from_epoch": 10,
+    "valid_until_epoch": 20,
+    "signature": "H6+ktF4T04ToQ1ubzqieerh2Tl4R6Bg/6ZdGgLQ4WVmFIwpLVQlDFTvHmIgx7Ug3JYzyjVTi1ggGiBnHY40AAA=="
+  },
+  "envelopeDigest": "sha256:adfe9d44e238c7efe072a2c2907346ce0c537bb2af5d5cb10210cb0bbc2c5be8",
+  "hops": [
+    {
+      "schema": "simurgh.custody_hop_receipt.v1",
+      "hop_index": 0,
+      "previous_receipt_digest": "sha256:adfe9d44e238c7efe072a2c2907346ce0c537bb2af5d5cb10210cb0bbc2c5be8",
+      "relay_identity_digest": "sha256:bba3fec96497af2bf0cd62e2f1bdba158c81b181a5b12ce054a0bb460f5e4ad9",
+      "transform_digest": "genesis",
+      "input_digest": "sha256:a7f8b2714d71b90776826f6729dddd11cf82ec3d913bceec43e1e4ac5a71faf9",
+      "output_digest": "sha256:a2a965f243ae58a8ff9d1ced9678a83366744930b08e777ee6c3f161d1409738",
+      "signature": "l3aVZxZEXj1BSrTa3z/2tIdFSNtfZJ5F2iE5lLAG/S/HDMWN0XpD5AO3vzqNyIyBQmBhPASeZmG2hCoxiZjhDg=="
+    },
+    {
+      "schema": "simurgh.custody_hop_receipt.v1",
+      "hop_index": 1,
+      "previous_receipt_digest": "sha256:e4469fe5bcdbbbc93c9241b4781fac66a13a7eaa533266b789f3314ca4471f58",
+      "relay_identity_digest": "sha256:bba3fec96497af2bf0cd62e2f1bdba158c81b181a5b12ce054a0bb460f5e4ad9",
+      "transform_digest": "genesis",
+      "input_digest": "sha256:a7f8b2714d71b90776826f6729dddd11cf82ec3d913bceec43e1e4ac5a71faf9",
+      "output_digest": "sha256:a2a965f243ae58a8ff9d1ced9678a83366744930b08e777ee6c3f161d1409738",
+      "signature": "A6DafoGI5JgLBGi5d5EN/778gFySoGZfR9FbunXrZ6uZxzhkSjdy441c4SRCRc0SipKQ67y0o1KaepEjWuUjDg=="
+    }
+  ],
+  "custodyReceipt": {
+    "schema": "simurgh.custody_receipt.v1",
+    "request_digest": "sha256:c543aa457854560328e14f58785535e07e86b5bb0a302ed21aaf0ecbcfb091f2",
+    "response_digest": "sha256:387c72402c0aed524e8a135b92650bb61cae4fcb5f3287e3ee8681fb121fef97",
+    "custody_path_digest": "sha256:523a111fadf0585b8b8c9367154591c4c66dd3a07f3285031f962b6de2bfa29c",
+    "model_identity_digest": "sha256:c9d39bcbdf729336e4ad74d1916dee69e6cfce13b4faf460f2138c406c42278b",
+    "relay_chain_digest": "sha256:c00513839f7cee0a3ad8021167cc0c390cd750cbeb05c2f2c99d0432edab97fa",
+    "trace_custody_observed": "declared_relay",
+    "tool_surface_digest": "sha256:e81eaa057f43fac0ff6f546a5d013ae0896a0b83fc9f815cbfdea9c8a3af8a66",
+    "receipt_epoch": 15,
+    "signature": "zJPlS6EfbZ1XQuWnwOcGHEJIKXCOWFAF/0VF93KHYRn1SLOJVIPyc/1r8JY8HtO8Y4stc+9QL/Gx9p/2E+g/Aw=="
+  },
+  "responseDigest": "sha256:387c72402c0aed524e8a135b92650bb61cae4fcb5f3287e3ee8681fb121fef97",
+  "requestDigest": "sha256:c543aa457854560328e14f58785535e07e86b5bb0a302ed21aaf0ecbcfb091f2",
+  "sig": {
+    "envelope_ok": true,
+    "hops_ok": true,
+    "receipt_ok": true
+  },
+  "observed": {
+    "endpoint_digest": "sha256:7fb1895b7188787e3c569ca3d888478285b23cad09f36c175ee259906050e735",
+    "model_identity_digest": "sha256:c9d39bcbdf729336e4ad74d1916dee69e6cfce13b4faf460f2138c406c42278b",
+    "account_pool_observed": false,
+    "trace_custody_observed": "declared_relay",
+    "tool_surface_digest": "sha256:e81eaa057f43fac0ff6f546a5d013ae0896a0b83fc9f815cbfdea9c8a3af8a66",
+    "transform_digests": [
+      "sha256:0b04ce41de6813b978594532b42da43cf10fc6232b61c8bcd47df132232623d4"
+    ]
+  },
+  "stage4o_surface_commitment_digest": "sha256:e81eaa057f43fac0ff6f546a5d013ae0896a0b83fc9f815cbfdea9c8a3af8a66",
+  "cpc": {
+    "signals": [],
+    "declared_cap": 2,
+    "anchor_digests": [
+      "sha256:f59a5718ea6125a90e181430fb2f5d21f7b350b77dda2d0c09ad0533eeb22535"
+    ]
+  }
+}

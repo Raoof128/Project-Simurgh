@@ -1,0 +1,49 @@
+{
+  "signals": [
+    {
+      "schema": "simurgh.custody_class_signal.v1",
+      "signal_mode": "matchable",
+      "failure_class": "undeclared_proxy_hop",
+      "stage4n_window_anchor_digest": "sha256:f59a5718ea6125a90e181430fb2f5d21f7b350b77dda2d0c09ad0533eeb22535",
+      "evidence_kind": "relay_spki_sha256",
+      "windowed_evidence_commitment": "sha256:6152c7afd475d0076de1020dd81d58a78076d1cb277535dd9dd29698dbaf476b",
+      "custody_class_digest": "sha256:f26242c23175cf65263f285de36fee9705ce6588d4014f1025e91b066520ee4e",
+      "entropy_floor_bits": 96,
+      "disclosure_budget_max_signals_per_window": 2,
+      "public_linkability": "bounded"
+    },
+    {
+      "schema": "simurgh.custody_class_signal.v1",
+      "signal_mode": "matchable",
+      "failure_class": "model_identity_mismatch",
+      "stage4n_window_anchor_digest": "sha256:f59a5718ea6125a90e181430fb2f5d21f7b350b77dda2d0c09ad0533eeb22535",
+      "evidence_kind": "relay_spki_sha256",
+      "windowed_evidence_commitment": "sha256:6152c7afd475d0076de1020dd81d58a78076d1cb277535dd9dd29698dbaf476b",
+      "custody_class_digest": "sha256:92d5b04d57ebf181821ce114abefd5f5770cf844cfead94db49ce8db9c73505c",
+      "entropy_floor_bits": 96,
+      "disclosure_budget_max_signals_per_window": 2,
+      "public_linkability": "bounded"
+    },
+    {
+      "schema": "simurgh.custody_class_signal.v1",
+      "signal_mode": "matchable",
+      "failure_class": "account_pool_ambiguity",
+      "stage4n_window_anchor_digest": "sha256:f59a5718ea6125a90e181430fb2f5d21f7b350b77dda2d0c09ad0533eeb22535",
+      "evidence_kind": "relay_spki_sha256",
+      "windowed_evidence_commitment": "sha256:6152c7afd475d0076de1020dd81d58a78076d1cb277535dd9dd29698dbaf476b",
+      "custody_class_digest": "sha256:47fed7435fb9206201e2786546165722db81bea817730131be800404495007ae",
+      "entropy_floor_bits": 96,
+      "disclosure_budget_max_signals_per_window": 2,
+      "public_linkability": "bounded"
+    }
+  ],
+  "declared_cap": 2,
+  "anchor_digests": [
+    "sha256:f59a5718ea6125a90e181430fb2f5d21f7b350b77dda2d0c09ad0533eeb22535"
+  ],
+  "expected": {
+    "ok": false,
+    "raw": 79,
+    "reason": "disclosure_budget_exceeded"
+  }
+}

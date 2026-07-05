@@ -1,0 +1,26 @@
+{
+  "commitment": {
+    "schema": "simurgh.enforcement_window_commitment.v1",
+    "stage4n_window_anchor_digest": "sha256:f59a5718ea6125a90e181430fb2f5d21f7b350b77dda2d0c09ad0533eeb22535",
+    "custody_class_digest": "sha256:ad8c904cd3fc01fcf6d4589f6d832f12547fca34eabe8be48c7ef46e7e6829b9",
+    "action_class": "account_cluster_ban",
+    "count_commitment": "sha256:3ddb39256d7384f5ff5c041d626cc521a4d289c19c58e0e34007b585760570af",
+    "signer_public_key": "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUNvd0JRWURLMlZ3QXlFQUlhbExOOVN2TUU1RHNzR2htYW1tVXZhQmVjR0tRbXJybWszWDhFVGlZNDg9Ci0tLS0tRU5EIFBVQkxJQyBLRVktLS0tLQo=",
+    "signature": "2i4Kwh4Cx0ju2dNyLxdxJur9UV5riHpXqA4scYxyiSIfv7wglRq7lMf/9PdMnseD3jOch64obGas0YWrQq3VCw=="
+  },
+  "signals": [
+    {
+      "schema": "simurgh.custody_class_signal.v1",
+      "signal_mode": "matchable",
+      "failure_class": "undeclared_proxy_hop",
+      "stage4n_window_anchor_digest": "sha256:f59a5718ea6125a90e181430fb2f5d21f7b350b77dda2d0c09ad0533eeb22535",
+      "evidence_kind": "relay_spki_sha256",
+      "windowed_evidence_commitment": "sha256:7325351ce9169cab0f0bfc5a837a7f0668100e46c5f97b91ac773fbd16aef76f",
+      "custody_class_digest": "sha256:ad8c904cd3fc01fcf6d4589f6d832f12547fca34eabe8be48c7ef46e7e6829b9",
+      "entropy_floor_bits": 96,
+      "disclosure_budget_max_signals_per_window": 4,
+      "public_linkability": "bounded"
+    }
+  ],
+  "expected_corroborated": true
+}
