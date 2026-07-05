@@ -13,7 +13,7 @@ proof of what happened after a guardrail missed — not another jailbreak detect
 [![Node](https://img.shields.io/badge/node-%E2%89%A522.0-1a1a1a?style=flat-square)](https://nodejs.org)
 [![License](https://img.shields.io/badge/license-AGPL--3.0-d6cfbe?style=flat-square)](#license)
 [![Status](https://img.shields.io/badge/status-research%20prototype-2f4a2a?style=flat-square)](#status)
-[![Latest](https://img.shields.io/badge/release-v2.18.0-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.18.0-stage-4h-proof-carrying-containment)
+[![Latest](https://img.shields.io/badge/release-v2.26.0-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.26.0-stage-4q-vfr)
 
 </div>
 
@@ -34,6 +34,17 @@ In one sentence: **Simurgh gives an agentic system a verifiable receipt, not a p
 > — the problem, the concrete Llama Guard 4 result, and the one-command reproduction, on a single
 > page. A printable, on-brand version is at
 > [`docs/research/llm-shield/one-page-brief.html`](docs/research/llm-shield/one-page-brief.html).
+
+> 🆕 **Latest — Stage 4Q · Verifiable Friction Receipts (`v2.26.0-stage-4q-vfr`).** A signed,
+> epoch-bound, ordered proof that an approval-gate friction checkpoint _preceded_ a protected
+> authority crossing — with a two-key pincer (a crossing must embed the approval digest, the
+> approval must be earlier in the run chain, and it must be signed by a key distinct from the
+> tool/harness). Its completeness closure, **No Silent Exemption**, requires any _unbound_ crossing
+> to carry a signed, policy-falsifiable exemption rather than a silent gap. Five machine-checked
+> Lean theorems, JS↔Python byte-parity, a live approval-gated capture lane driven by a genuinely
+> separate approver process, and a one-command offline reproduce. Honest scope: this proves
+> _oversight preceded consequential action, verifiably_ — not that a human deliberated, and not that
+> friction prevented harm.
 
 ---
 
@@ -183,6 +194,20 @@ documented non-claims.
   Q0/Q4 discrimination, Q6/Q7 tamper/privacy gates, Q3 offline preflight, total typed exits,
   byte-stable reproduction, and anti-theatre deletion.
 
+### Agent oversight & verifiable friction
+
+- **Capability kernel** (Stage 4A–4C) — a pure, dependency-free authorisation authority: task-grounded
+  egress/mutation gates, intent-source grounding, and provenance gating so authority and egress flow
+  only from trusted provenance.
+- **Verifiable friction receipts** (Stage 4Q) — a signed, epoch-bound, ordered proof that an
+  approval-gate checkpoint preceded a protected authority crossing, enforced by a **two-key pincer**
+  (causal digest binding + chain-position precedence + a distinct approver key). **No Silent
+  Exemption**: an unbound crossing must carry a signed, policy-falsifiable exemption (an affirmative
+  policy allowlist, fail-closed by default) rather than a silent gap. Exercised by a 15-case
+  normative corpus and a 10-arm live approval-gated capture over a genuinely separate approver
+  process, with JS↔Python byte-parity and five machine-checked Lean theorems. Scope is honest and
+  signed: recorded-run order, not physical time; enforcement evidence, not proof of prevention.
+
 ### External-defence evaluation
 
 - **Provider-agnostic adapter contract** that treats any external guardrail as an untrusted advisory
@@ -229,8 +254,8 @@ documented non-claims.
 
 - A single **quality gate** (`scripts/check.sh`): per-stage smoke, security/privacy/consistency
   audits, policy-drift guards (tooling stages never touch `src/llmShield`), and function-path
-  coverage on the pure attestation/checker libraries. The Stage 4H release baseline verified
-  **1202 automated tests** passing.
+  coverage on the pure attestation/checker libraries. The current baseline (through Stage 4Q)
+  verifies **1559 automated tests** passing.
 
 ---
 
@@ -261,6 +286,23 @@ scripts/reproduce-llm-shield-stage4h.sh
 Expected: `Stage 4H.5 final reproduce: PASS`. This verifies the signed Stage 4H evidence, typed
 fail-closed exits, offline preflight, byte-stable evidence, and anti-theatre deletion without a
 private key.
+
+Replay the Stage 4Q Verifiable Friction Receipts stage (offline, no private key — Node ≥ 26):
+
+```bash
+scripts/reproduce-llm-shield-stage4q.sh
+```
+
+Expected: `[stage4q] reproduce OK`. This runs all ten gates — unit suites, Python + JS↔Python
+parity, both fixture lanes with byte-idempotency, offline attestation verification, **be-your-own-
+approver** decision-equivalence, privacy scan, private-key audits, and the K7 all-functions net.
+Or be the approver yourself:
+
+```bash
+node -e 'const c=require("node:crypto"),fs=require("node:fs");fs.writeFileSync("/tmp/my-approver.pem",c.generateKeyPairSync("ed25519").privateKey.export({type:"pkcs8",format:"pem"}));'
+node tools/simurgh-attestation/stage4q/node/verify-stage4q.mjs docs/research/llm-shield/evidence/stage-4q/vfr-attestation.json --approver-key /tmp/my-approver.pem
+# -> stage4q verify: byo_decision_equivalent (raw 0)
+```
 
 Verify a single signed rung directly, and confirm it fails closed under tampering:
 
@@ -311,8 +353,8 @@ claim. See [`PRIVACY.md`](PRIVACY.md), [`docs/ETHICS.md`](docs/ETHICS.md), and
 
 ## Verification
 
-The full quality gate (`scripts/check.sh`) runs on every push. The Stage 4H release baseline was
-verified with **1202 automated tests** plus per-stage smoke gates, security/privacy/consistency
+The full quality gate (`scripts/check.sh`) runs on every push. The current baseline (through Stage
+4Q) verifies with **1559 automated tests** plus per-stage smoke gates, security/privacy/consistency
 audits, policy-drift guards, typed-exit checks, and checker/reproduce smokes. Every VCA rung is
 signed with its own Ed25519 key (private keys are never committed), reproduces byte-identically
 including its signature where claimed, and ships a negative self-proof (tamper) suite that the
