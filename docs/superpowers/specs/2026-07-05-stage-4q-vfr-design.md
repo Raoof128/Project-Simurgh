@@ -52,7 +52,7 @@ laundering, or same-key approval/tool signing fails closed.
 Lean theorem name: `frictionPrecedence` — named for what construction actually
 proves (the 4P `CpcEmissionBounded` lesson), NOT "NoBackdating".
 
-### 1.3 Signed non-claims / honesty rails (9 rails)
+### 1.3 Signed non-claims / honesty rails (10 rails)
 
 ```text
 not_general_friction_taxonomy
@@ -64,12 +64,19 @@ approval_key_is_authorisation_evidence_not_identity_truth
 pincer_ordering_is_recorded_run_order_not_physical_time_truth
 friction_receipt_is_enforcement_evidence_not_prevention
 approver_key_separation_is_cryptographic_not_organisational
+display_digest_is_rendering_commitment_not_comprehension_proof
 ```
 
 Rail 8 exists because VFR proves the friction receipt existed and preceded the
 crossing; it does NOT prove the friction stopped harm, changed behaviour, or
 prevented the underlying jailbreak. Rail 9 exists because one local operator
 holds both keys during capture: separation is cryptographic, not organisational.
+Rail 10 exists because `approval_display_digest` (§2.2) commits what was
+RENDERED to the approver, never what the approver understood.
+
+Rail 7 note (upgraded by §3.3 heartbeat anchoring): recorded-run order is
+additionally anchored to the public 4N heartbeat via window-straddle rules, so
+ordering is publicly anchored — still not physical-time truth. The rail stands.
 
 ### 1.4 Reviewer note (not a stage, not a claim)
 
@@ -95,6 +102,11 @@ mapping ships inside the attestation as a labelled `reviewer_note`, carrying Q8'
 - **What moves it higher:** a live Lane B arm where the approver is a genuinely
   separate process (shipped in this design), and PCCC later consuming VFR
   receipts to gate match-result egress.
+
+**Post-amendment projection (§6 inventions adopted; closeout re-score decides):**
+Novelty 9.5 (10 only if the signed source-map survives contact), Frontier 9.5,
+Good-for-Anthropic 9.5, Constitution 10. Projections are targets, not claims;
+the closeout re-score is the number of record.
 
 ---
 
@@ -155,10 +167,16 @@ Approval receipt minimum exact-key shape:
   "valid_from_epoch": 10,
   "valid_until_epoch": 20,
   "nonce_digest": "sha256:...",
+  "approval_display_digest": "sha256:...",
   "approver_public_key_digest": "sha256:...",
   "signature": "base64..."
 }
 ```
+
+`approval_display_digest` (invention §6.3) commits the rendered approval request
+shown to the approver. Executing an action other than the one displayed fails as
+raw 88 (existing semantics: internal fields do not match the crossing being
+authorised). Rail 10 scopes the claim: rendering commitment, not comprehension.
 
 **Replay/run binding (frozen):** the receipt is bound to the action, the request,
 the protected boundary kind, the epoch/window (`stage4n_window_anchor_digest`),
@@ -251,12 +269,20 @@ attempts real tool calls; the kernel gate admits only pincer-valid calls.
 **Lane B arms (frozen — both claws of the pincer exercised live):**
 
 ```text
-approved-and-ordered            → raw 0
-no receipt                      → 83
-wrong embedded approval digest  → 84
-receipt after crossing          → 85
-harness-signer-as-approver      → 86   (mandatory negative arm)
-expired epoch                   → 82
+approved-and-ordered              → raw 0
+human-at-terminal approval        → raw 0   (invention §6.7: real human on stdin CLI,
+                                             own key, captured once, digest-only;
+                                             rail 3 still applies)
+refusal-bearing run               → GREEN   (invention §6.2: run containing ledgered
+                                             refusals must still verify)
+no receipt                        → 83
+wrong embedded approval digest    → 84
+receipt after crossing            → 85
+harness-signer-as-approver        → 86   (mandatory negative arm)
+expired epoch                     → 82
+display/executed mismatch         → 88   (invention §6.3)
+crossing-census mismatch          → 89   (invention §6.1: harness-counted attempts
+                                             vs chain-committed cardinality)
 ```
 
 The raw-86 arm is mandatory: the harness/tool signer attempts to sign the
@@ -271,12 +297,19 @@ from the shipped 4N seismograph window machinery — VFR receipts anchor to
 existing 4N windows rather than inventing a second clock. A receipt outside its
 window is 82; in-window cross-run/cross-action replay is 88 (§2.5).
 
+**Heartbeat straddle rule (invention §6.4, frozen):** run-chain genesis and
+final digests are anchored into 4N heartbeat windows. A receipt minted in window
+W may authorize crossings only in W or W+1; cross-window straddle beyond W+1
+fails as raw 82. This publicly anchors ordering to the already-shipped 4N
+heartbeat without claiming physical-time truth (rail 7 note, §1.3).
+
 ### 3.4 Attestation build → sign → verify (non-circular, prettier-safe)
 
 `tools/simurgh-attestation/stage4q/build-4q-vfr.mjs` assembles Lane A evidence +
-Lane B capture digests + the 9 rails + the `reviewer_note` into
-`simurgh.vfr_attestation.v1`. Signing construction (frozen — 4P pattern,
-clarified):
+Lane B capture digests + the 10 rails + the `reviewer_note` + the signed
+`novelty_source_map` (§6.6) + the signed `constitution_projection` (§6.8) + the
+crossing-census commitment (§6.1) into `simurgh.vfr_attestation.v1`. Signing
+construction (frozen — 4P pattern, clarified):
 
 ```text
 body0 = attestation without bundle_digest and signature
@@ -305,6 +338,11 @@ recorded positions.
 (`/opt/homebrew/opt/node@26/bin` — byte-stability gotcha), `evidence/stage-4q/`
 fully prettier-ignored from day one (the 4N `cmp` lesson).
 
+**BYO-approver mode (invention §6.5, 3O lineage):** the reproduce script accepts
+`--approver-key <path>`; a reviewer mints their OWN approver key, re-runs the
+Lane A corpus, and obtains byte-identical evidence except signature fields —
+proving the machinery has no hidden dependence on the project's approver key.
+
 ---
 
 ## 4. Proofs, K7 E2E net, CI/reproduce, docs accuracy
@@ -324,9 +362,15 @@ failClosed:
 
 sameKeyFails:
   approver key digest = harness/tool key digest ⇒ ¬accept
+
+frictionCoverage:
+  chainComplete ∧ census = countCrossings ⇒
+    ∀ c ∈ crossings, accepted c ⇒ hasValidReceipt c
 ```
 
-`sameKeyFails` makes the two-key pincer machine-visible, not just tested. Honest
+`sameKeyFails` makes the two-key pincer machine-visible, not just tested.
+`frictionCoverage` (invention §6.1) lifts the law from per-crossing (∃ receipt)
+to run-level totality (∀ crossings) under the committed census. Honest
 scoping stated in the proof header: the theorems are about the decision
 function; `pincer_ordering_is_recorded_run_order_not_physical_time_truth`
 applies.
@@ -336,9 +380,10 @@ applies.
 One test that composes every stage4q export — kernel function, receipt mint
 (fixture signer), chain build, attestation build, sign, both verifier tiers —
 end to end, then runs the full tamper matrix through the composed pipeline: one
-expected-GREEN pincer-complete arm plus one arm per raw code 80–89, each
-asserting the exact code AND that the frozen check order fired (a mutant killing
-83 must not surface as 81).
+expected-GREEN pincer-complete arm, one expected-GREEN refusal-bearing-run arm
+(invention §6.2: ledgered refusals verify; a chain with a deleted refusal fails
+as 89), plus one arm per raw code 80–89, each asserting the exact code AND that
+the frozen check order fired (a mutant killing 83 must not surface as 81).
 
 **Export inventory + byte-idempotency (frozen):** The K7 net freezes an explicit
 export inventory for every stage4q module and asserts
@@ -381,7 +426,7 @@ both 3M and 3O audit scripts (4P lesson).
 `STAGE_4Q_THREAT_MODEL.md`, `STAGE_4Q_VALIDATION_MATRIX.md` (tamper matrix as
 expected-RED/GREEN table), `STAGE_4Q_REVIEWER_CHECKLIST.md`,
 `STAGE_4Q_CLOSEOUT.md` with the four-axis re-score and the Novelty source-map
-(gating any firstness language). The plan ENDS with the docs-accuracy pass —
+(gating any firstness language; also signed into the attestation per §6.6). The plan ENDS with the docs-accuracy pass —
 every checklist row verified against shipped behavior, spec deltas recorded
 explicitly rather than papered over (the 4P Lane C lesson).
 
@@ -411,6 +456,9 @@ explicitly rather than papered over (the 4P Lane C lesson).
    `approver_key_separation_is_cryptographic_not_organisational` carries this.
 4. VFR proves friction PRECEDED the crossing, never that friction HELPED —
    `friction_receipt_is_enforcement_evidence_not_prevention` carries this.
+5. `approval_display_digest` commits what was rendered, never what the approver
+   read or understood —
+   `display_digest_is_rendering_commitment_not_comprehension_proof` carries this.
 
 ### 5.3 Deferred, by name
 
@@ -438,16 +486,57 @@ next stage starts at 90.
 
 ---
 
+## 6. Adopted inventions (all eight; ZERO new raw codes)
+
+Decided 2026-07-05: every invention folds into existing code semantics (the 4P
+precedent — pincer/contest/disclosure/bridge added no codes). Blade unchanged:
+approval-gate friction only.
+
+1. **Friction Coverage Commitment** — 4L cardinality reuse. The run chain
+   commits the COUNT of attempted protected crossings; Lane B independently
+   counts attempts. Census mismatch (selective omission) = raw 89. Lean:
+   `frictionCoverage` (§4.1). The Completeness Invariant applied to friction.
+2. **Ledgered refusals, expected-GREEN** — every kernel refusal is a signed
+   chain entry; refusal-bearing runs verify GREEN; a deleted refusal breaks the
+   chain = 89. 4L F9 lineage.
+3. **`approval_display_digest`** — the receipt commits the RENDERED approval
+   request; display/executed mismatch = 88. Closes approval bait-and-switch.
+   Rail 10 scopes it.
+4. **4N heartbeat straddle anchoring** — receipts minted in window W authorize
+   crossings in W or W+1 only; beyond = 82. Publicly anchors ordering to the
+   shipped 4N heartbeat (rail 7 note).
+5. **BYO-approver reproduce mode** — 3O lineage; reviewer-minted approver key
+   yields byte-identical evidence except signatures (§3.5).
+6. **Signed `novelty_source_map`** — prior-art audit (SCITT, in-toto,
+   transparency logs, GitHub required reviews, OPA audit; per row: what it
+   orders / what it doesn't) SIGNED into the attestation. Makes the firstness
+   claim falsifiable; any successful attack on a row triggers re-score.
+7. **Human-at-terminal arm** — one Lane B arm with a real human approver on a
+   stdin CLI, own key, captured once, digest-only. Rail 3 unchanged.
+8. **Signed `constitution_projection`** — 4M Article-73-projection lineage: each
+   of the five frozen boundary kinds mapped to the constitution clause it
+   operationalizes; each Lane A arm annotated by clause.
+
+### 6.9 Plan-time freezes (from spec marking; MUST be frozen before code)
+
+1. Raw 87's policy envelope: exact keys of the declared policy object.
+2. `FrictionContext`: exact fields, including the chain-references shape.
+3. 4N epoch mapping: how `valid_from_epoch` integers map to concrete 4N window
+   indices (one paragraph, one worked example).
+
+---
+
 ## Approved final 4Q identity
 
 ```text
 Stage 4Q — VFR: Verifiable Friction Receipts
 Target: v2.26.0-stage-4q-vfr
 Law: Friction Precedence Law
-Theorem: frictionPrecedence (+ failClosed, sameKeyFails)
-Core mechanism: two-key pincer ordering
+Theorems: frictionPrecedence (+ failClosed, sameKeyFails, frictionCoverage)
+Core mechanism: two-key pincer ordering + friction coverage commitment
 Scope: approval gate only
-Lanes: Lane A kernel + Lane B 4O MCP live capture replay
-Raw codes: 80–89
+Lanes: Lane A kernel + Lane B 4O MCP live capture replay (incl. human arm)
+Rails: 10 signed non-claims
+Raw codes: 80–89 (inventions add ZERO new codes)
 Next stage starts at: 90
 ```
