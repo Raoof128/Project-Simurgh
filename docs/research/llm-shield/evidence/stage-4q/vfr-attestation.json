@@ -1,0 +1,107 @@
+{
+  "schema": "simurgh.vfr_attestation.v1",
+  "stage": "4q",
+  "lane_a_evidence_digest": "sha256:5ee4cfb5d993ae648645e239c55e7a19bd1965d363a27857076b8290e69e22e2",
+  "lane_b_capture_digest": "sha256:073c337a4c3650b1161a09a47aad9d6bfbb22e3d6f51caea899372ade4f00175",
+  "run_chain_root_digest": "sha256:c54cfef8651ba4683b306b7abec704107e2557502ef0f5a1837eb746585a8a38",
+  "census": {
+    "committed_crossings": 27,
+    "chain_crossings": 27,
+    "laneb_observed": 11
+  },
+  "non_claims": [
+    "not_general_friction_taxonomy",
+    "delay_and_cooldown_deferred",
+    "not_human_intent_proof",
+    "live_capture_is_local_mcp_fixture_only",
+    "not_external_tool_provider_guarantee",
+    "approval_key_is_authorisation_evidence_not_identity_truth",
+    "pincer_ordering_is_recorded_run_order_not_physical_time_truth",
+    "friction_receipt_is_enforcement_evidence_not_prevention",
+    "approver_key_separation_is_cryptographic_not_organisational",
+    "display_digest_is_rendering_commitment_not_comprehension_proof",
+    "exemption_claim_is_falsifiable_declaration_not_self_granted_bypass"
+  ],
+  "reviewer_note": {
+    "schema": "simurgh.vfr_attestation.v1#reviewer_note",
+    "owasp_llm10": "unbounded_consumption_mapping",
+    "nist_measure_2_7": "evidence_contract_mapping",
+    "carries_non_claim": "enforcement of declared budget, NOT prevention",
+    "status_sentence": "The reviewer note is signed for reproducibility but is not itself a compliance claim or raw-code enforcement rule."
+  },
+  "novelty_source_map": {
+    "schema": "simurgh.vfr_attestation.v1#novelty_source_map",
+    "rows": [
+      {
+        "prior_art": "SCITT (IETF draft-ietf-scitt-architecture)",
+        "what_it_orders": "signed statements about supply-chain artifacts in an append-only transparency log",
+        "what_it_does_not": "does not order an approval-friction checkpoint before an authority crossing, nor bind approver-key separation"
+      },
+      {
+        "prior_art": "in-toto",
+        "what_it_orders": "supply-chain step metadata and materials/products link attestations",
+        "what_it_does_not": "does not attest a human/policy approval preceding a runtime authority boundary"
+      },
+      {
+        "prior_art": "transparency logs (CT / Sigstore / Rekor)",
+        "what_it_orders": "inclusion and consistency of signed entries over time",
+        "what_it_does_not": "does not express a friction-before-authority precedence relation or a two-key pincer"
+      },
+      {
+        "prior_art": "GitHub required reviews",
+        "what_it_orders": "a merge is gated on a human approval before code lands",
+        "what_it_does_not": "evidence is not offline-recomputable, not chain-ordered, not key-separated"
+      },
+      {
+        "prior_art": "OPA / Gatekeeper audit",
+        "what_it_orders": "policy decisions and violations over cluster state, logged for audit",
+        "what_it_does_not": "does not produce a signed, re-runnable receipt binding approval order to a specific crossing"
+      },
+      {
+        "prior_art": "Notarized Agents (arXiv 2606.04193)",
+        "what_it_orders": "receiver-attested confidential receipts per individual agent action",
+        "what_it_does_not": "is per-action; does not prove chain-level friction precedence or completeness census"
+      },
+      {
+        "prior_art": "Governing Actions, Not Agents (arXiv 2606.26298)",
+        "what_it_orders": "an institutional-attestation governance model for autonomous actions",
+        "what_it_does_not": "is a model, not a recomputable friction-precedence receipt with policy-falsifiable exemptions"
+      }
+    ],
+    "falsification_rule": "any successful attack on a row triggers re-score at closeout"
+  },
+  "constitution_projection": {
+    "schema": "simurgh.vfr_attestation.v1#constitution_projection",
+    "rows": [
+      {
+        "boundary_kind": "tool_execution",
+        "clause": "oversight_before_consequential_action",
+        "machine_check": "green_pincer_complete"
+      },
+      {
+        "boundary_kind": "unsafe_export",
+        "clause": "containment_of_harmful_output",
+        "machine_check": "case_88_window_anchor_mismatch"
+      },
+      {
+        "boundary_kind": "privilege_expansion",
+        "clause": "corrigibility_preserved",
+        "machine_check": "case_86_approver_key_not_distinct"
+      },
+      {
+        "boundary_kind": "consent_broadening",
+        "clause": "consent_boundaries_respected",
+        "machine_check": "exemption_refused"
+      },
+      {
+        "boundary_kind": "disclosure_escalation",
+        "clause": "disclosure_under_declared_budget",
+        "machine_check": "case_87_boundary_kind_not_covered"
+      }
+    ]
+  },
+  "stage4n_window_anchor_digest": "sha256:3c2d373790fd8e8a9f51714219699bd8e6bd39ca7399ac2659070a9fdbefef2f",
+  "signer_public_key": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEA/QeUiRG0Q91wamAyeAW6jEd5wnVoW1QOKR4MCE2rsTU=\n-----END PUBLIC KEY-----\n",
+  "bundle_digest": "sha256:3ed0810f393d1b32a11ba66558a667422e825303bcfb8f7cb8a0241d07eb6916",
+  "signature": "W0tS3P39BRqJ+mzh9WzlTi8yLf9mX2lklurHe3sBfLHwg9KO7IYCkAGhxz9aiK27EAodBavUGc4SA8kWf/NgBA=="
+}
