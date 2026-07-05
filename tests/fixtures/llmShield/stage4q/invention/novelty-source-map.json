@@ -1,0 +1,41 @@
+{
+  "schema": "simurgh.vfr_attestation.v1#novelty_source_map",
+  "rows": [
+    {
+      "prior_art": "SCITT (IETF draft-ietf-scitt-architecture)",
+      "what_it_orders": "signed statements about supply-chain artifacts in an append-only transparency log",
+      "what_it_does_not": "does not order an approval-friction checkpoint before an authority crossing, nor bind approver-key separation"
+    },
+    {
+      "prior_art": "in-toto",
+      "what_it_orders": "supply-chain step metadata and materials/products link attestations",
+      "what_it_does_not": "does not attest a human/policy approval preceding a runtime authority boundary"
+    },
+    {
+      "prior_art": "transparency logs (CT / Sigstore / Rekor)",
+      "what_it_orders": "inclusion and consistency of signed entries over time",
+      "what_it_does_not": "does not express a friction-before-authority precedence relation or a two-key pincer"
+    },
+    {
+      "prior_art": "GitHub required reviews",
+      "what_it_orders": "a merge is gated on a human approval before code lands",
+      "what_it_does_not": "evidence is not offline-recomputable, not chain-ordered, not key-separated"
+    },
+    {
+      "prior_art": "OPA / Gatekeeper audit",
+      "what_it_orders": "policy decisions and violations over cluster state, logged for audit",
+      "what_it_does_not": "does not produce a signed, re-runnable receipt binding approval order to a specific crossing"
+    },
+    {
+      "prior_art": "Notarized Agents (arXiv 2606.04193)",
+      "what_it_orders": "receiver-attested confidential receipts per individual agent action",
+      "what_it_does_not": "is per-action; does not prove chain-level friction precedence or completeness census"
+    },
+    {
+      "prior_art": "Governing Actions, Not Agents (arXiv 2606.26298)",
+      "what_it_orders": "an institutional-attestation governance model for autonomous actions",
+      "what_it_does_not": "is a model, not a recomputable friction-precedence receipt with policy-falsifiable exemptions"
+    }
+  ],
+  "falsification_rule": "any successful attack on a row triggers re-score at closeout"
+}

@@ -1,0 +1,30 @@
+{
+  "schema": "simurgh.vfr_attestation.v1#constitution_projection",
+  "rows": [
+    {
+      "boundary_kind": "tool_execution",
+      "clause": "oversight_before_consequential_action",
+      "machine_check": "green_pincer_complete"
+    },
+    {
+      "boundary_kind": "unsafe_export",
+      "clause": "containment_of_harmful_output",
+      "machine_check": "case_88_window_anchor_mismatch"
+    },
+    {
+      "boundary_kind": "privilege_expansion",
+      "clause": "corrigibility_preserved",
+      "machine_check": "case_86_approver_key_not_distinct"
+    },
+    {
+      "boundary_kind": "consent_broadening",
+      "clause": "consent_boundaries_respected",
+      "machine_check": "exemption_refused"
+    },
+    {
+      "boundary_kind": "disclosure_escalation",
+      "clause": "disclosure_under_declared_budget",
+      "machine_check": "case_87_boundary_kind_not_covered"
+    }
+  ]
+}

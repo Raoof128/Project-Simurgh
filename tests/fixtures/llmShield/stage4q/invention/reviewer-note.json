@@ -1,0 +1,7 @@
+{
+  "schema": "simurgh.vfr_attestation.v1#reviewer_note",
+  "owasp_llm10": "unbounded_consumption_mapping",
+  "nist_measure_2_7": "evidence_contract_mapping",
+  "carries_non_claim": "enforcement of declared budget, NOT prevention",
+  "status_sentence": "The reviewer note is signed for reproducibility but is not itself a compliance claim or raw-code enforcement rule."
+}
