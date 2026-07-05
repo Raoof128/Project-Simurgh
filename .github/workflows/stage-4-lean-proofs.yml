@@ -21,3 +21,4 @@ jobs:
           lean proofs/stage4m/AntiMonotonicity.lean
           lean proofs/stage4n/TemporalCompleteness.lean
           lean proofs/stage4o/MonotoneConsent.lean
+          lean proofs/stage4p/OriginCustody.lean
