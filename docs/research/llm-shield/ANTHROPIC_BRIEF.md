@@ -76,8 +76,10 @@ two-tier verifier; and a one-command reproduce across ten gates. Repository base
 **1559 automated tests**, byte-stable reproduction, private keys never committed.
 
 ```bash
-git clone https://github.com/Raoof128/Project-Simurgh.git && cd Project-Simurgh && npm ci
-scripts/reproduce-llm-shield-stage4q.sh            # ten friction gates, fully offline (Node >= 26)
+git clone https://github.com/Raoof128/Project-Simurgh.git
+cd Project-Simurgh
+npm ci
+scripts/reproduce-llm-shield-stage4q.sh   # ten gates, offline, Node >= 26
 ```
 
 ## The discipline that should earn the reviewer's trust
