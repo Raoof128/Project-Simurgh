@@ -278,6 +278,69 @@ export const VOCA_REASONS_79 = Object.freeze([
   "declared_budget_mismatch",
 ]);
 
+// Stage 4Q VFR codes (reviewed extension of the shared ledger; 4Q spec §2.3). NUMERIC
+// order is allocation order; the NORMATIVE first-failure order is VFR_CHECK_ORDER
+// (4Q spec §2.3 — 83 right after 80 because absent receipts must not surface as
+// signature errors; 89 right after structural validity because laundering masks
+// downstream mismatches).
+export const VFR_RAW_CODES = Object.freeze({
+  FRICTION_ENVELOPE_MISSING: 80,
+  FRICTION_SIGNATURE_INVALID: 81,
+  FRICTION_EPOCH_INVALID: 82,
+  APPROVAL_RECEIPT_MISSING: 83,
+  APPROVAL_DIGEST_NOT_BOUND_TO_CROSSING: 84,
+  APPROVAL_CHAIN_POSITION_INVALID: 85,
+  APPROVER_KEY_NOT_DISTINCT: 86,
+  FRICTION_POLICY_NOT_SATISFIED: 87,
+  FRICTION_RECEIPT_BINDING_MISMATCH: 88,
+  FRICTION_ORDER_LAUNDERING: 89,
+});
+export const VFR_CHECK_ORDER = Object.freeze([80, 83, 81, 82, 89, 86, 84, 85, 87, 88]);
+
+export const VFR_REASONS_80 = Object.freeze(["absent", "schema_invalid"]);
+export const VFR_REASONS_81 = Object.freeze([
+  "approval_signature_invalid",
+  "crossing_signature_invalid",
+  "exemption_signature_invalid",
+]);
+export const VFR_REASONS_82 = Object.freeze([
+  "run_epoch_outside_validity_window",
+  "window_straddle_exceeded",
+]);
+export const VFR_REASONS_83 = Object.freeze(["absent", "schema_invalid"]);
+export const VFR_REASONS_84 = Object.freeze([
+  "approval_binding_unresolved",
+  "approval_binding_digest_mismatch",
+  "binding_kind_conflict",
+]);
+export const VFR_REASONS_85 = Object.freeze([
+  "approval_not_before_crossing",
+  "chain_position_unrecomputable",
+]);
+export const VFR_REASONS_86 = Object.freeze(["approver_key_equals_harness_key"]);
+export const VFR_REASONS_87 = Object.freeze([
+  "approver_not_declared_in_policy",
+  "boundary_kind_not_covered",
+  "approval_exemption_not_permitted_by_policy",
+]);
+export const VFR_REASONS_88 = Object.freeze([
+  "action_digest_mismatch",
+  "request_digest_mismatch",
+  "boundary_kind_mismatch",
+  "run_id_mismatch",
+  "window_anchor_mismatch",
+  "display_digest_mismatch",
+  "friction_receipt_binding_mismatch",
+]);
+export const VFR_REASONS_89 = Object.freeze([
+  "missing_entry",
+  "reordered_entry",
+  "duplicated_entry",
+  "non_linking_previous_digest",
+  "census_mismatch",
+  "refusal_entry_removed",
+]);
+
 export const HARNESS_CODES = Object.freeze({
   CLEAN_RUN_FALSELY_REJECTED: 19,
 });
@@ -360,6 +423,17 @@ export const RUN_LEVEL_BY_RAW = Object.freeze({
   77: 1,
   78: 1,
   79: 1,
+  // Stage 4Q VFR codes (reviewed extension of the shared ledger; 4Q spec §2.3).
+  80: 1,
+  81: 1,
+  82: 1,
+  83: 1,
+  84: 1,
+  85: 1,
+  86: 1,
+  87: 1,
+  88: 1,
+  89: 1,
 });
 
 export function stage4CodeForRawCode(code) {

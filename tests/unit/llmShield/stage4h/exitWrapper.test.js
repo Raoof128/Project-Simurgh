@@ -104,6 +104,17 @@ test("Stage 4H.4 exit map is explicit and collision-bounded", () => {
       77: 1,
       78: 1,
       79: 1,
+      // Stage 4Q VFR codes (reviewed extension of the shared ledger; 4Q spec §2.3).
+      80: 1,
+      81: 1,
+      82: 1,
+      83: 1,
+      84: 1,
+      85: 1,
+      86: 1,
+      87: 1,
+      88: 1,
+      89: 1,
     })
   );
 });
