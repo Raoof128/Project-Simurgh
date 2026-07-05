@@ -741,3 +741,36 @@ execution identity outside the evidence supplied to the verifier.
 Stage 4P classifies custody evidence, not provider truth. A cooperative path can
 prove its declared custody envelope. An uncooperative path can only fail to
 produce valid custody evidence, which 4P records as the auditable result.
+
+## 19. Closeout re-score (post-implementation)
+
+Evidence checked before scoring: `npm test` 1493/1493; `bash scripts/check-e2e.sh`
+13/13; `lean proofs/stage4p/OriginCustody.lean` exit 0 (six theorems, no `sorry`);
+Lane A 25/25 arms (13/13 raw-code coverage, 5/5 raw-78 reasons); Lane B 6/6 arms,
+tool-surface digest verified against the real Stage 4O manifest commitment
+function (not a modelled copy); Lane C 1 fixture (71-class, synthetic); CPC 5/5
+arms; invention layer pincer 3/3, contest 2/2, disclosure recompute pass, bridge
+binding pass; zero `src/llmShield` diff since `v2.24.0-stage-4o-vtsa`; the offline
+verifier (`verify-stage4p.mjs --offline`) passes against the committed bundle with
+no keygen step. No task report (1–13) records a descoped capability — the only
+deviations logged were fixture-hex-character bugs (Tasks 4, 6) and one field-shape
+judgment call (Task 11, `cpc_signals` representative-signal construction), all
+resolved without weakening any claim.
+
+| Axis               | Spec | Closeout | Delta notes                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| ------------------ | ---- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Novelty            | 9.0  | **9.0**  | `GhostTrilemma` proved exactly as specced (six theorems, `lean` exit 0, no `sorry`); the U2 dual-side pincer shipped and tests green (3/3). No descoping — held at spec.                                                                                                                                                                                                                                                          |
+| Frontier           | 9.0  | **9.0**  | Lane B shipped MCP-shaped as declared, binding against Stage 4O's own `manifestCore.mjs` function rather than a copy — a real cross-stage invariant, not modelled. HTTP resale shape remains correctly deferred to 4P.1 (signed non-claim, not new descoping). Held at spec.                                                                                                                                                      |
+| Good-for-Anthropic | 9.5  | **9.0**  | The U2 pincer and U4 vendor-disclosure projection shipped and are recomputable, but both sides of every fixture (pincer, contest, disclosure) remain synthetic — no real operator or provider corroborated a class in this stage. That gap was already named in the spec as the ceiling on 10; scoring a fraction below the spec's 9.5 to reflect that the pilot dependency is unchanged by implementation, not newly discovered. |
+| Constitution       | 9.0  | **9.0**  | The respondent path (§11.2) shipped with 2/2 contest arms (valid chain + wrong-signer rejection) exercised in fixtures, matching the spec's own caveat that 10 requires the contested case exercised for real. No regression from spec. Held at spec.                                                                                                                                                                             |
+
+**Reading the one delta:** Good-for-Anthropic moves from 9.5 to 9.0, not because
+anything shipped short of the plan, but because the spec's own 9.5 assumed the
+pincer/disclosure mechanism's persuasiveness before it existed; with the mechanism
+now built and reviewed, the honest ceiling is the same one the spec already named
+("10 requires a real operator/provider pilot — adoption cannot be self-awarded") —
+closeout scoring applies that ceiling one increment earlier than the pre-
+implementation estimate did, rather than after a hypothetical pilot attempt.
+
+Source discipline honoured: AEX / ChinaTalk / Tom's Hardware / CISPA / RATS / SCITT /
+in-toto cited via §3 source map only; no third-party incident figure adopted.
