@@ -90,6 +90,20 @@ test("Stage 4H.4 exit map is explicit and collision-bounded", () => {
       64: 1,
       65: 1,
       66: 1,
+      // Stage 4P VOCA codes (reviewed extension of the shared ledger; 4P spec §7.2).
+      67: 1,
+      68: 1,
+      69: 1,
+      70: 1,
+      71: 1,
+      72: 1,
+      73: 1,
+      74: 1,
+      75: 1,
+      76: 1,
+      77: 1,
+      78: 1,
+      79: 1,
     })
   );
 });
