@@ -522,7 +522,13 @@ approval-gate friction only.
 1. Raw 87's policy envelope: exact keys of the declared policy object.
 2. `FrictionContext`: exact fields, including the chain-references shape.
 3. 4N epoch mapping: how `valid_from_epoch` integers map to concrete 4N window
-   indices (one paragraph, one worked example).
+   indices (one paragraph, one worked example, including the window-boundary
+   case: a receipt minted at the last tick of window W exercised near the
+   W+1/W+2 boundary).
+4. Census unit of counting (invention 1): the exact definition of one
+   "attempted protected crossing", identical for Lane A and Lane B (kernel call
+   vs tool-call attempt vs malformed envelope), so raw 89 can never fire on an
+   honest run from counting-rule divergence.
 
 ---
 
