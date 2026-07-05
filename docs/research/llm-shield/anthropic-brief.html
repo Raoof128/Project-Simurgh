@@ -296,8 +296,8 @@
       <header class="head">
         <img src="../../Project-Simurgh-Logo.png" alt="Project Simurgh" />
         <div class="titlewrap">
-          <p class="eyebrow">Project Simurgh · Brief for an Anthropic reviewer</p>
-          <h1>A recomputable evidence layer for Anthropic's assurance stack</h1>
+          <p class="eyebrow">Project Simurgh · Technical Brief</p>
+          <h1>Recomputable evidence for AI safety and cybersecurity assurance</h1>
           <p class="sub">
             We do not claim a model is safe. We make one specific, verifiable claim recomputable by an
             outsider: a declared boundary held, oversight preceded a consequential action, and the record
@@ -308,7 +308,7 @@
 
       <main>
         <section>
-          <h2>Why this is Anthropic-shaped</h2>
+          <h2>Alignment with Anthropic's public safety direction</h2>
           <p class="lede">
             The Responsible Scaling Policy and the June 2026 Advanced AI Framework lean on
             <strong>independent third-party verification</strong>; the framework proposes mandatory
@@ -326,10 +326,11 @@
         <section>
           <h2>The one moat: completeness (no selective omission)</h2>
           <p class="claim">
-            Every agent &ldquo;flight recorder&rdquo; on the market is <strong>trust-the-writer
-            telemetry</strong> — it logs what the system chose to log. The property none of them have is
-            the one a dishonest or careless operator exploits: <strong>proof that nothing was quietly
-            dropped.</strong>
+            Many current agent-logging approaches still depend heavily on producer-controlled
+            telemetry — they record what the system chose to record. Simurgh targets a narrower,
+            harder property: <strong>independently recomputable evidence of boundary
+            completeness</strong> — proof that nothing was quietly dropped, the thing a dishonest or
+            careless operator exploits.
           </p>
           <p class="hint">Laundering move &rarr; the Simurgh blade that makes it non-repudiable:</p>
           <table class="metrics">
@@ -357,8 +358,9 @@
             <strong>2 · No quiet gaps — No Silent Exemption.</strong> An unbound action is permitted only
             with a <strong>signed, policy-falsifiable exemption</strong>, judged against an affirmative
             allowlist that is <strong>empty (refuse) by default</strong>. Even absence leaves a signed
-            feather in the ledger. We ship the firstness claim as a <strong>signed, attackable novelty
-            source-map</strong>, not an assertion.
+            feather in the ledger. To my knowledge this is a novel contribution; I treat it as
+            <strong>attackable rather than assumed</strong>, shipping it as a signed novelty source-map
+            an outsider can falsify.
           </p>
           <p>
             <strong>3 · The third-party ecosystem needs a substrate — be your own verifier.</strong> The
@@ -376,14 +378,17 @@
         </section>
 
         <section>
-          <h2>What we shipped (Stage 4Q)</h2>
+          <h2>What Stage 4Q includes (released as <code>v2.26.0-stage-4q-vfr</code>)</h2>
           <p>
-            A 15-case normative corpus and a 10-arm live approval-gated capture over a <strong>genuinely
-            separate approver process</strong> (with a human-at-terminal ceremony arm);
-            <strong>JS&harr;Python byte-parity</strong>; <strong>five machine-checked Lean
-            theorems</strong>; a signed offline attestation with a two-tier verifier; a one-command
-            reproduce across ten gates. Current baseline: <strong>1559 automated tests</strong>,
-            byte-stable reproduction, private keys never committed.
+            Stage 4Q is merged to <code>main</code> and tagged <code>v2.26.0-stage-4q-vfr</code>;
+            everything below reproduces from that tag via the command that follows. It comprises a
+            15-case normative corpus and a 10-arm live
+            approval-gated capture over a <strong>genuinely separate approver process</strong> (with a
+            human-at-terminal ceremony arm); <strong>JS&harr;Python byte-parity</strong>;
+            <strong>five machine-checked Lean theorems</strong>; a signed offline attestation with a
+            two-tier verifier; and a one-command reproduce across ten gates. Repository baseline at this
+            branch: <strong>1559 automated tests</strong>, byte-stable reproduction, private keys never
+            committed.
           </p>
           <pre><code>git clone https://github.com/Raoof128/Project-Simurgh.git &amp;&amp; cd Project-Simurgh &amp;&amp; npm ci
 scripts/reproduce-llm-shield-stage4q.sh   # ten friction gates, fully offline (Node &gt;= 26)</code></pre>
