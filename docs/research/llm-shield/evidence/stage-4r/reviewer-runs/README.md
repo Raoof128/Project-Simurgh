@@ -28,18 +28,20 @@ fingerprint, so re-runs cannot pad the count.
 | `reviewer-Cameron.json`   | `Cameron <ameronjd41291@gmail.com>` | `fern-a2804f` | `da26fa41573fe0ed` | yes (per Raouf)       | Fresh requester-issued challenge; distinct machine (distinct fingerprint).                          |
 | `reviewer-James.json`     | `James <james.ja555@outlook.com>` | `oak-6afb78`  | `527b716f8646073d` | yes (per Raouf)       | Fresh requester-issued challenge; distinct machine (distinct fingerprint).                          |
 | `reviewer-Hamed.json`     | `Hamed <hamedz928@gmail.com>`     | `reed-cfc093` | `b1752e9596282bfa` | pending               | Fresh requester-issued challenge; distinct machine (distinct fingerprint). Confirm fingerprint next. |
+| `reviewer-Mojgan.json`    | `Mojgan <Mojgan_m40@yahoo.com>`   | `pine-0b3a78` | `db883fe06e25ac04` | yes (firsthand, requester's family member) | Fresh requester-issued challenge; distinct machine (distinct fingerprint). |
 
-All four named runs carry DISTINCT fingerprints → four separate machines.
+All five named runs carry DISTINCT fingerprints → five separate machines.
 
 ## Honest tally
 
-**4 named, independent runs across 4 distinct machines** (Linda, Cameron, James, Hamed),
+**5 named, independent runs across 5 distinct machines** (Linda, Cameron, James, Hamed, Mojgan),
 each with a fresh requester-issued challenge and a valid signature. Linda,
-Cameron, and James are fingerprint-confirmed out of band by the requester;
-Hamed's confirmation is **pending** — plus the earlier anonymous first run
-(attributed by note to teacher Amin). This corroborates that the reference crypto
-runs and passes on multiple independent machines with named reviewers. It is
-**not** yet a cross-organisation or institutional
+Cameron, James, and Mojgan are fingerprint-confirmed out of band by the requester
+(Mojgan firsthand as a family member); Hamed's confirmation is **pending** — plus
+the earlier anonymous first run (attributed by note to teacher Amin). This
+corroborates that the reference crypto runs and passes on multiple independent
+machines with named reviewers. It is **not** yet a cross-organisation or
+institutional
 pilot, so the rail `cross_org_operator_b_not_yet_exercised` stays and the
 four-axis scores are unchanged. Padding is impossible: each distinct machine
 shows a distinct fingerprint, one machine cannot mint more than one (persistent
