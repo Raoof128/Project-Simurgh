@@ -27,7 +27,7 @@ fingerprint, so re-runs cannot pad the count.
 | `reviewer-Linda.json`     | `Linda <lala4433@gmail.com>`      | `sage-26175e` | `8686d6f26920fa26` | yes (per Raouf)       | Fresh requester-issued challenge; same machine as an earlier practice run (fingerprint match).      |
 | `reviewer-Cameron.json`   | `Cameron <ameronjd41291@gmail.com>` | `fern-a2804f` | `da26fa41573fe0ed` | yes (per Raouf)       | Fresh requester-issued challenge; distinct machine (distinct fingerprint).                          |
 | `reviewer-James.json`     | `James <james.ja555@outlook.com>` | `oak-6afb78`  | `527b716f8646073d` | yes (per Raouf)       | Fresh requester-issued challenge; distinct machine (distinct fingerprint).                          |
-| `reviewer-Hamed.json`     | `Hamed <hamedz928@gmail.com>`     | `reed-cfc093` | `b1752e9596282bfa` | pending               | Fresh requester-issued challenge; distinct machine (distinct fingerprint). Confirm fingerprint next. |
+| `reviewer-Hamed.json`     | `Hamed <hamedz928@gmail.com>`     | `reed-cfc093` | `b1752e9596282bfa` | yes (per Raouf)       | Fresh requester-issued challenge; distinct machine (distinct fingerprint).                          |
 | `reviewer-Mojgan.json`    | `Mojgan <Mojgan_m40@yahoo.com>`   | `pine-0b3a78` | `db883fe06e25ac04` | yes (firsthand, requester's family member) | Fresh requester-issued challenge; distinct machine (distinct fingerprint). |
 
 All five named runs carry DISTINCT fingerprints → five separate machines.
@@ -35,12 +35,12 @@ All five named runs carry DISTINCT fingerprints → five separate machines.
 ## Honest tally
 
 **5 named, independent runs across 5 distinct machines** (Linda, Cameron, James, Hamed, Mojgan),
-each with a fresh requester-issued challenge and a valid signature. Linda,
-Cameron, James, and Mojgan are fingerprint-confirmed out of band by the requester
-(Mojgan firsthand as a family member); Hamed's confirmation is **pending** — plus
-the earlier anonymous first run (attributed by note to teacher Amin). This
-corroborates that the reference crypto runs and passes on multiple independent
-machines with named reviewers. It is **not** yet a cross-organisation or
+each with a fresh requester-issued challenge, a valid signature, and its
+fingerprint **confirmed out of band by the requester** (Mojgan firsthand as a
+family member) — plus the earlier anonymous first run (attributed by note to
+teacher Amin). The five named runs span four Node major versions (18/20/22),
+which corroborates that the in-repo reference crypto runs and passes across
+independent machines and environments. It is **not** yet a cross-organisation or
 institutional
 pilot, so the rail `cross_org_operator_b_not_yet_exercised` stays and the
 four-axis scores are unchanged. Padding is impossible: each distinct machine
