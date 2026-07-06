@@ -1,0 +1,26 @@
+{
+  "result": {
+    "what": "Stage 4R PCCC external reviewer run",
+    "challenge": "pine-0b3a78",
+    "reviewer_identity_self_declared": "Mojgan <Mojgan_m40@yahoo.com>",
+    "reviewer_public_key_der_hex": "302a300506032b65700321001934c976645173526a942e73684d5b49346345614a91cdfcdcd60c1e28c1fc82",
+    "reviewer_key_fingerprint": "db883fe06e25ac04",
+    "scenarios": [
+      {
+        "classes": "shared",
+        "expect_match": true,
+        "got_match": true,
+        "verdict": "green"
+      },
+      {
+        "classes": "different",
+        "expect_match": false,
+        "got_match": false,
+        "verdict": "green"
+      }
+    ],
+    "all_passed": true,
+    "node_version": "v20.20.2"
+  },
+  "signature": "1ca179de69486ab756683dc874800d85a83da7e7ebd977aa90920329d851a6a1dac24f471261b9f49b9acc46b670d96976893b70c748c89ef4bb9f83c4cb9d0f"
+}
