@@ -81,34 +81,37 @@ for (const f of files) {
   const key = block.result.reviewer_public_key_der_hex;
   if (!byKey.has(key))
     byKey.set(key, {
-      platform: block.result.platform || "unknown",
-      node: block.result.node_version,
+      identity: block.result.reviewer_identity_self_declared || "ANONYMOUS (old-format)",
+      fingerprint: block.result.reviewer_key_fingerprint || "n/a",
       challenges: new Set(),
     });
   byKey.get(key).challenges.add(block.result.challenge);
-  console.log(
-    `  ✓ ${f}: verified (key …${key.slice(-12)}, ${block.result.platform || "platform?"}, ${block.result.node_version})`
-  );
+  const v = byKey.get(key);
+  console.log(`  ✓ ${f}: verified — identity="${v.identity}" fingerprint=${v.fingerprint}`);
 }
 
 const distinctKeys = byKey.size;
-const platforms = new Set([...byKey.values()].map((v) => v.platform));
-const nodeVersions = new Set([...byKey.values()].map((v) => v.node));
+const named = [...byKey.values()].filter((v) => !v.identity.startsWith("ANONYMOUS")).length;
 
 console.log("\n── Corroboration summary ──");
 console.log("valid blocks:", files.length - invalid, " invalid:", invalid);
-console.log("distinct signing keys (≈ distinct RUNS, not provably distinct people):", distinctKeys);
 console.log(
-  "self-reported platforms (CLAIMED, not attested):",
-  [...platforms].join(", ") || "none"
+  "distinct identity keys (persistent → ≈ distinct machines, NOT provably distinct people):",
+  distinctKeys
 );
-console.log("self-reported Node versions (CLAIMED):", [...nodeVersions].join(", ") || "none");
+console.log("of which self-declare an identity you can try to confirm:", named);
 console.log(
   "\nWhat this proves:",
   distinctKeys === 0
     ? "no verified runs yet."
-    : `${distinctKeys} internally-consistent run(s), each computing match + non-match and self-verifying green off-repo.`
+    : `${distinctKeys} internally-consistent run(s) bound to your challenge(s), each self-verifying green off-repo.`
 );
+console.log("\n⚠️  TRUST CHECKLIST — before counting ANY of these as real corroboration:");
+for (const v of byKey.values()) {
+  console.log(
+    `   [ ] confirm fingerprint ${v.fingerprint} really belongs to "${v.identity}" via a channel you trust (their email/GitHub).`
+  );
+}
 console.log(
-  "What this does NOT prove: different people, different real machines, or the claimed OSes — those are self-reported and spoofable. A genuine cross-platform or cross-org claim needs runs you personally witnessed on distinct machines, or an institutional run."
+  "\nWhat this still does NOT prove: that the runs came from different real people, or any OS — a self-contained script cannot attest that. Genuine cross-org corroboration needs an institutional run or people you personally know."
 );

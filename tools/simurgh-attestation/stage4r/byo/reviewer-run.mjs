@@ -12,7 +12,6 @@
 // the verdicts over the challenge. This proves an independent machine + keys ran
 // the real reference crypto and it passed. It is NOT production crypto.
 import crypto from "node:crypto";
-import os from "node:os";
 
 // ─────────────────────────── Edwards25519 reference group ───────────────────
 const P = 2n ** 255n - 19n;
@@ -237,7 +236,11 @@ if (process.argv[2] === "--verify") {
     s[1].verdict === "green";
   const challengeOk = !process.argv[4] || block.result.challenge === process.argv[4];
   const ok = sigOk && scenariosOk && block.result.all_passed && challengeOk;
-  console.log("reviewer public key:", block.result.reviewer_public_key_der_hex.slice(-16));
+  const identity =
+    block.result.reviewer_identity_self_declared || "ANONYMOUS (old-format block, no identity)";
+  const fp = block.result.reviewer_key_fingerprint || "n/a";
+  console.log("reviewer identity (SELF-DECLARED — confirm out of band!):", identity);
+  console.log("reviewer key fingerprint:", fp);
   console.log(
     "challenge:",
     block.result.challenge,
@@ -247,24 +250,54 @@ if (process.argv[2] === "--verify") {
   console.log("scenarios correct (match + non-match, both green):", scenariosOk);
   console.log(
     ok
-      ? "\n✅ VERIFIED — an independent reviewer ran the real ceremony and it passed."
+      ? "\n✅ VERIFIED — this block is intact, bound to your challenge, and the ceremony passed.\n   ⚠️  It does NOT prove WHO ran it. Confirm the fingerprint above with the person\n   over a channel you trust (their email/GitHub) before counting it as real corroboration."
       : "\n❌ NOT VERIFIED"
   );
   process.exit(ok ? 0 : 1);
 }
 
 // ─────────────────────────── run + sign result ──────────────────────────────
+// Usage: node reviewer-run.mjs "<challenge-from-requester>" "<your name / email or GitHub>"
+//
+// NO platform/OS field is emitted and there are NO override backdoors: a
+// self-contained script cannot prove which OS ran it, so it must not pretend to.
+// What makes a block hard to fake is (1) the requester-issued challenge you
+// cannot pre-generate, (2) a STABLE per-machine identity key (re-runs reuse it,
+// so one person cannot inflate the count by re-running), and (3) a signed
+// self-declared identity the requester confirms OUT OF BAND (email/GitHub).
+import { readFileSync as _rf, writeFileSync as _wf, existsSync as _ex } from "node:fs";
+import { fileURLToPath as _fu } from "node:url";
+import { dirname as _dn, join as _jn } from "node:path";
+
 const challenge = process.argv[2] || "no-challenge-provided";
+const identity =
+  process.argv[3] || "ANONYMOUS (no identity given — weak, requester cannot verify who ran this)";
 const epoch =
   "sha256:" +
   crypto
     .createHash("sha256")
     .update("reviewer-epoch|" + challenge)
     .digest("hex");
+
+// Stable per-machine key: reused across runs so N re-runs collapse to ONE
+// identity (defeats accidental count-padding). Stored beside the script.
+const keyPath = _jn(_dn(_fu(import.meta.url)), "simurgh-reviewer-identity-key.pem");
+let reviewer, reused;
+if (_ex(keyPath)) {
+  reviewer = { privateKey: crypto.createPrivateKey(_rf(keyPath)), publicKey: null };
+  reviewer.publicKey = crypto.createPublicKey(reviewer.privateKey);
+  reused = true;
+} else {
+  reviewer = crypto.generateKeyPairSync("ed25519");
+  _wf(keyPath, reviewer.privateKey.export({ type: "pkcs8", format: "pem" }));
+  reused = false;
+}
+const reviewerPubHex = reviewer.publicKey.export({ type: "spki", format: "der" }).toString("hex");
+const fingerprint = crypto.createHash("sha256").update(reviewerPubHex).digest("hex").slice(0, 16);
+
 const keyA = { kp: crypto.generateKeyPairSync("ed25519") };
 keyA.pub = keyA.kp.publicKey.export({ type: "spki", format: "der" }).toString("hex");
-const reviewer = crypto.generateKeyPairSync("ed25519"); // the reviewer's OWN independent key
-const keyB = { pub: reviewer.publicKey.export({ type: "spki", format: "der" }).toString("hex") };
+const keyB = { pub: reviewerPubHex };
 
 const CLASS_X = "sha256:" + "5c".repeat(32),
   CLASS_Y = "sha256:" + "6d".repeat(32);
@@ -276,15 +309,15 @@ const allPassed =
 const result = {
   what: "Stage 4R PCCC external reviewer run",
   challenge,
+  reviewer_identity_self_declared: identity,
   reviewer_public_key_der_hex: keyB.pub,
+  reviewer_key_fingerprint: fingerprint,
   scenarios: [
     { classes: "shared", expect_match: true, got_match: s1.match, verdict: s1.verdict },
     { classes: "different", expect_match: false, got_match: s2.match, verdict: s2.verdict },
   ],
   all_passed: allPassed,
   node_version: process.version,
-  platform: os.platform(), // darwin | win32 | linux — for cross-platform diversity
-  arch: os.arch(), // x64 | arm64 — records that the reference math agrees everywhere
 };
 const signature = crypto
   .sign(null, Buffer.from(canon(result)), reviewer.privateKey)
@@ -304,6 +337,14 @@ console.log(
   " verdict =",
   s2.verdict,
   " (expected match=false)"
+);
+console.log(
+  "\nYour identity key fingerprint:",
+  fingerprint,
+  reused ? "(reused existing key)" : "(new key — keep the .pem file to reuse it)"
+);
+console.log(
+  "Tell the requester this fingerprint over a channel they trust (your email/GitHub) so they can confirm the block is really from you."
 );
 console.log("\n────────── COPY EVERYTHING BELOW THIS LINE AND SEND IT BACK ──────────");
 console.log(JSON.stringify({ result, signature }, null, 2));
