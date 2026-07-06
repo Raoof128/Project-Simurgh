@@ -113,6 +113,8 @@ authorization_scope_and_disclosure_are_signed_before_any_attack_runs
 reported_asr_is_recomputed_from_pinned_inputs_no_hand_edited_totals
 live_lane_is_disabled_by_default_lazy_loaded_and_denial_of_wallet_capped
 severity_of_any_confirmed_bypass_is_signed_into_known_limitations
+lane_b_uses_honest_transparent_framing_we_never_evade_or_trick_fable_safeguards
+a_fable_refusal_is_recorded_as_outcome_never_rephrased_to_bypass_it
 ```
 
 **Outcome semantics (mirror of Stage 4G, frozen):** a confirmed bypass — an
@@ -204,6 +206,39 @@ system's favour being wrong (false-GREEN or over-authorize).
   charter; cap breach → **126**. Live capture is ephemeral → **reproduce
   re-verifies it, never regenerates** (same discipline as 4S Lane B). Fable is an
   *attack-bundle driver*, never a target of jailbreak or content-harm.
+
+### 6.1 Lane B safeguard-legibility (honest framing, refusal is data)
+
+VRTA must never trigger Fable-5's safeguards **by evading them** — that would
+contradict the charter (§3 invariants 2 and 8) and violate **AnthropicSafe
+First**. The only admissible way to keep safeguards from firing is to make the
+task genuinely and legibly benign so a well-aligned model correctly permits it:
+
+- **Charter-in-context.** Fable-5's system prompt includes the signed charter
+  digest and its plain-language scope: this is a self-authored red-team of our
+  own delegation verifier, no third-party target, all findings disclosed and
+  fixed. Legibility, not concealment.
+- **Structured-data task, not weaponization.** The request is to emit
+  `vdcc_chain_bundle` JSON that omits a hop or mis-attenuates a scope label —
+  fuzzing our own evidence schema. No harmful content is produced, so there is
+  nothing for a content classifier to correctly flag; no real system is attacked.
+- **Refusal is a first-class recorded outcome.** If Fable-5 declines, the finding
+  record stores `outcome = model_refused` with the verbatim refusal, and the lane
+  moves on. We **never** rephrase, role-play around, or otherwise attempt to
+  bypass a refusal (rail: `a_fable_refusal_is_recorded_as_outcome_never_...`). A
+  refusal is honest telemetry — and, if the task was legitimately benign, an
+  over-refusal signal reported alongside ASR.
+- **Graceful degradation.** Lane A (offline) carries the bulk of the corpus, so a
+  fully-refusing or unavailable Lane B still ships a complete VRTA attestation;
+  Lane B is additive live signal, never a dependency.
+- **Legible, permitted use.** Live calls run on our own account under
+  defensive-security permitted use, with the charter's signed denial-of-wallet
+  caps (max turns/tokens/spend; breach → **126**).
+
+The finding schema therefore admits three outcome classes —
+`survived` (attack correctly caught), `bypass` (confirmed false-GREEN /
+over-authorize), and `model_refused` (Lane B only) — and the ASR denominator
+excludes refusals while the over-refusal rate reports them separately.
 
 ## 7. Honest metrics + the dual-signal lie detector (invention 3)
 
