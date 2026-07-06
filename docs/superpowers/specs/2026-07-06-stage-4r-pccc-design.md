@@ -81,9 +81,17 @@ The signed set is now:
 public_tier_remains_digest_level_by_design
 dleq_is_fiat_shamir_random_oracle_model
 curve_arithmetic_is_reference_grade_not_constant_time
+in_repo_curve_crypto_is_reference_verifier_not_production_deployment
 not_a_voprf_rfc9497_protocol
 cross_org_operator_b_not_yet_exercised
 ```
+
+The `in_repo_curve_crypto_…` limitation is the explicit answer to "why
+custom crypto?": the Edwards25519/DLEQ modules exist to make the verifier
+path deterministic, vector-gated, and offline-recomputable — a reference
+research verifier, NOT a production cryptographic deployment. It is
+distinct from the constant-time caveat above (a specific timing weakness);
+this one is a scope statement.
 
 With valid DLEQ proofs the audit tier verifies the ceremony UNILATERALLY: a
 single liar dies at commit-reveal, and a colluding pair can no longer
@@ -379,7 +387,7 @@ diagnosed as replay, not reuse.
   (`ephemeral_public_digest_reuse_detected`). The digest is epoch-bound, so
   96's detection scope is same-epoch; cross-epoch anomalies surface as 95.
 
-## 7. Honesty rails (sixteen, spec-time, never retrofitted)
+## 7. Honesty rails (seventeen, spec-time, never retrofitted)
 
 ```text
 no_public_herd_token
@@ -398,6 +406,7 @@ fixture_scalar_quarantine_enforced_by_path_allowlist
 curve_arithmetic_is_reference_grade_not_constant_time
 dleq_is_fiat_shamir_random_oracle_model
 census_counts_are_window_scoped_and_cardinality_committed
+in_repo_curve_crypto_is_reference_verifier_not_production_deployment
 ```
 
 ## 8. Adopted inventions (zero new raw codes)
@@ -673,27 +682,33 @@ trips on honest negations — phrase accordingly.
 
 The original freeze capped all axes at 9.0 until one of four unlocks fired.
 Amendment 1 FIRES unlock #1 (the DLEQ upgrade) inside the stage; the census
-and kit strengthen two more without claiming them. Amended honest pre-score:
+and kit strengthen two more without claiming them. A same-day amendment
+first set three axes to 9.5; that was corrected DOWN after review — 9.5 is
+the ceiling the no-drift rule reserved for EXTERNAL validation, and parking
+three axes there on internal work alone (with the in-repo crypto itself
+unreviewed) was an overclaim by our own rule. Honest pre-score:
 
-- **Novelty 9.5** — the paid-debt composition: dependency-free,
+- **Novelty 9.3** — the paid-debt composition: dependency-free,
   DLEQ-verified private custody corroboration with a cryptographic
   no-herd-token law, friction-gated export, and slot cardinality. DH-PSI
   itself is old (Private Join & Compute, Password Monitor — named as
-  prior_art_limiting_rows). Held from 10: the source map has not survived
-  external prior-art review.
-- **Frontier 9.5** — unilateral audit-tier verifiability from pure
-  reference arithmetic; count-only cross-operator census. Held from 10:
-  operator B is still ours; constant-time prover deferred.
-- **Good-for-Anthropic 9.5** — consumes 4Q receipts (the 4Q closeout's
+  prior_art_limiting_rows). Held below 9.5: neither the source map nor the
+  in-repo crypto has survived external review.
+- **Frontier 9.3** — unilateral audit-tier verifiability from pure
+  reference arithmetic; count-only cross-operator census. Held below 9.5:
+  operator B is still ours; reference (not constant-time, not production)
+  crypto.
+- **Good-for-Anthropic 9.1** — consumes 4Q receipts (the 4Q closeout's
   named "to 9.5") AND ships the kit that turns a cross-org pilot into a
-  send-one-link exercise. Held from 10: no external organisation has run
-  it yet.
+  send-one-link exercise; the §20 FMF gap maps to an agreement Anthropic
+  actually signed. Held below 9.5: no external organisation has run it yet.
 - **Constitution 9.0** — unchanged until CERA (§8.7) is countersigned by a
-  real external reviewer; no self-granted credit.
+  real external reviewer; no self-granted credit (a reviewer proposed 9.1,
+  declined — CERA has not fired).
 
-**Residual no-drift rule:** Constitution stays ≤ 9.0 until CERA fires;
-nothing exceeds 9.5 until a real cross-org run or an external
-prior-art/clause-map review lands.
+**Residual no-drift rule:** Constitution stays 9.0 until CERA fires;
+nothing exceeds 9.5 until a real cross-org run OR an external
+prior-art/clause-map/cryptography review lands.
 
 ## 17. Deferred, by name
 
