@@ -285,10 +285,14 @@ task genuinely and legibly benign so a well-aligned model correctly permits it:
   defensive-security permitted use, with the charter's signed denial-of-wallet
   caps (max turns/tokens/spend; breach → **123**).
 
-The finding schema therefore admits three outcome classes —
+The finding schema therefore admits four outcome classes —
 `survived` (attack correctly caught), `bypass` (confirmed false-GREEN /
-over-authorize), and `model_refused` (Lane B only) — and the ASR denominator
-excludes refusals while the over-refusal rate reports them separately.
+over-authorize), `model_refused` (Lane B only), and `lane_disabled` (Lane B off
+by default) — and the ASR denominator excludes `model_refused` and
+`lane_disabled` while the over-refusal rate reports them separately. Lane B is
+**additive and sealed separately** in `lane_b_capture`; it never mutates the
+byte-stable offline corpus (the four `fable_adaptive` corpus fixtures are frozen
+pre-captured replays).
 
 ## 7. Honest metrics + the dual-signal lie detector (invention 3)
 
@@ -311,7 +315,7 @@ excludes refusals while the over-refusal rate reports them separately.
     verifier_recomputed_outcome`. Did you honestly report what the engine
     returned?
   - **128 `OUTCOME_CLASSIFICATION_INVALID`** — the recorded `outcome_class`
-    (`survived` / `bypass` / `model_refused`) does not follow from the
+    (`survived` / `bypass` / `model_refused` / `lane_disabled`) does not follow from the
     expected-vs-observed truth table, *even when* self-report and recompute
     agree. Did your label follow from the numbers? (Worked example: expected
     108, observed 0 → truth = bypass; a finding whose self-report matches the
@@ -328,7 +332,7 @@ the typed-wrapper catch-all (132), so 132 does not do double duty (P0-3).
 
 ```text
 119 VRTA_BUNDLE_MALFORMED           bundle/charter/fixture/finding schema invalid (reasons list)
-120 CHARTER_SIGNATURE_INVALID       charter signature does not verify
+120 SIGNATURE_INVALID               charter / finding / attestation signature does not verify (reason distinguishes)
 121 CHARTER_UNBOUND_ATTACK          attack fixture not bound to the signed charter
 122 NON_MALICE_INVARIANT_VIOLATED   non-fixture key or third-party endpoint referenced
 123 LIVE_LANE_CAP_EXCEEDED          denial-of-wallet cap breached / live lane ran uncapped
@@ -360,9 +364,12 @@ Node-26 e2e nets + every prior reproduce script — not just `npm test`.
 
 ## 9. Two-tier red-team attestation
 
-`vrta_attestation.v1`, one Merkle root over four arrays
-(`charter` / `attack_fixtures` / `finding_records` / `lane_b_capture`), signed
-with `INSECURE_FIXTURE_ONLY_vrta.pem`.
+`vrta_attestation.v1`, one Merkle root over **five** sealed groups
+(`charter` / `attack_fixtures` / `finding_records` / `lane_b_capture` /
+`asr_ledger`), signed with `INSECURE_FIXTURE_ONLY_vrta.pem`. Finding records are
+**individually signed** (code 120 `finding_signature_invalid`) in addition to
+being sealed under the root, so tampering a single finding is detectable at the
+finding layer, not only the attestation layer.
 
 - **Public tier:** structural — charter binding, corpus-count completeness,
   signatures, ASR-ledger recompute. No engine re-run.
