@@ -33,9 +33,14 @@ test("family counts sum to the declared 58", () => {
   );
   assert.deepEqual(Object.keys(FAMILY_COUNTS), ATTACK_FAMILIES);
 });
-test("seven non-claims, five limitations, twelve rails", () => {
+test("seven non-claims, six limitations, twelve rails", () => {
   assert.equal(VRTA_NON_CLAIMS.length, 7);
-  assert.equal(VRTA_KNOWN_LIMITATIONS.length, 5);
+  assert.equal(VRTA_KNOWN_LIMITATIONS.length, 6);
+  assert.ok(
+    VRTA_KNOWN_LIMITATIONS.includes(
+      "lane_a_reuses_the_4s_case_table_demonstrates_regression_resistance_not_novel_attack_discovery",
+    ),
+  );
   assert.equal(VRTA_RAILS.length, 12);
   assert.ok(VRTA_RAILS.includes("severity_of_any_confirmed_bypass_is_signed_into_known_limitations"));
 });
