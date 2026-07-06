@@ -341,6 +341,45 @@ export const VFR_REASONS_89 = Object.freeze([
   "refusal_entry_removed",
 ]);
 
+// Stage 4R PCCC codes (reviewed extension of the shared ledger; 4R spec §6).
+// NUMERIC order is allocation order; the NORMATIVE first-failure order is
+// PCCC_CHECK_ORDER (4R spec §6.4 — 94 before 95/96 so a degenerate point is
+// never diagnosed as reuse; 95 before 96 so a cross-epoch replay with identical
+// mask bytes reads as replay, not reuse; 98 last — its refusal is the ledgered
+// expected-GREEN).
+export const PCCC_RAW_CODES = Object.freeze({
+  PCCC_TRANSCRIPT_SCHEMA_INVALID: 90,
+  OPERATOR_IDENTITY_SIGNATURE_INVALID: 91,
+  MATCH_CLAIM_CONFLICT: 92,
+  DDH_TRANSCRIPT_MISMATCH: 93,
+  SMALL_ORDER_OR_ALL_ZERO_FAIL_CLOSED: 94,
+  CROSS_EPOCH_REPLAY_DETECTED: 95,
+  EPHEMERAL_KEY_REUSE_DETECTED: 96,
+  DISCLOSURE_BUDGET_EXCEEDED: 97,
+  VFR_EXPORT_GATE_FAILED: 98,
+  PUBLIC_HERD_TOKEN_VIOLATION: 99,
+});
+export const PCCC_CHECK_ORDER = Object.freeze([90, 91, 94, 95, 96, 93, 92, 99, 97, 98]);
+
+export const PCCC_REASONS_90 = Object.freeze([
+  "pccc_token_commitment_missing",
+  "pccc_token_commitment_opening_invalid",
+  "pccc_phase_order_invalid",
+  "slot_cardinality_commitment_missing",
+  "slot_cardinality_mismatch",
+  "slot_terminal_record_missing",
+  "window_match_census_mismatch",
+]);
+export const PCCC_REASONS_93 = Object.freeze([
+  "token_recompute_mismatch",
+  "dleq_mask_proof_invalid",
+  "dleq_z_proof_invalid",
+]);
+export const PCCC_REASONS_96 = Object.freeze([
+  "mask_reuse_detected",
+  "ephemeral_public_digest_reuse_detected",
+]);
+
 export const HARNESS_CODES = Object.freeze({
   CLEAN_RUN_FALSELY_REJECTED: 19,
 });
@@ -434,6 +473,17 @@ export const RUN_LEVEL_BY_RAW = Object.freeze({
   87: 1,
   88: 1,
   89: 1,
+  // Stage 4R PCCC codes (reviewed extension of the shared ledger; 4R spec §6).
+  90: 1,
+  91: 1,
+  92: 1,
+  93: 1,
+  94: 1,
+  95: 1,
+  96: 1,
+  97: 1,
+  98: 1,
+  99: 1,
 });
 
 export function stage4CodeForRawCode(code) {
