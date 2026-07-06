@@ -80,3 +80,7 @@ tests/fixtures/llmShield/stage4p/
 docs/research/llm-shield/evidence/stage-4p/
 tests/fixtures/llmShield/stage4q/
 docs/research/llm-shield/evidence/stage-4q/
+
+# Stage 4R PCCC: deterministic fixtures and byte-compared evidence (reproduce cmp).
+tests/fixtures/llmShield/stage4r/
+docs/research/llm-shield/evidence/stage-4r/
