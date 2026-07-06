@@ -374,7 +374,7 @@ git commit -m "feat(4u): frozen VRTA constants (families, non-claims, limitation
 - Test: `tests/unit/llmShield/stage4u/charter.test.js`
 
 **Interfaces:**
-- Consumes: `canonicalJson`, `recordDigest`, `merkleRootSorted` from `stage4m/core/canonical.mjs` (verified present — `merkleRootSorted` is exported at `canonical.mjs:101`); constants from Task 2; `VRTA_RAW_CODES` from Task 1. (No `sha256Hex`/`keyDigest` import — unused, P2-1/P2-2.)
+- Consumes: `canonicalJson`, `recordDigest`, `merkleRootSorted` from `stage4m/core/canonical.mjs` (verified present — `merkleRootSorted` is exported at `canonical.mjs:101`); `keyDigest` from `stage4s/core/receiptBuilder.mjs` (used to bind `charter_key_digest` to the verifying key); constants from Task 2; `VRTA_RAW_CODES` from Task 1. (No `sha256Hex` import.)
 - Produces:
   - `attackManifestRoot(seed, familyCounts) -> "sha256:<hex>"` — deterministic Merkle root over derived attack ids.
   - `deriveAttackIds(seed, familyCounts) -> string[]` — sorted stable ids `"<family>#<n>"`.
@@ -401,13 +401,14 @@ import {
   attackManifestRoot, deriveAttackIds, buildCharter, signCharter, charterDigest,
   verifyCharterShapeAndSignature, verifyManifestRoot,
 } from "../../../../tools/simurgh-attestation/stage4u/core/charter.mjs";
+import { keyDigest } from "../../../../tools/simurgh-attestation/stage4s/core/receiptBuilder.mjs";
 import { FAMILY_COUNTS, CAMPAIGN_SEED } from "../../../../tools/simurgh-attestation/stage4u/constants.mjs";
 
 const KEYDIR = "tests/fixtures/llmShield/stage4u/test-keys/";
 const priv = crypto.createPrivateKey(readFileSync(KEYDIR + "INSECURE_FIXTURE_ONLY_vrta-charter.pem"));
 const pubPem = crypto.createPublicKey(priv).export({ type: "spki", format: "pem" }).toString();
 const caps = { max_turns: 6, max_tokens: 4000, max_spend_usd: 2 };
-const mk = () => signCharter(buildCharter({ seed: CAMPAIGN_SEED, familyCounts: FAMILY_COUNTS, caps, charterKeyDigest: "sha256:" + "a".repeat(64) }), priv);
+const mk = () => signCharter(buildCharter({ seed: CAMPAIGN_SEED, familyCounts: FAMILY_COUNTS, caps, charterKeyDigest: keyDigest(pubPem) }), priv);
 
 test("attack ids are deterministic and count to 58", () => {
   const ids = deriveAttackIds(CAMPAIGN_SEED, FAMILY_COUNTS);
@@ -445,6 +446,13 @@ test("re-signed charter with mutated rails -> 119 (canonical lock)", () => {
   const resigned = signCharter({ ...c, signature: undefined }, priv);
   assert.equal(verifyCharterShapeAndSignature(resigned, { pubKeyPem: pubPem }).raw, 119);
 });
+test("valid signature but wrong charter_key_digest -> 120 (key binding, P0-2)", () => {
+  const c = mk(); c.charter_key_digest = "sha256:" + "b".repeat(64);
+  const resigned = signCharter({ ...c, signature: undefined }, priv); // re-sign so the sig is valid
+  const r = verifyCharterShapeAndSignature(resigned, { pubKeyPem: pubPem });
+  assert.equal(r.raw, 120);
+  assert.ok(r.detail.key_digest_mismatch);
+});
 test("charterDigest ignores the signature field", () => {
   const c = mk();
   const d1 = charterDigest(c);
@@ -467,6 +475,7 @@ Expected: FAIL — module not found.
 // SCOPE, not inner intent (rail non_malice_charter_proves_declared_scope_not_inner_intent).
 import crypto from "node:crypto";
 import { canonicalJson, recordDigest, merkleRootSorted } from "../../stage4m/core/canonical.mjs";
+import { keyDigest } from "../../stage4s/core/receiptBuilder.mjs";
 import {
   SCHEMAS, DOMAINS, ATTACK_FAMILIES, CAMPAIGN_SEED, FAMILY_COUNTS,
   VRTA_NON_CLAIMS, VRTA_KNOWN_LIMITATIONS, VRTA_RAILS,
@@ -552,6 +561,10 @@ export function verifyCharterShapeAndSignature(charter, { pubKeyPem }) {
     );
   } catch { sigOk = false; }
   if (!sigOk) return { raw: 120, reason: "charter_signature_invalid" };
+  // Bind the claimed key digest to the ACTUAL verifying key (P0-2) — otherwise
+  // charter_key_digest is decorative.
+  if (charter.charter_key_digest !== keyDigest(pubKeyPem))
+    return { raw: 120, reason: "charter_signature_invalid", detail: { key_digest_mismatch: true } };
   return { raw: 0, reason: "green" };
 }
 
@@ -571,7 +584,7 @@ export function verifyManifestRoot(charter) {
 - [ ] **Step 5: Run to verify it passes**
 
 Run: `node --test tests/unit/llmShield/stage4u/charter.test.js`
-Expected: PASS (8/8).
+Expected: PASS (9/9).
 
 - [ ] **Step 6: Commit**
 
@@ -760,6 +773,7 @@ git commit -m "feat(4u): attack fixture model + non-malice check (119/122 inputs
 ```javascript
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import crypto from "node:crypto";
 import { buildFinding, validateFindingRecord, verifyLedger, verifyBypassSeverity, recomputeAsr, laneBStats, signFinding, verifyFindingSignature }
   from "../../../../tools/simurgh-attestation/stage4u/core/findingLedger.mjs";
 import { deriveAttackIds } from "../../../../tools/simurgh-attestation/stage4u/core/charter.mjs";
@@ -807,12 +821,15 @@ test("laneBStats reports refusals separately from corpus ASR", () => {
   assert.equal(s.model_refused, 1);
   assert.deepEqual(s.over_refusal_rate, { refused: 1, attempts: 2, ratio: "1/2" });
 });
-test("signFinding/verifyFindingSignature round-trip (120 on tamper)", () => {
-  // Full crypto round-trip is exercised in Task 8/9 with real keys; here assert
-  // the API exists and that a hand-broken signature is rejected under 120.
-  assert.equal(typeof signFinding, "function");
-  const broken = { ...survivedFindings[0], finding_key_digest: "sha256:" + "0".repeat(64), signature: "00" };
-  assert.equal(verifyFindingSignature(broken, "").raw, 120);
+test("signFinding round-trips; wrong finding_key_digest -> 120 (key binding, P0-2)", () => {
+  const { privateKey } = crypto.generateKeyPairSync("ed25519");
+  const pub = crypto.createPublicKey(privateKey).export({ type: "spki", format: "pem" }).toString();
+  const signed = signFinding(survivedFindings[0], privateKey);
+  assert.deepEqual(verifyFindingSignature(signed, pub), { raw: 0, reason: "green" });
+  const wrongDigest = { ...signed, finding_key_digest: "sha256:" + "0".repeat(64) };
+  const r = verifyFindingSignature(wrongDigest, pub); // sig still valid (digest is stripped before signing) → binding catches it
+  assert.equal(r.raw, 120);
+  assert.ok(r.detail.key_digest_mismatch);
 });
 ```
 
@@ -874,7 +891,11 @@ export function verifyFindingSignature(finding, pubKeyPem) {
     ok = crypto.verify(null, Buffer.from(canonicalJson(unsignedFinding(finding))),
       crypto.createPublicKey(pubKeyPem), Buffer.from(finding.signature, "hex"));
   } catch { ok = false; }
-  return ok ? { raw: 0, reason: "green" } : { raw: 120, reason: "finding_signature_invalid", detail: { attack_id: finding.attack_id } };
+  if (!ok) return { raw: 120, reason: "finding_signature_invalid", detail: { attack_id: finding.attack_id } };
+  // Bind the claimed key digest to the ACTUAL verifying key (P0-2).
+  if (finding.finding_key_digest !== keyDigest(pubKeyPem))
+    return { raw: 120, reason: "finding_signature_invalid", detail: { attack_id: finding.attack_id, key_digest_mismatch: true } };
+  return { raw: 0, reason: "green" };
 }
 
 // P0-5 — 125 (missing planned id) is checked BEFORE 126 (pure count/dup mismatch).
@@ -1078,6 +1099,7 @@ import crypto from "node:crypto";
 import { evaluateVrta, evaluateVrtaSafe } from "../../../../tools/simurgh-attestation/stage4u/core/vrtaCore.mjs";
 import { buildCharter, signCharter, charterDigest, deriveAttackIds } from "../../../../tools/simurgh-attestation/stage4u/core/charter.mjs";
 import { buildFinding, signFinding, recomputeAsr } from "../../../../tools/simurgh-attestation/stage4u/core/findingLedger.mjs";
+import { keyDigest } from "../../../../tools/simurgh-attestation/stage4s/core/receiptBuilder.mjs";
 import { CAMPAIGN_SEED, FAMILY_COUNTS, SCHEMAS } from "../../../../tools/simurgh-attestation/stage4u/constants.mjs";
 
 const priv = crypto.createPrivateKey(readFileSync("tests/fixtures/llmShield/stage4u/test-keys/INSECURE_FIXTURE_ONLY_vrta-charter.pem"));
@@ -1085,7 +1107,7 @@ const pubPem = crypto.createPublicKey(priv).export({ type: "spki", format: "pem"
 const caps = { max_turns: 6, max_tokens: 4000, max_spend_usd: 2 };
 
 function greenBundle() {
-  const charter = signCharter(buildCharter({ seed: CAMPAIGN_SEED, familyCounts: FAMILY_COUNTS, caps, charterKeyDigest: "sha256:" + "a".repeat(64) }), priv);
+  const charter = signCharter(buildCharter({ seed: CAMPAIGN_SEED, familyCounts: FAMILY_COUNTS, caps, charterKeyDigest: keyDigest(pubPem) }), priv);
   const cd = charterDigest(charter);
   const ids = deriveAttackIds(CAMPAIGN_SEED, FAMILY_COUNTS);
   const attack_fixtures = ids.map((id) => ({
@@ -1135,6 +1157,10 @@ test("ASR ledger mismatch -> 130 (exact rational)", () => {
   const b = greenBundle(); b.asr = { confirmed_bypass: 1, executed_non_refusal: 58, ratio: "1/58" };
   assert.equal(evaluateVrta(b, opts).raw, 130);
 });
+test("missing lane_b_capture array -> 119 (schema, P1)", () => {
+  const b = greenBundle(); delete b.lane_b_capture;
+  assert.equal(evaluateVrta(b, opts).raw, 119);
+});
 ```
 
 - [ ] **Step 2: Run to verify it fails**
@@ -1163,7 +1189,7 @@ export function evaluateVrta(bundle, { pubKeyPem, findingPubKeyPem, engine, capB
   const findingPub = findingPubKeyPem || pubKeyPem;
   // ---- L1: schema (119) + signatures (120) ----
   if (!bundle || typeof bundle !== "object" || !Array.isArray(bundle.attack_fixtures) ||
-      !Array.isArray(bundle.finding_records) || !bundle.charter) {
+      !Array.isArray(bundle.finding_records) || !Array.isArray(bundle.lane_b_capture) || !bundle.charter) {
     return { raw: 119, reason: "vrta_bundle_schema_invalid" };
   }
   for (const fx of bundle.attack_fixtures) { const v = validateFixture(fx); if (v.raw) return v; }
@@ -1225,7 +1251,7 @@ export function evaluateVrtaSafe(bundle, opts) {
 - [ ] **Step 4: Run to verify it passes**
 
 Run: `node --test tests/unit/llmShield/stage4u/vrtaCore.test.js`
-Expected: PASS (9/9).
+Expected: PASS (10/10).
 
 - [ ] **Step 5: Commit**
 
@@ -1306,7 +1332,7 @@ Expected: FAIL — module not found.
 
 - [ ] **Step 4: Implement the corpus builder**
 
-Model each family generator on the 4S fixture builder (`tools/simurgh-attestation/stage4s/node/build-stage4s-fixtures.mjs`), reusing its receipt/bundle constructors. Key rules: (a) every fixture's `expected_raw` is the 4S/kernel code the malformation *should* trigger (use the corrected P1-7 code map in the Interfaces above — a dropped co-signature is **101**, not 111/112); (b) `observed_raw = evaluateChainSafe(payload.bundle).raw`; (c) `outcome_class = classify(expected_raw, observed_raw)`; (d) a `structural_forgery` fixture that cannot actually be forged (content-addressing) correctly yields `observed_raw === expected_raw` → `survived` — that is the honest headline result; (e) each finding is signed with the committed `INSECURE_FIXTURE_ONLY_vrta.pem` key via `signFinding`. The four `fable_adaptive` fixtures are **frozen pre-captured Fable payloads replayed deterministically** — they are ordinary committed Lane-A fixtures and are **never** mutated by the live lane; live Lane B (Task 12) is additive and sealed separately in `lane_b_capture` (P1-6). Write `charter.json` (signed with the charter key), one JSON per fixture, and `corpus-index.json`. `buildCorpus({ write })` returns `{ bundle, engine }` where `engine = (fixture) => evaluateChainSafe(fixture.payload.bundle).raw`.
+Model each family generator on the 4S fixture builder (`tools/simurgh-attestation/stage4s/node/build-stage4s-fixtures.mjs`), reusing its receipt/bundle constructors. Key rules: (a) every fixture's `expected_raw` is the 4S/kernel code the malformation *should* trigger (use the corrected P1-7 code map in the Interfaces above — a dropped co-signature is **101**, not 111/112); (b) `observed_raw = evaluateChainSafe(payload.bundle).raw`; (c) `outcome_class = classify(expected_raw, observed_raw)`; (d) a `structural_forgery` fixture that cannot actually be forged (content-addressing) correctly yields `observed_raw === expected_raw` → `survived` — that is the honest headline result; (e) each finding is signed with the committed `INSECURE_FIXTURE_ONLY_vrta.pem` key via `signFinding`. The four `fable_adaptive` fixtures are **frozen pre-captured Fable payloads replayed deterministically** — they are ordinary committed Lane-A fixtures and are **never** mutated by the live lane; live Lane B (Task 12) is additive and sealed separately in `lane_b_capture` (P1-6). Write `charter.json` — signed with the `vrta-charter` key and with `charter_key_digest = keyDigest(charterPub)` so the P0-2 binding holds; findings are signed with the `vrta` key so `finding_key_digest = keyDigest(vrtaPub)`. Write one JSON per fixture and `corpus-index.json`. `buildCorpus({ write })` returns `{ bundle, engine }` where `engine = (fixture) => evaluateChainSafe(fixture.payload.bundle).raw`.
 
 Represent the deterministic generator with a small seeded counter (no RNG): fixture content derives only from `attack_id` + fixed template, so two runs are byte-identical.
 
@@ -1413,7 +1439,7 @@ git commit -m "feat(4u): two-tier VRTA attestation builder + signer"
 - Test: extend `tests/unit/llmShield/stage4u/attestation.test.js` (verify half)
 
 **Interfaces:** (mirror 4S `verify-stage4s-attestation.mjs`)
-- Produces: `verifyAttestation(att, { tier, pubKeyPem }) -> { ok, raw, reason, tier }`. Public tier: charter binding, manifest-root recompute, corpus-count completeness, signature, ASR-ledger recompute — no engine. Audit tier: additionally re-run each fixture through `evaluateChainSafe` and re-derive `observed_raw` + `outcome_class`, catching 127/128/129. CLI `--tier public|audit --pubkey <pem>`; exit code = `raw`.
+- Produces: `verifyAttestation(att, { tier, attestationPubKeyPem, charterPubKeyPem, findingPubKeyPem }) -> { ok, raw, reason, tier }`. **Three distinct keys (P0-1)** — the attestation and findings are signed by `vrta.pem`, the charter by `vrta-charter.pem`; one ambiguous `pubKeyPem` could not verify both. Public tier: attestation signature → `attestationPubKeyPem`; charter signature + binding → `charterPubKeyPem` (passed to `evaluateVrta` as `pubKeyPem`); finding signatures → `findingPubKeyPem`; plus manifest-root recompute, corpus-count completeness, 127/128, ASR-ledger recompute — no engine. Audit tier: additionally re-run each fixture through `evaluateChainSafe`, catching 129. CLI `--tier public|audit --pubkey <att.pem> --charter-pubkey <charter.pem> --finding-pubkey <finding.pem>` (`--finding-pubkey` defaults to `--pubkey`); exit code = `raw`.
 
 - [ ] **Step 1: Write the failing test**
 
@@ -1425,21 +1451,28 @@ import { readFileSync } from "node:fs";
 import { verifyAttestation } from "../../../../tools/simurgh-attestation/stage4u/node/verify-stage4u-attestation.mjs";
 import { signAttestation } from "../../../../tools/simurgh-attestation/stage4u/node/build-stage4u-attestation.mjs";
 
-const priv = crypto.createPrivateKey(readFileSync("tests/fixtures/llmShield/stage4u/test-keys/INSECURE_FIXTURE_ONLY_vrta.pem"));
+const KEYDIR = "tests/fixtures/llmShield/stage4u/test-keys/";
+const priv = crypto.createPrivateKey(readFileSync(KEYDIR + "INSECURE_FIXTURE_ONLY_vrta.pem")); // attestation + findings
 const pub = crypto.createPublicKey(priv).export({ type: "spki", format: "pem" }).toString();
+const charterPub = crypto.createPublicKey(crypto.createPrivateKey(readFileSync(KEYDIR + "INSECURE_FIXTURE_ONLY_vrta-charter.pem"))).export({ type: "spki", format: "pem" }).toString();
 const att = JSON.parse(readFileSync("docs/research/llm-shield/evidence/stage-4u/attestation/vrta-attestation.json", "utf8"));
+const K = { attestationPubKeyPem: pub, charterPubKeyPem: charterPub, findingPubKeyPem: pub };
 
 test("public tier verifies GREEN", () => {
-  assert.equal(verifyAttestation(att, { tier: "public", pubKeyPem: pub }).raw, 0);
+  assert.equal(verifyAttestation(att, { tier: "public", ...K }).raw, 0);
 });
 test("audit tier verifies GREEN (engine re-run)", () => {
-  assert.equal(verifyAttestation(att, { tier: "audit", pubKeyPem: pub }).raw, 0);
+  assert.equal(verifyAttestation(att, { tier: "audit", ...K }).raw, 0);
+});
+test("charter key and attestation key are NOT interchangeable (P0-1 key binding)", () => {
+  // Passing the attestation key as the charter key must fail charter verification.
+  assert.notEqual(verifyAttestation(att, { tier: "public", attestationPubKeyPem: pub, charterPubKeyPem: pub, findingPubKeyPem: pub }).raw, 0);
 });
 // P1-10 — prove the two tiers are genuinely different, not just "signatures work".
 test("tamper WITHOUT re-sign → PUBLIC tier catches 120 (signature)", () => {
   const t = JSON.parse(JSON.stringify(att));
   t.per_fixture[0].observed_raw = 0;
-  assert.equal(verifyAttestation(t, { tier: "public", pubKeyPem: pub }).raw, 120);
+  assert.equal(verifyAttestation(t, { tier: "public", ...K }).raw, 120);
 });
 test("tamper a survived fixture's recorded recompute to a wrong-but-self-consistent value, THEN re-sign → PUBLIC passes, AUDIT catches 129", () => {
   // Keep the finding internally consistent (self === recompute, class stays
@@ -1451,8 +1484,8 @@ test("tamper a survived fixture's recorded recompute to a wrong-but-self-consist
   const i = t.per_fixture.findIndex((p) => p.outcome_class === "survived" && p.observed_raw !== 0 && p.observed_raw !== 105);
   t.per_fixture[i].observed_raw = 105;   // wrong, but non-zero → still classifies "survived"
   const resigned = signAttestation({ ...t, signature: undefined }, priv);
-  assert.equal(verifyAttestation(resigned, { tier: "public", pubKeyPem: pub }).raw, 0);   // public can't re-run → passes
-  assert.equal(verifyAttestation(resigned, { tier: "audit", pubKeyPem: pub }).raw, 129);  // engine re-run exposes the lie
+  assert.equal(verifyAttestation(resigned, { tier: "public", ...K }).raw, 0);   // public can't re-run → passes
+  assert.equal(verifyAttestation(resigned, { tier: "audit", ...K }).raw, 129);  // engine re-run exposes the lie
 });
 ```
 
@@ -1598,7 +1631,7 @@ git commit -m "feat(4u): Lean — charterBindingSound + asrMonotone (No Silent B
 - Modify: `scripts/check-e2e.sh` (wire the 4U row here — the reproduce script now exists, P0-2)
 
 **Interfaces:**
-- A 9-step verify-only script: (1) rebuild corpus to a temp dir and `cmp` fixture digests against committed; (2) `verify-stage4u-attestation --tier public`; (3) `--tier audit`; (4) recompute ASR ledger and compare; (5) python parity; (6) Lane B verify-only replay; (7) **tamper the attestation's `epoch` field (a guaranteed field, added in Task 9, P2-4) → expect a non-zero VRTA code (120, broken signature)**; (8) guarded `lean proofs/stage4u/NoSilentBypass.lean` (skip if `lean` absent); (9) print `REPRODUCE OK`. Byte-stable under Node 26.
+- A 9-step verify-only script (all `verify-stage4u-attestation` calls pass the three pubkeys `--pubkey …vrta.pub.pem --charter-pubkey …vrta-charter.pub.pem --finding-pubkey …vrta.pub.pem`, P0-1): (1) rebuild corpus to a temp dir and `cmp` fixture digests against committed; (2) `verify-stage4u-attestation --tier public`; (3) `--tier audit`; (4) recompute ASR ledger and compare; (5) python parity; (6) Lane B verify-only replay; (7) **tamper the attestation's `epoch` field (a guaranteed field, added in Task 9, P2-4) → expect a non-zero VRTA code (120, broken signature)**; (8) guarded `lean proofs/stage4u/NoSilentBypass.lean` (skip if `lean` absent); (9) print `REPRODUCE OK`. Byte-stable under Node 26.
 
 - [ ] **Step 1: Write the script** following `scripts/reproduce-llm-shield-stage4s.sh` structure (guarded lean, verify-only Lane B, `set -euo pipefail`).
 
