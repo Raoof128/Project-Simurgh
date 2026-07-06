@@ -104,6 +104,7 @@ hop requires BOTH neighbours to withhold their signatures off-ledger).
   "schema": "simurgh.vdcc_hop_receipt.v1",
   "epoch": "<4N window anchor>",
   "run_id": "<run identifier>",
+  "window_id": "<delegation window identifier>",
   "root_receipt_digest": "sha256:<digest of the root receipt>",
   "parent_receipt_digest": "sha256:<digest of parent hop receipt>",
   "delegator_key_digest": "sha256:<...>",
@@ -174,12 +175,46 @@ double-dipping attack alive and testable:
 
 ### 3.4 Chain bundle — `simurgh.vdcc_chain_bundle.v1`
 
-The tree: all hop receipts, all fan-out commitments, all crossing artifacts,
-the local-spend ledger per node, the Merkle bundle root (§10), non-claims,
-known limitations, rails, and the stage signature (stage4s Ed25519 key, own
-keypair per standing practice; fixture keys under
-`test-keys/INSECURE_FIXTURE_ONLY_stage4s.pem`, path-allowlisted in BOTH the
-3M and 3O private-key audits).
+Four sealed artifact arrays plus key material — the structure is normative:
+
+```json
+{
+  "schema": "simurgh.vdcc_chain_bundle.v1",
+  "epoch": "<4N window anchor>",
+  "run_id": "<run identifier>",
+  "tree_receipts": ["<hop receipts forming the delegation tree>"],
+  "detached_receipts": ["<validly signed receipts NOT claimed into the tree>"],
+  "fanout_commitments": ["<one per delegator node per window>"],
+  "crossing_artifacts": ["<authority crossings>"],
+  "public_key_index": {
+    "sha256:<key_digest>": "-----BEGIN PUBLIC KEY-----\n..."
+  },
+  "spine_index": ["<declared 4P/4O/4Q digests>"],
+  "bundle_merkle_root": "sha256:<...>",
+  "non_claims": ["..."],
+  "known_limitations": ["..."],
+  "rails": ["..."],
+  "signature": "<stage signature>"
+}
+```
+
+- **`public_key_index` (offline-verifier requirement):** every key digest
+  referenced by any receipt or crossing MUST resolve to PEM material in the
+  index. A missing or malformed index ⇒ raw 100
+  (`public_key_index_missing_or_malformed`); a referenced digest absent from
+  the index makes that signature UNVERIFIABLE ⇒ raw 101 fail-closed
+  (`referenced_public_key_unverifiable`). Without this the
+  producer-independent offline verifier has no key material — the index IS the
+  trust-no-participant story.
+- **`detached_receipts` are sealed:** `bundle_merkle_root` covers
+  `tree_receipts + detached_receipts + fanout_commitments +
+crossing_artifacts` — a producer cannot add or remove a detached receipt
+  without breaking the root. Tree invariants (§5) run ONLY over
+  `tree_receipts`; raw 111 checks `detached_receipts`. This keeps 111
+  reachable AND sealed.
+- Stage signature: stage4s Ed25519 key, own keypair per standing practice;
+  fixture keys under `test-keys/INSECURE_FIXTURE_ONLY_stage4s_*.pem`,
+  path-allowlisted in BOTH the 3M and 3O private-key audits.
 
 ## 4. Window-close fan-out commitment (the 4L move, lifted to trees)
 
@@ -188,7 +223,10 @@ keypair per standing practice; fixture keys under
 > fan-out commitments are invalid because they cannot bind concrete child
 > receipt digests.
 
-The verifier recomputes, for EVERY node:
+The verifier groups observed children by **`(parent_receipt_digest,
+window_id)`** — hop receipts carry `window_id` precisely so that multi-window
+delegation inside one epoch stays crisp — and recomputes, for EVERY node and
+window:
 
 ```text
 observed_child_count      == declared_child_count            (else raw 106)
@@ -345,7 +383,24 @@ reachable:
 unverifiable required signature reaches **raw 101**, never 100; a MISSING
 signature field is schema-malformed and reaches **raw 100**. The
 single-signature-hop fixture (one neighbour withholds) therefore carries an
-empty-string second signature to honestly reach 101.
+empty-string second signature to honestly reach 101. A referenced key digest
+absent from `public_key_index` is unverifiable ⇒ **raw 101**
+(`referenced_public_key_unverifiable`); a missing/malformed index itself ⇒
+**raw 100** (`public_key_index_missing_or_malformed`).
+
+**Binding-deferral rule (keeps 112/111 reachable, never masked):** the scope
+(108) and flux (110/109) phases evaluate ONLY crossings whose
+`bound_receipt_digest` resolves to a verified tree node. Receiptless,
+unknown, or detached-bound crossings are deferred UNTOUCHED to the binding
+phase, where:
+
+- **112** = empty, missing, or unknown `bound_receipt_digest`;
+- **111** = the digest exists as a validly signed receipt in
+  `detached_receipts` but is absent from the verified tree and from every
+  committed child set.
+
+Without this rule a ghost-bound crossing would crash the scope/flux
+arithmetic first and 112/111 would go flaky or dead.
 
 **118 reachability:** `internal_fail_closed` is reached only by a
 typed-wrapper fixture that injects an internal verifier exception / unknown
