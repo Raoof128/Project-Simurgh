@@ -51,7 +51,7 @@ const KEYS = {
 
 // Honest chain root->A, root->B, A->C, then per-spec mutations. Mirrors the
 // chainCore adversarial matrix but with deterministic committed keys.
-function build(spec = {}) {
+export function build(spec = {}) {
   const pki = {};
   for (const k of Object.values(KEYS)) pki[k.digest] = k.pem;
   const mkR = (o, dPriv, ePriv) => dualSign(buildHopReceipt(o), dPriv, ePriv);
@@ -245,7 +245,7 @@ function build(spec = {}) {
 }
 
 // name, expected raw, spec.
-const CASES = [
+export const CASES = [
   ["honest-tree", 0, {}],
   [
     "missing-signature-field",
@@ -309,7 +309,7 @@ const CASES = [
 ];
 
 // Split-brain needs a hand-built second receipt with the same delegatee under B.
-function buildSplitBrain() {
+export function buildSplitBrain() {
   const pki = {};
   for (const k of Object.values(KEYS)) pki[k.digest] = k.pem;
   const mkR = (o, dPriv, ePriv) => dualSign(buildHopReceipt(o), dPriv, ePriv);
