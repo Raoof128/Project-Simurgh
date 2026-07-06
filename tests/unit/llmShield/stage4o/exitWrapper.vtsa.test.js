@@ -34,7 +34,7 @@ test("documented check order is normative, not numeric", () => {
 test("all twelve map to run-level 1; unknown still fails closed to 3", () => {
   for (let raw = 55; raw <= 66; raw++) assert.equal(RUN_LEVEL_BY_RAW[raw], 1);
   // 67-79 are Stage 4P VOCA, 80-89 are Stage 4Q VFR, 90-99 are Stage 4R PCCC codes
-  // (mapped to 1); 100+ is unknown.
-  assert.equal(stage4CodeForRawCode(100), 3);
+  // (mapped to 1); 119+ is unknown (100-118 are Stage 4S VDCC).
+  assert.equal(stage4CodeForRawCode(999), 3);
   assert.equal(stage4CodeForRawCode(29), 3);
 });

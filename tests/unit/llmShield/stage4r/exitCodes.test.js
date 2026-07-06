@@ -51,7 +51,7 @@ test("subreason ledgers are frozen (spec §6.2, §6.3)", () => {
   ]);
 });
 
-test("registry maps 90-99 to stage-4 code 1 and 100 is unknown (3)", () => {
+test("registry maps 90-99 to stage-4 code 1 and 999 is unknown (3)", () => {
   for (let raw = 90; raw <= 99; raw++) assert.equal(stage4CodeForRawCode(raw), 1);
-  assert.equal(stage4CodeForRawCode(100), 3);
+  assert.equal(stage4CodeForRawCode(999), 3);
 });

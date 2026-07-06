@@ -21,7 +21,7 @@ test("vxd raw codes are 43-46 and map to run-level 1", () => {
 
 test("raw 39 stays reserved and unknown codes fail closed to 3", () => {
   assert.equal(stage4CodeForRawCode(39), 3);
-  assert.equal(stage4CodeForRawCode(100), 3);
+  assert.equal(stage4CodeForRawCode(999), 3);
   assert.equal(stage4CodeForRawCode(-1), 3);
 });
 
