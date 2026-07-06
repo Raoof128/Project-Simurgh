@@ -68,7 +68,14 @@ run_step 98 node --test tests/e2e/llmShield/stage4r/laneb.test.js
 
 echo "[stage4r] [9/10] JS<->Python parity + Lean 6 theorems"
 run_step 93 node --test tests/unit/llmShield/stage4r/parity.test.js
-run_step 90 bash -c 'cd proofs/stage4r && lean NoPublicHerdToken.lean'
+# Lean is verified by the dedicated stage-4-lean-proofs CI job (which installs
+# the toolchain). Only build it here if `lean` is on PATH, so the offline
+# quality gate — which has no Lean toolchain — does not fail on a missing binary.
+if command -v lean >/dev/null 2>&1; then
+  run_step 90 bash -c 'cd proofs/stage4r && lean NoPublicHerdToken.lean'
+else
+  echo "[stage4r] lean not on PATH — skipping proof build (covered by the lean-check CI job)"
+fi
 
 echo "[stage4r] [10/10] scans: forbidden live scalar, herd token, key audits, prettier"
 SA="$(cat "$KEYDIR/INSECURE_FIXTURE_ONLY_operator-alpha-scalar.hex")"
