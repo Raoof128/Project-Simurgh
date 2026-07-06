@@ -549,3 +549,13 @@ export const RUN_LEVEL_BY_RAW = Object.freeze({
 export function stage4CodeForRawCode(code) {
   return Object.prototype.hasOwnProperty.call(RUN_LEVEL_BY_RAW, code) ? RUN_LEVEL_BY_RAW[code] : 3;
 }
+
+// The ONE canonical "definitely-unknown" raw code for tests that assert the
+// wrapper fails closed to 3. It sits permanently outside every planned allocation
+// block (which grow upward from the 100s), so a future stage adding real codes can
+// never turn this probe into a real code. ALWAYS probe unknown-code behaviour with
+// this constant — never a bare literal just above the current range (that literal
+// becomes a real code next stage; that mistake broke CI on 4R and 4S). The
+// probe-hygiene test (tests/unit/llmShield/exitCodeProbeHygiene.test.js) enforces
+// this repo-wide.
+export const UNKNOWN_RAW_PROBE = 999;
