@@ -72,10 +72,10 @@ Three gaps in the July-2026 field this closes:
    artifact.
 2. **Red-teams can hide their own wins.** A campaign can quietly drop the attacks
    that succeeded. 4U turns the project's **Completeness Invariant** inward: the
-   red-team cannot omit a finding without a verifier failure (code 123/124).
+   red-team cannot omit a finding without a verifier failure (code 125/126).
 3. **Authorization for offensive testing is never machine-checkable.** Scope and
    ethics live in a PDF. 4U signs them into a charter that every attack is bound
-   to (code 119/120/127).
+   to (code 120/121/122).
 
 The one-sentence moat: **others say they red-teamed; 4U proves what was attacked,
 proves the honest result, and carries bounded no-harm evidence over its declared
@@ -283,7 +283,7 @@ task genuinely and legibly benign so a well-aligned model correctly permits it:
   Lane B is additive live signal, never a dependency.
 - **Legible, permitted use.** Live calls run on our own account under
   defensive-security permitted use, with the charter's signed denial-of-wallet
-  caps (max turns/tokens/spend; breach → **126**).
+  caps (max turns/tokens/spend; breach → **123**).
 
 The finding schema therefore admits three outcome classes —
 `survived` (attack correctly caught), `bypass` (confirmed false-GREEN /
