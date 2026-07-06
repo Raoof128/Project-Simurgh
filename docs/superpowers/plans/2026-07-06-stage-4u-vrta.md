@@ -79,6 +79,7 @@ import {
   VRTA_RAW_CODES,
   VRTA_CHECK_ORDER,
   VRTA_REASONS_119,
+  VRTA_REASONS_120,
   RUN_LEVEL_BY_RAW,
   UNKNOWN_RAW_PROBE,
 } from "../../../../tools/simurgh-attestation/stage4h/exitCodes.mjs";
@@ -112,6 +113,15 @@ test("named codes match the spec map", () => {
   assert.equal(VRTA_RAW_CODES.SEVERITY_UNDECLARED, 131);
   assert.equal(VRTA_RAW_CODES.INTERNAL_FAIL_CLOSED, 132);
   assert.equal(UNKNOWN_RAW_PROBE, 999);
+});
+
+test("VRTA_REASONS_120 covers the signature-invalid species (P1-1)", () => {
+  assert.deepEqual(VRTA_REASONS_120, [
+    "charter_signature_invalid",
+    "finding_signature_invalid",
+    "attestation_signature_invalid",
+  ]);
+  assert.ok(Object.isFrozen(VRTA_REASONS_120));
 });
 ```
 
@@ -170,7 +180,7 @@ Then in the `RUN_LEVEL_BY_RAW` object add 14 rows (after the last existing row, 
 - [ ] **Step 4: Run test to verify it passes**
 
 Run: `node --test tests/unit/llmShield/stage4u/exitCodes.test.js`
-Expected: PASS (4/4).
+Expected: PASS (5/5).
 
 - [ ] **Step 5: Regenerate the 4H exit-map goldens (both copies)**
 
@@ -424,6 +434,17 @@ test("missing schema -> 119", () => {
   const c = mk(); delete c.schema;
   assert.equal(verifyCharterShapeAndSignature(c, { pubKeyPem: pubPem }).raw, 119);
 });
+test("re-signed charter declaring different family counts -> 119 (canonical lock, P0-1)", () => {
+  const c = mk();
+  c.attack_family_counts = { ...FAMILY_COUNTS, ghost_hop: 1 }; // shrink the campaign
+  const resigned = signCharter({ ...c, signature: undefined }, priv);
+  assert.equal(verifyCharterShapeAndSignature(resigned, { pubKeyPem: pubPem }).raw, 119);
+});
+test("re-signed charter with mutated rails -> 119 (canonical lock)", () => {
+  const c = mk(); c.rails = c.rails.slice(0, 5);
+  const resigned = signCharter({ ...c, signature: undefined }, priv);
+  assert.equal(verifyCharterShapeAndSignature(resigned, { pubKeyPem: pubPem }).raw, 119);
+});
 test("charterDigest ignores the signature field", () => {
   const c = mk();
   const d1 = charterDigest(c);
@@ -447,9 +468,11 @@ Expected: FAIL — module not found.
 import crypto from "node:crypto";
 import { canonicalJson, recordDigest, merkleRootSorted } from "../../stage4m/core/canonical.mjs";
 import {
-  SCHEMAS, DOMAINS, ATTACK_FAMILIES,
+  SCHEMAS, DOMAINS, ATTACK_FAMILIES, CAMPAIGN_SEED, FAMILY_COUNTS,
   VRTA_NON_CLAIMS, VRTA_KNOWN_LIMITATIONS, VRTA_RAILS,
 } from "../constants.mjs";
+
+const DIGEST_RE = /^sha256:[0-9a-f]{64}$/;
 
 // Deterministic, stable attack ids: "<family>#<n>" for n in [0, count).
 export function deriveAttackIds(seed, familyCounts) {
@@ -501,16 +524,24 @@ export function signCharter(charter, privKey) {
 
 const REQUIRED = [
   "schema", "campaign_seed", "attack_family_counts", "attack_manifest_root",
-  "declared_attack_count", "caps", "non_claims", "known_limitations", "rails", "signature",
+  "declared_attack_count", "caps", "charter_key_digest", "non_claims", "known_limitations", "rails", "signature",
 ];
 
 // L1 — schema (119) + signature (120). Returns NOTHING later than 120 (P0-4).
+// Enforces the CANONICAL campaign constants (P0-1): a re-signed charter cannot
+// silently declare a different seed / family counts / non-claims / limitations /
+// rails and still pass on a self-consistent manifest root.
 export function verifyCharterShapeAndSignature(charter, { pubKeyPem }) {
-  if (!charter || typeof charter !== "object") return { raw: 119, reason: "charter_schema_invalid" };
-  for (const k of REQUIRED) {
-    if (!(k in charter)) return { raw: 119, reason: "charter_schema_invalid", detail: { missing: k } };
-  }
-  if (charter.schema !== SCHEMAS.CHARTER) return { raw: 119, reason: "charter_schema_invalid" };
+  const bad = (detail) => ({ raw: 119, reason: "charter_schema_invalid", detail });
+  if (!charter || typeof charter !== "object") return bad({ shape: true });
+  for (const k of REQUIRED) if (!(k in charter)) return bad({ missing: k });
+  if (charter.schema !== SCHEMAS.CHARTER) return bad({ schema: charter.schema });
+  if (charter.campaign_seed !== CAMPAIGN_SEED) return bad({ campaign_seed: charter.campaign_seed });
+  if (canonicalJson(charter.attack_family_counts) !== canonicalJson(FAMILY_COUNTS)) return bad({ attack_family_counts: true });
+  if (canonicalJson(charter.non_claims) !== canonicalJson(VRTA_NON_CLAIMS)) return bad({ non_claims: true });
+  if (canonicalJson(charter.known_limitations) !== canonicalJson(VRTA_KNOWN_LIMITATIONS)) return bad({ known_limitations: true });
+  if (canonicalJson(charter.rails) !== canonicalJson(VRTA_RAILS)) return bad({ rails: true });
+  if (!DIGEST_RE.test(charter.charter_key_digest)) return bad({ charter_key_digest: true });
   let sigOk = false;
   try {
     sigOk = crypto.verify(
@@ -540,7 +571,7 @@ export function verifyManifestRoot(charter) {
 - [ ] **Step 5: Run to verify it passes**
 
 Run: `node --test tests/unit/llmShield/stage4u/charter.test.js`
-Expected: PASS (6/6).
+Expected: PASS (8/8).
 
 - [ ] **Step 6: Commit**
 
@@ -696,7 +727,7 @@ export function nonMaliceViolation(fixture) {
 - [ ] **Step 4: Run to verify it passes**
 
 Run: `node --test tests/unit/llmShield/stage4u/attackModel.test.js`
-Expected: PASS (5/5).
+Expected: PASS (9/9).
 
 - [ ] **Step 5: Commit**
 
@@ -903,7 +934,7 @@ export function laneBStats(laneBCapture) {
 - [ ] **Step 4: Run to verify it passes**
 
 Run: `node --test tests/unit/llmShield/stage4u/findingLedger.test.js`
-Expected: PASS (5/5).
+Expected: PASS (8/8).
 
 - [ ] **Step 5: Commit**
 
@@ -1014,7 +1045,7 @@ export function verifyFindingReproduction(finding, freshRaw) {
 - [ ] **Step 4: Run to verify it passes**
 
 Run: `node --test tests/unit/llmShield/stage4u/dualSignal.test.js`
-Expected: PASS (6/6).
+Expected: PASS (7/7).
 
 - [ ] **Step 5: Commit**
 
@@ -1032,7 +1063,6 @@ git commit -m "feat(4u): dual-signal lie detector — independent 127/128/129"
 - Test: `tests/unit/llmShield/stage4u/vrtaCore.test.js`
 
 **Interfaces:**
-- Consumes: `verifyCharter`, `charterDigest` (Task 3); `validateFixture`, `bindsCharter`, `nonMaliceViolation` (Task 4); `verifyLedger`, `recomputeAsr` (Task 5); `verifyFinding` (Task 6); `VRTA_CHECK_ORDER`, `VRTA_RAW_CODES`.
 - Consumes: `verifyCharterShapeAndSignature`, `verifyManifestRoot`, `charterDigest` (Task 3); `validateFixture`, `bindsCharter`, `nonMaliceViolation` (Task 4); `validateFindingRecord`, `verifyFindingSignature`, `verifyLedger`, `recomputeAsr` (Task 5); `verifyFindingReport`, `verifyFindingReproduction` (Task 6).
 - Produces:
   - `evaluateVrta(bundle, { pubKeyPem, findingPubKeyPem, engine, capBreaches }) -> { raw, reason, detail? }` — runs the frozen order 119→132; returns the first non-zero, else `{raw:0}`. **Public tier** (no `engine`) still runs 127/128 via `verifyFindingReport` (recorded fields only, P0-8); **audit tier** (with `engine(fixture) -> raw`) additionally runs 129. `findingPubKeyPem` defaults to `pubKeyPem`. `capBreaches` (array) drives 123. Bundle carries `{ charter, attack_fixtures, finding_records, lane_b_capture, asr }` where `asr` is the exact-rational object from `recomputeAsr` (P1-8).
@@ -1195,7 +1225,7 @@ export function evaluateVrtaSafe(bundle, opts) {
 - [ ] **Step 4: Run to verify it passes**
 
 Run: `node --test tests/unit/llmShield/stage4u/vrtaCore.test.js`
-Expected: PASS (7/7).
+Expected: PASS (9/9).
 
 - [ ] **Step 5: Commit**
 
@@ -1310,7 +1340,7 @@ git commit -m "feat(4u): Lane A offline attack corpus — 58 seed-derived fixtur
 
 **Files:**
 - Create: `tools/simurgh-attestation/stage4u/node/build-stage4u-attestation.mjs`
-- Create key: `INSECURE_FIXTURE_ONLY_vrta.pem` (attestation signer)
+- Reuse key: `INSECURE_FIXTURE_ONLY_vrta.pem` (attestation signer — already created in Task 8; do not regenerate)
 - Test: `tests/unit/llmShield/stage4u/attestation.test.js` (build half)
 - Output: `docs/research/llm-shield/evidence/stage-4u/attestation/vrta-attestation.json`
 
@@ -1442,7 +1472,7 @@ git commit -m "feat(4u): two-tier VRTA attestation verifier + CLI"
 - Test: `tests/unit/llmShield/stage4u/parity.test.js` (drives the python via subprocess and compares)
 
 **Interfaces:**
-- Produces (Python): `canonical_json(obj)` (matches JS: `json.dumps(sort_keys=True, separators=(",",":"), ensure_ascii=False)`), `record_digest(obj)`, `classify(expected, observed)`, `recompute_asr(findings)`. Reads the corpus index from `sys.argv[1]` **defaulting to the committed path** `docs/research/llm-shield/evidence/stage-4u/fixtures/corpus-index.json` (P1-11 — no-arg invocation works), recomputes `classify` + exact-rational ASR, prints JSON `{ asr, over_refusal_rate, per_fixture:[{attack_id, outcome_class}] }`.
+- Produces (Python): `canonical_json(obj)` (matches JS: `json.dumps(sort_keys=True, separators=(",",":"), ensure_ascii=False)`), `record_digest(obj)`, `classify(expected, observed)`, `recompute_asr(findings)`. Reads the corpus index from `sys.argv[1]` **defaulting to the committed path** `docs/research/llm-shield/evidence/stage-4u/fixtures/corpus-index.json` (P1-11 — no-arg invocation works), recomputes `classify` + exact-rational ASR, prints JSON `{ attack_success_rate: { confirmed_bypass, executed_non_refusal, ratio }, per_fixture:[{attack_id, outcome_class}] }`. It does **not** emit `over_refusal_rate` — the offline 58-fixture corpus has no Lane B, so it must not pretend to have refusal stats (P0-2).
 - Parity contract: Python `classify`/ASR/`record_digest` must equal the JS values for every non-signature field (Python has no Ed25519 — signatures are excluded from parity, exactly as 4S excludes them).
 
 - [ ] **Step 1: Write the failing test**
@@ -1454,12 +1484,11 @@ import { execFileSync } from "node:child_process";
 import { buildCorpus } from "../../../../tools/simurgh-attestation/stage4u/node/build-stage4u-corpus.mjs";
 import { recomputeAsr } from "../../../../tools/simurgh-attestation/stage4u/core/findingLedger.mjs";
 
-test("python parity: classify + ASR match JS on the whole corpus", () => {
+test("python parity: classify + exact-rational ASR match JS on the whole corpus", () => {
   const { bundle } = buildCorpus({ write: false });
-  const js = recomputeAsr(bundle.finding_records);
+  const js = recomputeAsr(bundle.finding_records).attack_success_rate; // { confirmed_bypass, executed_non_refusal, ratio }
   const out = JSON.parse(execFileSync("python3", ["tools/simurgh-attestation/stage4u/python/vrta_parity.py"], { encoding: "utf8" }));
-  assert.equal(out.asr, js.asr);
-  assert.equal(out.over_refusal_rate, js.over_refusal_rate);
+  assert.deepEqual(out.attack_success_rate, js); // exact object equality, no float
   for (const p of out.per_fixture) {
     const f = bundle.finding_records.find((x) => x.attack_id === p.attack_id);
     assert.equal(p.outcome_class, f.outcome_class);
