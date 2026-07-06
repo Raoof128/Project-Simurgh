@@ -4,8 +4,12 @@
 
 - **Date:** 2026-07-06
 - **Status:** DESIGN — approved section-by-section; implementation follows the
-  written plan, not this doc alone.
-- **Subtitle:** Two-operator X25519 match ceremony with no public herd token.
+  written plan, not this doc alone. AMENDED 2026-07-06 (same day, approved):
+  Amendment 1 pays the DLEQ debt in-stage (§3.5); Amendment 2 adds the window
+  match census (§8.5); Amendment 3 ships the BYO-Operator Kit (§8.6); CERA
+  staged for closeout (§8.7).
+- **Subtitle:** Two-operator curve25519 match ceremony with no public herd
+  token.
 - **Roadmap position:** 4R pays 4P's signed
   `private_custody_corroboration_deferred` non-claim (the VOPRF/PSI private
   matching upgrade) and consumes 4Q VFR receipts to gate the EXPORT of match
@@ -42,9 +46,13 @@ cardinality discipline lifted to match slots.
 
 ### 1.4 Naming (reviewer-safe, frozen)
 
-> **PCCC Real-DDH X25519 Match Core with epoch-bound unlinkability.**
+> **PCCC Real-DDH Curve25519 Match Core (Edwards form), DLEQ-verified, with
+> epoch-bound unlinkability.**
 
-Never "full VOPRF", never "RFC-9380 compliant hash-to-curve".
+Never "full VOPRF", never "RFC-9380 compliant hash-to-curve", never
+"RFC 9497". (Amendment 1 renamed from "X25519 Match Core": the sigma
+protocol needs group access the clamped X25519 API cannot give — §3.5. The
+group is unchanged; only the coordinate form is Edwards.)
 
 ## 2. Non-claims and signed limitations
 
@@ -62,35 +70,52 @@ not_cross_epoch_linkability_claim
 
 ### 2.2 known_limitations (3U pattern — signed in ink, not footnoted)
 
+The original design carried three deferral pellets
+(`transcript_verification_is_cross_attestation_not_dleq_proof`,
+`colluding_operators_can_fabricate_match_without_dleq`,
+`dleq_or_voprf_upgrade_deferred_to_4r_x`). Amendment 1 (§3.5) PAYS that
+debt in-stage — superseded same day, recorded here, never silently deleted.
+The signed set is now:
+
 ```text
-transcript_verification_is_cross_attestation_not_dleq_proof
-colluding_operators_can_fabricate_match_without_dleq
-dleq_or_voprf_upgrade_deferred_to_4r_x
+public_tier_remains_digest_level_by_design
+dleq_is_fiat_shamir_random_oracle_model
+curve_arithmetic_is_reference_grade_not_constant_time
+not_a_voprf_rfc9497_protocol
+cross_org_operator_b_not_yet_exercised
 ```
 
-A colluding pair can fabricate a match; a single liar cannot (§3.3, §8).
+With valid DLEQ proofs the audit tier verifies the ceremony UNILATERALLY: a
+single liar dies at commit-reveal, and a colluding pair can no longer
+fabricate a match — a fabricated `z` has no valid proof (§6.3).
 
 ## 3. Normative match core contract (frozen)
 
 ### 3.1 Core shape
 
 ```text
-Hc = H_to_x25519_u("simurgh.pccc.class.v1", epoch, custody_class_digest)
+Hc = H_to_curve_point("simurgh.pccc.class.v1", epoch, custody_class_digest)
 
-Party A:  mA = X25519(a, Hc)
-Party B:  mB = X25519(b, Hc)
+Party A:  mA = a·Hc
+Party B:  mB = b·Hc
 
-A computes:  zA = X25519(a, mB)
-B computes:  zB = X25519(b, mA)
+A computes:  zA = a·mB
+B computes:  zB = b·mA
 
 MATCH ⇔ H("simurgh.pccc.match.v1", epoch, pair_id, zA)
       = H("simurgh.pccc.match.v1", epoch, pair_id, zB)
 ```
 
-Implemented with Node core `crypto` (JWK OKP import of the hashed
-u-coordinate; `crypto.diffieHellman`) and, for parity, the existing Python
-`cryptography` X25519 primitives. ZERO new dependencies. Feasibility probed
-2026-07-06: commutes, deterministic, nonzero.
+Group operations run on an in-repo Edwards25519 REFERENCE implementation
+(pure BigInt JS + pure Python, ~200 lines each, ZERO new dependencies),
+cross-validated against RFC 8032 test vectors and Node core Ed25519 (§14).
+Amendment 1 moved the core off the X25519 API: the clamped X25519 interface
+exposes scalar-mult only, which blocks the Chaum-Pedersen sigma protocol;
+the group is unchanged (curve25519), only the coordinate form is Edwards.
+Feasibility probed 2026-07-06 twice: X25519 double-masking (commutes,
+deterministic, nonzero) and pure-BigInt Edwards DLEQ (honest proof
+verifies, forged mask rejected, z-line proof verifies, 42 ms for three
+prove+verify cycles).
 
 ### 3.2 Hard locks
 
@@ -134,7 +159,7 @@ Phase failures are raw 90 subreasons (§6.2) — zero new codes.
 pair_id               = H("simurgh.pccc.pair.v1", epoch, sorted_operator_key_digests)
 pair_match_commitment = H("simurgh.pccc.match_commit.v1", epoch, pair_id, match, transcript_digest)
 ephemeral_scalar_public_digest
-                      = H("simurgh.pccc.ephemeral_pub.v1", epoch, role, X25519(a, basepoint))
+                      = H("simurgh.pccc.ephemeral_pub.v1", epoch, role, a·G)
 ```
 
 `epoch` sits inside `pair_id`, and `pair_id` sits inside the token domain,
@@ -143,17 +168,41 @@ Two pairs sharing a custody class in the same epoch still produce unequal
 tokens. `ephemeral_scalar_public_digest` is verifier-only sealed-packet
 material (§5.3), never public.
 
+### 3.5 DLEQ proofs — the debt paid in-stage (Amendment 1)
+
+Each operator attaches TWO Chaum-Pedersen DLEQ proofs to the sealed audit
+packet (never the public bundle):
+
+```text
+DLEQ_mask: log_G(epk) == log_Hc(mask)        same scalar built my mask
+DLEQ_z:    log_G(epk) == log_peer_mask(z)    same scalar built my z
+```
+
+Non-interactive via Fiat-Shamir: SHA-512 challenge under domain
+`"simurgh.pccc.dleq.v1"`, binding
+`{G, relation base point, epk, target point, R1, R2, epoch, run_id,
+pair_id, role}`. The audit verifier checks both proofs per operator,
+recomputes both tokens from the packet-carried `z` values, and decides
+match/non-match UNILATERALLY. Consequences:
+
+- a fabricated `z` has no valid `DLEQ_z` → raw 93 subreason (§6.3);
+- `z` moves INTO the sealed packet (§5.3) — still never public, still
+  epoch-bound;
+- prover-side scalar arithmetic is reference-grade BigInt, not constant
+  time — railed; acceptable because the prover is our own operator process
+  and the verifier touches packet/public values only.
+
 ## 4. Architecture
 
 ```text
 Lane A (deterministic corpus)          Lane B (live ceremony)
 ─────────────────────────────          ──────────────────────
 fixture custody-class corpus           operator-a process        operator-b process
-(committed 4P evidence classes         (own ephemeral X25519     (own ephemeral X25519
+(committed 4P evidence classes         (own ephemeral scalar     (own ephemeral scalar
  + synthetic multi-op classes)          + own Ed25519 identity)   + own Ed25519 identity)
         │                                     └── localhost mask exchange ──┘
         ▼                                                  │
-pcccCore (pure): hash-to-u ─ double-mask ─ commit/reveal ─ match token ─ transcript
+pcccCore (pure): hash-to-point ─ double-mask ─ DLEQ ─ commit/reveal ─ token ─ transcript
         │                                                  │
         ▼                                                  ▼
    match records                              signed ceremony capture
@@ -193,26 +242,27 @@ can self-approve the export crossing.
 
 ### 4.3 Two-tier verification (honesty split)
 
-Without DLEQ (deferred with VOPRF), an offline verifier cannot unilaterally
-prove `z = scalar × peer_mask` was honestly computed. Therefore:
-
 - **Public tier** verifies the disclosure record: schema, signatures, epoch
-  binding, digest commitments, herd-token scan, VFR receipt. Digest-level.
-- **Audit tier** verifies the ceremony from the sealed transcript packet:
-  phase order, commitment openings, token equality/inequality, all-zero
-  rejection, absence of raw mask/z material in public evidence, ephemeral
-  public-key digest ledger. Still never sees a raw scalar or raw `z`.
+  binding, digest commitments, herd-token scan, VFR receipt. Digest-level
+  BY DESIGN — signed as `public_tier_remains_digest_level_by_design`.
+- **Audit tier** verifies the ceremony from the sealed transcript packet
+  UNILATERALLY (Amendment 1): phase order, commitment openings, both DLEQ
+  proofs per operator (§3.5), token recomputation from packet `z` values,
+  token equality/inequality, all-zero rejection, absence of raw mask/z
+  material in PUBLIC evidence, ephemeral public-key digest ledger. Never
+  sees a raw scalar.
 
-Verification is cross-attestation between two keyed parties, not unilateral
-crypto proof. A single liar is caught (raw 90 opening subreason, raw 92, raw
-93); a colluding pair is out of scope and signed as such (§2.2).
+A single liar is caught at commit-reveal (raw 90 opening subreason, raw 92,
+raw 93); a colluding pair cannot fabricate a match without producing a
+valid DLEQ over a false relation — excluded up to Fiat-Shamir/ROM
+assumptions, which are signed in §2.2.
 
-## 5. Schemas (five, versioned; commitments/openings embedded)
+## 5. Schemas (seven, versioned; commitments/openings embedded)
 
-### 5.1 The five
+### 5.1 The seven
 
 1. `simurgh.pccc_mask_message.v1` — Phase 1, per class-slot:
-   `{epoch, run_id, pair_id, role, slot_index, mask_u, operator_signature}`.
+   `{epoch, run_id, pair_id, role, slot_index, mask_point, operator_signature}`.
    Never names the custody class.
 2. `simurgh.pccc_match_transcript.v1` — the ceremony record embedding all
    four phases with per-phase domain tags: commitment objects (§3.3),
@@ -231,22 +281,34 @@ signatures}`. Non-matches export under the identical schema.
 
 ```text
 lane_a_verification_kind: "deterministic_replay_with_fixture_scalars"
-lane_b_verification_kind: "two_party_cross_attestation_without_dleq"
+lane_b_verification_kind: "two_party_ceremony_dleq_audit_verified"
 verification_packet_kind: "sealed_transcript_packet_for_offline_verifier"
+window_match_census:      { epoch, matches, non_matches, refusals }   (§8.5)
 ```
+
+6. `simurgh.pccc_dleq_proof.v1` — sealed-packet member (§3.5):
+   `{relation_kind: "mask" | "z", epoch, run_id, pair_id, role, R1, R2, s}`.
+   Never appears in the public bundle.
+7. `simurgh.pccc_operator_invitation.v1` — BYO-Operator Kit contract
+   (§8.6): a signed invitation binding `{epoch_policy, schema_versions,
+verifier_digest, invitee_key_digest_slot}` so an external organisation
+   can run operator B with its own keys and produce a capture the shipped
+   verifier checks.
 
 ### 5.2 Public record vs audit packet (tier split)
 
-`pccc_match_record` is the only PUBLIC export shape: no `mask_u`, no token,
+`pccc_match_record` is the only PUBLIC export shape: no `mask_point`, no token,
 no `token_nonce`, no raw `z` — digest commitments only. The **sealed audit
 packet** (transcript material for the offline verifier) may include masks,
-token commitments, and openings — still no raw scalar and no raw `z`.
+token commitments, openings, `z` values, and DLEQ proofs (Amendment 1) —
+still no raw scalar, ever.
 
 ### 5.3 Sealed-packet contents
 
-Transcripts, phase messages, `ephemeral_scalar_public_digest` ledger.
-Epoch-bound by construction (every domain tag carries `epoch`), so even
-audit-tier material mints no cross-epoch link token.
+Transcripts, phase messages, `z` values, DLEQ proofs,
+`ephemeral_scalar_public_digest` ledger. Epoch-bound by construction (every
+domain tag carries `epoch`), so even audit-tier material mints no
+cross-epoch link token.
 
 ## 6. Raw codes 90–99 (frozen) and check order
 
@@ -274,9 +336,20 @@ pccc_phase_order_invalid
 slot_cardinality_commitment_missing
 slot_cardinality_mismatch
 slot_terminal_record_missing
+window_match_census_mismatch
 ```
 
-### 6.3 Raw 96 subreasons
+### 6.3 Raw 93 and 96 subreasons
+
+Raw 93 `ddh_transcript_mismatch` (Amendment 1 adds the DLEQ family):
+
+```text
+token_recompute_mismatch
+dleq_mask_proof_invalid
+dleq_z_proof_invalid
+```
+
+Raw 96 `ephemeral_key_reuse_detected`:
 
 ```text
 mask_reuse_detected
@@ -306,11 +379,11 @@ diagnosed as replay, not reuse.
   (`ephemeral_public_digest_reuse_detected`). The digest is epoch-bound, so
   96's detection scope is same-epoch; cross-epoch anomalies surface as 95.
 
-## 7. Honesty rails (thirteen, spec-time, never retrofitted)
+## 7. Honesty rails (sixteen, spec-time, never retrofitted)
 
 ```text
 no_public_herd_token
-transcript_verification_is_cross_attestation_not_dleq_proof
+audit_tier_is_dleq_verified_public_tier_is_digest_level
 public_record_is_digest_level_full_verification_requires_audit_packet
 lane_a_uses_insecure_fixture_only_scalars_for_byte_reproducibility
 lane_b_scalars_are_ephemeral_per_match_window_and_never_written_to_disk
@@ -322,6 +395,9 @@ epoch_is_4n_window_anchor_not_physical_time
 non_matches_are_first_class_evidence_no_selective_omission
 commit_before_reveal_blocks_single_liar_token_copy
 fixture_scalar_quarantine_enforced_by_path_allowlist
+curve_arithmetic_is_reference_grade_not_constant_time
+dleq_is_fiat_shamir_random_oracle_model
+census_counts_are_window_scoped_and_cardinality_committed
 ```
 
 ## 8. Adopted inventions (zero new raw codes)
@@ -364,11 +440,36 @@ Fields in `pccc_match_record`: `respondent_notice_hash`,
 adjudication, new contest raw codes, registry chaining, multi-stage appeal.
 Call it: contest-path disclosure hook, not contest adjudication.
 
+### 8.5 Window match census — the corroboration seismograph (4N + 4L)
+
+The attestation carries a count-only `window_match_census`
+`{epoch, matches, non_matches, refusals}`, cardinality-committed against
+the slot ledger (mismatch → raw 90 subreason `window_match_census_mismatch`).
+A privacy-preserving cross-operator corroboration statistic per window —
+the Article-73 trend signal with no registry and no linkable token. Counts
+only; nothing in the census identifies a pair, class, or operator.
+
+### 8.6 BYO-Operator Kit (3O move, lifted to ceremonies)
+
+`simurgh.pccc_operator_invitation.v1` plus a single-file operator
+(`byo/operator-kit.mjs`) so an external organisation can run operator B
+with its OWN keys and produce a capture the shipped verifier checks. Ships
+as schema + tooling + docs; an actual cross-org run is a post-tag pilot,
+not a 4R gate — signed as `cross_org_operator_b_not_yet_exercised`.
+
+### 8.7 CERA — Countersigned External Review Attestation (staged, closeout)
+
+A minimal schema letting an external reviewer countersign the constitution
+projection with their own key; the countersignature becomes replayable
+evidence that the clause-map review happened. Staged for closeout; NOT a
+4R gate; zero raw codes. Constitution score may not move until it fires
+(§16).
+
 ## 9. Lane A — deterministic corpus, full tamper matrix
 
 ### 9.1 Fixture scalar quarantine
 
-Lane A fixture operators use committed `INSECURE_FIXTURE_ONLY` X25519
+Lane A fixture operators use committed `INSECURE_FIXTURE_ONLY` curve25519
 scalars (path-regex compliant for the 3M/3O audits: no digits in the name
 portion). Enforced by TWO gates wired into reproduce:
 
@@ -398,6 +499,9 @@ forbidden_live_scalar_scan:
 | Mask tampered mid-ceremony → openings valid, tokens disagree                  | 93                                         |
 | Token-copy liar: commits own token, opens with peer's copied token            | 90 `pccc_token_commitment_opening_invalid` |
 | Claim liar: valid transcript, tokens unequal, still claims match              | 92                                         |
+| DLEQ forged: proof over a false relation (fabricated `z`)                     | 93 `dleq_z_proof_invalid`                  |
+| `z` tampered in sealed packet → token recompute disagrees                     | 93 `token_recompute_mismatch`              |
+| Census counts tampered vs slot ledger                                         | 90 `window_match_census_mismatch`          |
 | Raw custody_class_digest or window-independent token planted in public bundle | 99                                         |
 | Fifth signal in window (4P budget max 4)                                      | 97                                         |
 | Export attempted with no / pincer-failing VFR receipt                         | 98 + ledgered refusal expected-GREEN       |
@@ -410,7 +514,7 @@ DIFFERENT failures at different phases; both rows cite the Lean theorems.
 ### 10.1 Shape
 
 Two real OS processes (`laneb/operator.mjs --role a|b`), each with its own
-ephemeral X25519 scalar (never on disk, destroyed with the process) and its
+ephemeral curve25519 scalar (never on disk, destroyed with the process) and its
 own Ed25519 identity key, exchanging signed phase messages over localhost.
 `laneb/ceremony.mjs` orchestrates, including the VFR export crossing against
 the REAL 4Q approver process — 4R composes 4Q's Lane B, not a mock.
@@ -450,12 +554,13 @@ ceremony_start_digest
 Scope header (exact):
 
 ```text
-Lean proves symbolic phase-order and domain-separation laws.
-Node/Python exercise real X25519 byte behaviour.
-No theorem claims DDH hardness, RFC9380 compliance, or DLEQ proof.
+Lean proves symbolic phase-order, domain-separation, and proof-binding laws.
+Node/Python exercise real curve25519 byte behaviour.
+No theorem claims DDH hardness, RFC9380/RFC9497 compliance, or that Lean
+verified the real curve arithmetic.
 ```
 
-Five theorems:
+Six theorems:
 
 1. `noPublicHerdTokenForLinkMaterial` — for all link-bearing public digests
    produced under the PCCC domains {`pair_id_hash`, `pair_match_commitment`,
@@ -471,20 +576,28 @@ Five theorems:
 5. `singleLiarExcluded` — with binding commitments and phase order, a party
    that commits before the peer reveals cannot equal-by-copy; token equality
    is decided only between independently committed tokens.
+6. `dleqBindsSingleScalar` — in the symbolic model, an accepted transcript
+   with valid DLEQ proofs implies one scalar witness links epk, mask, and
+   `z` per operator; hence a fabricated match implies a forged proof or a
+   hash collision (colluding fabrication excluded symbolically).
 
 ## 12. Components
 
 ```text
 tools/simurgh-attestation/stage4r/
-  core/pcccCore.mjs            pure: hash-to-u, double-mask wrap, commit/reveal,
+  core/edwards25519.mjs        pure BigInt reference group: add, mul, on-curve,
+                               hash-to-point (try-and-increment + cofactor clear)
+  core/dleq.mjs                Chaum-Pedersen prove/verify, Fiat-Shamir SHA-512
+  core/pcccCore.mjs            pure: hash-to-point wrap, double-mask, commit/reveal,
                                match token, transcript schema/digest,
                                check order 90–99, herd-token scan, budget rule,
-                               slot cardinality rule
+                               slot cardinality + window census rules
   node/build-stage4r-attestation.mjs
   node/verify-stage4r-attestation.mjs   (two-tier, --offline)
   laneb/operator.mjs           one binary, role by flag: --role a|b
   laneb/ceremony.mjs           orchestrates processes + VFR export crossing
-  python/pccc_kernel.py        parity kernel (X25519 via existing `cryptography`)
+  byo/operator-kit.mjs         BYO single-file operator + invitation check
+  python/pccc_kernel.py        parity kernel (pure-Python Edwards25519 + DLEQ)
 proofs/stage4r/NoPublicHerdToken.lean
 tests/unit/llmShield/stage4r/  + tests/e2e/llmShield/stage4r/
 tests/fixtures/llmShield/stage4r/
@@ -503,15 +616,16 @@ pattern); reproduce re-verifies, never rebuilds signatures.
    sends its mask.
 3. Each applies its scalar to the peer's mask; all-zero `z` → raw 94 before
    any token exists.
-4. Phase 2: each commits to its token (binding role + peer mask digest).
-5. Phase 3: openings revealed; openings must match commitments.
-6. Phase 4: tokens compared; both operators sign the transcript — match or
+4. Each attaches its two DLEQ proofs (§3.5) to the sealed-packet material.
+5. Phase 2: each commits to its token (binding role + peer mask digest).
+6. Phase 3: openings revealed; openings must match commitments.
+7. Phase 4: tokens compared; both operators sign the transcript — match or
    non-match, both first-class.
-7. Export crossing: VFR receipt demanded and pincer-checked (key separation
+8. Export crossing: VFR receipt demanded and pincer-checked (key separation
    §4.2) → only then does `pair_match_commitment` (+ contest-hook fields)
    enter the public bundle. Refusal → raw 98, ledgered, nothing published.
-8. Attestation signs canonicalJson of the full run set; verifier recomputes
-   offline at both tiers.
+9. Attestation signs canonicalJson of the full run set (census included);
+   verifier recomputes offline at both tiers, audit tier unilaterally.
 
 ## 14. Cross-stage invariants (pinned in K7)
 
@@ -519,6 +633,9 @@ pattern); reproduce re-verifies, never rebuilds signatures.
   imported).
 - Epoch == committed 4N window anchor digest.
 - The VFR receipt verifies under the SHIPPED 4Q verifier, unmodified.
+- Edwards25519 reference arithmetic cross-validated against RFC 8032 test
+  vectors AND Node core Ed25519-derived checks; both 2026-07-06 probes
+  (X25519 commutativity, Edwards DLEQ round-trip) archived as seed tests.
 - Known golden breakage from additive codes 90–99 (budget for ALL of these):
   4H exit-map.json + 4H exitWrapper inline map, 4K/4H exitWrapper snapshots,
   4L e2e net golden, and the 4P constants probe
@@ -533,9 +650,12 @@ unit suites (constants, digest, schema, pcccCore, phases, fixtures, laneb,
 scripts/reproduce-llm-shield-stage4r.sh — twice, byte-stable, committed
   tree, Node 26
 offline verify — public tier (digest-level)
-offline verify — audit tier (sealed transcript packet)
-JS↔Python parity (hash-to-u, double-mask on fixture scalars, tokens, digests)
-Lean 5 theorems — exit 0
+offline verify — audit tier (sealed packet, DLEQ-verified, unilateral)
+Edwards25519 reference group vs RFC 8032 vectors + Node Ed25519 checks
+JS↔Python parity (group ops, hash-to-point, double-mask on fixture
+  scalars, DLEQ prove/verify round-trip, tokens, digests)
+window match census recompute vs slot ledger
+Lean 6 theorems — exit 0
 K7 all-functions net (frozen export inventory, composed replay +
   check-order masking, byte-idempotency, cross-stage invariants §14,
   attestation both tiers)
@@ -549,33 +669,45 @@ CI notes: `npm test` gates tests/unit only — wire stage-4r e2e into
 check-e2e; never shell `rg` in a unit test (Linux ENOENT); overclaim-scan
 trips on honest negations — phrase accordingly.
 
-## 16. Four-axis pre-score (frozen at 9.0 flat; closeout re-scores)
+## 16. Four-axis pre-score (amended 2026-07-06; closeout re-scores)
 
-- **Novelty 9.0** — DH-PSI is old (Private Join & Compute, Password
-  Monitor — named in the signed source map as prior_art_limiting_rows); the
-  claimed first is the composition: commit-before-reveal cross-attestation +
-  no-herd-token law + friction-gated export + slot cardinality, as signed
-  recomputable evidence.
-- **Frontier 9.0** — real crypto between real processes, offline-
-  recomputable at two tiers.
-- **Good-for-Anthropic 9.0** — providers corroborate shared custody-failure
-  classes without building a linkable registry; the exact "to 9.5" the 4Q
-  closeout named.
-- **Constitution 9.0** — makes "cooperate on safety signals without creating
-  surveillance infrastructure" machine-checkable; signed
-  constitution_projection.
+The original freeze capped all axes at 9.0 until one of four unlocks fired.
+Amendment 1 FIRES unlock #1 (the DLEQ upgrade) inside the stage; the census
+and kit strengthen two more without claiming them. Amended honest pre-score:
 
-**No drift above 9.0** until at least one of: DLEQ/VOPRF upgrade; cross-org
-operator B; external clause-map review; real cross-org pilot.
+- **Novelty 9.5** — the paid-debt composition: dependency-free,
+  DLEQ-verified private custody corroboration with a cryptographic
+  no-herd-token law, friction-gated export, and slot cardinality. DH-PSI
+  itself is old (Private Join & Compute, Password Monitor — named as
+  prior_art_limiting_rows). Held from 10: the source map has not survived
+  external prior-art review.
+- **Frontier 9.5** — unilateral audit-tier verifiability from pure
+  reference arithmetic; count-only cross-operator census. Held from 10:
+  operator B is still ours; constant-time prover deferred.
+- **Good-for-Anthropic 9.5** — consumes 4Q receipts (the 4Q closeout's
+  named "to 9.5") AND ships the kit that turns a cross-org pilot into a
+  send-one-link exercise. Held from 10: no external organisation has run
+  it yet.
+- **Constitution 9.0** — unchanged until CERA (§8.7) is countersigned by a
+  real external reviewer; no self-granted credit.
+
+**Residual no-drift rule:** Constitution stays ≤ 9.0 until CERA fires;
+nothing exceeds 9.5 until a real cross-org run or an external
+prior-art/clause-map review lands.
 
 ## 17. Deferred, by name
 
+DLEQ was REMOVED from this list — paid in-stage by Amendment 1.
+
 ```text
-DLEQ / VOPRF upgrade                 4R.x seed, signed in known_limitations
+full VOPRF (RFC 9497) protocol       still out — PCCC is DH-PSI + DLEQ, not a VOPRF
+constant-time prover arithmetic      reference-grade, railed; hardening later
 >2-party ceremonies                  pairwise only in 4R
 contest adjudication                 hook only (§8.4)
 registry chaining                    waits
 HTTP resale-shape substrate          unchanged from roadmap
+cross-org pilot EXECUTION            kit ships in 4R; the run is post-tag
+CERA countersignature                staged at closeout, not a gate
 ```
 
 OWASP-LLM10 / NIST MEASURE 2.7 mapping = a reviewer-checklist NOTE, not a
@@ -596,16 +728,20 @@ Raw codes 90–99 consumed; next stage starts at 100.
 ## 19. Suggested implementation shape (feeds writing-plans)
 
 1. Constants, digest core, schema validation, check order 90–99 (core).
-2. Hash-to-u + double-mask wrap + degenerate-point rejection (core, with
-   the Node JWK-OKP probe as the seed test).
-3. Commit-reveal phase machine + transcript build/verify (core).
-4. Slot cardinality + budget + herd-token scan rules (core).
-5. Lane A corpus builder + full tamper matrix fixtures.
-6. Two-tier offline verifier (+ sealed packet reader).
-7. Python parity kernel.
-8. Lane B operator + ceremony orchestrator + real 4Q approver crossing;
-   one-time capture ceremony; verify-only reproduce wiring.
-9. Attestation build/sign/verify; adopted-inventions blocks (source map,
-   constitution projection, contest hook fields).
-10. Lean theorems.
-11. Golden bumps (§14), reproduce script, K7 net, scans, docs, closeout.
+2. Edwards25519 reference group (add/mul/on-curve) + RFC 8032 vector gate.
+3. Hash-to-point + double-mask + degenerate-point rejection (both
+   2026-07-06 probes as seed tests).
+4. DLEQ prove/verify + forged-relation negative vectors (core).
+5. Commit-reveal phase machine + transcript build/verify (core).
+6. Slot cardinality + window census + budget + herd-token scan rules (core).
+7. Lane A corpus builder + full tamper matrix fixtures (incl. DLEQ arms).
+8. Two-tier offline verifier (+ sealed packet reader, DLEQ audit checks).
+9. Python parity kernel (group ops + DLEQ + tokens).
+10. Lane B operator + ceremony orchestrator + real 4Q approver crossing;
+    one-time capture ceremony; verify-only reproduce wiring.
+11. BYO-Operator Kit (invitation schema + single-file operator + docs).
+12. Attestation build/sign/verify; adopted-inventions blocks (source map,
+    constitution projection, contest hook, census).
+13. Lean theorems (six).
+14. Golden bumps (§14), reproduce script, K7 net, scans, docs, closeout
+    (+ CERA staging note).
