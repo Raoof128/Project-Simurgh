@@ -5,9 +5,10 @@
 // only the reference crypto (edwards25519 / dleq) and the ceremony token helper
 // (pcccCore) — no other repo coupling — so the kit is portable. An actual
 // cross-org run is a post-tag pilot (rail cross_org_operator_b_not_yet_exercised).
-import { G, mul, encodePoint, hashToPoint } from "../core/edwards25519.mjs";
+import { G, mul, encodePoint, decodePoint, hashToPoint } from "../core/edwards25519.mjs";
+import { matchToken } from "../core/maskCore.mjs";
 import { dleqProve } from "../core/dleq.mjs";
-import { tokenCommitment } from "../core/pcccCore.mjs";
+import { tokenCommitment, maskDigest } from "../core/pcccCore.mjs";
 
 export const INVITATION_SCHEMA = "simurgh.pccc_operator_invitation.v1";
 const REQUIRED_KEYS = [
@@ -64,6 +65,44 @@ export function operatorMaskContribution({
     role,
   });
   return { mask_point: encodePoint(mask), epk: encodePoint(epk), dleq_mask: proof };
+}
+
+// Phase 2/3: given the peer's mask, produce z, the match token, the binding
+// token commitment, and the DLEQ z-proof. Raw scalar never leaves this function.
+export function operatorZContribution({
+  scalar,
+  epoch,
+  peerMaskHex,
+  runId,
+  pairId,
+  role,
+  tokenNonce,
+}) {
+  const peerMask = decodePoint(peerMaskHex);
+  const z = mul(scalar, peerMask);
+  const epk = mul(scalar, G);
+  const token = matchToken(epoch, pairId, z);
+  const commitment = tokenCommitment({
+    epoch,
+    runId,
+    pairId,
+    role,
+    peerMaskDigest: maskDigest(peerMaskHex),
+    token,
+    tokenNonce,
+  });
+  const dleq_z = dleqProve({
+    scalar,
+    basePoint: peerMask,
+    epk,
+    targetPoint: z,
+    relationKind: "z",
+    epoch,
+    runId,
+    pairId,
+    role,
+  });
+  return { z: encodePoint(z), token, token_nonce: tokenNonce, commitment, dleq_z };
 }
 
 export { tokenCommitment };
