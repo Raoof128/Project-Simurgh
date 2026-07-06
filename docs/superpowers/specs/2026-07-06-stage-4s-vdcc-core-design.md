@@ -173,6 +173,12 @@ double-dipping attack alive and testable:
 }
 ```
 
+The crossing carries NO `actor_key_digest` — the actor key is INFERRED from
+the bound receipt's `delegatee_key_digest` (the delegatee is the party
+acting). `signature_actor` is verified against that key via
+`public_key_index`. This keeps one authoritative key per node and removes a
+field that could disagree with the receipt.
+
 ### 3.4 Chain bundle — `simurgh.vdcc_chain_bundle.v1`
 
 Four sealed artifact arrays plus key material — the structure is normative:
@@ -402,6 +408,15 @@ phase, where:
 Without this rule a ghost-bound crossing would crash the scope/flux
 arithmetic first and 112/111 would go flaky or dead.
 
+**Crossing-signature rule (preserves check order + 112 reachability):** for a
+crossing whose `bound_receipt_digest` resolves to a tree OR detached receipt,
+`signature_actor` MUST verify against the public key for that
+receipt's `delegatee_key_digest`; if it resolves and verification fails ⇒ raw 101. If the bound digest is empty or unknown, do NOT attempt crossing-signature
+verification — defer to the binding phase so 112 stays reachable. When the
+bound digest resolves into `detached_receipts`, that detached receipt's own
+dual signatures are verified first (101), then `signature_actor` against its
+`delegatee_key_digest`, before the crossing surfaces at 111.
+
 **118 reachability:** `internal_fail_closed` is reached only by a
 typed-wrapper fixture that injects an internal verifier exception / unknown
 raw outcome and proves the fail-closed mapping — never by any well-formed
@@ -473,6 +488,13 @@ set and the whole tree passes 0.
 - **Audit tier:** full recomputation including crossing payload digests and
   spine-ref resolution against the shipped 4P/4O/4Q bundles, unilateral (no
   operator cooperation needed).
+
+**Verifier key hygiene:** the attestation is signed with the stage4s PRIVATE
+key, but verification NEVER needs it. Commit the matching public key
+`test-keys/INSECURE_FIXTURE_ONLY_stage4s_root.pub.pem`; the build CLI takes
+`--key` (private), the verify CLI takes `--pubkey` defaulting to the committed
+public key. The private-key audits scan private PEMs only — the `.pub.pem` is
+public material and outside their scope.
 
 Verify-only reproduce script `scripts/reproduce-llm-shield-stage4s.sh`
 (Node 26 byte-stability gotcha; guarded `lean` call exactly as 4R's).

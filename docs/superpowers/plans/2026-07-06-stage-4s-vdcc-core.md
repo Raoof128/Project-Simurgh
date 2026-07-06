@@ -482,6 +482,7 @@ export function pathScope(scopes) {
   - `evaluateChainSafe(bundle, opts)` — try/catch typed wrapper: any thrown error → `{raw: 118, reason: "internal_fail_closed"}`.
   - `reSign(receipt, keys)` test helper EXPORTED from the test file only (not the module): after tampering signed content, re-sign so later codes are reachable (4R lesson).
 - Bundle carries `detached_receipts: []` (validly signed receipts NOT claimed into the tree — Lane A fixture material for 111, SEALED under `bundle_merkle_root` so a producer cannot add/remove them silently) and `spine_index: []` (declared spine digests). Tree invariants NEVER run over `detached_receipts` — that is what keeps 111 distinct from 105.
+- **Crossing-signature rule (spec §11):** the crossing has NO `actor_key_digest` — the actor key is inferred from the bound receipt's `delegatee_key_digest`. For a crossing whose `bound_receipt_digest` resolves to a tree OR detached receipt, `signature_actor` MUST verify against `public_key_index[thatReceipt.delegatee_key_digest]`; resolves-but-fails ⇒ 101. If the bound digest is empty/unknown, do NOT attempt crossing-signature verification — defer to the binding phase so 112 stays reachable. When it resolves into `detached_receipts`, verify that detached receipt's dual signatures first (101), then `signature_actor`, before surfacing at 111. Add a test row: crossing bound to a valid tree node but `signature_actor` re-signed by the WRONG key → 101.
 
 - [ ] **Step 1: Write the failing test** — the FULL spec §12 matrix, one `test()` per row, each building the honest base tree (root + 2 children + 1 grandchild, budgets 10/4/4/2, scopes shrinking, commitments complete) then applying ONE mutation + `reSign` where needed:
 
@@ -520,8 +521,8 @@ export function pathScope(scopes) {
 **Files:**
 
 - Create: `tools/simurgh-attestation/stage4s/node/build-stage4s-fixtures.mjs`
-- Create: `test-keys/INSECURE_FIXTURE_ONLY_stage4s_root.pem` (+ delegatorA/delegateeB/actor keys as the builder needs — generated once, committed)
-- Modify: the two private-key audit scripts (find with `grep -rln "INSECURE_FIXTURE_ONLY" scripts/ | head`) — extend the path-regex allowlist to cover `test-keys/INSECURE_FIXTURE_ONLY_stage4s_[a-z]+\.pem` (NO digits in names — 4P lesson)
+- Create: `test-keys/INSECURE_FIXTURE_ONLY_stage4s_root.pem` (+ delegatorA/delegateeB/actor keys as the builder needs — generated once, committed) AND the matching public key `test-keys/INSECURE_FIXTURE_ONLY_stage4s_root.pub.pem` (public material — the verifier reads this, never a private PEM)
+- Modify: the two private-key audit scripts (find with `grep -rln "INSECURE_FIXTURE_ONLY" scripts/ | head`) — extend the path-regex allowlist to cover `test-keys/INSECURE_FIXTURE_ONLY_stage4s_[a-z]+\.pem` (NO digits in names — 4P lesson); the `.pub.pem` is public material, outside the private-key audits' scope (they scan private PEMs only)
 - Modify: `.prettierignore` — add `docs/research/llm-shield/evidence/stage-4s/`
 - Test: `tests/unit/llmShield/stage4s/fixturesCorpus.test.js`
 
@@ -626,7 +627,7 @@ def authorise_with_chain(action: Action, *, chain: ChainContext) -> "ChainAuthor
 **Interfaces:**
 
 - Build: reads the fixture corpus + honest bundle, emits `docs/research/llm-shield/evidence/stage-4s/attestation/stage4s-attestation.json`: `{schema: "simurgh.vdcc_attestation.v1", epoch, corpus_digest, honest_bundle_digest, per_fixture: [{name, expected_raw, observed_raw, fixture_digest}], bundle_merkle_root, non_claims, known_limitations, rails, signature}` — signature = Ed25519 (stage4s key from `test-keys/INSECURE_FIXTURE_ONLY_stage4s_root.pem` for the committed artifact; the CLI takes `--key`) over `canonicalJson(parse(attestation-without-signature))` (3M prettier+merge-safe discipline). Two-stage digest per 4P: `attestation_digest = recordDigest({domain: DOMAINS.ATTESTATION, attestation})`.
-- Verify: `--tier public` recomputes structure, signature, corpus digests, merkle root from the attestation + fixture digests alone (no raw payload resolution); `--tier audit` ADDITIONALLY re-runs `evaluateChainSafe` on every fixture file and compares `observed_raw`, and resolves `spine_refs` against `--spine-dir` when provided. Exit 0 GREEN / 1 RED with the failing raw code printed. Paths: `isAbsolute(dir) ? dir : join(ROOT, dir)` (4R verifier lesson).
+- Verify: takes `--pubkey` (defaults to the committed `test-keys/INSECURE_FIXTURE_ONLY_stage4s_root.pub.pem`) — the PRIVATE key is NEVER required for verification (spec §14 verifier key hygiene). `--tier public` recomputes structure, signature (against `--pubkey`), corpus digests, merkle root from the attestation + fixture digests alone (no raw payload resolution); `--tier audit` ADDITIONALLY re-runs `evaluateChainSafe` on every fixture file and compares `observed_raw`, and resolves `spine_refs` against `--spine-dir` when provided. Exit 0 GREEN / 1 RED with the failing raw code printed. Paths: `isAbsolute(dir) ? dir : join(ROOT, dir)` (4R verifier lesson).
 
 - [ ] **Step 1: Write failing test** — build (into scratchpad temp dir), verify public → 0; verify audit → 0; tamper one `observed_raw` in the JSON → public catches signature break; reSign tampered file with fixture key → audit catches recompute mismatch while public passes (two-tier separation proof).
 - [ ] **Step 2: Verify failure.** **Step 3: Implement both CLIs.** **Step 4: Verify pass; run builder into the committed evidence path; `npm run format` (evidence is prettier-ignored — confirm `git status` shows no reformat)**.
