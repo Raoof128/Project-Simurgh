@@ -213,6 +213,14 @@ documented non-claims.
   normative corpus and a 10-arm live approval-gated capture over a genuinely separate approver
   process, with JS↔Python byte-parity and five machine-checked Lean theorems. Scope is honest and
   signed: recorded-run order, not physical time; enforcement evidence, not proof of prevention.
+- **Private custody corroboration** (Stage 4R) — two operators corroborate shared custody-class
+  membership without publishing a linkable **herd token**: a real-DDH curve25519 (Edwards form) match
+  ceremony with commit-before-reveal, **DLEQ-verified** sealed audit packets (so a single liar can't
+  fabricate a match), epoch-bound unlinkability, VFR-gated export, and a count-only window census.
+  Zero new dependencies (an in-repo Edwards25519 group gated against RFC 8032 + Node Ed25519), JS↔Python
+  byte-parity, a two-real-process Lane B with a distinct-key approver, and six machine-checked Lean
+  theorems. Scope is honest and signed: reference research crypto, not production; audit-tier
+  DLEQ verification, public tier digest-level; not a full VOPRF.
 
 ### External-defence evaluation
 
