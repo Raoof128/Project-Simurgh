@@ -745,3 +745,50 @@ Raw codes 90–99 consumed; next stage starts at 100.
 13. Lean theorems (six).
 14. Golden bumps (§14), reproduce script, K7 net, scans, docs, closeout
     (+ CERA staging note).
+
+## 20. Ecosystem gap survey — what the Anthropic-side landscape lacks (surveyed 2026-07-06)
+
+Honest framing: Anthropic HAS the will and the venues — the FMF
+information-sharing agreement (March 2025, expanding 2026), CAISI/UK-AISI
+pre-deployment evaluation, a funded third-party evals initiative, the SB 53
+Frontier Compliance Framework. What the surveyed landscape lacks is the
+VERIFICATION SUBSTRATE underneath those venues — which is 4R's lane, and
+never a claim that any lab is unsafe.
+
+1. **FMF sharing is legal-trust, not cryptographic corroboration.** The
+   published materials describe "secure, confidential exchange" under a
+   legal agreement; nothing public describes verification, anonymization,
+   or any way for two members to corroborate they saw the SAME
+   vulnerability class without identified disclosure. PCCC is exactly that
+   missing mechanism: match/no-match plus census counts, no herd token.
+2. **The third-party evaluation ecosystem runs on prose and trusted
+   telemetry.** Community calls for reproducibility standards for frontier
+   safety claims (NeurIPS reproducibility position paper, 2026) name the
+   gap; Anthropic's own March 2026 eval-awareness incident (Opus 4.6
+   locating a benchmark answer key) shows why recomputable evidence beats
+   reported scores.
+3. **Incident reporting is narrative, not recomputable.** SB 53 (15-day
+   critical-incident reports), the EU AI Act Article 73 regime (binding
+   August 2026), and NY RAISE all require root-cause narratives; none
+   define an evidence format a regulator can rerun. 4R's census is the
+   count-level trend input; the Incident Capsule (VDCC banner) is the
+   full answer.
+4. **Antitrust chill shrinks what labs dare to share** (arXiv 2511.08631:
+   information sharing among frontier labs raises output-restriction and
+   information-exchange concerns). A ceremony that reveals ONLY
+   match/no-match on a custody-failure class — no volumes, no prices, no
+   capabilities, no customer data — is close to the minimum-disclosure
+   point of that legal surface, and the No Public Herd Token law removes
+   the cross-window linkability that would make sharing a market-signal.
+5. **Cross-submitter unlinkability is unaddressed.** FMF plans to expand
+   sharing to non-FMF parties; nothing public covers whether repeat
+   submitters become linkable across disclosures. Epoch-bound
+   unlinkability (§3.4) is that property, by construction.
+
+Sources (accessed 2026-07-06): frontiermodelforum.org/information-sharing +
+progress update; anthropic.com/news/compliance-framework-SB53;
+anthropic.com/news/third-party-testing +
+a-new-initiative-for-developing-third-party-model-evaluations;
+metr.org/notes/2026-01-29-frontier-ai-safety-regulations;
+arxiv.org/abs/2511.08631; arxiv.org/pdf/2605.08192;
+artificialintelligenceact.eu/article/73.
