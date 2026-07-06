@@ -51,9 +51,14 @@ def child_set_root(children):
 
 
 def _dd(domain, value):
-    return "sha256:" + hashlib.sha256(
-        canonical_json({"domain": domain, "schema": CHAIN_BUNDLE, "value": value}).encode()
-    ).hexdigest()
+    return (
+        "sha256:"
+        + hashlib.sha256(
+            canonical_json(
+                {"domain": domain, "schema": CHAIN_BUNDLE, "value": value}
+            ).encode()
+        ).hexdigest()
+    )
 
 
 def bundle_root(entry_digests):
@@ -63,7 +68,11 @@ def bundle_root(entry_digests):
     while len(level) > 1:
         nxt = []
         for i in range(0, len(level), 2):
-            nxt.append(level[i] if i + 1 == len(level) else _dd(D_MERKLE_NODE, [level[i], level[i + 1]]))
+            nxt.append(
+                level[i]
+                if i + 1 == len(level)
+                else _dd(D_MERKLE_NODE, [level[i], level[i + 1]])
+            )
         level = nxt
     return level[0]
 
@@ -109,7 +118,12 @@ def index_bundle(receipts):
         if p is not None:
             children_of.setdefault(p, []).append(d)
     root = sentinel_roots[0] if len(sentinel_roots) == 1 else None
-    return {"by_digest": by_digest, "children_of": children_of, "sentinel_roots": sentinel_roots, "root": root}
+    return {
+        "by_digest": by_digest,
+        "children_of": children_of,
+        "sentinel_roots": sentinel_roots,
+        "root": root,
+    }
 
 
 def verify_tree(index):
@@ -117,7 +131,10 @@ def verify_tree(index):
     if len(index["sentinel_roots"]) != 1:
         return 102
     for d, r in by.items():
-        if r["parent_receipt_digest"] is not None and r["parent_receipt_digest"] not in by:
+        if (
+            r["parent_receipt_digest"] is not None
+            and r["parent_receipt_digest"] not in by
+        ):
             return 103
     deleg = {}
     for r in by.values():
@@ -194,7 +211,9 @@ def verify_fanout(index, commitments):
             if c["declared_child_count"] != len(obs_children):
                 return 106
             decl_sorted = sorted(c["declared_child_receipt_digests"])
-            if decl_sorted != obs_children or c["declared_child_set_root"] != child_set_root(obs_children):
+            if decl_sorted != obs_children or c[
+                "declared_child_set_root"
+            ] != child_set_root(obs_children):
                 return 107
         for w, c in dec_w.items():
             if w not in obs_w and c["declared_child_count"] != 0:
@@ -217,7 +236,9 @@ def verify_flux(index, crossings):
         spend = local.get(d, 0)
         if spend > r["budget_allocated"]:
             return 110
-        child_budget = sum(by[c]["budget_allocated"] for c in index["children_of"].get(d, []))
+        child_budget = sum(
+            by[c]["budget_allocated"] for c in index["children_of"].get(d, [])
+        )
         if spend + child_budget > r["budget_allocated"]:
             return 109
     return 0
@@ -296,7 +317,9 @@ def evaluate(bundle):
         if not scope_leq(r["scope"], parent["scope"]):
             return 108
     for a in resolved:
-        ps = path_scope([r["scope"] for r in path_receipts(tree_index, a["bound_receipt_digest"])])
+        ps = path_scope(
+            [r["scope"] for r in path_receipts(tree_index, a["bound_receipt_digest"])]
+        )
         if not scope_leq(normalize_scope(a["requested_scope"]), ps):
             return 108
 
