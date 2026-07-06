@@ -74,13 +74,23 @@ export function buildHopReceipt({
   };
 }
 
-export function dualSign(receipt, delegatorPrivKey, delegateePrivKey) {
-  const msg = canonicalJson(stripReceiptSigs(receipt));
+// The two halves of a dual signature. Both sign the IDENTICAL payload (the receipt
+// without either signature field), so the delegator and delegatee can sign in
+// separate processes (Lane B) and still produce byte-identical inputs.
+export function signDelegator(receipt, delegatorPrivKey) {
   return {
     ...receipt,
-    signature_delegator: signHex(delegatorPrivKey, msg),
-    signature_delegatee: signHex(delegateePrivKey, msg),
+    signature_delegator: signHex(delegatorPrivKey, canonicalJson(stripReceiptSigs(receipt))),
   };
+}
+export function signDelegatee(receipt, delegateePrivKey) {
+  return {
+    ...receipt,
+    signature_delegatee: signHex(delegateePrivKey, canonicalJson(stripReceiptSigs(receipt))),
+  };
+}
+export function dualSign(receipt, delegatorPrivKey, delegateePrivKey) {
+  return signDelegatee(signDelegator(receipt, delegatorPrivKey), delegateePrivKey);
 }
 
 // {ok} | {ok:false, missing:true|false} — spec §11: missing FIELD is malformed
