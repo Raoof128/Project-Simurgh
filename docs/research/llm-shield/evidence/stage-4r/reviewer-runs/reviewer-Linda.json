@@ -1,0 +1,26 @@
+{
+  "result": {
+    "what": "Stage 4R PCCC external reviewer run",
+    "challenge": "sage-26175e",
+    "reviewer_identity_self_declared": "Linda <lala4433@gmail.com>",
+    "reviewer_public_key_der_hex": "302a300506032b6570032100ef2356402e587ff078731dd6fcf210bc97b7db067c5eaf5517a93af1796380e4",
+    "reviewer_key_fingerprint": "8686d6f26920fa26",
+    "scenarios": [
+      {
+        "classes": "shared",
+        "expect_match": true,
+        "got_match": true,
+        "verdict": "green"
+      },
+      {
+        "classes": "different",
+        "expect_match": false,
+        "got_match": false,
+        "verdict": "green"
+      }
+    ],
+    "all_passed": true,
+    "node_version": "v22.22.1"
+  },
+  "signature": "7c8b9bf484d42e10dde957f93111539a89b839752df48fd78eb320149ec63f2b82741c6a929c4689052d8a12b0c2997f46b93a5031e0293f8a456f8955c9f008"
+}
