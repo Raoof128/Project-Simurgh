@@ -207,6 +207,7 @@ def naive_intent_verdict(action: Action, intent: ProvenanceIntentContext) -> str
 import hashlib as _hashlib  # noqa: E402
 from . import manifest_surface as _ms  # noqa: E402
 from . import friction_surface as _fs  # noqa: E402
+from . import vdcc_surface as _vs  # noqa: E402
 
 KERNEL_ENTRYPOINT_V1 = "authorise_with_manifest.v1"
 
@@ -327,4 +328,44 @@ def authorise_with_friction(
         allow_reason,
         out["receipt_digest"],
         out["crossing_digest"],
+    )
+
+
+# --- Stage 4S: delegation-chain completeness (sixth additive family member) -----------
+# The five functions above stay FROZEN. authorise_with_chain is a thin shim over the
+# pure vdcc_surface.decide, mirroring the Node chainCore. 4S spec §8. No Ghost Hop is
+# enforced at the guarded boundary: a crossing whose receipt binding is absent, orphan,
+# out-of-scope, over-budget, or on a broken/incomplete chain is refused fail-closed.
+
+
+@dataclass(frozen=True)
+class ChainContext:
+    bundle: dict
+    crossing: dict
+    verify_signature: object = None
+
+
+@dataclass
+class ChainAuthorityDecision:
+    decision: AuthorityDecision
+    raw_code: int
+    reason: str
+    bound_receipt_digest: str = ""
+
+
+def authorise_with_chain(action: Action, *, chain: ChainContext) -> "ChainAuthorityDecision":
+    out = _vs.decide(
+        bundle=chain.bundle, crossing=chain.crossing, verify_signature=chain.verify_signature
+    )
+    if out["raw"] != 0:
+        return ChainAuthorityDecision(
+            AuthorityDecision("block", out["reason"], action.family, [action.target]),
+            out["raw"],
+            out["reason"],
+        )
+    return ChainAuthorityDecision(
+        AuthorityDecision("allow", "chain_receipt_bound", action.family),
+        0,
+        "accepted",
+        out["bound_receipt_digest"],
     )
