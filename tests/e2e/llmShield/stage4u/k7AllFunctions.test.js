@@ -169,17 +169,44 @@ test("tamper matrix: every VRTA code 119..132 is independently reachable in froz
   }
 });
 
-test("read-only kernel: no adapter/src-llmShield diff and capability_kernel.py is byte-frozen", () => {
-  const base = execFileSync("git", ["merge-base", "HEAD", "main"], { encoding: "utf8" }).trim();
-  const diff = execFileSync("git", ["diff", "--name-only", `${base}..HEAD`], {
+test("read-only kernel: no adapter/src-llmShield changes and capability_kernel.py byte-frozen", () => {
+  const paths = ["tools/agentdojo-simurgh-adapter", "src/llmShield"];
+  // Working-tree vs HEAD — CI-robust, no base branch needed (matches the 4M/4N/4O convention).
+  const wtDiff = execFileSync("git", ["diff", "--name-only", "HEAD", "--", ...paths], {
     encoding: "utf8",
-  }).split("\n");
-  assert.ok(
-    !diff.some((p) => p.startsWith("tools/agentdojo-simurgh-adapter/")),
-    "no adapter change"
-  );
-  assert.ok(!diff.some((p) => p.startsWith("src/llmShield")), "no src/llmShield change");
+  });
+  assert.equal(wtDiff.trim(), "", "no uncommitted adapter/src-llmShield changes");
+
+  // Stronger check against the base branch when it can be resolved (local dev, or CI
+  // that fetched origin/main). `main` is not a local ref in a shallow PR checkout, so
+  // this is best-effort and skipped gracefully when no base ref is available.
   const kernel = "tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/capability_kernel.py";
-  const baseKernel = execFileSync("git", ["show", `${base}:${kernel}`], { encoding: "utf8" });
-  assert.equal(readFileSync(kernel, "utf8"), baseKernel, "kernel byte-identical to base");
+  let base = null;
+  for (const ref of ["origin/main", "main"]) {
+    try {
+      base = execFileSync("git", ["merge-base", "HEAD", ref], {
+        encoding: "utf8",
+        stdio: ["pipe", "pipe", "ignore"],
+      }).trim();
+      break;
+    } catch {
+      /* ref not available in this environment */
+    }
+  }
+  if (base) {
+    const branchDiff = execFileSync(
+      "git",
+      ["diff", "--name-only", `${base}..HEAD`, "--", ...paths],
+      {
+        encoding: "utf8",
+      }
+    );
+    assert.equal(
+      branchDiff.trim(),
+      "",
+      "no committed adapter/src-llmShield changes on this branch"
+    );
+    const baseKernel = execFileSync("git", ["show", `${base}:${kernel}`], { encoding: "utf8" });
+    assert.equal(readFileSync(kernel, "utf8"), baseKernel, "kernel byte-identical to base");
+  }
 });
