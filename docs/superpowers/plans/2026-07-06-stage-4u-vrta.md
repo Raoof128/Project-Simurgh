@@ -38,7 +38,7 @@ tools/simurgh-attestation/stage4u/
   core/vrtaCore.mjs        evaluateVrta / evaluateVrtaSafe — frozen order 119→132, 132 fail-closed
   node/build-stage4u-corpus.mjs        Lane A: seed→58 attack fixtures + manifest + charter
   node/build-stage4u-attestation.mjs   computeStructural / computeAttestation / signAttestation
-  node/verify-stage4u-attestation.mjs  verifyAttestation({tier,pubKeyPem}) + CLI
+  node/verify-stage4u-attestation.mjs  verifyAttestation({ tier, attestationPubKeyPem, charterPubKeyPem, findingPubKeyPem }) + CLI
   laneb/fable-attacker.mjs             capped live Fable-5 driver (disabled-by-default, lazy SDK)
   laneb/run-laneb-vrta.mjs             ceremony wrapper + verify-only replay (runVrtaLaneB)
   python/vrta_parity.py                stdlib parity for the offline outcome model
@@ -1373,7 +1373,7 @@ git commit -m "feat(4u): Lane A offline attack corpus — 58 seed-derived fixtur
 **Interfaces:** (mirror 4S `build-stage4s-attestation.mjs`)
 - Produces:
   - `computeStructural(fixturesDir) -> { epoch, charter_digest, attack_manifest_root, corpus_digest, per_fixture:[{attack_id,expected_raw,fixture_digest}], asr }` (NO engine run; `asr` is the exact-rational object; `epoch` is a fixed integer for reproduce-tamper, P2-4).
-  - `computeAttestation(fixturesDir, signerKeyDigest) -> structural + { per_fixture adds observed_raw + outcome_class, lane_b_capture }` (engine run).
+  - `computeAttestation(fixturesDir, signerKeyDigest) -> structural + { per_fixture adds observed_raw + outcome_class, lane_b_capture, attestation_key_digest: signerKeyDigest }` (engine run). The `attestation_key_digest` field lets the verifier bind the attestation signature to a named key (parallel to charter/finding binding).
   - `signAttestation(att, privKey) -> { ...att, signature }` (sign over canonicalJson of the unsigned att, including `bundle_merkle_root`).
   - `bundleMerkleRoot(att)` over the **five** sealed groups (`charter`, `attack_fixtures`, `finding_records`, `lane_b_capture`, `asr_ledger`) using `merkleRootSorted` (P0-10 — Lane B is inside the sealed root, so it cannot be altered or omitted unnoticed).
   - CLI `--key <pem> --out <path>`. Signs with the committed `INSECURE_FIXTURE_ONLY_vrta.pem` (generated in Task 8).
@@ -1439,7 +1439,7 @@ git commit -m "feat(4u): two-tier VRTA attestation builder + signer"
 - Test: extend `tests/unit/llmShield/stage4u/attestation.test.js` (verify half)
 
 **Interfaces:** (mirror 4S `verify-stage4s-attestation.mjs`)
-- Produces: `verifyAttestation(att, { tier, attestationPubKeyPem, charterPubKeyPem, findingPubKeyPem }) -> { ok, raw, reason, tier }`. **Three distinct keys (P0-1)** — the attestation and findings are signed by `vrta.pem`, the charter by `vrta-charter.pem`; one ambiguous `pubKeyPem` could not verify both. Public tier: attestation signature → `attestationPubKeyPem`; charter signature + binding → `charterPubKeyPem` (passed to `evaluateVrta` as `pubKeyPem`); finding signatures → `findingPubKeyPem`; plus manifest-root recompute, corpus-count completeness, 127/128, ASR-ledger recompute — no engine. Audit tier: additionally re-run each fixture through `evaluateChainSafe`, catching 129. CLI `--tier public|audit --pubkey <att.pem> --charter-pubkey <charter.pem> --finding-pubkey <finding.pem>` (`--finding-pubkey` defaults to `--pubkey`); exit code = `raw`.
+- Produces: `verifyAttestation(att, { tier, attestationPubKeyPem, charterPubKeyPem, findingPubKeyPem }) -> { ok, raw, reason, tier }`. **Three distinct keys (P0-1)** — the attestation and findings are signed by `vrta.pem`, the charter by `vrta-charter.pem`; one ambiguous `pubKeyPem` could not verify both. Public tier: attestation signature → `attestationPubKeyPem` **and** `attestation.attestation_key_digest === keyDigest(attestationPubKeyPem)` (else 120, parallel to charter/finding binding); charter signature + binding → `charterPubKeyPem` (passed to `evaluateVrta` as `pubKeyPem`); finding signatures → `findingPubKeyPem`; plus manifest-root recompute, corpus-count completeness, 127/128, ASR-ledger recompute — no engine. Audit tier: additionally re-run each fixture through `evaluateChainSafe`, catching 129. CLI `--tier public|audit --pubkey <att.pem> --charter-pubkey <charter.pem> --finding-pubkey <finding.pem>` (`--finding-pubkey` defaults to `--pubkey`); exit code = `raw`.
 
 - [ ] **Step 1: Write the failing test**
 
