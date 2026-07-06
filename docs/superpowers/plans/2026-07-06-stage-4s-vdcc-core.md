@@ -25,6 +25,7 @@
 - Unit tests in `tests/unit/llmShield/stage4s/` (gated by `npm test`); e2e in `tests/e2e/llmShield/stage4s/` (must be wired into `scripts/check-e2e.sh` explicitly — 4L lesson). Explicit `*.test.js` globs, never bare dirs. Never shell `rg` in a unit test.
 - Neutral commit messages; no attribution trailers of any kind.
 - Version: `v2.28.0-stage-4s-vdcc-core` — confirm with `git tag --sort=-creatordate | head -3` before tagging.
+- **Cascade re-sign rule (applies to EVERY fixture/tamper task — 4R lesson generalized):** a fixture targeting a later raw code MUST recompute and re-sign every earlier structural container needed to keep earlier checks green — affected fan-out commitments, child `parent_receipt_digest`s, `declared_child_set_root`, the four sealed arrays' digests, `bundle_merkle_root`, and all touched signatures — EXCEPT the exact layer the fixture intentionally breaks. A 115 fixture that accidentally dies at 107 because a digest drifted is a fixture bug, not a finding.
 
 ---
 
