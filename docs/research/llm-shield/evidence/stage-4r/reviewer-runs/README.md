@@ -21,17 +21,25 @@ fingerprint, so re-runs cannot pad the count.
 
 ## Ledger
 
-| File                    | Identity (self-declared)        | Challenge     | Fingerprint        | Out-of-band confirmed | Notes                                                              |
-| ----------------------- | ------------------------------- | ------------- | ------------------ | --------------------- | ----------------------------------------------------------------- |
-| `reviewer-Raouf4444.json` | anonymous (old-format)        | `Raouf4444`   | n/a (pre-identity) | n/a                   | First run; predates the identity/fingerprint fields.              |
-| `reviewer-Linda.json`   | `Linda <lala4433@gmail.com>`    | `sage-26175e` | `8686d6f26920fa26` | yes (Linda, per Raouf) | Fresh requester-issued challenge; same machine as an earlier practice/"Test Run" block (fingerprint match), i.e. one genuine reviewer who tested first. |
+| File                      | Identity (self-declared)          | Challenge     | Fingerprint        | Out-of-band confirmed | Notes                                                                                              |
+| ------------------------- | --------------------------------- | ------------- | ------------------ | --------------------- | -------------------------------------------------------------------------------------------------- |
+| `reviewer-Raouf4444.json` | anonymous (old-format)            | `Raouf4444`   | n/a (pre-identity) | n/a                   | First run; predates the identity/fingerprint fields.                                               |
+| `reviewer-Linda.json`     | `Linda <lala4433@gmail.com>`      | `sage-26175e` | `8686d6f26920fa26` | yes (per Raouf)       | Fresh requester-issued challenge; same machine as an earlier practice run (fingerprint match).      |
+| `reviewer-Cameron.json`   | `Cameron <ameronjd41291@gmail.com>` | `fern-a2804f` | `da26fa41573fe0ed` | pending               | Fresh requester-issued challenge; distinct machine (distinct fingerprint). Confirm fingerprint next. |
+| `reviewer-James.json`     | `James <james.ja555@outlook.com>` | `oak-6afb78`  | `527b716f8646073d` | pending               | Fresh requester-issued challenge; distinct machine (distinct fingerprint). Confirm fingerprint next. |
+
+All three named runs carry DISTINCT fingerprints → three separate machines.
 
 ## Honest tally
 
-**1 genuinely attributable independent run (Linda), fingerprint confirmed by the
-requester** — plus the earlier anonymous first run. This corroborates that the
-reference crypto runs and passes on an independent machine, with a named,
-confirmed reviewer. It is **not** yet a cross-organisation or institutional
-pilot, so the rail `cross_org_operator_b_not_yet_exercised` stays and the
-four-axis scores are unchanged. Padding is impossible here: distinct machines
-show distinct fingerprints, and the requester must confirm each one.
+**3 named, independent runs across 3 distinct machines** (Linda, Cameron, James),
+each with a fresh requester-issued challenge and a valid signature — plus the
+earlier anonymous first run. Linda's fingerprint is out-of-band confirmed;
+Cameron's and James's confirmations are **pending** (a 10-second "is this your
+fingerprint?" to each). This corroborates that the reference crypto runs and
+passes on multiple independent machines with named reviewers. It is **not** yet a
+cross-organisation or institutional pilot, so the rail
+`cross_org_operator_b_not_yet_exercised` stays and the four-axis scores are
+unchanged. Padding is impossible: each distinct machine shows a distinct
+fingerprint, one machine cannot mint more than one (persistent key), and the
+requester confirms each fingerprint out of band.

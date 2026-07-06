@@ -1,0 +1,26 @@
+{
+  "result": {
+    "what": "Stage 4R PCCC external reviewer run",
+    "challenge": "fern-a2804f",
+    "reviewer_identity_self_declared": "Cameron <ameronjd41291@gmail.com>",
+    "reviewer_public_key_der_hex": "302a300506032b65700321002579baf01f77e4ab3de794b7a5dac0878e6ce18d34671fc3b2a07d3864ea0b4c",
+    "reviewer_key_fingerprint": "da26fa41573fe0ed",
+    "scenarios": [
+      {
+        "classes": "shared",
+        "expect_match": true,
+        "got_match": true,
+        "verdict": "green"
+      },
+      {
+        "classes": "different",
+        "expect_match": false,
+        "got_match": false,
+        "verdict": "green"
+      }
+    ],
+    "all_passed": true,
+    "node_version": "v20.11.0"
+  },
+  "signature": "ad349ab0f5d6620eb021efe50285da17717775f61067631688de688fab39940add185fcf5a109f239eaf553cb86226e90bc0ccb2536577062077cecf758e3304"
+}
