@@ -420,6 +420,40 @@ export const VDCC_REASONS_100 = Object.freeze([
   "public_key_index_missing_or_malformed",
 ]);
 
+// Stage 4U VRTA codes (reviewed extension of the shared ledger; 4U spec §8).
+// 120 is generic SIGNATURE_INVALID (charter / finding / attestation).
+export const VRTA_RAW_CODES = Object.freeze({
+  VRTA_BUNDLE_MALFORMED: 119,
+  SIGNATURE_INVALID: 120,
+  CHARTER_UNBOUND_ATTACK: 121,
+  NON_MALICE_INVARIANT_VIOLATED: 122,
+  LIVE_LANE_CAP_EXCEEDED: 123,
+  ATTACK_MANIFEST_ROOT_MISMATCH: 124,
+  FINDING_RECORD_MISSING: 125,
+  CORPUS_COUNT_MISMATCH: 126,
+  SELF_REPORT_RECOMPUTE_CONFLICT: 127,
+  OUTCOME_CLASSIFICATION_INVALID: 128,
+  ATTACK_NOT_REPRODUCIBLE: 129,
+  ASR_LEDGER_MISMATCH: 130,
+  SEVERITY_UNDECLARED: 131,
+  INTERNAL_FAIL_CLOSED: 132,
+});
+export const VRTA_CHECK_ORDER = Object.freeze([
+  119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132,
+]);
+export const VRTA_REASONS_119 = Object.freeze([
+  "vrta_bundle_schema_invalid",
+  "charter_schema_invalid",
+  "attack_fixture_schema_invalid",
+  "finding_record_schema_invalid",
+  "attack_manifest_schema_invalid",
+]);
+export const VRTA_REASONS_120 = Object.freeze([
+  "charter_signature_invalid",
+  "finding_signature_invalid",
+  "attestation_signature_invalid",
+]);
+
 export const HARNESS_CODES = Object.freeze({
   CLEAN_RUN_FALSELY_REJECTED: 19,
 });
@@ -544,6 +578,21 @@ export const RUN_LEVEL_BY_RAW = Object.freeze({
   116: 1,
   117: 1,
   118: 1,
+  // Stage 4U VRTA codes (reviewed extension of the shared ledger; 4U spec §8).
+  119: 1,
+  120: 1,
+  121: 1,
+  122: 1,
+  123: 1,
+  124: 1,
+  125: 1,
+  126: 1,
+  127: 1,
+  128: 1,
+  129: 1,
+  130: 1,
+  131: 1,
+  132: 1,
 });
 
 export function stage4CodeForRawCode(code) {

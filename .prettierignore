@@ -88,3 +88,6 @@ docs/research/llm-shield/evidence/stage-4r/
 # Stage 4S VDCC: deterministic fixtures and byte-compared evidence (reproduce cmp).
 tests/fixtures/llmShield/stage4s/
 docs/research/llm-shield/evidence/stage-4s/
+
+# Stage 4U VRTA generated evidence (byte-stable, do not reformat)
+docs/research/llm-shield/evidence/stage-4u/

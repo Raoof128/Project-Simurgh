@@ -146,6 +146,21 @@ test("Stage 4H.4 exit map is explicit and collision-bounded", () => {
       116: 1,
       117: 1,
       118: 1,
+      // Stage 4U VRTA codes (reviewed extension of the shared ledger; 4U spec §8).
+      119: 1,
+      120: 1,
+      121: 1,
+      122: 1,
+      123: 1,
+      124: 1,
+      125: 1,
+      126: 1,
+      127: 1,
+      128: 1,
+      129: 1,
+      130: 1,
+      131: 1,
+      132: 1,
     })
   );
 });
