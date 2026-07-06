@@ -25,3 +25,4 @@ jobs:
           lean proofs/stage4q/FrictionPrecedence.lean
           lean proofs/stage4r/NoPublicHerdToken.lean
           lean proofs/stage4s/NoGhostHop.lean
+          lean proofs/stage4u/NoSilentBypass.lean
