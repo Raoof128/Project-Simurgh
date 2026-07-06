@@ -16,7 +16,6 @@ import {
   encodePoint,
   decodePoint,
   isSmallOrder,
-  randomScalar,
   scalarToHex,
   scalarFromHex,
 } from "./edwards25519.mjs";
@@ -54,7 +53,29 @@ export function dleqProve({
   pairId,
   role,
 }) {
-  const r = randomScalar();
+  // Deterministic (RFC 6979-style) commitment nonce: derived from the SECRET
+  // scalar plus all public inputs. Secret (attacker can't recompute without the
+  // scalar), and it makes proofs byte-reproducible for the fixture corpus.
+  const nonceBytes = crypto
+    .createHash("sha512")
+    .update(
+      canonicalJson({
+        domain: "simurgh.pccc.dleq.nonce.v1",
+        scalar: scalarToHex(scalar),
+        relation_kind: relationKind,
+        epoch,
+        run_id: runId,
+        pair_id: pairId,
+        role,
+        base: encodePoint(basePoint),
+        epk: encodePoint(epk),
+        target: encodePoint(targetPoint),
+      })
+    )
+    .digest();
+  let r = 0n;
+  for (const byte of nonceBytes) r = (r << 8n) | BigInt(byte);
+  r %= L;
   const R1 = mul(r, G);
   const R2 = mul(r, basePoint);
   const c = challengeScalar({
