@@ -221,6 +221,18 @@ documented non-claims.
   byte-parity, a two-real-process Lane B with a distinct-key approver, and six machine-checked Lean
   theorems. Scope is honest and signed: reference research crypto, not production; audit-tier
   DLEQ verification, public tier digest-level; not a full VOPRF.
+- **Delegation-chain completeness** (Stage 4S) — a delegated agentic authority **tree** cannot omit,
+  invent, replay, over-spend, over-scope, or ghost-hop authority without producing an offline-verifiable
+  verifier failure. Each hop is a **dual-signed** receipt (a hidden hop needs both neighbours to
+  withhold signatures); every delegator commits its **exact child set** at window close (the liar must
+  ledger the lie); scope attenuates as a lattice and budgets conserve as a flux law across the tree
+  (structuring-by-delegation cannot exceed the root budget). The **No Ghost Hop** law is enforced at the
+  Capability Kernel (`authorise_with_chain`, a sixth additive family member; five predecessors frozen).
+  Raw codes 100–118, a deterministic Lane A corpus reaching every reachable code, JS↔Python byte-parity,
+  a two-real-process Lane B over a genuine **MCP stdio** delegation hop, a two-tier signed attestation,
+  and six machine-checked Lean theorems (including inclusion≠completeness). Scope is honest and signed:
+  chain held **verifiable**, never "agents safe"; Merkle inclusion is presence, not completeness;
+  attenuation enforcement is prior art — our claim is the offline-recomputable proof.
 
 ### External-defence evaluation
 
