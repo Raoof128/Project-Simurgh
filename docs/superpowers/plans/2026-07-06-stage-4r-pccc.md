@@ -421,7 +421,7 @@ test("hashToPoint is deterministic, on-curve, non-identity, domain-separated", (
 - Create (generated, committed): `docs/research/llm-shield/evidence/stage-4r/pccc-attestation.json`
 - Test: `tests/unit/llmShield/stage4r/attestation.test.js` + `tests/e2e/llmShield/stage4r/verifier.test.js`
 
-- [ ] Steps: TDD attestation shape (exact keys incl. `window_match_census`, the three kind strings, 7 non-claims, 5 limitations, 16 rails); verifier e2e: both tiers exit 0 on committed evidence, audit tier exits 93 on a z-tampered packet copy, public tier exits 99 on a planted class digest; BYO kit validates the committed sample invitation and refuses a version-skewed one; sign once with the real key (generate at `~/simurgh-keys/stage4r.pem` if absent — NEVER in repo); commit — `feat: add stage 4r attestation, two-tier offline verifier, and byo operator kit`.
+- [ ] Steps: TDD attestation shape (exact keys incl. `window_match_census`, the three kind strings, 7 non-claims, 6 limitations, 17 rails); verifier e2e: both tiers exit 0 on committed evidence, audit tier exits 93 on a z-tampered packet copy, public tier exits 99 on a planted class digest; BYO kit validates the committed sample invitation and refuses a version-skewed one; sign once with the real key (generate at `~/simurgh-keys/stage4r.pem` if absent — NEVER in repo); commit — `feat: add stage 4r attestation, two-tier offline verifier, and byo operator kit`.
 
 ---
 
