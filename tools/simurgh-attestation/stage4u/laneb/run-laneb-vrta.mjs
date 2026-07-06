@@ -18,7 +18,11 @@ const CAPTURE = join(ROOT, "docs/research/llm-shield/evidence/stage-4u/laneb/lan
 function replayEntry(entry) {
   // Refusals and lane_disabled markers are outcomes, not attacks — they reproduce as-is.
   if (entry.outcome_class === "model_refused" || entry.outcome_class === "lane_disabled") {
-    return { attack_id: entry.attack_id, recorded_class: entry.outcome_class, replay_class: entry.outcome_class };
+    return {
+      attack_id: entry.attack_id,
+      recorded_class: entry.outcome_class,
+      replay_class: entry.outcome_class,
+    };
   }
   let replay_class = entry.outcome_class;
   if (entry.produced_bundle) {
@@ -38,8 +42,20 @@ export function runVrtaLaneB({ live = false, client = null, charter = null } = {
     const replayed = entries.map(replayEntry);
     for (const r of replayed)
       if (r.replay_class !== r.recorded_class)
-        return { raw: 129, reason: "attack_not_reproducible", detail: r, replayed, lane_b_capture: entries };
-    return { raw: 0, reason: "green", verified_count: replayed.length, lane_b_capture: entries, replayed };
+        return {
+          raw: 129,
+          reason: "attack_not_reproducible",
+          detail: r,
+          replayed,
+          lane_b_capture: entries,
+        };
+    return {
+      raw: 0,
+      reason: "green",
+      verified_count: replayed.length,
+      lane_b_capture: entries,
+      replayed,
+    };
   }
   // Live path (manual only) — not reached in CI.
   return runLive({ client, charter });
@@ -55,11 +71,18 @@ async function runLive({ client, charter }) {
     } catch (e) {
       if (e.name === "LaneBCapExceededError") break;
       // A disabled/unavailable lane records a single lane_disabled marker (evidence, not silence).
-      lane_b_capture.push({ attack_id: `laneb#${i}`, outcome_class: "lane_disabled", reason: String(e.message) });
+      lane_b_capture.push({
+        attack_id: `laneb#${i}`,
+        outcome_class: "lane_disabled",
+        reason: String(e.message),
+      });
       break;
     }
   }
   mkdirSync(dirname(CAPTURE), { recursive: true });
-  writeFileSync(CAPTURE, JSON.stringify({ schema: "simurgh.vrta_laneb_capture.v1", lane_b_capture }, null, 2) + "\n");
+  writeFileSync(
+    CAPTURE,
+    JSON.stringify({ schema: "simurgh.vrta_laneb_capture.v1", lane_b_capture }, null, 2) + "\n"
+  );
   return { raw: 0, reason: "green", verified_count: lane_b_capture.length, lane_b_capture };
 }

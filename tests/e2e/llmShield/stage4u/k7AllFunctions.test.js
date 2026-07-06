@@ -9,9 +9,20 @@ import crypto from "node:crypto";
 import { readFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { buildCorpus } from "../../../../tools/simurgh-attestation/stage4u/node/build-stage4u-corpus.mjs";
-import { evaluateVrta, evaluateVrtaSafe } from "../../../../tools/simurgh-attestation/stage4u/core/vrtaCore.mjs";
-import { signCharter, charterDigest, attackManifestRoot } from "../../../../tools/simurgh-attestation/stage4u/core/charter.mjs";
-import { buildFinding, signFinding, recomputeAsr } from "../../../../tools/simurgh-attestation/stage4u/core/findingLedger.mjs";
+import {
+  evaluateVrta,
+  evaluateVrtaSafe,
+} from "../../../../tools/simurgh-attestation/stage4u/core/vrtaCore.mjs";
+import {
+  signCharter,
+  charterDigest,
+  attackManifestRoot,
+} from "../../../../tools/simurgh-attestation/stage4u/core/charter.mjs";
+import {
+  buildFinding,
+  signFinding,
+  recomputeAsr,
+} from "../../../../tools/simurgh-attestation/stage4u/core/findingLedger.mjs";
 import {
   computeAttestation,
   signAttestation,
@@ -21,19 +32,24 @@ import { VRTA_CHECK_ORDER } from "../../../../tools/simurgh-attestation/stage4h/
 import { keyDigest } from "../../../../tools/simurgh-attestation/stage4s/core/receiptBuilder.mjs";
 
 const KEYDIR = "tests/fixtures/llmShield/stage4u/test-keys/";
-const charterPriv = crypto.createPrivateKey(readFileSync(KEYDIR + "INSECURE_FIXTURE_ONLY_vrta-charter.pem"));
+const charterPriv = crypto.createPrivateKey(
+  readFileSync(KEYDIR + "INSECURE_FIXTURE_ONLY_vrta-charter.pem")
+);
 const vrtaPriv = crypto.createPrivateKey(readFileSync(KEYDIR + "INSECURE_FIXTURE_ONLY_vrta.pem"));
-const charterPub = crypto.createPublicKey(charterPriv).export({ type: "spki", format: "pem" }).toString();
-const findingPub = crypto.createPublicKey(vrtaPriv).export({ type: "spki", format: "pem" }).toString();
+const charterPub = crypto
+  .createPublicKey(charterPriv)
+  .export({ type: "spki", format: "pem" })
+  .toString();
+const findingPub = crypto
+  .createPublicKey(vrtaPriv)
+  .export({ type: "spki", format: "pem" })
+  .toString();
 const OPTS = { pubKeyPem: charterPub, findingPubKeyPem: findingPub };
 
 const base = buildCorpus({ write: false }).bundle;
 const clone = () => structuredClone(base);
 const reFinding = (attack_id, o) =>
-  signFinding(
-    buildFinding({ attack_id, family: "ghost_hop", severity: null, ...o }),
-    vrtaPriv,
-  );
+  signFinding(buildFinding({ attack_id, family: "ghost_hop", severity: null, ...o }), vrtaPriv);
 
 // Each entry returns { bundle, opts } that trips exactly `code`.
 const TRIP = {
@@ -60,7 +76,10 @@ const TRIP = {
   123: () => ({ bundle: clone(), opts: { ...OPTS, capBreaches: ["max_tokens"] } }),
   124: () => {
     const b = clone();
-    const bad = signCharter({ ...b.charter, attack_manifest_root: "sha256:" + "a".repeat(64), signature: undefined }, charterPriv);
+    const bad = signCharter(
+      { ...b.charter, attack_manifest_root: "sha256:" + "a".repeat(64), signature: undefined },
+      charterPriv
+    );
     b.charter = bad;
     const cd = charterDigest(bad);
     for (const f of b.attack_fixtures) f.charter_digest = cd; // rebind so 121 passes
@@ -129,7 +148,11 @@ const TRIP = {
 
 test("full pipeline: corpus → attestation → verify public+audit is GREEN", () => {
   const att = signAttestation(computeAttestation(undefined, keyDigest(findingPub)), vrtaPriv);
-  const K = { attestationPubKeyPem: findingPub, charterPubKeyPem: charterPub, findingPubKeyPem: findingPub };
+  const K = {
+    attestationPubKeyPem: findingPub,
+    charterPubKeyPem: charterPub,
+    findingPubKeyPem: findingPub,
+  };
   assert.equal(verifyAttestation(att, { tier: "public", ...K }).raw, 0);
   assert.equal(verifyAttestation(att, { tier: "audit", ...K }).raw, 0);
 });
@@ -148,8 +171,13 @@ test("tamper matrix: every VRTA code 119..132 is independently reachable in froz
 
 test("read-only kernel: no adapter/src-llmShield diff and capability_kernel.py is byte-frozen", () => {
   const base = execFileSync("git", ["merge-base", "HEAD", "main"], { encoding: "utf8" }).trim();
-  const diff = execFileSync("git", ["diff", "--name-only", `${base}..HEAD`], { encoding: "utf8" }).split("\n");
-  assert.ok(!diff.some((p) => p.startsWith("tools/agentdojo-simurgh-adapter/")), "no adapter change");
+  const diff = execFileSync("git", ["diff", "--name-only", `${base}..HEAD`], {
+    encoding: "utf8",
+  }).split("\n");
+  assert.ok(
+    !diff.some((p) => p.startsWith("tools/agentdojo-simurgh-adapter/")),
+    "no adapter change"
+  );
   assert.ok(!diff.some((p) => p.startsWith("src/llmShield")), "no src/llmShield change");
   const kernel = "tools/agentdojo-simurgh-adapter/simurgh_agentdojo_adapter/capability_kernel.py";
   const baseKernel = execFileSync("git", ["show", `${base}:${kernel}`], { encoding: "utf8" });

@@ -17,7 +17,11 @@ export function verifyFindingReport(finding) {
     return { raw: 127, reason: "self_report_recompute_conflict" };
   const truth = classify(finding.expected_raw, finding.verifier_recomputed_raw);
   if (finding.outcome_class !== truth)
-    return { raw: 128, reason: "outcome_classification_invalid", detail: { recorded: finding.outcome_class, truth } };
+    return {
+      raw: 128,
+      reason: "outcome_classification_invalid",
+      detail: { recorded: finding.outcome_class, truth },
+    };
   return { raw: 0, reason: "green" };
 }
 

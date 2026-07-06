@@ -51,5 +51,8 @@ test("non-fixture key ref is a non-malice violation (feeds 122)", () => {
   assert.match(nonMaliceViolation({ ...good, key_refs: ["prod_signing_key"] }), /non_fixture_key/);
 });
 test("third-party endpoint is a non-malice violation (feeds 122)", () => {
-  assert.match(nonMaliceViolation({ ...good, endpoint: "https://api.example.com" }), /third_party_endpoint/);
+  assert.match(
+    nonMaliceViolation({ ...good, endpoint: "https://api.example.com" }),
+    /third_party_endpoint/
+  );
 });

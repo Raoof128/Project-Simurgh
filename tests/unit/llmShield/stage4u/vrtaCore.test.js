@@ -4,27 +4,43 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import crypto from "node:crypto";
-import { evaluateVrta, evaluateVrtaSafe } from "../../../../tools/simurgh-attestation/stage4u/core/vrtaCore.mjs";
+import {
+  evaluateVrta,
+  evaluateVrtaSafe,
+} from "../../../../tools/simurgh-attestation/stage4u/core/vrtaCore.mjs";
 import {
   buildCharter,
   signCharter,
   charterDigest,
   deriveAttackIds,
 } from "../../../../tools/simurgh-attestation/stage4u/core/charter.mjs";
-import { buildFinding, signFinding, recomputeAsr } from "../../../../tools/simurgh-attestation/stage4u/core/findingLedger.mjs";
+import {
+  buildFinding,
+  signFinding,
+  recomputeAsr,
+} from "../../../../tools/simurgh-attestation/stage4u/core/findingLedger.mjs";
 import { keyDigest } from "../../../../tools/simurgh-attestation/stage4s/core/receiptBuilder.mjs";
-import { CAMPAIGN_SEED, FAMILY_COUNTS, SCHEMAS } from "../../../../tools/simurgh-attestation/stage4u/constants.mjs";
+import {
+  CAMPAIGN_SEED,
+  FAMILY_COUNTS,
+  SCHEMAS,
+} from "../../../../tools/simurgh-attestation/stage4u/constants.mjs";
 
 const priv = crypto.createPrivateKey(
-  readFileSync("tests/fixtures/llmShield/stage4u/test-keys/INSECURE_FIXTURE_ONLY_vrta-charter.pem"),
+  readFileSync("tests/fixtures/llmShield/stage4u/test-keys/INSECURE_FIXTURE_ONLY_vrta-charter.pem")
 );
 const pubPem = crypto.createPublicKey(priv).export({ type: "spki", format: "pem" }).toString();
 const caps = { max_turns: 6, max_tokens: 4000, max_spend_usd: 2 };
 
 function greenBundle() {
   const charter = signCharter(
-    buildCharter({ seed: CAMPAIGN_SEED, familyCounts: FAMILY_COUNTS, caps, charterKeyDigest: keyDigest(pubPem) }),
-    priv,
+    buildCharter({
+      seed: CAMPAIGN_SEED,
+      familyCounts: FAMILY_COUNTS,
+      caps,
+      charterKeyDigest: keyDigest(pubPem),
+    }),
+    priv
   );
   const cd = charterDigest(charter);
   const ids = deriveAttackIds(CAMPAIGN_SEED, FAMILY_COUNTS);
@@ -50,8 +66,8 @@ function greenBundle() {
         outcome_class: "survived",
         severity: null,
       }),
-      priv,
-    ),
+      priv
+    )
   );
   const asr = recomputeAsr(finding_records).attack_success_rate;
   return { charter, attack_fixtures, finding_records, lane_b_capture: [], asr };
@@ -91,7 +107,7 @@ test("public tier catches 127 without an engine", () => {
       outcome_class: "survived",
       severity: null,
     }),
-    priv,
+    priv
   );
   assert.equal(evaluateVrta(b, opts).raw, 127);
 });
@@ -106,7 +122,7 @@ test("evaluateVrtaSafe returns 132 on a thrown engine", () => {
         throw new Error("boom");
       },
     }).raw,
-    132,
+    132
   );
 });
 test("ASR ledger mismatch -> 130 (exact rational)", () => {

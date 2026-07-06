@@ -13,11 +13,17 @@ import {
 
 test("VRTA codes are the contiguous block 119..132", () => {
   const vals = Object.values(VRTA_RAW_CODES).sort((a, b) => a - b);
-  assert.deepEqual(vals, Array.from({ length: 14 }, (_, i) => 119 + i));
+  assert.deepEqual(
+    vals,
+    Array.from({ length: 14 }, (_, i) => 119 + i)
+  );
 });
 
 test("check order is ascending 119..132 and covers every code once", () => {
-  assert.deepEqual(VRTA_CHECK_ORDER, Array.from({ length: 14 }, (_, i) => 119 + i));
+  assert.deepEqual(
+    VRTA_CHECK_ORDER,
+    Array.from({ length: 14 }, (_, i) => 119 + i)
+  );
 });
 
 test("every VRTA code is run-level 1", () => {
