@@ -12,6 +12,7 @@
 // the verdicts over the challenge. This proves an independent machine + keys ran
 // the real reference crypto and it passed. It is NOT production crypto.
 import crypto from "node:crypto";
+import os from "node:os";
 
 // ─────────────────────────── Edwards25519 reference group ───────────────────
 const P = 2n ** 255n - 19n;
@@ -282,6 +283,8 @@ const result = {
   ],
   all_passed: allPassed,
   node_version: process.version,
+  platform: os.platform(), // darwin | win32 | linux — for cross-platform diversity
+  arch: os.arch(), // x64 | arm64 — records that the reference math agrees everywhere
 };
 const signature = crypto
   .sign(null, Buffer.from(canon(result)), reviewer.privateKey)
