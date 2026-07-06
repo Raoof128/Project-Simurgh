@@ -1,0 +1,26 @@
+{
+  "result": {
+    "what": "Stage 4R PCCC external reviewer run",
+    "challenge": "oak-6afb78",
+    "reviewer_identity_self_declared": "James <james.ja555@outlook.com>",
+    "reviewer_public_key_der_hex": "302a300506032b6570032100701aea38575299c6dec30d22d8b00e1f1b638adba973775d5e3e59348839d9e4",
+    "reviewer_key_fingerprint": "527b716f8646073d",
+    "scenarios": [
+      {
+        "classes": "shared",
+        "expect_match": true,
+        "got_match": true,
+        "verdict": "green"
+      },
+      {
+        "classes": "different",
+        "expect_match": false,
+        "got_match": false,
+        "verdict": "green"
+      }
+    ],
+    "all_passed": true,
+    "node_version": "v20.11.0"
+  },
+  "signature": "ccb2aa5827f107518150ad55389e4baefc61d08ada341d91f80b304b8ca7ebd393bdc822f3a5f128f790fa8c696a6b07e30d5ed0a5f2291d244203e74f0d7f05"
+}
