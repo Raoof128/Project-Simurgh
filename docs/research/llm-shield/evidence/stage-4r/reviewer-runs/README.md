@@ -23,7 +23,7 @@ fingerprint, so re-runs cannot pad the count.
 
 | File                      | Identity (self-declared)          | Challenge     | Fingerprint        | Out-of-band confirmed | Notes                                                                                              |
 | ------------------------- | --------------------------------- | ------------- | ------------------ | --------------------- | -------------------------------------------------------------------------------------------------- |
-| `reviewer-Raouf4444.json` | anonymous (old-format)            | `Raouf4444`   | n/a (pre-identity) | n/a                   | First run; predates the identity/fingerprint fields.                                               |
+| `reviewer-Raouf4444.json` | anonymous in block; attributed out-of-band to teacher **Amin** (per Raouf) | `Raouf4444` | n/a (pre-identity) | name is a manifest note, NOT signed | First run; predates the identity/fingerprint fields, so "Amin" is an out-of-band annotation only — the signature does not cover it. |
 | `reviewer-Linda.json`     | `Linda <lala4433@gmail.com>`      | `sage-26175e` | `8686d6f26920fa26` | yes (per Raouf)       | Fresh requester-issued challenge; same machine as an earlier practice run (fingerprint match).      |
 | `reviewer-Cameron.json`   | `Cameron <ameronjd41291@gmail.com>` | `fern-a2804f` | `da26fa41573fe0ed` | pending               | Fresh requester-issued challenge; distinct machine (distinct fingerprint). Confirm fingerprint next. |
 | `reviewer-James.json`     | `James <james.ja555@outlook.com>` | `oak-6afb78`  | `527b716f8646073d` | pending               | Fresh requester-issued challenge; distinct machine (distinct fingerprint). Confirm fingerprint next. |
