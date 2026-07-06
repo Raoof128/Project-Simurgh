@@ -138,8 +138,9 @@ test("cross-stage invariants: 4N feed unchanged, shared exit ledger intact", () 
   assert.equal(stage4CodeForRawCode(54), 1);
   assert.equal(stage4CodeForRawCode(66), 1);
   assert.equal(stage4CodeForRawCode(79), 1);
-  // 67-79 are Stage 4P VOCA, 80-89 are Stage 4Q VFR codes (mapped to 1); 90+ is unknown.
-  assert.equal(stage4CodeForRawCode(90), 3);
+  // 67-79 are Stage 4P VOCA, 80-89 are Stage 4Q VFR, 90-99 are Stage 4R PCCC codes
+  // (mapped to 1); 100+ is unknown.
+  assert.equal(stage4CodeForRawCode(100), 3);
   // The 4N feed we anchor to is present and non-empty (read-only from 4O).
   assert.ok(feed.length > 0);
   assert.equal(feed[0].schema, "simurgh.seismograph.heartbeat.v1");

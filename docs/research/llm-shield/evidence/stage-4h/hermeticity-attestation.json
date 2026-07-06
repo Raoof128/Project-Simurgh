@@ -15,5 +15,5 @@
     "dgram",
     "child_process"
   ],
-  "node_major": 26
+  "node_major": 22
 }

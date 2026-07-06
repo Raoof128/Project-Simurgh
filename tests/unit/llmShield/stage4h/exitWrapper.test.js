@@ -115,6 +115,17 @@ test("Stage 4H.4 exit map is explicit and collision-bounded", () => {
       87: 1,
       88: 1,
       89: 1,
+      // Stage 4R PCCC codes (reviewed extension of the shared ledger; 4R spec §6).
+      90: 1,
+      91: 1,
+      92: 1,
+      93: 1,
+      94: 1,
+      95: 1,
+      96: 1,
+      97: 1,
+      98: 1,
+      99: 1,
     })
   );
 });
