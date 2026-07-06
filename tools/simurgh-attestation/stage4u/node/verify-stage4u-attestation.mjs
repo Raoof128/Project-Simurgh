@@ -13,7 +13,10 @@ import { evaluateChainSafe } from "../../stage4s/core/chainCore.mjs";
 import { evaluateVrta } from "../core/vrtaCore.mjs";
 import { bundleMerkleRoot } from "./build-stage4u-attestation.mjs";
 
-export function verifyAttestation(att, { tier = "public", attestationPubKeyPem, charterPubKeyPem, findingPubKeyPem } = {}) {
+export function verifyAttestation(
+  att,
+  { tier = "public", attestationPubKeyPem, charterPubKeyPem, findingPubKeyPem } = {}
+) {
   const findingPub = findingPubKeyPem || attestationPubKeyPem;
   const fail = (raw, reason, detail) => ({ ok: false, raw, reason, tier, detail });
 
@@ -25,7 +28,7 @@ export function verifyAttestation(att, { tier = "public", attestationPubKeyPem, 
       null,
       Buffer.from(canonicalJson(unsigned)),
       crypto.createPublicKey(attestationPubKeyPem),
-      Buffer.from(signature, "hex"),
+      Buffer.from(signature, "hex")
     );
   } catch {
     sigOk = false;
@@ -47,7 +50,11 @@ export function verifyAttestation(att, { tier = "public", attestationPubKeyPem, 
     asr: att.asr,
   };
   const engine = tier === "audit" ? (fx) => evaluateChainSafe(fx.payload.bundle).raw : undefined;
-  const r = evaluateVrta(bundle, { pubKeyPem: charterPubKeyPem, findingPubKeyPem: findingPub, engine });
+  const r = evaluateVrta(bundle, {
+    pubKeyPem: charterPubKeyPem,
+    findingPubKeyPem: findingPub,
+    engine,
+  });
   if (r.raw) return { ok: false, ...r, tier };
 
   // 4 — audit tier: every per-fixture observed_raw must reproduce on a fresh run (129).
@@ -56,7 +63,11 @@ export function verifyAttestation(att, { tier = "public", attestationPubKeyPem, 
     for (const p of att.per_fixture) {
       const fresh = evaluateChainSafe(fxById.get(p.attack_id).payload.bundle).raw;
       if (fresh !== p.observed_raw)
-        return fail(129, "attack_not_reproducible", { attack_id: p.attack_id, recorded: p.observed_raw, fresh });
+        return fail(129, "attack_not_reproducible", {
+          attack_id: p.attack_id,
+          recorded: p.observed_raw,
+          fresh,
+        });
     }
   }
   return { ok: true, raw: 0, reason: "green", tier };
@@ -65,15 +76,27 @@ export function verifyAttestation(att, { tier = "public", attestationPubKeyPem, 
 if (import.meta.url === `file://${process.argv[1]}`) {
   const args = process.argv.slice(2);
   const arg = (flag, def) => (args.indexOf(flag) >= 0 ? args[args.indexOf(flag) + 1] : def);
-  const attPath = arg("--att", "docs/research/llm-shield/evidence/stage-4u/attestation/vrta-attestation.json");
+  const attPath = arg(
+    "--att",
+    "docs/research/llm-shield/evidence/stage-4u/attestation/vrta-attestation.json"
+  );
   const tier = arg("--tier", "public");
   const kd = "tests/fixtures/llmShield/stage4u/test-keys";
   const readPem = (p) => readFileSync(p, "utf8");
   const attestationPubKeyPem = readPem(arg("--pubkey", `${kd}/INSECURE_FIXTURE_ONLY_vrta.pub.pem`));
-  const charterPubKeyPem = readPem(arg("--charter-pubkey", `${kd}/INSECURE_FIXTURE_ONLY_vrta-charter.pub.pem`));
-  const findingPubKeyPem = readPem(arg("--finding-pubkey", `${kd}/INSECURE_FIXTURE_ONLY_vrta.pub.pem`));
+  const charterPubKeyPem = readPem(
+    arg("--charter-pubkey", `${kd}/INSECURE_FIXTURE_ONLY_vrta-charter.pub.pem`)
+  );
+  const findingPubKeyPem = readPem(
+    arg("--finding-pubkey", `${kd}/INSECURE_FIXTURE_ONLY_vrta.pub.pem`)
+  );
   const att = JSON.parse(readFileSync(attPath, "utf8"));
-  const res = verifyAttestation(att, { tier, attestationPubKeyPem, charterPubKeyPem, findingPubKeyPem });
+  const res = verifyAttestation(att, {
+    tier,
+    attestationPubKeyPem,
+    charterPubKeyPem,
+    findingPubKeyPem,
+  });
   console.error(`stage4u verify [${tier}]: raw=${res.raw} reason=${res.reason}`);
   process.exit(res.raw === 0 ? 0 : res.raw);
 }

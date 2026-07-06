@@ -10,7 +10,9 @@ test("python parity: classify + exact-rational ASR match JS on the whole corpus"
   const { bundle } = buildCorpus({ write: false });
   const js = recomputeAsr(bundle.finding_records).attack_success_rate;
   const out = JSON.parse(
-    execFileSync("python3", ["tools/simurgh-attestation/stage4u/python/vrta_parity.py"], { encoding: "utf8" }),
+    execFileSync("python3", ["tools/simurgh-attestation/stage4u/python/vrta_parity.py"], {
+      encoding: "utf8",
+    })
   );
   assert.deepEqual(out.attack_success_rate, js);
   assert.equal(out.per_fixture.length, 58);

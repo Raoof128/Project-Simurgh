@@ -11,10 +11,17 @@ const KEYDIR = "tests/fixtures/llmShield/stage4u/test-keys/";
 const priv = crypto.createPrivateKey(readFileSync(KEYDIR + "INSECURE_FIXTURE_ONLY_vrta.pem")); // attestation + findings
 const pub = crypto.createPublicKey(priv).export({ type: "spki", format: "pem" }).toString();
 const charterPub = crypto
-  .createPublicKey(crypto.createPrivateKey(readFileSync(KEYDIR + "INSECURE_FIXTURE_ONLY_vrta-charter.pem")))
+  .createPublicKey(
+    crypto.createPrivateKey(readFileSync(KEYDIR + "INSECURE_FIXTURE_ONLY_vrta-charter.pem"))
+  )
   .export({ type: "spki", format: "pem" })
   .toString();
-const att = JSON.parse(readFileSync("docs/research/llm-shield/evidence/stage-4u/attestation/vrta-attestation.json", "utf8"));
+const att = JSON.parse(
+  readFileSync(
+    "docs/research/llm-shield/evidence/stage-4u/attestation/vrta-attestation.json",
+    "utf8"
+  )
+);
 const K = { attestationPubKeyPem: pub, charterPubKeyPem: charterPub, findingPubKeyPem: pub };
 
 test("public tier verifies GREEN", () => {
@@ -25,8 +32,13 @@ test("audit tier verifies GREEN (engine re-run)", () => {
 });
 test("charter key and attestation key are NOT interchangeable (key binding)", () => {
   assert.notEqual(
-    verifyAttestation(att, { tier: "public", attestationPubKeyPem: pub, charterPubKeyPem: pub, findingPubKeyPem: pub }).raw,
-    0,
+    verifyAttestation(att, {
+      tier: "public",
+      attestationPubKeyPem: pub,
+      charterPubKeyPem: pub,
+      findingPubKeyPem: pub,
+    }).raw,
+    0
   );
 });
 test("tamper WITHOUT re-sign -> PUBLIC tier catches 120 (signature)", () => {
@@ -36,7 +48,9 @@ test("tamper WITHOUT re-sign -> PUBLIC tier catches 120 (signature)", () => {
 });
 test("tamper observed_raw + re-sign -> PUBLIC passes, AUDIT catches 129 (true two-tier proof)", () => {
   const t = JSON.parse(JSON.stringify(att));
-  const i = t.per_fixture.findIndex((p) => p.outcome_class === "survived" && p.observed_raw !== 0 && p.observed_raw !== 105);
+  const i = t.per_fixture.findIndex(
+    (p) => p.outcome_class === "survived" && p.observed_raw !== 0 && p.observed_raw !== 105
+  );
   t.per_fixture[i].observed_raw = 105; // wrong; engine will not return this
   const resigned = signAttestation({ ...t, signature: undefined }, priv);
   assert.equal(verifyAttestation(resigned, { tier: "public", ...K }).raw, 0);

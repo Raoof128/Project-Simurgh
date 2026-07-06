@@ -30,7 +30,7 @@ export function deriveAttackIds(seed, familyCounts) {
 
 export function attackManifestRoot(seed, familyCounts) {
   const leaves = deriveAttackIds(seed, familyCounts).map((id) =>
-    recordDigest({ domain: DOMAINS.MANIFEST_LEAF, id }),
+    recordDigest({ domain: DOMAINS.MANIFEST_LEAF, id })
   );
   return merkleRootSorted(leaves);
 }
@@ -92,7 +92,8 @@ export function verifyCharterShapeAndSignature(charter, { pubKeyPem }) {
   if (charter.campaign_seed !== CAMPAIGN_SEED) return bad({ campaign_seed: charter.campaign_seed });
   if (canonicalJson(charter.attack_family_counts) !== canonicalJson(FAMILY_COUNTS))
     return bad({ attack_family_counts: true });
-  if (canonicalJson(charter.non_claims) !== canonicalJson(VRTA_NON_CLAIMS)) return bad({ non_claims: true });
+  if (canonicalJson(charter.non_claims) !== canonicalJson(VRTA_NON_CLAIMS))
+    return bad({ non_claims: true });
   if (canonicalJson(charter.known_limitations) !== canonicalJson(VRTA_KNOWN_LIMITATIONS))
     return bad({ known_limitations: true });
   if (canonicalJson(charter.rails) !== canonicalJson(VRTA_RAILS)) return bad({ rails: true });
@@ -103,7 +104,7 @@ export function verifyCharterShapeAndSignature(charter, { pubKeyPem }) {
       null,
       Buffer.from(canonicalJson(unsignedBody(charter))),
       crypto.createPublicKey(pubKeyPem),
-      Buffer.from(charter.signature, "hex"),
+      Buffer.from(charter.signature, "hex")
     );
   } catch {
     sigOk = false;

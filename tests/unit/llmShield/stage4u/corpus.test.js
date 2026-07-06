@@ -3,7 +3,10 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { buildCorpus } from "../../../../tools/simurgh-attestation/stage4u/node/build-stage4u-corpus.mjs";
-import { FAMILY_COUNTS, ATTACK_FAMILIES } from "../../../../tools/simurgh-attestation/stage4u/constants.mjs";
+import {
+  FAMILY_COUNTS,
+  ATTACK_FAMILIES,
+} from "../../../../tools/simurgh-attestation/stage4u/constants.mjs";
 import { evaluateVrta } from "../../../../tools/simurgh-attestation/stage4u/core/vrtaCore.mjs";
 
 test("corpus builds 58 fixtures across 8 families, all bound and complete", () => {
@@ -17,7 +20,7 @@ test("the assembled corpus bundle passes the audit-tier verifier GREEN", () => {
   const { bundle, engine, charterPub, findingPub } = buildCorpus({ write: false });
   assert.deepEqual(
     evaluateVrta(bundle, { pubKeyPem: charterPub, findingPubKeyPem: findingPub, engine }),
-    { raw: 0, reason: "green" },
+    { raw: 0, reason: "green" }
   );
 });
 test("honest ASR is 0/58 (every attack is contained)", () => {

@@ -28,7 +28,8 @@ const CAPS = Object.freeze({ max_turns: 6, max_tokens: 4000, max_spend_usd: 2 })
 
 // 4S case-name -> { exp, spec }. buildSplitBrain has no reusable spec.
 const CASE = new Map(CASES.map(([name, exp, spec]) => [name, { exp, spec }]));
-const bundleForCase = (name) => (name === "split-brain" ? buildSplitBrain() : build(CASE.get(name).spec));
+const bundleForCase = (name) =>
+  name === "split-brain" ? buildSplitBrain() : build(CASE.get(name).spec);
 const codeForCase = (name) => (name === "split-brain" ? 113 : CASE.get(name).exp);
 
 // Per-family ordered case lists (cycled to reach the declared count). Codes chosen
@@ -48,7 +49,12 @@ const FAMILY_CASES = Object.freeze({
   ],
   structuring_budget: ["budget-amplification", "local-overspend"],
   scope_escalation: ["forged-attenuation"],
-  crypto_signature: ["single-signature-hop", "missing-signature-field", "merkle-bundle-mismatch", "spine-ref-mismatch"],
+  crypto_signature: [
+    "single-signature-hop",
+    "missing-signature-field",
+    "merkle-bundle-mismatch",
+    "spine-ref-mismatch",
+  ],
   structural_forgery: [
     "dual-sentinel-root",
     "parent-digest-mismatch",
@@ -57,8 +63,18 @@ const FAMILY_CASES = Object.freeze({
     "epoch-replay",
     "root-replay",
   ],
-  fable_adaptive: ["orphan-crossing", "receiptless-crossing", "hidden-child", "single-signature-hop"],
-  verifier_oracle: ["spine-ref-mismatch", "merkle-bundle-mismatch", "missing-signature-field", "dual-sentinel-root"],
+  fable_adaptive: [
+    "orphan-crossing",
+    "receiptless-crossing",
+    "hidden-child",
+    "single-signature-hop",
+  ],
+  verifier_oracle: [
+    "spine-ref-mismatch",
+    "merkle-bundle-mismatch",
+    "missing-signature-field",
+    "dual-sentinel-root",
+  ],
   differential: ["honest-tree"],
 });
 
@@ -75,8 +91,13 @@ export function buildCorpus({ write = false } = {}) {
   const charterPub = pubOf(charterPriv);
 
   const charter = signCharter(
-    buildCharter({ seed: CAMPAIGN_SEED, familyCounts: FAMILY_COUNTS, caps: CAPS, charterKeyDigest: keyDigest(charterPub) }),
-    charterPriv,
+    buildCharter({
+      seed: CAMPAIGN_SEED,
+      familyCounts: FAMILY_COUNTS,
+      caps: CAPS,
+      charterKeyDigest: keyDigest(charterPub),
+    }),
+    charterPriv
   );
   const cd = charterDigest(charter);
 
@@ -119,10 +140,17 @@ export function buildCorpus({ write = false } = {}) {
             outcome_class,
             severity: null,
           }),
-          vrtaPriv,
-        ),
+          vrtaPriv
+        )
       );
-      cases.push({ attack_id, family, case: caseName, expected_raw: expected, observed_raw: observed, outcome_class });
+      cases.push({
+        attack_id,
+        family,
+        case: caseName,
+        expected_raw: expected,
+        observed_raw: observed,
+        outcome_class,
+      });
     }
   }
 
@@ -141,7 +169,10 @@ export function buildCorpus({ write = false } = {}) {
       charter_digest: cd,
       attack_manifest_root: charter.attack_manifest_root,
       attack_success_rate: asr,
-      cases: cases.map((c) => ({ ...c, fixture_digest: fixtureDigest(attack_fixtures.find((f) => f.attack_id === c.attack_id)) })),
+      cases: cases.map((c) => ({
+        ...c,
+        fixture_digest: fixtureDigest(attack_fixtures.find((f) => f.attack_id === c.attack_id)),
+      })),
     };
     writeFileSync(join(dir, "corpus-index.json"), canonicalJson(index) + "\n");
   }
@@ -151,5 +182,7 @@ export function buildCorpus({ write = false } = {}) {
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   const { bundle } = buildCorpus({ write: true });
-  console.error(`stage4u corpus: wrote ${bundle.attack_fixtures.length} fixtures + bundle.json + corpus-index.json`);
+  console.error(
+    `stage4u corpus: wrote ${bundle.attack_fixtures.length} fixtures + bundle.json + corpus-index.json`
+  );
 }

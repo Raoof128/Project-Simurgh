@@ -38,7 +38,12 @@ export const FAMILY_COUNTS = Object.freeze({
   verifier_oracle: 8,
   differential: 8,
 });
-export const OUTCOME_CLASSES = Object.freeze(["survived", "bypass", "model_refused", "lane_disabled"]);
+export const OUTCOME_CLASSES = Object.freeze([
+  "survived",
+  "bypass",
+  "model_refused",
+  "lane_disabled",
+]);
 // §2.1 — non-claims, signed, spec order.
 export const VRTA_NON_CLAIMS = Object.freeze([
   "not_a_proof_of_model_safety",

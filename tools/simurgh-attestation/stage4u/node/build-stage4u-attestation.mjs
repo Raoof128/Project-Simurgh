@@ -25,7 +25,10 @@ const dirOf = (fixturesDir) => (isAbsolute(fixturesDir) ? fixturesDir : join(ROO
 
 function loadBundle(fixturesDir) {
   const dir = dirOf(fixturesDir);
-  return { bundle: readJson(join(dir, "bundle.json")), index: readJson(join(dir, "corpus-index.json")) };
+  return {
+    bundle: readJson(join(dir, "bundle.json")),
+    index: readJson(join(dir, "corpus-index.json")),
+  };
 }
 
 // Merkle root over the FIVE sealed groups (P0-10 — Lane B is inside the root).
@@ -84,7 +87,13 @@ export function computeAttestation(fixturesDir = FIXDIR, signerKeyDigest = null)
     asr: bundle.asr,
     charter_digest: charterDigest(bundle.charter),
     attack_manifest_root: bundle.charter.attack_manifest_root,
-    corpus_digest: recordDigest(per_fixture.map((p) => ({ attack_id: p.attack_id, expected_raw: p.expected_raw, fixture_digest: p.fixture_digest }))),
+    corpus_digest: recordDigest(
+      per_fixture.map((p) => ({
+        attack_id: p.attack_id,
+        expected_raw: p.expected_raw,
+        fixture_digest: p.fixture_digest,
+      }))
+    ),
     per_fixture,
   };
   att.bundle_merkle_root = bundleMerkleRoot(att);

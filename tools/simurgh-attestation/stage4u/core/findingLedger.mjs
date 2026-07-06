@@ -42,12 +42,19 @@ export function buildFinding({
 
 // Schema/shape is 119, NOT 125. Called before ledger completeness.
 export function validateFindingRecord(finding) {
-  if (!finding || typeof finding !== "object") return { raw: 119, reason: "finding_record_schema_invalid" };
+  if (!finding || typeof finding !== "object")
+    return { raw: 119, reason: "finding_record_schema_invalid" };
   for (const k of FINDING_FIELDS)
-    if (!(k in finding)) return { raw: 119, reason: "finding_record_schema_invalid", detail: { missing: k } };
-  if (finding.schema !== SCHEMAS.FINDING) return { raw: 119, reason: "finding_record_schema_invalid" };
+    if (!(k in finding))
+      return { raw: 119, reason: "finding_record_schema_invalid", detail: { missing: k } };
+  if (finding.schema !== SCHEMAS.FINDING)
+    return { raw: 119, reason: "finding_record_schema_invalid" };
   if (!OUTCOME_CLASSES.includes(finding.outcome_class))
-    return { raw: 119, reason: "finding_record_schema_invalid", detail: { outcome_class: finding.outcome_class } };
+    return {
+      raw: 119,
+      reason: "finding_record_schema_invalid",
+      detail: { outcome_class: finding.outcome_class },
+    };
   return { raw: 0, reason: "green" };
 }
 
@@ -55,7 +62,8 @@ const unsignedFinding = (f) => {
   const { finding_key_digest, signature, ...body } = f;
   return body;
 };
-export const findingDigest = (f) => recordDigest({ domain: DOMAINS.FINDING, finding: unsignedFinding(f) });
+export const findingDigest = (f) =>
+  recordDigest({ domain: DOMAINS.FINDING, finding: unsignedFinding(f) });
 
 // Findings are individually signed (mirrors 4S per-receipt signing).
 export function signFinding(finding, privKey) {
@@ -71,12 +79,17 @@ export function verifyFindingSignature(finding, pubKeyPem) {
       null,
       Buffer.from(canonicalJson(unsignedFinding(finding))),
       crypto.createPublicKey(pubKeyPem),
-      Buffer.from(finding.signature, "hex"),
+      Buffer.from(finding.signature, "hex")
     );
   } catch {
     ok = false;
   }
-  if (!ok) return { raw: 120, reason: "finding_signature_invalid", detail: { attack_id: finding.attack_id } };
+  if (!ok)
+    return {
+      raw: 120,
+      reason: "finding_signature_invalid",
+      detail: { attack_id: finding.attack_id },
+    };
   // Bind the claimed key digest to the ACTUAL verifying key.
   if (finding.finding_key_digest !== keyDigest(pubKeyPem))
     return {
@@ -95,13 +108,25 @@ export function verifyLedger(charter, fixtures, findings) {
 
   for (const id of planned) {
     if (!fixtureIds.has(id))
-      return { raw: 125, reason: "finding_record_missing", detail: { attack_id: id, kind: "fixture" } };
+      return {
+        raw: 125,
+        reason: "finding_record_missing",
+        detail: { attack_id: id, kind: "fixture" },
+      };
     if (!findingIds.has(id))
-      return { raw: 125, reason: "finding_record_missing", detail: { attack_id: id, kind: "finding" } };
+      return {
+        raw: 125,
+        reason: "finding_record_missing",
+        detail: { attack_id: id, kind: "finding" },
+      };
   }
   for (const f of findings)
     if (!planned.has(f.attack_id))
-      return { raw: 125, reason: "finding_record_missing", detail: { attack_id: f.attack_id, kind: "unplanned" } };
+      return {
+        raw: 125,
+        reason: "finding_record_missing",
+        detail: { attack_id: f.attack_id, kind: "unplanned" },
+      };
 
   if (
     fixtures.length !== planned.size ||

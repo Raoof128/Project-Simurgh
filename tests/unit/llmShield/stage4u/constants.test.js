@@ -29,7 +29,7 @@ test("eight attack families in spec order", () => {
 test("family counts sum to the declared 58", () => {
   assert.equal(
     Object.values(FAMILY_COUNTS).reduce((a, b) => a + b, 0),
-    58,
+    58
   );
   assert.deepEqual(Object.keys(FAMILY_COUNTS), ATTACK_FAMILIES);
 });
@@ -38,11 +38,13 @@ test("seven non-claims, six limitations, twelve rails", () => {
   assert.equal(VRTA_KNOWN_LIMITATIONS.length, 6);
   assert.ok(
     VRTA_KNOWN_LIMITATIONS.includes(
-      "lane_a_reuses_the_4s_case_table_demonstrates_regression_resistance_not_novel_attack_discovery",
-    ),
+      "lane_a_reuses_the_4s_case_table_demonstrates_regression_resistance_not_novel_attack_discovery"
+    )
   );
   assert.equal(VRTA_RAILS.length, 12);
-  assert.ok(VRTA_RAILS.includes("severity_of_any_confirmed_bypass_is_signed_into_known_limitations"));
+  assert.ok(
+    VRTA_RAILS.includes("severity_of_any_confirmed_bypass_is_signed_into_known_limitations")
+  );
 });
 test("outcome classes are frozen and exact (incl. lane_disabled)", () => {
   assert.deepEqual(OUTCOME_CLASSES, ["survived", "bypass", "model_refused", "lane_disabled"]);

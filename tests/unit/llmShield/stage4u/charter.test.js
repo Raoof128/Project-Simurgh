@@ -14,16 +14,26 @@ import {
   verifyManifestRoot,
 } from "../../../../tools/simurgh-attestation/stage4u/core/charter.mjs";
 import { keyDigest } from "../../../../tools/simurgh-attestation/stage4s/core/receiptBuilder.mjs";
-import { FAMILY_COUNTS, CAMPAIGN_SEED } from "../../../../tools/simurgh-attestation/stage4u/constants.mjs";
+import {
+  FAMILY_COUNTS,
+  CAMPAIGN_SEED,
+} from "../../../../tools/simurgh-attestation/stage4u/constants.mjs";
 
 const KEYDIR = "tests/fixtures/llmShield/stage4u/test-keys/";
-const priv = crypto.createPrivateKey(readFileSync(KEYDIR + "INSECURE_FIXTURE_ONLY_vrta-charter.pem"));
+const priv = crypto.createPrivateKey(
+  readFileSync(KEYDIR + "INSECURE_FIXTURE_ONLY_vrta-charter.pem")
+);
 const pubPem = crypto.createPublicKey(priv).export({ type: "spki", format: "pem" }).toString();
 const caps = { max_turns: 6, max_tokens: 4000, max_spend_usd: 2 };
 const mk = () =>
   signCharter(
-    buildCharter({ seed: CAMPAIGN_SEED, familyCounts: FAMILY_COUNTS, caps, charterKeyDigest: keyDigest(pubPem) }),
-    priv,
+    buildCharter({
+      seed: CAMPAIGN_SEED,
+      familyCounts: FAMILY_COUNTS,
+      caps,
+      charterKeyDigest: keyDigest(pubPem),
+    }),
+    priv
   );
 
 test("attack ids are deterministic and count to 58", () => {
@@ -34,7 +44,10 @@ test("attack ids are deterministic and count to 58", () => {
 });
 test("a well-formed signed charter passes shape+sig AND manifest-root", () => {
   const c = mk();
-  assert.deepEqual(verifyCharterShapeAndSignature(c, { pubKeyPem: pubPem }), { raw: 0, reason: "green" });
+  assert.deepEqual(verifyCharterShapeAndSignature(c, { pubKeyPem: pubPem }), {
+    raw: 0,
+    reason: "green",
+  });
   assert.deepEqual(verifyManifestRoot(c), { raw: 0, reason: "green" });
 });
 test("tampered signature -> 120 (shape+sig layer only)", () => {
@@ -46,7 +59,10 @@ test("manifest root that does not recompute -> 124 (manifest layer only, never 1
   const c = mk();
   c.attack_manifest_root = "sha256:" + "b".repeat(64);
   const resigned = signCharter({ ...c, signature: undefined }, priv);
-  assert.deepEqual(verifyCharterShapeAndSignature(resigned, { pubKeyPem: pubPem }), { raw: 0, reason: "green" });
+  assert.deepEqual(verifyCharterShapeAndSignature(resigned, { pubKeyPem: pubPem }), {
+    raw: 0,
+    reason: "green",
+  });
   assert.equal(verifyManifestRoot(resigned).raw, 124);
 });
 test("missing schema -> 119", () => {

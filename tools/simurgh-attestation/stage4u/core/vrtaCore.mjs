@@ -54,7 +54,12 @@ export function evaluateVrta(bundle, { pubKeyPem, findingPubKeyPem, engine, capB
       return { raw: 121, reason: "charter_unbound_attack", detail: { attack_id: fx.attack_id } };
   for (const fx of bundle.attack_fixtures) {
     const nm = nonMaliceViolation(fx);
-    if (nm) return { raw: 122, reason: "non_malice_invariant_violated", detail: { attack_id: fx.attack_id, why: nm } };
+    if (nm)
+      return {
+        raw: 122,
+        reason: "non_malice_invariant_violated",
+        detail: { attack_id: fx.attack_id, why: nm },
+      };
   }
   if (Array.isArray(capBreaches) && capBreaches.length)
     return { raw: 123, reason: "live_lane_cap_exceeded", detail: { breaches: capBreaches } };
@@ -79,7 +84,11 @@ export function evaluateVrta(bundle, { pubKeyPem, findingPubKeyPem, engine, capB
   // 130 — exact-rational ASR ledger must recompute.
   const { attack_success_rate } = recomputeAsr(bundle.finding_records);
   if (bundle.asr && canonicalJson(bundle.asr) !== canonicalJson(attack_success_rate))
-    return { raw: 130, reason: "asr_ledger_mismatch", detail: { signed: bundle.asr, recomputed: attack_success_rate } };
+    return {
+      raw: 130,
+      reason: "asr_ledger_mismatch",
+      detail: { signed: bundle.asr, recomputed: attack_success_rate },
+    };
   // 131 — bypass severity (L4 tail).
   const sev = verifyBypassSeverity(bundle.finding_records);
   if (sev.raw) return sev;

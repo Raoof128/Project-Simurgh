@@ -14,7 +14,10 @@ import {
   verifyFindingSignature,
 } from "../../../../tools/simurgh-attestation/stage4u/core/findingLedger.mjs";
 import { deriveAttackIds } from "../../../../tools/simurgh-attestation/stage4u/core/charter.mjs";
-import { CAMPAIGN_SEED, FAMILY_COUNTS } from "../../../../tools/simurgh-attestation/stage4u/constants.mjs";
+import {
+  CAMPAIGN_SEED,
+  FAMILY_COUNTS,
+} from "../../../../tools/simurgh-attestation/stage4u/constants.mjs";
 
 const ids = deriveAttackIds(CAMPAIGN_SEED, FAMILY_COUNTS);
 const charter = {
@@ -32,7 +35,7 @@ const survivedFindings = ids.map((id) =>
     expected_raw: 111,
     outcome_class: "survived",
     severity: null,
-  }),
+  })
 );
 
 test("complete survived ledger is GREEN", () => {
@@ -42,7 +45,10 @@ test("dropping a finding -> 125", () => {
   assert.equal(verifyLedger(charter, fixtures, survivedFindings.slice(1)).raw, 125);
 });
 test("count mismatch (extra fixture, no id) -> 126", () => {
-  const extra = [...fixtures, { attack_id: "stage4u-vrta-seed-v1:ghost_hop#99", family: "ghost_hop" }];
+  const extra = [
+    ...fixtures,
+    { attack_id: "stage4u-vrta-seed-v1:ghost_hop#99", family: "ghost_hop" },
+  ];
   assert.equal(verifyLedger(charter, extra, survivedFindings).raw, 126);
 });
 test("bypass without severity -> 131", () => {
@@ -65,7 +71,11 @@ test("invalid outcome_class -> 119 (schema, not 125)", () => {
 });
 test("recomputeAsr is an EXACT rational (no float)", () => {
   const r = recomputeAsr(survivedFindings);
-  assert.deepEqual(r.attack_success_rate, { confirmed_bypass: 0, executed_non_refusal: 58, ratio: "0/58" });
+  assert.deepEqual(r.attack_success_rate, {
+    confirmed_bypass: 0,
+    executed_non_refusal: 58,
+    ratio: "0/58",
+  });
 });
 test("laneBStats reports refusals separately from corpus ASR", () => {
   const capture = [

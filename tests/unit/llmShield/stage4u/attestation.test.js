@@ -31,9 +31,13 @@ test("bundle Merkle root seals all FIVE groups incl. lane_b_capture", () => {
   assert.notEqual(bundleMerkleRoot(tampered), root0);
 });
 test("signature verifies against the signer public key (ESM)", () => {
-  const priv = crypto.createPrivateKey(readFileSync("tests/fixtures/llmShield/stage4u/test-keys/INSECURE_FIXTURE_ONLY_vrta.pem"));
+  const priv = crypto.createPrivateKey(
+    readFileSync("tests/fixtures/llmShield/stage4u/test-keys/INSECURE_FIXTURE_ONLY_vrta.pem")
+  );
   const pub = crypto.createPublicKey(priv);
   const att = signAttestation(computeAttestation(), priv);
   const { signature, ...body } = att;
-  assert.ok(crypto.verify(null, Buffer.from(canonicalJson(body)), pub, Buffer.from(signature, "hex")));
+  assert.ok(
+    crypto.verify(null, Buffer.from(canonicalJson(body)), pub, Buffer.from(signature, "hex"))
+  );
 });

@@ -33,7 +33,8 @@ export function validateFixture(fixture) {
   if (!DIGEST_RE.test(fixture.charter_digest)) return bad({ charter_digest: true });
   if (!Array.isArray(fixture.key_refs)) return bad({ key_refs: true });
   if (typeof fixture.endpoint !== "string") return bad({ endpoint: true });
-  if (!fixture.attack_id.startsWith(`${CAMPAIGN_SEED}:${fixture.family}#`)) return bad({ attack_id: fixture.attack_id });
+  if (!fixture.attack_id.startsWith(`${CAMPAIGN_SEED}:${fixture.family}#`))
+    return bad({ attack_id: fixture.attack_id });
   return { raw: 0, reason: "green" };
 }
 
@@ -51,7 +52,8 @@ export function bindsCharter(fixture, _charter, expectedDigest) {
 const FIXTURE_KEY_RE = /^INSECURE_FIXTURE_ONLY_[A-Za-z-]+$/;
 const ALLOWED_ENDPOINTS = new Set(["in_repo", "localhost"]);
 export function nonMaliceViolation(fixture) {
-  for (const k of fixture.key_refs || []) if (!FIXTURE_KEY_RE.test(k)) return `non_fixture_key:${k}`;
+  for (const k of fixture.key_refs || [])
+    if (!FIXTURE_KEY_RE.test(k)) return `non_fixture_key:${k}`;
   if (!ALLOWED_ENDPOINTS.has(fixture.endpoint)) return `third_party_endpoint:${fixture.endpoint}`;
   return null;
 }

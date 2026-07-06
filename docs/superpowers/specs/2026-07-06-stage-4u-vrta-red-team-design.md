@@ -35,7 +35,7 @@ endorsement claim.)
 
 Every safety layer must be attacked by its own authors, or it is faith, not
 evidence. But an adversarial harness that drives a live model, forges
-signatures, and hunts verifier blind spots is *shaped like* the thing we refuse
+signatures, and hunts verifier blind spots is _shaped like_ the thing we refuse
 to be. So Stage 4U's first deliverable is not an attack — it is a set of
 **machine-checkable non-malice constraints**: a signed charter that pins the
 declared scope, the bounded keys/endpoints, the caps, and the disclosure
@@ -44,7 +44,7 @@ charter proves **declared scope, not inner intent**, and yields **bounded
 no-harm evidence over declared endpoints, fixture keys, and hermetic execution**
 — not a metaphysical guarantee. The verifier refuses to score any attack not
 bound to the charter. Covert malice is the exact opposite of this design: our
-red-team is *maximally auditable by construction*, and a reviewer can re-derive
+red-team is _maximally auditable by construction_, and a reviewer can re-derive
 both the authorization frame and the honest attack-success rate offline.
 
 This is the Simurgh answer to "how do you red-team responsibly?" — you make the
@@ -57,7 +57,7 @@ Stages 4A–4S shipped a capability kernel (`authorise` →
 `authorise_with_intent` → `authorise_with_provenance` →
 `authorise_with_manifest` → `authorise_with_friction` →
 `authorise_with_chain`) and a VDCC delegation-completeness verifier over
-dual-signed hop-receipt trees. Each stage proved a *constructive* property: this
+dual-signed hop-receipt trees. Each stage proved a _constructive_ property: this
 bundle is complete, this delegation attenuates, this budget conserves. None has
 been subjected to a **published, reproducible, model-driven adversarial campaign
 whose only goal is to make the verifier lie** — to earn a GREEN attestation on a
@@ -125,9 +125,9 @@ a_fable_refusal_is_recorded_as_outcome_never_rephrased_to_bypass_it
 **Outcome semantics (mirror of Stage 4G, frozen):** a confirmed bypass — an
 attack that earns a GREEN it should not, or a kernel authorization that should
 have been contained — is a **valid recorded outcome**, not a VRTA failure. VRTA
-*fails* only when the red-team is charter-unbound, non-reproducible, incomplete
+_fails_ only when the red-team is charter-unbound, non-reproducible, incomplete
 (a finding omitted), misclassified, cap-breaching, or tampered. This is the
-difference between a *security outcome* and a *verification outcome*, and it is
+difference between a _security outcome_ and a _verification outcome_, and it is
 what lets us report a real bypass honestly instead of burying it.
 
 ## 3. The signed Red-Team Charter (invention 1)
@@ -137,16 +137,16 @@ The charter proves **declared scope, not inner intent** (rail
 `non_malice_charter_proves_declared_scope_not_inner_intent`); it binds eight
 structurally-enforced constraints:
 
-| # | Constraint | Structural enforcement (not just prose) |
-|---|------------|-----------------------------------------|
-| 1 | Self-target only | Every attack's referenced keys match `INSECURE_FIXTURE_ONLY_*`; every endpoint is localhost/in-repo. Violation → **122**. |
-| 2 | Containment, not elicitation | Win condition schema = `false_green` or `kernel_over_authorize`, never model-output content. Any content-harm target is schema-rejected → **119**. |
-| 3 | No harm causation | `destructive_mutation` crossings are modelled labels; no real destructive tool is invoked (offline hermeticity gate, reused from prior stages). |
-| 4 | Precommitted disclosure loop | The charter commits an `attack_manifest_root` (below); every planned attack id must resolve to exactly one fixture and one signed finding, and vice versa. Violation → **124 / 125 / 126**. |
-| 5 | Brutal honesty | Every confirmed bypass carries a signed severity in `known_limitations`; missing → **131**. |
-| 6 | Reproducible receipts | Each attack replays to its recorded raw outcome; divergence → **129**. |
-| 7 | Denial-of-wallet caps | Live lane token/spend/turn caps signed into the charter; exceed → **123**. |
-| 8 | No evasion-for-malice | Attacks probe *our own* verifier's blind spots; findings land in-repo. |
+| #   | Constraint                   | Structural enforcement (not just prose)                                                                                                                                                     |
+| --- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Self-target only             | Every attack's referenced keys match `INSECURE_FIXTURE_ONLY_*`; every endpoint is localhost/in-repo. Violation → **122**.                                                                   |
+| 2   | Containment, not elicitation | Win condition schema = `false_green` or `kernel_over_authorize`, never model-output content. Any content-harm target is schema-rejected → **119**.                                          |
+| 3   | No harm causation            | `destructive_mutation` crossings are modelled labels; no real destructive tool is invoked (offline hermeticity gate, reused from prior stages).                                             |
+| 4   | Precommitted disclosure loop | The charter commits an `attack_manifest_root` (below); every planned attack id must resolve to exactly one fixture and one signed finding, and vice versa. Violation → **124 / 125 / 126**. |
+| 5   | Brutal honesty               | Every confirmed bypass carries a signed severity in `known_limitations`; missing → **131**.                                                                                                 |
+| 6   | Reproducible receipts        | Each attack replays to its recorded raw outcome; divergence → **129**.                                                                                                                      |
+| 7   | Denial-of-wallet caps        | Live lane token/spend/turn caps signed into the charter; exceed → **123**.                                                                                                                  |
+| 8   | No evasion-for-malice        | Attacks probe _our own_ verifier's blind spots; findings land in-repo.                                                                                                                      |
 
 ### 3.1 Precommitted attack manifest (invention 2 — closes self-declared-count laundering)
 
@@ -183,7 +183,7 @@ every fixture has exactly one signed finding referring to a planned attack_id   
 
 Now "the red-team cannot hide its own wins" holds against a manifest fixed at
 charter-signing time, not a mutable running total. `fable_adaptive` ids are
-*slots* the live lane fills; an unfilled slot resolves to a `model_refused` or
+_slots_ the live lane fills; an unfilled slot resolves to a `model_refused` or
 `lane_disabled` finding (never silently dropped).
 
 ### 3.2 Charter binding
@@ -212,7 +212,7 @@ holds trivially (no `src/llmShield` or kernel diff). The surface:
 ## 5. Attack taxonomy (eight families) → what each falsifies
 
 Every family is a set of signed attack fixtures. The **expected** verifier verdict
-for each is recorded; a fixture is a *bypass* iff observed ≠ expected in the
+for each is recorded; a fixture is a _bypass_ iff observed ≠ expected in the
 system's favour being wrong (false-GREEN or over-authorize).
 
 1. **Ghost Hop** — off-ledger co-signature withholding, orphan-receipt injection,
@@ -228,10 +228,10 @@ system's favour being wrong (false-GREEN or over-authorize).
    leaf/node second-preimage. Falsifies signature + domain separation (101/117).
 5. **Structural forgery** — parent-pointer cycle (104), resolving-parent island
    (105). **Headline falsification target:** the 4S claim that content-addressing
-   makes these *unforgeable*. VRTA attempts an actual forge under adversarial
+   makes these _unforgeable_. VRTA attempts an actual forge under adversarial
    pressure and reports the honest result (expected: cannot forge without a hash
    collision → survives; if it forges, that is a signed high-severity finding).
-6. **Fable-driven adaptive (in-loop)** — Fable-5 is prompted to *construct* a
+6. **Fable-driven adaptive (in-loop)** — Fable-5 is prompted to _construct_ a
    chain the kernel authorizes but that omits a hop; key-free adaptive boundary
    probe (3K lineage). Falsifies robustness to a model adversary.
 7. **Verifier / oracle** — public-tier vs audit-tier gap hunting, selective
@@ -244,7 +244,7 @@ system's favour being wrong (false-GREEN or over-authorize).
 
 - **Lane A — offline deterministic corpus (the bulk).** ~40–60 signed attack
   fixtures across the eight families, seed-derived and byte-reproducible. No API,
-  zero cost. Fable-5's *role here* is captured, frozen attack payloads it
+  zero cost. Fable-5's _role here_ is captured, frozen attack payloads it
   previously produced, replayed deterministically — not a live call.
 - **Lane B — live Fable-5 adaptive (small, disabled-by-default).** A real
   `claude-fable-5` agent, driven under our own API access, is asked to construct
@@ -252,7 +252,7 @@ system's favour being wrong (false-GREEN or over-authorize).
   hard denial-of-wallet caps (max turns, max tokens, max spend) signed into the
   charter; cap breach → **123**. Live capture is ephemeral → **reproduce
   re-verifies it, never regenerates** (same discipline as 4S Lane B). Fable is an
-  *attack-bundle driver, not the protected system and not a jailbreak target*
+  _attack-bundle driver, not the protected system and not a jailbreak target_
   (P1-3, the safety hinge). **Lane B audit recomputes outcomes from the captured
   prompt, model response, tool-free structured output, and signed harness
   transcript; it never re-calls the live model during reproduce** (P1-1).
@@ -307,22 +307,23 @@ pre-captured replays).
   separately as `over_refusal_rate`. Target ASR 0/N, but the real number ships
   even if non-zero. If Lane B is disabled, ASR is computed over Lane A only and
   `lane_b_status = disabled_by_default`.
+
 - **Two independent codes, not one (P0-4):** each finding carries a
-  *self-reported* outcome (what the harness believed) **and** a
-  *verifier-recomputed* outcome (independent re-run), plus a recorded
+  _self-reported_ outcome (what the harness believed) **and** a
+  _verifier-recomputed_ outcome (independent re-run), plus a recorded
   `outcome_class`.
   - **127 `SELF_REPORT_RECOMPUTE_CONFLICT`** — `self_reported_outcome !=
-    verifier_recomputed_outcome`. Did you honestly report what the engine
+verifier_recomputed_outcome`. Did you honestly report what the engine
     returned?
   - **128 `OUTCOME_CLASSIFICATION_INVALID`** — the recorded `outcome_class`
     (`survived` / `bypass` / `model_refused` / `lane_disabled`) does not follow from the
-    expected-vs-observed truth table, *even when* self-report and recompute
+    expected-vs-observed truth table, _even when_ self-report and recompute
     agree. Did your label follow from the numbers? (Worked example: expected
     108, observed 0 → truth = bypass; a finding whose self-report matches the
     observed 0 but labels `outcome_class = survived` passes 127 yet fails 128.)
 - **ASR ledger:** the signed attestation carries `attack_success_rate`; a
   reviewer recomputes it from the finding records and fails **130** on mismatch.
-- **Anti-laundering (4L lineage):** adding a confirmed bypass can never *decrease*
+- **Anti-laundering (4L lineage):** adding a confirmed bypass can never _decrease_
   reported ASR — a signed monotonicity obligation, mirrored in Lean.
 
 ## 8. Raw codes 119–132 + frozen check order
@@ -411,18 +412,18 @@ attacks.
 To be recorded in the plan's citation block with URLs checked on 2026-07-06:
 NIST AI RMF adversarial-testing profile, MITRE ATLAS, OWASP LLM Top-10
 (delegation/excessive-agency items), and the project's own Stage 4G campaign
-(differentiated: 4G attacked the *evidence campaign layer*; 4U attacks the
-*delegation-completeness verifier and the capability kernel*, and signs a
+(differentiated: 4G attacked the _evidence campaign layer_; 4U attacks the
+_delegation-completeness verifier and the capability kernel_, and signs a
 non-malice charter). Every citation pinned or dropped.
 
 ## 14. Four-axis scorecard (spec-time estimate)
 
-| Axis | Score | What moves it higher |
-|------|-------|----------------------|
-| Novelty | 9.3 | Signed non-malice charter + precommitted attack manifest ("red-team that cannot hide its wins") is, to our knowledge, unpublished. Live cross-org lane would push it. |
-| Frontier | 9.1 | Model-driven adaptive attack on a formal completeness verifier. A second independent verifier impl would raise it. |
-| Good-for-Anthropic | 9.4 | Directly answers "did you red-team your own safety layer, and how do we trust the result?" — fellows-thread-grade. |
-| Constitution | 9.2 | The scope-bounded non-malice charter is the constitution's "responsible offense" clause made machine-checkable, without overclaiming inner intent. |
+| Axis               | Score | What moves it higher                                                                                                                                                  |
+| ------------------ | ----- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Novelty            | 9.3   | Signed non-malice charter + precommitted attack manifest ("red-team that cannot hide its wins") is, to our knowledge, unpublished. Live cross-org lane would push it. |
+| Frontier           | 9.1   | Model-driven adaptive attack on a formal completeness verifier. A second independent verifier impl would raise it.                                                    |
+| Good-for-Anthropic | 9.4   | Directly answers "did you red-team your own safety layer, and how do we trust the result?" — fellows-thread-grade.                                                    |
+| Constitution       | 9.2   | The scope-bounded non-malice charter is the constitution's "responsible offense" clause made machine-checkable, without overclaiming inner intent.                    |
 
 Re-scored at closeout (§17). Scores reflect the P0 hardening pass (manifest
 root, scope-bounded non-malice wording, dedicated malformed code, split
