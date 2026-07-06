@@ -75,6 +75,22 @@ cryptography review lands.
    proofs byte-reproducible for the fixture corpus. Standard practice; the nonce
    stays secret (bound to the scalar).
 
+## External reviewer run (recorded, honest scope)
+
+One independent external reviewer ran the self-contained `byo/reviewer-run.mjs`
+on their own machine (fresh Ed25519 key + fresh curve scalar, Node v22.16.0),
+bound to the challenge `Raouf4444`. Their signed result block
+(`evidence/stage-4r/reviewer-runs/reviewer-Raouf4444.json`) verifies: signature
+valid, both scenarios correct (shared→match, different→non-match, both green).
+This exercises the operator-B mechanism on a genuinely independent machine and
+identity, and is real recomputable external corroboration.
+
+Honest scope: this is a single busy reviewer, not a second organisation running
+a production pilot. The rail `cross_org_operator_b_not_yet_exercised` therefore
+stays, and the four-axis scores are unchanged — the score-moving unlock is a real
+cross-org / institutional run, of which this is the falsifiable seed (and the
+basis for a CERA countersignature).
+
 ## Next
 
 Tag `v2.27.0-stage-4r-pccc` after PR (re-check `git tag --sort=-creatordate`
