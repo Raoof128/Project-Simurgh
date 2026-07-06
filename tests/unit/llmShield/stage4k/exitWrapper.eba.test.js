@@ -35,8 +35,10 @@ test("wrapper stays total and fail-closed: unknown codes (incl. reserved 39) map
   // 40-42 are Stage 4L CCB codes, 43-46 are Stage 4M VXD codes, 47-54 are Stage 4N
   // Seismograph codes, 55-66 are Stage 4O VTSA codes, 67-79 are Stage 4P VOCA codes,
   // 80-89 are Stage 4Q VFR codes, 90-99 are Stage 4R PCCC codes, 100-118 are Stage 4S
-  // VDCC codes (all mapped to 1); 39 stays reserved/unmapped, 119+ unknown.
-  for (const raw of [39, 119, 999, -1, undefined, null, "thirty"]) {
+  // VDCC codes, 119-132 are Stage 4U VRTA codes (all mapped to 1); 39 stays
+  // reserved/unmapped. Probe the unknown case ONLY with UNKNOWN_RAW_PROBE (999) — never a
+  // bare literal just above the range (that becomes a real code next stage).
+  for (const raw of [39, 999, -1, undefined, null, "thirty"]) {
     assert.equal(stage4CodeForRawCode(raw), 3, String(raw));
   }
   assert.equal(Object.prototype.hasOwnProperty.call(RUN_LEVEL_BY_RAW, 39), false);
