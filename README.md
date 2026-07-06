@@ -233,6 +233,18 @@ documented non-claims.
   and six machine-checked Lean theorems (including inclusion≠completeness). Scope is honest and signed:
   chain held **verifiable**, never "agents safe"; Merkle inclusion is presence, not completeness;
   attenuation enforcement is prior art — our claim is the offline-recomputable proof.
+- **Verifiable red-team attestation** (Stage 4U) — a charter-bound adversarial red-team of the VDCC
+  verifier itself, under the **No Silent Bypass** law. Before any attack runs, an Ed25519-signed
+  `red_team_charter` precommits the campaign (seed, exact family counts, an attack-manifest Merkle root,
+  denial-of-wallet caps); the verifier refuses to score any attack not bound to the charter, so **the
+  red-team cannot hide its own wins**. A 58-fixture offline corpus across eight families drives the 4S
+  engine to an honest **ASR 0/58** (every malformation contained); a dual-signal lie detector separates a
+  dishonest self-report (127) from an invalid classification (128) from a non-reproducing recompute (129);
+  a two-tier signed attestation, JS↔Python parity, and two machine-checked Lean theorems
+  (`charterBindingSound`, `asrMonotone`) complete it. Raw codes 119–132; the kernel and 4S verifier are
+  imported **read-only** (no new `authorise_*` entry). Scope is honest and signed: the charter proves
+  **declared scope, not inner intent**; a confirmed bypass is a recorded outcome, not a verification
+  failure; a live Fable-5 refusal is recorded as `model_refused`, never rephrased to bypass it.
 
 ### External-defence evaluation
 
