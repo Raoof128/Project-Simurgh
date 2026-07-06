@@ -1,0 +1,12 @@
+{
+  "schema": "simurgh.pccc_operator_invitation.v1",
+  "epoch_policy": "current_4n_window_anchor",
+  "schema_versions": [
+    "simurgh.pccc_match_transcript.v1",
+    "simurgh.pccc_match_record.v1",
+    "simurgh.pccc_dleq_proof.v1"
+  ],
+  "verifier_digest": "sha256:d9f4c73bd2fe57e38259b3e2c00227f51c848a2a491b3ffb700aaac0a800c504",
+  "invitee_key_digest_slot": "TBD_BY_INVITEE",
+  "signature": "a1381809e8401b9a2dd4b58ae12a91c8ddfaa3bad2369de2936b9a07a6bd22560d5d2dd33ff8e5341c10e7c22d471d3ba89fbb692aedfb3f7c42fb990634280f"
+}
