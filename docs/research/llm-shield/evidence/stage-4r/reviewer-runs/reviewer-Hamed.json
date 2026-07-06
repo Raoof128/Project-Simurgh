@@ -1,0 +1,26 @@
+{
+  "result": {
+    "what": "Stage 4R PCCC external reviewer run",
+    "challenge": "reed-cfc093",
+    "reviewer_identity_self_declared": "Hamed <hamedz928@gmail.com>",
+    "reviewer_public_key_der_hex": "302a300506032b65700321003c86672078b38ef893b43144067278209a66bfb269dd4174a125741ae4733b08",
+    "reviewer_key_fingerprint": "b1752e9596282bfa",
+    "scenarios": [
+      {
+        "classes": "shared",
+        "expect_match": true,
+        "got_match": true,
+        "verdict": "green"
+      },
+      {
+        "classes": "different",
+        "expect_match": false,
+        "got_match": false,
+        "verdict": "green"
+      }
+    ],
+    "all_passed": true,
+    "node_version": "v18.19.1"
+  },
+  "signature": "6d57d768a02fe65229944e91456a573d522cf35875e58d694ebe370156ffa647bb0643bfd0a10f529ac92be9a003615700063bb1733e708f79ff95f1c24ec709"
+}
