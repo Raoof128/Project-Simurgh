@@ -3,14 +3,19 @@
 // A busy external reviewer runs ONE command, copies the printed RESULT block,
 // and sends it back. No repo, no npm install, no config — just Node.
 //
-//   node reviewer-run.mjs "<a-challenge-word-from-the-person-who-sent-this>"
+//   node reviewer-run.mjs "<challenge-from-requester>" "<your name / email or GitHub>"
 //
-// It generates a FRESH independent operator identity on the reviewer's machine
-// (their own Ed25519 key + a fresh curve25519 scalar — never shared), runs the
-// full PCCC match ceremony twice (shared class -> should MATCH; different class
-// -> should NON-MATCH), verifies both with the reference audit checks, and signs
-// the verdicts over the challenge. This proves an independent machine + keys ran
-// the real reference crypto and it passed. It is NOT production crypto.
+// It runs the full PCCC ceremony twice (shared class -> MATCH; different class
+// -> NON-MATCH), self-verifies both, and signs the verdicts + your challenge +
+// your self-declared identity with a STABLE per-machine key (stored beside this
+// file as simurgh-reviewer-identity-key.pem; re-runs reuse it, so one person
+// cannot inflate the count).
+//
+// HONEST LIMITS: a self-contained script CANNOT prove which OS or which human
+// ran it — so it emits no OS field and has no override backdoor. The only real
+// anti-fake is (1) the requester's fresh challenge you cannot pre-generate, and
+// (2) the requester confirming your key fingerprint OUT OF BAND (your email /
+// GitHub). It is reference research crypto, not production.
 import crypto from "node:crypto";
 
 // ─────────────────────────── Edwards25519 reference group ───────────────────
