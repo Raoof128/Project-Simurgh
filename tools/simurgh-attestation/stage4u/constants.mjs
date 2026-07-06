@@ -56,6 +56,7 @@ export const VRTA_KNOWN_LIMITATIONS = Object.freeze([
   "a_green_corpus_is_evidence_of_survived_attacks_not_absence_of_bugs",
   "severity_labels_are_analyst_declared_not_a_formal_exploitability_proof",
   "non_malice_is_enforced_over_declared_endpoints_and_fixture_keys_only",
+  "lane_a_reuses_the_4s_case_table_demonstrates_regression_resistance_not_novel_attack_discovery",
 ]);
 // §2.3 — honesty rails, spec order (12 incl. the severity rail).
 export const VRTA_RAILS = Object.freeze([

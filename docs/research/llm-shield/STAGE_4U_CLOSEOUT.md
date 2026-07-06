@@ -69,6 +69,24 @@ The honest headline: **the VDCC verifier caught every malformation in the corpus
 (ASR 0/58).** This is evidence of survived attacks over the declared families —
 not a proof that no vulnerability exists (see non-claims).
 
+### Sharpest caveat — read this before trusting the 0/58 (signed limitation)
+
+Lane A's 58 attacks are built by re-wrapping the Stage 4S `CASES` table — the
+malformation classes the 4S verifier was already written to catch. So **ASR 0/58
+demonstrates regression-resistance under a signed charter, NOT discovery of novel
+attacks the author did not pre-list.** A real adversary invents malformations
+outside the declared family table; this corpus does not (yet). This limitation is
+signed into the attestation as
+`lane_a_reuses_the_4s_case_table_demonstrates_regression_resistance_not_novel_attack_discovery`.
+Related honest gaps: the live Fable-5 adaptive lane was **not** exercised
+adversarially (the model refused the benign task and Lane B is disabled by
+default — the adaptive-attack machinery is wired and verify-only-tested, not
+demonstrated live); the `differential` family fixtures are benign (expected 0),
+so they do not adversarially probe JS↔Python divergence; and code 104 (cycle) is
+not exercised because content-addressing makes it unforgeable (as 4S already
+documented). Novel-attack generation and a live adaptive lane are the obvious
+next increments.
+
 ### A note on the live Fable-5 lane
 
 Consistent with the design, a live Fable-5 run may **refuse** the (benign,
