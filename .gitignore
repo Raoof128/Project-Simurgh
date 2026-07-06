@@ -72,3 +72,6 @@ __pycache__/
 
 # Stage 3I opt-in external-run virtualenvs
 tools/agentdojo-simurgh-adapter/.venv*/
+
+# Stage 4R reviewer per-machine identity key (private — never commit)
+tools/simurgh-attestation/stage4r/byo/simurgh-reviewer-identity-key.pem
