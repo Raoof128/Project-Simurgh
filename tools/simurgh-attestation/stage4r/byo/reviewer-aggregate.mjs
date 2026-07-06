@@ -1,10 +1,18 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Stage 4R — reviewer corroboration aggregator (self-contained; Node built-ins).
-// Verifies a folder of reviewer result blocks, DE-DUPES BY PUBLIC KEY (so nobody
-// pads the count by running twice), and reports the honest diversity: distinct
-// independent reviewers, distinct platforms, distinct Node versions. Counting
-// distinct keys — not blocks — is the same no-padding discipline the stage uses
-// everywhere ("the liar must ledger the lie").
+// Verifies a folder of reviewer result blocks and reports what the signatures
+// ACTUALLY prove, and — loudly — what they do NOT.
+//
+// HONESTY LIMITS (do not overclaim):
+//   • Each reviewer-run mints a FRESH ephemeral key, so "distinct keys" counts
+//     distinct RUNS, not provably distinct people or machines. One person can
+//     produce N keys. The count is a lower-effort-bound, not a headcount.
+//   • `platform` / `node_version` are SELF-REPORTED by the run and covered by
+//     the signature only for internal consistency — nothing cryptographically
+//     binds the run to a real OS. A macOS user can sign "win32". Treat platform
+//     as a claim, never as attested evidence.
+// The signature DOES prove: a block is internally consistent and unmodified, and
+// the two scenarios (match + non-match) were computed and self-verified green.
 //
 //   node reviewer-aggregate.mjs [<dir>]
 // default dir: docs/research/llm-shield/evidence/stage-4r/reviewer-runs
@@ -89,19 +97,18 @@ const nodeVersions = new Set([...byKey.values()].map((v) => v.node));
 
 console.log("\n── Corroboration summary ──");
 console.log("valid blocks:", files.length - invalid, " invalid:", invalid);
-console.log("DISTINCT independent reviewers (by key):", distinctKeys);
-console.log("distinct platforms:", [...platforms].join(", ") || "none");
-console.log("distinct Node versions:", [...nodeVersions].join(", ") || "none");
+console.log("distinct signing keys (≈ distinct RUNS, not provably distinct people):", distinctKeys);
 console.log(
-  "\nHonest read:",
+  "self-reported platforms (CLAIMED, not attested):",
+  [...platforms].join(", ") || "none"
+);
+console.log("self-reported Node versions (CLAIMED):", [...nodeVersions].join(", ") || "none");
+console.log(
+  "\nWhat this proves:",
   distinctKeys === 0
-    ? "no verified corroboration yet."
-    : distinctKeys === 1
-      ? "the mechanism is corroborated by 1 independent reviewer — proves it runs off-repo, but not a cross-platform or cross-org claim."
-      : platforms.size >= 2
-        ? `corroborated by ${distinctKeys} independent reviewers across ${platforms.size} platforms — a genuine cross-platform portability result for the reference crypto.`
-        : `corroborated by ${distinctKeys} independent reviewers, but all on the same platform — add a different OS to strengthen the portability claim.`
+    ? "no verified runs yet."
+    : `${distinctKeys} internally-consistent run(s), each computing match + non-match and self-verifying green off-repo.`
 );
 console.log(
-  "Note: a real CROSS-ORG score unlock needs one institutional run, not more individuals."
+  "What this does NOT prove: different people, different real machines, or the claimed OSes — those are self-reported and spoofable. A genuine cross-platform or cross-org claim needs runs you personally witnessed on distinct machines, or an institutional run."
 );
