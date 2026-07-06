@@ -139,7 +139,7 @@ test("cross-stage invariants: shared ledger carries 80-89; released 4P evidence 
     await import("../../../../tools/simurgh-attestation/stage4h/exitCodes.mjs");
   assert.deepEqual(VFR_CHECK_ORDER, [80, 83, 81, 82, 89, 86, 84, 85, 87, 88]);
   for (let c = 80; c <= 89; c += 1) assert.equal(stage4CodeForRawCode(c), 1);
-  assert.equal(stage4CodeForRawCode(100), 3);
+  assert.equal(stage4CodeForRawCode(999), 3);
   // Released 4P offline verifier still passes against the released 4P evidence (unchanged).
   execFileSync("node", [
     "tools/simurgh-attestation/stage4p/node/verify-stage4p.mjs",

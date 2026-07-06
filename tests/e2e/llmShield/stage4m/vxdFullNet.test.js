@@ -238,7 +238,7 @@ test("tamper matrix: every artifact file, one-byte flip -> verifier goes nonzero
 // ---- 4. Cross-stage invariants + exhaustiveness ----
 test("cross-stage invariants: exit map, 4L unchanged, zero src diff", () => {
   for (const c of [43, 44, 45, 46]) assert.equal(RUN_LEVEL_BY_RAW[c], 1);
-  assert.equal(stage4CodeForRawCode(100), 3); // exhaustiveness: unknown -> 3
+  assert.equal(stage4CodeForRawCode(999), 3); // exhaustiveness: unknown -> 3
   assert.equal(stage4CodeForRawCode(39), 3); // reserved stays unmapped
   const diff = execFileSync("git", ["diff", "--name-only", "HEAD", "--", "src/llmShield"], {
     encoding: "utf8",
