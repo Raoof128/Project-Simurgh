@@ -126,6 +126,26 @@ test("Stage 4H.4 exit map is explicit and collision-bounded", () => {
       97: 1,
       98: 1,
       99: 1,
+      // Stage 4S VDCC codes (reviewed extension of the shared ledger; 4S spec §11).
+      100: 1,
+      101: 1,
+      102: 1,
+      103: 1,
+      104: 1,
+      105: 1,
+      106: 1,
+      107: 1,
+      108: 1,
+      109: 1,
+      110: 1,
+      111: 1,
+      112: 1,
+      113: 1,
+      114: 1,
+      115: 1,
+      116: 1,
+      117: 1,
+      118: 1,
     })
   );
 });

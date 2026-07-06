@@ -31,9 +31,9 @@ test("seismograph raw codes are 47-54 and map to run-level 1", () => {
 });
 
 test("raw 39 stays reserved and unknown codes fail closed to 3", () => {
-  // 67-79 are Stage 4P VOCA, 80-89 are Stage 4Q VFR, 90-99 are Stage 4R PCCC codes
-  // (mapped to 1); 100+ is unknown.
-  for (const raw of [39, 100, 999, -1, undefined, null, "forty-seven"]) {
+  // 67-79 are Stage 4P VOCA, 80-89 are Stage 4Q VFR, 90-99 are Stage 4R PCCC, 100-118
+  // are Stage 4S VDCC codes (mapped to 1); 119+ is unknown.
+  for (const raw of [39, 119, 999, -1, undefined, null, "forty-seven"]) {
     assert.equal(stage4CodeForRawCode(raw), 3);
   }
 });

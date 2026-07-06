@@ -77,7 +77,7 @@ test("all 10 codes map to run-level 1; unknown fails closed to 3", () => {
     assert.equal(RUN_LEVEL_BY_RAW[code], 1);
     assert.equal(stage4CodeForRawCode(code), 1);
   }
-  assert.equal(stage4CodeForRawCode(100), 3);
+  assert.equal(stage4CodeForRawCode(999), 3);
 });
 
 // ---------------------------------------------------------------------------

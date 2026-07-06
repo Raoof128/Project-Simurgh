@@ -380,6 +380,46 @@ export const PCCC_REASONS_96 = Object.freeze([
   "ephemeral_public_digest_reuse_detected",
 ]);
 
+// Stage 4S VDCC codes (reviewed extension of the shared ledger; 4S spec §11).
+// NUMERIC order is allocation order; the NORMATIVE first-failure order is
+// VDCC_CHECK_ORDER (113 immediately after 103 so a split-brain child is never
+// diagnosed as a cycle; 110 before 109 so a local overspend is never diagnosed
+// as generic flux; 112 before 111 so "no binding at all" is never diagnosed as
+// an orphan; 118 last — typed-wrapper fail-closed only).
+export const VDCC_RAW_CODES = Object.freeze({
+  MALFORMED_CHAIN_BUNDLE: 100,
+  SIGNATURE_INVALID: 101,
+  ROOT_MISSING_OR_MULTIPLE: 102,
+  PARENT_DIGEST_MISMATCH: 103,
+  CYCLE_DETECTED: 104,
+  UNREACHABLE_NODE: 105,
+  FANOUT_COUNT_MISMATCH: 106,
+  FANOUT_CHILD_SET_MISMATCH: 107,
+  SCOPE_ATTENUATION_VIOLATION: 108,
+  BUDGET_FLUX_VIOLATION: 109,
+  LOCAL_SPEND_OVERFLOW: 110,
+  GHOST_HOP_DETECTED: 111,
+  RECEIPTLESS_AUTHORITY_CROSSING: 112,
+  SPLIT_BRAIN_CHILD: 113,
+  EPOCH_REPLAY: 114,
+  ROOT_REPLAY: 115,
+  SPINE_REF_MISMATCH: 116,
+  MERKLE_BUNDLE_MISMATCH: 117,
+  INTERNAL_FAIL_CLOSED: 118,
+});
+export const VDCC_CHECK_ORDER = Object.freeze([
+  100, 101, 102, 103, 113, 104, 105, 106, 107, 108, 110, 109, 112, 111, 114, 115, 116, 117, 118,
+]);
+export const VDCC_REASONS_100 = Object.freeze([
+  "chain_bundle_schema_invalid",
+  "receipt_schema_invalid",
+  "fanout_commitment_schema_invalid",
+  "crossing_artifact_schema_invalid",
+  "duplicate_declared_child_digests",
+  "required_signature_field_missing",
+  "public_key_index_missing_or_malformed",
+]);
+
 export const HARNESS_CODES = Object.freeze({
   CLEAN_RUN_FALSELY_REJECTED: 19,
 });
@@ -484,6 +524,26 @@ export const RUN_LEVEL_BY_RAW = Object.freeze({
   97: 1,
   98: 1,
   99: 1,
+  // Stage 4S VDCC codes (reviewed extension of the shared ledger; 4S spec §11).
+  100: 1,
+  101: 1,
+  102: 1,
+  103: 1,
+  104: 1,
+  105: 1,
+  106: 1,
+  107: 1,
+  108: 1,
+  109: 1,
+  110: 1,
+  111: 1,
+  112: 1,
+  113: 1,
+  114: 1,
+  115: 1,
+  116: 1,
+  117: 1,
+  118: 1,
 });
 
 export function stage4CodeForRawCode(code) {
