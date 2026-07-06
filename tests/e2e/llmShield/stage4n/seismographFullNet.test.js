@@ -102,7 +102,7 @@ test("exit wrapper exhaustiveness over the 4N band and unknowns", () => {
     assert.equal(stage4CodeForRawCode(code), 1);
   }
   assert.equal(stage4CodeForRawCode(39), 3);
-  assert.equal(stage4CodeForRawCode(100), 3); // T12: unknown fails closed
+  assert.equal(stage4CodeForRawCode(999), 3); // T12: unknown fails closed
 });
 
 test("anti-theatre (T13): deleting the tail record cannot stay green", () => {
