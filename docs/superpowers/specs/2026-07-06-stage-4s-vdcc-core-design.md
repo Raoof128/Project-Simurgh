@@ -574,6 +574,13 @@ cover consent broadening end-to-end.
 omission, replay, over-delegation, and false completeness rather than signing
 another log; every failure mode is a distinct reachable code with a fixture.
 
+**Closeout re-score (2026-07-06, shipped):** Novelty **9.4** (unchanged; the
+content-addressing-forbids-cycles finding is a bonus strengthening); Frontier
+**9.4** (+0.1 — the real two-process MCP hop lands the frontier sentence);
+Good-for-Anthropic **9.3** (unchanged); Constitution **9.1** (unchanged;
+consent-broadening end-to-end deferred to 4T). See
+`docs/research/llm-shield/STAGE_4S_CLOSEOUT.md`.
+
 ## 19. Standing requirements (MANDATORY before tag)
 
 - **K7-style all-functions E2E net**: composes every stage4s export, full

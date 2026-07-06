@@ -11,6 +11,11 @@
   beyond banner. Stages between now and VDCC are designed AIMING at this doc.
 - **Provenance note:** committed and dated 2026-07-05 to freeze articulation
   time.
+- **Status update (2026-07-06):** the first rung, **Stage 4S — VDCC-Core**, is
+  shipped (`v2.28.0-stage-4s-vdcc-core`): the delegation-chain completeness
+  invariant + No Ghost Hop law, enforced at the Capability Kernel, with a real
+  two-process MCP hop and machine-checked `inclusionNotCompleteness`. The
+  Incident Capsule (Art-73 projection) remains the next rung (Stage 4T).
 
 ---
 
