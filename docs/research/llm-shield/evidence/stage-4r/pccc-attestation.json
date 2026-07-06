@@ -1,0 +1,255 @@
+{
+  "body": {
+    "schema": "simurgh.pccc_attestation.v1",
+    "stage": "4r",
+    "epoch": "sha256:a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+    "run_id": "lane-a",
+    "evidence_root_digest": "sha256:e787a8eaf4f3ddf263229a2e027c9cd3901f1df13aea4cc724c8473e722b079c",
+    "window_match_census": {
+      "epoch": "sha256:a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+      "matches": 1,
+      "non_matches": 1,
+      "refusals": 17
+    },
+    "lane_a_verification_kind": "deterministic_replay_with_fixture_scalars",
+    "lane_b_verification_kind": "two_party_ceremony_dleq_audit_verified",
+    "verification_packet_kind": "sealed_transcript_packet_for_offline_verifier",
+    "non_claims": [
+      "not_an_identity_matching_system",
+      "not_a_public_membership_registry",
+      "not_full_voprf_or_rfc9380_claim",
+      "not_a_physical_time_claim",
+      "not_proof_of_human_deliberation",
+      "not_proof_of_operator_independence_beyond_process_and_key_separation",
+      "not_cross_epoch_linkability_claim"
+    ],
+    "known_limitations": [
+      "public_tier_remains_digest_level_by_design",
+      "dleq_is_fiat_shamir_random_oracle_model",
+      "curve_arithmetic_is_reference_grade_not_constant_time",
+      "in_repo_curve_crypto_is_reference_verifier_not_production_deployment",
+      "not_a_voprf_rfc9497_protocol",
+      "cross_org_operator_b_not_yet_exercised"
+    ],
+    "rails": [
+      "no_public_herd_token",
+      "audit_tier_is_dleq_verified_public_tier_is_digest_level",
+      "public_record_is_digest_level_full_verification_requires_audit_packet",
+      "lane_a_uses_insecure_fixture_only_scalars_for_byte_reproducibility",
+      "lane_b_scalars_are_ephemeral_per_match_window_and_never_written_to_disk",
+      "match_is_custody_class_corroboration_not_identity_attribution",
+      "hash_to_group_is_ad_hoc_domain_separated_not_rfc9380",
+      "scalar_reuse_and_replay_checks_are_recorded_evidence_not_omniscience",
+      "friction_gates_export_not_matching",
+      "epoch_is_4n_window_anchor_not_physical_time",
+      "non_matches_are_first_class_evidence_no_selective_omission",
+      "commit_before_reveal_blocks_single_liar_token_copy",
+      "fixture_scalar_quarantine_enforced_by_path_allowlist",
+      "curve_arithmetic_is_reference_grade_not_constant_time",
+      "dleq_is_fiat_shamir_random_oracle_model",
+      "census_counts_are_window_scoped_and_cardinality_committed",
+      "in_repo_curve_crypto_is_reference_verifier_not_production_deployment"
+    ],
+    "novelty_source_map": {
+      "claim": "dependency-free DLEQ-verified private custody corroboration with a no-herd-token law",
+      "prior_art_limiting_rows": [
+        {
+          "name": "Google Private Join and Compute",
+          "limit": "deployed DH-PSI, no signed attestation, no completeness commitment, no export friction"
+        },
+        {
+          "name": "Microsoft Password Monitor",
+          "limit": "OPRF credential checking, not custody-class corroboration"
+        },
+        {
+          "name": "Apple PSI",
+          "limit": "content matching, withdrawn; no recomputable evidence"
+        },
+        {
+          "name": "SCITT / in-toto",
+          "limit": "artifact notarization, no private matching"
+        }
+      ]
+    },
+    "constitution_projection": [
+      {
+        "clause": "cooperate on safety signals",
+        "mechanism": "two-operator corroboration without a linkable registry",
+        "check": "no_public_custody_class_digest_emitted"
+      },
+      {
+        "clause": "avoid building surveillance infrastructure",
+        "mechanism": "No Public Herd Token law (epoch-bound, no reusable token)",
+        "check": "herd_token_scan"
+      },
+      {
+        "clause": "give the affected a voice",
+        "mechanism": "contest-path disclosure hook",
+        "check": "contest_route_available"
+      }
+    ],
+    "contest_hook_fields": [
+      "respondent_notice_hash",
+      "contest_pointer_hash",
+      "matched_against_operator_commitment",
+      "contest_route_available"
+    ],
+    "cases": [
+      {
+        "name": "green_match",
+        "expect": {
+          "raw": 0,
+          "green": true
+        },
+        "public_record_digest": "sha256:51d4aac1af00937b44dc577a58e6e916d1141857ac4364d00b85623a583862f2"
+      },
+      {
+        "name": "green_non_match",
+        "expect": {
+          "raw": 0,
+          "green": true
+        },
+        "public_record_digest": "sha256:2cfe8b5f8b3fa996a93cb9c574177fc56e708530c2541b8d159ef92dd77c590c"
+      },
+      {
+        "name": "phase_order",
+        "expect": {
+          "raw": 90,
+          "reason": "pccc_phase_order_invalid"
+        },
+        "public_record_digest": "sha256:19f08d4fe3936b76b32bd74ecb83d90cb1827ec34c967646aac1abc8626934e7"
+      },
+      {
+        "name": "commit_missing",
+        "expect": {
+          "raw": 90,
+          "reason": "pccc_token_commitment_missing"
+        },
+        "public_record_digest": "sha256:37ea7eb6078700f89128ce80027834fb368398c9ee187a1e84d7291dc1ec26ff"
+      },
+      {
+        "name": "token_copy_liar",
+        "expect": {
+          "raw": 90,
+          "reason": "pccc_token_commitment_opening_invalid"
+        },
+        "public_record_digest": "sha256:2882fa229ca244f672cb008e0b70e05cf84bc02781e9ebc4fb48b1d2189d844d"
+      },
+      {
+        "name": "cardinality",
+        "expect": {
+          "raw": 90,
+          "reason": "slot_cardinality_mismatch"
+        },
+        "public_record_digest": "sha256:be388cf35d2118c772b02f9a60557fd0ccd2d230a6a670b9709649e7d94c9199"
+      },
+      {
+        "name": "census",
+        "expect": {
+          "raw": 90,
+          "reason": "window_match_census_mismatch"
+        },
+        "public_record_digest": "sha256:c1e65ba0027ecb7508d5f338c00c480b7eafafd8f858ca3ed8091d9933ab2600"
+      },
+      {
+        "name": "bad_sig",
+        "expect": {
+          "raw": 91,
+          "reason": "operator_identity_signature_invalid"
+        },
+        "public_record_digest": "sha256:bea8bc720636eece00f1d9f1a371dd37fea3c2953a24b7d44bf26547fb2405aa"
+      },
+      {
+        "name": "small_order",
+        "expect": {
+          "raw": 94,
+          "reason": "small_order_or_all_zero_fail_closed"
+        },
+        "public_record_digest": "sha256:ad9e20d89ac8755c3b48313f5ff64c116f72ffd61ec175ba184c69fa03cf5b6f"
+      },
+      {
+        "name": "replay",
+        "expect": {
+          "raw": 95,
+          "reason": "cross_epoch_replay_detected"
+        },
+        "public_record_digest": "sha256:c320cd019187b96b5090cd297e3a78ae96ff0cf1f17cf64eb0546612ad5ed21f"
+      },
+      {
+        "name": "mask_reuse",
+        "expect": {
+          "raw": 96,
+          "reason": "mask_reuse_detected"
+        },
+        "public_record_digest": "sha256:d17a703996398d64aa39ea08470871909666f5c5463258c1a28556da22188f0e"
+      },
+      {
+        "name": "eph_reuse",
+        "expect": {
+          "raw": 96,
+          "reason": "ephemeral_public_digest_reuse_detected"
+        },
+        "public_record_digest": "sha256:9fef756a0de8ffbc6fa7b749542a8992f91e315acb34f86dd85c9fbadd0d5a15"
+      },
+      {
+        "name": "dleq_z",
+        "expect": {
+          "raw": 93,
+          "reason": "dleq_z_proof_invalid"
+        },
+        "public_record_digest": "sha256:c68b054c4fc0ba8f6fe3f52ae35587d70fa71429a4e11fa003ee290f916dcc1f"
+      },
+      {
+        "name": "dleq_mask",
+        "expect": {
+          "raw": 93,
+          "reason": "dleq_mask_proof_invalid"
+        },
+        "public_record_digest": "sha256:99e3ef768f20b8b357da86bf93546f75bcfe8167e013b65f5b8a2b88221651b3"
+      },
+      {
+        "name": "token_recompute",
+        "expect": {
+          "raw": 93,
+          "reason": "token_recompute_mismatch"
+        },
+        "public_record_digest": "sha256:264282b20b50e58796a81d106175b9d8a1301944fa39675ae5bba609eeea909c"
+      },
+      {
+        "name": "claim_liar",
+        "expect": {
+          "raw": 92,
+          "reason": "match_claim_conflict"
+        },
+        "public_record_digest": "sha256:09e7a2eea5b9d70d89a527d874575d3b641163eb181ea6cc8d5f330861d6670f"
+      },
+      {
+        "name": "herd",
+        "expect": {
+          "raw": 99,
+          "reason": "public_herd_token_violation"
+        },
+        "public_record_digest": "sha256:568dbdf524b3fa23690e4b75ef39228d729d3a0e4b50007c916b69f5bcbf2c13"
+      },
+      {
+        "name": "budget",
+        "expect": {
+          "raw": 97,
+          "reason": "disclosure_budget_exceeded"
+        },
+        "public_record_digest": "sha256:6dbc73f00f5ae91767e2f0cb3a31d4dd0dfd51f12d8c3ab786672e43083541a2"
+      },
+      {
+        "name": "vfr",
+        "expect": {
+          "raw": 98,
+          "reason": "vfr_export_gate_failed"
+        },
+        "public_record_digest": "sha256:3973287492d13ce3fef855c22b91b0568b3db3afbb2c020d58a2acc6a794846f"
+      }
+    ]
+  },
+  "signature": "7ccc372d0d3a0fa8d63887c4896a3712895903a5d46cb9b7edae57b9723d7774a58aab7db1045bc52a3c05adff820164049bae943820afadad43c9483ebe9e00",
+  "public_key": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEArmcMHDvAXdPe5pJhXQO7IsgrdLLmgveSU0QRlBaJ7yc=\n-----END PUBLIC KEY-----\n",
+  "key_label": "INSECURE_FIXTURE_ONLY_attestation"
+}
