@@ -1,6 +1,9 @@
 # Stage 4S — VDCC-Core: Verifiable Delegation-Chain Completeness
 
-**MOTTO: AnthropicSafe First, then ReviewerSafe.**
+**MOTTO: AnthropicSafe First, then ReviewerSafe.** (Standing project
+convention since Stage 4M: "safe for the lab audience in content AND
+structural egress, then recomputable by any reviewer" — a design-order
+tie-break, not an endorsement claim.)
 
 - **Date:** 2026-07-06
 - **Law:** **No Ghost Hop.**
@@ -149,8 +152,11 @@ rail).
 
 ### 3.3 Authority-crossing artifact — `simurgh.vdcc_crossing_artifact.v1`
 
-Every protected authority crossing binds to a leaf-path receipt — egress is
-not special:
+Every protected authority crossing binds to a **verified node receipt** —
+ANY node on the tree, not only leaves, and egress is not special. If the same
+node also delegates children, its local spend and delegated child budgets
+compose under the flux law (§6) — this is precisely what keeps the
+double-dipping attack alive and testable:
 
 ```json
 {
@@ -190,6 +196,10 @@ merkle(sorted(observed))  == declared_child_set_root
   AND observed set        == declared set                    (else raw 107)
 ```
 
+`declared_child_receipt_digests` MUST be sorted, unique, and canonical;
+duplicate declared digests are malformed commitment structure ⇒ **raw 100**
+(not 107 — the commitment itself is structurally invalid before comparison).
+
 This is the completeness invariant made local-then-global: each parent commits
 its exact child universe; composition over the tree (§5) makes global
 omission impossible without a local, signed lie — **the liar must ledger the
@@ -227,12 +237,13 @@ arithmetically undisguisable.
 
 ## 7. Scope attenuation law (lattice + path intersection)
 
-Scopes form a meet-semilattice under set intersection:
+Scopes form a meet-semilattice under set intersection. **For scope sets,
+`A ⊑ B` iff `A ⊆ B`** (narrower = subset; no other reading is admitted):
 
 ```text
 child_scope   ⊑ parent_scope        per edge                  (else raw 108)
 path_scope(n) = root_scope ∩ edge₁ ∩ … ∩ edgeₙ
-requested_scope(crossing) ⊑ path_scope(bound leaf)            (else raw 108)
+requested_scope(crossing) ⊑ path_scope(bound node)            (else raw 108)
 ```
 
 **Narrowed novelty claim (source-mapped, §17):** runtime attenuation is
@@ -329,6 +340,17 @@ reachable:
   binds to a digest that exists as a **validly signed receipt** but appears in
   NO committed child set and NOT in the bundle tree.
 - **112 `receiptless_authority_crossing`** — no receipt binding at all.
+
+**Signature semantics (fixture-honesty rule):** a present-but-empty, null, or
+unverifiable required signature reaches **raw 101**, never 100; a MISSING
+signature field is schema-malformed and reaches **raw 100**. The
+single-signature-hop fixture (one neighbour withholds) therefore carries an
+empty-string second signature to honestly reach 101.
+
+**118 reachability:** `internal_fail_closed` is reached only by a
+typed-wrapper fixture that injects an internal verifier exception / unknown
+raw outcome and proves the fail-closed mapping — never by any well-formed
+input.
 
 **Dropped by design:** runtime `verifier_parity_mismatch`. JS↔Python parity
 is a CI/reproduce/golden gate, not a verifier verdict — a verifier cannot
