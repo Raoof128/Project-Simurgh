@@ -1,0 +1,14 @@
+{
+  "result": {
+    "what": "Stage 4R PCCC external reviewer run",
+    "challenge": "Raouf4444",
+    "reviewer_public_key_der_hex": "302a300506032b6570032100eef22c0707006bbdf323eeddeca303bb5a5faffbd077b7bd96c15f5ad6f877c9",
+    "scenarios": [
+      { "classes": "shared", "expect_match": true, "got_match": true, "verdict": "green" },
+      { "classes": "different", "expect_match": false, "got_match": false, "verdict": "green" }
+    ],
+    "all_passed": true,
+    "node_version": "v22.16.0"
+  },
+  "signature": "14675206c946efb4d78a5f00dfeecce566757ab902a2019bf4d30a4387c7aaf6d1f6b09a1ad66102500e5001455213e1b104cb2a0ec8c2c0c0908f90defbfc02"
+}
