@@ -14,8 +14,14 @@
 - **Status update (2026-07-06):** the first rung, **Stage 4S — VDCC-Core**, is
   shipped (`v2.28.0-stage-4s-vdcc-core`): the delegation-chain completeness
   invariant + No Ghost Hop law, enforced at the Capability Kernel, with a real
-  two-process MCP hop and machine-checked `inclusionNotCompleteness`. The
-  Incident Capsule (Art-73 projection) remains the next rung (Stage 4T).
+  two-process MCP hop and machine-checked `inclusionNotCompleteness`.
+- **Status update (2026-07-06b):** **Stage 4U — VRTA** (`v2.29.0-stage-4u-vrta`)
+  hardens the chain by red-teaming the VDCC verifier itself under the **No Silent
+  Bypass** law — a charter-bound 58-fixture adversarial corpus (honest ASR 0/58),
+  a precommitted attack manifest so the red-team cannot hide its own wins, and a
+  two-tier signed attestation. Red-teaming the verifier **before** projecting it
+  into a regulator-style report is the right order; the Incident Capsule (Art-73
+  projection) remains the next rung (Stage 4T), now built on a hardened chain.
 
 ---
 
