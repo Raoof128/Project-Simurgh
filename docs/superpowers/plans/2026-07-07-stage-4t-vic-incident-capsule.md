@@ -10,7 +10,7 @@
 
 ## Global Constraints
 
-- **Motto in every new file header:** `AnthropicSafe First, then ReviewerSafe.` (verbatim, since Stage 4M) — new `.mjs`/`.py`/`.lean`/`.html` **and** new `.js` test files: `// SPDX-License-Identifier: AGPL-3.0-or-later` + one-line `// Stage 4T … Motto: AnthropicSafe First, then ReviewerSafe.`
+- **Motto in every new file header:** `AnthropicSafe First, then ReviewerSafe.` (verbatim, since Stage 4M) — new `.mjs`/`.py`/`.lean` **and** new `.js` test files: `// SPDX-License-Identifier: AGPL-3.0-or-later` + one-line `// Stage 4T … Motto: AnthropicSafe First, then ReviewerSafe.` The `.html` browser verifier uses **HTML comments** instead (P1-4): `<!-- SPDX-License-Identifier: AGPL-3.0-or-later -->` + `<!-- Stage 4T VIC browser verifier. Motto: AnthropicSafe First, then ReviewerSafe. -->`.
 - **Neutral copy everywhere:** no Claude co-author trailer, no "Claude Code" tag in any commit, PR, release, or doc.
 - **Branch:** `stage-4t-vic` · **Target tag:** `v2.30.0-stage-4t-vic` · verify with `git tag --sort=-creatordate | head` before tagging.
 - **Raw codes:** 133–150, additive in `tools/simurgh-attestation/stage4h/exitCodes.mjs`, all `RUN_LEVEL_BY_RAW` level **1**. Frozen check order `133 → 134 → 135 → 136 → 137 → 138 → 139 → 140 → 145 → 146 → 141 → 142 → 143 → 144 → 147 → 148 → 149 → 150`.
@@ -167,7 +167,7 @@ cd tools/simurgh-attestation && for n in vic vic-delegator vic-delegatee; do \
 
 (If `keygen.mjs` takes different args, check `node keygen.mjs --help` and match the 4S/4U key generation invocation from git history.)
 
-- [ ] **Step 6: Verify green + no ripple** — `node --test tests/unit/llmShield/stage4t/exitCodes.test.js tests/unit/llmShield/stage4h/exitWrapper.test.js tests/unit/llmShield/stage4l/exitCodeProbeHygiene.test.js` → all PASS; then `npm test` → PASS.
+- [ ] **Step 6: Verify green + no ripple** — `node --test tests/unit/llmShield/stage4t/exitCodes.test.js tests/unit/llmShield/stage4h/exitWrapper.test.js tests/unit/llmShield/exitCodeProbeHygiene.test.js` → all PASS (probe-hygiene lives at `tests/unit/llmShield/exitCodeProbeHygiene.test.js`, NOT under `stage4l/` — P1-1); then `npm test` → PASS.
 - [ ] **Step 7: Commit** — `git add -A && git commit -m "feat(4t): raw codes 133-150 + golden sweep + VIC fixture keys"`
 
 ---
@@ -184,6 +184,7 @@ cd tools/simurgh-attestation && for n in vic vic-delegator vic-delegatee; do \
 
 - Produces: two committed JSON snapshots, each `{ schema: "simurgh.vic.template_snapshot.v1", regime, source_url, retrieved, transcription_of_record: true, sections: [{ section_id, title }] }`. `section_id` is snake_case, stable, ours; `title` is the Commission's heading text.
 
+- [ ] **Fail-closed rule for this whole task (P1-8):** if the template document cannot be fetched, or its section headings cannot be extracted, **STOP** — do not fall back to the sample JSON below as ground truth. The sample shows only the *shape*; the fetched Commission text is the sole source of section content. A pinned snapshot built from a guess would turn a placeholder into false evidence.
 - [ ] **Step 1: Fetch and transcribe the GPAI Art-55 template** from
   `https://digital-strategy.ec.europa.eu/en/library/ai-act-commission-publishes-reporting-template-serious-incidents-involving-general-purpose-ai` (download the DOCX/PDF; extract the section headings). Transcribe the real section list. Expected shape (VALIDATE against the fetched document and correct — the fetched text wins over this plan):
 
@@ -225,7 +226,7 @@ cd tools/simurgh-attestation && for n in vic vic-delegator vic-delegatee; do \
 **Interfaces:**
 
 - Produces (constants): `VIC_CAPSULE_SCHEMA="simurgh.vic.capsule.v1"`, `VIC_ATTESTATION_SCHEMA="simurgh.vic.attestation.v1"`, `VIC_VIEW_SCHEMA="simurgh.vic.view.v1"`, `TEMPLATE_REGIMES=Object.freeze(["gpai_art55","art73_high_risk_draft"])`, `PARTITION_CLASSES=Object.freeze(["evidence_backed","not_derivable","requires_human_input"])`, `VIEW_TIERS=Object.freeze(["regulator","insurer","public"])`, `RECOMPUTE_KINDS=Object.freeze(["stage4s_chain_verdict","kernel_block_record","epoch_range","participant_count","consent_manifest_scope","stage4u_asr","stage4n_beat_index"])`, `VIC_NON_CLAIMS` (7, spec §2.1 verbatim order), `VIC_KNOWN_LIMITATIONS` (7, spec §2.2 verbatim order incl. both reserved slots), `VIC_RAILS` (11, spec §2.3 verbatim order), `TEMPLATE_SNAPSHOT_DIGESTS={gpai_art55:"sha256:…",art73_high_risk_draft:"sha256:…"}` (Task 2 values), `PARTITIONS` (per regime, `{section_id: class}` for every section; classification decided here and published: `incident_dates`/`affected_persons_or_infrastructure`/`root_cause_analysis`/`corrective_measures`/`model_identification` → `evidence_backed` where a `RECOMPUTE_KINDS` entry can derive them, `incident_description`/`incident_classification` → `requires_human_input`, remainder → `not_derivable`), and `PARTITION_RECOMPUTE_KIND={regime:{section_id: kind}}` for every `evidence_backed` section.
-- Produces (templateMap): `loadTemplates()` → `{gpai_art55: snapshot, art73_high_risk_draft: snapshot}` (reads the two committed files); `verifyTemplateBindings(capsule, templates)` → `null` or `{raw, reason, detail}` for 135 (binding digest ≠ pinned digest, per regime), 136 (a snapshot section missing from the partition), 137 (capsule projects a `section_id` absent from that regime's snapshot).
+- Produces (templateMap): `loadTemplates()` → `{gpai_art55: snapshot, art73_high_risk_draft: snapshot}` (reads the two committed files); `verifyTemplateBindings(capsule, templates)` → `null` or `{raw, reason, detail}` for 135 (binding digest ≠ pinned digest, per regime), 136 (partition key set ≠ snapshot section set — catches BOTH a missing section AND an extra partition entry, via `setEqual`), 137 (capsule projects a `section_id` absent from that regime's snapshot). The loop is over `TEMPLATE_REGIMES`, so unknown/extra regimes in `template_bindings`/`projected_sections` are NOT silently ignored here — they are rejected as schema code 133 in `capsuleCore` L1 (see Task 7). Exports a small `setEqual(a, b)` helper (two `Set`s equal iff same size and `a ⊆ b`).
 
 - [ ] **Step 1: Failing tests** — `templateMap.test.js` (representative; constants.test.js asserts list lengths, frozen-ness, and that every `evidence_backed` partition entry has a `PARTITION_RECOMPUTE_KIND`):
 
@@ -252,10 +253,20 @@ test("135 on tampered snapshot digest", () => {
   const r = verifyTemplateBindings({ template_bindings: b, projected_sections: [] }, templates);
   assert.equal(r.raw, 135);
 });
-test("136 on partition gap", () => {
+test("136 on partition gap (binding digest must match the gappy partition, else 135 fires first)", () => {
   const gappy = { ...PARTITIONS.gpai_art55 }; delete gappy.incident_dates;
+  const b = okBindings();
+  b.find((x) => x.regime === "gpai_art55").partition_digest = recordDigest(gappy);
   const r = verifyTemplateBindings(
-    { template_bindings: okBindings(), projected_sections: [] }, templates, { partitions: { ...PARTITIONS, gpai_art55: gappy } });
+    { template_bindings: b, projected_sections: [] }, templates, { partitions: { ...PARTITIONS, gpai_art55: gappy } });
+  assert.equal(r.raw, 136);
+});
+test("136 on EXTRA partition entry (partition superset of snapshot)", () => {
+  const extra = { ...PARTITIONS.gpai_art55, invented_section: "not_derivable" };
+  const b = okBindings();
+  b.find((x) => x.regime === "gpai_art55").partition_digest = recordDigest(extra);
+  const r = verifyTemplateBindings(
+    { template_bindings: b, projected_sections: [] }, templates, { partitions: { ...PARTITIONS, gpai_art55: extra } });
   assert.equal(r.raw, 136);
 });
 test("137 on invented section", () => {
@@ -283,6 +294,8 @@ const FILES = {
   art73_high_risk_draft: "art73-draft-template.snapshot.json",
 };
 
+export const setEqual = (a, b) => a.size === b.size && [...a].every((x) => b.has(x));
+
 export function loadTemplates() {
   const out = {};
   for (const regime of TEMPLATE_REGIMES)
@@ -299,14 +312,17 @@ export function verifyTemplateBindings(capsule, templates, opts = {}) {
         binding.template_snapshot_digest !== TEMPLATE_SNAPSHOT_DIGESTS[regime] ||
         binding.partition_digest !== recordDigest(partitions[regime]))
       return { raw: 135, reason: "template_digest_mismatch", detail: { regime } };
-    for (const s of snapshot.sections) {
-      const cls = partitions[regime][s.section_id];
-      if (!PARTITION_CLASSES.includes(cls))
+    // 136: partition key set must EXACTLY equal the snapshot section set — a missing
+    // section OR an extra partition entry both break exhaustiveness.
+    const snapshotIds = new Set(snapshot.sections.map((s) => s.section_id));
+    const partitionIds = new Set(Object.keys(partitions[regime]));
+    if (!setEqual(snapshotIds, partitionIds))
+      return { raw: 136, reason: "template_partition_incomplete", detail: { regime } };
+    for (const s of snapshot.sections)
+      if (!PARTITION_CLASSES.includes(partitions[regime][s.section_id]))
         return { raw: 136, reason: "template_partition_incomplete", detail: { regime, section_id: s.section_id } };
-    }
-    const known = new Set(snapshot.sections.map((s) => s.section_id));
     for (const p of capsule.projected_sections ?? [])
-      if (p.regime === regime && !known.has(p.section_id))
+      if (p.regime === regime && !snapshotIds.has(p.section_id))
         return { raw: 137, reason: "template_section_unmapped", detail: { regime, section_id: p.section_id } };
   }
   return null;
@@ -329,7 +345,16 @@ export function verifyTemplateBindings(capsule, templates, opts = {}) {
 
 - Produces: `buildEvidenceManifest({ epoch, items })` → `{ epoch, items, census_root }` where `items: [{ kind, digest, epoch }]` sorted by digest and `census_root = merkleRootSorted(items.map(recordDigest))`; `verifyCensus(capsule, artifactsByDigest)` → `null` | `{raw,…}` for 138 (manifest item with no artifact), 139 (artifact key not listed in manifest), 140 (recomputed root ≠ `census_root`), 145 (item.epoch ≠ capsule.epoch). `artifactsByDigest` is a plain object `digest → parsed artifact` and each artifact must satisfy `recordDigest(artifact) === digest` (mismatch is 138 — the listed item is effectively absent).
 
-- [ ] **Step 1: Failing tests** — green manifest verifies; delete one artifact → 138; add an extra key → 139; tamper `census_root` → 140; set one item's `epoch` to `"other-epoch"` → 145 (test code follows the Task-3 pattern: build a 3-item manifest from inline `{kind:"stage4s_chain_bundle",…}` artifacts, mutate, assert `r.raw`).
+- [ ] **Step 1: Failing tests** — green manifest verifies; delete one artifact → 138; add an extra key → 139; tamper `census_root` → 140; for 145 you MUST re-root after mutating the epoch, or the earlier Merkle check (140) fires first:
+
+```javascript
+manifest.items[0].epoch = "other-epoch";
+manifest.census_root = merkleRootSorted(manifest.items.map(recordDigest)); // re-seal so 140 passes
+const r = verifyCensus({ epoch: "ep1", evidence_manifest: manifest }, artifactsByDigest);
+assert.equal(r.raw, 145);
+```
+
+(The 138/139/140 tests follow the Task-3 pattern: build a 3-item manifest from inline `{kind:"stage4s_chain_bundle",epoch:"ep1",…}` artifacts, mutate, assert `r.raw`. Note `artifactsByDigest` keys must equal `recordDigest(artifact)` for each item so 138 does not spuriously fire.)
 - [ ] **Step 2: Run → FAIL.**
 - [ ] **Step 3: Implement:**
 
@@ -378,9 +403,10 @@ export function verifyCensus(capsule, artifactsByDigest) {
 
 - Produces: `RECOMPUTE_REGISTRY` — `Object.freeze({ [kind]: (artifact, ctx) => value })`, one pure function per `RECOMPUTE_KINDS` entry: `stage4s_chain_verdict` → `ctx.chainVerdict(artifact)` (injected; audit tier passes `evaluateChainSafe`-backed fn, public tier passes recorded-verdict reader), `kernel_block_record` → `artifact.decisions.filter(d=>d.decision==="blocked").length`, `epoch_range` → `artifact.range`, `participant_count` → `artifact.participants.length`, `consent_manifest_scope` → `artifact.scope`, `stage4u_asr` → `artifact.attack_success_rate`, `stage4n_beat_index` → `artifact.beat_index`.
 - `verifyProjection(capsule, artifactsByDigest, ctx)` → 141 (an `evidence_backed` projected section whose `evidence_digest` is absent from `artifactsByDigest`), 142 (registry recompute ≠ `value`, `deepStrictEqual` on canonicalJson).
-- `verifySuppression(capsule, partitions, artifactsByDigest, kindOf)` → 143/144: for each regime+section the partition classes `evidence_backed` with declared kind `k = kindOf[regime][section_id]`, if the capsule marks it `not_derivable` (→143) or `requires_human_input` (→144) **while** some census artifact has `item.kind`-compatible evidence (an artifact whose manifest `kind` appears in `KIND_EVIDENCE_SOURCE = {stage4s_chain_verdict:"stage4s_chain_bundle", kernel_block_record:"kernel_decision_records", epoch_range:"stage4s_chain_bundle", participant_count:"stage4s_chain_bundle", consent_manifest_scope:"stage4o_consent_manifests", stage4u_asr:"stage4u_attestation_ref", stage4n_beat_index:"stage4n_temporal_anchor"}`), return the code.
+- Exports `KIND_EVIDENCE_SOURCE = Object.freeze({ stage4s_chain_verdict: "stage4s_chain_bundle", kernel_block_record: "kernel_decision_records", epoch_range: "stage4s_chain_bundle", participant_count: "stage4s_chain_bundle", consent_manifest_scope: "stage4o_consent_manifests", stage4u_asr: "stage4u_attestation_ref", stage4n_beat_index: "stage4n_temporal_anchor" })` — maps a recompute kind to the manifest `item.kind` that would supply its evidence.
+- `verifySuppression(capsule, partitions, kindOf)` → 143/144. **It reads `capsule.evidence_manifest.items` directly** (that is where kinds live — `artifactsByDigest` alone cannot tell a chain bundle from a consent manifest, P0-3). Let `presentKinds = new Set(capsule.evidence_manifest.items.map((i) => i.kind))`. For each regime+section the partition classes `evidence_backed` with declared recompute kind `k = kindOf[regime][section_id]`: if the capsule's projected section for that regime+section is marked `not_derivable` (→143) or `requires_human_input` (→144) **while** `presentKinds.has(KIND_EVIDENCE_SOURCE[k])`, return the code. Honest absence (evidence source kind NOT in the sealed census) ⇒ the marker is legal ⇒ `null`.
 
-- [ ] **Step 1: Failing tests** — green projection passes; drop the cited artifact → 141; corrupt `value` → 142; mark `affected…`-style `evidence_backed` section `not_derivable` with its source artifact still sealed → 143; mark it `requires_human_input` → 144; a genuinely absent evidence source (remove the artifact AND its manifest item) with `not_derivable` marker → `null` (honest absence is legal).
+- [ ] **Step 1: Failing tests** — green projection passes; drop the cited artifact → 141; corrupt `value` → 142; mark an `evidence_backed` section `not_derivable` **while its `KIND_EVIDENCE_SOURCE` kind is still in `capsule.evidence_manifest.items`** → 143; mark it `requires_human_input` under the same condition → 144; honest absence (remove the source kind's `item` from the manifest) with a `not_derivable` marker → `null`. Tests build a capsule with an inline `evidence_manifest.items` list so `verifySuppression` can read kinds.
 - [ ] **Step 2: Run → FAIL.** **Step 3: Implement** exactly per the Interfaces block (each check loops `capsule.projected_sections`, layer-pure: no census or template codes returned here). **Step 4: Run → PASS.**
 - [ ] **Step 5: Commit** — `git commit -m "feat(4t): field binding + closed recompute registry + suppression law (141/142/143/144)"`
 
@@ -395,7 +421,8 @@ export function verifyCensus(capsule, artifactsByDigest) {
 
 **Interfaces:**
 
-- Produces: `sectionCommitment(section, saltHex)` = `recordDigest({ salt: saltHex, section })`; `capsuleRoot(capsule, saltsBySectionKey)` = `merkleRootSorted` over commitments of every projected section (key = `` `${regime}/${section_id}` ``); `buildView(capsule, tier, redactKeys, salts)` → `{ schema: VIC_VIEW_SCHEMA, tier, capsule_root, disclosed: [{ key, section, salt }], redactions: { count, keys: [...], commitments: [...] } }`; `verifyView(view, capsule, salts)` → 148 when a disclosed section's `sectionCommitment(section, salt)` is not among the capsule's commitments OR `view.capsule_root !== capsuleRoot(capsule, salts)`; 149 when `disclosed.keys ∪ redactions.keys ≠ all section keys` or `redactions.count !== redactions.keys.length`. Verifying a view needs only the view + the capsule's commitment list (public-input verification), so also export `verifyViewAgainstCommitments(view, commitments)` with identical codes — the browser verifier uses this form.
+- Produces: `sectionCommitment(section, saltHex)` = `recordDigest({ salt: saltHex, section })`; `capsuleRoot(capsule, saltsBySectionKey)` = `merkleRootSorted` over commitments of every projected section (key = `` `${regime}/${section_id}` ``); `buildView(capsule, tier, redactKeys, salts)` → `{ schema: VIC_VIEW_SCHEMA, tier, capsule_root, disclosed: [{ key, section, salt }], redactions: { count, keys: [...], commitments: [...] } }`.
+- **`verifyViewAgainstCommitments(view, commitments)` is the primary verifier** (browser + CLI both call it — P1-3). `commitments` is the capsule's full public commitment list: `[{ key: "gpai_art55/incident_dates", commitment: "sha256:…" }, …]` (one per projected section, both regimes). It checks, in order: `view.capsule_root === merkleRootSorted(commitments.map(c => c.commitment))` (else 148); every `disclosed[i]` recomputes `sectionCommitment(disclosed[i].section, disclosed[i].salt)` and that value is the `commitment` for `disclosed[i].key` (else 148); `new Set([...disclosed.keys, ...redactions.keys])` `setEqual` `new Set(commitments.map(c => c.key))` (else 149); `redactions.count === redactions.keys.length` (else 149); every `redactions.keys[i]` has a matching `commitment` in the list (else 149). `verifyView(view, capsule, salts)` is a thin wrapper that derives `commitments` from `(capsule, salts)` then calls `verifyViewAgainstCommitments`.
 - Salts: deterministic for Lane A — `saltHex = sha256Hex(canonicalJson({ seed: "stage4t-vic-salt-v1", key }))`; Lane B uses `crypto.randomBytes(32)`.
 
 - [ ] **Step 1: Failing tests** — three-tier views verify green; tamper one disclosed `value` → 148; omit a section from both `disclosed` and `redactions` → 149; lower `redactions.count` by one → 149; a fully-redacted view still verifies (redact-all is legal, contradiction is not).
@@ -413,12 +440,30 @@ export function verifyCensus(capsule, artifactsByDigest) {
 
 **Interfaces:**
 
-- Produces: `buildCapsule({ epoch, manifest, projectedSections, salts, privKeyPem })` → signed `incident_capsule.v1` (fields: `schema`, `epoch`, `template_bindings`, `evidence_manifest`, `projected_sections`, `section_commitments`, `capsule_root`, `non_claims`, `known_limitations`, `signature`; signature over `canonicalJson` of the unsigned record).
+- Produces: `buildCapsule({ epoch, manifest, projectedSections, salts, privKeyPem })` → signed `incident_capsule.v1` (fields: `schema`, `epoch`, `template_bindings`, `evidence_manifest`, `projected_sections`, `section_commitments`, `capsule_root`, `non_claims`, `known_limitations`, `honesty_rails`, `capsule_key_digest`, `signature`). Import `keyDigest` from `stage4s/core/receiptBuilder.mjs`; set `capsule_key_digest = keyDigest(pubKeyPem)` derived from `privKeyPem`. `non_claims`/`known_limitations`/`honesty_rails` are set verbatim in `VIC_NON_CLAIMS`/`VIC_KNOWN_LIMITATIONS`/`VIC_RAILS` order (P1-7). The signature is `crypto.sign(null, Buffer.from(canonicalJson(unsignedCapsule(capsule))), privKey)` where `unsignedCapsule` strips only `signature`.
+- **L1 schema (133) — closed-world regime + list checks (P0-6):** `capsule.template_bindings.length === TEMPLATE_REGIMES.length` and every `b.regime`/`s.regime` in `template_bindings`/`projected_sections` ∈ `TEMPLATE_REGIMES` (else 133 with `regime` detail); `non_claims`/`known_limitations`/`honesty_rails` deep-equal the frozen constants in order (else 133).
+- **Signature 134 (P0-4):** `evaluateCapsule(bundle, opts)` requires `opts.capsulePubKeyPem`; fail 134 if `capsule.capsule_key_digest !== keyDigest(opts.capsulePubKeyPem)` OR `crypto.verify(...)` over `unsignedCapsule` is false (`capsule_signature_invalid`). Lane B's committed capture carries `capsule_pubkey_pem` (the ephemeral public key) so verify-mode can supply `capsulePubKeyPem` from the capture itself.
 - `verifyCrossStageRefs(capsule, artifactsByDigest, stageVerifiers)` → 146 when a census artifact's own-stage verifier does not reproduce its **recorded** verdict; `stageVerifiers = { stage4s_chain_bundle: (a)=>evaluateChainSafe(a.bundle, a.opts).raw, stage4u_attestation_ref: …, stage4o_consent_manifests: …, stage4n_temporal_anchor: … }` — each returns the recomputed verdict/digest to compare with `a.recorded_verdict`/`a.recorded_digest`. A recorded red (e.g. 108) that reproduces red passes (frozen outcome semantics).
-- `verifySeal(bundle)` → 147 when `bundle.attestation_digest !== recordDigest(JSON.parse(canonicalJson-of-bundle-content))` (two-stage digest recheck).
-- `evaluateCapsule(bundle, opts)` — schema 133, signature 134, then delegates in the frozen order to templateMap → censusCore → (145 handled in censusCore) → verifyCrossStageRefs → projectionCore → suppression → verifySeal → views; returns `{ raw: 0 }` or the first failure. `evaluateCapsuleSafe` wraps in try/catch → `{ raw: 150, reason: "internal_fail_closed" }`.
+- **147 two-stage digest — exact formula (P0-7):**
 
-- [ ] **Step 1: Failing tests** — a full green bundle (built with the module's own builders + Task 1 keys) → `{raw:0}`; per-mutation table driving every code 133–149 through `evaluateCapsule` (18-row `for` over `[mutator, expectedRaw]` pairs); BigInt-poisoned bundle through `evaluateCapsuleSafe` → 150; check-order test: a bundle violating BOTH census (139) and suppression (143) fails 139 (census layer first).
+```javascript
+export const unsignedCapsule = (capsule) => { const { signature, ...body } = capsule; return body; };
+export function capsuleAttestationDigest(bundle) {
+  // bundle = { schema, capsule, attestation_digest?, signature? } — the two-stage wrapper.
+  const { attestation_digest, signature, ...body } = bundle;
+  return recordDigest({ schema: body.schema, content: JSON.parse(canonicalJson(body.content)) });
+}
+export function verifySeal(bundle) {
+  return bundle.attestation_digest === capsuleAttestationDigest(bundle)
+    ? null : { raw: 147, reason: "attestation_digest_mismatch" };
+}
+```
+
+(The `JSON.parse(canonicalJson(...))` round-trip is the 4P prettier/merge-safe step: the digest is over the re-canonicalised content, immune to whitespace re-serialisation.)
+
+- `evaluateCapsule(bundle, opts)` — L1 schema 133 (incl. regime/list checks above), signature 134, then delegates in the frozen order to templateMap (135/136/137) → censusCore (138/139/140/145) → verifyCrossStageRefs (146) → projectionCore (141/142) → suppression (143/144) → verifySeal (147) → views (148/149); returns `{ raw: 0 }` or the first failure. `evaluateCapsuleSafe` wraps in try/catch → `{ raw: 150, reason: "internal_fail_closed" }`.
+
+- [ ] **Step 1: Failing tests** — a full green bundle (built with the module's own builders + the Task-1 `vic` key, passing `{ capsulePubKeyPem, stageVerifiers }`) → `{raw:0}`; the `FIXTURE_MUTATIONS` table (exported here for Task 8 reuse) is **17 rows** — one named mutation per code 133–149 — driven through `evaluateCapsule` as `[mutator, expectedRaw]` pairs; BigInt-poisoned bundle through `evaluateCapsuleSafe` → 150; check-order test: a bundle violating BOTH census (139) and suppression (143) fails 139 (census layer runs first).
 - [ ] **Step 2: Run → FAIL.** **Step 3: Implement.** **Step 4: Run → PASS.**
 - [ ] **Step 5: Commit** — `git commit -m "feat(4t): capsule assembly + cross-stage truth + seal + frozen check order with fail-closed (146/147/150)"`
 
@@ -452,9 +497,9 @@ export function verifyCensus(capsule, artifactsByDigest) {
 
 **Interfaces:**
 
-- Produces: `computeAttestation({ fixturesDir, lanebDir })` → `vic_attestation.v1` with Merkle root over four sealed groups `template_snapshot / capsule / census_artifacts / lane_b_capture`, `attestation_digest` = two-stage digest, signed with the `vic` key; `verifyAttestation({ bundlePath, tier, pubKeyPem })` — `public` tier: signatures, template digests, partition exhaustiveness, census set-equality + Merkle, section schema, view commitments; `audit` tier: additionally reruns the full `evaluateCapsule` with real `stageVerifiers` (4S rerun) over every Lane A fixture and asserts each `expected_raw`. CLI: `node verify-stage4t-attestation.mjs --tier public|audit <bundle>` exits raw code.
+- Produces: `computeAttestation({ fixturesDir, lanebDir })` → `vic_attestation.v1` with Merkle root over four sealed groups **`template_snapshots / lane_a_fixtures / census_artifacts / lane_b_capture`** — `lane_a_fixtures` seals **all 18** Lane A entries (honest capsule + one per code 133–149), NOT a single capsule (P0-5). `attestation_digest` = two-stage digest (`capsuleAttestationDigest` shape from Task 7), signed with the `vic` key; `verifyAttestation({ bundlePath, tier, pubKeyPem })` — `public` tier: signatures, template digests, partition exhaustiveness, census set-equality + Merkle, section schema, view commitments; `audit` tier: additionally reruns the full `evaluateCapsule` with real `stageVerifiers` (4S rerun) over every Lane A fixture and asserts each `expected_raw`. Exports `bundleMerkleRoot(attestation)` (over the four group digests) for the omission test. CLI: `node verify-stage4t-attestation.mjs --tier public|audit <bundle>` exits raw code.
 
-- [ ] **Step 1: Failing test** — sign+verify green both tiers; flip one byte in the capsule group → public tier fails (134/147 per what was flipped); a fixture whose `expected_raw` is falsified → audit tier catches it, public does not (tier-separation assertion, 3M lineage).
+- [ ] **Step 1: Failing test** — sign+verify green both tiers; flip one byte in the capsule group → public tier fails (134/147 per what was flipped); a fixture whose `expected_raw` is falsified → audit tier catches it, public does not (tier-separation assertion, 3M lineage); **omission test (P0-5):** `bundleMerkleRoot({ ...a, lane_a_fixtures: a.lane_a_fixtures.slice(1) }) !== bundleMerkleRoot(a)` — dropping any Lane A fixture changes the root.
 - [ ] **Step 2: Run → FAIL.** **Step 3: Implement.** **Step 4: Run → PASS.** Generate the committed attestation (after `npx prettier --write` on sources, hashes written after formatting — 3T lesson).
 - [ ] **Step 5: Commit** — `git commit -m "feat(4t): two-tier VIC attestation (public structural / audit engine-rerun) + CLI"`
 
@@ -511,8 +556,8 @@ export function verifyCensus(capsule, artifactsByDigest) {
   3. `censusExactness` — for an injective digest model, removing or adding a committed item changes the folded root.
   4. `noTwoStories` — under commitment binding (modelled injectivity), a verified view's disclosed value equals the capsule's, and its undisclosed set equals its declared redaction set.
 
-- [ ] **Step 1: Write the model + theorem statements with `sorry`, confirm `lake build` fails on `sorry`.**
-- [ ] **Step 2: Prove all four (zero `sorry`), `lake build` → success.**
+- [ ] **Step 1: Write the model + theorem statements with `sorry`.** Do not rely on `lake build` failing on `sorry` (Lean emits a warning, not an error, by default — P1-5). The enforced guard is a grep: `! grep -Rn "\bsorry\b" proofs/stage4t` must exit non-zero-free (no matches) for the task to be complete; add that grep to the reproduce script's guarded Lean step and the CI lean workflow.
+- [ ] **Step 2: Prove all four (zero `sorry`), `lake build` → success AND `! grep -Rn "\bsorry\b" proofs/stage4t` → no matches.**
 - [ ] **Step 3: Add the workflow step; do NOT add lean to `check.sh` (4R lesson — dedicated CI job only).**
 - [ ] **Step 4: Commit** — `git commit -m "feat(4t): machine-checked NoHearsay/suppressionDetectable/censusExactness/noTwoStories (Lean 4.15.0, zero sorry)"`
 
@@ -563,7 +608,7 @@ export function verifyCensus(capsule, artifactsByDigest) {
 
 - Consumes every export of every stage4t module (constants, templateMap, censusCore, projectionCore, viewCore, capsuleCore, fixtures builder, attestation build/verify, laneb verify).
 
-- [ ] **Step 1: Write the net:** (a) compose an honest end-to-end flow from raw 4S chain → census → capsule → attestation → three views → both verifier tiers → browser-parity core; (b) full tamper matrix for **133–149** (drive the exported `FIXTURE_MUTATIONS` through `evaluateCapsuleSafe` and through the audit-tier verifier), plus the typed-wrapper-only **150** fail-closed fixture; (c) cross-stage invariants: capsule over a tampered 4S bundle fails 146/142 and never 0; the suppression duel (same section: fabricate → 141-path, suppress → 143); a contradicting view never verifies (148); (d) read-only-predecessor assertion via committed state: `git show origin/main:<file>` vs HEAD for `capability_kernel.py` and each stage4s core file (4U K7 lesson — committed states, not working tree).
+- [ ] **Step 1: Write the net:** (a) compose an honest end-to-end flow from raw 4S chain → census → capsule → attestation → three views → both verifier tiers → browser-parity core; (b) full tamper matrix for **133–149** (drive the exported `FIXTURE_MUTATIONS` through `evaluateCapsuleSafe` and through the audit-tier verifier), plus the typed-wrapper-only **150** fail-closed fixture; (c) cross-stage invariants: capsule over a tampered 4S bundle fails 146/142 and never 0; the suppression duel (same section: fabricate → 141-path, suppress → 143); a contradicting view never verifies (148); (d) read-only-predecessor assertion via committed state — copy the 4U K7 baseline resolver verbatim (`BASE=$(git merge-base HEAD <ref>)` trying `origin/main` then `main`, so a moving `origin/main` cannot false-fail — P1-6), then `git show "$BASE:<file>"` vs HEAD for `capability_kernel.py`, each `stage4s/core/*.mjs`, AND every frozen predecessor 4T imports directly: `stage4m/core/canonical.mjs`, `stage4s/core/receiptBuilder.mjs`, and `stage4h/exitCodes.mjs` **restricted to the pre-existing lines** (4T legitimately appends codes 133–150 to exitCodes.mjs, so assert the 119–132 VRTA block and everything above it is byte-identical to base, not the whole file).
 - [ ] **Step 2: Run under Node 26 → PASS.** Then the full local gate: `bash check.sh` → green (rerun the known stage27 flake if it trips).
 - [ ] **Step 3: Commit** — `git commit -m "test(4t): K7 all-functions e2e net — tamper matrix 133-149 + 150 wrapper + cross-stage and read-only invariants"`
 
@@ -589,4 +634,17 @@ export function verifyCensus(capsule, artifactsByDigest) {
 
 - **Spec coverage:** §2 lists → Task 3 constants; §3 dual templates → Tasks 2–3; §4 census → Task 4; §5 suppression → Task 5; §6 capsule/binding/146/147 + consent IOU → Tasks 7, 16; §6.1 views → Tasks 6, 11, 14; §7 lanes → Tasks 8, 11; §8 codes/order/ripple → Tasks 1, 15; §9 tiers + browser → Tasks 9, 14; §10 reproduce → Task 13; §11 Lean → Task 12; §12 kernel-untouched → Task 15(d); §13 citations pinned → Task 16 closeout; §14 re-score + §15 E2E/docs pass → Tasks 15–16; §16 file structure → header block; §17 closeout → Task 16. No gaps found.
 - **Placeholder scan:** template section lists are explicitly marked "fetched text wins"; all other steps carry code or exact procedures. Clean.
-- **Type consistency:** `evaluateCapsuleSafe` / `verifyTemplateBindings` / `verifyCensus` / `verifyProjection` / `verifySuppression` / `verifyView(AgainstCommitments)` / `FIXTURE_MUTATIONS` names are used identically across Tasks 3–15. Clean.
+- **Type consistency:** `evaluateCapsuleSafe` / `verifyTemplateBindings` / `verifyCensus` / `verifyProjection` / `verifySuppression(capsule, partitions, kindOf)` / `verifyViewAgainstCommitments(view, commitments)` / `capsuleAttestationDigest` / `verifySeal` / `bundleMerkleRoot` / `keyDigest` / `setEqual` / `KIND_EVIDENCE_SOURCE` / `FIXTURE_MUTATIONS` names are used identically across Tasks 3–15. Clean.
+
+## Patch round (post-review, 2026-07-07)
+
+Seven P0 + eight P1 trapdoors fixed inline before handoff:
+
+- **P0-1** Task-3 136 test now sets the binding's `partition_digest` to the gappy partition so 136 fires, not 135; added an extra-entry 136 test.
+- **P0-2** Task-4 145 test re-roots the manifest after mutating `item.epoch` so 145 fires, not 140.
+- **P0-3** `verifySuppression` reads `capsule.evidence_manifest.items` for kinds; `KIND_EVIDENCE_SOURCE` exported.
+- **P0-4** capsule carries `capsule_key_digest`; `evaluateCapsule` requires `capsulePubKeyPem`; Lane B capture carries `capsule_pubkey_pem` (ephemeral) — 134 verifiable.
+- **P0-5** attestation seals `lane_a_fixtures` (all 18), not one `capsule`; omission test added.
+- **P0-6** `capsuleCore` L1 rejects unknown/extra regimes and wrong binding count as 133; partition check is exact `setEqual` (missing OR extra → 136).
+- **P0-7** exact `capsuleAttestationDigest`/`verifySeal` two-stage formula with the 4P re-canonicalise round-trip.
+- **P1s:** probe-hygiene path corrected (`tests/unit/llmShield/exitCodeProbeHygiene.test.js`); 17-row mutation table; `verifyViewAgainstCommitments` input shape pinned; HTML comment header; Lean `sorry` grep-guard (not `lake build` reliance); K7 merge-base baseline + widened frozen-file set (exitCodes checked above the 133 block only); signed capsule includes `honesty_rails`; Task-2 fail-closed on fetch failure.
