@@ -28,9 +28,32 @@ stdlib parity; Lean 4.15.0 (no mathlib); static browser verifier (CSP
 - Unit tests: never a bare directory to `node --test` (4K gotcha) — explicit `*.test.js` globs. Never shell out to `rg` in tests (Linux CI lacks it).
 - Fixture keys: `tests/fixtures/llmShield/stage4v/test-keys/INSECURE_FIXTURE_ONLY_{vdp,vdp-respondent}.pem` (+ `.pub.pem`); names contain no digits (3M/3O audit allowlist pattern).
 - `docs/research/llm-shield/evidence/stage-4v/` fully prettier-ignored in the SAME commit that creates it (4N lesson). Specs/plans/closeouts ARE prettier-gated: `npx prettier --write` before every docs commit.
-- Neutral commit messages, no attribution trailers (standing rule). Run `bash check.sh` locally before any push (4U lesson).
+- Neutral commit messages, no attribution trailers (standing rule). Run `bash scripts/check.sh` locally before any push (4U lesson).
 - Version: verify `git tag --sort=-creatordate | head -3` shows `v2.30.0-stage-4t-vic` before using target tag `v2.31.0-stage-4v-vdp` (4J gotcha).
 - Public wording rail: closeout/README use "provider-safe first, then reviewer-safe"; scorecard axis 3 is "Lab/regulator usefulness".
+
+**Verified repo facts (checked 2026-07-07 before planning — do not re-litigate):** the quality gate is `scripts/check.sh` (no root `check.sh`); `sha256Hex`, `recordDigest`, `canonicalJson`, `merkleRootSorted` are all exported from `tools/simurgh-attestation/stage4m/core/canonical.mjs`; `KIND_EVIDENCE_SOURCE` and `RECOMPUTE_REGISTRY` are exported from `tools/simurgh-attestation/stage4t/core/projectionCore.mjs`; 4T projected sections DO carry a `class` field; the 4T inner signature lives at `bundle.content.signature` (4T's own 134 fixture mutates exactly that); `RECOMPUTE_REGISTRY` keys are `stage4s_chain_verdict, kernel_block_record, epoch_range, participant_count, consent_manifest_scope, stage4u_asr, stage4n_beat_index`; the green 4T capsule has `art73_high_risk_draft/users_affected = 2`, `remedial_actions = 2`, `gpai_art55/evidence_available` class `not_derivable`, capsule-level anchor `beat_index = 42`.
+
+---
+
+### Task 0: Repo-shape preflight (no code, gate only)
+
+**Files:** none created — this task is a set of assertions that must pass before Task 1.
+
+- [ ] **Step 1: Confirm paths and exports**
+
+```bash
+test -f scripts/check.sh || echo "MISSING scripts/check.sh"
+test -f tools/simurgh-attestation/stage4t/node/greenCapsule.mjs || echo "MISSING greenCapsule"
+test -f tools/simurgh-attestation/stage4t/core/projectionCore.mjs || echo "MISSING projectionCore"
+node -e 'import("./tools/simurgh-attestation/stage4t/core/projectionCore.mjs").then(m=>{const need=["stage4s_chain_verdict","kernel_block_record","epoch_range","participant_count","consent_manifest_scope","stage4n_beat_index"];const have=Object.keys(m.RECOMPUTE_REGISTRY);const miss=need.filter(k=>!have.includes(k));if(miss.length){console.error("MISSING registry keys",miss);process.exit(1);}if(!m.KIND_EVIDENCE_SOURCE)throw new Error("no KIND_EVIDENCE_SOURCE");console.log("registry ok");})'
+node -e 'import("./tools/simurgh-attestation/stage4m/core/canonical.mjs").then(m=>{for(const k of ["sha256Hex","recordDigest","canonicalJson","merkleRootSorted"])if(typeof m[k]!=="function")throw new Error("missing "+k);console.log("canonical ok");})'
+node -e 'import("./tools/simurgh-attestation/stage4t/node/greenCapsule.mjs").then(m=>{const b=m.buildGreenBundle().bundle;console.log(JSON.stringify({root:b.content.capsule_root,att:b.attestation_digest,hasClass:"class" in b.content.projected_sections[0],anchor:b.content.evidence_anchored_at_beat.value}));})'
+```
+
+Expected: no `MISSING` lines; `registry ok`; `canonical ok`; a JSON line with `hasClass: true` and `anchor: 42`. If any fails, STOP — a prior stage moved; reconcile before writing 4V code.
+
+- [ ] **Step 2:** no commit (gate only). Proceed to Task 1.
 
 ---
 
@@ -254,8 +277,15 @@ export const DISPUTE_FAILED_SUBREASONS = Object.freeze([
   "recompute_failed",
   "section_not_contestable",
 ]);
-// Anchor contest pseudo-section key (spec §4a) — flows through set digest + statuses.
-export const ANCHOR_KEY = "meta/evidence_anchored_at_beat";
+// Anchor contest pseudo-section (spec §4a) — flows through set digest + statuses.
+export const ANCHOR_REGIME = "meta";
+export const ANCHOR_SECTION = "evidence_anchored_at_beat";
+export const ANCHOR_KEY = `${ANCHOR_REGIME}/${ANCHOR_SECTION}`;
+// filed_at_beat is signed-body metadata, NOT part of contested_section_set_digest
+// (spec §4a Option B): schema-checked, payload-checked, census-checked; a failed
+// self-anchor only sets filed_at_beat_status = FAILED, never voids the contest.
+export const FILED_AT_BEAT_REGIME = "meta";
+export const FILED_AT_BEAT_SECTION = "filed_at_beat";
 
 export const VDP_NON_CLAIMS = Object.freeze([
   "not_an_adjudication_of_truth_or_fault",
@@ -318,8 +348,10 @@ export const STAGE4T_REFERENCE_CAPSULE = Object.freeze({
 
 **Interfaces:**
 
-- Consumes: `recordDigest` from `../../stage4m/core/canonical.mjs`; `keyDigest` from `../../stage4s/core/receiptBuilder.mjs`; `VIC_CAPSULE_SCHEMA` from `../../stage4t/constants.mjs`; `ANCHOR_KEY` from `../constants.mjs`.
-- Produces: `contestKeys(counterCapsule) -> string[]` (contest `regime/section_id` keys + `ANCHOR_KEY` when `anchor_contest` present); `contestedSectionSetDigest(keys) -> "sha256:..."`; `buildBinding(capsuleBundle, capsulePubKeyPem, keys) -> binding`; `verifyBinding(counterCapsule, capsuleBundle, capsulePubKeyPem) -> null | {raw:153|154, reason, detail}`.
+- Consumes: `recordDigest` from `../../stage4m/core/canonical.mjs`; `keyDigest` from `../../stage4s/core/receiptBuilder.mjs`; `VIC_CAPSULE_SCHEMA` from `../../stage4t/constants.mjs`; `ANCHOR_REGIME` / `ANCHOR_SECTION` from `../constants.mjs`.
+- Produces: `contestTuples(counterCapsule) -> {regime, section_id}[]` (one per contest + the anchor pseudo-section when `anchor_contest` present; `filed_at_beat` is NOT included — spec §4a Option B, metadata not part of the set digest); `keyString(tuple) -> "regime/section_id"` (display + uncontested comparison only, safe because schema bans `/` in both fields, Task 6); `contestedSectionSetDigest(tuples) -> "sha256:..."` (digest over the tuples SORTED by a JSON-array sort key — collision-safe, order-insensitive); `buildBinding(capsuleBundle, capsulePubKeyPem, tuples) -> binding`; `verifyBinding(counterCapsule, capsuleBundle, capsulePubKeyPem) -> null | {raw:153|154, reason, detail}`.
+
+**Note (spec §6, P1 #6):** the previous slash-joined string key was collision-prone (`{a/b, c}` vs `{a, b/c}` both render `a/b/c`). The set digest is now over structured `{regime, section_id}` objects; `keyString` remains for human-readable map keys but is unambiguous because Task 6's `schemaCheck` rejects any `regime`/`section_id` containing `/`.
 
 - [ ] **Step 1: Write the failing tests**
 
@@ -328,7 +360,7 @@ export const STAGE4T_REFERENCE_CAPSULE = Object.freeze({
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
-  contestKeys,
+  contestTuples,
   contestedSectionSetDigest,
   buildBinding,
   verifyBinding,
@@ -336,23 +368,26 @@ import {
 import { buildGreenBundle } from "../../../../tools/simurgh-attestation/stage4t/node/greenCapsule.mjs";
 
 const green = buildGreenBundle();
-const keys = ["art73_high_risk_draft/users_affected", "gpai_art55/chain_of_events"];
+const tuples = [
+  { regime: "art73_high_risk_draft", section_id: "users_affected" },
+  { regime: "gpai_art55", section_id: "chain_of_events" },
+];
 const cc = (over = {}) => ({
-  binding: buildBinding(green.bundle, green.pubKeyPem, keys),
-  contests: keys.map((k) => {
-    const [regime, section_id] = [k.slice(0, k.indexOf("/")), k.slice(k.indexOf("/") + 1)];
-    return {
-      regime,
-      section_id,
-      verb: "dispute_as_judgment",
-      judgment_text_digest: "sha256:" + "0".repeat(64),
-    };
-  }),
+  binding: buildBinding(green.bundle, green.pubKeyPem, tuples),
+  contests: tuples.map((t) => ({
+    ...t,
+    verb: "dispute_as_judgment",
+    judgment_text_digest: "sha256:" + "0".repeat(64),
+  })),
   ...over,
 });
 
-test("set digest is order-insensitive", () => {
-  assert.equal(contestedSectionSetDigest(keys), contestedSectionSetDigest([...keys].reverse()));
+test("set digest is order-insensitive and collision-safe", () => {
+  assert.equal(contestedSectionSetDigest(tuples), contestedSectionSetDigest([...tuples].reverse()));
+  // collision guard: {a/b, c} and {a, b/c} must NOT collide (structured, not slash-joined)
+  const A = [{ regime: "a/b", section_id: "c" }];
+  const B = [{ regime: "a", section_id: "b/c" }];
+  assert.notEqual(contestedSectionSetDigest(A), contestedSectionSetDigest(B));
 });
 test("faithful binding verifies", () => {
   assert.equal(verifyBinding(cc(), green.bundle, green.pubKeyPem), null);
@@ -368,7 +403,7 @@ test("set digest vs contests mismatch -> 154; duplicate section -> 154", () => {
   assert.equal(verifyBinding(drop, green.bundle, green.pubKeyPem).raw, 154);
   const dup = cc();
   dup.contests = [...dup.contests, dup.contests[0]];
-  dup.binding = buildBinding(green.bundle, green.pubKeyPem, contestKeys(dup));
+  dup.binding = buildBinding(green.bundle, green.pubKeyPem, contestTuples(dup));
   assert.equal(verifyBinding(dup, green.bundle, green.pubKeyPem).raw, 154);
 });
 ```
@@ -385,27 +420,36 @@ test("set digest vs contests mismatch -> 154; duplicate section -> 154", () => {
 import { recordDigest } from "../../stage4m/core/canonical.mjs";
 import { keyDigest } from "../../stage4s/core/receiptBuilder.mjs";
 import { VIC_CAPSULE_SCHEMA } from "../../stage4t/constants.mjs";
-import { ANCHOR_KEY } from "../constants.mjs";
+import { ANCHOR_REGIME, ANCHOR_SECTION } from "../constants.mjs";
 
-export const contestKeys = (cc) => [
-  ...(cc.contests ?? []).map((c) => `${c.regime}/${c.section_id}`),
-  ...(cc.anchor_contest ? [ANCHOR_KEY] : []),
+// Structured contest tuples — filed_at_beat is metadata, NOT in the set (spec §4a Option B).
+export const contestTuples = (cc) => [
+  ...(cc.contests ?? []).map((c) => ({ regime: c.regime, section_id: c.section_id })),
+  ...(cc.anchor_contest ? [{ regime: ANCHOR_REGIME, section_id: ANCHOR_SECTION }] : []),
 ];
 
-export const contestedSectionSetDigest = (keys) => recordDigest([...keys].sort());
+export const keyString = (t) => `${t.regime}/${t.section_id}`;
 
-export function buildBinding(capsuleBundle, capsulePubKeyPem, keys) {
+// Collision-safe: sort by JSON-array key, digest over structured objects.
+const sortKey = (t) => JSON.stringify([t.regime, t.section_id]);
+export const contestedSectionSetDigest = (tuples) =>
+  recordDigest(
+    [...tuples].sort((a, b) => (sortKey(a) < sortKey(b) ? -1 : sortKey(a) > sortKey(b) ? 1 : 0))
+  );
+
+export function buildBinding(capsuleBundle, capsulePubKeyPem, tuples) {
   return {
     capsule_root: capsuleBundle.content.capsule_root,
     attestation_digest: capsuleBundle.attestation_digest,
     capsule_schema_version: VIC_CAPSULE_SCHEMA,
     capsule_signing_key_fingerprint: keyDigest(capsulePubKeyPem),
-    contested_section_set_digest: contestedSectionSetDigest(keys),
+    contested_section_set_digest: contestedSectionSetDigest(tuples),
   };
 }
 
 export function verifyBinding(cc, capsuleBundle, capsulePubKeyPem) {
-  const expected = buildBinding(capsuleBundle, capsulePubKeyPem, contestKeys(cc));
+  const tuples = contestTuples(cc);
+  const expected = buildBinding(capsuleBundle, capsulePubKeyPem, tuples);
   const b = cc.binding ?? {};
   for (const field of [
     "capsule_root",
@@ -415,14 +459,16 @@ export function verifyBinding(cc, capsuleBundle, capsulePubKeyPem) {
   ])
     if (b[field] !== expected[field])
       return { raw: 153, reason: "vdp_binding_mismatch", detail: { field } };
-  const keys = contestKeys(cc);
-  if (new Set(keys).size !== keys.length)
+  const seen = new Set(tuples.map(keyString));
+  if (seen.size !== tuples.length)
     return { raw: 154, reason: "vdp_contested_section_set_mismatch", detail: { duplicate: true } };
   if (b.contested_section_set_digest !== expected.contested_section_set_digest)
     return { raw: 154, reason: "vdp_contested_section_set_mismatch", detail: {} };
   return null;
 }
 ```
+
+Add `ANCHOR_REGIME = "meta"` and `ANCHOR_SECTION = "evidence_anchored_at_beat"` to `constants.mjs` (Task 2), keeping the existing `ANCHOR_KEY = "meta/evidence_anchored_at_beat"` for display. Downstream `contestKeys` references in later tasks become `contestTuples(...).map(keyString)`.
 
 - [ ] **Step 4: Run to verify PASS**, then commit: `git add -A && git commit -m "feat(4v): No Strawman binding tuple + contested-section-set digest (153/154)"`
 
@@ -437,10 +483,12 @@ export function verifyBinding(cc, capsuleBundle, capsulePubKeyPem) {
 
 **Interfaces:**
 
-- Consumes: `buildEvidenceManifest`, `verifyCensus` from `../../stage4t/core/censusCore.mjs`; `recordDigest`.
-- Produces: `buildRespondentCensus({epoch, items})` (re-export of `buildEvidenceManifest`); `respondentArtifactsIndex(cc) -> {digest: artifact}`; `verifyRespondentCensus(cc, capsuleEpoch) -> null | {raw:155..158}`.
+- Consumes: `buildEvidenceManifest`, `verifyCensus` from `../../stage4t/core/censusCore.mjs`; `recordDigest`; `contestTuples` is NOT needed here — the caller (Task 6) passes the referenced-digest set.
+- Produces: `buildRespondentCensus({epoch, items})` (re-export of `buildEvidenceManifest`); `respondentArtifactsIndex(cc) -> {digest: artifact}`; `referencedDigests(cc) -> Set<string>` (collects `evidence_digest` from every contest + `anchor_contest` + `filed_at_beat`); `verifyRespondentCensus(cc, capsuleEpoch) -> null | {raw:155..158}`.
 
-- [ ] **Step 1: Failing tests** — build a tiny census of one artifact `{ kind: "stage4s_chain_bundle", epoch: E, participants: ["x"] }`, assert green passes; then: item digest mismatch → 155; extra unlisted artifact → 156; corrupted `census_root` → 157; item epoch ≠ capsule epoch → 158.
+**P0 #3 — the census must reject referenced-but-uncensused evidence.** Raw 156 (`VDP_RESPONDENT_CENSUS_OMITS_EVIDENCE`) fires not only for a smuggled artifact (139 remap) but ALSO when a contest cites an `evidence_digest` absent from `respondent_census.items` — citing evidence outside your own sealed census is a Same-Rules violation that must fail before any conflict map, not silently degrade to `DISPUTE_FAILED{recompute_failed}`. This covers contest, anchor, AND filed_at_beat references (spec §4a Option B keeps filed_at_beat out of the binding, but its evidence is still census-bound).
+
+- [ ] **Step 1: Failing tests** — build a tiny census of one artifact `{ kind: "stage4s_chain_bundle", epoch: E, participants: ["x"] }`, assert green passes; then: item digest mismatch → 155; extra unlisted artifact → 156; **contest references a digest not in the census → 156**; corrupted `census_root` → 157; item epoch ≠ capsule epoch → 158.
 
 ```js
 // tests/unit/llmShield/stage4v/contestCensus.test.js
@@ -482,6 +530,20 @@ test("codes remap 138/139/140/145 -> 155/156/157/158", () => {
   assert.equal(verifyRespondentCensus(root, E).raw, 157);
   assert.equal(verifyRespondentCensus(mk(), "other-epoch").raw, 158);
 });
+test("contest references a digest not in the census -> 156 (P0 #3)", () => {
+  const c = mk();
+  c.contests = [
+    {
+      regime: "gpai_art55",
+      section_id: "serious_incident_response",
+      verb: "dispute_by_recomputation",
+      claimed_value: 1,
+      recompute_kind: "kernel_block_record",
+      evidence_digest: "sha256:" + "a".repeat(64),
+    }, // never sealed
+  ];
+  assert.equal(verifyRespondentCensus(c, E).raw, 156);
+});
 ```
 
 - [ ] **Step 2: Run to verify FAIL.**
@@ -502,6 +564,16 @@ export const buildRespondentCensus = buildEvidenceManifest;
 export const respondentArtifactsIndex = (cc) =>
   Object.fromEntries((cc.respondent_evidence_artifacts ?? []).map((a) => [recordDigest(a), a]));
 
+// Every evidence_digest a contest / anchor / filed_at_beat relies on.
+export const referencedDigests = (cc) => {
+  const all = [
+    ...(cc.contests ?? []),
+    ...(cc.anchor_contest ? [cc.anchor_contest] : []),
+    ...(cc.filed_at_beat ? [cc.filed_at_beat] : []),
+  ];
+  return new Set(all.map((c) => c.evidence_digest).filter((d) => typeof d === "string"));
+};
+
 const REMAP = Object.freeze({ 138: 155, 139: 156, 140: 157, 145: 158 });
 const REASON = Object.freeze({
   155: "vdp_respondent_census_item_mismatch",
@@ -515,9 +587,20 @@ export function verifyRespondentCensus(cc, capsuleEpoch) {
     { evidence_manifest: cc.respondent_census, epoch: capsuleEpoch },
     respondentArtifactsIndex(cc)
   );
-  if (!res) return null;
-  const raw = REMAP[res.raw];
-  return { raw, reason: REASON[raw], detail: res.detail };
+  if (res) {
+    const raw = REMAP[res.raw];
+    return { raw, reason: REASON[raw], detail: res.detail };
+  }
+  // P0 #3 — Same Rules: a contest may only cite evidence inside its OWN sealed census.
+  const listed = new Set((cc.respondent_census?.items ?? []).map((i) => i.digest));
+  for (const d of referencedDigests(cc))
+    if (!listed.has(d))
+      return {
+        raw: 156,
+        reason: "vdp_respondent_census_omits_evidence",
+        detail: { referenced: d },
+      };
+  return null;
 }
 ```
 
@@ -534,7 +617,7 @@ export function verifyRespondentCensus(cc, capsuleEpoch) {
 
 **Interfaces:**
 
-- Consumes: `RECOMPUTE_REGISTRY` from `../../stage4t/core/projectionCore.mjs` (registry-authority rail — the ONLY recompute source); `PARTITIONS` + `loadTemplates` from stage4t; `canonicalJson, recordDigest`; `contestKeys` (Task 3); `respondentArtifactsIndex` (Task 4); constants (Task 2).
+- Consumes: `RECOMPUTE_REGISTRY` AND `KIND_EVIDENCE_SOURCE` from `../../stage4t/core/projectionCore.mjs` (registry-authority rail — the ONLY recompute source, and the source-kind gate P1 #7); `PARTITIONS` from stage4t; `canonicalJson`; `contestTuples`, `keyString` (Task 3); `respondentArtifactsIndex` (Task 4); constants (Task 2). Add a test: a `stage4s_chain_verdict` contest whose `evidence_digest` points at a `kernel_decision_records` artifact → `DISPUTE_FAILED{recompute_failed}` (kind mismatch), NOT a spurious AGREED/CONFLICT.
 - Produces: `deriveSectionStatus({contest, cls, operatorValue, artifacts, ctx}) -> {status, subreason?, respondent_value?}` (the frozen spec-§3 table); `deriveConflictMap(capsuleBundle, counterCapsule, ctx) -> conflictMap` with `{schema, binding, respondent_role, sections[], anchor_status?, uncontested_sections[], partition_rescore_signals[]}`.
 
 - [ ] **Step 1: Failing tests** — the frozen table, geometry over intent (use the green 4T capsule; helper builds a one-contest counter-capsule):
@@ -688,10 +771,10 @@ Plus a `deriveConflictMap` test (built in Step 3's implementation order): derive
 // Motto: AnthropicSafe First, then ReviewerSafe.
 // Registry-authority rail: recompute comes ONLY from the stage4t shared registry.
 import { canonicalJson } from "../../stage4m/core/canonical.mjs";
-import { RECOMPUTE_REGISTRY } from "../../stage4t/core/projectionCore.mjs";
+import { RECOMPUTE_REGISTRY, KIND_EVIDENCE_SOURCE } from "../../stage4t/core/projectionCore.mjs";
 import { PARTITIONS } from "../../stage4t/constants.mjs";
 import { VDP_CONFLICT_MAP_SCHEMA, ANCHOR_KEY } from "../constants.mjs";
-import { contestKeys } from "./bindingCore.mjs";
+import { contestTuples, keyString } from "./bindingCore.mjs";
 import { respondentArtifactsIndex } from "./contestCensus.mjs";
 
 const eq = (a, b) => canonicalJson(a) === canonicalJson(b);
@@ -706,8 +789,14 @@ export function deriveSectionStatus({ contest, cls, operatorValue, artifacts, ct
   // recomputation verbs: the respondent's own evidence must recompute their claim.
   const artifact = artifacts[contest.evidence_digest];
   const fn = artifact === undefined ? undefined : RECOMPUTE_REGISTRY[contest.recompute_kind];
-  const recomputed = fn === undefined ? undefined : fn(artifact, ctx);
-  if (fn === undefined || !eq(recomputed, contest.claimed_value))
+  // P1 #7 — executable KIND_EVIDENCE_SOURCE rail: the cited artifact's kind must be
+  // the source kind the recompute kind expects (a chain verdict may not be recomputed
+  // from a kernel record). A kind/artifact mismatch is a failed dispute, not a valid one.
+  const expectedKind = KIND_EVIDENCE_SOURCE[contest.recompute_kind];
+  const kindOk =
+    artifact !== undefined && expectedKind !== undefined && artifact.kind === expectedKind;
+  const recomputed = fn === undefined || !kindOk ? undefined : fn(artifact, ctx);
+  if (fn === undefined || !kindOk || !eq(recomputed, contest.claimed_value))
     return { status: "DISPUTE_FAILED", subreason: "recompute_failed" };
   if (ABSENCE.has(cls))
     return { status: "ABSENCE_REBUTTED", respondent_value: contest.claimed_value };
@@ -719,11 +808,9 @@ export function deriveSectionStatus({ contest, cls, operatorValue, artifacts, ct
 export function deriveConflictMap(capsuleBundle, cc, ctx) {
   const capsule = capsuleBundle.content;
   const artifacts = respondentArtifactsIndex(cc);
-  const operatorByKey = new Map(
-    (capsule.projected_sections ?? []).map((p) => [`${p.regime}/${p.section_id}`, p])
-  );
+  const operatorByKey = new Map((capsule.projected_sections ?? []).map((p) => [keyString(p), p]));
   const sections = (cc.contests ?? []).map((contest) => {
-    const key = `${contest.regime}/${contest.section_id}`;
+    const key = keyString(contest);
     const cls = PARTITIONS[contest.regime]?.[contest.section_id];
     const op = operatorByKey.get(key);
     const derived = deriveSectionStatus({
@@ -754,7 +841,7 @@ export function deriveConflictMap(capsuleBundle, cc, ctx) {
     });
   }
 
-  const contested = new Set(contestKeys(cc));
+  const contested = new Set(contestTuples(cc).map(keyString));
   const uncontested_sections = Object.keys(PARTITIONS)
     .flatMap((r) => Object.keys(PARTITIONS[r]).map((s) => `${r}/${s}`))
     .filter((k) => !contested.has(k))
@@ -822,11 +909,37 @@ Test with a minimal two-contest counter-capsule assembled inline via
 respondent kernel artifact), asserting: green → `raw 0` + envelope with
 `capsule_reverify_result === 0`, map present, `filed_at_beat_status ===
 "not_supplied"`; broken respondent signature → 152; `respondent_role:
-"martian"` → 151; contest carrying raw `judgment_text` → 159;
-`expectedConflictMap` with one mutated status → 160; capsule with tampered
-inner signature → `raw 134` and `result.refused === true` (subpoena); a
-thrown-injection (pass `stageVerifiers` whose fn throws) → 161 via
-`evaluateContestSafe`.
+"martian"` → 151; **an unknown top-level key** (`cc.smuggled = 1`) → 151;
+**an unknown contest key** (`contest.provider_notes` — but that's a
+raw-content key) → 159, and a genuinely-unknown structural contest key
+(`contest.foo = 1`) → 151; contest carrying raw `judgment_text` → 159;
+a `dispute_by_recomputation` contest **missing `claimed_value`** → 151;
+`filed_at_beat` carrying `raw_prose` → 159; `expectedConflictMap` with one
+mutated status → 160; capsule with tampered inner signature → `raw 134` and
+`result.refused === true` (subpoena).
+
+**161 fail-closed (P1 #14 — do NOT test via a throwing `stageVerifiers`):** a
+poisoned stage verifier throws inside 4T's `evaluateCapsuleSafe` (pre-verify),
+which catches it and returns raw 150 — 4V would then refuse with
+`capsule_reverify_result: 150`, never reaching 161. Instead trigger a throw
+AFTER pre-verify, inside 4V's own path: give the counter-capsule a
+non-JSON-serializable respondent artifact so `respondentArtifactsIndex` →
+`recordDigest` → `canonicalJson` throws inside `evaluateContest` (pre-verify
+never touches respondent artifacts, so it passes first):
+
+```js
+test("161 fail-closed on an internal throw after pre-verify", () => {
+  const g = buildGreenContest(); // Task 7; or the inline builder for this task
+  const poisoned = JSON.parse(JSON.stringify(g.counterCapsule));
+  poisoned.respondent_evidence_artifacts.push({ kind: "x", bad: 10n }); // BigInt → JSON throws
+  const { raw } = evaluateContestSafe(g.capsuleBundle, poisoned, {
+    capsulePubKeyPem: g.capsulePubKeyPem,
+    respondentPubKeyPem: g.respondentPubKeyPem,
+    stageVerifiers: STAGE_VERIFIERS,
+  });
+  assert.equal(raw, 161);
+});
+```
 
 - [ ] **Step 2: Run to verify FAIL.**
 
@@ -848,13 +961,49 @@ import {
   RESPONDENT_ROLES,
   VDP_NON_CLAIMS,
 } from "../constants.mjs";
-import { verifyBinding, buildBinding, contestKeys } from "./bindingCore.mjs";
+import { verifyBinding, buildBinding, contestTuples } from "./bindingCore.mjs";
 import { verifyRespondentCensus, respondentArtifactsIndex } from "./contestCensus.mjs";
 import { deriveConflictMap, deriveSectionStatus } from "./conflictMap.mjs";
 
 const eqArray = (a, b) =>
   Array.isArray(a) && Array.isArray(b) && a.length === b.length && a.every((x, i) => x === b[i]);
 const DIGEST_RE = /^sha256:[0-9a-f]{64}$/;
+
+// P0 #2 — strict allowlists close prose/field smuggling. Unknown STRUCTURAL keys
+// are 151; known raw/content keys (judgment_text and friends) are 159 (payloadCheck).
+const TOP_LEVEL_KEYS = new Set([
+  "schema",
+  "respondent_role",
+  "binding",
+  "contests",
+  "anchor_contest",
+  "filed_at_beat",
+  "respondent_census",
+  "respondent_evidence_artifacts",
+  "non_claims",
+  "respondent_key_digest",
+  "signature",
+]);
+const RECOMPUTE_CONTEST_KEYS = new Set([
+  "regime",
+  "section_id",
+  "verb",
+  "claimed_value",
+  "recompute_kind",
+  "evidence_digest",
+]);
+const JUDGMENT_CONTEST_KEYS = new Set(["regime", "section_id", "verb", "judgment_text_digest"]);
+const RAW_CONTENT_KEYS = new Set([
+  "judgment_text",
+  "raw_prose",
+  "provider_notes",
+  "operator_summary",
+  "prompt",
+  "transcript",
+  "note",
+  "text",
+  "body",
+]);
 
 export const unsignedCounterCapsule = (cc) => {
   const { signature, ...body } = cc;
@@ -884,7 +1033,7 @@ export function buildCounterCapsule({
     non_claims: [...VDP_NON_CLAIMS],
     respondent_key_digest: keyDigest(pubKeyPem),
   };
-  cc.binding = buildBinding(capsuleBundle, capsulePubKeyPem, contestKeys(cc));
+  cc.binding = buildBinding(capsuleBundle, capsulePubKeyPem, contestTuples(cc));
   const priv = crypto.createPrivateKey(privKeyPem);
   cc.signature = crypto
     .sign(null, Buffer.from(canonicalJson(unsignedCounterCapsule(cc))), priv)
@@ -900,18 +1049,62 @@ export function resignCounterCapsule(cc, privKeyPem) {
   return cc;
 }
 
+// A single contest's STRUCTURAL shape (151 only). Raw-content keys are NOT flagged
+// here — they are deferred to payloadCheck (159) so the frozen check order holds
+// (159 fires after census, never before binding). Unknown NON-content keys are 151.
+function contestShapeError(c) {
+  if (typeof c !== "object" || c === null)
+    return { raw: 151, reason: "contest_schema_invalid", detail: { part: "contest" } };
+  if (!VDP_VERBS.includes(c.verb))
+    return { raw: 151, reason: "unknown_verb", detail: { verb: c.verb } };
+  if (
+    typeof c.regime !== "string" ||
+    typeof c.section_id !== "string" ||
+    c.regime.length === 0 ||
+    c.section_id.length === 0 ||
+    c.regime.includes("/") ||
+    c.section_id.includes("/")
+  )
+    return { raw: 151, reason: "contest_schema_invalid", detail: { part: "target" } };
+  const allowed = c.verb === "dispute_as_judgment" ? JUDGMENT_CONTEST_KEYS : RECOMPUTE_CONTEST_KEYS;
+  for (const k of Object.keys(c)) {
+    if (RAW_CONTENT_KEYS.has(k)) continue; // 159 territory — payloadCheck owns it
+    if (!allowed.has(k))
+      return { raw: 151, reason: "contest_schema_invalid", detail: { unknown_key: k } };
+  }
+  if (c.verb !== "dispute_as_judgment") {
+    if (
+      c.claimed_value === undefined ||
+      typeof c.recompute_kind !== "string" ||
+      !DIGEST_RE.test(c.evidence_digest ?? "")
+    )
+      return { raw: 151, reason: "contest_schema_invalid", detail: { part: "recompute_fields" } };
+  }
+  return null;
+}
+
 function schemaCheck(cc) {
-  if (!cc || cc.schema !== VDP_COUNTER_CAPSULE_SCHEMA)
+  if (!cc || typeof cc !== "object" || cc.schema !== VDP_COUNTER_CAPSULE_SCHEMA)
     return { raw: 151, reason: "vdp_counter_capsule_schema_invalid", detail: { part: "schema" } };
+  for (const k of Object.keys(cc))
+    if (!TOP_LEVEL_KEYS.has(k))
+      return {
+        raw: 151,
+        reason: "vdp_counter_capsule_schema_invalid",
+        detail: { unknown_top_key: k },
+      };
   if (!RESPONDENT_ROLES.includes(cc.respondent_role))
     return { raw: 151, reason: "unknown_respondent_role", detail: { role: cc.respondent_role } };
   if (!Array.isArray(cc.contests) || cc.contests.length === 0)
     return { raw: 151, reason: "contest_schema_invalid", detail: { part: "contests" } };
-  for (const c of cc.contests) {
-    if (!VDP_VERBS.includes(c.verb))
-      return { raw: 151, reason: "unknown_verb", detail: { verb: c.verb } };
-    if (typeof c.regime !== "string" || typeof c.section_id !== "string")
-      return { raw: 151, reason: "contest_schema_invalid", detail: { part: "target" } };
+  // contests + anchor_contest + filed_at_beat all obey the same per-verb shape law.
+  for (const c of [
+    ...cc.contests,
+    ...(cc.anchor_contest ? [cc.anchor_contest] : []),
+    ...(cc.filed_at_beat ? [cc.filed_at_beat] : []),
+  ]) {
+    const e = contestShapeError(c);
+    if (e) return e;
   }
   if (!Array.isArray(cc.respondent_census?.items))
     return { raw: 151, reason: "respondent_census_schema_invalid", detail: {} };
@@ -943,17 +1136,23 @@ function signatureCheck(cc, respondentPubKeyPem) {
     : { raw: 152, reason: "respondent_signature_invalid", detail: { part: "signature" } };
 }
 
-// 159 — prose by digest only: judgment contests carry ONLY a digest; any raw
-// judgment_text (on any contest or the anchor) is a forbidden payload.
+// 159 — prose by digest only. Scans contests + anchor_contest + filed_at_beat
+// (P0 #2, P1 #8). Any raw-content key anywhere is forbidden; judgment prose must
+// be a well-formed digest, never inline text.
 function payloadCheck(cc) {
-  const all = [...cc.contests, ...(cc.anchor_contest ? [cc.anchor_contest] : [])];
+  const all = [
+    ...cc.contests,
+    ...(cc.anchor_contest ? [cc.anchor_contest] : []),
+    ...(cc.filed_at_beat ? [cc.filed_at_beat] : []),
+  ];
   for (const c of all) {
-    if ("judgment_text" in c)
-      return {
-        raw: 159,
-        reason: "vdp_forbidden_raw_payload",
-        detail: { key: `${c.regime}/${c.section_id}` },
-      };
+    for (const k of Object.keys(c))
+      if (RAW_CONTENT_KEYS.has(k))
+        return {
+          raw: 159,
+          reason: "vdp_forbidden_raw_payload",
+          detail: { key: `${c.regime}/${c.section_id}`, field: k },
+        };
     if (c.verb === "dispute_as_judgment" && !DIGEST_RE.test(c.judgment_text_digest ?? ""))
       return {
         raw: 159,
@@ -1079,7 +1278,30 @@ import {
   buildMirrorContest,
 } from "../../../../tools/simurgh-attestation/stage4v/node/greenContest.mjs";
 import { evaluateContestSafe } from "../../../../tools/simurgh-attestation/stage4v/core/counterCapsuleCore.mjs";
-import { STAGE_VERIFIERS } from "../../../../tools/simurgh-attestation/stage4t/node/greenCapsule.mjs";
+import {
+  STAGE_VERIFIERS,
+  buildGreenBundle,
+} from "../../../../tools/simurgh-attestation/stage4t/node/greenCapsule.mjs";
+import { RECOMPUTE_REGISTRY } from "../../../../tools/simurgh-attestation/stage4t/core/projectionCore.mjs";
+import { PARTITIONS } from "../../../../tools/simurgh-attestation/stage4t/constants.mjs";
+
+// P1 #12 — preflight: fail loudly if a prior stage moved the assumed values, so a
+// green-contest status drift is diagnosed here, not deep inside a status assertion.
+test("preflight: 4T green capsule matches the values buildGreenContest assumes", () => {
+  for (const k of [
+    "kernel_block_record",
+    "participant_count",
+    "consent_manifest_scope",
+    "stage4n_beat_index",
+  ])
+    assert.ok(RECOMPUTE_REGISTRY[k], `registry missing ${k}`);
+  const ps = buildGreenBundle().bundle.content.projected_sections;
+  const val = (r, s) => ps.find((p) => p.regime === r && p.section_id === s)?.value;
+  assert.equal(val("art73_high_risk_draft", "remedial_actions"), 2);
+  assert.equal(val("art73_high_risk_draft", "users_affected"), 2);
+  assert.equal(PARTITIONS.gpai_art55.evidence_available, "not_derivable");
+  assert.equal(buildGreenBundle().bundle.content.evidence_anchored_at_beat.value, 42);
+});
 
 test("green contest: raw 0, all five statuses, anchor conflict, deployer, beat verified", () => {
   const g = buildGreenContest();
@@ -1130,6 +1352,7 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { recordDigest, sha256Hex, canonicalJson } from "../../stage4m/core/canonical.mjs";
 import { buildGreenBundle, EPOCH } from "../../stage4t/node/greenCapsule.mjs";
+import { PARTITIONS } from "../../stage4t/constants.mjs";
 import { buildRespondentCensus } from "../core/contestCensus.mjs";
 import { buildCounterCapsule, resignCounterCapsule } from "../core/counterCapsuleCore.mjs";
 
@@ -1257,8 +1480,10 @@ export function buildMirrorContest() {
   const capsule = green.bundle.content;
   const arts = capsule.evidence_artifacts.map((a) => JSON.parse(JSON.stringify(a)));
   const byDigest = Object.fromEntries(arts.map((a) => [recordDigest(a), a]));
+  // P1 #11 — one partition oracle (same source of truth deriveSectionStatus uses),
+  // not the capsule's own `class` field, so mirror + derivation cannot drift apart.
   const contests = capsule.projected_sections
-    .filter((p) => p.class === "evidence_backed")
+    .filter((p) => PARTITIONS[p.regime]?.[p.section_id] === "evidence_backed")
     .map((p) => ({
       regime: p.regime,
       section_id: p.section_id,
@@ -1424,16 +1649,42 @@ Expected: second build leaves tree clean (byte-stable); tests PASS. Add `tests/f
 - Consumes: `captureLaneB` from `../../stage4t/laneb/run-laneb-incident-ceremony.mjs` (operator side: live 4S MCP hop → fresh capsule, ephemeral keys); Task 6 evaluate.
 - Produces: `captureContestLaneB() -> capture`, `verifyContestLaneBCapture(capture) -> {ok, ...}`; CLI `--verify` mode (reproduce uses verify-only).
 
-- [ ] **Step 1: Write `respondent-child.mjs`** — a standalone process that reads `{capsule_bundle, capsule_pubkey_pem}` JSON on stdin, generates an ephemeral Ed25519 pair IN-CHILD, builds a counter-capsule (one CONFLICT*PROVEN dispute on `art73_high_risk_draft/users_affected` claiming 3 with its own chain artifact, one judgment on `gpai_art55/root_cause_analysis`, `respondent_role: "deployer"`), and prints `{counter_capsule, respondent_pubkey_pem, blindness: {env_has_operator_key_path: false, env_has_operator_state_path: false, argv: process.argv.slice(2)}}`. The blindness report checks `Object.keys(process.env).every((k) => !k.startsWith("OPERATOR*"))`AND asserts its argv carries no`.pem` path; it exits 1 if either fails.
+- [ ] **Step 1: Write `respondent-child.mjs`** — a standalone process that reads `{capsule_bundle, capsule_pubkey_pem}` JSON on stdin, generates an ephemeral Ed25519 pair IN-CHILD, builds a counter-capsule (one `CONFLICT_PROVEN` dispute on `art73_high_risk_draft/users_affected` claiming 3 with its own chain artifact of 3 participants — kind `stage4s_chain_bundle` to satisfy the KIND_EVIDENCE_SOURCE gate — one judgment on `gpai_art55/root_cause_analysis`, `respondent_role: "deployer"`), and prints `{counter_capsule, respondent_pubkey_pem, blindness}`.
+
+  **P0 #4 — the blindness check must be a real regex, not a literal `OPERATOR*` glob, and must scan env VALUES too.** The parent passes the forbidden substrings to the child (operator private-key path + working-state path) via the stdin payload, and the child computes:
+
+  ```js
+  const envBlob = JSON.stringify(process.env);
+  const blindness = {
+    // key form: OPERATOR, OPERATOR_KEY, OPERATOR_STATE_DIR all caught; "COOPERATOR" not.
+    env_has_operator_key_path:
+      Object.keys(process.env).some((k) => /^OPERATOR(_|$)/.test(k)) ||
+      envBlob.includes(forbiddenKeyPath),
+    env_has_operator_state_path: envBlob.includes(forbiddenStatePath),
+    argv_has_pem: process.argv.slice(2).some((a) => a.includes(".pem")),
+  };
+  if (
+    blindness.env_has_operator_key_path ||
+    blindness.env_has_operator_state_path ||
+    blindness.argv_has_pem
+  )
+    process.exit(1);
+  ```
+
+  The child prints `{counter_capsule, respondent_pubkey_pem, blindness}` and exits 0 only when blind.
 
 - [ ] **Step 2: Write `run-laneb-contest-ceremony.mjs`** — parent flow:
 
 ```text
 1. operatorCapture = await captureLaneB()            // real 4S 2-process MCP hop inside
+   // operatorCapture also exposes an ephemeral private-key path + working-state dir the
+   // parent knows; these are the forbidden substrings the child must NOT be able to see.
 2. spawn node respondent-child.mjs (stdio pipe), env: minimal {PATH, TZ:"UTC"} — NO operator paths
-3. write only {capsule_bundle: operatorCapture.capsule, capsule_pubkey_pem} to child stdin
+3. write {capsule_bundle: operatorCapture.capsule, capsule_pubkey_pem, forbiddenKeyPath, forbiddenStatePath} to child stdin
+   // forbidden* are passed ONLY so the child can PROVE it can't find them in its own env; the
+   // sealed capture stores only the boolean blindness result, never the paths themselves.
 4. envelope = evaluateContestSafe(capsule, child.counter_capsule, {capsulePubKeyPem, respondentPubKeyPem: child.respondent_pubkey_pem, stageVerifiers})
-5. assert raw === 0; write capture.json:
+5. assert raw === 0 AND child.blindness has all-false negatives; write capture.json:
    { schema: "simurgh.vdp.laneb_capture.v1",
      transport/process_isolation: from operatorCapture,
      respondent_process: { pid_isolated: true, blindness: child.blindness },
@@ -1469,7 +1720,7 @@ git add -A && git commit -m "feat(4v): Lane B two-process respondent-blind conte
 **Interfaces:**
 
 - Produces: `computeAttestation()`, `signAttestation()`, `writeAttestation()`, `bundleMerkleRoot(attestation)`; `verifyAttestation(attestation, {tier, pubKeyPem}) -> {ok}|{ok:false, reason}`.
-- Model both files LINE-FOR-LINE on the 4T pair already read (`build-stage4t-attestation.mjs` / `verify-stage4t-attestation.mjs`), with these substitutions: key `vdp`; schema `VDP_ATTESTATION_SCHEMA`; four content groups = `{ lane_a_fixtures: corpusDocument().cases, lane_b_capture, parity_contract, honesty_ledger }` where `parity_contract = { excluded_fixtures: ["signature-invalid", "subpoena-capsule-tampered"], lines: ["python_public_core_does_not_verify_ed25519_signatures", "node_public_verifier_is_authoritative_for_raw_152"] }` and `honesty_ledger = { non_claims: VDP_NON_CLAIMS, known_limitations: VDP_KNOWN_LIMITATIONS, rails: VDP_RAILS, reserved_slots: VDP_RESERVED_SLOTS }`; audit tier re-runs `evaluateContestSafe` per Lane A case asserting `expected_raw` AND `expected_envelope_digest` (byte-identical envelope re-derivation).
+- Model both files LINE-FOR-LINE on the 4T pair already read (`build-stage4t-attestation.mjs` / `verify-stage4t-attestation.mjs`), with these substitutions: key `vdp`; schema `VDP_ATTESTATION_SCHEMA`; four content groups = `{ lane_a_fixtures: corpusDocument().cases, lane_b_capture, parity_contract, honesty_ledger }` where `parity_contract = { excluded_fixtures: ["signature-invalid", "subpoena-capsule-tampered"], lines: ["python_public_core_does_not_verify_ed25519_signatures", "node_public_verifier_is_authoritative_for_raw_152"] }` and `honesty_ledger = { non_claims: VDP_NON_CLAIMS, known_limitations: VDP_KNOWN_LIMITATIONS, rails: VDP_RAILS, reserved_slots: VDP_RESERVED_SLOTS }`; audit tier re-runs `evaluateContestSafe` per Lane A case asserting `expected_raw` AND `expected_envelope_digest` (byte-identical envelope re-derivation), **AND (P1 #9) verifies the sealed Lane B capture**: call `verifyContestLaneBCapture(attestation.content.lane_b_capture)` and require `ok === true`, then re-derive the capture's `contest_outcome` and assert its `recordDigest` equals the sealed `component_hashes.contest_outcome` — otherwise return `{ ok: false, reason: "lane_b_capture_falsified" }`. Lane B is signed as evidence, not cargo.
 
 - [ ] **Step 1: failing test** — sign+verify public tier ok; flip one byte of `bundle_merkle_root` → `bundle_merkle_root_mismatch`; audit tier over the corpus green; corrupt one case's `expected_raw` in a cloned attestation → `lane_a_fixture_falsified`.
 - [ ] **Step 2: FAIL.** **Step 3: implement per the 4T model.** **Step 4: PASS**, write evidence file, commit: `git add -A && git commit -m "feat(4v): two-tier signed attestation over Lane A + Lane B + honesty ledger"`
@@ -1505,11 +1756,17 @@ Model on `stage4t/browser/vic-verifier.html`: single static file, CSP meta
 a `<script id="vdp-core">` block containing a PURE re-implementation of the
 public-tier decision core (sha256 + canonicalJson + merkleRootSorted inlined
 from the 4T browser core; binding compare; census; status table; map + envelope),
-and a small UI: two textareas (capsule bundle JSON, counter-capsule JSON) →
-"Derive outcome" → renders raw + per-section statuses. Banner text: "Convenience
-view — the Node CLI verifier is authoritative."
+and a small UI: **THREE textareas — capsule bundle JSON, counter-capsule JSON,
+and capsule public-key PEM (P0 #5)** → "Derive outcome" → renders raw +
+per-section statuses. The capsule pubkey is REQUIRED: `verifyBinding` compares
+`capsule_signing_key_fingerprint` = `keyDigest(capsulePubKeyPem)`, so the core
+must compute that fingerprint from the pasted PEM — never skip the fingerprint
+check (a browser core that ignores it is a weaker animal in the same feathers).
+The pure core therefore also inlines `keyDigest` (SPKI-DER SHA-256, matching
+`stage4s/core/receiptBuilder.mjs`). Banner text: "Convenience view — the Node
+CLI verifier is authoritative."
 
-- [ ] **Step 1: e2e parity test** — read the HTML, extract the `<script id="vdp-core">` source, evaluate in `node:vm` with a stub `globalThis`, run every non-excluded Lane A case, compare `{raw, envelopeDigest}` to `evaluateContestPublic` results. FAIL first (file absent), implement, PASS.
+- [ ] **Step 1: e2e parity test** — read the HTML, extract the `<script id="vdp-core">` source, evaluate in `node:vm` with a stub `globalThis`, run every non-excluded Lane A case (feeding capsule bundle + counter-capsule + the `corpusDocument().capsule_pubkey_pem`), compare `{raw, envelopeDigest}` to `evaluateContestPublic` results. FAIL first (file absent), implement, PASS.
 - [ ] **Step 2: Commit:** `git add -A && git commit -m "feat(4v): static browser verifier with node:vm CLI-parity gate"`
 
 ---
@@ -1597,18 +1854,18 @@ end Simurgh.Stage4V
 ```
 
 - [ ] **Step 1: create files; build:** `cd proofs/stage4v && ~/.elan/bin/lake build` (or the invocation `proofs/stage4t` uses — copy its README/workflow command). Expected: zero errors, zero `sorry`. If `List.get?_set_ne` differs in this toolchain, prove `disputeLocality` by induction on `cs` instead — the statement stays fixed.
-- [ ] **Step 2: extend the CI lean job** exactly as stage4t is wired (grep `.github/workflows` for `stage4t`). Remember: Lean is NOT in `check.sh` (standing rule).
+- [ ] **Step 2: extend the CI lean job** exactly as stage4t is wired (grep `.github/workflows` for `stage4t`). Remember: Lean is NOT in `scripts/check.sh` (standing rule).
 - [ ] **Step 3: Commit:** `git add -A && git commit -m "feat(4v): five machine-checked due-process theorems (Lean 4.15.0, zero sorry)"`
 
 ---
 
-### Task 14: K7 all-functions e2e net + reproduce script + check.sh wiring
+### Task 14: K7 all-functions e2e net + reproduce script + scripts/check.sh wiring
 
 **Files:**
 
 - Create: `tests/e2e/llmShield/stage4v/k7AllFunctions.test.js`
 - Create: `scripts/reproduce-llm-shield-stage4v.sh`
-- Modify: `check.sh` (mirror stage4t wiring — grep `stage4t` in check.sh and replicate each hook for stage4v), `.prettierignore` (verify `evidence/stage-4v` + fixtures entries exist)
+- Modify: `scripts/check.sh` (mirror stage4t wiring — grep `stage4t` in check.sh and replicate each hook for stage4v; grep confirms the path is `scripts/check.sh`), `.prettierignore` (verify `evidence/stage-4v` + fixtures entries exist)
 
 The K7 net composes EVERY stage4v export (import each module, assert every
 exported symbol is exercised at least once) and asserts, as named gates:
@@ -1632,7 +1889,7 @@ audit tiers → python parity → browser parity e2e → Lane B `--verify` → k
 
 - [ ] **Step 1:** write the k7 test, run: `node --test tests/e2e/llmShield/stage4v/k7AllFunctions.test.js` → PASS (fix anything it catches).
 - [ ] **Step 2:** write the reproduce script; run `bash scripts/reproduce-llm-shield-stage4v.sh` twice → green + tree clean both times.
-- [ ] **Step 3:** wire `check.sh` (unit globs + reproduce hook exactly as stage4t); run **full** `bash check.sh` locally → green (known pre-existing flakes per memory: Stage 2.x smoke — rerun clears).
+- [ ] **Step 3:** wire `scripts/check.sh` (unit globs + reproduce hook exactly as stage4t); run **full** `bash scripts/check.sh` locally → green (known pre-existing flakes per memory: Stage 2.x smoke — rerun clears).
 - [ ] **Step 4: Commit:** `git add -A && git commit -m "test(4v): K7 all-functions e2e net + reproduce script + quality-gate wiring"`
 
 ---
@@ -1652,6 +1909,6 @@ Content requirements (write from the spec, then verify against SHIPPED code):
 
 - [ ] **Step 1:** write the three stage docs + north-star update + README row.
 - [ ] **Step 2:** run the docs-accuracy pass against shipped code; fix drift.
-- [ ] **Step 3:** `bash check.sh` full local run → green.
+- [ ] **Step 3:** `bash scripts/check.sh` full local run → green.
 - [ ] **Step 4: Commit:** `git add -A && git commit -m "docs(4v): closeout + threat model + reviewer checklist + north-star update + README row"`
 - [ ] **Step 5:** Push branch, open PR (neutral title "Stage 4V: verifiable due process — counter-capsule contest"), watch CI; after green + merge, tag `v2.31.0-stage-4v-vdp` on the merge commit (verify `git tag --sort=-creatordate` first), push tag, run `bash scripts/reproduce-llm-shield-stage4v.sh` on main, update memory files.
