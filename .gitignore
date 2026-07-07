@@ -75,3 +75,6 @@ tools/agentdojo-simurgh-adapter/.venv*/
 
 # Stage 4R reviewer per-machine identity key (private — never commit)
 tools/simurgh-attestation/stage4r/byo/simurgh-reviewer-identity-key.pem
+
+# Local Claude Code project config + skills (internal, not for the repo)
+.claude/
