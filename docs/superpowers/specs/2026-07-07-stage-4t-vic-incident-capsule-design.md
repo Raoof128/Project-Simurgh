@@ -9,10 +9,13 @@ endorsement claim.)
 - **Law:** **No Hearsay.**
 - **Banner:** the VDCC north star's **wedge artifact** (`NORTH_STAR_VDCC.md`
   §2.3) — one signed capsule per incident epoch that projects the receipt
-  spine's evidence onto the European Commission's pinned Article-73
-  serious-incident reporting template: the first serious-incident report a
-  regulator can rerun. Built on a chain that 4S proved complete and 4U
-  red-teamed.
+  spine's evidence onto **two pinned Commission reporting templates**: the
+  published GPAI serious-incident template (Article 55 / GPAI Code of
+  Practice Commitment 9 — the flagship, the template a frontier lab actually
+  files) and the Article-73 high-risk draft template. The first
+  serious-incident report a regulator can rerun — one incident, one census,
+  two regulatory regimes, provably the same story. Built on a chain that 4S
+  proved complete and 4U red-teamed.
 - **Branch:** `stage-4t-vic` · **Target tag:** `v2.30.0-stage-4t-vic`
   (plan verifies against `git tag --sort=-creatordate` before versioning —
   standing 4J gotcha).
@@ -26,8 +29,9 @@ endorsement claim.)
 
 **Core claim (verbatim, frozen):**
 
-> For a declared incident epoch and pinned reporting-template snapshot, the
-> signed Incident Capsule binds every template section to either digest-linked
+> For a declared incident epoch and pinned reporting-template snapshots, the
+> signed Incident Capsule binds every template section of each bound regime to
+> either digest-linked
 > recomputable evidence or an explicit `not_derivable` / `requires_human_input`
 > marker, and commits a closed evidence census for that epoch. An unbacked
 > field, tampered or mis-recomputing evidence artifact, omitted census item,
@@ -65,12 +69,25 @@ The EU AI Act applies from **2 August 2026** (with exceptions); the Commission
 issued draft Article-73 guidance and a serious-incident **reporting template**
 for consultation in September 2025
 (https://digital-strategy.ec.europa.eu/en/consultations/ai-act-commission-issues-draft-guidance-and-reporting-template-serious-ai-incidents-and-seeks,
-https://artificialintelligenceact.eu/article/73/). TechPolicy.press, on the
-draft guidance: the EU has _"no tools to pin accountability of multi-agent
-incidents"_
+https://artificialintelligenceact.eu/article/73/), and published the **GPAI
+systemic-risk serious-incident reporting template** (Article 55 / GPAI Code of
+Practice Commitment 9) on 4 November 2025
+(https://digital-strategy.ec.europa.eu/en/library/ai-act-commission-publishes-reporting-template-serious-incidents-involving-general-purpose-ai)
+— a DOCX/PDF human workflow with no machine-verifiable element.
+TechPolicy.press, on the draft guidance: the EU has _"no tools to pin
+accountability of multi-agent incidents"_
 (https://www.techpolicy.press/eu-regulations-are-not-ready-for-multiagent-ai-incidents/).
-Every incident-report generator in the field emits prose over trusted logs;
-none is closed-world recomputable.
+The Act's own logging duty carries _"no cryptographic integrity
+requirements... not tamper-evident, externally anchored, or independently
+verifiable"_ (arXiv 2603.26983). And the 2026 auditability literature has a
+name for the industry's failure mode — the **container fallacy**: _"the
+automatic equation of evidence-container presence with audit sufficiency"_;
+when an external party asks a specific governance question, _"the assembled
+evidence is frequently insufficient to answer it"_ (DEMM, arXiv 2605.04093).
+Incident-report generators emit prose over trusted logs; the closest
+cryptographic kin (VeritasChain CAP-SRP) hash-chains a single system's own
+safety events with count-based completeness — none is a closed-world,
+template-bound, recomputable incident report (§13).
 
 The north star names three buyers for one artifact: the **regulator** (a
 report it can rerun), the **insurer** (the actuarial evidence format Lloyd's
@@ -121,7 +138,7 @@ not_a_claim_the_incident_was_prevented_by_this_stage
 
 ```text
 census_completeness_is_relative_to_declared_epoch_and_guarded_evidence_sources
-template_partition_reflects_the_pinned_draft_snapshot_not_future_guidance
+template_partitions_reflect_the_pinned_snapshots_not_future_guidance
 requires_human_input_sections_are_left_unfilled_by_design_the_capsule_is_not_a_complete_filing
 lane_b_incident_is_a_staged_contained_near_incident_not_a_field_incident
 redaction_hides_values_not_structure_view_privacy_is_commitment_level_not_an_anonymity_proof
@@ -157,12 +174,26 @@ not a VIC failure. VIC _fails_ only when the capsule misreports, fabricates,
 suppresses, omits, smuggles, or won't recompute. This is what lets the capsule
 report a real contained violation honestly instead of requiring a green world.
 
-## 3. Invention 1 — the normative pinned-template partition
+## 3. Invention 1 — the normative pinned-template partition (dual regime)
 
-`core/templateMap.mjs` commits a snapshot of the Commission's draft Article-73
-reporting template (fetched once at plan time, committed under
-`tools/simurgh-attestation/stage4t/template/`, digest =
-`template_snapshot_digest`) and a **three-way partition over its sections**:
+`core/templateMap.mjs` commits snapshots of **two** Commission reporting
+templates (each fetched once at plan time, committed under
+`tools/simurgh-attestation/stage4t/template/`, each with its own
+`template_snapshot_digest`):
+
+1. **Flagship — the GPAI systemic-risk serious-incident template** (Article
+   55 / GPAI Code of Practice Commitment 9, published 4 Nov 2025): the
+   template a frontier-lab provider actually files.
+2. **Second regime — the Article-73 high-risk draft template** (consultation
+   draft; final guidance expected around 2 Aug 2026): the deployment-side
+   regime whose clock sets the wedge timing.
+
+The capsule carries a `template_bindings[]` entry per regime and projects the
+**same sealed census** onto both partitions — one incident, one census, two
+regulatory regimes, and (via the §6.1 commitments) any overlap between the two
+projections is provably consistent. Code 135 applies per binding.
+
+Each pinned template gets a **three-way partition over its sections**:
 
 ```text
 evidence_backed        machine-derivable from spine artifacts; carries a recompute_kind
@@ -189,9 +220,9 @@ If the Commission's final guidance changes the template, VIC does not silently
 absorb the change: a new mapping requires a new pinned snapshot digest and a
 visible diff (rail
 `template_snapshot_is_pinned_by_digest_not_claimed_current_guidance`). The
-exact section list is frozen at plan time from the committed snapshot; the
+exact section lists are frozen at plan time from the committed snapshots; the
 spec-level expectation is section groups covering reporting-entity and
-AI-system identification, incident dates and description, affected
+AI-system/model identification, incident dates and description, affected
 persons/impact, measures taken, and root-cause/risk context — with narrative
 description and legal seriousness qualification expected to land in
 `requires_human_input`.
@@ -256,7 +287,8 @@ its evidence supports — no more, no less.
 `incident_capsule.v1` (canonical JSON; two-stage digest signs
 `canonicalJson(parse(bundle))` — the 4P/3M lesson):
 
-- `template_binding` — `template_snapshot_digest` + partition digest.
+- `template_bindings[]` — one per regime (GPAI Art-55 flagship + Art-73
+  draft): `template_snapshot_digest` + partition digest.
 - `epoch` — declared incident epoch id.
 - `evidence_manifest` — §4, with `census_root`.
 - `projected_sections[]` — one entry per template section:
@@ -273,7 +305,8 @@ its evidence supports — no more, no less.
       first-class projected section (recompute_kind `stage4n_beat_index`):
       the capsule proves its sealed evidence existed at a public heartbeat
       position — the first recomputable input an Article-73 deadline argument
-      (15-day / 2-day clocks) has ever had. Rail from birth:
+      (15-day general / 10-day death / 2-day critical-infrastructure clocks)
+      has ever had. Rail from birth:
       `anchor_time_is_evidence_seal_time_not_operator_knowledge_time`.
   - `not_derivable` → bare signed marker (subject to 143).
   - `requires_human_input` → bare signed marker (subject to 144); **never**
@@ -483,20 +516,55 @@ mirroring 4U's `bypassIsOutcomeNotFailure`).
 `src/llmShield` diff. 4T projects evidence the spine already produces; it adds
 no enforcement. Stated so reviewers see the boundary is deliberate.
 
-## 13. Prior-art / field scan (pinned at plan time)
+## 13. Prior-art / field scan (web sweep run 2026-07-07; URLs re-pinned at plan time)
 
-To be recorded in the plan's citation block with URLs checked on 2026-07-07:
-the Commission draft template + consultation page, artificialintelligenceact.eu
-Article-73 text, TechPolicy.press multi-agent-incidents piece (all already in
-`NORTH_STAR_VDCC.md` §6), the flight-recorder cohort (Vorlon / AgentRx / AIR
-Blackbox / Causality — telemetry, trust-the-writer, no census), SCITT /
-in-toto (artifact notarization, no field recompute, no suppression check), GRC
-incident-reporting tooling (OneTrust-class — workflow, zero recomputability),
-SD-JWT / W3C verifiable-credential selective disclosure (identity claims —
-no incident-report format, no redaction census, no template binding), and the
-project's own 4M projection (25-line surface, one disclosure, no
-census, no suppression law — differentiated in §1). Every citation pinned or
-dropped; the Novelty score is conditional on this sweep surviving contact.
+Closest kin first — the honest source map:
+
+- **VeritasChain VAP / CAP-SRP** (veritaschain.org/vap, github.com/veritaschain/cap-spec
+  + cap-srp; DRAFT v0.2, surveyed 2026-07-07) — the nearest occupant found:
+  append-only Ed25519 hash chain over a system's own generation / evaluation /
+  refusal events, with a "CompletenessVerifier" (expected vs actual event
+  counts) and optional Merkle anchor. Exact difference, in one breath: its
+  completeness is **count-based against self-declared counts** (the laundering
+  hole 4U's precommitted manifest closed) over a **single system's own event
+  log** (trust-the-writer at the source), with **no regulator-template
+  binding, no per-field recompute, no normative partition, no suppression
+  detection, and no multi-audience views**. CAP-SRP attests what was recorded;
+  VIC proves the report over the record is complete, faithful, and one story.
+- **DEMM — Decision Evidence Maturity Model** (arXiv 2605.04093) — names the
+  **container fallacy** and per-question evidence *sufficiency*; a
+  property-level maturity method with a trace reconstructor, explicitly "not
+  external validation": no cryptographic completeness, no template
+  projection, no signed capsule. Ally citation: it states VIC's problem;
+  VIC ships the recomputable answer.
+- **Commission templates themselves** — GPAI Art-55 systemic-risk template
+  (published 4 Nov 2025) and Art-73 high-risk draft: DOCX/PDF human
+  workflows, zero machine-verifiable structure. The gap is in the regulator's
+  own artifact.
+- **Article-50 structural-compliance analysis** (arXiv 2603.26983) — the
+  Act's logging duty has "no cryptographic integrity requirements";
+  supports §0.
+- **NeurIPS reproducibility-standards position** (arXiv 2605.08192) —
+  frontier safety claims should be reproducible; external norm backing the
+  ReviewerSafe half of the motto.
+- **Flight-recorder cohort** (Vorlon / AgentRx / AIR Blackbox / Causality) —
+  telemetry + forensics UX, trust-the-writer, no census, no completeness
+  invariant.
+- **SCITT / in-toto** — artifact notarization; no field recompute, no
+  suppression check, no incident semantics.
+- **GRC incident tooling** (OneTrust-class) — workflow and deadlines, zero
+  recomputability.
+- **SD-JWT / W3C VC selective disclosure** — identity claims; no
+  incident-report format, no redaction census, no no-contradiction guarantee
+  across audience tiers, no template binding.
+- **The project's own 4M projection** — 25-line output surface, one
+  disclosure, no census, no suppression law (differentiated in §1).
+
+Every citation pinned or dropped at plan time; the Novelty score is
+conditional on this source map surviving contact, and the novelty sentence is
+already narrowed to what the map supports: hash-chained safety-event
+provenance exists; a closed-world, dual-template-bound, suppression-checked,
+multi-audience-consistent, offline-recomputable incident capsule does not.
 
 ## 14. Four-axis scorecard (pre-score only — re-score at closeout after the prior-art sweep and shipped evidence)
 
@@ -527,7 +595,7 @@ dropped; the Novelty score is conditional on this sweep surviving contact.
 ```text
 tools/simurgh-attestation/stage4t/
   constants.mjs                 schemas, codes 133–150, non-claims, limitations, rails, recompute_kind registry
-  template/                     committed Commission template snapshot + digest
+  template/                     committed Commission template snapshots (GPAI Art-55 + Art-73 draft) + digests
   core/templateMap.mjs          pinned snapshot binding + three-way partition, 135/136/137
   core/censusCore.mjs           evidence manifest + merkle seal + epoch binding, 138/139/140/145
   core/projectionCore.mjs       field binding + recompute registry + suppression law, 141/142/143/144
