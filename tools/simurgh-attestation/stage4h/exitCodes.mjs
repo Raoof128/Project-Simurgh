@@ -454,6 +454,44 @@ export const VRTA_REASONS_120 = Object.freeze([
   "attestation_signature_invalid",
 ]);
 
+// Stage 4T VIC codes (reviewed extension of the shared ledger; 4T spec §8).
+export const VIC_RAW_CODES = Object.freeze({
+  VIC_CAPSULE_MALFORMED: 133,
+  VIC_SIGNATURE_INVALID: 134,
+  TEMPLATE_DIGEST_MISMATCH: 135,
+  TEMPLATE_PARTITION_INCOMPLETE: 136,
+  TEMPLATE_SECTION_UNMAPPED: 137,
+  EVIDENCE_CENSUS_MISSING_ITEM: 138,
+  EVIDENCE_CENSUS_SMUGGLED_ITEM: 139,
+  CENSUS_MERKLE_MISMATCH: 140,
+  FIELD_UNBACKED: 141,
+  FIELD_RECOMPUTE_MISMATCH: 142,
+  NOT_DERIVABLE_UNJUSTIFIED: 143,
+  REQUIRES_HUMAN_INPUT_UNJUSTIFIED: 144,
+  INCIDENT_EPOCH_MISMATCH: 145,
+  CROSS_STAGE_REFERENCE_INVALID: 146,
+  ATTESTATION_DIGEST_MISMATCH: 147,
+  VIEW_INCONSISTENT_WITH_CAPSULE: 148,
+  REDACTION_UNDECLARED: 149,
+  INTERNAL_FAIL_CLOSED: 150,
+});
+// Frozen first-failure order (spec §8): parse → signatures → template pinning →
+// census+epoch → cross-stage truth → field truth → suppression → seal → views → fail-closed.
+export const VIC_CHECK_ORDER = Object.freeze([
+  133, 134, 135, 136, 137, 138, 139, 140, 145, 146, 141, 142, 143, 144, 147, 148, 149, 150,
+]);
+export const VIC_REASONS_133 = Object.freeze([
+  "vic_capsule_schema_invalid",
+  "evidence_manifest_schema_invalid",
+  "projected_section_schema_invalid",
+  "view_schema_invalid",
+  "unknown_recompute_kind",
+]);
+export const VIC_REASONS_134 = Object.freeze([
+  "capsule_signature_invalid",
+  "attestation_signature_invalid",
+]);
+
 export const HARNESS_CODES = Object.freeze({
   CLEAN_RUN_FALSELY_REJECTED: 19,
 });
@@ -593,6 +631,25 @@ export const RUN_LEVEL_BY_RAW = Object.freeze({
   130: 1,
   131: 1,
   132: 1,
+  // Stage 4T VIC codes (reviewed extension of the shared ledger; 4T spec §8).
+  133: 1,
+  134: 1,
+  135: 1,
+  136: 1,
+  137: 1,
+  138: 1,
+  139: 1,
+  140: 1,
+  141: 1,
+  142: 1,
+  143: 1,
+  144: 1,
+  145: 1,
+  146: 1,
+  147: 1,
+  148: 1,
+  149: 1,
+  150: 1,
 });
 
 export function stage4CodeForRawCode(code) {
