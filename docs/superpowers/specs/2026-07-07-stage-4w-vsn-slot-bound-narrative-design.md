@@ -199,6 +199,26 @@ is visibly voice), render digest sealed, public tier structure-only.
 **Invariant: no audience view may hide or downgrade the visible type marker of
 a span** — the 4W No Two Stories.
 
+### Evidence Density (derived, never filed)
+
+A sealed byte-accounting triple over the verified narrative:
+
+```text
+evidence_density = {
+  slot_bound_bytes, judgment_bytes, voice_bytes,   // voice = declared prose + unspanned
+  total_bytes
+}
+```
+
+Rendered in every audience view ("this report is 14% evidence-bound, 21%
+judgment, 65% voice") and sealed in the attestation. Derived from the
+verified span map only — never author-filed, so it cannot be gamed except by
+_actually declaring more verifiable spans_, which is the point. Anti-gaming
+honesty is signed as a non-claim: density is **descriptive, not a quality
+score** — a condolence letter is legitimately 100% voice; a fabricated-number
+stuffing attack raises density only by surviving recomputation. No new raw
+codes; the metric is a projection of already-verified geometry.
+
 ---
 
 ## 3. Evidence lanes, attestation, parity, browser
@@ -227,9 +247,16 @@ a span** — the 4W No Two Stories.
   capsule-value collision → 170); judgment (dup id / unreferenced record /
   bad inner signature → 168). Mutation fixtures re-signed (the 4T
   resignBundle lesson).
+- **Fabricated-citation family ("the Brigandi test")**: a span citing an
+  evidence digest that exists nowhere → 167 (the fabricated citation); a span
+  citing real sealed evidence with a false quoted value → 169 (the false
+  quotation). Named in docs for the failure mode courts sanctioned at
+  $110K in April 2026 — under VSN both are structurally unfileable.
 - **Contest fixtures (socket payoff)**: slot span → AGREED / CONFLICT_PROVEN /
   DISPUTE_FAILED via the 4V adapter; prose-span classification contest →
   recorded; locality pair.
+- **Evidence-density fixture**: green narrative's sealed density triple is
+  byte-stable and equals the independent recount from the span map.
 - **View invariants**: a render attempting to downgrade a prose marker →
   refused; public-tier structure-only check.
 - **Non-ASCII fixture**: narrative containing multi-byte text (سیمرغ + an
@@ -263,6 +290,16 @@ sealed digest-only in a separate Lane C capture document
 the model refuses, we seal `model_refused` (4U precedent). Marked
 non-reproducible-without-key.
 
+**Lane C-adv — adversarial drafting sub-ceremony (the 4X foreshock).** A
+second live run: the model is instructed to draft _as favourably to the
+operator as possible_ while using the span grammar. Both outcomes sealed as
+first-class evidence: spin smuggled into undeclared text → the gate catches
+it (169/170, a successful verifier demonstration); spin confined to declared
+`unverified_prose` → the system working as designed (favourable voice is
+legal; favourable _evidence_ must recompute). This is a benign self-test of
+our own drafting pipeline, not an attack on any external system; the
+instruction text is sealed digest-only like every other prompt.
+
 ### Attestation — two-tier
 
 New `stage4w` Ed25519 keypair (`INSECURE_FIXTURE_ONLY_vsn*.pem` under
@@ -279,6 +316,18 @@ to BOTH `scripts/security-audit-llm-shield-stage3m.sh` and
 
 Signs `canonicalJson(parse(bundle))` (prettier+merge-safe); `keyDigest` over
 the **public** PEM on both build and verify sides (4V lesson, now doctrine).
+
+### C2PA / in-toto bridge projection (derived, no new codes)
+
+Reusing the 3W in-toto machinery: emit a Content-Credentials-compatible
+in-toto Statement whose subject is `narrative_body_digest` and whose
+predicate carries `span_map_digest` + the VSN attestation digest. The
+prior-art seam, quoted from C2PA's own framing: C2PA "records what was
+declared at the time of signing, not whether the declaration is true" — and
+signs the _file_, never the sentences. The bridge lets Content-Credentials
+tooling carry a VSN digest outward while VSN supplies the missing inner
+layer: typed spans that recompute. Derived projection artifact; corroboration
+by digest equality (the 3W doctrine); no new raw codes.
 
 ### Parity — three implementations, one geometry
 
@@ -333,7 +382,7 @@ modelled token/span algebra:
 5. **`contestAdapterFaithful`** — a narrative span contest derives exactly
    the status 4V's frozen table gives the corresponding projected section.
 
-### Non-claims (9, signed)
+### Non-claims (10, signed)
 
 1. `not_a_claim_of_truthful_narrative` — typed ≠ true.
 2. `not_a_claim_of_semantic_leakage_completeness`.
@@ -348,6 +397,9 @@ modelled token/span algebra:
 8. `not_a_claim_of_model_safety` — the permanent one.
 9. `not_a_claim_of_regulatory_compliance` — regulator-useful is not legal
    compliance.
+10. `not_a_claim_that_density_measures_quality` — evidence density is
+    descriptive byte accounting; a 100%-voice condolence letter is
+    legitimate, and higher density is not "better".
 
 ### Known limitations (signed)
 
@@ -369,29 +421,57 @@ modelled token/span algebra:
 - `multilingual_ruleset_deferred` — `vsn.leakage.v2+` lexicons.
 - `narrative_version_diff_deferred` — diffing narrative revisions across
   capsule re-filings (composes with 3Q registry machinery when opened).
+- `transparency_report_profile_deferred` — projecting VSN onto model-report /
+  risk-report narrative surfaces (transparency-hub-shaped documents are prose
+  - tables today; nothing types which sentences are evidence-bound). Signed
+    ambition, shipped only when opened; public wording provider-agnostic.
 
 ### Industry wedge (source-map claim, not a compliance claim)
 
-EU AI Act applies generally from **2 August 2026** (Art-113); Art-73
-serious-incident reports and GPAI Art-55 model reports are prose documents —
-the Act mandates filing but no mechanism types which sentences are
-evidence-bound. California SB 53-family frontier-transparency reports
-likewise. **No matching prior pattern in our current source map makes
-individual incident-report narrative spans recomputable and
-contest-addressable from sealed evidence.** Public wording stays
-provider-agnostic.
+Verified in the 2026-07-07 sweep:
+
+- **EU:** the AI Act applies generally from **2 August 2026** (Art-113). The
+  Commission published DRAFT Art-73 guidance + a standard reporting template
+  (consultation closed 2025-11-07; final expected to apply 2026-08-02) and a
+  separate GPAI systemic-risk incident template — the very templates 4T
+  builds against. Their prose sections are exactly the surface VSN types.
+- **Courts are already enforcing Law 1 by hand:** ~1,313 proceedings across
+  106 countries involve AI-hallucinated material; sanctions escalated 11× in
+  18 months (the April 2026 Oregon order: ~$110K for 23 fabricated citations
+  - 8 false quotations); the converging doctrine is that the duty to verify
+    AI output is "absolute and non-delegable". A `slot_bound` span is a
+    machine-verifiable citation; under VSN the fabricated citation is 167 and
+    the false quotation is 169 — structurally unfileable.
+- **KPMG withdrew a flagship agentic-AI report (2026-06-13)** after
+  organisations disputed its claims about their own deployments and citation
+  problems were documented — "industrialized plausibility." Under VSN every
+  disputed claim is a declared span with a contest address (4W + 4V
+  composing).
+- **C2PA v2.3 (Feb 2026) names our seam itself:** it "records what was
+  declared, not whether the declaration is true", and signs the file, never
+  the sentences. The bridge projection carries VSN outward through that
+  ecosystem.
+- **NIST AI 800-4 (March 2026)** finds "immature information sharing
+  ecosystems for incident data" and no standardized severity/root-cause
+  methodology; California SB 53-family frontier-transparency reports are
+  likewise prose.
+
+**No matching prior pattern in our current source map makes individual
+incident-report narrative spans recomputable and contest-addressable from
+sealed evidence.** Source-map claim, not a compliance claim; public wording
+stays provider-agnostic.
 
 ### Four-axis scorecard
 
 > Design-time internal scorecard, not shipped evidence and not a
 > literature-complete novelty claim.
 
-| Axis                     | Score | Why / what moves it higher                                                                                                                                  |
-| ------------------------ | ----- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Novelty                  | 9.4   | Span-typed provenance over sealed evidence + fail-closed leakage gate + contest adapter = new verifier geometry, not a 3S port. Higher: semantic gate (4X). |
-| Frontier                 | 9.2   | First narrative surface in the chain; single-narrative, single-round. Higher: adversarial drafter, multilingual ruleset.                                    |
-| Lab/regulator usefulness | 9.4   | Art-73 filings are prose today with the Act applying 2026-08-02; a typed narrative is directly fileable. Higher: real regulator template adoption.          |
-| Constitution             | 9.3   | Voice visibly marked as voice = anti-deception infrastructure; signed gate bounds. Higher: 4X adversarial closure.                                          |
+| Axis                     | Score | Why / what moves it higher                                                                                                                                                                                                                                |
+| ------------------------ | ----- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Novelty                  | 9.4   | Span-typed provenance over sealed evidence + fail-closed leakage gate + contest adapter + evidence-density projection = new verifier geometry, not a 3S port. Higher: semantic gate (4X).                                                                 |
+| Frontier                 | 9.3   | First narrative surface in the chain + Lane C-adv (live spin-instructed drafter, both outcomes sealed); single-narrative, single-round. Higher: independent adversary, multilingual ruleset.                                                              |
+| Lab/regulator usefulness | 9.5   | Art-73 template prose becomes typed exactly in the 2026-08-02 window; courts' non-delegable verify duty + the Brigandi/KPMG failures are this mechanism's shape; C2PA bridge rides an existing adoption channel. Higher: real regulator/tooling adoption. |
+| Constitution             | 9.3   | Voice visibly marked as voice + honest density accounting = anti-deception infrastructure; signed gate bounds. Higher: 4X adversarial closure.                                                                                                            |
 
 Re-score at closeout.
 
