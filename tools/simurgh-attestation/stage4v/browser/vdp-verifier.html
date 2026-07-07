@@ -307,8 +307,10 @@
           const res = globalThis.VDP.evaluateContestPublic(capsule, cc, pub);
           const lines = ["raw = " + res.raw];
           if (res.envelope.result && res.envelope.result.sections)
-            for (const s of res.envelope.result.sections) lines.push(s.key + " -> " + s.status + (s.subreason ? " (" + s.subreason + ")" : ""));
-          if (res.envelope.result && res.envelope.result.anchor_status) lines.push("anchor -> " + res.envelope.result.anchor_status.status);
+            for (const s of res.envelope.result.sections)
+              lines.push(s.key + " -> " + s.status + (s.subreason ? " (" + s.subreason + ")" : ""));
+          if (res.envelope.result && res.envelope.result.anchor_status)
+            lines.push("anchor -> " + res.envelope.result.anchor_status.status);
           out.textContent = lines.join("\n");
         } catch (e) {
           out.textContent = "error: " + e.message;
