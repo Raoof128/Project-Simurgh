@@ -1,6 +1,9 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { recordDigest, canonicalJson } from "../../../../tools/simurgh-attestation/stage4m/core/canonical.mjs";
+import {
+  recordDigest,
+  canonicalJson,
+} from "../../../../tools/simurgh-attestation/stage4m/core/canonical.mjs";
 import {
   deriveSectionStatus,
   deriveConflictMap,

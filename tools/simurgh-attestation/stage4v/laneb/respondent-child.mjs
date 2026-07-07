@@ -29,12 +29,20 @@ const envBlob = JSON.stringify(process.env);
 const blindness = {
   env_has_operator_key_path:
     Object.keys(process.env).some((k) => /^OPERATOR(_|$)/.test(k)) ||
-    (typeof forbiddenKeyPath === "string" && forbiddenKeyPath.length > 0 && envBlob.includes(forbiddenKeyPath)),
+    (typeof forbiddenKeyPath === "string" &&
+      forbiddenKeyPath.length > 0 &&
+      envBlob.includes(forbiddenKeyPath)),
   env_has_operator_state_path:
-    typeof forbiddenStatePath === "string" && forbiddenStatePath.length > 0 && envBlob.includes(forbiddenStatePath),
+    typeof forbiddenStatePath === "string" &&
+    forbiddenStatePath.length > 0 &&
+    envBlob.includes(forbiddenStatePath),
   argv_has_pem: process.argv.slice(2).some((a) => a.includes(".pem")),
 };
-if (blindness.env_has_operator_key_path || blindness.env_has_operator_state_path || blindness.argv_has_pem) {
+if (
+  blindness.env_has_operator_key_path ||
+  blindness.env_has_operator_state_path ||
+  blindness.argv_has_pem
+) {
   process.stderr.write("respondent child: BLINDNESS VIOLATED\n");
   process.exit(1);
 }

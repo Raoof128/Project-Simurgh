@@ -42,6 +42,10 @@ export function verifyRespondentCensus(cc, capsuleEpoch) {
   const listed = new Set((cc.respondent_census?.items ?? []).map((i) => i.digest));
   for (const d of referencedDigests(cc))
     if (!listed.has(d))
-      return { raw: 156, reason: "vdp_respondent_census_omits_evidence", detail: { referenced: d } };
+      return {
+        raw: 156,
+        reason: "vdp_respondent_census_omits_evidence",
+        detail: { referenced: d },
+      };
   return null;
 }

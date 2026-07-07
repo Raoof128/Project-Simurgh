@@ -7,7 +7,11 @@ export const VDP_ATTESTATION_SCHEMA = "simurgh.vdp.attestation.v1";
 export const VDP_LANE_A_CORPUS_SCHEMA = "simurgh.vdp.lane_a_corpus.v1";
 export const VDP_LANEB_CAPTURE_SCHEMA = "simurgh.vdp.laneb_capture.v1";
 
-export const VDP_VERBS = Object.freeze(["agree", "dispute_by_recomputation", "dispute_as_judgment"]);
+export const VDP_VERBS = Object.freeze([
+  "agree",
+  "dispute_by_recomputation",
+  "dispute_as_judgment",
+]);
 export const RESPONDENT_ROLES = Object.freeze([
   "provider",
   "deployer",

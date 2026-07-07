@@ -53,9 +53,7 @@ export function deriveSectionStatus({ contest, cls, operatorValue, artifacts, ct
 export function deriveConflictMap(capsuleBundle, cc, ctx) {
   const capsule = capsuleBundle.content;
   const artifacts = respondentArtifactsIndex(cc);
-  const operatorByKey = new Map(
-    (capsule.projected_sections ?? []).map((p) => [keyString(p), p])
-  );
+  const operatorByKey = new Map((capsule.projected_sections ?? []).map((p) => [keyString(p), p]));
   const sections = (cc.contests ?? []).map((contest) => {
     const key = keyString(contest);
     const cls = PARTITIONS[contest.regime]?.[contest.section_id];
