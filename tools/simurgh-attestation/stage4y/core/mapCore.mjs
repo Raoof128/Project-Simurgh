@@ -57,6 +57,14 @@ export function buildMap(bytes, manifest = [], opts = {}) {
       else cirV2++;
     }
 
+  // Reconciliation summary (public side of 186): the class sequence of non-redacted regions.
+  const unredacted = regions.filter((r) => r.class !== "redacted");
+  const reconciliation = {
+    redaction_region_count: regions.filter((r) => r.class === "redacted").length,
+    unredacted_segment_count: unredacted.length,
+    segment_class_sequence: unredacted.map((r) => r.class),
+  };
+
   const map = {
     schema: VDR_MAP_SCHEMA,
     document_byte_length: bytes.length,
@@ -64,7 +72,7 @@ export function buildMap(bytes, manifest = [], opts = {}) {
     regions,
     aggregates: { ...aggregatesFor(bytes.length, regions), shadow },
     frozen: freshFrozenBlock(),
-    reconciliation: null,
+    reconciliation,
     provenance,
   };
   const audit = {

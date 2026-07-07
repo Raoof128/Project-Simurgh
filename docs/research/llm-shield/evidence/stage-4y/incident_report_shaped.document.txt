@@ -1,0 +1,5 @@
+Serious incident report.
+Date of awareness: 3 March.
+Affected users: 1200 accounts.
+Severity: most sessions degraded.
+Corrective measures applied within 15 days.
