@@ -46,10 +46,12 @@ endorsement claim. Public-facing surfaces carry the provider-agnostic gloss:
 > the operator, and must recompute through the identical shared recompute
 > registry. The verifier derives — deterministically and offline — a conflict
 > map assigning each contested section exactly one of five statuses; it never
-> declares an overall winner. A counter-capsule that fails binding, signature,
-> schema, census, or payload discipline produces an offline-verifiable
-> raw-code failure and no conflict map. A reviewer who trusts neither party
-> can rerun the contest end-to-end from pinned inputs.
+> declares an overall winner. Filing a contest forces a full re-verification
+> of the contested capsule, and the sealed outcome envelope records that
+> result. A counter-capsule that fails binding, signature, schema, census, or
+> payload discipline produces an offline-verifiable raw-code failure and no
+> conflict map. A reviewer who trusts neither party can rerun the contest
+> end-to-end from pinned inputs.
 
 **The three laws of 4V** (each maps to a code cluster, 4S/4T-style):
 
@@ -196,7 +198,11 @@ contesting prose claims once 4W makes prose claim-checked); and
 lab risk-report surfaces — e.g. RSP v3.0 Risk Reports carry external expert
 review with no structured, recomputable dissent channel; the reviewer's
 disagreement today is a quote in a PDF. Signed as ambition, shipped only when
-a real reviewer wants it).
+a real reviewer wants it); and `fact_group_projection_deferred` (cross-regime
+fact-level aggregation: one underlying fact — same recompute kind + evidence —
+projects into sections of both regimes; a derived fact-group view of the
+conflict map is real but is reporting, not geometry, and is deferred to keep
+the blade thin).
 
 **Rails (each becomes a test or a gate):**
 
@@ -209,6 +215,7 @@ a real reviewer wants it).
 | Provider-agnostic public wording                                                                                                                       | closeout/README use "provider-safe first, then reviewer-safe" gloss                                        |
 | Reference-capsule immutability — the Lane A operator capsule is the real 4T green capsule, pinned by digest                                            | `STAGE4T_REFERENCE_CAPSULE` constants + e2e rebuild-and-compare (§7)                                       |
 | Status locality — a `DISPUTE_FAILED` at section X cannot alter any other section's status                                                              | named e2e hard gate + Lean `disputeLocality`                                                               |
+| Mirror symmetry — a self-contest over the same evidence yields all-`AGREED` (no hidden party-bias term)                                                | named e2e hard gate `mirror_contest_all_agreed` + Lean `mirrorAllAgreed`                                   |
 | Node public verifier is authoritative for raw 152                                                                                                      | parity contract line                                                                                       |
 
 ## 3. Invention 1 — the three-verb contest and the five-status conflict map
@@ -298,6 +305,29 @@ Determinism contract: any reviewer re-running the verifier over the same pair
 obtains a byte-identical conflict map (canonicalJson; asserted by the audit
 tier and the Python parity lane).
 
+**The contest is a subpoena — the outcome envelope.** The verifier's actual
+output is the **contest outcome envelope**
+(`simurgh.vdp.contest_outcome.v1`):
+
+```text
+contest_outcome
+├── capsule_reverify_result        ← the FULL 4T re-verification raw result,
+│                                     sealed, not discarded: filing a contest
+│                                     forces the capsule to re-prove itself
+├── conflict_map | refusal         ← map if scoreable; refusal (with the raw
+│                                     code) if the counter-capsule failed
+│                                     151–159 — or if the CAPSULE failed its
+│                                     own re-verification
+└── filed_at_beat_status           ← VERIFIED | FAILED | not_supplied (§4a)
+```
+
+If the operator's capsule fails its own recomputation under contest, that 4T
+failure code is now on the record **because the respondent filed**. The
+defence's deepest win is not winning a section — it is the answer forcing the
+accusation to re-prove itself. The envelope is derived-never-filed like the
+map itself (a presented envelope is at most an expected value; code 160
+covers the comparison).
+
 ## 4. Invention 2 — absence rebuttal (contesting what was NOT said)
 
 `dispute_by_recomputation` works against `evidence_backed` sections **and**
@@ -346,6 +376,16 @@ reviewer adjudicates neither; the geometry speaks. (Standing non-claims
 apply: no deadline-compliance verdict is derived — that is a legal question;
 we prove only where the parties' recomputable clocks conflict.)
 
+**A clock on both sides — `filed_at_beat`.** The counter-capsule may carry an
+optional `filed_at_beat` claim: the respondent anchors their OWN filing to
+the same 4N public heartbeat, via the same `stage4n_beat_index` kind over
+their own sealed census. The outcome envelope (§3) records it as
+`filed_at_beat_status: VERIFIED | FAILED | not_supplied` — a failed
+self-anchor is ledgered, never voids the contest. Now the regulator sees both
+parties' clocks in one geometry: when the operator knowably knew, and when
+the answer was knowably filed — timestamps disciplined by a heartbeat neither
+side controls.
+
 ## 5. Invention 3 — No Strawman binding + derived-never-filed conflict map
 
 The counter-capsule's `binding` block commits to five fields:
@@ -391,6 +431,10 @@ counter_capsule
 ├── contests[]                                    ← one per contested section
 ├── anchor_contest (optional)                     ← §4a; pseudo-section key
 │                                                    meta/evidence_anchored_at_beat
+├── filed_at_beat (optional)                      ← §4a; respondent's own
+│                                                    filing anchored to the 4N
+│                                                    heartbeat (same kind, own
+│                                                    census)
 │   ├── regime / section_id
 │   ├── verb: agree | dispute_by_recomputation | dispute_as_judgment
 │   ├── claimed_value + recompute_kind            (recomputation verbs)
@@ -442,8 +486,9 @@ Fixture families:
    against `root_cause_analysis`), and a `DISPUTE_FAILED{recompute_failed}`
    (the defence caught lying, ledgered, while its other disputes stay
    valid) — PLUS an anchor contest yielding `CONFLICT_PROVEN` on the
-   knowability beat (§4a) and `respondent_role: deployer` (the Art-73 pair
-   made concrete). Proves mixed outcomes coexist in one contest.
+   knowability beat (§4a), a `filed_at_beat` that verifies (§4a), and
+   `respondent_role: deployer` (the Art-73 pair made concrete). Proves mixed
+   outcomes coexist in one contest.
 2. **Tamper matrix:** one fixture per raw code 151–160, built with
    `resignCounterCapsule` (the 4T lesson: mutations break the respondent
    signature first, so 153–160 fixtures are re-signed; only the 152 fixture
@@ -454,6 +499,17 @@ Fixture families:
    subreason, including the **status-locality hard gate**: a
    `DISPUTE_FAILED` at section X leaves every other section's status
    byte-identical to the same contest without X.
+4. **Mirror Test (symmetry by construction):** `buildMirrorContest`
+   mechanically transforms the reference capsule's own sections into a
+   counter-capsule that re-derives every `evidence_backed` value from the
+   same evidence, re-sealed in a respondent census. The derived conflict map
+   MUST be all-`AGREED` — any other status proves the derivation function
+   carries a hidden pro-operator or pro-respondent bias term. Named e2e hard
+   gate: `mirror_contest_all_agreed`. (Lean twin: `mirrorAllAgreed`, §11.)
+5. **Subpoena fixture:** a contest filed against a tampered capsule — the
+   outcome envelope records the capsule's own 4T re-verification failure and
+   a refusal to score. The operator's failure is on the record BECAUSE the
+   respondent filed (§3).
 
 **Lane B — live two-party ceremony (respondent-blind).**
 
@@ -565,6 +621,12 @@ partitions, verbs, censuses as finite maps; statuses as an inductive.
    evidence; a `DISPUTE_FAILED` at X cannot change any other section's
    status. (Determinism of the whole map falls out as a corollary: statuses
    are total functions of per-section inputs.)
+5. **`mirrorAllAgreed`** — the Mirror Test formalised: a self-contest built
+   by re-deriving the capsule's own `evidence_backed` values from the same
+   evidence yields `AGREED` for every contested section. Symmetry is not
+   asserted; it is constructed — the status-derivation function contains no
+   bias term distinguishing the parties. (The Lane A twin is the
+   `mirror_contest_all_agreed` hard gate, §7.)
 
 ## 12. Kernel touch
 
@@ -593,12 +655,12 @@ current source-map" is the claim; the map is below.
 Design-time internal scorecard, not shipped evidence and not a
 literature-complete novelty claim.
 
-| Axis               | Score | Why / what moves it higher                                                                                                                                                                                                                                                                                                              |
-| ------------------ | ----- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Novelty            | 9.5   | First machine-adjudicable contest path for incident reports; absence rebuttal (contesting what was NOT said) and the anchor contest (contesting WHEN they knowably knew) have no matching prior pattern in our current source-map; treated as attackable, not assumed. Higher: an independent third party files a real counter-capsule. |
-| Frontier           | 9.2   | Recomputable disagreement is new verifier geometry; single-round + registry-bounded keeps it short of full due process. Higher: surrejoinder round + narrative contest (the 4W/4X arc).                                                                                                                                                 |
-| Good-for-Anthropic | 9.4   | Due process is the missing half of the regulator wedge — reports a lab files (or is named in) become answerable, not just assertable. Higher: real-regime pilot.                                                                                                                                                                        |
-| Constitution       | 9.4   | Accountability + contestability made machine-checkable; the accused gets the same evidence law as the accuser. Higher: respondent identity attestation (closing signed limitation 2).                                                                                                                                                   |
+| Axis               | Score | Why / what moves it higher                                                                                                                                                                                                                                                                                                                                                       |
+| ------------------ | ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Novelty            | 9.5   | First machine-adjudicable contest path for incident reports; absence rebuttal (contesting what was NOT said) and the anchor contest (contesting WHEN they knowably knew) have no matching prior pattern in our current source-map; treated as attackable, not assumed. Higher: an independent third party files a real counter-capsule.                                          |
+| Frontier           | 9.3   | Recomputable disagreement is new verifier geometry, and the Mirror Test (party-symmetry proven by construction, Lean-twinned) plus the subpoena property (a contest forces the accusation to re-prove itself) push past prior receipt rungs; single-round + registry-bounded keeps it short of full due process. Higher: surrejoinder round + narrative contest (the 4W/4X arc). |
+| Good-for-Anthropic | 9.4   | Due process is the missing half of the regulator wedge — reports a lab files (or is named in) become answerable, not just assertable. Higher: real-regime pilot.                                                                                                                                                                                                                 |
+| Constitution       | 9.4   | Accountability + contestability made machine-checkable; the accused gets the same evidence law as the accuser. Higher: respondent identity attestation (closing signed limitation 2).                                                                                                                                                                                            |
 
 Re-score at closeout against shipped evidence.
 
@@ -606,9 +668,11 @@ Re-score at closeout against shipped evidence.
 
 K7-style all-functions net composing EVERY export: unit suites per module
 (explicit `*.test.js` globs — never a bare dir, 4K gotcha); the 151–160
-tamper matrix + 161 wrapper; the five-status matrix + anchor-contest
-fixtures (§4a) + `DISPUTE_FAILED`
-subreasons + status-locality hard gate; tamper-matrix meta-assertions
+tamper matrix + 161 wrapper; the five-status matrix + anchor-contest and
+`filed_at_beat` fixtures (§4a) + `DISPUTE_FAILED`
+subreasons + status-locality hard gate + the `mirror_contest_all_agreed`
+hard gate + the subpoena fixture (outcome envelope seals the capsule's
+re-verification failure); tamper-matrix meta-assertions
 (`only_152_fixture_has_invalid_signature`,
 `all_153_to_160_fixtures_are_validly_resigned`); cross-stage invariants (4T
 green capsule digest-pinned rebuild; 4S/4T/4U artifacts byte-frozen;
@@ -630,12 +694,14 @@ tools/simurgh-attestation/stage4v/
 │   ├── contestCensus.mjs             respondent census (155–158) — thin
 │   │                                 caller over shared census discipline
 │   ├── conflictMap.mjs               five-status derivation + locality +
-│   │                                 rescore signals + uncontested[]
+│   │                                 rescore signals + uncontested[] +
+│   │                                 anchor/filed_at_beat statuses
 │   └── counterCapsuleCore.mjs        schema/signature/payload (151/152/159),
-│                                     160 check, evaluateContest(Safe), 161
+│                                     160 check, outcome envelope (subpoena),
+│                                     evaluateContest(Safe), 161
 ├── node/
 │   ├── greenContest.mjs              honest five-status counter-capsule +
-│   │                                 resignCounterCapsule
+│   │                                 resignCounterCapsule + buildMirrorContest
 │   ├── build-stage4v-fixtures.mjs    Lane A corpus (tamper + status matrix)
 │   ├── build-stage4v-attestation.mjs four sealed groups, Merkle, sign
 │   └── verify-stage4v-attestation.mjs two tiers + CLI
