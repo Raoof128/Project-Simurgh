@@ -41,7 +41,21 @@ In one sentence: **Simurgh gives an agentic system a verifiable receipt, not a p
 > selective omission, multi-agent accountability) to concrete mechanisms — printable version at
 > [`docs/research/llm-shield/anthropic-brief.html`](docs/research/llm-shield/anthropic-brief.html).
 
-> 🆕 **Latest — Stage 4W · Verifiable Slot-Bound Narrative (`v2.32.0-stage-4w-vsn`).** The incident
+> 🆕 **Latest — Stage 4X · Verifiable Leakage-Residue (`v2.33.0-stage-4x-vlr`).** 4W signed the
+> prose limitation "the leakage gate is lexical, not semantic." 4X turns it into a signed,
+> byte-reproducible **number** and shrinks the bound: over a frozen dual-provenance corpus, each item
+> is a real quantitative seed plus a declared **metamorphic relation**, and the paraphrase residue is
+> _derived_ as a pure function of the seed — so a reviewer reproduces the whole residue set. The
+> verifier runs the real `vsn.leakage.v1` and an additive `vsn.leakage.v2` and reports the honest
+> result: **v1 misses 6/6 metamorphic paraphrases; v2 shrinks the miss to 1/6, the irreducible
+> semantic floor.** Laws: **A Signed Limitation Must Bleed a Number · The Gate Reports Its Own
+> Misses · A Shrunk Bound Must Be Monotone.** No live-model lane and no adversarial elicitation by
+> design; the public tier verifies by arithmetic while the audit tier re-runs the gate; five
+> machine-checked Lean theorems, JS↔Python↔browser parity (hash-based CSP), and a one-command
+> offline reproduce. Honest scope: the shipped corpus is a 6-item seed, and a lexical v2 shrinks but
+> never closes the semantic residue.
+>
+> **Stage 4W · Verifiable Slot-Bound Narrative (`v2.32.0-stage-4w-vsn`).** The incident
 > narrative _around_ the numbers becomes span-typed and contest-addressable: free prose plus a
 > signed span map that types every claim-bearing span as `slot_bound` (recomputes against the
 > sealed capsule), `judgment` (digest-bound), or `unverified_prose` (zero evidentiary weight, shown
