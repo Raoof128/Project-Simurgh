@@ -32,3 +32,5 @@ jobs:
           ! grep -Rn "\bsorry\b" proofs/stage4v
           lean proofs/stage4w/SlotBoundNarrative.lean
           ! grep -Rn "\bsorry\b" proofs/stage4w
+          lean proofs/stage4x/LeakageResidue.lean
+          ! grep -Rn "\bsorry\b" proofs/stage4x
