@@ -35,6 +35,23 @@
   capsule states on its face which fields a machine may fill. Four Lean theorems,
   live two-process MCP Lane B, byte-stable reproduce. The 4S consent IOU is retired
   as a field group. This is the first serious-incident report a regulator can rerun.
+- **Status update (2026-07-07b):** the wedge grows a **right of reply** — **Stage
+  4V — VDP** (`v2.31.0-stage-4v-vdp`): **Verifiable Due Process**, the first
+  regulator-rerunnable incident report the accused can answer in a rerunnable way,
+  under **No Trial in Absentia** / **Same Rules for the Defence** / **No Strawman**.
+  A signed counter-capsule binds the exact sealed capsule and contests each section
+  by agree / dispute-by-recomputation (carrying its own census under the operator's
+  identical laws) / dispute-as-judgment; the verifier derives a five-status conflict
+  map and never declares a winner. Inventions: **absence rebuttal** (contesting what
+  was NOT said — the respondent-side dual of 4T suppression detection), the **anchor
+  contest** + `filed_at_beat` (a two-sided recomputable clock over the 4N heartbeat),
+  the **Mirror Test** (self-contest → all-`AGREED`, no party-bias term, Lean-twinned),
+  and **contest-as-subpoena** (filing forces the capsule to re-prove itself). Raw
+  codes 151–161, five Lean theorems, two-process respondent-blind Lane B,
+  JS↔Python↔browser parity, read-only kernel. Honest finding: only 6 of 22 template
+  sections are contestable by recomputation; the other 16 by signed judgment only.
+  The declared **4W** socket (`narrative_claim_contest_deferred`) and the **4X**
+  novel-attack hook (`lane_a_both_parties_built_by_us`) are signed into the stage.
 
 ---
 
