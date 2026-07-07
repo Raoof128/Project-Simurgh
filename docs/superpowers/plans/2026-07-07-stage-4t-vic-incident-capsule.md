@@ -450,10 +450,10 @@ export function verifyCensus(capsule, artifactsByDigest) {
 ```javascript
 export const unsignedCapsule = (capsule) => { const { signature, ...body } = capsule; return body; };
 
-// Two-stage wrapper shape (canonical `content` object — no ambiguous bare fields):
-//   { schema: VIC_ATTESTATION_SCHEMA, content: { … }, attestation_digest, signature }
-// The capsule-level wrapper's content is { capsule }; the Task-9 attestation wrapper's
-// content is the four sealed groups. Same digest function serves both.
+// Two-stage wrapper shape (canonical `content` object — no ambiguous bare fields).
+// Capsule bundle:     { schema: VIC_CAPSULE_BUNDLE_SCHEMA, content: <capsule>, attestation_digest, signature? }
+// Attestation bundle: { schema: VIC_ATTESTATION_SCHEMA, content: { template_snapshots, lane_a_fixtures, census_artifacts, lane_b_capture }, attestation_digest, signature }
+// Same digest function serves both (always over body.content).
 export function capsuleAttestationDigest(bundle) {
   const { attestation_digest, signature, ...body } = bundle;
   return recordDigest({ schema: body.schema, content: JSON.parse(canonicalJson(body.content)) });
