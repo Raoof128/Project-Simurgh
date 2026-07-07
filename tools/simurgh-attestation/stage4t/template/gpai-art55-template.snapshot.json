@@ -1,0 +1,26 @@
+{
+  "schema": "simurgh.vic.template_snapshot.v1",
+  "regime": "gpai_art55",
+  "title": "Report for Serious Incidents under the AI Act (General-Purpose AI Models with Systemic Risk)",
+  "legal_basis": "Article 55(1)(c) AI Act; GPAI Code of Practice Commitment 9 (Safety and Security Chapter)",
+  "source_url": "https://digital-strategy.ec.europa.eu/en/library/ai-act-commission-publishes-reporting-template-serious-incidents-involving-general-purpose-ai",
+  "source_document": "https://ec.europa.eu/newsroom/dae/redirection/document/121270",
+  "published": "2025-11-04",
+  "retrieved": "2026-07-07",
+  "transcription_of_record": true,
+  "sections": [
+    { "section_id": "incident_dates", "title": "Start and end dates of the serious incident" },
+    { "section_id": "resulting_harm", "title": "Resulting harm" },
+    { "section_id": "chain_of_events", "title": "Chain of events" },
+    { "section_id": "model_involved", "title": "Model involved" },
+    { "section_id": "evidence_available", "title": "Evidence available" },
+    { "section_id": "serious_incident_response", "title": "Serious incident response" },
+    { "section_id": "recommendation", "title": "Recommendation" },
+    { "section_id": "root_cause_analysis", "title": "Root cause analysis" },
+    {
+      "section_id": "post_market_monitoring_patterns",
+      "title": "Patterns in post-market monitoring on serious incidents"
+    },
+    { "section_id": "submitter_information", "title": "Submitter information" }
+  ]
+}
