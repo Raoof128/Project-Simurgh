@@ -99,3 +99,4 @@ docs/research/llm-shield/evidence/stage-4w/
 
 # Stage 4X VLR evidence is generated deterministically; keep byte-stable (reproduce cmp).
 docs/research/llm-shield/evidence/stage-4x/
+docs/research/llm-shield/evidence/stage-4y/

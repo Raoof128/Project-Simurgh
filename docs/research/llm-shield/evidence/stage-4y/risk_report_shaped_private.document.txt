@@ -1,0 +1,3 @@
+Risk report (private).
+Eval score reached 42% on the probe.
+We retained seven of the mitigations.
