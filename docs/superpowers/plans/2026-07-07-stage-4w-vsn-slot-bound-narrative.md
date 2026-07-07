@@ -409,6 +409,7 @@ test("span geometry: overlap, bounds, order, empty, dup id, mid-code-point", () 
   assert.equal(checkSpanGeometry(body, [span("s1", 0, bytes.length + 1)]).raw, 165); // OOB
   assert.equal(checkSpanGeometry(body, [span("s1", 0, 3), span("s1", 3, 6)]).raw, 165); // dup id
   assert.equal(checkSpanGeometry(body, [span("s1", 7, 9)]).raw, 165); // mid-UTF-8 code point
+  assert.equal(checkSpanGeometry(body, [span("s1", -1, 3)]).raw, 165); // negative start (bounds-safe)
 });
 ```
 
@@ -445,8 +446,13 @@ export function checkNormalisation(body) {
 }
 
 // A UTF-8 continuation byte is 0b10xxxxxx; offsets must land on code-point starts.
+// Explicitly bounds-safe (reviewer P2 #13): a negative or out-of-range offset is
+// never a boundary, so callers cannot be fooled by an under/overflow offset.
 export const isCodePointBoundary = (bytes, offset) =>
-  offset === bytes.length || (bytes[offset] & 0xc0) !== 0x80;
+  Number.isInteger(offset) &&
+  offset >= 0 &&
+  offset <= bytes.length &&
+  (offset === bytes.length || (bytes[offset] & 0xc0) !== 0x80);
 
 export function checkSpanGeometry(body, spanMap) {
   const bytes = bodyBytes(body);
@@ -526,6 +532,23 @@ test("leakage: digits, number words, percent, months, quantifiers, capsule colli
   assert.equal(
     scanLeakage("range 2026-07-01/2026-07-02 leaked\n", [], ["2026-07-01/2026-07-02"])[0].rule,
     "digit" // digits fire first; collision rule also matches — first hit wins
+  );
+});
+
+test("capsule_value_collision fires on a NON-numeric echoed value (reviewer P2 #12)", () => {
+  // A capsule value like a consent scope serialises to a digit-free string; echoing it
+  // undeclared must trip the collision rule specifically, not the digit rule.
+  const hit = scanLeakage("we quietly mention mailread in passing\n", [], ["mailread"]);
+  assert.equal(hit[0].rule, "capsule_value_collision");
+  // And when it IS declared inside a prose span, no hit.
+  const declaredEnd = bodyBytes("we quietly mention mailread").length;
+  assert.equal(
+    scanLeakage(
+      "we quietly mention mailread in passing\n",
+      [prose("p1", 0, declaredEnd)],
+      ["mailread"]
+    ).length,
+    0
   );
 });
 
@@ -887,6 +910,7 @@ import {
   computeEvidenceDensity,
   evaluateNarrative,
   evaluateNarrativeSafe,
+  payloadCheck,
 } from "../../../../tools/simurgh-attestation/stage4w/core/narrativeCore.mjs";
 import { buildGreenBundle } from "../../../../tools/simurgh-attestation/stage4t/node/greenCapsule.mjs";
 import { recordDigest } from "../../../../tools/simurgh-attestation/stage4m/core/canonical.mjs";
@@ -970,6 +994,15 @@ test("171 payload violation on smuggled transcript key; 172 wrapper on poisoned 
   ];
   const r = evaluateNarrativeSafe(g.bundle, resignRebind(dirty), opts(g));
   assert.equal(r.raw, 171);
+  // Reviewer P0 #1: forbidden material BESIDE content (not covered by the signature)
+  // must not hide. Unknown outer key -> 162 (outer allowlist); if we probe the payload
+  // scanner directly it also flags the private-key material.
+  const outer = JSON.parse(JSON.stringify(narrative));
+  outer.transcript = "raw hidden completion material";
+  const ro = evaluateNarrativeSafe(g.bundle, outer, opts(g));
+  assert.equal(ro.raw, 162); // outer_keys allowlist catches the smuggled sibling field
+  assert.equal(payloadCheck({ x: "-----BEGIN PRIVATE KEY-----" }).raw, 171);
+  assert.equal(payloadCheck({ x: "-----BEGIN PUBLIC KEY-----" }), null); // public key allowed
   const boom = evaluateNarrativeSafe(g.bundle, narrative, {
     capsulePubKeyPem: g.pubKeyPem,
     ctx: {
@@ -1069,7 +1102,11 @@ export const resignNarrative = (n, privKeyPem) => ({
   signature: sign(n.content, privKeyPem),
 });
 
-// Strict allowlists (162).
+// Strict allowlists (162). 162/171 boundary (spec §2, reviewer P1 #5 Option B):
+// 162 rejects unknown STRUCTURAL keys outside allowed containers (incl. outer bundle
+// keys); 171 catches forbidden payload MATERIAL nested inside otherwise-allowed opaque
+// containers (e.g. signed_judgment.content). Both fire — no gap beside `content`.
+const OUTER_KEYS = ["content", "signature", "author_pub_key_pem"];
 const TOP_KEYS = [
   "schema",
   "narrative_body",
@@ -1099,6 +1136,7 @@ const keysOk = (obj, allowed) => {
 
 function schemaCheck(narrative) {
   const bad = (reason, detail) => ({ raw: 162, reason, detail });
+  if (!keysOk(narrative, OUTER_KEYS)) return bad("vsn_schema_invalid", { field: "outer_keys" });
   const c = narrative?.content;
   if (!c || c.schema !== VSN_NARRATIVE_SCHEMA)
     return bad("vsn_schema_invalid", { field: "schema" });
@@ -1161,10 +1199,13 @@ function slotRecomputeCheck(content, capsuleBundle, ctx) {
   return null;
 }
 
-// 171 — recursive forbidden-payload scan (spec §2 Patch 6).
+// 171 — recursive forbidden-payload scan over the WHOLE bundle (spec §2 Patch 6,
+// reviewer P0 #1). Allows "PUBLIC KEY" (author_pub_key_pem is legitimate) but rejects
+// "PRIVATE KEY" anywhere. Scans top-level fields too, so forbidden material beside
+// `content` (which the signature does not cover) cannot hide.
 const FORBIDDEN_KEY =
   /^(prompt|completion|transcript|raw_transcript|api_key|tool_output|provider_message|network|egress_url)$/i;
-export function payloadCheck(value, path = "content") {
+export function payloadCheck(value, path = "narrative") {
   if (typeof value === "string")
     return value.includes("PRIVATE KEY")
       ? {
@@ -1230,7 +1271,7 @@ export function evaluateNarrative(capsuleBundle, narrative, { capsulePubKeyPem, 
         narrative.content.span_map,
         capsuleValueStrings(capsuleBundle.content)
       ),
-    () => payloadCheck(narrative.content),
+    () => payloadCheck(narrative),
   ];
   for (const check of checks) {
     const r = check();
@@ -1326,20 +1367,32 @@ test("slot-span contest derives 4V statuses through the imported table", () => {
     ctx: {},
   });
   assert.equal(agreed.status, "AGREED");
+
+  // Reviewer P1 #8 — a REAL CONFLICT_PROVEN: the respondent brings its OWN
+  // self-consistent evidence recomputing to a value that differs from the operator's.
+  // (participant_count's evidence kind is stage4s_chain_bundle — see KIND_EVIDENCE_SOURCE.
+  // If the green capsule lacks a participant_count section, use a kernel_block_record
+  // section with a respondent kernel_decision_records artifact carrying extra blocks.)
+  const respondentArtifact = {
+    kind: "stage4s_chain_bundle",
+    participants: [...(artifact.participants ?? []), "respondent-extra-1", "respondent-extra-2"],
+  };
+  const respondentDigest = recordDigest(respondentArtifact);
+  const respondentClaim = (artifact.participants ?? []).length + 2; // != operator value
   const conflict = contestSlotSpan({
     capsuleBundle: g.bundle,
     span: { regime: section.regime, section_id: section.section_id },
     contest: {
       verb: "dispute_by_recomputation",
-      claimed_value: (artifact.participants ?? []).length + 0, // self-consistent value
+      claimed_value: respondentClaim,
       recompute_kind: section.recompute_kind,
-      evidence_digest: section.evidence_digest,
+      evidence_digest: respondentDigest,
     },
-    artifacts,
+    artifacts: { [respondentDigest]: respondentArtifact },
     ctx: {},
   });
-  // same evidence ⇒ same value ⇒ AGREED; a differing self-consistent value needs different evidence.
-  assert.equal(conflict.status, "AGREED");
+  assert.equal(conflict.status, "CONFLICT_PROVEN");
+  assert.equal(conflict.respondent_value, respondentClaim);
 });
 
 test("prose-span classification contest is recorded, never recomputed", () => {
@@ -1696,9 +1749,8 @@ export function buildGreenNarrative() {
   const slotB = sections.find(
     (p) => p.class === "evidence_backed" && p.recompute_kind === "kernel_block_record"
   );
-  const jPriv = crypto.generateKeyPairSync("ed25519");
-  // Deterministic judgment key: derive from a fixed seed file instead — use the vsn key pair
-  // as the judgment signer for byte-stable fixtures.
+  // Deterministic judgment signer: the `vsn` fixture key (NOT a fresh ephemeral pair) so
+  // the green narrative — and every fixture derived from it — is byte-stable across runs.
   const jContent = {
     judgment_text_digest: "sha256:" + sha256Hex(canonicalJson({ note: "vsn-green-judgment" })),
   };
@@ -1775,8 +1827,8 @@ export function buildGreenNarrative() {
 }
 ```
 
-(Remove the unused `jPriv` line during implementation — the judgment signer is
-the `vsn` fixture key for byte-stability.)
+(The judgment signer is the `vsn` fixture key for byte-stability — no ephemeral
+pair, so fixtures reproduce identically run-to-run.)
 
 - [ ] **Step 4: Implement build-stage4w-fixtures.mjs**
 
@@ -2081,6 +2133,11 @@ export function writeCorpus() {
   const doc = { corpus: corpusDocument(), fixtures: buildLaneAFixtures() };
   writeFileSync(join(EVDIR, "corpus.json"), canonicalJson(doc) + "\n");
 }
+
+// CLI main: `node build-stage4w-fixtures.mjs` regenerates the byte-stable corpus
+// (reviewer P0 #3 — the corpus MUST be a committed file for Task 16's cmp).
+import { pathToFileURL } from "node:url";
+if (import.meta.url === pathToFileURL(process.argv[1]).href) writeCorpus();
 ```
 
 - [ ] **Step 5: Run the fixtures test — expect PASS.** Two fixtures need care:
@@ -2090,10 +2147,22 @@ export function writeCorpus() {
       `reserved: true` escape hatch is exactly why the reserved marker exists in
       `checkJudgments`. If 168 fires, fix the fixture, not the verifier.
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 6: Generate the committed corpus and prove it is byte-stable** (reviewer P0 #3)
 
 ```bash
-git add tools/simurgh-attestation/stage4w/node/ tests/unit/llmShield/stage4w/fixtures.test.js
+node tools/simurgh-attestation/stage4w/node/build-stage4w-fixtures.mjs
+node tools/simurgh-attestation/stage4w/node/build-stage4w-fixtures.mjs
+git diff --exit-code docs/research/llm-shield/evidence/stage-4w/lane-a/corpus.json
+```
+
+Expected: the file is written identically twice (idempotent); `git diff --exit-code`
+returns 0. If it differs run-to-run, a non-deterministic value leaked into a
+fixture — fix the fixture, never loosen the check.
+
+- [ ] **Step 7: Commit** (corpus file included)
+
+```bash
+git add tools/simurgh-attestation/stage4w/node/ tests/unit/llmShield/stage4w/fixtures.test.js docs/research/llm-shield/evidence/stage-4w/lane-a/corpus.json
 git commit -m "test(4w): Lane A corpus — green + 20 tamper cases incl Brigandi family + density recount"
 ```
 
@@ -2109,8 +2178,8 @@ git commit -m "test(4w): Lane A corpus — green + 20 tamper cases incl Brigandi
 
 **Interfaces:**
 
-- Child: reads `{capsule_projection, span_grammar}` JSON on stdin (projection = `projected_sections` with class/value/recompute*kind/evidence_digest ONLY — no raw `evidence_artifacts`), deterministically drafts body+span_map, signs with the SEALED ephemeral Lane-B author key (`vsn-laneb-author` fixture key — its PUBLIC pem goes into the capture), writes the signed narrative JSON to stdout. Refuses to start if any env key matches `/^OPERATOR(*|$)/`or argv contains`.pem`.
-- Parent: spawns child via `node` with a SCRUBBED env (`{PATH}` only), pipes the projection, verifies the child's narrative to raw 0 with `evaluateNarrativeSafe`, seals `{schema: VSN_LANEB_CAPTURE_SCHEMA, narrative, blindness: {env_keys_scrubbed: true, negatives: [...]}, verify_raw: 0}` to `docs/research/llm-shield/evidence/stage-4w/laneb/capture.json` (canonicalJson, byte-stable).
+- Child: reads `{capsule_projection, binding, laneb_priv_key_pem, laneb_pub_key_pem}` JSON on stdin (projection = `projected_sections` with class/value/recompute*kind/evidence_digest ONLY — no raw `evidence_artifacts`), deterministically drafts body+span_map, signs with its OWN ephemeral Lane-B author key (delivered over stdin, its PUBLIC pem sealed in the capture), writes the signed narrative JSON to stdout. **Honest scope of blindness:** the child receives only the public capsule projection as evidence input, PLUS its own ephemeral signing key over stdin — it receives no raw capsule evidence, no operator private key, and no operator working state. Refuses to start if any env key matches `/^OPERATOR(*|$)/`or argv contains`.pem` (those are the blindness surfaces; the key arrives on stdin, never argv/env).
+- Parent: spawns child via `node` with a SCRUBBED env (`{PATH}` only), pipes the projection, verifies the child's narrative to raw 0 with `evaluateNarrativeSafe`, seals `{schema: VSN_LANEB_CAPTURE_SCHEMA, narrative, verify_raw: 0, density, laneb_author_pub_key_pem, child_input_profile: {evidence_input: "capsule_public_projection_only", signing_key_delivery: "stdin_child_author_key", operator_private_state_visible: false}, component_hashes: {capsule_projection, narrative, density}, blindness: {env_keys_scrubbed: true, negatives: [...]}}` to `docs/research/llm-shield/evidence/stage-4w/laneb/capture.json` (canonicalJson, byte-stable). `component_hashes` are harness-computed (`recordDigest`) so Task 10 verify + Task 16 reproduce can rederive them (the 3V-A doctrine).
 - Blindness negatives sealed: (1) child started with `OPERATOR_SECRET=x` env → child exits non-zero; (2) child argv containing `fake.pem` → child exits non-zero. Parent records both exit codes in the capture.
 
 - [ ] **Step 1: Write the failing e2e test**
@@ -2134,6 +2203,9 @@ test("Lane B ceremony: blind child drafts, parent verifies raw 0, negatives seal
   assert.equal(cap.narrative.content.author_role, "drafting_model_operator_signed");
   assert.ok(cap.blindness.negatives.every((n) => n.exit_code !== 0));
   assert.ok(cap.laneb_author_pub_key_pem.includes("PUBLIC KEY"));
+  assert.equal(cap.child_input_profile.operator_private_state_visible, false);
+  assert.equal(cap.child_input_profile.evidence_input, "capsule_public_projection_only");
+  assert.match(cap.component_hashes.narrative, /^sha256:[a-f0-9]{64}$/);
 });
 ```
 
@@ -2235,7 +2307,7 @@ import { spawnSync } from "node:child_process";
 import { writeFileSync, mkdirSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { canonicalJson } from "../../stage4m/core/canonical.mjs";
+import { canonicalJson, recordDigest } from "../../stage4m/core/canonical.mjs";
 import { buildGreenBundle } from "../../stage4t/node/greenCapsule.mjs";
 import { buildNarrativeBinding } from "../core/narrativeBinding.mjs";
 import { evaluateNarrativeSafe } from "../core/narrativeCore.mjs";
@@ -2330,6 +2402,16 @@ writeFileSync(
     verify_raw: result.raw,
     density: result.density,
     laneb_author_pub_key_pem: pub("vsn-laneb-author"),
+    child_input_profile: {
+      evidence_input: "capsule_public_projection_only",
+      signing_key_delivery: "stdin_child_author_key",
+      operator_private_state_visible: false,
+    },
+    component_hashes: {
+      capsule_projection: recordDigest(projection),
+      narrative: recordDigest(narrative),
+      density: recordDigest(result.density),
+    },
     blindness: { env_keys_scrubbed: true, negatives },
   }) + "\n"
 );
@@ -2362,7 +2444,8 @@ git commit -m "feat(4w): Lane B two-process blind drafting ceremony with sealed 
 - `PARITY_CONTRACT.lines` includes `"python_public_core_does_not_verify_ed25519_signatures"`, `"browser_verifier_public_tier_only_node_cli_authoritative"`.
 - `honesty_ledger` = `{non_claims: VSN_NON_CLAIMS, known_limitations: VSN_KNOWN_LIMITATIONS, rails: VSN_RAILS, reserved_slots: VSN_RESERVED_SLOTS, ledger_note: "narrative_claim_contest_deferred PAID by 4W (4V ledger)"}`.
 - Bridge: `buildBridgeStatement(narrativeDigest, spanMapDigest, attestationDigest) -> in-toto Statement v1` with `_type: VSN_BRIDGE_STATEMENT_SCHEMA`, `subject: [{name: "vsn-narrative", digest: {sha256: <hex>}}]`, `predicateType: VSN_BRIDGE_PREDICATE_TYPE`, `predicate: {span_map_digest, attestation_digest, note: "C2PA records declarations; VSN recomputes spans. Corroborate by digest equality."}`.
-- Verifier: public tier = attestation signature + Merkle root + green narrative structural checks; audit tier (`--audit`) = rerun EVERY Lane A fixture via `evaluateNarrativeSafe` against `expected_raw`, re-verify Lane B capture byte-stable + raw 0, check Lane C capture digests IF present, recompute the density triple, recompute the bridge subject digest.
+- Verifier: public tier = attestation signature + Merkle root + green narrative structural checks; audit tier (`--audit`) = independently rebuild the Lane A fixtures (`buildLaneAFixtures()`), and for EACH sealed case assert BOTH that `evaluateNarrativeSafe(rebuilt).raw === case.expected_raw` AND that `recordDigest(rebuilt) === case.narrative_digest` — the digest comparison is what catches a validly re-signed pack whose sealed digest was swapped (the raw would still match). Then re-verify Lane B capture byte-stable + raw 0, check Lane C capture digests IF present, recompute the density triple, recompute the bridge subject digest. Any per-case digest/raw mismatch → `{ok:false, reason:"lane_a_fixture_falsified"}`.
+- `resignAttestation(att, privKeyPem) -> att` (re-signs `content` with the `vsn` key) — the reviewer-grade discrimination test needs a validly re-signed but dishonest pack (public-green, audit-red).
 
 - [ ] **Step 1: Write the failing test**
 
@@ -2373,10 +2456,18 @@ import assert from "node:assert/strict";
 import {
   buildAttestation,
   bundleMerkleRoot,
+  resignAttestation,
 } from "../../../../tools/simurgh-attestation/stage4w/node/build-stage4w-attestation.mjs";
 import { verifyAttestation } from "../../../../tools/simurgh-attestation/stage4w/node/verify-stage4w-attestation.mjs";
 import { buildBridgeStatement } from "../../../../tools/simurgh-attestation/stage4w/node/build-stage4w-bridge.mjs";
 import { recordDigest } from "../../../../tools/simurgh-attestation/stage4m/core/canonical.mjs";
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
+
+const HERE = dirname(fileURLToPath(import.meta.url));
+const KEYDIR = join(HERE, "../../../../tests/fixtures/llmShield/stage4w/test-keys");
+const readKey = (n) => readFileSync(join(KEYDIR, `INSECURE_FIXTURE_ONLY_${n}.pem`), "utf8");
 
 test("attestation round-trips public + audit tiers", () => {
   const att = buildAttestation();
@@ -2384,14 +2475,28 @@ test("attestation round-trips public + audit tiers", () => {
   assert.equal(verifyAttestation(att, { tier: "audit" }).ok, true);
 });
 
-test("falsified lane A digest is caught in audit tier", () => {
+test("stale-signature forgery is caught (broken signature)", () => {
   const att = buildAttestation();
   const forged = JSON.parse(JSON.stringify(att));
   forged.content.lane_a_fixtures.cases[0].narrative_digest = "sha256:" + "0".repeat(64);
-  forged.content.bundle_merkle_root = bundleMerkleRoot(forged); // sophisticated forger
+  forged.content.bundle_merkle_root = bundleMerkleRoot(forged); // recomputes root but NOT re-signed
   const r = verifyAttestation(forged, { tier: "audit" });
   assert.equal(r.ok, false);
-  assert.equal(r.reason, "attestation_signature_invalid"); // root re-signed? no — sig now stale
+  assert.equal(r.reason, "attestation_signature_invalid"); // signature now stale
+});
+
+test("validly RE-SIGNED falsified Lane A pack is public-GREEN but audit-RED (reviewer P1 #6)", () => {
+  // The dishonest producer owns the fixture key and re-signs cleanly. Public tier,
+  // which only checks signature + Merkle structure, passes. Audit tier RE-RUNS the
+  // fixture and catches that the sealed digest no longer matches reality.
+  const forged = JSON.parse(JSON.stringify(buildAttestation()));
+  forged.content.lane_a_fixtures.cases[0].narrative_digest = "sha256:" + "0".repeat(64);
+  forged.content.bundle_merkle_root = bundleMerkleRoot(forged);
+  resignAttestation(forged, readKey("vsn")); // valid signature over the lie
+  assert.equal(verifyAttestation(forged, { tier: "public" }).ok, true);
+  const audit = verifyAttestation(forged, { tier: "audit" });
+  assert.equal(audit.ok, false);
+  assert.equal(audit.reason, "lane_a_fixture_falsified");
 });
 
 test("bridge statement is in-toto v1 with recomputable subject", () => {
@@ -2548,7 +2653,7 @@ git commit -m "feat(4w): Lane C live drafting capture (digest-only, +adversarial
 
 **Interfaces:**
 
-- Python module mirrors the PUBLIC tier: `normalise_body`, `check_normalisation`, `check_span_geometry` (UTF-8 byte offsets via `str.encode("utf-8")`), `uncovered_regions`, `scan_leakage` (port the frozen lists EXACTLY from constants.mjs), `narrative_body_digest`, `span_map_digest` (port `canonical_json` from the existing `stage4t/python/vic_parity.py` — import it: `from vic_parity import canonical_json` pattern used by 4V), `compute_evidence_density`, `evaluate_public(narrative, capsule) -> {"raw": int, ...}` running 162(partial: keys/types)→164→165→166(digest fields only)→167→169(value-vs-projection equality + registry recompute for the self-contained kinds)→170. Ed25519 (163) EXCLUDED — parity contract line.
+- Python module mirrors the PUBLIC tier: `normalise_body`, `check_normalisation`, `check_span_geometry` (UTF-8 byte offsets via `str.encode("utf-8")`), `uncovered_regions`, `scan_leakage` (port the frozen lists EXACTLY from constants.mjs), `narrative_body_digest`, `span_map_digest` (port `canonical_json` from the existing `stage4t/python/vic_parity.py` — import it: `from vic_parity import canonical_json` pattern used by 4V), `key_digest(pem) -> "sha256:"+sha256(pem.encode()).hexdigest()` (reviewer P1 #7 — `keyDigest` hashes the raw PEM STRING, NOT a DER decode, so parity is one line and 166 is FULLY covered including `capsule_signing_key_fingerprint`), `compute_evidence_density`, `evaluate_public(narrative, capsule, capsule_pubkey_pem) -> {"raw": int, ...}` running 162(partial: keys/types)→164→165→166(ALL binding fields incl. fingerprint)→167→169(value-vs-projection equality + registry recompute for the self-contained kinds)→170. Ed25519 SIGNATURE verification (163) EXCLUDED — parity contract line.
 - Node test drives parity: run every Lane A fixture through BOTH `evaluateNarrativeSafe` (Node) and `vsn_parity.py` (spawn `python3`), assert equal raw for all fixtures EXCEPT the signature ones (excluded set from PARITY_CONTRACT).
 
 - [ ] **Step 1: Write the failing test**
@@ -2584,7 +2689,11 @@ test("JS/Python parity on the byte-geometry surface", () => {
     });
     const py = JSON.parse(
       execFileSync("python3", ["tools/simurgh-attestation/stage4w/python/vsn_parity.py"], {
-        input: canonicalJson({ narrative: f.narrative, capsule: g.capsuleBundle.content }),
+        input: canonicalJson({
+          narrative: f.narrative,
+          capsule: g.capsuleBundle.content,
+          capsule_pubkey_pem: g.capsulePubKeyPem,
+        }),
         encoding: "utf8",
       })
     );
@@ -2601,12 +2710,15 @@ test("JS/Python parity on the byte-geometry surface", () => {
       `body.encode("utf-8")` with the same continuation-byte boundary check
       (`(b[o] & 0xC0) != 0x80`), the leakage lists copied verbatim (add a
       header comment: `# MUST byte-match stage4w/constants.mjs LEAKAGE_* lists`),
-      binding digest recompute (`hashlib.sha256(body.encode()).hexdigest()` for
-      the body; `record_digest(span_map)` for the map), locality set check,
+      binding digest recompute of ALL fields (`hashlib.sha256(body.encode()).hexdigest()`
+      for the body; `record_digest(span_map)` for the map; `key_digest(capsule_pubkey_pem)`
+      = `"sha256:" + hashlib.sha256(pem.encode()).hexdigest()` for the fingerprint —
+      the raw PEM string, NOT a DER decode), locality set check,
       slot recompute for `participant_count` / `kernel_block_record` /
       `consent_manifest_scope` / `epoch_range` / `stage4n_beat_index`
       (dict-lookup port of RECOMPUTE_REGISTRY), density recount. Read
-      `{narrative, capsule}` JSON on stdin, print `{"raw": N, "reason": ...}`.
+      `{narrative, capsule, capsule_pubkey_pem}` JSON on stdin, print
+      `{"raw": N, "reason": ...}`.
 
 - [ ] **Step 3: Run — expect PASS across all included fixtures** (byte offsets
       over سیمرغ are the tripwire; if geometry disagrees, the bug is real — fix
@@ -2631,13 +2743,13 @@ git commit -m "feat(4w): Python public-tier parity over the byte-geometry surfac
 **Interfaces:**
 
 - Single static file, `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'">`.
-- Three textareas: capsule content JSON, narrative JSON, (optional) author pub key PEM — plus a Verify button. Renders the typed view: each segment badged `[E]`/`[J]`/`[V]`/`[·]` with distinct colors, density meter bar, raw code + reason on failure. Banner: "Public-tier convenience view — Node CLI is authoritative; signatures are NOT verified here."
+- Three textareas: capsule content JSON, narrative JSON, **capsule public-key PEM** (reviewer P0 #2 — the public tier recomputes `capsule_signing_key_fingerprint` for 166, which needs the CAPSULE key, not the author key; author-signature verification is excluded unless WebCrypto is implemented and parity-gated) — plus a Verify button. Renders the typed view: each segment badged `[E]`/`[J]`/`[V]`/`[·]` with distinct colors, density meter bar, raw code + reason on failure. Banner: "Public-tier convenience view — Node CLI is authoritative; author signatures are NOT verified here."
 - The pure verifier core lives in one `<script id="vsn-core">` block written in browser-compatible JS (TextEncoder available) implementing the SAME public-tier subset as Python (no Ed25519).
 - Parity gate: the e2e test extracts the `vsn-core` script block, runs it in `node:vm`, drives the same included-fixture set through it, asserts raw equality with Node (mirror `tests/e2e/llmShield/stage4v/browserParity.test.js` — read it first and copy its extraction harness).
 
-- [ ] **Step 1: Write the failing e2e test** (copy the 4V browserParity harness; change paths to stage4w, fixture set to the Task 13 included set, and assert on `evaluatePublic(narrative, capsule)` returned by the core block).
+- [ ] **Step 1: Write the failing e2e test** (copy the 4V browserParity harness; change paths to stage4w, fixture set to the Task 13 included set, and assert on `evaluatePublic(narrative, capsule, capsulePubKeyPem)` returned by the core block — the SAME three-arg signature as Python, so 166 fingerprint parity holds across all three implementations).
 
-- [ ] **Step 2: Implement the HTML.** The `vsn-core` block exports (via `globalThis.VSN`) `evaluatePublic`, `renderSegments`, `computeDensity`. Keep rule lists in ONE const block with the header comment `// MUST byte-match stage4w/constants.mjs`.
+- [ ] **Step 2: Implement the HTML.** The `vsn-core` block exports (via `globalThis.VSN`) `evaluatePublic(narrative, capsule, capsulePubKeyPem)`, `renderSegments`, `computeDensity`, and `keyDigest(pem)` = `"sha256:" + sha256Hex(pem)` (hash the raw PEM string — a tiny SHA-256 impl or SubtleCrypto is fine since it is not signature verification). Keep rule lists in ONE const block with the header comment `// MUST byte-match stage4w/constants.mjs`.
 
 - [ ] **Step 3: Run e2e — expect PASS.** Open the file manually in a browser once, paste the green narrative + capsule, screenshot-check the badges and the density meter.
 
@@ -2720,8 +2832,10 @@ public+audit round-trip, bridge digest recompute, Lane B capture re-verify,
 Lane C capture validation (if capture files exist), cross-stage invariants
 (4T green capsule still verifies raw 0 through `evaluateCapsuleSafe`; 4V green
 contest still raw 0 — the byte-frozen neighbours), and the read-only-kernel
-grep (`git diff --stat origin/main -- src/llmShield` empty — mirror how the 4V
-k7 file does this).
+check against the FROZEN PREDECESSOR TAG, not a moving branch ref (reviewer
+P1 #11): `git diff --name-only v2.31.0-stage-4v-vdp -- src/llmShield` MUST be
+empty (4W ships after that tag; comparing to the tag is stable regardless of
+local branch state — mirror how the 4V k7 file does the diff but swap the ref).
 
 - [ ] **Step 1: Write the K7 net** — mirror
       `tests/e2e/llmShield/stage4v/k7AllFunctions.test.js` section-for-section
