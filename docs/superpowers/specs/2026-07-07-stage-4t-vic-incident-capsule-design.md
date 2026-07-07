@@ -16,7 +16,7 @@ endorsement claim.)
 - **Branch:** `stage-4t-vic` · **Target tag:** `v2.30.0-stage-4t-vic`
   (plan verifies against `git tag --sort=-creatordate` before versioning —
   standing 4J gotcha).
-- **Raw codes:** 133–148 (additive in
+- **Raw codes:** 133–150 (additive in
   `tools/simurgh-attestation/stage4h/exitCodes.mjs`; probe hygiene is
   permanent — `UNKNOWN_RAW_PROBE=999` + `exitCodeProbeHygiene.test.js` — but
   the golden ripple is expected and enumerated in §8).
@@ -32,8 +32,11 @@ endorsement claim.)
 > marker, and commits a closed evidence census for that epoch. An unbacked
 > field, tampered or mis-recomputing evidence artifact, omitted census item,
 > smuggled census item, or template-partition gap produces an
-> offline-verifiable raw-code failure. A reviewer who trusts no participant can
-> rerun the capsule end-to-end from pinned inputs.
+> offline-verifiable raw-code failure. Any derived audience view commits to the
+> same capsule root; a view that contradicts the capsule, or redacts a section
+> without declaring the redaction, produces an offline-verifiable raw-code
+> failure. A reviewer who trusts no participant can rerun the capsule — and
+> check any view against it — end-to-end from pinned inputs.
 
 **The four laws of 4T** (each maps to a code cluster, 4S-style):
 
@@ -50,6 +53,9 @@ endorsement claim.)
 4. **Template-pinning law** — the capsule binds to exactly one template
    snapshot digest and the three-way partition over its sections is
    exhaustive. Codes 135 / 136.
+5. **No Two Stories law** (audience views) — every derived view commits to the
+   same capsule root; a view may redact, never contradict, and every redaction
+   is declared and counted. Codes 148 / 149.
 
 ---
 
@@ -118,7 +124,16 @@ census_completeness_is_relative_to_declared_epoch_and_guarded_evidence_sources
 template_partition_reflects_the_pinned_draft_snapshot_not_future_guidance
 requires_human_input_sections_are_left_unfilled_by_design_the_capsule_is_not_a_complete_filing
 lane_b_incident_is_a_staged_contained_near_incident_not_a_field_incident
+redaction_hides_values_not_structure_view_privacy_is_commitment_level_not_an_anonymity_proof
+counter_capsule_contest_deferred
+verified_slot_narrative_deferred
 ```
+
+The last two are **named reserved slots** (the 4P
+`private_custody_corroboration_deferred` pattern): the operator counter-capsule
+contest path (4M respondent lineage, adversarial due process over one census
+root) and the verified-slot narrative for `requires_human_input` sections (3S
+lineage). Each is signed as deferred so a future rung can retire it visibly.
 
 ### 2.3 Honesty rails (spec-time, in this order)
 
@@ -131,6 +146,8 @@ incident_classification_requires_human_input_not_machine_claimed
 browser_verifier_is_a_convenience_view_not_the_authoritative_verifier
 template_snapshot_is_pinned_by_digest_not_claimed_current_guidance
 no_free_text_is_ever_synthesized_into_a_projected_field
+anchor_time_is_evidence_seal_time_not_operator_knowledge_time
+views_may_redact_never_contradict_and_every_redaction_is_ledgered
 chain_held_verifiable_never_agents_safe
 ```
 
@@ -252,6 +269,12 @@ its evidence supports — no more, no less.
     bespoke code), `kernel_block_record`, `epoch_range`,
     `participant_count`, `consent_manifest_scope`, `stage4u_asr`,
     `stage4n_beat_index`.
+    - **Anchored knowability (invention 4):** `evidence_anchored_at_beat` is a
+      first-class projected section (recompute_kind `stage4n_beat_index`):
+      the capsule proves its sealed evidence existed at a public heartbeat
+      position — the first recomputable input an Article-73 deadline argument
+      (15-day / 2-day clocks) has ever had. Rail from birth:
+      `anchor_time_is_evidence_seal_time_not_operator_knowledge_time`.
   - `not_derivable` → bare signed marker (subject to 143).
   - `requires_human_input` → bare signed marker (subject to 144); **never**
     carries a machine value. No free text is ever synthesized.
@@ -279,6 +302,40 @@ Cross-stage reference check (one species, typed detail):
 reproduces red is a valid outcome (§2 outcome semantics) — the incident bundle
 in Lane B is exactly that; 146 fires only on misreproduction.
 
+### 6.1 Tiered audience views — the No Two Stories law (invention 5)
+
+Today a regulator filing, an insurer notice, and a public post about the same
+incident are three unverifiable stories. VIC makes contradiction between them
+cryptographically impossible:
+
+- Every `projected_sections` leaf carries a **salted commitment**
+  (selective-disclosure construction over the existing capsule Merkle tree);
+  the capsule root therefore binds every section value without revealing it.
+- `core/viewCore.mjs` derives **tiered views** from one capsule — e.g.,
+  regulator (full disclosure), insurer (impact + measures, identity-reduced),
+  public (redacted) — each carrying the **same capsule root** and, per
+  section, either the disclosed value + salt (recomputes against the
+  commitment) or a **declared redaction** carrying the bare commitment.
+- **The redactor must ledger the redaction** (4L cardinality lineage): each
+  view commits its redaction count and the exact redacted section ids. A view
+  may hide; it may never hide *that* it hid, and it can never assert a value
+  different from the capsule's — a differing value fails its commitment.
+
+```text
+view section value fails its capsule commitment        → 148 VIEW_INCONSISTENT_WITH_CAPSULE
+view omits a section without a declared redaction,
+or redaction count ≠ declared redacted set             → 149 REDACTION_UNDECLARED
+```
+
+The flagship demo: the Lane B capsule ships with all three views, and the
+public view provably tells the same story as the regulator view, minus its
+ledgered redactions. Honest limitation signed from birth: redaction hides
+values, not structure — this is commitment-level confidentiality, not an
+anonymity proof (§2.2). Prior art differentiation: SD-JWT / verifiable
+credentials do selective disclosure for identity claims; no incident-report
+format has multi-audience views with a redaction census and a
+no-contradiction guarantee (checked in the §13 sweep).
+
 **Consent IOU (4S closeout, retired here):** the 4S constitution row deferred
 "consent-broadening end-to-end" to 4T. It is paid as the **consent field
 group**, not a second blade: the capsule's consent-relevant sections bind to
@@ -291,8 +348,9 @@ breaks. The closeout states the IOU retired in exactly these terms.
 
 - **Lane A — deterministic incident-capsule corpus.** One honest capsule
   (raw 0) over a synthetic-but-real chain (built with 4S machinery and
-  committed fixture keys), plus **one fixture per reachable code 133–147**.
-  148 is defensive, typed-wrapper-only, exercised in unit tests via the
+  committed fixture keys), plus **one fixture per reachable code 133–149**
+  (including tampered-view and undeclared-redaction fixtures for 148/149).
+  150 is defensive, typed-wrapper-only, exercised in unit tests via the
   BigInt-poison pattern (4S precedent) and declared as such in the closeout —
   never smuggled into the corpus count. Byte-stable, no wall clock, no
   network.
@@ -302,7 +360,10 @@ breaks. The closeout states the IOU retired in exactly these terms.
   it (a real 4S code — expected **108** — fires in-process); 4T mints the
   capsule over the contained event, folding the failing chain bundle, kernel
   decision records, 4U attestation reference, 4O consent manifests, and 4N
-  temporal anchor into the sealed census. Ephemeral keys; the committed
+  temporal anchor into the sealed census, and deriving the **three tiered
+  views** (regulator / insurer / public) from the flagship capsule — the
+  public view provably consistent with the regulator view modulo ledgered
+  redactions. Ephemeral keys; the committed
   capture is **re-verified, never regenerated**. Signed framing: this is a
   **staged contained near-incident** (limitation 2.2.4); the seriousness
   classification section is `requires_human_input` — the capsule refusing to
@@ -311,7 +372,7 @@ breaks. The closeout states the IOU retired in exactly these terms.
   process-level ceremony (any future model-driven variant would inherit the
   4U Lane-B safeguard-legibility discipline).
 
-## 8. Raw codes 133–148 + frozen check order + ripple discipline
+## 8. Raw codes 133–150 + frozen check order + ripple discipline
 
 ```text
 133 VIC_CAPSULE_MALFORMED            capsule/manifest/section schema invalid (incl. unknown recompute_kind)
@@ -329,15 +390,17 @@ breaks. The closeout states the IOU retired in exactly these terms.
 145 INCIDENT_EPOCH_MISMATCH          census artifact bound to a different epoch
 146 CROSS_STAGE_REFERENCE_INVALID    referenced attestation fails to reproduce its recorded verdict (typed ref_kind)
 147 ATTESTATION_DIGEST_MISMATCH      two-stage bundle digest ≠ signed digest
-148 INTERNAL_FAIL_CLOSED             typed-wrapper catch-all (mirror of 4S 118 / 4U 132)
+148 VIEW_INCONSISTENT_WITH_CAPSULE   view section value fails its capsule commitment
+149 REDACTION_UNDECLARED             undeclared view omission, or redaction ledger ≠ redacted set
+150 INTERNAL_FAIL_CLOSED             typed-wrapper catch-all (mirror of 4S 118 / 4U 132)
 ```
 
 **Frozen check order** (parse → signatures → template pinning → census → epoch
-→ cross-stage truth → field truth → suppression → attestation seal →
+→ cross-stage truth → field truth → suppression → attestation seal → views →
 fail-closed):
 
 ```text
-133 → 134 → 135 → 136 → 137 → 138 → 139 → 140 → 145 → 146 → 141 → 142 → 143 → 144 → 147 → 148
+133 → 134 → 135 → 136 → 137 → 138 → 139 → 140 → 145 → 146 → 141 → 142 → 143 → 144 → 147 → 148 → 149 → 150
 ```
 
 All rows map to `RUN_LEVEL_BY_RAW` level 1 (a capsule-integrity failure is a
@@ -366,10 +429,15 @@ signed with `INSECURE_FIXTURE_ONLY_vic.pem`; two-stage digest over
   `evidence_backed` section (including rerunning the 4S chain verifier and
   re-verifying the 4U/4O/4N references), and evaluates the suppression law.
   Catches 141–146.
+- **View verification (both tiers):** any presented view is checked against
+  the capsule root — disclosed values against their commitments (148),
+  redaction ledger against the omitted set (149). Verifying a public view
+  requires only the view + the capsule root, never the full capsule.
 - **Browser verifier** (`browser/vic-verifier.html`, reusing the 4M browser
   pattern): one static HTML file, **no network calls, no remote dependency,
-  same canonical digest rules**; drop a capsule, get green/red per template
-  section, export a verification summary. It is a convenience view — the CLI
+  same canonical digest rules**; drop a capsule — or a tiered view — get
+  green/red per template section (views additionally show the redaction
+  ledger), export a verification summary. It is a convenience view — the CLI
   two-tier verifier remains authoritative (rail 2.3.6). Browser↔CLI **parity
   over the full Lane A corpus is a CI/reproduce gate that blocks the tag**,
   not a runtime raw code.
@@ -378,9 +446,10 @@ signed with `INSECURE_FIXTURE_ONLY_vic.pem`; two-stage digest over
 
 `scripts/reproduce-llm-shield-stage4t.sh` — verify-only: rebuild the Lane A
 corpus byte-stably (Node ≥ 26), recompute the capsule + attestation digests,
-verify both tiers, run the browser↔CLI parity gate, re-verify (never
+verify both tiers, verify the three Lane B views against the capsule root,
+run the browser↔CLI parity gate, re-verify (never
 regenerate) the Lane B capture, tamper one census item → expect a census-law
-failure. Guarded Lean step (built only if `lean` is on PATH; CI `lean-check`
+failure, tamper one view value → expect 148. Guarded Lean step (built only if `lean` is on PATH; CI `lean-check`
 covers it otherwise — and `check.sh` must not require lean, the 4R lesson). No
 network, no wall clock.
 
@@ -400,6 +469,10 @@ Three headline theorems, zero `sorry`, Lean 4.15.0, no mathlib:
    omission or addition of a committed item changes the recomputed root:
    exactness relative to declared epoch boundaries and guarded evidence
    sources, never omniscience.
+4. **`noTwoStories`** — a view that verifies against a capsule root cannot
+   assert a section value different from the capsule's (commitment binding,
+   modelled), and a verified view's undisclosed set equals its declared
+   redaction set.
 
 Plus supporting lemmas as needed (e.g., `redVerdictIsOutcomeNotFailure`
 mirroring 4U's `bypassIsOutcomeNotFailure`).
@@ -419,26 +492,29 @@ Article-73 text, TechPolicy.press multi-agent-incidents piece (all already in
 Blackbox / Causality — telemetry, trust-the-writer, no census), SCITT /
 in-toto (artifact notarization, no field recompute, no suppression check), GRC
 incident-reporting tooling (OneTrust-class — workflow, zero recomputability),
-and the project's own 4M projection (25-line surface, one disclosure, no
+SD-JWT / W3C verifiable-credential selective disclosure (identity claims —
+no incident-report format, no redaction census, no template binding), and the
+project's own 4M projection (25-line surface, one disclosure, no
 census, no suppression law — differentiated in §1). Every citation pinned or
 dropped; the Novelty score is conditional on this sweep surviving contact.
 
 ## 14. Four-axis scorecard (pre-score only — re-score at closeout after the prior-art sweep and shipped evidence)
 
-| Axis               | Score | What moves it higher                                                                                                                                                     |
-| ------------------ | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Novelty            | 9.3   | Closed-world recomputable incident report bound to a regulator's own pinned template, with suppression detection (143/144) as the unoccupied half. Survive the §13 sweep. |
-| Frontier           | 9.4   | Article-73 obligations live in the near-term window (AI Act applies 2 Aug 2026); the named regulator gap answered with a shipped artifact, not a paper.                    |
-| Good-for-Anthropic | 9.2   | The evidence substrate under the third-party-ecosystem bet, in the exact shape regulators/insurers consume. A genuinely non-engineer-usable browser verifier raises it.    |
-| Constitution       | 9.3   | Oversight/accountability projected into a rerunnable regulator surface; 4S consent IOU retired; `requires_human_input` is human oversight by construction.                 |
+| Axis               | Score | What moves it higher                                                                                                                                                                                          |
+| ------------------ | ----- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Novelty            | 9.5   | Closed-world recomputable incident report bound to a regulator's own pinned template, with suppression detection (143/144) AND contradiction-proof multi-audience views with a redaction census (148/149) — both halves unoccupied. Survive the §13 sweep. |
+| Frontier           | 9.4   | Article-73 obligations live in the near-term window (AI Act applies 2 Aug 2026); the named regulator gap answered with a shipped artifact, not a paper.                                                            |
+| Good-for-Anthropic | 9.4   | The evidence substrate under the third-party-ecosystem bet — and No Two Stories directly defends a lab's credibility: the public post and the regulator filing provably tell one story. Non-engineer-usable browser verifier raises it further.            |
+| Constitution       | 9.3   | Oversight/accountability projected into a rerunnable regulator surface; 4S consent IOU retired; `requires_human_input` is human oversight by construction; views make honesty-across-audiences structural.        |
 
 ## 15. Comprehensive E2E net + docs-accuracy pass (mandatory before tag)
 
 - `tests/e2e/llmShield/stage4t/k7AllFunctions.test.js` — composes every
-  stage4t export; **full tamper matrix for 133–147, plus a typed-wrapper-only
-  148 fail-closed fixture**; cross-stage invariants (a capsule over a tampered
+  stage4t export; **full tamper matrix for 133–149, plus a typed-wrapper-only
+  150 fail-closed fixture**; cross-stage invariants (a capsule over a tampered
   4S bundle must fail 146/142, never false-GREEN; suppression pair 141↔143
-  exercised as a duel); the no-kernel-touch assertion (4A–4S byte-frozen,
+  exercised as a duel; a view asserting a contradicting value must fail 148,
+  never verify); the no-kernel-touch assertion (4A–4S byte-frozen,
   committed-state git check `git show origin/main:file` vs HEAD — the 4U K7
   lesson).
 - `tests/e2e/llmShield/stage4t/laneb.test.js` — verify-only Lane B ceremony.
@@ -450,12 +526,13 @@ dropped; the Novelty score is conditional on this sweep surviving contact.
 
 ```text
 tools/simurgh-attestation/stage4t/
-  constants.mjs                 schemas, codes 133–148, non-claims, limitations, rails, recompute_kind registry
+  constants.mjs                 schemas, codes 133–150, non-claims, limitations, rails, recompute_kind registry
   template/                     committed Commission template snapshot + digest
   core/templateMap.mjs          pinned snapshot binding + three-way partition, 135/136/137
   core/censusCore.mjs           evidence manifest + merkle seal + epoch binding, 138/139/140/145
   core/projectionCore.mjs       field binding + recompute registry + suppression law, 141/142/143/144
-  core/capsuleCore.mjs          frozen check order + evaluateCapsule / evaluateCapsuleSafe (148), 146/147
+  core/viewCore.mjs             salted commitments + tiered views + redaction ledger, 148/149
+  core/capsuleCore.mjs          frozen check order + evaluateCapsule / evaluateCapsuleSafe (150), 146/147
   node/build-stage4t-fixtures.mjs       Lane A corpus (honest + one per code)
   node/build-stage4t-attestation.mjs    two-stage digest + sign
   node/verify-stage4t-attestation.mjs   --tier public|audit
