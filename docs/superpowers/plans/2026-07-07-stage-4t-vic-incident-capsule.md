@@ -107,9 +107,10 @@ test("VIC codes are 133-150, frozen order, level 1, fail-closed last", () => {
   assert.equal(VIC_RAW_CODES.VIEW_INCONSISTENT_WITH_CAPSULE, 148);
   assert.equal(VIC_RAW_CODES.REDACTION_UNDECLARED, 149);
   assert.equal(VIC_RAW_CODES.INTERNAL_FAIL_CLOSED, 150);
-  assert.deepEqual(VIC_CHECK_ORDER, [
-    133, 134, 135, 136, 137, 138, 139, 140, 145, 146, 141, 142, 143, 144, 147, 148, 149, 150,
-  ]);
+  assert.deepEqual(
+    VIC_CHECK_ORDER,
+    [133, 134, 135, 136, 137, 138, 139, 140, 145, 146, 141, 142, 143, 144, 147, 148, 149, 150]
+  );
   for (let c = 133; c <= 150; c += 1) assert.equal(RUN_LEVEL_BY_RAW[c], 1);
   assert.equal(RUN_LEVEL_BY_RAW[UNKNOWN_RAW_PROBE], undefined);
 });
@@ -184,9 +185,9 @@ cd tools/simurgh-attestation && for n in vic vic-delegator vic-delegatee; do \
 
 - Produces: two committed JSON snapshots, each `{ schema: "simurgh.vic.template_snapshot.v1", regime, source_url, retrieved, transcription_of_record: true, sections: [{ section_id, title }] }`. `section_id` is snake_case, stable, ours; `title` is the Commission's heading text.
 
-- [ ] **Fail-closed rule for this whole task (P1-8):** if the template document cannot be fetched, or its section headings cannot be extracted, **STOP** — do not fall back to the sample JSON below as ground truth. The sample shows only the *shape*; the fetched Commission text is the sole source of section content. A pinned snapshot built from a guess would turn a placeholder into false evidence.
+- [ ] **Fail-closed rule for this whole task (P1-8):** if the template document cannot be fetched, or its section headings cannot be extracted, **STOP** — do not fall back to the sample JSON below as ground truth. The sample shows only the _shape_; the fetched Commission text is the sole source of section content. A pinned snapshot built from a guess would turn a placeholder into false evidence.
 - [ ] **Step 1: Fetch and transcribe the GPAI Art-55 template** from
-  `https://digital-strategy.ec.europa.eu/en/library/ai-act-commission-publishes-reporting-template-serious-incidents-involving-general-purpose-ai` (download the DOCX/PDF; extract the section headings). Transcribe the real section list. Expected shape (VALIDATE against the fetched document and correct — the fetched text wins over this plan):
+      `https://digital-strategy.ec.europa.eu/en/library/ai-act-commission-publishes-reporting-template-serious-incidents-involving-general-purpose-ai` (download the DOCX/PDF; extract the section headings). Transcribe the real section list. Expected shape (VALIDATE against the fetched document and correct — the fetched text wins over this plan):
 
 ```json
 {
@@ -200,8 +201,14 @@ cd tools/simurgh-attestation && for n in vic vic-delegator vic-delegatee; do \
     { "section_id": "model_identification", "title": "GPAI model identification" },
     { "section_id": "incident_dates", "title": "Date(s) of incident and of awareness" },
     { "section_id": "incident_description", "title": "Description of the serious incident" },
-    { "section_id": "incident_classification", "title": "Type / classification of serious incident" },
-    { "section_id": "affected_persons_or_infrastructure", "title": "Affected persons or infrastructure" },
+    {
+      "section_id": "incident_classification",
+      "title": "Type / classification of serious incident"
+    },
+    {
+      "section_id": "affected_persons_or_infrastructure",
+      "title": "Affected persons or infrastructure"
+    },
     { "section_id": "root_cause_analysis", "title": "Root cause / contributing factors" },
     { "section_id": "corrective_measures", "title": "Measures taken or planned" },
     { "section_id": "cross_border_notifications", "title": "Other authorities notified" }
@@ -233,15 +240,23 @@ cd tools/simurgh-attestation && for n in vic vic-delegator vic-delegatee; do \
 ```javascript
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { loadTemplates, verifyTemplateBindings } from "../../../../tools/simurgh-attestation/stage4t/core/templateMap.mjs";
-import { TEMPLATE_SNAPSHOT_DIGESTS, PARTITIONS } from "../../../../tools/simurgh-attestation/stage4t/constants.mjs";
+import {
+  loadTemplates,
+  verifyTemplateBindings,
+} from "../../../../tools/simurgh-attestation/stage4t/core/templateMap.mjs";
+import {
+  TEMPLATE_SNAPSHOT_DIGESTS,
+  PARTITIONS,
+} from "../../../../tools/simurgh-attestation/stage4t/constants.mjs";
 import { recordDigest } from "../../../../tools/simurgh-attestation/stage4m/core/canonical.mjs";
 
 const templates = loadTemplates();
 
 const okBindings = () =>
   Object.entries(TEMPLATE_SNAPSHOT_DIGESTS).map(([regime, d]) => ({
-    regime, template_snapshot_digest: d, partition_digest: recordDigest(PARTITIONS[regime]),
+    regime,
+    template_snapshot_digest: d,
+    partition_digest: recordDigest(PARTITIONS[regime]),
   }));
 
 test("green bindings verify", () => {
@@ -249,29 +264,40 @@ test("green bindings verify", () => {
   assert.equal(verifyTemplateBindings(capsule, templates), null);
 });
 test("135 on tampered snapshot digest", () => {
-  const b = okBindings(); b[0].template_snapshot_digest = "sha256:" + "0".repeat(64);
+  const b = okBindings();
+  b[0].template_snapshot_digest = "sha256:" + "0".repeat(64);
   const r = verifyTemplateBindings({ template_bindings: b, projected_sections: [] }, templates);
   assert.equal(r.raw, 135);
 });
 test("136 on partition gap (binding digest must match the gappy partition, else 135 fires first)", () => {
-  const gappy = { ...PARTITIONS.gpai_art55 }; delete gappy.incident_dates;
+  const gappy = { ...PARTITIONS.gpai_art55 };
+  delete gappy.incident_dates;
   const b = okBindings();
   b.find((x) => x.regime === "gpai_art55").partition_digest = recordDigest(gappy);
-  const r = verifyTemplateBindings(
-    { template_bindings: b, projected_sections: [] }, templates, { partitions: { ...PARTITIONS, gpai_art55: gappy } });
+  const r = verifyTemplateBindings({ template_bindings: b, projected_sections: [] }, templates, {
+    partitions: { ...PARTITIONS, gpai_art55: gappy },
+  });
   assert.equal(r.raw, 136);
 });
 test("136 on EXTRA partition entry (partition superset of snapshot)", () => {
   const extra = { ...PARTITIONS.gpai_art55, invented_section: "not_derivable" };
   const b = okBindings();
   b.find((x) => x.regime === "gpai_art55").partition_digest = recordDigest(extra);
-  const r = verifyTemplateBindings(
-    { template_bindings: b, projected_sections: [] }, templates, { partitions: { ...PARTITIONS, gpai_art55: extra } });
+  const r = verifyTemplateBindings({ template_bindings: b, projected_sections: [] }, templates, {
+    partitions: { ...PARTITIONS, gpai_art55: extra },
+  });
   assert.equal(r.raw, 136);
 });
 test("137 on invented section", () => {
   const r = verifyTemplateBindings(
-    { template_bindings: okBindings(), projected_sections: [{ regime: "gpai_art55", section_id: "invented_section", class: "not_derivable" }] }, templates);
+    {
+      template_bindings: okBindings(),
+      projected_sections: [
+        { regime: "gpai_art55", section_id: "invented_section", class: "not_derivable" },
+      ],
+    },
+    templates
+  );
   assert.equal(r.raw, 137);
 });
 ```
@@ -286,7 +312,12 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { recordDigest } from "../../stage4m/core/canonical.mjs";
-import { TEMPLATE_REGIMES, TEMPLATE_SNAPSHOT_DIGESTS, PARTITIONS, PARTITION_CLASSES } from "../constants.mjs";
+import {
+  TEMPLATE_REGIMES,
+  TEMPLATE_SNAPSHOT_DIGESTS,
+  PARTITIONS,
+  PARTITION_CLASSES,
+} from "../constants.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const FILES = {
@@ -308,9 +339,12 @@ export function verifyTemplateBindings(capsule, templates, opts = {}) {
   for (const regime of TEMPLATE_REGIMES) {
     const binding = (capsule.template_bindings ?? []).find((b) => b.regime === regime);
     const snapshot = templates[regime];
-    if (!binding || binding.template_snapshot_digest !== recordDigest(snapshot) ||
-        binding.template_snapshot_digest !== TEMPLATE_SNAPSHOT_DIGESTS[regime] ||
-        binding.partition_digest !== recordDigest(partitions[regime]))
+    if (
+      !binding ||
+      binding.template_snapshot_digest !== recordDigest(snapshot) ||
+      binding.template_snapshot_digest !== TEMPLATE_SNAPSHOT_DIGESTS[regime] ||
+      binding.partition_digest !== recordDigest(partitions[regime])
+    )
       return { raw: 135, reason: "template_digest_mismatch", detail: { regime } };
     // 136: partition key set must EXACTLY equal the snapshot section set — a missing
     // section OR an extra partition entry both break exhaustiveness.
@@ -320,10 +354,18 @@ export function verifyTemplateBindings(capsule, templates, opts = {}) {
       return { raw: 136, reason: "template_partition_incomplete", detail: { regime } };
     for (const s of snapshot.sections)
       if (!PARTITION_CLASSES.includes(partitions[regime][s.section_id]))
-        return { raw: 136, reason: "template_partition_incomplete", detail: { regime, section_id: s.section_id } };
+        return {
+          raw: 136,
+          reason: "template_partition_incomplete",
+          detail: { regime, section_id: s.section_id },
+        };
     for (const p of capsule.projected_sections ?? [])
       if (p.regime === regime && !snapshotIds.has(p.section_id))
-        return { raw: 137, reason: "template_section_unmapped", detail: { regime, section_id: p.section_id } };
+        return {
+          raw: 137,
+          reason: "template_section_unmapped",
+          detail: { regime, section_id: p.section_id },
+        };
   }
   return null;
 }
@@ -355,6 +397,7 @@ assert.equal(r.raw, 145);
 ```
 
 (The 138/139/140 tests follow the Task-3 pattern: build a 3-item manifest from inline `{kind:"stage4s_chain_bundle",epoch:"ep1",…}` artifacts, mutate, assert `r.raw`. Note `artifactsByDigest` keys must equal `recordDigest(artifact)` for each item so 138 does not spuriously fire.)
+
 - [ ] **Step 2: Run → FAIL.**
 - [ ] **Step 3: Implement:**
 
@@ -373,7 +416,11 @@ export function verifyCensus(capsule, artifactsByDigest) {
   for (const item of manifest.items) {
     const artifact = artifactsByDigest[item.digest];
     if (artifact === undefined || recordDigest(artifact) !== item.digest)
-      return { raw: 138, reason: "evidence_census_missing_item", detail: { kind: item.kind, digest: item.digest } };
+      return {
+        raw: 138,
+        reason: "evidence_census_missing_item",
+        detail: { kind: item.kind, digest: item.digest },
+      };
   }
   const listed = new Set(manifest.items.map((i) => i.digest));
   for (const digest of Object.keys(artifactsByDigest))
@@ -383,7 +430,11 @@ export function verifyCensus(capsule, artifactsByDigest) {
     return { raw: 140, reason: "census_merkle_mismatch", detail: {} };
   for (const item of manifest.items)
     if (item.epoch !== capsule.epoch)
-      return { raw: 145, reason: "incident_epoch_mismatch", detail: { kind: item.kind, item_epoch: item.epoch } };
+      return {
+        raw: 145,
+        reason: "incident_epoch_mismatch",
+        detail: { kind: item.kind, item_epoch: item.epoch },
+      };
   return null;
 }
 ```
@@ -448,7 +499,10 @@ export function verifyCensus(capsule, artifactsByDigest) {
 - **147 two-stage digest — exact formula (P0-7):**
 
 ```javascript
-export const unsignedCapsule = (capsule) => { const { signature, ...body } = capsule; return body; };
+export const unsignedCapsule = (capsule) => {
+  const { signature, ...body } = capsule;
+  return body;
+};
 
 // Two-stage wrapper shape (canonical `content` object — no ambiguous bare fields).
 // Capsule bundle:     { schema: VIC_CAPSULE_BUNDLE_SCHEMA, content: <capsule>, attestation_digest, signature? }
@@ -460,7 +514,8 @@ export function capsuleAttestationDigest(bundle) {
 }
 export function verifySeal(bundle) {
   return bundle.attestation_digest === capsuleAttestationDigest(bundle)
-    ? null : { raw: 147, reason: "attestation_digest_mismatch" };
+    ? null
+    : { raw: 147, reason: "attestation_digest_mismatch" };
 }
 ```
 
