@@ -249,7 +249,16 @@ export function evaluateContest(capsuleBundle, cc, opts = {}) {
     () => payloadCheck(cc),
   ]) {
     const r = check();
-    if (r) return { raw: r.raw, envelope: { ...envelopeBase, result: { refused: true, ...r } } };
+    // The envelope seals only {refused, raw} — the diagnostic reason/detail stay out of
+    // the sealed digest (so JS/Python/browser parity is robust). Diagnostics are returned
+    // to callers separately when needed.
+    if (r)
+      return {
+        raw: r.raw,
+        reason: r.reason,
+        detail: r.detail,
+        envelope: { ...envelopeBase, result: { refused: true, raw: r.raw } },
+      };
   }
 
   const map = deriveConflictMap(capsuleBundle, cc, ctx);
@@ -259,10 +268,8 @@ export function evaluateContest(capsuleBundle, cc, opts = {}) {
   )
     return {
       raw: 160,
-      envelope: {
-        ...envelopeBase,
-        result: { refused: true, raw: 160, reason: "vdp_conflict_map_mismatch" },
-      },
+      reason: "vdp_conflict_map_mismatch",
+      envelope: { ...envelopeBase, result: { refused: true, raw: 160 } },
     };
 
   let filedStatus = "not_supplied";
