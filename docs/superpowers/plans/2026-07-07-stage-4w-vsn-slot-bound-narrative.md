@@ -408,7 +408,10 @@ test("span geometry: overlap, bounds, order, empty, dup id, mid-code-point", () 
   assert.equal(checkSpanGeometry(body, [span("s1", 0, 0)]).raw, 165); // empty
   assert.equal(checkSpanGeometry(body, [span("s1", 0, bytes.length + 1)]).raw, 165); // OOB
   assert.equal(checkSpanGeometry(body, [span("s1", 0, 3), span("s1", 3, 6)]).raw, 165); // dup id
-  assert.equal(checkSpanGeometry(body, [span("s1", 7, 9)]).raw, 165); // mid-UTF-8 code point
+  // "abcdef " is 7 bytes; س starts at byte 7 (a valid boundary) and is 2 bytes, so byte 8
+  // is a continuation byte — a span starting there splits a code point. (No magic numbers.)
+  const mid = Buffer.byteLength("abcdef ") + 1;
+  assert.equal(checkSpanGeometry(body, [span("s1", mid, mid + 2)]).raw, 165); // mid-UTF-8 code point
   assert.equal(checkSpanGeometry(body, [span("s1", -1, 3)]).raw, 165); // negative start (bounds-safe)
 });
 ```
