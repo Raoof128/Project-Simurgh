@@ -161,6 +161,25 @@ test("Stage 4H.4 exit map is explicit and collision-bounded", () => {
       130: 1,
       131: 1,
       132: 1,
+      // Stage 4T VIC codes (reviewed extension of the shared ledger; 4T spec §8).
+      133: 1,
+      134: 1,
+      135: 1,
+      136: 1,
+      137: 1,
+      138: 1,
+      139: 1,
+      140: 1,
+      141: 1,
+      142: 1,
+      143: 1,
+      144: 1,
+      145: 1,
+      146: 1,
+      147: 1,
+      148: 1,
+      149: 1,
+      150: 1,
     })
   );
 });
