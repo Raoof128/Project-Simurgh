@@ -90,6 +90,30 @@ pinned source map). The EU Art-73/Art-55 templates have **no dispute path at
 all** — the regulator receives one story and has no machine-checkable way to
 receive a second one about the same sealed evidence.
 
+The July-2026 field sharpens this three ways (web sweep 2026-07-07; URLs
+re-pinned at plan time):
+
+- **The regulation forces the pair and abandons the disagreement.** Art-73
+  obliges a deployer who identifies a serious incident to inform the provider
+  immediately (guidance: within 24 hours) and the provider to file within 15
+  days — but defines **no mechanism for resolving provider–deployer
+  disagreement** about the incident
+  (https://www.taylorwessing.com/en/insights-and-events/insights/2025/10/eu-ai-act-deep-dive,
+  https://artificialintelligenceact.eu/article/73/). The disagreement is
+  structurally inevitable and structurally unresolved — and the Act applies
+  from 2 August 2026.
+- **No Empty Chair.** California AB 316 (effective 2026-01-01) prohibits a
+  party who "developed, modified, or used" an AI system from asserting the AI
+  autonomously caused the harm
+  (https://btlj.org/2026/06/multi-agent-ai-is-outpacing-the-liability-frameworks-built-for-single-agent-systems/).
+  Nobody may blame the model; the parties must answer **each other** — and no
+  recomputable way to do that exists.
+- **The incident-report ecosystem has no respondent channel.** OECD AIM does
+  not accept open submissions; AIID/AIAAIC run on media coverage, "lacking
+  robust mechanisms for technical input"
+  (https://oecd.ai/en/incidents-methodology, https://arxiv.org/pdf/2501.14778).
+  A company named in an incident entry has no evidence-grade reply anywhere.
+
 4V's answer: **machine-checkable right of reply.** The respondent answers in
 the same recomputation language the operator was forced to speak. Not "the
 accused can complain" — **the accused can recompute back.**
@@ -117,11 +141,16 @@ Concretely, after 4T there remain four unanswered failure modes:
 4. **Strawman contests.** Absent a binding rule, a "response" can quietly
    address a different version, a redacted view, or a paraphrase of the
    report — contest theatre.
+5. **Uncontestable clock.** Art-73's 15-day deadline runs from when a causal
+   link is "established"; 4T made the operator's knowability instant
+   recomputable (`evidence_anchored_at_beat` over the 4N heartbeat), but that
+   instant is still one party's assertion — today nobody can contest WHEN the
+   operator knowably knew.
 
 4V makes each of these a machine-checkable object: (1) a published
 counter-capsule format + verifier; (2) the same census/recompute laws applied
 to the defence; (3) absence rebuttal (§4); (4) the five-field binding tuple
-(§5).
+(§5); (5) the anchor contest (§4a).
 
 ## 2. Non-claims, known limitations, honesty rails (from birth)
 
@@ -134,7 +163,8 @@ to the defence; (3) absence rebuttal (§4); (4) the five-field binding tuple
    `ABSENCE_REBUTTED` are geometry, not vindication.
 4. `not_a_multi_round_appeals_process` — single round; see reserved slots.
 5. `not_an_identity_or_authority_verification_of_the_respondent` — the
-   respondent key proves continuity of one respondent voice, not identity.
+   respondent key proves continuity of one respondent voice, not identity;
+   the self-declared `respondent_role` (§6) is equally unverified.
 6. `python_public_core_does_not_verify_ed25519_signatures` — parity honesty.
 7. `not_a_claim_the_incident_was_prevented_by_this_stage`.
 8. `not_a_claim_partition_rescore_signals_revise_the_capsule` — an
@@ -146,6 +176,11 @@ to the defence; (3) absence rebuttal (§4); (4) the five-field binding tuple
    `surrejoinder_round_deferred` carries it.
 2. **Respondent key provenance is out-of-band.** Self-asserted identity is
    spoofable (the 4R honesty lesson); we sign the gap instead of pretending.
+   External closure path: NIST's AI Agent Standards Initiative (launched
+   2026-02-17) and the NCCoE agent identity/authorization concept paper make
+   verifiable agent identity a live standards track
+   (https://www.nist.gov/news-events/news/2026/02/announcing-ai-agent-standards-initiative-interoperable-and-secure);
+   when it lands, it slots into this limitation without schema change.
 3. **Absence rebuttal is registry-bounded.** The defence can only rebut
    absence through a _registered_ recompute kind; the shared registry bounds
    what can be proven, and we sign that bound.
@@ -155,8 +190,13 @@ to the defence; (3) absence rebuttal (§4); (4) the five-field binding tuple
    a limitation so nobody reads `DISPUTE_RECORDED` as adjudication.
 
 **Reserved (signed) slots:** `surrejoinder_round_deferred` (multi-round due
-process) and `narrative_claim_contest_deferred` (the declared 4W socket:
-contesting prose claims once 4W makes prose claim-checked).
+process); `narrative_claim_contest_deferred` (the declared 4W socket:
+contesting prose claims once 4W makes prose claim-checked); and
+`risk_report_contest_profile_deferred` (projecting the contest mechanism onto
+lab risk-report surfaces — e.g. RSP v3.0 Risk Reports carry external expert
+review with no structured, recomputable dissent channel; the reviewer's
+disagreement today is a quote in a PDF. Signed as ambition, shipped only when
+a real reviewer wants it).
 
 **Rails (each becomes a test or a gate):**
 
@@ -248,6 +288,9 @@ The map also carries:
   never spun as agreement (the 4T "signed absence" move applied to the
   contest itself).
 - `partition_rescore_signals[]` — see §4.
+- `anchor_status` (when an anchor contest is present) — see §4a.
+- the respondent's self-declared `respondent_role`, echoed verbatim so the
+  reader sees WHO (by role) answered — without any identity claim.
 - a binding echo (the §5 tuple), so a conflict map cannot be re-attached to a
   different capsule.
 
@@ -277,6 +320,31 @@ normative 4T partition may have under-claimed derivability.
 rewrites** (non-claim 8): 4V never mutates 4T truth; it proves the partition
 has a contestable pressure point and feeds the next template-revision cycle
 honestly.
+
+## 4a. Invention 2b — the anchor contest (contesting the clock)
+
+Art-73's deadline arguments hinge on WHEN the operator knowably knew; 4T made
+that instant recomputable (`evidence_anchored_at_beat` over the 4N public
+heartbeat) but one-sided. 4V makes it **contestable**: the counter-capsule
+may carry one optional `anchor_contest` — a `dispute_by_recomputation`
+against the capsule's knowability anchor, using the **already-registered**
+`stage4n_beat_index` recompute kind over the respondent's own sealed census.
+
+Mechanics (no new codes, no new machinery — the anchor flows through the
+existing pipeline as the pseudo-section key `meta/evidence_anchored_at_beat`):
+
+- the key participates in `contested_section_set_digest` like any section
+  (so 154 covers it, and a duplicate anchor contest dies there);
+- status derivation uses the `evidence_backed` rows of the §3 table: same
+  beat → `AGREED`; both recompute, different beats → `CONFLICT_PROVEN`;
+  respondent evidence fails → `DISPUTE_FAILED{recompute_failed}`;
+- the conflict map records it as `anchor_status`, alongside the sections.
+
+The first two-sided recomputable timeliness dispute: "we knowably knew at
+beat N" can now be answered with "the public heartbeat shows beat M" — and a
+reviewer adjudicates neither; the geometry speaks. (Standing non-claims
+apply: no deadline-compliance verdict is derived — that is a legal question;
+we prove only where the parties' recomputable clocks conflict.)
 
 ## 5. Invention 3 — No Strawman binding + derived-never-filed conflict map
 
@@ -314,8 +382,15 @@ canonical payload — no unsigned costume jewellery.
 ```text
 counter_capsule
 ├── schema: "simurgh.vdp.counter_capsule.v1"     (signed)
+├── respondent_role: provider | deployer |        ← self-declared (No Empty
+│                    third_party | unspecified       Chair projection onto the
+│                                                    Art-73 pair; guarded by
+│                                                    non-claim 5; 151 enforces
+│                                                    the enum)
 ├── binding                                       ← §5 five-field tuple
 ├── contests[]                                    ← one per contested section
+├── anchor_contest (optional)                     ← §4a; pseudo-section key
+│                                                    meta/evidence_anchored_at_beat
 │   ├── regime / section_id
 │   ├── verb: agree | dispute_by_recomputation | dispute_as_judgment
 │   ├── claimed_value + recompute_kind            (recomputation verbs)
@@ -366,7 +441,9 @@ Fixture families:
    kind over respondent evidence), a `DISPUTE_RECORDED` (signed judgment
    against `root_cause_analysis`), and a `DISPUTE_FAILED{recompute_failed}`
    (the defence caught lying, ledgered, while its other disputes stay
-   valid). Proves mixed outcomes coexist in one contest.
+   valid) — PLUS an anchor contest yielding `CONFLICT_PROVEN` on the
+   knowability beat (§4a) and `respondent_role: deployer` (the Art-73 pair
+   made concrete). Proves mixed outcomes coexist in one contest.
 2. **Tamper matrix:** one fixture per raw code 151–160, built with
    `resignCounterCapsule` (the 4T lesson: mutations break the respondent
    signature first, so 153–160 fixtures are re-signed; only the 152 fixture
@@ -400,7 +477,7 @@ ephemeral keys, harness-computed hashes (the 3V-A rule); committed under
 ## 8. Raw codes 151–161 + frozen check order + ripple discipline
 
 ```text
-151 vdp_counter_capsule_schema_invalid    shape/verbs/non-claims (4T-133 analogue)
+151 vdp_counter_capsule_schema_invalid    shape/verbs/role enum/non-claims (4T-133 analogue)
 152 vdp_respondent_signature_invalid      Ed25519 over canonical body (4T-134)
 153 vdp_binding_mismatch                  any of the five tuple fields   ← No Strawman
 154 vdp_contested_section_set_mismatch    set digest ≠ contests[] OR duplicate section
@@ -504,6 +581,7 @@ current source-map" is the claim; the map is below.
 | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Contestable-AI literature (From Stem to Stern, arXiv:2408.01051; Contestable AI by Design, Minds & Machines 2022; Explainable AI Must Be Contestable, arXiv:2506.01662; Challenging the Machine, arXiv:2406.10430 / Lawfare) | Frameworks, design guidance, "arenas for adversarial debate"                                         | Concedes "existing work does not translate into actionable dispute processes"; no cryptographic binding, no recomputation, no metrics                        |
 | Computational argumentation for contestability (arXiv:2405.10729)                                                                                                                                                            | Formal adjudication of structured arguments — the closest technical relative                         | Adjudicates asserted premises, not sealed recomputable evidence; no binding to a signed report; no census discipline                                         |
+| Multi-agent failure-attribution benchmarks (Agents_Failure_Attribution, ICML 2025 spotlight; "Seeing the Whole Elephant", arXiv:2604.22708)                                                                                  | Automated blame assignment over multi-agent traces                                                   | Attribution by LLM judge — not recomputable, not cryptographically bound, not answerable by the blamed party                                                 |
 | IETF SCITT                                                                                                                                                                                                                   | Append-only transparency for supply-chain statements; multiple statements may reference one artifact | No dispute semantics: statements coexist, nothing adjudicates conflict or rebuts absence                                                                     |
 | C2PA                                                                                                                                                                                                                         | Cryptographic provenance assertions                                                                  | Explicitly no dispute path; assertions accumulate, never contest                                                                                             |
 | CVE/CVD dispute processes                                                                                                                                                                                                    | A real-world "DISPUTED" tag                                                                          | Prose adjudicated by humans at the registry; no recomputation, no evidence discipline                                                                        |
@@ -515,12 +593,12 @@ current source-map" is the claim; the map is below.
 Design-time internal scorecard, not shipped evidence and not a
 literature-complete novelty claim.
 
-| Axis               | Score | Why / what moves it higher                                                                                                                                                                                                                                                 |
-| ------------------ | ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Novelty            | 9.5   | First machine-adjudicable contest path for incident reports; absence rebuttal (contesting what was NOT said) has no matching prior pattern in our current source-map; treated as attackable, not assumed. Higher: an independent third party files a real counter-capsule. |
-| Frontier           | 9.2   | Recomputable disagreement is new verifier geometry; single-round + registry-bounded keeps it short of full due process. Higher: surrejoinder round + narrative contest (the 4W/4X arc).                                                                                    |
-| Good-for-Anthropic | 9.4   | Due process is the missing half of the regulator wedge — reports a lab files (or is named in) become answerable, not just assertable. Higher: real-regime pilot.                                                                                                           |
-| Constitution       | 9.4   | Accountability + contestability made machine-checkable; the accused gets the same evidence law as the accuser. Higher: respondent identity attestation (closing signed limitation 2).                                                                                      |
+| Axis               | Score | Why / what moves it higher                                                                                                                                                                                                                                                                                                              |
+| ------------------ | ----- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Novelty            | 9.5   | First machine-adjudicable contest path for incident reports; absence rebuttal (contesting what was NOT said) and the anchor contest (contesting WHEN they knowably knew) have no matching prior pattern in our current source-map; treated as attackable, not assumed. Higher: an independent third party files a real counter-capsule. |
+| Frontier           | 9.2   | Recomputable disagreement is new verifier geometry; single-round + registry-bounded keeps it short of full due process. Higher: surrejoinder round + narrative contest (the 4W/4X arc).                                                                                                                                                 |
+| Good-for-Anthropic | 9.4   | Due process is the missing half of the regulator wedge — reports a lab files (or is named in) become answerable, not just assertable. Higher: real-regime pilot.                                                                                                                                                                        |
+| Constitution       | 9.4   | Accountability + contestability made machine-checkable; the accused gets the same evidence law as the accuser. Higher: respondent identity attestation (closing signed limitation 2).                                                                                                                                                   |
 
 Re-score at closeout against shipped evidence.
 
@@ -528,7 +606,8 @@ Re-score at closeout against shipped evidence.
 
 K7-style all-functions net composing EVERY export: unit suites per module
 (explicit `*.test.js` globs — never a bare dir, 4K gotcha); the 151–160
-tamper matrix + 161 wrapper; the five-status matrix + `DISPUTE_FAILED`
+tamper matrix + 161 wrapper; the five-status matrix + anchor-contest
+fixtures (§4a) + `DISPUTE_FAILED`
 subreasons + status-locality hard gate; tamper-matrix meta-assertions
 (`only_152_fixture_has_invalid_signature`,
 `all_153_to_160_fixtures_are_validly_resigned`); cross-stage invariants (4T
