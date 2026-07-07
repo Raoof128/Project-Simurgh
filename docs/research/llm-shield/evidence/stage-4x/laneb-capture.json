@@ -1,0 +1,7 @@
+{
+  "schema": "simurgh.vlr.laneb_capture.v1",
+  "match": true,
+  "parent_computed_catch_rate": false,
+  "child_received_committed_ledger_path": false,
+  "child_received_operator_env": false
+}
