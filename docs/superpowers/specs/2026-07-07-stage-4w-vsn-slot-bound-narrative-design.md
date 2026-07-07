@@ -461,6 +461,15 @@ incident-report narrative spans recomputable and contest-addressable from
 sealed evidence.** Source-map claim, not a compliance claim; public wording
 stays provider-agnostic.
 
+**Source-precision guard (closeout obligation):** the wedge figures above are
+as-reported by secondary sources at design time. Before any of them ships in
+a public-facing doc, pin the PRIMARY source (the Oregon order itself for the
+citation/quotation counts and dollar amount; the Charlotin database snapshot
+for the proceedings/countries counts and the 11× trajectory; C2PA spec text
+for the quoted wording; FT/KPMG statements for the withdrawal details) or
+soften to "reported". An anti-fabrication stage must not carry a fuzzy
+citation.
+
 ### Four-axis scorecard
 
 > Design-time internal scorecard, not shipped evidence and not a
