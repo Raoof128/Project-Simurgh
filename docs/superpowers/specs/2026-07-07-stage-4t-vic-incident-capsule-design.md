@@ -42,7 +42,7 @@ endorsement claim.)
 > failure. A reviewer who trusts no participant can rerun the capsule — and
 > check any view against it — end-to-end from pinned inputs.
 
-**The four laws of 4T** (each maps to a code cluster, 4S-style):
+**The five laws of 4T** (each maps to a code cluster, 4S-style):
 
 1. **Field-binding law** (No Hearsay, fabrication side) — every
    `evidence_backed` section carries `{ value, evidence_digest,
@@ -156,7 +156,7 @@ lineage). Each is signed as deferred so a future rung can retire it visibly.
 
 ```text
 capsule_proves_record_completeness_not_harm_causation
-article73_projection_is_template_mapping_not_legal_compliance_claim
+regulatory_projection_is_template_mapping_not_legal_compliance_claim
 actuarial_input_is_evidence_format_not_pricing_advice
 census_is_per_epoch_not_cross_run
 incident_classification_requires_human_input_not_machine_claimed
@@ -185,8 +185,9 @@ templates (each fetched once at plan time, committed under
    55 / GPAI Code of Practice Commitment 9, published 4 Nov 2025): the
    template a frontier-lab provider actually files.
 2. **Second regime — the Article-73 high-risk draft template** (consultation
-   draft; final guidance expected around 2 Aug 2026): the deployment-side
-   regime whose clock sets the wedge timing.
+   draft, current at plan time; if final guidance or template text changes,
+   VIC requires a new pinned snapshot digest and a visible mapping diff): the
+   deployment-side regime whose clock sets the wedge timing.
 
 The capsule carries a `template_bindings[]` entry per regime and projects the
 **same sealed census** onto both partitions — one incident, one census, two
@@ -488,7 +489,7 @@ network, no wall clock.
 
 ## 11. Lean obligations (`proofs/stage4t/NoHearsay.lean`)
 
-Three headline theorems, zero `sorry`, Lean 4.15.0, no mathlib:
+Four headline theorems, zero `sorry`, Lean 4.15.0, no mathlib:
 
 1. **`noHearsay`** — in a verified capsule, every projected field is
    evidence-backed or explicitly declared absent: the three-way partition is
