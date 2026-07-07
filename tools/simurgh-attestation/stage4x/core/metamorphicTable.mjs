@@ -10,6 +10,15 @@ import { canonicalJson } from "../../stage4m/core/canonical.mjs";
 const MONTHS =
   "january|february|march|april|may|june|july|august|september|october|november|december";
 
+// Quantity prefix for the floor MR: a digit OR a spelled number word, optional "percent"/"%",
+// then "of ". Stripping it drops the measurable quantity while preserving the claim.
+const NUMBER_WORD =
+  "zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|hundred|thousand|million|billion|trillion";
+const NUMBER_QUANTITY_OF = new RegExp(
+  `\\b(?:\\d+|${NUMBER_WORD})\\s*(?:percent|%)?\\s+of\\s+`,
+  "i"
+);
+
 // Each relation carries a serialisable `pattern` (for the table digest) and a pure `apply`.
 const RELATIONS = [
   {
@@ -43,11 +52,13 @@ const RELATIONS = [
     apply: (s) => s.replace(/\d[\d,]*/, "a handful of"),
   },
   {
-    // The floor: drop the lexical quantity entirely, keep the claim. Slips BOTH gates.
+    // The floor: drop the lexical quantity entirely (digit OR spelled number), keep the
+    // claim. Slips BOTH gates — the irreducible semantic residue.
     id: "true_semantic_paraphrase",
     family: "true_semantic_paraphrase",
-    pattern: "drop /\\d+\\s*(percent|%)\\s+of\\s+/ (quantity removed, claim preserved)",
-    apply: (s) => s.replace(/\d+\s*(percent|%)\s+of\s+/i, ""),
+    pattern:
+      "drop /(digit|number-word)\\s*(percent|%)?\\s+of\\s+/ (quantity removed, claim preserved)",
+    apply: (s) => s.replace(NUMBER_QUANTITY_OF, ""),
   },
 ];
 
