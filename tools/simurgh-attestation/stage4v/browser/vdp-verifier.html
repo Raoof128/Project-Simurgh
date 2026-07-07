@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'"
+    />
+    <title>Stage 4V — VDP Counter-Capsule Contest Verifier (convenience view)</title>
+    <style>
+      body {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        max-width: 60rem;
+        margin: 2rem auto;
+        padding: 0 1rem;
+        line-height: 1.4;
+      }
+      textarea {
+        width: 100%;
+        min-height: 7rem;
+        font-family: inherit;
+        font-size: 0.85rem;
+      }
+      .banner {
+        background: #fff3cd;
+        border: 1px solid #e0c96b;
+        padding: 0.6rem;
+        border-radius: 4px;
+      }
+      pre {
+        background: #f4f4f4;
+        padding: 0.75rem;
+        overflow-x: auto;
+      }
+      label {
+        font-weight: bold;
+        display: block;
+        margin-top: 0.75rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>VDP — Verifiable Due Process (counter-capsule contest)</h1>
+    <p class="banner">
+      Convenience view — the Node CLI verifier is authoritative. This page recomputes the
+      public-tier conflict map offline (no network; CSP <code>default-src 'none'</code>).
+    </p>
+
+    <!-- prettier-ignore -->
+    <script id="vdp-core">
+      (function (root) {
+        function normalise(value) {
+          if (Array.isArray(value)) return value.map(normalise);
+          if (value && typeof value === "object") {
+            const out = {};
+            for (const key of Object.keys(value).sort()) out[key] = normalise(value[key]);
+            return out;
+          }
+          return value;
+        }
+        function canonicalJson(value) { return JSON.stringify(normalise(value)); }
+        const K = new Uint32Array([
+          0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,
+          0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,
+          0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,
+          0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,
+          0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,
+          0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,
+          0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,
+          0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2,
+        ]);
+        function utf8Bytes(str) {
+          const out = [];
+          for (let i = 0; i < str.length; i++) {
+            let c = str.codePointAt(i);
+            if (c > 0xffff) i++;
+            if (c < 0x80) out.push(c);
+            else if (c < 0x800) out.push(0xc0 | (c >> 6), 0x80 | (c & 63));
+            else if (c < 0x10000) out.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));
+            else out.push(0xf0 | (c >> 18), 0x80 | ((c >> 12) & 63), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));
+          }
+          return out;
+        }
+        function sha256Hex(str) {
+          const bytes = utf8Bytes(str);
+          const bitLen = bytes.length * 8;
+          bytes.push(0x80);
+          while (bytes.length % 64 !== 56) bytes.push(0);
+          for (let i = 7; i >= 0; i--) bytes.push(Math.floor(bitLen / 2 ** (8 * i)) & 0xff);
+          const h = new Uint32Array([0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19]);
+          const w = new Uint32Array(64);
+          const rotr = (x, n) => (x >>> n) | (x << (32 - n));
+          for (let off = 0; off < bytes.length; off += 64) {
+            for (let t = 0; t < 16; t++) {
+              const i = off + t * 4;
+              w[t] = (bytes[i] << 24) | (bytes[i + 1] << 16) | (bytes[i + 2] << 8) | bytes[i + 3];
+            }
+            for (let t = 16; t < 64; t++) {
+              const s0 = rotr(w[t - 15], 7) ^ rotr(w[t - 15], 18) ^ (w[t - 15] >>> 3);
+              const s1 = rotr(w[t - 2], 17) ^ rotr(w[t - 2], 19) ^ (w[t - 2] >>> 10);
+              w[t] = (w[t - 16] + s0 + w[t - 7] + s1) | 0;
+            }
+            let [a, b, c, d, e, f, g, hh] = h;
+            for (let t = 0; t < 64; t++) {
+              const S1 = rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25);
+              const ch = (e & f) ^ (~e & g);
+              const t1 = (hh + S1 + ch + K[t] + w[t]) | 0;
+              const S0 = rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22);
+              const maj = (a & b) ^ (a & c) ^ (b & c);
+              const t2 = (S0 + maj) | 0;
+              hh = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;
+            }
+            h[0] = (h[0] + a) | 0; h[1] = (h[1] + b) | 0; h[2] = (h[2] + c) | 0; h[3] = (h[3] + d) | 0;
+            h[4] = (h[4] + e) | 0; h[5] = (h[5] + f) | 0; h[6] = (h[6] + g) | 0; h[7] = (h[7] + hh) | 0;
+          }
+          return [...h].map((x) => (x >>> 0).toString(16).padStart(8, "0")).join("");
+        }
+        const recordDigest = (v) => "sha256:" + sha256Hex(canonicalJson(v));
+        const keyDigest = (pem) => "sha256:" + sha256Hex(pem);
+
+        const ABSENCE = { not_derivable: 1, requires_human_input: 1 };
+        const RAW_CONTENT_KEYS = { judgment_text:1, raw_prose:1, provider_notes:1, operator_summary:1, prompt:1, transcript:1, note:1, text:1, body:1 };
+        const TOP_LEVEL_KEYS = { schema:1, respondent_role:1, binding:1, contests:1, anchor_contest:1, filed_at_beat:1, respondent_census:1, respondent_evidence_artifacts:1, non_claims:1, respondent_key_digest:1, signature:1 };
+        const RECOMPUTE_CONTEST_KEYS = { regime:1, section_id:1, verb:1, claimed_value:1, recompute_kind:1, evidence_digest:1 };
+        const JUDGMENT_CONTEST_KEYS = { regime:1, section_id:1, verb:1, judgment_text_digest:1 };
+        const VERBS = { agree:1, dispute_by_recomputation:1, dispute_as_judgment:1 };
+        const ROLES = { provider:1, deployer:1, third_party:1, unspecified:1 };
+        const KIND_EVIDENCE_SOURCE = { stage4s_chain_verdict:"stage4s_chain_bundle", kernel_block_record:"kernel_decision_records", epoch_range:"stage4s_chain_bundle", participant_count:"stage4s_chain_bundle", consent_manifest_scope:"stage4o_consent_manifests", stage4u_asr:"stage4u_attestation_ref", stage4n_beat_index:"stage4n_temporal_anchor" };
+        const DIGEST_RE = /^sha256:[0-9a-f]{64}$/;
+        // Partitions must match tools/simurgh-attestation/stage4t/constants.mjs.
+        const PARTITIONS = ROOT_PARTITIONS();
+        function ROOT_PARTITIONS() {
+          return {
+            gpai_art55: { incident_dates:"evidence_backed", resulting_harm:"requires_human_input", chain_of_events:"evidence_backed", model_involved:"requires_human_input", evidence_available:"not_derivable", serious_incident_response:"evidence_backed", recommendation:"requires_human_input", root_cause_analysis:"requires_human_input", post_market_monitoring_patterns:"not_derivable", submitter_information:"requires_human_input" },
+            art73_high_risk_draft: { admin_authority:"requires_human_input", report_dates_classification:"evidence_backed", submitter_information:"requires_human_input", system_categorisation:"requires_human_input", system_description:"requires_human_input", incident_nature:"requires_human_input", users_affected:"evidence_backed", remedial_actions:"evidence_backed", initial_reporter:"requires_human_input", provider_preliminary_comments:"requires_human_input", cause_investigation:"requires_human_input", general_comments:"not_derivable" },
+          };
+        }
+        const recompute = (kind, a) => {
+          if (kind === "epoch_range") return a.range;
+          if (kind === "participant_count") return (a.participants || []).length;
+          if (kind === "kernel_block_record") return (a.decisions || []).filter((d) => d.decision === "blocked").length;
+          if (kind === "stage4s_chain_verdict") return a.recorded_verdict;
+          if (kind === "consent_manifest_scope") return a.scope;
+          if (kind === "stage4u_asr") return a.attack_success_rate;
+          if (kind === "stage4n_beat_index") return a.beat_index;
+          return undefined;
+        };
+        const eq = (a, b) => canonicalJson(a) === canonicalJson(b);
+        const artIndex = (cc) => Object.fromEntries((cc.respondent_evidence_artifacts || []).map((a) => [recordDigest(a), a]));
+        const tuples = (cc) => [
+          ...(cc.contests || []).map((c) => ({ regime: c.regime, section_id: c.section_id })),
+          ...(cc.anchor_contest ? [{ regime: "meta", section_id: "evidence_anchored_at_beat" }] : []),
+        ];
+        const keyString = (t) => t.regime + "/" + t.section_id;
+        const sortKey = (t) => JSON.stringify([t.regime, t.section_id]);
+        const setDigest = (ts) => recordDigest([...ts].sort((a, b) => (sortKey(a) < sortKey(b) ? -1 : sortKey(a) > sortKey(b) ? 1 : 0)));
+
+        function deriveSectionStatus(contest, cls, operatorValue, artifacts) {
+          if (cls === undefined) return { status: "DISPUTE_FAILED", subreason: "section_not_contestable" };
+          if (contest.verb === "dispute_as_judgment") return { status: "DISPUTE_RECORDED" };
+          if (contest.verb === "agree" && ABSENCE[cls]) return { status: "DISPUTE_FAILED", subreason: "section_not_contestable" };
+          const artifact = artifacts[contest.evidence_digest];
+          const expectedKind = KIND_EVIDENCE_SOURCE[contest.recompute_kind];
+          const kindOk = artifact !== undefined && expectedKind !== undefined && artifact.kind === expectedKind;
+          if (!kindOk) return { status: "DISPUTE_FAILED", subreason: "recompute_failed" };
+          const recomputed = recompute(contest.recompute_kind, artifact);
+          if (contest.verb === "agree") return eq(recomputed, operatorValue) ? { status: "AGREED", respondent_value: recomputed } : { status: "DISPUTE_FAILED", subreason: "recompute_failed" };
+          if (!eq(recomputed, contest.claimed_value)) return { status: "DISPUTE_FAILED", subreason: "recompute_failed" };
+          if (ABSENCE[cls]) return { status: "ABSENCE_REBUTTED", respondent_value: contest.claimed_value };
+          return eq(contest.claimed_value, operatorValue) ? { status: "AGREED", respondent_value: contest.claimed_value } : { status: "CONFLICT_PROVEN", respondent_value: contest.claimed_value };
+        }
+        function deriveConflictMap(capsuleBundle, cc) {
+          const capsule = capsuleBundle.content;
+          const artifacts = artIndex(cc);
+          const opByKey = {};
+          for (const p of capsule.projected_sections || []) opByKey[keyString(p)] = p;
+          const sections = (cc.contests || []).map((contest) => {
+            const key = keyString(contest);
+            const cls = (PARTITIONS[contest.regime] || {})[contest.section_id];
+            const op = opByKey[key];
+            const derived = deriveSectionStatus(contest, cls, op ? op.value : undefined, artifacts);
+            const e = { key, verb: contest.verb, operator_class: cls === undefined ? null : cls };
+            if (op && op.value !== undefined) e.operator_value = op.value;
+            return Object.assign(e, derived);
+          });
+          let anchor_status;
+          if (cc.anchor_contest) {
+            const s = deriveSectionStatus(cc.anchor_contest, "evidence_backed", (capsule.evidence_anchored_at_beat || {}).value, artifacts);
+            anchor_status = Object.assign({ key: "meta/evidence_anchored_at_beat" }, s);
+          }
+          const contested = {};
+          for (const t of tuples(cc)) contested[keyString(t)] = 1;
+          const uncontested = [];
+          for (const r of Object.keys(PARTITIONS)) for (const s of Object.keys(PARTITIONS[r])) { const k = r + "/" + s; if (!contested[k]) uncontested.push(k); }
+          uncontested.sort();
+          const rescore = sections.filter((s) => s.status === "ABSENCE_REBUTTED").map((s) => ({ key: s.key, note: "review_signal_not_automatic_rewrite" }));
+          const out = { schema: "simurgh.vdp.conflict_map.v1", binding: cc.binding, respondent_role: cc.respondent_role, sections };
+          if (anchor_status) out.anchor_status = anchor_status;
+          out.uncontested_sections = uncontested;
+          out.partition_rescore_signals = rescore;
+          return out;
+        }
+        function contestShapeError(c) {
+          if (!c || typeof c !== "object") return 151;
+          if (!VERBS[c.verb]) return 151;
+          if (typeof c.regime !== "string" || typeof c.section_id !== "string" || !c.regime || !c.section_id || c.regime.indexOf("/") >= 0 || c.section_id.indexOf("/") >= 0) return 151;
+          const allowed = c.verb === "dispute_as_judgment" ? JUDGMENT_CONTEST_KEYS : RECOMPUTE_CONTEST_KEYS;
+          for (const k of Object.keys(c)) { if (RAW_CONTENT_KEYS[k]) continue; if (!allowed[k]) return 151; }
+          if (c.verb !== "dispute_as_judgment") { if (c.claimed_value === undefined || typeof c.recompute_kind !== "string" || !DIGEST_RE.test(c.evidence_digest || "")) return 151; }
+          return null;
+        }
+        function schemaCheck(cc) {
+          if (!cc || typeof cc !== "object" || cc.schema !== "simurgh.vdp.counter_capsule.v1") return 151;
+          for (const k of Object.keys(cc)) { if (RAW_CONTENT_KEYS[k]) continue; if (!TOP_LEVEL_KEYS[k]) return 151; }
+          if (!ROLES[cc.respondent_role]) return 151;
+          if (!Array.isArray(cc.contests) || cc.contests.length === 0) return 151;
+          const group = [...cc.contests, ...(cc.anchor_contest ? [cc.anchor_contest] : []), ...(cc.filed_at_beat ? [cc.filed_at_beat] : [])];
+          for (const c of group) { const e = contestShapeError(c); if (e) return e; }
+          if (!Array.isArray((cc.respondent_census || {}).items)) return 151;
+          return null;
+        }
+        function bindingCheck(cc, capsuleBundle, capsulePubKeyPem) {
+          const ts = tuples(cc);
+          const b = cc.binding || {};
+          const exp = {
+            capsule_root: capsuleBundle.content.capsule_root,
+            attestation_digest: capsuleBundle.attestation_digest,
+            capsule_schema_version: "simurgh.vic.capsule.v1",
+            capsule_signing_key_fingerprint: keyDigest(capsulePubKeyPem),
+          };
+          for (const f of ["capsule_root", "attestation_digest", "capsule_schema_version", "capsule_signing_key_fingerprint"]) if (b[f] !== exp[f]) return 153;
+          const keys = ts.map(keyString);
+          if (new Set(keys).size !== keys.length) return 154;
+          if (b.contested_section_set_digest !== setDigest(ts)) return 154;
+          return null;
+        }
+        function censusCheck(cc, capsuleEpoch) {
+          const manifest = cc.respondent_census || {};
+          const byDigest = artIndex(cc);
+          for (const item of manifest.items || []) { const art = byDigest[item.digest]; if (art === undefined || recordDigest(art) !== item.digest) return 155; }
+          const listed = new Set((manifest.items || []).map((i) => i.digest));
+          for (const d of Object.keys(byDigest)) if (!listed.has(d)) return 156;
+          if (merkleRootSorted((manifest.items || []).map(recordDigest)) !== manifest.census_root) return 157;
+          for (const item of manifest.items || []) if (item.epoch !== capsuleEpoch) return 158;
+          const refs = new Set();
+          for (const c of [...(cc.contests || []), ...(cc.anchor_contest ? [cc.anchor_contest] : []), ...(cc.filed_at_beat ? [cc.filed_at_beat] : [])]) if (typeof c.evidence_digest === "string") refs.add(c.evidence_digest);
+          for (const d of refs) if (!listed.has(d)) return 156;
+          return null;
+        }
+        function payloadCheck(cc) {
+          for (const k of Object.keys(cc)) if (RAW_CONTENT_KEYS[k]) return 159;
+          const group = [...cc.contests, ...(cc.anchor_contest ? [cc.anchor_contest] : []), ...(cc.filed_at_beat ? [cc.filed_at_beat] : [])];
+          for (const c of group) { for (const k of Object.keys(c)) if (RAW_CONTENT_KEYS[k]) return 159; if (c.verb === "dispute_as_judgment" && !DIGEST_RE.test(c.judgment_text_digest || "")) return 159; }
+          return null;
+        }
+        function merkleRootSorted(digests) {
+          if (digests.length === 0) return "sha256:" + sha256Hex("vxd-empty");
+          let level = [...digests].sort();
+          while (level.length > 1) {
+            const next = [];
+            for (let i = 0; i < level.length; i += 2) { if (i + 1 === level.length) next.push(level[i]); else next.push("sha256:" + sha256Hex(level[i] + "|" + level[i + 1])); }
+            level = next;
+          }
+          return level[0];
+        }
+        // Bounded convenience pre-verify: recompute the capsule two-stage seal (147-analogue).
+        // The Node CLI runs the full 4T verifier; the browser view checks the seal only.
+        function capsuleReverify(bundle) {
+          const digest = recordDigest({ schema: bundle.schema, content: bundle.content });
+          return digest === bundle.attestation_digest ? 0 : 147;
+        }
+        // Public-tier contest evaluation (no Ed25519 152). Returns { raw, envelope }.
+        function evaluateContestPublic(capsuleBundle, cc, capsulePubKeyPem, expectedConflictMap) {
+          const reverify = capsuleReverify(capsuleBundle);
+          const base = { schema: "simurgh.vdp.contest_outcome.v1", capsule_reverify_result: reverify, filed_at_beat_status: "not_supplied" };
+          if (reverify !== 0) return { raw: reverify, envelope: Object.assign({}, base, { result: { refused: true, raw: reverify } }) };
+          for (const raw of [schemaCheck(cc), bindingCheck(cc, capsuleBundle, capsulePubKeyPem), censusCheck(cc, capsuleBundle.content.epoch), payloadCheck(cc)]) {
+            if (raw) return { raw, envelope: Object.assign({}, base, { result: { refused: true, raw } }) };
+          }
+          const map = deriveConflictMap(capsuleBundle, cc);
+          if (expectedConflictMap !== undefined && recordDigest(expectedConflictMap) !== recordDigest(map)) return { raw: 160, envelope: Object.assign({}, base, { result: { refused: true, raw: 160 } }) };
+          let filed = "not_supplied";
+          if (cc.filed_at_beat) { const s = deriveSectionStatus(cc.filed_at_beat, "evidence_backed", cc.filed_at_beat.claimed_value, artIndex(cc)); filed = s.status === "AGREED" ? "VERIFIED" : "FAILED"; }
+          return { raw: 0, envelope: Object.assign({}, base, { filed_at_beat_status: filed, result: map }) };
+        }
+        root.VDP = { canonicalJson, recordDigest, keyDigest, deriveSectionStatus, deriveConflictMap, evaluateContestPublic };
+      })(typeof globalThis !== "undefined" ? globalThis : this);
+    </script>
+
+    <label for="capsuleIn">Incident capsule bundle (JSON)</label>
+    <textarea id="capsuleIn"></textarea>
+    <label for="ccIn">Counter-capsule (JSON)</label>
+    <textarea id="ccIn"></textarea>
+    <label for="pubIn">Capsule public key (PEM)</label>
+    <textarea id="pubIn"></textarea>
+    <p><button id="run">Derive outcome</button></p>
+    <pre id="out">(paste inputs and press Derive)</pre>
+
+    <script>
+      document.getElementById("run").addEventListener("click", function () {
+        const out = document.getElementById("out");
+        try {
+          const capsule = JSON.parse(document.getElementById("capsuleIn").value);
+          const cc = JSON.parse(document.getElementById("ccIn").value);
+          const pub = document.getElementById("pubIn").value;
+          const res = globalThis.VDP.evaluateContestPublic(capsule, cc, pub);
+          const lines = ["raw = " + res.raw];
+          if (res.envelope.result && res.envelope.result.sections)
+            for (const s of res.envelope.result.sections) lines.push(s.key + " -> " + s.status + (s.subreason ? " (" + s.subreason + ")" : ""));
+          if (res.envelope.result && res.envelope.result.anchor_status) lines.push("anchor -> " + res.envelope.result.anchor_status.status);
+          out.textContent = lines.join("\n");
+        } catch (e) {
+          out.textContent = "error: " + e.message;
+        }
+      });
+    </script>
+  </body>
+</html>
