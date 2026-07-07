@@ -2178,7 +2178,7 @@ git commit -m "test(4w): Lane A corpus — green + 20 tamper cases incl Brigandi
 
 **Interfaces:**
 
-- Child: reads `{capsule_projection, binding, laneb_priv_key_pem, laneb_pub_key_pem}` JSON on stdin (projection = `projected_sections` with class/value/recompute*kind/evidence_digest ONLY — no raw `evidence_artifacts`), deterministically drafts body+span_map, signs with its OWN ephemeral Lane-B author key (delivered over stdin, its PUBLIC pem sealed in the capture), writes the signed narrative JSON to stdout. **Honest scope of blindness:** the child receives only the public capsule projection as evidence input, PLUS its own ephemeral signing key over stdin — it receives no raw capsule evidence, no operator private key, and no operator working state. Refuses to start if any env key matches `/^OPERATOR(*|$)/`or argv contains`.pem` (those are the blindness surfaces; the key arrives on stdin, never argv/env).
+- Child: reads a stdin JSON object with the keys `capsule_projection`, `binding`, `laneb_priv_key_pem`, and `laneb_pub_key_pem` (projection = `projected_sections` carrying only `class` / `value` / `recompute_kind` / `evidence_digest` — no raw `evidence_artifacts`), deterministically drafts the body and the span map, signs with its OWN ephemeral Lane-B author key (delivered over stdin, its PUBLIC pem sealed in the capture), writes the signed narrative JSON to stdout. **Honest scope of blindness:** the child receives only the public capsule projection as evidence input, PLUS its own ephemeral signing key over stdin — it receives no raw capsule evidence, no operator private key, and no operator working state. The blindness guard (exact code below) is `if (/^OPERATOR(_|$)/.test(k)) exit` over every env-var name `k`, matching the name `OPERATOR` alone or any name beginning `OPERATOR` immediately followed by an underscore; it also exits if any argv entry ends in `.pem`. Those are the blindness surfaces; the ephemeral key arrives on stdin, never via argv or env.
 - Parent: spawns child via `node` with a SCRUBBED env (`{PATH}` only), pipes the projection, verifies the child's narrative to raw 0 with `evaluateNarrativeSafe`, seals `{schema: VSN_LANEB_CAPTURE_SCHEMA, narrative, verify_raw: 0, density, laneb_author_pub_key_pem, child_input_profile: {evidence_input: "capsule_public_projection_only", signing_key_delivery: "stdin_child_author_key", operator_private_state_visible: false}, component_hashes: {capsule_projection, narrative, density}, blindness: {env_keys_scrubbed: true, negatives: [...]}}` to `docs/research/llm-shield/evidence/stage-4w/laneb/capture.json` (canonicalJson, byte-stable). `component_hashes` are harness-computed (`recordDigest`) so Task 10 verify + Task 16 reproduce can rederive them (the 3V-A doctrine).
 - Blindness negatives sealed: (1) child started with `OPERATOR_SECRET=x` env → child exits non-zero; (2) child argv containing `fake.pem` → child exits non-zero. Parent records both exit codes in the capture.
 
@@ -2655,6 +2655,25 @@ git commit -m "feat(4w): Lane C live drafting capture (digest-only, +adversarial
 
 - Python module mirrors the PUBLIC tier: `normalise_body`, `check_normalisation`, `check_span_geometry` (UTF-8 byte offsets via `str.encode("utf-8")`), `uncovered_regions`, `scan_leakage` (port the frozen lists EXACTLY from constants.mjs), `narrative_body_digest`, `span_map_digest` (port `canonical_json` from the existing `stage4t/python/vic_parity.py` — import it: `from vic_parity import canonical_json` pattern used by 4V), `key_digest(pem) -> "sha256:"+sha256(pem.encode()).hexdigest()` (reviewer P1 #7 — `keyDigest` hashes the raw PEM STRING, NOT a DER decode, so parity is one line and 166 is FULLY covered including `capsule_signing_key_fingerprint`), `compute_evidence_density`, `evaluate_public(narrative, capsule, capsule_pubkey_pem) -> {"raw": int, ...}` running 162(partial: keys/types)→164→165→166(ALL binding fields incl. fingerprint)→167→169(value-vs-projection equality + registry recompute for the self-contained kinds)→170. Ed25519 SIGNATURE verification (163) EXCLUDED — parity contract line.
 - Node test drives parity: run every Lane A fixture through BOTH `evaluateNarrativeSafe` (Node) and `vsn_parity.py` (spawn `python3`), assert equal raw for all fixtures EXCEPT the signature ones (excluded set from PARITY_CONTRACT).
+- **PEM-byte parity caveat:** `keyDigest` hashes the EXACT PEM string bytes (incl. its trailing newline). The parity gate feeds the fixture PEM verbatim (read from disk, not re-serialised), so JS/Python/browser agree; for the manual browser paste, the PEM must be pasted exactly (trailing newline included) or the 166 fingerprint will differ — note this in the browser banner.
+
+- [ ] **Step 0: Preflight — pin the `keyDigest` formula empirically (reviewer P1 #2).** Confirm `keyDigest` is sha256 of the RAW PEM string, not SPKI-DER, before writing the Python/browser port. VERIFIED 2026-07-07 on the `vdp` fixture key: `keyDigest(pem) === "sha256:"+sha256(pem)` matched; the SPKI-DER digest did NOT. Re-confirm on a stage4w key:
+
+```bash
+node --input-type=module <<'NODE'
+import { keyDigest } from "./tools/simurgh-attestation/stage4s/core/receiptBuilder.mjs";
+import { createHash, createPublicKey } from "node:crypto";
+import { readFileSync } from "node:fs";
+const pem = readFileSync("tests/fixtures/llmShield/stage4w/test-keys/INSECURE_FIXTURE_ONLY_vsn-author.pub.pem", "utf8");
+const rawPem = "sha256:" + createHash("sha256").update(pem).digest("hex");
+const spkiDer = "sha256:" + createHash("sha256").update(createPublicKey(pem).export({ type: "spki", format: "der" })).digest("hex");
+console.log("keyDigest:", keyDigest(pem));
+console.log("rawPem   :", rawPem, keyDigest(pem) === rawPem ? "<-- USE THIS" : "");
+console.log("spkiDer  :", spkiDer, keyDigest(pem) === spkiDer ? "<-- (would use this instead)" : "");
+NODE
+```
+
+Expected: `keyDigest === rawPem`. If a future Node version ever changes this, the port follows `keyDigest`, never the prose.
 
 - [ ] **Step 1: Write the failing test**
 
