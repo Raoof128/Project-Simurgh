@@ -301,14 +301,13 @@ recompute_kind }`. The audit tier recomputes `value` from the cited
     the chain verdict is just another field — a mismatch is **142**, no
     bespoke code), `kernel_block_record`, `epoch_range`,
     `participant_count`, `consent_manifest_scope`, `stage4u_asr`,
-    `stage4n_beat_index`.
-    - **Anchored knowability (invention 4):** `evidence_anchored_at_beat` is a
-      first-class projected section (recompute_kind `stage4n_beat_index`):
-      the capsule proves its sealed evidence existed at a public heartbeat
-      position — the first recomputable input an Article-73 deadline argument
-      (15-day general / 10-day death / 2-day critical-infrastructure clocks)
-      has ever had. Rail from birth:
-      `anchor_time_is_evidence_seal_time_not_operator_knowledge_time`.
+    `stage4n_beat_index`. - **Anchored knowability (invention 4):** `evidence_anchored_at_beat` is a
+    first-class projected section (recompute_kind `stage4n_beat_index`):
+    the capsule proves its sealed evidence existed at a public heartbeat
+    position — the first recomputable input an Article-73 deadline argument
+    (15-day general / 10-day death / 2-day critical-infrastructure clocks)
+    has ever had. Rail from birth:
+    `anchor_time_is_evidence_seal_time_not_operator_knowledge_time`.
   - `not_derivable` → bare signed marker (subject to 143).
   - `requires_human_input` → bare signed marker (subject to 144); **never**
     carries a machine value. No free text is ever synthesized.
