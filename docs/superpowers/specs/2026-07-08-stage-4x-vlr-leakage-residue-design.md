@@ -20,9 +20,9 @@ of scope — see §1 "Explicitly out of scope"), and instead by **measuring the
 gate's residue against a frozen, dual-provenance corpus and shrinking the
 bound.**
 
-**The wound it attacks.** 4W signed the sentence *"paraphrase smuggling
+**The wound it attacks.** 4W signed the sentence _"paraphrase smuggling
 ('almost nobody was affected') can evade any lexical detector — we bound
-syntactic smuggling only."* That is prose. A regulator or court filing an
+syntactic smuggling only."_ That is prose. A regulator or court filing an
 Art-73 narrative through VSN today cannot answer the operational question:
 **which misleading claims does `vsn.leakage.v1` actually miss, and how big is
 that gap?** A signed limitation with no number is a confession without a
@@ -42,10 +42,10 @@ makes the number smaller.
 leakage gate's own residue.** For a frozen corpus of claim-bearing prose, each
 item is a real quantitative **seed** the gate catches plus a declared
 **metamorphic relation** from a frozen, signed transform table; the paraphrase
-**residue** form is *derived* as a pure function of the seed (not hand-authored),
+**residue** form is _derived_ as a pure function of the seed (not hand-authored),
 so a reviewer reproduces the entire residue set byte-for-byte from the seeds and
 the signed table. Each item carries a machine-checkable ground-truth label of
-whether it *carries a claim*.
+whether it _carries a claim_.
 The verifier runs the real `vsn.leakage.v1` gate over every item, compares to
 the sealed ground truth, and emits a **signed residue ledger**: catch-rate
 N/M, the exact residue set R, and per-family breakdown. Then it defines an
@@ -60,17 +60,17 @@ and signed, not asserted.
 
 - `enumerated` — author-constructed paraphrase families spanning the gap
   top-down (digit→word-quantifier, exact→hedged, percent→fraction-phrase).
-  Gives *coverage*: the family taxonomy is auditable and near-complete over
+  Gives _coverage_: the family taxonomy is auditable and near-complete over
   the lexical gate's declared rule set.
-- `incident_sourced` — smuggling *shapes* lifted from real documented
+- `incident_sourced` — smuggling _shapes_ lifted from real documented
   failures (court-sanctioned fabricated-citation / false-quotation phrasings;
-  the withdrawn-report claim patterns). Gives *grounded discovery*: the misses
+  the withdrawn-report claim patterns). Gives _grounded discovery_: the misses
   are real-world misses, not only imagined ones. **Only the linguistic shape
   is reused; no third party is named as a claim in shipped evidence, and every
   figure is pinned or softened per the source-precision guard.**
 
-Fusing them answers both reviewer questions at once — *is your test space
-principled?* (enumerated) and *does it reflect what actually goes wrong?*
+Fusing them answers both reviewer questions at once — _is your test space
+principled?_ (enumerated) and _does it reflect what actually goes wrong?_
 (incident_sourced) — and the dual-provenance residue map is the new geometry:
 nobody publishes their own gate's measured miss set against both a taxonomy
 and an incident corpus.
@@ -82,12 +82,12 @@ and an incident corpus.
    until it carries a reproducible measurement. The verifier recomputes the
    catch-rate and residue offline from pinned inputs; a hand-edited total
    fails closed.
-2. **The Gate Reports Its Own Misses** — the residue set R is sealed *in the
-   attestation itself*, not hidden. A corpus item labelled ground-truth
+2. **The Gate Reports Its Own Misses** — the residue set R is sealed _in the
+   attestation itself_, not hidden. A corpus item labelled ground-truth
    claim-bearing that the gate misses is a **recorded residue outcome, not a
-   stage failure** (the 4U outcome-vs-integrity distinction). VLR *fails* only
+   stage failure** (the 4U outcome-vs-integrity distinction). VLR _fails_ only
    when the ledger is unbound, non-reproducible, miscounted, or mislabelled.
-3. **A Shrunk Bound Must Be Monotone** — `vsn.leakage.v2` may only *add*
+3. **A Shrunk Bound Must Be Monotone** — `vsn.leakage.v2` may only _add_
    catches; it must catch a superset of what v1 caught over the corpus (no
    silent regression), so R′ ⊆ R is a signed, checked obligation. A v2 that
    drops a v1 catch fails closed.
@@ -102,7 +102,7 @@ and an incident corpus.
   relative to the frozen corpus's declared families, not the universe of
   possible paraphrase (the 4U `corpus_is_relative_to_declared_families` bound,
   restated). `enumerated` items are author-constructed and `incident_sourced`
-  items reuse documented *shapes* — neither is exhaustive.
+  items reuse documented _shapes_ — neither is exhaustive.
 - **Ground-truth labels are author-declared, not adjudicated.** Whether an
   item "carries a claim" is a signed human label with a frozen rubric, not a
   formal semantic proof. We sign the rubric and the bound.
@@ -121,7 +121,7 @@ not through a live adversary.
 **Read-only kernel:** zero `src/llmShield` diff; 4A–4W byte-frozen; no
 `authorise_*` entry point. `vsn.leakage.v1` is **imported unmodified** from
 Stage 4W and never edited (a 4W-frozen assertion guards it); `vsn.leakage.v2`
-is a **new additive** ruleset in the 4X namespace that *composes* v1, never
+is a **new additive** ruleset in the 4X namespace that _composes_ v1, never
 mutates it. Additive raw codes **173–180** (headroom left by 4W's 173–180
 note; wrapper LAST; the exact count is fixed in §2).
 
@@ -194,11 +194,11 @@ Three additive artifacts beside the 4W bundle (4A–4W byte-frozen):
 (self-gauntlet Finding 2 hardening).** Existing paraphrase-attack benchmarks
 validate pairs with an LLM judge — non-deterministic, non-recomputable. VLR
 instead binds each item to a **frozen, signed metamorphic relation** and
-*derives* the residue_form as a pure function of the seed. A reviewer re-applies
+_derives_ the residue*form as a pure function of the seed. A reviewer re-applies
 the sealed `vlr.metamorphic.v1` table to the seeds and reproduces every
 residue_form byte-for-byte; the residue side is therefore **not
 author-constructible.** The remaining author freedom (seed choice, MR-table
-design) is *public and signed* — auditable, and bounded by the
+design) is \_public and signed* — auditable, and bounded by the
 `coverage_witness` requiring seeds to exercise every v1 lexical family (the
 sweep replaces cherry-picking).
 
@@ -216,7 +216,7 @@ Every item is **spanless** (no declared span map): the whole snippet is an
 undeclared region, so the real `vsn.leakage.v1` gate runs over it exactly as it
 would over connective prose in a 4W narrative. `caught_form` is expected to fire
 170 (a real gate hit); `residue_form` is expected to return clean **while
-ground truth says claim-bearing** — that clean-but-claim-bearing outcome *is*
+ground truth says claim-bearing** — that clean-but-claim-bearing outcome _is_
 the measured residue. No capsule is required (the collision rule is exercised
 by a dedicated `enumerated` family that carries a synthetic pinned capsule).
 
@@ -267,24 +267,24 @@ but diverges from the real gate — 177).
 
 ### Raw codes 173–180 (additive in `stage4h/exitCodes.mjs`; wrapper LAST)
 
-| Raw | Reason                        | Fires when                                                                                     |
-| --- | ----------------------------- | ---------------------------------------------------------------------------------------------- |
-| 173 | `vlr_schema_invalid`          | strict allowlist keys/types over corpus + ledger + attestation (+ per-item, per-family)        |
-| 174 | `vlr_signature_invalid`       | Ed25519 over `canonicalJson(content)` fails (attestation)                                       |
+| Raw | Reason                        | Fires when                                                                                                                                                                                                        |
+| --- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 173 | `vlr_schema_invalid`          | strict allowlist keys/types over corpus + ledger + attestation (+ per-item, per-family)                                                                                                                           |
+| 174 | `vlr_signature_invalid`       | Ed25519 over `canonicalJson(content)` fails (attestation)                                                                                                                                                         |
 | 175 | `vlr_corpus_invalid`          | count ≠ declared; dup/unsorted `item_id`; bad provenance tag; missing/rubric-inconsistent label; **`residue_form` ≠ `apply(metamorphic_relation, seed_form)`**; **`coverage_witness` misses a v1 lexical family** |
-| 176 | `vlr_v1_frozen_mismatch`      | `v1_ruleset_digest` ≠ digest recomputed from **imported unmodified** 4W constants (frozen gate) |
-| 177 | `vlr_gate_recompute_mismatch` | **audit tier only:** a sealed `per_item_outcomes` entry ≠ the live `vsn.leakage.v1`/`v2` re-run |
-| 178 | `vlr_ledger_mismatch`         | **public tier:** aggregates (slip-rate, catch-rate, R, R′) ≠ arithmetic over sealed `per_item_outcomes` |
-| 179 | `vlr_bound_not_monotone`      | **recomputed** from sealed outcomes: v2 caught-set ⊉ v1 caught-set (R′ ⊄ R), OR `ledger.monotone` disagrees with the recompute (a boolean lie) — **Law 3**, never trusts the stored flag |
-| 180 | `vlr_internal_fail_closed`    | wrapper: any throw → 180, never a silent pass                                                   |
+| 176 | `vlr_v1_frozen_mismatch`      | `v1_ruleset_digest` ≠ digest recomputed from **imported unmodified** 4W constants (frozen gate)                                                                                                                   |
+| 177 | `vlr_gate_recompute_mismatch` | **audit tier only:** a sealed `per_item_outcomes` entry ≠ the live `vsn.leakage.v1`/`v2` re-run                                                                                                                   |
+| 178 | `vlr_ledger_mismatch`         | **public tier:** aggregates (slip-rate, catch-rate, R, R′) ≠ arithmetic over sealed `per_item_outcomes`                                                                                                           |
+| 179 | `vlr_bound_not_monotone`      | **recomputed** from sealed outcomes: v2 caught-set ⊉ v1 caught-set (R′ ⊄ R), OR `ledger.monotone` disagrees with the recompute (a boolean lie) — **Law 3**, never trusts the stored flag                          |
+| 180 | `vlr_internal_fail_closed`    | wrapper: any throw → 180, never a silent pass                                                                                                                                                                     |
 
 Frozen `VLR_CHECK_ORDER` = 173→174→175→176→177→178→179 (wrapper 180 last).
 Parse → signature → corpus well-formedness+labels → **frozen-gate binding** →
 per-item gate recompute → ledger recompute → **monotonicity** → fail-closed;
 monotonic by construction (structural before semantic before ledger before
 law). All codes `RUN_LEVEL_BY_RAW` level **1** (a residue-ledger integrity
-failure is a harness/structural failure, not a security outcome — a *measured
-residue item* is a recorded outcome, never a raw code). `UNKNOWN_RAW_PROBE`
+failure is a harness/structural failure, not a security outcome — a _measured
+residue item_ is a recorded outcome, never a raw code). `UNKNOWN_RAW_PROBE`
 (999) hygiene per the standing rule; `exitCodeProbeHygiene` danger-zone guard
 extended to 180.
 
@@ -308,14 +308,14 @@ month. The v2 additions below are all DISJOINT from v1, so `vsn.leakage.v2` =
 v1 ∪ v2-lexicon is a strict superset by construction (see the honest 179/​
 `boundMonotone` framing).**
 
-| Family id                    | Example caught → residue                          | v2 catches? (disjoint v2 word) |
-| ---------------------------- | ------------------------------------------------- | ----------- |
-| `digit_to_word_quantifier`   | "23% of users" → "roughly a quarter of the base"  | ✓ (`roughly`, `quarter`) |
-| `exact_to_hedged`            | "all 4,200 accounts" → "essentially the whole base" | ✓ (`essentially`) |
-| `percent_to_fraction_phrase` | "80% of sessions" → "a large fraction of sessions" | ✓ (`fraction`) |
-| `date_to_relative`           | "on 3 August" → "earlier that period"             | partial (`earlier`) |
-| `count_to_bulk_phrase`       | "137 incidents" → "a handful of incidents"        | ✓ (`handful`) |
-| `true_semantic_paraphrase`   | "materially affected" → "not ideal for a subset"  | ✗ **irreducible residue** |
+| Family id                    | Example caught → residue                            | v2 catches? (disjoint v2 word) |
+| ---------------------------- | --------------------------------------------------- | ------------------------------ |
+| `digit_to_word_quantifier`   | "23% of users" → "roughly a quarter of the base"    | ✓ (`roughly`, `quarter`)       |
+| `exact_to_hedged`            | "all 4,200 accounts" → "essentially the whole base" | ✓ (`essentially`)              |
+| `percent_to_fraction_phrase` | "80% of sessions" → "a large fraction of sessions"  | ✓ (`fraction`)                 |
+| `date_to_relative`           | "on 3 August" → "earlier that period"               | partial (`earlier`)            |
+| `count_to_bulk_phrase`       | "137 incidents" → "a handful of incidents"          | ✓ (`handful`)                  |
+| `true_semantic_paraphrase`   | "materially affected" → "not ideal for a subset"    | ✗ **irreducible residue**      |
 
 **Verification note (spec-time, mandatory before freeze):** the earlier drafts
 of this table used "effectively **every** account" and "the vast **majority**"
@@ -330,15 +330,15 @@ v1 list.
 
 The `true_semantic_paraphrase` family is the signed floor: v2 cannot catch it
 lexically (no disjoint lexical marker exists), so it is measured and sealed into
-`residue_delta.irreducible` — the number that discharges 4W's limitation *with a
-bound*, not a zero. `v2` is a new additive ruleset (`vsn.leakage.v2` = v1 lists
+`residue_delta.irreducible` — the number that discharges 4W's limitation _with a
+bound_, not a zero. `v2` is a new additive ruleset (`vsn.leakage.v2` = v1 lists
 ∪ frozen DISJOINT approx/hedge/fraction/bulk lexicons —
 `roughly, approximately, about, around, effectively, essentially, largely,
 quarter, third, fifth, fraction, portion, handful, several, swath, chunk`),
 **composing** v1, never mutating it.
 
 **Out of VLR's residue scope: the v1 `capsule_value_collision` rule.** It is a
-lexical *exact-match* rule (an undeclared capsule value reproduced verbatim) —
+lexical _exact-match_ rule (an undeclared capsule value reproduced verbatim) —
 always caught, never a paraphrase phenomenon — so it is **not** a residue family
 and carries no corpus items or capsule-values schema slot. VLR measures
 paraphrase residue only; the collision rule's behaviour is 4W's, unchanged.
@@ -347,11 +347,11 @@ paraphrase residue only; the collision rule's behaviour is 4W's, unchanged.
 
 ## 3. Evidence lanes, attestation, parity, browser
 
-| Lane | Role                                    | Reproducibility tier      |
-| ---- | --------------------------------------- | ------------------------- |
-| A    | deterministic residue corpus + tamper   | byte-stable, CI-gated     |
-| B    | blind two-process recompute ceremony    | byte-stable, CI-gated     |
-| C    | **absent by design**                    | —                         |
+| Lane | Role                                  | Reproducibility tier  |
+| ---- | ------------------------------------- | --------------------- |
+| A    | deterministic residue corpus + tamper | byte-stable, CI-gated |
+| B    | blind two-process recompute ceremony  | byte-stable, CI-gated |
+| C    | **absent by design**                  | —                     |
 
 ### 3.1 Lane A — deterministic residue corpus
 
@@ -364,13 +364,13 @@ and rebuilt-twice-`cmp`-equal. Lane A locks:
 - **Frozen `v1_ruleset_digest`** recomputed live from the **imported
   unmodified** 4W constants; divergence → **176**.
 - **4W source-digest witness (freeze proof, added before freeze).** 176 proves
-  the *ruleset constants* match, but a reviewer may ask whether the wrapper
+  the _ruleset constants_ match, but a reviewer may ask whether the wrapper
   logic around `checkLeakage`/`scanLeakage` drifted. So the evidence manifest
   additionally binds the **file digests** of the imported 4W leakage module(s)
   (`stage4w/core/leakageGate.mjs` and `stage4w/constants.mjs`), computed live at
-  build and re-asserted at verify. Any edit to the 4W gate — constants *or*
+  build and re-asserted at verify. Any edit to the 4W gate — constants _or_
   wrapper — breaks the witness. This is the read-only-kernel guarantee for a
-  stage that *executes* the frozen gate rather than merely leaving it alone.
+  stage that _executes_ the frozen gate rather than merely leaving it alone.
 - **Raw-code tamper matrix 173–180**: one fixture per code plus trigger
   sub-variants — corpus count/dup/label (175), a swapped `v1_ruleset_digest`
   (176), a ledger whose recorded item outcome disagrees with the real gate
@@ -381,7 +381,7 @@ and rebuilt-twice-`cmp`-equal. Lane A locks:
   (`newly_caught_by_v2`, `irreducible`) is byte-stable and equals an
   independent recount from the per-item gate outcomes.
 - **RSP-shaped `incident_sourced` family (the Anthropic-surface fixture)**: a
-  small family whose *shape* is a frontier **Risk-Report / affirmative-safety-
+  small family whose _shape_ is a frontier **Risk-Report / affirmative-safety-
   case** quantitative claim — the hedged-quantifier prose a lab's transparency
   artifact carries ("containment held for the vast majority of red-team
   attempts", "risk remains roughly comparable to prior models"). Only the
@@ -397,8 +397,8 @@ and rebuilt-twice-`cmp`-equal. Lane A locks:
 ### 3.2 Lane B — blind two-process recompute ceremony (CI-gated, non-adversarial)
 
 Two OS processes prove the residue ledger is reproducible **through an
-independent process boundary** — *process-independent, not
-institution-independent* (the child is our code; the claim is that the ledger
+independent process boundary** — _process-independent, not
+institution-independent_ (the child is our code; the claim is that the ledger
 survives a blind recompute across a process boundary that cannot reuse the
 parent's in-memory state, not that a third party rederived it).
 
@@ -429,8 +429,8 @@ process boundary reproduces it byte-for-byte.
 > Stage 4X intentionally has **no Lane C**. The stage resolves the superseded
 > adversarial socket by **signed residue measurement, not adversarial
 > elicitation**. Adding a live-model or adversary lane would change the claim
-> from *reproducible leakage-residue accounting* into *behavioural robustness
-> evaluation*, which is out of scope — and would smuggle the superseded socket
+> from _reproducible leakage-residue accounting_ into _behavioural robustness
+> evaluation_, which is out of scope — and would smuggle the superseded socket
 > back through the side door. The absence of Lane C is a **design property**,
 > asserted and checked (a no-live-model hermeticity gate: no model client, no
 > fetch/socket/subprocess in the scored path — the 4U/OFFLINE_REASONS gate
@@ -458,15 +458,15 @@ both build and verify sides (4V→4W doctrine, now standing).
 - **Python** `vlr_parity.py`: ports the v1 frozen lexical ruleset **and** the
   v2 additive extension exactly, plus the per-item outcome model and the ledger
   recompute (catch-rate, R, R′, monotonicity). It is the second independent
-  implementation of the *gate itself*, so JS↔Python parity over the corpus is a
+  implementation of the _gate itself_, so JS↔Python parity over the corpus is a
   real cross-impl check on the residue number (a divergence would be a genuine
   finding). Ed25519 excluded per pattern, stated as a parity non-claim.
 - **Browser** `vlr-verifier.html`: static single file, CSP `default-src
-  'none'`, node:vm parity gate; paste corpus + ledger + pubkey → it **renders
+'none'`, node:vm parity gate; paste corpus + ledger + pubkey → it **renders
   the residue map itself** — per family, which claims the gate catches, which
   it misses, and the shrink under v2, with the irreducible floor visibly
-  marked. This is the public-facing artifact: a regulator sees *exactly which
-  misleading phrasings the lexical gate misses*, recomputed in their own
+  marked. This is the public-facing artifact: a regulator sees _exactly which
+  misleading phrasings the lexical gate misses_, recomputed in their own
   browser. Signature verification stays Node-authoritative (parity non-claim).
 - JS byte offsets via `TextEncoder`; the shared multi-byte fixture is the
   tripwire for all three.
@@ -506,20 +506,20 @@ non-obvious.
    source of truth; a hand-edited total cannot reach GREEN — 178 dominates).
 2. **`boundMonotone`** (invariant-lock) — the v2 caught-set over the corpus is
    a **superset** of the v1 caught-set, so R′ ⊆ R. Because `vsn.leakage.v2` is
-   *defined* as `v1 ∪ (disjoint v2 lexicon)`, this holds by construction; the
+   _defined_ as `v1 ∪ (disjoint v2 lexicon)`, this holds by construction; the
    theorem + code 179 **lock** that construction so a future v2 that forgets to
    compose v1 (a real implementation-regression bug) cannot be accepted. Honest
    scope: this guards against dropping v1, not against an emergent regression —
    Law 3 is a construction invariant, not an empirical discovery.
 3. **`frozenGateBinding`** — an accepted bundle's `v1_ruleset_digest` resolves
    to the digest of the **imported 4W constants**, i.e. acceptance implies the
-   measured gate *is* the frozen 4W gate (176 dominates) — the read-only-kernel
+   measured gate _is_ the frozen 4W gate (176 dominates) — the read-only-kernel
    guarantee for a stage that executes the gate.
 4. **`residueIsRecordedNotFailure`** (substantive) — a corpus item that is
    ground-truth claim-bearing and gate-missed yields membership in the residue
    set, **disjoint** from every raw integrity code: measuring a miss never
    raises a fail-closed code (the 4U outcome-vs-integrity distinction,
-   formalised — *The Gate Reports Its Own Misses* is a theorem, not a slogan).
+   formalised — _The Gate Reports Its Own Misses_ is a theorem, not a slogan).
 5. **`metamorphicResidueReproducible`** (substantive) — if the verifier
    accepts, every `residue_form` equals `apply(metamorphic_relation, seed_form)`
    under the sealed `vlr.metamorphic.v1` table, so the residue set (and thus the
@@ -543,13 +543,13 @@ non-obvious.
 7. `not_a_claim_of_regulatory_compliance` — regulator-useful is not legal
    compliance.
 8. `not_a_claim_that_incident_sourced_items_name_or_accuse_any_party` — only
-   the linguistic *shape* of a documented smuggle is reused; no third party is
+   the linguistic _shape_ of a documented smuggle is reused; no third party is
    a claim in shipped evidence.
 9. `not_a_claim_that_slip_rate_is_gate_field_performance` — the metamorphic
    slip-rate is measured over a **frozen seed set under a signed transform
    table**; the residue side is reproducible, but seed and MR-table choice
    remain author-declared (public, signed, coverage-bounded). It is the gate's
-   behaviour on *this transform of these seeds*, not its true field performance.
+   behaviour on _this transform of these seeds_, not its true field performance.
 
 ### Known limitations (signed)
 
@@ -558,7 +558,7 @@ non-obvious.
    is deterministic and reviewer-reproducible (residue = `apply(MR, seed)` under
    the signed `vlr.metamorphic.v1` table; theorem `metamorphicResidueReproducible`),
    so the residue side is **not** author-constructible. Remaining freedom is the
-   **seed set** and the **MR-table design** — both *public and signed*, hence
+   **seed set** and the **MR-table design** — both _public and signed_, hence
    auditable, and the seed set is bounded by the `coverage_witness` (every v1
    lexical family exercised). This is a materially smaller gaming surface than a
    hand-authored corpus, but not zero: a biased MR table or seed set is possible
@@ -590,7 +590,7 @@ semantic_residue_measurement_deferred
 
 - `irreducible_semantic_residue_deferred` — **newly minted.** The
   true-paraphrase floor (`residue_delta.irreducible`) that no lexical ruleset
-  can reach. A future stage could *estimate* it with a **model-as-untrusted-
+  can reach. A future stage could _estimate_ it with a **model-as-untrusted-
   advisory** lane (the 3V/3V-B pattern: digest-only, non-CI-gated, the model
   is an advisory signal that is itself verified, never an oracle and never
   driven to smuggle) — estimated, never eliminated, and never a live adversary.
@@ -600,21 +600,21 @@ semantic_residue_measurement_deferred
 - `transparency_report_profile_deferred` — carried from 4W (the VTRP stage;
   4X leaves it pre-seeded via the RSP-shaped `incident_sourced` family).
 - `residue_over_submitted_narrative_deferred` — **newly minted (the 4Y
-  candidate).** Today VLR measures the gate over a *frozen corpus*; the next
+  candidate).** Today VLR measures the gate over a _frozen corpus_; the next
   rung measures it over **any submitted 4W narrative** — a reviewer pastes a
   real Art-73 filing or an RSP Risk Report and gets its leakage-residue map
   recomputed in-browser. New evidence species (residue over external input, not
   a fixed corpus); the founder-ledger blocker named below is exactly this debt.
-  Signed non-claim in advance: *a residue map of a document is not a judgment of
-  the document's truth.*
+  Signed non-claim in advance: _a residue map of a document is not a judgment of
+  the document's truth._
 - `cross_gate_residue_benchmark_deferred` — **newly minted (the 4Z
   candidate).** Publish the dual-provenance corpus as a **standard benchmark any
   lexical gate can be measured against** — ours, a lab's, a vendor's filter —
   each reporting its own catch-rate under the signed contract (the 3O
-  "BYO-gateway" pattern applied to leakage gates: *others produce evidence under
-  our contract*). Widest moat-widener on the board; new species (external
-  parties produce residue evidence). Signed non-claim in advance: *catch-rate
-  over a shared corpus is not a ranking of filter quality.*
+  "BYO-gateway" pattern applied to leakage gates: _others produce evidence under
+  our contract_). Widest moat-widener on the board; new species (external
+  parties produce residue evidence). Signed non-claim in advance: _catch-rate
+  over a shared corpus is not a ranking of filter quality._
 
 ### Industry wedge (source-map claim, not a compliance claim)
 
@@ -622,12 +622,12 @@ Verified in the **2026-07-08 sweep** (one day after the 4W sweep; figures
 below are **as-reported by secondary outlets** — see the source-precision
 guard):
 
-- **The closer fit is the *softening* layer, not the citation cases.** Courts
-  are sanctioning *fabricated citations and false quotations* — but under our
+- **The closer fit is the _softening_ layer, not the citation cases.** Courts
+  are sanctioning _fabricated citations and false quotations_ — but under our
   own stack those are **VSN 167/169** (evidence-locality / false-quotation),
   already structurally unfileable after 4W. VLR's distinct wound is the
   **hedged-quantifier residue**: the phrasing that makes an unsupported or
-  fabricated *quantitative* claim read as innocuous prose ("roughly a
+  fabricated _quantitative_ claim read as innocuous prose ("roughly a
   quarter", "effectively everyone") and slip a **lexical** gate. The
   **KPMG-withdrawal pattern — "industrialized plausibility"** — is this
   residue's exact shape: disputed quantitative claims softened into prose. VLR
@@ -638,27 +638,27 @@ guard):
   submitted for **external expert review**, plus an **affirmative safety case**
   once a model crosses the AI-R&D-4 threshold. These are prose arguments built
   on quantitative claims — the highest-stakes hedged-quantifier documents a lab
-  produces — and the external reviewer is handed *text*, with no tool to
+  produces — and the external reviewer is handed _text_, with no tool to
   separate evidence-bound claims from voice. VLR + 4W give that reviewer a
   recomputable surface: **the quantitative claims in a Risk Report / safety case
   become machine-separable into evidence-bound, declared-voice, and
   measured-residue, so the case is reviewed by recomputation, not only by
   trust.** This is the constitution-alignment line for the fellows thread —
-  *making safety-case claims machine-checkable* — and it is provider-agnostic in
+  _making safety-case claims machine-checkable_ — and it is provider-agnostic in
   public wording (Anthropic named as the pinned instance of a general surface,
   not a target).
 - **The national-institute surface (pinned 2026-07-08).** NIST **CAISI** opened
   public comment on draft **AI 800-2, "Practices for Automated Benchmark
   Evaluations of Language Models"**, observing that practices for the
-  *"validity, transparency, and reproducibility of AI evaluations are only
-  beginning to emerge."* VLR is a worked example of exactly that: a signed,
+  _"validity, transparency, and reproducibility of AI evaluations are only
+  beginning to emerge."_ VLR is a worked example of exactly that: a signed,
   byte-reproducible evaluation with a deterministic corpus. It is also the
-  **empirical companion** to NIST's result that *no finite guardrail set is
-  universally robust* — NIST proves the gap must exist; VLR measures and signs
+  **empirical companion** to NIST's result that _no finite guardrail set is
+  universally robust_ — NIST proves the gap must exist; VLR measures and signs
   how large it is for a specific gate, reproducibly. Adjacent: **MLCommons
   AILuminate** (the safety benchmark UK AISI / US CAISI lean on) judges with
-  evaluator *models* and hides held-out prompts "to prevent gaming"; VLR's
-  metamorphic residue is reproducible *without* a model judge or a secret set —
+  evaluator _models_ and hides held-out prompts "to prevent gaming"; VLR's
+  metamorphic residue is reproducible _without_ a model judge or a secret set —
   a deterministic complement, not a competitor. And an **ISO/IEC 42001** auditor
   reviewing "evidence of control implementation" for a content-filter control
   can treat a signed residue map as that evidence.
@@ -667,7 +667,7 @@ guard):
   licensed attorneys across ~106 countries (Charlotin database, as of April
   2026); ~$145K in Q1-2026 sanctions, incl. a ~$109,700 Oregon aggregate and a
   $30,000 Sixth-Circuit penalty (two attorneys, 20+ fake citations, March
-  2026). These motivate the *family* of the disease; the citation-specific
+  2026). These motivate the _family_ of the disease; the citation-specific
   ones are 4W's surface, the quantitative-softening ones are 4X's.
 - **EU Art-73:** draft serious-incident guidance + reporting template
   (consultation closed 2025-11-07); the AI Act applies generally from
@@ -679,15 +679,15 @@ guard):
   parties who could run `vlr-verifier.html` on a residue map tomorrow — we aim
   at all of them, provider-agnostic in public wording:
 
-  | Actor | Why VLR | Single blocker |
-  | --- | --- | --- |
-  | **Anthropic** — RSP v3.0 Risk-Report / affirmative-safety-case external reviewer | separates a safety document's quantitative claims into evidence-bound / voice / measured-residue | residue map is over a corpus, not yet the reviewer's actual submitted document (4Y socket) |
-  | **NIST CAISI** — draft **AI 800-2** automated-benchmark-eval practices | AI 800-2 explicitly seeks *reproducible* eval practices; VLR is a signed byte-reproducible one, and the empirical companion to NIST's "no finite guardrail is universally robust" result | contribute the metamorphic corpus + slip-rate as a worked reproducible example |
-  | **US CAISI + UK AISI** joint evaluations / **MLCommons AILuminate** | AILuminate judges with evaluator *models* and hides held-out prompts; VLR's metamorphic residue is reproducible without a model judge or a secret set | position as a deterministic complement, not a competitor benchmark |
-  | **ISO/IEC 42001 auditor** | 42001 audits review "evidence of control implementation"; a content-filter's signed residue map *is* that evidence for a guardrail control | map VLR output to a 42001 control id (a profile, future) |
+  | Actor                                                                            | Why VLR                                                                                                                                                                                  | Single blocker                                                                             |
+  | -------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+  | **Anthropic** — RSP v3.0 Risk-Report / affirmative-safety-case external reviewer | separates a safety document's quantitative claims into evidence-bound / voice / measured-residue                                                                                         | residue map is over a corpus, not yet the reviewer's actual submitted document (4Y socket) |
+  | **NIST CAISI** — draft **AI 800-2** automated-benchmark-eval practices           | AI 800-2 explicitly seeks _reproducible_ eval practices; VLR is a signed byte-reproducible one, and the empirical companion to NIST's "no finite guardrail is universally robust" result | contribute the metamorphic corpus + slip-rate as a worked reproducible example             |
+  | **US CAISI + UK AISI** joint evaluations / **MLCommons AILuminate**              | AILuminate judges with evaluator _models_ and hides held-out prompts; VLR's metamorphic residue is reproducible without a model judge or a secret set                                    | position as a deterministic complement, not a competitor benchmark                         |
+  | **ISO/IEC 42001 auditor**                                                        | 42001 audits review "evidence of control implementation"; a content-filter's signed residue map _is_ that evidence for a guardrail control                                               | map VLR output to a 42001 control id (a profile, future)                                   |
 
-  The shared blocker is the same debt: VLR measures the *gate's* residue over a
-  frozen corpus, not yet the *arbitrary submitted document* each actor holds —
+  The shared blocker is the same debt: VLR measures the _gate's_ residue over a
+  frozen corpus, not yet the _arbitrary submitted document_ each actor holds —
   the `residue_over_submitted_narrative_deferred` (4Y) socket.
 
 **Prior-art seam (pinned 2026-07-08, the positioning anchor).** Two adjacent
@@ -714,7 +714,7 @@ plan time (PADBen arXiv 2511.00416; the CheckList / metamorphic-testing line).
 
 **Source-precision guard (BUILD-TIME obligation for VLR — moved earlier than
 4W's closeout placement; self-gauntlet Finding 3).** Unlike 4W, VLR seals its
-`incident_ref` pointers *inside the signed, frozen* `simurgh.vlr.corpus.v1`. A
+`incident_ref` pointers _inside the signed, frozen_ `simurgh.vlr.corpus.v1`. A
 "reported" figure signed into immutable evidence and softened only at closeout
 would leave a fuzzy citation notarised forever — the exact irony an
 anti-fabrication stage must not commit. Therefore every `incident_ref` is
@@ -729,12 +729,12 @@ closeout pass on top.
 > Design-time internal scorecard, not shipped evidence and not a
 > literature-complete novelty claim.
 
-| Axis                     | Score | Why / what moves it higher                                                                                                                                                                    |
-| ------------------------ | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Novelty                  | 9.4   | Signed byte-reproducible **metamorphic** residue attestation for a named lexical gate + coverage witness + monotone bound-shrink + frozen-gate source-digest witness = new verifier geometry, with a clean prior-art seam (MT/CheckList don't attest; paraphrase benchmarks aren't reproducible). Higher: the irreducible floor estimated by an advisory lane. |
-| Frontier                 | 9.2   | The primary number is a **deterministic, reviewer-reproducible metamorphic slip-rate** (residue = a function of seeds under a signed transform), not a hand-authored catch-rate — a stronger, less-gameable frontier claim; grounded discovery via `incident_sourced` provenance, no live adversary (deliberate, safety-first). Higher: multilingual transform table + advisory-estimated floor. |
+| Axis                     | Score | Why / what moves it higher                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| ------------------------ | ----- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Novelty                  | 9.4   | Signed byte-reproducible **metamorphic** residue attestation for a named lexical gate + coverage witness + monotone bound-shrink + frozen-gate source-digest witness = new verifier geometry, with a clean prior-art seam (MT/CheckList don't attest; paraphrase benchmarks aren't reproducible). Higher: the irreducible floor estimated by an advisory lane.                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| Frontier                 | 9.2   | The primary number is a **deterministic, reviewer-reproducible metamorphic slip-rate** (residue = a function of seeds under a signed transform), not a hand-authored catch-rate — a stronger, less-gameable frontier claim; grounded discovery via `incident_sourced` provenance, no live adversary (deliberate, safety-first). Higher: multilingual transform table + advisory-estimated floor.                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | Lab/regulator usefulness | 9.7   | Aims at a NAMED cluster, not one actor: **Anthropic** (RSP v3.0 Risk Reports / affirmative safety cases, 2026-02-24 — hedged-quantifier prose an external reviewer must trust, made machine-separable by VLR + 4W); **NIST CAISI** (draft AI 800-2 explicitly seeks reproducible eval practices — VLR is a worked one, and the empirical companion to NIST's "no finite guardrail is universally robust"); **MLCommons AILuminate / UK AISI + US CAISI** (deterministic complement to model-judged, held-out benchmarks); **ISO/IEC 42001 auditor** (a signed residue map is control-implementation evidence); plus the 2026-08-02 Art-73 window and the KPMG "industrialized plausibility" shape. Higher: residue map over an arbitrary submitted document (the 4Y debt) — real adoption by any one named actor. |
-| Constitution             | 9.5   | Making safety-case claims machine-checkable (evidence vs voice vs measured residue) is anti-deception honesty as infrastructure — and publishing your own gate's miss set against yourself, with a signed irreducible floor and no fake zero, models the honesty it verifies. Higher: institution-independent reproduction. |
+| Constitution             | 9.5   | Making safety-case claims machine-checkable (evidence vs voice vs measured residue) is anti-deception honesty as infrastructure — and publishing your own gate's miss set against yourself, with a signed irreducible floor and no fake zero, models the honesty it verifies. Higher: institution-independent reproduction.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 
 Re-score at closeout.
 
@@ -761,4 +761,3 @@ Re-score at closeout.
 and smaller under v2 where lexical residue is reachable —
 auditable residue, shrunk bound, signed irreducible floor.
 ```
-

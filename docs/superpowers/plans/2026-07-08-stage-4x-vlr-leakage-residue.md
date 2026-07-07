@@ -37,7 +37,7 @@ reproduce (`export PATH="/opt/homebrew/opt/node@26/bin:$PATH"`).
   `INSECURE_FIXTURE_ONLY_[A-Za-z-]+\.pem` — **no digits in key names** (so
   `INSECURE_FIXTURE_ONLY_vlr.pem`, not `vlr4x`).
 - **A tamper fixture must make its TARGET check fire FIRST** — recompute binding
-  + re-sign after any content mutation (the resignBundle lesson).
+  - re-sign after any content mutation (the resignBundle lesson).
 - **`evidence/stage-4x` must be fully `.prettierignore`d** or `cmp` reproduce
   breaks. Format generator files BEFORE regenerating evidence.
 - **Lean 4.15, no mathlib**: structural recursive `def` totals, not `foldr`;
@@ -114,9 +114,14 @@ export const VLR_RAW_CODES = Object.freeze({
 });
 export const VLR_CHECK_ORDER = Object.freeze([173, 174, 175, 176, 177, 178, 179]);
 export const VLR_REASONS_175 = Object.freeze([
-  "count_mismatch", "duplicate_item_id", "unsorted_item_id", "bad_provenance",
-  "missing_label", "rubric_inconsistent_label",
-  "residue_form_not_mr_derived", "coverage_witness_incomplete",
+  "count_mismatch",
+  "duplicate_item_id",
+  "unsorted_item_id",
+  "bad_provenance",
+  "missing_label",
+  "rubric_inconsistent_label",
+  "residue_form_not_mr_derived",
+  "coverage_witness_incomplete",
 ]);
 ```
 
@@ -191,7 +196,7 @@ Finding 5 by construction).
 
 **Framing (P2-9):** an MR is a **claim-bearing residue transform**, not a
 numeric-equivalence transform. Its contract is: the output is still a
-*claim-looking quantitative phrase* (preserves the `claim_bearing` class) that
+_claim-looking quantitative phrase_ (preserves the `claim_bearing` class) that
 slips v1 — NOT that it is numerically faithful to the seed. So `"80%" →
 "a large fraction"` is legal (claim-bearing preserved) without asserting 80% ≈
 "a large fraction". Seed selection SHOULD keep the rewrite plausible per family,
@@ -296,7 +301,7 @@ Two ledger builders, cleanly separated:
 - **179 monotonicity as a blade, not a sticker (P1-6)**: `checkMonotone(ledger)`
   RECOMPUTES `caughtSetV2 ⊇ caughtSetV1` and `R′ ⊆ R` from the sealed outcomes,
   then fires 179 if the relation fails **OR** if `ledger.monotone !==
-  recomputedMonotone` (a ledger that lies `monotone:true` while `R′ ⊄ R` fails).
+recomputedMonotone` (a ledger that lies `monotone:true` while `R′ ⊄ R` fails).
   Two fixtures: set-relation-fails, and boolean-lie.
 - **`residueIsRecordedNotFailure`**: `computeLedgerFromLiveGate` on an
   all-residue corpus returns populated R with NO throw and NO raw code.
@@ -321,7 +326,7 @@ the gate); both monotonicity fixtures (relation-fail + boolean-lie) fire 179.
     177 is NOT run.**
   - `tier: "audit"` → all public checks, then **177** (`checkOutcomesAgainstGate`
     re-runs v1/v2 per item). 177 sits after 176 in the canonical
-    `VLR_CHECK_ORDER` array, but is *gated off* in public tier.
+    `VLR_CHECK_ORDER` array, but is _gated off_ in public tier.
 - Each tamper fixture returns its expected raw and NO later check masks it
   (first-failure table, one per code).
 - **174**: bad attestation signature → 174 (Ed25519 over `canonicalJson(content)`,
@@ -386,6 +391,7 @@ the ledger survives a blind recompute across a process boundary that cannot reus
 the parent's state.
 
 **Test first** (`tests/e2e/llmShield/stage4x/laneb.test.js`, verify-only):
+
 - spawn `recompute-child.mjs`, feed corpus path + public v1/v2 digests over
   stdin, receive canonical ledger bytes, assert byte-equal to committed ledger;
 - **blindness negatives sealed**: child env carried no `OPERATOR_*`, no
@@ -395,7 +401,7 @@ the parent's state.
   `computeLedgerFromLiveGate` — the parent only spawns + byte-compares;
 - a sealed capture manifest asserts
   `{ parent_computed_catch_rate:false, child_received_committed_ledger_path:false,
-  child_received_operator_env:false }`.
+child_received_operator_env:false }`.
 
 **Code**: `laneb/recompute-child.mjs` imports the real gate +
 `computeLedgerFromLiveGate`, recomputes from the corpus, emits canonical ledger
@@ -450,12 +456,15 @@ real browser — the bare form is a "CSP-none dragon costume". 4W shipped
 a stale hash cannot ship:
 
 ```html
-<meta http-equiv="Content-Security-Policy"
+<meta
+  http-equiv="Content-Security-Policy"
   content="default-src 'none'; script-src 'sha256-…'; style-src 'sha256-…';
-           img-src 'none'; connect-src 'none'; base-uri 'none'; form-action 'none'" />
+           img-src 'none'; connect-src 'none'; base-uri 'none'; form-action 'none'"
+/>
 ```
 
 **Test first** (`tests/e2e/llmShield/stage4x/browserParity.test.js`):
+
 1. **CSP hash-consistency guard**: extract the inline `<script>` bytes, compute
    `sha256`, assert it equals the `script-src 'sha256-…'` in the meta tag (so any
    edit to the script that isn't reflected in the CSP hash **fails CI** — kills
@@ -493,6 +502,7 @@ corpus/gate/ledger algebra with structural recursive totals. Theorems:
 assertion FALSE-FAILS, because Task 1 additively edits shared
 `stage4h/exitCodes.mjs` and regenerates golden maps. The honest assertion is a
 **read-only leakage kernel**, not read-only-everything:
+
 - the 4W leakage files (`stage4w/core/leakageGate.mjs`, `stage4w/constants.mjs`)
   are byte-identical (via the source-digest witness);
 - `src/llmShield` has zero diff; no `authorise_*` entry added;

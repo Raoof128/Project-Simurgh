@@ -555,6 +555,34 @@ export const VSN_REASONS_163 = Object.freeze([
   "attestation_signature_invalid",
 ]);
 
+// Stage 4X VLR codes (spec §2). Wrapper LAST at 180; 181–189 headroom.
+export const VLR_RAW_CODES = Object.freeze({
+  VLR_SCHEMA_INVALID: 173,
+  VLR_SIGNATURE_INVALID: 174,
+  VLR_CORPUS_INVALID: 175,
+  VLR_V1_FROZEN_MISMATCH: 176,
+  VLR_GATE_RECOMPUTE_MISMATCH: 177,
+  VLR_LEDGER_MISMATCH: 178,
+  VLR_BOUND_NOT_MONOTONE: 179,
+  // _VLR-suffixed to avoid colliding with VSN's INTERNAL_FAIL_CLOSED: 172.
+  INTERNAL_FAIL_CLOSED_VLR: 180,
+});
+// Frozen first-failure order (4X spec §2): schema → signature → corpus →
+// frozen-gate → gate-recompute (audit) → ledger (public arithmetic) → monotone.
+// Wrapper 180 is applied LAST and is not part of the ordered array.
+export const VLR_CHECK_ORDER = Object.freeze([173, 174, 175, 176, 177, 178, 179]);
+export const VLR_REASONS_175 = Object.freeze([
+  "count_mismatch",
+  "duplicate_item_id",
+  "unsorted_item_id",
+  "bad_provenance",
+  "missing_label",
+  "rubric_inconsistent_label",
+  "residue_form_not_mr_derived",
+  "coverage_witness_incomplete",
+]);
+export const VLR_REASONS_176 = Object.freeze(["v1_ruleset_digest_mismatch", "four_w_source_drift"]);
+
 export const HARNESS_CODES = Object.freeze({
   CLEAN_RUN_FALSELY_REJECTED: 19,
 });
@@ -736,6 +764,14 @@ export const RUN_LEVEL_BY_RAW = Object.freeze({
   170: 1,
   171: 1,
   172: 1,
+  173: 1,
+  174: 1,
+  175: 1,
+  176: 1,
+  177: 1,
+  178: 1,
+  179: 1,
+  180: 1,
 });
 
 export function stage4CodeForRawCode(code) {
