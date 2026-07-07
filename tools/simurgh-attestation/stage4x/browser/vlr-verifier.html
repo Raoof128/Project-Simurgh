@@ -1,0 +1,248 @@
+<meta charset="utf-8" />
+<meta
+  http-equiv="Content-Security-Policy"
+  content="default-src 'none'; script-src 'sha256-WLXCXNa6zuXVLgzofWj0jI2EnK+NkPDTxLjj4rfMJdU='; style-src 'sha256-hfakzl+d/lLrkvI9iDb9mvoElYczWtraLFBgMJP/dGA='; img-src 'none'; connect-src 'none'; base-uri 'none'; form-action 'none'"
+/>
+<title>Stage 4X VLR — leakage-residue map</title>
+<style>
+  body {
+    font-family: ui-monospace, monospace;
+    max-width: 60rem;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+  textarea {
+    width: 100%;
+    height: 8rem;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  th,
+  td {
+    border: 1px solid #888;
+    padding: 4px 8px;
+    text-align: left;
+  }
+  .floor {
+    font-weight: bold;
+  }
+</style>
+<h1>VLR — leakage-residue map</h1>
+<p>
+  Paste the signed corpus and ledger. This page recomputes the metamorphic slip-rate and residue map
+  offline (no network). Ed25519 signatures stay Node-authoritative (parity non-claim).
+</p>
+<p>corpus.json:</p>
+<textarea id="corpus"></textarea>
+<p>ledger.json:</p>
+<textarea id="ledger"></textarea>
+<button id="go">Render residue map</button>
+<div id="out"></div>
+<script>
+  (function () {
+    var NUMBER_WORDS = [
+      "zero",
+      "one",
+      "two",
+      "three",
+      "four",
+      "five",
+      "six",
+      "seven",
+      "eight",
+      "nine",
+      "ten",
+      "eleven",
+      "twelve",
+      "thirteen",
+      "fourteen",
+      "fifteen",
+      "sixteen",
+      "seventeen",
+      "eighteen",
+      "nineteen",
+      "twenty",
+      "thirty",
+      "forty",
+      "fifty",
+      "sixty",
+      "seventy",
+      "eighty",
+      "ninety",
+      "hundred",
+      "thousand",
+      "million",
+      "billion",
+      "trillion",
+      "dozen",
+      "half",
+      "couple",
+    ];
+    var QUANTIFIERS = [
+      "all",
+      "none",
+      "most",
+      "every",
+      "nearly",
+      "almost",
+      "majority",
+      "nobody",
+      "no one",
+    ];
+    var MONTHS = [
+      "january",
+      "february",
+      "march",
+      "april",
+      "may",
+      "june",
+      "july",
+      "august",
+      "september",
+      "october",
+      "november",
+      "december",
+    ];
+    var V2 = [
+      "roughly",
+      "approximately",
+      "about",
+      "around",
+      "effectively",
+      "essentially",
+      "largely",
+      "quarter",
+      "third",
+      "fifth",
+      "fraction",
+      "portion",
+      "handful",
+      "several",
+      "swath",
+      "chunk",
+    ];
+    function wordRe(w) {
+      return new RegExp(
+        "\\b(" +
+          w
+            .map(function (x) {
+              return x.replace(/ /g, "\\s");
+            })
+            .join("|") +
+          ")\\b",
+        "u"
+      );
+    }
+    function v1(t) {
+      t = t.toLowerCase();
+      return (
+        /[0-9]/u.test(t) ||
+        wordRe(NUMBER_WORDS).test(t) ||
+        /%|\bpercent\b/u.test(t) ||
+        wordRe(MONTHS).test(t) ||
+        wordRe(QUANTIFIERS).test(t)
+      );
+    }
+    function v2(t) {
+      return v1(t) || wordRe(V2).test(t.toLowerCase());
+    }
+    function recompute(corpus) {
+      var items = corpus.items.slice().sort(function (a, b) {
+        return a.item_id < b.item_id ? -1 : 1;
+      });
+      var o = items.map(function (it) {
+        return {
+          item_id: it.item_id,
+          family: it.family,
+          seed_v1: v1(it.seed_form),
+          residue_v1: v1(it.residue_form),
+          residue_v2: v2(it.residue_form),
+        };
+      });
+      var total = o.length;
+      var catchable = o.filter(function (x) {
+        return x.seed_v1;
+      }).length;
+      var slipV1 = o.filter(function (x) {
+        return x.seed_v1 && !x.residue_v1;
+      }).length;
+      var slipV2 = o.filter(function (x) {
+        return x.seed_v1 && !x.residue_v2;
+      }).length;
+      var Rv2 = o
+        .filter(function (x) {
+          return !x.residue_v2;
+        })
+        .map(function (x) {
+          return x.item_id;
+        });
+      var fams = {};
+      o.forEach(function (x) {
+        fams[x.family] = fams[x.family] || {
+          family: x.family,
+          v1_caught: 0,
+          v2_caught: 0,
+          total: 0,
+        };
+        fams[x.family].total++;
+        if (x.residue_v1) fams[x.family].v1_caught++;
+        if (x.residue_v2) fams[x.family].v2_caught++;
+      });
+      return {
+        metamorphic_slip_rate_v1: slipV1 + "/" + catchable,
+        metamorphic_slip_rate_v2: slipV2 + "/" + catchable,
+        irreducible: Rv2,
+        per_family: Object.keys(fams)
+          .sort()
+          .map(function (k) {
+            return fams[k];
+          }),
+      };
+    }
+    var VLR = { recompute: recompute };
+    if (typeof globalThis !== "undefined") globalThis.VLR = VLR;
+    if (typeof document !== "undefined") {
+      document.getElementById("go").addEventListener("click", function () {
+        var out = document.getElementById("out");
+        try {
+          var corpus = JSON.parse(document.getElementById("corpus").value);
+          var r = recompute(corpus);
+          var rows = r.per_family
+            .map(function (f) {
+              var floor = r.irreducible.length && f.v2_caught < f.total;
+              return (
+                "<tr class='" +
+                (floor ? "floor" : "") +
+                "'><td>" +
+                f.family +
+                "</td><td>" +
+                f.v1_caught +
+                "/" +
+                f.total +
+                "</td><td>" +
+                f.v2_caught +
+                "/" +
+                f.total +
+                "</td></tr>"
+              );
+            })
+            .join("");
+          out.innerHTML =
+            "<p>v1 slip-rate <b>" +
+            r.metamorphic_slip_rate_v1 +
+            "</b> &rarr; v2 slip-rate <b>" +
+            r.metamorphic_slip_rate_v2 +
+            "</b>. Irreducible floor: " +
+            (r.irreducible.join(", ") || "none") +
+            "</p><table><tr><th>family</th><th>v1 caught</th><th>v2 caught</th></tr>" +
+            rows +
+            "</table>";
+        } catch (e) {
+          out.textContent = "parse error: " + e.message;
+        }
+      });
+    }
+  })();
+</script>
