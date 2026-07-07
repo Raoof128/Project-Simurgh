@@ -52,6 +52,22 @@
   sections are contestable by recomputation; the other 16 by signed judgment only.
   The declared **4W** socket (`narrative_claim_contest_deferred`) and the **4X**
   novel-attack hook (`lane_a_both_parties_built_by_us`) are signed into the stage.
+- **Status update (2026-07-07):** the **4W** socket is **PAID** — **Stage 4W —
+  VSN** (`v2.32.0-stage-4w-vsn`): **Verifiable Slot-Bound Narrative**, under
+  **No Smuggled Claim** / **No Unanswerable Story** / **Voice Is Not Evidence**.
+  The incident narrative around the numbers becomes span-typed: a signed span map
+  types every claim-bearing span `slot_bound` (recomputes against the sealed
+  capsule), `judgment` (digest-bound), or `unverified_prose` (zero evidentiary
+  weight, rendered as voice), and a frozen-lexical leakage gate fails closed on any
+  undeclared claim-lookalike. A `slot_bound` span reuses the 4V status table
+  verbatim (no cloned court), so `narrative_claim_contest_deferred` is marked PAID.
+  Inventions: **evidence density** (honest byte-accounting, signed non-claim that
+  it is not a quality score), the **Brigandi** fabricated-citation (167) /
+  false-quotation (169) fixture family, a **C2PA/in-toto bridge**, and a live
+  **Lane C-adv** spin-instructed drafting capture. Raw codes 162–172, five Lean
+  theorems, two-process blind Lane B, JS↔Python↔browser parity, read-only kernel.
+  Honest bound: the gate is **lexical, not semantic** — paraphrase smuggling is
+  minted as the **4X** socket (`semantic_leakage_adversary_deferred`).
 
 ---
 

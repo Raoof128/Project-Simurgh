@@ -315,4 +315,5 @@ export function writeCorpus() {
 
 // CLI main: `node build-stage4w-fixtures.mjs` regenerates the byte-stable corpus
 // (reviewer P0 #3 — the corpus MUST be a committed file for Task 16's cmp).
-if (import.meta.url === pathToFileURL(process.argv[1]).href) writeCorpus();
+// Guard argv[1] (undefined under `node -e`/dynamic import) so importing never crashes.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) writeCorpus();

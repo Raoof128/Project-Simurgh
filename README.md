@@ -41,16 +41,17 @@ In one sentence: **Simurgh gives an agentic system a verifiable receipt, not a p
 > selective omission, multi-agent accountability) to concrete mechanisms — printable version at
 > [`docs/research/llm-shield/anthropic-brief.html`](docs/research/llm-shield/anthropic-brief.html).
 
-> 🆕 **Latest — Stage 4Q · Verifiable Friction Receipts (`v2.26.0-stage-4q-vfr`).** A signed,
-> epoch-bound, ordered proof that an approval-gate friction checkpoint _preceded_ a protected
-> authority crossing — with a two-key pincer (a crossing must embed the approval digest, the
-> approval must be earlier in the run chain, and it must be signed by a key distinct from the
-> tool/harness). Its completeness closure, **No Silent Exemption**, requires any _unbound_ crossing
-> to carry a signed, policy-falsifiable exemption rather than a silent gap. Five machine-checked
-> Lean theorems, JS↔Python byte-parity, a live approval-gated capture lane driven by a genuinely
-> separate approver process, and a one-command offline reproduce. Honest scope: this proves
-> _oversight preceded consequential action, verifiably_ — not that a human deliberated, and not that
-> friction prevented harm.
+> 🆕 **Latest — Stage 4W · Verifiable Slot-Bound Narrative (`v2.32.0-stage-4w-vsn`).** The incident
+> narrative _around_ the numbers becomes span-typed and contest-addressable: free prose plus a
+> signed span map that types every claim-bearing span as `slot_bound` (recomputes against the
+> sealed capsule), `judgment` (digest-bound), or `unverified_prose` (zero evidentiary weight, shown
+> as voice). A frozen-lexical **leakage gate** fails closed on any undeclared claim-lookalike — so
+> the story may say anything but cannot _imply_ evidence. Laws: **No Smuggled Claim · No
+> Unanswerable Story · Voice Is Not Evidence.** It pays 4V's reserved narrative-contest socket (a
+> `slot_bound` span reuses the 4V status table verbatim), reports an honest evidence-density triple,
+> and ships a C2PA/in-toto bridge, five machine-checked Lean theorems, JS↔Python↔browser
+> byte-parity, and a one-command offline reproduce. Honest scope: the gate is **lexical, not
+> semantic** — paraphrase smuggling is named as the next (4X) attack surface, not claimed solved.
 
 ---
 
