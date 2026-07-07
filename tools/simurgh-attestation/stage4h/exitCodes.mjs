@@ -583,6 +583,46 @@ export const VLR_REASONS_175 = Object.freeze([
 ]);
 export const VLR_REASONS_176 = Object.freeze(["v1_ruleset_digest_mismatch", "four_w_source_drift"]);
 
+// Stage 4Y VDR codes (spec §2). Wrapper LAST at 189; 190–199 headroom.
+export const VDR_RAW_CODES = Object.freeze({
+  VDR_SCHEMA_INVALID: 181,
+  VDR_SIGNATURE_INVALID: 182,
+  VDR_DOCUMENT_BYTES_INVALID: 183,
+  VDR_FROZEN_BINDING_MISMATCH: 184,
+  VDR_PARTITION_INVALID: 185,
+  VDR_RECONCILIATION_MISMATCH: 186,
+  VDR_SHADOW_REPLAY_MISMATCH: 187,
+  VDR_MAP_RECOMPUTE_MISMATCH: 188,
+  // _VDR-suffixed to avoid colliding with VSN's INTERNAL_FAIL_CLOSED: 172.
+  INTERNAL_FAIL_CLOSED_VDR: 189,
+});
+// Frozen first-failure order (4Y spec §2): schema → signature → document-bytes
+// (intrinsic) → frozen-binding → partition → reconciliation (audit) →
+// shadow-replay (audit) → map-recompute (audit). Wrapper 189 applied LAST.
+export const VDR_CHECK_ORDER = Object.freeze([181, 182, 183, 184, 185, 186, 187, 188]);
+// Tier doctrine as a machine fact (spec §2): public = structural arithmetic +
+// signed commitments; audit adds byte recomputation + replay. public ⊂ audit.
+export const VDR_PUBLIC_CODES = Object.freeze([181, 182, 184, 185]);
+export const VDR_AUDIT_CODES = Object.freeze([181, 182, 183, 184, 185, 186, 187, 188]);
+export const VDR_REASONS_183 = Object.freeze([
+  "invalid_utf8",
+  "empty_body",
+  "not_nfc_normalised",
+  "manifest_offset_malformed",
+  "manifest_overlap",
+  "manifest_mid_code_point",
+  "undeclared_redaction_marker",
+]);
+export const VDR_REASONS_185 = Object.freeze([
+  "regions_unsorted",
+  "regions_overlap",
+  "regions_gap",
+  "length_not_conserved",
+  "unknown_region_class",
+  "aggregates_mismatch",
+  "shadow_arithmetic_broken",
+]);
+
 export const HARNESS_CODES = Object.freeze({
   CLEAN_RUN_FALSELY_REJECTED: 19,
 });
@@ -772,6 +812,15 @@ export const RUN_LEVEL_BY_RAW = Object.freeze({
   178: 1,
   179: 1,
   180: 1,
+  181: 1,
+  182: 1,
+  183: 1,
+  184: 1,
+  185: 1,
+  186: 1,
+  187: 1,
+  188: 1,
+  189: 1,
 });
 
 export function stage4CodeForRawCode(code) {
