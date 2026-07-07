@@ -7,8 +7,14 @@ import { readFileSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
-import { recordDigest, canonicalJson } from "../../../../tools/simurgh-attestation/stage4m/core/canonical.mjs";
-import { buildGreenBundle, STAGE_VERIFIERS } from "../../../../tools/simurgh-attestation/stage4t/node/greenCapsule.mjs";
+import {
+  recordDigest,
+  canonicalJson,
+} from "../../../../tools/simurgh-attestation/stage4m/core/canonical.mjs";
+import {
+  buildGreenBundle,
+  STAGE_VERIFIERS,
+} from "../../../../tools/simurgh-attestation/stage4t/node/greenCapsule.mjs";
 import * as constants from "../../../../tools/simurgh-attestation/stage4v/constants.mjs";
 import * as binding from "../../../../tools/simurgh-attestation/stage4v/core/bindingCore.mjs";
 import * as census from "../../../../tools/simurgh-attestation/stage4v/core/contestCensus.mjs";
@@ -66,7 +72,12 @@ test("gate 2 — meta: only_152 invalid sig, 153-160 validly resigned", () => {
   const pub = crypto.createPublicKey(doc.respondent_pubkey_pem);
   const ok = (cc) => {
     try {
-      return crypto.verify(null, Buffer.from(canonicalJson(core.unsignedCounterCapsule(cc))), pub, Buffer.from(cc.signature ?? "", "hex"));
+      return crypto.verify(
+        null,
+        Buffer.from(canonicalJson(core.unsignedCounterCapsule(cc))),
+        pub,
+        Buffer.from(cc.signature ?? "", "hex")
+      );
     } catch {
       return false;
     }
@@ -105,7 +116,9 @@ test("gate 4 — status-locality hard gate (from the corpus pair)", () => {
       stageVerifiers: STAGE_VERIFIERS,
     }).envelope.result.sections;
   };
-  const withX = run("locality-with-failed-section").filter((s) => s.key !== "gpai_art55/serious_incident_response");
+  const withX = run("locality-with-failed-section").filter(
+    (s) => s.key !== "gpai_art55/serious_incident_response"
+  );
   assert.deepEqual(withX, run("locality-without-failed-section"));
 });
 
@@ -124,7 +137,10 @@ test("gate 5 — subpoena: tampered capsule seals reverify 134, refused", () => 
 
 test("gate 6 — reference-capsule immutability", () => {
   assert.equal(constants.STAGE4T_REFERENCE_CAPSULE.capsule_root, green.bundle.content.capsule_root);
-  assert.equal(constants.STAGE4T_REFERENCE_CAPSULE.attestation_digest, green.bundle.attestation_digest);
+  assert.equal(
+    constants.STAGE4T_REFERENCE_CAPSULE.attestation_digest,
+    green.bundle.attestation_digest
+  );
 });
 
 test("gate 7 — registry-authority: stage4v defines no recompute fns, imports the 4T registry", () => {
@@ -139,7 +155,11 @@ test("gate 7 — registry-authority: stage4v defines no recompute fns, imports t
   walk(S4V);
   for (const f of files) {
     const src = readFileSync(f, "utf8");
-    assert.equal(/RECOMPUTE_REGISTRY\s*=/.test(src), false, `${f} must not define RECOMPUTE_REGISTRY`);
+    assert.equal(
+      /RECOMPUTE_REGISTRY\s*=/.test(src),
+      false,
+      `${f} must not define RECOMPUTE_REGISTRY`
+    );
     assert.equal(/function\s+recompute\b/.test(src), false, `${f} must not define recompute()`);
   }
   const conflictSrc = readFileSync(join(S4V, "core/conflictMap.mjs"), "utf8");
@@ -148,10 +168,14 @@ test("gate 7 — registry-authority: stage4v defines no recompute fns, imports t
 });
 
 test("gate 8 — read-only kernel: no src/llmShield diff, no authorise_ token", () => {
-  const diff = execFileSync("git", ["diff", "--name-only", "v2.30.0-stage-4t-vic", "--", "src/llmShield"], {
-    cwd: ROOT,
-    encoding: "utf8",
-  }).trim();
+  const diff = execFileSync(
+    "git",
+    ["diff", "--name-only", "v2.30.0-stage-4t-vic", "--", "src/llmShield"],
+    {
+      cwd: ROOT,
+      encoding: "utf8",
+    }
+  ).trim();
   assert.equal(diff, "", "src/llmShield must be byte-frozen since 4T");
   const files = [];
   const walk = (d) => {
@@ -199,7 +223,10 @@ test("attestation both tiers + Lane B capture verify", () => {
   assert.deepEqual(verifyAttestation(attestation, { tier: "public" }), { ok: true });
   assert.deepEqual(verifyAttestation(attestation, { tier: "audit" }), { ok: true });
   const cap = JSON.parse(
-    readFileSync(join(ROOT, "docs/research/llm-shield/evidence/stage-4v/laneb/capture.json"), "utf8")
+    readFileSync(
+      join(ROOT, "docs/research/llm-shield/evidence/stage-4v/laneb/capture.json"),
+      "utf8"
+    )
   );
   assert.equal(verifyContestLaneBCapture(cap).ok, true);
 });

@@ -23,7 +23,10 @@ import { corpusDocument } from "./build-stage4v-fixtures.mjs";
 const HERE = dirname(fileURLToPath(import.meta.url));
 const KEYDIR = join(HERE, "../../../../tests/fixtures/llmShield/stage4v/test-keys");
 const EVDIR = join(HERE, "../../../../docs/research/llm-shield/evidence/stage-4v/attestation");
-const LANEB = join(HERE, "../../../../docs/research/llm-shield/evidence/stage-4v/laneb/capture.json");
+const LANEB = join(
+  HERE,
+  "../../../../docs/research/llm-shield/evidence/stage-4v/laneb/capture.json"
+);
 const readKey = (n) => readFileSync(join(KEYDIR, `INSECURE_FIXTURE_ONLY_${n}.pem`), "utf8");
 const readPub = (n) => readFileSync(join(KEYDIR, `INSECURE_FIXTURE_ONLY_${n}.pub.pem`), "utf8");
 

@@ -130,7 +130,11 @@ export function buildLaneAFixtures() {
     156,
     (() => {
       const m = buildGreenContest().counterCapsule;
-      m.respondent_evidence_artifacts.push({ kind: "kernel_decision_records", epoch: "vic-incident-epoch-0001", decisions: [] });
+      m.respondent_evidence_artifacts.push({
+        kind: "kernel_decision_records",
+        epoch: "vic-incident-epoch-0001",
+        decisions: [],
+      });
       return resignCounterGreen(m);
     })()
   );
@@ -168,7 +172,8 @@ export function buildLaneAFixtures() {
   );
   // 160 — presented conflict map mismatch (expected map with a flipped status).
   const g160 = buildGreenContest();
-  const good160 = evaluateContestSafe(g160.capsuleBundle, g160.counterCapsule, EVAL_OPTS).envelope.result;
+  const good160 = evaluateContestSafe(g160.capsuleBundle, g160.counterCapsule, EVAL_OPTS).envelope
+    .result;
   const flipped = clone(good160);
   flipped.sections[1].status = "AGREED";
   add("conflict-map-mismatch", 160, g160.counterCapsule, {
@@ -176,12 +181,24 @@ export function buildLaneAFixtures() {
   });
 
   // status matrix: single-status scoreable contests (all raw 0).
-  const anchorArt = { kind: "stage4n_temporal_anchor", epoch: "vic-incident-epoch-0001", beat_index: 40 };
-  const kernel2 = { kind: "kernel_decision_records", epoch: "vic-incident-epoch-0001", decisions: [{ decision: "blocked" }, { decision: "blocked" }] };
+  const anchorArt = {
+    kind: "stage4n_temporal_anchor",
+    epoch: "vic-incident-epoch-0001",
+    beat_index: 40,
+  };
+  const kernel2 = {
+    kind: "kernel_decision_records",
+    epoch: "vic-incident-epoch-0001",
+    decisions: [{ decision: "blocked" }, { decision: "blocked" }],
+  };
   const singleCensus = (arts) =>
     buildRespondentCensus({
       epoch: "vic-incident-epoch-0001",
-      items: arts.map((a) => ({ kind: a.kind, digest: recordDigest(a), epoch: "vic-incident-epoch-0001" })),
+      items: arts.map((a) => ({
+        kind: a.kind,
+        digest: recordDigest(a),
+        epoch: "vic-incident-epoch-0001",
+      })),
     });
   const mkSingle = (contests, arts) => {
     const cc = {

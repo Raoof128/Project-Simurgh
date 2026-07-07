@@ -3,7 +3,10 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { recordDigest, canonicalJson } from "../../../../tools/simurgh-attestation/stage4m/core/canonical.mjs";
+import {
+  recordDigest,
+  canonicalJson,
+} from "../../../../tools/simurgh-attestation/stage4m/core/canonical.mjs";
 import { capsuleAttestationDigest } from "../../../../tools/simurgh-attestation/stage4t/core/capsuleCore.mjs";
 import {
   buildGreenBundle,
@@ -123,7 +126,10 @@ test("expectedConflictMap mismatch -> 160", () => {
   const good = evaluateContest(green.bundle, cc, opts()).envelope.result;
   const tampered = JSON.parse(JSON.stringify(good));
   tampered.sections[0].status = "AGREED";
-  assert.equal(evaluateContest(green.bundle, cc, { ...opts(), expectedConflictMap: tampered }).raw, 160);
+  assert.equal(
+    evaluateContest(green.bundle, cc, { ...opts(), expectedConflictMap: tampered }).raw,
+    160
+  );
 });
 
 test("subpoena: tampered capsule inner signature -> raw 134, refused", () => {

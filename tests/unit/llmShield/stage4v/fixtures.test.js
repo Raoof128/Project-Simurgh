@@ -1,12 +1,18 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import crypto from "node:crypto";
-import { recordDigest, canonicalJson } from "../../../../tools/simurgh-attestation/stage4m/core/canonical.mjs";
+import {
+  recordDigest,
+  canonicalJson,
+} from "../../../../tools/simurgh-attestation/stage4m/core/canonical.mjs";
 import {
   buildLaneAFixtures,
   corpusDocument,
 } from "../../../../tools/simurgh-attestation/stage4v/node/build-stage4v-fixtures.mjs";
-import { evaluateContestSafe, unsignedCounterCapsule } from "../../../../tools/simurgh-attestation/stage4v/core/counterCapsuleCore.mjs";
+import {
+  evaluateContestSafe,
+  unsignedCounterCapsule,
+} from "../../../../tools/simurgh-attestation/stage4v/core/counterCapsuleCore.mjs";
 import { STAGE_VERIFIERS } from "../../../../tools/simurgh-attestation/stage4t/node/greenCapsule.mjs";
 
 test("every fixture reproduces its expected_raw and envelope digest", () => {

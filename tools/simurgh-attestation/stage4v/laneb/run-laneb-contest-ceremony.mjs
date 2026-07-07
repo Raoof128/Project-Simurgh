@@ -59,7 +59,11 @@ export async function captureContestLaneB() {
     stageVerifiers: STAGE_VERIFIERS,
   });
   if (raw !== 0) throw new Error(`lane b contest not scoreable: raw ${raw}`);
-  if (child.blindness.env_has_operator_key_path || child.blindness.env_has_operator_state_path || child.blindness.argv_has_pem)
+  if (
+    child.blindness.env_has_operator_key_path ||
+    child.blindness.env_has_operator_state_path ||
+    child.blindness.argv_has_pem
+  )
     throw new Error("lane b respondent not blind");
 
   return {

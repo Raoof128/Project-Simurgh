@@ -20,8 +20,7 @@ import { bundleMerkleRoot } from "./build-stage4v-attestation.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const KEYDIR = join(HERE, "../../../../tests/fixtures/llmShield/stage4v/test-keys");
-const readPub = () =>
-  readFileSync(join(KEYDIR, "INSECURE_FIXTURE_ONLY_vdp.pub.pem"), "utf8");
+const readPub = () => readFileSync(join(KEYDIR, "INSECURE_FIXTURE_ONLY_vdp.pub.pem"), "utf8");
 
 export function verifyAttestation(attestation, { tier = "public", pubKeyPem } = {}) {
   const pub = pubKeyPem ?? readPub();

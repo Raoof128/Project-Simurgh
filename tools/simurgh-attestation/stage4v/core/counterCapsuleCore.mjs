@@ -239,7 +239,10 @@ export function evaluateContest(capsuleBundle, cc, opts = {}) {
     filed_at_beat_status: "not_supplied",
   };
   if (reverify.raw !== 0)
-    return { raw: reverify.raw, envelope: { ...envelopeBase, result: { refused: true, raw: reverify.raw } } };
+    return {
+      raw: reverify.raw,
+      envelope: { ...envelopeBase, result: { refused: true, raw: reverify.raw } },
+    };
 
   for (const check of [
     () => schemaCheck(cc),
