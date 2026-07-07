@@ -46,7 +46,7 @@ endorsement claim.)
 
 1. **Field-binding law** (No Hearsay, fabrication side) — every
    `evidence_backed` section carries `{ value, evidence_digest,
-   recompute_kind }` and the audit tier recomputes the value from the cited
+recompute_kind }` and the audit tier recomputes the value from the cited
    artifact. Codes 137 / 141 / 142.
 2. **Suppression law** (No Hearsay, hiding side) — the pinned partition is
    normative; downgrading a derivable section while the sealed census holds
@@ -294,7 +294,7 @@ its evidence supports — no more, no less.
 - `evidence_manifest` — §4, with `census_root`.
 - `projected_sections[]` — one entry per template section:
   - `evidence_backed` → `{ section_id, value, evidence_digest,
-    recompute_kind }`. The audit tier recomputes `value` from the cited
+recompute_kind }`. The audit tier recomputes `value` from the cited
     census artifact via a **closed `recompute_kind` registry** (one pure
     recompute function per kind; unknown kind is schema-invalid → 133).
     Expected kinds include `stage4s_chain_verdict` (rerun the 4S verifier;
@@ -352,7 +352,7 @@ cryptographically impossible:
   commitment) or a **declared redaction** carrying the bare commitment.
 - **The redactor must ledger the redaction** (4L cardinality lineage): each
   view commits its redaction count and the exact redacted section ids. A view
-  may hide; it may never hide *that* it hid, and it can never assert a value
+  may hide; it may never hide _that_ it hid, and it can never assert a value
   different from the capsule's — a differing value fails its commitment.
 
 ```text
@@ -522,18 +522,18 @@ no enforcement. Stated so reviewers see the boundary is deliberate.
 Closest kin first — the honest source map:
 
 - **VeritasChain VAP / CAP-SRP** (veritaschain.org/vap, github.com/veritaschain/cap-spec
-  + cap-srp; DRAFT v0.2, surveyed 2026-07-07) — the nearest occupant found:
-  append-only Ed25519 hash chain over a system's own generation / evaluation /
-  refusal events, with a "CompletenessVerifier" (expected vs actual event
-  counts) and optional Merkle anchor. Exact difference, in one breath: its
-  completeness is **count-based against self-declared counts** (the laundering
-  hole 4U's precommitted manifest closed) over a **single system's own event
-  log** (trust-the-writer at the source), with **no regulator-template
-  binding, no per-field recompute, no normative partition, no suppression
-  detection, and no multi-audience views**. CAP-SRP attests what was recorded;
-  VIC proves the report over the record is complete, faithful, and one story.
+  - cap-srp; DRAFT v0.2, surveyed 2026-07-07) — the nearest occupant found:
+    append-only Ed25519 hash chain over a system's own generation / evaluation /
+    refusal events, with a "CompletenessVerifier" (expected vs actual event
+    counts) and optional Merkle anchor. Exact difference, in one breath: its
+    completeness is **count-based against self-declared counts** (the laundering
+    hole 4U's precommitted manifest closed) over a **single system's own event
+    log** (trust-the-writer at the source), with **no regulator-template
+    binding, no per-field recompute, no normative partition, no suppression
+    detection, and no multi-audience views**. CAP-SRP attests what was recorded;
+    VIC proves the report over the record is complete, faithful, and one story.
 - **DEMM — Decision Evidence Maturity Model** (arXiv 2605.04093) — names the
-  **container fallacy** and per-question evidence *sufficiency*; a
+  **container fallacy** and per-question evidence _sufficiency_; a
   property-level maturity method with a trace reconstructor, explicitly "not
   external validation": no cryptographic completeness, no template
   projection, no signed capsule. Ally citation: it states VIC's problem;
@@ -569,12 +569,12 @@ multi-audience-consistent, offline-recomputable incident capsule does not.
 
 ## 14. Four-axis scorecard (pre-score only — re-score at closeout after the prior-art sweep and shipped evidence)
 
-| Axis               | Score | What moves it higher                                                                                                                                                                                          |
-| ------------------ | ----- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Axis               | Score | What moves it higher                                                                                                                                                                                                                                       |
+| ------------------ | ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Novelty            | 9.5   | Closed-world recomputable incident report bound to a regulator's own pinned template, with suppression detection (143/144) AND contradiction-proof multi-audience views with a redaction census (148/149) — both halves unoccupied. Survive the §13 sweep. |
-| Frontier           | 9.4   | Article-73 obligations live in the near-term window (AI Act applies 2 Aug 2026); the named regulator gap answered with a shipped artifact, not a paper.                                                            |
+| Frontier           | 9.4   | Article-73 obligations live in the near-term window (AI Act applies 2 Aug 2026); the named regulator gap answered with a shipped artifact, not a paper.                                                                                                    |
 | Good-for-Anthropic | 9.4   | The evidence substrate under the third-party-ecosystem bet — and No Two Stories directly defends a lab's credibility: the public post and the regulator filing provably tell one story. Non-engineer-usable browser verifier raises it further.            |
-| Constitution       | 9.3   | Oversight/accountability projected into a rerunnable regulator surface; 4S consent IOU retired; `requires_human_input` is human oversight by construction; views make honesty-across-audiences structural.        |
+| Constitution       | 9.3   | Oversight/accountability projected into a rerunnable regulator surface; 4S consent IOU retired; `requires_human_input` is human oversight by construction; views make honesty-across-audiences structural.                                                 |
 
 ## 15. Comprehensive E2E net + docs-accuracy pass (mandatory before tag)
 

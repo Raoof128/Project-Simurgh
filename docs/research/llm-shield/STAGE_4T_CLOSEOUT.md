@@ -59,27 +59,27 @@ reviewer — a design-order tie-break, not an endorsement claim.)
 
 ## Honest results
 
-| raw | reason                          | how exercised                                                        |
-| --- | ------------------------------- | ------------------------------------------------------------------- |
-| 0   | green                           | honest capsule (real 108 chain); live Lane B hop (verdict 0)        |
-| 133 | vic_capsule_malformed           | bad bundle schema / duplicate regime / unknown recompute kind       |
-| 134 | vic_signature_invalid           | tampered inner signature / wrong public key                         |
-| 135 | template_digest_mismatch        | binding snapshot digest ≠ pinned digest                             |
-| 136 | template_partition_incomplete   | partition key set ≠ snapshot section set (missing OR extra)         |
-| 137 | template_section_unmapped       | capsule projects a section absent from the snapshot                 |
-| 138 | evidence_census_missing_item    | manifest lists an item the bundle lacks                             |
-| 139 | evidence_census_smuggled_item   | bundle carries an artifact the manifest omits                       |
-| 140 | census_merkle_mismatch          | tampered census root                                                |
-| 141 | field_unbacked                  | evidence_backed field with unresolvable evidence digest             |
-| 142 | field_recompute_mismatch        | recompute ≠ projected value (incl. chain verdict)                   |
-| 143 | not_derivable_unjustified       | SUPPRESSION: derivable section hidden while evidence sealed         |
-| 144 | requires_human_input_unjustified| SUPPRESSION: derivable section laundered behind human-input marker  |
-| 145 | incident_epoch_mismatch         | census item bound to a different epoch                              |
-| 146 | cross_stage_reference_invalid   | recorded chain verdict falsified over a real 108 bundle             |
-| 147 | attestation_digest_mismatch     | two-stage seal tampered (valid signature, wrong digest)             |
-| 148 | view_inconsistent_with_capsule  | a view discloses a value contradicting the capsule                  |
-| 149 | redaction_undeclared            | undeclared omission / count mismatch / fabricated redaction         |
-| 150 | internal_fail_closed            | **defensive** — typed wrapper, exercised via a poisoned getter      |
+| raw | reason                           | how exercised                                                      |
+| --- | -------------------------------- | ------------------------------------------------------------------ |
+| 0   | green                            | honest capsule (real 108 chain); live Lane B hop (verdict 0)       |
+| 133 | vic_capsule_malformed            | bad bundle schema / duplicate regime / unknown recompute kind      |
+| 134 | vic_signature_invalid            | tampered inner signature / wrong public key                        |
+| 135 | template_digest_mismatch         | binding snapshot digest ≠ pinned digest                            |
+| 136 | template_partition_incomplete    | partition key set ≠ snapshot section set (missing OR extra)        |
+| 137 | template_section_unmapped        | capsule projects a section absent from the snapshot                |
+| 138 | evidence_census_missing_item     | manifest lists an item the bundle lacks                            |
+| 139 | evidence_census_smuggled_item    | bundle carries an artifact the manifest omits                      |
+| 140 | census_merkle_mismatch           | tampered census root                                               |
+| 141 | field_unbacked                   | evidence_backed field with unresolvable evidence digest            |
+| 142 | field_recompute_mismatch         | recompute ≠ projected value (incl. chain verdict)                  |
+| 143 | not_derivable_unjustified        | SUPPRESSION: derivable section hidden while evidence sealed        |
+| 144 | requires_human_input_unjustified | SUPPRESSION: derivable section laundered behind human-input marker |
+| 145 | incident_epoch_mismatch          | census item bound to a different epoch                             |
+| 146 | cross_stage_reference_invalid    | recorded chain verdict falsified over a real 108 bundle            |
+| 147 | attestation_digest_mismatch      | two-stage seal tampered (valid signature, wrong digest)            |
+| 148 | view_inconsistent_with_capsule   | a view discloses a value contradicting the capsule                 |
+| 149 | redaction_undeclared             | undeclared omission / count mismatch / fabricated redaction        |
+| 150 | internal_fail_closed             | **defensive** — typed wrapper, exercised via a poisoned getter     |
 
 **Published finding — the honest partition.** Of the 22 pinned template sections
 across both regimes, only **6 (27%)** are machine-derivable from the Simurgh spine
@@ -94,12 +94,12 @@ key audits pass; Lean 4 theorems, zero `sorry`.
 
 ## Four-axis re-score (closeout)
 
-| Axis               | Pre | Closeout | Note                                                                                                                                                          |
-| ------------------ | --- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Axis               | Pre | Closeout | Note                                                                                                                                                                                                                                                                 |
+| ------------------ | --- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Novelty            | 9.5 | **9.5**  | Closest occupant (VeritasChain CAP-SRP) is count-based completeness over a single system's own log; VIC adds real regulator-template binding, per-field recompute, suppression detection, and contradiction-proof multi-audience views. Source map survived contact. |
-| Frontier           | 9.4 | **9.4**  | Article-73 obligations live in the near-term window (AI Act applies 2 Aug 2026); the named regulator gap answered with a shipped, rerunnable artifact.        |
-| Good-for-Anthropic | 9.4 | **9.4**  | Evidence substrate under the third-party-ecosystem bet, in the exact shape regulators/insurers consume; No Two Stories defends "one public story = one filing." |
-| Constitution       | 9.3 | **9.3**  | Oversight/accountability projected into a rerunnable regulator surface; 4S consent IOU retired as a field group; `requires_human_input` is human oversight by construction. |
+| Frontier           | 9.4 | **9.4**  | Article-73 obligations live in the near-term window (AI Act applies 2 Aug 2026); the named regulator gap answered with a shipped, rerunnable artifact.                                                                                                               |
+| Good-for-Anthropic | 9.4 | **9.4**  | Evidence substrate under the third-party-ecosystem bet, in the exact shape regulators/insurers consume; No Two Stories defends "one public story = one filing."                                                                                                      |
+| Constitution       | 9.3 | **9.3**  | Oversight/accountability projected into a rerunnable regulator surface; 4S consent IOU retired as a field group; `requires_human_input` is human oversight by construction.                                                                                          |
 
 **Reviewer-hardness (commentary):** high — every raw code is a distinct, reachable,
 tested failure species; suppression (143/144) and view-contradiction (148/149) are
