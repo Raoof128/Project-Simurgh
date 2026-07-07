@@ -7,6 +7,7 @@
 // checkMonotone → 179, always RECOMPUTED, never trusts the stored flag (P1-6).
 import { checkLeakage } from "../../stage4w/core/leakageGate.mjs";
 import { checkLeakageV2 } from "./gateV2.mjs";
+import { canonicalJson } from "../../stage4m/core/canonical.mjs";
 import { VLR_LEDGER_SCHEMA } from "../constants.mjs";
 
 const caught = (fn, text) => fn(text, [], []) !== null;
@@ -99,8 +100,10 @@ const AGG_KEYS = [
 // Public tier (178): recompute aggregates from the SEALED outcomes; NO gate call.
 export function checkLedgerArithmetic(corpus, signedLedger) {
   const re = computeLedgerFromSealedOutcomes(corpus, signedLedger.per_item_outcomes);
+  // canonicalJson is key-order-independent — the sealed ledger arrives with alphabetical keys
+  // (canonicalJson on disk) while the recompute is insertion-order; JSON.stringify would false-fail.
   for (const k of AGG_KEYS)
-    if (JSON.stringify(re[k]) !== JSON.stringify(signedLedger[k]))
+    if (canonicalJson(re[k]) !== canonicalJson(signedLedger[k]))
       return fail(178, "vlr_ledger_mismatch", k);
   return null;
 }
