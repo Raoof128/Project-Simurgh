@@ -492,6 +492,37 @@ export const VIC_REASONS_134 = Object.freeze([
   "attestation_signature_invalid",
 ]);
 
+// Stage 4V VDP codes (reviewed extension of the shared ledger; 4V spec §8).
+export const VDP_RAW_CODES = Object.freeze({
+  VDP_COUNTER_CAPSULE_MALFORMED: 151,
+  VDP_RESPONDENT_SIGNATURE_INVALID: 152,
+  VDP_BINDING_MISMATCH: 153,
+  VDP_CONTESTED_SECTION_SET_MISMATCH: 154,
+  VDP_RESPONDENT_CENSUS_ITEM_MISMATCH: 155,
+  VDP_RESPONDENT_CENSUS_OMITS_EVIDENCE: 156,
+  VDP_RESPONDENT_CENSUS_ROOT_MISMATCH: 157,
+  VDP_RESPONDENT_CENSUS_EPOCH_MISMATCH: 158,
+  VDP_FORBIDDEN_RAW_PAYLOAD: 159,
+  VDP_CONFLICT_MAP_MISMATCH: 160,
+  INTERNAL_FAIL_CLOSED: 161,
+});
+// Frozen first-failure order (4V spec §8): pre(4T re-verify) → schema → signature →
+// binding → set digest → census → payload → map compare → fail-closed.
+export const VDP_CHECK_ORDER = Object.freeze([
+  151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161,
+]);
+export const VDP_REASONS_151 = Object.freeze([
+  "vdp_counter_capsule_schema_invalid",
+  "contest_schema_invalid",
+  "respondent_census_schema_invalid",
+  "unknown_verb",
+  "unknown_respondent_role",
+]);
+export const VDP_REASONS_152 = Object.freeze([
+  "respondent_signature_invalid",
+  "attestation_signature_invalid",
+]);
+
 export const HARNESS_CODES = Object.freeze({
   CLEAN_RUN_FALSELY_REJECTED: 19,
 });
@@ -650,6 +681,18 @@ export const RUN_LEVEL_BY_RAW = Object.freeze({
   148: 1,
   149: 1,
   150: 1,
+  // Stage 4V VDP codes.
+  151: 1,
+  152: 1,
+  153: 1,
+  154: 1,
+  155: 1,
+  156: 1,
+  157: 1,
+  158: 1,
+  159: 1,
+  160: 1,
+  161: 1,
 });
 
 export function stage4CodeForRawCode(code) {
