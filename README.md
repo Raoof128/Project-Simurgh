@@ -233,6 +233,26 @@ documented non-claims.
   and six machine-checked Lean theorems (including inclusion≠completeness). Scope is honest and signed:
   chain held **verifiable**, never "agents safe"; Merkle inclusion is presence, not completeness;
   attenuation enforcement is prior art — our claim is the offline-recomputable proof.
+- **Verifiable Due Process** (Stage 4V) — the first regulator-rerunnable incident report **the accused
+  can answer in a rerunnable way**, under three laws: **No Trial in Absentia**, **Same Rules for the
+  Defence**, **No Strawman**. A respondent files a signed **counter-capsule** bound to the exact sealed
+  4T capsule (root, attestation digest, schema version, signing-key fingerprint, contested-section-set
+  digest) and contests each section by one of three verbs: agree, dispute-by-recomputation (carrying its
+  own Merkle-sealed evidence census under the operator's identical census laws), or dispute-as-judgment
+  (prose sealed by digest only). The verifier derives — deterministically, offline — a **conflict map**
+  assigning each section one of five statuses (`AGREED`, `CONFLICT_PROVEN`, `ABSENCE_REBUTTED`,
+  `DISPUTE_RECORDED`, `DISPUTE_FAILED`); it never declares a winner. Inventions: **absence rebuttal**
+  (contesting what the operator said could NOT be derived — the respondent-side dual of 4T suppression
+  detection); the **anchor contest** + `filed_at_beat` (a two-sided recomputable clock over the 4N
+  heartbeat); the **Mirror Test** (a self-contest that must return all-`AGREED`, proving the scoring
+  function carries no party-bias term — Lean-twinned); and **contest-as-subpoena** (filing forces the
+  capsule to re-prove itself, and the sealed outcome envelope records the result). Provider-safe first,
+  then reviewer-safe. Raw codes 151–161; five machine-checked Lean theorems (`noTrialInAbsentia`,
+  `noStrawman`, `sameRulesForDefence`, `disputeLocality`, `mirrorAllAgreed`); a two-process
+  respondent-blind Lane B capture; JS↔Python↔browser parity. The kernel is imported **read-only** (no new
+  `authorise_*` entry; 4A–4U byte-frozen). Honest signed limitations: single round (no surrejoinder);
+  respondent key proves continuity of one voice, not identity; absence rebuttal is registry-bounded; both
+  Lane A parties are built by us.
 - **Verifiable red-team attestation** (Stage 4U) — a charter-bound adversarial red-team of the VDCC
   verifier itself, under the **No Silent Bypass** law. Before any attack runs, an Ed25519-signed
   `red_team_charter` precommits the campaign (seed, exact family counts, an attack-manifest Merkle root,
