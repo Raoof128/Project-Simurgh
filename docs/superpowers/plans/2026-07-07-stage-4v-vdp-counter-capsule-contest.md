@@ -909,14 +909,20 @@ Test with a minimal two-contest counter-capsule assembled inline via
 respondent kernel artifact), asserting: green → `raw 0` + envelope with
 `capsule_reverify_result === 0`, map present, `filed_at_beat_status ===
 "not_supplied"`; broken respondent signature → 152; `respondent_role:
-"martian"` → 151; **an unknown top-level key** (`cc.smuggled = 1`) → 151;
-**an unknown contest key** (`contest.provider_notes` — but that's a
-raw-content key) → 159, and a genuinely-unknown structural contest key
-(`contest.foo = 1`) → 151; contest carrying raw `judgment_text` → 159;
+"martian"` → 151; **an unknown structural top-level key** (`cc.smuggled = 1`)
+→ 151; **a top-level raw-content key** (`cc.transcript = "…"`) → **159**, not
+151 (prose smuggling is a forbidden payload, not a malformed field); **an
+unknown contest key** (`contest.provider_notes` — a raw-content key) → 159,
+and a genuinely-unknown structural contest key (`contest.foo = 1`) → 151;
+contest carrying raw `judgment_text` → 159;
 a `dispute_by_recomputation` contest **missing `claimed_value`** → 151;
 `filed_at_beat` carrying `raw_prose` → 159; `expectedConflictMap` with one
 mutated status → 160; capsule with tampered inner signature → `raw 134` and
 `result.refused === true` (subpoena).
+
+Note: every 159 case must have the raw key **in the signed body** (build or
+`resignCounterCapsule` WITH the key), because 152 (signature) precedes 159 in
+the frozen order — a raw key bolted on after signing would fire 152 first.
 
 **161 fail-closed (P1 #14 — do NOT test via a throwing `stageVerifiers`):** a
 poisoned stage verifier throws inside 4T's `evaluateCapsuleSafe` (pre-verify),
@@ -1086,13 +1092,15 @@ function contestShapeError(c) {
 function schemaCheck(cc) {
   if (!cc || typeof cc !== "object" || cc.schema !== VDP_COUNTER_CAPSULE_SCHEMA)
     return { raw: 151, reason: "vdp_counter_capsule_schema_invalid", detail: { part: "schema" } };
-  for (const k of Object.keys(cc))
+  for (const k of Object.keys(cc)) {
+    if (RAW_CONTENT_KEYS.has(k)) continue; // 159 territory — payloadCheck owns top-level prose too
     if (!TOP_LEVEL_KEYS.has(k))
       return {
         raw: 151,
         reason: "vdp_counter_capsule_schema_invalid",
         detail: { unknown_top_key: k },
       };
+  }
   if (!RESPONDENT_ROLES.includes(cc.respondent_role))
     return { raw: 151, reason: "unknown_respondent_role", detail: { role: cc.respondent_role } };
   if (!Array.isArray(cc.contests) || cc.contests.length === 0)
@@ -1136,10 +1144,14 @@ function signatureCheck(cc, respondentPubKeyPem) {
     : { raw: 152, reason: "respondent_signature_invalid", detail: { part: "signature" } };
 }
 
-// 159 — prose by digest only. Scans contests + anchor_contest + filed_at_beat
-// (P0 #2, P1 #8). Any raw-content key anywhere is forbidden; judgment prose must
-// be a well-formed digest, never inline text.
+// 159 — prose by digest only. Scans the TOP LEVEL + contests + anchor_contest +
+// filed_at_beat (P0 #2, P1 #8). Any raw-content key anywhere is forbidden prose
+// (a top-level `transcript` is smuggling, not a mere malformed field, so 159 not
+// 151); judgment prose must be a well-formed digest, never inline text.
 function payloadCheck(cc) {
+  for (const k of Object.keys(cc))
+    if (RAW_CONTENT_KEYS.has(k))
+      return { raw: 159, reason: "vdp_forbidden_raw_payload", detail: { top_level_field: k } };
   const all = [
     ...cc.contests,
     ...(cc.anchor_contest ? [cc.anchor_contest] : []),
@@ -1619,7 +1631,7 @@ test("status matrix + locality: DISPUTE_FAILED at X leaves other statuses byte-i
 
 `corpusDocument()` = `{ schema: "simurgh.vdp.lane_a_corpus.v1", reference_capsule_bundle, capsule_pubkey_pem, respondent_pubkey_pem, cases }` where each case gets `expected_envelope_digest = recordDigest(evaluateContestSafe(...).envelope)` computed at build time (audit tier, `STAGE_VERIFIERS`). `writeCorpus()` writes `canonicalJson(doc) + "\n"` to the laneA path. CLI main runs `writeCorpus()`.
 
-For 154/duplicate and locality-without: rebuild binding with `buildBinding(bundle, pubKeyPem, contestKeys(cc))` before resigning (the digest must match the new set for the OTHER checks to be reachable; the 154 fixtures deliberately leave it stale/dup respectively).
+For 154/duplicate and locality-without: rebuild binding with `buildBinding(bundle, pubKeyPem, contestTuples(cc))` before resigning (the digest must match the new set for the OTHER checks to be reachable; the 154 fixtures deliberately leave it stale/dup respectively).
 
 - [ ] **Step 4: Build + verify byte-stability**
 
@@ -1878,8 +1890,8 @@ exported symbol is exercised at least once) and asserts, as named gates:
 6. **Reference-capsule immutability**: `buildGreenBundle()` digests equal `STAGE4T_REFERENCE_CAPSULE` pins.
 7. **Registry-authority invariant**: read every `tools/simurgh-attestation/stage4v/**/*.mjs` source with `node:fs` (never `rg`), assert none defines a recompute function (`/RECOMPUTE_REGISTRY\s*=/` absent, `/function recompute/` absent) and `conflictMap.mjs` imports the registry from `../../stage4t/core/projectionCore.mjs`.
 8. **Read-only kernel**: `git diff --name-only v2.30.0-stage-4t-vic -- src/llmShield` empty via `execFileSync("git", ...)`; no `authorise_` token in stage4v sources.
-9. **Frozen 4T/4S/4U artifacts**: `git diff --exit-code v2.30.0-stage-4t-vic -- tools/simurgh-attestation/stage4t tools/simurgh-attestation/stage4s` (expected: only additions elsewhere; stage4t/4s dirs byte-identical).
-10. **Wrapper**: injected-throw → 161 (`evaluateContestSafe` with a poisoned stage verifier).
+9. **Frozen 4T/4S/4U artifacts**: `git diff --exit-code v2.30.0-stage-4t-vic -- tools/simurgh-attestation/stage4t tools/simurgh-attestation/stage4s tools/simurgh-attestation/stage4u` (expected: only additions elsewhere; the stage4t/4s/4u dirs byte-identical).
+10. **Wrapper**: non-serialisable respondent artifact (e.g. a BigInt field) after a successful capsule pre-verify → 161 (a poisoned stage verifier would be caught by 4T's `evaluateCapsuleSafe` → 150; the throw must land inside 4V's own path — see Task 6 §"161 fail-closed").
 
 `reproduce-llm-shield-stage4v.sh`: copy the 4T script structure verbatim
 (env pins, `run_step`, exit wrapper) with steps: node≥26 → unit suites
