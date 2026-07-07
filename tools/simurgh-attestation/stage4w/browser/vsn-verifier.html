@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'"
+    />
+    <title>Simurgh 4W — VSN narrative verifier (public tier)</title>
+    <style>
+      body {
+        font-family: ui-monospace, monospace;
+        max-width: 60rem;
+        margin: 2rem auto;
+        padding: 0 1rem;
+        line-height: 1.5;
+      }
+      textarea {
+        width: 100%;
+        height: 7rem;
+        font-family: ui-monospace, monospace;
+        font-size: 0.85rem;
+      }
+      .banner {
+        background: #fffbe6;
+        border: 1px solid #e0c000;
+        padding: 0.6rem 0.8rem;
+        border-radius: 6px;
+        margin-bottom: 1rem;
+      }
+      .seg {
+        padding: 0.05rem 0.2rem;
+        border-radius: 3px;
+      }
+      .E {
+        background: #d6f5d6;
+      }
+      .J {
+        background: #e6e0ff;
+      }
+      .V {
+        background: #f3f3f3;
+        color: #555;
+        font-style: italic;
+      }
+      .C {
+        color: #888;
+      }
+      .bar {
+        display: flex;
+        height: 1.4rem;
+        border-radius: 4px;
+        overflow: hidden;
+        margin: 0.5rem 0;
+      }
+      .bE {
+        background: #58c058;
+      }
+      .bJ {
+        background: #9c88ff;
+      }
+      .bV {
+        background: #ccc;
+      }
+      .ok {
+        color: #1a7f37;
+        font-weight: bold;
+      }
+      .bad {
+        color: #b00000;
+        font-weight: bold;
+      }
+      button {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Simurgh Stage 4W — Verifiable Slot-Bound Narrative</h1>
+    <div class="banner">
+      Public-tier convenience view — the Node CLI is authoritative; author signatures are NOT
+      verified here. Paste the capsule content JSON, the narrative bundle JSON, and the
+      <strong>capsule public-key PEM</strong> (used to recompute the binding fingerprint). Paste the
+      PEM exactly, including its trailing newline.
+    </div>
+    <label>Capsule content JSON<textarea id="capsule"></textarea></label>
+    <label>Narrative bundle JSON<textarea id="narrative"></textarea></label>
+    <label>Capsule public-key PEM<textarea id="pubkey"></textarea></label>
+    <p><button id="go">Verify</button></p>
+    <div id="result"></div>
+    <div id="render"></div>
+
+    <script id="vsn-core">
+      // Pure VSN public-tier core — self-contained (CSP default-src 'none').
+      // Ported verbatim from stage4m canonical.mjs (sha256 + canonicalJson) and the
+      // stage4w public-tier checks. MUST byte-match stage4w/constants.mjs + core/*.mjs.
+      (function () {
+        function normalise(value) {
+          if (Array.isArray(value)) return value.map(normalise);
+          if (value && typeof value === "object") {
+            const out = {};
+            for (const key of Object.keys(value).sort()) out[key] = normalise(value[key]);
+            return out;
+          }
+          return value;
+        }
+        const canonicalJson = (v) => JSON.stringify(normalise(v));
+        const K = new Uint32Array([
+          0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4,
+          0xab1c5ed5, 0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe,
+          0x9bdc06a7, 0xc19bf174, 0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f,
+          0x4a7484aa, 0x5cb0a9dc, 0x76f988da, 0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7,
+          0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc,
+          0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85, 0xa2bfe8a1, 0xa81a664b,
+          0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070, 0x19a4c116,
+          0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+          0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7,
+          0xc67178f2,
+        ]);
+        function utf8Bytes(str) {
+          const out = [];
+          for (let i = 0; i < str.length; i++) {
+            let c = str.codePointAt(i);
+            if (c > 0xffff) i++;
+            if (c < 0x80) out.push(c);
+            else if (c < 0x800) out.push(0xc0 | (c >> 6), 0x80 | (c & 63));
+            else if (c < 0x10000)
+              out.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));
+            else
+              out.push(
+                0xf0 | (c >> 18),
+                0x80 | ((c >> 12) & 63),
+                0x80 | ((c >> 6) & 63),
+                0x80 | (c & 63)
+              );
+          }
+          return out;
+        }
+        function sha256Hex(str) {
+          const bytes = utf8Bytes(str);
+          const bitLen = bytes.length * 8;
+          bytes.push(0x80);
+          while (bytes.length % 64 !== 56) bytes.push(0);
+          for (let i = 7; i >= 0; i--) bytes.push(Math.floor(bitLen / 2 ** (8 * i)) & 0xff);
+          const h = new Uint32Array([
+            0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab,
+            0x5be0cd19,
+          ]);
+          const w = new Uint32Array(64);
+          const rotr = (x, n) => (x >>> n) | (x << (32 - n));
+          for (let off = 0; off < bytes.length; off += 64) {
+            for (let t = 0; t < 16; t++) {
+              const i = off + t * 4;
+              w[t] = (bytes[i] << 24) | (bytes[i + 1] << 16) | (bytes[i + 2] << 8) | bytes[i + 3];
+            }
+            for (let t = 16; t < 64; t++) {
+              const s0 = rotr(w[t - 15], 7) ^ rotr(w[t - 15], 18) ^ (w[t - 15] >>> 3);
+              const s1 = rotr(w[t - 2], 17) ^ rotr(w[t - 2], 19) ^ (w[t - 2] >>> 10);
+              w[t] = (w[t - 16] + s0 + w[t - 7] + s1) | 0;
+            }
+            let [a, b, c, d, e, f, g, hh] = h;
+            for (let t = 0; t < 64; t++) {
+              const S1 = rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25);
+              const ch = (e & f) ^ (~e & g);
+              const t1 = (hh + S1 + ch + K[t] + w[t]) | 0;
+              const S0 = rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22);
+              const maj = (a & b) ^ (a & c) ^ (b & c);
+              const t2 = (S0 + maj) | 0;
+              hh = g;
+              g = f;
+              f = e;
+              e = (d + t1) | 0;
+              d = c;
+              c = b;
+              b = a;
+              a = (t1 + t2) | 0;
+            }
+            h[0] = (h[0] + a) | 0;
+            h[1] = (h[1] + b) | 0;
+            h[2] = (h[2] + c) | 0;
+            h[3] = (h[3] + d) | 0;
+            h[4] = (h[4] + e) | 0;
+            h[5] = (h[5] + f) | 0;
+            h[6] = (h[6] + g) | 0;
+            h[7] = (h[7] + hh) | 0;
+          }
+          return [...h].map((x) => (x >>> 0).toString(16).padStart(8, "0")).join("");
+        }
+        const recordDigest = (v) => "sha256:" + sha256Hex(canonicalJson(v));
+        const keyDigest = (pem) => "sha256:" + sha256Hex(pem);
+
+        // MUST byte-match stage4w/constants.mjs LEAKAGE_* lists.
+        const NUMBER_WORDS = [
+          "zero",
+          "one",
+          "two",
+          "three",
+          "four",
+          "five",
+          "six",
+          "seven",
+          "eight",
+          "nine",
+          "ten",
+          "eleven",
+          "twelve",
+          "thirteen",
+          "fourteen",
+          "fifteen",
+          "sixteen",
+          "seventeen",
+          "eighteen",
+          "nineteen",
+          "twenty",
+          "thirty",
+          "forty",
+          "fifty",
+          "sixty",
+          "seventy",
+          "eighty",
+          "ninety",
+          "hundred",
+          "thousand",
+          "million",
+          "billion",
+          "trillion",
+          "dozen",
+          "half",
+          "couple",
+        ];
+        const QUANTIFIERS = [
+          "all",
+          "none",
+          "most",
+          "every",
+          "nearly",
+          "almost",
+          "majority",
+          "nobody",
+          "no one",
+        ];
+        const MONTHS = [
+          "january",
+          "february",
+          "march",
+          "april",
+          "may",
+          "june",
+          "july",
+          "august",
+          "september",
+          "october",
+          "november",
+          "december",
+        ];
+        const KIND_EVIDENCE_SOURCE = {
+          stage4s_chain_verdict: "stage4s_chain_bundle",
+          kernel_block_record: "kernel_decision_records",
+          epoch_range: "stage4s_chain_bundle",
+          participant_count: "stage4s_chain_bundle",
+          consent_manifest_scope: "stage4o_consent_manifests",
+          stage4n_beat_index: "stage4n_temporal_anchor",
+        };
+        function recompute(kind, a) {
+          if (kind === "epoch_range") return a.range;
+          if (kind === "participant_count") return (a.participants || []).length;
+          if (kind === "kernel_block_record")
+            return (a.decisions || []).filter((d) => d.decision === "blocked").length;
+          if (kind === "stage4s_chain_verdict") return a.recorded_verdict;
+          if (kind === "consent_manifest_scope") return a.scope;
+          return undefined;
+        }
+        const eq = (a, b) => canonicalJson(a) === canonicalJson(b);
+        const enc = (s) => utf8Bytes(s);
+
+        function normaliseBody(body) {
+          return body
+            .normalize("NFC")
+            .replace(/\r\n?/g, "\n")
+            .split("\n")
+            .map((l) => l.replace(/[ \t]+$/, ""))
+            .join("\n");
+        }
+        const cpBoundary = (bytes, o) =>
+          Number.isInteger(o) &&
+          o >= 0 &&
+          o <= bytes.length &&
+          (o === bytes.length || (bytes[o] & 0xc0) !== 0x80);
+
+        function checkNormalisation(body) {
+          if (typeof body !== "string" || body.length === 0) return 164;
+          return body !== normaliseBody(body) ? 164 : null;
+        }
+        function checkGeometry(body, spanMap) {
+          const bytes = enc(body);
+          const seen = new Set();
+          let prevEnd = 0,
+            prevStart = -1;
+          for (const s of spanMap || []) {
+            if (!Number.isInteger(s.start_byte) || !Number.isInteger(s.end_byte)) return 165;
+            if (seen.has(s.span_id)) return 165;
+            seen.add(s.span_id);
+            if (s.start_byte < prevStart || s.start_byte < prevEnd) return 165;
+            if (s.end_byte <= s.start_byte) return 165;
+            if (s.end_byte > bytes.length) return 165;
+            if (!cpBoundary(bytes, s.start_byte) || !cpBoundary(bytes, s.end_byte)) return 165;
+            prevStart = s.start_byte;
+            prevEnd = s.end_byte;
+          }
+          return null;
+        }
+        function checkBinding(narrative, capsule, pubPem) {
+          const b = narrative.content.binding || {};
+          const expected = {
+            capsule_root: capsule.capsule_root,
+            attestation_digest: capsule.attestation_digest,
+            capsule_schema_version: "simurgh.vic.capsule.v1",
+            capsule_signing_key_fingerprint: keyDigest(pubPem),
+            narrative_body_digest: "sha256:" + sha256Hex(narrative.content.narrative_body),
+            span_map_digest: recordDigest(narrative.content.span_map || []),
+          };
+          for (const f of Object.keys(expected)) if (b[f] !== expected[f]) return 166;
+          return null;
+        }
+        function bytesSlice(body, a, b) {
+          const bytes = enc(body);
+          let s = "";
+          // decode UTF-8 subarray
+          const sub = bytes.slice(a, b);
+          let i = 0;
+          while (i < sub.length) {
+            let c = sub[i++];
+            if (c < 0x80) s += String.fromCodePoint(c);
+            else if (c >> 5 === 0x6) s += String.fromCodePoint(((c & 31) << 6) | (sub[i++] & 63));
+            else if (c >> 4 === 0xe)
+              s += String.fromCodePoint(
+                ((c & 15) << 12) | ((sub[i++] & 63) << 6) | (sub[i++] & 63)
+              );
+            else
+              s += String.fromCodePoint(
+                ((c & 7) << 18) | ((sub[i++] & 63) << 12) | ((sub[i++] & 63) << 6) | (sub[i++] & 63)
+              );
+          }
+          return s;
+        }
+        function uncovered(body, spanMap) {
+          const bytes = enc(body);
+          const spans = [...(spanMap || [])].sort((a, b) => a.start_byte - b.start_byte);
+          const regs = [];
+          let cur = 0;
+          for (const s of spans) {
+            if (s.start_byte > cur) regs.push([cur, s.start_byte]);
+            cur = Math.max(cur, s.end_byte);
+          }
+          if (cur < bytes.length) regs.push([cur, bytes.length]);
+          return regs.map(([a, b]) => bytesSlice(body, a, b));
+        }
+        function wordRe(words) {
+          return new RegExp("\\b(" + words.join("|").replace(/ /g, "\\s") + ")\\b", "u");
+        }
+        function checkLeakage(body, spanMap, capsule) {
+          const values = (capsule.projected_sections || [])
+            .filter((p) => p.value !== undefined && p.value !== null)
+            .map((p) => (typeof p.value === "string" ? p.value : canonicalJson(p.value)));
+          for (const region of uncovered(body, spanMap)) {
+            const f = region.toLowerCase();
+            if (/[0-9]/u.test(f)) return 170;
+            if (wordRe(NUMBER_WORDS).test(f)) return 170;
+            if (/%|\bpercent\b/u.test(f)) return 170;
+            if (wordRe(MONTHS).test(f)) return 170;
+            if (wordRe(QUANTIFIERS).test(f)) return 170;
+            for (const v of values) if (v.length >= 2 && f.includes(v.toLowerCase())) return 170;
+          }
+          return null;
+        }
+        function checkLocality(narrative, capsule) {
+          const sealed = new Set((capsule.evidence_artifacts || []).map(recordDigest));
+          for (const s of narrative.content.span_map || [])
+            if (s.type === "slot_bound" && !sealed.has(s.evidence_digest)) return 167;
+          return null;
+        }
+        function checkSlot(narrative, capsule) {
+          const sections = {};
+          for (const p of capsule.projected_sections || [])
+            sections[p.regime + "/" + p.section_id] = p;
+          const sealed = {};
+          for (const a of capsule.evidence_artifacts || []) sealed[recordDigest(a)] = a;
+          for (const s of narrative.content.span_map || []) {
+            if (s.type !== "slot_bound") continue;
+            const p = sections[s.regime + "/" + s.section_id];
+            if (!p || p.class !== "evidence_backed") return 169;
+            if (p.recompute_kind !== s.recompute_kind || p.evidence_digest !== s.evidence_digest)
+              return 169;
+            if (!eq(s.claimed_value, p.value)) return 169;
+            const art = sealed[s.evidence_digest];
+            if (!art || art.kind !== KIND_EVIDENCE_SOURCE[s.recompute_kind]) return 169;
+            if (!eq(recompute(s.recompute_kind, art), s.claimed_value)) return 169;
+          }
+          return null;
+        }
+
+        function evaluatePublic(narrative, capsule, capsulePubKeyPem) {
+          const body = narrative.content.narrative_body;
+          const sm = narrative.content.span_map || [];
+          const checks = [
+            () => checkNormalisation(body),
+            () => checkGeometry(body, sm),
+            () => checkBinding(narrative, capsule, capsulePubKeyPem),
+            () => checkLocality(narrative, capsule),
+            () => checkSlot(narrative, capsule),
+            () => checkLeakage(body, sm, capsule),
+          ];
+          for (const c of checks) {
+            const r = c();
+            if (r !== null && r !== undefined) return { raw: r };
+          }
+          return { raw: 0 };
+        }
+
+        const MARKERS = { slot_bound: "E", judgment: "J", unverified_prose: "V", connective: "C" };
+        function computeDensity(content) {
+          const total = enc(content.narrative_body).length;
+          let slot = 0,
+            judg = 0;
+          for (const s of content.span_map || []) {
+            const len = s.end_byte - s.start_byte;
+            if (s.type === "slot_bound") slot += len;
+            else if (s.type === "judgment") judg += len;
+          }
+          return {
+            slot_bound_bytes: slot,
+            judgment_bytes: judg,
+            voice_bytes: total - slot - judg,
+            total_bytes: total,
+          };
+        }
+        function renderSegments(content) {
+          const spans = [...(content.span_map || [])].sort((a, b) => a.start_byte - b.start_byte);
+          const segs = [];
+          let cur = 0;
+          const push = (a, b, type) =>
+            segs.push({ cls: MARKERS[type], text: bytesSlice(content.narrative_body, a, b) });
+          for (const s of spans) {
+            if (s.start_byte > cur) push(cur, s.start_byte, "connective");
+            push(s.start_byte, s.end_byte, s.type);
+            cur = s.end_byte;
+          }
+          if (cur < enc(content.narrative_body).length)
+            push(cur, enc(content.narrative_body).length, "connective");
+          return segs;
+        }
+
+        globalThis.VSN = { evaluatePublic, renderSegments, computeDensity, keyDigest };
+      })();
+    </script>
+    <script>
+      document.getElementById("go").addEventListener("click", () => {
+        const out = document.getElementById("result");
+        const rend = document.getElementById("render");
+        try {
+          const capsule = JSON.parse(document.getElementById("capsule").value);
+          const narrative = JSON.parse(document.getElementById("narrative").value);
+          const pubkey = document.getElementById("pubkey").value;
+          const res = globalThis.VSN.evaluatePublic(narrative, capsule, pubkey);
+          out.innerHTML =
+            res.raw === 0
+              ? '<p class="ok">PUBLIC TIER OK (raw 0)</p>'
+              : '<p class="bad">REJECTED — raw ' + res.raw + "</p>";
+          const d = globalThis.VSN.computeDensity(narrative.content);
+          const pct = (n) => (d.total_bytes ? Math.round((100 * n) / d.total_bytes) : 0);
+          rend.innerHTML =
+            '<div class="bar"><div class="bE" style="width:' +
+            pct(d.slot_bound_bytes) +
+            '%"></div><div class="bJ" style="width:' +
+            pct(d.judgment_bytes) +
+            '%"></div><div class="bV" style="width:' +
+            pct(d.voice_bytes) +
+            '%"></div></div>' +
+            "<p>Evidence density: " +
+            pct(d.slot_bound_bytes) +
+            "% evidence-bound, " +
+            pct(d.judgment_bytes) +
+            "% judgment, " +
+            pct(d.voice_bytes) +
+            "% voice.</p>";
+          const segs = globalThis.VSN.renderSegments(narrative.content);
+          rend.innerHTML += segs
+            .map(
+              (s) => '<span class="seg ' + s.cls + '">' + s.text.replace(/</g, "&lt;") + "</span>"
+            )
+            .join("");
+        } catch (e) {
+          out.innerHTML = '<p class="bad">parse error: ' + String(e).replace(/</g, "&lt;") + "</p>";
+        }
+      });
+    </script>
+  </body>
+</html>
