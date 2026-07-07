@@ -28,3 +28,5 @@ jobs:
           lean proofs/stage4u/NoSilentBypass.lean
           lean proofs/stage4t/NoHearsay.lean
           ! grep -Rn "\bsorry\b" proofs/stage4t
+          lean proofs/stage4v/DueProcess.lean
+          ! grep -Rn "\bsorry\b" proofs/stage4v
