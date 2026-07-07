@@ -245,6 +245,21 @@ documented non-claims.
   imported **read-only** (no new `authorise_*` entry). Scope is honest and signed: the charter proves
   **declared scope, not inner intent**; a confirmed bypass is a recorded outcome, not a verification
   failure; a live Fable-5 refusal is recorded as `model_refused`, never rephrased to bypass it.
+- **Verifiable Incident Capsule** (Stage 4T) — the first serious-incident report a regulator can
+  **rerun**, under the **No Hearsay** law. One signed capsule per incident epoch projects the receipt
+  spine onto BOTH pinned European Commission reporting templates (the published GPAI Art-55 systemic-risk
+  template and the Art-73 high-risk draft — real transcriptions of record). Every template section either
+  recomputes from a Merkle-sealed epoch **census** or signs its absence (`not_derivable` /
+  `requires_human_input`); **suppression detection** makes hiding derivable evidence a failure (143/144),
+  not just fabricating it (141). The **No Two Stories** law binds regulator / insurer / public audience
+  views to one capsule root — a view may redact but never contradict, and every redaction is ledgered
+  (148/149). Honest published finding: only **6 of 22** template sections are machine-derivable from the
+  spine. Raw codes 133–150; four machine-checked Lean theorems (`noHearsay`, `suppressionDetectable`,
+  `censusExactness`, `noTwoStories`); a live two-process MCP Lane B; a static browser verifier
+  (convenience view — the CLI two-tier verifier remains authoritative); byte-stable reproduce. No new
+  `authorise_*` entry — the kernel and 4S verifier are imported **read-only**. Honest and signed: the
+  capsule proves record completeness, never harm causation; the seriousness classification is
+  `requires_human_input` — the capsule refuses to invent a legal conclusion.
 
 ### External-defence evaluation
 

@@ -22,6 +22,19 @@
   two-tier signed attestation. Red-teaming the verifier **before** projecting it
   into a regulator-style report is the right order; the Incident Capsule (Art-73
   projection) remains the next rung (Stage 4T), now built on a hardened chain.
+- **Status update (2026-07-07):** the **wedge artifact is shipped** — **Stage 4T —
+  VIC** (`v2.30.0-stage-4t-vic`): the **Verifiable Incident Capsule** under the **No
+  Hearsay** law, bound to BOTH pinned Commission templates (GPAI Art-55 published +
+  Art-73 high-risk draft, real transcriptions of record). Every template section
+  recomputes from a Merkle-sealed epoch census or signs its absence
+  (`not_derivable` / `requires_human_input`); **suppression detection** (143/144)
+  makes hiding derivable evidence a failure, not just fabricating it; and the **No
+  Two Stories** law binds regulator / insurer / public audience views to one capsule
+  root (redact, never contradict; every redaction ledgered). Honest published
+  finding: only 6 of 22 template sections are machine-derivable from the spine — the
+  capsule states on its face which fields a machine may fill. Four Lean theorems,
+  live two-process MCP Lane B, byte-stable reproduce. The 4S consent IOU is retired
+  as a field group. This is the first serious-incident report a regulator can rerun.
 
 ---
 
