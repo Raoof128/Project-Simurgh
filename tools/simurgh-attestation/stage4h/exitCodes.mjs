@@ -523,6 +523,38 @@ export const VDP_REASONS_152 = Object.freeze([
   "attestation_signature_invalid",
 ]);
 
+// Stage 4W VSN codes (spec §2). Wrapper LAST at 172; 173-180 headroom.
+export const VSN_RAW_CODES = Object.freeze({
+  VSN_SCHEMA_INVALID: 162,
+  VSN_SIGNATURE_INVALID: 163,
+  VSN_NORMALISATION_INVALID: 164,
+  VSN_SPAN_GEOMETRY_INVALID: 165,
+  VSN_BINDING_MISMATCH: 166,
+  VSN_EVIDENCE_LOCALITY_VIOLATION: 167,
+  VSN_JUDGMENT_BINDING_INVALID: 168,
+  VSN_SLOT_RECOMPUTE_MISMATCH: 169,
+  VSN_LEAKAGE_DETECTED: 170,
+  VSN_PAYLOAD_VIOLATION: 171,
+  INTERNAL_FAIL_CLOSED: 172,
+});
+// Frozen first-failure order (4W spec §2): schema → signature → normalisation →
+// geometry → binding → locality → judgment → slot recompute → leakage → payload → wrapper.
+export const VSN_CHECK_ORDER = Object.freeze([
+  162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172,
+]);
+export const VSN_REASONS_162 = Object.freeze([
+  "vsn_schema_invalid",
+  "span_schema_invalid",
+  "judgment_schema_invalid",
+  "unknown_span_type",
+  "unknown_author_role",
+  "unknown_leakage_ruleset",
+]);
+export const VSN_REASONS_163 = Object.freeze([
+  "vsn_signature_invalid",
+  "attestation_signature_invalid",
+]);
+
 export const HARNESS_CODES = Object.freeze({
   CLEAN_RUN_FALSELY_REJECTED: 19,
 });
@@ -693,6 +725,17 @@ export const RUN_LEVEL_BY_RAW = Object.freeze({
   159: 1,
   160: 1,
   161: 1,
+  162: 1,
+  163: 1,
+  164: 1,
+  165: 1,
+  166: 1,
+  167: 1,
+  168: 1,
+  169: 1,
+  170: 1,
+  171: 1,
+  172: 1,
 });
 
 export function stage4CodeForRawCode(code) {
