@@ -96,3 +96,6 @@ tests/fixtures/llmShield/stage4t/expected-results/
 tests/fixtures/llmShield/stage4v/expected-results/
 docs/research/llm-shield/evidence/stage-4v/
 docs/research/llm-shield/evidence/stage-4w/
+
+# Stage 4X VLR evidence is generated deterministically; keep byte-stable (reproduce cmp).
+docs/research/llm-shield/evidence/stage-4x/
