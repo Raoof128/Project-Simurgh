@@ -83,6 +83,8 @@ export function computeLedgerFromSealedOutcomes(corpus, per_item_outcomes) {
   };
 }
 
+// Note: `monotone` is intentionally NOT here — Law 3 (179) owns it exclusively and RECOMPUTES
+// it, so a lying flag surfaces as 179, not as a generic 178 arithmetic mismatch (check order).
 const AGG_KEYS = [
   "v1",
   "v2",
@@ -92,7 +94,6 @@ const AGG_KEYS = [
   "catch_rate_v2",
   "residue_delta",
   "per_family",
-  "monotone",
 ];
 
 // Public tier (178): recompute aggregates from the SEALED outcomes; NO gate call.
