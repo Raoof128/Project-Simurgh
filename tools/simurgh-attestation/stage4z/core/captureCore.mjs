@@ -24,6 +24,30 @@ export function validOutcome(capture) {
   return CAPTURE_OUTCOMES.includes(capture?.ceremony?.outcome);
 }
 
+// validateCeremony(ceremony) → null | {error}. The Lane C sealing shape, validated in CI
+// WITHOUT loading torch — malformed ceremony JSON cannot ship while the compute stays offline.
+export function validateCeremony(ceremony) {
+  if (!ceremony || typeof ceremony !== "object") return { error: "not_an_object" };
+  if (!CAPTURE_OUTCOMES.includes(ceremony.outcome)) return { error: "bad_outcome" };
+  for (const field of [
+    "timestamp",
+    "model_id",
+    "revision_digest",
+    "lens_digest",
+    "position_rule_id",
+  ])
+    if (typeof ceremony[field] !== "string" || !ceremony[field])
+      return { error: `missing:${field}` };
+  if (ceremony.position_rule_id !== "all_positions") return { error: "position_rule_not_total" };
+  // A `captured` ceremony must carry the declaration digest it captured against; a
+  // `capture_failed` ceremony must carry a reason (both-outcomes honesty).
+  if (ceremony.outcome === "captured" && typeof ceremony.declaration_digest !== "string")
+    return { error: "captured_missing_declaration_digest" };
+  if (ceremony.outcome === "capture_failed" && typeof ceremony.reason !== "string")
+    return { error: "capture_failed_missing_reason" };
+  return null;
+}
+
 // Public 193: the map's committed tensor set must equal the capture manifest's.
 export function checkCaptureBinding(map, capture) {
   if (canonicalJson(map?.commitments ?? null) !== canonicalJson(capture?.commitments ?? null))
