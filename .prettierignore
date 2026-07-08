@@ -101,3 +101,6 @@ docs/research/llm-shield/evidence/stage-4w/
 docs/research/llm-shield/evidence/stage-4x/
 docs/research/llm-shield/evidence/stage-4y/
 docs/research/llm-shield/evidence/stage-4z/
+
+# Stage 5A VNC evidence (byte-stable canonicalJson; never reformat)
+docs/research/llm-shield/evidence/stage-5a/
