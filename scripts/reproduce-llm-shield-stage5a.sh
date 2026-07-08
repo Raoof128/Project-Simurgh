@@ -29,7 +29,7 @@ else
   echo "   python3 absent — skipping parity (Node authoritative)"
 fi
 
-echo "-- 6/6 K7 all-functions net"
-node --test tests/e2e/llmShield/stage5a/k7AllFunctions.test.js >/dev/null && echo "   K7 OK"
+echo "-- 6/6 browser-parity (CSP + no-egress + WebCrypto Ed25519) + K7 all-functions net"
+node --test tests/e2e/llmShield/stage5a/browserParity.test.js tests/e2e/llmShield/stage5a/k7AllFunctions.test.js >/dev/null && echo "   browser + K7 OK"
 
 echo "== Stage 5A VNC reproduce: ALL PASS =="

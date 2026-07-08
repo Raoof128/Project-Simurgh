@@ -182,6 +182,9 @@ export function assemble({
   if (reflectionManifest) bundle.reflection_manifest = reflectionManifest;
   if (pilotAdaptation) bundle.pilot_adaptation = pilotAdaptation;
   if (pilotRawBytesB64) bundle.pilot_raw_bytes_b64 = pilotRawBytesB64;
+  // The VNC attestation public key travels with the public bundle so the offline browser
+  // verifier can check the signature; the attestation's signing_key_digest binds it.
+  bundle.attestation_pub_key_pem = VNC_PUB;
   return rebuildAttestation(bundle);
 }
 
