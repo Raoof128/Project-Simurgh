@@ -27,6 +27,7 @@ export function tallies(findings) {
     const fam = f.family || familyOf(f.attack_id);
     if (fam && fam in per_family) per_family[fam] += 1;
   }
+  t.asr = computeAsr(findings);
   return t;
 }
 
