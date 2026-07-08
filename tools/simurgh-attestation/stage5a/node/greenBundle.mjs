@@ -49,6 +49,8 @@ export function makeVwaBundle(
     thetaVal = 3,
     prompts = [{ prompt_id: "p1", n_tokens: 2 }],
     layers = [2, 5],
+    provenance = "fixture",
+    extraMapFields = {},
   } = {}
 ) {
   const declaration = {
@@ -76,13 +78,8 @@ export function makeVwaBundle(
       lensRows[`${layer}:${tok.token_id}`] = f32([tokenVals[tok.token_id], 0]);
   const saltFor = (key) =>
     createHash("sha256").update(`vnc-fixture-salt:${id}:${key}`).digest("hex").slice(0, 16);
-  const { map, audit } = buildMap({
-    declaration,
-    activations,
-    lensRows,
-    saltFor,
-    provenance: "fixture",
-  });
+  const { map, audit } = buildMap({ declaration, activations, lensRows, saltFor, provenance });
+  Object.assign(map, extraMapFields); // adapter markers etc., bound by the attestation below
   const capture = {
     schema: "simurgh.vwa.capture.v1",
     model_id: "insecure-fixture-model",
