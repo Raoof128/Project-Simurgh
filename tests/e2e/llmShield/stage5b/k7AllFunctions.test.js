@@ -26,10 +26,20 @@ const committed = JSON.parse(
 const clone = () => structuredClone(committed);
 
 test("K7.1 — every module export is defined", () => {
-  const mods = { constants, charter, captureBinding, attackModel, findingLedger, asrCore, varCore, ceremonyCore, greenBundle, corpus };
+  const mods = {
+    constants,
+    charter,
+    captureBinding,
+    attackModel,
+    findingLedger,
+    asrCore,
+    varCore,
+    ceremonyCore,
+    greenBundle,
+    corpus,
+  };
   for (const [name, mod] of Object.entries(mods))
-    for (const [k, v] of Object.entries(mod))
-      assert.ok(v !== undefined, `${name}.${k} defined`);
+    for (const [k, v] of Object.entries(mod)) assert.ok(v !== undefined, `${name}.${k} defined`);
 });
 
 test("K7.2 — the committed attestation is GREEN at both tiers", () => {
@@ -39,12 +49,24 @@ test("K7.2 — the committed attestation is GREEN at both tiers", () => {
 test("K7.3 — tamper matrix: each bound field trips the correct FIRST-failure code", () => {
   const cases = [
     ["schema (210)", (b) => delete b.charter.schema, 210],
-    ["signature (211)", (b) => (b.attestation.signature = "00" + b.attestation.signature.slice(2)), 211],
-    ["No Author's Map (214)", (b) => {
-      const k = Object.keys(b.frozen_capture.tensors_b64)[0];
-      b.frozen_capture.tensors_b64[k] = Buffer.from([1, 1, 1]).toString("base64");
-    }, 214],
-    ["capture ceremony (215)", (b) => (b.capture_binding.declaration_digest = "sha256:" + "e".repeat(64)), 215],
+    [
+      "signature (211)",
+      (b) => (b.attestation.signature = "00" + b.attestation.signature.slice(2)),
+      211,
+    ],
+    [
+      "No Author's Map (214)",
+      (b) => {
+        const k = Object.keys(b.frozen_capture.tensors_b64)[0];
+        b.frozen_capture.tensors_b64[k] = Buffer.from([1, 1, 1]).toString("base64");
+      },
+      214,
+    ],
+    [
+      "capture ceremony (215)",
+      (b) => (b.capture_binding.declaration_digest = "sha256:" + "e".repeat(64)),
+      215,
+    ],
     ["finding classification (216)", (b) => (b.findings[0].outcome = "vanished"), 216],
     ["bypass label mismatch (218)", (b) => (b.findings[0].outcome = "bypass"), 218],
     ["partition (221)", (b) => b.findings.pop(), 221],
