@@ -41,7 +41,27 @@ In one sentence: **Simurgh gives an agentic system a verifiable receipt, not a p
 > selective omission, multi-agent accountability) to concrete mechanisms — printable version at
 > [`docs/research/llm-shield/anthropic-brief.html`](docs/research/llm-shield/anthropic-brief.html).
 
-> 🆕 **Latest — Stage 4Z · Verifiable Workspace Attestation (`v2.35.0-stage-4z-vwa`).** Anthropic's
+> 🆕 **Latest — Stage 5A · Verifiable Narrative–Workspace Conflict (`v2.36.0-stage-5a-vnc`).**
+> The J-lens paper's sharpest finding is a **disagreement**: the workspace readout shows
+> `eval`-awareness firing while the model's verbalized output says nothing of the kind. When a lab
+> publishes "the model reported it was not aware of being evaluated," that sentence binds to
+> **nothing** — no readout, no completeness law, no recorded conflict. 5A ships the confrontation: a
+> signed **conflict ledger** between a 4W span-typed **narrative** (what the system _says_) and a 4Z
+> attested **workspace map** (what the telemetry _shows_), under **dual completeness** — every
+> introspective claim gets exactly one verdict (`corroborated | contradicted | unreadable`) and every
+> flag is either covered or listed unnarrated. Laws: **No Two Stories Inside · No Silent Claim/No
+> Silent Flag · No Post-Hoc Claim Table · A Conflict Is Not a Lie.** A recorded contradiction is
+> verified _content_; laundering it to corroborated is a failure (205). Codes 199–209; the claim
+> table binds the map's **declaration_digest, never the map_digest** (precommitment can't be
+> theater); real in-page **WebCrypto Ed25519**; six Lean theorems (incl. `conflictAntitone` — new
+> telemetry can only surface conflicts, never launder them); blind two-process recompute; JS↔Python
+> parity. **Pays** the `workspace_narrative_conflict` IOU in full (mints one frontier debt — the
+> first ledger-shrinking stage). First **cross-species conflict** evidence — introspection vs.
+> interpretability. Honest scope: the real 1B Lane C capture and a real external export were **not
+> executed this build** (mechanisms shipped + fixture-verified; Frontier scored down accordingly).
+> **No live-model adversary lane.**
+>
+> **Stage 4Z · Verifiable Workspace Attestation (`v2.35.0-stage-4z-vwa`).** Anthropic's
 > J-lens paper (Jul 6 2026) shows a cheap internal lens surfaces a model's **silent** cognition and
 > proposes it "to flag transcripts for review" — while conceding "monitoring the J-space is not
 > sufficient." That flag stream ships with **no evidence contract**. 4Z is the contract: a signed,
@@ -169,10 +189,23 @@ Attestation)** turns such a readout into a signed, byte-reproducible evidence co
   GPAI Code of Practice states but leaves unmechanised: a system-card-shaped document whose every
   safety number recomputes from a verified artifact.
 
-Honest scope, signed in the stage itself: Simurgh reproduces a lexicon-restricted **method family** on
-open weights, not Anthropic's frontier lens; a flag is not a verdict, a readout is not faithfulness,
-and agreement is not model safety. Details in
-[`docs/research/llm-shield/JLENS_COMPOSITION.md`](docs/research/llm-shield/JLENS_COMPOSITION.md).
+**Stage 5A (Verifiable Narrative–Workspace Conflict)** takes the next step the paper implies. The
+J-lens paper's own eval-awareness finding is a _disagreement_ between two witnesses — the readout and
+the model's words. 5A makes that confrontation machine-checkable: a signed conflict ledger that
+confronts every introspective claim in a model's narrative with every flag in its attested workspace
+map, completely and recomputably, preserving disagreements undeniably (a contradiction is verified
+content, never a lie). This is the honesty-about-internal-states principle rendered as infrastructure —
+and the accompanying **Reflection-Corpus Provenance** manifest makes visible which constitution clause
+shaped which reflection example, the scaffolding both the J-lens paper's §7 and _Teaching Claude why_
+note is stripped before training.
+
+Honest scope, signed in the stages themselves: Simurgh reproduces a lexicon-restricted **method family**
+on open weights, not Anthropic's frontier lens; a flag is not a verdict, a readout is not faithfulness,
+a recorded conflict is disagreement (never which side is true), and agreement is not model safety. The
+5A real 1B capture and a real external readout export were not executed in that build — mechanisms
+shipped and fixture-verified, with the real-data lanes carried as named residuals. Details in
+[`docs/research/llm-shield/JLENS_COMPOSITION.md`](docs/research/llm-shield/JLENS_COMPOSITION.md) and
+[`docs/research/llm-shield/NARRATIVE_WORKSPACE_CONFLICT.md`](docs/research/llm-shield/NARRATIVE_WORKSPACE_CONFLICT.md).
 
 ---
 
