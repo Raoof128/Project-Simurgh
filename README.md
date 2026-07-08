@@ -41,7 +41,21 @@ In one sentence: **Simurgh gives an agentic system a verifiable receipt, not a p
 > selective omission, multi-agent accountability) to concrete mechanisms — printable version at
 > [`docs/research/llm-shield/anthropic-brief.html`](docs/research/llm-shield/anthropic-brief.html).
 
-> 🆕 **Latest — Stage 5A · Verifiable Narrative–Workspace Conflict (`v2.36.0-stage-5a-vnc`).**
+> 🆕 **Latest — Stage 5B · Verifiable Adversarial Readout (`v2.37.0-stage-5b-var`).** A red-team
+> is only credible if it attacks evidence it did not author. 5B grounds a signed, precommitted
+> red-team on a **real, byte-reproducible Llama-3.2-1B workspace-readout capture** (run on a
+> commodity Apple M2, 8 GB, float32, offline — captured twice, `cmp`-identical) that the attacker
+> did not choose, then drives **46 attacks at the frozen 4V→5A verifiers**, discovering real codes
+> **152/163/174/182/191/200/205/214**. Laws: **No Silent Bypass · No Author's Map · No Post-Hoc
+> Attack · A Bypass Is Not a Break.** Codes 210–224; `VAR_PUBLIC_CODES ⊊ VAR_AUDIT_CODES` (the
+> laundered/omitted-bypass teeth are audit-only); a fixture-integrity gate (re-drive == recorded);
+> Signed-Floor Corroboration reconciles residue bypasses against 4X/4Y's signed floors; real
+> in-page **WebCrypto Ed25519**; **7 Lean theorems**; blind recompute; JS↔Python parity. **Retires
+> the 4Z/5A Lane C capture debt** (the harness ran for real). Honest: ASR **0/46** (every attack
+> survived); family-specific semantic mutations + the live-adversary lane are a signed v2
+> increment; 1B is a grounding substrate, not frontier scale.
+>
+> **Stage 5A · Verifiable Narrative–Workspace Conflict (`v2.36.0-stage-5a-vnc`).**
 > The J-lens paper's sharpest finding is a **disagreement**: the workspace readout shows
 > `eval`-awareness firing while the model's verbalized output says nothing of the kind. When a lab
 > publishes "the model reported it was not aware of being evaluated," that sentence binds to
