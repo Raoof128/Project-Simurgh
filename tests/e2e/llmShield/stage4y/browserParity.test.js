@@ -11,7 +11,10 @@ import { canonicalJson } from "../../../../tools/simurgh-attestation/stage4m/cor
 import { freshFrozenBlock } from "../../../../tools/simurgh-attestation/stage4y/core/frozenBinding.mjs";
 
 const ROOT = join(import.meta.dirname, "../../../..");
-const HTML = readFileSync(join(ROOT, "tools/simurgh-attestation/stage4y/browser/vdr-verifier.html"), "utf8");
+const HTML = readFileSync(
+  join(ROOT, "tools/simurgh-attestation/stage4y/browser/vdr-verifier.html"),
+  "utf8"
+);
 const EVID = join(ROOT, "docs/research/llm-shield/evidence/stage-4y");
 const rd = (name) => JSON.parse(readFileSync(join(EVID, name), "utf8"));
 
@@ -49,8 +52,20 @@ test("no-egress: the executable script (comments+strings stripped) has no networ
     .replace(/"(?:[^"\\]|\\.)*"/g, '""')
     .replace(/'(?:[^'\\]|\\.)*'/g, "''")
     .replace(/`(?:[^`\\]|\\.)*`/g, "``");
-  for (const sink of ["fetch", "XMLHttpRequest", "WebSocket", "EventSource", "sendBeacon", "importScripts", "Worker"])
-    assert.equal(new RegExp("\\b" + sink + "\\b").test(script), false, `sink ${sink} present in script`);
+  for (const sink of [
+    "fetch",
+    "XMLHttpRequest",
+    "WebSocket",
+    "EventSource",
+    "sendBeacon",
+    "importScripts",
+    "Worker",
+  ])
+    assert.equal(
+      new RegExp("\\b" + sink + "\\b").test(script),
+      false,
+      `sink ${sink} present in script`
+    );
   // crypto.subtle is allowed (not a network sink); confirm it is used.
   assert.match(inner("script"), /crypto\.subtle/);
 });
