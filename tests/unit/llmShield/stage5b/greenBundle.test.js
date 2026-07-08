@@ -8,6 +8,7 @@ import {
   loadRealCapture,
   makeGreenVarBundle,
   driveTarget5A,
+  driveTarget4Z,
 } from "../../../../tools/simurgh-attestation/stage5b/node/greenBundle.mjs";
 
 test("the green VAR bundle is grounded on the REAL Llama-3.2-1B capture and evaluates GREEN", () => {
@@ -40,4 +41,9 @@ test("5A driver: conflict_laundering trips the REAL 5A verdict-recompute code 20
 test("5A driver: a signature tamper is caught by the frozen 5A verifier (non-zero)", () => {
   const raw = driveTarget5A("signature");
   assert.notEqual(raw, 0);
+});
+
+test("4Z driver: clean workspace map is GREEN; a signature tamper is caught (real 4Z code)", () => {
+  assert.equal(driveTarget4Z("none"), 0);
+  assert.equal(driveTarget4Z("signature"), 191);
 });
