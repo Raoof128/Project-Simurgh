@@ -12,7 +12,7 @@ import { canonicalJson } from "../../stage4m/core/canonical.mjs";
 import { declarationDigest } from "../core/declarationCore.mjs";
 import { buildMap } from "../core/mapCore.mjs";
 import { signAttestation } from "../core/vwaCore.mjs";
-import { scoreNano, tensorCommitment } from "../core/tensorCore.mjs";
+import { scoreNano } from "../core/tensorCore.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, "..", "..", "..", "..");
