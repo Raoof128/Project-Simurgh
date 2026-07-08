@@ -219,6 +219,16 @@ test("Stage 4H.4 exit map is explicit and collision-bounded", () => {
       187: 1,
       188: 1,
       189: 1,
+      // Stage 4Z VWA codes (reviewed extension of the shared ledger; 4Z spec §2).
+      190: 1,
+      191: 1,
+      192: 1,
+      193: 1,
+      194: 1,
+      195: 1,
+      196: 1,
+      197: 1,
+      198: 1,
     })
   );
 });
