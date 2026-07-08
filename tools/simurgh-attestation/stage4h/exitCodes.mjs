@@ -623,6 +623,44 @@ export const VDR_REASONS_185 = Object.freeze([
   "shadow_arithmetic_broken",
 ]);
 
+// Stage 4Z VWA codes (spec §2). Wrapper LAST at 198; 199 remains headroom.
+export const VWA_RAW_CODES = Object.freeze({
+  VWA_SCHEMA_INVALID: 190,
+  VWA_SIGNATURE_INVALID: 191,
+  VWA_DECLARATION_PRECOMMIT_MISMATCH: 192,
+  VWA_CAPTURE_BINDING_MISMATCH: 193,
+  VWA_GRID_INVALID: 194,
+  VWA_READOUT_RECOMPUTE_MISMATCH: 195,
+  VWA_FLAG_AGREEMENT_MISMATCH: 196,
+  VWA_SELF_REPORT_CONFLICT: 197,
+  // _VWA-suffixed to avoid colliding with VSN's INTERNAL_FAIL_CLOSED: 172.
+  INTERNAL_FAIL_CLOSED_VWA: 198,
+});
+// Frozen first-failure order (4Z spec §2): schema → signature → declaration
+// precommit → capture binding → grid (No Silent Cell/Token) → readout recompute
+// (audit) → flag agreement → self-report conflict. Wrapper 198 applied LAST.
+export const VWA_CHECK_ORDER = Object.freeze([190, 191, 192, 193, 194, 195, 196, 197]);
+// Tier doctrine as a machine fact (spec §2): public verifies structure, signatures,
+// precommitment, binding, grid, flags, and conflict WITH tensors withheld; audit
+// adds 195 (recompute the score matrix from tensors). public ⊂ audit.
+export const VWA_PUBLIC_CODES = Object.freeze([190, 191, 192, 193, 194, 196, 197]);
+export const VWA_AUDIT_CODES = Object.freeze([190, 191, 192, 193, 194, 195, 196, 197]);
+export const VWA_REASONS_192 = Object.freeze([
+  "declaration_digest_mismatch",
+  "theta_nano_mismatch",
+  "position_rule_mismatch",
+  "layer_set_mismatch",
+  "grid_positions_not_total", // the shrunk-declaration attack
+]);
+export const VWA_REASONS_194 = Object.freeze([
+  "cell_missing", // No Silent Cell
+  "cell_duplicate",
+  "cell_undeclared",
+  "cells_unsorted",
+  "token_missing", // No Silent Token (matrix not total over the lexicon)
+  "aggregates_mismatch",
+]);
+
 export const HARNESS_CODES = Object.freeze({
   CLEAN_RUN_FALSELY_REJECTED: 19,
 });
@@ -821,6 +859,15 @@ export const RUN_LEVEL_BY_RAW = Object.freeze({
   187: 1,
   188: 1,
   189: 1,
+  190: 1,
+  191: 1,
+  192: 1,
+  193: 1,
+  194: 1,
+  195: 1,
+  196: 1,
+  197: 1,
+  198: 1,
 });
 
 export function stage4CodeForRawCode(code) {
