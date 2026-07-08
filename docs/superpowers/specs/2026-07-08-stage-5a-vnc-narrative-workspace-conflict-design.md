@@ -52,8 +52,11 @@ This stage folds four commitments into one rung (one blade — see below):
 2. **The lane (B):** Lane C is **actually executed** this stage — the 4Z
    capture harness runs on the open ~1B model AND the same session elicits a
    benign self-narrative, producing the repo's first REAL narrative+readout
-   pair. This retires 4Z's signed Frontier debt ("Lane C capture not run",
-   9.2→9.1) in the same stroke.
+   pair. This retires 4Z's signed **capture-execution** debt ("Lane C
+   capture not run", the 9.2→9.1 trim) in the same stroke. It does NOT pay
+   the separately minted **frontier-scale** debt (see Sockets): a 1B capture
+   is a non-frontier proof-of-mechanism. Two different debts, stated apart
+   so the ledger tells exactly one story (reviewer MF8).
 3. **The ingest family (C):** one REAL published external readout artifact is
    adapted through the 4Z adapter contract into a WFM and conflict-checked —
    attacking 4Z's signed limitation #8
@@ -175,6 +178,11 @@ stage consuming TWO prior stages' attestations as typed inputs (4W narrative +
 
 ### Sockets (ledger discipline: pays 3, mints 1 — net debt −2, the first ledger-shrinking stage)
 
+Paid-slot scope is a **machine fact**, not a comment (reviewer MF1):
+`VNC_PAID_SLOT_SCOPES` maps each paid slot to `full` /`artifact_scope` /
+`mechanism_and_open_corpus_scope`, asserted set-equal to the paid-slot list
+at test time — so the scope survives to runtime.
+
 - **Pays: `workspace_narrative_conflict_deferred`** (minted 4Z → **PAID here**,
   in full — the socket's minted wording "attested conflict between a model's
   verbalized narrative and its recorded readout grid" is exactly the blade).
@@ -253,13 +261,18 @@ For claim c with token set K_c and the map's flag relation
   scope; token-id membership by exact integer equality after parsing —
   never lexical string compare; artifact comparisons via `canonicalJson`,
   never `JSON.stringify` — 4X gotcha).
-- `unreadable` iff some `k ∈ K_c` is NOT in the map's declared lexicon, or
-  the span_ref does not resolve inside the bound narrative (a claim about an
-  instrument that wasn't watching is neither corroborated nor contradicted —
-  it is honestly unreadable). Precedence rule, deterministic and
-  conservative: if ANY token of the claim is unreadable, the WHOLE claim is
-  `unreadable` — partial coverage never silently downgrades to a
-  corroboration over the readable subset.
+- `unreadable` iff some `k ∈ K_c` is NOT in the map's declared lexicon (a
+  claim about an instrument that wasn't watching is neither corroborated nor
+  contradicted — it is honestly unreadable). Precedence rule, deterministic
+  and conservative: if ANY token of the claim is out-of-lexicon, the WHOLE
+  claim is `unreadable` — partial coverage never silently downgrades to a
+  corroboration over the readable subset. **An unresolvable span is NOT an
+  `unreadable` verdict** (gauntlet-2 fix, reviewer MF3): a span_ref whose
+  byte offsets do not resolve on a code-point boundary in the bound
+  narrative is a MALFORMED claim table = a raw-202 precommit failure, caught
+  before any verdict is computed. Out-of-lexicon is a verdict; unresolvable
+  span is a gate. Conflating them would let a broken span masquerade as a
+  benign "unreadable" pass.
 - else `asserts_unflagged`: `corroborated` iff `hits(c) = ∅`, `contradicted`
   otherwise; `asserts_flagged`: `corroborated` iff `hits(c) ≠ ∅`,
   `contradicted` otherwise.

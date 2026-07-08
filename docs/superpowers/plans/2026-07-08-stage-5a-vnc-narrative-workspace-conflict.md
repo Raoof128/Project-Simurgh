@@ -143,9 +143,10 @@ scripts/reproduce-llm-shield-stage5a.sh
 - `VNC_CHECK_ORDER` deep-equals `[199,200,201,202,203,204,205,206,207,208]`
   (209 excluded, asserted last-and-separate).
 - Every 199–209 has `RUN_LEVEL_BY_RAW === 1`; `getRunLevel(999) === 3`.
-- `VNC_PUBLIC_CODES` deep-equals `VNC_AUDIT_CODES` deep-equals
-  `[199…208]` — tier depth differs, code SET does not (spec §2); assert
-  public ⊆ audit anyway (mirrors Lean `publicSubsetAudit`).
+- `VNC_PUBLIC_CODES` deep-equals `VNC_AUDIT_CODES` deep-equals the LITERAL
+  `[199, 200, 201, 202, 203, 204, 205, 206, 207, 208]` (reviewer N1 — no
+  ellipsis gremlin in the assertion) — tier depth differs, code SET does not
+  (spec §2); assert public ⊆ audit anyway (mirrors Lean `publicSubsetAudit`).
 
 **Implement:** append to `stage4h/exitCodes.mjs` (after the VWA block,
 updating its "199 remains headroom" comment to point at 210). Regenerate
@@ -172,6 +173,13 @@ VNC_PAID_SLOTS = Object.freeze([
   "reflection_corpus_provenance_deferred", // mechanism + open-corpus scope
 ]);
 VNC_MINTED_SLOTS = Object.freeze(["frontier_readout_conflict_deferred"]);
+// Reviewer MF1: paid-slot SCOPE is a machine fact, not a comment (comments
+// vanish at runtime — not Simurgh-grade). Every paid slot MUST have a scope.
+VNC_PAID_SLOT_SCOPES = Object.freeze({
+  workspace_narrative_conflict_deferred: "full",
+  lab_readout_pilot_deferred: "artifact_scope",
+  reflection_corpus_provenance_deferred: "mechanism_and_open_corpus_scope",
+});
 // 4Z reserved set MINUS the three paid, PLUS the one minted:
 VNC_RESERVED_SLOTS = Object.freeze([
   "irreducible_semantic_residue_deferred",
@@ -184,8 +192,11 @@ VNC_RESERVED_SLOTS = Object.freeze([
 ```
 
 Assert each paid slot ABSENT from `VNC_RESERVED_SLOTS`; assert
-`VNC_RESERVED_SLOTS.length === 6` (net debt −2, checked as arithmetic).
-Re-import `SPAN_TYPES` from 4W (single source of truth, 4Z precedent).
+`VNC_RESERVED_SLOTS.length === 6` (net debt −2, checked as arithmetic);
+assert `Object.keys(VNC_PAID_SLOT_SCOPES)` set-equals `VNC_PAID_SLOTS` (every
+paid slot has exactly one scope, no orphan scopes) and each scope value is
+one of `{full, artifact_scope, mechanism_and_open_corpus_scope}`. Re-import
+`SPAN_TYPES` from 4W (single source of truth, 4Z precedent).
 
 **Implement:** `stage5a/constants.mjs`. **Verify:** unit green.
 
@@ -204,13 +215,28 @@ Re-import `SPAN_TYPES` from 4W (single source of truth, 4Z precedent).
   precommit-invalid (202 path), unit-asserted. The referenced span's `type`
   must be `unverified_prose` (v1 eligibility — spec §2); a claim pointing
   at a `judgment` or `slot_bound` span → 202, unit-asserted.
-- `checkClaimTable(table, narrative, declaration)` returns `{raw:202}` for:
-  digest cross-mismatch (ledger vs attestation is Task 9's wiring; here:
-  table's `declaration_digest` ≠ `recordDigest(declaration)`), scope rule ≠
-  `all_cells`, empty `token_ids`, duplicate `claim_id`, unresolvable
-  span_ref. Clean table → `null`.
+- `checkClaimTable(table, narrative)` returns `{raw:202}` for INTERNAL
+  precommit invalidity only: scope rule ≠ `all_cells`, empty `token_ids`,
+  duplicate `claim_id`, span_ref unresolvable/non-boundary, referenced span
+  type ≠ `unverified_prose`. Clean table → `null`. **The `map_digest`-field
+  rejection is a 199 SCHEMA violation (owned by `checkSchema`, the 4W-162
+  structural-key-allowlist pattern), NOT 202** — re-gauntlet fix: listing it
+  in both places made the 202 mention unreachable (199 fires first), the
+  same reachability class as the MF3 span bug. Structural key allowlisting
+  is schema's job; 202 is semantic precommit validity. **Digest BINDING recomputation
+  (the table's `narrative_digest` and `declaration_digest`) lives in 201,
+  NOT here** (reviewer MF2/MF4 + check-order doctrine: 201 "No Borrowed
+  Story" runs before 202 and owns every cross-artifact digest recompute; by
+  the time 202 runs, narrative identity is already verified, so span
+  resolution is against the confirmed narrative). The receipt for the
+  reviewer: narrative_digest mismatch IS caught with a test — at 201, which
+  fires strictly before 202, so it is stronger than an in-202 check, not
+  weaker.
 - Token ids NOT ⊆ lexicon is **valid** at table level (unreadable is a
-  verdict, not an error) — asserted explicitly.
+  verdict, not an error) — asserted explicitly. This is DISTINCT from an
+  unresolvable span (a malformed table → 202): out-of-lexicon = the
+  instrument wasn't watching (verdict-time `unreadable`); unresolvable span
+  = the claim table is malformed (precommit failure).
 
 **Implement:** `core/claimCore.mjs`, pure; imports only 4M canonical + the
 4W boundary helper. **Verify:** unit green.
@@ -223,14 +249,28 @@ Re-import `SPAN_TYPES` from 4W (single source of truth, 4Z precedent).
   `cells[].flags` (cellKey = `(prompt_id,t,layer)` canonical tuple).
 - `hitsFor(claim, F)` = exact-integer membership over ALL cells; order
   `(prompt_id,t,layer,token_id)` — total, hence unique.
-- `verdictFor(claim, map)`:
-  - any token ∉ declared lexicon OR unresolved span → `unreadable`
-    (precedence rule: partial unreadability ⇒ WHOLE claim unreadable,
-    unit-asserted with a mixed token set);
+- `verdictFor(claim, map)` (helper — assumes 201+202 already passed, i.e. the
+  span resolved; reviewer MF3 precedence):
+  - any token ∉ declared lexicon → `unreadable` (precedence: ANY
+    out-of-lexicon token ⇒ WHOLE claim unreadable, unit-asserted with a
+    mixed token set). **An unresolved span is NOT an `unreadable` verdict**
+    — it is a raw-202 precommit failure caught earlier in `evaluateVnc`, so
+    `verdictFor` never sees one in the full verifier; a defensive isolated
+    call MAY return `unreadable`, documented as helper-only. This resolves
+    the Task 3 (202) vs Task 4 (unreadable) span contradiction the reviewer
+    flagged — span resolution is a precommit gate, out-of-lexicon is a
+    verdict.
   - `asserts_unflagged`: `corroborated` iff hits empty, else `contradicted`;
   - `asserts_flagged`: `corroborated` iff hits non-empty, else
     `contradicted`;
   - every verdict row carries `evidence` = sorted hits (possibly empty).
+- **Token-id hygiene (reviewer nice-to-fix — rusty-nail defense):** token
+  ids are decimal-integer strings; `parseTokenId` rejects `"01"` (leading
+  zero), `"1.0"` (non-integer), `"-1"` (if negative ids are disallowed by
+  the tokenizer contract — assert the chosen rule), whitespace, and any id
+  outside `Number.isSafeInteger` after parse; membership is BigInt/integer
+  equality so `"9"` never matches `"10"` and never orders lexically.
+  Unit-test each malformed form.
 - `classify(table, map)` is TOTAL: one row per claim, sorted by `claim_id`;
   property test over generated tables (every generated claim appears exactly
   once — the Lean `verdictTotal` shadow).
@@ -252,8 +292,11 @@ Re-import `SPAN_TYPES` from 4W (single source of truth, 4Z precedent).
 - `partitionFlags(ledger, map)`: `covered = ⋃ evidence`, `unnarrated =
 F \ covered`, both sorted; identity `covered.length +
 unnarrated.length === F.length` with disjointness — asserted.
-- `checkCoverage(ledger, map)` → `{raw:204}` on: a flag in neither side, a
-  flag in both, an `unnarrated_flags` entry absent from the map.
+- `checkCoverage(ledger, map)` → `{raw:204}` on: a flag in neither side
+  (silent flag), a flag in both (overlap), an `unnarrated_flags` entry
+  absent from the map's flag relation, OR an `evidence` entry (a covered
+  flag) absent from the map's flag relation (reviewer: a verdict cannot
+  cite a hit that the map does not contain — a fabricated-evidence guard).
 - `tallies(ledger)` recounts all seven aggregates
   (`n_claims,n_corroborated,n_contradicted,n_unreadable,n_flags,n_covered_flags,n_unnarrated_flags`);
   `checkTallies` → `{raw:208}` on any drift (mutate each of the seven once —
@@ -271,13 +314,33 @@ encoding both facts so drift in 4W surfaces here, not in production.
 
 **Test first** (`bindingCore.test.js`):
 
-- `checkBindings(bundle, {vwaPubKeyPem, vsnPubKeyPem})` → `{raw:201}` when:
-  ledger/attestation `narrative_digest` ≠ recomputed; `map_digest` ≠
-  `recordDigest(map)`; `map_attestation_digest` ≠ recomputed; the table's
-  `declaration_digest` ≠ the embedded map's `declaration_digest`; the
-  embedded 4Z attestation fails `evaluateVwa(…, {tier:"public"})` (delegated
-  verbatim — its raw code is REPORTED inside the 201 detail, never re-mapped);
-  the embedded narrative signature fails; span geometry fails.
+- `checkBindings(bundle, {vwaPubKeyPem})` → `{raw:201}` when ANY of these
+  digest recomputations disagree (reviewer MF4: recompute every digest field
+  from bytes — a SIGNED stale digest is still stale):
+  - the claim table's `narrative_digest` ≠ `recordDigest(narrative)`
+    (reviewer MF2 — the claim table must point at the real narrative
+    identity);
+  - the claim table's `declaration_digest` ≠ the embedded map's
+    `declaration_digest`;
+  - ledger/attestation `narrative_digest` ≠ `recordDigest(narrative)`;
+  - `map_digest` ≠ `recordDigest(map)`;
+  - `map_attestation_digest` ≠ `recordDigest(mapAttestation)`;
+  - `claim_table_digest` (in ledger + attestation) ≠ `recordDigest(table)`;
+  - `ledger_digest` (in attestation) ≠ `recordDigest(ledger)`;
+  - when present: `reflection_manifest_digest` / `pilot_adaptation_digest`
+    ≠ recomputed.
+    Plus: the embedded 4Z attestation fails `evaluateVwa(…, {tier:"public",
+publicKeyPem: vwaPubKeyPem})` (delegated verbatim — its raw code is
+    REPORTED inside the 201 detail, never re-mapped); the embedded narrative
+    signature fails (verified against the narrative's OWN embedded
+    `author_pub_key_pem`, the 163 pattern); span geometry fails.
+- **`vsnPubKeyPem` is REMOVED (reviewer MF5 — no fake teeth):** a 4W
+  narrative carries its own `author_pub_key_pem` and is verified against it;
+  a key-swap re-sign changes `narrative_digest`, which 201 already recomputes
+  — so an external VSN key param would be verification theater. `vwaPubKeyPem`
+  STAYS and is real: 4Z's `checkSignature` asserts `signing_key_digest ===
+keyDigest(vwaPubKeyPem)` (verified by reading `vwaCore.mjs:77`), so a wrong
+  4Z key surfaces as a 201 delegation failure.
 - Clean bundle (built from Task 10's builder helpers) → `null`.
 - Audit depth: with the 4Z audit bundle present, delegation runs
   `tier:"audit"`; with it withheld, audit delegation is SKIPPED and recorded
@@ -309,8 +372,12 @@ verified at download time; record the statement + URL in SOURCE.md.
 
 **Offline step first (not CI):** download the pinned Neuronpedia gemma-2-2b
 export (S3 v1 bucket); VERIFY LICENSE on the Neuronpedia terms page before
-committing anything; record source URL + retrieval date + sha256 in
-`evidence/stage-5a/pilot/SOURCE.md`. If the license does not permit
+committing anything; record in `evidence/stage-5a/pilot/SOURCE.md` the FULL
+provenance pin (reviewer N5 — a URL is not an identity): source URL, S3
+object key + version-id (or ETag if versioning is off), byte length,
+retrieval date, and sha256. The adapter binds the sha256; SOURCE.md carries
+the rest so the exact object is re-fetchable and non-ambiguous. If the
+license does not permit
 redistribution, commit ONLY the digest + adapter output, never the raw bytes
 (the audit bundle then documents `raw_export: "digest_only_license"` —
 honesty over convenience; the spec's _reported_ marker resolves here).
@@ -337,8 +404,14 @@ frozen pilot artifact replays in Lane A.
   (includes: claim table carrying `map_digest` — Task 3's structural law
   surfaces here too).
 - `attestationBody(...)` binds
-  `merkleRootSorted([claim_table_digest, ledger_digest, narrative_digest, map_attestation_digest, …optional])`;
-  keyDigest = sha256(raw PEM); `signAttestation`/`checkSignature` → 200.
+  `merkleRootSorted([claim_table_digest, ledger_digest, narrative_digest, map_attestation_digest, ...optional])`;
+  keyDigest = sha256(raw PEM); `signAttestation`/`checkSignature` → 200. The
+  200 check owns signature validity + `signing_key_digest === keyDigest(pub)`
+  - the merkle-root recompute; the per-field stale-digest matrix (reviewer
+    MF4 — claim_table/ledger/narrative/map/map_attestation/reflection_manifest/
+    pilot digests each recomputed from bytes) is the 201 test family (Task 6).
+    Together: a stale digest dies at 201, a forged signature or swapped
+    merkle-root at 200 — no signed-but-stale digest survives either tier.
 - `evaluateVnc(bundle, {tier, keys})` walks `VNC_CHECK_ORDER` frozen
   first-failure; optional-artifact skips recorded
   (`rcp: "absent"`, `pilot: "absent"`) — absence ≠ pass, visible in output.
@@ -352,27 +425,61 @@ frozen pilot artifact replays in Lane A.
 
 ### Task 10: Fixture builder — 16 fixtures, byte-stable, split-tamper
 
-**Test first** (`fixtures.test.js` + goldens): build the corpus per spec §3
-table (5 clean incl. `eval_awareness_conflict`, 1 pilot, 1 rcp, 9 tampers);
-for each fixture assert the exact `(public, audit)` expectation; build twice
-and `cmp` every file (byte-stability e2e).
+**Test first** (`fixtures.test.js` + goldens): build the corpus and, for each
+fixture, assert the exact `(public, audit)` raw expectation; build twice and
+`cmp` every file (byte-stability e2e). The exact 16-fixture matrix (reviewer
+N3 — inline, not "see spec §3"):
 
-Doctoring notes (decided now, not discovered):
+| #   | fixture_id                   | public_raw | audit_raw | target                                     |
+| --- | ---------------------------- | ---------- | --------- | ------------------------------------------ |
+| 1   | `clean_corroborated_absent`  | 0          | 0         | asserts_unflagged, no hits → corroborated  |
+| 2   | `eval_awareness_conflict`    | 0          | 0         | contradicted verdict RECORDED (headline)   |
+| 3   | `clean_unnarrated_flags`     | 0          | 0         | flags, no claims, all listed               |
+| 4   | `clean_zero_claims`          | 0          | 0         | empty table valid; all flags unnarrated    |
+| 5   | `clean_unreadable_claim`     | 0          | 0         | out-of-lexicon token → unreadable          |
+| 6   | `pilot_external_export`      | 0          | 0         | frozen real export; lossiness declared     |
+| 7   | `provenance_manifest_clean`  | 0          | 0         | RCP totality holds                         |
+| 8   | `tamper_signature`           | 200        | 200       | attestation signature broken (no resign)   |
+| 9   | `tamper_borrowed_story`      | 201        | 201       | map_digest → foreign capture, re-signed    |
+| 10  | `tamper_posthoc_claim_table` | 202        | 202       | table mutated precommit-invalid, re-signed |
+| 11  | `tamper_silent_claim`        | 203        | 203       | a claim's verdict row deleted              |
+| 12  | `tamper_silent_flag`         | 204        | 204       | a flag dropped from evidence AND list      |
+| 13  | `tamper_two_stories`         | 205        | 205       | verdict flipped; tallies/partition kept    |
+| 14  | `tamper_manifest_inclusion`  | 206        | 206       | example digest swapped under same root     |
+| 15  | `tamper_adapter_lossy`       | 207        | 207       | synthesized field missing marker           |
+| 16  | `tamper_tally`               | 208        | 208       | one aggregate mutated, all else clean      |
+
+Doctoring notes (decided now, not discovered — split-tamper discipline: keep
+EVERY earlier check in `VNC_CHECK_ORDER` clean so ONLY the target fires):
 
 - `eval_awareness_conflict`: synthetic map with `eval`-token flags + a
   narrative span asserting absence — verdict `contradicted`, bundle CLEAN.
-- `tamper_two_stories` (205): flip the verdict row AND its tallies'
-  consistency is preserved by ALSO flipping…nothing — tallies count verdict
-  labels, so keep tallies matching the TAMPERED rows (else 208 masks 205);
-  re-sign ledger + attestation. The check that catches it is verdict
-  RECOMPUTE, not arithmetic — that is the point.
-- `tamper_silent_flag` (204): remove one flag from `unnarrated_flags` AND
-  from no evidence list; keep tallies consistent with the tampered lists.
-- `tamper_posthoc_claim_table` (202): narrow one claim's token set,
-  re-digest the table but leave the attestation's `claim_table_digest`
-  stale.
+- `tamper_signature` (200): corrupt one signature byte; do NOT resign.
 - `tamper_borrowed_story` (201): swap `map_digest` to a second synthetic
-  capture's digest; re-sign attestation (else 200 masks 201).
+  capture's digest, then re-sign the attestation so 200 stays clean and 201
+  fires on the digest recompute.
+- `tamper_posthoc_claim_table` (202, reviewer MF6 — rewritten): mutate the
+  claim table into a PRECOMMIT-INVALID SHAPE (duplicate a `claim_id`, OR set
+  `scope_rule_id` ≠ `all_cells`, OR empty one claim's `token_ids`), then
+  re-digest the table AND update `claim_table_digest` everywhere (ledger +
+  attestation) AND re-sign — so 199/200/201 all pass and 202 fires on the
+  internal invalidity. (The old "leave claim_table_digest stale" note was
+  wrong — that fires 201, not 202.)
+- `tamper_silent_claim` (203): delete one verdict row from the ledger; keep
+  tallies matching the shortened row list so 208 stays clean and 203 fires.
+- `tamper_silent_flag` (204): remove one flag from BOTH its evidence list and
+  `unnarrated_flags`; adjust tallies to the tampered lists so 208 stays clean
+  and 204 fires on the partition break.
+- `tamper_two_stories` (205, reviewer MF7 — reworded): flip one verdict row
+  (e.g. `contradicted`→`corroborated`) AND update all tallies and the flag
+  partition to match the TAMPERED ledger, then re-sign — so 203, 204, and
+  208 all stay clean and 205 fires because verdict RECOMPUTE from
+  (map, claim table) disagrees with the published row. This is the whole
+  point of a recompute check versus an arithmetic check.
+- `tamper_manifest_inclusion` (206): swap one example digest while leaving
+  the committed Merkle root unchanged → inclusion recompute breaks.
+- `tamper_adapter_lossy` (207): synthesize a field in the adapted map without
+  its `adapter_derived` marker.
 - `tamper_tally` (208): mutate ONE aggregate only; everything else clean.
 
 Construction dependencies (gauntlet-pinned, not discovered mid-build):
@@ -396,11 +503,13 @@ prettier-ignored.
 **Test first** (`tests/e2e/llmShield/stage5a/laneb.test.js`): parent copies
 {narrative bytes, map bytes, claim table, provenance block} to a temp dir;
 child rebuilds the LEDGER from only those inputs and emits
-`canonicalJson(ledger)`; parent compares to committed. Negatives: child
-exits 2 on any `OPERATOR_*` env var; exits 2 if stdin message contains
-`committed_ledger` or `ledger_path`. Input rule of record: the ledger binds
-provenance ⇒ the child receives provenance as INPUT DATA (a claim, not the
-answer).
+`canonicalJson(ledger)`; parent compares to committed. Negatives (reviewer
+N6 — scrub every leak of the answer): child exits 2 on any `OPERATOR_*` env
+var; exits 2 if the stdin message contains ANY of `committed_ledger`,
+`ledger_path`, `ledger_digest`, `expected_raw`, or an evidence-dir path
+substring. Input rule of record: the ledger binds provenance ⇒ the child
+receives provenance as INPUT DATA (a claim, not the answer); it never
+receives the committed ledger, its digest, or the expected outcome.
 
 **Implement:** `laneb/recompute-child.mjs` +
 `laneb/run-laneb-recompute-ceremony.mjs`. **Verify:** e2e green.
@@ -413,9 +522,12 @@ then full-ledger `canonicalJson` equality over the whole corpus; token-id
 handling integer-exact; verdict/partition/tally logic reimplemented, not
 imported.
 
-**Implement:** `python/vnc_parity.py` (modes: `decl_digest`, `ledger`,
-`canonical`) mirroring `vwa_parity.py`'s shape. **Verify:** parity e2e
-green over all 16 fixtures.
+**Implement:** `python/vnc_parity.py` (modes: `claim_digest`,
+`narrative_digest`, `ledger`, `canonical`) mirroring `vwa_parity.py`'s shape
+— mode names renamed from 4Z's `decl_digest` (reviewer N4: this stage
+preflights the claim-table and narrative digests, not a declaration, so the
+mode names say what they compute). **Verify:** parity e2e green over all 16
+fixtures.
 
 ### Task 13: Browser verifier — `vnc-verifier.html`
 
@@ -448,8 +560,17 @@ consistency test.
 6. Seal BOTH outcomes: `captured`/`capture_failed`; zero-conflict and
    conflict-bearing ledgers equally sealed. Never re-run until it looks
    good. Freeze into the `frozen_capture` Lane A set; rerun the 4Z cascade
-   on the frozen tensors (retires the 4Z Frontier debt — record in BOTH
-   closeouts).
+   on the frozen tensors.
+
+**Two DISTINCT debts — do not conflate (reviewer MF8, the irony-goblin
+catch):** (a) 4Z's signed limitation "Lane C capture NOT executed" (its
+9.2→9.1 Frontier trim) is RETIRED here — the capture is now actually run,
+even at 1B. (b) `frontier_readout_conflict_deferred`, MINTED here, is a
+SEPARATE debt: a **>7B / frontier-scale** narrative+readout conflict pair
+produced by the model's own operator. Running Lane C on Llama-3.2-1B is a
+non-frontier proof-of-mechanism: it retires (a), it does NOT pay (b). Record
+this distinction verbatim in BOTH closeouts so the ledger tells exactly one
+story — which is, after all, this stage's whole thesis.
 
 Pilot freeze (Task 8's offline step) happens in the same working session;
 after freeze, CI only ever replays.
