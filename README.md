@@ -13,7 +13,7 @@ proof of what happened after a guardrail missed — not another jailbreak detect
 [![Node](https://img.shields.io/badge/node-%E2%89%A522.0-1a1a1a?style=flat-square)](https://nodejs.org)
 [![License](https://img.shields.io/badge/license-AGPL--3.0-d6cfbe?style=flat-square)](#license)
 [![Status](https://img.shields.io/badge/status-research%20prototype-2f4a2a?style=flat-square)](#status)
-[![Latest](https://img.shields.io/badge/release-v2.26.0-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.26.0-stage-4q-vfr)
+[![Latest](https://img.shields.io/badge/release-v2.37.0-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.37.0-stage-5b-var)
 
 </div>
 
@@ -41,20 +41,21 @@ In one sentence: **Simurgh gives an agentic system a verifiable receipt, not a p
 > selective omission, multi-agent accountability) to concrete mechanisms — printable version at
 > [`docs/research/llm-shield/anthropic-brief.html`](docs/research/llm-shield/anthropic-brief.html).
 
-> 🆕 **Latest — Stage 5B · Verifiable Adversarial Readout (`v2.37.0-stage-5b-var`).** A red-team
-> is only credible if it attacks evidence it did not author. 5B grounds a signed, precommitted
-> red-team on a **real, byte-reproducible Llama-3.2-1B workspace-readout capture** (run on a
-> commodity Apple M2, 8 GB, float32, offline — captured twice, `cmp`-identical) that the attacker
-> did not choose, then drives **46 attacks at the frozen 4V→5A verifiers**, discovering real codes
-> **152/163/174/182/191/200/205/214**. Laws: **No Silent Bypass · No Author's Map · No Post-Hoc
-> Attack · A Bypass Is Not a Break.** Codes 210–224; `VAR_PUBLIC_CODES ⊊ VAR_AUDIT_CODES` (the
-> laundered/omitted-bypass teeth are audit-only); a fixture-integrity gate (re-drive == recorded);
-> Signed-Floor Corroboration reconciles residue bypasses against 4X/4Y's signed floors; real
-> in-page **WebCrypto Ed25519**; **7 Lean theorems**; blind recompute; JS↔Python parity. **Retires
-> the 4Z/5A Lane C capture debt** (the harness ran for real). Honest: ASR **0/46** (every attack
-> survived); family-specific semantic mutations + the live-adversary lane are a signed v2
-> increment; 1B is a grounding substrate, not frontier scale.
->
+> 🆕 **Latest — Stage 5B · Verifiable Adversarial Readout (`v2.37.0-stage-5b-var`).**
+> A red-team is only credible if it attacks evidence it did not author. 5B grounds a signed,
+> precommitted red-team on a **real, byte-reproducible Llama-3.2-1B workspace-readout capture** — run
+> on a commodity Apple M2 (8 GB, float32, offline), captured **twice and `cmp`-identical** — that the
+> attacker did not choose, then drives **46 attacks at the frozen 4V→5A verifiers**, each resolving to
+> a real, recomputable code. Laws: **No Silent Bypass · No Author's Map · No Post-Hoc Attack · A
+> Bypass Is Not a Break.** It **retires the Lane C capture debt** (the interpretability harness
+> finally ran for real), ships **7 machine-checked Lean theorems**, a fixture-integrity gate, and an
+> in-page WebCrypto Ed25519 verifier. Honest to its floor: ASR **0/46** (every attack was caught,
+> a clean red-team), with the real semantic mutations and a live-adversary lane signed as the next
+> increment.
+
+<details>
+<summary><b>Recent stages — 5A → 4W</b> (click to expand the prior rungs)</summary>
+
 > **Stage 5A · Verifiable Narrative–Workspace Conflict (`v2.36.0-stage-5a-vnc`).**
 > The J-lens paper's sharpest finding is a **disagreement**: the workspace readout shows
 > `eval`-awareness firing while the model's verbalized output says nothing of the kind. When a lab
@@ -136,6 +137,8 @@ In one sentence: **Simurgh gives an agentic system a verifiable receipt, not a p
 > byte-parity, and a one-command offline reproduce. Honest scope: the gate is **lexical, not
 > semantic** — paraphrase smuggling is named as the next (4X) attack surface, not claimed solved.
 
+</details>
+
 ---
 
 ## What it is — and what it is not
@@ -213,20 +216,33 @@ and the accompanying **Reflection-Corpus Provenance** manifest makes visible whi
 shaped which reflection example, the scaffolding both the J-lens paper's §7 and _Teaching Claude why_
 note is stripped before training.
 
+**Stage 5B (Verifiable Adversarial Readout)** closes the loop from the other direction — and runs
+the readout **for real**. It executes a lexicon-restricted mean-Jacobian capture on an open ~1B
+model on commodity hardware (an 8 GB laptop, offline), captured **twice to byte-identical**, then
+**red-teams the entire introspection stack on a capture the attacker did not author**. That
+anti-circularity is the point: you cannot credibly test a conflict/leakage/hidden-cell detector on
+evidence you generated, so 5B binds every one of 46 attacks to a **precommitted readout** (No
+Author's Map) and attests that no bypass was silently laundered or omitted, with the attack-success
+rate recomputable from pinned inputs. It is, as far as we know, the first time a workspace readout of
+this kind is not only _attested_ but adversarially _stress-tested_ under a signed, offline-reproducible
+contract — and it retires 5A's outstanding real-capture residual in the process.
+
 Honest scope, signed in the stages themselves: Simurgh reproduces a lexicon-restricted **method family**
 on open weights, not Anthropic's frontier lens; a flag is not a verdict, a readout is not faithfulness,
 a recorded conflict is disagreement (never which side is true), and agreement is not model safety. The
-5A real 1B capture and a real external readout export were not executed in that build — mechanisms
-shipped and fixture-verified, with the real-data lanes carried as named residuals. Details in
-[`docs/research/llm-shield/JLENS_COMPOSITION.md`](docs/research/llm-shield/JLENS_COMPOSITION.md) and
-[`docs/research/llm-shield/NARRATIVE_WORKSPACE_CONFLICT.md`](docs/research/llm-shield/NARRATIVE_WORKSPACE_CONFLICT.md).
+1B Lane C capture is now **executed and byte-reproducible** (Stage 5B, on commodity hardware); what
+remains signed as future work is a real external readout export, family-specific semantic red-team
+mutations, and a live-adversary lane — all carried as named residuals, none claimed done. Details in
+[`docs/research/llm-shield/JLENS_COMPOSITION.md`](docs/research/llm-shield/JLENS_COMPOSITION.md),
+[`docs/research/llm-shield/NARRATIVE_WORKSPACE_CONFLICT.md`](docs/research/llm-shield/NARRATIVE_WORKSPACE_CONFLICT.md),
+and [`docs/research/llm-shield/STAGE_5B_CLOSEOUT.md`](docs/research/llm-shield/STAGE_5B_CLOSEOUT.md).
 
 ---
 
 ## Flagship: Verifiable Containment Attestation (LLM Shield)
 
-The current work is a ladder of signed, independently reproducible research rungs (**Stage 3A → 4H**,
-releases `v1.6.0` → `v2.18.0`). The attestation rungs produce Ed25519-signed,
+The current work is a ladder of signed, independently reproducible research rungs (**Stage 3A → 5B**,
+releases `v1.6.0` → `v2.37.0`). The attestation rungs produce Ed25519-signed,
 metadata-only evidence bundles and offline checkers that re-derive their bounded claims byte-for-byte.
 
 ### The concrete result (Stage 3V-B)
@@ -502,6 +518,18 @@ node -e 'const c=require("node:crypto"),fs=require("node:fs");fs.writeFileSync("
 node tools/simurgh-attestation/stage4q/node/verify-stage4q.mjs docs/research/llm-shield/evidence/stage-4q/vfr-attestation.json --approver-key /tmp/my-approver.pem
 # -> stage4q verify: byo_decision_equivalent (raw 0)
 ```
+
+Replay the latest rung — **Stage 5B Verifiable Adversarial Readout**, a signed red-team grounded on a
+real, byte-reproducible 1B workspace-readout capture (offline, no private key):
+
+```bash
+scripts/reproduce-llm-shield-stage5b.sh
+```
+
+Expected: `Stage 5B VAR reproduce: ALL PASS`. The audit tier **re-drives all 46 attacks at the frozen
+4V→5A verifiers** and confirms each recorded code; it also checks byte-stability of the signed bundle,
+the blind two-process recompute, JS↔Python parity, the in-page WebCrypto Ed25519 browser check, the
+K7 all-functions net, and the real-capture reconciliation lock.
 
 Verify a single signed rung directly, and confirm it fails closed under tampering:
 
