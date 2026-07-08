@@ -1,0 +1,332 @@
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
+<!-- Stage 4Z VWA — offline browser verifier (plan Task 12). AnthropicSafe First, then
+     ReviewerSafe. Public tier only: recomputes declaration precommit (192), grid + matrix
+     totality (194), flag agreement (196), self-report conflict (197), and verifies the
+     Ed25519 attestation with REAL in-page WebCrypto (191) — model-proprietary tensors stay
+     withheld. Strict hash-CSP, zero external requests. -->
+<meta charset="utf-8" />
+<meta
+  http-equiv="Content-Security-Policy"
+  content="default-src 'none'; script-src 'sha256-aZwZCgUfnDWLEFSQPiIQ00hwIeAENpfBEaE7qcW/HXY='; style-src 'sha256-uqYUfxUkF6kRcrvca2fF8Xkr0eoEIacwWXqfH8GpOAQ='; img-src 'none'; connect-src 'none'; base-uri 'none'; form-action 'none'"
+/>
+<title>Stage 4Z VWA — Workspace Attestation Verifier</title>
+<style>
+  body {
+    font-family: system-ui, sans-serif;
+    max-width: 52rem;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    color: #111;
+  }
+  h1 {
+    font-size: 1.2rem;
+  }
+  .ok {
+    color: #0a6;
+  }
+  .bad {
+    color: #c00;
+  }
+  pre {
+    background: #f5f5f5;
+    padding: 0.5rem;
+    overflow-x: auto;
+  }
+</style>
+<h1>Stage 4Z VWA — Verifiable Workspace Attestation (public tier)</h1>
+<p>
+  Drop a <code>*.bundle.json</code> and the public key to recompute the readout grid, the flag
+  arithmetic, the self-report conflict check, and the Ed25519 signature — entirely offline.
+</p>
+<pre id="out">no bundle loaded</pre>
+<script>
+  (function () {
+    // ---- pure sha256 (browser-safe; byte-identical to node:crypto over UTF-8) ----
+    var K = [
+      0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4,
+      0xab1c5ed5, 0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe,
+      0x9bdc06a7, 0xc19bf174, 0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f,
+      0x4a7484aa, 0x5cb0a9dc, 0x76f988da, 0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7,
+      0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc,
+      0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85, 0xa2bfe8a1, 0xa81a664b,
+      0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070, 0x19a4c116,
+      0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+      0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7,
+      0xc67178f2,
+    ];
+    function utf8(str) {
+      var out = [];
+      for (var i = 0; i < str.length; i++) {
+        var c = str.codePointAt(i);
+        if (c > 0xffff) i++;
+        if (c < 0x80) out.push(c);
+        else if (c < 0x800) out.push(0xc0 | (c >> 6), 0x80 | (c & 63));
+        else if (c < 0x10000) out.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));
+        else
+          out.push(
+            0xf0 | (c >> 18),
+            0x80 | ((c >> 12) & 63),
+            0x80 | ((c >> 6) & 63),
+            0x80 | (c & 63)
+          );
+      }
+      return out;
+    }
+    function sha256Hex(str) {
+      var bytes = utf8(str),
+        bitLen = bytes.length * 8;
+      bytes.push(0x80);
+      while (bytes.length % 64 !== 56) bytes.push(0);
+      for (var i = 7; i >= 0; i--) bytes.push(Math.floor(bitLen / Math.pow(2, 8 * i)) & 0xff);
+      var h = [
+        0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab,
+        0x5be0cd19,
+      ];
+      var w = new Array(64),
+        rotr = function (x, n) {
+          return (x >>> n) | (x << (32 - n));
+        };
+      for (var off = 0; off < bytes.length; off += 64) {
+        for (var t = 0; t < 16; t++) {
+          var j = off + t * 4;
+          w[t] = (bytes[j] << 24) | (bytes[j + 1] << 16) | (bytes[j + 2] << 8) | bytes[j + 3];
+        }
+        for (t = 16; t < 64; t++) {
+          var s0 = rotr(w[t - 15], 7) ^ rotr(w[t - 15], 18) ^ (w[t - 15] >>> 3);
+          var s1 = rotr(w[t - 2], 17) ^ rotr(w[t - 2], 19) ^ (w[t - 2] >>> 10);
+          w[t] = (w[t - 16] + s0 + w[t - 7] + s1) | 0;
+        }
+        var a = h[0],
+          b = h[1],
+          c = h[2],
+          d = h[3],
+          e = h[4],
+          f = h[5],
+          g = h[6],
+          hh = h[7];
+        for (t = 0; t < 64; t++) {
+          var S1 = rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25);
+          var ch = (e & f) ^ (~e & g);
+          var t1 = (hh + S1 + ch + K[t] + w[t]) | 0;
+          var S0 = rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22);
+          var maj = (a & b) ^ (a & c) ^ (b & c);
+          var t2 = (S0 + maj) | 0;
+          hh = g;
+          g = f;
+          f = e;
+          e = (d + t1) | 0;
+          d = c;
+          c = b;
+          b = a;
+          a = (t1 + t2) | 0;
+        }
+        h[0] = (h[0] + a) | 0;
+        h[1] = (h[1] + b) | 0;
+        h[2] = (h[2] + c) | 0;
+        h[3] = (h[3] + d) | 0;
+        h[4] = (h[4] + e) | 0;
+        h[5] = (h[5] + f) | 0;
+        h[6] = (h[6] + g) | 0;
+        h[7] = (h[7] + hh) | 0;
+      }
+      return h
+        .map(function (x) {
+          return (x >>> 0).toString(16).padStart(8, "0");
+        })
+        .join("");
+    }
+    var sha = function (s) {
+      return "sha256:" + sha256Hex(s);
+    };
+    function normalise(v) {
+      if (Array.isArray(v)) return v.map(normalise);
+      if (v && typeof v === "object") {
+        var o = {};
+        Object.keys(v)
+          .sort()
+          .forEach(function (k) {
+            o[k] = normalise(v[k]);
+          });
+        return o;
+      }
+      return v;
+    }
+    var canonical = function (v) {
+      return JSON.stringify(normalise(v));
+    };
+    function pemToDer(pem) {
+      var b64 = pem.replace(/-----[^-]+-----/g, "").replace(/\s+/g, "");
+      var bin = atob(b64),
+        arr = new Uint8Array(bin.length);
+      for (var i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+      return arr.buffer;
+    }
+
+    // ---- VWA public-tier recompute (BigInt score comparison; no floats) ----
+    function cmpNano(a, b) {
+      var x = BigInt(a),
+        y = BigInt(b);
+      return x < y ? -1 : x > y ? 1 : 0;
+    }
+    function expandGrid(decl) {
+      var cells = [];
+      decl.prompts.forEach(function (p) {
+        for (var t = 0; t < p.n_tokens; t++)
+          decl.layers.forEach(function (layer) {
+            cells.push({ prompt_id: p.prompt_id, t: t, layer: layer });
+          });
+      });
+      cells.sort(function (a, b) {
+        var pa = String(a.prompt_id),
+          pb = String(b.prompt_id);
+        if (pa !== pb) return pa < pb ? -1 : 1;
+        if (a.t !== b.t) return a.t - b.t;
+        return a.layer - b.layer;
+      });
+      return cells;
+    }
+    function flagsFor(scores, theta) {
+      return scores
+        .filter(function (s) {
+          return cmpNano(s.score_nano, theta) >= 0;
+        })
+        .map(function (s) {
+          return s.token_id;
+        });
+    }
+    function recountFlags(cells) {
+      var fbt = {},
+        nfc = 0,
+        ft = 0;
+      cells.forEach(function (c) {
+        var flags = c.flags || [];
+        if (flags.length) nfc++;
+        ft += flags.length;
+        flags.forEach(function (tid) {
+          fbt[tid] = (fbt[tid] || 0) + 1;
+        });
+      });
+      return { n_cells: cells.length, flags_by_token: fbt, n_flagged_cells: nfc, flag_total: ft };
+    }
+    // 192 declaration precommit (incl. shrink check), 194 grid+matrix totality, 196 flags, 197 conflict.
+    function checkPublic(bundle) {
+      var d = bundle.declaration,
+        map = bundle.map,
+        cap = bundle.capture,
+        att = bundle.attestation;
+      var dd = sha(canonical(d));
+      if (
+        cap.declaration_digest !== dd ||
+        map.declaration_digest !== dd ||
+        att.declaration_digest !== dd
+      )
+        return { raw: 192, detail: "declaration_digest_mismatch" };
+      if (map.theta_nano !== d.theta_nano) return { raw: 192, detail: "theta_nano_mismatch" };
+      if (map.position_rule_id !== d.position_rule_id)
+        return { raw: 192, detail: "position_rule_mismatch" };
+      if (canonical(map.layers) !== canonical(d.layers))
+        return { raw: 192, detail: "layer_set_mismatch" };
+      for (var i = 0; i < d.corpus_manifest.prompts.length; i++) {
+        var p = d.corpus_manifest.prompts[i];
+        if (cap.prompt_token_counts[p.prompt_id] !== p.n_tokens)
+          return { raw: 192, detail: "grid_positions_not_total" };
+      }
+      var expected = expandGrid({ prompts: d.corpus_manifest.prompts, layers: d.layers });
+      if (map.cells.length !== expected.length) return { raw: 194, detail: "cell_count_mismatch" };
+      for (i = 0; i < map.cells.length; i++) {
+        var a = map.cells[i],
+          e = expected[i];
+        if (String(a.prompt_id) !== String(e.prompt_id) || a.t !== e.t || a.layer !== e.layer)
+          return { raw: 194, detail: "cell_mismatch_or_unsorted" };
+        if (!a.scores || a.scores.length !== d.tokens.length)
+          return { raw: 194, detail: "token_missing" };
+        for (var j = 0; j < d.tokens.length; j++)
+          if (a.scores[j].token_id !== d.tokens[j].token_id)
+            return { raw: 194, detail: "token_mismatch" };
+      }
+      if (canonical(map.aggregates) !== canonical(recountFlags(map.cells)))
+        return { raw: 194, detail: "aggregates_mismatch" };
+      for (i = 0; i < map.cells.length; i++) {
+        var want = flagsFor(map.cells[i].scores, map.theta_nano)
+          .slice()
+          .sort(function (x, y) {
+            return x - y;
+          });
+        var got = (map.cells[i].flags || []).slice().sort(function (x, y) {
+          return x - y;
+        });
+        if (canonical(got) !== canonical(want))
+          return { raw: 196, detail: "flag_agreement_mismatch" };
+      }
+      if (map.self_report.n_flags !== map.aggregates.flag_total)
+        return { raw: 197, detail: "self_report_conflict" };
+      return null;
+    }
+    // 191 — REAL WebCrypto Ed25519 over canonicalJson(body) + four-digest merkle binding.
+    function verifyPublic(bundle, pubPem) {
+      var map = bundle.map,
+        cap = bundle.capture,
+        d = bundle.declaration,
+        att = bundle.attestation;
+      if (att.signing_key_digest !== sha(pubPem))
+        return Promise.resolve({ raw: 191, detail: "key_digest" });
+      if (att.declaration_digest !== sha(canonical(d)))
+        return Promise.resolve({ raw: 191, detail: "declaration_binding" });
+      if (att.capture_digest !== sha(canonical(cap)))
+        return Promise.resolve({ raw: 191, detail: "capture_binding" });
+      if (att.map_digest !== sha(canonical(map)))
+        return Promise.resolve({ raw: 191, detail: "map_binding" });
+      var leaves = [att.declaration_digest, att.capture_digest, att.map_digest, att.audit_digest]
+        .slice()
+        .sort();
+      var root = leaves[0];
+      // sorted-leaf merkle (arbitrary arity, odd-promote) — mirrors merkleRootSorted.
+      var level = leaves.slice();
+      while (level.length > 1) {
+        var next = [];
+        for (var i = 0; i < level.length; i += 2) {
+          if (i + 1 === level.length) next.push(level[i]);
+          else next.push(sha(level[i] + "|" + level[i + 1]));
+        }
+        level = next;
+      }
+      root = level[0];
+      if (att.bundle_merkle_root !== root)
+        return Promise.resolve({ raw: 191, detail: "merkle_binding" });
+      var body = {};
+      Object.keys(att).forEach(function (k) {
+        if (k !== "signature") body[k] = att[k];
+      });
+      if (typeof crypto === "undefined" || !crypto.subtle)
+        return Promise.resolve({ raw: -1, detail: "signature_not_verified_in_this_browser" });
+      var sigHex = att.signature || "";
+      var sig = new Uint8Array(sigHex.length / 2);
+      for (var k = 0; k < sig.length; k++) sig[k] = parseInt(sigHex.substr(k * 2, 2), 16);
+      return crypto.subtle
+        .importKey("spki", pemToDer(pubPem), { name: "Ed25519" }, false, ["verify"])
+        .then(function (key) {
+          return crypto.subtle.verify(
+            { name: "Ed25519" },
+            key,
+            sig,
+            new Uint8Array(utf8(canonical(body)))
+          );
+        })
+        .then(function (ok) {
+          if (!ok) return { raw: 191, detail: "signature" };
+          return checkPublic(bundle) || { raw: 0 };
+        });
+    }
+
+    var VWA = {
+      canonical: canonical,
+      sha: sha,
+      cmpNano: cmpNano,
+      flagsFor: flagsFor,
+      recountFlags: recountFlags,
+      checkPublic: checkPublic,
+      verifyPublic: verifyPublic,
+    };
+    if (typeof globalThis !== "undefined") globalThis.VWA = VWA;
+  })();
+</script>
