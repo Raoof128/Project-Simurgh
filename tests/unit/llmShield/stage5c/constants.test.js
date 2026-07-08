@@ -41,7 +41,11 @@ test("mechanisms: two CI mechanisms, not three gates (PF3)", () => {
 });
 
 test("mr families added, equivalence bases enumerated exactly (P1-108)", () => {
-  assert.deepEqual(VSB_MR_FAMILIES_ADDED, ["voice_flip", "unicode_confusable", "guardrail_evasion"]);
+  assert.deepEqual(VSB_MR_FAMILIES_ADDED, [
+    "voice_flip",
+    "unicode_confusable",
+    "guardrail_evasion",
+  ]);
   assert.deepEqual(VSB_EQUIVALENCE_BASES, [
     "lexical_synonym",
     "syntactic_voice",
