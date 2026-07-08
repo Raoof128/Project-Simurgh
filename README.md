@@ -41,7 +41,27 @@ In one sentence: **Simurgh gives an agentic system a verifiable receipt, not a p
 > selective omission, multi-agent accountability) to concrete mechanisms — printable version at
 > [`docs/research/llm-shield/anthropic-brief.html`](docs/research/llm-shield/anthropic-brief.html).
 
-> 🆕 **Latest — Stage 4Y · Verifiable Document Residue (`v2.34.0-stage-4y-vdr`).** 4X measured the
+> 🆕 **Latest — Stage 4Z · Verifiable Workspace Attestation (`v2.35.0-stage-4z-vwa`).** Anthropic's
+> J-lens paper (Jul 6 2026) shows a cheap internal lens surfaces a model's **silent** cognition and
+> proposes it "to flag transcripts for review" — while conceding "monitoring the J-space is not
+> sufficient." That flag stream ships with **no evidence contract**. 4Z is the contract: a signed,
+> byte-reproducible attestation over **workspace-readout telemetry** — a **total readout grid**
+> (every position × layer cell present exactly once: **No Silent Cell**), the **full score matrix**
+> (every lexicon token per cell: **No Silent Token**), a **precommitted declaration** (No Post-Hoc
+> Declaration — you can't cherry-pick WHAT/WHERE/WHICH-LAYERS after seeing the readouts), a
+> dual-signal **self-report conflict** check, and a **withheld-tensor** public tier (the map verifies
+> with the model-proprietary tensors kept private). The reference monitor is a lexicon-restricted
+> mean-Jacobian lens on an open ~1B model (Lane C, digest-only). Laws: **No Silent Cell · The Readout
+> Is Not a Verdict · No Post-Hoc Declaration.** Codes 190–198; scores serialize as **decimal
+> strings** (BigInt-exact, JS↔Python-identical); real in-page **WebCrypto Ed25519**; six Lean
+> theorems (incl. `lexiconMonotone` — provable only because there is no top-K); blind two-process
+> recompute; and the **VSC — Verifiable System Card**, which **pays the three-stage
+> `transparency_report_profile` IOU**: a system-card-shaped document whose every safety number
+> recomputes from a verified artifact. First activation-derived evidence species. **No live-model
+> adversary lane.** Honest scope: method-family replication, not the paper's frontier lens; the
+> external-lab pilot is the minted 10-blocker.
+>
+> **Stage 4Y · Verifiable Document Residue (`v2.34.0-stage-4y-vdr`).** 4X measured the
 > gate's residue over a corpus _we_ authored; 4Y hands the instrument to the world. Submit **any**
 > UTF-8 document and get back a signed, byte-reproducible, **content-free structural residue map** —
 > a total partition of every byte into `caught_v1` / `caught_v2_only` / `redacted` / `unflagged`
