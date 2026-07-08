@@ -701,6 +701,42 @@ export const VNC_REASONS_204 = Object.freeze([
   "evidence_flag_absent_from_map", // fabricated-evidence guard (reviewer N7)
 ]);
 
+// Stage 5B VAR codes (spec §3). Wrapper LAST at 224; 225 remains headroom.
+// _VAR-suffixed on the wrapper only (never a bare `VAR`/`var` identifier — JS reserved word).
+export const VAR_RAW_CODES = Object.freeze({
+  VAR_SCHEMA_INVALID: 210,
+  VAR_SIGNATURE_INVALID: 211,
+  VAR_CHARTER_CAMPAIGN_MISMATCH: 212,
+  VAR_ATTACK_UNSCHEDULED: 213,
+  VAR_CAPTURE_AUTHORSHIP_INVALID: 214, // No Author's Map (precommitted-readout)
+  VAR_CAPTURE_CEREMONY_INVALID: 215,
+  VAR_FINDING_CLASSIFICATION_INVALID: 216,
+  VAR_SILENT_BYPASS: 217, // No Silent Bypass (laundered/omitted) — audit-only teeth
+  VAR_BYPASS_LABEL_MISMATCH: 218,
+  VAR_PRECOMMIT_STRUCTURAL_INVALID: 219, // charter binds readings, structural not temporal
+  VAR_SEVERITY_UNSIGNED: 220,
+  VAR_PARTITION_INVALID: 221,
+  VAR_ASR_RECOMPUTE_MISMATCH: 222,
+  VAR_TALLY_OR_FLOOR_MISMATCH: 223,
+  INTERNAL_FAIL_CLOSED_VAR: 224,
+});
+// Frozen first-failure order (5B spec §3): schema → signature → charter campaign →
+// unscheduled → No Author's Map → capture ceremony → finding classification →
+// No Silent Bypass → label mismatch → structural precommit → severity lock →
+// partition → ASR recompute → tally/floor. Wrapper 224 applied LAST.
+export const VAR_CHECK_ORDER = Object.freeze([
+  210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223,
+]);
+// Tier split is NOT identity (gauntlet-2 P1-A): audit = every code; public is a STRICT
+// subset EXCLUDING 217 — the laundered/omitted-bypass truthfulness case needs the target
+// re-run, which only the audit tier does. public ⊊ audit.
+export const VAR_AUDIT_CODES = Object.freeze([
+  210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223,
+]);
+export const VAR_PUBLIC_CODES = Object.freeze([
+  210, 211, 212, 213, 214, 215, 216, 218, 219, 220, 221, 222, 223,
+]);
+
 export const HARNESS_CODES = Object.freeze({
   CLEAN_RUN_FALSELY_REJECTED: 19,
 });
@@ -919,6 +955,21 @@ export const RUN_LEVEL_BY_RAW = Object.freeze({
   207: 1,
   208: 1,
   209: 1,
+  210: 1,
+  211: 1,
+  212: 1,
+  213: 1,
+  214: 1,
+  215: 1,
+  216: 1,
+  217: 1,
+  218: 1,
+  219: 1,
+  220: 1,
+  221: 1,
+  222: 1,
+  223: 1,
+  224: 1,
 });
 
 export function stage4CodeForRawCode(code) {
