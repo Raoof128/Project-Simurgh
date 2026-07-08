@@ -34,3 +34,5 @@ jobs:
           ! grep -Rn "\bsorry\b" proofs/stage4w
           lean proofs/stage4x/LeakageResidue.lean
           ! grep -Rn "\bsorry\b" proofs/stage4x
+          lean proofs/stage4y/DocumentResidue.lean
+          ! grep -Rn "\bsorry\b" proofs/stage4y
