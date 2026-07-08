@@ -24,12 +24,18 @@ test("VSB_RAW_CODES: 15 codes, 225-239 contiguous, wrapper LAST at 239", () => {
 });
 
 test("check order = 225..238, wrapper 239 excluded", () => {
-  assert.deepEqual(VSB_CHECK_ORDER, Array.from({ length: 14 }, (_, i) => 225 + i));
+  assert.deepEqual(
+    VSB_CHECK_ORDER,
+    Array.from({ length: 14 }, (_, i) => 225 + i)
+  );
   assert.ok(!VSB_CHECK_ORDER.includes(239));
 });
 
 test("tier split: audit = 225..238; public excludes ONLY 233; 237 IS public (PF2)", () => {
-  assert.deepEqual(VSB_AUDIT_CODES, Array.from({ length: 14 }, (_, i) => 225 + i));
+  assert.deepEqual(
+    VSB_AUDIT_CODES,
+    Array.from({ length: 14 }, (_, i) => 225 + i)
+  );
   // public ⊊ audit
   assert.ok(VSB_PUBLIC_CODES.every((c) => VSB_AUDIT_CODES.includes(c)));
   assert.ok(VSB_PUBLIC_CODES.length < VSB_AUDIT_CODES.length);
