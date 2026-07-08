@@ -9,6 +9,7 @@ import {
   makeGreenVarBundle,
   driveTarget5A,
   driveTarget4Z,
+  driveTarget,
 } from "../../../../tools/simurgh-attestation/stage5b/node/greenBundle.mjs";
 
 test("the green VAR bundle is grounded on the REAL Llama-3.2-1B capture and evaluates GREEN", () => {
@@ -46,4 +47,12 @@ test("5A driver: a signature tamper is caught by the frozen 5A verifier (non-zer
 test("4Z driver: clean workspace map is GREEN; a signature tamper is caught (real 4Z code)", () => {
   assert.equal(driveTarget4Z("none"), 0);
   assert.equal(driveTarget4Z("signature"), 191);
+});
+
+test("unified driveTarget: all SIX frozen verifiers drive clean→0 and catch a tamper (real codes)", () => {
+  const expected = { "5a": 200, "4z": 191, "4x": 174, "4y": 182, "4w": 163, "4v": 152 };
+  for (const [stage, sigCode] of Object.entries(expected)) {
+    assert.equal(driveTarget(stage, "none"), 0, `${stage} clean`);
+    assert.equal(driveTarget(stage, "signature"), sigCode, `${stage} signature`);
+  }
 });
