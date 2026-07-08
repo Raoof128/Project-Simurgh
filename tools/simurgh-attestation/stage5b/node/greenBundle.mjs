@@ -15,11 +15,13 @@ import { CAMPAIGN_SEED, VAR_SCHEMAS } from "../constants.mjs";
 // Frozen target verifiers (READ-ONLY imports — no predecessor is modified).
 import {
   buildGreenVncBundle,
+  makeVwaBundle,
   rebuildAttestation,
   VNC_PUB,
   VWA_PUB,
 } from "../../stage5a/node/greenBundle.mjs";
 import { evaluateVnc, signArtifact } from "../../stage5a/core/vncCore.mjs";
+import { evaluateVwa } from "../../stage4z/core/vwaCore.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, "..", "..", "..", "..");
@@ -113,6 +115,18 @@ export function driveTarget5A(mutation = "none") {
     b.ledger = signArtifact(content, VNC_PRIV_5A(), VNC_PUB);
     rebuildAttestation(b); // re-bind the attestation to the laundered ledger (else 201 masks 205)
     return evaluateVnc(b, VNC_OPTS).raw;
+  }
+  throw new Error("unknown mutation " + mutation);
+}
+
+// 4Z driver (workspace-map target; silent_cell_hide family). `mutation` ∈ { none, signature }.
+const VWA_OPTS = { tier: "audit", publicKeyPem: VWA_PUB };
+export function driveTarget4Z(mutation = "none") {
+  const b = makeVwaBundle();
+  if (mutation === "none") return evaluateVwa(b, VWA_OPTS).raw;
+  if (mutation === "signature") {
+    b.attestation.signature = b.attestation.signature.replace(/^./, (c) => (c === "0" ? "1" : "0"));
+    return evaluateVwa(b, VWA_OPTS).raw;
   }
   throw new Error("unknown mutation " + mutation);
 }
