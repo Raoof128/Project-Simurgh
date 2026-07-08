@@ -229,6 +229,18 @@ test("Stage 4H.4 exit map is explicit and collision-bounded", () => {
       196: 1,
       197: 1,
       198: 1,
+      // Stage 5A VNC codes 199–209 (reviewed extension of the shared ledger; 5A spec §2).
+      199: 1,
+      200: 1,
+      201: 1,
+      202: 1,
+      203: 1,
+      204: 1,
+      205: 1,
+      206: 1,
+      207: 1,
+      208: 1,
+      209: 1,
     })
   );
 });

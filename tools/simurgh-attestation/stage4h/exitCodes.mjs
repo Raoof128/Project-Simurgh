@@ -623,7 +623,7 @@ export const VDR_REASONS_185 = Object.freeze([
   "shadow_arithmetic_broken",
 ]);
 
-// Stage 4Z VWA codes (spec §2). Wrapper LAST at 198; 199 remains headroom.
+// Stage 4Z VWA codes (spec §2). Wrapper LAST at 198.
 export const VWA_RAW_CODES = Object.freeze({
   VWA_SCHEMA_INVALID: 190,
   VWA_SIGNATURE_INVALID: 191,
@@ -659,6 +659,46 @@ export const VWA_REASONS_194 = Object.freeze([
   "cells_unsorted",
   "token_missing", // No Silent Token (matrix not total over the lexicon)
   "aggregates_mismatch",
+]);
+
+// Stage 5A VNC codes (spec §2). Wrapper LAST at 209; 210 remains headroom.
+// _VNC-suffixed to avoid colliding with VSN's INTERNAL_FAIL_CLOSED: 172.
+export const VNC_RAW_CODES = Object.freeze({
+  VNC_SCHEMA_INVALID: 199,
+  VNC_SIGNATURE_INVALID: 200,
+  VNC_INPUT_BINDING_MISMATCH: 201,
+  VNC_CLAIM_TABLE_PRECOMMIT_MISMATCH: 202,
+  VNC_CLASSIFICATION_INVALID: 203,
+  VNC_FLAG_COVERAGE_INVALID: 204,
+  VNC_VERDICT_RECOMPUTE_MISMATCH: 205,
+  VNC_PROVENANCE_MANIFEST_MISMATCH: 206,
+  VNC_ADAPTER_CONFORMANCE_FAILED: 207,
+  VNC_TALLY_MISMATCH: 208,
+  INTERNAL_FAIL_CLOSED_VNC: 209,
+});
+// Frozen first-failure order (5A spec §2): schema → signature → input binding
+// (No Borrowed Story) → claim-table precommit (No Post-Hoc Claim Table) →
+// classification (No Silent Claim) → flag coverage (No Silent Flag) → verdict
+// recompute (No Two Stories) → provenance manifest → adapter conformance →
+// tally. Wrapper 209 applied LAST.
+export const VNC_CHECK_ORDER = Object.freeze([199, 200, 201, 202, 203, 204, 205, 206, 207, 208]);
+// Tier doctrine as a machine fact (spec §2): the code SET is identical across
+// tiers; audit differs only by DEPTH (embedded-artifact audit re-verify + pilot
+// raw reopen). public ⊆ audit.
+export const VNC_PUBLIC_CODES = Object.freeze([199, 200, 201, 202, 203, 204, 205, 206, 207, 208]);
+export const VNC_AUDIT_CODES = Object.freeze([199, 200, 201, 202, 203, 204, 205, 206, 207, 208]);
+export const VNC_REASONS_202 = Object.freeze([
+  "scope_rule_not_all_cells",
+  "token_ids_empty",
+  "claim_id_duplicate",
+  "span_unresolvable", // malformed table, NOT an unreadable verdict (MF3)
+  "span_type_not_unverified_prose",
+]);
+export const VNC_REASONS_204 = Object.freeze([
+  "flag_uncovered", // No Silent Flag
+  "flag_double_covered",
+  "unnarrated_flag_absent_from_map",
+  "evidence_flag_absent_from_map", // fabricated-evidence guard (reviewer N7)
 ]);
 
 export const HARNESS_CODES = Object.freeze({
@@ -868,6 +908,17 @@ export const RUN_LEVEL_BY_RAW = Object.freeze({
   196: 1,
   197: 1,
   198: 1,
+  199: 1,
+  200: 1,
+  201: 1,
+  202: 1,
+  203: 1,
+  204: 1,
+  205: 1,
+  206: 1,
+  207: 1,
+  208: 1,
+  209: 1,
 });
 
 export function stage4CodeForRawCode(code) {
