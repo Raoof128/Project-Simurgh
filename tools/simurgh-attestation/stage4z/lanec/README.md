@@ -30,7 +30,7 @@ declaration_digest, lens_digest }`. Layers ≈ `{2,5,8,11,13,15}` for the 16-lay
 
 - **captured** → freeze the tensors into the stage4z `frozen_capture` fixture and run the
   **mandatory rerun cascade** (Task 13): `build-stage4z-fixtures → attestation → Lane B →
-  Python parity → browser parity → K7/reproduce`. Otherwise the shipped artifacts prove the
+Python parity → browser parity → K7/reproduce`. Otherwise the shipped artifacts prove the
   synthetic placeholder, not the capture.
 - **capture_failed** → the ceremony is sealed with a `reason`; the stage ships on the synthetic
   fixtures, honestly labelled. Honesty over heroics (3V-B / 4U precedent).

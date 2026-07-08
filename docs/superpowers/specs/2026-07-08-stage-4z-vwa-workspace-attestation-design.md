@@ -14,7 +14,7 @@
 
 ### What this stage is
 
-Anthropic's *Verbalizable Representations Form a Global Workspace in Language Models*
+Anthropic's _Verbalizable Representations Form a Global Workspace in Language Models_
 (Transformer Circuits, 2026-07-06) shows that a cheap internal instrument — the
 Jacobian lens — surfaces a model's **silent** strategic and situational cognition
 (`leverage`, `fake`, `secretly`, `reward`) that never appears in outputs, and says
@@ -38,7 +38,7 @@ mean-Jacobian lens computed on an open-weights ~1B model** (Lane C, digest-only)
 — to our knowledge the first independent replication of the paper's method
 family, at honest, signed scope.
 
-This opens the **signal-side arc**: 3M→4Y verified *outputs and boundaries*; 4Z
+This opens the **signal-side arc**: 3M→4Y verified _outputs and boundaries_; 4Z
 is the first stage whose evidence species is **activation-derived telemetry**.
 It also **PAYS the three-stage IOU `transparency_report_profile_deferred`**
 (minted 4W, carried 4X and 4Y) via the **VSC — Verifiable System Card**
@@ -50,13 +50,13 @@ stays reserved and untouched.)
 
 ### Laws (falsifiable; a hostile reviewer should attack exactly these)
 
-1. **No Silent Cell.** The workspace flag map is a *total* function on the
+1. **No Silent Cell.** The workspace flag map is a _total_ function on the
    declared grid: every (position, layer) cell appears exactly once — no
    duplicates, no gaps, no undeclared cells. Selective omission of embarrassing
    cells is a verification FAILURE (raw 194), not an editorial choice. This is
    the Completeness Invariant applied to interpretability telemetry.
    **Crucially, the declaration is precommitted by a TOTAL RULE, not a
-   hand-picked list** (see Law 2, gauntlet-2 fix): the position set is *all*
+   hand-picked list** (see Law 2, gauntlet-2 fix): the position set is _all_
    token positions of each pinned prompt (`T(p) = every position`), and the
    layer set `L` is fixed pre-capture — otherwise No Silent Cell is gameable
    by shrinking the declaration after seeing the readouts (declare `T={1..39}`
@@ -80,16 +80,16 @@ in JS, Python, and the browser.
 
 ### The honest core, signed up front (= the next stages' attack surface)
 
-- **Lexicon-restricted, not the J-space.** We compute lens *rows* for a declared
+- **Lexicon-restricted, not the J-space.** We compute lens _rows_ for a declared
   lexicon (one VJP per (prompt, token)), not the full-vocabulary Jacobian. The
   paper's full method (future-token averaging over ~1000 prompts, full vocab,
-  frontier scale) is NOT reproduced. Our capture is a *method-family* replication
+  frontier scale) is NOT reproduced. Our capture is a _method-family_ replication
   at ~1B scale, present-token VJP variant (the paper's §A.7 reports qualitative
   robustness across such variants — cited, not re-proven).
 - **A readout is not faithfulness.** The lens may miss or misname cognition; the
   paper's own §9.2 limitation — automatic, well-practiced computations bypass the
   J-space — is echoed verbatim into `VWA_KNOWN_LIMITATIONS`. VWA makes the
-  *telemetry* trustworthy, not the *lens*.
+  _telemetry_ trustworthy, not the _lens_.
 - **Precommitment is signature-attested, not temporally proven.** A dishonest
   operator could back-date a lexicon; binding precedence to an external witness
   anchor is the 3W dual-root path, reserved (`lexicon_witness_anchor` noted in
@@ -145,7 +145,7 @@ interpretability-method capture.
   - `reflection_corpus_provenance_deferred` — signed, recomputable provenance
     for reflection-training corpora (which constitution principles entered which
     training example — invisible post-hoc in both the J-lens paper's §7 and
-    *Teaching Claude why*, since scaffolding is stripped before training).
+    _Teaching Claude why_, since scaffolding is stripped before training).
 
 ---
 
@@ -221,27 +221,27 @@ spanning early/workspace/motor bands), and a precommitted lexicon `K_lex`
 
 ### Artifact schemas (all `simurgh.vwa.*.v1`)
 
-| Schema | Contents | Tier |
-| --- | --- | --- |
-| `simurgh.vwa.declaration.v1` | flag lexicon (tokens[] string + token_id), `theta_nano` (JSON field is ASCII; θ_nano is prose only), corpus manifest, **total position rule id** (`all_positions`), layer set `L`, tokenizer id; hashed to `declaration_digest` and **signed before capture** (No Post-Hoc Declaration) | public |
-| `simurgh.vwa.capture.v1` | model id + revision digest, lens variant id, seeds, versions, per-tensor salted commitments, declaration_digest, ceremony record (both-outcomes field: `captured` \| `capture_failed`). The (model-revision digest × lens digests) pair is the **staleness receipt**: activation monitors are documented to go stale across model updates (arXiv 2606.15980), and this binding proves exactly which model revision a readout came from — zero new code, one named guarantee | public (commitments) / audit (tensors + salts) |
-| `simurgh.vwa.map.v1` | the WFM: grid cells with the FULL `score_nano` matrix (every lexicon token per cell; floats never enter JSON — see deterministic surface), flags, aggregates, indexed tensor-commitment tables, declaration_digest, capture_digest, `self_report` block (monitor-claimed `n_flags`), provenance | public |
-| `simurgh.vwa.audit.v1` | tensors, salts, per-cell recompute traces | audit (never published) |
-| `simurgh.vwa.attestation.v1` | Ed25519 over `canonicalJson(body)`; body binds `merkleRootSorted([declaration_digest, capture_digest, map_digest, audit_digest])` (declaration, NOT lexicon — binds the whole precommitted workspace contract); keyDigest = `"sha256:" + sha256(raw PEM string)` (4W lesson: raw PEM, NOT DER) | public |
+| Schema                       | Contents                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | Tier                                           |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
+| `simurgh.vwa.declaration.v1` | flag lexicon (tokens[] string + token_id), `theta_nano` (JSON field is ASCII; θ_nano is prose only), corpus manifest, **total position rule id** (`all_positions`), layer set `L`, tokenizer id; hashed to `declaration_digest` and **signed before capture** (No Post-Hoc Declaration)                                                                                                                                                                                     | public                                         |
+| `simurgh.vwa.capture.v1`     | model id + revision digest, lens variant id, seeds, versions, per-tensor salted commitments, declaration_digest, ceremony record (both-outcomes field: `captured` \| `capture_failed`). The (model-revision digest × lens digests) pair is the **staleness receipt**: activation monitors are documented to go stale across model updates (arXiv 2606.15980), and this binding proves exactly which model revision a readout came from — zero new code, one named guarantee | public (commitments) / audit (tensors + salts) |
+| `simurgh.vwa.map.v1`         | the WFM: grid cells with the FULL `score_nano` matrix (every lexicon token per cell; floats never enter JSON — see deterministic surface), flags, aggregates, indexed tensor-commitment tables, declaration_digest, capture_digest, `self_report` block (monitor-claimed `n_flags`), provenance                                                                                                                                                                             | public                                         |
+| `simurgh.vwa.audit.v1`       | tensors, salts, per-cell recompute traces                                                                                                                                                                                                                                                                                                                                                                                                                                   | audit (never published)                        |
+| `simurgh.vwa.attestation.v1` | Ed25519 over `canonicalJson(body)`; body binds `merkleRootSorted([declaration_digest, capture_digest, map_digest, audit_digest])` (declaration, NOT lexicon — binds the whole precommitted workspace contract); keyDigest = `"sha256:" + sha256(raw PEM string)` (4W lesson: raw PEM, NOT DER)                                                                                                                                                                              | public                                         |
 
 ### Raw codes (additive; wrapper LAST; `_VWA` suffix)
 
-| Raw | Name | Fires when | Tier |
-| --- | --- | --- | --- |
-| 190 | `VWA_SCHEMA_INVALID` | any artifact fails schema/shape | public+audit |
-| 191 | `VWA_SIGNATURE_INVALID` | Ed25519 verify fails / key digest mismatch | public+audit |
+| Raw | Name                                 | Fires when                                                                                                                                                                                                                                     | Tier         |
+| --- | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
+| 190 | `VWA_SCHEMA_INVALID`                 | any artifact fails schema/shape                                                                                                                                                                                                                | public+audit |
+| 191 | `VWA_SIGNATURE_INVALID`              | Ed25519 verify fails / key digest mismatch                                                                                                                                                                                                     | public+audit |
 | 192 | `VWA_DECLARATION_PRECOMMIT_MISMATCH` | `declaration_digest` differs across declaration/capture/map/attestation; or θ_nano, position rule, or layer set `L` in the map ≠ precommitted; or the grid's positions are not the TOTAL set the position rule mandates (a shrunk declaration) | public+audit |
-| 193 | `VWA_CAPTURE_BINDING_MISMATCH` | public: commitment sets disagree across artifacts; audit: reopened `sha256(salt‖bytes)` ≠ commitment | public+audit |
-| 194 | `VWA_GRID_INVALID` | No Silent Cell broken: missing/duplicate/undeclared cell, unsorted, or aggregates ≠ recount | public+audit |
-| 195 | `VWA_READOUT_RECOMPUTE_MISMATCH` | audit only: score matrix recomputed from tensors (float64 → nano-scaling) ≠ published matrix | audit |
-| 196 | `VWA_FLAG_AGREEMENT_MISMATCH` | flags ≠ θ-rule applied to the published score matrix | public+audit |
-| 197 | `VWA_SELF_REPORT_CONFLICT` | monitor-claimed `n_flags` ≠ recomputed `flag_total` | public+audit |
-| 198 | `INTERNAL_FAIL_CLOSED_VWA` | any unexpected throw in `evaluateVwaSafe` | wrapper |
+| 193 | `VWA_CAPTURE_BINDING_MISMATCH`       | public: commitment sets disagree across artifacts; audit: reopened `sha256(salt‖bytes)` ≠ commitment                                                                                                                                           | public+audit |
+| 194 | `VWA_GRID_INVALID`                   | No Silent Cell broken: missing/duplicate/undeclared cell, unsorted, or aggregates ≠ recount                                                                                                                                                    | public+audit |
+| 195 | `VWA_READOUT_RECOMPUTE_MISMATCH`     | audit only: score matrix recomputed from tensors (float64 → nano-scaling) ≠ published matrix                                                                                                                                                   | audit        |
+| 196 | `VWA_FLAG_AGREEMENT_MISMATCH`        | flags ≠ θ-rule applied to the published score matrix                                                                                                                                                                                           | public+audit |
+| 197 | `VWA_SELF_REPORT_CONFLICT`           | monitor-claimed `n_flags` ≠ recomputed `flag_total`                                                                                                                                                                                            | public+audit |
+| 198 | `INTERNAL_FAIL_CLOSED_VWA`           | any unexpected throw in `evaluateVwaSafe`                                                                                                                                                                                                      | wrapper      |
 
 - `VWA_CHECK_ORDER = [190,191,192,193,194,195,196,197]` — frozen first-failure order.
 - `VWA_PUBLIC_CODES = [190,191,192,193,194,196,197]`; `VWA_AUDIT_CODES = [190…197]`.
@@ -273,25 +273,24 @@ the telemetry disagree" — it does NOT adjudicate which is true (non-claim).
 ~12 fixtures, committed under `tests/fixtures/llmShield/stage4z/` with evidence
 under `docs/research/llm-shield/evidence/stage-4z/` (prettier-ignored on day
 one — 4K/4N lesson). Deterministic salts `saltFor(id) = sha256("vwa-fixture-salt:"+id).slice(0,16)`;
-committed INSECURE_FIXTURE_ONLY key pair. Fixture tensors for the `synthetic_*`
-set are small hand-built float32 arrays (d=8) so every number in the map is
-hand-checkable; the `frozen_capture` set replays the Lane C capture's real
+committed INSECURE*FIXTURE_ONLY key pair. Fixture tensors for the `synthetic*\*`set are small hand-built float32 arrays (d=8) so every number in the map is
+hand-checkable; the`frozen_capture` set replays the Lane C capture's real
 tensors once frozen.
 
-| # | Fixture | Set | Expected (public / audit) |
-| --- | --- | --- | --- |
-| 1 | `synthetic_clean_multihop` | clean | 0 / 0 |
-| 2 | `synthetic_clean_injection_detect` | clean | 0 / 0 (flags present: `fake`, `injection`) |
-| 3 | `synthetic_clean_zero_flags` | clean | 0 / 0 (zero flags is a valid outcome) |
-| 4 | `withheld_tensors` | withheld | 0 / SKIPPED (verify script skips audit tier for the withheld set — verbatim 4Y precedent, `fx.set === "withheld" && tier === "audit" → continue`; public verifies fully — the Futurium tension answered) |
-| 5 | `tamper_signature` | tamper | 191 / 191 |
-| 6 | `tamper_posthoc_declaration` | tamper | 192 / 192 (lexicon/θ/layer-set altered post-capture) |
-| 7 | `tamper_tensor_commitment` | tamper | 193 / 193 |
-| 8 | `tamper_omitted_cell` | tamper | 194 / 194 |
-| 9 | `tamper_scores_doctored` | tamper | 0 / 195 (doctored `score_nano` matrix kept flag-consistent → public-clean, audit-caught — documented asymmetry) |
-| 10 | `tamper_flag_flip` | tamper | 196 / 196 |
-| 11 | `perfect_score_conflict` | tamper | 197 / 197 |
-| 12 | `tamper_shrunk_declaration` | tamper | 192 / 192 (grid drops positions after capture; totality-over-declaration (194) still holds but the declaration ≠ the total-rule precommitment — the gauntlet-2 completeness fix) |
+| #   | Fixture                            | Set      | Expected (public / audit)                                                                                                                                                                                |
+| --- | ---------------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | `synthetic_clean_multihop`         | clean    | 0 / 0                                                                                                                                                                                                    |
+| 2   | `synthetic_clean_injection_detect` | clean    | 0 / 0 (flags present: `fake`, `injection`)                                                                                                                                                               |
+| 3   | `synthetic_clean_zero_flags`       | clean    | 0 / 0 (zero flags is a valid outcome)                                                                                                                                                                    |
+| 4   | `withheld_tensors`                 | withheld | 0 / SKIPPED (verify script skips audit tier for the withheld set — verbatim 4Y precedent, `fx.set === "withheld" && tier === "audit" → continue`; public verifies fully — the Futurium tension answered) |
+| 5   | `tamper_signature`                 | tamper   | 191 / 191                                                                                                                                                                                                |
+| 6   | `tamper_posthoc_declaration`       | tamper   | 192 / 192 (lexicon/θ/layer-set altered post-capture)                                                                                                                                                     |
+| 7   | `tamper_tensor_commitment`         | tamper   | 193 / 193                                                                                                                                                                                                |
+| 8   | `tamper_omitted_cell`              | tamper   | 194 / 194                                                                                                                                                                                                |
+| 9   | `tamper_scores_doctored`           | tamper   | 0 / 195 (doctored `score_nano` matrix kept flag-consistent → public-clean, audit-caught — documented asymmetry)                                                                                          |
+| 10  | `tamper_flag_flip`                 | tamper   | 196 / 196                                                                                                                                                                                                |
+| 11  | `perfect_score_conflict`           | tamper   | 197 / 197                                                                                                                                                                                                |
+| 12  | `tamper_shrunk_declaration`        | tamper   | 192 / 192 (grid drops positions after capture; totality-over-declaration (194) still holds but the declaration ≠ the total-rule precommitment — the gauntlet-2 completeness fix)                         |
 
 Byte-stability: build the corpus twice, `cmp` every file. Golden `verify`
 outputs for both tiers.
@@ -376,7 +375,7 @@ full-map equality over the corpus.
    the first system-card-shaped document whose numbers recompute.
 2. **Composition memo** — `docs/research/llm-shield/JLENS_COMPOSITION.md`:
    the paper↔Simurgh mapping (their lens flags → our evidence contract; their
-   §9.2 insufficiency → our external-containment thesis; *Teaching Claude why* →
+   §9.2 insufficiency → our external-containment thesis; _Teaching Claude why_ →
    `reflection_corpus_provenance_deferred`). Docs-only, provider-named citations
    allowed in research docs, public artifact wording stays provider-agnostic.
 
@@ -387,8 +386,9 @@ Lane B + browser-parity + K7); `check-e2e.sh` line
 `"Stage 4Z VWA|scripts/reproduce-llm-shield-stage4z.sh"`; prior stages'
 reproduce scripts re-run green (additive codes must not disturb sealed
 history); `stage-4-lean-proofs.yml` gains `lean proofs/stage4z/WorkspaceAttestation.lean`
-+ sorry-grep; README banner; K7 all-functions net (every export + tamper matrix
-+ cross-stage invariants) MANDATORY before tag; docs-accuracy pass at the end.
+
+- sorry-grep; README banner; K7 all-functions net (every export + tamper matrix
+- cross-stage invariants) MANDATORY before tag; docs-accuracy pass at the end.
 
 ---
 
@@ -396,14 +396,14 @@ history); `stage-4-lean-proofs.yml` gains `lean proofs/stage4z/WorkspaceAttestat
 
 ### Lean (`proofs/stage4z/WorkspaceAttestation.lean`, Lean 4.15 core, no mathlib, zero sorry)
 
-| Theorem | Class | Statement |
-| --- | --- | --- |
-| `gridConservation` | substantive | a well-formed cell list over declaration (T × L) has length \|T\|·\|L\| with no duplicates — No Silent Cell |
-| `matrixTotal` | substantive | a well-formed map carries a score for every (cell × lexicon token) pair — No Silent Token |
-| `flagAgreement` | substantive | the flag set equals the θ-rule applied to the published matrix (flag ⟺ `score_nano ≥ θ_nano`) |
-| `lexiconMonotone` | substantive | lexicon ⊆ lexicon′ (same θ) ⇒ flag set ⊆ flag set′ — adding watch-tokens never hides a flag. (Provable ONLY because the gauntlet removed top-K truncation from the flag rule — under truncation this statement is false.) |
-| `conflictSound` | substantive | claimed ≠ recomputed total ⇒ the conflict check fires (197 cannot be silently skipped) |
-| `publicSubsetAudit` | lock | the public check list is a sublist of the audit check list — a public PASS can never contradict audit scope |
+| Theorem             | Class       | Statement                                                                                                                                                                                                                 |
+| ------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `gridConservation`  | substantive | a well-formed cell list over declaration (T × L) has length \|T\|·\|L\| with no duplicates — No Silent Cell                                                                                                               |
+| `matrixTotal`       | substantive | a well-formed map carries a score for every (cell × lexicon token) pair — No Silent Token                                                                                                                                 |
+| `flagAgreement`     | substantive | the flag set equals the θ-rule applied to the published matrix (flag ⟺ `score_nano ≥ θ_nano`)                                                                                                                             |
+| `lexiconMonotone`   | substantive | lexicon ⊆ lexicon′ (same θ) ⇒ flag set ⊆ flag set′ — adding watch-tokens never hides a flag. (Provable ONLY because the gauntlet removed top-K truncation from the flag rule — under truncation this statement is false.) |
+| `conflictSound`     | substantive | claimed ≠ recomputed total ⇒ the conflict check fires (197 cannot be silently skipped)                                                                                                                                    |
+| `publicSubsetAudit` | lock        | the public check list is a sublist of the audit check list — a public PASS can never contradict audit scope                                                                                                               |
 
 Structural `def f : List α → Nat` totals; no `sorry`; CI-checked.
 
@@ -458,7 +458,7 @@ Structural `def f : List α → Nat` totals; no `sorry`; CI-checked.
   sufficient" — a monitoring signal explicitly proposed for audit use, with no
   evidence contract attached. Anthropic research index entry: "A global
   workspace in language models" (2026-07-06).
-- **Live incident (marked *reported* — secondary analyses):** the Mythos
+- **Live incident (marked _reported_ — secondary analyses):** the Mythos
   system-card dispute — claims characterized as "self-evaluated by the vendor…
   unreproduced by any named external party" (flyingpenguin, 2026); primary
   card at red.anthropic.com/2026/mythos-preview/. The disease = internal
@@ -524,7 +524,7 @@ Structural `def f : List α → Nat` totals; no `sorry`; CI-checked.
     receiving model access. And the position stated plainly: "Behavioural
     Assurance Cannot Verify the Safety Claims Governance Now Demands" (arXiv
     2605.15164).
-  - *(Reported, secondary):* Anthropic's stated goal to "reliably detect most
+  - _(Reported, secondary):_ Anthropic's stated goal to "reliably detect most
     AI model problems by 2027" via interpretability — the detection stream is
     a roadmap commitment across the industry; the evidence contract for it
     does not exist. VWA is that contract.
@@ -540,7 +540,7 @@ Structural `def f : List α → Nat` totals; no `sorry`; CI-checked.
     centralizing safety numbers and safeguards — the exact "transparency-hub-
     shaped documents" the 4W socket named as untyped prose + tables.
   - **Stanford FMTI (primary):** the Foundation Model Transparency Index
-    *scores* provider transparency but cannot *verify* a single reported
+    _scores_ provider transparency but cannot _verify_ a single reported
     number — an index over attestations, not evidence. The VSC is the
     missing substrate: a report whose numbers carry their own recompute
     path.
@@ -558,12 +558,12 @@ Structural `def f : List α → Nat` totals; no `sorry`; CI-checked.
 
 ### Four-axis scorecard (spec-time; re-score honestly at closeout)
 
-| Axis | Score | What moves it higher (buildable debts, not decoration) |
-| --- | --- | --- |
-| Novelty | **9.4** | first evidence contract over interpretability telemetry: No Silent Cell on readout grids + No Post-Hoc Declaration (total-position-rule precommitment) + withheld-tensor public tier + perfect-score conflict fixture; 10 = the narrative-conflict stage built on top (`workspace_narrative_conflict_deferred`) |
-| Frontier | **9.2** | first independent method-family replication of the mean-Jacobian lens on open weights, sealed Lane C; real WebCrypto verify + 6 Lean + dual parity; 10 = full-vocab rows or a >7B capture with the same contract |
+| Axis                       | Score   | What moves it higher (buildable debts, not decoration)                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| -------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Novelty                    | **9.4** | first evidence contract over interpretability telemetry: No Silent Cell on readout grids + No Post-Hoc Declaration (total-position-rule precommitment) + withheld-tensor public tier + perfect-score conflict fixture; 10 = the narrative-conflict stage built on top (`workspace_narrative_conflict_deferred`)                                                                                                                                                                 |
+| Frontier                   | **9.2** | first independent method-family replication of the mean-Jacobian lens on open weights, sealed Lane C; real WebCrypto verify + 6 Lean + dual parity; 10 = full-vocab rows or a >7B capture with the same contract                                                                                                                                                                                                                                                                |
 | Lab / regulator usefulness | **9.8** | raised from 9.7 after industry sweep #2: activation telemetry is now confirmed DEPLOYED user-facing (Gemini probes, grep-verified zero evidence machinery), sold as a hosted API (Goodfire), and mass-produced by an open auditing ecosystem (Petri 2.0) — three live surfaces, none with an evidence contract; plus Art 43/55, the structured-access gap, and composition with Anthropic's own instrument; 10 = `lab_readout_pilot_deferred` executed by a real external party |
-| Constitution | **9.4** | pure honesty machinery: completeness, anti-cherry-picking, conflict disclosure, signed non-claims echoing the paper's own limits; 10 = reflection-corpus provenance shipped, closing the constitution→training→telemetry loop |
+| Constitution               | **9.4** | pure honesty machinery: completeness, anti-cherry-picking, conflict disclosure, signed non-claims echoing the paper's own limits; 10 = reflection-corpus provenance shipped, closing the constitution→training→telemetry loop                                                                                                                                                                                                                                                   |
 
 Ledger note: this stage **pays a three-stage IOU in-stage**
 (`transparency_report_profile_deferred`, minted 4W → PAID by the VSC

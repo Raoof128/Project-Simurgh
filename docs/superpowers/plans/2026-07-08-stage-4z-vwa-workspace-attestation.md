@@ -86,10 +86,10 @@
   `spanMapDigest(spanMap)=recordDigest(spanMap??[])`; `leakageGate.mjs`:
   `scanLeakage(body, spanMap, capsuleValues)` (region-granular).
 - **4W `slot_bound` span schema (verified):** `["span_id","start_byte",
-  "end_byte","type", ...,"evidence_digest","recompute_kind","claimed_value"]`;
+"end_byte","type", ...,"evidence_digest","recompute_kind","claimed_value"]`;
   `evaluateNarrative` ALREADY, per slot_bound span, looks up
   `sealed[s.evidence_digest]`, checks `artifact.kind ===
-  KIND_EVIDENCE_SOURCE[s.recompute_kind]`, and asserts
+KIND_EVIDENCE_SOURCE[s.recompute_kind]`, and asserts
   `fn(artifact, ctx) === s.claimed_value` (else `recompute_mismatch`). **VSC
   reuses this recompute HARNESS and these exact field names** — but the
   per-artifact `recompute_kind → fn` registry does NOT yet cover 4T/4U/4X/4Y/4Z
@@ -265,7 +265,7 @@ Python snippet recorded in the test comment (parity anchor for Task 11).
   (BigInt compare of the decimal strings); flags that disagree with the rule
   applied to the published matrix → `{raw:196}`.
 - `aggregatesFor` recomputes `n_cells,flags_by_token,n_flagged_cells,
-  flag_total`; a doctored aggregate → `{raw:194}`.
+flag_total`; a doctored aggregate → `{raw:194}`.
 - **`lexiconMonotone` behavioural test:** adding a token to the lexicon never
   removes an existing flag (guards the D1 fix in code, not just Lean).
 
@@ -279,7 +279,7 @@ Python snippet recorded in the test comment (parity anchor for Task 11).
 **Test first** (`declarationCore.test.js`, `captureCore.test.js`):
 
 - `declarationDigest(decl) = recordDigest(canonical {lexicon, theta_nano, corpus
-  manifest, position_rule_id:"all_positions", layer_set, tokenizer})`;
+manifest, position_rule_id:"all_positions", layer_set, tokenizer})`;
   `checkPrecommit` fails `{raw:192}` when the digest differs across
   declaration/capture/map/attestation, when `theta_nano`/position-rule/`L` in the
   map ≠ precommitted, **or when the grid's positions are not the total set the
@@ -380,7 +380,7 @@ pure function of EXCEPT the answer: `{tensors, salts, declaration bundle,
 capture manifest fields (model/revision/lens digests/seeds/versions),
 self_report, provenance}`. Rule of thumb (gauntlet-2 C): if the committed
 public map binds a field (it binds `declaration_digest`, `capture_digest`,
-commitments, `self_report`), the child needs that field's *inputs* — salts and
+commitments, `self_report`), the child needs that field's _inputs_ — salts and
 the capture manifest were both missing in the first draft and would mismatch
 every run. The committed **map/audit are NEVER passed** (still the answer).
 Blindness negatives — child exits 2 on any `OPERATOR_*` env and on any of
@@ -425,10 +425,11 @@ verbatim: `pemToDer(pubPem)` → `crypto.subtle.importKey("spki", der,
 {name:"Ed25519"}, false, ["verify"])` → `crypto.subtle.verify({name:"Ed25519"},
 key, sig, canonicalJson(body))`, with the `if (typeof crypto === "undefined" ||
 !crypto.subtle)` degradation guard (4Y `vdr-verifier.html:490`). Inlined sha256
-+ canonicalJson + grid/matrix/flag/conflict recompute (BigInt string compares,
-no floats); hash-CSP; `EXPECTED_FROZEN` pinned; reset `/g` regex `lastIndex`;
-recompute CSP via Node injection (never `/`-delimited sed). Strict CSP → zero
-external requests (asserted by a request-interception count of 0).
+
+- canonicalJson + grid/matrix/flag/conflict recompute (BigInt string compares,
+  no floats); hash-CSP; `EXPECTED_FROZEN` pinned; reset `/g` regex `lastIndex`;
+  recompute CSP via Node injection (never `/`-delimited sed). Strict CSP → zero
+  external requests (asserted by a request-interception count of 0).
 
 **Verify:** e2e green; recompute CSP hash after any edit.
 
@@ -445,17 +446,18 @@ JSON can't sneak through while the compute stays offline.
 
 **No unit test for the capture itself** (offline torch). Deliverable:
 `lanec/capture-workspace-readout.py`
-+ `lanec/README.md`. Produces, on a pinned Llama-3.2-1B-Instruct revision:
-per-`(prompt,ℓ,t)` activations (ALL token positions — the total position rule)
-+ per-`(ℓ,k)` post-final-norm-logit VJP lens rows (fp32, fixed seeds),
-salted-committed, plus a ceremony record with
-timestamps/versions/`captured|capture_failed`. **Rejects any non-finite
-(NaN/±Inf) tensor value** before sealing (gauntlet-2 E) — a blown-up gradient
-aborts the capture rather than producing an undefined `score_nano`. Benign
-pinned corpus only; rails frozen; no elicitation/honeypots/organisms/evasion-search. After a `captured`
-run, freeze the tensors into the `frozen_capture` fixture (Task 8 swap) and
-rerun post-processing forever in Lane A. A `capture_failed` seal ships on
-synthetic fixtures — honesty over heroics.
+
+- `lanec/README.md`. Produces, on a pinned Llama-3.2-1B-Instruct revision:
+  per-`(prompt,ℓ,t)` activations (ALL token positions — the total position rule)
+- per-`(ℓ,k)` post-final-norm-logit VJP lens rows (fp32, fixed seeds),
+  salted-committed, plus a ceremony record with
+  timestamps/versions/`captured|capture_failed`. **Rejects any non-finite
+  (NaN/±Inf) tensor value** before sealing (gauntlet-2 E) — a blown-up gradient
+  aborts the capture rather than producing an undefined `score_nano`. Benign
+  pinned corpus only; rails frozen; no elicitation/honeypots/organisms/evasion-search. After a `captured`
+  run, freeze the tensors into the `frozen_capture` fixture (Task 8 swap) and
+  rerun post-processing forever in Lane A. A `capture_failed` seal ships on
+  synthetic fixtures — honesty over heroics.
 
 **Verify:** offline; record the ceremony digest + outcome in the closeout.
 `grep` confirms `lanec/` is in NO `node --test` glob and NOT in `check.sh`.
