@@ -1,0 +1,606 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'sha256-oU4P4xKoC6EVSBbshVzcQ76VO8W8cWROcXVQ/MLfBY0='; style-src 'sha256-XN0mvoEpEQwwtCx4rtOVfSrC2Uz5aQSB9bmpk2SI8Gc='; img-src 'none'; connect-src 'none'; base-uri 'none'; form-action 'none'"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Stage 4Y VDR — Verifiable Document Residue (offline verifier)</title>
+    <style>
+      body {
+        font:
+          14px/1.5 system-ui,
+          sans-serif;
+        max-width: 900px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+        color: #111;
+      }
+      h1 {
+        font-size: 1.3rem;
+      }
+      .bar {
+        display: flex;
+        height: 26px;
+        border: 1px solid #999;
+        overflow: hidden;
+        margin: 0.5rem 0;
+      }
+      .seg {
+        height: 100%;
+      }
+      .caught_v1 {
+        background: #c0392b;
+      }
+      .caught_v2_only {
+        background: #e67e22;
+      }
+      .redacted {
+        background: #2c3e50;
+      }
+      .unflagged {
+        background: #ecf0f1;
+      }
+      .k {
+        font-weight: 600;
+      }
+      .ok {
+        color: #157347;
+      }
+      .bad {
+        color: #b02a37;
+      }
+      pre {
+        background: #f6f8fa;
+        padding: 0.5rem;
+        overflow-x: auto;
+      }
+      .note {
+        color: #555;
+        font-size: 0.85rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Stage 4Y VDR — Verifiable Document Residue</h1>
+    <p class="note">
+      Offline. No network. Public tier verifies signature + structure over the map alone; audit tier
+      additionally recomputes the map from the document bytes. Document bytes never leave this page
+      (strict CSP, no fetch/XHR/WebSocket/form). Not proof against a compromised browser.
+    </p>
+    <p>
+      Map JSON: <input type="file" id="mapf" /> Attestation JSON:
+      <input type="file" id="attf" /> Public key PEM: <input type="file" id="keyf" />
+    </p>
+    <p>Document bytes (audit tier, optional): <input type="file" id="docf" /></p>
+    <button id="go" type="button">Verify</button>
+    <div id="out"></div>
+
+    <script>
+      (function () {
+        // ---- pure sha256 (browser-safe; byte-identical to node:crypto over UTF-8) ----
+        var K = [
+          0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4,
+          0xab1c5ed5, 0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe,
+          0x9bdc06a7, 0xc19bf174, 0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f,
+          0x4a7484aa, 0x5cb0a9dc, 0x76f988da, 0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7,
+          0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc,
+          0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85, 0xa2bfe8a1, 0xa81a664b,
+          0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070, 0x19a4c116,
+          0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+          0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7,
+          0xc67178f2,
+        ];
+        function utf8(str) {
+          var out = [];
+          for (var i = 0; i < str.length; i++) {
+            var c = str.codePointAt(i);
+            if (c > 0xffff) i++;
+            if (c < 0x80) out.push(c);
+            else if (c < 0x800) out.push(0xc0 | (c >> 6), 0x80 | (c & 63));
+            else if (c < 0x10000)
+              out.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));
+            else
+              out.push(
+                0xf0 | (c >> 18),
+                0x80 | ((c >> 12) & 63),
+                0x80 | ((c >> 6) & 63),
+                0x80 | (c & 63)
+              );
+          }
+          return out;
+        }
+        function sha256Hex(str) {
+          var bytes = utf8(str),
+            bitLen = bytes.length * 8;
+          bytes.push(0x80);
+          while (bytes.length % 64 !== 56) bytes.push(0);
+          for (var i = 7; i >= 0; i--) bytes.push(Math.floor(bitLen / Math.pow(2, 8 * i)) & 0xff);
+          var h = [
+            0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab,
+            0x5be0cd19,
+          ];
+          var w = new Array(64),
+            rotr = function (x, n) {
+              return (x >>> n) | (x << (32 - n));
+            };
+          for (var off = 0; off < bytes.length; off += 64) {
+            for (var t = 0; t < 16; t++) {
+              var j = off + t * 4;
+              w[t] = (bytes[j] << 24) | (bytes[j + 1] << 16) | (bytes[j + 2] << 8) | bytes[j + 3];
+            }
+            for (t = 16; t < 64; t++) {
+              var s0 = rotr(w[t - 15], 7) ^ rotr(w[t - 15], 18) ^ (w[t - 15] >>> 3);
+              var s1 = rotr(w[t - 2], 17) ^ rotr(w[t - 2], 19) ^ (w[t - 2] >>> 10);
+              w[t] = (w[t - 16] + s0 + w[t - 7] + s1) | 0;
+            }
+            var a = h[0],
+              b = h[1],
+              c = h[2],
+              d = h[3],
+              e = h[4],
+              f = h[5],
+              g = h[6],
+              hh = h[7];
+            for (t = 0; t < 64; t++) {
+              var S1 = rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25);
+              var ch = (e & f) ^ (~e & g);
+              var t1 = (hh + S1 + ch + K[t] + w[t]) | 0;
+              var S0 = rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22);
+              var maj = (a & b) ^ (a & c) ^ (b & c);
+              var t2 = (S0 + maj) | 0;
+              hh = g;
+              g = f;
+              f = e;
+              e = (d + t1) | 0;
+              d = c;
+              c = b;
+              b = a;
+              a = (t1 + t2) | 0;
+            }
+            h[0] = (h[0] + a) | 0;
+            h[1] = (h[1] + b) | 0;
+            h[2] = (h[2] + c) | 0;
+            h[3] = (h[3] + d) | 0;
+            h[4] = (h[4] + e) | 0;
+            h[5] = (h[5] + f) | 0;
+            h[6] = (h[6] + g) | 0;
+            h[7] = (h[7] + hh) | 0;
+          }
+          return h
+            .map(function (x) {
+              return (x >>> 0).toString(16).padStart(8, "0");
+            })
+            .join("");
+        }
+        var sha = function (s) {
+          return "sha256:" + sha256Hex(s);
+        };
+        function normalise(v) {
+          if (Array.isArray(v)) return v.map(normalise);
+          if (v && typeof v === "object") {
+            var o = {};
+            Object.keys(v)
+              .sort()
+              .forEach(function (k) {
+                o[k] = normalise(v[k]);
+              });
+            return o;
+          }
+          return v;
+        }
+        var canonical = function (v) {
+          return JSON.stringify(normalise(v));
+        };
+
+        // ---- frozen digests this verifier was built to expect (CI keeps them live) ----
+        var EXPECTED_FROZEN = {
+          v1_ruleset_digest:
+            "sha256:08d28481a7eb9ea87ed0d7f17df241736096066ee0c43c872b43d61564249340",
+          v2_digest: "sha256:c47fc9ff6de722885ec9bc5b7e048c36b97f9407476e1f6b10de32e14585cfdf",
+          metamorphic_table_digest:
+            "sha256:d5f299e4c0e24c2a7a34e716621f6c4fdaac8eae43b1381bcca114867896f19b",
+          source_witness_digest:
+            "sha256:7b8435c4cc6041162aaf08ac8edf210e334a33931d4db9748415eb83366ce384",
+        };
+
+        // ---- lexicons + recompute (mirror of the JS/Python core) ----
+        var NUM =
+          "zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|hundred|thousand|million|billion|trillion|dozen|half|couple";
+        var QUANT = "all|none|most|every|nearly|almost|majority|nobody|no\\s?one";
+        var MON =
+          "january|february|march|april|may|june|july|august|september|october|november|december";
+        var V2 =
+          "roughly|approximately|about|around|effectively|essentially|largely|quarter|third|fifth|fraction|portion|handful|several|swath|chunk";
+        var V1RES = [
+          /[0-9]+/g,
+          new RegExp("\\b(" + NUM + ")\\b", "giu"),
+          /%|\bpercent\b/gi,
+          new RegExp("\\b(" + MON + ")\\b", "giu"),
+          new RegExp("\\b(" + QUANT + ")\\b", "giu"),
+        ];
+        var V2RE = new RegExp("\\b(" + V2 + ")\\b", "giu");
+        var firesV1 = function (t) {
+          return V1RES.some(function (r) {
+            r.lastIndex = 0;
+            return r.test(t);
+          });
+        };
+        var firesV2 = function (t) {
+          V2RE.lastIndex = 0; // reset: a /g regex .test() is stateful
+          return firesV1(t) || V2RE.test(t);
+        };
+        function byteOffMap(str) {
+          var map = [],
+            b = 0,
+            i = 0;
+          while (i < str.length) {
+            var cp = str.codePointAt(i),
+              units = cp > 0xffff ? 2 : 1;
+            map[i] = b;
+            if (units === 2) map[i + 1] = b;
+            b += cp < 0x80 ? 1 : cp < 0x800 ? 2 : cp < 0x10000 ? 3 : 4;
+            i += units;
+          }
+          map[str.length] = b;
+          return map;
+        }
+        function extract(text) {
+          var m = byteOffMap(text),
+            spans = [];
+          function collect(re, cls) {
+            re.lastIndex = 0;
+            var mt;
+            while ((mt = re.exec(text)) !== null) {
+              spans.push({
+                start_byte: m[mt.index],
+                end_byte: m[mt.index + mt[0].length],
+                class: cls,
+              });
+              if (mt[0].length === 0) re.lastIndex++;
+            }
+          }
+          V1RES.forEach(function (r) {
+            collect(r, "caught_v1");
+          });
+          collect(V2RE, "caught_v2_only");
+          spans.sort(function (a, b) {
+            return a.start_byte - b.start_byte || a.end_byte - b.end_byte;
+          });
+          return spans;
+        }
+        var RANK = { redacted: 0, caught_v1: 1, caught_v2_only: 2, unflagged: 3 };
+        var CBR = ["redacted", "caught_v1", "caught_v2_only", "unflagged"];
+        function partition(len, spans, manifest) {
+          var rank = new Array(len).fill(3);
+          function paint(s, e, r) {
+            for (var i = Math.max(0, s); i < Math.min(len, e); i++) if (r < rank[i]) rank[i] = r;
+          }
+          spans.forEach(function (sp) {
+            paint(sp.start_byte, sp.end_byte, RANK[sp.class]);
+          });
+          manifest.forEach(function (mm) {
+            paint(mm.offset, mm.offset + mm.length, 0);
+          });
+          var regions = [],
+            i = 0;
+          while (i < len) {
+            var r = rank[i],
+              j = i + 1;
+            while (j < len && rank[j] === r) j++;
+            regions.push({ offset: i, length: j - i, class: CBR[r] });
+            i = j;
+          }
+          return regions;
+        }
+        function applyMR(id, s) {
+          if (id === "digit_to_word_quantifier") return s.replace(/\d+%?/, "roughly a quarter");
+          if (id === "exact_to_hedged")
+            return s.replace(/\ball\s+[\d,]+/i, "essentially the whole set of");
+          if (id === "percent_to_fraction_phrase") return s.replace(/\d+%/, "a large fraction");
+          if (id === "date_to_relative")
+            return s.replace(new RegExp("on\\s+\\d+\\s+(" + MON + ")", "i"), "around that time");
+          if (id === "count_to_bulk_phrase") return s.replace(/\d[\d,]*/, "a handful of");
+          if (id === "true_semantic_paraphrase")
+            return s.replace(
+              new RegExp(
+                "\\b(?:\\d+|" +
+                  NUM.split("|")
+                    .filter(function (w) {
+                      return ["dozen", "half", "couple"].indexOf(w) < 0;
+                    })
+                    .join("|") +
+                  ")\\s*(?:percent|%)?\\s+of\\s+",
+                "i"
+              ),
+              ""
+            );
+          throw new Error("unknown mr");
+        }
+        var MRIDS = [
+          "digit_to_word_quantifier",
+          "exact_to_hedged",
+          "percent_to_fraction_phrase",
+          "date_to_relative",
+          "count_to_bulk_phrase",
+          "true_semantic_paraphrase",
+        ];
+        function shadow(text) {
+          return MRIDS.map(function (id) {
+            var v = applyMR(id, text);
+            if (v === text) return { mr_id: id, applicable: false };
+            return {
+              mr_id: id,
+              applicable: true,
+              variant_digest: sha(v),
+              slips_v1: !firesV1(v),
+              slips_v2: !firesV2(v),
+            };
+          });
+        }
+        function caughtLines(text, spans) {
+          var enc = utf8,
+            ranges = [],
+            start = 0,
+            bytes = enc(text);
+          for (var i = 0; i < bytes.length; i++)
+            if (bytes[i] === 0x0a) {
+              ranges.push([start, i + 1]);
+              start = i + 1;
+            }
+          if (start < bytes.length) ranges.push([start, bytes.length]);
+          if (ranges.length === 0 && bytes.length > 0) ranges.push([0, bytes.length]);
+          // map byte ranges back to substrings via the byte-offset table
+          var m = byteOffMap(text),
+            out = [];
+          function textForByteRange(bs, be) {
+            var s = 0,
+              e = text.length;
+            for (var k = 0; k < m.length; k++) {
+              if (m[k] === bs) s = k;
+              if (m[k] === be) {
+                e = k;
+                break;
+              }
+            }
+            return text.slice(s, e);
+          }
+          ranges.forEach(function (rg) {
+            if (
+              spans.some(function (sp) {
+                return sp.start_byte < rg[1] && sp.end_byte > rg[0];
+              })
+            )
+              out.push(textForByteRange(rg[0], rg[1]));
+          });
+          return out;
+        }
+        function buildMap(text, manifest, salt) {
+          var byteLen = utf8(text).length,
+            spans = extract(text),
+            regions = partition(byteLen, spans, manifest);
+          var lines = caughtLines(text, spans),
+            per = lines.map(shadow);
+          var a = 0,
+            k1 = 0,
+            k2 = 0;
+          per.forEach(function (recs) {
+            recs.forEach(function (r) {
+              if (r.applicable) {
+                a++;
+                if (r.slips_v1) k1++;
+                if (r.slips_v2) k2++;
+              }
+            });
+          });
+          var bbc = {},
+            scc = {};
+          CBR.forEach(function (c) {
+            bbc[c] = 0;
+            scc[c] = 0;
+          });
+          regions.forEach(function (r) {
+            bbc[r.class] += r.length;
+            scc[r.class]++;
+          });
+          var unred = regions.filter(function (r) {
+            return r.class !== "redacted";
+          });
+          return {
+            schema: "simurgh.vdr.map.v1",
+            document_byte_length: byteLen,
+            document_commitment: sha(String(salt) + text),
+            regions: regions,
+            aggregates: {
+              bytes_by_class: bbc,
+              span_counts_by_class: scc,
+              shadow: {
+                n_caught_regions: lines.length,
+                a_applicable_variants: a,
+                k_slip_v1: k1,
+                k_slip_v2: k2,
+              },
+            },
+            frozen: EXPECTED_FROZEN,
+            reconciliation: {
+              redaction_region_count: regions.filter(function (r) {
+                return r.class === "redacted";
+              }).length,
+              unredacted_segment_count: unred.length,
+              segment_class_sequence: unred.map(function (r) {
+                return r.class;
+              }),
+            },
+            provenance: "fixture",
+          };
+        }
+
+        // ---- public-tier checks (181/184/185) + WebCrypto Ed25519 (182) ----
+        function pemToDer(pem) {
+          var b64 = pem.replace(/-----[^-]+-----/g, "").replace(/\s+/g, "");
+          var bin = atob(b64),
+            arr = new Uint8Array(bin.length);
+          for (var i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+          return arr.buffer;
+        }
+        function checkStructure(map) {
+          if (!map || map.schema !== "simurgh.vdr.map.v1")
+            return { raw: 181, detail: "map_schema" };
+          if (canonical(map.frozen) !== canonical(EXPECTED_FROZEN))
+            return { raw: 184, detail: "frozen_binding_mismatch" };
+          // 185: recount conservation + aggregates
+          var cursor = 0,
+            bbc = {},
+            scc = {};
+          CBR.forEach(function (c) {
+            bbc[c] = 0;
+            scc[c] = 0;
+          });
+          for (var i = 0; i < map.regions.length; i++) {
+            var r = map.regions[i];
+            if (CBR.indexOf(r.class) < 0) return { raw: 185, detail: "unknown_region_class" };
+            if (r.offset !== cursor) return { raw: 185, detail: "gap_or_overlap" };
+            cursor += r.length;
+            bbc[r.class] += r.length;
+            scc[r.class]++;
+          }
+          if (cursor !== map.document_byte_length)
+            return { raw: 185, detail: "length_not_conserved" };
+          if (
+            canonical(bbc) !== canonical(map.aggregates.bytes_by_class) ||
+            canonical(scc) !== canonical(map.aggregates.span_counts_by_class)
+          )
+            return { raw: 185, detail: "aggregates_mismatch" };
+          return null;
+        }
+        function verifyPublic(map, attestation, pubPem) {
+          var s = checkStructure(map);
+          if (s && s.raw === 181) return Promise.resolve(s);
+          // 182 — WebCrypto Ed25519 over canonicalJson(body), keyDigest + merkle binding.
+          if (attestation.signing_key_digest !== sha(pubPem))
+            return Promise.resolve({ raw: 182, detail: "key_digest" });
+          if (attestation.map_digest !== sha(canonical(map)))
+            return Promise.resolve({ raw: 182, detail: "map_digest_binding" });
+          var body = {};
+          Object.keys(attestation).forEach(function (k) {
+            if (k !== "signature") body[k] = attestation[k];
+          });
+          if (typeof crypto === "undefined" || !crypto.subtle)
+            return Promise.resolve({ raw: -1, detail: "signature_not_verified_in_this_browser" });
+          var sigHex = attestation.signature || "";
+          var sig = new Uint8Array(sigHex.length / 2);
+          for (var i = 0; i < sig.length; i++) sig[i] = parseInt(sigHex.substr(i * 2, 2), 16);
+          return crypto.subtle
+            .importKey("spki", pemToDer(pubPem), { name: "Ed25519" }, false, ["verify"])
+            .then(function (key) {
+              return crypto.subtle.verify(
+                { name: "Ed25519" },
+                key,
+                sig,
+                new Uint8Array(utf8(canonical(body)))
+              );
+            })
+            .then(function (ok) {
+              if (!ok) return { raw: 182, detail: "signature" };
+              return s || { raw: 0 };
+            });
+        }
+        function verifyAudit(map, docText, salt, manifest) {
+          var rebuilt = buildMap(docText, manifest || [], salt);
+          if (canonical(rebuilt) !== canonical(map))
+            return { raw: 188, detail: "map_recompute_mismatch" };
+          return { raw: 0 };
+        }
+
+        var VDR = {
+          buildMap: buildMap,
+          checkStructure: checkStructure,
+          verifyPublic: verifyPublic,
+          verifyAudit: verifyAudit,
+          EXPECTED_FROZEN: EXPECTED_FROZEN,
+          canonical: canonical,
+          sha: sha,
+        };
+        if (typeof globalThis !== "undefined") globalThis.VDR = VDR;
+
+        if (typeof document !== "undefined" && document.getElementById("go")) {
+          var readText = function (input) {
+            return new Promise(function (res) {
+              var f = input.files[0];
+              if (!f) return res(null);
+              var r = new FileReader();
+              r.onload = function () {
+                res(r.result);
+              };
+              r.readAsText(f);
+            });
+          };
+          document.getElementById("go").addEventListener("click", function () {
+            Promise.all([
+              readText(document.getElementById("mapf")),
+              readText(document.getElementById("attf")),
+              readText(document.getElementById("keyf")),
+              readText(document.getElementById("docf")),
+            ]).then(function (vals) {
+              var out = document.getElementById("out");
+              out.textContent = "";
+              try {
+                var map = JSON.parse(vals[0]);
+                var att = JSON.parse(vals[1]);
+                var pub = vals[2];
+                verifyPublic(map, att, pub).then(function (pr) {
+                  var h = document.createElement("div");
+                  var sigLine =
+                    pr.raw === -1
+                      ? '<span class="bad">signature not verified in this browser — verify via CLI</span>'
+                      : pr.raw === 0
+                        ? '<span class="ok">public tier: PASS (signature + structure)</span>'
+                        : '<span class="bad">public tier: raw ' +
+                          pr.raw +
+                          " (" +
+                          pr.detail +
+                          ")</span>";
+                  var bar = '<div class="bar">';
+                  map.regions.forEach(function (r) {
+                    var pct = (100 * r.length) / map.document_byte_length;
+                    bar += '<div class="seg ' + r.class + '" style="width:' + pct + '%"></div>';
+                  });
+                  bar += "</div>";
+                  var sh = map.aggregates.shadow;
+                  h.innerHTML =
+                    sigLine +
+                    bar +
+                    '<p class="k">shadow: ' +
+                    sh.k_slip_v1 +
+                    "/" +
+                    sh.a_applicable_variants +
+                    " slip v1, " +
+                    sh.k_slip_v2 +
+                    "/" +
+                    sh.a_applicable_variants +
+                    " slip v2 over " +
+                    sh.n_caught_regions +
+                    " caught regions</p>";
+                  out.appendChild(h);
+                  if (vals[3] != null) {
+                    var ar = verifyAudit(map, vals[3], att._salt_hint || map._salt_hint || "0", []);
+                    var a = document.createElement("p");
+                    a.innerHTML =
+                      ar.raw === 0
+                        ? '<span class="ok">audit tier: map recompute MATCHES</span>'
+                        : '<span class="bad">audit tier: raw ' + ar.raw + "</span>";
+                    out.appendChild(a);
+                  }
+                });
+              } catch (e) {
+                out.textContent = "error: " + e.message;
+              }
+            });
+          });
+        }
+      })();
+    </script>
+  </body>
+</html>
