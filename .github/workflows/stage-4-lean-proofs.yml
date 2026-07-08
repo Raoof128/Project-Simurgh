@@ -38,3 +38,5 @@ jobs:
           ! grep -Rn "\bsorry\b" proofs/stage4y
           lean proofs/stage4z/WorkspaceAttestation.lean
           ! grep -Rn "\bsorry\b" proofs/stage4z
+          lean proofs/stage5a/NarrativeConflict.lean
+          ! grep -Rn "\bsorry\b" proofs/stage5a
