@@ -3,7 +3,10 @@
      verifies the attestation Ed25519 signature IN-PAGE via WebCrypto. No egress (hash-CSP). If
      Ed25519 is unavailable it FAILS CLOSED (ed25519_not_supported); the Node CLI stays
      authoritative. Motto: AnthropicSafe First, then ReviewerSafe. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-SmVFPKieKZIERXCBQotHgeh+wnvRY0RcG/Clr+1HdFM='; style-src 'unsafe-inline'">
+<meta
+  http-equiv="Content-Security-Policy"
+  content="default-src 'none'; script-src 'sha256-SmVFPKieKZIERXCBQotHgeh+wnvRY0RcG/Clr+1HdFM='; style-src 'unsafe-inline'"
+/>
 <main>
   <h1>Stage 5B VAR — Adversarial Readout verifier</h1>
   <p>
