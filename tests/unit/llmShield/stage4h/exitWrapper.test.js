@@ -241,6 +241,22 @@ test("Stage 4H.4 exit map is explicit and collision-bounded", () => {
       207: 1,
       208: 1,
       209: 1,
+      // Stage 5B VAR codes 210–224 (reviewed extension of the shared ledger; 5B spec §3).
+      210: 1,
+      211: 1,
+      212: 1,
+      213: 1,
+      214: 1,
+      215: 1,
+      216: 1,
+      217: 1,
+      218: 1,
+      219: 1,
+      220: 1,
+      221: 1,
+      222: 1,
+      223: 1,
+      224: 1,
     })
   );
 });
