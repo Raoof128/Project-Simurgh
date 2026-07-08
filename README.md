@@ -145,6 +145,35 @@ complements — a verifiable receipt is not a substitute for good values, and th
 statement of design orientation, not an endorsement by Anthropic and not a compliance or
 certification claim.
 
+### Matching Anthropic's interpretability research (July 2026)
+
+The same complementarity now has a concrete counterpart on the interpretability side. In
+[_Verbalizable Representations Form a Global Workspace in Language Models_](https://www.anthropic.com/research)
+(Transformer Circuits, 6 July 2026), Anthropic shows a cheap internal instrument — the Jacobian lens —
+surfaces a model's **silent** strategic and situational cognition that never reaches its output, and
+proposes the readout as a tool "to flag transcripts for review." The same paper signs the honest
+limit: it does "not feel comfortable making the stronger claim that monitoring the J-space is
+sufficient" — automatic, well-practised computations can bypass it.
+
+That is the seam Simurgh's verification layer is built for. **Stage 4Z (Verifiable Workspace
+Attestation)** turns such a readout into a signed, byte-reproducible evidence contract:
+
+- **the paper reads** silent cognition; **Simurgh attests** it — a total readout grid (No Silent
+  Cell), a precommitted declaration (you cannot cherry-pick what/where/which-layers to look at after
+  the fact), and a self-report conflict check, all recomputable offline by a third party;
+- **the paper's own limitation** — monitoring is not sufficient — is precisely why an external,
+  post-hoc, recomputable containment guarantee stays load-bearing: interpretability and verification
+  are **uncorrelated failure modes**, the layered posture the cross-lab chain-of-thought
+  monitorability work also calls for;
+- the accompanying **Verifiable System Card** answers the transparency-report integrity gap the EU
+  GPAI Code of Practice states but leaves unmechanised: a system-card-shaped document whose every
+  safety number recomputes from a verified artifact.
+
+Honest scope, signed in the stage itself: Simurgh reproduces a lexicon-restricted **method family** on
+open weights, not Anthropic's frontier lens; a flag is not a verdict, a readout is not faithfulness,
+and agreement is not model safety. Details in
+[`docs/research/llm-shield/JLENS_COMPOSITION.md`](docs/research/llm-shield/JLENS_COMPOSITION.md).
+
 ---
 
 ## Flagship: Verifiable Containment Attestation (LLM Shield)
