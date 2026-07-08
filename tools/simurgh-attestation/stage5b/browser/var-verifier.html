@@ -1,0 +1,90 @@
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
+<!-- Stage 5B VAR — offline browser verifier. Recomputes the ASR from the pinned findings and
+     verifies the attestation Ed25519 signature IN-PAGE via WebCrypto. No egress (hash-CSP). If
+     Ed25519 is unavailable it FAILS CLOSED (ed25519_not_supported); the Node CLI stays
+     authoritative. Motto: AnthropicSafe First, then ReviewerSafe. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-SmVFPKieKZIERXCBQotHgeh+wnvRY0RcG/Clr+1HdFM='; style-src 'unsafe-inline'">
+<main>
+  <h1>Stage 5B VAR — Adversarial Readout verifier</h1>
+  <p>
+    Paste the signed attestation bundle. This page recomputes the ASR and verifies the Ed25519
+    signature offline.
+  </p>
+  <textarea id="in" rows="10" cols="80"></textarea>
+  <button id="go">Verify</button>
+  <pre id="out"></pre>
+</main>
+<script>
+  function canonical(v) {
+    if (v === null || typeof v !== "object") return JSON.stringify(v);
+    if (Array.isArray(v)) return "[" + v.map(canonical).join(",") + "]";
+    return (
+      "{" +
+      Object.keys(v)
+        .sort()
+        .map((k) => JSON.stringify(k) + ":" + canonical(v[k]))
+        .join(",") +
+      "}"
+    );
+  }
+  function computeAsr(findings) {
+    let b = 0,
+      s = 0;
+    for (const f of findings) {
+      if (f.outcome === "bypass") {
+        b++;
+        s++;
+      } else if (f.outcome === "survived") s++;
+    }
+    return b + "/" + s;
+  }
+  function pemToDer(pem) {
+    const b64 = pem.replace(/-----[^-]+-----/g, "").replace(/\s+/g, "");
+    const bin = atob(b64);
+    const u = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i);
+    return u;
+  }
+  function hexToBytes(h) {
+    const u = new Uint8Array(h.length / 2);
+    for (let i = 0; i < u.length; i++) u[i] = parseInt(h.substr(i * 2, 2), 16);
+    return u;
+  }
+  async function verifyVar(bundle) {
+    const asr = computeAsr(bundle.findings);
+    const asrMatches = asr === bundle.attestation.aggregates.asr;
+    let sigOk = false,
+      error = null;
+    try {
+      const body = { ...bundle.attestation };
+      delete body.signature;
+      const key = await crypto.subtle.importKey(
+        "spki",
+        pemToDer(bundle.attestation_pub_key_pem),
+        { name: "Ed25519" },
+        false,
+        ["verify"]
+      );
+      sigOk = await crypto.subtle.verify(
+        { name: "Ed25519" },
+        key,
+        hexToBytes(bundle.attestation.signature),
+        new TextEncoder().encode(canonical(body))
+      );
+    } catch (e) {
+      error = "ed25519_not_supported"; // FAIL CLOSED — Node CLI is authoritative
+    }
+    return { ok: sigOk && asrMatches && !error, asr, asrMatches, sigOk, error };
+  }
+  globalThis.VAR = { canonical, computeAsr, verifyVar };
+  if (typeof document !== "undefined") {
+    document.getElementById("go").onclick = async () => {
+      try {
+        const r = await verifyVar(JSON.parse(document.getElementById("in").value));
+        document.getElementById("out").textContent = JSON.stringify(r, null, 2);
+      } catch (e) {
+        document.getElementById("out").textContent = "parse error: " + e.message;
+      }
+    };
+  }
+</script>
