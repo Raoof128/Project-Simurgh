@@ -50,9 +50,13 @@ def capture(model_id, revision, corpus, lexicon, layers, out_dir, salt_seed):
 
     tok = AutoTokenizer.from_pretrained(model_id, revision=revision)
     model = AutoModelForCausalLM.from_pretrained(
-        model_id, revision=revision, torch_dtype="float32", output_hidden_states=True
+        model_id,
+        revision=revision,
+        torch_dtype="float32",
+        output_hidden_states=True,
+        low_cpu_mem_usage=True,  # avoid the load-time double-alloc on 8GB hosts
     ).eval()
-    torch.use_deterministic_algorithms(True)  # help CPU byte-stability (still MEASURED, not assumed)
+    torch.set_num_threads(1)  # single-thread CPU → byte-stability (still MEASURED, not assumed)
 
     # Resolve the lexicon token ids once (detection-side only).
     lex_ids = [int(t) for t in lexicon]
@@ -153,7 +157,27 @@ if __name__ == "__main__":
             "captured", cfg["model_id"], cfg["revision"], cfg["declaration_digest"],
             result["lens_digest"],
         )
-        print(json.dumps({"ceremony": rec, "prompt_token_counts": result["prompt_token_counts"]}))
+        # Persist a DETERMINISTIC frozen capture (NO timestamp) so byte-stability is cmp-able.
+        import base64
+        import os
+
+        commitments = result["commitments"]
+        capture_root = "sha256:" + sha_hex("\n".join(sorted(commitments.values())).encode("utf-8"))
+        frozen = {
+            "model_id": cfg["model_id"],
+            "declaration_digest": cfg["declaration_digest"],
+            "lens_digest": result["lens_digest"],
+            "capture_root": capture_root,
+            "prompt_token_counts": result["prompt_token_counts"],
+            "commitments": commitments,
+            "salts": result["salts"],
+            "tensors_b64": {k: base64.b64encode(v).decode("ascii") for k, v in result["tensors"].items()},
+        }
+        out_dir = cfg.get("out_dir", ".")
+        os.makedirs(out_dir, exist_ok=True)
+        with open(os.path.join(out_dir, "frozen_capture.json"), "w", encoding="utf-8") as fh:
+            json.dump(frozen, fh, sort_keys=True, separators=(",", ":"))
+        print(json.dumps({"ceremony": rec, "capture_root": capture_root}))
     except Exception as e:  # noqa: BLE001 — both-outcomes honesty: a failure is sealed, not hidden.
         rec = seal(
             "capture_failed", cfg["model_id"], cfg["revision"], None,
