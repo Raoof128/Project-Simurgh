@@ -41,7 +41,22 @@ In one sentence: **Simurgh gives an agentic system a verifiable receipt, not a p
 > selective omission, multi-agent accountability) to concrete mechanisms — printable version at
 > [`docs/research/llm-shield/anthropic-brief.html`](docs/research/llm-shield/anthropic-brief.html).
 
-> 🆕 **Latest — Stage 4X · Verifiable Leakage-Residue (`v2.33.0-stage-4x-vlr`).** 4W signed the
+> 🆕 **Latest — Stage 4Y · Verifiable Document Residue (`v2.34.0-stage-4y-vdr`).** 4X measured the
+> gate's residue over a corpus _we_ authored; 4Y hands the instrument to the world. Submit **any**
+> UTF-8 document and get back a signed, byte-reproducible, **content-free structural residue map** —
+> a total partition of every byte into `caught_v1` / `caught_v2_only` / `redacted` / `unflagged`
+> (redaction is **counted, not erased**), plus a metamorphic **shadow** slip-rate — without
+> republishing a word of the document. Two tiers: the **public** map + attestation verify by
+> structural arithmetic + signed commitments (a withheld document still verifies), the **audit**
+> tier re-runs the frozen gate over the bytes and rebuilds the whole map. Laws: **No Silent Region ·
+> Same Bytes, Same Map · The Map Is Not a Verdict.** Codes 181–189; the browser verifier does a
+> **real in-page WebCrypto Ed25519** check; six Lean theorems, JS↔Python↔browser parity, a blind
+> two-process recompute, and an OSCAL projection into NIST's format. Over the 10-fixture corpus:
+> **18 caught regions, 34 applicable variants, 15 slip v1, 2 slip v2** — the v2 lexicon shrinks the
+> slip set but never closes it. No live-model lane. Honest scope: fixtures are self-authored (the
+> external-submitter pilot is the one minted socket).
+>
+> **Stage 4X · Verifiable Leakage-Residue (`v2.33.0-stage-4x-vlr`).** 4W signed the
 > prose limitation "the leakage gate is lexical, not semantic." 4X turns it into a signed,
 > byte-reproducible **number** and shrinks the bound: over a frozen dual-provenance corpus, each item
 > is a real quantitative seed plus a declared **metamorphic relation**, and the paraphrase residue is
