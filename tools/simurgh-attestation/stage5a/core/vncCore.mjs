@@ -168,7 +168,13 @@ export function evaluateVnc(bundle, { tier = "public", vncPubKeyPem, vwaPubKeyPe
       pilot === "present"
         ? checkAdaptation(bundle.pilot_adaptation, vwa, {
             vwaPubKeyPem,
-            rawExportBytes: tier === "audit" ? (bundle.pilot_raw_bytes ?? null) : null,
+            rawExportBytes:
+              tier === "audit"
+                ? (bundle.pilot_raw_bytes ??
+                  (bundle.pilot_raw_bytes_b64
+                    ? Buffer.from(bundle.pilot_raw_bytes_b64, "base64")
+                    : null))
+                : null,
           })
         : null,
     () => checkTallies(ledger),
