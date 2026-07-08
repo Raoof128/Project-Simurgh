@@ -26,7 +26,8 @@ PRIVATE_KEY_MATCHES="$(
     | grep -v -E "^tests/fixtures/llmShield/stage4t/test-keys/INSECURE_FIXTURE_ONLY_[A-Za-z-]+\.pem$" \
     | grep -v -E "^tests/fixtures/llmShield/stage4v/test-keys/INSECURE_FIXTURE_ONLY_[A-Za-z-]+\.pem$" \
     | grep -v -E "^tests/fixtures/llmShield/stage4w/test-keys/INSECURE_FIXTURE_ONLY_[A-Za-z-]+\.pem$" \
-    | grep -v -E "^tests/fixtures/llmShield/stage4x/test-keys/INSECURE_FIXTURE_ONLY_[A-Za-z-]+\.pem$" || true
+    | grep -v -E "^tests/fixtures/llmShield/stage4x/test-keys/INSECURE_FIXTURE_ONLY_[A-Za-z-]+\.pem$" \
+    | grep -v -E "^tests/fixtures/llmShield/stage4y/test-keys/INSECURE_FIXTURE_ONLY_[A-Za-z-]+\.pem$" || true
 )"
 if [[ -n "$PRIVATE_KEY_MATCHES" ]]; then
   echo "$PRIVATE_KEY_MATCHES"
