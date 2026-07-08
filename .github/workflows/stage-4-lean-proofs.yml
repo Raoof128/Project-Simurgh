@@ -39,4 +39,5 @@ jobs:
           lean proofs/stage4z/WorkspaceAttestation.lean
           ! grep -Rn "\bsorry\b" proofs/stage4z
           lean proofs/stage5a/NarrativeConflict.lean
+          lean proofs/stage5b/AdversarialReadout.lean
           ! grep -Rn "\bsorry\b" proofs/stage5a
