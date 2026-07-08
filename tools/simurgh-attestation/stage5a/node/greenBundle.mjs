@@ -17,7 +17,7 @@ import { signAttestation } from "../../stage4z/core/vwaCore.mjs";
 import { scoreNano } from "../../stage4z/core/tensorCore.mjs";
 import { VNC_CLAIM_TABLE_SCHEMA, VNC_LEDGER_SCHEMA } from "../constants.mjs";
 import { classify } from "../core/verdictCore.mjs";
-import { partitionFlags, tallies } from "../core/partitionCore.mjs";
+import { computeUnnarrated, tallies } from "../core/partitionCore.mjs";
 import { signArtifact, signVncAttestation } from "../core/vncCore.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -129,9 +129,7 @@ export function buildGreenVncBundle({ conflict = false } = {}) {
   const claim_table = signArtifact(claimTableContent, VNC_AUTHOR_PRIV, VNC_AUTHOR_PUB);
 
   const verdicts = classify(claim_table, vwa.map);
-  // Build a provisional ledger to compute the partition + tallies, then seal the real one.
-  const provisional = { content: { verdicts, unnarrated_flags: [] } };
-  const { unnarrated } = partitionFlags(provisional, vwa.map);
+  const unnarrated = computeUnnarrated(verdicts, vwa.map);
   const ledgerContent = {
     schema: VNC_LEDGER_SCHEMA,
     verdicts,
