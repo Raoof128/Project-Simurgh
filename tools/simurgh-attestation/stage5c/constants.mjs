@@ -71,7 +71,11 @@ export const VSB_CELL_CLASSES = Object.freeze([
   "degenerate",
 ]);
 // P1-111: explicit integer rational; degenerate fraction = degenerate / total_grid_cells (P1-191).
-export const VSB_MAX_DEGENERATE_RATE = Object.freeze({ num: 1, den: 2 });
+// A TOTAL (MR × base) product is naturally sparse — each MR targets one pattern, so most pairs
+// are no-ops. The cap is a GROSS no-op guard ("a corpus where almost nothing mutates is not a
+// corpus"), not a density target; 9/10 catches a ≥90%-degenerate ruleset while allowing realistic
+// sparse grids. Task 9's curated corpus keeps the real rate well below this.
+export const VSB_MAX_DEGENERATE_RATE = Object.freeze({ num: 9, den: 10 });
 
 // P0-4: 5C's Lane C implements ONLY external_detector (no var_capture_1b 5B-scope bleed).
 export const VSB_LANE_C_KINDS = Object.freeze(["external_detector"]);
