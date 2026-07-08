@@ -1,0 +1,15 @@
+{
+  "model_id": "meta-llama/Llama-3.2-1B-Instruct",
+  "revision": "9213176726f574b556790deb65791e0c5aa438b6",
+  "corpus": [
+    {
+      "prompt_id": "p0",
+      "text": "The sky is blue today."
+    }
+  ],
+  "lexicon": [271, 517],
+  "layers": [5, 8],
+  "out_dir": "/private/tmp/claude-501/-Users-raoof-r12-Desktop-Raouf-Project-Simurgh/5f4b8c50-cb6c-4783-88f2-5210f9e92c37/scratchpad/var-capture-run1",
+  "salt_seed": "stage5b-var-capture-v1",
+  "declaration_digest": "sha256:ad8f7c81a5ec37eac605f990560ec701db74af0788e6b078b77b69cf8227e10d"
+}

@@ -104,3 +104,6 @@ docs/research/llm-shield/evidence/stage-4z/
 
 # Stage 5A VNC evidence (byte-stable canonicalJson; never reformat)
 docs/research/llm-shield/evidence/stage-5a/
+
+# Stage 5B VAR evidence — REAL Llama-3.2-1B Lane C capture (byte-stable; never reformat)
+docs/research/llm-shield/evidence/stage-5b/
