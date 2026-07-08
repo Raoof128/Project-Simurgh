@@ -57,5 +57,5 @@
   },
   "q3_status": "pass",
   "run_level_exit": 0,
-  "hermeticity_attestation_digest": "sha256:e38c42b04b9983fd5e862400ad057efea287c8d439ea24a4ee1794cd4e38f42c"
+  "hermeticity_attestation_digest": "sha256:977681ab700247ff89b3ec4687a05ffc0050be9aa8ea10b59ccf9f388afb1cf8"
 }

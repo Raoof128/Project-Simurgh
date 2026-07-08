@@ -737,6 +737,42 @@ export const VAR_PUBLIC_CODES = Object.freeze([
   210, 211, 212, 213, 214, 215, 216, 218, 219, 220, 221, 222, 223,
 ]);
 
+// Stage 5C VSB codes (spec §3). Wrapper LAST at 239; 240 remains headroom.
+// _VSB-suffixed on the wrapper only (mirrors _VAR/_VNC). VSB is safe as an identifier.
+export const VSB_RAW_CODES = Object.freeze({
+  VSB_SCHEMA_INVALID: 225,
+  VSB_SIGNATURE_INVALID: 226,
+  VSB_MR_RULESET_MISMATCH: 227, // composed ruleset ≠ constants OR 4X slice ≠ metamorphicTableDigest()
+  VSB_GRID_INCOMPLETE: 228, // No Cherry-Picked Mutation
+  VSB_MUTATION_NOT_REPRODUCIBLE: 229,
+  VSB_EQUIVALENCE_BASIS_UNDECLARED: 230,
+  VSB_GATE_VERDICT_MISMATCH: 231,
+  VSB_PARTITION_INVALID: 232,
+  VSB_SILENT_SLIP: 233, // No Silent Slip — AUDIT-ONLY teeth (whole-grid recompute)
+  VSB_SEVERITY_INVALID: 234, // severity enum only (child-binding match is 238)
+  VSB_SLIP_RATE_RECOMPUTE_MISMATCH: 235,
+  VSB_FLOOR_MONOTONICITY_INVALID: 236, // anti-regression (by-construction for leakage v1/v2)
+  VSB_KERNEL_BREACH_CLAIMED: 237, // Law 3 anti-overclaim — PUBLIC (lexical screen of analyst_note)
+  VSB_LANE_BINDING_INVALID: 238, // Lane-B severity binding OR Lane-C detector binding
+  INTERNAL_FAIL_CLOSED_VSB: 239,
+});
+// Frozen first-failure order (5C spec §3): schema → signature → MR-ruleset → grid-complete →
+// mutation-reproducible → equivalence-basis → gate-verdict → partition → silent-slip →
+// severity-enum → slip-rate → floor-monotonicity → kernel-breach-claimed → lane-binding.
+// Wrapper 239 applied LAST.
+export const VSB_CHECK_ORDER = Object.freeze([
+  225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238,
+]);
+// Tier split is NOT identity (PF2): audit = every code; public is a STRICT subset EXCLUDING
+// ONLY 233 (silent slip needs the whole-grid recompute). 237 IS public — a lexical screen of the
+// artifact's own analyst_note, catchable with no recompute. public ⊊ audit.
+export const VSB_AUDIT_CODES = Object.freeze([
+  225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238,
+]);
+export const VSB_PUBLIC_CODES = Object.freeze([
+  225, 226, 227, 228, 229, 230, 231, 232, 234, 235, 236, 237, 238,
+]);
+
 export const HARNESS_CODES = Object.freeze({
   CLEAN_RUN_FALSELY_REJECTED: 19,
 });
@@ -970,6 +1006,21 @@ export const RUN_LEVEL_BY_RAW = Object.freeze({
   222: 1,
   223: 1,
   224: 1,
+  225: 1,
+  226: 1,
+  227: 1,
+  228: 1,
+  229: 1,
+  230: 1,
+  231: 1,
+  232: 1,
+  233: 1,
+  234: 1,
+  235: 1,
+  236: 1,
+  237: 1,
+  238: 1,
+  239: 1,
 });
 
 export function stage4CodeForRawCode(code) {
