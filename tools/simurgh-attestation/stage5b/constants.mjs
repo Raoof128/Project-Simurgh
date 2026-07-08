@@ -48,6 +48,20 @@ export const VAR_ATTACK_FAMILIES = Object.freeze([
 export const VAR_EXPECTED_FAMILY_TOTAL = 7;
 export const VAR_EXPECTED_ATTACK_TOTAL = 46;
 
+// FROZEN in Task 10B from the integrity-validated corpus (reviewer blocker 3/4): these are the
+// concrete counts + Merkle root the charter binds, derived AFTER the fixture-integrity gate.
+export const VAR_FAMILY_COUNTS = Object.freeze({
+  capture_substitution: 6,
+  conflict_laundering: 8,
+  crypto_signature: 6,
+  narrative_span_forgery: 6,
+  precommit_backdate: 4,
+  residue_paraphrase_slip: 8,
+  silent_cell_hide: 8,
+});
+export const VAR_ATTACK_MANIFEST_ROOT =
+  "sha256:f6001ddfd4d64fcc5f6b1d86e32f30c38f644124afca967ba4f392d24003636a";
+
 export const CAMPAIGN_SEED = "stage5b-var-seed-v1";
 
 // v1 claim-eligible span type on the 4W side (spec §4, family 4).
