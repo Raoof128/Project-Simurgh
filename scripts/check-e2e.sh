@@ -133,6 +133,7 @@ declare -a REPRODUCE=(
   "Stage 4Z VWA|scripts/reproduce-llm-shield-stage4z.sh"
   "Stage 5A VNC|scripts/reproduce-llm-shield-stage5a.sh"
   "Stage 5B VAR|scripts/reproduce-llm-shield-stage5b.sh"
+  "Stage 5C VSB|scripts/reproduce-llm-shield-stage5c.sh"
 )
 for entry in "${REPRODUCE[@]}"; do
   name="${entry%%|*}"
