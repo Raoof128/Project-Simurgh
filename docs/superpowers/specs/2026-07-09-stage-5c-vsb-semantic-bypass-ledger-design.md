@@ -77,13 +77,14 @@ is a cell where `flagged(base) = true` and `flagged(mutation) = false`.
 the gates take structured input).** The 4W gate is
 `scanLeakage(body, spanMap, capsuleValues)` returning region hits
 (`leakageGate.mjs:43`), so `flagged_4w(text) := scanLeakage(text, [], []).length
-> 0` (an EMPTY span map leaves the whole body as one uncovered region —
-verified against `uncoveredRegions`; a span _covering_ the body would scan
+
+> 0`(an EMPTY span map leaves the whole body as one uncovered region —
+verified against`uncoveredRegions`; a span _covering_ the body would scan
 nothing); 4X residue and 4Y document-residue each
 get their own one-line reduction pinned in §2. Prompt Guard is a genuine
 `text → verdict` (cleaner than our own gates). Every reduction is frozen in
-constants and covered by the signed ruleset digest; 5C never edits a gate
-(read-only kernel extends to the imported engine and gates).
+> constants and covered by the signed ruleset digest; 5C never edits a gate
+> (read-only kernel extends to the imported engine and gates).
 
 **Bypass, defined precisely (and gated — see Law 3):** in this stage "bypass"
 means _a meaning-preserving mutation that flips a **downstream text-detector's**
@@ -540,12 +541,12 @@ the credibility apex.
 artifact, and Novelty is DOWN from the pre-gauntlet 9.6 because the mutation
 engine is 4X's, not ours — F1):**
 
-| Axis                   | Score | Delta built here → what still moves it higher                                                                                                                  |
-| ---------------------- | ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Axis                   | Score | Delta built here → what still moves it higher                                                                                                                                                                                                                                                                           |
+| ---------------------- | ----- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Novelty**            | 8.7   | ↓ from 9.6 (gauntlet F1): the metamorphic engine is **4X's, reused**, not new geometry. What IS new: the itemized+severity bypass **ledger** (4X signs a count), **externalization** to a real detector, the **anti-overclaim gate** (237/`kernelDisjoint`), and `gridClosure`. → 10: the learned-paraphrase lane (5D). |
-| **Frontier**           | 9.5   | +real-detector Lane C: 4X's engine, now run against a **shipped guardrail** (Prompt Guard 86M / Llama Guard) that is _published-100%-evadable_ (Hackett 2504.11168), not only our own gates. → 9.7+: frontier-scale probe / lab access. |
-| **Good-for-Anthropic** | 9.7   | +BYO-detector adapter with a worked Prompt Guard example (a lab drops in its detector for signed model-card / RSP evidence); answers Anthropic's own Opus 4.6 eval-integrity lesson for the detector slice. → 9.9+: an actual external lab runs it. |
-| **Constitution**       | 9.6   | ↑ from 9.5: the re-blade _itself_ is the constitutional act — crediting 4X, catching a false socket payment (F2), and self-downgrading Novelty is radical honesty as infrastructure. → 9.8: a repo-wide honesty lemma (no stage may assert model-safety) — held for 5D. |
+| **Frontier**           | 9.5   | +real-detector Lane C: 4X's engine, now run against a **shipped guardrail** (Prompt Guard 86M / Llama Guard) that is _published-100%-evadable_ (Hackett 2504.11168), not only our own gates. → 9.7+: frontier-scale probe / lab access.                                                                                 |
+| **Good-for-Anthropic** | 9.7   | +BYO-detector adapter with a worked Prompt Guard example (a lab drops in its detector for signed model-card / RSP evidence); answers Anthropic's own Opus 4.6 eval-integrity lesson for the detector slice. → 9.9+: an actual external lab runs it.                                                                     |
+| **Constitution**       | 9.6   | ↑ from 9.5: the re-blade _itself_ is the constitutional act — crediting 4X, catching a false socket payment (F2), and self-downgrading Novelty is radical honesty as infrastructure. → 9.8: a repo-wide honesty lemma (no stage may assert model-safety) — held for 5D.                                                 |
 
 **Weakest honest number, named for 5D:** Novelty 8.7 — because the engine is
 inherited, this stage's originality lives entirely in the attestation layer;
