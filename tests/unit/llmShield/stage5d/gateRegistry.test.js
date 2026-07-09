@@ -41,7 +41,13 @@ test("sourceDigest is stable sha256 and covers 4W+4Y+4X (G2-3)", () => {
   assert.match(d, /^sha256:[0-9a-f]{64}$/);
   assert.equal(d, sourceDigest("v1"), "deterministic");
   const v1files = GATE_SOURCE_FILES.v1;
-  assert.ok(v1files.some((f) => f.includes("stage4y/core/spanExtractor")), "doc_residue dep 4Y");
-  assert.ok(v1files.some((f) => f.includes("stage4x/core/gateV2")), "doc_residue dep 4X V2_LEXICON");
+  assert.ok(
+    v1files.some((f) => f.includes("stage4y/core/spanExtractor")),
+    "doc_residue dep 4Y"
+  );
+  assert.ok(
+    v1files.some((f) => f.includes("stage4x/core/gateV2")),
+    "doc_residue dep 4X V2_LEXICON"
+  );
   assert.notEqual(sourceDigest("v1"), sourceDigest("v3"), "proposed normalizer adds a file");
 });

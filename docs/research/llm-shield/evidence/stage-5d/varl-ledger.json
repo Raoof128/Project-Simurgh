@@ -1,0 +1,421 @@
+{
+  "schema": "simurgh.varl.escalation_ledger.v1",
+  "ruleset_id": "varl.v1",
+  "gate_registry": [
+    {
+      "gate_version": "v1",
+      "source_digest": "sha256:53ae157cb65dd0dee293f1456e88378dedb478d25a86530061273dfb8b61f412",
+      "kind": "frozen_kernel"
+    },
+    {
+      "gate_version": "v3",
+      "source_digest": "sha256:c0f335c7c982f51e6c6c6d40f79acde560590f7e73803d22c837af6c2ac90a25",
+      "kind": "proposed_normalizer"
+    },
+    {
+      "gate_version": "v4",
+      "source_digest": "sha256:c0f335c7c982f51e6c6c6d40f79acde560590f7e73803d22c837af6c2ac90a25",
+      "kind": "proposed_normalizer"
+    }
+  ],
+  "base_corpus": [
+    {
+      "base_id": "synonym_veil_pct",
+      "mechanism": "leakage",
+      "base_text": "40 percent of accounts were leaked"
+    },
+    {
+      "base_id": "confusable_digit",
+      "mechanism": "leakage",
+      "base_text": "5000 records were exposed"
+    },
+    {
+      "base_id": "distshift_datepct",
+      "mechanism": "leakage",
+      "base_text": "on 5 March 90 percent of the data leaked"
+    },
+    {
+      "base_id": "voiceflip_were",
+      "mechanism": "leakage",
+      "base_text": "3000 accounts were compromised"
+    },
+    {
+      "base_id": "guardrail_pct",
+      "mechanism": "leakage",
+      "base_text": "exposed 50 percent of the records"
+    },
+    {
+      "base_id": "docres_count",
+      "mechanism": "doc_residue",
+      "base_text": "50 accounts were exposed in the breach"
+    }
+  ],
+  "rungs": [
+    {
+      "round": 1,
+      "target_gate_version": "v1",
+      "evasions": [
+        {
+          "base_id": "synonym_veil_pct",
+          "recipe": [
+            {
+              "op": "fullwidth_digits"
+            },
+            {
+              "op": "percent_to_per_cent"
+            }
+          ],
+          "evasion_digest": "sha256:6558ad0a3116b43e27628be8780700ae83e005d651a5fae1fc17ab7c1a4be140",
+          "watcher_verdict_at_target": false,
+          "equivalence_class": "exact_quantity_preserving",
+          "human_reviewed": true,
+          "reviewer": "raouf"
+        },
+        {
+          "base_id": "confusable_digit",
+          "recipe": [
+            {
+              "op": "fullwidth_digits"
+            }
+          ],
+          "evasion_digest": "sha256:92d5bbef2b7314516a908354c0059c93bacf8a11035d95af2e62338d8103c574",
+          "watcher_verdict_at_target": false,
+          "equivalence_class": "exact_quantity_preserving",
+          "human_reviewed": true,
+          "reviewer": "raouf"
+        },
+        {
+          "base_id": "distshift_datepct",
+          "recipe": [
+            {
+              "op": "fullwidth_digits"
+            },
+            {
+              "op": "percent_to_per_cent"
+            },
+            {
+              "op": "homoglyph_month",
+              "args": {
+                "map": {
+                  "March": "Mаrch"
+                }
+              }
+            }
+          ],
+          "evasion_digest": "sha256:9959180c486190ac47855896966c1e7f324266b90f8cfb4fe290480b980846cf",
+          "watcher_verdict_at_target": false,
+          "equivalence_class": "exact_quantity_preserving",
+          "human_reviewed": true,
+          "reviewer": "raouf"
+        },
+        {
+          "base_id": "voiceflip_were",
+          "recipe": [
+            {
+              "op": "fullwidth_digits"
+            }
+          ],
+          "evasion_digest": "sha256:d69b592ea5f80a455b108212017bac0b47aefb8094f8a361fe744dfed8e55cfb",
+          "watcher_verdict_at_target": false,
+          "equivalence_class": "exact_quantity_preserving",
+          "human_reviewed": true,
+          "reviewer": "raouf"
+        },
+        {
+          "base_id": "guardrail_pct",
+          "recipe": [
+            {
+              "op": "fullwidth_digits"
+            },
+            {
+              "op": "percent_to_per_cent"
+            }
+          ],
+          "evasion_digest": "sha256:47996f6bbde26cbf4635b3ec0c7a483e1f0828cfa1ff7c53372e2beb2b976cd7",
+          "watcher_verdict_at_target": false,
+          "equivalence_class": "exact_quantity_preserving",
+          "human_reviewed": true,
+          "reviewer": "raouf"
+        },
+        {
+          "base_id": "docres_count",
+          "recipe": [
+            {
+              "op": "fullwidth_digits"
+            }
+          ],
+          "evasion_digest": "sha256:3b5f890d83beae29f7d4b83e0f29da0a51ddc8a0d111141165e87d6631131aa3",
+          "watcher_verdict_at_target": false,
+          "equivalence_class": "exact_quantity_preserving",
+          "human_reviewed": true,
+          "reviewer": "raouf"
+        }
+      ],
+      "hardening_diff": {
+        "to_gate_version": "v3",
+        "closes_class": "compat_and_hand_homoglyph",
+        "rule_kinds": [
+          "nfkc",
+          "per_cent_rule",
+          "homoglyph_table"
+        ]
+      },
+      "closed_count": 6,
+      "residual_class": "invisible_combining_marks | vague_semantic",
+      "durability": "brittle"
+    },
+    {
+      "round": 2,
+      "target_gate_version": "v3",
+      "evasions": [
+        {
+          "base_id": "synonym_veil_pct",
+          "recipe": [
+            {
+              "op": "literal",
+              "args": {
+                "text": "for͏ty per͏cent of accounts were leaked"
+              }
+            }
+          ],
+          "evasion_digest": "sha256:7cda98b83eac6a6eae66e1ebe966f83fc87bafa81e56194492c80a77901f7ee6",
+          "watcher_verdict_at_target": false,
+          "equivalence_class": "exact_quantity_preserving",
+          "human_reviewed": true,
+          "reviewer": "raouf"
+        },
+        {
+          "base_id": "confusable_digit",
+          "recipe": [
+            {
+              "op": "literal",
+              "args": {
+                "text": "fi͏ve thous͏and records were exposed"
+              }
+            }
+          ],
+          "evasion_digest": "sha256:cab5836e5e259b841a7cd06185afc12cfac2d2393ba7fc2e727b02a3feabe453",
+          "watcher_verdict_at_target": false,
+          "equivalence_class": "exact_quantity_preserving",
+          "human_reviewed": true,
+          "reviewer": "raouf"
+        },
+        {
+          "base_id": "distshift_datepct",
+          "recipe": [
+            {
+              "op": "literal",
+              "args": {
+                "text": "on the fifth of Mar͏ch, nin͏ety per͏cent of the data leaked"
+              }
+            }
+          ],
+          "evasion_digest": "sha256:b204b302f1837f96382638fcdd31b3c466c3ce0bf0eda137945f329a356aabc3",
+          "watcher_verdict_at_target": false,
+          "equivalence_class": "exact_quantity_preserving",
+          "human_reviewed": true,
+          "reviewer": "raouf"
+        },
+        {
+          "base_id": "voiceflip_were",
+          "recipe": [
+            {
+              "op": "literal",
+              "args": {
+                "text": "thr͏ee thous͏and accounts were compromised"
+              }
+            }
+          ],
+          "evasion_digest": "sha256:25f46789184427c4dccfccb098b6ae1d077ac0a2914c78871ccda6456bae690f",
+          "watcher_verdict_at_target": false,
+          "equivalence_class": "exact_quantity_preserving",
+          "human_reviewed": true,
+          "reviewer": "raouf"
+        },
+        {
+          "base_id": "guardrail_pct",
+          "recipe": [
+            {
+              "op": "literal",
+              "args": {
+                "text": "exposed fif͏ty per͏cent of the records"
+              }
+            }
+          ],
+          "evasion_digest": "sha256:df9337ce116f1d7548155a0846d65326162fae835ac758e385ad943b56b1b128",
+          "watcher_verdict_at_target": false,
+          "equivalence_class": "exact_quantity_preserving",
+          "human_reviewed": true,
+          "reviewer": "raouf"
+        },
+        {
+          "base_id": "docres_count",
+          "recipe": [
+            {
+              "op": "literal",
+              "args": {
+                "text": "fif͏ty accounts were exposed in the breach"
+              }
+            }
+          ],
+          "evasion_digest": "sha256:2f5b81fffa6c5720acff7261a3287536145a4bde7e7bd2d504ef506e1640c774",
+          "watcher_verdict_at_target": false,
+          "equivalence_class": "exact_quantity_preserving",
+          "human_reviewed": true,
+          "reviewer": "raouf"
+        }
+      ],
+      "hardening_diff": {
+        "to_gate_version": "v4",
+        "closes_class": "combining_marks_and_ignorables",
+        "rule_kinds": [
+          "combining_marks",
+          "default_ignorable"
+        ]
+      },
+      "closed_count": 6,
+      "residual_class": "cross_script_confusable | vague_semantic",
+      "durability": "durable"
+    },
+    {
+      "round": 3,
+      "target_gate_version": "v4",
+      "evasions": [
+        {
+          "base_id": "synonym_veil_pct",
+          "recipe": [
+            {
+              "op": "literal",
+              "args": {
+                "text": "forтy percenт of accounts were leaked"
+              }
+            }
+          ],
+          "evasion_digest": "sha256:bda52bd5bc25abc47d5d9f5d30d33769c7be8a937851a2e6b9c3ea41d95cb686",
+          "watcher_verdict_at_target": false,
+          "equivalence_class": "exact_quantity_preserving",
+          "human_reviewed": true,
+          "reviewer": "raouf"
+        },
+        {
+          "base_id": "confusable_digit",
+          "recipe": [
+            {
+              "op": "literal",
+              "args": {
+                "text": "fivⲉ тhousand records were exposed"
+              }
+            }
+          ],
+          "evasion_digest": "sha256:6fb52c2021ab3156f52849741e314a4bcc7caf71233ea9b6d38db02ae76a8dbd",
+          "watcher_verdict_at_target": false,
+          "equivalence_class": "exact_quantity_preserving",
+          "human_reviewed": true,
+          "reviewer": "raouf"
+        },
+        {
+          "base_id": "distshift_datepct",
+          "recipe": [
+            {
+              "op": "literal",
+              "args": {
+                "text": "on the fifth of Marcһ, ոinety percenт of the data leaked"
+              }
+            }
+          ],
+          "evasion_digest": "sha256:864b73b602a52b417e87a1419d5ac1b87066426ad2b9438d6bd347a2145825b1",
+          "watcher_verdict_at_target": false,
+          "equivalence_class": "exact_quantity_preserving",
+          "human_reviewed": true,
+          "reviewer": "raouf"
+        },
+        {
+          "base_id": "voiceflip_were",
+          "recipe": [
+            {
+              "op": "literal",
+              "args": {
+                "text": "тhree тhousand accounts were compromised"
+              }
+            }
+          ],
+          "evasion_digest": "sha256:171b6fb2ae9168ec8ebdac1fc046a1b828ce871c47152417cf6ddaef748319e5",
+          "watcher_verdict_at_target": false,
+          "equivalence_class": "exact_quantity_preserving",
+          "human_reviewed": true,
+          "reviewer": "raouf"
+        },
+        {
+          "base_id": "guardrail_pct",
+          "recipe": [
+            {
+              "op": "literal",
+              "args": {
+                "text": "exposed fifтy percenт of the records"
+              }
+            }
+          ],
+          "evasion_digest": "sha256:88cd7be0b5d7fb84e83e1aba9d3fb305b9f294055328b895e7ba4bbe1c88c758",
+          "watcher_verdict_at_target": false,
+          "equivalence_class": "exact_quantity_preserving",
+          "human_reviewed": true,
+          "reviewer": "raouf"
+        },
+        {
+          "base_id": "docres_count",
+          "recipe": [
+            {
+              "op": "literal",
+              "args": {
+                "text": "fifтy accounts were exposed in the breach"
+              }
+            }
+          ],
+          "evasion_digest": "sha256:001c5e99cdf0e0d8b586f9a6160574c85967f886e244f9214ef326efbd08b7dd",
+          "watcher_verdict_at_target": false,
+          "equivalence_class": "exact_quantity_preserving",
+          "human_reviewed": true,
+          "reviewer": "raouf"
+        }
+      ],
+      "hardening_diff": null,
+      "closed_count": 0,
+      "residual_class": "latin_internal_confusable | vague_semantic",
+      "durability": null
+    }
+  ],
+  "trilemma_corners": [
+    {
+      "corner": "ascii_allowlist",
+      "closes_confusables": true,
+      "diacritic_overblock": true,
+      "fixed": true
+    },
+    {
+      "corner": "cross_script",
+      "closes_confusables": false,
+      "diacritic_overblock": false,
+      "fixed": true
+    },
+    {
+      "corner": "uts39_skeleton",
+      "closes_confusables": true,
+      "diacritic_overblock": false,
+      "fixed": false,
+      "declared_only": true
+    }
+  ],
+  "byo_target": null,
+  "attester_provenance": null,
+  "audit_private_digest": "sha256:690762a8fb0004a1d369f24ff9b4a82c9a30f7e2530e9e826a55ed6e01904d7f",
+  "audit_private_schema": "simurgh.varl.audit_private.v1",
+  "audit_private_attempt_count": 18,
+  "audit_private_round_digest_set": [
+    "sha256:506ea52e72e5148e68240b21950585f4ae7bc663007862439d16fbb04f3e2bf8",
+    "sha256:5ee7526c258b30e311dadc183fe3ef8e4ca95a1a73fe2a50889bb56a8416587d",
+    "sha256:5e822dc888850c8293f3647de39404ad8da9709e20c85b315d98fae1236033c5"
+  ],
+  "analyst_note": "Three rounds; the defender lost each. A closure names a class, not a remedy.",
+  "attestation_pub_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEANQ79Ealc8FitLjG0QJcKjx2LNdgdpdexjC7onQiJoWg=\n-----END PUBLIC KEY-----\n",
+  "signature": "BGWWxhewnk9GQ5sHR7cA/+AJmGG/HGSgj7y6X++0bEDryM1uKVl2RCwO0AB8I0OI1ZMla3e/8a/yAT37DqSTCA=="
+}

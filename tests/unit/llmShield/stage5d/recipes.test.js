@@ -2,7 +2,11 @@
 // Stage 5D VARL — recipe engine (plan Task 3). Determinism, op semantics, reproduces real evasions.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { applyRecipe, evasionDigest, recipeDigest } from "../../../../tools/simurgh-attestation/stage5d/core/recipes.mjs";
+import {
+  applyRecipe,
+  evasionDigest,
+  recipeDigest,
+} from "../../../../tools/simurgh-attestation/stage5d/core/recipes.mjs";
 import { scanLeakage } from "../../../../tools/simurgh-attestation/stage4w/core/leakageGate.mjs";
 
 const clear = (t) => scanLeakage(t, [], []).length === 0;
@@ -32,7 +36,10 @@ test("cross_script_confusable replaces the codepoint at an index", () => {
 });
 
 test("spell_number + homoglyph_month use sorted-key substring maps (deterministic)", () => {
-  assert.equal(applyRecipe("40", [{ op: "spell_number", args: { map: { 40: "forty" } } }]), "forty");
+  assert.equal(
+    applyRecipe("40", [{ op: "spell_number", args: { map: { 40: "forty" } } }]),
+    "forty"
+  );
   assert.equal(
     applyRecipe("March", [{ op: "homoglyph_month", args: { map: { March: "Mаrch" } } }]),
     "Mаrch"
@@ -40,7 +47,10 @@ test("spell_number + homoglyph_month use sorted-key substring maps (deterministi
 });
 
 test("literal op returns verbatim text (G2-2 catch-all)", () => {
-  assert.equal(applyRecipe("ignored", [{ op: "literal", args: { text: "any bytes 𝟜𝟘" } }]), "any bytes 𝟜𝟘");
+  assert.equal(
+    applyRecipe("ignored", [{ op: "literal", args: { text: "any bytes 𝟜𝟘" } }]),
+    "any bytes 𝟜𝟘"
+  );
 });
 
 test("unknown op throws (→244/254)", () => {
