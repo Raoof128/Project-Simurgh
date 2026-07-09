@@ -12,9 +12,9 @@ import {
   verify as edVerify,
 } from "node:crypto";
 import { canonicalJson } from "../../stage4m/core/canonical.mjs";
-import { VDA_DETECTOR, VDA_VARIANT_LIMITS } from "../constants.mjs";
-import { applyRecipe } from "./recipes.mjs";
+import { VDA_DETECTOR } from "../constants.mjs";
 import { checkDetectorPinned, checkScoreTableBinding } from "./detector.mjs";
+import { checkVariantSafety } from "./corpus.mjs";
 import { checkSlips } from "./slip.mjs";
 import { checkCurve, checkFp } from "./curve.mjs";
 import { checkClaims, checkProvenance } from "./claim.mjs";
@@ -86,21 +86,6 @@ function checkSignature(bundle, pinnedKeyFingerprint) {
   }
 }
 
-// 258 — recipes apply cleanly and variants respect the safety limits (length; literal derivability is
-// the corpus-safety scan, Task 11/19).
-function checkVariants(bundle) {
-  const bt = new Map((bundle.base_corpus ?? []).map((b) => [b.base_id, b.base_text]));
-  for (const e of bundle.evasions ?? []) {
-    try {
-      const text = applyRecipe(bt.get(e.base_id) ?? "", e.recipe ?? []);
-      if ([...text].length > VDA_VARIANT_LIMITS.max_len) return 258;
-    } catch {
-      return 258;
-    }
-  }
-  return null;
-}
-
 // 266 (audit only) — the census is bound and complete: its digest matches the signed capture_log_digest,
 // and every census slip appears in the public evasions.
 function checkCaptureOmission(bundle, auditPrivate) {
@@ -120,7 +105,7 @@ export function evaluateVda(bundle, opts = {}) {
     () => checkSchema(bundle),
     () => checkSignature(bundle, pinnedKeyFingerprint),
     () => checkDetectorPinned(bundle),
-    () => checkVariants(bundle),
+    () => checkVariantSafety(bundle),
     () => checkScoreTableBinding(bundle),
     () => checkSlips(bundle, theta), // 260 / 261
     () => checkCurve(bundle), // 262
