@@ -272,6 +272,22 @@ test("Stage 4H.4 exit map is explicit and collision-bounded", () => {
       237: 1,
       238: 1,
       239: 1,
+      // Stage 5D VARL codes 240–254 (additive extension of the shared ledger; 5D spec §3).
+      240: 1,
+      241: 1,
+      242: 1,
+      243: 1,
+      244: 1,
+      245: 1,
+      246: 1,
+      247: 1,
+      248: 1,
+      249: 1,
+      250: 1,
+      251: 1,
+      252: 1,
+      253: 1,
+      254: 1,
     })
   );
 });
