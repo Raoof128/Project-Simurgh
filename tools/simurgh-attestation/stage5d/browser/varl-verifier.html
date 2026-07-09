@@ -1,0 +1,126 @@
+<!doctype html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
+<!-- Stage 5D VARL — browser verifier (plan Task 15). Motto: AnthropicSafe First, then ReviewerSafe.
+     Self-contained: paste the ledger JSON, it verifies the Ed25519 signature (WebCrypto) over
+     canonicalJson(content) and recomputes every evasion_digest from base_text + recipe. No network. -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Simurgh 5D — VARL verifier</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        max-width: 900px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+      }
+      textarea {
+        width: 100%;
+        height: 12rem;
+        font-family: monospace;
+      }
+      .ok {
+        color: #137333;
+      }
+      .bad {
+        color: #c5221f;
+      }
+      pre {
+        white-space: pre-wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>VARL escalation-ledger verifier</h1>
+    <p>
+      Paste <code>varl-ledger.json</code>. Everything runs locally (WebCrypto Ed25519 + SHA-256).
+    </p>
+    <textarea id="in" placeholder="paste ledger JSON here"></textarea>
+    <p><button id="go">Verify</button></p>
+    <pre id="out"></pre>
+    <script>
+      const CGJ = "͏";
+      const enc = new TextEncoder();
+      const canonicalJson = (v) => {
+        if (v === null || typeof v !== "object") return JSON.stringify(v);
+        if (Array.isArray(v)) return "[" + v.map(canonicalJson).join(",") + "]";
+        return (
+          "{" +
+          Object.keys(v)
+            .sort()
+            .map((k) => JSON.stringify(k) + ":" + canonicalJson(v[k]))
+            .join(",") +
+          "}"
+        );
+      };
+      async function sha256(s) {
+        const d = await crypto.subtle.digest("SHA-256", enc.encode(s));
+        return (
+          "sha256:" + [...new Uint8Array(d)].map((b) => b.toString(16).padStart(2, "0")).join("")
+        );
+      }
+      function applyRecipe(base, recipe) {
+        let t = base;
+        for (const s of recipe) {
+          const a = s.args || {};
+          if (s.op === "fullwidth_digits")
+            t = t.replace(/[0-9]/g, (d) => String.fromCodePoint(0xff10 + Number(d)));
+          else if (s.op === "percent_to_per_cent") t = t.replaceAll("percent", "per cent");
+          else if (s.op === "spell_number" || s.op === "homoglyph_month") {
+            for (const k of Object.keys(a.map || {}).sort()) t = t.replaceAll(k, a.map[k]);
+          } else if (s.op === "combining_joiner") {
+            const cp = [...t];
+            for (const p of [...(a.positions || [])].sort((x, y) => y - x))
+              cp.splice(p + 1, 0, CGJ);
+            t = cp.join("");
+          } else if (s.op === "cross_script_confusable") {
+            const cp = [...t];
+            for (const r of a.replacements || []) cp[r.index] = r.to;
+            t = cp.join("");
+          } else if (s.op === "literal") t = a.text;
+          else throw new Error("unknown op " + s.op);
+        }
+        return t;
+      }
+      function pemToDer(pem) {
+        const b64 = pem.replace(/-----[^-]+-----/g, "").replace(/\s+/g, "");
+        return Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+      }
+      document.getElementById("go").onclick = async () => {
+        const out = document.getElementById("out");
+        try {
+          const b = JSON.parse(document.getElementById("in").value);
+          const { signature, ...content } = b;
+          const key = await crypto.subtle.importKey(
+            "spki",
+            pemToDer(b.attestation_pub_key_pem),
+            { name: "Ed25519" },
+            false,
+            ["verify"]
+          );
+          const sigOk = await crypto.subtle.verify(
+            { name: "Ed25519" },
+            key,
+            Uint8Array.from(atob(signature), (c) => c.charCodeAt(0)),
+            enc.encode(canonicalJson(content))
+          );
+          const baseText = Object.fromEntries(b.base_corpus.map((x) => [x.base_id, x.base_text]));
+          let n = 0,
+            bad = 0;
+          for (const rung of b.rungs)
+            for (const e of rung.evasions) {
+              n++;
+              if ((await sha256(applyRecipe(baseText[e.base_id], e.recipe))) !== e.evasion_digest)
+                bad++;
+            }
+          out.innerHTML =
+            `<span class="${sigOk ? "ok" : "bad"}">Ed25519 signature: ${sigOk ? "VALID" : "INVALID"}</span>\n` +
+            `<span class="${bad === 0 ? "ok" : "bad"}">Evasion digests: ${n - bad}/${n} reproduced</span>\n` +
+            `<span class="${sigOk && bad === 0 ? "ok" : "bad"}">Overall: ${sigOk && bad === 0 ? "raw 0 (public surface)" : "FAILED"}</span>`;
+        } catch (err) {
+          out.innerHTML = `<span class="bad">error: ${err.message}</span>`;
+        }
+      };
+    </script>
+  </body>
+</html>
