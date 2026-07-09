@@ -773,6 +773,40 @@ export const VSB_PUBLIC_CODES = Object.freeze([
   225, 226, 227, 228, 229, 230, 231, 232, 234, 235, 236, 237, 238,
 ]);
 
+// Stage 5D VARL codes (spec §3). Wrapper LAST at 254; 255 remains headroom.
+// One meaning per code (audit P0-1: no 249/human-review collision — an unreviewed exact-claim is a
+// 252 overclaim, not a trilemma failure).
+export const VARL_RAW_CODES = Object.freeze({
+  VARL_SCHEMA_INVALID: 240,
+  VARL_SIGNATURE_INVALID: 241,
+  VARL_SOURCE_DIGEST_INVALID: 242, // gate_registry source-digest ≠ pinned gate bytes
+  VARL_ROUND_CONTIGUITY_INVALID: 243, // No Silent Round (structural: 1..N, non-empty)
+  VARL_RECIPE_INVALID: 244, // applyRecipe(base,recipe) ≠ evasion_digest, or unknown op
+  VARL_WATCHER_VERDICT_MISMATCH: 245, // No Unverified Slip / Adversary Untrusted
+  VARL_CLOSED_COUNT_MISMATCH: 246,
+  VARL_RESIDUAL_PREDICATE_INVALID: 247, // A Closure Is Not a Cure
+  VARL_DURABILITY_INVALID: 248,
+  VARL_TRILEMMA_INVALID: 249, // corner outcome (A/B recomputed; C declared shape) or pick-2 violated
+  VARL_BYO_BINDING_INVALID: 250,
+  VARL_PROVENANCE_INCONSISTENT: 251, // Lane C: response_digest ≠ recorded evasion (org/model self-asserted)
+  VARL_OVERCLAIM_DETECTED: 252, // PUBLIC: analyst_note denylist OR unreviewed exact_quantity claim
+  VARL_AUDIT_PRIVATE_OMISSION: 253, // AUDIT-ONLY: log digest ≠ signed, or a losing round omitted
+  INTERNAL_FAIL_CLOSED_VARL: 254,
+});
+// Frozen first-failure order 240 → 253; wrapper 254 applied LAST.
+export const VARL_CHECK_ORDER = Object.freeze([
+  240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253,
+]);
+// Tier split (audit P0-2): audit = every code; public is a STRICT subset EXCLUDING ONLY 253
+// (audit-private omission needs the ceremony log). 252 IS public (denylist / unreviewed-claim
+// screen of the artifact's own fields). public ⊊ audit.
+export const VARL_AUDIT_CODES = Object.freeze([
+  240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253,
+]);
+export const VARL_PUBLIC_CODES = Object.freeze([
+  240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252,
+]);
+
 export const HARNESS_CODES = Object.freeze({
   CLEAN_RUN_FALSELY_REJECTED: 19,
 });
@@ -1021,6 +1055,21 @@ export const RUN_LEVEL_BY_RAW = Object.freeze({
   237: 1,
   238: 1,
   239: 1,
+  240: 1,
+  241: 1,
+  242: 1,
+  243: 1,
+  244: 1,
+  245: 1,
+  246: 1,
+  247: 1,
+  248: 1,
+  249: 1,
+  250: 1,
+  251: 1,
+  252: 1,
+  253: 1,
+  254: 1,
 });
 
 export function stage4CodeForRawCode(code) {
