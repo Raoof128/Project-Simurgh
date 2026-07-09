@@ -45,3 +45,5 @@ jobs:
           ! grep -Rn "\bsorry\b" proofs/stage5c
           lean proofs/stage5d/AdaptiveRedTeam.lean
           ! grep -REn "\bsorry\b|\badmit\b" proofs/stage5d
+          lean proofs/stage5e/DeployedDetector.lean
+          ! grep -REn "\bsorry\b|\badmit\b" proofs/stage5e
