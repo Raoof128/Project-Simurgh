@@ -13,7 +13,7 @@ proof of what happened after a guardrail missed — not another jailbreak detect
 [![Node](https://img.shields.io/badge/node-%E2%89%A522.0-1a1a1a?style=flat-square)](https://nodejs.org)
 [![License](https://img.shields.io/badge/license-AGPL--3.0-d6cfbe?style=flat-square)](#license)
 [![Status](https://img.shields.io/badge/status-research%20prototype-2f4a2a?style=flat-square)](#status)
-[![Latest](https://img.shields.io/badge/release-v2.37.0-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.37.0-stage-5b-var)
+[![Latest](https://img.shields.io/badge/release-v2.39.0-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.39.0-stage-5d-varl)
 
 </div>
 
@@ -41,7 +41,7 @@ In one sentence: **Simurgh gives an agentic system a verifiable receipt, not a p
 > selective omission, multi-agent accountability) to concrete mechanisms — printable version at
 > [`docs/research/llm-shield/anthropic-brief.html`](docs/research/llm-shield/anthropic-brief.html).
 
-> 🆕 **Latest — Stage 5D · Verifiable Adaptive Red-Team Ledger (`stage-5d-varl`, pending tag `v2.39.0`).**
+> 🆕 **Latest — Stage 5D · Verifiable Adaptive Red-Team Ledger (`v2.39.0-stage-5d-varl`).**
 > The first Simurgh stage whose evidence is a **multi-round arms race**: an untrusted adversary
 > proposes evasions of the frozen 5C gate, a watcher recomputes every one against the pinned gate, the
 > defender hardens, and the cycle repeats — completeness asserted over **rounds**. The executed
@@ -58,8 +58,32 @@ In one sentence: **Simurgh gives an agentic system a verifiable receipt, not a p
 > 9.7→10 Good-for-Anthropic lever, signed as debt).
 
 <details>
-<summary><b>Recent stages — 5A → 4W</b> (click to expand the prior rungs)</summary>
+<summary><b>Recent stages — 5C → 4W</b> (click to expand the prior rungs)</summary>
 
+> **Stage 5C · Verifiable Semantic Bypass Ledger (`v2.38.0-stage-5c-vsb`).** The first Simurgh stage
+> to report a **non-zero observed slip count** as a first-class result. Over a total (metamorphic-
+> relation × base) grid, the frozen 4X leakage engine leaves **9 slipped / 54 grid cells** (19 caught,
+> 26 degenerate, 0 not-applicable), signed and byte-reproducible to `raw 0` at both tiers. The slip
+> table is a **projection of the total grid**, so audit recomputes it and rejects any laundered-out
+> slip. Laws: **No Silent Slip · No Cherry-Picked Mutation.** Ships a **BYO-detector adapter** (any
+> external detector fills the same two-artifact contract) with a Prompt Guard worked example. Codes
+> 225–239; 82 tests, seven Lean theorems (incl. `gridClosure`, `kernelDisjoint`), Python + browser
+> (WebCrypto Ed25519) parity, a two-process blind-severity Lane B. Honest scope: `doc_residue` turned
+> out to **share the leakage lexicon** (a distinct code-path, not a semantically independent detector),
+> and the real-detector Lane C shipped as **adapter + stub, not an executed capture** — Frontier scored
+> down accordingly.
+>
+> **Stage 5B · Verifiable Adversarial Readout (`v2.37.0-stage-5b-var`).** Executes a
+> lexicon-restricted mean-Jacobian workspace-readout capture on an open ~1B model on commodity hardware
+> (an 8 GB laptop, offline), captured **twice to byte-identical**, then **red-teams the whole
+> introspection stack on a capture the attacker did not author** (No Author's Map). Every one of 46
+> attacks binds to a **precommitted readout**, and the attestation confirms no bypass was silently
+> laundered or omitted, with the attack-success rate recomputable from pinned inputs (ASR 0/46). As far
+> as we know the first time a workspace readout of this kind is not only _attested_ but adversarially
+> _stress-tested_ under a signed, offline-reproducible contract — retiring 5A's outstanding real-capture
+> residual. Drives six frozen 4V→5A verifiers; seven Lean theorems; JS↔Python parity. Honest scope: a
+> method family on open weights, not Anthropic's frontier lens; no live-adversary lane.
+>
 > **Stage 5A · Verifiable Narrative–Workspace Conflict (`v2.36.0-stage-5a-vnc`).**
 > The J-lens paper's sharpest finding is a **disagreement**: the workspace readout shows
 > `eval`-awareness firing while the model's verbalized output says nothing of the kind. When a lab
@@ -189,7 +213,7 @@ certification claim.
 ### Matching Anthropic's interpretability research (July 2026)
 
 The same complementarity now has a concrete counterpart on the interpretability side. In
-[_Verbalizable Representations Form a Global Workspace in Language Models_](https://www.anthropic.com/research)
+[_Verbalizable Representations Form a Global Workspace in Language Models_](https://www.anthropic.com/research/global-workspace)
 (Transformer Circuits, 6 July 2026), Anthropic shows a cheap internal instrument — the Jacobian lens —
 surfaces a model's **silent** strategic and situational cognition that never reaches its output, and
 proposes the readout as a tool "to flag transcripts for review." The same paper signs the honest
@@ -523,17 +547,17 @@ node tools/simurgh-attestation/stage4q/node/verify-stage4q.mjs docs/research/llm
 # -> stage4q verify: byo_decision_equivalent (raw 0)
 ```
 
-Replay the latest rung — **Stage 5B Verifiable Adversarial Readout**, a signed red-team grounded on a
-real, byte-reproducible 1B workspace-readout capture (offline, no private key):
+Replay the latest rung — **Stage 5D Verifiable Adaptive Red-Team Ledger**, a signed multi-round
+attack↔harden arms race over the frozen 5C gate (offline, no private key):
 
 ```bash
-scripts/reproduce-llm-shield-stage5b.sh
+scripts/reproduce-llm-shield-stage5d.sh
 ```
 
-Expected: `Stage 5B VAR reproduce: ALL PASS`. The audit tier **re-drives all 46 attacks at the frozen
-4V→5A verifiers** and confirms each recorded code; it also checks byte-stability of the signed bundle,
-the blind two-process recompute, JS↔Python parity, the in-page WebCrypto Ed25519 browser check, the
-K7 all-functions net, and the real-capture reconciliation lock.
+Expected: `Stage 5D VARL reproduce: ALL PASS`. The audit tier **re-verifies all 18 slips across the 3
+rounds against the pinned gate** and confirms each recorded code; it also checks byte-stability of the
+signed ledger at both tiers, the `trilemmaLatticeUnsat` corners, durability classification, the
+in-page WebCrypto Ed25519 browser check, JS↔Python parity, and the K7 all-functions net.
 
 Verify a single signed rung directly, and confirm it fails closed under tampering:
 
