@@ -52,12 +52,57 @@ export function checkSlipTable(grid, slipTable, { tier = "audit" } = {}) {
   }
 
   if (tier === "audit") {
-    // 233 — every slipped grid cell must appear in the slip table.
-    const present = new Set(slipTable.map((e) => `${e.mr_id}|${e.base_id}`));
-    for (const c of grid)
-      if (c.cell_class === "slipped" && !present.has(`${c.mr_id}|${c.base_id}`))
-        return bad(233, "vsb_silent_slip", { omitted: `${c.mr_id}|${c.base_id}` });
+    const r = checkSilentSlip(grid, slipTable);
+    if (r) return r;
   }
 
+  return null;
+}
+
+// --- Granular checks, called by the orchestrator (vsbCore) in the FROZEN code order
+// 233 → 234 → ... → 237 (checkSlipTable batches them for convenience/tests only). ---
+
+// 233 — No Silent Slip (audit-only). Trusts grid.cell_class, proven honest by the prior
+// audit-tier checkGrid (232 recompute); the orchestrator runs checkGrid before this.
+export function checkSilentSlip(grid, slipTable) {
+  const present = new Set(slipTable.map((e) => `${e.mr_id}|${e.base_id}`));
+  for (const c of grid)
+    if (c.cell_class === "slipped" && !present.has(`${c.mr_id}|${c.base_id}`))
+      return {
+        raw: 233,
+        reason: "vsb_silent_slip",
+        detail: { omitted: `${c.mr_id}|${c.base_id}` },
+      };
+  return null;
+}
+
+// 234 — severity + severity_basis enum validity (both tiers).
+export function checkSeverity(slipTable) {
+  for (const e of slipTable) {
+    if (!VSB_SEVERITY_ENUM.includes(e.severity))
+      return {
+        raw: 234,
+        reason: "vsb_severity_invalid",
+        detail: { cell: `${e.mr_id}|${e.base_id}`, severity: e.severity },
+      };
+    if (!VSB_SEVERITY_BASES.includes(e.severity_basis))
+      return {
+        raw: 234,
+        reason: "vsb_severity_invalid",
+        detail: { cell: `${e.mr_id}|${e.base_id}`, basis: e.severity_basis },
+      };
+  }
+  return null;
+}
+
+// 237 — anti-overclaim (PUBLIC): analyst_note must not assert a kernel/authority breach.
+export function checkBreachScreen(slipTable) {
+  for (const e of slipTable)
+    if (containsBreachClaim(e.analyst_note))
+      return {
+        raw: 237,
+        reason: "vsb_kernel_breach_claimed",
+        detail: { cell: `${e.mr_id}|${e.base_id}` },
+      };
   return null;
 }
