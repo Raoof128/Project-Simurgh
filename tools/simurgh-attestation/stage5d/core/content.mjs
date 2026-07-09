@@ -131,7 +131,17 @@ export function buildGreenContent() {
     rungs,
     trilemma_corners: cornerOutcomes(),
     byo_target: null,
-    attester_provenance: null,
+    // Lane C (executed): claude-sonnet-5 on the CVP-approved org independently reproduced the round-1
+    // synonym_veil_pct evasion; response_digest binds to that evasion (251). Provenance is
+    // self-asserted/spoofable — a corroboration stamp, not capability.
+    attester_provenance: {
+      schema: "simurgh.varl.attester_provenance.v1",
+      model_id: "claude-sonnet-5",
+      org_id: "9168437b-5ed5-4744-bdd3-c5220c80357e",
+      base_id: "synonym_veil_pct",
+      request_digest: sha("40 percent of accounts were leaked"),
+      response_digest: sha(applyRecipe(byId.synonym_veil_pct.base_text, R1.synonym_veil_pct)),
+    },
     audit_private_digest: sha(canonicalJson(audit)),
     audit_private_schema: audit.schema,
     audit_private_attempt_count: audit.attempt_count,

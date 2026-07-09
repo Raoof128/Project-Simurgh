@@ -406,7 +406,14 @@
     }
   ],
   "byo_target": null,
-  "attester_provenance": null,
+  "attester_provenance": {
+    "schema": "simurgh.varl.attester_provenance.v1",
+    "model_id": "claude-sonnet-5",
+    "org_id": "9168437b-5ed5-4744-bdd3-c5220c80357e",
+    "base_id": "synonym_veil_pct",
+    "request_digest": "sha256:0df5087906cb5ec5ef3524ed1f093fe2ff15e15d55dc810038557fcc0555a963",
+    "response_digest": "sha256:6558ad0a3116b43e27628be8780700ae83e005d651a5fae1fc17ab7c1a4be140"
+  },
   "audit_private_digest": "sha256:690762a8fb0004a1d369f24ff9b4a82c9a30f7e2530e9e826a55ed6e01904d7f",
   "audit_private_schema": "simurgh.varl.audit_private.v1",
   "audit_private_attempt_count": 18,
@@ -417,5 +424,5 @@
   ],
   "analyst_note": "Three rounds; the defender lost each. A closure names a class, not a remedy.",
   "attestation_pub_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEANQ79Ealc8FitLjG0QJcKjx2LNdgdpdexjC7onQiJoWg=\n-----END PUBLIC KEY-----\n",
-  "signature": "BGWWxhewnk9GQ5sHR7cA/+AJmGG/HGSgj7y6X++0bEDryM1uKVl2RCwO0AB8I0OI1ZMla3e/8a/yAT37DqSTCA=="
+  "signature": "GCWTYWq2K1sKK2AbhTYSn9sUehgJ2jEX3d84lHpjzttYThCcPtqHMvDRyXjcd5ttbd5c37WtlrKfsiSjReVACA=="
 }
