@@ -15,7 +15,7 @@ the ledger reads "we beat a deployed detector," not only "we beat our own gates.
 ## Honest scope
 
 - Base corpus is **different** from Lane A: Prompt Guard is an input-prompt classifier, so Lane C's
-  bases are flagged *prompts* — same engine, different bases (spec §4 honest wrinkle).
+  bases are flagged _prompts_ — same engine, different bases (spec §4 honest wrinkle).
 - A slip here measures that detector's meaning-blindness **at the pinned version and threshold** —
   never a claim about the provider's underlying model, and never a kernel breach (Law 3).
 - Public tier verifies digest binding + shape only; the audit tier, given the audit-private log,

@@ -9,14 +9,26 @@ import { execFileSync } from "node:child_process";
 import { createPublicKey, createPrivateKey } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { buildGreenContent, buildGreenBundle, auditPrivate } from "../../../../tools/simurgh-attestation/stage5c/node/greenBundle.mjs";
+import {
+  buildGreenContent,
+  buildGreenBundle,
+  auditPrivate,
+} from "../../../../tools/simurgh-attestation/stage5c/node/greenBundle.mjs";
 import { FLAGGED_BASES } from "../../../../tools/simurgh-attestation/stage5c/core/corpus.mjs";
-import { evaluateVsb, evaluateVsbSafe, signBundle, severityBindingDigest } from "../../../../tools/simurgh-attestation/stage5c/core/vsbCore.mjs";
+import {
+  evaluateVsb,
+  evaluateVsbSafe,
+  signBundle,
+  severityBindingDigest,
+} from "../../../../tools/simurgh-attestation/stage5c/core/vsbCore.mjs";
 import { verifyEvidence } from "../../../../tools/simurgh-attestation/stage5c/node/verify-stage5c-attestation.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO = join(HERE, "..", "..", "..", "..");
-const priv = readFileSync(join(REPO, "tests/fixtures/llmShield/stage5c/test-keys/INSECURE_FIXTURE_ONLY_stage-vsb.pem"), "utf8");
+const priv = readFileSync(
+  join(REPO, "tests/fixtures/llmShield/stage5c/test-keys/INSECURE_FIXTURE_ONLY_stage-vsb.pem"),
+  "utf8"
+);
 const pub = createPublicKey(createPrivateKey(priv)).export({ type: "spki", format: "pem" });
 const baseTextById = auditPrivate(FLAGGED_BASES);
 
@@ -95,9 +107,15 @@ test("tamper matrix: every code fires at its owning tier, frozen first-failure o
   // 235 — tampered slip rate
   assert.equal(evalA(signed((c) => ((c.slip_rates[0].slip_rate_num += 1), c))), 235);
   // 236 — claimed regression
-  assert.equal(evalA(signed((c) => ((c.floor_monotonicity[0].newer_slip_subset_of_older = false), c))), 236);
+  assert.equal(
+    evalA(signed((c) => ((c.floor_monotonicity[0].newer_slip_subset_of_older = false), c))),
+    236
+  );
   // 237 — breach analyst_note (PUBLIC)
-  assert.equal(evalP(signed((c) => ((c.slip_table[0].analyst_note = "bypassed the kernel"), c))), 237);
+  assert.equal(
+    evalP(signed((c) => ((c.slip_table[0].analyst_note = "bypassed the kernel"), c))),
+    237
+  );
   // 238 — wrong severity_binding
   assert.equal(evalA(signed((c) => ((c.binding.severity_binding = "sha256:0"), c))), 238);
 });
@@ -117,10 +135,21 @@ test("double-fault: earlier code wins (228 before 234)", () => {
 });
 
 test("read-only predecessor: stage4w/4x/4y imported byte-identical to the merge-base", () => {
-  const base = execFileSync("git", ["merge-base", "HEAD", "origin/main"], { cwd: REPO, encoding: "utf8" }).trim();
+  const base = execFileSync("git", ["merge-base", "HEAD", "origin/main"], {
+    cwd: REPO,
+    encoding: "utf8",
+  }).trim();
   const changed = execFileSync(
     "git",
-    ["diff", "--name-only", base, "--", "tools/simurgh-attestation/stage4w", "tools/simurgh-attestation/stage4x", "tools/simurgh-attestation/stage4y"],
+    [
+      "diff",
+      "--name-only",
+      base,
+      "--",
+      "tools/simurgh-attestation/stage4w",
+      "tools/simurgh-attestation/stage4x",
+      "tools/simurgh-attestation/stage4y",
+    ],
     { cwd: REPO, encoding: "utf8" }
   ).trim();
   assert.equal(changed, "", `predecessor files changed: ${changed}`);
