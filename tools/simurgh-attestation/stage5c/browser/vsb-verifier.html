@@ -1,0 +1,140 @@
+<!--
+  SPDX-License-Identifier: AGPL-3.0-or-later
+  Stage 5C VSB — static browser verifier (plan Task 15; F4). Motto: AnthropicSafe First, then
+  ReviewerSafe. Verifies the Ed25519 signature IN-PAGE via WebCrypto (crypto.subtle), reading the
+  embedded attestation_pub_key_pem, and recomputes the public arithmetic surface (partition,
+  No-Silent-Slip, exact-integer slip-rate, floor-monotonicity, severity_binding). No egress
+  (hash-CSP is stamped by inject-csp.mjs). Fails closed to ed25519_not_supported where WebCrypto
+  lacks Ed25519. The mutation engine + audit recompute stay Node-authoritative.
+-->
+<meta charset="utf-8" />
+<title>Stage 5C VSB — slip-ledger verifier</title>
+<h1>Stage 5C VSB — slip-ledger verifier</h1>
+<p>
+  Paste a <code>simurgh.vsb.slip_ledger.v1</code> bundle. This page verifies the Ed25519 signature
+  and recomputes the public arithmetic surface offline.
+</p>
+<textarea id="in" rows="12" style="width: 100%"></textarea>
+<button id="go">Verify</button>
+<pre id="out"></pre>
+<script id="vsb">
+  const FAMILY_OF = {
+    digit_to_word_quantifier: "digit_to_word_quantifier",
+    exact_to_hedged: "exact_to_hedged",
+    percent_to_fraction_phrase: "percent_to_fraction_phrase",
+    date_to_relative: "date_to_relative",
+    count_to_bulk_phrase: "count_to_bulk_phrase",
+    true_semantic_paraphrase: "true_semantic_paraphrase",
+    voice_flip: "voice_flip",
+    unicode_confusable: "unicode_confusable",
+    guardrail_evasion: "guardrail_evasion",
+  };
+  const CELL_CLASSES = ["caught", "slipped", "not_applicable", "degenerate"];
+
+  function canonicalJson(v) {
+    if (v === null || typeof v !== "object") return JSON.stringify(v);
+    if (Array.isArray(v)) return "[" + v.map(canonicalJson).join(",") + "]";
+    return (
+      "{" +
+      Object.keys(v)
+        .sort()
+        .map((k) => JSON.stringify(k) + ":" + canonicalJson(v[k]))
+        .join(",") +
+      "}"
+    );
+  }
+  async function sha256Hex(str) {
+    const d = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
+    return "sha256:" + [...new Uint8Array(d)].map((b) => b.toString(16).padStart(2, "0")).join("");
+  }
+  function pemToDer(pem) {
+    const b64 = pem.replace(/-----[^-]+-----/g, "").replace(/\s+/g, "");
+    const bin = atob(b64);
+    const u8 = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+    return u8;
+  }
+
+  async function verify(bundle) {
+    const errs = [];
+    // recompute arithmetic surface
+    const baseMech = Object.fromEntries(bundle.base_corpus.map((b) => [b.base_id, b.mechanism]));
+    for (const c of bundle.grid)
+      if (!CELL_CLASSES.includes(c.cell_class)) errs.push("bad_class:" + c.cell_class);
+    const slipped = new Set(
+      bundle.grid.filter((c) => c.cell_class === "slipped").map((c) => c.mr_id + "|" + c.base_id)
+    );
+    const tabled = new Set(bundle.slip_table.map((e) => e.mr_id + "|" + e.base_id));
+    if (slipped.size !== tabled.size || [...slipped].some((k) => !tabled.has(k)))
+      errs.push("silent_slip_or_extra");
+    const groups = {};
+    for (const c of bundle.grid) {
+      if (c.cell_class !== "caught" && c.cell_class !== "slipped") continue;
+      const key = baseMech[c.base_id] + "|" + FAMILY_OF[c.mr_id];
+      (groups[key] = groups[key] || { caught: 0, slipped: 0 })[c.cell_class]++;
+    }
+    for (const r of bundle.slip_rates) {
+      const g = groups[r.mechanism + "|" + r.mr_family];
+      if (
+        !g ||
+        g.caught !== r.caught ||
+        g.slipped !== r.slipped ||
+        r.slip_rate_num !== r.slipped ||
+        r.slip_rate_den !== r.caught + r.slipped
+      )
+        errs.push("slip_rate_mismatch:" + r.mr_family);
+    }
+    for (const row of bundle.floor_monotonicity)
+      if (row.newer_slip_subset_of_older !== true) errs.push("floor_regression");
+    const rows = bundle.slip_table
+      .map((e) => ({
+        mr_id: e.mr_id,
+        base_id: e.base_id,
+        severity: e.severity,
+        severity_basis: e.severity_basis,
+      }))
+      .sort((a, b) => (a.mr_id + "|" + a.base_id).localeCompare(b.mr_id + "|" + b.base_id));
+    if ((await sha256Hex(canonicalJson(rows))) !== bundle.binding.severity_binding)
+      errs.push("severity_binding_mismatch");
+
+    // Ed25519 signature (fail closed if unsupported)
+    let sigOk = false;
+    try {
+      const key = await crypto.subtle.importKey(
+        "spki",
+        pemToDer(bundle.attestation_pub_key_pem),
+        { name: "Ed25519" },
+        false,
+        ["verify"]
+      );
+      const { signature, ...content } = bundle;
+      const sig = pemToDer("-----BEGIN X-----\n" + signature + "\n-----END X-----");
+      sigOk = await crypto.subtle.verify(
+        { name: "Ed25519" },
+        key,
+        sig,
+        new TextEncoder().encode(canonicalJson(content))
+      );
+    } catch (e) {
+      return { ok: false, reason: "ed25519_not_supported", detail: String(e && e.message), errs };
+    }
+    if (!sigOk) errs.push("signature_invalid");
+    return { ok: errs.length === 0, errs };
+  }
+
+  if (typeof document !== "undefined") {
+    document.getElementById("go").onclick = async () => {
+      const out = document.getElementById("out");
+      try {
+        const r = await verify(JSON.parse(document.getElementById("in").value));
+        out.textContent = r.ok
+          ? "VERIFIED ✓ (signature + arithmetic surface)"
+          : "FAILED ✗ " + JSON.stringify(r);
+      } catch (e) {
+        out.textContent = "ERROR " + e;
+      }
+    };
+  }
+  if (typeof module !== "undefined")
+    module.exports = { verify, canonicalJson, sha256Hex, pemToDer };
+</script>
