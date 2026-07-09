@@ -21,12 +21,12 @@ The gauntlet fixes (F1–F8) are baked into the tasks and marked `[Fn]` — do n
 2. **`VSB` is safe as an identifier** (not a JS reserved word, unlike `var`); the wrapper suffix
    `_VSB` (`INTERNAL_FAIL_CLOSED_VSB`) mirrors `_VAR`/`_VNC`.
 3. **The 4X engine is IMPORTED, never copied or edited** `[F1]`: `import { applyMR, MR_TABLE,
-   metamorphicTableDigest } from "../../stage4x/core/metamorphicTable.mjs"` and
+metamorphicTableDigest } from "../../stage4x/core/metamorphicTable.mjs"` and
    `{ scanLeakageV2, checkLeakageV2, v2Digest } from "../../stage4x/core/gateV2.mjs"`. Zero bytes
    of stage4w/4x/4y change. The composed ruleset appends 5C relations; the 4X slice MUST
    byte-equal `metamorphicTableDigest()` (raw 227).
 4. **`flagged(text)` is a REDUCTION, not a boolean** `[F3]`. `flagged_4w(text) :=
-   scanLeakage(text, [], []).length > 0`. **The span map is `[]` (empty), NOT a covering span** —
+scanLeakage(text, [], []).length > 0`. **The span map is `[]` (empty), NOT a covering span** —
    verified against `uncoveredRegions` (`leakageGate.mjs:12`): empty map ⇒ whole body is one
    uncovered region ⇒ scanned; a covering span ⇒ zero regions ⇒ nothing scanned ⇒ every base
    `not_applicable` ⇒ a silent dead stage. Task 3 asserts a known-flagged base returns `true`.
@@ -35,7 +35,7 @@ The gauntlet fixes (F1–F8) are baked into the tasks and marked `[Fn]` — do n
    a float `[F8-adjacent]`.
 6. **Lane B blinds SEVERITY, not mutation** `[F5]`. A blind-mutator ceremony is theater
    (`applyMR` is a pure frozen function). The child receives `{mr_id, base_id,
-   mutated_text_digest}` for slipped cells — **never** `mechanism`/`gate_version`/slip-rate —
+mutated_text_digest}` for slipped cells — **never** `mechanism`/`gate_version`/slip-rate —
    and emits `{severity, severity_basis}`. Blindness makes severity adversary-independent.
 7. **Browser verifies Ed25519 via WebCrypto** `[F4]`: `crypto.subtle.importKey/verify`, embedded
    `attestation_pub_key_pem`, fail closed `ed25519_not_supported`. Copy the pattern from
@@ -124,7 +124,7 @@ entries above — do not conflate.
 
 - `VSB_SCHEMAS` (P1-103 — all artifact schemas, not just the ledger):
   `{ SLIP_LEDGER: "simurgh.vsb.slip_ledger.v1", ATTESTATION: "simurgh.vsb.attestation.v1",
-  LANEB_SEVERITY: "simurgh.vsb.laneb_severity.v1", LANEC_VERDICT_LOG: "simurgh.vsb.lanec_verdict_log.v1" }`;
+LANEB_SEVERITY: "simurgh.vsb.laneb_severity.v1", LANEC_VERDICT_LOG: "simurgh.vsb.lanec_verdict_log.v1" }`;
   domains frozen.
 - `VSB_MECHANISMS` deep-equals `["leakage","doc_residue"]` (PF3 — the CI mechanisms; "4W"/"4X"
   are leakage v1/v2, NOT two families) with `VSB_LEAKAGE_VERSIONS = ["v1","v2"]` and
@@ -147,8 +147,8 @@ entries above — do not conflate.
   `VSB_PAID_SLOT_SCOPES` = `{ irreducible_semantic_residue_deferred: "itemize_and_externalize" }`
   (NOT `"full"` — honest scope), `VSB_MINTED_SLOTS = ["learned_paraphrase_mutation_deferred"]`.
   `VSB_RESERVED_SLOTS` (P1-115 — enumerate exactly, assert no dupes, length 6): `["multilingual_ruleset_deferred",
-  "narrative_version_diff_deferred", "submitted_document_pilot_deferred", "frontier_readout_conflict_deferred",
-  "live_adversary_capture_lane_deferred", "learned_paraphrase_mutation_deferred"]` — **excludes** the paid
+"narrative_version_diff_deferred", "submitted_document_pilot_deferred", "frontier_readout_conflict_deferred",
+"live_adversary_capture_lane_deferred", "learned_paraphrase_mutation_deferred"]` — **excludes** the paid
   `irreducible_semantic_residue_deferred`, **includes** the minted slot.
 - exitCodes: `VSB_RAW_CODES` = 225…239; `VSB_CHECK_ORDER` = [225…238] (wrapper 239 excluded);
   `RUN_LEVEL_BY_RAW[225..239] === 1`. Code **238** is `VSB_LANE_BINDING_INVALID` (Lane-B severity
@@ -157,7 +157,7 @@ entries above — do not conflate.
   a **strict subset** EXCLUDING **only 233** (silent slip — invisible without a whole-grid
   recompute). **237 IS public** — it is a lexical screen of the artifact's own
   `analyst_note`, catchable with no recompute. Assert `VSB_PUBLIC_CODES ⊊
-  VSB_AUDIT_CODES`, `233 ∉ VSB_PUBLIC_CODES`, **`237 ∈ VSB_PUBLIC_CODES`**.
+VSB_AUDIT_CODES`, `233 ∉ VSB_PUBLIC_CODES`, **`237 ∈ VSB_PUBLIC_CODES`**.
 - **Full raw-code map (P2 — freeze all 15 names, spec §3 order):** `225 VSB_SCHEMA_INVALID`,
   `226 VSB_SIGNATURE_INVALID`, `227 VSB_MR_RULESET_MISMATCH`, `228 VSB_GRID_INCOMPLETE`,
   `229 VSB_MUTATION_NOT_REPRODUCIBLE`, `230 VSB_EQUIVALENCE_BASIS_UNDECLARED`,
@@ -166,10 +166,10 @@ entries above — do not conflate.
   `237 VSB_KERNEL_BREACH_CLAIMED`, `238 VSB_LANE_BINDING_INVALID`, `239 INTERNAL_FAIL_CLOSED_VSB`.
   (Names are the spec §3 set of record — do NOT rename to a reviewer's variant; spec↔plan↔code
   must be one string.)
-- **Tier data contract (P1-122 / P0-5).** *Public tier* receives the signed bundle: `grid`,
+- **Tier data contract (P1-122 / P0-5).** _Public tier_ receives the signed bundle: `grid`,
   `slip_table`, `slip_rates`, `floor_monotonicity`, all digests, `analyst_note` — and re-derives
   everything **except** the whole-grid slip-set recompute (so it cannot catch a laundered-out slip
-  → 233 is audit-only). *Audit tier* additionally receives the full **base corpus raw texts**
+  → 233 is audit-only). _Audit tier_ additionally receives the full **base corpus raw texts**
   (Lane A committed; Lane C via the audit-private log, Task 13), recomputes `applyMR5C` + every
   `flagged()` verdict + the complete partition, and recompares the slip-set (233) and severities
   against `severity_binding` (238). Public trusts the table; audit proves it.
@@ -205,7 +205,7 @@ entries above — do not conflate.
   **and** its digest equals `metamorphicTableDigest()` — a byte change to the composed table OR
   drift of the imported 4X slice trips 227 (read-only-engine witness, cf. 4X `corpusCore.mjs:30`).
 - **230**: every `mr_id` in `COMPOSED_MR_TABLE` has a `MR_EQUIVALENCE_BASIS_BY_ID[id] ∈
-  VSB_EQUIVALENCE_BASES`; a missing/invalid basis → 230.
+VSB_EQUIVALENCE_BASES`; a missing/invalid basis → 230.
 - Determinism: `applyMR5C(id, base_text)` twice ⇒ identical bytes.
 
 **Code:** `stage5c/core/mrRuleset.mjs`. **Commit:** `feat(5c): composed MR ruleset over imported 4X engine + slice witness`.
@@ -240,13 +240,13 @@ entries above — do not conflate.
 **Test first** (`gridCore.test.js`):
 
 - `buildGrid(bases, mrIds)` enumerates the **full** `(MR × base)` product, sorted `(mr_id,
-  base_id)`. **228**: a grid missing any pair, or with a duplicate, fails closed.
+base_id)`. **228**: a grid missing any pair, or with a duplicate, fails closed.
 - **229**: each cell's `mutated_text_digest` = `sha256(bytes(applyMR5C(mr_id, base_text)))`;
   verify recomputes and byte-compares — a tampered digest trips 229.
 - Cell-class rule (spec §2): `not_applicable` if `flagged(base)=false`; `degenerate` if
   `applyMR5C` returned bytes identical to base; else `caught`/`slipped` by `flagged(mutation)`.
 - **231** (moved here from Task 3, P1-71): the verifier recomputes `flagged(mechanism, version,
-  text)` for each cell's base and mutation and compares to the sealed `base_verdict` /
+text)` for each cell's base and mutation and compares to the sealed `base_verdict` /
   `mutation_verdict`; any mismatch fails closed. (gateReductions supplies the pure `flagged()`;
   gridCore owns the sealed-verdict comparison.)
 - **232**: partition overlap/gap, or `degenerate / total_grid_cells` > `VSB_MAX_DEGENERATE_RATE`
@@ -261,7 +261,7 @@ entries above — do not conflate.
 **Test first** (`slipLedger.test.js`):
 
 - `projectSlips(grid)` = every `slipped` cell → a slip_table entry (`mr_id, base_id, mechanism,
-  gate_version, severity, severity_basis, analyst_note?`).
+gate_version, severity, severity_basis, analyst_note?`).
 - **233** (audit teeth, No Silent Slip): a slip_table with a slipped grid-cell **omitted** →
   fails closed at the audit tier; public tier (which trusts the table) does NOT catch it — assert
   public-GREEN / audit-RED. (233 is the ONLY audit-only code — PF2.)
@@ -287,7 +287,7 @@ entries above — do not conflate.
 **Test first** (`slipRateCore.test.js`):
 
 - `slipRates(grid)` per `(mechanism, mr_family)`: `{caught, slipped, slip_rate_num,
-  slip_rate_den}` where `den = caught + slipped`, integers only (gotcha 5). **235**: a published
+slip_rate_den}` where `den = caught + slipped`, integers only (gotcha 5). **235**: a published
   rate ≠ recomputed pair fails closed; the `den = 0` case (all `not_applicable`) yields
   `0/0 → rate 0` explicitly (Lean edge, Task 15).
 - **236** `[anti-regression; PF3 caveat]`: for a mechanism with >1 version (only **leakage**
@@ -343,11 +343,13 @@ Green is about integrity, not about the slip count being zero.
 ## Task 9 — build-stage5c-corpus.mjs: (MR×base) grid + integrity gate (spec §2, §4)
 
 **Test first** (`corpus.test.js`): the committed base corpus draws flagged fixtures from 4W/4X/4Y
-+ the named families (`distribution_shift_slip` **analog** `[F6]`, `synonym_veil`, `voice_flip`,
-`confusable_homoglyph`, `guardrail_evasion_slip`). Integrity gate: every cell's recomputed
-`cell_class` and (for slips) `target_raw` match; the grid is total (228); degenerate-rate ≤ cap.
+
+- the named families (`distribution_shift_slip` **analog** `[F6]`, `synonym_veil`, `voice_flip`,
+  `confusable_homoglyph`, `guardrail_evasion_slip`). Integrity gate: every cell's recomputed
+  `cell_class` and (for slips) `target_raw` match; the grid is total (228); degenerate-rate ≤ cap.
 
 ### Task 9B — freeze counts/rates/digest from the validated corpus (5B lesson)
+
 Freeze `VSB_FAMILY_COUNTS`, the per-`(gate,family)` slip-rate table, and `COMPOSED_RULESET_DIGEST`
 in constants **only after** the integrity gate passes — never hand-authored. Re-run the corpus
 build + assert parity.
@@ -412,21 +414,22 @@ and validates a `lane_c_binding` **shape** (`external_detector` kind: `detector_
 assert that torch/transformers appear in **no** CI glob. `promptguard-adapter.py` (worked Prompt
 Guard 86M example, pinned threshold) and `run-vsb-lanec.py --dry-run` live under `lanec/` and are
 excluded from pytest/`check.sh`; **absent** Lane-C binding in CI → no code (238 optional-skip).
+
 - **Base corpus is DIFFERENT** `[PF5]`: Prompt Guard is an _input-prompt_ classifier, so Lane C's
   grid runs over a **flagged-prompt** base corpus (prompts PG flags), NOT the 4W/4X/4Y bases — the
   same `(MR × base)` engine over different bases (spec §4 honest wrinkle).
 - **Two artifacts (P0-5, final — hashes can't be reversed):** Lane C emits BOTH:
   1. **Public artifact** — `lane_c_binding`, `verdict_log_digest`, `base_corpus_digest`,
      `audit_private_log_digest`, and digest-only rows `{base_id, mr_id, base_text_digest,
-     mutated_text_digest, detector_verdict}`. **No raw prompts.**
+mutated_text_digest, detector_verdict}`. **No raw prompts.**
   2. **Audit-private artifact** (excluded from CI and public evidence) — raw flagged-prompt base
      texts + raw mutated texts (or enough raw base text to recompute each mutation via
      `applyMR5C`), plus verdict labels/digests.
-  **Public** verifies digest binding + shape only. **Audit** (given the private artifact)
-  recomputes `applyMR5C`, verifies each `mutated_text_digest`, recomputes the partition from the
-  sealed `detector_verdict` labels, and **does NOT re-invoke Prompt Guard**. Without the private
-  artifact the audit tier verifies log integrity + verdict binding + partition-from-labels only —
-  it never claims an `applyMR5C` recompute it cannot do. This matches the Task 1 tier data contract.
+     **Public** verifies digest binding + shape only. **Audit** (given the private artifact)
+     recomputes `applyMR5C`, verifies each `mutated_text_digest`, recomputes the partition from the
+     sealed `detector_verdict` labels, and **does NOT re-invoke Prompt Guard**. Without the private
+     artifact the audit tier verifies log integrity + verdict binding + partition-from-labels only —
+     it never claims an `applyMR5C` recompute it cannot do. This matches the Task 1 tier data contract.
 
 **Commit:** `feat(5c): Lane C detector adapter + Prompt Guard example (digest-only, non-CI)`.
 
