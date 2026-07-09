@@ -807,6 +807,38 @@ export const VARL_PUBLIC_CODES = Object.freeze([
   240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252,
 ]);
 
+// Stage 5E VDA codes (spec §3). Wrapper LAST at 267; 268 remains headroom.
+// One meaning per code. External-review corrections: 256 is UNPINNED-or-invalid (external key pin),
+// slip is two booleans (260 crossing / 261 inversion), 264 is forbidden-claim/unreviewed (public),
+// 266 is the sole audit-only code (capture-census omission).
+export const VDA_RAW_CODES = Object.freeze({
+  VDA_SCHEMA_INVALID: 255,
+  VDA_SIGNATURE_UNPINNED_OR_INVALID: 256, // embedded key fingerprint ≠ externally pinned, or bad sig
+  VDA_DETECTOR_UNPINNED: 257, // pin field missing, revision ≠ capture, or positive_class_index ∉ label_map
+  VDA_RECIPE_OR_VARIANT_INVALID: 258, // recipe ≠ generated_text_digest, or literal/variant safety limit
+  VDA_SCORE_TABLE_BINDING_INVALID: 259, // table digest / entry keying / score range+width
+  VDA_SLIP_ARITHMETIC_MISMATCH: 260, // threshold_crossing ≠ recompute
+  VDA_INVERSION_UNSOUND: 261, // score_inversion=true while ¬(evasion < raw)
+  VDA_CURVE_INVALID: 262, // curve point ≠ recompute, or non-monotone
+  VDA_FP_INVALID: 263, // benign_fp_curve point ≠ recompute
+  VDA_FORBIDDEN_CLAIM_OR_UNREVIEWED: 264, // PUBLIC: forbidden structured claim / denylist phrase / unreviewed inversion
+  VDA_PROVENANCE_INCONSISTENT: 265, // score_table_digest / capture_log_digest / attester recipe→digest
+  VDA_CAPTURE_OMISSION: 266, // AUDIT-ONLY: census digest ≠ signed, or a census slip omitted from evasions
+  INTERNAL_FAIL_CLOSED_VDA: 267,
+});
+// Frozen first-failure order 255 → 266; wrapper 267 applied LAST.
+export const VDA_CHECK_ORDER = Object.freeze([
+  255, 256, 257, 258, 259, 260, 261, 262, 263, 264, 265, 266,
+]);
+// Tier split: audit = every check code; public is a STRICT subset EXCLUDING ONLY 266 (capture-census
+// omission needs the audit-private census). 264 IS public (forbidden-claim / unreviewed screen).
+export const VDA_AUDIT_CODES = Object.freeze([
+  255, 256, 257, 258, 259, 260, 261, 262, 263, 264, 265, 266,
+]);
+export const VDA_PUBLIC_CODES = Object.freeze([
+  255, 256, 257, 258, 259, 260, 261, 262, 263, 264, 265,
+]);
+
 export const HARNESS_CODES = Object.freeze({
   CLEAN_RUN_FALSELY_REJECTED: 19,
 });
@@ -1070,6 +1102,20 @@ export const RUN_LEVEL_BY_RAW = Object.freeze({
   252: 1,
   253: 1,
   254: 1,
+  // Stage 5E VDA codes (reviewed extension of the shared ledger; 5E spec §3). 267 wrapper matches 254.
+  255: 1,
+  256: 1,
+  257: 1,
+  258: 1,
+  259: 1,
+  260: 1,
+  261: 1,
+  262: 1,
+  263: 1,
+  264: 1,
+  265: 1,
+  266: 1,
+  267: 1,
 });
 
 export function stage4CodeForRawCode(code) {
