@@ -3,7 +3,7 @@
 // AnthropicSafe First, then ReviewerSafe. The grid is the TOTAL (MR × base) product (No
 // Cherry-Picked Mutation); each cell is partitioned; the verifier recomputes everything.
 import { createHash } from "node:crypto";
-import { VSB_MAX_DEGENERATE_RATE, VSB_CELL_CLASSES } from "../constants.mjs";
+import { VSB_MAX_DEGENERATE_RATE, VSB_CELL_CLASSES, VSB_EQUIVALENCE_BASES } from "../constants.mjs";
 import { applyMR5C, MR_EQUIVALENCE_BASIS_BY_ID } from "./mrRuleset.mjs";
 import { flagged } from "./gateReductions.mjs";
 
@@ -57,8 +57,11 @@ export function degenerateRate(grid) {
   return { num, den };
 }
 
-// Verifier: 228 completeness → 229 mutation reproducibility → 231 verdict recompute →
-// 232 partition validity + degenerate-rate cap. First-failure order.
+// Verifier — COLUMN-WISE so first-failure honours the frozen CODE order 228 → 229 → 230 → 231 →
+// 232 (a row-wise loop could fire a later code on an earlier cell). Recompute codes (229/231/232-
+// correctness) need the base text; for Lane A the bases are committed PUBLIC fixtures so it is
+// available at both tiers, and only 233 (in slipLedger) is audit-gated (P0-5 / PF2). For Lane C
+// the raw prompt texts arrive via the audit-private map.
 export function checkGrid(grid, baseCorpus, mrIds, baseTextById = null) {
   const bad = (raw, reason, detail) => ({ raw, reason, detail });
   const byId = new Map(baseCorpus.map((b) => [b.base_id, b]));
@@ -76,33 +79,46 @@ export function checkGrid(grid, baseCorpus, mrIds, baseTextById = null) {
   if (seen.size !== expected.size)
     return bad(228, "vsb_grid_incomplete", { missing: expected.size - seen.size });
 
-  for (const c of grid) {
-    const b = byId.get(c.base_id);
-    // Structural (both tiers): cell_class must be a valid class label.
+  // 229 — mutation reproducibility (recompute applyMR5C, byte-compare the sealed digest).
+  if (baseTextById)
+    for (const c of grid) {
+      const baseText = baseTextById[c.base_id];
+      if (baseText === undefined)
+        return bad(229, "vsb_mutation_not_reproducible", { missing_base_text: c.base_id });
+      if (sha256Bytes(applyMR5C(c.mr_id, baseText)) !== c.mutated_text_digest)
+        return bad(229, "vsb_mutation_not_reproducible", { cell: `${c.mr_id}|${c.base_id}` });
+    }
+
+  // 230 — every cell declares a valid equivalence_basis.
+  for (const c of grid)
+    if (!VSB_EQUIVALENCE_BASES.includes(c.equivalence_basis))
+      return bad(230, "vsb_equivalence_basis_undeclared", { cell: `${c.mr_id}|${c.base_id}` });
+
+  // 231 — recomputed base/mutation verdicts vs the sealed values.
+  if (baseTextById)
+    for (const c of grid) {
+      const b = byId.get(c.base_id);
+      const baseText = baseTextById[c.base_id];
+      const baseVerdict = flagged(b.mechanism, b.gate_version, baseText);
+      const mutationVerdict = flagged(b.mechanism, b.gate_version, applyMR5C(c.mr_id, baseText));
+      if (baseVerdict !== b.base_verdict || mutationVerdict !== c.mutation_verdict)
+        return bad(231, "vsb_gate_verdict_mismatch", { cell: `${c.mr_id}|${c.base_id}` });
+    }
+
+  // 232 — partition validity: class-label membership (all cells), then class-correctness vs the
+  // recomputed partition, then the degenerate-rate cap.
+  for (const c of grid)
     if (!VSB_CELL_CLASSES.includes(c.cell_class))
       return bad(232, "vsb_partition_invalid", { bad_class: c.cell_class });
-    // Recompute checks (229/231/232) require the raw base text — audit tier only (P0-5). Public
-    // tier (no baseTextById) verifies completeness + shape; the recompute is the audit's job.
-    if (!baseTextById) continue;
-    const baseText = baseTextById[c.base_id];
-    if (baseText === undefined)
-      return bad(231, "vsb_gate_verdict_mismatch", { missing_base_text: c.base_id });
-    const mutated = applyMR5C(c.mr_id, baseText);
-    // 229 — mutation reproducibility
-    if (sha256Bytes(mutated) !== c.mutated_text_digest)
-      return bad(229, "vsb_mutation_not_reproducible", { cell: `${c.mr_id}|${c.base_id}` });
-    // 231 — recomputed verdicts vs sealed
-    const baseVerdict = flagged(b.mechanism, b.gate_version, baseText);
-    const mutationVerdict = flagged(b.mechanism, b.gate_version, mutated);
-    if (baseVerdict !== b.base_verdict || mutationVerdict !== c.mutation_verdict)
-      return bad(231, "vsb_gate_verdict_mismatch", { cell: `${c.mr_id}|${c.base_id}` });
-    // 232 — partition validity (class matches the recomputed partition)
-    const expectedClass = classifyCell(baseVerdict, mutated === baseText, mutationVerdict);
-    if (!VSB_CELL_CLASSES.includes(c.cell_class) || c.cell_class !== expectedClass)
-      return bad(232, "vsb_partition_invalid", { cell: `${c.mr_id}|${c.base_id}` });
-  }
-
-  // 232 — degenerate-rate cap (num/den > max means a no-op corpus)
+  if (baseTextById)
+    for (const c of grid) {
+      const b = byId.get(c.base_id);
+      const baseText = baseTextById[c.base_id];
+      const mutated = applyMR5C(c.mr_id, baseText);
+      const expectedClass = classifyCell(b.base_verdict, mutated === baseText, c.mutation_verdict);
+      if (c.cell_class !== expectedClass)
+        return bad(232, "vsb_partition_invalid", { cell: `${c.mr_id}|${c.base_id}` });
+    }
   const { num, den } = degenerateRate(grid);
   const { num: mn, den: md } = VSB_MAX_DEGENERATE_RATE;
   if (den > 0 && num * md > mn * den)
