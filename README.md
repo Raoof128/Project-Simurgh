@@ -41,17 +41,18 @@ In one sentence: **Simurgh gives an agentic system a verifiable receipt, not a p
 > selective omission, multi-agent accountability) to concrete mechanisms — printable version at
 > [`docs/research/llm-shield/anthropic-brief.html`](docs/research/llm-shield/anthropic-brief.html).
 
-> 🆕 **Latest — Stage 5B · Verifiable Adversarial Readout (`v2.37.0-stage-5b-var`).**
-> A red-team is only credible if it attacks evidence it did not author. 5B grounds a signed,
-> precommitted red-team on a **real, byte-reproducible Llama-3.2-1B workspace-readout capture** — run
-> on a commodity Apple M2 (8 GB, float32, offline), captured **twice and `cmp`-identical** — that the
-> attacker did not choose, then drives **46 attacks at the frozen 4V→5A verifiers**, each resolving to
-> a real, recomputable code. Laws: **No Silent Bypass · No Author's Map · No Post-Hoc Attack · A
-> Bypass Is Not a Break.** It **retires the Lane C capture debt** (the interpretability harness
-> finally ran for real), ships **7 machine-checked Lean theorems**, a fixture-integrity gate, and an
-> in-page WebCrypto Ed25519 verifier. Honest to its floor: ASR **0/46** (every attack was caught,
-> a clean red-team), with the real semantic mutations and a live-adversary lane signed as the next
-> increment.
+> 🆕 **Latest — Stage 5C · Verifiable Semantic Bypass Ledger (`stage-5c-vsb`, pending tag `v2.38.0`).**
+> The first Simurgh stage to report a **non-zero observed slip count** as a first-class result:
+> **9 slipped / 54 grid cells**, byte-reproducible, verifying to `raw 0` at both tiers. It reuses
+> **4X's imported metamorphic engine** (not reinvented — the 4X slice stays byte-identical, witnessed
+> by raw 227) and turns its measured residue into a **signed, itemized bypass ledger with per-slip
+> blind severity**. Laws: **No Cherry-Picked Mutation · No Silent Slip · A Slip Is a Detector Bound,
+> Not a Kernel Breach** — the last enforced by a public anti-overclaim gate (raw 237) backed by a
+> `kernelDisjoint` Lean theorem. Codes **225–239**, **7 machine-checked Lean theorems**, a
+> two-process blind-severity ceremony, Python + browser (WebCrypto Ed25519) parity. Honest to its
+> limits: the real-detector Lane C (Prompt Guard) shipped as **mechanism + adapter only, not
+> executed** (Frontier scored down accordingly), and `doc_residue` shares the leakage lexicon — both
+> signed as the next increment.
 
 <details>
 <summary><b>Recent stages — 5A → 4W</b> (click to expand the prior rungs)</summary>
