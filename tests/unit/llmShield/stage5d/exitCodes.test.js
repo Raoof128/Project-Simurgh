@@ -12,16 +12,20 @@ import {
 
 test("codes 240-254 contiguous, one meaning each, wrapper LAST", () => {
   const vals = Object.values(VARL_RAW_CODES).sort((a, b) => a - b);
-  assert.deepEqual(vals, [240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254]);
+  assert.deepEqual(
+    vals,
+    [240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254]
+  );
   assert.equal(new Set(vals).size, vals.length, "no code reused (P0-1 collision guard)");
   assert.equal(VARL_RAW_CODES.INTERNAL_FAIL_CLOSED_VARL, 254);
   assert.equal(Math.max(...vals), 254, "wrapper is the highest");
 });
 
 test("check order is 240..253, wrapper 254 excluded", () => {
-  assert.deepEqual(VARL_CHECK_ORDER, [
-    240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253,
-  ]);
+  assert.deepEqual(
+    VARL_CHECK_ORDER,
+    [240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253]
+  );
   assert.ok(!VARL_CHECK_ORDER.includes(254));
 });
 

@@ -9,14 +9,17 @@ import { canonicalJson } from "../../stage4m/core/canonical.mjs";
 
 const CGJ = "͏"; // Combining Grapheme Joiner (invisible)
 const sha256 = (s) => "sha256:" + createHash("sha256").update(Buffer.from(s, "utf8")).digest("hex");
-const sortedEntries = (m) => Object.entries(m ?? {}).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0));
+const sortedEntries = (m) =>
+  Object.entries(m ?? {}).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0));
 
 // Each op: (text, args) -> text. Pure. Codepoint-indexed where positional.
 const OPS = {
   fullwidth_digits: (t) => t.replace(/[0-9]/g, (d) => String.fromCodePoint(0xff10 + Number(d))),
   percent_to_per_cent: (t) => t.replaceAll("percent", "per cent"),
-  spell_number: (t, { map } = {}) => sortedEntries(map).reduce((s, [k, v]) => s.replaceAll(k, v), t),
-  homoglyph_month: (t, { map } = {}) => sortedEntries(map).reduce((s, [k, v]) => s.replaceAll(k, v), t),
+  spell_number: (t, { map } = {}) =>
+    sortedEntries(map).reduce((s, [k, v]) => s.replaceAll(k, v), t),
+  homoglyph_month: (t, { map } = {}) =>
+    sortedEntries(map).reduce((s, [k, v]) => s.replaceAll(k, v), t),
   combining_joiner: (t, { positions = [] } = {}) => {
     const cp = [...t];
     // insert CGJ after each codepoint index; apply descending so earlier indices stay valid
@@ -29,7 +32,8 @@ const OPS = {
   cross_script_confusable: (t, { replacements = [] } = {}) => {
     const cp = [...t];
     for (const { index, to } of replacements) {
-      if (index < 0 || index >= cp.length) throw new Error(`confusable index out of range: ${index}`);
+      if (index < 0 || index >= cp.length)
+        throw new Error(`confusable index out of range: ${index}`);
       cp[index] = to;
     }
     return cp.join("");

@@ -17,9 +17,36 @@ const sha256 = (buf) => createHash("sha256").update(buf).digest("hex");
 
 // ---- Normalizers (copied in from the stage5c/experiments prototypes; NEVER imported — G2-5) ----
 const HOMOGLYPH = {
-  а: "a", е: "e", о: "o", р: "p", с: "c", у: "y", х: "x", ѕ: "s", і: "i", ј: "j", ԁ: "d",
-  А: "A", Е: "E", О: "O", Р: "P", С: "C", У: "Y", Х: "X", М: "M", Т: "T", В: "B", Н: "H", К: "K",
-  ο: "o", ν: "v", α: "a", ρ: "p", τ: "t", ι: "i", κ: "k",
+  а: "a",
+  е: "e",
+  о: "o",
+  р: "p",
+  с: "c",
+  у: "y",
+  х: "x",
+  ѕ: "s",
+  і: "i",
+  ј: "j",
+  ԁ: "d",
+  А: "A",
+  Е: "E",
+  О: "O",
+  Р: "P",
+  С: "C",
+  У: "Y",
+  Х: "X",
+  М: "M",
+  Т: "T",
+  В: "B",
+  Н: "H",
+  К: "K",
+  ο: "o",
+  ν: "v",
+  α: "a",
+  ρ: "p",
+  τ: "t",
+  ι: "i",
+  κ: "k",
 };
 const HG_RE = new RegExp("[" + Object.keys(HOMOGLYPH).join("") + "]", "gu");
 
@@ -38,7 +65,11 @@ const normalizeV4 = (text) => {
   return t;
 };
 
-export const NORMALIZERS = Object.freeze({ v1: (t) => String(t), v3: normalizeV3, v4: normalizeV4 });
+export const NORMALIZERS = Object.freeze({
+  v1: (t) => String(t),
+  v3: normalizeV3,
+  v4: normalizeV4,
+});
 
 // Frozen kernel verdict for a base's mechanism (all bases use the v1 lexicon).
 function frozenFlagged(mechanism, text) {
@@ -74,11 +105,9 @@ export const GATE_SOURCE_FILES = Object.freeze({
 export function sourceDigest(gate_version) {
   const files = GATE_SOURCE_FILES[gate_version];
   if (!files) throw new Error(`unknown gate_version: ${gate_version}`);
-  const lines = [...files]
-    .sort()
-    .map((rel) => {
-      const bytes = readFileSync(join(REPO, rel), "utf8").replace(/\r\n/g, "\n");
-      return `${rel}\n${sha256(Buffer.from(bytes, "utf8"))}`;
-    });
+  const lines = [...files].sort().map((rel) => {
+    const bytes = readFileSync(join(REPO, rel), "utf8").replace(/\r\n/g, "\n");
+    return `${rel}\n${sha256(Buffer.from(bytes, "utf8"))}`;
+  });
   return "sha256:" + sha256(Buffer.from(lines.join("\n"), "utf8"));
 }

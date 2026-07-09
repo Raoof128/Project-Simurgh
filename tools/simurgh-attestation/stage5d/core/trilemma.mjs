@@ -44,7 +44,13 @@ export function cornerOutcomes() {
   return [
     { corner: "ascii_allowlist", ...forFn(flaggedAsciiAllowlist) },
     { corner: "cross_script", ...forFn(flaggedCrossScript) },
-    { corner: "uts39_skeleton", closes_confusables: true, diacritic_overblock: false, fixed: false, declared_only: true },
+    {
+      corner: "uts39_skeleton",
+      closes_confusables: true,
+      diacritic_overblock: false,
+      fixed: false,
+      declared_only: true,
+    },
   ];
 }
 

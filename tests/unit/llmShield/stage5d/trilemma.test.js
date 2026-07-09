@@ -46,6 +46,8 @@ test("pick-2 holds: no corner is {closes ∧ ¬overblock ∧ fixed}", () => {
 });
 
 test("a fabricated all-three corner breaks the invariant", () => {
-  const cheat = [{ corner: "x", closes_confusables: true, diacritic_overblock: false, fixed: true }];
+  const cheat = [
+    { corner: "x", closes_confusables: true, diacritic_overblock: false, fixed: true },
+  ];
   assert.equal(trilemmaHolds(cheat), false);
 });

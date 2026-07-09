@@ -58,12 +58,18 @@ function evasion(base, recipe, target) {
     reviewer: "raouf",
   };
 }
-const rowSet = (table, target) => FLAGGED_BASES.map((b) => evasion(byId[b.base_id], table[b.base_id], target));
+const rowSet = (table, target) =>
+  FLAGGED_BASES.map((b) => evasion(byId[b.base_id], table[b.base_id], target));
 const closedAt = (evasions, toGate) =>
-  evasions.filter((e) => verdictAt(toGate, byId[e.base_id].mechanism, applyRecipe(byId[e.base_id].base_text, e.recipe))).length;
+  evasions.filter((e) =>
+    verdictAt(toGate, byId[e.base_id].mechanism, applyRecipe(byId[e.base_id].base_text, e.recipe))
+  ).length;
 
 export function buildAuditPrivate() {
-  const rounds = [1, 2, 3].map((r) => ({ round: r, table: [R1, R2, R3][r - 1] === R1 ? "transform" : "literal" }));
+  const rounds = [1, 2, 3].map((r) => ({
+    round: r,
+    table: [R1, R2, R3][r - 1] === R1 ? "transform" : "literal",
+  }));
   return { schema: "simurgh.varl.audit_private.v1", attempt_count: 18, rounds };
 }
 
@@ -73,22 +79,37 @@ export function buildGreenContent() {
     e3 = rowSet(R3, "v4");
   const rungs = [
     {
-      round: 1, target_gate_version: "v1", evasions: e1,
-      hardening_diff: { to_gate_version: "v3", closes_class: "compat_and_hand_homoglyph", rule_kinds: CLOSURE_RULE_KINDS["v1->v3"] },
+      round: 1,
+      target_gate_version: "v1",
+      evasions: e1,
+      hardening_diff: {
+        to_gate_version: "v3",
+        closes_class: "compat_and_hand_homoglyph",
+        rule_kinds: CLOSURE_RULE_KINDS["v1->v3"],
+      },
       closed_count: closedAt(e1, "v3"),
       residual_class: "invisible_combining_marks | vague_semantic",
       durability: classifyDurability({ rule_kinds: CLOSURE_RULE_KINDS["v1->v3"] }),
     },
     {
-      round: 2, target_gate_version: "v3", evasions: e2,
-      hardening_diff: { to_gate_version: "v4", closes_class: "combining_marks_and_ignorables", rule_kinds: CLOSURE_RULE_KINDS["v3->v4"] },
+      round: 2,
+      target_gate_version: "v3",
+      evasions: e2,
+      hardening_diff: {
+        to_gate_version: "v4",
+        closes_class: "combining_marks_and_ignorables",
+        rule_kinds: CLOSURE_RULE_KINDS["v3->v4"],
+      },
       closed_count: closedAt(e2, "v4"),
       residual_class: "cross_script_confusable | vague_semantic",
       durability: classifyDurability({ rule_kinds: CLOSURE_RULE_KINDS["v3->v4"] }),
     },
     {
-      round: 3, target_gate_version: "v4", evasions: e3,
-      hardening_diff: null, closed_count: 0, // OPEN rung [PG4]
+      round: 3,
+      target_gate_version: "v4",
+      evasions: e3,
+      hardening_diff: null,
+      closed_count: 0, // OPEN rung [PG4]
       residual_class: "latin_internal_confusable | vague_semantic",
       durability: null,
     },
@@ -102,7 +123,11 @@ export function buildGreenContent() {
       { gate_version: "v3", source_digest: sourceDigest("v3"), kind: "proposed_normalizer" },
       { gate_version: "v4", source_digest: sourceDigest("v4"), kind: "proposed_normalizer" },
     ],
-    base_corpus: FLAGGED_BASES.map((b) => ({ base_id: b.base_id, mechanism: b.mechanism, base_text: b.base_text })),
+    base_corpus: FLAGGED_BASES.map((b) => ({
+      base_id: b.base_id,
+      mechanism: b.mechanism,
+      base_text: b.base_text,
+    })),
     rungs,
     trilemma_corners: cornerOutcomes(),
     byo_target: null,
@@ -111,6 +136,6 @@ export function buildGreenContent() {
     audit_private_schema: audit.schema,
     audit_private_attempt_count: audit.attempt_count,
     audit_private_round_digest_set: audit.rounds.map((r) => sha(canonicalJson(r))),
-    analyst_note: "Three rounds; the defender lost each. A closure is not a cure.",
+    analyst_note: "Three rounds; the defender lost each. A closure names a class, not a remedy.",
   };
 }
