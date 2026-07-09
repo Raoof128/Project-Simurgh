@@ -43,3 +43,5 @@ jobs:
           ! grep -Rn "\bsorry\b" proofs/stage5a
           lean proofs/stage5c/SemanticBypass.lean
           ! grep -Rn "\bsorry\b" proofs/stage5c
+          lean proofs/stage5d/AdaptiveRedTeam.lean
+          ! grep -REn "\bsorry\b|\badmit\b" proofs/stage5d
