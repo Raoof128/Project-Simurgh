@@ -839,6 +839,41 @@ export const VDA_PUBLIC_CODES = Object.freeze([
   255, 256, 257, 258, 259, 260, 261, 262, 263, 264, 265,
 ]);
 
+// Stage 5F VMP codes (reviewed extension of the shared ledger; 5F spec §2). One meaning per code.
+// 280 is the sole audit-only code; 281 is the strict-completeness policy code; 282 is the fail-closed
+// wrapper AND the env/replay-unavailable code (its tampering-vs-environment split is carried by the
+// dedicated test suite, not a distinct run level). 282 wrapper matches 267/254.
+export const VMP_RAW_CODES = Object.freeze({
+  OK: 0,
+  VMP_SCHEMA_INVALID: 268,
+  VMP_SIGNATURE_INVALID: 269,
+  VMP_CHAIN_INVALID: 270,
+  VMP_PANEL_PLAN_INVALID: 271, // incl. roster ⊆ universe (Law 6)
+  VMP_CORPUS_BINDING_INVALID: 272,
+  VMP_CELL_MATRIX_INVALID: 273, // Law 1
+  VMP_CELL_STATUS_INVALID: 274,
+  VMP_APPLICABILITY_INVALID: 275, // Law 4
+  VMP_ADAPTER_BINDING_INVALID: 276, // Law 2
+  VMP_VERDICT_INVALID: 277,
+  VMP_BOOTSTRAP_PROVENANCE_INVALID: 278,
+  VMP_DERIVED_SUMMARY_MISMATCH: 279, // completeness/histogram/omission-bound/label-vector
+  VMP_CENSUS_BIJECTION_INVALID: 280, // Law 5, audit-only
+  VMP_EVALUATION_INCOMPLETE_POLICY: 281, // strict-default policy rejection
+  INTERNAL_OR_ENV_UNAVAILABLE_VMP: 282, // fail-closed wrapper + replay/runner unavailable
+});
+// Frozen first-failure order 268 → 280 (incl. audit-only 280); 281 policy + 282 wrapper applied OUTSIDE.
+export const VMP_CHECK_ORDER = Object.freeze([
+  268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 280,
+]);
+// *_AUDIT_CODES / *_PUBLIC_CODES mean "codes executed in that tier" (house convention, cf. VDA_*),
+// NOT "tier-only". audit-only = VMP_AUDIT_CODES \ VMP_PUBLIC_CODES = [280].
+export const VMP_AUDIT_CODES = Object.freeze([
+  268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 280,
+]);
+export const VMP_PUBLIC_CODES = Object.freeze([
+  268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279,
+]);
+
 export const HARNESS_CODES = Object.freeze({
   CLEAN_RUN_FALSELY_REJECTED: 19,
 });
@@ -1116,6 +1151,22 @@ export const RUN_LEVEL_BY_RAW = Object.freeze({
   265: 1,
   266: 1,
   267: 1,
+  // Stage 5F VMP (268–282): every code is a run-level-1 rejection, matching 5E/5D.
+  268: 1,
+  269: 1,
+  270: 1,
+  271: 1,
+  272: 1,
+  273: 1,
+  274: 1,
+  275: 1,
+  276: 1,
+  277: 1,
+  278: 1,
+  279: 1,
+  280: 1,
+  281: 1,
+  282: 1,
 });
 
 export function stage4CodeForRawCode(code) {
