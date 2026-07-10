@@ -32,6 +32,7 @@ export const BUNDLE_KEYS = new Set([
   "benign_probe",
   "benign_fp_curve",
   "capture_provenance",
+  "baseline_census",
   "review_records",
   "structured_claims",
   "byo_target",

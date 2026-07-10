@@ -7,9 +7,15 @@
 import { createHash, createPrivateKey, createPublicKey } from "node:crypto";
 import { canonicalJson } from "../../stage4m/core/canonical.mjs";
 import { applyRecipe } from "../core/recipes.mjs";
-import { normalizeDeobfuscated, scoreTableDigest, runtimeDigest } from "../core/detector.mjs";
+import {
+  normalizeDeobfuscated,
+  scoreTableDigest,
+  runtimeDigest,
+  decLt,
+} from "../core/detector.mjs";
 import { thresholdCrossing, scoreInversion } from "../core/slip.mjs";
 import { curveAt, benignFpAt } from "../core/curve.mjs";
+import { buildBaselineCensus } from "../core/corpus.mjs";
 import { signBundle, contentOf } from "../core/vdaCore.mjs";
 
 const sha256 = (s) => "sha256:" + createHash("sha256").update(Buffer.from(s, "utf8")).digest("hex");
@@ -41,6 +47,7 @@ export function buildFromCapture(cap, pubPem) {
   const entries = [];
   const evasions = [];
   const census = [];
+  const censusRows = [];
   for (const b of cap.bases) {
     const recipe = cap.recipes[b.base_id];
     const evText = applyRecipe(b.base_text, recipe);
@@ -64,6 +71,18 @@ export function buildFromCapture(cap, pubPem) {
     }
     const raw = cap.scores[`${b.base_id}|raw`];
     const ev = cap.scores[`${b.base_id}|evasion`];
+    const baselineFlagged = !decLt(raw, theta); // raw ≥ reference θ
+    censusRows.push({ base_id: b.base_id, baseline_flagged: baselineFlagged });
+    if (!baselineFlagged) {
+      // No selection-bias headline: a base Prompt Guard did not flag is recorded, never analysed as
+      // a "slip", never silently dropped.
+      census.push({
+        base_id: b.base_id,
+        generated_text_digest: sha256(evText),
+        disposition: "baseline_missed",
+      });
+      continue;
+    }
     const crossing = thresholdCrossing(raw, ev, theta);
     evasions.push({
       base_id: b.base_id,
@@ -107,6 +126,7 @@ export function buildFromCapture(cap, pubPem) {
     benign_probe: cap.benign_probe,
     benign_fp_curve,
     capture_provenance,
+    baseline_census: buildBaselineCensus(censusRows),
     public_tier_does_not_prove_capture_completeness: true,
     curve_scope: "conditional on the committed corpus",
     attestation_pub_key_pem: pubPem,
