@@ -31,6 +31,11 @@ echo "-- 5/8 verify committed evidence — audit tier (census bijection) -> raw 
 node "$S/node/verify-vmp-attestation.mjs" --tier audit >/dev/null
 echo "   audit verify OK"
 
+echo "-- 5b/8 verify REAL dual-detector capture (PG2 86M + Llama Guard 3 1B) — both tiers -> raw 0"
+node "$S/node/verify-vmp-attestation.mjs" --tier public --dir docs/research/llm-shield/evidence/stage-5f/real-capture >/dev/null
+node "$S/node/verify-vmp-attestation.mjs" --tier audit --dir docs/research/llm-shield/evidence/stage-5f/real-capture >/dev/null
+echo "   real-capture verify OK"
+
 echo "-- 6/8 Lane B two-process/two-key blind recompute ceremony"
 node "$S/laneb/run-laneb-recompute-ceremony.mjs" >/dev/null
 echo "   Lane B corroborated"
