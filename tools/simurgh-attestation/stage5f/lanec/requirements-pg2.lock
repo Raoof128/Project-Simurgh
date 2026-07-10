@@ -1,0 +1,6 @@
+# Stage 5F VMP Lane C — Prompt Guard 2 86M isolated env (pinned; CPU/float32).
+torch==2.8.0
+transformers==4.46.3
+tokenizers==0.20.3
+safetensors==0.6.2
+huggingface-hub==0.35.0
