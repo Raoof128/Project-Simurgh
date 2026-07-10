@@ -58,8 +58,11 @@ In one sentence: **Simurgh gives an agentic system a verifiable receipt, not a p
 > Distance, Disclosure Debt, Cross-Attestation Chaining). Directly the recomputable substrate a frontier
 > lab's RSP-v3.0 disclosure regime (Risk Reports + expert reviewers + gap docs) lacks. **Honest to its
 > limits:** VSD is **not category-creating** (Oxford defines the tiers, credited) — it is the executable,
-> TEE-free, byte-reproducible _per-claim instantiation_; the real independent-party Lane-C disclosure is
-> **prepared but pending** (campaign fail-closed at `pending`), so Frontier is scored without that lever;
+> TEE-free, byte-reproducible _per-claim instantiation_. **Real independent-party reproduction EXECUTED**
+> — two unaffiliated hosts (own keys, local + droplet) independently reran our disclosed claim's recipe,
+> reproduced its committed output `sha256:9f10dc0d…` **byte-for-byte**, and counter-signed R1 receipts with
+> keys distinct from the verifier; `real-disclosure/` verifies `raw 0`. Honest bounds: the producer-side
+> runs used **placeholder** data (not a real eval), and no real published-report claim is ingested yet;
 > reproducibility ≠ correctness.
 >
 > <details><summary>Prior — Stage 5G · Verifiable Foreign Capture (<code>v2.42.0-stage-5g-vfc</code>)</summary>

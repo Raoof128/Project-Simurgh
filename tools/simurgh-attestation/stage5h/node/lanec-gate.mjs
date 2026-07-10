@@ -25,7 +25,13 @@ if (status === "completed") {
     console.error("[5h] FAIL-CLOSED: status=completed but real-disclosure/ is absent");
     process.exit(1);
   }
-  const res = verify({ dir: REAL, tier: "audit" });
+  // the real disclosure carries its OWN external pin + host registry (the real independent host key)
+  const res = verify({
+    dir: REAL,
+    tier: "audit",
+    pinPath: join(REAL, "pin.json"),
+    hostRegistryPath: join(REAL, "host-registry.json"),
+  });
   if (res.raw !== 0) {
     console.error(`[5h] FAIL-CLOSED: real-disclosure verify raw ${res.raw}`);
     process.exit(1);

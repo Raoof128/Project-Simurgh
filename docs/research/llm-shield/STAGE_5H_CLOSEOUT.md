@@ -29,7 +29,7 @@ Every claim carries a **declared consequence** and a verifier-**computed reprodu
 - **Lanes:** A (byte-stable synthetic "Redacted Risk Report" — the Oxford worked-example family;
   verifies raw 0 public+audit), B (two-process blind review ceremony — the controlled-tier mechanism
   played for real; the ceremony receipt is the SAME species as the bundle receipt), **C (real
-  independent-party disclosure — pack prepared, campaign `pending`; see below)**. **JS↔Python↔browser
+  independent-party disclosure — EXECUTED, campaign `completed`; see below)**. **JS↔Python↔browser
   parity** on the deterministic surface, **10 Lean theorems + 1 lemma** (zero `sorry`).
 - **Beast inventions:** Inversion Census, Right-Scaling Distance (the field's "evidential inversion"
   as a signed integer), the Frontier-7B fixture family (traceable to the Oxford paper's own worked
@@ -40,19 +40,30 @@ fail-closed campaign gate + byte-stability sorted-manifest compare). The prior 5
 still pass and their Lean still compiles (sealed history undisturbed). Additive codes 300–315 rippled
 both `exit-map.json` goldens + the exitWrapper inline map — regenerated under Node 26.
 
-## Lane C — real independent-party disclosure (status: pending)
+## Lane C — real independent-party disclosure (status: COMPLETED 2026-07-10)
 
-The outbound pack (`/Users/raoof.r12/Desktop/Raouf/test/simurgh-stage5h-vsd-lanec-pack-20260710/`) is
-prepared for the independent droplet team with the **roles split so no party hosts its own claim**:
-they act as PRODUCER over their real 5G PG2 capture (cross-attestation chaining — their 5G
-attestation becomes a `present[]` artefact by digest; Simurgh's ceremony key hosts that claim) AND as
-REVIEW HOST over our Lane-A controlled claim (the real `secure_review_host_independence_deferred`
-payment). No independent-party run has returned this session, so the committed
-`evidence/stage-5h/lanec/campaign-outcome.json` honestly records `status: "pending"` — and the
-reproduce gate is fail-closed on it (a `completed` status would require the real-disclosure dir to
-exist and verify raw 0; `pending` requires it to be ABSENT). The Lane C ingest tool is built and
-tested (fixture keys standing in) and verifies an assembled attestation raw 0. **Frontier is scored
-WITHOUT the real-capture lever**, exactly as 5A/5C did when their real capture was not executed.
+The independent droplet team executed **both split roles** on their own machines with their own
+Ed25519 keys (a local host **and** the droplet `170.64.167.95`, Node v26.5.0).
+
+- **REVIEW-HOST role (the load-bearing result).** Two unaffiliated hosts independently reran **our**
+  committed Lane-A controlled recipe (`aggregate_mean` over `redteam-summary`) from `review-target/`
+  and **reproduced our committed output digest `sha256:9f10dc0d…` BYTE-FOR-BYTE**, then counter-signed
+  R1 receipts with keys **distinct from the Simurgh verifier**. The committed
+  `evidence/stage-5h/real-disclosure/` is **our disclosed claim carrying the real droplet host
+  receipt** (host fp `sha256:8c12ec8c…` ≠ verifier fp `sha256:6a5f0962…`); it **verifies raw 0
+  audit** under its own external pin + host registry. This is the real
+  `secure_review_host_independence_deferred` payment — an unaffiliated party recomputed a
+  Simurgh-disclosed claim's evidence and cryptographically attested the reproduction.
+- **PRODUCER role (honest bound).** Both hosts also filed signed producer claims (inventory_digest +
+  Ed25519 signature independently verified, distinct keys per host) — but over the pack's
+  **placeholder `refusal_rate: 0.94` artefact, NOT a real eval**. That half demonstrates cross-party
+  producer signing only; ingesting it lands `311` (its declared tier isn't structurally supported by
+  the placeholder), so it is **not** used as the completed evidence.
+
+`campaign-outcome.json` records `status: "completed"`, and the reproduce gate is fail-closed on it
+(completed ⇒ the real-disclosure dir must exist and verify raw 0). Verify-only: the receipt is signed
+by a key we do not hold (non-possession is the point). Independent operational note: the team
+generated fresh keys per host and removed the droplet artefacts after fetching each result.
 
 ## Positioning (the honest statement of record)
 
@@ -68,8 +79,11 @@ Crosswalks deferred; no conformance claimed.
 
 1. **Reproducibility ≠ correctness.** VSD verifies a claim's tier and right-scaling — not that the
    claim is true or the eval well-designed (the behavioural-assurance seam, 2605.15164). → VPC + validity.
-2. **The real independent-party capture is NOT executed this session** (`status: pending`); the
-   byte-stable Lane-A evidence is a **synthetic** demonstration. → `real_risk_report_pilot_deferred`.
+2. **Real independent-party reproduction IS executed** (review-host role, two hosts, byte-identical,
+   distinct keys — see Lane C). Remaining bounds: the CI-byte-stable Lane-A evidence is still a
+   **synthetic** demonstration; the independent PRODUCER runs used **placeholder** data, not a real
+   eval; and no **real published risk-report** claim (C-2) has been ingested yet. →
+   `real_risk_report_pilot_deferred`.
 3. **Consequence is producer-declared** — VSD checks it is _supported_, not that it wasn't
    _under-rated_ to duck the floor. → `consequence_self_rating_contest_deferred` (VPC).
 4. **The secure-review host is bound, not vouched** — R1 binds that a named pinned host recomputed,
@@ -90,12 +104,12 @@ lexical-not-semantic seam (inherited on `claim_text_digest`). **Mints:**
 
 ## Four-axis scorecard — re-scored at closeout
 
-| Axis               | Spec-time | Closeout | Why the closeout value                                                                                                                             |
-| ------------------ | --------: | -------: | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Novelty            |       9.3 |  **9.3** | First executable evidential-inversion verifier (computed tier + typed warrant + fail-closed inequality); Oxford remains the acknowledged neighbour |
-| Frontier           |       8.5 |  **8.5** | Full verifier + all lanes + parity + Lean shipped; **real independent-party capture NOT executed** (campaign `pending`) — held at spec-time value  |
-| Good-for-Anthropic |       9.6 |  **9.6** | Direct substrate for the RSP v3.0 disclosure regime (Risk Reports + expert reviewers + gap docs); ready pack; no external pilot has run it yet     |
-| Constitution       |       9.5 |  **9.5** | Mechanises "claims must not outrun their evidence" with a typed fail-closed inequality; the truth-boolean absence is a Lean lemma                  |
+| Axis               | Spec-time | Closeout | Why the closeout value                                                                                                                                                                                                                                                                                                     |
+| ------------------ | --------: | -------: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Novelty            |       9.3 |  **9.3** | First executable evidential-inversion verifier (computed tier + typed warrant + fail-closed inequality); Oxford remains the acknowledged neighbour                                                                                                                                                                         |
+| Frontier           |       8.5 |  **9.2** | **Real independent-party reproduction EXECUTED** — two unaffiliated hosts (own keys, local + droplet) reran our claim's recipe, reproduced `sha256:9f10dc0d…` byte-for-byte, counter-signed R1; real-disclosure verifies raw 0. Short of 9.5: producer-side data was placeholder; no real published-report claim (C-2) yet |
+| Good-for-Anthropic |       9.6 |  **9.6** | Direct substrate for the RSP v3.0 disclosure regime (Risk Reports + expert reviewers + gap docs); ready pack; no external pilot has run it yet                                                                                                                                                                             |
+| Constitution       |       9.5 |  **9.5** | Mechanises "claims must not outrun their evidence" with a typed fail-closed inequality; the truth-boolean absence is a Lean lemma                                                                                                                                                                                          |
 
 _"Good-for-Anthropic" measures potential usefulness to assurance teams; it does not imply Anthropic
 review, adoption, or endorsement._

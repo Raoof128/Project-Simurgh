@@ -1,6 +1,6 @@
 {
   "schema": "simurgh.vsd.campaign_outcome.v1",
-  "status": "pending",
-  "disclosure_present": false,
-  "note": "Outbound Lane-C disclosure pack prepared for the independent droplet team (roles split: they produce their own claim over their real 5G PG2 capture; they host a receipt over our Lane-A claim). No independent-party run has returned this session; the real capture is a post-tag activity, as in 5G. Frontier is scored WITHOUT the real-capture lever."
+  "status": "completed",
+  "disclosure_present": true,
+  "note": "Independent droplet team executed BOTH Lane-C roles on their own machines with their own Ed25519 keys (local + droplet 170.64.167.95, Node v26.5.0). REVIEW-HOST role (the load-bearing result): two unaffiliated hosts independently reran our committed Lane-A controlled recipe and reproduced its committed_output_digest sha256:9f10dc0d... BYTE-FOR-BYTE, then counter-signed R1 receipts with keys distinct from the Simurgh verifier. real-disclosure/ = our disclosed claim carrying the real droplet host receipt (host fp 8c12ec8c != verifier fp 6a5f0962), verifies raw 0 audit. HONEST BOUND: the PRODUCER role used the pack's placeholder refusal_rate 0.94 artefact, NOT a real eval; that half demonstrates cross-party producer signing only. The real independent reproduction is the review-host half."
 }
