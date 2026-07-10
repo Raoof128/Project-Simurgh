@@ -323,10 +323,12 @@ when bypassed/preempted), trust_reason}`. When `record_authentic` is false (raw 
   reproduce; both outcomes sealed (a detected inversion is a successful demonstration, not an
   accusation — **"a tier is not a verdict on truth"**). **Lane C absence is fail-closed** (harder
   than 5G's if-exists-skip, a latent softness this stage repairs): a committed
-  `campaign-outcome.json` with `status ∈ {completed, declined, no_show, environment_failed}` is
-  REQUIRED — `completed` requires the real-disclosure dir and a raw-0 verify; any other status
-  forbids completed evidence; a missing record fails the reproduce (no silent absence; 5G's
-  campaignOutcome semantics reused).
+  `campaign-outcome.json` with `status ∈ {completed, pending, declined, no_show,
+environment_failed}` is REQUIRED — `completed` requires the real-disclosure dir and a raw-0
+  verify; any other status forbids completed evidence; a missing record fails the reproduce (no
+  silent absence; 5G's campaignOutcome semantics reused). `pending` is the honest state when the
+  outbound pack is prepared but no independent-party run has returned yet (this stage ships at
+  `pending`; the real capture is a post-tag activity, as in 5G).
 
 ### Attestation tiers (two-tier)
 
