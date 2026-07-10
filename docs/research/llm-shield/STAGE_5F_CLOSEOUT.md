@@ -1,0 +1,87 @@
+# Stage 5F — VMP: Verifiable Multi-detector Panel Attestation (closeout)
+
+> Motto: **AnthropicSafe First, then ReviewerSafe.** Version **v2.41.0**, branch `stage-5f-vmp`, raw
+> codes **268–282**. Spec + plan: `docs/superpowers/specs/2026-07-10-stage-5f-vmp-multi-detector-panel-design.md`,
+> `docs/superpowers/plans/2026-07-10-stage-5f-vmp-multi-detector-panel.md`.
+
+## Blade
+
+The Completeness Invariant instantiated on a **detector panel**: a single signed attestation binds N
+precommitted released detectors (Prompt Guard 2 86M + Llama Guard 4 12B) to one shared committed corpus,
+so every case discloses — for every member — either a verdict or a **typed, policy-checkable
+non-result**. Selective omission across detectors becomes impossible to hide. **No aggregate panel
+verdict is produced** (panel completeness ≠ detection completeness).
+
+## Six verifier laws (all implemented + tested + Lean-checked)
+
+1. No Post-Commit Panel Omission · 2. No Silent Exam or Adapter Swap · 3. No Membership Rewrite ·
+2. No Post-Hoc Applicability Rewrite · 5. No Dropped Capture Record · 6. **No Gerrymandered Universe**
+   (precommit the detector universe; publish `Omission Lower Bound = |universe| − |panel|`). Claim-rail:
+   Disagreement Is Not Correctness.
+
+## What shipped (verified, not asserted)
+
+- **Verifier core, codes 268–282** — 13 pure modules + the `evaluatePanel` evaluator with the frozen
+  first-failure order and the provenance-mode / 282 env-vs-tampering preflight. **Lexical** decimal-string
+  score comparison — no `Number` touches a verdict.
+- **Evidence builder + verify CLI** — public + audit both **raw 0**; strict-by-default with
+  `--attestation-only`; external trust pin lives OUTSIDE the pack.
+- **Lane B** blind-recompute ceremony + signed receipt (five acyclic digests, external ceremony pin,
+  closeout inseparability). Two-process/two-key separation — NOT independent-party verification.
+- **BYO-Panel adapter** (invention ②) — any team attests its own detectors offline (`provenance_mode:
+"none"`, frozen semantics registry only, own pins).
+- **Python parity** (independent digest + lexical-verdict reimpl) + **browser portable** verifier
+  (`raw: null` capability set — never reads as a full raw 0).
+- **Lean** `PanelCompleteness.lean` — 8 theorems + 1 lemma, **compiles clean under lean 4.15, zero
+  `sorry`**; wired into `stage-4-lean-proofs.yml`.
+- **K7 all-functions net + three tamper suites** (268–280 integrity / 281 policy / 282 environment —
+  never conflated). **99 tests green** (70 unit + 29 e2e).
+- **Fail-closed 8-step reproduce** (ALL PASS) + **independent-party conformance kit** (ALL PASS).
+- **Lane C dual-detector capture harness** (PG2 CPU + LG4 12B 8-bit, isolated env locks, merge asserts
+  the shared corpus) — present but **not yet executed** (see limitations).
+
+## Beast inventions folded in
+
+① Roster Coverage Commitment / Omission Lower Bound (Law 6). ② BYO-Panel Adapter Contract.
+③ Full-Corpus Disagreement Observation (`heterogeneous_label_vector` = raw `{semantics, label}` per
+member — **no boolean, no normalization**). ④ Panel Contest / Rerun Right spun out → next stage (VPC).
+Plus the zero-code-path projections: `evaluatedObligationFraction`, the Cherry-Pick Test fixture family.
+
+## Signed limitations (admit irregularity over overclaim)
+
+1. **The committed evidence is a synthetic structural demonstration** over two real detector identities.
+   A real dual-detector capture is Lane C, which needs a droplet (PG2 CPU + LG4 12B GPU/8-bit) and **has
+   not been executed**. The harness is present; the capture is the Frontier lever.
+2. **Offline pinned weights ≠ a hosted endpoint** (carries `live_endpoint_attestation_deferred`).
+3. **The Omission Lower Bound only bites within a committed universe** — a producer who declares
+   `universe = roster` truthfully gets bound 0. Universe representativeness is minted
+   `universe_completeness_deferred`.
+4. **Two-process/two-key ≠ independent-party verification.**
+5. **Panel completeness is not detection completeness**; heterogeneous semantics are declared, never
+   reconciled into an aggregate.
+
+## Socket ledger
+
+**PAYS** `multi_detector_panel_deferred` (minted by 5E). **PARTIALLY PAYS**
+`roster_representativeness_deferred` (silence surface published; remainder re-minted
+`universe_completeness_deferred`). **MINTS** `panel_aggregation_policy_deferred`,
+`universe_completeness_deferred`, `panel_contest_deferred` (→ VPC), `portable_historical_kernel_deferred`.
+**Carries** `multilingual_ruleset_deferred` (→ 5G VML), `live_endpoint_attestation_deferred`,
+`unicode_confusables_kernel_hardening_deferred`, `downstream_efficacy_target_deferred` (→ 5H VDE).
+
+## Four-axis scorecard — re-scored at closeout
+
+| Axis               | Spec-time | Closeout | Why the closeout value                                                                                                              |
+| ------------------ | --------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Novelty            | 9.4       | **9.4**  | prior-art kill-test executed; the panel-completeness object survives, positioned against four neighbor classes                      |
+| Frontier           | 8.7       | **8.4**  | **scored DOWN** — Lane C real capture did not execute; the evidence is a synthetic demonstration (5A/5C honest-downgrade precedent) |
+| Good-for-Anthropic | 9.2       | **9.2**  | BYO-Panel contract makes it self-serve; no external pilot has run it yet                                                            |
+| Constitution       | 9.2       | **9.2**  | visible silence surface + attestation-truth/policy separation; VPC contest (→ 9.4) spun out                                         |
+
+_"Good-for-Anthropic" measures potential usefulness to assurance teams; it does not imply Anthropic
+review, adoption, or endorsement._
+
+## Next
+
+Run the Lane C dual capture on a droplet (restores Frontier to 9.3–9.4). Then **5G VML** (multilingual,
+pays the oldest debt), **5H VDE** (downstream efficacy), and **VPC** (Panel Contest / Rerun Right).
