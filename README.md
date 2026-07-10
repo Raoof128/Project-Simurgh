@@ -13,7 +13,7 @@ proof of what happened after a guardrail missed — not another jailbreak detect
 [![Node](https://img.shields.io/badge/node-%E2%89%A522.0-1a1a1a?style=flat-square)](https://nodejs.org)
 [![License](https://img.shields.io/badge/license-AGPL--3.0-d6cfbe?style=flat-square)](#license)
 [![Status](https://img.shields.io/badge/status-research%20prototype-2f4a2a?style=flat-square)](#status)
-[![Latest](https://img.shields.io/badge/release-v2.41.0-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.41.0-stage-5f-vmp)
+[![Latest](https://img.shields.io/badge/release-v2.42.0-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.42.0-stage-5g-vfc)
 
 </div>
 
@@ -41,7 +41,28 @@ In one sentence: **Simurgh gives an agentic system a verifiable receipt, not a p
 > selective omission, multi-agent accountability) to concrete mechanisms — printable version at
 > [`docs/research/llm-shield/anthropic-brief.html`](docs/research/llm-shield/anthropic-brief.html).
 
-> 🆕 **Latest — Stage 5F · Verifiable Multi-detector Panel Attestation (`v2.41.0-stage-5f-vmp`).**
+> 🆕 **Latest — Stage 5G · Verifiable Foreign Capture (`v2.42.0-stage-5g-vfc`).**
+> Extends the Completeness Invariant to the **provenance of production**: for every foreign capture the
+> verifier computes a **typed producer/verifier Separation Strength** (`distinct_key_only` →
+> `challenge_bound` → `externally_anchored`) and **rejects unsupported upgrades** (raw **296**, the
+> headline). "We graded our
+> own homework" becomes impossible to _hide_: separation is a checkable rung, not a boolean. Three signed
+> objects (no object signs itself, domain-separated), external verifier pin (all three of key·subject·digest),
+> a precommitted **challenge receipt** (substitution-resistance, _not_ wall-clock freshness), and an offline
+> **Sigstore cross-binding** for rung-2 (Fulcio-certified key attests the producer key — ECDSA-Fulcio ≠
+> Ed25519-producer). Codes **283–299**, **10 Lean theorems + 1 lemma** (compile clean, zero `sorry`), **105
+> tests**, Lane B sidecar ceremony, JS↔Python parity, a **portable browser verifier** (raw:null, CSP
+> no-egress), the **Anchored-Subject Diversity Index** (surfaces producer monoculture), a **Homework Corpus**
+> (self-grading failures made impossible), and a standalone **foreign-capture pack** an external actor runs.
+> **Honest to its limits — and this one is load-bearing:** VFC is **not category-creating** (OVERT already
+> ships tiered independent-attestation levels + a pinned profile); it is the executable, byte-reproducible,
+> Lean-modelled _per-capture instantiation_. The committed evidence is a **synthetic** Lane-A demonstration;
+> a **real foreign capture by a separately-reported external actor is the pending → higher lever**, and the
+> "foreign" claim is substantiated only once that actor runs the pack — otherwise it ships as
+> _challenge-bound operator-separated capture_. Rung-2 proves the key is _externally anchored_, **never**
+> human/organisational non-collusion.
+>
+> <details><summary>Prior — Stage 5F · Verifiable Multi-detector Panel Attestation (<code>v2.41.0-stage-5f-vmp</code>)</summary>
 > The Completeness Invariant instantiated on a **detector panel**: one signed attestation binds N
 > precommitted released detectors (Prompt Guard 2 86M + Llama Guard 4 12B) to one shared committed
 > corpus, so every case discloses — for every member — a verdict **or a typed, policy-checkable
@@ -58,6 +79,7 @@ In one sentence: **Simurgh gives an agentic system a verifiable receipt, not a p
 > content-safety guard says `allow`) surfaced as observation, never an aggregate. Honest to its limits:
 > the CI-byte-stable evidence is a synthetic demonstration; the 12B model on a GPU droplet and an
 > independent-party capture remain the → 10 levers.
+> </details>
 >
 > <details><summary>Prior — Stage 5E · Verifiable Deployed-detector Attestation (<code>v2.40.0-stage-5e-vda</code>)</summary>
 > The first Simurgh stage whose evidence targets a **real, shipped, third-party detector** — Meta's
