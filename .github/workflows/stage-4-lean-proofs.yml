@@ -49,3 +49,5 @@ jobs:
           ! grep -REn "\bsorry\b|\badmit\b" proofs/stage5e
           lean proofs/stage5f/PanelCompleteness.lean
           ! grep -REn "\bsorry\b|\badmit\b" proofs/stage5f
+          lean proofs/stage5g/ForeignCapture.lean
+          ! grep -REn "\bsorry\b|\badmit\b" proofs/stage5g
