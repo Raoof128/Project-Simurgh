@@ -1,0 +1,48 @@
+<meta charset="utf-8" />
+<meta
+  http-equiv="Content-Security-Policy"
+  content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self'"
+/>
+<title>VSD portable verifier</title>
+<style>
+  body {
+    font-family: system-ui, sans-serif;
+    max-width: 48rem;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+  pre {
+    background: #f4f4f4;
+    padding: 1rem;
+    overflow-x: auto;
+  }
+  .ok {
+    color: #0a7d28;
+  }
+  .bad {
+    color: #b00020;
+  }
+</style>
+<h1>VSD portable verifier</h1>
+<p>
+  Advisory only (<code>raw: null</code>) — a browser is not the attestation-of-record verifier. It
+  recomputes the domain-digest surface and the tier lattice. No network access (CSP no-egress).
+</p>
+<p>Load <code>vsd-attestation.json</code>, <code>recompute-recipe.json</code>, and the artefact files.</p>
+<input type="file" id="files" multiple />
+<pre id="out">awaiting files…</pre>
+<script type="module">
+  import { verifyPortable } from "./vsd-portable.mjs";
+  const out = document.getElementById("out");
+  document.getElementById("files").addEventListener("change", async (e) => {
+    const map = {};
+    for (const f of e.target.files) map[f.name] = JSON.parse(await f.text());
+    const bundle = map["vsd-attestation.json"];
+    const recipes = map["recompute-recipe.json"];
+    const artefacts = {};
+    for (const a of bundle.artefacts_ref) artefacts[a.artefact_id] = map[`${a.artefact_id}.json`];
+    const res = await verifyPortable({ bundle, recipes, artefacts });
+    out.className = res.corroborated ? "ok" : "bad";
+    out.textContent = JSON.stringify(res, null, 2);
+  });
+</script>
