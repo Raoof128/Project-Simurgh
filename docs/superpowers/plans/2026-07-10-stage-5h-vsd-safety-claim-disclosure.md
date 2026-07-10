@@ -37,8 +37,15 @@
   artefact not in declared inputs, constant-output form). Valid receipt with `verdict:
 "not_reproduced"` is NEVER 309 — tier fact (proven < controlled).
 - Result shape: `{raw, tier, record_authentic (¬{300,301,302,303}), attestation_valid (raw∈{0,314}),
-verdict_table, inventory_census_verified (null on public tier), policy_evaluated, policy_accepted
-(null when bypassed/preempted), trust_reason}`.
+verdict_table, inventory_census_verified (null on public tier), policy_evaluated (true ONLY when
+the policy check actually ran; false when preempted), policy_accepted (null when
+bypassed/preempted), trust_reason}`. When `record_authentic` is false (raw ∈ {300–303}),
+  `verdict_table = []` — no downstream computation over an unauthenticated record.
+- Registry distinction (frozen): `ctx.hostRegistry === undefined` (operator never supplied the
+  external config) → **315**; a SUPPLIED registry that is empty or lacks the host → **308**.
+- `recompute {recipe_digest, committed_output_digest}` is required iff `declared_tier ≥ controlled`;
+  `recipe_digest = domainDigest(DOMAIN.recompute_recipe, recipe)` (the domain is consumed here).
+  A review receipt reruns THAT claim's own recipe — no claim borrows another's recompute evidence.
 - External config OUTSIDE the evidence dir, never a pack default: `stage5h/pin.json` (verifier pin
   `{key_fingerprint, identity_subject, identity_digest}`) + `stage5h/host-registry.json` (array of
   `{host_subject, host_key_fingerprint, public_key_pem}`).
@@ -97,6 +104,7 @@ tools/simurgh-attestation/stage5h/core/policy.mjs          NEW  314
 tools/simurgh-attestation/stage5h/core/rightScalingDistance.mjs NEW projection (§6-B)
 tools/simurgh-attestation/stage5h/core/inversionCensus.mjs NEW  projection (§6-A)
 tools/simurgh-attestation/stage5h/core/disclosureDebt.mjs  NEW  projection (§6-E)
+tools/simurgh-attestation/stage5h/core/campaignOutcome.mjs NEW  Lane C outcome record (throws; no raw code)
 tools/simurgh-attestation/stage5h/core/vsdCore.mjs         NEW  315 wrapper; evaluateDisclosure(+Safe); PURE
 tools/simurgh-attestation/stage5h/node/recomputeKernelRunner.mjs NEW pinned recipe interpreter
 tools/simurgh-attestation/stage5h/node/buildBundle.mjs     NEW  deterministic synthetic bundle
@@ -113,7 +121,8 @@ tests/unit/llmShield/stage5h/_validBundle.mjs              NEW  deterministic fi
 tests/unit/llmShield/stage5h/_ctx.mjs                      NEW  ctxFor() builder
 tests/unit/llmShield/stage5h/*.test.js                     NEW  one file per owner module
 tests/e2e/llmShield/stage5h/k7AllFunctions.test.js         NEW  K7 net
-scripts/reproduce-llm-shield-stage5h.sh                    NEW  8-step fail-closed
+scripts/reproduce-llm-shield-stage5h.sh                    NEW  8-step fail-closed (Lane C outcome-gated)
+scripts/check-e2e.sh                                       MODIFIED  Stage 5H reproduce registry entry
 scripts/security-audit-llm-shield-stage3m.sh / stage3o.sh  MODIFIED stage5h test-key allowlist
 .github/workflows/stage-4-lean-proofs.yml                  MODIFIED + proofs/stage5h line
 .prettierignore                                            MODIFIED evidence dir + pin/host-registry
@@ -212,11 +221,11 @@ hostRegistry, recomputeResult, tier})` → the exact ctx `vsdCore` consumes.
 
 The three claims (exact values, deterministic — no `Date.now()`, no randomness):
 
-| claim_id                        | declared_tier | declared_consequence | evidence                                                                                                                                                  |
-| ------------------------------- | ------------- | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `frontier7b-cbrn-threshold`     | `controlled`  | `threshold_crossing` | host receipt `reproduced`; present: `artefacts/redteam-summary.json` + `artefacts/judge-rubric.json`; 2 withheld (typed, `available_at_tier: controlled`) |
-| `frontier7b-harmbench-public`   | `public`      | `supporting`         | recompute recipe over `artefacts/eval-results.json`; committed output digest matches; withheld = []                                                       |
-| `frontier7b-monitoring-context` | `restricted`  | `contextual`         | restriction `{reason, right_scaling_note}`; no receipt, no recipe                                                                                         |
+| claim_id                        | declared_tier | declared_consequence | evidence                                                                                                                                                                                                                                        |
+| ------------------------------- | ------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `frontier7b-cbrn-threshold`     | `controlled`  | `threshold_crossing` | host receipt `reproduced` over THIS claim's own recipe (`aggregate_mean` over `artefacts/redteam-summary.json`); present: `artefacts/redteam-summary.json` + `artefacts/judge-rubric.json`; 2 withheld (typed, `available_at_tier: controlled`) |
+| `frontier7b-harmbench-public`   | `public`      | `supporting`         | recompute recipe over `artefacts/eval-results.json`; committed output digest matches; withheld = []                                                                                                                                             |
+| `frontier7b-monitoring-context` | `restricted`  | `contextual`         | restriction `{reason, right_scaling_note}`; no receipt, no recipe                                                                                                                                                                               |
 
 Every claim carries `claim_text_digest` (sha256 of a fixed sentence), `method_summary_digest` for the
 two ≥controlled claims, and a full `scope_statement {checkpoint_kind, environment,
@@ -236,7 +245,8 @@ tamper matrix per module (test names = these strings):
 
 - **Task 5 `schema.mjs` (300):** missing `claims[]`; duplicate `claim_id`; unknown top-level field in
   `pin`/`host-registry` embedded inside the bundle (`embedded_trust_material`); missing
-  `restriction` on a `restricted` claim; missing `recompute` on a `public` claim; missing
+  `restriction` on a `restricted` claim; missing `recompute` on a claim declaring ≥ `controlled`
+  (BOTH the controlled and public fixture claims carry one); missing
   `method_summary_digest` on a `controlled` claim; non-member enum values. Schema deliberately
   EXEMPTS `scope_statement` presence — that is 304's single ownership (assert schema passes a
   scope-less claim so the exemption is real).
@@ -265,23 +275,31 @@ tamper matrix per module (test names = these strings):
   ledger → 305; withheld entry missing `justification_type`/`available_at_tier` → 306; present
   artefact bytes perturbed → 307. Ledger totality: `present ∩ withheld = ∅` → 300? NO — overlap is
   305's `reason:"artefact_in_both_ledgers"` (ledger owns partition).
-- **Task 11 `reviewReceipt.mjs` (308/309):** registry absent while a receipt present → 308; host fp
-  not in registry → 308; host sig bit-flip → 309; receipt `inventory_digest` mismatch → 309
-  (`claim_digest` linkage is 303's, per the ownership triangle — do NOT re-check it here); valid
-  receipt with `verdict:"not_reproduced"` → **`{ok:true, verdict:"not_reproduced"}`** (NEVER 309 —
-  assert explicitly).
+- **Task 11 `reviewReceipt.mjs` (308/309):** SUPPLIED registry empty → 308; host fp not in the
+  supplied registry → 308 (a registry never supplied at all — `ctx.hostRegistry === undefined` —
+  is 315, owned by vsdCore, asserted in Task 18: environment failure, never a pin verdict); host
+  sig bit-flip → 309; receipt `inventory_digest` mismatch → 309 (`claim_digest` linkage is 303's,
+  per the ownership triangle — do NOT re-check it here); valid receipt with
+  `verdict:"not_reproduced"` → **`{ok:true, verdict:"not_reproduced"}`** (NEVER 309 — assert
+  explicitly).
 - **Task 12 `recompute.mjs` (310) + `node/recomputeKernelRunner.mjs`:** the pinned recipe grammar is
   ONE form: `{schema:"simurgh.vsd.recompute_recipe.v1", op:"aggregate_mean", input_artefact_ids:[…],
 metric:"refusal_rate", decimals:4}` — runner reads ONLY the listed artefacts from `ctx.artefactBytes`,
   computes the mean of `value` fields as decimal-string arithmetic (no float: parse to scaled
   integers), emits `{output:{metric, mean:"0.9400", n:6}, output_digest:artifactDigest(output)}`.
-  310 fires on: `artifactDigest(recipe) !== claim.recompute.recipe_digest`; unknown `op`;
+  310 fires on: `domainDigest(DOMAIN.recompute_recipe, recipe) !== claim.recompute.recipe_digest`
+  (this is where the `recompute_recipe` domain is CONSUMED — using `artifactDigest` here would
+  leave the domain dead and violate the no-dead-domains rule); unknown `op`;
   `input_artefact_ids` ⊄ present[]; an input listed but not read is impossible by construction
   (runner reads exactly the list — assert in test); zero inputs (constant-output form) →
   `reason:"constant_output_recipe"`. **Output mismatch is NOT 310** — runner returns
-  `{matched:false}` and the tier lattice consumes it (Task 13). Runner is Node-side; core/recompute
-  only VALIDATES recipe integrity from `ctx.recomputeResult.recipeChecks`. Kernel-null with a
-  `public` claim → handled by vsdCore (315), asserted in Task 18. **Rounding-edge test required**:
+  `{matched:false}` and the tier lattice consumes it (Task 13). Split of labour (frozen):
+  core/recompute performs the STATIC integrity checks (recipe digest, grammar shape,
+  `input_artefact_ids ⊆ present[]`, constant-output form) PURELY from the bundle — they run for
+  EVERY claim carrying a recompute block, controlled included, kernel or no kernel; only OUTPUT
+  matching consumes `ctx.recomputeResult`, and the kernel reruns recipes only for
+  `public`-declared claims (R1's rerun is the host's, not ours). Kernel-null with a `public`
+  claim → handled by vsdCore (315), asserted in Task 18. **Rounding-edge test required**:
   a second artefact fixture whose values force half-up rounding at `decimals:4` (e.g. five rows
   averaging to `…x50005` scaled) — JS and Python (Task 23) MUST byte-agree on it; if they diverge,
   fix the rounding contract BEFORE Task 23, not after.
@@ -290,8 +308,10 @@ metric:"refusal_rate", decimals:4}` — runner reads ONLY the listed artefacts f
 
 **Interfaces:** `computeTierFacts(claim, {receiptFact, recomputeFact})` →
 `{proven_tier, support_quality, max_consequence_warranted}` implementing EXACTLY spec §2:
-tierR1 needs `method_summary_digest` present ∧ receipt valid ∧ `verdict==="reproduced"`;
-tierR2 needs tierR1-public-parts ∧ `withheld.length===0` ∧ `recomputeFact.matched===true`.
+tierR1 = tierR0 ∧ `method_summary_digest` present ∧ receipt valid ∧ `verdict==="reproduced"`;
+tierR2 = tierR0 ∧ `method_summary_digest` present ∧ `withheld.length===0` ∧
+`recomputeFact.matched===true` — **EXPLICIT: R2 does NOT require an R1 receipt** (the public
+fixture claim has none and must prove R2; assert this exact case).
 Table-driven test (8 rows): all three fixture claims → (R1, R2, R0); `not_reproduced` receipt → R0;
 receipt absent on controlled-declared → R0; recompute mismatch on public-declared → R1-if-receipt
 else R0; withheld nonempty blocks R2 even when recompute matches; `support_quality` follows tier.
@@ -312,7 +332,8 @@ CONSEQUENCE.index(max_consequence(proven_tier))` → 312. Cases: C2-on-R0 (the h
 - **Task 17 `policy.mjs` (314):** `evaluatePolicy(verdictTable, policy=DEFAULT_POLICY)`; DEFAULT is a
   no-op on any structurally-valid table (assert on the valid bundle); strict config
   `{threshold_crossing:"public"}` rejects the R1 CBRN claim → 314 with `policy_accepted:false`;
-  `policy_evaluated:true` always in result.
+  `policy_evaluated` is `true` ONLY when this check actually ran — an earlier failure preempts it
+  and the result carries `policy_evaluated:false, policy_accepted:null` (assert both states).
 
 ## Task 18 — `vsdCore.mjs`: the check-major walk + 315 wrapper (the stage's spine)
 
@@ -328,14 +349,19 @@ CONSEQUENCE.index(max_consequence(proven_tier))` → 312. Cases: C2-on-R0 (the h
 // completes the verdict_table for ALL claims (no forward pass past 313).
 ```
 
-315 fires when: any `public`-declared claim while `ctx.recomputeResult == null`; hostRegistry needed
-but ctx omits it entirely (vs present-but-unpinned = 308 — assert the distinction); internal throw in
-Safe. Result assembled EXACTLY per the Global-Constraints shape; `record_authentic` false iff raw ∈
-{300,301,302,303}; `attestation_valid = raw===0 || raw===314`; `inventory_census_verified` null on
-public tier; `policy_accepted` null when a pre-policy failure preempted it. Tests: the valid bundle →
-raw 0 both tiers; ONE tamper per raw code 300–315 end-to-end through Safe (16 cases, reusing module
-tampers); check-major order test (claim-2 fails 304 AND claim-1 fails 312 → raw 304); truthful-R0
-reachability (restricted+C0 bundle variant → raw 0, then strict policy → 314). Commit
+315 fires when: any `public`-declared claim while `ctx.recomputeResult == null` (a
+controlled-declared claim does NOT need the kernel — its evidence is the host receipt; Simurgh's
+own rerun is an R2 requirement only);
+`ctx.hostRegistry === undefined` (never supplied — vs a supplied-but-empty/unpinned registry = 308,
+assert the distinction BOTH ways); internal throw in Safe. Result assembled EXACTLY per the
+Global-Constraints shape; `record_authentic` false iff raw ∈ {300,301,302,303} — **and when it is
+false, `verdict_table = []`** (no downstream computation over an unauthenticated record; assert on
+a 301 tamper); `attestation_valid = raw===0 || raw===314`; `inventory_census_verified` null on
+public tier; `policy_evaluated` true ONLY when the policy check ran (false + `policy_accepted:null`
+when preempted — assert on any pre-policy failure). Tests: the valid bundle → raw 0 both tiers; ONE
+tamper per raw code 300–315 end-to-end through Safe (16 cases, reusing module tampers); check-major
+order test (claim-2 fails 304 AND claim-1 fails 312 → raw 304); truthful-R0 reachability
+(restricted+C0 bundle variant → raw 0, then strict policy → 314). Commit
 `feat(5h): vsdCore — check-major walk, fail-closed wrapper, result shape`.
 
 ## Task 19 — Projections (§6): `rightScalingDistance` / `inversionCensus` / `disclosureDebt`
@@ -356,10 +382,16 @@ builder reads its fixtures dir the same way — verified), fixed timestamps
 `{bundle, artefacts, pin, hostRegistry}`.
 `build-vsd-evidence.mjs` writes `docs/research/llm-shield/evidence/stage-5h/`
 (`vsd-attestation.json`, `claim-inventory.json`, `review-receipts.json`, `recompute-recipe.json`,
-`inventory-census.json`, `artefacts/eval-results.json`) + `stage5h/pin.json` +
-`stage5h/host-registry.json` OUTSIDE the evidence dir. **Add `.prettierignore` lines in this task.**
-Test: run builder twice into temp dirs → `cmp` every file byte-identical; verify evidence → raw 0
-both tiers. Commit `feat(5h): Lane A byte-stable evidence builder`.
+`inventory-census.json`) **plus `artefacts/<id>.json` for EVERY `present[]` artefact
+inventory-driven — iterate the bundle's artefact map, never a hardcoded filename list** (that
+covers `eval-results.json`, `redteam-summary.json`, `judge-rubric.json`, and the Task-12
+rounding-edge artefact; a hardcoded list here guarantees a 307/313 at verify) + `stage5h/pin.json`
+
+- `stage5h/host-registry.json` OUTSIDE the evidence dir. **Add `.prettierignore` lines in this
+  task.** Test: run builder twice into clean temp dirs → build a **sorted manifest** (path + sha256
+  per file) for each and assert manifest equality (catches added/omitted files that pairwise `cmp`
+  misses), then `git diff --exit-code` on the committed copy; verify evidence → raw 0 both tiers.
+  Commit `feat(5h): Lane A byte-stable evidence builder`.
 
 ## Task 21 — `node/verify-vsd-attestation.mjs` (orchestrator CLI)
 
@@ -374,12 +406,17 @@ asserts exit 0 with raw 0; on a tampered temp copy it asserts exit 1 with the ex
 ## Task 22 — Lane B ceremony (`laneb/`)
 
 `ceremony.mjs`: process-2 (spawned `node` child with ONLY the evidence dir + host ceremony key)
-blind-recomputes all six domain digests, re-verifies producer+attestation sigs, re-runs the recipe,
-recomputes per-claim `{proven_tier, support_quality, inverted}`, and signs a
-`simurgh.vsd.review_receipt.v1` for the controlled claim — **same species as the bundle receipt**
-(spec §3: R1 is a rerun that happened). `run-laneb-review-ceremony.mjs` orchestrates two processes,
-writes `evidence/stage-5h/laneb/ceremony-transcript.json` + receipt, asserts the ceremony receipt's
-`recomputed_output_digest` equals the bundle receipt's. Deterministic; reproduce-safe. Commit
+blind-recomputes all six domain digests, re-verifies producer+attestation sigs, re-runs **BOTH
+committed recipes** (the controlled claim's and the public claim's — each claim's OWN recipe,
+never borrowed: the reviewer-caught evidence-cosplay trap), recomputes per-claim
+`{proven_tier, support_quality, inverted}`, and signs a `simurgh.vsd.review_receipt.v1` **for the
+controlled claim over ITS recipe output** — same species as the bundle receipt (spec §3: R1 is a
+rerun that happened); the public claim's rerun is recorded in the transcript as a cross-check
+(its digest must equal the claim's `committed_output_digest`), not a receipt.
+`run-laneb-review-ceremony.mjs` orchestrates two processes, writes
+`evidence/stage-5h/laneb/ceremony-transcript.json` + receipt, asserts the ceremony receipt's
+`recomputed_output_digest` equals the bundle receipt's (both are reruns of the SAME controlled
+recipe). Deterministic; reproduce-safe. Commit
 `feat(5h): Lane B two-process blind review ceremony`.
 
 ## Task 23 — Python parity (`python/vsd_parity.py`)
@@ -444,19 +481,31 @@ review host for THEIR claim — honest note in evidence: host independent of pro
 verifier), and (2) counter-signs an R1 receipt as REVIEW HOST over OUR committed Lane-A claim
 (rerunning our recipe from the pack) — THIS receipt is the real
 `secure_review_host_independence_deferred` payment. Both requested; either alone seals honestly;
-declines recorded, never re-rolled. C-2 (real published risk-report claim) is assembled by US, verify-only,
+declines recorded, never re-rolled. **Campaign outcome is fail-closed** (reviewer catch — 5G's
+if-exists-skip was a latent softness): add `core/campaignOutcome.mjs` (5G semantics mirrored: only
+`status:"completed"` may carry disclosure evidence; non-completed with evidence throws) and commit
+`evidence/stage-5h/lanec/campaign-outcome.json` with
+`status ∈ {completed, declined, no_show, environment_failed}` — written honestly when the campaign
+resolves. C-2 (real published risk-report claim) is assembled by US, verify-only,
 provider-agnostic wording — staged for closeout review (spec gauntlet item 14). Commit
-`feat(5h): Lane C real-disclosure ingest + outbound pack scaffolding`.
+`feat(5h): Lane C real-disclosure ingest + fail-closed campaign outcome + outbound pack scaffolding`.
 
 ## Task 28 — Reproduce script + audit sweeps
 
 `scripts/reproduce-llm-shield-stage5h.sh` — 8 steps, EVERY gate two-line (5E lesson), mirroring the
 5G script: (1) stage5h unit suite; (2) exit-code probe hygiene; (3) K7 e2e; (4) public verify raw 0;
-(5) audit verify raw 0; (5b) real-disclosure verify-only IF dir exists; (6) Lane B ceremony; (7)
-python parity (skip-guarded); (8) byte-stability rebuild+cmp. Then: run `bash
+(5) audit verify raw 0; (5b) **Lane C fail-closed gate** (reviewer catch — NOT if-exists-skip):
+`lanec/campaign-outcome.json` MUST exist or the script fails; `status:"completed"` → the
+real-disclosure dir must exist AND verify raw 0; any other status → the dir must be ABSENT (a
+non-completed campaign carrying completed evidence fails); (6) Lane B ceremony; (7) python parity
+(skip-guarded); (8) byte-stability rebuild + sorted-manifest compare. **CI wiring in this task**
+(reviewer catch, verified: `scripts/check-e2e.sh` carries an explicit per-stage reproduce
+registry): add the `"Stage 5H VSD|scripts/reproduce-llm-shield-stage5h.sh"` entry to
+`check-e2e.sh`, and confirm `scripts/check.sh` reaches the stage5h unit tests via `npm test` (it
+runs the unit suite — verify stage5h globs are included, not assumed). Then: run `bash
 scripts/reproduce-llm-shield-stage5g.sh` AND the 4Y–5F reproduce scripts unchanged-green (sealed
 history), `bash scripts/check.sh` clean, `npm run format:check` (NEVER a subset — 4V lesson).
-Commit `feat(5h): fail-closed reproduce script`.
+Commit `feat(5h): fail-closed reproduce script + CI wiring`.
 
 ## Task 29 — Final gate: full E2E + docs-accuracy pass (plan ENDS here by standing rule)
 
@@ -465,10 +514,19 @@ Commit `feat(5h): fail-closed reproduce script`.
    result shape, domain list, fixture claim table) — fix the DOC when drift is editorial, fix the
    CODE only for real defects; never loosen a check.
 3. Evidence committed; `.prettierignore` verified BEFORE `npm run format:check`.
-4. PR `stage-5h-vsd` with honest scope section (what is executed vs deferred), no attribution
-   trailers. CI green → rebase-merge → reset local main → tag `v2.43.0-stage-5h-vsd` at reproduced
-   HEAD → reproduce ON MAIN → closeout doc (re-scored scorecard; gauntlet item 14 resolved) → README
-   banner → memory + Zurvan (dupe-search first; decision ADR; NEVER push Zurvan).
+4. **Docs BEFORE tag** (reviewer catch + the 5G lesson — the tagged commit must CONTAIN its own
+   closeout and banner): write the closeout doc (re-scored scorecard; gauntlet item 14 resolved;
+   post-release slots as explicit TO-CONFIRM placeholders) + README banner ON THE BRANCH → commit.
+5. PR `stage-5h-vsd` with honest scope section (what is executed vs deferred), no attribution
+   trailers → CI green → rebase-merge → reset local main to origin/main.
+6. Reproduce ON MAIN under Node 26 (ALL PASS) → tag `v2.43.0-stage-5h-vsd` at the reproduced HEAD
+   (verify `git rev-parse <tag>^{commit}` == reproduced HEAD) → push the tag → create the GitHub
+   Release → **verify with `gh release list` that the Release exists and is marked Latest** (a git
+   tag is NOT a GitHub Release — the 5C lesson; `gh release create` has exited 1 on a
+   already-created Release before, so check the list, not the command's exit code).
+7. Fill the closeout TO-CONFIRM slots (tag==HEAD, reproduce-on-main, Release Latest) in a small
+   docs commit on main → memory write + Zurvan (dupe-search first; decision ADR; NEVER push
+   Zurvan).
 
 ## Test-count budget (honest estimate)
 

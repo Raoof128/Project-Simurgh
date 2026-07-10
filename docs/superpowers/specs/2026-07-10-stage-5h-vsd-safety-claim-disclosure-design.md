@@ -154,14 +154,19 @@ the claim's domain-digested content and get no separator of their own).
                  withheld[]: { artefact_id, justification_type ∈
                                {safety_hazard, third_party_confidential, security_sensitive},
                                available_at_tier, reason } },   ← Law 3: enumerate or fail
-               recompute?   { recipe_digest, committed_output_digest },   (required iff tier=public)
+               recompute?   { recipe_digest, committed_output_digest },   (required iff tier ≥ controlled;
+                              recipe_digest = domainDigest(DOMAIN.recompute_recipe, recipe) —
+                              the domain is consumed here, never artifactDigest)
                restriction? { reason, right_scaling_note } } }  (required iff tier=restricted)
    wrapper { …content, inventory_digest, producer_signature }
 
 ② simurgh.vsd.review_receipt.v1           ← a SECURE-REVIEW HOST signs (one per controlled claim)
    content { claim_digest, inventory_digest, host_identity_digest, host_key_fingerprint,
-             recomputed_output_digest, verdict ∈ {reproduced, not_reproduced} }
+             recomputed_output_digest,        ← the HOST's rerun of THAT claim's committed recipe
+             verdict ∈ {reproduced, not_reproduced} }
    wrapper { …content, receipt_digest, host_signature }
+   (a receipt attests a rerun of the claim's OWN recipe — no claim may borrow another claim's
+    recompute evidence)
 
 ③ simurgh.vsd.disclosure_attestation.v1   ← SIMURGH signs the attestation-of-record
    { claim_inventory: ①, review_receipts[]: ②,
@@ -200,7 +205,7 @@ fail 300.
 | 305 | `VSD_ARTEFACT_UNACCOUNTED`                   | a referenced `artefact_id` is neither `present[]` nor `withheld[]` (Law 3 — Completeness)                                                                                                            | core/artefactLedger.mjs      |
 | 306 | `VSD_REDACTION_UNTYPED`                      | a `withheld[]` entry lacks typed justification / `available_at_tier`                                                                                                                                 | core/artefactLedger.mjs      |
 | 307 | `VSD_ARTEFACT_DIGEST_MISMATCH`               | a `present[]` artefact's recomputed digest ≠ committed                                                                                                                                               | core/artefactLedger.mjs      |
-| 308 | `VSD_REVIEW_HOST_UNPINNED`                   | controlled evidence present/required but host registry absent, or host not in it (fail-closed)                                                                                                       | core/reviewReceipt.mjs       |
+| 308 | `VSD_REVIEW_HOST_UNPINNED`                   | controlled evidence present/required and the SUPPLIED registry is empty or lacks the host (registry not supplied at all = environment failure → 315, never 308)                                      | core/reviewReceipt.mjs       |
 | 309 | `VSD_REVIEW_RECEIPT_INVALID`                 | host sig over ② fails; receipt's `claim_digest`/`inventory_digest` don't match                                                                                                                       | core/reviewReceipt.mjs       |
 | 310 | `VSD_RECOMPUTE_RECIPE_INVALID`               | recipe-integrity: recomputed `recipe_digest` ≠ committed; recipe grammar violated; recipe reads an artefact not in its declared `present[]` inputs; constant-output form (Law 2's anti-gaming floor) | core/recompute.mjs           |
 | 311 | `VSD_TIER_OVERCLAIM`                         | `declared_tier` > `proven_tier` (incl. `public` declared + honest recompute-output mismatch)                                                                                                         | core/tierOverclaim.mjs       |
@@ -249,8 +254,11 @@ tierR0 = claim well-formed ∧ scope bound ∧ artefact ledger complete (Laws 3+
          every tier; typed redactions are floor too — an untyped redaction is 306, never a
          tier discriminator)
 tierR1 = tierR0 ∧ method_summary_digest present ∧ review receipt valid under pinned host
-              ∧ receipt.verdict == reproduced
-tierR2 = tierR1-public-parts ∧ withheld[] EMPTY ∧ offline recompute byte-matches committed output
+              ∧ receipt.verdict == reproduced      (the receipt reruns THIS claim's recipe)
+tierR2 = tierR0 ∧ method_summary_digest present ∧ withheld[] EMPTY
+              ∧ offline recompute byte-matches committed output
+         (EXPLICIT: R2 does NOT require an R1 receipt — Simurgh's own offline rerun outranks a
+          host's; the public fixture claim carries no receipt and proves R2)
 proven_tier = highest satisfied
 support_quality = {R0: descriptive, R1: qualified, R2: full}   (computed, reported, signed)
 max_consequence = {R0: contextual, R1: threshold_crossing, R2: threshold_crossing}
@@ -258,8 +266,10 @@ declared_tier > proven_tier → 311 ; declared_consequence > max_consequence(pro
 ```
 
 Result shape: `{raw, tier, record_authentic (¬{300,301,302,303}), attestation_valid (raw∈{0,314}),
-verdict_table, inventory_census_verified (null on public tier), policy_evaluated,
-policy_accepted (null when bypassed/preempted), trust_reason}`.
+verdict_table, inventory_census_verified (null on public tier), policy_evaluated (true ONLY when
+the policy check actually ran; false when an earlier failure preempted it), policy_accepted (null
+when bypassed/preempted), trust_reason}`. When `record_authentic` is false (raw ∈ {300–303}),
+`verdict_table = []` — no downstream computation runs over an unauthenticated record.
 
 ---
 
@@ -311,7 +321,12 @@ policy_accepted (null when bypassed/preempted), trust_reason}`.
   as a VSD inventory at its honest tier — withheld artefacts enumerated from the report's own
   redaction notices — demonstrating the inversion detector on real-world material. Verify-only in
   reproduce; both outcomes sealed (a detected inversion is a successful demonstration, not an
-  accusation — **"a tier is not a verdict on truth"**).
+  accusation — **"a tier is not a verdict on truth"**). **Lane C absence is fail-closed** (harder
+  than 5G's if-exists-skip, a latent softness this stage repairs): a committed
+  `campaign-outcome.json` with `status ∈ {completed, declined, no_show, environment_failed}` is
+  REQUIRED — `completed` requires the real-disclosure dir and a raw-0 verify; any other status
+  forbids completed evidence; a missing record fails the reproduce (no silent absence; 5G's
+  campaignOutcome semantics reused).
 
 ### Attestation tiers (two-tier)
 
@@ -337,8 +352,9 @@ independent stdlib-only reimplementation, byte-agreement asserted in K7.
 ### Byte-stability
 
 Deterministic builder (fixed nonces, fixed synthetic timestamps, sorted claim order); evidence
-built twice + `cmp` in reproduce; evidence dir prettier-ignored; `pin.json` +
-`host-registry.json` OUTSIDE the evidence dir. 4H digest goldens regenerated under Node 26
+built twice into clean dirs and compared by **sorted manifest** (path + sha256 per file — catches
+added/omitted files that pairwise `cmp` misses) plus `git diff --exit-code` on the committed
+copy; evidence dir prettier-ignored; `pin.json` + `host-registry.json` OUTSIDE the evidence dir. 4H digest goldens regenerated under Node 26
 (codes 300–315 ripple BOTH `exit-map.json` files + the exitWrapper inline map — known 5F/5G
 gotcha, budgeted).
 
@@ -395,7 +411,9 @@ Anthropic review, adoption, or endorsement._
   `support_quality`) · `core/tierOverclaim.mjs` (311) · `core/inversion.mjs` (312) ·
   `core/census.mjs` (313) · `core/policy.mjs` (314) · `core/rightScalingDistance.mjs` (§6-B
   projection) · `core/inversionCensus.mjs` (§6-A projection) · `core/disclosureDebt.mjs` (§6-E
-  projection) · `core/vsdCore.mjs` (315 wrapper; **PURE** — kernel in orchestrator)
+  projection) · `core/campaignOutcome.mjs` (Lane C outcome record; no raw code — throws, 5G
+  semantics: only `completed` may carry disclosure evidence) · `core/vsdCore.mjs` (315 wrapper;
+  **PURE** — kernel in orchestrator)
 - `node/recomputeKernelRunner.mjs` · `node/buildBundle.mjs` (deterministic synthetic) ·
   `node/build-vsd-evidence.mjs` · `node/verify-vsd-attestation.mjs` (orchestrator;
   `process.exitCode = raw===0 ? 0 : 1`)
