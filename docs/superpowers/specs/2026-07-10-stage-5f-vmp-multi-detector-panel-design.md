@@ -62,8 +62,11 @@ forget a member._
 6. **No Gerrymandered Universe** _(beast invention ①, the pre-commit twin of Law 1)._ The panel plan
    binds a precommitted **detector universe** (a registry of candidate detector IDs); the verifier
    checks `roster ⊆ universe`, and the attestation publishes the **Omission Lower Bound** =
-   `|universe| − |panel|`, the signed **silence surface**. You may still draw a small honest panel —
-   but what you left on the table is now a number, not a shrug.
+   `|universe| − |panel|`, the signed **silence surface**. **Honest scope (signed):** this catches
+   omission _within a committed universe_; it does **not** force the universe to be representative —
+   a producer who declares `universe = roster` truthfully gets bound 0, so the number is only
+   informative relative to a universe the producer had a reason (or a mandate) to declare. Universe
+   representativeness itself is minted `universe_completeness_deferred`, not claimed here.
 
 **Signed claim-rail (non-claim, not a verifier law):** **Disagreement Is Not Correctness.** Agreement,
 disagreement, abstention, and failure are reported, never converted into a panel-safety verdict.
@@ -491,22 +494,22 @@ the standing 10 lever); ship VPC contest (Constitution).
 
 **Core (pure, deterministic) — `tools/simurgh-attestation/stage5f/`**
 
-| Module                   | Responsibility                                                                                                                                                                 | Code     |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------- |
-| `constants.mjs`          | frozen `VMP_RAW_CODES` {268→282} (stage-local single source; registered in global `exitCodeProbeHygiene.test.js`), `DECISION_SEMANTICS` + `CELL_STATUS` enums, precision (4dp) | —        |
-| `core/schema.mjs`        | schema id + exact-key/unknown-key + aggregate-field rejection                                                                                                                  | 268      |
-| `core/signature.mjs`     | external-pinned fingerprint first, then Ed25519 (embedded key informational only)                                                                                              | 269      |
-| `core/chain.mjs`         | linear chain: positions `0..N`, precommit@0, closeout, `previous_record_digest` linkage, single terminal head                                                                  | 270      |
-| `core/plan.mjs`          | `panel_plan_digest` over 5 subdigests + schema ver; roster integrity; **`roster ⊆ universe`** + universe binding (Law 6)                                                       | 271      |
-| `core/corpus.mjs`        | `corpus_digest`, case + `case_class` binding                                                                                                                                   | 272      |
-| `core/matrix.mjs`        | cell-matrix bijection; status-union legality                                                                                                                                   | 273, 274 |
-| `core/applicability.mjs` | applicability-matrix + capability-profile entailment                                                                                                                           | 275      |
-| `core/adapter.mjs`       | pure structural binding of `detector_input_digest` + adapter/tokenizer/truncation to plan (consumes replay result)                                                             | 276      |
-| `core/verdict.mjs`       | closed registry: `binary_softmax` (scaled-int compare) + `categorical_generation` (pinned parser)                                                                              | 277      |
-| `core/bootstrap.mjs`     | pure — validates pin records + runner results                                                                                                                                  | 278      |
-| `core/completeness.mjs`  | representation/evaluation recompute + histogram; **`coverage` recompute (omission_lower_bound + sole_catcher_cases, inventions ①/③)**; strict policy gate                      | 279, 281 |
-| `core/census.mjs`        | audit bijection (all statuses ↔ all terminal records; every attempt → one terminal)                                                                                            | 280      |
-| `core/vmpCore.mjs`       | evaluator — frozen order 268→282; `evaluatePanel`/`evaluatePanelSafe`; receives impure runner results via orchestration, never trusts a decorative `recorded_raw`              | 282      |
+| Module                   | Responsibility                                                                                                                                                                                                                                                                                       | Code     |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `constants.mjs`          | `VMP_SCHEMAS`, `DECISION_SEMANTICS` + `CELL_STATUS` enums, `VMP_RESERVED_SLOTS`, `scaleDecimal`, precision (4dp); **re-exports** the named codes from the global ledger `stage4h/exitCodes.mjs` (where `VMP_RAW_CODES` + `VMP_CHECK_ORDER`/`AUDIT`/`PUBLIC` + `RUN_LEVEL_BY_RAW` live, mirroring 5E) | —        |
+| `core/schema.mjs`        | schema id + exact-key/unknown-key + aggregate-field rejection                                                                                                                                                                                                                                        | 268      |
+| `core/signature.mjs`     | external-pinned fingerprint first, then Ed25519 (embedded key informational only)                                                                                                                                                                                                                    | 269      |
+| `core/chain.mjs`         | linear chain: positions `0..N`, precommit@0, closeout, `previous_record_digest` linkage, single terminal head                                                                                                                                                                                        | 270      |
+| `core/plan.mjs`          | `panel_plan_digest` over 5 subdigests + schema ver; roster integrity; **`roster ⊆ universe`** + universe binding (Law 6)                                                                                                                                                                             | 271      |
+| `core/corpus.mjs`        | `corpus_digest`, case + `case_class` binding                                                                                                                                                                                                                                                         | 272      |
+| `core/matrix.mjs`        | cell-matrix bijection; status-union legality                                                                                                                                                                                                                                                         | 273, 274 |
+| `core/applicability.mjs` | applicability-matrix + capability-profile entailment                                                                                                                                                                                                                                                 | 275      |
+| `core/adapter.mjs`       | pure structural binding of `detector_input_digest` + adapter/tokenizer/truncation to plan (consumes replay result)                                                                                                                                                                                   | 276      |
+| `core/verdict.mjs`       | closed registry: `binary_softmax` (scaled-int compare) + `categorical_generation` (pinned parser)                                                                                                                                                                                                    | 277      |
+| `core/bootstrap.mjs`     | pure — validates pin records + runner results                                                                                                                                                                                                                                                        | 278      |
+| `core/completeness.mjs`  | representation/evaluation recompute + histogram; **`coverage` recompute (omission_lower_bound + sole_catcher_cases, inventions ①/③)**; strict policy gate                                                                                                                                            | 279, 281 |
+| `core/census.mjs`        | audit bijection (all statuses ↔ all terminal records; every attempt → one terminal)                                                                                                                                                                                                                  | 280      |
+| `core/vmpCore.mjs`       | evaluator — frozen order 268→282; `evaluatePanel`/`evaluatePanelSafe`; receives impure runner results via orchestration, never trusts a decorative `recorded_raw`                                                                                                                                    | 282      |
 
 **Node CLI — `stage5f/node/`:** `build-vmp-evidence.mjs` (byte-stable builder), `greenBundle.mjs`
 (Ed25519 sign, external pin), `verify-vmp-attestation.mjs` (strict default → 281; `--attestation-only`;
@@ -638,8 +641,9 @@ becomes contestable by re-running one cell (4V VDP "contest-as-subpoena" lineage
 
 **TDD handoff contract.** The plan is written for a zero-context engineer: file map → tasks, each a
 failing-test-first cycle with complete code and exact commands. **Global Constraints copied verbatim**
-into the plan header: schema `simurgh.vmp.panel_attestation.v1`; frozen `VMP_RAW_CODES` 268→282
-(registered in `exitCodeProbeHygiene.test.js`); `panel_plan_digest = hash(schema_version + roster +
+into the plan header: schema `simurgh.vmp.panel_attestation.v1`; named `VMP_RAW_CODES` 268→282 defined
+in the global ledger `stage4h/exitCodes.mjs` (with `VMP_CHECK_ORDER`/`AUDIT`/`PUBLIC` + `RUN_LEVEL_BY_RAW`,
+mirroring 5E) and guarded by `exitCodeProbeHygiene.test.js`; `panel_plan_digest = hash(schema_version + roster +
 corpus + applicability + adapter_manifest + universe)` with `roster ⊆ universe` (Law 6); **acyclic Lane
 B order** (result_chain_head → receipt →
 closeout → attestation); decimal-string scores + scaled-int comparison; **Node 26**; the
