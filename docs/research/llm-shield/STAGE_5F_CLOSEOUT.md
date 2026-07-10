@@ -55,6 +55,14 @@ Plus the zero-code-path projections: `evaluatedObligationFraction`, the Cherry-P
    detectors are still not grounded. Lane C on a GPU droplet — **independent-party evidence generation** —
    remains the → 10 Frontier lever. Frontier is held pending that run, not downgraded.
 
+2. **Offline pinned weights ≠ a hosted endpoint** (carries `live_endpoint_attestation_deferred`).
+3. **The Omission Lower Bound only bites within a committed universe** — a producer who declares
+   `universe = roster` truthfully gets bound 0. Universe representativeness is minted
+   `universe_completeness_deferred`.
+4. **Two-process/two-key ≠ independent-party verification.**
+5. **Panel completeness is not detection completeness**; heterogeneous semantics are declared, never
+   reconciled into an aggregate.
+
 ## Independent-party reproduction (post-pack, 2026-07-10)
 
 An **unaffiliated team ran the reviewer pack on their own hardware** — a local machine (Node v22.16.0)
@@ -65,10 +73,7 @@ pass means their Node-26 rebuild reproduced our committed digests exactly on for
 contract, Lane B ceremony, JS↔Python parity, and byte-stability all hold off our machines. It is **NOT
 independent-party evidence generation**: no detector was run (no GPU), so it does not move Frontier. The
 run surfaced **no defects** (the pack shipped with the 5E fail-closed + full-dependency lessons already
-baked in). 2. **Offline pinned weights ≠ a hosted endpoint** (carries `live_endpoint_attestation_deferred`). 3. **The Omission Lower Bound only bites within a committed universe** — a producer who declares
-`universe = roster` truthfully gets bound 0. Universe representativeness is minted
-`universe_completeness_deferred`. 4. **Two-process/two-key ≠ independent-party verification.** 5. **Panel completeness is not detection completeness**; heterogeneous semantics are declared, never
-reconciled into an aggregate.
+baked in).
 
 ## Socket ledger
 
