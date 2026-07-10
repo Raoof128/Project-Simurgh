@@ -1,0 +1,5 @@
+{
+  "schema_version": "0.3",
+  "fulcio_root_fingerprints": [],
+  "note": "rung-2 Sigstore roots go here; the Lane-A synthetic evidence is rung-1 (no anchor)."
+}

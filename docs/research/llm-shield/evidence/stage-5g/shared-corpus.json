@@ -1,0 +1,9 @@
+{
+  "schema": "simurgh.vfc.corpus.v1",
+  "cases": [
+    {
+      "case_id": "c1",
+      "source_text_digest": "sha256:dd4840e6524ed7b76350d1edb512349b4c80799c78927d891fd91e66c8448e84"
+    }
+  ]
+}
