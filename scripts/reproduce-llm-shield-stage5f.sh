@@ -27,11 +27,19 @@ echo "-- 4/5 verify committed evidence — audit tier (census bijection) -> raw 
 node "$S/node/verify-vmp-attestation.mjs" --tier audit >/dev/null
 echo "   audit verify OK"
 
-echo "-- 5/6 Lane B two-process/two-key blind recompute ceremony"
+echo "-- 5/7 Lane B two-process/two-key blind recompute ceremony"
 node "$S/laneb/run-laneb-recompute-ceremony.mjs" >/dev/null
 echo "   Lane B corroborated"
 
-echo "-- 6/6 byte-stability: rebuild the evidence pack in place and diff"
+echo "-- 6/7 JS<->Python digest+verdict parity (if python3 present; Node authoritative)"
+if command -v python3 >/dev/null 2>&1; then
+  python3 "$S/python/vmp_parity.py" >/dev/null
+  echo "   Python parity corroborated"
+else
+  echo "   python3 absent — parity skipped"
+fi
+
+echo "-- 7/7 byte-stability: rebuild the evidence pack in place and diff"
 node "$S/node/build-vmp-evidence.mjs" >/dev/null
 git diff --quiet -- docs/research/llm-shield/evidence/stage-5f "$S/pin.json"
 echo "   byte-stable (no diff)"
