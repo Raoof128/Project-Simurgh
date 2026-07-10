@@ -56,10 +56,12 @@ In one sentence: **Simurgh gives an agentic system a verifiable receipt, not a p
 > (self-grading failures made impossible), and a standalone **foreign-capture pack** an external actor runs.
 > **Honest to its limits — and this one is load-bearing:** VFC is **not category-creating** (OVERT already
 > ships tiered independent-attestation levels + a pinned profile); it is the executable, byte-reproducible,
-> Lean-modelled _per-capture instantiation_. The committed evidence is a **synthetic** Lane-A demonstration;
-> a **real foreign capture by a separately-reported external actor is the pending → higher lever**, and the
-> "foreign" claim is substantiated only once that actor runs the pack — otherwise it ships as
-> _challenge-bound operator-separated capture_. Rung-2 proves the key is _externally anchored_, **never**
+> Lean-modelled _per-capture instantiation_. **Real foreign capture EXECUTED by an independent party** —
+> an unaffiliated team ran the pack on their own machines with their own keys (local + droplet, two runs
+> agree), and their capture verifies `raw 0` both tiers with the producer key **cryptographically distinct
+> from the verifier key**: the first evidence Simurgh did not generate. The CI-byte-stable evidence is a
+> synthetic demo (the real capture is verify-only, not rebuildable — we don't hold the foreign key); real
+> keyless-Sigstore rung-2 remains the → 9.5 lever. Rung-2 proves the key is _externally anchored_, **never**
 > human/organisational non-collusion.
 >
 > <details><summary>Prior — Stage 5F · Verifiable Multi-detector Panel Attestation (<code>v2.41.0-stage-5f-vmp</code>)</summary>

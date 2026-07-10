@@ -26,8 +26,9 @@ carries a typed producer identity and verifier identity, and the verifier comput
   so a truthful rung-0 record is reachable and rejected only by **policy** (298), never mislabelled as
   malformed. Env/kernel-unavailable is **299** (own family), never misreported as tampering.
 - **Lanes:** A (byte-stable synthetic evidence, verifies raw 0 public+audit), B (blind-recompute sidecar
-  ceremony), C (real foreign capture — **pending**, see limitations). **JS↔Python parity**, a **portable
-  browser verifier** (raw:null, CSP no-egress), **10 Lean theorems + 1 lemma** (zero `sorry`).
+  ceremony), **C (real foreign capture — EXECUTED by an independent party, verify raw 0 both tiers, see
+  below)**. **JS↔Python parity**, a **portable browser verifier** (raw:null, CSP no-egress), **10 Lean
+  theorems + 1 lemma** (zero `sorry`).
 - **Beast inventions:** A Anchored-Subject Diversity Index (surfaces producer monoculture), B Anchoring
   Trilemma (**signed design observation, not a theorem**), C Homework Corpus (289 / 296 / retained_auditor),
   D Reflexive Mirror Capture (staged for Lane C).
@@ -35,6 +36,22 @@ carries a typed producer identity and verifier identity, and the verifier comput
 **Tests:** 105 stage5g (unit + e2e K7) + the ledger ripple (283–299 additive, both `exit-map.json`
 regenerated under Node 26, exitWrapper map updated). Reproduce script: **ALL PASS** under Node 26; the
 prior 5F reproduce still passes (sealed history undisturbed).
+
+## Real independent-party foreign capture (executed 2026-07-10)
+
+**An unaffiliated team** (the same group that reproduced 5F) ran `foreign-capture-pack/` on **their own
+machines with their own Ed25519 keys** — a local host **and** the droplet `170.64.167.95` — over the
+Simurgh-issued challenge. Both runs completed and **agree** (identical `detector_snapshot_digest`,
+`corpus_digest`, `challenge_record_digest`, and per-case labels: `c1 benign`, `c2 malicious` — PG2 flags
+the injection). We ingested their returned `capture-package.json` (`lanec/build-real-evidence.mjs`) into a
+rung-1 attestation that **verifies raw 0 public + audit**, with the **producer key
+(`sha256:0d14cafc…`) cryptographically distinct from the Simurgh verifier key (`sha256:7105485f…`)**.
+Evidence: `docs/research/llm-shield/evidence/stage-5g/real-capture/` (verify-only in reproduce — **not
+rebuildable by us**, since we do not hold the foreign key; that non-possession is the point). This is the
+first evidence Simurgh **did not generate** — genuine independent-party **evidence generation**, the → 10
+lever, at **rung-1**. Honest operational note: the droplet has ~960 MB RAM/no swap and OOM-killed the first
+attempt; the team added a temporary 2 GB swap, reran, and removed it (left the droplet as found). Rung-2
+(real keyless Sigstore) remains pending.
 
 ## Positioning (the honest statement of record)
 
@@ -49,13 +66,11 @@ equivalence to their assurance levels or receipt models (`overt_vfc_crosswalk_de
 
 ## Signed limitations (admit irregularity over overclaim)
 
-1. **The real foreign capture is NOT executed.** The committed evidence is a **synthetic** Lane-A
-   demonstration built from fixture keys. The **"foreign" claim requires a `completed` rung-1 capture by a
-   separately-reported external actor** who controls the producer key and environment (the standalone
-   `foreign-capture-pack/` is ready for them). A second machine run by the same operator is **not** a
-   foreign producer — until the external run lands, the honest title is **"challenge-bound
-   operator-separated capture,"** and _foreign / independent-party_ is not claimed. This is the load-bearing
-   pending lever (`reflexive_foreign_capture_execution_deferred`).
+1. **The real foreign capture IS executed** by an independent party (see the section above), verify raw 0
+   both tiers, producer key distinct from the verifier — so the **"foreign" claim is substantiated at
+   rung-1**. Two remaining honesty bounds: the CI-byte-stable Lane-A evidence is still a **synthetic**
+   demonstration (the real capture is verify-only, not rebuildable by us); and the **verifier** identity is
+   a committed fixture key (the _producer_ is genuinely external, which is what rung-1 separation requires).
 2. **Rung-2 real keyless Sigstore is not executed** — v1 proves the rung-2 verifier on offline fixtures
    (`real_sigstore_anchor_execution_deferred`).
 3. **Rung-2 proves the key is bound to an external subject, not human/organisational non-collusion**
@@ -76,12 +91,12 @@ equivalence to their assurance levels or receipt models (`overt_vfc_crosswalk_de
 
 ## Four-axis scorecard — re-scored at closeout
 
-| Axis               | Spec-time | Closeout | Why the closeout value                                                                                                                                                               |
-| ------------------ | --------: | -------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Novelty            |       8.7 |  **8.7** | executable + Lean + parity + browser instantiation shipped; OVERT remains the acknowledged neighbour (not category creation)                                                         |
-| Frontier           |       8.3 |  **8.0** | ALL lanes + the verifier proven on synthetic evidence, but the **real foreign capture is NOT executed** — the headline claim is pending an external actor (honest downgrade, cf. 5A) |
-| Good-for-Anthropic |       8.8 |  **8.8** | self-serve verifier + ready foreign-capture pack; no external pilot has run it; OVERT/CAP-SRP crosswalk pending                                                                      |
-| Constitution       |       9.3 |  **9.3** | mechanises producer≠verifier with typed honesty; strict defaults + signed non-claims shipped; the honest-title rule is enforced                                                      |
+| Axis               | Spec-time | Closeout | Why the closeout value                                                                                                                                                                                                      |
+| ------------------ | --------: | -------: | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Novelty            |       8.7 |  **8.7** | executable + Lean + parity + browser instantiation shipped; OVERT remains the acknowledged neighbour (not category creation)                                                                                                |
+| Frontier           |       8.3 |  **9.3** | **real independent-party foreign capture EXECUTED** (unaffiliated team, own keys, local + droplet, two runs agree, verify raw 0) — the named → 10 lever landed at rung-1; short of 9.5 only on real keyless-Sigstore rung-2 |
+| Good-for-Anthropic |       8.8 |  **8.8** | self-serve verifier + ready foreign-capture pack; no external pilot has run it; OVERT/CAP-SRP crosswalk pending                                                                                                             |
+| Constitution       |       9.3 |  **9.3** | mechanises producer≠verifier with typed honesty; strict defaults + signed non-claims shipped; the honest-title rule is enforced                                                                                             |
 
 _"Good-for-Anthropic" measures potential usefulness to assurance teams; it does not imply Anthropic
 review, adoption, or endorsement._
@@ -94,6 +109,7 @@ review, adoption, or endorsement._
 
 ## Next
 
-An external actor runs `foreign-capture-pack/` for the real rung-1 capture (resolves the title + moves
-Frontier). Then **VPC** (panel/anchor contest — pays `producer_affiliation_deferred`) and **VUC**
-(external universe commitment), completing the External Accountability arc; then the penciled VML/VDE.
+The real rung-1 foreign capture is **done** (above). Remaining lever: **real keyless-Sigstore rung-2**
+(`real_sigstore_anchor_execution_deferred`). Then **VPC** (panel/anchor contest — pays
+`producer_affiliation_deferred`) and **VUC** (external universe commitment), completing the External
+Accountability arc; then the penciled VML/VDE.
