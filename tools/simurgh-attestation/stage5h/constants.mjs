@@ -91,6 +91,7 @@ export const JUSTIFICATION_TYPES = Object.freeze([
 
 export const CAMPAIGN_STATUS = Object.freeze([
   "completed",
+  "pending", // outbound pack prepared; awaiting an independent-party run (honest not-yet-done state)
   "declined",
   "no_show",
   "environment_failed",
