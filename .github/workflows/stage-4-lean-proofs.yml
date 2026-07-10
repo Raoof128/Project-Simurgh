@@ -47,3 +47,5 @@ jobs:
           ! grep -REn "\bsorry\b|\badmit\b" proofs/stage5d
           lean proofs/stage5e/DeployedDetector.lean
           ! grep -REn "\bsorry\b|\badmit\b" proofs/stage5e
+          lean proofs/stage5f/PanelCompleteness.lean
+          ! grep -REn "\bsorry\b|\badmit\b" proofs/stage5f
