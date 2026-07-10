@@ -114,11 +114,11 @@ lexical-not-semantic seam (inherited on `claim_text_digest`). **Mints:**
 _"Good-for-Anthropic" measures potential usefulness to assurance teams; it does not imply Anthropic
 review, adoption, or endorsement._
 
-## Post-release confirmations (TO-CONFIRM after tag)
+## Post-release confirmations (2026-07-10)
 
-- reproduce-on-main (Node 26): **TO-CONFIRM**
-- tag commit == reproduced HEAD: **TO-CONFIRM**
-- GitHub Release published + marked Latest: **TO-CONFIRM**
+- reproduce-on-main (Node 26): **ALL PASS** (incl. Lane C completed-campaign gate + byte-stability).
+- tag commit == reproduced HEAD: **MATCH** — `v2.43.0-stage-5h-vsd` @ `f0b0ae52c2fe9b02506e12ee773f7affd1897cbc`.
+- GitHub Release published + marked **Latest**: **CONFIRMED** (verified via `gh release list`).
 
 ## Next
 
