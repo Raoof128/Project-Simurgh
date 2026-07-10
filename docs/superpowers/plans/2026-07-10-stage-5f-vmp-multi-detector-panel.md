@@ -58,32 +58,27 @@ a private key into the evidence dir (asserted in Task 16 + Task 24).
 
 ## Task 1 — Scaffold + constants (`stage5f/constants.mjs`) [S§2]
 
-Test-first: assert the **exact frozen** exports.
+> **[Gauntlet P0]** The raw **codes** do NOT live here. Verified against `stage4h/exitCodes.mjs`
+> (lines 815–840): 5E's named `VDA_*` codes, `VDA_CHECK_ORDER`, `VDA_AUDIT_CODES`, `VDA_PUBLIC_CODES`,
+> and `RUN_LEVEL_BY_RAW` all live in that **global ledger**. So the named `VMP_*` codes + order/tier
+> arrays go in `stage4h/exitCodes.mjs` (Task 2); `constants.mjs` holds schemas/enums/reserved-slots/
+> `scaleDecimal` and **re-exports** `VMP_RAW_CODES` from exitCodes.mjs. (This corrects a mistaken spec
+> §2 pushback — there IS a global ledger; I had read only the 4h-family block at the top of the file.)
+
+Test-first: assert the **exact frozen** exports (codes re-exported from Task 2).
 
 ```js
+export {
+  VMP_RAW_CODES,
+  VMP_CHECK_ORDER,
+  VMP_AUDIT_CODES,
+  VMP_PUBLIC_CODES,
+} from "../stage4h/exitCodes.mjs";
 export const VMP_SCHEMAS = Object.freeze({
   ATTESTATION: "simurgh.vmp.panel_attestation.v1",
   CAPTURE_CENSUS: "simurgh.vmp.capture_census.v1", // audit-private census + attempt log
   LANEB_RECEIPT: "simurgh.vmp.blind_recompute_receipt.v1",
   BYO_PANEL: "simurgh.vmp.byo_panel.v1",
-});
-export const VMP_RAW_CODES = Object.freeze({
-  OK: 0,
-  SCHEMA_INVALID: 268, // + no aggregate-verdict field
-  SIGNATURE_INVALID: 269, // external-pinned fingerprint first
-  CHAIN_INVALID: 270,
-  PLAN_INTEGRITY: 271, // incl. roster ⊆ universe (L6)
-  CORPUS_BINDING: 272,
-  MATRIX_BIJECTION: 273, // L1
-  STATUS_UNION_INVALID: 274,
-  APPLICABILITY_UNSOUND: 275, // L4
-  ADAPTER_REPLAY_MISMATCH: 276, // L2
-  VERDICT_RECOMPUTE_MISMATCH: 277,
-  BOOTSTRAP_PROVENANCE: 278,
-  COMPLETENESS_DECLARATION: 279, // incl. coverage/omission bound (①③)
-  CENSUS_BIJECTION: 280, // L5, audit-only
-  EVALUATION_INCOMPLETE_POLICY: 281, // strict-default policy
-  INTERNAL_OR_ENV_UNAVAILABLE: 282, // fail-closed wrapper + infra-unavailable
 });
 export const DECISION_SEMANTICS = Object.freeze([
   "binary_malicious_softmax",
@@ -117,11 +112,22 @@ export const VMP_RESERVED_SLOTS = Object.freeze([
 
 Also export `scaleDecimal(str, p)` → integer (throws on non-`/^\d+\.\d{p}$/`), reused by verdict + parity.
 
-## Task 2 — Exit codes 268–282 (`stage4h/exitCodes.mjs`) [additive; golden ripple]
+## Task 2 — Exit codes 268–282 in the global ledger (`stage4h/exitCodes.mjs`) [additive; golden ripple]
 
-Test-first: `exitCodeProbeHygiene.test.js` stays green; assert each new code is in the named map and
-unique. Add 268–282 with full names (mirror `VMP_RAW_CODES`). Regenerate the 4h exit-map golden +
-signed digest fixtures under Node 26 from a clean state. Run the frozen prior-reproduce list
+Mirror 5E's block exactly (lines 810–840 for the pattern). Add, all in `exitCodes.mjs`:
+
+- named `VMP_RAW_CODES` (268 `SCHEMA_INVALID` … 282 `INTERNAL_OR_ENV_UNAVAILABLE`, one meaning per
+  code; 280 is the sole audit-only code; 281 is the policy code; 282 the wrapper);
+- `VMP_CHECK_ORDER = [268…280]` (frozen first-failure order, incl. audit-only 280; 281 policy + 282
+  wrapper applied OUTSIDE the array, like 5E's 267);
+- `VMP_AUDIT_CODES = [268…280]`; `VMP_PUBLIC_CODES = [268…279]` (public excludes ONLY 280 — census
+  needs the audit-private file);
+- `RUN_LEVEL_BY_RAW` entries for 268–282.
+
+Test-first: the global `exitCodeProbeHygiene.test.js` stays green (probe with `UNKNOWN_RAW_PROBE=999`,
+never a bare literal); assert each new code is uniquely named and present in `RUN_LEVEL_BY_RAW`.
+Regenerate the 4h signed digest fixtures with `build-stage4h-digest-fixtures.mjs` **under Node 26 from a
+clean fixture state** (deterministic golden ripple). Run the frozen prior-reproduce list
 (`4y,4z,5a,5b,5c,5d,5e`) — all must stay green (additive non-disturbance).
 
 ## Task 3 — Schema gate (`stage5f/core/schema.mjs`) [S§2 / 268]
@@ -199,16 +205,27 @@ Runner (`node/historicalVerifierRunner.mjs`, impure): loads a **hash-bound vendo
 (`evaluateVda`) and 3V-B verifier from `stage5f/bootstrap/`, verifies each copy against
 `historical-pins.json` (`verifier_source_digest` = full transitive kernel manifest) **before** execution,
 runs it, returns the canonical result. If it cannot execute → the caller returns **282** (Task 15).
+**[Gauntlet P2] Fallback:** 3V-B's verifier is a top-level script (`verify-stage3vb-external-defense.mjs`),
+not a clean module — if vendoring its full transitive kernel proves impractical, 278 downgrades to the
+signed **"historical artifact reference binding"** floor (metadata + digest equality only), and the
+`bootstrap_provenance` entry sets `provenance_mode: "reference_binding"` so the weaker claim is explicit,
+never silently substituted for a verifier re-run. Decide empirically in this task, not in prose.
 
 ## Task 13 — Completeness + coverage (`stage5f/core/completeness.mjs`) [S§2 / 279 / 281 / ①③]
 
 Test-first (279): recompute `representation_complete` (must be `true` in a valid bundle),
 `evaluation_complete = (all applicable&supported evaluated ∧ capture_failed==0 ∧ missing_capture==0)`,
 and the histogram; a declared flag/histogram ≠ recomputed → 279. **Coverage (①/③):** recompute
-`omission_lower_bound == universe_size − panel_size` and `sole_catcher_cases` (cases where exactly one
-member's verdict is the catching one, from the `evaluated` cells); declared ≠ recomputed → 279.
+`omission_lower_bound == universe_size − panel_size` and `sole_catcher_cases` — a case where exactly one
+member returns **its own declared-positive class** (`malicious` for PG2, `block` for LG4 — never a shared
+"catch" notion, so no cross-semantics reconciliation); declared ≠ recomputed → 279.
+**Inventions A + C (folded here as projections, tested against `_validBundle`):** `panelCompletenessRatio(bundle)`
+= evaluated ÷ total obligations, per-member + campaign (non-claim in output: "coverage figure, not a
+detection rate"); `disagreementLedger(bundle)` = per-case list where members' declared-positive verdicts
+differ, surfaced as **evidence, never a verdict**. Both are pure projections over already-verified cells —
+no new raw code.
 Test-first (281): `evaluatePolicy(result)` returns 281 iff `evaluation_complete === false` (strict). Export
-`checkCompleteness(bundle)`, `evaluatePolicy`.
+`checkCompleteness`, `evaluatePolicy`, `panelCompletenessRatio`, `disagreementLedger`.
 
 ## Task 14 — Audit census bijection (`stage5f/core/census.mjs`) [S§2 / 280 / L5]
 
@@ -253,10 +270,12 @@ matches. Claim string: "two-process/two-key separation, not independent-party ve
 `capture_pg2.py` (Prompt Guard 2 86M, local M2) + `capture_lg4.py` (Llama Guard 4 12B, 8-bit/droplet),
 each with `requirements-pg2.lock`/`requirements-lg4.lock`. **Acquisition lifecycle:** acquire pinned
 snapshots → verify manifests/digests → `HF_HUB_OFFLINE=1`+`TRANSFORMERS_OFFLINE=1` → capture from cache.
-Both evaluate the **exact shared corpus** (identical `case_id` + `source_input_digest`); the corpus is
-**disagreement-mined** (③) to expose inter-detector blind spots (extends 5E's safe base families —
-inputs only, no generation preserved; categorical output = bounded allow/block token, else
-`capture_failed`/`unexpected_categorical_output`). Each capture emits a hash-bound fragment;
+Both evaluate the **exact shared corpus** (identical `case_id` + `source_input_digest`). **[Gauntlet P2]
+"Disagreement-mining" (③) SELECTS from the precommitted safe base families the cases that happen to
+disagree — it does NOT author new potent evasion strings** (AnthropicSafe: same posture as 5E — inputs
+only, no generation preserved; categorical output = bounded allow/block token, else
+`capture_failed`/`unexpected_categorical_output`; the corpus is committed in the panel plan _before_
+capture, so mining cannot be a post-hoc content-generation loop). Each capture emits a hash-bound fragment;
 `merge_capture_census.py` checks the common corpus and builds the unified `capture_census.json` (all
 statuses). Digest-only into the bundle; verdicts + any `model_refused` recorded honestly, no re-runs.
 Records the executed run (Frontier lever).
@@ -295,8 +314,10 @@ exact); lemma `VerifierCodomainHasNoAggregate` (structural codomain, not an impo
 Python pytest+coverage / CLI command matrix strict|attestation-only|audit asserting the structured
 `{...raw:281}` / browser portable-function net / Lean zero-sorry). **Tamper matrix:** one isolated
 mutation per load-bearing field class and per raw-code branch 268→282, plus generated unknown-key /
-duplicate-cell / chain-fork / roster-not-in-universe / dropped-census-record families. Cross-stage
-invariant: the bootstrap re-run still yields 5E/3V-B's recorded raws.
+duplicate-cell / chain-fork / roster-not-in-universe / dropped-census-record families. **Invention B —
+the Cherry-Pick Test** (named fixture family): a "tempting" panel where dropping detector D would flip
+the _reported_ outcome flagged→clean; the fixture asserts the attestation still carries D's cell (fails
+273/280 if omitted). Cross-stage invariant: the bootstrap re-run still yields 5E/3V-B's recorded raws.
 
 ## Task 23 — Reproduce script + conformance pack (`scripts/reproduce-llm-shield-stage5f.sh`, `stage5f/conformance-pack/`)
 
