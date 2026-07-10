@@ -1,5 +1,35 @@
 ## Change Log
 
+## [reproduce-fail-open-sweep] — 2026-07-10 — Fail-closed repair across stage 4Y–5D reproduce runners
+
+**Raouf:**
+
+- **Scope:** Correctness repair to six per-stage `scripts/reproduce-*.sh` runners. No verifier semantics, evidence values, model scores, capture claims, attestation codes, or production runtime code changed.
+- **Summary:** Generalized the Stage 5E clean-room finding. A gate written `cmd >/dev/null && echo "… OK"` under `set -euo pipefail` fails **open**: `set -e` does not abort when the failure is the non-final element of an `&&` list, so a failed unit/K7/parity/Lean gate skips its "OK" line yet the script still reaches `ALL PASS` and exits 0. The same pattern was present in `reproduce-llm-shield-stage{4y,4z,5a,5b,5c,5d}.sh`; each affected gate is now a standalone command followed by its echo. The 5C Lean gate also chained `lean … && ! grep sorry && echo` (fail-open on a Lean error and on a found `sorry`) — replaced with an explicit `if grep … then exit 1` guard. Byte-stability `git diff --quiet … || { … exit 1; }` lines were unchanged (already fail closed).
+- **Files changed:** `scripts/reproduce-llm-shield-stage4y.sh`, `scripts/reproduce-llm-shield-stage4z.sh`, `scripts/reproduce-llm-shield-stage5a.sh`, `scripts/reproduce-llm-shield-stage5b.sh`, `scripts/reproduce-llm-shield-stage5c.sh`, `scripts/reproduce-llm-shield-stage5d.sh`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** Minimal repro confirms the pattern fails open under `set -e`. Post-fix: no `&& echo …OK/PASS` fail-open remains; `bash -n` passes on all six; all six run `PASS`/`ALL PASS` under Node 26 (v26.5.0); an injected exit-73 unit shim on 5D now yields exit 73 with no `unit OK`/`ALL PASS`. CI gates each stage with `node --test` directly, so no stage shipped a genuinely failing gate — this removes a false-`ALL PASS` exposure for third parties running the reproduce scripts.
+- **Follow-ups:** Consider a CI lint rejecting `&& echo` around gate lines; the Stage 5E `conformancePack.test.js` fail-closed regression is the template.
+
+## [stage-5e-droplet-evidence-log] — 2026-07-10 — Annotate completed external-run evidence
+
+**Raouf:**
+
+- **Scope:** Documentation-only follow-up to the Stage 5E conformance-pack repair and completed Linux x86_64 droplet run. No verifier, runner, pack content, evidence value, model score, capture claim, or production service changed.
+- **Summary:** Prepended the sanitized droplet log with the two original clean-room findings, the applied repairs, and explicit scope/credential boundaries while preserving the raw droplet output below a separator. The note records the omitted `stage4h/exitCodes.mjs`, the masked `&& echo` shell failures, the fail-closed runner repair, explicit-manifest builder, regression coverage, `74/74` Stage 5E tests, and remote/local ZIP hash match.
+- **Files changed:** `/Users/raoof.r12/Desktop/Raouf/test/simurgh-vda-conformance-fixed-droplet.log`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** Required repair-summary and raw-output markers are present; the original `raw 0`, byte-stability, `unit OK`, Python parity, `K7 OK`, Lean-skip, and `ALL PASS` evidence remains present; the log contains no configured droplet password, address, or username; Prettier and `git diff --check` pass for the project logs.
+- **Follow-ups:** Preserve this annotated log with the fixed ZIP for third-party handoff. The pre-existing non-demo missing-`ANTHROPIC_API_KEY` repository test failure remains separate from Stage 5E.
+
+## [stage-5e-conformance-pack-fail-closed] — 2026-07-10 — Self-contained export repair
+
+**Raouf:**
+
+- **Scope:** Repair the self-contained Stage 5E VDA conformance ZIP after an independent clean-room run found one omitted shared dependency and a false-positive shell exit. No verifier semantics, evidence values, model scores, capture claims, or production runtime code changed.
+- **Summary:** Added a repository-native explicit-manifest pack builder that includes `tools/simurgh-attestation/stage4h/exitCodes.mjs`; changed the Stage 5E reproduce runner so unit, K7, and installed-Lean failures terminate before `ALL PASS`; added behavioral regressions for fail-closed propagation and exported dependency completeness; added tracked pack README, droplet setup, and top-level runner assets; built `simurgh-vda-conformance-fixed.zip` for external droplet execution.
+- **Files changed:** `scripts/reproduce-llm-shield-stage5e.sh`, `scripts/build-llm-shield-stage5e-conformance-pack.sh`, `tests/unit/llmShield/stage5e/conformancePack.test.js`, `tools/simurgh-attestation/stage5e/conformance-pack/{README.md,DROPLET_SETUP.md,run.sh}`, `AGENT.md`, `CHANGELOG.md`.
+- **Verification:** TDD red/green confirmed the original runner swallowed injected unit exit `73` and the original export had no builder; regressions pass `2/2`; Stage 5E unit suite passes `74/74`; Stage 5E reproduce passes all six gates; a brand-new extraction of the rebuilt ZIP passes with `unit OK`, `K7 OK`, Lean zero-sorry, `ALL PASS`, and exit `0`; ZIP integrity, `bash -n`, Prettier-supported files, and `git diff --check` pass. Full `npm test` is `2411/2412`: the unrelated `securityHardening.test.js` missing-API-key assertion fails identically on an untouched `git archive HEAD` baseline because the tagged server starts instead of exiting `78`.
+- **Follow-ups:** Run the fixed ZIP on a fresh droplet once `DROPLET_SSH` access is supplied; preserve the resulting full log and host metadata. Address the pre-existing non-demo missing-`ANTHROPIC_API_KEY` fail-closed regression separately.
+
 ## [v2.24.0-stage-4o-vtsa] — 2026-07-04 — Stage 4O VTSA + Monotone Consent Law (shipped)
 
 **Raouf:** Shipped Stage 4O — Verifiable Tool-Surface Attestation over the Monotone Consent Law: a committed tool surface may narrow silently, but may broaden only under delta-bound consent, and drift can never launder across manifest epochs. Added the fourth additive Capability Kernel entry point `authorise_with_manifest` (the frozen three byte-unchanged) with a six-field `ManifestBindings` sidecar; Node cores + a byte-parity Python mirror for domain-separated digests, a manifest-order Merkle surface with inclusion proofs, exact-key manifest/commitment validation, the drift lattice + Monotone-Consent chain validation, the 12-check gate, timeline binding to 4N chain positions, and the constitutional alignment map. Raw codes 55–66 (documented first-failure order 55→56→57→64→65→58→59→60→61→62→63→66). Signed byte-reproducible evidence bundle with two Ed25519 keypairs (manifest vs attestation), an 18-arm decision corpus, selective-disclosure verifier, live digest-only Lane B capture of `@modelcontextprotocol/server-filesystem`, and `proofs/stage4o/MonotoneConsent.lean` (machine-checked, no `sorry`). Kernel↔verifier parity gate (Node and Python agree on every first raw code). F1 retro fixture withheld per its hard gate (public disclosure insufficient — recorded as a known limitation, not approximated). Four-axis shipped re-score ~8.9 (Novelty 9 / Frontier 9 / Anthropic 8 / Constitution 9.5). One command: `scripts/reproduce-llm-shield-stage4o.sh`.

@@ -25,12 +25,14 @@ node tools/simurgh-attestation/stage5b/laneb/run-laneb-var-ceremony.mjs
 
 echo "-- 5/6 JS<->Python parity (tallies / ASR / floor)"
 if command -v python3 >/dev/null 2>&1; then
-  node --test tests/e2e/llmShield/stage5b/parity.test.js >/dev/null && echo "   parity OK"
+  node --test tests/e2e/llmShield/stage5b/parity.test.js >/dev/null
+  echo "   parity OK"
 else
   echo "   python3 absent — skipping parity (Node authoritative)"
 fi
 
 echo "-- 6/6 browser-parity (WebCrypto Ed25519 + hash-CSP) + K7 all-functions net + real-capture lock"
-node --test tests/e2e/llmShield/stage5b/browserParity.test.js tests/e2e/llmShield/stage5b/k7AllFunctions.test.js tests/e2e/llmShield/stage5b/realCapture.test.js >/dev/null && echo "   browser + K7 + capture OK"
+node --test tests/e2e/llmShield/stage5b/browserParity.test.js tests/e2e/llmShield/stage5b/k7AllFunctions.test.js tests/e2e/llmShield/stage5b/realCapture.test.js >/dev/null
+echo "   browser + K7 + capture OK"
 
 echo "== Stage 5B VAR reproduce: ALL PASS =="

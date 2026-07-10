@@ -20,17 +20,20 @@ after=$(shasum docs/research/llm-shield/evidence/stage-5e/vda-attestation.json |
 if [ "$before" = "$after" ]; then echo "   byte-stable (no diff)"; else echo "   NOT byte-stable"; exit 1; fi
 
 echo "-- 3/6 stage5e unit suite"
-node --test tests/unit/llmShield/stage5e/*.test.js >/dev/null && echo "   unit OK"
+node --test tests/unit/llmShield/stage5e/*.test.js >/dev/null
+echo "   unit OK"
 
 echo "-- 4/6 JS<->Python parity over the committed evidence"
 python3 "$S/python/vda_parity.py"
 
 echo "-- 5/6 K7 all-functions net"
-node --test tests/e2e/llmShield/stage5e/k7AllFunctions.test.js >/dev/null && echo "   K7 OK"
+node --test tests/e2e/llmShield/stage5e/k7AllFunctions.test.js >/dev/null
+echo "   K7 OK"
 
 echo "-- 6/6 Lean proofs (if lean present; else the CI lean workflow gates them)"
 if command -v lean >/dev/null 2>&1; then
-  (cd proofs/stage5e && lean DeployedDetector.lean) && echo "   lean OK (zero sorry)"
+  (cd proofs/stage5e && lean DeployedDetector.lean)
+  echo "   lean OK (zero sorry)"
 else
   echo "   lean not installed locally — gated by stage-4-lean-proofs.yml"
 fi
