@@ -1,0 +1,14 @@
+{
+  "schema": "simurgh.vsd.review_receipt.v1",
+  "content": {
+    "claim_digest": "sha256:53400cb987f974d181f2de98a1c13e9b14800ec6999be7de3c776226b6eee1f0",
+    "inventory_digest": "sha256:fc1516e8dd8c439185436c1c2c0ee732907b38f81424a31502ba7a4c98ba6f1f",
+    "host_identity_digest": "sha256:11607a06aa97dc97fd36aaf24acbbb0642697099742ed61cdf3184dc1276eae9",
+    "host_key_fingerprint": "sha256:8c12ec8ca4b94dcf2ba3536dd662d323869409c0a2dd571e12b0b4952d7b2e0c",
+    "recomputed_output_digest": "sha256:9f10dc0dccddb17a5498dc69efe52330c523d4bf1d1202bf0b7440adf445ede0",
+    "verdict": "reproduced"
+  },
+  "receipt_digest": "sha256:2bdc0f5f08915591fbde091940a7802e34d8525500471f638e56ecbefdc0ba7d",
+  "host_signature": "2I3G1kqckz1enOdCKNTxSyg9oEst3q+wv4GX4BOS5fUNH8YhotBh9hvw3ChHV5oGZmbmvVS9aP4OoX8pxTFbCQ==",
+  "host_public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEA/Bcp4Wcq4qDGDgusfCFZAqPxhxVNvrWEJ8aH2hmUjH0=\n-----END PUBLIC KEY-----\n"
+}

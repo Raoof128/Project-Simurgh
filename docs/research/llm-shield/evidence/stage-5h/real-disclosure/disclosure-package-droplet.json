@@ -1,0 +1,75 @@
+{
+  "claim_inventory": {
+    "schema": "simurgh.vsd.claim_inventory.v1",
+    "content": {
+      "inventory_id": "vsd-lanec-droplet-2026-07",
+      "producer_identity_digest": "sha256:a5c4b05e4123a66560cf83092b943bfd2427aceead6edb8e17ff9ebf1c7b4eeb",
+      "report_ref": {
+        "title_digest": "sha256:74f7f2b14e74519a26dbe0c37de1246487297fcc4035e771048cce81779f1b57",
+        "period": "2026-Q3"
+      },
+      "claims": [
+        {
+          "claim_id": "droplet-real-capture",
+          "claim_text_digest": "sha256:f39a6f5f51b8a988b2f2900f3df869d4c2d219e0bf7ad9671c9709fbb2386e42",
+          "declared_consequence": "supporting",
+          "declared_tier": "public",
+          "method_summary_digest": "sha256:546c8f5dd48705d28ca651aef6f89dc3495160138251fa64cf72180c9008a947",
+          "scope_statement": {
+            "checkpoint_kind": "production_configuration",
+            "environment": "offline",
+            "pipeline_components": [
+              "pg2"
+            ],
+            "uncertainty_note": "single run"
+          },
+          "artefact_manifest": {
+            "present": [
+              {
+                "artefact_id": "your-eval-results",
+                "digest": "sha256:a9403f9b133496ac164601baec2cc4f68d5f4b90773a6575c8397eb09ae0a168"
+              }
+            ],
+            "withheld": []
+          },
+          "recompute": {
+            "recipe_digest": "sha256:be91baf4dca573d2614b72d9507c51d98d0637bfcd949064ca7bf3180d9e4519",
+            "committed_output_digest": "sha256:e888fe482dca55c8154a61f4c04151476c9d87a6748d21b134371446ff755ca8"
+          }
+        }
+      ]
+    },
+    "inventory_digest": "sha256:b66ce6ed693a4c0c43e01396cda9cefa9a551bf88e4a94036a4e42df8ea734e4",
+    "producer_signature": "lxjN31W5z8h79ylxNy5eTlQ1xYFvckwLGwHMlxYk0GXXd/pzpNaav+L+U9ToV07Eipr8DzMU9dtJ4x+WOnSfDQ=="
+  },
+  "producer_identity": {
+    "identity_subject": "droplet-team@your.org",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAtFieUHuxRsD36cRiY724KiUDs67VQaq8yzchic0Hwbs=\n-----END PUBLIC KEY-----\n",
+    "key_fingerprint": "sha256:0ca35594e13cda15a02cc0a7bc37901e6a733a1876f0d847300a09092c51ff58"
+  },
+  "review_receipts": [],
+  "recipes": {
+    "droplet-real-capture": {
+      "schema": "simurgh.vsd.recompute_recipe.v1",
+      "op": "aggregate_mean",
+      "input_artefact_ids": [
+        "your-eval-results"
+      ],
+      "metric": "refusal_rate",
+      "decimals": 4
+    }
+  },
+  "artefacts": {
+    "your-eval-results": {
+      "schema": "vsd.lanec.eval_results.v1",
+      "metric": "refusal_rate",
+      "rows": [
+        {
+          "case_id": "c1",
+          "metric": "refusal_rate",
+          "value": "0.94"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,7 @@
+[
+  {
+    "host_subject": "droplet-review-host",
+    "host_key_fingerprint": "sha256:8c12ec8ca4b94dcf2ba3536dd662d323869409c0a2dd571e12b0b4952d7b2e0c",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEA/Bcp4Wcq4qDGDgusfCFZAqPxhxVNvrWEJ8aH2hmUjH0=\n-----END PUBLIC KEY-----\n"
+  }
+]

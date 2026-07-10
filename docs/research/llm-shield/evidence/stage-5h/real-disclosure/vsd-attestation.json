@@ -1,0 +1,186 @@
+{
+  "schema": "simurgh.vsd.disclosure_attestation.v1",
+  "claim_inventory": {
+    "schema": "simurgh.vsd.claim_inventory.v1",
+    "content": {
+      "inventory_id": "vsd-inv-frontier7b-2026-07",
+      "producer_identity_digest": "sha256:34e2390b4ce2bbfcdb66f6ee0de3c15cbc70726ca11bfa3dc2c9f50083d91045",
+      "report_ref": {
+        "title_digest": "sha256:4dd80859122932b4c10c01281079c4568c51840f14cbe9e6f22d479002f30324",
+        "period": "2026-Q3"
+      },
+      "claims": [
+        {
+          "claim_id": "frontier7b-cbrn-threshold",
+          "claim_text_digest": "sha256:34fa1ebc5c52d26a1c8f75ff0ba28881357ada3b171547ebaf3c7759b62b3134",
+          "declared_consequence": "threshold_crossing",
+          "declared_tier": "controlled",
+          "method_summary_digest": "sha256:d8022bb606405f99519602c817270e486c1d8b0381fa726413456c4c26357425",
+          "scope_statement": {
+            "checkpoint_kind": "refusal_relaxed_checkpoint",
+            "environment": "offline",
+            "pipeline_components": [
+              "constitutional_training",
+              "refusal_head"
+            ],
+            "uncertainty_note": "distribution shift + evaluation-awareness not excluded"
+          },
+          "artefact_manifest": {
+            "present": [
+              {
+                "artefact_id": "redteam-summary",
+                "digest": "sha256:25ed1868eb6a4993fc690102435759e73a0bc2905085b0a18a7c6e6731acf370"
+              },
+              {
+                "artefact_id": "judge-rubric",
+                "digest": "sha256:0e4d9b5f0a8e95f59e52a382c9d72ae0844628d095c6638ca8d4b01f1a632d67"
+              }
+            ],
+            "withheld": [
+              {
+                "artefact_id": "redteam-prompts",
+                "justification_type": "safety_hazard",
+                "available_at_tier": "controlled",
+                "reason": "raw CBRN elicitation prompts"
+              },
+              {
+                "artefact_id": "model-weights",
+                "justification_type": "security_sensitive",
+                "available_at_tier": "controlled",
+                "reason": "frontier weights"
+              }
+            ]
+          },
+          "recompute": {
+            "recipe_digest": "sha256:7f558e1fb5bbe9da9869c9ac2ae55271491a4d6bee440d1e011148b6f55a4a28",
+            "committed_output_digest": "sha256:9f10dc0dccddb17a5498dc69efe52330c523d4bf1d1202bf0b7440adf445ede0"
+          }
+        },
+        {
+          "claim_id": "frontier7b-harmbench-public",
+          "claim_text_digest": "sha256:cb91c860e18ad89bce3ad6c68c6737f669e57699a512cb82c0dd69b1831a280d",
+          "declared_consequence": "supporting",
+          "declared_tier": "public",
+          "method_summary_digest": "sha256:6e112631940ff54eabbe67f4c41c3664751197408fd9b8ddcdf1d02ba09e0ac8",
+          "scope_statement": {
+            "checkpoint_kind": "representative_launch_checkpoint",
+            "environment": "offline",
+            "pipeline_components": [
+              "constitutional_training",
+              "refusal_head"
+            ],
+            "uncertainty_note": "distribution shift + evaluation-awareness not excluded"
+          },
+          "artefact_manifest": {
+            "present": [
+              {
+                "artefact_id": "eval-results",
+                "digest": "sha256:d1c2aee7c6165eb65aff57465c8d6c7eac9cb07c7522bfa6bcf22f2098984c72"
+              }
+            ],
+            "withheld": []
+          },
+          "recompute": {
+            "recipe_digest": "sha256:4b6453f640390d321c502742707956bb83528d85e991b712406900266b151841",
+            "committed_output_digest": "sha256:0b5953f5d6bf652eccf75357444ba5958a8de86e35790da44f330e216ff2bad7"
+          }
+        },
+        {
+          "claim_id": "frontier7b-monitoring-context",
+          "claim_text_digest": "sha256:0b845a34451ebd3e9b28fb215326e38b08a5b51ececae0f663372d6426e0a152",
+          "declared_consequence": "contextual",
+          "declared_tier": "restricted",
+          "scope_statement": {
+            "checkpoint_kind": "production_configuration",
+            "environment": "offline",
+            "pipeline_components": [
+              "constitutional_training",
+              "refusal_head"
+            ],
+            "uncertainty_note": "distribution shift + evaluation-awareness not excluded"
+          },
+          "artefact_manifest": {
+            "present": [],
+            "withheld": []
+          },
+          "restriction": {
+            "reason": "operational monitoring data confidential",
+            "right_scaling_note": "context only; not a release-justifying warrant"
+          }
+        }
+      ]
+    },
+    "inventory_digest": "sha256:fc1516e8dd8c439185436c1c2c0ee732907b38f81424a31502ba7a4c98ba6f1f",
+    "producer_signature": "kAIQfaCB0b1DzLzmQid/xJUDJPzXt0tjvrSMRex3OcJ3Fd+d+XXtMfhqOXyoQH+0Lb2DD6Axalk9CZRLv2Y2CQ=="
+  },
+  "review_receipts": [
+    {
+      "schema": "simurgh.vsd.review_receipt.v1",
+      "content": {
+        "claim_digest": "sha256:53400cb987f974d181f2de98a1c13e9b14800ec6999be7de3c776226b6eee1f0",
+        "inventory_digest": "sha256:fc1516e8dd8c439185436c1c2c0ee732907b38f81424a31502ba7a4c98ba6f1f",
+        "host_identity_digest": "sha256:11607a06aa97dc97fd36aaf24acbbb0642697099742ed61cdf3184dc1276eae9",
+        "host_key_fingerprint": "sha256:8c12ec8ca4b94dcf2ba3536dd662d323869409c0a2dd571e12b0b4952d7b2e0c",
+        "recomputed_output_digest": "sha256:9f10dc0dccddb17a5498dc69efe52330c523d4bf1d1202bf0b7440adf445ede0",
+        "verdict": "reproduced"
+      },
+      "receipt_digest": "sha256:2bdc0f5f08915591fbde091940a7802e34d8525500471f638e56ecbefdc0ba7d",
+      "host_signature": "2I3G1kqckz1enOdCKNTxSyg9oEst3q+wv4GX4BOS5fUNH8YhotBh9hvw3ChHV5oGZmbmvVS9aP4OoX8pxTFbCQ=="
+    }
+  ],
+  "producer_identity": {
+    "identity_subject": "frontier-lab@example.org",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAzIgDPngNWZL4S0R7jStYAfcYl16oGtd7EM+14xmLXJk=\n-----END PUBLIC KEY-----\n",
+    "key_fingerprint": "sha256:eb86c62159926f4ddb78e4e48a23f89bd6eb824c1a728a386a7a92968bfabd1d"
+  },
+  "verifier_identity": {
+    "identity_subject": "simurgh-verifier@example.org",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEApgsh0mTFR+meX643yJ+xJyyjAM45NoEbgsGR5yejelc=\n-----END PUBLIC KEY-----\n",
+    "key_fingerprint": "sha256:6a5f096246735752b8a319a13fa91b172475d09bff050c1655f0e81938b7d0f8"
+  },
+  "artefacts_ref": [
+    {
+      "artefact_id": "redteam-summary",
+      "path": "artefacts/redteam-summary.json",
+      "digest": "sha256:25ed1868eb6a4993fc690102435759e73a0bc2905085b0a18a7c6e6731acf370"
+    },
+    {
+      "artefact_id": "judge-rubric",
+      "path": "artefacts/judge-rubric.json",
+      "digest": "sha256:0e4d9b5f0a8e95f59e52a382c9d72ae0844628d095c6638ca8d4b01f1a632d67"
+    },
+    {
+      "artefact_id": "eval-results",
+      "path": "artefacts/eval-results.json",
+      "digest": "sha256:d1c2aee7c6165eb65aff57465c8d6c7eac9cb07c7522bfa6bcf22f2098984c72"
+    }
+  ],
+  "verdict_table": [
+    {
+      "claim_id": "frontier7b-cbrn-threshold",
+      "proven_tier": "controlled",
+      "support_quality": "qualified",
+      "max_consequence_warranted": "threshold_crossing",
+      "inverted": false,
+      "right_scaling_distance": 0
+    },
+    {
+      "claim_id": "frontier7b-harmbench-public",
+      "proven_tier": "public",
+      "support_quality": "full",
+      "max_consequence_warranted": "threshold_crossing",
+      "inverted": false,
+      "right_scaling_distance": 0
+    },
+    {
+      "claim_id": "frontier7b-monitoring-context",
+      "proven_tier": "restricted",
+      "support_quality": "descriptive",
+      "max_consequence_warranted": "contextual",
+      "inverted": false,
+      "right_scaling_distance": 0
+    }
+  ],
+  "inventory_census_digest": "sha256:12d34008c4e3f7fc8adeca840075e6c56a35730934541db20935d33f49be3c47",
+  "attestation_signature": "B9Q+1tM/hWn9YbIFT3Vh5nzBlVEi8DNa6VkoQhTbRPNIZvOcCjhHLxe6WpoI90Pll7myXPTDVApkOtuoaYAZDw=="
+}
