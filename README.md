@@ -13,7 +13,7 @@ proof of what happened after a guardrail missed — not another jailbreak detect
 [![Node](https://img.shields.io/badge/node-%E2%89%A522.0-1a1a1a?style=flat-square)](https://nodejs.org)
 [![License](https://img.shields.io/badge/license-AGPL--3.0-d6cfbe?style=flat-square)](#license)
 [![Status](https://img.shields.io/badge/status-research%20prototype-2f4a2a?style=flat-square)](#status)
-[![Latest](https://img.shields.io/badge/release-v2.42.0-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.42.0-stage-5g-vfc)
+[![Latest](https://img.shields.io/badge/release-v2.43.0-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.43.0-stage-5h-vsd)
 
 </div>
 
@@ -41,7 +41,29 @@ In one sentence: **Simurgh gives an agentic system a verifiable receipt, not a p
 > selective omission, multi-agent accountability) to concrete mechanisms — printable version at
 > [`docs/research/llm-shield/anthropic-brief.html`](docs/research/llm-shield/anthropic-brief.html).
 
-> 🆕 **Latest — Stage 5G · Verifiable Foreign Capture (`v2.42.0-stage-5g-vfc`).**
+> 🆕 **Latest — Stage 5H · Verifiable Safety-claim Disclosure (`v2.43.0-stage-5h-vsd`).**
+> Extends the Completeness Invariant to the **reproducibility tier of a safety claim**. Every claim carries
+> a **declared consequence** and a verifier-**computed reproducibility tier** (`restricted` → `controlled` →
+> `public`), and the verifier enforces the **Right-Scaling Law** — a claim may not outrun its evidence.
+> The headline is the **Evidential-Inversion Detector** (raw **312**): a threshold-crossing claim on
+> restricted evidence fails closed — Oxford's named _"evidential inversion: the most consequential claims
+> are the least reproducible"_ turned into an executable check. `warrant(tier)` is a **typed pair**
+> (`max_consequence`, `support_quality`) — a reviewer-only recompute is permanently typed `qualified`, never
+> laundered into `full`. Three signed objects (producer inventory / secure-review-host receipt / Simurgh
+> attestation; no object signs itself), six domain separators **all consumed by a named check**, external
+> pin + host registry from OUTSIDE the bundle. **No Undeclared Redaction** makes redactions typed IOUs;
+> **No Scope Substitution** binds the evaluated checkpoint (the _Maverick fixture_ — evaluated ≠ released).
+> Codes **300–315**, **10 Lean theorems + 1 lemma** (zero `sorry`), **75 unit + 11 K7 e2e**, a two-process
+> Lane-B review ceremony, JS↔Python↔browser parity, and beast inventions (Inversion Census, Right-Scaling
+> Distance, Disclosure Debt, Cross-Attestation Chaining). Directly the recomputable substrate a frontier
+> lab's RSP-v3.0 disclosure regime (Risk Reports + expert reviewers + gap docs) lacks. **Honest to its
+> limits:** VSD is **not category-creating** (Oxford defines the tiers, credited) — it is the executable,
+> TEE-free, byte-reproducible _per-claim instantiation_; the real independent-party Lane-C disclosure is
+> **prepared but pending** (campaign fail-closed at `pending`), so Frontier is scored without that lever;
+> reproducibility ≠ correctness.
+>
+> <details><summary>Prior — Stage 5G · Verifiable Foreign Capture (<code>v2.42.0-stage-5g-vfc</code>)</summary>
+>
 > Extends the Completeness Invariant to the **provenance of production**: for every foreign capture the
 > verifier computes a **typed producer/verifier Separation Strength** (`distinct_key_only` →
 > `challenge_bound` → `externally_anchored`) and **rejects unsupported upgrades** (raw **296**, the
@@ -63,6 +85,8 @@ In one sentence: **Simurgh gives an agentic system a verifiable receipt, not a p
 > synthetic demo (the real capture is verify-only, not rebuildable — we don't hold the foreign key); real
 > keyless-Sigstore rung-2 remains the → 9.5 lever. Rung-2 proves the key is _externally anchored_, **never**
 > human/organisational non-collusion.
+>
+> </details>
 >
 > <details><summary>Prior — Stage 5F · Verifiable Multi-detector Panel Attestation (<code>v2.41.0-stage-5f-vmp</code>)</summary>
 > The Completeness Invariant instantiated on a **detector panel**: one signed attestation binds N
