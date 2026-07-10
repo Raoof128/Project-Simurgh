@@ -50,17 +50,25 @@ Plus the zero-code-path projections: `evaluatedObligationFraction`, the Cherry-P
 ## Signed limitations (admit irregularity over overclaim)
 
 1. **The committed evidence is a synthetic structural demonstration** over two real detector identities.
-   The real dual-detector capture is Lane C (harness complete). It is **scheduled to be run by an
-   independent team** on their own droplet (PG2 CPU + LG4 12B GPU/8-bit) — **independent-party evidence
-   generation**, the strongest grounding and the → 10 lever. Frontier is held pending that run, not
-   downgraded.
-2. **Offline pinned weights ≠ a hosted endpoint** (carries `live_endpoint_attestation_deferred`).
-3. **The Omission Lower Bound only bites within a committed universe** — a producer who declares
-   `universe = roster` truthfully gets bound 0. Universe representativeness is minted
-   `universe_completeness_deferred`.
-4. **Two-process/two-key ≠ independent-party verification.**
-5. **Panel completeness is not detection completeness**; heterogeneous semantics are declared, never
-   reconciled into an aggregate.
+   The real dual-detector capture is Lane C (harness complete). An independent team has **reproduced the
+   verify-only pack** (below) but has **not** run Lane C (their droplet had no GPU for LG4 12B), so the
+   detectors are still not grounded. Lane C on a GPU droplet — **independent-party evidence generation** —
+   remains the → 10 Frontier lever. Frontier is held pending that run, not downgraded.
+
+## Independent-party reproduction (post-pack, 2026-07-10)
+
+An **unaffiliated team ran the reviewer pack on their own hardware** — a local machine (Node v22.16.0)
+and a **droplet `170.64.167.95` under Node v26.5.0** (scp upload → extract → run → delete). **Both runs:
+`ALL PASS`, byte-identical** (step 7 rebuilds the evidence and compares against the shipped bytes, so a
+pass means their Node-26 rebuild reproduced our committed digests exactly on foreign hardware). This is
+**independent-party _reproduction_ of committed evidence, verify-only** — the verifier, attestation
+contract, Lane B ceremony, JS↔Python parity, and byte-stability all hold off our machines. It is **NOT
+independent-party evidence generation**: no detector was run (no GPU), so it does not move Frontier. The
+run surfaced **no defects** (the pack shipped with the 5E fail-closed + full-dependency lessons already
+baked in). 2. **Offline pinned weights ≠ a hosted endpoint** (carries `live_endpoint_attestation_deferred`). 3. **The Omission Lower Bound only bites within a committed universe** — a producer who declares
+`universe = roster` truthfully gets bound 0. Universe representativeness is minted
+`universe_completeness_deferred`. 4. **Two-process/two-key ≠ independent-party verification.** 5. **Panel completeness is not detection completeness**; heterogeneous semantics are declared, never
+reconciled into an aggregate.
 
 ## Socket ledger
 
