@@ -391,13 +391,35 @@ provider, or vendor is ranked or labelled safe/unsafe.
 5. No downstream-efficacy link — carries `downstream_efficacy_target_deferred` (→ 5H VDE).
 6. English-only — carries `multilingual_ruleset_deferred` (→ 5G VML).
 
-**Regulator/lab wedge (source-precision guarded — no absence claim ships until primary text is
-read).** The disease in the wild: safety write-ups often identify selected detectors without a
-standard machine-checkable roster, common-case contract, and capture census. VMP makes selective
-omission un-hideable. Regulatory: the gap hunt will test whether GPAI adversarial-testing
-requirements specify machine-checkable panel completeness. Standards: C2PA / in-toto / SCITT address
-provenance and supply-chain evidence; the gap hunt will determine whether any directly specifies
-evaluation-panel membership + per-case census completeness (their scope may simply differ).
+**Regulator/lab wedge (gap hunt executed 2026-07-10; source-precision guarded).** The disease in the
+wild: safety write-ups often identify selected detectors without a standard machine-checkable roster,
+common-case contract, and capture census — e.g. an eval-reporting study reports that some providers
+give "insufficient documentation … vague statements lacking methodological detail" for their safety
+evaluations (reported, arXiv 2503.17388). VMP makes selective omission un-hideable.
+**Regulatory (grounded obligation):** the EU AI Act GPAI **Code of Practice** (Art. 56, published
+2025-07-10; obligations from 2025-08-02) **mandates** adversarial testing (red-teaming) before
+deployment, before each major update, and at least annually, plus detailed technical documentation
+shared with regulators — but the summaries reviewed specify **no machine-checkable panel-completeness
+format**. The obligation exists; the recomputable completeness contract does not. (Full Code /
+Safety-and-Security-chapter primary text to be pinned before any hard absence claim.)
+**Standards seam (primaries pinned):** C2PA attestations are "claims about the security properties of
+a device, program, or execution environment" — they vouch for _who/what created the asset_ and
+**explicitly do not cover** AI model evaluation, detector-panel performance, or per-case test
+completeness (spec.c2pa.org 1.4, attestations). in-toto attests "verifiable claims about any aspect of
+how a piece of software is produced" — its completeness object is **supply-chain pipeline steps /
+artifacts**, not detector×case obligations (in-toto/attestation). SCITT registers signed supply-chain
+statements. None specifies evaluation-panel membership + per-case census completeness — their scope is
+simply different.
+**Prior-art kill-test (Novelty source map).** The claim survives, narrowed and positioned against four
+neighbor classes it is _not_: (a) multi-detector **defense systems** that stack scanners but produce
+no attestation (LlamaFirewall arXiv 2505.03574; OpenAI Guardrails); (b) **guardrail
+orchestration/aggregation** that scores or selects across guardrails — exactly the axis VMP defers via
+`panel_aggregation_policy_deferred` (Best-of-N Guardrail Orchestration arXiv 2606.01513); (c) **ensemble
+benchmarks** that report an aggregate risk score, not a per-case recomputable census (AILuminate /
+MLCommons arXiv 2503.05731); (d) **supply-chain / lifecycle provenance** attestation whose completeness
+object is pipeline steps or artifacts (in-toto, C2PA, SCITT, Atlas arXiv 2502.19567). The uncovered
+combination — _representation-completeness over a heterogeneous **detector panel** on a shared committed
+corpus, with roster precommit + typed non-results + all-status census bijection_ — is 5F's blade.
 **Founder's ledger — one external actor who could run it tomorrow:** a lab safety-eval team already
 stacking Prompt Guard + Llama Guard, or a red-team vendor. **One identified technical blocker:** no
 shared-corpus precommit + census-bijection format exists — exactly what 5F ships (integration,
@@ -408,15 +430,17 @@ their own panel (tracked debt).
 
 | Axis               | Current | Closeout target                                                                                         |
 | ------------------ | ------- | ------------------------------------------------------------------------------------------------------- |
-| Novelty            | 8.4     | 9.2 after a primary prior-art sweep + attackable source map                                             |
+| Novelty            | 9.1     | 9.2 after pinning the EU Code primary text + a third detector family                                    |
 | Frontier           | 8.7     | 9.3 after the fresh dual-detector shared-corpus capture _executes_ (else scored down — 5A/5C precedent) |
 | Good-for-Anthropic | 8.8     | 9.5 after an external safety-team pilot                                                                 |
 | Constitution       | 9.1     | 9.4 via stronger honesty/oversight/contestability mechanisms — **not** via adoption                     |
 
-_"Good-for-Anthropic" measures potential usefulness to assurance teams; it does not imply Anthropic
-review, adoption, or endorsement._ Tracked debts (guard on the teeth): execute the fresh dual Lane-C
-capture (Frontier); the primary prior-art sweep (Novelty); an external safety-team pilot
-(Good-for-Anthropic, the standing 10 lever).
+_Novelty rose 8.4 → 9.1: the gap hunt (2026-07-10) executed the prior-art kill-test and produced the
+attackable source map above — the claim survives, narrowed and positioned against four neighbor
+classes. "Good-for-Anthropic" measures potential usefulness to assurance teams; it does not imply
+Anthropic review, adoption, or endorsement._ Tracked debts (guard on the teeth): execute the fresh
+dual Lane-C capture (Frontier); pin the EU Code primary text (Novelty hard-absence claim); an external
+safety-team pilot (Good-for-Anthropic, the standing 10 lever).
 
 ---
 
@@ -516,8 +540,13 @@ bootstrap re-run still yields 5E/3V-B's recorded raws, and the frozen prior-repr
 
 ## 6. Gap-hunt plan + beast-mode inventions + TDD handoff
 
-**Gap-hunt plan (executable; gates Novelty 8.4→9.2, source-precision guarded).** Four fronts, each
-with a kill-criterion; no absence claim ships until primary text is read:
+**Gap-hunt — EXECUTED 2026-07-10 (Novelty 8.4→9.1; source map in §4 wedge).** Verdict: the blade
+survives the kill-test, narrowed and positioned against four neighbor classes (defense systems /
+guardrail aggregation / ensemble benchmarks / supply-chain provenance). C2PA + in-toto primaries
+pinned (scope explicitly excludes evaluation-panel/per-case completeness); the EU AI Act GPAI Code of
+Practice **mandates** adversarial testing + documentation with no machine-checkable completeness
+format (primary Code text still to be pinned for a hard-absence claim). Four fronts, each with a
+kill-criterion; no absence claim ships until primary text is read:
 
 1. **Mechanism prior-art kill-test.** Queries: "multi-detector attestation," "detector panel
    completeness," "recomputable evaluation panel," "no cherry-picked detector," "ensemble guardrail
