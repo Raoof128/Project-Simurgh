@@ -1,0 +1,7 @@
+# Stage 5F VMP Lane C — Llama Guard 4 12B isolated env (pinned; GPU/8-bit). Meta preview transformers.
+torch==2.8.0
+transformers==4.51.3
+tokenizers==0.20.3
+bitsandbytes==0.43.1
+accelerate==0.34.2
+huggingface-hub==0.35.0
