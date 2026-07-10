@@ -26,15 +26,18 @@ node tools/simurgh-attestation/stage4y/laneb/run-laneb-recompute-ceremony.mjs
 
 echo "-- 5/6 JS<->Python parity"
 if command -v python3 >/dev/null 2>&1; then
-  node --test tests/unit/llmShield/stage4y/parity.test.js >/dev/null && echo "   parity OK"
+  node --test tests/unit/llmShield/stage4y/parity.test.js >/dev/null
+  echo "   parity OK"
 else
   echo "   python3 not found — parity skipped"
 fi
 
 echo "-- 6/6 K7 all-functions net + browser + Lean"
-node --test tests/e2e/llmShield/stage4y/k7AllFunctions.test.js tests/e2e/llmShield/stage4y/browserParity.test.js >/dev/null && echo "   K7 + browser OK"
+node --test tests/e2e/llmShield/stage4y/k7AllFunctions.test.js tests/e2e/llmShield/stage4y/browserParity.test.js >/dev/null
+echo "   K7 + browser OK"
 if command -v lean >/dev/null 2>&1; then
-  lean proofs/stage4y/DocumentResidue.lean && echo "   Lean OK (zero sorry)"
+  lean proofs/stage4y/DocumentResidue.lean
+  echo "   Lean OK (zero sorry)"
 fi
 
 echo "== Stage 4Y VDR reproduce: PASS =="

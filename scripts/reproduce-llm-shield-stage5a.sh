@@ -24,12 +24,14 @@ node tools/simurgh-attestation/stage5a/laneb/run-laneb-recompute-ceremony.mjs
 
 echo "-- 5/6 JS<->Python parity (digest preflight + full ledger-content equality)"
 if command -v python3 >/dev/null 2>&1; then
-  node --test tests/e2e/llmShield/stage5a/parity.test.js >/dev/null && echo "   parity OK"
+  node --test tests/e2e/llmShield/stage5a/parity.test.js >/dev/null
+  echo "   parity OK"
 else
   echo "   python3 absent — skipping parity (Node authoritative)"
 fi
 
 echo "-- 6/6 browser-parity (CSP + no-egress + WebCrypto Ed25519) + K7 all-functions net"
-node --test tests/e2e/llmShield/stage5a/browserParity.test.js tests/e2e/llmShield/stage5a/k7AllFunctions.test.js >/dev/null && echo "   browser + K7 OK"
+node --test tests/e2e/llmShield/stage5a/browserParity.test.js tests/e2e/llmShield/stage5a/k7AllFunctions.test.js >/dev/null
+echo "   browser + K7 OK"
 
 echo "== Stage 5A VNC reproduce: ALL PASS =="

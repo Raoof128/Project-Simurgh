@@ -19,15 +19,18 @@ git diff --quiet -- "$EVID/green-slip-ledger.json" "$EVID/summary.json" \
   && echo "   byte-stable (no diff)" || { echo "   DRIFT in $EVID"; exit 1; }
 
 echo "-- 3/5 Lane B blind-severity ceremony (unit) + full stage5c unit suite"
-node --test tests/unit/llmShield/stage5c/*.test.js >/dev/null && echo "   unit OK"
+node --test tests/unit/llmShield/stage5c/*.test.js >/dev/null
+echo "   unit OK"
 
 echo "-- 4/5 JS<->Python parity + browser (WebCrypto Ed25519) + K7 all-functions net"
-node --test tests/e2e/llmShield/stage5c/parity.test.js tests/e2e/llmShield/stage5c/k7AllFunctions.test.js >/dev/null \
-  && echo "   parity + browser + K7 OK"
+node --test tests/e2e/llmShield/stage5c/parity.test.js tests/e2e/llmShield/stage5c/k7AllFunctions.test.js >/dev/null
+echo "   parity + browser + K7 OK"
 
 echo "-- 5/5 Lean proofs (if lean present; else the CI lean workflow gates them)"
 if command -v lean >/dev/null 2>&1; then
-  lean proofs/stage5c/SemanticBypass.lean && ! grep -Rn "\bsorry\b" proofs/stage5c && echo "   lean OK (zero sorry)"
+  lean proofs/stage5c/SemanticBypass.lean
+  if grep -Rn "\bsorry\b" proofs/stage5c; then echo "   FOUND sorry in proofs/stage5c"; exit 1; fi
+  echo "   lean OK (zero sorry)"
 else
   echo "   lean absent — gated by stage-4-lean-proofs.yml"
 fi

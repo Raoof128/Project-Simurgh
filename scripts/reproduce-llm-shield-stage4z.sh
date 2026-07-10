@@ -24,12 +24,14 @@ node tools/simurgh-attestation/stage4z/laneb/run-laneb-recompute-ceremony.mjs
 
 echo "-- 5/6 JS<->Python parity (roundHalfEven ties, canonical torture, full-map equality)"
 if command -v python3 >/dev/null 2>&1; then
-  node --test tests/e2e/llmShield/stage4z/parity.test.js >/dev/null && echo "   parity OK"
+  node --test tests/e2e/llmShield/stage4z/parity.test.js >/dev/null
+  echo "   parity OK"
 else
   echo "   python3 absent — skipping parity (Node authoritative)"
 fi
 
 echo "-- 6/6 browser-parity + K7 all-functions net"
-node --test tests/e2e/llmShield/stage4z/browserParity.test.js tests/e2e/llmShield/stage4z/k7AllFunctions.test.js >/dev/null && echo "   browser + K7 OK"
+node --test tests/e2e/llmShield/stage4z/browserParity.test.js tests/e2e/llmShield/stage4z/k7AllFunctions.test.js >/dev/null
+echo "   browser + K7 OK"
 
 echo "== Stage 4Z VWA reproduce: ALL PASS =="
