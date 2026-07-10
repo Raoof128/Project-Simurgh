@@ -1,0 +1,36 @@
+Stage 5E VDA — independent-ENVIRONMENT reproduction receipt (lane D, scope A)
+============================================================================
+
+Motto: AnthropicSafe First, then ReviewerSafe.
+
+SCOPE (honest): this is an independent ENVIRONMENT, not an independent PARTY.
+The host below is the author's second machine (a cloud VM), driven by us, cloning
+the public repo. It proves the deterministic surface reproduces off the author's
+laptop and ACROSS ARCHITECTURE. It banks Frontier ~9.6. A real external PARTY
+running the BYO adapter remains the reserved path to 10.
+
+Host class ...... Linux x86_64 (cloud VM; arm64 macOS is the primary capture host)
+Kernel .......... Linux 6.8.0-71-generic x86_64
+Node ............ v26.5.0
+Python .......... 3.12.3
+Commit .......... f876e34e2411ab407e5a3c722e75fe5c70db4613 (branch stage-5e-vda)
+
+Reproduce (verify-only; NO model, NO capture on this host):
+  1/6 verify committed attestation (audit + public)  -> raw 0 / raw 0
+  2/6 byte-stability: rebuild in place and diff       -> byte-stable (no diff)
+  3/6 stage5e unit suite                              -> OK
+  4/6 JS<->Python parity over committed evidence      -> 40 facts, 4 slip(s) at θ=0.5000
+  5/6 K7 all-functions net                            -> OK
+  6/6 Lean proofs                                     -> gated by CI on this host
+
+  == Stage 5E VDA reproduce: ALL PASS ==
+
+Key finding: the committed evidence rebuilt BYTE-IDENTICALLY on x86_64 Linux,
+matching the arm64 macOS build — the deterministic verification surface is
+platform-independent (sha256 + canonical JSON, no neural forward pass in the
+verify path).
+
+Scope C (re-running the Prompt Guard 2 capture on this host and comparing the
+float score table) is a separate, higher-effort experiment and is NOT part of
+this receipt. Per the plan, score_precision is frozen before any such run and a
+cross-architecture mismatch would be a REPORTED finding, never a tuned knob.
