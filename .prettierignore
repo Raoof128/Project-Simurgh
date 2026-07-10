@@ -116,3 +116,5 @@ tools/simurgh-attestation/stage5e/lanec/capture-result.json
 # Stage 5F VMP evidence (byte-stable canonicalJson; never reformat) + external trust pin
 docs/research/llm-shield/evidence/stage-5f/
 tools/simurgh-attestation/stage5f/pin.json
+docs/research/llm-shield/evidence/stage-5g/
+tools/simurgh-attestation/stage5g/pin.json

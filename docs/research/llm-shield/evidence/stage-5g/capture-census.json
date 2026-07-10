@@ -1,0 +1,20 @@
+{
+  "schema": "simurgh.vfc.capture_census.v1",
+  "challenge_record_digest": "sha256:faf184687c344fb85a4b07a4b1f822590eed0576404f55eaf11f327064b60580",
+  "corpus_digest": "sha256:bc2ce79c652a8f8efbae77d5950e5e9776cdfdbcbad49e3ad5dc6364d37a4d56",
+  "attempt_records": [
+    {
+      "record_id": "a1",
+      "case_id": "c1",
+      "terminal_ref": "t1"
+    }
+  ],
+  "terminal_records": [
+    {
+      "record_id": "t1",
+      "case_id": "c1",
+      "status": "completed"
+    }
+  ],
+  "capture_digest": "sha256:e9b7137f2706f98f47d67bde3e7450e9528157b4ae2b29375f75a440bcab6992"
+}
