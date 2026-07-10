@@ -50,8 +50,10 @@ Plus the zero-code-path projections: `evaluatedObligationFraction`, the Cherry-P
 ## Signed limitations (admit irregularity over overclaim)
 
 1. **The committed evidence is a synthetic structural demonstration** over two real detector identities.
-   A real dual-detector capture is Lane C, which needs a droplet (PG2 CPU + LG4 12B GPU/8-bit) and **has
-   not been executed**. The harness is present; the capture is the Frontier lever.
+   The real dual-detector capture is Lane C (harness complete). It is **scheduled to be run by an
+   independent team** on their own droplet (PG2 CPU + LG4 12B GPU/8-bit) — **independent-party evidence
+   generation**, the strongest grounding and the → 10 lever. Frontier is held pending that run, not
+   downgraded.
 2. **Offline pinned weights ≠ a hosted endpoint** (carries `live_endpoint_attestation_deferred`).
 3. **The Omission Lower Bound only bites within a committed universe** — a producer who declares
    `universe = roster` truthfully gets bound 0. Universe representativeness is minted
@@ -71,17 +73,18 @@ Plus the zero-code-path projections: `evaluatedObligationFraction`, the Cherry-P
 
 ## Four-axis scorecard — re-scored at closeout
 
-| Axis               | Spec-time | Closeout | Why the closeout value                                                                                                              |
-| ------------------ | --------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| Novelty            | 9.4       | **9.4**  | prior-art kill-test executed; the panel-completeness object survives, positioned against four neighbor classes                      |
-| Frontier           | 8.7       | **8.4**  | **scored DOWN** — Lane C real capture did not execute; the evidence is a synthetic demonstration (5A/5C honest-downgrade precedent) |
-| Good-for-Anthropic | 9.2       | **9.2**  | BYO-Panel contract makes it self-serve; no external pilot has run it yet                                                            |
-| Constitution       | 9.2       | **9.2**  | visible silence surface + attestation-truth/policy separation; VPC contest (→ 9.4) spun out                                         |
+| Axis               | Spec-time | Closeout | Why the closeout value                                                                                                                                                              |
+| ------------------ | --------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Novelty            | 9.4       | **9.4**  | prior-art kill-test executed; the panel-completeness object survives, positioned against four neighbor classes                                                                      |
+| Frontier           | 8.7       | **8.7**  | held — Lane C capture is **pending an independent team** (independent-party evidence generation, the → 10 lever); the harness is complete and the synthetic evidence verifies today |
+| Good-for-Anthropic | 9.2       | **9.2**  | BYO-Panel contract makes it self-serve; no external pilot has run it yet                                                                                                            |
+| Constitution       | 9.2       | **9.2**  | visible silence surface + attestation-truth/policy separation; VPC contest (→ 9.4) spun out                                                                                         |
 
 _"Good-for-Anthropic" measures potential usefulness to assurance teams; it does not imply Anthropic
 review, adoption, or endorsement._
 
 ## Next
 
-Run the Lane C dual capture on a droplet (restores Frontier to 9.3–9.4). Then **5G VML** (multilingual,
-pays the oldest debt), **5H VDE** (downstream efficacy), and **VPC** (Panel Contest / Rerun Right).
+An **independent team runs the Lane C dual capture** on their droplet (independent-party evidence
+generation → Frontier 9.3–9.4). Then **5G VML** (multilingual, pays the oldest debt), **5H VDE**
+(downstream efficacy), and **VPC** (Panel Contest / Rerun Right).
