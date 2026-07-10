@@ -254,3 +254,36 @@ export function resign(bundle) {
     attestation_signature: signContent(VERIFIER_PRIV, DOMAIN.foreign_capture, content),
   };
 }
+
+// --- Homework Corpus (Invention C): named fixtures after real self-grading failures. ---
+
+// honor_system_self_graded (Forbes "illusion of the honor system"): producer key IS the verifier key,
+// signed consistently (verifier key signs the transcript) so 283–288 pass and the rung-0 floor 289 fires.
+export function honorSystemSelfGraded() {
+  const b = validBundle({ rung: "challenge_bound" });
+  b.producer_identity.public_key_pem = b.verifier_identity.public_key_pem;
+  b.producer_identity.key_fingerprint = b.verifier_identity.key_fingerprint;
+  const tc = b.producer_transcript.content;
+  b.capture.producer_identity_ref = identityDigest(b.producer_identity, "producer");
+  tc.capture_digest = captureDigest(b.capture);
+  tc.producer_identity_digest = identityDigest(b.producer_identity, "producer");
+  tc.producer_key_fingerprint = b.producer_identity.key_fingerprint;
+  b.producer_transcript.producer_signature = signContent(
+    VERIFIER_PRIV,
+    DOMAIN.producer_transcript,
+    tc
+  );
+  const { attestation_signature, ...content } = b;
+  return {
+    ...content,
+    attestation_signature: signContent(VERIFIER_PRIV, DOMAIN.foreign_capture, content),
+  };
+}
+
+// notified_body_unanchored (EU AI Act notified-body independence): claims externally_anchored with NO
+// anchor evidence → proven stays rung-1 → overclaim 296.
+export function notifiedBodyUnanchored() {
+  const b = validBundle({ rung: "challenge_bound" });
+  b.separation_claim.claimed_rung = "externally_anchored";
+  return resign(b);
+}
