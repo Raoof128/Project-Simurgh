@@ -7,7 +7,7 @@
 // Digest conventions (written down per gotcha): committed-artifact digests use sha256(canonicalJson(x));
 // signed VFC objects use domainDigest(DOMAIN.<obj>, content); identities use identityDigest(id, role).
 import { readFileSync } from "node:fs";
-import { createPrivateKey, createPublicKey } from "node:crypto";
+import { createPrivateKey, createPublicKey, sign as nodeSign } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { join } from "node:path";
 import {
@@ -31,6 +31,15 @@ const pubPem = (p) =>
 
 const VERIFIER_PRIV = priv("stage-vfc");
 const PRODUCER_PRIV = priv("stage-vfc-producer");
+const FULCIO_PRIV = priv("stage-vfc-fulcio");
+const FULCIO_PUB_PEM = pubPem(FULCIO_PRIV);
+export const FULCIO_ROOT_FP = fingerprint(FULCIO_PUB_PEM);
+export const FROZEN_INTEGRATED_TIME = 1700000000;
+export const FIXTURE_OIDC = Object.freeze({
+  issuer: "https://fixture.oidc",
+  audience: "sigstore",
+  subject: "producer@fixture.example",
+});
 
 export const artifactDigest = (obj) => sha256Hex(canonicalJson(obj));
 export const identityDigest = (id, role) => domainDigest(DOMAIN[`${role}_identity`], id);
@@ -105,6 +114,11 @@ function build({ rung = "challenge_bound" } = {}) {
   const { verifier, producer } = fixtureIdentities();
   const { corpus, panelPlan, detectorSnapshot } = fixtureArtifacts();
   const boundOrHigher = rung === "challenge_bound" || rung === "externally_anchored";
+  const anchored = rung === "externally_anchored";
+  if (anchored) {
+    producer.anchor_type = "sigstore_oidc";
+    producer.anchor_subject = FIXTURE_OIDC.subject;
+  }
   const receipt = boundOrHigher
     ? issueChallenge({ corpus, panelPlan, detectorSnapshot, verifierIdentity: verifier })
     : undefined;
@@ -126,6 +140,35 @@ function build({ rung = "challenge_bound" } = {}) {
     producer_key_fingerprint: producer.key_fingerprint,
   };
   if (boundOrHigher) transcriptContent.challenge_record_digest = receipt.challenge_record_digest;
+
+  let anchorEvidence;
+  if (anchored) {
+    const dsse_statement = {
+      producer_identity_digest: identityDigest(producer, "producer"),
+      producer_key_fingerprint: producer.key_fingerprint,
+      capture_digest: capDigest,
+      challenge_record_digest: receipt.challenge_record_digest,
+    };
+    anchorEvidence = {
+      anchor_type: "sigstore_oidc",
+      sigstore_bundle: {
+        schema_version: "0.3",
+        fulcio_cert_pubkey_pem: FULCIO_PUB_PEM,
+        producer_key_algorithm: "ed25519",
+        integrated_time: FROZEN_INTEGRATED_TIME,
+        issuer: FIXTURE_OIDC.issuer,
+        audience: FIXTURE_OIDC.audience,
+        subject: FIXTURE_OIDC.subject,
+        dsse_statement,
+        dsse_signature: nodeSign(
+          "sha256",
+          Buffer.from(canonicalJson(dsse_statement)),
+          FULCIO_PRIV
+        ).toString("base64"),
+      },
+    };
+    transcriptContent.anchor_evidence_digest = domainDigest(DOMAIN.anchor_evidence, anchorEvidence);
+  }
 
   const census = buildCensus({
     challengeRecordDigest: boundOrHigher ? receipt.challenge_record_digest : null,
@@ -151,6 +194,7 @@ function build({ rung = "challenge_bound" } = {}) {
       digest: artifactDigest(detectorSnapshot),
     },
     capture_census_digest: domainDigest(DOMAIN.capture_census, census),
+    ...(anchored ? { anchor_evidence: anchorEvidence } : {}),
     separation_claim: { claimed_rung: rung },
   };
   const bundle = {
@@ -184,6 +228,21 @@ export function resign(bundle) {
   tc.producer_identity_digest = identityDigest(b.producer_identity, "producer");
   tc.producer_key_fingerprint = b.producer_identity.key_fingerprint;
   if (b.challenge_receipt) tc.challenge_record_digest = b.challenge_receipt.challenge_record_digest;
+  if (b.anchor_evidence) {
+    const dsse_statement = {
+      producer_identity_digest: identityDigest(b.producer_identity, "producer"),
+      producer_key_fingerprint: b.producer_identity.key_fingerprint,
+      capture_digest: tc.capture_digest,
+      challenge_record_digest: tc.challenge_record_digest,
+    };
+    b.anchor_evidence.sigstore_bundle.dsse_statement = dsse_statement;
+    b.anchor_evidence.sigstore_bundle.dsse_signature = nodeSign(
+      "sha256",
+      Buffer.from(canonicalJson(dsse_statement)),
+      FULCIO_PRIV
+    ).toString("base64");
+    tc.anchor_evidence_digest = domainDigest(DOMAIN.anchor_evidence, b.anchor_evidence);
+  }
   b.producer_transcript.producer_signature = signContent(
     PRODUCER_PRIV,
     DOMAIN.producer_transcript,
