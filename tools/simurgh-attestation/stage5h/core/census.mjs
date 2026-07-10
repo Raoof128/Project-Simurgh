@@ -3,7 +3,8 @@
 // claim ids; artefacts_ref digests match the on-disk bytes; and the COMMITTED verdict_table equals the
 // freshly recomputed one (a signed verdict table an editor changed but the attestation still covers
 // would pass 301 — this catches the drift).
-import { canonicalJson, artifactDigest } from "./digests.mjs";
+import { canonicalJson, artifactDigest, domainDigest } from "./digests.mjs";
+import { DOMAIN } from "../constants.mjs";
 import { buildVerdictTable } from "./tierLattice.mjs";
 
 const RAW = 313;
@@ -20,6 +21,14 @@ export function checkCensus(ctx) {
   const tableIds = b.verdict_table.map((r) => r.claim_id).sort();
   if (canonicalJson(claimIds) !== canonicalJson(tableIds)) {
     return fail("verdict_table_bijection");
+  }
+  // the committed inventory census digest must match the recomputed preimage (consumes the domain)
+  const preimage = {
+    claim_ids: claimIds,
+    artefact_ids: b.artefacts_ref.map((a) => a.artefact_id).sort(),
+  };
+  if (domainDigest(DOMAIN.inventory_census, preimage) !== b.inventory_census_digest) {
+    return fail("inventory_census_digest_mismatch");
   }
   for (const a of b.artefacts_ref) {
     const bytes = ctx.artefactBytes ? ctx.artefactBytes[a.artefact_id] : undefined;

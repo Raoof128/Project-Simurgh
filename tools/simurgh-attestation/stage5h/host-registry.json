@@ -1,0 +1,7 @@
+[
+  {
+    "host_subject": "aisi-review-host@example.org",
+    "host_key_fingerprint": "sha256:e64577c92bb735fb639ac812144e2cd0044cdc036b6290af34ee49fc8fdde619",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAfubZJAd/suErj1kS8oNRuTduz+7nmSFmMHsrqakazQQ=\n-----END PUBLIC KEY-----\n"
+  }
+]

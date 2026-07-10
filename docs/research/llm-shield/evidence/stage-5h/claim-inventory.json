@@ -1,0 +1,113 @@
+{
+  "schema": "simurgh.vsd.claim_inventory.v1",
+  "content": {
+    "inventory_id": "vsd-inv-frontier7b-2026-07",
+    "producer_identity_digest": "sha256:34e2390b4ce2bbfcdb66f6ee0de3c15cbc70726ca11bfa3dc2c9f50083d91045",
+    "report_ref": {
+      "title_digest": "sha256:4dd80859122932b4c10c01281079c4568c51840f14cbe9e6f22d479002f30324",
+      "period": "2026-Q3"
+    },
+    "claims": [
+      {
+        "claim_id": "frontier7b-cbrn-threshold",
+        "claim_text_digest": "sha256:34fa1ebc5c52d26a1c8f75ff0ba28881357ada3b171547ebaf3c7759b62b3134",
+        "declared_consequence": "threshold_crossing",
+        "declared_tier": "controlled",
+        "method_summary_digest": "sha256:d8022bb606405f99519602c817270e486c1d8b0381fa726413456c4c26357425",
+        "scope_statement": {
+          "checkpoint_kind": "refusal_relaxed_checkpoint",
+          "environment": "offline",
+          "pipeline_components": [
+            "constitutional_training",
+            "refusal_head"
+          ],
+          "uncertainty_note": "distribution shift + evaluation-awareness not excluded"
+        },
+        "artefact_manifest": {
+          "present": [
+            {
+              "artefact_id": "redteam-summary",
+              "digest": "sha256:25ed1868eb6a4993fc690102435759e73a0bc2905085b0a18a7c6e6731acf370"
+            },
+            {
+              "artefact_id": "judge-rubric",
+              "digest": "sha256:0e4d9b5f0a8e95f59e52a382c9d72ae0844628d095c6638ca8d4b01f1a632d67"
+            }
+          ],
+          "withheld": [
+            {
+              "artefact_id": "redteam-prompts",
+              "justification_type": "safety_hazard",
+              "available_at_tier": "controlled",
+              "reason": "raw CBRN elicitation prompts"
+            },
+            {
+              "artefact_id": "model-weights",
+              "justification_type": "security_sensitive",
+              "available_at_tier": "controlled",
+              "reason": "frontier weights"
+            }
+          ]
+        },
+        "recompute": {
+          "recipe_digest": "sha256:7f558e1fb5bbe9da9869c9ac2ae55271491a4d6bee440d1e011148b6f55a4a28",
+          "committed_output_digest": "sha256:9f10dc0dccddb17a5498dc69efe52330c523d4bf1d1202bf0b7440adf445ede0"
+        }
+      },
+      {
+        "claim_id": "frontier7b-harmbench-public",
+        "claim_text_digest": "sha256:cb91c860e18ad89bce3ad6c68c6737f669e57699a512cb82c0dd69b1831a280d",
+        "declared_consequence": "supporting",
+        "declared_tier": "public",
+        "method_summary_digest": "sha256:6e112631940ff54eabbe67f4c41c3664751197408fd9b8ddcdf1d02ba09e0ac8",
+        "scope_statement": {
+          "checkpoint_kind": "representative_launch_checkpoint",
+          "environment": "offline",
+          "pipeline_components": [
+            "constitutional_training",
+            "refusal_head"
+          ],
+          "uncertainty_note": "distribution shift + evaluation-awareness not excluded"
+        },
+        "artefact_manifest": {
+          "present": [
+            {
+              "artefact_id": "eval-results",
+              "digest": "sha256:d1c2aee7c6165eb65aff57465c8d6c7eac9cb07c7522bfa6bcf22f2098984c72"
+            }
+          ],
+          "withheld": []
+        },
+        "recompute": {
+          "recipe_digest": "sha256:4b6453f640390d321c502742707956bb83528d85e991b712406900266b151841",
+          "committed_output_digest": "sha256:0b5953f5d6bf652eccf75357444ba5958a8de86e35790da44f330e216ff2bad7"
+        }
+      },
+      {
+        "claim_id": "frontier7b-monitoring-context",
+        "claim_text_digest": "sha256:0b845a34451ebd3e9b28fb215326e38b08a5b51ececae0f663372d6426e0a152",
+        "declared_consequence": "contextual",
+        "declared_tier": "restricted",
+        "scope_statement": {
+          "checkpoint_kind": "production_configuration",
+          "environment": "offline",
+          "pipeline_components": [
+            "constitutional_training",
+            "refusal_head"
+          ],
+          "uncertainty_note": "distribution shift + evaluation-awareness not excluded"
+        },
+        "artefact_manifest": {
+          "present": [],
+          "withheld": []
+        },
+        "restriction": {
+          "reason": "operational monitoring data confidential",
+          "right_scaling_note": "context only; not a release-justifying warrant"
+        }
+      }
+    ]
+  },
+  "inventory_digest": "sha256:fc1516e8dd8c439185436c1c2c0ee732907b38f81424a31502ba7a4c98ba6f1f",
+  "producer_signature": "kAIQfaCB0b1DzLzmQid/xJUDJPzXt0tjvrSMRex3OcJ3Fd+d+XXtMfhqOXyoQH+0Lb2DD6Axalk9CZRLv2Y2CQ=="
+}
