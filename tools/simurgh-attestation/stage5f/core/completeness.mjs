@@ -3,6 +3,8 @@
 // policy). The declared summary can only equal the recomputed one — an incomplete panel cannot declare
 // itself complete, and a small panel cannot understate its silence surface. Coverage publishes the RAW
 // heterogeneous_label_vector (typed labels, no normalization) and never an aggregate.
+import { canonicalJson } from "../../canonicalise.mjs";
+
 const STATUSES = [
   "evaluated",
   "not_applicable",
@@ -75,9 +77,10 @@ export function checkCompleteness(bundle) {
     cov.omission_lower_bound !== r.coverage.omission_lower_bound
   )
     return 279;
+  // Compare canonically (key-order independent) — the committed evidence is canonicalised on write.
   if (
-    JSON.stringify(cov.heterogeneous_label_vector) !==
-    JSON.stringify(r.coverage.heterogeneous_label_vector)
+    canonicalJson(cov.heterogeneous_label_vector) !==
+    canonicalJson(r.coverage.heterogeneous_label_vector)
   )
     return 279;
   return null;
