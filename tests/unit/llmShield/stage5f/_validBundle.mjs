@@ -75,14 +75,12 @@ function build() {
     { case_id: "c1", case_class: "general", source_input_digest: sha256Bytes("case-1-source") },
     { case_id: "c2", case_class: "general", source_input_digest: sha256Bytes("case-2-source") },
   ];
+  // Applicability is per (member × case_class) — one entry per unique class, never per case.
+  const classes = [...new Set(cases.map((c) => c.case_class))];
   const applicability_matrix = [];
   for (const m of roster)
-    for (const c of cases)
-      applicability_matrix.push({
-        member_id: m.member_id,
-        case_class: c.case_class,
-        applicable: true,
-      });
+    for (const cc of classes)
+      applicability_matrix.push({ member_id: m.member_id, case_class: cc, applicable: true });
 
   const roster_digest = sha256Canon(roster);
   const corpus_digest = sha256Canon(cases);
@@ -129,6 +127,7 @@ function build() {
           kind: "binary_softmax",
           positive_score: v.score,
           threshold: "0.5000",
+          positive_class_index: m.positive_class_index,
           label,
         };
       } else {
@@ -251,3 +250,9 @@ function build() {
 
 export const fixture = build();
 export const validBundle = () => clone(fixture.bundle);
+
+// Re-sign a mutated bundle so it passes 269 (tests that exercise post-signature checks via evaluatePanel).
+export function resign(bundle) {
+  const { signature, ...content } = bundle;
+  return { ...content, signature: signBundle(content, fixture.attestationPem) };
+}
