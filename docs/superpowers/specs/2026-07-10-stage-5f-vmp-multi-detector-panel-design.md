@@ -18,8 +18,10 @@ across detectors becomes impossible to hide.
 **Gauntlet:** brainstorm + Sections 1–6 each reviewed and locked; five Section-1 locks, eight
 Section-2 locks, eight Section-3 locks, six Section-4 locks (incl. one corrected impossible
 theorem), ten Section-5 blocking fixes (incl. one reviewer claim rejected with repo receipts), and a
-Section-5 Lane-B digest-cycle fix. Beast-mode inventions: Panel Completeness Ratio, the Cherry-Pick
-Test, Detector Disagreement Ledger.
+Section-5 Lane-B digest-cycle fix, and a second beast pass. Beast-mode inventions (folded in): Panel
+Completeness Ratio, the Cherry-Pick Test, Detector Disagreement Ledger, ① Roster Coverage Commitment /
+Omission Lower Bound (Law 6), ② BYO-Panel Adapter Contract, ③ Adversarial Disagreement Mining. Invention
+④ Panel Contest / Rerun Right is spun out to the next stage (VPC).
 
 Folds the blade into one law family: (1) a **precommitted panel plan** (roster + corpus +
 applicability + adapters) bound before capture in a signed evidence chain; (2) a **typed non-result
@@ -42,7 +44,7 @@ representation-completeness.
 **Simurgh sentence.** _A detector panel may disagree, abstain, or fail — but it may not quietly
 forget a member._
 
-**Five verifier laws (falsifiable):**
+**Six verifier laws (falsifiable):**
 
 1. **No Post-Commit Panel Omission.** For every committed case, every member of the precommitted
    roster has exactly one typed cell. A member cannot be removed or silenced after roster
@@ -57,6 +59,11 @@ forget a member._
    before capture; `not_applicable`/`unsupported_input` must be entailed by them.
 5. **No Dropped Capture Record.** Every public cell (any status) maps to exactly one terminal census
    record and back; every capture attempt resolves to exactly one terminal record.
+6. **No Gerrymandered Universe** _(beast invention ①, the pre-commit twin of Law 1)._ The panel plan
+   binds a precommitted **detector universe** (a registry of candidate detector IDs); the verifier
+   checks `roster ⊆ universe`, and the attestation publishes the **Omission Lower Bound** =
+   `|universe| − |panel|`, the signed **silence surface**. You may still draw a small honest panel —
+   but what you left on the table is now a number, not a shrug.
 
 **Signed claim-rail (non-claim, not a verifier law):** **Disagreement Is Not Correctness.** Agreement,
 disagreement, abstention, and failure are reported, never converted into a panel-safety verdict.
@@ -70,17 +77,34 @@ disagreement, abstention, and failure are reported, never converted into a panel
 - **Offline pinned weights ≠ a hosted endpoint** (carries `live_endpoint_attestation_deferred`).
 - **Bootstrap provenance vs shared-corpus evidence are separate claims:** imported 5E/3V-B captures
   prove custody only; panel verdicts come from the new shared corpus both members evaluate.
-- **Roster precommit prevents post-result omission, not biased initial detector selection.**
+- **Roster precommit + coverage commitment (Law 6) prevent post-result omission and quantify the
+  silence surface — but coverage is not representativeness.** A large universe with a small honest
+  panel is still honest; we publish the gap, we do not prove the universe itself is complete.
+
+**Beast inventions folded in (this stage).** ① **Roster Coverage Commitment / Omission Lower Bound**
+(Law 6 above): the thing in-toto/C2PA structurally cannot express — they prove steps happened; they
+cannot measure what a panel was _selected to exclude_. ② **BYO-Panel Adapter Contract**: any safety
+team points VMP at their own detectors offline, zero Simurgh involvement — removes the "one blocker"
+and turns the standing-10 lever into a single command. Non-claim: _a BYO run is the caller's
+evidence, not ours; we verify the contract, we do not endorse the panel._ ③ **Adversarial
+Disagreement Mining**: the shared corpus is built to expose inter-detector blind spots (cases where
+exactly one member catches), and the attestation surfaces the **sole-catcher structure** — the
+Cherry-Pick Test made real with live models. Non-claim: _a sole-catcher is a coverage fact on this
+corpus, never a ranking._ (④ Panel Contest Cells / the Rerun Right is a **different blade** — spun out
+to the next stage, VPC.)
 
 **AnthropicSafe framing.** The shared corpus extends the already-published safe base families (5E's
 8 bases + benign probes), not novel potent attack strings; detectors score **inputs only**; no target
 model generates; the categorical detector's output is a bounded safe token (allow/block) — no harmful
 generation is produced or preserved. Same posture as 5E.
 
-**Socket ledger.** **PAYS** `multi_detector_panel_deferred` (minted by 5E). **MINTS**
-`panel_aggregation_policy_deferred` (weighting/quorum/fusion — deliberately out of scope in v1),
-`roster_representativeness_deferred` (initial-selection bias), `portable_historical_kernel_deferred`
-(browser cannot run historical verifiers). **Carries** `multilingual_ruleset_deferred` (→ 5G VML),
+**Socket ledger.** **PAYS** `multi_detector_panel_deferred` (minted by 5E). **PARTIALLY PAYS**
+`roster_representativeness_deferred` — the Coverage Commitment (Law 6) publishes the silence surface;
+full representativeness (proving the universe itself is complete) remains open, re-minted as
+`universe_completeness_deferred`. **MINTS** `panel_aggregation_policy_deferred` (weighting/quorum/fusion
+— deliberately out of scope in v1), `universe_completeness_deferred`, `panel_contest_deferred`
+(→ next stage VPC, beast invention ④), `portable_historical_kernel_deferred` (browser cannot run
+historical verifiers). **Carries** `multilingual_ruleset_deferred` (→ 5G VML),
 `live_endpoint_attestation_deferred`, `unicode_confusables_kernel_hardening_deferred`,
 `downstream_efficacy_target_deferred` (→ 5H VDE).
 
@@ -104,11 +128,17 @@ audit tier adds the census bijection. One additive raw-code block, fail-closed w
     "previous_record_digest": null,
     "record_digest": "sha256:...",
     "signature": "base64",
-    "panel_plan_digest": "sha256:...", // = hash(schema_version + roster + corpus + applicability + adapter_manifest)
+    "panel_plan_digest": "sha256:...", // = hash(schema_version + roster + corpus + applicability + adapter_manifest + universe)
     "roster_digest": "sha256:...",
     "corpus_digest": "sha256:...",
     "applicability_digest": "sha256:...",
     "adapter_manifest_digest": "sha256:...",
+    "universe_digest": "sha256:...", // Law 6: the precommitted candidate-detector universe
+  },
+  "detector_universe": {
+    // Law 6: registry of candidate detector IDs the panel was drawn from
+    "universe_digest": "sha256:...",
+    "candidates": ["prompt_guard_2_86m", "llama_guard_4_12b", "..."],
   },
   "roster": [
     // frozen membership; each member fully declared
@@ -178,6 +208,13 @@ audit tier adds the census bijection. One additive raw-code block, fail-closed w
       "missing_capture": 1,
     },
   },
+  "coverage": {
+    // Law 6 (invention ①): silence surface + sole-catcher structure (invention ③) — both DECLARED, recomputed
+    "universe_size": 5,
+    "panel_size": 2,
+    "omission_lower_bound": 3, // = universe_size − panel_size
+    "sole_catcher_cases": [{ "case_id": "...", "only_member": "prompt_guard_2_86m" }],
+  },
   "bootstrap_provenance": [
     // custody-only; NEVER counted as panel verdicts
     {
@@ -218,23 +255,23 @@ provenance (e.g. `unexpected_categorical_output`) and no verdict.
 
 **Raw codes (additive 268→282), each bound to a law/bound:**
 
-| Code | Check                                                                                                                                                                | Enforces                                         |
-| ---- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
-| 268  | schema id + no unknown keys; no aggregate-verdict field (`aggregate_verdict`/`panel_score`/`consensus`/`quorum`)                                                     | structural gate; aggregate-absence               |
-| 269  | signature — **external-pinned fingerprint first**, then Ed25519 over canonical content (embedded key informational only)                                             | not self-authenticating (5E lesson)              |
-| 270  | precommit receipt + **linear chain closure** (positions `0..N` unique/contiguous, one per position, no forks, single terminal head, attestation binds it)            | Law 3                                            |
-| 271  | panel-plan integrity — `panel_plan_digest = hash(schema_ver + 4 subdigests)`; roster fully declared + hashes to `roster_digest`                                      | Law 3                                            |
-| 272  | corpus binding — cases hash to `corpus_digest`; cells reference only committed cases                                                                                 | exam integrity                                   |
-| 273  | cell-matrix bijection — exactly one typed cell per (member × case), none absent/duplicated                                                                           | Law 1                                            |
-| 274  | status-union validity — status ∈ enum; only `evaluated` has a verdict; `capture_failed` has bounded error prov, no verdict                                           | typed non-results                                |
-| 275  | applicability/capability — `not_applicable` ⟸ matrix; `unsupported_input` ⟸ capability profile                                                                       | Law 4                                            |
-| 276  | shared-input + adapter **replay** — `detector_input_digest = digest(applyCommittedAdapter(source, adapter, tokenizer, truncation))`; digests match roster            | Law 2                                            |
-| 277  | semantics-specific verdict recompute via closed registry (scaled-int softmax compare / pinned parser); **no softmax recomputation**; no cross-semantics mapping      | heterogeneous semantics declared, not reconciled |
-| 278  | bootstrap provenance — run pinned historical verifiers (5E/3V-B) on imported artifacts under their pinned roots; expect `recorded_raw`                               | custody-only imports                             |
-| 279  | declared `completeness` flags + histogram match recomputed values                                                                                                    | missing-capture cannot be laundered              |
-| 280  | _(audit only)_ census bijection — all public cells (every status) ↔ all terminal census records; every attempt → one terminal; census hashes to `capture_log_digest` | Law 5                                            |
-| 281  | strict completeness **policy** — `VMP_EVALUATION_INCOMPLETE_POLICY` (default CLI rejects `evaluation_complete=false`)                                                | consumer sufficiency                             |
-| 282  | fail-closed wrapper (`evaluatePanelSafe`); also the **infrastructure-unavailable** code (Python replay / historical kernel / subprocess cannot execute)              | never fail open; env-unavailable ≠ tampering     |
+| Code | Check                                                                                                                                                                                                          | Enforces                                              |
+| ---- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| 268  | schema id + no unknown keys; no aggregate-verdict field (`aggregate_verdict`/`panel_score`/`consensus`/`quorum`)                                                                                               | structural gate; aggregate-absence                    |
+| 269  | signature — **external-pinned fingerprint first**, then Ed25519 over canonical content (embedded key informational only)                                                                                       | not self-authenticating (5E lesson)                   |
+| 270  | precommit receipt + **linear chain closure** (positions `0..N` unique/contiguous, one per position, no forks, single terminal head, attestation binds it)                                                      | Law 3                                                 |
+| 271  | panel-plan integrity — `panel_plan_digest = hash(schema_ver + 5 subdigests incl. universe)`; roster fully declared + hashes to `roster_digest`; **`roster ⊆ universe`** (universe hashes to `universe_digest`) | Law 3 + Law 6                                         |
+| 272  | corpus binding — cases hash to `corpus_digest`; cells reference only committed cases                                                                                                                           | exam integrity                                        |
+| 273  | cell-matrix bijection — exactly one typed cell per (member × case), none absent/duplicated                                                                                                                     | Law 1                                                 |
+| 274  | status-union validity — status ∈ enum; only `evaluated` has a verdict; `capture_failed` has bounded error prov, no verdict                                                                                     | typed non-results                                     |
+| 275  | applicability/capability — `not_applicable` ⟸ matrix; `unsupported_input` ⟸ capability profile                                                                                                                 | Law 4                                                 |
+| 276  | shared-input + adapter **replay** — `detector_input_digest = digest(applyCommittedAdapter(source, adapter, tokenizer, truncation))`; digests match roster                                                      | Law 2                                                 |
+| 277  | semantics-specific verdict recompute via closed registry (scaled-int softmax compare / pinned parser); **no softmax recomputation**; no cross-semantics mapping                                                | heterogeneous semantics declared, not reconciled      |
+| 278  | bootstrap provenance — run pinned historical verifiers (5E/3V-B) on imported artifacts under their pinned roots; expect `recorded_raw`                                                                         | custody-only imports                                  |
+| 279  | declared `completeness` flags + histogram **and `coverage` (omission_lower_bound = universe−panel; sole_catcher_cases)** match recomputed values                                                               | missing-capture + silence surface cannot be laundered |
+| 280  | _(audit only)_ census bijection — all public cells (every status) ↔ all terminal census records; every attempt → one terminal; census hashes to `capture_log_digest`                                           | Law 5                                                 |
+| 281  | strict completeness **policy** — `VMP_EVALUATION_INCOMPLETE_POLICY` (default CLI rejects `evaluation_complete=false`)                                                                                          | consumer sufficiency                                  |
+| 282  | fail-closed wrapper (`evaluatePanelSafe`); also the **infrastructure-unavailable** code (Python replay / historical kernel / subprocess cannot execute)                                                        | never fail open; env-unavailable ≠ tampering          |
 
 **Frozen first-failure order:** 268 → 269 → 270 → 271 → 272 → 273 → 274 → 275 → 276 → 277 → 278 →
 279, then (audit only) 280, then policy 281, wrapper 282. Structure/auth before semantics; corpus
@@ -345,7 +382,7 @@ canonical agreement, not FP reproducibility of inference.
 
 ## 4. Lean + non-claims + limitations + wedge + scorecard
 
-**Lean core (`proofs/stage5f/PanelCompleteness.lean`, zero `sorry`, Lean 4.15) — 7 theorems + 1
+**Lean core (`proofs/stage5f/PanelCompleteness.lean`, zero `sorry`, Lean 4.15) — 8 theorems + 1
 lemma:**
 
 1. `CellMatrixBijection` — `cells ≃ roster × corpus` ⇒ `|cells| = |roster|·|corpus|`, exactly one
@@ -364,6 +401,9 @@ tokenizer, truncation))` and those digests equal the plan-bound ones. _(Law 2)_
 7. `StrictPolicyMayRejectValidAttestation` — `attestation_valid` does **not** imply `policy_accepted`;
    strict-default rejects truthful incompleteness, `--attestation-only` accepts the same structurally
    valid bundle (non-equivalence, not independence).
+8. `RosterSubsetUniverseAndBound` — an accepted bundle has `roster ⊆ universe` and the published
+   `omission_lower_bound = |universe| − |panel|` is exact (`= |universe \ roster|`) ⇒ a member outside
+   the committed universe, or an understated silence surface, is rejected. _(Law 6, invention ①)_
 
 - Lemma `VerifierCodomainHasNoAggregate` — the Stage-5F verifier's **output type** contains no
   aggregate panel-verdict field (a structural codomain statement about our code, **not** a claim that
@@ -428,19 +468,22 @@ their own panel (tracked debt).
 
 **Four-axis scorecard — spec-time current / closeout target:**
 
-| Axis               | Current | Closeout target                                                                                         |
-| ------------------ | ------- | ------------------------------------------------------------------------------------------------------- |
-| Novelty            | 9.1     | 9.2 after pinning the EU Code primary text + a third detector family                                    |
-| Frontier           | 8.7     | 9.3 after the fresh dual-detector shared-corpus capture _executes_ (else scored down — 5A/5C precedent) |
-| Good-for-Anthropic | 8.8     | 9.5 after an external safety-team pilot                                                                 |
-| Constitution       | 9.1     | 9.4 via stronger honesty/oversight/contestability mechanisms — **not** via adoption                     |
+| Axis               | Current | Closeout target                                                                                              |
+| ------------------ | ------- | ------------------------------------------------------------------------------------------------------------ |
+| Novelty            | 9.4     | 9.5 after pinning the EU Code primary text + a third detector family                                         |
+| Frontier           | 8.7     | 9.4 after the fresh dual-detector disagreement-mined capture _executes_ (else scored down — 5A/5C precedent) |
+| Good-for-Anthropic | 9.2     | 9.5 after an external safety-team pilot actually runs the BYO-Panel contract                                 |
+| Constitution       | 9.2     | 9.4 once the Panel Contest / Rerun Right (invention ④) ships as the next stage (VPC)                         |
 
-_Novelty rose 8.4 → 9.1: the gap hunt (2026-07-10) executed the prior-art kill-test and produced the
-attackable source map above — the claim survives, narrowed and positioned against four neighbor
-classes. "Good-for-Anthropic" measures potential usefulness to assurance teams; it does not imply
-Anthropic review, adoption, or endorsement._ Tracked debts (guard on the teeth): execute the fresh
-dual Lane-C capture (Frontier); pin the EU Code primary text (Novelty hard-absence claim); an external
-safety-team pilot (Good-for-Anthropic, the standing 10 lever).
+_Movement from the beast pass (2026-07-10): Novelty 9.1 → **9.4** (invention ① Roster Coverage
+Commitment / Omission Lower Bound — the completeness object in-toto/C2PA structurally cannot express);
+Good-for-Anthropic 8.8 → **9.2** (invention ② BYO-Panel contract makes it self-serve, not gated on us);
+Constitution 9.1 → **9.2** (① publishes a visible silence surface). Frontier stays 8.7 until the
+disagreement-mined dual capture (invention ③) executes. "Good-for-Anthropic" measures potential
+usefulness to assurance teams; it does not imply Anthropic review, adoption, or endorsement._ Tracked
+debts (guard on the teeth): execute the fresh dual Lane-C capture (Frontier); pin the EU Code primary
+text + add a third detector (Novelty); an external team runs the BYO-Panel contract (Good-for-Anthropic,
+the standing 10 lever); ship VPC contest (Constitution).
 
 ---
 
@@ -454,21 +497,22 @@ safety-team pilot (Good-for-Anthropic, the standing 10 lever).
 | `core/schema.mjs`        | schema id + exact-key/unknown-key + aggregate-field rejection                                                                                                                  | 268      |
 | `core/signature.mjs`     | external-pinned fingerprint first, then Ed25519 (embedded key informational only)                                                                                              | 269      |
 | `core/chain.mjs`         | linear chain: positions `0..N`, precommit@0, closeout, `previous_record_digest` linkage, single terminal head                                                                  | 270      |
-| `core/plan.mjs`          | `panel_plan_digest` over 4 subdigests + schema ver; roster integrity                                                                                                           | 271      |
+| `core/plan.mjs`          | `panel_plan_digest` over 5 subdigests + schema ver; roster integrity; **`roster ⊆ universe`** + universe binding (Law 6)                                                       | 271      |
 | `core/corpus.mjs`        | `corpus_digest`, case + `case_class` binding                                                                                                                                   | 272      |
 | `core/matrix.mjs`        | cell-matrix bijection; status-union legality                                                                                                                                   | 273, 274 |
 | `core/applicability.mjs` | applicability-matrix + capability-profile entailment                                                                                                                           | 275      |
 | `core/adapter.mjs`       | pure structural binding of `detector_input_digest` + adapter/tokenizer/truncation to plan (consumes replay result)                                                             | 276      |
 | `core/verdict.mjs`       | closed registry: `binary_softmax` (scaled-int compare) + `categorical_generation` (pinned parser)                                                                              | 277      |
 | `core/bootstrap.mjs`     | pure — validates pin records + runner results                                                                                                                                  | 278      |
-| `core/completeness.mjs`  | representation/evaluation recompute + histogram; strict policy gate                                                                                                            | 279, 281 |
+| `core/completeness.mjs`  | representation/evaluation recompute + histogram; **`coverage` recompute (omission_lower_bound + sole_catcher_cases, inventions ①/③)**; strict policy gate                      | 279, 281 |
 | `core/census.mjs`        | audit bijection (all statuses ↔ all terminal records; every attempt → one terminal)                                                                                            | 280      |
 | `core/vmpCore.mjs`       | evaluator — frozen order 268→282; `evaluatePanel`/`evaluatePanelSafe`; receives impure runner results via orchestration, never trusts a decorative `recorded_raw`              | 282      |
 
 **Node CLI — `stage5f/node/`:** `build-vmp-evidence.mjs` (byte-stable builder), `greenBundle.mjs`
 (Ed25519 sign, external pin), `verify-vmp-attestation.mjs` (strict default → 281; `--attestation-only`;
 `--tier audit`; structured output), `historicalVerifierRunner.mjs` (loads/runs the hash-bound
-historical copy).
+historical copy), `byoPanelAdapter.mjs` (invention ②: BYO-Panel contract — point VMP at your own
+detectors offline; verifies the contract, endorses nothing).
 
 **Python — `stage5f/python/`:** `vmp_parity.py` (canonicalJson byte-equality + full raw-code
 precedence + scaled-int verdict + completeness/policy arithmetic), `vmp_adapter_replay.py`
@@ -560,7 +604,9 @@ kill-criterion; no absence claim ships until primary text is read:
 4. **In-the-wild disease.** Public model cards / safety write-ups reporting a single detector or a
    favorable subset (marked "reported"; motivation, not a counted claim).
 
-**Beast-mode inventions (zero-new-code-path; each ships its own anti-gaming non-claim):**
+**Beast-mode inventions — all folded in (each ships its own anti-gaming non-claim):**
+
+Zero-new-code-path projections/fixtures over already-verified data:
 
 - **A — Panel Completeness Ratio (PCR)** _(derived projection)._ Fraction of `(member × case)`
   obligations reaching `evaluated`, per-member and campaign-wide. Non-claim: "PCR is a coverage
@@ -572,14 +618,30 @@ kill-criterion; no absence claim ships until primary text is read:
   where members disagree, surfaced as **evidence, never a verdict**. Non-claim: "disagreement is
   surfaced, never adjudicated."
 
-**Recommendation:** ship **A + B** in v1; offer **C** as the ambition upgrade. All three are
-projections/fixtures over already-verified data — no new raw codes, no new capture surface.
+Second beast pass (blade-deepeners, minimal surface):
+
+- **① Roster Coverage Commitment / Omission Lower Bound** _(Law 6; one sub-digest in the plan +
+  `roster ⊆ universe` folded into 271; the bound is a projection)._ Precommit the detector _universe_
+  you drew from; publish `|universe| − |panel|` as the signed silence surface — the completeness
+  object in-toto/C2PA structurally cannot express. Non-claim: "coverage is not representativeness."
+- **② BYO-Panel Adapter Contract** _(reuses 5E's BYO-adapter pattern; `node/byoPanelAdapter.mjs`)._
+  Any team points VMP at their own detectors offline. Non-claim: "a BYO run is the caller's evidence,
+  not ours; we verify the contract, we do not endorse the panel."
+- **③ Adversarial Disagreement Mining** _(corpus-design + the `sole_catcher_cases` projection)._ The
+  shared corpus is built to expose inter-detector blind spots; the attestation surfaces sole-catcher
+  cases. Non-claim: "a sole-catcher is a coverage fact on this corpus, never a ranking."
+
+**Spun out (different blade → next stage VPC):** **④ Panel Contest Cells / the Rerun Right** — a
+dissenting party files a signed counter-cell against the same `shared_input_digest`; the attestation
+becomes contestable by re-running one cell (4V VDP "contest-as-subpoena" lineage). Mints
+`panel_contest_deferred`.
 
 **TDD handoff contract.** The plan is written for a zero-context engineer: file map → tasks, each a
 failing-test-first cycle with complete code and exact commands. **Global Constraints copied verbatim**
 into the plan header: schema `simurgh.vmp.panel_attestation.v1`; frozen `VMP_RAW_CODES` 268→282
 (registered in `exitCodeProbeHygiene.test.js`); `panel_plan_digest = hash(schema_version + roster +
-corpus + applicability + adapter_manifest)`; **acyclic Lane B order** (result_chain_head → receipt →
+corpus + applicability + adapter_manifest + universe)` with `roster ⊆ universe` (Law 6); **acyclic Lane
+B order** (result_chain_head → receipt →
 closeout → attestation); decimal-string scores + scaled-int comparison; **Node 26**; the
 `INSECURE_FIXTURE_ONLY` key policy; the 276/278/282 failure-code distinctions; fail-closed
 reproduce/pack. Per-task **Interfaces blocks**. The build-risk ledger is read before Task 1. Frozen
