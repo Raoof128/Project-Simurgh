@@ -48,7 +48,8 @@ export function checkStatusUnion(bundle) {
         break;
       case "unsupported_input":
         if (has(cell, "decision_evidence")) return 274;
-        if (typeof cell.capability_ref !== "string") return 274;
+        if (typeof cell.capability_ref !== "string" || typeof cell.unsupported_reason !== "string")
+          return 274;
         break;
       case "not_applicable":
         if (has(cell, "decision_evidence")) return 274;
