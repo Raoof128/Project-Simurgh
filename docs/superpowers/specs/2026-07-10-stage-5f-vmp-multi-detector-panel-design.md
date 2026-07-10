@@ -20,7 +20,7 @@ Section-2 locks, eight Section-3 locks, six Section-4 locks (incl. one corrected
 theorem), ten Section-5 blocking fixes (incl. one reviewer claim rejected with repo receipts), and a
 Section-5 Lane-B digest-cycle fix, and a second beast pass. Beast-mode inventions (folded in): Panel
 Completeness Ratio, the Cherry-Pick Test, Detector Disagreement Ledger, ① Roster Coverage Commitment /
-Omission Lower Bound (Law 6), ② BYO-Panel Adapter Contract, ③ Adversarial Disagreement Mining. Invention
+Omission Lower Bound (Law 6), ② BYO-Panel Adapter Contract, ③ Full-Corpus Disagreement Observation. Invention
 ④ Panel Contest / Rerun Right is spun out to the next stage (VPC).
 
 Folds the blade into one law family: (1) a **precommitted panel plan** (roster + corpus +
@@ -90,11 +90,13 @@ cannot measure what a panel was _selected to exclude_. ② **BYO-Panel Adapter C
 team points VMP at their own detectors offline, zero Simurgh involvement — removes the "one blocker"
 and turns the standing-10 lever into a single command. Non-claim: _a BYO run is the caller's
 evidence, not ours; we verify the contract, we do not endorse the panel._ ③ **Adversarial
-Disagreement Mining**: the shared corpus is built to expose inter-detector blind spots (cases where
-exactly one member catches), and the attestation surfaces the **sole-catcher structure** — the
-Cherry-Pick Test made real with live models. Non-claim: _a sole-catcher is a coverage fact on this
-corpus, never a ranking._ (④ Panel Contest Cells / the Rerun Right is a **different blade** — spun out
-to the next stage, VPC.)
+Disagreement Observation**: the attestation evaluates the **entire** precommitted safe corpus (no
+selection/"mining" — that would reintroduce selection bias) and publishes a raw **`member_positive_vector`**
+per case (each member's boolean "returned its **own** declared-positive class"). Disagreement is whatever
+the full corpus shows — surfaced as **observation, never a verdict**, with **no prevalence claim** and no
+shared "catch" notion. Non-claim: _raw per-member vectors are declared, never reconciled into an
+aggregate._ (④ Panel Contest Cells / the Rerun Right is a **different blade** — spun out to the next
+stage, VPC.)
 
 **AnthropicSafe framing.** The shared corpus extends the already-published safe base families (5E's
 8 bases + benign probes), not novel potent attack strings; detectors score **inputs only**; no target
@@ -212,11 +214,14 @@ audit tier adds the census bijection. One additive raw-code block, fail-closed w
     },
   },
   "coverage": {
-    // Law 6 (invention ①): silence surface + sole-catcher structure (invention ③) — both DECLARED, recomputed
+    // Law 6 (①): silence surface + raw per-member positive vectors (③) — both DECLARED, recomputed
     "universe_size": 5,
     "panel_size": 2,
     "omission_lower_bound": 3, // = universe_size − panel_size
-    "sole_catcher_cases": [{ "case_id": "...", "only_member": "prompt_guard_2_86m" }],
+    // ③: each member's OWN declared-positive boolean per case — raw observation, no shared "catch", no aggregate
+    "member_positive_vector": [
+      { "case_id": "...", "positives": { "prompt_guard_2_86m": true, "llama_guard_4_12b": false } },
+    ],
   },
   "bootstrap_provenance": [
     // custody-only; NEVER counted as panel verdicts
@@ -271,7 +276,7 @@ provenance (e.g. `unexpected_categorical_output`) and no verdict.
 | 276  | shared-input + adapter **replay** — `detector_input_digest = digest(applyCommittedAdapter(source, adapter, tokenizer, truncation))`; digests match roster                                                      | Law 2                                                 |
 | 277  | semantics-specific verdict recompute via closed registry (scaled-int softmax compare / pinned parser); **no softmax recomputation**; no cross-semantics mapping                                                | heterogeneous semantics declared, not reconciled      |
 | 278  | bootstrap provenance — run pinned historical verifiers (5E/3V-B) on imported artifacts under their pinned roots; expect `recorded_raw`                                                                         | custody-only imports                                  |
-| 279  | declared `completeness` flags + histogram **and `coverage` (omission_lower_bound = universe−panel; sole_catcher_cases)** match recomputed values                                                               | missing-capture + silence surface cannot be laundered |
+| 279  | `VMP_DERIVED_SUMMARY_MISMATCH` (frozen `reason` enum): declared `completeness` flags + histogram + `coverage` (omission_lower_bound = universe−panel; raw `member_positive_vector`) match recomputed values    | missing-capture + silence surface cannot be laundered |
 | 280  | _(audit only)_ census bijection — all public cells (every status) ↔ all terminal census records; every attempt → one terminal; census hashes to `capture_log_digest`                                           | Law 5                                                 |
 | 281  | strict completeness **policy** — `VMP_EVALUATION_INCOMPLETE_POLICY` (default CLI rejects `evaluation_complete=false`)                                                                                          | consumer sufficiency                                  |
 | 282  | fail-closed wrapper (`evaluatePanelSafe`); also the **infrastructure-unavailable** code (Python replay / historical kernel / subprocess cannot execute)                                                        | never fail open; env-unavailable ≠ tampering          |
@@ -352,11 +357,10 @@ result_chain_head_digest` **and** `blind_recompute_receipt_digest`; the principa
   (Llama Guard 4 12B, 8-bit / GPU droplet), each with its own `requirements-*.lock`; both evaluate
   the **exact shared corpus** (identical `case_id` + `source_input_digest`). `merge_capture_census.py`
   checks the common corpus and builds the unified census (all statuses).
-- **Transcript-free, metadata-and-verdict evidence:** source inputs referenced through the committed
-  safe-corpus artifact; no free-form model generation is preserved. `capture_failed` /
-  `unexpected_categorical_output` for any non-{allow,block} output.
-- **Digest-only into the bundle, never CI-gated;** verdicts and any `model_refused` recorded
-  honestly, no re-runs for a prettier number.
+- **Transcript-free, metadata-and-verdict evidence (never CI-gated):** source inputs referenced through
+  the committed safe-corpus artifact; no free-form model generation is preserved. Any non-{allow,block}
+  or refusal output maps to the frozen `capture_failed` / `unexpected_categorical_output` — **there is no
+  `model_refused` status**. Verdicts recorded honestly, no re-runs for a prettier number.
 - **Acquisition lifecycle (frozen):** (1) download pinned snapshots in an explicit acquisition phase,
   (2) verify manifests/digests, (3) set `HF_HUB_OFFLINE=1` + `TRANSFORMERS_OFFLINE=1`, (4) capture
   entirely from the verified cache. "Download if blocked" lives in setup, never inside the ceremony.
@@ -507,7 +511,7 @@ the standing 10 lever); ship VPC contest (Constitution).
 | `core/adapter.mjs`       | pure structural binding of `detector_input_digest` + adapter/tokenizer/truncation to plan (consumes replay result)                                                                                                                                                                                   | 276      |
 | `core/verdict.mjs`       | closed registry: `binary_softmax` (scaled-int compare) + `categorical_generation` (pinned parser)                                                                                                                                                                                                    | 277      |
 | `core/bootstrap.mjs`     | pure — validates pin records + runner results                                                                                                                                                                                                                                                        | 278      |
-| `core/completeness.mjs`  | representation/evaluation recompute + histogram; **`coverage` recompute (omission_lower_bound + sole_catcher_cases, inventions ①/③)**; strict policy gate                                                                                                                                            | 279, 281 |
+| `core/completeness.mjs`  | representation/evaluation recompute + histogram; **`coverage` recompute (omission_lower_bound + raw `member_positive_vector`, ①/③); `evaluated_obligation_fraction` + `disagreementLedger` projections**; strict policy gate                                                                         | 279, 281 |
 | `core/census.mjs`        | audit bijection (all statuses ↔ all terminal records; every attempt → one terminal)                                                                                                                                                                                                                  | 280      |
 | `core/vmpCore.mjs`       | evaluator — frozen order 268→282; `evaluatePanel`/`evaluatePanelSafe`; receives impure runner results via orchestration, never trusts a decorative `recorded_raw`                                                                                                                                    | 282      |
 
@@ -630,9 +634,11 @@ Second beast pass (blade-deepeners, minimal surface):
 - **② BYO-Panel Adapter Contract** _(reuses 5E's BYO-adapter pattern; `node/byoPanelAdapter.mjs`)._
   Any team points VMP at their own detectors offline. Non-claim: "a BYO run is the caller's evidence,
   not ours; we verify the contract, we do not endorse the panel."
-- **③ Adversarial Disagreement Mining** _(corpus-design + the `sole_catcher_cases` projection)._ The
-  shared corpus is built to expose inter-detector blind spots; the attestation surfaces sole-catcher
-  cases. Non-claim: "a sole-catcher is a coverage fact on this corpus, never a ranking."
+- **③ Full-Corpus Disagreement Observation** _(evaluate the entire committed safe corpus; the raw
+  `member_positive_vector` projection)._ No selection/"mining" (that reintroduces selection bias);
+  disagreement is whatever the full corpus shows, published as each member's own declared-positive
+  boolean per case. Non-claim: "raw per-member vectors are observation, never a reconciled aggregate or
+  a prevalence claim."
 
 **Spun out (different blade → next stage VPC):** **④ Panel Contest Cells / the Rerun Right** — a
 dissenting party files a signed counter-cell against the same `shared_input_digest`; the attestation

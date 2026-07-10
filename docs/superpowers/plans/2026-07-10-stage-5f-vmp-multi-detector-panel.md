@@ -43,18 +43,25 @@ result_chain_head_digest` AND `blind_recompute_receipt_digest`; the attestation 
 
 ---
 
-## Task 0 — Test-key fixtures
+## Task 0 — Test-key fixtures + external trust pins
 
-Create Ed25519 keys with basenames matching the test-fixture allowlist (`[A-Za-z-]+`, no digits, per the
-4P priv-key-audit path regex):
+> **[Gauntlet-2 #1]** Keys go in the **established fixture dir**, not `tools/…/keys/`. Verified: 5E uses
+> `tests/fixtures/llmShield/stage5e/test-keys/INSECURE_FIXTURE_ONLY_stage-vda.pem` — the
+> `INSECURE_FIXTURE_ONLY_` prefix (underscores included) IS the allowlist convention; the earlier
+> `[A-Za-z-]+` regex was wrong. **Test the exact paths against the real priv-key audit before committing.**
 
-- `tools/simurgh-attestation/stage5f/keys/INSECURE_FIXTURE_ONLY_stage-vmp.pem` (attestation key)
-- `tools/simurgh-attestation/stage5f/keys/INSECURE_FIXTURE_ONLY_stage-vmp-ceremony.pem` (Lane B)
-- `tools/simurgh-attestation/stage5f/keys/INSECURE_FIXTURE_ONLY_stage-vmp-pin.json` (external pinned
-  fingerprint for the attestation key)
+Create Ed25519 keys in `tests/fixtures/llmShield/stage5f/test-keys/`:
 
-Public keys derived from private (never commit `.pub.pem`). The builder must **never** write/print/copy
-a private key into the evidence dir (asserted in Task 16 + Task 24).
+- `INSECURE_FIXTURE_ONLY_stage-vmp.pem` (attestation key)
+- `INSECURE_FIXTURE_ONLY_stage-vmp-ceremony.pem` (Lane B ceremony key)
+
+**External trust pins (Gauntlet-2 seam 3 / #6 / #8):** the trusted fingerprints for BOTH the attestation
+key and the ceremony key are supplied to the verifier **from outside the evidence pack** — a separate CLI
+arg (`--pinned-fingerprint`, `--ceremony-fingerprint`), an installed trust file, or release-pinned config.
+`vmp-pinned-key.json` in the pack is **informational only**; the CLI never trusts it by default (else an
+attacker swaps key + re-signs + swaps the pin and it self-authenticates — the exact failure the pin
+exists to prevent). Public keys derived from private (never commit `.pub.pem`); the builder **never**
+writes/prints/copies a private key into the evidence dir (asserted in Task 16 + Task 24).
 
 ## Task 1 — Scaffold + constants (`stage5f/constants.mjs`) [S§2]
 
@@ -110,7 +117,10 @@ export const VMP_RESERVED_SLOTS = Object.freeze([
 ]);
 ```
 
-Also export `scaleDecimal(str, p)` → integer (throws on non-`/^\d+\.\d{p}$/`), reused by verdict + parity.
+**[Gauntlet-2 #3/#4]** Score comparison uses **no binary floating-point and no `Number` arithmetic on a
+verdict.** Validate each score against `new RegExp(\`^(0\\.\\d{${SCORE_PRECISION}}|1\\.0{${SCORE_PRECISION}})$\`)`(range`0.0000`–`1.0000`, exact width) and compare **lexically** — equal-width zero-padded decimals in
+[0,1] sort correctly as strings, so `"0.8123" >= "0.5000"`is exact with zero arithmetic. Export`validateScore(str)`(throws on malformed/out-of-range) and`scoreGte(a, b)`(lexical). (BigInt is
+unnecessary — but if any op ever needs subtraction, scale to integer <10⁴, which is exact in`Number`.)
 
 ## Task 2 — Exit codes 268–282 in the global ledger (`stage4h/exitCodes.mjs`) [additive; golden ripple]
 
@@ -215,17 +225,18 @@ never silently substituted for a verifier re-run. Decide empirically in this tas
 
 Test-first (279): recompute `representation_complete` (must be `true` in a valid bundle),
 `evaluation_complete = (all applicable&supported evaluated ∧ capture_failed==0 ∧ missing_capture==0)`,
-and the histogram; a declared flag/histogram ≠ recomputed → 279. **Coverage (①/③):** recompute
-`omission_lower_bound == universe_size − panel_size` and `sole_catcher_cases` — a case where exactly one
-member returns **its own declared-positive class** (`malicious` for PG2, `block` for LG4 — never a shared
-"catch" notion, so no cross-semantics reconciliation); declared ≠ recomputed → 279.
-**Inventions A + C (folded here as projections, tested against `_validBundle`):** `panelCompletenessRatio(bundle)`
-= evaluated ÷ total obligations, per-member + campaign (non-claim in output: "coverage figure, not a
-detection rate"); `disagreementLedger(bundle)` = per-case list where members' declared-positive verdicts
-differ, surfaced as **evidence, never a verdict**. Both are pure projections over already-verified cells —
+and the histogram; a declared flag/histogram ≠ recomputed → 279 (renamed `VMP_DERIVED_SUMMARY_MISMATCH`,
+frozen `reason` enum — see Gauntlet-2 amendment). **Coverage (①/③):** recompute
+`omission_lower_bound == universe_size − panel_size` and the raw **`member_positive_vector`** — for each
+case, each member's boolean "returned its **own** declared-positive class" (`malicious` for PG2, `block`
+for LG4; no shared "catch", no "exactly one" aggregate); declared ≠ recomputed → 279.
+**Inventions A + C (projections, tested against `_validBundle`):** `evaluatedObligationFraction(bundle)`
+= evaluated ÷ **applicable-and-supported** obligations, published beside the status histogram (non-claim:
+"coverage figure, not a detection rate"); `disagreementLedger(bundle)` = per-case list where the raw
+`member_positive_vector` entries differ, surfaced as **observation, never a verdict**. Pure projections —
 no new raw code.
 Test-first (281): `evaluatePolicy(result)` returns 281 iff `evaluation_complete === false` (strict). Export
-`checkCompleteness`, `evaluatePolicy`, `panelCompletenessRatio`, `disagreementLedger`.
+`checkCompleteness`, `evaluatePolicy`, `evaluatedObligationFraction`, `disagreementLedger`.
 
 ## Task 14 — Audit census bijection (`stage5f/core/census.mjs`) [S§2 / 280 / L5]
 
@@ -277,8 +288,10 @@ only, no generation preserved; categorical output = bounded allow/block token, e
 `capture_failed`/`unexpected_categorical_output`; the corpus is committed in the panel plan _before_
 capture, so mining cannot be a post-hoc content-generation loop). Each capture emits a hash-bound fragment;
 `merge_capture_census.py` checks the common corpus and builds the unified `capture_census.json` (all
-statuses). Digest-only into the bundle; verdicts + any `model_refused` recorded honestly, no re-runs.
-Records the executed run (Frontier lever).
+statuses). **Transcript-free metadata-and-verdict evidence** into the bundle (not "digest-only"); an
+unexpected/refusal output maps to the frozen `capture_failed`/`unexpected_categorical_output` — **there is
+no `model_refused` status**. Verdicts recorded honestly, no re-runs. Records the executed run (Frontier
+lever) over the **full** committed corpus (no disagreement "mining" — see Gauntlet-2 amendment).
 
 ## Task 19 — BYO-Panel adapter contract (`stage5f/node/byoPanelAdapter.mjs` + README) — [②]
 
@@ -343,14 +356,115 @@ duplicates first; add an ADR).
 
 ---
 
+## Gauntlet round 2 — binding amendments (all verified correct; 3 refined with receipts)
+
+These amend the tasks above and are binding on the implementer.
+
+**Seam 1 — final-evidence build order [#14].** Task 16 implements + unit-tests the builder against
+**synthetic fixtures** (fake census/receipt); it does NOT produce shippable evidence. The **real**
+evidence is generated LAST, in this exact order (a new closeout sub-step, before Task 25's reproduce):
+Lane C capture (Task 18) → `merge_capture_census.py` → result/capture chain → Lane B receipt (Task 17) →
+closeout record → signed attestation → byte-stability verify. Nothing signs the final bundle before the
+receipt and real census exist.
+
+**Seam 2 — no reconstructed aggregate [#13/#15/additional-5/6/9].** Remove `sole_catcher_cases` and any
+"catch"/"catcher" framing from the SIGNED path. Publish instead a raw **`member_positive_vector`** per
+case: for each member, the boolean "this member returned **its own declared-positive class**" — no shared
+"catch" notion, no "exactly one" aggregate. `disagreementLedger` reports cases where these raw vectors
+differ, as **observation, never verdict**. **Invention ③ is reframed to "Full-Corpus Disagreement
+Observation":** evaluate the **entire** precommitted safe corpus (no selection/"mining" — that reintroduced
+selection bias); disagreement is whatever the full corpus shows, with **no prevalence claim**. Rename
+"Cherry-Pick Test" assertion (#15) to: _"D is the only member returning its own declared-positive result
+for the case; omitting D erases that member-specific observation"_ — it proves omission **visibility**, not
+a clean/flagged panel outcome. Rename PCR → **`evaluated_obligation_fraction`** = evaluated ÷
+**applicable-and-supported** obligations, always published beside the status histogram (#5). Rename 279 →
+**`VMP_DERIVED_SUMMARY_MISMATCH`** with a frozen `reason` enum (`completeness_flag` / `histogram` /
+`omission_bound` / `positive_vector` / `derived_fraction`) — restores one-meaning-per-code (#6).
+
+**Seam 3 — pins outside the pack [#6/#8]:** handled in Task 0. Additionally, the **Lane B receipt (#8)
+re-binds `capture_log_digest`** (it was dropped): the receipt binds `{panel_plan_digest, cell_matrix_digest,
+completeness_digest, capture_log_digest, result_chain_head_digest}` — otherwise the ceremony doesn't
+corroborate the private census. Ceremony-key fingerprint pinned externally (Task 0).
+
+**Schema/matrix hardening.**
+
+- **[#5] Recursive exact-key validation (268):** freeze exact nested schemas for `roster` member, `cell`,
+  `decision_evidence`, `coverage`, `detector_universe`, `roster_precommit`, `closeout`; reject unknown keys
+  **recursively** (aggregate fields can't hide in a nested object). Lean lemma and schema enforcement are
+  **separate controls** (#smaller-137).
+- **[additional-1] Uniqueness + non-empty (271–273):** unique `member_id`, unique `case_id`, unique universe
+  candidate IDs, unique applicability entries; non-empty roster and corpus. Without these, `|cells| =
+|roster|·|corpus|` can pass on a malformed matrix.
+- **[additional-2/#11] Status tagged-union (274):** freeze required/forbidden fields per status —
+  `evaluated`{decision*evidence, input binding, terminal-census ref; ⊘error}, `capture_failed`{bounded
+  error enum, **input binding**, attempt ref; ⊘verdict}, `unsupported_input`{capability derivation/ref;
+  ⊘verdict,⊘output}, `not_applicable`{applicability-matrix ref; ⊘verdict,⊘attempt}, `missing_capture`
+  {obligation ref + explicit reason; ⊘verdict,⊘attempt}. \*\*Adapter/input binding is required for every
+  \_attempted* capture, incl. `capture_failed`\*\* (#11). Bounded error enum, never free text. Remove
+  `model_refused` (#additional-10) — it maps to `capture_failed`/a frozen reason. No `model_refused`
+  status or semantic exists.
+
+**Verdict + applicability soundness.**
+
+- **[additional-3] PG2 class binding (277):** the member declares `label_map`, `positive_class_index`,
+  `positive_label`; the capture fragment proves `positive_score` came from that index (else a producer
+  passes the benign-class score and still satisfies the arithmetic).
+- **[additional-4] Categorical (277):** if the only accepted outputs are the bounded tokens `allow`/`block`,
+  the verifier **validates a bounded token** (+ `parser_digest` over the pinned parser source/manifest) —
+  it does NOT claim to replay arbitrary generation parsing. Say so.
+- **[#10] Applicability/replay dependency (275/276):** `unsupported_input` justified by **token length**
+  must consume **replay-derived** token counts; a missing replay fails **282 before 275** can accept it
+  (a producer can't commit a false token count to hide a hard case). Language/type applicability stays
+  static from the capability profile.
+
+**Chain / bootstrap / BYO / parity / tamper / release.**
+
+- **[#7] Chain-record binding:** every external chain-record file is bound by the signed bundle — either
+  inline, or via an exact sorted **chain-record manifest** with each file digest. **[#8-plan-digest]**
+  `panel_plan_digest` is a **domain-separated canonical object digest** (`canonicalJson` of the subdigest
+  object), never raw string concatenation; the spec + precommit schema are amended to include
+  `universe_digest` (done). **[additional/stable-IDs]** every attempt and terminal census record carries a
+  stable `record_id`; the bijection keys on `record_id`, not only `(member_id, case_id)`.
+- **[#12] Bootstrap — resolved, not deferred:** default mode is **historical-verifier execution** (both 5E
+  `evaluateVda` and 3V-B verify scripts were verified runnable offline). **`reference_binding`** is a
+  distinct, explicitly-declared mode (`provenance_mode` field) with its **own claim wording, fixtures, and
+  policy** — never a silent mid-build downgrade. The vendored kernel carries its own manifest (entry +
+  imports + exit-map + key + schema/constants + dep closure) with a path-containment closure test.
+- **[additional-12] BYO profile:** a BYO panel has **no 5E/3V-B bootstrap requirement** (`bootstrap_provenance`
+  optional/empty; `provenance_mode: "none"`), supports **only the frozen decision-semantics registry**
+  unless a new schema version adds types, and supplies its **own** external pins. State this in the
+  `byo_panel.v1` contract + README.
+- **[additional-13] Parity capability table:** 268–277, 279–281 are **independently reimplemented** in
+  Python; **278's historical-verifier run is a shared vendored kernel invoked via subprocess** (orchestration
+  parity, named as such — not independent). Freeze the table in `vmp_parity.py`'s header.
+- **[additional-7] Public output fields:** public/`--attestation-only` results always carry
+  `audit_census_verified:false` and `full_panel_completeness_verified:false` so "policy accepted" is never
+  mistaken for audit completeness. **`--tier audit` is the release-reproduce default** whenever the census
+  file is present.
+- **[#14/tamper] Three suites (Task 22):** `tamper-matrix` (268–280, integrity) / `policy-fixtures` (281,
+  honest rejection) / `environment` (282, throw/unavailable) — an honestly-incomplete panel or a missing
+  Python env is **never** labelled "tampering."
+- **[additional-16] Release ceremony (Task 25):** after tag → **create the GitHub Release, verify it exists
+  and is marked Latest**, confirm tag presence is not mistaken for Release publication (the 5C/5E lesson).
+- **Smaller:** keep `greenBundle.mjs` (rejected the rename — it is the established house name, 5E ships
+  `stage5e/node/greenBundle.mjs`; renaming for 5F alone breaks the cross-stage convention); reference
+  exit-code blocks by exported symbol, not line numbers; Checkpoint A wording → "the **evidence pack**
+  (incl. private census) verifies at both tiers," not "public bundle" (done).
+
+---
+
 ## Execution order & checkpoints
 
 - **Pure core first (Tasks 3–15):** each is independently testable against `_validBundle.mjs`; build the
   frozen check order incrementally, watching each new code fail then pass.
-- **Checkpoint A (after Task 16):** a byte-stable public bundle verifies at both tiers under Node 26.
-- **Checkpoint B (after Task 20):** Node↔Python raw-code precedence is identical on the tamper matrix.
-- **Checkpoint C (after Task 18, non-CI):** the real dual-detector disagreement-mined capture executes
-  offline; census bijection (280) closes over it. This is the Frontier lever — if it does not execute,
-  Frontier is scored down at closeout and the reason stated (5A/5C precedent).
+- **Checkpoint A (after Task 16):** the builder produces, from synthetic fixtures, an **evidence pack (incl.
+  private census)** that verifies at both tiers under Node 26.
+- **Checkpoint B (after Task 20):** Node↔Python raw-code precedence is identical on the tamper matrix
+  (per the parity capability table — 278 is shared-kernel).
+- **Checkpoint C (after Task 18, non-CI):** the real dual-detector **full-corpus** capture executes offline;
+  census bijection (280) closes over it. This is the Frontier lever — if it does not execute, Frontier is
+  scored down at closeout and the reason stated (5A/5C precedent).
+- **Final-evidence generation (Seam 1 order):** Lane C → merged census → chain → Lane B receipt → closeout
+  → signed attestation → byte-stability, run LAST before reproduce-on-main.
 - **Batched question before Task 1:** raise any plan concern as ONE batch; then run task-by-task, stopping
   only for a real blocker or genuine ambiguity.
