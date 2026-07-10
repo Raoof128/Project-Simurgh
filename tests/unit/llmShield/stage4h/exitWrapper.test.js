@@ -301,6 +301,22 @@ test("Stage 4H.4 exit map is explicit and collision-bounded", () => {
       265: 1,
       266: 1,
       267: 1,
+      // Stage 5F VMP codes (reviewed extension of the shared ledger; 5F spec §2). 282 wrapper matches 267.
+      268: 1,
+      269: 1,
+      270: 1,
+      271: 1,
+      272: 1,
+      273: 1,
+      274: 1,
+      275: 1,
+      276: 1,
+      277: 1,
+      278: 1,
+      279: 1,
+      280: 1,
+      281: 1,
+      282: 1,
     })
   );
 });
