@@ -1,0 +1,5 @@
+{
+  "schema": "simurgh.vfc.panel_plan.v1",
+  "detector": "prompt_guard_2_86m",
+  "threshold": "0.5000"
+}

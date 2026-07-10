@@ -30,6 +30,14 @@ echo "-- 5/8 verify committed evidence — audit tier (census bijection) -> raw 
 node "$S/node/verify-vfc-attestation.mjs" --tier audit >/dev/null
 echo "   audit verify OK"
 
+echo "-- 5b verify the REAL independent-party foreign capture (verify-only; not rebuildable — foreign key)"
+if [ -f docs/research/llm-shield/evidence/stage-5g/real-capture/vfc-attestation.json ]; then
+  node "$S/node/verify-vfc-attestation.mjs" --dir docs/research/llm-shield/evidence/stage-5g/real-capture --tier audit >/dev/null
+  echo "   real-capture verify OK (raw 0, audit)"
+else
+  echo "   real-capture absent — skipped"
+fi
+
 echo "-- 6/8 Lane B blind-recompute sidecar ceremony corroborates"
 node "$S/laneb/run-laneb-recompute-ceremony.mjs" >/dev/null
 echo "   lane B OK"

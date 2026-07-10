@@ -1,0 +1,5 @@
+{
+  "schema": "simurgh.vfc.detector_snapshot.v1",
+  "model_id": "meta-llama/Llama-Prompt-Guard-2-86M",
+  "revision": "a8ded8e697ce7c355e395a0df51f94adb4a2fd27"
+}
