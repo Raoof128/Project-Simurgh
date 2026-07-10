@@ -13,7 +13,7 @@ proof of what happened after a guardrail missed — not another jailbreak detect
 [![Node](https://img.shields.io/badge/node-%E2%89%A522.0-1a1a1a?style=flat-square)](https://nodejs.org)
 [![License](https://img.shields.io/badge/license-AGPL--3.0-d6cfbe?style=flat-square)](#license)
 [![Status](https://img.shields.io/badge/status-research%20prototype-2f4a2a?style=flat-square)](#status)
-[![Latest](https://img.shields.io/badge/release-v2.39.0-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.39.0-stage-5d-varl)
+[![Latest](https://img.shields.io/badge/release-v2.40.0-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.40.0-stage-5e-vda)
 
 </div>
 
@@ -41,7 +41,28 @@ In one sentence: **Simurgh gives an agentic system a verifiable receipt, not a p
 > selective omission, multi-agent accountability) to concrete mechanisms — printable version at
 > [`docs/research/llm-shield/anthropic-brief.html`](docs/research/llm-shield/anthropic-brief.html).
 
-> 🆕 **Latest — Stage 5D · Verifiable Adaptive Red-Team Ledger (`v2.39.0-stage-5d-varl`).**
+> 🆕 **Latest — Stage 5E · Verifiable Deployed-detector Attestation (`v2.40.0-stage-5e-vda`).**
+> The first Simurgh stage whose evidence targets a **real, shipped, third-party detector** — Meta's
+> **Llama Prompt Guard 2 (86M)** — at a **pinned open-weights revision, captured offline with zero
+> vendor cooperation**. CI recomputes only arithmetic/geometry over a committed score table; the model
+> runs once, offline (the 5B split). **Executed grounding (real, not planned):** over 8 published
+> injection test vectors, **4 flagged at baseline and all 4 slip** under invisible combining-mark
+> obfuscation, with **de-obfuscation recovering the original score exactly** — a real score-inversion
+> defect; the other 4 are recorded as `baseline_missed` (full census, no cherry-pick). Evidence verifies
+> `raw 0` at both tiers, byte-stable, and reproduces **cross-architecture** on a fresh x86_64 host.
+> Inventions: the **score-inversion** ranking defect (two independent slip booleans, not a taxonomy) and
+> the **Evasion–Threshold Curve** (evasion as a signed function of the operating point, with its
+> false-positive cost). Laws: **No Straw Detector · No Tunable Excuse · No Forbidden Claim · No Silent
+> Slip**. Codes **255–267**, **8 Lean theorems + 1 lemma**, JS↔Python parity (40 facts). Honest to its
+> limits: a slip is a **chosen-threshold miss on a pinned revision — not a defeat** (the artifact is
+> structurally unable to assert otherwise); **offline open weights ≠ a hosted endpoint**; and the
+> droplet run is an **independent environment, not an independent party** (the → 10 lever: a real
+> external team running the BYO adapter). Hardened by an **external review (12 blocking findings applied)**.
+
+<details>
+<summary><b>Recent stages — 5D → 4W</b> (click to expand the prior rungs)</summary>
+
+> **Stage 5D · Verifiable Adaptive Red-Team Ledger (`v2.39.0-stage-5d-varl`).**
 > The first Simurgh stage whose evidence is a **multi-round arms race**: an untrusted adversary
 > proposes evasions of the frozen 5C gate, a watcher recomputes every one against the pinned gate, the
 > defender hardens, and the cycle repeats — completeness asserted over **rounds**. The executed
@@ -52,13 +73,7 @@ In one sentence: **Simurgh gives an agentic system a verifiable receipt, not a p
 > No Unverified Slip · A Closure Is Not a Cure · The Adversary Is Untrusted**. Produced by a **key-free
 > two-role ceremony** (attacker subagent + watcher); **Lane C executed live** — `claude-sonnet-5`,
 > pinned, on the CVP-approved org, its provenance folded into the ledger. Codes **240–254**,
-> **8 machine-checked Lean theorems**, Python + browser (WebCrypto Ed25519) parity. Honest to its
-> limits: **v4 is brittle** (still an enumerated homoglyph table — round 3 beat it), **253 binds the
-> log but does not force completeness**, and **no external team has run the BYO harness yet** (the
-> 9.7→10 Good-for-Anthropic lever, signed as debt).
-
-<details>
-<summary><b>Recent stages — 5C → 4W</b> (click to expand the prior rungs)</summary>
+> **8 machine-checked Lean theorems**, Python + browser (WebCrypto Ed25519) parity.
 
 > **Stage 5C · Verifiable Semantic Bypass Ledger (`v2.38.0-stage-5c-vsb`).** The first Simurgh stage
 > to report a **non-zero observed slip count** as a first-class result. Over a total (metamorphic-
