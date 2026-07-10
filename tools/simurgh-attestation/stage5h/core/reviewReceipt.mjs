@@ -22,6 +22,7 @@ export function checkReviewHostPinned(ctx) {
 
 export function checkReviewReceipt(ctx) {
   const b = ctx.bundle;
+  if (b.review_receipts.length === 0) return { ok: true }; // nothing to authenticate
   const reg = ctx.hostRegistry;
   const byFp = new Map(reg.map((h) => [h.host_key_fingerprint, h]));
   for (const r of b.review_receipts) {

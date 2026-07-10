@@ -343,6 +343,13 @@ export function resign(bundle, keys) {
     r.receipt_digest = domainDigest(DOMAIN.review_receipt, r.content);
     r.host_signature = signContent(hostKey.priv, DOMAIN.review_receipt, r.content);
   }
+  return resignAttestationOnly(bundle, keys);
+}
+
+// Re-sign ONLY the outer attestation (leave inventory + receipts as-is). Needed to test an inner
+// signature failure (e.g. a bad host receipt) while keeping the attestation itself valid.
+export function resignAttestationOnly(bundle, keys) {
+  const { verifierKey } = keys;
   const { attestation_signature, schema, ...attContent } = bundle;
   bundle.attestation_signature = signContent(
     verifierKey.priv,
