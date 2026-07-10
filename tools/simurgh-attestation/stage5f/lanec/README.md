@@ -1,7 +1,7 @@
 # Stage 5F VMP — Lane C: fresh non-CI dual-detector offline pinned-weight capture
 
 **Status: HARNESS PRESENT, CAPTURE NOT YET EXECUTED.** This is the Frontier lever. The committed
-evidence pack is a *synthetic structural demonstration* over the two real detector identities; a real
+evidence pack is a _synthetic structural demonstration_ over the two real detector identities; a real
 capture requires **Prompt Guard 2 86M + Llama Guard 4 12B offline on a droplet** (PG2 runs on CPU; LG4
 12B needs a GPU + 8-bit). Until this runs, the closeout scores Frontier down honestly (5A/5C precedent).
 

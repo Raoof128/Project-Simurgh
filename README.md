@@ -13,7 +13,7 @@ proof of what happened after a guardrail missed — not another jailbreak detect
 [![Node](https://img.shields.io/badge/node-%E2%89%A522.0-1a1a1a?style=flat-square)](https://nodejs.org)
 [![License](https://img.shields.io/badge/license-AGPL--3.0-d6cfbe?style=flat-square)](#license)
 [![Status](https://img.shields.io/badge/status-research%20prototype-2f4a2a?style=flat-square)](#status)
-[![Latest](https://img.shields.io/badge/release-v2.40.0-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.40.0-stage-5e-vda)
+[![Latest](https://img.shields.io/badge/release-v2.41.0-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.41.0-stage-5f-vmp)
 
 </div>
 
@@ -41,7 +41,22 @@ In one sentence: **Simurgh gives an agentic system a verifiable receipt, not a p
 > selective omission, multi-agent accountability) to concrete mechanisms — printable version at
 > [`docs/research/llm-shield/anthropic-brief.html`](docs/research/llm-shield/anthropic-brief.html).
 
-> 🆕 **Latest — Stage 5E · Verifiable Deployed-detector Attestation (`v2.40.0-stage-5e-vda`).**
+> 🆕 **Latest — Stage 5F · Verifiable Multi-detector Panel Attestation (`v2.41.0-stage-5f-vmp`).**
+> The Completeness Invariant instantiated on a **detector panel**: one signed attestation binds N
+> precommitted released detectors (Prompt Guard 2 86M + Llama Guard 4 12B) to one shared committed
+> corpus, so every case discloses — for every member — a verdict **or a typed, policy-checkable
+> non-result**. Selective omission across detectors becomes impossible to hide; **no aggregate panel
+> verdict** is produced (panel completeness ≠ detection completeness). Six laws incl. **No Gerrymandered
+> Universe** — precommit the detector universe and publish the signed **Omission Lower Bound**
+> (`|universe| − |panel|`), the thing in-toto/C2PA structurally cannot express. Codes **268–282**,
+> **8 Lean theorems + 1 lemma** (compile clean, zero `sorry`), **99 tests**, Lane B two-process
+> ceremony, JS↔Python parity, a **BYO-Panel contract** (any team attests its own detectors offline),
+> and a **strict-vs-attestation-only** policy so a truthful incomplete panel stays verifiable while the
+> default CLI refuses to call it clean. Honest to its limits: the committed evidence is a **synthetic
+> structural demonstration** over two real detector identities — a real dual-detector capture (Lane C)
+> needs a droplet and **has not yet run** (Frontier scored **down** at closeout, 5A/5C precedent).
+>
+> <details><summary>Prior — Stage 5E · Verifiable Deployed-detector Attestation (<code>v2.40.0-stage-5e-vda</code>)</summary>
 > The first Simurgh stage whose evidence targets a **real, shipped, third-party detector** — Meta's
 > **Llama Prompt Guard 2 (86M)** — at a **pinned open-weights revision, captured offline with zero
 > vendor cooperation**. CI recomputes only arithmetic/geometry over a committed score table; the model
@@ -58,6 +73,7 @@ In one sentence: **Simurgh gives an agentic system a verifiable receipt, not a p
 > structurally unable to assert otherwise); **offline open weights ≠ a hosted endpoint**; and the
 > droplet run is an **independent environment, not an independent party** (the → 10 lever: a real
 > external team running the BYO adapter). Hardened by an **external review (12 blocking findings applied)**.
+> </details>
 
 <details>
 <summary><b>Recent stages — 5D → 4W</b> (click to expand the prior rungs)</summary>
