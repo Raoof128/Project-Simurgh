@@ -37,8 +37,10 @@ Rewrite · **(L4)** No Post-Hoc Applicability Rewrite · **(L5)** No Dropped Cap
 - **K7 all-functions net + three tamper suites** (268–280 integrity / 281 policy / 282 environment —
   never conflated). **99 tests green** (70 unit + 29 e2e).
 - **Fail-closed 8-step reproduce** (ALL PASS) + **independent-party conformance kit** (ALL PASS).
-- **Lane C dual-detector capture harness** (PG2 CPU + LG4 12B 8-bit, isolated env locks, merge asserts
-  the shared corpus) — present but **not yet executed** (see limitations).
+- **Lane C dual-detector capture — EXECUTED** (real evidence at `evidence/stage-5f/real-capture/`):
+  Prompt Guard 2 86M (CPU) + **Llama Guard 3 1B** (Apple-Silicon MPS/fp16) captured offline over a
+  shared safe corpus; the real attestation verifies **raw 0 both tiers**. The 12B harness
+  (`capture_lg4.py`) remains for a GPU-droplet scale-up.
 
 ## Beast inventions folded in
 
@@ -49,11 +51,12 @@ Plus the zero-code-path projections: `evaluatedObligationFraction`, the Cherry-P
 
 ## Signed limitations (admit irregularity over overclaim)
 
-1. **The committed evidence is a synthetic structural demonstration** over two real detector identities.
-   The real dual-detector capture is Lane C (harness complete). An independent team has **reproduced the
-   verify-only pack** (below) but has **not** run Lane C (their droplet had no GPU for LG4 12B), so the
-   detectors are still not grounded. Lane C on a GPU droplet — **independent-party evidence generation** —
-   remains the → 10 Frontier lever. Frontier is held pending that run, not downgraded.
+1. **Two evidence sets, both honest.** The CI-byte-stable evidence (`evidence/stage-5f/*.json`) is a
+   synthetic structural demonstration (rebuildable in CI without models). The **real** dual-detector
+   capture (`evidence/stage-5f/real-capture/`) is now **executed** on live models (PG2 86M + Llama Guard
+   3 1B, offline), verifying raw 0 both tiers. Remaining levers: the **12B** model on a GPU droplet, and
+   **independent-party** evidence generation (an outside team runs the capture, not us) — the → 10 lever.
+   The corpus is a thin seed (2 cases), not a saturation study.
 
 2. **Offline pinned weights ≠ a hosted endpoint** (carries `live_endpoint_attestation_deferred`).
 3. **The Omission Lower Bound only bites within a committed universe** — a producer who declares
@@ -75,6 +78,21 @@ independent-party evidence generation**: no detector was run (no GPU), so it doe
 run surfaced **no defects** (the pack shipped with the 5E fail-closed + full-dependency lessons already
 baked in).
 
+## Real dual-detector capture (executed, 2026-07-10)
+
+Captured offline on a MacBook (M2): **Prompt Guard 2 86M** on CPU, **Llama Guard 3 1B** on the
+Apple-Silicon **MPS (Metal) GPU in fp16**, over a shared safe corpus (1 benign + 1 published-style
+prompt-injection vector, inputs only). Evidence: `evidence/stage-5f/real-capture/` (attestation +
+census + per-member fragments recording model/revision/runtime). Verifies **raw 0 both tiers**,
+`evaluation_complete`.
+
+The capture produced the panel's whole reason to exist — a **real, honest inter-detector disagreement**:
+on the injection case, **PG2 → `malicious`** (it flags the prompt injection) while **LG3 → `allow`**
+(no _unsafe content_ — injection isn't a content-safety concern). The `heterogeneous_label_vector`
+records both raw typed labels; VMP surfaces the disagreement as **observation, never an aggregate
+verdict**. Roster is PG2 86M + Llama Guard 3 1B (laptop-feasible); Llama Guard 4 12B remains the
+documented GPU-droplet scale-up.
+
 ## Socket ledger
 
 **PAYS** `multi_detector_panel_deferred` (minted by 5E). **PARTIALLY PAYS**
@@ -86,12 +104,12 @@ baked in).
 
 ## Four-axis scorecard — re-scored at closeout
 
-| Axis               | Spec-time | Closeout | Why the closeout value                                                                                                                                                              |
-| ------------------ | --------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Novelty            | 9.4       | **9.4**  | prior-art kill-test executed; the panel-completeness object survives, positioned against four neighbor classes                                                                      |
-| Frontier           | 8.7       | **8.7**  | held — Lane C capture is **pending an independent team** (independent-party evidence generation, the → 10 lever); the harness is complete and the synthetic evidence verifies today |
-| Good-for-Anthropic | 9.2       | **9.2**  | BYO-Panel contract makes it self-serve; no external pilot has run it yet                                                                                                            |
-| Constitution       | 9.2       | **9.2**  | visible silence surface + attestation-truth/policy separation; VPC contest (→ 9.4) spun out                                                                                         |
+| Axis               | Spec-time | Closeout | Why the closeout value                                                                                                                                                                                                                |
+| ------------------ | --------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Novelty            | 9.4       | **9.4**  | prior-art kill-test executed; the panel-completeness object survives, positioned against four neighbor classes                                                                                                                        |
+| Frontier           | 8.7       | **9.3**  | **real dual-detector capture EXECUTED** (PG2 86M CPU + Llama Guard 3 1B MPS/fp16, offline, raw 0 both tiers, real inter-detector disagreement captured); short of 9.4 on the thin 2-case corpus + 12B/independent-party still pending |
+| Good-for-Anthropic | 9.2       | **9.2**  | BYO-Panel contract makes it self-serve; no external pilot has run it yet                                                                                                                                                              |
+| Constitution       | 9.2       | **9.2**  | visible silence surface + attestation-truth/policy separation; VPC contest (→ 9.4) spun out                                                                                                                                           |
 
 _"Good-for-Anthropic" measures potential usefulness to assurance teams; it does not imply Anthropic
 review, adoption, or endorsement._

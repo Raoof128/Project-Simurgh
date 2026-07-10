@@ -53,9 +53,11 @@ In one sentence: **Simurgh gives an agentic system a verifiable receipt, not a p
 > ceremony, JS↔Python parity, a **BYO-Panel contract** (any team attests its own detectors offline),
 > and a **strict-vs-attestation-only** policy so a truthful incomplete panel stays verifiable while the
 > default CLI refuses to call it clean. Honest to its limits: the committed evidence is a **synthetic
-> structural demonstration** over two real detector identities — the real dual-detector capture (Lane C,
-> harness complete) is **scheduled to run on an independent team's droplet** (independent-party evidence
-> generation, the → 10 lever), so Frontier is **held pending that run**, not downgraded.
+> structural demonstration; the **real dual-detector capture is now EXECUTED** —
+> **Prompt Guard 2 86M (CPU) + Llama Guard 3 1B (Apple-Silicon MPS/fp16)** captured offline, verifying
+> **raw 0 both tiers**, with a real inter-detector disagreement (PG2 flags the injection `malicious`;
+> the content-safety guard says `allow`) surfaced as observation, never an aggregate. The 12B model on a
+> GPU droplet and **independent-party\*\* evidence generation remain the → 10 levers.
 >
 > <details><summary>Prior — Stage 5E · Verifiable Deployed-detector Attestation (<code>v2.40.0-stage-5e-vda</code>)</summary>
 > The first Simurgh stage whose evidence targets a **real, shipped, third-party detector** — Meta's
