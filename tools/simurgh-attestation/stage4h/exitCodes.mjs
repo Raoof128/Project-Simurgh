@@ -908,6 +908,40 @@ export const VFC_AUDIT_CHECK_ORDER = Object.freeze([
 export const VFC_AUDIT_ONLY_CODES = Object.freeze([297]);
 export const VFC_POLICY_CODES = Object.freeze([298]);
 
+// Stage 5H — VSD: Verifiable Safety-claim Disclosure. Additive codes 300–315. Every safety claim
+// carries a declared consequence and a verifier-COMPUTED reproducibility tier (restricted →
+// controlled → public); the verifier rejects tier overclaim (311) and evidential inversion (312 —
+// a claim consequence exceeding what its proven tier warrants). Frozen first-failure order.
+export const VSD_RAW_CODES = Object.freeze({
+  OK: 0,
+  VSD_SCHEMA_INVALID: 300,
+  VSD_ATTESTATION_TRUST_OR_SIGNATURE_INVALID: 301, // reason: external_pin_missing|external_pin_mismatch|attestation_signature_invalid
+  VSD_INVENTORY_SIGNATURE_INVALID: 302, // + producer-identity binding
+  VSD_CLAIM_OUTSIDE_INVENTORY: 303, // membership + claim_digest linkage
+  VSD_SCOPE_UNBOUND: 304, // Law 4 — scope presence
+  VSD_ARTEFACT_UNACCOUNTED: 305, // Law 3 — Completeness (present ⊎ withheld)
+  VSD_REDACTION_UNTYPED: 306, // Law 3 — typed redaction floor
+  VSD_ARTEFACT_DIGEST_MISMATCH: 307,
+  VSD_REVIEW_HOST_UNPINNED: 308, // supplied registry empty / host absent (undefined registry → 315)
+  VSD_REVIEW_RECEIPT_INVALID: 309,
+  VSD_RECOMPUTE_RECIPE_INVALID: 310, // Law 2 anti-gaming floor (recipe integrity ONLY)
+  VSD_TIER_OVERCLAIM: 311, // declared_tier > proven_tier
+  VSD_EVIDENTIAL_INVERSION: 312, // Law 1 — headline
+  VSD_AUDIT_CENSUS_MISMATCH: 313, // audit-only (incl. verdict_table equality)
+  VSD_POLICY_REJECTED: 314, // strict local floor above the structural warrant
+  INTERNAL_OR_ENV_UNAVAILABLE_VSD: 315, // fail-closed wrapper + recompute kernel unavailable
+});
+// Public first-failure order 300 → 312. Audit adds the census bijection 313. Policy 314 + wrapper
+// 315 applied OUTSIDE the ordered scan (house convention, cf. VFC_*).
+export const VSD_PUBLIC_CHECK_ORDER = Object.freeze([
+  300, 301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312,
+]);
+export const VSD_AUDIT_CHECK_ORDER = Object.freeze([
+  300, 301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312, 313,
+]);
+export const VSD_AUDIT_ONLY_CODES = Object.freeze([313]);
+export const VSD_POLICY_CODES = Object.freeze([314]);
+
 export const HARNESS_CODES = Object.freeze({
   CLEAN_RUN_FALSELY_REJECTED: 19,
 });
@@ -1218,6 +1252,22 @@ export const RUN_LEVEL_BY_RAW = Object.freeze({
   297: 1,
   298: 1,
   299: 1,
+  300: 1,
+  301: 1,
+  302: 1,
+  303: 1,
+  304: 1,
+  305: 1,
+  306: 1,
+  307: 1,
+  308: 1,
+  309: 1,
+  310: 1,
+  311: 1,
+  312: 1,
+  313: 1,
+  314: 1,
+  315: 1,
 });
 
 export function stage4CodeForRawCode(code) {
