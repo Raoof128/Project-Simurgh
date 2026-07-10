@@ -1,0 +1,12 @@
+{
+  "claim_ids": [
+    "frontier7b-cbrn-threshold",
+    "frontier7b-harmbench-public",
+    "frontier7b-monitoring-context"
+  ],
+  "artefact_ids": [
+    "eval-results",
+    "judge-rubric",
+    "redteam-summary"
+  ]
+}

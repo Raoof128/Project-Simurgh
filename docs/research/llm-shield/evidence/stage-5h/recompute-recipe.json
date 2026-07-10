@@ -1,0 +1,20 @@
+{
+  "frontier7b-cbrn-threshold": {
+    "schema": "simurgh.vsd.recompute_recipe.v1",
+    "op": "aggregate_mean",
+    "input_artefact_ids": [
+      "redteam-summary"
+    ],
+    "metric": "refusal_rate",
+    "decimals": 4
+  },
+  "frontier7b-harmbench-public": {
+    "schema": "simurgh.vsd.recompute_recipe.v1",
+    "op": "aggregate_mean",
+    "input_artefact_ids": [
+      "eval-results"
+    ],
+    "metric": "refusal_rate",
+    "decimals": 4
+  }
+}

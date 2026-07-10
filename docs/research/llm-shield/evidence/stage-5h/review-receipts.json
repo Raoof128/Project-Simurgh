@@ -1,0 +1,15 @@
+[
+  {
+    "schema": "simurgh.vsd.review_receipt.v1",
+    "content": {
+      "claim_digest": "sha256:53400cb987f974d181f2de98a1c13e9b14800ec6999be7de3c776226b6eee1f0",
+      "inventory_digest": "sha256:fc1516e8dd8c439185436c1c2c0ee732907b38f81424a31502ba7a4c98ba6f1f",
+      "host_identity_digest": "sha256:7fac4805f482d7ca016c22c31ced0713e8b0ebe7f462239052a4c79f5731ea26",
+      "host_key_fingerprint": "sha256:e64577c92bb735fb639ac812144e2cd0044cdc036b6290af34ee49fc8fdde619",
+      "recomputed_output_digest": "sha256:9f10dc0dccddb17a5498dc69efe52330c523d4bf1d1202bf0b7440adf445ede0",
+      "verdict": "reproduced"
+    },
+    "receipt_digest": "sha256:66efd1f3642cae6ea2a64ff62871f1cf457930ea0962431c456ae01ab598f646",
+    "host_signature": "eJWVMwj3FcCc8Qr1ECkzt202rLb0/7ejyOwLf3sHs9/GEbhf5q+BkdHtImDlbHZ+IKTdEdh4d85fZ+YIzQCeAg=="
+  }
+]
