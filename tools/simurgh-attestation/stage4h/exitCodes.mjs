@@ -874,6 +874,40 @@ export const VMP_PUBLIC_CODES = Object.freeze([
   268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279,
 ]);
 
+// Stage 5G — VFC: Verifiable Foreign Capture. Additive 283–299. Producer/verifier separation
+// rungs (distinct_key_only → challenge_bound → externally_anchored); the verifier computes the
+// strongest proven rung and rejects unsupported upgrades. Frozen first-failure order.
+export const VFC_RAW_CODES = Object.freeze({
+  OK: 0,
+  VFC_SCHEMA_INVALID: 283,
+  VFC_ATTESTATION_TRUST_OR_SIGNATURE_INVALID: 284, // reason: external_pin_missing|external_pin_mismatch|attestation_signature_invalid
+  VFC_CHALLENGE_RECEIPT_INVALID: 285,
+  VFC_PRODUCER_ATTRIBUTION_MISSING: 286, // Law 1
+  VFC_PRODUCER_SIGNATURE_INVALID: 287,
+  VFC_CAPTURE_DIGEST_MISMATCH: 288,
+  VFC_KEY_NOT_DISTINCT: 289, // rung-0 floor
+  VFC_CHALLENGE_UNBOUND: 290, // Law 2 (present-but-incomplete binding)
+  VFC_CHALLENGE_MISMATCH: 291, // Law 2 (present-but-mismatched)
+  VFC_SUBJECT_NOT_DISTINCT: 292, // rung-2
+  VFC_EXTERNAL_TRUST_CONFIGURATION_INVALID: 293, // rung-2, fail-closed
+  VFC_ANCHOR_EVIDENCE_INVALID: 294, // rung-2
+  VFC_ANCHOR_BINDING_MISMATCH: 295, // rung-2, Law 4
+  VFC_SEPARATION_OVERCLAIM: 296, // Law 3 — headline
+  VFC_AUDIT_CENSUS_MISMATCH: 297, // audit-only
+  VFC_POLICY_REJECTED: 298, // strict min-rung
+  INTERNAL_OR_ENV_UNAVAILABLE_VFC: 299, // fail-closed wrapper + kernel unavailable
+});
+// Public first-failure order 283 → 296. Audit adds the census bijection 297. Policy 298 + wrapper 299
+// applied OUTSIDE the ordered scan (house convention, cf. VMP_*).
+export const VFC_PUBLIC_CHECK_ORDER = Object.freeze([
+  283, 284, 285, 286, 287, 288, 289, 290, 291, 292, 293, 294, 295, 296,
+]);
+export const VFC_AUDIT_CHECK_ORDER = Object.freeze([
+  283, 284, 285, 286, 287, 288, 289, 290, 291, 292, 293, 294, 295, 296, 297,
+]);
+export const VFC_AUDIT_ONLY_CODES = Object.freeze([297]);
+export const VFC_POLICY_CODES = Object.freeze([298]);
+
 export const HARNESS_CODES = Object.freeze({
   CLEAN_RUN_FALSELY_REJECTED: 19,
 });
@@ -1167,6 +1201,23 @@ export const RUN_LEVEL_BY_RAW = Object.freeze({
   280: 1,
   281: 1,
   282: 1,
+  283: 1,
+  284: 1,
+  285: 1,
+  286: 1,
+  287: 1,
+  288: 1,
+  289: 1,
+  290: 1,
+  291: 1,
+  292: 1,
+  293: 1,
+  294: 1,
+  295: 1,
+  296: 1,
+  297: 1,
+  298: 1,
+  299: 1,
 });
 
 export function stage4CodeForRawCode(code) {

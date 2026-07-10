@@ -317,6 +317,24 @@ test("Stage 4H.4 exit map is explicit and collision-bounded", () => {
       280: 1,
       281: 1,
       282: 1,
+      // Stage 5G VFC codes (reviewed extension of the shared ledger; 5G spec §2).
+      283: 1,
+      284: 1,
+      285: 1,
+      286: 1,
+      287: 1,
+      288: 1,
+      289: 1,
+      290: 1,
+      291: 1,
+      292: 1,
+      293: 1,
+      294: 1,
+      295: 1,
+      296: 1,
+      297: 1,
+      298: 1,
+      299: 1,
     })
   );
 });
