@@ -101,11 +101,11 @@ equivalence to their assurance levels or receipt models (`overt_vfc_crosswalk_de
 _"Good-for-Anthropic" measures potential usefulness to assurance teams; it does not imply Anthropic
 review, adoption, or endorsement._
 
-## Post-release confirmations (TO-CONFIRM — filled after the tag + Release)
+## Post-release confirmations (2026-07-10)
 
-- reproduce-on-main (Node 26): **TO-CONFIRM**
-- tag commit == reproduced HEAD: **TO-CONFIRM**
-- GitHub Release published + marked Latest: **TO-CONFIRM**
+- reproduce-on-main (Node 26): **ALL PASS** (incl. the real-capture verify-only step + byte-stability).
+- tag commit == reproduced HEAD: **MATCH** — `v2.42.0-stage-5g-vfc` @ `fc8754a1ee13f0447bb13c6f8b78f03d6793982b`.
+- GitHub Release published + marked **Latest**: **CONFIRMED** (verified via `gh release list`).
 
 ## Next
 
