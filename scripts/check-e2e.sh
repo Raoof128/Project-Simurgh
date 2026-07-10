@@ -135,6 +135,7 @@ declare -a REPRODUCE=(
   "Stage 5B VAR|scripts/reproduce-llm-shield-stage5b.sh"
   "Stage 5C VSB|scripts/reproduce-llm-shield-stage5c.sh"
   "Stage 5D VARL|scripts/reproduce-llm-shield-stage5d.sh"
+  "Stage 5E VDA|scripts/reproduce-llm-shield-stage5e.sh"
   "Stage 5C VSB|scripts/reproduce-llm-shield-stage5c.sh"
 )
 for entry in "${REPRODUCE[@]}"; do
