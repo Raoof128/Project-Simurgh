@@ -14,10 +14,10 @@ verdict is produced** (panel completeness ≠ detection completeness).
 
 ## Six verifier laws (all implemented + tested + Lean-checked)
 
-1. No Post-Commit Panel Omission · 2. No Silent Exam or Adapter Swap · 3. No Membership Rewrite ·
-2. No Post-Hoc Applicability Rewrite · 5. No Dropped Capture Record · 6. **No Gerrymandered Universe**
-   (precommit the detector universe; publish `Omission Lower Bound = |universe| − |panel|`). Claim-rail:
-   Disagreement Is Not Correctness.
+**(L1)** No Post-Commit Panel Omission · **(L2)** No Silent Exam or Adapter Swap · **(L3)** No Membership
+Rewrite · **(L4)** No Post-Hoc Applicability Rewrite · **(L5)** No Dropped Capture Record ·
+**(L6) No Gerrymandered Universe** — precommit the detector universe; publish
+`Omission Lower Bound = |universe| − |panel|`. Claim-rail: Disagreement Is Not Correctness.
 
 ## What shipped (verified, not asserted)
 
