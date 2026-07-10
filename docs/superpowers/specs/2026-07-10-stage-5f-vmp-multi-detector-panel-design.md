@@ -91,12 +91,13 @@ team points VMP at their own detectors offline, zero Simurgh involvement — rem
 and turns the standing-10 lever into a single command. Non-claim: _a BYO run is the caller's
 evidence, not ours; we verify the contract, we do not endorse the panel._ ③ **Adversarial
 Disagreement Observation**: the attestation evaluates the **entire** precommitted safe corpus (no
-selection/"mining" — that would reintroduce selection bias) and publishes a raw **`member_positive_vector`**
-per case (each member's boolean "returned its **own** declared-positive class"). Disagreement is whatever
-the full corpus shows — surfaced as **observation, never a verdict**, with **no prevalence claim** and no
-shared "catch" notion. Non-claim: _raw per-member vectors are declared, never reconciled into an
-aggregate._ (④ Panel Contest Cells / the Rerun Right is a **different blade** — spun out to the next
-stage, VPC.)
+selection/"mining" — that would reintroduce selection bias) and publishes a raw
+**`heterogeneous_label_vector`** per case: each member's `{semantics, label}` **raw typed label** in its
+own space — **no boolean, no shared "positive", no cross-detector normalization** (that would be the
+reconciliation Law-2 forbids). Disagreement is whatever the full corpus shows — surfaced as
+**observation, never a verdict**, with **no prevalence claim**. Non-claim: _raw typed labels are declared,
+never mapped into a shared space or an aggregate._ (④ Panel Contest Cells / the Rerun Right is a
+**different blade** — spun out to the next stage, VPC.)
 
 **AnthropicSafe framing.** The shared corpus extends the already-published safe base families (5E's
 8 bases + benign probes), not novel potent attack strings; detectors score **inputs only**; no target
@@ -218,9 +219,15 @@ audit tier adds the census bijection. One additive raw-code block, fail-closed w
     "universe_size": 5,
     "panel_size": 2,
     "omission_lower_bound": 3, // = universe_size − panel_size
-    // ③: each member's OWN declared-positive boolean per case — raw observation, no shared "catch", no aggregate
-    "member_positive_vector": [
-      { "case_id": "...", "positives": { "prompt_guard_2_86m": true, "llama_guard_4_12b": false } },
+    // ③: raw typed labels per case, each member in its OWN space — no boolean, no shared "positive", no normalization
+    "heterogeneous_label_vector": [
+      {
+        "case_id": "...",
+        "labels": {
+          "prompt_guard_2_86m": { "semantics": "binary_malicious_softmax", "label": "malicious" },
+          "llama_guard_4_12b": { "semantics": "categorical_allow_block", "label": "allow" },
+        },
+      },
     ],
   },
   "bootstrap_provenance": [
@@ -263,23 +270,23 @@ provenance (e.g. `unexpected_categorical_output`) and no verdict.
 
 **Raw codes (additive 268→282), each bound to a law/bound:**
 
-| Code | Check                                                                                                                                                                                                          | Enforces                                              |
-| ---- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
-| 268  | schema id + no unknown keys; no aggregate-verdict field (`aggregate_verdict`/`panel_score`/`consensus`/`quorum`)                                                                                               | structural gate; aggregate-absence                    |
-| 269  | signature — **external-pinned fingerprint first**, then Ed25519 over canonical content (embedded key informational only)                                                                                       | not self-authenticating (5E lesson)                   |
-| 270  | precommit receipt + **linear chain closure** (positions `0..N` unique/contiguous, one per position, no forks, single terminal head, attestation binds it)                                                      | Law 3                                                 |
-| 271  | panel-plan integrity — `panel_plan_digest = hash(schema_ver + 5 subdigests incl. universe)`; roster fully declared + hashes to `roster_digest`; **`roster ⊆ universe`** (universe hashes to `universe_digest`) | Law 3 + Law 6                                         |
-| 272  | corpus binding — cases hash to `corpus_digest`; cells reference only committed cases                                                                                                                           | exam integrity                                        |
-| 273  | cell-matrix bijection — exactly one typed cell per (member × case), none absent/duplicated                                                                                                                     | Law 1                                                 |
-| 274  | status-union validity — status ∈ enum; only `evaluated` has a verdict; `capture_failed` has bounded error prov, no verdict                                                                                     | typed non-results                                     |
-| 275  | applicability/capability — `not_applicable` ⟸ matrix; `unsupported_input` ⟸ capability profile                                                                                                                 | Law 4                                                 |
-| 276  | shared-input + adapter **replay** — `detector_input_digest = digest(applyCommittedAdapter(source, adapter, tokenizer, truncation))`; digests match roster                                                      | Law 2                                                 |
-| 277  | semantics-specific verdict recompute via closed registry (scaled-int softmax compare / pinned parser); **no softmax recomputation**; no cross-semantics mapping                                                | heterogeneous semantics declared, not reconciled      |
-| 278  | bootstrap provenance — run pinned historical verifiers (5E/3V-B) on imported artifacts under their pinned roots; expect `recorded_raw`                                                                         | custody-only imports                                  |
-| 279  | `VMP_DERIVED_SUMMARY_MISMATCH` (frozen `reason` enum): declared `completeness` flags + histogram + `coverage` (omission_lower_bound = universe−panel; raw `member_positive_vector`) match recomputed values    | missing-capture + silence surface cannot be laundered |
-| 280  | _(audit only)_ census bijection — all public cells (every status) ↔ all terminal census records; every attempt → one terminal; census hashes to `capture_log_digest`                                           | Law 5                                                 |
-| 281  | strict completeness **policy** — `VMP_EVALUATION_INCOMPLETE_POLICY` (default CLI rejects `evaluation_complete=false`)                                                                                          | consumer sufficiency                                  |
-| 282  | fail-closed wrapper (`evaluatePanelSafe`); also the **infrastructure-unavailable** code (Python replay / historical kernel / subprocess cannot execute)                                                        | never fail open; env-unavailable ≠ tampering          |
+| Code | Check                                                                                                                                                                                                           | Enforces                                              |
+| ---- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| 268  | schema id + no unknown keys; no aggregate-verdict field (`aggregate_verdict`/`panel_score`/`consensus`/`quorum`)                                                                                                | structural gate; aggregate-absence                    |
+| 269  | signature — **external-pinned fingerprint first**, then Ed25519 over canonical content (embedded key informational only)                                                                                        | not self-authenticating (5E lesson)                   |
+| 270  | precommit receipt + **linear chain closure** (positions `0..N` unique/contiguous, one per position, no forks, single terminal head, attestation binds it)                                                       | Law 3                                                 |
+| 271  | panel-plan integrity — `panel_plan_digest = hash(schema_ver + 5 subdigests incl. universe)`; roster fully declared + hashes to `roster_digest`; **`roster ⊆ universe`** (universe hashes to `universe_digest`)  | Law 3 + Law 6                                         |
+| 272  | corpus binding — cases hash to `corpus_digest`; cells reference only committed cases                                                                                                                            | exam integrity                                        |
+| 273  | cell-matrix bijection — exactly one typed cell per (member × case), none absent/duplicated                                                                                                                      | Law 1                                                 |
+| 274  | status-union validity — status ∈ enum; only `evaluated` has a verdict; `capture_failed` has bounded error prov, no verdict                                                                                      | typed non-results                                     |
+| 275  | applicability/capability — `not_applicable` ⟸ matrix; `unsupported_input` ⟸ capability profile                                                                                                                  | Law 4                                                 |
+| 276  | shared-input + adapter **replay** — `detector_input_digest = digest(applyCommittedAdapter(source, adapter, tokenizer, truncation))`; digests match roster                                                       | Law 2                                                 |
+| 277  | semantics-specific verdict recompute via closed registry (lexical decimal-string compare / bounded-token validation); **no softmax recomputation**; no cross-semantics mapping                                  | heterogeneous semantics declared, not reconciled      |
+| 278  | bootstrap provenance — run pinned historical verifiers (5E/3V-B) on imported artifacts under their pinned roots; expect `recorded_raw`                                                                          | custody-only imports                                  |
+| 279  | `VMP_DERIVED_SUMMARY_MISMATCH` (frozen `reason` enum): declared `completeness` flags + histogram + `coverage` (omission_lower_bound = universe−panel; raw `heterogeneous_label_vector`) match recomputed values | missing-capture + silence surface cannot be laundered |
+| 280  | _(audit only)_ census bijection — all public cells (every status) ↔ all terminal census records; every attempt → one terminal; census hashes to `capture_log_digest`                                            | Law 5                                                 |
+| 281  | strict completeness **policy** — `VMP_EVALUATION_INCOMPLETE_POLICY` (default CLI rejects `evaluation_complete=false`)                                                                                           | consumer sufficiency                                  |
+| 282  | fail-closed wrapper (`evaluatePanelSafe`); also the **infrastructure-unavailable** code (Python replay / historical kernel / subprocess cannot execute)                                                         | never fail open; env-unavailable ≠ tampering          |
 
 **Frozen first-failure order:** 268 → 269 → 270 → 271 → 272 → 273 → 274 → 275 → 276 → 277 → 278 →
 279, then (audit only) 280, then policy 281, wrapper 282. Structure/auth before semantics; corpus
@@ -329,7 +336,7 @@ A legal precommitted `not_applicable`/`unsupported_input` does **not** break eva
   validated); the pure core consumes the result. Node fails **closed** (raw 282) if the replay
   cannot execute — it never downgrades to structural-only and returns 0.
 - **Re-runs the pinned parser (277)** over each categorical cell's committed canonical output token;
-  softmax cells recompute the threshold decision by **scaled-integer** comparison.
+  softmax cells recompute the threshold decision by **lexical decimal-string** comparison (no `Number`).
 - **Bootstrap provenance (278)** runs the historical 5E/3V-B verifiers from a detached worktree at
   the exact commit, checked against the pinned source manifest (full transitive kernel).
 - **Tamper matrix:** one isolated mutation per load-bearing field class and per raw-code branch
@@ -375,7 +382,7 @@ builder never writes/prints/copies the key into evidence); separate ceremony key
 
 **Parity (JS ↔ Python ↔ browser) — the deterministic surface only.** Agree on `canonicalJson`
 byte-equality, raw-code **precedence** (Node↔Python full), `decision_evidence` structure + parser
-dispatch, and all digest/completeness/policy arithmetic (**scaled-integer** comparison; no verifier
+dispatch, and all digest/completeness/policy arithmetic (**lexical decimal-string** comparison; no verifier
 recomputes softmax; no binary float touches a verdict). Do **not** agree on neural floating-point
 execution (Lane C, captured once). The browser covers the **portable surface only** and returns
 `{ verification_scope: "portable", portable_valid: true, full_attestation_status: "not_evaluated",
@@ -509,9 +516,9 @@ the standing 10 lever); ship VPC contest (Constitution).
 | `core/matrix.mjs`        | cell-matrix bijection; status-union legality                                                                                                                                                                                                                                                         | 273, 274 |
 | `core/applicability.mjs` | applicability-matrix + capability-profile entailment                                                                                                                                                                                                                                                 | 275      |
 | `core/adapter.mjs`       | pure structural binding of `detector_input_digest` + adapter/tokenizer/truncation to plan (consumes replay result)                                                                                                                                                                                   | 276      |
-| `core/verdict.mjs`       | closed registry: `binary_softmax` (scaled-int compare) + `categorical_generation` (pinned parser)                                                                                                                                                                                                    | 277      |
+| `core/verdict.mjs`       | closed registry: `binary_malicious_softmax` (lexical decimal-string compare, no softmax recompute) + `categorical_allow_block` (bounded-token validation)                                                                                                                                            | 277      |
 | `core/bootstrap.mjs`     | pure — validates pin records + runner results                                                                                                                                                                                                                                                        | 278      |
-| `core/completeness.mjs`  | representation/evaluation recompute + histogram; **`coverage` recompute (omission_lower_bound + raw `member_positive_vector`, ①/③); `evaluated_obligation_fraction` + `disagreementLedger` projections**; strict policy gate                                                                         | 279, 281 |
+| `core/completeness.mjs`  | representation/evaluation recompute + histogram; **`coverage` recompute (omission_lower_bound + raw `heterogeneous_label_vector`, ①/③); `evaluatedObligationFraction` + `heterogeneousLabelVector` projections**; strict policy gate                                                                 | 279, 281 |
 | `core/census.mjs`        | audit bijection (all statuses ↔ all terminal records; every attempt → one terminal)                                                                                                                                                                                                                  | 280      |
 | `core/vmpCore.mjs`       | evaluator — frozen order 268→282; `evaluatePanel`/`evaluatePanelSafe`; receives impure runner results via orchestration, never trusts a decorative `recorded_raw`                                                                                                                                    | 282      |
 
@@ -522,7 +529,7 @@ historical copy), `byoPanelAdapter.mjs` (invention ②: BYO-Panel contract — p
 detectors offline; verifies the contract, endorses nothing).
 
 **Python — `stage5f/python/`:** `vmp_parity.py` (canonicalJson byte-equality + full raw-code
-precedence + scaled-int verdict + completeness/policy arithmetic), `vmp_adapter_replay.py`
+precedence + lexical decimal-string verdict + completeness/policy arithmetic), `vmp_adapter_replay.py`
 (pinned-env deterministic input-adapter replay), `vmp_bootstrap_verify.py` (parity historical-verifier
 runner).
 
@@ -635,10 +642,10 @@ Second beast pass (blade-deepeners, minimal surface):
   Any team points VMP at their own detectors offline. Non-claim: "a BYO run is the caller's evidence,
   not ours; we verify the contract, we do not endorse the panel."
 - **③ Full-Corpus Disagreement Observation** _(evaluate the entire committed safe corpus; the raw
-  `member_positive_vector` projection)._ No selection/"mining" (that reintroduces selection bias);
-  disagreement is whatever the full corpus shows, published as each member's own declared-positive
-  boolean per case. Non-claim: "raw per-member vectors are observation, never a reconciled aggregate or
-  a prevalence claim."
+  `heterogeneous_label_vector` projection)._ No selection/"mining" (that reintroduces selection bias);
+  disagreement is whatever the full corpus shows, published as each member's raw `{semantics, label}`
+  typed label per case — **no boolean, no shared "positive", no normalization**. Non-claim: "raw typed
+  labels are observation, never mapped into a shared space, an aggregate, or a prevalence claim."
 
 **Spun out (different blade → next stage VPC):** **④ Panel Contest Cells / the Rerun Right** — a
 dissenting party files a signed counter-cell against the same `shared_input_digest`; the attestation
@@ -652,7 +659,7 @@ in the global ledger `stage4h/exitCodes.mjs` (with `VMP_CHECK_ORDER`/`AUDIT`/`PU
 mirroring 5E) and guarded by `exitCodeProbeHygiene.test.js`; `panel_plan_digest = hash(schema_version + roster +
 corpus + applicability + adapter_manifest + universe)` with `roster ⊆ universe` (Law 6); **acyclic Lane
 B order** (result_chain_head → receipt →
-closeout → attestation); decimal-string scores + scaled-int comparison; **Node 26**; the
+closeout → attestation); decimal-string scores + lexical comparison; **Node 26**; the
 `INSECURE_FIXTURE_ONLY` key policy; the 276/278/282 failure-code distinctions; fail-closed
 reproduce/pack. Per-task **Interfaces blocks**. The build-risk ledger is read before Task 1. Frozen
 prior-reproduce list `4y,4z,5a,5b,5c,5d,5e` must stay green.
