@@ -1,0 +1,18 @@
+<meta charset="utf-8" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self'" />
+<title>VFC portable verifier</title>
+<main style="font-family: system-ui; max-width: 40rem; margin: 2rem auto">
+  <h1>Verifiable Foreign Capture — portable verifier</h1>
+  <p>Recomputes the digest surface + rung predicates offline. This is an <b>explicitly incomplete</b>
+    portable check (<code>raw: null</code>): it does not evaluate signatures, the Sigstore anchor, or
+    policy. No network access is permitted (CSP <code>default-src 'none'</code>).</p>
+  <input type="file" id="bundle" accept="application/json" />
+  <pre id="out"></pre>
+</main>
+<script type="module">
+  import { verifyPortable } from "./vfc-portable.mjs";
+  document.getElementById("bundle").addEventListener("change", async (e) => {
+    const bundle = JSON.parse(await e.target.files[0].text());
+    document.getElementById("out").textContent = JSON.stringify(await verifyPortable(bundle), null, 2);
+  });
+</script>
