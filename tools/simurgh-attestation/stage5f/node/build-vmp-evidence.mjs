@@ -17,17 +17,22 @@ function writeJson(path, value) {
 }
 
 export function buildEvidence() {
-  const { bundle, auditPrivate, replayResults, pinnedFingerprint } = buildPanel();
+  const { bundle, auditPrivate, replayResults, receipt, pinnedFingerprint, ceremonyFingerprint } =
+    buildPanel();
   mkdirSync(EVID, { recursive: true });
   writeJson(join(EVID, "vmp-attestation.json"), bundle);
   writeJson(join(EVID, "capture-census.json"), auditPrivate);
   writeJson(join(EVID, "vmp-replay-results.json"), replayResults);
+  writeJson(join(EVID, "laneb-receipt.json"), receipt);
   writeJson(join(EVID, "vmp-pinned-key.json"), {
     note: "informational only — trust comes from the external pin",
     attestation_fingerprint: pinnedFingerprint,
   });
-  // External trust pin lives OUTSIDE the evidence pack (installed-trust-store analogue).
-  writeJson(join(STAGE, "pin.json"), { attestation_fingerprint: pinnedFingerprint });
+  // External trust pins live OUTSIDE the evidence pack (installed-trust-store analogue).
+  writeJson(join(STAGE, "pin.json"), {
+    attestation_fingerprint: pinnedFingerprint,
+    ceremony_fingerprint: ceremonyFingerprint,
+  });
   if (canonicalJson(bundle).includes("PRIVATE KEY"))
     throw new Error("refusing to write a private key into evidence");
   return { evidenceDir: EVID };

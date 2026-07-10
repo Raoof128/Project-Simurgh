@@ -8,6 +8,7 @@ import { join } from "node:path";
 import { createPublicKey } from "node:crypto";
 import { sha256Canon, sha256Bytes, panelPlanDigest } from "../core/digests.mjs";
 import { signBundle, keyFingerprint } from "../core/signature.mjs";
+import { buildReceipt, receiptDigest } from "../laneb/ceremony.mjs";
 
 const ROOT = join(fileURLToPath(new URL(".", import.meta.url)), "../../../..");
 const KEYS = join(ROOT, "tests/fixtures/llmShield/stage5f/test-keys");
@@ -17,6 +18,7 @@ const ceremonyPem = readFileSync(
   "utf8"
 );
 const attestationPubPem = createPublicKey(attestationPem).export({ type: "spki", format: "pem" });
+const ceremonyPubPem = createPublicKey(ceremonyPem).export({ type: "spki", format: "pem" });
 
 export const clone = (v) => JSON.parse(JSON.stringify(v));
 
@@ -179,12 +181,42 @@ function build() {
   };
   precommit.record_digest = recordDigest(precommit);
   const result_chain_head_digest = precommit.record_digest;
-  const laneb_receipt_digest = sha256Bytes("laneb-receipt-placeholder");
+
+  const completeness = {
+    representation_complete: true,
+    evaluation_complete: true,
+    cell_status_histogram: {
+      evaluated: 4,
+      not_applicable: 0,
+      unsupported_input: 0,
+      capture_failed: 0,
+      missing_capture: 0,
+    },
+  };
+  const coverage = {
+    universe_size: 3,
+    panel_size: 2,
+    omission_lower_bound: 1,
+    heterogeneous_label_vector,
+  };
+
+  // Lane B (acyclic order): result_chain_head → receipt (five digests) → closeout binds it → sign.
+  const receipt = buildReceipt(
+    {
+      panel_plan_digest: plan_digest,
+      cell_matrix_digest: sha256Canon(cells),
+      completeness_digest: sha256Canon({ completeness, coverage }),
+      capture_log_digest,
+      result_chain_head_digest,
+    },
+    ceremonyPubPem,
+    ceremonyPem
+  );
   const closeout = {
     record_type: "panel_closeout",
     chain_position: 1,
     previous_record_digest: result_chain_head_digest,
-    blind_recompute_receipt_digest: laneb_receipt_digest,
+    blind_recompute_receipt_digest: receiptDigest(receipt),
   };
   closeout.record_digest = recordDigest(closeout);
 
@@ -198,23 +230,8 @@ function build() {
     applicability_matrix,
     corpus: { corpus_digest, cases },
     cells,
-    completeness: {
-      representation_complete: true,
-      evaluation_complete: true,
-      cell_status_histogram: {
-        evaluated: 4,
-        not_applicable: 0,
-        unsupported_input: 0,
-        capture_failed: 0,
-        missing_capture: 0,
-      },
-    },
-    coverage: {
-      universe_size: 3,
-      panel_size: 2,
-      omission_lower_bound: 1,
-      heterogeneous_label_vector,
-    },
+    completeness,
+    coverage,
     bootstrap_provenance: [],
     closeout,
     capture_provenance: { capture_log_digest },
@@ -235,8 +252,10 @@ function build() {
     bundle,
     auditPrivate,
     replayResults,
+    receipt,
     runnerResults: {},
     pinnedFingerprint: keyFingerprint(attestationPubPem),
+    ceremonyFingerprint: keyFingerprint(ceremonyPubPem),
     attestationPem,
     ceremonyPem,
   };

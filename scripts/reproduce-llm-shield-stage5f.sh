@@ -27,7 +27,11 @@ echo "-- 4/5 verify committed evidence — audit tier (census bijection) -> raw 
 node "$S/node/verify-vmp-attestation.mjs" --tier audit >/dev/null
 echo "   audit verify OK"
 
-echo "-- 5/5 byte-stability: rebuild the evidence pack in place and diff"
+echo "-- 5/6 Lane B two-process/two-key blind recompute ceremony"
+node "$S/laneb/run-laneb-recompute-ceremony.mjs" >/dev/null
+echo "   Lane B corroborated"
+
+echo "-- 6/6 byte-stability: rebuild the evidence pack in place and diff"
 node "$S/node/build-vmp-evidence.mjs" >/dev/null
 git diff --quiet -- docs/research/llm-shield/evidence/stage-5f "$S/pin.json"
 echo "   byte-stable (no diff)"
