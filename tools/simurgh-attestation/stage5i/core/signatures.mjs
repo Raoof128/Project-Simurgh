@@ -42,13 +42,18 @@ export function roleCollisionOk(roles) {
   const hosts = asSet(roles.hosts);
   const inAny = (fp, ...sets) => sets.some((s) => asSet(s).has(fp));
 
-  if (inAny(verifier, grantIssuers, affiliationIssuers, reviewers, hosts) || verifier === producer) {
+  if (
+    inAny(verifier, grantIssuers, affiliationIssuers, reviewers, hosts) ||
+    verifier === producer
+  ) {
     return { ok: false, reason: "verifier_role_collision" };
   }
   if (reviewers.has(producer)) return { ok: false, reason: "reviewer_is_producer" };
-  for (const gi of grantIssuers) if (reviewers.has(gi)) return { ok: false, reason: "reviewer_is_grant_issuer" };
+  for (const gi of grantIssuers)
+    if (reviewers.has(gi)) return { ok: false, reason: "reviewer_is_grant_issuer" };
   if (hosts.has(producer)) return { ok: false, reason: "host_is_producer" };
-  if (affiliationIssuers.has(producer)) return { ok: false, reason: "affiliation_issuer_is_producer" };
+  if (affiliationIssuers.has(producer))
+    return { ok: false, reason: "affiliation_issuer_is_producer" };
   for (const ai of affiliationIssuers) {
     if (reviewers.has(ai)) return { ok: false, reason: "affiliation_issuer_is_reviewer" }; // B5
   }
