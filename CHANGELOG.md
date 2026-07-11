@@ -1,5 +1,15 @@
 ## Change Log
 
+## [stage-5i-vpc] — 2026-07-11 — VPC: Verifiable Panel Coverage (`v2.44.0-stage-5i-vpc`)
+
+**Raouf:**
+
+- **Scope:** New stage (branch `stage-5i-vpc`). Additive raw codes **316–331**; new `tools/simurgh-attestation/stage5i/` verifier + tests + evidence + Lean. Additive only — no prior verifier semantics, evidence values, or codes changed.
+- **Summary:** Turns RSP v3.4's split-external-review condition ("all parts of the unredacted report are evaluated by at least one external reviewer") into an offline-recomputable relation: grant-bounded coverage **equality** `⋃C(r)=S` with computed reviewer+host independence, a no-silent-filter census, and externally-anchored non-affiliation. Laws: No Section Left Unreviewed (327), No Phantom Review (323), No Self-Vouched Reviewer (325/326). Headline: the **Adequacy Gate** (328) — a coverage verifier structurally unable to certify review adequacy (fails closed even at full coverage). Two zero-code projections (Coverage Depth Census, Typed Coverage State); two roots break the challenge↔root cycle; pure `vpcCore` over adapter `facts`. Three lanes (A byte-stable, B multi-process ceremony, C real Opus 4.6 structure PENDING); JS↔Python↔browser byte-identical parity; 9 Lean theorems (zero sorry).
+- **Files changed:** `tools/simurgh-attestation/stage4h/exitCodes.mjs`, `tools/simurgh-attestation/stage5i/**`, `tests/{unit,e2e}/llmShield/stage5i/**`, `tests/fixtures/llmShield/stage5i/test-keys/**`, `proofs/stage5i/**`, both `exit-map.json` goldens + `exitWrapper.test.js`, `scripts/reproduce-llm-shield-stage5i.sh`, `scripts/security-audit-llm-shield-stage3{m,o}.sh`, `.prettierignore`, `docs/research/llm-shield/{evidence/stage-5i,STAGE_5I_CLOSEOUT.md}`, `README.md`, `AGENT.md`, `CHANGELOG.md`, spec + plan.
+- **Verification:** 35 stage5i tests + K7 net green; `reproduce-llm-shield-stage5i.sh` ALL PASS (Node 26); prior 5H reproduce still PASS; full repo suite green except the pre-existing Stage-2 `securityHardening` baseline; `lean PanelCoverage.lean` zero sorry; byte-identical cross-language digests.
+- **Follow-ups:** VRC → VUC (External Accountability arc); VTC penciled. Nearest lever: real Lane-C ceremony with the droplet team.
+
 ## [reproduce-fail-open-sweep] — 2026-07-10 — Fail-closed repair across stage 4Y–5D reproduce runners
 
 **Raouf:**

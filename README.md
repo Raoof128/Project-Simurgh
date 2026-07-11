@@ -13,7 +13,7 @@ proof of what happened after a guardrail missed — not another jailbreak detect
 [![Node](https://img.shields.io/badge/node-%E2%89%A522.0-1a1a1a?style=flat-square)](https://nodejs.org)
 [![License](https://img.shields.io/badge/license-AGPL--3.0-d6cfbe?style=flat-square)](#license)
 [![Status](https://img.shields.io/badge/status-research%20prototype-2f4a2a?style=flat-square)](#status)
-[![Latest](https://img.shields.io/badge/release-v2.43.0-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.43.0-stage-5h-vsd)
+[![Latest](https://img.shields.io/badge/release-v2.44.0-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.44.0-stage-5i-vpc)
 
 </div>
 
@@ -41,7 +41,32 @@ In one sentence: **Simurgh gives an agentic system a verifiable receipt, not a p
 > selective omission, multi-agent accountability) to concrete mechanisms — printable version at
 > [`docs/research/llm-shield/anthropic-brief.html`](docs/research/llm-shield/anthropic-brief.html).
 
-> 🆕 **Latest — Stage 5H · Verifiable Safety-claim Disclosure (`v2.43.0-stage-5h-vsd`).**
+> 🆕 **Latest — Stage 5I · Verifiable Panel Coverage (`v2.44.0-stage-5i-vpc`).**
+> Turns RSP v3.4's split-external-review condition — _"all parts of the unredacted report are evaluated by
+> at least one external reviewer"_ — into an offline-recomputable relation over a committed report
+> partition, signed access grants, and reviewer receipts. The blade is grant-bounded coverage **equality**
+> `⋃C(r) = S` with **computed** reviewer + host independence (5G's rung lattice re-instantiated), a
+> **no-silent-filter census** (every supplied panel member qualifies or the bundle fails closed), and
+> **externally-anchored non-affiliation**. Three laws: **No Section Left Unreviewed** (327), **No Phantom
+> Review** (323), **No Self-Vouched Reviewer** (325/326). The headline invention is the **Adequacy Gate**
+> (`VPC_ADEQUACY_CLAIMED`, **328**) — a coverage verifier **structurally unable to certify the review was
+> adequate**: an adequacy/quality assertion fails closed **even at full coverage** (a bounded vocabulary
+> over a bounded surface, honestly not a semantic proof) — the purest anti-overclaim, and exactly the
+> **Wirecard** line (EY signed off on evidence sourced from the audited party). Plus two zero-code projections nobody publishes: the **Coverage Depth Census**
+> (`single_reviewer_sections` fragility map — "Pathway 5 rested on one reviewer's eyes") and the **Typed
+> Coverage State** (covered / assigned_only / unassigned coordination-theater map). Two roots
+> (`panel_subject_root` excludes challenge receipts) break the challenge↔root cycle. Codes **316–331**,
+> **9 Lean theorems** (zero `sorry`), **35 unit + K7 e2e**, three lanes (**A** byte-stable committed pack
+> raw 0 public+audit + byte-stable · **B** deterministic multi-process panel ceremony · **C** the real
+> Opus 4.6 Sabotage Risk Report public structure, campaign **PENDING**), and **JS↔Python↔browser parity,
+> byte-identical**. **Honest to its limits:** VPC is **not category-creating** (RSP v3.4 defines the
+> coverage condition; the EU AI Act Art. 55 + GPAI Code of Practice mandate independent external
+> evaluation) — it is the executable, byte-reproducible verifier under them. Coverage ≠ diligence
+> (→ VRC); Lane C is public-structure-only and its real ceremony is pending; separation is
+> `challenge_bound`, not `externally_anchored`.
+>
+> <details><summary>Prior — Stage 5H · Verifiable Safety-claim Disclosure (<code>v2.43.0-stage-5h-vsd</code>)</summary>
+>
 > Extends the Completeness Invariant to the **reproducibility tier of a safety claim**. Every claim carries
 > a **declared consequence** and a verifier-**computed reproducibility tier** (`restricted` → `controlled` →
 > `public`), and the verifier enforces the **Right-Scaling Law** — a claim may not outrun its evidence.
@@ -64,6 +89,8 @@ In one sentence: **Simurgh gives an agentic system a verifiable receipt, not a p
 > keys distinct from the verifier; `real-disclosure/` verifies `raw 0`. Honest bounds: the producer-side
 > runs used **placeholder** data (not a real eval), and no real published-report claim is ingested yet;
 > reproducibility ≠ correctness.
+>
+> </details>
 >
 > <details><summary>Prior — Stage 5G · Verifiable Foreign Capture (<code>v2.42.0-stage-5g-vfc</code>)</summary>
 >
