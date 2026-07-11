@@ -22,7 +22,7 @@ import { DOMAINS, CHALLENGE_DOMAIN, POLICY_PROFILES } from "../constants.mjs";
 // keys: { producer, grantIssuer, affIssuer, verifier, reviewers:[{...}] } each { privatePem, id:{identity_subject,public_key_pem,key_fingerprint} }
 export function buildSignedBundle(
   keys,
-  { sections, panel, campaign_id = "c1", profile = "release" } = {}
+  { sections, panel, campaign_id = "c1", profile = "release", signReceipt = signContent } = {}
 ) {
   const producer = {
     ...keys.producer.id,
@@ -141,9 +141,11 @@ export function buildSignedBundle(
         host_independence_evidence_digest: artifactDigest(hostSep),
       },
     };
+    // signReceipt is a hook: Lane B routes this through a per-reviewer child process that sees only
+    // its own grant + receipt content (never another reviewer's material).
     coverage_receipts.push({
       content: receiptContent,
-      signature: signContent(m.rk.privatePem, DOMAINS.receipt, receiptContent),
+      signature: signReceipt(m.rk.privatePem, DOMAINS.receipt, receiptContent),
     });
   }
 
