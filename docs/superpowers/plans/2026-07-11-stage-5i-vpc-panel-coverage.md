@@ -136,8 +136,9 @@ scripts/reproduce-llm-shield-stage5i.sh
    exit 1 and 331 → exit 3 in both exit-map goldens. Run → fail.
 3. Add codes to `stage4h/exitCodes.mjs` in the exact §2.4 order and names (316 `VPC_MALFORMED_BUNDLE`
    … 327 `VPC_SECTION_LEFT_UNREVIEWED`, 328 `VPC_ADEQUACY_CLAIMED`, 329 `VPC_ATTESTATION_MISMATCH`,
-   330 `VPC_POLICY_REJECTED`, 331 `INTERNAL_OR_ENV_UNAVAILABLE_VPC`). Regenerate both exit-map goldens
-   + inline map under **Node 26**. Run → pass. Commit.
+   330 `VPC_POLICY_REJECTED`, 331 `INTERNAL_OR_ENV_UNAVAILABLE_VPC`). **GAUNTLET P8:** there is no
+   generator script — the exit-map goldens + inline exitWrapper map are **hand-edited** (add 316–330→1,
+   331→3); the `exitCodesLedger` test guards correctness. Verify under **Node 26**. Run → pass. Commit.
 
 ## Task 1 — constants.mjs
 
@@ -158,11 +159,18 @@ review_quality, approved, endorsed, certified_safe`).
 - Validate the four in-bundle object classes + the external affiliationAssertion shape.
 - **Canonicalization before uniqueness:** `section_id` and `canonical_path` are NFC-normalized and
   path-canonicalized; reject duplicates (post-NFC), non-canonical array order, unknown redaction
-  enums, and **any `ADEQUACY_FORBIDDEN_KEYS` presence anywhere → this is caught later at 328, but the
-  SCHEMA must accept the field as structurally valid so 328 (not 316) fires** (trap: schema must not
-  swallow the adequacy field). `reviewer_attests_evaluated` accepts boolean `false`.
+  enums. `reviewer_attests_evaluated` accepts boolean `false`.
+- **GAUNTLET P3 — the schema/adequacy conflict.** The repo schema pattern is a **closed allowlist**
+  (`unknownKey(obj, ALLOWED)` → schema fail; see `stage5g/core/schema.mjs`). Under that pattern an
+  `adequate:true` key is an *unknown key* → it would fire **316**, and since 316 < 328 the named
+  adequacy gate would NEVER run. To keep 328 meaningful: the attestation schema carries an **open
+  `annotations` object** (the only permissive area); the closed allowlist governs every OTHER object.
+  A bundle asserting adequacy does so inside `annotations` → schema-VALID (316 passes) → caught by the
+  named 328. Forbidden adequacy keys appearing OUTSIDE `annotations` remain a 316 unknown-key (they
+  are not a valid position at all).
 - Tests `schema.test.js`: valid bundle → ok; duplicate `section_id` after NFC → 316; unknown enum →
-  316; a bundle carrying `adequate:true` → schema-OK (so 328 can own it). TDD → commit.
+  316; `annotations:{review_quality:"good"}` → schema-OK (so 328 owns it); `adequate:true` at top
+  level → 316 (not a valid position). TDD → commit.
 
 ## Task 3 — core/digests.mjs + core/signatures.mjs
 
@@ -172,6 +180,28 @@ fingerprint; add `roleCollisionOk(principals)` implementing the §2.3 matrix EXA
 `affiliation_issuer ≠ producer` and the allowed `reviewer==host`); `noSelfSign(obj)` = the object's
 own signature field is excluded from the signed content. Tests `digestsSignatures.test.js`: a tampered
 sig → false; `verifier==host` → collision; `reviewer==host` → allowed. TDD → commit.
+
+## Task 3b — core/result.mjs + core/context.mjs (define BEFORE any check uses `R`/`ctx`)
+
+**GAUNTLET P1/P2: every code block below uses `R(...)` and `ctx.*`; neither existed. Define them
+here first.**
+
+- `core/result.mjs`: the repo convention is a **plain object**, not a class. Provide the shorthand
+  used throughout this plan:
+  ```js
+  export const R = (raw, reason, extra = {}) => ({ raw, reason, ...extra }); // == 5H { raw, reason }
+  export const OK = (ctx) => ({ raw: 0, ctx });
+  ```
+- `core/context.mjs`: `makeCtx(bundle, cfg) → ctx` carrying EVERY helper the checks call:
+  `bundle`, `cfg`, `R_candidate` (filled by 321), `rawReceiptCount()` (=`bundle.coverage_receipts?.
+  length ?? 0`), `grantDigest(g)` (=`domainDigest('simurgh.vpc.grant.v1', g.content)`),
+  `resolvesExactlyOnce(digest)` (against the bundle's affiliation/separation/host evidence objects),
+  `keyDistinct(ev)` / `challengeBound(ev)` / `externallyAnchored(ev)` (the three rung predicates,
+  reading `cfg.verifier_key_pin` for distinctness and a Simurgh-signed challenge receipt for
+  challenge-binding), `separationEvidence(receipt)` / `hostEvidence(receipt)` (resolve the digests to
+  objects), and `anchorLineageOf(fp)` (filled by 326 for the 330 distinct-lineage check).
+- Test `context.test.js`: `makeCtx` on the valid fixture exposes all helpers; `rawReceiptCount` = n;
+  `R(321,"x")` deep-equals `{raw:321,reason:"x"}`. TDD → commit.
 
 ## Task 4 — core/externalConfig.mjs (317)
 
@@ -276,8 +306,11 @@ Tests `separation.test.js`: a receipt whose evidence only clears distinct-key un
 `affiliationValid(receipt, partition, producer, pinnedRegistry)` requires ALL: assertion resolves;
 `subject_key_fingerprint == reviewer`; `producer_identity_digest == partition.producer_principal.
 producer_identity_digest`; `partition_digest == current`; `issued_by` externally pinned AND `≠
-producer`; `relationship == "independent_of_producer"`. Any miss → 326. Tests: replayed assertion
-(other producer) → 326; issuer == producer → 326; unpinned issuer → 326. TDD → commit.
+producer`; `relationship == "independent_of_producer"`. Any miss → 326. **GAUNTLET P7:** on success,
+stash the resolved `anchor_lineage_digest` per candidate into `ctx.anchorLineageOf(fp)` — Task 14's
+330 `require_distinct_anchor_lineage` depends on it. Tests: replayed assertion (other producer) → 326;
+issuer == producer → 326; unpinned issuer → 326; on pass `ctx.anchorLineageOf(fp)` populated. TDD →
+commit.
 
 ## Task 11 — core/coverage.mjs (327)
 
@@ -290,24 +323,29 @@ After 324–326 pass over EVERY candidate, set `R_eligible = R_candidate` (no si
 
 **Complete code:**
 
+**GAUNTLET P5:** do NOT recurse the whole bundle — the projection maps `coverage_depth.per_section`
+and `section_states.*` are keyed by `section_id`, so a real section titled/id'd "approved" would
+false-positive. Scan ONLY the schema-permitted `annotations` objects (the sole place an adequacy
+assertion can legally sit, per P3), across every signed object that has one.
+
 ```js
 import { ADEQUACY_FORBIDDEN_KEYS } from "../constants.mjs";
-// Fails closed if the bundle asserts adequacy/quality — EVEN when coverage holds.
+// Fails closed if any annotations object asserts adequacy/quality — EVEN when coverage holds.
 export function checkAdequacyGate(bundle) {
-  const hit = (obj) => {
-    if (obj == null || typeof obj !== "object") return false;
-    for (const k of Object.keys(obj)) {
-      if (ADEQUACY_FORBIDDEN_KEYS.has(k)) return true;
-      if (hit(obj[k])) return true;
+  const annotationObjs = collectAnnotations(bundle); // [bundle.attestation.annotations, ...] only
+  for (const ann of annotationObjs) {
+    if (ann == null || typeof ann !== "object") continue;
+    for (const k of Object.keys(ann)) {
+      if (ADEQUACY_FORBIDDEN_KEYS.has(k)) return R(328, "adequacy_or_quality_claimed");
     }
-    return false;
-  };
-  return hit(bundle) ? R(328, "adequacy_or_quality_claimed") : null;
+  }
+  return null;
 }
 ```
 
-Tests `adequacyGate.test.js`: a fully-covered bundle with `attestation.review_quality:"good"` → 328
-(NOT 0); nested `{certified_safe:true}` → 328; clean bundle → null. TDD → commit.
+Tests `adequacyGate.test.js`: a fully-covered bundle with `attestation.annotations.review_quality:
+"good"` → 328 (NOT 0); a section id `"approved"` in `per_section` → NOT 328 (proves the scope fix);
+clean bundle → null. TDD → commit.
 
 ## Task 13 — coverageDepth.mjs (B) + sectionStates.mjs (C) projections
 
@@ -338,7 +376,7 @@ export function vpcVerify(bundle, cfg, { tier }) {
     const steps = [
       () => checkSchema(bundle),                 // 316
       () => checkExternalConfig(cfg),            // 317
-      () => (ctx.candidateCount() >= 1 ? null : R(318)),
+      () => (ctx.rawReceiptCount() >= 1 ? null : R(318)),  // P4: RAW count — R_candidate isn't built until 321
       () => checkSignaturesAndRoles(bundle, cfg),// 319
       () => checkPartition(bundle),              // 320
       () => checkCensus(bundle, ctx),            // 321
@@ -374,7 +412,13 @@ raw 0 public+audit; byte-stability build-twice identical. TDD → commit.
 ## Task 17 — Lane A fixtures + tamper matrix
 
 `_validBundle.mjs`: 8-section `S`, 3 independent reviewers, distinct keys + pinned affiliation, union
-= S → raw 0 public+audit. Generate `test-keys/` (add path to the 3m/3o allowlist — trap 6). Tamper
+= S → raw 0 public+audit. Generate `test-keys/` — **GAUNTLET P6:** key names must match the scanner
+regex `INSECURE_FIXTURE_ONLY_[A-Za-z-]+\.pem` (**no digits, no underscores** in the suffix, so
+`reviewerA`/`reviewerB` OK, `reviewer1`/`reviewer_a` break CI), and add the line
+`| grep -v -E "^tests/fixtures/llmShield/stage5i/test-keys/INSECURE_FIXTURE_ONLY_[A-Za-z-]+\.pem$"` to
+**BOTH** `scripts/security-audit-llm-shield-stage3m.sh` AND `scripts/security-audit-llm-shield-stage3o.sh`.
+Add `tools/simurgh-attestation/stage5i` evidence + `tests/fixtures/llmShield/stage5i` to
+`.prettierignore` (**GAUNTLET P9**). Tamper
 matrix per §3.1, **each fixture re-signed after mutation** (trap 5), incl. the `wirecard-*` family
 (affiliation issuer traces to producer → 326; receipt beyond grant → 323) and `covered panel asserts
 "review adequate" → 328`. Tests `fixture.test.js` + `checks.test.js` assert the intended FIRST raw
