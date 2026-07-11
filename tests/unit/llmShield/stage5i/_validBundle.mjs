@@ -84,7 +84,6 @@ export function validBundle() {
     const grantContent = {
       reviewer_principal: { key_fingerprint: r.fp },
       review_host_identity_ref: hostRef,
-      host_independence_evidence_digest: hostSepDigest,
       granted_sections: [...r.sec],
       partition_digest,
       issued_by: { identity_subject: grantIssuer.identity_subject, key_fingerprint: grantIssuer.key_fingerprint },

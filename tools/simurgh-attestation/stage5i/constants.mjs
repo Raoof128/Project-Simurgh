@@ -21,6 +21,9 @@ export const DOMAINS = Object.freeze({
   policy: "simurgh.vpc.policy.v1", // B7 — policy is digested under its own domain + externally pinned
 });
 
+// The Simurgh-signed freshness challenge that lifts a reviewer/host to challenge_bound (rung 1).
+export const CHALLENGE_DOMAIN = "simurgh.vpc.challenge.v1";
+
 // Re-instantiates 5G's rung lattice for reviewer/host principals. Ordinal only, never a measurement.
 const RUNG_ORDER = ["distinct_key_only", "challenge_bound", "externally_anchored"];
 export const RUNG = Object.freeze({
