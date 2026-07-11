@@ -24,7 +24,7 @@ echo "-- byte-stability (build twice, sorted manifest) --"
 echo "-- Lane B: deterministic multi-process panel ceremony --"
 "$NODE" "tools/simurgh-attestation/stage5i/laneb/run-laneb-panel-ceremony.mjs"
 
-echo "-- Lane C: fail-closed campaign gate (real Opus 4.6 public structure, PENDING) --"
+echo "-- Lane C: fail-closed campaign gate (real Opus 4.6 public structure; COMPLETED — independent-party pack verifies raw 0) --"
 "$NODE" "$BASE/lanec-gate.mjs"
 
 echo "-- committed pack matches a fresh rebuild --"

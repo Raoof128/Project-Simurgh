@@ -1,1 +1,12 @@
-{"campaign_id":"vpc-lanec-opus46-2026-07-11","claim":"public_report_structure_coverage","non_claim":"NOT rsp_unredacted_report_compliance; does not observe Anthropic's confidential report or actual review panel; affiliation axis modeled","reason":"awaiting real independent-party (droplet-team) split-review ceremony over the public structure","status":"pending"}
+{
+  "status": "completed",
+  "campaign_id": "vpc-lanec-opus46-2026-07-11",
+  "evidence_root": "sha256:b72ca365fd7cd7cd8a567e5d0c77b63e4c4aa3e340410a2046b11e63d45a9443",
+  "panel_evidence_root": "sha256:f8cd7fdd1913997c31355e0f00799512a3652cfba3e662f3b15152dfd86e2895",
+  "independent_party_verifier_fingerprint": "sha256:8a7d5d15c8f610bc60053711591f19a5234ac4611742420fa28c35003203ff83",
+  "reviewers": 2,
+  "sections_total": 37,
+  "coverage_gap": 0,
+  "claim": "public_report_structure_coverage",
+  "non_claim": "NOT rsp_unredacted_report_compliance; does not observe Anthropics confidential report or actual review panel; affiliation axis modeled; verifier key distinct from ours (non-possession)"
+}
