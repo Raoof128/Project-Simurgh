@@ -8,6 +8,7 @@ import {
   buildRealStructure,
 } from "../../../../tools/simurgh-attestation/stage5i/lanec/build-real-coverage.mjs";
 import { laneCGate } from "../../../../tools/simurgh-attestation/stage5i/node/lanec-gate.mjs";
+import { runDropletCeremony } from "../../../../tools/simurgh-attestation/stage5i/lanec/run-droplet-ceremony.mjs";
 
 test("Lane C: real Opus 4.6 TOC derives a valid partition structure (public structure only)", () => {
   const pc = derivePartition();
@@ -46,4 +47,13 @@ test("Lane C gate is fail-closed: completed without a pack is rejected", () => {
   assert.equal(laneCGate(dir).reason, "completed_without_pack");
   // and a missing record fails closed too
   assert.equal(laneCGate(mkdtempSync(join(tmpdir(), "vpc-lanec-empty-"))).ok, false);
+});
+
+test("Lane C droplet ceremony runner: full ceremony over the real 37-section structure verifies raw 0", () => {
+  const r = runDropletCeremony();
+  assert.equal(r.pub.raw, 0, "public");
+  assert.equal(r.aud.raw, 0, "audit");
+  assert.equal(r.sections, 37, "real Opus 4.6 leaf-section count");
+  assert.equal(r.bundle.coverage_receipts.length, 2, "≥2 reviewers");
+  assert.equal(r.bundle.attestation.content.coverage_gap.length, 0, "full coverage");
 });
