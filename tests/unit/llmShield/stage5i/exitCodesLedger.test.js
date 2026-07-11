@@ -42,14 +42,14 @@ test("VPC_RAW_CODES: exact names→ints, unique, contiguous 316–331", () => {
   assert.deepEqual(
     ints.slice().sort((a, b) => a - b),
     Array.from({ length: 16 }, (_, i) => 316 + i),
-    "contiguous 316–331",
+    "contiguous 316–331"
   );
 });
 
 test("house partition: public 316–328, audit-only [329], policy [330], wrapper 331", () => {
   assert.deepEqual(
     VPC_PUBLIC_CHECK_ORDER,
-    Array.from({ length: 13 }, (_, i) => 316 + i),
+    Array.from({ length: 13 }, (_, i) => 316 + i)
   );
   assert.deepEqual(VPC_AUDIT_ONLY_CODES, [329]);
   assert.deepEqual(VPC_POLICY_CODES, [330]);

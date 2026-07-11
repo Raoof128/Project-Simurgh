@@ -42,7 +42,15 @@ export const REDACTION_ENUM = Object.freeze(new Set(["misuse_risk", "commercial_
 // surface (schema forbids these keys elsewhere as unknown). Honest bound: a bounded vocabulary, not
 // a semantic proof.
 export const ADEQUACY_FORBIDDEN_KEYS = Object.freeze(
-  new Set(["adequate", "sufficient", "thorough", "review_quality", "approved", "endorsed", "certified_safe"]),
+  new Set([
+    "adequate",
+    "sufficient",
+    "thorough",
+    "review_quality",
+    "approved",
+    "endorsed",
+    "certified_safe",
+  ])
 );
 
 // S5 — exact frozen policy profiles (integers, not "≥2"). policy_digest is pinned OUT of band.
