@@ -2,8 +2,8 @@
   "manifest_version": "simurgh.vca.signed_pack_manifest.v1",
   "base_pack_digest": "sha256:45b821ca17998ccc27bdbb4f84a9f959d19f79a27a19222e8539112ee0968bd7",
   "certificate_digest": "sha256:258242704c03fe0a0a67179fdcf4a8c2bd7d6d6c75f6eb163e7513c8fe8f283b",
-  "hermeticity_attestation_digest": "sha256:977681ab700247ff89b3ec4687a05ffc0050be9aa8ea10b59ccf9f388afb1cf8",
-  "merkle_root": "sha256:dc9a9124a61d32b8903dcebaf35ebb86d0c833f5921b2114ba4a7e3ed74a8fcc",
-  "signed_pack_manifest_digest": "sha256:93e5f393d533016d0a0c8cc368665e632fdf7f51afed410dfe58bff5fb2ef51b",
-  "signature": "base64:by81ZNzMx+aa2gEh0Mn9NUYNfpNgxKN+4PzEzYRu2EEK3+TFP1XYxvQdFeqLLzoqM4Nu1+2qwTki68RqSNutAA=="
+  "hermeticity_attestation_digest": "sha256:e38c42b04b9983fd5e862400ad057efea287c8d439ea24a4ee1794cd4e38f42c",
+  "merkle_root": "sha256:92dd351afbec59cffb3b2c695dc94d3054494d637a1158cb436bad14e20fe3f2",
+  "signed_pack_manifest_digest": "sha256:8e1c53c6807e55c38eab5e17d763ff3e9cb22ca488a652898079f951f7db84ee",
+  "signature": "base64:SxMqsh++8AjbqE+DqyJKUY21y7t45IxrmZ86N9VuHB85JGDbup5+rp2hVfZvzIRsBRKVQSs4EoEav3qpmZX2Dg=="
 }
