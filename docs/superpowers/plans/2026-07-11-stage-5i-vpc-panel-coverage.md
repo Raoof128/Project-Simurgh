@@ -15,7 +15,8 @@
   run on the repo default, but any `reproduce`/4H-digest step is Node 26 from a clean tree.
 - **`exitCodes.mjs` is GLOBAL, not stage-local** — it lives at
   `tools/simurgh-attestation/stage4h/exitCodes.mjs`. Add VPC codes 316–331 there. `UNKNOWN_RAW_PROBE
-  = 999` stays above the block. Codes **316–330 → exit 1; 331 → exit 3** (wrapper).
+  = 999` stays above the block. **All defined codes 316–331 map to exit 1** (VSD's wrapper 315→1 is
+  the precedent, verified in both goldens); only genuinely-unknown codes → 3 (the 999 probe / default).
 - **`domainDigest` is the 2-arg 5G/5H form:** `domainDigest(domainSep, contentObj)` in
   `stage5i/core/digests.mjs` (mirror `stage5h/core/digests.mjs`). Also reuse `identityDigest(identity,
   role)` and `artifactDigest(obj)` from that module. Domains: `simurgh.vpc.{partition,grant,receipt,
@@ -208,12 +209,13 @@ scripts/reproduce-llm-shield-stage5i.sh
    map. Update EVERY file the grep surfaces.
 2. Failing test `tests/unit/llmShield/stage5i/exitCodesLedger.test.js`: assert every name↔int in
    316–331 is present, unique, monotonic, contiguous with 315, wrapper=331, and that 316–330 map to
-   exit 1 and 331 → exit 3 in both exit-map goldens. Run → fail.
+   exit 1 (ALL of 316–331 → 1, matching the VSD 315→1 precedent) in both exit-map goldens. Run → fail.
 3. Add codes to `stage4h/exitCodes.mjs` in the exact §2.4 order and names (316 `VPC_MALFORMED_BUNDLE`
    … 327 `VPC_SECTION_LEFT_UNREVIEWED`, 328 `VPC_ADEQUACY_CLAIMED`, 329 `VPC_ATTESTATION_MISMATCH`,
    330 `VPC_POLICY_REJECTED`, 331 `INTERNAL_OR_ENV_UNAVAILABLE_VPC`). **GAUNTLET P8:** there is no
-   generator script — the exit-map goldens + inline exitWrapper map are **hand-edited** (add 316–330→1,
-   331→3); the `exitCodesLedger` test guards correctness. Verify under **Node 26**. Run → pass. Commit.
+   generator script — the exit-map goldens (`run_level_by_raw`) + inline `RUN_LEVEL_BY_RAW` map are
+   **hand-edited** (add 316–331 → 1); the `exitCodesLedger` test guards correctness. Verify under
+   **Node 26**. Run → pass. Commit.
 
 ## Task 1 — constants.mjs
 

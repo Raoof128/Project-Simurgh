@@ -942,6 +942,39 @@ export const VSD_AUDIT_CHECK_ORDER = Object.freeze([
 export const VSD_AUDIT_ONLY_CODES = Object.freeze([313]);
 export const VSD_POLICY_CODES = Object.freeze([314]);
 
+// Stage 5I — VPC: Verifiable Panel Coverage. Additive codes 316–331. Grant-bounded coverage equality
+// (⋃C(r)=S) with computed reviewer+host independence, no-silent-filter census, externally-anchored
+// non-affiliation. Beast-mode: adequacy gate (328 — coverage-not-adequacy, fails even at full
+// coverage). Public first-failure order 316→328; audit adds attestation recompute 329; policy 330 +
+// wrapper 331 applied OUTSIDE the ordered scan (house convention, cf. VSD_*/VFC_*).
+export const VPC_RAW_CODES = Object.freeze({
+  OK: 0,
+  VPC_MALFORMED_BUNDLE: 316, // schema / canonical form / uniqueness / required objects
+  VPC_EXTERNAL_CONFIG_INVALID: 317, // registries/pin/policy_digest + policy_pin (undefined cfg → 331)
+  VPC_EMPTY_PANEL: 318, // zero raw receipts (fail fast before census)
+  VPC_SIGNATURE_OR_ROLE_BINDING_INVALID: 319, // sig invalid / signer≠role / prohibited collision
+  VPC_PARTITION_COMMITMENT_INVALID: 320, // partition_digest ≠ recompute over src+proc+producer
+  VPC_OBJECT_GRAPH_OR_REFERENCE_INVALID: 321, // ref resolution + role match + no dup/orphan → R_candidate
+  VPC_GRANT_EXCEEDS_PARTITION: 322, // G(r) ⊄ S
+  VPC_RECEIPT_EXCEEDS_GRANT: 323, // C(r) ⊄ G(r) — No Phantom Review
+  VPC_NON_EVALUATION_RECEIPT: 324, // counted receipt lacks reviewer_attests_evaluated === true
+  VPC_UNDER_SEPARATED_PRINCIPAL: 325, // reviewer OR host separation rung < policy
+  VPC_SELF_VOUCHED_AFFILIATION: 326, // No Self-Vouched Reviewer — affiliation not externally anchored
+  VPC_SECTION_LEFT_UNREVIEWED: 327, // coverage_gap ≠ ∅ — headline
+  VPC_ADEQUACY_CLAIMED: 328, // BEAST A — adequacy/quality assertion present (fails even at ⋃C=S)
+  VPC_ATTESTATION_MISMATCH: 329, // audit-only — declared roots/census/union/gap/verdict ≠ recompute
+  VPC_POLICY_REJECTED: 330, // min_reviewers / nontrivial partition / distinct hosts / distinct lineage
+  INTERNAL_OR_ENV_UNAVAILABLE_VPC: 331, // fail-closed wrapper
+});
+export const VPC_PUBLIC_CHECK_ORDER = Object.freeze([
+  316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328,
+]);
+export const VPC_AUDIT_CHECK_ORDER = Object.freeze([
+  316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329,
+]);
+export const VPC_AUDIT_ONLY_CODES = Object.freeze([329]);
+export const VPC_POLICY_CODES = Object.freeze([330]);
+
 export const HARNESS_CODES = Object.freeze({
   CLEAN_RUN_FALSELY_REJECTED: 19,
 });
@@ -1268,6 +1301,22 @@ export const RUN_LEVEL_BY_RAW = Object.freeze({
   313: 1,
   314: 1,
   315: 1,
+  316: 1,
+  317: 1,
+  318: 1,
+  319: 1,
+  320: 1,
+  321: 1,
+  322: 1,
+  323: 1,
+  324: 1,
+  325: 1,
+  326: 1,
+  327: 1,
+  328: 1,
+  329: 1,
+  330: 1,
+  331: 1,
 });
 
 export function stage4CodeForRawCode(code) {
