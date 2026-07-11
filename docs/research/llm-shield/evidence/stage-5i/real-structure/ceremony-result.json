@@ -1,0 +1,14 @@
+{
+  "public_raw": 0,
+  "audit_raw": 0,
+  "reviewers": 2,
+  "sections_total": 37,
+  "coverage_union": 37,
+  "coverage_gap": 0,
+  "partition_digest": "sha256:d2fc4797115e61ecd226a9fccaaf232a10a6288853b2f5080c44404b709ed07f",
+  "panel_subject_root": "sha256:51bf0750ee0bc6af31aab84e970e0c5fb572b4ee3f444b4275153c4ea068966a",
+  "panel_evidence_root": "sha256:f8cd7fdd1913997c31355e0f00799512a3652cfba3e662f3b15152dfd86e2895",
+  "single_reviewer_sections": 35,
+  "verifier_key_fingerprint": "sha256:8a7d5d15c8f610bc60053711591f19a5234ac4611742420fa28c35003203ff83",
+  "note": "Independent-party ceremony over the Opus 4.6 PUBLIC structure. NOT rsp compliance; does not observe the confidential report or Anthropic's real review panel; affiliation axis modeled."
+}

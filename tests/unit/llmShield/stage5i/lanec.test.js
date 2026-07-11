@@ -32,12 +32,18 @@ test("Lane C: real Opus 4.6 TOC derives a valid partition structure (public stru
   assert.ok(ids.includes("6.5"));
 });
 
-test("Lane C: committed campaign is honestly PENDING; gate passes pending", () => {
+test("Lane C: a fresh derived structure is honestly PENDING (gate passes pending)", () => {
   const { campaign } = buildRealStructure(mkdtempSync(join(tmpdir(), "vpc-lanec-")));
   assert.equal(campaign.status, "pending");
   assert.equal(campaign.claim, "public_report_structure_coverage");
   assert.match(campaign.non_claim, /NOT rsp_unredacted_report_compliance/);
-  assert.equal(laneCGate().ok, true); // committed pending state
+});
+
+test("Lane C: committed campaign is COMPLETED — real independent-party pack verifies raw 0", () => {
+  const g = laneCGate(); // default = committed real-structure dir
+  assert.equal(g.ok, true);
+  assert.equal(g.status, "completed"); // droplet ceremony executed
+  assert.match(g.independent_verifier, /^sha256:/); // their verifier key (distinct from ours)
 });
 
 test("Lane C gate is fail-closed: completed without a pack is rejected", () => {

@@ -6,6 +6,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { pathToFileURL } from "node:url";
 import { join } from "node:path";
 import { REAL_DIR } from "../lanec/build-real-coverage.mjs";
+import { verifyPack } from "./verify-vpc-attestation.mjs";
 
 export function laneCGate(dir = REAL_DIR) {
   const outcomePath = join(dir, "campaign-outcome.json");
@@ -15,10 +16,23 @@ export function laneCGate(dir = REAL_DIR) {
     return { ok: true, status: "pending", reason: c.reason };
   }
   if (c.status === "completed") {
-    // Real ceremony claimed done ⇒ the droplet-signed pack must be present and verify (not shipped yet).
+    // Real ceremony claimed done ⇒ the droplet-signed pack must be present AND verify raw 0 (audit).
     if (!existsSync(join(dir, "bundle.json")))
       return { ok: false, reason: "completed_without_pack" };
-    return { ok: true, status: "completed" };
+    const pub = verifyPack(dir, "public");
+    const aud = verifyPack(dir, "audit");
+    if (pub.raw !== 0 || aud.raw !== 0) {
+      return {
+        ok: false,
+        reason: `completed_pack_fails_verify:public=${pub.raw},audit=${aud.raw}`,
+      };
+    }
+    return {
+      ok: true,
+      status: "completed",
+      evidence_root: c.evidence_root,
+      independent_verifier: c.independent_party_verifier_fingerprint,
+    };
   }
   return { ok: false, reason: `unknown_status:${c.status}` };
 }

@@ -56,14 +56,16 @@ In one sentence: **Simurgh gives an agentic system a verifiable receipt, not a p
 > (`single_reviewer_sections` fragility map — "Pathway 5 rested on one reviewer's eyes") and the **Typed
 > Coverage State** (covered / assigned_only / unassigned coordination-theater map). Two roots
 > (`panel_subject_root` excludes challenge receipts) break the challenge↔root cycle. Codes **316–331**,
-> **9 Lean theorems** (zero `sorry`), **35 unit + K7 e2e**, three lanes (**A** byte-stable committed pack
+> **9 Lean theorems** (zero `sorry`), **37 unit + K7 e2e**, three lanes (**A** byte-stable committed pack
 > raw 0 public+audit + byte-stable · **B** deterministic multi-process panel ceremony · **C** the real
-> Opus 4.6 Sabotage Risk Report public structure, campaign **PENDING**), and **JS↔Python↔browser parity,
-> byte-identical**. **Honest to its limits:** VPC is **not category-creating** (RSP v3.4 defines the
-> coverage condition; the EU AI Act Art. 55 + GPAI Code of Practice mandate independent external
-> evaluation) — it is the executable, byte-reproducible verifier under them. Coverage ≠ diligence
-> (→ VRC); Lane C is public-structure-only and its real ceremony is pending; separation is
-> `challenge_bound`, not `externally_anchored`.
+> Opus 4.6 Sabotage Risk Report public structure), and **JS↔Python↔browser parity, byte-identical**.
+> **Real independent-party ceremony EXECUTED** — the droplet team ran the full split-review with their
+> own keys over the 37-section public structure; their pack verifies **raw 0** under our verifier with a
+> **verifier key distinct from ours** (non-possession), `coverage_gap = 0`. **Honest to its limits:**
+> VPC is **not category-creating** (RSP v3.4 defines the coverage condition; the EU AI Act Art. 55 + GPAI
+> Code of Practice mandate independent external evaluation) — it is the executable, byte-reproducible
+> verifier under them. Coverage ≠ diligence (→ VRC); Lane C is public-structure-only with a modeled
+> affiliation axis; separation is `challenge_bound`, not `externally_anchored`.
 >
 > <details><summary>Prior — Stage 5H · Verifiable Safety-claim Disclosure (<code>v2.43.0-stage-5h-vsd</code>)</summary>
 >

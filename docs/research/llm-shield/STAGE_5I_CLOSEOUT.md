@@ -28,28 +28,36 @@ committed report partition, signed access grants, and reviewer receipts.
 - **Three evidence lanes:** **A** byte-stable synthetic pack (committed keys → deterministic Ed25519;
   verifies raw 0 public + audit; byte-stable; `wirecard-*` fixture) · **B** deterministic multi-process
   panel ceremony (per-reviewer child processes, ≥2 reviewers, `∀r C(r) ⊂ S`, `⋃C = S`) · **C** the real
-  Opus 4.6 Sabotage Risk Report public structure (37 leaf sections), campaign **PENDING**.
+  Opus 4.6 Sabotage Risk Report public structure (37 leaf sections), campaign **COMPLETED** — real
+  independent-party ceremony executed (distinct keys, our verifier accepts raw 0).
 - **JS ↔ Python ↔ browser parity, byte-identical** on the committed pack (same raw 0, same
   `partition_digest` / `panel_subject_root` / `panel_evidence_root`).
 - **9 Lean theorems, zero `sorry`** (rung monotonicity, first-failure uniqueness/soundness, gap↔coverage
   decomposition, no-silent-filter, bounded adequacy, no-phantom, producer binding, coverage soundness).
 
-**Tests:** 35 stage5i unit/e2e green (incl. the K7 all-functions net asserting every raw 316–331
+**Tests:** 37 stage5i unit/e2e green (incl. the K7 all-functions net asserting every raw 316–331
 reachable + evidence lock); reproduce script **ALL PASS** (Node 26); the prior 5H reproduce still
 passes (sealed history undisturbed); full repo unit suite green **except** the pre-existing Stage-2
 `securityHardening` / `ANTHROPIC_API_KEY` baseline (references no VPC code). Additive codes 316–331
 rippled both `exit-map.json` goldens + the inline `RUN_LEVEL_BY_RAW` map **and** a 7th hardcoded
 consumer (`exitWrapper.test.js`) the trap-list warned about.
 
-## Lane C — real independent-party ceremony (status: PENDING)
+## Lane C — real independent-party ceremony (status: COMPLETED 2026-07-11)
 
-Lane C ships the **real Opus 4.6 public TOC** (offline snapshot, `toc-leaf-partition` → 37 leaf
-sections; per-section `redaction_types = []`, no invented metadata) with a **fail-closed campaign
-gate**: `pending` is honestly labeled; a `completed` claim without a droplet-signed pack is rejected.
-The real independent-party split-review ceremony is deferred to the droplet team **post-tag** (the 5E
-pattern). Signed non-claim: `public_report_structure_coverage`, **NOT** `rsp_unredacted_report_compliance`;
-it does not observe Anthropic's confidential report or actual review panel, and the affiliation axis is
-**modeled** — only the reviewer/host **separation** axis (`challenge_bound`) is real in Lane A/B.
+The independent droplet team ran the full split-review ceremony with **their own keys** over the
+**real Opus 4.6 public structure** (37 leaf sections, `toc-leaf-partition`; per-section
+`redaction_types = []`, no invented metadata). Their pack (`evidence/stage-5i/real-structure/`)
+**verifies raw 0 (public + audit) under our repo verifier**, with a **verifier key distinct from ours**
+(`sha256:8a7d5d15…` ≠ our `sha256:e33e2d3f…`) and distinct reviewer keys — **non-possession is the
+point** (we cannot rebuild it). 2 reviewers, each covering a proper subset, union = the full 37-section
+structure, `coverage_gap = 0`; `evidence_root sha256:b72ca365…`. The **fail-closed campaign gate** now
+requires `completed ⟹ pack present AND verifies raw 0`; `pending` remained honestly labeled until this
+ran, and a `completed` claim whose pack fails verification is rejected.
+
+Signed non-claim (unchanged): `public_report_structure_coverage`, **NOT**
+`rsp_unredacted_report_compliance`; it does not observe Anthropic's confidential report or actual review
+panel, and the affiliation axis is **modeled** — only the reviewer/host **separation** axis
+(`challenge_bound`) is real.
 
 ## Positioning (the honest statement of record)
 
@@ -69,7 +77,8 @@ CODEOWNERS/Gerrit give forge-hosted path coverage without computed independence 
    `reviewer_assessment_contest_deferred` (VRC).
 2. **`challenge_bound`, not `externally_anchored`.** Separation reached rung 1; a real Sigstore-OIDC
    anchor is unexecuted → `real_sigstore_anchor_execution_deferred` (5G, open).
-3. **Lane C is public-structure-only and PENDING**; its affiliation axis is modeled.
+3. **Lane C is public-structure-only** (real independent-party ceremony EXECUTED — see above); its
+   affiliation axis is modeled, and it does not observe the confidential report or Anthropic's real panel.
 4. **Producer-committed section universe** — selective/gerrymandered universe not caught here →
    `uncommitted_section_universe_deferred` (VUC).
 5. **The adequacy gate is a bounded vocabulary over a bounded surface**, not a semantic-absence proof.
@@ -80,19 +89,20 @@ CODEOWNERS/Gerrit give forge-hosted path coverage without computed independence 
 
 **PAYS** `producer_affiliation_deferred` (5G) + `secure_review_host_independence_deferred` (5H), each at
 the rung achieved (`challenge_bound` separation + externally-pinned affiliation). **CHIPS**
-`real_risk_report_pilot_deferred` (real Opus 4.6 structure; not hard-paid — structure, campaign pending).
+`real_risk_report_pilot_deferred` (real Opus 4.6 structure + executed independent-party ceremony; not
+hard-paid — it is the report's public STRUCTURE, not a full real-report claim-with-evidence pilot).
 **MINTS** `reviewer_assessment_contest_deferred` (→ VRC) + `uncommitted_section_universe_deferred` (→ VUC).
 Ledger flat (2 mints, 2 pays). Penciled future rung: **VTC** (temporal coverage, beast-mode D — a
 distinct blade, not minted).
 
 ## Four-axis scorecard — re-scored at closeout
 
-| Axis               | Spec-time | Closeout | Why the closeout value                                                                                                                                                                                                        |
-| ------------------ | --------: | -------: | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Novelty            |       9.0 |  **9.0** | First executable coverage verifier that fails closed on a frozen adequacy vocabulary (`noForbiddenAdequacyAssertion`) + computed reviewer/host independence + no-silent-filter census. in-toto is the acknowledged neighbour. |
-| Frontier           |       9.0 |  **8.7** | Verbatim RSP v3.4 anchor (3 days old) + real Opus 4.6 public structure + 3-runtime byte-identical parity SHIPPED. Held down: Lane C real ceremony is **PENDING** (not executed) and separation is `challenge_bound`.          |
-| Good-for-Anthropic |       9.3 |  **9.3** | Executable verifier for the exact coverage guarantee RSP v3.4 wrote into policy, matched to a named report; multi-regulator (EU AI Act). No process-owner pilot has run it yet.                                               |
-| Constitution       |       9.2 |  **9.2** | Mechanises "every section reaches a reviewer" — completeness applied to oversight; the adequacy gate makes coverage-≠-diligence a fail-closed code, the purest anti-overclaim.                                                |
+| Axis               | Spec-time | Closeout | Why the closeout value                                                                                                                                                                                                                                                                                                                                       |
+| ------------------ | --------: | -------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Novelty            |       9.0 |  **9.0** | First executable coverage verifier that fails closed on a frozen adequacy vocabulary (`noForbiddenAdequacyAssertion`) + computed reviewer/host independence + no-silent-filter census. in-toto is the acknowledged neighbour.                                                                                                                                |
+| Frontier           |       9.0 |  **9.3** | Verbatim RSP v3.4 anchor (3 days old) + real Opus 4.6 public structure + 3-runtime byte-identical parity + **real independent-party ceremony EXECUTED** (droplet team, own keys distinct from ours, 37 sections, our verifier accepts raw 0). Short of 9.5: separation is `challenge_bound` (not `externally_anchored`) and the affiliation axis is modeled. |
+| Good-for-Anthropic |       9.3 |  **9.3** | Executable verifier for the exact coverage guarantee RSP v3.4 wrote into policy, matched to a named report; multi-regulator (EU AI Act). No process-owner pilot has run it yet.                                                                                                                                                                              |
+| Constitution       |       9.2 |  **9.2** | Mechanises "every section reaches a reviewer" — completeness applied to oversight; the adequacy gate makes coverage-≠-diligence a fail-closed code, the purest anti-overclaim.                                                                                                                                                                               |
 
 _"Good-for-Anthropic" measures potential usefulness to assurance teams; it implies no Anthropic review,
 adoption, or endorsement._
