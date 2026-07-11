@@ -2,18 +2,29 @@
 <meta charset="utf-8" />
 <title>Stage 5I VPC — portable coverage verifier</title>
 <h1>Verifiable Panel Coverage — portable verifier</h1>
-<p>Load a bundle.json and external-config.json to verify the deterministic surface offline (WebCrypto).</p>
+<p>
+  Load a bundle.json and external-config.json to verify the deterministic surface offline
+  (WebCrypto).
+</p>
 <input id="bundle" type="file" accept=".json" /> bundle.json<br />
 <input id="cfg" type="file" accept=".json" /> external-config.json<br />
 <button id="go">Verify</button>
 <pre id="out"></pre>
 <script type="module">
   import { verifyPortable } from "./vpc-portable.mjs";
-  const read = (el) => new Promise((res) => { const f = el.files[0]; const r = new FileReader(); r.onload = () => res(JSON.parse(r.result)); r.readAsText(f); });
+  const read = (el) =>
+    new Promise((res) => {
+      const f = el.files[0];
+      const r = new FileReader();
+      r.onload = () => res(JSON.parse(r.result));
+      r.readAsText(f);
+    });
   document.getElementById("go").onclick = async () => {
     const bundle = await read(document.getElementById("bundle"));
     const cfg = await read(document.getElementById("cfg"));
     const r = await verifyPortable(bundle, cfg);
-    document.getElementById("out").textContent = JSON.stringify(r, null, 2) + (r.raw === 0 ? "\n\nVERIFIED (raw 0)" : `\n\nFAILED (raw ${r.raw})`);
+    document.getElementById("out").textContent =
+      JSON.stringify(r, null, 2) +
+      (r.raw === 0 ? "\n\nVERIFIED (raw 0)" : `\n\nFAILED (raw ${r.raw})`);
   };
 </script>

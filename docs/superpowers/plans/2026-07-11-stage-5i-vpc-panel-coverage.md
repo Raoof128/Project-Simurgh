@@ -15,12 +15,12 @@
   run on the repo default, but any `reproduce`/4H-digest step is Node 26 from a clean tree.
 - **`exitCodes.mjs` is GLOBAL, not stage-local** — it lives at
   `tools/simurgh-attestation/stage4h/exitCodes.mjs`. Add VPC codes 316–331 there. `UNKNOWN_RAW_PROBE
-  = 999` stays above the block. **All defined codes 316–331 map to exit 1** (VSD's wrapper 315→1 is
+= 999` stays above the block. **All defined codes 316–331 map to exit 1** (VSD's wrapper 315→1 is
   the precedent, verified in both goldens); only genuinely-unknown codes → 3 (the 999 probe / default).
 - **`domainDigest` is the 2-arg 5G/5H form:** `domainDigest(domainSep, contentObj)` in
   `stage5i/core/digests.mjs` (mirror `stage5h/core/digests.mjs`). Also reuse `identityDigest(identity,
-  role)` and `artifactDigest(obj)` from that module. Domains: `simurgh.vpc.{partition,grant,receipt,
-  affiliation,attestation}.v1`.
+role)` and `artifactDigest(obj)` from that module. Domains: `simurgh.vpc.{partition,grant,receipt,
+affiliation,attestation}.v1`.
 - **Keys compared by SPKI-DER digest**; PEM is normalized before fingerprinting (reuse the shared
   `canonicalise.mjs` SPKI-DER path — the newline-ghost trap).
 - **Two policy profiles** (pinned, referenced by `policy_digest`): `vpc-release-challenge-bound-v1`
@@ -28,16 +28,16 @@
   `require_nontrivial_partition = true`, `require_distinct_anchor_lineage = true`) and
   `vpc-test-externally-anchored-v1` (disjoint synthetic anchors, proves rung-2 support, pays nothing).
 - **Frozen total order** (first-failure-wins): `316→328 (public) → 329 (audit) → 330 (policy) → 331
-  (wrapper)`. Policy (330) runs in BOTH tiers; only 329 is audit-exclusive. `vpcCore` owns this order.
+(wrapper)`. Policy (330) runs in BOTH tiers; only 329 is audit-exclusive. `vpcCore` owns this order.
 - **Role-collision matrix:** `verifier ≠ {producer, grant_issuer, affiliation_issuer, reviewer,
-  host}`; `reviewer ≠ {producer, grant_issuer}`; `host ≠ producer`; `affiliation_issuer ≠ producer`
+host}`; `reviewer ≠ {producer, grant_issuer}`; `host ≠ producer`; `affiliation_issuer ≠ producer`
   (pinned affiliation registry excludes producer). Allowed: `reviewer == host` ⟹ host_separation
   non-additive.
 - **Byte-stable surface** = `canonicalJson` over `{partition_digest, policy_digest,
-  panel_evidence_root, trust_context_digest, canonical(counted_reviewers), coverage_union,
-  coverage_gap, equality_holds, verdict, coverage_depth, section_states}`. Reviewer sigs differ per
+panel_evidence_root, trust_context_digest, canonical(counted_reviewers), coverage_union,
+coverage_gap, equality_holds, verdict, coverage_depth, section_states}`. Reviewer sigs differ per
   key ⇒ never byte-compared. Attestation sig = `Ed25519(DOMAIN.attestation ‖ canonicalJson(content
-  minus top-level signature))`.
+minus top-level signature))`.
 - **Independence is computed, never declared.** `vpcSeparation(evidence) → rung` re-instantiates 5G's
   `rungLattice` pattern for reviewer+host principals; any rung field in a receipt is display-only.
 - **No object signs itself** = no signature field is inside the content its own signature covers
@@ -57,13 +57,13 @@
 4. **CLI `main` argv guard:** every `node/*.mjs` CLI wraps its entrypoint in
    `if (import.meta.url === \`file://${process.argv[1]}\`)` — never top-level side effects.
 5. **`resign` after mutate:** every tamper fixture is `structuredClone → mutate one fact → re-sign
-   every affected signed object + attestation`, else it collapses into 319.
+every affected signed object + attestation`, else it collapses into 319.
 6. **priv-key audit allowlist:** the `3m`/`3o` private-key scanners fail CI on new `test-keys/*.pem`
    unless the new stage's key PATHS are allowlisted (path regex). Add `stage5i/test-keys/` before CI.
 7. **`npm test` = unit only.** Never shell out to `rg`/`grep` inside a unit test. Lane B/C + reproduce
    are driven by the reproduce script, not `npm test`.
 8. **Lean is NOT in check.sh.** Compile `proofs/stage5i` separately (`lake build`); the `lean-not-in-
-   check.sh` guard exists so don't wire it in.
+check.sh` guard exists so don't wire it in.
 9. **`node --test <bare-dir>` fails** — use an explicit `*.test.js` glob.
 10. **check.sh locally before push** — prettier config, committed-state git checks (fetch-depth:0),
     the additive exit-map ripple. Run `./scripts/check.sh` before the PR, not just `npm test`.
@@ -73,9 +73,9 @@
 ## REVIEW-2 amendments (external review; applied — each names its task + exact change)
 
 - **B1 (Lane C release posture).** Ship **core-complete with `campaign-outcome.json.status ==
-  "pending"`**; the real ceremony runs **post-tag as a follow-up PR** (the 5E pattern — 5E's
+"pending"`**; the real ceremony runs **post-tag as a follow-up PR** (the 5E pattern — 5E's
   independent-party repro shipped in PR #106 after the tag). Do NOT claim executed Lane C at tag;
-  re-score Frontier honestly at closeout. The `completed` gate (Task 19) is fail-closed *when* status
+  re-score Frontier honestly at closeout. The `completed` gate (Task 19) is fail-closed _when_ status
   is `completed`; `pending` is a valid, honestly-labeled shipping state, never masquerading as done.
 - **B4 (challenge acyclicity — two roots).** Task 14 computes **`panel_subject_root`** = manifest over
   {partition, grants, identities, affiliation-assertion digests} (EXCLUDES challenge receipts) and
@@ -87,13 +87,13 @@
   every reviewer and from the evidence producer.
 - **B6 (freeze evidence collections + typed resolvers).** Task 2 + Task 3b freeze:
   `bundle.{partition, access_grants[], coverage_receipts[], reviewer_separation_evidence[],
-  host_separation_evidence[]}` and `external_config.{affiliation_assertions[], reviewer_registry,
-  host_registry, affiliation_issuer_registry, verifier_key_pin, policy, policy_pin}`. Replace generic
+host_separation_evidence[]}` and `external_config.{affiliation_assertions[], reviewer_registry,
+host_registry, affiliation_issuer_registry, verifier_key_pin, policy, policy_pin}`. Replace generic
   `resolvesExactlyOnce(d)` with typed `resolveExactlyOne(kind, digest)` for
   `{affiliation_assertion, reviewer_separation, host_separation}`.
 - **B7 (policy external pin).** Constants define `simurgh.vpc.policy.v1`; Task 4 verifies
   `policy_digest == domainDigest('simurgh.vpc.policy.v1', policy)` AND `policy_digest ==
-  cfg.policy_pin.policy_digest` (the pin is supplied OUT of band, like the verifier key pin — swapping
+cfg.policy_pin.policy_digest` (the pin is supplied OUT of band, like the verifier key pin — swapping
   both policy and its self-digest must still fail). `checkExternalConfig(cfg, bundle)` takes the bundle
   (producer-exclusion needs the bundle's producer identity).
 - **B9a (adequacy surface).** The `annotations` object is a **flat map of string→primitive** (schema
@@ -120,7 +120,7 @@
   before pushing the tag/publishing.)
 - **S1 (golden vs signed-fixture regen).** `exit-map.json` goldens: **hand-edit** (no generator). The
   signed **4H digest net**: regenerate with `tools/simurgh-attestation/stage4h/build-stage4h-digest-
-  fixtures.mjs` under Node 26 from a clean tree — never hand-edit signed digest fixtures.
+fixtures.mjs` under Node 26 from a clean tree — never hand-edit signed digest fixtures.
 - **S2 (CLI guard).** Trap 4 form is
   `if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href)` (the exact 5H
   `build-vsd-evidence.mjs` form) — survives spaces/encoding.
@@ -128,11 +128,11 @@
   **reject if `original !== candidate`** (raw 316); never silently rewrite before signature checks.
 - **S4 (identity compare).** Task 10/roleCollision: compare the FULL compact identity ref via
   `canonicalJson` + resolve against the registry; affiliation also checks `subject_identity_digest ==
-  resolved reviewer identity digest`, not only the key fingerprint.
+resolved reviewer identity digest`, not only the key fingerprint.
 - **S5 (freeze policy JSON).** `policy/release.json` = `{ "profile_id": "vpc-release-challenge-bound-
-  v1", "required_reviewer_separation": "challenge_bound", "required_host_separation":
-  "challenge_bound", "min_reviewers": 2, "min_distinct_hosts": 2, "require_nontrivial_partition":
-  true, "require_distinct_anchor_lineage": true }` (integers, not "≥2").
+v1", "required_reviewer_separation": "challenge_bound", "required_host_separation":
+"challenge_bound", "min_reviewers": 2, "min_distinct_hosts": 2, "require_nontrivial_partition":
+true, "require_distinct_anchor_lineage": true }` (integers, not "≥2").
 - **S6 (lineage semantics).** The affiliation field + 330 check use
   **`subject_affiliation_lineage_digest`** (the reviewer-org lineage) — NOT the issuer lineage (one
   trusted authority may certify many distinct reviewers).
@@ -239,7 +239,7 @@ review_quality, approved, endorsed, certified_safe`).
   enums. `reviewer_attests_evaluated` accepts boolean `false`.
 - **GAUNTLET P3 — the schema/adequacy conflict.** The repo schema pattern is a **closed allowlist**
   (`unknownKey(obj, ALLOWED)` → schema fail; see `stage5g/core/schema.mjs`). Under that pattern an
-  `adequate:true` key is an *unknown key* → it would fire **316**, and since 316 < 328 the named
+  `adequate:true` key is an _unknown key_ → it would fire **316**, and since 316 < 328 the named
   adequacy gate would NEVER run. To keep 328 meaningful: the attestation schema carries an **open
   `annotations` object** (the only permissive area); the closed allowlist governs every OTHER object.
   A bundle asserting adequacy does so inside `annotations` → schema-VALID (316 passes) → caught by the
@@ -271,7 +271,7 @@ here first.**
   ```
 - `core/context.mjs`: `makeCtx(bundle, cfg) → ctx` carrying EVERY helper the checks call:
   `bundle`, `cfg`, `R_candidate` (filled by 321), `rawReceiptCount()` (=`bundle.coverage_receipts?.
-  length ?? 0`), `grantDigest(g)` (=`domainDigest('simurgh.vpc.grant.v1', g.content)`),
+length ?? 0`), `grantDigest(g)` (=`domainDigest('simurgh.vpc.grant.v1', g.content)`),
   `resolvesExactlyOnce(digest)` (against the bundle's affiliation/separation/host evidence objects),
   `keyDistinct(ev)` / `challengeBound(ev)` / `externallyAnchored(ev)` (the three rung predicates,
   reading `cfg.verifier_key_pin` for distinctness and a Simurgh-signed challenge receipt for
@@ -306,7 +306,7 @@ export function checkCensus(bundle, ctx) {
   const grantsByReviewer = new Map();
   for (const g of bundle.access_grants) {
     const fp = g.reviewer_principal.key_fingerprint;
-    if (grantsByReviewer.has(fp)) return R(321, "duplicate_grant");   // no dup
+    if (grantsByReviewer.has(fp)) return R(321, "duplicate_grant"); // no dup
     grantsByReviewer.set(fp, g);
   }
   const seenReceipt = new Set();
@@ -316,18 +316,21 @@ export function checkCensus(bundle, ctx) {
     if (seenReceipt.has(fp)) return R(321, "duplicate_receipt");
     seenReceipt.add(fp);
     const g = grantsByReviewer.get(fp);
-    if (!g) return R(321, "orphan_receipt");                          // receipt w/o grant
+    if (!g) return R(321, "orphan_receipt"); // receipt w/o grant
     if (ctx.grantDigest(g) !== c.grant_digest) return R(321, "grant_ref_mismatch");
-    if (g.review_host_identity_ref.key_fingerprint
-          !== c.review_host_identity_ref.key_fingerprint) return R(321, "host_mismatch");
-    for (const d of [c.independence_evidence.separation_evidence_digest,
-                     c.independence_evidence.affiliation_assertion_digest,
-                     c.independence_evidence.host_independence_evidence_digest]) {
+    if (g.review_host_identity_ref.key_fingerprint !== c.review_host_identity_ref.key_fingerprint)
+      return R(321, "host_mismatch");
+    for (const d of [
+      c.independence_evidence.separation_evidence_digest,
+      c.independence_evidence.affiliation_assertion_digest,
+      c.independence_evidence.host_independence_evidence_digest,
+    ]) {
       if (!ctx.resolvesExactlyOnce(d)) return R(321, "evidence_ref_unresolved");
     }
     candidate.push({ fp, grant: g, receipt: c });
   }
-  for (const g of bundle.access_grants) {                             // no orphan grant
+  for (const g of bundle.access_grants) {
+    // no orphan grant
     if (!seenReceipt.has(g.reviewer_principal.key_fingerprint)) return R(321, "orphan_grant");
   }
   ctx.R_candidate = candidate;
@@ -357,9 +360,9 @@ with `false` → 324. TDD → commit.
 import { RUNG } from "../constants.mjs";
 // evidence-driven rung; NO declared value trusted. Mirrors 5G checkKeySeparation→checkChallengeBinding→checkAnchorBinding.
 export function vpcSeparation(ev, ctx) {
-  if (!ev || !ctx.keyDistinct(ev)) return "below_floor";             // not even rung 0
+  if (!ev || !ctx.keyDistinct(ev)) return "below_floor"; // not even rung 0
   let rung = "distinct_key_only";
-  if (ctx.challengeBound(ev)) rung = "challenge_bound";              // binds a Simurgh-signed challenge receipt
+  if (ctx.challengeBound(ev)) rung = "challenge_bound"; // binds a Simurgh-signed challenge receipt
   if (rung === "challenge_bound" && ctx.externallyAnchored(ev)) rung = "externally_anchored";
   return rung;
 }
@@ -367,10 +370,13 @@ export function checkSeparation(ctx, policy) {
   for (const { receipt } of ctx.R_candidate) {
     const rev = vpcSeparation(ctx.separationEvidence(receipt), ctx);
     const host = vpcSeparation(ctx.hostEvidence(receipt), ctx);
-    if (RUNG.index(rev) < RUNG.index(policy.required_reviewer_separation)) return R(325, "reviewer");
+    if (RUNG.index(rev) < RUNG.index(policy.required_reviewer_separation))
+      return R(325, "reviewer");
     if (RUNG.index(host) < RUNG.index(policy.required_host_separation)) return R(325, "host");
-    ctx.computedSeparation.set(receipt.reviewer_principal.key_fingerprint,   // B8: ctx state, NEVER mutate a signed object
-      { reviewer_separation_strength: rev, host_separation_strength: host });
+    ctx.computedSeparation.set(
+      receipt.reviewer_principal.key_fingerprint, // B8: ctx state, NEVER mutate a signed object
+      { reviewer_separation_strength: rev, host_separation_strength: host }
+    );
   }
   return null;
 }
@@ -452,30 +458,39 @@ under min 4 → 330; shared anchor lineage → 330. TDD → commit.
 // verifies sigs / parses SPKI-DER / resolves registries and passes `facts`; vpcCore never calls crypto.
 export function vpcVerify(bundle, cfg, facts, { tier }) {
   // 316 and 317 run BEFORE makeCtx so a malformed bundle/cfg yields 316/317, not a 331 throw (B2).
-  const s316 = checkSchema(bundle); if (s316) return s316;              // 316
-  if (cfg === undefined) return R(331, "external_config_unavailable");  // undefined ⇒ wrapper, not 317
-  const s317 = checkExternalConfig(cfg, bundle); if (s317) return s317; // 317 (needs bundle: producer-exclusion, B7)
+  const s316 = checkSchema(bundle);
+  if (s316) return s316; // 316
+  if (cfg === undefined) return R(331, "external_config_unavailable"); // undefined ⇒ wrapper, not 317
+  const s317 = checkExternalConfig(cfg, bundle);
+  if (s317) return s317; // 317 (needs bundle: producer-exclusion, B7)
   try {
     const ctx = makeCtx(bundle, cfg, facts);
     const steps = [
-      () => (ctx.rawReceiptCount() >= 1 ? null : R(318)),  // RAW count — R_candidate isn't built until 321
-      () => checkSignaturesAndRoles(ctx),        // 319  PURE over facts.sigValid + roleCollisionOk
-      () => checkPartition(ctx),                 // 320
-      () => checkCensus(ctx),                    // 321
-      () => checkGrantBounds(ctx),               // 322
-      () => checkReceiptBounds(ctx),             // 323
-      () => checkEvaluation(ctx),                // 324
-      () => checkSeparation(ctx, cfg.policy),    // 325
-      () => checkAffiliation(ctx),               // 326
-      () => checkCoverage(ctx),                  // 327
-      () => checkAdequacyGate(bundle),           // 328
+      () => (ctx.rawReceiptCount() >= 1 ? null : R(318)), // RAW count — R_candidate isn't built until 321
+      () => checkSignaturesAndRoles(ctx), // 319  PURE over facts.sigValid + roleCollisionOk
+      () => checkPartition(ctx), // 320
+      () => checkCensus(ctx), // 321
+      () => checkGrantBounds(ctx), // 322
+      () => checkReceiptBounds(ctx), // 323
+      () => checkEvaluation(ctx), // 324
+      () => checkSeparation(ctx, cfg.policy), // 325
+      () => checkAffiliation(ctx), // 326
+      () => checkCoverage(ctx), // 327
+      () => checkAdequacyGate(bundle), // 328
     ];
-    for (const s of steps) { const r = s(); if (r) return r; }
-    if (tier === "audit") { const r = checkAttestationRecompute(ctx); if (r) return r; } // 329 audit-only
-    const p = checkPolicy(ctx, cfg.policy); if (p) return p;   // 330 BOTH tiers
+    for (const s of steps) {
+      const r = s();
+      if (r) return r;
+    }
+    if (tier === "audit") {
+      const r = checkAttestationRecompute(ctx);
+      if (r) return r;
+    } // 329 audit-only
+    const p = checkPolicy(ctx, cfg.policy);
+    if (p) return p; // 330 BOTH tiers
     return OK(ctx);
   } catch (e) {
-    return R(331, "internal_or_env_unavailable", { error: String(e) });  // B3: object, not spread string
+    return R(331, "internal_or_env_unavailable", { error: String(e) }); // B3: object, not spread string
   }
 }
 ```
@@ -561,7 +576,6 @@ filter: `R_eligible = R_candidate`), T7 (`firstFailureUnique` over the frozen pr
 PASS (Node 26); prior reproduce scripts still pass; `check.sh` green; K7 covers every export + all
 raw 316–331; byte-stability **manifest** identical (S11); Lane C campaign `pending` (real ceremony
 post-tag — B1). Then: README/CHANGELOG/AGENT/closeout tasks (B12) → PR with honest scope section →
-CI green → rebase-merge → **reset local main to origin/main** → **reproduce ON MAIN (clean tree, Node
-26) — must pass BEFORE the tag is pushed** → tag `v2.44.0-stage-5i-vpc` at the reproduced HEAD → push
+CI green → rebase-merge → **reset local main to origin/main** → **reproduce ON MAIN (clean tree, Node 26) — must pass BEFORE the tag is pushed** → tag `v2.44.0-stage-5i-vpc` at the reproduced HEAD → push
 → publish Release + verify Latest → closeout with re-scored scorecard (Frontier honest: Lane C
 pending) → memory + Zurvan.
