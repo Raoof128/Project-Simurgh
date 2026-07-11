@@ -21,6 +21,12 @@ echo "-- verify COMMITTED Lane-A pack (audit) --"
 echo "-- byte-stability (build twice, sorted manifest) --"
 "$NODE" "$BASE/verify-byte-stability.mjs"
 
+echo "-- Lane B: deterministic multi-process panel ceremony --"
+"$NODE" "tools/simurgh-attestation/stage5i/laneb/run-laneb-panel-ceremony.mjs"
+
+echo "-- Lane C: fail-closed campaign gate (real Opus 4.6 public structure, PENDING) --"
+"$NODE" "$BASE/lanec-gate.mjs"
+
 echo "-- committed pack matches a fresh rebuild --"
 FRESH="$(mktemp -d)"
 trap 'rm -rf "$FRESH"' EXIT
