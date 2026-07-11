@@ -3,7 +3,7 @@
 // the stage-4 run level for the raw code (0 = verified).
 import { readFileSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { join, dirname } from "node:path";
+import { join, dirname, isAbsolute } from "node:path";
 import { vpcVerify } from "../core/vpcCore.mjs";
 import { makeAdapterFacts } from "./adapter.mjs";
 import { stage4CodeForRawCode } from "../../stage4h/exitCodes.mjs";
@@ -20,7 +20,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   const argv = process.argv.slice(2);
   const tier = argv.includes("--tier") ? argv[argv.indexOf("--tier") + 1] : "public";
   const dirArg = argv.find((a) => !a.startsWith("--") && a !== tier);
-  const dir = dirArg ? join(process.cwd(), dirArg) : EVIDENCE_DIR;
+  const dir = dirArg ? (isAbsolute(dirArg) ? dirArg : join(process.cwd(), dirArg)) : EVIDENCE_DIR;
   const res = verifyPack(dir, tier);
   console.log(`tier=${tier} raw=${res.raw} reason=${res.reason ?? "verified"}`);
   process.exit(stage4CodeForRawCode(res.raw));
