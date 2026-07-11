@@ -50,26 +50,26 @@ grant-bounded coverage whose union equals `S`. That composition is the contribut
 
 **Beast-mode inventions (one code, two projections — each ships its own bound):**
 
-- **A. The Adequacy Gate (`VPC_ADEQUACY_CLAIMED`, 328).** VPC proves coverage and is *structurally
-  unable to certify that the review was adequate* — a bundle asserting adequacy/quality/thoroughness
+- **A. The Adequacy Gate (`VPC_ADEQUACY_CLAIMED`, 328).** VPC proves coverage and is _structurally
+  unable to certify that the review was adequate_ — a bundle asserting adequacy/quality/thoroughness
   fails closed **even at full coverage**. The coverage-≠-diligence bound becomes a fail-closed code +
   Lean theorem (`noForbiddenAdequacyAssertion` — a bounded-vocabulary check, honestly NOT a semantic
   proof), not a disclaimer. The purest "admit irregularity over overclaim"
-  — and exactly the Wirecard line (their sin was *claimed* adequacy).
+  — and exactly the Wirecard line (their sin was _claimed_ adequacy).
 - **B. Coverage Depth Census — the fragility map.** A derived projection nobody publishes: per-section
   reviewer multiplicity + the `single_reviewer_sections` set ("this claim rested on one reviewer's
   eyes"). Zero new code path. Non-claim: depth counts independent eyes, not diligence.
 - **C. Typed Coverage State — the coordination-theater map.** Per-section `covered / assigned_only
-  (promised-undelivered) / unassigned` — surfaces panels that squeak past `⋃C=S` while a grantee
+(promised-undelivered) / unassigned` — surfaces panels that squeak past `⋃C=S` while a grantee
   silently never reported. Zero new code path. Non-claim: `assigned_only` ≠ a coverage gap.
 
 ### The three laws (each falsifiable by a hostile reviewer)
 
 1. **No Section Left Unreviewed** — every section in the committed partition appears in ≥1 valid
-   receipt attesting *evaluation*; any gap fails closed.
+   receipt attesting _evaluation_; any gap fails closed.
 2. **No Phantom Review** — `receipt.sections ⊆ access_grant.sections ⊆ committed_partition`; a
    receipt claiming a section outside its signed grant is void.
-3. **No Self-Vouched Reviewer** — reviewer & host separation is *computed* on 5G's rung lattice
+3. **No Self-Vouched Reviewer** — reviewer & host separation is _computed_ on 5G's rung lattice
    (`distinct_key_only → challenge_bound → externally_anchored`); organisational non-affiliation
    derives from externally-pinned affiliation evidence. A producer-authored affiliation claim
    cannot establish independence regardless of key distinctness.
@@ -164,7 +164,7 @@ support only and pays nothing.
 **Five domain separators, each consumed by a named check** (no dead domains): `partition.v1`→320,
 `grant.v1`→321/322, `receipt.v1`→323/324, `affiliation.v1`→326, `attestation.v1`→329.
 
-**Independence is computed, never declared.** VPC **re-instantiates** 5G's rung-lattice *pattern*
+**Independence is computed, never declared.** VPC **re-instantiates** 5G's rung-lattice _pattern_
 (`rungLattice.mjs` composing `checkKeySeparation` → `checkChallengeBinding` → `checkAnchorBinding`)
 for the reviewer and host principals — it is NOT a drop-in import (5G's checks are bound to VFC's
 producer/capture bundle shape). `vpcSeparation(evidence) → rung` is a new function following that
@@ -214,21 +214,21 @@ total, wider than exit-maps alone. Codes 316–330 map to exit 1; 331 → exit 3
 
 **Public first-failure scan (316→328):**
 
-| Raw | Name | Law |
-| --: | --- | --- |
-| 316 | `VPC_MALFORMED_BUNDLE` | (schema / canonical form / uniqueness / required objects) |
-| 317 | `VPC_EXTERNAL_CONFIG_INVALID` | (empty/malformed cfg or policy_digest mismatch; *undefined/unavailable* → 331) |
-| 318 | `VPC_EMPTY_PANEL` | (zero candidate reviewers) |
-| 319 | `VPC_SIGNATURE_OR_ROLE_BINDING_INVALID` | (sig invalid / signer≠role / prohibited collision) |
-| 320 | `VPC_PARTITION_COMMITMENT_INVALID` | (partition_digest ≠ recompute over source+procedure+producer) |
-| 321 | `VPC_OBJECT_GRAPH_OR_REFERENCE_INVALID` | (ref resolution, role match, no dup/orphan — derives census, no attestation compare) |
-| 322 | `VPC_GRANT_EXCEEDS_PARTITION` | `G(r) ⊄ S` |
-| 323 | `VPC_RECEIPT_EXCEEDS_GRANT` | **No Phantom Review** (`C(r) ⊄ G(r)`) |
-| 324 | `VPC_NON_EVALUATION_RECEIPT` | (counted receipt lacks `reviewer_attests_evaluated == true`) |
-| 325 | `VPC_UNDER_SEPARATED_PRINCIPAL` | No Self-Vouched Reviewer (reviewer or host `separation < required`) |
-| 326 | `VPC_SELF_VOUCHED_AFFILIATION` | **No Self-Vouched Reviewer** (subject ∧ producer-bound ∧ partition-bound ∧ relationship ∧ issuer externally pinned ∧ `affiliation_issuer ≠ producer`) |
-| 327 | `VPC_SECTION_LEFT_UNREVIEWED` | **No Section Left Unreviewed** (`coverage_gap ≠ ∅`) — headline |
-| 328 | `VPC_ADEQUACY_CLAIMED` | **No Adequacy Overclaim** (BEAST A — any adequacy/quality/thoroughness/certification assertion present → fail closed, *even when coverage holds*) |
+| Raw | Name                                    | Law                                                                                                                                                   |
+| --: | --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 316 | `VPC_MALFORMED_BUNDLE`                  | (schema / canonical form / uniqueness / required objects)                                                                                             |
+| 317 | `VPC_EXTERNAL_CONFIG_INVALID`           | (empty/malformed cfg or policy*digest mismatch; \_undefined/unavailable* → 331)                                                                       |
+| 318 | `VPC_EMPTY_PANEL`                       | (zero candidate reviewers)                                                                                                                            |
+| 319 | `VPC_SIGNATURE_OR_ROLE_BINDING_INVALID` | (sig invalid / signer≠role / prohibited collision)                                                                                                    |
+| 320 | `VPC_PARTITION_COMMITMENT_INVALID`      | (partition_digest ≠ recompute over source+procedure+producer)                                                                                         |
+| 321 | `VPC_OBJECT_GRAPH_OR_REFERENCE_INVALID` | (ref resolution, role match, no dup/orphan — derives census, no attestation compare)                                                                  |
+| 322 | `VPC_GRANT_EXCEEDS_PARTITION`           | `G(r) ⊄ S`                                                                                                                                            |
+| 323 | `VPC_RECEIPT_EXCEEDS_GRANT`             | **No Phantom Review** (`C(r) ⊄ G(r)`)                                                                                                                 |
+| 324 | `VPC_NON_EVALUATION_RECEIPT`            | (counted receipt lacks `reviewer_attests_evaluated == true`)                                                                                          |
+| 325 | `VPC_UNDER_SEPARATED_PRINCIPAL`         | No Self-Vouched Reviewer (reviewer or host `separation < required`)                                                                                   |
+| 326 | `VPC_SELF_VOUCHED_AFFILIATION`          | **No Self-Vouched Reviewer** (subject ∧ producer-bound ∧ partition-bound ∧ relationship ∧ issuer externally pinned ∧ `affiliation_issuer ≠ producer`) |
+| 327 | `VPC_SECTION_LEFT_UNREVIEWED`           | **No Section Left Unreviewed** (`coverage_gap ≠ ∅`) — headline                                                                                        |
+| 328 | `VPC_ADEQUACY_CLAIMED`                  | **No Adequacy Overclaim** (BEAST A — any adequacy/quality/thoroughness/certification assertion present → fail closed, _even when coverage holds_)     |
 
 **Audit-only `[329]`:** `VPC_ATTESTATION_MISMATCH` — declared `{counted_reviewers, coverage_union,
 coverage_gap, equality_holds, verdict, coverage_depth, section_states, panel_evidence_root,
@@ -298,7 +298,7 @@ covered panel asserts "review adequate" → 328     (adequacy overclaim fails ev
 family models the EY/Wirecard sign-off (EY signed audits whose evidence came from the audited party's
 own screenshots, not an independent source): a coverage receipt whose `affiliation_issuer` traces to
 the producer → **326**, and a receipt claiming a section its grant never covered → **323**. Wirecard
-also carries a *diligence* failure ("signed off without doing the work") — that dimension is
+also carries a _diligence_ failure ("signed off without doing the work") — that dimension is
 explicitly **VRC's**, not VPC's, and citing it sharpens the coverage-≠-diligence bound rather than
 overclaiming it.
 
@@ -328,7 +328,7 @@ keys we do not hold (independence). Challenge evidence is bound to **this** cere
 would be circular) — and never a reused 5G challenge. **Two axes, reported separately and honestly:** reviewer & host **separation**
 reach a REAL `challenge_bound` (distinct droplet keys binding our fresh challenge); the **affiliation**
 axis is exercised with a **MODELED anchor** — there is no real third-party organisational-affiliation
-authority attesting independence from a *modeled* producer, so Lane C does not claim real
+authority attesting independence from a _modeled_ producer, so Lane C does not claim real
 externally-anchored non-affiliation (that path needs a real producer + a real affiliation authority). `campaign-outcome.json` (`status/campaign_id/evidence_root`): `completed` ⟹ dir + sigs +
 external config + verify all present; missing record fails; non-completed states carry typed reasons;
 the release gate requires `completed`.
@@ -406,8 +406,8 @@ claims (BEAST B/C); their only guarantee is recomputation-equality under 329.
 - **`public_report_structure_coverage` ≠ `rsp_unredacted_report_compliance`.** Lane C does not observe
   Anthropic's confidential report or actual review process, and does not model METR's review.
 - **`evidence_producer_principal` ≠ `source_report.publisher`.** The independence assertions concern
-  the *modeled evidence producer* (who assembled the VPC bundle), NOT the report publisher (Anthropic).
-  Lane C proves reviewers independent *of the evidence producer*, never independence from Anthropic.
+  the _modeled evidence producer_ (who assembled the VPC bundle), NOT the report publisher (Anthropic).
+  Lane C proves reviewers independent _of the evidence producer_, never independence from Anthropic.
 - **Redaction taxonomy is report-level**, not per-section, unless the public report visibly ties a
   redaction to a section.
 - **The rung-2 fixture proves verifier support, not real anchored execution** (synthetic-deterministic,
@@ -415,7 +415,7 @@ claims (BEAST B/C); their only guarantee is recomputation-equality under 329.
 - **Anti-sockpuppet is enforced, not assumed:** at `min_reviewers ≥ 2` the release policy rejects
   reviewers sharing a principal key (321) or an anchor lineage (330) — a failure in-toto's `threshold`
   and CODEOWNERS accept.
-- **The adequacy gate is structural, not a disclaimer (BEAST A).** VPC is *unable to certify* that a
+- **The adequacy gate is structural, not a disclaimer (BEAST A).** VPC is _unable to certify_ that a
   review was adequate, sufficient, thorough, or good; a bundle asserting any such predicate fails
   closed (328), even at full coverage. Coverage ⊬ adequacy is a code + Lean theorem, not a footnote.
 - **Coverage depth counts independent eyes, not diligence (BEAST B).** `single_reviewer_sections` marks
@@ -441,7 +441,7 @@ claims (BEAST B/C); their only guarantee is recomputation-equality under 329.
    `uncommitted_section_universe_deferred` (VUC).
 5. Producer's declared **consequence self-rating is not contested** here →
    `consequence_self_rating_contest_deferred` (VRC).
-6. **Coverage is not timestamped.** VPC does not prove a section was evaluated *before* release — a
+6. **Coverage is not timestamped.** VPC does not prove a section was evaluated _before_ release — a
    receipt could be back-dated post-incident. This is deliberately a **separate blade** (beast-mode D,
    temporal binding to the 4N heartbeat has its own attack surface) → penciled future rung **VTC**, not
    a minted socket (ledger hygiene).
@@ -489,12 +489,12 @@ process owner must produce the receipts).
 
 ### §4.4 Four-axis scorecard (spec-time, post-sweep; re-scored honestly at closeout)
 
-| Axis | Spec-time | Rationale / what moves it higher |
-| --- | ---: | --- |
-| **Novelty** | **9.0** | Composition is unprecedented in the scoped search AND ships a new object no neighbour has: a coverage verifier that fails closed on a frozen adequacy vocabulary (`noForbiddenAdequacyAssertion`, beast-mode A — bounded, honestly not semantic), plus the depth/state projections nobody publishes. Discount held because the primitives (set-cover, threshold sigs) are known. → **9.3** if a broader sweep confirms no equivalent composition and the adequacy-gate theorem class proves genuinely first-of-kind for oversight. |
-| **Frontier** | **9.0** | Anchor 3 days old, real named report corpus, real Lane C `challenge_bound` execution planned with the independent droplet team. → **9.4** on executing real Lane C; higher on the (a) Sigstore upgrade. |
-| **Good-for-Anthropic** | **9.3** | Direct substrate for RSP v3.4's split-review regime with a named report; discount because Lane C is real-structure not a process-owner pilot. → **9.6** on completed Lane C + a concrete SCITT/profile integration mapping; → **10** on a real assurance-team or external-reviewer pilot. |
-| **Constitution** | **9.2** | Mechanises "every section reaches a reviewer" — completeness applied to oversight itself; no selective review. → **9.5** when bound to review quality/truth (VRC). |
+| Axis                   | Spec-time | Rationale / what moves it higher                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| ---------------------- | --------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Novelty**            |   **9.0** | Composition is unprecedented in the scoped search AND ships a new object no neighbour has: a coverage verifier that fails closed on a frozen adequacy vocabulary (`noForbiddenAdequacyAssertion`, beast-mode A — bounded, honestly not semantic), plus the depth/state projections nobody publishes. Discount held because the primitives (set-cover, threshold sigs) are known. → **9.3** if a broader sweep confirms no equivalent composition and the adequacy-gate theorem class proves genuinely first-of-kind for oversight. |
+| **Frontier**           |   **9.0** | Anchor 3 days old, real named report corpus, real Lane C `challenge_bound` execution planned with the independent droplet team. → **9.4** on executing real Lane C; higher on the (a) Sigstore upgrade.                                                                                                                                                                                                                                                                                                                            |
+| **Good-for-Anthropic** |   **9.3** | Direct substrate for RSP v3.4's split-review regime with a named report; discount because Lane C is real-structure not a process-owner pilot. → **9.6** on completed Lane C + a concrete SCITT/profile integration mapping; → **10** on a real assurance-team or external-reviewer pilot.                                                                                                                                                                                                                                          |
+| **Constitution**       |   **9.2** | Mechanises "every section reaches a reviewer" — completeness applied to oversight itself; no selective review. → **9.5** when bound to review quality/truth (VRC).                                                                                                                                                                                                                                                                                                                                                                 |
 
 _"Good-for-Anthropic" measures potential usefulness to assurance teams; it implies no Anthropic
 review, adoption, or endorsement._

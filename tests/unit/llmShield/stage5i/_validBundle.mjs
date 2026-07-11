@@ -5,9 +5,16 @@ import {
   artifactDigest,
   identityDigest,
 } from "../../../../tools/simurgh-attestation/stage5i/core/digests.mjs";
-import { DOMAINS, POLICY_PROFILES } from "../../../../tools/simurgh-attestation/stage5i/constants.mjs";
+import {
+  DOMAINS,
+  POLICY_PROFILES,
+} from "../../../../tools/simurgh-attestation/stage5i/constants.mjs";
 
-const idOf = (subject, fp) => ({ identity_subject: subject, key_fingerprint: fp, public_key_pem: `PEM:${fp}` });
+const idOf = (subject, fp) => ({
+  identity_subject: subject,
+  key_fingerprint: fp,
+  public_key_pem: `PEM:${fp}`,
+});
 
 export function validBundle() {
   const sections = ["1", "2", "3", "4", "5", "6", "7", "8"].map((id) => ({
@@ -43,8 +50,20 @@ export function validBundle() {
 
   // Two reviewers, each C(r) ⊂ S, union = S (A:1-5, B:4-8).
   const reviewers = [
-    { subject: "reviewerA", fp: "fp:reviewerA", host: "fp:hostA", lineage: "lineage:A", sec: ["1", "2", "3", "4", "5"] },
-    { subject: "reviewerB", fp: "fp:reviewerB", host: "fp:hostB", lineage: "lineage:B", sec: ["4", "5", "6", "7", "8"] },
+    {
+      subject: "reviewerA",
+      fp: "fp:reviewerA",
+      host: "fp:hostA",
+      lineage: "lineage:A",
+      sec: ["1", "2", "3", "4", "5"],
+    },
+    {
+      subject: "reviewerB",
+      fp: "fp:reviewerB",
+      host: "fp:hostB",
+      lineage: "lineage:B",
+      sec: ["4", "5", "6", "7", "8"],
+    },
   ];
 
   const reviewer_separation_evidence = [];
@@ -56,14 +75,28 @@ export function validBundle() {
 
   for (const r of reviewers) {
     const revId = idOf(r.subject, r.fp);
-    const hostRef = { identity_subject: `${r.subject}-host`, key_fingerprint: r.host, identity_digest: identityDigest(idOf(`${r.subject}-host`, r.host)) };
+    const hostRef = {
+      identity_subject: `${r.subject}-host`,
+      key_fingerprint: r.host,
+      identity_digest: identityDigest(idOf(`${r.subject}-host`, r.host)),
+    };
 
-    const sep = { subject_key_fingerprint: r.fp, challenge_receipt: { bound_panel_subject_root: "ANY", campaign_id: "c1", nonce: `n:${r.fp}` } };
+    const sep = {
+      subject_key_fingerprint: r.fp,
+      challenge_receipt: { bound_panel_subject_root: "ANY", campaign_id: "c1", nonce: `n:${r.fp}` },
+    };
     const sepDigest = artifactDigest(sep);
     challengeBoundDigests.add(sepDigest);
     reviewer_separation_evidence.push(sep);
 
-    const hostSep = { subject_key_fingerprint: r.host, challenge_receipt: { bound_panel_subject_root: "ANY", campaign_id: "c1", nonce: `n:${r.host}` } };
+    const hostSep = {
+      subject_key_fingerprint: r.host,
+      challenge_receipt: {
+        bound_panel_subject_root: "ANY",
+        campaign_id: "c1",
+        nonce: `n:${r.host}`,
+      },
+    };
     const hostSepDigest = artifactDigest(hostSep);
     challengeBoundDigests.add(hostSepDigest);
     host_separation_evidence.push(hostSep);
@@ -86,7 +119,10 @@ export function validBundle() {
       review_host_identity_ref: hostRef,
       granted_sections: [...r.sec],
       partition_digest,
-      issued_by: { identity_subject: grantIssuer.identity_subject, key_fingerprint: grantIssuer.key_fingerprint },
+      issued_by: {
+        identity_subject: grantIssuer.identity_subject,
+        key_fingerprint: grantIssuer.key_fingerprint,
+      },
     };
     const grant = { content: grantContent, signature: `sig:grant:${r.fp}` };
     const grant_digest = domainDigest(DOMAINS.grant, grantContent);
@@ -114,8 +150,14 @@ export function validBundle() {
 
   const external_config = {
     affiliation_assertions,
-    reviewer_registry: { "fp:reviewerA": { identity_subject: "reviewerA" }, "fp:reviewerB": { identity_subject: "reviewerB" } },
-    host_registry: { "fp:hostA": { identity_subject: "reviewerA-host" }, "fp:hostB": { identity_subject: "reviewerB-host" } },
+    reviewer_registry: {
+      "fp:reviewerA": { identity_subject: "reviewerA" },
+      "fp:reviewerB": { identity_subject: "reviewerB" },
+    },
+    host_registry: {
+      "fp:hostA": { identity_subject: "reviewerA-host" },
+      "fp:hostB": { identity_subject: "reviewerB-host" },
+    },
     affiliation_issuer_registry: { "fp:affIssuer": { identity_subject: "affiliation-authority" } },
     verifier_key_pin: { key_fingerprint: "fp:verifier", identity_subject: "simurgh-verifier" },
     policy,
@@ -143,7 +185,14 @@ export function validBundle() {
     signature: "sig:attestation",
   };
 
-  const bundle = { partition, access_grants, coverage_receipts, reviewer_separation_evidence, host_separation_evidence, attestation };
+  const bundle = {
+    partition,
+    access_grants,
+    coverage_receipts,
+    reviewer_separation_evidence,
+    host_separation_evidence,
+    attestation,
+  };
 
   const facts = {
     sigValid: true,
