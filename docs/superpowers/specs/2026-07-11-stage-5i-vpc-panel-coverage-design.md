@@ -53,7 +53,8 @@ grant-bounded coverage whose union equals `S`. That composition is the contribut
 - **A. The Adequacy Gate (`VPC_ADEQUACY_CLAIMED`, 328).** VPC proves coverage and is *structurally
   unable to certify that the review was adequate* — a bundle asserting adequacy/quality/thoroughness
   fails closed **even at full coverage**. The coverage-≠-diligence bound becomes a fail-closed code +
-  Lean theorem (`adequacyUnprovable`), not a disclaimer. The purest "admit irregularity over overclaim"
+  Lean theorem (`noForbiddenAdequacyAssertion` — a bounded-vocabulary check, honestly NOT a semantic
+  proof), not a disclaimer. The purest "admit irregularity over overclaim"
   — and exactly the Wirecard line (their sin was *claimed* adequacy).
 - **B. Coverage Depth Census — the fragility map.** A derived projection nobody publishes: per-section
   reviewer multiplicity + the `single_reviewer_sections` set ("this claim rested on one reviewer's
@@ -124,7 +125,7 @@ C. coverageReceipt (1 per reviewer)  DOMAIN.receipt (reviewer key)
      // NO declared rung — verifier recomputes vpcSeparation(separation_evidence); any embedded value is display-only
 
 D. panelCoverageAttestation      DOMAIN.attestation (Simurgh verifier key ≠ all other roles)
-   { partition_digest, policy_digest, panel_evidence_root, trust_context_digest,
+   { partition_digest, policy_digest, panel_subject_root, panel_evidence_root, trust_context_digest,
      counted_reviewers:[ { key_fingerprint, reviewer_separation_strength,
                            host_separation_strength, independence_valid } ],
      coverage_union:[…sorted…], coverage_gap:[…], equality_holds, verdict,
@@ -136,8 +137,8 @@ D. panelCoverageAttestation      DOMAIN.attestation (Simurgh verifier key ≠ al
 External signed object (fifth domain — real, not a receipt field):
    affiliationAssertion   DOMAIN.affiliation   (externally-pinned issuer key)
    { subject_key_fingerprint, subject_identity_digest, producer_identity_digest,
-     relationship:"independent_of_producer", anchor_lineage_digest, partition_digest,
-     issued_by:{ identity_subject, key_fingerprint } }
+     relationship:"independent_of_producer", subject_affiliation_lineage_digest, partition_digest,
+     issued_by:{ identity_subject, key_fingerprint } }   // issued_by ∉ {producer, reviewer}
 ```
 
 **Externally-supplied config (outside the bundle):** `affiliation_anchor_registry` (pinned issuers +
@@ -188,18 +189,21 @@ duplicate grant/receipt entries, non-canonical array order, unknown redaction en
 ### §2.3 Role-collision matrix
 
 Two distinct issuer roles: `grant_issuer` (accessGrant `issued_by`) and `affiliation_issuer`
-(affiliationAssertion `issued_by`). `affiliation_issuer == producer` would let the producer vouch for
-their own reviewer's independence — the exact self-vouch VPC bans — so it is prohibited AND the pinned
-`affiliation_anchor_registry` MUST exclude the producer identity (enforced in 326).
+(affiliationAssertion `issued_by`). `affiliation_issuer == producer` OR `== reviewer` would let the
+producer/reviewer vouch for the reviewer's own independence — the exact self-vouch VPC bans — so both
+are prohibited AND the pinned `affiliation_anchor_registry` MUST exclude the producer identity
+(enforced in 326).
 
 ```
 Prohibited:  verifier ≠ {producer, grant_issuer, affiliation_issuer, reviewer, host}
              reviewer ≠ {producer, grant_issuer}       host ≠ producer
-             affiliation_issuer ≠ producer   (and ∉ producer-controlled: pinned registry excludes producer)
+             affiliation_issuer ≠ {producer, reviewer}   (and ∉ producer-controlled: pinned registry excludes producer)
 Allowed (listed, not inferred):  reviewer == host  ⟹  host_separation is non-additive
 ```
 
-`require_distinct_anchor_lineage` (release): no two counted reviewers share an `anchor_lineage_digest`.
+`require_distinct_anchor_lineage` (release): no two counted reviewers share a
+`subject_affiliation_lineage_digest` — the SUBJECT's (reviewer-org) affiliation lineage, NOT the
+issuer's (a single trusted authority may legitimately certify many distinct reviewers).
 
 ### §2.4 Raw codes 316–331 (house-partitioned; wrapper LAST; `UNKNOWN_RAW_PROBE=999` above the block)
 
@@ -286,7 +290,7 @@ affiliation issuer absent from registry → 326     under-separated reviewer/hos
 attestation census/union/depth mismatch → 329     duplicate section_id (post-NFC)        → 316
 3 reviewers, policy.min_reviewers = 4   → 330     policy not matching policy_digest      → 317
 reviewer_attests_evaluated = false      → 324     orphan receipt / unresolved grant      → 321
-verifier key == host key                → 319     two reviewers share anchor_lineage     → 330
+verifier key == host key                → 319     share subject_affiliation_lineage      → 330
 covered panel asserts "review adequate" → 328     (adequacy overclaim fails even at ⋃C=S)
 ```
 
@@ -319,8 +323,9 @@ stays `[]` unless the public report visibly ties a redaction to a section. The d
 recompute byte-identical on the deterministic surface. The **challenge is issued and signed by the
 Simurgh verifier key** (freshness); the coverage receipts are signed by the droplet reviewer/host
 keys we do not hold (independence). Challenge evidence is bound to **this** ceremony
-(`partition_digest, policy_digest, reviewer/host identity, campaign_id, panel_evidence_root`) — never
-a reused 5G challenge. **Two axes, reported separately and honestly:** reviewer & host **separation**
+(`partition_digest, policy_digest, reviewer/host identity, campaign_id, nonce, panel_subject_root`) —
+**`panel_subject_root`, not `panel_evidence_root`** (the latter includes the challenge, so binding it
+would be circular) — and never a reused 5G challenge. **Two axes, reported separately and honestly:** reviewer & host **separation**
 reach a REAL `challenge_bound` (distinct droplet keys binding our fresh challenge); the **affiliation**
 axis is exercised with a **MODELED anchor** — there is no real third-party organisational-affiliation
 authority attesting independence from a *modeled* producer, so Lane C does not claim real
@@ -335,13 +340,16 @@ that external review of this report occurred.
 
 ### §3.2 Attestation — two-tier, evidence-graph-bound
 
-Public tier verifies 316→328 + verdict; audit tier adds 329. `panel_evidence_root` = canonical
-sorted manifest over {partition, grant, receipt, affiliation-assertion, reviewer-separation,
-host-separation digests}; `trust_context_digest` = over {policy, reviewer/host/affiliation-anchor
-registries, verifier pin}. Signature = `Ed25519(DOMAIN.attestation ‖ canonicalJson(attestationContent))`.
-Byte-stable surface = `{partition_digest, policy_digest, panel_evidence_root, trust_context_digest,
-canonical(counted_reviewers), coverage_union, coverage_gap, equality_holds, verdict, coverage_depth,
-section_states}`. The two **projections are recomputed and root-bound** (BEAST B/C): `coverage_depth`
+Public tier verifies 316→328 + verdict; audit tier adds 329. **Two roots break the challenge cycle
+(no ouroboros):** `panel_subject_root` = manifest over {partition, grants, identities,
+affiliation-assertion digests} — **excludes challenge receipts**; the Lane-C challenge binds
+`panel_subject_root` (+ campaign_id + nonce + reviewer/host identity). `panel_evidence_root` =
+`panel_subject_root` + {challenge/anchor evidence, coverage receipts, reviewer/host-separation
+digests}. `trust_context_digest` = over {policy, reviewer/host/affiliation-anchor registries, verifier
+pin, policy_pin}. Signature = `Ed25519(DOMAIN.attestation ‖ canonicalJson(attestationContent))`.
+Byte-stable surface = `{partition_digest, policy_digest, panel_subject_root, panel_evidence_root,
+trust_context_digest, canonical(counted_reviewers), coverage_union, coverage_gap, equality_holds,
+verdict, coverage_depth, section_states}`. The two **projections are recomputed and root-bound** (BEAST B/C): `coverage_depth`
 (per-section reviewer multiplicity + `min_depth` + `single_reviewer_sections` — the fragility map) and
 `section_states` (per-section `covered`/`assigned_only`/`unassigned` — the coordination-theater map)
 are derived over `R_eligible`, checked by 329, never a separate claim. Reviewer sigs differ per key ⇒
@@ -372,9 +380,11 @@ T6  equality decomposition  let U=⋃C(r); U⊆S (from T2 ∘ G⊆S); gap=S∖U;
 T7  firstFailureUnique      over the frozen predicate list, the first-failing predicate ⟹ a unique raw code
 T8  census recompute (audit) 329 pass ⟹ counted_reviewers = canonical(R_eligible)
 T9  two-tier monotonicity   auditPass ⟹ publicPass   (strictness witnessed constructively by the raw-329 fixture)
-T10 evidence-root binding   auditPass ⟹ declared {panel_evidence_root, trust_context_digest, depth, states} = recomputed
-T11 adequacyUnprovable      (BEAST A) covered ∧ verify=0 ⟹ the bundle asserts NO adequacy/quality predicate;
-                            coverage ⊬ adequacy — the artifact is structurally unable to certify review quality
+T10 evidence-root binding   auditPass ⟹ declared {panel_subject_root, panel_evidence_root, trust_context_digest, depth, states} = recomputed
+T11 noForbiddenAdequacyAssertion  (BEAST A) verify=0 ⟹ no key in the frozen adequacy vocabulary
+                            appears in the permitted annotation surface. HONEST BOUND (not a theorem):
+                            this rejects a bounded vocabulary in a bounded surface — it does NOT prove
+                            the absence of semantically-equivalent wording. Mechanically true, not semantic.
 L1  separation monotone     the vpcSeparation rung lattice is monotone — PROVED FRESH for VPC's
                             reviewer/host principals, following (not importing) 5G's lemma structure
 ```
@@ -395,6 +405,9 @@ claims (BEAST B/C); their only guarantee is recomputation-equality under 329.
   separately, never merged.
 - **`public_report_structure_coverage` ≠ `rsp_unredacted_report_compliance`.** Lane C does not observe
   Anthropic's confidential report or actual review process, and does not model METR's review.
+- **`evidence_producer_principal` ≠ `source_report.publisher`.** The independence assertions concern
+  the *modeled evidence producer* (who assembled the VPC bundle), NOT the report publisher (Anthropic).
+  Lane C proves reviewers independent *of the evidence producer*, never independence from Anthropic.
 - **Redaction taxonomy is report-level**, not per-section, unless the public report visibly ties a
   redaction to a section.
 - **The rung-2 fixture proves verifier support, not real anchored execution** (synthetic-deterministic,
@@ -478,7 +491,7 @@ process owner must produce the receipts).
 
 | Axis | Spec-time | Rationale / what moves it higher |
 | --- | ---: | --- |
-| **Novelty** | **9.0** | Composition is unprecedented in the scoped search AND ships a new object no neighbour has: a coverage verifier structurally unable to certify its own adequacy (`adequacyUnprovable` theorem, beast-mode A), plus the depth/state projections nobody publishes. Discount held because the primitives (set-cover, threshold sigs) are known. → **9.3** if a broader sweep confirms no equivalent composition and the adequacy-gate theorem class proves genuinely first-of-kind for oversight. |
+| **Novelty** | **9.0** | Composition is unprecedented in the scoped search AND ships a new object no neighbour has: a coverage verifier that fails closed on a frozen adequacy vocabulary (`noForbiddenAdequacyAssertion`, beast-mode A — bounded, honestly not semantic), plus the depth/state projections nobody publishes. Discount held because the primitives (set-cover, threshold sigs) are known. → **9.3** if a broader sweep confirms no equivalent composition and the adequacy-gate theorem class proves genuinely first-of-kind for oversight. |
 | **Frontier** | **9.0** | Anchor 3 days old, real named report corpus, real Lane C `challenge_bound` execution planned with the independent droplet team. → **9.4** on executing real Lane C; higher on the (a) Sigstore upgrade. |
 | **Good-for-Anthropic** | **9.3** | Direct substrate for RSP v3.4's split-review regime with a named report; discount because Lane C is real-structure not a process-owner pilot. → **9.6** on completed Lane C + a concrete SCITT/profile integration mapping; → **10** on a real assurance-team or external-reviewer pilot. |
 | **Constitution** | **9.2** | Mechanises "every section reaches a reviewer" — completeness applied to oversight itself; no selective review. → **9.5** when bound to review quality/truth (VRC). |
