@@ -76,11 +76,15 @@ Code's external-evaluation mandate, both of which name disagreement but leave it
    report/eval surface → VUC.
 4. **Logical, not temporal.** Epoch order is a signed logical sequence; wall-clock timeliness → VTC.
 5. **Single committed rating scale**, no cross-scale comparison in v1.
-6. **Real independent-party Lane C EXECUTED, but at rung `distinct_key_only`.** The droplet party emitted
-   real ratings under fresh keys we do not hold (byte-verified raw 0, 37 real sections, a remote droplet
-   run under Node 26), so independence is `distinct_key_only` — **NOT `externally_anchored`** (no
-   Sigstore/OIDC anchor). "Local device" run 1 is byte-committed; the remote droplet run 2 is documented
-   (its bytes were not transferred). → `real_sigstore_anchor_execution_deferred` remains open.
+6. **Real independent-party Lane C EXECUTED at rung `distinct_key_only`; the `externally_anchored` RAILS
+   are built.** The droplet party emitted real ratings under fresh keys we do not hold (byte-verified
+   raw 0, 37 real sections, a remote droplet run under Node 26). The rung machinery is shipped
+   (`core/independence.mjs` reuses the VFC lattice; `lanec/attach-anchor.mjs` + the runner's `ANCHOR_ME.txt`;
+   the gate computes the strongest proven rung), and it **refuses to upgrade on the structural binding
+   alone** — `externally_anchored` requires the injected `anchorVerified` (our online `cosign verify-blob`
+   against Fulcio+Rekor). So true 9.5 is **one operator step away**: the droplet operator runs
+   `cosign sign-blob` with their real OIDC identity and sends the `sigstore-bundle.json`. Until a real
+   anchor is verified, the score honestly stays 9.4. → `real_sigstore_anchor_execution_deferred` open.
 7. Parity is JS↔Python **semantic** + browser packaging, not cross-runtime crypto-impl parity.
 8. The **"Areas of disagreement" RSP section wording is reported-until-pinned** (the canonical policy page
    surfaced the split-review sentence, not that exact section text).
