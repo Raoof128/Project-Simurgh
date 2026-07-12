@@ -14,6 +14,13 @@ Compiles the FROZEN spec (`docs/superpowers/specs/2026-07-13-stage-5m-vtc-quorum
 - **Keys:** Lane-A `INSECURE_FIXTURE_ONLY_*` (prettier-ignored, allowlisted in `scripts/security-audit-llm-shield-stage3m.sh` + `…stage3o.sh` by PATH REGEX, no digits); Lane-B/D **real Ed25519** — commit **public keys + fingerprints only**, never private keys, never allowlist a private key.
 - **Evidence dirs prettier-ignored;** byte-stable (`cmp` twice).
 - **Pinned inputs** `{ tsa_root, bitcoin_checkpoint, rekor_log_pubkey, expected_submitter_key }` are adapter inputs, independent of the entry (G6).
+- **Frozen-core reuse facts (verified against repo — do not re-derive):**
+  - 5L core entry is **`vtcqVerify(bundle, cfg, facts, { tier })`** (`stage5l/core/vtcqCore.mjs:21`); it catches its own internals → `383`.
+  - The core finds anchors **by `anchor_type`** in `bundle.anchors`: `rfc3161_tsa` and **`bitcoin_ots`** (`context.mjs:34-35`); `371`/`372`/`dedupedDomains`/`verifiedAnchorSetDigest` run over **all** `bundle.anchors` (G-A).
+  - **The transparency-log seat MUST live in a v2-only field `bundle.transparency_log_seat`, NEVER in `bundle.anchors`** — so the frozen core's anchor computations are byte-untouched (G-A).
+  - 5L facts built by **`makeVtcqFacts(bundle, cfg, keys)`** (`stage5l/node/adapter.mjs:18`) → `{tsaCrypto, otsState, checkpointWitnessSigValid}`. Reuse it for `facts5L` (G-B).
+  - v2 `required_members` are **labels**; map to frozen anchor_types: `rfc3161_tsa→rfc3161_tsa`, `bitcoin_confirmed_publication→bitcoin_ots`, `transparency_log_inclusion→` (v2-only seat) (G-C).
+  - **Do NOT add any export to `tools/simurgh-attestation/canonicalise.mjs`** — it already exports `canonicalJson` + `sha256Bytes`; adding an export triggers the 3M 100%-coverage gate. New helpers live in `stage5m/` (G-D).
 - **Real Lane B facts** (already captured & offline-verified): Rekor uuid `108e9186e8c5677ace556f35c062528c6cbcdeacbfc5f0b82e63509340bbd9e073bf7bc81bfb504f`, global_log_index `2156398791`, shard_leaf_index `2034494529`, tree_size `2034499331`, rootHash `8d8ba1bfc885f83cd007bb99e2110ed3238ed1d55dce3d5ee2afec428211b95b`, 24 inclusion hashes, bound artifact sha256 `9f1f14af4cafd0243fa37787822f2afcd3b599090f081d56aad6dc854ea0366d`, commitment `3ee8a8c9b8d7ea805fdb4bae192d86d11c22192855526d95761f4b87d89828e8`. Packet + offline verifier in scratchpad `rekor-gate/`.
 
 ## File map (one responsibility each)
@@ -57,11 +64,11 @@ tests/fixtures/llmShield/stage5m/test-keys/INSECURE_FIXTURE_ONLY_*.pem
 Steps:
 1. **Test first** `tests/unit/llmShield/stage5m/exitCodes.test.js`: assert 384–395 present, unique, disjoint from 364–383; order array is a permutation with 394 before 393; every code maps RUN_LEVEL 1; wrapper is last. Run → fail.
 2. Edit `exitCodes.mjs`: add the block additively (mirror `VTCQ_*` from 5L). **Gotcha (memory):** this is another exit-map consumer — update `RUN_LEVEL_BY_RAW` and any `exitWrapper`/exit-map golden; keep the non-hermetic 4h builder to only the two exit-maps it already reads. Run 5L + prior exit-map tests → still green.
-3. `constants.mjs`: `PROFILE='third_trust_ecology'`, `QUORUM_RULE='all_required'`, `REQUIRED_MEMBERS=['rfc3161_tsa','bitcoin_confirmed_publication','transparency_log_inclusion']` (frozen, exactly 3), `PINNED_INPUT_KEYS`, `MINTED_SOCKETS=['keyless_submitter_identity_binding'(I7),'checkpoint_witness_cosigning'(I8)]`, `RESERVED_ARTIFACT_SLOTS`. Test freezes each. Commit `feat(5m): exit codes 384-395 + constants`.
+3. `constants.mjs`: `PROFILE='third_trust_ecology'`, `QUORUM_RULE='all_required'`, `REQUIRED_MEMBERS=['rfc3161_tsa','bitcoin_confirmed_publication','transparency_log_inclusion']` (frozen, exactly 3), **`MEMBER_TO_ANCHOR_TYPE={rfc3161_tsa:'rfc3161_tsa', bitcoin_confirmed_publication:'bitcoin_ots', transparency_log_inclusion:'transparency_log_seat'}`** (G-C — maps v2 labels to the frozen 5L anchor types + the v2-only seat field), `PINNED_INPUT_KEYS`, `MINTED_SOCKETS=['keyless_submitter_identity_binding'(I7),'checkpoint_witness_cosigning'(I8)]`, `RESERVED_ARTIFACT_SLOTS`. Test freezes each + asserts the OTS label maps to `bitcoin_ots`. Commit `feat(5m): exit codes 384-395 + constants`.
 
 ## Task 1 — pure core: schema 384 (test-first)
 
-`core/schema.mjs checkV2Schema(bundle)`: 384 if `schema!=='vtc_quorum_confirmed.v2'`, profile/quorum_rule wrong, `required_members` not exactly the 3-set (reject a smuggled 4th member — No Gerrymandered Universe), or any seat shape malformed. Tests: valid `_valid.mjs` v2 bundle → null; each malformation → 384. Commit.
+`core/schema.mjs checkV2Schema(bundle)`: 384 if `schema!=='vtc_quorum_confirmed.v2'`, profile/quorum_rule wrong, `required_members` not exactly the 3-set (reject a smuggled 4th member — No Gerrymandered Universe), the two frozen anchors (`rfc3161_tsa`, `bitcoin_ots`) absent from `bundle.anchors`, or **`bundle.transparency_log_seat`** (the v2-only Rekor seat field — NEVER in `bundle.anchors`, G-A) malformed. Tests: valid `_valid.mjs` v2 bundle → null; each malformation → 384; a Rekor seat smuggled into `bundle.anchors` → 384. Commit.
 
 ## Task 2 — pure core: Rekor seat 385–390 over injected facts
 
@@ -89,14 +96,18 @@ Tests: mismatch at each level → 391; two seats same class → 392. Commit.
 - `checkState(facts)`: if `facts.declared_externally_anchored && state==='incomplete'` → **394** (overclaim, first); else if `state==='incomplete'` → **393**; else null (0).
 Tests: confirmed→0 & N=3; a required seat absent + declared false → 393 & N<3; same absent + declared true → 394; ensure a present-but-invalid seat returns its 385–392 code, NOT 394/393 (precedence). Commit.
 
-## Task 5 — pure core: dispatch + frozen spine
+## Task 5 — pure core: dispatch + frozen spine (G-A/G-B fixed)
 
-`core/dispatch.mjs dispatchVtcQuorum(bundle, facts, run5lCore)`:
-1. schema-version check → non-`.v2` handled (v1 routed to 5L unchanged — `v1Unreinterpreted`).
-2. project bundle onto **5L `vtc_quorum` profile** (G2); `const c = run5lCore(projection); if (c!==0) return c;` (frozenCorePreserved).
-3. `checkV2Schema` (384) → `checkRekorSeat` (385–390) → `checkCrossSeat` (391) → `checkDistinctEcologies` (392) → `checkState` (394 then 393) → 0.
-Wrap the whole call so an internal throw yields **395** (outer boundary, never masks a derived code).
-`vtcQuorumCore.mjs` composes these as the exported frozen spine. Tests: full order table; v1 bundle verdict == its 5L verdict; a 5L-core nonzero (e.g. pending OTS → 372) short-circuits. Commit.
+`core/dispatch.mjs`:
+- **`projectToFiveL(bundle)`** — pure transform producing a 5L-shaped bundle: keep `bundle.anchors` (the two frozen anchors `rfc3161_tsa` + `bitcoin_ots`) **unchanged**; set `quorum_policy.profile = 'vtc_quorum'`; **drop every v2-only top-level field** (`transparency_log_seat`, v2 reserved slots, v2 profile marker). The Rekor seat is NEVER in `bundle.anchors` (G-A), so `dedupedDomains`/`371`/`372`/`verifiedAnchorSetDigest` are byte-identical to a standalone 5L bundle.
+- **`dispatchVtcQuorum(bundle, facts5L, facts5M, keys, {tier})`**:
+  1. schema-version check → non-`.v2` routed to `vtcqVerify` unchanged (`v1Unreinterpreted`).
+  2. `const projected = projectToFiveL(bundle); const cfg5L = { profile: 'vtc_quorum', ...accuracy_policy_s };`
+     `const c = vtcqVerify(projected, cfg5L, facts5L, {tier}); if (c.code !== 0) return c;` (frozenCorePreserved; a 5L `383` propagates unchanged — G-E).
+  3. Extension inside a `try` that yields **395** on throw (outer boundary only over the extension, never masks a derived code — G-E):
+     `checkV2Schema` (384) → `checkRekorSeat(facts5M)` (385–390) → `checkCrossSeat(facts5M)` (391) → `checkDistinctEcologies(facts5M)` (392) → `checkState(facts5M)` (394 then 393) → 0.
+`vtcQuorumCore.mjs` composes these as the exported frozen spine.
+**Tests:** full order table; **projection-equivalence — `projectToFiveL(v2bundle)` verified by `vtcqVerify` gives byte-identical verdict to the equivalent standalone 5L bundle** (frozenCorePreserved, the G-A guard); a v2 anchor added/removed does NOT change the projected 5L verdict; a 5L-core nonzero (pending OTS → 372) short-circuits before 384; v1 bundle verdict == its 5L verdict. Commit.
 
 ## Task 6 — node adapter: real crypto (ports the gate verifier)
 
@@ -105,7 +116,12 @@ Wrap the whole call so an internal throw yields **395** (outer boundary, never m
 - `verifyCheckpointNote(checkpoint, rekorPubKey)` → parse note, ECDSA-verify sig over `body+'\n'`, assert size line == treeSize and root line == rootHash.
 - `verifySet(canonEntry, setDer, rekorPubKey)`.
 - `verifySubmitter(anchorBytes, sigDer, entryPubKey)`.
-`node/facts.mjs makeVtcQuorumFacts(bundle, pinned)`: recompute all of the above, assert `shard_leaf_index<tree_size` and `checkpoint_size===tree_size`, produce the injected-facts object (booleans + values the core consumes). `node/verify.mjs verifyVtcQuorum(bundle,pinned)=dispatchVtcQuorum(bundle, makeVtcQuorumFacts(...), run5lCore)`.
+`node/facts.mjs makeVtcQuorumFacts(bundle, pinned)`: recompute all of the above **for the Rekor seat only** (facts5M), assert `shard_leaf_index<tree_size` and `checkpoint_size===tree_size`, produce the extension injected-facts object. `node/verify.mjs verifyVtcQuorum(bundle, pinned, keys, {tier})`:
+```
+const facts5L = makeVtcqFacts(projectToFiveL(bundle), { profile:'vtc_quorum', ... }, keys); // REUSE 5L adapter (G-B)
+const facts5M = makeVtcQuorumFacts(bundle, pinned);
+return dispatchVtcQuorum(bundle, facts5L, facts5M, keys, { tier });
+```
 Test against the **real Lane B packet**: verdict 0, state confirmed, N=3, externally_anchored true. Negative controls (tamper anchor→386, flip inclusion hash→387, corrupt SET→389, logIndex=treeSize→387 `log_index_out_of_range`, wrong expected_submitter→390). Commit.
 
 ## Task 7 — attestation + in-toto predicate (I-B)
@@ -116,9 +132,13 @@ Test against the **real Lane B packet**: verdict 0, state confirmed, N=3, extern
 
 `node/buildEvidence.mjs` builds `evidence/stage-5m/lane-a/` synthetic bundles (fixture keys) exercising **every** 384–395 + all three states; `cmp` twice for byte-idempotence. `verifyAttestation.mjs` two-tier CLI. Tests: build is deterministic; each fixture yields its target code. Commit.
 
-## Task 9 — Lane B real offline CI gate
+## Task 9 — Lane B real offline CI gate (G-G: the integration that banks externally_anchored)
 
-Wire the frozen real packet into `evidence/stage-5m/real-laneb/` (Rekor packet + manifest `898fc09e…`, reuse 5L DigiCert token + confirmed OTS). CI gate = **digest pin + full offline Node recompute** → 0/confirmed/N=3/anchored, run on any 5M verifier/adapter/schema/trust-root/evidence change. Real Ed25519 attestation (public key + fpr committed; private key never). Test asserts the gate result and that the committed signature verifies. Commit.
+**Crux (verified: 5L Lane B has NO checkpoint witness; `vtc_quorum` needs `required_confirmed_publication`).** For the 5L core to return `computedFinality='confirmed'` (else it returns 372 and nothing banks), construct a **signed checkpoint witness** for the OTS seat, offline, no live Bitcoin node (matches 5L design + honest bound):
+- `checkpoint_evidence = { block_height: 957689, block_hash: '00000000…fe521', observed_tip_height, min_confirmations, witness_key_fingerprint }` with `observed_tip_height - 957689 + 1 >= min_confirmations`, and a **real witness Ed25519 signature** over it; `witness_key_fingerprint ∈ bundle.anchor_policy.accepted_checkpoint_witness_keys`; `otsState='verified_immediate'`.
+- The witness key is a **real stage key** (public key + fpr committed; private never). `min_confirmations` and `observed_tip_height` are pinned honestly (the tip we observed via the mempool.space cross-check); do not fabricate a deeper confirmation count than observed.
+
+Then wire the full v2 bundle into `evidence/stage-5m/real-laneb/`: two frozen anchors (DigiCert TSA + `bitcoin_ots` with the confirmed checkpoint_evidence) in `bundle.anchors`, the Rekor packet in `bundle.transparency_log_seat`, manifest `898fc09e…`. CI gate = **digest pin + full offline Node recompute** (`verifyVtcQuorum`) → verdict **0 / confirmed / N=3 / externally_anchored=true**, run on any 5M verifier/adapter/schema/trust-root/evidence change. Real Ed25519 **attestation** (public key + fpr committed; private never). Tests assert: the gate result; the committed attestation + witness signatures verify; **and a negative — drop the checkpoint witness → 5L core 372 → NOT anchored** (proves the witness is load-bearing, not decorative). Commit.
 
 ## Task 10 — Python parity + Lane D + browser
 
