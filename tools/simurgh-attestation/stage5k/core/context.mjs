@@ -43,6 +43,23 @@ export function makeCtx(bundle, cfg, facts = {}) {
 
   ctx.partition_digest = partition_digest;
   ctx.sectionById = sectionById;
+  // coverage relation C(r): reviewer fingerprint → sorted covered sections; producer identity.
+  ctx.coverageByFp = new Map(
+    safe(
+      () =>
+        vpc.coverage_receipts.map((c) => [
+          c.content.reviewer_principal.key_fingerprint,
+          [...c.content.evaluated_sections].sort(),
+        ]),
+      []
+    )
+  );
+  ctx.reviewerFps = [...ctx.coverageByFp.keys()].sort();
+  ctx.producerFp = safe(() => vpc.partition.content.producer_principal.key_fingerprint, null);
+  ctx.producerIdentityDigest = safe(
+    () => vpc.partition.content.producer_principal.producer_identity_digest,
+    null
+  );
   ctx.U_commit = bundle.universe_commitment.leaves.map((l) => ({
     leaf_id: l.leaf_id,
     leaf_type: l.leaf_type,

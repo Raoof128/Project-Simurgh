@@ -11,8 +11,11 @@ import { signContent } from "../core/signatures.mjs";
 import { domainDigest, artifactDigest } from "../core/digests.mjs";
 import { leafHash, merkleRoot, buildInclusion, encodeDigest } from "../core/merkle.mjs";
 import { projectSection } from "../core/projection.mjs";
+import { computeProjections } from "../core/projections.mjs";
+import { makeCtx } from "../core/context.mjs";
 import { DOMAINS, POLICY_PROFILES } from "../constants.mjs";
 import { vucLaneKeys } from "./laneKeys.mjs";
+import { makeAdapterFacts } from "./adapter.mjs";
 
 const H = (o) => artifactDigest(o);
 const bySort = (a, b) => (a.leaf_id < b.leaf_id ? -1 : a.leaf_id > b.leaf_id ? 1 : 0);
@@ -91,7 +94,11 @@ export function buildSignedVucBundle(
     independence_claim: "none_fixture_only",
     subject_digest: universe_commitment_digest,
     receipt_digest: ordering_receipt_digest,
-    evidence: { commitment_session_id, sequencer: keys.sequencer.id.key_fingerprint },
+    evidence: {
+      commitment_session_id,
+      campaign_nonce,
+      sequencer: keys.sequencer.id.key_fingerprint,
+    },
   };
   // ceremony_id formed AFTER ordering exists.
   const ceremony_id = H({
@@ -310,7 +317,12 @@ export function buildSignedVucBundle(
     vpc_external_config,
     vrc_bundle,
     vrc_external_config: vrc_cfg,
+    prior_vuc_bundle: null,
   };
+
+  // Attach the audit-tier projections (recomputed + compared at 361).
+  const facts = makeAdapterFacts(bundle, cfg);
+  bundle.projections = computeProjections(makeCtx(bundle, cfg, facts));
 
   return { bundle, cfg, keys };
 }
