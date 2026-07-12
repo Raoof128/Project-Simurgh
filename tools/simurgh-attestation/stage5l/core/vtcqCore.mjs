@@ -15,6 +15,7 @@ import { checkWindowCoherence } from "./window.mjs";
 import { checkReceipt } from "./receipt.mjs";
 import { checkCapabilityDerivation, checkCapabilityStructure } from "./capability.mjs";
 import { checkReleaseBinding, checkReleaseCensus, checkAnchorOmission } from "./release.mjs";
+import { checkProjections } from "./projections.mjs";
 import { checkReservedSlots } from "./policy.mjs";
 
 export function vtcqVerify(bundle, cfg, facts, { tier = "public" } = {}) {
@@ -47,7 +48,8 @@ export function vtcqVerify(bundle, cfg, facts, { tier = "public" } = {}) {
       if (r) return r;
     }
     if (tier === "audit") {
-      // 381 projections wired in Task 1.10
+      const p = checkProjections(ctx); // 381 audit-only
+      if (p) return p;
     }
     const pol = checkReservedSlots(ctx); // 382
     if (pol) return pol;
