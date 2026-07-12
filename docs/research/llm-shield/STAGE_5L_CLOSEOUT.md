@@ -55,8 +55,14 @@ min_confirmations`) — no live node; witness-less path is honestly `pinned_chec
   **and** a confirmed Bitcoin PoW publication (a genuine _heterogeneous_ quorum), independently reproduced.
   **But `externally_anchored` is STILL NOT banked in the verifier:** the automated `vtcqVerify` has not yet
   consumed a real `vtc_quorum_confirmed` bundle wiring the real DigiCert token (genTime via the OpenSSL
-  path, `accuracy_s` pinned) + a real confirmed checkpoint. That integration + **Lane C-adv** (live
-  Fable-5, CVP) are what remain. VTC-Q still ships as **VTC-Core**.
+  path, `accuracy_s` pinned) + a real confirmed checkpoint. That integration is what remains to ship
+  **VTC-Quorum**.
+- **Lane C-adv — EXECUTED 2026-07-12, live Fable-5 REFUSED.** Live `claude-fable-5` (CVP-approved org) was
+  tasked as an adversarial gerrymandering producer to craft bundle mutations bypassing a VTC-Q law. It
+  **refused** (`stop_reason=refusal`, empty content, 4 output tokens) — recorded honestly, not retried
+  (same discipline + result as 4U). Evidence: `evidence/stage-5l/real-lanec/`. A refusal is a real capture
+  outcome, not a containment demo; the verifier's containment of these attacks is proven separately by the
+  K7 tamper matrix. Does NOT bank `externally_anchored`.
 - Full RFC-3161 CMS/X.509 is the adapter's job (OpenSSL-backed, Lane B); the pure core takes the signed
   `tsa_crypto_attestation` as a fact (the 5I/5K B11 pattern).
 
