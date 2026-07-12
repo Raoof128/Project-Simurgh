@@ -28,7 +28,12 @@ network, so an outside reviewer can confirm a real containment claim and **falsi
 one**. The threat model is a **dishonest producer**: an operator who wants to look contained. That
 offline-falsifiable stance is the core difference from receipt-only logging.
 
-## Latest: Stage 4Q — verifiable friction receipts
+## An example rung: Stage 4Q — verifiable friction receipts
+
+_The ladder now runs to **Stage 5L (`v2.47.0`)** — a machine-checkable proof that the evaluation scope was
+committed **before** review, anchored in a real Bitcoin block (957 689) and stress-tested by a live
+Claude Sonnet-5 adversary that could not break it. Stage 4Q below is one earlier rung, kept because it
+reproduces cleanly and shows the pattern._
 
 The same signed-evidence spine now attests **agent oversight**, not just containment. Stage 4Q
 (`v2.26.0-stage-4q-vfr`) produces a signed, epoch-bound, ordered proof that an **approval-gate
