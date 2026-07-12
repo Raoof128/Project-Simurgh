@@ -75,7 +75,7 @@ Stage 5M ships as a **new `stage5m/` module** that imports and reuses the frozen
 | **388** | Authenticated checkpoint / pinned log identity invalid | `checkpoint_root_mismatch`, `checkpoint_tree_size_mismatch`, `checkpoint_signature_invalid`, `checkpoint_note_malformed`, `checkpoint_log_key_unpinned`, `checkpoint_log_identity_mismatch` |
 | **389** | SET (`signedEntryTimestamp`) invalid vs pinned Rekor key | — |
 | **390** | Submitter authenticity / expected key binding fails (entry otherwise log-valid) | `submitter_signature_invalid`, `submitter_public_key_malformed`, `submitter_key_algorithm_mismatch`, `submitter_key_fingerprint_mismatch`, `expected_submitter_key_binding_failed` |
-| **391** | Exact cross-seat anchor disagreement — checks **both binding levels** (G3): `parse(anchor_artifact) == commitment_digest == TSA.messageImprint` **and** `sha256(anchor_artifact) == OTS.target == Rekor.artifact_hash` | — |
+| **391** | Exact cross-seat anchor disagreement — two declared representations resolving to one commitment (G3, corrected for the frozen 5L OTS contract): `hexDecode(canonical_anchor) == commitment_digest == TSA.messageImprint == **OTS.leaf**` (TSA+OTS bind the digest **directly** — 5L `365` requires `ots_leaf_hex == commitment`) **and** `sha256(canonical_anchor_bytes) == Rekor.artifact_hash` (Rekor binds the hex-encoding) | — |
 | **392** | Counterfeit ecology: seats not three verifier-derived distinct trust ecologies (aliasing) | — |
 | **394** | `externally_anchored` declared over an **otherwise-honest** incomplete state | — |
 | **393** | `third_trust_ecology` **incomplete** — a required seat absent (honest floor) | — |
@@ -84,6 +84,14 @@ Stage 5M ships as a **new `stage5m/` module** that imports and reuses the frozen
 `388` deliberately folds checkpoint-root / size / signature / note / pinned-key / log-identity into one semantic class (_"the claimed authenticated tree state is not valid for this proof under the pinned log identity"_); the enum gives reviewers teeth without inflating the raw ledger. Same for `387`. `390` under this profile emits **only** key-binding reasons — no Fulcio/certificate-subject/OIDC reasons (those become live only under I7).
 
 **Pinned inputs (adapter inputs, not derived from the entry).** The verifier's pinned set is `{ tsa_root, bitcoin_checkpoint, rekor_log_pubkey, expected_submitter_key }`. `expected_submitter_key` is an **independent** pinned input (G6): `390` compares the entry's submitter key to this pin, so the check is not vacuous (it never checks the entry against itself). Seat-*absent* vs seat-*present-but-invalid* is the discriminator between the honest floor `393` and the specific seat codes `385–390`.
+
+### Resolved capture model (post plan-gauntlet P0-1/P0-2, verified against `adapter.mjs`/`commitment.mjs`)
+
+- **OTS binds the commitment directly:** the OTS proof is stamped over the raw commitment digest `D` (leaf = `D`), because 5L `365` requires `ots_leaf_hex === commitmentDigestHex`. Stamping the anchor-file (sha256 ≠ `D`) fails closed. Rekor binds `sha256(hex(D))`; TSA imprint = `D`.
+- **Checkpoint witness = the TSA-verifier identity** (`adapter.mjs:70` verifies with `tsaVerId`), fingerprint **precommitted** in `anchor_policy.accepted_checkpoint_witness_keys` (digested into the commitment). No separate witness key.
+- **Lane B is a fresh capture ceremony** over a new commitment `D` (the original `3ee8…` `anchor_policy` is not retained and could not have precommitted our witness). OTS tooling: `py-opentimestamps from_hash`.
+- **Two-level state:** `computed_ecology_state ∈ {confirmed, incomplete}` distinct from `outcome_class ∈ {ecology_confirmed, ecology_incomplete, false_anchored}`; exact fields used in core, attestation, Lean.
+- **Transparency-log seat is schema-OPTIONAL:** absence is valid (`seat_present=false`; Rekor checks skip) so the honest `393` state is reachable; present-but-malformed seat → `384`; valid outer seat + malformed Rekor body → `385`.
 
 ### Three computed states (state contract)
 
