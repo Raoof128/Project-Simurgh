@@ -10,6 +10,7 @@ import { R, OK } from "./result.mjs";
 import { checkBundleSchema, checkConfigSchema } from "./schema.mjs";
 import { makeCtx } from "./context.mjs";
 import { checkObligation } from "./checks333to341.mjs";
+import { checkChains } from "./chains.mjs";
 
 export function vrcVerify(bundle, cfg, facts, { tier = "public" } = {}) {
   const b332 = checkBundleSchema(bundle);
@@ -22,7 +23,8 @@ export function vrcVerify(bundle, cfg, facts, { tier = "public" } = {}) {
     const steps = [
       () => ctx.anchorMismatch, // 333
       () => checkObligation(ctx), // 334, 335, 336
-      // 337–344 appended by Tasks 1.6–1.10
+      () => checkChains(ctx), // 337
+      // 338–344 appended by Tasks 1.7–1.10
     ];
     for (const s of steps) {
       const r = s();
