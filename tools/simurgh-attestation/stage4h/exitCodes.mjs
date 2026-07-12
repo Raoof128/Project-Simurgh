@@ -975,6 +975,38 @@ export const VPC_AUDIT_CHECK_ORDER = Object.freeze([
 export const VPC_AUDIT_ONLY_CODES = Object.freeze([329]);
 export const VPC_POLICY_CODES = Object.freeze([330]);
 
+// Stage 5J — VRC: Verifiable Rating Contest. Additive codes 332–347. Exact rating-obligation equality
+// over the verified 5I coverage relation (reviewer pairs = C(r) AND producer sections = S), append-only
+// contest events, No Silent Favourable Override. Public first-failure 332→344; audit adds projection
+// recompute 345; policy 346 + wrapper 347 applied OUTSIDE the ordered scan (house convention, cf. VPC_*).
+export const VRC_RAW_CODES = Object.freeze({
+  OK: 0,
+  VRC_SCHEMA_INVALID: 332, // bundle OR cfg structural form
+  VRC_VPC_ANCHOR_MISMATCH: 333, // vpc_ref/producer_ref ≠ re-verified 5I bundle, or upstream unverified
+  VRC_OBLIGATION_ROOT_MISMATCH: 334, // reviewer pairs = C(r) AND producer sections = S
+  VRC_REQUIRED_RATING_MISSING: 335, // reviewer pair or producer section
+  VRC_ORPHAN_RATING: 336, // out-of-panel / out-of-universe / non-required subject
+  VRC_CHAIN_TOPOLOGY_INVALID: 337, // fork/cycle/detached/cross-subject/≠1 head/bad-or-forged epoch chain
+  VRC_RATING_SCALE_INVALID: 338, // unsigned / rating_scale_digest mismatch across compared entries
+  VRC_COMPARISON_NON_CANONICAL: 339, // ordinal comparison attempted on a non_comparable pair
+  VRC_REVIEWER_RATING_SIGNATURE_INVALID: 340, // any reviewer-chain entry (head or superseded)
+  VRC_PRODUCER_RATING_SIGNATURE_INVALID: 341, // any producer-chain entry (head or superseded)
+  VRC_UNANSWERED_CONTEST_EVENT: 342, // census mismatch OR required event has no response — headline
+  VRC_RESPONSE_RECEIPT_INVALID: 343, // present-but-invalid: sig/binding/uniqueness/subject/epoch/replay
+  VRC_PHANTOM_REVIEWER_STATEMENT: 344, // concurrence OR rebuttal w/o valid reviewer sig, or both asserted
+  VRC_PROJECTION_MISMATCH: 345, // audit-only (census/skew/downgrade-depth/concurrence-backing/bridge)
+  VRC_RESERVED_SLOT_ACTIVATED: 346, // policy — non-null reserved branch under current schema_version
+  INTERNAL_OR_ENV_UNAVAILABLE_VRC: 347, // fail-closed wrapper
+});
+export const VRC_PUBLIC_CHECK_ORDER = Object.freeze([
+  332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344,
+]);
+export const VRC_AUDIT_CHECK_ORDER = Object.freeze([
+  332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 345,
+]);
+export const VRC_AUDIT_ONLY_CODES = Object.freeze([345]);
+export const VRC_POLICY_CODES = Object.freeze([346]);
+
 export const HARNESS_CODES = Object.freeze({
   CLEAN_RUN_FALSELY_REJECTED: 19,
 });
@@ -1317,6 +1349,24 @@ export const RUN_LEVEL_BY_RAW = Object.freeze({
   329: 1,
   330: 1,
   331: 1,
+  // Stage 5J VRC (332–347): every code is a run-level-1 attestation rejection (incl. wrapper 347,
+  // matching per-stage wrappers 331/315/299/…; only 4H's raw 29 and truly-unknown codes are 3).
+  332: 1,
+  333: 1,
+  334: 1,
+  335: 1,
+  336: 1,
+  337: 1,
+  338: 1,
+  339: 1,
+  340: 1,
+  341: 1,
+  342: 1,
+  343: 1,
+  344: 1,
+  345: 1,
+  346: 1,
+  347: 1,
 });
 
 export function stage4CodeForRawCode(code) {
