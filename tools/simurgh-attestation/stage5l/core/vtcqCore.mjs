@@ -11,6 +11,10 @@ import { checkCommitment } from "./commitment.mjs";
 import { checkTsaParse, checkTsaCrypto, checkTsaValidity, checkTsaAccuracy } from "./tsa.mjs";
 import { checkOtsStructural, checkFinalityOverclaim } from "./ots.mjs";
 import { checkIndependenceInflation, checkProfileFloor } from "./quorum.mjs";
+import { checkWindowCoherence } from "./window.mjs";
+import { checkReceipt } from "./receipt.mjs";
+import { checkCapabilityDerivation, checkCapabilityStructure } from "./capability.mjs";
+import { checkReleaseBinding, checkReleaseCensus, checkAnchorOmission } from "./release.mjs";
 import { checkReservedSlots } from "./policy.mjs";
 
 export function vtcqVerify(bundle, cfg, facts, { tier = "public" } = {}) {
@@ -30,7 +34,13 @@ export function vtcqVerify(bundle, cfg, facts, { tier = "public" } = {}) {
       () => checkFinalityOverclaim(ctx), // 380
       () => checkIndependenceInflation(ctx), // 371
       () => checkProfileFloor(ctx), // 372
-      // 374 → 375 → 373 → 376 → 377 → 378 → 379 (Task group 1, frozen spine)
+      () => checkWindowCoherence(ctx), // 374
+      () => checkReceipt(ctx), // 375 (before 373)
+      () => checkCapabilityDerivation(ctx), // 373
+      () => checkCapabilityStructure(ctx), // 376
+      () => checkReleaseBinding(ctx), // 377
+      () => checkReleaseCensus(ctx), // 378
+      () => checkAnchorOmission(ctx), // 379
     ];
     for (const s of steps) {
       const r = s();

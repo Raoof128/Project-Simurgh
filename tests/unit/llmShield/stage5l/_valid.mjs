@@ -19,13 +19,18 @@ const TSA_VERIFIER_FP = "fp:tsaverifier";
 const NONCE = "issuance-nonce-1";
 
 // Build a valid VTC-Q bundle for a profile ("vtc_core" | "vtc_quorum") + finality ("pending"|"confirmed").
-export function validBundle({ profile = "vtc_core", finality = "confirmed" } = {}) {
+export function validBundle({
+  profile = "vtc_core",
+  finality = "confirmed",
+  reviewWindow,
+  trustDomainRegistry,
+} = {}) {
   const campaign_id = "vtcq-campaign-1";
   const vuc_root = "sha256:vuc-root";
   const tsa_token_digest = "sha256:tsa-token";
   const ots_proof_digest = "sha256:ots-proof";
 
-  const review_window = {
+  const review_window = reviewWindow ?? {
     window_open_not_before: 2000,
     window_close_after: 9000,
     required_anchor_profile: profile,
@@ -41,7 +46,7 @@ export function validBundle({ profile = "vtc_core", finality = "confirmed" } = {
     required_confirmed_publication: profile === "vtc_quorum",
   };
   const withOts = profile === "vtc_quorum";
-  const trust_domain_registry = withOts ? ["tsa-x", "ots-y"] : ["tsa-x"];
+  const trust_domain_registry = trustDomainRegistry ?? (withOts ? ["tsa-x", "ots-y"] : ["tsa-x"]);
   const declared_release_surface = [
     { endpoint_id: "reviewer-a", release_ordinal: 0, audience_digest: "sha256:aud-a" },
   ];
@@ -168,6 +173,7 @@ export function validBundle({ profile = "vtc_core", finality = "confirmed" } = {
     profile,
     policy_digest: "sha256:policy",
     accuracy_policy_s: 2,
+    tsa_verifier_public_key_fingerprint: TSA_VERIFIER_FP, // pinned out-of-band; 375 recomputes gate identity
   };
 
   const commitment_digest_hex = commitment_session_id.slice("sha256:".length);
