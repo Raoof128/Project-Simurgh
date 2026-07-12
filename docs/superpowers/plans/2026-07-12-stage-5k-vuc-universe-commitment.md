@@ -30,9 +30,9 @@
 - **All digests** via the SHARED `tools/simurgh-attestation/canonicalise.mjs` (`canonicalJson`,
   `sha256Hex`) — never a stage-local hash copy (byte-parity across JS/Python/browser depends on it).
 - **Merkle-set profile `simurgh.vuc.merkle_set.v1` is frozen** (spec §2). `leaf_hash =
-  SHA256(UTF8("simurgh.vuc.leaf.v1") || 0x00 || UTF8(canonicalJson(leaf_payload)))`; `node_hash =
-  SHA256(UTF8("simurgh.vuc.node.v1") || 0x00 || left_hash_bytes || right_hash_bytes)`; `leaf_payload =
-  {leaf_id, leaf_type, subject_digest}`; **odd final node promoted UNCHANGED** (RFC-6962 style). Hash
+SHA256(UTF8("simurgh.vuc.leaf.v1") || 0x00 || UTF8(canonicalJson(leaf_payload)))`; `node_hash =
+SHA256(UTF8("simurgh.vuc.node.v1") || 0x00 || left_hash_bytes || right_hash_bytes)`; `leaf_payload =
+{leaf_id, leaf_type, subject_digest}`; **odd final node promoted UNCHANGED** (RFC-6962 style). Hash
   bytes are the raw 32-byte digests concatenated, NOT hex strings. SHA-256 only. **NFC-reject** (never
   silent-normalize). **Leaf ordering key = the leaf's `leaf_id` compared as raw UTF-8 bytes**
   (`Buffer.compare` in JS, `.encode("utf-8")` byte order in Python); leaves are sorted by this key BEFORE
@@ -47,7 +47,7 @@
   **independently per component** (`U_commit = U_vpc` AND `U_commit = U_vrc`) — **never through a
   union** (a union `U_vpc ∪ U_vrc = U_commit` launders a gap; it is a modelled REJECTED counterexample).
 - **`subject_digest = H("simurgh.vuc.section_subject.v1", {partition_digest, section_id, canonical_path,
-  redaction_types})`** — `section_id` is IN the subject, so two sections with an equal `canonical_path`
+redaction_types})`** — `section_id` is IN the subject, so two sections with an equal `canonical_path`
   are NOT aliases. Alias detection (359) = duplicate canonical id OR duplicate subject OR >1 mapping.
 - **Two-axis anchor state machine** (adapter-derived, offline from bundled receipts):
   `ordering_evidence_state ∈ {verified_immediate, pending_unverified, invalid}` (raw-pending OTS →
@@ -63,7 +63,7 @@
   EXCLUDED from the census (surfaces as a 361 audit mismatch), it NEVER causes a public-tier failure.
   It does not change the raw-0 verdict.
 - **`prior_universe_ref` is optional** (`null | {vuc_bundle_digest, universe_commitment_digest,
-  ordering_receipt_digest}`); the referenced prior VUC bundle is supplied in cfg and RE-VERIFIED, then the
+ordering_receipt_digest}`); the referenced prior VUC bundle is supplied in cfg and RE-VERIFIED, then the
   `regression_census` (audit 361) reports leaves dropped vs its derived set. Absent input → empty census,
   not a fault. A bare digest cannot reveal dropped leaves (Review-v2 rule 13).
 - **Reserved slots are structural unions** `null | reserved_anchor_object`; a non-null branch under the
@@ -90,7 +90,7 @@ binding. Where an older task snippet below conflicts, THIS block wins:
    `UNKNOWN_RAW_PROBE`, never a bare `999`.
 2. **No `ceremony_id` cycle.** `commitment_session_id = H(universe_commitment_digest, campaign_nonce)` is
    signed into `producer_commitment_statement` **pre-anchor**; `ceremony_id = H(universe_commitment_digest,
-   ordering_receipt_digest, campaign_nonce)` is formed **after** ordering and carried by challenges / starts
+ordering_receipt_digest, campaign_nonce)` is formed **after** ordering and carried by challenges / starts
    / bindings. 349 verifies the session id; 353/354 cross-check the ceremony id against the verified receipt.
 3. **Reuse the 5I/5J producer key for the commitment** (no separate `producer-commitment` key in v1 — a
    distinct key needs a signed `key_delegation` object under 349, deferred). laneKeys = producer (reused),
@@ -133,9 +133,9 @@ binding. Where an older task snippet below conflicts, THIS block wins:
     exhaustiveness.
 16. **Parity covers the full deterministic matrix 348–362** (Tasks 5/6): a shared
     `tests/fixtures/llmShield/stage5k/parity-vectors/` manifest (raw 0 + every reachable deterministic code
-    + the public/audit 361 split + commitment/Merkle/projection/set digests), Node ↔ Python agree on all;
-    browser agrees over its supported surface. The browser is a **WebCrypto reimplementation** of the
-    deterministic surface proven by vectors — NOT a direct import of the `node:crypto`/`Buffer` core.
+    - the public/audit 361 split + commitment/Merkle/projection/set digests), Node ↔ Python agree on all;
+      browser agrees over its supported surface. The browser is a **WebCrypto reimplementation** of the
+      deterministic surface proven by vectors — NOT a direct import of the `node:crypto`/`Buffer` core.
 17. **Set-law (357/358) reachability is honest.** Under the REAL adapter a VRC-only or VPC-only divergence
     normally fails earlier (352/upstream), so do NOT promise real-adapter K7 arms for every per-component
     case. Prove the independent branches with **pure-core unit tests over injected, internally-consistent
@@ -167,11 +167,11 @@ binding. Where an older task snippet below conflicts, THIS block wins:
   5. `tests/unit/llmShield/stage4h/exitWrapper.test.js`
   6. `tests/unit/llmShield/stage4h/closeout.test.js`
   7. `tests/unit/llmShield/stage4h/reproduce.test.js`
-  Regenerate the two goldens with `tools/simurgh-attestation/stage4h/build-stage4h-digest-fixtures.mjs`
-  (Node 26) — do NOT hand-edit. **The 4H digest builder is non-hermetic in this env**: it churns ~17
-  unrelated fixtures even on a clean tree. Run it on a clean tree, then `git add` ONLY the two
-  `exit-map.json` diffs and revert the rest (`git checkout -- <the others>`). Golden lock: both
-  exit-maps must carry 348–363 → 1.
+     Regenerate the two goldens with `tools/simurgh-attestation/stage4h/build-stage4h-digest-fixtures.mjs`
+     (Node 26) — do NOT hand-edit. **The 4H digest builder is non-hermetic in this env**: it churns ~17
+     unrelated fixtures even on a clean tree. Run it on a clean tree, then `git add` ONLY the two
+     `exit-map.json` diffs and revert the rest (`git checkout -- <the others>`). Golden lock: both
+     exit-maps must carry 348–363 → 1.
 - `resign()` / signing helpers MUTATE; `structuredClone` before tampering a fixture (fixture aliasing
   bit 5I and again 5J). `_validBundle()` MUST return `structuredClone(...)`.
 - Compare recomputes with `canonicalJson(a) === canonicalJson(b)`, never `===` on objects.
@@ -209,7 +209,7 @@ binding. Where an older task snippet below conflicts, THIS block wins:
   `checkVerificationContext(ctx)`: recompute the six evidence roots + `policy_digest`, validate pinned
   keys/checkpoints, bind the digest into the bundle and BOTH attestations. Caller booleans never define it.
 - `projection.mjs` — `sectionSubjectDigest({partition_digest, section_id, canonical_path,
-  redaction_types})`; `projectSection(section, partition_digest) → {leaf_id, leaf_type, subject_digest}`;
+redaction_types})`; `projectSection(section, partition_digest) → {leaf_id, leaf_type, subject_digest}`;
   `universeSetDigest(leaves)` (canonical set digest for parity comparison).
 - `schema.mjs` — `checkBundleSchema(bundle) → 348 | null` AND `checkConfigSchema(cfg) → 348 | null`
   (two TOTAL functions, both catch parse/canonical failures and RETURN 348, never throw): shape,
@@ -263,14 +263,14 @@ binding. Where an older task snippet below conflicts, THIS block wins:
   Task 1.2.)
 - `buildSignedBundle.mjs` — mint a SYNTHETIC 5I VPC bundle AND a SYNTHETIC 5J VRC bundle over ONE shared
   `SECTIONS` source (the 5I/5J BUILDERS as code, never a shipped artifact), then build a valid `vuc_bundle`
-  + external-config over them so `U_commit=U_vpc=U_vrc` by construction. (Seeded Task 1.2; widened + emits
-  attestations in Task 2.2.)
+  - external-config over them so `U_commit=U_vpc=U_vrc` by construction. (Seeded Task 1.2; widened + emits
+    attestations in Task 2.2.)
 - `build-vuc-evidence.mjs` — `buildLaneAEvidence(dir)`: write `bundle.json`, `external-config.json`,
   `public-attestation.json`, `audit-attestation.json` (byte-stable).
 - `verify-vuc-attestation.mjs` — CLI (`--tier public|audit`, optional dir arg); handles absolute-path dir.
 - `verify-byte-stability.mjs` — build twice into temp dirs, assert every file byte-identical (copy 5J).
 - `lanec-gate.mjs` — `evaluateCampaign(pack) → {campaign_state, ordering_state, finality_state,
-  sigstore_chip_state, rung}` (copy 5J shape).
+sigstore_chip_state, rung}` (copy 5J shape).
 - `attach-anchor.mjs` — attach a real Sigstore/Rekor anchor + recompute rung (copy 5J).
 - `verify-witness.mjs` — run `ots verify` on the finality receipt; map to `anchor_finality_state`.
 
@@ -397,17 +397,22 @@ test("VUC codes are OK:0 + the contiguous 348..363 block", () => {
   const allocated = Object.values(VUC_RAW_CODES)
     .filter((n) => n !== 0)
     .sort((a, b) => a - b);
-  assert.deepEqual(allocated, Array.from({ length: 16 }, (_, i) => 348 + i));
+  assert.deepEqual(
+    allocated,
+    Array.from({ length: 16 }, (_, i) => 348 + i)
+  );
   assert.equal(VUC_RAW_CODES.INTERNAL_OR_ENV_UNAVAILABLE_VUC, 363);
 });
 
 test("house partition: public 348..360+362, audit adds 361, policy 362, wrapper 363", () => {
-  assert.deepEqual(VUC_PUBLIC_CHECK_ORDER, [
-    348, 349, 350, 351, 352, 353, 354, 355, 356, 357, 358, 359, 360,
-  ]);
-  assert.deepEqual(VUC_AUDIT_CHECK_ORDER, [
-    348, 349, 350, 351, 352, 353, 354, 355, 356, 357, 358, 359, 360, 361,
-  ]);
+  assert.deepEqual(
+    VUC_PUBLIC_CHECK_ORDER,
+    [348, 349, 350, 351, 352, 353, 354, 355, 356, 357, 358, 359, 360]
+  );
+  assert.deepEqual(
+    VUC_AUDIT_CHECK_ORDER,
+    [348, 349, 350, 351, 352, 353, 354, 355, 356, 357, 358, 359, 360, 361]
+  );
   assert.deepEqual(VUC_AUDIT_ONLY_CODES, [361]);
   assert.deepEqual(VUC_POLICY_CODES, [362]);
 });
@@ -476,7 +481,8 @@ test("both exit-map goldens carry 348..363 → 1", () => {
     "tests/fixtures/llmShield/stage4h/expected-results/exit-map.json",
   ]) {
     const m = JSON.parse(readFileSync(p, "utf8"));
-    for (let c = 348; c <= 363; c++) assert.equal(m[String(c)] ?? m.map?.[String(c)], 1, `${p}:${c}`);
+    for (let c = 348; c <= 363; c++)
+      assert.equal(m[String(c)] ?? m.map?.[String(c)], 1, `${p}:${c}`);
   }
 });
 ```
@@ -565,7 +571,11 @@ export function rungGte(a, b) {
 }
 
 export const POLICY_PROFILES = Object.freeze({
-  release: Object.freeze({ profile_id: "vuc-release-v1", min_leaves: 2, require_dual_equality: true }),
+  release: Object.freeze({
+    profile_id: "vuc-release-v1",
+    min_leaves: 2,
+    require_dual_equality: true,
+  }),
   test: Object.freeze({ profile_id: "vuc-test-v1", min_leaves: 1, require_dual_equality: true }),
 });
 ```
@@ -587,7 +597,7 @@ Run → green. Commit `feat(5k): VUC constants (domains, Merkle profile, G13 bel
 > 5I VPC bundle AND a synthetic 5J VRC bundle AND the VUC layer over **one shared `SECTIONS` source**, so
 > `U_commit = U_vpc = U_vrc` holds by construction — and `_validBundle.mjs` returns a `structuredClone` of
 > its raw-0 output. Every check task (1.3+) tampers that. `buildSignedBundle` + `laneKeys` are seeded here
-> and only *extended* in Task group 2 (evidence-pack writer, attestations, byte-stability). **Do NOT reuse
+> and only _extended_ in Task group 2 (evidence-pack writer, attestations, byte-stability). **Do NOT reuse
 > the committed 5J evidence bundle as upstream** — it embeds its own synthetic 5I, which will not match the
 > committed 5I partition and desyncs `U_vpc`/`U_vrc`; mint both fresh from the one `SECTIONS` source.
 
@@ -601,17 +611,41 @@ comment to 5K). Then:
 ```js
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { leafHash, nodeHash, merkleRoot, verifyInclusion, buildInclusion } from "../../../../tools/simurgh-attestation/stage5k/core/merkle.mjs";
+import {
+  leafHash,
+  nodeHash,
+  merkleRoot,
+  verifyInclusion,
+  buildInclusion,
+} from "../../../../tools/simurgh-attestation/stage5k/core/merkle.mjs";
 import { canonicalJson } from "../../../../tools/simurgh-attestation/canonicalise.mjs";
 import { createHash } from "node:crypto";
 
-const H = (...bufs) => { const h = createHash("sha256"); for (const b of bufs) h.update(b); return h.digest(); };
-const leaf = (i) => ({ leaf_id: `s${i}`, leaf_type: "vpc_section", subject_digest: `sha256:${i.toString().repeat(4)}` });
+const H = (...bufs) => {
+  const h = createHash("sha256");
+  for (const b of bufs) h.update(b);
+  return h.digest();
+};
+const leaf = (i) => ({
+  leaf_id: `s${i}`,
+  leaf_type: "vpc_section",
+  subject_digest: `sha256:${i.toString().repeat(4)}`,
+});
 
 test("leafHash is domain-framed over canonicalJson(leaf_payload)", () => {
   const lp = leaf(1);
-  const expect = H(Buffer.from("simurgh.vuc.leaf.v1", "utf8"), Buffer.from([0]),
-    Buffer.from(canonicalJson({ leaf_id: lp.leaf_id, leaf_type: lp.leaf_type, subject_digest: lp.subject_digest }), "utf8"));
+  const expect = H(
+    Buffer.from("simurgh.vuc.leaf.v1", "utf8"),
+    Buffer.from([0]),
+    Buffer.from(
+      canonicalJson({
+        leaf_id: lp.leaf_id,
+        leaf_type: lp.leaf_type,
+        subject_digest: lp.subject_digest,
+      }),
+      "utf8"
+    )
+  );
   assert.ok(leafHash(lp).equals(expect));
 });
 
@@ -634,15 +668,36 @@ for (let n = 1; n <= 9; n++) {
       const leafHex = "sha256:" + hashes[idx].toString("hex");
       assert.equal(verifyInclusion(proof, leafHex, rootHex), true, `size ${n} idx ${idx}`);
       // negative arms
-      assert.equal(verifyInclusion({ ...proof, leaf_index: (idx + 1) % n }, leafHex, rootHex), false); // wrong index
+      assert.equal(
+        verifyInclusion({ ...proof, leaf_index: (idx + 1) % n }, leafHex, rootHex),
+        false
+      ); // wrong index
       assert.equal(verifyInclusion({ ...proof, tree_size: n + 1 }, leafHex, rootHex), false); // wrong size
       if (proof.sibling_hashes.length) {
-        assert.equal(verifyInclusion({ ...proof, sibling_hashes: proof.sibling_hashes.slice(1) }, leafHex, rootHex), false); // missing sibling
-        assert.equal(verifyInclusion({ ...proof, sibling_hashes: [...proof.sibling_hashes, rootHex] }, leafHex, rootHex), false); // extra sibling
-        const bad = [...proof.sibling_hashes]; bad[0] = "sha256:" + "e".repeat(64);
+        assert.equal(
+          verifyInclusion(
+            { ...proof, sibling_hashes: proof.sibling_hashes.slice(1) },
+            leafHex,
+            rootHex
+          ),
+          false
+        ); // missing sibling
+        assert.equal(
+          verifyInclusion(
+            { ...proof, sibling_hashes: [...proof.sibling_hashes, rootHex] },
+            leafHex,
+            rootHex
+          ),
+          false
+        ); // extra sibling
+        const bad = [...proof.sibling_hashes];
+        bad[0] = "sha256:" + "e".repeat(64);
         assert.equal(verifyInclusion({ ...proof, sibling_hashes: bad }, leafHex, rootHex), false); // wrong sibling
       }
-      assert.equal(verifyInclusion({ ...proof, sibling_hashes: ["deadbeef"] }, leafHex, rootHex), false); // malformed (not sha256:64hex)
+      assert.equal(
+        verifyInclusion({ ...proof, sibling_hashes: ["deadbeef"] }, leafHex, rootHex),
+        false
+      ); // malformed (not sha256:64hex)
     }
   });
 }
@@ -661,9 +716,16 @@ import { canonicalJson } from "../../canonicalise.mjs";
 import { DOMAINS } from "../constants.mjs";
 
 const NUL = Buffer.from([0]);
-const sha = (...bufs) => { const h = createHash("sha256"); for (const b of bufs) h.update(b); return h.digest(); };
+const sha = (...bufs) => {
+  const h = createHash("sha256");
+  for (const b of bufs) h.update(b);
+  return h.digest();
+};
 const RE = /^sha256:([0-9a-f]{64})$/; // frozen encoding — lowercase, prefixed
-const dec = (s) => { const m = typeof s === "string" && s.match(RE); return m ? Buffer.from(m[1], "hex") : null; }; // 32 bytes or null
+const dec = (s) => {
+  const m = typeof s === "string" && s.match(RE);
+  return m ? Buffer.from(m[1], "hex") : null;
+}; // 32 bytes or null
 const enc = (buf) => "sha256:" + buf.toString("hex");
 
 export function leafHash({ leaf_id, leaf_type, subject_digest }) {
@@ -689,14 +751,16 @@ export function merkleRoot(leafHashes) {
 export function buildInclusion(leafHashes, leaf_index) {
   const tree_size = leafHashes.length;
   const sibling_hashes = [];
-  let idx = leaf_index, level = leafHashes;
+  let idx = leaf_index,
+    level = leafHashes;
   while (level.length > 1) {
     const promoted = idx === level.length - 1 && level.length % 2 === 1;
     if (!promoted) sibling_hashes.push(enc(idx % 2 === 0 ? level[idx + 1] : level[idx - 1]));
     const next = [];
     for (let i = 0; i < level.length; i += 2)
       next.push(i + 1 < level.length ? nodeHash(level[i], level[i + 1]) : level[i]);
-    idx = Math.floor(idx / 2); level = next;
+    idx = Math.floor(idx / 2);
+    level = next;
   }
   return { leaf_index, tree_size, sibling_hashes };
 }
@@ -707,7 +771,9 @@ export function verifyInclusion({ leaf_index, tree_size, sibling_hashes }, leafH
   let acc = dec(leafHashHex);
   const root = dec(rootHex);
   if (!acc || !root) return false; // strict sha256:<64hex>, 32-byte
-  let idx = leaf_index, size = tree_size, si = 0; // sibling cursor — advances ONLY on non-promoted levels
+  let idx = leaf_index,
+    size = tree_size,
+    si = 0; // sibling cursor — advances ONLY on non-promoted levels
   while (size > 1) {
     const promoted = idx === size - 1 && size % 2 === 1; // last node on an odd level → no sibling this level
     if (!promoted) {
@@ -894,6 +960,7 @@ Commit `feat(5k): 356 inclusion proofs (index-fixed, subject census)`.
 ### Task 1.8 — 357 shrinking · 358 phantom · 359 alias (the set laws)
 
 **Test first** — `setlaws.test.js`, the headline arms, each per component:
+
 - **357 (No Shrinking Universe):** a committed leaf absent from `U_vpc` → 357; a separate arm absent from
   `U_vrc` → 357 (regenerate + re-sign the downstream fixture so the ONLY failing law is shrinking —
   the earlier checks must stay green, proving 357 is reached on its own).
@@ -901,7 +968,7 @@ Commit `feat(5k): 356 inclusion proofs (index-fixed, subject census)`.
   `U_vrc` phantom arm → 358.
 - **359 (alias):** duplicate canonical id across leaves → 359; duplicate `subject_digest` with distinct
   ids → 359; a section mapping to >1 leaf → 359.
-Run → fails.
+  Run → fails.
 
 **Minimal code** — `setlaws.mjs`: `checkShrinking` (∀ committed leaf: ∈ U_vpc exactly once AND ∈ U_vrc
 exactly once); `checkPhantom` (∀ evaluated leaf in each component ∈ U_commit); `checkAlias` (dup id / dup
@@ -1011,8 +1078,9 @@ test-keys dir to `.prettierignore`. Run → green; `cmp` twice. Commit
 `commit → order → start → execution → output` chain; the assembled pack verifies raw 0; the sequencer
 never receives leaf content (assert it only ever got digests); sequencer + reviewer keys are distinct.
 Run → fails. **Minimal code** — `laneb` harness spawning `node` child processes (mirror 5J `laneb.test.js`
-+ any helper). Reserve CI ports in the 33xxx band if any socket is used (EADDRINUSE lesson). Run → green.
-Commit `feat(5k): Lane B multi-party commit-first ceremony (content-blind sequencer)`.
+
+- any helper). Reserve CI ports in the 33xxx band if any socket is used (EADDRINUSE lesson). Run → green.
+  Commit `feat(5k): Lane B multi-party commit-first ceremony (content-blind sequencer)`.
 
 ---
 
@@ -1080,7 +1148,7 @@ theorems from spec §4:
 5. `executionCompleteness` — exact `bound = expected`, every output bound `∃!` (full fossil closure).
 6. `firstFailurePerTier` — reuse the 5J `firstFailure`/`firstFailureUnique`/`firstFailureSound` proof
    idiom verbatim (`Option.some.injEq` for uniqueness; the induction with `simp only [firstFailure,
-   Option.some.injEq] at h; subst h` for the false branch). Model per tier; 363 as the external wrapper.
+Option.some.injEq] at h; subst h` for the false branch). Model per tier; 363 as the external wrapper.
 7. `anchorTwoAxisSoundness` — the four acceptance rules; use `decide`/`of_decide_eq_true` for the finite
    state comparisons (NOT `==`/`Nat.eq_of_beq_eq_true`).
 8. `auditMonotone` — `audit_accepts ⟹ public_valid ∧ public_accepts`.
@@ -1089,10 +1157,10 @@ theorems from spec §4:
 10. `noSilentScopeChange` (Scope Trilemma) — model `scopeAdjusted(u₀,u₁)` and prove the total disjunction
     where **each branch is tied to a checker predicate** (Review-v2 rule 15, NOT bare enum exhaustiveness):
     `(retainsEqualityObligation ∧ shrinkChecked357) ∨ (requiresNewCommitmentAndOrdering ∧ phantomChecked358)
-    ∨ postSignalReject354`.
+∨ postSignalReject354`.
 11. `setEqualityDecisionBlindToSectionText` (narrowed) — the **set-equality decision** is a function of the
     projected leaf triples + protocol state, not the raw section text: prove `projectedTriples a =
-    projectedTriples b ∧ protocolState a = protocolState b ⟹ setEqualityVerdict a = setEqualityVerdict b`
+projectedTriples b ∧ protocolState a = protocolState b ⟹ setEqualityVerdict a = setEqualityVerdict b`
     (congruence on the projection input). NOT a whole-verdict blindness claim.
 
 Commit `feat(5k): Lean core — 11 theorems incl. Scope Trilemma + blind verification (zero sorry)`.
@@ -1123,7 +1191,7 @@ Commit `test(5k): K7 all-functions e2e net + full tamper matrix`.
   **Bitcoin-confirmed** (blocks 957642+957644, committed on main `96265f2a`, release notes updated) — the
   `real-structure/` pack still verifies raw 0; VUC embeds/reuses it unchanged, do not re-stamp it.
 - `bash scripts/check.sh` locally (the full gate — prettier, git-clean, unit, e2e) → green.
-Commit `chore(5k): reproduce script, priv-key allowlists, prior-stage regression green`.
+  Commit `chore(5k): reproduce script, priv-key allowlists, prior-stage regression green`.
 
 ---
 
@@ -1139,7 +1207,7 @@ Commit `chore(5k): reproduce script, priv-key allowlists, prior-stage regression
   until Lane C-adv + a real commit-first anchored ceremony execute (do NOT bank 9.4 at closeout unless
   they ran); Good-for-Anthropic 9.4; Constitution 9.4. State the pending Frontier delta as a tracked debt.
 - **Prior-stage anchor check (generalizable):** before tagging, confirm no earlier release still carries a
-  *pending* external anchor that has since landed. (5J's OpenTimestamps witness landed 2026-07-12 → its
+  _pending_ external anchor that has since landed. (5J's OpenTimestamps witness landed 2026-07-12 → its
   release + `campaign-outcome.json` were flipped to `bitcoin_confirmed`; verify via `ots info` + a
   public-explorer merkle-root cross-check, since `verify-witness.mjs`'s `ots verify` needs a Bitcoin node.)
 - README banner → VUC latest (v2.46.0); fold 5J into `<details>Prior`; badge to `v2.46.0-stage-5k-vuc`.
