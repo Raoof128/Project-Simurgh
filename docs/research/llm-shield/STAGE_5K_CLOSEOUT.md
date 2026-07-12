@@ -49,14 +49,25 @@ was neither narrowed nor expanded later, verifiably" — **NEVER** "the universe
   commit-first-margin / omission-claim censuses (audit 361, verdict-neutral), G13 adequacy-vocabulary belt,
   in-toto/SCITT bridge (`external_registry_anchor`).
 
-**Tests:** 54 stage5k unit + 5 K7 e2e green; reproduce ALL PASS (Node 26); **5I + 5J reproduce undisturbed.**
+- **Lane B** (multi-party separation properties) — 5 distinct role principals, content-blind sequencer
+  (challenges bind digests only), cross-role chain.
+- **Lane C machinery** — campaign gate (`completed` only on raw 0 + `verified_immediate` + a DISTINCT
+  verifier key), VFC independence rung (refuses > `distinct_key_only` without a verified anchor),
+  bespoke `attach-anchor` (re-verifies so the anchor never breaks raw 0), `verify-witness` (OTS), the
+  independent-party droplet runner (deterministic pack + `ANCHOR_ME` = commitment digest), and
+  adversarial sealing (357/358/354 = gerrymandering trophies, never `completed`).
+- **Node ↔ Python ↔ browser parity** — all three agree on the deterministic surface (browser is a
+  WebCrypto reimplementation, CSP no-egress, anchor path declared not simulated).
 
-## Deferred to a follow-up (honest)
+**Tests:** 64 stage5k unit + 5 K7 e2e green; reproduce ALL PASS (Node 26); **5I + 5J reproduce undisturbed.**
 
-- **Lane B** (multi-party content-blind-sequencer ceremony), **Lane C** (real externally-anchored commit-first
-  ceremony + droplet package + Lane C-adv live gerrymandering producer), and **browser** WebCrypto parity are
-  NOT yet built. The core blade, Lane A evidence, parity, Lean, and K7 are complete; these lanes add
-  independent-execution and adversarial evidence and are the natural next increment.
+## Remaining — the frontier-lever operator steps (not code)
+
+- **Live Lane C-adv** — a real Fable-5 acting as a gerrymandering producer (CVP-covered, digest-only,
+  sealed either way). **Real external anchor** — a Sigstore/Rekor or OTS/Bitcoin anchor of the
+  `universe_commitment_digest`, verified online. Both are out-of-band executions (Sigstore/Bitcoin are
+  external services, never part of the offline raw-0 recompute). **Until they run, Frontier stays 9.0.**
+  The rails are built and gated; this mirrors 5J, whose witness executed after ship and later confirmed.
 
 ## Four-axis scorecard (closeout, honest)
 
