@@ -67,27 +67,35 @@ export function validBundle({ profile = "vtc_core", finality = "confirmed" } = {
     { anchor_type: "rfc3161_tsa", trust_domain: "tsa-x", tsa_token_digest, verifier_result: null },
   ];
   if (withOts) {
+    // A genuinely PENDING anchor has no confirming checkpoint yet; a CONFIRMED one carries the witnessed
+    // checkpoint (36 confirmations >= min_confirmations 6).
+    const checkpoint_evidence =
+      finality === "confirmed"
+        ? {
+            block_hash: "00blk",
+            block_height: 957665,
+            block_merkle_root: "mroot",
+            observed_tip_height: 957700,
+            observed_at_epoch_s: 1783836829,
+            witness_key_fingerprint: "fp:witness",
+            signature: "sig:witness",
+          }
+        : null;
     anchors.push({
       anchor_type: "bitcoin_ots",
       trust_domain: "ots-y",
       ots_proof_digest,
-      checkpoint_evidence: {
-        block_hash: "00blk",
-        block_height: 957665,
-        block_merkle_root: "mroot",
-        observed_tip_height: 957700,
-        observed_at_epoch_s: 1783836829,
-        witness_key_fingerprint: "fp:witness",
-        signature: "sig:witness",
-      },
+      declared_finality: finality, // "pending" | "confirmed" — the CLAIM (380 compares vs computed)
+      checkpoint_evidence,
       verifier_result: null,
     });
   }
   const validAnchors = anchors; // all valid in the fixture
   const verified_anchor_set_digest = verifiedAnchorSetDigest(validAnchors);
-  const checkpoint_evidence_digest = withOts
-    ? artifactDigest(anchors[1].checkpoint_evidence)
-    : null;
+  const checkpoint_evidence_digest =
+    withOts && anchors[1].checkpoint_evidence
+      ? artifactDigest(anchors[1].checkpoint_evidence)
+      : null;
 
   const start_capability_root_digest = startCapabilityRootDigest({
     commitment_session_id,
@@ -184,7 +192,7 @@ export function validBundle({ profile = "vtc_core", finality = "confirmed" } = {
       },
     },
     otsState: withOts ? { [ots_proof_digest]: "verified_immediate" } : {},
-    otsFinality: withOts ? { [ots_proof_digest]: finality } : {},
+    checkpointWitnessSigValid: withOts ? { [ots_proof_digest]: true } : {},
     otsLeafHex: withOts ? { [ots_proof_digest]: commitment_digest_hex } : {},
     tsaVerifierFingerprint: TSA_VERIFIER_FP,
   };
