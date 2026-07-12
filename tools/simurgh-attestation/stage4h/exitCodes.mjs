@@ -1079,6 +1079,33 @@ export const VTCQ_AUDIT_CHECK_ORDER = Object.freeze([...VTCQ_PUBLIC_CHECK_ORDER,
 export const VTCQ_AUDIT_ONLY_CODES = Object.freeze([381]);
 export const VTCQ_POLICY_CODES = Object.freeze([382]);
 
+// Stage 5M — VTC-Quorum: exact three-of-three external-anchor ecology layered on the frozen 5L core.
+// Additive band 384-395 (383 was the prior ceiling). The v2 dispatcher runs the 5L core (364-383) first,
+// then this extension. 395 is the OUTER fail-closed boundary (wraps projection+adapters+dispatch), never
+// an ordinary sequential predicate.
+export const VTCQUORUM_RAW_CODES = Object.freeze({
+  OK: 0,
+  VTCQUORUM_V2_SCHEMA_INVALID: 384, // envelope/profile/quorum_rule/required-members/extra-anchor/adequacy/seat shape
+  VTCQUORUM_REKOR_ENTRY_MALFORMED: 385, // hashedrekord kind / spec shape
+  VTCQUORUM_REKOR_ARTIFACT_MISMATCH: 386, // rekor artifact-hash != sha256(canonical anchor) (cross-commitment replay)
+  VTCQUORUM_REKOR_INCLUSION_INVALID: 387, // RFC6962 inclusion proof (root/index/tree-size/path)
+  VTCQUORUM_REKOR_CHECKPOINT_INVALID: 388, // authenticated tree state under the pinned log identity
+  VTCQUORUM_REKOR_SET_INVALID: 389, // signedEntryTimestamp vs pinned Rekor key
+  VTCQUORUM_REKOR_SUBMITTER_BINDING: 390, // submitter authenticity / expected pinned key binding
+  VTCQUORUM_CROSS_SEAT_DISAGREEMENT: 391, // seats do not all bind one commitment (No Two Anchored Stories)
+  VTCQUORUM_COUNTERFEIT_ECOLOGY: 392, // seats not three verifier-pinned distinct trust ecologies
+  VTCQUORUM_INCOMPLETE_ECOLOGY: 393, // honest floor: a required seat absent (third_trust_ecology incomplete)
+  VTCQUORUM_ANCHORED_OVERCLAIM: 394, // externally_anchored declared over a computed-incomplete ecology
+  INTERNAL_OR_ENV_UNAVAILABLE_VTCQUORUM: 395, // outer fail-closed boundary (run level 1)
+});
+// Public first-failure spine (frozen): seat structural→crypto→binding→state; 394 (lie) before 393 (gap).
+export const VTCQUORUM_PUBLIC_CHECK_ORDER = Object.freeze([
+  384, 385, 386, 387, 388, 389, 390, 391, 392, 394, 393,
+]);
+export const VTCQUORUM_AUDIT_CHECK_ORDER = Object.freeze([...VTCQUORUM_PUBLIC_CHECK_ORDER]);
+export const VTCQUORUM_AUDIT_ONLY_CODES = Object.freeze([]);
+export const VTCQUORUM_POLICY_CODES = Object.freeze([]);
+
 export const HARNESS_CODES = Object.freeze({
   CLEAN_RUN_FALSELY_REJECTED: 19,
 });
@@ -1478,6 +1505,18 @@ export const RUN_LEVEL_BY_RAW = Object.freeze({
   381: 1,
   382: 1,
   383: 1,
+  384: 1,
+  385: 1,
+  386: 1,
+  387: 1,
+  388: 1,
+  389: 1,
+  390: 1,
+  391: 1,
+  392: 1,
+  393: 1,
+  394: 1,
+  395: 1,
 });
 
 export function stage4CodeForRawCode(code) {
