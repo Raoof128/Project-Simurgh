@@ -54,7 +54,7 @@ export function checkBundleSchema(bundle) {
   }
   if (!Array.isArray(bundle.declared_releases)) return R(364, "declared_releases_not_array");
   const rcv = bundle.review_access_authorisation_receipt;
-  if (!isObj(rcv) || !Array.isArray(rcv.binds)) return R(364, "receipt_malformed");
+  if (!isObj(rcv) || !isObj(rcv.binds)) return R(364, "receipt_malformed"); // binds = {field: digest}
   if (typeof rcv.start_capability_root_digest !== "string") return R(364, "receipt_no_capability");
   if (hasAdequacyKey(bundle)) return R(364, "adequacy_vocabulary_forbidden");
   return null;
