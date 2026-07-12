@@ -29,7 +29,7 @@ function minBundle() {
         verifier_result: null,
       },
     ],
-    review_access_authorisation_receipt: { binds: [], start_capability_root_digest: "sha256:cap" },
+    review_access_authorisation_receipt: { binds: {}, start_capability_root_digest: "sha256:cap" },
     declared_releases: [],
     reserved_slots: { campaign_composition_root: null },
     signatures: {},

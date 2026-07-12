@@ -7,6 +7,7 @@
 import { R, OK } from "./result.mjs";
 import { checkBundleSchema, checkConfigSchema } from "./schema.mjs";
 import { makeCtx } from "./context.mjs";
+import { checkCommitment } from "./commitment.mjs";
 import { checkReservedSlots } from "./policy.mjs";
 
 export function vtcqVerify(bundle, cfg, facts, { tier = "public" } = {}) {
@@ -17,7 +18,8 @@ export function vtcqVerify(bundle, cfg, facts, { tier = "public" } = {}) {
   try {
     const ctx = makeCtx(bundle, cfg, facts);
     const steps = [
-      // populated check-by-check in Task group 1 (frozen spine order)
+      () => checkCommitment(ctx), // 365
+      // 366 → 380 → … populated check-by-check in Task group 1 (frozen spine order)
     ];
     for (const s of steps) {
       const r = s();
