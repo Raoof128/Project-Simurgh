@@ -13,6 +13,8 @@ import {
   ceremonyId,
 } from "../../../../tools/simurgh-attestation/stage5l/core/derive.mjs";
 import { DOMAINS } from "../../../../tools/simurgh-attestation/stage5l/constants.mjs";
+import { makeCtx } from "../../../../tools/simurgh-attestation/stage5l/core/context.mjs";
+import { computeProjections } from "../../../../tools/simurgh-attestation/stage5l/core/projections.mjs";
 
 const GATE_FP = "fp:gate";
 const TSA_VERIFIER_FP = "fp:tsaverifier";
@@ -202,6 +204,9 @@ export function validBundle({
     otsLeafHex: withOts ? { [ots_proof_digest]: commitment_digest_hex } : {},
     tsaVerifierFingerprint: TSA_VERIFIER_FP,
   };
+
+  // projections are an audit-tier recompute; attach after the bundle exists (they feed no upstream digest).
+  bundle.projections = computeProjections(makeCtx(bundle, cfg, facts));
 
   return { bundle, cfg, facts, GATE_FP, TSA_VERIFIER_FP, NONCE };
 }
