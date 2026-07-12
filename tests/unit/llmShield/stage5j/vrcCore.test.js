@@ -336,3 +336,33 @@ test("POSITIVE control — producer revises AFTER responding (history + receipt 
   supersedeProducer(bundle, facts, "3", "high"); // revise to match, but keep ceB + its response
   assert.equal(vrcVerify(bundle, cfg, facts, { tier: "public" }).raw, 0);
 });
+
+// --- Task 1.10 — phantom reviewer statement 344 -----------------------------------------------
+test("344 — an unsigned concurrence object (phantom backed-state)", () => {
+  const { bundle, cfg, facts } = validBundle();
+  facts.concurrenceSigValid[bundle.concurrences[0].concurrence_digest] = false;
+  assert.equal(vrcVerify(bundle, cfg, facts).raw, 344);
+});
+
+test("344 — a wrongly-signed rebuttal object", () => {
+  const { bundle, cfg, facts } = validBundle();
+  facts.rebuttalSigValid[bundle.reviewer_rebuttals[0].rebuttal_digest] = false;
+  assert.equal(vrcVerify(bundle, cfg, facts).raw, 344);
+});
+
+test("344 — one reviewer asserts BOTH concurrence and rebuttal on one event (ambiguous)", () => {
+  const { bundle, cfg, facts } = validBundle();
+  const conc = bundle.concurrences[0]; // ceC, reviewer RB
+  const bothRebuttal = {
+    content: {
+      contest_event_digest: conc.content.contest_event_digest,
+      reviewer_id: conc.content.reviewer_id,
+      rebuttal_claim: "maintains_dissent",
+      rebuttal_epoch: 951,
+    },
+    rebuttal_digest: "sha256:both-rebuttal",
+  };
+  bundle.reviewer_rebuttals.push(bothRebuttal);
+  facts.rebuttalSigValid[bothRebuttal.rebuttal_digest] = true;
+  assert.equal(vrcVerify(bundle, cfg, facts).raw, 344);
+});
