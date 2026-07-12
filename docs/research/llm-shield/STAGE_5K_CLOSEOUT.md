@@ -61,13 +61,26 @@ was neither narrowed nor expanded later, verifiably" — **NEVER** "the universe
 
 **Tests:** 64 stage5k unit + 5 K7 e2e green; reproduce ALL PASS (Node 26); **5I + 5J reproduce undisturbed.**
 
+## Real Lane C — independent reproduction EXECUTED (2026-07-12)
+
+An independent party ran the verify-only droplet pack (`~/Desktop/Raouf/test/stage5k-vuc-droplet/`) on
+**two independent machines / Node builds** (local v22.16.0, remote droplet Nexus v26.5.0), both reproducing
+**`raw 0` public + audit** with a byte-identical `universe_commitment_digest` (`sha256:01cd6f55…`), and
+OpenTimestamps-stamped `ANCHOR_ME.txt` on both. Committed at
+`docs/research/llm-shield/evidence/stage-5k/real-lanec/` (proof + `lanec-outcome.json`). Verified locally:
+the `.ots` stamps `sha256(ANCHOR_ME.txt)=5f026ef3…`, which contains the committed digest; all 4 calendars
+`PendingAttestation` (fresh, ~hours to Bitcoin). **Honest framing:** VUC's proof is bound to the original
+review panel, so this is **reproduction independence + a de-identified public witness**, NOT a
+distinct-verifier-key ceremony. It satisfies **one** of Novelty's two 9.3 conditions (independent
+reproduction); the other (broader prior-art sweep) is unpaid, so Novelty stays 9.0.
+
 ## Remaining — the frontier-lever operator steps (not code)
 
-- **Live Lane C-adv** — a real Fable-5 acting as a gerrymandering producer (CVP-covered, digest-only,
-  sealed either way). **Real external anchor** — a Sigstore/Rekor or OTS/Bitcoin anchor of the
-  `universe_commitment_digest`, verified online. Both are out-of-band executions (Sigstore/Bitcoin are
-  external services, never part of the offline raw-0 recompute). **Until they run, Frontier stays 9.0.**
-  The rails are built and gated; this mirrors 5J, whose witness executed after ship and later confirmed.
+- **Bitcoin confirmation** of the de-identified witness (a recurring `ots upgrade` check is running; on
+  confirmation, flip `lanec-outcome.json` to verified + cross-check the block merkle root, as done for 5J).
+- **Live Lane C-adv** — a real Fable-5 gerrymandering producer (CVP-covered, digest-only, sealed either
+  way). **Until it and a confirmed anchor run, Frontier stays 9.0** — Sigstore/Bitcoin are external
+  services, never part of the offline raw-0 recompute. The rails are built and gated.
 
 ## Four-axis scorecard (closeout, honest)
 
