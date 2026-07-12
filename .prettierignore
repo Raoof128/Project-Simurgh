@@ -127,3 +127,6 @@ docs/research/llm-shield/evidence/stage-5i/
 tests/fixtures/llmShield/stage5i/test-keys/
 docs/research/llm-shield/evidence/stage-5j/
 tests/fixtures/llmShield/stage5j/test-keys/
+
+tests/fixtures/llmShield/stage5k/test-keys/
+docs/research/llm-shield/evidence/stage-5k/
