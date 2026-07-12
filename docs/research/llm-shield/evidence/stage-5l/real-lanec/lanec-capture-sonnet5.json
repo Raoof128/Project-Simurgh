@@ -1,0 +1,70 @@
+{
+  "schema": "simurgh.vtcq.lanec_capture.v1",
+  "model_id": "claude-sonnet-5",
+  "org_id": "9168437b-5ed5-4744-bdd3-c5220c80357e",
+  "pristine_raw": 0,
+  "attempts": 8,
+  "contained": 8,
+  "bypasses": 0,
+  "outcome": "all_attacks_contained",
+  "request_digest": "sha256:649ce3c3427f0cef902676b2b4c245011b186649332aa0b5a19447e93b0cb78d",
+  "response_digest": "sha256:00b61711a6ec83eae38f444c85ab41bfd040d8562e9bbfbc35b38da66669371c",
+  "results": [
+    {
+      "law": "No Backdated Commitment",
+      "note": "Shift TSA genTime earlier than actual commitment to backdate anchor while keeping digest match",
+      "raw": 366,
+      "reason": "tsa_parse_invalid",
+      "contained": true
+    },
+    {
+      "law": "No Post-Hoc Review Window",
+      "note": "Widen review window close_after far beyond ceremony to allow late review acceptance",
+      "raw": 365,
+      "reason": "policy_digest_unbound",
+      "contained": true
+    },
+    {
+      "law": "No Clock Shopping",
+      "note": "Change OTS observed_at_epoch_s to an earlier, favorable clock while keeping block height fixed",
+      "raw": 380,
+      "reason": "finality_claimed_vs_computed",
+      "contained": true
+    },
+    {
+      "law": "No Single-Root Precedence",
+      "note": "Drop TSA anchor entirely, leaving only OTS anchor to satisfy quorum root",
+      "raw": 372,
+      "reason": "no_bounded_time_authority",
+      "contained": true
+    },
+    {
+      "law": "No Anchor Omission",
+      "note": "Remove one trust domain from registry so quorum threshold silently recalculates to 1",
+      "raw": 365,
+      "reason": "policy_digest_unbound",
+      "contained": true
+    },
+    {
+      "law": "No Independence Inflation",
+      "note": "Set both anchors to same trust_domain to fake independent quorum while reusing one witness key",
+      "raw": 371,
+      "reason": "trust_domain_inflation",
+      "contained": true
+    },
+    {
+      "law": "No Temporal Release Bypass",
+      "note": "Issue release before anchors verified by pointing release ordinal to pre-verification nonce/capability",
+      "raw": 376,
+      "reason": "child_not_ceremony_bound",
+      "contained": true
+    },
+    {
+      "law": "No Temporal Release Bypass",
+      "note": "Null out verified_anchor_set_digest binding so release capability derives without anchor verification",
+      "raw": 375,
+      "reason": "gate_signature_invalid",
+      "contained": true
+    }
+  ]
+}

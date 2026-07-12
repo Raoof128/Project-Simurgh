@@ -104,10 +104,14 @@ async function main() {
   for (const a of attempts.slice(0, 8)) {
     const clone = JSON.parse(JSON.stringify(bundle));
     for (const p of a.patches || []) applyPatch(clone, p.path, p.value);
-    const facts = makeVtcqFacts(clone, cfg, keys);
-    const r = verifyVtcq(clone, cfg, { ...keys }, { tier: "public" });
-    // re-derive facts is done inside verifyVtcq; run again with fresh facts for OTS-tamper cases
-    const r2 = { raw: r.raw, reason: r.reason };
+    let r2;
+    try {
+      const r = verifyVtcq(clone, cfg, keys, { tier: "public" });
+      r2 = { raw: r.raw, reason: r.reason };
+    } catch (e) {
+      // an adversarial patch so malformed the verifier throws is still CONTAINED (wrapper 383 semantics)
+      r2 = { raw: 383, reason: "wrapper_" + String(e.message || e).slice(0, 40) };
+    }
     const contained = r2.raw !== 0;
     results.push({ law: a.law, note: a.note, raw: r2.raw, reason: r2.reason, contained });
     console.log(

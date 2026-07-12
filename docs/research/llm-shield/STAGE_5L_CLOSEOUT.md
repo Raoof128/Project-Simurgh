@@ -57,12 +57,15 @@ min_confirmations`) — no live node; witness-less path is honestly `pinned_chec
   consumed a real `vtc_quorum_confirmed` bundle wiring the real DigiCert token (genTime via the OpenSSL
   path, `accuracy_s` pinned) + a real confirmed checkpoint. That integration is what remains to ship
   **VTC-Quorum**.
-- **Lane C-adv — EXECUTED 2026-07-12, live Fable-5 REFUSED.** Live `claude-fable-5` (CVP-approved org) was
-  tasked as an adversarial gerrymandering producer to craft bundle mutations bypassing a VTC-Q law. It
-  **refused** (`stop_reason=refusal`, empty content, 4 output tokens) — recorded honestly, not retried
-  (same discipline + result as 4U). Evidence: `evidence/stage-5l/real-lanec/`. A refusal is a real capture
-  outcome, not a containment demo; the verifier's containment of these attacks is proven separately by the
-  K7 tamper matrix. Does NOT bank `externally_anchored`.
+- **Lane C-adv — EXECUTED 2026-07-12; live Sonnet-5 attacked all 7 laws, ALL CONTAINED.** `claude-fable-5`
+  **refused** (`stop_reason=refusal`) — recorded honestly, not retried. `claude-sonnet-5` (CVP-covered, the
+  same model 5D used) then produced **8 real gerrymandering attacks across all 7 laws** (backdate,
+  post-hoc window, clock-shopping, single-root, anchor-omission, independence-inflation, release-bypass) —
+  the frozen verifier **contained every one** (raw 366/365/380/372/365/371/376/375; **0 bypasses**,
+  `all_attacks_contained`). A genuine live-adversary containment demonstration. Evidence:
+  `evidence/stage-5l/real-lanec/` (`lanec-capture.json` = Fable refusal, `lanec-capture-sonnet5.json` =
+  Sonnet 8/8). Robustness fix landed: a malformed adversarial anchor now returns a clean **364** (was a
+  throw). Does NOT by itself bank `externally_anchored`.
 - Full RFC-3161 CMS/X.509 is the adapter's job (OpenSSL-backed, Lane B); the pure core takes the signed
   `tsa_crypto_attestation` as a fact (the 5I/5K B11 pattern).
 

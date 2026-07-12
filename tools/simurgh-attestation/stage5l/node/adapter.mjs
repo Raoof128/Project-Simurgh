@@ -45,6 +45,7 @@ export function makeVtcqFacts(bundle, cfg, keys) {
 
   // TSA crypto attestation (tsa-verifier signed) → lift to facts, gated on the signature verifying
   for (const a of bundle.anchors ?? []) {
+    if (!a || typeof a !== "object") continue; // malformed anchor → schema 364 owns it, never a throw
     if (a.anchor_type === "rfc3161_tsa") {
       const { sig, ...body } = a.tsa_crypto_attestation ?? {};
       const ok = safeVerify(tsaVerId, SIG.tsaCrypto, body, sig);
