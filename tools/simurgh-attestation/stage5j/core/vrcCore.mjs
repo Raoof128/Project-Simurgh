@@ -9,6 +9,7 @@
 import { R, OK } from "./result.mjs";
 import { checkBundleSchema, checkConfigSchema } from "./schema.mjs";
 import { makeCtx } from "./context.mjs";
+import { checkObligation } from "./checks333to341.mjs";
 
 export function vrcVerify(bundle, cfg, facts, { tier = "public" } = {}) {
   const b332 = checkBundleSchema(bundle);
@@ -20,7 +21,8 @@ export function vrcVerify(bundle, cfg, facts, { tier = "public" } = {}) {
     const ctx = makeCtx(bundle, cfg, facts); // stores ctx.anchorMismatch; never throws on bad upstream
     const steps = [
       () => ctx.anchorMismatch, // 333
-      // 334–344 appended by Tasks 1.5–1.10
+      () => checkObligation(ctx), // 334, 335, 336
+      // 337–344 appended by Tasks 1.6–1.10
     ];
     for (const s of steps) {
       const r = s();
