@@ -3,30 +3,27 @@
   "campaign_id": "vrc-lanec-opus46-2026-07-12",
   "claim": "public_report_structure_rating_contest",
   "independence_rung": "distinct_key_only",
-  "public_witness": null,
+  "public_witness": {
+    "log": "opentimestamps",
+    "status": "pending_bitcoin_confirmation",
+    "verified": false,
+    "de_identified": true,
+    "anchored_digest": "sha256:286a93aa4a613cff69ba8200342c37799ff88f3ec0c110edcccd6203325a9c13",
+    "note": "The de-identified OpenTimestamps witness step WAS executed and the proof is bound to this pack's contest_layer_root, but the stamp is not yet mined into a Bitcoin block (all calendars report PendingAttestation — expected, ~hours). Our verify-witness.mjs returns status=pending / witnessVerified=false, so NO verified public_witness is claimed yet. Re-run `ots upgrade` + verify-witness.mjs once Bitcoin confirms to flip this to verified."
+  },
   "committed_run": {
-    "label": "run-1-local-device",
-    "node_version": "v22.16.0",
-    "verifier_key_fingerprint": "sha256:33c874325a687f74634fc36492988709e2775b9aecbdd8f5d72937c4a64d2b64",
-    "contest_layer_root": "sha256:aa59da08aaa8dd2d1676c578d8fb2c076f7bb9fe9d601bc2aca2babeaac4f6ed",
+    "label": "witness-bearing-run (de-identified public witness, pending)",
+    "verifier_key_fingerprint_distinct_from_ours": true,
     "public_raw": 0,
     "audit_raw": 0,
     "sections_total": 37,
-    "reviewer_pairs": 39,
-    "divergences": 3,
-    "note": "Byte-committed here; re-verifies raw 0 under the repo verifier; verifier key distinct from ours (we do not possess it)."
+    "witness_proof": "witness-proof.opentimestamps",
+    "note": "Byte-committed here; re-verifies raw 0 under the repo verifier; carries a bound-but-pending OpenTimestamps witness."
   },
-  "corroborating_run": {
-    "label": "run-2-remote-droplet",
-    "host": "Nexus (170.64.167.95)",
-    "os": "Ubuntu 24.04 / kernel 6.8.0-71-generic",
-    "node_version": "v26.5.0",
-    "verifier_key_fingerprint": "sha256:11156cdd64de0a64797c0ff810dbf079cd2cd461385f188c3eaa93913b53b6e3",
-    "contest_layer_root": "sha256:5a3268b2be9df014eb3fe91cee24846ecf7bc6a8f1f391c42975eb7d741e2cac",
-    "public_raw": 0,
-    "audit_raw": 0,
-    "note": "Executed on a separate remote machine under Node 26 with a DIFFERENT distinct verifier key; documented in RAW_RESULTS.md. Its bytes were not transferred, so run 1 is the byte-committed artifact."
-  },
-  "independence_note": "distinct_key_only ONLY. The party ran the basic ceremony (de-identified: own keys, no name/email/account). They did NOT do the optional OpenTimestamps public-witness step, so there is no public_witness signal. The identity-anchored externally_anchored rung is intentionally NOT pursued — the party requires anonymity, and that rung requires revealing a real identity via Sigstore/OIDC.",
-  "non_claim": "NOT rsp_unredacted_report_compliance; over the Opus 4.6 PUBLIC structure only; ratings are the droplet party's own independent assessments (NOT attributed to METR, Anthropic, or any named reviewer); does not observe the confidential report or Anthropic's real review panel; affiliation axis modeled; independence rung is distinct_key_only (NOT externally_anchored)."
+  "corroborating_runs": [
+    { "label": "local", "node": "v22.16.0", "raw": 0 },
+    { "label": "remote-droplet 170.64.167.95 (Nexus, Ubuntu 24.04)", "node": "v26.5.0", "raw": 0, "witness": "OpenTimestamps stamp also submitted on the droplet (Run 4), pending confirmation; bytes documented in RAW_RESULTS.md" }
+  ],
+  "identity_note": "The identity-anchored externally_anchored rung is intentionally NOT pursued — the party requires anonymity, and that rung requires revealing a real identity via Sigstore/OIDC. The de-identified public witness (above) is the honest ceiling for an anonymous party; once Bitcoin confirms, independence stays distinct_key_only with a VERIFIED public_witness (not the identity rung).",
+  "non_claim": "NOT rsp_unredacted_report_compliance; over the Opus 4.6 PUBLIC structure only; ratings are the party's own independent assessments (NOT attributed to METR, Anthropic, or any named reviewer); does not observe the confidential report or Anthropic's real review panel; affiliation axis modeled."
 }
