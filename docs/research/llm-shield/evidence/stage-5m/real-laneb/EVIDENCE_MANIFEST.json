@@ -1,0 +1,54 @@
+{
+  "CAPTURE_CONTINUITY.json": {
+    "bytes": 1268,
+    "sha256": "3c90d2cd5d4ac4a377ca7c4837ec488b97c5fa7f3baa2ba263670162e0f26f59"
+  },
+  "D.bin": {
+    "bytes": 32,
+    "sha256": "d41fcb241aabf2523b90eb383efe86385cf0a6a661928cb3ae0e549dd231cf1a"
+  },
+  "D.ots": {
+    "bytes": 705,
+    "sha256": "3273653af9de9901b68c4431c254977ff67e070e9bb4d7e3d7dddbea173fec6e"
+  },
+  "canonical-anchor.txt": {
+    "bytes": 64,
+    "sha256": "91fd350f019f6333ea2d7c4db6b76bd91ecf4e108f188199795fe72dd189a63e"
+  },
+  "ceremony.json": {
+    "bytes": 2852,
+    "sha256": "f170381407a78d202f2b6e6c679ae5e00b911a0a81398a7ece86a07a6c1eecfe"
+  },
+  "rekor_entry_full.json": {
+    "bytes": 2978,
+    "sha256": "4f91f31aac546c3c45c9ecb6af4b5d02bca310e846510af5edb45a474013af7e"
+  },
+  "rekor_pubkey.pem": {
+    "bytes": 178,
+    "sha256": "dce5ef715502ec9f3cdfd11f8cc384b31a6141023d3e7595e9908a81cb6241bd"
+  },
+  "response.tsr": {
+    "bytes": 6008,
+    "sha256": "46433441ab55a7778d119223c8df0898a0a60a637b6beecb5d3e1231f51d8216"
+  },
+  "token.der": {
+    "bytes": 5999,
+    "sha256": "07645c774c16ccf79c75ca0ebb60552d0a032abd437a6ac51bab6ed87412624f"
+  },
+  "keys/PUB_gate.pem": {
+    "bytes": 113,
+    "sha256": "233b14a8b1f9193690958b1b01742e1bf9276e5a82253bd505feb4128a921ee7"
+  },
+  "keys/PUB_sequencer.pem": {
+    "bytes": 113,
+    "sha256": "abbe76b113c12b71e67cbb403d697161a28637e0ac72b1572a2a52cd6618b27a"
+  },
+  "keys/PUB_submitter.pem": {
+    "bytes": 178,
+    "sha256": "3fdbfae4aded015eab2ec3ef3ceaff7bde5c30dd7170ec5b05f87feb11f8950d"
+  },
+  "keys/PUB_tsaverifier.pem": {
+    "bytes": 113,
+    "sha256": "105573eaaf88b70f4bab2cb08527c63febb01d6ffb6e99a49e0651656e406c6b"
+  }
+}
