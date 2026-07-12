@@ -13,7 +13,7 @@ proof of what happened after a guardrail missed — not another jailbreak detect
 [![Node](https://img.shields.io/badge/node-%E2%89%A522.0-1a1a1a?style=flat-square)](https://nodejs.org)
 [![License](https://img.shields.io/badge/license-AGPL--3.0-d6cfbe?style=flat-square)](#license)
 [![Status](https://img.shields.io/badge/status-research%20prototype-2f4a2a?style=flat-square)](#status)
-[![Latest](https://img.shields.io/badge/release-v2.44.0-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.44.0-stage-5i-vpc)
+[![Latest](https://img.shields.io/badge/release-v2.45.0-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.45.0-stage-5j-vrc)
 
 </div>
 
@@ -41,7 +41,32 @@ In one sentence: **Simurgh gives an agentic system a verifiable receipt, not a p
 > selective omission, multi-agent accountability) to concrete mechanisms — printable version at
 > [`docs/research/llm-shield/anthropic-brief.html`](docs/research/llm-shield/anthropic-brief.html).
 
-> 🆕 **Latest — Stage 5I · Verifiable Panel Coverage (`v2.44.0-stage-5i-vpc`).**
+> 🆕 **Latest — Stage 5J · Verifiable Rating Contest (`v2.45.0-stage-5j-vrc`).**
+> Turns RSP v3.4's external-review **disagreement** into an offline-recomputable relation: it derives an
+> exact **rating-obligation set** from VPC's (5I) coverage relation, requires the ledger to **equal** it on
+> both sides (reviewer pairs = C(r), producer sections = S), and preserves every divergence as an
+> **append-only contest event** — so **suppression fails closed**. **Contest recorder, not truth arbiter.**
+> Because the reviewer chain is append-only and reviewer-signed, **erase-by-supersession** leaves the
+> historical divergence recomputable (**342**) and a forged _superseded_ entry is caught even when the head
+> is honest (**341**, the fossil attack); revise-after-responding → raw 0. Beast-mode: the **Override
+> Trilemma** (`noSilentOverridePath`, no fourth branch) · **`noCorrectnessBit`** (the state space has no
+> correct/incorrect value — structurally unable to assert who was right) · the **reviewer rebuttal**
+> (silence ≠ agreement) · **Downgrade Depth** · a **content-blind ledger authority** · an in-toto/SCITT
+> bridge. Codes **332–347**, two split attestations (public never certifies projections; `audit ⟹ public`),
+> **11 Lean theorems** (zero `sorry`), **79 unit + 4 K7 e2e**, real Ed25519 end-to-end + byte-stable pack,
+> and **Node↔Python↔browser parity**. **Real independent-party Lane C EXECUTED, de-identified:** an
+> anonymous party ran the ceremony over the real **37-section Opus 4.6 public structure** with their **own
+> keys** (distinct from ours; we do not possess them), locally and on a **remote droplet under Node 26**,
+> both **raw 0**. A de-identified **OpenTimestamps** public witness was submitted and is **pending Bitcoin
+> confirmation** — no verified `public_witness` is claimed until it lands. **Honest to its limits:** VRC is
+> **not category-creating** on attestation (in-toto/SCITT/C2PA exist) — it is the first executable verifier
+> of a two-party rating divergence where omission fails closed. Contest ≠ correctness (→ VRC's own signed
+> non-claim); independence is `distinct_key_only`, **not** the identity-anchored `externally_anchored` rung
+> (which requires revealing an identity the party declined). Scorecard: Novelty 9.5 · Frontier 9.4 ·
+> Good-for-Anthropic 9.5 · Constitution 9.6.
+>
+> <details><summary>Prior — Stage 5I · Verifiable Panel Coverage (<code>v2.44.0-stage-5i-vpc</code>)</summary>
+>
 > Turns RSP v3.4's split-external-review condition — _"all parts of the unredacted report are evaluated by
 > at least one external reviewer"_ — into an offline-recomputable relation over a committed report
 > partition, signed access grants, and reviewer receipts. The blade is grant-bounded coverage **equality**
@@ -66,6 +91,8 @@ In one sentence: **Simurgh gives an agentic system a verifiable receipt, not a p
 > Code of Practice mandate independent external evaluation) — it is the executable, byte-reproducible
 > verifier under them. Coverage ≠ diligence (→ VRC); Lane C is public-structure-only with a modeled
 > affiliation axis; separation is `challenge_bound`, not `externally_anchored`.
+>
+> </details>
 >
 > <details><summary>Prior — Stage 5H · Verifiable Safety-claim Disclosure (<code>v2.43.0-stage-5h-vsd</code>)</summary>
 >
