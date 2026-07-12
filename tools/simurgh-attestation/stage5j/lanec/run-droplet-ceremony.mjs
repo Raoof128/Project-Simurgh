@@ -15,6 +15,7 @@ import { fingerprint, signContent } from "../core/signatures.mjs";
 import { domainDigest, artifactDigest, canonicalJson } from "../core/digests.mjs";
 import { DOMAINS } from "../constants.mjs";
 import { computeProjections, projectionRoot } from "../core/projections.mjs";
+import { contestLayerRoot } from "../core/roots.mjs";
 import { verifyVrc } from "../node/adapter.mjs";
 import { buildSignedBundle as vpcBuild } from "../../stage5i/node/buildSignedBundle.mjs";
 import { derivePartition } from "../../stage5i/lanec/build-real-coverage.mjs";
@@ -324,6 +325,7 @@ export function runVrcDropletCeremony() {
     sections: S.length,
     verifierFp: vrcVerifier.id.key_fingerprint,
     divergences: contest_history.length,
+    contestLayerRoot: contestLayerRoot(bundle),
   };
 }
 
@@ -333,10 +335,13 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     ? argv[argv.indexOf("--out") + 1]
     : "stage5j-droplet-output";
   const outDir = isAbsolute(outArg) ? outArg : join(process.cwd(), outArg);
-  const { bundle, cfg, pub, aud, sections, verifierFp, divergences } = runVrcDropletCeremony();
+  const { bundle, cfg, pub, aud, sections, verifierFp, divergences, contestLayerRoot } =
+    runVrcDropletCeremony();
   mkdirSync(outDir, { recursive: true });
   writeFileSync(join(outDir, "bundle.json"), canonicalJson(bundle) + "\n");
   writeFileSync(join(outDir, "external-config.json"), canonicalJson(cfg) + "\n");
+  // The digest to (optionally) anchor for the externally_anchored rung — see README "true 9.5" section.
+  writeFileSync(join(outDir, "ANCHOR_ME.txt"), contestLayerRoot + "\n");
   const result = {
     public_raw: pub.raw,
     audit_raw: aud.raw,
@@ -344,11 +349,13 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     reviewer_pairs: bundle.reviewer_ratings.length,
     divergences,
     verifier_key_fingerprint: verifierFp,
-    note: "Independent-party VRC rating-contest ceremony over the Opus 4.6 PUBLIC structure. NOT rsp compliance; ratings are the droplet party's own independent assessments (not METR/Anthropic); does not observe the confidential report.",
+    contest_layer_root: contestLayerRoot,
+    independence_rung: "distinct_key_only",
+    note: "Independent-party VRC rating-contest ceremony over the Opus 4.6 PUBLIC structure. NOT rsp compliance; ratings are the droplet party's own independent assessments (not METR/Anthropic); does not observe the confidential report. For the externally_anchored rung, anchor contest_layer_root with cosign (see README).",
   };
   writeFileSync(join(outDir, "ceremony-result.json"), JSON.stringify(result, null, 2) + "\n");
   console.log(
-    `VRC Lane C ceremony: public=${pub.raw} audit=${aud.raw} sections=${sections} divergences=${divergences} verifier=${verifierFp.slice(0, 20)}…`
+    `VRC Lane C ceremony: public=${pub.raw} audit=${aud.raw} sections=${sections} divergences=${divergences} verifier=${verifierFp.slice(0, 20)}… rung=distinct_key_only`
   );
   if (pub.raw !== 0 || aud.raw !== 0) {
     console.error(
