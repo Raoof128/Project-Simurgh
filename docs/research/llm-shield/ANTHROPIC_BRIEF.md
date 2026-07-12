@@ -3,8 +3,9 @@
 **One-page technical brief**
 
 _We do not claim a model is safe. We make one specific, verifiable claim recomputable by an
-outsider: that a declared boundary held, that oversight preceded a consequential action, and that
-the record is complete — with no selective omission._
+outsider: that a declared boundary held, that oversight preceded a consequential action, that the
+evaluated scope and its timing were fixed before review, and that the record is complete — with no
+selective omission._
 
 ---
 
@@ -15,9 +16,13 @@ substrate: the Responsible Scaling Policy and the June 2026 Advanced AI Framewor
 **independent third-party verification**; the framework proposes mandatory third-party testing with
 governments able to block deployments that fail; and after the February 2026 move away from
 universal pre-release verification, the stated bet is a **robust third-party evaluation ecosystem**.
-That ecosystem is only as strong as its evidence format. Today that format is prose and
-trusted logs. Simurgh is the missing layer: **an outsider with only a public key re-derives the
-verdict byte-for-byte, with no model, no network, and no producer access.**
+RSP v3.4 makes it sharper still — capability/safety evaluations must occur **before deployment** as a
+prerequisite gate, with Risk Reports published in advance and the Responsible Scaling Officer approving
+release. Each of those is an _ordering_ obligation stated in prose. That ecosystem is only as strong as
+its evidence format, and today that format is prose and trusted logs. Simurgh is the missing layer:
+**an outsider with only a public key re-derives the verdict byte-for-byte, with no model, no network,
+and no producer access** — and, as of Stage 5L, that includes a machine-checkable proof that the
+evaluation scope was committed _before_ review, anchored in a public Bitcoin block.
 
 ## The one moat: completeness (no selective omission)
 
@@ -27,12 +32,14 @@ recomputable evidence of boundary completeness** — proof that nothing was quie
 a dishonest or careless operator exploits. The spine is built around a Completeness Invariant, and
 each stage adds one anti-laundering blade so an operator cannot make a bad run _look_ clean:
 
-| Laundering move                                 | Simurgh blade                                                      |
-| ----------------------------------------------- | ------------------------------------------------------------------ |
-| Drop an inconvenient action / reorder events    | anti-laundering lattice (3Q), run-chain order + census (4Q raw 89) |
-| Backdate the audit clock                        | temporal-completeness heartbeat (4N)                               |
-| Hide the real model/route behind a proxy        | No-Ghost-Provider custody (4P)                                     |
-| Quietly skip approval on a consequential action | **No Silent Exemption (4Q)**                                       |
+| Laundering move                                  | Simurgh blade                                                      |
+| ------------------------------------------------ | ------------------------------------------------------------------ |
+| Drop an inconvenient action / reorder events     | anti-laundering lattice (3Q), run-chain order + census (4Q raw 89) |
+| Backdate the audit clock                         | temporal-completeness heartbeat (4N)                               |
+| Hide the real model/route behind a proxy         | No-Ghost-Provider custody (4P)                                     |
+| Quietly skip approval on a consequential action  | **No Silent Exemption (4Q)**                                       |
+| Fix the evaluation scope _after_ seeing results  | **temporal commitment + notary quorum (5L)**                       |
+| Swap or shrink what "everything evaluated" means | universe-commitment equality (5K)                                  |
 
 ## Four problem → mechanism mappings
 
@@ -58,13 +65,40 @@ each stage adds one anti-laundering blade so an operator cannot make a bad run _
    machinery has no hidden dependence on our key. This is the concrete answer to "why should an
    evaluator trust the producer": they don't have to.
 
-4. **Multi-agent accountability the regulators lack — the forward wedge.** EU AI Act Article 73
-   guidance (binding August 2026) gives, in its own critics' words, "no tools to pin accountability
-   of multi-agent incidents." Our post-4Q north star (delegation-chain completeness + an **Incident
-   Capsule**) aims to be the first serious-incident report a regulator can _rerun_. A working,
-   independent verification layer strengthens Anthropic's hand when governments ask for one.
+4. **Multi-agent accountability the regulators lack — now shipped.** EU AI Act Article 73 guidance
+   (binding August 2026) gives, in its own critics' words, "no tools to pin accountability of
+   multi-agent incidents." Stage 4T (**Verifiable Incident Capsule**, `v2.30.0`) is a first cut at a
+   serious-incident report a regulator can _rerun_ — an Article-73-shaped capsule with a "No Hearsay"
+   rule and suppression detection — and Stage 4S (VDCC) adds delegation-chain completeness with a "No
+   Ghost Hop" law. A working, independent verification layer strengthens Anthropic's hand when
+   governments ask for one.
 
-## What Stage 4Q includes (released as `v2.26.0-stage-4q-vfr`)
+## Where the arc is now — real captures, not slideware
+
+The ladder has advanced 21 rungs past 4Q to **Stage 5L (`v2.47.0`)**, and the claims are backed by live
+evidence a reviewer can look up, not just fixtures:
+
+- **A real shipped detector's blind spot, contained.** A live **Llama Guard 4 12B** was run once over a
+  180-case reference set (frozen and signed; never re-run in CI). It missed **138** downstream-injection
+  attacks it structurally cannot see; Simurgh's context/tool/output boundaries **contained 138/138**, with
+  a targeted attack-success rate of **0/150** and byte-identical capture across three greedy runs
+  (Stage 3V-B). This is a boundary claim — not "Llama Guard is weak."
+- **A live model tried to break the verifier and could not.** In Stage 5L, a live **Claude Sonnet-5**
+  adversary (Cyber Verification Program) was tasked to forge a temporal-commitment ceremony **8 ways
+  across all 7 laws** (backdate, post-hoc window, clock-shopping, single-root, anchor omission,
+  independence inflation, release bypass). The frozen verifier **contained every one, 0 bypasses** —
+  while `claude-fable-5` refused the attacker role outright (recorded honestly, not retried).
+- **A commitment you can look up in the blockchain.** Stage 5L binds the evaluation scope to a real
+  **DigiCert RFC-3161** timestamp (`openssl ts -verify: OK`) _and_ a **Bitcoin-confirmed** OpenTimestamps
+  proof — **block 957 689**, merkle root cross-checked against mempool.space — plus an independent
+  two-machine reproduction. Honest boundary: this ships as **VTC-Core**; the verifier consuming that real
+  confirmed quorum bundle to bank `externally_anchored` is the one signed, named next step.
+
+Depth underneath: **20+ signed rungs**, each a single falsifiable blade; machine-checked **Lean theorems**
+(zero `sorry`, no user axioms) on every recent stage; **Node ↔ Python ↔ browser byte-parity**; and a
+public, Merkle-chained replay timeline. The one worked example below still reproduces byte-for-byte.
+
+## A worked, reproducible example — Stage 4Q (released as `v2.26.0-stage-4q-vfr`)
 
 Stage 4Q is merged to `main` and tagged `v2.26.0-stage-4q-vfr`; everything below reproduces from
 that tag by the command that follows. It comprises a 15-case normative corpus and a 10-arm live
@@ -72,8 +106,9 @@ approval-gated capture over a
 **genuinely separate approver process** (with a human-at-terminal ceremony arm); **JS↔Python
 byte-parity**; **five machine-checked Lean theorems** (`frictionPrecedence`, `failClosed`,
 `sameKeyFails`, `frictionCoverage`, `noSilentExemption`); a signed offline attestation with a
-two-tier verifier; and a one-command reproduce across ten gates. Repository baseline at this branch:
-**1559 automated tests**, byte-stable reproduction, private keys never committed.
+two-tier verifier; and a one-command reproduce across ten gates. Repository baseline **at the 4Q tag**:
+1559 automated tests, byte-stable reproduction, private keys never committed (the tree has since grown
+past 600 test files across the 3A → 5L arc).
 
 ```bash
 git clone https://github.com/Raoof128/Project-Simurgh.git
