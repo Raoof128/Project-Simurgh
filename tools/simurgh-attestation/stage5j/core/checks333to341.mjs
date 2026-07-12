@@ -1,7 +1,45 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Stage 5J — VRC bindings/obligation/topology/scale/signatures (334–341). Extended by Tasks 1.5–1.8.
 import { R } from "./result.mjs";
+import { domainDigest } from "./digests.mjs";
+import { DOMAINS } from "../constants.mjs";
 import { ratingObligationRoot } from "./roots.mjs";
+
+// A rating entry is ordinally comparable only if it is ordinal AND its dimension is declared comparable.
+function isComparable(entry, comparableDims) {
+  return (
+    entry &&
+    entry.content.value_kind === "ordinal" &&
+    comparableDims.has(entry.content.dimension_id)
+  );
+}
+
+// Task 1.7 — 338 scale integrity → 339 no ordinal comparison over a non_comparable pair.
+export function checkScaleAndComparison(ctx) {
+  const { bundle, facts } = ctx;
+  if (!facts.scaleSigValid) return R(338, "rating_scale_unsigned");
+
+  const topScale = domainDigest(DOMAINS.scale, bundle.rating_scale.content);
+  const comparableDims = new Set(bundle.rating_scale.content.comparable_dimensions);
+  const all = [...bundle.reviewer_ratings, ...bundle.producer_ratings];
+  for (const e of all) {
+    if (e.content.value_kind === "ordinal" && e.content.rating_scale_digest !== topScale) {
+      return R(338, "rating_scale_digest_mismatch");
+    }
+  }
+
+  // 339 — every declared contest event must be over a genuinely comparable pair; a contest over an
+  // abstain / out-of-dimension pair is an ordinal comparison forced onto a non_comparable pair.
+  const byDigest = new Map(all.map((e) => [e.entry_digest, e]));
+  for (const ce of bundle.contest_history) {
+    const rev = byDigest.get(ce.content.reviewer_rating_digest);
+    const prod = byDigest.get(ce.content.producer_rating_digest);
+    if (!isComparable(rev, comparableDims) || !isComparable(prod, comparableDims)) {
+      return R(339, "comparison_on_non_comparable_pair");
+    }
+  }
+  return null;
+}
 
 // Task 1.5 — obligation equality (both sides). 334 obligation-root mismatch → 335 missing → 336 orphan.
 export function checkObligation(ctx) {
