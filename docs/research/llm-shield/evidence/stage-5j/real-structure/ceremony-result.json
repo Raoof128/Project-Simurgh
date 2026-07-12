@@ -1,0 +1,9 @@
+{
+  "public_raw": 0,
+  "audit_raw": 0,
+  "sections_total": 37,
+  "reviewer_pairs": 39,
+  "divergences": 3,
+  "verifier_key_fingerprint": "sha256:db92f06de8126c57e88590b45695633ce953ea74d4b2cb06fbb7d2f3841c30cf",
+  "note": "Independent-party VRC rating-contest ceremony over the Opus 4.6 PUBLIC structure. NOT rsp compliance; ratings are the droplet party's own independent assessments (not METR/Anthropic); does not observe the confidential report."
+}

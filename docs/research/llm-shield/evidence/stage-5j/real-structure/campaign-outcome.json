@@ -1,0 +1,28 @@
+{
+  "status": "completed",
+  "campaign_id": "vrc-lanec-opus46-2026-07-12",
+  "claim": "public_report_structure_rating_contest",
+  "independence_rung": "distinct_key_only",
+  "committed_run": {
+    "label": "run-1-local-device",
+    "node_version": "v22.16.0",
+    "verifier_key_fingerprint": "sha256:db92f06de8126c57e88590b45695633ce953ea74d4b2cb06fbb7d2f3841c30cf",
+    "public_raw": 0,
+    "audit_raw": 0,
+    "sections_total": 37,
+    "reviewer_pairs": 39,
+    "divergences": 3,
+    "note": "Byte-committed here; re-verifies raw 0 under the repo verifier; verifier key distinct from ours (we do not possess it)."
+  },
+  "corroborating_run": {
+    "label": "run-2-remote-droplet",
+    "host": "Nexus (170.64.167.95)",
+    "os": "Ubuntu 24.04.3 LTS",
+    "node_version": "v26.5.0",
+    "verifier_key_fingerprint": "sha256:6eb29ff108621bb04c2affd27f79d7552b4d1160f5f3bd5c9961f3f0a134b114",
+    "public_raw": 0,
+    "audit_raw": 0,
+    "note": "Executed on a separate remote machine under Node 26 with a DIFFERENT distinct verifier key; documented in RAW_RESULTS.md. Its bytes were not transferred, so run 1 is the byte-committed artifact."
+  },
+  "non_claim": "NOT rsp_unredacted_report_compliance; over the Opus 4.6 PUBLIC structure only; ratings are the droplet party's own independent assessments (NOT attributed to METR, Anthropic, or any named reviewer); does not observe the confidential report or Anthropic's real review panel; affiliation axis modeled; independence rung is distinct_key_only (NOT externally_anchored)."
+}
