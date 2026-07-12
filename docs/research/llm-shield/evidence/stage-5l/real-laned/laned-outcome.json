@@ -1,0 +1,24 @@
+{
+  "stage": "5L-VTC-Q",
+  "lane": "D",
+  "claim": "independent_party_reproduction_plus_deidentified_public_witness",
+  "executed_at": "2026-07-12",
+  "commitment_session_id": "sha256:3ee8a8c9b8d7ea805fdb4bae192d86d11c22192855526d95761f4b87d89828e8",
+  "independent_reproduction": {
+    "verified": true,
+    "runs": [
+      { "label": "local", "node": "v22.16.0", "host": "Raoufs-MacBook-Air", "core_public_raw": 0, "core_audit_raw": 0, "quorum_public_raw": 0, "quorum_audit_raw": 0 },
+      { "label": "remote-droplet (Nexus, Ubuntu 24.04)", "node": "v26.5.0", "host": "Nexus", "core_public_raw": 0, "core_audit_raw": 0, "quorum_public_raw": 0, "quorum_audit_raw": 0 }
+    ],
+    "note": "An independent party ran the verify-only droplet pack (public keys only, no private material) on two machines / Node builds. All four checks (core-positive + quorum-confirmed-stub, public + audit) reproduce raw 0, with a byte-identical commitment_session_id."
+  },
+  "public_witness": {
+    "log": "opentimestamps",
+    "status": "pending_bitcoin_confirmation",
+    "verified": false,
+    "de_identified": true,
+    "ots_target_file_sha256": "6e1dd226b872bb0ff23a36a68dd1203cc1e8e94d20ad6f5133f70a21f4c3ca34",
+    "note": "Both machines ots-stamped pack/ANCHOR_ME.txt (content = the full commitment_session_id). PendingAttestation on 4 calendars. A recurring check (job b7c4ddf5, every 45 min, 7-day expiry) runs `ots upgrade` on both proofs and notifies on Bitcoin confirm; then flip verified + cross-check the block merkle root vs mempool.space (as 5J/5K). Proof: ANCHOR_ME.txt.ots (local copy committed)."
+  },
+  "non_claim": "This is REPRODUCTION independence + a de-identified public witness (same tier as VUC's Lane C) — NOT a distinct-verifier-key ceremony. The droplet pack is verify-only (public keys only, no builder), so the party re-verifies the committed bytes with their own machine/Node but does not re-sign with their own keys. A full distinct-key Lane D (party re-runs the builder with its own gate/sequencer/tsa-verifier keys) remains a further step. Independent reproduction does NOT bank externally_anchored (that needs the OTS Bitcoin-CONFIRMED + the real Lane-B quorum re-run)."
+}
