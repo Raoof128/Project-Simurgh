@@ -155,3 +155,34 @@ test("336 — orphan rating (reviewer not in the verified 5I panel)", () => {
   facts.reviewerSigValid[orphan.entry_digest] = true;
   assert.equal(vrcVerify(bundle, cfg, facts).raw, 336);
 });
+
+// --- Task 1.6 — rating-chain + epoch-ticket integrity 337 --------------------------------------
+test("337 — forked chain: a second genesis for one chain_subject (two active heads)", () => {
+  const { bundle, cfg, facts } = validBundle();
+  const twin = structuredClone(bundle.producer_ratings[0]);
+  twin.content.value = "high"; // different content → distinct entry_digest, still revision 0 / genesis
+  twin.entry_digest = "sha256:twin-genesis-producer-1";
+  facts.producerSigValid[twin.entry_digest] = true;
+  bundle.producer_ratings.push(twin);
+  assert.equal(vrcVerify(bundle, cfg, facts).raw, 337);
+});
+
+test("337 — cross-subject supersession (entry supersedes a different chain_subject)", () => {
+  const { bundle, cfg, facts } = validBundle();
+  // producer:2 entry claims to supersede the producer:1 entry — different chain_subject.
+  bundle.producer_ratings[1].content.supersedes_digest = bundle.producer_ratings[0].entry_digest;
+  bundle.producer_ratings[1].content.revision = 1;
+  assert.equal(vrcVerify(bundle, cfg, facts).raw, 337);
+});
+
+test("337 — broken epoch-ticket chain (previous_epoch_ticket_digest tampered)", () => {
+  const { bundle, cfg, facts } = validBundle();
+  bundle.epoch_tickets[2].content.previous_epoch_ticket_digest = "sha256:notthepriorticket";
+  assert.equal(vrcVerify(bundle, cfg, facts).raw, 337);
+});
+
+test("337 — forged/unsigned epoch ticket (ledger-authority signature invalid)", () => {
+  const { bundle, cfg, facts } = validBundle();
+  facts.epochTicketSigValid[bundle.epoch_tickets[0].epoch_ticket_digest] = false;
+  assert.equal(vrcVerify(bundle, cfg, facts).raw, 337);
+});
