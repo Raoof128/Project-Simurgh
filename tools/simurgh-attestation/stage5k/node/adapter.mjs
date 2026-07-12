@@ -5,6 +5,8 @@
 import { verifyContent, fingerprint } from "../core/signatures.mjs";
 import { domainDigest } from "../core/digests.mjs";
 import { DOMAINS } from "../constants.mjs";
+import { vucVerify } from "../core/vucCore.mjs";
+import { attestationDigest } from "../core/attestation.mjs";
 import { vpcVerify } from "../../stage5i/core/vpcCore.mjs";
 import { makeAdapterFacts as vpcAdapterFacts } from "../../stage5i/node/adapter.mjs";
 import { vrcVerify } from "../../stage5j/core/vrcCore.mjs";
@@ -155,4 +157,28 @@ export function makeAdapterFacts(bundle, cfg) {
     producerBindingSigValid,
     omissionSigValid,
   };
+}
+
+// Convenience: full verify (adapter facts + pure core).
+export function verifyVuc(bundle, cfg, { tier = "public" } = {}) {
+  return vucVerify(bundle, cfg, makeAdapterFacts(bundle, cfg), { tier });
+}
+
+// Resolve attestation signatures (verifier-signed). attWrappers = [{ attestation, signature }, ...].
+export function makeAttestationFacts(attWrappers, cfg) {
+  const reg = cfg.key_registry;
+  const attestationSigValid = {};
+  for (const w of attWrappers) {
+    if (!w) continue;
+    const domain =
+      w.attestation.tier === "public" ? DOMAINS.attestation_public : DOMAINS.attestation_audit;
+    attestationSigValid[attestationDigest(w.attestation)] = safeVerify(
+      reg,
+      cfg.verifier_key_fingerprint,
+      domain,
+      w.attestation,
+      w.signature
+    );
+  }
+  return { attestationSigValid };
 }
