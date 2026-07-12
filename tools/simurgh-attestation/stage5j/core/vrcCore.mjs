@@ -11,6 +11,7 @@ import { checkBundleSchema, checkConfigSchema } from "./schema.mjs";
 import { makeCtx } from "./context.mjs";
 import { checkObligation, checkScaleAndComparison, checkSignatures } from "./checks333to341.mjs";
 import { checkChains } from "./chains.mjs";
+import { checkContest } from "./contest.mjs";
 
 export function vrcVerify(bundle, cfg, facts, { tier = "public" } = {}) {
   const b332 = checkBundleSchema(bundle);
@@ -26,7 +27,8 @@ export function vrcVerify(bundle, cfg, facts, { tier = "public" } = {}) {
       () => checkChains(ctx), // 337
       () => checkScaleAndComparison(ctx), // 338, 339
       () => checkSignatures(ctx), // 340, 341
-      // 342–344 appended by Tasks 1.9–1.10
+      () => checkContest(ctx), // 342, 343
+      // 344 appended by Task 1.10
     ];
     for (const s of steps) {
       const r = s();
