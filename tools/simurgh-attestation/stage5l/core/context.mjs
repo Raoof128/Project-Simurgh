@@ -35,8 +35,30 @@ export function makeCtx(bundle, cfg, facts) {
   const otsAnchor = anchors.find((a) => a.anchor_type === "bitcoin_ots");
   const tsaFact = tsaAnchor ? facts?.tsaCrypto?.[tsaAnchor.tsa_token_digest] : null;
   const tsaUpperBound = resolveTsaUpperBound(tsaFact, cfg);
-  const otsFinality = otsAnchor ? facts?.otsFinality?.[otsAnchor.ots_proof_digest] : undefined;
   const otsState = otsAnchor ? facts?.otsState?.[otsAnchor.ots_proof_digest] : undefined;
+  const declaredFinality = otsAnchor ? otsAnchor.declared_finality : undefined;
+
+  // computedFinality is derived offline from the signed checkpoint_evidence (P0-2/3): the OTS Merkle path
+  // resolves (otsState), the witness key is in the committed accepted set, the witness signature verifies,
+  // and observed_tip_height - block_height + 1 >= min_confirmations. Never a live Bitcoin node.
+  let otsWitnessAccepted = true;
+  let computedFinality;
+  if (!otsAnchor) {
+    computedFinality = undefined;
+  } else if (otsState === "invalid") {
+    computedFinality = "invalid";
+  } else {
+    const ce = otsAnchor.checkpoint_evidence;
+    const acceptedKeys = bundle.anchor_policy?.accepted_checkpoint_witness_keys ?? [];
+    otsWitnessAccepted = !!ce && acceptedKeys.includes(ce.witness_key_fingerprint);
+    const sigValid = !!facts?.checkpointWitnessSigValid?.[otsAnchor.ots_proof_digest];
+    const confs = ce ? ce.observed_tip_height - ce.block_height + 1 : -1;
+    const minConf = bundle.anchor_policy?.min_confirmations ?? Infinity;
+    computedFinality =
+      ce && otsWitnessAccepted && sigValid && otsState === "verified_immediate" && confs >= minConf
+        ? "confirmed"
+        : "pending";
+  }
 
   const dedupedDomains = [...new Set(anchors.map((a) => a.trust_domain))];
   const verifiedAnchorSetDigestVal = verifiedAnchorSetDigest(anchors);
@@ -60,7 +82,9 @@ export function makeCtx(bundle, cfg, facts) {
     tsaFact,
     tsaUpperBound,
     otsState,
-    otsFinality,
+    declaredFinality,
+    computedFinality,
+    otsWitnessAccepted,
     dedupedDomains,
     verifiedAnchorSetDigest: verifiedAnchorSetDigestVal,
   };

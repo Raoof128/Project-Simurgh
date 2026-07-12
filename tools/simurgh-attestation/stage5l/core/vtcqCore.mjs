@@ -9,6 +9,8 @@ import { checkBundleSchema, checkConfigSchema } from "./schema.mjs";
 import { makeCtx } from "./context.mjs";
 import { checkCommitment } from "./commitment.mjs";
 import { checkTsaParse, checkTsaCrypto, checkTsaValidity, checkTsaAccuracy } from "./tsa.mjs";
+import { checkOtsStructural, checkFinalityOverclaim } from "./ots.mjs";
+import { checkIndependenceInflation, checkProfileFloor } from "./quorum.mjs";
 import { checkReservedSlots } from "./policy.mjs";
 
 export function vtcqVerify(bundle, cfg, facts, { tier = "public" } = {}) {
@@ -24,7 +26,11 @@ export function vtcqVerify(bundle, cfg, facts, { tier = "public" } = {}) {
       () => checkTsaCrypto(ctx), // 367
       () => checkTsaValidity(ctx), // 368
       () => checkTsaAccuracy(ctx), // 369
-      // 370 → 380 → 371 → 372 → 374 → 375 → 373 → 376 → 377 → 378 → 379 (Task group 1, frozen spine)
+      () => checkOtsStructural(ctx), // 370
+      () => checkFinalityOverclaim(ctx), // 380
+      () => checkIndependenceInflation(ctx), // 371
+      () => checkProfileFloor(ctx), // 372
+      // 374 → 375 → 373 → 376 → 377 → 378 → 379 (Task group 1, frozen spine)
     ];
     for (const s of steps) {
       const r = s();
