@@ -1,0 +1,23 @@
+{
+  "campaign_id": "vuc-lanec-verify-2026-07-12",
+  "claim": "independent_reproduction_plus_deidentified_public_witness",
+  "universe_commitment_digest": "sha256:01cd6f553d8b6f1cf47acb7f2ed5dbf6b9519a3f1546575d3db293988c656344",
+  "independent_reproduction": {
+    "verified": true,
+    "runs": [
+      { "label": "local", "node": "v22.16.0", "public_raw": 0, "audit_raw": 0 },
+      { "label": "remote-droplet (Nexus, Ubuntu 24.04)", "node": "v26.5.0", "public_raw": 0, "audit_raw": 0 }
+    ],
+    "note": "Two independent machines + Node builds reproduced raw 0 (public + audit) on the committed VUC Lane-A pack, with a byte-identical universe_commitment_digest. VUC's proof is bound to the original review panel, so Lane C independence is REPRODUCTION + de-identified public witness, NOT a distinct-verifier-key ceremony."
+  },
+  "public_witness": {
+    "log": "opentimestamps",
+    "status": "pending_bitcoin_confirmation",
+    "verified": false,
+    "de_identified": true,
+    "anchored_digest": "sha256:01cd6f553d8b6f1cf47acb7f2ed5dbf6b9519a3f1546575d3db293988c656344",
+    "ots_target_file_sha256": "5f026ef39db4416e744a36aaad8f1af372b7525981466117de7cc44785a1ca74",
+    "note": "ANCHOR_ME.txt OpenTimestamps-stamped on both machines (Run 3/4). All 4 calendars report PendingAttestation (fresh stamp, ~hours to Bitcoin). Verified locally via `ots info`: the proof stamps sha256(ANCHOR_ME.txt)=5f026ef3…, and ANCHOR_ME.txt contains the committed universe_commitment_digest. A recurring `ots upgrade` check (30-min cadence, 7-day expiry) will Bitcoin-confirm; on confirmation, re-run `ots upgrade` + flip this to verified and cross-check the block merkle root against a public explorer (as done for 5J)."
+  },
+  "non_claim": "Independent reproduction + a de-identified public witness prove the universe commitment was publicly, immutably timestamped and re-verifies byte-for-byte on other machines. They do NOT establish a distinct-verifier-key ceremony (verification needs no key), a live adversarial (Lane C-adv) run, NOR that the committed universe was ADEQUATE for the real risk domain (scope stability != completeness)."
+}
