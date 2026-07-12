@@ -1007,6 +1007,40 @@ export const VRC_AUDIT_CHECK_ORDER = Object.freeze([
 export const VRC_AUDIT_ONLY_CODES = Object.freeze([345]);
 export const VRC_POLICY_CODES = Object.freeze([346]);
 
+// Stage 5K — VUC: Verifiable Universe Commitment. Additive codes 348–363. Declared-universe →
+// evaluated-universe equality (per component), sequencer-chain commit-first precedence, exact
+// reviewer/producer execution bindings over a Merkle-set commitment. No Shrinking Universe / No Phantom
+// Section / No Post-Hoc Commitment Record. Public first-failure 348→360; audit adds projection 361;
+// policy 362 + wrapper 363 applied OUTSIDE the ordered scan (house convention, cf. VRC_*).
+export const VUC_RAW_CODES = Object.freeze({
+  OK: 0, // every stage enum carries OK:0 (VPC/VRC convention) — CODES.OK must not be undefined
+  VUC_SCHEMA_INVALID: 348,
+  VUC_COMMITMENT_INVALID: 349,
+  VUC_ANCHOR_SUBJECT_INVALID: 350,
+  VUC_ORDERING_NOT_VERIFIED_IMMEDIATE: 351,
+  VUC_DOWNSTREAM_BINDING_INVALID: 352,
+  VUC_START_CENSUS_INVALID: 353,
+  VUC_POST_HOC_COMMITMENT_RECORD: 354, // No Post-Hoc Commitment Record (headline)
+  VUC_EXECUTION_BINDING_INVALID: 355,
+  VUC_INCLUSION_PROOF_INVALID: 356,
+  VUC_SHRINKING_UNIVERSE: 357, // No Shrinking Universe (per component, headline)
+  VUC_PHANTOM_SECTION: 358, // No Phantom Section (per component, headline)
+  VUC_ALIAS_VIOLATION: 359, // distinct leaf_id + dup subject / many-to-one (dup leaf_id is 349's)
+  VUC_ANCHOR_FINALITY_OVERCLAIM: 360,
+  VUC_PROJECTION_MISMATCH: 361, // audit-only (bijection/per-component/inclusion/start census/
+  //                               regression/commit-first-margin/omission census/in-toto bridge)
+  VUC_RESERVED_SLOT_ACTIVATED: 362, // policy — non-null reserved branch / non-release profile / leaf_count<2
+  INTERNAL_OR_ENV_UNAVAILABLE_VUC: 363, // fail-closed wrapper (run level 1)
+});
+export const VUC_PUBLIC_CHECK_ORDER = Object.freeze([
+  348, 349, 350, 351, 352, 353, 354, 355, 356, 357, 358, 359, 360,
+]);
+export const VUC_AUDIT_CHECK_ORDER = Object.freeze([
+  348, 349, 350, 351, 352, 353, 354, 355, 356, 357, 358, 359, 360, 361,
+]);
+export const VUC_AUDIT_ONLY_CODES = Object.freeze([361]);
+export const VUC_POLICY_CODES = Object.freeze([362]);
+
 export const HARNESS_CODES = Object.freeze({
   CLEAN_RUN_FALSELY_REJECTED: 19,
 });
@@ -1367,6 +1401,24 @@ export const RUN_LEVEL_BY_RAW = Object.freeze({
   345: 1,
   346: 1,
   347: 1,
+  // Stage 5K VUC (348–363): every code is a run-level-1 attestation rejection (incl. wrapper 363,
+  // matching per-stage wrappers 347/331/315/…; only 4H's raw 29 and truly-unknown codes are 3).
+  348: 1,
+  349: 1,
+  350: 1,
+  351: 1,
+  352: 1,
+  353: 1,
+  354: 1,
+  355: 1,
+  356: 1,
+  357: 1,
+  358: 1,
+  359: 1,
+  360: 1,
+  361: 1,
+  362: 1,
+  363: 1,
 });
 
 export function stage4CodeForRawCode(code) {
