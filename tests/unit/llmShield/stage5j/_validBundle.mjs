@@ -272,7 +272,9 @@ export function validBundle() {
     },
   };
 
-  return { bundle, cfg, facts, meta: { S, RA, RB, RATING_SCALE_DIGEST } };
+  // Deep-clone so tests can freely mutate their copy without polluting the module-level fixture
+  // (the 5I "structuredClone before tampering" gotcha, enforced here at the source).
+  return structuredClone({ bundle, cfg, facts, meta: { S, RA, RB, RATING_SCALE_DIGEST } });
 }
 
 // resign(obj, key): after mutating a signed object in a cloned fixture, recompute its digest and mark
