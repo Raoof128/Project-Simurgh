@@ -51,7 +51,7 @@ override, missing/orphan rating, forged supersession, replayed response, or phan
   exclusion, fossil-attack supersession authority, tier monotonicity, the Override Trilemma,
   `noCorrectnessBit`).
 
-**Tests:** 78 stage5j unit + 4 K7 e2e green (K7 asserts every raw 332–347 reachable + evidence lock; a
+**Tests:** 79 stage5j unit + 4 K7 e2e green (K7 asserts every raw 332–347 reachable + evidence lock; a
 locked test re-verifies the committed **real-structure** independent-party pack at raw 0).
 Full repo unit suite green (exit 0). Prior **5I reproduce still raw 0** (sealed history undisturbed). The
 5J reproduce script is **ALL PASS** under Node 26. Both priv-key audit scripts (3m + 3o) pass with the
