@@ -118,3 +118,81 @@ Both proofs are freshly stamped (pending Bitcoin confirmation, typically several
 `ots upgrade ./pack/ANCHOR_ME.txt.ots` will be run on each machine; the send-back set is the `run.sh`
 verify log plus `pack/ANCHOR_ME.txt.ots`. A confirmation check will be appended here once `ots upgrade`
 reports `Success! Timestamp complete` on both.
+
+## OpenTimestamps confirmation — local
+
+Command: `ots upgrade ./pack/ANCHOR_ME.txt.ots`
+
+Raw output:
+```
+Got 1 attestation(s) from https://btc.calendar.catallaxy.com
+Got 1 attestation(s) from https://bob.btc.calendar.opentimestamps.org
+Got 1 attestation(s) from https://alice.btc.calendar.opentimestamps.org
+Calendar https://finney.calendar.eternitywall.com: Pending confirmation in Bitcoin blockchain
+Success! Timestamp complete
+```
+exit=0
+
+`ots info ./pack/ANCHOR_ME.txt.ots` (upgraded proof, key lines):
+```
+File sha256 hash: 6e1dd226b872bb0ff23a36a68dd1203cc1e8e94d20ad6f5133f70a21f4c3ca34
+...
+verify BitcoinBlockHeaderAttestation(957689)
+# Bitcoin block merkle root b0d4a6ce66e071d0de1d917369a64715df79fa1b7a1ed32cfaa2d82acae83c69
+# Transaction id 790976cb10cd3ee9fe6adacbd06fda3756dfafe6b4c8f859f5ab33a09b77c2f0
+    verify PendingAttestation('https://bob.btc.calendar.opentimestamps.org')
+...
+verify BitcoinBlockHeaderAttestation(957690)
+# Bitcoin block merkle root 9ba9935400c02ba76aa35ba687b9e98d23f520dfb333d796ca9aaa2a8ac5c7f7
+# Transaction id 75f3b881b89dbabe85ce9c0858dbd1bbcea9a071970f3a54853d867d0588df40
+...
+verify BitcoinBlockHeaderAttestation(957688)
+# Bitcoin block merkle root d3964d906fb18def9b38140445952b7b2437aff504d459fc56825267c94d7189
+# Transaction id 82ae376a40521ad7d399be8b53797dd814685daae231a5c635b5efb47ea96d52
+...
+verify PendingAttestation('https://finney.calendar.eternitywall.com')
+```
+
+## OpenTimestamps confirmation — droplet
+
+Command: `ots upgrade ./pack/ANCHOR_ME.txt.ots`
+
+Raw output:
+```
+Got 1 attestation(s) from https://btc.calendar.catallaxy.com
+Got 1 attestation(s) from https://alice.btc.calendar.opentimestamps.org
+Got 1 attestation(s) from https://bob.btc.calendar.opentimestamps.org
+Calendar https://finney.calendar.eternitywall.com: Pending confirmation in Bitcoin blockchain
+Success! Timestamp complete
+```
+exit=0
+
+`ots info ./pack/ANCHOR_ME.txt.ots` (upgraded proof, key lines):
+```
+File sha256 hash: 6e1dd226b872bb0ff23a36a68dd1203cc1e8e94d20ad6f5133f70a21f4c3ca34
+...
+verify BitcoinBlockHeaderAttestation(957689)
+# Bitcoin block merkle root b0d4a6ce66e071d0de1d917369a64715df79fa1b7a1ed32cfaa2d82acae83c69
+# Transaction id 790976cb10cd3ee9fe6adacbd06fda3756dfafe6b4c8f859f5ab33a09b77c2f0
+    verify PendingAttestation('https://alice.btc.calendar.opentimestamps.org')
+...
+verify BitcoinBlockHeaderAttestation(957688)
+# Bitcoin block merkle root d3964d906fb18def9b38140445952b7b2437aff504d459fc56825267c94d7189
+# Transaction id 82ae376a40521ad7d399be8b53797dd814685daae231a5c635b5efb47ea96d52
+    verify PendingAttestation('https://bob.btc.calendar.opentimestamps.org')
+...
+verify BitcoinBlockHeaderAttestation(957690)
+# Bitcoin block merkle root 9ba9935400c02ba76aa35ba687b9e98d23f520dfb333d796ca9aaa2a8ac5c7f7
+# Transaction id 75f3b881b89dbabe85ce9c0858dbd1bbcea9a071970f3a54853d867d0588df40
+...
+verify PendingAttestation('https://finney.calendar.eternitywall.com')
+```
+
+Three of four calendar branches (`catallaxy` → block 957689/957689, `bob` → block 957690, `alice` →
+block 957688) confirmed on both machines with matching block heights, merkle roots, and transaction ids
+— same calendar-batching behavior observed for the Stage 5J and 5K proofs. The `finney` branch remains
+pending on both — not required, since three confirmed calendar attestations already satisfy
+`Success! Timestamp complete`.
+
+Updated `./pack/ANCHOR_ME.txt.ots` files (post-upgrade, Bitcoin-confirmed) are ready to accompany the
+`run.sh` verify log in the send-back set on both machines.

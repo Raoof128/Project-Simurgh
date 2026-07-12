@@ -20,10 +20,17 @@
   },
   "opentimestamps": {
     "log": "opentimestamps",
-    "status": "pending_bitcoin_confirmation",
-    "verified": false,
+    "status": "bitcoin_confirmed",
+    "verified": true,
     "ots_target_file_sha256": "9f1f14af4cafd0243fa37787822f2afcd3b599090f081d56aad6dc854ea0366d",
-    "note": "Real OTS stamp over ANCHOR_ME.txt (file content = the commitment digest hex). PendingAttestation on 4 calendars (a.pool/b.pool.opentimestamps, eternitywall, catallaxy). Bitcoin confirmation in ~hours; run `ots upgrade ANCHOR_ME.txt.ots` then flip verified + cross-check the block merkle root vs mempool.space (as done for 5J/5K). Proof: ANCHOR_ME.txt.ots."
+    "bitcoin": {
+      "primary_block_height": 957689,
+      "primary_block_hash": "00000000000000000001ef4a1326588d274668820d9d306a4133245ada8fe521",
+      "primary_block_merkle_root": "b0d4a6ce66e071d0de1d917369a64715df79fa1b7a1ed32cfaa2d82acae83c69",
+      "primary_txid": "790976cb10cd3ee9fe6adacbd06fda3756dfafe6b4c8f859f5ab33a09b77c2f0",
+      "cross_checked_explorer": "mempool.space"
+    },
+    "note": "Bitcoin-confirmed 2026-07-12. `ots upgrade` returned Success; landed in blocks 957688-957690 (calendar-batched with the Lane D proofs into the SAME blocks; distinct per-proof Merkle paths). Independently cross-checked vs mempool.space (block 957689 merkle_root b0d4a6ce...83c69 == OTS proof; txid confirmed). Upgraded proof committed: ANCHOR_ME.txt.ots (3.6 KB)."
   },
   "banks_externally_anchored": false,
   "non_claim": "A real DigiCert RFC-3161 token establishes a real bounded-time upper bound over the commitment, offline-verifiable. `externally_anchored` is NOT yet banked: it additionally requires the OTS proof to be Bitcoin-CONFIRMED and the full vtc_quorum_confirmed ceremony re-run with this real token + confirmed checkpoint wired through the adapter's OpenSSL path. This record is the real capture; confirmation + adapter integration are the remaining steps."
