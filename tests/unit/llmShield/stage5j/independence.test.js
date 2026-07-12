@@ -12,6 +12,8 @@ import {
   strongestRung,
   anchorBindingValid,
   rungAtLeast,
+  publicWitness,
+  publicWitnessBindingValid,
 } from "../../../../tools/simurgh-attestation/stage5j/core/independence.mjs";
 import { evaluateCampaign } from "../../../../tools/simurgh-attestation/stage5j/node/lanec-gate.mjs";
 
@@ -73,4 +75,56 @@ test("the gate reports externally_anchored when a real anchor is verified", () =
   });
   assert.equal(gated.status, "completed");
   assert.equal(gated.independence, "externally_anchored");
+});
+
+// --- DE-IDENTIFIED public transparency-log witness (no identity revealed) ----------------------
+function withWitness(bundle, cfg, overrides = {}) {
+  cfg.anchor_evidence = {
+    kind: "public-witness",
+    log: "opentimestamps",
+    locator: "sha256:ots-proof-digest",
+    anchored_digest: contestLayerRoot(bundle),
+    ...overrides,
+  };
+  return cfg;
+}
+
+test("de-identified witness + verified public-log check → public_witness signal, rung stays distinct_key_only", () => {
+  const { bundle, cfg } = buildSignedVrcBundle(vrcLaneKeys());
+  withWitness(bundle, cfg);
+  // no identity anchor ⇒ identity rung unchanged
+  assert.equal(strongestRung(bundle, cfg, { witnessVerified: true }), "distinct_key_only");
+  // but a de-identified public witness IS recorded
+  assert.deepEqual(publicWitness(bundle, cfg, { witnessVerified: true }), {
+    log: "opentimestamps",
+    verified: true,
+    de_identified: true,
+  });
+});
+
+test("witness that carries an identity is rejected (must stay de-identified)", () => {
+  const { bundle, cfg } = buildSignedVrcBundle(vrcLaneKeys());
+  withWitness(bundle, cfg, { identity: "someone@org.org" });
+  assert.equal(publicWitnessBindingValid(bundle, cfg).reason, "witness_must_be_de_identified");
+  assert.equal(publicWitness(bundle, cfg, { witnessVerified: true }), null);
+});
+
+test("witness not bound to this pack, or unverified, → no signal", () => {
+  const { bundle, cfg } = buildSignedVrcBundle(vrcLaneKeys());
+  withWitness(bundle, cfg, { anchored_digest: "sha256:other-pack" });
+  assert.equal(publicWitness(bundle, cfg, { witnessVerified: true }), null);
+  const c2 = withWitness(bundle, structuredClone(cfg), {});
+  c2.anchor_evidence.anchored_digest = contestLayerRoot(bundle);
+  assert.equal(publicWitness(bundle, c2, { witnessVerified: false }), null); // not yet verified
+});
+
+test("the gate reports the de-identified public_witness alongside distinct_key_only", () => {
+  const { bundle, cfg } = buildSignedVrcBundle(vrcLaneKeys());
+  withWitness(bundle, cfg);
+  const gated = evaluateCampaign({ status: "completed", pack: { bundle, cfg } }, "sha256:ours", {
+    witnessVerified: true,
+  });
+  assert.equal(gated.independence, "distinct_key_only");
+  assert.equal(gated.public_witness.de_identified, true);
+  assert.equal(gated.public_witness.log, "opentimestamps");
 });

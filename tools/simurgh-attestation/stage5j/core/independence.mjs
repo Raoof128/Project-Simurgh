@@ -41,3 +41,31 @@ export function anchorBindingValid(bundle, cfg) {
 export function rungAtLeast(rung, floor) {
   return RUNG.index(rung) >= RUNG.index(floor);
 }
+
+// DE-IDENTIFIED alternative to the identity anchor. A public-transparency-log witness (OpenTimestamps /
+// Bitcoin, or a Rekor hashedrekord with the party's OWN pseudonymous key) proves the pack's
+// contest_layer_root was committed to a public, immutable, third-party log at a time — WITHOUT revealing
+// who did it. This is ORTHOGONAL to the identity lattice (it carries no identity), so it never lifts the
+// rung above distinct_key_only; it is reported as a separate signal. Honest bound: it proves public
+// immutable witnessing + non-fabrication-after-the-fact, NOT a real external identity.
+const WITNESS_LOGS = new Set(["opentimestamps", "rekor"]);
+
+export function publicWitnessBindingValid(bundle, cfg) {
+  const w = cfg?.anchor_evidence;
+  if (!w || w.kind !== "public-witness") return { ok: false, reason: "no_public_witness" };
+  if (!WITNESS_LOGS.has(w.log)) return { ok: false, reason: "unknown_witness_log" };
+  if (typeof w.locator !== "string" || !w.locator)
+    return { ok: false, reason: "witness_locator_missing" };
+  if ("identity" in w) return { ok: false, reason: "witness_must_be_de_identified" };
+  if (w.anchored_digest !== contestLayerRoot(bundle))
+    return { ok: false, reason: "witness_not_bound_to_pack" };
+  return { ok: true };
+}
+
+// The public-witness signal (de-identified). `witnessVerified` = our online check that the digest is
+// actually in the public log (ots verify / rekor inclusion). Returns null if absent/unverified.
+export function publicWitness(bundle, cfg, { witnessVerified = false } = {}) {
+  const b = publicWitnessBindingValid(bundle, cfg);
+  if (!b.ok || !witnessVerified) return null;
+  return { log: cfg.anchor_evidence.log, verified: true, de_identified: true };
+}
