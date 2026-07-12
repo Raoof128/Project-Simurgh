@@ -186,3 +186,36 @@ test("337 — forged/unsigned epoch ticket (ledger-authority signature invalid)"
   facts.epochTicketSigValid[bundle.epoch_tickets[0].epoch_ticket_digest] = false;
   assert.equal(vrcVerify(bundle, cfg, facts).raw, 337);
 });
+
+// --- Task 1.7 — scale + comparison 338 / 339 --------------------------------------------------
+test("338 — rating scale unsigned (scale_authority signature invalid)", () => {
+  const { bundle, cfg, facts } = validBundle();
+  facts.scaleSigValid = false;
+  assert.equal(vrcVerify(bundle, cfg, facts).raw, 338);
+});
+
+test("338 — an ordinal entry's rating_scale_digest ≠ the committed top-level scale", () => {
+  const { bundle, cfg, facts } = validBundle();
+  bundle.producer_ratings[0].content.rating_scale_digest = "sha256:otherscale";
+  assert.equal(vrcVerify(bundle, cfg, facts).raw, 338);
+});
+
+test("339 — a contest event over a non_comparable pair (reviewer abstained on section 8)", () => {
+  const { bundle, cfg, facts } = validBundle();
+  const rev8 = bundle.reviewer_ratings.find(
+    (e) => e.content.section_id === "8" && e.content.value_kind === "not_assessed"
+  );
+  const prod8 = bundle.producer_ratings.find((e) => e.content.section_id === "8");
+  bundle.contest_history.push({
+    content: {
+      section_id: "8",
+      reviewer_id: rev8.content.reviewer_id,
+      producer_rating_digest: prod8.entry_digest,
+      reviewer_rating_digest: rev8.entry_digest,
+      rating_scale_digest: bundle.rating_scale ? prod8.content.rating_scale_digest : "x",
+      ledger_epoch: 999,
+    },
+    contest_event_digest: "sha256:contest-over-abstain",
+  });
+  assert.equal(vrcVerify(bundle, cfg, facts).raw, 339);
+});
