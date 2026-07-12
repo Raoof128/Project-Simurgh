@@ -76,11 +76,14 @@ reproduction); the other (broader prior-art sweep) is unpaid, so Novelty stays 9
 
 ## Remaining — the frontier-lever operator steps (not code)
 
-- **Bitcoin confirmation** of the de-identified witness (a recurring `ots upgrade` check is running; on
-  confirmation, flip `lanec-outcome.json` to verified + cross-check the block merkle root, as done for 5J).
+- **Bitcoin confirmation** of the de-identified witness — **DONE 2026-07-12.** `ots upgrade` returned
+  `Success!` on both machines; block **957665**, txid `f465762b…f744d9`, merkle root `c61b3919…e49e54`.
+  Independently cross-checked vs mempool.space (block-height → hash → merkle_root all match; txid confirmed
+  in 957665). `lanec-outcome.json` flipped `public_witness.verified=true`; polling job b7827018 cancelled.
 - **Live Lane C-adv** — a real Fable-5 gerrymandering producer (CVP-covered, digest-only, sealed either
-  way). **Until it and a confirmed anchor run, Frontier stays 9.0** — Sigstore/Bitcoin are external
-  services, never part of the offline raw-0 recompute. The rails are built and gated.
+  way). The anchor is now confirmed, but VUC's Lane C is structurally reproduction-only (verify-only pack,
+  no distinct-key ceremony possible) and Lane C-adv is still unrun, so **Frontier stays 9.0** — Bitcoin is
+  an external service, never part of the offline raw-0 recompute. The rails are built and gated.
 
 ## Four-axis scorecard (closeout, honest)
 

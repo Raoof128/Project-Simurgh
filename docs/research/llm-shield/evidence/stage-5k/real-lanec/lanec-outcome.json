@@ -12,12 +12,21 @@
   },
   "public_witness": {
     "log": "opentimestamps",
-    "status": "pending_bitcoin_confirmation",
-    "verified": false,
+    "status": "bitcoin_confirmed",
+    "verified": true,
     "de_identified": true,
     "anchored_digest": "sha256:01cd6f553d8b6f1cf47acb7f2ed5dbf6b9519a3f1546575d3db293988c656344",
     "ots_target_file_sha256": "5f026ef39db4416e744a36aaad8f1af372b7525981466117de7cc44785a1ca74",
-    "note": "ANCHOR_ME.txt OpenTimestamps-stamped on both machines (Run 3/4). All 4 calendars report PendingAttestation (fresh stamp, ~hours to Bitcoin). Verified locally via `ots info`: the proof stamps sha256(ANCHOR_ME.txt)=5f026ef3…, and ANCHOR_ME.txt contains the committed universe_commitment_digest. A recurring `ots upgrade` check (30-min cadence, 7-day expiry) will Bitcoin-confirm; on confirmation, re-run `ots upgrade` + flip this to verified and cross-check the block merkle root against a public explorer (as done for 5J)."
+    "bitcoin": {
+      "block_height": 957665,
+      "block_hash": "000000000000000000002c2b8d166314e381eadd5727756bf791c420efcd3b3d",
+      "block_merkle_root": "c61b391960ade50ac74a01fba0b6d06a2c8ed2721a8cd507214a384ec3e49e54",
+      "txid": "f465762bad6d18d414b184a0592296a0b459a3286dcc517997e509eab8f744d9",
+      "confirming_calendar": "alice.btc.calendar.opentimestamps.org",
+      "cross_checked_explorer": "mempool.space",
+      "cross_check": "block-height 957665 → block_hash 000…cd3b3d; block merkle_root = c61b3919…e49e54 (= OTS proof); txid f465762b… confirmed in block 957665"
+    },
+    "note": "Bitcoin-confirmed 2026-07-12. `ots upgrade` returned `Success! Timestamp complete` on BOTH machines (local + droplet); both proofs' alice-calendar branch attests block 957665 / txid f465762b… (calendar batching — same tx, distinct merkle paths per proof), same pattern as 5J. Independently cross-checked against mempool.space: block 957665 merkle root = c61b3919…e49e54 matches the OTS BitcoinBlockHeaderAttestation exactly, and the txid is confirmed in that block. The stamped file hash 5f026ef3… is sha256(ANCHOR_ME.txt), and ANCHOR_ME.txt contains the committed universe_commitment_digest 01cd6f55…."
   },
   "non_claim": "Independent reproduction + a de-identified public witness prove the universe commitment was publicly, immutably timestamped and re-verifies byte-for-byte on other machines. They do NOT establish a distinct-verifier-key ceremony (verification needs no key), a live adversarial (Lane C-adv) run, NOR that the committed universe was ADEQUATE for the real risk domain (scope stability != completeness)."
 }
