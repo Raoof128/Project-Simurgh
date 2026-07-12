@@ -117,3 +117,41 @@ test("makeCtx does not throw on a structurally-odd-but-schema-valid upstream (�
   const r = vrcVerify(bundle, cfg, facts);
   assert.equal(r.raw, 333);
 });
+
+// --- Task 1.5 — obligation equality 334 / 335 / 336 --------------------------------------------
+test("334 — declared rating_obligation_root ≠ recompute (incomplete synthetic set)", () => {
+  const { bundle, cfg, facts } = validBundle();
+  bundle.rating_obligation_root = "sha256:notthederivedobligation";
+  assert.equal(vrcVerify(bundle, cfg, facts).raw, 334);
+});
+
+test("335 — a required reviewer pair is missing (arm a) / a producer section is missing (arm b)", () => {
+  const a = validBundle();
+  a.bundle.reviewer_ratings.pop(); // drop (8,RB) — a required pair now absent
+  assert.equal(vrcVerify(a.bundle, a.cfg, a.facts).raw, 335);
+  const b = validBundle();
+  b.bundle.producer_ratings.pop(); // drop section 8's producer self-rating
+  assert.equal(vrcVerify(b.bundle, b.cfg, b.facts).raw, 335);
+});
+
+test("336 — orphan rating (reviewer not in the verified 5I panel)", () => {
+  const { bundle, cfg, facts } = validBundle();
+  const orphan = {
+    content: {
+      chain_subject: "reviewer:3:sha256:ghostreviewer",
+      revision: 0,
+      supersedes_digest: null,
+      rating_scale_digest: bundle.reviewer_ratings[0].content.rating_scale_digest,
+      dimension_id: "overall_risk",
+      section_id: "3",
+      reviewer_id: "sha256:ghostreviewer",
+      value_kind: "ordinal",
+      value: "low",
+      ledger_epoch: 999,
+    },
+    entry_digest: "sha256:orphanentrydigestunique",
+  };
+  bundle.reviewer_ratings.push(orphan);
+  facts.reviewerSigValid[orphan.entry_digest] = true;
+  assert.equal(vrcVerify(bundle, cfg, facts).raw, 336);
+});
