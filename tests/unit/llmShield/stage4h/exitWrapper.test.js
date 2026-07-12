@@ -383,6 +383,24 @@ test("Stage 4H.4 exit map is explicit and collision-bounded", () => {
       345: 1,
       346: 1,
       347: 1,
+      // Stage 5K VUC codes 348–363 (reviewed extension of the shared ledger; 5K spec §2). Wrapper 363
+      // matches per-stage wrappers 347/331/… at level 1.
+      348: 1,
+      349: 1,
+      350: 1,
+      351: 1,
+      352: 1,
+      353: 1,
+      354: 1,
+      355: 1,
+      356: 1,
+      357: 1,
+      358: 1,
+      359: 1,
+      360: 1,
+      361: 1,
+      362: 1,
+      363: 1,
     })
   );
 });
