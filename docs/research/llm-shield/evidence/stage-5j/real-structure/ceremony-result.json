@@ -4,6 +4,8 @@
   "sections_total": 37,
   "reviewer_pairs": 39,
   "divergences": 3,
-  "verifier_key_fingerprint": "sha256:db92f06de8126c57e88590b45695633ce953ea74d4b2cb06fbb7d2f3841c30cf",
-  "note": "Independent-party VRC rating-contest ceremony over the Opus 4.6 PUBLIC structure. NOT rsp compliance; ratings are the droplet party's own independent assessments (not METR/Anthropic); does not observe the confidential report."
+  "verifier_key_fingerprint": "sha256:33c874325a687f74634fc36492988709e2775b9aecbdd8f5d72937c4a64d2b64",
+  "contest_layer_root": "sha256:aa59da08aaa8dd2d1676c578d8fb2c076f7bb9fe9d601bc2aca2babeaac4f6ed",
+  "independence_rung": "distinct_key_only",
+  "note": "Independent-party VRC rating-contest ceremony over the Opus 4.6 PUBLIC structure. NOT rsp compliance; ratings are the droplet party's own independent assessments (not METR/Anthropic); does not observe the confidential report. For the externally_anchored rung, anchor contest_layer_root with cosign (see README)."
 }
