@@ -80,11 +80,12 @@ authorised-**access**, not honest content / adequate review / a human read it.
 
 - **Novelty 9.2** — temporalCompletenessNoHiddenGap (new theorem class) + SCITT bridge; TSA/OTS/Bitcoin
   are known primitives, the composition is the novelty.
-- **Frontier 9.3** (was 9.0) — banked since spec: **real DigiCert TSA (verified)**, **confirmed Bitcoin
-  publication of the commitment (block 957689, mempool-cross-checked)**, and **independent-party
-  reproduction** (2 machines). Both real trust roots now exist over the commitment. Remaining +0.2 to 9.5:
-  the verifier consuming a real `vtc_quorum_confirmed` bundle (integration) **+** live Lane C-adv; I5
-  (three-ecology quorum) is the boldest further lever.
+- **Frontier 9.4** (was 9.0) — banked since spec: **real DigiCert TSA (verified)**, **confirmed Bitcoin
+  publication (block 957689, mempool-cross-checked)**, **independent-party reproduction** (2 machines), and
+  a **real live-adversary containment demonstration** (Sonnet-5, 8 attacks across all 7 laws, all
+  contained, 0 bypass). The ONLY remaining +0.1 to 9.5: the verifier consuming a real `vtc_quorum_confirmed`
+  bundle (integration) to bank `externally_anchored`; I5 (three-ecology quorum) is the boldest further
+  lever.
 - **Good-for-Anthropic 9.6** — binds the primary-sourced RSP prerequisite-gate as recomputable; names the
   RSO as a concrete actor; SCITT standards-track distribution.
 - **Constitution 9.6** — makes temporal completeness + an RSP-clause ordering machine-checkable; every
