@@ -29,6 +29,35 @@ third party can _verify_ what a run did instead of taking a vendor's word for it
 
 In one sentence: **Simurgh gives an agentic system a verifiable receipt, not a passport.**
 
+### For a reviewer in a hurry — the 60-second version
+
+**The bet:** oversight of AI should not rest on trust. Simurgh is an independent, **byte-reproducible
+verification layer** — a third party recomputes what a run actually did, offline, without trusting any
+vendor, model, or lab. Everything below is signed, non-interactive, and checkable with one command.
+
+- **It maps to Anthropic's own problems, in Anthropic's own words.** The
+  [Constitution](#design-alignment-with-claudes-constitution)'s "the model is not the only safeguard" →
+  containment measured _after_ a guardrail misses. The July-2026
+  [global-workspace interpretability paper](#matching-anthropics-interpretability-research-july-2026)'s
+  own "not sufficient" limit → a signed workspace-attestation contract. RSP v3.4's evaluate-**before**-deploy
+  → a machine-checkable temporal commitment anchored in Bitcoin.
+- **Real, falsifiable results — not slideware.** A live **Llama Guard 4 12B** missed **138/150**
+  downstream attacks; Simurgh produced verifiable containment evidence for **138/138** (targeted attack
+  success **0/150**) — [Stage 3V-B](#the-concrete-result-stage-3v-b). A live **Sonnet-5 adversary** (CVP)
+  tried to forge a temporal-commitment ceremony **8 ways across all 7 laws** — the frozen verifier
+  contained **every one, 0 bypasses**, and the commitment is anchored in **Bitcoin block 957 689**
+  (independently cross-checked).
+- **Depth, not a demo.** 20+ signed research rungs, each adding **one falsifiable blade**; Lean proofs
+  (zero `sorry`, no user axioms); Node ↔ Python ↔ browser byte-parity; a public Merkle-chained replay
+  timeline.
+- **Calibrated by construction.** Every artifact carries machine-readable **non-claims**. The honesty
+  guardrail is literal: **"boundary held, verifiably" — never "model safe."** No vendor is ranked, no
+  immunity is claimed, and no live model is re-executed in CI.
+
+> **Verify it yourself in one command, offline, no private key:** see
+> [Reproduce it yourself](#reproduce-it-yourself-offline-no-private-key). That is the whole thesis made
+> operational — a receipt you can recompute, not a passport you have to trust.
+
 > 📄 **One-page technical brief:**
 > [Verifiable Containment Attestation After Guardrail Failure](docs/research/llm-shield/ONE_PAGE_BRIEF.md)
 > — the problem, the concrete Llama Guard 4 result, and the one-command reproduction, on a single
@@ -40,6 +69,13 @@ In one sentence: **Simurgh gives an agentic system a verifiable receipt, not a p
 > maps four named problems (third-party verification, verifiable oversight, completeness vs.
 > selective omission, multi-agent accountability) to concrete mechanisms — printable version at
 > [`docs/research/llm-shield/anthropic-brief.html`](docs/research/llm-shield/anthropic-brief.html).
+
+**The ladder so far.** Each release below is one falsifiable rung — a single mechanism a hostile reviewer
+could reject by attacking exactly one claim. It is a deliberate record of depth, not a changelog; skim the
+newest for the current frontier, or jump straight to
+[what it is / is not](#what-it-is--and-what-it-is-not), the
+[Constitution alignment](#design-alignment-with-claudes-constitution), or the
+[concrete result](#the-concrete-result-stage-3v-b).
 
 > 🆕 **Latest — Stage 5L · Verifiable Temporal Commitment with Notary Quorum (`v2.47.0-stage-5l-vtcq`).**
 > Externally commits the **full ceremony contract** (the VUC universe root + review-window / anchor / quorum
@@ -53,13 +89,14 @@ In one sentence: **Simurgh gives an agentic system a verifiable receipt, not a p
 > adapter (facts from _verified_ signatures), byte-stable Lane-A pack, two-tier attestation (`audit ⟹
 public`), **Node↔Python↔browser parity**, **14 Lean theorems** (zero `sorry`, no user axioms), K7
 > all-functions net. Beast-mode: an **RSP prerequisite-gate** fixture (RSO-approval-as-gate, primary-sourced)
-> · a **SCITT projection** bridge (emit-only) · `temporalCompletenessNoHiddenGap`. **Real Lane B + D
-> EXECUTED:** a genuine **DigiCert RFC-3161** token over the commitment (`openssl ts -verify: OK`) + a
-> **Bitcoin-confirmed** OTS publication (block **957689**, cross-checked vs mempool.space) + **independent
-> two-machine reproduction**. **Honest to its limits:** ships **VTC-Core** — both real trust roots exist over
-> the commitment, but `externally_anchored` is **not yet banked in the verifier** (a real `vtc_quorum_confirmed`
-> bundle + live Lane C-adv remain). Scorecard: Novelty 9.2 · Frontier 9.3 · Good-for-Anthropic 9.6 ·
-> Constitution 9.6.
+> · a **SCITT projection** bridge (emit-only) · `temporalCompletenessNoHiddenGap`. **Real lanes EXECUTED:** a
+> genuine **DigiCert RFC-3161** token over the commitment (`openssl ts -verify: OK`) + a **Bitcoin-confirmed**
+> OTS publication (block **957 689**, cross-checked vs mempool.space) + **independent two-machine
+> reproduction** + a **live Sonnet-5 adversary** (CVP) that attacked all 7 laws **8 ways — every one
+> contained, 0 bypasses**. **Honest to its limits:** ships **VTC-Core** — both real trust roots exist over
+> the commitment, but `externally_anchored` is **not yet banked in the verifier** (the sole remaining step
+> is the verifier consuming a real `vtc_quorum_confirmed` bundle). Scorecard: Novelty 9.2 · Frontier 9.4 ·
+> Good-for-Anthropic 9.6 · Constitution 9.6.
 >
 > <details><summary>Prior — Stage 5K · Verifiable Universe Commitment (<code>v2.46.0-stage-5k-vuc</code>)</summary>
 >
@@ -457,8 +494,8 @@ and [`docs/research/llm-shield/STAGE_5B_CLOSEOUT.md`](docs/research/llm-shield/S
 
 ## Flagship: Verifiable Containment Attestation (LLM Shield)
 
-The current work is a ladder of signed, independently reproducible research rungs (**Stage 3A → 5B**,
-releases `v1.6.0` → `v2.37.0`). The attestation rungs produce Ed25519-signed,
+The current work is a ladder of signed, independently reproducible research rungs (**Stage 3A → 5L**,
+releases `v1.6.0` → `v2.47.0`). The attestation rungs produce Ed25519-signed,
 metadata-only evidence bundles and offline checkers that re-derive their bounded claims byte-for-byte.
 
 ### The concrete result (Stage 3V-B)
