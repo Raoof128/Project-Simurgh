@@ -4,7 +4,7 @@
 // distinct_key_only — identifier separation, NOT a non-possession claim). A pack that fails can be
 // SEALED as an outcome (e.g. the adversarial Fable-5 demo's 342 trophy) but is never `completed`.
 import { verifyVrc } from "./adapter.mjs";
-import { strongestRung } from "../core/independence.mjs";
+import { strongestRung, publicWitness } from "../core/independence.mjs";
 
 // `anchorFacts` = { anchorVerified, challengeVerified } — the results of the ONLINE / out-of-band
 // checks (cosign verify-blob against Fulcio+Rekor, or a Simurgh challenge round-trip). Absent ⇒
@@ -22,7 +22,14 @@ export function evaluateCampaign(campaign, ourVerifierFingerprint, anchorFacts =
   if (cfg.verifier_key_pin.key_fingerprint === ourVerifierFingerprint) {
     return { status: "rejected", reason: "verifier_not_distinct" };
   }
-  return { status: "completed", raw: 0, independence: strongestRung(bundle, cfg, anchorFacts) };
+  return {
+    status: "completed",
+    raw: 0,
+    // Identity lattice (distinct_key_only → challenge_bound → externally_anchored).
+    independence: strongestRung(bundle, cfg, anchorFacts),
+    // Orthogonal, DE-IDENTIFIED signal — a public transparency-log witness, no identity revealed.
+    public_witness: publicWitness(bundle, cfg, anchorFacts),
+  };
 }
 
 // A sealed adversarial demonstration (Lane-A family): the outcome is recorded honestly, and a 342
