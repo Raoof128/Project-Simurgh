@@ -20,6 +20,11 @@ export function sha256Hex(input) {
   return "sha256:" + crypto.createHash("sha256").update(input).digest("hex");
 }
 
+// Raw 32-byte digest (Stage 5L needs the bytes for the RFC-3161 messageImprint / OTS leaf binding).
+export function sha256Bytes(input) {
+  return crypto.createHash("sha256").update(input).digest();
+}
+
 export function fingerprintPublicKey(pubKeyPem) {
   const der = crypto.createPublicKey(pubKeyPem).export({ type: "spki", format: "der" });
   return sha256Hex(der);
