@@ -14,11 +14,20 @@
   },
   "public_witness": {
     "log": "opentimestamps",
-    "status": "pending_bitcoin_confirmation",
-    "verified": false,
+    "status": "bitcoin_confirmed",
+    "verified": true,
     "de_identified": true,
     "ots_target_file_sha256": "6e1dd226b872bb0ff23a36a68dd1203cc1e8e94d20ad6f5133f70a21f4c3ca34",
-    "note": "Both machines ots-stamped pack/ANCHOR_ME.txt (content = the full commitment_session_id). PendingAttestation on 4 calendars. A recurring check (job b7c4ddf5, every 45 min, 7-day expiry) runs `ots upgrade` on both proofs and notifies on Bitcoin confirm; then flip verified + cross-check the block merkle root vs mempool.space (as 5J/5K). Proof: ANCHOR_ME.txt.ots (local copy committed)."
+    "bitcoin": {
+      "blocks": [957688, 957689, 957690],
+      "primary_block_height": 957689,
+      "primary_block_hash": "00000000000000000001ef4a1326588d274668820d9d306a4133245ada8fe521",
+      "primary_block_merkle_root": "b0d4a6ce66e071d0de1d917369a64715df79fa1b7a1ed32cfaa2d82acae83c69",
+      "primary_txid": "790976cb10cd3ee9fe6adacbd06fda3756dfafe6b4c8f859f5ab33a09b77c2f0",
+      "cross_checked_explorer": "mempool.space",
+      "cross_check": "block-height 957689 -> block_hash 000...8fe521; merkle_root b0d4a6ce...83c69 (= OTS proof); txid 790976cb... confirmed in 957689"
+    },
+    "note": "Bitcoin-confirmed 2026-07-12. `ots upgrade` returned Success on both machines; 3 of 4 calendar branches landed in blocks 957688-957690 with matching merkle roots + txids on both (calendar batching -> shared blocks, distinct per-proof Merkle paths, same pattern as 5J/5K). Independently cross-checked vs mempool.space (block 957689: height->hash->merkle_root match, txid confirmed). Recurring check job b7c4ddf5 stopped. Upgraded proof committed: ANCHOR_ME.txt.ots (3.7 KB)."
   },
   "non_claim": "This is REPRODUCTION independence + a de-identified public witness (same tier as VUC's Lane C) — NOT a distinct-verifier-key ceremony. The droplet pack is verify-only (public keys only, no builder), so the party re-verifies the committed bytes with their own machine/Node but does not re-sign with their own keys. A full distinct-key Lane D (party re-runs the builder with its own gate/sequencer/tsa-verifier keys) remains a further step. Independent reproduction does NOT bank externally_anchored (that needs the OTS Bitcoin-CONFIRMED + the real Lane-B quorum re-run)."
 }
