@@ -84,3 +84,36 @@ test("347 — cfg undefined (never a throw)", () => {
   const { bundle, facts } = validBundle();
   assert.equal(vrcVerify(bundle, undefined, facts).raw, 347);
 });
+
+// --- Task 1.4 — makeCtx + upstream RE-VERIFICATION → 333 ----------------------------------------
+test("333 — upstream 5I bundle did not verify (facts.vpc_verdict ≠ 0)", () => {
+  const { bundle, cfg, facts } = validBundle();
+  facts.vpc_verdict = 327; // e.g. the 5I coverage-gap code
+  const r = vrcVerify(bundle, cfg, facts);
+  assert.equal(r.raw, 333);
+  assert.equal(r.reason, "upstream_unverified");
+});
+
+test("333 — vpc_ref anchor mismatch (panel_subject_root tampered)", () => {
+  const { bundle, cfg, facts } = validBundle();
+  bundle.vpc_ref.panel_subject_root = "sha256:deadbeef";
+  const r = vrcVerify(bundle, cfg, facts);
+  assert.equal(r.raw, 333);
+  assert.equal(r.reason, "anchor_mismatch");
+});
+
+test("333 — producer_ref does not bind the reused 5I producer principal", () => {
+  const { bundle, cfg, facts } = validBundle();
+  bundle.producer_ref.producer_key_fingerprint = "sha256:nottheproducer";
+  const r = vrcVerify(bundle, cfg, facts);
+  assert.equal(r.raw, 333);
+  assert.equal(r.reason, "producer_mismatch");
+});
+
+test("makeCtx does not throw on a structurally-odd-but-schema-valid upstream (→ 333, not 347)", () => {
+  const { bundle, cfg, facts } = validBundle();
+  cfg.vpc_bundle.attestation.content.panel_subject_root = "sha256:changed";
+  // vpc_ref still holds the original → anchor_mismatch, cleanly, not a wrapper throw
+  const r = vrcVerify(bundle, cfg, facts);
+  assert.equal(r.raw, 333);
+});
