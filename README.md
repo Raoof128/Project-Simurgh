@@ -13,7 +13,7 @@ proof of what happened after a guardrail missed — not another jailbreak detect
 [![Node](https://img.shields.io/badge/node-%E2%89%A522.0-1a1a1a?style=flat-square)](https://nodejs.org)
 [![License](https://img.shields.io/badge/license-AGPL--3.0-d6cfbe?style=flat-square)](#license)
 [![Status](https://img.shields.io/badge/status-research%20prototype-2f4a2a?style=flat-square)](#status)
-[![Latest](https://img.shields.io/badge/release-v2.46.0-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.46.0-stage-5k-vuc)
+[![Latest](https://img.shields.io/badge/release-v2.47.0-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.47.0-stage-5l-vtcq)
 
 </div>
 
@@ -41,7 +41,28 @@ In one sentence: **Simurgh gives an agentic system a verifiable receipt, not a p
 > selective omission, multi-agent accountability) to concrete mechanisms — printable version at
 > [`docs/research/llm-shield/anthropic-brief.html`](docs/research/llm-shield/anthropic-brief.html).
 
-> 🆕 **Latest — Stage 5K · Verifiable Universe Commitment (`v2.46.0-stage-5k-vuc`).**
+> 🆕 **Latest — Stage 5L · Verifiable Temporal Commitment with Notary Quorum (`v2.47.0-stage-5l-vtcq`).**
+> Externally commits the **full ceremony contract** (the VUC universe root + review-window / anchor / quorum
+> / trust-domain / declared-release policies) through a **bounded-time RFC-3161 authority** _and_ a
+> structurally distinct **Bitcoin/OTS publication root**, then makes reviewer access **cryptographically
+> impossible until that commitment verifies** — enforced by a gate-issued capability every declared release
+> must consume. Laws: **No Backdated Commitment**, **No Post-Hoc Review Window**, **No Temporal Release
+> Bypass**. Codes **364–383** on a frozen non-numeric spine; three computed states (`vtc_core`=0,
+> `vtc_quorum_confirmed`=0, `vtc_quorum_pending`=**372** honest floor-miss, `false-confirmed`=**380**);
+> offline Bitcoin finality via a signed checkpoint witness (no live node). Real Ed25519 signed builder +
+> adapter (facts from _verified_ signatures), byte-stable Lane-A pack, two-tier attestation (`audit ⟹
+public`), **Node↔Python↔browser parity**, **14 Lean theorems** (zero `sorry`, no user axioms), K7
+> all-functions net. Beast-mode: an **RSP prerequisite-gate** fixture (RSO-approval-as-gate, primary-sourced)
+> · a **SCITT projection** bridge (emit-only) · `temporalCompletenessNoHiddenGap`. **Real Lane B + D
+> EXECUTED:** a genuine **DigiCert RFC-3161** token over the commitment (`openssl ts -verify: OK`) + a
+> **Bitcoin-confirmed** OTS publication (block **957689**, cross-checked vs mempool.space) + **independent
+> two-machine reproduction**. **Honest to its limits:** ships **VTC-Core** — both real trust roots exist over
+> the commitment, but `externally_anchored` is **not yet banked in the verifier** (a real `vtc_quorum_confirmed`
+> bundle + live Lane C-adv remain). Scorecard: Novelty 9.2 · Frontier 9.3 · Good-for-Anthropic 9.6 ·
+> Constitution 9.6.
+>
+> <details><summary>Prior — Stage 5K · Verifiable Universe Commitment (<code>v2.46.0-stage-5k-vuc</code>)</summary>
+>
 > Proves the ceremony could not quietly **swap, shrink, or reinterpret what "everything" means after
 > commitment**: an authorship-bound, externally-ordered **Merkle-set universe commitment**, chained to exact
 > reviewer/producer start obligations and fresh execution outputs, with **independent** equality against each
@@ -61,6 +82,8 @@ In one sentence: **Simurgh gives an agentic system a verifiable receipt, not a p
 > Lane C is reproduction + de-identified witness, **not** a distinct-key ceremony. Scorecard: Novelty 9.0 ·
 > Frontier 9.0 (unbanked; needs live Lane C-adv + a confirmed anchor) · Good-for-Anthropic 9.4 · Constitution
 > 9.4.
+>
+> </details>
 >
 > <details><summary>Prior — Stage 5J · Verifiable Rating Contest (<code>v2.45.0-stage-5j-vrc</code>)</summary>
 >
