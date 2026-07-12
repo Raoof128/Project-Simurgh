@@ -255,3 +255,84 @@ test("341 — fossil attack: a SUPERSEDED producer entry has an invalid signatur
   facts.producerSigValid[genesis.entry_digest] = false; // the fossil is forged
   assert.equal(vrcVerify(bundle, cfg, facts).raw, 341);
 });
+
+// --- Task 1.9 — append-only contest layer 342 / 343 -------------------------------------------
+// Helper: append a producer supersession (rev1) on a section, matching the reviewer (severity "high").
+function supersedeProducer(bundle, facts, section, value) {
+  const genesis = bundle.producer_ratings.find((e) => e.content.section_id === section);
+  const rev1 = {
+    content: {
+      chain_subject: genesis.content.chain_subject,
+      revision: 1,
+      supersedes_digest: genesis.entry_digest,
+      rating_scale_digest: genesis.content.rating_scale_digest,
+      dimension_id: genesis.content.dimension_id,
+      section_id: section,
+      value_kind: "ordinal",
+      value,
+      ledger_epoch: 900 + Number(section),
+    },
+    entry_digest: `sha256:producer-${section}-rev1`,
+  };
+  bundle.producer_ratings.push(rev1);
+  facts.producerSigValid[rev1.entry_digest] = true;
+  return rev1;
+}
+
+test("342 — a recomputed contest event is omitted from contest_history (census mismatch)", () => {
+  const { bundle, cfg, facts } = validBundle();
+  bundle.contest_history = bundle.contest_history.filter((ce) => ce.content.section_id !== "3");
+  bundle.producer_responses = bundle.producer_responses.filter(
+    (r) => r.content.contest_event_digest !== "sha256:contest-over-abstain"
+  );
+  assert.equal(vrcVerify(bundle, cfg, facts).raw, 342);
+});
+
+test("342 — erase-by-supersession: producer revises to match, then drops the earlier event (still recomputed)", () => {
+  const { bundle, cfg, facts } = validBundle();
+  supersedeProducer(bundle, facts, "3", "high"); // now head matches reviewer(3,RA)=high
+  // producer drops the section-3 contest event AND its response, hoping the divergence vanishes
+  const ceB = bundle.contest_history.find((ce) => ce.content.section_id === "3");
+  bundle.contest_history = bundle.contest_history.filter((ce) => ce !== ceB);
+  bundle.producer_responses = bundle.producer_responses.filter(
+    (r) => r.content.contest_event_digest !== ceB.contest_event_digest
+  );
+  // the fossil producer rev0 (low) still pairs with reviewer(3,RA) high → event recomputed → 342
+  assert.equal(vrcVerify(bundle, cfg, facts).raw, 342);
+});
+
+test("342 — a stored contest event has no response object (unanswered)", () => {
+  const { bundle, cfg, facts } = validBundle();
+  const ceB = bundle.contest_history.find((ce) => ce.content.section_id === "3");
+  bundle.producer_responses = bundle.producer_responses.filter(
+    (r) => r.content.contest_event_digest !== ceB.contest_event_digest
+  );
+  assert.equal(vrcVerify(bundle, cfg, facts).raw, 342);
+});
+
+test("343 — a present response has an invalid signature", () => {
+  const { bundle, cfg, facts } = validBundle();
+  facts.responseSigValid[bundle.producer_responses[0].response_digest] = false;
+  assert.equal(vrcVerify(bundle, cfg, facts).raw, 343);
+});
+
+test("343 — a response is bound to a non-existent event (replayed / dangling)", () => {
+  const { bundle, cfg, facts } = validBundle();
+  const extra = {
+    content: {
+      contest_event_digest: "sha256:noSuchEvent",
+      response_body_digest: "sha256:x",
+      ledger_epoch: 950,
+    },
+    response_digest: "sha256:extra-response",
+  };
+  bundle.producer_responses.push(extra);
+  facts.responseSigValid[extra.response_digest] = true;
+  assert.equal(vrcVerify(bundle, cfg, facts).raw, 343);
+});
+
+test("POSITIVE control — producer revises AFTER responding (history + receipt preserved) → raw 0", () => {
+  const { bundle, cfg, facts } = validBundle();
+  supersedeProducer(bundle, facts, "3", "high"); // revise to match, but keep ceB + its response
+  assert.equal(vrcVerify(bundle, cfg, facts, { tier: "public" }).raw, 0);
+});
