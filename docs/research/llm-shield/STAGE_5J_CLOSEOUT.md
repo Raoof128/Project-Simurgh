@@ -36,8 +36,13 @@ override, missing/orphan rating, forged supersession, replayed response, or phan
 - **Three evidence lanes:** **A** byte-stable Fable-5-scenario pack (committed keys → deterministic
   Ed25519; verifies raw 0 public + audit; byte-stable; committed == fresh rebuild) · **B** deterministic
   multi-role ceremony (distinct keys per role, 5-state census A–E, content-blind ledger authority) · **C**
-  the campaign gate (`completed ⟹ pack present AND verifies raw 0 under a DISTINCT verifier key`);
-  **real independent-party Lane C NOT executed** — see limitations.
+  the campaign gate (`completed ⟹ pack present AND verifies raw 0 under a DISTINCT verifier key`) —
+  **real independent-party ceremony EXECUTED**: a droplet party ran the ceremony over the real Opus 4.6
+  public structure (**37 leaf sections**, 39 reviewer pairs, 3 divergences) with **their own keys**; the
+  pack **byte-verifies raw 0 (public + audit) under our repo verifier** with a verifier key distinct from
+  ours (`sha256:db92f06d…` ≠ ours `sha256:6a5e0288…` — non-possession is the point). Two runs (local Node
+  22 + a **remote Ubuntu droplet under Node 26** with a second distinct key `sha256:6eb29ff1…`), both raw
+  0; run 1 is byte-committed at `evidence/stage-5j/real-structure/`. Independence rung: **`distinct_key_only`**.
 - **Node JS ↔ independent Python semantic parity, byte-identical** on the committed pack (same verdict +
   `rating_obligation_root` / `rating_ledger_root` / `contest_layer_root` / `projection_root`), plus a
   browser WebCrypto portable verifier (packaging/execution parity over the same decision logic).
@@ -46,7 +51,8 @@ override, missing/orphan rating, forged supersession, replayed response, or phan
   exclusion, fossil-attack supersession authority, tier monotonicity, the Override Trilemma,
   `noCorrectnessBit`).
 
-**Tests:** 77 stage5j unit + 4 K7 e2e green (K7 asserts every raw 332–347 reachable + evidence lock).
+**Tests:** 78 stage5j unit + 4 K7 e2e green (K7 asserts every raw 332–347 reachable + evidence lock; a
+locked test re-verifies the committed **real-structure** independent-party pack at raw 0).
 Full repo unit suite green (exit 0). Prior **5I reproduce still raw 0** (sealed history undisturbed). The
 5J reproduce script is **ALL PASS** under Node 26. Both priv-key audit scripts (3m + 3o) pass with the
 stage5j test-keys allowlisted.
@@ -70,9 +76,11 @@ Code's external-evaluation mandate, both of which name disagreement but leave it
    report/eval surface → VUC.
 4. **Logical, not temporal.** Epoch order is a signed logical sequence; wall-clock timeliness → VTC.
 5. **Single committed rating scale**, no cross-scale comparison in v1.
-6. **Real independent-party Lane C NOT executed.** The gate + the byte-stable synthetic pack are done, but
-   the real ceremony (the reused 5I reviewer principals emitting real ratings under keys we do not hold)
-   is deferred → the Frontier score reflects this.
+6. **Real independent-party Lane C EXECUTED, but at rung `distinct_key_only`.** The droplet party emitted
+   real ratings under fresh keys we do not hold (byte-verified raw 0, 37 real sections, a remote droplet
+   run under Node 26), so independence is `distinct_key_only` — **NOT `externally_anchored`** (no
+   Sigstore/OIDC anchor). "Local device" run 1 is byte-committed; the remote droplet run 2 is documented
+   (its bytes were not transferred). → `real_sigstore_anchor_execution_deferred` remains open.
 7. Parity is JS↔Python **semantic** + browser packaging, not cross-runtime crypto-impl parity.
 8. The **"Areas of disagreement" RSP section wording is reported-until-pinned** (the canonical policy page
    surfaced the split-review sentence, not that exact section text).
@@ -86,12 +94,12 @@ reserved (typed-null, 346-guarded): `universe_commitment_anchor` (VUC), `review_
 
 ## Four-axis scorecard — re-scored at closeout
 
-| Axis               | Spec-time | Closeout | Why the closeout value                                                                                                                                                                       |
-| ------------------ | --------: | -------: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Novelty            |       9.2 |  **9.5** | Override Trilemma + `noCorrectnessBit` theorem classes, content-blind sequencer, Downgrade Depth — all built and Lean-proven. → 9.6 on a broader prior-art sweep + independent reproduction. |
-| Frontier           |       9.0 |  **9.2** | Real Ed25519 end-to-end + byte-stable pack + 3-runtime parity, but the **real independent-party Lane C is NOT executed** (synthetic pack only). Earns 9.5 only when that ceremony runs.      |
-| Good-for-Anthropic |       9.4 |  **9.5** | Reviewer rebuttal completes both-sides due process; maps to the RSP v3.4 external-review process over quantified Risk Reports. Caps at 9.5 with no real process-owner pilot.                 |
-| Constitution       |       9.4 |  **9.6** | Reviewer rebuttal + `noCorrectnessBit` make the contest fuller (both sides heard, silence ≠ agreement) **without** claiming truth. Binding review quality/truth belongs to a later rung.     |
+| Axis               | Spec-time | Closeout | Why the closeout value                                                                                                                                                                                                                                                                                    |
+| ------------------ | --------: | -------: | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Novelty            |       9.2 |  **9.5** | Override Trilemma + `noCorrectnessBit` theorem classes, content-blind sequencer, Downgrade Depth — all built and Lean-proven. → 9.6 on a broader prior-art sweep + independent reproduction.                                                                                                              |
+| Frontier           |       9.0 |  **9.4** | Real Ed25519 e2e + byte-stable pack + 3-runtime parity + **real independent-party Lane C EXECUTED** (droplet party, own keys distinct from ours, 37 real Opus sections, byte-verified raw 0, a remote Node-26 droplet run). Short of 9.5: independence is `distinct_key_only`, not `externally_anchored`. |
+| Good-for-Anthropic |       9.4 |  **9.5** | Reviewer rebuttal completes both-sides due process; maps to the RSP v3.4 external-review process over quantified Risk Reports. Caps at 9.5 with no real process-owner pilot.                                                                                                                              |
+| Constitution       |       9.4 |  **9.6** | Reviewer rebuttal + `noCorrectnessBit` make the contest fuller (both sides heard, silence ≠ agreement) **without** claiming truth. Binding review quality/truth belongs to a later rung.                                                                                                                  |
 
 _"Good-for-Anthropic" measures potential usefulness to assurance teams; it implies no Anthropic review,
 adoption, or endorsement._
@@ -99,6 +107,7 @@ adoption, or endorsement._
 ## Next
 
 **VUC** (external universe commitment — pays `uncommitted_section_universe_deferred`), then **VTC**
-(temporal coverage), then the **capstone** composing the finished External-Accountability rungs. Nearest
-Frontier lever: execute the real Lane C ceremony (independent party emits real reviewer ratings under
-their own keys) and the live-Fable-5 adversarial demo.
+(temporal coverage), then the **capstone** composing the finished External-Accountability rungs. Real
+Lane C is now EXECUTED (`distinct_key_only`); the remaining Frontier levers are a real Sigstore/OIDC
+anchor to lift Lane C to `externally_anchored` (`real_sigstore_anchor_execution_deferred`) and the
+live-Fable-5 adversarial demo.
