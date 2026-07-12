@@ -366,3 +366,24 @@ test("344 — one reviewer asserts BOTH concurrence and rebuttal on one event (a
   facts.rebuttalSigValid[bothRebuttal.rebuttal_digest] = true;
   assert.equal(vrcVerify(bundle, cfg, facts).raw, 344);
 });
+
+// --- Task 1.11 — projections 345 (audit-only) -------------------------------------------------
+test("345 — a tampered projection field: audit rejects (345), public accepts (0)", () => {
+  const { bundle, cfg, facts } = validBundle();
+  bundle.projections.favourable_skew.favourable_count += 1;
+  assert.equal(vrcVerify(bundle, cfg, facts, { tier: "audit" }).raw, 345);
+  assert.equal(vrcVerify(bundle, cfg, facts, { tier: "public" }).raw, 0);
+});
+
+test("345 — projection_root mismatch (audit)", () => {
+  const { bundle, cfg, facts } = validBundle();
+  bundle.projections.projection_root = "sha256:notthedigest";
+  assert.equal(vrcVerify(bundle, cfg, facts, { tier: "audit" }).raw, 345);
+});
+
+test("345 — in-toto/SCITT bridge subject ≠ contest_layer_root (audit)", () => {
+  const { bundle, cfg, facts } = validBundle();
+  bundle.external_registry_anchor = { subject_digest: "sha256:wrongsubject", registry: "intoto" };
+  assert.equal(vrcVerify(bundle, cfg, facts, { tier: "audit" }).raw, 345);
+  // (346 would fire on a reserved slot, but external_registry_anchor is an ACTIVE optional field.)
+});

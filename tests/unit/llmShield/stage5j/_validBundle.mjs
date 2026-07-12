@@ -11,6 +11,10 @@ import {
   artifactDigest,
 } from "../../../../tools/simurgh-attestation/stage5j/core/digests.mjs";
 import { DOMAINS } from "../../../../tools/simurgh-attestation/stage5j/constants.mjs";
+import {
+  computeProjections,
+  projectionRoot,
+} from "../../../../tools/simurgh-attestation/stage5j/core/projections.mjs";
 
 const ROOT = join(import.meta.dirname, "../../../..");
 const VPC_BUNDLE = JSON.parse(
@@ -182,19 +186,16 @@ const reviewer_rebuttals = [
   })(),
 ];
 
-// --- projections (recomputed at audit tier) -----------------------------------------------------
-const projections = {
-  divergence_census: contest_history.map((ce) => ({
-    section_id: ce.content.section_id,
-    reviewer_id: ce.content.reviewer_id,
-    producer_rating: producerPlan[ce.content.section_id],
-    reviewer_ratings: [revBy(ce.content.section_id, ce.content.reviewer_id).content.value],
-  })),
-  favourable_skew: { favourable_count: 3, comparable_pair_count: 9 }, // 9 comparable (10 − 1 abstain)
-  concurrence_backing: { backed_claim_count: 1, total_concurrence_claim_count: 1 },
-  downgrade_depth: { total_rank_delta: 2 + 2 + 2, contested_pair_count: 3 }, // (3-1)+(3-1)+(4-2)
-};
-projections.projection_root = artifactDigest(projections);
+// --- projections (recomputed at audit tier) — computed via the SAME core function the verifier uses,
+// so the fixture is valid by construction (favourable 3/9 comparable; downgrade delta 6 over 3 pairs).
+const projections = computeProjections({
+  rating_scale: { content: SCALE_CONTENT },
+  producer_ratings,
+  reviewer_ratings,
+  contest_history,
+  concurrences,
+});
+projections.projection_root = projectionRoot(projections);
 
 // --- roots --------------------------------------------------------------------------------------
 const required_reviewer_pairs = reviewerPlan.map((p) => `${p.s}:${p.r}`).sort();

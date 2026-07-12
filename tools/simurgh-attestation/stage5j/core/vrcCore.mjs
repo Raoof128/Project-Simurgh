@@ -12,6 +12,7 @@ import { makeCtx } from "./context.mjs";
 import { checkObligation, checkScaleAndComparison, checkSignatures } from "./checks333to341.mjs";
 import { checkChains } from "./chains.mjs";
 import { checkContest, checkPhantomStatement } from "./contest.mjs";
+import { checkProjections } from "./projections.mjs";
 
 export function vrcVerify(bundle, cfg, facts, { tier = "public" } = {}) {
   const b332 = checkBundleSchema(bundle);
@@ -34,7 +35,11 @@ export function vrcVerify(bundle, cfg, facts, { tier = "public" } = {}) {
       const r = s();
       if (r) return r;
     }
-    // audit-only 345 + policy 346 appended by Tasks 1.11–1.12
+    if (tier === "audit") {
+      const p = checkProjections(ctx); // 345 audit-only
+      if (p) return p;
+    }
+    // policy 346 appended by Task 1.12
     return OK(ctx);
   } catch (e) {
     return R(347, "internal_or_env_unavailable", { error: String(e) });
