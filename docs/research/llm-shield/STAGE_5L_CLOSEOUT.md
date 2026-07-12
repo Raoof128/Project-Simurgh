@@ -45,9 +45,15 @@ min_confirmations`) — no live node; witness-less path is honestly `pinned_chec
   confirmation in ~hours. Evidence: `evidence/stage-5l/real-laneb/`. **`externally_anchored` still NOT
   banked**: it needs the OTS Bitcoin-CONFIRMED **and** the full `vtc_quorum_confirmed` ceremony re-run with
   this real token + confirmed checkpoint wired through the adapter's OpenSSL path.
-- **Out-of-band, not run**: **Lane C-adv** live Fable-5 gerrymandering producer (CVP-covered); **Lane D**
-  independent distinct-key party (the droplet pack enables it). Until the OTS confirms + these run, VTC-Q
-  ships as **VTC-Core**.
+- **Lane D — REPRODUCTION DONE (2026-07-12).** An independent party ran the verify-only droplet pack
+  (public keys only) on **two machines / Node builds** (local v22.16.0, droplet Nexus v26.5.0): all four
+  checks (core + quorum, public+audit) reproduce **raw 0** with a byte-identical `commitment_session_id`.
+  Both machines OTS-stamped the digest (de-identified witness, **pending Bitcoin**; recurring check job
+  b7c4ddf5). Evidence: `evidence/stage-5l/real-laned/`. **HONEST:** this is reproduction + witness (VUC
+  Lane-C tier), **NOT** a distinct-key ceremony (the droplet is verify-only). A full distinct-key Lane D
+  (party re-runs the builder with its own keys) remains a further step.
+- **Out-of-band, not run**: **Lane C-adv** live Fable-5 gerrymandering producer (CVP-covered). Until the
+  OTS anchors confirm (Lane B + Lane D) + the real quorum re-run, VTC-Q ships as **VTC-Core**.
 - Full RFC-3161 CMS/X.509 is the adapter's job (OpenSSL-backed, Lane B); the pure core takes the signed
   `tsa_crypto_attestation` as a fact (the 5I/5K B11 pattern).
 
