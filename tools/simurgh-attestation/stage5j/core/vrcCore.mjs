@@ -13,6 +13,7 @@ import { checkObligation, checkScaleAndComparison, checkSignatures } from "./che
 import { checkChains } from "./chains.mjs";
 import { checkContest, checkPhantomStatement } from "./contest.mjs";
 import { checkProjections } from "./projections.mjs";
+import { checkReservedSlots } from "./policy.mjs";
 
 export function vrcVerify(bundle, cfg, facts, { tier = "public" } = {}) {
   const b332 = checkBundleSchema(bundle);
@@ -39,7 +40,8 @@ export function vrcVerify(bundle, cfg, facts, { tier = "public" } = {}) {
       const p = checkProjections(ctx); // 345 audit-only
       if (p) return p;
     }
-    // policy 346 appended by Task 1.12
+    const pol = checkReservedSlots(ctx); // 346 policy (both tiers)
+    if (pol) return pol;
     return OK(ctx);
   } catch (e) {
     return R(347, "internal_or_env_unavailable", { error: String(e) });

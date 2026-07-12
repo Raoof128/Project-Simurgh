@@ -5,6 +5,10 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { validBundle } from "./_validBundle.mjs";
 import { vrcVerify } from "../../../../tools/simurgh-attestation/stage5j/core/vrcCore.mjs";
+import {
+  VRC_PUBLIC_CHECK_ORDER,
+  VRC_AUDIT_CHECK_ORDER,
+} from "../../../../tools/simurgh-attestation/stage4h/exitCodes.mjs";
 
 test("Task 1.2 — _validBundle() carries every required top-level key", () => {
   const { bundle, cfg, facts } = validBundle();
@@ -386,4 +390,45 @@ test("345 — in-toto/SCITT bridge subject ≠ contest_layer_root (audit)", () =
   bundle.external_registry_anchor = { subject_digest: "sha256:wrongsubject", registry: "intoto" };
   assert.equal(vrcVerify(bundle, cfg, facts, { tier: "audit" }).raw, 345);
   // (346 would fire on a reserved slot, but external_registry_anchor is an ACTIVE optional field.)
+});
+
+// --- Task 1.12 — reserved-slot policy 346 (both tiers) ----------------------------------------
+test("346 — each reserved slot activated (non-null) fails closed, both tiers", () => {
+  for (const slot of [
+    "universe_commitment_anchor",
+    "review_window_binding",
+    "campaign_composition_root",
+  ]) {
+    const { bundle, cfg, facts } = validBundle();
+    bundle[slot] = { activated: true };
+    assert.equal(vrcVerify(bundle, cfg, facts, { tier: "public" }).raw, 346, `${slot} public`);
+    assert.equal(vrcVerify(bundle, cfg, facts, { tier: "audit" }).raw, 346, `${slot} audit`);
+  }
+});
+
+// --- Task 1.13 — frozen first-failure order ---------------------------------------------------
+test("frozen order — with simultaneous 334 + 342 defects, the EARLIER code (334) wins", () => {
+  const { bundle, cfg, facts } = validBundle();
+  bundle.rating_obligation_root = "sha256:tampered"; // 334
+  bundle.contest_history = bundle.contest_history.filter((ce) => ce.content.section_id !== "3"); // would be 342
+  assert.equal(vrcVerify(bundle, cfg, facts).raw, 334);
+});
+
+test("frozen order — with 337 + 340 defects, topology (337) wins over signature (340)", () => {
+  const { bundle, cfg, facts } = validBundle();
+  bundle.producer_ratings[1].content.supersedes_digest = bundle.producer_ratings[0].entry_digest; // 337
+  bundle.producer_ratings[1].content.revision = 1;
+  facts.reviewerSigValid[bundle.reviewer_ratings[0].entry_digest] = false; // would be 340
+  assert.equal(vrcVerify(bundle, cfg, facts).raw, 337);
+});
+
+test("frozen order — the published check-order arrays match the spec sequence", () => {
+  assert.deepEqual(
+    VRC_PUBLIC_CHECK_ORDER,
+    [332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344]
+  );
+  assert.deepEqual(
+    VRC_AUDIT_CHECK_ORDER,
+    [332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 345]
+  );
 });
