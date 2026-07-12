@@ -62,6 +62,8 @@ A minimal schema-version dispatcher identifies `vtc_quorum_confirmed.v2`. The **
 
 Stage 5M ships as a **new `stage5m/` module** that imports and reuses the frozen 5L core (TSA + OTS seats, codes 364–383) unchanged.
 
+**Seat placement (gauntlet G-A, verified against `context.mjs:34-35`):** the 5L core derives anchors by `anchor_type` from `bundle.anchors` and computes `371`/`372`/`dedupedDomains`/`verifiedAnchorSetDigest` over **all** of them. Therefore the transparency-log seat lives in a **v2-only field `bundle.transparency_log_seat`, never in `bundle.anchors`** — the two frozen anchors (`rfc3161_tsa`, `bitcoin_ots`) stay in `bundle.anchors`. The projection is then minimal and provable: keep `bundle.anchors` unchanged, rewrite `quorum_policy.profile → vtc_quorum`, drop v2-only top-level fields; `frozenCorePreserved` is enforced by an executable test that the projection verifies byte-identically to the equivalent standalone 5L bundle. Dispatch runs two fact sets — `facts5L` (reusing 5L's `makeVtcqFacts`) for seats 1–2, `facts5M` for the Rekor extension (G-B). v2 member labels map to frozen anchor types via `MEMBER_TO_ANCHOR_TYPE` (`bitcoin_confirmed_publication → bitcoin_ots`, G-C).
+
 ### New raw codes (384–395, additive; 383 was the prior ceiling)
 
 | Code | Fires when | Bounded detail enum (diagnostic only, never changes precedence) |
