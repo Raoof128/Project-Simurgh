@@ -125,3 +125,5 @@ tools/simurgh-attestation/stage5h/host-registry.json
 docs/research/llm-shield/evidence/stage-5h/real-disclosure/
 docs/research/llm-shield/evidence/stage-5i/
 tests/fixtures/llmShield/stage5i/test-keys/
+docs/research/llm-shield/evidence/stage-5j/
+tests/fixtures/llmShield/stage5j/test-keys/
