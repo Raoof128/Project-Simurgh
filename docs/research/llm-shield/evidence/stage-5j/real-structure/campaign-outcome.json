@@ -5,25 +5,30 @@
   "independence_rung": "distinct_key_only",
   "public_witness": {
     "log": "opentimestamps",
-    "status": "pending_bitcoin_confirmation",
-    "verified": false,
+    "status": "bitcoin_confirmed",
+    "verified": true,
     "de_identified": true,
     "anchored_digest": "sha256:286a93aa4a613cff69ba8200342c37799ff88f3ec0c110edcccd6203325a9c13",
-    "note": "The de-identified OpenTimestamps witness step WAS executed and the proof is bound to this pack's contest_layer_root, but the stamp is not yet mined into a Bitcoin block (all calendars report PendingAttestation — expected, ~hours). Our verify-witness.mjs returns status=pending / witnessVerified=false, so NO verified public_witness is claimed yet. Re-run `ots upgrade` + verify-witness.mjs once Bitcoin confirms to flip this to verified."
+    "ots_target_file_sha256": "9a0317ed5131a58899f39bf72c163073a127c27d27e6aeea14398a116e62d8e4",
+    "bitcoin_block_attestations": [
+      { "height": 957642, "calendar": "alice.btc.calendar.opentimestamps.org", "block_hash": "000000000000000000023440671ceb75054987517b5e606a3cc0987718b2d95f", "merkle_root": "a3db07d0a87d32369a0c0914de2710e9aca2adaf173a7851eac2aac2a4727fe3", "txid": "b9ef98221ae9f82f7ba0e15c2f69a75bc2bb1c9db2bf35a5845b0142828d97ac" },
+      { "height": 957644, "calendar": "bob.btc.calendar.opentimestamps.org", "block_hash": "00000000000000000001891988ba43c2618b94328e5de919a1d443ef2a494d8b", "merkle_root": "8ce9839ea0bdd5001dc1e1339b6f55baed87f77fd9fb833298bceb18944b4019", "txid": "13ded6730b2a9460ce3935eeb206597b10fe0a8d0d432f9a4e079e75d8153c4c" }
+    ],
+    "note": "CONFIRMED 2026-07-12. `ots upgrade` returned Success (exit 0) and the committed witness-proof.opentimestamps now embeds BitcoinBlockHeaderAttestation(957642) and (957644) via the alice + bob calendars (`ots info`). Both blocks' merkle roots were INDEPENDENTLY cross-checked against a public explorer (mempool.space) and match the attestations exactly — the same check `ots verify` performs. A local `ots verify` needs a Bitcoin node (not run in the maintainer's offline env); it is reproducible by anyone running a node, or by re-fetching blocks 957642/957644. The catallaxy + finney calendar paths remain pending (a proof is complete once any one path resolves to a Bitcoin block)."
   },
   "committed_run": {
-    "label": "witness-bearing-run (de-identified public witness, pending)",
+    "label": "witness-bearing-run (de-identified public witness, Bitcoin-confirmed)",
     "verifier_key_fingerprint_distinct_from_ours": true,
     "public_raw": 0,
     "audit_raw": 0,
     "sections_total": 37,
     "witness_proof": "witness-proof.opentimestamps",
-    "note": "Byte-committed here; re-verifies raw 0 under the repo verifier; carries a bound-but-pending OpenTimestamps witness."
+    "note": "Byte-committed here; re-verifies raw 0 under the repo verifier; carries the upgraded, Bitcoin-confirmed OpenTimestamps proof (blocks 957642 + 957644)."
   },
   "corroborating_runs": [
-    { "label": "local", "node": "v22.16.0", "raw": 0 },
-    { "label": "remote-droplet 170.64.167.95 (Nexus, Ubuntu 24.04)", "node": "v26.5.0", "raw": 0, "witness": "OpenTimestamps stamp also submitted on the droplet (Run 4), pending confirmation; bytes documented in RAW_RESULTS.md" }
+    { "label": "local", "node": "v22.16.0", "raw": 0, "witness": "OpenTimestamps proof upgraded to Bitcoin blocks 957642 + 957644 (Run 5); bytes in RAW_RESULTS.md" },
+    { "label": "remote-droplet 170.64.167.95 (Nexus, Ubuntu 24.04)", "node": "v26.5.0", "raw": 0, "witness": "OpenTimestamps stamp also upgraded to Bitcoin blocks 957642 + 957644 (Run 5); bytes in RAW_RESULTS.md" }
   ],
-  "identity_note": "The identity-anchored externally_anchored rung is intentionally NOT pursued — the party requires anonymity, and that rung requires revealing a real identity via Sigstore/OIDC. The de-identified public witness (above) is the honest ceiling for an anonymous party; once Bitcoin confirms, independence stays distinct_key_only with a VERIFIED public_witness (not the identity rung).",
+  "identity_note": "The identity-anchored externally_anchored rung is intentionally NOT pursued — the party requires anonymity, and that rung requires revealing a real identity via Sigstore/OIDC. The de-identified public witness (above) is the honest ceiling for an anonymous party; now that Bitcoin has confirmed, independence stays distinct_key_only with a VERIFIED de-identified public_witness (NOT the identity rung — the score stays Frontier 9.4, not 9.5).",
   "non_claim": "NOT rsp_unredacted_report_compliance; over the Opus 4.6 PUBLIC structure only; ratings are the party's own independent assessments (NOT attributed to METR, Anthropic, or any named reviewer); does not observe the confidential report or Anthropic's real review panel; affiliation axis modeled."
 }
