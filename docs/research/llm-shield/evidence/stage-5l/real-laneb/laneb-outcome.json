@@ -1,0 +1,30 @@
+{
+  "stage": "5L-VTC-Q",
+  "lane": "B",
+  "claim": "real_bounded_time_authority_capture_plus_public_witness",
+  "captured_at": "2026-07-12T09:37Z",
+  "commitment_digest": "sha256:3ee8a8c9b8d7ea805fdb4bae192d86d11c22192855526d95761f4b87d89828e8",
+  "rfc3161_tsa": {
+    "authority": "DigiCert",
+    "responder": "DigiCert SHA256 RSA4096 Timestamp Responder 2025 1",
+    "endpoint": "http://timestamp.digicert.com",
+    "status": "Granted",
+    "policy_oid": "2.16.840.1.114412.7.1",
+    "hash_algorithm": "sha256",
+    "serial": "0xB14C369D9F034A25C93C1F8A4C471E2A",
+    "gen_time": "2026-07-12T09:37:30Z",
+    "accuracy": "unspecified_in_token",
+    "verified": true,
+    "verification": "openssl ts -verify: OK — messageImprint == commitment_digest AND chains to DigiCert Trusted Root G4",
+    "note": "REAL RFC-3161 token over the real commitment digest, offline-verified (imprint binding + full chain). Files: response.tsr, token.der, tsa-certs.pem, digicert-root-g4.crt, request.tsq. Accuracy is not in the token; a production verifier resolves it from the committed TSA policy or fails closed (raw 369)."
+  },
+  "opentimestamps": {
+    "log": "opentimestamps",
+    "status": "pending_bitcoin_confirmation",
+    "verified": false,
+    "ots_target_file_sha256": "9f1f14af4cafd0243fa37787822f2afcd3b599090f081d56aad6dc854ea0366d",
+    "note": "Real OTS stamp over ANCHOR_ME.txt (file content = the commitment digest hex). PendingAttestation on 4 calendars (a.pool/b.pool.opentimestamps, eternitywall, catallaxy). Bitcoin confirmation in ~hours; run `ots upgrade ANCHOR_ME.txt.ots` then flip verified + cross-check the block merkle root vs mempool.space (as done for 5J/5K). Proof: ANCHOR_ME.txt.ots."
+  },
+  "banks_externally_anchored": false,
+  "non_claim": "A real DigiCert RFC-3161 token establishes a real bounded-time upper bound over the commitment, offline-verifiable. `externally_anchored` is NOT yet banked: it additionally requires the OTS proof to be Bitcoin-CONFIRMED and the full vtc_quorum_confirmed ceremony re-run with this real token + confirmed checkpoint wired through the adapter's OpenSSL path. This record is the real capture; confirmation + adapter integration are the remaining steps."
+}

@@ -38,10 +38,16 @@ min_confirmations`) — no live node; witness-less path is honestly `pinned_chec
 - **`externally_anchored` is NOT yet banked.** The committed `quorum-confirmed` Lane-A fixture is a
   **stub-facts logic fixture** (`otsFinality:confirmed` injected) — CI-green, byte-stable, but **never a
   claim of a real anchored ceremony**. `externally_anchored` requires the real Lane-B capture below.
-- **Out-of-band, not run** (inherently multi-day, exactly like 5J/5K): **Lane B** real DigiCert RFC-3161
-  capture + real OTS stamp + **real Bitcoin confirmation** of the checkpoint; **Lane C-adv** live Fable-5
-  gerrymandering producer (CVP-covered); **Lane D** independent distinct-key party. Until these run,
-  VTC-Q ships as **VTC-Core**.
+- **Lane B — REAL capture DONE (2026-07-12), verified.** A genuine **DigiCert RFC-3161 token** over the
+  real commitment digest: Status Granted, policy OID `2.16.840.1.114412.7.1`, genTime `2026-07-12
+09:37:30Z`, **`openssl ts -verify: OK`** (messageImprint == commitment digest AND chains to DigiCert
+  Trusted Root G4). A real **OTS stamp** is submitted (4 calendars, `PendingAttestation`) — Bitcoin
+  confirmation in ~hours. Evidence: `evidence/stage-5l/real-laneb/`. **`externally_anchored` still NOT
+  banked**: it needs the OTS Bitcoin-CONFIRMED **and** the full `vtc_quorum_confirmed` ceremony re-run with
+  this real token + confirmed checkpoint wired through the adapter's OpenSSL path.
+- **Out-of-band, not run**: **Lane C-adv** live Fable-5 gerrymandering producer (CVP-covered); **Lane D**
+  independent distinct-key party (the droplet pack enables it). Until the OTS confirms + these run, VTC-Q
+  ships as **VTC-Core**.
 - Full RFC-3161 CMS/X.509 is the adapter's job (OpenSSL-backed, Lane B); the pure core takes the signed
   `tsa_crypto_attestation` as a fact (the 5I/5K B11 pattern).
 
