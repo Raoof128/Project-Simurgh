@@ -13,7 +13,7 @@ proof of what happened after a guardrail missed — not another jailbreak detect
 [![Node](https://img.shields.io/badge/node-%E2%89%A522.0-1a1a1a?style=flat-square)](https://nodejs.org)
 [![License](https://img.shields.io/badge/license-AGPL--3.0-d6cfbe?style=flat-square)](#license)
 [![Status](https://img.shields.io/badge/status-research%20prototype-2f4a2a?style=flat-square)](#status)
-[![Latest](https://img.shields.io/badge/release-v2.45.0-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.45.0-stage-5j-vrc)
+[![Latest](https://img.shields.io/badge/release-v2.46.0-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.46.0-stage-5k-vuc)
 
 </div>
 
@@ -41,7 +41,29 @@ In one sentence: **Simurgh gives an agentic system a verifiable receipt, not a p
 > selective omission, multi-agent accountability) to concrete mechanisms — printable version at
 > [`docs/research/llm-shield/anthropic-brief.html`](docs/research/llm-shield/anthropic-brief.html).
 
-> 🆕 **Latest — Stage 5J · Verifiable Rating Contest (`v2.45.0-stage-5j-vrc`).**
+> 🆕 **Latest — Stage 5K · Verifiable Universe Commitment (`v2.46.0-stage-5k-vuc`).**
+> Proves the ceremony could not quietly **swap, shrink, or reinterpret what "everything" means after
+> commitment**: an authorship-bound, externally-ordered **Merkle-set universe commitment**, chained to exact
+> reviewer/producer start obligations and fresh execution outputs, with **independent** equality against each
+> downstream component — `U_commit = U_vpc` **and** `U_commit = U_vrc`, **never through a union**. Three laws:
+> **No Shrinking Universe** (357), **No Phantom Section** (358), **No Post-Hoc Commitment Record** (354, a
+> cycle-free `commitment_session_id` signed pre-anchor → `ceremony_id` post-order). Codes **348–363**, two
+> split attestations (`audit ⟹ public` under the same context **and** `policy_digest`), **11 Lean theorems**
+> (zero unfinished goals, no user axioms — `commitmentBinding` depends on _none_), **64 unit + 5 K7 e2e**,
+> real Ed25519 end-to-end + byte-stable pack, and **Node↔Python↔browser parity**. Beast-mode: the **Scope
+> Trilemma** (`noSilentScopeChange`, no fourth branch) · **blind set-equality** (verify a confidential
+> report's scope from digests) · regression / commit-first-margin / omission-claim censuses (audit,
+> verdict-neutral) · a G13 adequacy-vocabulary belt · an in-toto/SCITT bridge. Design incorporates a
+> **32-finding external audit applied to spec + plan before build**. **Real independent Lane C EXECUTED:** an
+> independent party byte-reproduced `raw 0` (public + audit) on **two machines / Node builds**, with an
+> OpenTimestamps public witness over the commitment digest **pending Bitcoin confirmation**. **Honest to its
+> limits:** committed = evaluated ≠ the universe was **adequate** (→ mints `universe_adequacy_deferred`);
+> Lane C is reproduction + de-identified witness, **not** a distinct-key ceremony. Scorecard: Novelty 9.0 ·
+> Frontier 9.0 (unbanked; needs live Lane C-adv + a confirmed anchor) · Good-for-Anthropic 9.4 · Constitution
+> 9.4.
+>
+> <details><summary>Prior — Stage 5J · Verifiable Rating Contest (<code>v2.45.0-stage-5j-vrc</code>)</summary>
+>
 > Turns RSP v3.4's external-review **disagreement** into an offline-recomputable relation: it derives an
 > exact **rating-obligation set** from VPC's (5I) coverage relation, requires the ledger to **equal** it on
 > both sides (reviewer pairs = C(r), producer sections = S), and preserves every divergence as an
@@ -64,6 +86,8 @@ In one sentence: **Simurgh gives an agentic system a verifiable receipt, not a p
 > non-claim); independence is `distinct_key_only`, **not** the identity-anchored `externally_anchored` rung
 > (which requires revealing an identity the party declined). Scorecard: Novelty 9.5 · Frontier 9.4 ·
 > Good-for-Anthropic 9.5 · Constitution 9.6.
+>
+> </details>
 >
 > <details><summary>Prior — Stage 5I · Verifiable Panel Coverage (<code>v2.44.0-stage-5i-vpc</code>)</summary>
 >
