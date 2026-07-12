@@ -1041,6 +1041,44 @@ export const VUC_AUDIT_CHECK_ORDER = Object.freeze([
 export const VUC_AUDIT_ONLY_CODES = Object.freeze([361]);
 export const VUC_POLICY_CODES = Object.freeze([362]);
 
+// Stage 5L — VTC-Q: Verifiable Temporal Commitment with Notary Quorum. Additive codes 364–383.
+// Externally commits the full ceremony contract through an RFC-3161 bounded-time authority AND a
+// structurally distinct Bitcoin/OTS publication root, then gates reviewer access on a capability every
+// declared release must consume. No Backdated Commitment / No Post-Hoc Review Window / No Temporal
+// Release Bypass. The public first-failure SPINE is NOT numeric: 380 (finality-claimed-vs-computed) runs
+// right after 370; 374 (window) before 375 (receipt); 373 (capability) after 375. Audit adds projection
+// 381; policy 382 + wrapper 383 applied OUTSIDE the ordered scan (house convention, cf. VUC_*).
+export const VTCQ_RAW_CODES = Object.freeze({
+  OK: 0, // every stage enum carries OK:0 — CODES.OK must not be undefined
+  VTCQ_SCHEMA_INVALID: 364,
+  VTCQ_COMMITMENT_BINDING_INVALID: 365, // any committed-digest binding failure (No Post-Hoc Window)
+  VTCQ_TSA_PARSE_INVALID: 366,
+  VTCQ_TSA_CRYPTO_INVALID: 367, // CMS sig / fingerprint / EKU / policy-OID / ESSCertIDv2 / attestation token_raw_digest
+  VTCQ_TSA_VALIDITY_INVALID: 368, // cert invalid at genTime / committed-LTV status evidence absent
+  VTCQ_TSA_ACCURACY_UNRESOLVED: 369, // fail-closed (No Clock Shopping)
+  VTCQ_OTS_STRUCTURAL_INVALID: 370, // OTS proof / Merkle path / checkpoint-evidence structurally invalid
+  VTCQ_INDEPENDENCE_INFLATION: 371, // an anchor pair resolves to one declared trust domain
+  VTCQ_PROFILE_FLOOR_UNMET: 372, // no bounded-time authority / publication absent / threshold / required-confirmed
+  VTCQ_CAPABILITY_DERIVATION_INVALID: 373, // start_capability_root not derived from the verified anchor set
+  VTCQ_WINDOW_INCOHERENT: 374, // committed window not window_coherent
+  VTCQ_RECEIPT_INVALID: 375, // binding missing / gate sig invalid / gate fingerprint mismatch / context
+  VTCQ_CAPABILITY_STRUCTURE_INVALID: 376, // malformed / not ceremony-bound / duplicate child (replay)
+  VTCQ_RELEASE_BINDING_INVALID: 377, // a present declared release fails to bind a valid child (No Bypass)
+  VTCQ_RELEASE_CENSUS_INVALID: 378, // release set incomplete/extra vs declared_release_surface
+  VTCQ_ANCHOR_OMISSION: 379, // a committed trust-domain registry member has no typed result
+  VTCQ_FINALITY_OVERCLAIM: 380, // declared finality state != computed state
+  VTCQ_PROJECTION_MISMATCH: 381, // audit-only
+  VTCQ_RESERVED_SLOT_ACTIVATED: 382, // policy — non-null reserved branch (campaign_composition_root / minted)
+  INTERNAL_OR_ENV_UNAVAILABLE_VTCQ: 383, // fail-closed wrapper (run level 1)
+});
+// Public first-failure SPINE (frozen, NON-numeric — see header): 364..380 in evaluation order.
+export const VTCQ_PUBLIC_CHECK_ORDER = Object.freeze([
+  364, 365, 366, 367, 368, 369, 370, 380, 371, 372, 374, 375, 373, 376, 377, 378, 379,
+]);
+export const VTCQ_AUDIT_CHECK_ORDER = Object.freeze([...VTCQ_PUBLIC_CHECK_ORDER, 381]);
+export const VTCQ_AUDIT_ONLY_CODES = Object.freeze([381]);
+export const VTCQ_POLICY_CODES = Object.freeze([382]);
+
 export const HARNESS_CODES = Object.freeze({
   CLEAN_RUN_FALSELY_REJECTED: 19,
 });
@@ -1419,6 +1457,27 @@ export const RUN_LEVEL_BY_RAW = Object.freeze({
   361: 1,
   362: 1,
   363: 1,
+  // Stage 5L VTC-Q (364–383): every code is a run-level-1 attestation rejection (incl. wrapper 383).
+  364: 1,
+  365: 1,
+  366: 1,
+  367: 1,
+  368: 1,
+  369: 1,
+  370: 1,
+  371: 1,
+  372: 1,
+  373: 1,
+  374: 1,
+  375: 1,
+  376: 1,
+  377: 1,
+  378: 1,
+  379: 1,
+  380: 1,
+  381: 1,
+  382: 1,
+  383: 1,
 });
 
 export function stage4CodeForRawCode(code) {
