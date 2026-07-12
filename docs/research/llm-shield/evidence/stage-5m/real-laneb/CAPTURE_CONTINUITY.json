@@ -1,0 +1,19 @@
+{
+  "stage": "5M-VTC-Quorum",
+  "lane": "B",
+  "status": "PENDING_BITCOIN",
+  "commitment_digest": "0fdfc6cdfb2ba30760a5fb921b67e4545b7970fbb46ad6b2f3d265785c182992",
+  "canonical_anchor_digest": "91fd350f019f6333ea2d7c4db6b76bd91ecf4e108f188199795fe72dd189a63e",
+  "tsa_token_digest": "07645c774c16ccf79c75ca0ebb60552d0a032abd437a6ac51bab6ed87412624f",
+  "initial_ots_digest": "3273653af9de9901b68c4431c254977ff67e070e9bb4d7e3d7dddbea173fec6e",
+  "rekor_entry_uuid": "108e9186e8c5677ae453c032579f9af5474003b6cae1c40da82927454612378c637988e745285deb",
+  "quorum_policy_digest": "sha256:8482a017143b34d36091b83c13ef1dea948a22f6e6a70d8820c3ae6df9fe0497",
+  "anchor_policy_digest": "sha256:38dbb6ccaf5aee794276de6e0c9c6f4679bf9a175f198ea48d9e3612efc0f97f",
+  "tsa_verifier_fingerprint": "sha256:1f7f26b1d491de34d7dc3611b53c8ac276bbd2e0644eb93cc48cb518b3512989",
+  "capture_tool_versions": {
+    "openssl": "OpenSSL 3.5.2 5 Aug 2025 (Library: OpenSSL 3.5.2 5 Aug 2025)",
+    "py_opentimestamps": "0.4.5",
+    "node": "v22.16.0"
+  },
+  "non_claim": "PENDING: OTS not yet Bitcoin-confirmed; externally_anchored NOT banked. Task 1B upgrades the .ots, mints the checkpoint witness (tsa-verifier key), and runs the full 3-ecology verifier. No policy edits between 1A and 1B."
+}

@@ -1,0 +1,58 @@
+{
+  "campaign_id": "vtcq-5m-laneb-1",
+  "vuc_root": "sha256:sha256:9ecae5c214f85c7e5eb7878f9c55155c180ae9c5fbf95e99faa45387c",
+  "review_window": {
+    "window_open_not_before": 2000,
+    "window_close_after": 9000000000,
+    "required_anchor_profile": "vtc_quorum"
+  },
+  "anchor_policy": {
+    "network": "bitcoin",
+    "min_confirmations": 6,
+    "accepted_checkpoint_witness_keys": [
+      "sha256:1f7f26b1d491de34d7dc3611b53c8ac276bbd2e0644eb93cc48cb518b3512989"
+    ]
+  },
+  "quorum_policy": {
+    "profile": "vtc_quorum",
+    "threshold": 2,
+    "required_confirmed_publication": true
+  },
+  "trust_domain_registry": [
+    "digicert-tsa",
+    "bitcoin-ots"
+  ],
+  "declared_release_surface": [
+    {
+      "endpoint_id": "reviewer-a",
+      "release_ordinal": 0,
+      "audience_digest": "sha256:aud-a"
+    }
+  ],
+  "ceremony_contract": {
+    "review_window_policy_digest": "sha256:8e681586223ad99db6d17e4234a8ef747c29d61909d18e0e97d394b9aa725c6a",
+    "anchor_policy_digest": "sha256:38dbb6ccaf5aee794276de6e0c9c6f4679bf9a175f198ea48d9e3612efc0f97f",
+    "quorum_policy_digest": "sha256:8482a017143b34d36091b83c13ef1dea948a22f6e6a70d8820c3ae6df9fe0497",
+    "trust_domain_registry_digest": "sha256:772da7da199119685a3d97c428fa23b80ce47a80ac48bb71a18afc23891d9e62",
+    "declared_release_surface_digest": "sha256:090c507b8508eba8401e9248fd4f999e151db7a5a50358cfe5e65f031193055c",
+    "gate_identity_policy_digest": "sha256:51757dfd9f29d9cd64acf40cb4097d3d2ec954e86eba2e5ed1ee82d6cc87386b"
+  },
+  "commitmentPayload": {
+    "review_window_policy_digest": "sha256:8e681586223ad99db6d17e4234a8ef747c29d61909d18e0e97d394b9aa725c6a",
+    "anchor_policy_digest": "sha256:38dbb6ccaf5aee794276de6e0c9c6f4679bf9a175f198ea48d9e3612efc0f97f",
+    "quorum_policy_digest": "sha256:8482a017143b34d36091b83c13ef1dea948a22f6e6a70d8820c3ae6df9fe0497",
+    "trust_domain_registry_digest": "sha256:772da7da199119685a3d97c428fa23b80ce47a80ac48bb71a18afc23891d9e62",
+    "declared_release_surface_digest": "sha256:090c507b8508eba8401e9248fd4f999e151db7a5a50358cfe5e65f031193055c",
+    "gate_identity_policy_digest": "sha256:51757dfd9f29d9cd64acf40cb4097d3d2ec954e86eba2e5ed1ee82d6cc87386b",
+    "schema_version": "simurgh.vtcq.bundle.v1",
+    "campaign_id": "vtcq-5m-laneb-1",
+    "vuc_root": "sha256:sha256:9ecae5c214f85c7e5eb7878f9c55155c180ae9c5fbf95e99faa45387c"
+  },
+  "commitment_session_id": "sha256:0fdfc6cdfb2ba30760a5fb921b67e4545b7970fbb46ad6b2f3d265785c182992",
+  "commitment_digest_hex": "0fdfc6cdfb2ba30760a5fb921b67e4545b7970fbb46ad6b2f3d265785c182992",
+  "fingerprints": {
+    "gate": "sha256:5c216f94dbb7950522e79120bc0e84af63c55ee15109fdf17f8d80cd93d5e1c5",
+    "sequencer": "sha256:a641b27a6ef202185f5efe629fbd25c9e1320c1b7c2077826f2947e7591757d6",
+    "tsaverifier": "sha256:1f7f26b1d491de34d7dc3611b53c8ac276bbd2e0644eb93cc48cb518b3512989"
+  }
+}
