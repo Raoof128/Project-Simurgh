@@ -8,6 +8,7 @@ import { R, OK } from "./result.mjs";
 import { checkBundleSchema, checkConfigSchema } from "./schema.mjs";
 import { makeCtx } from "./context.mjs";
 import { checkCommitment } from "./commitment.mjs";
+import { checkTsaParse, checkTsaCrypto, checkTsaValidity, checkTsaAccuracy } from "./tsa.mjs";
 import { checkReservedSlots } from "./policy.mjs";
 
 export function vtcqVerify(bundle, cfg, facts, { tier = "public" } = {}) {
@@ -19,7 +20,11 @@ export function vtcqVerify(bundle, cfg, facts, { tier = "public" } = {}) {
     const ctx = makeCtx(bundle, cfg, facts);
     const steps = [
       () => checkCommitment(ctx), // 365
-      // 366 → 380 → … populated check-by-check in Task group 1 (frozen spine order)
+      () => checkTsaParse(ctx), // 366
+      () => checkTsaCrypto(ctx), // 367
+      () => checkTsaValidity(ctx), // 368
+      () => checkTsaAccuracy(ctx), // 369
+      // 370 → 380 → 371 → 372 → 374 → 375 → 373 → 376 → 377 → 378 → 379 (Task group 1, frozen spine)
     ];
     for (const s of steps) {
       const r = s();
