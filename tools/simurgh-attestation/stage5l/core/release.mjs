@@ -6,7 +6,8 @@
 import { R } from "./result.mjs";
 import { releaseSlotId } from "./derive.mjs";
 
-// 377 — a committed surface endpoint with NO release (a required release is missing → bypass).
+// 377 — No Temporal Release Bypass: every committed surface endpoint has a gate-authorised release. A
+// missing release, or a release whose gate signature does not verify (adapter fact), is a bypass.
 export function checkReleaseBinding(ctx) {
   const surface = ctx.bundle.declared_release_surface ?? [];
   const releasedSlots = new Set(
@@ -16,6 +17,11 @@ export function checkReleaseBinding(ctx) {
     const slot = releaseSlotId(s.endpoint_id, s.release_ordinal);
     if (!releasedSlots.has(slot))
       return R(377, "surface_entry_not_released", { endpoint: s.endpoint_id });
+  }
+  for (const r of ctx.bundle.declared_releases ?? []) {
+    if (ctx.facts?.releaseSigValid?.[`${r.endpoint_id}:${r.release_ordinal}`] !== true) {
+      return R(377, "release_gate_signature_invalid", { endpoint: r.endpoint_id });
+    }
   }
   return null;
 }

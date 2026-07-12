@@ -82,6 +82,7 @@ test("an extra release outside the committed surface → 378 (valid child, off-s
     audience_digest: "sha256:aud-smuggled",
     consumption_record: { release_capability_digest, release_payload_digest, sig: "sig" },
   });
+  v.facts.releaseSigValid["smuggled:0"] = true; // otherwise-valid but off-surface → isolates 378
   assert.equal(run(v).raw, 378);
 });
 
