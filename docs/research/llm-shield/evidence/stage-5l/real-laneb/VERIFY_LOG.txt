@@ -1,0 +1,15 @@
+# Stage 5L VTC-Q — Lane B real capture (DigiCert RFC-3161 + OpenTimestamps)
+date: 2026-07-12T09:38:51Z
+commitment_digest: 3ee8a8c9b8d7ea805fdb4bae192d86d11c22192855526d95761f4b87d89828e8
+
+## RFC-3161 (DigiCert)
+Status: Granted.
+Policy OID: 2.16.840.1.114412.7.1
+Hash Algorithm: sha256
+Serial number: 0xB14C369D9F034A25C93C1F8A4C471E2A
+Time stamp: Jul 12 09:37:30 2026 GMT
+verify: Verification: OK
+
+## OpenTimestamps
+ots target file sha256: 9f1f14af4cafd0243fa37787822f2afcd3b599090f081d56aad6dc854ea0366d  (= the commitment digest hex, ots stamps the file)
+state: PendingAttestation on 4 calendars (fresh stamp; Bitcoin confirmation in hours)
