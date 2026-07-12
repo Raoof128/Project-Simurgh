@@ -41,6 +41,24 @@ export function checkScaleAndComparison(ctx) {
   return null;
 }
 
+// Task 1.8 — signatures over ALL historical entries (fossil attack, theorem 8). 340 reviewer-chain,
+// 341 producer-chain. A forged historical (superseded) entry is caught even though the active head is
+// honestly signed. The adapter resolves invalid-sig AND key-swap (wrong role) into a false fact.
+export function checkSignatures(ctx) {
+  const { bundle, facts } = ctx;
+  for (const e of bundle.reviewer_ratings) {
+    if (!facts.reviewerSigValid?.[e.entry_digest]) {
+      return R(340, "reviewer_rating_signature_invalid", { entry_digest: e.entry_digest });
+    }
+  }
+  for (const e of bundle.producer_ratings) {
+    if (!facts.producerSigValid?.[e.entry_digest]) {
+      return R(341, "producer_rating_signature_invalid", { entry_digest: e.entry_digest });
+    }
+  }
+  return null;
+}
+
 // Task 1.5 — obligation equality (both sides). 334 obligation-root mismatch → 335 missing → 336 orphan.
 export function checkObligation(ctx) {
   const { bundle, S, requiredReviewerPairs } = ctx;

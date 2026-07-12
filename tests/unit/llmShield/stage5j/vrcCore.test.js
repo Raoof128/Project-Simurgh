@@ -219,3 +219,39 @@ test("339 — a contest event over a non_comparable pair (reviewer abstained on 
   });
   assert.equal(vrcVerify(bundle, cfg, facts).raw, 339);
 });
+
+// --- Task 1.8 — signatures over ALL historical entries 340 / 341 (fossil attack) ---------------
+test("340 — an active reviewer rating has an invalid signature", () => {
+  const { bundle, cfg, facts } = validBundle();
+  facts.reviewerSigValid[bundle.reviewer_ratings[0].entry_digest] = false;
+  assert.equal(vrcVerify(bundle, cfg, facts).raw, 340);
+});
+
+test("341 — an active producer rating has an invalid signature", () => {
+  const { bundle, cfg, facts } = validBundle();
+  facts.producerSigValid[bundle.producer_ratings[0].entry_digest] = false;
+  assert.equal(vrcVerify(bundle, cfg, facts).raw, 341);
+});
+
+test("341 — fossil attack: a SUPERSEDED producer entry has an invalid signature (all history checked)", () => {
+  const { bundle, cfg, facts } = validBundle();
+  const genesis = bundle.producer_ratings[0]; // producer:1 genesis
+  const rev1 = {
+    content: {
+      chain_subject: genesis.content.chain_subject,
+      revision: 1,
+      supersedes_digest: genesis.entry_digest,
+      rating_scale_digest: genesis.content.rating_scale_digest,
+      dimension_id: genesis.content.dimension_id,
+      section_id: "1",
+      value_kind: "ordinal",
+      value: "medium",
+      ledger_epoch: 998,
+    },
+    entry_digest: "sha256:producer-1-rev1-head",
+  };
+  bundle.producer_ratings.push(rev1);
+  facts.producerSigValid[rev1.entry_digest] = true; // the head is honestly signed
+  facts.producerSigValid[genesis.entry_digest] = false; // the fossil is forged
+  assert.equal(vrcVerify(bundle, cfg, facts).raw, 341);
+});

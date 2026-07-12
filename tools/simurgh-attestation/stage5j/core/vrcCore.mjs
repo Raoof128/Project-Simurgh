@@ -9,7 +9,7 @@
 import { R, OK } from "./result.mjs";
 import { checkBundleSchema, checkConfigSchema } from "./schema.mjs";
 import { makeCtx } from "./context.mjs";
-import { checkObligation, checkScaleAndComparison } from "./checks333to341.mjs";
+import { checkObligation, checkScaleAndComparison, checkSignatures } from "./checks333to341.mjs";
 import { checkChains } from "./chains.mjs";
 
 export function vrcVerify(bundle, cfg, facts, { tier = "public" } = {}) {
@@ -25,7 +25,8 @@ export function vrcVerify(bundle, cfg, facts, { tier = "public" } = {}) {
       () => checkObligation(ctx), // 334, 335, 336
       () => checkChains(ctx), // 337
       () => checkScaleAndComparison(ctx), // 338, 339
-      // 340–344 appended by Tasks 1.8–1.10
+      () => checkSignatures(ctx), // 340, 341
+      // 342–344 appended by Tasks 1.9–1.10
     ];
     for (const s of steps) {
       const r = s();
