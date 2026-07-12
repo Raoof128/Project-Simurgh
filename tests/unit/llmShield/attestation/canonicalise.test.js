@@ -5,6 +5,7 @@ import crypto from "node:crypto";
 import {
   canonicalJson,
   sha256Hex,
+  sha256Bytes,
   fingerprintPublicKey,
 } from "../../../../tools/simurgh-attestation/canonicalise.mjs";
 
@@ -24,6 +25,13 @@ test("sha256Hex is stable and prefixed", () => {
     sha256Hex("abc"),
     "sha256:" + crypto.createHash("sha256").update("abc").digest("hex")
   );
+});
+
+test("sha256Bytes returns the raw 32-byte digest", () => {
+  const b = sha256Bytes("abc");
+  assert.ok(Buffer.isBuffer(b));
+  assert.equal(b.length, 32);
+  assert.equal(b.toString("hex"), crypto.createHash("sha256").update("abc").digest("hex"));
 });
 
 test("fingerprintPublicKey hashes the DER SPKI bytes", () => {
