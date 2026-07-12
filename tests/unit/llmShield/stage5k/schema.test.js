@@ -136,8 +136,10 @@ test("non-canonicalisable bundle returns 348, does not throw", () => {
   assert.equal(checkBundleSchema(b).raw, 348);
 });
 
-test("vucVerify skeleton: valid → raw 0; schema tamper → 348; cfg undefined → 363", () => {
-  assert.equal(vucVerify(minBundle(), minCfg(), {}).raw, 0);
+test("vucVerify schema boundary: schema tamper → 348; cfg undefined → 363; valid schema passes 348", () => {
+  // minBundle is schema-valid but NOT a real ceremony, so it passes 348 and then fails a deeper check
+  // (not 348) — the raw-0 assertion lives in laneA/vucCore against the by-construction crux fixture.
+  assert.notEqual(vucVerify(minBundle(), minCfg(), {}).raw, 348);
   const b = minBundle();
   delete b.ordering_anchor;
   assert.equal(vucVerify(b, minCfg(), {}).raw, 348);
