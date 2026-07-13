@@ -149,6 +149,8 @@ Parity (Node ↔ Python ↔ browser) is on the **pure core over identical inject
 | **C-adv — live adversary** | Sonnet-5 (CVP) tasked to forge the third seat. **Deterministic acceptance corpus beneath the live model** (mandatory, frozen): counterfeit ecology→392, cross-log/wrong-checkpoint replay→388, cross-commitment replay→386, honest 2-seat floor→393, promoted 2-seat floor→394. Any live-model forgery is frozen as an evidence mutation and passed through the real verifier; a refusal is reported honestly and counts as **neither** attack generation nor containment success | digest-only |
 | **D — independent repro** | Second machine / distinct env+keys re-runs the **python** adapter over the frozen Lane B packet → **decision-equivalence** (raw verdict, computed state, anchor+trust-root fingerprints byte-equal; signed attestations naturally differ by key) | digest-only |
 
+**Both live/external lanes are EXECUTED, digest-only, at the 5J/5K/5L bar (plan Tasks 13b + 16):** Lane C-adv runs a live Sonnet-5 (CVP) adversary against the real verifier via `stage5m/lanec/run-lanec.mjs` (Fable-5 refusal recorded honestly); Lane D ships a **droplet-team pack** (`~/Desktop/Raouf/test/stage5m-vtcq-droplet/`) a separate party runs on a separate machine with a distinct key.
+
 ### Keys (amendment 3 of §3)
 
 - **Fixture-only** `INSECURE_FIXTURE_ONLY_*` keys: Lane A synthetic regeneration **only**.
