@@ -1,0 +1,15 @@
+{
+  "stage": "5M-VTC-Quorum",
+  "lane": "D",
+  "kind": "independent-party droplet pack",
+  "pack_path": "~/Desktop/Raouf/test/stage5m-vtcq-droplet/",
+  "pack_files": 65,
+  "self_verification": {
+    "node_raw": 372,
+    "externally_anchored": false,
+    "lane_d_all_ok": true,
+    "party_key": "fresh Ed25519, fingerprint distinct from producer"
+  },
+  "status": "PACK BUILT + SELF-VERIFIED locally (distinct-key decision-equivalence at 372). A remote independent-PARTY droplet run is the standing ceremony (mirrors stage5j/5k/5l droplet packs).",
+  "non_claim": "Verify-only, public keys only, no private material shipped. Reproduces the honest pending floor 372; flips to raw 0 after the producer's Task 1B Bitcoin-confirmation close. Digest-only, NOT CI-gated."
+}
