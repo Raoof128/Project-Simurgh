@@ -1,47 +1,63 @@
 {
   "CAPTURE_CONTINUITY.json": {
-    "bytes": 1268,
-    "sha256": "3c90d2cd5d4ac4a377ca7c4837ec488b97c5fa7f3baa2ba263670162e0f26f59"
+    "bytes": 1508,
+    "sha256": "d6ad951a788bdb2a48465403836ae22e1c32f8d47fce68a069805d503b55f01c"
   },
   "D.bin": {
     "bytes": 32,
-    "sha256": "d41fcb241aabf2523b90eb383efe86385cf0a6a661928cb3ae0e549dd231cf1a"
+    "sha256": "39a91c90c6310d4d2e5208d513849653b3e01c536f820d0645301b749b1c424c"
   },
   "D.ots": {
     "bytes": 705,
-    "sha256": "3273653af9de9901b68c4431c254977ff67e070e9bb4d7e3d7dddbea173fec6e"
+    "sha256": "2c80aa9d58e0d396136699ae168526351f4a6f2a6947848c97cdb8b8911b0061"
   },
   "canonical-anchor.txt": {
     "bytes": 64,
-    "sha256": "91fd350f019f6333ea2d7c4db6b76bd91ecf4e108f188199795fe72dd189a63e"
+    "sha256": "25f17ef0da3497b7146e6b6def28526c2ac53a0b7fa63c4882d069831e0b77cb"
   },
   "ceremony.json": {
-    "bytes": 2852,
-    "sha256": "f170381407a78d202f2b6e6c679ae5e00b911a0a81398a7ece86a07a6c1eecfe"
+    "bytes": 2858,
+    "sha256": "6e1504551fb215bb3f964d94290ef66f5d08d885a84bc4b917657db048138fea"
+  },
+  "digicert-root-g4.crt": {
+    "bytes": 1988,
+    "sha256": "ce7d6b44f5d510391be98c8d76b18709400a30cd87659bfebe1c6f97ff5181ee"
+  },
+  "laneb-bundle.json": {
+    "bytes": 9139,
+    "sha256": "aa2cd240f8d1a9df2dda3f2f1e41cae2b5e8e9765ae6c2fdb5bf5084208c60b0"
+  },
+  "laneb-pinned.json": {
+    "bytes": 284,
+    "sha256": "5cab37b4f61f3041c606aca18f9b1175a23cf6f7122deb6962487623b7f56b17"
   },
   "rekor_entry_full.json": {
-    "bytes": 2978,
-    "sha256": "4f91f31aac546c3c45c9ecb6af4b5d02bca310e846510af5edb45a474013af7e"
+    "bytes": 2907,
+    "sha256": "bd610725f74874cee6b12aa394a2b10690767beaad364ba9938a73a890d321a3"
   },
   "rekor_pubkey.pem": {
     "bytes": 178,
     "sha256": "dce5ef715502ec9f3cdfd11f8cc384b31a6141023d3e7595e9908a81cb6241bd"
   },
   "response.tsr": {
-    "bytes": 6008,
-    "sha256": "46433441ab55a7778d119223c8df0898a0a60a637b6beecb5d3e1231f51d8216"
+    "bytes": 6006,
+    "sha256": "120e10a6f07a482bc73e80894f4da729780a2e8a62fd1582fb8200a29fb941b8"
   },
   "token.der": {
-    "bytes": 5999,
-    "sha256": "07645c774c16ccf79c75ca0ebb60552d0a032abd437a6ac51bab6ed87412624f"
+    "bytes": 5997,
+    "sha256": "c8f495e575599f581780c3805160c9ebe6007b4ecc9e92272388a943c7856d33"
+  },
+  "tsa-certs.pem": {
+    "bytes": 7344,
+    "sha256": "88225975a7e74dce7f85716adc7446ae7f59a244b2b1802958176cff6a726ff8"
   },
   "keys/PUB_gate.pem": {
     "bytes": 113,
-    "sha256": "233b14a8b1f9193690958b1b01742e1bf9276e5a82253bd505feb4128a921ee7"
+    "sha256": "0f828d4088680dbb6b15c61d825c6102c1790d44844b0da6633cde517dd2df4d"
   },
   "keys/PUB_sequencer.pem": {
     "bytes": 113,
-    "sha256": "abbe76b113c12b71e67cbb403d697161a28637e0ac72b1572a2a52cd6618b27a"
+    "sha256": "cb9baf8fea10d7d7fc163ea55fe1c83da48d7155db407224ddb3ae7fa1f5758e"
   },
   "keys/PUB_submitter.pem": {
     "bytes": 178,
@@ -49,6 +65,6 @@
   },
   "keys/PUB_tsaverifier.pem": {
     "bytes": 113,
-    "sha256": "105573eaaf88b70f4bab2cb08527c63febb01d6ffb6e99a49e0651656e406c6b"
+    "sha256": "2938739191b4c6874d7210a863af64897a7a99ea29aab175b669eaff6ebbc2f2"
   }
 }

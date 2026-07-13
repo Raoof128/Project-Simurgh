@@ -1,0 +1,184 @@
+{
+  "schema_version": "simurgh.vtcq.bundle.v1",
+  "campaign_id": "vtcq-5m-laneb-1",
+  "commitment_session_id": "sha256:c20e70f515f3c487da9774d4846cafb7906d61726bd97adeee0c43b1ce2eabb1",
+  "ceremony_id": "sha256:f2b6990fb0918061f89f3af1e8ab32ac811d5d3605142cf59ed1fc31c938a2ed",
+  "vuc": {
+    "universe_commitment_digest": "sha256:sha256:9ecae5c214f85c7e5eb7878f9c55155c180ae9c5fbf95e99faa45387c"
+  },
+  "ceremony_contract": {
+    "review_window_policy_digest": "sha256:90b2bc67c21372f86a9418c475eef2b3812fb8276b7a347a9573fdf90602c944",
+    "anchor_policy_digest": "sha256:29f2cafee9a37efde9a2383a6d7de0e617e43d40c5b70c7e8394f78bb44f827b",
+    "quorum_policy_digest": "sha256:8482a017143b34d36091b83c13ef1dea948a22f6e6a70d8820c3ae6df9fe0497",
+    "trust_domain_registry_digest": "sha256:772da7da199119685a3d97c428fa23b80ce47a80ac48bb71a18afc23891d9e62",
+    "declared_release_surface_digest": "sha256:090c507b8508eba8401e9248fd4f999e151db7a5a50358cfe5e65f031193055c",
+    "gate_identity_policy_digest": "sha256:2d1a09107ca3a4e1e6ccf8b5870fdbd6a5a80931ce8533b0512e1527b538e9f2"
+  },
+  "review_window": {
+    "window_open_not_before": 1900000000,
+    "window_close_after": 2000000000,
+    "required_anchor_profile": "vtc_quorum"
+  },
+  "anchor_policy": {
+    "network": "bitcoin",
+    "min_confirmations": 6,
+    "accepted_checkpoint_witness_keys": [
+      "sha256:652e98ad81db401ac446f148cf248cb4ec242269854c4441fced5ca79a136bfd"
+    ]
+  },
+  "quorum_policy": {
+    "profile": "vtc_quorum",
+    "threshold": 2,
+    "required_confirmed_publication": true
+  },
+  "trust_domain_registry": [
+    "digicert-tsa",
+    "bitcoin-ots"
+  ],
+  "declared_release_surface": [
+    {
+      "endpoint_id": "reviewer-a",
+      "release_ordinal": 0,
+      "audience_digest": "sha256:aud-a"
+    }
+  ],
+  "anchors": [
+    {
+      "anchor_type": "rfc3161_tsa",
+      "trust_domain": "digicert-tsa",
+      "tsa_token_digest": "sha256:c8f495e575599f581780c3805160c9ebe6007b4ecc9e92272388a943c7856d33",
+      "tsa_crypto_attestation": {
+        "token_raw_digest": "sha256:c8f495e575599f581780c3805160c9ebe6007b4ecc9e92272388a943c7856d33",
+        "parseOk": true,
+        "canonicalDer": true,
+        "genTime_s": 1783903315,
+        "accuracy_s": null,
+        "policyOID": "2.16.840.1.114412.7.1",
+        "certValidAtGenTime": true,
+        "ltvOk": true,
+        "essV2Ok": true,
+        "cryptoResult": "valid",
+        "messageImprintHex": "c20e70f515f3c487da9774d4846cafb7906d61726bd97adeee0c43b1ce2eabb1",
+        "sig": "WlqJAg40fcZp+a0709msJYI1rol9BW2wJa7WIy6DVEPG1+4I15cephmx6+fPJOyz/Ao+8dKU0v57WH3R7dv6Ag=="
+      },
+      "verifier_result": null
+    },
+    {
+      "anchor_type": "bitcoin_ots",
+      "trust_domain": "bitcoin-ots",
+      "ots_proof_digest": "sha256:2c80aa9d58e0d396136699ae168526351f4a6f2a6947848c97cdb8b8911b0061",
+      "declared_finality": "pending",
+      "checkpoint_evidence": null,
+      "ots_leaf_hex": "c20e70f515f3c487da9774d4846cafb7906d61726bd97adeee0c43b1ce2eabb1",
+      "verifier_result": null
+    }
+  ],
+  "review_access_authorisation_receipt": {
+    "binds": {
+      "commitment_session_id": "sha256:c20e70f515f3c487da9774d4846cafb7906d61726bd97adeee0c43b1ce2eabb1",
+      "verified_anchor_set_digest": "sha256:9d215edf15209bf99cd347702ef42e075b392d6904286f4de939d0c55991a264",
+      "checkpoint_evidence_digest": null,
+      "quorum_policy_digest": "sha256:8482a017143b34d36091b83c13ef1dea948a22f6e6a70d8820c3ae6df9fe0497",
+      "declared_release_surface_digest": "sha256:090c507b8508eba8401e9248fd4f999e151db7a5a50358cfe5e65f031193055c",
+      "start_capability_root_digest": "sha256:b5bf79709debde5060f602f1c5243aeceeb793e1c1c37d922243ad21bcce804c"
+    },
+    "start_capability_root_digest": "sha256:b5bf79709debde5060f602f1c5243aeceeb793e1c1c37d922243ad21bcce804c",
+    "gate_public_key_fingerprint": "sha256:499c068a29896c2cfb31b646ddc67e0c05fbbf80ed3d02a23d09a0d8f8c1e151",
+    "issuance_nonce": "vtcq-5m-issuance-nonce",
+    "sig": "FjFsnrXZcRM/WBoHHmlnU+NloXUDJ4ok7yhpr/qW+ve0df0fxZJO1p9hawksmLcd6lAbw7YxQbNEg0K77uXRCw=="
+  },
+  "declared_releases": [
+    {
+      "endpoint_id": "reviewer-a",
+      "release_ordinal": 0,
+      "audience_digest": "sha256:aud-a",
+      "consumption_record": {
+        "release_capability_digest": "sha256:6a7be5fb0ff0ba2d18884fb37eceaaf6638e6e27c8283d34463efb589e8c541b",
+        "release_payload_digest": "sha256:payload-reviewer-a",
+        "endpoint_id": "reviewer-a",
+        "release_ordinal": 0,
+        "sig": "BV1m7FvvV5xlQLkFYnS3ycnAzzne1p/M7VrksxYoZnZDDDmKawigu8fQkFYIjcaCcLlXiibHAZJ0s3Amfzo1CA=="
+      }
+    }
+  ],
+  "projections": {
+    "state_census": {
+      "computed_state": "vtc_quorum_pending",
+      "rung": "challenge_bound"
+    },
+    "quorum_census": {
+      "deduped_domain_count": 2,
+      "threshold": 2,
+      "computed_finality": "pending"
+    },
+    "release_census": {
+      "surface_count": 1,
+      "released_count": 1,
+      "bijection": true
+    },
+    "anchor_census": {
+      "registry": [
+        "bitcoin-ots",
+        "digicert-tsa"
+      ],
+      "typed_result_domains": [
+        "bitcoin-ots",
+        "digicert-tsa"
+      ]
+    },
+    "projection_root": "sha256:08b11063351bbaaf98b29f274d7982d5c0f0245e3e90182b2b95b4d05c8775ac"
+  },
+  "reserved_slots": {
+    "campaign_composition_root": null
+  },
+  "signatures": {
+    "sequencer": "z53dp/JQXyM67A/xgJBErtjxQwPmC8j8CUIVyZKnDqyrdUDNMK+qJ6clnrWJ0IrfG4rZ/pHTUzPp/0q9uIOqCQ=="
+  },
+  "envelope_schema": "vtc_quorum_confirmed.v2",
+  "quorum_profile": "third_trust_ecology",
+  "quorum_rule": "all_required",
+  "required_members": [
+    "rfc3161_tsa",
+    "bitcoin_confirmed_publication",
+    "transparency_log_inclusion"
+  ],
+  "transparency_log_seat": {
+    "uuid": "108e9186e8c5677ac7369907b7a78e0f8b9695723b0bddca93b6f3ab15fac6ded8920acd1a1d3c60",
+    "body": "eyJhcGlWZXJzaW9uIjoiMC4wLjEiLCJraW5kIjoiaGFzaGVkcmVrb3JkIiwic3BlYyI6eyJkYXRhIjp7Imhhc2giOnsiYWxnb3JpdGhtIjoic2hhMjU2IiwidmFsdWUiOiIyNWYxN2VmMGRhMzQ5N2I3MTQ2ZTZiNmRlZjI4NTI2YzJhYzUzYTBiN2ZhNjNjNDg4MmQwNjk4MzFlMGI3N2NiIn19LCJzaWduYXR1cmUiOnsiY29udGVudCI6Ik1FUUNJQXhIYTNuM0p2TnNHSGpwN00yRC8xcnVseTR4cHNrVGJWZGFWdXpmSlh4eEFpQUtlY2Rrb0dVeXpQTGtuMjdwanFJTWJSTXJXWEVNOUwzZGNEaVlMckwxdFE9PSIsInB1YmxpY0tleSI6eyJjb250ZW50IjoiTFMwdExTMUNSVWRKVGlCUVZVSk1TVU1nUzBWWkxTMHRMUzBLVFVacmQwVjNXVWhMYjFwSmVtb3dRMEZSV1VsTGIxcEplbW93UkVGUlkwUlJaMEZGYm5rdmRTc3laR2hTY0ZoWGFrVTFkbnBvVTFrMGFuSXpPVGRSYWdwYWNGZzNSR3B0Vm5WeVVFWlhha0Z4V0hOVWNIZE5NRUUxYUdoNFJrYzJTRXRTYjNkclFuTnFSMDE0UkV4c2N6QnNSVWRwY1VGMGJITkJQVDBLTFMwdExTMUZUa1FnVUZWQ1RFbERJRXRGV1MwdExTMHRDZz09In19fX0=",
+    "logID": "c0d23d6ad406973f9559f3ba2d1ca01f84147d8ffc5b8445c224f98b9591801d",
+    "logIndex": 2157912696,
+    "integratedTime": 1783903321,
+    "signedEntryTimestamp": "MEYCIQC/UZoqhg+ZUvzf3K9NDxeJRydnbuuA4n8ojWbfzvs/VQIhALFwBR+Ii/B0t16tdh/5ivfX8lmpRIbm4ZGWXyeJPr0n",
+    "submitter_pubkey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEny/u+2dhRpXWjE5vzhSY4jr397Qj\nZpX7DjmVurPFWjAqXsTpwM0A5hhxFG6HKRowkBsjGMxDLls0lEGiqAtlsA==\n-----END PUBLIC KEY-----\n",
+    "inclusionProof": {
+      "checkpoint": "rekor.sigstore.dev - 1193050959916656506\n2036008484\nzkkAJFRdTG9LKCPPgVfpFmirwd1C/QBOGaOH30yWwKI=\n\n— rekor.sigstore.dev wNI9ajBEAiAj+GbivpZrA6Y372m/5eeVALVu1ciVTa+0NWwaDbqVdQIgHm2enBMdnw/cDqXeJiRq10XK6a00LspgazD73n86Vkg=\n",
+      "hashes": [
+        "0fc428abc01e233c83cb8dc0a32eb8ce733c20c38e1c8d8d8415ac2324b20c1e",
+        "87d1f66d18198f319a00af8771f943b2925779faed9eb5107004550a82f510cd",
+        "d5e1a78f5d9353672a700aa28a0bab968df2d881103f91fb4ea68c6e4ceb3121",
+        "5892aea026c440fc02ca63b6e572d7d5a0d01f26f3f9820ba750a7d72ed46276",
+        "42e2195efff2a8657d048d884f0bd2d519f6e6dfe237d2701e16be04a7114bd8",
+        "ac9d852f53e56a8b181efba00e39350cb71c1ed9f25e644d3059f15b99497db1",
+        "8ad1eed90a12ae015a48e58767d158fb01ea2dae698ec126df94759651108456",
+        "9d7ffd017a7ba3c81e55d0c7fb315051946c5c0f291d6a71d77bc39121676317",
+        "18b5b219a6fed6cd53a9b610d975a465effda24812aadf088d87454e2d001ef4",
+        "9cb75a2281e8a057196e99844e6074ce0711d08ec28a67117a97f34d8438d1f9",
+        "47c929a0fd2e86ebdb5ebefb3baaebb1404bbaa2f5f2c9ebde2f3ead748d9a1d",
+        "ddce22c425f20daf51616085fd2b9078aac7bad2b92be64e4cf596a6afb84476",
+        "a29a1bc5499b41d82275fe7362418e2198c049ebe31bc1259d3790d600226057",
+        "c5a80bc9c55a8f12010ce2fed55a19865d455166bb5f8a3f73a99804e160be8b",
+        "a53861a5e190be279ae501437a4da6f0586763f85f8c77616c30a53c7851e6bc",
+        "31ddf1d4b8f8c179288834ee122534117f8c6742df610a861beb08ea2cfe320e",
+        "e6cc4d643a31123e833264004e2b17f5b41774599e44761f0bc063c8320881e7",
+        "46afc0d9a4c2f5ee7895d363729b09dbaad7fe1f0994de991f1830ef211ae82d",
+        "fbf559e7a32c20fc4c8b22c0a1dcca5e8e53116750a77eb3f3da8b869ce5a00a",
+        "75ac6665a6a3469655f89c4788e61984906248a379b9caa38765a719b1e18abc",
+        "0ce09ea12328bc8bcb13192122f8aca30f40b8d5e0796b3810293247a11ca985"
+      ],
+      "logIndex": 2036008434,
+      "rootHash": "ce490024545d4c6f4b2823cf8157e91668abc1dd42fd004e19a387df4c96c0a2",
+      "treeSize": 2036008484
+    }
+  },
+  "declared_externally_anchored": false
+}
