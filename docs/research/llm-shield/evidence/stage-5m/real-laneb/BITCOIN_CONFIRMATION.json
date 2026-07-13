@@ -1,0 +1,19 @@
+{
+  "stage": "5M-VTC-Quorum",
+  "lane": "B",
+  "status": "BITCOIN_CONFIRMED",
+  "commitment_digest": "0fdfc6cdfb2ba30760a5fb921b67e4545b7970fbb46ad6b2f3d265785c182992",
+  "ots_leaf_equals_D": true,
+  "bitcoin": {
+    "block_height": 957774,
+    "block_hash": "0000000000000000000231dc07375582a563f6563df9f8400f76a217a1199421",
+    "block_merkle_root": "14a432a4a30d916276e12b57c6119fd28522f0e583ff52a091cd998458b751e4",
+    "observed_tip_height": 957779,
+    "confirmations": 6,
+    "min_confirmations": 6,
+    "cross_checked_explorer": "mempool.space",
+    "calendar": "alice.btc.calendar.opentimestamps.org"
+  },
+  "upgraded_ots_sha256": "687d6a3aaa55ee70051d08d41fb3a4a38419572381496cf2a6386a286e5c16af",
+  "non_claim": "D Bitcoin-confirmed (block 957774, merkle root cross-checked vs mempool.space). externally_anchored is banked ONLY by the full verifier run (Task 1B) consuming a tsa-verifier-signed checkpoint_evidence with these exact values. min_confirmations=6 met exactly."
+}
