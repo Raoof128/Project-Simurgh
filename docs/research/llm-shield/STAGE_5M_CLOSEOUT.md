@@ -10,6 +10,8 @@
 - **11 Lean theorems** (core Lean 4.15, no mathlib, zero `sorry`, no user axioms).
 - **Tri-runtime parity** Node ↔ Python ↔ browser (WebCrypto); **independent Lane D** (Python consumes the raw packet itself).
 - **Deterministic Lane C corpus** (CI-gated): counterfeit ecology→392, cross-log→388, cross-commitment replay→386, honest floor→393, promoted floor→394.
+- **Live Lane C-adv** (digest-only): a live **Claude Sonnet-5** (CVP) tasked to forge the third ecology against the real verifier — **0 bypasses** (refused 3/6 outright; the 3 it attempted all contained at raw 365/364, `externally_anchored` false). Fable-5 refuses by default.
+- **Droplet-team pack** (digest-only): `~/Desktop/Raouf/test/stage5m-vtcq-droplet/` — a separate party with a **fresh distinct key** reproduces the honest pending floor `372` + independent Python Lane-D `all_ok` (decision-equivalent; flips to `0` after Task 1B close).
 - **K7 all-functions net** + `reproduce-llm-shield-stage5m.sh` (Node 26), wired into `check-e2e.sh`.
 - **Real 3-ecology capture** over commitment `D = c20e70f5…eabb1`: DigiCert token (imprint == `D`, chains to Root G4), Rekor entry (`sha256(hex(D))`), OTS (leaf == `D`).
 - **75 unit+e2e tests + Lean**, all green; 5I–5L undisturbed.
