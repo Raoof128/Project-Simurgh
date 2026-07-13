@@ -10,6 +10,33 @@
     "lane_d_all_ok": true,
     "party_key": "fresh Ed25519, fingerprint distinct from producer"
   },
-  "status": "PACK BUILT + SELF-VERIFIED locally (distinct-key decision-equivalence at 372). A remote independent-PARTY droplet run is the standing ceremony (mirrors stage5j/5k/5l droplet packs).",
-  "non_claim": "Verify-only, public keys only, no private material shipped. Reproduces the honest pending floor 372; flips to raw 0 after the producer's Task 1B Bitcoin-confirmation close. Digest-only, NOT CI-gated."
+  "status": "REAL two-machine independent reproduction EXECUTED (distinct keys, byte-identical decision digest)",
+  "non_claim": "Verify-only, public keys only, no private material shipped. Reproduces the honest pending floor 372; flips to raw 0 after the producer's Task 1B Bitcoin-confirmation close. Digest-only, NOT CI-gated.",
+  "independent_reproduction": {
+    "shared_decision_digest": "sha256:a2bf8719b36203a57e2af2a6",
+    "shared_verdict": {
+      "raw": 372,
+      "externally_anchored": false,
+      "reason": "required_confirmed_publication_absent"
+    },
+    "runs": [
+      {
+        "host": "Raoufs-MacBook-Air.local",
+        "os": "Darwin 25.5.0 arm64",
+        "node": "v22.16.0",
+        "party_fingerprint": "sha256:d9c39a106a87a1b1f",
+        "lane_d_all_ok": true
+      },
+      {
+        "host": "Nexus",
+        "os": "Linux 6.8.0-134 x86_64",
+        "ip": "170.64.167.95",
+        "node": "v26.5.0",
+        "party_fingerprint": "sha256:7979f961edefd8496",
+        "lane_d_all_ok": true,
+        "exec": "scp + sudo env PATH=/root/.nvm/.../v26.5.0 bash run.sh"
+      }
+    ],
+    "note": "Two independent machines/runtimes (Node 22 + Node 26) with DISTINCT freshly-generated keys reproduced the SAME decision digest a2bf8719 and verdict raw=372 (honest pending floor). Decision-equivalence, not signature-identity (party keys differ). Flips to raw 0 after the producer's Task 1B Bitcoin-confirmation close."
+  }
 }
