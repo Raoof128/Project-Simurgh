@@ -422,6 +422,19 @@ test("Stage 4H.4 exit map is explicit and collision-bounded", () => {
       381: 1,
       382: 1,
       383: 1,
+      // Stage 5M VTC-Quorum codes (additive extension of the shared ledger; 5M spec §2).
+      384: 1,
+      385: 1,
+      386: 1,
+      387: 1,
+      388: 1,
+      389: 1,
+      390: 1,
+      391: 1,
+      392: 1,
+      393: 1,
+      394: 1,
+      395: 1,
     })
   );
 });
