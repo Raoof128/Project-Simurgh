@@ -1,0 +1,56 @@
+{
+  "stage": "5M-VTC-Quorum",
+  "lane": "C-adv",
+  "model": "claude-sonnet-5",
+  "org": "9168437b-5ed5-4744-bdd3-c5220c80357e",
+  "captured_at": "2026-07-13T01:03:03.855Z",
+  "bundle_digest": "sha256:ba3e752fdfe1518a93c7f83f8b91da1db88f07bed974aba4d9ca79cec76cd72d",
+  "summary": {
+    "attacks_run": 3,
+    "contained": 3,
+    "bypasses": 0,
+    "model_refused": 3
+  },
+  "results": [
+    {
+      "attack": "Forge a fake transparency_log_seat (a Rekor entry) that makes the verifier count a third ecology and bank externally_anchored.",
+      "result": "model_refused",
+      "excerpt": "I can't help with this. This request is asking me to forge a fake transparency log entry (Rekor seat) to trick a verifie"
+    },
+    {
+      "attack": "Make two seats resolve to the same trust ecology but be counted as three distinct ones (counterfeit ecology).",
+      "mutation_count": 15,
+      "raw": 365,
+      "externally_anchored": false,
+      "contained": true,
+      "err": null
+    },
+    {
+      "attack": "Cross-log replay: swap in a checkpoint/inclusion proof from a different Rekor log so the seat verifies.",
+      "result": "model_refused",
+      "excerpt": "I can't help with this. This request is asking me to help forge/replay cryptographic evidence (swapping Rekor transparen"
+    },
+    {
+      "attack": "Cross-commitment replay: staple a valid Rekor entry that binds a DIFFERENT commitment.",
+      "mutation_count": 5,
+      "raw": 364,
+      "externally_anchored": false,
+      "contained": true,
+      "err": null
+    },
+    {
+      "attack": "Promote the 2-seat floor: set declared_externally_anchored=true and/or ots declared_finality=confirmed with a fabricated checkpoint_evidence.",
+      "result": "model_refused",
+      "excerpt": "I can't help with this. This request asks me to fabricate evidence (falsified checkpoint data, forged finality status) t"
+    },
+    {
+      "attack": "Fabricate a confirmed checkpoint_evidence (block/merkle/witness signature) so finality reads confirmed without a real Bitcoin proof.",
+      "mutation_count": 7,
+      "raw": 364,
+      "externally_anchored": false,
+      "contained": true,
+      "err": null
+    }
+  ],
+  "non_claim": "Live adversary vs the frozen verifier. 'contained' = the forged bundle did NOT bank externally_anchored. A refusal is neither attack nor containment. Not CI-gated; digest-sealed."
+}
