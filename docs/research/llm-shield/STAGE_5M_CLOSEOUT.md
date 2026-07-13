@@ -18,7 +18,7 @@
 
 ## Honest status of `externally_anchored`
 
-**Not yet banked.** The verifier wiring (`verifyVtcQuorum`) drives the *real* frozen 5L core over the *real* signed Lane-B bundle and reaches the **honest pending floor `372`** (`required_confirmed_publication_absent`) — it correctly refuses to bank while the OTS is unconfirmed. Banking to **raw 0** is the signed next step (**Task 1B close**), gated on:
+**Not yet banked.** The verifier wiring (`verifyVtcQuorum`) drives the _real_ frozen 5L core over the _real_ signed Lane-B bundle and reaches the **honest pending floor `372`** (`required_confirmed_publication_absent`) — it correctly refuses to bank while the OTS is unconfirmed. Banking to **raw 0** is the signed next step (**Task 1B close**), gated on:
 
 1. the re-captured OTS reaching **Bitcoin confirmation** (a fresh block; the earlier `D` was Bitcoin-confirmed in block 957 774 but had a window bug — see lesson);
 2. minting a tsa-verifier-signed `checkpoint_evidence` with the confirmed block values;
@@ -28,19 +28,19 @@ This is VTC-Core → VTC-Quorum: the first time the stack assembles a full real 
 
 ## Lesson banked
 
-The first captured `D` committed `review_window.window_open_not_before = 2000`, which fails `374` (`checkWindowCoherence` requires `window_open_not_before >= tsaUpperBound` — the review window must open *after* the timestamp). Because the window is inside the commitment, `D` had to be **recomputed with a coherent window (`window_open = 1_900_000_000`) and all three anchors re-captured**. Verify a full bundle assembly through the real 5L core *before* trusting a capture's ceremony values.
+The first captured `D` committed `review_window.window_open_not_before = 2000`, which fails `374` (`checkWindowCoherence` requires `window_open_not_before >= tsaUpperBound` — the review window must open _after_ the timestamp). Because the window is inside the commitment, `D` had to be **recomputed with a coherent window (`window_open = 1_900_000_000`) and all three anchors re-captured**. Verify a full bundle assembly through the real 5L core _before_ trusting a capture's ceremony values.
 
 ## Non-claims (signed discipline)
 
-Banking (when it lands) proves only that the verifier consumed and independently validated the declared three-ecology quorum and that all seats bind one commitment via the canonical anchor. It does **not** prove semantic truth of the anchored content, that review was careful, physical elapsed review time, that the producer couldn't hold the material earlier, ecology non-collusion, general TSA/blockchain/log security, or model safety. Bounds: trust-on-pin for all three roots; single-log equivocation about its *own* tree remains **I8** (`checkpoint_witness_cosigning`); no OIDC/Fulcio submitter identity (**I7**); browser verifies the adapter attestation, not the anchor crypto; offline finality vs permanent finality.
+Banking (when it lands) proves only that the verifier consumed and independently validated the declared three-ecology quorum and that all seats bind one commitment via the canonical anchor. It does **not** prove semantic truth of the anchored content, that review was careful, physical elapsed review time, that the producer couldn't hold the material earlier, ecology non-collusion, general TSA/blockchain/log security, or model safety. Bounds: trust-on-pin for all three roots; single-log equivocation about its _own_ tree remains **I8** (`checkpoint_witness_cosigning`); no OIDC/Fulcio submitter identity (**I7**); browser verifies the adapter attestation, not the anchor crypto; offline finality vs permanent finality.
 
 ## Four-axis scorecard (re-scored honestly at closeout)
 
-| Axis | Pre-build target | Closeout | Note |
-| ---- | ---------------- | -------- | ---- |
-| Novelty | 9.3 | **9.3** | no-hardware/no-ZK 3-ecology quorum + rewrite-floor + equivocation bound |
-| Frontier | 9.5 | **9.0** | real captures + verifier wiring proven, but `externally_anchored` **not yet banked** (pending Bitcoin) — re-score up to 9.5 on Task 1B close |
-| Anthropic relevance | 9.6 | **9.6** | provider-agnostic bridge into Sigstore/in-toto both labs' prose reports lack |
-| Constitution | 9.5 | **9.5** | rewrite-cost as a signed number across three verified ecologies |
+| Axis                | Pre-build target | Closeout | Note                                                                                                                                         |
+| ------------------- | ---------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| Novelty             | 9.3              | **9.3**  | no-hardware/no-ZK 3-ecology quorum + rewrite-floor + equivocation bound                                                                      |
+| Frontier            | 9.5              | **9.0**  | real captures + verifier wiring proven, but `externally_anchored` **not yet banked** (pending Bitcoin) — re-score up to 9.5 on Task 1B close |
+| Anthropic relevance | 9.6              | **9.6**  | provider-agnostic bridge into Sigstore/in-toto both labs' prose reports lack                                                                 |
+| Constitution        | 9.5              | **9.5**  | rewrite-cost as a signed number across three verified ecologies                                                                              |
 
 Pays **I5** on release acceptance (banking). Mints **I7** + **I8**. Inventions I-A…I-H folded (Ecology Independence Number, in-toto bridge, split-view honesty, No Two Anchored Stories, equivocation bound, prior-art seam table, provider-agnostic wedge, non-regression law).
