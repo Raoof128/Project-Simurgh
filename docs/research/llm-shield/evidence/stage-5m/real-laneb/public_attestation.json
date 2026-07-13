@@ -1,0 +1,25 @@
+{
+  "tier": "public",
+  "payload": {
+    "stage": "5M-VTC-Quorum",
+    "schema_version": "simurgh.vtcq.bundle.v1",
+    "envelope_schema": "vtc_quorum_confirmed.v2",
+    "quorum_profile": "third_trust_ecology",
+    "quorum_rule": "all_required",
+    "commitment_session_id": "sha256:c20e70f515f3c487da9774d4846cafb7906d61726bd97adeee0c43b1ce2eabb1",
+    "pinned_roots_fpr": null,
+    "transparency_log": {
+      "uuid": "108e9186e8c5677ac7369907b7a78e0f8b9695723b0bddca93b6f3ab15fac6ded8920acd1a1d3c60",
+      "global_log_index": 2157912696,
+      "shard_leaf_index": 2036008434,
+      "tree_size": 2036008484
+    },
+    "raw": 0,
+    "detail": null,
+    "computed_ecology_state": "confirmed",
+    "outcome_class": "ecology_confirmed",
+    "ecology_independence_number": 3,
+    "externally_anchored": true
+  },
+  "sig": "piSXa6k5uROfmlZzKruqhSm9530p6LQ+IEF5dWDRLouwWU/3nFOoC84ZcgJ6MsISKEtk4liCHieaoXnM32daCA=="
+}

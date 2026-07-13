@@ -1,24 +1,13 @@
 {
   "stage": "5M-VTC-Quorum",
   "lane": "B",
-  "status": "PENDING_BITCOIN (coherent-window recapture)",
+  "status": "BITCOIN_CONFIRMED \u2014 externally_anchored BANKED (raw 0)",
   "commitment_digest": "c20e70f515f3c487da9774d4846cafb7906d61726bd97adeee0c43b1ce2eabb1",
-  "canonical_anchor_digest": "25f17ef0da3497b7146e6b6def28526c2ac53a0b7fa63c4882d069831e0b77cb",
   "tsa_token_digest": "c8f495e575599f581780c3805160c9ebe6007b4ecc9e92272388a943c7856d33",
-  "initial_ots_digest": "2c80aa9d58e0d396136699ae168526351f4a6f2a6947848c97cdb8b8911b0061",
-  "rekor_entry_uuid": "108e9186e8c5677ac7369907b7a78e0f8b9695723b0bddca93b6f3ab15fac6ded8920acd1a1d3c60",
+  "confirmed_ots_digest": "499aacf44f8460e76ced966506427c2b10391167104426f400d6faccbbf3a0cc",
+  "bitcoin_block": 957782,
   "quorum_policy_digest": "sha256:8482a017143b34d36091b83c13ef1dea948a22f6e6a70d8820c3ae6df9fe0497",
   "anchor_policy_digest": "sha256:29f2cafee9a37efde9a2383a6d7de0e617e43d40c5b70c7e8394f78bb44f827b",
   "tsa_verifier_fingerprint": "sha256:652e98ad81db401ac446f148cf248cb4ec242269854c4441fced5ca79a136bfd",
-  "review_window": {
-    "window_open_not_before": 1900000000,
-    "window_close_after": 2000000000,
-    "required_anchor_profile": "vtc_quorum"
-  },
-  "capture_tool_versions": {
-    "openssl": "OpenSSL 3.5.2 5 Aug 2025 (Library: OpenSSL 3.5.2 5 Aug 2025)",
-    "py_opentimestamps": "0.4.5",
-    "node": "v22.16.0"
-  },
-  "note": "Coherent-window recapture: the first D committed review_window.window_open_not_before=2000 which fails 374 (must be >= tsaUpperBound). This D commits window_open=1_900_000_000. Verifies to honest 372 (pending); externally_anchored banks when the OTS is Bitcoin-confirmed (Task 1B close)."
+  "note": "Coherent-window D, all three ecologies over D; OTS Bitcoin-confirmed block 957782 (mempool-cross-checked). Verifier banks externally_anchored at raw 0."
 }

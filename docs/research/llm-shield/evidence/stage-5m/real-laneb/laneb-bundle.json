@@ -2,7 +2,7 @@
   "schema_version": "simurgh.vtcq.bundle.v1",
   "campaign_id": "vtcq-5m-laneb-1",
   "commitment_session_id": "sha256:c20e70f515f3c487da9774d4846cafb7906d61726bd97adeee0c43b1ce2eabb1",
-  "ceremony_id": "sha256:f2b6990fb0918061f89f3af1e8ab32ac811d5d3605142cf59ed1fc31c938a2ed",
+  "ceremony_id": "sha256:d0d9bd0a78f9a78a92df814daab6cd9f6243bee9326ad0d25d6381f58552ea8c",
   "vuc": {
     "universe_commitment_digest": "sha256:sha256:9ecae5c214f85c7e5eb7878f9c55155c180ae9c5fbf95e99faa45387c"
   },
@@ -66,9 +66,18 @@
     {
       "anchor_type": "bitcoin_ots",
       "trust_domain": "bitcoin-ots",
-      "ots_proof_digest": "sha256:2c80aa9d58e0d396136699ae168526351f4a6f2a6947848c97cdb8b8911b0061",
-      "declared_finality": "pending",
-      "checkpoint_evidence": null,
+      "ots_proof_digest": "sha256:499aacf44f8460e76ced966506427c2b10391167104426f400d6faccbbf3a0cc",
+      "declared_finality": "confirmed",
+      "checkpoint_evidence": {
+        "block_hash": "000000000000000000020085a7608c31a61fb758c647f3a37d7532cc3229cf16",
+        "block_height": 957782,
+        "block_merkle_root": "b90a6426100d78946d39fc2643c180beda4b16edc571754a5f2456def3a679da",
+        "observed_tip_height": 957791,
+        "observed_at_epoch_s": 1783903968,
+        "witness_key_fingerprint": "sha256:652e98ad81db401ac446f148cf248cb4ec242269854c4441fced5ca79a136bfd",
+        "ots_leaf_hex": "c20e70f515f3c487da9774d4846cafb7906d61726bd97adeee0c43b1ce2eabb1",
+        "signature": "KbL0cshzJlHBI3aWSqNZgxUE4aWotZ60baGE4Az0qcDGyti+DiaRjeIUTLM7CuPAq0A8vOPVNvS+B3E5AdXQCA=="
+      },
       "ots_leaf_hex": "c20e70f515f3c487da9774d4846cafb7906d61726bd97adeee0c43b1ce2eabb1",
       "verifier_result": null
     }
@@ -76,16 +85,16 @@
   "review_access_authorisation_receipt": {
     "binds": {
       "commitment_session_id": "sha256:c20e70f515f3c487da9774d4846cafb7906d61726bd97adeee0c43b1ce2eabb1",
-      "verified_anchor_set_digest": "sha256:9d215edf15209bf99cd347702ef42e075b392d6904286f4de939d0c55991a264",
-      "checkpoint_evidence_digest": null,
+      "verified_anchor_set_digest": "sha256:ff21cc5090d44592cd526a8d14ab2f7de6f63de1ceb6e1ca192d80d529b4fa21",
+      "checkpoint_evidence_digest": "sha256:41a2c8b5d2822476db7482f8a125f78833bd2aac2947f8c346fc815d716e9174",
       "quorum_policy_digest": "sha256:8482a017143b34d36091b83c13ef1dea948a22f6e6a70d8820c3ae6df9fe0497",
       "declared_release_surface_digest": "sha256:090c507b8508eba8401e9248fd4f999e151db7a5a50358cfe5e65f031193055c",
-      "start_capability_root_digest": "sha256:b5bf79709debde5060f602f1c5243aeceeb793e1c1c37d922243ad21bcce804c"
+      "start_capability_root_digest": "sha256:7d076b4ba0089b088ceb11c51c5adfc984576bc6ce8e8f68e21cddaa9e9a8f7f"
     },
-    "start_capability_root_digest": "sha256:b5bf79709debde5060f602f1c5243aeceeb793e1c1c37d922243ad21bcce804c",
+    "start_capability_root_digest": "sha256:7d076b4ba0089b088ceb11c51c5adfc984576bc6ce8e8f68e21cddaa9e9a8f7f",
     "gate_public_key_fingerprint": "sha256:499c068a29896c2cfb31b646ddc67e0c05fbbf80ed3d02a23d09a0d8f8c1e151",
     "issuance_nonce": "vtcq-5m-issuance-nonce",
-    "sig": "FjFsnrXZcRM/WBoHHmlnU+NloXUDJ4ok7yhpr/qW+ve0df0fxZJO1p9hawksmLcd6lAbw7YxQbNEg0K77uXRCw=="
+    "sig": "OfT0btXQZaELForVRw8LwP+TRIGkWlB0M6fSsIYkWs2VNtlnlLfe01nyh6Bp4wn3pfO9iDfSQLCkSi+OW6R6Bw=="
   },
   "declared_releases": [
     {
@@ -93,23 +102,23 @@
       "release_ordinal": 0,
       "audience_digest": "sha256:aud-a",
       "consumption_record": {
-        "release_capability_digest": "sha256:6a7be5fb0ff0ba2d18884fb37eceaaf6638e6e27c8283d34463efb589e8c541b",
+        "release_capability_digest": "sha256:e1627cef46b81ea988a1c097641d2f9c54f122bcb55edd2a12cdb9da88ca5099",
         "release_payload_digest": "sha256:payload-reviewer-a",
         "endpoint_id": "reviewer-a",
         "release_ordinal": 0,
-        "sig": "BV1m7FvvV5xlQLkFYnS3ycnAzzne1p/M7VrksxYoZnZDDDmKawigu8fQkFYIjcaCcLlXiibHAZJ0s3Amfzo1CA=="
+        "sig": "PmDnpdy61KhHQQKWBBybUoiddTQ6X3QPmRJWlWtDaWnezXf3zq02eqmhE1aLSLwWsxU/F7M+3y++3Q9xflH0Dw=="
       }
     }
   ],
   "projections": {
     "state_census": {
-      "computed_state": "vtc_quorum_pending",
-      "rung": "challenge_bound"
+      "computed_state": "vtc_quorum_confirmed",
+      "rung": "externally_anchored"
     },
     "quorum_census": {
       "deduped_domain_count": 2,
       "threshold": 2,
-      "computed_finality": "pending"
+      "computed_finality": "confirmed"
     },
     "release_census": {
       "surface_count": 1,
@@ -126,7 +135,7 @@
         "digicert-tsa"
       ]
     },
-    "projection_root": "sha256:08b11063351bbaaf98b29f274d7982d5c0f0245e3e90182b2b95b4d05c8775ac"
+    "projection_root": "sha256:4c37657fcc1d37e949cfb544969c2f2a1ab5717fff403fa844993917f16e6dcc"
   },
   "reserved_slots": {
     "campaign_composition_root": null
@@ -180,5 +189,5 @@
       "treeSize": 2036008484
     }
   },
-  "declared_externally_anchored": false
+  "declared_externally_anchored": true
 }

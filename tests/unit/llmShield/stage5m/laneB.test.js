@@ -1,8 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Stage 5M — Lane B real offline gate. Verifies the FROZEN real signed bundle (real DigiCert token, real
 // Rekor entry, real ceremony over commitment D) through the whole verifier. The OTS for this coherent-window
-// D is not yet Bitcoin-confirmed, so the honest verdict is 372 (required_confirmed_publication_absent) and
-// externally_anchored is NOT banked. Banking flips to raw 0 once Task 1B closes with the Bitcoin checkpoint.
+// D is Bitcoin-confirmed (block 957782); the verifier banks externally_anchored at raw 0 (Task 1B closed).
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, existsSync } from "node:fs";
@@ -25,7 +24,7 @@ function pubId(name, subject) {
   };
 }
 
-test("Lane B: real signed bundle verifies to the honest pending floor (372, not anchored)", () => {
+test("Lane B: real signed bundle banks externally_anchored (raw 0, Bitcoin-confirmed)", () => {
   const bundle = JSON.parse(readFileSync(join(EV, "laneb-bundle.json"), "utf8"));
   const p = JSON.parse(readFileSync(join(EV, "laneb-pinned.json"), "utf8"));
   const keys = {
@@ -43,12 +42,10 @@ test("Lane B: real signed bundle verifies to the honest pending floor (372, not 
     vtcq_policy_digest: p.vtcq_policy_digest,
   };
   const r = verifyVtcQuorum(bundle, pinned, keys, { tier: "public" });
-  assert.equal(r.raw, 372, `expected honest pending floor, got ${r.raw} ${r.reason ?? ""}`);
-  assert.equal(
-    bundle.declared_externally_anchored,
-    false,
-    "pending bundle must not declare anchored"
-  );
+  assert.equal(r.raw, 0, `expected banked raw 0, got ${r.raw} ${r.reason ?? ""}`);
+  assert.equal(r.externally_anchored, true, "externally_anchored must be banked");
+  assert.equal(r.ecology_independence_number, 3);
+  assert.equal(bundle.declared_externally_anchored, true, "confirmed bundle declares anchored");
 
   // The Rekor seat itself is REAL and valid offline (three ecologies present) even though finality is pending.
   const facts = makeVtcQuorumFacts(bundle, pinned);

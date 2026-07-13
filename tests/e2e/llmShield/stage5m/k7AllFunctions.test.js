@@ -183,7 +183,7 @@ test("K7: attestation both tiers + in-toto + tamper", () => {
   assert.equal(emitContainmentQuorumPredicate(b, verdict).subject[0].digest.sha256, "abcd");
 });
 
-test("K7 cross-stage: 384-395 disjoint from 364-383; real Lane-B bundle → honest 372", () => {
+test("K7 cross-stage: 384-395 disjoint from 364-383; real Lane-B bundle → banked raw 0", () => {
   for (const c of Object.values(VTCQUORUM_RAW_CODES)) assert.ok(c === 0 || (c >= 384 && c <= 395));
   const bundle = JSON.parse(readFileSync(join(EV, "laneb-bundle.json"), "utf8"));
   const p = JSON.parse(readFileSync(join(EV, "laneb-pinned.json"), "utf8"));
@@ -208,7 +208,10 @@ test("K7 cross-stage: 384-395 disjoint from 364-383; real Lane-B bundle → hone
     tsa_verifier_pubkey_fpr: p.tsa_verifier_pubkey_fpr,
     vtcq_policy_digest: p.vtcq_policy_digest,
   };
-  assert.equal(verifyVtcQuorum(bundle, pinned, keys, {}).raw, 372);
+  const lb = verifyVtcQuorum(bundle, pinned, keys, {});
+  assert.equal(lb.raw, 0);
+  assert.equal(lb.externally_anchored, true);
+  assert.equal(lb.ecology_independence_number, 3);
   // real Rekor adapter touched
   const seat = bundle.transparency_log_seat;
   assert.equal(verifyInclusion(seat).ok, true);
