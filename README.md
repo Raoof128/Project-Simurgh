@@ -13,7 +13,7 @@ proof of what happened after a guardrail missed — not another jailbreak detect
 [![Node](https://img.shields.io/badge/node-%E2%89%A522.0-1a1a1a?style=flat-square)](https://nodejs.org)
 [![License](https://img.shields.io/badge/license-AGPL--3.0-d6cfbe?style=flat-square)](#license)
 [![Status](https://img.shields.io/badge/status-research%20prototype-2f4a2a?style=flat-square)](#status)
-[![Latest](https://img.shields.io/badge/release-v2.47.0-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.47.0-stage-5l-vtcq)
+[![Latest](https://img.shields.io/badge/release-v2.48.0-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.48.0-stage-5m-vtc-quorum)
 
 </div>
 
@@ -77,26 +77,24 @@ newest for the current frontier, or jump straight to
 [Constitution alignment](#design-alignment-with-claudes-constitution), or the
 [concrete result](#the-concrete-result-stage-3v-b).
 
-> 🆕 **Latest — Stage 5L · Verifiable Temporal Commitment with Notary Quorum (`v2.47.0-stage-5l-vtcq`).**
-> Externally commits the **full ceremony contract** (the VUC universe root + review-window / anchor / quorum
-> / trust-domain / declared-release policies) through a **bounded-time RFC-3161 authority** _and_ a
-> structurally distinct **Bitcoin/OTS publication root**, then makes reviewer access **cryptographically
-> impossible until that commitment verifies** — enforced by a gate-issued capability every declared release
-> must consume. Laws: **No Backdated Commitment**, **No Post-Hoc Review Window**, **No Temporal Release
-> Bypass**. Codes **364–383** on a frozen non-numeric spine; three computed states (`vtc_core`=0,
-> `vtc_quorum_confirmed`=0, `vtc_quorum_pending`=**372** honest floor-miss, `false-confirmed`=**380**);
-> offline Bitcoin finality via a signed checkpoint witness (no live node). Real Ed25519 signed builder +
-> adapter (facts from _verified_ signatures), byte-stable Lane-A pack, two-tier attestation (`audit ⟹
-public`), **Node↔Python↔browser parity**, **14 Lean theorems** (zero `sorry`, no user axioms), K7
-> all-functions net. Beast-mode: an **RSP prerequisite-gate** fixture (RSO-approval-as-gate, primary-sourced)
-> · a **SCITT projection** bridge (emit-only) · `temporalCompletenessNoHiddenGap`. **Real lanes EXECUTED:** a
-> genuine **DigiCert RFC-3161** token over the commitment (`openssl ts -verify: OK`) + a **Bitcoin-confirmed**
-> OTS publication (block **957 689**, cross-checked vs mempool.space) + **independent two-machine
-> reproduction** + a **live Sonnet-5 adversary** (CVP) that attacked all 7 laws **8 ways — every one
-> contained, 0 bypasses**. **Honest to its limits:** ships **VTC-Core** — both real trust roots exist over
-> the commitment, but `externally_anchored` is **not yet banked in the verifier** (the sole remaining step
-> is the verifier consuming a real `vtc_quorum_confirmed` bundle). Scorecard: Novelty 9.2 · Frontier 9.4 ·
-> Good-for-Anthropic 9.6 · Constitution 9.6.
+> 🆕 **Latest — Stage 5M · VTC-Quorum: exact three-ecology external-anchor quorum (`v2.48.0-stage-5m-vtc-quorum`).**
+> The verifier consumes and **independently validates an exact three-of-three** external-anchor ecology —
+> **RFC-3161 TSA + Bitcoin-confirmed OpenTimestamps + Rekor transparency-log inclusion** — all binding one
+> commitment `D`, and **only then banks `externally_anchored`**. Layered additively on the frozen 5L core
+> (codes 364–383 untouched); new codes **384–395**; two-level state (`ecology_confirmed`=0 /
+> `ecology_incomplete`=**393** / `false_anchored`=**394**, lie before gap). Laws: **No Anchor Without
+> Recompute**, **No Silent Downgrade**, **No Counterfeit Ecology**, **No Two Anchored Stories**. Real Node
+> adapter (RFC6962 inclusion + checkpoint STH + SET + submitter, validated offline vs a real Rekor entry),
+> two-tier attestation, emit-only **in-toto** candidate predicate, **Node↔Python↔browser parity**, **11 Lean
+> theorems** (zero `sorry`), K7 net. Beast-mode: **Ecology Independence Number** (signed rewrite-cost floor) ·
+> **crossEcologyEquivocationBound** (a bound the TEE/ZK prior art can't state) · a prior-art seam table.
+> **Banked, for real:** a genuine **DigiCert** token (imprint == `D`) + a **Bitcoin-confirmed OTS** (block
+> **957 782**, merkle root cross-checked vs mempool.space) + a real **Rekor** entry → the confirmed bundle
+> verifies to **`raw 0` / `externally_anchored=true` / `N=3`**. **Adversary EXECUTED:** live **Sonnet-5** (CVP)
+>
+> - a local **Llama-3.2-1B** fuzzer across all six forgery classes — **0 bypasses**; and a **real two-machine
+>   independent reproduction** (Mac Node 22 + remote droplet Node 26, distinct keys, byte-identical decision).
+>   Pays socket **I5**. Scorecard: Novelty 9.3 · Frontier 9.5 · Anthropic-relevance 9.6 · Constitution 9.5.
 >
 > <details><summary>Prior — Stage 5K · Verifiable Universe Commitment (<code>v2.46.0-stage-5k-vuc</code>)</summary>
 >
@@ -494,8 +492,8 @@ and [`docs/research/llm-shield/STAGE_5B_CLOSEOUT.md`](docs/research/llm-shield/S
 
 ## Flagship: Verifiable Containment Attestation (LLM Shield)
 
-The current work is a ladder of signed, independently reproducible research rungs (**Stage 3A → 5L**,
-releases `v1.6.0` → `v2.47.0`). The attestation rungs produce Ed25519-signed,
+The current work is a ladder of signed, independently reproducible research rungs (**Stage 3A → 5M**,
+releases `v1.6.0` → `v2.48.0`). The attestation rungs produce Ed25519-signed,
 metadata-only evidence bundles and offline checkers that re-derive their bounded claims byte-for-byte.
 
 ### The concrete result (Stage 3V-B)
