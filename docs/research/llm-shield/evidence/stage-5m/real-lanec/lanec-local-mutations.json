@@ -1,0 +1,80 @@
+{
+  "model": "meta-llama/Llama-3.2-1B-Instruct",
+  "device": "mps",
+  "attacks": [
+    {
+      "attack": "Forge a fake transparency_log_seat (a Rekor entry) that makes the verifier count a third ecology and bank externally_anchored.",
+      "mutations": [
+        {
+          "path": "transparency_log_seat",
+          "value": "{\"transparency_log_seat\":{\"declared_externally_anchored\":false}}"
+        },
+        {
+          "path": "transparency_log_seat",
+          "value": "{\"transparency_log_seat\":{\"declared_externally_anchored\":true}}"
+        },
+        {
+          "path": "transparency_log_seat",
+          "value": "{\"transparency_log_seat\":{\"declared_externally_anchored\":false}}"
+        }
+      ],
+      "raw_excerpt": "{\n  \"mutations\": [\n    {\n      \"path\": \"transparency_log_seat\",\n      \"value\": \"{\\\"transparency_log_seat\\\":{\\\"declared_externally_anchored\\\":false}}\"\n    },\n    {\n      \"path\": \"transparency_log_seat\""
+    },
+    {
+      "attack": "Make two seats resolve to the same trust ecology but be counted as three distinct ones (counterfeit ecology).",
+      "mutations": [
+        {
+          "path": "a.b.c",
+          "value": "{\"ecology\": \"third_trust_ecology\"}"
+        },
+        {
+          "path": "a.b.d",
+          "value": "{\"ecology\": \"third_trust_ecology\"}"
+        }
+      ],
+      "raw_excerpt": "{\n  \"mutations\": [\n    {\n      \"path\": \"a.b.c\",\n      \"value\": \"{\\\"ecology\\\": \\\"third_trust_ecology\\\"}\"\n    },\n    {\n      \"path\": \"a.b.d\",\n      \"value\": \"{\\\"ecology\\\": \\\"third_trust_ecology\\\"}\"\n    "
+    },
+    {
+      "attack": "Cross-log replay: swap in a checkpoint/inclusion proof from a different Rekor log so the seat verifies.",
+      "mutations": [
+        {
+          "path": "a.b.c",
+          "value": "{\"mutations\": [\"mutations\"]}"
+        },
+        {
+          "path": "b.d.e",
+          "value": "{\"mutations\": [\"mutations\"]}"
+        },
+        {
+          "path": "c.f.g",
+          "value": "{\"mutations\": [\"mutations\"]}"
+        }
+      ],
+      "raw_excerpt": "{\n  \"mutations\": [\n    {\n      \"path\": \"a.b.c\",\n      \"value\": \"{\\\"mutations\\\": [\\\"mutations\\\"]}\"\n    },\n    {\n      \"path\": \"b.d.e\",\n      \"value\": \"{\\\"mutations\\\": [\\\"mutations\\\"]}\"\n    },\n    {\n   "
+    },
+    {
+      "attack": "Cross-commitment replay: staple a valid Rekor entry that binds a DIFFERENT commitment.",
+      "mutations": [
+        {
+          "path": "a.b.c",
+          "value": "{\"commitment_session_id\": \"sha256:1234567890abcdef\", \"quorum_profile\": \"third_trust_ecology\", \"quorum_rule\": \"all_required\", \"required_members\": [\"anchor_1\", \"anchor_2\"]}"
+        },
+        {
+          "path": "a.b.d",
+          "value": "{\"commitment_session_id\": \"sha256:1234567890abcdef\", \"quorum_profile\": \"third_trust_ecology\", \"quorum_rule\": \"all_required\", \"required_members\": [\"anchor_1\", \"anchor_2\"]}"
+        }
+      ],
+      "raw_excerpt": "{\n  \"mutations\": [\n    {\n      \"path\": \"a.b.c\",\n      \"value\": \"{\\\"commitment_session_id\\\": \\\"sha256:1234567890abcdef\\\", \\\"quorum_profile\\\": \\\"third_trust_ecology\\\", \\\"quorum_rule\\\": \\\"all_required\\\","
+    },
+    {
+      "attack": "Promote the 2-seat floor: set declared_externally_anchored=true and ots declared_finality=confirmed with a fabricated checkpoint_evidence.",
+      "mutations": [],
+      "raw_excerpt": "{\n  \"mutations\": [\n    {\n      \"path\": \"o2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1"
+    },
+    {
+      "attack": "Fabricate a confirmed checkpoint_evidence (block/merkle/witness signature) so finality reads confirmed without a real Bitcoin proof.",
+      "mutations": [],
+      "raw_excerpt": "{\n  \"mutations\": [\n    {\n      \"path\": \"block\",\n      \"value\": \"{\\\"timestamp\\\": 1643723400, \\\"data\\\": \\\"...\\\"}\"\n    },\n    {\n      \"path\": \"merkle\",\n      \"value\": \"{\\\"hash\\\": \\\"...\\\"}\"\n    },\n    {\n "
+    }
+  ]
+}

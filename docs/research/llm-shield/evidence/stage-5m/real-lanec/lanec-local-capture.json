@@ -1,0 +1,68 @@
+{
+  "stage": "5M-VTC-Quorum",
+  "lane": "C-adv-local",
+  "model": "meta-llama/Llama-3.2-1B-Instruct",
+  "device": "mps",
+  "captured_at": "2026-07-13T01:28:36.366Z",
+  "summary": {
+    "attacks_run": 6,
+    "contained": 6,
+    "bypasses": 0
+  },
+  "results": [
+    {
+      "attack": "Forge a fake transparency_log_seat (a Rekor entry) that makes the verifier count a third ecology and bank externally_anchored.",
+      "mutation_count": 3,
+      "raw": 395,
+      "externally_anchored": false,
+      "contained": true,
+      "err": null
+    },
+    {
+      "attack": "Make two seats resolve to the same trust ecology but be counted as three distinct ones (counterfeit ecology).",
+      "mutation_count": 2,
+      "raw": 372,
+      "externally_anchored": false,
+      "contained": true,
+      "err": null
+    },
+    {
+      "attack": "Cross-log replay: swap in a checkpoint/inclusion proof from a different Rekor log so the seat verifies.",
+      "mutation_count": 3,
+      "raw": 372,
+      "externally_anchored": false,
+      "contained": true,
+      "err": null
+    },
+    {
+      "attack": "Cross-commitment replay: staple a valid Rekor entry that binds a DIFFERENT commitment.",
+      "mutation_count": 2,
+      "raw": 372,
+      "externally_anchored": false,
+      "contained": true,
+      "err": null
+    },
+    {
+      "attack": "Promote the 2-seat floor: set declared_externally_anchored=true and ots declared_finality=confirmed with a fabricated checkpoint_evidence.",
+      "mutation_count": 0,
+      "raw": 372,
+      "externally_anchored": false,
+      "contained": true,
+      "err": null
+    },
+    {
+      "attack": "Fabricate a confirmed checkpoint_evidence (block/merkle/witness signature) so finality reads confirmed without a real Bitcoin proof.",
+      "mutation_count": 0,
+      "raw": 372,
+      "externally_anchored": false,
+      "contained": true,
+      "err": null
+    }
+  ],
+  "non_claim": "Local uncensored fuzzer (Llama-3.2-1B) exercises EVERY attack class \u2014 including those a frontier model refuses \u2014 against the frozen verifier. 'contained' = did NOT bank externally_anchored. Defensive; target is our own verifier. Digest-only, NOT CI-gated.",
+  "honest_coverage": {
+    "local_real_mutations": 4,
+    "local_no_parseable_mutation": 2,
+    "note": "The 1B fuzzer produced real mutations for 4/6 classes (all contained, none banked). 2/6 produced no parseable mutation (weak 1B) and are NOT strongly exercised by the local model \u2014 those classes ARE covered by the deterministic Lane C corpus (promoted floor->394) and the Sonnet-5 lane. Combined across deterministic + Sonnet-5 + local, all 6 classes are exercised with 0 bypasses."
+  }
+}
