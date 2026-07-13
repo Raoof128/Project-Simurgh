@@ -1,15 +1,23 @@
 {
+  "BITCOIN_CONFIRMATION.json": {
+    "bytes": 892,
+    "sha256": "aafe44a578ae38e9d986f121686f3fd43b518d4f34cc5cec3556930326231207"
+  },
   "CAPTURE_CONTINUITY.json": {
-    "bytes": 1508,
-    "sha256": "d6ad951a788bdb2a48465403836ae22e1c32f8d47fce68a069805d503b55f01c"
+    "bytes": 894,
+    "sha256": "177661c7c45aad3a85bd90b1993195bc79fa6490fc2163621d73db38929e3b8d"
   },
   "D.bin": {
     "bytes": 32,
     "sha256": "39a91c90c6310d4d2e5208d513849653b3e01c536f820d0645301b749b1c424c"
   },
   "D.ots": {
-    "bytes": 705,
-    "sha256": "2c80aa9d58e0d396136699ae168526351f4a6f2a6947848c97cdb8b8911b0061"
+    "bytes": 1672,
+    "sha256": "499aacf44f8460e76ced966506427c2b10391167104426f400d6faccbbf3a0cc"
+  },
+  "audit_attestation.json": {
+    "bytes": 1044,
+    "sha256": "a8612c41b461e8c90f5b38d5d9730013fca77ecf6601bb9d1d4d69198014cc0a"
   },
   "canonical-anchor.txt": {
     "bytes": 64,
@@ -24,12 +32,16 @@
     "sha256": "ce7d6b44f5d510391be98c8d76b18709400a30cd87659bfebe1c6f97ff5181ee"
   },
   "laneb-bundle.json": {
-    "bytes": 9139,
-    "sha256": "aa2cd240f8d1a9df2dda3f2f1e41cae2b5e8e9765ae6c2fdb5bf5084208c60b0"
+    "bytes": 9837,
+    "sha256": "b7bd2f7b3b86c844788bc53458bc7aa8dd4229cecaefc3750f7c5a31506fec36"
   },
   "laneb-pinned.json": {
     "bytes": 284,
     "sha256": "5cab37b4f61f3041c606aca18f9b1175a23cf6f7122deb6962487623b7f56b17"
+  },
+  "public_attestation.json": {
+    "bytes": 911,
+    "sha256": "46326dfe4de567900b6d2ee44c981bc883f3ebf40ac5bcd3c70826bc29e787c4"
   },
   "rekor_entry_full.json": {
     "bytes": 2907,

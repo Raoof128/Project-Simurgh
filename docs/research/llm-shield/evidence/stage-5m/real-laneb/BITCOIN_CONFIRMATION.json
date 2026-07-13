@@ -1,0 +1,21 @@
+{
+  "stage": "5M-VTC-Quorum",
+  "lane": "B",
+  "status": "BITCOIN_CONFIRMED — externally_anchored BANKED",
+  "commitment_digest": "c20e70f515f3c487da9774d4846cafb7906d61726bd97adeee0c43b1ce2eabb1",
+  "bitcoin": {
+    "block_height": 957782,
+    "block_hash": "000000000000000000020085a7608c31a61fb758c647f3a37d7532cc3229cf16",
+    "block_merkle_root": "b90a6426100d78946d39fc2643c180beda4b16edc571754a5f2456def3a679da",
+    "observed_tip_height": 957791,
+    "confirmations": 10,
+    "min_confirmations": 6,
+    "cross_checked_explorer": "mempool.space"
+  },
+  "banked": {
+    "raw": 0,
+    "externally_anchored": true,
+    "ecology_independence_number": 3
+  },
+  "non_claim": "D Bitcoin-confirmed (block 957782, merkle root cross-checked vs mempool.space). The full 3-ecology verifier consumes the tsa-verifier-signed checkpoint_evidence and banks externally_anchored at raw 0. Pays I5."
+}
