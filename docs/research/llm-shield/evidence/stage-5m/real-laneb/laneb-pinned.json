@@ -1,0 +1,6 @@
+{
+  "expected_submitter_fpr": "sha256:8f78af8a8854b5018d56339b8f1f07ccb9837d2015634310e8ac478f39dc7de8",
+  "accuracy_policy_s": 2,
+  "tsa_verifier_pubkey_fpr": "sha256:652e98ad81db401ac446f148cf248cb4ec242269854c4441fced5ca79a136bfd",
+  "vtcq_policy_digest": "sha256:vtcq-5m-policy"
+}
