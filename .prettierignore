@@ -135,3 +135,7 @@ tests/fixtures/llmShield/stage5l/test-keys/
 
 docs/research/llm-shield/evidence/stage-5m/
 tests/fixtures/llmShield/stage5m/test-keys/
+
+# Stage 5N byte-stable evidence + fixture keys
+docs/research/llm-shield/evidence/stage-5n/
+tests/fixtures/llmShield/stage5n/test-keys/
