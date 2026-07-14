@@ -11,6 +11,22 @@ import { parseTsaReply } from "./tsaTime.mjs";
 import { runEndpointChild } from "./endpointQuorum.mjs";
 import { startAuthorisationDigest } from "../core/derive.mjs";
 
+// Extract the artifact hash the transparency log ACTUALLY recorded, from the entry's own signed body.
+// This must be read from evidence, never asserted by the producer: subjectCheck compares it against
+// sha256(utf8(role_subject_hex)), which is what binds the Rekor seat to this endpoint's subject.
+// Fails CLOSED (null) on absent/unparseable evidence — null can never equal a real digest.
+export function rekorArtifactHash(entry) {
+  try {
+    const uuid = Object.keys(entry ?? {})[0];
+    if (!uuid) return null;
+    const body = JSON.parse(Buffer.from(entry[uuid].body, "base64").toString("utf8"));
+    const v = body?.spec?.data?.hash?.value;
+    return typeof v === "string" && /^[0-9a-f]{64}$/.test(v) ? v : null;
+  } catch {
+    return null;
+  }
+}
+
 // Default adapter: builds B11 facts from the envelope + real evidence (chain recompute is the 14 s path).
 export function defaultFactsAdapter(env, verifier_config, { endpointEvidence } = {}) {
   const recomputed = runChain(
@@ -44,7 +60,7 @@ export function defaultFactsAdapter(env, verifier_config, { endpointEvidence } =
       subject_extractable: startTsa.subject_extractable,
       tsa_imprint: startTsa.imprintHex,
       ots_leaf: startSubject,
-      rekor_artifact_hash: null,
+      rekor_artifact_hash: rekorArtifactHash(ee.start?.rekorEntry),
     },
     end: {
       authority_id: endTsa.authority_id ?? "digicert-tsa",
@@ -54,7 +70,7 @@ export function defaultFactsAdapter(env, verifier_config, { endpointEvidence } =
       subject_extractable: endTsa.subject_extractable,
       tsa_imprint: endTsa.imprintHex,
       ots_leaf: env.D_out,
-      rekor_artifact_hash: null,
+      rekor_artifact_hash: rekorArtifactHash(ee.end?.rekorEntry),
     },
   };
 }
