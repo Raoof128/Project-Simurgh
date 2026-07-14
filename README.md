@@ -13,7 +13,7 @@ proof of what happened after a guardrail missed — not another jailbreak detect
 [![Node](https://img.shields.io/badge/node-%E2%89%A522.0-1a1a1a?style=flat-square)](https://nodejs.org)
 [![License](https://img.shields.io/badge/license-AGPL--3.0-d6cfbe?style=flat-square)](#license)
 [![Status](https://img.shields.io/badge/status-research%20prototype-2f4a2a?style=flat-square)](#status)
-[![Latest](https://img.shields.io/badge/release-v2.48.0-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.48.0-stage-5m-vtc-quorum)
+[![Latest](https://img.shields.io/badge/release-v2.49.0-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.49.0-stage-5n-vtc-delay)
 
 </div>
 
@@ -541,8 +541,8 @@ and [`docs/research/llm-shield/STAGE_5B_CLOSEOUT.md`](docs/research/llm-shield/S
 
 ## Flagship: Verifiable Containment Attestation (LLM Shield)
 
-The current work is a ladder of signed, independently reproducible research rungs (**Stage 3A → 5M**,
-releases `v1.6.0` → `v2.48.0`). The attestation rungs produce Ed25519-signed,
+The current work is a ladder of signed, independently reproducible research rungs (**Stage 3A → 5N**,
+releases `v1.6.0` → `v2.49.0`). The attestation rungs produce Ed25519-signed,
 metadata-only evidence bundles and offline checkers that re-derive their bounded claims byte-for-byte.
 
 ### The concrete result (Stage 3V-B)
@@ -881,7 +881,7 @@ claim. See [`PRIVACY.md`](PRIVACY.md), [`docs/ETHICS.md`](docs/ETHICS.md), and
 ## Verification
 
 The full quality gate (`scripts/check.sh`) runs on every push. The current baseline (through Stage
-5M, `v2.48.0`) verifies with **2,996 automated unit tests** plus per-stage smoke gates,
+5N, `v2.49.0`) verifies with **3,057 automated unit tests** plus per-stage smoke gates,
 security/privacy/consistency audits, policy-drift guards, typed-exit checks, and checker/reproduce
 smokes. Every VCA rung is
 signed with its own Ed25519 key (private keys are never committed), reproduces byte-identically
