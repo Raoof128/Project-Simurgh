@@ -3,8 +3,9 @@
 // does not parse the .ots; this module ADDS real TSA imprint binding + OTS Bitcoin confirmation on top of
 // the extension. Honest label: child_component = "stage5m_quorum_extension". Typed facts, never throws.
 import crypto from "node:crypto";
-import { execFileSync } from "node:child_process";
+import { readFileSync } from "node:fs";
 import { parseTsaReply } from "./tsaTime.mjs";
+import { verifyOtsOffline } from "./otsVerify.mjs";
 import { makeVtcQuorumFacts } from "../../stage5m/node/facts.mjs";
 import { checkRekorSeat } from "../../stage5m/core/rekorSeat.mjs";
 import { checkCrossSeat, checkDistinctEcologies } from "../../stage5m/core/crossSeat.mjs";
@@ -12,17 +13,15 @@ import { checkState, stateFields } from "../../stage5m/core/state.mjs";
 
 const sha = (b) => crypto.createHash("sha256").update(b).digest("hex");
 
-// Parse `ots info` for the Bitcoin attestation(s). Offline read of the detached proof structure.
-function otsConfirmation(otsPath) {
-  try {
-    const out = execFileSync("ots", ["info", otsPath], { encoding: "utf8" });
-    const heights = [...out.matchAll(/BitcoinBlockHeaderAttestation\((\d+)\)/g)].map((m) =>
-      Number(m[1])
-    );
-    return { confirmed: heights.length > 0, block_heights: heights };
-  } catch (e) {
-    return { confirmed: false, block_heights: [], error: String(e) };
-  }
+// Real OFFLINE OTS→Bitcoin verification (no `ots` CLI, no network): leaf == D + recomputed op path to a
+// Bitcoin merkle root at a claimed height (otsVerify.mjs).
+function otsConfirmation(otsPath, subjectHex) {
+  const r = verifyOtsOffline(readFileSync(otsPath), subjectHex);
+  return {
+    confirmed: r.confirmed,
+    block_heights: (r.attestations ?? []).map((a) => a.height),
+    leaf_ok: r.leaf_ok,
+  };
 }
 
 // runEndpointChild(role, ev, pinned) -> { green, raw, reason, detail, stateFields }
@@ -47,8 +46,8 @@ export function runEndpointChild(role, ev, opts = {}) {
       detail: { ...detail, tsa_imprint_mismatch: true },
     };
 
-  // (b) OTS leaf == D + Bitcoin confirmation (real detached-proof read).
-  const ots = otsConfirmation(ev.otsPath);
+  // (b) OTS leaf == D + Bitcoin confirmation (real offline detached-proof recompute).
+  const ots = otsConfirmation(ev.otsPath, ev.subjectHex);
   if (!opts.allowPending && !ots.confirmed)
     return {
       green: false,
