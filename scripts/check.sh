@@ -1281,9 +1281,13 @@ if command -v cargo >/dev/null 2>&1; then
   if (cargo fmt --check --manifest-path tools/simurgh-daemon-linux/Cargo.toml \
       && cargo clippy --manifest-path tools/simurgh-daemon-linux/Cargo.toml --all-targets -- -D warnings \
       && if [[ "$(uname -s)" == "Linux" || "${CI:-}" == "true" ]]; then
-        env SIMURGH_REQUIRE_XVFB_TESTS=1 cargo test --manifest-path tools/simurgh-daemon-linux/Cargo.toml
+        # --test-threads=1: DISPLAY is process-global; the Xvfb integration tests
+        # mutate it under a shared mutex, so serial execution prevents a parallel
+        # thread from swapping DISPLAY between set_var and scan() (observed as a
+        # spurious scanner_unavailable). Mirrors the dedicated CI Rust step.
+        env SIMURGH_REQUIRE_XVFB_TESTS=1 cargo test --manifest-path tools/simurgh-daemon-linux/Cargo.toml -- --test-threads=1
       else
-        cargo test --manifest-path tools/simurgh-daemon-linux/Cargo.toml
+        cargo test --manifest-path tools/simurgh-daemon-linux/Cargo.toml -- --test-threads=1
       fi) \
       > "$LOG_DIR/stage28-rust-gates.log" 2>&1; then
     pass "Linux Rust daemon: fmt + clippy + test"
