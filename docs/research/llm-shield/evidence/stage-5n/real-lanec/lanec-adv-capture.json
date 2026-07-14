@@ -1,0 +1,47 @@
+{
+  "schema": "simurgh.vtc_delay.lanec_adv.v1",
+  "model": "claude-sonnet-5",
+  "charter_digest": "8a4eadc4a324de2f9798441c7561b2970c8fc8cd7e706f3af13a07415b98e6a0",
+  "frozen_menu": [
+    "reuse_freshness",
+    "replace_start_token_digest",
+    "alter_D_out",
+    "shave_elapsed_floor",
+    "swap_endpoint_subject"
+  ],
+  "outcome": "all_attacks_contained",
+  "attempts": [
+    {
+      "mutation_id": "reuse_freshness",
+      "raw": 401,
+      "reason": "freshness_challenge_invalid_or_reused",
+      "contained": true
+    },
+    {
+      "mutation_id": "replace_start_token_digest",
+      "raw": 409,
+      "reason": "seed_derivation_mismatch",
+      "contained": true
+    },
+    {
+      "mutation_id": "alter_D_out",
+      "raw": 413,
+      "reason": "output_commitment_mismatch",
+      "contained": true
+    },
+    {
+      "mutation_id": "shave_elapsed_floor",
+      "raw": 417,
+      "reason": "insufficient_timestamp_separation",
+      "contained": true
+    },
+    {
+      "mutation_id": "swap_endpoint_subject",
+      "raw": 404,
+      "reason": "start_endpoint_subject_mismatch",
+      "contained": true
+    }
+  ],
+  "prompt_digest": "04d1d1e8e35ccd10d8ecc86731c8826a8f42d44558b1d390694af1e1bab56eee",
+  "sealed_at_note": "digest-only live capture; both outcomes sealed honestly, never re-run to look good"
+}
