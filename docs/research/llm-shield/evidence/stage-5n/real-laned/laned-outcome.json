@@ -1,0 +1,23 @@
+{
+  "schema": "simurgh.vtc_delay.laned.v1",
+  "note": "Producer-independent cross-machine verification of the deterministic core (Lane D contract). The Python parity module was executed on separate machines with no shared code beyond the module; all produced byte-identical seed / x0 / terminal / checkpoints. Full anchor verification (TSA/OTS/Rekor) rides the Lane-D pack; this outcome pins the shared deterministic surface.",
+  "environment_manifest": [
+    { "role": "reference", "machine": "local", "arch": "arm64", "runtime": "node", "operator": "author" },
+    { "machine": "database-web-syd1-01", "arch": "x86_64", "runtime": "python-3.12.3", "location": "syd1", "module_sha256": "ab075d68925d905c8600d769f5e4df3acf160041048ac22f2a4edad26ce118b6" },
+    { "machine": "moodle-web-syd1-01", "arch": "x86_64", "runtime": "python-3.12.3", "location": "syd1" }
+  ],
+  "shared_vectors": {
+    "seed": "2c0172e3ab4a66866cbcf801f434541bd1cc6659536e69549074d764ca5928f0",
+    "x0": "d724443ef5bad902040038eddd082f34b0ccb5a251c415c1f4073db6a3b5d5a3",
+    "terminal_value": "4f4e1c478386612af7fb08460b6cc9371f58c04783073a0ccd617c934db46c2b",
+    "checkpoints": [
+      { "i": 5, "value": "f1023c56783807ccfd7f4fe407bb9fbef20a89f96f8f337210d291cd3379b76a" },
+      { "i": 10, "value": "4f4e1c478386612af7fb08460b6cc9371f58c04783073a0ccd617c934db46c2b" }
+    ]
+  },
+  "result": "all_machines_byte_identical",
+  "machines": 3,
+  "runtimes": ["node", "python"],
+  "architectures": ["arm64", "x86_64"],
+  "duration_note": "wall-clock verification duration differs per machine and is not treated as an evidence failure (Lane D contract)"
+}
