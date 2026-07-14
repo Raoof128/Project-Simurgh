@@ -1106,6 +1106,42 @@ export const VTCQUORUM_AUDIT_CHECK_ORDER = Object.freeze([...VTCQUORUM_PUBLIC_CH
 export const VTCQUORUM_AUDIT_ONLY_CODES = Object.freeze([]);
 export const VTCQUORUM_POLICY_CODES = Object.freeze([]);
 
+// Additive band 396-419 (Stage 5N — VTC-Delay). Single first-failure spine 396..418; 419 is the OUTER
+// fail-closed boundary (wraps preflight+parse+core), never an ordinary predicate. Proves delayed
+// FINALISATION + input-descendant commitment — never cognition, attention, or physical elapsed time.
+export const VTCDELAY_RAW_CODES = Object.freeze({
+  OK: 0,
+  DELAY_ENVELOPE_MALFORMED: 396, // hostile-safe schema / digest-contract / adequacy+overclaim scan / input provenance
+  FINAL_ENVELOPE_SIGNATURE_INVALID: 397, // signer fpr committed AND == verifier_config.expected_final_signer_fpr
+  INPUT_COMMITMENT_MISMATCH: 398, // D_in = H_DS(input.v1, canonical(input_reference)) != envelope D_in
+  DELAY_POLICY_DIGEST_MISMATCH: 399, // hdsObject(policy.v1, delay_policy) != delay_policy_digest
+  DELAY_POLICY_NOT_ACCEPTED: 400, // profile mismatch / floor / freshness-modes / interp channel / external hard limits
+  FRESHNESS_CHALLENGE_INVALID_OR_REUSED: 401, // fully-signed issuer challenge; census-relative replay
+  START_REQUEST_BINDING_INVALID: 402, // start_request omits/alters a committed field
+  START_REQUEST_SIGNATURE_INVALID: 403, // producer signature over raw 32-byte start_request_digest
+  START_ENDPOINT_SUBJECT_MISMATCH: 404, // role-specific TSA imprint / OTS leaf / Rekor sha256(utf8(hex)) mapping
+  START_TOKEN_INVALID: 405, // openssl ts -verify -attime <genTime>; nonce; TS EKU; LTV
+  START_ENDPOINT_ANCHOR_INCOMPLETE: 406, // 5M quorum-extension + real OTS/Bitcoin over the start endpoint
+  ITERATION_COUNT_MISMATCH: 407, // execution_declaration.iteration_count != committed T
+  IMPLEMENTATION_COMMITMENT_MISMATCH: 408, // execution_declaration.implementation_digest != committed
+  SEED_DERIVATION_MISMATCH: 409, // declared seed != H_DS(seed.v1, ...)
+  CHECKPOINT_LADDER_MISMATCH: 410, // declared ladder disagrees with full recompute (diagnostic, not a substitute)
+  DELAY_RECOMPUTATION_FAILURE: 411, // x_T != full T-step recompute
+  DECISION_BINDING_MISMATCH: 412, // decision_digest != H_DS(decision.v1, decision_body) (verifier recomputes)
+  OUTPUT_COMMITMENT_MISMATCH: 413, // D_out != H_DS(output.v1, ...)
+  END_ENDPOINT_SUBJECT_MISMATCH: 414, // role-specific mapping over D_out
+  END_ENDPOINT_ANCHOR_INCOMPLETE: 415, // 5M quorum-extension + real OTS/Bitcoin over the end endpoint
+  TSA_UNCERTAINTY_UNRESOLVED: 416, // accuracy missing with no signed bound / authority mismatch without sync bound
+  INSUFFICIENT_TIMESTAMP_SEPARATION: 417, // elapsed_lower_bound_ms < precommitted_minimum_elapsed_ms (No Instant Finalisation)
+  INTERPRETABILITY_EVIDENCE_INVALID_OR_UNBOUND: 418, // optional+present must bind run_id+D_out; not_in_scope+present
+  INTERNAL_OR_ENV_UNAVAILABLE_VTCDELAY: 419, // outer fail-closed boundary (run level 1)
+});
+// Single first-failure spine (frozen numeric order); 419 is the outer boundary, not a predicate.
+export const VTCDELAY_CHECK_ORDER = Object.freeze(Array.from({ length: 23 }, (_, i) => 396 + i));
+export const VTCDELAY_WRAPPER = 419;
+export const VTCDELAY_AUDIT_ONLY_CODES = Object.freeze([]);
+export const VTCDELAY_POLICY_CODES = Object.freeze([]);
+
 export const HARNESS_CODES = Object.freeze({
   CLEAN_RUN_FALSELY_REJECTED: 19,
 });
@@ -1517,6 +1553,30 @@ export const RUN_LEVEL_BY_RAW = Object.freeze({
   393: 1,
   394: 1,
   395: 1,
+  396: 1,
+  397: 1,
+  398: 1,
+  399: 1,
+  400: 1,
+  401: 1,
+  402: 1,
+  403: 1,
+  404: 1,
+  405: 1,
+  406: 1,
+  407: 1,
+  408: 1,
+  409: 1,
+  410: 1,
+  411: 1,
+  412: 1,
+  413: 1,
+  414: 1,
+  415: 1,
+  416: 1,
+  417: 1,
+  418: 1,
+  419: 1,
 });
 
 export function stage4CodeForRawCode(code) {
