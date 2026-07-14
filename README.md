@@ -102,7 +102,29 @@ newest for the current frontier, or jump straight to
 [Constitution alignment](#design-alignment-with-claudes-constitution), or the
 [concrete result](#the-concrete-result-stage-3v-b).
 
-> 🆕 **Latest — Stage 5M · VTC-Quorum: exact three-ecology external-anchor quorum (`v2.48.0-stage-5m-vtc-quorum`).**
+> 🆕 **Latest — Stage 5N · VTC-Delay: a decision that provably could not have been finalised instantly (`v2.49.0-stage-5n-vtc-delay`).**
+> Binds a decision's **finalisation** to two things a producer cannot fake afterwards: a **dependent SHA-256
+> chain** of **T = 20,000,000** steps seeded from the _real start timestamp token_, and **two RFC-3161
+> endpoints** whose genTimes yield a conservative elapsed **lower bound**. The verifier **re-runs the whole
+> chain** — deliberately **not a VDF**: no trusted setup, no fast-verify, no hardware claim. (The VDF paper's
+> own defining property is output that is _"efficiently and publicly verified"_; we trade exactly that away
+> for a verifier anyone can re-implement from the spec.) Additive on the frozen 5M extension; new codes
+> **396–419**. Laws: **No Instant Finalisation** · **No Pre-Input Final Commitment**.
+> **Banked, for real:** both endpoints Bitcoin-confirmed in **block 957 983** (our OTS parser's merkle root
+> cross-checked against a public explorer; block timestamp after both genTimes) → the real ceremony verifies
+> **`raw 0` / `elapsed_lower_bound_ms 90 000`** against a frozen **60 000 ms** floor, with **no injected
+> facts**. **13 Lean theorems** (zero proof holes) + a theorem-projection gate, Node↔Python↔browser parity
+> (browser core **never** emits a normative raw 0), K7 net over all 24 codes. **Adversary EXECUTED:** live
+> **Sonnet-5** (CVP) chose all five temporal-fraud attacks — **all contained**; **Fable-5 refused**, sealed
+> honestly as `model_refused`. **Lane D:** 3 machines / 2 architectures / 2 runtimes byte-identical.
+> **Honesty boundary:** proves finalisation was _delayed_, **never** that anyone reviewed carefully —
+> _"receipt, not passport."_ The real ceremony also caught a production bug that 59 unit tests and 13
+> theorems missed. Pays socket **I4**. Scorecard: Novelty 9.4 · Frontier 9.4 · Anthropic-relevance 9.7 ·
+> Constitution 9.6.
+>
+> <details><summary>Previous — Stage 5M · VTC-Quorum (<code>v2.48.0</code>)</summary>
+>
+> **Stage 5M · VTC-Quorum: exact three-ecology external-anchor quorum (`v2.48.0-stage-5m-vtc-quorum`).**
 > The verifier consumes and **independently validates an exact three-of-three** external-anchor ecology —
 > **RFC-3161 TSA + Bitcoin-confirmed OpenTimestamps + Rekor transparency-log inclusion** — all binding one
 > commitment `D`, and **only then banks `externally_anchored`**. Layered additively on the frozen 5L core
@@ -120,6 +142,8 @@ newest for the current frontier, or jump straight to
 > - a local **Llama-3.2-1B** fuzzer across all six forgery classes — **0 bypasses**; and a **real two-machine
 >   independent reproduction** (Mac Node 22 + remote droplet Node 26, distinct keys, byte-identical decision).
 >   Pays socket **I5**. Scorecard: Novelty 9.3 · Frontier 9.5 · Anthropic-relevance 9.6 · Constitution 9.5.
+>
+> </details>
 >
 > <details><summary>Prior — Stage 5K · Verifiable Universe Commitment (<code>v2.46.0-stage-5k-vuc</code>)</summary>
 >
