@@ -50,9 +50,11 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // ─────────────────────────────────────────────────────────────
 //  .env loader — strips inline `#` comments outside quotes
+//  SIMURGH_SKIP_DOTENV=1 skips the file so tests can prove the
+//  fail-closed guards against a genuinely empty environment.
 // ─────────────────────────────────────────────────────────────
 const envPath = join(__dirname, ".env");
-if (existsSync(envPath)) {
+if (process.env.SIMURGH_SKIP_DOTENV !== "1" && existsSync(envPath)) {
   for (const line of readFileSync(envPath, "utf8").split("\n")) {
     const m = line.match(/^\s*([A-Z_][A-Z0-9_]*)\s*=\s*(.*)\s*$/);
     if (!m || process.env[m[1]]) continue;

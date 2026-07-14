@@ -11,6 +11,9 @@ export async function startServer(extraEnv = {}) {
   const child = spawn("node", ["server.js"], {
     env: {
       ...process.env,
+      // A developer's local .env must not leak a real provider key into the
+      // scenario env — these smokes assert fail-closed/no-network behaviour.
+      SIMURGH_SKIP_DOTENV: "1",
       SIMURGH_DEMO_MODE: "1",
       SIMURGH_LLM_SHIELD_SECRET: "smoke-llm-shield-secret-32-characters",
       PORT: String(port),

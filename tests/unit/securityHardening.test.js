@@ -9,6 +9,8 @@ function secureEnv(overrides = {}) {
   const env = {
     ...process.env,
     PORT: String(34000 + Math.floor(Math.random() * 2000)),
+    // A developer's local .env must not silently satisfy the fail-closed guards under test.
+    SIMURGH_SKIP_DOTENV: "1",
     SIMURGH_DEMO_MODE: "0",
     SIMURGH_HELPER_SECRET: "hardening-helper-secret-32-characters",
     SIMURGH_AUDIT_SECRET: "hardening-audit-secret-32-characters",
