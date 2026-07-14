@@ -28,10 +28,10 @@ includes the start token, so it cannot predate its own input).
   (401/409/413/417/404). **Fable-5 refused** — sealed as `model_refused`, never re-rolled into a pass.
 - **Lane D** — 3 machines / 2 architectures / 2 runtimes (local arm64 Node + two x86_64 syd1 droplets on
   stdlib Python) produced **byte-identical** seed / x0 / terminal / checkpoints.
-- **Real Lane B ceremony captured** over the shipped frozen formulas (below).
-- **59 unit + 12 K7 tests + Lean**, all green; `reproduce-llm-shield-stage5n.sh` exit 0; 5I–5M undisturbed.
+- **Real Lane B ceremony BANKED at raw 0** over the shipped frozen formulas (below).
+- **61 unit + 18 e2e tests + Lean**, all green; `reproduce-llm-shield-stage5n.sh` exit 0; 5I–5M undisturbed.
 
-## Real Lane B ceremony (captured; Bitcoin bank PENDING)
+## Real Lane B ceremony — **BANKED (raw 0)**
 
 Run over the **shipped** modules (`core/{derive,chain}.mjs`, `constants.mjs` — not a copy), so what the
 chain confirms is the code that ships. Freshness nonce = **Bitcoin block 957 979**
@@ -48,9 +48,35 @@ provably cannot predate that block.
 | Rekor                | logIndex 2167349197 / 2167350626, inclusion proofs both                    |
 | **Elapsed bound**    | **90,000 ms ≥ 60,000 ms floor** (raw 92 s − 1000 ms uncertainty each side) |
 
-**Status: `externally_anchored` NOT banked.** Both OTS proofs are submitted to three calendars and remain
-`PendingAttestation`. Bitcoin confirmation is an external clock no script can accelerate; until it lands,
-**I4 is unpaid** and Frontier does not bank it. Stated, never skipped.
+**Status: BANKED — `raw 0`.** Both endpoints Bitcoin-confirmed in **block 957 983**
+(`0000000000000000000140d3…f79b`). The production verifier runs end-to-end with **no injected facts** —
+real DigiCert tokens, real Bitcoin-confirmed OTS (offline recompute, leaf == subject), real Rekor entries,
+and a full 20,000,000-step chain re-run — returning **`raw 0` / `elapsed_lower_bound_ms: 90 000`**.
+
+Two cross-checks that make this more than self-agreement:
+
+- Our OTS parser's extracted merkle root **matches block 957 983 on a public explorer** (byte-reversed for
+  display order) — the proof commits to the real chain, not to our own arithmetic.
+- The block's timestamp (**09:25:52Z**) falls **after both TSA genTimes**, the ordering the claim requires.
+
+The frozen pack is `evidence/stage-5n/real-laneb/` (public material only; the ceremony private keys were
+never copied and are not in the repo). `envelope.json` **is** the exact canonical bytes that verified.
+**Pays I4 — PAID.**
+
+### The bug the real ceremony found
+
+Its first true end-to-end run returned **404 `rekor_artifact_mismatch`**. `defaultFactsAdapter` hardcoded
+`rekor_artifact_hash: null`, which `subjectCheck` compares against `sha256(utf8(role_subject_hex))` — so
+**every real envelope would have failed 404/414 forever**; the production path could not return 0 at all.
+Unit tests missed it because they inject facts or call `runEndpointChild` directly; only a run over real
+Rekor evidence reaches that line. The hash is now **extracted from the log entry's own body**, never
+asserted by the producer, and fails closed to `null`. This is the single strongest argument for Lane B
+existing: a real ceremony against real anchors found a bug that 61 unit tests and 13 Lean theorems did not.
+
+The lesson generalises. The Lean theorems are sound — they model the **pure core over injected facts**, and
+the bug was in the **adapter that manufactures those facts**, which is exactly the seam a symbolic model
+cannot see. Hermetic tests injected the same facts the adapter should have produced, so they agreed with
+each other and with the proofs, and all three were wrong together. Only real evidence broke the tie.
 
 ## Independent verification (external, unprompted)
 
@@ -87,13 +113,22 @@ residual canonical-chain pin.
 
 ## Four-axis scorecard (re-scored from shipped evidence — no floor, no mandatory increase)
 
-| Axis                | Pre-build target | Closeout | Note                                                                                                                                                                                                                          |
-| ------------------- | ---------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Novelty             | 9.4              | **9.4**  | fresh-input-bound dependent chain + dual-endpoint interval; a delay proof that is honestly _not_ a VDF                                                                                                                        |
-| Frontier            | 9.4              | **9.1**  | **down 0.3: the Bitcoin bank has not landed, so the stage's own headline guarantee is captured but unbanked.** Offsetting it: live Sonnet-5 5/5 contained, 3-machine Lane D, and an external party re-derived `D_out` exactly |
-| Anthropic relevance | 9.7              | **9.7**  | makes "a human actually had time to look" a recomputable receipt rather than a prose assertion                                                                                                                                |
-| Constitution        | 9.6              | **9.6**  | delay as a signed number, with the strongest false reading ("reviewed carefully") structurally unassertable                                                                                                                   |
+| Axis                | Pre-build target | Closeout | Note                                                                                                                                                                                                                                                                                                                   |
+| ------------------- | ---------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Novelty             | 9.4              | **9.4**  | fresh-input-bound dependent chain + dual-endpoint interval; a delay proof that is honestly _not_ a VDF                                                                                                                                                                                                                 |
+| Frontier            | 9.4              | **9.4**  | **BANKED: raw 0 over real anchors, both endpoints in Bitcoin block 957 983, merkle root cross-checked against a public explorer.** Plus live Sonnet-5 5/5 contained, 3-machine Lane D, and an external party re-deriving `D_out` exactly. The real ceremony also found a production bug no unit test or theorem caught |
+| Anthropic relevance | 9.7              | **9.7**  | makes "a human actually had time to look" a recomputable receipt rather than a prose assertion                                                                                                                                                                                                                         |
+| Constitution        | 9.6              | **9.6**  | delay as a signed number, with the strongest false reading ("reviewed carefully") structurally unassertable                                                                                                                                                                                                            |
 
-**Frontier re-scores to 9.4 only if/when both endpoints Bitcoin-confirm and the full envelope verifies to
-raw 0 through the real `otsVerify.mjs`.** It is not pre-credited here. Pays **I4 — UNPAID pending that
-confirmation.**
+Frontier was scored **9.1 while the bank was pending** and moved to 9.4 **only after** both endpoints
+confirmed and the full envelope verified to raw 0 through the real `otsVerify.mjs` — the condition written
+down in advance, met, and then paid. It was never pre-credited.
+
+Pays **I4 — PAID** (banked at raw 0, Bitcoin block 957 983). Mints no new socket: 5N's declared successor
+work (`public_beacon` freshness, semantic overclaim beyond the lexical gate) is already carried as signed
+limitations rather than new IOUs.
+
+**What would move it higher.** Frontier → 9.6 needs a **second, independent producer** running their own
+ceremony against this verifier and banking raw 0 — Lane D proved the _deterministic surface_ travels, not
+yet a whole ceremony. Anthropic relevance → 9.9 needs one real external reviewer (a lab or regulator)
+running `verifyVtcDelay` on evidence we did not produce. Both are buildable artifacts, not aspirations.
