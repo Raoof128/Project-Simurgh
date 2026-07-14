@@ -1,0 +1,78 @@
+{
+  "stage": "5n",
+  "lean_file": "proofs/stage5n/VtcDelay.lean",
+  "note": "Binds the Lean symbolic model to the runtime. The build fails if raw codes, domain strings, or the check order drift between Lean and the runtime constants (A4 anti-theatre gate).",
+  "theorems": [
+    {
+      "name": "coreTotality",
+      "runtime": "core/dispatch.mjs:verifyCore",
+      "raw_codes": "396..418",
+      "asserts": "verdict in {0} union 396..418"
+    },
+    {
+      "name": "descendantConformance",
+      "runtime": "core/delayProof.mjs+decision.mjs",
+      "raw_codes": [411, 413],
+      "asserts": "green -> terminal + output commitment hold"
+    },
+    {
+      "name": "startTokenDependencyConformance",
+      "runtime": "core/chain.mjs+delayProof.mjs",
+      "raw_codes": [409, 410, 411, 413],
+      "asserts": "green -> seed/checkpoint/terminal/output; NOT physical postdating"
+    },
+    {
+      "name": "noGreenWithoutChildAnchors",
+      "runtime": "node/endpointQuorum.mjs",
+      "raw_codes": [406, 415],
+      "asserts": "green -> both endpoint children verified"
+    },
+    {
+      "name": "overclaimUnassertable",
+      "runtime": "core/schema.mjs:scanForbidden",
+      "raw_codes": [396],
+      "asserts": "green -> no forbidden adequacy/overclaim key"
+    },
+    {
+      "name": "issuerReplay401",
+      "runtime": "core/freshness.mjs",
+      "raw_codes": [401],
+      "asserts": "prefix pass + freshness reused -> 401"
+    },
+    {
+      "name": "wrongTerminal411",
+      "runtime": "core/delayProof.mjs:checkTerminal",
+      "raw_codes": [411],
+      "asserts": "checks 396..410 pass + terminal fails -> 411"
+    },
+    {
+      "name": "elapsedSoundness",
+      "runtime": "core/elapsed.mjs",
+      "raw_codes": [417],
+      "asserts": "committed uncertainty bounds -> true elapsed >= floor (Int)"
+    },
+    {
+      "name": "uncertaintyMonotone",
+      "runtime": "core/elapsed.mjs",
+      "raw_codes": [416, 417],
+      "asserts": "larger uncertainty never raises the lower bound"
+    }
+  ],
+  "check_order": [
+    396, 397, 398, 399, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414,
+    415, 416, 417, 418
+  ],
+  "wrapper": 419,
+  "domain_strings": [
+    "simurgh.vtc_delay.start_request.v1",
+    "simurgh.vtc_delay.start_authorisation.v1",
+    "simurgh.vtc_delay.seed.v1",
+    "simurgh.vtc_delay.x0.v1",
+    "simurgh.vtc_delay.step.v1",
+    "simurgh.vtc_delay.decision.v1",
+    "simurgh.vtc_delay.output.v1",
+    "simurgh.vtc_delay.policy.v1",
+    "simurgh.vtc_delay.input.v1",
+    "simurgh.vtc_delay.issuer_challenge.v1"
+  ]
+}
