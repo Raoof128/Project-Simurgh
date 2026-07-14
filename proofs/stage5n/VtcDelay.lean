@@ -1,6 +1,7 @@
 -- SPDX-License-Identifier: AGPL-3.0-or-later
 -- Stage 5N symbolic VTC-Delay laws (spec §4 + A2/A4). Core Lean 4 only, no mathlib. All theorems fully
--- proved (no `sorry`, no user axioms). SCOPE: symbolic model of the pure-core first-failure spine and the
+-- proved — zero proof holes, zero user axioms (the CI guard greps this tree for holes, so do not name one
+-- here even in prose). SCOPE: symbolic model of the pure-core first-failure spine and the
 -- integer elapsed arithmetic — NOT real crypto. Each domain-separated hash is treated as a deterministic
 -- function; this proves verifier CONFORMANCE, not collision/preimage resistance or physical elapsed time.
 namespace Simurgh.Stage5N
