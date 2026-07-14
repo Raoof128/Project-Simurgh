@@ -41,18 +41,43 @@ vendor, model, or lab. Everything below is signed, non-interactive, and checkabl
   [global-workspace interpretability paper](#matching-anthropics-interpretability-research-july-2026)'s
   own "not sufficient" limit → a signed workspace-attestation contract. RSP v3.4's evaluate-**before**-deploy
   → a machine-checkable temporal commitment anchored in Bitcoin.
+- **RSP v3.4's newest commitments already have a released evidence protocol here.** The policy
+  (effective 8 July 2026) allows external review of a Risk Report to be split across reviewers —
+  _"so long as all parts of the unredacted report are evaluated by at least one external
+  reviewer"_ — and requires public Risk Reports to indicate where material was redacted. Three
+  released verifiers make exactly those commitments offline-recomputable:
+  [**VFC** `v2.42.0`](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.42.0-stage-5g-vfc)
+  computes a typed producer↔verifier separation strength instead of accepting an independence
+  claim at face value;
+  [**VSD** `v2.43.0`](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.43.0-stage-5h-vsd)
+  binds every safety claim to its evidence, declared scope, redactions, and a computed
+  reproducibility tier — a consequential claim resting only on restricted evidence fails closed;
+  [**VPC** `v2.44.0`](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.44.0-stage-5i-vpc)
+  recomputes grant-bounded section-coverage equality over signed reviewer receipts, and is
+  structurally unable to certify "the review was adequate" — full coverage plus an adequacy claim
+  fails closed. The confidential report never leaves the lab: the verifier checks signed
+  relationships, committed identifiers, and recomputation results, offline.
 - **Real, falsifiable results — not slideware.** A live **Llama Guard 4 12B** missed **138/150**
   downstream attacks; Simurgh produced verifiable containment evidence for **138/138** (targeted attack
   success **0/150**) — [Stage 3V-B](#the-concrete-result-stage-3v-b). A live **Sonnet-5 adversary** (CVP)
   tried to forge a temporal-commitment ceremony **8 ways across all 7 laws** — the frozen verifier
   contained **every one, 0 bypasses**, and the commitment is anchored in **Bitcoin block 957 689**
   (independently cross-checked).
-- **Depth, not a demo.** 20+ signed research rungs, each adding **one falsifiable blade**; Lean proofs
-  (zero `sorry`, no user axioms); Node ↔ Python ↔ browser byte-parity; a public Merkle-chained replay
-  timeline.
+- **Depth, not a demo.** 40+ research stages across **94 tagged releases in two months**
+  (13 May → 13 July 2026), each stage adding **one falsifiable blade**; Lean proofs (zero `sorry`,
+  no user axioms); Node ↔ Python ↔ browser byte-parity; ~3,000 automated unit tests plus per-stage
+  tamper suites; a public Merkle-chained replay timeline.
 - **Calibrated by construction.** Every artifact carries machine-readable **non-claims**. The honesty
   guardrail is literal: **"boundary held, verifiably" — never "model safe."** No vendor is ranked, no
   immunity is claimed, and no live model is re-executed in CI.
+
+**Who built it:** [Mohammad Raouf Abedini](https://github.com/Raoof128) — sole author, full-loop:
+gap-hunt, spec, implementation, Lean proofs, signing ceremonies, and closeout, released in a public
+two-month sprint. Live adversarial lanes ran under an approved Cyber Verification Program
+organisation, and the independent ceremonies (foreign capture, split-review panel, two-machine
+byte-identical reproductions) were executed by unaffiliated third parties with their own keys.
+Methodology is LLM-assisted and disclosed in the research write-ups; every claim is bounded by
+signed evidence and machine-readable non-claims.
 
 > **Verify it yourself in one command, offline, no private key:** see
 > [Reproduce it yourself](#reproduce-it-yourself-offline-no-private-key). That is the whole thesis made
@@ -832,8 +857,9 @@ claim. See [`PRIVACY.md`](PRIVACY.md), [`docs/ETHICS.md`](docs/ETHICS.md), and
 ## Verification
 
 The full quality gate (`scripts/check.sh`) runs on every push. The current baseline (through Stage
-4Q) verifies with **1559 automated tests** plus per-stage smoke gates, security/privacy/consistency
-audits, policy-drift guards, typed-exit checks, and checker/reproduce smokes. Every VCA rung is
+5M, `v2.48.0`) verifies with **2,996 automated unit tests** plus per-stage smoke gates,
+security/privacy/consistency audits, policy-drift guards, typed-exit checks, and checker/reproduce
+smokes. Every VCA rung is
 signed with its own Ed25519 key (private keys are never committed), reproduces byte-identically
 including its signature where claimed, and ships a negative self-proof (tamper) suite that the
 verifiers reject while failing closed.
