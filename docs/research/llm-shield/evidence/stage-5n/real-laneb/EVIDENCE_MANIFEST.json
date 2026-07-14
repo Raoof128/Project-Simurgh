@@ -1,0 +1,50 @@
+{
+  "bitcoin": {
+    "block_hash": "0000000000000000000140d37f3a9c105eff35aecefc97ba71b114c0606ff79b",
+    "both_endpoints_confirmed_in_block": 957983,
+    "cross_checked_against": "blockstream.info block-height/957983",
+    "merkle_root_display_order": "a1b9b89d625dfa19e051ff696791ceaaa5c842bd2c5d78a32bfdae7509aca13a"
+  },
+  "ceremony": "stage-5n-vtc-delay Lane B",
+  "files": {
+    "D_end.hex": "5ddb9c696531b2e303c19aef230a335b4f397a1d1f2007ea65a5a7f364523f2c",
+    "D_start.hex": "89bf6ffbdd8401d3e9cd0fa2d7083f73e4992a886febd3b4207c6cbe999eff38",
+    "ceremony_submitter_pub.pem": "f6fe717bc7163c8733295aa358c1b4a1b5124c7786c6c3ccf7c6e97f15bdad41",
+    "contract.json": "5e722763924fd4a0eda8a91efe4116a0c3584feefeef37a0566953b7449896d8",
+    "end.confirmed.ots": "220aaf9d22cfc46f8c7ae0a556b94cc5e6982ea83ccd87418e09e2869b239b8a",
+    "end.pending.ots": "15e89ca1859950ee35757932ef581f333f33274cb8ecab896027be80aa517ca7",
+    "end.tsq": "8ecb0bd286a1ca7f0463c47aaa82a50035308d25c5f34d22df6e2faeb2744a2c",
+    "end.tsr": "a81af1ab3b50129f8a8fe9da32f59c6d3dbe307e0cc40dd5082e1255a473c9c1",
+    "end_artifact.txt": "5ddb9c696531b2e303c19aef230a335b4f397a1d1f2007ea65a5a7f364523f2c",
+    "end_rekor_entry.json": "5555ff015dc710b3b2ea3602eab9f03b9fe3965a54ba4db96b9773c893fb2841",
+    "end_rekor_post.json": "1957837e6fbad75c6bc0f5ed8b2435785cd84242f3e287ad424a51449be60fb6",
+    "envelope.json": "dc3c23522bb94209a87add4ba591ab66f64e19c51fc7c395fb546eadb2d76550",
+    "fresh_start_evidence.json": "8695575ecbb66218ccad5cdd534308b549097e74dc699abd64d95e8a26e7974a",
+    "phase-b.json": "1d914071c967c881a97257e1a262b1faed7c4ed3a9dc53a48b84671c169468ba",
+    "rekor_prod_pub.pem": "dce5ef715502ec9f3cdfd11f8cc384b31a6141023d3e7595e9908a81cb6241bd",
+    "start.confirmed.ots": "644f372df807c8813552b0271e0d2f04f662ce6a0f976fe927071c7c4b5af186",
+    "start.pending.ots": "b284a5b823effd16a2543f86a7eb5b5740d09d2a216d895fbc201200790fbbdd",
+    "start.tsq": "75b0da4ef35c8eb42d3bc74ce09d904abfa0ffef19f12c18b9fd0f9dafcc4ed7",
+    "start.tsr": "f7a363125d20bc8ba64bb070c35c688acae1ea0ffaec93b50ffb9a259194a0c0",
+    "start_artifact.txt": "89bf6ffbdd8401d3e9cd0fa2d7083f73e4992a886febd3b4207c6cbe999eff38",
+    "start_rekor_entry.json": "088e59d89269bca75355a46bff3765c6d7b04fdb068bf91b3bdfc3fb123cd832",
+    "start_rekor_post.json": "77b013de4e354f031b6e4b791231cd44a8da0393f8f58948104be8f225360725"
+  },
+  "freshness_nonce_block": 957979,
+  "note": "Real dual-endpoint ceremony over the SHIPPED frozen formulas. Public material only; the ceremony private keys were never copied here and are not in the repo. Verify: recompute each sha256 below, then run the verifier over envelope.json with this directory as endpointEvidence.",
+  "rekor_log_index": {
+    "end": 2167350626,
+    "start": 2167349197
+  },
+  "schema": "simurgh.vtc_delay.laneb_manifest.v1",
+  "tsa_genTimes_utc": {
+    "end": "2026-07-14T09:02:39Z",
+    "start": "2026-07-14T09:01:07Z"
+  },
+  "verdict": {
+    "elapsed_lower_bound_ms": 90000,
+    "precommitted_floor_ms": 60000,
+    "raw": 0,
+    "reason": "ok"
+  }
+}

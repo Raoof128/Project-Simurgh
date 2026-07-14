@@ -93,13 +93,11 @@ print(f"Lane C: {len(adv['attempts'])} attacks contained; Fable: model_refused (
 print(f"Lane D: {laned['machines']} machines, {laned['architectures']} -> byte-identical")
 PY
 
-echo "-- Lane B (real dual-endpoint ceremony) --"
+echo "-- Lane B: the REAL dual-endpoint ceremony verifies to raw 0 (full 20M chain, ~36 s) --"
 if [ -d "$EV/real-laneb" ]; then
-  "$NODE" --test tests/unit/llmShield/stage5n/laneB.test.js 2>&1 | tail -2
+  "$NODE" --test tests/e2e/llmShield/stage5n/realGreen.test.js 2>&1 | tail -3
 else
-  echo "real-laneb/ not frozen in this tree: the ceremony's two OTS proofs bank Bitcoin confirmation"
-  echo "on the external chain clock, which no script can accelerate. Everything above is independent"
-  echo "of it. This is reported, never skipped silently."
+  echo "FAIL: real-laneb/ is missing from this tree"; exit 1
 fi
 
 echo "-- guard: no private key in committed evidence --"

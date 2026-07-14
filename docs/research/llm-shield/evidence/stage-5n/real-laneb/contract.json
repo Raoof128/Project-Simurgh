@@ -1,0 +1,94 @@
+{
+  "ceremony": "stage-5n-vtc-delay-laneb",
+  "envelope_schema": "simurgh.vtc_delay.envelope.v1",
+  "frozen_at_fresh_block": {
+    "source": "blockstream.info",
+    "height": 957979,
+    "hash": "00000000000000000001b1b2d160e5986d44c45f597c8d62a5206b4493f43bd1",
+    "block_timestamp": 1784019538,
+    "note": "Bitcoin block unavailable before this ceremony began; bound as the freshness nonce."
+  },
+  "run_id": "run-5n-laneb-957979",
+  "input_reference": {
+    "reference_schema": "simurgh.vtc_delay.input_ref.v1",
+    "artifact_digest": "db14636713e1fd5b9f480f727341ef9cbfd01c5758ce5911b5d7832e16017166",
+    "canonicalisation_profile": "simurgh_canonical_json_v1",
+    "artifact_type": "review_item"
+  },
+  "D_in": "649814d7dcad53dec7e3148d4f4ca47f51fec0133f48254321ea282641d8461b",
+  "delay_policy": {
+    "profile_id": "simurgh.vtc_delay.profile.5n.v1",
+    "delay_algorithm_id": "simurgh.stage5n.dependent-sha256-chain.v1",
+    "hash_algorithm": "sha256",
+    "iteration_count_T": 20000000,
+    "checkpoint_cadence": 2000000,
+    "canonical_encoding": "simurgh_canonical_json_v1",
+    "implementation_digest": "4c2e5f7290f174e97a6a15bd3865329a99dd5bf97dd4c356c4e94e7cf68167b5",
+    "precommitted_minimum_elapsed_ms": 60000,
+    "accepted_freshness_modes": [
+      "issuer_signed"
+    ],
+    "uncertainty_policy": {
+      "mode": "per_authority",
+      "per_authority_bounds": {
+        "digicert-tsa": {
+          "uncertainty_bound_ms": 1000
+        }
+      },
+      "policy_signer_key_id": "sha256:96fcbadfe99ab0405e883e55f22a02ee17efa20365295e3b44849fedb46fc3e0"
+    },
+    "interpretability_policy": {
+      "channel": "optional"
+    },
+    "verifier_limits": {
+      "max_envelope_bytes": 262144,
+      "max_checkpoint_count": 16,
+      "maximum_supported_T": 20000000
+    },
+    "final_signer_fingerprint": "sha256:4f49c72f94e2910b9244e6b2156e950931585b334f932f37ce2145916c3073d8"
+  },
+  "delay_policy_digest": "93bea87e8c649f678642beac810df2d6490f9f1a476dbeebc68029e220dd3cb3",
+  "freshness_request": {
+    "stage_id": "5n",
+    "run_id": "run-5n-laneb-957979",
+    "D_in": "649814d7dcad53dec7e3148d4f4ca47f51fec0133f48254321ea282641d8461b",
+    "delay_policy_digest": "93bea87e8c649f678642beac810df2d6490f9f1a476dbeebc68029e220dd3cb3",
+    "issuer_key_id": "sha256:6d9127deefee5e308eec86613d949f253c53141b49e86b3ceaced56b082f72c4"
+  },
+  "freshness_challenge": {
+    "challenge_schema": "simurgh.vtc_delay.challenge.v1",
+    "mode": "issuer_signed",
+    "request_commitment_digest": "6b551a868f8415681f689029fd8eeb9ab71f6a0fd4a87f1e9bef3009949df02c",
+    "run_id": "run-5n-laneb-957979",
+    "nonce": "00000000000000000001b1b2d160e5986d44c45f597c8d62a5206b4493f43bd1",
+    "issued_at_ms": 1784019633265,
+    "expires_at_ms": 1784106033265,
+    "issuer_key_id": "sha256:6d9127deefee5e308eec86613d949f253c53141b49e86b3ceaced56b082f72c4",
+    "signature": "base64:NGU2GUUTE4msl3NKv3yKVpEXIgJ0lCEXuVdVlN3/OI9Am/jEZOUvz/X+y/da7QEptRRWjh3Uw+NMqOdePutFBw=="
+  },
+  "start_request": {
+    "stage_id": "5n",
+    "run_id": "run-5n-laneb-957979",
+    "D_in": "649814d7dcad53dec7e3148d4f4ca47f51fec0133f48254321ea282641d8461b",
+    "delay_policy_digest": "93bea87e8c649f678642beac810df2d6490f9f1a476dbeebc68029e220dd3cb3",
+    "nonce": "00000000000000000001b1b2d160e5986d44c45f597c8d62a5206b4493f43bd1"
+  },
+  "start_authorisation": {
+    "start_request_digest": "46979ef5bc7273bb9aa6f2c0266925a957e41eb6eaf0d964bb72afe8c4fadaa1",
+    "producer_key_fingerprint": "sha256:96fcbadfe99ab0405e883e55f22a02ee17efa20365295e3b44849fedb46fc3e0",
+    "start_request_signature": "base64:xNDPBgvgj4pMyIVLgw94XZR/BFuqddnFAp3Wgt9WGvuWSeP9mOaxYDa6Sgj9WjB1/bofQeiXmRdsWhXeYF/xAA=="
+  },
+  "D_start": "36c5aef367f942f351bc019ceb2cc174f05f18774f54c93277df9e9908053bb9",
+  "keys": {
+    "issuer": "sha256:6d9127deefee5e308eec86613d949f253c53141b49e86b3ceaced56b082f72c4",
+    "producer": "sha256:96fcbadfe99ab0405e883e55f22a02ee17efa20365295e3b44849fedb46fc3e0",
+    "finalsigner": "sha256:4f49c72f94e2910b9244e6b2156e950931585b334f932f37ce2145916c3073d8"
+  },
+  "pubkeys": {
+    "issuer": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEA2Cm+MwVi7i/Uemf+vF3lLN65GU/gZ7YHS9yUff0u+SY=\n-----END PUBLIC KEY-----\n",
+    "producer": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEARJ4jWl5ZF1sjPao34qrv7pnblorVLIvUsVlZowB3cx4=\n-----END PUBLIC KEY-----\n",
+    "finalsigner": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEABMLVMvPm/lqd9FWMvjA/Mf1vgWLchUSp+xUugZFV9Rg=\n-----END PUBLIC KEY-----\n"
+  },
+  "T": 20000000,
+  "CADENCE": 2000000
+}
