@@ -1,0 +1,60 @@
+{
+  "start_token_digest": "1f30934bfaecefa28625c0bdb5f0560937cd9011615e9569bec83a856775ca19",
+  "seed": "2b95a7aeab017349761d7857c3cb7f5817c49b3f10f3d0e38cff835ba1ebaa99",
+  "x0": "4383eb5e6c7c3279f595628c45fd2212fadc6bb6b5176cb1aeb4f67a8c9c6865",
+  "checkpoint_count": 10,
+  "checkpoints": [
+    {
+      "i": 2000000,
+      "value": "667fb67b75e708e57ad1cd1079a69c56deda4ff6992fcce6b276b2503457a12f"
+    },
+    {
+      "i": 4000000,
+      "value": "cebbecf44d52f6ef13123d5c4c53ae649ae49d27ed76b42e71c909bffac9274f"
+    },
+    {
+      "i": 6000000,
+      "value": "7a82251358e5f1dc98075bab1684e0b6d4e33d25a58cbf1427b8ca46b10fe03a"
+    },
+    {
+      "i": 8000000,
+      "value": "99e046887d0ae8e1a145e4e9c8dae0d18964ac2ccc6464b6ae219c706c09afd1"
+    },
+    {
+      "i": 10000000,
+      "value": "8513909cd60b2801cfd6895482dc74fbdd9b3183f14fa24c310a5d51bea89e68"
+    },
+    {
+      "i": 12000000,
+      "value": "fb2703c6ab6b6d925be35f5f6bc2e48b1bf6ac3436ef41f7cb957e0f6a085890"
+    },
+    {
+      "i": 14000000,
+      "value": "9a4de4c4dff30b20715ee2d8ecfb67e5ca9ba710baf9c16776f3aa9fdf3f3dbb"
+    },
+    {
+      "i": 16000000,
+      "value": "0039735e03039ecaad2c1f75899913406e5b34c09464074d56327a32b606b26c"
+    },
+    {
+      "i": 18000000,
+      "value": "0bfa69fb7e0ce6df93be089f54038ea55d075dad46b88ed8ab8f4906a1e4ed15"
+    },
+    {
+      "i": 20000000,
+      "value": "8b4737c0e32ecb1fe3a1fec3647fa9956424ba814260ea1d1f69b2558bad4df1"
+    }
+  ],
+  "terminal_value": "8b4737c0e32ecb1fe3a1fec3647fa9956424ba814260ea1d1f69b2558bad4df1",
+  "decision_body": {
+    "decision_schema": "simurgh.vtc_delay.decision.v1",
+    "verdict": "delay_policy_satisfied",
+    "reason_codes": [],
+    "decision_scope_digest": "69dbd1582b6466f26dcc1d28235ca6ecbf5297d7a49bbdee8b0ceb8815ac3939"
+  },
+  "decision_digest": "dd86f159b600df0ae25d77ed433f2a5c626846e268c30679f00600e32ce6ab94",
+  "D_out": "3c8387827db18052ea019504d6d9a173515769f51a9e16157b8e5aefcd0ebf0d",
+  "chain_ms": 18152,
+  "T": 20000000,
+  "CADENCE": 2000000
+}
