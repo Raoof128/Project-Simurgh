@@ -53,3 +53,5 @@ jobs:
           ! grep -REn "\bsorry\b|\badmit\b" proofs/stage5g
           lean proofs/stage5h/DisclosureTier.lean
           ! grep -REn "\bsorry\b|\badmit\b" proofs/stage5h
+          lean proofs/stage5n/VtcDelay.lean
+          ! grep -REn "\bsorry\b|\badmit\b" proofs/stage5n
