@@ -8,6 +8,8 @@
 **Reuses (frozen, unmodified):** the Stage 5M three-ecology external-anchor quorum, applied to the scope commitment anchor.
 **Does NOT reuse:** Stage 5K's `simurgh.vuc.merkle_set.v1` leaf profile. Verified unsalted — `leafHash({leaf_id, leaf_type, subject_digest})` — therefore **binding but not hiding**, and canonicalised by sorting on `leaf_id`, which conflicts with position binding. Stage 5O defines a new domain-separated salted, position-bound profile.
 
+**Amendment A1 folded:** Section 2 threat analysis added four signed claim ceilings and exposed an exact-versus-lower-bound ambiguity in the unopened-preimage statement. Section 1 now defines a monotone canonical non-claim union and delegates probability semantics to PC-0. **No blade, law, release predicate, or socket changed** — A1 is a claim-discipline correction, not a redesign.
+
 ---
 
 ## Section 1 — identity, laws, honest core
@@ -74,7 +76,11 @@ The critical word is **expected**. Frozen checks, for every challenged `i`:
 
 A verifier that recomputes from the opening's _self-declared_ index validates the producer's claim against itself, and the malformed leaf survives. The index field must never be trusted as an input to its own check.
 
-**What an internal-index mismatch buys the producer.** It does _not_ bypass the committed list, cardinality, whole-universe cross-artifact equality, or tree-position binding of the public `leaf_id`. It _does_ buy a population of schema-malformed leaf preimages that remains invisible unless sampled: if `J` unopened leaves encode a wrong internal index, detection is conditional and probabilistic at `P_detect(N, J, k)`. An internal-index mismatch is therefore counted among the defects `J` under the opening predicate — it needs no separate machinery.
+**What an internal-index mismatch buys the producer.** It does _not_ bypass the committed list, cardinality, whole-universe cross-artifact equality, or tree-position binding of the public `leaf_id`. It _does_ buy a population of schema-malformed leaf preimages that remains invisible unless sampled.
+
+If **exactly** `J` unopened leaves violate the declared opening predicate, a uniformly sampled challenge of `k` distinct indices detects at least one with **exact** probability `1 − C(N−J, k) / C(N, k)`. If **at least** `J` leaves violate the predicate, that expression is a **lower bound**. If the predicate cannot recognise the defect, the guarantee does not apply. An internal-index mismatch is counted among the defects `J` under the opening predicate — it needs no separate machinery.
+
+All probability claims are subject to **PC-0**'s validity domain, predicate-precommitment, beacon assumptions, and canonical rational encoding rules.
 
 The consequence is **not cosmetic across compositions.** Within Stage 5O's own verification context the mismatch gains the producer nothing exploitable, because every consumer reads `leaf_id` at its bound tree position. But a future composition that detaches a leaf from its Merkle position and relies on the embedded index would activate the dormant population. Stage 5S composes frozen sub-evidence; a latent defect in a composed input is a defect of the composition. Hence the signed limitation rather than a reassurance.
 
@@ -84,7 +90,25 @@ The consequence is **not cosmetic across compositions.** Within Stage 5O's own v
 2. **No Hidden Shrinkage** — the committed, executed, and reported universes are exactly equal as indexed universes under the Stage 5O salted, position-bound identity profile.
 3. **No Unopenable Scope** — every beacon-selected index must produce a valid case, salt, and authentication path. Refusal, absence, duplication, or malformation **fails closed**.
 
-### Honest core (signed here, not in an appendix)
+### Honest core — baseline and accumulation rule
+
+**Accumulation rule (A1).** Section 1 freezes the **baseline** honest core. Later reviewed sections may **add** non-claims when their threat analysis exposes a new claim ceiling. The release envelope signs the canonical **union** of all section-level non-claims. **No later section may remove, weaken, or silently rename a previously frozen non-claim.** The limitations remain normative and signed — "not an appendix" is preserved in substance — while the spec is permitted to learn without pretending Section 1 predicted every future seam.
+
+**Freeze invariant.**
+
+```text
+release_non_claims
+=
+ordered_deduplicated_union(
+  section_1_baseline_non_claims,
+  section_2_added_non_claims,
+  ...
+)
+```
+
+Ordering is **lexicographic by machine field**, fixed and canonical, so a non-claim's section of origin cannot affect the signed bytes.
+
+**Section 1 baseline:**
 
 ```text
 not_scope_adequacy
@@ -95,6 +119,15 @@ not_proof_of_beacon_unbiasability_or_finality
 not_proof_of_salt_entropy
 not_semantic_junk_detection_beyond_declared_predicate
 not_proof_that_the_private_scope_was_well_chosen
+```
+
+**Added by Section 2** (threat analysis; see that section for each ceiling's wording):
+
+```text
+not_proof_of_case_distinctness
+not_proof_of_global_cross_verifier_disclosure_budget
+not_proof_of_complete_disclosure_history_without_committed_ledger
+not_proof_of_cross_commitment_corpus_reuse
 ```
 
 > Selective openings reveal the challenged cases. All unchallenged case payloads remain undisclosed under the stated commitment assumptions.
