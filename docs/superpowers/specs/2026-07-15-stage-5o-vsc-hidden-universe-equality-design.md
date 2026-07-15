@@ -2,6 +2,8 @@
 
 **Status:** Sections **1–5 FROZEN** — Section 1 `a1e2e6d1`, Section 2 `0e26c361`, Section 3 `e8dc0a77`, Section 4 `cb67542f`, Section 5 this commit. Sections 6–13 pending.
 **Release is BLOCKED by design:** `release_required_bindings` carries the unresolved `section_6_anchored_presented_census_closure` (§5.9). A green Section 5 freeze does **not** mean anti-equivocation exists, and per **A13** full anti-equivocation is not coming: Stage 4T binds views to a held capsule, never excluding an unseen one, so `not_proof_of_global_census_closure_uniqueness_without_exclusion_witnesses` is a **permanent** ceiling.
+**Amendment A21 folded (amends frozen Sections 1 and 3):** The stage stated **no cryptographic assumption anywhere**. Zero mentions of collision or preimage resistance; none of the 23 ceilings covered it; and after A18, Ed25519 unforgeability underwrote every authority conclusion while being equally unstated. The preflight found the "existing global home" did not exist: the single `_Assumptions / externally checked premises_` block belongs to the conditional-detection-probability bound and lists **beacon** premises only — the same class of finding as Stage 5M shipping no machine envelope. A21 creates the global register in Section 1 and states six assumptions once, each with an explicit **scope**: `canonical_encoding_unambiguous`, `hash_collision_resistance`, `hash_second_preimage_resistance`, `hash_preimage_resistance` (**hiding only** — it is not what makes a commitment binding), `ed25519_euf_cma`, `signing_key_not_compromised`. **Three** ceilings are minted, not four: `not_information_theoretic_binding`, `not_information_theoretic_hiding`, `not_proof_of_cryptographic_primitive_security`. The proposed fourth, `not_proof_of_signing_key_non_compromise`, is **rejected as duplicate ownership** — A18's Section 4-owned `not_proof_of_exclusive_or_uncompromised_producer_key_control` already states that fact more precisely, and the §1 completeness rule fails closed on duplicate ownership; A16 spent an entire amendment undoing exactly that condition. The injectivity sweep found **one** frozen violation, in §3.2: "two inputs produce the same case digest **only when** their parsed values produce identical bytes" asserts a bijection SHA-256 does not have, under a heading about being careful. It now names the assumption it was already spending. **The commitment frontier was preflighted, not assumed:** none of the nine digest constructions covers non-claims, assumptions or limitations, so `profile_bundle_digest`, `scope_vector_digest`, the precommitment, both censuses, the closure and every anchor are **unmoved**. But `release_non_claims` **is** signed as a `lexicographically_sorted_union`, so A21 **is not docs-only** — it moves the signed release envelope and nothing upstream of it. **No blade, law, evidence predicate, release predicate, or socket changed.** No conclusion was weakened: each named assumption was already being spent silently.
+
 **Amendment A20 folded (amends frozen Sections 4 and 5):** The requirement ledger had **no canonical grammar**. Section 4 emitted a five-field block, Section 5 a six-field block missing `status:`, and Section 6's draft a terse `NAME: PENDING` line — three dialects for one contract, and no single parser could read all four requirements, only their union could. A ledger the Section 10 gate can only read by union is a ledger where **the gate decides the contract**. A20 freezes exactly four fields in fixed order — `requirement`, `owning section`, `permitted discharger`, `status` — and moves every consequence into **ledger semantics stated once**: `status: PENDING => release REJECTS`, exactly one owner, exactly one permitted discharger. Three fields are deleted. `unresolved at release: REJECT` was not wrong but **derivable**, and a field restating a global rule per record is a second home for it that nothing arbitrates when the two drift. `permanent ceiling:` in §5.9 gave `not_proof_of_global_census_closure_uniqueness_without_exclusion_witnesses` a **third** home while it already lived in `section_5.added_non_claims` — an A3 violation inside the ledger A3 polices — and a **ceiling is not a requirement**: requirements are discharged, ceilings are permanent, and one shape for both invites a reader to expect the ceiling to lapse. §5.9 gains the `status:` it never had. **The defect was found by fixture S6.44, the parser-union removal test, on its first execution** — not by review, and not by any of the twenty preceding amendments that read these blocks. The canonical parser alone now finds **4/4** requirements. **No requirement was added, removed, weakened or strengthened; no blade, law, evidence predicate, release predicate, ceiling or socket changed.** Only the machine grammar changed — which is why it needs an amendment number rather than an erratum: frozen normative text changed shape.
 
 **Amendment A19 folded (amends frozen Section 4):** A18 minted three artifacts — the producer-authority schema, the `simurgh.vsc.producer_signature.ed25519.v1` profile, and the detached `closure_authorization` schema — and the profile bundle pinned none of them. The third is the load-bearing one: `closure_authorization_schema_digest` sits **inside the signed message**, so an unpinned schema would be producer-selected after anchoring and signed into apparent legitimacy — the §3.1 authority rule in its eighth costume, one artifact past A9's. The bundle expands **14 → 17 pairs**, and the descriptor's four profile fields are demoted to **declared, non-authoritative copies** whose authoritative home is the bundle: had the descriptor been authoritative while the bundle pinned the same profiles, a disagreement between them would have had no defined winner, which is A3's one-fact-one-home rule broken by a tidy-looking field. A fourth candidate — a separate closure-authorisation _verification_ profile — was **rejected**: verification is wholly owned by the signature profile, and pinning a profile for a construction another profile already governs is the decorative-amendment failure this stage has now refused three times. The limit-compatibility invariant was recomputed a **fifth** time: worst-case manifest **`7,267,676 <= 8,388,608`**, headroom **`1,120,932`** bytes, HOLDS; the three pinned-ASCII pairs cost **533 bytes**. **No blade, law, evidence predicate, release predicate, or socket changed** — A18 already changed the release predicate, and A19 binds the artifacts that change depends on.
@@ -204,7 +206,12 @@ not_proof_of_beacon_unbiasability_or_finality
 not_proof_of_salt_entropy
 not_semantic_junk_detection_beyond_declared_predicate
 not_proof_that_the_private_scope_was_well_chosen
+not_information_theoretic_binding
+not_information_theoretic_hiding
+not_proof_of_cryptographic_primitive_security
 ```
+
+**This list is declaration-ordered, not sorted** — unlike Sections 2 and 5, which declare lexicographically. It is harmless: `release_non_claims` is a `lexicographically_sorted_union`, so a section's internal order cannot reach the signed bytes. A21 appends rather than re-sorting, because reordering frozen text would buy nothing and obscure the diff.
 
 > Selective openings reveal the challenged cases. All unchallenged case payloads remain undisclosed under the stated commitment assumptions.
 
@@ -227,6 +234,54 @@ The third is a specific failure mode **inside** the second's broader process que
 > **`not_proof_of_unopened_leaf_preimage_index_consistency`** — The verifier deterministically checks each public leaf identifier's canonical tree position and cross-artifact equality. It validates the private preimage's embedded index only for beacon-selected openings.
 
 A hidden universe that is fixed is not a universe that is right. **Hiding makes gerrymandering invisible**; the beacon challenge bounds _stuffing_, never _taste_.
+
+### Cryptographic premises — stated once, for the whole document (A21)
+
+**Preflight finding: there was no global home, and no statement to put in it.** The single `_Assumptions / externally checked premises_` block belongs to the conditional-detection-probability bound below and lists **beacon** premises only. Cryptographic primitives were assumed **everywhere and stated nowhere**: SHA-256 collision resistance underwrites every "declared digest MUST equal verifier recomputation" rule in §4.7.3, Merkle binding in §3.5, slot binding in §6.1 and profile-bundle binding in §4.4; and after A18, Ed25519 unforgeability underwrites every authority conclusion in the stage. A document that spends Section 3 refusing to let `canonicalJson` carry semantics it does not have may not let SHA-256 carry a bijection it does not have either.
+
+**The register is global. It is stated here, once, and never repeated inside a requirement record, a threat row, or a ceiling definition.**
+
+```text
+assumption: canonical_encoding_unambiguous
+scope:      all hashed and signed preimages
+meaning:    distinct accepted semantic objects must not have multiple accepted
+            canonical byte encodings
+
+assumption: hash_collision_resistance
+scope:      digest equality, Merkle binding, slot binding, profile-bundle binding
+meaning:    equal digests are COMPUTATIONAL evidence of equal canonical
+            preimages, never logical injectivity
+
+assumption: hash_second_preimage_resistance
+scope:      post-commitment substitution resistance
+meaning:    a committed object cannot feasibly be replaced by a distinct
+            accepted object carrying the same digest
+
+assumption: hash_preimage_resistance
+scope:      hiding claims only
+meaning:    concealed committed values remain computationally hard to recover
+            where sufficient secret entropy exists
+
+assumption: ed25519_euf_cma
+scope:      producer-authority and other Ed25519-authenticated objects
+meaning:    an attacker without the signing key cannot feasibly produce a fresh
+            valid signature for a covered message
+
+assumption: signing_key_not_compromised
+scope:      all authority conclusions
+meaning:    signature validity does not prove key custody, non-compromise, or
+            correct human control
+```
+
+**The scope column is load-bearing.** `hash_preimage_resistance` is scoped to hiding **only**: it is not what makes a commitment binding, and a spec that cites it for binding has confused the two properties. `hash_collision_resistance` is scoped to every equality conclusion, which is why it appears in four places at once.
+
+**Three ceilings, not four.** `signing_key_not_compromised` gets an assumption but **no new ceiling**: its ceiling already exists as A18's Section 4-owned `not_proof_of_exclusive_or_uncompromised_producer_key_control`, which states the same fact more precisely. Minting `not_proof_of_signing_key_non_compromise` beside it would be duplicate ownership, and the §1 completeness rule says duplicate ownership **fails closed** — the ledger would carry two names for one fact, which is exactly what A3 exists to prevent and what A16 spent an amendment undoing.
+
+> **`not_information_theoretic_binding`** (A21) — every Stage 5O commitment is **computationally** binding, never unconditionally so. An adversary with unbounded computation, or a future break of the pinned hash, could open a commitment to a value other than the one committed. No claim in this stage survives such an adversary.
+
+> **`not_information_theoretic_hiding`** (A21) — hiding is **computational** and depends on salt entropy (`not_proof_of_salt_entropy`), not on the structure of the commitment. An unbounded adversary, or a preimage break, recovers concealed case payloads. The two ceilings are duals and neither implies the other: a scheme may be computationally binding and computationally hiding, and Stage 5O claims exactly that pair and no more.
+
+> **`not_proof_of_cryptographic_primitive_security`** (A21) — Stage 5O does not prove SHA-256 collision resistance, second-preimage resistance, or preimage resistance, nor Ed25519 EUF-CMA security. These are **assumed**, and the register above names each assumption, its scope, and what it buys. If a primitive falls, the conclusions resting on it fall with it, and no fixture in this stage detects that: a verifier using the same hash cannot distinguish two colliding preimages from one. This is why S6.36 is an **assumption-language fixture** whose subject is a sentence rather than an enforcement fixture whose subject is bytes.
 
 ### Attack taxonomy — what is deterministic, what is probabilistic, what is neither
 
@@ -762,25 +817,27 @@ Successor-work candidates: `case_distinctness_witnessing`, `federated_disclosure
 
 ### Section 2 freeze gate
 
-| Gate                                                                          | Status                                                                                                                                               |
-| ----------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| PC-1 and PC-2 distinguish exact probability from minimum guarantee            | ✅ PC-0 freezes exact-for-`J` vs `>=`-for-at-least-`J`, plus domain and canonical rational encoding                                                  |
-| PC-3 narrowed to one specified pair                                           | ✅ multi-pair needs a structure-specific contract; exact disjoint-pair sum and graph form recorded, neither shipped                                  |
-| PC-3 has a strict active domain and an executable relational check            | ✅ `N>=2`, `2<=k<=N`; `k<2` → probability 0, ratio **absent**, claim inactive; precommitted relational predicate `R` over all unordered opened pairs |
-| Cardinality dilution named with a policy-bound non-vacuity floor              | ✅ T3.5; both bases distinguished; fraction basis **resistant, not invariant** (1.28% measured drift); prevalence gap signed                         |
-| Repeated audits carry no aggregate detection claim                            | ✅ Option A — PC-1/2/3 are single-challenge; no PC-4, because its premises are the T6.6 hole                                                         |
-| "Duplication is optimal" removed                                              | ✅ replaced with "sampling-resistant relational strategy"; T3.4 named as strictly stronger                                                           |
-| Green blindness fixtures assert limitations, not merely acceptance            | ✅ eight accepted-blindness fixtures assert non-claim presence; four paired enforcement fixtures reject                                              |
-| Beacon salt fixture distinguishes disclosed from indistinguishable provenance | ✅ T5.2 declared → **reject**; T5.9 undeclared → accepted + ceiling                                                                                  |
-| Disclosure truncation, ledger forking, cross-root corpus reuse named          | ✅ T6.6, T6.7, with two new ceilings                                                                                                                 |
-| Each attack belongs to exactly one primary class                              | ✅ 40 attacks (T1 8, T2 3, T3 5, T4 8, T5 9, T6 7), one class each                                                                                   |
-| Deterministic failures not diluted by sampling language                       | ✅ T1 and T4 (except T4.3) carry no probability text                                                                                                 |
-| Record fabrication never presented as generally detectable                    | ✅ T2.3 `potentially undetectable`; PC-2 states zero-visible → zero probability                                                                      |
-| Beacon guarantees separated from beacon assumptions                           | ✅ T4.3 is the sole assumption-dependent row; availability fails closed, neutrality does not                                                         |
-| Repeated-audit disclosure has its own class                                   | ✅ T6, distinct from T4                                                                                                                              |
-| Section 2 declares `added_non_claims` explicitly (A3 ownership rule)          | ✅ seven owned ceilings, lexicographic; Section 1 carries no mirror                                                                                  |
-| Every residual maps to an existing non-claim or proposes one without an IOU   | ✅ seven proposed, all claim ceilings; three successor candidates, zero sockets                                                                      |
-| No raw `420+` codes assigned                                                  | ✅ none in this section                                                                                                                              |
+| Gate                                                                          | Status                                                                                                                                                                                        |
+| ----------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| PC-1 and PC-2 distinguish exact probability from minimum guarantee            | ✅ PC-0 freezes exact-for-`J` vs `>=`-for-at-least-`J`, plus domain and canonical rational encoding                                                                                           |
+| PC-3 narrowed to one specified pair                                           | ✅ multi-pair needs a structure-specific contract; exact disjoint-pair sum and graph form recorded, neither shipped                                                                           |
+| PC-3 has a strict active domain and an executable relational check            | ✅ `N>=2`, `2<=k<=N`; `k<2` → probability 0, ratio **absent**, claim inactive; precommitted relational predicate `R` over all unordered opened pairs                                          |
+| Cardinality dilution named with a policy-bound non-vacuity floor              | ✅ T3.5; both bases distinguished; fraction basis **resistant, not invariant** (1.28% measured drift); prevalence gap signed                                                                  |
+| Repeated audits carry no aggregate detection claim                            | ✅ Option A — PC-1/2/3 are single-challenge; no PC-4, because its premises are the T6.6 hole                                                                                                  |
+| "Duplication is optimal" removed                                              | ✅ replaced with "sampling-resistant relational strategy"; T3.4 named as strictly stronger                                                                                                    |
+| Green blindness fixtures assert limitations, not merely acceptance            | ✅ eight accepted-blindness fixtures assert non-claim presence; four paired enforcement fixtures reject                                                                                       |
+| Beacon salt fixture distinguishes disclosed from indistinguishable provenance | ✅ T5.2 declared → **reject**; T5.9 undeclared → accepted + ceiling                                                                                                                           |
+| Disclosure truncation, ledger forking, cross-root corpus reuse named          | ✅ T6.6, T6.7, with two new ceilings                                                                                                                                                          |
+| Each attack belongs to exactly one primary class                              | ✅ 40 attacks (T1 8, T2 3, T3 5, T4 8, T5 9, T6 7), one class each                                                                                                                            |
+| Deterministic failures not diluted by sampling language                       | ✅ T1 and T4 (except T4.3) carry no probability text                                                                                                                                          |
+| Record fabrication never presented as generally detectable                    | ✅ T2.3 `potentially undetectable`; PC-2 states zero-visible → zero probability                                                                                                               |
+| Beacon guarantees separated from beacon assumptions                           | ✅ T4.3 is the sole assumption-dependent row; availability fails closed, neutrality does not                                                                                                  |
+| **Cryptographic premises stated globally, once, with explicit scope (A21)**   | ✅ §1 register — six assumptions; `hash_preimage_resistance` scoped to hiding ONLY; primitives are assumed, never proven; three ceilings, the fourth rejected as duplicate ownership of A18's |
+| **No cryptographic conclusion rests on an unnamed assumption (A21)**          | ✅ §1, §3.2 — the injectivity sweep found one frozen violation and corrected it; S6.36 is an assumption-LANGUAGE fixture, since no verifier using the same hash can detect a collision        |
+| Repeated-audit disclosure has its own class                                   | ✅ T6, distinct from T4                                                                                                                                                                       |
+| Section 2 declares `added_non_claims` explicitly (A3 ownership rule)          | ✅ seven owned ceilings, lexicographic; Section 1 carries no mirror                                                                                                                           |
+| Every residual maps to an existing non-claim or proposes one without an IOU   | ✅ seven proposed, all claim ceilings; three successor candidates, zero sockets                                                                                                               |
+| No raw `420+` codes assigned                                                  | ✅ none in this section                                                                                                                                                                       |
 
 ---
 
@@ -931,7 +988,9 @@ case_digest = SHA256(CASE_DOMAIN || u32be(len(case_bytes)) || case_bytes)
 
 **Digest equality is a statement about bytes, not about meaning (frozen).**
 
-> Two inputs produce the same case digest **only when their parsed values produce identical bytes under the frozen Stage 5O schema and canonicalisation algorithm.**
+> Under `hash_collision_resistance` (§1), two inputs produce the same case digest **only when their parsed values produce identical bytes under the frozen Stage 5O schema and canonicalisation algorithm** — or when a collision has been found, which this stage assumes infeasible and does not detect.
+
+**A21 corrected this sentence.** As frozen it read "only when their parsed values produce identical bytes", which asserts **injectivity**: same digest therefore same bytes, collisions excluded by fiat. The heading above it says digest equality is a statement about bytes rather than meaning — the sentence was careful about semantics and silent about collisions. The correction weakens nothing anyone relied on; it names the assumption the sentence was already spending.
 
 Canonical JSON normalises _representation_, not _application semantics_. It does not know that two differently ordered arrays denote the same set, that `"01"` and `"1"` name the same identifier, that Unicode-normalised strings are equal, that two predicate-parameter lists are equivalent, or that reordered attack steps mean the same case. **Semantic equivalence is never outsourced to `canonicalJson`.**
 
