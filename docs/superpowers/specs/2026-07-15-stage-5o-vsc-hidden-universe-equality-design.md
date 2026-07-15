@@ -1,6 +1,6 @@
 # Stage 5O — VSC: Hidden-Universe Equality (design)
 
-**Status:** Sections **1–5 FROZEN** — Section 1 `a1e2e6d1`, Section 2 `0e26c361`, Section 3 `e8dc0a77`, Section 4 `cb67542f`, Section 5 this commit. Sections 6–13 pending.
+**Status:** Sections **1–6 FROZEN** — Section 1 `a1e2e6d1`, Section 2 `0e26c361`, Section 3 `e8dc0a77`, Section 4 `cb67542f`, Section 5 `b08554ed`, Section 6 this commit. Sections 7–13 pending.
 **Release is BLOCKED by design:** `release_required_bindings` carries the unresolved `section_6_anchored_presented_census_closure` (§5.9) and, since **A24**, `section_10_evidence_attack_raw_code_allocation` (§4.10) — the stage's own `evidence_attack_fixtures` raw-code obligation, which had no owner, discharger or status while **zero** codes existed in the reserved band. A green Section 5 freeze does **not** mean anti-equivocation exists, and per **A13** full anti-equivocation is not coming: Stage 4T binds views to a held capsule, never excluding an unseen one, so `not_proof_of_global_census_closure_uniqueness_without_exclusion_witnesses` is a **permanent** ceiling.
 **Amendment A24 folded (amends frozen Section 4):** §4.9's class table states that `evidence_attack_fixtures` carry a **non-zero Stage 5O raw code**. That is a normative obligation, and it had **no owner, no permitted discharger, no status and no ledger entry** — it lived in a table cell and blocked nothing. **Measured, not assumed: zero codes are allocated in the reserved `420+` band anywhere in the stage**, while the committed sections carry **78** evidence-attack rows and Section 6 adds **25**; every apparent `420+` occurrence in this document is byte arithmetic — `465` from `1,121,465`, `463` from `463,043` — and the audit that surfaced this was A23's, when the check "every evidence-attack row names an existing first-failure code" proved **unsatisfiable because no code exists to name**. **This is A8's painted door standing in the register A8 was built to prevent**: an unfinished obligation recorded as prose promises a discharge the contract never defines and nothing enforces, which is exactly why the second ledger has the opposite lifecycle. A24 **allocates no codes** and mints no mechanism. It records the obligation as `section_10_evidence_attack_raw_code_allocation`, owned by Section 4, dischargeable by **Section 10 alone**, `status: PENDING` — so the release gate **rejects** until Section 10 maps every evidence-attack row to exactly one declared first-failure reason and exactly one non-zero code, **one code per semantic failure class, never one per fixture**: a code that names a fixture rather than a failure is an identifier pretending to be a diagnosis. Section 10 must further prove a closed allocation table, unique reasons and numbers, deterministic first-failure ordering, no unmapped fixture, no code with incompatible meanings, **never `0` for rejection**, exit-ledger parity, mechanically regenerated goldens, and that unrelated prior-stage codes did not move — preflighting every shared golden and consumer **before allocating the first number**, because 4M's additive codes broke five goldens and 4R/4S cost four red rounds to the same class of change. **Section 6 does not own numeric allocation and is not blocked by this**: its rows carry stable symbolic failure reasons, the numbers arrive from Section 10, and the ownership model would break if a section had to supply codes for a table it does not own. **The missing codes were never the defect. The unledgered obligation was.** No blade, law, evidence predicate, ceiling, fixture, or socket changed; **the release predicate gains one fail-closed prerequisite that was already normatively required and silently unenforced.**
 
@@ -2149,13 +2149,39 @@ permitted discharger:   10
 status:                 PENDING
 ```
 
-**What Section 10 must prove to discharge it:**
+**What Section 10 must prove to discharge it.** Section 10 **assigns both the semantic failure reason and its raw code** — they are one taxonomy operation, not two. The chain runs:
 
 ```text
-every normative evidence_attack_fixtures row
-    -> exactly one declared first-failure reason
-    -> exactly one non-zero raw code in the reserved Stage 5O band
+fixture contract  ->  Section 10 semantic first-failure class  ->  Section 10 raw code
 ```
+
+and never:
+
+```text
+fixture  ->  locally invented reason  ->  Section 10 deduplicates it later
+```
+
+**Sections 3–6 define attacks; Section 10 defines their shared first-failure taxonomy and numeric protocol.** A section that mints a provisional reason for its own rows is naming an equivalence class from inside one of its members: reasons group fixtures **across** sections by first-failure condition, so a locally invented vocabulary yields one reason per fixture — the confetti cannon arriving in a fake moustache, and Section 10 inheriting a taxonomy it must first undo. **No section may declare a provisional reason, a fixture-name-as-reason alias, or a per-row pending status.**
+
+```text
+fixture_id
+semantic_failure_reason      // assigned by Section 10
+raw_code                     // assigned by Section 10
+first_failure_precedence
+```
+
+```text
+every normative evidence-attack fixture  ->  exactly one semantic failure reason
+every semantic failure reason            ->  exactly one non-zero raw code
+one semantic failure reason              ->  ONE OR MORE fixtures
+one fixture                              ->  exactly one reason
+```
+
+**A fixture name is not a reason. A field name is not a reason.** A reason names the verifier's first semantic failure condition — `anchor_quorum_incomplete`, `required_replacement_closure_absent`, `producer_authority_binding_mismatch` — and the vocabulary is Section 10's decision. The stage's existing backticked identifiers are **neither**: `duplicate_key_raw_case` names a fixture, `census_closure_digest` names a field, and eleven committed rows carry the former in the position a reader would expect the latter. **Measured at this erratum: of 78 committed evidence-attack rows, 11 carry a trailing symbolic identifier and none of them is a failure reason.** Section 10 classifies the complete stage-wide set in **one pass** — 78 committed plus Section 6's 25, a **derived projection and never a normative constant**.
+
+**The mapping gate must detect:** an unmapped fixture; one fixture mapped twice; one reason assigned two codes; one code assigned incompatible reasons; a fixture identifier masquerading as a reason; a field identifier masquerading as a reason; a code outside the reserved band; first-failure precedence disagreement; and stale mappings when fixtures are added, removed, or retired.
+
+_A24 discharge erratum: A24's folded text required "exactly one **declared** first-failure reason" without saying who declares it — readable as rows declaring reasons that Section 10 merely collects, which is the path this erratum forbids. Naming the equivalence classes the codes represent is inherent in A24's existing obligation, so this is an unfinished tail of that ruling and mints no mechanism. **No new amendment number.**_
 
 **One code per semantic failure class, never one per fixture.** Fixtures exercising the same first-failure condition share a code; the alternative turns a hundred-odd evidence-attack rows into a code-number confetti cannon, and a code that names a fixture rather than a failure is an identifier pretending to be a diagnosis. Section 10 must further establish a closed allocation table, unique symbolic reason names, unique numeric codes, deterministic first-failure ordering, no evidence-attack fixture without a mapping, no code mapped to incompatible meanings, **never `0` for rejection**, shared exit-ledger parity, mechanically regenerated goldens, and explicit proof that unrelated prior-stage codes did not move.
 
@@ -2951,13 +2977,775 @@ Binding remains valuable. It does not alchemise records into events.
 
 ---
 
-## Sections 6–13 — pending
+## Section 6 — Anchored presented census closure
 
-6. Future-height anchor contract. **Discharges `section_6_anchored_presented_census_closure`** (§5.9, A13) — construct the EXTERNAL closure over fully validated censuses, derive `closure_slot_id` from `(precommitment, epoch)` alone, verify the detached closure authorisation under the **precommitment-bound producer authority** (A18), anchor strictly before the challenge height via the Stage 5M quorum, reject **jointly presented** conflicting closures carrying the **same** authority, consume the slot with no retry garden. Builds **no** Stage 4T capsule (A14). Declares `section_7_challenge_seed_binds_presented_census_closure` and `section_12_stage4t_presented_evidence_package_capsule`, and freezes `challenge_subject_digest` for Section 7. Claims **no** global uniqueness — see the A13 ceiling. A producer signature does not discharge it; a timestamp does not; two valid timestamps over two conflicting closures do not.
+**Status:** **FROZEN** — this commit. Scope: the prechallenge closure and its two anchor roles. Section 6 defines **no** beacon selection (Section 7), **no** openings (Section 8), and **no** completed Stage 4T package capsule (Section 12, A14). It **discharges** `section_6_anchored_presented_census_closure` (§5.9) and claims **no** global closure uniqueness (A13).
+
+**Preflights (three, all run before drafting).**
+
+1. **Seed-binding rehomed (A13).** `the challenge seed BINDS census_closure_digest` was removed from this section's discharge list. Section 7 owns beacon-seed derivation; Section 6 freezes the handoff value and declares the requirement.
+2. **Capsule rehomed (A14).** `closure_capsule_root` is **absent by design**. A closure-only capsule is decorative (nothing public is redactable), and a package capsule cannot exist before the challenge that generates its contents. Section 12 owns it.
+3. **Digest graph verified acyclic.** Machine-checked over the constructions below: no digest contains a value derived from itself, and `anchor_schedule_profile_digest` is a **root** with no upstream — it binds static rules only.
+
+### 6.1 The closure slot — the singular-story key
+
+```text
+CLOSURE_SLOT_DOMAIN = ASCII "simurgh.vsc.census_closure_slot.v1"
+
+closure_slot_id =
+  SHA256(
+    CLOSURE_SLOT_DOMAIN          ||
+    stage5o_precommitment_digest ||   // 32 bytes, VERIFIER-RECOMPUTED
+    epoch_digest                      // 32 bytes, VERIFIER-RECOMPUTED
+  )
+```
+
+The slot is derived from `(precommitment, epoch)` and **nothing else**. Forbidden as slot inputs:
+
+```text
+producer-selected policy labels     reviewer identity          anchor ecology
+census digests                      challenge height alone     nominal profile aliases
+```
+
+**Every one of those would let a producer mint a second nominal slot for one actual epoch**, and then equivocate without ever colliding. A slot keyed by census digest is the sharpest of them: two censuses would produce two slots, and "one closure per slot" would become true and worthless simultaneously — the slot must be the thing a story is told _about_, never the story.
+
+### 6.2 The census closure
+
+```text
+CENSUS_CLOSURE_DOMAIN = ASCII "simurgh.vsc.census_closure.v1"
+
+census_closure_digest =
+  SHA256(
+    CENSUS_CLOSURE_DOMAIN          ||
+    census_closure_schema_digest   ||   // 32 bytes, profile-pinned (A17)
+    stage5o_precommitment_digest   ||   // 32 bytes, VERIFIER-RECOMPUTED
+    epoch_digest                   ||   // 32 bytes, VERIFIER-RECOMPUTED
+    u64be(N)                       ||   // 8 bytes
+    closure_slot_id                ||   // 32 bytes, VERIFIER-RECOMPUTED
+    execution_record_census_digest ||   // 32 bytes, VERIFIER-RECOMPUTED
+    reported_result_census_digest       // 32 bytes, VERIFIER-RECOMPUTED
+  )
+```
+
+Exact-key object, every declared field mandatory and non-authoritative:
+
+```text
+census_closure = {
+  schema_id, schema_digest,
+  stage5o_precommitment_digest, epoch_digest, cardinality,
+  closure_slot_id,
+  execution_record_census_digest, reported_result_census_digest,
+  census_closure_digest
+}
+```
+
+#### 6.2.1 The closure acceptance lattice — three states, never one word
+
+"Valid closure" would otherwise collapse several distinct facts into one adjective. The states are **frozen and separate**, and each names exactly what it has:
+
+```text
+closure_candidate_valid =
+    exact schema passes                                       (A17-pinned)
+  + both census schemas match the pinned profile pairs        (A9)
+  + both census digests recompute                             (§5.5)
+  + both censuses cite the same precommitment, epoch and N    (§5.3)
+  + indexed-universe equality passes for ALL N                (§5.4)
+  + every R[i] binds the exact RECOMPUTED E[i] digest         (§5.4, S5.19)
+  + closure_slot_id recomputes                                (§6.1)
+  + census_closure_digest recomputes                          (§6.2)
+  + closure_authorization verifies under the precommitment-
+    bound producer authority                                  (§6.2.2, A18)
+
+closure_anchor_valid =
+    closure_candidate_valid
+  + the complete presented_census_closure anchor quorum validates   (§6.5)
+
+presented_closure_accepted =
+    closure_anchor_valid
+  + package consistency checks pass                                 (§6.3)
+```
+
+**Nothing may be described with a state it has not reached.** A candidate-valid closure is not anchored. An anchor-valid closure is not accepted. The three-word vocabulary exists because a single "valid" would let a structurally sound but **unanchored** alternative be reported as a second accepted anchored story — which is precisely the overclaim §6.3 exists to prevent.
+
+**The DAG stays one-way.** Neither census contains `census_closure_digest` (§5.2.4). The closure consumes the censuses; the censuses never consume the closure.
+
+#### 6.2.2 Closure authorisation — the slot names its speaker (A18)
+
+A18 binds `producer_authority_digest` into `stage5o_precommitment_digest`. Section 6 is where that binding does its work.
+
+**The authorisation is detached.** It is not a field of `census_closure`, and `census_closure_digest` does not cover it. A closure is a statement of fact about two censuses; an authorisation is the claim that one specific key endorsed that statement. Folding the signature into the closure preimage would make the digest depend on the signature and the signature depend on the digest — the §4.7.3 cycle rule, one artifact downstream. Detaching it also leaves §5.2.2's census maxima untouched: **no authorisation field enters either census schema**.
+
+```text
+closure_authorization = {
+  schema_id, schema_digest,
+  producer_authority_digest,      // declared, non-authoritative
+  stage5o_precommitment_digest,   // declared, non-authoritative
+  epoch_digest,                   // declared, non-authoritative
+  cardinality,                    // declared, non-authoritative
+  closure_slot_id,                // declared, non-authoritative
+  census_closure_digest,          // declared, non-authoritative
+  signature                       // lowercase hex, exactly 128 characters
+}
+```
+
+```text
+CLOSURE_AUTHORIZATION_DOMAIN = ASCII "simurgh.vsc.census_closure_authorization.v1"   // 43 bytes
+
+authorization_message =
+  CLOSURE_AUTHORIZATION_DOMAIN        ||
+  closure_authorization_schema_digest ||   // 32 bytes, profile-pinned
+  producer_authority_digest           ||   // 32 bytes
+  stage5o_precommitment_digest        ||   // 32 bytes
+  epoch_digest                        ||   // 32 bytes
+  u64be(N)                            ||   // 8 bytes
+  closure_slot_id                     ||   // 32 bytes
+  census_closure_digest                    // 32 bytes
+```
+
+Every field after the domain constant is fixed-width, so no framing is required and no boundary is inferable. **The signed message is these exact bytes** — never `canonicalJson(closure_authorization)`, never a re-encoded projection (§4.7.1).
+
+Verifier order (frozen):
+
+```text
+1. every declared field equals the verifier's recomputed value        (§4.7.3)
+2. producer_authority_digest equals the value recomputed from the
+   manifest's producer_authority_descriptor  -- the AUTHORITATIVE source
+3. rebuild authorization_message from RECOMPUTED values only,
+   never from the envelope's declared copies
+4. verify the signature under the DESCRIPTOR's public key,
+   strict Ed25519, per simurgh.vsc.producer_signature.ed25519.v1
+5. any failure -> UNAUTHORISED -> reject
+```
+
+**Step 3 is the load-bearing one.** A verifier that rebuilds the message from the envelope's own declared fields checks the signature against the producer's story rather than against the facts — the producer signs its own account and the check passes by construction. This is §3.1's authority rule as a code path, exactly as S5.19 is: the sibling of the trap where `R[i].execution_entry_digest` is compared to itself.
+
+##### The foreign-closure denial of service is closed structurally, not merely detected
+
+```text
+closure_slot_id = SHA256(CLOSURE_SLOT_DOMAIN || stage5o_precommitment_digest || epoch_digest)
+```
+
+and A18 puts `producer_authority_digest` **inside** `stage5o_precommitment_digest`.
+
+**The precise statement, and it is not an implication:**
+
+> Under the collision-resistance assumption for the slot hash and the canonical precommitment encoding, the same `closure_slot_id` **computationally binds** the same precommitment, and therefore the same committed authority.
+
+An earlier draft of this paragraph wrote `same slot => same precommitment => same authority`. **That is false as written.** `closure_slot_id` is a hash: equal digests do not logically prove equal preimages, and a spec that writes `=>` over a hash has quietly assumed injectivity. Stage 5O spends Section 3 refusing to let `canonicalJson` carry semantics it does not have; it may not then let SHA-256 carry a bijection it does not have either.
+
+The DoS closure rests on **four** premises, and each is named rather than absorbed:
+
+```text
+1. collision resistance of the slot hash
+2. unambiguous canonical encoding of the precommitment inputs
+3. unforgeability of the authority signature (Ed25519, §4.7.1)
+4. the signature covering the EXACT instance -- not merely a reusable precommitment
+```
+
+Premise 4 is the one a careless design drops. If the signed message bound only the precommitment, one valid victim signature would be transplantable across every epoch, census pair and closure sharing that precommitment — a single harvested signature authorising an unbounded family of stories. The message therefore binds `epoch_digest`, `u64be(N)`, `closure_slot_id` and `census_closure_digest`, and `census_closure_digest` transitively binds both census digests. **The signature and the slot structure work together; neither gets solo billing.**
+
+A third party **cannot reach a victim's slot under its own key**: a different key yields a different precommitment, hence — under premises 1 and 2 — a different `closure_slot_id`, hence no conflict, two unrelated slots rather than two stories. The only route to the slot is to cite the victim's precommitment digest verbatim, which is public and freely copyable, and that leaves the attacker unable to produce a signature verifying under the key that digest commits to (premise 3).
+
+**"Same authority" is therefore a computational consequence of the slot, not an independent premise.** It is still checked, as deliberate redundancy in the §4.6 pattern where a mismatch anywhere rejects.
+
+### 6.3 Presented-package consistency and joint conflict evidence
+
+**For an ordinary evidence package:**
+
+```text
+exactly one valid census_closure_digest for closure_slot_id
+every package object references that same closure
+every declared copy is non-authoritative and recomputed
+```
+
+**For jointly presented conflicting closures:**
+
+```text
+same closure_slot_id
+different census_closure_digest
+both independently closure_candidate_valid
+  -> REJECT
+  -> emit canonical conflict evidence (closure_conflict schema, A17)
+```
+
+Because `closure_candidate_valid` now includes authorisation (§6.2.2), **both candidates are necessarily authorised under the same precommitment-bound key** — the slot guarantees it. A closure reaching the slot without a verifying signature never becomes a candidate at all:
+
+```text
+closure for the slot whose authorisation does not verify
+  -> reject as UNAUTHORISED or FOREIGN evidence
+  -> emit NO producer-equivocation evidence
+```
+
+**That branch is the point of A18.** Emitting equivocation evidence against a producer on the strength of a closure they never signed would accuse the victim of the attacker's act.
+
+**What the conflict evidence proves, exactly (A18):**
+
+> The same precommitted cryptographic authority authorised two different census closures for one slot, and both were jointly presented.
+
+**What it does NOT automatically prove:**
+
+> Both stories were externally anchored or accepted.
+
+The conflict schema therefore carries an explicit machine field:
+
+```text
+both_closures_anchor_valid : bool
+  true   only when BOTH candidates independently reach closure_anchor_valid
+  false  otherwise — including when one candidate is merely candidate_valid
+
+producer_authority_digest  : bytes32
+  the single authority both closures were authorised under; the claim names
+  a key, never a person or an organisation (A18 ceilings, §4.10)
+```
+
+**Without that field, a structurally valid but unanchored alternative would be described as a second accepted anchored story.** A producer could then manufacture "conflict evidence" against a rival's real closure by scribbling a candidate-valid one — the conflict is real, but its severity is not what an unqualified report would imply. Emitting the conflict is honest; emitting it _as though both were anchored_ is not.
+
+**This is conflict evidence, not exclusion, and the wording is load-bearing.** The following claims are **FORBIDDEN** in this section and anywhere downstream:
+
+```text
+"the slot is permanently consumed"      -- consumed within WHAT? no global registry exists
+"the first closure globally wins"       -- no verifier observes a global first
+"no retry exists anywhere"              -- Stage 5O sees one package, not the world
+```
+
+#### 6.3.1 The verifier is set-based — nothing "consumes" anything
+
+An offline verifier holds **no mutable slot state**, so no closure — valid or invalid — can reserve, consume, or claim a slot. The algorithm is a set computation over what was presented:
+
+```text
+1. validate every presented closure candidate INDEPENDENTLY,
+   INCLUDING its authorisation under the precommitment-bound key (§6.2.2)
+2. collect candidate-valid closures by closure_slot_id
+3. deduplicate by census_closure_digest
+4. zero accepted anchored digests        -> reject: missing valid closure
+5. exactly one accepted anchored digest  -> continue
+6. more than one distinct candidate-valid digest for a slot -> reject: conflict
+```
+
+**An invalid candidate cannot reserve anything, because there is nothing to reserve.** An earlier draft of this section described a producer offering a deliberately invalid closure to "consume" the slot, then presenting a corrected one — and called it an evidence attack. That was wrong on the architecture: a producer may certainly supply that malicious ordering, but the defect under test is **the verifier's state machine**, not the evidence. A verifier that marks a slot consumed before full validation has invented mutable state this design does not have:
+
+```text
+verifier_marks_slot_consumed_before_full_validation
+  -> implementation_regression_fixture
+  -> NO 420+ evidence raw code
+```
+
+**If Stage 5O ever introduces a persistent registration service** whose slots can genuinely be consumed, that is new architecture requiring a registry schema, a state-transition proof, and a profile pin. **Nothing in this section supplies that object**, and no wording here may imply one exists.
+
+The honest rule is **local to the presented package and its anchor evidence**: within what a verifier is shown, one slot admits one accepted closure, and a second candidate-valid one presented alongside rejects. A producer who shows closure A to reviewer A and closure B to reviewer B is **not detected** — that is A13's permanent ceiling `not_proof_of_global_census_closure_uniqueness_without_exclusion_witnesses`, and no phrasing in this section may paper over it.
+
+### 6.4 The closure-core Stage 4T section — projection and adapter rule only
+
+Section 6 freezes **one keyed section** and the rule for projecting it. It does **not** build a capsule (A14).
+
+```text
+regime     = "stage5o"
+section_id = "census_closure"
+```
+
+payload:
+
+```text
+{
+  closure_slot_id,
+  census_closure_digest,
+  stage5o_precommitment_digest,
+  epoch_digest,
+  execution_record_census_digest,
+  reported_result_census_digest,
+  challenge_subject_digest
+}
+```
+
+**The adapter uses Stage 4T's real construction, read from its source — not a function wearing its name:**
+
+```text
+sectionKey(s)                = `${s.regime}/${s.section_id}`
+sectionCommitment(s, salt)   = recordDigest({ salt, section: s })
+package_capsule_root         = merkleRootSorted(section_commitments)
+```
+
+The earlier draft's `Stage4T_CapsuleRoot(flatObject)` **does not exist in Stage 4T and is deleted.** 4T's real signature is `capsuleRoot(capsule, salts)` over keyed sections; a flat-object adapter would have been a new function carrying a shipped stage's name — the same borrowing A13 caught at the claim layer, one layer down in the code.
+
+#### 6.4.1 Why sorting is legal here and forbidden three sections earlier
+
+This distinction must be written, not inferred. A reader who meets `merkleRootSorted` beside §4.2's "the verifier must not sort" will otherwise conclude one of them is a bug:
+
+```text
+Stage 5O scope / census entries:
+  POSITIONAL SEQUENCE — position i IS the identity
+  sorting FORBIDDEN (§4.2, A6)
+
+Stage 4T evidence-package sections:
+  UNIQUELY KEYED SET — semantic role is regime/section_id
+  canonical sorting PERMITTED
+```
+
+Sorting destroys nothing at the package layer because **no positional claim exists there**. A section's meaning comes from its key, not its neighbours; the ordering among sections carries no information, so canonicalising it by sort is exactly the §4.8 `set` case. Inside each section every Stage 5O ordering rule survives untouched — the execution-record census remains a sequence even though the census document is one keyed capsule section.
+
+#### 6.4.2 Salts — Lane B, and the ceiling that goes with them
+
+**The salt profile is Section 12's, not Section 6's, and not A17's.** An earlier draft of this subsection labelled it `(profile, A17)` — an error of exactly the kind A17's ownership map exists to catch: Section 6 would have had Section 4 pin a profile for a construction A14 assigned to Section 12. Section 6 states the **requirement**; Section 12 pins the profile and owns the resulting ceiling.
+
+```text
+simurgh.vsc.package_capsule_salt.v1   (profile — pinned by SECTION 12, required here)
+
+- one INDEPENDENTLY generated 32-byte salt per package section
+- canonical lowercase-hex external encoding
+- salt keyed to the exact section key
+- NO deterministicSalt(key)
+- NO reuse of Stage 5O leaf salts
+- NO reuse across package sections
+- NO silent fallback to Lane A
+```
+
+**Stage 4T's shipped default is a Lane A test convenience**, flagged in its own source: `deterministicSalt(key) = sha256(canonicalJson({seed:"stage4t-vic-salt-v1", key}))`, with the comment _"Lane B overrides with random bytes."_ It is public and recomputable by anyone. Adopting it would make the section commitments **binding but not hiding** — precisely the defect that disqualified 5K's leaf profile in this spec's opening lines.
+
+The closure-core section is public and needs no hiding. **The reason is the later sections**: openings, receipts, and reviewer material whose redacted contents must stay hidden. A salt profile chosen for the public section and inherited by the private ones is how a hiding failure arrives quietly.
+
+**Random-looking salts do not prove entropy**, exactly as at the leaf layer (T5.9). The section that finally owns the package capsule (Section 12) must own `not_proof_of_package_capsule_salt_entropy`. **`not_proof_of_salt_entropy` must NOT silently expand to cover a second construction** — one fact, one home; a ceiling that quietly grows to cover artifacts its author never saw is how a limitation stops meaning anything.
+
+### 6.5 The dual-anchor schedule — two roles, one height, no mixing
+
+Section 4's contract already requires the **scope precommitment** anchored before the challenge height (Law 1). Section 5's closure requires the **completed census story** fixed before the same height. **One anchor cannot impersonate both.**
+
+```text
+role = scope_precommitment          subject = stage5o_precommitment_digest
+role = presented_census_closure     subject = challenge_subject_digest
+```
+
+Both reuse the **exact frozen Stage 5M quorum construction**, by pinned ID and digest — never by prose reference.
+
+#### 6.5.1 The static/instance split that keeps the graph acyclic
+
+```text
+anchor_schedule_profile_digest    binds the STATIC RULE:
+  roles, subject-TYPE mappings, quorum profile, timing rules, non-mixing rules
+
+anchor instance                   binds the CONCRETE FACTS:
+  one role, one subject digest, the challenge height, the receipts
+```
+
+**The `anchor_schedule_profile` also covers the anchor instance's exact-key SCHEMA.** The instance is a serialised evidence object, not merely a digest construction, so its shape must be pinned or it sits between chairs. It is covered by the schedule profile rather than receiving its own pair, because the instance's **shape is static** — only its values vary per ceremony — and that is exactly the type-versus-value line this subsection already draws:
+
+```text
+anchor_instance = {              // SHAPE pinned by anchor_schedule_profile_digest
+  anchor_role,                   // enum, VALUES vary per instance
+  anchor_subject_digest,
+  challenge_height,
+  anchor_binding_digest,
+  receipts                       // sequence; each binds the recomputed anchor_binding_digest
+}
+```
+
+**The profile MUST NOT include** the actual `challenge_subject_digest` value, the resulting closure-anchor receipts, or any attestation digest derived from that subject. `challenge_subject_digest` contains `anchor_schedule_profile_digest`; if the profile also contained the subject, the graph would be cyclic and neither value would be computable. The profile says _"role `presented_census_closure` uses subject type `challenge_subject_digest`"_ — a **type**, never a value.
+
+Machine-checked: the graph is acyclic, and `anchor_schedule_profile_digest` is a **root** with no upstream.
+
+#### 6.5.2 `anchor_binding_digest` — role separation with teeth
+
+```text
+ANCHOR_BINDING_DOMAIN = ASCII "simurgh.vsc.anchor_binding.v1"
+
+anchor_binding_digest =
+  SHA256(
+    ANCHOR_BINDING_DOMAIN          ||
+    anchor_schedule_profile_digest ||   // 32 bytes
+    u8(anchor_role)                ||   // 1 byte, enum: 0 = scope_precommitment,
+                                        //                1 = presented_census_closure
+    anchor_subject_digest          ||   // 32 bytes
+    u64be(challenge_height)        ||   // 8 bytes
+    stage5m_quorum_profile_digest       // 32 bytes
+  )
+```
+
+**Every receipt in an anchor instance MUST bind the same recomputed `anchor_binding_digest`.** This is what makes the roles non-interchangeable rather than merely differently labelled. It defeats:
+
+```text
+- scope receipts re-presented as closure receipts (different role byte -> different binding)
+- receipts for another challenge height substituted in
+- one ecology anchoring the scope while another quietly anchors the closure
+- the schedule profile swallowing its own output
+```
+
+`anchor_role` is a **fixed-width enum byte**, not a string: a variable-width role name would need framing, and an unframed one would let `scope_precommitment` + subject `X` collide with `scope` + subject `_precommitmentX`. The domain constant is fixed-length and every following field is fixed-width, so no framing is required and no boundary is inferable — §4.5's property, preserved.
+
+#### 6.5.3 Challenge-height authority — the crown, refused again
+
+```text
+expected_challenge_height = value from the PRECOMMITTED beacon contract
+
+scope anchor claimed height    MUST equal expected_challenge_height
+closure anchor claimed height  MUST equal expected_challenge_height
+```
+
+**Neither anchor package may introduce its own height.** A height arriving inside an anchor package is producer-declared context in a correctly shaped field — §3.1's authority rule, now in its seventh costume, and the one the beacon contract exists to refuse. Both roles read one verifier-known height that was bound before either ceremony ran.
+
+#### 6.5.3.1 Three different times, never one word
+
+A "before the challenge height" check must name **which** time it means. These are three distinct facts and only the second is the Law 1 property:
+
+```text
+anchor SUBMITTED before height          -- a request was sent. Proves nothing about inclusion.
+anchor SUBJECT FIXED before height      -- THE LAW 1 PROPERTY. The bytes were committed and
+                                           provably included below the height.
+anchor PROOF became AVAILABLE after height  -- permitted. An OTS attestation upgraded after the
+                                           challenge is fine PROVIDED its Bitcoin attestation
+                                           proves inclusion in a block below the height.
+```
+
+**Conflating the first with the second is the whole attack.** A calendar submission before the challenge is a promise; a confirmed pre-height Bitcoin anchor is evidence. The third is not a defect at all — proof availability is a property of _when we looked_, not of _when the bytes were fixed_, and forbidding late-upgraded proofs would reject honest evidence for no gain.
+
+#### 6.5.3.2 Which ecology proves the height relation
+
+The Stage 5M quorum is **heterogeneous**. A Bitcoin block height cannot be compared with a TSA or Rekor wall-clock value, and Section 6 does **not** invent such a comparison:
+
+```text
+Bitcoin ecology (the ONLY seat that establishes the height relation):
+  proves inclusion in block height h_anchor
+  requires  h_anchor < expected_challenge_height
+
+other Stage 5M ecologies (TSA, transparency log):
+  corroborate the EXACT SAME anchor_binding_digest
+  satisfy their OWN frozen validity and timing predicates, imported from 5M
+  are NOT directly compared to Bitcoin height
+```
+
+**Only the Bitcoin seat is height-native**, so only it can carry a strict-inequality claim about a block height. The other seats prove that the same subject was attested under their own pinned predicates — corroboration by digest equality, which is 3W's construction and this project's established shape. Asking a TSA clock to speak Bitcoin by sheer confidence would manufacture a comparison whose error bars nobody has measured.
+
+Timing checks are therefore role-specific but share one boundary and one height-native seat:
+
+```text
+scope_precommitment anchor       Bitcoin seat proves h_anchor < expected_challenge_height
+presented_census_closure anchor  Bitcoin seat proves h_anchor < expected_challenge_height
+```
+
+**No inter-anchor ordering is invented.** Section 6 does **not** require the scope anchor to precede the closure anchor, and does **not** compare Bitcoin height against TSA or Rekor wall-clock to order the two ceremonies. Their common precommitment and common challenge-height boundary are sufficient. Manufacturing a cross-ecology comparison to establish an ordering no attack needs would import 5M/5N's hardest problem for decoration. If a later attack shows an explicit inter-anchor order buys a real property, it can be added with its own evidence; it is not assumed here.
+
+**For the Bitcoin-native ecology**, the proof must show inclusion in a block **strictly before** the challenge block. Submission to an OpenTimestamps calendar before the challenge is **not sufficient** if the eventual Bitcoin anchor lands at or after the challenge height — a pending attestation is a promise, not an anchor.
+
+### 6.6 The Section 7 handoff
+
+```text
+CHALLENGE_SUBJECT_DOMAIN = ASCII "simurgh.vsc.challenge_subject.v1"
+
+challenge_subject_digest =
+  SHA256(
+    CHALLENGE_SUBJECT_DOMAIN         ||
+    challenge_subject_profile_digest ||   // 32 bytes, profile-pinned (A17)
+    stage5o_precommitment_digest     ||   // 32 bytes
+    epoch_digest                     ||   // 32 bytes
+    closure_slot_id                  ||   // 32 bytes
+    census_closure_digest            ||   // 32 bytes
+    challenge_policy_digest          ||   // 32 bytes
+    beacon_contract_digest           ||   // 32 bytes
+    anchor_schedule_profile_digest        // 32 bytes
+  )
+```
+
+**`closure_capsule_root` is absent, and its absence is the design (A14).** A package containing challenge results and openings cannot exist before the challenge; anchoring its root before the challenge would be temporally circular.
+
+Section 6 **freezes** this value and **anchors** it. It does **not** claim the seed consumed it:
+
+```text
+section_6.required_later_bindings = [
+  section_7_challenge_seed_binds_presented_census_closure,
+  section_12_stage4t_presented_evidence_package_capsule
+]
+```
+
+Section 7 discharges the first only when the **actual seed preimage** contains the verifier-recomputed `challenge_subject_digest`. Section 12 discharges the second only when the assembled package capsule exists, over a pinned section registry, with Lane-B salts.
+
+This is the containment analogue at the evidence layer: downstream challenge and opening authority descends from the **unique anchored closure**, never from a producer-supplied "current census" pointer.
+
+### 6.7 Section 6 attack matrix
+
+**Raw-code status — declared once for the class, never per row (A24).** Every `evidence_attack_fixtures` row below expects `REJECT`. **None names a number, because no number exists**: zero raw codes are allocated in the reserved `420+` band anywhere in Stage 5O, and Section 6 does not own the allocation table. The obligation is ledgered, not painted:
+
+```text
+class:            evidence_attack_fixtures
+expected_result:  REJECT
+raw_code_status:  PENDING_SECTION_10
+covered_by:       section_10_evidence_attack_raw_code_allocation   // §4.10, A24
+```
+
+**This is a matrix-level declaration on purpose.** Repeating `raw_code_status: PENDING_SECTION_10` on twenty-five rows would state one fact twenty-five times — a second home for a value that changes exactly once, when Section 10 discharges the requirement. A20 and A22 both cost an amendment to undo precisely that shape. The gate proves **coverage**, not repetition: every evidence-attack row in this matrix is covered by the pending requirement, and the release gate rejects while its status is `PENDING`.
+
+| ID     | Attack                                                                                                                                      | Expected result                                                                                                                                                                                                                                                                     | Class                                |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
+| S6.1   | two closures for one slot, **jointly presented**                                                                                            | **reject** + canonical conflict evidence                                                                                                                                                                                                                                            | `evidence_attack_fixtures`           |
+| S6.2   | same closure under two nominal policy labels                                                                                                | **same slot** — labels are not slot inputs; no second acceptance                                                                                                                                                                                                                    | `implementation_regression_fixtures` |
+| S6.3   | closure cites another epoch                                                                                                                 | **reject** — `closure_slot_id` recomputation fails                                                                                                                                                                                                                                  | `evidence_attack_fixtures`           |
+| S6.4   | closure cites another precommitment                                                                                                         | **reject**                                                                                                                                                                                                                                                                          | `evidence_attack_fixtures`           |
+| S6.5   | closure cardinality differs from the censuses                                                                                               | **reject**                                                                                                                                                                                                                                                                          | `evidence_attack_fixtures`           |
+| S6.6   | execution-record census digest substituted                                                                                                  | **reject**                                                                                                                                                                                                                                                                          | `evidence_attack_fixtures`           |
+| S6.7   | reported-result census digest substituted                                                                                                   | **reject**                                                                                                                                                                                                                                                                          | `evidence_attack_fixtures`           |
+| S6.8   | declared `census_closure_digest` trusted without recomputation                                                                              | **negative implementation fixture**                                                                                                                                                                                                                                                 | `implementation_regression_fixtures` |
+| S6.9   | declared `closure_slot_id` trusted without recomputation                                                                                    | **negative implementation fixture**                                                                                                                                                                                                                                                 | `implementation_regression_fixtures` |
+| S6.10  | anchor receipts split across closure A and closure B                                                                                        | **reject** — `anchor_binding_digest` mismatch                                                                                                                                                                                                                                       | `evidence_attack_fixtures`           |
+| S6.11  | **scope receipts re-presented as closure receipts**                                                                                         | **reject** — role byte differs → different binding                                                                                                                                                                                                                                  | `evidence_attack_fixtures`           |
+| S6.12  | closure anchored at or after the challenge height                                                                                           | **reject**                                                                                                                                                                                                                                                                          | `evidence_attack_fixtures`           |
+| S6.13  | OTS calendar submission before the challenge, Bitcoin anchor lands after                                                                    | **reject** — a pending attestation is not an anchor                                                                                                                                                                                                                                 | `evidence_attack_fixtures`           |
+| S6.14  | closure valid but anchor quorum incomplete                                                                                                  | **fail closed**                                                                                                                                                                                                                                                                     | `evidence_attack_fixtures`           |
+| S6.15  | first accepted closure later proves inconvenient                                                                                            | **epoch fails** — no replacement closure in the presented package                                                                                                                                                                                                                   | `evidence_attack_fixtures`           |
+| S6.16  | **verifier marks a slot consumed before full validation**                                                                                   | **negative implementation fixture** — the verifier is set-based (§6.3.1); no mutable slot state exists to consume                                                                                                                                                                   | `implementation_regression_fixtures` |
+| S6.16b | producer supplies an invalid closure first, then a corrected one, in that order                                                             | **reject the invalid; the ordering is irrelevant** — candidates validate independently; the malicious ordering is the _producer's_ input, the defect it targets is the _verifier's_                                                                                                 | `evidence_attack_fixtures`           |
+| S6.17  | producer signs two closures for one slot, jointly presented                                                                                 | **reject** + conflict evidence naming the shared authority — a signature is now REQUIRED (A18) but still discharges nothing on its own                                                                                                                                              | `evidence_attack_fixtures`           |
+| S6.25  | third party builds a closure for the victim's slot, citing the victim's public precommitment verbatim, signed with the attacker's key (A18) | **reject as UNAUTHORISED** — **no** producer-equivocation evidence emitted; the DoS this closes                                                                                                                                                                                     | `evidence_attack_fixtures`           |
+| S6.26  | closure presented with no `closure_authorization` at all (A18)                                                                              | **reject** — unauthorised; not a candidate                                                                                                                                                                                                                                          | `evidence_attack_fixtures`           |
+| S6.27  | valid authorisation for closure A replayed onto closure B, same slot (A18)                                                                  | **reject** — `census_closure_digest` is inside the signed message                                                                                                                                                                                                                   | `evidence_attack_fixtures`           |
+| S6.28  | authorisation replayed into another epoch or precommitment (A18)                                                                            | **reject** — both are inside the signed message                                                                                                                                                                                                                                     | `evidence_attack_fixtures`           |
+| S6.29  | verifier rebuilds `authorization_message` from the envelope's declared fields rather than recomputed values (A18)                           | **negative implementation fixture** — checks the signature against the producer's story, not the facts; the S5.19 trap one artifact downstream                                                                                                                                      | `implementation_regression_fixtures` |
+| S6.30  | verifier takes the public key from the authorisation envelope instead of the precommitted descriptor (A18)                                  | **negative implementation fixture** — any key would then verify its own signature                                                                                                                                                                                                   | `implementation_regression_fixtures` |
+| S6.31  | signature accepted over `canonicalJson(closure_authorization)` rather than the exact message bytes (A18)                                    | **negative implementation fixture** — the house-helper convention; §4.7.1 diverges from it deliberately                                                                                                                                                                             | `implementation_regression_fixtures` |
+| S6.32  | same authority identifier declared, different public key bytes                                                                              | **reject** — `producer_authority_digest` recomputes over the key; the identifier is declared, the key is authoritative                                                                                                                                                              | `evidence_attack_fixtures`           |
+| S6.33  | victim's valid authorisation replayed against a different conflict record                                                                   | **reject** — the message binds `census_closure_digest`; there is no reusable precommitment-only signature (premise 4, §6.2.2)                                                                                                                                                       | `evidence_attack_fixtures`           |
+| S6.34  | a per-census signature substituted for the required closure authorisation                                                                   | **reject** — Stage 5O defines no per-census authorisation; a signature over an unrequired object authorises nothing                                                                                                                                                                 | `evidence_attack_fixtures`           |
+| S6.35  | empty, absent, or unsupported `signature_profile` in the descriptor                                                                         | **reject** — exact byte equality with the pinned ID; no negotiation, no default                                                                                                                                                                                                     | `evidence_attack_fixtures`           |
+| S6.36  | **assumption-language fixture** — the document must not infer "same slot therefore same precommitment" unconditionally                      | **passes** when the text states the computational assumption and cites `hash_collision_resistance` (§1, A21); **fails** when it treats the hash as injective. **Not** an enforcement fixture: no verifier using the same hash can distinguish two colliding preimages from a digest | `assumption_language_fixtures`       |
+| S6.45  | transitive edge broken: `census_closure_digest` recomputed over a different execution/result census pair than the one presented             | **reject** — the message binds the closure digest, the closure digest binds both census digests; the edge is proven, not diagrammed                                                                                                                                                 | `evidence_attack_fixtures`           |
+| S6.46  | transitive edge broken: `producer_authority_digest` recomputed over a different `signature_profile_digest` than the descriptor declares     | **reject** — the message binds the authority digest, the authority digest binds the signature profile; the edge is proven, not diagrammed                                                                                                                                           | `evidence_attack_fixtures`           |
+| S6.37  | summary line `NAME: PENDING` present with **no** canonical four-field block                                                                 | **FAIL** — the gate parses canonical blocks only; summaries carry no authority                                                                                                                                                                                                      | `implementation_regression_fixtures` |
+| S6.38  | canonical block missing `owning section`, `permitted discharger`, or `status`                                                               | **FAIL** — A8's contract requires all four                                                                                                                                                                                                                                          | `implementation_regression_fixtures` |
+| S6.39  | duplicate canonical block for one requirement name                                                                                          | **FAIL** — no defined winner                                                                                                                                                                                                                                                        | `implementation_regression_fixtures` |
+| S6.40  | one requirement claimed by two owning sections                                                                                              | **FAIL** — A3: one fact, one home                                                                                                                                                                                                                                                   | `implementation_regression_fixtures` |
+| S6.41  | unknown `status` value                                                                                                                      | **FAIL** — closed vocabulary; an unrecognised status must never read as discharged                                                                                                                                                                                                  | `implementation_regression_fixtures` |
+| S6.42  | requirement marked discharged by a section other than its permitted discharger                                                              | **FAIL** — exactly one permitted discharger                                                                                                                                                                                                                                         | `implementation_regression_fixtures` |
+| S6.43  | canonical block fields presented in a different order                                                                                       | **FAIL** — field order fixed and checked; two orderings would be two canonical forms (§3.3.1's rule, one artifact downstream)                                                                                                                                                       | `implementation_regression_fixtures` |
+| S6.44  | **parser-union removal test** — delete the summary parser entirely                                                                          | **the canonical parser alone must still find every requirement** — if it cannot, the ledger has two dialects and the gate decides the contract                                                                                                                                      | `implementation_regression_fixtures` |
+| S6.19  | anchor package supplies its own challenge height                                                                                            | **reject** — height is verifier-known from the beacon contract                                                                                                                                                                                                                      | `evidence_attack_fixtures`           |
+| S6.20  | `anchor_schedule_profile` includes the concrete `challenge_subject_digest`                                                                  | **negative implementation fixture** — cyclic graph; profile binds subject **types**                                                                                                                                                                                                 | `implementation_regression_fixtures` |
+| S6.22  | **hidden conflicting closure, never jointly presented**                                                                                     | **accept** + `not_proof_of_global_census_closure_uniqueness_without_exclusion_witnesses` asserted — `accepted_blindness_fixtures`, raw `0`                                                                                                                                          | `accepted_blindness_fixtures`        |
+| S6.23  | closure-core section committed with `deterministicSalt(key)`                                                                                | **negative implementation fixture** — Lane A salt is public; binding, not hiding                                                                                                                                                                                                    | `implementation_regression_fixtures` |
+| S6.24  | package capsule built from a flat-object adapter                                                                                            | **negative implementation fixture** — 4T's real signature is `capsuleRoot(capsule, salts)` over keyed sections                                                                                                                                                                      | `implementation_regression_fixtures` |
+
+**S6.1/S6.22 are the section's honest pair.** Same producer, same two closures; the only difference is whether a verifier is shown both. One rejects deterministically, one accepts with a permanent ceiling. Presenting only S6.1 would advertise anti-equivocation Stage 5O does not have.
+
+**S6.25 is the attack A18 exists for, and it fails structurally rather than by detection.** The attacker cannot reach the slot under their own key — a different key means a different precommitment, hence a different slot. Copying the victim's public precommitment digest reaches the slot but leaves the attacker unable to sign under the key that digest commits to. The closure never becomes a candidate, so no conflict evidence naming the victim can be emitted. **Rejecting the forgery and accusing nobody are the same act.**
+
+**S6.29–S6.31 are three ways to build the check wrong**, and they matter more than the evidence attacks around them: each one leaves a verifier that reports "authorised" for everything. S6.31 is the sharpest, because it is the shipped house convention — the wrong answer is the one the existing helper already implements.
+
+**S6.36 is an assumption-language fixture, and it is the one fixture whose subject is a sentence.** It expects **no runtime rejection**: no verifier using the same hash can distinguish two genuine colliding preimages from a digest, so demanding enforcement would demand the impossible and quietly re-import the injectivity assumption into the test itself. What it checks is a **machine-checked prose obligation**: the document must not infer "same slot therefore same precommitment" unconditionally. It passes when the text cites `hash_collision_resistance` (§1, A21) and fails when it writes `=>` over a hash.
+
+**S6.45 and S6.46 break each transitive edge individually.** The message binds `census_closure_digest` and `producer_authority_digest` directly; the census digests and the signature profile are bound only **through** them. That chain is sound under `hash_collision_resistance` — but "sound under an assumption" is a claim, and a claim needs a fixture. Breaking each edge separately demonstrates the binding instead of relying on a diagram-shaped assumption that the arrows hold.
+
+**S6.44 is the ledger's version of the same idea.** This stage's worst defects have all been things that looked complete: A17's object looked complete while its digest covered nothing. A ledger readable only by the union of two parsers looks complete too. Removing the summary parser is how we find out.
+
+**S6.16 moved classes, and the move is the lesson.** It was drafted as an evidence attack: "an invalid closure consumes the slot, then the corrected one is rejected." That sentence smuggled in mutable state the design does not have. In a set-based offline verifier no candidate consumes anything, so a producer cannot weaponise the ordering — they can only reveal a verifier that invented a state machine. S6.16 is now an `implementation_regression_fixtures` case carrying **no `420+` code**, and S6.16b records that the producer's malicious ordering is legal input with no effect. **The defect under test is ours, not theirs.**
+
+### 6.8 Honest limits
+
+Section 6 proves, once every gate passes:
+
+- one accepted closure value **within the presented package and its anchor evidence**;
+- that closure binds one exact execution-record/reported-result census pair, validated in full before acceptance;
+- that closure was externally anchored, by the frozen 5M quorum, **strictly before** the challenge height;
+- the scope precommitment was anchored under a **distinct, non-interchangeable role**;
+- downstream evidence must identify that exact closure.
+
+It does **not** prove:
+
+- census payloads are truthful (§5.8);
+- execution happened (`not_proof_of_real_execution`);
+- result values are semantically correct (§5.8);
+- anchor services are infallible (`not_proof_of_beacon_unbiasability_or_finality`);
+- **an unseen conflicting closure is impossible** — A13's ceiling, and per that amendment's ruling it is **not** re-minted here: the field exists, is Section 5-owned, and Section 6 references it.
+
+```text
+section_6.added_non_claims = [
+  not_proof_of_bitcoin_finality_beyond_pinned_checkpoint_and_confirmation_policy,
+  not_proof_of_organizational_independence_beyond_pinned_ecology_classes,
+  not_proof_of_timestamp_authority_clock_key_custody_or_process_correctness,
+  not_proof_of_transparency_log_global_consistency_without_witness_cosigning
+]
+
+section_6.imported_non_claims = []      // UNAVAILABLE — see §6.8.1
+```
+
+#### 6.8.1 Why these are owned here, and not imported
+
+An earlier draft declared `section_6.added_non_claims = []` on the reasoning that anchor limitations were already owned by the Section 1 baseline. **That was wrong twice.** Section 1's `not_proof_of_beacon_unbiasability_or_finality` concerns the **beacon**'s unpredictability and finality — it says nothing about TSA, Rekor, Bitcoin, split views, service compromise, or omitted anchor evidence. And the obvious repair — importing Stage 5M's envelope — is **not available**:
+
+```text
+Stage 5M core emits:   externally_anchored (bool), ecology_independence_number (int), raw codes
+Stage 5M does NOT emit: known_limitations, or any machine-readable claim envelope
+```
+
+`known_limitations` appears **nowhere** in Stage 5M — not in its core, its fixtures, or its shipped evidence. Other stages ship it as a machine field (5B, 5C), so this is not house style; 5M specifically does not. What 5M has is **excellent prose** — §1's honest core and §4's signed limitations — plus one `BROWSER_NON_CLAIM` string constant and two ad-hoc Lane C strings.
+
+**`externally_anchored = true` is a computed state under a pinned profile, not a statement that three systems are infallible.** A consumer inheriting that boolean inherits none of 5M's prose. Under this spec's own classification, a prose-only limitation **cannot count as a machine-preserved envelope**, so Section 6 must own the fields this release actually uses.
+
+**The original insight remains Stage 5M's**; the definitions below are faithful to its frozen text. Section 6 owns the **machine fields** because Section 6 is the first consumer to carry the anchor state into a monotone, machine-owned claim ledger.
+
+> **`not_proof_of_bitcoin_finality_beyond_pinned_checkpoint_and_confirmation_policy`** — A valid Bitcoin or OpenTimestamps seat proves inclusion and confirmation relative to the pinned checkpoint, observed tip, and declared confirmation threshold. It does **not** prove irreversible or absolute chain finality beyond that evidence horizon. _(5M: "confirmation is relative to the frozen checkpoint and declared confirmation policy, not proof of permanent blockchain finality.")_
+
+> **`not_proof_of_organizational_independence_beyond_pinned_ecology_classes`** — `ecology_independence_number` counts distinct **verifier-pinned anchor classes**. It does **not** prove distinct organisations, operators, infrastructure, upstream dependencies, or uncorrelated compromise across those classes. _(5M: "counts independent pinned ecologies under a no-collusion assumption; not a probability, dollar cost, or bits-of-security level.")_ **This is the ceiling most likely to grow feathers**: nothing stops "three ecologies" from being read as "three institutions," and Section 6 invokes that number **twice**, once per anchor role.
+
+> **`not_proof_of_timestamp_authority_clock_key_custody_or_process_correctness`** — A valid timestamp token proves signature, certificate-chain, and message-imprint validity under the pinned profile, together with the time **asserted by** the authority. It does **not** independently prove the authority's clock accuracy, key custody, internal process integrity, or freedom from compromise. _(5M: pinned DigiCert trust root; "does not prove that Bitcoin/Rekor/the TSA establish semantic truth.")_
+
+> **`not_proof_of_transparency_log_global_consistency_without_witness_cosigning`** — A valid transparency-log seat proves that the entry verifies against the **presented signed checkpoint** and its inclusion evidence. Without witness cosigning or an equivalent split-view-resistance mechanism, it does **not** prove that all observers received one **globally consistent** log history. _(5M: "does not detect a log equivocating about its own tree state to different monitors — that requires witness cosigning, socket I8.")_
+
+**"Global", not "self".** A valid Rekor inclusion proof against one signed checkpoint _does_ establish local consistency with that checkpoint; what remains unproved is that every observer received one consistent history. The narrower word would have conceded a property the seat actually has.
+
+#### 6.8.2 Successor-work candidate — `anchor_quorum_machine_claim_envelope`
+
+**Candidate, not a socket, and NOT a Stage 5O release prerequisite.** Section 6 states the inherited limitations in full, so blocking 5O on an upstream backfill would add delay without strengthening this release's evidence.
+
+> **`anchor_quorum_machine_claim_envelope`** — backfill the Stage 5M quorum with a versioned, machine-readable claim-envelope schema carrying its Bitcoin-finality, transparency-log consistency, timestamp-authority, and ecology-independence ceilings through the core attestation, browser projection, portable verifier, captured evidence, and final in-toto projection. An **upstream composition-portability remediation candidate**.
+
+Requirements, if taken:
+
+```text
+- exact claim-envelope schema ID and digest
+- canonical ordered non-claim fields
+- preservation through JS, Python and browser tiers
+- omission or alteration FAILS CLOSED
+- legacy Stage 5M evidence adapter states that no native envelope existed
+- no change to externally_anchored semantics
+- no claim that making limitations machine-readable CLOSES them
+```
+
+**That last line is the point.** The backfill **transports** assumptions; it does not solve Bitcoin reorganisation, Rekor split views, TSA compromise, or correlated operators. Stage 5M's quorum is useful and valid within its pinned predicates — the debt is only that its honest boundaries are **not portable as machine evidence**. Section 6 repairs this composition; the candidate repairs the road for every composition after it.
+
+#### 6.8.3 Ceiling fixture pairs — enforced versus signed
+
+Each ceiling carries one green fixture (what the evidence cannot prove → **signed**) and one enforcement fixture (what it does prove → **enforced**):
+
+| Evidence condition                                    | Result                                                                                        |
+| ----------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Bitcoin proof meets the pinned confirmation policy    | **accept** + `not_proof_of_bitcoin_finality_beyond_pinned_checkpoint_and_confirmation_policy` |
+| Bitcoin proof below required confirmations            | **reject**                                                                                    |
+| Rekor entry verifies against one signed checkpoint    | **accept** + `not_proof_of_transparency_log_global_consistency_without_witness_cosigning`     |
+| Rekor inclusion proof or checkpoint signature invalid | **reject**                                                                                    |
+| TSA token signature, chain, and imprint all validate  | **accept** + `not_proof_of_timestamp_authority_clock_key_custody_or_process_correctness`      |
+| TSA signature, chain, or imprint invalid              | **reject**                                                                                    |
+| Three distinct pinned ecology classes pass            | **accept** + `not_proof_of_organizational_independence_beyond_pinned_ecology_classes`         |
+| Duplicate class, or insufficient class count          | **reject**                                                                                    |
+
+```text
+what the evidence proves      -> ENFORCED
+what the evidence cannot prove -> SIGNED
+```
+
+#### 6.8.4 Section 7 open-question register — candidate tests, not fixtures (A23)
+
+**A fixture whose expected truth is unresolved is not a pending fixture. It is a candidate test, and it does not belong in a normative matrix.** Two rows were drafted as Section 6 fixtures whose expected results depend on Section 7 decisions that do not exist yet. They are removed rather than given a speculative class to satisfy census closure — **classifying a row to make the count close is the census defect A23 exists to abolish, performed one row at a time.**
+
+| Candidate | Drafted subject                                       | Blocked on                                                                         |
+| --------- | ----------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| `S6.18`   | two conflicting closures, each separately timestamped | whether notarisation of both branches is a Section 7 rejection or a stated ceiling |
+| `S6.21`   | a challenge object referencing another closure        | Section 7's challenge-binding rule, which declares the rejection Section 6 cannot  |
+
+Neither is a claim, a ceiling, or an obligation: **no release gate consults this register.** Each is reintroduced only once Section 7 resolves its premise, and only with the full record:
+
+```text
+fixture id
+class
+subject
+expected result
+owner
+discharging section
+```
+
+**These IDs are retired, not recycled.** `S6.18` and `S6.21` are never reassigned to different subjects — A23 requires fixture IDs to be unique across every class, and an ID that silently changes meaning between drafts is the one-fact-one-home violation wearing a version number.
+
+### Section 6 freeze gate
+
+| #   | Gate                                                                                                         | Status                                                                                                                                                                                                                               |
+| --- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1   | Closure schema and all Section 6 profiles precommitted                                                       | ⚠️ **A17 pending** — the bundle pins 7 pairs; Section 6's artifacts are not yet among them                                                                                                                                           |
+| 2   | Slot identity derived solely from precommitment and epoch                                                    | ✅ 6.1 — labels, reviewers, ecologies, census digests all forbidden as inputs; S6.2                                                                                                                                                  |
+| 3   | Both censuses fully validate **before** closure acceptance                                                   | ✅ 6.2.1 — seven ordered steps; S6.16                                                                                                                                                                                                |
+| 4   | Closure digest uses exact framed bytes                                                                       | ✅ 6.2 — domain constant + all fixed-width fields; no framing needed                                                                                                                                                                 |
+| 5   | All declared digest and slot fields recomputed                                                               | ✅ 6.2 — S6.8, S6.9                                                                                                                                                                                                                  |
+| 6   | Stage 4T imported at its real strength                                                                       | ✅ 6.4 — real `sectionKey`/`sectionCommitment`/`merkleRootSorted`; flat adapter deleted; S6.24                                                                                                                                       |
+| 7   | One accepted closure **within the presented package**                                                        | ✅ 6.3 — "permanently consumed"/"globally wins"/"no retry anywhere" explicitly forbidden                                                                                                                                             |
+| 8   | No replacement closure after failure or unfavourable results                                                 | ✅ 6.3, 6.15 — local to the package; S6.15, S6.16                                                                                                                                                                                    |
+| 9   | Every anchor receipt commits the same closure and slot                                                       | ✅ 6.5.2 — `anchor_binding_digest`; S6.10                                                                                                                                                                                            |
+| 10  | Closure anchored strictly before the challenge height                                                        | ✅ 6.5.3 — S6.12, S6.13                                                                                                                                                                                                              |
+| 11  | Receipt mixing across roles or subjects rejects                                                              | ✅ 6.5.2 — role enum byte in the preimage; S6.11                                                                                                                                                                                     |
+| 12  | Producer signatures and timestamps alone do not establish singularity                                        | ✅ 6.3, 6.8 — a signature is REQUIRED (A18) and still discharges nothing alone; S6.17, S6.18                                                                                                                                         |
+| 12a | **The closure is authorised by the precommitment-bound authority (A18)**                                     | ✅ 6.2.2 — detached `closure_authorization`; authorisation is inside `closure_candidate_valid`; S6.26                                                                                                                                |
+| 12b | **Authorisation is DETACHED — no census or closure schema gained a field**                                   | ✅ 6.2.2 — §5.2.2 census maxima untouched; no §4.7.3 cycle; A19 for censuses rejected as overbinding                                                                                                                                 |
+| 12c | **The signed message is exact bytes, never `canonicalJson`**                                                 | ✅ 6.2.2 — fixed-width after the domain constant; S6.31                                                                                                                                                                              |
+| 12d | **The message is rebuilt from RECOMPUTED values, never the envelope**                                        | ✅ 6.2.2 — else the signature checks the producer's story against itself; S6.29                                                                                                                                                      |
+| 12e | **The key comes from the precommitted descriptor, never the envelope**                                       | ✅ 6.2.2 — else any key verifies its own signature; S6.30                                                                                                                                                                            |
+| 12f | **A closure signed by a foreign key emits NO equivocation evidence**                                         | ✅ 6.2.2, 6.3 — rejected as UNAUTHORISED; accusing the victim of the attacker's act is forbidden; S6.25                                                                                                                              |
+| 12g | **Conflict evidence names an AUTHORITY, never a person or organisation**                                     | ✅ 6.3 — `producer_authority_digest` machine field; A18's two §4.10 ceilings; I7 open                                                                                                                                                |
+| 12h | Same-slot closures share one authority **computationally**, under named assumptions                          | ✅ 6.2.2 — NOT `same slot => same precommitment`; a hash is not a bijection. Four premises named: slot-hash collision resistance, canonical encoding, signature unforgeability, and the signature covering the exact instance; S6.36 |
+| 12i | **The signed message binds the exact instance, not a reusable precommitment**                                | ✅ 6.2.2 — epoch, `N`, slot and `census_closure_digest` are all inside the message; otherwise one harvested victim signature would authorise an unbounded family of stories; S6.33                                                   |
+| 13  | `challenge_subject_digest` frozen for Section 7                                                              | ✅ 6.6 — exact preimage; `closure_capsule_root` absent by design (A14)                                                                                                                                                               |
+| 14  | Section 7 seed consumption declared **PENDING**, not discharged                                              | ✅ 6.6 — `section_7_challenge_seed_binds_presented_census_closure`                                                                                                                                                                   |
+| 15  | Section 5's closure requirement discharged **only** as narrowed                                              | ✅ 6.8 — `section_6_anchored_presented_census_closure`; global uniqueness **not** claimed (A13)                                                                                                                                      |
+| 16  | `section_6.added_non_claims` declared, even if empty                                                         | ✅ 6.8 — **four** fields, defined and fixture-backed; lexicographic                                                                                                                                                                  |
+| 16a | Closure candidate / anchor / acceptance are **distinct states**                                              | ✅ 6.2.1 — three-state lattice; nothing described with a state it has not reached                                                                                                                                                    |
+| 16b | Conflict evidence states whether one or **both** closures possess valid anchors                              | ✅ 6.3 — `both_closures_anchor_valid` machine field; false unless both reach `closure_anchor_valid`                                                                                                                                  |
+| 16c | Invalid evidence never consumes a slot                                                                       | ✅ 6.3.1 — the verifier is set-based; no mutable slot state exists                                                                                                                                                                   |
+| 16d | Slot-consumption-before-validation is an **implementation-regression** fixture                               | ✅ 6.3.1 — S6.16, no `420+` code; S6.16b records the producer ordering as inert                                                                                                                                                      |
+| 16e | **Bitcoin** establishes the strict height relation; other ecologies keep their own predicates                | ✅ 6.5.3.2 — only the height-native seat carries the inequality; others corroborate by digest equality                                                                                                                               |
+| 16f | Submission, fixity, and proof-availability times are **not conflated**                                       | ✅ 6.5.3.1 — three named times; only _subject fixed before height_ is the Law 1 property                                                                                                                                             |
+| 16g | Stage 5M claim envelope **mapped**; missing anchor ceilings added                                            | ✅ 6.8.1 — 5M ships **no** machine envelope (`known_limitations` absent); four fields owned here; `imported_non_claims = []` recorded explicitly                                                                                     |
+| 16h | Stage 5M debt logged as successor-work candidate, **not** a release prerequisite                             | ✅ 6.8.2 — `anchor_quorum_machine_claim_envelope`; no socket minted                                                                                                                                                                  |
+| 17  | `section_6.required_later_bindings` declared                                                                 | ✅ 6.6 — two: Section 7 seed, Section 12 package capsule                                                                                                                                                                             |
+| 17a | **Requirements emitted in the CANONICAL four-field shape**                                                   | ✅ 6.6 — Section 4's shape is normative; the terse `NAME: PENDING` block is a human summary carrying no authority; S6.37                                                                                                             |
+| 17b | **The gate parses canonical blocks only, never summaries**                                                   | ✅ 6.6 — one ledger, one dialect; a union-of-two-parsers ledger lets the gate decide the contract; S6.44                                                                                                                             |
+| 17c | **Ledger field order fixed and checked; one representation only**                                            | ✅ 6.6 — two valid orderings would be two canonical forms (§3.3.1 downstream); S6.43                                                                                                                                                 |
+| 17d | Missing/duplicate/unknown field, duplicate name, two owners, unknown status, unpermitted discharger all FAIL | ✅ 6.6 — S6.38–S6.42                                                                                                                                                                                                                 |
+| 18  | Digest graph acyclic; schedule profile binds types, not values                                               | ✅ 6.5.1 — machine-checked; `anchor_schedule_profile_digest` is a root; S6.20                                                                                                                                                        |
+| 19  | No `420+` raw codes allocated                                                                                | ✅ none in this section                                                                                                                                                                                                              |
+| 20  | **Authorisation is a NEW release condition, and said so (A18)**                                              | ✅ 6.2.2 — the release predicate CHANGED; not presented as clarification                                                                                                                                                             |
+
+**Requirement status:**
+
+```text
+section_6_anchored_presented_census_closure            : PENDING  -> discharged by THIS section once frozen
+section_7_challenge_seed_binds_presented_census_closure: PENDING  -> release REJECTS
+section_12_stage4t_presented_evidence_package_capsule  : PENDING  -> release REJECTS
+```
+
+**The block above is a human summary and carries no authority.** The canonical machine ledger is §4.10's four-field shape (A20), and Section 6 emits it verbatim. The release consequence and the exactly-one-discharger rule are **ledger semantics** and are stated once in §4.10, never repeated inside a record:
+
+```text
+requirement:            section_7_challenge_seed_binds_presented_census_closure
+owning section:         6
+permitted discharger:   7
+status:                 PENDING
+
+requirement:            section_12_stage4t_presented_evidence_package_capsule
+owning section:         6
+permitted discharger:   12
+status:                 PENDING
+```
+
+**`global closure uniqueness : NOT CLAIMED` was deleted from this block (A20).** It is a **non-claim wearing a requirement-record coat** — the exact thing A20's grammar forbids — and it was a _third_ home for a fact that already lives in `section_5.added_non_claims` and in the `permanent ceiling:` line A20 removed from §5.9. A ceiling is not a requirement: requirements are discharged, ceilings are permanent, and a ledger that lists both in one shape invites a reader to expect the ceiling to go away. It lives in exactly one place: `not_proof_of_global_census_closure_uniqueness_without_exclusion_witnesses` (§5.8, A13).
+
+**One ledger, one dialect (frozen).** Section 6 emitted `NAME: PENDING -> release REJECTS` while Section 4 emitted a four-field block; neither parser read all four requirements, only their union did. Teaching the Section 10 gate two dialects would make the gate the place where the contract is decided. **Section 4's shape wins**, and Section 6 is the clean seam to standardise on it because Section 6 is not yet frozen:
+
+```text
+the gate parses CANONICAL BLOCKS ONLY, never summaries
+a summary line with no canonical block            -> FAIL
+a duplicate requirement name                      -> FAIL
+a missing owner, discharger or status             -> FAIL
+an unknown or duplicate field                     -> FAIL
+an unknown status value                           -> FAIL
+a requirement discharged by an unpermitted section -> FAIL
+field order is FIXED and checked; two representations of one block are forbidden
+```
+
+The last line matters for the same reason §3.3.1 does: if a block has two valid orderings, it has two canonical forms, and "canonical" stops meaning anything.
+
+**Gate 20 is the one that must not be softened.** Every prior amendment in this stage ended "no release predicate changed". A18 does change it: an unauthorised closure now fails a release that would previously have passed. Recording that honestly costs nothing and hiding it would make the ledger a riddle.
+
+**Gate 1 blocks the freeze until A17.** Per the ordering ruling, A17 is derived from the artifacts above now that they exist, not from a planned pair count — and the 8 MiB manifest invariant is recomputed against the resulting structure with **no grandfather clause for old wrapper arithmetic**.
+
+---
+
+## Sections 7–13 — pending
+
 7. Beacon-seed and unique-index derivation (rejection sampling; no modulo bias). **Discharges `section_7_challenge_seed_binds_presented_census_closure`** (A13) — only when the actual seed preimage contains the verifier-recomputed `challenge_subject_digest`.
 8. Opening rules and cumulative-disclosure accounting. **Discharges the fail-closed requirement `section_8_opening_bundle_resource_limits`** (§4.10, A8) — must pin `MAX_OPENING_TRANSPORT_BYTES` and `MAX_OPENING_BUNDLE_CANONICAL_BYTES`, prove the opening-side compatibility invariant, and **bind both limits into the exact preimage of the already-precommitted `disclosure_policy_digest`**. Printing the constants discharges nothing; release rejects while the requirement is unresolved.
 9. Exact rational probability encoding (decimal-string integers).
-10. Raw codes from **420**, first-failure order frozen before implementation.
+10. Raw codes from **420**, first-failure order frozen before implementation. **Discharges `section_10_evidence_attack_raw_code_allocation`** (§4.10, A24) — assigns **both** the semantic first-failure reason and its code, one code per semantic class, over the whole stage in one pass.
 11. Conditional Lean model.
 12. Evidence lanes: normative Lane A, captured Bitcoin Lane B, dishonest-producer fixtures. **Discharges `section_12_stage4t_presented_evidence_package_capsule`** (A14) — builds the Stage 4T capsule over the **assembled** package once openings, receipts, ledger and narrative exist; that audience-varying material is what 4T actually protects, and it cannot exist before the challenge.
 13. Prior-art and novelty source map (pinned: title, version/date, URL, retrieval date, exact quote, digest or archived copy, classification).
