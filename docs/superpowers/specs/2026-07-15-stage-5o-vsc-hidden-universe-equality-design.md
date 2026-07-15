@@ -1,7 +1,8 @@
 # Stage 5O — VSC: Hidden-Universe Equality (design)
 
 **Status:** Sections **1–4 FROZEN** — Section 1 `a1e2e6d1`, Section 2 `0e26c361`, Section 3 `e8dc0a77`, Section 4 this commit. Sections 5–13 pending.
-**Section 4 pinned-limit ruling folded at freeze:** `MAX_SCOPE_CARDINALITY` `2^20`→**`2^18`**, canonical `192`→**32 MiB**, transport `256`→**64 MiB**, `MAX_CASE_BYTES` **64 KiB** unchanged. Cardinality is bounded by unmeasured runtime amplification, not by byte fit — both candidates fit their caps. Adds the limit-compatibility invariant, boundary fixtures S4.26–S4.34, and two `added_non_claims` (verifier capacity; opening-bundle bounds deferred to Section 8).
+**Amendment A8 folded (also amends frozen Sections 1–3):** Section 4 misclassified a temporary cross-section release dependency as a permanent signed non-claim. Because frozen non-claims can never be removed or weakened, that field could only ever have been signed as a stale limitation, and no contract operation called "discharge" existed for it. The opening-bundle resource-limit item is now a fail-closed `required_later_binding`, owned by Section 4 and dischargeable only by Section 8 through exact limits bound into `disclosure_policy_digest` with boundary fixtures. **Scope note:** the amendment necessarily extends into frozen Section 1, which defines the release envelope — a requirement that no release gate reads would be the same painted door one layer up. Section 1 gains the parallel `release_required_bindings` union and its completeness checks, and Sections 1–3 gain empty declarations — additive under the A1 no-rewrite discipline, changing no claim, law, digest, or byte construction. `not_proof_that_every_conforming_verifier_can_process_a_profile_conforming_artifact` remains a permanent non-claim — artifact conformance does not guarantee resource-capable implementations. No claim ceiling was weakened; release remains impossible until the requirement is discharged. **No blade, law, evidence predicate, or socket changed.**
+**Section 4 pinned-limit ruling folded at freeze:** `MAX_SCOPE_CARDINALITY` `2^20`→**`2^18`**, canonical `192`→**32 MiB**, transport `256`→**64 MiB**, `MAX_CASE_BYTES` **64 KiB** unchanged. Cardinality is bounded by unmeasured runtime amplification, not by byte fit — both candidates fit their caps. Adds the limit-compatibility invariant, boundary fixtures S4.26–S4.34, and two `added_non_claims` (verifier capacity; global epoch uniqueness).
 **Section 1 review edits folded at freeze:** record-fabrication claim ceiling + `not_proof_of_real_execution`; provider-agnostic public wording with the pinned seam deferred to the **Section 13** source map; indexed-universe equality replacing set equality; two-layer position-binding split + `not_proof_of_unopened_leaf_preimage_index_consistency`. (This list predates the amendment log; "record-fabrication" was formerly written "A3", which now collides with **Amendment A3** — attack IDs and amendment IDs are distinct namespaces.)
 **Release target:** `v2.50.0-stage-5o-vsc-hidden-universe-equality`
 **Motto:** _ClaimSafe first, then ReviewerSafe._
@@ -132,10 +133,39 @@ release_non_claims =
 
 Ordering is **lexicographic by machine field**, fixed and canonical, so a non-claim's section of origin cannot affect the signed bytes.
 
+**Required later bindings are a SECOND ledger, not non-claims (A8).** A non-claim is **permanent**: once frozen it may never be removed or weakened, so a temporary cross-section dependency recorded as a non-claim can never be discharged — the release would sign a stale limitation forever, and any later section claiming to have "discharged" it would be performing an operation the contract does not define. That is a painted door at the claim-ledger layer. Temporary dependencies therefore live in their own ledger with the opposite lifecycle: **fail-closed until resolved**.
+
+```text
+release_required_bindings =
+  lexicographically_sorted_union(
+    section_1.required_later_bindings,
+    ...
+    section_13.required_later_bindings
+  )
+```
+
+```text
+- required_later_bindings are NOT non-claims and are NOT a claim ceiling
+- they are fail-closed release prerequisites
+- each requirement has exactly ONE owning section
+- each requirement names exactly ONE permitted discharging section
+- an unresolved requirement at release -> REJECT
+- a later section CANNOT claim discharge by prose; discharge requires the
+  exact artifacts the requirement names, bound into the digest it names
+- the release envelope signs BOTH the requirement AND its discharge evidence
+- every normative section MUST declare required_later_bindings, even if empty
+- a missing section-level declaration fails the release gate
+```
+
+The two ledgers differ in direction and must never be conflated. A **non-claim** is honest permanent scope: it is signed and stays. A **required later binding** is an unfinished obligation: it is signed and **blocks release** until the named section discharges it with bytes. Recording an obligation in the permanent ledger understates the spec's honesty by pretending a gap is a boundary; recording a boundary in the obligation ledger would promise a discharge that can never come.
+
+**Sections 1–3 were frozen before this mechanism existed.** A8 adds their empty declarations — `section_1.required_later_bindings = []` here, and `section_2` / `section_3` at their own ledger sites — because a rule requiring every section to declare cannot exempt the sections that predate it without reintroducing the ambiguity it exists to remove: a missing declaration would again be unreadable as either "none" or "forgot". These are additive amendments to frozen text under the A1 no-rewrite discipline, not silent edits: they add an empty ledger, and change no claim, law, digest, or byte construction.
+
 **Completeness checks (A3) — the section index IS the census.**
 
 ```text
 - every normative section MUST declare added_non_claims, even if empty
+- every normative section MUST declare required_later_bindings, even if empty (A8)
 - each machine field has exactly one owning section
 - later sections may reference an existing field but MUST NOT redefine it
 - duplicate ownership fails closed
@@ -658,6 +688,8 @@ section_2.added_non_claims = [
   not_proof_of_global_cross_verifier_disclosure_budget
   not_proof_of_target_defect_prevalence
 ]
+
+section_2.required_later_bindings = []          // A8
 ```
 
 > **`not_proof_of_case_distinctness`** — Stage 5O does not establish that the committed private universe contains `N` distinct cases. Duplicated cases are individually valid and are detectable only when both members of a pair fall in the same sample.
@@ -987,6 +1019,8 @@ section_3.added_non_claims = [
   not_proof_of_unopened_leaf_preimage_conformance
   not_proof_of_unopened_salt_uniqueness
 ]
+
+section_3.required_later_bindings = []          // A8
 ```
 
 > **`not_proof_of_unopened_salt_uniqueness`** — Openings verify salt length, encoding, and leaf recomputation for challenged positions. They do not prove that unopened positions use distinct salts.
@@ -1182,14 +1216,14 @@ Measured scale of the gap A6 closed: a JavaScript array cannot exceed `2^32 - 1`
 
 **What `MAX_CASE_BYTES` does not bound.** It bounds **canonical committed case bytes** for a single case (§3.2). It does **not** bound the raw transport size of an opening bundle, and it does not bound an opening bundle in aggregate. A large `k`, an escape-heavy JSON encoding, or many individually conforming 64 KiB cases can still constitute an opening-level allocation attack while every per-case check passes — the same transport-versus-canonical distinction this section draws for the manifest, one artifact downstream.
 
-Stage 5O therefore **defers to Section 8**, which must pin, in the same profile-owned manner:
+Stage 5O therefore raises the fail-closed requirement **`section_8_opening_bundle_resource_limits`** (§4.10, A8) — owned by Section 4, dischargeable only by Section 8, and **rejecting at release while unresolved**. Section 8 must pin, in the same profile-owned manner:
 
 ```text
 MAX_OPENING_TRANSPORT_BYTES            preflight resource guard over raw opening-bundle bytes
 MAX_OPENING_BUNDLE_CANONICAL_BYTES     normative acceptance over the canonical opening bundle
 ```
 
-Section 4 makes no claim about opening-bundle resource bounds. A reader must not infer from a pinned `MAX_CASE_BYTES` that the opening path is bounded; it is bounded only once Section 8 pins those two constants.
+Section 4 makes no claim about opening-bundle resource bounds. A reader must not infer from a pinned `MAX_CASE_BYTES` that the opening path is bounded; it is bounded only once Section 8 pins those two constants **and binds them into the already-precommitted `disclosure_policy_digest`** (§4.10). This is a fail-closed **requirement**, not a permanent non-claim: it blocks release rather than describing a boundary.
 
 **Manifest transport contract (frozen).** The §3.3.1 lessons apply to the manifest itself, not only to case payloads:
 
@@ -1620,13 +1654,16 @@ Section 10 may reference this class when validating verifier check order, but **
 
 Current members: **S3.2** (recompute from `claimed_index`), **S3.14** (recompute from `claimed_epoch_digest`), **S4.3** (sort a malformed vector), **S4.18** (anchor the wrong digest), **S4.25** (default string sort). Five — counted from the matrix rows, after I asserted six from memory and was wrong.
 
-### 4.10 `section_4.added_non_claims` — owned by this section (A3)
+### 4.10 `section_4.added_non_claims` and `section_4.required_later_bindings` (A3, A8)
 
 ```text
 section_4.added_non_claims = [
   not_proof_of_global_epoch_uniqueness_without_complete_campaign_history,
-  not_proof_that_every_conforming_verifier_can_process_a_profile_conforming_artifact,
-  not_proof_of_opening_bundle_resource_bounds_without_section_8_limits
+  not_proof_that_every_conforming_verifier_can_process_a_profile_conforming_artifact
+]
+
+section_4.required_later_bindings = [
+  section_8_opening_bundle_resource_limits
 ]
 ```
 
@@ -1636,9 +1673,46 @@ The name carries its condition, matching `not_proof_of_complete_disclosure_histo
 
 > **`not_proof_that_every_conforming_verifier_can_process_a_profile_conforming_artifact`** — the pinned limits of §4.1.1 bound the **artifact**, not the runtime. `MAX_SCOPE_CARDINALITY = 262144` states which artifacts are in-profile; it does not state that any given verifier host has the memory, time, or parser capacity to complete verification of one. A verifier that cannot process an in-profile artifact is resource-incapable or non-conforming (S4.34); the artifact remains valid and **no raw code may report it otherwise**. This is the honest cost of pinning a cardinality on unmeasured-runtime grounds rather than a benchmarked one.
 
-> **`not_proof_of_opening_bundle_resource_bounds_without_section_8_limits`** — `MAX_CASE_BYTES` bounds one canonical case. Stage 5O Section 4 makes **no claim** about the raw or aggregate size of an opening bundle; those bounds exist only once Section 8 pins `MAX_OPENING_TRANSPORT_BYTES` and `MAX_OPENING_BUNDLE_CANONICAL_BYTES`. Until then a conforming per-case limit must not be read as a bounded opening path.
+Both names carry their condition, matching the pattern above, and neither may be dropped or weakened by a later section. Both are **permanent**: no future section discharges either one.
 
-Both names carry their condition, matching the pattern above. Neither may be dropped by a later section without an amendment; the second is discharged — not deleted — when Section 8 pins its two constants.
+#### `section_8_opening_bundle_resource_limits` — the requirement (A8)
+
+An earlier draft of this section recorded the opening-bundle gap as a third non-claim, `not_proof_of_opening_bundle_resource_bounds_without_section_8_limits`, and stated that Section 8 would "discharge" it. **The contract defines no such operation.** Frozen non-claims are permanent by the A1 accumulation rule, so that field could only ever be signed into the release envelope as a stale limitation — describing a gap the same release had actually closed. It was a real dependency wearing a permanent-ceiling coat. A8 reclassifies it.
+
+```text
+requirement:            section_8_opening_bundle_resource_limits
+owning section:         4
+permitted discharger:   8   (exactly one; no other section may discharge it)
+unresolved at release:  REJECT
+```
+
+**What Section 4 actually depends on.** `MAX_CASE_BYTES` bounds one canonical case (§3.2, §4.1.1). It does not bound the raw transport size of an opening bundle, nor an opening bundle in aggregate. A large `k`, an escape-heavy encoding, or many individually conforming 64 KiB cases can constitute an opening-level allocation attack while every per-case check passes — the §4.1.1 transport-versus-canonical distinction, one artifact downstream.
+
+**Discharge conditions — bytes, not prose.** Section 8 discharges this requirement only by defining **and binding**:
+
+```text
+MAX_OPENING_TRANSPORT_BYTES            preflight resource guard over raw opening-bundle bytes
+MAX_OPENING_BUNDLE_CANONICAL_BYTES     normative acceptance over the canonical opening bundle
+```
+
+together with the opening-side limit-compatibility invariant, in the derived-not-sampled form §4.1.1 freezes for the manifest:
+
+```text
+maxCanonicalOpeningBundleBytes(
+  maximum permitted k,
+  MAX_CASE_BYTES,
+  MAX_SCOPE_CARDINALITY,
+  maximum authentication-path length,
+  pinned opening schema
+)
+  <= MAX_OPENING_BUNDLE_CANONICAL_BYTES
+
+MAX_OPENING_BUNDLE_CANONICAL_BYTES <= MAX_OPENING_TRANSPORT_BYTES
+```
+
+**Both limits MUST enter the exact preimage of `disclosure_policy_digest`** — the digest Section 4 has _already_ bound into `stage5o_precommitment_digest` (§4.7). This is the load-bearing half of the requirement. `disclosure_policy_digest` is precommitted **before** the beacon is knowable; a limit printed in Section 8 but absent from that preimage would be a producer-selectable opening bound chosen after the challenge — the §3.1 authority rule violated one artifact downstream, in its fifth costume. **Printing the constants in Section 8 discharges nothing.**
+
+Boundary fixtures on both sides of both limits are required, in the S4.26–S4.33 pattern, including the ordering assertion: rejection must precede the allocation it guards.
 
 ### 4.11 Section 4 attack matrix
 
@@ -1717,7 +1791,8 @@ A pinned limit that is never exercised at its boundary is an untested claim. Eac
 | **The cardinality ceiling is justified by runtime, not byte fit**                         | ✅ 4.1.1 — `2^18` frozen; `2^20` fits 192 MiB but would promise unmeasured object-graph capacity; recorded as a measured future profile candidate requiring a new `commitment_profile_digest`                                              |
 | **Every pinned limit is exercised at its boundary, both sides**                           | ✅ 4.11.1 — S4.26–S4.33; at-limit accepts and limit-plus-one rejects; S4.27/S4.29 assert rejection ORDER, not merely outcome                                                                                                               |
 | **A resource-incapable verifier is never reported as invalid evidence**                   | ✅ 4.11.1, 4.10 — S4.34 is `implementation_regression_fixtures`; `not_proof_that_every_conforming_verifier_can_process_a_profile_conforming_artifact`                                                                                      |
-| **Opening-bundle resource bounds are NOT claimed by this section**                        | ✅ 4.1.1, 4.10 — `MAX_CASE_BYTES` bounds one canonical case only; `MAX_OPENING_TRANSPORT_BYTES`/`MAX_OPENING_BUNDLE_CANONICAL_BYTES` deferred to Section 8; `not_proof_of_opening_bundle_resource_bounds_without_section_8_limits`         |
+| **Opening-bundle resource bounds are NOT claimed by this section**                        | ✅ 4.1.1, 4.10 — `MAX_CASE_BYTES` bounds one canonical case only; the gap is the fail-closed requirement `section_8_opening_bundle_resource_limits`, not a permanent ceiling (A8)                                                          |
+| **Temporary cross-section dependencies are requirements, never non-claims (A8)**          | ✅ 4.10, §1 — `required_later_bindings` ledger: one owner, one permitted discharger, unresolved → release REJECT; discharge requires named bytes inside `disclosure_policy_digest`, never prose                                            |
 | **Manifest transport contract frozen (UTF-8, no BOM, lexical duplicate-key rejection)**   | ✅ 4.1.1 — the §3.3.1 rules apply to the manifest itself, not only to case payloads                                                                                                                                                        |
 | **Profile-tuple approval itself pinned; cannot drift with the local verifier**            | ✅ 4.4 — v1 accepts exactly one `STAGE5O_V1_PROFILE_TUPLE`, no registry; registry form deferred with its digest bound into `profile_bundle_digest`                                                                                         |
 | **Vector and path membership use the same authoritative leaf, index, `N`, root**          | ✅ 4.3.1 — five shared authoritative values; path stated as redundant-but-required; split-brain forbidden                                                                                                                                  |
@@ -1728,7 +1803,8 @@ A pinned limit that is never exercised at its boundary is an untested claim. Eac
 | **Digest derivation acyclic; all declared digests recomputed**                            | ✅ 4.7.1 — DAG stated; no self-containing digest; no whole-manifest shortcut; declared digests non-authoritative                                                                                                                           |
 | **Fixture raw-code taxonomy is non-contradictory**                                        | ✅ 4.9 — blindness fixtures verify raw `0`; a non-zero code attaches to an OMITTED ceiling, never to the valid fixture                                                                                                                     |
 | **Implementation-regression fixtures are non-raw-code-bearing**                           | ✅ 4.9 — four-class taxonomy frozen; six members (S3.2, S3.14, S4.3, S4.18, S4.25, S4.34); `MAX_CANONICAL_LEAF_ENTRY_BYTES` classified here — it cannot fire on schema-valid input; must execute **before** the raw-code matrix is trusted |
-| `section_4.added_non_claims` declared                                                     | ✅ 4.10 — three ceilings: global epoch uniqueness, verifier-capacity, opening-bundle resource bounds                                                                                                                                       |
+| `section_4.added_non_claims` declared                                                     | ✅ 4.10 — two permanent ceilings: global epoch uniqueness, verifier capacity                                                                                                                                                               |
+| `section_4.required_later_bindings` declared (A8)                                         | ✅ 4.10 — one requirement: `section_8_opening_bundle_resource_limits`, discharger Section 8, unresolved → release REJECT                                                                                                                   |
 | No raw `420+` codes allocated                                                             | ✅ none in this section                                                                                                                                                                                                                    |
 
 ---
@@ -1738,7 +1814,7 @@ A pinned limit that is never exercised at its boundary is an untested claim. Eac
 5. Indexed-universe equality objects.
 6. Future-height anchor contract.
 7. Beacon-seed and unique-index derivation (rejection sampling; no modulo bias).
-8. Opening rules and cumulative-disclosure accounting. **Must pin `MAX_OPENING_TRANSPORT_BYTES` and `MAX_OPENING_BUNDLE_CANONICAL_BYTES`** in the profile-owned manner of §4.1.1 — Section 4 explicitly declines to bound the opening path, and `section_4.added_non_claims` carries that ceiling until Section 8 discharges it.
+8. Opening rules and cumulative-disclosure accounting. **Discharges the fail-closed requirement `section_8_opening_bundle_resource_limits`** (§4.10, A8) — must pin `MAX_OPENING_TRANSPORT_BYTES` and `MAX_OPENING_BUNDLE_CANONICAL_BYTES`, prove the opening-side compatibility invariant, and **bind both limits into the exact preimage of the already-precommitted `disclosure_policy_digest`**. Printing the constants discharges nothing; release rejects while the requirement is unresolved.
 9. Exact rational probability encoding (decimal-string integers).
 10. Raw codes from **420**, first-failure order frozen before implementation.
 11. Conditional Lean model.
