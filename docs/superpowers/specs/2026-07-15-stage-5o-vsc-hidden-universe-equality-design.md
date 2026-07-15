@@ -1,6 +1,7 @@
 # Stage 5O — VSC: Hidden-Universe Equality (design)
 
-**Status:** Section 1 FROZEN (identity, laws, honest core). Review edits folded: A3 claim ceiling + `not_proof_of_real_execution`; provider-agnostic public wording with the pinned seam deferred to the Section 13 source map; indexed-universe equality replacing set equality; two-layer position-binding split + `not_proof_of_unopened_leaf_preimage_index_consistency`. Sections 2–13 pending.
+**Status (A7):** Sections **1–3 FROZEN** — Section 1 `a1e2e6d1`, Section 2 `0e26c361`, Section 3 `e8dc0a77`. Section 4 **draft, under review**. Sections 5–13 pending.
+**Section 1 review edits folded at freeze:** record-fabrication claim ceiling + `not_proof_of_real_execution`; provider-agnostic public wording with the pinned seam deferred to the **Section 13** source map; indexed-universe equality replacing set equality; two-layer position-binding split + `not_proof_of_unopened_leaf_preimage_index_consistency`. (This list predates the amendment log; "record-fabrication" was formerly written "A3", which now collides with **Amendment A3** — attack IDs and amendment IDs are distinct namespaces.)
 **Release target:** `v2.50.0-stage-5o-vsc-hidden-universe-equality`
 **Motto:** _ClaimSafe first, then ReviewerSafe._
 **Pays:** signed IOU **I6 `hiding_scope_commitment`** — in full, **on release acceptance** (not on spec approval).
@@ -19,6 +20,8 @@
 **Amendment A5 folded:** Section 3.1 resolved the deferred opening-index representation by making `claimed_index` mandatory and non-authoritative. Section 1's optional-index wording and stale Section 4 forward reference were removed. Its explanatory concatenation formula was replaced with a symbolic reference to Section 3.2's sole normative byte construction. **No blade, law, release predicate, or socket changed.**
 
 **Amendment A6 folded:** Section 4 established that the public scope manifest must materialise all `N` leaf entries, making the `u64` encoding ceiling operationally unacceptable — the accepted `N` exceeded a JavaScript array's maximum length by a factor of 4.29e9. Section 3.2 had already applied the encodable-≠-accepted principle to `MAX_CASE_BYTES` and failed to apply it to `N`. Section 3.2 now separates the binary encoding domain from the accepted Stage 5O v1 operational domain, which is profile-pinned by Section 4. **No blade, law, release predicate, or socket changed.**
+
+**Amendment A7 folded:** Updated stale section-status labels and corrected Section 1's prior-art source-map forward reference from Section 12 to Section 13 after the section roadmap was finalised. **No blade, law, evidence predicate, release predicate, or socket changed.**
 
 ---
 
@@ -237,7 +240,7 @@ Per the NIST beacon project's explicit warning against using beacon output as se
 
 Published frontier-lab policy permits confidential evaluation or review scopes while requiring complete coverage. The cited policy condition is currently expressed in prose rather than as a publicly recomputable evidence relation.
 
-The pinned instance (full citation with retrieval date and digest belongs in Section 12's source map): the cited policy text states a complete-coverage condition over confidentially reviewed sections, but **does not specify a public, machine-verifiable mechanism by which an outsider can recompute that coverage**. This is a statement about the published text only; it is not a claim that no internal mechanism exists.
+The pinned instance (full citation with retrieval date and digest belongs in **Section 13**'s source map): the cited policy text states a complete-coverage condition over confidentially reviewed sections, but **does not specify a public, machine-verifiable mechanism by which an outsider can recompute that coverage**. This is a statement about the published text only; it is not a claim that no internal mechanism exists.
 
 **What Stage 5O contributes to such a claim:** Stage 5O makes the **hidden-universe completeness and no-omission component** machine-checkable under its declared evidence contract. It does not make the full claim checkable — whether material was genuinely _evaluated_ additionally requires reviewer receipts, independence, and adequacy mechanisms. In Simurgh terms the stronger statement belongs to a composition:
 
@@ -255,7 +258,7 @@ and even then, each stage's adequacy and human-action non-claims are retained.
 
 ---
 
-## Section 2 — threat model and attack matrix (DRAFT, uncommitted)
+## Section 2 — threat model and attack matrix (FROZEN `0e26c361`)
 
 Six classes. Every concrete attack belongs to **exactly one primary class**. No raw codes are assigned in this section.
 
@@ -696,7 +699,7 @@ Successor-work candidates: `case_distinctness_witnessing`, `federated_disclosure
 
 ---
 
-## Section 3 — salted, position-bound leaf profile (DRAFT, uncommitted)
+## Section 3 — salted, position-bound leaf profile (FROZEN `e8dc0a77`)
 
 Profile identifier: **`simurgh.vsc.hidden_leaf.v1`**. This section replaces notation with a construction. `H(domain ‖ epoch ‖ index ‖ salt ‖ H(case))` was explanatory shorthand; raw `‖` is **not frozen** and is not used below.
 
