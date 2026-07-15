@@ -2,6 +2,8 @@
 
 **Status:** Sections **1–5 FROZEN** — Section 1 `a1e2e6d1`, Section 2 `0e26c361`, Section 3 `e8dc0a77`, Section 4 `cb67542f`, Section 5 this commit. Sections 6–13 pending.
 **Release is BLOCKED by design:** `release_required_bindings` carries the unresolved `section_6_anchored_presented_census_closure` (§5.9). A green Section 5 freeze does **not** mean anti-equivocation exists, and per **A13** full anti-equivocation is not coming: Stage 4T binds views to a held capsule, never excluding an unseen one, so `not_proof_of_global_census_closure_uniqueness_without_exclusion_witnesses` is a **permanent** ceiling.
+**Amendment A18 folded (amends frozen Section 4):** Section 6's closure preflight established that Stage 5O bound **no cryptographic producer authority**: `stage5o_precommitment_digest` covered a scope and five policy slots and named no speaker, and neither census carried a signature or an authority field. A public anchor proves bytes were fixed before a height; it does not prove **who** fixed them. Any third party could therefore construct a well-formed closure over the same slot, anchor it, and manufacture conflict evidence against a producer who never authored it — a denial-of-service that turns the stage's own equivocation detector against honest producers. A18 binds `producer_authority_digest` **directly into the precommitment, immediately after `scope_vector_digest` and before the policy slots** — authority is not a policy. A preflight of every shipped signature-bearing stage found **no reusable profile**: `signature_profile_id`/`_digest` appear nowhere in the repository, only a helper convention that signs `canonicalJson` output with SPKI-PEM keys. Stage 5O therefore mints `simurgh.vsc.producer_signature.ed25519.v1` and **diverges deliberately twice**: 32 raw key bytes rather than PEM (a key has one identity byte string; PEM has many valid encodings of it), and exact domain-separated message bytes rather than an encoder's output (the §3.1 seam Section 3 already closed for `case_digest`). Two permanent ceilings are minted and defined: `not_proof_of_real_world_producer_identity` and `not_proof_of_exclusive_or_uncompromised_producer_key_control` — the stage proves continuity of a key, never who holds it or how well; **I7 remains open**. The limit-compatibility invariant was recomputed a **fourth** time: worst-case manifest **`7,267,143 <= 8,388,608`**, headroom **`1,121,465`** bytes, HOLDS. **The release predicate CHANGED: authorisation is a new release condition** — unlike every prior amendment in this stage. The invalidation frontier is recorded precisely rather than as "everything downstream": `case_digest`, `leaf_value`, `merkle_leaf`, `merkle_root`, `epoch_digest`, `profile_bundle_digest` and `scope_vector_digest` are **unchanged**, because they sit below the precommitment; the precommitment and every census, closure, anchor-subject and challenge-subject digest above it are **invalidated and must be recomputed**. Per-census authorisation was considered and **rejected as overbinding**: the closure digest already binds the exact census pair, so one authorised closure proves the authority endorsed both censuses as one presented story, and two further schemas, envelopes and validation paths would buy no property Stage 5O needs. **No blade, law, evidence predicate, or socket changed.**
+
 **Amendment A17 folded (amends frozen Section 4):** Section 6 introduced seven concrete closure, anchor-handoff, and Stage 4T package-adapter constructions. The profile bundle expands **7 → 14 pairs**, pinning each by exact ID and digest **before anchoring**, so no producer may choose a closure schema, conflict-evidence shape, anchor schedule, or 4T adapter after the scope precommitment exists. A frozen **ownership map** assigns every Section 6 machine object exactly one owner; the **anchor instance** — a serialised evidence object, not merely a digest construction — has its exact-key schema covered by `closure_anchor_schedule_profile`, since its shape is static while only its values vary. The scope-manifest maximum was recomputed against the expanded bundle: **`7,266,642 <= 8,388,608`**, headroom **`1,121,966`** bytes. The seven new pairs cost only 1,263 bytes because their IDs are pinned to concrete ASCII rather than carrying the `2^16 - 1` bound. A17 pins **nothing imaginary**: no closure-only capsule (deleted by A14), no `closure_non_equivocation_profile` (no such mechanism exists — A13), no `package_capsule_salt` profile and no final package schema, section registry, or capsule root (all Section 12, not yet designed). **No blade, law, evidence predicate, release predicate, or socket changed.**
 **Amendment A16 folded (amends frozen Sections 1 and 2):** The Section 1 baseline field `not_proof_that_the_private_scope_was_well_chosen` had **no normative definition anywhere** and overlapped `not_scope_adequacy`, which T3.4 cited alongside it as though the two were interchangeable. A field the release envelope signs while the spec never records its meaning is a riddle, not a limitation. A16 freezes an **outcome-versus-selection-process** distinction: adequacy concerns the **resulting universe**; "well chosen" concerns the undisclosed **process, rationale, and provenance** used to select it. T3.4 is narrowed to the adequacy ceiling alone, and new row **T3.7** exercises the selection-process ceiling through an accepted-blindness fixture (opaque selection **not** relying on prior outputs — distinguishing it from A15's T3.6, which does). The field is **not** renamed and **not** deleted: A1 forbids removing or silently renaming a frozen non-claim, and deprecation would demand migration machinery for no gain. Because the field is Section 1-owned, Section 2 references it and does **not** add it to `section_2.added_non_claims`. **No non-claim was removed, weakened, or renamed; no blade, law, or socket changed.**
 **Amendment A15 folded (amends frozen Sections 1 and 2):** Section 6's anchor analysis established that future-height anchoring proves scope fixation **before the challenge height**, not before producer-controlled evaluation or result observation. Section 1's claim table asserted that Stage 5O catches "Commit the scope after seeing results" **Deterministically** — false: a producer may evaluate a large pool, observe outputs, select a flattering subset, and anchor it well before the challenge block, passing every check. Law 1 is renamed **"No Scope After The Fact" → "No Scope After Challenge Height"**; its body already stated the narrow, true property, so only the title overreached — the third time a name outran its mechanism, after A4 and A10. The claim row is split into A1 (at-or-after the height, deterministic, T4.1) and **A1b** (before the height but after seeing results, **not detected at all**). T4.1 is left alone: it already names the real after-height violation. Section 2 gains threat row **T3.6** and owns the new ceiling `not_proof_of_scope_selection_independence_from_prior_evaluation_outputs` — distinct from `not_scope_adequacy`, which concedes strategic **quality**, where this concedes selection **timing and information**. Another real weakening, for A13's reason: the stronger property was unavailable, not merely inconvenient. **No indexed-universe equality mechanism, evidence predicate, or socket changed.**
@@ -1174,20 +1176,23 @@ scope_manifest = {
   leaf_entries,
   merkle_root,
   scope_vector_digest,
+  producer_authority_descriptor,   // A18
+  producer_authority_digest,       // A18 — declared, non-authoritative
   policy_bindings,
   stage5o_precommitment_digest
 }
 ```
 
-| Public                          | Private until challenged |
-| ------------------------------- | ------------------------ |
-| `N`                             | case payloads            |
-| profile IDs and digests         | salts                    |
-| epoch descriptor and digest     | opening preimages        |
-| all `N` salted `leaf_id` values |                          |
-| Merkle root                     |                          |
-| predicate and policy digests    |                          |
-| final precommitment digest      |                          |
+| Public                                         | Private until challenged |
+| ---------------------------------------------- | ------------------------ |
+| `N`                                            | case payloads            |
+| profile IDs and digests                        | salts                    |
+| epoch descriptor and digest                    | opening preimages        |
+| all `N` salted `leaf_id` values                |                          |
+| Merkle root                                    |                          |
+| predicate and policy digests                   |                          |
+| producer authority descriptor and digest (A18) |                          |
+| final precommitment digest                     |                          |
 
 **A root-only manifest is invalid for Stage 5O.** Whole-universe cross-artifact equality (Section 1, Layer 1) requires the **ordered public leaf vector** — it is the object `S[i].leaf_id` is read from. A root alone cannot support a positional equality check without an opening for every position, which would destroy hiding.
 
@@ -1265,15 +1270,15 @@ Independently chosen limits must be proven unable to contradict each other. `max
 **This invariant is closed-form, not an estimate.** Because `declared_index` is `canonicalDecimal(array position)` and `leaf_id` is exactly 64 hex characters under an exact-key schema, the canonical leaf vector's byte count is **fully determined by `N`**. The only producer freedom in the manifest is the five profile IDs, each capped at `2^16 - 1` bytes. Measured against the pinned v1 profile:
 
 ```text
-canonical leaf vector at N = 65536    :  6,804,633 bytes   ( 6.489 MiB)   — exact
-worst-case wrapper (14 pairs, A17)    :    462,009 bytes   ( 0.441 MiB)   — bound
-worst-case canonical manifest         :  7,266,642 bytes   ( 6.930 MiB)
-MAX_SCOPE_CANONICAL_BYTES             :  8,388,608 bytes   ( 8.000 MiB)
-headroom                              :  1,121,966 bytes   ( 1.070 MiB)   — invariant HOLDS
+canonical leaf vector at N = 65536       :  6,804,633 bytes   ( 6.489 MiB)   — exact
+worst-case wrapper (14 pairs + authority):    462,510 bytes   ( 0.441 MiB)   — bound
+worst-case canonical manifest            :  7,267,143 bytes   ( 6.930 MiB)
+MAX_SCOPE_CANONICAL_BYTES                :  8,388,608 bytes   ( 8.000 MiB)
+headroom                                 :  1,121,465 bytes   ( 1.070 MiB)   — invariant HOLDS
 MAX_SCOPE_CANONICAL_BYTES <= MAX_SCOPE_TRANSPORT_BYTES : 8,388,608 <= 16,777,216 — HOLDS
 ```
 
-_Recomputed three times: A9 (five pairs to seven, wrapper 329,418 → 460,746), A11 (`N` from `2^18` to `2^16`), A17 (seven pairs to fourteen, wrapper 460,746 → 462,009)._ Every time the invariant survived; every time it was **recomputed rather than assumed** — **old wrapper arithmetic gets no grandfather clause**. A17's seven pairs cost only **1,263 bytes** because their IDs are pinned to concrete ASCII (29–44 bytes each); the original seven still carry the `2^16 - 1` bound and contribute ~459 KiB of hypothetical between them. Pinning IDs is not tidiness — it is most of the headroom. A limit-compatibility proof that survives a schema or cardinality change only by luck is not a proof, and A9 and A11 are precisely the amendment class that silently invalidates a frozen number.
+_Recomputed four times: A9 (five pairs to seven, wrapper 329,418 → 460,746), A11 (`N` from `2^18` to `2^16`), A17 (seven pairs to fourteen, wrapper 460,746 → 462,009), A18 (producer authority descriptor, wrapper 462,009 → 462,510)._ Every time the invariant survived; every time it was **recomputed rather than assumed** — **old wrapper arithmetic gets no grandfather clause**. A17's seven pairs cost only **1,263 bytes** because their IDs are pinned to concrete ASCII (29–44 bytes each); the original seven still carry the `2^16 - 1` bound and contribute ~459 KiB of hypothetical between them. Pinning IDs is not tidiness — it is most of the headroom. A limit-compatibility proof that survives a schema or cardinality change only by luck is not a proof, and A9 and A11 are precisely the amendment class that silently invalidates a frozen number.
 
 **`MAX_CANONICAL_LEAF_ENTRY_BYTES` cannot fire on schema-valid input, and is not claimed to.** The widest canonical entry at `N = 2^16` is **103 bytes** and, per the paragraph above, that width is _determined_ by the exact-key schema rather than chosen by the producer. The constant can therefore only trip when schema validation is itself incomplete — that is, on a verifier defect, never on hostile evidence. It is retained as a cheap tripwire and is classified in §4.9 as an **`implementation_regression_fixtures` guard**, not as a constant that bounds producer freedom. Listing it among adversarial limits would have made it the fourth costume of the §3.1 authority bug: a correctly shaped constant reading as a defence it cannot mount.
 
@@ -1625,6 +1630,94 @@ Omission would make "disable the check" indistinguishable from "the field is abs
 
 Later sections exclusively define each policy preimage. Section 4 defines only the binding slots.
 
+#### 4.7.1 Producer authority — the precommitment names its speaker (A18)
+
+Section 6's closure preflight established that Stage 5O bound **no cryptographic producer authority at all**. A public anchor proves that bytes were fixed before a height; it does not prove **who** fixed them. Any third party could therefore construct a well-formed census closure over the same slot, anchor it, and manufacture conflict evidence against a producer who never authored it — turning the stage's own equivocation detector into a denial-of-service weapon aimed at honest producers. The precommitment bound a scope, a set of rules, and no speaker.
+
+**Authority is not a policy**, so it does not join `policy_bindings`. It is bound directly, immediately after the scope.
+
+```text
+producer_authority_descriptor = {
+  schema_id,                 // pinned exactly; declared, non-authoritative
+  schema_digest,             // bytes32
+  signature_profile_id,      // pinned exactly; declared, non-authoritative
+  signature_profile_digest,  // bytes32
+  public_key                 // lowercase hex, exactly 64 characters
+}
+```
+
+Pinned v1 identifiers — concrete ASCII, not a `2^16 - 1` bound:
+
+```text
+PRODUCER_AUTHORITY_SCHEMA_ID = ASCII "simurgh.vsc.producer_authority.v1"          // 33 bytes
+SIGNATURE_PROFILE_ID         = ASCII "simurgh.vsc.producer_signature.ed25519.v1"  // 41 bytes
+```
+
+##### The signature profile — `simurgh.vsc.producer_signature.ed25519.v1`
+
+No reusable profile existed to import. The preflight read every shipped signature-bearing stage: `signature_profile`, `signature_profile_id` and `signature_profile_digest` appear **nowhere** in the repository. What exists is a **helper convention** — `crypto.sign(null, canonicalBytes, privPem)` over Ed25519 keys recorded as `{ key_type: "Ed25519", format: "spki-pem" }`. A helper is not a pinned contract: it has no ID, no digest, and no executable acceptance rule. Stage 5O therefore mints its own, and **deliberately diverges from the house convention twice**:
+
+```text
+algorithm            Ed25519 (RFC 8032), PURE mode — never ed25519ph, never ed25519ctx
+message              the exact domain-separated byte string defined per signed object
+                     NEVER canonicalJson output; NEVER a re-encoded projection
+public key           exactly 32 raw bytes
+signature            exactly 64 raw bytes
+external public key  lowercase hex, exactly 64 characters
+external signature   lowercase hex, exactly 128 characters
+verification         strict — reject non-canonical point encodings, reject
+                     small-order public keys, reject non-canonical S scalars
+negotiation          none — one algorithm, one profile, one v1
+```
+
+**Why diverge from SPKI-PEM.** `producer_authority_digest` hashes the key material directly. PEM is a _presentation_ of a key, not an identity: the same key has many valid PEM encodings differing in line breaks and trailing whitespace, so a PEM-keyed digest would be encoder-dependent and would need length framing. **32 raw bytes has exactly one encoding.** The authority digest needs one identity byte string, not a rendering of one.
+
+**Why not sign `canonicalJson` output.** Signing an encoder's output makes the signature depend on the encoder. This is the §3.1 authority rule at the signature layer, and Section 3 already closed exactly this seam for `case_digest`. The signed message is always an explicit, domain-separated, fixed-width concatenation.
+
+##### The authority digest
+
+```text
+PRODUCER_AUTHORITY_DOMAIN = ASCII "simurgh.vsc.producer_authority.v1"
+
+producer_authority_digest =
+  SHA256(
+    PRODUCER_AUTHORITY_DOMAIN          ||
+    producer_authority_schema_digest   ||   // bytes32
+    u16be(len(signature_profile_id))   ||   // 2 bytes
+    ASCII(signature_profile_id)        ||   // variable — hence framed
+    signature_profile_digest           ||   // bytes32
+    public_key_bytes                        // exactly 32 bytes
+  )
+```
+
+`PRODUCER_AUTHORITY_DOMAIN` and `PRODUCER_AUTHORITY_SCHEMA_ID` are deliberately the same ASCII string: they name one fact — _this is the v1 producer authority_ — in one place, per A3. No collision arises, because every preimage in the graph begins with its own domain constant.
+
+Verifier order (frozen):
+
+```text
+1. schema_id           == PRODUCER_AUTHORITY_SCHEMA_ID   (exact bytes; no alias, no case folding)
+2. signature_profile_id == SIGNATURE_PROFILE_ID          (exact bytes)
+3. schema_digest and signature_profile_digest == the pinned v1 values
+4. public_key is exactly 64 lowercase hex characters, decoding to exactly 32 bytes
+5. the decoded key passes STRICT Ed25519 public-key validation
+6. recompute producer_authority_digest; the declared field MUST equal it
+7. any mismatch REJECTS — no fallback, no negotiation, no "best effort"
+```
+
+Frozen for v1:
+
+```text
+- exactly one authority per precommitment
+- no key rotation within a precommitment
+- no delegation
+- no threshold or multi-party authority
+- changing the key requires a NEW precommitment, and therefore a new anchor
+```
+
+**The authoritative public key comes only from this descriptor**, which the precommitment already binds — never from inside a signed object. This is the §3.1 authority rule in its seventh costume: an untrusted envelope may carry a key-shaped value, but a key does not acquire authority by arriving in a correctly shaped field.
+
+#### 4.7.2 The precommitment root
+
 ```text
 PRECOMMITMENT_DOMAIN = ASCII "simurgh.vsc.precommitment.v1"
 
@@ -1632,6 +1725,7 @@ stage5o_precommitment_digest =
   SHA256(
     PRECOMMITMENT_DOMAIN        ||
     scope_vector_digest         ||   // bytes32
+    producer_authority_digest   ||   // bytes32 — A18
     opening_predicate_digest    ||   // bytes32
     relational_predicate_digest ||   // bytes32
     challenge_policy_digest     ||   // bytes32
@@ -1644,7 +1738,7 @@ All fixed-width after the domain constant; field order is exactly as written.
 
 > **This is the digest Section 6 must anchor** (the future-height anchor contract). Anchoring only `merkle_root` or only `scope_vector_digest` **must fail the implementation suite.**
 
-#### 4.7.1 Digest derivation is a DAG, and every declared digest is non-authoritative
+#### 4.7.3 Digest derivation is a DAG, and every declared digest is non-authoritative
 
 ```text
 profile component digests
@@ -1661,6 +1755,11 @@ leaf vector                 |
         |                   |
         v                   v
 merkle_root -------> scope_vector_digest ----+
+                                             |
+producer authority descriptor                |
+        |                                    |
+        v                                    |
+producer_authority_digest ------------------>+
                                              |
 policy artifacts                             |
         |                                    |
@@ -1772,7 +1871,9 @@ Current members: **S3.2** (recompute from `claimed_index`), **S3.14** (recompute
 
 ```text
 section_4.added_non_claims = [
+  not_proof_of_exclusive_or_uncompromised_producer_key_control,          // A18
   not_proof_of_global_epoch_uniqueness_without_complete_campaign_history,
+  not_proof_of_real_world_producer_identity,                            // A18
   not_proof_that_every_conforming_verifier_can_process_a_profile_conforming_artifact
 ]
 
@@ -1787,7 +1888,11 @@ The name carries its condition, matching `not_proof_of_complete_disclosure_histo
 
 > **`not_proof_that_every_conforming_verifier_can_process_a_profile_conforming_artifact`** — the pinned limits of §4.1.1 bound the **artifact**, not the runtime. `MAX_SCOPE_CARDINALITY = 65536` states which artifacts are in-profile; it does not state that any given verifier host has the memory, time, or parser capacity to complete verification of one. A verifier that cannot process an in-profile artifact is resource-incapable or non-conforming (S4.34); the artifact remains valid and **no raw code may report it otherwise**. This is the honest cost of pinning a cardinality on unmeasured-runtime grounds rather than a benchmarked one.
 
-Both names carry their condition, matching the pattern above, and neither may be dropped or weakened by a later section. Both are **permanent**: no future section discharges either one.
+> **`not_proof_of_exclusive_or_uncompromised_producer_key_control`** (A18) — a valid signature proves **signing capability** under the pinned profile. It does not prove exclusive control, uncompromised custody, absence of key sharing, or that every signature reflects the intended producer's conscious approval. A stolen, shared, or coerced key produces signatures Stage 5O accepts as authorised, because at the byte level they **are** authorised. The stage proves continuity of a key, never diligence of its holder.
+
+> **`not_proof_of_real_world_producer_identity`** (A18) — Stage 5O proves authorisation continuity under one precommitted cryptographic public key. It does **not** prove the legal, organisational, or real-world identity of the party controlling that key. The stage can say "the same speaker authorised both of these"; it cannot say who the speaker is. Keyless submitter identity (I7) remains **open** and is not addressed by A18.
+
+All four names carry their condition, matching the pattern above, and none may be dropped or weakened by a later section. All four are **permanent**: no future section discharges any of them.
 
 #### `section_8_opening_bundle_resource_limits` — the requirement (A8)
 
@@ -1830,34 +1935,40 @@ Boundary fixtures on both sides of both limits are required, in the S4.26–S4.3
 
 ### 4.11 Section 4 attack matrix
 
-| ID    | Attack                                                                                | Expected result                                                                   |
-| ----- | ------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| S4.1  | `N` differs from leaf-vector length                                                   | **reject**                                                                        |
-| S4.2  | `declared_index` differs from array position                                          | **reject**                                                                        |
-| S4.3  | verifier sorts malformed entries before checking                                      | **negative implementation fixture** — MUST fail the suite                         |
-| S4.4  | sparse or repeated indices                                                            | **reject**                                                                        |
-| S4.5  | duplicate `leaf_id`                                                                   | **reject**                                                                        |
-| S4.6  | root does not match the ordered vector                                                | **reject**                                                                        |
-| S4.7  | correct root under wrong `N`                                                          | **reject**                                                                        |
-| S4.8  | correct root under wrong epoch                                                        | **reject**                                                                        |
-| S4.9  | correct root under wrong profile bundle                                               | **reject**                                                                        |
-| S4.10 | profile ID-digest mismatch                                                            | **reject**                                                                        |
-| S4.11 | unsupported profile combination (each part individually valid)                        | **reject**                                                                        |
-| S4.12 | downgrade to the unsalted 5K leaf profile                                             | **reject**                                                                        |
-| S4.13 | producer invents a new profile but labels it `v1`                                     | **reject** (digest mismatch)                                                      |
-| S4.14 | root-only commitment without the leaf vector                                          | **reject**                                                                        |
-| S4.15 | policy binding omitted                                                                | **reject**                                                                        |
-| S4.16 | predicate changed after precommitment                                                 | **reject**                                                                        |
-| S4.17 | beacon contract changed after precommitment                                           | **reject**                                                                        |
-| S4.18 | verifier anchors `scope_vector_digest` instead of the final precommitment             | **negative implementation fixture** — MUST fail the suite                         |
-| S4.19 | sequence array reordered                                                              | **different digest**                                                              |
-| S4.20 | set array reordered                                                                   | **same digest**                                                                   |
-| S4.21 | duplicate set member                                                                  | **reject**                                                                        |
-| S4.22 | undeclared array semantics                                                            | **reject**                                                                        |
-| S4.23 | unknown commitment field                                                              | **reject**                                                                        |
-| S4.24 | empty universe (`N = 0`)                                                              | **reject**                                                                        |
-| S4.25 | set canonicalisation uses the language's default string sort                          | **negative implementation fixture** — UTF-16 vs UTF-8 order inverts above the BMP |
-| S4.35 | execution or result object schema introduced after the precommitment is anchored (A9) | **reject** — `profile_bundle_digest` mismatch                                     |
+| ID    | Attack                                                                                          | Expected result                                                                     |
+| ----- | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| S4.1  | `N` differs from leaf-vector length                                                             | **reject**                                                                          |
+| S4.2  | `declared_index` differs from array position                                                    | **reject**                                                                          |
+| S4.3  | verifier sorts malformed entries before checking                                                | **negative implementation fixture** — MUST fail the suite                           |
+| S4.4  | sparse or repeated indices                                                                      | **reject**                                                                          |
+| S4.5  | duplicate `leaf_id`                                                                             | **reject**                                                                          |
+| S4.6  | root does not match the ordered vector                                                          | **reject**                                                                          |
+| S4.7  | correct root under wrong `N`                                                                    | **reject**                                                                          |
+| S4.8  | correct root under wrong epoch                                                                  | **reject**                                                                          |
+| S4.9  | correct root under wrong profile bundle                                                         | **reject**                                                                          |
+| S4.10 | profile ID-digest mismatch                                                                      | **reject**                                                                          |
+| S4.11 | unsupported profile combination (each part individually valid)                                  | **reject**                                                                          |
+| S4.12 | downgrade to the unsalted 5K leaf profile                                                       | **reject**                                                                          |
+| S4.13 | producer invents a new profile but labels it `v1`                                               | **reject** (digest mismatch)                                                        |
+| S4.14 | root-only commitment without the leaf vector                                                    | **reject**                                                                          |
+| S4.15 | policy binding omitted                                                                          | **reject**                                                                          |
+| S4.16 | predicate changed after precommitment                                                           | **reject**                                                                          |
+| S4.17 | beacon contract changed after precommitment                                                     | **reject**                                                                          |
+| S4.18 | verifier anchors `scope_vector_digest` instead of the final precommitment                       | **negative implementation fixture** — MUST fail the suite                           |
+| S4.19 | sequence array reordered                                                                        | **different digest**                                                                |
+| S4.20 | set array reordered                                                                             | **same digest**                                                                     |
+| S4.21 | duplicate set member                                                                            | **reject**                                                                          |
+| S4.22 | undeclared array semantics                                                                      | **reject**                                                                          |
+| S4.23 | unknown commitment field                                                                        | **reject**                                                                          |
+| S4.24 | empty universe (`N = 0`)                                                                        | **reject**                                                                          |
+| S4.25 | set canonicalisation uses the language's default string sort                                    | **negative implementation fixture** — UTF-16 vs UTF-8 order inverts above the BMP   |
+| S4.35 | execution or result object schema introduced after the precommitment is anchored (A9)           | **reject** — `profile_bundle_digest` mismatch                                       |
+| S4.36 | producer authority descriptor swapped or introduced after anchoring (A18)                       | **reject** — `stage5o_precommitment_digest` mismatch                                |
+| S4.37 | declared `producer_authority_digest` disagrees with recomputation from the descriptor (A18)     | **reject** — declared digests are non-authoritative (§4.7.3)                        |
+| S4.38 | `public_key` presented as uppercase hex, `0x`-prefixed, PEM, or whitespace-padded (A18)         | **reject** — exactly 64 lowercase hex characters; one canonical representation      |
+| S4.39 | `public_key` decodes to a small-order or non-canonically encoded point (A18)                    | **reject** — strict Ed25519 public-key validation                                   |
+| S4.40 | `signature_profile_id` names a different algorithm or a "v2" the verifier might negotiate (A18) | **reject** — exact byte equality with the pinned ID; no negotiation                 |
+| S4.41 | two authorities, or a rotated key, inside one precommitment (A18)                               | **reject** — v1 binds exactly one authority; a new key requires a new precommitment |
 
 **Fixture IDs are stable identifiers, not positions.** S4.35 is numbered above the §4.11.1 boundary block because S4.26–S4.34 were assigned at the Section 4 freeze; renumbering an assigned fixture to make a table read tidily would break every reference to it. The tables group by kind, and the IDs stay put.
 
@@ -1899,15 +2010,21 @@ A pinned limit that is never exercised at its boundary is an untested claim. Eac
 | Epoch digest derived, not trusted                                                         | ✅ 4.5 — recomputed from descriptor, recomputed value used; S4.8                                                                                                                                                                                               |
 | `N`, epoch, profile bundle, root all inside `scope_vector_digest`                         | ✅ 4.6 — plus fourfold `N` redundancy; S4.1, S4.7, S4.9                                                                                                                                                                                                        |
 | Predicate, challenge, beacon, disclosure policies inside the final precommitment          | ✅ 4.7 — all slots mandatory; `NO_RELATIONAL_PREDICATE_DIGEST` constant, never null; S4.15–S4.17                                                                                                                                                               |
+| **The precommitment binds a producer AUTHORITY, not only a scope and rules (A18)**        | ✅ 4.7.1, 4.7.2 — `producer_authority_digest` bound immediately after `scope_vector_digest`, before the policy slots; authority is not a policy; S4.36                                                                                                         |
+| **The signature profile is pinned, not conventional (A18)**                               | ✅ 4.7.1 — `simurgh.vsc.producer_signature.ed25519.v1` minted: no `signature_profile_id`/`_digest` exists anywhere in the repo; Ed25519 pure, 32 raw key bytes, 64 raw signature bytes, strict verification, no negotiation; S4.39, S4.40                      |
+| **Signed messages are exact domain-separated bytes, never `canonicalJson` output (A18)**  | ✅ 4.7.1 — the house helper signs `canonicalBytes`; Stage 5O diverges deliberately, closing the §3.1 seam at the signature layer                                                                                                                               |
+| **The public key has exactly one canonical representation (A18)**                         | ✅ 4.7.1 — 32 raw bytes, externally 64 lowercase hex; SPKI-PEM rejected as a presentation with many valid encodings; S4.38                                                                                                                                     |
+| **The authoritative key comes from the precommitment, never from a signed object (A18)**  | ✅ 4.7.1 — §3.1 authority rule, seventh costume: a key-shaped field acquires no authority by being correctly shaped                                                                                                                                            |
+| **Key identity and custody are NOT claimed (A18)**                                        | ✅ 4.10 — `not_proof_of_real_world_producer_identity`, `not_proof_of_exclusive_or_uncompromised_producer_key_control`; both permanent; I7 remains open                                                                                                         |
 | **Section 6** required to anchor the **final precommitment digest**                       | ✅ 4.7 — anchoring root or scope digest MUST fail; S4.18                                                                                                                                                                                                       |
 | Every schema array has declared sequence-or-set semantics                                 | ✅ 4.8 — undeclared paths fail validation; S4.19–S4.22, S4.25                                                                                                                                                                                                  |
 | **Array-semantics registry is bound into `case_schema_digest`, not inferred at runtime**  | ✅ 4.8 — JSON Pointer paths; every reachable path exactly once; no name/value inference; set compare = unsigned UTF-8 byte order                                                                                                                               |
 | Public and private fields stated explicitly                                               | ✅ 4.1 — table; root-only manifest invalid; S4.14                                                                                                                                                                                                              |
 | **Transport limits separated from canonical artifact limits**                             | ✅ 4.1.1 — raw caps are a preflight resource guard; canonical caps decide acceptance, so a verdict cannot depend on whitespace                                                                                                                                 |
 | **Operational limits carry pinned v1 VALUES, owned by the commitment profile**            | ✅ 4.1.1 — five constants FROZEN as exact decimal strings (`MiB = 2^20` stated); covered by `commitment_profile_digest`; `MAX_CASE_BYTES` pinned in the same artifact; bounded/streaming input path before allocation                                          |
-| **Pinned limits cannot contradict one another — proven, not sampled**                     | ✅ 4.1.1 — limit-compatibility invariant derived from the frozen canonical schema; closed-form (leaf vector exact in `N`); worst case 7,266,642 <= 8,388,608 bytes, 1,121,966 B (1.070 MiB) headroom, recomputed at A9, A11, A17; canonical <= transport       |
+| **Pinned limits cannot contradict one another — proven, not sampled**                     | ✅ 4.1.1 — limit-compatibility invariant derived from the frozen canonical schema; closed-form (leaf vector exact in `N`); worst case 7,267,143 <= 8,388,608 bytes, 1,121,465 B (1.070 MiB) headroom, recomputed at A9, A11, A17, A18; canonical <= transport  |
 | **The cardinality ceiling is justified by runtime, not byte fit**                         | ✅ 4.1.1 — `2^16` frozen (A11); the former `2^18` counted the manifest only and understated the public core 6.6x (173.2 MiB, 90% of the 192 MiB cap rejected at `2^20`); larger cardinality = new profile after streaming + 3-runtime + measured boundary runs |
-| **Sizing counts ALL public objects, not the manifest alone (A11)**                        | ✅ 4.1.1 — public canonical core 45,649,418 B (43.535 MiB) = manifest 7,266,642 + exec census 19,191,389 + result census 19,191,387; stated as an evidence footprint, never a heap bound                                                                       |
+| **Sizing counts ALL public objects, not the manifest alone (A11)**                        | ✅ 4.1.1 — public canonical core 45,649,919 B (43.535 MiB) = manifest 7,267,143 + exec census 19,191,389 + result census 19,191,387; stated as an evidence footprint, never a heap bound                                                                       |
 | **Census-specific limits owned by Section 5, bound by the existing profile**              | ✅ 4.1.1, 5.2.2 — four exact constants inside the `commitment_profile` preimage already covered by `commitment_profile_digest`; no new bundle field, no A9 rework                                                                                              |
 | **Every pinned limit is exercised at its boundary, both sides**                           | ✅ 4.11.1 — S4.26–S4.33; at-limit accepts and limit-plus-one rejects; S4.27/S4.29 assert rejection ORDER, not merely outcome                                                                                                                                   |
 | **A resource-incapable verifier is never reported as invalid evidence**                   | ✅ 4.11.1, 4.10 — S4.34 is `implementation_regression_fixtures`; `not_proof_that_every_conforming_verifier_can_process_a_profile_conforming_artifact`                                                                                                          |
@@ -1920,10 +2037,10 @@ A pinned limit that is never exercised at its boundary is an untested claim. Eac
 | **Epoch guarantee is LOCAL only; no duplicate-epoch check is claimed**                    | ✅ 4.5, 4.10 — Section 4 defines no campaign-history object, so no same-history check exists; `not_proof_of_global_epoch_uniqueness_without_complete_campaign_history`                                                                                         |
 | **Every digest is an exact byte construction, not symbolic notation**                     | ✅ 4.4–4.7 — four ASCII domain constants pinned; field order frozen; variable text `u16be`-framed; every `bytes32` = lowercase 64-hex                                                                                                                          |
 | **`schema_version` is bound and non-authoritative**                                       | ✅ 4.4 — `manifest_schema_id`+`manifest_schema_digest` inside `profile_bundle_digest`; declared version must equal the pinned expected value                                                                                                                   |
-| **Digest derivation acyclic; all declared digests recomputed**                            | ✅ 4.7.1 — DAG stated; no self-containing digest; no whole-manifest shortcut; declared digests non-authoritative                                                                                                                                               |
+| **Digest derivation acyclic; all declared digests recomputed**                            | ✅ 4.7.3 — DAG stated; no self-containing digest; no whole-manifest shortcut; declared digests non-authoritative                                                                                                                                               |
 | **Fixture raw-code taxonomy is non-contradictory**                                        | ✅ 4.9 — blindness fixtures verify raw `0`; a non-zero code attaches to an OMITTED ceiling, never to the valid fixture                                                                                                                                         |
 | **Implementation-regression fixtures are non-raw-code-bearing**                           | ✅ 4.9 — four-class taxonomy frozen; six members (S3.2, S3.14, S4.3, S4.18, S4.25, S4.34); `MAX_CANONICAL_LEAF_ENTRY_BYTES` classified here — it cannot fire on schema-valid input; must execute **before** the raw-code matrix is trusted                     |
-| `section_4.added_non_claims` declared                                                     | ✅ 4.10 — two permanent ceilings: global epoch uniqueness, verifier capacity                                                                                                                                                                                   |
+| `section_4.added_non_claims` declared                                                     | ✅ 4.10 — four permanent ceilings: global epoch uniqueness, verifier capacity, real-world producer identity (A18), exclusive/uncompromised key control (A18)                                                                                                   |
 | `section_4.required_later_bindings` declared (A8)                                         | ✅ 4.10 — one requirement: `section_8_opening_bundle_resource_limits`, discharger Section 8, unresolved → release REJECT                                                                                                                                       |
 | No raw `420+` codes allocated                                                             | ✅ none in this section                                                                                                                                                                                                                                        |
 
@@ -2232,7 +2349,7 @@ reported_reported_result_census_digest =
   )
 ```
 
-The digest field is **excluded from its own preimage**, and `schema_id`/`schema_digest`/`cardinality`/`declared_index` are excluded because they are non-authoritative declarations whose authoritative sources (the pinned profile, `N`, the array position) are already bound. §4.7.1's DAG rule holds: no self-containing digest, no whole-manifest shortcut, every declared digest recomputed.
+The digest field is **excluded from its own preimage**, and `schema_id`/`schema_digest`/`cardinality`/`declared_index` are excluded because they are non-authoritative declarations whose authoritative sources (the pinned profile, `N`, the array position) are already bound. §4.7.3's DAG rule holds: no self-containing digest, no whole-manifest shortcut, every declared digest recomputed.
 
 **Role separation is what stops object substitution.** An execution census and a result census over the same universe have different domain constants and different pinned schema digests, so a producer cannot present one in the other's slot even when every identity vector matches.
 
@@ -2500,7 +2617,7 @@ A fixture that asserts what its author hoped is worse than no fixture: it conver
 | 6   | Every result entry binds the exact corresponding execution-entry digest                      | ✅ 5.4, 5.5 — chain link **recomputed**, never read; S5.8, S5.19                                                                                                                            |
 | 7   | Role-specific domains prevent execution/result substitution                                  | ✅ 5.5 — five domain constants; plus pinned schema IDs and digests; S5.15                                                                                                                   |
 | 8   | Epoch, precommitment, cardinality match across all objects                                   | ✅ 5.3 — all verifier-recomputed, declared copies checked; S5.10, S5.11                                                                                                                     |
-| 9   | Every declared digest recomputed                                                             | ✅ 5.3, 5.5 — §4.7.1 DAG holds; self-field-excluded projections; S5.13, S5.14                                                                                                               |
+| 9   | Every declared digest recomputed                                                             | ✅ 5.3, 5.5 — §4.7.3 DAG holds; self-field-excluded projections; S5.13, S5.14                                                                                                               |
 | 10  | Full-versus-selective verifier claims remain distinct                                        | ✅ 5.6 — equality is a full-verifier claim; selective MUST NOT claim it                                                                                                                     |
 | 11  | Payload truth and execution occurrence not inferred from identity equality                   | ✅ 5.7, 5.8 — three owned ceilings + `not_proof_of_real_execution`; S5.9, S5.9b, S5.20, S5.21                                                                                               |
 | 12  | **A10 committed** — Section 1 says "execution-record identities", not "executed"             | ✅ `bc742152`, atomic, precedes this freeze                                                                                                                                                 |
