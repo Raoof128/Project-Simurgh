@@ -18,6 +18,8 @@
 
 **Amendment A5 folded:** Section 3.1 resolved the deferred opening-index representation by making `claimed_index` mandatory and non-authoritative. Section 1's optional-index wording and stale Section 4 forward reference were removed. Its explanatory concatenation formula was replaced with a symbolic reference to Section 3.2's sole normative byte construction. **No blade, law, release predicate, or socket changed.**
 
+**Amendment A6 folded:** Section 4 established that the public scope manifest must materialise all `N` leaf entries, making the `u64` encoding ceiling operationally unacceptable — the accepted `N` exceeded a JavaScript array's maximum length by a factor of 4.29e9. Section 3.2 had already applied the encodable-≠-accepted principle to `MAX_CASE_BYTES` and failed to apply it to `N`. Section 3.2 now separates the binary encoding domain from the accepted Stage 5O v1 operational domain, which is profile-pinned by Section 4. **No blade, law, release predicate, or socket changed.**
+
 ---
 
 ## Section 1 — identity, laws, honest core
@@ -782,16 +784,32 @@ case_bytes_i            UTF-8 canonical JSON under the frozen case schema
 
 No delimiter guessing. No decimal index text inside the hashed bytes. No producer-controlled field deciding the position or the epoch.
 
-**Integer domains (frozen).** `u64be` and `u32be` are partial functions until their ranges are fixed:
+**Integer domains (frozen, A6).** Two domains, never conflated:
+
+- the **binary encoding domain** — what `u64be`/`u32be` can represent, which makes the hash construction a total function;
+- the **accepted Stage 5O v1 operational domain** — what a verifier will actually accept, which is always narrower.
+
+**Encoding domain:**
 
 ```text
 1 <= N <= 2^64 - 1
 0 <= expected_index_i < N
-1 <= length(case_bytes_i) <= MAX_CASE_BYTES
-MAX_CASE_BYTES  precommitted positive integer, <= 2^32 - 1
+1 <= length(case_bytes_i) <= 2^32 - 1
 ```
 
-`N`'s ceiling is `2^64 - 1` rather than `2^64` deliberately — it keeps every index representable in `u64be` without maximum-domain arithmetic, and still exceeds any plausible evaluation universe by an absurd margin. `MAX_CASE_BYTES` exists because `u32be` _can_ encode four gigabytes and no honest case needs to.
+`N`'s encoding ceiling is `2^64 - 1` rather than `2^64` deliberately — it keeps every index representable in `u64be` without maximum-domain arithmetic.
+
+**Operational domain — profile-pinned, and the one that governs acceptance:**
+
+```text
+1 <= N <= min(2^64 - 1, MAX_SCOPE_CARDINALITY)
+1 <= length(case_bytes_i) <= MAX_CASE_BYTES
+
+MAX_SCOPE_CARDINALITY   profile-pinned (Section 4)
+MAX_CASE_BYTES          precommitted positive integer, <= 2^32 - 1
+```
+
+**Encodable is not accepted.** `u32be` _can_ encode four gigabytes and no honest case needs to. Equally, `u64be` _can_ encode `2^64 - 1` positions and no manifest can materialise them — Section 4 requires the ordered public leaf vector, so an unbounded `N` is a memory-exhaustion weapon rather than a generous limit. The encoding bounds make the construction total; the **operational bounds decide acceptance**.
 
 **Overflow and encoding behaviour (fail-closed).**
 
@@ -1028,26 +1046,26 @@ Per the A1 monotonicity rule, the general ceiling **does not silently absorb** t
 
 ### Section 3 freeze gate
 
-| Gate                                                                                   | Status                                                                                                                                                                     |
-| -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `claimed_index` mandatory but non-authoritative                                        | ✅ 3.1 — one canonical opening shape; recomputation uses verifier-known `i` only                                                                                           |
-| Leaf hashing uses verifier-known `expected_index`                                      | ✅ 3.1, 3.2 — `u64be(expected_index_i)`                                                                                                                                    |
-| **`expected_epoch_digest` is verifier-known; producer declarations non-authoritative** | ✅ 3.1 authority table — `claimed_epoch_digest` mandatory, equality-checked, powerless; S3.13, S3.14                                                                       |
-| Every hashed component has an exact byte encoding                                      | ✅ 3.2 — one length-prefixed variable field; all others fixed-width                                                                                                        |
-| **`N`, index, and case-length domains are total; overflow fails closed**               | ✅ 3.2 — `1<=N<=2^64-1`, `0<=i<N`, `1<=len<=MAX_CASE_BYTES`; length checked **before** hashing; S3.17, S3.18                                                               |
-| Case canonicalisation: one frozen schema, no floats                                    | ✅ 3.3, 3.4                                                                                                                                                                |
-| **Numbers: no JSON numerics; canonical decimal strings only**                          | ✅ 3.3.1 — measured `9007199254740993` → `…992` in JS, exact in Python: a live parity break, not a hypothetical; S3.19, S3.20                                              |
-| **Duplicate keys rejected lexically, before parsing**                                  | ✅ 3.3.1 — measured `JSON.parse` collapses `{"a":1,"a":2}` → `{"a":2}`, so a post-parse rule is unimplementable; S3.21                                                     |
-| **Unicode: UTF-8 only, no normalisation, lone surrogates rejected**                    | ✅ 3.3.1 — measured `"\ud800"` → `efbfbd` in JS, raises in Python; NFC/NFD already distinct; S3.22, S3.23, S3.24                                                           |
-| **Cross-commitment salt non-reuse owned and signed by Section 3**                      | ✅ 3.6, 3.7 — `not_proof_of_cross_commitment_salt_nonreuse`; Section 8 may reference, must not discharge; S3.25 reject / S3.26 green                                       |
-| **Digest equivalence defined by frozen canonical bytes, not logical equivalence**      | ✅ 3.3 — bytes-only rule; ordered-vs-set arrays must be resolved in the schema, never by `canonicalJson`; S3.5                                                             |
-| Salt format: exactly one canonical 32-byte representation                              | ✅ 3.4 — lowercase hex, 64 chars                                                                                                                                           |
-| Merkle shape and odd-node handling unambiguous                                         | ✅ 3.5 — **single normative recursive `MTH`**; duplicate-last forbidden; no synthetic sibling for unpaired nodes; 5K agreement is implementation evidence only             |
-| Cross-epoch replay rejected (**narrowed** — not "structurally impossible")             | ✅ 3.1, 3.2 — rejected when the verifier supplies the expected epoch digest and distinct epochs have distinct digests, subject to the stated hash assumptions; S3.4, S3.13 |
-| Opened salt reuse rejects                                                              | ✅ 3.6, S3.11                                                                                                                                                              |
-| Unopened salt uniqueness is an explicit signed ceiling                                 | ✅ 3.7 — `not_proof_of_unopened_salt_uniqueness`, S3.12 green fixture                                                                                                      |
-| **Unopened full-preimage conformance is a signed ceiling with paired fixtures**        | ✅ 3.7 — `not_proof_of_unopened_leaf_preimage_conformance`; S3.16 green / S3.15 reject                                                                                     |
-| No raw `420+` codes allocated                                                          | ✅ none in this section                                                                                                                                                    |
+| Gate                                                                                                            | Status                                                                                                                                                                        |
+| --------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `claimed_index` mandatory but non-authoritative                                                                 | ✅ 3.1 — one canonical opening shape; recomputation uses verifier-known `i` only                                                                                              |
+| Leaf hashing uses verifier-known `expected_index`                                                               | ✅ 3.1, 3.2 — `u64be(expected_index_i)`                                                                                                                                       |
+| **`expected_epoch_digest` is verifier-known; producer declarations non-authoritative**                          | ✅ 3.1 authority table — `claimed_epoch_digest` mandatory, equality-checked, powerless; S3.13, S3.14                                                                          |
+| Every hashed component has an exact byte encoding                                                               | ✅ 3.2 — one length-prefixed variable field; all others fixed-width                                                                                                           |
+| **Encoding domains total; accepted operational domain profile-pinned and narrower; overflow fails closed** (A6) | ✅ 3.2 — encoding `1<=N<=2^64-1`, `0<=i<N`; operational `1<=N<=min(2^64-1, MAX_SCOPE_CARDINALITY)`, `1<=len<=MAX_CASE_BYTES`; length checked **before** hashing; S3.17, S3.18 |
+| Case canonicalisation: one frozen schema, no floats                                                             | ✅ 3.3, 3.4                                                                                                                                                                   |
+| **Numbers: no JSON numerics; canonical decimal strings only**                                                   | ✅ 3.3.1 — measured `9007199254740993` → `…992` in JS, exact in Python: a live parity break, not a hypothetical; S3.19, S3.20                                                 |
+| **Duplicate keys rejected lexically, before parsing**                                                           | ✅ 3.3.1 — measured `JSON.parse` collapses `{"a":1,"a":2}` → `{"a":2}`, so a post-parse rule is unimplementable; S3.21                                                        |
+| **Unicode: UTF-8 only, no normalisation, lone surrogates rejected**                                             | ✅ 3.3.1 — measured `"\ud800"` → `efbfbd` in JS, raises in Python; NFC/NFD already distinct; S3.22, S3.23, S3.24                                                              |
+| **Cross-commitment salt non-reuse owned and signed by Section 3**                                               | ✅ 3.6, 3.7 — `not_proof_of_cross_commitment_salt_nonreuse`; Section 8 may reference, must not discharge; S3.25 reject / S3.26 green                                          |
+| **Digest equivalence defined by frozen canonical bytes, not logical equivalence**                               | ✅ 3.3 — bytes-only rule; ordered-vs-set arrays must be resolved in the schema, never by `canonicalJson`; S3.5                                                                |
+| Salt format: exactly one canonical 32-byte representation                                                       | ✅ 3.4 — lowercase hex, 64 chars                                                                                                                                              |
+| Merkle shape and odd-node handling unambiguous                                                                  | ✅ 3.5 — **single normative recursive `MTH`**; duplicate-last forbidden; no synthetic sibling for unpaired nodes; 5K agreement is implementation evidence only                |
+| Cross-epoch replay rejected (**narrowed** — not "structurally impossible")                                      | ✅ 3.1, 3.2 — rejected when the verifier supplies the expected epoch digest and distinct epochs have distinct digests, subject to the stated hash assumptions; S3.4, S3.13    |
+| Opened salt reuse rejects                                                                                       | ✅ 3.6, S3.11                                                                                                                                                                 |
+| Unopened salt uniqueness is an explicit signed ceiling                                                          | ✅ 3.7 — `not_proof_of_unopened_salt_uniqueness`, S3.12 green fixture                                                                                                         |
+| **Unopened full-preimage conformance is a signed ceiling with paired fixtures**                                 | ✅ 3.7 — `not_proof_of_unopened_leaf_preimage_conformance`; S3.16 green / S3.15 reject                                                                                        |
+| No raw `420+` codes allocated                                                                                   | ✅ none in this section                                                                                                                                                       |
 
 ---
 
