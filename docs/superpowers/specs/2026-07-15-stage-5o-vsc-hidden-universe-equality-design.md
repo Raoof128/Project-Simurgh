@@ -3750,4 +3750,43 @@ The last line matters for the same reason §3.3.1 does: if a block has two valid
 12. Evidence lanes: normative Lane A, captured Bitcoin Lane B, dishonest-producer fixtures. **Discharges `section_12_stage4t_presented_evidence_package_capsule`** (A14) — builds the Stage 4T capsule over the **assembled** package once openings, receipts, ledger and narrative exist; that audience-varying material is what 4T actually protects, and it cannot exist before the challenge.
 13. Prior-art and novelty source map (pinned: title, version/date, URL, retrieval date, exact quote, digest or archived copy, classification).
 
+### Section 10 open items — A24 gate-hardening acceptance criteria
+
+**These are acceptance criteria on how Section 10 builds its gates. They are NOT requirements**: they mint no ledger entry, take no owner/discharger pair, and block no release on their own. A24's `section_10_evidence_attack_raw_code_allocation` already blocks release; these constrain the gate that discharges it.
+
+#### `retired_identifier_active_use_rejection`
+
+```text
+open item:      retired_identifier_active_use_rejection
+owner:          section 10
+purpose:        distinguish permitted historical or explicit-absence references to a
+                retired construction from impermissible normative REUSE of it
+required self-test:
+                inject a retired identifier into an ACTIVE requirement block and
+                confirm the gate REJECTS
+```
+
+```text
+permitted contexts                          forbidden active contexts
+------------------                          -------------------------
+amendment history describing deletion       requirement identifiers or subjects
+explicit absence declarations               construction definitions
+negative fixtures proving rejection         normative formulas
+                                            discharge conditions
+                                            active gate obligations
+                                            release mappings
+```
+
+**The invariant:**
+
+```text
+retired identifier mentioned HISTORICALLY  !=  retired identifier used NORMATIVELY
+```
+
+**A plain grep cannot establish that distinction, and the current dead-language check is a plain grep.** It reports green on `closure_capsule_root` — deleted by A14 — because all five occurrences happen to be declarations of its absence. That is **luck of wording, not construction**: the same check would report green on a live normative reuse, because it counts names and cannot read context. The gate passed its most recent test for the wrong reason, which is the same condition as failing it.
+
+**The failure mode is specific and has a name.** A construction is deleted; its identifier survives; a later section reuses the name for the real object that replaced it, or worse, for the deleted one. Then a reviewer greps, finds the identifier, and cannot tell whether the stage is describing a corpse or standing on one. This stage has already spent a review cycle on exactly that ambiguity — `section_12_stage4t_presented_evidence_package_capsule` is a **live, legitimate** post-challenge package construction and was read as the resurrected prechallenge `closure_capsule_root` **because the identifier alone could not settle the question**. It was a false alarm, and the gap it exposed is real: nothing mechanical distinguishes the two cases.
+
+_Logged against Section 10 rather than folded into §4.10: A24's discharge conditions are frozen Section 4 text, and an acceptance criterion written there would change frozen normative text for a gate that does not yet exist. This is roadmap, not contract._
+
 **Outside the release predicate:** the independent-producer Frontier gate (a second producer completing the Stage 5N ceremony) runs parallel to Stage 5O and does not gate its release. Frontier remains capped at **9.4** until that run lands.
