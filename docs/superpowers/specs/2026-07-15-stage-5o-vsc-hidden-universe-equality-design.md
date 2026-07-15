@@ -14,6 +14,8 @@
 
 **Amendment A3 folded:** Removed the duplicated Section 2 non-claim mirror from Section 1. Each normative section now owns its additions, while Section 1 retains the baseline honest core and the monotone canonical-union invariant. The release gate requires an explicit section-level declaration, including empty declarations, from every normative section. **No blade, law, release predicate, or socket changed.**
 
+**Amendment A4 folded:** Section 3 established that full leaf-preimage conformance is verified only for challenged positions. Law 3 was renamed from "No Unopenable Scope" to **"No Unopenable Challenge"** so its title matches its already-frozen body and signed limitations. The law body, blade, release predicate, and sockets are **unchanged** — only the claim the title was making. A law name is a claim.
+
 ---
 
 ## Section 1 — identity, laws, honest core
@@ -92,7 +94,7 @@ The consequence is **not cosmetic across compositions.** Within Stage 5O's own v
 
 1. **No Scope After The Fact** — the private universe and its cardinality `N` are committed and externally anchored before the predeclared challenge height. `N` is bound _into_ the commitment, not signed beside it.
 2. **No Hidden Shrinkage** — the committed, executed, and reported universes are exactly equal as indexed universes under the Stage 5O salted, position-bound identity profile.
-3. **No Unopenable Scope** — every beacon-selected index must produce a valid case, salt, and authentication path. Refusal, absence, duplication, or malformation **fails closed**.
+3. **No Unopenable Challenge** (A4) — every beacon-selected index must produce a valid case, salt, and authentication path. Refusal, absence, duplication, or malformation **fails closed**. The law binds **challenged** positions; it does not assert that all `N` leaves are openable (see `not_proof_of_unopened_leaf_preimage_conformance`).
 
 ### Honest core — baseline and accumulation rule
 
