@@ -16,6 +16,8 @@
 
 **Amendment A4 folded:** Section 3 established that full leaf-preimage conformance is verified only for challenged positions. Law 3 was renamed from "No Unopenable Scope" to **"No Unopenable Challenge"** so its title matches its already-frozen body and signed limitations. The law body, blade, release predicate, and sockets are **unchanged** — only the claim the title was making. A law name is a claim.
 
+**Amendment A5 folded:** Section 3.1 resolved the deferred opening-index representation by making `claimed_index` mandatory and non-authoritative. Section 1's optional-index wording and stale Section 4 forward reference were removed. Its explanatory concatenation formula was replaced with a symbolic reference to Section 3.2's sole normative byte construction. **No blade, law, release predicate, or socket changed.**
+
 ---
 
 ## Section 1 — identity, laws, honest core
@@ -69,15 +71,23 @@ The private case payloads never appear in the execution and result artifacts. On
 **Layer 2 — leaf-preimage index consistency.** For each challenged position `i`, the verifier confirms:
 
 ```text
-leaf_id = H( domain || epoch || expected_index_i || salt_i || H(case_i) )
+leaf_i =
+  Stage5OLeaf(
+    expected_epoch_digest,
+    expected_index_i,
+    salt_i,
+    case_i
+  )
 ```
+
+`Stage5OLeaf` is **explanatory notation only**. Section 3.2 exclusively defines the normative domains, field order, byte encodings, length framing, and hash construction.
 
 The critical word is **expected**. Frozen checks, for every challenged `i`:
 
 1. The challenge selects canonical outer position `i`.
 2. The authentication path proves `leaf_id` occupies tree position `i`.
 3. Recalculation injects the **verifier-known** `i`.
-4. A producer-supplied `index_i` must equal `i`, or be omitted as redundant (schema decision deferred to Section 4).
+4. The mandatory producer-supplied `claimed_index` must equal the verifier-known challenged index `i`. It is routing and review metadata only; leaf recomputation uses verifier-known `i`, never the producer-declared value.
 5. Any preimage internally built with `j ≠ i` fails.
 
 A verifier that recomputes from the opening's _self-declared_ index validates the producer's claim against itself, and the malformed leaf survives. The index field must never be trusted as an input to its own check.
