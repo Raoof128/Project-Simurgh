@@ -1,6 +1,7 @@
 # Stage 5O — VSC: Hidden-Universe Equality (design)
 
 **Status:** Sections **1–4 FROZEN** — Section 1 `a1e2e6d1`, Section 2 `0e26c361`, Section 3 `e8dc0a77`, Section 4 this commit. Sections 5–13 pending.
+**Amendment A9 folded:** The Section 5 preflight gate failed. `profile_bundle_digest` pinned five ID-digest pairs and covered **neither** the execution-object schema **nor** the result-object schema — the strings appeared nowhere in the spec, and `commitment_profile` owns only the §4.1.1 operational limits. Section 5's censuses are the objects whole-universe equality is read from, so their schemas were producer-selectable **after** `stage5o_precommitment_digest` was anchored: the §3.1 authority rule in its fourth costume, anchoring the shape of the argument rather than the argument. The bundle now carries **seven** pairs; `STAGE5O_V1_PROFILE_BUNDLE_DIGEST` changes, breaking nothing, because no Stage 5O artifact has been released. The §4.1.1 limit-compatibility invariant was **recomputed, not assumed** — two more IDs at the `2^16 - 1` ceiling cost 131,328 worst-case wrapper bytes, cutting headroom 5.542 → 5.417 MiB; it still holds. Attack S4.35 makes the new coverage falsifiable. **No blade, law, evidence predicate, or socket changed.**
 **Amendment A8 folded (also amends frozen Sections 1–3):** Section 4 misclassified a temporary cross-section release dependency as a permanent signed non-claim. Because frozen non-claims can never be removed or weakened, that field could only ever have been signed as a stale limitation, and no contract operation called "discharge" existed for it. The opening-bundle resource-limit item is now a fail-closed `required_later_binding`, owned by Section 4 and dischargeable only by Section 8 through exact limits bound into `disclosure_policy_digest` with boundary fixtures. **Scope note:** the amendment necessarily extends into frozen Section 1, which defines the release envelope — a requirement that no release gate reads would be the same painted door one layer up. Section 1 gains the parallel `release_required_bindings` union and its completeness checks, and Sections 1–3 gain empty declarations — additive under the A1 no-rewrite discipline, changing no claim, law, digest, or byte construction. `not_proof_that_every_conforming_verifier_can_process_a_profile_conforming_artifact` remains a permanent non-claim — artifact conformance does not guarantee resource-capable implementations. No claim ceiling was weakened; release remains impossible until the requirement is discharged. **No blade, law, evidence predicate, or socket changed.**
 **Section 4 pinned-limit ruling folded at freeze:** `MAX_SCOPE_CARDINALITY` `2^20`→**`2^18`**, canonical `192`→**32 MiB**, transport `256`→**64 MiB**, `MAX_CASE_BYTES` **64 KiB** unchanged. Cardinality is bounded by unmeasured runtime amplification, not by byte fit — both candidates fit their caps. Adds the limit-compatibility invariant, boundary fixtures S4.26–S4.34, and two `added_non_claims` (verifier capacity; global epoch uniqueness).
 **Section 1 review edits folded at freeze:** record-fabrication claim ceiling + `not_proof_of_real_execution`; provider-agnostic public wording with the pinned seam deferred to the **Section 13** source map; indexed-universe equality replacing set equality; two-layer position-binding split + `not_proof_of_unopened_leaf_preimage_index_consistency`. (This list predates the amendment log; "record-fabrication" was formerly written "A3", which now collides with **Amendment A3** — attack IDs and amendment IDs are distinct namespaces.)
@@ -1204,11 +1205,13 @@ Independently chosen limits must be proven unable to contradict each other. `max
 
 ```text
 canonical leaf vector at N = 262144   : 27,414,011 bytes   (26.144 MiB)   — exact
-worst-case wrapper (5 IDs at 2^16-1)  :      329,418 bytes ( 0.314 MiB)   — bound
-worst-case canonical manifest         : 27,743,427 bytes   (26.458 MiB)
+worst-case wrapper (7 IDs at 2^16-1)  :      460,746 bytes ( 0.439 MiB)   — bound
+worst-case canonical manifest         : 27,874,755 bytes   (26.583 MiB)
 MAX_SCOPE_CANONICAL_BYTES             : 33,554,432 bytes   (32.000 MiB)
-headroom                              :  5,811,005 bytes   ( 5.542 MiB)   — invariant HOLDS
+headroom                              :  5,679,677 bytes   ( 5.417 MiB)   — invariant HOLDS
 ```
+
+_Recomputed under A9._ The profile bundle carries **seven** ID-digest pairs, not five; two more IDs at their `2^16 - 1` ceiling cost 131,328 worst-case wrapper bytes and reduce headroom from 5.542 MiB to 5.417 MiB. The invariant holds, but it was **recomputed rather than assumed** — a limit-compatibility proof that survives a schema change only by luck is not a proof, and A9 is exactly the kind of additive amendment that silently invalidates a frozen number.
 
 **`MAX_CANONICAL_LEAF_ENTRY_BYTES` cannot fire on schema-valid input, and is not claimed to.** The widest canonical entry at `N = 2^18` is **104 bytes** (105 at `2^20`) and, per the paragraph above, that width is _determined_ by the exact-key schema rather than chosen by the producer. The constant can therefore only trip when schema validation is itself incomplete — that is, on a verifier defect, never on hostile evidence. It is retained as a cheap tripwire and is classified in §4.9 as an **`implementation_regression_fixtures` guard**, not as a constant that bounds producer freedom. Listing it among adversarial limits would have made it the fourth costume of the §3.1 authority bug: a correctly shaped constant reading as a defence it cannot mount.
 
@@ -1331,11 +1334,13 @@ Version labels are not trusted. Exact ID-digest pairs:
 
 ```text
 profile_bundle = {
-  manifest_schema_id,     manifest_schema_digest,
-  commitment_profile_id,  commitment_profile_digest,
-  leaf_profile_id,        leaf_profile_digest,
-  tree_profile_id,        tree_profile_digest,
-  case_schema_id,         case_schema_digest
+  manifest_schema_id,          manifest_schema_digest,
+  commitment_profile_id,       commitment_profile_digest,
+  leaf_profile_id,             leaf_profile_digest,
+  tree_profile_id,             tree_profile_digest,
+  case_schema_id,              case_schema_digest,
+  execution_object_schema_id,  execution_object_schema_digest,   // A9
+  result_object_schema_id,     result_object_schema_digest       // A9
 }
 ```
 
@@ -1356,9 +1361,21 @@ profile_bundle_digest =
     u16be(len(UTF8(tree_profile_id)))        || UTF8(tree_profile_id)       ||
     tree_profile_digest                      ||   // bytes32
     u16be(len(UTF8(case_schema_id)))         || UTF8(case_schema_id)        ||
-    case_schema_digest                            // bytes32
+    case_schema_digest                       ||   // bytes32
+    u16be(len(UTF8(execution_object_schema_id))) ||
+      UTF8(execution_object_schema_id)       ||   // A9
+    execution_object_schema_digest           ||   // bytes32, A9
+    u16be(len(UTF8(result_object_schema_id)))    ||
+      UTF8(result_object_schema_id)          ||   // A9
+    result_object_schema_digest                   // bytes32, A9
   )
 ```
+
+**Why the object schemas are here and not in Section 5 (A9).** Section 5 defines the execution and result censuses — the objects `S[i] = E[i] = R[i]` equality is read from. If their schemas were introduced by Section 5, a producer would choose the parser contract for the reported universes **after** `stage5o_precommitment_digest` was anchored, and could then present rows whose shape suited whatever the beacon selected. That is the §3.1 authority rule in its fourth costume: a schema arriving in a correctly shaped field, acquiring authority it was never granted. Anchoring the equality of three universes whose two reported schemas are producer-selectable would anchor the shape of the argument, not the argument.
+
+The pairs live at **bundle level**, as peers of `case_schema` — not inside `commitment_profile`, which owns the §4.1.1 operational limits and nothing else. One artifact, one concern.
+
+**No compatibility break.** `STAGE5O_V1_PROFILE_BUNDLE_DIGEST` changes, since the preimage gained two framed pairs. No Stage 5O artifact has been released, so no anchored commitment is invalidated; the domain constant stays `v1` because there is no `v0` in the world to distinguish it from. Field order is frozen as written: the two new pairs are **appended after `case_schema`**, never interleaved.
 
 Field order is exactly as written. IDs are UTF-8, `1 <= len <= 2^16 - 1`, canonical per §3.3.1 (no lone surrogates, no normalisation). Every `bytes32` appears in JSON as **lowercase hex, exactly 64 characters** — the same single encoding §3.4 freezes for salts; non-canonical equivalents reject.
 
@@ -1383,13 +1400,13 @@ The declared version carries information for readers. The pinned schema digest c
 STAGE5O_V1_PROFILE_BUNDLE_DIGEST = <fixed bytes32, pinned in the verifier>
 ```
 
-The verifier recomputes `profile_bundle_digest` from **all ten fields** (five ID-digest pairs, §4.4 construction) and compares it to that single pinned constant:
+The verifier recomputes `profile_bundle_digest` from **all fourteen fields** (seven ID-digest pairs, §4.4 construction, A9) and compares it to that single pinned constant:
 
 ```text
 "supported" in v1 == exact equality with STAGE5O_V1_PROFILE_BUNDLE_DIGEST
 ```
 
-This collapses the three checks into one that cannot drift: IDs, digests, and the combination are all covered, because all ten fields are inside the digest. Individually supported components could never have implied an approved combination — now the question does not arise.
+This collapses the three checks into one that cannot drift: IDs, digests, and the combination are all covered, because all fourteen fields are inside the digest. Individually supported components could never have implied an approved combination — now the question does not arise.
 
 Should a future version require multiple bundles, the registry itself must be pinned — `profile_tuple_registry_id` and `profile_tuple_registry_digest` bound **into** `profile_bundle_digest`, with the verifier loading the exact pinned registry artifact. "Supported by my current binary" is not offline reproducibility. That is deferred, not designed: **v1 has one bundle digest.**
 
@@ -1716,33 +1733,36 @@ Boundary fixtures on both sides of both limits are required, in the S4.26–S4.3
 
 ### 4.11 Section 4 attack matrix
 
-| ID    | Attack                                                                    | Expected result                                                                   |
-| ----- | ------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| S4.1  | `N` differs from leaf-vector length                                       | **reject**                                                                        |
-| S4.2  | `declared_index` differs from array position                              | **reject**                                                                        |
-| S4.3  | verifier sorts malformed entries before checking                          | **negative implementation fixture** — MUST fail the suite                         |
-| S4.4  | sparse or repeated indices                                                | **reject**                                                                        |
-| S4.5  | duplicate `leaf_id`                                                       | **reject**                                                                        |
-| S4.6  | root does not match the ordered vector                                    | **reject**                                                                        |
-| S4.7  | correct root under wrong `N`                                              | **reject**                                                                        |
-| S4.8  | correct root under wrong epoch                                            | **reject**                                                                        |
-| S4.9  | correct root under wrong profile bundle                                   | **reject**                                                                        |
-| S4.10 | profile ID-digest mismatch                                                | **reject**                                                                        |
-| S4.11 | unsupported profile combination (each part individually valid)            | **reject**                                                                        |
-| S4.12 | downgrade to the unsalted 5K leaf profile                                 | **reject**                                                                        |
-| S4.13 | producer invents a new profile but labels it `v1`                         | **reject** (digest mismatch)                                                      |
-| S4.14 | root-only commitment without the leaf vector                              | **reject**                                                                        |
-| S4.15 | policy binding omitted                                                    | **reject**                                                                        |
-| S4.16 | predicate changed after precommitment                                     | **reject**                                                                        |
-| S4.17 | beacon contract changed after precommitment                               | **reject**                                                                        |
-| S4.18 | verifier anchors `scope_vector_digest` instead of the final precommitment | **negative implementation fixture** — MUST fail the suite                         |
-| S4.19 | sequence array reordered                                                  | **different digest**                                                              |
-| S4.20 | set array reordered                                                       | **same digest**                                                                   |
-| S4.21 | duplicate set member                                                      | **reject**                                                                        |
-| S4.22 | undeclared array semantics                                                | **reject**                                                                        |
-| S4.23 | unknown commitment field                                                  | **reject**                                                                        |
-| S4.24 | empty universe (`N = 0`)                                                  | **reject**                                                                        |
-| S4.25 | set canonicalisation uses the language's default string sort              | **negative implementation fixture** — UTF-16 vs UTF-8 order inverts above the BMP |
+| ID    | Attack                                                                                | Expected result                                                                   |
+| ----- | ------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| S4.1  | `N` differs from leaf-vector length                                                   | **reject**                                                                        |
+| S4.2  | `declared_index` differs from array position                                          | **reject**                                                                        |
+| S4.3  | verifier sorts malformed entries before checking                                      | **negative implementation fixture** — MUST fail the suite                         |
+| S4.4  | sparse or repeated indices                                                            | **reject**                                                                        |
+| S4.5  | duplicate `leaf_id`                                                                   | **reject**                                                                        |
+| S4.6  | root does not match the ordered vector                                                | **reject**                                                                        |
+| S4.7  | correct root under wrong `N`                                                          | **reject**                                                                        |
+| S4.8  | correct root under wrong epoch                                                        | **reject**                                                                        |
+| S4.9  | correct root under wrong profile bundle                                               | **reject**                                                                        |
+| S4.10 | profile ID-digest mismatch                                                            | **reject**                                                                        |
+| S4.11 | unsupported profile combination (each part individually valid)                        | **reject**                                                                        |
+| S4.12 | downgrade to the unsalted 5K leaf profile                                             | **reject**                                                                        |
+| S4.13 | producer invents a new profile but labels it `v1`                                     | **reject** (digest mismatch)                                                      |
+| S4.14 | root-only commitment without the leaf vector                                          | **reject**                                                                        |
+| S4.15 | policy binding omitted                                                                | **reject**                                                                        |
+| S4.16 | predicate changed after precommitment                                                 | **reject**                                                                        |
+| S4.17 | beacon contract changed after precommitment                                           | **reject**                                                                        |
+| S4.18 | verifier anchors `scope_vector_digest` instead of the final precommitment             | **negative implementation fixture** — MUST fail the suite                         |
+| S4.19 | sequence array reordered                                                              | **different digest**                                                              |
+| S4.20 | set array reordered                                                                   | **same digest**                                                                   |
+| S4.21 | duplicate set member                                                                  | **reject**                                                                        |
+| S4.22 | undeclared array semantics                                                            | **reject**                                                                        |
+| S4.23 | unknown commitment field                                                              | **reject**                                                                        |
+| S4.24 | empty universe (`N = 0`)                                                              | **reject**                                                                        |
+| S4.25 | set canonicalisation uses the language's default string sort                          | **negative implementation fixture** — UTF-16 vs UTF-8 order inverts above the BMP |
+| S4.35 | execution or result object schema introduced after the precommitment is anchored (A9) | **reject** — `profile_bundle_digest` mismatch                                     |
+
+**Fixture IDs are stable identifiers, not positions.** S4.35 is numbered above the §4.11.1 boundary block because S4.26–S4.34 were assigned at the Section 4 freeze; renumbering an assigned fixture to make a table read tidily would break every reference to it. The tables group by kind, and the IDs stay put.
 
 **S4.3, S4.18, and S4.25 join S3.2 and S3.14 as guards against our own implementation** — with S4.11.1's S4.34, six fixtures now assert that a verifier built the wrong way fails the suite. S4.3 is the sharpest: a verifier that politely sorts a malformed vector and calls it canonical is laundering with excellent manners.
 
@@ -1776,7 +1796,8 @@ A pinned limit that is never exercised at its boundary is an untested claim. Eac
 | The verifier never sorts an invalid leaf vector into validity                             | ✅ 4.2 — reject-never-repair; S4.3 negative implementation fixture                                                                                                                                                                         |
 | `leaf_id` has one exact meaning                                                           | ✅ 4.3 — `leaf_id_i = leaf_value_i`, defined solely by 3.2                                                                                                                                                                                 |
 | Duplicate public leaf identities reject                                                   | ✅ 4.3 — and explicitly does **not** detect T3.2; S4.5                                                                                                                                                                                     |
-| Profile IDs and digests both covered — no separate local "is this ID supported?" question | ✅ 4.4 — all ten fields inside `profile_bundle_digest`; S4.10, S4.13                                                                                                                                                                       |
+| Profile IDs and digests both covered — no separate local "is this ID supported?" question | ✅ 4.4 — all fourteen fields inside `profile_bundle_digest` (seven pairs, A9); S4.10, S4.13, S4.35                                                                                                                                         |
+| **Execution and result object schemas bound BEFORE anchoring (A9)**                       | ✅ 4.4 — `execution_object_schema` and `result_object_schema` pairs inside `profile_bundle_digest`; Section 5 may not introduce a schema the precommitment never covered; S4.35                                                            |
 | Approved combination cannot drift with the local verifier                                 | ✅ 4.4 — v1 "supported" == exact equality with `STAGE5O_V1_PROFILE_BUNDLE_DIGEST`; S4.11, S4.12                                                                                                                                            |
 | Epoch digest derived, not trusted                                                         | ✅ 4.5 — recomputed from descriptor, recomputed value used; S4.8                                                                                                                                                                           |
 | `N`, epoch, profile bundle, root all inside `scope_vector_digest`                         | ✅ 4.6 — plus fourfold `N` redundancy; S4.1, S4.7, S4.9                                                                                                                                                                                    |
