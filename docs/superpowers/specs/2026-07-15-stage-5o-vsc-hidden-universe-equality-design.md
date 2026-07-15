@@ -2,6 +2,7 @@
 
 **Status:** Sections **1–5 FROZEN** — Section 1 `a1e2e6d1`, Section 2 `0e26c361`, Section 3 `e8dc0a77`, Section 4 `cb67542f`, Section 5 this commit. Sections 6–13 pending.
 **Release is BLOCKED by design:** `release_required_bindings` carries the unresolved `section_6_anchored_presented_census_closure` (§5.9). A green Section 5 freeze does **not** mean anti-equivocation exists, and per **A13** full anti-equivocation is not coming: Stage 4T binds views to a held capsule, never excluding an unseen one, so `not_proof_of_global_census_closure_uniqueness_without_exclusion_witnesses` is a **permanent** ceiling.
+**Amendment A17 folded (amends frozen Section 4):** Section 6 introduced seven concrete closure, anchor-handoff, and Stage 4T package-adapter constructions. The profile bundle expands **7 → 14 pairs**, pinning each by exact ID and digest **before anchoring**, so no producer may choose a closure schema, conflict-evidence shape, anchor schedule, or 4T adapter after the scope precommitment exists. A frozen **ownership map** assigns every Section 6 machine object exactly one owner; the **anchor instance** — a serialised evidence object, not merely a digest construction — has its exact-key schema covered by `closure_anchor_schedule_profile`, since its shape is static while only its values vary. The scope-manifest maximum was recomputed against the expanded bundle: **`7,266,642 <= 8,388,608`**, headroom **`1,121,966`** bytes. The seven new pairs cost only 1,263 bytes because their IDs are pinned to concrete ASCII rather than carrying the `2^16 - 1` bound. A17 pins **nothing imaginary**: no closure-only capsule (deleted by A14), no `closure_non_equivocation_profile` (no such mechanism exists — A13), no `package_capsule_salt` profile and no final package schema, section registry, or capsule root (all Section 12, not yet designed). **No blade, law, evidence predicate, release predicate, or socket changed.**
 **Amendment A16 folded (amends frozen Sections 1 and 2):** The Section 1 baseline field `not_proof_that_the_private_scope_was_well_chosen` had **no normative definition anywhere** and overlapped `not_scope_adequacy`, which T3.4 cited alongside it as though the two were interchangeable. A field the release envelope signs while the spec never records its meaning is a riddle, not a limitation. A16 freezes an **outcome-versus-selection-process** distinction: adequacy concerns the **resulting universe**; "well chosen" concerns the undisclosed **process, rationale, and provenance** used to select it. T3.4 is narrowed to the adequacy ceiling alone, and new row **T3.7** exercises the selection-process ceiling through an accepted-blindness fixture (opaque selection **not** relying on prior outputs — distinguishing it from A15's T3.6, which does). The field is **not** renamed and **not** deleted: A1 forbids removing or silently renaming a frozen non-claim, and deprecation would demand migration machinery for no gain. Because the field is Section 1-owned, Section 2 references it and does **not** add it to `section_2.added_non_claims`. **No non-claim was removed, weakened, or renamed; no blade, law, or socket changed.**
 **Amendment A15 folded (amends frozen Sections 1 and 2):** Section 6's anchor analysis established that future-height anchoring proves scope fixation **before the challenge height**, not before producer-controlled evaluation or result observation. Section 1's claim table asserted that Stage 5O catches "Commit the scope after seeing results" **Deterministically** — false: a producer may evaluate a large pool, observe outputs, select a flattering subset, and anchor it well before the challenge block, passing every check. Law 1 is renamed **"No Scope After The Fact" → "No Scope After Challenge Height"**; its body already stated the narrow, true property, so only the title overreached — the third time a name outran its mechanism, after A4 and A10. The claim row is split into A1 (at-or-after the height, deterministic, T4.1) and **A1b** (before the height but after seeing results, **not detected at all**). T4.1 is left alone: it already names the real after-height violation. Section 2 gains threat row **T3.6** and owns the new ceiling `not_proof_of_scope_selection_independence_from_prior_evaluation_outputs` — distinct from `not_scope_adequacy`, which concedes strategic **quality**, where this concedes selection **timing and information**. Another real weakening, for A13's reason: the stronger property was unavailable, not merely inconvenient. **No indexed-universe equality mechanism, evidence predicate, or socket changed.**
 **Amendment A14 folded (amends frozen Section 5):** A13 put the Stage 4T capsule inside `section_6_anchored_presented_census_closure`'s discharge list. The Section 6 adapter preflight — reading 4T's `capsuleRoot = merkleRootSorted(sectionCommitment(section, salt) per keyed section)` — showed that condition is wrong twice over. **(1) A closure-only capsule is decorative:** every closure field is public, so nothing is redactable, exactly one substantive view exists, and 4T's "redact but never contradict" is satisfied trivially — a sorted Merkle root recommitting already-committed data, plus a second salt profile, for no added claim. **(2) A package capsule cannot exist before the challenge:** the audience-varying material 4T protects (openings, receipts, ledger, narrative) is produced by Sections 7–8 **after** the beacon, so binding a `closure_capsule_root` into the prechallenge `challenge_subject_digest` is **temporally circular** — anchoring a root over evidence the challenge has not yet generated. A14 drops `closure_capsule_root` from the prechallenge design and splits the deliverables across **two temporal layers**: Section 6 anchors the closure with **no Stage 4T**; **Section 12** discharges the 4T capsule over the assembled package once it exists. **No release requirement was removed** — the view-consistency property changed owner and gained an honest home. **No blade, law, evidence predicate, or socket changed.**
@@ -1265,14 +1266,14 @@ Independently chosen limits must be proven unable to contradict each other. `max
 
 ```text
 canonical leaf vector at N = 65536    :  6,804,633 bytes   ( 6.489 MiB)   — exact
-worst-case wrapper (7 IDs at 2^16-1)  :    460,746 bytes   ( 0.439 MiB)   — bound
-worst-case canonical manifest         :  7,265,379 bytes   ( 6.929 MiB)
+worst-case wrapper (14 pairs, A17)    :    462,009 bytes   ( 0.441 MiB)   — bound
+worst-case canonical manifest         :  7,266,642 bytes   ( 6.930 MiB)
 MAX_SCOPE_CANONICAL_BYTES             :  8,388,608 bytes   ( 8.000 MiB)
-headroom                              :  1,123,229 bytes   ( 1.071 MiB)   — invariant HOLDS
+headroom                              :  1,121,966 bytes   ( 1.070 MiB)   — invariant HOLDS
 MAX_SCOPE_CANONICAL_BYTES <= MAX_SCOPE_TRANSPORT_BYTES : 8,388,608 <= 16,777,216 — HOLDS
 ```
 
-_Recomputed twice: once under A9 (five ID-digest pairs to seven, wrapper 329,418 to 460,746) and again under A11 (`N` from `2^18` to `2^16`)._ Both times the invariant survived; both times it was **recomputed rather than assumed**. A limit-compatibility proof that survives a schema or cardinality change only by luck is not a proof, and A9 and A11 are precisely the amendment class that silently invalidates a frozen number.
+_Recomputed three times: A9 (five pairs to seven, wrapper 329,418 → 460,746), A11 (`N` from `2^18` to `2^16`), A17 (seven pairs to fourteen, wrapper 460,746 → 462,009)._ Every time the invariant survived; every time it was **recomputed rather than assumed** — **old wrapper arithmetic gets no grandfather clause**. A17's seven pairs cost only **1,263 bytes** because their IDs are pinned to concrete ASCII (29–44 bytes each); the original seven still carry the `2^16 - 1` bound and contribute ~459 KiB of hypothetical between them. Pinning IDs is not tidiness — it is most of the headroom. A limit-compatibility proof that survives a schema or cardinality change only by luck is not a proof, and A9 and A11 are precisely the amendment class that silently invalidates a frozen number.
 
 **`MAX_CANONICAL_LEAF_ENTRY_BYTES` cannot fire on schema-valid input, and is not claimed to.** The widest canonical entry at `N = 2^16` is **103 bytes** and, per the paragraph above, that width is _determined_ by the exact-key schema rather than chosen by the producer. The constant can therefore only trip when schema validation is itself incomplete — that is, on a verifier defect, never on hostile evidence. It is retained as a cheap tripwire and is classified in §4.9 as an **`implementation_regression_fixtures` guard**, not as a constant that bounds producer freedom. Listing it among adversarial limits would have made it the fourth costume of the §3.1 authority bug: a correctly shaped constant reading as a defence it cannot mount.
 
@@ -1400,9 +1401,42 @@ profile_bundle = {
   leaf_profile_id,             leaf_profile_digest,
   tree_profile_id,             tree_profile_digest,
   case_schema_id,              case_schema_digest,
-  execution_object_schema_id,  execution_object_schema_digest,   // A9
-  result_object_schema_id,     result_object_schema_digest       // A9
+  execution_object_schema_id,  execution_object_schema_digest,          // A9
+  result_object_schema_id,     result_object_schema_digest,             // A9
+  census_closure_schema_id,                  census_closure_schema_digest,                  // A17
+  presented_closure_consistency_profile_id,  presented_closure_consistency_profile_digest,  // A17
+  closure_conflict_schema_id,                closure_conflict_schema_digest,                // A17
+  closure_anchor_schedule_profile_id,        closure_anchor_schedule_profile_digest,        // A17
+  challenge_subject_profile_id,              challenge_subject_profile_digest,              // A17
+  stage4t_package_adapter_profile_id,        stage4t_package_adapter_profile_digest,        // A17
+  package_closure_core_section_schema_id,    package_closure_core_section_schema_digest     // A17
 }
+```
+
+**A17 — the ownership map (frozen).** Every Section 6 machine object has exactly one pinned owner. **No construction sits between chairs:**
+
+| Construction                                                                                                          | Pinned owner                            |
+| --------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
+| `closure_slot_id`, package-level single-closure rules                                                                 | `presented_closure_consistency_profile` |
+| `census_closure` object and `census_closure_digest`                                                                   | `census_closure_schema`                 |
+| canonical joint-conflict evidence                                                                                     | `closure_conflict_schema`               |
+| anchor roles, `anchor_binding_digest`, timing rules, receipt non-mixing, **and the anchor-instance exact-key schema** | `closure_anchor_schedule_profile`       |
+| `challenge_subject_digest`                                                                                            | `challenge_subject_profile`             |
+| the real 4T keyed-section adapter (`sectionKey`/`sectionCommitment`/`merkleRootSorted`)                               | `stage4t_package_adapter_profile`       |
+| the `stage5o/census_closure` keyed section                                                                            | `package_closure_core_section_schema`   |
+
+**The anchor instance is a serialised evidence object, not merely a digest construction**, so its exact-key schema must be pinned. It is covered **by the schedule profile** rather than given its own pair, because the instance's _shape_ is static while only its _values_ vary per ceremony — the type-versus-value line §6.5.1 already draws to keep the graph acyclic.
+
+**Pinned IDs, exact ASCII (`2^16 - 1` bound not used):**
+
+```text
+simurgh.vsc.census_closure.v1                     29 bytes
+simurgh.vsc.presented_closure_consistency.v1      44 bytes
+simurgh.vsc.closure_conflict_evidence.v1          40 bytes
+simurgh.vsc.anchor_schedule.v1                    30 bytes
+simurgh.vsc.challenge_subject.v1                  32 bytes
+simurgh.vsc.stage4t_package_adapter.v1            38 bytes
+simurgh.vsc.package_closure_core_section.v1       43 bytes
 ```
 
 **Exact construction (frozen).** `exact_framed_profile_fields` was a promise-shaped variable; it is now bytes. Variable-length text is length-prefixed; every digest is fixed 32-byte:
@@ -1436,7 +1470,9 @@ profile_bundle_digest =
 
 The pairs live at **bundle level**, as peers of `case_schema` — not inside `commitment_profile`, which owns the §4.1.1 operational limits and nothing else. One artifact, one concern.
 
-**No compatibility break.** `STAGE5O_V1_PROFILE_BUNDLE_DIGEST` changes, since the preimage gained two framed pairs. No Stage 5O artifact has been released, so no anchored commitment is invalidated; the domain constant stays `v1` because there is no `v0` in the world to distinguish it from. Field order is frozen as written: the two new pairs are **appended after `case_schema`**, never interleaved.
+**A17 pins nothing imaginary.** It does **not** pin a closure-only capsule (A14 deleted it), a `closure_non_equivocation_profile` (no such mechanism exists — A13), the `package_capsule_salt` profile (Section 12 owns the construction it governs), or the final evidence-package schema, allowed-section registry, or package capsule root (all Section 12, and not yet designed). Pinning a profile for a construction that does not exist is the decorative-amendment failure the Section 5 preflight already refused once.
+
+**No compatibility break.** `STAGE5O_V1_PROFILE_BUNDLE_DIGEST` changes, since the preimage gained framed pairs. No Stage 5O artifact has been released, so no anchored commitment is invalidated; the domain constant stays `v1` because there is no `v0` in the world to distinguish it from. Field order is frozen as written: the two new pairs are **appended after `case_schema`**, never interleaved.
 
 Field order is exactly as written. IDs are UTF-8, `1 <= len <= 2^16 - 1`, canonical per §3.3.1 (no lone surrogates, no normalisation). Every `bytes32` appears in JSON as **lowercase hex, exactly 64 characters** — the same single encoding §3.4 freezes for salts; non-canonical equivalents reject.
 
@@ -1461,13 +1497,13 @@ The declared version carries information for readers. The pinned schema digest c
 STAGE5O_V1_PROFILE_BUNDLE_DIGEST = <fixed bytes32, pinned in the verifier>
 ```
 
-The verifier recomputes `profile_bundle_digest` from **all fourteen fields** (seven ID-digest pairs, §4.4 construction, A9) and compares it to that single pinned constant:
+The verifier recomputes `profile_bundle_digest` from **all twenty-eight fields** (fourteen ID-digest pairs, §4.4 construction, A9 + A17) and compares it to that single pinned constant:
 
 ```text
 "supported" in v1 == exact equality with STAGE5O_V1_PROFILE_BUNDLE_DIGEST
 ```
 
-This collapses the three checks into one that cannot drift: IDs, digests, and the combination are all covered, because all fourteen fields are inside the digest. Individually supported components could never have implied an approved combination — now the question does not arise.
+This collapses the three checks into one that cannot drift: IDs, digests, and the combination are all covered, because all twenty-eight fields are inside the digest. Individually supported components could never have implied an approved combination — now the question does not arise.
 
 Should a future version require multiple bundles, the registry itself must be pinned — `profile_tuple_registry_id` and `profile_tuple_registry_digest` bound **into** `profile_bundle_digest`, with the verifier loading the exact pinned registry artifact. "Supported by my current binary" is not offline reproducibility. That is deferred, not designed: **v1 has one bundle digest.**
 
