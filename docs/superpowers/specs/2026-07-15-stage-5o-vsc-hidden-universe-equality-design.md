@@ -1945,6 +1945,7 @@ An earlier draft of this section recorded the opening-bundle gap as a third non-
 requirement:            section_8_opening_bundle_resource_limits
 owning section:         4
 permitted discharger:   8   (exactly one; no other section may discharge it)
+status:                 PENDING
 unresolved at release:  REJECT
 ```
 
