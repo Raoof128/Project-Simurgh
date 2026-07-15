@@ -12,6 +12,8 @@
 
 **Amendment A2 folded:** Section 2 established that cumulative disclosure is enforceable only over a complete presented ledger for one commitment root. Section 1's unconditional "bounded" wording for A6 was narrowed accordingly. **No blade, law, release predicate, or socket changed.**
 
+**Amendment A3 folded:** Removed the duplicated Section 2 non-claim mirror from Section 1. Each normative section now owns its additions, while Section 1 retains the baseline honest core and the monotone canonical-union invariant. The release gate requires an explicit section-level declaration, including empty declarations, from every normative section. **No blade, law, release predicate, or socket changed.**
+
 ---
 
 ## Section 1 — identity, laws, honest core
@@ -94,23 +96,38 @@ The consequence is **not cosmetic across compositions.** Within Stage 5O's own v
 
 ### Honest core — baseline and accumulation rule
 
-**Accumulation rule (A1).** Section 1 freezes the **baseline** honest core. Later reviewed sections may **add** non-claims when their threat analysis exposes a new claim ceiling. The release envelope signs the canonical **union** of all section-level non-claims. **No later section may remove, weaken, or silently rename a previously frozen non-claim.** The limitations remain normative and signed — "not an appendix" is preserved in substance — while the spec is permitted to learn without pretending Section 1 predicted every future seam.
+**Accumulation rule (A1, A3).** Section 1 freezes the **baseline** honest core. Later reviewed sections may **add** non-claims when their threat analysis exposes a new claim ceiling. The release envelope signs the canonical **union** of all section-level non-claims. **No later section may remove, weaken, or silently rename a previously frozen non-claim.** The limitations remain normative and signed — "not an appendix" is preserved in substance — while the spec is permitted to learn without pretending Section 1 predicted every future seam.
+
+**Ownership rule (A3).** Each normative section **owns and defines** any non-claims first introduced by that section. Section 1 defines the **baseline honest core and the accumulation rule only** — it does not mirror later sections' additions. The release envelope signs the canonical union of the Section 1 baseline and every later section's owned additions. One fact, one home, one signature path.
 
 **Freeze invariant.**
 
 ```text
-release_non_claims
-=
-ordered_deduplicated_union(
-  section_1_baseline_non_claims,
-  section_2_added_non_claims,
-  ...
-)
+release_non_claims =
+  lexicographically_sorted_union(
+    section_1.baseline_non_claims,
+    section_2.added_non_claims,
+    ...
+    section_13.added_non_claims
+  )
 ```
 
 Ordering is **lexicographic by machine field**, fixed and canonical, so a non-claim's section of origin cannot affect the signed bytes.
 
-**Section 1 baseline:**
+**Completeness checks (A3) — the section index IS the census.**
+
+```text
+- every normative section MUST declare added_non_claims, even if empty
+- each machine field has exactly one owning section
+- later sections may reference an existing field but MUST NOT redefine it
+- duplicate ownership fails closed
+- removal, weakening, or silent renaming fails closed
+- a missing section-level declaration fails the release gate
+```
+
+The last rule is load-bearing: without it a producer could "compute the union" while quietly omitting a section, which is selective omission wearing the union's clothes.
+
+**Section 1 baseline** (`section_1.baseline_non_claims`):
 
 ```text
 not_scope_adequacy
@@ -121,15 +138,6 @@ not_proof_of_beacon_unbiasability_or_finality
 not_proof_of_salt_entropy
 not_semantic_junk_detection_beyond_declared_predicate
 not_proof_that_the_private_scope_was_well_chosen
-```
-
-**Added by Section 2** (threat analysis; see that section for each ceiling's wording):
-
-```text
-not_proof_of_case_distinctness
-not_proof_of_global_cross_verifier_disclosure_budget
-not_proof_of_complete_disclosure_history_without_committed_ledger
-not_proof_of_cross_commitment_corpus_reuse
 ```
 
 > Selective openings reveal the challenged cases. All unchallenged case payloads remain undisclosed under the stated commitment assumptions.
