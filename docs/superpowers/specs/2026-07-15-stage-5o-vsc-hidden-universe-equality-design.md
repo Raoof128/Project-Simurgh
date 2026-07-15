@@ -1467,7 +1467,28 @@ profile_bundle_digest =
     execution_object_schema_digest           ||   // bytes32, A9
     u16be(len(UTF8(result_object_schema_id)))    ||
       UTF8(result_object_schema_id)          ||   // A9
-    result_object_schema_digest                   // bytes32, A9
+    result_object_schema_digest              ||   // bytes32, A9
+    u16be(len(UTF8(census_closure_schema_id)))   ||
+      UTF8(census_closure_schema_id)         ||   // A17
+    census_closure_schema_digest             ||   // bytes32, A17
+    u16be(len(UTF8(presented_closure_consistency_profile_id))) ||
+      UTF8(presented_closure_consistency_profile_id) ||   // A17
+    presented_closure_consistency_profile_digest  ||   // bytes32, A17
+    u16be(len(UTF8(closure_conflict_schema_id))) ||
+      UTF8(closure_conflict_schema_id)       ||   // A17
+    closure_conflict_schema_digest           ||   // bytes32, A17
+    u16be(len(UTF8(closure_anchor_schedule_profile_id))) ||
+      UTF8(closure_anchor_schedule_profile_id) ||   // A17
+    closure_anchor_schedule_profile_digest   ||   // bytes32, A17
+    u16be(len(UTF8(challenge_subject_profile_id))) ||
+      UTF8(challenge_subject_profile_id)     ||   // A17
+    challenge_subject_profile_digest         ||   // bytes32, A17
+    u16be(len(UTF8(stage4t_package_adapter_profile_id))) ||
+      UTF8(stage4t_package_adapter_profile_id) ||   // A17
+    stage4t_package_adapter_profile_digest   ||   // bytes32, A17
+    u16be(len(UTF8(package_closure_core_section_schema_id))) ||
+      UTF8(package_closure_core_section_schema_id) ||   // A17
+    package_closure_core_section_schema_digest        // bytes32, A17
   )
 ```
 
@@ -1477,7 +1498,7 @@ The pairs live at **bundle level**, as peers of `case_schema` — not inside `co
 
 **A17 pins nothing imaginary.** It does **not** pin a closure-only capsule (A14 deleted it), a `closure_non_equivocation_profile` (no such mechanism exists — A13), the `package_capsule_salt` profile (Section 12 owns the construction it governs), or the final evidence-package schema, allowed-section registry, or package capsule root (all Section 12, and not yet designed). Pinning a profile for a construction that does not exist is the decorative-amendment failure the Section 5 preflight already refused once.
 
-**No compatibility break.** `STAGE5O_V1_PROFILE_BUNDLE_DIGEST` changes, since the preimage gained framed pairs. No Stage 5O artifact has been released, so no anchored commitment is invalidated; the domain constant stays `v1` because there is no `v0` in the world to distinguish it from. Field order is frozen as written: the two new pairs are **appended after `case_schema`**, never interleaved.
+**No compatibility break.** `STAGE5O_V1_PROFILE_BUNDLE_DIGEST` changes, since the preimage gained framed pairs. No Stage 5O artifact has been released, so no anchored commitment is invalidated; the domain constant stays `v1` because there is no `v0` in the world to distinguish it from. Field order is frozen as written and **the preimage order equals the object order exactly**: A9's two pairs are appended after `case_schema`, A17's seven after `result_object_schema`, never interleaved. **The object and the preimage are checked against each other, not maintained in parallel by hand** — a pair present in the object but absent from the preimage is declared and unbound, which is the §3.1 authority rule in the costume that survives review most easily, because the object looks complete.
 
 Field order is exactly as written. IDs are UTF-8, `1 <= len <= 2^16 - 1`, canonical per §3.3.1 (no lone surrogates, no normalisation). Every `bytes32` appears in JSON as **lowercase hex, exactly 64 characters** — the same single encoding §3.4 freezes for salts; non-canonical equivalents reject.
 
