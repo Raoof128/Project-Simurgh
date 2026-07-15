@@ -1,7 +1,8 @@
 # Stage 5O — VSC: Hidden-Universe Equality (design)
 
 **Status:** Sections **1–5 FROZEN** — Section 1 `a1e2e6d1`, Section 2 `0e26c361`, Section 3 `e8dc0a77`, Section 4 `cb67542f`, Section 5 this commit. Sections 6–13 pending.
-**Release is BLOCKED by design:** `release_required_bindings` carries the unresolved `section_6_unique_census_closure` (§5.9). A green Section 5 freeze does **not** mean anti-equivocation exists — Section 5 specified the lock; Section 6 must manufacture the key.
+**Release is BLOCKED by design:** `release_required_bindings` carries the unresolved `section_6_anchored_presented_census_closure` (§5.9). A green Section 5 freeze does **not** mean anti-equivocation exists, and per **A13** full anti-equivocation is not coming: Stage 4T binds views to a held capsule, never excluding an unseen one, so `not_proof_of_global_census_closure_uniqueness_without_exclusion_witnesses` is a **permanent** ceiling.
+**Amendment A13 folded (amends frozen Section 5):** The Section 6 preflight read Stage 4T's source instead of its nickname. 4T's "No Two Stories" binds **audience views to a capsule root the verifier already holds** — "a view may REDACT, never CONTRADICT" — so it is not a two-closure conflict detector and not an exclusion relation. **"One filing has one story" is not "there is one filing."** No shipped Simurgh component supplies exclusion; offline, inclusion proves presence and cannot prove absence. A13 therefore (1) **narrows** `section_6_unique_census_closure` → `section_6_anchored_presented_census_closure`, handing the residue to the permanent ceiling `not_proof_of_global_census_closure_uniqueness_without_exclusion_witnesses`; (2) **rehomes** `the challenge seed BINDS census_closure_digest` from Section 6 to **Section 7**, which owns beacon-seed derivation — Section 6 must not report completion of another section's work. Stage 4T becomes the **presentation-integrity shell** around the 5O closure via an additive composition profile; its shipped release is **not** rewritten and remains historically true. The narrowing is a real weakening of §5.9's first promise and is recorded as one — permitted only because the preflight showed the property is unavailable to every shipped component, not merely inconvenient. Leaving an unsatisfiable requirement in the ledger would block Stage 5O forever while proving nothing. **No blade, law, evidence predicate, or socket changed.**
 **Amendment A12 folded (amends frozen Section 2):** Section 5's `case_link_commitment` is checkable only at an opening, when `case_digest_i` becomes available. PC-1 froze the opening predicate `Q` as a function of `(case_i, salt_i, path_i, verifier-known i)` — a tuple with **no access to `E[i]`** — so `Q` could not see a case-link defect, and any claim that such a defect joins `J` would have been a probability claim with no executable predicate behind it. `Q` now also takes **verifier-known `E[i]`**, a public row of the execution-record census rather than producer-supplied opening data, granting the producer no authority. `Q`'s clauses are stated explicitly: leaf-preimage conformance, path and index conformance, and case-link conformance against `E[i].execution_record_digest`. **Additive**: `Q` gains discrimination and loses none; no non-claim is removed or weakened. **No blade, law, evidence predicate, release predicate, or socket changed.**
 **Amendment A11 folded (amends frozen Section 4):** Section 5 introduced the public execution-record and reported-result censuses, establishing that Section 4's manifest-only sizing analysis understated the Stage 5O public evidence footprint by ~6.6x — at `2^18` the public core reaches **173.2 MiB, 90% of the 192 MiB canonical cap this project rejected at `2^20` as an unmeasured capacity hope**. The v1 cardinality ceiling drops `2^18` → **`2^16`**, and the scope-manifest canonical and transport limits drop `32 → 8 MiB` and `64 → 16 MiB` accordingly. The limit-compatibility invariant was recomputed: worst-case manifest 7,265,379 <= 8,388,608, headroom 1.071 MiB, HOLDS. Census-specific limits are defined by Section 5 and bound through the existing `commitment_profile_digest`. Canonical artifact size remains distinct from verifier heap usage — `not_proof_that_every_conforming_verifier_can_process_a_profile_conforming_artifact` stays permanent. A11 adds **no** concrete schema-digest values (none exist yet; `STAGE5O_V1_PROFILE_BUNDLE_DIGEST` is a placeholder the release gate resolves), inserts **no** `census_closure_digest` into any census, claims **no** heap bound, and claims **no** anti-equivocation before Section 6 discharges the closure requirement. **No blade, law, evidence predicate, release predicate, or socket changed.**
 **Amendment A10 folded (amends frozen Section 1):** Section 5 measured that indexed identity equality does **not** prove that execution records arose from real invocations of their associated cases — a producer constructs the entry around any opaque payload digest and every check passes, one real execution reported at all `N` positions, `8/8` distinct entry digests, every check green. Section 1's blade and Law 2 said "committed, executed, and reported members", which invited exactly the inference Section 5 disproved. Both are narrowed to **"execution-record identities"**. The equality relation, the law's mechanism, the release predicate, and the sockets are **unchanged**: A10 removes a meaning the stage never possessed, not a guarantee it once had. **No blade mechanism, evidence predicate, or socket changed.**
@@ -2208,13 +2209,14 @@ Section 5 does **not** prove:
 
 ```text
 section_5.added_non_claims = [
+  not_proof_of_global_census_closure_uniqueness_without_exclusion_witnesses,   // A13
   not_proof_of_real_case_execution_correspondence,
   not_proof_of_result_payload_semantic_correctness,
   not_proof_of_unopened_case_link_conformance
 ]
 
 section_5.required_later_bindings = [
-  section_6_unique_census_closure
+  section_6_anchored_presented_census_closure                                  // A13
 ]
 ```
 
@@ -2235,6 +2237,19 @@ The second is what S5.9b lives under: one real invocation, `N` case-link commitm
 
 > **`not_proof_of_execution_payload_truthfulness` was dropped** — it was absorbed. Its two concessions ("describes work that happened", "describes it accurately") are carried by `not_proof_of_real_execution` and the truthfulness clause of `not_proof_of_real_case_execution_correspondence` respectively. Keeping it would have created a third overlapping name for facts with two homes, violating A3's one-fact-one-home rule. This is a **draft-stage removal of an unfrozen field**, not a weakening of a frozen ceiling: nothing in `section_5.added_non_claims` has ever been signed.
 
+> **`not_proof_of_global_census_closure_uniqueness_without_exclusion_witnesses`** (A13) — Stage 5O proves that a **presented** census closure binds one exact execution-record/reported-result census pair, was anchored before the challenge height, and cannot be altered across audience views. It does **not** prove that no **second, unseen** closure exists for the same `closure_slot_id`. A producer may construct `closure_capsule_A` and `closure_capsule_B` for one slot and hand one to each reviewer; each capsule may be internally perfect, and Stage 4T will correctly prove that A's views match A and B's views match B. Excluding an unseen alternative requires **exclusion witnesses** — witness-quorum registration, an append-only transparency log with split-view resistance, threshold witness cosigning, or a Bitcoin single-use seal — none of which Stage 5O contains. **No verifier can infer an unseen capsule from evidence it never receives.**
+
+**The name carries its condition**, matching `not_proof_of_complete_disclosure_history_without_committed_ledger`. It is permanent **for Stage 5O**: no Stage 5O section discharges it, and it must not be read as a promise that some later stage will. The ladder it completes:
+
+| Layer                     | Honest guarantee                                       |
+| ------------------------- | ------------------------------------------------------ |
+| 5O census closure         | one exact execution/result census pair is bound        |
+| 4T closure capsule        | every presented view is consistent with that closure   |
+| 5O conflict fixture       | two **jointly presented** closures for one slot reject |
+| future witness/seal stage | unseen alternative closures become externally excluded |
+
+**Stage 4T is not rewritten and must not be.** Its shipped release remains historically true — one capsule, many consistent views. Stage 5O adds an **additive composition profile** (`simurgh.vsc.closure_capsule.v1`, `simurgh.vsc.closure_view_consistency.v1`) that makes 4T the **presentation-integrity shell** around the 5O closure. 4T is asked for exactly what it has, and no heading in this spec may imply otherwise.
+
 > **`not_proof_of_unopened_case_link_conformance`** — Stage 5O verifies the execution-record case-link construction only for **challenged** positions, where the opened case supplies the authoritative `case_digest`. For **unopened** positions, it does not prove that the declared `case_link_commitment` has any valid preimage under the frozen Section 5 profile.
 
 **This is Section 3's unopened-leaf finding, one evidence object outward, and it must stay a distinct field.** The leaf preimage at position `i` can be perfectly valid while the case link at the same position is random bytes — `not_proof_of_unopened_leaf_preimage_conformance` does not reach it. An unopened execution entry holding a meaningless `case_link_commitment` still occupies the correct index, carries the correct `scope_leaf_id`, contributes to a valid execution-census digest, is referenced correctly by `R[i]`, and passes **every** public Section 5 equality check.
@@ -2253,20 +2268,41 @@ The third is the most basic and was the last found. The first two concern whethe
 
 This is what prevents **"result included" from quietly becoming "result true"** — the same failure mode as "boundary held" becoming "model safe", one abstraction layer down.
 
-### 5.9 `section_6_unique_census_closure` — the requirement (A8)
+### 5.9 `section_6_anchored_presented_census_closure` — the requirement (A8, narrowed by A13)
 
 **The gap, stated exactly.** The two census digests bind **to** `stage5o_precommitment_digest` — every row digest cites it — but are **not bound into** it, and cannot be: the scope is committed before execution runs. The direction is correct and unavoidable. The consequence is that Section 5 constrains each census's internal consistency and its binding to the committed scope, and says nothing about **how many censuses exist**. Two reported-result censuses over one precommitment, differing only in `result_payload_digest` values, both internally valid, both passing every check in §5.4 — the flattering one to reviewer A, the other to reviewer B. Two fully green stories.
 
-That is not an auxiliary property left unproved; it undermines the reported-result object itself. It is therefore a **fail-closed requirement**, not a permanent ceiling.
+That is not an auxiliary property left unproved; it undermines the reported-result object itself. **Part of it is a fail-closed requirement. Part of it is permanently outside Stage 5O, and A13 separates them** — because an earlier draft of this section asked for both under one name and could never have got it.
+
+**A13 — what the Section 6 preflight found.** This section's first draft named the requirement `section_6_unique_census_closure` and assigned Section 6 to prove that **exactly one** closure exists per slot, by importing Stage 4T's "No Two Stories". Stage 4T's actual relation, read from its source rather than its nickname:
+
+> "One capsule, N audience views. A view may REDACT, never CONTRADICT, and every redaction is ledgered." — `stage4t/core/viewCore.mjs`
+> "No Two Stories defends 'one public story = one filing.'" — `STAGE_4T_CLOSEOUT.md`
+
+Its subject is **a capsule root the verifier already holds**. It proves a _view_ is consistent with _the capsule it is bound to_. It is not a two-closure conflict detector, and it is certainly not an exclusion relation:
 
 ```text
-requirement:            section_6_unique_census_closure
+asked for:   for subject = closure_slot_id, at most one census_closure_digest
+             can obtain an accepted non-equivocation certificate
+supplied:    for a HELD capsule root, every presented view is consistent with it
+```
+
+**"One filing has one story" is not "there is one filing."** No shipped Simurgh component supplies the exclusion property; offline, an inclusion proof shows presence and cannot show absence. Excluding an unseen conflicting closure needs a witness quorum, an append-only log with split-view resistance, or a single-use seal — none of which Stage 5O contains.
+
+**The honest split (A13):**
+
+```text
+requirement:            section_6_anchored_presented_census_closure
 owning section:         5
 permitted discharger:   6   (exactly one)
 unresolved at release:  REJECT
+
+permanent ceiling:      not_proof_of_global_census_closure_uniqueness_without_exclusion_witnesses
 ```
 
-**Naming Section 6 is legitimate because the acceptance relation is frozen here, now.** A8 forbids a promise-shaped variable; it does not forbid naming a discharger whose exact discharge contract is already specified. The following is that contract.
+A13 narrows the requirement and hands the residue to a **signed permanent ceiling** rather than to a section that could never discharge it. This is a genuine weakening of what §5.9 first promised, and it is recorded as one. It is **not** a limitation invented to let the release pass: the preflight established the property is unavailable to every shipped component, not merely inconvenient. The alternative — leaving an unsatisfiable requirement in the ledger — would block Stage 5O forever while proving nothing, which is not honesty, only paralysis wearing a lock.
+
+**Naming Section 6 is legitimate because the acceptance relation is frozen here, now.** A8 forbids a promise-shaped variable; it does not forbid naming a discharger whose exact discharge contract is already specified. The following is that contract, as narrowed.
 
 #### 5.9.1 The closure object (frozen by this requirement)
 
@@ -2289,26 +2325,28 @@ Every execution object, result object, challenge object, opening receipt, and fi
 #### 5.9.2 Discharge conditions — all of them, or the release rejects
 
 ```text
+- the closure was CONSTRUCTED over fully validated censuses
 - the closure was fixed BEFORE the beacon challenge height
-- the challenge seed BINDS census_closure_digest
-- exactly one accepted closure exists for
-    (stage5o_precommitment_digest, epoch_digest)
 - execution and result censuses match that closure exactly
-- conflicting closures FAIL CLOSED
-- later evidence cannot substitute another closure
+- every presented audience view is consistent with the closure capsule   (Stage 4T)
+- JOINTLY PRESENTED conflicting closures for one slot FAIL CLOSED
+- the accepted closure consumes the slot; no replacement after failure
 ```
 
-**Three properties, three required sources.** Section 6 must identify which component supplies each; no component supplies more than it can:
+**A13 removed `the challenge seed BINDS census_closure_digest` from this list.** Section 6 owns closure construction, presentation integrity, and pre-challenge anchoring. **Section 7 owns beacon-seed derivation.** Section 6 cannot discharge a condition about the seed's preimage, and a contract that asked it to would have let Section 6 report completion of work belonging to another section — the same class of error as a law naming a property its mechanism does not reach. Section 6 therefore declares its own fail-closed requirement, `section_7_challenge_seed_binds_closure_capsule`, and the release stays blocked until Section 7 proves the actual seed preimage contains the verifier-recomputed `challenge_subject_digest`. **No release requirement was removed or weakened by the rehoming; it changed owner.**
 
-| Property                               | Required source                                       |
-| -------------------------------------- | ----------------------------------------------------- |
-| fixed before challenge                 | temporal anchor                                       |
-| one story per `(precommitment, epoch)` | **Stage 4T No Two Stories** non-equivocation relation |
-| challenge bound to the exact story     | seed includes `census_closure_digest`                 |
+**Four properties, four required sources.** Section 6 must identify which component supplies each; **no component supplies more than it can**:
+
+| Property                                         | Required source                                                                    | Status                                |
+| ------------------------------------------------ | ---------------------------------------------------------------------------------- | ------------------------------------- |
+| fixed before challenge                           | temporal anchor (Stage 5M quorum)                                                  | dischargeable by Section 6            |
+| every presented view consistent with the closure | **Stage 4T** view-consistency relation, at its real strength                       | dischargeable by Section 6            |
+| challenge bound to the exact story               | seed includes `challenge_subject_digest`                                           | **Section 7** (A13 rehoming)          |
+| **no unseen conflicting closure exists**         | exclusion witnesses — witness quorum, split-view-resistant log, or single-use seal | **NOT AVAILABLE** → permanent ceiling |
 
 **What does not discharge it.** A producer signature alone does not. A timestamp alone does not. **Two separately valid timestamps over two conflicting closures do not** — that is the equivocation, notarised twice, and a verifier that accepts either has been shown both stories and believed the one it read first.
 
-#### 5.9.3 Why the closure must enter the challenge seed
+#### 5.9.3 Why the closure must enter the challenge seed — Section 7's obligation (A13)
 
 Without it, a producer prepares two closures before the same block:
 
@@ -2319,37 +2357,38 @@ closure_B -> reviewer B
 
 Both use the same beacon height. If the closure digest influences seed derivation, each closure derives a _different_ sample — so each story is challenged on positions chosen for it. If it does not influence derivation, both stories face _one_ sample and the producer simply presents whichever census survives it. Either way the producer wins.
 
-Binding the closure into the seed makes the sample belong to **one exact execution-and-result story**. Stage 4T then prevents multiple stories from independently claiming legitimacy. Neither mechanism suffices alone: the seed binding makes a story challengeable, and 4T makes it singular.
+Binding the closure into the seed makes the sample belong to **one exact execution-and-result story**. Stage 4T then prevents that story from being altered across audiences. Neither mechanism suffices alone, and **neither makes the story singular** — that is the ceiling below, not a property either component has. The reasoning above is why Section 7 must bind `challenge_subject_digest` into the seed preimage; it is stated here because Section 5's requirement depends on it, and it is **Section 7's to discharge**, not Section 6's.
 
 ### 5.10 Section 5 attack matrix
 
-| ID    | Attack                                                                                                  | Expected result                                                                                              |
-| ----- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| S5.1  | execution census has fewer or more than `N` rows                                                        | **reject** — `N_execution != N_scope`                                                                        |
-| S5.2  | result census has fewer or more than `N` rows                                                           | **reject** — `N_result != N_scope`                                                                           |
-| S5.3  | `declared_index` differs from array position                                                            | **reject**                                                                                                   |
-| S5.4  | verifier sorts malformed rows before checking                                                           | **negative implementation fixture** — MUST fail the suite                                                    |
-| S5.5  | duplicate or sparse `declared_index`                                                                    | **reject**                                                                                                   |
-| S5.6  | execution row cites another scope leaf                                                                  | **reject** — `E[i].scope_leaf_id != S[i].leaf_id`                                                            |
-| S5.7  | result row cites another scope leaf                                                                     | **reject** — `R[i].scope_leaf_id != S[i].leaf_id`                                                            |
-| S5.8  | result row cites another position's execution entry                                                     | **reject** — chain-link mismatch                                                                             |
-| S5.9  | **execution/result content of case `j` reported at position `i`**                                       | **accept** + both ceilings asserted — `accepted_blindness_fixtures`, raw `0`; MEASURED, not reasoned         |
-| S5.9b | **one real invocation reused across all `N` case-link claims**                                          | **accept** + both ceilings asserted — the case link makes each false association _stable_, not _true_        |
-| S5.10 | execution and result censuses cite different epochs                                                     | **reject** — both must equal the recomputed `epoch_digest`                                                   |
-| S5.11 | census cites another precommitment                                                                      | **reject**                                                                                                   |
-| S5.12 | unknown object-level or row-level field                                                                 | **reject** — exact-key schema (A9-pinned)                                                                    |
-| S5.13 | decorative wrong `execution_record_census_digest`                                                       | **reject** — declared digest recomputed                                                                      |
-| S5.14 | decorative wrong `reported_reported_result_census_digest`                                               | **reject** — declared digest recomputed                                                                      |
-| S5.15 | execution census presented in the result census slot                                                    | **reject** — domain + pinned schema-digest separation                                                        |
-| S5.16 | census declares a schema the precommitment never covered                                                | **reject** — `profile_bundle_digest` mismatch (A9; cf. S4.35)                                                |
-| S5.17 | `entries` reordered, all rows otherwise valid                                                           | **reject** — `sequence` semantics; positions are the universe                                                |
-| S5.18 | census digest computed as `SHA256(canonicalJson(object))`                                               | **negative implementation fixture** — encoder-dependent; MUST fail                                           |
-| S5.19 | verifier checks `R[i].execution_entry_digest` against the DECLARED field rather than the recomputed one | **negative implementation fixture** — MUST fail                                                              |
-| S5.20 | all identities and links match, result content is false                                                 | **accept** + `not_proof_of_result_payload_semantic_correctness` asserted                                     |
-| S5.21 | producer-signed synthetic execution rows, never executed                                                | **accept** + `not_proof_of_real_execution` asserted                                                          |
-| S5.22 | two valid reported-result censuses over one precommitment, shown to different audiences                 | **reject** once `section_6_unique_census_closure` is discharged; **release BLOCKED** until then — §5.9       |
-| S5.23 | `challenged_random_case_link` — random bytes in `case_link_commitment` at an **opened** position        | **reject** — recomputed `case_link_commitment` mismatch; joins `J` under PC-1 (A12)                          |
-| S5.24 | `unopened_random_case_link` — random bytes in `case_link_commitment` at an **unopened** position        | **accept** + `not_proof_of_unopened_case_link_conformance` asserted — `accepted_blindness_fixtures`, raw `0` |
+| ID     | Attack                                                                                                  | Expected result                                                                                                                                                                                |
+| ------ | ------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| S5.1   | execution census has fewer or more than `N` rows                                                        | **reject** — `N_execution != N_scope`                                                                                                                                                          |
+| S5.2   | result census has fewer or more than `N` rows                                                           | **reject** — `N_result != N_scope`                                                                                                                                                             |
+| S5.3   | `declared_index` differs from array position                                                            | **reject**                                                                                                                                                                                     |
+| S5.4   | verifier sorts malformed rows before checking                                                           | **negative implementation fixture** — MUST fail the suite                                                                                                                                      |
+| S5.5   | duplicate or sparse `declared_index`                                                                    | **reject**                                                                                                                                                                                     |
+| S5.6   | execution row cites another scope leaf                                                                  | **reject** — `E[i].scope_leaf_id != S[i].leaf_id`                                                                                                                                              |
+| S5.7   | result row cites another scope leaf                                                                     | **reject** — `R[i].scope_leaf_id != S[i].leaf_id`                                                                                                                                              |
+| S5.8   | result row cites another position's execution entry                                                     | **reject** — chain-link mismatch                                                                                                                                                               |
+| S5.9   | **execution/result content of case `j` reported at position `i`**                                       | **accept** + both ceilings asserted — `accepted_blindness_fixtures`, raw `0`; MEASURED, not reasoned                                                                                           |
+| S5.9b  | **one real invocation reused across all `N` case-link claims**                                          | **accept** + both ceilings asserted — the case link makes each false association _stable_, not _true_                                                                                          |
+| S5.10  | execution and result censuses cite different epochs                                                     | **reject** — both must equal the recomputed `epoch_digest`                                                                                                                                     |
+| S5.11  | census cites another precommitment                                                                      | **reject**                                                                                                                                                                                     |
+| S5.12  | unknown object-level or row-level field                                                                 | **reject** — exact-key schema (A9-pinned)                                                                                                                                                      |
+| S5.13  | decorative wrong `execution_record_census_digest`                                                       | **reject** — declared digest recomputed                                                                                                                                                        |
+| S5.14  | decorative wrong `reported_reported_result_census_digest`                                               | **reject** — declared digest recomputed                                                                                                                                                        |
+| S5.15  | execution census presented in the result census slot                                                    | **reject** — domain + pinned schema-digest separation                                                                                                                                          |
+| S5.16  | census declares a schema the precommitment never covered                                                | **reject** — `profile_bundle_digest` mismatch (A9; cf. S4.35)                                                                                                                                  |
+| S5.17  | `entries` reordered, all rows otherwise valid                                                           | **reject** — `sequence` semantics; positions are the universe                                                                                                                                  |
+| S5.18  | census digest computed as `SHA256(canonicalJson(object))`                                               | **negative implementation fixture** — encoder-dependent; MUST fail                                                                                                                             |
+| S5.19  | verifier checks `R[i].execution_entry_digest` against the DECLARED field rather than the recomputed one | **negative implementation fixture** — MUST fail                                                                                                                                                |
+| S5.20  | all identities and links match, result content is false                                                 | **accept** + `not_proof_of_result_payload_semantic_correctness` asserted                                                                                                                       |
+| S5.21  | producer-signed synthetic execution rows, never executed                                                | **accept** + `not_proof_of_real_execution` asserted                                                                                                                                            |
+| S5.22  | two valid reported-result censuses over one precommitment, **jointly presented**                        | **reject** once `section_6_anchored_presented_census_closure` is discharged; **release BLOCKED** until then — §5.9                                                                             |
+| S5.22b | two closure capsules for one slot, **one shown to each reviewer, never jointly presented**              | **accept both** + `not_proof_of_global_census_closure_uniqueness_without_exclusion_witnesses` asserted — `accepted_blindness_fixtures`, raw `0`; no verifier can infer an unseen capsule (A13) |
+| S5.23  | `challenged_random_case_link` — random bytes in `case_link_commitment` at an **opened** position        | **reject** — recomputed `case_link_commitment` mismatch; joins `J` under PC-1 (A12)                                                                                                            |
+| S5.24  | `unopened_random_case_link` — random bytes in `case_link_commitment` at an **unopened** position        | **accept** + `not_proof_of_unopened_case_link_conformance` asserted — `accepted_blindness_fixtures`, raw `0`                                                                                   |
 
 **S5.9/S5.9b are `accepted_blindness_fixtures` — raw `0`, ceilings asserted.** The first draft called S5.9 "the section's reason to exist" and claimed the chain link rejected it. Executed, it passes. The case-link commitment does **not** reject it either; it merely ensures each false association was committed consistently, before the challenge was predictable. Both fixtures accept and MUST assert both ceilings:
 
@@ -2372,39 +2411,41 @@ A fixture that asserts what its author hoped is worse than no fixture: it conver
 
 ### Section 5 freeze gate
 
-| #   | Gate                                                                                         | Status                                                                                                                      |
-| --- | -------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Execution and result schemas bound **before** anchoring                                      | ✅ A9 — both pairs inside `profile_bundle_digest`; S5.16, S4.35                                                             |
-| 2   | Scope is the Section 4 projection, not a duplicated authority                                | ✅ 5.1 — `S[i] = scope_manifest.leaf_entries[i]`; no second scope object                                                    |
-| 3   | Array position authoritative in all three universes                                          | ✅ 5.3 — `expected_index = array position`; S5.3                                                                            |
-| 4   | No verifier sorting or repair                                                                | ✅ 5.3 — reject-never-repair, identical to §4.2; S5.4, S5.5                                                                 |
-| 5   | Equality checked entry-by-entry across all `N`                                               | ✅ 5.4 — `dom(S) = dom(E) = dom(R) = {0..N-1}`; S5.1, S5.2, S5.6, S5.7                                                      |
-| 6   | Every result entry binds the exact corresponding execution-entry digest                      | ✅ 5.4, 5.5 — chain link **recomputed**, never read; S5.8, S5.19                                                            |
-| 7   | Role-specific domains prevent execution/result substitution                                  | ✅ 5.5 — five domain constants; plus pinned schema IDs and digests; S5.15                                                   |
-| 8   | Epoch, precommitment, cardinality match across all objects                                   | ✅ 5.3 — all verifier-recomputed, declared copies checked; S5.10, S5.11                                                     |
-| 9   | Every declared digest recomputed                                                             | ✅ 5.3, 5.5 — §4.7.1 DAG holds; self-field-excluded projections; S5.13, S5.14                                               |
-| 10  | Full-versus-selective verifier claims remain distinct                                        | ✅ 5.6 — equality is a full-verifier claim; selective MUST NOT claim it                                                     |
-| 11  | Payload truth and execution occurrence not inferred from identity equality                   | ✅ 5.7, 5.8 — three owned ceilings + `not_proof_of_real_execution`; S5.9, S5.9b, S5.20, S5.21                               |
-| 12  | **A10 committed** — Section 1 says "execution-record identities", not "executed"             | ✅ `bc742152`, atomic, precedes this freeze                                                                                 |
-| 13  | **`not_proof_of_unopened_case_link_conformance` owned by Section 5**                         | ✅ 5.8 — distinct from both the leaf-preimage ceiling and the two correspondence ceilings                                   |
-| 14  | **Challenged/unopened random-case-link fixtures form a reject/green pair**                   | ✅ 5.10 — S5.23 rejects, S5.24 accepts + ceiling; ship together or not at all                                               |
-| 15  | **PC-1 explicitly includes the case-link check**                                             | ✅ A12 `83c7c57d` — `Q` takes verifier-known `E[i]`; without it the ceiling would be unbounded, not sampled                 |
-| 16  | `case_link_commitment` inside the recomputed execution-entry digest, hence the census digest | ✅ 5.5 — entry digest preimage; census digest is over entry digests                                                         |
-| 17  | Result entries use the **recomputed** execution-entry digest, never a declared copy          | ✅ 5.4, 5.5 — S5.19 fails a verifier that compares the declared field to itself                                             |
-| 18  | Neither census contains `census_closure_digest`                                              | ✅ 5.2.4 — exact-key **evidence-schema rejection**, not an implementation fixture; upstream/downstream law frozen           |
-| 19  | Exact schema IDs and four byte limits match the reproduced constants                         | ✅ 5.2.1, 5.2.2 — IDs 38 B / 37 B; `19191389` / `19191387` / `33554432` / `33554432`, reproduced by two independent methods |
-| 20  | Canonical-overflow impossibility classified as implementation regression                     | ✅ 5.2.3 — unreachable by a producer under the pinned schema; `MAX_CANONICAL_LEAF_ENTRY_BYTES` character                    |
-| 21  | Both ledgers lexicographically canonical                                                     | ✅ 5.8 — `added_non_claims` 3 entries sorted; `required_later_bindings` 1 entry                                             |
-| 22  | No `420+` raw codes allocated                                                                | ✅ none in this section                                                                                                     |
+| #   | Gate                                                                                         | Status                                                                                                                                                                                      |
+| --- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Execution and result schemas bound **before** anchoring                                      | ✅ A9 — both pairs inside `profile_bundle_digest`; S5.16, S4.35                                                                                                                             |
+| 2   | Scope is the Section 4 projection, not a duplicated authority                                | ✅ 5.1 — `S[i] = scope_manifest.leaf_entries[i]`; no second scope object                                                                                                                    |
+| 3   | Array position authoritative in all three universes                                          | ✅ 5.3 — `expected_index = array position`; S5.3                                                                                                                                            |
+| 4   | No verifier sorting or repair                                                                | ✅ 5.3 — reject-never-repair, identical to §4.2; S5.4, S5.5                                                                                                                                 |
+| 5   | Equality checked entry-by-entry across all `N`                                               | ✅ 5.4 — `dom(S) = dom(E) = dom(R) = {0..N-1}`; S5.1, S5.2, S5.6, S5.7                                                                                                                      |
+| 6   | Every result entry binds the exact corresponding execution-entry digest                      | ✅ 5.4, 5.5 — chain link **recomputed**, never read; S5.8, S5.19                                                                                                                            |
+| 7   | Role-specific domains prevent execution/result substitution                                  | ✅ 5.5 — five domain constants; plus pinned schema IDs and digests; S5.15                                                                                                                   |
+| 8   | Epoch, precommitment, cardinality match across all objects                                   | ✅ 5.3 — all verifier-recomputed, declared copies checked; S5.10, S5.11                                                                                                                     |
+| 9   | Every declared digest recomputed                                                             | ✅ 5.3, 5.5 — §4.7.1 DAG holds; self-field-excluded projections; S5.13, S5.14                                                                                                               |
+| 10  | Full-versus-selective verifier claims remain distinct                                        | ✅ 5.6 — equality is a full-verifier claim; selective MUST NOT claim it                                                                                                                     |
+| 11  | Payload truth and execution occurrence not inferred from identity equality                   | ✅ 5.7, 5.8 — three owned ceilings + `not_proof_of_real_execution`; S5.9, S5.9b, S5.20, S5.21                                                                                               |
+| 12  | **A10 committed** — Section 1 says "execution-record identities", not "executed"             | ✅ `bc742152`, atomic, precedes this freeze                                                                                                                                                 |
+| 13  | **`not_proof_of_unopened_case_link_conformance` owned by Section 5**                         | ✅ 5.8 — distinct from both the leaf-preimage ceiling and the two correspondence ceilings                                                                                                   |
+| 14  | **Challenged/unopened random-case-link fixtures form a reject/green pair**                   | ✅ 5.10 — S5.23 rejects, S5.24 accepts + ceiling; ship together or not at all                                                                                                               |
+| 15  | **PC-1 explicitly includes the case-link check**                                             | ✅ A12 `83c7c57d` — `Q` takes verifier-known `E[i]`; without it the ceiling would be unbounded, not sampled                                                                                 |
+| 16  | `case_link_commitment` inside the recomputed execution-entry digest, hence the census digest | ✅ 5.5 — entry digest preimage; census digest is over entry digests                                                                                                                         |
+| 17  | Result entries use the **recomputed** execution-entry digest, never a declared copy          | ✅ 5.4, 5.5 — S5.19 fails a verifier that compares the declared field to itself                                                                                                             |
+| 18  | Neither census contains `census_closure_digest`                                              | ✅ 5.2.4 — exact-key **evidence-schema rejection**, not an implementation fixture; upstream/downstream law frozen                                                                           |
+| 19  | Exact schema IDs and four byte limits match the reproduced constants                         | ✅ 5.2.1, 5.2.2 — IDs 38 B / 37 B; `19191389` / `19191387` / `33554432` / `33554432`, reproduced by two independent methods                                                                 |
+| 20  | Canonical-overflow impossibility classified as implementation regression                     | ✅ 5.2.3 — unreachable by a producer under the pinned schema; `MAX_CANONICAL_LEAF_ENTRY_BYTES` character                                                                                    |
+| 21  | Both ledgers lexicographically canonical                                                     | ✅ 5.8 — `added_non_claims` 4 entries sorted (A13); `required_later_bindings` 1 entry                                                                                                       |
+| 22  | **Stage 4T imported at its REAL strength, not its nickname**                                 | ✅ 5.9 (A13) — 4T binds views to a held capsule root; it is not an exclusion relation. `not_proof_of_global_census_closure_uniqueness_without_exclusion_witnesses` owns the residue; S5.22b |
+| 23  | No `420+` raw codes allocated                                                                | ✅ none in this section                                                                                                                                                                     |
 
 **Requirement status — declared is not discharged:**
 
 ```text
-section_5.required_later_bindings declared   : PASS
-section_6_unique_census_closure discharged   : PENDING   -> release REJECTS
+section_5.required_later_bindings declared    : PASS
+section_6_anchored_presented_census_closure   : PENDING   -> release REJECTS
+global closure uniqueness                     : NOT CLAIMED (permanent ceiling, A13)
 ```
 
-**A green Section 5 freeze gate does NOT mean anti-equivocation exists.** Section 5 has specified the shape of the lock — the closure object, its preimage, its three required sources, and what does not discharge it. Section 6 still has to manufacture the key. Until it does, `release_required_bindings` is unresolved and Stage 5O cannot release. The two statuses are displayed separately precisely so a green freeze cannot be misread as a green property.
+**A green Section 5 freeze gate does NOT mean anti-equivocation exists**, and after A13 it does not mean full anti-equivocation is even coming. Section 5 has specified the shape of the lock — the closure object, its preimage, its three required sources, and what does not discharge it. Section 6 still has to manufacture the key. Until it does, `release_required_bindings` is unresolved and Stage 5O cannot release. The two statuses are displayed separately precisely so a green freeze cannot be misread as a green property.
 
 **What this section is honest about, in one place:**
 
@@ -2421,8 +2462,8 @@ Binding remains valuable. It does not alchemise records into events.
 
 ## Sections 6–13 — pending
 
-6. Future-height anchor contract. **Discharges the fail-closed requirement `section_6_unique_census_closure`** (§5.9) — must construct, anchor, and enforce uniqueness of the EXTERNAL closure object: closure fixed before the challenge height, `census_closure_digest` bound into the challenge seed, exactly one accepted closure per `(stage5o_precommitment_digest, epoch_digest)` via the Stage 4T non-equivocation relation, conflicting closures fail closed. A producer signature does not discharge it; a timestamp does not; two valid timestamps over two conflicting closures do not. Release rejects while unresolved.
-7. Beacon-seed and unique-index derivation (rejection sampling; no modulo bias).
+6. Future-height anchor contract. **Discharges `section_6_anchored_presented_census_closure`** (§5.9, A13) — construct the EXTERNAL closure over fully validated censuses, derive `closure_slot_id` from `(precommitment, epoch)` alone, anchor strictly before the challenge height via the Stage 5M quorum, wrap it as a Stage 4T closure capsule so every presented view is consistent with it, reject **jointly presented** conflicting closures, consume the slot with no retry garden. Declares `section_7_challenge_seed_binds_closure_capsule` (A13) and freezes `challenge_subject_digest` for Section 7. Claims **no** global uniqueness — see the A13 ceiling. A producer signature does not discharge it; a timestamp does not; two valid timestamps over two conflicting closures do not.
+7. Beacon-seed and unique-index derivation (rejection sampling; no modulo bias). **Discharges `section_7_challenge_seed_binds_closure_capsule`** (A13) — only when the actual seed preimage contains the verifier-recomputed `challenge_subject_digest`.
 8. Opening rules and cumulative-disclosure accounting. **Discharges the fail-closed requirement `section_8_opening_bundle_resource_limits`** (§4.10, A8) — must pin `MAX_OPENING_TRANSPORT_BYTES` and `MAX_OPENING_BUNDLE_CANONICAL_BYTES`, prove the opening-side compatibility invariant, and **bind both limits into the exact preimage of the already-precommitted `disclosure_policy_digest`**. Printing the constants discharges nothing; release rejects while the requirement is unresolved.
 9. Exact rational probability encoding (decimal-string integers).
 10. Raw codes from **420**, first-failure order frozen before implementation.
