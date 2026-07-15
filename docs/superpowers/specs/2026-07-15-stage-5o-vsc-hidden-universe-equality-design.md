@@ -10,6 +10,8 @@
 
 **Amendment A1 folded:** Section 2 threat analysis added four signed claim ceilings and exposed an exact-versus-lower-bound ambiguity in the unopened-preimage statement. Section 1 now defines a monotone canonical non-claim union and delegates probability semantics to PC-0. **No blade, law, release predicate, or socket changed** — A1 is a claim-discipline correction, not a redesign.
 
+**Amendment A2 folded:** Section 2 established that cumulative disclosure is enforceable only over a complete presented ledger for one commitment root. Section 1's unconditional "bounded" wording for A6 was narrowed accordingly. **No blade, law, release predicate, or socket changed.**
+
 ---
 
 ## Section 1 — identity, laws, honest core
@@ -140,16 +142,24 @@ A hidden universe that is fixed is not a universe that is right. **Hiding makes 
 
 ### Attack taxonomy — what is deterministic, what is probabilistic, what is neither
 
-| #   | Attack                                                                      | Caught                                               | By                                         |
-| --- | --------------------------------------------------------------------------- | ---------------------------------------------------- | ------------------------------------------ |
-| A1  | Commit the scope after seeing results                                       | **Deterministically**                                | future-height anchor (Law 1)               |
-| A2  | **Structural omission** — census has ≠ `N` entries, or index domains differ | **Deterministically**                                | indexed-universe equality (Law 2)          |
-| A3  | **Record fabrication** — `N` records exist, some invented                   | **Conditionally probabilistic, possibly not at all** | beacon opening, bounded by predicate power |
-| A4  | **Scope stuffing** — `N` real executions, `J` of them junk                  | **Probabilistically** at `P_detect(N,J,k)`           | beacon opening                             |
-| A5  | **Challenge manipulation** — refuse or malform an opening                   | **Deterministically**                                | fail-closed (Law 3)                        |
-| A6  | Unzip the corpus via repeated audits                                        | **Bounded**                                          | cumulative disclosure budget               |
+| #   | Attack                                                                      | Caught                                                         | By                                         |
+| --- | --------------------------------------------------------------------------- | -------------------------------------------------------------- | ------------------------------------------ |
+| A1  | Commit the scope after seeing results                                       | **Deterministically**                                          | future-height anchor (Law 1)               |
+| A2  | **Structural omission** — census has ≠ `N` entries, or index domains differ | **Deterministically**                                          | indexed-universe equality (Law 2)          |
+| A3  | **Record fabrication** — `N` records exist, some invented                   | **Conditionally probabilistic, possibly not at all**           | beacon opening, bounded by predicate power |
+| A4  | **Scope stuffing** — `N` real executions, `J` of them junk                  | **Probabilistically** at `P_detect(N,J,k)`                     | beacon opening                             |
+| A5  | **Challenge manipulation** — refuse or malform an opening                   | **Deterministically**                                          | fail-closed (Law 3)                        |
+| A6  | Unzip the corpus via repeated audits                                        | **Locally bounded, conditional on evidence completeness** (A2) | cumulative disclosure budget               |
 
 **Missing execution is not a probabilistic detection event.** Commit `N` and report fewer, or shift the index domain, and the census comparison fails with certainty. The sampling probability never qualifies the equality law.
+
+**A6 — locally bounded, conditional on evidence completeness (A2).** The verifier enforces the unique-index disclosure budget over the **complete, non-forked disclosure history presented for one commitment root and epoch**. It does **not** prove that omitted histories, disconnected reviewers, or re-committed versions of the same hidden corpus do not exist. The budget is not unconditionally bounded — it is bounded relative to the evidence it was handed. See:
+
+```text
+not_proof_of_global_cross_verifier_disclosure_budget
+not_proof_of_complete_disclosure_history_without_committed_ledger
+not_proof_of_cross_commitment_corpus_reuse
+```
 
 **A3 — record fabrication, stated without overclaim:**
 
