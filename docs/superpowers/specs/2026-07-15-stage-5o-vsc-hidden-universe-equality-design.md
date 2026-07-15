@@ -694,9 +694,365 @@ Successor-work candidates: `case_distinctness_witnessing`, `federated_disclosure
 
 ---
 
-## Sections 3–13 — pending
+## Section 3 — salted, position-bound leaf profile (DRAFT, uncommitted)
 
-3. Salted, position-bound leaf profile.
+Profile identifier: **`simurgh.vsc.hidden_leaf.v1`**. This section replaces notation with a construction. `H(domain ‖ epoch ‖ index ‖ salt ‖ H(case))` was explanatory shorthand; raw `‖` is **not frozen** and is not used below.
+
+### 3.1 The authority contract — mandatory, never authoritative
+
+The Section 1 deferral is resolved, and generalised so the same bug cannot reappear in a third field:
+
+> **Producer-declared context may carry information. It never acquires authority merely by arriving in a correctly shaped field.** Every value that positions or scopes a leaf is supplied by the verifier at recomputation. The producer's copy is mandatory, checked for equality, and otherwise powerless.
+
+**Authority table (frozen).** For challenged position `i` in epoch `e`:
+
+| Hashed input            | Supplied by                           | Producer's copy                | Rule                                                  |
+| ----------------------- | ------------------------------------- | ------------------------------ | ----------------------------------------------------- |
+| `expected_index_i`      | **verifier** (`challenge.indices[j]`) | `opening.claimed_index`        | MUST equal `i`                                        |
+| `expected_epoch_digest` | **verifier** (commitment context)     | `opening.claimed_epoch_digest` | MUST equal the expected epoch digest                  |
+| `salt_i`                | producer                              | —                              | checked for length/encoding/uniqueness among openings |
+| `case_i`                | producer                              | —                              | checked against the frozen schema                     |
+
+```text
+opening.claimed_index         MUST equal i
+opening.claimed_epoch_digest  MUST equal expected_epoch_digest
+leaf recomputation            MUST use verifier-known i AND verifier-known expected_epoch_digest
+authentication path           MUST prove the leaf occupies tree position i
+authentication context        MUST bind the expected epoch
+```
+
+Recomputation is:
+
+```text
+recomputeLeaf(
+  expected_index        = challenge.indices[j],       // verifier-known
+  expected_epoch_digest = commitment.expected_epoch,  // verifier-known
+  salt                  = opening.salt,
+  case                  = opening.case
+)
+```
+
+and never:
+
+```text
+recomputeLeaf(
+  index = opening.claimed_index,                // FORBIDDEN — validates the claim against itself
+  epoch = opening.claimed_epoch_digest,         // FORBIDDEN — replays epoch A inside epoch B
+  ...
+)
+```
+
+Both claimed fields are **mandatory**, not optional: one canonical opening shape, no positional-array dependence, no two-shapes ambiguity. Their purpose is routing, duplicate detection, and reviewer readability. **They have no authority.**
+
+**Why the epoch needs this too.** Without the rule, a producer replays a leaf from epoch A while submitting epoch A's digest inside an epoch B opening, and the recomputation succeeds — the hash contains an epoch, just not the right one.
+
+### 3.2 Byte-level construction (frozen)
+
+Every hashed component has an exact encoding. The only variable-length hashed field is length-prefixed; all others are fixed-width, so no delimiter is inferable and no boundary is ambiguous.
+
+```text
+CASE_DOMAIN  = ASCII "simurgh.vsc.case.v1"      (fixed constant)
+LEAF_DOMAIN  = ASCII "simurgh.vsc.leaf.v1"      (fixed constant, distinct from CASE_DOMAIN)
+
+case_digest_i =
+  SHA256(
+    CASE_DOMAIN              ||
+    u32be(len(case_bytes_i)) ||
+    case_bytes_i
+  )
+
+leaf_value_i =
+  SHA256(
+    LEAF_DOMAIN               ||
+    expected_epoch_digest     ||   // exactly 32 bytes, VERIFIER-SUPPLIED
+    u64be(expected_index_i)   ||   // exactly 8 bytes, unsigned big-endian, VERIFIER-SUPPLIED
+    salt_i                    ||   // exactly 32 bytes
+    case_digest_i                  // exactly 32 bytes
+  )
+```
+
+Constraints:
+
+```text
+expected_index_i        unsigned 64-bit big-endian — NOT decimal text inside the hash
+salt_i                  exactly 32 bytes
+expected_epoch_digest   exactly 32 bytes (contract in Section 6)
+case_bytes_i            UTF-8 canonical JSON under the frozen case schema
+```
+
+No delimiter guessing. No decimal index text inside the hashed bytes. No producer-controlled field deciding the position or the epoch.
+
+**Integer domains (frozen).** `u64be` and `u32be` are partial functions until their ranges are fixed:
+
+```text
+1 <= N <= 2^64 - 1
+0 <= expected_index_i < N
+1 <= length(case_bytes_i) <= MAX_CASE_BYTES
+MAX_CASE_BYTES  precommitted positive integer, <= 2^32 - 1
+```
+
+`N`'s ceiling is `2^64 - 1` rather than `2^64` deliberately — it keeps every index representable in `u64be` without maximum-domain arithmetic, and still exceeds any plausible evaluation universe by an absurd margin. `MAX_CASE_BYTES` exists because `u32be` _can_ encode four gigabytes and no honest case needs to.
+
+**Overflow and encoding behaviour (fail-closed).**
+
+```text
+decimal index outside unsigned 64-bit range        -> reject
+leading-zero index strings (except the literal "0") -> reject
+negative values                                     -> reject
+fractional or exponent-form numbers                 -> reject
+length(case_bytes_i) > MAX_CASE_BYTES               -> reject BEFORE hashing
+```
+
+Length is validated **before** hashing, never discovered after.
+
+### 3.3 Case digest profile (frozen)
+
+`H(case_i)` needs its own contract, or two runtimes hash different representations of the same logical case.
+
+```text
+case_commitment_payload = exact-key schema {
+  case_schema_version
+  case_type
+  case_payload
+  declared_predicate_inputs
+}
+
+case_bytes  = UTF8(canonicalJson(case_commitment_payload))
+case_digest = SHA256(CASE_DOMAIN || u32be(len(case_bytes)) || case_bytes)
+```
+
+**`case_id` is not a substitute for the payload.** It may appear inside `case_payload` for identity, but the digest covers the whole canonical payload. A leaf committing only to a guessable case identifier would revive exactly the theatre rejected in the 5K analysis — a commitment that is binding but brute-forceable, and therefore not hiding.
+
+**Digest equality is a statement about bytes, not about meaning (frozen).**
+
+> Two inputs produce the same case digest **only when their parsed values produce identical bytes under the frozen Stage 5O schema and canonicalisation algorithm.**
+
+Canonical JSON normalises _representation_, not _application semantics_. It does not know that two differently ordered arrays denote the same set, that `"01"` and `"1"` name the same identifier, that Unicode-normalised strings are equal, that two predicate-parameter lists are equivalent, or that reordered attack steps mean the same case. **Semantic equivalence is never outsourced to `canonicalJson`.**
+
+Consequently, for every array in the case schema:
+
+```text
+- if the array is semantically ORDERED, order is preserved and is part of the digest
+- if the array is semantically a SET, the SCHEMA itself must specify sorting,
+  duplicate handling, and comparison rules BEFORE canonicalisation
+```
+
+An array whose set-or-sequence nature is unstated is a schema defect, not a canonicaliser problem. (Section 4 freezes the case schema against this rule.)
+
+#### 3.3.1 Input domain — numbers, duplicate keys, Unicode (frozen)
+
+`case_bytes` must denote **exactly one byte sequence in every runtime**, not "whatever the local JSON parser thought the author probably meant". Each rule below is justified by a measured divergence, not by caution.
+
+**Numbers — no JSON numeric values at all.**
+
+```text
+Case commitment payloads contain NO JSON numeric values.
+
+Schema-defined integers are canonical decimal STRINGS:
+  - "0", or a non-zero digit followed by digits
+  - no leading zeroes
+  - no sign unless the field explicitly permits signed values
+  - no exponent notation
+  - field-specific bounds checked BEFORE hashing
+```
+
+Rejecting floats is **insufficient**. Measured: `JSON.parse('{"a":9007199254740993}')` yields `9007199254740992` in JavaScript — silently altered, since `Number.MAX_SAFE_INTEGER` is `9007199254740991` — while Python parses the same literal exactly. **The same raw JSON would produce two different `case_digest` values in two runtimes**, breaking the stage's JS↔Python↔browser parity requirement. Decimal strings remove the hazard rather than bounding it.
+
+**Duplicate keys — rejected lexically, before parsing.**
+
+> Raw JSON entering the commitment pathway must pass a duplicate-key-rejecting parser or equivalent lexical validation **before** conversion to an in-memory value. Canonicalisation never receives an object produced from duplicate-key input.
+
+Measured: `JSON.parse('{"a":1,"a":2}')` yields `{"a":2}`, and `canonicalJson` then emits `{"a":2}` without complaint. **The evidence of duplication is destroyed before any post-parse check could see it.** A duplicate-key rule that runs after `JSON.parse` is unimplementable, not merely weak.
+
+**Unicode — code points preserved, never normalised.**
+
+```text
+- UTF-8 only
+- reject malformed UTF-8
+- reject lone UTF-16 surrogates / non-scalar values
+- NO NFC, NFD, NFKC or NFKD normalisation
+- canonically equivalent-looking strings MAY intentionally produce different digests
+- JSON escape spelling does not matter after valid parsing; the resulting
+  scalar sequence does
+```
+
+Measured: `"\ud800"` (a lone surrogate) encodes to UTF-8 bytes `efbfbd` in JavaScript — silently replaced with U+FFFD — whereas Python's `.encode('utf-8')` raises instead. Another parity break, so rejection is the only total rule. Measured for normalisation: NFC `é` is `c3a9`, NFD `é` is `65cc81`, and `canonicalJson` already keeps them distinct — the no-normalisation policy is implementable as written.
+
+**Why no normalisation, for a security corpus specifically.** Normalisation can silently merge attack strings that the corpus author intended to remain distinct. A red-team universe whose members are collapsed by NFKC has had its cardinality quietly edited by a text-processing library — which is exactly the class of unaccountable universe mutation this stage exists to make impossible.
+
+### 3.4 JSON representation (outside the hash)
+
+```text
+indices, cardinalities   canonical decimal strings
+salts                    lowercase hex, exactly 64 characters — ONE encoding only
+non-canonical equivalent encodings    rejected
+floats, negative zero, duplicate keys, unknown fields in the case schema    rejected
+```
+
+The JSON index is a decimal string; the hashed index is `u64be(i)`. These are different representations of the same value and must never be conflated.
+
+### 3.5 Merkle tree profile (frozen)
+
+Own domain-separated leaf value, established canonical shape:
+
+```text
+merkle_leaf_i    = SHA256(0x00 || leaf_value_i)
+merkle_node(l,r) = SHA256(0x01 || l || r)
+```
+
+**The tree is defined recursively, and this definition is the sole normative one.** It does not depend on Stage 5K, on RFC 6962 commentary, or on any experiment:
+
+```text
+MTH([])       = FORBIDDEN — Stage 5O requires N > 0
+MTH([x])      = MerkleLeaf(x)
+MTH(D[0:n])   = MerkleNode( MTH(D[0:k]), MTH(D[k:n]) )
+                where k is the largest power of two STRICTLY less than n
+```
+
+Frozen shape rules:
+
+```text
+- canonical shape determined solely by N
+- no duplicate-last rule
+- no implicit zero padding
+- left/right order is significant
+- N > 0
+- authentication paths are position-aware
+- path length and orientation MUST match the canonical tree for N and i
+- a node with no sibling in the decomposition contributes NO synthetic
+  sibling element to the authentication path
+```
+
+The last rule matters independently of the root: two implementations can agree on `MTH` and still disagree on **proof encoding** if one emits placeholder siblings. Path length is exactly the number of `MerkleNode` levels on position `i`'s root path.
+
+**Duplicate-last is explicitly forbidden** — it is the rule behind CVE-2012-2459, where distinct leaf sets produce identical roots.
+
+**Implementation evidence (not a mathematical claim, not normative).** Stage 5K's bottom-up promote-odd implementation was tested against the recursive `MTH` above: roots **identical for `n = 1..600`**, and path lengths **identical to the `MTH` recursion depth for `n = 1..400`, every `i`**, with `buildInclusion`/`verifyInclusion` round-tripping throughout. Stage 5K promotes (`merkle.mjs:35`), it does not duplicate. This is evidence that 5K's code is a **candidate implementation** of §3.5 — it is not a claim of general equivalence, and Stage 5O's shape is canonical because this section defines it recursively, full stop. A Lean proof that bottom-up promotion equals `MTH` for all `n` is a Section 11 candidate, not a prerequisite.
+
+**The root alone carries no semantics.** `N`, profile version, and epoch are bound by the commitment contract (Section 4), never inferred from the root.
+
+### 3.6 The salt seam
+
+Per-leaf salts must be independently generated. Opening `k` salts **cannot** prove the unopened `N−k` salts are unique — and reuse matters: once one case opens, its revealed salt assists attacks on other unopened leaves that reused it.
+
+For **opened** positions the verifier requires:
+
+```text
+- valid 32-byte salt, canonical lowercase-hex encoding
+- no duplicate salt among the disclosed openings for the same commitment root
+- salt not derived from the public beacon where provenance explicitly reveals that fact (T5.2)
+```
+
+Random-looking bytes prove neither entropy nor independence (T5.9, `not_proof_of_salt_entropy`).
+
+**Scope of duplicate-salt detection (frozen).**
+
+> Opened-salt duplicate detection is complete only over the disclosed openings and disclosure history supplied for **one commitment root**. It is **not** a global uniqueness claim.
+
+**The cross-root escape.** Once a case and salt are revealed under one commitment, salt reuse can assist linkage or candidate recomputation against a _different_ commitment — even when the epoch changes. Section 3 defines salt generation, scopes duplicate checking, and is where this weakness first becomes true. It therefore **owns** the ceiling:
+
+```text
+not_proof_of_cross_commitment_salt_nonreuse
+```
+
+**Section 8's disclosure ledger does not automatically discharge it.** A same-root ledger detects reuse among evidence it actually links; it cannot determine that two unrelated salted roots conceal the same case, the same corpus, or the same salt. Closing this would require new geometry — a stable private corpus identifier, a cross-root salt-generation commitment, an independently witnessed salt-derivation ceremony, or a privacy-preserving linkage proof — all outside the current blade, and some in direct tension with the unlinkability the stage is built to provide. Section 8 may **reference** this ceiling; it must not claim to discharge it merely by maintaining a ledger.
+
+### 3.7 `section_3.added_non_claims` — owned by this section (A3)
+
+```text
+section_3.added_non_claims = [
+  not_proof_of_cross_commitment_salt_nonreuse
+  not_proof_of_unopened_leaf_preimage_conformance
+  not_proof_of_unopened_salt_uniqueness
+]
+```
+
+> **`not_proof_of_unopened_salt_uniqueness`** — Openings verify salt length, encoding, and leaf recomputation for challenged positions. They do not prove that unopened positions use distinct salts.
+
+> **`not_proof_of_cross_commitment_salt_nonreuse`** — Duplicate-salt rejection covers all disclosed openings presented under the same commitment root and complete presented disclosure history. Stage 5O does not prove that salts are never reused across different commitment roots, epochs, or re-committed versions of a hidden corpus.
+
+> **`not_proof_of_unopened_leaf_preimage_conformance`** — The verifier establishes complete tree-position and cross-artifact identity equality for all `N` public leaf identifiers. It verifies full Stage 5O leaf-preimage conformance only for challenged openings. Unopened leaves may contain malformed or unavailable preimages and remain subject to the conditional sampling guarantee.
+
+**Unopened leaves are unverified for more than salt uniqueness.** An unopened leaf may conceal a non-canonical case, an unknown-field case, an invalid schema, a mis-sized salt, a wrong embedded index, a wrong epoch, a foreign profile or domain, or a `leaf_value` that is simply random bytes for which the producer holds **no valid opening at all**. Each such defect enters `J` and is caught only if sampled (PC-1).
+
+**Three unopened-leaf ceilings, all retained — none replaces another:**
+
+| Ceiling                                                 | Scope                                                 | Owner     |
+| ------------------------------------------------------- | ----------------------------------------------------- | --------- |
+| `not_proof_of_unopened_leaf_preimage_index_consistency` | the specific index-binding ceiling                    | Section 1 |
+| `not_proof_of_unopened_salt_uniqueness`                 | the specific cross-leaf salt ceiling                  | Section 3 |
+| `not_proof_of_unopened_leaf_preimage_conformance`       | the general schema, encoding, and openability ceiling | Section 3 |
+
+Per the A1 monotonicity rule, the general ceiling **does not silently absorb** the two specific ones. The canonical union carries all three unless a later amendment formally deprecates one. Section 3 **references** Section 1's field without redefining it, as A3 requires.
+
+**Law 3 is spot-checked, not universal.** "No Unopenable Challenge" (renamed by A4, precisely because of this finding) binds every _beacon-selected_ index. It does not assert that all `N` leaves are openable — that is what `not_proof_of_unopened_leaf_preimage_conformance` concedes, and what the S3.15/S3.16 fixture pair demonstrates from both sides. The law's former title, "No Unopenable Scope", claimed the universal property this section proves the stage does not have.
+
+### 3.8 Section 3 attack matrix
+
+| ID    | Attack                                                                               | Expected result                                                                                                                         |
+| ----- | ------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
+| S3.1  | self-declared index differs from challenge                                           | **reject**                                                                                                                              |
+| S3.2  | verifier recomputes using `claimed_index` not `expected_index`                       | **negative implementation fixture** — a verifier built this way MUST fail the suite                                                     |
+| S3.3  | correct leaf at wrong Merkle position                                                | **reject**                                                                                                                              |
+| S3.4  | cross-epoch leaf replay                                                              | **reject** (`epoch_digest` is inside `leaf_value`)                                                                                      |
+| S3.5  | case canonicalisation variant                                                        | same digest **only** when the parsed values produce identical bytes under the frozen schema and canonicalisation algorithm              |
+| S3.6  | unknown case field                                                                   | **reject**                                                                                                                              |
+| S3.7  | salt wrong length or non-canonical encoding                                          | **reject**                                                                                                                              |
+| S3.8  | leaf/node domain swap                                                                | **reject**                                                                                                                              |
+| S3.9  | duplicate-last instead of canonical promotion                                        | **reject**                                                                                                                              |
+| S3.10 | authentication path valid for a different `N`                                        | **reject**                                                                                                                              |
+| S3.11 | duplicate salts among **opened** positions                                           | **reject**                                                                                                                              |
+| S3.12 | duplicate salts among **unopened** positions                                         | **accepted + `not_proof_of_unopened_salt_uniqueness` present**                                                                          |
+| S3.13 | `claimed_epoch_digest` differs from `expected_epoch_digest`                          | **reject**                                                                                                                              |
+| S3.14 | verifier recomputes using `claimed_epoch_digest` rather than `expected_epoch_digest` | **negative implementation fixture** — a verifier built this way MUST fail the suite                                                     |
+| S3.15 | **challenged** leaf whose `leaf_value` has no valid preimage (random bytes)          | **reject**                                                                                                                              |
+| S3.16 | **unopened** leaf whose `leaf_value` has no valid preimage                           | **accepted + `not_proof_of_unopened_leaf_preimage_conformance` present**                                                                |
+| S3.17 | index decimal outside `u64` range, leading-zero, negative, or exponent-form          | **reject**                                                                                                                              |
+| S3.18 | `length(case_bytes_i) > MAX_CASE_BYTES`                                              | **reject before hashing**                                                                                                               |
+| S3.19 | JSON numeric literal in a case payload, incl. unsafe integers above `2^53-1`         | **reject** — `unsafe_integer_literal`                                                                                                   |
+| S3.20 | non-canonical decimal string (leading zero, stray sign, exponent form)               | **reject** — `noncanonical_decimal_string`                                                                                              |
+| S3.21 | duplicate key in **raw** case JSON                                                   | **reject before canonicalisation** — `duplicate_key_raw_case`                                                                           |
+| S3.22 | lone UTF-16 surrogate / non-scalar value                                             | **reject** — `lone_surrogate`                                                                                                           |
+| S3.23 | malformed UTF-8                                                                      | **reject**                                                                                                                              |
+| S3.24 | composed vs decomposed Unicode (NFC vs NFD)                                          | **distinct digests** under the no-normalisation rule — `composed_vs_decomposed_unicode`                                                 |
+| S3.25 | same salt twice among presented **same-root** openings                               | **reject** — `same_salt_twice_in_presented_same_root_openings`                                                                          |
+| S3.26 | same salt across two **unlinked commitment roots**                                   | **both roots may verify independently + `not_proof_of_cross_commitment_salt_nonreuse` present** — `same_salt_across_two_unlinked_roots` |
+
+**S3.2 and S3.14 are guards against our own regression**, not against a producer: each asserts that an implementation trusting a producer-declared field _fails the suite_. Both exist because the authority bug was written once for the index, caught, and then reproduced one field to the left for the epoch.
+
+**S3.21 is an ordering requirement, not merely a rule.** Measured: `JSON.parse('{"a":1,"a":2}')` returns `{"a":2}` and `canonicalJson` emits it without complaint — so a duplicate-key check placed after parsing has nothing left to detect. The rule is only implementable at the lexical layer.
+
+**S3.25 / S3.26 separate what Section 3 enforces from what it refuses to pretend**: identical salt reuse rejects within one presented root, and passes across two unlinked roots with the ceiling asserted.
+
+**S3.12 and S3.16 are accepted-blindness fixtures** — they prove the verifier knows where its eyesight ends. **S3.15/S3.16 is the pair that matters most**: the identical defect rejects when challenged and passes when not. That is the honest shape of a spot-check, and it is exactly what a reader might otherwise mistake Law 3 for guaranteeing universally.
+
+### Section 3 freeze gate
+
+| Gate                                                                                   | Status                                                                                                                                                                     |
+| -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `claimed_index` mandatory but non-authoritative                                        | ✅ 3.1 — one canonical opening shape; recomputation uses verifier-known `i` only                                                                                           |
+| Leaf hashing uses verifier-known `expected_index`                                      | ✅ 3.1, 3.2 — `u64be(expected_index_i)`                                                                                                                                    |
+| **`expected_epoch_digest` is verifier-known; producer declarations non-authoritative** | ✅ 3.1 authority table — `claimed_epoch_digest` mandatory, equality-checked, powerless; S3.13, S3.14                                                                       |
+| Every hashed component has an exact byte encoding                                      | ✅ 3.2 — one length-prefixed variable field; all others fixed-width                                                                                                        |
+| **`N`, index, and case-length domains are total; overflow fails closed**               | ✅ 3.2 — `1<=N<=2^64-1`, `0<=i<N`, `1<=len<=MAX_CASE_BYTES`; length checked **before** hashing; S3.17, S3.18                                                               |
+| Case canonicalisation: one frozen schema, no floats                                    | ✅ 3.3, 3.4                                                                                                                                                                |
+| **Numbers: no JSON numerics; canonical decimal strings only**                          | ✅ 3.3.1 — measured `9007199254740993` → `…992` in JS, exact in Python: a live parity break, not a hypothetical; S3.19, S3.20                                              |
+| **Duplicate keys rejected lexically, before parsing**                                  | ✅ 3.3.1 — measured `JSON.parse` collapses `{"a":1,"a":2}` → `{"a":2}`, so a post-parse rule is unimplementable; S3.21                                                     |
+| **Unicode: UTF-8 only, no normalisation, lone surrogates rejected**                    | ✅ 3.3.1 — measured `"\ud800"` → `efbfbd` in JS, raises in Python; NFC/NFD already distinct; S3.22, S3.23, S3.24                                                           |
+| **Cross-commitment salt non-reuse owned and signed by Section 3**                      | ✅ 3.6, 3.7 — `not_proof_of_cross_commitment_salt_nonreuse`; Section 8 may reference, must not discharge; S3.25 reject / S3.26 green                                       |
+| **Digest equivalence defined by frozen canonical bytes, not logical equivalence**      | ✅ 3.3 — bytes-only rule; ordered-vs-set arrays must be resolved in the schema, never by `canonicalJson`; S3.5                                                             |
+| Salt format: exactly one canonical 32-byte representation                              | ✅ 3.4 — lowercase hex, 64 chars                                                                                                                                           |
+| Merkle shape and odd-node handling unambiguous                                         | ✅ 3.5 — **single normative recursive `MTH`**; duplicate-last forbidden; no synthetic sibling for unpaired nodes; 5K agreement is implementation evidence only             |
+| Cross-epoch replay rejected (**narrowed** — not "structurally impossible")             | ✅ 3.1, 3.2 — rejected when the verifier supplies the expected epoch digest and distinct epochs have distinct digests, subject to the stated hash assumptions; S3.4, S3.13 |
+| Opened salt reuse rejects                                                              | ✅ 3.6, S3.11                                                                                                                                                              |
+| Unopened salt uniqueness is an explicit signed ceiling                                 | ✅ 3.7 — `not_proof_of_unopened_salt_uniqueness`, S3.12 green fixture                                                                                                      |
+| **Unopened full-preimage conformance is a signed ceiling with paired fixtures**        | ✅ 3.7 — `not_proof_of_unopened_leaf_preimage_conformance`; S3.16 green / S3.15 reject                                                                                     |
+| No raw `420+` codes allocated                                                          | ✅ none in this section                                                                                                                                                    |
+
+---
+
+## Sections 4–13 — pending
+
 4. Commitment schema and canonical declared-index ordering.
 5. Indexed-universe equality objects.
 6. Future-height anchor contract.
