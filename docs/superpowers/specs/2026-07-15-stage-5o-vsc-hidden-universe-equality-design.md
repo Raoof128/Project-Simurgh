@@ -3597,11 +3597,14 @@ Section 6 **freezes** this value and **anchors** it. It does **not** claim the s
 ```text
 section_6.required_later_bindings = [
   section_7_challenge_seed_binds_presented_census_closure,
-  section_12_stage4t_presented_evidence_package_capsule
+  section_12_stage4t_presented_evidence_package_capsule,
+  section_7_beacon_chain_roots_in_verified_closure_bitcoin_checkpoint   // A26 erratum
 ]
 ```
 
-Section 7 discharges the first only when the **actual seed preimage** contains the verifier-recomputed `challenge_subject_digest`. Section 12 discharges the second only when the assembled package capsule exists, over a pinned section registry, with Lane-B salts.
+Section 7 discharges the first only when the **actual seed preimage** contains the verifier-recomputed `challenge_subject_digest`. Section 12 discharges the second only when the assembled package capsule exists, over a pinned section registry, with Lane-B salts. Section 7 discharges `section_7_beacon_chain_roots_in_verified_closure_bitcoin_checkpoint` only when the validated header suffix **begins at** A26's verifier-derived checkpoint projection (§6.5.4) rather than at a producer-declared copy of it.
+
+**A26 erratum — this ledger was the register A26 forgot.** A26 emitted the canonical four-field block for its new requirement and did **not** add the name here, so the canonical grammar carried **six** requirements while the second ledger's union carried **five**. The fold's gate parsed only the four-field blocks, reported `6 declared, 6 unique, all PENDING`, and was **green over a register it never read** — A22's blind spot reproduced exactly, in the other ledger, by the amendment whose own record cites A22's lesson. **The requirement gate now derives both representations and requires equality**, because a ledger that cannot be cross-checked against its own canonical grammar is a second dialect, and §4.10 already settled that one dialect wins. The list order here is declaration-ordered, not sorted, exactly as §1's non-claims are: `release_required_bindings` is a `lexicographically_sorted_union`, so a section's internal order cannot reach the signed bytes, and appending rather than re-sorting keeps the ordinal prose above true.
 
 This is the containment analogue at the evidence layer: downstream challenge and opening authority descends from the **unique anchored closure**, never from a producer-supplied "current census" pointer.
 
