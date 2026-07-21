@@ -356,6 +356,20 @@
                 <td>Quietly skip approval on a consequential action</td>
                 <td class="val"><strong>No Silent Exemption (4Q)</strong></td>
               </tr>
+              <tr>
+                <td>Fix the evaluation scope <em>after</em> seeing results</td>
+                <td class="val">
+                  temporal commitment + externally-banked notary quorum (5L&ndash;5M)
+                </td>
+              </tr>
+              <tr>
+                <td>Finalise a decision the instant results appear</td>
+                <td class="val">verifiable finalisation delay (5N)</td>
+              </tr>
+              <tr>
+                <td>Swap or shrink what &ldquo;everything evaluated&rdquo; means</td>
+                <td class="val">universe-commitment equality (5K)</td>
+              </tr>
             </tbody>
           </table>
         </section>
@@ -405,11 +419,13 @@
           </h2>
           <p>
             <em
-              >The arc has since advanced 21 rungs to Stage 5L (<code>v2.47.0</code>): a real Llama
+              >The arc has since advanced 23 rungs to Stage 5N (<code>v2.49.0</code>): a real Llama
               Guard 4 blind spot contained 138/138, a live Sonnet-5 adversary contained 8/8 across
-              all 7 laws, and an evaluation-scope commitment anchored in Bitcoin block
-              957&#8239;689. Stage 4Q remains a clean, one-command reproducible example of the
-              pattern.</em
+              all 7 laws, an evaluation-scope commitment anchored in Bitcoin block 957&#8239;689,
+              and &mdash; now banked &mdash; the 3-of-3 TSA+Bitcoin+Rekor quorum
+              (<code>externally_anchored</code>, raw 0, block 957&#8239;782) plus a verifiable
+              finalisation delay banked at block 957&#8239;983. Stage 4Q remains a clean,
+              one-command reproducible example of the pattern.</em
             >
           </p>
           <p>
