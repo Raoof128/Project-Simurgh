@@ -25,7 +25,7 @@ export function measure(obj) {
   return Buffer.byteLength(canonicalJson(obj), "utf8");
 }
 
-/** A valid 71-character digest token from a deterministic filler byte. */
+/** A valid 64-character bare-hex digest field from a deterministic filler byte. */
 const token = (fill) => encodeDigestToken(Buffer.alloc(32, fill));
 
 /** A lexically valid 160-hex header. Content is irrelevant to size; every valid header is 160. */

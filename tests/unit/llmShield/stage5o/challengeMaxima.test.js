@@ -68,7 +68,7 @@ test("maxima: every digest token in every generated object decodes to exactly 32
     for (const [k, v] of Object.entries(o)) {
       if (k.endsWith("_digest")) {
         assert.equal(decodeDigestToken(v).length, 32, `${k} must decode to 32 bytes`);
-        assert.equal(v.length, 71, `${k} must be a 71-char token`);
+        assert.equal(v.length, 64, `${k} must be a 64-char bare-hex field`);
         n++;
       }
     }
@@ -100,10 +100,10 @@ test("maxima: the four A27 numbers, generated and exact", () => {
   const m = generateMaxima();
   // Pinned to the generated values. If a schema changes, this fails and A27's numbers move --
   // which is the point: the script is the authority, not a remembered constant.
-  assert.equal(m.MAX_BEACON_SUFFIX_ARTIFACT_BYTES_V1, 328873);
-  assert.equal(m.MAX_SELECTED_INDICES_ARTIFACT_BYTES_V1, 513335);
-  assert.equal(m.MAX_CHALLENGE_RECORD_BYTES_V1, 661);
-  assert.equal(m.MAX_CHALLENGE_PACKAGE_BYTES_V1, 842869);
+  assert.equal(m.MAX_BEACON_SUFFIX_ARTIFACT_BYTES_V1, 328859);
+  assert.equal(m.MAX_SELECTED_INDICES_ARTIFACT_BYTES_V1, 513328);
+  assert.equal(m.MAX_CHALLENGE_RECORD_BYTES_V1, 619);
+  assert.equal(m.MAX_CHALLENGE_PACKAGE_BYTES_V1, 842806);
 });
 
 test("maxima: package total is the EXACT arithmetic sum — no wrapper, no margin", () => {
@@ -186,7 +186,10 @@ test('boundary: out-of-universe index "65536" REJECT', () => {
 test("boundary: uppercase digest token REJECT", () => {
   const valid = maximalChallengeRecord();
   const bad = maximalChallengeRecord();
-  bad.beacon_suffix_digest = bad.beacon_suffix_digest.toUpperCase();
+  // The generated digests use all-digit nibble fillers (token(0x88) -> "88..."), so .toUpperCase()
+  // on them is the identity -- and the negative-fixture law (correctly) rejects a non-mutation.
+  // Use the uppercase form of a valid lowercase-LETTERED digest so the case mutation is real.
+  bad.beacon_suffix_digest = "a".repeat(64).toUpperCase();
   assertNegativeVector({
     name: "uppercase_digest_token",
     valid,
@@ -200,7 +203,7 @@ test("boundary: uppercase digest token REJECT", () => {
 test("boundary: extra schema key REJECT", () => {
   const valid = maximalChallengeRecord();
   const bad = maximalChallengeRecord();
-  bad.beacon_value = "sha256:" + "ab".repeat(32); // the field v4 deliberately removed
+  bad.beacon_value = "ab".repeat(32); // the field v4 deliberately removed
   assertNegativeVector({
     name: "extra_schema_key",
     valid,
