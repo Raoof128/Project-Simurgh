@@ -21,8 +21,8 @@ prerequisite gate, with Risk Reports published in advance and the Responsible Sc
 release. Each of those is an _ordering_ obligation stated in prose. That ecosystem is only as strong as
 its evidence format, and today that format is prose and trusted logs. Simurgh is the missing layer:
 **an outsider with only a public key re-derives the verdict byte-for-byte, with no model, no network,
-and no producer access** — and, as of Stage 5L, that includes a machine-checkable proof that the
-evaluation scope was committed _before_ review, anchored in a public Bitcoin block.
+and no producer access** — and, as of Stage 5M, that includes a machine-checkable proof that the
+evaluation scope was committed _before_ review, banked against an externally-confirmed Bitcoin quorum.
 
 ## The one moat: completeness (no selective omission)
 
@@ -38,7 +38,7 @@ each stage adds one anti-laundering blade so an operator cannot make a bad run _
 | Backdate the audit clock                         | temporal-completeness heartbeat (4N)                               |
 | Hide the real model/route behind a proxy         | No-Ghost-Provider custody (4P)                                     |
 | Quietly skip approval on a consequential action  | **No Silent Exemption (4Q)**                                       |
-| Fix the evaluation scope _after_ seeing results  | **temporal commitment + notary quorum (5L)**                       |
+| Fix the evaluation scope _after_ seeing results  | **temporal commitment + externally-banked notary quorum (5L–5M)**  |
 | Swap or shrink what "everything evaluated" means | universe-commitment equality (5K)                                  |
 
 ## Four problem → mechanism mappings
@@ -75,7 +75,7 @@ each stage adds one anti-laundering blade so an operator cannot make a bad run _
 
 ## Where the arc is now — real captures, not slideware
 
-The ladder has advanced 21 rungs past 4Q to **Stage 5L (`v2.47.0`)**, and the claims are backed by live
+The ladder has advanced 23 rungs past 4Q to **Stage 5N (`v2.49.0`)**, and the claims are backed by live
 evidence a reviewer can look up, not just fixtures:
 
 - **A real shipped detector's blind spot, contained.** A live **Llama Guard 4 12B** was run once over a
@@ -88,13 +88,16 @@ evidence a reviewer can look up, not just fixtures:
   across all 7 laws** (backdate, post-hoc window, clock-shopping, single-root, anchor omission,
   independence inflation, release bypass). The frozen verifier **contained every one, 0 bypasses** —
   while `claude-fable-5` refused the attacker role outright (recorded honestly, not retried).
-- **A commitment you can look up in the blockchain.** Stage 5L binds the evaluation scope to a real
+- **A commitment you can look up in the blockchain — now banked.** Stage 5L binds the evaluation scope to a real
   **DigiCert RFC-3161** timestamp (`openssl ts -verify: OK`) _and_ a **Bitcoin-confirmed** OpenTimestamps
   proof — **block 957 689**, merkle root cross-checked against mempool.space — plus an independent
-  two-machine reproduction. Honest boundary: this ships as **VTC-Core**; the verifier consuming that real
-  confirmed quorum bundle to bank `externally_anchored` is the one signed, named next step.
+  two-machine reproduction. **Now banked:** Stage 5M sealed the exact 3-of-3 TSA + Bitcoin + Rekor quorum
+  — `externally_anchored`, **raw 0**, **Bitcoin block 957 782** — and Stage 5N (`v2.49.0`) added a
+  verifiable finalisation _delay_ (re-run SHA-256 chain over two RFC-3161 endpoints), banked at **block
+  957 983** — each merkle root cross-checked against a public explorer, with independent multi-machine
+  byte-identical reproduction.
 
-Depth underneath: **20+ signed rungs**, each a single falsifiable blade; machine-checked **Lean theorems**
+Depth underneath: **40+ signed rungs** across **94 tagged releases**, each a single falsifiable blade; machine-checked **Lean theorems**
 (zero `sorry`, no user axioms) on every recent stage; **Node ↔ Python ↔ browser byte-parity**; and a
 public, Merkle-chained replay timeline. The one worked example below still reproduces byte-for-byte.
 
@@ -108,7 +111,7 @@ byte-parity**; **five machine-checked Lean theorems** (`frictionPrecedence`, `fa
 `sameKeyFails`, `frictionCoverage`, `noSilentExemption`); a signed offline attestation with a
 two-tier verifier; and a one-command reproduce across ten gates. Repository baseline **at the 4Q tag**:
 1559 automated tests, byte-stable reproduction, private keys never committed (the tree has since grown
-past 600 test files across the 3A → 5L arc).
+past 600 test files across the 3A → 5N arc).
 
 ```bash
 git clone https://github.com/Raoof128/Project-Simurgh.git
