@@ -1,38 +1,39 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-// Stage 5O — VSC: the digest-token codec pinned by challenge_protocol_profile (A27).
+// Stage 5O — VSC: the digest-field codec pinned by challenge_protocol_profile (A27).
 //
 // Two representations of one digest, and sizing one with the other changes offsets and therefore
 // changes the construction:
 //
-//   canonical JSON artifact field : "sha256:" + 64 lowercase hex  -> 71 ASCII bytes
-//   fixed-width preimage / HKDF   : the decoded payload           -> 32 raw bytes
+//   canonical JSON `bytes32` field : 64 lowercase hex, no prefix   -> 64 ASCII bytes  (§3.4, line 1680)
+//   fixed-width preimage / HKDF    : the decoded payload           -> 32 raw bytes
 //
-// A 71-byte token in a 32-byte slot is a 39-byte overrun, not an inefficiency.
+// A 64-char field in a 32-byte slot is a 32-byte overrun, not an inefficiency.
 //
-// PRIOR ART, NOT AUTHORITY: stage5k/core/merkle.mjs independently implements the same lexical
-// grammar inside a PRIVATE helper of its frozen simurgh.vuc.merkle_set.v1 Merkle construction.
-// Stage 5O does NOT import, inherit, or invoke it, and does not claim to: a private const is not
-// an interface, and citing one as though it were would be a guarantee imported by nickname --
-// the defect A13 caught when an earlier draft invoked a Stage4T_CapsuleRoot(flatObject) that
-// does not exist in Stage 4T. This module is a new Stage-5O-scoped construction whose authority
-// comes from A27, and it shares 5K's grammar deliberately.
+// FROZEN ENCODING, NOT 5K's. Stage 5K stores digests as "sha256:<64hex>" inside a PRIVATE helper of
+// its frozen simurgh.vuc.merkle_set.v1 construction. Spec line 40 states Stage 5O does NOT reuse 5K's
+// leaf profile, and §3.4 / line 1680 freeze a single encoding for every `bytes32`: bare lowercase
+// hex, exactly 64 characters, no prefix. This codec implements that bare-hex grammar. It does not
+// import, inherit, or invoke 5K, and a 5K-style `sha256:`-prefixed field is FOREIGN and REJECTS here
+// -- adopting a prefix the spec never sanctioned is a guarantee imported by nickname, the defect A13
+// caught when an earlier draft invoked a Stage4T_CapsuleRoot(flatObject) that does not exist. This
+// module's authority comes from A27 and from the frozen §3.4 encoding, not from 5K's grammar.
 //
-// Divergence from 5K's helper, deliberate: 5K's dec returns null on malformed input. This codec
-// THROWS. A verifier that receives null and continues has already lost the fail-closed property
-// the strict grammar exists to provide.
+// Fail-closed by construction: dec returns nothing on malformed input, it THROWS. A verifier that
+// receives null and continues has already lost the fail-closed property the strict grammar exists
+// to provide.
 
 export const STAGE5O_DIGEST_TOKEN_CODEC_ID = "simurgh.vsc.digest_token_codec.v1";
 
-// Frozen encoding: anchored, lowercase-only, exactly 64 hex characters. No alternative lexical
-// representation is equivalent -- no case normalisation, no whitespace trimming, no 0x prefix,
-// no bare hex, no best-effort decode.
-const DIGEST_TOKEN_RE = /^sha256:([0-9a-f]{64})$/;
+// Frozen encoding: anchored, lowercase-only, exactly 64 hex characters, no prefix. No alternative
+// lexical representation is equivalent -- no case normalisation, no whitespace trimming, no 0x
+// prefix, no `sha256:` prefix, no best-effort decode.
+const DIGEST_TOKEN_RE = /^([0-9a-f]{64})$/;
 
 const DIGEST_RAW_BYTES = 32;
-const DIGEST_TOKEN_CHARS = 71; // 7 ("sha256:") + 64
+const DIGEST_TOKEN_CHARS = 64; // 64 lowercase hex, no prefix
 
 /**
- * Lexical token -> raw 32 bytes. Throws on any deviation from the frozen grammar.
+ * Lexical bare-hex field -> raw 32 bytes. Throws on any deviation from the frozen grammar.
  * @param {string} token
  * @returns {Buffer} exactly 32 bytes
  */
@@ -54,9 +55,9 @@ export function decodeDigestToken(token) {
 }
 
 /**
- * Raw 32 bytes -> lexical token. Throws unless the input is exactly 32 bytes.
+ * Raw 32 bytes -> lexical bare-hex field. Throws unless the input is exactly 32 bytes.
  * @param {Buffer|Uint8Array} raw
- * @returns {string} 71 ASCII characters
+ * @returns {string} 64 lowercase hex characters, no prefix
  */
 export function encodeDigestToken(raw) {
   const buf = Buffer.isBuffer(raw) ? raw : raw instanceof Uint8Array ? Buffer.from(raw) : null;
@@ -66,7 +67,7 @@ export function encodeDigestToken(raw) {
   if (buf.length !== DIGEST_RAW_BYTES) {
     throw new Error("digest_bytes_width");
   }
-  return "sha256:" + buf.toString("hex");
+  return buf.toString("hex");
 }
 
 export const DIGEST_TOKEN_WIDTHS = Object.freeze({

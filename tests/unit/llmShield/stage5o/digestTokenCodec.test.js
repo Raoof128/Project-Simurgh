@@ -1,9 +1,15 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-// Stage 5O — A27 digest-token codec parity vectors.
+// Stage 5O — A27 digest-token codec parity vectors (bare-hex, §3.4 / line 1680).
 //
 // Premise type for every law below: exhaustive finite check or explicit counterexample.
 // A premise TYPE is a classification, not proof the premise holds -- which is exactly how the
 // withdrawn S7.19 passed every gate. These are executed.
+//
+// The frozen encoding is BARE lowercase hex, exactly 64 characters, no prefix -- the single
+// encoding §3.4 freezes for salts and line 1680 freezes for every `bytes32`. Stage 5O's Merkle
+// math is SHA256(0x00 || leaf_value) over RAW bytes (§3.2), and spec line 40 states 5O does NOT
+// reuse Stage 5K's leaf profile. The `sha256:`-prefixed token that an earlier A27 draft imported
+// from 5K is therefore foreign to this stage: these vectors REJECT it.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
@@ -24,7 +30,7 @@ const MIXED = createHash("sha256").update("simurgh.vsc.mixed").digest();
  *
  * A negative fixture must FIRST prove it generated a negative case. The mixed-case vector below
  * did not: it built a "mutation" that was the identity ("9".toUpperCase() === "9"), then asserted
- * the implementation was wrong for accepting a conforming token. That is the withdrawn S7.19
+ * the implementation was wrong for accepting a conforming form. That is the withdrawn S7.19
  * defect -- a premise asserted rather than verified -- reappearing inside the tests written to
  * prevent it.
  *
@@ -58,20 +64,21 @@ test("codec id is pinned", () => {
   assert.equal(STAGE5O_DIGEST_TOKEN_CODEC_ID, "simurgh.vsc.digest_token_codec.v1");
 });
 
-test("encode: fixed vectors produce the exact frozen token", () => {
-  assert.equal(encodeDigestToken(ZERO), "sha256:" + "00".repeat(32));
-  assert.equal(encodeDigestToken(FF), "sha256:" + "ff".repeat(32));
-  assert.equal(encodeDigestToken(MIXED), "sha256:" + MIXED.toString("hex"));
+test("encode: fixed vectors produce the exact frozen bare-hex form", () => {
+  assert.equal(encodeDigestToken(ZERO), "00".repeat(32));
+  assert.equal(encodeDigestToken(FF), "ff".repeat(32));
+  assert.equal(encodeDigestToken(MIXED), MIXED.toString("hex"));
 });
 
-test("widths: a token is 71 ASCII chars; a payload is 32 raw bytes", () => {
+test("widths: a bare-hex field is 64 ASCII chars; a payload is 32 raw bytes", () => {
   const t = encodeDigestToken(MIXED);
-  assert.equal(t.length, 71);
-  assert.equal(Buffer.byteLength(t, "ascii"), 71);
+  assert.equal(t.length, 64);
+  assert.equal(Buffer.byteLength(t, "ascii"), 64);
   assert.equal(DIGEST_TOKEN_WIDTHS.raw_bytes, 32);
-  assert.equal(DIGEST_TOKEN_WIDTHS.token_chars, 71);
-  // the whole point: sizing one with the other is a 39-byte overrun
-  assert.equal(t.length - DIGEST_TOKEN_WIDTHS.raw_bytes, 39);
+  assert.equal(DIGEST_TOKEN_WIDTHS.token_chars, 64);
+  // the whole point: a 64-char JSON field is twice the width of its 32-byte payload; sizing one
+  // slot with the other is a 32-byte overrun, not an inefficiency.
+  assert.equal(t.length - DIGEST_TOKEN_WIDTHS.raw_bytes, 32);
 });
 
 test("law: decode(encode(x)) == x for every generated 32-byte x", () => {
@@ -84,9 +91,9 @@ test("law: decode(encode(x)) == x for every generated 32-byte x", () => {
   }
 });
 
-test("law: encode(decode(t)) == t for every accepted token t", () => {
+test("law: encode(decode(t)) == t for every accepted bare-hex field t", () => {
   for (let i = 0; i < 512; i++) {
-    const t = "sha256:" + createHash("sha256").update(`token-${i}`).digest("hex");
+    const t = createHash("sha256").update(`token-${i}`).digest("hex");
     assert.equal(encodeDigestToken(decodeDigestToken(t)), t);
   }
 });
@@ -96,8 +103,8 @@ test("decode: every non-conforming lexical form REJECTS (throws, never null)", (
 
   // Premise verification, not decoration. The first draft of this vector built mixed case as
   // hex.slice(0,63) + hex.slice(63).toUpperCase() -- and MIXED's hex[63] is "9", so the
-  // "mutation" was the identity and the token stayed validly lowercase. The test demanded a
-  // throw for a conforming token and failed. A case mutation must land on a LETTER, and the
+  // "mutation" was the identity and the value stayed validly lowercase. The test demanded a
+  // throw for a conforming value and failed. A case mutation must land on a LETTER, and the
   // fixture must prove it mutated rather than assume it: that assumption is precisely the
   // S7.19 defect, one layer down.
   const letterIdx = [...hex].findIndex((c) => /[a-f]/.test(c));
@@ -107,21 +114,20 @@ test("decode: every non-conforming lexical form REJECTS (throws, never null)", (
   assert.notEqual(mixedCaseHex, hex, "premise: the case mutation must actually change a byte");
 
   const rejects = {
-    uppercase_scheme: "SHA256:" + hex,
-    uppercase_hex: "sha256:" + hex.toUpperCase(),
-    mixed_case_hex: "sha256:" + mixedCaseHex,
-    missing_prefix: hex,
-    zero_x_prefix: "sha256:0x" + hex.slice(2),
-    short_sixty_three: "sha256:" + hex.slice(0, 63),
-    long_sixty_five: "sha256:" + hex + "a",
-    trailing_newline: "sha256:" + hex + "\n",
-    leading_space: " sha256:" + hex,
-    trailing_space: "sha256:" + hex + " ",
+    // the exact foreign form the earlier A27 draft accepted: a `sha256:` prefix is not canonical
+    sha256_prefixed: "sha256:" + hex,
+    uppercase_scheme_prefixed: "SHA256:" + hex,
+    uppercase_hex: hex.toUpperCase(),
+    mixed_case_hex: mixedCaseHex,
+    zero_x_prefix: "0x" + hex.slice(2),
+    short_sixty_three: hex.slice(0, 63),
+    long_sixty_five: hex + "a",
+    trailing_newline: hex + "\n",
+    leading_space: " " + hex,
+    trailing_space: hex + " ",
     empty: "",
-    prefix_only: "sha256:",
-    wrong_scheme: "sha512:" + hex,
-    embedded: "x sha256:" + hex + " y",
-    non_hex_char: "sha256:" + "g".repeat(64),
+    embedded: "x " + hex + " y",
+    non_hex_char: "g".repeat(64),
   };
   for (const [name, bad] of Object.entries(rejects)) {
     assert.throws(() => decodeDigestToken(bad), `expected REJECT for ${name}`);
@@ -138,24 +144,23 @@ test("encode: wrong-width and non-buffer inputs REJECT", () => {
   for (const bad of [Buffer.alloc(31), Buffer.alloc(33), Buffer.alloc(0)]) {
     assert.throws(() => encodeDigestToken(bad));
   }
-  for (const bad of [null, undefined, "sha256:" + "00".repeat(32), 42, {}]) {
+  for (const bad of [null, undefined, "00".repeat(32), 42, {}]) {
     assert.throws(() => encodeDigestToken(bad));
   }
   // a Uint8Array of correct width is accepted (Buffer is a Uint8Array subclass)
-  assert.equal(encodeDigestToken(new Uint8Array(32)), "sha256:" + "00".repeat(32));
+  assert.equal(encodeDigestToken(new Uint8Array(32)), "00".repeat(32));
 });
 
 test("negative-fixture law: case mutations prove they mutated AND changed the property", () => {
   const hex = MIXED.toString("hex");
-  const validToken = "sha256:" + hex;
+  const validField = hex;
   const letterIdx = [...hex].findIndex((c) => /[a-f]/.test(c));
   assert.notEqual(letterIdx, -1, "premise: the vector's hex must contain at least one a-f");
 
   assertNegativeVector({
     name: "mixed_case_hex",
-    valid: validToken,
-    mutated:
-      "sha256:" + hex.slice(0, letterIdx) + hex[letterIdx].toUpperCase() + hex.slice(letterIdx + 1),
+    valid: validField,
+    mutated: hex.slice(0, letterIdx) + hex[letterIdx].toUpperCase() + hex.slice(letterIdx + 1),
     accept: decodeDigestToken,
     property: containsUppercaseAscii,
     propertyName: "contains_uppercase_ascii",
@@ -163,20 +168,20 @@ test("negative-fixture law: case mutations prove they mutated AND changed the pr
 
   assertNegativeVector({
     name: "uppercase_hex",
-    valid: validToken,
-    mutated: "sha256:" + hex.toUpperCase(),
+    valid: validField,
+    mutated: hex.toUpperCase(),
     accept: decodeDigestToken,
     property: containsUppercaseAscii,
     propertyName: "contains_uppercase_ascii",
   });
 
   assertNegativeVector({
-    name: "uppercase_scheme",
-    valid: validToken,
-    mutated: "SHA256:" + hex,
+    name: "sha256_prefixed",
+    valid: validField,
+    mutated: "sha256:" + hex,
     accept: decodeDigestToken,
-    property: containsUppercaseAscii,
-    propertyName: "contains_uppercase_ascii",
+    property: (s) => s.includes("sha256:"),
+    propertyName: "carries_foreign_prefix",
   });
 });
 
@@ -193,8 +198,8 @@ test("the law itself REJECTS an identity mutation (it must catch the S7.19 shape
     () =>
       assertNegativeVector({
         name: "identity_mutation",
-        valid: "sha256:" + digitEndingHex,
-        mutated: "sha256:" + digitEndingHex.slice(0, 63) + digitEndingHex.slice(63).toUpperCase(),
+        valid: digitEndingHex,
+        mutated: digitEndingHex.slice(0, 63) + digitEndingHex.slice(63).toUpperCase(),
         accept: decodeDigestToken,
       }),
     /PREMISE FAILED — the mutation did not change the input/,
@@ -205,7 +210,7 @@ test("the law itself REJECTS an identity mutation (it must catch the S7.19 shape
 test("codec failure is a CATCHABLE SYNCHRONOUS throw — a verdict, never a crash", () => {
   // A throw is the right internal behaviour, but it is only a protocol verdict if the verifier
   // boundary can convert it deterministically:
-  //     try { raw = decodeDigestToken(token) } catch { REJECT }
+  //     try { raw = decodeDigestToken(field) } catch { REJECT }
   // That boundary is only sound if the throw is SYNCHRONOUS. An async throw would escape a sync
   // try/catch and surface as an unhandled rejection -- verifier termination, not rejection.
   assert.notEqual(
@@ -217,7 +222,7 @@ test("codec failure is a CATCHABLE SYNCHRONOUS throw — a verdict, never a cras
 
   let caught = null;
   try {
-    decodeDigestToken("not-a-token");
+    decodeDigestToken("not-a-field");
   } catch (e) {
     caught = e;
   }
@@ -228,27 +233,30 @@ test("codec failure is a CATCHABLE SYNCHRONOUS throw — a verdict, never a cras
   const verdicts = new Set();
   for (let i = 0; i < 64; i++) {
     try {
-      decodeDigestToken("sha256:" + "Z".repeat(64));
+      decodeDigestToken("Z".repeat(64));
       verdicts.add("ACCEPTED");
     } catch (e) {
       verdicts.add(`REJECT:${e.message}`);
     }
   }
-  assert.equal(verdicts.size, 1, "the same malformed token must produce one deterministic verdict");
+  assert.equal(verdicts.size, 1, "the same malformed field must produce one deterministic verdict");
   assert.ok([...verdicts][0].startsWith("REJECT:"), "malformed input must never be accepted");
 });
 
-test("cross-check: 5K's grammar is INDEPENDENTLY implemented here, never imported", () => {
-  // Stage 5K states the same lexical grammar inside a private helper. This asserts the grammars
-  // AGREE -- it does not import 5K, and Stage 5O's authority comes from A27, not from 5K.
+test("divergence from 5K: Stage 5O uses BARE hex and rejects 5K's `sha256:` grammar", () => {
+  // Spec line 40: Stage 5O does NOT reuse Stage 5K's leaf profile. 5K stores digests as
+  // "sha256:<64hex>" (its merkle.mjs); Stage 5O's §3.4 / line 1680 encoding is bare 64-hex.
+  // This asserts the DIVERGENCE is real and enforced -- the opposite of the withdrawn cross-check
+  // that claimed a shared grammar the spec explicitly disavows.
   const merkle = readFileSync(
     new URL("../../../../tools/simurgh-attestation/stage5k/core/merkle.mjs", import.meta.url),
     "utf8"
   );
   assert.ok(
     merkle.includes("/^sha256:([0-9a-f]{64})$/"),
-    "5K's grammar changed; the compatibility claim must be re-measured, not assumed"
+    "5K still uses the prefixed grammar; the divergence claim is measured against the real 5K"
   );
+
   const codec = readFileSync(
     new URL(
       "../../../../tools/simurgh-attestation/stage5o/core/digestTokenCodec.mjs",
@@ -256,9 +264,23 @@ test("cross-check: 5K's grammar is INDEPENDENTLY implemented here, never importe
     ),
     "utf8"
   );
-  assert.ok(codec.includes("/^sha256:([0-9a-f]{64})$/"), "5O must state the same grammar");
+  assert.ok(
+    codec.includes("/^([0-9a-f]{64})$/"),
+    "5O must state the bare-hex grammar (§3.4 / line 1680), not 5K's prefixed one"
+  );
+  assert.ok(
+    !codec.includes("sha256:") || /reject|foreign|does NOT/i.test(codec),
+    "5O must not adopt the `sha256:` prefix as its own encoding"
+  );
   assert.ok(
     !/from\s+["'][^"']*stage5k/.test(codec),
     "Stage 5O must NOT import stage5k: prior art is not authority"
+  );
+
+  // The behavioural proof of divergence: a 5K-style prefixed field is REJECTED here.
+  const prefixed = "sha256:" + MIXED.toString("hex");
+  assert.throws(
+    () => decodeDigestToken(prefixed),
+    "a 5K-style `sha256:`-prefixed field must REJECT under Stage 5O's bare-hex grammar"
   );
 });
