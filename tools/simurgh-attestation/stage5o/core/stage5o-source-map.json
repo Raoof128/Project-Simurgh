@@ -1,0 +1,83 @@
+{
+  "schema_id": "simurgh.vsc.source_map.v1",
+  "sweep_date": "2026-07-22",
+  "sweep_scope": ["prior_art_standards", "academic_audit_sampling"],
+  "sweep_is_exhaustive": false,
+  "sweep_note": "A targeted sweep of the constructions Stage 5O actually executes. It did NOT cover regulation, incidents-in-the-wild, or the lab surface. No sweep proves absence; this map records what was found, never that nothing else exists.",
+  "entries": [
+    {
+      "id": "rfc6962",
+      "title": "Certificate Transparency",
+      "version_or_date": "RFC 6962, June 2013",
+      "url": "https://www.rfc-editor.org/rfc/rfc6962.txt",
+      "retrieval_date": "2026-07-22",
+      "exact_quote": "For n > 1, let k be the largest power of two smaller than n (i.e., k < n <= 2k).",
+      "quote_unavailable_reason": null,
+      "classification": "prior_art_construction",
+      "used_by": ["section_3.5", "section_8"],
+      "note": "Stage 5O's recursive Merkle tree hash IS this construction: the same k rule, the same 0x00 leaf and 0x01 node prefixes, and the same second-preimage domain separation. Section 3.5 is an implementation of RFC 6962's MTH, not an invention."
+    },
+    {
+      "id": "rfc5869",
+      "title": "HMAC-based Extract-and-Expand Key Derivation Function (HKDF)",
+      "version_or_date": "RFC 5869, May 2010",
+      "url": "https://www.rfc-editor.org/rfc/rfc5869.txt",
+      "retrieval_date": "2026-07-22",
+      "exact_quote": "PRK = HMAC-Hash(salt, IKM)",
+      "quote_unavailable_reason": null,
+      "classification": "prior_art_construction",
+      "used_by": ["section_7"],
+      "note": "Stage 5O's challenge seed is RFC 5869 extract-then-expand, unmodified. Section 7 pins the inputs; it does not redesign the KDF."
+    },
+    {
+      "id": "hypergeometric_detection",
+      "title": "Hypergeometric detection probability for sampling without replacement",
+      "version_or_date": "classical; no single primary claimant",
+      "url": null,
+      "retrieval_date": "2026-07-22",
+      "exact_quote": null,
+      "quote_unavailable_reason": "Classical mathematics with no single primary source to quote. The identity P = 1 - C(N-J,k)/C(N,k) is the standard probability of drawing at least one of J defectives in a sample of k drawn without replacement from N. url is NULL by design: a placeholder pointing at an unrelated document would itself be the fuzzy citation this map exists to prevent. For the audit-sampling application see the pinned prior_art_field entry dopp2009.",
+      "classification": "classical_mathematics",
+      "used_by": ["section_9"],
+      "note": "Section 9's P_detect is this identity. Stage 5O did not invent it and claims no novelty for it."
+    },
+    {
+      "id": "dopp2009",
+      "title": "Checking election outcome accuracy Post-election audit sampling",
+      "version_or_date": "arXiv:0907.3166, 17 July 2009",
+      "url": "https://arxiv.org/abs/0907.3166",
+      "retrieval_date": "2026-07-22",
+      "exact_quote": "This article provides an overview of post-election audit sampling research and compares various approaches to calculating post-election audit sample sizes, focusing on risk-limiting audits.",
+      "quote_unavailable_reason": null,
+      "classification": "prior_art_field",
+      "used_by": ["section_9"],
+      "note": "Risk-limiting audit sampling is the established field in which Section 9's detection floor sits. The quote is from the retrieved abstract; the paper's own formula text could not be extracted from the PDF on this retrieval and is therefore NOT quoted here."
+    }
+  ],
+  "claims": [
+    {
+      "id": "verifier_enforced_detection_floor",
+      "claim": "Stage 5O makes a precommitted detection-probability floor a VERIFIER-ENFORCED rejection decided in exact rational arithmetic, rather than a reported statistic: the producer's presented probability is checked against the verifier's recomputed value, and the floor comparison is an exact integer cross-multiplication with no floating point on any verdict path.",
+      "falsifiable_by": "Exhibit a prior system in which a precommitted detection-probability floor causes a verifier to REJECT evidence, with the presented probability checked against a recomputed exact rational rather than reported as a number.",
+      "distinguishes_from": ["hypergeometric_detection", "dopp2009"],
+      "sources": ["hypergeometric_detection", "dopp2009"],
+      "non_release": true,
+      "note": "The probability mathematics is classical and the audit-sampling application is established. The claim is narrowly about the floor being an executable rejection with claim-value verification, not about the formula."
+    },
+    {
+      "id": "no_unbudgeted_unzip",
+      "claim": "Stage 5O binds cumulative selective disclosure over a presented history to a precommitted budget, where reopening an already-disclosed index consumes no budget, and proves the accounting is monotone.",
+      "falsifiable_by": "Exhibit a prior selective-disclosure scheme that enforces a precommitted CUMULATIVE unique-index budget across a presented history, with idempotent reopening.",
+      "distinguishes_from": ["rfc6962"],
+      "sources": ["rfc6962"],
+      "non_release": true,
+      "note": "Merkle membership is RFC 6962; the budgeted cumulative-disclosure accounting over it is the claimed increment."
+    }
+  ],
+  "explicit_non_novelty": [
+    "The Merkle tree hash (section 3.5) is RFC 6962's MTH, including the k rule and the 0x00/0x01 prefixes.",
+    "The challenge seed (section 7) is RFC 5869 HKDF.",
+    "The detection probability (section 9) is the classical hypergeometric identity.",
+    "The tiered capsule and its redaction semantics are Stage 4T's, reused unchanged including codes 148 and 149."
+  ]
+}

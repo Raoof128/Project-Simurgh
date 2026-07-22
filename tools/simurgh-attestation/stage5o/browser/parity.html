@@ -1,0 +1,1616 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'">
+<title>Stage 5O §7 browser parity</title>
+<body>
+<pre id="result">RESULT:PENDING</pre>
+<script>
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Stage 5O §7 browser — canonical JSON (same algorithm as the shared canonicalJson: recursively sort
+// keys, compact separators, UTF-8). Zero external imports so the portable surface runs under a strict
+// no-egress CSP in a real browser.
+function canonicalJson(value) {
+  const c = (v) =>
+    Array.isArray(v)
+      ? v.map(c)
+      : v && typeof v === "object"
+        ? Object.keys(v)
+            .sort()
+            .reduce((o, k) => ((o[k] = c(v[k])), o), {})
+        : v;
+  return JSON.stringify(c(value));
+}
+
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Stage 5O §7.3.8 item 4 — the BROWSER-PORTABLE Section 7 crypto surface.
+//
+// Uses ONLY browser-available primitives: the WHATWG WebCrypto SubtleCrypto API (globalThis.crypto,
+// identical in a real browser and in Node 26), BigInt, TextEncoder, and pure JS. No node:crypto, no
+// Buffer, no Node built-ins — so the exact same module reproduces every §7 cryptographic value under
+// a strict no-egress CSP in a real browser and under Node's WebCrypto. All functions are async.
+
+
+const subtle = globalThis.crypto.subtle;
+const utf8 = (s) => new TextEncoder().encode(s);
+function hexToBytes(h) {
+  const a = new Uint8Array(h.length / 2);
+  for (let i = 0; i < a.length; i++) a[i] = parseInt(h.substr(i * 2, 2), 16);
+  return a;
+}
+function bytesToHex(b) {
+  let s = "";
+  for (const x of b) s += x.toString(16).padStart(2, "0");
+  return s;
+}
+function concat(...arrs) {
+  const n = arrs.reduce((s, a) => s + a.length, 0);
+  const o = new Uint8Array(n);
+  let p = 0;
+  for (const a of arrs) {
+    o.set(a, p);
+    p += a.length;
+  }
+  return o;
+}
+const u16be = (n) => new Uint8Array([(n >> 8) & 0xff, n & 0xff]);
+const u32be = (n) =>
+  new Uint8Array([(n >>> 24) & 0xff, (n >>> 16) & 0xff, (n >>> 8) & 0xff, n & 0xff]);
+const u64be = (n) => {
+  const b = new Uint8Array(8);
+  let bn = BigInt(n);
+  for (let i = 7; i >= 0; i--) {
+    b[i] = Number(bn & 0xffn);
+    bn >>= 8n;
+  }
+  return b;
+};
+async function sha256(bytes) {
+  return new Uint8Array(await subtle.digest("SHA-256", bytes));
+}
+async function doubleSha256(bytes) {
+  return sha256(await sha256(bytes));
+}
+async function hmac(key, data) {
+  const k = await subtle.importKey("raw", key, { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  return new Uint8Array(await subtle.sign("HMAC", k, data));
+}
+async function hkdfExtract(salt, ikm) {
+  return hmac(salt, ikm);
+}
+async function hkdfExpand(prk, info, length) {
+  const blocks = Math.ceil(length / 32);
+  let t = new Uint8Array(0);
+  const out = [];
+  for (let i = 1; i <= blocks; i++) {
+    t = await hmac(prk, concat(t, info, new Uint8Array([i])));
+    out.push(t);
+  }
+  return concat(...out).slice(0, length);
+}
+
+/** The framed descriptor digest: SHA256(u16be(len(domain))||domain||u32be(len(body))||body). */
+async function framedDigestHex(domain, body) {
+  const d = utf8(domain);
+  const b = utf8(body);
+  return bytesToHex(await sha256(concat(u16be(d.length), d, u32be(b.length), b)));
+}
+async function registryDigestHex(domain, prepared) {
+  return framedDigestHex(domain, canonicalJson(prepared));
+}
+/** The plain-concat checkpoint-instance digest: SHA256(domain||raw(pair18)||canonical(checkpoint)). */
+async function checkpointInstanceHex(domain, pair18DigestHex, checkpoint) {
+  const pre = concat(utf8(domain), hexToBytes(pair18DigestHex), utf8(canonicalJson(checkpoint)));
+  return bytesToHex(await sha256(pre));
+}
+async function digestOfCanonicalHex(obj) {
+  return bytesToHex(await sha256(utf8(canonicalJson(obj))));
+}
+function compactTargetToBig(nBits) {
+  const e = nBits >>> 24;
+  const m = nBits & 0x007fffff;
+  if (nBits & 0x00800000) throw new Error("negative_target");
+  return e <= 3 ? BigInt(m) >> BigInt(8 * (3 - e)) : BigInt(m) << BigInt(8 * (e - 3));
+}
+async function blockHashInternalHex(headerHex) {
+  return bytesToHex(await doubleSha256(hexToBytes(headerHex)));
+}
+async function blockHashDisplayHex(headerHex) {
+  const b = await doubleSha256(hexToBytes(headerHex));
+  return bytesToHex(b.slice().reverse());
+}
+
+function bitLength(n) {
+  let b = 0;
+  while (n > 0) {
+    n >>= 1;
+    b++;
+  }
+  return b;
+}
+async function deriveIndices(seedHex, N, k, drawCeiling, drawDomain) {
+  const seed = hexToBytes(seedHex);
+  const dom = utf8(drawDomain);
+  const b = bitLength(N - 1);
+  const mask = (1n << BigInt(b)) - 1n;
+  const acc = [];
+  const seen = new Set();
+  let j = 0;
+  for (; j < drawCeiling && acc.length < k; j++) {
+    const draw = await hkdfExpand(seed, concat(dom, u64be(j)), 32);
+    const candidate = Number(BigInt("0x" + bytesToHex(draw)) & mask);
+    if (candidate >= N || seen.has(candidate)) continue;
+    seen.add(candidate);
+    acc.push(candidate);
+  }
+  if (acc.length < k) throw new Error("draw_ceiling_exhausted");
+  return { sorted: [...acc].sort((x, y) => x - y), draws: j };
+}
+
+// ---- Section 8 crypto surface (domains supplied by the caller; no literal owned here; u32be above).
+async function caseDigestHex(caseDomain, caseBytes) {
+  return bytesToHex(await sha256(concat(utf8(caseDomain), u32be(caseBytes.length), caseBytes)));
+}
+async function leafIdHex(leafDomain, epochBytes, index, saltBytes, caseDigestBytes) {
+  return bytesToHex(
+    await sha256(concat(utf8(leafDomain), epochBytes, u64be(index), saltBytes, caseDigestBytes))
+  );
+}
+async function caseLinkHex(linkDomain, caseDigestBytes, execBytes) {
+  return bytesToHex(await sha256(concat(utf8(linkDomain), caseDigestBytes, execBytes)));
+}
+async function merkleLeafBytes(leaf) {
+  return sha256(concat(new Uint8Array([0]), leaf));
+}
+async function merkleNodeBytes(l, r) {
+  return sha256(concat(new Uint8Array([1]), l, r));
+}
+function largestPow2Lt(n) {
+  let k = 1;
+  while (k * 2 < n) k *= 2;
+  return k;
+}
+async function mthBytes(leaves) {
+  if (leaves.length === 0) throw new Error("empty");
+  if (leaves.length === 1) return merkleLeafBytes(leaves[0]);
+  const k = largestPow2Lt(leaves.length);
+  return merkleNodeBytes(await mthBytes(leaves.slice(0, k)), await mthBytes(leaves.slice(k)));
+}
+async function mthHex(leavesHex) {
+  return bytesToHex(await mthBytes(leavesHex.map(hexToBytes)));
+}
+async function verifyInclusionHex(leafHex, path, rootHex) {
+  let node = await merkleLeafBytes(hexToBytes(leafHex));
+  for (const s of path) {
+    const sib = hexToBytes(s.sibling);
+    node = s.side === "right" ? await merkleNodeBytes(node, sib) : await merkleNodeBytes(sib, node);
+  }
+  return bytesToHex(node) === rootHex;
+}
+async function disclosurePolicyDigestHex(policyDomain, policy) {
+  return bytesToHex(await sha256(concat(utf8(policyDomain), utf8(canonicalJson(policy)))));
+}
+
+// ---- Section 9 exact rational arithmetic. Pure BigInt: no crypto, no float, and identical in a
+// real browser and in Node. This is the stage's first ARITHMETIC parity surface — every earlier lane
+// proved hashing agreed; these functions prove the DECISIONS agree.
+function ratGcd(a, b) {
+  if (a < 0n) a = -a;
+  if (b < 0n) b = -b;
+  while (b) [a, b] = [b, a % b];
+  return a;
+}
+function ratReduce(n, d) {
+  if (d === 0n) throw new Error("zero_denominator");
+  if (d < 0n) {
+    n = -n;
+    d = -d;
+  }
+  if (n === 0n) return { n: 0n, d: 1n };
+  const g = ratGcd(n, d);
+  return { n: n / g, d: d / g };
+}
+function ratFormat({ n, d }) {
+  const r = ratReduce(n, d);
+  return { numerator: r.n.toString(10), denominator: r.d.toString(10) };
+}
+function productQkPortable(N, J, k) {
+  let n = 1n,
+    d = 1n;
+  for (let i = 0n; i < k; i++) {
+    n *= N - J - i;
+    d *= N - i;
+  }
+  return ratReduce(n, d);
+}
+function productQJPortable(N, J, k) {
+  let n = 1n,
+    d = 1n;
+  for (let i = 0n; i < J; i++) {
+    n *= N - k - i;
+    d *= N - i;
+  }
+  return ratReduce(n, d);
+}
+/** The frozen §9.3 rule: degenerate branch, then m = min(J,k) with the k == J tie pinned to Q_k. */
+function pDetectPortable(N, J, k) {
+  if (N - J < k) return { value: { n: 1n, d: 1n }, form: "degenerate", terms: 0 };
+  const useQk = k <= J;
+  const q = useQk ? productQkPortable(N, J, k) : productQJPortable(N, J, k);
+  return {
+    value: ratReduce(q.d - q.n, q.d),
+    form: useQk ? "Q_k" : "Q_J",
+    terms: Number(useQk ? k : J),
+  };
+}
+function pPairPortable(N, k) {
+  return ratReduce(k * (k - 1n), N * (N - 1n));
+}
+function pairRatioActivePortable(N, k) {
+  return N >= 2n && k >= 2n;
+}
+function jStarPortable(f, N) {
+  return (f.n * N + f.d - 1n) / f.d;
+}
+async function probabilityPolicyDigestHex(policyDomain, policy) {
+  return bytesToHex(await sha256(concat(utf8(policyDomain), utf8(canonicalJson(policy)))));
+}
+
+const VECTORS = {
+  "meta": {
+    "stage": "5o",
+    "surface": "section7_8_9_crypto_and_arithmetic",
+    "runtime_reference": "node"
+  },
+  "section8": {
+    "domains": {
+      "case_domain": "simurgh.vsc.case.v1",
+      "leaf_domain": "simurgh.vsc.leaf.v1",
+      "execution_case_link_domain": "simurgh.vsc.execution_case_link.v1",
+      "disclosure_policy_domain": "simurgh.vsc.disclosure_policy.v1"
+    },
+    "case": {
+      "case_bytes_hex": "7b2263617365223a317d",
+      "case_digest": "92d86d507844a435aafd5698587dcb9057bb959e3a42b31c8c35c1ddd5aa0c48"
+    },
+    "leaf": {
+      "epoch": "7777777777777777777777777777777777777777777777777777777777777777",
+      "index": 5,
+      "salt": "5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a",
+      "leaf_id": "4c0341f46ebc520792eeeb4493b4ee6ee4dd331e22c6195209623d61e91f02c2"
+    },
+    "case_link": {
+      "execution_record_digest": "e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5",
+      "commitment": "b9cb8a8f170515bd69e9dcb52511a17e6e12187e0d93b4173ad979dd6f768ae9"
+    },
+    "merkle": {
+      "leaves": [
+        "0101010101010101010101010101010101010101010101010101010101010101",
+        "0202020202020202020202020202020202020202020202020202020202020202",
+        "0303030303030303030303030303030303030303030303030303030303030303",
+        "0404040404040404040404040404040404040404040404040404040404040404",
+        "0505050505050505050505050505050505050505050505050505050505050505"
+      ],
+      "root": "c51042bb8b9d81dfc115ef99d0e2cecf1954cfc078d70032d187b46615f01b90",
+      "index": 3,
+      "path": [
+        {
+          "sibling": "acaa04663a8547a2f70c60cc18f9378796b13c4f9a08f70d6adae662365b30c6",
+          "side": "left"
+        },
+        {
+          "sibling": "3a066e0f40c6a1981ebfa60d2411625d0517ae22c2fc8c7c1784ff8a75c78565",
+          "side": "left"
+        },
+        {
+          "sibling": "f3ab555d06a67b08ab25039fdbe2a6fcb305c83bc165492ce81d3dea13ec1fbf",
+          "side": "right"
+        }
+      ]
+    },
+    "disclosure_policy": {
+      "policy": {
+        "max_opening_package_transport_bytes": 1048576,
+        "max_opening_package_canonical_bytes": 524288,
+        "max_presented_history_transport_bytes": 1048576,
+        "max_presented_history_canonical_bytes": 524288,
+        "max_presented_history_entries": 1024,
+        "max_cumulative_disclosed_indices": 64
+      },
+      "digest": "aa5216a32ad0c671e83d8dcbc59bc0fdcffa83a52e5fcb08493f8bfcca8b6d72"
+    }
+  },
+  "section9": {
+    "policy_domain": "simurgh.vsc.probability_policy.v1",
+    "detect": [
+      {
+        "N": 1247,
+        "J": 5,
+        "k": 30,
+        "form": "Q_J",
+        "terms": 5,
+        "p_detect": {
+          "numerator": "2861928357751",
+          "denominator": "24926661161479"
+        },
+        "pair_ratio_active": true,
+        "p_pair": {
+          "numerator": "15",
+          "denominator": "26789"
+        }
+      },
+      {
+        "N": 12470,
+        "J": 5,
+        "k": 30,
+        "form": "Q_J",
+        "terms": 5,
+        "p_detect": {
+          "numerator": "2147233042031429",
+          "denominator": "179338970490884321"
+        },
+        "pair_ratio_active": true,
+        "p_pair": {
+          "numerator": "3",
+          "denominator": "536167"
+        }
+      },
+      {
+        "N": 62350,
+        "J": 5,
+        "k": 30,
+        "form": "Q_J",
+        "terms": 5,
+        "p_detect": {
+          "numerator": "3145074447213468251",
+          "denominator": "1308519312143973924995"
+        },
+        "pair_ratio_active": true,
+        "p_pair": {
+          "numerator": "1",
+          "denominator": "4468345"
+        }
+      },
+      {
+        "N": 256,
+        "J": 5,
+        "k": 8,
+        "form": "Q_J",
+        "terms": 5,
+        "p_detect": {
+          "numerator": "23262277",
+          "denominator": "157313376"
+        },
+        "pair_ratio_active": true,
+        "p_pair": {
+          "numerator": "7",
+          "denominator": "8160"
+        }
+      },
+      {
+        "N": 1000,
+        "J": 9,
+        "k": 9,
+        "form": "Q_k",
+        "terms": 9,
+        "p_detect": {
+          "numerator": "41702962969989086537",
+          "denominator": "531603552900040792800"
+        },
+        "pair_ratio_active": true,
+        "p_pair": {
+          "numerator": "1",
+          "denominator": "13875"
+        }
+      },
+      {
+        "N": 1000,
+        "J": 500,
+        "k": 7,
+        "form": "Q_k",
+        "terms": 7,
+        "p_detect": {
+          "numerator": "21854279",
+          "denominator": "22022733"
+        },
+        "pair_ratio_active": true,
+        "p_pair": {
+          "numerator": "7",
+          "denominator": "166500"
+        }
+      },
+      {
+        "N": 10,
+        "J": 10,
+        "k": 5,
+        "form": "degenerate",
+        "terms": 0,
+        "p_detect": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "pair_ratio_active": true,
+        "p_pair": {
+          "numerator": "2",
+          "denominator": "9"
+        }
+      },
+      {
+        "N": 256,
+        "J": 5,
+        "k": 1,
+        "form": "Q_k",
+        "terms": 1,
+        "p_detect": {
+          "numerator": "5",
+          "denominator": "256"
+        },
+        "pair_ratio_active": false
+      }
+    ],
+    "j_star": [
+      {
+        "f": {
+          "numerator": "1",
+          "denominator": "250"
+        },
+        "N": 999,
+        "j_star": "4"
+      },
+      {
+        "f": {
+          "numerator": "1",
+          "denominator": "250"
+        },
+        "N": 1000,
+        "j_star": "4"
+      },
+      {
+        "f": {
+          "numerator": "1",
+          "denominator": "250"
+        },
+        "N": 1001,
+        "j_star": "5"
+      },
+      {
+        "f": {
+          "numerator": "1",
+          "denominator": "250"
+        },
+        "N": 124700,
+        "j_star": "499"
+      }
+    ],
+    "floor": {
+      "p_detect": {
+        "numerator": "23262277",
+        "denominator": "157313376"
+      },
+      "p_min_equal": {
+        "numerator": "23262277",
+        "denominator": "157313376"
+      },
+      "p_min_above": {
+        "numerator": "11631139",
+        "denominator": "78656688"
+      },
+      "cross_equal": {
+        "left": "3659467328317152",
+        "right": "3659467328317152"
+      },
+      "verdict_equal": "accept",
+      "verdict_above": "s9_detection_floor_unmet"
+    },
+    "policy_digest": {
+      "policy": {
+        "target_defect_basis": "absolute_count",
+        "target_defect_count": "5",
+        "minimum_detection_bound": {
+          "numerator": "1",
+          "denominator": "10"
+        },
+        "k_derivation_version": "simurgh.vsc.k_derivation.v1",
+        "claim_type": "exact",
+        "max_probability_decimal_digits": 64,
+        "max_probability_evaluation_terms": 65536,
+        "max_probability_intermediate_bits": 2097152,
+        "max_probability_package_transport_bytes": 65536,
+        "max_probability_package_canonical_bytes": 32768
+      },
+      "digest": "a54e2b8c8dc10386258de122537fed9a3c10d1a577801e51856672099160d38c"
+    }
+  },
+  "domains": {
+    "seed_domain": "simurgh.vsc.challenge_seed_digest_domain.v1",
+    "draw_domain": "simurgh.vsc.challenge_index_draw.v1",
+    "checkpoint_domain": "simurgh.vsc.verified_closure_bitcoin_checkpoint_digest_domain.v1"
+  },
+  "canonical_vectors": [
+    {
+      "value": {
+        "b": 1,
+        "a": 2,
+        "": 3
+      },
+      "canonical": "{\"\":3,\"a\":2,\"b\":1}"
+    },
+    {
+      "value": {
+        "z": [
+          3,
+          2,
+          1
+        ],
+        "nested": {
+          "y": "é",
+          "x": null
+        }
+      },
+      "canonical": "{\"nested\":{\"x\":null,\"y\":\"é\"},\"z\":[3,2,1]}"
+    },
+    {
+      "value": [
+        "10",
+        "2",
+        "1"
+      ],
+      "canonical": "[\"10\",\"2\",\"1\"]"
+    }
+  ],
+  "registry": [
+    {
+      "id": "simurgh.vsc.digest_token_codec.v1",
+      "kind": "grammar",
+      "domain": "simurgh.vsc.grammar_descriptor_digest_domain.v1",
+      "prepared": {
+        "descriptor_version": "1",
+        "kind": "grammar",
+        "grammar_id": "simurgh.vsc.digest_token_codec.v1",
+        "rule": {
+          "encoding": "bare_lowercase_hex",
+          "exact_chars": 64,
+          "prefix": null,
+          "rejects": [
+            "sha256:",
+            "uppercase",
+            "0x"
+          ]
+        }
+      },
+      "digest": "7f9f52da0c07db11e4d86931cca278708d23e5396a574c7200d2df88153034fe"
+    },
+    {
+      "id": "simurgh.vsc.grammar.bitcoin_header_hex160.v1",
+      "kind": "grammar",
+      "domain": "simurgh.vsc.grammar_descriptor_digest_domain.v1",
+      "prepared": {
+        "descriptor_version": "1",
+        "kind": "grammar",
+        "grammar_id": "simurgh.vsc.grammar.bitcoin_header_hex160.v1",
+        "rule": {
+          "encoding": "bare_lowercase_hex",
+          "exact_chars": 160,
+          "bytes": 80,
+          "prefix": null
+        }
+      },
+      "digest": "f1b50d7af52e016c5a43fe202b7d735182f9940399add3cacc3e3f0932ed8790"
+    },
+    {
+      "id": "simurgh.vsc.grammar.canonical_unsigned_decimal.v1",
+      "kind": "grammar",
+      "domain": "simurgh.vsc.grammar_descriptor_digest_domain.v1",
+      "prepared": {
+        "descriptor_version": "1",
+        "kind": "grammar",
+        "grammar_id": "simurgh.vsc.grammar.canonical_unsigned_decimal.v1",
+        "rule": {
+          "encoding": "canonical_unsigned_decimal",
+          "regex": "^(0|[1-9][0-9]*)$",
+          "sign": false,
+          "leading_zero": false
+        }
+      },
+      "digest": "cce5e956652c89ab86e630a824dd9a5a14d10a15da6e5f696802bf6b9223d13b"
+    },
+    {
+      "id": "simurgh.vsc.grammar.lowercase_hex8.v1",
+      "kind": "grammar",
+      "domain": "simurgh.vsc.grammar_descriptor_digest_domain.v1",
+      "prepared": {
+        "descriptor_version": "1",
+        "kind": "grammar",
+        "grammar_id": "simurgh.vsc.grammar.lowercase_hex8.v1",
+        "rule": {
+          "encoding": "bare_lowercase_hex",
+          "exact_chars": 8,
+          "bytes": 4,
+          "prefix": null
+        }
+      },
+      "digest": "da9463e30c793e1ab726b1e075c8b47d395b15e488d8517f4988c9ccd0ee4fad"
+    },
+    {
+      "id": "simurgh.bitcoin.mainnet.header_validation.v1",
+      "kind": "profile",
+      "domain": "simurgh.vsc.profile_descriptor_digest_domain.v1",
+      "prepared": {
+        "descriptor_version": "1",
+        "kind": "profile",
+        "profile_id": "simurgh.bitcoin.mainnet.header_validation.v1",
+        "rules": [
+          {
+            "rule_id": "network_identity",
+            "value": "bitcoin_mainnet"
+          },
+          {
+            "rule_id": "pow_limit",
+            "encoding": "compact_target",
+            "testnet_min_difficulty_exception": false
+          },
+          {
+            "rule_id": "header_encoding",
+            "byte_order": "internal_le",
+            "hash": "double_sha256"
+          },
+          {
+            "rule_id": "retarget_interval",
+            "blocks": 2016
+          },
+          {
+            "rule_id": "nbits_extraction",
+            "from": "checkpoint_header",
+            "field": "compact_target",
+            "into": "checkpoint_nbits"
+          },
+          {
+            "rule_id": "nbits_equality",
+            "left": "extracted_compact_target(checkpoint_header)",
+            "operator": "equals",
+            "right": "checkpoint_nbits"
+          },
+          {
+            "rule_id": "compact_target_decode",
+            "value": "compact_target_to_pow_threshold"
+          }
+        ],
+        "imports": []
+      },
+      "digest": "744f292d0f8fe93fd9a85ac6956e3fb456f0c24efaa21ff657032f365f661fb2"
+    },
+    {
+      "id": "simurgh.vsc.anchor_schedule.v1",
+      "kind": "profile",
+      "domain": "simurgh.vsc.profile_descriptor_digest_domain.v1",
+      "prepared": {
+        "descriptor_version": "1",
+        "kind": "profile",
+        "profile_id": "simurgh.vsc.anchor_schedule.v1",
+        "rules": [
+          {
+            "rule_id": "anchor_roles",
+            "source": "section_4_6_frozen_A17"
+          },
+          {
+            "rule_id": "anchor_binding_digest",
+            "source": "section_4_6_frozen_A17"
+          },
+          {
+            "rule_id": "timing_rules",
+            "source": "section_4_6_frozen_A17"
+          },
+          {
+            "rule_id": "receipt_non_mixing",
+            "source": "section_4_6_frozen_A17"
+          },
+          {
+            "rule_id": "anchor_instance_exact_key_schema",
+            "source": "section_4_6_frozen_A17"
+          }
+        ],
+        "imports": []
+      },
+      "digest": "64ddea1e0e7435263958f5b8dc7d587b210a6f0f8e9d49de0fae9d1d20a2338e"
+    },
+    {
+      "id": "simurgh.vsc.challenge_subject.v1",
+      "kind": "profile",
+      "domain": "simurgh.vsc.profile_descriptor_digest_domain.v1",
+      "prepared": {
+        "descriptor_version": "1",
+        "kind": "profile",
+        "profile_id": "simurgh.vsc.challenge_subject.v1",
+        "rules": [
+          {
+            "rule_id": "challenge_subject_digest_construction",
+            "domain": "simurgh.vsc.challenge_subject.v1",
+            "preimage_order": [
+              {
+                "ref": "self_profile_digest"
+              },
+              {
+                "ref": "runtime_input",
+                "field": "stage5o_precommitment_digest"
+              },
+              {
+                "ref": "runtime_input",
+                "field": "epoch_digest"
+              },
+              {
+                "ref": "runtime_input",
+                "field": "closure_slot_id"
+              },
+              {
+                "ref": "runtime_input",
+                "field": "census_closure_digest"
+              },
+              {
+                "ref": "runtime_input",
+                "field": "challenge_policy_digest"
+              },
+              {
+                "ref": "runtime_input",
+                "field": "beacon_contract_digest"
+              },
+              {
+                "ref": "static_import",
+                "id": "simurgh.vsc.anchor_schedule.v1"
+              }
+            ],
+            "source": "section_6_frozen_6.6"
+          }
+        ],
+        "runtime_inputs": [
+          {
+            "field": "stage5o_precommitment_digest",
+            "source": "section6_accepted_context",
+            "type": "digest_token"
+          },
+          {
+            "field": "epoch_digest",
+            "source": "section6_accepted_context",
+            "type": "digest_token"
+          },
+          {
+            "field": "closure_slot_id",
+            "source": "section6_accepted_context",
+            "type": "digest_token"
+          },
+          {
+            "field": "census_closure_digest",
+            "source": "section6_accepted_context",
+            "type": "digest_token"
+          },
+          {
+            "field": "challenge_policy_digest",
+            "source": "section6_accepted_context",
+            "type": "digest_token"
+          },
+          {
+            "field": "beacon_contract_digest",
+            "source": "section6_accepted_context",
+            "type": "digest_token"
+          }
+        ],
+        "imports": [
+          {
+            "id": "simurgh.vsc.anchor_schedule.v1",
+            "digest": "64ddea1e0e7435263958f5b8dc7d587b210a6f0f8e9d49de0fae9d1d20a2338e"
+          }
+        ]
+      },
+      "digest": "b8c12b7c4f7f3a122f81f82f1114f4242bfbc85e5be52feee1ddf3a072de2756"
+    },
+    {
+      "id": "simurgh.vsc.verified_closure_bitcoin_checkpoint_schema.v1",
+      "kind": "schema",
+      "domain": "simurgh.vsc.schema_descriptor_digest_domain.v1",
+      "prepared": {
+        "descriptor_version": "1",
+        "kind": "schema",
+        "schema_id": "simurgh.vsc.verified_closure_bitcoin_checkpoint_schema.v1",
+        "closed": true,
+        "fields": {
+          "network_profile_id": {
+            "type": "string",
+            "const_value": "simurgh.bitcoin.mainnet.header_validation.v1"
+          },
+          "checkpoint_height": {
+            "type": "string",
+            "grammar_ref": {
+              "id": "simurgh.vsc.grammar.canonical_unsigned_decimal.v1"
+            }
+          },
+          "checkpoint_block_hash": {
+            "type": "string",
+            "grammar_ref": {
+              "id": "simurgh.vsc.digest_token_codec.v1"
+            }
+          },
+          "checkpoint_header": {
+            "type": "string",
+            "grammar_ref": {
+              "id": "simurgh.vsc.grammar.bitcoin_header_hex160.v1"
+            }
+          },
+          "checkpoint_nbits": {
+            "type": "string",
+            "grammar_ref": {
+              "id": "simurgh.vsc.grammar.lowercase_hex8.v1"
+            }
+          },
+          "checkpoint_witness_profile_id": {
+            "type": "string"
+          },
+          "checkpoint_witness_profile_digest": {
+            "type": "string",
+            "grammar_ref": {
+              "id": "simurgh.vsc.digest_token_codec.v1"
+            }
+          },
+          "checkpoint_witness_key_fingerprint": {
+            "type": "string",
+            "grammar_ref": {
+              "id": "simurgh.vsc.digest_token_codec.v1"
+            }
+          },
+          "stage5l_checkpoint_evidence_digest": {
+            "type": "string",
+            "grammar_ref": {
+              "id": "simurgh.vsc.digest_token_codec.v1"
+            }
+          }
+        }
+      },
+      "digest": "66db15b7bc0cd7b8c26fbe0ec284ce9c5f526c44229f9c343757d4802e42db5a"
+    },
+    {
+      "id": "simurgh.vsc.beacon_contract.v1",
+      "kind": "schema",
+      "domain": "simurgh.vsc.schema_descriptor_digest_domain.v1",
+      "prepared": {
+        "descriptor_version": "1",
+        "kind": "schema",
+        "schema_id": "simurgh.vsc.beacon_contract.v1",
+        "closed": true,
+        "fields": {
+          "schema_id": {
+            "type": "string",
+            "const_value": "simurgh.vsc.beacon_contract.v1"
+          },
+          "schema_digest": {
+            "type": "string",
+            "grammar_ref": {
+              "id": "simurgh.vsc.digest_token_codec.v1"
+            }
+          },
+          "profile_id": {
+            "type": "string",
+            "const_value": "simurgh.vsc.beacon_contract_profile.v1"
+          },
+          "profile_digest": {
+            "type": "string",
+            "grammar_ref": {
+              "id": "simurgh.vsc.digest_token_codec.v1"
+            }
+          },
+          "beacon_source_id": {
+            "type": "string",
+            "const_value": "simurgh.vsc.beacon.bitcoin_mainnet.v1"
+          },
+          "depth_convention_id": {
+            "type": "string",
+            "const_value": "simurgh.bitcoin.depth.descendants_after_beacon.v1"
+          },
+          "challenge_height": {
+            "type": "string",
+            "grammar_ref": {
+              "id": "simurgh.vsc.grammar.canonical_unsigned_decimal.v1"
+            }
+          }
+        }
+      },
+      "digest": "efd325763a5a5e5970fa3c3648fb06898dd0a24355ea9041801011896d77f703"
+    },
+    {
+      "id": "simurgh.vsc.beacon_suffix.v1",
+      "kind": "schema",
+      "domain": "simurgh.vsc.schema_descriptor_digest_domain.v1",
+      "prepared": {
+        "descriptor_version": "1",
+        "kind": "schema",
+        "schema_id": "simurgh.vsc.beacon_suffix.v1",
+        "closed": true,
+        "fields": {
+          "schema_id": {
+            "type": "string",
+            "const_value": "simurgh.vsc.beacon_suffix.v1"
+          },
+          "schema_digest": {
+            "type": "string",
+            "grammar_ref": {
+              "id": "simurgh.vsc.digest_token_codec.v1"
+            }
+          },
+          "profile_id": {
+            "type": "string",
+            "const_value": "simurgh.vsc.beacon_suffix_profile.v1"
+          },
+          "profile_digest": {
+            "type": "string",
+            "grammar_ref": {
+              "id": "simurgh.vsc.digest_token_codec.v1"
+            }
+          },
+          "verified_closure_bitcoin_checkpoint_digest": {
+            "type": "string",
+            "grammar_ref": {
+              "id": "simurgh.vsc.digest_token_codec.v1"
+            }
+          },
+          "headers": {
+            "type": "array",
+            "element_schema": {
+              "type": "string",
+              "grammar_ref": {
+                "id": "simurgh.vsc.grammar.bitcoin_header_hex160.v1"
+              }
+            }
+          }
+        }
+      },
+      "digest": "c8a6f7927e9c37e3675def9d179f702731800b89d44770519783d8d67cc8c649"
+    },
+    {
+      "id": "simurgh.vsc.ordered_selected_indices.v1",
+      "kind": "schema",
+      "domain": "simurgh.vsc.schema_descriptor_digest_domain.v1",
+      "prepared": {
+        "descriptor_version": "1",
+        "kind": "schema",
+        "schema_id": "simurgh.vsc.ordered_selected_indices.v1",
+        "closed": true,
+        "fields": {
+          "schema_id": {
+            "type": "string",
+            "const_value": "simurgh.vsc.ordered_selected_indices.v1"
+          },
+          "schema_digest": {
+            "type": "string",
+            "grammar_ref": {
+              "id": "simurgh.vsc.digest_token_codec.v1"
+            }
+          },
+          "profile_id": {
+            "type": "string",
+            "const_value": "simurgh.vsc.ordered_selected_indices_profile.v1"
+          },
+          "profile_digest": {
+            "type": "string",
+            "grammar_ref": {
+              "id": "simurgh.vsc.digest_token_codec.v1"
+            }
+          },
+          "indices": {
+            "type": "array",
+            "element_schema": {
+              "type": "string",
+              "grammar_ref": {
+                "id": "simurgh.vsc.grammar.canonical_unsigned_decimal.v1"
+              }
+            }
+          }
+        }
+      },
+      "digest": "d73dab774296f1fd38a5eddb17b316446c1700fcf185cf6df2cef5fe1353d23f"
+    },
+    {
+      "id": "simurgh.vsc.challenge_record.v1",
+      "kind": "schema",
+      "domain": "simurgh.vsc.schema_descriptor_digest_domain.v1",
+      "prepared": {
+        "descriptor_version": "1",
+        "kind": "schema",
+        "schema_id": "simurgh.vsc.challenge_record.v1",
+        "closed": true,
+        "fields": {
+          "schema_id": {
+            "type": "string",
+            "const_value": "simurgh.vsc.challenge_record.v1"
+          },
+          "schema_digest": {
+            "type": "string",
+            "grammar_ref": {
+              "id": "simurgh.vsc.digest_token_codec.v1"
+            }
+          },
+          "challenge_protocol_profile_id": {
+            "type": "string",
+            "const_value": "simurgh.vsc.challenge_protocol_profile.v1"
+          },
+          "challenge_protocol_profile_digest": {
+            "type": "string",
+            "grammar_ref": {
+              "id": "simurgh.vsc.digest_token_codec.v1"
+            }
+          },
+          "challenge_seed": {
+            "type": "string",
+            "grammar_ref": {
+              "id": "simurgh.vsc.digest_token_codec.v1"
+            }
+          },
+          "challenge_subject_digest": {
+            "type": "string",
+            "grammar_ref": {
+              "id": "simurgh.vsc.digest_token_codec.v1"
+            }
+          },
+          "verified_closure_bitcoin_checkpoint_digest": {
+            "type": "string",
+            "grammar_ref": {
+              "id": "simurgh.vsc.digest_token_codec.v1"
+            }
+          },
+          "beacon_contract_digest": {
+            "type": "string",
+            "grammar_ref": {
+              "id": "simurgh.vsc.digest_token_codec.v1"
+            }
+          },
+          "beacon_suffix_digest": {
+            "type": "string",
+            "grammar_ref": {
+              "id": "simurgh.vsc.digest_token_codec.v1"
+            }
+          },
+          "ordered_selected_indices_digest": {
+            "type": "string",
+            "grammar_ref": {
+              "id": "simurgh.vsc.digest_token_codec.v1"
+            }
+          }
+        }
+      },
+      "digest": "b1fcb25e6d690c337d715a919b523c8f3c228c456a017af0cc947105516bb611"
+    },
+    {
+      "id": "simurgh.vsc.challenge_resource_limits_profile.v1",
+      "kind": "profile",
+      "domain": "simurgh.vsc.profile_descriptor_digest_domain.v1",
+      "prepared": {
+        "descriptor_version": "1",
+        "kind": "profile",
+        "profile_id": "simurgh.vsc.challenge_resource_limits_profile.v1",
+        "rules": [
+          {
+            "rule_id": "max_beacon_suffix_headers",
+            "value": 2016
+          },
+          {
+            "rule_id": "max_selected_indices",
+            "value": 65536
+          },
+          {
+            "rule_id": "max_challenge_draws",
+            "value": 4194304
+          },
+          {
+            "rule_id": "max_beacon_suffix_artifact_bytes",
+            "value": 328995
+          },
+          {
+            "rule_id": "max_selected_indices_artifact_bytes",
+            "value": 513475
+          },
+          {
+            "rule_id": "max_challenge_record_bytes",
+            "value": 882
+          },
+          {
+            "rule_id": "max_challenge_package_canonical_bytes",
+            "value": 843352
+          },
+          {
+            "rule_id": "max_challenge_package_transport_bytes",
+            "value": 1048576
+          }
+        ],
+        "imports": [
+          {
+            "id": "simurgh.vsc.beacon_contract.v1",
+            "digest": "efd325763a5a5e5970fa3c3648fb06898dd0a24355ea9041801011896d77f703"
+          },
+          {
+            "id": "simurgh.vsc.beacon_suffix.v1",
+            "digest": "c8a6f7927e9c37e3675def9d179f702731800b89d44770519783d8d67cc8c649"
+          },
+          {
+            "id": "simurgh.vsc.ordered_selected_indices.v1",
+            "digest": "d73dab774296f1fd38a5eddb17b316446c1700fcf185cf6df2cef5fe1353d23f"
+          },
+          {
+            "id": "simurgh.vsc.challenge_record.v1",
+            "digest": "b1fcb25e6d690c337d715a919b523c8f3c228c456a017af0cc947105516bb611"
+          }
+        ]
+      },
+      "digest": "4c6347afefcd4c0fc50dd2d27666e4704d379b643f3a5e107b81891a0471a696"
+    },
+    {
+      "id": "simurgh.vsc.beacon_contract_profile.v1",
+      "kind": "profile",
+      "domain": "simurgh.vsc.profile_descriptor_digest_domain.v1",
+      "prepared": {
+        "descriptor_version": "1",
+        "kind": "profile",
+        "profile_id": "simurgh.vsc.beacon_contract_profile.v1",
+        "rules": [
+          {
+            "rule_id": "beacon_source_identity",
+            "value": "simurgh.vsc.beacon.bitcoin_mainnet.v1"
+          },
+          {
+            "rule_id": "depth_convention",
+            "value": "simurgh.bitcoin.depth.descendants_after_beacon.v1"
+          },
+          {
+            "rule_id": "minimum_lead_blocks",
+            "value": 6
+          },
+          {
+            "rule_id": "required_descendants",
+            "value": 6,
+            "plus_one": false
+          }
+        ],
+        "imports": [
+          {
+            "id": "simurgh.vsc.beacon_contract.v1",
+            "digest": "efd325763a5a5e5970fa3c3648fb06898dd0a24355ea9041801011896d77f703"
+          }
+        ]
+      },
+      "digest": "cefec3dc98d725062e73c8600c54be0d7a8bbe1c9591de8335ba080eee566075"
+    },
+    {
+      "id": "simurgh.vsc.beacon_suffix_profile.v1",
+      "kind": "profile",
+      "domain": "simurgh.vsc.profile_descriptor_digest_domain.v1",
+      "prepared": {
+        "descriptor_version": "1",
+        "kind": "profile",
+        "profile_id": "simurgh.vsc.beacon_suffix_profile.v1",
+        "rules": [
+          {
+            "rule_id": "checkpoint_binding",
+            "left": "beacon_suffix.verified_closure_bitcoin_checkpoint_digest",
+            "operator": "equals",
+            "right": "verifier.checkpoint_instance_digest"
+          },
+          {
+            "rule_id": "header_linkage",
+            "algorithm": "bitcoin_header_double_sha256_linkage"
+          },
+          {
+            "rule_id": "pow_validation",
+            "authority_ref": {
+              "id": "simurgh.bitcoin.mainnet.header_validation.v1"
+            }
+          },
+          {
+            "rule_id": "same_period",
+            "limit_ref": {
+              "id": "simurgh.vsc.challenge_resource_limits_profile.v1"
+            }
+          }
+        ],
+        "imports": [
+          {
+            "id": "simurgh.vsc.beacon_suffix.v1",
+            "digest": "c8a6f7927e9c37e3675def9d179f702731800b89d44770519783d8d67cc8c649"
+          },
+          {
+            "id": "simurgh.bitcoin.mainnet.header_validation.v1",
+            "digest": "744f292d0f8fe93fd9a85ac6956e3fb456f0c24efaa21ff657032f365f661fb2"
+          },
+          {
+            "id": "simurgh.vsc.challenge_resource_limits_profile.v1",
+            "digest": "4c6347afefcd4c0fc50dd2d27666e4704d379b643f3a5e107b81891a0471a696"
+          }
+        ]
+      },
+      "digest": "d5558e824e0c82b61c23f4d9c2e938a3a515e093384baf6868827e17e7d644fb"
+    },
+    {
+      "id": "simurgh.vsc.ordered_selected_indices_profile.v1",
+      "kind": "profile",
+      "domain": "simurgh.vsc.profile_descriptor_digest_domain.v1",
+      "prepared": {
+        "descriptor_version": "1",
+        "kind": "profile",
+        "profile_id": "simurgh.vsc.ordered_selected_indices_profile.v1",
+        "rules": [
+          {
+            "rule_id": "hkdf_sampler_construction",
+            "algorithm": "hkdf_index_sampler"
+          },
+          {
+            "rule_id": "ordering",
+            "value": "strictly_increasing_declared_index"
+          },
+          {
+            "rule_id": "uniqueness",
+            "value": true
+          },
+          {
+            "rule_id": "universe_relation",
+            "operator": "less_than",
+            "right": "universe_size"
+          },
+          {
+            "rule_id": "count_ceiling",
+            "limit_ref": {
+              "id": "simurgh.vsc.challenge_resource_limits_profile.v1"
+            }
+          }
+        ],
+        "imports": [
+          {
+            "id": "simurgh.vsc.ordered_selected_indices.v1",
+            "digest": "d73dab774296f1fd38a5eddb17b316446c1700fcf185cf6df2cef5fe1353d23f"
+          },
+          {
+            "id": "simurgh.vsc.challenge_resource_limits_profile.v1",
+            "digest": "4c6347afefcd4c0fc50dd2d27666e4704d379b643f3a5e107b81891a0471a696"
+          }
+        ]
+      },
+      "digest": "da66ebf48297162243a104182b8a8f4f1a86c2e8f875c3d4c76aacd11e18de4f"
+    },
+    {
+      "id": "simurgh.vsc.challenge_protocol_profile.v1",
+      "kind": "profile",
+      "domain": "simurgh.vsc.profile_descriptor_digest_domain.v1",
+      "prepared": {
+        "descriptor_version": "1",
+        "kind": "profile",
+        "profile_id": "simurgh.vsc.challenge_protocol_profile.v1",
+        "rules": [
+          {
+            "rule_id": "first_failure_order",
+            "order": [
+              "s7_noncanonical_or_oversize",
+              "s7_artifact_shape",
+              "s7_bytes32_token_grammar",
+              "s7_schema_pin_mismatch",
+              "s7_checkpoint_not_verifier_derived",
+              "s7_chain_invalid",
+              "s7_insufficient_descendants",
+              "s7_precommitment_binding_mismatch",
+              "s7_index_derivation",
+              "s7_root_incomplete",
+              "s7_seed_binding"
+            ]
+          },
+          {
+            "rule_id": "check_identifiers",
+            "ids": [
+              "canonical_input",
+              "artifact_shape",
+              "token_grammar",
+              "authority_pins",
+              "checkpoint_derivation",
+              "bitcoin_chain",
+              "descendant_depth",
+              "precommitment_binding",
+              "index_replay",
+              "root_completeness",
+              "seed_binding"
+            ]
+          },
+          {
+            "rule_id": "checkpoint_instance_digest",
+            "domain": "simurgh.vsc.verified_closure_bitcoin_checkpoint_digest_domain.v1",
+            "preimage": [
+              "UTF8(domain)",
+              "decodeDigestToken(pair18_schema_digest)",
+              "UTF8(canonicalJson(context.checkpoint))"
+            ]
+          },
+          {
+            "rule_id": "challenge_seed",
+            "construction": "hkdf_extract_sha256",
+            "seed_domain": "simurgh.vsc.challenge_seed_digest_domain.v1",
+            "draw_domain": "simurgh.vsc.challenge_index_draw.v1",
+            "salt": {
+              "source": "self_profile_digest"
+            },
+            "ikm_order_raw32": [
+              {
+                "ref": "seed_domain_utf8"
+              },
+              {
+                "ref": "runtime_input",
+                "field": "challenge_subject_digest"
+              },
+              {
+                "ref": "verifier_derived",
+                "field": "beacon_value"
+              }
+            ],
+            "draw": {
+              "construction": "hkdf_expand_sha256",
+              "info": "draw_domain_utf8 || u64be(j)",
+              "length_bytes": 32
+            }
+          },
+          {
+            "rule_id": "five_root_completeness",
+            "roots": [
+              "challenge_subject",
+              "verified_closure_bitcoin_checkpoint",
+              "beacon_contract",
+              "beacon_suffix",
+              "ordered_selected_indices"
+            ],
+            "each_present_once": true,
+            "no_cross_wire": true
+          },
+          {
+            "rule_id": "discharge_mapping",
+            "beacon_chain_roots": [
+              "s7_checkpoint_not_verifier_derived",
+              "s7_chain_invalid",
+              "s7_insufficient_descendants"
+            ],
+            "seed_binds_closure": [
+              "s7_seed_binding"
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "id": "simurgh.vsc.anchor_schedule.v1",
+            "digest": "64ddea1e0e7435263958f5b8dc7d587b210a6f0f8e9d49de0fae9d1d20a2338e"
+          },
+          {
+            "id": "simurgh.vsc.challenge_subject.v1",
+            "digest": "b8c12b7c4f7f3a122f81f82f1114f4242bfbc85e5be52feee1ddf3a072de2756"
+          },
+          {
+            "id": "simurgh.vsc.verified_closure_bitcoin_checkpoint_schema.v1",
+            "digest": "66db15b7bc0cd7b8c26fbe0ec284ce9c5f526c44229f9c343757d4802e42db5a"
+          },
+          {
+            "id": "simurgh.vsc.beacon_contract_profile.v1",
+            "digest": "cefec3dc98d725062e73c8600c54be0d7a8bbe1c9591de8335ba080eee566075"
+          },
+          {
+            "id": "simurgh.vsc.beacon_suffix_profile.v1",
+            "digest": "d5558e824e0c82b61c23f4d9c2e938a3a515e093384baf6868827e17e7d644fb"
+          },
+          {
+            "id": "simurgh.vsc.ordered_selected_indices_profile.v1",
+            "digest": "da66ebf48297162243a104182b8a8f4f1a86c2e8f875c3d4c76aacd11e18de4f"
+          },
+          {
+            "id": "simurgh.vsc.challenge_resource_limits_profile.v1",
+            "digest": "4c6347afefcd4c0fc50dd2d27666e4704d379b643f3a5e107b81891a0471a696"
+          },
+          {
+            "id": "simurgh.vsc.challenge_record.v1",
+            "digest": "b1fcb25e6d690c337d715a919b523c8f3c228c456a017af0cc947105516bb611"
+          },
+          {
+            "id": "simurgh.vsc.digest_token_codec.v1",
+            "digest": "7f9f52da0c07db11e4d86931cca278708d23e5396a574c7200d2df88153034fe"
+          }
+        ]
+      },
+      "digest": "50280dff32bc92d936c0fa532afdba87325b1e7143397be3ed0a4b5d72becfe4"
+    }
+  ],
+  "hkdf_rfc": [
+    {
+      "case": "rfc5869_a1",
+      "salt": "000102030405060708090a0b0c",
+      "ikm": "0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b",
+      "info": "f0f1f2f3f4f5f6f7f8f9",
+      "L": 42,
+      "prk": "077709362c2e32df0ddc3f0dc47bba6390b6c73bb50f9c3122ec844ad7c2b3e5",
+      "okm": "3cb25f25faacd57a90434f64d0362f2a2d2d0a90cf1a5a4c5db02d56ecc4c5bf34007208d5b887185865"
+    }
+  ],
+  "hkdf_seed": {
+    "salt": "50280dff32bc92d936c0fa532afdba87325b1e7143397be3ed0a4b5d72becfe4",
+    "seed_domain": "simurgh.vsc.challenge_seed_digest_domain.v1",
+    "subject_digest": "5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c",
+    "beacon_value": "bddd99ccfda39da1b108ce1a5d70038d0a967bacb68b6b63065f626a00000000",
+    "seed": "2a2f46e97196d5632a2369fca7ec6e0e841c7befb0515f6f05ec102372f37f43"
+  },
+  "sampler": {
+    "seed": "2a2f46e97196d5632a2369fca7ec6e0e841c7befb0515f6f05ec102372f37f43",
+    "N": 256,
+    "k": 8,
+    "draw_domain": "simurgh.vsc.challenge_index_draw.v1",
+    "draw_ceiling": 4194304,
+    "indices": [
+      16,
+      19,
+      90,
+      109,
+      129,
+      162,
+      199,
+      209
+    ],
+    "draws_used": 8
+  },
+  "bitcoin": [
+    {
+      "height": 0,
+      "header": "0100000000000000000000000000000000000000000000000000000000000000000000003ba3edfd7a7b12b27ac72c3e67768f617fc81bc3888a51323a9fb8aa4b1e5e4a29ab5f49ffff001d1dac2b7c",
+      "internal": "6fe28c0ab6f1b372c1a6a246ae63f74f931e8365e15a089c68d6190000000000",
+      "display": "000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f",
+      "nbits_hex": "ffff001d",
+      "nbits_u32": 486604799,
+      "target_decimal": "26959535291011309493156476344723991336010898738574164086137773096960",
+      "pow_ok": true
+    },
+    {
+      "height": 1,
+      "header": "010000006fe28c0ab6f1b372c1a6a246ae63f74f931e8365e15a089c68d6190000000000982051fd1e4ba744bbbe680e1fee14677ba1a3c3540bf7b1cdb606e857233e0e61bc6649ffff001d01e36299",
+      "internal": "4860eb18bf1b1620e37e9490fc8a427514416fd75159ab86688e9a8300000000",
+      "display": "00000000839a8e6886ab5951d76f411475428afc90947ee320161bbf18eb6048",
+      "nbits_hex": "ffff001d",
+      "nbits_u32": 486604799,
+      "target_decimal": "26959535291011309493156476344723991336010898738574164086137773096960",
+      "pow_ok": true
+    },
+    {
+      "height": 2,
+      "header": "010000004860eb18bf1b1620e37e9490fc8a427514416fd75159ab86688e9a8300000000d5fdcc541e25de1c7a5addedf24858b8bb665c9f36ef744ee42c316022c90f9bb0bc6649ffff001d08d2bd61",
+      "internal": "bddd99ccfda39da1b108ce1a5d70038d0a967bacb68b6b63065f626a00000000",
+      "display": "000000006a625f06636b8bb6ac7b960a8d03705d1ace08b1a19da3fdcc99ddbd",
+      "nbits_hex": "ffff001d",
+      "nbits_u32": 486604799,
+      "target_decimal": "26959535291011309493156476344723991336010898738574164086137773096960",
+      "pow_ok": true
+    }
+  ],
+  "checkpoint_instance": {
+    "domain": "simurgh.vsc.verified_closure_bitcoin_checkpoint_digest_domain.v1",
+    "pair18_digest": "66db15b7bc0cd7b8c26fbe0ec284ce9c5f526c44229f9c343757d4802e42db5a",
+    "checkpoint": {
+      "network_profile_id": "simurgh.bitcoin.mainnet.header_validation.v1",
+      "checkpoint_height": "0",
+      "checkpoint_block_hash": "000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f",
+      "checkpoint_header": "0100000000000000000000000000000000000000000000000000000000000000000000003ba3edfd7a7b12b27ac72c3e67768f617fc81bc3888a51323a9fb8aa4b1e5e4a29ab5f49ffff001d1dac2b7c",
+      "checkpoint_nbits": "ffff001d",
+      "checkpoint_witness_profile_id": "simurgh.vsc.checkpoint_witness.v1",
+      "checkpoint_witness_profile_digest": "1111111111111111111111111111111111111111111111111111111111111111",
+      "checkpoint_witness_key_fingerprint": "2222222222222222222222222222222222222222222222222222222222222222",
+      "stage5l_checkpoint_evidence_digest": "3333333333333333333333333333333333333333333333333333333333333333"
+    },
+    "digest": "fe9dbdff4c064d57988e0bd0101645bc209fa2d54cf1338d0248e302faf0d078"
+  },
+  "roots": {
+    "challenge_subject": "5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c",
+    "verified_closure_bitcoin_checkpoint": "fe9dbdff4c064d57988e0bd0101645bc209fa2d54cf1338d0248e302faf0d078",
+    "beacon_contract": "0dd58f1811267ed5a48f0bf5bc22b437eca2f73ee09c84295c80fca6c5ea872a",
+    "beacon_suffix": "8b256c2828c78f2767958cc3a1bcdf8688e2c61b7ef0e839cf35c5e95cb1f1d6",
+    "ordered_selected_indices": "8233bf6d45c48c5e39bbfe1c304def6e652fcf68edbb7b5cc3fb312beee03458"
+  },
+  "root_artifacts": {
+    "beacon_contract": {
+      "schema_id": "simurgh.vsc.beacon_contract.v1",
+      "challenge_height": "2"
+    },
+    "beacon_suffix": {
+      "schema_id": "simurgh.vsc.beacon_suffix.v1",
+      "headers": [
+        "010000006fe28c0ab6f1b372c1a6a246ae63f74f931e8365e15a089c68d6190000000000982051fd1e4ba744bbbe680e1fee14677ba1a3c3540bf7b1cdb606e857233e0e61bc6649ffff001d01e36299",
+        "010000004860eb18bf1b1620e37e9490fc8a427514416fd75159ab86688e9a8300000000d5fdcc541e25de1c7a5addedf24858b8bb665c9f36ef744ee42c316022c90f9bb0bc6649ffff001d08d2bd61"
+      ]
+    },
+    "ordered_selected_indices": {
+      "schema_id": "simurgh.vsc.ordered_selected_indices.v1",
+      "indices": [
+        "16",
+        "19",
+        "90",
+        "109",
+        "129",
+        "162",
+        "199",
+        "209"
+      ]
+    }
+  },
+  "negatives": {
+    "uppercase_token_decodes": false,
+    "malformed_compact_target_throws": true,
+    "mutated_nonce_pow_ok": false,
+    "one_bit_seed_mutation_indices": [
+      54,
+      95,
+      116,
+      130,
+      169,
+      185,
+      229,
+      231
+    ],
+    "sampler_exhaustion_throws": true
+  }
+}
+;
+
+async function run() {
+  const V = VECTORS;
+  const fails = [];
+  const eq = (n, a, b) => { if (JSON.stringify(a) !== JSON.stringify(b)) fails.push(n + ": " + a + " != " + b); };
+  for (const cv of V.canonical_vectors) eq("canonical", canonicalJson(cv.value), cv.canonical);
+  for (const e of V.registry) eq("registry/" + e.id, await registryDigestHex(e.domain, e.prepared), e.digest);
+  for (const r of V.hkdf_rfc) {
+    const prk = await hkdfExtract(hexToBytes(r.salt), hexToBytes(r.ikm));
+    eq("hkdf/prk", bytesToHex(prk), r.prk);
+    eq("hkdf/okm", bytesToHex(await hkdfExpand(prk, hexToBytes(r.info), r.L)), r.okm);
+  }
+  const hs = V.hkdf_seed;
+  const dom = new TextEncoder().encode(hs.seed_domain);
+  const ikm = new Uint8Array([...dom, ...hexToBytes(hs.subject_digest), ...hexToBytes(hs.beacon_value)]);
+  eq("seed", bytesToHex(await hkdfExtract(hexToBytes(hs.salt), ikm)), hs.seed);
+  const s = V.sampler;
+  const samp = await deriveIndices(s.seed, s.N, s.k, s.draw_ceiling, s.draw_domain);
+  eq("sampler/indices", samp.sorted, s.indices);
+  eq("sampler/draws", samp.draws, s.draws_used);
+  const ci = V.checkpoint_instance;
+  eq("checkpoint", await checkpointInstanceHex(ci.domain, ci.pair18_digest, ci.checkpoint), ci.digest);
+  for (const name of ["beacon_contract","beacon_suffix","ordered_selected_indices"])
+    eq("root/" + name, await digestOfCanonicalHex(V.root_artifacts[name]), V.roots[name]);
+  for (const bh of V.bitcoin) {
+    eq("btc/internal", await blockHashInternalHex(bh.header), bh.internal);
+    eq("btc/display", await blockHashDisplayHex(bh.header), bh.display);
+    eq("btc/target", compactTargetToBig(bh.nbits_u32).toString(10), bh.target_decimal);
+  }
+  const s8 = V.section8, d8 = s8.domains;
+  const cb = hexToBytes(s8.case.case_bytes_hex);
+  eq("s8/case", await caseDigestHex(d8.case_domain, cb), s8.case.case_digest);
+  const cd8 = hexToBytes(s8.case.case_digest);
+  eq("s8/leaf", await leafIdHex(d8.leaf_domain, hexToBytes(s8.leaf.epoch), s8.leaf.index, hexToBytes(s8.leaf.salt), cd8), s8.leaf.leaf_id);
+  eq("s8/link", await caseLinkHex(d8.execution_case_link_domain, cd8, hexToBytes(s8.case_link.execution_record_digest)), s8.case_link.commitment);
+  eq("s8/merkle", await mthHex(s8.merkle.leaves), s8.merkle.root);
+  eq("s8/inclusion", await verifyInclusionHex(s8.merkle.leaves[s8.merkle.index], s8.merkle.path, s8.merkle.root), true);
+  eq("s8/policy", await disclosurePolicyDigestHex(d8.disclosure_policy_domain, s8.disclosure_policy.policy), s8.disclosure_policy.digest);
+  const s9 = V.section9;
+  for (const c of s9.detect) {
+    const N = BigInt(c.N), J = BigInt(c.J), kk = BigInt(c.k);
+    const r = pDetectPortable(N, J, kk);
+    const tag = "s9/N=" + c.N + ",J=" + c.J + ",k=" + c.k;
+    eq(tag + "/form", r.form, c.form);
+    eq(tag + "/terms", r.terms, c.terms);
+    eq(tag + "/value", ratFormat(r.value), c.p_detect);
+    const active = pairRatioActivePortable(N, kk);
+    eq(tag + "/pair_active", active, c.pair_ratio_active);
+    if (active) eq(tag + "/pair", ratFormat(pPairPortable(N, kk)), c.p_pair);
+  }
+  for (const c of s9.j_star) {
+    const f = { n: BigInt(c.f.numerator), d: BigInt(c.f.denominator) };
+    eq("s9/j_star/N=" + c.N, jStarPortable(f, BigInt(c.N)).toString(10), c.j_star);
+  }
+  const fl = s9.floor;
+  const pn = BigInt(fl.p_detect.numerator), pd = BigInt(fl.p_detect.denominator);
+  const en = BigInt(fl.p_min_equal.numerator), ed = BigInt(fl.p_min_equal.denominator);
+  const an = BigInt(fl.p_min_above.numerator), ad = BigInt(fl.p_min_above.denominator);
+  eq("s9/floor/equality_accepts", pn * ed >= en * pd, true);
+  eq("s9/floor/above_rejects", pn * ad >= an * pd, false);
+  eq("s9/policy_digest", await probabilityPolicyDigestHex(s9.policy_domain, s9.policy_digest.policy), s9.policy_digest.digest);
+  document.getElementById("result").textContent =
+    fails.length ? "RESULT:FAIL " + fails.join("; ") : "RESULT:PASS §7 (registry+hkdf+sampler+bitcoin) + §8 (case+leaf+link+merkle+policy) + §9 (exact rational arithmetic+floor+policy)";
+}
+run().catch(e => { document.getElementById("result").textContent = "RESULT:FAIL " + e.message; });
+
+</script>
+</body>
