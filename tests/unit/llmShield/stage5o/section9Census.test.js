@@ -26,6 +26,11 @@ import {
   measureProbabilityCompatibility,
   probabilityCompatibilityInvariantHolds,
 } from "../../../../tools/simurgh-attestation/stage5o/node/measureProbabilityCompatibility.mjs";
+import {
+  section9IdentityGrid,
+  section9IdentityCensus,
+  section9CensusReport,
+} from "../../../../tools/simurgh-attestation/stage5o/node/measureSection9Censuses.mjs";
 import { makeSection9Fixture, canonicalJson } from "./section9Fixture.mjs";
 
 test("census: the check-identifier catalogue and the first-failure order are parallel and unique", () => {
@@ -41,16 +46,9 @@ test("census: the check-identifier catalogue and the first-failure order are par
 });
 
 test("census: the DUAL-FORM identity holds over a generated grid (oracle-free, no expected value)", () => {
-  const sizes = [1, 2, 3, 4, 7, 8, 9, 16, 17, 100, 256, 257, 1024, 1247, 4096];
-  const grid = [];
-  for (const N of sizes) {
-    for (const k of [1, 2, 3, N - 1, N, Math.max(1, N >> 1)]) {
-      for (const J of [1, 2, N - 1, N, Math.max(1, N >> 2)]) {
-        if (k < 1 || k > N || J < 1 || J > N) continue;
-        grid.push([N, J, k]);
-      }
-    }
-  }
+  // The grid has ONE owner (the generator). If the test enumerated its own, the evidence and the
+  // freeze receipt could describe different grids — this stage's recurring defect.
+  const grid = section9IdentityGrid();
   let degenerate = 0;
   let compared = 0;
   for (const [N, J, k] of grid) {
@@ -154,4 +152,23 @@ test("census: a fraction-basis policy verifies end to end", () => {
     canonicalJson(f.claim.detection_probability),
     canonicalJson(formatRational(f.detect.value))
   );
+});
+
+test("census: the generated §9 census report is byte-stable and its digests are recomputable", () => {
+  const a = section9CensusReport();
+  const b = section9CensusReport();
+  assert.equal(canonicalJson(a), canonicalJson(b), "the report must be byte-stable");
+  assert.equal(a.identity_grid.identity_holds, true);
+  assert.equal(a.compatibility_proof.bounded, true);
+  // the grid the test walks and the grid the receipt digests are the SAME object
+  assert.equal(a.identity_grid.total_cases, section9IdentityGrid().length);
+  assert.equal(
+    a.identity_grid.compared_cases + a.identity_grid.degenerate_cases,
+    a.identity_grid.total_cases
+  );
+  assert.match(a.digests.identity_grid_digest, /^[0-9a-f]{64}$/);
+  assert.match(a.digests.compatibility_proof_digest, /^[0-9a-f]{64}$/);
+  // every compared case really did agree across both product forms
+  const disagreed = section9IdentityCensus().rows.filter((r) => r.identity_agrees === false);
+  assert.deepEqual(disagreed, [], "a product-identity disagreement would be a §9 defect");
 });
