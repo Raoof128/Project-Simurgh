@@ -1,6 +1,6 @@
 # Stage 5O — VSC: Hidden-Universe Equality (design)
 
-**Status:** Sections **1–7 FROZEN** — Section 1 `a1e2e6d1`, Section 2 `0e26c361`, Section 3 `e8dc0a77`, Section 4 `cb67542f`, Section 5 `b08554ed`, Section 6 `fa34242d`, Section 7 `dd7a2513` (A34). **Section 7 is FROZEN.** The §7 contract (§7.1–§7.3) is backed by a working, tested verifier: the authority registry, the revised §7.3.1 shapes + regenerated maxima, the pure eleven-check prefix-ordered relation, `evaluateSection7Safe`, the RFC 5869 HKDF seed, the frozen index sampler, and a real Bitcoin-mainnet suffix validator. Evidence is in three lanes, all green: **Lane A** (the full sixteen-row `S7.*` matrix over a sealed synthetic validator — not real PoW), **Lane B** (the real validator over a committed real mainnet chain, genesis + blocks 1–8), and **Lane C** (the exported two-argument verifier + real validator + a real producer bundle → ACCEPT, real check-6 break → symbolic `s7_chain_invalid`). A **cross-runtime crypto parity lane** reproduces every value that reaches a §7 verdict byte-for-byte in Node, stdlib Python, and a real headless browser (WebCrypto). The four §7.3.8 freeze-review items are all **RESOLVED** and Section 7 is frozen under A34 (freeze gate + browser-parity ceremony receipt + invalidation rule at §7's end). §7 code lives in `tools/simurgh-attestation/stage5o/` (not `src/`). Remaining **stage-release** blockers (separate from §7): §10 raw-code allocation and §11 Lean. **Section 8 DRAFT (design ruled 2026-07-22, case-only); Sections 9–13 DRAFT scaffolds**.
+**Status:** Sections **1–7 FROZEN** — Section 1 `a1e2e6d1`, Section 2 `0e26c361`, Section 3 `e8dc0a77`, Section 4 `cb67542f`, Section 5 `b08554ed`, Section 6 `fa34242d`, Section 7 `dd7a2513` (A34). **Section 7 is FROZEN.** The §7 contract (§7.1–§7.3) is backed by a working, tested verifier: the authority registry, the revised §7.3.1 shapes + regenerated maxima, the pure eleven-check prefix-ordered relation, `evaluateSection7Safe`, the RFC 5869 HKDF seed, the frozen index sampler, and a real Bitcoin-mainnet suffix validator. Evidence is in three lanes, all green: **Lane A** (the full sixteen-row `S7.*` matrix over a sealed synthetic validator — not real PoW), **Lane B** (the real validator over a committed real mainnet chain, genesis + blocks 1–8), and **Lane C** (the exported two-argument verifier + real validator + a real producer bundle → ACCEPT, real check-6 break → symbolic `s7_chain_invalid`). A **cross-runtime crypto parity lane** reproduces every value that reaches a §7 verdict byte-for-byte in Node, stdlib Python, and a real headless browser (WebCrypto). The four §7.3.8 freeze-review items are all **RESOLVED** and Section 7 is frozen under A34 (freeze gate + browser-parity ceremony receipt + invalidation rule at §7's end). §7 code lives in `tools/simurgh-attestation/stage5o/` (not `src/`). Remaining **stage-release** blockers (separate from §7): §10 raw-code allocation and §11 Lean. **Section 8 DRAFT — case-only opening + cumulative-disclosure accounting IMPLEMENTED (Node==Python==real-browser parity), freeze-ready; Sections 9–13 DRAFT scaffolds**.
 **Release is BLOCKED by design:** `release_required_bindings` carries the unresolved `section_6_anchored_presented_census_closure` (§5.9) and, since **A24**, `section_10_evidence_attack_raw_code_allocation` (§4.10) — the stage's own `evidence_attack_fixtures` raw-code obligation, which had no owner, discharger or status while **zero** codes existed in the reserved band. A green Section 5 freeze does **not** mean anti-equivocation exists, and per **A13** full anti-equivocation is not coming: Stage 4T binds views to a held capsule, never excluding an unseen one, so `not_proof_of_global_census_closure_uniqueness_without_exclusion_witnesses` is a **permanent** ceiling.
 **Amendment A34 folded (freezes Section 7) — `dd7a2513`.** With the four §7.3.8 freeze-review items all resolved (Rulings 1–4) and Lane A, Lane B, Lane C, the cross-runtime crypto parity lane, and every generated census green, Section 7 is **FROZEN**. The frozen surface is the challenge-issuance verifier and everything it binds: the §7 authority descriptors and the 17 framed registry digests, the revised §7.3.1 producer-artifact shapes and the four regenerated maxima, the eleven-check prefix-ordered relation, its symbolic check-identifier catalogue and first-failure order, the pair-23 resource limits, the RFC 5869 HKDF seed and the byte-exact index sampler, the real Bitcoin-mainnet suffix validator, the opaque accepted-context capability, the canonical `S7.*` fixture matrix, the cross-runtime parity vectors, and the production wiring. **Freeze-invalidation rule:** _any change to the Section 7 authority descriptors, registry digests, check catalogue, resource limits, HKDF or sampler construction, Bitcoin validator, accepted-context capability, fixture matrix, parity vectors, or production wiring requires a normative amendment and a complete rerun of Lanes A–C, cross-runtime parity, and all generated censuses — including the real-browser ceremony — before refreezing._ Section 10 raw-code allocation (A24) and Section 11 Lean remain **stage-release** blockers, not Section 7 completeness blockers, and Section 7 makes no unproved theorem claim. **No blade, law, evidence predicate, release predicate, ceiling, or socket changed** — A34 records the freeze of an already-executed contract.
 
@@ -4252,7 +4252,7 @@ Per A34, any future amendment to a frozen §7 surface must rerun Lanes A–C, cr
 
 ---
 
-## Section 8 — Opening rules and cumulative-disclosure accounting (DRAFT — design ruled 2026-07-22, not yet frozen)
+## Section 8 — Opening rules and cumulative-disclosure accounting (DRAFT — implemented + parity green, freeze-ready)
 
 ### 8.1 Identity, blade, law, boundaries
 
@@ -4359,21 +4359,31 @@ The revealed indices, taken as a set, must **exactly equal** the accepted contex
 Same discipline as §7: the disclosure-policy limits (from the accepted context) gate **before** any expensive per-opening hashing, and the presented history is bounded before it is materialised.
 
 ```text
-1  raw opening-package transport ceiling                          (before parsing)
-2  lexical parse + canonicalJson(parsed) === raw
-3  canonical opening-package + presented-history resource ceilings (canonical + entries)
-4  exact-key shape of the opening bundle and each opening
-5  32-byte token grammar (decodeDigestToken over the token census)
-6  disclosure-policy authority + precommitment binding
-     (disclosure_policy_digest == accepted-context precommitment; limits read from context)
-7  opening indices exactly equal the §7 selected indices
-8  case/leaf preimage conformance + case-link equality against E[i]
-9  Merkle inclusion at the verifier-known position and root
-10 presented-history validity + one-challenge-per-epoch relation
-11 cumulative unique-index budget transition ( |D_next| <= B )
+#   check id (SECTION8_CHECK_IDS)  first-failure reason (SECTION8_FIRST_FAILURE_ORDER)
+--  -----------------------------  ---------------------------------------------------
+1   opening_transport              s8_opening_package_oversize   (raw <= transport, before parsing)
+2   opening_canonical              s8_noncanonical               (parse + canonicalJson(parsed)===raw)
+3   resource_limit                 s8_resource_limit             (canonical package + history bytes/entries)
+4   opening_shape                  s8_opening_shape              (exact-key bundle/opening/step/history)
+5   token_grammar                  s8_bytes32_token_grammar      (decodeDigestToken over every token)
+6   disclosure_policy_binding      s8_disclosure_policy_binding  (digest==precommitment; challenge bound)
+7   indices_match                  s8_indices_mismatch           (opened set == §7 selection)
+8   case_link                      s8_case_link_invalid          (case/leaf + case-link vs public E[i]; no dup salt)
+9   merkle_inclusion               s8_merkle_inclusion_invalid   (§3.5 inclusion at position i to the root)
+10  history_validity               s8_presented_history_invalid  (well-formed; no re-audit of this challenge)
+11  budget_transition              s8_budget_exhausted           ( |D_prior ∪ current| <= B )
 ```
 
-Exactly one symbolic first-failure reason is returned; numeric codes are Section 10's (A24), never minted here.
+Exactly one symbolic first-failure reason is returned; numeric codes are Section 10's (A24), never minted here. The eleven check ids run parallel to the eleven reasons (a census in `section8Discharge.test.js`). The opening package is a raw canonical JSON string with the exact-key schema `simurgh.vsc.opening_bundle.v1`:
+
+```text
+opening_bundle = {
+  schema_id                = "simurgh.vsc.opening_bundle.v1",
+  challenge_record_digest,                       // binds to the §7 challenge (== accepted context)
+  openings   = [ { index, salt, case, auth_path = [ { sibling, side } ] } ],
+  presented_history = [ { challenge_record_digest, disclosed_indices } ]
+}
+```
 
 ### 8.6 Discharge of `section_8_opening_bundle_resource_limits`
 
@@ -4422,7 +4432,11 @@ What moves it higher: build federated_disclosure_ledger (closes T6.6 → Frontie
 authenticated-receipt profile for history entries; execution/result correspondence sampling.
 ```
 
-`DESIGN RULED, NOT FROZEN` — the design above reflects the 2026-07-22 ruling and is authored for review. It is **not** frozen and carries no implementation yet; the §8 verifier, the disclosure-policy descriptor + six limits generator, the opening/Merkle/case-link checks, the presented-history validator, and the budget-transition engine are the next phase, TDD, after this design is approved. A green byte-limit discharge alone is **not** a green Section 8: opening correctness, Merkle membership, the case-link equality, presented-history validity, and the cumulative unique-index transition are all core §8 mechanisms.
+### 8.10 Implementation status and freeze gate
+
+The §8 design above is **implemented and tested** (TDD, generator-derived): the sealed §7→§8 adapter and the opaque `Section7AcceptedContext`/`CommittedUniverseContext` capabilities, the §3.2/§3.5 leaf and recursive-Merkle primitives, the disclosure-policy digest over the six limits, the pure eleven-check opening relation + `evaluateSection8Safe`, the "No Unbudgeted Unzip" budget transition, and the opening-compatibility invariant that discharges `section_8_opening_bundle_resource_limits`. Evidence: the `S8.*` first-failure matrix (all eleven reasons witnessed at their check, plus budget idempotency and consumption), and a **cross-runtime crypto parity lane** that reproduces §8's `case_digest`, `leaf_id`, `case_link`, Merkle root + inclusion, and `disclosure_policy_digest` byte-for-byte in Node, stdlib Python, and a real headless browser (the §7 parity lane, extended).
+
+`FREEZE GATE` — Section 8 may come to a freeze ruling when: the contract matches the implementation; the `S8.*` matrix is complete with prefix-satisfaction; the case-link/Merkle/budget/discharge mechanisms are all exercised; Node ≡ Python ≡ real-browser crypto parity is green; and the generated censuses (order/check-id parity, disclosure-policy digest binding, opening compatibility invariant) are green. Like §7, freezing §8 does **not** unblock the stage: §10 raw-code allocation (which numbers the eleven `s8_*` reasons) and §11 Lean remain separate release blockers, and §8 makes no unproved theorem claim. A green byte-limit discharge alone is **not** a green Section 8 — opening correctness, Merkle membership, the case-link equality, presented-history validity, and the cumulative unique-index transition are all core §8 mechanisms and are all exercised above.
 
 ## Section 9 — Exact rational probability encoding (DRAFT — design not started)
 
