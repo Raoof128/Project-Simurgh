@@ -15,6 +15,7 @@ import { canonicalJson } from "../../stage4m/core/canonical.mjs";
 import { encodeDigestToken } from "../core/digestTokenCodec.mjs";
 import {
   SCHEMA_IDS,
+  PROFILE_IDS,
   MAX_BEACON_SUFFIX_HEADERS_V1,
   MAX_SELECTED_INDICES_V1,
   HEADER_HEX_CHARS,
@@ -35,6 +36,8 @@ export function maximalBeaconSuffixArtifact() {
   return {
     schema_id: SCHEMA_IDS.beacon_suffix,
     schema_digest: token(0x11),
+    profile_id: PROFILE_IDS.beacon_suffix,
+    profile_digest: token(0x12),
     verified_closure_bitcoin_checkpoint_digest: token(0x22),
     headers: Array.from({ length: MAX_BEACON_SUFFIX_HEADERS_V1 }, (_, i) => header(i)),
   };
@@ -44,6 +47,8 @@ export function maximalOrderedSelectedIndicesArtifact() {
   return {
     schema_id: SCHEMA_IDS.ordered_selected_indices,
     schema_digest: token(0x33),
+    profile_id: PROFILE_IDS.ordered_selected_indices,
+    profile_digest: token(0x34),
     // the largest valid ordered sequence, and it contains the longest permitted decimal strings
     indices: Array.from({ length: MAX_SELECTED_INDICES_V1 }, (_, i) => String(i)),
   };
@@ -54,6 +59,9 @@ export function maximalChallengeRecord() {
   return {
     schema_id: SCHEMA_IDS.challenge_record,
     schema_digest: token(0x44),
+    challenge_protocol_profile_id: PROFILE_IDS.challenge_protocol,
+    challenge_protocol_profile_digest: token(0x45),
+    challenge_seed: token(0x46), // 32-byte token, NOT a *_digest field
     challenge_subject_digest: token(0x55),
     verified_closure_bitcoin_checkpoint_digest: token(0x66),
     beacon_contract_digest: token(0x77),

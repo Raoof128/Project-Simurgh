@@ -15,6 +15,16 @@ export const SCHEMA_IDS = Object.freeze({
   challenge_record: "simurgh.vsc.challenge_record.v1",
 });
 
+// Section-7 construction PROFILE ids (A28 pairs 19–22). Distinct literals from the object SCHEMA_IDS
+// above under the single-hat constitution (A31); this map MIRRORS the profile_id const_values in
+// section7AuthorityDescriptors.mjs, which is the normative source (a census proves the mirror).
+export const PROFILE_IDS = Object.freeze({
+  beacon_contract: "simurgh.vsc.beacon_contract_profile.v1",
+  beacon_suffix: "simurgh.vsc.beacon_suffix_profile.v1",
+  ordered_selected_indices: "simurgh.vsc.ordered_selected_indices_profile.v1",
+  challenge_protocol: "simurgh.vsc.challenge_protocol_profile.v1",
+});
+
 export const BEACON_SOURCE_ID = "simurgh.vsc.beacon.bitcoin_mainnet.v1";
 export const BEACON_DEPTH_CONVENTION_ID = "simurgh.bitcoin.depth.descendants_after_beacon.v1";
 export const STAGE5L_CHECKPOINT_DEPTH_CONVENTION = "simurgh.bitcoin.depth.inclusive_block_count.v1";
