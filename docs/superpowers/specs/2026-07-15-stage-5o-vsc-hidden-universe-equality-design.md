@@ -1,7 +1,7 @@
 # Stage 5O — VSC: Hidden-Universe Equality (design)
 
 **Status:** **ALL THIRTEEN SECTIONS FROZEN** — Section 1 `a1e2e6d1`, Section 2 `0e26c361`, Section 3 `e8dc0a77`, Section 4 `cb67542f`, Section 5 `b08554ed`, Section 6 `fa34242d`, Section 7 `dd7a2513` (A34), Section 8 `396eea24` (A35), Section 9 `1d8dc862` (A36), Section 10 `8393d08e` (A38), Section 11 `8393d08e` (A39), Section 12 `8393d08e` (A40), Section 13 `8393d08e` (A41). The §7 contract (§7.1–§7.3) is backed by a working, tested verifier: the authority registry, the revised §7.3.1 shapes + regenerated maxima, the pure eleven-check prefix-ordered relation, `evaluateSection7Safe`, the RFC 5869 HKDF seed, the frozen index sampler, and a real Bitcoin-mainnet suffix validator. Evidence is in three lanes, all green: **Lane A** (the full sixteen-row `S7.*` matrix over a sealed synthetic validator — not real PoW), **Lane B** (the real validator over a committed real mainnet chain, genesis + blocks 1–8), and **Lane C** (the exported two-argument verifier + real validator + a real producer bundle → ACCEPT, real check-6 break → symbolic `s7_chain_invalid`). A **cross-runtime crypto parity lane** reproduces every value that reaches a §7 verdict byte-for-byte in Node, stdlib Python, and a real headless browser (WebCrypto). The four §7.3.8 freeze-review items are all **RESOLVED** and Section 7 is frozen under A34 (freeze gate + browser-parity ceremony receipt + invalidation rule at §7's end). §7 code lives in `tools/simurgh-attestation/stage5o/` (not `src/`). Remaining **stage-release** blockers (separate from §7): §10 raw-code allocation and §11 Lean. **Section 8 is FROZEN** — case-only opening + cumulative-disclosure accounting, the sealed §7→§8 handoff, and the "No Unbudgeted Unzip" budget, frozen under A35 (freeze gate + browser-parity ceremony receipt + invalidation rule at §8.10). **Section 9 is FROZEN** — exact rational probability encoding: the executable T3.5 detection floor, producer claim-value verification, and bounded exact arithmetic (A36). **Section 10 is FROZEN** — the sole numeric allocator, codes 420-463 over 44 symbolic reasons, table closed (A38). **Section 11 is FROZEN** — 15 Lean theorems, zero proof escapes (A39). **Section 12 is FROZEN and its capsule requirement DISCHARGED** — six-section registry, one recomputed package subject, real Stage 4T capsule with a verified redacted Lane B view (A40). **Section 13 is FROZEN** — pinned prior-art and novelty source map, non-exhaustive by declaration (A41).
-**Release ledger.** `section_10_evidence_attack_raw_code_allocation` (§4.10, A24) is **DISCHARGED** by A38 on the executed reason-to-code bijection, and `section_12_stage4t_presented_evidence_package_capsule` is **DISCHARGED** by A40 on a constructed and verified capsule. **Four ledger entries still read `PENDING` and have not been ruled on** — `section_6_anchored_presented_census_closure`, `section_8_opening_bundle_resource_limits`, and the two §7 bindings (`..._beacon_chain_roots_in_verified_closure_bitcoin_checkpoint`, `..._challenge_seed_binds_presented_census_closure`). Each is plausibly discharged **in fact** by its now-frozen section, but a status nobody has verified is not a discharge, and this stage does not flip a release-blocking status on plausibility. Release therefore remains **BLOCKED** until those four are audited and ruled. A green Section 5 freeze does **not** mean anti-equivocation exists, and per **A13** full anti-equivocation is not coming: Stage 4T binds views to a held capsule, never excluding an unseen one, so `not_proof_of_global_census_closure_uniqueness_without_exclusion_witnesses` is a **permanent** ceiling.
+**Release ledger — ALL SIX requirements DISCHARGED.** `section_6_anchored_presented_census_closure` (§6), `section_7_beacon_chain_roots_in_verified_closure_bitcoin_checkpoint` and `section_7_challenge_seed_binds_presented_census_closure` (§7), `section_8_opening_bundle_resource_limits` (§8), `section_10_evidence_attack_raw_code_allocation` (A38) and `section_12_stage4t_presented_evidence_package_capsule` (A40). Each status is bound to **executed** evidence in its four-field record, never to a description. The four audited in the final pass had been discharged **in fact** by their now-frozen dischargers while their statuses still read `PENDING`; the audit verified each against running code before flipping it, because a status nobody has verified is not a discharge.
 **Amendments A38-A41 folded (freeze Sections 10, 11, 12 and 13) — `8393d08e`, `8393d08e`, `8393d08e`, `8393d08e`.** With every remaining design and implementation gate satisfied, the last four sections are **FROZEN** and **all thirteen sections of Stage 5O are frozen**. **A38 (§10)** freezes the sole numeric allocator: symbolic reasons stay owned by their originating sections, 44 reasons map bijectively to codes 420-463, Stage 4T's 148/149 are reused unchanged, raw 29 stays reserved for unexpected internal failure, and the table is closed. **A39 (§11)** freezes the Lean layer: 15 theorems, zero proof escapes, no project-defined axiom, replayable under a pinned toolchain — and it proves the encoded relations under the stage's registered assumptions, never the cryptographic primitives themselves. **A40 (§12)** freezes the assembled-package capsule: an exact six-section registry including `census_closure`, no mandatory narrative, one package subject **recomputed** by every section from its own payload, verifier-minted input-bound receipts, and the real Stage 4T capsule with a verified redacted Lane B view. **A41 (§13)** freezes the pinned prior-art and novelty source map, whose most valuable output is negative: the Merkle construction is RFC 6962's, the seed is RFC 5869's, the detection probability is classical, and the capsule semantics are Stage 4T's. **Freeze-invalidation rule:** _any change to an allocated code or the allocation constitution, to a Lean theorem or its binding census, to the package registry, subject, receipts, lane profile or capsule adapter, or to a source-map entry, claim or gate rule, requires a normative amendment and a complete refreeze of the affected section, rerunning its matrix, its generators and censuses, the Lean replay, cross-runtime parity, and the full repository suite._ **Both deferred discharges are ruled DISCHARGED** (§10's raw-code allocation, §12's Stage 4T package capsule) on executed evidence, not on description. **No blade, law, evidence predicate, release predicate, ceiling, or socket changed** — A38-A41 record the freeze of already-executed contracts.
 
 **Amendment A37 folded (amends frozen Section 5's A14 statement, and rules Section 12's composition) — `<A37_HASH>`.** A14's temporal argument — the argument that moved the Stage 4T capsule out of the prechallenge subject and into Section 12 — named the post-challenge material as _"openings, receipts, ledger, narrative"_. That enumeration is now wrong in two directions and cannot be silently corrected inside a Section 12 draft, because it is the load-bearing sentence of a **frozen** amendment. **`narrative` is dropped**: it has no schema, no producer and no authority anywhere in Stage 5O, and Stage **4W (VSN)** already owns span-typed narrative machinery — defining a second narrative here would put one construction between two chairs, the exact A3 violation A17's ownership map exists to prevent. A reserved-but-empty narrative section would be decorative authority, and an _unnamed_ mandatory section is worse: it is a silently-required capsule section that no producer can build and no verifier can check. **The enumeration was also incomplete**: it omitted the accepted challenge evidence, the accepted probability claim, and the `stage5o/census_closure` keyed section that §6/A17 had **already frozen** under `package_closure_core_section_schema` for exactly this adapter. The corrected temporal statement is frozen as:
@@ -2223,7 +2223,9 @@ An earlier draft of this section recorded the opening-bundle gap as a third non-
 requirement:            section_8_opening_bundle_resource_limits
 owning section:         4
 permitted discharger:   8
-status:                 PENDING
+status:                 DISCHARGED   // by §8 (frozen 396eea24); evidence = the EXECUTED
+                                     // opening-compatibility invariant, including the negative case
+                                     // where a policy below the maximum FAILS it
 ```
 
 #### `section_10_evidence_attack_raw_code_allocation` — the requirement (A24)
@@ -2888,7 +2890,9 @@ supplied:    for a HELD capsule root, every presented view is consistent with it
 requirement:            section_6_anchored_presented_census_closure
 owning section:         5
 permitted discharger:   6
-status:                 PENDING
+status:                 DISCHARGED   // by §6 (frozen fa34242d) as narrowed by A13,
+                                     // per §6.8; consumed downstream by §7's accepted-closure gate
+                                     // and carried as §12's verified stage5o/census_closure section
 ```
 
 **A20 normalised this block.** It was missing `status:` — the same defect §4.10 carried, found by the S6.44 parser-union removal test rather than by review — and it carried `permanent ceiling:`, a field outside the canonical vocabulary that gave `not_proof_of_global_census_closure_uniqueness_without_exclusion_witnesses` a **second home** while it already lives in `section_5.added_non_claims` above. An A3 violation inside the ledger A3 polices. The ceiling is unchanged and is stated in exactly one place.
@@ -3049,7 +3053,7 @@ A fixture that asserts what its author hoped is worse than no fixture: it conver
 
 ```text
 section_5.required_later_bindings declared    : PASS
-section_6_anchored_presented_census_closure   : PENDING   -> release REJECTS
+section_6_anchored_presented_census_closure   : DISCHARGED (§6, fa34242d)
 global closure uniqueness                     : NOT CLAIMED (permanent ceiling, A13)
 ```
 
@@ -3931,10 +3935,10 @@ discharging section
 **Requirement status:**
 
 ```text
-section_6_anchored_presented_census_closure            : PENDING  -> discharged by THIS section once frozen
+section_6_anchored_presented_census_closure            : DISCHARGED (§6, fa34242d)
 section_7_beacon_chain_roots_in_verified_closure_bitcoin_checkpoint
-                                                      : PENDING  -> release REJECTS   // A26
-section_7_challenge_seed_binds_presented_census_closure: PENDING  -> release REJECTS
+                                                      : DISCHARGED (§7, dd7a2513)     // A26
+section_7_challenge_seed_binds_presented_census_closure: DISCHARGED (§7, dd7a2513)
 section_12_stage4t_presented_evidence_package_capsule  : DISCHARGED (A40)
 ```
 
@@ -3944,12 +3948,14 @@ section_12_stage4t_presented_evidence_package_capsule  : DISCHARGED (A40)
 requirement:            section_7_beacon_chain_roots_in_verified_closure_bitcoin_checkpoint
 owning section:         6
 permitted discharger:   7
-status:                 PENDING
+status:                 DISCHARGED   // by §7 (frozen dd7a2513); evidence =
+                                     // checks 5 and 6 executed over the committed real mainnet chain
 
 requirement:            section_7_challenge_seed_binds_presented_census_closure
 owning section:         6
 permitted discharger:   7
-status:                 PENDING
+status:                 DISCHARGED   // by §7 (frozen dd7a2513); evidence =
+                                     // check 11 s7_seed_binding, witnessed in the S7 matrix
 
 requirement:            section_12_stage4t_presented_evidence_package_capsule
 owning section:         6
@@ -4770,7 +4776,7 @@ Contiguous per-section sub-bands, matching every prior stage. Numeric order **is
 
 `0` is **OK** and is never a rejection. The allocation is generated from the frozen `SECTION{7,8,9}_FIRST_FAILURE_ORDER` arrays rather than transcribed, so a reason cannot silently lose or gain a number.
 
-**Closure rule (why §10 does not discharge yet).** A24 requires a **closed** table. §11 (Lean) and §13 (prior-art map) mint no runtime codes, but **§12 may**: its capsule verifier is `DESIGN OPEN` and could add reasons. Section 10 therefore declares the table **closed over every reason-minting section that exists** and reserves **457+** for §12. `section_10_evidence_attack_raw_code_allocation` is discharged **only once §12 is frozen** — claiming a closed table while a section that can mint reasons is undesigned would discharge a release blocker on a promise.
+**Closure rule (why §10 deferred its discharge).** A24 requires a **closed** table. §11 (Lean) and §13 (prior-art map) mint no runtime codes, but **§12 could**: at the time §10 was written its capsule verifier was undesigned and might still add reasons. It since did — seven of them, allocated at 457-463 — and §12 is now frozen. Section 10 therefore declares the table **closed over every reason-minting section that exists** and reserves **457+** for §12. `section_10_evidence_attack_raw_code_allocation` was discharged **only once §12 was frozen** (A38, alongside A40) — claiming a closed table while a section that could still mint reasons was undesigned would have discharged a release blocker on a promise. §12 is frozen and the table is closed at 463.
 
 ### 10.3 The fail-closed wrapper keeps the shared code, deliberately
 
@@ -5177,7 +5183,7 @@ section_10.required_later_bindings   = []
 section_11.added_non_claims         = []
 section_11.required_later_bindings   = []
 section_12.added_non_claims         = []
-section_12.required_later_bindings   = []         // DESIGN OPEN — narrative schema/authority pending §12 design
+section_12.required_later_bindings   = []         // §12 FROZEN 8393d08e — narrative DROPPED by A37 (owned by Stage 4W)
 section_13.added_non_claims         = []
 section_13.required_later_bindings   = []         // novelty is non-release (Frontier); source map is a §13 freeze-deliverable
 ```
