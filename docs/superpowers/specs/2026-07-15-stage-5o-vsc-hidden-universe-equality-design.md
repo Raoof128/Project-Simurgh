@@ -1,6 +1,6 @@
 # Stage 5O — VSC: Hidden-Universe Equality (design)
 
-**Status:** Sections **1–8 FROZEN** — Section 1 `a1e2e6d1`, Section 2 `0e26c361`, Section 3 `e8dc0a77`, Section 4 `cb67542f`, Section 5 `b08554ed`, Section 6 `fa34242d`, Section 7 `dd7a2513` (A34), Section 8 `396eea24` (A35). **Sections 7 and 8 are FROZEN.** The §7 contract (§7.1–§7.3) is backed by a working, tested verifier: the authority registry, the revised §7.3.1 shapes + regenerated maxima, the pure eleven-check prefix-ordered relation, `evaluateSection7Safe`, the RFC 5869 HKDF seed, the frozen index sampler, and a real Bitcoin-mainnet suffix validator. Evidence is in three lanes, all green: **Lane A** (the full sixteen-row `S7.*` matrix over a sealed synthetic validator — not real PoW), **Lane B** (the real validator over a committed real mainnet chain, genesis + blocks 1–8), and **Lane C** (the exported two-argument verifier + real validator + a real producer bundle → ACCEPT, real check-6 break → symbolic `s7_chain_invalid`). A **cross-runtime crypto parity lane** reproduces every value that reaches a §7 verdict byte-for-byte in Node, stdlib Python, and a real headless browser (WebCrypto). The four §7.3.8 freeze-review items are all **RESOLVED** and Section 7 is frozen under A34 (freeze gate + browser-parity ceremony receipt + invalidation rule at §7's end). §7 code lives in `tools/simurgh-attestation/stage5o/` (not `src/`). Remaining **stage-release** blockers (separate from §7): §10 raw-code allocation and §11 Lean. **Section 8 is FROZEN** — case-only opening + cumulative-disclosure accounting, the sealed §7→§8 handoff, and the "No Unbudgeted Unzip" budget, frozen under A35 (freeze gate + browser-parity ceremony receipt + invalidation rule at §8.10). **Sections 9–13 DRAFT scaffolds.**
+**Status:** Sections **1–8 FROZEN** — Section 1 `a1e2e6d1`, Section 2 `0e26c361`, Section 3 `e8dc0a77`, Section 4 `cb67542f`, Section 5 `b08554ed`, Section 6 `fa34242d`, Section 7 `dd7a2513` (A34), Section 8 `396eea24` (A35). **Sections 7 and 8 are FROZEN.** The §7 contract (§7.1–§7.3) is backed by a working, tested verifier: the authority registry, the revised §7.3.1 shapes + regenerated maxima, the pure eleven-check prefix-ordered relation, `evaluateSection7Safe`, the RFC 5869 HKDF seed, the frozen index sampler, and a real Bitcoin-mainnet suffix validator. Evidence is in three lanes, all green: **Lane A** (the full sixteen-row `S7.*` matrix over a sealed synthetic validator — not real PoW), **Lane B** (the real validator over a committed real mainnet chain, genesis + blocks 1–8), and **Lane C** (the exported two-argument verifier + real validator + a real producer bundle → ACCEPT, real check-6 break → symbolic `s7_chain_invalid`). A **cross-runtime crypto parity lane** reproduces every value that reaches a §7 verdict byte-for-byte in Node, stdlib Python, and a real headless browser (WebCrypto). The four §7.3.8 freeze-review items are all **RESOLVED** and Section 7 is frozen under A34 (freeze gate + browser-parity ceremony receipt + invalidation rule at §7's end). §7 code lives in `tools/simurgh-attestation/stage5o/` (not `src/`). Remaining **stage-release** blockers (separate from §7): §10 raw-code allocation and §11 Lean. **Section 8 is FROZEN** — case-only opening + cumulative-disclosure accounting, the sealed §7→§8 handoff, and the "No Unbudgeted Unzip" budget, frozen under A35 (freeze gate + browser-parity ceremony receipt + invalidation rule at §8.10). **Section 9 DESIGN RULED** (exact rational probability encoding — implementation in progress, no frozen surface touched). **Sections 10–13 DRAFT scaffolds.**
 **Release is BLOCKED by design:** `release_required_bindings` carries the unresolved `section_6_anchored_presented_census_closure` (§5.9) and, since **A24**, `section_10_evidence_attack_raw_code_allocation` (§4.10) — the stage's own `evidence_attack_fixtures` raw-code obligation, which had no owner, discharger or status while **zero** codes existed in the reserved band. A green Section 5 freeze does **not** mean anti-equivocation exists, and per **A13** full anti-equivocation is not coming: Stage 4T binds views to a held capsule, never excluding an unseen one, so `not_proof_of_global_census_closure_uniqueness_without_exclusion_witnesses` is a **permanent** ceiling.
 **Amendment A35 folded (freezes Section 8) — `396eea24`.** With the §8.10 freeze gate satisfied in every clause — contract matching implementation, the complete `S8.*` first-failure matrix with prefix satisfaction, the case-link, indexed Merkle-inclusion and cumulative-budget mechanisms **executed rather than described**, the opening-compatibility invariant discharging `section_8_opening_bundle_resource_limits`, the sealed §7→§8 capability path refusing caller-forged acceptance, Node ≡ stdlib-Python ≡ real-headless-browser reproduction of every verdict-relevant cryptographic value, and all generated order, identifier and digest censuses green — Section 8 is **FROZEN**. The frozen surface is the opening verifier and everything it binds: the `Section7AcceptedContext` and `CommittedUniverseContext` capability types with their branding and mint paths, the sealed acceptance adapter, the opening-package and presented-history schemas, the disclosure-policy descriptor and its six limits together with `disclosure_policy_digest`, the budget-key, challenge-identity and history-validity semantics, the case-digest, leaf-ID and case-link preimages, the §3.5 recursive Merkle leaf/path/root conventions, the eleven-check symbolic catalogue and its first-failure order, the cumulative-disclosure transition, the opening-compatibility generator and its maxima, the canonical `S8.*` fixture matrix, the cross-runtime parity vectors, and the production wiring including `evaluateSection8Safe`. **Frozen law — "No Unbudgeted Unzip":** _for the frozen disclosure-budget key, the verifier accepts a current opening only when the union of valid previously disclosed indices and current selected indices remains within the precommitted budget; reopening a previously disclosed index adds no cost; and this guarantee applies only to the complete, valid history presented to the verifier._ **Freeze-invalidation rule:** _any change to the accepted-context contents, branding or mint path, the opening-package or presented-history schemas, the disclosure-policy descriptor, digest or any of its six limits, the budget-key, challenge-identity or history-validity semantics, the case-digest, leaf-ID or case-link preimages, the Merkle leaf/path/root conventions, the check catalogue, ordering or symbolic reasons, the cumulative-disclosure transition, the opening-compatibility generator or maxima, the `S8.*` fixture matrix, the parity vectors or cryptographic implementation, or the production wiring and safe-wrapper behaviour requires a normative amendment and a complete Section 8 refreeze — rerunning the full `S8.*` first-failure matrix, the compatibility and disclosure-budget generators, all Section 8 censuses, Node/Python parity, the real-browser parity ceremony, and the complete Stage 5O suite._ A missing browser binary may report an explicit **skip** in ordinary CI, but it must never produce a full parity **PASS**; any Section 8 amendment requires another recorded real-browser ceremony before refreezing. Section 10 raw-code allocation (A24, which numbers the eleven `s8_*` reasons) and Section 11 Lean remain **stage-release** blockers, not Section 8 completeness defects, and Section 8 makes no unproved theorem claim. **No blade, law, evidence predicate, release predicate, ceiling, or socket changed** — A35 records the freeze of an already-executed contract.
 
@@ -4491,13 +4491,186 @@ The six frozen disclosure-policy limits, in canonical order, are `max_opening_pa
 
 Per A35, any future amendment to a frozen §8 surface must rerun the full `S8.*` first-failure matrix, the compatibility and disclosure-budget generators, all Section 8 censuses, Node/Python parity, the real-browser parity ceremony, and the complete Stage 5O suite before refreezing. A missing browser binary may report an explicit **skip** in ordinary CI, but must never produce a full parity **PASS**.
 
-## Section 9 — Exact rational probability encoding (DRAFT — design not started)
+## Section 9 — Exact rational probability encoding (DRAFT — design ruled, implementation in progress)
 
-**Purpose.** Package **PC-0's** frozen exact-rational encoding (Section 2) for challenge/selection probabilities — decimal-string integer numerator/denominator, never floating point — as it is consumed at verification. §9 does **not** redefine PC-0's representation (two owners would be the A3 violation), and modulo-bias prevention is **§7's rejection sampler** (check 9), not §9's.
+### 9.1 Identity, blade, laws, boundaries
 
-**Frozen constraints it must honor:** the canonical-unsigned-decimal grammar (§7.3 registry); the no-modulo-bias property of the sampler (§7 check 8, `s7_index_derivation`).
+**Blade.** Every probability that bears on a Stage 5O verdict becomes an **exactly decided, resource-bounded, cross-runtime-identical rational**. Section 2 froze a rejection — T3.5: _"The verifier **rejects** unless `P_detect(N, J*, k) >= p_min`"_ — and nothing executed it. §9 executes it, and verifies the number the producer put on the label as well as the floor beneath it.
 
-`DESIGN OPEN` — where probabilities are consumed and verified, and the exact mapping to the sampler. The representation itself is **not** open: it is PC-0's (§2 — exact numerator/denominator, decimal-string, lowest terms, positive denominator, leading-zero rules); §9 implements and packages it, never redesigns it. **Scaffold only.**
+**Law — "No Rounded Verdict."** No verdict-bearing comparison may consult a floating-point value. Every probability decision is an exact integer comparison over reduced rationals; the floor is decided as `n1 * d2 >= n2 * d1`, never by division. _Falsifiable:_ exhibit any decision path that touches a float.
+
+**Law — "No Unbounded Binomial."** Every probability evaluation is **bounded before it is performed**, by precommitted limits, never discovered mid-computation. The bound is on **exact arithmetic** — operand digits and intermediate width — not merely on loop iterations: a one-term evaluation over a million-digit operand is unbounded computation with a bounded term count.
+
+**Honest core, signed up front — exactness is not calibration.** §9 guarantees the number is exactly the one the model implies. It never claims the model is right: an exactly computed probability of a wrongly modelled event is exactly the wrong number. This is §9's added non-claim `not_proof_that_the_probability_model_is_calibrated`, and it is the natural attack surface for a later section.
+
+**Boundaries — what §9 does not own.** §9 does **not** redefine PC-0's representation (two owners would be the A3 violation); it packages and executes it. Modulo-bias prevention remains **§7's rejection sampler**. §9 mutates **no frozen surface**: it adds nothing to §7's authority registry, alters no §8 module, and requires **no A34 or A35 rerun**.
+
+**The registry constraint (load-bearing).** The canonical-unsigned-decimal grammar `^(0|[1-9][0-9]*)$` is frozen inside §7's authority registry. Adding a "positive decimal" grammar there would flip the seventeen framed registry digests and trigger the A34 invalidation rule. §9 therefore **references** `simurgh.vsc.grammar.canonical_unsigned_decimal.v1` and expresses positivity, field ranges and lowest-terms as **§9 semantic checks** — the lexical/semantic split the descriptors already declare — exactly as §8 owned its disclosure policy without minting a registry pair.
+
+**PC-0 is not amended.** PC-0 freezes `0 <= J <= N` and `0 <= k <= N` as the **formula's** domain, with `C(a,b) = 0` when `b > a`. §9's `1 <= J* <= N`, `1 <= k <= N` constrain the **precommitted policy parameters**, a different object: a policy declaring a zero defect threshold or a zero-size challenge is vacuous, not a redefinition of the mathematics. Both statements stand unchanged.
+
+### 9.2 The canonical rational object
+
+A rational is a two-key object whose fields **reference** the frozen grammar rather than restating it:
+
+```json
+{ "numerator": "<canonical_unsigned_decimal>", "denominator": "<canonical_unsigned_decimal>" }
+```
+
+Generic canonicality (PC-0, executed):
+
+```text
+both strings match simurgh.vsc.grammar.canonical_unsigned_decimal.v1
+denominator != 0
+gcd(numerator, denominator) == 1
+```
+
+`"2"/"4"` and `"1"/"2"` are the same number, so exactly one is canonical; the lowest-terms rule is what makes a rational's digest meaningful. **Field-specific semantic domains then apply by use** — a generic rational rule must not silently permit `f* = 0`, `f* > 1`, or a negative-equivalent construction:
+
+| Field                           | Domain                                 |
+| ------------------------------- | -------------------------------------- |
+| target fraction `f*`            | `0 < numerator <= denominator`         |
+| minimum detection bound `p_min` | `0 <= numerator <= denominator`        |
+| any computed probability        | `0 <= numerator <= denominator`        |
+| absolute-count threshold `J*`   | `1 <= J* <= N` (integer, not rational) |
+
+### 9.3 The exact evaluators
+
+**Detection probability.** Frozen as `P_detect(N, J, k) = 1 - C(N-J, k) / C(N, k)`, evaluated over `N >= 1`, `1 <= J <= N`, `1 <= k <= N`.
+
+```text
+degenerate branch:
+  N - J < k   ->   P_detect = 1/1        (C(N-J,k) = 0; zero product terms)
+
+otherwise the two equivalent products:
+  Q_k = product over i = 0 .. k-1  of  (N - J - i) / (N - i)
+  Q_J = product over i = 0 .. J-1  of  (N - k - i) / (N - i)
+
+form selection (the tie at k == J is pinned to Q_k):
+  Q = Q_k   when k <= J
+  Q = Q_J   when J < k
+
+  P_detect = 1 - Q
+```
+
+`Q_k` and `Q_J` are **exactly equal**, so selection is a resource decision and never a semantic one; the term count is `m = min(J, k)`. The result is returned in **lowest terms with positive denominator**, which is the unique canonical form of a rational — so every correct implementation emits the same reduced numerator and denominator bytes regardless of the cancellation procedure it uses internally. Parity therefore compares the **reduced rational bytes**, not merely the Boolean verdict.
+
+**Fraction basis.** `J* = ceil(f* x N) = floor((aN + b - 1) / b)` for `f* = a/b`, exact integer arithmetic throughout. Verified: `f* = 1/250, N = 1247 -> J* = 5`; `f* = 1/250, N = 124700 -> J* = 499`.
+
+**Pair ratio (PC-3).** `P_pair(N, k) = k(k-1) / (N(N-1))`, **active only when `N >= 2` and `k >= 2`**. A smaller `N` or `k` does not invalidate the detection claim — it makes the pair-ratio field **inactive**, and PC-3's frozen rule that _a field that cannot be computed must not be emitted_ is enforced as an activation check, never as a domain rejection.
+
+### 9.4 "No Unbounded Binomial" — bounded exact arithmetic
+
+Term count alone does not bound computation: converting an untrusted decimal string to an integer is itself the sink, so **operand size is bounded before any integer conversion**. §9 owns three precommitted limits (semantic/resource limits in the §9 policy, **not** new §7 lexical grammars):
+
+```text
+max_probability_decimal_digits        bounds every rational field BEFORE integer conversion
+max_probability_evaluation_terms      bounds m = min(J, k)
+max_probability_intermediate_bits     bounds every product and cross-multiplication operand
+```
+
+Frozen execution order:
+
+```text
+1. degenerate comparison          (comparison only, zero cost)
+2. choose m = min(J, k)
+3. verify term bound              m <= max_probability_evaluation_terms
+4. verify operand/intermediate-size bound
+5. evaluate
+```
+
+A **generated compatibility proof** (oracle-free, dual-ledger) demonstrates that the frozen `N` and `k` ceilings together with these limits bound every intermediate multiplication and GCD operand — the §9 analogue of §8's opening-compatibility invariant.
+
+### 9.5 The probability policy and its precommitment binding
+
+Precommitted **before the anchor** (T3.5), canonicalised and digest-bound under §9's own domain `simurgh.vsc.probability_policy.v1` — a §9-owned digest, never a registry pair. The basis is a **discriminated exact-key shape**; the inactive alternative must be **absent**, so no field changes JSON type according to another field:
+
+```json
+{ "target_defect_basis": "absolute_count", "target_defect_count": "5" }
+```
+
+```json
+{
+  "target_defect_basis": "fraction",
+  "target_defect_fraction": { "numerator": "1", "denominator": "250" }
+}
+```
+
+The policy additionally carries `minimum_detection_bound` (rational), `k_derivation_version`, `claim_type`, the three §9.4 limits, and the trusted outer package ceilings. The verifier recomputes `probability_policy_digest` and requires equality with the value bound into the precommitment.
+
+### 9.6 The producer claim object and claim semantics
+
+The floor gate alone does not verify the number on the label: a producer presenting `9/10` over a computed `4/5` would pass whenever `4/5 >= p_min`. §9 therefore verifies **presented against computed**.
+
+```json
+{
+  "claim_type": "exact",
+  "detection_probability": { "numerator": "...", "denominator": "..." },
+  "pair_ratio": { "numerator": "...", "denominator": "..." }
+}
+```
+
+`pair_ratio` is **conditionally present**. Semantics, frozen:
+
+```text
+claim_type = exact
+  presented detection_probability == computed P_detect
+
+claim_type = at_least
+  presented detection_probability == policy.minimum_detection_bound
+  and computed P_detect >= policy.minimum_detection_bound
+
+pair ratio, when active (N >= 2 and k >= 2)
+  presented pair_ratio == computed P_pair
+pair ratio, when inactive
+  pair_ratio must be absent
+```
+
+An `at_least` claim carries exactly one canonical meaning; arbitrary producer-selected lower bounds are **not** permitted, and PC-0's rule that _a producer quoting the bound must not be able to choose the reading_ becomes executable.
+
+### 9.7 The sealed Section 7 -> Section 9 authority handoff
+
+A §9-owned sealed adapter consumes the frozen `Section7AcceptedContext` and mints an opaque §9 authority context. It **projects** `N`, `k` (the accepted challenge's ordered-selected-index count), the challenge identity, the stage precommitment identity, the expected `probability_policy_digest`, and the trusted outer package limits. It **must not** alter §7 acceptance, accept a structural lookalike, trust producer-resupplied `N` or `k`, obtain pre-parse limits from the unverified package, or expose a public mint. Both frozen sections are preserved.
+
+### 9.8 The verifier relation — ordered checks, first failure, symbolic reasons
+
+```text
+ 1  s9_policy_package_transport_oversize     raw transport ceiling, the only pre-parse ceiling
+ 2  s9_noncanonical                          canonicalJson(parse(raw)) === raw
+ 3  s9_policy_package_canonical_oversize     canonical bytes vs the TRUSTED canonical ceiling
+ 4  s9_probability_claim_shape               exact-key schema, discriminated basis
+ 5  s9_rational_grammar                      every rational field matches the frozen grammar
+ 6  s9_denominator_not_positive              denominator == 0
+ 7  s9_rational_not_lowest_terms             gcd != 1
+ 8  s9_policy_binding_mismatch               recomputed digest != precommitted digest
+ 9  s9_parameter_domain_violation            PC-0 / field-specific domains
+10  s9_evaluation_bound_exceeded             "No Unbounded Binomial"
+11  s9_claim_type_mismatch                   at_least presented as exact, or an unknown type
+12  s9_pair_ratio_activation_mismatch        active-and-absent, or inactive-and-present
+13  s9_detection_claim_value_mismatch        presented detection probability != computed
+14  s9_pair_ratio_value_mismatch             presented pair ratio != computed
+15  s9_detection_floor_unmet                 computed P_detect < p_min  -> the T3.5 rejection
+```
+
+**Check 1** is the only pre-parse ceiling — canonical size cannot be measured before parsing. **Check 3** applies the canonical ceiling after parsing and canonical projection. Neither ceiling may be selected from an unverified producer policy; both are resolved by the §9.7 sealed adapter from the precommitment-bound authority. **Check 9** rejects `N < 1`, `k < 1`, `k > N`, `J* < 1`, `J* > N`, `f* <= 0`, `f* > 1`, `p_min < 0`, `p_min > 1` — but **not** `k < 2` or `N < 2`, which make the pair ratio inactive and are owned by check 12. `evaluateSection9Safe` is the fail-closed wrapper (raw 29). The count is **derived by the census**; fifteen is what the catalogue contains, not a target.
+
+### 9.9 Parity and oracle-free evidence
+
+The parity block compares far more than acceptance — `J*`, the chosen product form, the term count `m`, the reduced `P_detect` numerator and denominator, the reduced `P_pair` numerator and denominator when active, the floor-comparison operands, and the final check identifier and verdict — across **Node `BigInt`, Python `int`, and real-browser `BigInt`**. This is the stage's first **arithmetic** parity: every prior lane proved hashing agreed; this proves **decisions** agree.
+
+The generated identity census (oracle-free) covers both product forms, degenerate cases, `J < k`, `J == k`, `J > k`, `N = 1`, `k = 1`, `k = N`, power-of-two and non-power-of-two sizes, fraction thresholds just below and above integer boundaries, rational reduction, floor equality and one-unit-below cases, and resource-bound edges. It is the natural §11 Lean theorem.
+
+### 9.10 Non-claims and freeze gate
+
+Added by §9: `not_proof_that_the_probability_model_is_calibrated`. Preserved verbatim from the frozen sections:
+
+> `P_detect` is conditional on the challenge-sampling model and the target defect count. It does not prove the corpus actually contains `J*` defects.
+
+> `P_pair` is the probability that one specified pair is jointly sampled. It is not a claim of independence between sampled positions.
+
+The frozen ceilings `not_proof_of_challenge_parameter_adequacy` and `not_proof_of_target_defect_prevalence` stand unchanged; §9 weakens none of them.
+
+`FREEZE GATE` — Section 9 may come to a freeze ruling when: the contract matches the implementation; the `S9.*` matrix is complete with prefix satisfaction; the floor, claim-value, activation and bound mechanisms are **executed rather than described**; the compatibility proof bounds every intermediate operand; Node/Python/browser **arithmetic** parity is green over reduced rational bytes; and the generated censuses (check order, check identifiers, policy-digest binding, dual-form identity grid) are green. As with §7 and §8, freezing §9 does **not** unblock the stage: §10 raw-code allocation and §11 Lean remain separate release blockers, and §9 makes no unproved theorem claim.
 
 ## Section 10 — Raw-code allocation and frozen first-failure ordering (DRAFT — design not started)
 
@@ -4578,8 +4751,8 @@ Section 7 is under active rebuild; Sections 8–13 are DESIGN-OPEN scaffolds. Ea
 section_7.added_non_claims          = []
 section_7.required_later_bindings    = []
 section_8.added_non_claims          = []
-section_8.required_later_bindings    = []         // DESIGN OPEN — opening-correctness / Merkle / receipts bindings pending §8 design
-section_9.added_non_claims          = []
+section_8.required_later_bindings    = []         // §8 FROZEN 396eea24 — a discharger, not a requirement-raiser (§8.8)
+section_9.added_non_claims          = ["not_proof_that_the_probability_model_is_calibrated"]
 section_9.required_later_bindings    = []
 section_10.added_non_claims         = []
 section_10.required_later_bindings   = []
