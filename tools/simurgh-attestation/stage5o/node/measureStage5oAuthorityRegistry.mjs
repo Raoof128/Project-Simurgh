@@ -129,7 +129,9 @@ export function generateAuthorityRegistry(opts = {}) {
       throw new Error(`duplicate_registry_id:${id}`);
     }
     registry[id] = token;
-    perId[id] = Object.freeze({ entry, kind, domain: k.domain, token });
+    // `prepared` is the exact object hashed (imports resolved to embedded digests, maxima injected);
+    // an independent runtime frames+hashes canonicalJson(prepared) under `domain` to reproduce `token`.
+    perId[id] = Object.freeze({ entry, kind, domain: k.domain, token, prepared });
   }
   return Object.freeze({ registry: Object.freeze(registry), perId: Object.freeze(perId), maxima });
 }
