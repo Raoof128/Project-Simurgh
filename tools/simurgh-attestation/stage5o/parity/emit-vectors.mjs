@@ -19,6 +19,15 @@ import {
 import { generateAuthorityRegistry } from "../node/measureStage5oAuthorityRegistry.mjs";
 import { PROFILE_DESCRIPTORS, SCHEMA_DESCRIPTORS } from "../core/section7AuthorityDescriptors.mjs";
 import {
+  pDetect,
+  pPair,
+  pairRatioActive,
+  jStarFromFraction,
+  DEFAULT_EVALUATION_LIMITS,
+} from "../core/exactProbability.mjs";
+import { formatRational, reduce } from "../core/probabilityRational.mjs";
+import { PROBABILITY_POLICY_DOMAIN, probabilityPolicyDigest } from "../core/probabilityPolicy.mjs";
+import {
   caseDigest,
   leafId,
   caseLinkCommitment,
@@ -251,9 +260,82 @@ const section8 = {
   disclosure_policy: { policy: s8Policy, digest: disclosurePolicyDigest(s8Policy) },
 };
 
+// ---- Section 9: EXACT RATIONAL ARITHMETIC. Every prior lane proved hashing agreed across runtimes;
+// this one proves DECISIONS agree. The cases below span the degenerate branch, both product forms,
+// the k == J tie, and the floor comparison at equality and one unit above.
+const s9Cases = [
+  { N: 1247, J: 5, k: 30 },
+  { N: 12470, J: 5, k: 30 },
+  { N: 62350, J: 5, k: 30 },
+  { N: 256, J: 5, k: 8 },
+  { N: 1000, J: 9, k: 9 },
+  { N: 1000, J: 500, k: 7 },
+  { N: 10, J: 10, k: 5 },
+  { N: 256, J: 5, k: 1 },
+];
+const section9 = {
+  policy_domain: PROBABILITY_POLICY_DOMAIN,
+  detect: s9Cases.map(({ N, J, k }) => {
+    const r = pDetect(BigInt(N), BigInt(J), BigInt(k), DEFAULT_EVALUATION_LIMITS);
+    const active = pairRatioActive(BigInt(N), BigInt(k));
+    return {
+      N,
+      J,
+      k,
+      form: r.form,
+      terms: r.terms,
+      p_detect: formatRational(r.value),
+      pair_ratio_active: active,
+      ...(active ? { p_pair: formatRational(pPair(BigInt(N), BigInt(k))) } : {}),
+    };
+  }),
+  // J* = ceil(f* x N) around exact integer boundaries
+  j_star: [
+    { f: { numerator: "1", denominator: "250" }, N: 999, j_star: "4" },
+    { f: { numerator: "1", denominator: "250" }, N: 1000, j_star: "4" },
+    { f: { numerator: "1", denominator: "250" }, N: 1001, j_star: "5" },
+    { f: { numerator: "1", denominator: "250" }, N: 124700, j_star: "499" },
+  ].map((c) => ({
+    ...c,
+    j_star: jStarFromFraction(
+      { n: BigInt(c.f.numerator), d: BigInt(c.f.denominator) },
+      BigInt(c.N)
+    ).toString(10),
+  })),
+  // the floor comparison operands, decided by exact cross multiplication and never by division
+  floor: (() => {
+    const r = pDetect(256n, 5n, 8n, DEFAULT_EVALUATION_LIMITS).value;
+    const above = reduce(r.n + 1n, r.d);
+    return {
+      p_detect: formatRational(r),
+      p_min_equal: formatRational(r),
+      p_min_above: formatRational(above),
+      cross_equal: { left: (r.n * r.d).toString(10), right: (r.n * r.d).toString(10) },
+      verdict_equal: "accept",
+      verdict_above: "s9_detection_floor_unmet",
+    };
+  })(),
+  policy_digest: (() => {
+    const p = {
+      target_defect_basis: "absolute_count",
+      target_defect_count: "5",
+      minimum_detection_bound: { numerator: "1", denominator: "10" },
+      k_derivation_version: "simurgh.vsc.k_derivation.v1",
+      claim_type: "exact",
+      max_probability_decimal_digits: 64,
+      max_probability_evaluation_terms: 65536,
+      max_probability_intermediate_bits: 2097152,
+      max_probability_package_transport_bytes: 65536,
+      max_probability_package_canonical_bytes: 32768,
+    };
+    return { policy: p, digest: probabilityPolicyDigest(p) };
+  })(),
+};
+
 const vectors = {
-  meta: { stage: "5o", surface: "section7_and_8_crypto", runtime_reference: "node" },
+  meta: { stage: "5o", surface: "section7_8_9_crypto_and_arithmetic", runtime_reference: "node" },
   section8,
+  section9,
   domains: {
     seed_domain: SEED_DOMAIN,
     draw_domain: DRAW_DOMAIN,

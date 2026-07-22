@@ -1,7 +1,7 @@
 {
   "meta": {
     "stage": "5o",
-    "surface": "section7_and_8_crypto",
+    "surface": "section7_8_9_crypto_and_arithmetic",
     "runtime_reference": "node"
   },
   "section8": {
@@ -60,6 +60,207 @@
         "max_cumulative_disclosed_indices": 64
       },
       "digest": "aa5216a32ad0c671e83d8dcbc59bc0fdcffa83a52e5fcb08493f8bfcca8b6d72"
+    }
+  },
+  "section9": {
+    "policy_domain": "simurgh.vsc.probability_policy.v1",
+    "detect": [
+      {
+        "N": 1247,
+        "J": 5,
+        "k": 30,
+        "form": "Q_J",
+        "terms": 5,
+        "p_detect": {
+          "numerator": "2861928357751",
+          "denominator": "24926661161479"
+        },
+        "pair_ratio_active": true,
+        "p_pair": {
+          "numerator": "15",
+          "denominator": "26789"
+        }
+      },
+      {
+        "N": 12470,
+        "J": 5,
+        "k": 30,
+        "form": "Q_J",
+        "terms": 5,
+        "p_detect": {
+          "numerator": "2147233042031429",
+          "denominator": "179338970490884321"
+        },
+        "pair_ratio_active": true,
+        "p_pair": {
+          "numerator": "3",
+          "denominator": "536167"
+        }
+      },
+      {
+        "N": 62350,
+        "J": 5,
+        "k": 30,
+        "form": "Q_J",
+        "terms": 5,
+        "p_detect": {
+          "numerator": "3145074447213468251",
+          "denominator": "1308519312143973924995"
+        },
+        "pair_ratio_active": true,
+        "p_pair": {
+          "numerator": "1",
+          "denominator": "4468345"
+        }
+      },
+      {
+        "N": 256,
+        "J": 5,
+        "k": 8,
+        "form": "Q_J",
+        "terms": 5,
+        "p_detect": {
+          "numerator": "23262277",
+          "denominator": "157313376"
+        },
+        "pair_ratio_active": true,
+        "p_pair": {
+          "numerator": "7",
+          "denominator": "8160"
+        }
+      },
+      {
+        "N": 1000,
+        "J": 9,
+        "k": 9,
+        "form": "Q_k",
+        "terms": 9,
+        "p_detect": {
+          "numerator": "41702962969989086537",
+          "denominator": "531603552900040792800"
+        },
+        "pair_ratio_active": true,
+        "p_pair": {
+          "numerator": "1",
+          "denominator": "13875"
+        }
+      },
+      {
+        "N": 1000,
+        "J": 500,
+        "k": 7,
+        "form": "Q_k",
+        "terms": 7,
+        "p_detect": {
+          "numerator": "21854279",
+          "denominator": "22022733"
+        },
+        "pair_ratio_active": true,
+        "p_pair": {
+          "numerator": "7",
+          "denominator": "166500"
+        }
+      },
+      {
+        "N": 10,
+        "J": 10,
+        "k": 5,
+        "form": "degenerate",
+        "terms": 0,
+        "p_detect": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "pair_ratio_active": true,
+        "p_pair": {
+          "numerator": "2",
+          "denominator": "9"
+        }
+      },
+      {
+        "N": 256,
+        "J": 5,
+        "k": 1,
+        "form": "Q_k",
+        "terms": 1,
+        "p_detect": {
+          "numerator": "5",
+          "denominator": "256"
+        },
+        "pair_ratio_active": false
+      }
+    ],
+    "j_star": [
+      {
+        "f": {
+          "numerator": "1",
+          "denominator": "250"
+        },
+        "N": 999,
+        "j_star": "4"
+      },
+      {
+        "f": {
+          "numerator": "1",
+          "denominator": "250"
+        },
+        "N": 1000,
+        "j_star": "4"
+      },
+      {
+        "f": {
+          "numerator": "1",
+          "denominator": "250"
+        },
+        "N": 1001,
+        "j_star": "5"
+      },
+      {
+        "f": {
+          "numerator": "1",
+          "denominator": "250"
+        },
+        "N": 124700,
+        "j_star": "499"
+      }
+    ],
+    "floor": {
+      "p_detect": {
+        "numerator": "23262277",
+        "denominator": "157313376"
+      },
+      "p_min_equal": {
+        "numerator": "23262277",
+        "denominator": "157313376"
+      },
+      "p_min_above": {
+        "numerator": "11631139",
+        "denominator": "78656688"
+      },
+      "cross_equal": {
+        "left": "3659467328317152",
+        "right": "3659467328317152"
+      },
+      "verdict_equal": "accept",
+      "verdict_above": "s9_detection_floor_unmet"
+    },
+    "policy_digest": {
+      "policy": {
+        "target_defect_basis": "absolute_count",
+        "target_defect_count": "5",
+        "minimum_detection_bound": {
+          "numerator": "1",
+          "denominator": "10"
+        },
+        "k_derivation_version": "simurgh.vsc.k_derivation.v1",
+        "claim_type": "exact",
+        "max_probability_decimal_digits": 64,
+        "max_probability_evaluation_terms": 65536,
+        "max_probability_intermediate_bits": 2097152,
+        "max_probability_package_transport_bytes": 65536,
+        "max_probability_package_canonical_bytes": 32768
+      },
+      "digest": "a54e2b8c8dc10386258de122537fed9a3c10d1a577801e51856672099160d38c"
     }
   },
   "domains": {

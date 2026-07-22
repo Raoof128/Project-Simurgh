@@ -140,3 +140,47 @@ test("browser parity: §8 crypto reproduces (case / leaf / case-link / Merkle / 
     s8.disclosure_policy.digest
   );
 });
+
+test("browser parity: §9 EXACT RATIONAL ARITHMETIC reproduces (form, terms, value, floor, policy)", async () => {
+  const s9 = V.section9;
+  for (const c of s9.detect) {
+    const N = BigInt(c.N);
+    const J = BigInt(c.J);
+    const k = BigInt(c.k);
+    const r = P.pDetectPortable(N, J, k);
+    const tag = `N=${c.N} J=${c.J} k=${c.k}`;
+    assert.equal(r.form, c.form, `${tag}/form`);
+    assert.equal(r.terms, c.terms, `${tag}/terms`);
+    assert.deepEqual(P.ratFormat(r.value), c.p_detect, `${tag}/value`);
+    const active = P.pairRatioActivePortable(N, k);
+    assert.equal(active, c.pair_ratio_active, `${tag}/active`);
+    if (active) assert.deepEqual(P.ratFormat(P.pPairPortable(N, k)), c.p_pair, `${tag}/pair`);
+    // the two identities must agree in the browser surface too
+    if (N - J >= k) {
+      assert.deepEqual(
+        P.productQkPortable(N, J, k),
+        P.productQJPortable(N, J, k),
+        `${tag}/identity`
+      );
+    }
+  }
+  for (const c of s9.j_star) {
+    const f = { n: BigInt(c.f.numerator), d: BigInt(c.f.denominator) };
+    assert.equal(P.jStarPortable(f, BigInt(c.N)).toString(10), c.j_star, `j*/N=${c.N}`);
+  }
+  const fl = s9.floor;
+  const pn = BigInt(fl.p_detect.numerator);
+  const pd = BigInt(fl.p_detect.denominator);
+  assert.equal(
+    pn * BigInt(fl.p_min_equal.denominator) >= BigInt(fl.p_min_equal.numerator) * pd,
+    true
+  );
+  assert.equal(
+    pn * BigInt(fl.p_min_above.denominator) >= BigInt(fl.p_min_above.numerator) * pd,
+    false
+  );
+  assert.equal(
+    await P.probabilityPolicyDigestHex(s9.policy_domain, s9.policy_digest.policy),
+    s9.policy_digest.digest
+  );
+});

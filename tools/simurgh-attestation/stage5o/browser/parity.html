@@ -190,10 +190,75 @@ async function disclosurePolicyDigestHex(policyDomain, policy) {
   return bytesToHex(await sha256(concat(utf8(policyDomain), utf8(canonicalJson(policy)))));
 }
 
+// ---- Section 9 exact rational arithmetic. Pure BigInt: no crypto, no float, and identical in a
+// real browser and in Node. This is the stage's first ARITHMETIC parity surface — every earlier lane
+// proved hashing agreed; these functions prove the DECISIONS agree.
+function ratGcd(a, b) {
+  if (a < 0n) a = -a;
+  if (b < 0n) b = -b;
+  while (b) [a, b] = [b, a % b];
+  return a;
+}
+function ratReduce(n, d) {
+  if (d === 0n) throw new Error("zero_denominator");
+  if (d < 0n) {
+    n = -n;
+    d = -d;
+  }
+  if (n === 0n) return { n: 0n, d: 1n };
+  const g = ratGcd(n, d);
+  return { n: n / g, d: d / g };
+}
+function ratFormat({ n, d }) {
+  const r = ratReduce(n, d);
+  return { numerator: r.n.toString(10), denominator: r.d.toString(10) };
+}
+function productQkPortable(N, J, k) {
+  let n = 1n,
+    d = 1n;
+  for (let i = 0n; i < k; i++) {
+    n *= N - J - i;
+    d *= N - i;
+  }
+  return ratReduce(n, d);
+}
+function productQJPortable(N, J, k) {
+  let n = 1n,
+    d = 1n;
+  for (let i = 0n; i < J; i++) {
+    n *= N - k - i;
+    d *= N - i;
+  }
+  return ratReduce(n, d);
+}
+/** The frozen §9.3 rule: degenerate branch, then m = min(J,k) with the k == J tie pinned to Q_k. */
+function pDetectPortable(N, J, k) {
+  if (N - J < k) return { value: { n: 1n, d: 1n }, form: "degenerate", terms: 0 };
+  const useQk = k <= J;
+  const q = useQk ? productQkPortable(N, J, k) : productQJPortable(N, J, k);
+  return {
+    value: ratReduce(q.d - q.n, q.d),
+    form: useQk ? "Q_k" : "Q_J",
+    terms: Number(useQk ? k : J),
+  };
+}
+function pPairPortable(N, k) {
+  return ratReduce(k * (k - 1n), N * (N - 1n));
+}
+function pairRatioActivePortable(N, k) {
+  return N >= 2n && k >= 2n;
+}
+function jStarPortable(f, N) {
+  return (f.n * N + f.d - 1n) / f.d;
+}
+async function probabilityPolicyDigestHex(policyDomain, policy) {
+  return bytesToHex(await sha256(concat(utf8(policyDomain), utf8(canonicalJson(policy)))));
+}
+
 const VECTORS = {
   "meta": {
     "stage": "5o",
-    "surface": "section7_and_8_crypto",
+    "surface": "section7_8_9_crypto_and_arithmetic",
     "runtime_reference": "node"
   },
   "section8": {
@@ -252,6 +317,207 @@ const VECTORS = {
         "max_cumulative_disclosed_indices": 64
       },
       "digest": "aa5216a32ad0c671e83d8dcbc59bc0fdcffa83a52e5fcb08493f8bfcca8b6d72"
+    }
+  },
+  "section9": {
+    "policy_domain": "simurgh.vsc.probability_policy.v1",
+    "detect": [
+      {
+        "N": 1247,
+        "J": 5,
+        "k": 30,
+        "form": "Q_J",
+        "terms": 5,
+        "p_detect": {
+          "numerator": "2861928357751",
+          "denominator": "24926661161479"
+        },
+        "pair_ratio_active": true,
+        "p_pair": {
+          "numerator": "15",
+          "denominator": "26789"
+        }
+      },
+      {
+        "N": 12470,
+        "J": 5,
+        "k": 30,
+        "form": "Q_J",
+        "terms": 5,
+        "p_detect": {
+          "numerator": "2147233042031429",
+          "denominator": "179338970490884321"
+        },
+        "pair_ratio_active": true,
+        "p_pair": {
+          "numerator": "3",
+          "denominator": "536167"
+        }
+      },
+      {
+        "N": 62350,
+        "J": 5,
+        "k": 30,
+        "form": "Q_J",
+        "terms": 5,
+        "p_detect": {
+          "numerator": "3145074447213468251",
+          "denominator": "1308519312143973924995"
+        },
+        "pair_ratio_active": true,
+        "p_pair": {
+          "numerator": "1",
+          "denominator": "4468345"
+        }
+      },
+      {
+        "N": 256,
+        "J": 5,
+        "k": 8,
+        "form": "Q_J",
+        "terms": 5,
+        "p_detect": {
+          "numerator": "23262277",
+          "denominator": "157313376"
+        },
+        "pair_ratio_active": true,
+        "p_pair": {
+          "numerator": "7",
+          "denominator": "8160"
+        }
+      },
+      {
+        "N": 1000,
+        "J": 9,
+        "k": 9,
+        "form": "Q_k",
+        "terms": 9,
+        "p_detect": {
+          "numerator": "41702962969989086537",
+          "denominator": "531603552900040792800"
+        },
+        "pair_ratio_active": true,
+        "p_pair": {
+          "numerator": "1",
+          "denominator": "13875"
+        }
+      },
+      {
+        "N": 1000,
+        "J": 500,
+        "k": 7,
+        "form": "Q_k",
+        "terms": 7,
+        "p_detect": {
+          "numerator": "21854279",
+          "denominator": "22022733"
+        },
+        "pair_ratio_active": true,
+        "p_pair": {
+          "numerator": "7",
+          "denominator": "166500"
+        }
+      },
+      {
+        "N": 10,
+        "J": 10,
+        "k": 5,
+        "form": "degenerate",
+        "terms": 0,
+        "p_detect": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "pair_ratio_active": true,
+        "p_pair": {
+          "numerator": "2",
+          "denominator": "9"
+        }
+      },
+      {
+        "N": 256,
+        "J": 5,
+        "k": 1,
+        "form": "Q_k",
+        "terms": 1,
+        "p_detect": {
+          "numerator": "5",
+          "denominator": "256"
+        },
+        "pair_ratio_active": false
+      }
+    ],
+    "j_star": [
+      {
+        "f": {
+          "numerator": "1",
+          "denominator": "250"
+        },
+        "N": 999,
+        "j_star": "4"
+      },
+      {
+        "f": {
+          "numerator": "1",
+          "denominator": "250"
+        },
+        "N": 1000,
+        "j_star": "4"
+      },
+      {
+        "f": {
+          "numerator": "1",
+          "denominator": "250"
+        },
+        "N": 1001,
+        "j_star": "5"
+      },
+      {
+        "f": {
+          "numerator": "1",
+          "denominator": "250"
+        },
+        "N": 124700,
+        "j_star": "499"
+      }
+    ],
+    "floor": {
+      "p_detect": {
+        "numerator": "23262277",
+        "denominator": "157313376"
+      },
+      "p_min_equal": {
+        "numerator": "23262277",
+        "denominator": "157313376"
+      },
+      "p_min_above": {
+        "numerator": "11631139",
+        "denominator": "78656688"
+      },
+      "cross_equal": {
+        "left": "3659467328317152",
+        "right": "3659467328317152"
+      },
+      "verdict_equal": "accept",
+      "verdict_above": "s9_detection_floor_unmet"
+    },
+    "policy_digest": {
+      "policy": {
+        "target_defect_basis": "absolute_count",
+        "target_defect_count": "5",
+        "minimum_detection_bound": {
+          "numerator": "1",
+          "denominator": "10"
+        },
+        "k_derivation_version": "simurgh.vsc.k_derivation.v1",
+        "claim_type": "exact",
+        "max_probability_decimal_digits": 64,
+        "max_probability_evaluation_terms": 65536,
+        "max_probability_intermediate_bits": 2097152,
+        "max_probability_package_transport_bytes": 65536,
+        "max_probability_package_canonical_bytes": 32768
+      },
+      "digest": "a54e2b8c8dc10386258de122537fed9a3c10d1a577801e51856672099160d38c"
     }
   },
   "domains": {
@@ -1318,8 +1584,31 @@ async function run() {
   eq("s8/merkle", await mthHex(s8.merkle.leaves), s8.merkle.root);
   eq("s8/inclusion", await verifyInclusionHex(s8.merkle.leaves[s8.merkle.index], s8.merkle.path, s8.merkle.root), true);
   eq("s8/policy", await disclosurePolicyDigestHex(d8.disclosure_policy_domain, s8.disclosure_policy.policy), s8.disclosure_policy.digest);
+  const s9 = V.section9;
+  for (const c of s9.detect) {
+    const N = BigInt(c.N), J = BigInt(c.J), kk = BigInt(c.k);
+    const r = pDetectPortable(N, J, kk);
+    const tag = "s9/N=" + c.N + ",J=" + c.J + ",k=" + c.k;
+    eq(tag + "/form", r.form, c.form);
+    eq(tag + "/terms", r.terms, c.terms);
+    eq(tag + "/value", ratFormat(r.value), c.p_detect);
+    const active = pairRatioActivePortable(N, kk);
+    eq(tag + "/pair_active", active, c.pair_ratio_active);
+    if (active) eq(tag + "/pair", ratFormat(pPairPortable(N, kk)), c.p_pair);
+  }
+  for (const c of s9.j_star) {
+    const f = { n: BigInt(c.f.numerator), d: BigInt(c.f.denominator) };
+    eq("s9/j_star/N=" + c.N, jStarPortable(f, BigInt(c.N)).toString(10), c.j_star);
+  }
+  const fl = s9.floor;
+  const pn = BigInt(fl.p_detect.numerator), pd = BigInt(fl.p_detect.denominator);
+  const en = BigInt(fl.p_min_equal.numerator), ed = BigInt(fl.p_min_equal.denominator);
+  const an = BigInt(fl.p_min_above.numerator), ad = BigInt(fl.p_min_above.denominator);
+  eq("s9/floor/equality_accepts", pn * ed >= en * pd, true);
+  eq("s9/floor/above_rejects", pn * ad >= an * pd, false);
+  eq("s9/policy_digest", await probabilityPolicyDigestHex(s9.policy_domain, s9.policy_digest.policy), s9.policy_digest.digest);
   document.getElementById("result").textContent =
-    fails.length ? "RESULT:FAIL " + fails.join("; ") : "RESULT:PASS §7 (registry+hkdf+sampler+bitcoin) + §8 (case+leaf+link+merkle+policy)";
+    fails.length ? "RESULT:FAIL " + fails.join("; ") : "RESULT:PASS §7 (registry+hkdf+sampler+bitcoin) + §8 (case+leaf+link+merkle+policy) + §9 (exact rational arithmetic+floor+policy)";
 }
 run().catch(e => { document.getElementById("result").textContent = "RESULT:FAIL " + e.message; });
 

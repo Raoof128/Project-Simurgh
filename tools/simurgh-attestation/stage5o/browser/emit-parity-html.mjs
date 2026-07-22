@@ -57,8 +57,31 @@ async function run() {
   eq("s8/merkle", await mthHex(s8.merkle.leaves), s8.merkle.root);
   eq("s8/inclusion", await verifyInclusionHex(s8.merkle.leaves[s8.merkle.index], s8.merkle.path, s8.merkle.root), true);
   eq("s8/policy", await disclosurePolicyDigestHex(d8.disclosure_policy_domain, s8.disclosure_policy.policy), s8.disclosure_policy.digest);
+  const s9 = V.section9;
+  for (const c of s9.detect) {
+    const N = BigInt(c.N), J = BigInt(c.J), kk = BigInt(c.k);
+    const r = pDetectPortable(N, J, kk);
+    const tag = "s9/N=" + c.N + ",J=" + c.J + ",k=" + c.k;
+    eq(tag + "/form", r.form, c.form);
+    eq(tag + "/terms", r.terms, c.terms);
+    eq(tag + "/value", ratFormat(r.value), c.p_detect);
+    const active = pairRatioActivePortable(N, kk);
+    eq(tag + "/pair_active", active, c.pair_ratio_active);
+    if (active) eq(tag + "/pair", ratFormat(pPairPortable(N, kk)), c.p_pair);
+  }
+  for (const c of s9.j_star) {
+    const f = { n: BigInt(c.f.numerator), d: BigInt(c.f.denominator) };
+    eq("s9/j_star/N=" + c.N, jStarPortable(f, BigInt(c.N)).toString(10), c.j_star);
+  }
+  const fl = s9.floor;
+  const pn = BigInt(fl.p_detect.numerator), pd = BigInt(fl.p_detect.denominator);
+  const en = BigInt(fl.p_min_equal.numerator), ed = BigInt(fl.p_min_equal.denominator);
+  const an = BigInt(fl.p_min_above.numerator), ad = BigInt(fl.p_min_above.denominator);
+  eq("s9/floor/equality_accepts", pn * ed >= en * pd, true);
+  eq("s9/floor/above_rejects", pn * ad >= an * pd, false);
+  eq("s9/policy_digest", await probabilityPolicyDigestHex(s9.policy_domain, s9.policy_digest.policy), s9.policy_digest.digest);
   document.getElementById("result").textContent =
-    fails.length ? "RESULT:FAIL " + fails.join("; ") : "RESULT:PASS §7 (registry+hkdf+sampler+bitcoin) + §8 (case+leaf+link+merkle+policy)";
+    fails.length ? "RESULT:FAIL " + fails.join("; ") : "RESULT:PASS §7 (registry+hkdf+sampler+bitcoin) + §8 (case+leaf+link+merkle+policy) + §9 (exact rational arithmetic+floor+policy)";
 }
 run().catch(e => { document.getElementById("result").textContent = "RESULT:FAIL " + e.message; });
 `;

@@ -126,6 +126,63 @@ def derive_indices(seed_hex, N, k, draw_ceiling, draw_domain):
     return sorted(accepted), j
 
 
+def _gcd(a, b):
+    a, b = abs(a), abs(b)
+    while b:
+        a, b = b, a % b
+    return a
+
+
+def _reduce(n, d):
+    if d == 0:
+        raise ValueError("zero denominator")
+    if d < 0:
+        n, d = -n, -d
+    if n == 0:
+        return (0, 1)
+    g = _gcd(n, d)
+    return (n // g, d // g)
+
+
+def _rat(obj):
+    return (int(obj["numerator"]), int(obj["denominator"]))
+
+
+def _fmt(n, d):
+    n, d = _reduce(n, d)
+    return {"numerator": str(n), "denominator": str(d)}
+
+
+def _product_qk(N, J, k):
+    n, d = 1, 1
+    for i in range(k):
+        n *= N - J - i
+        d *= N - i
+    return _reduce(n, d)
+
+
+def _product_qj(N, J, k):
+    n, d = 1, 1
+    for i in range(J):
+        n *= N - k - i
+        d *= N - i
+    return _reduce(n, d)
+
+
+def p_detect(N, J, k):
+    """Exactly the frozen §9.3 rule: degenerate branch, then min(J,k) with the k == J tie on Q_k."""
+    if N - J < k:
+        return ((1, 1), "degenerate", 0)
+    use_qk = k <= J
+    q = _product_qk(N, J, k) if use_qk else _product_qj(N, J, k)
+    val = _reduce(1 * q[1] - q[0] * 1, q[1])
+    return (val, "Q_k" if use_qk else "Q_J", k if use_qk else J)
+
+
+def p_pair(N, k):
+    return _reduce(k * (k - 1), N * (N - 1))
+
+
 def main():
     with open(VECTORS, "r", encoding="utf-8") as f:
         v = json.load(f)
@@ -240,12 +297,42 @@ def main():
     dpd = sha256(dom["disclosure_policy_domain"].encode("utf-8") + canonical(dp["policy"]).encode("utf-8"))
     check("s8/disclosure_policy_digest", dpd.hex(), dp["digest"])
 
+    # Section 9: EXACT RATIONAL ARITHMETIC. Prior lanes proved hashing agreed; this proves the
+    # DECISIONS agree — the chosen product form, the term count, the reduced rational bytes, and the
+    # floor verdict must all match Node and the browser exactly.
+    s9 = v["section9"]
+    for c in s9["detect"]:
+        val, form, terms = p_detect(int(c["N"]), int(c["J"]), int(c["k"]))
+        tag = "s9/detect/N=%s,J=%s,k=%s" % (c["N"], c["J"], c["k"])
+        check(tag + "/form", form, c["form"])
+        check(tag + "/terms", terms, c["terms"])
+        check(tag + "/value", _fmt(val[0], val[1]), c["p_detect"])
+        active = int(c["N"]) >= 2 and int(c["k"]) >= 2
+        check(tag + "/pair_active", active, c["pair_ratio_active"])
+        if active:
+            pp = p_pair(int(c["N"]), int(c["k"]))
+            check(tag + "/pair", _fmt(pp[0], pp[1]), c["p_pair"])
+    for c in s9["j_star"]:
+        a, b = _rat(c["f"])
+        got = (a * int(c["N"]) + b - 1) // b
+        check("s9/j_star/N=%s" % c["N"], str(got), c["j_star"])
+    fl = s9["floor"]
+    pn, pd = _rat(fl["p_detect"])
+    en, ed = _rat(fl["p_min_equal"])
+    an, ad = _rat(fl["p_min_above"])
+    # the floor is decided by exact cross multiplication, never division
+    check("s9/floor/equality_accepts", pn * ed >= en * pd, True)
+    check("s9/floor/above_rejects", pn * ad >= an * pd, False)
+    pol = s9["policy_digest"]
+    pdg = sha256(s9["policy_domain"].encode("utf-8") + canonical(pol["policy"]).encode("utf-8"))
+    check("s9/policy_digest", pdg.hex(), pol["digest"])
+
     if fails:
         print("PARITY FAIL (%d):" % len(fails))
         for f in fails:
             print("  " + f)
         sys.exit(1)
-    print("Section 7 crypto parity: Python == Node (byte-for-byte). All vectors match.")
+    print("Section 7/8/9 parity: Python == Node (byte-for-byte). All vectors match.")
 
 
 if __name__ == "__main__":

@@ -169,3 +169,68 @@ export async function verifyInclusionHex(leafHex, path, rootHex) {
 export async function disclosurePolicyDigestHex(policyDomain, policy) {
   return bytesToHex(await sha256(concat(utf8(policyDomain), utf8(canonicalJson(policy)))));
 }
+
+// ---- Section 9 exact rational arithmetic. Pure BigInt: no crypto, no float, and identical in a
+// real browser and in Node. This is the stage's first ARITHMETIC parity surface — every earlier lane
+// proved hashing agreed; these functions prove the DECISIONS agree.
+function ratGcd(a, b) {
+  if (a < 0n) a = -a;
+  if (b < 0n) b = -b;
+  while (b) [a, b] = [b, a % b];
+  return a;
+}
+export function ratReduce(n, d) {
+  if (d === 0n) throw new Error("zero_denominator");
+  if (d < 0n) {
+    n = -n;
+    d = -d;
+  }
+  if (n === 0n) return { n: 0n, d: 1n };
+  const g = ratGcd(n, d);
+  return { n: n / g, d: d / g };
+}
+export function ratFormat({ n, d }) {
+  const r = ratReduce(n, d);
+  return { numerator: r.n.toString(10), denominator: r.d.toString(10) };
+}
+export function productQkPortable(N, J, k) {
+  let n = 1n,
+    d = 1n;
+  for (let i = 0n; i < k; i++) {
+    n *= N - J - i;
+    d *= N - i;
+  }
+  return ratReduce(n, d);
+}
+export function productQJPortable(N, J, k) {
+  let n = 1n,
+    d = 1n;
+  for (let i = 0n; i < J; i++) {
+    n *= N - k - i;
+    d *= N - i;
+  }
+  return ratReduce(n, d);
+}
+/** The frozen §9.3 rule: degenerate branch, then m = min(J,k) with the k == J tie pinned to Q_k. */
+export function pDetectPortable(N, J, k) {
+  if (N - J < k) return { value: { n: 1n, d: 1n }, form: "degenerate", terms: 0 };
+  const useQk = k <= J;
+  const q = useQk ? productQkPortable(N, J, k) : productQJPortable(N, J, k);
+  return {
+    value: ratReduce(q.d - q.n, q.d),
+    form: useQk ? "Q_k" : "Q_J",
+    terms: Number(useQk ? k : J),
+  };
+}
+export function pPairPortable(N, k) {
+  return ratReduce(k * (k - 1n), N * (N - 1n));
+}
+export function pairRatioActivePortable(N, k) {
+  return N >= 2n && k >= 2n;
+}
+export function jStarPortable(f, N) {
+  return (f.n * N + f.d - 1n) / f.d;
+}
+export async function probabilityPolicyDigestHex(policyDomain, policy) {
+  return bytesToHex(await sha256(concat(utf8(policyDomain), utf8(canonicalJson(policy)))));
+}
