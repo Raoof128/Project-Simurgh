@@ -1,6 +1,6 @@
 # Stage 5O — VSC: Hidden-Universe Equality (design)
 
-**Status:** Sections **1–6 FROZEN** — Section 1 `a1e2e6d1`, Section 2 `0e26c361`, Section 3 `e8dc0a77`, Section 4 `cb67542f`, Section 5 `b08554ed`, Section 6 this commit. Sections 7–13 pending.
+**Status:** Sections **1–6 FROZEN** — Section 1 `a1e2e6d1`, Section 2 `0e26c361`, Section 3 `e8dc0a77`, Section 4 `cb67542f`, Section 5 `b08554ed`, Section 6 `fa34242d`. Sections 7–13 pending.
 **Release is BLOCKED by design:** `release_required_bindings` carries the unresolved `section_6_anchored_presented_census_closure` (§5.9) and, since **A24**, `section_10_evidence_attack_raw_code_allocation` (§4.10) — the stage's own `evidence_attack_fixtures` raw-code obligation, which had no owner, discharger or status while **zero** codes existed in the reserved band. A green Section 5 freeze does **not** mean anti-equivocation exists, and per **A13** full anti-equivocation is not coming: Stage 4T binds views to a held capsule, never excluding an unseen one, so `not_proof_of_global_census_closure_uniqueness_without_exclusion_witnesses` is a **permanent** ceiling.
 **Amendment A28 folded (amends frozen Section 4):** A28 expands the profile bundle (§4.4) **seventeen → twenty-three pairs**, pinning the six Section-7 constructions **ahead of** the Section-7 verifier that will consume them — the same discipline by which A17/A27 pinned Section-6 artifacts before their consumers, never after. One pair is a **schema**: the A26 §6.5.4 verified-closure Bitcoin-checkpoint projection carried a schema block but **no pinned identity or digest**, so `verified_closure_bitcoin_checkpoint_schema` mints it — an unpinned schema inside evidence is the §3.1 authority rule's next costume. The other five are **profiles**: `beacon_contract_profile`, `beacon_suffix_profile`, `ordered_selected_indices_profile`, `challenge_protocol_profile`, `challenge_resource_limits_profile`. Under the **single-hat constitution** each profile literal is **distinct from the already-frozen §7 artifact `schema_id`** it governs (`simurgh.vsc.beacon_contract.v1`, `.beacon_suffix.v1`, `.ordered_selected_indices.v1`, `.challenge_record.v1` in `constants.mjs`): a construction profile and an object schema must never share a literal, so `beacon_contract_profile.v1` is minted, never `beacon_contract.v1`. The `_schema`/`_profile` suffix matches the classifier the bundle already uses (schema pairs own an object schema+digest; profile pairs own a construction), and a repository-wide role scan confirmed each of the six literals has **exactly one role** (zero prior occurrences). **Ownership divides with no construction between chairs:** `beacon_suffix_profile` and `ordered_selected_indices_profile` own each artifact's **local** shape, field constraints, canonical construction and validation; `challenge_protocol_profile` owns **only** the cross-artifact orchestration — the binding equations, which digest commits which artifact, the required equality/consistency checks, and the verifier first-failure ordering; `challenge_resource_limits_profile` owns **one** authoritative §7 resource-limit table of which the generated challenge maxima are **outputs**, never a duplicate hand-maintained authority. **The load-bearing clause: the challenge protocol profile imports the globally authoritative digest-token encoding (`simurgh.vsc.digest_token_codec.v1`, the bare-`[0-9a-f]{64}` grammar) by reference and does not redefine its lexical grammar** — a second normative owner of that grammar would reopen exactly the defect class the 2026-07-21 codec correction closed. The limit-compatibility invariant was **regenerated, not subtracted**: the same generator constructs the maximal 23-pair manifest and measures it through the production `canonicalJson` in two independent views agreeing at **6,810,273 bytes** — the six literals add exactly `Σ (2·len(prefix) + len(literal) + 86) = 1,137` canonical bytes, all in the wrapper (`4,503 → 5,640`); the leaf vector is bundle-independent and stays `6,804,633`. Worst-case manifest **6,809,136 → 6,810,273** (headroom `1,579,472 → 1,578,335`, HOLDS); the one dependent figure, the public canonical core, moves the same **45,191,912 → 45,193,049** (censuses unchanged, carrying their own schema IDs). A **transitive dependency census** separates _bytes changed_ from _maximum changed_: no stored `STAGE5O_V1_PROFILE_BUNDLE_DIGEST` constant exists — the verifier recomputes it from the fields — and every downstream digest field is fixed 32-byte → 64-hex, so the bundle **preimage** and its **recomputed value** change while **no stored artifact and no downstream canonical size** moves; only the manifest maximum and public core do. **No blade, law, evidence predicate, release predicate, ceiling, or socket changed** — A28 pins the Section-7 constructions §4.4 will bind, and names twenty-three pairs where there were seventeen.
 
@@ -61,7 +61,7 @@
 
 ---
 
-## Section 1 — identity, laws, honest core
+## Section 1 — identity, laws, honest core (FROZEN `a1e2e6d1`)
 
 ### Blade (one)
 
@@ -1320,7 +1320,7 @@ The forward direction is what S3.5 exercises and it is deterministic: the frozen
 
 ---
 
-## Section 4 — commitment schema and canonical declared-index ordering (DRAFT, uncommitted)
+## Section 4 — commitment schema and canonical declared-index ordering (FROZEN `cb67542f`)
 
 Section 4 freezes **two** objects, not one overloaded blob:
 
@@ -2405,7 +2405,7 @@ A pinned limit that is never exercised at its boundary is an untested claim. Eac
 
 ---
 
-## Section 5 — Indexed-universe equality objects
+## Section 5 — Indexed-universe equality objects (FROZEN `b08554ed`)
 
 **Status:** draft, under review. Scope: the exact objects the equality law is read from, and nothing else. Section 5 defines **no anchoring** (Section 6) and **no beacon selection** (Section 7). Where this section says "anchored", it refers to a fact Section 4 already froze, never to a mechanism Section 5 introduces.
 
@@ -3015,7 +3015,7 @@ Binding remains valuable. It does not alchemise records into events.
 
 ---
 
-## Section 6 — Anchored presented census closure
+## Section 6 — Anchored presented census closure (FROZEN `fa34242d`)
 
 **Status:** **FROZEN** — this commit. Scope: the prechallenge closure and its two anchor roles. Section 6 defines **no** beacon selection (Section 7), **no** openings (Section 8), and **no** completed Stage 4T package capsule (Section 12, A14). It **discharges** `section_6_anchored_presented_census_closure` (§5.9) and claims **no** global closure uniqueness (A13).
 
