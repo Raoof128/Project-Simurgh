@@ -53,7 +53,8 @@ function concat(...arrs) {
   return o;
 }
 const u16be = (n) => new Uint8Array([(n >> 8) & 0xff, n & 0xff]);
-const u32be = (n) => new Uint8Array([(n >>> 24) & 0xff, (n >>> 16) & 0xff, (n >>> 8) & 0xff, n & 0xff]);
+const u32be = (n) =>
+  new Uint8Array([(n >>> 24) & 0xff, (n >>> 16) & 0xff, (n >>> 8) & 0xff, n & 0xff]);
 const u64be = (n) => {
   const b = new Uint8Array(8);
   let bn = BigInt(n);
