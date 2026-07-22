@@ -34,9 +34,10 @@ export const SCOPE_MANIFEST_KEYS = Object.freeze([
   "stage5o_precommitment_digest",
 ]);
 
-// 17 profile pairs, in frozen bundle order (§4.4). Each contributes `<prefix>_id` (pinned literal)
-// and `<prefix>_digest` (bytes32). The seven A27 literals are the first seven; the ten A17/A19
-// literals follow.
+// 23 profile pairs, in frozen bundle order (§4.4). Each contributes `<prefix>_id` (pinned literal)
+// and `<prefix>_digest` (bytes32). The seven A27 literals are first; the ten A17/A19 literals follow;
+// A28 appends the six Section-7 pairs (one schema + five profiles). The `_schema`/`_profile` suffix
+// matches each pair's role: schema pairs own an object schema+digest, profile pairs own a construction.
 export const BUNDLE_PROFILES = Object.freeze([
   ["manifest_schema", "simurgh.vsc.scope_manifest.v1"], // A27
   ["commitment_profile", "simurgh.vsc.commitment.v1"], // A27
@@ -55,6 +56,15 @@ export const BUNDLE_PROFILES = Object.freeze([
   ["producer_authority_schema", "simurgh.vsc.producer_authority.v1"], // A19
   ["producer_signature_profile", "simurgh.vsc.producer_signature.ed25519.v1"], // A19
   ["closure_authorization_schema", "simurgh.vsc.census_closure_authorization.v1"], // A19
+  [
+    "verified_closure_bitcoin_checkpoint_schema",
+    "simurgh.vsc.verified_closure_bitcoin_checkpoint_schema.v1",
+  ], // A28
+  ["beacon_contract_profile", "simurgh.vsc.beacon_contract_profile.v1"], // A28
+  ["beacon_suffix_profile", "simurgh.vsc.beacon_suffix_profile.v1"], // A28
+  ["ordered_selected_indices_profile", "simurgh.vsc.ordered_selected_indices_profile.v1"], // A28
+  ["challenge_protocol_profile", "simurgh.vsc.challenge_protocol_profile.v1"], // A28
+  ["challenge_resource_limits_profile", "simurgh.vsc.challenge_resource_limits_profile.v1"], // A28
 ]);
 
 export const PRODUCER_AUTHORITY_KEYS = Object.freeze([

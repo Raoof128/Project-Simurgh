@@ -57,12 +57,12 @@ test("census: the generator's schema matches the CURRENT working-tree spec (not 
   );
   assert.equal(specTop.length, 12, "scope_manifest must have exactly 12 keys");
 
-  // 34 profile_bundle keys = 17 id/digest pairs
+  // 46 profile_bundle keys = 23 id/digest pairs (A28 adds six §7 pairs to A27's seventeen)
   const specBundle = extractBlockKeys(spec, "profile_bundle").sort();
   const genBundle = [];
   for (const [p] of BUNDLE_PROFILES) genBundle.push(`${p}_id`, `${p}_digest`);
   assert.deepEqual(specBundle, [...genBundle].sort(), "profile_bundle keys drifted");
-  assert.equal(specBundle.length, 34, "profile_bundle must have exactly 17 id/digest pairs");
+  assert.equal(specBundle.length, 46, "profile_bundle must have exactly 23 id/digest pairs");
 
   // 5 producer_authority_descriptor keys
   const specAuth = extractBlockKeys(spec, "producer_authority_descriptor").sort();
@@ -102,8 +102,8 @@ test("gate 3 — two independent totals AGREE (production encoder == structural 
 
 test("the derived maximum, pinned (the script is the authority; change the schema and this moves)", () => {
   const m = generateScopeManifestMaximum();
-  assert.equal(m.MAX_SCOPE_CANONICAL_MANIFEST_BYTES_V1, 6809136);
-  // labelled leaf-array split, exactly
+  assert.equal(m.MAX_SCOPE_CANONICAL_MANIFEST_BYTES_V1, 6810273); // A28: 23 pairs (A27 6,809,136 + 1,137)
+  // labelled leaf-array split, exactly — bundle-independent, so A28's six pairs leave it unchanged
   assert.equal(m.ledger.leaf_split.entries_plus_inter_commas, 6804633);
   assert.equal(
     m.ledger.leaf_split.entries_plus_inter_commas + m.ledger.leaf_split.array_brackets,
@@ -113,11 +113,12 @@ test("the derived maximum, pinned (the script is the authority; change the schem
 
 test("gate 2 — anti-oracle: the quarantined values are ABSENT from the generator source", () => {
   const src = readFileSync(GEN_SRC, "utf8");
-  for (const forbidden of ["7267676", "7,267,676"]) {
+  // both superseded worst-case figures are history-only: pre-A27 (7,267,676) and pre-A28 (6,809,136)
+  for (const forbidden of ["7267676", "7,267,676", "6809136", "6,809,136"]) {
     assert.ok(!src.includes(forbidden), `generator must not contain the quarantined ${forbidden}`);
   }
-  // the derived maximum itself must not be hard-coded in the generator — it must be computed
-  for (const derived of ["6809136", "6,809,136"]) {
+  // the current derived maximum itself must not be hard-coded in the generator — it must be computed
+  for (const derived of ["6810273", "6,810,273"]) {
     assert.ok(!src.includes(derived), `generator must DERIVE the maximum, not assert ${derived}`);
   }
 });
