@@ -5026,11 +5026,47 @@ One fixture is deliberately affirmative: a **Lane A dictionary attack** that gue
 
 **Section 12 does not empty the release ledger.** After §12 and §10, **Section 11 Lean and Section 13 remain release blockers** — §11 is implemented and type-checked but not yet frozen, and §13 is not designed. §12 discharges its own obligation and unblocks §10's deferred discharge; it makes no other obligation evaporate.
 
-## Section 13 — Prior-art and novelty source map (DRAFT — design not started)
+## Section 13 — Prior-art and novelty source map (DRAFT — implemented, freeze-ready)
 
-**Purpose.** A pinned prior-art and novelty source map — per entry: title, version/date, URL, retrieval date, exact quote, digest or archived copy, and classification — under the source-precision guard (secondary figures marked "reported" until the primary source is pinned).
+**Purpose.** A pinned prior-art and novelty source map — per entry: title, version/date, URL, retrieval date, exact quote, and classification — under the source-precision guard. **The novelty claim is explicitly NON-release**: a Frontier-axis assertion, never part of `release_required_bindings`. §13 adds no `required_later_bindings` entry.
 
-`DESIGN OPEN` — the actual gap-hunt sweep (regulation, incidents-in-the-wild, prior-art standards, the lab surface); the falsifiable novelty claims and their signed source-map. **Release-binding decision: the novelty claim is explicitly NON-release** — a Frontier-axis assertion, never part of `release_required_bindings`, and non-frozen until the source map exists; the pinned source map is a §13 **freeze-deliverable**, not a cross-section requirement, so §13 adds no `required_later_bindings` entry for it. **Scaffold only; requires the web sweep this stage's discipline mandates before any novelty claim.**
+### 13.1 The blade: a novelty claim without a pinned source is a rejected claim
+
+An anti-fabrication project must not carry a fuzzy citation, so the discipline is **mechanical rather than aspirational**. The gate rejects: a claim with no source; a claim citing an id absent from the map; a claim with no falsifier; an entry missing any required field; an unknown classification (**fail closed**); a quote absent **without a stated reason**; and a map asserting its own sweep was **exhaustive** — no sweep proves absence, which is this stage's own law and a prior-art map is the last place to forget it.
+
+**A placeholder URL is itself a fuzzy citation.** A `url` may be `null` only for `classical_mathematics` and only with a stated reason: pointing a reader at an unrelated document is worse than pointing them nowhere. _(This rule exists because the first draft of the map did exactly that — it carried the RFC 6962 URL as a placeholder on the hypergeometric entry. The gate now forbids what its own author had already done once.)_
+
+### 13.2 What Stage 5O did NOT invent
+
+The sweep's most useful output is negative, and it is recorded before any claim:
+
+| Construction                        | Actually is                                                                   |
+| ----------------------------------- | ----------------------------------------------------------------------------- |
+| §3.5 recursive Merkle tree hash     | **RFC 6962** MTH — same `k` rule, same `0x00`/`0x01` prefixes, same rationale |
+| §7 challenge seed                   | **RFC 5869** HKDF extract-then-expand, unmodified                             |
+| §9 detection probability `P_detect` | the **classical hypergeometric** identity for sampling without replacement    |
+| §12 capsule and redaction semantics | **Stage 4T**'s, reused unchanged including codes 148 and 149                  |
+
+RFC 6962 §2.1 reads, verbatim: _"For n > 1, let k be the largest power of two smaller than n (i.e., k < n <= 2k)."_ Stage 5O's `largestPow2Lt` **is** that rule. Section 3.5 is an implementation of a 2013 standard, not an invention, and the map says so in the same register a reviewer would.
+
+### 13.3 The two narrow claims
+
+Both are `non_release`, both name their falsifier, and both must distinguish themselves from a pinned prior-art entry:
+
+- **`verifier_enforced_detection_floor`** — a precommitted detection-probability floor as a **verifier-enforced rejection** decided in exact rational arithmetic, with the producer's presented probability checked against the verifier's recomputed value. _Falsified by_ exhibiting a prior system where such a floor causes a verifier to reject, with claim-value verification rather than a reported number. The mathematics is classical and the audit-sampling field is established (Dopp 2009, pinned); the claim is only about the floor being executable.
+- **`no_unbudgeted_unzip`** — cumulative selective disclosure bound to a precommitted budget with idempotent reopening, proved monotone. _Falsified by_ exhibiting a prior selective-disclosure scheme enforcing a cumulative unique-index budget across a presented history. Merkle membership is RFC 6962's; the budgeted accounting over it is the claimed increment.
+
+### 13.4 The sweep's declared scope, and its limits
+
+```text
+covered:      prior-art standards, academic audit sampling
+NOT covered:  regulation, incidents-in-the-wild, the lab surface
+exhaustive:   false — and the gate rejects any map that says otherwise
+```
+
+One retrieval failed honestly and is recorded rather than papered over: the Dopp 2009 PDF would not yield extractable text, so its **formula is not quoted** and only the retrieved abstract is. The hypergeometric identity is therefore classified `classical_mathematics` with a declared-null URL, not attributed to a quote nobody holds.
+
+`FREEZE GATE` — Section 13 may come to a freeze ruling when: the shipped map passes its own gate; every claim is sourced, falsifiable and distinguished from pinned prior art; the non-novelty table matches the constructions the code actually executes; the sweep scope and its incompleteness are declared; and the injection self-test rejects an unsourced claim. Freezing §13 adds no release binding — the novelty claim is non-release by design.
 
 ### Sections 7–13 ledger declarations (A8 — every normative section MUST declare both registers, even if empty)
 
