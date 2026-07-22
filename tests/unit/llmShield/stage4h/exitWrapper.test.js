@@ -498,6 +498,13 @@ test("Stage 4H.4 exit map is explicit and collision-bounded", () => {
       454: 1,
       455: 1,
       456: 1,
+      457: 1,
+      458: 1,
+      459: 1,
+      460: 1,
+      461: 1,
+      462: 1,
+      463: 1,
     })
   );
 });

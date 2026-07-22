@@ -24,16 +24,18 @@ import {
 import { SECTION7_FIRST_FAILURE_ORDER } from "../../../../tools/simurgh-attestation/stage5o/core/section7Verifier.mjs";
 import { SECTION8_FIRST_FAILURE_ORDER } from "../../../../tools/simurgh-attestation/stage5o/core/section8Verifier.mjs";
 import { SECTION9_FIRST_FAILURE_ORDER } from "../../../../tools/simurgh-attestation/stage5o/core/section9Verifier.mjs";
+import { SECTION12_FIRST_FAILURE_ORDER } from "../../../../tools/simurgh-attestation/stage5o/core/section12Verifier.mjs";
 
 const FROZEN = [
   ["s7", SECTION7_FIRST_FAILURE_ORDER, 420, 430],
   ["s8", SECTION8_FIRST_FAILURE_ORDER, 431, 441],
   ["s9", SECTION9_FIRST_FAILURE_ORDER, 442, 456],
+  ["s12", SECTION12_FIRST_FAILURE_ORDER, 457, 463],
 ];
 const ALL_REASONS = FROZEN.flatMap(([, order]) => [...order]);
 
 test("§10.2 every frozen reason has exactly one code, and the count is DERIVED", () => {
-  assert.equal(ALL_REASONS.length, 37, "the three frozen orders must total 37 reasons");
+  assert.equal(ALL_REASONS.length, 44, "the four reason-minting sections must total 44 reasons");
   for (const r of ALL_REASONS) {
     const code = rawCodeForVscReason(r);
     assert.equal(typeof code, "number", `${r} has no code`);
@@ -44,8 +46,8 @@ test("§10.2 every frozen reason has exactly one code, and the count is DERIVED"
 
 test("§10.2 every allocated code has exactly one reason (no incompatible meanings)", () => {
   const codes = Object.values(VSC_RAW_CODES).filter((c) => c !== 0);
-  assert.equal(codes.length, 37);
-  assert.equal(new Set(codes).size, 37, "duplicate code");
+  assert.equal(codes.length, 44);
+  assert.equal(new Set(codes).size, 44, "duplicate code");
   for (const c of codes) {
     const r = vscReasonForRawCode(c);
     assert.ok(ALL_REASONS.includes(r), `code ${c} maps to unknown reason ${r}`);
@@ -69,13 +71,13 @@ test("§10.2 sub-bands are contiguous, disjoint, and numeric order IS the first-
   const all = FROZEN.flatMap(([, order]) => order.map(rawCodeForVscReason));
   assert.equal(new Set(all).size, all.length);
   assert.equal(Math.min(...all), 420);
-  assert.equal(Math.max(...all), 456);
+  assert.equal(Math.max(...all), 463);
 });
 
-test("§10.2 VSC_CHECK_ORDER is the whole spine, 420..456 in numeric order", () => {
+test("§10.2 VSC_CHECK_ORDER is the whole spine, 420..463 in numeric order", () => {
   assert.deepEqual(
     VSC_CHECK_ORDER,
-    Array.from({ length: 37 }, (_, i) => 420 + i)
+    Array.from({ length: 44 }, (_, i) => 420 + i)
   );
   assert.ok(!VSC_CHECK_ORDER.includes(0), "0 is OK and is not a predicate");
 });
@@ -88,19 +90,19 @@ test("§10.3 the wrapper is the SHARED 29, not a Stage 5O code", () => {
 });
 
 test("§10.4 every allocated code has a run level, and the band is uniformly level 1", () => {
-  for (let c = 420; c <= 456; c++) {
+  for (let c = 420; c <= 463; c++) {
     assert.ok(Object.prototype.hasOwnProperty.call(RUN_LEVEL_BY_RAW, c), `${c} has no run level`);
     assert.equal(RUN_LEVEL_BY_RAW[c], 1, `${c} must be run level 1`);
   }
 });
 
-test("§10.2 the reserved boundary for §12 is declared and empty", () => {
-  assert.equal(VSC_RESERVED_FROM, 457);
+test("§10.2 the table is CLOSED at 463 and 464+ stays reserved", () => {
+  assert.equal(VSC_RESERVED_FROM, 464);
   const allocated = Object.values(VSC_RAW_CODES).filter((c) => c !== 0);
   for (const c of allocated) assert.ok(c < VSC_RESERVED_FROM, `${c} intrudes on the §12 reserve`);
   assert.ok(
-    !Object.prototype.hasOwnProperty.call(RUN_LEVEL_BY_RAW, 457),
-    "457+ must stay unallocated until §12 is designed"
+    !Object.prototype.hasOwnProperty.call(RUN_LEVEL_BY_RAW, 464),
+    "464+ must stay unallocated; §12 closed the table at 463"
   );
 });
 
@@ -134,6 +136,6 @@ test("§10.1 one code per SEMANTIC CLASS, never one per fixture", () => {
 test("§10 an unknown reason has no code, and an out-of-band code has no reason", () => {
   assert.equal(rawCodeForVscReason("s9_not_a_real_reason"), undefined);
   assert.equal(vscReasonForRawCode(419), undefined, "419 belongs to Stage 5N");
-  assert.equal(vscReasonForRawCode(457), undefined, "457 is reserved, not allocated");
+  assert.equal(vscReasonForRawCode(464), undefined, "464 is reserved, not allocated");
   assert.equal(vscReasonForRawCode(29), undefined, "the shared wrapper is not a 5O reason");
 });

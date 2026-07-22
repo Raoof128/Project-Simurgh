@@ -1211,19 +1211,28 @@ export const VSC_RAW_CODES = Object.freeze({
   S9_DETECTION_CLAIM_VALUE_MISMATCH: 454,
   S9_PAIR_RATIO_VALUE_MISMATCH: 455,
   S9_DETECTION_FLOOR_UNMET: 456,
+  // S12 — Section 12, 7 reasons, 457-463
+  S12_PACKAGE_TRANSPORT_OVERSIZE: 457,
+  S12_NONCANONICAL: 458,
+  S12_PACKAGE_CANONICAL_OVERSIZE: 459,
+  S12_PACKAGE_SHAPE: 460,
+  S12_SECTION_REGISTRY_MISMATCH: 461,
+  S12_CHALLENGE_BINDING_MISMATCH: 462,
+  S12_LANE_DECLARATION_INVALID: 463,
 });
 
-export const VSC_CHECK_ORDER = Object.freeze(Array.from({ length: 37 }, (_, i) => 420 + i));
+export const VSC_CHECK_ORDER = Object.freeze(Array.from({ length: 44 }, (_, i) => 420 + i));
 export const VSC_WRAPPER = RAW_VERIFIER_CODES.INTERNAL_ERROR_FAIL_CLOSED; // shared 29, see above
 export const VSC_BANDS = Object.freeze({
   s7: Object.freeze({ lo: 420, hi: 430 }),
   s8: Object.freeze({ lo: 431, hi: 441 }),
   s9: Object.freeze({ lo: 442, hi: 456 }),
+  s12: Object.freeze({ lo: 457, hi: 463 }),
 });
 // Reserved for Section 12, which is DESIGN OPEN and may still mint reasons. Section 10's table is
 // closed over every reason-minting section that EXISTS; it does not pretend to be closed over one
 // that does not.
-export const VSC_RESERVED_FROM = 457;
+export const VSC_RESERVED_FROM = 464;
 
 const VSC_REASON_BY_RAW = Object.freeze(
   Object.fromEntries(
@@ -1700,6 +1709,13 @@ export const RUN_LEVEL_BY_RAW = Object.freeze({
   454: 1,
   455: 1,
   456: 1,
+  457: 1,
+  458: 1,
+  459: 1,
+  460: 1,
+  461: 1,
+  462: 1,
+  463: 1,
 });
 
 export function stage4CodeForRawCode(code) {
