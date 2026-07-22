@@ -14,6 +14,7 @@ import {
   BEACON_SUFFIX_ARTIFACT_KEYS,
   ORDERED_SELECTED_INDICES_ARTIFACT_KEYS,
   CHALLENGE_RECORD_KEYS,
+  VERIFIED_CLOSURE_BITCOIN_CHECKPOINT_KEYS,
   checkBeaconContractArtifactShape,
 } from "../../../../tools/simurgh-attestation/stage5o/core/challengeArtifactShape.mjs";
 import { encodeDigestToken } from "../../../../tools/simurgh-attestation/stage5o/core/digestTokenCodec.mjs";
@@ -42,6 +43,7 @@ const CASES = [
   ["beacon_suffix", BEACON_SUFFIX_ARTIFACT_KEYS],
   ["ordered_selected_indices", ORDERED_SELECTED_INDICES_ARTIFACT_KEYS],
   ["challenge_record", CHALLENGE_RECORD_KEYS],
+  ["verified_closure_bitcoin_checkpoint", VERIFIED_CLOSURE_BITCOIN_CHECKPOINT_KEYS],
 ];
 
 for (const [name, keys] of CASES) {

@@ -1,17 +1,16 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-// Stage 5O §7 — STRUCTURAL AND LEXICAL shape rules for the four producer artifacts (§7.3.1 schemas).
+// Stage 5O §7 — STRUCTURAL shape rules for the producer artifacts + the context checkpoint (check 2).
 //
-// SCOPE, stated so it cannot be overread: this is shape only -- exact-key schemas, lexical forms,
-// structural counts, and the canonical-bytes acceptance condition. It performs NO cryptography,
-// NO proof-of-work, NO chain linkage, NO digest recomputation and NO policy checks. It is NOT the
-// Section 7 verifier and must never be cited as one.
+// SCOPE: exact-key schemas, const-value pins, structural counts, and field WIDTH/lexical form. For
+// the four PRODUCER artifacts, 32-byte token fields are checked to WIDTH only — their lowercase-hex
+// grammar is check 3's job (decodeDigestToken over the §7.3.3 token census), so a 64-char but
+// non-hex token passes shape and first-fails at check 3, as the S7.* matrix requires. The context
+// CHECKPOINT is not in that census (§7.3.3 is the four producers), so its token fields are fully
+// decoded here as part of conforming to pair 18. This module performs NO cryptography, PoW, chain
+// linkage, digest recomputation, or policy checks; it is NOT the Section 7 verifier.
 //
-// section7AuthorityDescriptors.mjs is the NORMATIVE SOURCE for the exact-key sets and the const
-// pins; this module MIRRORS it (a census in section7ArtifactShapeCensus.test.js proves the mirror).
-//
-// Every function REJECTS by throwing, synchronously, like the codec: a verifier boundary converts
-// it with try/catch. No nulls, no partial results, no fallbacks.
-import { canonicalJson } from "../../stage4m/core/canonical.mjs";
+// section7AuthorityDescriptors.mjs is the NORMATIVE SOURCE for the exact-key sets and const pins;
+// this module MIRRORS it (section7ArtifactShapeCensus.test.js proves the mirror).
 import { decodeDigestToken } from "./digestTokenCodec.mjs";
 import {
   SCHEMA_IDS,
@@ -22,12 +21,16 @@ import {
   MAX_SELECTED_INDICES_V1,
   HEADER_HEX_CHARS,
 } from "./constants.mjs";
+import { canonicalJson } from "../../stage4m/core/canonical.mjs";
 
 const HEADER_RE = /^[0-9a-f]{160}$/; // exactly 160 lowercase hex, no 0x prefix
+const HEX8_RE = /^[0-9a-f]{8}$/; // 4-byte compact target (nbits), lexical form
 const CANONICAL_DECIMAL_RE = /^(0|[1-9][0-9]*)$/; // "0" or nonzero first digit; no sign/space/leading zero
+const TOKEN_WIDTH = 64; // a 32-byte token renders as 64 chars; the hex grammar is check 3's
+const BITCOIN_MAINNET_PROFILE_ID = "simurgh.bitcoin.mainnet.header_validation.v1";
 
-// ---- The four producer-artifact exact-key sets (§7.3.1). Declared here as a MIRROR of the frozen
-//      SCHEMA_DESCRIPTORS field sets; the shape census proves equality.
+// ---- The producer-artifact exact-key sets (§7.3.1) + the checkpoint schema (pair 18). Declared as
+//      a MIRROR of the frozen SCHEMA_DESCRIPTORS field sets; the shape census proves equality.
 export const BEACON_CONTRACT_ARTIFACT_KEYS = Object.freeze([
   "schema_id",
   "schema_digest",
@@ -64,15 +67,21 @@ export const CHALLENGE_RECORD_KEYS = Object.freeze([
   "beacon_suffix_digest",
   "ordered_selected_indices_digest",
 ]);
+export const VERIFIED_CLOSURE_BITCOIN_CHECKPOINT_KEYS = Object.freeze([
+  "network_profile_id",
+  "checkpoint_height",
+  "checkpoint_block_hash",
+  "checkpoint_header",
+  "checkpoint_nbits",
+  "checkpoint_witness_profile_id",
+  "checkpoint_witness_profile_digest",
+  "checkpoint_witness_key_fingerprint",
+  "stage5l_checkpoint_evidence_digest",
+]);
 
 /**
- * A canonical-size limit is only sound when canonical encoding is a CONDITION OF ACCEPTANCE.
- * Otherwise semantically equivalent JSON with whitespace or alternate key order sits under an
- * aggregate limit while exceeding the generated canonical maximum.
- *
- *   1. raw.length <= MAX          (caller, before parsing)
- *   2. parse raw
- *   3. canonicalJson(parsed) as UTF-8 === raw     <- this function
+ * A canonical-size limit is only sound when canonical encoding is a CONDITION OF ACCEPTANCE
+ * (check 1). Returns the parsed object; throws if the raw bytes are not the canonical encoding.
  */
 export function requireCanonicalBytes(raw) {
   if (typeof raw !== "string") throw new TypeError("raw_input_not_a_string");
@@ -97,9 +106,18 @@ function requireExactKeys(obj, keys, what) {
   }
 }
 
+function requireTokenWidth(s, what) {
+  if (typeof s !== "string") throw new TypeError(`${what}_not_a_string`);
+  if (s.length !== TOKEN_WIDTH) throw new Error(`${what}_token_width`);
+}
+
 function requireCanonicalDecimal(s, what) {
   if (typeof s !== "string" || !CANONICAL_DECIMAL_RE.test(s)) throw new Error(`${what}_decimal`);
   if (!Number.isSafeInteger(Number(s))) throw new Error(`${what}_not_a_safe_integer`);
+}
+
+function requireString(s, what) {
+  if (typeof s !== "string" || s.length === 0) throw new Error(`${what}_string`);
 }
 
 export function checkBeaconContractArtifactShape(a) {
@@ -110,8 +128,8 @@ export function checkBeaconContractArtifactShape(a) {
   if (a.depth_convention_id !== BEACON_DEPTH_CONVENTION_ID) {
     throw new Error("beacon_contract_depth_convention_id");
   }
-  decodeDigestToken(a.schema_digest);
-  decodeDigestToken(a.profile_digest);
+  requireTokenWidth(a.schema_digest, "beacon_contract_schema_digest");
+  requireTokenWidth(a.profile_digest, "beacon_contract_profile_digest");
   requireCanonicalDecimal(a.challenge_height, "beacon_contract_challenge_height");
   return a;
 }
@@ -120,9 +138,12 @@ export function checkBeaconSuffixArtifactShape(a) {
   requireExactKeys(a, BEACON_SUFFIX_ARTIFACT_KEYS, "beacon_suffix_artifact");
   if (a.schema_id !== SCHEMA_IDS.beacon_suffix) throw new Error("beacon_suffix_schema_id");
   if (a.profile_id !== PROFILE_IDS.beacon_suffix) throw new Error("beacon_suffix_profile_id");
-  decodeDigestToken(a.schema_digest);
-  decodeDigestToken(a.profile_digest);
-  decodeDigestToken(a.verified_closure_bitcoin_checkpoint_digest);
+  requireTokenWidth(a.schema_digest, "beacon_suffix_schema_digest");
+  requireTokenWidth(a.profile_digest, "beacon_suffix_profile_digest");
+  requireTokenWidth(
+    a.verified_closure_bitcoin_checkpoint_digest,
+    "beacon_suffix_checkpoint_digest"
+  );
   if (!Array.isArray(a.headers)) throw new TypeError("beacon_suffix_headers_not_an_array");
   if (a.headers.length < 1 || a.headers.length > MAX_BEACON_SUFFIX_HEADERS_V1) {
     throw new Error("beacon_suffix_header_count");
@@ -138,12 +159,13 @@ export function checkOrderedSelectedIndicesArtifactShape(a, universeSize) {
   requireExactKeys(a, ORDERED_SELECTED_INDICES_ARTIFACT_KEYS, "ordered_selected_indices_artifact");
   if (a.schema_id !== SCHEMA_IDS.ordered_selected_indices) throw new Error("indices_schema_id");
   if (a.profile_id !== PROFILE_IDS.ordered_selected_indices) throw new Error("indices_profile_id");
-  decodeDigestToken(a.schema_digest);
-  decodeDigestToken(a.profile_digest);
+  requireTokenWidth(a.schema_digest, "indices_schema_digest");
+  requireTokenWidth(a.profile_digest, "indices_profile_digest");
   if (!Array.isArray(a.indices)) throw new TypeError("indices_not_an_array");
   if (a.indices.length < 1 || a.indices.length > MAX_SELECTED_INDICES_V1) {
     throw new Error("indices_count");
   }
+  let prev = -1;
   const seen = new Set();
   for (const s of a.indices) {
     if (typeof s !== "string" || !CANONICAL_DECIMAL_RE.test(s)) {
@@ -153,6 +175,8 @@ export function checkOrderedSelectedIndicesArtifactShape(a, universeSize) {
     if (!Number.isSafeInteger(v)) throw new Error("index_not_a_safe_integer");
     if (universeSize !== undefined && v >= universeSize) throw new Error("index_out_of_universe");
     if (seen.has(s)) throw new Error("index_duplicate");
+    if (v <= prev) throw new Error("index_not_strictly_increasing");
+    prev = v;
     seen.add(s);
   }
   return a;
@@ -164,12 +188,42 @@ export function checkChallengeRecordShape(r) {
   if (r.challenge_protocol_profile_id !== PROFILE_IDS.challenge_protocol) {
     throw new Error("challenge_record_protocol_profile_id");
   }
-  // check-3 token census (§7.3.3): every *_digest field PLUS challenge_seed decodes to 32 bytes.
+  // WIDTH only (check 2). The lowercase-hex grammar of these tokens is check 3 (§7.3.3).
   for (const k of Object.keys(r)) {
-    if (k.endsWith("_digest")) decodeDigestToken(r[k]);
+    if (k.endsWith("_digest")) requireTokenWidth(r[k], `challenge_record_${k}`);
   }
-  decodeDigestToken(r.challenge_seed); // a 32-byte token, NOT a *_digest field
+  requireTokenWidth(r.challenge_seed, "challenge_record_challenge_seed");
   return r;
 }
 
-export const SHAPE_WIDTHS = Object.freeze({ header_hex_chars: HEADER_HEX_CHARS });
+// The context checkpoint (pair 18). NOT in the §7.3.3 token census, so its token fields are decoded
+// here (full conformance). It descends from a trusted accepted context; this is a defensive re-check.
+export function checkVerifiedClosureBitcoinCheckpointShape(c) {
+  requireExactKeys(
+    c,
+    VERIFIED_CLOSURE_BITCOIN_CHECKPOINT_KEYS,
+    "verified_closure_bitcoin_checkpoint"
+  );
+  if (c.network_profile_id !== BITCOIN_MAINNET_PROFILE_ID) throw new Error("checkpoint_network_id");
+  requireCanonicalDecimal(c.checkpoint_height, "checkpoint_height");
+  decodeDigestToken(c.checkpoint_block_hash);
+  if (typeof c.checkpoint_header !== "string" || !HEADER_RE.test(c.checkpoint_header)) {
+    throw new Error("checkpoint_header_lexical");
+  }
+  if (typeof c.checkpoint_nbits !== "string" || !HEX8_RE.test(c.checkpoint_nbits)) {
+    throw new Error("checkpoint_nbits_lexical");
+  }
+  requireString(c.checkpoint_witness_profile_id, "checkpoint_witness_profile_id");
+  decodeDigestToken(c.checkpoint_witness_profile_digest);
+  decodeDigestToken(c.checkpoint_witness_key_fingerprint);
+  decodeDigestToken(c.stage5l_checkpoint_evidence_digest);
+  return c;
+}
+
+export const SHAPE_WIDTHS = Object.freeze({
+  header_hex_chars: HEADER_HEX_CHARS,
+  token_chars: TOKEN_WIDTH,
+});
+
+// canonicalJson is re-exported convenience for verifier callers building check-1 raw comparisons.
+export { canonicalJson };

@@ -187,21 +187,18 @@ test('boundary: out-of-universe index "65536" REJECT', () => {
   });
 });
 
-test("boundary: uppercase digest token REJECT", () => {
-  const valid = maximalChallengeRecord();
-  const bad = maximalChallengeRecord();
-  // The generated digests use all-digit nibble fillers (token(0x88) -> "88..."), so .toUpperCase()
-  // on them is the identity -- and the negative-fixture law (correctly) rejects a non-mutation.
-  // Use the uppercase form of a valid lowercase-LETTERED digest so the case mutation is real.
-  bad.beacon_suffix_digest = "a".repeat(64).toUpperCase();
-  assertNegativeVector({
-    name: "uppercase_digest_token",
-    valid,
-    mutated: bad,
-    accept: checkChallengeRecordShape,
-    property: (o) => /[A-Z]/.test(o.beacon_suffix_digest),
-    propertyName: "contains_uppercase_ascii",
-  });
+test("check 2 vs check 3: an uppercase 64-char token passes SHAPE but fails token GRAMMAR", () => {
+  // Shape (check 2) is WIDTH-only for producer tokens; the lowercase-hex grammar is check 3.
+  const rec = maximalChallengeRecord();
+  rec.beacon_suffix_digest = "A".repeat(64); // 64 chars, not lowercase hex
+  assert.doesNotThrow(
+    () => checkChallengeRecordShape(rec),
+    "check 2 accepts a width-64 token regardless of case"
+  );
+  assert.throws(
+    () => decodeDigestToken(rec.beacon_suffix_digest),
+    "check 3 (decodeDigestToken) rejects a non-lowercase-hex token"
+  );
 });
 
 test("boundary: extra schema key REJECT", () => {
