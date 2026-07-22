@@ -4299,7 +4299,21 @@ verified_disclosure_policy            // or its resolved authoritative projectio
 
 The producer's opening bundle contains **openings only**. It may not resupply `k`, the selected indices, the root, the epoch, the disclosure limits, the budget, or the disclosure-policy authority — every one of those is read from the accepted context, never from the bundle.
 
-> **Freeze-respecting note (needs your confirmation).** §7 is frozen returning `ACCEPT | {reject}`; it does not itself mint a context. So `Section7AcceptedContext` is designed as a **§8-owned input capability** minted by the acceptance **path** immediately after a successful §7 verification, fed the artifacts §7 just accepted — parallel to how §7 consumes a §6-minted context, and **without altering §7's frozen verify**. If you instead want §7 itself to mint it, that is a §7 amendment triggering the A34 rerun of Lanes A–C, parity, and censuses.
+**The sealed adapter (ruled 2026-07-22).** Section 8 owns the `Section7AcceptedContext` capability type and a single sealed acceptance-to-context adapter; Section 7 exclusively owns the acceptance relation. The adapter does not reinterpret, weaken, supplement, or independently reproduce Section 7 acceptance — it may mint the capability **only** after the frozen production Section 7 verifier accepts the same immutable inputs from which the context is derived. §7 is untouched, so **no A34 rerun**.
+
+```text
+acceptSection7ForSection8(section6AcceptedContext, producerBundle, committedUniverseContext)
+    -> Section7AcceptedContext | rejection
+  1. capture one immutable input snapshot
+  2. run the PRODUCTION-wired evaluateSection7Safe on that snapshot (never the test factory)
+  3. require the exact §7 ACCEPT result (symbolic rejection, raw 29, or any throw -> no context)
+  4. mint the opaque Section7AcceptedContext from the same accepted snapshot + committed universe
+  5. return no context on anything but a clean ACCEPT
+```
+
+Mechanical: an unexported constructor; a module-private `WeakSet` brand; immutable captured fields; the same §6 capability and the same canonical producer-bundle snapshot §7 verified. There is **no** exported `mintSection7AcceptedContext({ accepted: true, ... })`. Section 8 rejects a plain-object lookalike, a JSON round-trip, a spread copy, a structured clone, a manually constructed object, a context minted from a rejected bundle, a context minted after raw 29, and a context whose source bundle was mutated after verification.
+
+**Why a third input.** §7 is frozen returning `ACCEPT | {reject}` and its `Section6AcceptedContext` deliberately carries only what §7's eleven checks need — not `merkle_root`, `scope_manifest_identity`, `epoch_digest`, the execution census, or the disclosure policy. Section 8 needs those to check inclusion, the case-link, and the budget. Extending the §6 context would reopen frozen §7, so instead Section 8 authenticates the **public committed universe** against the anchored precommitment through its own opaque `CommittedUniverseContext` (WeakSet-branded, minted by an anchored-commitment acceptance path — the same scaffolding discipline §7 uses for its §6 context). The `Section7AcceptedContext` is minted from the §7 ACCEPT **and** that authenticated committed universe.
 
 ### 8.3 The disclosure policy (`disclosure_policy_digest` preimage)
 
