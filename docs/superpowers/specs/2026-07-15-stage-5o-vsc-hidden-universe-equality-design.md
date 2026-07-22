@@ -4714,15 +4714,96 @@ _The suite receipt records **254**, not the 253 quoted in the freeze ruling: the
 
 Per A36, any future amendment to a frozen §9 surface must rerun the complete `S9.*` matrix, the bounded-arithmetic compatibility proof, the dual-form identity census, Node/Python arithmetic parity, the real-browser arithmetic ceremony, all §9 censuses, and the complete Stage 5O suite before refreezing.
 
-## Section 10 — Raw-code allocation and frozen first-failure ordering (DRAFT — design not started)
+## Section 10 — Raw-code allocation and frozen first-failure ordering (DRAFT — design ruled, implementation in progress)
 
-**Purpose.** Allocate **every** Stage 5O evidence-attack raw code — one code per semantic failure class, over the whole stage in a single pass — with a frozen deterministic first-failure order, in the reserved band **from 420** (per A24, zero are currently allocated).
+**Purpose.** Allocate **every** Stage 5O evidence-attack raw code — one code per semantic failure class — with a frozen deterministic first-failure order, in the reserved band **from 420** (per A24, zero were allocated before this section).
 
-**Discharges `section_10_evidence_attack_raw_code_allocation`** (§4.10, A24). Discharge condition (A24, verbatim obligations): map every evidence-attack row to exactly one declared first-failure reason and exactly one non-zero code, **one code per semantic class, never one per fixture**; prove a closed allocation table, unique reasons and numbers, deterministic first-failure ordering, no unmapped fixture, no code with incompatible meanings, **never `0` for rejection**, exit-ledger parity, mechanically regenerated goldens, and that unrelated prior-stage codes did not move — preflighting every shared golden and consumer **before allocating the first number** (4M's additive codes broke five goldens; 4R/4S cost four red rounds).
+**Discharges `section_10_evidence_attack_raw_code_allocation`** (§4.10, A24) — but **not yet**: see §10.2's closure rule. The discharge condition (A24, verbatim obligations) is to map every evidence-attack row to exactly one declared first-failure reason and exactly one non-zero code, **one code per semantic class, never one per fixture**; prove a closed allocation table, unique reasons and numbers, deterministic first-failure ordering, no unmapped fixture, no code with incompatible meanings, **never `0` for rejection**, exit-ledger parity, mechanically regenerated goldens, and that unrelated prior-stage codes did not move — preflighting every shared golden and consumer **before allocating the first number**.
 
-The **eleven §7 symbolic reasons** (`s7_noncanonical_or_oversize` … `s7_seed_binding`, §7.2) are among the classes Section 10 must number; §7 froze their order and symbols, Section 10 owns their numbers.
+### 10.1 The preflight, executed before the first number
 
-`DESIGN OPEN` — the full allocation table across §§2–13; the code integers; the exit-ledger and its parity check; the golden-regeneration procedure. **Scaffold only; the acceptance criteria below already constrain the gate that will discharge this.**
+A24 requires the preflight to precede allocation, so it is recorded here as the first act of the section rather than as a later reassurance.
+
+```text
+reasons needing numbers    37   (§7 = 11, §8 = 11, §9 = 15) — generator-derived from the frozen verifiers
+highest prior code         419  (Stage 5N / VTC-Delay); the 420+ band is empty
+ledger baseline            401 entries in RUN_LEVEL_BY_RAW
+exit-map digest baseline   b229d256516d39109af79bbd5dbfe22eada983944a10d4b8141e34f8c912e672
+suite baseline             3311/3311
+```
+
+**The blast radius is three consumers**, enumerated by execution rather than by search:
+
+```text
+tests/fixtures/llmShield/stage4h/expected-results/exit-map.json   golden, builder-written
+docs/research/llm-shield/evidence/stage-4h/exit-map.json          evidence copy, builder-written
+tests/unit/llmShield/stage4h/exitWrapper.test.js                  pins the WHOLE map by deepEqual
+```
+
+`RUN_LEVEL_BY_RAW` is embedded **wholesale** into the Stage 4H exit map by `build-stage4h-digest-fixtures.mjs`, which writes both JSON copies; the third consumer pins the entire map against a literal, as every prior code-allocating stage has had to extend. The probe-hygiene gate computes `maxAllocated` dynamically and needs no edit.
+
+**That number was wrong twice before it was right, and the record of being wrong is the useful part.** The first preflight searched for assertions on the ledger's _count_ and _maximum_, found none, and concluded the radius was **one**; the whole-map `deepEqual` pins neither, so it was invisible to that search and surfaced only as a red test in the full-suite run. The corrected figure of **two** was then also wrong: the builder writes a second JSON copy under `docs/research/`, which appeared only when the working tree was inspected after running it. **An absence found by a narrow search is not an absence** — the law this stage learned at §4 and has now re-learned twice in one section. The rule that follows is not "grep harder": a preflight must **run the builders and enumerate what moves**, because a search can only find the shapes it was written to expect. _(4M's additive codes broke five goldens because nobody measured first; measuring first still only finds what the measurement was shaped to see.)_
+
+Every one of the three moved **purely additively**: zero pre-existing keys changed, zero removed, exactly the thirty-seven keys `420…456` added.
+
+**One code per semantic class is satisfied by construction.** §8 carries **18** fixture rows against **11** reasons and §9 carries **21** against **15**: the reason set already _is_ the semantic-class set, so numbering reasons — never fixtures — discharges that obligation without a further rule.
+
+### 10.2 The allocation, and why the table is not yet closed
+
+Contiguous per-section sub-bands, matching every prior stage. Numeric order **is** the frozen first-failure order within each sub-band, so the spine and the numbers cannot disagree:
+
+```text
+§7  challenge issuance      420 – 430    (11 reasons, s7_*)
+§8  opening and disclosure  431 – 441    (11 reasons, s8_*)
+§9  exact probability       442 – 456    (15 reasons, s9_*)
+```
+
+`0` is **OK** and is never a rejection. The allocation is generated from the frozen `SECTION{7,8,9}_FIRST_FAILURE_ORDER` arrays rather than transcribed, so a reason cannot silently lose or gain a number.
+
+**Closure rule (why §10 does not discharge yet).** A24 requires a **closed** table. §11 (Lean) and §13 (prior-art map) mint no runtime codes, but **§12 may**: its capsule verifier is `DESIGN OPEN` and could add reasons. Section 10 therefore declares the table **closed over every reason-minting section that exists** and reserves **457+** for §12. `section_10_evidence_attack_raw_code_allocation` is discharged **only once §12 is frozen** — claiming a closed table while a section that can mint reasons is undesigned would discharge a release blocker on a promise.
+
+### 10.3 The fail-closed wrapper keeps the shared code, deliberately
+
+Stage 5N minted its own outer boundary (419, outside the spine). Stage 5O does **not**, and the reason is recorded rather than the deviation hidden: §7, §8 and §9 each return the shared `RAW_VERIFIER_CODES.INTERNAL_ERROR_FAIL_CLOSED` (**29**) from `evaluateSection{7,8,9}Safe`, and that wrapper behaviour is **frozen production wiring in all three sections**. Minting a Stage 5O wrapper would change wiring inside three frozen sections and trigger **A34, A35 and A36 refreezes** — three complete campaigns, including three real-browser ceremonies — to renumber an internal error. The shared boundary is kept, and `29` is declared as Stage 5O's outer boundary.
+
+Consequently **Section 10 is purely additive**: the reason-to-code mapping lives in the ledger and its mapping function, and **no frozen module is edited**. Section 10 requires no A34, A35 or A36 rerun.
+
+### 10.4 Exit-ledger parity
+
+The census is generated, never maintained:
+
+```text
+every frozen reason has exactly one code        (37 -> 37, no reason unmapped)
+every allocated code has exactly one reason     (no code with incompatible meanings)
+numeric order == frozen first-failure order     (per sub-band)
+sub-bands are contiguous and disjoint           (420-430, 431-441, 442-456)
+no allocated code is 0                          (0 is OK, never a rejection)
+every allocated code has a RUN_LEVEL_BY_RAW entry
+no code <= 419 changed value                    (prior stages did not move)
+```
+
+### 10.5 Golden regeneration
+
+The single affected golden is regenerated **mechanically** by its own builder — never hand-edited — and the change is proved to be **purely additive**: the pre-existing key/value pairs of `RUN_LEVEL_BY_RAW` are identical before and after, and only keys in `420…456` appear.
+
+### 10.6 `retired_identifier_active_use_rejection`
+
+The open item logged against this section is implemented here. A retired identifier mentioned **historically** is permitted; the same identifier used **normatively** is not:
+
+```text
+permitted                                   forbidden (active/normative)
+---------                                   ----------------------------
+amendment history describing deletion       requirement identifiers or subjects
+explicit absence declarations               construction definitions
+negative fixtures proving rejection         normative formulas, discharge conditions,
+                                            active gate obligations, release mappings
+```
+
+A plain grep cannot draw that line — it counts names and cannot read context, which is why the existing dead-language check reports green on `closure_capsule_root` by **luck of wording**: all its occurrences happen to be declarations of absence. A gate that passes for the wrong reason is in the same condition as one that fails. The §10 gate therefore classifies each occurrence by its surrounding context and carries the **required self-test**: inject a retired identifier into an **active requirement block** and confirm the gate **rejects**.
+
+### 10.7 Freeze gate
+
+`FREEZE GATE` — Section 10 may come to a freeze ruling when: the allocation is generated from the frozen reason orders and matches this contract; the exit-ledger parity census is green in every clause; the affected golden is mechanically regenerated and the diff is proved purely additive; no prior-stage code moved and the full repository suite is green at or above its recorded baseline; the `retired_identifier_active_use_rejection` gate is implemented and its injection self-test rejects. Freezing §10 does **not** discharge its release blocker — §10.2's closure rule defers that to §12's freeze — and §11 Lean remains a separate release blocker.
 
 ### Section 10 open items — A24 gate-hardening acceptance criteria
 

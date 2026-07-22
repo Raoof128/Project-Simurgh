@@ -1158,6 +1158,92 @@ export const OFFLINE_REASONS = Object.freeze([
   "hermeticity_falsifier_not_tested",
 ]);
 
+// ---- Stage 5O (VSC) — §10 raw-code allocation, additive band 420-456.
+//
+// GENERATED from the frozen SECTION{7,8,9}_FIRST_FAILURE_ORDER arrays, never transcribed: numeric
+// order IS the frozen first-failure order within each sub-band, so the spine and the numbers cannot
+// disagree. One code per SEMANTIC CLASS (§8 has 18 fixture rows against 11 reasons, §9 has 21
+// against 15) — never one per fixture. 0 is OK and is never a rejection.
+//
+// The outer fail-closed boundary is deliberately the SHARED code 29, not a Stage 5O code: §7, §8 and
+// §9 all return RAW_VERIFIER_CODES.INTERNAL_ERROR_FAIL_CLOSED from their safe wrappers, and that
+// wiring is frozen, so minting a 5O wrapper would force A34, A35 and A36 refreezes to renumber an
+// internal error.
+export const VSC_RAW_CODES = Object.freeze({
+  OK: 0,
+  // S7 — Section 7, 11 reasons, 420-430
+  S7_NONCANONICAL_OR_OVERSIZE: 420,
+  S7_ARTIFACT_SHAPE: 421,
+  S7_BYTES32_TOKEN_GRAMMAR: 422,
+  S7_SCHEMA_PIN_MISMATCH: 423,
+  S7_CHECKPOINT_NOT_VERIFIER_DERIVED: 424,
+  S7_CHAIN_INVALID: 425,
+  S7_INSUFFICIENT_DESCENDANTS: 426,
+  S7_PRECOMMITMENT_BINDING_MISMATCH: 427,
+  S7_INDEX_DERIVATION: 428,
+  S7_ROOT_INCOMPLETE: 429,
+  S7_SEED_BINDING: 430,
+  // S8 — Section 8, 11 reasons, 431-441
+  S8_OPENING_PACKAGE_OVERSIZE: 431,
+  S8_NONCANONICAL: 432,
+  S8_RESOURCE_LIMIT: 433,
+  S8_OPENING_SHAPE: 434,
+  S8_BYTES32_TOKEN_GRAMMAR: 435,
+  S8_DISCLOSURE_POLICY_BINDING: 436,
+  S8_INDICES_MISMATCH: 437,
+  S8_CASE_LINK_INVALID: 438,
+  S8_MERKLE_INCLUSION_INVALID: 439,
+  S8_PRESENTED_HISTORY_INVALID: 440,
+  S8_BUDGET_EXHAUSTED: 441,
+  // S9 — Section 9, 15 reasons, 442-456
+  S9_POLICY_PACKAGE_TRANSPORT_OVERSIZE: 442,
+  S9_NONCANONICAL: 443,
+  S9_POLICY_PACKAGE_CANONICAL_OVERSIZE: 444,
+  S9_PROBABILITY_CLAIM_SHAPE: 445,
+  S9_RATIONAL_GRAMMAR: 446,
+  S9_DENOMINATOR_NOT_POSITIVE: 447,
+  S9_RATIONAL_NOT_LOWEST_TERMS: 448,
+  S9_POLICY_BINDING_MISMATCH: 449,
+  S9_PARAMETER_DOMAIN_VIOLATION: 450,
+  S9_EVALUATION_BOUND_EXCEEDED: 451,
+  S9_CLAIM_TYPE_MISMATCH: 452,
+  S9_PAIR_RATIO_ACTIVATION_MISMATCH: 453,
+  S9_DETECTION_CLAIM_VALUE_MISMATCH: 454,
+  S9_PAIR_RATIO_VALUE_MISMATCH: 455,
+  S9_DETECTION_FLOOR_UNMET: 456,
+});
+
+export const VSC_CHECK_ORDER = Object.freeze(Array.from({ length: 37 }, (_, i) => 420 + i));
+export const VSC_WRAPPER = RAW_VERIFIER_CODES.INTERNAL_ERROR_FAIL_CLOSED; // shared 29, see above
+export const VSC_BANDS = Object.freeze({
+  s7: Object.freeze({ lo: 420, hi: 430 }),
+  s8: Object.freeze({ lo: 431, hi: 441 }),
+  s9: Object.freeze({ lo: 442, hi: 456 }),
+});
+// Reserved for Section 12, which is DESIGN OPEN and may still mint reasons. Section 10's table is
+// closed over every reason-minting section that EXISTS; it does not pretend to be closed over one
+// that does not.
+export const VSC_RESERVED_FROM = 457;
+
+const VSC_REASON_BY_RAW = Object.freeze(
+  Object.fromEntries(
+    Object.entries(VSC_RAW_CODES)
+      .filter(([, v]) => v !== 0)
+      .map(([k, v]) => [v, k.toLowerCase()])
+  )
+);
+
+/** The Stage 5O raw code for a frozen symbolic reason, or undefined for an unknown reason. */
+export function rawCodeForVscReason(reason) {
+  const v = VSC_RAW_CODES[String(reason).toUpperCase()];
+  return v === 0 ? undefined : v;
+}
+
+/** The frozen symbolic reason for a Stage 5O raw code, or undefined outside the 5O band. */
+export function vscReasonForRawCode(code) {
+  return VSC_REASON_BY_RAW[code];
+}
+
 export const RUN_LEVEL_BY_RAW = Object.freeze({
   0: 0,
   19: 1,
@@ -1577,6 +1663,43 @@ export const RUN_LEVEL_BY_RAW = Object.freeze({
   417: 1,
   418: 1,
   419: 1,
+  420: 1,
+  421: 1,
+  422: 1,
+  423: 1,
+  424: 1,
+  425: 1,
+  426: 1,
+  427: 1,
+  428: 1,
+  429: 1,
+  430: 1,
+  431: 1,
+  432: 1,
+  433: 1,
+  434: 1,
+  435: 1,
+  436: 1,
+  437: 1,
+  438: 1,
+  439: 1,
+  440: 1,
+  441: 1,
+  442: 1,
+  443: 1,
+  444: 1,
+  445: 1,
+  446: 1,
+  447: 1,
+  448: 1,
+  449: 1,
+  450: 1,
+  451: 1,
+  452: 1,
+  453: 1,
+  454: 1,
+  455: 1,
+  456: 1,
 });
 
 export function stage4CodeForRawCode(code) {
