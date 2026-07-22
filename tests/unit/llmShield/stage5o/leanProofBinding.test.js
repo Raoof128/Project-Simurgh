@@ -34,11 +34,22 @@ test("§11 the proof carries no hole and no user axiom", () => {
 
 test("§11 the modelled spine IS the frozen spine: every reason, in order, with its §10 code", () => {
   const body = LEAN.slice(LEAN.indexOf("def checks"), LEAN.indexOf("def firstFail"));
-  const pairs = [...body.matchAll(/\(f\.([A-Za-z0-9]+),\s*(\d+)\)/g)].map((m) => [m[1], Number(m[2])]);
-  assert.equal(pairs.length, REASONS.length, "the Lean spine and the frozen orders differ in length");
+  const pairs = [...body.matchAll(/\(f\.([A-Za-z0-9]+),\s*(\d+)\)/g)].map((m) => [
+    m[1],
+    Number(m[2]),
+  ]);
+  assert.equal(
+    pairs.length,
+    REASONS.length,
+    "the Lean spine and the frozen orders differ in length"
+  );
   REASONS.forEach((reason, i) => {
     assert.equal(pairs[i][0], camel(reason), `position ${i}: Lean models a different check`);
-    assert.equal(pairs[i][1], rawCodeForVscReason(reason), `${reason}: Lean carries the wrong code`);
+    assert.equal(
+      pairs[i][1],
+      rawCodeForVscReason(reason),
+      `${reason}: Lean carries the wrong code`
+    );
     assert.equal(pairs[i][1], 420 + i, "numeric order must equal the frozen first-failure order");
   });
 });
@@ -46,7 +57,11 @@ test("§11 the modelled spine IS the frozen spine: every reason, in order, with 
 test("§11 the Facts structure declares exactly the frozen checks, no more and no fewer", () => {
   const struct = LEAN.slice(LEAN.indexOf("structure Facts where"), LEAN.indexOf("def checks"));
   const fields = [...struct.matchAll(/^\s{2}([A-Za-z0-9]+)\s*:\s*Bool/gm)].map((m) => m[1]);
-  assert.deepEqual(fields, REASONS.map(camel), "a spare or missing field would model a different verifier");
+  assert.deepEqual(
+    fields,
+    REASONS.map(camel),
+    "a spare or missing field would model a different verifier"
+  );
 });
 
 test("§11 the band the totality theorem claims is the band §10 actually allocated", () => {
