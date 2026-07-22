@@ -1,8 +1,10 @@
 # Stage 5O — VSC: Hidden-Universe Equality (design)
 
-**Status:** Sections **1–6 FROZEN** — Section 1 `a1e2e6d1`, Section 2 `0e26c361`, Section 3 `e8dc0a77`, Section 4 `cb67542f`, Section 5 `b08554ed`, Section 6 `fa34242d`. Sections 7–13 pending.
+**Status:** Sections **1–6 FROZEN** — Section 1 `a1e2e6d1`, Section 2 `0e26c361`, Section 3 `e8dc0a77`, Section 4 `cb67542f`, Section 5 `b08554ed`, Section 6 `fa34242d`. **Section 7 DRAFT — REBUILD in progress** on the repaired base (A29–A31): the seed is being re-derived against frozen A25 (HKDF + singular beacon_value), the fixture register moved to a canonical Section-7 matrix with classes, and terminology/ownership aligned to the §7.3 registry. **Sections 8–13 DRAFT scaffolds**.
 **Release is BLOCKED by design:** `release_required_bindings` carries the unresolved `section_6_anchored_presented_census_closure` (§5.9) and, since **A24**, `section_10_evidence_attack_raw_code_allocation` (§4.10) — the stage's own `evidence_attack_fixtures` raw-code obligation, which had no owner, discharger or status while **zero** codes existed in the reserved band. A green Section 5 freeze does **not** mean anti-equivocation exists, and per **A13** full anti-equivocation is not coming: Stage 4T binds views to a held capsule, never excluding an unseen one, so `not_proof_of_global_census_closure_uniqueness_without_exclusion_witnesses` is a **permanent** ceiling.
 **Amendment A33 folded (amends frozen Sections 2 and 6):** The gate-row hand-counts A22 declared non-normative had, as A22 predicted, drifted. The attack-matrix summary read **40 attacks (T3 5)** while the matrices hold **42 (T3 7)** — A15/A16 added rows T3.6/T3.7 and no hand-count followed; §2's summary read **seven** owned ceilings against **eight** declared; §6 read **four** non-claims and **two** later-bindings against **five** and **three** (A26 added the beacon-chain-roots binding). A33 corrects each to the value the matrices and registers **actually contain**, verified by counting rows. It hand-sets no new normative number — A22's rule stands that these counts are gate-generated and merely describe reality — it removes four stale descriptions a running gate would have flagged. A counter, not a reading, found them, the fifth time this stage's own thesis has been proven against it in this repair pass. **No non-claim, requirement, blade, law, evidence predicate, release predicate, ceiling, digest, or figure changed** — four stale counts now match reality.
+
+**Amendment A32 folded (amends frozen Section 1):** A25's frozen challenge-seed construction salts its HKDF-Extract with `challenge_seed_profile_digest` — but that name identifies **no pinned profile, bundle pair, descriptor, registry entry, or verifier-owned field anywhere in the stage**; it was an unresolved authority placeholder, the same defect class A17/A27/A28 closed, one A25 introduced. An HKDF salt must be a real, fixed, pre-beacon value. A32 corrects the salt **directly** — `salt = challenge_seed_profile_digest → salt = challenge_protocol_profile_digest` — to the generated, registry-pinned digest of `simurgh.vsc.challenge_protocol_profile.v1` (pair 22), which the §7.3 model already makes the **sole** owner of the challenge-seed preimage, the cross-artifact binding equations, and the derivation order. **This is a normative replacement, not an alias:** two names for one authority would invite a future field to treat them as two, so `challenge_seed_profile` is retired, not aliased, and no twenty-fourth profile is minted — a pair whose only purpose is to supply a salt-shaped digest while pair 22 still owns the construction would be decorative authority, and moving seed ownership to a new pair 24 would be a redesign, not a repair. Pair 22's digest satisfies A25's own salt requirements (public, profile-pinned, fixed before the beacon, independent of the beacon-derived IKM); at runtime pair 22 represents this salt as the symbolic `self_profile_digest` (§7.3), so descriptor hashing stays acyclic and the digest resolves only after descriptor construction. **No blade, law, evidence predicate, release predicate, ceiling, or socket changed** — A32 gives A25's salt the pinned home it always required, and it was the §7 seed rebuild, not a reading, that found the placeholder.
 
 **Amendment A31 folded (amends frozen Section 4):** Two scope statements in the A27 and A28 folds overreached; A31 narrows them and changes no literal, digest, or figure. **(1) Single-hat is role-vs-role, not global.** A27 wrote that a hash-domain and a schema/profile identifier "must never share a literal **even when they describe the same object**," but frozen constructions deliberately share one literal for one fact per A3: `PRODUCER_AUTHORITY_DOMAIN` **is** `PRODUCER_AUTHORITY_SCHEMA_ID` (`simurgh.vsc.producer_authority.v1`) and `CHALLENGE_SUBJECT_DOMAIN` is the pair-12 profile id, each naming one fact in one place with no collision (every preimage opens with its own domain). The rule A27/A28 actually apply is narrower: **a newly-minted bundle schema/profile identifier must not reuse a literal that already denotes a different role** — which is why `case_schema.v1` was minted rather than reusing `CASE_DOMAIN`'s `case.v1` (two roles), while `hidden_leaf.v1` was kept because it was already the leaf profile id (one role). Single-hat governs role-vs-role distinctness; it never forbids A3's one-fact-one-literal. **(2) A28's ownership wording is aligned to the §7.3 registry.** A28 wrote that `beacon_suffix_profile` and `ordered_selected_indices_profile` own each artifact's "**local shape, field constraints**, canonical construction and validation," but the option-1 §7.3 model gives **exact-key shape and field constraints to the schema descriptors** and **construction/verification semantics to the profiles** (header linkage, PoW, same-period; the HKDF sampler, ordering, uniqueness). A31 narrows the A28 sentence to semantics accordingly. **No blade, law, evidence predicate, release predicate, ceiling, socket, literal, digest, or figure changed** — A31 corrects two overstatements of scope and nothing else.
 
@@ -18,7 +20,7 @@
 
 **Amendment A26 folded (amends frozen Section 6):** Section 7's beacon must root in a Bitcoin chain the verifier can identify, and the obvious move — read that context out of the existing Stage 5L `bitcoin_ots` receipt — was preflighted against shipped code **before** it was written down. The receipt does not carry an 80-byte header, `nBits`, or any mainnet identity. **But the preflight found something worse than absence.** `stage5l/core/context.mjs` admits a checkpoint witness by testing `bundle.anchor_policy.accepted_checkpoint_witness_keys.includes(ce.witness_key_fingerprint)` — and `anchor_policy` is **producer-side**. It is precommitted and tamper-evident (`commitment.mjs` binds it via `anchor_policy_digest`; raw 365 rejects a mismatch), but **committed is not authoritative**: precommitment proves _prior declaration_, never independence, honesty, or provenance. A producer may precommit its own key, sign a fabricated checkpoint with it, and every Stage 5L check passes — because the fabricated policy **is** the committed policy. **This is §3.1's authority rule in its tenth costume**, and A26 was about to import it as a foundation. The verifier's whole pinned surface in 5L is four fields, and the one that looks like the missing root, `cfg.tsa_verifier_public_key_fingerprint`, is consumed **only** by `gateIdentityPolicyDigest` (raw 375) — which checks the _gate_ identity. Nothing compares it against `ce.witness_key_fingerprint`. The Lane A builder signs checkpoints with `keys.tsaverifier` **and** lists that fingerprint as accepted, so **one key plays both roles and every test passes whether or not the link exists**: a fixture coincidence standing in for an authority check. A26 therefore mints a **distinct verifier-controlled `stage5l_checkpoint_witness_profile`** rather than requiring `ce.witness_key_fingerprint == cfg.tsa_verifier_public_key_fingerprint`, which would fossilise the coincidence into the protocol and collapse two trust roles — the TSA gate-identity verifier and the Bitcoin checkpoint witness — merely relocating the defect. The admissible signer is the **intersection**: `producer_committed_keys ∩ verifier_pinned_keys`. **A producer may narrow the verifier's authorised witnesses; it may never enlarge them** — which keeps the genuinely useful property of committing beforehand to a witness ecology while denying that declaration the power to create its own authority. Seven fail-closed steps run in order, and step 2 (recompute the fingerprint from the **resolved** public-key bytes) exists because a fingerprint naming an authorised witness while its accompanying key hashes elsewhere is the entire attack in one row. The projection **keeps the authority evidence that created it** — profile id, profile digest, and witness fingerprint all survive verification, because a projection that forgets its own premise is a conclusion. Stage 5L's `observed_tip_height` and `checkpoint_inclusive_confirmations` are projected **separately and are inert here**: measured, `prev_block` appears **nowhere** in the codebase, so the tip is a signed **number** with witness authority as an assertion and **no chain authority whatsoever**; a separate projection is what stops it acquiring powers it never had. Network authority is verifier-owned — measured, `anchor_policy.network = "bitcoin"` is producer-supplied and **does not distinguish mainnet from testnet at all** — so `cfg.bitcoin_network_profile_id` owns mainnet identity, `powLimit`, compact-target rules, encoding, byte order and retarget interval, and the producer's field may be compared but never select the profile. **Two depth conventions are pinned separately and never merged**: Stage 5L's inherited `inclusive_block_count.v1` (`tip - height + 1`; six inclusive confirmations = block + five descendants) and Stage 5O's `descendants_after_beacon.v1` (`final_suffix_height - beacon_height`; `BEACON_REQUIRED_DESCENDANTS_V1 = 6` = beacon + six later blocks, **no `+1`, never "confirmations"**) — one word covering both counts is how an off-by-one becomes a disagreement about prose. **§6.5.3 is untouched and no arrow is inverted:** `H` stays precommitted and anchor-introduced heights stay forbidden; `A` is a _separate derived fact_, and the checkpoint context — post-anchor evidence — never enters the subject it confirms, which would cycle. **The ceiling was minted only after the audit, not before it:** all **34** existing ceilings were read with the A22 gate's own parser and none owns **witness ⊥ producer** — the two near-misses fail for the same reason, since `not_proof_of_organizational_independence_beyond_pinned_ecology_classes` bounds **class ⊥ class** (live even with one ecology) and `not_proof_of_timestamp_authority_clock_key_custody_or_process_correctness` has the right shape but the **TSA** as its subject, so borrowing it would collapse the two roles at the ceiling layer exactly as reusing the TSA fingerprint would at the key layer. `not_proof_of_checkpoint_witness_organizational_independence_or_non_collusion` is therefore added, taking non-claims to **35** — **and a ceiling alone was forbidden here**, because it would have excused an omitted authority check, the move this stage already refused when it took the liveness cost rather than mint a height-selection pardon. Mechanism and ceiling divide exactly: _the signer must be verifier-authorised_ / _authorisation does not prove the witness is honest, independent, or non-colluding_. One requirement is added — `section_7_beacon_chain_roots_in_verified_closure_bitcoin_checkpoint` (owner 6, discharger 7, `PENDING`), taking requirements to **6** — because a verified projection Section 7 has not been written to consume is a decorative object, A8's painted door in the register A8 exists to prevent; **a prose claim that the beacon "uses the same Bitcoin chain" does not discharge it.** Eight fixtures land, S6.47–S6.54, **S6.47 being the measured defect reproduced**. **The blade, the laws, and every evidence and release predicate are unchanged** — A26 adds an authority root the design had assumed it already had, and one ceiling naming what the root still cannot buy.
 
-**Amendment A25 folded (amends frozen Section 1):** Section 7's draft claimed its index sampler was **exactly uniform**. It is not, and could not be: `hash_collision_resistance` does not imply that `SHA256(seed || counter)` behaves as a uniform draw stream, and hashing a Bitcoin block hash — structurally **non-uniform**, since proof-of-work forces it below the target — does not by itself prove uniform extraction. **The stage was spending a pseudorandomness assumption it had never named**, which is precisely the condition A21 existed to end, one register later. A25 replaces the bespoke concatenated-SHA-256 stream with **RFC 5869 HKDF-SHA256**, a construction designed for exactly this shape: extract a pseudorandom key from non-uniform input material, then expand it into context-bound outputs. `challenge_seed = HKDF-Extract-SHA256(salt = challenge_seed_profile_digest, IKM = CHALLENGE_SEED_DOMAIN || challenge_subject_digest || beacon_value)`, and each draw is a **separate one-block `HKDF-Expand-SHA256`** keyed by `u64be(j)` in `info` — never one enormous output, because RFC 5869 caps a single expand at `255 * HashLen` = **8,160 bytes** and a million-draw stream would blow through it; per-counter expansion also gives random access, so `draw_9187` costs one call rather than 9,188. The salt is public, profile-pinned, fixed before the beacon and independent of the IKM, exactly as RFC 5869 permits and for the separation reason it gives. **Two assumptions are minted and no ceiling is:** `hmac_sha256_prf_security` and `beacon_ikm_sufficient_conditional_min_entropy` — the second deliberately **positive**, a premise the stage spends rather than a limitation it concedes. Both ceilings already exist (§1's beacon ceiling; A21's `not_proof_of_cryptographic_primitive_security`), and minting more would be the duplicate ownership that fails closed. **The uniformity claim is now stated in two layers that must never be collapsed:** conditional on independent uniform draws, low-bit extraction plus `candidate >= N` rejection is **exactly** uniform and per-draw duplicate rejection yields an exactly uniform ordered sample without replacement — that layer is combinatorics and owes nothing to cryptography; the **realised** sequence is only **computationally indistinguishable** from it, under A25's assumptions. Rejection sampling removes modulo bias exactly; HKDF supplies the draw model; the beacon supplies assumed entropy; **none of the three proves the others, and the old sentence let one borrow another's credit.** Implementation parity is pinned to RFC 5869's own Appendix A vectors rather than to our arithmetic. **No blade, law, evidence predicate, release predicate, ceiling, or socket changed** — the stage names a premise it was already spending, and narrows a claim that was false.
+**Amendment A25 folded (amends frozen Section 1):** Section 7's draft claimed its index sampler was **exactly uniform**. It is not, and could not be: `hash_collision_resistance` does not imply that `SHA256(seed || counter)` behaves as a uniform draw stream, and hashing a Bitcoin block hash — structurally **non-uniform**, since proof-of-work forces it below the target — does not by itself prove uniform extraction. **The stage was spending a pseudorandomness assumption it had never named**, which is precisely the condition A21 existed to end, one register later. A25 replaces the bespoke concatenated-SHA-256 stream with **RFC 5869 HKDF-SHA256**, a construction designed for exactly this shape: extract a pseudorandom key from non-uniform input material, then expand it into context-bound outputs. `challenge_seed = HKDF-Extract-SHA256(salt = challenge_protocol_profile_digest, IKM = CHALLENGE_SEED_DOMAIN || challenge_subject_digest || beacon_value)` (**salt corrected by A32** — `challenge_seed_profile_digest` named no pinned authority), and each draw is a **separate one-block `HKDF-Expand-SHA256`** keyed by `u64be(j)` in `info` — never one enormous output, because RFC 5869 caps a single expand at `255 * HashLen` = **8,160 bytes** and a million-draw stream would blow through it; per-counter expansion also gives random access, so `draw_9187` costs one call rather than 9,188. The salt is public, profile-pinned, fixed before the beacon and independent of the IKM, exactly as RFC 5869 permits and for the separation reason it gives. **Two assumptions are minted and no ceiling is:** `hmac_sha256_prf_security` and `beacon_ikm_sufficient_conditional_min_entropy` — the second deliberately **positive**, a premise the stage spends rather than a limitation it concedes. Both ceilings already exist (§1's beacon ceiling; A21's `not_proof_of_cryptographic_primitive_security`), and minting more would be the duplicate ownership that fails closed. **The uniformity claim is now stated in two layers that must never be collapsed:** conditional on independent uniform draws, low-bit extraction plus `candidate >= N` rejection is **exactly** uniform and per-draw duplicate rejection yields an exactly uniform ordered sample without replacement — that layer is combinatorics and owes nothing to cryptography; the **realised** sequence is only **computationally indistinguishable** from it, under A25's assumptions. Rejection sampling removes modulo bias exactly; HKDF supplies the draw model; the beacon supplies assumed entropy; **none of the three proves the others, and the old sentence let one borrow another's credit.** Implementation parity is pinned to RFC 5869's own Appendix A vectors rather than to our arithmetic. **No blade, law, evidence predicate, release predicate, ceiling, or socket changed** — the stage names a premise it was already spending, and narrows a claim that was false.
 
 **Amendment A24 folded (amends frozen Section 4):** §4.9's class table states that `evidence_attack_fixtures` carry a **non-zero Stage 5O raw code**. That is a normative obligation, and it had **no owner, no permitted discharger, no status and no ledger entry** — it lived in a table cell and blocked nothing. **Measured, not assumed: zero codes are allocated in the reserved `420+` band anywhere in the stage**, while the committed sections carry **78** evidence-attack rows and Section 6 adds **25**; every apparent `420+` occurrence in this document is byte arithmetic — `465` from `1,121,465`, `463` from `463,043` — and the audit that surfaced this was A23's, when the check "every evidence-attack row names an existing first-failure code" proved **unsatisfiable because no code exists to name**. **This is A8's painted door standing in the register A8 was built to prevent**: an unfinished obligation recorded as prose promises a discharge the contract never defines and nothing enforces, which is exactly why the second ledger has the opposite lifecycle. A24 **allocates no codes** and mints no mechanism. It records the obligation as `section_10_evidence_attack_raw_code_allocation`, owned by Section 4, dischargeable by **Section 10 alone**, `status: PENDING` — so the release gate **rejects** until Section 10 maps every evidence-attack row to exactly one declared first-failure reason and exactly one non-zero code, **one code per semantic failure class, never one per fixture**: a code that names a fixture rather than a failure is an identifier pretending to be a diagnosis. Section 10 must further prove a closed allocation table, unique reasons and numbers, deterministic first-failure ordering, no unmapped fixture, no code with incompatible meanings, **never `0` for rejection**, exit-ledger parity, mechanically regenerated goldens, and that unrelated prior-stage codes did not move — preflighting every shared golden and consumer **before allocating the first number**, because 4M's additive codes broke five goldens and 4R/4S cost four red rounds to the same class of change. **Section 6 does not own numeric allocation and is not blocked by this**: its rows carry stable symbolic failure reasons, the numbers arrive from Section 10, and the ownership model would break if a section had to supply codes for a table it does not own. **The missing codes were never the defect. The unledgered obligation was.** No blade, law, evidence predicate, ceiling, fixture, or socket changed; **the release predicate gains one fail-closed prerequisite that was already normatively required and silently unenforced.**
 
@@ -3965,15 +3967,267 @@ The last line matters for the same reason §3.3.1 does: if a block has two valid
 
 ---
 
-## Sections 7–13 — pending
+## Section 7 — Challenge-issuance verification (DRAFT, uncommitted)
 
-7. Beacon-seed and unique-index derivation (rejection sampling; no modulo bias). **Discharges `section_7_challenge_seed_binds_presented_census_closure`** (A13) — only when the actual seed preimage contains the verifier-recomputed `challenge_subject_digest`.
-8. Opening rules and cumulative-disclosure accounting. **Discharges the fail-closed requirement `section_8_opening_bundle_resource_limits`** (§4.10, A8) — must pin `MAX_OPENING_TRANSPORT_BYTES` and `MAX_OPENING_BUNDLE_CANONICAL_BYTES`, prove the opening-side compatibility invariant, and **bind both limits into the exact preimage of the already-precommitted `disclosure_policy_digest`**. Printing the constants discharges nothing; release rejects while the requirement is unresolved.
-9. Exact rational probability encoding (decimal-string integers).
-10. Raw codes from **420**, first-failure order frozen before implementation. **Discharges `section_10_evidence_attack_raw_code_allocation`** (§4.10, A24) — assigns **both** the semantic first-failure reason and its code, one code per semantic class, over the whole stage in one pass.
-11. Conditional Lean model.
-12. Evidence lanes: normative Lane A, captured Bitcoin Lane B, dishonest-producer fixtures. **Discharges `section_12_stage4t_presented_evidence_package_capsule`** (A14) — builds the Stage 4T capsule over the **assembled** package once openings, receipts, ledger and narrative exist; that audience-varying material is what 4T actually protects, and it cannot exist before the challenge.
-13. Prior-art and novelty source map (pinned: title, version/date, URL, retrieval date, exact quote, digest or archived copy, classification).
+Section 7 verifies that the presented challenge over an anchored census closure was **constructed and bound consistently with the frozen protocol**: seeded from the Section-6-anchored subject, its beacon rooted in a witness-authorised Bitcoin checkpoint, its selected indices reproducible by public replay. It is the first consumer of the six A28 bundle pairs (one schema, five profiles) and the discharger of two Section-6 `required_later_bindings`: `section_7_challenge_seed_binds_presented_census_closure` and `section_7_beacon_chain_roots_in_verified_closure_bitcoin_checkpoint`.
+
+### 7.1 Identity, authority context, and boundaries
+
+**Purpose.** Given four producer-presented challenge artifacts (beacon contract, beacon suffix, ordered selected indices, challenge record) and an accepted Section-6 context, Section 7 returns `ACCEPT` or the first-failing symbolic reason under a frozen order (§7.2). It performs no producer-signature ceremony of its own; a challenge carries authority because it descends from the anchored closure, not because Section 7 re-signs it.
+
+**The accepted Section-6 context (the trust transition, made non-forgeable).** Section 7 accepts only an opaque `Section6AcceptedContext` produced by the successful Section 6 verifier. A raw JSON object, a deserialised lookalike, a producer-supplied copy, or a manually constructed object is **not** an accepted context and is rejected before any Section 7 relation is evaluated. The context binds the verified `challenge_subject_digest`, the verified `anchor_schedule_profile_digest`, the A26 witness-authorised checkpoint evidence, and — for the precommitment binding (check 8) — the precommitted `beacon_contract_digest`, the challenge-policy parameters (including `k`), and the precommitted beacon height. Opacity is enforced by a non-serialisable capability — an unexported constructor or private brand — so an accepted context cannot be forged by shape; fixtures obtain one by running the real Section 6 acceptance path, never by constructing it directly. **The verified checkpoint object is read from `Section6AcceptedContext`; it is never accepted as a fifth producer-presented challenge artifact.** A caller-supplied copy gains no authority merely by being present: Section 7 uses only values extracted from the accepted context, and may compare producer artifacts against those values, but never promotes a caller-provided copy into the authority context.
+
+**Consumed bundle pairs.** Section 7 consumes exactly **eight** of the twenty-three bundle pairs (schema authorities and semantic profiles alike); each consumption is a check in §7.2, so none is decorative:
+
+```text
+18 verified_closure_bitcoin_checkpoint_schema  pin the checkpoint carried in the accepted
+                                               context; recompute its digest for check 5
+19 beacon_contract_profile                     validate beacon-contract construction
+20 beacon_suffix_profile                       validate suffix shape + header chain
+21 ordered_selected_indices_profile            validate index sampler + shape
+22 challenge_protocol_profile                  own the binding equations + first-failure order
+23 challenge_resource_limits_profile           enforce the Section-7 resource-limit table
+12 challenge_subject_profile                   binds the Section-6-verified challenge_subject_digest
+                                               into the challenge-seed preimage
+11 closure_anchor_schedule_profile             binds the verified anchor_schedule_profile_digest
+                                               into the challenge-seed preimage
+```
+
+`producer_signature_profile` (pair 16) is **not** freshly consumed here — it is owned and consumed by Sections 4/6, and Section 7's authority is the anchored subject, not a new signature. The remaining fourteen pairs belong to Sections 4/6 and are not read by Section 7.
+
+**Authority boundaries (Section 7 decides; it does not define).**
+
+```text
+digest-token grammar   imported exclusively by reference from simurgh.vsc.digest_token_codec.v1;
+                       the implementation calls decodeDigestToken and Section 7 contains no
+                       lexical reproduction of the grammar
+artifact shapes        owned by the §7 SCHEMA descriptors (exact keys/fields), implemented as
+                       pure checks in challengeArtifactShape.mjs; the profiles own construction
+                       semantics, not shape; Section 7 adds no local shape
+numeric limits         owned by challenge_resource_limits_profile (23); the implementation
+                       constants are an exact, census-checked mirror of that profile and carry
+                       no independent normative authority
+raw exit codes         NOT minted here — Section 7 freezes symbolic reasons and order only;
+                       section_10_evidence_attack_raw_code_allocation (A24) maps each reason to
+                       exactly one non-zero code, one code per failure class
+```
+
+Section 7 mints no identifier, no grammar, and no number. Every authority it uses has a prior owner.
+
+**Typed output contract.**
+
+```text
+verify_section_7(section6_accepted_context, producer_bundle)
+    -> ACCEPT
+     | { reject: <one symbolic first-failure reason> }
+```
+
+Exactly one reason is returned — the first check to fail under the §7.2 order — never a list and never a numeric code. The symbolic → numeric mapping is deferred exclusively to Section 10 under the closed allocation table A24 requires; `0` is never a rejection.
+
+**The verifier is deterministic, total, and non-throwing.** Unexpected implementation failures follow the already-frozen stage-wide internal-error fail-closed authority (`RAW_VERIFIER_CODES.INTERNAL_ERROR_FAIL_CLOSED`, surfaced by the `evaluate…Safe` fail-closed wrapper applied LAST) and are **not** misreported as one of the eleven Section 7 evidence-attack reasons. Section 7 allocates no numeric code for that path.
+
+### 7.2 The prefix-ordered first-failure relation
+
+`challenge_protocol_profile` (pair 22) owns this order. Exactly one symbolic reason is returned — the first check to fail. The order is a **prefix-ordered first-failure relation**: a witness for check `k` is constructed to satisfy checks `1..k-1` and fail exactly at `k` (§7.3), and no check depends on a later one, so the verdict is a total function of the presented bundle and the accepted context. Exact preimages and per-artifact schema/profile pin bytes are frozen in §7.3.
+
+```text
+#   check                                        consumed authority                       reason
+--  -------------------------------------------  ---------------------------------------  ------
+1   each producer artifact: raw <= its           challenge_resource_limits_profile (23,   s7_noncanonical_or_oversize
+    per-artifact canonical byte ceiling,         four per-artifact ceilings) + canonical
+    parse, canonicalJson(parsed) === raw         encoder
+2   exact-key/type/width shape of the four       pure checks in                           s7_artifact_shape
+    producer artifacts; the context checkpoint   challengeArtifactShape.mjs (§7 schema
+    conforms to pair 18's schema                 descriptors, not the profiles)
+3   every 32-byte token field decodes            digest_token_codec.v1 by reference       s7_bytes32_token_grammar
+    (the frozen token-field census, §7.3.3)      (decodeDigestToken)
+4   each schema_id/profile_id == pinned literal  authority registry, pairs 18–23 (§7.3.4) s7_schema_pin_mismatch
+    AND each schema_digest/profile_digest ==
+    its REGISTRY value (not a producer copy)
+5   recompute checkpoint_instance_digest under   pair 18 + accepted context               s7_checkpoint_not_verifier_derived
+    pair 18 from the accepted-context
+    checkpoint; require beacon_suffix.verified_
+    closure_bitcoin_checkpoint_digest == it
+6   suffix header chain: linkage, PoW, network   profile 20 + network profile +           s7_chain_invalid
+    + same-period; network_profile_id read from  pair 23 (header max)
+    the accepted context
+7   beacon_descendant_depth >=                   profile 19 (descendants convention);     s7_insufficient_descendants
+    BEACON_REQUIRED_DESCENDANTS_V1 (no +1)       NEVER observed_tip_height
+8   presented policy binds the precommitment:    profile 19 + accepted context            s7_precommitment_binding_mismatch
+    digest(beacon_contract) == context.beacon_
+    contract_digest; indices.length == context.k;
+    beacon_contract.challenge_height ==
+    context.precommitted_beacon_height
+9   replay the index sampler over the CANONICAL  profile 21 + pair 23 (index/draw         s7_index_derivation
+    PRESENTED seed; presented indices == replay  ceilings)
+10  five named root-binding equalities +         challenge_protocol_profile (22, §7.3.5)  s7_root_incomplete
+    the static completeness census
+11  expected seed derived from accepted context  pairs 11/12 + accepted context           s7_seed_binding
+    == presented challenge_seed
+```
+
+Check 8 gives **T4.2** (producer-selectable/retryable height) and **T4.6** (producer-controlled `k`) an executable relation: a presented contract, height, or `k` that does not equal the Section-6 precommitment is rejected **before** the sampler replay (check 9) can consume `k` or the seed can be recomputed. It compares only against the opaque accepted context, never a producer-declared copy.
+
+**Check 9 is two mechanisms.** Runtime: `challenge_record.<named_root> == recomputed_digest(<named_artifact>)` for exactly `{challenge_subject, verified_closure_bitcoin_checkpoint, beacon_contract, beacon_suffix, ordered_selected_indices}`, each present once, none cross-wired. Static completeness census (a build/test-time property, not a runtime relation): `set(record root fields) == set(verifier root checks) == set(the five frozen required roots)`, which fails if a schema root lacks a verifier check or the verifier checks an invented root.
+
+**Witness authority has one owner (Section 6).** Section 6 validates witness authority and mints the opaque `Section6AcceptedContext`. Section 7 checks the checkpoint's pair-18 schema and digest and consumes the witness-authorised checkpoint from that context; it does **not** re-prove A26 witness validity and adds no duplicate witness check, reason, or fixture.
+
+**Discharge mapping.** Checks 5–7 together discharge `section_7_beacon_chain_roots_in_verified_closure_bitcoin_checkpoint`; check 11 discharges `section_7_challenge_seed_binds_presented_census_closure`. Both compare only against values extracted from the opaque accepted context, never a producer-declared copy.
+
+**Two implementation layers.** `verifySection7Relation(context, bundle) -> ACCEPT | {reject: reason}` holds the eleven-check relation; `evaluateSection7Safe(...)` is the fail-closed wrapper applied LAST, catching any unexpected throw to `RAW_VERIFIER_CODES.INTERNAL_ERROR_FAIL_CLOSED` — stage-wide infrastructure failure, not a twelfth Section 7 reason.
+
+### 7.3 Schemas, preimages, the authority registry, and the fixture register
+
+#### 7.3.1 Revised producer-artifact schemas
+
+The four producer artifacts carry an explicit profile binding so each of pairs 19–22 has a runtime home; `schema_id`/`schema_digest` are reserved for schema identity. The checkpoint is the frozen §6.5.4 projection and is not modified.
+
+```text
+beacon_contract           schema_id, schema_digest, profile_id, profile_digest, <contract fields>
+beacon_suffix             schema_id, schema_digest, profile_id, profile_digest,
+                          verified_closure_bitcoin_checkpoint_digest, headers
+ordered_selected_indices  schema_id, schema_digest, profile_id, profile_digest, indices
+challenge_record          schema_id, schema_digest,
+                          challenge_protocol_profile_id, challenge_protocol_profile_digest,
+                          challenge_seed,
+                          challenge_subject_digest, verified_closure_bitcoin_checkpoint_digest,
+                          beacon_contract_digest, beacon_suffix_digest, ordered_selected_indices_digest
+```
+
+`challenge_seed` is a 32-byte token (codec-encoded) but **not** a `*_digest` field. The first three carry generic `profile_id`/`profile_digest`; the record carries `challenge_protocol_profile_id`/`_digest` because pair 22 governs orchestration, not that object's local shape.
+
+#### 7.3.2 Digest domains and preimages
+
+`pair18_schema_digest` (digest of the frozen §6.5.4 schema descriptor, a registry pin) and `checkpoint_instance_digest` (digest of one accepted checkpoint object) are kept distinct:
+
+```text
+checkpoint_instance_digest = SHA256(
+  UTF8("simurgh.vsc.verified_closure_bitcoin_checkpoint_digest_domain.v1") ||
+  decodeDigestToken(pair18_schema_digest) ||                        // raw 32 bytes
+  UTF8(canonicalJson(section6_context.checkpoint)) )
+
+CHALLENGE_SEED_DOMAIN = ASCII "simurgh.vsc.challenge_seed_digest_domain.v1"
+CHALLENGE_DRAW_DOMAIN = ASCII "simurgh.vsc.challenge_index_draw.v1"
+
+// The challenge_seed is the RFC 5869 HKDF-SHA256 extract PRK (frozen A25; salt corrected by A32).
+// It is NOT a plain SHA256 digest. All three binds after the domain are raw 32-byte values.
+challenge_seed = HKDF-Extract-SHA256(
+  salt = decodeDigestToken(REGISTRY["simurgh.vsc.challenge_protocol_profile.v1"]),  // pair 22, raw 32B
+  IKM  = UTF8(CHALLENGE_SEED_DOMAIN)
+      || decodeDigestToken(accepted_context.challenge_subject_digest)               // raw 32B
+      || accepted_context.beacon_value )                                            // raw 32B (below)
+
+// beacon_value is the UNIQUE verifier-derived beacon entropy — one block, verifier-selected, not the
+// producer's to vary. It is the raw block hash (internal 32-byte order, NOT display-order hex) of the
+// verified suffix header at the precommitted beacon height:
+beacon_value = raw_block_hash_internal_order(
+  verified suffix header whose height == accepted_context.precommitted_beacon_height )
+// NOT: the final suffix block, the checkpoint block, the whole suffix digest, a producer-declared
+// hash, or any descendant chosen after seeing the indices. The suffix proves chain membership and
+// descendant depth; it contributes NO variable digest to the seed (digest(beacon_suffix) is gone).
+
+// Per-draw expansion: random-access one-block HKDF-Expand, never one enormous output (A25).
+draw_j = HKDF-Expand-SHA256(
+  PRK  = challenge_seed,
+  info = UTF8(CHALLENGE_DRAW_DOMAIN) || u64be(j),
+  L    = 32 )
+// then the frozen rejection sampler: low-bit candidate -> reject candidate >= the unbiased acceptance
+// range -> reject a duplicate accepted index -> continue until exactly k distinct indices exist.
+
+digest(beacon_contract | beacon_suffix | ordered_selected_indices) = SHA256(canonicalJson(artifact))
+```
+
+The salt is public, generated from pair 22's frozen descriptor, registry-pinned, fixed before the beacon through the profile bundle, and independent of the beacon-derived IKM — exactly A25's stated salt requirements. Check 5 requires `beacon_suffix.verified_closure_bitcoin_checkpoint_digest == checkpoint_instance_digest`; check 8 replays `draw_j` from the **presented** `challenge_record.challenge_seed`; check 10 recomputes the expected `challenge_seed` from the accepted context + `beacon_value` and requires it to equal the presented one. Binding the presented `beacon_contract` and `k` to the accepted context is a **separate** relation (§7.2), not folded into the seed.
+
+#### 7.3.3 The Section-7 32-byte token-field census (check 3)
+
+Check 3 decodes exactly a frozen enumerated set — every `*_digest` field across the four artifact schemas PLUS `challenge_record.challenge_seed` — never a wildcard. A static census asserts this set; a nested or added 32-byte token fails the build unless enumerated here.
+
+#### 7.3.4 The authority registry and the pin equalities (check 4)
+
+Comparing two producer-supplied values pins names while leaving meaning producer-controlled. An independent, frozen, oracle-free **authority registry** is generated from canonical **descriptors** (`tools/simurgh-attestation/stage5o/core/section7AuthorityDescriptors.mjs`, the normative source; constants, shape module, and verifier tables mirror it, never the reverse). Both the bundle pair digest and the presented artifact digest must match the registry:
+
+```text
+# the four PRODUCER artifacts carry schema_id + profile_id fields:
+artifact.schema_digest   == REGISTRY[artifact.schema_id]
+artifact.profile_digest  == REGISTRY[artifact.profile_id]
+profile_bundle[id]       == REGISTRY[id]      for id in pairs 18..23
+
+# the CHECKPOINT is the frozen §6.5.4 projection — it carries NO schema_id/schema_digest field and is
+# NOT a producer artifact, so the generic formula above does not apply. Pair 18 is checked externally:
+profile_bundle[pair18]      == REGISTRY[pair18]                      # the bundle pin, like any pair
+context.checkpoint          conforms to REGISTRY[pair18]'s schema   # shape (check 2)
+checkpoint_instance_digest  binds REGISTRY[pair18]'s schema digest  # check 5 (§7.3.2), not a field pin
+```
+
+The registry is **transitively closed** over 17 descriptors (4 grammar, 8 profile, 5 schema), each framed-hashed under one of three bootstrap digest-domain constants:
+`SHA256( u16be(len(UTF8(domain))) || UTF8(domain) || u32be(len(UTF8(canonicalJson(descriptor)))) || UTF8(canonicalJson(descriptor)) )`.
+Two closure censuses hold: every static `import{id}` resolves to a registry entry or a pinned external authority; every `runtime_input` resolves to exactly one typed field of an accepted prior-section context. Pair 23's ceilings include four generator-derived maxima, so pairs 23 and 22 (and dependently 20/21) are **held** until the maxima regenerate (§7.3.7).
+
+#### 7.3.5 Five-root relation + static completeness census (check 9)
+
+The runtime relation and static census of §7.2 are the frozen mechanisms; a bound-but-unconsumed root is the decorative object the A26 erratum forbids, and runtime code cannot prove its own coverage, so the census carries that guarantee.
+
+#### 7.3.6 The fixture register — canonical Section-7 matrix (`S7.*`)
+
+Every row declares exactly one class from the closed §4.9 enum (A23); a fixture-shaped ID outside a canonical matrix rejects, so the register lives here as a matrix, not a fenced list. The clean positive control is an explicit implementation-conformance row, not an unclassified orphan.
+
+| ID    | fixture                                                                     | verdict — first-fail check, symbolic reason       | class                                |
+| ----- | --------------------------------------------------------------------------- | ------------------------------------------------- | ------------------------------------ |
+| S7.1  | valid bundle + real accepted `Section6AcceptedContext`                      | **ACCEPT** — positive-conformance control         | `implementation_regression_fixtures` |
+| S7.2  | reordered field (object vs canonical)                                       | reject at 1, `s7_noncanonical_or_oversize`        | `evidence_attack_fixtures`           |
+| S7.3  | root key physically omitted                                                 | reject at 2, `s7_artifact_shape`                  | `evidence_attack_fixtures`           |
+| S7.4  | digest token: one lowercase `a` to `A`, length preserved 64                 | reject at 3, `s7_bytes32_token_grammar`           | `evidence_attack_fixtures`           |
+| S7.5  | wrong `schema_id`                                                           | reject at 4, `s7_schema_pin_mismatch`             | `evidence_attack_fixtures`           |
+| S7.6  | wrong `schema_digest` (valid 64-hex, wrong value)                           | reject at 4, `s7_schema_pin_mismatch`             | `evidence_attack_fixtures`           |
+| S7.7  | wrong `profile_id`                                                          | reject at 4, `s7_schema_pin_mismatch`             | `evidence_attack_fixtures`           |
+| S7.8  | wrong `profile_digest` (valid 64-hex, wrong value)                          | reject at 4, `s7_schema_pin_mismatch`             | `evidence_attack_fixtures`           |
+| S7.9  | suffix commits to a producer-constructed checkpoint copy, not the context   | reject at 5, `s7_checkpoint_not_verifier_derived` | `evidence_attack_fixtures`           |
+| S7.10 | wrong-chain checkpoint (valid-looking)                                      | reject at 6, `s7_chain_invalid`                   | `evidence_attack_fixtures`           |
+| S7.11 | valid chain, descendant depth `= BEACON_REQUIRED_DESCENDANTS_V1 - 1`        | reject at 7, `s7_insufficient_descendants`        | `evidence_attack_fixtures`           |
+| S7.12 | presented `beacon_contract` digest `!= context.beacon_contract_digest`      | reject at 8, `s7_precommitment_binding_mismatch`  | `evidence_attack_fixtures`           |
+| S7.13 | `ordered_selected_indices.length != context.k`                              | reject at 8, `s7_precommitment_binding_mismatch`  | `evidence_attack_fixtures`           |
+| S7.14 | canonical/unique/in-range indices `!=` HKDF replay                          | reject at 9, `s7_index_derivation`                | `evidence_attack_fixtures`           |
+| S7.15 | two non-checkpoint roots cross-wired (contract digest into indices slot)    | reject at 10, `s7_root_incomplete`                | `evidence_attack_fixtures`           |
+| S7.16 | internally-consistent forged seed (indices regenerated so checks 1-10 pass) | reject at 11, `s7_seed_binding`                   | `evidence_attack_fixtures`           |
+
+**Prefix-satisfaction:** for every `S7.k` that first-fails at check `c`, the verifier stops at `c` **and** each of checks `1..c-1` individually passes on that fixture. One positive-conformance control + fifteen `evidence_attack_fixtures` = **sixteen rows**; all **eleven** reasons have a live witness (check 4 carries four; check 8 carries two, discharging T4.2 and T4.6). Each `evidence_attack_fixtures` row requires a non-zero first-failure code, allocated by **Section 10 (A24)** — never here.
+
+#### 7.3.7 Regeneration obligations (executed during implementation)
+
+The revised §7.3.1 shapes change four exact-key schemas, so the four challenge maxima are **regenerated** through `measureChallengeMaxima` (never patched by field-byte delta), under: exact-key census for all four revised artifacts; profile-field grammar census; anti-oracle and dual-ledger agreement on each regenerated maximum; and a confirmation that pair 23 is verifier-consumed through the limit table and is **not** serialised into any artifact. Numeric raw codes remain Section 10's under A24; §7 freezes only symbolic reasons and order.
+
+**The full byte-invalidation frontier.** Generating the authority-registry digests and revising the §7.3.1 shapes changes **bytes** far beyond the four challenge maxima. Everything that transitively binds the affected digests recomputes: the recomputed `profile_bundle_digest`, `scope_vector_digest`, `stage5o_precommitment_digest`, the execution and result census digests, the anchor subjects, `challenge_subject_digest`, and every §4/5/6 fixture and golden carrying them. As with A29/A30, **widths and maxima hold** — every digest stays fixed 32-byte → 64-hex, no concrete digest is stored (the verifier recomputes each), and the leaf-vector scope-manifest maximum is bundle-independent — so **bytes change while no stored value, canonical size, or maximum moves**. The regeneration must recompute the whole frontier, not the four maxima alone; the §7.3.4 registry generator and the census/parity gates are the byte-stable authorities that prove it closed.
+
+---
+
+## Section 8 — Opening rules and cumulative-disclosure accounting (DRAFT — design not started)
+
+**Purpose.** Define how a producer opens (reveals) the Section-7-selected leaves in response to the challenge, with cumulative-disclosure accounting bounded by resource limits **over the complete presented same-root disclosure history**. It does **not** establish that omitted or forked history does not exist — that residue is §5.9's permanent exclusion-witness ceiling, not something §8 closes.
+
+**Discharges the fail-closed requirement `section_8_opening_bundle_resource_limits`** (§4.10, A8). Discharge condition: pin `MAX_OPENING_TRANSPORT_BYTES` and `MAX_OPENING_BUNDLE_CANONICAL_BYTES`, prove the opening-side compatibility invariant (the §4.1.1 discipline applied to openings), and **bind both limits into the exact preimage of the already-precommitted `disclosure_policy_digest`**. Printing the constants discharges nothing; release rejects while the requirement is unresolved.
+
+**Frozen constraints it must honor:** `disclosure_policy_digest` is precommitted upstream (§4/6); openings consume the §7 ordered selected indices; the canonical-bytes acceptance condition (raw ≤ limit → parse → `canonicalJson === raw`) applies to the opening bundle as it does to §7 artifacts.
+
+`DESIGN OPEN` — the exact opening-bundle schema; the cumulative-disclosure accounting mechanism (how successive openings accumulate against the budget); the opening-side compatibility-invariant generator; the precise `disclosure_policy_digest` preimage binding. **None reviewed. This section is a scaffold, not the hardened contract §7 is.** The fail-closed requirement `section_8_opening_bundle_resource_limits` covers **byte limits only** — opening correctness, Merkle membership, the `Q`/`R` accounting, disclosure receipts, and cumulative unique-index accounting are §8 core mechanisms that need **their own release binding or a global all-sections-frozen gate**; a green byte-limit discharge is not a green Section 8.
+
+## Section 9 — Exact rational probability encoding (DRAFT — design not started)
+
+**Purpose.** Package **PC-0's** frozen exact-rational encoding (Section 2) for challenge/selection probabilities — decimal-string integer numerator/denominator, never floating point — as it is consumed at verification. §9 does **not** redefine PC-0's representation (two owners would be the A3 violation), and modulo-bias prevention is **§7's rejection sampler** (check 9), not §9's.
+
+**Frozen constraints it must honor:** the canonical-unsigned-decimal grammar (§7.3 registry); the no-modulo-bias property of the sampler (§7 check 8, `s7_index_derivation`).
+
+`DESIGN OPEN` — where probabilities are consumed and verified, and the exact mapping to the sampler. The representation itself is **not** open: it is PC-0's (§2 — exact numerator/denominator, decimal-string, lowest terms, positive denominator, leading-zero rules); §9 implements and packages it, never redesigns it. **Scaffold only.**
+
+## Section 10 — Raw-code allocation and frozen first-failure ordering (DRAFT — design not started)
+
+**Purpose.** Allocate **every** Stage 5O evidence-attack raw code — one code per semantic failure class, over the whole stage in a single pass — with a frozen deterministic first-failure order, in the reserved band **from 420** (per A24, zero are currently allocated).
+
+**Discharges `section_10_evidence_attack_raw_code_allocation`** (§4.10, A24). Discharge condition (A24, verbatim obligations): map every evidence-attack row to exactly one declared first-failure reason and exactly one non-zero code, **one code per semantic class, never one per fixture**; prove a closed allocation table, unique reasons and numbers, deterministic first-failure ordering, no unmapped fixture, no code with incompatible meanings, **never `0` for rejection**, exit-ledger parity, mechanically regenerated goldens, and that unrelated prior-stage codes did not move — preflighting every shared golden and consumer **before allocating the first number** (4M's additive codes broke five goldens; 4R/4S cost four red rounds).
+
+The **eleven §7 symbolic reasons** (`s7_noncanonical_or_oversize` … `s7_seed_binding`, §7.2) are among the classes Section 10 must number; §7 froze their order and symbols, Section 10 owns their numbers.
+
+`DESIGN OPEN` — the full allocation table across §§2–13; the code integers; the exit-ledger and its parity check; the golden-regeneration procedure. **Scaffold only; the acceptance criteria below already constrain the gate that will discharge this.**
 
 ### Section 10 open items — A24 gate-hardening acceptance criteria
 
@@ -4013,5 +4267,50 @@ retired identifier mentioned HISTORICALLY  !=  retired identifier used NORMATIVE
 **The failure mode is specific and has a name.** A construction is deleted; its identifier survives; a later section reuses the name for the real object that replaced it, or worse, for the deleted one. Then a reviewer greps, finds the identifier, and cannot tell whether the stage is describing a corpse or standing on one. This stage has already spent a review cycle on exactly that ambiguity — `section_12_stage4t_presented_evidence_package_capsule` is a **live, legitimate** post-challenge package construction and was read as the resurrected prechallenge `closure_capsule_root` **because the identifier alone could not settle the question**. It was a false alarm, and the gap it exposed is real: nothing mechanical distinguishes the two cases.
 
 _Logged against Section 10 rather than folded into §4.10: A24's discharge conditions are frozen Section 4 text, and an acceptance criterion written there would change frozen normative text for a gate that does not yet exist. This is roadmap, not contract._
+
+## Section 11 — Conditional Lean model (DRAFT — design not started)
+
+**Purpose.** Machine-checked Lean theorems for Stage 5O's load-bearing properties — zero `sorry`, no user axioms — following the Stage-4/5 Lean-core precedent.
+
+`DESIGN OPEN` — which properties earn theorems. Candidates: prefix-ordered first-failure **totality** (the §7.2 verdict is a total function; a witness for check `k` satisfies `1..k-1`); **five-root completeness** (the static census equals the schema root set); **checkpoint-instance binding** (check 5 rejects any non-context checkpoint); **seed-binding** (check 10 rejects a seed not derived from the accepted subject); **registry transitive closure** (no dangling import). The formalization is unwritten. **Scaffold only.**
+
+## Section 12 — Evidence lanes and the assembled-package capsule (DRAFT — design not started)
+
+**Purpose.** The three evidence lanes — normative **Lane A** (byte-stable CI), captured Bitcoin **Lane B** (deterministic ceremony), and **dishonest-producer fixtures** — plus the Stage 4T capsule over the assembled evidence package.
+
+**Discharges `section_12_stage4t_presented_evidence_package_capsule`** (A14). Discharge condition: build the Stage 4T capsule over the **assembled** package (openings, receipts, ledger, and — only if retained — a `narrative`, see below) once it exists — the audience-varying material 4T actually protects, which **cannot exist before the challenge** — over a pinned section registry, with Lane-B salts.
+
+**Frozen constraints it must honor:** A14 (no `closure_capsule_root` prechallenge; the package capsule is strictly post-challenge and lives here in Section 12, never in the prechallenge subject).
+
+`DESIGN OPEN` — the assembled-package schema; the pinned section registry; the 4T adapter binding; the Lane B Bitcoin ceremony and its salts. **`narrative` is currently undefined** — it has no schema, authority, or production; §12 must either define it (schema + producer + whether optional) or **drop it from the mandatory package list**, so an unnamed `narrative` never becomes a silently-required capsule section. **Scaffold only.**
+
+## Section 13 — Prior-art and novelty source map (DRAFT — design not started)
+
+**Purpose.** A pinned prior-art and novelty source map — per entry: title, version/date, URL, retrieval date, exact quote, digest or archived copy, and classification — under the source-precision guard (secondary figures marked "reported" until the primary source is pinned).
+
+`DESIGN OPEN` — the actual gap-hunt sweep (regulation, incidents-in-the-wild, prior-art standards, the lab surface); the falsifiable novelty claims and their signed source-map. **Release-binding decision: the novelty claim is explicitly NON-release** — a Frontier-axis assertion, never part of `release_required_bindings`, and non-frozen until the source map exists; the pinned source map is a §13 **freeze-deliverable**, not a cross-section requirement, so §13 adds no `required_later_bindings` entry for it. **Scaffold only; requires the web sweep this stage's discipline mandates before any novelty claim.**
+
+### Sections 7–13 ledger declarations (A8 — every normative section MUST declare both registers, even if empty)
+
+Section 7 is under active rebuild; Sections 8–13 are DESIGN-OPEN scaffolds. Each declares both A8 registers so the §1 release-envelope enumeration (`section_1..section_13`) and the A22 completeness gate remain satisfiable. No Section 7–13 adds a non-claim — their ceilings are §1's — and none owns a new cross-section requirement: they **discharge** §4/5/6 requirements, they do not mint their own. Scaffold entries are provisional and may gain members when the section is designed.
+
+```text
+section_7.added_non_claims          = []
+section_7.required_later_bindings    = []
+section_8.added_non_claims          = []
+section_8.required_later_bindings    = []         // DESIGN OPEN — opening-correctness / Merkle / receipts bindings pending §8 design
+section_9.added_non_claims          = []
+section_9.required_later_bindings    = []
+section_10.added_non_claims         = []
+section_10.required_later_bindings   = []
+section_11.added_non_claims         = []
+section_11.required_later_bindings   = []
+section_12.added_non_claims         = []
+section_12.required_later_bindings   = []         // DESIGN OPEN — narrative schema/authority pending §12 design
+section_13.added_non_claims         = []
+section_13.required_later_bindings   = []         // novelty is non-release (Frontier); source map is a §13 freeze-deliverable
+```
+
+---
 
 **Outside the release predicate:** the independent-producer Frontier gate (a second producer completing the Stage 5N ceremony) runs parallel to Stage 5O and does not gate its release. Frontier remains capped at **9.4** until that run lands.
