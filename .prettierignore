@@ -142,3 +142,4 @@ tests/fixtures/llmShield/stage5n/test-keys/
 
 # Stage 5O §7 parity vectors (generator-produced reference — byte-stable, not prettier-shaped)
 tools/simurgh-attestation/stage5o/parity/section7_parity_vectors.json
+tools/simurgh-attestation/stage5o/browser/parity.html
