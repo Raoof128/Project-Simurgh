@@ -11,10 +11,19 @@ import {
 import { mintCommittedUniverseContext } from "../../../../tools/simurgh-attestation/stage5o/core/committedUniverseContext.mjs";
 import { blockHashInternalHex } from "../../../../tools/simurgh-attestation/stage5o/core/bitcoinMainnetSuffixValidator.mjs";
 import { encodeDigestToken } from "../../../../tools/simurgh-attestation/stage5o/core/digestTokenCodec.mjs";
+import { disclosurePolicyDigest } from "../../../../tools/simurgh-attestation/stage5o/core/disclosurePolicy.mjs";
 import { buildValidSection7Case, bundleOf } from "./section7SyntheticFixture.mjs";
 import { genesisCheckpoint, suffixHeaders, REAL_CHAIN } from "./realMainnetChain.mjs";
 
 const tok = (f) => encodeDigestToken(Buffer.alloc(32, f));
+const POLICY = {
+  max_opening_package_transport_bytes: 1048576,
+  max_opening_package_canonical_bytes: 524288,
+  max_presented_history_transport_bytes: 1048576,
+  max_presented_history_canonical_bytes: 524288,
+  max_presented_history_entries: 1024,
+  max_cumulative_disclosed_indices: 64,
+};
 
 // A case the PRODUCTION verifier (real Bitcoin validator) accepts: genesis checkpoint + real headers.
 function realCase() {
@@ -34,15 +43,13 @@ function committedUniverse(over = {}) {
     merkle_root: tok(0x71),
     epoch_digest: tok(0x72),
     N: 256,
-    execution_census: { 0: tok(0xe0), 1: tok(0xe1), 2: tok(0xe2) },
-    disclosure_policy: {
-      max_opening_package_transport_bytes: 1048576,
-      max_opening_package_canonical_bytes: 524288,
-      max_presented_history_transport_bytes: 1048576,
-      max_presented_history_canonical_bytes: 524288,
-      max_presented_history_entries: 1024,
-      max_cumulative_disclosed_indices: 64,
+    execution_census: {
+      0: { case_link_commitment: tok(0xc0), execution_record_digest: tok(0xe0) },
+      1: { case_link_commitment: tok(0xc1), execution_record_digest: tok(0xe1) },
+      2: { case_link_commitment: tok(0xc2), execution_record_digest: tok(0xe2) },
     },
+    disclosure_policy: POLICY,
+    precommitted_disclosure_policy_digest: disclosurePolicyDigest(POLICY),
     ...over,
   });
 }

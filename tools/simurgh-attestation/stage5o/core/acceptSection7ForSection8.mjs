@@ -33,6 +33,7 @@ function mint(section7Verified, committedUniverse) {
     N: committedUniverse.N,
     execution_census: committedUniverse.execution_census,
     disclosure_policy: committedUniverse.disclosure_policy,
+    precommitted_disclosure_policy_digest: committedUniverse.precommitted_disclosure_policy_digest,
   });
   MINTED.add(ctx);
   return ctx;
