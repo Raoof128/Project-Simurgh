@@ -4844,11 +4844,38 @@ retired identifier mentioned HISTORICALLY  !=  retired identifier used NORMATIVE
 
 _Logged against Section 10 rather than folded into §4.10: A24's discharge conditions are frozen Section 4 text, and an acceptance criterion written there would change frozen normative text for a gate that does not yet exist. This is roadmap, not contract._
 
-## Section 11 — Conditional Lean model (DRAFT — design not started)
+## Section 11 — Conditional Lean model (DRAFT — implemented, freeze-ready)
 
-**Purpose.** Machine-checked Lean theorems for Stage 5O's load-bearing properties — zero `sorry`, no user axioms — following the Stage-4/5 Lean-core precedent.
+**Purpose.** Machine-checked Lean theorems for Stage 5O's load-bearing properties — zero proof holes, no user axioms — following the Stage-4/5 Lean-core precedent. Core Lean 4 only, no mathlib. The proof lives at `proofs/stage5o/Vsc.lean` and is type-checked in CI alongside every prior stage's core.
 
-`DESIGN OPEN` — which properties earn theorems. Candidates: prefix-ordered first-failure **totality** (the §7.2 verdict is a total function; a witness for check `k` satisfies `1..k-1`); **five-root completeness** (the static census equals the schema root set); **checkpoint-instance binding** (check 5 rejects any non-context checkpoint); **seed-binding** (check 10 rejects a seed not derived from the accepted subject); **registry transitive closure** (no dangling import). The formalization is unwritten. **Scaffold only.**
+### 11.1 Scope, stated before the theorems
+
+The model is **symbolic**. Each domain-separated hash is treated as a deterministic function, so what is proved is verifier **conformance** — never collision or preimage resistance, never that the probability model is calibrated, and never anything about real Bitcoin proof-of-work. A theorem here constrains the pure core's decision structure; it does not extend any claim §§7–9 make about the world.
+
+### 11.2 What earns a theorem
+
+The spine is **generated** from the frozen `SECTION{7,8,9}_FIRST_FAILURE_ORDER` arrays and the §10 allocation, so the codes the theorems quantify over are the codes the verifiers actually emit.
+
+| Theorem                                               | Property                                                                                                                                    |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `zero_not_code`                                       | **0 is never a rejection** — it is OK, and is not among 420…456                                                                             |
+| `green_all_ok`                                        | a green verdict forces every check to have passed                                                                                           |
+| `coreTotality`                                        | every verdict is `0` or a code in the allocated band **420…456**                                                                            |
+| `prefixSatisfaction` / `prefixSatisfaction_stage5o`   | a rejecting verdict splits the spine into a **fully-passing prefix**, the failing check whose code is the verdict, and an unexamined suffix |
+| `fallingProd_add`, `dualFormIdentity`                 | §9: **`Q_k` and `Q_J` are the same rational** — dual-form selection changes cost, never meaning                                             |
+| `floor_inclusive`, `floor_monotone`                   | §9: the T3.5 floor is **inclusive at equality** and monotone in the numerator                                                               |
+| `reopen_free`, `union_length_ge`                      | §8: **reopening is free**, and disclosure accounting never shrinks                                                                          |
+| `no_unbudgeted_unzip`, `accepted_prior_within_budget` | §8: an accepted opening fits the precommitted budget, and cannot sit on an already-overspent history                                        |
+
+**`prefixSatisfaction` is the one that pays for the fixture discipline.** The entire `S7`/`S8`/`S9` matrix rests on a row first-failing at _its_ check, which presupposes every earlier check passed. The matrices demonstrate this on fixtures; the theorem establishes it for **all** inputs, so a fixture cannot quietly exercise an easier rule than it claims to.
+
+**`dualFormIdentity` is the flagship.** §9's census verifies the identity over a generated grid of 424 cases; the theorem proves it for every `N`, `J`, `k`. Grid and proof agree, and neither is the other's oracle.
+
+### 11.3 Binding the proof to the implementation
+
+A proof that drifts from the code proves something about a program nobody runs — and Stage 5N learned the sharp version, where a real ceremony found a defect that 61 tests and 13 Lean theorems all missed because **proofs cannot see the seam where facts are manufactured**. A binding census therefore checks that the modelled spine **is** the frozen spine: field names equal the frozen reasons in order, each carries its §10 code, the band `coreTotality` claims is the band §10 allocated, every named theorem is present, no proof hole or user axiom exists, and the scope disclaimer is intact. This does not re-prove the theorems — Lean does that — it prevents the model and the verifier from silently parting company.
+
+`FREEZE GATE` — Section 11 may come to a freeze ruling when: the proof type-checks under the pinned toolchain with zero errors; the hole and axiom guards are clean; the binding census is green in every clause; and CI type-checks it alongside the prior cores. Freezing §11 does **not** discharge §10's release blocker, which §10.2 defers to §12's freeze.
 
 ## Section 12 — Evidence lanes and the assembled-package capsule (DRAFT — design not started)
 
