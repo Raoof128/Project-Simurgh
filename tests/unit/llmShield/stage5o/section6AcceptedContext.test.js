@@ -24,6 +24,7 @@ function validFields() {
     beacon_contract_digest: tok(0x33),
     challenge_policy_digest: tok(0x44),
     k: 128,
+    universe_size: 65536,
     checkpoint: { network_profile_id: "simurgh.bitcoin.mainnet.header_validation.v1" },
   };
 }
@@ -67,6 +68,13 @@ test("mint: a non-positive or non-integer k is rejected", () => {
     const bad = { ...validFields(), k };
     assert.throws(() => mintSection6AcceptedContext(bad), `k=${k} must reject`);
   }
+});
+
+test("mint: universe_size out of [1, 65536] or k>universe is rejected", () => {
+  for (const u of [0, -1, 65537, 1.5]) {
+    assert.throws(() => mintSection6AcceptedContext({ ...validFields(), universe_size: u }));
+  }
+  assert.throws(() => mintSection6AcceptedContext({ ...validFields(), k: 100, universe_size: 50 }));
 });
 
 test("mint: a wrong network profile id is rejected", () => {

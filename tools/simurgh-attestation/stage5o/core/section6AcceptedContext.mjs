@@ -8,6 +8,7 @@
 // freezes the bound values; the eventual Section 6 verifier calls it, and tests call it to obtain a
 // real context, but a producer never can.
 import { decodeDigestToken } from "./digestTokenCodec.mjs";
+import { MAX_SELECTED_INDICES_V1 } from "./constants.mjs";
 
 const MINTED = new WeakSet();
 
@@ -25,6 +26,7 @@ const CONTEXT_KEYS = Object.freeze([
   "beacon_contract_digest",
   "challenge_policy_digest",
   "k",
+  "universe_size",
   "checkpoint",
 ]);
 
@@ -66,6 +68,14 @@ export function mintSection6AcceptedContext(fields) {
   if (!Number.isSafeInteger(fields.k) || fields.k < 1) {
     throw new Error("accepted_context_k");
   }
+  if (
+    !Number.isSafeInteger(fields.universe_size) ||
+    fields.universe_size < 1 ||
+    fields.universe_size > MAX_SELECTED_INDICES_V1
+  ) {
+    throw new Error("accepted_context_universe_size");
+  }
+  if (fields.k > fields.universe_size) throw new Error("accepted_context_k_exceeds_universe");
   if (fields.checkpoint === null || typeof fields.checkpoint !== "object") {
     throw new TypeError("accepted_context_checkpoint_not_an_object");
   }
@@ -77,6 +87,7 @@ export function mintSection6AcceptedContext(fields) {
     beacon_contract_digest: fields.beacon_contract_digest,
     challenge_policy_digest: fields.challenge_policy_digest,
     k: fields.k,
+    universe_size: fields.universe_size,
     checkpoint: Object.freeze({ ...fields.checkpoint }),
   });
   MINTED.add(ctx);

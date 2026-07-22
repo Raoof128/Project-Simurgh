@@ -13,8 +13,6 @@
 // this module MIRRORS it (section7ArtifactShapeCensus.test.js proves the mirror).
 import { decodeDigestToken } from "./digestTokenCodec.mjs";
 import {
-  SCHEMA_IDS,
-  PROFILE_IDS,
   BEACON_SOURCE_ID,
   BEACON_DEPTH_CONVENTION_ID,
   MAX_BEACON_SUFFIX_HEADERS_V1,
@@ -122,8 +120,9 @@ function requireString(s, what) {
 
 export function checkBeaconContractArtifactShape(a) {
   requireExactKeys(a, BEACON_CONTRACT_ARTIFACT_KEYS, "beacon_contract_artifact");
-  if (a.schema_id !== SCHEMA_IDS.beacon_contract) throw new Error("beacon_contract_schema_id");
-  if (a.profile_id !== PROFILE_IDS.beacon_contract) throw new Error("beacon_contract_profile_id");
+  // schema_id/profile_id are TYPE-checked here; their exact value + registry digest are check 4.
+  requireString(a.schema_id, "beacon_contract_schema_id");
+  requireString(a.profile_id, "beacon_contract_profile_id");
   if (a.beacon_source_id !== BEACON_SOURCE_ID) throw new Error("beacon_contract_source_id");
   if (a.depth_convention_id !== BEACON_DEPTH_CONVENTION_ID) {
     throw new Error("beacon_contract_depth_convention_id");
@@ -136,8 +135,8 @@ export function checkBeaconContractArtifactShape(a) {
 
 export function checkBeaconSuffixArtifactShape(a) {
   requireExactKeys(a, BEACON_SUFFIX_ARTIFACT_KEYS, "beacon_suffix_artifact");
-  if (a.schema_id !== SCHEMA_IDS.beacon_suffix) throw new Error("beacon_suffix_schema_id");
-  if (a.profile_id !== PROFILE_IDS.beacon_suffix) throw new Error("beacon_suffix_profile_id");
+  requireString(a.schema_id, "beacon_suffix_schema_id");
+  requireString(a.profile_id, "beacon_suffix_profile_id");
   requireTokenWidth(a.schema_digest, "beacon_suffix_schema_digest");
   requireTokenWidth(a.profile_digest, "beacon_suffix_profile_digest");
   requireTokenWidth(
@@ -157,8 +156,8 @@ export function checkBeaconSuffixArtifactShape(a) {
 
 export function checkOrderedSelectedIndicesArtifactShape(a, universeSize) {
   requireExactKeys(a, ORDERED_SELECTED_INDICES_ARTIFACT_KEYS, "ordered_selected_indices_artifact");
-  if (a.schema_id !== SCHEMA_IDS.ordered_selected_indices) throw new Error("indices_schema_id");
-  if (a.profile_id !== PROFILE_IDS.ordered_selected_indices) throw new Error("indices_profile_id");
+  requireString(a.schema_id, "indices_schema_id");
+  requireString(a.profile_id, "indices_profile_id");
   requireTokenWidth(a.schema_digest, "indices_schema_digest");
   requireTokenWidth(a.profile_digest, "indices_profile_digest");
   if (!Array.isArray(a.indices)) throw new TypeError("indices_not_an_array");
@@ -184,10 +183,8 @@ export function checkOrderedSelectedIndicesArtifactShape(a, universeSize) {
 
 export function checkChallengeRecordShape(r) {
   requireExactKeys(r, CHALLENGE_RECORD_KEYS, "challenge_record");
-  if (r.schema_id !== SCHEMA_IDS.challenge_record) throw new Error("challenge_record_schema_id");
-  if (r.challenge_protocol_profile_id !== PROFILE_IDS.challenge_protocol) {
-    throw new Error("challenge_record_protocol_profile_id");
-  }
+  requireString(r.schema_id, "challenge_record_schema_id");
+  requireString(r.challenge_protocol_profile_id, "challenge_record_protocol_profile_id");
   // WIDTH only (check 2). The lowercase-hex grammar of these tokens is check 3 (§7.3.3).
   for (const k of Object.keys(r)) {
     if (k.endsWith("_digest")) requireTokenWidth(r[k], `challenge_record_${k}`);
