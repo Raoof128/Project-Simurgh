@@ -13,7 +13,7 @@ proof of what happened after a guardrail missed — not another jailbreak detect
 [![Node](https://img.shields.io/badge/node-%E2%89%A522.0-1a1a1a?style=flat-square)](https://nodejs.org)
 [![License](https://img.shields.io/badge/license-AGPL--3.0-d6cfbe?style=flat-square)](#license)
 [![Status](https://img.shields.io/badge/status-research%20prototype-2f4a2a?style=flat-square)](#status)
-[![Latest](https://img.shields.io/badge/release-v2.49.0-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.49.0-stage-5n-vtc-delay)
+[![Latest](https://img.shields.io/badge/release-v2.50.0-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.50.0-stage-5o-vsc)
 
 </div>
 
@@ -102,219 +102,25 @@ newest for the current frontier, or jump straight to
 [Constitution alignment](#design-alignment-with-claudes-constitution), or the
 [concrete result](#the-concrete-result-stage-3v-b).
 
-> 🆕 **Latest — Stage 5N · VTC-Delay: a decision that provably could not have been finalised instantly (`v2.49.0-stage-5n-vtc-delay`).**
-> Binds a decision's **finalisation** to two things a producer cannot fake afterwards: a **dependent SHA-256
-> chain** of **T = 20,000,000** steps seeded from the _real start timestamp token_, and **two RFC-3161
-> endpoints** whose genTimes yield a conservative elapsed **lower bound**. The verifier **re-runs the whole
-> chain** — deliberately **not a VDF**: no trusted setup, no fast-verify, no hardware claim. (The VDF paper's
-> own defining property is output that is _"efficiently and publicly verified"_; we trade exactly that away
-> for a verifier anyone can re-implement from the spec.) Additive on the frozen 5M extension; new codes
-> **396–419**. Laws: **No Instant Finalisation** · **No Pre-Input Final Commitment**.
-> **Banked, for real:** both endpoints Bitcoin-confirmed in **block 957 983** (our OTS parser's merkle root
-> cross-checked against a public explorer; block timestamp after both genTimes) → the real ceremony verifies
-> **`raw 0` / `elapsed_lower_bound_ms 90 000`** against a frozen **60 000 ms** floor, with **no injected
-> facts**. **13 Lean theorems** (zero proof holes) + a theorem-projection gate, Node↔Python↔browser parity
-> (browser core **never** emits a normative raw 0), K7 net over all 24 codes. **Adversary EXECUTED:** live
-> **Sonnet-5** (CVP) chose all five temporal-fraud attacks — **all contained**; **Fable-5 refused**, sealed
-> honestly as `model_refused`. **Lane D:** 3 machines / 2 architectures / 2 runtimes byte-identical.
-> **Honesty boundary:** proves finalisation was _delayed_, **never** that anyone reviewed carefully —
-> _"receipt, not passport."_ The real ceremony also caught a production bug that 59 unit tests and 13
-> theorems missed. Pays socket **I4**. Scorecard: Novelty 9.4 · Frontier 9.4 · Anthropic-relevance 9.7 ·
-> Constitution 9.6.
->
-> <details><summary>Previous — Stage 5M · VTC-Quorum (<code>v2.48.0</code>)</summary>
->
-> **Stage 5M · VTC-Quorum: exact three-ecology external-anchor quorum (`v2.48.0-stage-5m-vtc-quorum`).**
-> The verifier consumes and **independently validates an exact three-of-three** external-anchor ecology —
-> **RFC-3161 TSA + Bitcoin-confirmed OpenTimestamps + Rekor transparency-log inclusion** — all binding one
-> commitment `D`, and **only then banks `externally_anchored`**. Layered additively on the frozen 5L core
-> (codes 364–383 untouched); new codes **384–395**; two-level state (`ecology_confirmed`=0 /
-> `ecology_incomplete`=**393** / `false_anchored`=**394**, lie before gap). Laws: **No Anchor Without
-> Recompute**, **No Silent Downgrade**, **No Counterfeit Ecology**, **No Two Anchored Stories**. Real Node
-> adapter (RFC6962 inclusion + checkpoint STH + SET + submitter, validated offline vs a real Rekor entry),
-> two-tier attestation, emit-only **in-toto** candidate predicate, **Node↔Python↔browser parity**, **11 Lean
-> theorems** (zero `sorry`), K7 net. Beast-mode: **Ecology Independence Number** (signed rewrite-cost floor) ·
-> **crossEcologyEquivocationBound** (a bound the TEE/ZK prior art can't state) · a prior-art seam table.
-> **Banked, for real:** a genuine **DigiCert** token (imprint == `D`) + a **Bitcoin-confirmed OTS** (block
-> **957 782**, merkle root cross-checked vs mempool.space) + a real **Rekor** entry → the confirmed bundle
-> verifies to **`raw 0` / `externally_anchored=true` / `N=3`**. **Adversary EXECUTED:** live **Sonnet-5** (CVP)
->
-> - a local **Llama-3.2-1B** fuzzer across all six forgery classes — **0 bypasses**; and a **real two-machine
->   independent reproduction** (Mac Node 22 + remote droplet Node 26, distinct keys, byte-identical decision).
->   Pays socket **I5**. Scorecard: Novelty 9.3 · Frontier 9.5 · Anthropic-relevance 9.6 · Constitution 9.5.
->
-> </details>
->
-> <details><summary>Prior — Stage 5K · Verifiable Universe Commitment (<code>v2.46.0-stage-5k-vuc</code>)</summary>
->
-> Proves the ceremony could not quietly **swap, shrink, or reinterpret what "everything" means after
-> commitment**: an authorship-bound, externally-ordered **Merkle-set universe commitment**, chained to exact
-> reviewer/producer start obligations and fresh execution outputs, with **independent** equality against each
-> downstream component — `U_commit = U_vpc` **and** `U_commit = U_vrc`, **never through a union**. Three laws:
-> **No Shrinking Universe** (357), **No Phantom Section** (358), **No Post-Hoc Commitment Record** (354, a
-> cycle-free `commitment_session_id` signed pre-anchor → `ceremony_id` post-order). Codes **348–363**, two
-> split attestations (`audit ⟹ public` under the same context **and** `policy_digest`), **11 Lean theorems**
-> (zero unfinished goals, no user axioms — `commitmentBinding` depends on _none_), **64 unit + 5 K7 e2e**,
-> real Ed25519 end-to-end + byte-stable pack, and **Node↔Python↔browser parity**. Beast-mode: the **Scope
-> Trilemma** (`noSilentScopeChange`, no fourth branch) · **blind set-equality** (verify a confidential
-> report's scope from digests) · regression / commit-first-margin / omission-claim censuses (audit,
-> verdict-neutral) · a G13 adequacy-vocabulary belt · an in-toto/SCITT bridge. Design incorporates a
-> **32-finding external audit applied to spec + plan before build**. **Real independent Lane C EXECUTED:** an
-> independent party byte-reproduced `raw 0` (public + audit) on **two machines / Node builds**, with an
-> OpenTimestamps public witness over the commitment digest **pending Bitcoin confirmation**. **Honest to its
-> limits:** committed = evaluated ≠ the universe was **adequate** (→ mints `universe_adequacy_deferred`);
-> Lane C is reproduction + de-identified witness, **not** a distinct-key ceremony. Scorecard: Novelty 9.0 ·
-> Frontier 9.0 (unbanked; needs live Lane C-adv + a confirmed anchor) · Good-for-Anthropic 9.4 · Constitution
-> 9.4.
->
-> </details>
->
-> <details><summary>Prior — Stage 5J · Verifiable Rating Contest (<code>v2.45.0-stage-5j-vrc</code>)</summary>
->
-> Turns RSP v3.4's external-review **disagreement** into an offline-recomputable relation: it derives an
-> exact **rating-obligation set** from VPC's (5I) coverage relation, requires the ledger to **equal** it on
-> both sides (reviewer pairs = C(r), producer sections = S), and preserves every divergence as an
-> **append-only contest event** — so **suppression fails closed**. **Contest recorder, not truth arbiter.**
-> Because the reviewer chain is append-only and reviewer-signed, **erase-by-supersession** leaves the
-> historical divergence recomputable (**342**) and a forged _superseded_ entry is caught even when the head
-> is honest (**341**, the fossil attack); revise-after-responding → raw 0. Beast-mode: the **Override
-> Trilemma** (`noSilentOverridePath`, no fourth branch) · **`noCorrectnessBit`** (the state space has no
-> correct/incorrect value — structurally unable to assert who was right) · the **reviewer rebuttal**
-> (silence ≠ agreement) · **Downgrade Depth** · a **content-blind ledger authority** · an in-toto/SCITT
-> bridge. Codes **332–347**, two split attestations (public never certifies projections; `audit ⟹ public`),
-> **11 Lean theorems** (zero `sorry`), **79 unit + 4 K7 e2e**, real Ed25519 end-to-end + byte-stable pack,
-> and **Node↔Python↔browser parity**. **Real independent-party Lane C EXECUTED, de-identified:** an
-> anonymous party ran the ceremony over the real **37-section Opus 4.6 public structure** with their **own
-> keys** (distinct from ours; we do not possess them), locally and on a **remote droplet under Node 26**,
-> both **raw 0**. A de-identified **OpenTimestamps** public witness was submitted and is **pending Bitcoin
-> confirmation** — no verified `public_witness` is claimed until it lands. **Honest to its limits:** VRC is
-> **not category-creating** on attestation (in-toto/SCITT/C2PA exist) — it is the first executable verifier
-> of a two-party rating divergence where omission fails closed. Contest ≠ correctness (→ VRC's own signed
-> non-claim); independence is `distinct_key_only`, **not** the identity-anchored `externally_anchored` rung
-> (which requires revealing an identity the party declined). Scorecard: Novelty 9.5 · Frontier 9.4 ·
-> Good-for-Anthropic 9.5 · Constitution 9.6.
->
-> </details>
->
-> <details><summary>Prior — Stage 5I · Verifiable Panel Coverage (<code>v2.44.0-stage-5i-vpc</code>)</summary>
->
-> Turns RSP v3.4's split-external-review condition — _"all parts of the unredacted report are evaluated by
-> at least one external reviewer"_ — into an offline-recomputable relation over a committed report
-> partition, signed access grants, and reviewer receipts. The blade is grant-bounded coverage **equality**
-> `⋃C(r) = S` with **computed** reviewer + host independence (5G's rung lattice re-instantiated), a
-> **no-silent-filter census** (every supplied panel member qualifies or the bundle fails closed), and
-> **externally-anchored non-affiliation**. Three laws: **No Section Left Unreviewed** (327), **No Phantom
-> Review** (323), **No Self-Vouched Reviewer** (325/326). The headline invention is the **Adequacy Gate**
-> (`VPC_ADEQUACY_CLAIMED`, **328**) — a coverage verifier **structurally unable to certify the review was
-> adequate**: an adequacy/quality assertion fails closed **even at full coverage** (a bounded vocabulary
-> over a bounded surface, honestly not a semantic proof) — the purest anti-overclaim, and exactly the
-> **Wirecard** line (EY signed off on evidence sourced from the audited party). Plus two zero-code projections nobody publishes: the **Coverage Depth Census**
-> (`single_reviewer_sections` fragility map — "Pathway 5 rested on one reviewer's eyes") and the **Typed
-> Coverage State** (covered / assigned_only / unassigned coordination-theater map). Two roots
-> (`panel_subject_root` excludes challenge receipts) break the challenge↔root cycle. Codes **316–331**,
-> **9 Lean theorems** (zero `sorry`), **37 unit + K7 e2e**, three lanes (**A** byte-stable committed pack
-> raw 0 public+audit + byte-stable · **B** deterministic multi-process panel ceremony · **C** the real
-> Opus 4.6 Sabotage Risk Report public structure), and **JS↔Python↔browser parity, byte-identical**.
-> **Real independent-party ceremony EXECUTED** — the droplet team ran the full split-review with their
-> own keys over the 37-section public structure; their pack verifies **raw 0** under our verifier with a
-> **verifier key distinct from ours** (non-possession), `coverage_gap = 0`. **Honest to its limits:**
-> VPC is **not category-creating** (RSP v3.4 defines the coverage condition; the EU AI Act Art. 55 + GPAI
-> Code of Practice mandate independent external evaluation) — it is the executable, byte-reproducible
-> verifier under them. Coverage ≠ diligence (→ VRC); Lane C is public-structure-only with a modeled
-> affiliation axis; separation is `challenge_bound`, not `externally_anchored`.
->
-> </details>
->
-> <details><summary>Prior — Stage 5H · Verifiable Safety-claim Disclosure (<code>v2.43.0-stage-5h-vsd</code>)</summary>
->
-> Extends the Completeness Invariant to the **reproducibility tier of a safety claim**. Every claim carries
-> a **declared consequence** and a verifier-**computed reproducibility tier** (`restricted` → `controlled` →
-> `public`), and the verifier enforces the **Right-Scaling Law** — a claim may not outrun its evidence.
-> The headline is the **Evidential-Inversion Detector** (raw **312**): a threshold-crossing claim on
-> restricted evidence fails closed — Oxford's named _"evidential inversion: the most consequential claims
-> are the least reproducible"_ turned into an executable check. `warrant(tier)` is a **typed pair**
-> (`max_consequence`, `support_quality`) — a reviewer-only recompute is permanently typed `qualified`, never
-> laundered into `full`. Three signed objects (producer inventory / secure-review-host receipt / Simurgh
-> attestation; no object signs itself), six domain separators **all consumed by a named check**, external
-> pin + host registry from OUTSIDE the bundle. **No Undeclared Redaction** makes redactions typed IOUs;
-> **No Scope Substitution** binds the evaluated checkpoint (the _Maverick fixture_ — evaluated ≠ released).
-> Codes **300–315**, **10 Lean theorems + 1 lemma** (zero `sorry`), **75 unit + 11 K7 e2e**, a two-process
-> Lane-B review ceremony, JS↔Python↔browser parity, and beast inventions (Inversion Census, Right-Scaling
-> Distance, Disclosure Debt, Cross-Attestation Chaining). Directly the recomputable substrate a frontier
-> lab's RSP-v3.0 disclosure regime (Risk Reports + expert reviewers + gap docs) lacks. **Honest to its
-> limits:** VSD is **not category-creating** (Oxford defines the tiers, credited) — it is the executable,
-> TEE-free, byte-reproducible _per-claim instantiation_. **Real independent-party reproduction EXECUTED**
-> — two unaffiliated hosts (own keys, local + droplet) independently reran our disclosed claim's recipe,
-> reproduced its committed output `sha256:9f10dc0d…` **byte-for-byte**, and counter-signed R1 receipts with
-> keys distinct from the verifier; `real-disclosure/` verifies `raw 0`. Honest bounds: the producer-side
-> runs used **placeholder** data (not a real eval), and no real published-report claim is ingested yet;
-> reproducibility ≠ correctness.
->
-> </details>
->
-> <details><summary>Prior — Stage 5G · Verifiable Foreign Capture (<code>v2.42.0-stage-5g-vfc</code>)</summary>
->
-> Extends the Completeness Invariant to the **provenance of production**: for every foreign capture the
-> verifier computes a **typed producer/verifier Separation Strength** (`distinct_key_only` →
-> `challenge_bound` → `externally_anchored`) and **rejects unsupported upgrades** (raw **296**, the
-> headline). "We graded our
-> own homework" becomes impossible to _hide_: separation is a checkable rung, not a boolean. Three signed
-> objects (no object signs itself, domain-separated), external verifier pin (all three of key·subject·digest),
-> a precommitted **challenge receipt** (substitution-resistance, _not_ wall-clock freshness), and an offline
-> **Sigstore cross-binding** for rung-2 (Fulcio-certified key attests the producer key — ECDSA-Fulcio ≠
-> Ed25519-producer). Codes **283–299**, **10 Lean theorems + 1 lemma** (compile clean, zero `sorry`), **105
-> tests**, Lane B sidecar ceremony, JS↔Python parity, a **portable browser verifier** (raw:null, CSP
-> no-egress), the **Anchored-Subject Diversity Index** (surfaces producer monoculture), a **Homework Corpus**
-> (self-grading failures made impossible), and a standalone **foreign-capture pack** an external actor runs.
-> **Honest to its limits — and this one is load-bearing:** VFC is **not category-creating** (OVERT already
-> ships tiered independent-attestation levels + a pinned profile); it is the executable, byte-reproducible,
-> Lean-modelled _per-capture instantiation_. **Real foreign capture EXECUTED by an independent party** —
-> an unaffiliated team ran the pack on their own machines with their own keys (local + droplet, two runs
-> agree), and their capture verifies `raw 0` both tiers with the producer key **cryptographically distinct
-> from the verifier key**: the first evidence Simurgh did not generate. The CI-byte-stable evidence is a
-> synthetic demo (the real capture is verify-only, not rebuildable — we don't hold the foreign key); real
-> keyless-Sigstore rung-2 remains the → 9.5 lever. Rung-2 proves the key is _externally anchored_, **never**
-> human/organisational non-collusion.
->
-> </details>
->
-> <details><summary>Prior — Stage 5F · Verifiable Multi-detector Panel Attestation (<code>v2.41.0-stage-5f-vmp</code>)</summary>
-> The Completeness Invariant instantiated on a **detector panel**: one signed attestation binds N
-> precommitted released detectors (Prompt Guard 2 86M + Llama Guard 4 12B) to one shared committed
-> corpus, so every case discloses — for every member — a verdict **or a typed, policy-checkable
-> non-result**. Selective omission across detectors becomes impossible to hide; **no aggregate panel
-> verdict** is produced (panel completeness ≠ detection completeness). Six laws incl. **No Gerrymandered
-> Universe** — precommit the detector universe and publish the signed **Omission Lower Bound**
-> (`|universe| − |panel|`), the thing in-toto/C2PA structurally cannot express. Codes **268–282**,
-> **8 Lean theorems + 1 lemma** (compile clean, zero `sorry`), **99 tests**, Lane B two-process
-> ceremony, JS↔Python parity, a **BYO-Panel contract** (any team attests its own detectors offline),
-> and a **strict-vs-attestation-only** policy so a truthful incomplete panel stays verifiable while the
-> default CLI refuses to call it clean. **Real dual-detector capture EXECUTED** on live models —
-> Prompt Guard 2 86M (CPU) + Llama Guard 3 1B (Apple-Silicon MPS/fp16) captured offline, verifying
-> `raw 0` both tiers, with a real inter-detector disagreement (PG2 flags the injection `malicious`; the
-> content-safety guard says `allow`) surfaced as observation, never an aggregate. Honest to its limits:
-> the CI-byte-stable evidence is a synthetic demonstration; the 12B model on a GPU droplet and an
-> independent-party capture remain the → 10 levers.
-> </details>
->
-> <details><summary>Prior — Stage 5E · Verifiable Deployed-detector Attestation (<code>v2.40.0-stage-5e-vda</code>)</summary>
-> The first Simurgh stage whose evidence targets a **real, shipped, third-party detector** — Meta's
-> **Llama Prompt Guard 2 (86M)** — at a **pinned open-weights revision, captured offline with zero
-> vendor cooperation**. CI recomputes only arithmetic/geometry over a committed score table; the model
-> runs once, offline (the 5B split). **Executed grounding (real, not planned):** over 8 published
-> injection test vectors, **4 flagged at baseline and all 4 slip** under invisible combining-mark
-> obfuscation, with **de-obfuscation recovering the original score exactly** — a real score-inversion
-> defect; the other 4 are recorded as `baseline_missed` (full census, no cherry-pick). Evidence verifies
-> `raw 0` at both tiers, byte-stable, and reproduces **cross-architecture** on a fresh x86_64 host.
-> Inventions: the **score-inversion** ranking defect (two independent slip booleans, not a taxonomy) and
-> the **Evasion–Threshold Curve** (evasion as a signed function of the operating point, with its
-> false-positive cost). Laws: **No Straw Detector · No Tunable Excuse · No Forbidden Claim · No Silent
-> Slip**. Codes **255–267**, **8 Lean theorems + 1 lemma**, JS↔Python parity (40 facts). Honest to its
-> limits: a slip is a **chosen-threshold miss on a pinned revision — not a defeat** (the artifact is
-> structurally unable to assert otherwise); **offline open weights ≠ a hosted endpoint**; and the
-> droplet run is an **independent environment, not an independent party** (the → 10 lever: a real
-> external team running the BYO adapter). Hardened by an **external review (12 blocking findings applied)**.
-> </details>
+> 🆕 **Latest — Stage 5O · VSC: a bounded audit of a universe the auditor never sees (`v2.50.0-stage-5o-vsc`).**
+> A producer commits to a **private** evaluation universe; a **public Bitcoin beacon** issues a challenge it
+> could not predict; an offline verifier checks the opened cases, the disclosure budget and the detection
+> probability — without ever seeing the universe. **All thirteen sections frozen**, all six release
+> requirements discharged on executed evidence. New codes **420–463**.
+> Laws: **No Unbudgeted Unzip** (reopening a disclosed index costs nothing; the union must fit the
+> precommitted budget) · **No Rounded Verdict** (every normative probability is a canonical reduced
+> rational in exact integer arithmetic — the T3.5 detection floor is an executable **rejection**, and the
+> producer's presented number is checked against the verifier's, so a `9/10` label over a computed `4/5`
+> fails). **15 Lean theorems**, zero proof escapes — including `dualFormIdentity`, which proves the two
+> binomial product forms equal for all inputs and collapses the worst case from **293 ms / 153,459 digits
+> to 0.007 ms**. First **arithmetic** parity: Node ≡ stdlib Python ≡ a real headless browser agree on the
+> chosen form, term count, reduced rational bytes and floor verdict. **K7 net: 210/210 exports exercised**,
+> enforced by a generated census that fails if any export is untouched.
+> **Honesty boundary:** Lane A redactions **hide nothing** (its salts are a public function of a public key)
+> — a dictionary-attack fixture _passes_ as evidence of that signed non-claim; Lane B's confidentiality is
+> **audience-relative**; and the prior-art map declares itself **non-exhaustive**, recording that the Merkle
+> construction is RFC 6962's, the seed RFC 5869's and the detection probability the classical hypergeometric
+> identity. Stage 5O did not invent its ingredients.
 
 <details>
 <summary><b>Recent stages — 5D → 4W</b> (click to expand the prior rungs)</summary>
