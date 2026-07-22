@@ -98,18 +98,9 @@ function challengeSeedToken(challengeSubjectDigest, beaconValueHex) {
  * Build a valid producer bundle + accepted context that passes all eleven checks under the synthetic
  * validator. Returns raw canonical strings (the bundle Section 7 consumes) plus the parsed parts.
  */
-export function buildValidSection7Case({ k = 8, universeSize = 256, forgedSeedToken } = {}) {
-  const challengeSubjectDigest = tok(0x5c);
-  const beaconContract = {
-    schema_id: SCHEMA_IDS.beacon_contract,
-    schema_digest: REGISTRY[SCHEMA_IDS.beacon_contract],
-    profile_id: PROFILE_IDS.beacon_contract,
-    profile_digest: REGISTRY[PROFILE_IDS.beacon_contract],
-    beacon_source_id: BEACON_SOURCE_ID,
-    depth_convention_id: BEACON_DEPTH_CONVENTION_ID,
-    challenge_height: String(BEACON_HEIGHT),
-  };
-  const checkpoint = {
+/** The default synthetic checkpoint (not a real Bitcoin block; Lane C passes a real one instead). */
+export function syntheticCheckpoint() {
+  return {
     network_profile_id: MAINNET,
     checkpoint_height: String(BEACON_HEIGHT - 10),
     checkpoint_block_hash: tok(0xc1),
@@ -120,19 +111,40 @@ export function buildValidSection7Case({ k = 8, universeSize = 256, forgedSeedTo
     checkpoint_witness_key_fingerprint: tok(0xc3),
     stage5l_checkpoint_evidence_digest: tok(0xc4),
   };
+}
+
+export function buildValidSection7Case({
+  k = 8,
+  universeSize = 256,
+  forgedSeedToken,
+  checkpoint = syntheticCheckpoint(),
+  headers = [...FROZEN_HEADERS],
+  beaconValueHex = VERIFIED_FACT.beaconValue,
+  precommittedBeaconHeight = BEACON_HEIGHT,
+} = {}) {
+  const challengeSubjectDigest = tok(0x5c);
+  const beaconContract = {
+    schema_id: SCHEMA_IDS.beacon_contract,
+    schema_digest: REGISTRY[SCHEMA_IDS.beacon_contract],
+    profile_id: PROFILE_IDS.beacon_contract,
+    profile_digest: REGISTRY[PROFILE_IDS.beacon_contract],
+    beacon_source_id: BEACON_SOURCE_ID,
+    depth_convention_id: BEACON_DEPTH_CONVENTION_ID,
+    challenge_height: String(precommittedBeaconHeight),
+  };
   const beaconSuffix = {
     schema_id: SCHEMA_IDS.beacon_suffix,
     schema_digest: REGISTRY[SCHEMA_IDS.beacon_suffix],
     profile_id: PROFILE_IDS.beacon_suffix,
     profile_digest: REGISTRY[PROFILE_IDS.beacon_suffix],
     verified_closure_bitcoin_checkpoint_digest: checkpointInstanceToken(checkpoint),
-    headers: [...FROZEN_HEADERS],
+    headers: [...headers],
   };
   const context = mintSection6AcceptedContext({
     challenge_subject_digest: challengeSubjectDigest,
     anchor_schedule_profile_digest: tok(0xa5),
     network_profile_id: MAINNET,
-    precommitted_beacon_height: String(BEACON_HEIGHT),
+    precommitted_beacon_height: String(precommittedBeaconHeight),
     beacon_contract_digest: digestTokenOf(beaconContract),
     challenge_policy_digest: tok(0xb0),
     k,
@@ -141,8 +153,7 @@ export function buildValidSection7Case({ k = 8, universeSize = 256, forgedSeedTo
   });
   // A forged-seed case regenerates its indices from the FORGED seed, so checks 1-10 stay internally
   // consistent and only check 11 (expected != forged) fails.
-  const seedToken =
-    forgedSeedToken ?? challengeSeedToken(challengeSubjectDigest, VERIFIED_FACT.beaconValue);
+  const seedToken = forgedSeedToken ?? challengeSeedToken(challengeSubjectDigest, beaconValueHex);
   const seedRaw = decodeDigestToken(seedToken);
   const { sortedIndices } = deriveChallengeIndices({
     seed: seedRaw,

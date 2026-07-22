@@ -36,6 +36,7 @@ import {
 } from "./challengeArtifactShape.mjs";
 import { PROFILE_DESCRIPTORS, SCHEMA_DESCRIPTORS } from "./section7AuthorityDescriptors.mjs";
 import { generateAuthorityRegistry } from "../node/measureStage5oAuthorityRegistry.mjs";
+import { validateBitcoinMainnetSuffix } from "./bitcoinMainnetSuffixValidator.mjs";
 import { RAW_VERIFIER_CODES } from "../../stage4h/exitCodes.mjs";
 
 // ---- Frozen §7.2 first-failure order (the normative source is pair 22's descriptor rule).
@@ -312,3 +313,11 @@ export function makeEvaluateSection7Safe(verifySection7Relation) {
     }
   };
 }
+
+// ---- The PRODUCTION verifier: permanently wired to the real mainnet validator. Ordinary callers
+//      import THIS (two arguments) and can never select a weaker validator. The factory above exists
+//      only for the deterministic Lane A unit suite.
+export const verifySection7Relation = makeSection7Verifier({
+  validateBitcoinSuffix: validateBitcoinMainnetSuffix,
+});
+export const evaluateSection7Safe = makeEvaluateSection7Safe(verifySection7Relation);
