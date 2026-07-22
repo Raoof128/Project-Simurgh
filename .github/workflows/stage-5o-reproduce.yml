@@ -1,0 +1,47 @@
+name: stage-5o-reproduce
+# A NAMED, visible release gate for Stage 5O, deliberately not buried inside the large check.sh run:
+# it gets its own timeout and logs, and a failure is attributable to a specific gate rather than to
+# one enormous combined log.
+#
+# It runs the same script a reviewer runs locally, so "it reproduces" means the same thing in both
+# places. Browser parity is TRI-STATE inside that script: a runner with no Chrome reports an explicit
+# SKIP / NOT EXECUTED and never a PASS, because Node's WebCrypto is not evidence about a real
+# browser. The banked real-browser ceremony stands on its own recorded receipt.
+on:
+  push:
+    paths:
+      - "tools/simurgh-attestation/stage5o/**"
+      - "tests/unit/llmShield/stage5o/**"
+      - "tests/e2e/llmShield/stage5o/**"
+      - "proofs/stage5o/**"
+      - "scripts/reproduce-llm-shield-stage5o.sh"
+      - ".github/workflows/stage-5o-reproduce.yml"
+  pull_request:
+    paths:
+      - "tools/simurgh-attestation/stage5o/**"
+      - "tests/unit/llmShield/stage5o/**"
+      - "tests/e2e/llmShield/stage5o/**"
+      - "proofs/stage5o/**"
+      - "scripts/reproduce-llm-shield-stage5o.sh"
+      - ".github/workflows/stage-5o-reproduce.yml"
+jobs:
+  stage5o-reproduce:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "26"
+      - name: Install elan (pinned toolchain from proofs/stage5o/lean-toolchain)
+        run: |
+          curl -sSfL https://github.com/leanprover/elan/releases/latest/download/elan-x86_64-unknown-linux-gnu.tar.gz | tar xz
+          ./elan-init -y --default-toolchain "$(cat proofs/stage5o/lean-toolchain)"
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Stage 5O reproduce (unit + K7 export census + Lean + parity + generators + ledger)
+        run: bash scripts/reproduce-llm-shield-stage5o.sh
+      - name: Assert the K7 export census reported 100%
+        run: |
+          # Defence in depth: the reproduce script already fails on a red K7 net, but this makes the
+          # coverage claim its own visible, separately attributable gate.
+          node --test tests/e2e/llmShield/stage5o/k7AllFunctions.test.js

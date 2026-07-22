@@ -60,8 +60,18 @@ else
 fi
 
 echo "-- real-browser parity ceremony --"
-if bash "$S5O/browser/run-browser-parity.sh" > /tmp/s5o-browser.log 2>&1; then
+# The runner is TRI-STATE: 0 = real-browser PASS, 2 = no browser present (explicit SKIP), 1 = FAIL.
+# A SKIP must never fail this gate and must never be reported as a parity PASS, because Node's
+# WebCrypto is not evidence about a real browser. Only a genuine FAIL stops the reproduce.
+set +e
+bash "$S5O/browser/run-browser-parity.sh" > /tmp/s5o-browser.log 2>&1
+BROWSER_RC=$?
+set -e
+if [ "$BROWSER_RC" -eq 0 ]; then
   tail -2 /tmp/s5o-browser.log
+elif [ "$BROWSER_RC" -eq 2 ]; then
+  cat /tmp/s5o-browser.log
+  echo "browser parity: SKIPPED / NOT EXECUTED (not a PASS; the banked ceremony stands on its receipt)"
 else
   echo "FAIL: browser parity"; tail -20 /tmp/s5o-browser.log; exit 1
 fi
