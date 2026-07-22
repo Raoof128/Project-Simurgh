@@ -146,11 +146,113 @@ async function deriveIndices(seedHex, N, k, drawCeiling, drawDomain) {
   return { sorted: [...acc].sort((x, y) => x - y), draws: j };
 }
 
+// ---- Section 8 crypto surface (domains supplied by the caller; no literal owned here; u32be above).
+async function caseDigestHex(caseDomain, caseBytes) {
+  return bytesToHex(await sha256(concat(utf8(caseDomain), u32be(caseBytes.length), caseBytes)));
+}
+async function leafIdHex(leafDomain, epochBytes, index, saltBytes, caseDigestBytes) {
+  return bytesToHex(
+    await sha256(concat(utf8(leafDomain), epochBytes, u64be(index), saltBytes, caseDigestBytes))
+  );
+}
+async function caseLinkHex(linkDomain, caseDigestBytes, execBytes) {
+  return bytesToHex(await sha256(concat(utf8(linkDomain), caseDigestBytes, execBytes)));
+}
+async function merkleLeafBytes(leaf) {
+  return sha256(concat(new Uint8Array([0]), leaf));
+}
+async function merkleNodeBytes(l, r) {
+  return sha256(concat(new Uint8Array([1]), l, r));
+}
+function largestPow2Lt(n) {
+  let k = 1;
+  while (k * 2 < n) k *= 2;
+  return k;
+}
+async function mthBytes(leaves) {
+  if (leaves.length === 0) throw new Error("empty");
+  if (leaves.length === 1) return merkleLeafBytes(leaves[0]);
+  const k = largestPow2Lt(leaves.length);
+  return merkleNodeBytes(await mthBytes(leaves.slice(0, k)), await mthBytes(leaves.slice(k)));
+}
+async function mthHex(leavesHex) {
+  return bytesToHex(await mthBytes(leavesHex.map(hexToBytes)));
+}
+async function verifyInclusionHex(leafHex, path, rootHex) {
+  let node = await merkleLeafBytes(hexToBytes(leafHex));
+  for (const s of path) {
+    const sib = hexToBytes(s.sibling);
+    node = s.side === "right" ? await merkleNodeBytes(node, sib) : await merkleNodeBytes(sib, node);
+  }
+  return bytesToHex(node) === rootHex;
+}
+async function disclosurePolicyDigestHex(policyDomain, policy) {
+  return bytesToHex(await sha256(concat(utf8(policyDomain), utf8(canonicalJson(policy)))));
+}
+
 const VECTORS = {
   "meta": {
     "stage": "5o",
-    "surface": "section7_crypto",
+    "surface": "section7_and_8_crypto",
     "runtime_reference": "node"
+  },
+  "section8": {
+    "domains": {
+      "case_domain": "simurgh.vsc.case.v1",
+      "leaf_domain": "simurgh.vsc.leaf.v1",
+      "execution_case_link_domain": "simurgh.vsc.execution_case_link.v1",
+      "disclosure_policy_domain": "simurgh.vsc.disclosure_policy.v1"
+    },
+    "case": {
+      "case_bytes_hex": "7b2263617365223a317d",
+      "case_digest": "92d86d507844a435aafd5698587dcb9057bb959e3a42b31c8c35c1ddd5aa0c48"
+    },
+    "leaf": {
+      "epoch": "7777777777777777777777777777777777777777777777777777777777777777",
+      "index": 5,
+      "salt": "5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a",
+      "leaf_id": "4c0341f46ebc520792eeeb4493b4ee6ee4dd331e22c6195209623d61e91f02c2"
+    },
+    "case_link": {
+      "execution_record_digest": "e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5",
+      "commitment": "b9cb8a8f170515bd69e9dcb52511a17e6e12187e0d93b4173ad979dd6f768ae9"
+    },
+    "merkle": {
+      "leaves": [
+        "0101010101010101010101010101010101010101010101010101010101010101",
+        "0202020202020202020202020202020202020202020202020202020202020202",
+        "0303030303030303030303030303030303030303030303030303030303030303",
+        "0404040404040404040404040404040404040404040404040404040404040404",
+        "0505050505050505050505050505050505050505050505050505050505050505"
+      ],
+      "root": "c51042bb8b9d81dfc115ef99d0e2cecf1954cfc078d70032d187b46615f01b90",
+      "index": 3,
+      "path": [
+        {
+          "sibling": "acaa04663a8547a2f70c60cc18f9378796b13c4f9a08f70d6adae662365b30c6",
+          "side": "left"
+        },
+        {
+          "sibling": "3a066e0f40c6a1981ebfa60d2411625d0517ae22c2fc8c7c1784ff8a75c78565",
+          "side": "left"
+        },
+        {
+          "sibling": "f3ab555d06a67b08ab25039fdbe2a6fcb305c83bc165492ce81d3dea13ec1fbf",
+          "side": "right"
+        }
+      ]
+    },
+    "disclosure_policy": {
+      "policy": {
+        "max_opening_package_transport_bytes": 1048576,
+        "max_opening_package_canonical_bytes": 524288,
+        "max_presented_history_transport_bytes": 1048576,
+        "max_presented_history_canonical_bytes": 524288,
+        "max_presented_history_entries": 1024,
+        "max_cumulative_disclosed_indices": 64
+      },
+      "digest": "aa5216a32ad0c671e83d8dcbc59bc0fdcffa83a52e5fcb08493f8bfcca8b6d72"
+    }
   },
   "domains": {
     "seed_domain": "simurgh.vsc.challenge_seed_digest_domain.v1",
@@ -1207,8 +1309,17 @@ async function run() {
     eq("btc/display", await blockHashDisplayHex(bh.header), bh.display);
     eq("btc/target", compactTargetToBig(bh.nbits_u32).toString(10), bh.target_decimal);
   }
+  const s8 = V.section8, d8 = s8.domains;
+  const cb = hexToBytes(s8.case.case_bytes_hex);
+  eq("s8/case", await caseDigestHex(d8.case_domain, cb), s8.case.case_digest);
+  const cd8 = hexToBytes(s8.case.case_digest);
+  eq("s8/leaf", await leafIdHex(d8.leaf_domain, hexToBytes(s8.leaf.epoch), s8.leaf.index, hexToBytes(s8.leaf.salt), cd8), s8.leaf.leaf_id);
+  eq("s8/link", await caseLinkHex(d8.execution_case_link_domain, cd8, hexToBytes(s8.case_link.execution_record_digest)), s8.case_link.commitment);
+  eq("s8/merkle", await mthHex(s8.merkle.leaves), s8.merkle.root);
+  eq("s8/inclusion", await verifyInclusionHex(s8.merkle.leaves[s8.merkle.index], s8.merkle.path, s8.merkle.root), true);
+  eq("s8/policy", await disclosurePolicyDigestHex(d8.disclosure_policy_domain, s8.disclosure_policy.policy), s8.disclosure_policy.digest);
   document.getElementById("result").textContent =
-    fails.length ? "RESULT:FAIL " + fails.join("; ") : "RESULT:PASS " + V.registry.length + " registry + hkdf + sampler + bitcoin";
+    fails.length ? "RESULT:FAIL " + fails.join("; ") : "RESULT:PASS §7 (registry+hkdf+sampler+bitcoin) + §8 (case+leaf+link+merkle+policy)";
 }
 run().catch(e => { document.getElementById("result").textContent = "RESULT:FAIL " + e.message; });
 

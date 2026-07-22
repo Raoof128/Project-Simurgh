@@ -105,3 +105,38 @@ test("browser parity: negatives reproduce (uppercase, malformed target, mutated 
   assert.deepEqual(sorted, neg.one_bit_seed_mutation_indices);
   assert.notDeepEqual(sorted, V.sampler.indices);
 });
+
+test("browser parity: §8 crypto reproduces (case / leaf / case-link / Merkle / disclosure policy)", async () => {
+  const s8 = V.section8;
+  const d = s8.domains;
+  const cb = P.hexToBytes(s8.case.case_bytes_hex);
+  assert.equal(await P.caseDigestHex(d.case_domain, cb), s8.case.case_digest);
+  const cdBytes = P.hexToBytes(s8.case.case_digest);
+  assert.equal(
+    await P.leafIdHex(
+      d.leaf_domain,
+      P.hexToBytes(s8.leaf.epoch),
+      s8.leaf.index,
+      P.hexToBytes(s8.leaf.salt),
+      cdBytes
+    ),
+    s8.leaf.leaf_id
+  );
+  assert.equal(
+    await P.caseLinkHex(
+      d.execution_case_link_domain,
+      cdBytes,
+      P.hexToBytes(s8.case_link.execution_record_digest)
+    ),
+    s8.case_link.commitment
+  );
+  assert.equal(await P.mthHex(s8.merkle.leaves), s8.merkle.root);
+  assert.equal(
+    await P.verifyInclusionHex(s8.merkle.leaves[s8.merkle.index], s8.merkle.path, s8.merkle.root),
+    true
+  );
+  assert.equal(
+    await P.disclosurePolicyDigestHex(d.disclosure_policy_domain, s8.disclosure_policy.policy),
+    s8.disclosure_policy.digest
+  );
+});

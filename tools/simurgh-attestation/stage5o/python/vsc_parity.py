@@ -74,6 +74,39 @@ def framed(domain, body):
     return len(d).to_bytes(2, "big") + d + len(b).to_bytes(4, "big") + b
 
 
+def merkle_leaf(v):
+    return sha256(b"\x00" + v)
+
+
+def merkle_node(left, right):
+    return sha256(b"\x01" + left + right)
+
+
+def largest_pow2_lt(n):
+    k = 1
+    while k * 2 < n:
+        k *= 2
+    return k
+
+
+def mth(leaves):
+    n = len(leaves)
+    if n == 0:
+        raise ValueError("empty")
+    if n == 1:
+        return merkle_leaf(leaves[0])
+    k = largest_pow2_lt(n)
+    return merkle_node(mth(leaves[:k]), mth(leaves[k:]))
+
+
+def verify_inclusion(leaf, path, root):
+    node = merkle_leaf(leaf)
+    for step in path:
+        sib = bytes.fromhex(step["sibling"])
+        node = merkle_node(node, sib) if step["side"] == "right" else merkle_node(sib, node)
+    return node == root
+
+
 def derive_indices(seed_hex, N, k, draw_ceiling, draw_domain):
     seed = bytes.fromhex(seed_hex)
     domain = draw_domain.encode("utf-8")
@@ -172,6 +205,40 @@ def main():
     nbits = int.from_bytes(raw[72:76], "little")
     pow_ok = int.from_bytes(dsha256(raw)[::-1], "big") <= compact_target(nbits)
     check("neg/mutated_nonce_pow", pow_ok, neg["mutated_nonce_pow_ok"])
+
+    # Section 8 crypto surface
+    s8 = v["section8"]
+    dom = s8["domains"]
+    cb = bytes.fromhex(s8["case"]["case_bytes_hex"])
+    cd = sha256(dom["case_domain"].encode("utf-8") + len(cb).to_bytes(4, "big") + cb)
+    check("s8/case_digest", cd.hex(), s8["case"]["case_digest"])
+    lf = s8["leaf"]
+    lid = sha256(
+        dom["leaf_domain"].encode("utf-8")
+        + bytes.fromhex(lf["epoch"])
+        + int(lf["index"]).to_bytes(8, "big")
+        + bytes.fromhex(lf["salt"])
+        + cd
+    )
+    check("s8/leaf_id", lid.hex(), lf["leaf_id"])
+    cl = s8["case_link"]
+    link = sha256(
+        dom["execution_case_link_domain"].encode("utf-8")
+        + cd
+        + bytes.fromhex(cl["execution_record_digest"])
+    )
+    check("s8/case_link", link.hex(), cl["commitment"])
+    mk = s8["merkle"]
+    leaves = [bytes.fromhex(x) for x in mk["leaves"]]
+    check("s8/merkle_root", mth(leaves).hex(), mk["root"])
+    check(
+        "s8/merkle_inclusion",
+        verify_inclusion(leaves[mk["index"]], mk["path"], bytes.fromhex(mk["root"])),
+        True,
+    )
+    dp = s8["disclosure_policy"]
+    dpd = sha256(dom["disclosure_policy_domain"].encode("utf-8") + canonical(dp["policy"]).encode("utf-8"))
+    check("s8/disclosure_policy_digest", dpd.hex(), dp["digest"])
 
     if fails:
         print("PARITY FAIL (%d):" % len(fails))

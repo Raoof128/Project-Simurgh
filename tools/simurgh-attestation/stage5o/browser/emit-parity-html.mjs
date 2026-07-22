@@ -48,8 +48,17 @@ async function run() {
     eq("btc/display", await blockHashDisplayHex(bh.header), bh.display);
     eq("btc/target", compactTargetToBig(bh.nbits_u32).toString(10), bh.target_decimal);
   }
+  const s8 = V.section8, d8 = s8.domains;
+  const cb = hexToBytes(s8.case.case_bytes_hex);
+  eq("s8/case", await caseDigestHex(d8.case_domain, cb), s8.case.case_digest);
+  const cd8 = hexToBytes(s8.case.case_digest);
+  eq("s8/leaf", await leafIdHex(d8.leaf_domain, hexToBytes(s8.leaf.epoch), s8.leaf.index, hexToBytes(s8.leaf.salt), cd8), s8.leaf.leaf_id);
+  eq("s8/link", await caseLinkHex(d8.execution_case_link_domain, cd8, hexToBytes(s8.case_link.execution_record_digest)), s8.case_link.commitment);
+  eq("s8/merkle", await mthHex(s8.merkle.leaves), s8.merkle.root);
+  eq("s8/inclusion", await verifyInclusionHex(s8.merkle.leaves[s8.merkle.index], s8.merkle.path, s8.merkle.root), true);
+  eq("s8/policy", await disclosurePolicyDigestHex(d8.disclosure_policy_domain, s8.disclosure_policy.policy), s8.disclosure_policy.digest);
   document.getElementById("result").textContent =
-    fails.length ? "RESULT:FAIL " + fails.join("; ") : "RESULT:PASS " + V.registry.length + " registry + hkdf + sampler + bitcoin";
+    fails.length ? "RESULT:FAIL " + fails.join("; ") : "RESULT:PASS §7 (registry+hkdf+sampler+bitcoin) + §8 (case+leaf+link+merkle+policy)";
 }
 run().catch(e => { document.getElementById("result").textContent = "RESULT:FAIL " + e.message; });
 `;

@@ -125,3 +125,47 @@ export async function deriveIndices(seedHex, N, k, drawCeiling, drawDomain) {
   if (acc.length < k) throw new Error("draw_ceiling_exhausted");
   return { sorted: [...acc].sort((x, y) => x - y), draws: j };
 }
+
+// ---- Section 8 crypto surface (domains supplied by the caller; no literal owned here; u32be above).
+export async function caseDigestHex(caseDomain, caseBytes) {
+  return bytesToHex(await sha256(concat(utf8(caseDomain), u32be(caseBytes.length), caseBytes)));
+}
+export async function leafIdHex(leafDomain, epochBytes, index, saltBytes, caseDigestBytes) {
+  return bytesToHex(
+    await sha256(concat(utf8(leafDomain), epochBytes, u64be(index), saltBytes, caseDigestBytes))
+  );
+}
+export async function caseLinkHex(linkDomain, caseDigestBytes, execBytes) {
+  return bytesToHex(await sha256(concat(utf8(linkDomain), caseDigestBytes, execBytes)));
+}
+async function merkleLeafBytes(leaf) {
+  return sha256(concat(new Uint8Array([0]), leaf));
+}
+async function merkleNodeBytes(l, r) {
+  return sha256(concat(new Uint8Array([1]), l, r));
+}
+function largestPow2Lt(n) {
+  let k = 1;
+  while (k * 2 < n) k *= 2;
+  return k;
+}
+async function mthBytes(leaves) {
+  if (leaves.length === 0) throw new Error("empty");
+  if (leaves.length === 1) return merkleLeafBytes(leaves[0]);
+  const k = largestPow2Lt(leaves.length);
+  return merkleNodeBytes(await mthBytes(leaves.slice(0, k)), await mthBytes(leaves.slice(k)));
+}
+export async function mthHex(leavesHex) {
+  return bytesToHex(await mthBytes(leavesHex.map(hexToBytes)));
+}
+export async function verifyInclusionHex(leafHex, path, rootHex) {
+  let node = await merkleLeafBytes(hexToBytes(leafHex));
+  for (const s of path) {
+    const sib = hexToBytes(s.sibling);
+    node = s.side === "right" ? await merkleNodeBytes(node, sib) : await merkleNodeBytes(sib, node);
+  }
+  return bytesToHex(node) === rootHex;
+}
+export async function disclosurePolicyDigestHex(policyDomain, policy) {
+  return bytesToHex(await sha256(concat(utf8(policyDomain), utf8(canonicalJson(policy)))));
+}

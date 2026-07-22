@@ -18,9 +18,20 @@ import {
 } from "../core/bitcoinMainnetSuffixValidator.mjs";
 import { generateAuthorityRegistry } from "../node/measureStage5oAuthorityRegistry.mjs";
 import { PROFILE_DESCRIPTORS, SCHEMA_DESCRIPTORS } from "../core/section7AuthorityDescriptors.mjs";
+import {
+  caseDigest,
+  leafId,
+  caseLinkCommitment,
+  CASE_DOMAIN,
+  LEAF_DOMAIN,
+  EXECUTION_CASE_LINK_DOMAIN,
+} from "../core/leafConstruction.mjs";
+import { MTH, buildInclusionPath } from "../core/merkleTree.mjs";
+import { disclosurePolicyDigest, DISCLOSURE_POLICY_DOMAIN } from "../core/disclosurePolicy.mjs";
 
 const sha256 = (buf) => createHash("sha256").update(buf).digest();
 const hex = (s) => Buffer.from(s, "hex");
+const R = (fill) => Buffer.alloc(32, fill);
 
 const PAIR22 = PROFILE_DESCRIPTORS.challenge_protocol_profile;
 const SEED_RULE = PAIR22.rules.find((r) => r.rule_id === "challenge_seed");
@@ -196,8 +207,53 @@ try {
   exhaustionThrows = true;
 }
 
+// ---- Section 8 crypto surface: case_digest, leaf_id, case_link, Merkle, disclosure_policy_digest.
+const caseBytes = Buffer.from(canonicalJson({ case: 1 }), "utf8");
+const s8CaseDigest = caseDigest(caseBytes);
+const s8LeafId = leafId(R(0x77), 5, R(0x5a), s8CaseDigest);
+const s8Link = caseLinkCommitment(s8CaseDigest, R(0xe5));
+const s8Leaves = [1, 2, 3, 4, 5].map((f) => R(f));
+const s8Root = MTH(s8Leaves);
+const s8Path = buildInclusionPath(s8Leaves, 3);
+const s8Policy = {
+  max_opening_package_transport_bytes: 1048576,
+  max_opening_package_canonical_bytes: 524288,
+  max_presented_history_transport_bytes: 1048576,
+  max_presented_history_canonical_bytes: 524288,
+  max_presented_history_entries: 1024,
+  max_cumulative_disclosed_indices: 64,
+};
+
+const section8 = {
+  domains: {
+    case_domain: CASE_DOMAIN,
+    leaf_domain: LEAF_DOMAIN,
+    execution_case_link_domain: EXECUTION_CASE_LINK_DOMAIN,
+    disclosure_policy_domain: DISCLOSURE_POLICY_DOMAIN,
+  },
+  case: { case_bytes_hex: caseBytes.toString("hex"), case_digest: s8CaseDigest.toString("hex") },
+  leaf: {
+    epoch: R(0x77).toString("hex"),
+    index: 5,
+    salt: R(0x5a).toString("hex"),
+    leaf_id: s8LeafId.toString("hex"),
+  },
+  case_link: {
+    execution_record_digest: R(0xe5).toString("hex"),
+    commitment: s8Link.toString("hex"),
+  },
+  merkle: {
+    leaves: s8Leaves.map((l) => l.toString("hex")),
+    root: s8Root.toString("hex"),
+    index: 3,
+    path: s8Path.map((s) => ({ sibling: s.sibling.toString("hex"), side: s.side })),
+  },
+  disclosure_policy: { policy: s8Policy, digest: disclosurePolicyDigest(s8Policy) },
+};
+
 const vectors = {
-  meta: { stage: "5o", surface: "section7_crypto", runtime_reference: "node" },
+  meta: { stage: "5o", surface: "section7_and_8_crypto", runtime_reference: "node" },
+  section8,
   domains: {
     seed_domain: SEED_DOMAIN,
     draw_domain: DRAW_DOMAIN,
