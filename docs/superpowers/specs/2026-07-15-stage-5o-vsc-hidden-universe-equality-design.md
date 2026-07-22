@@ -1,7 +1,9 @@
 # Stage 5O — VSC: Hidden-Universe Equality (design)
 
-**Status:** Sections **1–9 FROZEN** — Section 1 `a1e2e6d1`, Section 2 `0e26c361`, Section 3 `e8dc0a77`, Section 4 `cb67542f`, Section 5 `b08554ed`, Section 6 `fa34242d`, Section 7 `dd7a2513` (A34), Section 8 `396eea24` (A35), Section 9 `1d8dc862` (A36). **Sections 7, 8 and 9 are FROZEN.** The §7 contract (§7.1–§7.3) is backed by a working, tested verifier: the authority registry, the revised §7.3.1 shapes + regenerated maxima, the pure eleven-check prefix-ordered relation, `evaluateSection7Safe`, the RFC 5869 HKDF seed, the frozen index sampler, and a real Bitcoin-mainnet suffix validator. Evidence is in three lanes, all green: **Lane A** (the full sixteen-row `S7.*` matrix over a sealed synthetic validator — not real PoW), **Lane B** (the real validator over a committed real mainnet chain, genesis + blocks 1–8), and **Lane C** (the exported two-argument verifier + real validator + a real producer bundle → ACCEPT, real check-6 break → symbolic `s7_chain_invalid`). A **cross-runtime crypto parity lane** reproduces every value that reaches a §7 verdict byte-for-byte in Node, stdlib Python, and a real headless browser (WebCrypto). The four §7.3.8 freeze-review items are all **RESOLVED** and Section 7 is frozen under A34 (freeze gate + browser-parity ceremony receipt + invalidation rule at §7's end). §7 code lives in `tools/simurgh-attestation/stage5o/` (not `src/`). Remaining **stage-release** blockers (separate from §7): §10 raw-code allocation and §11 Lean. **Section 8 is FROZEN** — case-only opening + cumulative-disclosure accounting, the sealed §7→§8 handoff, and the "No Unbudgeted Unzip" budget, frozen under A35 (freeze gate + browser-parity ceremony receipt + invalidation rule at §8.10). **Section 9 is FROZEN** — exact rational probability encoding: the executable T3.5 detection floor, producer claim-value verification, and bounded exact arithmetic, frozen under A36 (freeze gate + arithmetic-parity ceremony receipt + invalidation rule at §9.10). It mutates no frozen surface — no A34 or A35 rerun. **Sections 10–13 DRAFT scaffolds.**
+**Status:** **ALL THIRTEEN SECTIONS FROZEN** — Section 1 `a1e2e6d1`, Section 2 `0e26c361`, Section 3 `e8dc0a77`, Section 4 `cb67542f`, Section 5 `b08554ed`, Section 6 `fa34242d`, Section 7 `dd7a2513` (A34), Section 8 `396eea24` (A35), Section 9 `1d8dc862` (A36), Section 10 `<F10>` (A38), Section 11 `<F11>` (A39), Section 12 `<F12>` (A40), Section 13 `<F13>` (A41). The §7 contract (§7.1–§7.3) is backed by a working, tested verifier: the authority registry, the revised §7.3.1 shapes + regenerated maxima, the pure eleven-check prefix-ordered relation, `evaluateSection7Safe`, the RFC 5869 HKDF seed, the frozen index sampler, and a real Bitcoin-mainnet suffix validator. Evidence is in three lanes, all green: **Lane A** (the full sixteen-row `S7.*` matrix over a sealed synthetic validator — not real PoW), **Lane B** (the real validator over a committed real mainnet chain, genesis + blocks 1–8), and **Lane C** (the exported two-argument verifier + real validator + a real producer bundle → ACCEPT, real check-6 break → symbolic `s7_chain_invalid`). A **cross-runtime crypto parity lane** reproduces every value that reaches a §7 verdict byte-for-byte in Node, stdlib Python, and a real headless browser (WebCrypto). The four §7.3.8 freeze-review items are all **RESOLVED** and Section 7 is frozen under A34 (freeze gate + browser-parity ceremony receipt + invalidation rule at §7's end). §7 code lives in `tools/simurgh-attestation/stage5o/` (not `src/`). Remaining **stage-release** blockers (separate from §7): §10 raw-code allocation and §11 Lean. **Section 8 is FROZEN** — case-only opening + cumulative-disclosure accounting, the sealed §7→§8 handoff, and the "No Unbudgeted Unzip" budget, frozen under A35 (freeze gate + browser-parity ceremony receipt + invalidation rule at §8.10). **Section 9 is FROZEN** — exact rational probability encoding: the executable T3.5 detection floor, producer claim-value verification, and bounded exact arithmetic (A36). **Section 10 is FROZEN** — the sole numeric allocator, codes 420-463 over 44 symbolic reasons, table closed (A38). **Section 11 is FROZEN** — 15 Lean theorems, zero proof escapes (A39). **Section 12 is FROZEN and its capsule requirement DISCHARGED** — six-section registry, one recomputed package subject, real Stage 4T capsule with a verified redacted Lane B view (A40). **Section 13 is FROZEN** — pinned prior-art and novelty source map, non-exhaustive by declaration (A41).
 **Release is BLOCKED by design:** `release_required_bindings` carries the unresolved `section_6_anchored_presented_census_closure` (§5.9) and, since **A24**, `section_10_evidence_attack_raw_code_allocation` (§4.10) — the stage's own `evidence_attack_fixtures` raw-code obligation, which had no owner, discharger or status while **zero** codes existed in the reserved band. A green Section 5 freeze does **not** mean anti-equivocation exists, and per **A13** full anti-equivocation is not coming: Stage 4T binds views to a held capsule, never excluding an unseen one, so `not_proof_of_global_census_closure_uniqueness_without_exclusion_witnesses` is a **permanent** ceiling.
+**Amendments A38-A41 folded (freeze Sections 10, 11, 12 and 13) — `<F10>`, `<F11>`, `<F12>`, `<F13>`.** With every remaining design and implementation gate satisfied, the last four sections are **FROZEN** and **all thirteen sections of Stage 5O are frozen**. **A38 (§10)** freezes the sole numeric allocator: symbolic reasons stay owned by their originating sections, 44 reasons map bijectively to codes 420-463, Stage 4T's 148/149 are reused unchanged, raw 29 stays reserved for unexpected internal failure, and the table is closed. **A39 (§11)** freezes the Lean layer: 15 theorems, zero proof escapes, no project-defined axiom, replayable under a pinned toolchain — and it proves the encoded relations under the stage's registered assumptions, never the cryptographic primitives themselves. **A40 (§12)** freezes the assembled-package capsule: an exact six-section registry including `census_closure`, no mandatory narrative, one package subject **recomputed** by every section from its own payload, verifier-minted input-bound receipts, and the real Stage 4T capsule with a verified redacted Lane B view. **A41 (§13)** freezes the pinned prior-art and novelty source map, whose most valuable output is negative: the Merkle construction is RFC 6962's, the seed is RFC 5869's, the detection probability is classical, and the capsule semantics are Stage 4T's. **Freeze-invalidation rule:** _any change to an allocated code or the allocation constitution, to a Lean theorem or its binding census, to the package registry, subject, receipts, lane profile or capsule adapter, or to a source-map entry, claim or gate rule, requires a normative amendment and a complete refreeze of the affected section, rerunning its matrix, its generators and censuses, the Lean replay, cross-runtime parity, and the full repository suite._ **Both deferred discharges are ruled DISCHARGED** (§10's raw-code allocation, §12's Stage 4T package capsule) on executed evidence, not on description. **No blade, law, evidence predicate, release predicate, ceiling, or socket changed** — A38-A41 record the freeze of already-executed contracts.
+
 **Amendment A37 folded (amends frozen Section 5's A14 statement, and rules Section 12's composition) — `<A37_HASH>`.** A14's temporal argument — the argument that moved the Stage 4T capsule out of the prechallenge subject and into Section 12 — named the post-challenge material as _"openings, receipts, ledger, narrative"_. That enumeration is now wrong in two directions and cannot be silently corrected inside a Section 12 draft, because it is the load-bearing sentence of a **frozen** amendment. **`narrative` is dropped**: it has no schema, no producer and no authority anywhere in Stage 5O, and Stage **4W (VSN)** already owns span-typed narrative machinery — defining a second narrative here would put one construction between two chairs, the exact A3 violation A17's ownership map exists to prevent. A reserved-but-empty narrative section would be decorative authority, and an _unnamed_ mandatory section is worse: it is a silently-required capsule section that no producer can build and no verifier can check. **The enumeration was also incomplete**: it omitted the accepted challenge evidence, the accepted probability claim, and the `stage5o/census_closure` keyed section that §6/A17 had **already frozen** under `package_closure_core_section_schema` for exactly this adapter. The corrected temporal statement is frozen as:
 
 > The assembled post-challenge package contains the verifier-projected census closure, accepted challenge evidence, accepted case openings, the valid presented disclosure history, the accepted probability claim, and verifier-minted acceptance receipts. It contains **no** mandatory narrative section. Narrative remains owned by Stage 4W and may enter Stage 5O only through a future normative amendment carrying a real producer, schema and authority.
@@ -4720,7 +4722,7 @@ _The suite receipt records **254**, not the 253 quoted in the freeze ruling: the
 
 Per A36, any future amendment to a frozen §9 surface must rerun the complete `S9.*` matrix, the bounded-arithmetic compatibility proof, the dual-form identity census, Node/Python arithmetic parity, the real-browser arithmetic ceremony, all §9 censuses, and the complete Stage 5O suite before refreezing.
 
-## Section 10 — Raw-code allocation and frozen first-failure ordering (DRAFT — design ruled, implementation in progress)
+## Section 10 — Raw-code allocation and frozen first-failure ordering (FROZEN `<F10>`)
 
 **Purpose.** Allocate **every** Stage 5O evidence-attack raw code — one code per semantic failure class — with a frozen deterministic first-failure order, in the reserved band **from 420** (per A24, zero were allocated before this section).
 
@@ -4811,6 +4813,27 @@ A plain grep cannot draw that line — it counts names and cannot read context, 
 
 `FREEZE GATE` — Section 10 may come to a freeze ruling when: the allocation is generated from the frozen reason orders and matches this contract; the exit-ledger parity census is green in every clause; the affected golden is mechanically regenerated and the diff is proved purely additive; no prior-stage code moved and the full repository suite is green at or above its recorded baseline; the `retired_identifier_active_use_rejection` gate is implemented and its injection self-test rejects. Freezing §10 does **not** discharge its release blocker — §10.2's closure rule defers that to §12's freeze — and §11 Lean remains a separate release blocker.
 
+**The gate is SATISFIED and Section 10 is FROZEN (ruled 2026-07-22, folded as A38).**
+
+```text
+Section 10 FROZEN — <F10>
+
+Freeze evidence:
+- code-table digest ............ a036a8d7bbb3b5f20b7255a3870d773381d8b2832178f94c3aa746172d455b69
+- allocation-generator commit .. 09f2f77e (bands 420-456), 6dab294e (band 457-463)
+- highest allocated code ....... 463
+- symbolic reasons / codes ..... 44 / 44
+- unmapped-reason count ........ 0
+- collision count .............. 0
+- allocation constitution ...... PASS (bijection reason <-> code, contiguous disjoint sub-bands,
+                                 numeric order == frozen first-failure order, 0 never a rejection)
+- Stage 4T 148/149 ............. reused unchanged, no alias
+- raw 29 ....................... reserved for unexpected internal failure, outside the band
+- prior-stage codes ............ 0..419 unmoved; all three consumers purely additive
+```
+
+Section 10 owns numbers only: symbolic reasons remain owned by their originating sections, and every §7, §8, §9 and §12 reason resolves through this one machine-checked table.
+
 ### Section 10 open items — A24 gate-hardening acceptance criteria
 
 **These are acceptance criteria on how Section 10 builds its gates. They are NOT requirements**: they mint no ledger entry, take no owner/discharger pair, and block no release on their own. A24's `section_10_evidence_attack_raw_code_allocation` already blocks release; these constrain the gate that discharges it.
@@ -4850,7 +4873,7 @@ retired identifier mentioned HISTORICALLY  !=  retired identifier used NORMATIVE
 
 _Logged against Section 10 rather than folded into §4.10: A24's discharge conditions are frozen Section 4 text, and an acceptance criterion written there would change frozen normative text for a gate that does not yet exist. This is roadmap, not contract._
 
-## Section 11 — Conditional Lean model (DRAFT — implemented, freeze-ready)
+## Section 11 — Conditional Lean model (FROZEN `<F11>`)
 
 **Purpose.** Machine-checked Lean theorems for Stage 5O's load-bearing properties — zero proof holes, no user axioms — following the Stage-4/5 Lean-core precedent. Core Lean 4 only, no mathlib. The proof lives at `proofs/stage5o/Vsc.lean` and is type-checked in CI alongside every prior stage's core.
 
@@ -4883,7 +4906,28 @@ A proof that drifts from the code proves something about a program nobody runs �
 
 `FREEZE GATE` — Section 11 may come to a freeze ruling when: the proof type-checks under the pinned toolchain with zero errors; the hole and axiom guards are clean; the binding census is green in every clause; and CI type-checks it alongside the prior cores. Freezing §11 does **not** discharge §10's release blocker, which §10.2 defers to §12's freeze.
 
-## Section 12 — Evidence lanes and the assembled-package capsule (DRAFT — design ruled, implementation in progress)
+**Section 11 is FROZEN (ruled 2026-07-22, folded as A39).**
+
+```text
+Section 11 FROZEN — <F11>
+
+Freeze evidence:
+- Lean version ................. 4.15.0
+- toolchain digest ............. aff3a276fcd1daa6f311e07baf168d5c0c89a3ddad4cd4e8de3e2ec779504e46
+- theorem-source digest ........ 6b84c1845c06ed7e42c7b25fd8b2b60a07d81f37dbfcca2f0ecc3d53eafc2139
+- theorem count ................ 15
+- replay command ............... lean proofs/stage5o/Vsc.lean
+- replay result ................ zero errors, zero warnings
+- proof-escape census .......... none (no sorry, no admit, no project-defined axiom)
+- obligation map ............... spine/codes bound to §7/§8/§9/§10 by the binding census
+```
+
+**Trusted foundation versus new assumption.** Section 11 relies on Lean's standard kernel and core
+library; it introduces **no** project-defined axiom. It does **not** prove the cryptographic
+primitives secure — it proves the encoded relations under the stage's registered assumptions and
+definitions, with each hash modelled as a deterministic function.
+
+## Section 12 — Evidence lanes and the assembled-package capsule (FROZEN `<F12>`)
 
 **Purpose.** The evidence lanes, and the Stage 4T capsule over the **assembled** evidence package — the audience-varying material 4T actually protects, which cannot exist before the challenge.
 
@@ -5026,7 +5070,35 @@ One fixture is deliberately affirmative: a **Lane A dictionary attack** that gue
 
 **Section 12 does not empty the release ledger.** After §12 and §10, **Section 11 Lean and Section 13 remain release blockers** — §11 is implemented and type-checked but not yet frozen, and §13 is not designed. §12 discharges its own obligation and unblocks §10's deferred discharge; it makes no other obligation evaporate.
 
-## Section 13 — Prior-art and novelty source map (DRAFT — implemented, freeze-ready)
+**The gates are SATISFIED, Section 12 is FROZEN (ruled 2026-07-22, folded as A40), and
+`section_12_stage4t_presented_evidence_package_capsule` is DISCHARGED.**
+
+```text
+Section 12 FROZEN — <F12>
+
+Freeze evidence:
+- mandatory registry ........... 6 sections, census_closure INCLUDED, no mandatory narrative
+- registry digest .............. ef5ae87e55bfe5a4ddc46b97b037ecad14b12d9218e69f1cd0b33ee0f12c8efd
+- package schema id ............ simurgh.vsc.presented_evidence_package.v1
+- symbolic reasons ............. 7 (numbers allocated by §10 at 457-463)
+- package subject .............. all six sections RECOMPUTE one subject from their own payloads
+- receipts ..................... verifier-minted and input-bound; a rejection never assembles
+- capsule ...................... built with Stage 4T sectionCommitment/capsuleRoot, root kept in
+                                 Stage 4T's token encoding, propagated unchanged
+- Lane B redacted view ......... VERIFIES (a genuinely redacted section, salt withheld)
+- 148 / 149 .................... propagate unchanged, no alias
+- lane enum .................... exactly two; dishonest-producer is a test corpus, never a lane
+```
+
+**Discharge evidence** is the real construction and verification of the capsule — an accepted Lane B
+package, a valid redacted Lane B view, and the expected 148/149 failures — **not** the fact that
+this section describes the adapter.
+
+**The audience-relative claim is preserved verbatim:** _Lane B can provide computational resistance
+to offline content guessing only for an audience lacking the redacted section's fresh salt and
+value, under the registered assumptions and the salt-custody premise._
+
+## Section 13 — Prior-art and novelty source map (FROZEN `<F13>`)
 
 **Purpose.** A pinned prior-art and novelty source map — per entry: title, version/date, URL, retrieval date, exact quote, and classification — under the source-precision guard. **The novelty claim is explicitly NON-release**: a Frontier-axis assertion, never part of `release_required_bindings`. §13 adds no `required_later_bindings` entry.
 
@@ -5067,6 +5139,25 @@ exhaustive:   false — and the gate rejects any map that says otherwise
 One retrieval failed honestly and is recorded rather than papered over: the Dopp 2009 PDF would not yield extractable text, so its **formula is not quoted** and only the retrieved abstract is. The hypergeometric identity is therefore classified `classical_mathematics` with a declared-null URL, not attributed to a quote nobody holds.
 
 `FREEZE GATE` — Section 13 may come to a freeze ruling when: the shipped map passes its own gate; every claim is sourced, falsifiable and distinguished from pinned prior art; the non-novelty table matches the constructions the code actually executes; the sweep scope and its incompleteness are declared; and the injection self-test rejects an unsourced claim. Freezing §13 adds no release binding — the novelty claim is non-release by design.
+
+**Section 13 is FROZEN (ruled 2026-07-22, folded as A41).**
+
+```text
+Section 13 FROZEN — <F13>
+
+Freeze evidence:
+- source-map digest ............ 6e067d427afe0d7bb76b8c9bd14233d78b5e3efc40296c1e881ad9929797a0b1
+- entries / claims ............. 4 / 2
+- citation-integrity census .... PASS (no dangling source, no placeholder URL)
+- classification-enum census ... PASS (closed enum, unknown fails closed)
+- falsifier census ............. PASS (every claim names its falsifier)
+- quote census ................. 3 quoted verbatim, 1 absence DECLARED with reason
+- non-exhaustive scope ......... declared; the gate rejects any map claiming exhaustiveness
+```
+
+**Permanent ceiling.** _The source map is not proof of exhaustive prior-art coverage, patent
+novelty, regulatory completeness, or absence of earlier implementations._ It may support narrow
+research-contribution statements; it must **never** certify its own completeness.
 
 ### Sections 7–13 ledger declarations (A8 — every normative section MUST declare both registers, even if empty)
 
