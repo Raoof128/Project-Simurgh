@@ -1,6 +1,6 @@
 # Stage 5O — VSC: Hidden-Universe Equality (design)
 
-**Status:** Sections **1–7 FROZEN** — Section 1 `a1e2e6d1`, Section 2 `0e26c361`, Section 3 `e8dc0a77`, Section 4 `cb67542f`, Section 5 `b08554ed`, Section 6 `fa34242d`, Section 7 `dd7a2513` (A34). **Section 7 is FROZEN.** The §7 contract (§7.1–§7.3) is backed by a working, tested verifier: the authority registry, the revised §7.3.1 shapes + regenerated maxima, the pure eleven-check prefix-ordered relation, `evaluateSection7Safe`, the RFC 5869 HKDF seed, the frozen index sampler, and a real Bitcoin-mainnet suffix validator. Evidence is in three lanes, all green: **Lane A** (the full sixteen-row `S7.*` matrix over a sealed synthetic validator — not real PoW), **Lane B** (the real validator over a committed real mainnet chain, genesis + blocks 1–8), and **Lane C** (the exported two-argument verifier + real validator + a real producer bundle → ACCEPT, real check-6 break → symbolic `s7_chain_invalid`). A **cross-runtime crypto parity lane** reproduces every value that reaches a §7 verdict byte-for-byte in Node, stdlib Python, and a real headless browser (WebCrypto). The four §7.3.8 freeze-review items are all **RESOLVED** and Section 7 is frozen under A34 (freeze gate + browser-parity ceremony receipt + invalidation rule at §7's end). §7 code lives in `tools/simurgh-attestation/stage5o/` (not `src/`). Remaining **stage-release** blockers (separate from §7): §10 raw-code allocation and §11 Lean. **Sections 8–13 DRAFT scaffolds**.
+**Status:** Sections **1–7 FROZEN** — Section 1 `a1e2e6d1`, Section 2 `0e26c361`, Section 3 `e8dc0a77`, Section 4 `cb67542f`, Section 5 `b08554ed`, Section 6 `fa34242d`, Section 7 `dd7a2513` (A34). **Section 7 is FROZEN.** The §7 contract (§7.1–§7.3) is backed by a working, tested verifier: the authority registry, the revised §7.3.1 shapes + regenerated maxima, the pure eleven-check prefix-ordered relation, `evaluateSection7Safe`, the RFC 5869 HKDF seed, the frozen index sampler, and a real Bitcoin-mainnet suffix validator. Evidence is in three lanes, all green: **Lane A** (the full sixteen-row `S7.*` matrix over a sealed synthetic validator — not real PoW), **Lane B** (the real validator over a committed real mainnet chain, genesis + blocks 1–8), and **Lane C** (the exported two-argument verifier + real validator + a real producer bundle → ACCEPT, real check-6 break → symbolic `s7_chain_invalid`). A **cross-runtime crypto parity lane** reproduces every value that reaches a §7 verdict byte-for-byte in Node, stdlib Python, and a real headless browser (WebCrypto). The four §7.3.8 freeze-review items are all **RESOLVED** and Section 7 is frozen under A34 (freeze gate + browser-parity ceremony receipt + invalidation rule at §7's end). §7 code lives in `tools/simurgh-attestation/stage5o/` (not `src/`). Remaining **stage-release** blockers (separate from §7): §10 raw-code allocation and §11 Lean. **Section 8 DRAFT (design ruled 2026-07-22, case-only); Sections 9–13 DRAFT scaffolds**.
 **Release is BLOCKED by design:** `release_required_bindings` carries the unresolved `section_6_anchored_presented_census_closure` (§5.9) and, since **A24**, `section_10_evidence_attack_raw_code_allocation` (§4.10) — the stage's own `evidence_attack_fixtures` raw-code obligation, which had no owner, discharger or status while **zero** codes existed in the reserved band. A green Section 5 freeze does **not** mean anti-equivocation exists, and per **A13** full anti-equivocation is not coming: Stage 4T binds views to a held capsule, never excluding an unseen one, so `not_proof_of_global_census_closure_uniqueness_without_exclusion_witnesses` is a **permanent** ceiling.
 **Amendment A34 folded (freezes Section 7) — `dd7a2513`.** With the four §7.3.8 freeze-review items all resolved (Rulings 1–4) and Lane A, Lane B, Lane C, the cross-runtime crypto parity lane, and every generated census green, Section 7 is **FROZEN**. The frozen surface is the challenge-issuance verifier and everything it binds: the §7 authority descriptors and the 17 framed registry digests, the revised §7.3.1 producer-artifact shapes and the four regenerated maxima, the eleven-check prefix-ordered relation, its symbolic check-identifier catalogue and first-failure order, the pair-23 resource limits, the RFC 5869 HKDF seed and the byte-exact index sampler, the real Bitcoin-mainnet suffix validator, the opaque accepted-context capability, the canonical `S7.*` fixture matrix, the cross-runtime parity vectors, and the production wiring. **Freeze-invalidation rule:** _any change to the Section 7 authority descriptors, registry digests, check catalogue, resource limits, HKDF or sampler construction, Bitcoin validator, accepted-context capability, fixture matrix, parity vectors, or production wiring requires a normative amendment and a complete rerun of Lanes A–C, cross-runtime parity, and all generated censuses — including the real-browser ceremony — before refreezing._ Section 10 raw-code allocation (A24) and Section 11 Lean remain **stage-release** blockers, not Section 7 completeness blockers, and Section 7 makes no unproved theorem claim. **No blade, law, evidence predicate, release predicate, ceiling, or socket changed** — A34 records the freeze of an already-executed contract.
 
@@ -4252,15 +4252,163 @@ Per A34, any future amendment to a frozen §7 surface must rerun Lanes A–C, cr
 
 ---
 
-## Section 8 — Opening rules and cumulative-disclosure accounting (DRAFT — design not started)
+## Section 8 — Opening rules and cumulative-disclosure accounting (DRAFT — design ruled 2026-07-22, not yet frozen)
 
-**Purpose.** Define how a producer opens (reveals) the Section-7-selected leaves in response to the challenge, with cumulative-disclosure accounting bounded by resource limits **over the complete presented same-root disclosure history**. It does **not** establish that omitted or forked history does not exist — that residue is §5.9's permanent exclusion-witness ceiling, not something §8 closes.
+### 8.1 Identity, blade, law, boundaries
 
-**Discharges the fail-closed requirement `section_8_opening_bundle_resource_limits`** (§4.10, A8). Discharge condition: pin `MAX_OPENING_TRANSPORT_BYTES` and `MAX_OPENING_BUNDLE_CANONICAL_BYTES`, prove the opening-side compatibility invariant (the §4.1.1 discipline applied to openings), and **bind both limits into the exact preimage of the already-precommitted `disclosure_policy_digest`**. Printing the constants discharges nothing; release rejects while the requirement is unresolved.
+**Blade.** Given the §7-verified challenge (its ordered selected indices) and the private universe committed in §§3–5, Section 8 verifies a producer's **opening**: that each revealed case is genuinely the committed leaf at its selected index, that its case-link matches the already-verified **public** execution census, that the opening bundle and the presented disclosure history are resource-bounded by limits **precommitted before the beacon**, and that cumulative disclosure over the presented same-root history stays within the precommitted budget. It is the discharger of the §4.10 fail-closed requirement `section_8_opening_bundle_resource_limits`.
 
-**Frozen constraints it must honor:** `disclosure_policy_digest` is precommitted upstream (§4/6); openings consume the §7 ordered selected indices; the canonical-bytes acceptance condition (raw ≤ limit → parse → `canonicalJson === raw`) applies to the opening bundle as it does to §7 artifacts.
+**Law — "No Unbudgeted Unzip."** For one frozen disclosure-budget key, the verifier rejects any opening whose newly disclosed **unique** indices would make the presented-history union exceed the precommitted disclosure budget `B`. The verifier proves this only over the complete history **presented to it**.
 
-`DESIGN OPEN` — the exact opening-bundle schema; the cumulative-disclosure accounting mechanism (how successive openings accumulate against the budget); the opening-side compatibility-invariant generator; the precise `disclosure_policy_digest` preimage binding. **None reviewed. This section is a scaffold, not the hardened contract §7 is.** The fail-closed requirement `section_8_opening_bundle_resource_limits` covers **byte limits only** — opening correctness, Merkle membership, the `Q`/`R` accounting, disclosure receipts, and cumulative unique-index accounting are §8 core mechanisms that need **their own release binding or a global all-sections-frozen gate**; a green byte-limit discharge is not a green Section 8.
+```text
+D_prior = union of the unique indices of all valid prior accepted openings for the budget key
+D_next  = D_prior ∪ current_opening_indices
+accept only when |D_next| <= B
+```
+
+Reopening an already-disclosed index consumes **no** additional budget — the cost of a challenge is `|current_opening_indices \ D_prior|`, not its cardinality.
+
+**Case-only, by ruling (2026-07-22).** Section 8 opens **case** leaves only. It does **not** reveal or resupply an execution record, an execution payload, a result payload, a model response, execution provenance, or any extra execution digest field. §5 already proves whole-universe **identity equality** across the scope, execution and result sets; Section 8's only execution touch-point is a recompute against a value the verifier **already holds** from the public execution census:
+
+```text
+case_link_commitment_i = SHA256( EXECUTION_CASE_LINK_DOMAIN
+                              || case_digest_i
+                              || E[i].execution_record_digest )
+```
+
+checked against the already-verified public execution-census relation. Execution/result-**content** correspondence sampling is recorded as **successor work** — no reserved schema slot (a reserved empty field is decorative authority) and no socket minted.
+
+**Boundaries (Section 8 decides; it does not define).** The leaf preimage and `case_digest` construction are §3's; Merkle membership is §3.5's; the execution census and `E[i].execution_record_digest` are §5's; `disclosure_policy_digest`'s **slot** is §4.7's (Section 4 defines only the binding slot — "later sections exclusively define each policy preimage"); the §7 selected indices and their digest are §7's. Section 8 mints no identifier a prior section owns.
+
+### 8.2 The Section 7 → Section 8 handoff (`Section7AcceptedContext`)
+
+Section 8 accepts only an **opaque** `Section7AcceptedContext` — never a producer-supplied copy, a JSON round-trip, or a structural lookalike (enforced by a module-private brand, exactly as §7's `Section6AcceptedContext`). It carries, at minimum, the values a valid opening is checked against:
+
+```text
+ordered_selected_indices              // the §7 challenge selection
+ordered_selected_indices_digest
+challenge_subject_digest
+challenge_record_digest               // the canonical challenge identity (below)
+scope_manifest_identity               // pins the committed universe
+merkle_root                           // the committed tree root
+N                                     // universe cardinality
+epoch_digest
+verified_execution_census_context     // the source of each E[i].execution_record_digest
+verified_disclosure_policy            // or its resolved authoritative projection (the six limits + B)
+```
+
+The producer's opening bundle contains **openings only**. It may not resupply `k`, the selected indices, the root, the epoch, the disclosure limits, the budget, or the disclosure-policy authority — every one of those is read from the accepted context, never from the bundle.
+
+> **Freeze-respecting note (needs your confirmation).** §7 is frozen returning `ACCEPT | {reject}`; it does not itself mint a context. So `Section7AcceptedContext` is designed as a **§8-owned input capability** minted by the acceptance **path** immediately after a successful §7 verification, fed the artifacts §7 just accepted — parallel to how §7 consumes a §6-minted context, and **without altering §7's frozen verify**. If you instead want §7 itself to mint it, that is a §7 amendment triggering the A34 rerun of Lanes A–C, parity, and censuses.
+
+### 8.3 The disclosure policy (`disclosure_policy_digest` preimage)
+
+Section 8 defines the preimage of the slot §4.7 already bound into `stage5o_precommitment_digest`:
+
+```text
+disclosure_policy_digest = SHA256( DISCLOSURE_POLICY_DOMAIN || canonicalJson(disclosure_policy) )
+```
+
+The policy is precommitted **before the beacon is knowable**, so every limit and the budget are producer-fixed ahead of the challenge — a limit chosen after the challenge would be the §3.1 authority rule violated one artifact downstream. The policy owns **six** resource limits (the presented history is itself an allocation surface, so bounding only the new bundle is insufficient — a tiny valid opening must not arrive beside ten million prior receipts):
+
+```text
+MAX_OPENING_PACKAGE_TRANSPORT_BYTES        raw pre-parse guard over the opening package
+MAX_OPENING_PACKAGE_CANONICAL_BYTES        canonical acceptance over the opening package
+MAX_PRESENTED_HISTORY_TRANSPORT_BYTES       raw pre-parse guard over the presented history
+MAX_PRESENTED_HISTORY_CANONICAL_BYTES       canonical acceptance over the presented history
+MAX_PRESENTED_HISTORY_ENTRIES               cardinality bound on prior receipts materialised
+MAX_CUMULATIVE_DISCLOSED_INDICES            the disclosure budget B
+```
+
+**Frozen history semantics (settled before authoring the checks):**
+
+- **Budget key.** One exact verifier-held tuple identifying the committed universe root — `{ scope_manifest_identity, merkle_root, N }` — and **never** including `disclosure_policy_digest` (else T6.5 resets the budget by renaming the policy) and **never** including `epoch_digest` (the budget is carried across epochs of the same root, T6.3).
+- **Challenge identity.** One canonical identifier derived from the verified §7 challenge record (`challenge_record_digest`). `same epoch + same challenge id → exact idempotent replay`; `same epoch + different challenge id → reject` (T6.4, one challenge per epoch).
+- **History validity.** Each prior history entry must be independently re-verifiable from canonical evidence (or governed by a separately designed authenticated-receipt profile, successor work) — an arbitrary producer-declared index list is **not** history and counts for nothing.
+
+### 8.4 The opening bundle and the case-link check
+
+For each selected index `i`, the opening reveals the §3 leaf preimage and its authentication path; Section 8 recomputes and requires:
+
+```text
+case_digest_i             = §3 case-digest construction over the revealed (case, salt)
+leaf_id_i                 = §3.2 leaf construction ( u64be(i), salt, case_digest_i, ... )
+merkle inclusion          §3.5 authentication path from leaf_id_i at position i to merkle_root
+case_link_commitment_i    = SHA256( EXECUTION_CASE_LINK_DOMAIN || case_digest_i
+                                  || E[i].execution_record_digest )   == the verified census value
+```
+
+The revealed indices, taken as a set, must **exactly equal** the accepted context's `ordered_selected_indices` — no omission, no substitution, no extra.
+
+### 8.5 The prefix-ordered first-failure relation
+
+Same discipline as §7: the disclosure-policy limits (from the accepted context) gate **before** any expensive per-opening hashing, and the presented history is bounded before it is materialised.
+
+```text
+1  raw opening-package transport ceiling                          (before parsing)
+2  lexical parse + canonicalJson(parsed) === raw
+3  canonical opening-package + presented-history resource ceilings (canonical + entries)
+4  exact-key shape of the opening bundle and each opening
+5  32-byte token grammar (decodeDigestToken over the token census)
+6  disclosure-policy authority + precommitment binding
+     (disclosure_policy_digest == accepted-context precommitment; limits read from context)
+7  opening indices exactly equal the §7 selected indices
+8  case/leaf preimage conformance + case-link equality against E[i]
+9  Merkle inclusion at the verifier-known position and root
+10 presented-history validity + one-challenge-per-epoch relation
+11 cumulative unique-index budget transition ( |D_next| <= B )
+```
+
+Exactly one symbolic first-failure reason is returned; numeric codes are Section 10's (A24), never minted here.
+
+### 8.6 Discharge of `section_8_opening_bundle_resource_limits`
+
+The requirement becomes `DISCHARGED` only when **all** hold — and the verifier must **execute the budget transition**, not merely print the parameters:
+
+```text
+disclosure_policy_digest        == accepted precommitment disclosure_policy_digest
+raw opening package             <= MAX_OPENING_PACKAGE_TRANSPORT_BYTES
+canonical opening package       <= MAX_OPENING_PACKAGE_CANONICAL_BYTES
+maxCanonicalOpeningBundleBytes( max permitted k, MAX_CASE_BYTES, N, max auth-path, pinned schema )
+                                <= MAX_OPENING_PACKAGE_CANONICAL_BYTES
+MAX_OPENING_PACKAGE_CANONICAL_BYTES <= MAX_OPENING_PACKAGE_TRANSPORT_BYTES
+all six limits owned by ONE pinned descriptor, mirrored exactly by the implementation (census)
+the cumulative unique-index budget transition executes (check 11), not just its constants printed
+```
+
+Boundary fixtures on both sides of every limit, in the §4 S4.26–S4.33 pattern, including the ordering assertion (rejection must precede the allocation it guards). The §4.1.1 transport-versus-canonical distinction applies to both the opening package and the presented history.
+
+### 8.7 Honest ceilings and successor work
+
+Section 8 asserts — it does not close — the already-frozen §2 cumulative-audit residues:
+
+- **T6.6** truncated / forked disclosure history — `accepted + ceiling asserted` (`not_proof_of_complete_disclosure_history_without_committed_ledger`): an offline verifier bounds only the history it is handed.
+- **T6.7** resalted corpus under a new root — `accepted + ceiling asserted` (`not_proof_of_cross_commitment_corpus_reuse`).
+- **T6.2** independently-operating verifiers collating legitimate openings — `accepted + ceiling asserted` (`not_proof_of_global_cross_verifier_disclosure_budget`).
+
+The monotonic committed ledger that would close T6.6 is the `federated_disclosure_ledger` **successor candidate** — no socket minted. Execution/result-content correspondence sampling is likewise successor work — no reserved field, no socket.
+
+### 8.8 `section_8.added_non_claims` and `section_8.required_later_bindings` (A3, A8)
+
+`section_8.added_non_claims` — Section 8 adds no new permanent ceiling of its own: the disclosure residues (T6.2/T6.6/T6.7) are §2-owned and referenced, not re-declared (A3). `section_8.required_later_bindings` — empty; Section 8 is a **discharger** (of §4.10's `section_8_opening_bundle_resource_limits`), not a requirement-raiser. Both registers are declared even though empty (A8).
+
+### 8.9 Four-axis scorecard (DRAFT, honest)
+
+```text
+Novelty      7.0  — cumulative unique-index disclosure accounting over a presented same-root
+                    history, with the opening limits and budget precommitted before the beacon and
+                    the case-link checked against a PUBLIC census (no content revealed). Closes a
+                    signed requirement rather than opening new geometry.
+Frontier     7.0  — "bounded audit of a hidden evaluation universe" is the eval-set-protection
+                    shape; the honest T6.6/T6.7 ceilings keep the claim truthful.
+Anthropic    7.5  — disclosure-budget accounting maps to protecting a held evaluation corpus from
+                    being unzipped by repeated legitimate audits.
+Constitution 7.5  — transparency + honesty: every limit precommitted, every residue signed.
+What moves it higher: build federated_disclosure_ledger (closes T6.6 → Frontier/Novelty up); an
+authenticated-receipt profile for history entries; execution/result correspondence sampling.
+```
+
+`DESIGN RULED, NOT FROZEN` — the design above reflects the 2026-07-22 ruling and is authored for review. It is **not** frozen and carries no implementation yet; the §8 verifier, the disclosure-policy descriptor + six limits generator, the opening/Merkle/case-link checks, the presented-history validator, and the budget-transition engine are the next phase, TDD, after this design is approved. A green byte-limit discharge alone is **not** a green Section 8: opening correctness, Merkle membership, the case-link equality, presented-history validity, and the cumulative unique-index transition are all core §8 mechanisms.
 
 ## Section 9 — Exact rational probability encoding (DRAFT — design not started)
 
