@@ -38,6 +38,11 @@ export const MAX_BEACON_SUFFIX_HEADERS_V1 = 2016; // one full difficulty period 
 export const MAX_SELECTED_INDICES_V1 = 65536; // MAX_SCOPE_CARDINALITY
 export const MAX_CHALLENGE_DRAWS_V1 = 4194304; // 2^22; coupon-collector tail, failure <= 2^-76.33
 
+// The challenge-package TRANSPORT ceiling: a chosen pre-parse DoS bound (raw bytes, before parsing),
+// distinct from the generator-derived CANONICAL package maximum. 2^20, comfortably above the derived
+// canonical sum; a census requires transport >= canonical. It is pair 23's authority (mirrored here).
+export const MAX_CHALLENGE_PACKAGE_TRANSPORT_BYTES = 1048576;
+
 // Lexical widths.
 export const HEADER_HEX_CHARS = 160; // 80 bytes, lowercase hex, no 0x prefix
 export const RETARGET_INTERVAL = 2016;

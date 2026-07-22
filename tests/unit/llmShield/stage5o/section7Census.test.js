@@ -9,13 +9,17 @@ import assert from "node:assert/strict";
 import {
   SCHEMA_IDS,
   PROFILE_IDS,
+  MAX_CHALLENGE_PACKAGE_TRANSPORT_BYTES,
 } from "../../../../tools/simurgh-attestation/stage5o/core/constants.mjs";
 import {
   PROFILE_DESCRIPTORS,
   SCHEMA_DESCRIPTORS,
 } from "../../../../tools/simurgh-attestation/stage5o/core/section7AuthorityDescriptors.mjs";
 import { CHALLENGE_RECORD_KEYS } from "../../../../tools/simurgh-attestation/stage5o/core/challengeArtifactShape.mjs";
-import { SECTION7_FIRST_FAILURE_ORDER } from "../../../../tools/simurgh-attestation/stage5o/core/section7Verifier.mjs";
+import {
+  SECTION7_FIRST_FAILURE_ORDER,
+  SECTION7_CHECK1_ENFORCED_LIMITS,
+} from "../../../../tools/simurgh-attestation/stage5o/core/section7Verifier.mjs";
 import { generateMaxima } from "../../../../tools/simurgh-attestation/stage5o/node/measureChallengeMaxima.mjs";
 import { generateAuthorityRegistry } from "../../../../tools/simurgh-attestation/stage5o/node/measureStage5oAuthorityRegistry.mjs";
 
@@ -70,6 +74,26 @@ test("mirror census: each schema's self-declared schema_id const_value equals SC
     const d = SCHEMA_DESCRIPTORS[key];
     assert.equal(d.fields.schema_id.const_value, id, `${key}.schema_id const_value`);
   }
+});
+
+test("check-1 census: enforced byte limits equal the pair-23 *_bytes entries exactly", () => {
+  const pair23 = PROFILE_DESCRIPTORS.challenge_resource_limits_profile;
+  const byteRules = pair23.rules
+    .filter((r) => r.rule_id.endsWith("_bytes"))
+    .map((r) => r.rule_id)
+    .sort();
+  assert.deepEqual(
+    [...SECTION7_CHECK1_ENFORCED_LIMITS].sort(),
+    byteRules,
+    "no implementation-only limit, no descriptor byte-limit left unenforced"
+  );
+});
+
+test("check-1 census: the transport ceiling is >= the canonical package maximum", () => {
+  assert.ok(
+    MAX_CHALLENGE_PACKAGE_TRANSPORT_BYTES >= generateMaxima().MAX_CHALLENGE_PACKAGE_BYTES_V1,
+    "transport must not be below canonical"
+  );
 });
 
 test("limits census: the verifier's ceilings come from one generator (pair 23 mirror)", () => {

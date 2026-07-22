@@ -72,7 +72,7 @@ function injectMaxima(descriptor, maxima) {
     max_beacon_suffix_artifact_bytes: maxima.MAX_BEACON_SUFFIX_ARTIFACT_BYTES_V1,
     max_selected_indices_artifact_bytes: maxima.MAX_SELECTED_INDICES_ARTIFACT_BYTES_V1,
     max_challenge_record_bytes: maxima.MAX_CHALLENGE_RECORD_BYTES_V1,
-    max_challenge_package_bytes: maxima.MAX_CHALLENGE_PACKAGE_BYTES_V1,
+    max_challenge_package_canonical_bytes: maxima.MAX_CHALLENGE_PACKAGE_BYTES_V1,
   };
   const rules = descriptor.rules.map((r) =>
     r.rule_id in table ? { ...r, value: table[r.rule_id] } : r

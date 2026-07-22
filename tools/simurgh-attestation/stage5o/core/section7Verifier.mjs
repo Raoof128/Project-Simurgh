@@ -24,6 +24,7 @@ import {
   BEACON_REQUIRED_DESCENDANTS_V1,
   MAX_CHALLENGE_DRAWS_V1,
   MAX_BEACON_SUFFIX_HEADERS_V1,
+  MAX_CHALLENGE_PACKAGE_TRANSPORT_BYTES,
   RETARGET_INTERVAL,
 } from "./constants.mjs";
 import {
@@ -60,6 +61,15 @@ const ARTIFACT_ORDER = Object.freeze([
   "beacon_suffix",
   "ordered_selected_indices",
   "challenge_record",
+]);
+// The pair-23 byte limits check 1 enforces (§7.3.8 item 1). A census requires this set to equal the
+// pair-23 `*_bytes` rule entries exactly — no implementation-only limit, no descriptor limit unenforced.
+export const SECTION7_CHECK1_ENFORCED_LIMITS = Object.freeze([
+  "max_beacon_suffix_artifact_bytes",
+  "max_selected_indices_artifact_bytes",
+  "max_challenge_record_bytes",
+  "max_challenge_package_canonical_bytes",
+  "max_challenge_package_transport_bytes",
 ]);
 const PER_ARTIFACT_CEILING = Object.freeze({
   beacon_suffix: MAXIMA.MAX_BEACON_SUFFIX_ARTIFACT_BYTES_V1,
@@ -155,10 +165,21 @@ export function makeSection7Verifier({ validateBitcoinSuffix }) {
     }
     const ctx = section6AcceptedContext;
 
-    // ---- check 1: envelope, canonical bytes, per-artifact + package ceilings.
+    // ---- check 1 (§7.3.8 item 1): pre-parse transport ceiling on the raw package, then canonical
+    //      projection, per-artifact canonical maxima (the entries pair 23 defines), and the canonical
+    //      package sum. beacon_contract has NO separate byte ceiling — it is bounded by its schema,
+    //      its field bounds, and the package aggregate.
     if (producerBundle === null || typeof producerBundle !== "object") return rej(REASON.oversize);
+    if (Object.keys(producerBundle).length !== ARTIFACT_ORDER.length) return rej(REASON.oversize);
+    let transportBytes = 0;
+    for (const name of ARTIFACT_ORDER) {
+      const raw = producerBundle[name];
+      if (typeof raw !== "string") return rej(REASON.oversize);
+      transportBytes += Buffer.byteLength(raw, "utf8");
+    }
+    if (transportBytes > MAX_CHALLENGE_PACKAGE_TRANSPORT_BYTES) return rej(REASON.oversize);
     const parsed = {};
-    let packageBytes = 0;
+    let canonicalPackageBytes = 0;
     for (const name of ARTIFACT_ORDER) {
       const raw = producerBundle[name];
       let obj;
@@ -167,16 +188,14 @@ export function makeSection7Verifier({ validateBitcoinSuffix }) {
       } catch {
         return rej(REASON.oversize);
       }
-      const bytes = Buffer.byteLength(raw, "utf8");
       const ceiling = PER_ARTIFACT_CEILING[name];
       if (ceiling !== undefined) {
-        if (bytes > ceiling) return rej(REASON.oversize);
-        packageBytes += bytes;
+        if (Buffer.byteLength(raw, "utf8") > ceiling) return rej(REASON.oversize);
+        canonicalPackageBytes += Buffer.byteLength(raw, "utf8");
       }
       parsed[name] = obj;
     }
-    if (Object.keys(producerBundle).length !== ARTIFACT_ORDER.length) return rej(REASON.oversize);
-    if (packageBytes > MAXIMA.MAX_CHALLENGE_PACKAGE_BYTES_V1) return rej(REASON.oversize);
+    if (canonicalPackageBytes > MAXIMA.MAX_CHALLENGE_PACKAGE_BYTES_V1) return rej(REASON.oversize);
 
     // ---- check 2: exact-key/type/width shape of the four artifacts + the context checkpoint.
     try {

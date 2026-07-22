@@ -345,7 +345,11 @@ export const PROFILE_DESCRIPTORS = Object.freeze({
       { rule_id: "max_beacon_suffix_artifact_bytes", value: "<regenerated>" },
       { rule_id: "max_selected_indices_artifact_bytes", value: "<regenerated>" },
       { rule_id: "max_challenge_record_bytes", value: "<regenerated>" },
-      { rule_id: "max_challenge_package_bytes", value: "<regenerated>" },
+      // CANONICAL package maximum (generator-derived sum of the three variable artifacts) and the
+      // chosen TRANSPORT pre-parse ceiling. beacon_contract has NO separate byte maximum in v1 — it
+      // is bounded by its schema, field bounds, and this package aggregate (§7.3.8 item 1).
+      { rule_id: "max_challenge_package_canonical_bytes", value: "<regenerated>" },
+      { rule_id: "max_challenge_package_transport_bytes", value: 1048576 },
     ],
     imports: [
       { id: "simurgh.vsc.beacon_contract.v1" },
