@@ -4068,7 +4068,7 @@ Exactly one reason is returned — the first check to fail under the §7.2 order
 
 Check 8 gives **T4.2** (producer-selectable/retryable height) and **T4.6** (producer-controlled `k`) an executable relation: a presented contract, height, or `k` that does not equal the Section-6 precommitment is rejected **before** the sampler replay (check 9) can consume `k` or the seed can be recomputed. It compares only against the opaque accepted context, never a producer-declared copy.
 
-**Check 9 is two mechanisms.** Runtime: `challenge_record.<named_root> == recomputed_digest(<named_artifact>)` for exactly `{challenge_subject, verified_closure_bitcoin_checkpoint, beacon_contract, beacon_suffix, ordered_selected_indices}`, each present once, none cross-wired. Static completeness census (a build/test-time property, not a runtime relation): `set(record root fields) == set(verifier root checks) == set(the five frozen required roots)`, which fails if a schema root lacks a verifier check or the verifier checks an invented root.
+**The `root_completeness` check (ordinal 10) is two mechanisms.** Runtime: `challenge_record.<named_root> == recomputed_digest(<named_artifact>)` for exactly `{challenge_subject, verified_closure_bitcoin_checkpoint, beacon_contract, beacon_suffix, ordered_selected_indices}`, each present once, none cross-wired. Static completeness census (a build/test-time property, not a runtime relation): `set(record root fields) == set(verifier root checks) == set(the five frozen required roots)`, which fails if a schema root lacks a verifier check or the verifier checks an invented root.
 
 **Witness authority has one owner (Section 6).** Section 6 validates witness authority and mints the opaque `Section6AcceptedContext`. Section 7 checks the checkpoint's pair-18 schema and digest and consumes the witness-authorised checkpoint from that context; it does **not** re-prove A26 witness validity and adds no duplicate witness check, reason, or fixture.
 
@@ -4131,13 +4131,23 @@ draw_j = HKDF-Expand-SHA256(
   PRK  = challenge_seed,
   info = UTF8(CHALLENGE_DRAW_DOMAIN) || u64be(j),
   L    = 32 )
-// then the frozen rejection sampler: low-bit candidate -> reject candidate >= the unbiased acceptance
-// range -> reject a duplicate accepted index -> continue until exactly k distinct indices exist.
+// then the frozen rejection sampler (A25), byte-exact (§7.3.8 item 2, resolved):
+//   x         = OS2IP(draw_j)             // unsigned 256-bit big-endian integer
+//   b         = bitLength(N - 1)          // b == 0 when N == 1
+//   mask      = 0 if b == 0 else (2^b) - 1
+//   candidate = x AND mask
+//   candidate >= N            -> reject this draw, continue     (exact, no modulo bias)
+//   candidate already chosen  -> reject this draw, continue
+//   otherwise                 -> append candidate; stop at exactly k distinct indices
+// Each j consumes exactly ONE HKDF-Expand draw, INCLUDING the N == 1 case (b = 0 -> candidate 0), and
+// every draw counts against the pair-23 max_challenge_draws ceiling. Exact uniformity is a statement
+// about the ideal independent-uniform draw model plus rejection sampling; the realised sequence is
+// only computationally pseudorandom under A25's assumptions.
 
 digest(beacon_contract | beacon_suffix | ordered_selected_indices) = SHA256(canonicalJson(artifact))
 ```
 
-The salt is public, generated from pair 22's frozen descriptor, registry-pinned, fixed before the beacon through the profile bundle, and independent of the beacon-derived IKM — exactly A25's stated salt requirements. Check 5 requires `beacon_suffix.verified_closure_bitcoin_checkpoint_digest == checkpoint_instance_digest`; check 8 replays `draw_j` from the **presented** `challenge_record.challenge_seed`; check 10 recomputes the expected `challenge_seed` from the accepted context + `beacon_value` and requires it to equal the presented one. Binding the presented `beacon_contract` and `k` to the accepted context is a **separate** relation (§7.2), not folded into the seed.
+The salt is public, generated from pair 22's frozen descriptor, registry-pinned, fixed before the beacon through the profile bundle, and independent of the beacon-derived IKM — exactly A25's stated salt requirements. The `checkpoint_derivation` check requires `beacon_suffix.verified_closure_bitcoin_checkpoint_digest == checkpoint_instance_digest`; the `index_replay` check replays `draw_j` from the **presented** `challenge_record.challenge_seed`; the `seed_binding` check recomputes the expected `challenge_seed` from the accepted context + `beacon_value` and requires it to equal the presented one. Binding the presented `beacon_contract` and `k` to the accepted context is the **separate** `precommitment_binding` check (§7.2), not folded into the seed.
 
 #### 7.3.3 The Section-7 32-byte token-field census (check 3)
 
@@ -4201,14 +4211,14 @@ The revised §7.3.1 shapes change four exact-key schemas, so the four challenge 
 
 #### 7.3.8 Implementation status and freeze-review open items
 
-The §7 verifier is implemented and tested (Lane A/B/C all green, 5A–5I). Freezing §7 waits on ruling the following seams the implementation surfaced — none is a defect in the running code, each is a place where the frozen prose is looser than the executed contract and must be tightened to it before freeze:
+The §7 verifier is implemented and tested (Lane A/B/C all green, 5A–5I). Items 1–3 below are **RESOLVED** (the prose is tightened to the executed contract and backed by censuses); item 4 is the remaining **evidence gate** that blocks the §7 freeze.
 
-1. **Check-1 ceiling coverage.** §7.2 check 1 reads "each producer artifact ≤ its per-artifact canonical byte ceiling" against **four** ceilings, but pair 23 owns ceilings for `beacon_suffix`, `ordered_selected_indices`, `challenge_record`, and the aggregate `challenge_package` — `beacon_contract` has no ceiling and `challenge_package` is not a single artifact. The implementation applies the per-artifact ceilings to suffix/indices/record, the package ceiling to their sum, and canonical-bytes (no size ceiling) to the fixed-bounded `beacon_contract`. The prose should be tightened to say exactly this.
-2. **Sampler extraction width.** A25 freezes "low-bit extraction plus `candidate >= N` rejection" but does not pin the extraction width in bytes. The implementation uses `b = bitLength(N − 1)` (the minimal width for which the rule is exactly uniform, with `N ≤ 2¹⁶`). The byte-exact extraction rule (width, endianness of the low bits) should be pinned in §7.3.2.
-3. **Check-number drift in the prose.** Inserting check 8 (precommitment binding) renumbered the later checks in the table/pair-22 order (9 = index derivation, 10 = five-root, 11 = seed), but two prose passages still use pre-insertion numbers: §7.2's "**Check 9** is two mechanisms" describes the five-root relation, which is now check **10**; §7.3.2's "check 8 replays `draw_j`" / "check 10 recomputes the expected `challenge_seed`" should read check **9** / check **11**. The table and pair-22 `first_failure_order` are authoritative and the code follows them; the prose numbers should be corrected.
-4. **Node-only crypto surface.** The verifier, registry generator, and Bitcoin validator use `node:crypto`; the JS↔Python↔browser parity lane for these surfaces is not yet built (the RFC 5869 HKDF vectors are pinned, but cross-runtime parity of the framed registry hash, the checkpoint-instance digest, and the Bitcoin double-SHA256 is future work).
+1. **Check-1 resource authority — RESOLVED (Ruling 1).** Pair 23 defines `max_challenge_package_canonical_bytes` (generator-derived) and a chosen `max_challenge_package_transport_bytes`. Check 1 enforces: raw package bytes ≤ transport (before parsing); per-artifact canonical maxima for `beacon_suffix`/`ordered_selected_indices`/`challenge_record`; canonical package sum ≤ the canonical maximum. `beacon_contract` has **no separate byte maximum in v1** — bounded by its schema, field bounds, and the package aggregate. A census requires the enforced byte-limit set to equal the pair-23 `*_bytes` entries exactly, and transport ≥ canonical.
+2. **Sampler extraction rule — RESOLVED (Ruling 2).** The byte-exact rule is frozen in §7.3.2: `x = OS2IP(draw_j)`, `b = bitLength(N−1)`, `mask = 0 if b==0 else 2^b−1`, `candidate = x AND mask`, reject `candidate ≥ N`, reject a duplicate, else append; each `j` consumes exactly one HKDF-Expand draw (including `N == 1`, `b = 0`), counted against the pair-23 draw ceiling. Exact uniformity is the ideal-draw-plus-rejection statement; the realised sequence is computationally pseudorandom under A25.
+3. **Check-number drift — RESOLVED (Ruling 3).** Pair 22 carries `check_identifiers` (the eleven symbolic check IDs) parallel to `first_failure_order`; the authoritative catalog assigns ordinal → check id → reason. Prose names a check by its id (`root_completeness`, `index_replay`, `seed_binding`), never a bare ordinal, and censuses bind pair-22 ids ≡ verifier ids ≡ fixture first-failure ids, 1:1 with reasons.
+4. **Cross-runtime crypto parity — OPEN (evidence gate, not prose).** The verifier, registry generator, and Bitcoin validator use `node:crypto`. Against the stage's byte-reproducibility posture, §7 does not freeze until an offline **Python** and **browser** parity lane reproduces, byte-for-byte, every cryptographic value that reaches a §7 verdict (descriptor canonical bytes + the 17 registry digests, checkpoint-instance digest, pair-22 self-profile salt, HKDF Extract/Expand, sampler candidates/decisions/indices, Bitcoin double-SHA256, internal-vs-display order, compact-`nBits`, target/PoW, `beacon_value`, challenge seed, the five root digests), with the required negative vectors, under a Node ≡ Python ≡ browser byte-equality gate. Node is not declared authoritative.
 
-Freezing §7 also still requires the §11 Lean obligations (or their honest deferral) and the §10 raw-code allocation (A24), which remain PENDING by design.
+Freezing §7 also still requires the §11 Lean obligations (or their honest deferral) and the §10 raw-code allocation (A24), which remain PENDING by design — separate from §7, and §7 makes no unproved theorem claim.
 
 ---
 
