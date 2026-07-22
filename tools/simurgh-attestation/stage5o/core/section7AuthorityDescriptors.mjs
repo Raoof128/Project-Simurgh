@@ -381,6 +381,25 @@ export const PROFILE_DESCRIPTORS = Object.freeze({
         ],
       },
       {
+        // Symbolic CHECK IDs, parallel to first_failure_order (ordinal i -> check_ids[i-1] ->
+        // order[i-1]). This table alone assigns ordinals; prose refers to checks by these names,
+        // never a bare number, so inserting a check never leaves a stale "check N" behind (§7.3.8 item 3).
+        rule_id: "check_identifiers",
+        ids: [
+          "canonical_input",
+          "artifact_shape",
+          "token_grammar",
+          "authority_pins",
+          "checkpoint_derivation",
+          "bitcoin_chain",
+          "descendant_depth",
+          "precommitment_binding",
+          "index_replay",
+          "root_completeness",
+          "seed_binding",
+        ],
+      },
+      {
         rule_id: "checkpoint_instance_digest",
         domain: "simurgh.vsc.verified_closure_bitcoin_checkpoint_digest_domain.v1",
         preimage: [

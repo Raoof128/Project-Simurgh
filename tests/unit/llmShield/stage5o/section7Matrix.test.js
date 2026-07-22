@@ -13,6 +13,7 @@ import {
   makeSection7Verifier,
   makeEvaluateSection7Safe,
   SECTION7_FIRST_FAILURE_ORDER,
+  SECTION7_CHECK_CATALOG,
 } from "../../../../tools/simurgh-attestation/stage5o/core/section7Verifier.mjs";
 import { RAW_VERIFIER_CODES } from "../../../../tools/simurgh-attestation/stage4h/exitCodes.mjs";
 import {
@@ -219,6 +220,14 @@ test("matrix: derived class counts (never hand-carried) — 1 positive control +
   assert.equal(positive.length, 1);
   assert.equal(attacks.length, ROWS.length - 1);
   assert.ok(positive[0].accept === true);
+});
+
+test("matrix: fixture first-failure check IDs cover all eleven pair-22 check IDs", () => {
+  const reasonToCheckId = new Map(SECTION7_CHECK_CATALOG.map((c) => [c.reason, c.check_id]));
+  const witnessed = new Set(ROWS.filter((r) => r.reason).map((r) => reasonToCheckId.get(r.reason)));
+  for (const c of SECTION7_CHECK_CATALOG) {
+    assert.ok(witnessed.has(c.check_id), `check ${c.check_id} has no fixture witness`);
+  }
 });
 
 test("matrix: every one of the eleven reasons has at least one live witness", () => {

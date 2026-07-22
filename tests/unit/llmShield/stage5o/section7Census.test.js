@@ -19,6 +19,8 @@ import { CHALLENGE_RECORD_KEYS } from "../../../../tools/simurgh-attestation/sta
 import {
   SECTION7_FIRST_FAILURE_ORDER,
   SECTION7_CHECK1_ENFORCED_LIMITS,
+  SECTION7_CHECK_IDS,
+  SECTION7_CHECK_CATALOG,
 } from "../../../../tools/simurgh-attestation/stage5o/core/section7Verifier.mjs";
 import { generateMaxima } from "../../../../tools/simurgh-attestation/stage5o/node/measureChallengeMaxima.mjs";
 import { generateAuthorityRegistry } from "../../../../tools/simurgh-attestation/stage5o/node/measureStage5oAuthorityRegistry.mjs";
@@ -47,6 +49,24 @@ test("first-failure census: the verifier order is the pair-22 order — eleven u
   assert.deepEqual([...SECTION7_FIRST_FAILURE_ORDER], [...owner]);
   assert.equal(SECTION7_FIRST_FAILURE_ORDER.length, 11);
   assert.equal(new Set(SECTION7_FIRST_FAILURE_ORDER).size, 11, "reasons are unique");
+});
+
+test("check-id census: pair-22 check ids run parallel to reasons — 11 each, unique, 1:1 catalog", () => {
+  const ids = ruleOf("check_identifiers").ids;
+  assert.equal(ids.length, 11);
+  assert.equal(new Set(ids).size, 11, "check ids are unique");
+  assert.deepEqual([...SECTION7_CHECK_IDS], [...ids]);
+  assert.equal(SECTION7_CHECK_CATALOG.length, 11);
+  for (let i = 0; i < 11; i++) {
+    assert.equal(SECTION7_CHECK_CATALOG[i].ordinal, i + 1, "each id -> exactly one ordinal");
+    assert.equal(SECTION7_CHECK_CATALOG[i].check_id, ids[i]);
+    assert.equal(SECTION7_CHECK_CATALOG[i].reason, SECTION7_FIRST_FAILURE_ORDER[i]);
+  }
+  assert.equal(
+    new Set(SECTION7_CHECK_CATALOG.map((c) => c.reason)).size,
+    11,
+    "each id -> exactly one reason"
+  );
 });
 
 test("mirror census: SCHEMA_IDS/PROFILE_IDS equal the descriptor authorities", () => {

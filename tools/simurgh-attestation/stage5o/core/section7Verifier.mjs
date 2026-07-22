@@ -47,6 +47,15 @@ const CHECKPOINT_RULE = PAIR22.rules.find((r) => r.rule_id === "checkpoint_insta
 export const SECTION7_FIRST_FAILURE_ORDER = Object.freeze([
   ...PAIR22.rules.find((r) => r.rule_id === "first_failure_order").order,
 ]);
+export const SECTION7_CHECK_IDS = Object.freeze([
+  ...PAIR22.rules.find((r) => r.rule_id === "check_identifiers").ids,
+]);
+// The authoritative catalog: ordinal -> symbolic check id -> symbolic rejection reason.
+export const SECTION7_CHECK_CATALOG = Object.freeze(
+  SECTION7_CHECK_IDS.map((id, i) =>
+    Object.freeze({ ordinal: i + 1, check_id: id, reason: SECTION7_FIRST_FAILURE_ORDER[i] })
+  )
+);
 const SEED_DOMAIN = SEED_RULE.seed_domain;
 const DRAW_DOMAIN = SEED_RULE.draw_domain;
 const CHECKPOINT_DOMAIN = CHECKPOINT_RULE.domain;
