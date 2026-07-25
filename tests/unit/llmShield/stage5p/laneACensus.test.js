@@ -39,7 +39,10 @@ test("the census publishes which typed outcomes NO fixture reaches, rather than 
   const c = measureLaneACensus();
   assert.ok(Array.isArray(c.unreached_typed_outcomes));
   // Every reached outcome must be a typed one, and the two sets must partition the outcome space.
-  const reached = c.first_failure_rows.map((r) => r.observed_policy_outcome).filter(Boolean);
+  // BOTH sources count: the normative matrix and the coverage fixtures that sit outside it.
+  const reached = [...c.first_failure_rows, ...c.coverage_rows]
+    .map((r) => r.observed_policy_outcome)
+    .filter(Boolean);
   for (const o of reached) assert.ok(c.typed_outcomes.includes(o));
   for (const o of c.unreached_typed_outcomes) assert.ok(!reached.includes(o));
   assert.equal(new Set([...reached, ...c.unreached_typed_outcomes]).size, c.typed_outcomes.length);

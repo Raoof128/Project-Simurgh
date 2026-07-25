@@ -129,3 +129,27 @@ test("every frozen check id and every frozen outcome is a stable symbol, never a
   for (const o of POLICY_OUTCOMES)
     assert.match(o, /^[a-z][a-z_]*$/, "symbolic outcomes only — no raw codes in Lane A");
 });
+
+// ---- coverage fixtures: outside the normative matrix, discharging the outcome obligation -------
+
+test("coverage fixtures reach outcomes the six normative rows do not", async () => {
+  const { COVERAGE_FIXTURES } =
+    await import("../../../../tools/simurgh-attestation/stage5p/node/laneAFixtures.mjs");
+  for (const f of COVERAGE_FIXTURES) {
+    const ancestor = cleanAncestor();
+    const mutant = f.build();
+    assert.notDeepEqual(mutant, ancestor, `PREMISE FAILED: ${f.fixture_id} produced no mutation`);
+    assert.equal(
+      verifySection2(ancestor, PINNED).ok,
+      true,
+      "PREMISE FAILED: ancestor not accepted"
+    );
+
+    const r = verifySection2(mutant, PINNED);
+    assert.equal(r.ok, false, `${f.fixture_id} must be rejected`);
+    assert.equal(r.check_id, f.expected_check_id);
+    assert.equal(r.outcome, f.expected_policy_outcome);
+  }
+  // The coverage set must NOT leak into the frozen six.
+  assert.equal(FROZEN_MATRIX.length, 6, "the normative taxonomy stays at six rows");
+});

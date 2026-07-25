@@ -18,7 +18,13 @@ import {
 } from "../core/delegationEdge.mjs";
 import { IDENTITY_BANK_TYPE } from "../core/identityBank.mjs";
 import { SECTION2_CHECK_IDS, POLICY_OUTCOMES, verifySection2 } from "../core/section2Verifier.mjs";
-import { S2_FIXTURES, cleanAncestor, PINNED, REGISTRY } from "./laneAFixtures.mjs";
+import {
+  S2_FIXTURES,
+  COVERAGE_FIXTURES,
+  cleanAncestor,
+  PINNED,
+  REGISTRY,
+} from "./laneAFixtures.mjs";
 
 const dupes = (list) => {
   const seen = new Set();
@@ -71,6 +77,13 @@ export function measureLaneACensus() {
   if (!fixtureContig.ok)
     problems.push({ kind: "non_contiguous_fixture_ids", observed: fixtureContig.observed });
 
+  // --- check ORDER, not merely membership -----------------------------------------------------
+  // Found by fault injection: contiguity alone did NOT catch S2.C5 and S2.C6 being swapped in the
+  // frozen array. The order is normative, so ascending order is asserted independently.
+  const checkNums = checkIds.map((id) => Number(id.match(/^S2\.C(\d+)$/)?.[1] ?? NaN));
+  const ascending = checkNums.every((n, i) => i === 0 || n > checkNums[i - 1]);
+  if (!ascending) problems.push({ kind: "check_ids_out_of_order", observed: checkIds });
+
   // --- fixture/check mismatch: every expected check must exist, every outcome must be typed ----
   for (const f of fixtures) {
     if (!checkIds.includes(f.expected_check_id)) {
@@ -111,7 +124,20 @@ export function measureLaneACensus() {
   });
 
   // --- outcome reachability: a typed outcome no fixture reaches is honest, but it is RECORDED --
-  const reached = new Set(first_failure_rows.map((r) => r.observed_policy_outcome).filter(Boolean));
+  const coverage_rows = COVERAGE_FIXTURES.map((f) => {
+    const r = verifySection2(f.build(), PINNED);
+    if (r.ok || r.check_id !== f.expected_check_id || r.outcome !== f.expected_policy_outcome) {
+      problems.push({ kind: "coverage_fixture_mismatch", fixture: f.fixture_id });
+    }
+    return {
+      fixture_id: f.fixture_id,
+      observed_check_id: r.ok ? null : r.check_id,
+      observed_policy_outcome: r.ok ? null : r.outcome,
+    };
+  });
+  const reached = new Set(
+    [...first_failure_rows, ...coverage_rows].map((r) => r.observed_policy_outcome).filter(Boolean)
+  );
   const unreached = outcomes.filter((o) => !reached.has(o));
 
   return {
@@ -136,6 +162,7 @@ export function measureLaneACensus() {
     typed_outcomes: outcomes,
     fixtures,
     first_failure_rows,
+    coverage_rows,
     counts: {
       principal_kinds: PRINCIPAL_KINDS.length,
       strength_axes: AXES.length,
@@ -148,6 +175,7 @@ export function measureLaneACensus() {
     // of the outcome space, and the unreached set is published rather than quietly implied empty.
     unreached_typed_outcomes: unreached,
     // The digest domain must NEVER equal the schema type literal (single-hat).
+    check_ids_ascending: ascending,
     single_hat_ok: DELEGATION_EDGE_DOMAIN !== DELEGATION_EDGE_TYPE,
     problems,
     ok: problems.length === 0 && DELEGATION_EDGE_DOMAIN !== DELEGATION_EDGE_TYPE,
