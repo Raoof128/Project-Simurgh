@@ -212,3 +212,25 @@ export const S2_FIXTURES = Object.freeze([
     },
   },
 ]);
+
+/**
+ * COVERAGE fixtures — deliberately OUTSIDE the normative S2.* matrix.
+ *
+ * The frozen §2.4 taxonomy has exactly six rows and must not grow to chase outcome coverage. But a
+ * typed outcome that no lane ever reaches is an unproven claim, so reachable-but-unwitnessed
+ * outcomes get fixtures here, where they discharge the release obligation without disturbing the
+ * attack taxonomy.
+ */
+export const COVERAGE_FIXTURES = Object.freeze([
+  {
+    fixture_id: "S2.COV.1",
+    single_defect_description: "evidence names a profile that is not pinned in the registry",
+    expected_check_id: "S2.C2",
+    expected_policy_outcome: "resolver_binding_invalid",
+    build() {
+      const b = clone(cleanAncestor());
+      b.evidences[0].profile_id = "simurgh.synthetic.unpinned-ghost.v1";
+      return b;
+    },
+  },
+]);
