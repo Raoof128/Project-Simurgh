@@ -330,7 +330,7 @@ that consumes them.
 
 ---
 
-## Section 2 — canonical principal grammar, check order, attack matrix (FROZEN `<FREEZE_HASH>`)
+## Section 2 — canonical principal grammar, check order, attack matrix (FROZEN `8f9733b1`)
 
 ### 2.1 Canonical principal (frozen before any fixture)
 
@@ -747,7 +747,7 @@ incomparability_density_is_not_a_security_score
 Section-owned, additive (5O A3/A8 pattern): these do NOT amend Section 1's frozen five; the Lane A
 census counts this register separately.
 
-## Section 3 — evidence lanes (FROZEN `<FREEZE_HASH>`, ruled at A2)
+## Section 3 — evidence lanes (FROZEN `8f9733b1`, ruled at A2)
 
 Three lanes. The normative one contains no real-world dependency; reality enters through a
 controlled airlock rather than through the laboratory ceiling.
@@ -920,7 +920,7 @@ be mistaken for an oversight.
 
 ---
 
-## Section 4 — threat model: attack classes (FROZEN `<FREEZE_HASH>`)
+## Section 4 — threat model: attack classes (FROZEN `8f9733b1`)
 
 Six fixtures are not a threat model; they are six fixtures. This taxonomy names the **classes**, and
 states honestly which are witnessed by §2.4's matrix and which are not yet witnessed at all. A class
@@ -980,7 +980,7 @@ Two assertions about one canonical principal that cannot both hold. **Witnessed:
 T7 and T9 are **structural limits of this blade**, not defects to be patched later. T8 and T10 are
 **work items** with named triggers.
 
-## Section 5 — release state and four-axis scorecard (FROZEN `<FREEZE_HASH>`, re-scored at closeout)
+## Section 5 — release state and four-axis scorecard (FROZEN `8f9733b1`, re-scored at closeout)
 
 **What this section is, and is not.** Everything below describes the stage as it stands: **Lane A is
 implemented**; Lane B has not been executed; Lane C1 has a frozen capture but no profile; Lane C2 is
@@ -1139,7 +1139,7 @@ wire formats, the resolver profile or evidence envelope, **§2.12's discharge la
 vocabulary**, the lane definitions, or the threat-class table ⇒ **normative amendment + re-freeze**,
 and the Lane A census must be re-run in both phases with the receipts re-recorded above.
 
-**Freeze status:** Section 1 FROZEN `991dde48`. **Sections 2, 3, 4 and 5 FROZEN `<FREEZE_HASH>`.**
+**Freeze status:** Section 1 FROZEN `991dde48`. **Sections 2, 3, 4 and 5 FROZEN `8f9733b1`.**
 The freeze covers this document's contract. It does **not** assert that Stage 5P is complete: what
 is implemented is **Lane A**, and §5.4 names the six things that are not.
 
