@@ -567,7 +567,103 @@ the targeted property actually changed, and only then is rejection meaningful. A
 reported **distinctly** from an implementation failure — 5O's `S7.19` was a persuasive false proof
 that passed every gate because no gate checked whether its premise was true.
 
-### 2.5 Lane C amendment trigger (frozen)
+### 2.5 Delegation edge wire format (frozen; structure only, policy deferred)
+
+The bank carries delegation edges, so their bytes are frozen **now** — an undefined representation
+would make the "clean ancestor" unstable, and every S2 fixture derives from that ancestor.
+
+```json
+{
+  "type": "simurgh.vsi.delegation_edge.v1",
+  "actor_principal": {
+    "type": "simurgh.vsi.principal.v1",
+    "kind": "person",
+    "namespace_id": "simurgh.synthetic.person.v1",
+    "subject_id": "<64 hex>"
+  },
+  "represented_principal": {
+    "type": "simurgh.vsi.principal.v1",
+    "kind": "organisation",
+    "namespace_id": "simurgh.synthetic.organisation.v1",
+    "subject_id": "<64 hex>"
+  },
+  "role_id": "simurgh.synthetic.submitter-role.v1",
+  "scope_id": "simurgh.synthetic.evidence-submission-scope.v1",
+  "validity": {
+    "type": "simurgh.vsi.logical-validity.v1",
+    "not_before_epoch": "7",
+    "not_after_epoch": "12"
+  }
+}
+```
+
+**Canonical rules.** Exact keys only · `actor_principal ≠ represented_principal` · `role_id` and
+`scope_id` are pinned identifiers, never free text · epochs are canonical unsigned **decimal
+strings**, never JSON numbers · no leading zeroes except `"0"` · both bounds finite ·
+`not_before_epoch ≤ not_after_epoch` · **logical recorded epochs only, never wall-clock timestamps**
+· no aliasing, inferred organisation membership, or domain-based equivalence.
+
+**Authentication is not part of this object.** The edge is _the claim_; a resolver-evidence envelope
+signs and profile-binds it. The identifier is derived **externally** — there is no self-referential
+`edge_id` inside the signed object:
+
+```text
+delegation_edge_id = SHA256(
+    UTF8("simurgh.vsi.delegation-edge.v1") || 0x00 || canonical_json(delegation_edge) )
+```
+
+**Section 2 boundary.** Section 2 validates and canonicalises this structure; it does **not** decide
+whether an edge satisfies authority-to-act policy. Every current S2 fixture carries
+`"delegation_edges": []`, so delegation semantics cannot contaminate the identity-resolution matrix.
+
+### 2.6 Identity bank (frozen)
+
+Conceptually `canonical_principal → strength_vector`, but **never** encoded as a JSON object keyed by
+a formatted principal string — that invites stringification ambiguity and key-ordering traps. It is a
+**sorted exact-key array**:
+
+```json
+{
+  "type": "simurgh.vsi.identity_bank.v1",
+  "principals": [
+    {
+      "principal": {
+        "type": "simurgh.vsi.principal.v1",
+        "kind": "organisation",
+        "namespace_id": "simurgh.synthetic.organisation.v1",
+        "subject_id": "<64 hex>"
+      },
+      "strength": {
+        "binding": "cryptographically_bound",
+        "resolution": "provider_asserted",
+        "continuity": "durable",
+        "role": "unproven"
+      },
+      "supporting_evidence_digests": ["<64 hex>"]
+    }
+  ],
+  "delegation_edges": []
+}
+```
+
+**Bank invariants (normative).**
+
+```text
+principals sorted by canonical principal bytes
+no duplicate canonical principal
+supporting_evidence_digests sorted and unique
+strength is VERIFIER-DERIVED, never trusted producer input
+evidence from different principals is never pooled
+a failed attachment leaves the entire bank BYTE-IDENTICAL
+delegation edges sorted by derived delegation_edge_id
+delegation edges never alter principal strength vectors
+empty arrays are explicit, never omitted
+```
+
+The clean ancestor contains **at least one accepted principal entry and an empty delegation array**,
+and every S2 fixture derives from that exact ancestor.
+
+### 2.7 Lane C amendment trigger (frozen)
 
 ```text
 Lane C cannot enter implementation or release scope until its state-transition model
