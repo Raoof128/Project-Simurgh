@@ -92,6 +92,27 @@ else
   echo "FAIL: Lane B offline verification"; cat /tmp/s5p-b.log; exit 1
 fi
 
+echo "-- signed attestation: verifies offline AND still matches what the repo computes --"
+if "$NODE" -e "
+  const fs = await import(\"node:fs\");
+  const m = await import(process.cwd() + \"/$S5P/node/attestation.mjs\");
+  const D = process.cwd() + \"/docs/research/llm-shield/evidence/stage-5p/attestation/\";
+  const b = JSON.parse(fs.readFileSync(D + \"stage5p-attestation.json\", \"utf8\"));
+  const pub = fs.readFileSync(D + \"stage5p-signer.pub\", \"utf8\");
+  const v = m.verifyAttestation(b, pub);
+  if (!v.ok) { console.error(JSON.stringify(v.checks)); process.exit(1); }
+  const fresh = m.buildPublicPayload();
+  if (JSON.stringify(fresh) !== JSON.stringify(b.public.payload)) {
+    console.error(\"DRIFT: the signed claims no longer match what the repo computes\"); process.exit(1);
+  }
+  console.log(\"attestation: 8/8 offline checks, payload matches repo, \" +
+    b.audit.payload.known_limitations.length + \" limitations SIGNED\");
+" --input-type=module > /tmp/s5p-att.log 2>&1; then
+  cat /tmp/s5p-att.log
+else
+  echo "FAIL: attestation"; cat /tmp/s5p-att.log; exit 1
+fi
+
 echo "-- cross-runtime parity: Node == stdlib Python --"
 if python3 "$S5P/python/vsi_parity.py" > /tmp/s5p-py.log 2>&1; then
   tail -2 /tmp/s5p-py.log
