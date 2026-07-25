@@ -79,6 +79,19 @@ else
   echo "FAIL: Lane C1 capture verification"; cat /tmp/s5p-c1.log; exit 1
 fi
 
+echo "-- Lane B: the REAL public Rekor ceremony re-verifies OFFLINE (8 checks) --"
+if "$NODE" -e "
+  const m = await import(process.cwd() + \"/$S5P/node/laneBRekor.mjs\");
+  const c = m.verifyRekorCeremonyOffline();
+  for (const [k, v] of Object.entries(c.checks)) if (!v) { console.error(\"FAILED: \" + k); process.exit(1); }
+  if (!c.ok) process.exit(1);
+  console.log(\"lane B: 8/8 offline checks, rekor logIndex \" + c.log_index + \", keyless=\" + c.is_keyless);
+" --input-type=module > /tmp/s5p-b.log 2>&1; then
+  cat /tmp/s5p-b.log
+else
+  echo "FAIL: Lane B offline verification"; cat /tmp/s5p-b.log; exit 1
+fi
+
 echo "-- Lean core (six §1 targets, zero proof escapes) --"
 if command -v lean >/dev/null 2>&1; then
   if lean proofs/stage5p/Vsi.lean; then
@@ -97,5 +110,6 @@ fi
 
 echo
 echo "== Stage 5P reproduce: ALL GATES PASSED =="
-echo "Lane A (sealed synthetic) and Lane C1 (frozen GLEIF capture) are reproduced above."
-echo "NOT reproduced, because NOT executed: Lane B (real Sigstore ceremony), Lane C2, Lane L."
+echo "Reproduced above: Lane A (sealed synthetic), Lane B (real public Rekor entry, offline),"
+echo "                  Lane C1 (frozen GLEIF capture, offline)."
+echo "NOT reproduced, because NOT executed: Lane C2 (no qualifying profile exists), Lane L."
