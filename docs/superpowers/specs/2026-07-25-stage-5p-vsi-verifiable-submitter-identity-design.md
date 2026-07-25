@@ -1523,3 +1523,83 @@ Three fixtures exist purely to stop the family proving something weaker than it 
 Historical verifiability is not present accountability, and a verifier that answered "valid" for a
 retired entity without saying which of the two it meant would be precisely the overclaim this stage
 exists to make impossible.
+
+---
+
+# Annex B — Lane B EXECUTED (post-freeze, 2026-07-25)
+
+The ceremony ran. **Rekor entry `2245421742`** is in the live public-good transparency log at
+`rekor.sigstore.dev`, UUID
+`108e9186e8c5677a869aaa5794d6c3c8030176e8d23629cb72432c6a1d0177b67edb8ba7c98fc64e`, integrated
+`2026-07-25T08:51:11Z`, included at tree size `2,123,517,582`. Anyone can fetch it. It was fetched a
+second time, independently, and returned byte-identical material.
+
+## B.1 What this ceremony is — and is not
+
+|            |                                                                                             |
+| ---------- | ------------------------------------------------------------------------------------------- |
+| **IS**     | a real entry in the real public Rekor log                                                   |
+| **IS**     | a real RFC 6962 inclusion proof, **recomputed here** rather than taken on the server's word |
+| **IS**     | a real Signed Entry Timestamp verified under **Rekor's own published key**                  |
+| **IS NOT** | a Fulcio **keyless** ceremony — the signer is a self-managed ECDSA P-256 key                |
+| **IS NOT** | proof of who holds that key                                                                 |
+
+Fulcio keyless signing requires an interactive OIDC flow that no offline reproduce can perform.
+Rather than fake one, the ceremony used a self-managed key and **says so in the result object**:
+`is_keyless: false`, `signer: "self_managed_ecdsa_p256"`, and a `not_claimed` list that travels with
+every verdict so no caller can take the answer without the bound.
+
+**The substitution turned out to be instructive rather than merely acceptable.** For a stage about
+submitter identity it isolates exactly one axis:
+
+```text
+binding     cryptographically_bound   the signature really verifies
+resolution  unresolved                a bare public key resolves NO principal
+continuity  ephemeral                 one log entry is one moment
+role        unproven                  a log says nothing about authority to act
+```
+
+A transparency log proves an artifact existed and was signed by **something** at a time. It does not
+say by **whom**. That gap is 5P's entire thesis, and Lane B is now the version of it built out of
+real infrastructure instead of fixtures. The test `asking Rekor to RESOLVE a principal fails` is the
+industry's most common overclaim about transparency logs, refused mechanically.
+
+## B.2 Eight offline checks
+
+No network. The ceremony happened once, was frozen, and is re-verified from bytes.
+
+| #   | Check                                             | Why it is separate                                   |
+| --- | ------------------------------------------------- | ---------------------------------------------------- |
+| 1   | artifact signature verifies                       | the bytes really were signed                         |
+| 2   | body binds the artifact **digest**                | else the log proves _something_ was logged, not ours |
+| 3   | body binds the signer's **key**                   |                                                      |
+| 4   | body binds the **signature** bytes                | three independent bindings, not one                  |
+| 5   | inclusion proof **recomputed** to the root        | server arithmetic is not evidence                    |
+| 6   | checkpoint root **equals** the proof root         | a root nobody signed is arithmetic without authority |
+| 7   | Signed Entry Timestamp verifies under Rekor's key |                                                      |
+| 8   | independent re-fetch byte-identical               | the only check that speaks to **external** validity  |
+
+A premise test corrupts one proof hash and asserts the recomputation lands somewhere else, so check 5
+is known to be capable of failing.
+
+## B.3 The `real_sigstore_anchor_execution_deferred` debt
+
+Open since **5G**, carried through 5I, 5J, 5K and 5M. This ceremony **executes a real Sigstore
+anchor** and re-verifies it offline, which is what the debt asked for. It does **not** discharge a
+keyless-identity claim, because none was made. The precise retirement wording:
+
+> `real_sigstore_anchor_execution_deferred` — **RETIRED by execution**: a real public Rekor entry,
+> frozen and offline-verified (Annex B). The **keyless/Fulcio identity binding remains unexecuted**
+> and is not claimed.
+
+## B.4 A frozen-grammar finding
+
+The bundle needed a principal for a bare signing key, and §2.1's frozen grammar has four kinds —
+`account`, `person`, `organisation`, `service` — **none of which is "a credential whose holder is
+unknown"**. Minting a fifth was considered and **rejected**: a key is a credential, not an entity,
+and giving credentials their own principal kind would invite exactly the "held a key, therefore is a
+party" conflation this stage exists to prevent. Lane B uses `account`, the opaque-handle kind, and a
+test asserts it is none of `person`, `organisation` or `service`.
+
+**Private key disposition:** generated in a session scratchpad, **never committed**, and not required
+to verify anything. The ceremony re-verifies from the public key alone.
