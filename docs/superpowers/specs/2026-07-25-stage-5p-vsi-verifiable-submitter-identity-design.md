@@ -236,9 +236,11 @@ for any real EU registration identity, so `principal_resolved` is unreachable fo
 the honest ceiling for an Art. 22(3) filing under current infrastructure is
 `cryptographically_bound / provider_asserted / ephemeral / unproven`.
 
-**Article 18 supplies the regulatory basis for the continuity axis:** it expressly requires
-documentary availability to survive the bankruptcy or cessation of the provider or authorised
-representative during the ten-year retention period. VSI makes one part of that continuity problem
+**Article 18 supplies the regulatory basis for the continuity axis:** Art. 18(2) requires each
+Member State to determine conditions under which the documentation stays available "for the cases
+when a provider or its authorised representative established on its territory goes bankrupt or ceases
+its activity prior to the end of that period" — documentary availability must survive the accountable
+principal itself. VSI makes one part of that continuity problem
 machine-checkable; **it does not claim to satisfy Article 18.**
 
 ### Motivating seam (prior-art classification: **motivating seam**, not novelty evidence)
@@ -254,16 +256,19 @@ machine-checkable; **it does not claim to satisfy Article 18.**
 **Source-precision guard — status after pinning (2026-07-25).** Each quotation below was extracted
 from the primary text by whitespace-normalised substring match, not by summarisation.
 
-| Quotation                                                                                                                                                                | Primary source                                       | Status                                                                                                                                                                    |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| "registering a Statement only proves it was produced by an Issuer"                                                                                                       | RFC 9943 §9.2 _Accuracy of Statements_               | **verbatim**                                                                                                                                                              |
-| "Transparency does not prevent dishonest or compromised Issuers, but it holds them accountable."                                                                         | RFC 9943                                             | **verbatim**                                                                                                                                                              |
-| "Issuers can refuse to register their Statements with a TS or selectively submit some but not all the Statements they issue."                                            | RFC 9943 §9.3 _Issuer Participation_                 | **verbatim**                                                                                                                                                              |
-| "If an OIDC identity or OIDC provider is compromised, Fulcio might issue unauthorized certificates"                                                                      | Sigstore, _What Sigstore Doesn't Guarantee_          | **verbatim**                                                                                                                                                              |
-| "Fulcio itself does not monitor the certificate transparency log; users are responsible for monitoring the log for unauthorized certificates issued to their identities" | Sigstore, _Short Lived Certificates_ preamble        | **verbatim**                                                                                                                                                              |
-| "If no third parties monitor the logs, then any misbehavior by Rekor and Fulcio might go undetected."                                                                    | Sigstore, _What Sigstore Doesn't Guarantee_          | **verbatim**                                                                                                                                                              |
-| EU AI Act Art. 22(3)(b), 22(3)(c), Art. 18                                                                                                                               | artificialintelligenceact.eu article pages           | **extracted, not byte-verified against OJ L 2024/1689** — to be re-pinned against the Official Journal PDF before freeze of any section that depends on the exact wording |
-| FCC / NY-AG comment-fraud figures; March 2026 astroturf campaign                                                                                                         | secondary reporting; one an unadjudicated allegation | **reported** — may not name a fixture until pinned to primary                                                                                                             |
+| Quotation                                                                                                                                                                                                             | Primary source                                       | Status                                                        |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- | ------------------------------------------------------------- |
+| "registering a Statement only proves it was produced by an Issuer"                                                                                                                                                    | RFC 9943 §9.2 _Accuracy of Statements_               | **verbatim**                                                  |
+| "Transparency does not prevent dishonest or compromised Issuers, but it holds them accountable."                                                                                                                      | RFC 9943                                             | **verbatim**                                                  |
+| "Issuers can refuse to register their Statements with a TS or selectively submit some but not all the Statements they issue."                                                                                         | RFC 9943 §9.3 _Issuer Participation_                 | **verbatim**                                                  |
+| "If an OIDC identity or OIDC provider is compromised, Fulcio might issue unauthorized certificates"                                                                                                                   | Sigstore, _What Sigstore Doesn't Guarantee_          | **verbatim**                                                  |
+| "Fulcio itself does not monitor the certificate transparency log; users are responsible for monitoring the log for unauthorized certificates issued to their identities"                                              | Sigstore, _Short Lived Certificates_ preamble        | **verbatim**                                                  |
+| "If no third parties monitor the logs, then any misbehavior by Rekor and Fulcio might go undetected."                                                                                                                 | Sigstore, _What Sigstore Doesn't Guarantee_          | **verbatim**                                                  |
+| EU AI Act Art. 22(3)(b) — "for a period of 10 years after the high-risk AI system has been placed on the market"                                                                                                      | **OJ L 2024/1689**                                   | **verbatim**                                                  |
+| EU AI Act Art. 22(3)(c) — "provide a competent authority, upon a reasoned request, with all the information and documentation"                                                                                        | **OJ L 2024/1689**                                   | **verbatim**                                                  |
+| EU AI Act Art. 18(1) — "The provider shall, for a period ending 10 years after the high-risk AI system has been placed on the market or put into service, keep at the disposal of the national competent authorities" | **OJ L 2024/1689**                                   | **verbatim**                                                  |
+| EU AI Act Art. 18(2) — "a provider or its authorised representative established on its territory goes bankrupt or ceases its activity prior to the end of that period"                                                | **OJ L 2024/1689**                                   | **verbatim**                                                  |
+| FCC / NY-AG comment-fraud figures; March 2026 astroturf campaign                                                                                                                                                      | secondary reporting; one an unadjudicated allegation | **reported** — may not name a fixture until pinned to primary |
 
 RFC 9943 §9.3 continues, in the same breath: _"It is important for Relying Parties not to accept
 Signed Statements for which they cannot discover Receipts"_ — the standard's own fail-closed posture,
@@ -294,8 +299,8 @@ moves no axis.
 
 ### Section 1 freeze gate
 
-- [x] Every quotation byte-verified or downgraded — 6 **verbatim**, 3 EU-law rows **extracted**
-      (re-pin against OJ L 2024/1689 before any section depends on exact wording), 2 **reported**
+- [x] Every quotation byte-verified or downgraded — **10 verbatim** (6 SCITT/Sigstore + 4 EU-law,
+      the latter re-pinned against OJ L 2024/1689 on 2026-07-25), 2 **reported**
 - [x] Four axes and their value sets frozen; no fifth axis added later without amendment
 - [x] `≤ᵥ` defined once, normatively, before any check consumes it; `⊔` likewise
 - [x] Ceiling confirmed as a **vector** at every use site, and confirmed to bound the **delta**
@@ -312,157 +317,6 @@ six forward-committed attack rows ⇒ **normative amendment + full re-freeze** o
 that consumes them.
 
 **FROZEN `991dde48`.**
-
----
-
-## A2 — amends frozen A1 (Section 2 rulings landing on frozen text)
-
-**Why an amendment and not an edit.** The Section 2 rulings changed objects that A1 froze. A1's own
-invalidation rule names the counts, so the change is recorded here rather than applied silently.
-History is not rewritten; Section 1 keeps its freeze hash `991dde48`.
-
-| Object                        | A1 (frozen `991dde48`) | A2    | Reason                                              |
-| ----------------------------- | ---------------------- | ----- | --------------------------------------------------- |
-| laws                          | 6                      | **7** | Law 7 **No Frankenidentity** — the join law         |
-| Lean targets                  | 5                      | **6** | `principalMismatchNoJoin`                           |
-| typed outcomes                | 8                      | **9** | `identity_principal_mismatch`                       |
-| forward-committed attack rows | 5                      | **6** | S2.6 witnesses `identity_claim_mismatch` separately |
-
-**Re-freeze obligation, discharged.** A1 requires full re-freeze of _every later section that
-consumes_ these objects. Sections 2-N are unwritten, so the consuming set is **empty** and the
-obligation is discharged trivially — recorded explicitly, because a discharged-by-vacuity obligation
-that goes unstated is indistinguishable at review time from one that was skipped.
-
-**Counts re-derived, not hand-carried.** `tools/simurgh-attestation/stage5p/node/measureSection1Census.mjs`
-is the sole authority; every number in the table above is reproduced by running it.
-
----
-
-## Section 3 — evidence lanes (DRAFT, ruled at A2)
-
-Three lanes. The normative one contains no real-world dependency; reality enters through a
-controlled airlock rather than through the laboratory ceiling.
-
-### Lane A — sealed synthetic resolver (**normative**)
-
-The complete `S2.*` matrix runs **here**, and only here. Lane A is the oracle: it defines what the
-VSI contract _means_.
-
-- deterministic local issuer and resolver keys; synthetic identity namespace
-- frozen resolver profiles with **explicit four-axis ceilings**
-- exact canonical principal grammar
-- fixtures for expiry, replay, principal collision, delegation
-- byte-stable generation, offline verification, every first-failure outcome witnessed
-- **no** dependency on Fulcio, Rekor, OIDC, DNS, company registries, or wall-clock network reachability
-
-**Naming rule (normative).** The synthetic authorities are **never** named after a real provider.
-Frozen identifiers:
-
-```text
-simurgh.synthetic.oidc.v1
-simurgh.synthetic.registry.v1
-simurgh.synthetic.role_authority.v1
-```
-
-Lane A proves the VSI contract and verifier semantics — **not** compatibility with any external
-service. This also keeps the lane clear of the brand-denylist class of defect that 3P/5D/5E
-machinery exists to catch.
-
-### Lane B — real Sigstore ceremony (**external validity, not the oracle**)
-
-The lane that retires `real_sigstore_anchor_execution_deferred`, and the only thing that can:
-
-1. perform a real keyless signing ceremony
-2. capture the Fulcio certificate, Rekor material, identity claims and verification outputs
-3. freeze all required public artifacts
-4. bind the real artifact digest into the 5P evidence bundle
-5. **re-verify offline**, without refreshing or reissuing the certificate
-6. record the achieved vector honestly
-
-**Expected achieved vector — written down before execution, so a better result cannot be
-retrofitted as a prediction:**
-
-```text
-binding      cryptographically_bound
-resolution   provider_asserted
-continuity   ephemeral
-role         unproven
-```
-
-The expired certificate must remain **historically verifiable**, and expiry must **not** upgrade
-`continuity` to `durable` — that is Law 5 in its sharpest form, and it is the single most likely
-place for this stage to accidentally cheat.
-
-A network outage, provider change, or OIDC-policy drift **must not** rewrite the meaning of `S2.*`.
-Lane B is never CI-gating.
-
-### Lane C — real durable resolution (**hard-gated, unavailable today**)
-
-```text
-status: unavailable
-reason: no pinned real resolver profile establishes durable principal resolution
-        and accountable-role semantics under an offline-verifiable contract
-```
-
-Lane C ships only when **all seven** exist: canonical principal identifier; signed or independently
-authenticated resolver response; pinned profile and trust root; explicit axis ceiling;
-historical/offline verification method; revocation, cessation and delegation semantics; and no
-guessed equivalence between a person, an organisation and a legal role.
-
-**Explicitly forbidden approximations** — these are hints wearing resolver costumes, and none may
-move an axis: website scraping, an email domain, a company-search screenshot, or an organisation
-name inside an OIDC claim.
-
-Until Lane C exists, the founder's-ledger blocker stays **demonstrably unreachable**. That is a
-stronger research result than a decorative green box, and it is the honest reason
-`principal_resolved` and `accountable_role_bound` are unreachable for a real Art. 22(3) filing today.
-
-**Open — flagged, not invented.** Lane C requirement 6 (revocation / cessation) has **no typed
-outcome** in the frozen nine. A revoked or ceased resolver profile is a real state that the current
-outcome set cannot express. I am **not** minting a tenth code speculatively while Lane C is
-unavailable; instead this is recorded as an **amendment trigger**: shipping Lane C requires an
-amendment adding at least `resolver_profile_revoked`, and the gap is stated here so it cannot later
-be mistaken for an oversight.
-
----
-
-## A3 — amends frozen A1/A2: delegation never joins vectors
-
-**The hole A3 closes was in A2's own Law 7.** A2 permitted a join when "a pinned, independently
-verifiable delegation edge binds the principals". A delegation proves a **relationship** between two
-principals; it does **not** make them one principal. Left standing, Frankenidentity walks back in
-wearing a delegation badge:
-
-```text
-Person A         role       = accountable_role_bound
-Organisation B   continuity = durable
-Delegation       A represents B
-INVALID JOIN     B becomes durable + accountable_role_bound
-```
-
-That may occasionally describe reality, but the vector was assembled across **two subjects**.
-
-**Changed by A3** (no count moves — 7 laws, 6 Lean targets, 9 outcomes, 6 rows all hold):
-
-| Object                    | A2                                                       | A3                                                                                               |
-| ------------------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| Law 7                     | join permitted on same principal **or valid delegation** | join permitted on **same canonical principal only**; delegation is a separate typed relationship |
-| `principalMismatchNoJoin` | carried a `¬ validDelegation` premise                    | **premise dropped** — no exception                                                               |
-| S2.5 expected outcome     | "no axis movement" (prose)                               | `identity_provider_untrusted` at `S2.C3`                                                         |
-
-**Structural consequence A3 forces, surfaced here rather than discovered in Section 4.** If neither
-principal inherits the other's components, a submission involving an actor and a represented party
-resolves to **two principals with two vectors** — so Section 1's banked object cannot be a single
-vector. It becomes a **principal-keyed map plus a separate set of delegation edges**:
-
-```text
-BANKS:  submitter_identity_bound @ { canonical_principal -> strength_vector }
-                                  + [ delegation_edge ]
-```
-
-The policy test `required ≤ᵥ actual` is therefore **per principal**, and a policy demanding authority
-to act for another principal is satisfied by a delegation edge, never by a merged vector. This
-amends the singular-vector wording frozen in Section 1's ledger.
 
 ---
 
@@ -676,3 +530,255 @@ At minimum, any Lane C profile supporting revocation requires:
 
 The outcome is **not** minted because the architecture mentions revocation. It is minted when a real
 pinned profile makes the state **reachable** and the verifier must distinguish it.
+
+## Section 3 — evidence lanes (DRAFT, ruled at A2)
+
+Three lanes. The normative one contains no real-world dependency; reality enters through a
+controlled airlock rather than through the laboratory ceiling.
+
+### Lane A — sealed synthetic resolver (**normative**)
+
+The complete `S2.*` matrix runs **here**, and only here. Lane A is the oracle: it defines what the
+VSI contract _means_.
+
+- deterministic local issuer and resolver keys; synthetic identity namespace
+- frozen resolver profiles with **explicit four-axis ceilings**
+- exact canonical principal grammar
+- fixtures for expiry, replay, principal collision, delegation
+- byte-stable generation, offline verification, every first-failure outcome witnessed
+- **no** dependency on Fulcio, Rekor, OIDC, DNS, company registries, or wall-clock network reachability
+
+**Naming rule (normative).** The synthetic authorities are **never** named after a real provider.
+Frozen identifiers:
+
+```text
+simurgh.synthetic.oidc.v1
+simurgh.synthetic.registry.v1
+simurgh.synthetic.role_authority.v1
+```
+
+Lane A proves the VSI contract and verifier semantics — **not** compatibility with any external
+service. This also keeps the lane clear of the brand-denylist class of defect that 3P/5D/5E
+machinery exists to catch.
+
+### Lane B — real Sigstore ceremony (**external validity, not the oracle**)
+
+The lane that retires `real_sigstore_anchor_execution_deferred`, and the only thing that can:
+
+1. perform a real keyless signing ceremony
+2. capture the Fulcio certificate, Rekor material, identity claims and verification outputs
+3. freeze all required public artifacts
+4. bind the real artifact digest into the 5P evidence bundle
+5. **re-verify offline**, without refreshing or reissuing the certificate
+6. record the achieved vector honestly
+
+**Expected achieved vector — written down before execution, so a better result cannot be
+retrofitted as a prediction:**
+
+```text
+binding      cryptographically_bound
+resolution   provider_asserted
+continuity   ephemeral
+role         unproven
+```
+
+The expired certificate must remain **historically verifiable**, and expiry must **not** upgrade
+`continuity` to `durable` — that is Law 5 in its sharpest form, and it is the single most likely
+place for this stage to accidentally cheat.
+
+A network outage, provider change, or OIDC-policy drift **must not** rewrite the meaning of `S2.*`.
+Lane B is never CI-gating.
+
+### Lane C — real durable resolution (**hard-gated, unavailable today**)
+
+```text
+status: unavailable
+reason: no pinned real resolver profile establishes durable principal resolution
+        and accountable-role semantics under an offline-verifiable contract
+```
+
+Lane C ships only when **all seven** exist: canonical principal identifier; signed or independently
+authenticated resolver response; pinned profile and trust root; explicit axis ceiling;
+historical/offline verification method; revocation, cessation and delegation semantics; and no
+guessed equivalence between a person, an organisation and a legal role.
+
+**Explicitly forbidden approximations** — these are hints wearing resolver costumes, and none may
+move an axis: website scraping, an email domain, a company-search screenshot, or an organisation
+name inside an OIDC claim.
+
+Until Lane C exists, the founder's-ledger blocker stays **demonstrably unreachable**. That is a
+stronger research result than a decorative green box, and it is the honest reason
+`principal_resolved` and `accountable_role_bound` are unreachable for a real Art. 22(3) filing today.
+
+**Open — flagged, not invented.** Lane C requirement 6 (revocation / cessation) has **no typed
+outcome** in the frozen nine. A revoked or ceased resolver profile is a real state that the current
+outcome set cannot express. I am **not** minting a tenth code speculatively while Lane C is
+unavailable; instead this is recorded as an **amendment trigger**: shipping Lane C requires an
+amendment adding at least `resolver_profile_revoked`, and the gap is stated here so it cannot later
+be mistaken for an oversight.
+
+---
+
+## Section 4 — threat model: attack classes (DRAFT)
+
+Six fixtures are not a threat model; they are six fixtures. This taxonomy names the **classes**, and
+states honestly which are witnessed by §2.4's matrix and which are not yet witnessed at all. A class
+with no witness is a **coverage gap on the record**, not an implied absence of risk.
+
+### T1 — axis laundering (strength asserted on an axis the source cannot speak to)
+
+Continuity evidence implying role; a provider assertion implying principal resolution; an expired
+certificate implying durability. **Witnessed:** S2.1. **Governed by:** Law 4 (vector ceiling bounds
+the delta), Law 5 (expiry is not manufacture).
+
+### T2 — subject substitution (strength assembled across distinct principals)
+
+Frankenidentity assembly; a delegation edge used as an equality edge; two weak resolvers merged into
+one fictional strong principal. **Witnessed:** S2.2. **Governed by:** Law 7 (join only across the
+exact same canonical principal), atomicity.
+
+### T3 — temporal and presentational replay
+
+The same evidence re-presented under a stronger profile, reserialised, or re-ordered to gain an axis.
+**Witnessed:** S2.3. **Governed by:** Law 2, Law 3 (upgrade only via new, independently signed,
+digest-bound resolver evidence).
+
+### T4 — order collapse (the partial order flattened into a ranking)
+
+Scalar scores, lexicographic comparison, "overall level", averaging, or treating incomparable as
+pass/fail by default. **Witnessed:** S2.4. **Governed by:** Law 1, `incomparableIff`,
+`relationPartition`.
+
+### T5 — authority laundering from untrusted content
+
+Model output, prompt content, document text, or any untrusted context asserting identity strength,
+role, or resolver status. **Witnessed:** S2.5. **Governed by:** resolver-source authority (S2.C3) —
+natural-language output has **zero** resolver authority. This is 4B/4C's capability boundary applied
+to identity.
+
+### T6 — same-subject contradiction
+
+Two assertions about one canonical principal that cannot both hold. **Witnessed:** S2.6.
+**Governed by:** same-principal claim consistency (S2.C6).
+
+### Classes named but NOT yet witnessed — the honest coverage gaps
+
+| Class                                | Why unwitnessed                                                                                                                                 | Trigger to witness                                                   |
+| ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| **T7 — resolver profile compromise** | a compromised trusted profile is indistinguishable from an honest one at the structural layer; Sigstore concedes the same for a compromised IdP | requires a monitoring/transparency lane, not a fixture               |
+| **T8 — revocation and cessation**    | no typed outcome exists (§2.7); the state is unreachable while Lane C is unavailable                                                            | Lane C entering scope ⇒ amendment adding `resolver_profile_revoked`  |
+| **T9 — submission incompleteness**   | out of scope by Law 6; SCITT concedes the same seam in RFC 9943 §9.3                                                                            | the dedicated completeness blade (socket minted in §1)               |
+| **T10 — cross-namespace collision**  | two profiles mapping different real subjects into one canonical namespace                                                                       | resolver-profile registry census (Lane A Task 2 partially guards it) |
+
+T7 and T9 are **structural limits of this blade**, not defects to be patched later. T8 and T10 are
+**work items** with named triggers.
+
+## Section 5 — four-axis scorecard (honest, re-scored at closeout)
+
+Scored against the stage **as currently specified and built**, not as hoped. Section 1 is frozen,
+Section 2 is drafted, Lane A has one module, Lane B has not been executed, Lane C is unreachable.
+
+| Axis                   | Score   | Honest basis                                                                                                                                                                                                                                                                                                                                                                                     |
+| ---------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Novelty**            | **8.6** | The componentwise identity lattice with a typed incomparable outcome, and _delegation never transfers axes_, are new geometry — and they correct a collapse this repo itself shipped in `stage5g/rungLattice.mjs`. Docked below 9 because keyless signing, transparency logs and identity assertions are all existing primitives; the invention is the **refusal to order them**, not the parts. |
+| **Frontier**           | **8.0** | Lowest axis, deliberately. The real Sigstore ceremony (Lane B) **has not run**, so 5G's five-stage-old `real_sigstore_anchor_execution_deferred` is still open, and Lane C is _demonstrably unreachable_. A stage whose two reality-facing lanes are unexecuted has not yet met the frontier — it has specified how it would.                                                                    |
+| **Good-for-Anthropic** | **9.0** | Directly serves third-party evaluation and red-team submission provenance, where a lab must know which durable principal stands behind submitted evidence years later. Maps cleanly onto EU AI Act Art. 22(3) production-on-request. Held below 9.5 because no external actor has run the verifier.                                                                                              |
+| **Constitution**       | **9.3** | The stage's entire content is refusing to overclaim what a signature proves: five signed non-claims, a typed unreachable ceiling for the named real-world actor, an explicitly unwitnessed-class table, and a bound that says _authentication is not accountability_. The honest-bound-first discipline is the deliverable, not a caveat attached to it.                                         |
+
+### What moves each higher — buildable artifacts with names, tracked as debts
+
+| Axis               | Artifact that moves it                                                                                                                      | Moves to |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| Novelty            | `proofs/stage5p/Vsi.lean` with all five §1 targets discharged, zero `sorry` — the order becomes machine-checked, not asserted               | 9.2      |
+| Frontier           | **Execute Lane B**: a real public Fulcio/Rekor ceremony, frozen and offline re-verified, retiring `real_sigstore_anchor_execution_deferred` | 9.0      |
+| Frontier           | A pinned **real** resolver profile satisfying all seven Lane C conditions, making `principal_resolved` reachable once                       | 9.4      |
+| Good-for-Anthropic | One external party (auditor, lab eval team, or standards contact) running the Lane A verifier unaided from the spec                         | 9.5      |
+| Constitution       | The **prior-art map** signed alongside the closeout, with every seam quotation byte-verified against primary text                           | 9.5      |
+
+**Guard against grade inflation.** Frontier at 8.0 is the discriminating score here: it is low because
+two of three lanes are unexecuted, and it must **stay** low until a ceremony actually runs. If it
+rises before Lane B executes, the scale has stopped measuring anything.
+
+## Deferred-section register — what this spec does NOT yet contain
+
+Stated explicitly so no gap is silent. Each row names the trigger that unblocks it.
+
+| Missing section                                | Status                                                                                                                                                        | Trigger                                                                                                                                                     |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Raw code allocation (band opens at **464**)    | **deliberately deferred**                                                                                                                                     | Lane A semantics proven; then ONE sole allocator maps symbolic outcomes to codes, 5O §10 pattern. Allocating now would number a design that may still move. |
+| Lean (`proofs/stage5p/Vsi.lean`)               | not written                                                                                                                                                   | five targets named in §1; written after the verifier's shape is executable                                                                                  |
+| Attestation / evidence package                 | not written                                                                                                                                                   | after Lane A produces a stable bank artifact                                                                                                                |
+| Cross-runtime parity (Node ≡ Python ≡ browser) | not written                                                                                                                                                   | after the deterministic surface is fixed                                                                                                                    |
+| K7 all-functions E2E net                       | **not in the Lane A plan** — a real gap                                                                                                                       | mandatory before tag; must enumerate every export + tamper matrix + cross-stage invariants                                                                  |
+| `STAGE_5P_PRIOR_ART_MAP.md`                    | **WRITTEN 2026-07-25** — `docs/research/llm-shield/STAGE_5P_PRIOR_ART_MAP.md`, six families + regulatory context; to be signed with `SIG5P.audit` at closeout | signing at closeout                                                                                                                                         |
+| EU AI Act re-pin                               | **DISCHARGED 2026-07-25**                                                                                                                                     | all four rows byte-verified against OJ L 2024/1689; Art. 18(1) wording corrected — my earlier paraphrase was not the Regulation's text                      |
+
+**Freeze status:** Section 1 FROZEN `991dde48`. **Sections 2, 3, 4 and 5 are DRAFT and have received
+no freeze ruling.**
+
+---
+
+# Amendment ledger
+
+## A2 — amends frozen A1 (Section 2 rulings landing on frozen text)
+
+**Why an amendment and not an edit.** The Section 2 rulings changed objects that A1 froze. A1's own
+invalidation rule names the counts, so the change is recorded here rather than applied silently.
+History is not rewritten; Section 1 keeps its freeze hash `991dde48`.
+
+| Object                        | A1 (frozen `991dde48`) | A2    | Reason                                              |
+| ----------------------------- | ---------------------- | ----- | --------------------------------------------------- |
+| laws                          | 6                      | **7** | Law 7 **No Frankenidentity** — the join law         |
+| Lean targets                  | 5                      | **6** | `principalMismatchNoJoin`                           |
+| typed outcomes                | 8                      | **9** | `identity_principal_mismatch`                       |
+| forward-committed attack rows | 5                      | **6** | S2.6 witnesses `identity_claim_mismatch` separately |
+
+**Re-freeze obligation, discharged.** A1 requires full re-freeze of _every later section that
+consumes_ these objects. Sections 2-N are unwritten, so the consuming set is **empty** and the
+obligation is discharged trivially — recorded explicitly, because a discharged-by-vacuity obligation
+that goes unstated is indistinguishable at review time from one that was skipped.
+
+**Counts re-derived, not hand-carried.** `tools/simurgh-attestation/stage5p/node/measureSection1Census.mjs`
+is the sole authority; every number in the table above is reproduced by running it.
+
+---
+
+## A3 — amends frozen A1/A2: delegation never joins vectors
+
+**The hole A3 closes was in A2's own Law 7.** A2 permitted a join when "a pinned, independently
+verifiable delegation edge binds the principals". A delegation proves a **relationship** between two
+principals; it does **not** make them one principal. Left standing, Frankenidentity walks back in
+wearing a delegation badge:
+
+```text
+Person A         role       = accountable_role_bound
+Organisation B   continuity = durable
+Delegation       A represents B
+INVALID JOIN     B becomes durable + accountable_role_bound
+```
+
+That may occasionally describe reality, but the vector was assembled across **two subjects**.
+
+**Changed by A3** (no count moves — 7 laws, 6 Lean targets, 9 outcomes, 6 rows all hold):
+
+| Object                    | A2                                                       | A3                                                                                               |
+| ------------------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| Law 7                     | join permitted on same principal **or valid delegation** | join permitted on **same canonical principal only**; delegation is a separate typed relationship |
+| `principalMismatchNoJoin` | carried a `¬ validDelegation` premise                    | **premise dropped** — no exception                                                               |
+| S2.5 expected outcome     | "no axis movement" (prose)                               | `identity_provider_untrusted` at `S2.C3`                                                         |
+
+**Structural consequence A3 forces, surfaced here rather than discovered in Section 4.** If neither
+principal inherits the other's components, a submission involving an actor and a represented party
+resolves to **two principals with two vectors** — so Section 1's banked object cannot be a single
+vector. It becomes a **principal-keyed map plus a separate set of delegation edges**:
+
+```text
+BANKS:  submitter_identity_bound @ { canonical_principal -> strength_vector }
+                                  + [ delegation_edge ]
+```
+
+The policy test `required ≤ᵥ actual` is therefore **per principal**, and a policy demanding authority
+to act for another principal is satisfied by a delegation edge, never by a merged vector. This
+amends the singular-vector wording frozen in Section 1's ledger.
+
+---

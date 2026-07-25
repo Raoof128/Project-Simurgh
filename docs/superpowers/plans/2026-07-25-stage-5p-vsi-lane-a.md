@@ -43,8 +43,11 @@ delegation_edge_id = SHA256( UTF8("simurgh.vsi.delegation-edge.v1") || 0x00 ||
 
 Additional standing rules:
 
-- **Pure core, injected facts** (5M `B11`): nothing under `stage5p/core/` performs crypto, I/O, or
-  reads a clock. Digests are computed in `stage5p/node/` and passed in.
+- **Pure core** — and the B11 line is drawn deliberately. `stage5p/core/` performs **no I/O, no
+  clock, and no crypto TRUST decisions** (no signature verification, no trust-root evaluation); those
+  are adapter work in `stage5p/node/`. It **may** hash bytes it is handed, because a SHA-256 over
+  given bytes is deterministic computation, not trust — this is 5O's precedent (`leafConstruction`,
+  `merkleTree` hash inside core). `deriveSubjectId` therefore lives in **core**.
 - **The core verifier must not** lowercase emails, trim identifiers, apply Unicode normalisation,
   collapse aliases, infer company equivalence, treat an email domain as an organisation, or derive a
   person from an account name. Those are resolver-profile decisions.
@@ -53,7 +56,9 @@ Additional standing rules:
 - **Reuse, do not reinvent:** `tools/simurgh-attestation/canonicalise.mjs` exports `canonicalJson`.
 - **No attribution trailers** in any commit message.
 - Run `npx prettier --write` on every touched file before committing; `npx prettier --check` must pass.
-- Node 26 for all test runs: `/opt/homebrew/opt/node@26/bin/node`.
+- Node 26 for all test runs. **One standard command, recorded in every verification note** —
+  `npm run test:stage5p` (a bare `node --test <dir>` errors with `Cannot find module`; a green suite
+  must never depend on recalling the right shell incantation).
 
 ---
 
@@ -90,7 +95,16 @@ missing key, `type !== "simurgh.vsi.principal.v1"`, `kind` outside
 `["account","person","organisation","service"]`, `namespace_id` that is not lowercase ASCII, and
 `subject_id` not matching `/^[0-9a-f]{64}$/`.
 
-`deriveSubjectId` lives in `stage5p/node/` (it hashes) and is imported by fixtures, **not** by core.
+`deriveSubjectId(namespaceId, canonicalSubjectBytes)` accepts **BYTES ONLY** — `Buffer` or
+`Uint8Array`. A string argument is **rejected at the boundary**, because silently accepting one makes
+UTF-8 encoding part of the core's undocumented resolver policy. The resolver profile decides how a
+real identifier becomes canonical subject bytes; the principal core hashes exactly the bytes it is
+handed and performs no normalisation, case folding, trimming, alias expansion, or encoding policy.
+
+**The Unicode claim, stated narrowly.** The assertion is _not_ "NFC and NFD always identify different
+real people". It is: **the VSI principal core does not invent equivalence between distinct canonical
+byte sequences.** A resolver profile may deliberately normalise before calling the core — and if it
+does, that behaviour is pinned in that profile, not hidden in the core.
 
 **Steps**
 
@@ -98,9 +112,17 @@ missing key, `type !== "simurgh.vsi.principal.v1"`, `kind` outside
    - all four `kind` values accepted; a fifth rejected
    - uppercase hex `subject_id` rejected; 63- and 65-char rejected
    - uppercase `namespace_id` rejected
-   - **laundering rejections, one test each:** `"Alice@x"` vs `"alice@x"` are different subjects;
-     a trailing-space identifier is not trimmed into equality; NFC and NFD spellings of the same
-     grapheme produce **different** subjects (assert the module does not normalise)
+   - **byte-premise first, then the laundering assertion** (a negative test that never proved its
+     premise is the S7.19 defect): assert `Buffer.from("\u00e9")` differs from `Buffer.from("e\u0301")`,
+     THEN assert their `deriveSubjectId` outputs differ
+   - `deriveSubjectId(ns, "\u00e9")` **throws** — strings rejected at the boundary
+   - `"Alice@x"` vs `"alice@x"` are different subjects; a trailing-space identifier is not trimmed
+   - **exact-object hardening, one test each:** arrays and `null` rejected; missing key; additional
+     key; inherited-key tricks and non-plain objects (`Object.create`, class instances) rejected;
+     uppercase or malformed `subject_id`; invalid `kind`; uppercase or non-ASCII `namespace_id`;
+     a formatted string pretending to be a principal object
+   - **no friendly parser** — `makePrincipal` never repairs, coerces, or infers. Friendly parsers
+     become identity soup remarkably fast.
    - `principalsEqual` is exact over all four fields — differing only in `kind` is not equal
    - `namespace_id === resolver_profile_id` is _not_ special-cased anywhere (they are distinct fields)
 2. Run it; watch every test fail (module absent).
@@ -198,6 +220,22 @@ Implements every §2.6 invariant. **The three that carry the stage:**
 Sorting is by `principalCanonicalBytes`, delegation edges by `delegation_edge_id`. Assert that
 inserting the same principals in reverse order yields byte-identical bank output.
 
+**State-transition ledger (the executable contract):**
+
+```text
+valid attachment
+  -> same principal only
+  -> monotone vector change
+  -> bounded by prior JOIN resolver ceiling
+  -> evidence digest added once
+
+failed attachment
+  -> typed failure
+  -> bank byte-identical
+  -> no digest harvested
+  -> no partial axis update
+```
+
 Commit: `feat(5p): identity bank — sorted, atomic, per-principal, never pooled`.
 
 ---
@@ -229,7 +267,15 @@ S2.C9 required <=v actual policy test
 **First failure only.** A test asserts no later check can shadow an earlier defect: for each fixture,
 the reported `check_id` equals the expected one **and** all earlier checks are recorded satisfied.
 
-Raw codes are **not** allocated in this task. Numeric allocation happens once, in a later section, as
+Each check is pinned on six dimensions before any code is written:
+
+```text
+check_id | input consumed | failure condition | symbolic outcome
+         | required prefix checks | state mutation permitted (yes/no)
+```
+
+The verifier emits **only stable symbolic values** — `check_id`, `strength_relation`,
+`policy_outcome`. Raw codes are **not** allocated in this task. Numeric allocation happens once, in a later section, as
 the sole allocator (5O's §10 pattern) — do not scatter numbers through the verifier.
 
 Commit: `feat(5p): section 2 verifier — nine checks, first-failure only`.

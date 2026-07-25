@@ -3,7 +3,7 @@
   "version": "0.4.18",
   "private": true,
   "license": "AGPL-3.0-or-later",
-  "description": "Zero-trust behavioral AI exam proctor — working mitigation against the Invisible Window attack (Abedini, 2026). Claude-powered, prompt-cached, with native Countermeasure C helper.",
+  "description": "Zero-trust behavioral AI exam proctor \u2014 working mitigation against the Invisible Window attack (Abedini, 2026). Claude-powered, prompt-cached, with native Countermeasure C helper.",
   "type": "module",
   "main": "server.js",
   "scripts": {
@@ -11,7 +11,8 @@
     "dev": "node --watch server.js",
     "test": "node --test tests/unit/*.test.js tests/unit/**/*.test.js tests/unit/**/**/*.test.js",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "test:stage5p": "node --test tests/unit/llmShield/stage5p/*.test.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
