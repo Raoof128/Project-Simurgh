@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+# Stage 5P — VSI: verifiable submitter identity. Fail-closed reproduce covering the unit suite, both
+# census phases, the raw-code allocator census, and the Lean core. Node 26.
+#
+# Every gate is an explicit if/then/else exit 1. NO `cmd && echo "OK"` chains: under `set -e` that
+# pattern can report success when the command failed (the 5E gotcha — it cost two real fail-opens).
+#
+# Honest scope: this reproduces everything that needs no network and no clock. Lane B (a real
+# Sigstore ceremony) and Lane C2 are NOT reproduced here because they have not been executed; a
+# script that silently skipped them would read as coverage.
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$ROOT"
+
+NODE="/opt/homebrew/opt/node@26/bin/node"
+if [ ! -x "$NODE" ]; then NODE="node"; fi
+S5P="tools/simurgh-attestation/stage5p"
+
+echo "== Stage 5P VSI reproduce =="
+"$NODE" --version
+
+echo "-- unit suite --"
+if "$NODE" --test tests/unit/llmShield/stage5p/*.test.js > /tmp/s5p-unit.log 2>&1; then
+  tail -3 /tmp/s5p-unit.log
+else
+  echo "FAIL: stage5p unit suite"; tail -30 /tmp/s5p-unit.log; exit 1
+fi
+
+echo "-- Section 1 census (counts are generator-derived, never hand-carried) --"
+if "$NODE" "$S5P/node/measureSection1Census.mjs" > /tmp/s5p-s1.log 2>&1; then
+  echo "section 1 census: clean"
+else
+  echo "FAIL: Section 1 census"; tail -30 /tmp/s5p-s1.log; exit 1
+fi
+
+echo "-- Lane A census, DRAFT phase (is the discharge ledger complete?) --"
+if "$NODE" "$S5P/node/measureStage5pLaneACensus.mjs" --phase=draft > /tmp/s5p-draft.log 2>&1; then
+  echo "lane A census (draft): clean"
+else
+  echo "FAIL: Lane A census (draft)"; tail -40 /tmp/s5p-draft.log; exit 1
+fi
+
+echo "-- Lane A census, RELEASE phase (is every typed outcome discharged?) --"
+if "$NODE" "$S5P/node/measureStage5pLaneACensus.mjs" --phase=release > /tmp/s5p-rel.log 2>&1; then
+  echo "lane A census (release): clean"
+else
+  echo "FAIL: Lane A census (release)"; tail -40 /tmp/s5p-rel.log; exit 1
+fi
+
+echo "-- raw-code census (Annex R band + A5 amendment band + emission-site coverage) --"
+if "$NODE" "$S5P/node/measureStage5pRawCodes.mjs" > /tmp/s5p-raw.log 2>&1; then
+  echo "raw-code census: clean"
+else
+  echo "FAIL: raw-code census"; tail -40 /tmp/s5p-raw.log; exit 1
+fi
+
+echo "-- byte-stability: every census serialises identically twice --"
+for gen in measureSection1Census measureStage5pRawCodes; do
+  "$NODE" "$S5P/node/$gen.mjs" > "/tmp/s5p-$gen.1" 2>/dev/null
+  "$NODE" "$S5P/node/$gen.mjs" > "/tmp/s5p-$gen.2" 2>/dev/null
+  if cmp -s "/tmp/s5p-$gen.1" "/tmp/s5p-$gen.2"; then
+    echo "$gen: byte-stable"
+  else
+    echo "FAIL: $gen is not byte-stable"; exit 1
+  fi
+done
+
+echo "-- Lean core (six §1 targets, zero proof escapes) --"
+if command -v lean >/dev/null 2>&1; then
+  if lean proofs/stage5p/Vsi.lean; then
+    echo "lean: type-checks"
+  else
+    echo "FAIL: Lean core"; exit 1
+  fi
+  if grep -REn "\bsorry\b|\badmit\b" proofs/stage5p >/dev/null 2>&1; then
+    echo "FAIL: proof escape found in proofs/stage5p"; exit 1
+  else
+    echo "lean: no proof escapes"
+  fi
+else
+  echo "SKIP: lean not installed (the proof is CI-gated separately)"
+fi
+
+echo
+echo "== Stage 5P reproduce: ALL GATES PASSED =="
+echo "NOT reproduced, because NOT executed: Lane B (real Sigstore ceremony), Lane C2."
