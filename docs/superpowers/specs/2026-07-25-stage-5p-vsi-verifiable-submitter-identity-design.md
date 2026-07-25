@@ -624,6 +624,57 @@ applying Unicode normalisation. A profile MAY define such a transformation as pa
 `canonical_subject_bytes` derivation — and if it does, that behaviour is pinned in the profile and
 visible to a verifier, never a hidden default.
 
+### 2.11 Resolver evidence envelope (frozen)
+
+What a resolver actually submits. The claim is a **discriminated union**: exactly one alternative is
+present, and **the inactive alternative is ABSENT, not `null`** (5O §9's pattern — a `null` key is a
+statement, and an absent key is silence; only silence is unambiguous).
+
+```json
+{
+  "type": "simurgh.vsi.resolver_evidence.v1",
+  "profile_id": "simurgh.synthetic.oidc.v1",
+  "claim": { "principal": { "type": "simurgh.vsi.principal.v1", "...": "..." } },
+  "asserted_strength_delta": {
+    "binding": "cryptographically_bound",
+    "resolution": "provider_asserted",
+    "continuity": "ephemeral",
+    "role": "unproven"
+  },
+  "evidence_digest": "<64 lowercase hex>",
+  "submission_digest_binding": "<64 lowercase hex>",
+  "signature": "<lowercase hex, even length>"
+}
+```
+
+| Field                       | Rule                                                                             |
+| --------------------------- | -------------------------------------------------------------------------------- |
+| `claim`                     | exactly one of `principal` \| `delegation`; the other key **absent**             |
+| `asserted_strength_delta`   | complete four-axis vector — what the resolver _claims_, never what it is granted |
+| `evidence_digest`           | bare 64-hex; identity of the underlying evidence bytes                           |
+| `submission_digest_binding` | bare 64-hex; Law 3's digest-bound-to-the-original-submission requirement         |
+| `signature`                 | lowercase hex; **verified by an adapter, never by the core** (B11)               |
+
+**Replay identity — the mechanism that makes Law 2 catchable.**
+
+```text
+replay_identity = SHA256(
+    UTF8("simurgh.vsi.replay.v1")   || 0x00 ||
+    UTF8(evidence_digest)           || 0x00 ||
+    UTF8(submission_digest_binding) || 0x00 ||
+    canonical_json(claim) )
+```
+
+It deliberately **excludes `profile_id` and `asserted_strength_delta`**. Two envelopes carrying the
+same underlying evidence therefore share a replay identity **even when re-presented under a stronger
+profile or with a larger asserted delta** — which is precisely how `S2.C4` catches
+`identity_replay_upgrade_attempted`. If replay identity included the profile, the attack would
+rename itself into invisibility.
+
+**`asserted_strength_delta` is a CLAIM, not a grant.** It is what the producer says; the verifier
+grants only what `Law 4`'s ceiling permits. The two are never conflated, and the fixture register
+records both (`attempted_strength_after` vs `actual_strength_after`).
+
 ### 2.9 `section_2.added_non_claims` (register)
 
 ```text
