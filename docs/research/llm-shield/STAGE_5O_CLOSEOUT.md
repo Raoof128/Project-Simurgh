@@ -14,16 +14,16 @@ package — byte-reproducibly, with no trust in the producer.
 
 ## What shipped (all thirteen sections frozen)
 
-| §         | Blade                                                                                            |
-| --------- | ------------------------------------------------------------------------------------------------ |
-| **1–6**   | commitment schema, indexed-universe equality objects, anchored presented census closure           |
-| **7**     | challenge issuance: 11-check prefix-ordered relation, real Bitcoin-mainnet suffix validator, RFC 5869 seed, byte-exact index sampler |
-| **8**     | **No Unbudgeted Unzip** — case-only opening, indexed Merkle inclusion, cumulative budget where reopening costs nothing |
-| **9**     | **exact rational probability** — the frozen T3.5 detection floor made an executable rejection, decided by integer cross-multiplication with no float on any verdict path |
-| **10**    | sole numeric allocator: 44 symbolic reasons → codes **420–463**, generated from the frozen orders |
-| **11**    | Lean core: **15 theorems, zero proof escapes, no project-defined axiom**                          |
-| **12**    | assembled-package capsule over a six-section registry, Stage 4T adapter reused unchanged          |
-| **13**    | pinned prior-art and novelty source map                                                           |
+| §       | Blade                                                                                                                                                                    |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **1–6** | commitment schema, indexed-universe equality objects, anchored presented census closure                                                                                  |
+| **7**   | challenge issuance: 11-check prefix-ordered relation, real Bitcoin-mainnet suffix validator, RFC 5869 seed, byte-exact index sampler                                     |
+| **8**   | **No Unbudgeted Unzip** — case-only opening, indexed Merkle inclusion, cumulative budget where reopening costs nothing                                                   |
+| **9**   | **exact rational probability** — the frozen T3.5 detection floor made an executable rejection, decided by integer cross-multiplication with no float on any verdict path |
+| **10**  | sole numeric allocator: 44 symbolic reasons → codes **420–463**, generated from the frozen orders                                                                        |
+| **11**  | Lean core: **15 theorems, zero proof escapes, no project-defined axiom**                                                                                                 |
+| **12**  | assembled-package capsule over a six-section registry, Stage 4T adapter reused unchanged                                                                                 |
+| **13**  | pinned prior-art and novelty source map                                                                                                                                  |
 
 **Release ledger: all six requirements DISCHARGED**, each bound to executed evidence rather than to a
 description.
@@ -94,12 +94,12 @@ Recorded because the pattern is the deliverable, not the embarrassment:
 
 ## Four-axis scorecard (re-scored from shipped evidence — no floor, no mandatory increase)
 
-| Axis             | Spec (draft) | Closeout | Why                                                                                                                                                                               |
-| ---------------- | ------------ | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Axis             | Spec (draft) | Closeout | Why                                                                                                                                                                                                                                                                                            |
+| ---------------- | ------------ | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Novelty**      | 7.0          | **7.5**  | The budget accounting is as drafted, but §9 turned a frozen prose bound into an executable rejection **with claim-value verification** — the floor now catches a `9/10` label over a computed `4/5`. Narrow, and the ingredients are explicitly not ours (RFC 6962, RFC 5869, hypergeometric). |
-| **Frontier**     | 7.0          | **7.0**  | **Unmoved, deliberately.** No independent producer ran this; no external party re-derived anything. The eval-set-protection shape is real but unexercised outside this repo, and §13's sweep skipped regulation, incidents and the lab surface. |
-| **Anthropic**    | 7.5          | **8.0**  | Disclosure-budget accounting over a held evaluation corpus is the mapped use, and §9 adds a checkable adequacy floor so an audit cannot silently decay to a microscopic detection probability while every check stays green. |
-| **Constitution** | 7.5          | **8.0**  | Every limit precommitted, every residue signed, and the honesty rails are now **executable**: Lane A's non-confidentiality is a passing fixture, and the citation gate refuses a fuzzy source. |
+| **Frontier**     | 7.0          | **7.0**  | **Unmoved, deliberately.** No independent producer ran this; no external party re-derived anything. The eval-set-protection shape is real but unexercised outside this repo, and §13's sweep skipped regulation, incidents and the lab surface.                                                |
+| **Anthropic**    | 7.5          | **8.0**  | Disclosure-budget accounting over a held evaluation corpus is the mapped use, and §9 adds a checkable adequacy floor so an audit cannot silently decay to a microscopic detection probability while every check stays green.                                                                   |
+| **Constitution** | 7.5          | **8.0**  | Every limit precommitted, every residue signed, and the honesty rails are now **executable**: Lane A's non-confidentiality is a passing fixture, and the citation gate refuses a fuzzy source.                                                                                                 |
 
 **Frontier stays at 7.0 on purpose.** The axis measures whether the world outside this repository has
 exercised the blade, and nothing here did that. A stage that scores itself up for internal thoroughness
