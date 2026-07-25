@@ -1253,6 +1253,38 @@ export function vscReasonForRawCode(code) {
   return VSC_REASON_BY_RAW[code];
 }
 
+// ---- Stage 5P (VSI) — the closed band 464-472, consuming 5O's VSC_RESERVED_FROM ----------------
+//
+// The SOLE allocator is tools/simurgh-attestation/stage5p/core/rawCodeAllocator.mjs, which carries
+// the full triple {check_id, policy_outcome, raw_code}. This file cannot import it — exitCodes.mjs
+// is deliberately dependency-free, being the root of the exit-code graph — so the numbers appear in
+// both places and an equality gate in tests/unit/llmShield/stage5p/rawCodeAllocator.test.js fails if
+// they ever disagree on a single code. The check binding lives only in the allocator: two outcomes
+// share S2.C8, so a flat reason table cannot express the allocation on its own.
+//
+// Order is the frozen first-failure check order, with the S2.C8 tie-break (specific unresolved
+// condition before general incomparable relation) normative.
+export const VSI_RAW_CODES = Object.freeze({
+  OK: 0,
+  RESOLVER_BINDING_INVALID: 464, // S2.C2 — profile unpinned/invalid, or adapter reported a bad signature
+  IDENTITY_PROVIDER_UNTRUSTED: 465, // S2.C3 — untrusted source; where any model narrative lands
+  IDENTITY_REPLAY_UPGRADE_ATTEMPTED: 466, // S2.C4 — same evidence re-presented under a stronger profile
+  IDENTITY_PRINCIPAL_MISMATCH: 467, // S2.C5 — Law 7; two valid results, different canonical principals
+  IDENTITY_CLAIM_MISMATCH: 468, // S2.C6 — incomparable assertions about ONE canonical principal
+  ACCOUNTABLE_ROLE_UNPROVEN: 469, // S2.C7 — Law 4; delta exceeds what the vector ceiling permits
+  IDENTITY_UNRESOLVED: 470, // S2.C8 — the SPECIFIC condition: subject resolved by nothing presented
+  IDENTITY_STRENGTH_INCOMPARABLE: 471, // S2.C8 — the GENERAL relation: required and actual unordered
+  IDENTITY_EPHEMERAL_ONLY: 472, // S2.C9 — resolved but ephemeral where durability was required
+});
+export const VSI_CHECK_ORDER = Object.freeze(Array.from({ length: 9 }, (_, i) => 464 + i));
+export const VSI_WRAPPER = RAW_VERIFIER_CODES.INTERNAL_ERROR_FAIL_CLOSED; // shared 29, as 5O uses it
+export const VSI_BANDS = Object.freeze({ section2: Object.freeze({ lo: 464, hi: 472 }) });
+// CLOSED. A later outcome (the Lane C1 `resolver_profile_revoked` armed in spec §2.7 is the expected
+// first one) takes 473+ by explicit amendment. Existing codes NEVER move, even when a new outcome
+// logically belongs between two current checks — numeric adjacency is an accident of allocation
+// order, never a semantic claim.
+export const VSI_RESERVED_FROM = 473;
+
 export const RUN_LEVEL_BY_RAW = Object.freeze({
   0: 0,
   19: 1,
@@ -1716,6 +1748,15 @@ export const RUN_LEVEL_BY_RAW = Object.freeze({
   461: 1,
   462: 1,
   463: 1,
+  464: 1,
+  465: 1,
+  466: 1,
+  467: 1,
+  468: 1,
+  469: 1,
+  470: 1,
+  471: 1,
+  472: 1,
 });
 
 export function stage4CodeForRawCode(code) {
