@@ -117,6 +117,41 @@ test("the README states the four things the bundle does NOT establish", () => {
   assert.match(readme, /rekor\.sigstore\.dev\/api\/v1\/log\/entries/);
 });
 
+test("the reproduction receipt records a GENUINELY different environment", () => {
+  // Guards the failure mode of pasting a local run and calling it a reproduction. The receipt earns
+  // its name only if the host differs from the machine that built the bundle; if every row matched
+  // the producer's toolchain it would be a screenshot of ourselves.
+  const receipt = readFileSync(join(B, "REPRODUCTION_RECEIPT.md"), "utf8");
+  assert.match(receipt, /ALL CHECKS PASSED/);
+  assert.match(receipt, /exit code \`0\`/);
+  for (const marker of ["x86_64", "Ubuntu Linux", "3.12.3", "3.0.13"]) {
+    assert.ok(receipt.includes(marker), `the receipt omits the host's ${marker}`);
+  }
+  // The producer's own toolchain must be recorded alongside, or "different" is unfalsifiable.
+  for (const ours of ["arm64", "macOS", "3.14.6", "3.6.3"]) {
+    assert.ok(receipt.includes(ours), `the receipt omits the producer's ${ours} for comparison`);
+  }
+});
+
+test("the receipt REFUSES the party-independence claim it would be easiest to make", () => {
+  // The whole risk of a reproduction receipt is that it gets read as external validation. The
+  // operator was the producer, so the receipt must say so in terms that cannot be skimmed past.
+  const receipt = readFileSync(join(B, "REPRODUCTION_RECEIPT.md"), "utf8");
+  assert.match(receipt, /does NOT establish/i);
+  assert.match(receipt, /different \*\*machine\*\*, not a different \*\*party\*\*/i);
+  assert.match(receipt, /not discharged by this run/i);
+  assert.match(receipt, /No score moved/i);
+});
+
+test("the receipt does NOT publish a live SSH endpoint", () => {
+  // The repo is public. An IP plus a username is a free gift to anyone scanning for hosts, and the
+  // run's evidentiary value is entirely in the environment delta, which needs no hostname.
+  const receipt = readFileSync(join(B, "REPRODUCTION_RECEIPT.md"), "utf8");
+  assert.ok(!/\b\d{1,3}(\.\d{1,3}){3}\b/.test(receipt), "the receipt leaks an IP address");
+  assert.ok(!/ssh -i|@\d+\.\d+\.\d+\.\d+|eoiadmin/.test(receipt), "the receipt leaks SSH details");
+  assert.match(receipt, /redact/i, "the redaction must be declared, not silent");
+});
+
 test("the verifier imports NO producer code and needs no network", () => {
   const src = readFileSync(join(B, "verify.py"), "utf8");
   for (const forbidden of ["requests", "urllib.request", "http.client", "socket."]) {

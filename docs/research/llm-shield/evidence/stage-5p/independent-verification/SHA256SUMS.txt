@@ -23,6 +23,7 @@ dce5ef715502ec9f3cdfd11f8cc384b31a6141023d3e7595e9908a81cb6241bd  ./rekor-ceremo
 def822bb865a20eed2b136c35fef5b931de43a70cc3fba2faacb8dda680b79d5  ./rekor-ceremony/rekor-response.json
 aa1a6776d026488c108f89ca392c7f3685675065f1f964131a39b8a7cccb65f0  ./rekor-ceremony/sha256-manifest.txt
 9eff1a9016181e8e189481b12f68dbd64e9af911a472c93609efc669be21d656  ./rekor-ceremony/signer-public-key.pem
+6d5bcc1a1f5354f39b477346cd733f2b0617fcd21b8e9db450b6174a08986ec0  ./REPRODUCTION_RECEIPT.md
 0346f6e6cea056404624627bbf8b0242b67dcf273748b77b393d004b6559b04c  ./SPEC.md
 e3e607de466526344cfadc12f0484d6755042d48dba29152a66ca5db3b13cbcb  ./verify.py
 cc64c066b9d2cfe639c545c4a6cc8f5612bbb57da38c9327d4e64d212014eea8  ./vsi_parity.py
