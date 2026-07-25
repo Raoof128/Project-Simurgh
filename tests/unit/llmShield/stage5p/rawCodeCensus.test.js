@@ -237,6 +237,8 @@ test("raw literals 464-474 occur ONLY in the allocator, the registry, goldens an
     // Asserts VSC_RESERVED_FROM === 464 and that the handoff to 5P's band is intact.
     "tests/unit/llmShield/stage5o/exitCodes.test.js",
     "docs/superpowers/specs/2026-07-25-stage-5p-vsi-verifiable-submitter-identity-design.md",
+    // The closeout is approved documentation — the ruling permits the literals there by name.
+    "docs/research/llm-shield/STAGE_5P_CLOSEOUT.md",
   ];
   const SKIP = new Set(["node_modules", ".git", "dist", "build", ".remember", "coverage"]);
   // The FULL allocated range, amendment band included. The first version stopped at 472 and left
