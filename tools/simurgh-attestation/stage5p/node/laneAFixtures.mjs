@@ -70,10 +70,32 @@ export const UNTRUSTED_PROFILE = profile(
   }
 );
 
-export const REGISTRY = makeResolverRegistry([REGISTRY_PROFILE, ROLE_PROFILE, UNTRUSTED_PROFILE]);
+// A5: a profile that WAS trusted and whose authority has since been withdrawn. It is deliberately
+// listed in BOTH the trusted set and the revoked set — that is the honest shape of revocation, and
+// it is what forces the verifier to check the specific case before the general one. If revocation
+// were modelled by simply removing it from the trusted set, it would be indistinguishable from a
+// profile that never had authority, and the two have different remediations.
+export const REVOKED_PROFILE = profile("simurgh.synthetic.revoked-registrar.v1", "4".repeat(64), {
+  binding: "unbound",
+  resolution: "provider_asserted",
+  continuity: "durable",
+  role: "unproven",
+});
+
+export const REGISTRY = makeResolverRegistry([
+  REGISTRY_PROFILE,
+  ROLE_PROFILE,
+  UNTRUSTED_PROFILE,
+  REVOKED_PROFILE,
+]);
 export const PINNED = Object.freeze({
   registry: REGISTRY,
-  trusted_profile_ids: Object.freeze([REGISTRY_PROFILE.profile_id, ROLE_PROFILE.profile_id]),
+  trusted_profile_ids: Object.freeze([
+    REGISTRY_PROFILE.profile_id,
+    ROLE_PROFILE.profile_id,
+    REVOKED_PROFILE.profile_id,
+  ]),
+  revoked_profile_ids: Object.freeze([REVOKED_PROFILE.profile_id]),
 });
 
 const evidence = ({
@@ -260,6 +282,34 @@ export const COVERAGE_FIXTURES = Object.freeze([
       // one axis, so S2.C8 passes and the failure lands on the policy test with the specific
       // ephemerality outcome rather than the generic one.
       b.required.continuity = "durable";
+      return b;
+    },
+  },
+  {
+    fixture_id: "S2.COV.4",
+    single_defect_description:
+      "a resolver whose authority was withdrawn is still presented as a source",
+    expected_check_id: "S2.C3",
+    expected_policy_outcome: "resolver_profile_revoked",
+    build() {
+      const b = clone(cleanAncestor());
+      // Still in the trusted set — revocation is what rejects it, not absence from the set.
+      b.evidences[0].profile_id = REVOKED_PROFILE.profile_id;
+      return b;
+    },
+  },
+  {
+    fixture_id: "S2.COV.5",
+    single_defect_description:
+      "the subject is resolved, and the registry says that subject has ceased to exist",
+    expected_check_id: "S2.C9",
+    expected_policy_outcome: "identity_principal_ceased",
+    build() {
+      const b = clone(cleanAncestor());
+      // The registry profile HAS continuity authority, so it may lawfully speak about lifecycle.
+      b.evidences[0].principal_lifecycle = "ceased";
+      // Comparable but unmet, so the run reaches the policy test rather than dying earlier.
+      b.required.binding = "cryptographically_bound";
       return b;
     },
   },

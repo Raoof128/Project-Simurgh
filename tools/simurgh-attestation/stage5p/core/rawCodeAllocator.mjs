@@ -25,7 +25,7 @@ import { RAW_VERIFIER_CODES } from "../../stage4h/exitCodes.mjs";
  * general incomparable relation. Two outcomes share that check, so check order alone does not
  * determine the band and this tie-break has to be stated rather than inferred.
  */
-export const VSI_ALLOCATION = Object.freeze(
+export const VSI_CLOSED_BAND = Object.freeze(
   [
     { check_id: "S2.C2", policy_outcome: "resolver_binding_invalid", raw_code: 464 },
     { check_id: "S2.C3", policy_outcome: "identity_provider_untrusted", raw_code: 465 },
@@ -39,8 +39,38 @@ export const VSI_ALLOCATION = Object.freeze(
   ].map(Object.freeze)
 );
 
+/**
+ * The AMENDMENT BAND — append-only, ordered by MINT SEQUENCE rather than by check order.
+ *
+ * This is the case Annex R.4 predicted. `resolver_profile_revoked` belongs at S2.C3 and would
+ * "logically" sit between 465 and 466 — and it does NOT move there. Existing codes never move, so a
+ * later mint appends and the numbering stops being globally check-ordered. Numeric adjacency was
+ * always a historical accident of allocation order; the frozen check order is where meaning lives.
+ */
+export const VSI_AMENDMENT_BAND = Object.freeze(
+  [
+    {
+      check_id: "S2.C3",
+      policy_outcome: "resolver_profile_revoked",
+      raw_code: 473,
+      minted_by: "A5",
+    },
+    {
+      check_id: "S2.C9",
+      policy_outcome: "identity_principal_ceased",
+      raw_code: 474,
+      minted_by: "A5",
+    },
+  ].map(Object.freeze)
+);
+
+/** Every allocated row, closed band first. One code per outcome across BOTH segments. */
+export const VSI_ALLOCATION = Object.freeze([...VSI_CLOSED_BAND, ...VSI_AMENDMENT_BAND]);
+
 export const VSI_BAND_LO = 464;
-export const VSI_BAND_HI = 472;
+export const VSI_BAND_HI = 472; // the CLOSED band's upper edge; amendments append above it
+export const VSI_AMENDMENT_FROM = 473;
+export const VSI_ALLOCATED_HI = 474;
 
 /** Success is raw 0. It is deliberately NOT a member of the band and is never allocated. */
 export const VSI_OK_RAW = 0;

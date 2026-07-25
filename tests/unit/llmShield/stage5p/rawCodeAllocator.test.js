@@ -8,6 +8,9 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   VSI_ALLOCATION,
+  VSI_CLOSED_BAND,
+  VSI_AMENDMENT_BAND,
+  VSI_ALLOCATED_HI,
   VSI_PAIR_ALIASES,
   VSI_BAND_LO,
   VSI_BAND_HI,
@@ -32,6 +35,7 @@ import {
   RAW_VERIFIER_CODES,
   VSI_RAW_CODES,
   VSI_CHECK_ORDER,
+  VSI_AMENDMENT_CODES,
   VSI_WRAPPER,
   VSI_RESERVED_FROM,
 } from "../../../../tools/simurgh-attestation/stage4h/exitCodes.mjs";
@@ -49,13 +53,38 @@ const ANNEX_R = [
   [472, "S2.C9", "identity_ephemeral_only"],
 ];
 
-test("the allocation table matches the frozen Annex R band, row for row", () => {
+// A5.4, transcribed. Append-only, ordered by MINT sequence — NOT by check order.
+const A5_BAND = [
+  [473, "S2.C3", "resolver_profile_revoked"],
+  [474, "S2.C9", "identity_principal_ceased"],
+];
+
+test("the CLOSED band is byte-for-byte what Annex R froze — an amendment never moves it", () => {
   assert.deepEqual(
-    VSI_ALLOCATION.map((r) => [r.raw_code, r.check_id, r.policy_outcome]),
+    VSI_CLOSED_BAND.map((r) => [r.raw_code, r.check_id, r.policy_outcome]),
     ANNEX_R
   );
   assert.equal(VSI_BAND_LO, 464);
   assert.equal(VSI_BAND_HI, 472);
+});
+
+test("the AMENDMENT band matches A5.4, and every row names the amendment that minted it", () => {
+  assert.deepEqual(
+    VSI_AMENDMENT_BAND.map((r) => [r.raw_code, r.check_id, r.policy_outcome]),
+    A5_BAND
+  );
+  for (const r of VSI_AMENDMENT_BAND) {
+    assert.equal(r.minted_by, "A5", "an unattributed code cannot be traced back to a ruling");
+    assert.ok(r.raw_code > VSI_BAND_HI, "an amendment must append, never intrude");
+  }
+  assert.equal(VSI_ALLOCATED_HI, 474);
+});
+
+test("the full allocation is the closed band followed by the amendment band", () => {
+  assert.deepEqual(
+    VSI_ALLOCATION.map((r) => [r.raw_code, r.check_id, r.policy_outcome]),
+    [...ANNEX_R, ...A5_BAND]
+  );
 });
 
 test("all nine frozen outcomes appear exactly once — no omission, no duplicate", () => {
@@ -65,25 +94,39 @@ test("all nine frozen outcomes appear exactly once — no omission, no duplicate
   assert.equal(new Set(seen).size, seen.length, "an outcome is allocated twice");
 });
 
-test("codes are unique and contiguous across the closed band, with nothing outside it", () => {
+test("codes are unique and contiguous across BOTH segments, with nothing outside them", () => {
   const codes = VSI_ALLOCATION.map((r) => r.raw_code);
   assert.equal(new Set(codes).size, codes.length, "a code is allocated twice");
+  // Appending leaves no gap: contiguity still holds end to end.
   assert.deepEqual(
     codes,
-    Array.from({ length: VSI_BAND_HI - VSI_BAND_LO + 1 }, (_, i) => VSI_BAND_LO + i)
+    Array.from({ length: VSI_ALLOCATED_HI - VSI_BAND_LO + 1 }, (_, i) => VSI_BAND_LO + i)
   );
 });
 
-test("row order follows the frozen S2.C* check order", () => {
-  const idx = VSI_ALLOCATION.map((r) => SECTION2_CHECK_IDS.indexOf(r.check_id));
+test("the CLOSED band follows frozen check order; the amendment band follows MINT order", () => {
+  const closed = VSI_CLOSED_BAND.map((r) => SECTION2_CHECK_IDS.indexOf(r.check_id));
   assert.ok(
-    idx.every((n) => n >= 0),
+    closed.every((n) => n >= 0),
     "an allocated check id is not in the frozen order"
   );
   assert.deepEqual(
-    idx,
-    [...idx].sort((a, b) => a - b),
-    "allocation order contradicts check order"
+    closed,
+    [...closed].sort((a, b) => a - b),
+    "closed band contradicts check order"
+  );
+
+  // The amendment band is deliberately NOT globally check-ordered, and asserting that it were would
+  // assert something false: 473 sits at S2.C3, numerically above 472's S2.C9. That IS "existing
+  // codes never move" — past the first amendment, numeric adjacency stops tracking check order.
+  const amended = VSI_AMENDMENT_BAND.map((r) => SECTION2_CHECK_IDS.indexOf(r.check_id));
+  assert.ok(
+    amended.every((n) => n >= 0),
+    "an amended check id is not in the frozen order"
+  );
+  assert.ok(
+    amended[0] < closed[closed.length - 1],
+    "PREMISE: 473 must genuinely be out of global check order, or this test proves nothing"
   );
 });
 
@@ -106,7 +149,9 @@ test("success is raw 0, and 0 is not a member of the band", () => {
 // ---- executed agreement: the allocator is checked against RUNS, not against declarations --------
 
 test("every Lane A fixture's EXECUTED symbolic result maps to its Annex R raw code", () => {
-  const expected = new Map(ANNEX_R.map(([code, check, outcome]) => [`${check}|${outcome}`, code]));
+  const expected = new Map(
+    [...ANNEX_R, ...A5_BAND].map(([code, check, outcome]) => [`${check}|${outcome}`, code])
+  );
   // PREMISE: the ancestor is accepted, so each rejection below is caused by the fixture's defect.
   assert.equal(verifySection2(cleanAncestor(), PINNED).ok, true, "PREMISE FAILED");
 
@@ -230,16 +275,22 @@ test("the repo-wide registry agrees with the allocator on every single code", ()
     VSI_ALLOCATION.map((r) => [r.policy_outcome, r.raw_code])
   );
   assert.equal(VSI_RAW_CODES.OK, 0);
+  // VSI_CHECK_ORDER is the CLOSED band's first-failure spine ONLY. The amendment band has no check
+  // order to express, so extending that array would assert something untrue about 473/474.
   assert.deepEqual(
     [...VSI_CHECK_ORDER],
-    VSI_ALLOCATION.map((r) => r.raw_code)
+    VSI_CLOSED_BAND.map((r) => r.raw_code)
+  );
+  assert.deepEqual(
+    [...VSI_AMENDMENT_CODES],
+    VSI_AMENDMENT_BAND.map((r) => r.raw_code)
   );
   assert.equal(VSI_WRAPPER, RAW_VERIFIER_CODES.INTERNAL_ERROR_FAIL_CLOSED);
 });
 
-test("the band is CLOSED after 472 — the next outcome needs an amendment, not a gap-fill", () => {
-  assert.equal(VSI_RESERVED_FROM, 473);
-  assert.equal(VSI_RESERVED_FROM, VSI_BAND_HI + 1);
+test("allocation is CLOSED after 474 — the next outcome needs an amendment, not a gap-fill", () => {
+  assert.equal(VSI_RESERVED_FROM, 475);
+  assert.equal(VSI_RESERVED_FROM, VSI_ALLOCATED_HI + 1);
   for (const r of VSI_ALLOCATION) assert.ok(r.raw_code < VSI_RESERVED_FROM);
 });
 

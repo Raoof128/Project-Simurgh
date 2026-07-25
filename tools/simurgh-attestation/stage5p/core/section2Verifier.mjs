@@ -37,6 +37,9 @@ export const POLICY_OUTCOMES = Object.freeze([
   "accountable_role_unproven",
   "identity_strength_incomparable",
   "identity_principal_mismatch",
+  // A5 — minted when §2.7's armed trigger fired. Appended; the nine above are unchanged.
+  "resolver_profile_revoked",
+  "identity_principal_ceased",
 ]);
 
 const reject = (check_id, outcome, detail) => ({ ok: false, check_id, outcome, detail });
@@ -89,7 +92,18 @@ export function verifySection2(bundle, pinned) {
   // ---- S2.C3 resolver-source authority --------------------------------------------------------
   // T5: untrusted content — model output, prose, prompt context — has ZERO resolver authority.
   const trusted = new Set(pinned?.trusted_profile_ids ?? []);
+  const revoked = new Set(pinned?.revoked_profile_ids ?? []);
   for (const e of parsed) {
+    // A5: revocation is the SPECIFIC case of which untrusted is the general one — a revoked profile
+    // once held authority and lost it, an untrusted one never had any. Checking specific first is
+    // what keeps the remediations distinguishable.
+    if (revoked.has(e.profile_id)) {
+      return reject(
+        "S2.C3",
+        "resolver_profile_revoked",
+        `profile "${e.profile_id}" has been revoked`
+      );
+    }
     if (!trusted.has(e.profile_id)) {
       return reject(
         "S2.C3",
@@ -155,6 +169,15 @@ export function verifySection2(bundle, pinned) {
   // ---- S2.C7 monotone delta and vector-ceiling enforcement -------------------------------------
   let bank = emptyBank();
   for (let i = 0; i < parsed.length; i += 1) {
+    // A5.3: authority to speak about lifecycle IS the existing ceiling, not a new field. A profile
+    // with no continuity standing declaring a subject ceased is Law 4 laundering in a new hat.
+    if ("principal_lifecycle" in parsed[i] && profiles[i].ceiling.continuity !== "durable") {
+      return reject(
+        "S2.C7",
+        "accountable_role_unproven",
+        "profile asserts principal_lifecycle without continuity authority"
+      );
+    }
     const r = attachEvidence(bank, parsed[i], profiles[i]);
     if (!r.ok) return reject("S2.C7", "accountable_role_unproven", r.reason);
     bank = r.bank;
@@ -183,8 +206,14 @@ export function verifySection2(bundle, pinned) {
 
   // ---- S2.C9 required <=v actual ----------------------------------------------------------------
   if (!leqV(required, entry.strength)) {
-    const outcome =
-      entry.strength.continuity === "ephemeral" ? "identity_ephemeral_only" : "identity_unresolved";
+    // A5: most specific reason first. Cessation explains WHY no strength will ever be enough, so it
+    // outranks ephemerality, which in turn outranks the generic unresolved fallback.
+    const ceased = parsed.some((e) => e.principal_lifecycle === "ceased");
+    const outcome = ceased
+      ? "identity_principal_ceased"
+      : entry.strength.continuity === "ephemeral"
+        ? "identity_ephemeral_only"
+        : "identity_unresolved";
     return reject("S2.C9", outcome, "actual strength does not meet the required minimum");
   }
   pass("S2.C9");

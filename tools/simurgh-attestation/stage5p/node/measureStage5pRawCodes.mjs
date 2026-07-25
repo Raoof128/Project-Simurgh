@@ -23,6 +23,7 @@ import {
   VSI_PAIR_ALIASES,
   VSI_BAND_LO,
   VSI_BAND_HI,
+  VSI_ALLOCATED_HI,
   VSI_OK_RAW,
   VSI_FAIL_CLOSED_RAW,
   rawCodeFor,
@@ -34,6 +35,10 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const VERIFIER_SOURCE = resolve(HERE, "../core/section2Verifier.mjs");
 
 const pairKey = (check, outcome) => `${check}|${outcome}`;
+
+// The closed band is nine rows. Stated once, module-scope, so the census never has to ask the
+// allocator how big the segment it is policing is supposed to be.
+const CLOSED_BAND_FROZEN_LEN = 9;
 
 /**
  * EMISSION-SITE PROBES — deliberately NOT fixtures.
@@ -123,10 +128,8 @@ export function measureRawCodeCensus(options = {}) {
   if (new Set(codes).size !== codes.length) {
     problems.push({ kind: "duplicate_raw_code", observed: codes });
   }
-  const expectedBand = Array.from(
-    { length: VSI_BAND_HI - VSI_BAND_LO + 1 },
-    (_, i) => VSI_BAND_LO + i
-  );
+  // Contiguity spans BOTH segments — the amendment appends, so there is still no gap anywhere.
+  const expectedBand = Array.from({ length: codes.length }, (_, i) => VSI_BAND_LO + i);
   if (JSON.stringify(codes) !== JSON.stringify(expectedBand)) {
     problems.push({
       kind: "band_not_contiguous_in_order",
@@ -135,24 +138,65 @@ export function measureRawCodeCensus(options = {}) {
     });
   }
   for (const c of codes) {
-    if (c < VSI_BAND_LO || c > VSI_BAND_HI) problems.push({ kind: "code_outside_band", code: c });
+    if (c < VSI_BAND_LO || c > VSI_ALLOCATED_HI) {
+      problems.push({ kind: "code_outside_band", code: c });
+    }
+  }
+  // A5: the closed band must be EXACTLY what it was. An amendment appends; it never renumbers,
+  // re-points or reorders an already-allocated row. This is the executable form of "existing codes
+  // never move", and it is transcribed from Annex R.1 rather than read off the module.
+  const CLOSED_BAND_FROZEN = [
+    ["S2.C2", "resolver_binding_invalid", 464],
+    ["S2.C3", "identity_provider_untrusted", 465],
+    ["S2.C4", "identity_replay_upgrade_attempted", 466],
+    ["S2.C5", "identity_principal_mismatch", 467],
+    ["S2.C6", "identity_claim_mismatch", 468],
+    ["S2.C7", "accountable_role_unproven", 469],
+    ["S2.C8", "identity_unresolved", 470],
+    ["S2.C8", "identity_strength_incomparable", 471],
+    ["S2.C9", "identity_ephemeral_only", 472],
+  ];
+  // Read POSITIONALLY off the table under measurement, not off the module: a gate that consults the
+  // real export can never be falsified by an injected table, which would make it decorative.
+  const observedClosed = allocation
+    .slice(0, CLOSED_BAND_FROZEN_LEN)
+    .map((r) => [r.check_id, r.policy_outcome, r.raw_code]);
+  if (JSON.stringify(observedClosed) !== JSON.stringify(CLOSED_BAND_FROZEN)) {
+    problems.push({ kind: "closed_band_disturbed_by_amendment", observed: observedClosed });
+  }
+  for (const r of allocation.slice(CLOSED_BAND_FROZEN_LEN)) {
+    if (r.raw_code <= VSI_BAND_HI) {
+      problems.push({ kind: "amendment_intrudes_on_closed_band", row: r });
+    }
+    // Every amendment row names the amendment that minted it. An unattributed code is a code
+    // nobody can trace back to a ruling.
+    if (typeof r.minted_by !== "string" || r.minted_by.length === 0) {
+      problems.push({ kind: "amendment_row_without_provenance", row: r });
+    }
   }
   if (codes.includes(VSI_OK_RAW)) problems.push({ kind: "success_allocated_in_band" });
   if (codes.includes(VSI_FAIL_CLOSED_RAW)) problems.push({ kind: "fail_closed_allocated_in_band" });
 
   // --- ordering follows the frozen check order ---------------------------------------------------
-  const checkIdx = allocation.map((r) => SECTION2_CHECK_IDS.indexOf(r.check_id));
-  if (checkIdx.some((n) => n < 0)) {
+  // Ordering is asserted WITHIN a segment. The closed band follows the frozen check order; the
+  // amendment band follows MINT order and asserting check order over it would be asserting something
+  // false — 473 sits at S2.C3, above 472's S2.C9, entirely correctly.
+  const closedIdx = allocation
+    .filter((r) => r.raw_code <= VSI_BAND_HI)
+    .map((r) => SECTION2_CHECK_IDS.indexOf(r.check_id));
+  if (allocation.some((r) => SECTION2_CHECK_IDS.indexOf(r.check_id) < 0)) {
     problems.push({
       kind: "allocated_check_not_in_frozen_order",
       observed: allocation.map((r) => r.check_id),
     });
-  } else if (checkIdx.some((n, i) => i > 0 && n < checkIdx[i - 1])) {
-    problems.push({ kind: "allocation_order_contradicts_check_order", observed: checkIdx });
+  } else if (closedIdx.some((n, i) => i > 0 && n < closedIdx[i - 1])) {
+    problems.push({ kind: "allocation_order_contradicts_check_order", observed: closedIdx });
   }
 
   // --- the S2.C8 internal tie-break is normative --------------------------------------------------
-  const c8 = allocation.filter((r) => r.check_id === "S2.C8").map((r) => r.policy_outcome);
+  const c8 = allocation
+    .filter((r) => r.check_id === "S2.C8" && r.raw_code <= VSI_BAND_HI)
+    .map((r) => r.policy_outcome);
   const C8_FROZEN_ORDER = ["identity_unresolved", "identity_strength_incomparable"];
   if (JSON.stringify(c8) !== JSON.stringify(C8_FROZEN_ORDER)) {
     problems.push({
@@ -242,9 +286,10 @@ export function measureRawCodeCensus(options = {}) {
     census_id: "simurgh.vsi.raw_code_census.v1",
     band: {
       lo: VSI_BAND_LO,
-      hi: VSI_BAND_HI,
-      closed_after: VSI_BAND_HI,
-      reserved_from: VSI_BAND_HI + 1,
+      closed_band_hi: VSI_BAND_HI,
+      amendment_from: VSI_BAND_HI + 1,
+      allocated_hi: VSI_ALLOCATED_HI,
+      reserved_from: VSI_ALLOCATED_HI + 1,
     },
     ok_raw: VSI_OK_RAW,
     fail_closed_raw: VSI_FAIL_CLOSED_RAW,
@@ -258,6 +303,8 @@ export function measureRawCodeCensus(options = {}) {
     probe_rows,
     counts: {
       allocated: allocation.length,
+      closed_band: CLOSED_BAND_FROZEN_LEN,
+      amendment_band: allocation.length - CLOSED_BAND_FROZEN_LEN,
       aliases: aliases.length,
       covered_pairs: covered.size,
       static_emission_sites: static_sites.length,

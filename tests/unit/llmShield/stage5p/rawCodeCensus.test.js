@@ -43,11 +43,34 @@ test("byte-stability: two runs serialise identically", () => {
   assert.equal(JSON.stringify(measureRawCodeCensus()), JSON.stringify(measureRawCodeCensus()));
 });
 
-test("the band is reported as closed after 472", () => {
+test("the two segments are reported distinctly, and allocation is closed after 474", () => {
   const c = measureRawCodeCensus();
-  assert.deepEqual(c.band, { lo: 464, hi: 472, closed_after: 472, reserved_from: 473 });
+  assert.deepEqual(c.band, {
+    lo: 464,
+    closed_band_hi: 472,
+    amendment_from: 473,
+    allocated_hi: 474,
+    reserved_from: 475,
+  });
   assert.equal(c.ok_raw, 0);
   assert.equal(c.fail_closed_raw, 29);
+  assert.equal(c.counts.closed_band, 9);
+  assert.equal(c.counts.amendment_band, 2);
+});
+
+test("GATE PROOF — an amendment that renumbers or re-points a CLOSED-band row is caught", () => {
+  // The promise A5 rests on is "existing codes never move". This is its executable form.
+  const renumbered = mutate((rows) => {
+    rows[0].raw_code = 999;
+  });
+  assert.ok(
+    kinds(renumbered).includes("closed_band_disturbed_by_amendment"),
+    JSON.stringify(kinds(renumbered))
+  );
+  const repointed = mutate((rows) => {
+    rows[0].policy_outcome = "resolver_profile_revoked";
+  });
+  assert.ok(kinds(repointed).includes("closed_band_disturbed_by_amendment"));
 });
 
 // ---- GATE PROOFS: each mutation drives the REAL census ----------------------------------------

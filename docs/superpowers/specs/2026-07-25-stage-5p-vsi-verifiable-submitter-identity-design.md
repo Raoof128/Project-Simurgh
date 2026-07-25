@@ -1348,3 +1348,88 @@ absent). What 5O actually promised is unchanged and still strictly enforced.
 additively (the 4M lesson: additive codes break goldens, and forgetting them reddens CI), and the 5O
 handoff assertion was strengthened as above. `RUN_LEVEL_BY_RAW`'s 401 pre-existing entries below 420
 are unchanged in value and count — **no prior code moved**.
+
+---
+
+# A5 — the §2.7 amendment FIRES (post-freeze, 2026-07-25)
+
+§2.7 froze an armed trigger: Lane C may not enter implementation until its state-transition model has
+typed outcomes for every normative revocation and cessation it claims to evaluate. The Lane C1 GLEIF
+capture makes cessation **reachable**, so the trigger fires here, **before** C1 ships. This amendment
+amends frozen §1 (typed outcomes), frozen §2.4 (matrix) and frozen §2.11 (evidence envelope) **by
+pointer**, in the A2/A3 manner.
+
+## A5.1 Two outcomes, not one
+
+§2.7's text says "minting at minimum `resolver_profile_revoked` **and a principal-cessation
+outcome**". They are different failures with different remediations and must not be collapsed:
+
+| Outcome                     | Check   | Meaning                                                                   | Remediation                                          |
+| --------------------------- | ------- | ------------------------------------------------------------------------- | ---------------------------------------------------- |
+| `resolver_profile_revoked`  | `S2.C3` | the **SOURCE**'s authority was withdrawn — it was trusted, and is not now | re-establish or replace the resolver profile         |
+| `identity_principal_ceased` | `S2.C9` | the **SUBJECT** no longer exists; historical resolution still verifies    | none available — nobody can presently be accountable |
+
+`resolver_profile_revoked` sits at `S2.C3` as the **specific** case of which
+`identity_provider_untrusted` is the general one — a revoked profile once had authority, an untrusted
+one never did. Specific precedes general at a shared check, exactly as `S2.C8` already does.
+
+`identity_principal_ceased` sits at `S2.C9` alongside `identity_ephemeral_only`, and for the same
+reason: both are "resolved, but not adequate for what was required, **for a specific stated
+reason**". This placement is what makes the Archaeology Test expressible — the evidence verifies, and
+the policy still fails.
+
+**LAPSED mints nothing.** A lapsed registration is continuity _decay_, and the lattice already
+expresses it: the profile simply may no longer assert `durable`. Minting an outcome for a state the
+order already represents would be numbering for its own sake.
+
+## A5.2 Typed outcomes: nine → eleven
+
+§1's frozen list is amended by pointer. The nine originals are **unchanged in name, meaning and
+code**; the two new outcomes are appended.
+
+## A5.3 Envelope: an OPTIONAL eighth key
+
+`principal_lifecycle`, optional, frozen vocabulary `active | ceased`.
+
+- **Absent = silence**, and silence is the honest default: it means _this profile asserts nothing
+  about the subject's lifecycle_. Every Lane A fixture is therefore unchanged — the sealed synthetic
+  registry has no lifecycle authority and never claimed any.
+- **`null` is rejected**, as with the claim alternatives. A null key is a statement; only absence is
+  silence.
+- **Authority is the existing ceiling, not a new field.** A profile may assert `principal_lifecycle`
+  only if its ceiling grants continuity authority (`continuity: durable`). A profile with no
+  continuity standing declaring a subject ceased is Law 4 laundering wearing a new hat, and is
+  rejected at `S2.C7`.
+- **Replay identity is UNCHANGED.** It covers `evidence_digest`, `submission_digest_binding` and
+  `claim` only, so the eighth key cannot perturb it and no `S2.C4` behaviour moves.
+
+## A5.4 Raw codes: the AMENDMENT BAND opens at 473
+
+Annex R's band 464–472 stays **closed and unmoved**. The new outcomes append in **mint order**:
+
+| Raw | Check   | Symbolic outcome            |
+| --: | ------- | --------------------------- |
+| 473 | `S2.C3` | `resolver_profile_revoked`  |
+| 474 | `S2.C9` | `identity_principal_ceased` |
+
+**This is the case Annex R.4 predicted, and the rule holds:** `resolver_profile_revoked` belongs at
+`S2.C3` and would "logically" sit between 465 and 466 — and it does **not** move there. Existing
+codes never move. The allocation table therefore has two segments:
+
+- the **closed band** 464–472, ordered by frozen check order
+- the **amendment band** 473+, append-only, ordered by **mint sequence**
+
+The census check-order gate applies **within a segment**, and a new gate asserts that no amendment
+row renumbers, re-points or reorders any closed-band row. Numeric adjacency was always a historical
+accident of allocation order; the frozen check order is where meaning lives.
+
+`VSI_RESERVED_FROM` advances 473 → **475**.
+
+## A5.5 What this amendment does NOT do
+
+- It does not change the four axes, `≤ᵥ`, `⊔`, the relation/verdict split, the seven laws, the six
+  Lean targets, or the five non-claims.
+- It does not change the frozen nine-check order or the normative six-row `S2.*` matrix. Both new
+  outcomes are witnessed by **coverage** fixtures, outside the attack taxonomy, exactly as
+  `S2.COV.1`–`S2.COV.3` are.
+- It does not make Lane C1 shipped. It **unblocks** C1 by discharging the §2.7 precondition.

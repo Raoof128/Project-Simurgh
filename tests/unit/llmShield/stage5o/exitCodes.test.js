@@ -106,12 +106,12 @@ test("§10.2 the table is CLOSED at 463, and the 464 handoff went to Stage 5P in
   // "464 must stay unmapped" assertion was recording a temporary fact, not a Stage 5O invariant.
   // Stage 5P (Annex R) took the handoff. What 5O actually guarantees is asserted strictly below,
   // and the successor band is now pinned exactly rather than merely required to be absent.
-  for (let c = 464; c <= 472; c++) {
+  for (let c = 464; c <= 474; c++) {
     assert.equal(RUN_LEVEL_BY_RAW[c], 1, `${c} must be Stage 5P's band at run level 1`);
   }
   assert.ok(
-    !Object.prototype.hasOwnProperty.call(RUN_LEVEL_BY_RAW, 473),
-    "473+ must stay unallocated; Stage 5P closed its band at 472"
+    !Object.prototype.hasOwnProperty.call(RUN_LEVEL_BY_RAW, 475),
+    "475+ must stay unallocated; Stage 5P's closed band ends at 472 and A5 appended 473-474"
   );
 });
 

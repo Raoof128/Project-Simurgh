@@ -1275,15 +1275,26 @@ export const VSI_RAW_CODES = Object.freeze({
   IDENTITY_UNRESOLVED: 470, // S2.C8 — the SPECIFIC condition: subject resolved by nothing presented
   IDENTITY_STRENGTH_INCOMPARABLE: 471, // S2.C8 — the GENERAL relation: required and actual unordered
   IDENTITY_EPHEMERAL_ONLY: 472, // S2.C9 — resolved but ephemeral where durability was required
+  // --- amendment band (A5, minted when spec §2.7's armed trigger fired) ---
+  // Append-only, MINT order not check order. 473 belongs at S2.C3 and would "logically" sit between
+  // 465 and 466; it does not move there, because existing codes never move.
+  RESOLVER_PROFILE_REVOKED: 473, // S2.C3 — the SOURCE's authority was withdrawn (specific vs untrusted)
+  IDENTITY_PRINCIPAL_CEASED: 474, // S2.C9 — the SUBJECT no longer exists; history still verifies
 });
+// The closed band's first-failure spine. The amendment band is deliberately NOT part of it: its
+// order is mint sequence, so appending to this array would assert a check order that is not true.
 export const VSI_CHECK_ORDER = Object.freeze(Array.from({ length: 9 }, (_, i) => 464 + i));
+export const VSI_AMENDMENT_CODES = Object.freeze([473, 474]);
 export const VSI_WRAPPER = RAW_VERIFIER_CODES.INTERNAL_ERROR_FAIL_CLOSED; // shared 29, as 5O uses it
-export const VSI_BANDS = Object.freeze({ section2: Object.freeze({ lo: 464, hi: 472 }) });
+export const VSI_BANDS = Object.freeze({
+  section2: Object.freeze({ lo: 464, hi: 472 }),
+  amendment: Object.freeze({ lo: 473, hi: 474 }),
+});
 // CLOSED. A later outcome (the Lane C1 `resolver_profile_revoked` armed in spec §2.7 is the expected
 // first one) takes 473+ by explicit amendment. Existing codes NEVER move, even when a new outcome
 // logically belongs between two current checks — numeric adjacency is an accident of allocation
 // order, never a semantic claim.
-export const VSI_RESERVED_FROM = 473;
+export const VSI_RESERVED_FROM = 475;
 
 export const RUN_LEVEL_BY_RAW = Object.freeze({
   0: 0,
@@ -1757,6 +1768,8 @@ export const RUN_LEVEL_BY_RAW = Object.freeze({
   470: 1,
   471: 1,
   472: 1,
+  473: 1,
+  474: 1,
 });
 
 export function stage4CodeForRawCode(code) {
