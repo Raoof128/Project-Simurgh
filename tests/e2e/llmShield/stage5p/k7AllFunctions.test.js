@@ -39,7 +39,7 @@ const isCallable = (v) => typeof v === "function";
 
 test("K7.1 — every stage5p module is enumerated, and none is empty", async () => {
   const files = moduleFiles();
-  assert.ok(files.length >= 14, `expected the full module set, found ${files.length}`);
+  assert.ok(files.length >= 16, `expected the full module set, found ${files.length}`);
   const mods = await loadAll();
   for (const [rel, mod] of Object.entries(mods)) {
     assert.ok(Object.keys(mod).length > 0, `${rel} exports nothing`);
@@ -67,6 +67,7 @@ test("K7.2 — EVERY callable export is exercised at least once", async () => {
     "node/laneC1Gleif.mjs": laneC1,
     "node/typedOutcomeDischarge.mjs": discharge,
     "node/attestation.mjs": attestation,
+    "node/laneLLiveCapture.mjs": laneL,
   } = mods;
 
   const V = {
@@ -215,6 +216,11 @@ test("K7.2 — EVERY callable export is exercised at least once", async () => {
   record("node/laneBRekor.mjs", "recomputeInclusionRoot");
   assert.ok(laneB.rekorEvidenceBundle(laneB.REKOR_CEILING).evidences.length === 1);
   record("node/laneBRekor.mjs", "rekorEvidenceBundle");
+  const lCapture = laneL.loadLaneLCapture();
+  assert.equal(lCapture.probes.length, 3);
+  record("node/laneLLiveCapture.mjs", "loadLaneLCapture");
+  assert.equal(laneL.laneLEvidenceBundle(lCapture.probes[0]).evidences.length, 1);
+  record("node/laneLLiveCapture.mjs", "laneLEvidenceBundle");
 
   const censusA = await import(join(S5P, "node/measureStage5pLaneACensus.mjs"));
   assert.equal(censusA.measureLaneACensus({ phase: "release" }).ok, true);
@@ -358,7 +364,15 @@ test("K7.8 — the attestation covers every lane that ran, and names every lane 
   // Ran: A (censuses), B (rekor), C1 (gleif) — each contributes a digest or coordinate.
   assert.ok(p.lane_a_census_digest && p.lane_b_uuid && p.lane_c1_capture_digest);
   // Did not run: named, not omitted.
-  assert.deepEqual(p.lanes_not_executed, ["C2", "L"]);
+  assert.deepEqual(
+    p.lanes_not_executed,
+    ["C2"],
+    "Lane L executed 2026-07-25 and is no longer absent"
+  );
+  assert.ok(
+    p.lane_l_capture_digest && p.lane_l_probes > 0,
+    "an executed lane must contribute evidence"
+  );
   const limitations = attestation.KNOWN_LIMITATIONS.join(" ");
   for (const lane of p.lanes_not_executed) {
     assert.match(

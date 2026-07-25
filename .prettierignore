@@ -146,3 +146,5 @@ tools/simurgh-attestation/stage5o/browser/parity.html
 
 # Stage 5P Lane C1 GLEIF capture: byte-frozen external API responses, digest-manifested; prettier must never rewrap captured bytes
 docs/research/llm-shield/evidence/stage-5p/
+tools/simurgh-attestation/stage5p/python/parity-vectors.json
+tools/simurgh-attestation/stage5p/browser/parity-vectors.json

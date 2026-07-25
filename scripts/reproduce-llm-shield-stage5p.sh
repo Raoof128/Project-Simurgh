@@ -99,6 +99,27 @@ else
   echo "FAIL: Lane B offline verification"; cat /tmp/s5p-b.log; exit 1
 fi
 
+echo "-- Lane L: the live capture replays offline and stays contained at S2.C3 --"
+if "$NODE" -e "
+  const m = await import(process.cwd() + \"/$S5P/node/laneLLiveCapture.mjs\");
+  const v = await import(process.cwd() + \"/$S5P/core/section2Verifier.mjs\");
+  const c = m.loadLaneLCapture();
+  let produced = 0, contained = 0;
+  for (const p of c.probes) {
+    if (p.disposition !== \"model_produced_claim\") continue;
+    produced++;
+    const r = v.verifySection2(m.laneLEvidenceBundle(p), m.LANE_L_PINNED);
+    if (r.ok === false && r.check_id === \"S2.C3\") contained++;
+  }
+  if (produced === 0) { console.error(\"no probe produced a claim — the lane tests nothing\"); process.exit(1); }
+  if (contained !== produced) { console.error(\"authority laundering was NOT contained\"); process.exit(1); }
+  console.log(\"lane L: \" + contained + \"/\" + produced + \" produced claims contained at S2.C3\");
+" --input-type=module > /tmp/s5p-l.log 2>&1; then
+  cat /tmp/s5p-l.log
+else
+  echo "FAIL: Lane L containment"; cat /tmp/s5p-l.log; exit 1
+fi
+
 echo "-- signed attestation: verifies offline AND still matches what the repo computes --"
 if "$NODE" -e "
   const fs = await import(\"node:fs\");
@@ -146,5 +167,5 @@ fi
 echo
 echo "== Stage 5P reproduce: ALL GATES PASSED =="
 echo "Reproduced above: Lane A (sealed synthetic), Lane B (real public Rekor entry, offline),"
-echo "                  Lane C1 (frozen GLEIF capture, offline)."
-echo "NOT reproduced, because NOT executed: Lane C2 (no qualifying profile exists), Lane L."
+echo "                  Lane C1 (frozen GLEIF capture, offline), Lane L (live capture, replayed)."
+echo "NOT reproduced, because NOT executed: Lane C2 (no qualifying profile exists)."
