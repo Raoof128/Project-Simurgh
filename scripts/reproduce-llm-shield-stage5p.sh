@@ -27,6 +27,13 @@ else
   echo "FAIL: stage5p unit suite"; tail -30 /tmp/s5p-unit.log; exit 1
 fi
 
+echo "-- K7 all-functions net + export census + cross-lane invariants --"
+if "$NODE" --test tests/e2e/llmShield/stage5p/*.test.js > /tmp/s5p-k7.log 2>&1; then
+  tail -3 /tmp/s5p-k7.log
+else
+  echo "FAIL: K7 all-functions net"; tail -30 /tmp/s5p-k7.log; exit 1
+fi
+
 echo "-- Section 1 census (counts are generator-derived, never hand-carried) --"
 if "$NODE" "$S5P/node/measureSection1Census.mjs" > /tmp/s5p-s1.log 2>&1; then
   echo "section 1 census: clean"
