@@ -3,8 +3,8 @@
 **Motto: AnthropicSafe First, then ReviewerSafe.**
 
 Status: **Section 1 FROZEN `991dde48`** (amendments A1, A2, A3). **Sections 2-5 DRAFT** — awaiting
-freeze rulings. Not yet written: raw codes, Lean, attestation, parity, K7 (see the deferred-section
-register).
+freeze rulings. **Lane A is BUILT and green** (115 tests, both censuses clean). Not yet written:
+raw codes, Lean, attestation, parity, K7 (see the deferred-section register).
 Branch `stage-5p-vsi-verifiable-submitter-identity`. Raw codes open at **464** (5O consumed 420-463).
 Target tag `v2.51.0-stage-5p-vsi`.
 
@@ -906,7 +906,7 @@ Two assertions about one canonical principal that cannot both hold. **Witnessed:
 | **T7 — resolver profile compromise** | a compromised trusted profile is indistinguishable from an honest one at the structural layer; Sigstore concedes the same for a compromised IdP | requires a monitoring/transparency lane, not a fixture                                                                            |
 | **T8 — revocation and cessation**    | no typed outcome exists (§2.7)                                                                                                                  | **trigger ARMED 2026-07-25**: the Lane C1 RETIRED capture makes cessation reachable; the §2.7 amendment must land before C1 ships |
 | **T9 — submission incompleteness**   | out of scope by Law 6; SCITT concedes the same seam in RFC 9943 §9.3                                                                            | the dedicated completeness blade (socket minted in §1)                                                                            |
-| **T10 — cross-namespace collision**  | two profiles mapping different real subjects into one canonical namespace                                                                       | resolver-profile registry census (Lane A Task 2 partially guards it)                                                              |
+| **T10 — cross-namespace collision**  | **mechanism EXISTS** — `makeResolverRegistry` rejects one canonical namespace reached from different profile-local keys                         | not yet witnessed by an `S2.*` fixture; upgrade this row only when it is                                                          |
 
 T7 and T9 are **structural limits of this blade**, not defects to be patched later. T8 and T10 are
 **work items** with named triggers.
