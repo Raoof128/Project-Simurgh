@@ -51,9 +51,12 @@
       "lane_b_is_keyless": false,
       "lane_b_offline_checks_ok": true,
       "lean_core_digest": "842349b340643415afa76fd56e2d50ba3a5d9fcac0053a3f44ae77ceafafb224",
+      "lane_l_capture_digest": "b61c1149b0079cbbaeca36fa6af06858ac6d0dc81a7364a7240ea1e648cabb1f",
+      "lane_l_probes": 3,
+      "lane_l_produced_claims": 3,
+      "lane_l_refusals": 0,
       "lanes_not_executed": [
-        "C2",
-        "L"
+        "C2"
       ],
       "non_claims": [
         "not_proof_of_uncompromised_identity",
@@ -65,27 +68,28 @@
         "not_proof_of_present_accountability"
       ]
     },
-    "signature": "0288f0ee3e831aab17f7e0f2d0deb1a52a47133907e6b89001abc2cf2d746d1bddb2c65041578aff839d0f33640a664ac6c7baf694a0139f70b088774b05620b"
+    "signature": "c92e144b74568fde69d172908fbae77bb2ac84d46b56249571ca29fb1102909c8e21d68f2eb1703c354230f31ba1f1fc898cb82479b53a7ccc6ee2e9e9e6e20c"
   },
   "audit": {
     "payload": {
       "attestation_schema": "simurgh.vsi.attestation.audit.v1",
-      "public_attestation_digest": "35975b139eb0f4bb39eccb66be7735055e32d4cd87ee64d8bf4772ee42145cc4",
+      "public_attestation_digest": "2fa42b79715bae03713484eaa3b88efd9c255cce59d0851780ef6cd642ecbefa",
       "known_limitations": [
         "lane_b_is_a_real_rekor_anchor_with_a_self_managed_key_NOT_a_fulcio_keyless_ceremony",
         "lane_b_proves_an_artifact_was_signed_by_something_at_a_time_never_by_whom",
         "lane_c1_authentication_is_tls_at_capture_then_digest_frozen_not_an_offline_gleif_signature",
         "lane_c1_maps_only_the_three_registry_pairs_the_capture_observed_others_fail_closed",
         "lane_c2_role_and_durable_principal_resolution_is_unreachable_no_qualifying_profile_exists",
-        "lane_l_live_authority_laundering_capture_has_not_been_executed",
+        "lane_l_captured_ONE_model_on_ONE_day_it_is_not_a_rate_and_not_a_claim_about_other_models",
+        "lane_l_containment_is_a_property_of_the_VERIFIER_never_a_claim_about_model_safety",
         "the_lean_core_bounds_the_ORDER_ALGEBRA_it_does_not_certify_the_pipeline_or_the_fact_manufacturing_seam",
         "identity_binding_does_not_imply_submission_completeness_law_6_scitt_rfc9943_concedes_the_same_seam",
         "a_compromised_but_trusted_resolver_profile_is_indistinguishable_from_an_honest_one_here_T7",
         "cross_namespace_collision_T10_has_a_mechanism_but_no_S2_fixture_witness",
         "a_lane_a_witness_discharges_REACHABILITY_of_an_outcome_never_its_external_validity"
       ],
-      "limitations_count": 11
+      "limitations_count": 12
     },
-    "signature": "3d303cb414675af5761e9b4f7b83dc0bb188d6d3be2c6a280b38eda630b74f9a7938feeb7e206f45163bdf65c975199b0139a04ae3b3152aa6ad97e5e30cb309"
+    "signature": "9b749c68500d5ef74e2a9f145c7c35396304700a725482bd8d354339fb8c182de7b8400c3963063e25c1b51abdd106bf66b1b30239c733c2ef8bfe30b0a2b70a"
   }
 }

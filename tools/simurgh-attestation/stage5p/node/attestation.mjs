@@ -20,6 +20,7 @@ import { measureLaneACensus } from "./measureStage5pLaneACensus.mjs";
 import { measureRawCodeCensus } from "./measureStage5pRawCodes.mjs";
 import { loadGleifCapture } from "./laneC1Gleif.mjs";
 import { verifyRekorCeremonyOffline } from "./laneBRekor.mjs";
+import { loadLaneLCapture } from "./laneLLiveCapture.mjs";
 
 export const SIG5P = Object.freeze({
   public: "simurgh.vsi.attestation.public.v1",
@@ -38,7 +39,8 @@ export const KNOWN_LIMITATIONS = Object.freeze([
   "lane_c1_authentication_is_tls_at_capture_then_digest_frozen_not_an_offline_gleif_signature",
   "lane_c1_maps_only_the_three_registry_pairs_the_capture_observed_others_fail_closed",
   "lane_c2_role_and_durable_principal_resolution_is_unreachable_no_qualifying_profile_exists",
-  "lane_l_live_authority_laundering_capture_has_not_been_executed",
+  "lane_l_captured_ONE_model_on_ONE_day_it_is_not_a_rate_and_not_a_claim_about_other_models",
+  "lane_l_containment_is_a_property_of_the_VERIFIER_never_a_claim_about_model_safety",
   "the_lean_core_bounds_the_ORDER_ALGEBRA_it_does_not_certify_the_pipeline_or_the_fact_manufacturing_seam",
   "identity_binding_does_not_imply_submission_completeness_law_6_scitt_rfc9943_concedes_the_same_seam",
   "a_compromised_but_trusted_resolver_profile_is_indistinguishable_from_an_honest_one_here_T7",
@@ -80,6 +82,7 @@ export function buildPublicPayload() {
   const rawCodes = measureRawCodeCensus();
   const gleif = loadGleifCapture();
   const rekor = verifyRekorCeremonyOffline();
+  const laneL = loadLaneLCapture();
 
   return {
     attestation_schema: SIG5P.public,
@@ -115,8 +118,15 @@ export function buildPublicPayload() {
     // The Lean core, by file digest: a reader can check the proof they have is the proof we signed.
     lean_core_digest: fileDigest(resolve(HERE, "../../../../proofs/stage5p/Vsi.lean")),
 
+    // Lane L — a live capture, frozen and replayed offline.
+    lane_l_capture_digest: laneL.capture_digest,
+    lane_l_probes: laneL.probes.length,
+    lane_l_produced_claims: laneL.probes.filter((x) => x.disposition === "model_produced_claim")
+      .length,
+    lane_l_refusals: laneL.probes.filter((x) => x.disposition === "model_refused").length,
+
     // Lanes that did NOT run. Stated positively so their absence is a signed fact, not an omission.
-    lanes_not_executed: ["C2", "L"],
+    lanes_not_executed: ["C2"],
 
     non_claims: ATTESTED_NON_CLAIMS,
   };

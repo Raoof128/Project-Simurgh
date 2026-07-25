@@ -99,7 +99,10 @@ test("the LIMITATIONS are signed, and they name the real bounds rather than gest
   assert.match(joined, /NOT_a_fulcio_keyless_ceremony/i, "Lane B's biggest bound must be signed");
   assert.match(joined, /not_an_offline_gleif_signature/i, "Lane C1's authentication gap");
   assert.match(joined, /lane_c2.*unreachable/i, "an unreachable lane is a signed fact");
-  assert.match(joined, /lane_l.*not_been_executed/i, "an unexecuted lane is a signed fact");
+  // Lane L EXECUTED, so its limitation is now about SCOPE rather than absence: one model, one day,
+  // and containment as a property of the verifier rather than a claim about model safety.
+  assert.match(joined, /lane_l_captured_ONE_model_on_ONE_day/i);
+  assert.match(joined, /containment_is_a_property_of_the_VERIFIER/i);
 });
 
 test("the NON-CLAIMS travel in the PUBLIC tier, so consumers get them without an audit", () => {
@@ -114,12 +117,19 @@ test("the NON-CLAIMS travel in the PUBLIC tier, so consumers get them without an
 });
 
 test("lanes that did NOT run are stated POSITIVELY — absence is a signed fact", () => {
-  assert.deepEqual(BUNDLE.public.payload.lanes_not_executed, ["C2", "L"]);
+  assert.deepEqual(BUNDLE.public.payload.lanes_not_executed, ["C2"]);
   // ...and the lanes that DID run carry real coordinates, not booleans.
   assert.equal(BUNDLE.public.payload.lane_b_log, "rekor.sigstore.dev");
   assert.ok(BUNDLE.public.payload.lane_b_log_index > 0);
   assert.equal(BUNDLE.public.payload.lane_b_is_keyless, false, "never presented as keyless");
   assert.equal(BUNDLE.public.payload.lane_c1_records, 3);
+  assert.equal(BUNDLE.public.payload.lane_l_probes, 3);
+  // Produced + refused must account for EVERY probe — a probe with no disposition would be a
+  // silently dropped result, which is the one thing a live lane must never do.
+  assert.equal(
+    BUNDLE.public.payload.lane_l_produced_claims + BUNDLE.public.payload.lane_l_refusals,
+    BUNDLE.public.payload.lane_l_probes
+  );
 });
 
 test("the attestation binds the FROZEN contract, not a summary of it", () => {
