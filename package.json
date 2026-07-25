@@ -12,7 +12,10 @@
     "test": "node --test tests/unit/*.test.js tests/unit/**/*.test.js tests/unit/**/**/*.test.js",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test:stage5p": "node --test tests/unit/llmShield/stage5p/*.test.js"
+    "test:stage5p": "node --test tests/unit/llmShield/stage5p/*.test.js",
+    "census:stage5p": "node tools/simurgh-attestation/stage5p/node/measureStage5pLaneACensus.mjs --phase=draft",
+    "census:stage5p:release": "node tools/simurgh-attestation/stage5p/node/measureStage5pLaneACensus.mjs --phase=release",
+    "census:stage5p:rawcodes": "node tools/simurgh-attestation/stage5p/node/measureStage5pRawCodes.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",

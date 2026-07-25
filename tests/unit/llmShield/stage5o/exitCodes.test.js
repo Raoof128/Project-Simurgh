@@ -96,13 +96,22 @@ test("§10.4 every allocated code has a run level, and the band is uniformly lev
   }
 });
 
-test("§10.2 the table is CLOSED at 463 and 464+ stays reserved", () => {
+test("§10.2 the table is CLOSED at 463, and the 464 handoff went to Stage 5P intact", () => {
   assert.equal(VSC_RESERVED_FROM, 464);
   const allocated = Object.values(VSC_RAW_CODES).filter((c) => c !== 0);
   for (const c of allocated) assert.ok(c < VSC_RESERVED_FROM, `${c} intrudes on the §12 reserve`);
+
+  // `VSC_RESERVED_FROM` was reserved for §12 while §12 was DESIGN OPEN. §12 then shipped closed at
+  // 457-463 (A40) and needed nothing beyond it, which RELEASED the reserve — so the original
+  // "464 must stay unmapped" assertion was recording a temporary fact, not a Stage 5O invariant.
+  // Stage 5P (Annex R) took the handoff. What 5O actually guarantees is asserted strictly below,
+  // and the successor band is now pinned exactly rather than merely required to be absent.
+  for (let c = 464; c <= 472; c++) {
+    assert.equal(RUN_LEVEL_BY_RAW[c], 1, `${c} must be Stage 5P's band at run level 1`);
+  }
   assert.ok(
-    !Object.prototype.hasOwnProperty.call(RUN_LEVEL_BY_RAW, 464),
-    "464+ must stay unallocated; §12 closed the table at 463"
+    !Object.prototype.hasOwnProperty.call(RUN_LEVEL_BY_RAW, 473),
+    "473+ must stay unallocated; Stage 5P closed its band at 472"
   );
 });
 

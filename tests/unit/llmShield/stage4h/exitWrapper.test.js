@@ -505,6 +505,18 @@ test("Stage 4H.4 exit map is explicit and collision-bounded", () => {
       461: 1,
       462: 1,
       463: 1,
+      // Stage 5P VSI codes (Annex R additive allocation, closed band 464-472; run level 1).
+      // Consumes the handoff 5O left at VSC_RESERVED_FROM = 464, after 5O's §12 shipped closed
+      // at 463 and needed nothing beyond it.
+      464: 1,
+      465: 1,
+      466: 1,
+      467: 1,
+      468: 1,
+      469: 1,
+      470: 1,
+      471: 1,
+      472: 1,
     })
   );
 });

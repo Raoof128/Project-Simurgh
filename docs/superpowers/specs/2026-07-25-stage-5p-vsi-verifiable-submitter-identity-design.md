@@ -1209,3 +1209,142 @@ to act for another principal is satisfied by a delegation edge, never by a merge
 amends the singular-vector wording frozen in Section 1's ledger.
 
 ---
+
+# Annex R — raw-code allocation (post-freeze, ruled 2026-07-25)
+
+**This annex does NOT reopen §§2–5.** Those sections are frozen at `8f9733b1` and their content is
+unchanged: the verifier still emits symbolic outcomes only. This annex adds the numbering layer that
+sits _outside_ it, and every rule below is additive.
+
+## R.1 The closed band 464–472
+
+Allocated in **frozen first-failure check order**. `S2.C1` mints no code of its own: a bundle that
+fails grammar reports `identity_unresolved`, which is allocated once at `470` under the check where
+the outcome is a _specific condition_ rather than a parse failure.
+
+| Raw | Check   | Symbolic outcome                    |
+| --: | ------- | ----------------------------------- |
+| 464 | `S2.C2` | `resolver_binding_invalid`          |
+| 465 | `S2.C3` | `identity_provider_untrusted`       |
+| 466 | `S2.C4` | `identity_replay_upgrade_attempted` |
+| 467 | `S2.C5` | `identity_principal_mismatch`       |
+| 468 | `S2.C6` | `identity_claim_mismatch`           |
+| 469 | `S2.C7` | `accountable_role_unproven`         |
+| 470 | `S2.C8` | `identity_unresolved`               |
+| 471 | `S2.C8` | `identity_strength_incomparable`    |
+| 472 | `S2.C9` | `identity_ephemeral_only`           |
+
+**Within `S2.C8` the internal order is frozen:** the _specific_ unresolved condition precedes the
+_general_ incomparable relation. Two outcomes share a check, so check order alone does not determine
+the band — this tie-break is normative and is asserted by the allocator census.
+
+**Success remains raw `0`.** It is not a member of the band and is never allocated positionally.
+
+**A model's narrative lands at 465.** A Claude Fable 5-style claim to represent an organisation, hold
+a role, or have resolved an identity is an untrusted source and nothing more: it reaches
+`identity_provider_untrusted` at `S2.C3`, carries no identity authority, and **mints no
+model-specific outcome or code**. Giving model output its own code would be the first step toward
+treating it as a resolver.
+
+### R.1.1 Declared aliases — nine codes, eleven emission sites
+
+**Discovered while implementing the band, and recorded rather than papered over.** The table above
+allocates one code per _outcome_, but the frozen verifier emits (check, outcome) **pairs**, and
+`identity_unresolved` is emitted at **three** checks, not one:
+
+| Check   | Condition                                                          | Status              |
+| ------- | ------------------------------------------------------------------ | ------------------- |
+| `S2.C1` | no evidence presented, or the canonical grammar rejects the bundle | **alias** → 470     |
+| `S2.C8` | the subject is not present in the derived bank                     | **allocated** → 470 |
+| `S2.C9` | `required` exceeds actual and the banked identity is NOT ephemeral | **alias** → 470     |
+
+A strictly pair-keyed lookup over nine rows would send the two unallocated sites to the
+internal-artifact code. **That would be a false attribution:** a malformed submission is an ordinary
+typed rejection caused by the caller's input, not evidence that the verifier broke. `29` means "we
+have a defect" and has to keep meaning that, or the one signal that says _stop and investigate_
+becomes routine noise.
+
+So the band stays exactly nine codes wide and the allocator carries a second, explicitly **declared**
+alias set. Aliases **mint nothing**: each points at a code the band already allocated, for the same
+outcome, at a different check. An alias is declared, never inferred — a real check paired with a real
+outcome that is not an actual emission site remains **contradictory** and still fails closed.
+
+Eleven covered pairs, nine codes, two aliases. The census gate in R.3 is what makes this checkable
+rather than a matter of trust: with the aliases removed, it reports both unmapped sites by name.
+
+## R.2 Sole-allocator contract
+
+One canonical table, `tools/simurgh-attestation/stage5p/core/rawCodeAllocator.mjs`, whose rows are
+exactly the triple:
+
+```js
+{ check_id: "S2.C5", policy_outcome: "identity_principal_mismatch", raw_code: 467 }
+```
+
+- **No arithmetic mapping.** No `464 + index`, no offset from a check number — a table lookup only.
+  An arithmetic map silently re-numbers everything the moment a row is inserted.
+- **No raw literals in verifiers.** `section2Verifier.mjs` is unchanged and stays symbolic. Only the
+  CLI or an outer result wrapper calls the allocator.
+- **Unknown, missing or contradictory symbols fail closed** through the existing internal-artifact
+  path (`RAW_VERIFIER_CODES.INTERNAL_ERROR_FAIL_CLOSED`, the shared `29` that 5O also uses as
+  `VSC_WRAPPER`). The allocator **never guesses the nearest code**, and never returns a band member
+  it was not asked for.
+- **Two files carry the numbers, and a test binds them.** The repo-wide registry
+  (`stage4h/exitCodes.mjs`) must hold the band for `RUN_LEVEL_BY_RAW`, and that file is deliberately
+  dependency-free, so it cannot import the allocator. The duplication is therefore _mechanically
+  checked_: an equality gate fails if the two ever disagree on a single code.
+- **Generated, never hand-copied.** The later Python and Lean mappings are **generated from this
+  table**. A hand-transcribed mapping is a forward contract violation, not a convenience.
+
+## R.3 Allocator census gates
+
+`measureStage5pRawCodes.mjs` proves, and each gate is exercised by a mutation before it is trusted:
+
+- all nine frozen outcomes appear exactly once — no omission, no duplicate
+- codes unique and **contiguous 464…472**, with no gap and no member outside the band
+- row order follows the frozen `S2.C*` check order
+- the two `S2.C8` rows appear in their frozen internal order
+- success is raw `0` and is not in the band; neither is the fail-closed `29`
+- **every Lane A fixture's executed symbolic result maps to its expected raw code** — the allocator
+  is checked against execution, not against the fixture register's declared expectations
+- **emission-site coverage** (R.1.1), by two independent nets: a **static** scan of literal
+  `reject("S2.Cx", "outcome")` sites in the verifier source, and a **dynamic** corpus that executes
+  fixtures plus dedicated site probes. The static net cannot resolve `S2.C9`'s computed outcome, so
+  every computed site is additionally required to have been reached dynamically — the static scan is
+  a supplement and the census asserts it is the smaller of the two
+- aliases mint nothing, never re-point a code at a different outcome, and never duplicate an
+  allocated site
+- swapping any two allocations makes the census fail — including the subtlest swap, exchanging two
+  outcomes between rows, which leaves completeness, contiguity and check order all intact and is
+  caught **only** by emission-site coverage
+- deleting any row fails completeness
+- no `identityScore()`-style export and no numeric relation export exists on the 5P surface
+- raw literals `464`–`472` occur **only** in the allocator, the repo registry, the repo-wide
+  `RUN_LEVEL_BY_RAW` golden, the 5O handoff assertion, and this annex
+
+Each gate is proved capable of failing by a mutation driven through the **real** census — injected
+tables, not a re-implementation of the census's own predicates. A gate proved against a copy of
+itself has proved nothing.
+
+## R.4 The band is CLOSED after 472
+
+A later outcome — the Lane C1 `resolver_profile_revoked` armed in §2.7 is the expected first one —
+receives **473 or later by explicit amendment**. **Existing codes never move**, even when a new
+outcome logically belongs between two current checks. Numeric adjacency is a historical accident of
+allocation order and is never a semantic claim; the frozen check order is where meaning lives.
+
+`VSI_RESERVED_FROM = 473` records this in the registry, mirroring 5O's `VSC_RESERVED_FROM = 464`
+which this band now consumes.
+
+**The 5O handoff, and what had to change to take it.** 5O reserved 464+ for its Section 12 while §12
+was DESIGN OPEN. §12 then shipped closed at 457–463 under A40 and needed nothing beyond it, which
+released the reserve. 5O's test asserted `464` was absent from `RUN_LEVEL_BY_RAW` — a true statement
+about the world at 5O's freeze, but **not a Stage 5O invariant**: it recorded that no successor had
+arrived yet. It is now **strengthened, not relaxed** — 5O still guarantees that no 5O code reaches
+464, and the assertion additionally pins the successor band exactly (464…472 at run level 1, 473
+absent). What 5O actually promised is unchanged and still strictly enforced.
+
+**Two files carried a ripple, both expected.** The repo-wide `RUN_LEVEL_BY_RAW` golden was extended
+additively (the 4M lesson: additive codes break goldens, and forgetting them reddens CI), and the 5O
+handoff assertion was strengthened as above. `RUN_LEVEL_BY_RAW`'s 401 pre-existing entries below 420
+are unchanged in value and count — **no prior code moved**.
