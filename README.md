@@ -13,7 +13,7 @@ proof of what happened after a guardrail missed — not another jailbreak detect
 [![Node](https://img.shields.io/badge/node-%E2%89%A522.0-1a1a1a?style=flat-square)](https://nodejs.org)
 [![License](https://img.shields.io/badge/license-AGPL--3.0-d6cfbe?style=flat-square)](#license)
 [![Status](https://img.shields.io/badge/status-research%20prototype-2f4a2a?style=flat-square)](#status)
-[![Latest](https://img.shields.io/badge/release-v2.50.0-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.50.0-stage-5o-vsc)
+[![Latest](https://img.shields.io/badge/release-v2.51.0-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.51.0-stage-5p-vsi)
 
 </div>
 
@@ -102,7 +102,36 @@ newest for the current frontier, or jump straight to
 [Constitution alignment](#design-alignment-with-claudes-constitution), or the
 [concrete result](#the-concrete-result-stage-3v-b).
 
-> 🆕 **Latest — Stage 5O · VSC: a bounded audit of a universe the auditor never sees (`v2.50.0-stage-5o-vsc`).**
+> 🆕 **Latest — Stage 5P · VSI: authentication is not accountability (`v2.51.0-stage-5p-vsi`).**
+> Evidence can bind a submission to an authenticated identity **without** proving that identity stays
+> resolvable or accountable later. 5P makes the distinction machine-checkable with a **componentwise
+> Identity Resolution Lattice** over four independent axes — `binding / resolution / continuity / role`
+> — under a **product (partial) order**, deliberately **not** a rung. It corrects a collapse this repo
+> itself shipped in `stage5g/rungLattice.mjs`. **276 of 576 ordered pairs are incomparable**: that is
+> the measured cost of any scalar identity score.
+> Laws: **No Frankenidentity** (contributions join only across the exact same canonical principal; a
+> delegation edge is not an equality edge and transfers **no** axis) · **No Ceiling Breach** (the
+> ceiling bounds the **delta** and is a **vector**, so a registry can neither manufacture role strength
+> nor erase a binding proved elsewhere) · **Expiry Is Not Erasure**.
+> **Lane B executed against the real world:** a genuine entry in the public **Rekor** transparency log
+> (`logIndex 2245421742`), with the RFC 6962 inclusion proof **recomputed** rather than taken on the
+> server's word and an **independent re-fetch** — retiring `real_sigstore_anchor_execution_deferred`,
+> open since **5G**. **Lane C1** is the first real resolver profile (`gleif.lei.v1`), keyed on the
+> `(entity, registration)` **pair** the capture proved are independent signals. **Lane L** put a live
+> model's fluent claim to be an "authorised representative" through the verifier: **3/3 contained** at
+> `S2.C3`. **14 Lean theorems**, zero proof escapes; Node ≡ stdlib Python ≡ a real headless browser on
+> 1734 checks each. New codes **464–474**.
+> **Honesty boundary:** the Rekor ceremony is **NOT Fulcio keyless** — a self-managed key, and every
+> verdict carries `is_keyless: false`. It proves an artifact was signed by **something** at a time,
+> never by **whom**, and that gap is the thesis rather than a defect. Lane C1's authentication is
+> **TLS-at-capture**, not an offline GLEIF signature. **Lane C2 is unreachable**: no profile proving
+> durable role authority exists yet anywhere (vLEI OOR / eIDAS QEAA, Dec-2026 EUDI deadline). All of
+> it is **signed into the attestation** as 12 known limitations — including the lane that did not run.
+
+<details>
+<summary><b>Recent stages — 5O → 4W</b> (click to expand the prior rungs)</summary>
+
+> **Stage 5O · VSC: a bounded audit of a universe the auditor never sees (`v2.50.0-stage-5o-vsc`).**
 > A producer commits to a **private** evaluation universe; a **public Bitcoin beacon** issues a challenge it
 > could not predict; an offline verifier checks the opened cases, the disclosure budget and the detection
 > probability — without ever seeing the universe. **All thirteen sections frozen**, all six release
@@ -121,9 +150,6 @@ newest for the current frontier, or jump straight to
 > **audience-relative**; and the prior-art map declares itself **non-exhaustive**, recording that the Merkle
 > construction is RFC 6962's, the seed RFC 5869's and the detection probability the classical hypergeometric
 > identity. Stage 5O did not invent its ingredients.
-
-<details>
-<summary><b>Recent stages — 5D → 4W</b> (click to expand the prior rungs)</summary>
 
 > **Stage 5D · Verifiable Adaptive Red-Team Ledger (`v2.39.0-stage-5d-varl`).**
 > The first Simurgh stage whose evidence is a **multi-round arms race**: an untrusted adversary
