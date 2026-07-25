@@ -19,7 +19,8 @@ function allVectors() {
   for (const binding of AXIS_VALUES.binding)
     for (const resolution of AXIS_VALUES.resolution)
       for (const continuity of AXIS_VALUES.continuity)
-        for (const role of AXIS_VALUES.role) out.push(makeStrength({ binding, resolution, continuity, role }));
+        for (const role of AXIS_VALUES.role)
+          out.push(makeStrength({ binding, resolution, continuity, role }));
   return out;
 }
 
@@ -58,7 +59,8 @@ test("the census carries its anti-gaming non-claim and no density SCORE", () => 
   assert.equal(m.non_claim, "incomparability_density_is_not_a_security_score");
   // A ratio invites ranking; the census publishes exact integers only.
   for (const [k, v] of Object.entries(m)) {
-    if (typeof v === "number") assert.ok(Number.isInteger(v), `${k} must be an exact integer, got ${v}`);
+    if (typeof v === "number")
+      assert.ok(Number.isInteger(v), `${k} must be an exact integer, got ${v}`);
   }
 });
 
