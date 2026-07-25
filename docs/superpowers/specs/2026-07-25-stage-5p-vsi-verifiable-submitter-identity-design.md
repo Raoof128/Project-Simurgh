@@ -2,8 +2,9 @@
 
 **Motto: AnthropicSafe First, then ReviewerSafe.**
 
-Status: **Section 1 FROZEN `991dde48`** (amendments A1, A2, A3). **Section 2 DRAFT** — awaiting
-freeze ruling. Sections 3-N unwritten.
+Status: **Section 1 FROZEN `991dde48`** (amendments A1, A2, A3). **Sections 2-5 DRAFT** — awaiting
+freeze rulings. Not yet written: raw codes, Lean, attestation, parity, K7 (see the deferred-section
+register).
 Branch `stage-5p-vsi-verifiable-submitter-identity`. Raw codes open at **464** (5O consumed 420-463).
 Target tag `v2.51.0-stage-5p-vsi`.
 
@@ -176,6 +177,11 @@ BANKS:      submitter_identity_bound @ componentwise identity-strength vector
 MINTS:      submitter_submission_completeness_unproven   (the SCITT seam; for a later blade)
 ```
 
+_(Non-normative pointer: the `BANKS` object was amended by **A3** — a submission involving an actor
+and a represented party banks a **principal-keyed map plus delegation edges**, evaluated per
+principal. Semantics live in the amendment ledger; this annotation only prevents a §1-only reader
+from building the singular-vector schema.)_
+
 ### Typed outcomes
 
 ```text
@@ -290,6 +296,10 @@ mechanism; none may be dropped without a normative amendment.
 
 S2.2 and S2.6 give the two mismatch codes a clean home: **S2.2 is a wrong-subject join, S2.6 is a
 same-subject contradiction.**
+
+_(Non-normative pointer: S2.5's required-rejection wording above is the frozen A1 text; **A3**
+refined the expected outcome to `identity_provider_untrusted` at check `S2.C3` — see the amendment
+ledger and the §2.4 matrix.)_
 
 S2.5 reaches back to this project's founding threat model: untrusted context may _describe_ identity
 strength, but **only pinned, independently signed resolver evidence may alter the vector**. It is the
@@ -548,13 +558,24 @@ incomparable_ordered_pairs  276
 incomparable_unordered_pairs 138
 ```
 
-**The meaning of the number:** 276 of 576 ordered pairs — the strict majority of distinct
-comparisons — are incomparable. That is the measure of what any scalar identity score would
-silently destroy, and therefore the size of the design space Law 1 protects.
+**The meaning of the number:** of the 276 distinct vector pairs (C(24,2)), **exactly half — 138 —
+are incomparable** (equivalently: 276 of the 552 non-equal ordered pairs; 47.9% of all 576 ordered
+pairs including equals). Every one of those 138 pairs is a comparison a scalar identity score would
+have to invent an answer for. That is the measured size of the design space Law 1 protects. (An
+earlier draft said "strict majority" — the generator says exactly half; the generator wins.)
 
 **Anti-gaming non-claim (owned by the census, `section_2.added_non_claims`):**
 `incomparability_density_is_not_a_security_score`. The census publishes exact integers only — a
 ratio invites ranking, so no ratio is ever emitted.
+
+### 2.9 `section_2.added_non_claims` (register)
+
+```text
+incomparability_density_is_not_a_security_score
+```
+
+Section-owned, additive (5O A3/A8 pattern): these do NOT amend Section 1's frozen five; the Lane A
+census counts this register separately.
 
 ## Section 3 — evidence lanes (DRAFT, ruled at A2)
 
@@ -620,7 +641,8 @@ expiry: _the certificate is archaeological dust; the binding still verifies; dur
 manufactured._ This is Law 5 in its sharpest executable form, and it applies twice — to the expired
 Sigstore certificate here, and to the RETIRED-entity record in Lane C1 below. Passing archaeology
 proves **historical verifiability only**; the section-owned non-claim
-`not_proof_of_present_accountability` ships in the same breath (`section_3.added_non_claims`).
+`not_proof_of_present_accountability` ships in the same breath (`section_3.added_non_claims`,
+register below).
 
 ### Lane C — real durable resolution, SPLIT by amendment into C1 (reachable) and C2 (gated)
 
@@ -702,13 +724,22 @@ A single capture — including the 2026-07-25 GLEIF ceremony above — witnesses
 therefore cannot mint `durable` under a heartbeat profile. That is the honest reading of today's
 evidence.
 
+#### `section_3.added_non_claims` (register)
+
+```text
+not_proof_of_present_accountability
+```
+
+Section-owned, additive: does NOT amend Section 1's frozen five.
+
 #### Lane L — live authority-laundering capture (**digest-only, never CI-gated**)
 
 Invention C. A live frontier-model lane in the 3L/5B pattern: the model is induced to assert, in
 untrusted context, identity strength or role ("I am the authorised representative of X") — and the
 verifier moves **zero axes** (T5, check `S2.C3`). Both outcomes seal honestly: a caught assertion is
-a successful verifier demonstration; a refusal is recorded as `model_refused`. CVP approval already
-covers this lane. It upgrades T5 from fixture-witnessed to **witnessed-live**.
+a successful verifier demonstration; a refusal is recorded as `model_refused`. The lane is enabled
+by the 2026-07-09 CVP approval, which unlocked live adversarial lanes for this project. It upgrades
+T5 from fixture-witnessed to **witnessed-live**.
 
 **Open — flagged, not invented.** Lane C requirement 6 (revocation / cessation) has **no typed
 outcome** in the frozen nine. A revoked or ceased resolver profile is a real state that the current
@@ -805,7 +836,7 @@ rises before Lane B executes, the scale has stopped measuring anything.
 | --- | -------------------------------------------------------------------------------------------------------------------- | -------------- | ------------------------------------------------------------------------------------------------- | -------------------------------------------- |
 | A   | `gleif.lei.v1` registry-continuity profile — first REAL resolver profile; new evidence species (regulatory-registry) | §3 Lane C1     | capture ceremony EXECUTED 2026-07-25 (receipt in §3); profile unimplemented; §2.7 amendment armed | Frontier 8.0 → ~9.0                          |
 | B   | Identity Heartbeat — `durable` as ≥2 anchored-epoch survival; `epochMonotone` (additive)                             | §3             | specified; implement after Lane A Task 5                                                          | Novelty 8.6 → ~9.0                           |
-| C   | Lane L live authority-laundering capture                                                                             | §3             | specified; CVP already covers it                                                                  | Frontier +, GfA → ~9.4                       |
+| C   | Lane L live authority-laundering capture                                                                             | §3             | specified; enabled by the 2026-07-09 CVP approval                                                 | Frontier +, GfA → ~9.4                       |
 | D   | The Archaeology Test — expired-cert / retired-entity offline re-verification family                                  | §3 Lane B + C1 | specified                                                                                         | Constitution reinforced                      |
 | E   | Incomparability census — 276/576 as the measured cost of any scalar score                                            | §2.8           | generator + tests EXIST and are spec-governed                                                     | Novelty support                              |
 

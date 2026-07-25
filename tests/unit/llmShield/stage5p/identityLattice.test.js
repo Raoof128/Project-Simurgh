@@ -31,14 +31,17 @@ const CEIL = makeStrength({
   continuity: "durable",
   role: "accountable_role_bound",
 });
-// The two vectors Section 1 names as the motivating incomparable pair.
+// The two vectors Section 1 names as the motivating incomparable pair. NOTE the name: this is an
+// ephemeral-but-principal-resolved OIDC identity IN THE ABSTRACT — it is deliberately NOT called
+// "Sigstore", because the spec's Lane B writes down that a real public Sigstore ceremony achieves
+// only provider_asserted. A fixture name is a claim (the 5N lesson); this one no longer overclaims.
 const PSEUDONYMOUS_ORG = makeStrength({
   binding: "cryptographically_bound",
   resolution: "provider_asserted",
   continuity: "durable",
   role: "unproven",
 });
-const SIGSTORE_KEYLESS = makeStrength({
+const EPHEMERAL_RESOLVED_OIDC = makeStrength({
   binding: "cryptographically_bound",
   resolution: "principal_resolved",
   continuity: "ephemeral",
@@ -65,7 +68,7 @@ test("makeStrength rejects an unknown axis, an unknown value, and a missing axis
 });
 
 test("leqV is the componentwise order: reflexive, and floor <= everything <= ceiling", () => {
-  for (const v of [FLOOR, CEIL, PSEUDONYMOUS_ORG, SIGSTORE_KEYLESS]) {
+  for (const v of [FLOOR, CEIL, PSEUDONYMOUS_ORG, EPHEMERAL_RESOLVED_OIDC]) {
     assert.equal(leqV(v, v), true, "reflexive");
     assert.equal(leqV(FLOOR, v), true, "floor is bottom");
     assert.equal(leqV(v, CEIL), true, "ceiling is top");
@@ -74,9 +77,9 @@ test("leqV is the componentwise order: reflexive, and floor <= everything <= cei
 
 // Law 1 — the pair that any total order would have to launder into a ranking.
 test("a durable pseudonymous org and an ephemeral resolved OIDC identity are INCOMPARABLE", () => {
-  assert.equal(leqV(PSEUDONYMOUS_ORG, SIGSTORE_KEYLESS), false);
-  assert.equal(leqV(SIGSTORE_KEYLESS, PSEUDONYMOUS_ORG), false);
-  assert.equal(compareStrength(PSEUDONYMOUS_ORG, SIGSTORE_KEYLESS), "incomparable");
+  assert.equal(leqV(PSEUDONYMOUS_ORG, EPHEMERAL_RESOLVED_OIDC), false);
+  assert.equal(leqV(EPHEMERAL_RESOLVED_OIDC, PSEUDONYMOUS_ORG), false);
+  assert.equal(compareStrength(PSEUDONYMOUS_ORG, EPHEMERAL_RESOLVED_OIDC), "incomparable");
 });
 
 // Lean target `incomparableIff` — BICONDITIONAL. The one-directional form is satisfied by a broken
@@ -122,9 +125,9 @@ test("relations are correctly oriented, not merely partitioned", () => {
 
 // Law 4 — the ceiling bounds the DELTA. joinV is the componentwise join used by boundResolverDelta.
 test("joinV is the componentwise join: never lowers either operand", () => {
-  const j = joinV(PSEUDONYMOUS_ORG, SIGSTORE_KEYLESS);
+  const j = joinV(PSEUDONYMOUS_ORG, EPHEMERAL_RESOLVED_OIDC);
   assert.equal(leqV(PSEUDONYMOUS_ORG, j), true);
-  assert.equal(leqV(SIGSTORE_KEYLESS, j), true);
+  assert.equal(leqV(EPHEMERAL_RESOLVED_OIDC, j), true);
   assert.equal(j.continuity, "durable", "takes the stronger continuity");
   assert.equal(j.resolution, "principal_resolved", "takes the stronger resolution");
   assert.equal(j.role, "unproven", "invents nothing on an axis where both are at the floor");
