@@ -68,7 +68,32 @@ export function measureSection1Census(specText) {
     .map((m) => m[1]);
   const typedOutcomes = identifierFence(spec, "Typed outcomes");
   const nonClaims = identifierFence(spec, "Non-claims");
-  const attackRows = (spec.match(/^\|\s*S2\.\d+\s*\|/gm) ?? []).length;
+  // S2.* IDs appear TWICE by design: once in Section 1's forward commitment, once in Section 2's
+  // delivered matrix. The invariant is the DISTINCT set, and the two tables must agree exactly —
+  // a commitment that names rows the matrix never delivers is the failure mode this catches.
+  const rowIds = [
+    ...new Set((spec.match(/^\|\s*(S2\.\d+)\s*\|/gm) ?? []).map((m) => m.match(/S2\.\d+/)[0])),
+  ].sort();
+  const attackRows = rowIds.length;
+
+  // Cross-section: forward-commitment table vs delivered matrix, when the latter exists.
+  // Headings carry section numbers ("### 2.4 Frozen matrix"), so match on the heading LINE, never
+  // on a literal prefix — a literal made this gate silently vacuous once already.
+  const tableIds = (needle) => {
+    const m = spec.match(new RegExp(`^###[^\\n]*${needle}[^\\n]*$`, "m"));
+    if (!m) return null;
+    const i = spec.indexOf(m[0]);
+    const seg = spec.slice(i, i + 4000);
+    return [
+      ...new Set((seg.match(/^\|\s*(S2\.\d+)\s*\|/gm) ?? []).map((m) => m.match(/S2\.\d+/)[0])),
+    ].sort();
+  };
+  const committed = tableIds("Forward commitment");
+  const delivered = tableIds("Frozen matrix");
+  const commitmentDrift =
+    committed && delivered && JSON.stringify(committed) !== JSON.stringify(delivered)
+      ? { committed, delivered }
+      : null;
 
   const derived = {
     axes: axes.length,
@@ -128,13 +153,15 @@ export function measureSection1Census(specText) {
     asserted,
     drift,
     duplicates: dupes,
+    attack_row_ids: rowIds,
+    commitment_drift: commitmentDrift,
     identifiers: {
       axes,
       lean_targets: leanTargets,
       typed_outcomes: typedOutcomes,
       non_claims: nonClaims,
     },
-    ok: drift.length === 0 && Object.keys(dupes).length === 0,
+    ok: drift.length === 0 && Object.keys(dupes).length === 0 && commitmentDrift === null,
   };
 }
 

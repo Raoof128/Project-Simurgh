@@ -2,7 +2,8 @@
 
 **Motto: AnthropicSafe First, then ReviewerSafe.**
 
-Status: **Section 1 FROZEN `991dde48`** (amendment A1). Sections 2-N unwritten.
+Status: **Section 1 FROZEN `991dde48`** (amendments A1, A2, A3). **Section 2 DRAFT** — awaiting
+freeze ruling. Sections 3-N unwritten.
 Branch `stage-5p-vsi-verifiable-submitter-identity`. Raw codes open at **464** (5O consumed 420-463).
 Target tag `v2.51.0-stage-5p-vsi`.
 
@@ -82,11 +83,18 @@ crypto: facts are injected by an adapter, and the unknown-detail enum fails clos
    erase a valid historical binding, and cannot manufacture durable principal resolution.
 6. **Identity Binding Does Not Imply Completeness.** A bound identity says nothing about whether
    the submitter disclosed everything. This is deliberately left to a dedicated later blade.
-7. **No Frankenidentity (added by A2).** Resolver evidence may join **only** when every
-   contribution resolves to the **same canonical principal**, or when a pinned, independently
-   verifiable **delegation edge** binds the principals. Otherwise the policy outcome is
+7. **No Frankenidentity (added by A2; tightened by A3).** Resolver contributions may be
+   componentwise-joined **only** when every contribution resolves to the **exact same canonical
+   principal**. A delegation, representation or agency edge **does not establish principal equality
+   and does not authorise vector joining.** Otherwise the policy outcome is
    `identity_principal_mismatch` and `strength(actual)` is **unchanged**. The failure is
    **atomic**: no "safe-looking" axis from either resolver survives the mismatch.
+
+   Delegation is evaluated **separately**, as a typed relationship over `actor_principal`,
+   `represented_principal`, `role`, `scope` and validity constraints. A valid delegation may satisfy
+   a policy requiring authority to act for another principal — but **neither principal inherits the
+   other's identity-strength components**. An absent, invalid or insufficient delegation resolves
+   through the existing `accountable_role_unproven`; no tenth outcome is required.
 
 ### Relation vs policy verdict — they are not the same object
 
@@ -119,7 +127,7 @@ incomparableIff     : outcome a b = incomparable ↔ ¬ (a ≤ᵥ b) ∧ ¬ (b �
 relationPartition   : ∀ a b, exactly_one [equal a b, strictlyBelow a b,
                                           strictlyAbove a b, incomparable a b]
 
-principalMismatchNoJoin : principal r₁ ≠ principal r₂ → ¬ validDelegation r₁ r₂ →
+principalMismatchNoJoin : principal r₁ ≠ principal r₂ →
                             attachMany e [r₁, r₂] = failure identity_principal_mismatch
 ```
 
@@ -415,3 +423,160 @@ outcome set cannot express. I am **not** minting a tenth code speculatively whil
 unavailable; instead this is recorded as an **amendment trigger**: shipping Lane C requires an
 amendment adding at least `resolver_profile_revoked`, and the gap is stated here so it cannot later
 be mistaken for an oversight.
+
+---
+
+## A3 — amends frozen A1/A2: delegation never joins vectors
+
+**The hole A3 closes was in A2's own Law 7.** A2 permitted a join when "a pinned, independently
+verifiable delegation edge binds the principals". A delegation proves a **relationship** between two
+principals; it does **not** make them one principal. Left standing, Frankenidentity walks back in
+wearing a delegation badge:
+
+```text
+Person A         role       = accountable_role_bound
+Organisation B   continuity = durable
+Delegation       A represents B
+INVALID JOIN     B becomes durable + accountable_role_bound
+```
+
+That may occasionally describe reality, but the vector was assembled across **two subjects**.
+
+**Changed by A3** (no count moves — 7 laws, 6 Lean targets, 9 outcomes, 6 rows all hold):
+
+| Object                    | A2                                                       | A3                                                                                               |
+| ------------------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| Law 7                     | join permitted on same principal **or valid delegation** | join permitted on **same canonical principal only**; delegation is a separate typed relationship |
+| `principalMismatchNoJoin` | carried a `¬ validDelegation` premise                    | **premise dropped** — no exception                                                               |
+| S2.5 expected outcome     | "no axis movement" (prose)                               | `identity_provider_untrusted` at `S2.C3`                                                         |
+
+**Structural consequence A3 forces, surfaced here rather than discovered in Section 4.** If neither
+principal inherits the other's components, a submission involving an actor and a represented party
+resolves to **two principals with two vectors** — so Section 1's banked object cannot be a single
+vector. It becomes a **principal-keyed map plus a separate set of delegation edges**:
+
+```text
+BANKS:  submitter_identity_bound @ { canonical_principal -> strength_vector }
+                                  + [ delegation_edge ]
+```
+
+The policy test `required ≤ᵥ actual` is therefore **per principal**, and a policy demanding authority
+to act for another principal is satisfied by a delegation edge, never by a merged vector. This
+amends the singular-vector wording frozen in Section 1's ledger.
+
+---
+
+## Section 2 — canonical principal grammar, check order, attack matrix (DRAFT)
+
+### 2.1 Canonical principal (frozen before any fixture)
+
+An exact-key object, never a human-readable compound string:
+
+```json
+{
+  "type": "simurgh.vsi.principal.v1",
+  "kind": "account",
+  "namespace_id": "simurgh.synthetic.oidc-subject.v1",
+  "subject_id": "<64 lowercase hex>"
+}
+```
+
+| Field          | Rule                                                                                               |
+| -------------- | -------------------------------------------------------------------------------------------------- |
+| `type`         | exact literal `simurgh.vsi.principal.v1`                                                           |
+| `kind`         | one of `account`, `person`, `organisation`, `service`                                              |
+| `namespace_id` | pinned canonical identity namespace; lowercase ASCII only; **distinct from `resolver_profile_id`** |
+| `subject_id`   | exactly 64 lowercase hexadecimal characters                                                        |
+
+**`namespace_id` says what identity universe the principal belongs to. `resolver_profile_id` says
+which resolver produced the assertion.** Two different resolvers identify the same principal **only**
+when both pinned profiles explicitly map into the same canonical namespace _and_ produce the same
+`subject_id`.
+
+### 2.2 Subject derivation
+
+```text
+subject_id = SHA256(
+    UTF8("simurgh.vsi.subject.v1") || 0x00 ||
+    UTF8(namespace_id)             || 0x00 ||
+    canonical_subject_bytes )
+```
+
+`canonical_subject_bytes` is defined **by the resolver profile**, never by the core verifier.
+
+**The core VSI verifier must not** lowercase emails, trim identifiers, apply Unicode normalisation,
+collapse aliases, infer company equivalence, treat an email domain as an organisation, or derive a
+person from an account name. Those are resolver-profile decisions. **A profile that cannot define an
+exact mapping does not produce a canonical principal.**
+
+Principal equality is **exact equality of all four canonical fields**. No fuzzy matching, no
+normalisation, no "close enough, probably Alice" — that road ends in identity soup.
+
+### 2.3 First-failure check order (frozen before fixtures)
+
+```text
+S2.C1  canonical principal grammar
+S2.C2  resolver signature and trusted-profile validation
+S2.C3  resolver-source authority
+S2.C4  evidence-to-profile binding and replay protection
+S2.C5  canonical-principal join compatibility
+S2.C6  same-principal claim consistency
+S2.C7  monotone delta and vector-ceiling enforcement
+S2.C8  partial-order relation
+S2.C9  required ≤ᵥ actual policy test
+```
+
+### 2.4 Frozen matrix
+
+Every fixture derives from **one clean accepted ancestor** and introduces **exactly one** defect; all
+earlier checks remain satisfied, so each row's first failure is forced by prefix satisfaction.
+
+| Fixture | Single defect                                                      | First failure                                 |
+| ------- | ------------------------------------------------------------------ | --------------------------------------------- |
+| S2.1    | continuity resolver attempts to raise role                         | `S2.C7` — resolver vector ceiling             |
+| S2.2    | two valid assertions identify different principals                 | `S2.C5` — `identity_principal_mismatch`       |
+| S2.3    | valid evidence replayed under a stronger profile                   | `S2.C4` — `identity_replay_upgrade_attempted` |
+| S2.4    | incomparable vectors compressed into a scalar/lexicographic result | `S2.C8` — `identity_strength_incomparable`    |
+| S2.5    | model output or untrusted context claims resolver authority        | `S2.C3` — `identity_provider_untrusted`       |
+| S2.6    | contradictory assertions target the same canonical principal       | `S2.C6` — `identity_claim_mismatch`           |
+
+Each row banks:
+
+```text
+fixture_id
+expected_check_id
+expected_policy_outcome
+prefix_checks_satisfied
+single_defect_description
+strength_before
+attempted_strength_after
+actual_strength_after
+```
+
+**Atomicity, proved not asserted.** S2.2 and S2.6 must each additionally witness:
+
+```text
+actual_strength_after is BYTE-IDENTICAL to strength_before
+```
+
+No harvesting the harmless-looking axes out of rejected evidence.
+
+**Premise gate (inherited from 5O's hardest-won lesson).** Every negative fixture must first prove it
+generated a negative case: the mutated input differs from the valid one, the valid one is accepted,
+the targeted property actually changed, and only then is rejection meaningful. A premise failure is
+reported **distinctly** from an implementation failure — 5O's `S7.19` was a persuasive false proof
+that passed every gate because no gate checked whether its premise was true.
+
+### 2.5 Lane C amendment trigger (frozen)
+
+```text
+Lane C cannot enter implementation or release scope until its state-transition model
+has typed outcomes for every normative revocation, cessation and delegation failure
+it claims to evaluate.
+
+At minimum, any Lane C profile supporting revocation requires:
+  resolver_profile_revoked
+```
+
+The outcome is **not** minted because the architecture mentions revocation. It is minted when a real
+pinned profile makes the state **reachable** and the verifier must distinguish it.
