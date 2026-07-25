@@ -148,3 +148,6 @@ tools/simurgh-attestation/stage5o/browser/parity.html
 docs/research/llm-shield/evidence/stage-5p/
 tools/simurgh-attestation/stage5p/python/parity-vectors.json
 tools/simurgh-attestation/stage5p/browser/parity-vectors.json
+
+# Local session-state, gitignored by .remember/.gitignore. Never part of the repo.
+.remember/
