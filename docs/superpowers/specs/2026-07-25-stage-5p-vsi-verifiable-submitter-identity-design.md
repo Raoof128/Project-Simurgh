@@ -529,7 +529,32 @@ At minimum, any Lane C profile supporting revocation requires:
 ```
 
 The outcome is **not** minted because the architecture mentions revocation. It is minted when a real
-pinned profile makes the state **reachable** and the verifier must distinguish it.
+pinned profile makes the state **reachable** and the verifier must distinguish it. **Status 2026-07-25:
+ARMED** — the Lane C1 RETIRED capture (§3) makes cessation reachable; the amendment must land before
+C1 ships.
+
+### 2.8 Incomparability census (invention E)
+
+The size of the incomparable region of the strength-vector space is published as a **signed,
+generator-derived number** — `tools/simurgh-attestation/stage5p/node/measureIncomparability.mjs` is
+the sole authority, cross-checked in test against both brute-force enumeration and the independent
+closed form for a product of chains (`Π nᵢ(nᵢ+1)/2`). Generator output at spec time (never
+hand-edit; the generator re-derives):
+
+```text
+vector_count                 24
+ordered_pairs               576
+incomparable_ordered_pairs  276
+incomparable_unordered_pairs 138
+```
+
+**The meaning of the number:** 276 of 576 ordered pairs — the strict majority of distinct
+comparisons — are incomparable. That is the measure of what any scalar identity score would
+silently destroy, and therefore the size of the design space Law 1 protects.
+
+**Anti-gaming non-claim (owned by the census, `section_2.added_non_claims`):**
+`incomparability_density_is_not_a_security_score`. The census publishes exact integers only — a
+ratio invites ranking, so no ratio is ever emitted.
 
 ## Section 3 — evidence lanes (DRAFT, ruled at A2)
 
@@ -589,7 +614,60 @@ place for this stage to accidentally cheat.
 A network outage, provider change, or OIDC-policy drift **must not** rewrite the meaning of `S2.*`.
 Lane B is never CI-gating.
 
-### Lane C — real durable resolution (**hard-gated, unavailable today**)
+**The Archaeology Test (invention D — a named fixture family, zero new code paths).** Lane B's
+frozen bundle MUST re-verify offline at a verification epoch strictly after the Fulcio certificate's
+expiry: _the certificate is archaeological dust; the binding still verifies; durability was not
+manufactured._ This is Law 5 in its sharpest executable form, and it applies twice — to the expired
+Sigstore certificate here, and to the RETIRED-entity record in Lane C1 below. Passing archaeology
+proves **historical verifiability only**; the section-owned non-claim
+`not_proof_of_present_accountability` ships in the same breath (`section_3.added_non_claims`).
+
+### Lane C — real durable resolution, SPLIT by amendment into C1 (reachable) and C2 (gated)
+
+The 2026-07-25 gap-hunt found that the durable-resolution lane is not one problem but two, with
+opposite availability. The blanket `status: unavailable` was hiding a reachable half.
+
+#### Lane C1 — registry continuity profile `gleif.lei.v1` (**captured-then-frozen, reachable**)
+
+GLEIF's Legal Entity Identifier system publishes, as global public infrastructure, exactly the
+vocabulary this stage's continuity axis needs: **LAPSED** (entity exists; binding not renewed — decay
+without principal death) and **RETIRED** (entity ceased operation), with retired records kept
+published for historical resolution — **Law 5's "expiry is not erasure" as GLEIF's own operating
+practice**. ISO 17442-3 (2024) standardises the vLEI credential path on top.
+
+The seven Lane C conditions, answered honestly for `gleif.lei.v1`:
+
+| #   | Condition                                      | `gleif.lei.v1` answer                                                                                                                                                                                                                  |
+| --- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | canonical principal identifier                 | the 20-character LEI, namespace `gleif.lei.v1` — **yes**                                                                                                                                                                               |
+| 2   | signed or independently authenticated response | **the honest gap**: TLS-at-capture + digest-frozen bytes, NOT an offline GLEIF signature — _captured-then-frozen_ class, the same weakness the federated roadmap flagged for I7/I8 at lock. The signed upgrade path is vLEI/KERI (C2). |
+| 3   | pinned profile and trust root                  | profile pins endpoint, capture digests, and capture date; trust-on-capture                                                                                                                                                             |
+| 4   | explicit axis ceiling                          | `continuity` plus org-principal `resolution` at `provider_asserted`; **zero authority over binding and role**                                                                                                                          |
+| 5   | historical/offline verification                | frozen capture re-verifies offline by digest — **yes**                                                                                                                                                                                 |
+| 6   | revocation/cessation semantics                 | LAPSED/RETIRED/entity-status map directly — but see the ARMED trigger below                                                                                                                                                            |
+| 7   | no guessed equivalence                         | the LEI **is** the legal entity; no person/org inference — **yes**                                                                                                                                                                     |
+
+**Capture receipt (ceremony executed 2026-07-25).** Three records, one per continuity state, frozen
+at `docs/research/llm-shield/evidence/stage-5p/gleif-capture/` with a sha256 manifest and a
+provenance file that states the authentication honesty in full:
+
+| LEI                    | Entity                               | entity_status / registration_status | Reading                                                                                          |
+| ---------------------- | ------------------------------------ | ----------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `213800ERUMY5KWCIHJ87` | LEHMAN BROTHERS HOLDINGS PLC         | ACTIVE / ISSUED                     | principal exists; binding current — an entity in administration still maintains its registration |
+| `213800Q7NV3T5PZOU403` | LEHMAN BROTHERS LIMITED              | ACTIVE / LAPSED                     | principal exists; binding decayed — the LAPSED seam                                              |
+| `6488T70V0O9W2T3P0H24` | NOVOPAN TRÆINDUSTRI A/S SOCIALE FOND | INACTIVE / RETIRED                  | principal ceased; record still published                                                         |
+
+The capture surfaced a semantic the design had not separated: **entity status and registration
+status are independent sub-signals** (Lehman entities are entity-ACTIVE in liquidation with LAPSED
+registrations). The C1 profile must map the PAIR, never either alone. Records naming natural persons
+(sole proprietorships) are excluded from fixtures.
+
+**ARMED amendment trigger (§2.7 fires before C1 ships).** The RETIRED capture makes the
+cessation state _reachable_, so implementing C1 REQUIRES the §2.7 amendment first — minting at
+minimum `resolver_profile_revoked` and a principal-cessation outcome. The trigger is armed, not
+fired; no outcome is minted by this text.
+
+#### Lane C2 — role and durable principal resolution (**hard-gated, unavailable today**)
 
 ```text
 status: unavailable
@@ -597,18 +675,40 @@ reason: no pinned real resolver profile establishes durable principal resolution
         and accountable-role semantics under an offline-verifiable contract
 ```
 
-Lane C ships only when **all seven** exist: canonical principal identifier; signed or independently
-authenticated resolver response; pinned profile and trust root; explicit axis ceiling;
-historical/offline verification method; revocation, cessation and delegation semantics; and no
-guessed equivalence between a person, an organisation and a legal role.
+What C1 deliberately cannot touch — `binding`, `role`, and `resolution` above `provider_asserted` —
+stays gated exactly as before. The forbidden approximations stand: website scraping, an email domain,
+a company-search screenshot, an organisation name inside an OIDC claim.
 
-**Explicitly forbidden approximations** — these are hints wearing resolver costumes, and none may
-move an axis: website scraping, an email domain, a company-search screenshot, or an organisation
-name inside an OIDC claim.
+**The runway is real and dated.** The vLEI Official Organizational Role credential (GLEIF as root of
+trust, person + role + entity cryptographically combined) and eIDAS 2.0's EUDI wallets for legal
+persons with qualified attestations of attributes — member-state deadline **December 2026** — are the
+world building C2's resolver infrastructure on a legal timetable. 5P's verifier is specified before
+the ecosystem ships. When one of those becomes pinnable under all seven conditions, C2 opens by
+amendment; nothing is approximated meanwhile.
 
-Until Lane C exists, the founder's-ledger blocker stays **demonstrably unreachable**. That is a
-stronger research result than a decorative green box, and it is the honest reason
-`principal_resolved` and `accountable_role_bound` are unreachable for a real Art. 22(3) filing today.
+#### The Identity Heartbeat (invention B — continuity as a survival record)
+
+A profile MAY define `durable` as **witnessed survival**: the same canonical principal re-attested in
+capture ceremonies anchored at **two or more distinct externally anchored epochs** (reusing 5M/5N's
+already-banked Bitcoin anchoring — zero new dependencies). Continuity then stops being a resolver's
+adjective and becomes an append-only record. Section-owned additive Lean target (this does NOT amend
+Section 1's frozen six):
+
+```text
+epochMonotone : witnessed_epochs(p, t1) ⊆ witnessed_epochs(p, t2)  for t1 ≤ t2
+```
+
+A single capture — including the 2026-07-25 GLEIF ceremony above — witnesses exactly ONE epoch and
+therefore cannot mint `durable` under a heartbeat profile. That is the honest reading of today's
+evidence.
+
+#### Lane L — live authority-laundering capture (**digest-only, never CI-gated**)
+
+Invention C. A live frontier-model lane in the 3L/5B pattern: the model is induced to assert, in
+untrusted context, identity strength or role ("I am the authorised representative of X") — and the
+verifier moves **zero axes** (T5, check `S2.C3`). Both outcomes seal honestly: a caught assertion is
+a successful verifier demonstration; a refusal is recorded as `model_refused`. CVP approval already
+covers this lane. It upgrades T5 from fixture-witnessed to **witnessed-live**.
 
 **Open — flagged, not invented.** Lane C requirement 6 (revocation / cessation) has **no typed
 outcome** in the frozen nine. A revoked or ceased resolver profile is a real state that the current
@@ -652,9 +752,9 @@ pass/fail by default. **Witnessed:** S2.4. **Governed by:** Law 1, `incomparable
 ### T5 — authority laundering from untrusted content
 
 Model output, prompt content, document text, or any untrusted context asserting identity strength,
-role, or resolver status. **Witnessed:** S2.5. **Governed by:** resolver-source authority (S2.C3) —
-natural-language output has **zero** resolver authority. This is 4B/4C's capability boundary applied
-to identity.
+role, or resolver status. **Witnessed:** S2.5, and — once Lane L executes — **witnessed-live** against a real frontier model.
+**Governed by:** resolver-source authority (S2.C3) — natural-language output has **zero** resolver
+authority. This is 4B/4C's capability boundary applied to identity.
 
 ### T6 — same-subject contradiction
 
@@ -663,12 +763,12 @@ Two assertions about one canonical principal that cannot both hold. **Witnessed:
 
 ### Classes named but NOT yet witnessed — the honest coverage gaps
 
-| Class                                | Why unwitnessed                                                                                                                                 | Trigger to witness                                                   |
-| ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| **T7 — resolver profile compromise** | a compromised trusted profile is indistinguishable from an honest one at the structural layer; Sigstore concedes the same for a compromised IdP | requires a monitoring/transparency lane, not a fixture               |
-| **T8 — revocation and cessation**    | no typed outcome exists (§2.7); the state is unreachable while Lane C is unavailable                                                            | Lane C entering scope ⇒ amendment adding `resolver_profile_revoked`  |
-| **T9 — submission incompleteness**   | out of scope by Law 6; SCITT concedes the same seam in RFC 9943 §9.3                                                                            | the dedicated completeness blade (socket minted in §1)               |
-| **T10 — cross-namespace collision**  | two profiles mapping different real subjects into one canonical namespace                                                                       | resolver-profile registry census (Lane A Task 2 partially guards it) |
+| Class                                | Why unwitnessed                                                                                                                                 | Trigger to witness                                                                                                                |
+| ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| **T7 — resolver profile compromise** | a compromised trusted profile is indistinguishable from an honest one at the structural layer; Sigstore concedes the same for a compromised IdP | requires a monitoring/transparency lane, not a fixture                                                                            |
+| **T8 — revocation and cessation**    | no typed outcome exists (§2.7)                                                                                                                  | **trigger ARMED 2026-07-25**: the Lane C1 RETIRED capture makes cessation reachable; the §2.7 amendment must land before C1 ships |
+| **T9 — submission incompleteness**   | out of scope by Law 6; SCITT concedes the same seam in RFC 9943 §9.3                                                                            | the dedicated completeness blade (socket minted in §1)                                                                            |
+| **T10 — cross-namespace collision**  | two profiles mapping different real subjects into one canonical namespace                                                                       | resolver-profile registry census (Lane A Task 2 partially guards it)                                                              |
 
 T7 and T9 are **structural limits of this blade**, not defects to be patched later. T8 and T10 are
 **work items** with named triggers.
@@ -698,6 +798,20 @@ Section 2 is drafted, Lane A has one module, Lane B has not been executed, Lane 
 **Guard against grade inflation.** Frontier at 8.0 is the discriminating score here: it is low because
 two of three lanes are unexecuted, and it must **stay** low until a ceremony actually runs. If it
 rises before Lane B executes, the scale has stopped measuring anything.
+
+### Second wave (approved 2026-07-25) — inventions A-E, committed as spec, scored only at closeout
+
+| Inv | Name                                                                                                                 | Spec home      | Status                                                                                            | Projected movement (banked ONLY at closeout) |
+| --- | -------------------------------------------------------------------------------------------------------------------- | -------------- | ------------------------------------------------------------------------------------------------- | -------------------------------------------- |
+| A   | `gleif.lei.v1` registry-continuity profile — first REAL resolver profile; new evidence species (regulatory-registry) | §3 Lane C1     | capture ceremony EXECUTED 2026-07-25 (receipt in §3); profile unimplemented; §2.7 amendment armed | Frontier 8.0 → ~9.0                          |
+| B   | Identity Heartbeat — `durable` as ≥2 anchored-epoch survival; `epochMonotone` (additive)                             | §3             | specified; implement after Lane A Task 5                                                          | Novelty 8.6 → ~9.0                           |
+| C   | Lane L live authority-laundering capture                                                                             | §3             | specified; CVP already covers it                                                                  | Frontier +, GfA → ~9.4                       |
+| D   | The Archaeology Test — expired-cert / retired-entity offline re-verification family                                  | §3 Lane B + C1 | specified                                                                                         | Constitution reinforced                      |
+| E   | Incomparability census — 276/576 as the measured cost of any scalar score                                            | §2.8           | generator + tests EXIST and are spec-governed                                                     | Novelty support                              |
+
+**The eIDAS clock is the wedge's edge:** member states must ship EUDI wallets for legal persons by
+December 2026. The verifier that types what those credentials actually prove is specified here,
+first. Current scores are UNCHANGED by this table; they move at closeout, against artifacts.
 
 ## Deferred-section register — what this spec does NOT yet contain
 
