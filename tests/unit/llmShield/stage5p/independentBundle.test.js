@@ -134,13 +134,31 @@ test("the reproduction receipt records a GENUINELY different environment", () =>
 });
 
 test("the receipt REFUSES the party-independence claim it would be easiest to make", () => {
-  // The whole risk of a reproduction receipt is that it gets read as external validation. The
-  // operator was the producer, so the receipt must say so in terms that cannot be skimmed past.
+  // The whole risk of a reproduction receipt is that it gets read as external validation. A third
+  // party DID run this one — which makes the temptation worse, not better, because the record binds
+  // the run to a shared login and cannot tell that party apart from us. The receipt must refuse the
+  // upgrade on the evidence rather than on modesty, and say so unskimmably.
+  // NB: the file is hard-wrapped prose, so any multi-word phrase may straddle a newline. Match
+  // whitespace flexibly or these assertions fail on reflow rather than on substance.
   const receipt = readFileSync(join(B, "REPRODUCTION_RECEIPT.md"), "utf8");
-  assert.match(receipt, /does NOT establish/i);
-  assert.match(receipt, /different \*\*machine\*\*, not a different \*\*party\*\*/i);
-  assert.match(receipt, /not discharged by this run/i);
-  assert.match(receipt, /No score moved/i);
+  assert.match(receipt, /does\s+NOT\s+establish/i);
+  assert.match(receipt, /identity_unresolved/);
+  assert.match(receipt, /shared\s+administrative\s+account/i);
+  assert.match(receipt, /not\s+discharged\s+by\s+this\s+run/i);
+  assert.match(receipt, /No\s+score\s+moved/i);
+});
+
+test("the receipt records the operator correction instead of quietly applying it", () => {
+  // The first version of this file asserted the operator was the producer. That was false. A
+  // reproduction receipt that silently rewrites its own provenance is worth less than one that
+  // shows the correction, so the superseded claim must remain visible.
+  const receipt = readFileSync(join(B, "REPRODUCTION_RECEIPT.md"), "utf8");
+  assert.match(receipt, /earlier\s+version\s+of\s+this\s+receipt/i);
+  assert.match(receipt, /That\s+was\s+wrong/i);
+  // ...and it must state the one concrete step that WOULD discharge party independence, or the
+  // refusal is just a shrug.
+  assert.match(receipt, /What\s+would\s+discharge\s+it/i);
+  assert.match(receipt, /openssl dgst -sha256 -sign/);
 });
 
 test("the receipt does NOT publish a live SSH endpoint", () => {

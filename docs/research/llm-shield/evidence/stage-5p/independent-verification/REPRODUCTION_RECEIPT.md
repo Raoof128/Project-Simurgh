@@ -4,7 +4,8 @@
 
 The bundle was transferred by `scp` to a machine that shares nothing with the development laptop —
 different CPU architecture, different operating system, different Python minor version, different
-OpenSSL generation — extracted, and run with `python3 verify.py`.
+OpenSSL generation — extracted, and run with `python3 verify.py` by an operator with access to that
+host.
 
 ## The environment delta is the point
 
@@ -40,26 +41,56 @@ than of one interpreter build.
 older OpenSSL, needing nothing but the standard library and the `openssl` binary. A recipient with an
 ordinary environment can run it. That claim was previously an assertion; it is now a receipt.
 
-**Does NOT establish: party independence.** The operator was the **producer**, on the producer's own
-infrastructure. This is a different **machine**, not a different **party**. The closeout's open item —
+**Does NOT establish: party independence.** An earlier version of this receipt asserted that the
+operator was the producer. That was wrong — the run was performed by a third party with access to the
+host, not by this repository's author. The correction is recorded here rather than quietly applied,
+because what it changes is instructive: it changes the **history** of this run and not its
+**evidential weight**.
+
+The reason is the subject of this stage. The transcript binds the run to a shared administrative
+account (`whoami` returns a role login, not a person), it carries no signature, and the environment
+strings are self-reported by the same shell that reported the results. Nothing in the record
+distinguishes *"a third party ran this"* from *"the producer ran this"* — both hypotheses fit the
+evidence equally well. In this stage's own vocabulary the operator is **`identity_unresolved`**: the
+strongest available claim is an assertion made in conversation, and §2 is precisely the rule that an
+assertion of identity, however credible, is not a **resolution** of one. A shared account is an
+opaque handle — the `account` principal kind — and handles do not name parties.
+
+So the closeout's open item —
 
 > Anthropic relevance → 9.5 needs one external party running the Lane A verifier unaided from the
 > spec
 
-— is **not discharged by this run and must not be reported as discharged.** The distinction matters:
-cross-machine reproduction rules out *"it only works on the author's laptop"*. It cannot rule out
-*"the author's judgement is wrong about what the evidence means"*, and only a genuinely external
-reviewer can do that.
+— is **not discharged by this run and must not be reported as discharged**, and the reason is now
+sharper than it was: not *"the operator was us"* but *"the record cannot say who the operator was."*
+Cross-machine reproduction rules out *"it only works on the author's laptop"*. It cannot rule out
+*"the author's judgement is wrong about what the evidence means"*, and only an attributable reviewer
+can do that.
 
-No score moved on the strength of this run. Stage 5P's four axes remain **9.1 / 9.0 / 9.2 / 9.5**.
+**What would discharge it** is small and concrete — the party who ran it returns a result bound to
+**them** instead of to a shared login:
+
+```bash
+python3 verify.py | tee result.txt              # on their machine
+openssl dgst -sha256 -sign their-key.pem -out result.sig result.txt
+```
+
+Sending `result.txt`, `result.sig` and the public half, under a name that can be pointed at, is one
+signature away — and it is the whole distance between *"someone ran it"* and *"this party ran it"*.
+That Stage 5P cannot verify the identity of the party who verified Stage 5P is not an embarrassment
+to the thesis; it is the thesis, applied to its own receipt.
+
+No score moved on the strength of this run, and none should move on a run whose operator the record
+cannot name. Stage 5P's four axes remain **9.1 / 9.0 / 9.2 / 9.5**.
 
 ## Host redaction
 
 The reproduction host's public IP address and login account are deliberately **not** recorded here.
 This repository is public, and publishing a live SSH endpoint with its username would be a small,
 free gift to anyone scanning for hosts — the run's evidentiary value lives entirely in the
-environment delta above, none of which requires naming the machine. The unredacted transcript is
-retained privately.
+environment delta above, none of which requires naming the machine. The case is stronger than it
+first appeared: the host is **shared with other people**, so publishing it would expose third
+parties' infrastructure and not only our own. The unredacted transcript is retained privately.
 
 ## Reproduce it yourself
 
