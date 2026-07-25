@@ -18,6 +18,8 @@ import {
 } from "../core/delegationEdge.mjs";
 import { IDENTITY_BANK_TYPE } from "../core/identityBank.mjs";
 import { SECTION2_CHECK_IDS, POLICY_OUTCOMES, verifySection2 } from "../core/section2Verifier.mjs";
+import { validateDischargeLedger } from "../core/dischargeGate.mjs";
+import { buildDischargeLedger, DECLARED_DISCHARGES } from "./typedOutcomeDischarge.mjs";
 import {
   S2_FIXTURES,
   COVERAGE_FIXTURES,
@@ -43,7 +45,17 @@ function contiguity(ids, re) {
   return { ok: JSON.stringify(nums) === JSON.stringify(expected), observed: nums };
 }
 
-export function measureLaneACensus() {
+/**
+ * @param options.phase    "draft" (default) — is the ledger COMPLETE and well-formed?
+ *                         "release"         — is the stage READY? `pending` becomes fatal.
+ * @param options.declared non-witnessed discharges; see typedOutcomeDischarge.mjs.
+ *
+ * The default is deliberately the WEAKER phase: a caller who forgets to say which question they are
+ * asking must not be silently told the stage is release-ready.
+ */
+export function measureLaneACensus(options = {}) {
+  const phase = options.phase ?? "draft";
+  const declared = options.declared ?? DECLARED_DISCHARGES;
   const problems = [];
 
   const checkIds = [...SECTION2_CHECK_IDS];
@@ -140,8 +152,16 @@ export function measureLaneACensus() {
   );
   const unreached = outcomes.filter((o) => !reached.has(o));
 
+  // --- §2.12 discharge gate ---------------------------------------------------------------------
+  // The ledger is generated from executed fixtures; the gate then asks the phase's question of it.
+  // Its problems are the census's problems: a stage cannot be clean while an outcome is undischarged.
+  const discharge_ledger = buildDischargeLedger(phase, declared);
+  const discharge = validateDischargeLedger(discharge_ledger, { phase, typedOutcomes: outcomes });
+  problems.push(...discharge.problems);
+
   return {
     census_id: "simurgh.vsi.lane_a_census.v1",
+    phase,
     schema_types: {
       principal: PRINCIPAL_TYPE,
       resolver_profile: RESOLVER_PROFILE_TYPE,
@@ -171,9 +191,16 @@ export function measureLaneACensus() {
       typed_outcomes: outcomes.length,
       fixtures: fixtures.length,
     },
-    // Honest, not hidden: outcomes no Lane A fixture reaches. Lane A does not claim full coverage
-    // of the outcome space, and the unreached set is published rather than quietly implied empty.
+    // Honest, not hidden: outcomes no Lane A fixture reaches. The set is PUBLISHED rather than
+    // quietly implied empty — and §2.12's gate is what turns a non-empty set into a release blocker.
     unreached_typed_outcomes: unreached,
+    discharge_ledger,
+    discharge: {
+      phase: discharge.phase,
+      counts: discharge.counts,
+      pending: discharge.pending,
+      ok: discharge.ok,
+    },
     // The digest domain must NEVER equal the schema type literal (single-hat).
     check_ids_ascending: ascending,
     single_hat_ok: DELEGATION_EDGE_DOMAIN !== DELEGATION_EDGE_TYPE,
@@ -185,11 +212,15 @@ export function measureLaneACensus() {
 import { fileURLToPath } from "node:url";
 import { resolve } from "node:path";
 if (process.argv[1] && resolve(process.argv[1]) === resolve(fileURLToPath(import.meta.url))) {
-  const out = measureLaneACensus();
+  // `--phase=draft` (default) asks whether the ledger is complete; `--phase=release` asks whether
+  // the stage may ship. An unrecognised phase is a census problem, never a silent downgrade.
+  const flag = process.argv.slice(2).find((a) => a.startsWith("--phase="));
+  const phase = flag ? flag.slice("--phase=".length) : "draft";
+  const out = measureLaneACensus({ phase });
   process.stdout.write(JSON.stringify(out, null, 2) + "\n");
   if (!out.ok) {
-    process.stderr.write("\nLANE A CENSUS: PROBLEMS FOUND\n");
+    process.stderr.write(`\nLANE A CENSUS (--phase=${phase}): PROBLEMS FOUND\n`);
     process.exit(1);
   }
-  process.stderr.write("\nLANE A CENSUS: clean.\n");
+  process.stderr.write(`\nLANE A CENSUS (--phase=${phase}): clean.\n`);
 }

@@ -233,4 +233,34 @@ export const COVERAGE_FIXTURES = Object.freeze([
       return b;
     },
   },
+  {
+    fixture_id: "S2.COV.2",
+    single_defect_description:
+      "every presented evidence resolves a principal other than the claimed submitter",
+    expected_check_id: "S2.C8",
+    expected_policy_outcome: "identity_unresolved",
+    build() {
+      const b = clone(cleanAncestor());
+      // The evidences remain internally consistent (all speak about ALICE), so S2.C5 and S2.C6 are
+      // genuinely satisfied and the bank is built. The submission's subject is simply never
+      // resolved by anything presented — which is precisely what "unresolved" means.
+      b.subject = { ...BOB };
+      return b;
+    },
+  },
+  {
+    fixture_id: "S2.COV.3",
+    single_defect_description:
+      "the resolved identity is real but ephemeral, and the policy requires durability",
+    expected_check_id: "S2.C9",
+    expected_policy_outcome: "identity_ephemeral_only",
+    build() {
+      const b = clone(cleanAncestor());
+      // Comparable, not incomparable: `required` sits strictly ABOVE the banked vector on exactly
+      // one axis, so S2.C8 passes and the failure lands on the policy test with the specific
+      // ephemerality outcome rather than the generic one.
+      b.required.continuity = "durable";
+      return b;
+    },
+  },
 ]);

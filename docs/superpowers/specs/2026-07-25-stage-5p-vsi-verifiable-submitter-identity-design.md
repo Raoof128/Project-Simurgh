@@ -330,7 +330,7 @@ that consumes them.
 
 ---
 
-## Section 2 — canonical principal grammar, check order, attack matrix (DRAFT)
+## Section 2 — canonical principal grammar, check order, attack matrix (FROZEN `<FREEZE_HASH>`)
 
 ### 2.1 Canonical principal (frozen before any fixture)
 
@@ -675,6 +675,69 @@ rename itself into invisibility.
 grants only what `Law 4`'s ceiling permits. The two are never conflated, and the fixture register
 records both (`attempted_strength_after` vs `actual_strength_after`).
 
+### 2.12 Typed Outcome Discharge Gate (normative release gate)
+
+A typed outcome that no lane ever exercises is an unproven claim wearing a taxonomy's clothes. This
+gate is the rule that makes the outcome list falsifiable rather than decorative. **It is normative,
+and it is stable after freeze** — the mutable discharge state it governs lives in §5, never here.
+
+```text
+Before Stage 5P may release, every frozen typed outcome MUST
+appear exactly once in the generated typed-outcome discharge ledger
+and MUST have exactly one of these statuses:
+
+  witnessed
+  mechanically_unreachable
+  reserved
+
+witnessed
+  Requires one or more real fixtures, the lane, expected check ID,
+  expected symbolic outcome, and a passing premise receipt proving
+  the fixture actually reaches the claimed condition.
+
+mechanically_unreachable
+  Requires a named machine-checkable proof or exhaustive analysis,
+  its bounded scope, and a reproducible passing result.
+
+reserved
+  Requires a signed non-claim, an explicit amendment trigger, the
+  lanes in which the outcome is unavailable, and a reason it cannot
+  currently be exercised.
+
+A prose assertion, implementation existence, unreachable code path,
+or untrusted model output is not a discharge.
+
+Stage 5P release is forbidden while any typed outcome is pending,
+duplicated, omitted, or discharged under more than one status.
+```
+
+**Authority rule (normative, and a restatement of T5 at the discharge layer).** A Claude Fable 5
+jailbreak response, provider narrative, or other untrusted model output may _describe_ an identity,
+role or resolver status, but it **cannot witness or discharge any identity outcome and cannot move
+any strength axis**. The mechanism is `S2.C3`: authority is a property of a pinned trusted profile,
+never of the content of an assertion. `UNTRUSTED_PROFILE` exists in Lane A precisely so that the
+most articulate possible claim still fails at the authority check.
+
+**`pending` is a development-only status.** It is legal while the stage is being built and is
+**never a valid release discharge** — it is the explicit absence of one. The distinction is what
+lets §§2–5 freeze honestly while Lane B and the remaining evidence machinery are still incomplete.
+
+**Two phases, one generator.** The Lane A census is the sole authority for the ledger and runs in
+either phase:
+
+```bash
+node tools/simurgh-attestation/stage5p/node/measureStage5pLaneACensus.mjs --phase=draft
+node tools/simurgh-attestation/stage5p/node/measureStage5pLaneACensus.mjs --phase=release
+```
+
+| Phase       | Rejects                                                                                                                                                                                                                                                                                                                                  |
+| ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **draft**   | an outcome missing from the ledger; an outcome appearing more than once; a status outside the development vocabulary; an unknown outcome; a `witnessed` row naming no fixture or carrying no premise receipt                                                                                                                             |
+| **release** | everything draft rejects, **plus**: any `pending` row; an empty fixture set on `witnessed`; a prose-only `mechanically_unreachable` (no named proof, no bounded scope, no reproducible result); an unsigned or triggerless `reserved`; and any fixture whose declared expected outcome disagrees with what the verifier actually returns |
+
+Draft completeness and release readiness are therefore **different questions with different exit
+codes**, and the stage can be honest about being mid-build without loosening the release bar.
+
 ### 2.9 `section_2.added_non_claims` (register)
 
 ```text
@@ -684,7 +747,7 @@ incomparability_density_is_not_a_security_score
 Section-owned, additive (5O A3/A8 pattern): these do NOT amend Section 1's frozen five; the Lane A
 census counts this register separately.
 
-## Section 3 — evidence lanes (DRAFT, ruled at A2)
+## Section 3 — evidence lanes (FROZEN `<FREEZE_HASH>`, ruled at A2)
 
 Three lanes. The normative one contains no real-world dependency; reality enters through a
 controlled airlock rather than through the laboratory ceiling.
@@ -857,11 +920,17 @@ be mistaken for an oversight.
 
 ---
 
-## Section 4 — threat model: attack classes (DRAFT)
+## Section 4 — threat model: attack classes (FROZEN `<FREEZE_HASH>`)
 
 Six fixtures are not a threat model; they are six fixtures. This taxonomy names the **classes**, and
 states honestly which are witnessed by §2.4's matrix and which are not yet witnessed at all. A class
 with no witness is a **coverage gap on the record**, not an implied absence of risk.
+
+**Scope of every "Witnessed" cell below (normative reading).** A witness here means: **a sealed
+synthetic Lane A fixture reaches the named check and outcome.** It does **not** mean the class has
+been observed in the wild, reproduced against a real provider, or proved absent. Lane B is
+unexecuted and Lane C2 is unreachable, so no cell in this table carries external validity. That is a
+statement about this stage's current state, not a limitation of the taxonomy.
 
 ### T1 — axis laundering (strength asserted on an axis the source cannot speak to)
 
@@ -911,10 +980,56 @@ Two assertions about one canonical principal that cannot both hold. **Witnessed:
 T7 and T9 are **structural limits of this blade**, not defects to be patched later. T8 and T10 are
 **work items** with named triggers.
 
-## Section 5 — four-axis scorecard (honest, re-scored at closeout)
+## Section 5 — release state and four-axis scorecard (FROZEN `<FREEZE_HASH>`, re-scored at closeout)
+
+**What this section is, and is not.** Everything below describes the stage as it stands: **Lane A is
+implemented**; Lane B has not been executed; Lane C1 has a frozen capture but no profile; Lane C2 is
+unreachable; raw codes, Lean, attestation, parity and the K7 net are **unwritten forward contracts**
+tracked in the deferred register. No sentence in §§4–5 asserts that the complete 5P stage exists.
+
+### 5.1 Typed outcome discharge ledger (GENERATED — never hand-edited)
+
+The mutable counterpart to §2.12's frozen law. The ledger is emitted by the Lane A census, so its
+rows are derived from executed verifier behaviour rather than from prose:
+
+```json
+{
+  "type": "simurgh.vsi.typed_outcome_discharge.v1",
+  "phase": "draft",
+  "outcomes": [
+    {
+      "policy_outcome": "resolver_binding_invalid",
+      "status": "witnessed",
+      "lane": "A",
+      "fixture_ids": ["S2.COV.1"],
+      "expected_check_id": "S2.C2",
+      "premise_receipt": "<how the fixture proved it generated the claimed condition>"
+    },
+    { "policy_outcome": "identity_ephemeral_only", "status": "pending" }
+  ]
+}
+```
+
+| Field             | Rule                                                                                         |
+| ----------------- | -------------------------------------------------------------------------------------------- |
+| `policy_outcome`  | exactly one row per frozen outcome; duplicates and omissions are census problems, not notes  |
+| `status`          | `witnessed` \| `mechanically_unreachable` \| `reserved` \| `pending` (development only)      |
+| `lane` etc.       | required by status, per §2.12's evidence requirements for that status                        |
+| `premise_receipt` | the executed proof that the fixture reached the condition it names — not a description of it |
+
+**Counts are generator-derived** (§1's counting rule applies here too). A count written in prose that
+disagrees with `measureStage5pLaneACensus.mjs --phase=…` is a defect in the prose.
+
+**A Lane A witness discharges reachability, not external validity.** `identity_ephemeral_only` being
+witnessed by a sealed synthetic fixture proves the outcome is typed and reachable; it does **not**
+prove a real keyless ceremony produces it. That second claim is Lane B's, it is still unpaid, and
+§2.12 deliberately does not let a Lane A row retire it.
+
+### 5.2 Scorecard
 
 Scored against the stage **as currently specified and built**, not as hoped. Section 1 is frozen,
-Section 2 is drafted, Lane A has one module, Lane B has not been executed, Lane C is unreachable.
+Sections 2–5 are frozen as of this section's freeze, Lane A is implemented, Lane B has not been
+executed, Lane C is unreachable.
 
 | Axis                   | Score   | Honest basis                                                                                                                                                                                                                                                                                                                                                                                     |
 | ---------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -923,11 +1038,14 @@ Section 2 is drafted, Lane A has one module, Lane B has not been executed, Lane 
 | **Good-for-Anthropic** | **9.0** | Directly serves third-party evaluation and red-team submission provenance, where a lab must know which durable principal stands behind submitted evidence years later. Maps cleanly onto EU AI Act Art. 22(3) production-on-request. Held below 9.5 because no external actor has run the verifier.                                                                                              |
 | **Constitution**       | **9.3** | The stage's entire content is refusing to overclaim what a signature proves: five signed non-claims, a typed unreachable ceiling for the named real-world actor, an explicitly unwitnessed-class table, and a bound that says _authentication is not accountability_. The honest-bound-first discipline is the deliverable, not a caveat attached to it.                                         |
 
-### What moves each higher — buildable artifacts with names, tracked as debts
+### 5.3 What moves each higher — buildable artifacts with names, tracked as debts
+
+Every row is an **unbuilt forward contract**. None of them exists today; listing them here is a debt
+register in the reserved-socket tradition, not a description of shipped capability.
 
 | Axis               | Artifact that moves it                                                                                                                      | Moves to |
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| Novelty            | `proofs/stage5p/Vsi.lean` with all five §1 targets discharged, zero `sorry` — the order becomes machine-checked, not asserted               | 9.2      |
+| Novelty            | `proofs/stage5p/Vsi.lean` with all **six** §1 targets discharged, zero `sorry` — the order becomes machine-checked, not asserted            | 9.2      |
 | Frontier           | **Execute Lane B**: a real public Fulcio/Rekor ceremony, frozen and offline re-verified, retiring `real_sigstore_anchor_execution_deferred` | 9.0      |
 | Frontier           | A pinned **real** resolver profile satisfying all seven Lane C conditions, making `principal_resolved` reachable once                       | 9.4      |
 | Good-for-Anthropic | One external party (auditor, lab eval team, or standards contact) running the Lane A verifier unaided from the spec                         | 9.5      |
@@ -936,6 +1054,25 @@ Section 2 is drafted, Lane A has one module, Lane B has not been executed, Lane 
 **Guard against grade inflation.** Frontier at 8.0 is the discriminating score here: it is low because
 two of three lanes are unexecuted, and it must **stay** low until a ceremony actually runs. If it
 rises before Lane B executes, the scale has stopped measuring anything.
+
+### 5.4 Release-blocking forward contracts (NONE of these exists yet)
+
+§§2–5 are frozen as a **contract**, not as a completed capability. What is implemented today is
+**Lane A** and nothing else. Six items block release, and each is unbuilt:
+
+| #   | Forward contract                                     | State                                                                        | Blocks                                                 |
+| --- | ---------------------------------------------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------ |
+| 1   | Sole raw-code allocation, band opening at **464**    | **not allocated** — Lane A emits symbolic outcomes only                      | any numeric interoperability claim                     |
+| 2   | `proofs/stage5p/Vsi.lean`, six targets, zero `sorry` | **not written**                                                              | "the order is machine-checked"                         |
+| 3   | Signed attestation / evidence bundle                 | **not written**                                                              | any offline third-party verification claim             |
+| 4   | Independent runtime parity (Node ≡ Python ≡ browser) | **not written**                                                              | "the deterministic surface is runtime-independent"     |
+| 5   | K7 all-functions E2E net                             | **not written**                                                              | tag — mandatory, per the standing stage invariant      |
+| 6   | Real public Sigstore ceremony (Lane B)               | **not executed** — 5G's `real_sigstore_anchor_execution_deferred` stays open | Frontier rising above 8.0; any external-validity claim |
+
+Until all six land, the honest description of this stage is **"Stage 5P Lane A implemented, spec
+frozen"** — never "Stage 5P complete". §2.12's release phase is the mechanical form of that
+sentence: `--phase=release` is a question the stage may answer cleanly on the discharge ledger while
+still being unshippable for the six reasons above, which are tracked here and not by that gate.
 
 ### Second wave (approved 2026-07-25) — inventions A-E, committed as spec, scored only at closeout
 
@@ -965,8 +1102,46 @@ Stated explicitly so no gap is silent. Each row names the trigger that unblocks 
 | `STAGE_5P_PRIOR_ART_MAP.md`                    | **WRITTEN 2026-07-25** — `docs/research/llm-shield/STAGE_5P_PRIOR_ART_MAP.md`, six families + regulatory context; to be signed with `SIG5P.audit` at closeout | signing at closeout                                                                                                                                         |
 | EU AI Act re-pin                               | **DISCHARGED 2026-07-25**                                                                                                                                     | all four rows byte-verified against OJ L 2024/1689; Art. 18(1) wording corrected — my earlier paraphrase was not the Regulation's text                      |
 
-**Freeze status:** Section 1 FROZEN `991dde48`. **Sections 2, 3, 4 and 5 are DRAFT and have received
-no freeze ruling.**
+## Sections 2–5 freeze gate
+
+Receipts below are **generator-derived**, not hand-carried — every number is reproducible by running
+the named command. Section 1's counting rule governs this block as it governs the rest of the spec.
+
+```text
+node tools/simurgh-attestation/stage5p/node/measureSection1Census.mjs
+  axes 4 · laws 7 · lean_targets 6 · typed_outcomes 9 · non_claims 5 · attack_rows 6 · drift []
+
+node tools/simurgh-attestation/stage5p/node/measureStage5pLaneACensus.mjs --phase=draft    -> clean
+node tools/simurgh-attestation/stage5p/node/measureStage5pLaneACensus.mjs --phase=release  -> clean
+  check_ids 9 · typed_outcomes 9 · matrix fixtures 6 · coverage fixtures 3 · profiles 3
+  discharge: witnessed 9 · mechanically_unreachable 0 · reserved 0 · pending 0
+  unreached_typed_outcomes: []
+
+npm run test:stage5p -> 150/150
+```
+
+- [x] §2.1–§2.11 unchanged in substance since the A3 rulings; §2.12 added by this freeze
+- [x] §2.12's law is **stable prose**; the discharge state it governs lives in §5.1 and is generated
+- [x] Every one of the nine typed outcomes is discharged — `witnessed`, by an executed Lane A fixture
+      with a premise receipt; **zero** `pending`, `reserved`, or `mechanically_unreachable`
+- [x] Draft and release phases proved to be **different questions**: removing a single coverage
+      witness leaves `--phase=draft` clean (exit 0) and fails `--phase=release` (exit 1) with
+      `pending_is_not_a_release_discharge`
+- [x] The non-witnessed discharge path is **live, not dead code** — exercised by injection, and a
+      declaration missing its required evidence is rejected rather than smuggled through
+- [x] §4's "Witnessed" cells scoped explicitly to sealed synthetic Lane A — no external validity
+- [x] §5 restructured so no sentence implies the complete stage exists: §5.4 lists the six unbuilt
+      release-blocking forward contracts by name
+
+**A4 — Sections 2–5 invalidation rule.** Any change to the canonical principal grammar, the subject
+derivation, the nine-check order, the frozen six-row matrix, the delegation edge or identity bank
+wire formats, the resolver profile or evidence envelope, **§2.12's discharge law or its status
+vocabulary**, the lane definitions, or the threat-class table ⇒ **normative amendment + re-freeze**,
+and the Lane A census must be re-run in both phases with the receipts re-recorded above.
+
+**Freeze status:** Section 1 FROZEN `991dde48`. **Sections 2, 3, 4 and 5 FROZEN `<FREEZE_HASH>`.**
+The freeze covers this document's contract. It does **not** assert that Stage 5P is complete: what
+is implemented is **Lane A**, and §5.4 names the six things that are not.
 
 ---
 
