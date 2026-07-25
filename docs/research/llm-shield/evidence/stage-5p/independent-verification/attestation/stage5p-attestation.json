@@ -1,0 +1,95 @@
+{
+  "bundle_schema": "simurgh.vsi.attestation_bundle.v1",
+  "public": {
+    "payload": {
+      "attestation_schema": "simurgh.vsi.attestation.public.v1",
+      "stage": "5P",
+      "blade": "componentwise_identity_resolution_lattice",
+      "check_order": [
+        "S2.C1",
+        "S2.C2",
+        "S2.C3",
+        "S2.C4",
+        "S2.C5",
+        "S2.C6",
+        "S2.C7",
+        "S2.C8",
+        "S2.C9"
+      ],
+      "typed_outcomes": [
+        "identity_unresolved",
+        "identity_ephemeral_only",
+        "identity_provider_untrusted",
+        "identity_claim_mismatch",
+        "resolver_binding_invalid",
+        "identity_replay_upgrade_attempted",
+        "accountable_role_unproven",
+        "identity_strength_incomparable",
+        "identity_principal_mismatch",
+        "resolver_profile_revoked",
+        "identity_principal_ceased"
+      ],
+      "raw_code_allocation_digest": "6bfe3eb7a3b114380efd9a0416c55156af76bb3d69f589fdc28b32ed85ff752a",
+      "raw_code_alias_digest": "071d3250e650bdb2996c72ca7870afaab4a2deab6441ba19f0164d8f3fdc34ee",
+      "lane_a_census_digest": "7c393b8a42f3cb6bcd78eced2f42850c02cefddb0b37207f398a35f2cc352346",
+      "raw_code_census_digest": "d3d2b71492c17a05602bee0b2b1a9c2439987ba8e11d576a66d751f7cc77ffe6",
+      "lane_a_census_ok": true,
+      "raw_code_census_ok": true,
+      "discharge_counts": {
+        "witnessed": 11,
+        "mechanically_unreachable": 0,
+        "reserved": 0,
+        "pending": 0
+      },
+      "lane_c1_capture_digest": "e960c1b926991beaf55ce4c0a4f5cad7fe6d1e4e0976be85c0de9445d3d14d65",
+      "lane_c1_authentication": "tls_at_capture_then_digest_frozen",
+      "lane_c1_records": 3,
+      "lane_b_log": "rekor.sigstore.dev",
+      "lane_b_uuid": "108e9186e8c5677a869aaa5794d6c3c8030176e8d23629cb72432c6a1d0177b67edb8ba7c98fc64e",
+      "lane_b_log_index": 2245421742,
+      "lane_b_artifact_digest": "839b7729289f8a10dd2a113b905bff3dcbf3d5738f697644951f5ebe5cddaa80",
+      "lane_b_is_keyless": false,
+      "lane_b_offline_checks_ok": true,
+      "lean_core_digest": "842349b340643415afa76fd56e2d50ba3a5d9fcac0053a3f44ae77ceafafb224",
+      "lane_l_capture_digest": "b61c1149b0079cbbaeca36fa6af06858ac6d0dc81a7364a7240ea1e648cabb1f",
+      "lane_l_probes": 3,
+      "lane_l_produced_claims": 3,
+      "lane_l_refusals": 0,
+      "lanes_not_executed": [
+        "C2"
+      ],
+      "non_claims": [
+        "not_proof_of_uncompromised_identity",
+        "not_proof_of_exclusive_account_control",
+        "not_proof_of_submitter_honesty",
+        "not_proof_of_submission_completeness",
+        "not_proof_of_legal_authority_outside_the_pinned_resolver_profile",
+        "incomparability_density_is_not_a_security_score",
+        "not_proof_of_present_accountability"
+      ]
+    },
+    "signature": "c92e144b74568fde69d172908fbae77bb2ac84d46b56249571ca29fb1102909c8e21d68f2eb1703c354230f31ba1f1fc898cb82479b53a7ccc6ee2e9e9e6e20c"
+  },
+  "audit": {
+    "payload": {
+      "attestation_schema": "simurgh.vsi.attestation.audit.v1",
+      "public_attestation_digest": "2fa42b79715bae03713484eaa3b88efd9c255cce59d0851780ef6cd642ecbefa",
+      "known_limitations": [
+        "lane_b_is_a_real_rekor_anchor_with_a_self_managed_key_NOT_a_fulcio_keyless_ceremony",
+        "lane_b_proves_an_artifact_was_signed_by_something_at_a_time_never_by_whom",
+        "lane_c1_authentication_is_tls_at_capture_then_digest_frozen_not_an_offline_gleif_signature",
+        "lane_c1_maps_only_the_three_registry_pairs_the_capture_observed_others_fail_closed",
+        "lane_c2_role_and_durable_principal_resolution_is_unreachable_no_qualifying_profile_exists",
+        "lane_l_captured_ONE_model_on_ONE_day_it_is_not_a_rate_and_not_a_claim_about_other_models",
+        "lane_l_containment_is_a_property_of_the_VERIFIER_never_a_claim_about_model_safety",
+        "the_lean_core_bounds_the_ORDER_ALGEBRA_it_does_not_certify_the_pipeline_or_the_fact_manufacturing_seam",
+        "identity_binding_does_not_imply_submission_completeness_law_6_scitt_rfc9943_concedes_the_same_seam",
+        "a_compromised_but_trusted_resolver_profile_is_indistinguishable_from_an_honest_one_here_T7",
+        "cross_namespace_collision_T10_has_a_mechanism_but_no_S2_fixture_witness",
+        "a_lane_a_witness_discharges_REACHABILITY_of_an_outcome_never_its_external_validity"
+      ],
+      "limitations_count": 12
+    },
+    "signature": "9b749c68500d5ef74e2a9f145c7c35396304700a725482bd8d354339fb8c182de7b8400c3963063e25c1b51abdd106bf66b1b30239c733c2ef8bfe30b0a2b70a"
+  }
+}

@@ -78,3 +78,6 @@ tools/simurgh-attestation/stage4r/byo/simurgh-reviewer-identity-key.pem
 
 # Local Claude Code project config + skills (internal, not for the repo)
 .claude/
+
+# Sendable bundle, rebuilt on demand from the versioned directory.
+stage5p-independent-verification.tar.gz

@@ -1,0 +1,33 @@
+{
+  "ceremony_id": "simurgh.vsi.rekor_ceremony.v1",
+  "executed_utc": "2026-07-25T08:51:11Z",
+  "log": "rekor.sigstore.dev",
+  "log_id": "c0d23d6ad406973f9559f3ba2d1ca01f84147d8ffc5b8445c224f98b9591801d",
+  "uuid": "108e9186e8c5677a869aaa5794d6c3c8030176e8d23629cb72432c6a1d0177b67edb8ba7c98fc64e",
+  "log_index": 2245421742,
+  "integrated_time": 1784969471,
+  "tree_size_at_inclusion": 2123517582,
+  "root_hash": "396791ba179f872808a6c5ce3c2aa90abeb02f6d281e097934472bec1e95c416",
+  "public_url": "https://rekor.sigstore.dev/api/v1/log/entries/108e9186e8c5677a869aaa5794d6c3c8030176e8d23629cb72432c6a1d0177b67edb8ba7c98fc64e",
+  "what_this_is": [
+    "a REAL entry in the REAL public-good Rekor transparency log",
+    "a real RFC 6962 inclusion proof against a real signed tree head",
+    "a real Signed Entry Timestamp under Rekor s own published log key",
+    "independently re-fetched by UUID and byte-identical"
+  ],
+  "what_this_is_NOT": [
+    "NOT a Fulcio keyless ceremony — the signer is a self-managed ECDSA P-256 key",
+    "NOT proof of who holds that key: a bare public key resolves no principal",
+    "NOT proof of submitter identity",
+    "NOT proof of durable continuity — one log entry is one moment"
+  ],
+  "why_a_self_managed_key": "Fulcio keyless signing requires an interactive OIDC flow that no offline reproduce can perform. Rather than fake one, this ceremony uses a self-managed key and states the difference. For a stage about submitter identity the substitution is instructive rather than merely acceptable: it isolates binding from resolution, which is precisely 5P s thesis.",
+  "axis_authority": {
+    "binding": "cryptographically_bound — the signature really verifies",
+    "resolution": "unresolved — nobody vouches for the key holder",
+    "continuity": "ephemeral — a single entry is a single moment",
+    "role": "unproven — a log says nothing about authority to act"
+  },
+  "private_key_disposition": "generated in a session scratchpad, NEVER committed, not required to verify",
+  "offline_verification": "tools/simurgh-attestation/stage5p/node/laneBRekor.mjs — 8 checks, no network"
+}
