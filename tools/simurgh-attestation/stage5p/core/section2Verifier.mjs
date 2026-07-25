@@ -196,3 +196,25 @@ export function verifySection2(bundle, pinned) {
     strength_relation: relation,
   };
 }
+
+/**
+ * Fail-closed wrapper — wired LAST, per the standing stage invariant.
+ *
+ * Any input the pure verifier cannot even parse, and any internal error, becomes a TYPED rejection
+ * rather than a thrown exception or (far worse) a silent accept. A failed run hands back no bank:
+ * there is no partial state for a caller to mistake for a result.
+ */
+export function evaluateSection2Safe(bundle, pinned) {
+  try {
+    const r = verifySection2(bundle, pinned);
+    if (r.ok) return r;
+    return { ok: false, check_id: r.check_id, outcome: r.outcome, detail: r.detail };
+  } catch (err) {
+    return {
+      ok: false,
+      check_id: "S2.C1",
+      outcome: "identity_unresolved",
+      detail: `fail-closed: ${err?.message ?? "unrepresentable input"}`,
+    };
+  }
+}
