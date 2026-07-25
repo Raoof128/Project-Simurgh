@@ -2,13 +2,13 @@
 
 **Motto: AnthropicSafe First, then ReviewerSafe.**
 
-Status: **Section 1 FROZEN `<FREEZE_HASH>`** (amendment A1). Sections 2-N unwritten.
+Status: **Section 1 FROZEN `991dde48`** (amendment A1). Sections 2-N unwritten.
 Branch `stage-5p-vsi-verifiable-submitter-identity`. Raw codes open at **464** (5O consumed 420-463).
 Target tag `v2.51.0-stage-5p-vsi`.
 
 ---
 
-## Section 1 — identity, laws, honest core (FROZEN `<FREEZE_HASH>`)
+## Section 1 — identity, laws, honest core (FROZEN `991dde48`)
 
 ### Blade (one)
 
@@ -278,4 +278,4 @@ the five Lean targets, the eight typed outcomes, the five non-claims, the ledger
 five forward-committed attack rows ⇒ **normative amendment + full re-freeze** of every later section
 that consumes them.
 
-**FROZEN `<FREEZE_HASH>`.**
+**FROZEN `991dde48`.**
