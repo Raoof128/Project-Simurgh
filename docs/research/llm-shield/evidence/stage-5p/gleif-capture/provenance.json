@@ -1,0 +1,35 @@
+{
+  "capture_id": "simurgh.vsi.gleif_capture.v1",
+  "captured_utc_date": "2026-07-25",
+  "endpoint": "https://api.gleif.org/api/v1/lei-records/{lei}",
+  "accept": "application/vnd.api+json",
+  "records": [
+    {
+      "lei": "213800ERUMY5KWCIHJ87",
+      "legal_name": "LEHMAN BROTHERS HOLDINGS PLC",
+      "entity_status": "ACTIVE",
+      "registration_status": "ISSUED",
+      "sha256": "1a8571dbe3a308010984246063bf901e91a0467a544b43edb35d4cb5d40565b4",
+      "continuity_reading": "principal exists; binding current"
+    },
+    {
+      "lei": "213800Q7NV3T5PZOU403",
+      "legal_name": "LEHMAN BROTHERS LIMITED",
+      "entity_status": "ACTIVE",
+      "registration_status": "LAPSED",
+      "sha256": "8075e1f65ad14416b5100a2f59a0d2f2494b9ddf5f5a37fefa573fae64b72dbb",
+      "continuity_reading": "principal exists; binding decayed - the LAPSED seam"
+    },
+    {
+      "lei": "6488T70V0O9W2T3P0H24",
+      "legal_name": "NOVOPAN TRAEINDUSTRI A/S SOCIALE FOND",
+      "entity_status": "INACTIVE",
+      "registration_status": "RETIRED",
+      "sha256": "7ff2f27a176806b3bf055102d015199832b529cb06cef27bcd1e621070f1a465",
+      "continuity_reading": "principal ceased; record still published - Law 5 as GLEIF practice"
+    }
+  ],
+  "authentication_honesty": "These bytes were authenticated by TLS to api.gleif.org at capture time and are digest-frozen thereafter. They are NOT an offline cryptographic signature by GLEIF. Trust model: trust-on-capture plus byte stability - the same class as 5O's blockstream.info header capture. The vLEI/KERI path is the future signed upgrade and is NOT claimed here.",
+  "axis_authority": "This capture may inform ONLY the continuity axis and org-principal resolution at provider_asserted. It has ZERO authority over binding or role.",
+  "personal_name_rule": "Records naming natural persons (sole proprietorships) are excluded from fixtures."
+}
