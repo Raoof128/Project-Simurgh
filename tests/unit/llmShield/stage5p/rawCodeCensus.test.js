@@ -224,7 +224,7 @@ test("the static and dynamic nets disagree in scope, and both are required", () 
 
 // ---- repo hygiene: the literals live in exactly the approved places -----------------------------
 
-test("raw literals 464-472 occur ONLY in the allocator, the registry, goldens and approved docs", () => {
+test("raw literals 464-474 occur ONLY in the allocator, the registry, goldens and approved docs", () => {
   const APPROVED = [
     "tools/simurgh-attestation/stage5p/core/rawCodeAllocator.mjs",
     "tools/simurgh-attestation/stage4h/exitCodes.mjs",
@@ -239,7 +239,10 @@ test("raw literals 464-472 occur ONLY in the allocator, the registry, goldens an
     "docs/superpowers/specs/2026-07-25-stage-5p-vsi-verifiable-submitter-identity-design.md",
   ];
   const SKIP = new Set(["node_modules", ".git", "dist", "build", ".remember", "coverage"]);
-  const BAND = /\b(46[4-9]|47[0-2])\b/;
+  // The FULL allocated range, amendment band included. The first version stopped at 472 and left
+  // 473-474 unpoliced the moment A5 minted them — a hygiene gate that does not grow with the band
+  // silently stops covering the newest codes, which are the ones most likely to leak.
+  const BAND = /\b(46[4-9]|47[0-4])\b/;
   // Correlation is PER FILE, not per line. A leak's realistic shape is a bare `const X = 467;` under
   // a `// stage5p` header several lines above — a per-line rule would walk straight past it.
   const MENTIONS_5P = /VSI_|vsi\.|stage5p|Stage 5P|identity_unresolved|resolver_binding_invalid/;

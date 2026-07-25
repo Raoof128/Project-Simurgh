@@ -66,6 +66,19 @@ for gen in measureSection1Census measureStage5pRawCodes; do
   fi
 done
 
+echo "-- Lane C1: the frozen GLEIF capture re-verifies OFFLINE by digest --"
+if "$NODE" -e "
+  const m = await import(process.cwd() + \"/$S5P/node/laneC1Gleif.mjs\");
+  const c = m.loadGleifCapture();
+  if (c.records.length !== 3) { console.error(\"expected 3 records\"); process.exit(1); }
+  for (const r of c.records) if (!r.digest_verified) { console.error(r.lei); process.exit(1); }
+  console.log(\"lane C1: 3/3 records verified, auth=\" + c.authentication);
+" --input-type=module > /tmp/s5p-c1.log 2>&1; then
+  cat /tmp/s5p-c1.log
+else
+  echo "FAIL: Lane C1 capture verification"; cat /tmp/s5p-c1.log; exit 1
+fi
+
 echo "-- Lean core (six §1 targets, zero proof escapes) --"
 if command -v lean >/dev/null 2>&1; then
   if lean proofs/stage5p/Vsi.lean; then
@@ -84,4 +97,5 @@ fi
 
 echo
 echo "== Stage 5P reproduce: ALL GATES PASSED =="
-echo "NOT reproduced, because NOT executed: Lane B (real Sigstore ceremony), Lane C2."
+echo "Lane A (sealed synthetic) and Lane C1 (frozen GLEIF capture) are reproduced above."
+echo "NOT reproduced, because NOT executed: Lane B (real Sigstore ceremony), Lane C2, Lane L."
