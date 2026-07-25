@@ -568,6 +568,62 @@ earlier draft said "strict majority" — the generator says exactly half; the ge
 `incomparability_density_is_not_a_security_score`. The census publishes exact integers only — a
 ratio invites ranking, so no ratio is ever emitted.
 
+### 2.10 Resolver profile (frozen)
+
+A resolver profile is the pinned statement of **what a resolver is allowed to say**. It is the
+carrier of Law 4's vector ceiling, and the only place normalisation policy may live.
+
+```json
+{
+  "type": "simurgh.vsi.resolver_profile.v1",
+  "profile_id": "simurgh.synthetic.oidc.v1",
+  "trust_root_fpr": "<64 lowercase hex>",
+  "permitted_claim_types": ["principal"],
+  "ceiling": {
+    "binding": "cryptographically_bound",
+    "resolution": "provider_asserted",
+    "continuity": "ephemeral",
+    "role": "unproven"
+  },
+  "namespace_map": { "sub": "simurgh.synthetic.oidc-subject.v1" }
+}
+```
+
+| Field                   | Rule                                                                                        |
+| ----------------------- | ------------------------------------------------------------------------------------------- |
+| `type`                  | exact literal `simurgh.vsi.resolver_profile.v1`                                             |
+| `profile_id`            | canonical lowercase ASCII identifier; **MUST NOT equal any `namespace_id`** it maps to      |
+| `trust_root_fpr`        | exactly 64 lowercase hex — **bare**, a `sha256:`-prefixed value is rejected, never stripped |
+| `permitted_claim_types` | non-empty, no duplicates, subset of the frozen set below                                    |
+| `ceiling`               | a **complete four-axis vector**; a scalar, a partial object, or an unknown axis is rejected |
+| `namespace_map`         | non-empty; profile-local claim key → canonical `namespace_id`                               |
+
+```text
+principal
+delegation
+```
+
+**Law 4's structural guard.** The ceiling is validated by the lattice's own `makeStrength`, so a
+scalar ceiling (`"ceiling": "provider_asserted"`) or a partial one cannot be expressed at all. A
+resolver competent on continuity and incompetent on role must say so on **all four axes**.
+
+**Single-hat (§2.5 lineage).** `profile_id` says _which resolver produced the assertion_;
+`namespace_id` says _what identity universe the principal belongs to_. They are different hats and
+may never share a string — a profile that maps into a namespace named identically to itself is
+rejected.
+
+**Registry rule — the T10 guard (normative).** Across a registry of profiles: if two profiles map
+into the **same canonical `namespace_id`**, they MUST do so from the **identical profile-local key**.
+Two profiles reaching one canonical namespace by different local keys makes that namespace
+ambiguous — different real subjects could be driven into one `subject_id` — and the registry
+**rejects**. Sharing a namespace is how two resolvers legitimately speak about one principal; sharing
+it _inconsistently_ is how they manufacture a collision.
+
+**Normalisation lives here or nowhere.** §2.2 forbids the core from folding case, trimming, or
+applying Unicode normalisation. A profile MAY define such a transformation as part of its
+`canonical_subject_bytes` derivation — and if it does, that behaviour is pinned in the profile and
+visible to a verifier, never a hidden default.
+
 ### 2.9 `section_2.added_non_claims` (register)
 
 ```text
