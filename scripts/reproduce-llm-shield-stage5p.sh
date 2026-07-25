@@ -92,6 +92,13 @@ else
   echo "FAIL: Lane B offline verification"; cat /tmp/s5p-b.log; exit 1
 fi
 
+echo "-- cross-runtime parity: Node == stdlib Python --"
+if python3 "$S5P/python/vsi_parity.py" > /tmp/s5p-py.log 2>&1; then
+  tail -2 /tmp/s5p-py.log
+else
+  echo "FAIL: Python parity"; cat /tmp/s5p-py.log; exit 1
+fi
+
 echo "-- Lean core (six §1 targets, zero proof escapes) --"
 if command -v lean >/dev/null 2>&1; then
   if lean proofs/stage5p/Vsi.lean; then

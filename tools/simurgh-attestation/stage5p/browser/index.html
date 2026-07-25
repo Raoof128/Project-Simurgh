@@ -1,0 +1,9 @@
+<!doctype html>
+<meta charset="utf-8" />
+<!-- Stage 5P portable verifier. CSP forbids ALL egress: a verifier that can phone home is not
+     offline, and a reviewer cannot tell the difference by reading it. No connect-src is granted,
+     so fetch/XHR/WebSocket are structurally impossible rather than merely absent. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'" />
+<title>Stage 5P VSI — portable parity</title>
+<pre id="out">running…</pre>
+<script type="module" src="./parity-run.mjs"></script>
