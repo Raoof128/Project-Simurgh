@@ -1433,3 +1433,93 @@ accident of allocation order; the frozen check order is where meaning lives.
   outcomes are witnessed by **coverage** fixtures, outside the attack taxonomy, exactly as
   `S2.COV.1`–`S2.COV.3` are.
 - It does not make Lane C1 shipped. It **unblocks** C1 by discharging the §2.7 precondition.
+
+---
+
+# Annex C1 — Lane C1 SHIPPED, and invention D with it (post-freeze, 2026-07-25)
+
+A5 discharged §2.7's precondition, so Lane C1 could be built. This annex records what shipped and
+the one place the frozen prose turned out to be wrong.
+
+## C1.1 The profile
+
+`gleif.lei.v1`, the **first real resolver profile in this stage**. It reads the capture frozen at
+`docs/research/llm-shield/evidence/stage-5p/gleif-capture/` and re-verifies every record against the
+committed sha256 manifest before use. There is **no network path in the module** — a test asserts the
+source contains no `fetch`, `node:http`, `node:https` or equivalent, because a lane that could
+refetch would not be reproducing anything, and two runs could then disagree for reasons no reviewer
+can see.
+
+**The honest gap is unchanged and is now returned WITH the data.** `loadGleifCapture()` hands back
+`authentication: "tls_at_capture_then_digest_frozen"` and a `not_claimed` list alongside the records,
+so a consumer cannot obtain the facts without the bound. It is not an offline GLEIF signature; a
+reviewer who trusts the capture is trusting the capturer. The signed upgrade path is vLEI/KERI — Lane
+C2, still unreachable.
+
+## C1.2 The PAIR is normative
+
+The capture's discovery, now enforced in code. `entity.status` and `registration.status` are
+independent sub-signals, and reading either alone is wrong in a way that matters:
+
+| entity   | registration | continuity granted | lifecycle | reading                                |
+| -------- | ------------ | ------------------ | --------- | -------------------------------------- |
+| ACTIVE   | ISSUED       | `durable`          | `active`  | principal exists; binding current      |
+| ACTIVE   | LAPSED       | `ephemeral`        | `active`  | principal exists; binding **decayed**  |
+| INACTIVE | RETIRED      | `ephemeral`        | `ceased`  | principal **ceased**; record published |
+
+- reading **entity alone**: "ACTIVE, so durable" — wrong, the binding decayed
+- reading **registration alone**: "LAPSED, so ceased" — wrong, the entity is alive
+
+**Exactly three pairs are mapped**, and every other pair is **rejected, never interpolated**. GLEIF
+publishes more statuses (`PENDING_TRANSFER`, `MERGED`, `ANNULLED`, `DUPLICATE`…); mapping a state
+nobody captured would be guessing an equivalence, which Lane C condition 7 forbids. The table is
+small because the capture is small, and that is the honest relationship between them.
+
+## C1.3 A frozen-prose defect the implementation caught
+
+§3's Lane C1 heading names the profile `gleif.lei.v1` **and** its condition-1 row names the
+namespace `gleif.lei.v1`. §2's frozen **single-hat rule** forbids exactly that collision: an
+identifier must never wear two hats, or a value valid in one role can be replayed into the other.
+The prose conflated them and nobody noticed until `makeResolverProfile` refused to build:
+
+```text
+TypeError: resolver profile: single-hat violation —
+  profile_id "gleif.lei.v1" is also used as a namespace_id
+```
+
+**Resolution:** the profile keeps `gleif.lei.v1` (the heading's name, and the id that appears in
+evidence envelopes); the identity namespace becomes **`gleif.lei.subject.v1`**. The frozen §3 row is
+amended by pointer. This is the third time in this stage that a mechanism has been stricter than the
+prose describing it, and the mechanism has been right every time.
+
+## C1.4 Invention D — the Archaeology Test (SHIPPED, zero new code paths)
+
+Ten fixtures, `A1`–`A10`, over the machinery C1 already provides. The family asks one question the
+rest of the stage does not: **when the subject is gone, what survives?**
+
+The answer this stage will sign: **the evidence still verifies, and the accountability does not.**
+
+|      | Claim                                          | Result                                             |
+| ---- | ---------------------------------------------- | -------------------------------------------------- |
+| `A2` | historical verification of a **ceased** entity | **succeeds**, raw `0`                              |
+| `A3` | present accountability, **same evidence**      | fails, `identity_principal_ceased`, raw `474`      |
+| `A4` | the two runs differ **only** in the policy     | byte-identical evidence, identical replay identity |
+
+A ceased entity's evidence is not forged, void or tampered — it is simply **past**. `A7` guards that
+reading directly by asserting cessation surfaces at the **policy** test (`S2.C9`) and never as one of
+the validation outcomes, so "the check failed" can never be heard as "the evidence was bad".
+
+Three fixtures exist purely to stop the family proving something weaker than it claims:
+
+- `A6` — a **living** entity still passes the same policy, so `A3` is cessation and not an
+  unsatisfiable policy
+- `A9` — a ceased entity cannot be talked back into accountability by asserting harder; the
+  over-claim dies at the ceiling (`S2.C7`) before it reaches the policy test
+- `A10` — **fault injection on the family itself**: strip `principal_lifecycle` and the same record
+  reports ordinary decay. With and without the signal must differ, or the cessation outcome would be
+  decorative
+
+**Non-claim, shipped in the same breath as the mechanism:** `not_proof_of_present_accountability`.
+Historical verifiability is not present accountability, and a verifier that answered "valid" for a
+retired entity without saying which of the two it meant would be precisely the overclaim this stage
+exists to make impossible.
