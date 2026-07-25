@@ -20,6 +20,12 @@ export const RESOLVER_EVIDENCE_TYPE = "simurgh.vsi.resolver_evidence.v1";
 export const REPLAY_DOMAIN = "simurgh.vsi.replay.v1";
 export const CLAIM_ALTERNATIVES = Object.freeze(["principal", "delegation"]);
 
+// A5.3 — the OPTIONAL eighth key. Absent means the profile asserts NOTHING about the subject's
+// lifecycle, which is the honest default and is why every Lane A fixture is unchanged: the sealed
+// synthetic registry has no lifecycle authority and never claimed any. `null` is rejected for the
+// same reason a null claim alternative is — a null key is a statement, only absence is silence.
+export const PRINCIPAL_LIFECYCLE_VALUES = Object.freeze(["active", "ceased"]);
+
 const EVIDENCE_KEYS = Object.freeze([
   "type",
   "profile_id",
@@ -29,6 +35,9 @@ const EVIDENCE_KEYS = Object.freeze([
   "submission_digest_binding",
   "signature",
 ]);
+// Optional keys are listed separately so the exact-key gate stays exact: an unknown key is still
+// rejected, and a missing REQUIRED key is still fatal.
+const OPTIONAL_EVIDENCE_KEYS = Object.freeze(["principal_lifecycle"]);
 
 const HEX64_RE = /^[0-9a-f]{64}$/;
 const SIG_RE = /^([0-9a-f]{2})+$/;
@@ -74,7 +83,7 @@ export function makeResolverEvidence(value) {
     );
   }
   for (const key of Object.keys(value)) {
-    if (!EVIDENCE_KEYS.includes(key))
+    if (!EVIDENCE_KEYS.includes(key) && !OPTIONAL_EVIDENCE_KEYS.includes(key))
       throw new TypeError(`resolver evidence: unknown key "${key}"`);
   }
   for (const key of EVIDENCE_KEYS) {
@@ -91,6 +100,22 @@ export function makeResolverEvidence(value) {
     );
   }
   const claim = validateClaim(value.claim);
+
+  // A5.3: present-or-absent, never null, and only from the frozen vocabulary.
+  const hasLifecycle = Object.prototype.hasOwnProperty.call(value, "principal_lifecycle");
+  if (hasLifecycle) {
+    if (value.principal_lifecycle === null) {
+      throw new TypeError(
+        "resolver evidence: principal_lifecycle must be ABSENT when unasserted, never null — " +
+          "a null key is a statement, an absent key is silence"
+      );
+    }
+    if (!PRINCIPAL_LIFECYCLE_VALUES.includes(value.principal_lifecycle)) {
+      throw new TypeError(
+        `resolver evidence: unknown principal_lifecycle "${value.principal_lifecycle}"`
+      );
+    }
+  }
 
   if (!isPlainObject(value.asserted_strength_delta)) {
     throw new TypeError(
@@ -131,6 +156,8 @@ export function makeResolverEvidence(value) {
     evidence_digest: value.evidence_digest,
     submission_digest_binding: value.submission_digest_binding,
     signature: value.signature,
+    // Spread so the key stays ABSENT when unasserted rather than becoming an explicit undefined.
+    ...(hasLifecycle ? { principal_lifecycle: value.principal_lifecycle } : {}),
   });
 }
 

@@ -517,6 +517,9 @@ test("Stage 4H.4 exit map is explicit and collision-bounded", () => {
       470: 1,
       471: 1,
       472: 1,
+      // Stage 5P amendment band (A5: §2.7's armed trigger fired). Append-only, mint order.
+      473: 1,
+      474: 1,
     })
   );
 });
