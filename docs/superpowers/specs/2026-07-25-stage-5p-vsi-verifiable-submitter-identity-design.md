@@ -65,7 +65,7 @@ never a silent fail.
 crypto: facts are injected by an adapter, and the unknown-detail enum fails closed to `"unknown"`
 (5M's `bounded()` idiom is inherited verbatim in spirit).
 
-### The six laws
+### The seven laws
 
 1. **No Imaginary Ordering.** Components are compared independently; incomparability is typed.
 2. **No Replay Upgrade.** Re-presentation, replay and reserialisation of the same evidence can
@@ -82,6 +82,11 @@ crypto: facts are injected by an adapter, and the unknown-detail enum fails clos
    erase a valid historical binding, and cannot manufacture durable principal resolution.
 6. **Identity Binding Does Not Imply Completeness.** A bound identity says nothing about whether
    the submitter disclosed everything. This is deliberately left to a dedicated later blade.
+7. **No Frankenidentity (added by A2).** Resolver evidence may join **only** when every
+   contribution resolves to the **same canonical principal**, or when a pinned, independently
+   verifiable **delegation edge** binds the principals. Otherwise the policy outcome is
+   `identity_principal_mismatch` and `strength(actual)` is **unchanged**. The failure is
+   **atomic**: no "safe-looking" axis from either resolver survives the mismatch.
 
 ### Relation vs policy verdict — they are not the same object
 
@@ -113,6 +118,9 @@ incomparableIff     : outcome a b = incomparable ↔ ¬ (a ≤ᵥ b) ∧ ¬ (b �
 
 relationPartition   : ∀ a b, exactly_one [equal a b, strictlyBelow a b,
                                           strictlyAbove a b, incomparable a b]
+
+principalMismatchNoJoin : principal r₁ ≠ principal r₂ → ¬ validDelegation r₁ r₂ →
+                            attachMany e [r₁, r₂] = failure identity_principal_mismatch
 ```
 
 `≤ᵥ` is the componentwise order and `ceiling r` is a **vector**; `⊔` is the componentwise join.
@@ -171,11 +179,23 @@ resolver_binding_invalid
 identity_replay_upgrade_attempted
 accountable_role_unproven
 identity_strength_incomparable
+identity_principal_mismatch
 ```
 
 `identity_strength_incomparable` was **added at Section 1 freeze** — the ruling's original
 seven-outcome list had no code for the partial order's defining case, which would have left a
 verifier only two options for an incomparable pair, both bugs: silently pass, or silently fail.
+
+`identity_principal_mismatch` was **added by amendment A2** (below). It is structurally distinct
+from `identity_claim_mismatch`, and the distinction is load-bearing because the **remediation
+differs**:
+
+| Outcome                       | Meaning                                                                                                                                   | Remediation                                                                                        |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `identity_claim_mismatch`     | evidence conflicts with the submission, or with claims already bound **inside the same principal context**                                | correct or replace the conflicting evidence                                                        |
+| `identity_principal_mismatch` | two individually **valid** resolver results identify **different principals** and are being combined as though they described one subject | prove an explicit, pinned, independently verifiable delegation / representation / equivalence edge |
+
+Both resolver assertions may be perfectly authentic. **The defect is the attempted join.**
 
 **Counting rule (normative).** These fences contain identifiers and nothing else — no inline
 commentary, no continuation lines. Every count asserted anywhere in this spec is
@@ -246,15 +266,19 @@ and the reason Law 6 is a non-claim rather than a silent gap.
 Ordered, laundering first. Each row is a single-defect fixture that must first-fail at its named
 mechanism; none may be dropped without a normative amendment.
 
-| #   | Attack                                                                                                            | Required rejection                                      |
-| --- | ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
-| 1   | Continuity evidence presented as accountable-role evidence                                                        | resolver axis ceiling (`boundResolverDelta`)            |
-| 2   | Two weak resolvers combined into one imaginary strong principal                                                   | cross-resolver principal mismatch                       |
-| 3   | Same evidence replayed through a stronger profile identifier                                                      | `identity_replay_upgrade_attempted`                     |
-| 4   | Incomparable vectors compressed into a scalar or lexicographic score                                              | `identity_strength_incomparable`                        |
-| 5   | **Authority laundering from model output** — untrusted natural-language content asserts a role or resolver status | natural-language output has **zero** resolver authority |
+| ID   | Attack                                                                                           | Required rejection                                                          |
+| ---- | ------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------- |
+| S2.1 | Continuity evidence used to imply accountable role                                               | resolver **vector** ceiling blocks the role increase (`boundResolverDelta`) |
+| S2.2 | Individually valid evidence for **different** principals combined — _Frankenidentity assembly_   | `identity_principal_mismatch`, atomically                                   |
+| S2.3 | Same evidence replayed under a stronger profile identifier                                       | `identity_replay_upgrade_attempted`                                         |
+| S2.4 | Incomparable vectors compressed into a scalar or lexicographic order                             | `identity_strength_incomparable`                                            |
+| S2.5 | **Authority laundering from model output** — untrusted context asserts identity strength or role | no axis movement; resolver authority required                               |
+| S2.6 | Conflicting evidence against the **same** canonical principal                                    | `identity_claim_mismatch`                                                   |
 
-Row 5 reaches back to this project's founding threat model: untrusted context may _describe_ identity
+S2.2 and S2.6 give the two mismatch codes a clean home: **S2.2 is a wrong-subject join, S2.6 is a
+same-subject contradiction.**
+
+S2.5 reaches back to this project's founding threat model: untrusted context may _describe_ identity
 strength, but **only pinned, independently signed resolver evidence may alter the vector**. It is the
 same authority boundary 4B (intent grounding) and 4C (provenance gating) enforce for capabilities,
 applied here to identity. A model — any model — writing "submitted by the authorised representative"
@@ -268,14 +292,126 @@ moves no axis.
 - [x] `≤ᵥ` defined once, normatively, before any check consumes it; `⊔` likewise
 - [x] Ceiling confirmed as a **vector** at every use site, and confirmed to bound the **delta**
 - [x] Relation (`strength_relation`) separated from verdict (`policy_outcome`)
-- [x] Eight typed outcomes fixed, including `identity_strength_incomparable`
+- [x] Typed outcomes fixed (**nine** as amended by A2), including `identity_strength_incomparable`
+      and `identity_principal_mismatch`
 - [x] Ledger wording (`PAYS: none`) fixed for verbatim reproduction in the closeout
-- [x] Section 2's five required attack rows recorded as a forward commitment
+- [x] Section 2's required attack rows recorded as a forward commitment (**six** as amended by A2)
 
 **A1 — Section 1 invalidation rule.** Any change to the four axes or their value sets, the
-definition of `≤ᵥ` or `⊔`, the relation/verdict split, the four comparator relations, the six laws,
-the five Lean targets, the eight typed outcomes, the five non-claims, the ledger wording, or the
-five forward-committed attack rows ⇒ **normative amendment + full re-freeze** of every later section
+definition of `≤ᵥ` or `⊔`, the relation/verdict split, the four comparator relations, the seven laws,
+the six Lean targets, the nine typed outcomes, the five non-claims, the ledger wording, or the
+six forward-committed attack rows ⇒ **normative amendment + full re-freeze** of every later section
 that consumes them.
 
 **FROZEN `991dde48`.**
+
+---
+
+## A2 — amends frozen A1 (Section 2 rulings landing on frozen text)
+
+**Why an amendment and not an edit.** The Section 2 rulings changed objects that A1 froze. A1's own
+invalidation rule names the counts, so the change is recorded here rather than applied silently.
+History is not rewritten; Section 1 keeps its freeze hash `991dde48`.
+
+| Object                        | A1 (frozen `991dde48`) | A2    | Reason                                              |
+| ----------------------------- | ---------------------- | ----- | --------------------------------------------------- |
+| laws                          | 6                      | **7** | Law 7 **No Frankenidentity** — the join law         |
+| Lean targets                  | 5                      | **6** | `principalMismatchNoJoin`                           |
+| typed outcomes                | 8                      | **9** | `identity_principal_mismatch`                       |
+| forward-committed attack rows | 5                      | **6** | S2.6 witnesses `identity_claim_mismatch` separately |
+
+**Re-freeze obligation, discharged.** A1 requires full re-freeze of _every later section that
+consumes_ these objects. Sections 2-N are unwritten, so the consuming set is **empty** and the
+obligation is discharged trivially — recorded explicitly, because a discharged-by-vacuity obligation
+that goes unstated is indistinguishable at review time from one that was skipped.
+
+**Counts re-derived, not hand-carried.** `tools/simurgh-attestation/stage5p/node/measureSection1Census.mjs`
+is the sole authority; every number in the table above is reproduced by running it.
+
+---
+
+## Section 3 — evidence lanes (DRAFT, ruled at A2)
+
+Three lanes. The normative one contains no real-world dependency; reality enters through a
+controlled airlock rather than through the laboratory ceiling.
+
+### Lane A — sealed synthetic resolver (**normative**)
+
+The complete `S2.*` matrix runs **here**, and only here. Lane A is the oracle: it defines what the
+VSI contract _means_.
+
+- deterministic local issuer and resolver keys; synthetic identity namespace
+- frozen resolver profiles with **explicit four-axis ceilings**
+- exact canonical principal grammar
+- fixtures for expiry, replay, principal collision, delegation
+- byte-stable generation, offline verification, every first-failure outcome witnessed
+- **no** dependency on Fulcio, Rekor, OIDC, DNS, company registries, or wall-clock network reachability
+
+**Naming rule (normative).** The synthetic authorities are **never** named after a real provider.
+Frozen identifiers:
+
+```text
+simurgh.synthetic.oidc.v1
+simurgh.synthetic.registry.v1
+simurgh.synthetic.role_authority.v1
+```
+
+Lane A proves the VSI contract and verifier semantics — **not** compatibility with any external
+service. This also keeps the lane clear of the brand-denylist class of defect that 3P/5D/5E
+machinery exists to catch.
+
+### Lane B — real Sigstore ceremony (**external validity, not the oracle**)
+
+The lane that retires `real_sigstore_anchor_execution_deferred`, and the only thing that can:
+
+1. perform a real keyless signing ceremony
+2. capture the Fulcio certificate, Rekor material, identity claims and verification outputs
+3. freeze all required public artifacts
+4. bind the real artifact digest into the 5P evidence bundle
+5. **re-verify offline**, without refreshing or reissuing the certificate
+6. record the achieved vector honestly
+
+**Expected achieved vector — written down before execution, so a better result cannot be
+retrofitted as a prediction:**
+
+```text
+binding      cryptographically_bound
+resolution   provider_asserted
+continuity   ephemeral
+role         unproven
+```
+
+The expired certificate must remain **historically verifiable**, and expiry must **not** upgrade
+`continuity` to `durable` — that is Law 5 in its sharpest form, and it is the single most likely
+place for this stage to accidentally cheat.
+
+A network outage, provider change, or OIDC-policy drift **must not** rewrite the meaning of `S2.*`.
+Lane B is never CI-gating.
+
+### Lane C — real durable resolution (**hard-gated, unavailable today**)
+
+```text
+status: unavailable
+reason: no pinned real resolver profile establishes durable principal resolution
+        and accountable-role semantics under an offline-verifiable contract
+```
+
+Lane C ships only when **all seven** exist: canonical principal identifier; signed or independently
+authenticated resolver response; pinned profile and trust root; explicit axis ceiling;
+historical/offline verification method; revocation, cessation and delegation semantics; and no
+guessed equivalence between a person, an organisation and a legal role.
+
+**Explicitly forbidden approximations** — these are hints wearing resolver costumes, and none may
+move an axis: website scraping, an email domain, a company-search screenshot, or an organisation
+name inside an OIDC claim.
+
+Until Lane C exists, the founder's-ledger blocker stays **demonstrably unreachable**. That is a
+stronger research result than a decorative green box, and it is the honest reason
+`principal_resolved` and `accountable_role_bound` are unreachable for a real Art. 22(3) filing today.
+
+**Open — flagged, not invented.** Lane C requirement 6 (revocation / cessation) has **no typed
+outcome** in the frozen nine. A revoked or ceased resolver profile is a real state that the current
+outcome set cannot express. I am **not** minting a tenth code speculatively while Lane C is
+unavailable; instead this is recorded as an **amendment trigger**: shipping Lane C requires an
+amendment adding at least `resolver_profile_revoked`, and the gap is stated here so it cannot later
+be mistaken for an oversight.
