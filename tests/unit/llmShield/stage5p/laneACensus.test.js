@@ -92,6 +92,58 @@ test("GATE PROOF — duplicate identifiers, non-contiguity, missing check and un
   );
 });
 
+// ---- §2.12 phases: draft completeness vs release readiness ------------------------------------
+
+test("the census runs in both phases, and is clean in both", () => {
+  for (const phase of ["draft", "release"]) {
+    const c = measureLaneACensus({ phase });
+    assert.equal(c.phase, phase);
+    assert.deepEqual(c.problems, [], `${phase}: ${JSON.stringify(c.problems, null, 2)}`);
+    assert.equal(c.ok, true);
+  }
+});
+
+test("the census defaults to draft — the weaker phase is never assumed to be release", () => {
+  assert.equal(measureLaneACensus().phase, "draft");
+});
+
+test("an unknown phase is rejected rather than silently treated as draft", () => {
+  const c = measureLaneACensus({ phase: "someday" });
+  assert.equal(c.ok, false);
+  assert.ok(c.problems.some((p) => p.kind === "unknown_phase"));
+});
+
+test("the census embeds the generated discharge ledger, byte-identical to the builder's", async () => {
+  const { buildDischargeLedger } =
+    await import("../../../../tools/simurgh-attestation/stage5p/node/typedOutcomeDischarge.mjs");
+  const c = measureLaneACensus({ phase: "release" });
+  assert.equal(JSON.stringify(c.discharge_ledger), JSON.stringify(buildDischargeLedger("release")));
+});
+
+test("HONEST STATE: no typed outcome is unreached, and none is pending", () => {
+  const c = measureLaneACensus({ phase: "release" });
+  assert.deepEqual(c.unreached_typed_outcomes, []);
+  assert.deepEqual(c.discharge.pending, []);
+  assert.equal(c.discharge.counts.witnessed, c.typed_outcomes.length);
+});
+
+test("GATE PROOF — the phases genuinely differ: a pending outcome passes draft and fails release", () => {
+  // An outcome declared pending is exactly the mid-build state §2.12 permits in draft and forbids
+  // at release. Injected rather than mutated into the fixtures, so the real ledger stays untouched.
+  const declared = { identity_ephemeral_only: { status: "pending" } };
+
+  const draft = measureLaneACensus({ phase: "draft", declared });
+  assert.deepEqual(draft.problems, [], "PREMISE FAILED: draft must tolerate pending");
+  assert.deepEqual(draft.discharge.pending, ["identity_ephemeral_only"]);
+
+  const release = measureLaneACensus({ phase: "release", declared });
+  assert.equal(release.ok, false, "release gate is vacuous — it accepted a pending outcome");
+  assert.ok(
+    release.problems.some((p) => p.kind === "pending_is_not_a_release_discharge"),
+    JSON.stringify(release.problems)
+  );
+});
+
 test("GATE PROOF — fixture_check_mismatch fires when a fixture's expectation is wrong", async () => {
   const mod = await import("../../../../tools/simurgh-attestation/stage5p/node/laneAFixtures.mjs");
   const real = mod.S2_FIXTURES.find((f) => f.fixture_id === "S2.1");
