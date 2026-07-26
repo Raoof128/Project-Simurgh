@@ -47,7 +47,7 @@ const readJson = (p) => JSON.parse(readFileSync(p, "utf8"));
  */
 function runManifest(cwd = process.cwd(), label = "HEAD") {
   const results = [];
-  const run = (command, argv) => {
+  const run = (command, argv, treeRelative = false) => {
     const res = spawnSync(argv[0], argv.slice(1), {
       cwd,
       encoding: "utf8",
@@ -55,7 +55,7 @@ function runManifest(cwd = process.cwd(), label = "HEAD") {
       maxBuffer: 64 * 1024 * 1024,
       env: { ...process.env, SIMURGH_SKIP_DOTENV: "1" },
     });
-    results.push({ command, ok: res.status === 0, exit: res.status });
+    results.push({ command, ok: res.status === 0, exit: res.status, tree_relative: treeRelative });
     process.stdout.write(`      ${res.status === 0 ? "✔" : "✗"} [${label}] ${command}\n`);
   };
 
@@ -64,13 +64,39 @@ function runManifest(cwd = process.cwd(), label = "HEAD") {
     const script = `scripts/reproduce-llm-shield-stage${stage}.sh`;
     run(script, ["bash", script]);
   }
-  run("write surface HEAD~1..HEAD", [
-    process.execPath,
-    "tools/simurgh-attestation/stage5q/node/checkWriteSurface.mjs",
-    "--range",
-    "HEAD~1..HEAD",
-  ]);
+  // TREE-RELATIVE: `HEAD~1..HEAD` names a different commit pair in every tree it runs in, so its
+  // result cannot be compared against a baseline. Flagged so attribution says `not_comparable`
+  // rather than inventing a comparison.
+  run(
+    "write surface HEAD~1..HEAD",
+    [
+      process.execPath,
+      "tools/simurgh-attestation/stage5q/node/checkWriteSurface.mjs",
+      "--range",
+      "HEAD~1..HEAD",
+    ],
+    true
+  );
   return results;
+}
+
+/** Run the manifest against a throwaway checkout of `ref`, so nothing it writes survives. */
+function runManifestIsolated(ref, label) {
+  const scratch = joinPath(process.cwd(), ".git", `5q-manifest-${label}`);
+  rmSync(scratch, { recursive: true, force: true });
+  const add = spawnSync("git", ["worktree", "add", "--detach", "--quiet", scratch, ref], {
+    encoding: "utf8",
+  });
+  if (add.status !== 0) {
+    console.log(`  REFUSING to run the manifest in the primary tree — scratch worktree failed`);
+    return [];
+  }
+  try {
+    return runManifest(scratch, label);
+  } finally {
+    spawnSync("git", ["worktree", "remove", "--force", scratch]);
+    rmSync(scratch, { recursive: true, force: true });
+  }
 }
 
 function main(argv) {
@@ -119,7 +145,13 @@ function main(argv) {
   const wantManifest = argv.includes("--manifest");
   const wantBaseline = argv.includes("--baseline");
   if (wantManifest) console.log("  running the pinned non-disturbance manifest:");
-  const manifestResults = wantManifest ? runManifest() : null;
+  // THE HEAD RUN GOES IN A SCRATCH WORKTREE TOO, and this is not symmetry for its own sake.
+  // `check-e2e.sh` runs Stage 4H's digest-fixture builder, which REGENERATES
+  // `evidence/stage-4h/exit-map.json` in whatever tree it runs in. Run in the primary worktree, the
+  // non-disturbance gate disturbs prior-stage evidence — and it did: two 4H files were regenerated
+  // and then swept into a commit by `git add -A`, a real §6.1 violation caused by the check that
+  // exists to catch §6.1 violations. Same shape as finding 5Q-F003, one layer up.
+  const manifestResults = wantManifest ? runManifestIsolated("HEAD", "HEAD") : null;
 
   // The baseline run, in a scratch worktree at the merge-base. Opt-in because it doubles a run that
   // already takes tens of minutes — and because "we did not check" is reported as `not_compared`
