@@ -123,21 +123,44 @@ function main(argv) {
   const targets = selectTargets({ members: closure.members, roles, stageId });
   const targetSet = new Set(targets);
 
-  // Cells for THIS tray's targets, straight from the frozen matrix. The tray does not decide which
-  // obligations exist; it reports on the ones the universe already committed.
+  // Cells for THIS tray's targets come straight from the frozen matrix: the tray does not decide
+  // which obligations exist, it reports on the ones the universe already committed.
+  //
+  // The pack results, keyed by cell. A cell the packs never reached keeps a NULL status: a status
+  // is a claim, and "no pack established anything here" is not one of the four things this stage is
+  // allowed to say about a member.
+  const packPath = `${E}/packs/all-pack-results.json`;
+  const packByCell = new Map();
+  if (existsSync(packPath)) {
+    for (const d of readJson(packPath).discharges) {
+      packByCell.set(`${d.function_id}|${d.attack_class}`, d);
+    }
+  }
+  const ledgerPath = `${E}/findings/q0-finding-ledger.json`;
+  const findingByCell = new Map();
+  if (existsSync(ledgerPath)) {
+    for (const r of readJson(ledgerPath).records) {
+      findingByCell.set(`${r.affected_function_id}|${r.attack_class}`, r.finding_id);
+    }
+  }
+
   const cells = obligations.cells.filter((c) => targetSet.has(c.function_id));
-  const obligationRows = cells.map((c) => ({
-    function_id: c.function_id,
-    attack_class: c.attack_class,
-    applicability: c.applicability,
-    omission_reason: c.omission_reason,
-    pack_id: null,
-    premise_receipt_digest: null,
-    observed_outcome: null,
-    // NULL, not attacked_pass. No pack has run against this tray, and a status is a claim.
-    discharge_status: null,
-    finding_ids: [],
-  }));
+  const obligationRows = cells.map((c) => {
+    const key = `${c.function_id}|${c.attack_class}`;
+    const pack = packByCell.get(key) ?? null;
+    const findingId = findingByCell.get(key) ?? null;
+    return {
+      function_id: c.function_id,
+      attack_class: c.attack_class,
+      applicability: c.applicability,
+      omission_reason: c.omission_reason,
+      pack_id: pack?.pack_id ?? null,
+      premise_receipt_digest: pack?.premise_receipt_digest ?? null,
+      observed_outcome: pack?.observed_outcome ?? null,
+      discharge_status: pack?.discharge_status ?? null,
+      finding_ids: findingId ? [findingId] : [],
+    };
+  });
 
   const positivePath = argv.includes("--no-positive-path")
     ? { result: "environment_unreproducible", detail: "positive path not executed in this run" }
@@ -149,9 +172,11 @@ function main(argv) {
     committedClosureDigest,
     targets,
     obligationRows,
-    packIds: [],
-    premiseReceipts: [],
-    findingIds: [],
+    packIds: [...new Set(obligationRows.map((r) => r.pack_id).filter(Boolean))],
+    premiseReceipts: obligationRows
+      .filter((r) => r.premise_receipt_digest)
+      .map((r) => r.premise_receipt_digest),
+    findingIds: [...new Set(obligationRows.flatMap((r) => r.finding_ids))],
     positivePath,
     admissibility: adm,
     closureMemberIds: new Set(closure.members.map((m) => m.function_id)),

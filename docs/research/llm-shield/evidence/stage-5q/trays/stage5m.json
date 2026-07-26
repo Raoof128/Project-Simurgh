@@ -73,17 +73,98 @@
     "R9"
   ],
   "omitted_classes_with_frozen_reason": [],
-  "attack_pack_ids": [],
-  "premise_receipts": [],
+  "attack_pack_ids": [
+    "5q-all-argumentaliasing-r8-02",
+    "5q-all-determinism-r15-04",
+    "5q-all-failopen-r16-06",
+    "5q-all-frozenconstant-r8-01",
+    "5q-all-pathologicaloperand-r9-05",
+    "5q-all-prototypepollution-r1-03"
+  ],
+  "premise_receipts": [
+    "1b22b19860e3f0a7bb62adf0062be0737076b34939142a71eae16e0420186277",
+    "7c5ed55fa728583b82a52134d5d8bc2e3dc01c4c3e39c316ea9307ebfdaf0576",
+    "ce733edff030b6eae02a48cedf43d5da3356aed9cc85c3e6c6eeef423bd3277f",
+    "7b455ce51deb2c491d9b68f13cc05cf549b36ed3c862ad39db29e0649f7a8d65",
+    "9ca38925c298b0d60fcaf19faec09ab1a3cd0ac99c9f658b66e5309b87a83158",
+    "1df6bab448310930742162c2c60ea88e5493814cbbe0bf8484cb6b67e9df2627",
+    "b3f0825ba6ddd422f39997fd7c13807eea01ff957d2a80ddf71877c6ca64e38c",
+    "1966ea31ef4905488dcc8d5eb99c5a3335311a62676dbceee6b742d284c92ed4",
+    "60ef0125d141d3a2ea5bcc3c56bc3c9de6f4b747897d666580cff96ae7a125fe",
+    "0a90fb9207ab87da7a0504e56368585c369513a657de997680ee5823538ca719",
+    "3c94cdc3d5b8ca07f7985524d755f7e217e188acd4211d8b757c2a83162182e5",
+    "678ccaa1d1542fdd53171822403333d41bfdea27081d85854029dd8eeb16714c",
+    "3c53412d52d6c3a3a482926c85e22d218b5717d1a12b01fe1ef1fcedc803eb73",
+    "67f54ce9d19bf947b803ca4b057bf9aacb647583d0a4857f8085cd1fcefee9b1",
+    "00d6d371a45c26a686732f99c5a7f71ffb90784d1d0264871940cb378dcbf24b",
+    "2e20defad338e670ef2e43cf9c52cac113d0214e12c92b3b33740d9ee556d233",
+    "a661e37094e461fe7bab4d3f0c66647c3b3ef0187bb7f609dbfbe42cdd305ccd",
+    "d3617a27cc04255efde33c293075e0719c15258291d02cda6a4301ee1ec3b0b5",
+    "85901e37051299f137570715d7fca260fc29a00ddc5f0329ceadac1cd2ad4120",
+    "1490f28935a7275dd3b7a61dcb2b7a6bad198e14420e93aa6a362d684413de08",
+    "f9523463d209171f8a55d310fffc745057617e1577fa5bcf79e45e25c969c6fe",
+    "01d2f01f5ba39c5cbe1da8c2274b65efc2985a72f18396b5722019635dd5ae9f",
+    "b1d3389d2d93e002bd20eaf9d175a488667741071bb248f6fc737fe849cc08ef",
+    "2d6687d2b14082cd3bf30a13ea14c568f7eaa1de65fea6d53058a5070b3bc214",
+    "e43c5f3eff46801976ce7f13d6834734d181256ff5b4609204da275d95d4ff35",
+    "8adc5f89c622655d65c49d29809f30e1b887084e5b748a2fa01c74e466a8f21f",
+    "acdffe763ec77a4d1932640b19a07ad96a3206b7b00fe8c06b10fbf010aa4e01",
+    "3acf4f5b17fd3a552f7b2f1284d6cd4b332ca4643e841bc50ce85eeadac795cd",
+    "4b549013907f705737d6990e489f70c3170159bc36cd3b7da9080ea6f5363245",
+    "09cce619ebf457ac065a06ca658720cf804d66f2def5c8361c5db754ea1f12d4",
+    "7c1feabad73b4a8c0dd0a07dee2fff254b21a8f53f035deda3e6623a335a64d0",
+    "85f7ebfb1327ff6f6aa04e66d34d8149b7094d11447cb950a713c923bf669a7a",
+    "03644385a4af4ecca41b7380beba9e75120a3ecbc9d17d8a745f7e22d6574e3c",
+    "4e41ed0ee6330c5c5b93b8958104b62e27a2a508734e80a469b4281032e12fb0",
+    "b45dde3215d010f940ab22dee8504ac4105c420dd65e10de5fa7b66fe8cd1ccc",
+    "e5eb13fc59c95250e96a174d33bc2fbd4deabe3c5c03ea71e872b3493da66ad1",
+    "c280b0507aa98410e56c15d6d7c9bfa3b21f36ee60a2dfc92a2937f6db52854a",
+    "1f00ac3ea4f4402204c54c0c75f2b775571d4552b6dbae31ee71bf2feb0b5bf3",
+    "70fbd9f322c080e7d5337a688c1891bba7781f8bc96010fca0538a21c3b68560",
+    "01f764d1d10f72b19d694e21a2d92e524b913141261fce8b439dcd998eb8baeb",
+    "0cac2a1160674ecb352147cc739872245806d3435e11fb59f792bd4de86af4a5",
+    "d3a897da3b8fc9124b4be9bdfdefd0d1dcf71230912f8db127ec86efd259a334",
+    "82f3fc16d88160599242d1e658cca39e026a3495e7c5909d682b852a71378079",
+    "5e6454b3fcf865e9532adf85cb958dec95516bc62777d7bb63a224b7d8ed18c1",
+    "4da270f7cc4d118e7a0256aa1caad09ffb1b89a5b3196c52ae9dba79c3bb846d",
+    "d8564eb51b82ea7c5b03d7f6d6c7e8501dd846244076a349fd7ae028a88909ff",
+    "556f495c4ffcf0b2e5b61d7a8c6815c8ddaa38a66ea67d724dcb7ab5e0d4076c",
+    "cf16af188e8863e885057feeb7971114aa7753ff5a85e8cfdd1376921e89ba1e",
+    "ad36f23880086708727f0d7405032212d3f047cce203bc16af575e3ef5d25f13",
+    "fb81280c1ea3dcc88416ef0cca5299fe23676f796b83d22e481dc14bc1d7a7e6",
+    "4eccdd1ebbabca65fe362909be459f8efa5649115fc831f7fa1209706c2146c6",
+    "5ed7ca2f96b6dacdf31844d07542cc3030aac4fef20fd38f83746b44d8000ce2",
+    "c0159aebd3894edefc8469f06de3139a00ae9b5917e48ea0920e2a2dd1dff716",
+    "928b7be48a81f8bd65f6b9d66cf3343ee50ca2192ab96dbd7879d5fd4017ae10",
+    "4ad05c300b9d56b7ae28c1d791ea254c04e2d90c6be4dcf6a7d08380d49ed539",
+    "83fbaf7fb01a7acd813b444946589be0be2445eb67f3a245b2f92de9b9b5f6b2",
+    "8fe4a73c21761f5b5e68297c6de2341182fa27137b1493d9b9bec977e56d9bec",
+    "55b2c1fa542dec0ee8055cf1d36f74a2f0b0652c6fbfdb29329cbddc21476624",
+    "5464b329d3adf91c1ebff1a1f2e666680f97af761199f32b31191fe66e711919",
+    "9c61fc7c7f760f874194bf5de2a9df142f3d135ce5d6d2ec229c10d38ba74060",
+    "923a52d516cf0045a05035e01f446867d91497ac677b6ee67a8b31a41ed6089f",
+    "57068d2a7fac5c89e8305cfd20bd730ab447bf3e43294f86fe11ff45642f8c06",
+    "6051ffbc4e477f364cc77ca0c1139d1041b00a43bfbed697fd2e09129f585f87",
+    "52bd7da37ccd9f657a003235cae862dc5fdbbad3c1178632346702674b8049ca",
+    "145b3a0012d0a41068218967d32fd0446bbac5c5766519e654e9b3ff9e915cd1",
+    "5b1431940b33e8cc7327ffad938512d9ea983245b41c93d3311820c104380645",
+    "ffc011ca15e3c0450b01cad6ac01dec6c69728f612067a9334aadf8a849581f3",
+    "f18375d46da0b4d563480811fd09a7fbe26ac9713986855036caafa9b357c470",
+    "dde02d19086ece8a438dfaace4d305d1b529c036d990eb32ed77822d89131e9b",
+    "b82ce25384a0c7d56650226cf39de1f8fcd1421c35e4eff166e0db2fc811f84b",
+    "7cd188af38caf844612a37bf3378f0f7153d8b8cbd45a5cfafbc11ac9fb18026"
+  ],
   "finding_ids": [],
-  "coverage_statuses": {},
+  "coverage_statuses": {
+    "attacked_pass": 71
+  },
   "positive_path_result": {
     "result": "reproduced",
     "script": "scripts/reproduce-llm-shield-stage5m.sh",
     "exit": 0,
     "signal": null,
-    "log_digest": "fafbb3155361800434e062eb61fa37e89272d7fc87fc8272c2bc97ad6dd1169d",
-    "log_tail": "\u001b[34mℹ todo 0\u001b[39m | \u001b[34mℹ duration_ms 61.79025\u001b[39m | -- guard: no private key in committed evidence -- | no private keys in evidence: OK | == Stage 5M reproduce complete == | "
+    "log_digest": "0861f7c9582936d319702325e38bf658e13e838b2934c268ac64f57c9a64f041",
+    "log_tail": "\u001b[34mℹ todo 0\u001b[39m | \u001b[34mℹ duration_ms 61.006917\u001b[39m | -- guard: no private key in committed evidence -- | no private keys in evidence: OK | == Stage 5M reproduce complete == | "
   },
   "obligation_receipts": [
     {
@@ -134,10 +215,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/laneKeys.mjs:vtcQuorumLaneKeys",
       "attack_class": "R1",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-prototypepollution-r1-03",
+      "premise_receipt_digest": "1b22b19860e3f0a7bb62adf0062be0737076b34939142a71eae16e0420186277",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -260,10 +341,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/browser/vtcq-quorum-portable.mjs:verifyPublicAttestation",
       "attack_class": "R9",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-pathologicaloperand-r9-05",
+      "premise_receipt_digest": "7c5ed55fa728583b82a52134d5d8bc2e3dc01c4c3e39c316ea9307ebfdaf0576",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -278,10 +359,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/rekorAdapter.mjs:verifyCheckpoint",
       "attack_class": "R1",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-prototypepollution-r1-03",
+      "premise_receipt_digest": "ce733edff030b6eae02a48cedf43d5da3356aed9cc85c3e6c6eeef423bd3277f",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -701,10 +782,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/rekorAdapter.mjs:verifyCheckpoint",
       "attack_class": "R15",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-determinism-r15-04",
+      "premise_receipt_digest": "7b455ce51deb2c491d9b68f13cc05cf549b36ed3c862ad39db29e0649f7a8d65",
+      "observed_outcome": "accepted_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -791,10 +872,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/constants.mjs:ECOLOGY_CLASSES",
       "attack_class": "R8",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-frozenconstant-r8-01",
+      "premise_receipt_digest": "9ca38925c298b0d60fcaf19faec09ab1a3cd0ac99c9f658b66e5309b87a83158",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -836,10 +917,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/attestation.mjs:verifyAttestation",
       "attack_class": "R1",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-prototypepollution-r1-03",
+      "premise_receipt_digest": "1df6bab448310930742162c2c60ea88e5493814cbbe0bf8484cb6b67e9df2627",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -872,19 +953,19 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/attestation.mjs:buildAuditAttestationPayload",
       "attack_class": "R9",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-pathologicaloperand-r9-05",
+      "premise_receipt_digest": "b3f0825ba6ddd422f39997fd7c13807eea01ff957d2a80ddf71877c6ca64e38c",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/browser/vtcq-quorum-portable.mjs:extensionVerdict",
       "attack_class": "R9",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-pathologicaloperand-r9-05",
+      "premise_receipt_digest": "1966ea31ef4905488dcc8d5eb99c5a3335311a62676dbceee6b742d284c92ed4",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -980,10 +1061,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/constants.mjs:PINNED_INPUT_KEYS",
       "attack_class": "R8",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-frozenconstant-r8-01",
+      "premise_receipt_digest": "60ef0125d141d3a2ea5bcc3c56bc3c9de6f4b747897d666580cff96ae7a125fe",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -1025,10 +1106,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/core/rekorSeat.mjs:checkRekorSeat",
       "attack_class": "R8",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-argumentaliasing-r8-02",
+      "premise_receipt_digest": "0a90fb9207ab87da7a0504e56368585c369513a657de997680ee5823538ca719",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -1052,10 +1133,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/browser/vtcq-quorum-portable.mjs:verifyPublicAttestation",
       "attack_class": "R15",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-determinism-r15-04",
+      "premise_receipt_digest": "3c94cdc3d5b8ca07f7985524d755f7e217e188acd4211d8b757c2a83162182e5",
+      "observed_outcome": "accepted_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -1079,10 +1160,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/attestation.mjs:signAttestation",
       "attack_class": "R1",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-prototypepollution-r1-03",
+      "premise_receipt_digest": "678ccaa1d1542fdd53171822403333d41bfdea27081d85854029dd8eeb16714c",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -1286,10 +1367,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/rekorAdapter.mjs:verifySet",
       "attack_class": "R9",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-pathologicaloperand-r9-05",
+      "premise_receipt_digest": "3c53412d52d6c3a3a482926c85e22d218b5717d1a12b01fe1ef1fcedc803eb73",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -1367,10 +1448,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/rekorAdapter.mjs:verifyInclusion",
       "attack_class": "R15",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-determinism-r15-04",
+      "premise_receipt_digest": "67f54ce9d19bf947b803ca4b057bf9aacb647583d0a4857f8085cd1fcefee9b1",
+      "observed_outcome": "accepted_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -1394,10 +1475,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/rekorAdapter.mjs:verifySubmitter",
       "attack_class": "R8",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-argumentaliasing-r8-02",
+      "premise_receipt_digest": "00d6d371a45c26a686732f99c5a7f71ffb90784d1d0264871940cb378dcbf24b",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -1619,10 +1700,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/rekorAdapter.mjs:verifySubmitter",
       "attack_class": "R9",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-pathologicaloperand-r9-05",
+      "premise_receipt_digest": "2e20defad338e670ef2e43cf9c52cac113d0214e12c92b3b33740d9ee556d233",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -1718,10 +1799,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/attestation.mjs:buildPublicAttestationPayload",
       "attack_class": "R15",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-determinism-r15-04",
+      "premise_receipt_digest": "a661e37094e461fe7bab4d3f0c66647c3b3ef0187bb7f609dbfbe42cdd305ccd",
+      "observed_outcome": "accepted_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -1745,10 +1826,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/verify.mjs:verifyVtcQuorum",
       "attack_class": "R15",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-determinism-r15-04",
+      "premise_receipt_digest": "d3617a27cc04255efde33c293075e0719c15258291d02cda6a4301ee1ec3b0b5",
+      "observed_outcome": "accepted_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -1889,10 +1970,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/browser/vtcq-quorum-portable.mjs:verifyPublicAttestation",
       "attack_class": "R8",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-argumentaliasing-r8-02",
+      "premise_receipt_digest": "85901e37051299f137570715d7fca260fc29a00ddc5f0329ceadac1cd2ad4120",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -1979,10 +2060,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/core/rekorSeat.mjs:checkRekorSeat",
       "attack_class": "R1",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-prototypepollution-r1-03",
+      "premise_receipt_digest": "1490f28935a7275dd3b7a61dcb2b7a6bad198e14420e93aa6a362d684413de08",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -2465,10 +2546,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/attestation.mjs:buildAuditAttestationPayload",
       "attack_class": "R8",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-argumentaliasing-r8-02",
+      "premise_receipt_digest": "f9523463d209171f8a55d310fffc745057617e1577fa5bcf79e45e25c969c6fe",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -2483,10 +2564,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/rekorAdapter.mjs:verifySet",
       "attack_class": "R8",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-argumentaliasing-r8-02",
+      "premise_receipt_digest": "01d2f01f5ba39c5cbe1da8c2274b65efc2985a72f18396b5722019635dd5ae9f",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -2519,10 +2600,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/rekorAdapter.mjs:rfc6962Root",
       "attack_class": "R15",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-determinism-r15-04",
+      "premise_receipt_digest": "b1d3389d2d93e002bd20eaf9d175a488667741071bb248f6fc737fe849cc08ef",
+      "observed_outcome": "accepted_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -2762,10 +2843,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/browser/canonical-json.mjs:canonicalJson",
       "attack_class": "R8",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-argumentaliasing-r8-02",
+      "premise_receipt_digest": "2d6687d2b14082cd3bf30a13ea14c568f7eaa1de65fea6d53058a5070b3bc214",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -2798,10 +2879,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/browser/vtcq-quorum-portable.mjs:extensionVerdict",
       "attack_class": "R15",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-determinism-r15-04",
+      "premise_receipt_digest": "e43c5f3eff46801976ce7f13d6834734d181256ff5b4609204da275d95d4ff35",
+      "observed_outcome": "accepted_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -2843,10 +2924,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/verify.mjs:cfg5LFor",
       "attack_class": "R8",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-argumentaliasing-r8-02",
+      "premise_receipt_digest": "8adc5f89c622655d65c49d29809f30e1b887084e5b748a2fa01c74e466a8f21f",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -2879,10 +2960,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/browser/canonical-json.mjs:canonicalJson",
       "attack_class": "R15",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-determinism-r15-04",
+      "premise_receipt_digest": "acdffe763ec77a4d1932640b19a07ad96a3206b7b00fe8c06b10fbf010aa4e01",
+      "observed_outcome": "accepted_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -2933,10 +3014,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/attestation.mjs:buildAuditAttestationPayload",
       "attack_class": "R1",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-prototypepollution-r1-03",
+      "premise_receipt_digest": "3acf4f5b17fd3a552f7b2f1284d6cd4b332ca4643e841bc50ce85eeadac795cd",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -3014,19 +3095,19 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/rekorAdapter.mjs:verifyInclusion",
       "attack_class": "R8",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-argumentaliasing-r8-02",
+      "premise_receipt_digest": "4b549013907f705737d6990e489f70c3170159bc36cd3b7da9080ea6f5363245",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/attestation.mjs:buildPublicAttestationPayload",
       "attack_class": "R1",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-prototypepollution-r1-03",
+      "premise_receipt_digest": "09cce619ebf457ac065a06ca658720cf804d66f2def5c8361c5db754ea1f12d4",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -3095,10 +3176,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/verify.mjs:verifyVtcQuorum",
       "attack_class": "R16",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-failopen-r16-06",
+      "premise_receipt_digest": "7c1feabad73b4a8c0dd0a07dee2fff254b21a8f53f035deda3e6623a335a64d0",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -3329,10 +3410,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/attestation.mjs:buildAuditAttestationPayload",
       "attack_class": "R15",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-determinism-r15-04",
+      "premise_receipt_digest": "85f7ebfb1327ff6f6aa04e66d34d8149b7094d11447cb950a713c923bf669a7a",
+      "observed_outcome": "accepted_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -3401,28 +3482,28 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/rekorAdapter.mjs:verifyInclusion",
       "attack_class": "R1",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-prototypepollution-r1-03",
+      "premise_receipt_digest": "03644385a4af4ecca41b7380beba9e75120a3ecbc9d17d8a745f7e22d6574e3c",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/constants.mjs:MEMBER_TO_ANCHOR_TYPE",
       "attack_class": "R8",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-frozenconstant-r8-01",
+      "premise_receipt_digest": "4e41ed0ee6330c5c5b93b8958104b62e27a2a508734e80a469b4281032e12fb0",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/browser/canonical-json.mjs:canonicalJson",
       "attack_class": "R9",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-pathologicaloperand-r9-05",
+      "premise_receipt_digest": "b45dde3215d010f940ab22dee8504ac4105c420dd65e10de5fa7b66fe8cd1ccc",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -3500,10 +3581,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/browser/vtcq-quorum-portable.mjs:verifyPublicAttestation",
       "attack_class": "R1",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-prototypepollution-r1-03",
+      "premise_receipt_digest": "e5eb13fc59c95250e96a174d33bc2fbd4deabe3c5c03ea71e872b3493da66ad1",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -3554,19 +3635,19 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/rekorAdapter.mjs:verifyInclusion",
       "attack_class": "R9",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-pathologicaloperand-r9-05",
+      "premise_receipt_digest": "c280b0507aa98410e56c15d6d7c9bfa3b21f36ee60a2dfc92a2937f6db52854a",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/attestation.mjs:verifyAttestation",
       "attack_class": "R8",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-argumentaliasing-r8-02",
+      "premise_receipt_digest": "1f00ac3ea4f4402204c54c0c75f2b775571d4552b6dbae31ee71bf2feb0b5bf3",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -3599,19 +3680,19 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/attestation.mjs:buildPublicAttestationPayload",
       "attack_class": "R8",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-argumentaliasing-r8-02",
+      "premise_receipt_digest": "70fbd9f322c080e7d5337a688c1891bba7781f8bc96010fca0538a21c3b68560",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/rekorAdapter.mjs:verifySubmitter",
       "attack_class": "R1",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-prototypepollution-r1-03",
+      "premise_receipt_digest": "01f764d1d10f72b19d694e21a2d92e524b913141261fce8b439dcd998eb8baeb",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -3626,10 +3707,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/attestation.mjs:buildPublicAttestationPayload",
       "attack_class": "R9",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-pathologicaloperand-r9-05",
+      "premise_receipt_digest": "0cac2a1160674ecb352147cc739872245806d3435e11fb59f792bd4de86af4a5",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -3806,10 +3887,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/browser/vtcq-quorum-portable.mjs:extensionVerdict",
       "attack_class": "R8",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-argumentaliasing-r8-02",
+      "premise_receipt_digest": "d3a897da3b8fc9124b4be9bdfdefd0d1dcf71230912f8db127ec86efd259a334",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -4103,10 +4184,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/rekorAdapter.mjs:verifySet",
       "attack_class": "R1",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-prototypepollution-r1-03",
+      "premise_receipt_digest": "82f3fc16d88160599242d1e658cca39e026a3495e7c5909d682b852a71378079",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -4166,10 +4247,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/attestation.mjs:signAttestation",
       "attack_class": "R9",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-pathologicaloperand-r9-05",
+      "premise_receipt_digest": "5e6454b3fcf865e9532adf85cb958dec95516bc62777d7bb63a224b7d8ed18c1",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -4256,10 +4337,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/rekorAdapter.mjs:rfc6962Root",
       "attack_class": "R9",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-pathologicaloperand-r9-05",
+      "premise_receipt_digest": "4da270f7cc4d118e7a0256aa1caad09ffb1b89a5b3196c52ae9dba79c3bb846d",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -4517,10 +4598,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/verify.mjs:cfg5LFor",
       "attack_class": "R15",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-determinism-r15-04",
+      "premise_receipt_digest": "d8564eb51b82ea7c5b03d7f6d6c7e8501dd846244076a349fd7ae028a88909ff",
+      "observed_outcome": "accepted_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -4544,10 +4625,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/rekorAdapter.mjs:rfc6962Root",
       "attack_class": "R1",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-prototypepollution-r1-03",
+      "premise_receipt_digest": "556f495c4ffcf0b2e5b61d7a8c6815c8ddaa38a66ea67d724dcb7ab5e0d4076c",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -4607,10 +4688,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/constants.mjs:MINTED_SOCKETS",
       "attack_class": "R8",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-frozenconstant-r8-01",
+      "premise_receipt_digest": "cf16af188e8863e885057feeb7971114aa7753ff5a85e8cfdd1376921e89ba1e",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -4976,10 +5057,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/rekorAdapter.mjs:verifySubmitter",
       "attack_class": "R15",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-determinism-r15-04",
+      "premise_receipt_digest": "ad36f23880086708727f0d7405032212d3f047cce203bc16af575e3ef5d25f13",
+      "observed_outcome": "accepted_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -5048,10 +5129,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/browser/vtcq-quorum-portable.mjs:extensionVerdict",
       "attack_class": "R1",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-prototypepollution-r1-03",
+      "premise_receipt_digest": "fb81280c1ea3dcc88416ef0cca5299fe23676f796b83d22e481dc14bc1d7a7e6",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -5381,10 +5462,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/attestation.mjs:signAttestation",
       "attack_class": "R15",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-determinism-r15-04",
+      "premise_receipt_digest": "4eccdd1ebbabca65fe362909be459f8efa5649115fc831f7fa1209706c2146c6",
+      "observed_outcome": "accepted_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -5462,10 +5543,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/core/rekorSeat.mjs:checkRekorSeat",
       "attack_class": "R15",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-determinism-r15-04",
+      "premise_receipt_digest": "5ed7ca2f96b6dacdf31844d07542cc3030aac4fef20fd38f83746b44d8000ce2",
+      "observed_outcome": "accepted_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -5624,10 +5705,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/rekorAdapter.mjs:verifyCheckpoint",
       "attack_class": "R9",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-pathologicaloperand-r9-05",
+      "premise_receipt_digest": "c0159aebd3894edefc8469f06de3139a00ae9b5917e48ea0920e2a2dd1dff716",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -5651,10 +5732,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/constants.mjs:REQUIRED_MEMBERS",
       "attack_class": "R8",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-frozenconstant-r8-01",
+      "premise_receipt_digest": "928b7be48a81f8bd65f6b9d66cf3343ee50ca2192ab96dbd7879d5fd4017ae10",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -5849,10 +5930,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/rekorAdapter.mjs:verifySet",
       "attack_class": "R15",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-determinism-r15-04",
+      "premise_receipt_digest": "4ad05c300b9d56b7ae28c1d791ea254c04e2d90c6be4dcf6a7d08380d49ed539",
+      "observed_outcome": "accepted_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -5993,10 +6074,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/attestation.mjs:verifyAttestation",
       "attack_class": "R15",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-determinism-r15-04",
+      "premise_receipt_digest": "83fbaf7fb01a7acd813b444946589be0be2445eb67f3a245b2f92de9b9b5f6b2",
+      "observed_outcome": "accepted_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -6056,10 +6137,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/verify.mjs:cfg5LFor",
       "attack_class": "R9",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-pathologicaloperand-r9-05",
+      "premise_receipt_digest": "8fe4a73c21761f5b5e68297c6de2341182fa27137b1493d9b9bec977e56d9bec",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -6083,10 +6164,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/laneKeys.mjs:vtcQuorumLaneKeys",
       "attack_class": "R8",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-argumentaliasing-r8-02",
+      "premise_receipt_digest": "55b2c1fa542dec0ee8055cf1d36f74a2f0b0652c6fbfdb29329cbddc21476624",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -6173,10 +6254,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/verify.mjs:verifyVtcQuorum",
       "attack_class": "R8",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-argumentaliasing-r8-02",
+      "premise_receipt_digest": "5464b329d3adf91c1ebff1a1f2e666680f97af761199f32b31191fe66e711919",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -6227,10 +6308,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/laneKeys.mjs:vtcQuorumLaneKeys",
       "attack_class": "R9",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-pathologicaloperand-r9-05",
+      "premise_receipt_digest": "9c61fc7c7f760f874194bf5de2a9df142f3d135ce5d6d2ec229c10d38ba74060",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -6317,10 +6398,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/browser/canonical-json.mjs:canonicalJson",
       "attack_class": "R1",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-prototypepollution-r1-03",
+      "premise_receipt_digest": "923a52d516cf0045a05035e01f446867d91497ac677b6ee67a8b31a41ed6089f",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -6353,10 +6434,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/verify.mjs:verifyVtcQuorum",
       "attack_class": "R9",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-pathologicaloperand-r9-05",
+      "premise_receipt_digest": "57068d2a7fac5c89e8305cfd20bd730ab447bf3e43294f86fe11ff45642f8c06",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -6380,10 +6461,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/rekorAdapter.mjs:rfc6962Root",
       "attack_class": "R8",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-argumentaliasing-r8-02",
+      "premise_receipt_digest": "6051ffbc4e477f364cc77ca0c1139d1041b00a43bfbed697fd2e09129f585f87",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -6596,10 +6677,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/attestation.mjs:signAttestation",
       "attack_class": "R8",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-argumentaliasing-r8-02",
+      "premise_receipt_digest": "52bd7da37ccd9f657a003235cae862dc5fdbbad3c1178632346702674b8049ca",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -6794,10 +6875,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/verify.mjs:verifyVtcQuorum",
       "attack_class": "R1",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-prototypepollution-r1-03",
+      "premise_receipt_digest": "145b3a0012d0a41068218967d32fd0446bbac5c5766519e654e9b3ff9e915cd1",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -7109,10 +7190,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/rekorAdapter.mjs:verifyCheckpoint",
       "attack_class": "R8",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-argumentaliasing-r8-02",
+      "premise_receipt_digest": "5b1431940b33e8cc7327ffad938512d9ea983245b41c93d3311820c104380645",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -7190,10 +7271,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/attestation.mjs:verifyAttestation",
       "attack_class": "R9",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-pathologicaloperand-r9-05",
+      "premise_receipt_digest": "ffc011ca15e3c0450b01cad6ac01dec6c69728f612067a9334aadf8a849581f3",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -7226,10 +7307,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/verify.mjs:cfg5LFor",
       "attack_class": "R1",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-prototypepollution-r1-03",
+      "premise_receipt_digest": "f18375d46da0b4d563480811fd09a7fbe26ac9713986855036caafa9b357c470",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -7262,10 +7343,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/node/laneKeys.mjs:vtcQuorumLaneKeys",
       "attack_class": "R15",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-determinism-r15-04",
+      "premise_receipt_digest": "dde02d19086ece8a438dfaace4d305d1b529c036d990eb32ed77822d89131e9b",
+      "observed_outcome": "accepted_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -7361,10 +7442,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/core/rekorSeat.mjs:checkRekorSeat",
       "attack_class": "R9",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-pathologicaloperand-r9-05",
+      "premise_receipt_digest": "b82ce25384a0c7d56650226cf39de1f8fcd1421c35e4eff166e0db2fc811f84b",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -7397,10 +7478,10 @@
     {
       "function_id": "5m:tools/simurgh-attestation/stage5m/constants.mjs:RESERVED_ARTIFACT_SLOTS",
       "attack_class": "R8",
-      "pack_id": null,
-      "premise_receipt_digest": null,
-      "observed_outcome": null,
-      "discharge_status": null,
+      "pack_id": "5q-all-frozenconstant-r8-01",
+      "premise_receipt_digest": "7cd188af38caf844612a37bf3378f0f7153d8b8cbd45a5cfafbc11ac9fb18026",
+      "observed_outcome": "refused_as_expected",
+      "discharge_status": "attacked_pass",
       "finding_ids": []
     },
     {
@@ -7431,5 +7512,5 @@
       "finding_ids": []
     }
   ],
-  "summary": "No attack pack has been run against this tray; no discharge is claimed and no finding is implied."
+  "summary": "No finding was produced by these admissible packs over this frozen target set."
 }

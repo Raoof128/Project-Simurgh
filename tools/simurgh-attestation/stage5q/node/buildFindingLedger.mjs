@@ -5,9 +5,13 @@
 //
 //   node .../buildFindingLedger.mjs [--write]
 //
-// Three findings are frozen here. Each one's premise receipt is RECOMPUTED against the frozen
-// fixture bytes before it may enter the chain — a receipt that names a predicate and is believed is
-// a label, and the whole apparatus exists to refuse labels.
+// Every finding's premise receipt is RECOMPUTED against the frozen fixture bytes before it may
+// enter the chain — a receipt that names a predicate and is believed is a label, and the whole
+// apparatus exists to refuse labels.
+//
+// Three findings are written out below by hand. The rest are appended mechanically from the attack
+// packs, because there are nine of them today and a ledger whose entries must be typed out is a
+// ledger that stops being appended to.
 //
 //   5Q-F001   the shared Lean workflow type-checks 27 of 33 proof files and exits 0.
 //             R7. assurance_only. Found by design review, corroborated by the harness.
@@ -23,6 +27,11 @@
 //             destroys the evidence as a side effect of reading it.
 //             R8. claim_narrowing.
 //
+//   5Q-F004+  from the attack packs. Eight exported constants across 5C, 5D, 5O and 5P are frozen
+//             at the top level only, so any importer can write into the nested data — including
+//             5O's authority descriptors (115 writable nodes) and 5P's pinned Rekor trust root.
+//             One function mutates the object its caller handed it. All R8.
+//
 // F002 AND F003 CORROBORATE EACH OTHER BY DIFFERENT MECHANISMS, which is why both are recorded
 // rather than merged. F002 reads the mutation file and shows the attacks cannot land; F003 runs the
 // producer in a scratch worktree and observes it land 1 of 6. Neither borrows the other's method,
@@ -31,7 +40,7 @@
 // THE LEDGER IS NOT A LIST OF WHAT WE DECIDED TO REPORT. Every record here is chained, and
 // `verifyChain` recomputes the chain on every build: an edited record breaks it at a named index.
 
-import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { dirname } from "node:path";
 import { emptyLedger, appendFinding, verifyChain, ledgerDigest } from "../core/findingLedger.mjs";
@@ -64,7 +73,92 @@ function fixtureStore(paths) {
   };
 }
 
-export function buildLedger({ closureDigest, fixtures, digests }) {
+/**
+ * How each probe family's finding is stated, and which closed-registry predicate recomputes it.
+ *
+ * The predicate registry is CLOSED (spec §4.4), so a family that cannot be expressed through one of
+ * the fifteen does not get a finding record — it gets left out and said so. Both families here map
+ * honestly rather than by contortion:
+ *
+ *   frozen-constant    `omitsMember`. `Object.freeze(X)` is a COMPLETENESS CLAIM over the object
+ *                      graph under X. A shallow freeze covers part of its universe, and the
+ *                      difference between `universe` and `produced` IS the finding.
+ *
+ *   argument-aliasing  `contradicts`. One subject — the caller's object — read twice either side
+ *                      of a single call, with conflicting values. The verifier recomputes the
+ *                      contradiction without calling anything.
+ */
+const FAMILY_FINDING_SHAPE = Object.freeze({
+  "frozen-constant": {
+    predicate_id: "omitsMember",
+    severity: "claim_narrowing",
+    expected_result:
+      "an exported constant presented as fixed is immutable through every path an importer can reach",
+    quote_prefix: "Object.freeze over",
+    observed: (d) =>
+      `Object.freeze covers ${d.premise_fixture.produced.length} of ` +
+      `${d.premise_fixture.universe.length} reachable node(s). The rest are writable by any module ` +
+      `that imports it, so a value the code treats as pinned is shared mutable state.`,
+  },
+  "argument-aliasing": {
+    predicate_id: "contradicts",
+    severity: "claim_narrowing",
+    expected_result: "a function does not mutate the object its caller handed it",
+    quote_prefix: "the caller's object before",
+    observed: (d) =>
+      `the argument's serialisation changed across a single call: ${String(d.detail).slice(0, 120)}`,
+  },
+});
+
+/** Build one Q0 record per pack finding. Deterministic order: by function id, then class. */
+export function packFindingRecords({ closureDigest, packFindings, fixtures }) {
+  const ordered = [...packFindings].sort((a, b) =>
+    a.function_id === b.function_id
+      ? a.attack_class.localeCompare(b.attack_class)
+      : a.function_id.localeCompare(b.function_id)
+  );
+  const records = [];
+  let next = 4;
+  for (const d of ordered) {
+    const shape = FAMILY_FINDING_SHAPE[d.family_id];
+    if (!shape || !d.premise_fixture) continue;
+    const fixtureBytes = Buffer.from(JSON.stringify(d.premise_fixture), "utf8");
+    const fixtureDigest = sha256(fixtureBytes);
+    fixtures.byDigest.set(fixtureDigest, fixtureBytes);
+    const [stageId, modulePath] = d.function_id.split(":");
+    records.push({
+      finding_id: `5Q-F${String(next).padStart(3, "0")}`,
+      affected_stage: stageId,
+      affected_function_id: d.function_id,
+      affected_tags: [],
+      attack_class: d.attack_class,
+      premise_receipt: makePremiseReceipt({
+        pack_id: d.pack_id,
+        closure_digest: closureDigest,
+        target_function_id: d.function_id,
+        fixture_digest: fixtureDigest,
+        predicate_id: shape.predicate_id,
+      }),
+      expected_result: shape.expected_result,
+      observed_result: shape.observed(d),
+      exploit_fixture_digest: fixtureDigest,
+      severity: shape.severity,
+      claim_impact: {
+        file: modulePath,
+        claim_digest: sha256(read(modulePath)),
+        quote: `${shape.quote_prefix} ${d.function_id.split(":").pop()}`,
+      },
+      scope: "head",
+      discovered_at_commit: "5e658298",
+      discovered_by: "stage5q_q0_attack_pack",
+      corroborated_by: [],
+    });
+    next += 1;
+  }
+  return records;
+}
+
+export function buildLedger({ closureDigest, fixtures, digests, packFindings = [] }) {
   const records = [
     {
       finding_id: "5Q-F001",
@@ -177,6 +271,11 @@ export function buildLedger({ closureDigest, fixtures, digests }) {
     },
   ];
 
+  // The pack findings, appended AFTER the three hand-written ones and in a deterministic order.
+  // Written by a loop rather than by hand because there are nine of them and there will be more:
+  // a ledger whose entries must be typed out is a ledger that stops being appended to.
+  records.push(...packFindingRecords({ closureDigest, packFindings, fixtures }));
+
   // EVERY RECEIPT RECOMPUTES BEFORE ITS RECORD IS APPENDED. A finding whose premise cannot be
   // recomputed is a finding nobody has to believe, and appending it first and checking later would
   // put it in the chain regardless.
@@ -215,7 +314,18 @@ function main(argv) {
   }
 
   const fixtures = fixtureStore(Object.values(paths));
-  const { ledger, premiseResults } = buildLedger({ closureDigest, fixtures, digests });
+  const packPath = `${E}/packs/all-pack-results.json`;
+  const packFindings = existsSync(packPath)
+    ? JSON.parse(readFileSync(packPath, "utf8")).discharges.filter(
+        (d) => d.discharge_status === "finding_frozen"
+      )
+    : [];
+  const { ledger, premiseResults } = buildLedger({
+    closureDigest,
+    fixtures,
+    digests,
+    packFindings,
+  });
 
   const chain = verifyChain(ledger);
   if (!chain.ok) {
