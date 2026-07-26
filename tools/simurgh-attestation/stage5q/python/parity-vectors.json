@@ -1,0 +1,295 @@
+{
+  "schema": "simurgh.vsr.parity-vectors.v1",
+  "note": "The frozen cross-runtime vectors. Chosen for the cases where Node, Python and a browser actually diverge — line endings, non-ASCII, odd-length Merkle levels, unicode key ordering — rather than for cases where any three implementations would agree by accident. `bytes` are byte arrays, never strings: a string has already lost the distinction between malformed UTF-8 and U+FFFD.",
+  "excluded_from_the_surface": [
+    "floating-point numbers — JSON.stringify and json.dumps disagree on representation",
+    "non-BMP escaping — the two disagree on surrogate handling",
+    "anything reading the filesystem, the clock or a process"
+  ],
+  "vectors": [
+    {
+      "id": "src-01-plain",
+      "kind": "source_span_digest",
+      "why": "the ordinary case, with a trailing newline already present",
+      "bytes": [99, 111, 110, 115, 116, 32, 120, 32, 61, 32, 49, 59, 10]
+    },
+    {
+      "id": "src-02-no-trailing-lf",
+      "kind": "source_span_digest",
+      "why": "exactly one trailing LF is ADDED when absent",
+      "bytes": [99, 111, 110, 115, 116, 32, 120, 32, 61, 32, 49, 59]
+    },
+    {
+      "id": "src-03-crlf",
+      "kind": "canonical_source_bytes",
+      "why": "CRLF collapses to LF; a runtime that leaves CR in place produces a different digest for identical code",
+      "bytes": [97, 13, 10, 98, 13, 10]
+    },
+    {
+      "id": "src-04-lone-cr",
+      "kind": "canonical_source_bytes",
+      "why": "a lone CR is also LF — classic-Mac line endings must not digest differently",
+      "bytes": [97, 13, 98, 13]
+    },
+    {
+      "id": "src-05-interior-blank-lines",
+      "kind": "canonical_source_bytes",
+      "why": "interior blank lines are CONTENT and survive; only the trailing run is normalised",
+      "bytes": [97, 10, 10, 10, 98, 10, 10]
+    },
+    {
+      "id": "src-06-utf8-multibyte",
+      "kind": "source_span_digest",
+      "why": "non-ASCII: 'é' is two bytes and 'θ' is two; a runtime that digests code units instead of bytes disagrees here",
+      "bytes": [47, 47, 32, 195, 169, 32, 206, 184, 10]
+    },
+    {
+      "id": "src-07-empty",
+      "kind": "canonical_source_bytes",
+      "why": "the empty file becomes a single LF, not nothing",
+      "bytes": []
+    },
+    {
+      "id": "fid-01-simple",
+      "kind": "function_id",
+      "why": "the ordinary three-part id",
+      "parts": {
+        "stageId": "5p",
+        "modulePath": "tools/simurgh-attestation/stage5p/core/identityBank.mjs",
+        "symbol": "attachEvidence"
+      }
+    },
+    {
+      "id": "fid-02-symbol-with-colons",
+      "kind": "function_id",
+      "why": "a verifier-branch symbol contains ':' — the parse is bounded to the first two separators, not greedy",
+      "parts": {
+        "stageId": "5p",
+        "modulePath": "tools/simurgh-attestation/stage5p/core/section2Verifier.mjs",
+        "symbol": "reject@S2.C2/resolver_binding_invalid#3"
+      }
+    },
+    {
+      "id": "fid-03-parse-roundtrip",
+      "kind": "parse_function_id",
+      "why": "parsing must recover the symbol whole, colons included",
+      "id_text": "5o:tools/simurgh-attestation/stage5o/core/x.mjs:reject@S7.C1/a:b#1"
+    },
+    {
+      "id": "json-01-key-order",
+      "kind": "canonical_json",
+      "why": "keys sort recursively; insertion order must not survive into the bytes",
+      "value": { "zebra": 1, "alpha": { "yak": 2, "beta": 3 }, "mid": [3, 1, 2] }
+    },
+    {
+      "id": "json-02-unicode-keys",
+      "kind": "canonical_json",
+      "why": "sorting is by code unit, not by locale — a locale-aware sort reorders these",
+      "value": { "é": 1, "e": 2, "Z": 3, "a": 4 }
+    },
+    {
+      "id": "json-03-nested-empty",
+      "kind": "canonical_json",
+      "why": "empty object and empty array are distinct and both survive",
+      "value": { "a": {}, "b": [], "c": null, "d": false }
+    },
+    {
+      "id": "leaf-01",
+      "kind": "closure_leaf",
+      "why": "the real commitment projection: nine fields, in the fixed order, over a realistic row",
+      "row": {
+        "function_id": "5k:tools/simurgh-attestation/stage5k/core/merkle.mjs:leafHash",
+        "stage_id": "5k",
+        "module_path": "tools/simurgh-attestation/stage5k/core/merkle.mjs",
+        "export_name_or_internal_symbol": "leafHash",
+        "source_digest": "3b9f0c1d2e4a5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f9a0b1c2d3e4",
+        "category": "exported_function",
+        "reachable_from": ["5k:tools/simurgh-attestation/stage5k/core/merkle.mjs:buildInclusion"],
+        "security_role": "canonicalisation",
+        "historical_tags": ["v2.46.0-stage-5k-vuc"]
+      }
+    },
+    {
+      "id": "leaf-02-extra-field-ignored",
+      "kind": "closure_leaf",
+      "why": "a tenth field must NOT change the leaf — the projection is exactly the nine committed fields",
+      "row": {
+        "function_id": "5k:tools/simurgh-attestation/stage5k/core/merkle.mjs:leafHash",
+        "stage_id": "5k",
+        "module_path": "tools/simurgh-attestation/stage5k/core/merkle.mjs",
+        "export_name_or_internal_symbol": "leafHash",
+        "source_digest": "3b9f0c1d2e4a5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f9a0b1c2d3e4",
+        "category": "exported_function",
+        "reachable_from": ["5k:tools/simurgh-attestation/stage5k/core/merkle.mjs:buildInclusion"],
+        "security_role": "canonicalisation",
+        "historical_tags": ["v2.46.0-stage-5k-vuc"],
+        "coverage_status": "attacked_pass"
+      }
+    },
+    {
+      "id": "merkle-01-single",
+      "kind": "merkle_root",
+      "why": "a one-leaf tree is that leaf, unwrapped",
+      "leaves": ["0000000000000000000000000000000000000000000000000000000000000001"]
+    },
+    {
+      "id": "merkle-02-pair",
+      "kind": "merkle_root",
+      "why": "two leaves: one node hash over left||right",
+      "leaves": [
+        "0000000000000000000000000000000000000000000000000000000000000001",
+        "0000000000000000000000000000000000000000000000000000000000000002"
+      ]
+    },
+    {
+      "id": "merkle-03-odd-promoted",
+      "kind": "merkle_root",
+      "why": "THREE leaves. The odd one is PROMOTED, not duplicated — the other common convention gives a different root for the same leaves",
+      "leaves": [
+        "0000000000000000000000000000000000000000000000000000000000000001",
+        "0000000000000000000000000000000000000000000000000000000000000002",
+        "0000000000000000000000000000000000000000000000000000000000000003"
+      ]
+    },
+    {
+      "id": "merkle-04-five",
+      "kind": "merkle_root",
+      "why": "five leaves exercises promotion at two different levels",
+      "leaves": [
+        "0000000000000000000000000000000000000000000000000000000000000001",
+        "0000000000000000000000000000000000000000000000000000000000000002",
+        "0000000000000000000000000000000000000000000000000000000000000003",
+        "0000000000000000000000000000000000000000000000000000000000000004",
+        "0000000000000000000000000000000000000000000000000000000000000005"
+      ]
+    },
+    {
+      "id": "merkle-05-order-matters",
+      "kind": "merkle_root",
+      "why": "the SAME leaves reversed. Must differ from merkle-02: nodeHash concatenates left||right and is not commutative",
+      "leaves": [
+        "0000000000000000000000000000000000000000000000000000000000000002",
+        "0000000000000000000000000000000000000000000000000000000000000001"
+      ]
+    },
+    {
+      "id": "cov-01-all-discharged",
+      "kind": "coverage_status",
+      "why": "every obligated cell discharged and none found",
+      "cells": [
+        {
+          "attack_class": "R1",
+          "applicability": "obligated",
+          "discharged": true,
+          "discharge_status": "attacked_pass",
+          "finding_count": 0
+        },
+        {
+          "attack_class": "R8",
+          "applicability": "obligated",
+          "discharged": true,
+          "discharge_status": "attacked_pass",
+          "finding_count": 0
+        }
+      ]
+    },
+    {
+      "id": "cov-02-one-gap-blocks",
+      "kind": "coverage_status",
+      "why": "P0-5: one undischarged obligated cell blocks the member even though the other passed",
+      "cells": [
+        {
+          "attack_class": "R1",
+          "applicability": "obligated",
+          "discharged": true,
+          "discharge_status": "attacked_pass",
+          "finding_count": 0
+        },
+        {
+          "attack_class": "R8",
+          "applicability": "obligated",
+          "discharged": false,
+          "discharge_status": null,
+          "finding_count": 0
+        }
+      ]
+    },
+    {
+      "id": "cov-03-finding-beats-passes",
+      "kind": "coverage_status",
+      "why": "a finding is never softened by other cells passing",
+      "cells": [
+        {
+          "attack_class": "R1",
+          "applicability": "obligated",
+          "discharged": true,
+          "discharge_status": "attacked_pass",
+          "finding_count": 0
+        },
+        {
+          "attack_class": "R8",
+          "applicability": "obligated",
+          "discharged": true,
+          "discharge_status": "finding_frozen",
+          "finding_count": 1
+        }
+      ]
+    },
+    {
+      "id": "cov-04-mechanically-unreachable",
+      "kind": "coverage_status",
+      "why": "every cell omitted for a mechanical reason",
+      "cells": [
+        {
+          "attack_class": "R1",
+          "applicability": "omitted",
+          "omission_reason": "no_such_input_surface",
+          "discharged": false,
+          "finding_count": 0
+        },
+        {
+          "attack_class": "R4",
+          "applicability": "omitted",
+          "omission_reason": "no_trust_decision",
+          "discharged": false,
+          "finding_count": 0
+        }
+      ]
+    },
+    {
+      "id": "cov-05-delegated-needs-a-caller",
+      "kind": "coverage_status",
+      "why": "'delegated' is NOT mechanical: with no validated caller the member derives NOTHING",
+      "cells": [
+        {
+          "attack_class": "R1",
+          "applicability": "omitted",
+          "omission_reason": "delegated",
+          "discharged": false,
+          "finding_count": 0
+        }
+      ]
+    },
+    {
+      "id": "cov-06-delegated-with-a-caller",
+      "kind": "coverage_status",
+      "why": "the same cells WITH a validated caller",
+      "delegates_to": "5a:m.mjs:caller",
+      "cells": [
+        {
+          "attack_class": "R1",
+          "applicability": "omitted",
+          "omission_reason": "delegated",
+          "discharged": false,
+          "finding_count": 0
+        }
+      ]
+    },
+    {
+      "id": "cov-07-no-cells",
+      "kind": "coverage_status",
+      "why": "a member with no cells derives null — the absent cell is not the omitted cell",
+      "cells": []
+    }
+  ]
+}

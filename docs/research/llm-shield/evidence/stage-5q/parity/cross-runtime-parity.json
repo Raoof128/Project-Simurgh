@@ -1,0 +1,267 @@
+{
+  "schema": "simurgh.vsr.cross-runtime-parity.v1",
+  "note": "FOUR evaluators, not three. The Node core is included because three mirrors agreeing with each other says nothing about the code that computes the committed digests.",
+  "vectors_digest": "fdde6f2032a865739ec0aded4394773c9c987ebf27ae8bba680d10a29e3ca45a",
+  "vector_count": 27,
+  "surface": [
+    "canonicalSourceBytes / sourceSpanDigest (§2.5)",
+    "makeFunctionId / parseFunctionId",
+    "canonicalJson",
+    "closure member leaf + merkle root (Task 8)",
+    "coverage status derivation (Annex A4.3)"
+  ],
+  "excluded_from_the_surface": [
+    "floating-point numbers — JSON.stringify and json.dumps disagree on representation",
+    "non-BMP escaping — the two disagree on surrogate handling",
+    "anything reading the filesystem, the clock or a process"
+  ],
+  "runtimes": {
+    "node_core": {
+      "ran": true
+    },
+    "portable": {
+      "ran": true
+    },
+    "python": {
+      "ran": true,
+      "version": "Python 3.14.6"
+    },
+    "browser": {
+      "ran": true,
+      "binary": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+    }
+  },
+  "comparisons": [
+    {
+      "pair": "core_vs_portable",
+      "ran": true,
+      "differing": []
+    },
+    {
+      "pair": "portable_vs_python",
+      "ran": true,
+      "differing": []
+    },
+    {
+      "pair": "portable_vs_browser",
+      "ran": true,
+      "differing": []
+    }
+  ],
+  "three_runtime_parity": true,
+  "browser_parity_proven": true,
+  "results": {
+    "node_core": {
+      "src-01-plain": "a9f577de16351b6b5e6618240814b6e463fd9ab874310d06a86e5fb6261fd164",
+      "src-02-no-trailing-lf": "a9f577de16351b6b5e6618240814b6e463fd9ab874310d06a86e5fb6261fd164",
+      "src-03-crlf": [
+        97,
+        10,
+        98,
+        10
+      ],
+      "src-04-lone-cr": [
+        97,
+        10,
+        98,
+        10
+      ],
+      "src-05-interior-blank-lines": [
+        97,
+        10,
+        10,
+        10,
+        98,
+        10,
+        10
+      ],
+      "src-06-utf8-multibyte": "6d806c8521d66d9f7b0106de16c5796ab82f901e0797936d9930916e646814de",
+      "src-07-empty": [
+        10
+      ],
+      "fid-01-simple": "5p:tools/simurgh-attestation/stage5p/core/identityBank.mjs:attachEvidence",
+      "fid-02-symbol-with-colons": "5p:tools/simurgh-attestation/stage5p/core/section2Verifier.mjs:reject@S2.C2/resolver_binding_invalid#3",
+      "fid-03-parse-roundtrip": {
+        "stageId": "5o",
+        "modulePath": "tools/simurgh-attestation/stage5o/core/x.mjs",
+        "symbol": "reject@S7.C1/a:b#1"
+      },
+      "json-01-key-order": "{\"alpha\":{\"beta\":3,\"yak\":2},\"mid\":[3,1,2],\"zebra\":1}",
+      "json-02-unicode-keys": "{\"Z\":3,\"a\":4,\"e\":2,\"é\":1}",
+      "json-03-nested-empty": "{\"a\":{},\"b\":[],\"c\":null,\"d\":false}",
+      "leaf-01": "99ce3e72c33c48dd5ebfb3a9750fad4f8c6cbd9d19565c223f3e32d45c1a7238",
+      "leaf-02-extra-field-ignored": "99ce3e72c33c48dd5ebfb3a9750fad4f8c6cbd9d19565c223f3e32d45c1a7238",
+      "merkle-01-single": "0000000000000000000000000000000000000000000000000000000000000001",
+      "merkle-02-pair": "847db34d0c7553e5f748c8fe680aae01ec247fde774c729a41cfd39864135750",
+      "merkle-03-odd-promoted": "547d1b65c80fc80d393e29a30040799b5b201d16a4541aea7561576beaaf8116",
+      "merkle-04-five": "36b40ae887b9c1cfff7e63d2c95645f7d2682fa0f99da3c147180d2194a9cf00",
+      "merkle-05-order-matters": "33db82f62868f8b3eb178834420fb187b40196b59584d9c3cdfcf2d8b40da58d",
+      "cov-01-all-discharged": "attacked_pass",
+      "cov-02-one-gap-blocks": null,
+      "cov-03-finding-beats-passes": "finding_frozen",
+      "cov-04-mechanically-unreachable": "mechanically_unreachable",
+      "cov-05-delegated-needs-a-caller": null,
+      "cov-06-delegated-with-a-caller": "delegated_to_attacked_caller",
+      "cov-07-no-cells": null
+    },
+    "portable": {
+      "src-01-plain": "a9f577de16351b6b5e6618240814b6e463fd9ab874310d06a86e5fb6261fd164",
+      "src-02-no-trailing-lf": "a9f577de16351b6b5e6618240814b6e463fd9ab874310d06a86e5fb6261fd164",
+      "src-03-crlf": [
+        97,
+        10,
+        98,
+        10
+      ],
+      "src-04-lone-cr": [
+        97,
+        10,
+        98,
+        10
+      ],
+      "src-05-interior-blank-lines": [
+        97,
+        10,
+        10,
+        10,
+        98,
+        10,
+        10
+      ],
+      "src-06-utf8-multibyte": "6d806c8521d66d9f7b0106de16c5796ab82f901e0797936d9930916e646814de",
+      "src-07-empty": [
+        10
+      ],
+      "fid-01-simple": "5p:tools/simurgh-attestation/stage5p/core/identityBank.mjs:attachEvidence",
+      "fid-02-symbol-with-colons": "5p:tools/simurgh-attestation/stage5p/core/section2Verifier.mjs:reject@S2.C2/resolver_binding_invalid#3",
+      "fid-03-parse-roundtrip": {
+        "stageId": "5o",
+        "modulePath": "tools/simurgh-attestation/stage5o/core/x.mjs",
+        "symbol": "reject@S7.C1/a:b#1"
+      },
+      "json-01-key-order": "{\"alpha\":{\"beta\":3,\"yak\":2},\"mid\":[3,1,2],\"zebra\":1}",
+      "json-02-unicode-keys": "{\"Z\":3,\"a\":4,\"e\":2,\"é\":1}",
+      "json-03-nested-empty": "{\"a\":{},\"b\":[],\"c\":null,\"d\":false}",
+      "leaf-01": "99ce3e72c33c48dd5ebfb3a9750fad4f8c6cbd9d19565c223f3e32d45c1a7238",
+      "leaf-02-extra-field-ignored": "99ce3e72c33c48dd5ebfb3a9750fad4f8c6cbd9d19565c223f3e32d45c1a7238",
+      "merkle-01-single": "0000000000000000000000000000000000000000000000000000000000000001",
+      "merkle-02-pair": "847db34d0c7553e5f748c8fe680aae01ec247fde774c729a41cfd39864135750",
+      "merkle-03-odd-promoted": "547d1b65c80fc80d393e29a30040799b5b201d16a4541aea7561576beaaf8116",
+      "merkle-04-five": "36b40ae887b9c1cfff7e63d2c95645f7d2682fa0f99da3c147180d2194a9cf00",
+      "merkle-05-order-matters": "33db82f62868f8b3eb178834420fb187b40196b59584d9c3cdfcf2d8b40da58d",
+      "cov-01-all-discharged": "attacked_pass",
+      "cov-02-one-gap-blocks": null,
+      "cov-03-finding-beats-passes": "finding_frozen",
+      "cov-04-mechanically-unreachable": "mechanically_unreachable",
+      "cov-05-delegated-needs-a-caller": null,
+      "cov-06-delegated-with-a-caller": "delegated_to_attacked_caller",
+      "cov-07-no-cells": null
+    },
+    "python": {
+      "cov-01-all-discharged": "attacked_pass",
+      "cov-02-one-gap-blocks": null,
+      "cov-03-finding-beats-passes": "finding_frozen",
+      "cov-04-mechanically-unreachable": "mechanically_unreachable",
+      "cov-05-delegated-needs-a-caller": null,
+      "cov-06-delegated-with-a-caller": "delegated_to_attacked_caller",
+      "cov-07-no-cells": null,
+      "fid-01-simple": "5p:tools/simurgh-attestation/stage5p/core/identityBank.mjs:attachEvidence",
+      "fid-02-symbol-with-colons": "5p:tools/simurgh-attestation/stage5p/core/section2Verifier.mjs:reject@S2.C2/resolver_binding_invalid#3",
+      "fid-03-parse-roundtrip": {
+        "modulePath": "tools/simurgh-attestation/stage5o/core/x.mjs",
+        "stageId": "5o",
+        "symbol": "reject@S7.C1/a:b#1"
+      },
+      "json-01-key-order": "{\"alpha\":{\"beta\":3,\"yak\":2},\"mid\":[3,1,2],\"zebra\":1}",
+      "json-02-unicode-keys": "{\"Z\":3,\"a\":4,\"e\":2,\"é\":1}",
+      "json-03-nested-empty": "{\"a\":{},\"b\":[],\"c\":null,\"d\":false}",
+      "leaf-01": "99ce3e72c33c48dd5ebfb3a9750fad4f8c6cbd9d19565c223f3e32d45c1a7238",
+      "leaf-02-extra-field-ignored": "99ce3e72c33c48dd5ebfb3a9750fad4f8c6cbd9d19565c223f3e32d45c1a7238",
+      "merkle-01-single": "0000000000000000000000000000000000000000000000000000000000000001",
+      "merkle-02-pair": "847db34d0c7553e5f748c8fe680aae01ec247fde774c729a41cfd39864135750",
+      "merkle-03-odd-promoted": "547d1b65c80fc80d393e29a30040799b5b201d16a4541aea7561576beaaf8116",
+      "merkle-04-five": "36b40ae887b9c1cfff7e63d2c95645f7d2682fa0f99da3c147180d2194a9cf00",
+      "merkle-05-order-matters": "33db82f62868f8b3eb178834420fb187b40196b59584d9c3cdfcf2d8b40da58d",
+      "src-01-plain": "a9f577de16351b6b5e6618240814b6e463fd9ab874310d06a86e5fb6261fd164",
+      "src-02-no-trailing-lf": "a9f577de16351b6b5e6618240814b6e463fd9ab874310d06a86e5fb6261fd164",
+      "src-03-crlf": [
+        97,
+        10,
+        98,
+        10
+      ],
+      "src-04-lone-cr": [
+        97,
+        10,
+        98,
+        10
+      ],
+      "src-05-interior-blank-lines": [
+        97,
+        10,
+        10,
+        10,
+        98,
+        10,
+        10
+      ],
+      "src-06-utf8-multibyte": "6d806c8521d66d9f7b0106de16c5796ab82f901e0797936d9930916e646814de",
+      "src-07-empty": [
+        10
+      ]
+    },
+    "browser": {
+      "cov-01-all-discharged": "attacked_pass",
+      "cov-02-one-gap-blocks": null,
+      "cov-03-finding-beats-passes": "finding_frozen",
+      "cov-04-mechanically-unreachable": "mechanically_unreachable",
+      "cov-05-delegated-needs-a-caller": null,
+      "cov-06-delegated-with-a-caller": "delegated_to_attacked_caller",
+      "cov-07-no-cells": null,
+      "fid-01-simple": "5p:tools/simurgh-attestation/stage5p/core/identityBank.mjs:attachEvidence",
+      "fid-02-symbol-with-colons": "5p:tools/simurgh-attestation/stage5p/core/section2Verifier.mjs:reject@S2.C2/resolver_binding_invalid#3",
+      "fid-03-parse-roundtrip": {
+        "stageId": "5o",
+        "modulePath": "tools/simurgh-attestation/stage5o/core/x.mjs",
+        "symbol": "reject@S7.C1/a:b#1"
+      },
+      "json-01-key-order": "{\"alpha\":{\"beta\":3,\"yak\":2},\"mid\":[3,1,2],\"zebra\":1}",
+      "json-02-unicode-keys": "{\"Z\":3,\"a\":4,\"e\":2,\"é\":1}",
+      "json-03-nested-empty": "{\"a\":{},\"b\":[],\"c\":null,\"d\":false}",
+      "leaf-01": "99ce3e72c33c48dd5ebfb3a9750fad4f8c6cbd9d19565c223f3e32d45c1a7238",
+      "leaf-02-extra-field-ignored": "99ce3e72c33c48dd5ebfb3a9750fad4f8c6cbd9d19565c223f3e32d45c1a7238",
+      "merkle-01-single": "0000000000000000000000000000000000000000000000000000000000000001",
+      "merkle-02-pair": "847db34d0c7553e5f748c8fe680aae01ec247fde774c729a41cfd39864135750",
+      "merkle-03-odd-promoted": "547d1b65c80fc80d393e29a30040799b5b201d16a4541aea7561576beaaf8116",
+      "merkle-04-five": "36b40ae887b9c1cfff7e63d2c95645f7d2682fa0f99da3c147180d2194a9cf00",
+      "merkle-05-order-matters": "33db82f62868f8b3eb178834420fb187b40196b59584d9c3cdfcf2d8b40da58d",
+      "src-01-plain": "a9f577de16351b6b5e6618240814b6e463fd9ab874310d06a86e5fb6261fd164",
+      "src-02-no-trailing-lf": "a9f577de16351b6b5e6618240814b6e463fd9ab874310d06a86e5fb6261fd164",
+      "src-03-crlf": [
+        97,
+        10,
+        98,
+        10
+      ],
+      "src-04-lone-cr": [
+        97,
+        10,
+        98,
+        10
+      ],
+      "src-05-interior-blank-lines": [
+        97,
+        10,
+        10,
+        10,
+        98,
+        10,
+        10
+      ],
+      "src-06-utf8-multibyte": "6d806c8521d66d9f7b0106de16c5796ab82f901e0797936d9930916e646814de",
+      "src-07-empty": [
+        10
+      ]
+    }
+  }
+}

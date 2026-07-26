@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Stage 5Q — VSR cross-runtime parity</title>
+    <!--
+      CSP: default-src 'none'. No connect-src, so the page CANNOT fetch anything — not the vector
+      file, not a CDN, not a telemetry beacon. Everything it evaluates is inlined below by the
+      driver before the page is opened.
+
+      This is not decoration. A parity page that could fetch its own vectors could be handed
+      different vectors than the other two runtimes ran, and the three would "agree" about
+      different things. The strongest statement a browser can make here is about bytes it was
+      shipped with, so those are the only bytes it gets.
+
+      'unsafe-inline' for script is unavoidable — the module and the vectors are inlined — and it is
+      safe precisely because nothing external can reach this document.
+    -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'unsafe-inline' blob:; style-src 'unsafe-inline'"
+    />
+    <style>
+      body {
+        font:
+          13px/1.5 ui-monospace,
+          SFMono-Regular,
+          Menlo,
+          monospace;
+        margin: 2rem;
+        max-width: 60rem;
+      }
+      h1 {
+        font-size: 1.1rem;
+      }
+      pre {
+        overflow-x: auto;
+        background: #f6f6f6;
+        padding: 0.75rem;
+      }
+      @media (prefers-color-scheme: dark) {
+        body {
+          background: #111;
+          color: #ddd;
+        }
+        pre {
+          background: #1c1c1c;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Stage 5Q — VSR deterministic surface, evaluated in this browser</h1>
+    <p id="status">running…</p>
+    <pre id="out"></pre>
+    <script type="module">
+      // __VSR_PORTABLE__ and __VSR_VECTORS__ are replaced with the real module source and the real
+      // vector JSON by runBrowserParity.mjs. Left as markers here so the file on disk is readable
+      // and so a page opened by hand fails LOUDLY rather than silently evaluating nothing.
+      const PORTABLE_SOURCE = `__VSR_PORTABLE__`;
+      const VECTORS_JSON = `__VSR_VECTORS__`;
+
+      const status = document.getElementById("status");
+      const out = document.getElementById("out");
+
+      try {
+        if (PORTABLE_SOURCE.startsWith("__VSR")) {
+          throw new Error(
+            "this page was opened without being prepared: run runBrowserParity.mjs, which inlines " +
+              "the portable module and the frozen vectors. A page that evaluated an empty surface " +
+              "would report parity over nothing."
+          );
+        }
+        const blob = new Blob([PORTABLE_SOURCE], { type: "text/javascript" });
+        const url = URL.createObjectURL(blob);
+        const mod = await import(url);
+        URL.revokeObjectURL(url);
+
+        const doc = JSON.parse(VECTORS_JSON);
+        const results = await mod.evaluateVectors(doc.vectors);
+        const sorted = Object.fromEntries(Object.entries(results).sort());
+
+        out.textContent = JSON.stringify(sorted, null, 2);
+        status.textContent = `evaluated ${Object.keys(sorted).length} vectors`;
+        // The driver reads this element. A marker, not a result: the results are the JSON above.
+        document.title = "VSR-PARITY-OK";
+      } catch (error) {
+        out.textContent = String(error && error.stack ? error.stack : error);
+        status.textContent = "FAILED";
+        document.title = "VSR-PARITY-FAILED";
+      }
+    </script>
+  </body>
+</html>
