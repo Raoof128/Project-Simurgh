@@ -12,5 +12,6 @@
   },
   "expected_failure": "census complete with N-1",
   "precondition_source_digest": "7fd9ad4b1188f761a539d8292f4d4050a6ee41b1d3fa1bcadb9a9c851e8f1bcc",
-  "detector_note": "the target stage own suite went GREEN->GREEN->GREEN on this mutant: the guard is uncovered there. Detector strengthened, mutant untouched."
+  "detector_note": "the target stage own suite went GREEN->GREEN->GREEN on this mutant: the guard is uncovered there. Detector strengthened, mutant untouched.",
+  "undetected_analysis": "UNKILLABLE BY CONSTRUCTION, same shape. The dropped-cell loop and the phantom-record loop are symmetric, and the cardinality+uniqueness checks above them mean any input that trips one trips the other. Deleting either leaves the other covering it. R7 stays undischarged."
 }

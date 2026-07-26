@@ -12,5 +12,6 @@
   },
   "expected_failure": "unconfigured trust root accepted",
   "precondition_source_digest": "aafd8850e5bb40525b58e07657d96ef86395e362601cb20f260a10a2a8919cc3",
-  "detector_note": "the target stage own suite went GREEN->GREEN->GREEN on this mutant: the guard is uncovered there. Detector strengthened, mutant untouched."
+  "detector_note": "the target stage own suite went GREEN->GREEN->GREEN on this mutant: the guard is uncovered there. Detector strengthened, mutant untouched.",
+  "undetected_analysis": "UNKILLABLE BY CONSTRUCTION, verified by reading the target. For an empty allowlist the NEXT guard returns the identical code: `[].includes(x)` is false, so `!ctx.trustRootAllowlist.includes(kr.root_fingerprint)` fires and returns CODES.VFC_EXTERNAL_TRUST_CONFIGURATION_INVALID. No input distinguishes the two guards. The seeded fault is therefore undetectable because the guard it removes is REDUNDANT, not because the detector is weak. Recorded, not tuned away: R5 stays undischarged and the harness refuses to publish attacked_pass for it."
 }
