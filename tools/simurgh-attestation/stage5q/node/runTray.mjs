@@ -292,4 +292,10 @@ async function main(argv) {
   return results.some((r) => r.refused) ? 1 : 0;
 }
 
-main(process.argv.slice(2)).then((code) => process.exit(code));
+// THE MAIN GUARD. Without it, `await import(...)` of this file RUNS it — which is finding 5Q-F003,
+// the defect this stage froze against Stage 5M, committed here in our own drivers. Ten of them did
+// it, and the K7 export census is what found them: it could not enumerate a module that exits
+// during enumeration.
+if (import.meta.url === `file://${process.argv[1]}`) {
+  main(process.argv.slice(2)).then((code) => process.exit(code));
+}
