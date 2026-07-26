@@ -151,3 +151,6 @@ tools/simurgh-attestation/stage5p/browser/parity-vectors.json
 
 # Local session-state, gitignored by .remember/.gitignore. Never part of the repo.
 .remember/
+
+# Stage 5Q evidence — canonical JSON, gated by evidenceCanonical.test.js not prettier
+docs/research/llm-shield/evidence/stage-5q/
