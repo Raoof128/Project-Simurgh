@@ -218,42 +218,97 @@ Role is not a self-declaration; it is a claim checked against the reachability g
 
 ### §2.5 Stable identity under churn
 
-`function_id` must survive reformatting, renaming and file moves well enough to be cited in a frozen
-finding, while remaining precise enough to detect that a member changed.
-
 ```text
-function_id  = "<stage_id>:<module_path>:<symbol>"        # stable across content edits
-source_digest = sha256(normalised source span)             # changes when the body changes
+function_id   = "<stage_id>:<module_path>:<symbol>"
+source_digest = SHA256( UTF8("simurgh.vsr.source-span.v1") || 0x00 || canonical_source_bytes )
 ```
 
-Normalisation before digest: strip comments, collapse whitespace runs to a single space, strip
-trailing commas. Rationale: a prettier reflow must not invalidate a frozen finding, but a semantic
-edit must be visible. The normaliser is itself a closure member with role `canonicalisation` and is
-therefore attacked by the full matrix — including against itself.
+**The stability claim, stated exactly as strongly as it is true:**
+
+> `function_id` is stable across source-body edits and reformatting **while the stage, module path
+> and symbol remain unchanged**. A path move or symbol rename creates a **new** function id. A
+> `succession_hint` may relate the two but never transfers identity automatically.
+
+Claiming more than this would be a false completeness claim inside a stage about false completeness
+claims. The identifier is stable under the churn it is stable under, and no further.
+
+**`canonical_source_bytes` performs no semantic normalisation.** It is:
+
+- UTF-8 bytes of the source span;
+- BOM **rejected**, not stripped (a BOM is a content difference, not noise);
+- CRLF and lone CR converted to LF;
+- final-newline treatment pinned (exactly one trailing LF, added if absent);
+- **no** comment removal, **no** whitespace collapsing, **no** punctuation removal.
+
+**Why the textual normaliser was removed.** An earlier draft specified strip-comments /
+collapse-whitespace / strip-trailing-commas. Applied textually — which is the only way it could be
+applied across this closure — that rule can alter or collide inside string literals, template
+literals, regular expressions, Python strings, shell quoting, Lean syntax and YAML scalars. It would
+have made 5Q responsible for proving semantic equivalence of arbitrary source across five languages,
+which is a research programme, not a census field.
+
+**The consequence is accepted, not worked around.** A Prettier-only change **will** alter
+`source_digest`. That does not invalidate a frozen finding, because a finding cites the stable
+`function_id` **and** the `source_digest` observed at discovery. A changed digest proves only that
+the implementation changed — which is true, and useful. This is strictly stronger than pretending two
+differently formatted programs are provably the same program.
 
 **Rename handling.** A renamed symbol produces a new `function_id`. The census emits a
 `succession_hint` when a disappeared id and an appeared id share a `source_digest`; the hint is
-advisory and never auto-applied, because silent identity transfer is exactly the laundering 5Q
-exists to catch.
+advisory and never auto-applied, because silent identity transfer is exactly the laundering 5Q exists
+to catch. Note the hint is weaker under this digest rule than under the deleted normaliser — a rename
+accompanied by reformatting produces no hint at all. That is the honest cost of refusing to guess.
 
-### §2.6 Dual census — the anti-vacuity mechanism
+### §2.6 Census domains and the projection rule
 
-Two independent inventories, built by different means, must agree:
+Three inventories, built by different means, over **different domains**. Comparing them naively would
+be a category error: a runtime import cannot enumerate module-private internals, so a blanket
+"present in one, absent from the other is a conflict" rule would flag every internal function in the
+repository forever.
 
-|                    | Method                                                  | Blind to                                                          |
-| ------------------ | ------------------------------------------------------- | ----------------------------------------------------------------- |
-| **Static census**  | parse module source; enumerate declarations and exports | dynamically added properties, re-exports, conditional definitions |
-| **Runtime census** | `import * as ns`, enumerate the actual callable surface | anything never imported; dead files                               |
+```text
+static census
+  all declared closure members, including internals and dead files
 
-**Disagreement fails closed.** A member in one census and not the other is a `census_conflict` and
-blocks release, unless discharged by a signed, member-specific exception recording which census is
-authoritative and why.
+runtime census
+  runtime-visible exports, re-exports, constants and CLI surfaces
+
+gate census
+  workflows, package scripts and shell gate definitions
+```
+
+**The comparison is over a projection, not the raw sets:**
+
+```text
+project(static_census, runtime_visible) == runtime_census
+```
+
+Static-only internal members are **not** conflicts merely because JavaScript does not export them.
+They remain fully inventoried and must still receive a coverage status (§2.7) via static
+reachability.
+
+**A real `census_conflict` is exactly one of:**
+
+- a runtime-visible export absent from the static projection;
+- a statically exported symbol absent at runtime;
+- a dynamic export not represented statically;
+- category or identity disagreement on a symbol present in both.
+
+Conflicts fail closed and block release unless discharged by a signed, member-specific exception
+naming which census is authoritative and why.
+
+**Why the projection rule is load-bearing rather than pedantic.** Without it the first real census
+run has two outcomes and both are bad: it fails permanently, or it accumulates exceptions until
+exceptions become wallpaper and the gate means nothing. A completeness mechanism that must be
+routinely overridden has already failed — it just has not been told yet.
 
 This is not theoretical rigour. The 5P K7 net found 5 dead exports and a further 2 when Lane L
-landed; those were found precisely because the runtime surface and the intended surface disagreed. In
-5Q the disagreement is promoted from an incidental discovery to a first-class release blocker.
+landed, precisely because the runtime surface and the intended surface disagreed. 5Q promotes that
+incidental discovery to a first-class release blocker, but only over the domain where the comparison
+is meaningful.
 
-**A third, weaker net is mandated for R5/R6 members: the gate-definition census** (§2.8).
+The **gate census** (§2.8) is the third net and covers R5/R6 members, which neither of the other two
+can see: a workflow step is not an export and not a declaration.
 
 ### §2.7 `coverage_status` — the four allowed values
 
@@ -514,15 +569,32 @@ bug list.
 
 ### §6.1 Phase Q0 — discovery and freeze
 
-Runs the trays and campaigns against a **frozen closure** (L2) at a fixed head commit. No production
-code under `tools/simurgh-attestation/stage5{a..o}/` is modified during Q0. New code lands only under
-the 5Q tree and its tests.
+Runs the trays and campaigns against a **frozen closure** (L2) at a fixed head commit.
 
-**`.github/workflows/` is frozen during Q0 for the same reason.** Gate definitions are closure members
-with role `completeness_claim` (§2.4), and at least one of them — the Lean workflow — is itself live
-evidence for a finding (§14.1). Editing a gate during the phase that attacks gates would destroy the
-premise it is being attacked on. The one permitted addition is 5Q's own narrowly-scoped proof gate
-(§14.3), which touches no existing list.
+**Everything in the committed closure is read-only during Q0**, including
+`tools/simurgh-attestation/stage5{a..p}/` — 5P inclusive. An earlier draft wrote `stage5{a..o}`,
+which would have left Stage 5P mutable while it sat inside both the function closure and the attack
+target set. A campaign that can edit its own target mid-run measures nothing.
+
+**Every first-party shared dependency whose `source_digest` is in the committed closure is frozen
+too.** Otherwise a Stage 5 verifier stays untouched while an imported security primitive changes
+underneath it, and the closure digest silently stops describing the thing being attacked.
+
+**Permitted write surface during Q0 — exhaustive:**
+
+```text
+tools/simurgh-attestation/stage5q/**
+tests/**/stage5q/**
+proofs/stage5q/**
+stage5q evidence/output directories
+the narrowly scoped 5Q-only CI addition (§14.3)
+```
+
+**`.github/workflows/` is otherwise frozen**, and for a sharper reason than symmetry: gate
+definitions are closure members with role `completeness_claim` (§2.4), and at least one — the Lean
+workflow — is itself live evidence for an open finding (§14.1). Editing a gate during the phase that
+attacks gates destroys the premise it is being attacked on. The single permitted addition is 5Q's own
+proof gate, which touches no existing list.
 
 Q0 ends with: closure digest, tag closure digest, taxonomy digest, ledger digest — all four signed.
 
@@ -784,12 +856,48 @@ observed_result        it verifies 27 of 32 named files; 4 stage-5 proofs are
                        (9 theorems, 0 sorry) is referenced by nothing automated
 severity               assurance_only
 claim_impact           the "Lean N theorems, 0 escapes" line in the 5I/5J/5K/5L
-                       closeouts was not CI-enforced at any point after its stage shipped
+                       closeouts was never enforced by any CI path, at any commit
+                       in repository history (absence receipt below)
 scope                  head | tags (both)
 discovered_at_commit   ea574df8
 discovered_by          pre_stage_design_review
 corroborated_by        stage5q_q0_attack_pack   (recorded at Q0, never re-credited)
+absence_receipt        §14.0
 ```
+
+### §14.0 The absence receipt
+
+`claim_impact` above asserts a **historical absence**, which is a strictly harder claim than "absent
+at head". It is not narrowed to the measured head because it did not have to be: a reproducible
+pickaxe sweep over all history establishes it, and the sweep carries a positive control proving the
+method detects presence when presence exists.
+
+```bash
+# (a) no workflow, at any commit, ever named these proofs
+for n in PanelCoverage RatingContest UniverseCommitment TemporalQuorum EcologyQuorum; do
+  git log --all --oneline -S"$n" -- .github/
+done                                            # => 0 commits, all five
+
+# (b) nor was the alternative path ever wired: their reproduce scripts in the check gates
+for s in 5i 5j 5k 5l; do
+  git log --all --oneline -S"reproduce-llm-shield-stage$s" -- scripts/check-e2e.sh scripts/check.sh
+done                                            # => 0 commits, all four
+
+# (c) POSITIVE CONTROL — the same method finds 5m, which IS wired
+git log --all --oneline -S"reproduce-llm-shield-stage5m" -- scripts/check-e2e.sh
+# => 104cf8d7 feat(5m): Task 14 — K7 all-functions net + reproduce script + CI wiring
+#    421e4e27 feat(5m): Task 14 — K7 all-functions net + reproduce script + CI wiring
+#    (two commits, identical subject: a pre-merge rebase duplicate under --all)
+```
+
+Control (c) is what makes (a) and (b) admissible. Two commands returning zero prove nothing if the
+command is broken; the control demonstrates the same invocation returns a hit where a hit exists.
+`git log -S` is a pickaxe over occurrence counts, so an add-then-remove would also surface — the zero
+results mean never present, not merely absent now.
+
+**Bounded honestly:** the sweep covers `.github/` and the two check scripts, which are the only
+automated surfaces that could have executed a proof. It does not prove no human ever ran `lean` by
+hand, which is not a claim anyone makes and would not be CI enforcement if true (§14.1).
 
 ### §14.1 F001 stays live through the Q0 freeze
 
@@ -949,9 +1057,50 @@ Named here so their absence is deliberate rather than an omission:
 
 ## Freeze block
 
+**§§2–5 are FROZEN as of this commit.** Amendments are annex-only from here; the four objects are
+never reopened in place.
+
 ```text
 frozen_sections      §2 §3 §4 §5
-freeze_commit        <recorded on freeze, two-commit convention>
-freeze_digest        <sha256 of §§2-5 normalised>
+freeze_commit        AWAITING_RECEIPT_COMMIT
+freeze_digest        AWAITING_RECEIPT_COMMIT
 amendment_protocol   numbered post-freeze annex only; §§2-5 never reopened
 ```
+
+### Extraction procedure — the exact mechanism
+
+The freeze is defined by a command, not by this sentence. Anyone may re-run it.
+
+```bash
+node -e '
+  import("./tools/simurgh-attestation/stage5q/core/frozenBlock.mjs").then(async (m) => {
+    const { readFileSync } = await import("node:fs");
+    const spec = readFileSync(
+      "docs/superpowers/specs/2026-07-26-stage-5q-vsr-stage-wide-red-team-design.md",
+      "utf8"
+    );
+    const r = m.freezeReceipt(spec);
+    console.log(r.digest, r.bytes);
+  });
+'
+```
+
+| Property         | Value                                                                                     |
+| ---------------- | ----------------------------------------------------------------------------------------- |
+| module           | `tools/simurgh-attestation/stage5q/core/frozenBlock.mjs`                                  |
+| span             | opens at `## §2 FROZEN OBJECT 1`, terminates **exclusively** at `## §6 `                  |
+| canonicalisation | UTF-8; BOM rejected; CRLF/CR → LF; exactly one trailing LF; **no** semantic normalisation |
+| digest           | `SHA256( UTF8("simurgh.vsr.frozen-block.v1") \|\| 0x00 \|\| canonical_bytes )`            |
+| gate             | `tests/unit/llmShield/stage5q/frozenBlock.test.js`                                        |
+
+**Delimited by anchors, not line numbers.** Line numbers move whenever anything above §2 is edited,
+and a freeze whose scope drifts with unrelated edits is not a freeze.
+
+**The receipt fields sit outside the frozen span, by construction.** This is what makes the
+two-commit convention coherent: commit 1 freezes the content, commit 2 records a digest _of_ that
+content. Were `freeze_digest` inside the frozen span, writing it down would change the very bytes it
+describes. A test asserts this property directly rather than leaving it to careful reading.
+
+**Fails closed.** A missing opening anchor or missing `## §6 ` terminator throws. A silently-empty
+block would produce a stable digest over nothing — a green gate describing air, which is exactly the
+false-green defect this stage exists to hunt (§14).
