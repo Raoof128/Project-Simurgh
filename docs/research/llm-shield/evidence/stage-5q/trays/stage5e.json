@@ -1,0 +1,3665 @@
+{
+  "tray_id": "tray-5e",
+  "closure_digest": "87512ae221ae2de5148759dcd48ad04ebf02c1b6354bc75e95af9d991f7fc936",
+  "target_function_ids": [
+    "5e:tests/e2e/llmShield/stage5e/k7AllFunctions.test.js:<file-gate>",
+    "5e:tests/unit/llmShield/stage5e/byoAdapter.test.js:<file-gate>",
+    "5e:tests/unit/llmShield/stage5e/claim.test.js:<file-gate>",
+    "5e:tests/unit/llmShield/stage5e/conformancePack.test.js:<file-gate>",
+    "5e:tests/unit/llmShield/stage5e/constants.test.js:<file-gate>",
+    "5e:tests/unit/llmShield/stage5e/corpus.test.js:<file-gate>",
+    "5e:tests/unit/llmShield/stage5e/curve.test.js:<file-gate>",
+    "5e:tests/unit/llmShield/stage5e/detector.test.js:<file-gate>",
+    "5e:tests/unit/llmShield/stage5e/exitCodes.test.js:<file-gate>",
+    "5e:tests/unit/llmShield/stage5e/greenBundle.test.js:<file-gate>",
+    "5e:tests/unit/llmShield/stage5e/recipes.test.js:<file-gate>",
+    "5e:tests/unit/llmShield/stage5e/slip.test.js:<file-gate>",
+    "5e:tests/unit/llmShield/stage5e/vdaCore.test.js:<file-gate>",
+    "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_DETECTOR",
+    "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_FORBIDDEN_CLAIM_CODES",
+    "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_MINTED_SLOTS",
+    "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_OVERCLAIM_DENYLIST",
+    "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_PAID_SCOPE",
+    "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_PAID_SLOTS",
+    "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_RECIPE_OPS",
+    "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_RESERVED_SLOTS",
+    "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_SCHEMAS",
+    "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_STRUCTURED_CLAIM_CODES",
+    "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_VARIANT_LIMITS",
+    "5e:tools/simurgh-attestation/stage5e/node/verify-vda-attestation.mjs:verifyEvidence"
+  ],
+  "applicable_classes": [
+    "R1",
+    "R10",
+    "R11",
+    "R12",
+    "R13",
+    "R14",
+    "R15",
+    "R16",
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R6",
+    "R7",
+    "R8",
+    "R9"
+  ],
+  "omitted_classes_with_frozen_reason": [],
+  "attack_pack_ids": [],
+  "premise_receipts": [],
+  "finding_ids": [],
+  "coverage_statuses": {},
+  "positive_path_result": {
+    "result": "reproduced",
+    "script": "scripts/reproduce-llm-shield-stage5e.sh",
+    "exit": 0,
+    "signal": null,
+    "log_digest": "1a808e7a9c43fbc33956709a16647bf55eff1f9f71370435ef3329249d2b8d27",
+    "log_tail": "-- 5/6 K7 all-functions net |    K7 OK | -- 6/6 Lean proofs (if lean present; else the CI lean workflow gates them) |    lean OK (zero sorry) | == Stage 5E VDA reproduce: ALL PASS == | "
+  },
+  "obligation_receipts": [
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/corpus.test.js:<file-gate>",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/corpus.test.js:<file-gate>",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_FORBIDDEN_CLAIM_CODES",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/slip.test.js:<file-gate>",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_SCHEMAS",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/constants.test.js:<file-gate>",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_PAID_SLOTS",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_MINTED_SLOTS",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/corpus.test.js:<file-gate>",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_FORBIDDEN_CLAIM_CODES",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_OVERCLAIM_DENYLIST",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_RESERVED_SLOTS",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/conformancePack.test.js:<file-gate>",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/corpus.test.js:<file-gate>",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_DETECTOR",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_DETECTOR",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/curve.test.js:<file-gate>",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/slip.test.js:<file-gate>",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_PAID_SLOTS",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/byoAdapter.test.js:<file-gate>",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_DETECTOR",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_STRUCTURED_CLAIM_CODES",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/node/verify-vda-attestation.mjs:verifyEvidence",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_VARIANT_LIMITS",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/vdaCore.test.js:<file-gate>",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_MINTED_SLOTS",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/slip.test.js:<file-gate>",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_RESERVED_SLOTS",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_SCHEMAS",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_FORBIDDEN_CLAIM_CODES",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/recipes.test.js:<file-gate>",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_PAID_SCOPE",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_RESERVED_SLOTS",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/greenBundle.test.js:<file-gate>",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_VARIANT_LIMITS",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/byoAdapter.test.js:<file-gate>",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/recipes.test.js:<file-gate>",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_MINTED_SLOTS",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/slip.test.js:<file-gate>",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/recipes.test.js:<file-gate>",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/conformancePack.test.js:<file-gate>",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/node/verify-vda-attestation.mjs:verifyEvidence",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_PAID_SCOPE",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/curve.test.js:<file-gate>",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_SCHEMAS",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/exitCodes.test.js:<file-gate>",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/exitCodes.test.js:<file-gate>",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_PAID_SLOTS",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/claim.test.js:<file-gate>",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_STRUCTURED_CLAIM_CODES",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_PAID_SLOTS",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_PAID_SLOTS",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/e2e/llmShield/stage5e/k7AllFunctions.test.js:<file-gate>",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/curve.test.js:<file-gate>",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/claim.test.js:<file-gate>",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/slip.test.js:<file-gate>",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/recipes.test.js:<file-gate>",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_DETECTOR",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_PAID_SLOTS",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_RESERVED_SLOTS",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_MINTED_SLOTS",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/corpus.test.js:<file-gate>",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/node/verify-vda-attestation.mjs:verifyEvidence",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/constants.test.js:<file-gate>",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_RECIPE_OPS",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_SCHEMAS",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/node/verify-vda-attestation.mjs:verifyEvidence",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/byoAdapter.test.js:<file-gate>",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/greenBundle.test.js:<file-gate>",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/greenBundle.test.js:<file-gate>",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_OVERCLAIM_DENYLIST",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/curve.test.js:<file-gate>",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/claim.test.js:<file-gate>",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/claim.test.js:<file-gate>",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_VARIANT_LIMITS",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_VARIANT_LIMITS",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/e2e/llmShield/stage5e/k7AllFunctions.test.js:<file-gate>",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_PAID_SCOPE",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_STRUCTURED_CLAIM_CODES",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_DETECTOR",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/node/verify-vda-attestation.mjs:verifyEvidence",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/detector.test.js:<file-gate>",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_FORBIDDEN_CLAIM_CODES",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/curve.test.js:<file-gate>",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/node/verify-vda-attestation.mjs:verifyEvidence",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/detector.test.js:<file-gate>",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/e2e/llmShield/stage5e/k7AllFunctions.test.js:<file-gate>",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_VARIANT_LIMITS",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_DETECTOR",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_DETECTOR",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_SCHEMAS",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_RESERVED_SLOTS",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/detector.test.js:<file-gate>",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_SCHEMAS",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/node/verify-vda-attestation.mjs:verifyEvidence",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_DETECTOR",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_SCHEMAS",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_VARIANT_LIMITS",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/curve.test.js:<file-gate>",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_MINTED_SLOTS",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/corpus.test.js:<file-gate>",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/curve.test.js:<file-gate>",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/corpus.test.js:<file-gate>",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_STRUCTURED_CLAIM_CODES",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_RESERVED_SLOTS",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/exitCodes.test.js:<file-gate>",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_STRUCTURED_CLAIM_CODES",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_OVERCLAIM_DENYLIST",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_DETECTOR",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/corpus.test.js:<file-gate>",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_PAID_SLOTS",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/constants.test.js:<file-gate>",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/conformancePack.test.js:<file-gate>",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/vdaCore.test.js:<file-gate>",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_VARIANT_LIMITS",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/conformancePack.test.js:<file-gate>",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_STRUCTURED_CLAIM_CODES",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/corpus.test.js:<file-gate>",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_PAID_SLOTS",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/vdaCore.test.js:<file-gate>",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/e2e/llmShield/stage5e/k7AllFunctions.test.js:<file-gate>",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_RECIPE_OPS",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/vdaCore.test.js:<file-gate>",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_RECIPE_OPS",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/corpus.test.js:<file-gate>",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/byoAdapter.test.js:<file-gate>",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_PAID_SCOPE",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_PAID_SCOPE",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_PAID_SCOPE",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/node/verify-vda-attestation.mjs:verifyEvidence",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_DETECTOR",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_OVERCLAIM_DENYLIST",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/conformancePack.test.js:<file-gate>",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/node/verify-vda-attestation.mjs:verifyEvidence",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/constants.test.js:<file-gate>",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/vdaCore.test.js:<file-gate>",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/greenBundle.test.js:<file-gate>",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_SCHEMAS",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/recipes.test.js:<file-gate>",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/vdaCore.test.js:<file-gate>",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_DETECTOR",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_FORBIDDEN_CLAIM_CODES",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_RECIPE_OPS",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/conformancePack.test.js:<file-gate>",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_VARIANT_LIMITS",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_PAID_SCOPE",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_MINTED_SLOTS",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_FORBIDDEN_CLAIM_CODES",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_RECIPE_OPS",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/constants.test.js:<file-gate>",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_DETECTOR",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_MINTED_SLOTS",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/greenBundle.test.js:<file-gate>",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/claim.test.js:<file-gate>",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/constants.test.js:<file-gate>",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_FORBIDDEN_CLAIM_CODES",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/vdaCore.test.js:<file-gate>",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/claim.test.js:<file-gate>",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/curve.test.js:<file-gate>",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/slip.test.js:<file-gate>",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_STRUCTURED_CLAIM_CODES",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_RECIPE_OPS",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/exitCodes.test.js:<file-gate>",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/conformancePack.test.js:<file-gate>",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/conformancePack.test.js:<file-gate>",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/greenBundle.test.js:<file-gate>",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/vdaCore.test.js:<file-gate>",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_FORBIDDEN_CLAIM_CODES",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/claim.test.js:<file-gate>",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_DETECTOR",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_OVERCLAIM_DENYLIST",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/detector.test.js:<file-gate>",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_PAID_SCOPE",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_VARIANT_LIMITS",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/e2e/llmShield/stage5e/k7AllFunctions.test.js:<file-gate>",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/recipes.test.js:<file-gate>",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/conformancePack.test.js:<file-gate>",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/conformancePack.test.js:<file-gate>",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/greenBundle.test.js:<file-gate>",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_RESERVED_SLOTS",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/e2e/llmShield/stage5e/k7AllFunctions.test.js:<file-gate>",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_RESERVED_SLOTS",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_STRUCTURED_CLAIM_CODES",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/detector.test.js:<file-gate>",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_RESERVED_SLOTS",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_STRUCTURED_CLAIM_CODES",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_PAID_SCOPE",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/curve.test.js:<file-gate>",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/claim.test.js:<file-gate>",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_OVERCLAIM_DENYLIST",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_FORBIDDEN_CLAIM_CODES",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/e2e/llmShield/stage5e/k7AllFunctions.test.js:<file-gate>",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/corpus.test.js:<file-gate>",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/slip.test.js:<file-gate>",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/curve.test.js:<file-gate>",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_MINTED_SLOTS",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_PAID_SCOPE",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_SCHEMAS",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/vdaCore.test.js:<file-gate>",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_OVERCLAIM_DENYLIST",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/corpus.test.js:<file-gate>",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/corpus.test.js:<file-gate>",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/exitCodes.test.js:<file-gate>",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_SCHEMAS",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/conformancePack.test.js:<file-gate>",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/conformancePack.test.js:<file-gate>",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/slip.test.js:<file-gate>",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/byoAdapter.test.js:<file-gate>",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/detector.test.js:<file-gate>",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_VARIANT_LIMITS",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/exitCodes.test.js:<file-gate>",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_MINTED_SLOTS",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_RESERVED_SLOTS",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_MINTED_SLOTS",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_MINTED_SLOTS",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_VARIANT_LIMITS",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/detector.test.js:<file-gate>",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/conformancePack.test.js:<file-gate>",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/corpus.test.js:<file-gate>",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/slip.test.js:<file-gate>",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_FORBIDDEN_CLAIM_CODES",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_OVERCLAIM_DENYLIST",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/recipes.test.js:<file-gate>",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_PAID_SCOPE",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/claim.test.js:<file-gate>",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_STRUCTURED_CLAIM_CODES",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_FORBIDDEN_CLAIM_CODES",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_RECIPE_OPS",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/node/verify-vda-attestation.mjs:verifyEvidence",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/node/verify-vda-attestation.mjs:verifyEvidence",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/constants.test.js:<file-gate>",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/e2e/llmShield/stage5e/k7AllFunctions.test.js:<file-gate>",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/exitCodes.test.js:<file-gate>",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_VARIANT_LIMITS",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/e2e/llmShield/stage5e/k7AllFunctions.test.js:<file-gate>",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/recipes.test.js:<file-gate>",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/vdaCore.test.js:<file-gate>",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_RESERVED_SLOTS",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/greenBundle.test.js:<file-gate>",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/conformancePack.test.js:<file-gate>",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_OVERCLAIM_DENYLIST",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_MINTED_SLOTS",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_DETECTOR",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_MINTED_SLOTS",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/exitCodes.test.js:<file-gate>",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_STRUCTURED_CLAIM_CODES",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/exitCodes.test.js:<file-gate>",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_OVERCLAIM_DENYLIST",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/vdaCore.test.js:<file-gate>",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/detector.test.js:<file-gate>",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_OVERCLAIM_DENYLIST",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/conformancePack.test.js:<file-gate>",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_PAID_SLOTS",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_RECIPE_OPS",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/exitCodes.test.js:<file-gate>",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_FORBIDDEN_CLAIM_CODES",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/claim.test.js:<file-gate>",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/greenBundle.test.js:<file-gate>",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/curve.test.js:<file-gate>",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/byoAdapter.test.js:<file-gate>",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_SCHEMAS",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/conformancePack.test.js:<file-gate>",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/detector.test.js:<file-gate>",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/e2e/llmShield/stage5e/k7AllFunctions.test.js:<file-gate>",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/vdaCore.test.js:<file-gate>",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/slip.test.js:<file-gate>",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_PAID_SCOPE",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_FORBIDDEN_CLAIM_CODES",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/vdaCore.test.js:<file-gate>",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_STRUCTURED_CLAIM_CODES",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/curve.test.js:<file-gate>",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/greenBundle.test.js:<file-gate>",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_VARIANT_LIMITS",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/constants.test.js:<file-gate>",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_SCHEMAS",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/node/verify-vda-attestation.mjs:verifyEvidence",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/byoAdapter.test.js:<file-gate>",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/byoAdapter.test.js:<file-gate>",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_RECIPE_OPS",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/detector.test.js:<file-gate>",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_STRUCTURED_CLAIM_CODES",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_RECIPE_OPS",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/slip.test.js:<file-gate>",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_MINTED_SLOTS",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/byoAdapter.test.js:<file-gate>",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_RESERVED_SLOTS",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/constants.test.js:<file-gate>",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/corpus.test.js:<file-gate>",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_MINTED_SLOTS",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/node/verify-vda-attestation.mjs:verifyEvidence",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/vdaCore.test.js:<file-gate>",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/claim.test.js:<file-gate>",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_RECIPE_OPS",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/recipes.test.js:<file-gate>",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_RECIPE_OPS",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/greenBundle.test.js:<file-gate>",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_VARIANT_LIMITS",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/constants.test.js:<file-gate>",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/constants.test.js:<file-gate>",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_PAID_SLOTS",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_DETECTOR",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/recipes.test.js:<file-gate>",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/byoAdapter.test.js:<file-gate>",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_VARIANT_LIMITS",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_FORBIDDEN_CLAIM_CODES",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/claim.test.js:<file-gate>",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/vdaCore.test.js:<file-gate>",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/claim.test.js:<file-gate>",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/detector.test.js:<file-gate>",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/claim.test.js:<file-gate>",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/detector.test.js:<file-gate>",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_RECIPE_OPS",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_OVERCLAIM_DENYLIST",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_PAID_SCOPE",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/node/verify-vda-attestation.mjs:verifyEvidence",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_PAID_SLOTS",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/slip.test.js:<file-gate>",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_RESERVED_SLOTS",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/exitCodes.test.js:<file-gate>",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_OVERCLAIM_DENYLIST",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/detector.test.js:<file-gate>",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/recipes.test.js:<file-gate>",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_STRUCTURED_CLAIM_CODES",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/curve.test.js:<file-gate>",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_RECIPE_OPS",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/exitCodes.test.js:<file-gate>",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/constants.test.js:<file-gate>",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_OVERCLAIM_DENYLIST",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/exitCodes.test.js:<file-gate>",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/slip.test.js:<file-gate>",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/detector.test.js:<file-gate>",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/e2e/llmShield/stage5e/k7AllFunctions.test.js:<file-gate>",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_PAID_SLOTS",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_PAID_SCOPE",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/claim.test.js:<file-gate>",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/curve.test.js:<file-gate>",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/e2e/llmShield/stage5e/k7AllFunctions.test.js:<file-gate>",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/detector.test.js:<file-gate>",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/byoAdapter.test.js:<file-gate>",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/constants.test.js:<file-gate>",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/slip.test.js:<file-gate>",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_PAID_SLOTS",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_FORBIDDEN_CLAIM_CODES",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_PAID_SLOTS",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_OVERCLAIM_DENYLIST",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/curve.test.js:<file-gate>",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_RESERVED_SLOTS",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_SCHEMAS",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/exitCodes.test.js:<file-gate>",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/byoAdapter.test.js:<file-gate>",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/greenBundle.test.js:<file-gate>",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/slip.test.js:<file-gate>",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_RESERVED_SLOTS",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/byoAdapter.test.js:<file-gate>",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_PAID_SCOPE",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/constants.test.js:<file-gate>",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_SCHEMAS",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/recipes.test.js:<file-gate>",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/vdaCore.test.js:<file-gate>",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_PAID_SLOTS",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/constants.test.js:<file-gate>",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/greenBundle.test.js:<file-gate>",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_SCHEMAS",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/corpus.test.js:<file-gate>",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/recipes.test.js:<file-gate>",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_RESERVED_SLOTS",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_MINTED_SLOTS",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/e2e/llmShield/stage5e/k7AllFunctions.test.js:<file-gate>",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_SCHEMAS",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/byoAdapter.test.js:<file-gate>",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_STRUCTURED_CLAIM_CODES",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/exitCodes.test.js:<file-gate>",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/byoAdapter.test.js:<file-gate>",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/e2e/llmShield/stage5e/k7AllFunctions.test.js:<file-gate>",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/detector.test.js:<file-gate>",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/recipes.test.js:<file-gate>",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/e2e/llmShield/stage5e/k7AllFunctions.test.js:<file-gate>",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/recipes.test.js:<file-gate>",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/constants.test.js:<file-gate>",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/exitCodes.test.js:<file-gate>",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/slip.test.js:<file-gate>",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_RECIPE_OPS",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/e2e/llmShield/stage5e/k7AllFunctions.test.js:<file-gate>",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/recipes.test.js:<file-gate>",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_FORBIDDEN_CLAIM_CODES",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_PAID_SCOPE",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/greenBundle.test.js:<file-gate>",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/node/verify-vda-attestation.mjs:verifyEvidence",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/greenBundle.test.js:<file-gate>",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/byoAdapter.test.js:<file-gate>",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/greenBundle.test.js:<file-gate>",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_PAID_SLOTS",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/claim.test.js:<file-gate>",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_RECIPE_OPS",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/node/verify-vda-attestation.mjs:verifyEvidence",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_VARIANT_LIMITS",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_OVERCLAIM_DENYLIST",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_STRUCTURED_CLAIM_CODES",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tests/unit/llmShield/stage5e/curve.test.js:<file-gate>",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5e:tools/simurgh-attestation/stage5e/constants.mjs:VDA_DETECTOR",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    }
+  ],
+  "summary": "No attack pack has been run against this tray; no discharge is claimed and no finding is implied."
+}
