@@ -114,6 +114,14 @@ export function buildArtefacts({ existing, named, gateStep, gateExit, probeResul
       omitted_from_the_gate: omitted,
       named_but_absent_from_disk: phantom,
       sets_are_equal: omitted.length === 0 && phantom.length === 0,
+      // The SAME two sets under the names the closed predicate registry reads (`omitsMember`,
+      // spec §4.4). A premise artifact a verifier cannot recompute over is a description of a
+      // premise, and the ledger requires the receipt to RECOMPUTE rather than to be believed.
+      // Duplicated deliberately: the descriptive names above are what a human reads, and renaming
+      // them to suit the predicate would make the artifact worse to read in order to make it
+      // machine-checkable. It has to be both.
+      universe: existing,
+      produced: named,
     },
     falseGreen: {
       schema: "simurgh.vsr.f001-false-green.v1",

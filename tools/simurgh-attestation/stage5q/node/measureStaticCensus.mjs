@@ -128,6 +128,10 @@ function main(argv) {
       file_count: files.length,
       member_count: census.members.length,
       edge_count: census.edges.length,
+      // The graph counts travel WITH the census. `resolved_edges` is the number that decides
+      // whether every reachability question is being answered or merely asked: at zero, each one
+      // passes vacuously. It was zero once, and the §2.4 role rule certified an empty graph.
+      graph: census.graph,
       members: census.members,
       edges: census.edges,
       parse_errors: census.parseErrors,
@@ -143,6 +147,12 @@ function main(argv) {
     console.log(`  files walked        : ${files.length}`);
     console.log(`  members             : ${census.members.length}`);
     console.log(`  edges               : ${census.edges.length}`);
+    console.log(
+      `  resolved edges      : ${census.graph.resolved_edges}` +
+        `  (cross-module ${census.graph.linked_cross_module}, ` +
+        `unresolved ${census.graph.unresolved_edges}, ` +
+        `unattributed ${census.graph.unattributed_calls})`
+    );
     console.log("  by root             :", JSON.stringify(byRoot));
     console.log("  by extraction       :", JSON.stringify(byExtraction));
     console.log("  by category         :");

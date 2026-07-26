@@ -13,6 +13,24 @@
 // The two modes exist because "failures are data" and "the closure is sound" are different claims
 // (gauntlet P1-10). A module that cannot be imported has no runtime surface, so §2.6's projection
 // cannot be evaluated for it — that is fine while discovering and fatal while committing.
+//
+// ------------------------------------------------------------------------------------------------
+// A SIDE EFFECT THIS DRIVER CAUSES, AND NOW REFUSES TO HIDE (finding 5Q-F003).
+//
+// "Any import-time side effect runs" was written above as a hazard to be contained. It is not
+// contained: the child process is isolated from the ENVIRONMENT, not from the FILESYSTEM, and it
+// runs in the primary worktree. At least one module in the closure —
+// `stage5m/lanec/apply-local-adversary.mjs` — is a top-level script with no main guard whose last
+// action is `writeFileSync` over a committed evidence file. Importing it re-runs a ceremony and
+// replaces published bytes.
+//
+// This happened twice: once at Task 3, where it reached a commit, and once inside 5Q's own
+// reproduce script, which called this driver and silently corrupted the same file again.
+//
+// So the driver now checks. It does NOT restore: a silent restore would make the write invisible
+// exactly the way it was invisible the first time, and the point of the check is that the next
+// occurrence is loud. It names the paths, names the finding, and exits non-zero.
+// ------------------------------------------------------------------------------------------------
 
 import { readdirSync, statSync, existsSync, writeFileSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -26,6 +44,29 @@ const REPO = process.cwd();
 const BATCH_SIZE = 25;
 const TIMEOUT_MS = 60_000;
 const MAX_OUTPUT_BYTES = 8 * 1024 * 1024;
+
+/**
+ * Prior-stage evidence paths this process left changed.
+ *
+ * Scoped to `docs/research/llm-shield/evidence/` minus 5Q's own directory: 5Q writes its own
+ * evidence legitimately, and every other stage's is read-only for the whole of Q0 (spec §6.1).
+ * Untracked files count — a census that CREATES a file under another stage's evidence has also
+ * written where it may not.
+ */
+function damagedPriorStageEvidence() {
+  const status = spawnSync(
+    "git",
+    ["status", "--porcelain", "--", "docs/research/llm-shield/evidence/"],
+    { cwd: REPO, encoding: "utf8" }
+  );
+  if (status.status !== 0) return [];
+  return status.stdout
+    .split("\n")
+    .map((line) => line.slice(3).trim())
+    .filter(Boolean)
+    .filter((p) => !p.startsWith("docs/research/llm-shield/evidence/stage-5q/"))
+    .sort();
+}
 
 /** Only importable JS under R1/R2/R8. .py/.lean/.sh have no runtime surface in this sense. */
 function collectModulePaths() {
@@ -168,6 +209,19 @@ function main(argv) {
 
   if (out) {
     writeFileSync(out, `${JSON.stringify({ mode, members, failures }, null, 2)}\n`);
+  }
+
+  const damage = damagedPriorStageEvidence();
+  if (damage.length > 0) {
+    console.log(`\n  IMPORT-TIME DAMAGE: ${damage.length} prior-stage evidence path(s) changed`);
+    for (const p of damage) console.log(`    ✗ ${p}`);
+    console.log(
+      "\n  The census did not modify these; importing a module in the closure did. This is\n" +
+        "  finding 5Q-F003. Nothing is restored automatically — a silent restore is what made the\n" +
+        "  first occurrence invisible. Restore deliberately:\n" +
+        `\n      git checkout -- ${damage.join(" ")}\n`
+    );
+    return 1;
   }
 
   if (mode === "verify") {

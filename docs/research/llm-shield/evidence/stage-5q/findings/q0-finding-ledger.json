@@ -1,0 +1,137 @@
+{
+  "schema": "simurgh.vsr.q0-finding-ledger.v1",
+  "note": "Append-only and hash-chained (L3). A record is never edited and severity is never rewritten: escalation mints a new finding with its own id, premise receipt and claim impact. Every premise here recomputed against the frozen fixture bytes at build time.",
+  "closure_digest": "87512ae221ae2de5148759dcd48ad04ebf02c1b6354bc75e95af9d991f7fc936",
+  "q0_finding_ledger_digest": "a50a06f986e3a6076ad4883a77d5abbb94a33cc0fcea08d73e67721fe2a25773",
+  "head_digest": "1be0f22b552fe93ca05ae390677d757f9f6ab72dcd5a55c8a6c972e3042df80b",
+  "record_count": 3,
+  "premise_verification": [
+    {
+      "finding_id": "5Q-F001",
+      "recomputed": true,
+      "reason": "6 committed member(s) absent from the produced set: proofs/stage5i/PanelCoverage.lean, proofs/stage5j/RatingContest.lean, proofs/stage5k/UniverseCommitment.lean"
+    },
+    {
+      "finding_id": "5Q-F002",
+      "recomputed": true,
+      "reason": "5 claimed step(s) have no execution record: attack:1, attack:2, attack:3"
+    },
+    {
+      "finding_id": "5Q-F003",
+      "recomputed": true,
+      "reason": "same subject, conflicting assignment of summary, captured_at"
+    }
+  ],
+  "records": [
+    {
+      "finding_id": "5Q-F001",
+      "affected_stage": "cross-stage",
+      "affected_function_id": ".github/workflows/stage-4-lean-proofs.yml:Type-check the Stage 4 formal core",
+      "affected_tags": [
+        "v2.44.0-stage-5i-vpc",
+        "v2.45.0-stage-5j-vrc",
+        "v2.46.0-stage-5k-vuc",
+        "v2.47.0-stage-5l-vtcq",
+        "v2.48.0-stage-5m-vtc-quorum"
+      ],
+      "attack_class": "R7",
+      "premise_receipt": {
+        "pack_id": "5q-gate-lean-r7-01",
+        "closure_digest": "87512ae221ae2de5148759dcd48ad04ebf02c1b6354bc75e95af9d991f7fc936",
+        "target_function_id": ".github/workflows/stage-4-lean-proofs.yml:Type-check the Stage 4 formal core",
+        "fixture_digest": "3bdcad9de283ba75279d740d54a1c47557ca4738570bf5218d66ee0d988b440b",
+        "predicate_id": "omitsMember",
+        "predicate_args": {},
+        "receipt_digest": "ee29aabec9ff74f61f72ea8a5fefc0d0cb12b471e0063817a052daf4cd94c5e6"
+      },
+      "expected_result": "a gate claiming the formal core type-checks covers every .lean file under proofs/",
+      "observed_result": "the gate names 27 files by hand; 33 exist. Six are never type-checked, and the gate exits 0 — the green says the named 27 compiled, and is read as saying the core is proved.",
+      "exploit_fixture_digest": "3bdcad9de283ba75279d740d54a1c47557ca4738570bf5218d66ee0d988b440b",
+      "severity": "assurance_only",
+      "claim_impact": {
+        "file": ".github/workflows/stage-4-lean-proofs.yml",
+        "claim_digest": "0ff612ac48ea0d7fffa5e6db19fa88e22ac19f1b2bf31cdcf292363caf6e6e9b",
+        "quote": "Type-check the Stage 4 formal core (exit lattice, structuring, anti-monotonicity)"
+      },
+      "scope": "head",
+      "discovered_at_commit": "41b242ad",
+      "discovered_by": "pre_stage_design_review",
+      "corroborated_by": [
+        "5q-gate-lean-r7-01"
+      ],
+      "record_kind": "q0",
+      "prev_digest": null,
+      "record_digest": "746ea5e0c552c2c92170df085eb2c277c803f28ccdd7880c99e930a72886bc2d"
+    },
+    {
+      "finding_id": "5Q-F002",
+      "affected_stage": "5m",
+      "affected_function_id": "tools/simurgh-attestation/stage5m/lanec/apply-local-adversary.mjs:applyMutations",
+      "affected_tags": [
+        "v2.48.0-stage-5m-vtc-quorum"
+      ],
+      "attack_class": "R7",
+      "premise_receipt": {
+        "pack_id": "5q-5m-lanec-r7-01",
+        "closure_digest": "87512ae221ae2de5148759dcd48ad04ebf02c1b6354bc75e95af9d991f7fc936",
+        "target_function_id": "tools/simurgh-attestation/stage5m/lanec/apply-local-adversary.mjs:applyMutations",
+        "fixture_digest": "86b30dcebb444a7c9350f53feb0a0b4c4cd5c1f7d341d9812b0f01cdba8d31b1",
+        "predicate_id": "executionFabricated",
+        "predicate_args": {},
+        "receipt_digest": "0ee29e010892578f3f9c55fb35d33ca8ded4e05154df9029c86274ee175776a4"
+      },
+      "expected_result": "six declared attack classes are applied to the Lane B bundle and each forgery is judged by the frozen verifier",
+      "observed_result": "one of six applies its mutations. Three declare paths (a.b.c, a.b.d, b.d.e, c.f.g) that resolve against nothing and are silently dropped by the producer's `catch {}`; two declare no mutations at all. Five verdicts are the verifier's answer about the PRISTINE bundle, recorded as containment of an attack that never reached it.",
+      "exploit_fixture_digest": "86b30dcebb444a7c9350f53feb0a0b4c4cd5c1f7d341d9812b0f01cdba8d31b1",
+      "severity": "claim_falsifying",
+      "claim_impact": {
+        "file": "docs/research/llm-shield/evidence/stage-5m/real-lanec/lanec-local-capture.json",
+        "claim_digest": "2e80ef0d421dbce97cb77641dcbebd0b3b3a4e5a6cc40aaa6cc83804ee4ba2f0",
+        "quote": "Local uncensored fuzzer (Llama-3.2-1B) exercises EVERY attack class — including those a frontier model refuses — against the frozen verifier."
+      },
+      "scope": "both",
+      "discovered_at_commit": "2a2bf318",
+      "discovered_by": "stage5q_q0_attack_pack",
+      "corroborated_by": [
+        "5q-5m-import-r8-01"
+      ],
+      "record_kind": "q0",
+      "prev_digest": "746ea5e0c552c2c92170df085eb2c277c803f28ccdd7880c99e930a72886bc2d",
+      "record_digest": "a93c7b972f7cb0ffbd5bbcd27e499558cbb422c2b5bedee4d837ab62fafff990"
+    },
+    {
+      "finding_id": "5Q-F003",
+      "affected_stage": "5m",
+      "affected_function_id": "tools/simurgh-attestation/stage5m/lanec/apply-local-adversary.mjs:<module-evaluation>",
+      "affected_tags": [
+        "v2.48.0-stage-5m-vtc-quorum"
+      ],
+      "attack_class": "R8",
+      "premise_receipt": {
+        "pack_id": "5q-5m-import-r8-01",
+        "closure_digest": "87512ae221ae2de5148759dcd48ad04ebf02c1b6354bc75e95af9d991f7fc936",
+        "target_function_id": "tools/simurgh-attestation/stage5m/lanec/apply-local-adversary.mjs:<module-evaluation>",
+        "fixture_digest": "94fb5d698dd3f1a5197fdbc9287364316d183253565a90eae0ea2272eeda2770",
+        "predicate_id": "contradicts",
+        "predicate_args": {},
+        "receipt_digest": "8524e8c9c8838c2da525bc66749082f95de279a5e473afd503d6ea2dbbad4158"
+      },
+      "expected_result": "importing a module makes its exports available and changes nothing on disk",
+      "observed_result": "a bare `await import(...)` re-runs the Lane C-adv ceremony and writeFileSync's over the committed capture. The published file (6 contained, captured 2026-07-13) becomes a fresh one (1 contained) with today's timestamp. This is not hypothetical: 5Q's own runtime census did it to this branch at commit 659ef95e.",
+      "exploit_fixture_digest": "94fb5d698dd3f1a5197fdbc9287364316d183253565a90eae0ea2272eeda2770",
+      "severity": "claim_narrowing",
+      "claim_impact": {
+        "file": "docs/research/llm-shield/evidence/stage-5m/real-lanec/lanec-local-capture.json",
+        "claim_digest": "2e80ef0d421dbce97cb77641dcbebd0b3b3a4e5a6cc40aaa6cc83804ee4ba2f0",
+        "quote": "\"captured_at\": \"2026-07-13T01:28:36.366Z\""
+      },
+      "scope": "both",
+      "discovered_at_commit": "2a2bf318",
+      "discovered_by": "stage5q_q0_attack_pack",
+      "corroborated_by": [],
+      "record_kind": "q0",
+      "prev_digest": "a93c7b972f7cb0ffbd5bbcd27e499558cbb422c2b5bedee4d837ab62fafff990",
+      "record_digest": "1be0f22b552fe93ca05ae390677d757f9f6ab72dcd5a55c8a6c972e3042df80b"
+    }
+  ]
+}
