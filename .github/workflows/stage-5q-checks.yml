@@ -1,0 +1,123 @@
+name: Stage 5Q (VSR) checks
+
+# The ONE CI addition Stage 5Q is permitted (spec §6.1, §14.3).
+#
+# WHY THIS FILE EXISTS BEFORE TASK 8
+#
+# .github/workflows/** is closure root R5. Creating this file after Task 8 would GROW THE COMMITTED
+# UNIVERSE AFTER L2 — the exact violation this stage was built to detect, committed by the stage
+# itself. So it is created before the closure is committed, and its SHAPE is frozen at that point.
+#
+# Every job is present from the start. Jobs whose inputs do not exist yet are guarded by an
+# existence check rather than being absent, so enabling them later changes no bytes of this file.
+# A test asserts its digest at Task 8 equals its digest at Task 21.
+#
+# SELF-EXTENDING BY CONSTRUCTION: this file invokes scripts, which discover their inputs with
+# `find`. It names no individual proof, test or module. A 5Q gate that listed its own files by name
+# would be F001 one level down, inside the stage that froze F001 as evidence.
+
+on:
+  push:
+    branches: ["stage-5q-vsr-**", main]
+    paths:
+      - "tools/simurgh-attestation/stage5q/**"
+      - "tests/**/stage5q/**"
+      - "proofs/stage5q/**"
+      - "scripts/check-stage5q-proofs.sh"
+      - "scripts/reproduce-llm-shield-stage5q.sh"
+      - ".github/workflows/stage-5q-checks.yml"
+  pull_request:
+    paths:
+      - "tools/simurgh-attestation/stage5q/**"
+      - "tests/**/stage5q/**"
+      - "proofs/stage5q/**"
+      - "scripts/check-stage5q-proofs.sh"
+      - "scripts/reproduce-llm-shield-stage5q.sh"
+      - ".github/workflows/stage-5q-checks.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  stage5q:
+    name: Stage 5Q Q0 gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies (npm ci)
+        run: npm ci
+
+      - name: Stage 5Q unit tests
+        run: npm run test:stage5q
+
+      # BASE_SHA goes through env: rather than being interpolated into the shell. Even though a
+      # base SHA is GitHub-controlled rather than user text, a workflow in a repository about
+      # verifiable containment does not model-check its own injection surface by eye.
+      - name: Q0 write surface
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          if [ -f tools/simurgh-attestation/stage5q/node/checkWriteSurface.mjs ]; then
+            RANGE="${BASE_SHA:-HEAD~1}..HEAD"
+            node tools/simurgh-attestation/stage5q/node/checkWriteSurface.mjs --range "$RANGE"
+          else
+            echo "write-surface verifier not present yet — no-op until Task 1.2"
+          fi
+
+      - name: Stage 5Q censuses
+        run: |
+          if [ -f tools/simurgh-attestation/stage5q/node/measureStaticCensus.mjs ]; then
+            npm run census:stage5q:static
+          else
+            echo "static census not present yet — no-op until Task 2"
+          fi
+          if [ -f tools/simurgh-attestation/stage5q/node/measureRuntimeCensus.mjs ]; then
+            npm run census:stage5q:runtime -- --mode=verify
+          else
+            echo "runtime census not present yet — no-op until Task 3"
+          fi
+          if [ -f tools/simurgh-attestation/stage5q/node/measureGateCensus.mjs ]; then
+            npm run census:stage5q:gate
+          else
+            echo "gate census not present yet — no-op until Task 4"
+          fi
+
+      - name: Install Lean (elan)
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o elan-init.sh
+          sh elan-init.sh -y --default-toolchain leanprover/lean4:v4.15.0
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Stage 5Q proofs
+        run: |
+          if [ -d proofs/stage5q ] && [ "$(find proofs/stage5q -name '*.lean' -print0 | grep -zc . || true)" -gt 0 ]; then
+            npm run stage5q:proofs
+          else
+            echo "no stage5q proofs yet — no-op until Task 18.1"
+          fi
+
+      - name: Stage 5Q mutation self-proof
+        run: |
+          if [ -f tools/simurgh-attestation/stage5q/node/runMutationSelfProof.mjs ]; then
+            npm run stage5q:mutants -- --all
+          else
+            echo "mutation self-proof not present yet — no-op until Task 12"
+          fi
+
+      - name: Stage 5Q Q0 transition
+        run: |
+          if [ -f tools/simurgh-attestation/stage5q/node/verifyTransition.mjs ]; then
+            npm run stage5q:transition
+          else
+            echo "transition validator not present yet — no-op until Task 21"
+          fi
