@@ -21,6 +21,7 @@
     "census:stage5q:runtime": "node tools/simurgh-attestation/stage5q/node/measureRuntimeCensus.mjs",
     "census:stage5q:gate": "node tools/simurgh-attestation/stage5q/node/measureGateCensus.mjs",
     "census:stage5q:coverage": "node tools/simurgh-attestation/stage5q/node/measureQ0Coverage.mjs",
+    "stage5q:roles": "node tools/simurgh-attestation/stage5q/node/checkRoles.mjs",
     "stage5q:commit-closure": "node tools/simurgh-attestation/stage5q/node/commitClosure.mjs",
     "stage5q:mutants": "node tools/simurgh-attestation/stage5q/node/runMutationSelfProof.mjs",
     "stage5q:attest": "node tools/simurgh-attestation/stage5q/node/attestation.mjs",

@@ -127,7 +127,40 @@ export function buildReachability({ members, edges }) {
     return seen;
   };
 
+  /**
+   * Shortest call path `from -> ... -> to`, or null.
+   *
+   * Added for the §2.4 adversarial role check (Task 6). "There is a path" is not an actionable
+   * violation: the reviewer has to see WHICH calls put a supposedly-pure helper underneath a trust
+   * decision before they can judge whether the role or the code is wrong. BFS, so the reported path
+   * is the shortest one and therefore the easiest to read.
+   */
+  const pathFrom = (from, to) => {
+    if (from === to) return [from];
+    const prev = new Map([[from, null]]);
+    const queue = [from];
+    while (queue.length) {
+      const id = queue.shift();
+      for (const next of forward.get(id) ?? []) {
+        if (prev.has(next)) continue;
+        prev.set(next, id);
+        if (next === to) {
+          const path = [next];
+          let cur = id;
+          while (cur !== null && cur !== undefined) {
+            path.push(cur);
+            cur = prev.get(cur);
+          }
+          return path.reverse();
+        }
+        queue.push(next);
+      }
+    }
+    return null;
+  };
+
   return {
+    pathFrom,
     reachableFrom: (id) => closure(id, forward),
     callersOf: (id) => new Set(backward.get(id) ?? []),
     transitiveCallersOf: (id) => closure(id, backward),
