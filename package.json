@@ -15,13 +15,24 @@
     "test:stage5p": "node --test tests/unit/llmShield/stage5p/*.test.js",
     "census:stage5p": "node tools/simurgh-attestation/stage5p/node/measureStage5pLaneACensus.mjs --phase=draft",
     "census:stage5p:release": "node tools/simurgh-attestation/stage5p/node/measureStage5pLaneACensus.mjs --phase=release",
-    "census:stage5p:rawcodes": "node tools/simurgh-attestation/stage5p/node/measureStage5pRawCodes.mjs"
+    "census:stage5p:rawcodes": "node tools/simurgh-attestation/stage5p/node/measureStage5pRawCodes.mjs",
+    "test:stage5q": "node --test tests/unit/llmShield/stage5q/*.test.js",
+    "census:stage5q:static": "node tools/simurgh-attestation/stage5q/node/measureStaticCensus.mjs",
+    "census:stage5q:runtime": "node tools/simurgh-attestation/stage5q/node/measureRuntimeCensus.mjs",
+    "census:stage5q:gate": "node tools/simurgh-attestation/stage5q/node/measureGateCensus.mjs",
+    "census:stage5q:coverage": "node tools/simurgh-attestation/stage5q/node/measureQ0Coverage.mjs",
+    "stage5q:commit-closure": "node tools/simurgh-attestation/stage5q/node/commitClosure.mjs",
+    "stage5q:mutants": "node tools/simurgh-attestation/stage5q/node/runMutationSelfProof.mjs",
+    "stage5q:attest": "node tools/simurgh-attestation/stage5q/node/attestation.mjs",
+    "stage5q:transition": "node tools/simurgh-attestation/stage5q/node/verifyTransition.mjs",
+    "stage5q:proofs": "scripts/check-stage5q-proofs.sh"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
     "express": "^4.21.2"
   },
   "devDependencies": {
+    "acorn": "8.17.0",
     "prettier": "^3.8.3"
   }
 }
