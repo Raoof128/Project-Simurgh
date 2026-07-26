@@ -1,0 +1,72 @@
+{
+  "schema": "simurgh.vsr.attack-taxonomy.v1",
+  "note": "Frozen R1-R16. Identifiers are citable in findings forever (spec §4.1).",
+  "domain": "simurgh.vsr.attack-taxonomy.v1",
+  "attack_taxonomy_digest": "f5e03d1193263afc7966263c466c7794cd2c1d7dd8105e45e1e5124103c5f2e7",
+  "classes": [
+    {
+      "id": "R1",
+      "title": "Exact-key, type confusion and malformed-object attacks"
+    },
+    {
+      "id": "R2",
+      "title": "Unicode, lexical and canonicalisation laundering"
+    },
+    {
+      "id": "R3",
+      "title": "Digest, domain-separation and profile-binding confusion"
+    },
+    {
+      "id": "R4",
+      "title": "Signature, key-swap and trust-root substitution"
+    },
+    {
+      "id": "R5",
+      "title": "Cross-stage and cross-tag replay"
+    },
+    {
+      "id": "R6",
+      "title": "Raw-code collision, reordering and first-failure shadowing"
+    },
+    {
+      "id": "R7",
+      "title": "Selective omission, census truncation and fake completeness"
+    },
+    {
+      "id": "R8",
+      "title": "State aliasing, mutation-after-validation and partial commit"
+    },
+    {
+      "id": "R9",
+      "title": "Resource exhaustion, oversized operands and pathological recursion"
+    },
+    {
+      "id": "R10",
+      "title": "Generator vacuity, oracle dependence and false-green gates"
+    },
+    {
+      "id": "R11",
+      "title": "Cross-runtime disagreement and browser-only divergence"
+    },
+    {
+      "id": "R12",
+      "title": "Historical downgrade and compatibility laundering"
+    },
+    {
+      "id": "R13",
+      "title": "Authority laundering from untrusted context or model output"
+    },
+    {
+      "id": "R14",
+      "title": "Selective-disclosure contradiction and two-story evidence"
+    },
+    {
+      "id": "R15",
+      "title": "Honest-looking evidence over fabricated execution reality"
+    },
+    {
+      "id": "R16",
+      "title": "Error-path exceptions, crashes and fail-open wrappers"
+    }
+  ]
+}
