@@ -9,6 +9,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import {
+  attributeManifest,
   evaluateTransition,
   manifestGaps,
   TRANSITION_CONDITIONS,
@@ -194,4 +195,54 @@ test("Task 21 produces no evidence — the validator is validation only", () => 
     "utf8"
   );
   assert.equal(/writeFileSync|mkdirSync/.test(source), false, "the validator writes something");
+});
+
+// ------------------------------------------------------------------------------------------------
+// Attribution — who broke it. Added after T7's first real run found five prior-stage failures that
+// 5Q did not cause.
+// ------------------------------------------------------------------------------------------------
+
+test("a failure identical at the merge-base is PRE-EXISTING, not a Q0 regression", () => {
+  // Reporting an already-broken prior stage as "5Q regressed it" is a false attribution — the
+  // reporting analogue of the false findings this stage spent its length refusing to publish.
+  const a = attributeManifest(
+    [{ command: "check-e2e.sh", ok: false }],
+    [{ command: "check-e2e.sh", ok: false }]
+  );
+  assert.deepEqual(a.pre_existing, ["check-e2e.sh"]);
+  assert.deepEqual(a.regressed_by_q0, []);
+});
+
+test("a failure that was GREEN at the merge-base is a Q0 regression", () => {
+  const a = attributeManifest(
+    [{ command: "check-e2e.sh", ok: false }],
+    [{ command: "check-e2e.sh", ok: true }]
+  );
+  assert.deepEqual(a.regressed_by_q0, ["check-e2e.sh"]);
+  assert.deepEqual(a.pre_existing, []);
+});
+
+test("with NO baseline, a failure is not_compared — never 'not our fault'", () => {
+  const a = attributeManifest([{ command: "x", ok: false }], null);
+  assert.deepEqual(a.not_compared, ["x"]);
+  assert.deepEqual(a.pre_existing, [], "we did not check, so we may not say it pre-existed");
+});
+
+test("T7 STILL FAILS on a pre-existing failure — attribution does not weaken the condition", () => {
+  // A stage does not get to redefine its own gate when the gate fires. T7 asks whether the manifest
+  // is green; attribution asks whether Q0 is why it is not. Both answers, neither substituting.
+  const w = GREEN();
+  w.manifestResults = [{ command: "check-e2e.sh", ok: false }];
+  w.baselineResults = [{ command: "check-e2e.sh", ok: false }];
+  const r = evaluateTransition(w);
+  assert.equal(only(r, "T7").ok, false, "T7 must still fail");
+  assert.match(only(r, "T7").detail, /PRE-EXISTING/);
+  assert.equal(r.q1_authorised, false);
+  assert.equal(r.q0_disturbed_a_prior_stage, false, "but Q0 did not cause it");
+});
+
+test("q0_disturbed_a_prior_stage is null when nothing ran — not false", () => {
+  const w = GREEN();
+  w.manifestResults = null;
+  assert.equal(evaluateTransition(w).q0_disturbed_a_prior_stage, null);
 });

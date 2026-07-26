@@ -99,6 +99,12 @@ const MEMBER = Object.freeze({
 // answer, or asserts a real property of the constant. "It is defined" is not an adapter: an
 // existence check is exactly the enumeration this registry exists to go beyond.
 // ------------------------------------------------------------------------------------------------
+/** Extracted so the adapter stays one expression while still asserting a real behaviour. */
+const attributeManifestPreExisting = (m) => {
+  const a = m.attributeManifest([{ command: "c", ok: false }], [{ command: "c", ok: false }]);
+  return a.pre_existing.length === 1 && a.regressed_by_q0.length === 0;
+};
+
 const ADAPTERS = {
   // ---- browser/vsr-portable.mjs -----------------------------------------------------------
   "browser/vsr-portable.mjs": {
@@ -783,6 +789,11 @@ const ADAPTERS = {
         "an empty world authorises nothing"
       );
     },
+    attributeManifest: (m) =>
+      ok(
+        attributeManifestPreExisting(m),
+        "a failure identical at the baseline is pre-existing, not a Q0 regression"
+      ),
     manifestGaps: (m) =>
       ok(
         m.manifestGaps({ allStageScripts: ["scripts/x.sh"], coveredByCheckE2e: [] }).length === 1,

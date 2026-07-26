@@ -16,7 +16,8 @@
 // recreating, inside the gate meant to catch regressions, the exact fail-open shell shape this
 // stage prohibits everywhere else.
 
-import { readFileSync, readdirSync, existsSync } from "node:fs";
+import { readFileSync, readdirSync, existsSync, rmSync } from "node:fs";
+import { join as joinPath } from "node:path";
 import { spawnSync } from "node:child_process";
 import { createPublicKey } from "node:crypto";
 import {
@@ -36,18 +37,26 @@ const SPEC = "docs/superpowers/specs/2026-07-26-stage-5q-vsr-stage-wide-red-team
 
 const readJson = (p) => JSON.parse(readFileSync(p, "utf8"));
 
-/** Run the pinned non-disturbance manifest. Every command's real exit status, no `|| echo`. */
-function runManifest() {
+/**
+ * Run the pinned non-disturbance manifest. Every command's real exit status, no `|| echo`.
+ *
+ * `cwd` lets the same manifest run against a scratch worktree at the merge-base, which is how a
+ * failure gets ATTRIBUTED. Without a baseline, a prior stage that was already broken on this
+ * machine reads as "5Q regressed it" — a false attribution, and the reporting analogue of the false
+ * findings this stage spent its whole length refusing to publish.
+ */
+function runManifest(cwd = process.cwd(), label = "HEAD") {
   const results = [];
   const run = (command, argv) => {
     const res = spawnSync(argv[0], argv.slice(1), {
+      cwd,
       encoding: "utf8",
       timeout: 1_800_000,
       maxBuffer: 64 * 1024 * 1024,
       env: { ...process.env, SIMURGH_SKIP_DOTENV: "1" },
     });
     results.push({ command, ok: res.status === 0, exit: res.status });
-    process.stdout.write(`      ${res.status === 0 ? "✔" : "✗"} ${command}\n`);
+    process.stdout.write(`      ${res.status === 0 ? "✔" : "✗"} [${label}] ${command}\n`);
   };
 
   run("scripts/check-e2e.sh", ["bash", "scripts/check-e2e.sh"]);
@@ -108,8 +117,35 @@ function main(argv) {
   const frozenBlockDigest = freezeReceipt(readFileSync(SPEC, "utf8")).digest;
 
   const wantManifest = argv.includes("--manifest");
+  const wantBaseline = argv.includes("--baseline");
   if (wantManifest) console.log("  running the pinned non-disturbance manifest:");
   const manifestResults = wantManifest ? runManifest() : null;
+
+  // The baseline run, in a scratch worktree at the merge-base. Opt-in because it doubles a run that
+  // already takes tens of minutes — and because "we did not check" is reported as `not_compared`
+  // rather than quietly as "not our fault".
+  let baselineResults = null;
+  if (wantManifest && wantBaseline) {
+    const mergeBase = spawnSync("git", ["merge-base", "main", "HEAD"], {
+      encoding: "utf8",
+    }).stdout.trim();
+    const scratch = joinPath(process.cwd(), ".git", "5q-transition-baseline");
+    rmSync(scratch, { recursive: true, force: true });
+    const add = spawnSync("git", ["worktree", "add", "--detach", "--quiet", scratch, mergeBase], {
+      encoding: "utf8",
+    });
+    if (add.status !== 0) {
+      console.log(`  baseline worktree failed; attribution will read not_compared`);
+    } else {
+      console.log(`  re-running the manifest at the merge-base ${mergeBase.slice(0, 8)}:`);
+      try {
+        baselineResults = runManifest(scratch, "base");
+      } finally {
+        spawnSync("git", ["worktree", "remove", "--force", scratch]);
+        rmSync(scratch, { recursive: true, force: true });
+      }
+    }
+  }
 
   const result = evaluateTransition({
     attestation: {
@@ -122,6 +158,7 @@ function main(argv) {
     ledger,
     frozenBlockDigest,
     manifestResults,
+    baselineResults,
   });
 
   // The manifest coverage check: every stage-5 reproduce script must be accounted for by either
@@ -151,6 +188,19 @@ function main(argv) {
       "\n  T7 was NOT RUN. Pass --manifest to execute it. A condition that did not run has not\n" +
         "  passed, which is why it is reported as a failure rather than skipped."
     );
+  } else if (result.manifest_attribution) {
+    const a = result.manifest_attribution;
+    console.log(
+      `\n  DID Q0 DISTURB A PRIOR STAGE : ${result.q0_disturbed_a_prior_stage ? "YES" : "NO"}`
+    );
+    if (a.pre_existing.length) {
+      console.log(`      pre-existing (identical at the merge-base): ${a.pre_existing.join(", ")}`);
+    }
+    if (a.not_compared.length) {
+      console.log(
+        `      NOT COMPARED (pass --baseline to attribute): ${a.not_compared.join(", ")}`
+      );
+    }
   }
 
   return result.q1_authorised && gaps.length === 0 ? 0 : 1;
