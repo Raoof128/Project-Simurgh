@@ -5,11 +5,12 @@
   "target_symbol": "checkCrossSeat",
   "adapter": "swapAdjacentChecks",
   "intent": "reorder two adjacent checks so a later failure reports first",
-  "detector_glob": "tests/unit/llmShield/stage5m",
+  "detector_glob": "tests/unit/llmShield/stage5q/selfproof",
   "args": {
     "from": "  if (facts.anchor_decoded !== facts.commitment) return R(391, \"anchor_not_commitment\");\n  if (facts.tsa_imprint !== facts.commitment) return R(391, \"tsa_imprint_disagrees\");",
     "to": "  if (facts.tsa_imprint !== facts.commitment) return R(391, \"tsa_imprint_disagrees\");\n  if (facts.anchor_decoded !== facts.commitment) return R(391, \"anchor_not_commitment\");"
   },
   "expected_failure": "later check reports first",
-  "precondition_source_digest": "5341face3403defcc7ff611a9a9f8bb47a4e635b3ffa075b7564396f7c7e513c"
+  "precondition_source_digest": "5341face3403defcc7ff611a9a9f8bb47a4e635b3ffa075b7564396f7c7e513c",
+  "detector_note": "the target stage own suite went GREEN->GREEN->GREEN on this mutant: the guard is uncovered there. Detector strengthened, mutant untouched."
 }
