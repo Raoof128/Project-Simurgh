@@ -514,7 +514,48 @@ echo "                 L1 certified = $CERTIFIED (rebuilds to the committed dige
 
 # ------------------------------------------------------------------------------------------------
 echo
-echo "-- 16. this script disturbed nothing (re-checked after every gate ran) --"
+echo "-- 16. cross-runtime parity (Node core / portable / Python / browser) --"
+PARITY="$E/parity/cross-runtime-parity.json"
+if [ ! -f "$PARITY" ]; then
+  echo "FAIL: the parity receipt is missing"
+  exit 1
+fi
+PAR_EXIT=0
+PAR_OUT="$("$NODE" "$Q/node/runCrossRuntimeParity.mjs" 2>&1)" || PAR_EXIT=$?
+echo "$PAR_OUT" | sed -n '2,9p' | sed 's/^/      /'
+if [ "$PAR_EXIT" != "0" ]; then
+  echo "FAIL: a runtime DIVERGED on the deterministic surface"
+  echo "$PAR_OUT" | tail -20
+  exit 1
+fi
+# The receipt must be bound to the vector bytes, and it must never claim more than it measured.
+PAR_VEC_DIGEST="$("$NODE" -e "process.stdout.write(String(require('./$PARITY').vectors_digest))")"
+LIVE_VEC_DIGEST="$("$NODE" -e "
+const { createHash } = require('node:crypto');
+const { readFileSync } = require('node:fs');
+process.stdout.write(createHash('sha256').update(readFileSync('$Q/python/parity-vectors.json')).digest('hex'));
+")"
+if [ "$PAR_VEC_DIGEST" != "$LIVE_VEC_DIGEST" ]; then
+  echo "FAIL: the parity receipt describes a different vector set than the one on disk"
+  exit 1
+fi
+THREE="$("$NODE" -e "process.stdout.write(String(require('./$PARITY').three_runtime_parity))")"
+BROWSER_RAN="$("$NODE" -e "process.stdout.write(String(require('./$PARITY').runtimes.browser.ran))")"
+# A MISSING BROWSER IS NOT A PASS (gauntlet P1-32). The receipt may say `false` — two-runtime parity
+# is a true, smaller claim — but it may never say `true` while a runtime went unmeasured.
+if [ "$THREE" = "true" ] && [ "$BROWSER_RAN" != "true" ]; then
+  echo "FAIL: the receipt claims three-runtime parity while the browser did not run"
+  exit 1
+fi
+if [ "$THREE" = "true" ]; then
+  echo "parity: four evaluators agree; three-runtime parity PROVEN: OK"
+else
+  echo "parity: no divergence, but three-runtime parity is NOT proven (a runtime did not run)"
+fi
+
+# ------------------------------------------------------------------------------------------------
+echo
+echo "-- 17. this script disturbed nothing (re-checked after every gate ran) --"
 # Gate 3 checked the branch. This checks THIS RUN: a reproduce script that verifies non-disturbance
 # and then disturbs something on its way through is worse than one that never checked, because it
 # prints a clean bill over damage it caused. It has happened once already.
@@ -534,11 +575,11 @@ echo "==========================================================================
 echo "NOT REPRODUCED BY THIS SCRIPT — named rather than omitted"
 echo "================================================================================"
 cat <<'NOTE'
-  Q0 tail, does not exist yet          the Node/Python/browser parity vectors (19.5), the K7-A
-                                       export census (19.7), the signed attestation (20), K7-B and
-                                       the reproduction receipt (20.5), transition validation (21).
-                                       The full reproduce at 20.5 is the artifact a reviewer runs;
-                                       this one is its scaffold and says so in its banner.
+  Q0 tail, does not exist yet          the K7-A export census (19.7), the signed attestation (20),
+                                       K7-B and the reproduction receipt (20.5), transition
+                                       validation (21). The full reproduce at 20.5 is the artifact
+                                       a reviewer runs; this one is its scaffold and says so in its
+                                       banner.
 
   L1 COVERAGE — NOT CERTIFIED          gate 15 verifies the ledger; it does not certify coverage,
                                        because the ledger does not. 1438 of 23332 obligated cells
