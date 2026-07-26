@@ -1,0 +1,15 @@
+{
+  "mutant_id": "M3",
+  "attack_class": "R3",
+  "target_file": "tools/simurgh-attestation/stage5k/core/merkle.mjs",
+  "target_symbol": "leafHash",
+  "adapter": "removeArgument",
+  "intent": "drop the domain-separation prefix from the leaf hash",
+  "detector_glob": "tests/unit/llmShield/stage5k",
+  "args": {
+    "from": "sha(Buffer.from(DOMAINS.leaf, \"utf8\"), NUL, Buffer.from(payload, \"utf8\"))",
+    "to": "sha(Buffer.from(payload, \"utf8\"))"
+  },
+  "expected_failure": "leaf/node preimage confusion",
+  "precondition_source_digest": "008439c4b93001fe69ded7b04b9c9d2c66fe9006641ae8a560928251ef2f168c"
+}

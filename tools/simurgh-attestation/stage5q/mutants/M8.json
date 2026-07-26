@@ -1,0 +1,16 @@
+{
+  "mutant_id": "M8",
+  "attack_class": "R8",
+  "target_file": "tools/simurgh-attestation/stage5p/core/identityBank.mjs",
+  "target_symbol": "attachEvidence",
+  "adapter": "deleteGuardClause",
+  "intent": "drop the profile/evidence binding guard so state is accepted unvalidated",
+  "detector_glob": "tests/unit/llmShield/stage5q/selfproof",
+  "args": {
+    "from": "  if (e.profile_id !== p.profile_id)\n    return fail(\"evidence profile_id does not match the supplied profile\");\n",
+    "to": ""
+  },
+  "expected_failure": "mutation-after-validation accepted",
+  "precondition_source_digest": "ba3293b4930ce25be01a7c43009655a4101b76c1f053d873b00d832e6a31132f",
+  "detector_note": "5P own suite went GREEN->GREEN->GREEN on this mutant: the guard is uncovered there. Detector strengthened, mutant untouched."
+}
