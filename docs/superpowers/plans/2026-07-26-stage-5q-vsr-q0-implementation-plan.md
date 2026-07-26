@@ -84,6 +84,18 @@ RUNTIME PINNING — byte-stable evidence
   builders (the 4H lesson). A reviewer reproducing under 22 who gets different
   bytes is correct, and it is our defect, not theirs.
 
+Q0 PHASES (spec §6.1.1)
+  Q0 PREPARATION  Tasks 1-8    universe not yet committed; L2 does not bind
+  Q0 DISCOVERY    Tasks 9-20   attacks run; L2 binds, no closure may change
+  Q0 TRANSITION   Task 21      validation only, no new evidence
+  Read-only constraints apply in ALL phases. Phase changes whether L2 binds.
+
+NO EXCEPTIONS IN Q0
+  There is no signed-exception mechanism. A mis-declared role is FIXED; an
+  unimportable module is a FINDING; an unclassifiable member is a FINDING
+  against the closure rule. An escape hatch nobody can forge beats one
+  nobody has specified.
+
 RAW CODES
   NONE. Outcomes are symbolic throughout Q0. Next free code if ever needed: 475.
 
@@ -107,14 +119,33 @@ domain tags      simurgh.vsr.<object>.v1
 ## Preflight — run before Task 1, batch any concerns into one question
 
 ```bash
-node --version                                   # expect v22+ for dev
-/opt/homebrew/opt/node@26/bin/node --version   # REQUIRED v26.x — byte-stable evidence only
-lean --version                                   # expect 4.15.0
-git branch --show-current                        # expect stage-5q-vsr-stage-wide-red-team
-git status --short                               # expect clean
-SIMURGH_SKIP_DOTENV=1 npm test 2>&1 | tail -5    # expect 0 fail (baseline)
-npm run format:check                             # expect clean
+set -o pipefail        # WITHOUT THIS, a piped `npm test` reports tail's status, not npm's
+
+node --version                                    # dev node, v22+
+"${SIMURGH_NODE26_BIN:-/opt/homebrew/opt/node@26/bin}/node" --version   # MUST report v26.x
+lean --version                                    # expect 4.15.0
+git branch --show-current                         # expect stage-5q-vsr-stage-wide-red-team
+git status --short                                # expect clean
+
+# baseline test run — status captured, NOT piped away
+SIMURGH_SKIP_DOTENV=1 npm test > /tmp/stage5q-baseline.log 2>&1
+status=$?
+tail -5 /tmp/stage5q-baseline.log
+test "$status" -eq 0 || { echo "BASELINE RED — do not start Task 1"; exit 1; }
+
+npm run format:check                              # expect clean
+npm i -D --save-exact acorn@8.17.0                # the pinned parser (Task 2)
 ```
+
+**Why the pipeline was rewritten (gauntlet P1-1).** `npm test 2>&1 | tail -5` exits with **tail's**
+status. `tail` essentially always succeeds, so a completely failing test suite would have shown red
+output above a green exit — a false green in the preflight of the stage that exists to hunt false
+greens.
+
+**Node 26 is pinned by VERSION, not by one developer's Homebrew path (gauntlet P1-2).**
+`SIMURGH_NODE26_BIN` overrides; the local path is a fallback; the assertion is that the reported
+major is exactly 26. A protocol that hard-codes `/opt/homebrew` is unrunnable by the external party
+this project keeps saying it wants.
 
 **Gotchas carried in from prior stages — read before Task 1.**
 
@@ -225,6 +256,48 @@ npm run format:check                                    # EXPECT clean
 
 ---
 
+## Task 1.2 — Write-surface verifier
+
+**Added by the external gauntlet (P1-41).** Matrix 1 claimed a "pre-commit path guard (Task 1)"
+that no task created — a false completeness claim in the coverage matrix, which is the same defect
+class as F001 and M6 from the previous round. Either the guard exists or the matrix row goes.
+
+**Files**
+
+- create: `tools/simurgh-attestation/stage5q/core/writeSurface.mjs`
+- create: `tools/simurgh-attestation/stage5q/node/checkWriteSurface.mjs`
+- create: `tests/unit/llmShield/stage5q/writeSurface.test.js`
+
+**Interfaces**
+
+```js
+export const Q0_WRITE_ALLOWLIST = Object.freeze([...]);   // verbatim from spec §6.1
+export function checkPaths(changedPaths): { ok, violations: Array<{ path, reason }> }
+```
+
+**Failing tests first:**
+
+- a path under `tools/simurgh-attestation/stage5p/` is a **violation** — 5P is read-only (§6.1);
+- `.github/workflows/stage-4-lean-proofs.yml` is a violation — it is F001's live premise (§14.2);
+- `.github/workflows/stage-5q-checks.yml` is **permitted** — the one allowed CI addition;
+- both named 5Q scripts are permitted;
+- `package.json` is permitted **only** for the `scripts` key — a dependency change is a violation
+  unless it is the pinned `acorn` line, which is named explicitly;
+- an empty change set is **not** vacuously ok — it returns ok with a count of zero, and the count is
+  asserted, so "nothing changed" cannot be confused with "nothing checked".
+
+```bash
+node tools/simurgh-attestation/stage5q/node/checkWriteSurface.mjs --staged
+# EXPECT: exit 0 and a printed count; non-zero listing every violating path otherwise
+```
+
+Run **before every Q0 commit** and inside both reproduce scripts. A declared-but-unenforced write
+surface is a comment, and this stage does not ship comments as controls.
+
+**Commit:** `feat(5q): Task 1.2 — Q0 write-surface verifier over the §6.1 allowlist`
+
+---
+
 ## Task 1.5 — Annex A1: closure root R8 (**before every census**)
 
 **Moved here from Task 7.5 by the external gauntlet (P0-3).** Sitting after Tasks 2-6 meant the
@@ -289,8 +362,11 @@ tests/unit/llmShield/stage5p/typedOutcomeDischarge.test.js gate_definition / com
 
 ```js
 // sourceDigest.mjs
-export function canonicalSourceBytes(text): Buffer      // throws on BOM
-export function sourceSpanDigest(text): string          // domain-separated hex
+// Buffer IN, not string: reading malformed UTF-8 as a JS string silently replaces invalid
+// bytes with U+FFFD BEFORE the BOM/validity checks can see them (gauntlet P1-5).
+export function canonicalSourceBytes(input: Buffer | Uint8Array): Buffer   // throws on BOM
+export function sourceSpanDigest(input: Buffer | Uint8Array): string       // domain-separated hex
+export function decodeUtf8Strict(input: Buffer): string                    // fatal: true, for parsing
 
 // functionId.mjs
 export function makeFunctionId({ stageId, modulePath, symbol }): string
@@ -298,8 +374,7 @@ export function parseFunctionId(id): { stageId, modulePath, symbol }
 
 // censusStatic.mjs
 export function staticCensus({ roots, readFile, listFiles }): {
-  members: Array<Member>, byId: Map<string, Member>,
-  successionHints: Array<{ disappeared_id, appeared_id, shared_source_digest }>
+  members: Array<Member>, byId: Map<string, Member>, edges: Array<Edge>
 }
 // Member: { function_id, stage_id, module_path, export_name_or_internal_symbol,
 //           source_digest, category, exported: boolean, runtime_visible: boolean }
@@ -332,9 +407,103 @@ SIMURGH_SKIP_DOTENV=1 node --test tests/unit/llmShield/stage5q/sourceDigest.test
 # EXPECT: Cannot find module
 ```
 
-**Implement.** Parse with a real parser, not regex, for `.mjs` — regex over source is exactly the
-class of mistake §2.5 deleted. Use `node:module` + a lightweight AST walk, or accept a documented
-regex fallback **only** for `.py`/`.lean`/`.sh` with the limitation recorded as a member field.
+### The parser is PINNED (gauntlet P0-6)
+
+An earlier draft said "`node:module` + a lightweight AST walk, or accept a regex fallback". That was
+an unresolved choice **and** technically wrong: `node:module` is the module-resolution API and
+exposes no parser and no AST — verified, its exports are `_cache`, `_pathCache`, `_findPath`,
+`createRequire` and friends. Preflight also confirms no parser exists anywhere in the dependency
+tree (deps: `@anthropic-ai/sdk`, `express`; devDeps: `prettier` only).
+
+```text
+PARSER            acorn, EXACT version 8.17.0, zero transitive dependencies
+INSTALL           npm i -D --save-exact acorn@8.17.0
+ecmaVersion       2024
+sourceType        "module"
+locations         true          (needed for ordinal disambiguation, below)
+```
+
+**The parser enters the closure as `imported_dependency`,** with its resolved version and
+`integrity` hash committed inside `closure_member_commitment`. The tool that measures the closure is
+itself named in the closure — otherwise the census has an unmeasured oracle at its root, which is the
+exact objection Matrix 2 exists to answer.
+
+**Node types visited, and the member each yields:**
+
+| AST node                                                                      | Member                                                                              |
+| ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `FunctionDeclaration`                                                         | `exported_function` if in `ExportNamedDeclaration`, else `internal_function`        |
+| `VariableDeclarator` with `ArrowFunctionExpression`/`FunctionExpression` init | same rule                                                                           |
+| `ExportDefaultDeclaration`                                                    | symbol `default`                                                                    |
+| `MethodDefinition` / object `Property` with function value                    | `Class.method` / `Object.key`                                                       |
+| nested function inside another function                                       | `internal_function`, qualified (below)                                              |
+| `CallExpression` callee `test`/`it` with function arg                         | **not a member** — test callbacks are excluded by name, and the exclusion is tested |
+| `CallExpression` callee `reject` with 2 string args                           | `verifier_branch`                                                                   |
+| `ExportNamedDeclaration` with `source`                                        | `reexport_edge`, not a new member                                                   |
+
+**Non-JS languages** use documented, tested scanners with their limitation recorded **as a member
+field**, never as silent best-effort: `.py` (`^\s*def\s+`/`^\s*class\s+`), `.lean`
+(`^(theorem|lemma)\s+`), `.sh` (`^\w+\s*\(\)`), `.yml` (job/step ids). Each member carries
+`extraction_method: "acorn" | "line_scanner"` so a reviewer can see which claims rest on a real
+parse.
+
+### Symbol grammar — collision-safe (gauntlet P1-4)
+
+`function_id` is `<stage_id>:<module_path>:<symbol>` and `symbol` is a **qualified path**, not a bare
+name:
+
+```text
+foo                        top-level
+Klass#method               class method
+Klass.staticMethod         static method
+obj.key                    object-literal property
+outer>inner                nested function
+default                    default export
+reject@S2.C3/outcome       verifier branch, keyed by its two string arguments
+<anon@L120C7>              anonymous, keyed by 1-based line/column from acorn `locations`
+```
+
+**Duplicate `function_id` is a hard census failure**, not a silent last-write-wins.
+
+**The honest limitation, stated rather than hidden:** an anonymous unit keyed by position gets a
+**new** `function_id` when a sibling is inserted above it. Anonymous units are therefore poor finding
+anchors, and a finding against one records the enclosing named member as well.
+
+### Succession hints move to their own module (gauntlet P0-7)
+
+`staticCensus({ roots, readFile, listFiles })` receives no previous census, so it **cannot** compute
+succession — it has no temporal knowledge. An earlier draft had it return `successionHints` anyway.
+
+```js
+// core/censusCompare.mjs — separate module, explicit temporal inputs
+export function compareCensuses({ previousMembers, currentMembers }): {
+  appeared, disappeared,
+  successionHints: Array<{ disappeared_id, appeared_id, shared_source_digest }>
+}
+```
+
+`staticCensus` returns `{ members, byId }` only. A current-state census must not claim knowledge it
+does not possess.
+
+### Task 2 also emits the typed graph (gauntlet P0-4)
+
+Nothing else in the plan produced call or import edges, yet `buildReachability({ members, edges })`
+consumes them, and without edges: `pure_transform` laundering cannot be detected, `callersOf` is
+unfounded, delegation cannot enumerate call sites, and a role exception could not name a reproducible
+path. Task 2 is the only place with the ASTs in hand.
+
+```js
+export function extractEdges({ ast, member, resolveImport }): Array<Edge>
+// Edge: { kind, from_function_id, to_function_id | to_unresolved,
+//         derivation: "acorn_static" | "line_scanner" | "manifest",
+//         confidence: "exact" | "heuristic" }
+// kind: call_edge | import_edge | reexport_edge | cli_invocation_edge | gate_invocation_edge
+```
+
+**An unresolvable dynamic call becomes an explicit `to_unresolved` edge with
+`confidence: "heuristic"` — it never disappears.** A silently dropped edge is a silently missing
+caller, and a silently missing caller is how `delegated_to_attacked_caller` becomes a lie. Test that
+`obj[expr]()` and `await import(variable)` both produce unresolved edges rather than nothing.
 
 **Then run the live census as a diagnostic (not published):**
 
@@ -376,7 +545,10 @@ export async function runtimeCensusFromNamespaces({ namespaces }): {
 // node/measureRuntimeCensus.mjs — DRIVER, owns crash isolation
 //   spawns a child per batch, each child imports its batch and prints JSON,
 //   merges results, converts a dead child into failures[] entries
-export async function runtimeCensusSpawned({ modulePaths, batchSize }): SameShape
+export async function runtimeCensusSpawned({ modulePaths, batchSize, timeoutMs, maxOutputBytes }): {
+  members: Array<{ function_id, module_path, symbol, kind }>,
+  failures: Array<{ module_path, error_class, message, batch_index }>
+}
 ```
 
 **Failing test first.** Import failure is recorded, never thrown away — a module that fails to import
@@ -390,9 +562,37 @@ committed by our own tooling, and it must be tested against a fixture module tha
 plus whatever R8 adds. Importing them executes their top level, so any import-time side effect runs.
 Batch size 25 is a reasonable starting point; the number is not load-bearing, the isolation is.
 
+**Two modes, because "failures are data" and "the closure is sound" are different claims
+(gauntlet P1-10):**
+
+```text
+--mode=collect   emit members and failures, exit 0.   For discovery.
+--mode=verify    exit NON-ZERO if any failure is unresolved. Task 8 consumes THIS mode.
+```
+
+Import failures are legitimate data while discovering. They are **not** an acceptable input to a
+closure commitment: a module that cannot be imported has no runtime surface, so the projection
+`project(static, runtime_visible) == runtime` cannot be evaluated for it. Since Q0 admits no
+exceptions (Task 6), an unresolved failure is either fixed or becomes a finding.
+
+**Process controls (gauntlet P1-9), all tested:** per-batch timeout; stdout/stderr byte caps;
+sanitized environment (no provider credentials, no `SIMURGH_*` beyond the harness's own); fixed
+working directory. **Error records are canonicalised** — symbolic error class plus a bounded
+normalised message, with **no stack traces, absolute paths, PIDs or timings**, because those make a
+byte-stable artifact unstable (gauntlet P2-5).
+
+**Namespace input is typed** (gauntlet P1-7): `Array<{ modulePath: string, namespace: object }>`,
+so the core can emit a stable `module_path` without guessing.
+
+**Symbol-keyed exports do not exist** (gauntlet P1-8): ECMAScript export names are strings. The
+namespace object carries `Symbol.toStringTag`, which is metadata, not a project export. Exclude
+standard namespace symbols explicitly and test that no project export is lost by the exclusion.
+
 ```bash
-node tools/simurgh-attestation/stage5q/node/measureRuntimeCensus.mjs --format=summary
-# EXPECT: a member count and a (possibly empty) failures list, exit 0
+npm run census:stage5q:runtime -- --mode=collect --format=summary
+# EXPECT: member count + failures list, exit 0
+npm run census:stage5q:runtime -- --mode=verify
+# EXPECT: exit 0 only if failures is empty
 ```
 
 **Commit:** `feat(5q): Task 3 — runtime-visible census with import failures as data`
@@ -506,10 +706,31 @@ Failing tests first:
 
 - **a member declared `pure_transform` that is reachable from a `trust_decision` member FAILS
   CLOSED**, and the violation names the reachability path;
-- the failure is only cleared by a signed member-specific exception, and an unsigned exception does
-  not clear it;
+- **there is no exception mechanism to clear it** (see below);
 - `requiredClasses` returns the full matrix for the four full-obligation roles;
 - an unknown role string is rejected, never defaulted.
+
+### Signed exceptions are PROHIBITED in Q0 (gauntlet P0-8)
+
+The design referred to a "signed member-specific exception" while defining no schema, signer, key,
+signature profile, validity period, member binding or path binding. That is an authority surface with
+no contract — a field literally named `signed: true` would have satisfied the prose.
+
+**Ruling: Q0 admits no exceptions at all.** Of the two options the gauntlet offered, prohibition is
+the stronger and the simpler, and it removes the surface rather than specifying it.
+
+What happens instead, when a member would have needed one:
+
+```text
+mis-declared role          ->  FIX THE ROLE. The reachability path is the argument.
+unimportable module        ->  a FINDING. A module in the closure that cannot be imported
+                               is a real defect, not paperwork.
+genuinely unclassifiable   ->  a FINDING against the closure rule itself, escalated to an annex.
+```
+
+This costs an escape hatch and buys the removal of an entire class of attack against 5Q — and an
+escape hatch nobody can forge is worth more than one nobody has specified. If Q1 proves exceptions
+are unavoidable, they arrive by annex with a full wire format, not by prose.
 
 **Fault injection required before this task is done:** flip one real member's declared role from a
 full-obligation role to `pure_transform` and confirm the violation fires. Record the command in the
@@ -807,6 +1028,36 @@ export function admissibility(mutationReceipts): { isAdmissible(cls): boolean }
 - a pack run against a closure digest ≠ the committed one is **refused outright** (L2);
 - a pack result records the closure digest it ran against, so a reviewer can check the pairing.
 
+### Pack execution is isolated (gauntlet P0-11)
+
+`runPack` was in-process. A red-team fixture is **adversarial input by construction** — it can crash
+the runner, mutate shared state, read credentials, reach the network, overwrite evidence, or poison
+every later pack in the run. R8, R9, R13, R15 and R16 are precisely the classes whose fixtures are
+_designed_ to do those things.
+
+A harness that executes adversarial packs in its own process is a stage-5Q finding waiting to be
+written about stage 5Q.
+
+**Contract, every element tested:**
+
+```text
+child process per pack, never in-process
+sanitized environment      allowlist only; NO provider/API credentials unless the live
+                           lane explicitly requests them and the pack declares it
+explicit allowlisted input paths
+fresh temporary working directory per pack
+target material READ-ONLY, or a scratch copy
+wall-clock timeout, enforced by the parent
+stdout/stderr byte caps, bounded and recorded
+deterministic exit mapping (no "non-zero means something happened")
+cleanup on success, failure, timeout AND signal
+NO arbitrary shell command sourced from pack JSON
+```
+
+**The last line is load-bearing.** A pack format that can carry a shell string is a remote code
+execution primitive wearing a lanyard. Packs declare _structured_ operations against a closed
+registry; anything not in the registry is rejected at schema validation, before execution.
+
 **Commit:** `feat(5q): Task 11 — harness core with L2 closure binding and L4 admissibility`
 
 ---
@@ -849,8 +1100,71 @@ restored_exit = 0
   class — cross-class detections are secondary observations only (spec §7.1);
 - all 16 classes must have receipts before the ledger publishes any `attacked_pass`.
 
-**Execution rules (spec §7.2):** mutants are applied in a scratch worktree and reverted. **No mutated
-source is ever committed.** Only descriptions, commands and observed exits enter evidence.
+### Task 12 must BUILD the detectors and the mutations (gauntlet P0-9)
+
+Task 9 defines only a schema, and the mutant files were "descriptions only" — so the runner had
+nothing to apply and no `detecting_pack_id` to record. Task 12 therefore creates, and this is the
+bulk of the task:
+
+```text
+16 self-proof detector packs      one per R1-R16, dedicated to the mutation lane
+16 structured mutation adapters   one per M1-M16, from a CLOSED registry
+```
+
+**Mutations are structured, never shell patches in JSON** (same reasoning as the pack registry):
+
+```js
+// core/mutationAdapter.mjs
+export const MUTATION_ADAPTERS = Object.freeze({
+  replaceCallWithConstant: ({ file, symbol, callee, constant }) => …,
+  swapAdjacentChecks:      ({ file, symbol, checkA, checkB })   => …,
+  deleteGuardClause:       ({ file, symbol, guardId })          => …,
+  weakenComparison:        ({ file, symbol, from, to })         => …,
+  removeArgument:          ({ file, symbol, argIndex })         => …,
+});
+// Each M*.json names ONE adapter + structured args + target file + precondition_source_digest.
+```
+
+**Precondition refusal:** the adapter recomputes the target's `source_digest` and **refuses to apply**
+unless it matches `precondition_source_digest`. A mutant that silently applies to drifted source
+proves nothing about the code that was actually committed.
+
+### The mutation lane needs its own L2 receipt (gauntlet P0-10)
+
+`runPack` refuses a target whose closure digest differs from Task 8's. A mutation **changes source
+bytes**, therefore changes `source_digest`, therefore changes the closure digest. Task 12 could not
+both mutate a target and satisfy the ordinary L2 check — the two rules were flatly incompatible.
+
+The mutation lane does not pretend the mutant still has the baseline digest. It **records the
+intentional delta**:
+
+```text
+baseline_closure_digest      the Task 8 commitment this started from
+target_function_id
+baseline_source_digest       recomputed, must equal the committed value
+mutation_digest              digest of the structured mutation description
+mutated_source_digest        what it became
+detector_pack_id
+```
+
+`runPack` accepts a `mutationReceipt` **only** in the self-proof lane, and only when
+`baseline_closure_digest` matches the commitment and `baseline_source_digest` matches that member's
+committed digest. Proving you started from the frozen baseline is the honest version of the check;
+claiming the mutant _is_ the baseline would be a lie the harness tells itself.
+
+### Execution rules (spec §7.2)
+
+Mutants are applied in a **scratch git worktree** and reverted. **No mutated source is ever
+committed.** Only descriptions, commands and observed exits enter evidence.
+
+**Both trees are checked** (gauntlet P2-15): `git status --short` in the primary worktree proves
+nothing about the scratch worktree. Assert the primary is clean **and** the scratch worktree is
+removed. Cleanup runs via `trap` on success, failure, timeout and signal.
+
+**Receipts carry bounded logs** (gauntlet P2-16): exit code **plus** stdout/stderr digests and
+bounded prefixes. Exit status alone cannot distinguish "the detector caught the seeded flaw" from
+"the test runner crashed for an unrelated reason", and those two must never be confused — one
+discharges a class and the other invalidates the run.
 
 ```bash
 node tools/simurgh-attestation/stage5q/node/runMutationSelfProof.mjs --all
@@ -896,8 +1210,21 @@ F001-complete-probe  an independent diagnostic attempts EVERY proof and records 
 
 **The complete probe is out-of-band and is NOT wired into any shared workflow (spec §14.1/§14.2):**
 
-```bash
-find proofs -name '*.lean' -print0 | sort -z | xargs -0 -n1 -I{} sh -c 'lean {} >/dev/null 2>&1; echo "$?  {}"'
+**The shell version is REJECTED (gauntlet P1-22).** It returned success through its final `echo`
+regardless of any proof failing, left `{}` unquoted, mixed `-n1` with `-I` (which conflict across
+xargs implementations), and would break on filenames containing shell metacharacters. A probe whose
+purpose is recording failures, that structurally cannot report failure, is F001 a third time.
+
+Implement in Node, one `spawnSync` per sorted file, exact exit code stored per file:
+
+```js
+// node/captureF001.mjs
+const files = listLeanFilesSorted(); // NUL-safe enumeration, deterministic order
+const results = files.map((f) => {
+  const r = spawnSync("lean", [f], { encoding: "utf8", timeout: 120_000 });
+  return { file: f, exit: r.status, signal: r.signal, stderr_digest: sha256(r.stderr ?? "") };
+});
+// The artefact records EVERY exit code. The task fails if any file was not attempted.
 ```
 
 **ESCALATION (spec §14.6).** If any proof fails, F001 keeps `assurance_only` and a **separate**
@@ -945,10 +1272,20 @@ without saying what it was — a zero-context implementer could not have known w
 positive_path_result = the exit status and log digest of scripts/reproduce-llm-shield-stage5X.sh
                        run at head, under Node 26
 
-values: reproduced | reproduced_with_diff | script_absent | environment_unreproducible
+values: reproduced | reproduced_with_diff | reproduction_failed
+      | script_absent | environment_unreproducible
+
+reproduction_failed  (gauntlet P1-23) — an ordinary non-zero exit, with the exit code and a
+bounded log digest. It is NOT squeezed into reproduced_with_diff: "produced different bytes"
+and "did not run" are different facts, and merging them hides the worse one.
 ```
 
-**Its purpose is to prove the attacks did not break the thing they attacked.** A tray reporting no
+**Its purpose is to prove the attacks did not break the thing they attacked.**
+
+**Run it in a scratch worktree or with a redirected output root (gauntlet P1-24).** Many reproduce
+scripts regenerate evidence; running them in the primary worktree would write to frozen prior-stage
+paths and violate §6.1 read-only. After each run, assert that no committed closure path changed —
+using the Task 1.2 write-surface verifier, which is exactly what it is for. A tray reporting no
 findings while the stage's own reproduce script has stopped passing is reporting on rubble.
 
 Note that 8 of the 16 stage reproduce scripts are **not** run by `check-e2e.sh` (5f, 5g, 5i, 5j, 5k,
@@ -967,8 +1304,10 @@ as a finding, do not repair it during Q0.
 
 > No finding was produced by these admissible packs over this frozen target set.
 
-A tray must **never** emit "secure", "no vulnerabilities", or "passed". A test greps the emitted
-report for those words and fails on any of them.
+A tray must **never** emit "secure", "no vulnerabilities", or "passed". The check validates the
+**exact `summary` field**, not every byte of the report (gauntlet P2-7): a raw report legitimately
+contains file paths and quoted historical text carrying those tokens, and a whole-file grep would
+either fire falsely or be quietly relaxed until it fired never.
 
 **Order:** 14.1 `5a` → 14.16 `5p`. Later trays reuse earlier pack scaffolding; the first two will be
 slower than the remaining fourteen.
@@ -1024,9 +1363,11 @@ A member encountered here that is absent from the committed historical closure i
 node tools/simurgh-attestation/stage5q/campaigns/historical.mjs --worktree-root /tmp/5q-tags
 # EXPECT: 16 tag records, each with an outcome; worktrees removed on exit
 git worktree list
-# EXPECT: exactly ONE line — the primary worktree. `git worktree list` always lists the primary,
-# so "no worktrees" is never a correct expectation; the assertion is that no /tmp/5q-tags entry
-# survives. Assert on the absence of the worktree-root prefix, not on an empty list.
+# `git worktree list` ALWAYS lists the primary, and a developer may legitimately have others open
+# (gauntlet P1-39). Do NOT assert a line count. Assert only that no path under this campaign's
+# --worktree-root survives:
+#   git worktree list --porcelain | grep -q "/tmp/5q-tags" && echo LEAKED && exit 1
+# A leftover campaign worktree is a HARNESS FAILURE, recorded, not tidied silently (P2-9).
 ```
 
 **Commit:** `feat(5q): Task 16 — historical-tag campaign in isolated worktrees`
@@ -1102,9 +1443,15 @@ closureBindsResults      a pack result carries the closure digest it ran against
 projectionSoundness      a static-only internal is never a census_conflict
 ```
 
-**Failing test first.** `leanProofBinding.test.js` asserts each named theorem exists in the file, and
-that the file contains **zero** `sorry`/`admit`/`native_decide` escapes. The binding test is what
-stops a proof file drifting away from the properties the plan claims it proves.
+**Failing test first.** `leanProofBinding.test.js` asserts each named theorem exists, that the file
+contains **zero** `sorry`/`admit`/`native_decide` escapes, **and that each theorem's STATEMENT
+matches a pinned digest**.
+
+**Names alone are worthless (gauntlet P1-30):** a file containing all seven theorem names, each
+proving `True`, would pass a name-only check while proving nothing. The test pins
+`sha256(normalised statement text)` per theorem, so changing what a theorem _says_ fails the gate
+even when the identifier is untouched. Statement changes are legitimate — they just require updating
+the pinned digest deliberately, which is the point.
 
 ```bash
 lean proofs/stage5q/Vsr.lean          # EXPECT: exit 0, no output
@@ -1132,7 +1479,28 @@ every export of every `stage5q` module and exercises it, exactly as the sixteen 
   a hand-listed K7 net would be F001 a third time);
 - **dead exports fail the net.** 5P's K7 census found 5 dead exports plus 2 more when Lane L landed;
   expect the same here and delete them rather than exercising them token-effort;
-- cross-lane invariants: a closure digest from Task 8 verifies against the attestation in Task 20.
+  **K7 splits in two, because the original created a dependency cycle (gauntlet P0-12):** K7 was
+  committed at 18.2 yet had to verify the Task 20 attestation, while Task 20 claimed to cover K7.
+
+```text
+K7-A   BEFORE Task 20    export census + invocation coverage.
+                         Task 20 signs the K7-A result.
+K7-B   AFTER  Task 21    attestation and closure cross-binding.
+                         Verifies the completed attestation; part of the reproduction
+                         receipt, NOT a prerequisite of the signature it checks.
+```
+
+**Enumeration is not invocation coverage (gauntlet P1-31).** `import * as` proves an export
+_exists_; it cannot generically call functions with different signatures. K7-A therefore maintains a
+typed **invocation-adapter registry**, and the gate is set equality:
+
+```text
+{ export ids } == { adapter ids }
+```
+
+A missing adapter fails the gate. **Dead exports are a review decision, not an automatic deletion** —
+5P deleted five, which was right there, but a net that silently deletes is a net that can be used to
+make coverage look complete by removing the uncovered.
 
 Placed under `tests/e2e/`, so `scripts/check-e2e.sh` picks it up automatically by `find` — no
 workflow edit, and therefore no new manually-enumerated gate.
@@ -1163,8 +1531,13 @@ Nothing touching the filesystem, the clock, or a process is in the parity surfac
 browser on the same vectors, or the claim is withdrawn** — a parity claim over a surface where the
 runtimes were never compared is worse than no claim.
 
-**Gotchas:** CSP `default-src 'none'` with no `connect-src`; skip honestly when no browser is present
-rather than passing vacuously; Python canonical JSON is
+**A missing browser is NOT a pass (gauntlet P1-32).** A skip is honest only if the claim is
+withdrawn with it. When no browser is available the run emits `browser_unavailable`, marks browser
+parity **unproven**, and **blocks any statement of three-runtime parity** in the attestation and
+closeout. Two-runtime parity is a true, smaller claim; "parity verified" with one runtime unmeasured
+is a false one.
+
+**Gotchas:** CSP `default-src 'none'` with no `connect-src`; Python canonical JSON is
 `json.dumps(sort_keys=True, separators=(",",":"), ensure_ascii=False)`.
 
 **Commit:** `feat(5q): Task 18.3 — Node/Python/browser parity over the deterministic surface`
@@ -1177,9 +1550,22 @@ rather than passing vacuously; Python canonical JSON is
 
 - create: `scripts/reproduce-llm-shield-stage5q.sh`
 
-Reproduces Q0 end to end from pinned inputs: freeze verification, all three censuses, closure
-commitment byte-stability, mutation receipts, tray reports, campaign reports, coverage ledger,
-attestation verification.
+**Split, because as scheduled it could not pass (gauntlet P0-13):** the script was required to run
+coverage and attestation verification at Task 18.4, while Tasks 19 and 20 did not exist yet. Its
+expected `ALL GATES PASSED` was unreachable by construction.
+
+```text
+18.4a  scaffold, HERE            freeze verification, three censuses, closure byte-stability,
+                                 mutation receipts, tray + campaign reports.
+                                 Exits non-zero on anything missing. Never claims completeness.
+
+18.4b  full reproduce, AFTER 21  adds coverage ledger, attestation verification, K7-B,
+                                 prior-stage non-disturbance. This is the artifact a
+                                 reviewer runs.
+```
+
+Both are inside the §6.1 write surface, which now names
+`scripts/reproduce-llm-shield-stage5q.sh` explicitly (gauntlet P0-14).
 
 **Hard requirements, each paid for by a prior stage:**
 
@@ -1276,9 +1662,50 @@ obligation_matrix_root               (A4 — NEW)
 A4 each added one. The change is called out rather than absorbed silently, because a root list that
 grows without announcement is how an attestation quietly stops covering what it claims to cover.
 
-Two-tier Ed25519, public (recomputable) / audit (signed limitations). **Private key never leaves the
-session scratchpad and is never committed** — 5P's lesson: a deterministically derived key is
-forgeable by anyone reading the source.
+### Byte-stability and signing are SEPARATE artifacts (gauntlet P0-15)
+
+Task 20 was declared byte-stable while its Ed25519 key was ephemeral. Those cannot both hold: a
+fresh key yields a different public key and a different signature on every run. A deterministically
+derived key would restore byte-stability and is prohibited — 5P proved it forgeable by anyone reading
+the source.
+
+The two properties belong to two artifacts:
+
+```text
+public_structural_bundle          DETERMINISTIC, byte-stable, cmp-able across runs
+  the nine roots, known_limitations, closure/tag/taxonomy metadata
+  contains NO signature, NO public key, NO timestamp
+  a reviewer REPRODUCES these bytes
+
+signed_audit_envelope             NOT byte-reproducible, and does not claim to be
+  signature over sha256(public_structural_bundle)
+  signer profile + persistent public key
+  a reviewer VERIFIES this, they do not reproduce it
+```
+
+**The plan states exactly which bytes are stable**, because "the attestation is byte-stable" was the
+kind of unqualified claim this stage exists to catch.
+
+**No timestamps in the deterministic bundle** (gauntlet P2-18). Any `created_at` breaks byte
+identity. Time lives in the envelope, which is verified rather than reproduced.
+
+### The signer must survive into Q1 (gauntlet P0-16)
+
+"Private key never leaves the session scratchpad" plus "Q1 appends to the Q0 ledger" is a
+contradiction: destroying the only key makes authenticated append impossible, and Q1-F001 is already
+scheduled.
+
+```text
+signer profile     durable, offline, generated ONCE for stage 5Q and retained
+                   for the life of Q0 + Q1
+public half        committed in the public bundle and in the repo
+private half       offline, outside the repo, never in the session scratchpad
+rotation           a signed key-rotation object, itself signed by the outgoing key,
+                   committed in Q0 so Q1 can present a chain rather than a new key
+```
+
+A Q1 append signed by a key with no committed link to the Q0 signer is **indistinguishable from a
+forgery**, and 5Q of all stages cannot ship that.
 
 **Failing tests first:**
 
@@ -1311,8 +1738,39 @@ T2  every attack class is admissible, or its inadmissibility is recorded in the 
 T3  every closure member has exactly one coverage status
 T4  the finding ledger chain verifies end to end
 T5  no Q1 record exists yet for any finding
-T6  the frozen-block digest still equals da78774b…  (the spec was not edited in place)
+T6  the frozen-block digest still equals
+    da78774b77495459e4889e1c433e1933bb502ac81c9e5c0811e2450af7fdfc74
+    (the spec was not edited in place)
+T7  prior-stage non-disturbance: the manifest below runs green
 ```
+
+### T7 is a manifest of commands, not a promise (gauntlet P1-37)
+
+Matrix 1 claimed Task 21 ran the full `check-e2e.sh`, but Task 21 contained no such command. Either
+it runs or the row is false, and this stage does not ship rows it cannot execute.
+
+```bash
+./scripts/check-e2e.sh                       # every tests/e2e net, found dynamically
+for s in f g i j k l n p; do                 # the 8 NOT covered by check-e2e.sh
+  ./scripts/reproduce-llm-shield-stage5$s.sh || echo "PRIOR STAGE 5$s REGRESSED"
+done
+node tools/simurgh-attestation/stage5q/node/checkWriteSurface.mjs --range HEAD~1..HEAD
+```
+
+### Transition is not release (gauntlet P1-38)
+
+T2 permits an inadmissible attack class if the inadmissibility is recorded, while §12.1's release
+gates require every applicable class discharged. Not a conflict once the layers are named:
+
+```text
+Q0 MAY freeze an incomplete or partly inadmissible result.
+       Freezing what actually happened is the whole point of Q0.
+Q1 MAY be authorised to repair the HARNESS as well as the code.
+STAGE 5Q RELEASE remains BLOCKED until every required class is admissible.
+```
+
+An honest frozen record of an incomplete campaign is worth more than a delayed one pretending to be
+complete — but it does not ship as a finished stage.
 
 **Failing tests first:** each of T1–T6 fails independently when violated; a Q1 record present before
 the freeze is detected by T5; T6 catches an in-place spec edit.
@@ -1441,24 +1899,24 @@ Every published Q0 field maps to a producer, inputs, canonicaliser, digest, veri
 witness**. A field that merely "comes from the harness" fails review — the harness is a machine, not
 an oracle.
 
-| Published field                      | Producer | Source inputs                        | Canonicaliser             | Digest                      | Verifier                 | Negative witness                    |
-| ------------------------------------ | -------- | ------------------------------------ | ------------------------- | --------------------------- | ------------------------ | ----------------------------------- |
-| `function_closure_digest`            | T8       | static+runtime+gate censuses, roles  | canonical member ordering | `simurgh.vsr.closure.v1`    | `commitClosure --verify` | remove one member → digest moves    |
-| `release_tag_closure_digest`         | T8       | 16 `(tag, sha)` pairs                | sorted tag list           | `simurgh.vsr.tags.v1`       | tag existence check      | 17th tag rejected                   |
-| `attack_taxonomy_digest`             | T8       | spec §4.1 frozen table               | frozen order R1–R16       | `simurgh.vsr.taxonomy.v1`   | constants test           | reordered table → digest moves      |
-| `q0_finding_ledger_digest`           | T10      | appended findings                    | chain order               | `simurgh.vsr.ledger.v1`     | `verifyChain`            | tampered middle record detected     |
-| `mutation_receipt_root`              | T12      | 16 receipts                          | receipt canonical form    | `simurgh.vsr.mutation.v1`   | receipt validator        | green→green receipt rejected        |
-| `attack_pack_root`                   | T9,T14   | pack definitions + premises          | pack canonical form       | `simurgh.vsr.pack.v1`       | `validateAttackPack`     | pack without premise inadmissible   |
-| `coverage_discharge_root`            | T19      | statuses over closure                | member order              | `simurgh.vsr.coverage.v1`   | coverage ledger          | unstatused member fails             |
-| `tray.*.finding_ids`                 | T14.N    | pack results                         | tray canonical form       | tray digest                 | tray schema test         | invented target id rejected         |
-| `F001.*`                             | T13      | filesystem, workflow, `lean` exits   | artefact canonical form   | finding digest              | F001 capture test        | `discovered_by`=harness rejected    |
-| `tag.*.outcome`                      | T16      | worktree runs                        | outcome enum              | campaign digest             | campaign test            | unreproducible ≠ pass               |
-| `tray.*.positive_path_result`        | T14.N    | stage reproduce script under Node 26 | outcome enum              | tray digest                 | tray schema test         | `reproduced_with_diff` is a finding |
-| `lean_theorem_set`                   | T18.1    | `proofs/stage5q/Vsr.lean`            | Lean source bytes         | source-span digest          | `leanProofBinding`       | a `sorry` fails the scan            |
-| `parity_vector_result`               | T18.3    | shared vectors                       | canonical JSON            | vector digest               | `crossRuntimeParity`     | one diverged rule fails all three   |
-| `historical_function_closure_digest` | T7.6     | tag worktrees                        | canonical member ordering | `simurgh.vsr.historical.v1` | inventory test           | member absent at T16 is a finding   |
-| `obligation_matrix_root`             | T7.7     | closure × taxonomy                   | canonical cell ordering   | `simurgh.vsr.obligation.v1` | `obligations` test       | ab/c vs a/bc collision test         |
-| `closure_member_commitment_digest`   | T8       | censuses, roles, edges               | canonical member ordering | `simurgh.vsr.closure.v1`    | `commitClosure --verify` | remove one member → digest moves    |
+| Published field                      | Producer                          | Source inputs                        | Canonicaliser             | Digest                      | Verifier                 | Negative witness                    |
+| ------------------------------------ | --------------------------------- | ------------------------------------ | ------------------------- | --------------------------- | ------------------------ | ----------------------------------- |
+| `function_closure_digest`            | T8                                | static+runtime+gate censuses, roles  | canonical member ordering | `simurgh.vsr.closure.v1`    | `commitClosure --verify` | remove one member → digest moves    |
+| `release_tag_closure_digest`         | T8                                | 16 `(tag, sha)` pairs                | sorted tag list           | `simurgh.vsr.tags.v1`       | tag existence check      | 17th tag rejected                   |
+| `attack_taxonomy_digest`             | T8                                | spec §4.1 frozen table               | frozen order R1–R16       | `simurgh.vsr.taxonomy.v1`   | constants test           | reordered table → digest moves      |
+| `q0_finding_ledger_digest`           | T20 (chain T10, findings T13-T18) | appended findings                    | chain order               | `simurgh.vsr.ledger.v1`     | `verifyChain`            | tampered middle record detected     |
+| `mutation_receipt_root`              | T12                               | 16 receipts                          | receipt canonical form    | `simurgh.vsr.mutation.v1`   | receipt validator        | green→green receipt rejected        |
+| `attack_pack_root`                   | T9, T14, T15-T18                  | pack definitions + premises          | pack canonical form       | `simurgh.vsr.pack.v1`       | `validateAttackPack`     | pack without premise inadmissible   |
+| `coverage_discharge_root`            | T19                               | statuses over closure                | member order              | `simurgh.vsr.coverage.v1`   | coverage ledger          | unstatused member fails             |
+| `tray.*.finding_ids`                 | T14.N                             | pack results                         | tray canonical form       | tray digest                 | tray schema test         | invented target id rejected         |
+| `F001.*`                             | T13                               | filesystem, workflow, `lean` exits   | artefact canonical form   | finding digest              | F001 capture test        | `discovered_by`=harness rejected    |
+| `tag.*.outcome`                      | T16                               | worktree runs                        | outcome enum              | campaign digest             | campaign test            | unreproducible ≠ pass               |
+| `tray.*.positive_path_result`        | T14.N                             | stage reproduce script under Node 26 | outcome enum              | tray digest                 | tray schema test         | `reproduced_with_diff` is a finding |
+| `lean_theorem_set`                   | T18.1                             | `proofs/stage5q/Vsr.lean`            | Lean source bytes         | source-span digest          | `leanProofBinding`       | a `sorry` fails the scan            |
+| `parity_vector_result`               | T18.3                             | shared vectors                       | canonical JSON            | vector digest               | `crossRuntimeParity`     | one diverged rule fails all three   |
+| `historical_function_closure_digest` | T7.6                              | tag worktrees                        | canonical member ordering | `simurgh.vsr.historical.v1` | inventory test           | member absent at T16 is a finding   |
+| `obligation_matrix_root`             | T7.7                              | closure × taxonomy                   | canonical cell ordering   | `simurgh.vsr.obligation.v1` | `obligations` test       | ab/c vs a/bc collision test         |
+| `closure_member_commitment_digest`   | T8                                | censuses, roles, edges               | canonical member ordering | `simurgh.vsr.closure.v1`    | `commitClosure --verify` | remove one member → digest moves    |
 
 ---
 
