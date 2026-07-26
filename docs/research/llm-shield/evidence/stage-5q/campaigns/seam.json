@@ -1,0 +1,191 @@
+{
+  "campaign_id": "campaign-seam",
+  "closure_digest": "87512ae221ae2de5148759dcd48ad04ebf02c1b6354bc75e95af9d991f7fc936",
+  "packs_run": 9,
+  "packs_establishing_a_result": 9,
+  "packs_errored": 0,
+  "findings": [],
+  "packs_without_premise": [],
+  "results": [
+    {
+      "pack_id": "seam/5a-as-5p",
+      "target_pair": [
+        "stage5a evidence",
+        "stage5p verifier"
+      ],
+      "attack_classes": [
+        "R5"
+      ],
+      "expectation": "refused at provenance typing; a 5A artefact does not become 5P evidence by being handed over",
+      "outcome": "refused_as_expected",
+      "detail": "provenance typing separates the two",
+      "premise": {
+        "artefact_provenance": "5a",
+        "presented_as": "5p"
+      },
+      "premise_established": true,
+      "is_finding": false
+    },
+    {
+      "pack_id": "seam/schema-downgrade",
+      "target_pair": [
+        "historical schema v1",
+        "later profile"
+      ],
+      "attack_classes": [
+        "R12"
+      ],
+      "expectation": "refused; STRENGTH IS NOT INHERITED — a later profile does not retroactively harden an older artefact",
+      "outcome": "refused_as_expected",
+      "detail": "strength stays with the artefact",
+      "premise": {
+        "artefact_version": 1,
+        "profile_version": 3
+      },
+      "premise_established": true,
+      "is_finding": false
+    },
+    {
+      "pack_id": "seam/5g-identity-to-5p",
+      "target_pair": [
+        "stage5g identity claim",
+        "stage5p durable resolution"
+      ],
+      "attack_classes": [
+        "R5",
+        "R13"
+      ],
+      "expectation": "refused; 5P's C2 is unreachable from a 5G claim BY DESIGN, not by accident",
+      "outcome": "refused_as_expected",
+      "detail": "ephemeral cannot satisfy durable",
+      "premise": {
+        "source_stage": "5g",
+        "target_check": "5p:S2.C2",
+        "requires": "durable"
+      },
+      "premise_established": true,
+      "is_finding": false
+    },
+    {
+      "pack_id": "seam/5l-anchor-inflation",
+      "target_pair": [
+        "stage5l anchor",
+        "its frozen witness"
+      ],
+      "attack_classes": [
+        "R12",
+        "R14"
+      ],
+      "expectation": "the WITNESS BOUNDS THE READING; an anchor may never be read as stronger than what witnessed it",
+      "outcome": "refused_as_expected",
+      "detail": "witness bounds the reading",
+      "premise": {
+        "witness_depth": "single",
+        "attempted_reading": "deeply_confirmed"
+      },
+      "premise_established": true,
+      "is_finding": false
+    },
+    {
+      "pack_id": "seam/5o-selective",
+      "target_pair": [
+        "stage5o completeness evidence",
+        "another stage's presentation"
+      ],
+      "attack_classes": [
+        "R14",
+        "R7"
+      ],
+      "expectation": "partial presentation DETECTED; a subset presented as the whole is the defect, not a convenience",
+      "outcome": "refused_as_expected",
+      "detail": "partial presentation detected: 2 committed member(s) absent from the produced set: c, d",
+      "premise": {
+        "universe_size": 4,
+        "presented_size": 2
+      },
+      "premise_established": true,
+      "is_finding": false
+    },
+    {
+      "pack_id": "seam/band-confusion",
+      "target_pair": [
+        "symbolic outcome",
+        "adjacent numeric band"
+      ],
+      "attack_classes": [
+        "R6"
+      ],
+      "expectation": "the SYMBOL WINS; no numeric coercion across adjacent bands",
+      "outcome": "distinct_as_expected",
+      "detail": "symbol distinguishes what the number cannot",
+      "premise": {
+        "same_raw": true,
+        "distinct_symbols": true
+      },
+      "premise_established": true,
+      "is_finding": false
+    },
+    {
+      "pack_id": "seam/valid-sig-wrong-object",
+      "target_pair": [
+        "a genuine signature",
+        "a semantically mismatched object"
+      ],
+      "attack_classes": [
+        "R4",
+        "R1"
+      ],
+      "expectation": "the signature VERIFIES and the object is REJECTED. Authenticity is not aboutness — the composition analogue of 5P's No Frankenidentity",
+      "outcome": "refused_as_expected",
+      "detail": "authentic signature over a different object, detected: an authentic signature covers a different object than the one presented",
+      "premise": {
+        "signature_valid": true,
+        "signed_object_digest": "c979a1ceb22550db8c41f67a35c78e7ef0153f1fa4420ede70f0bba7f1d9bb4e",
+        "presented_object_digest": "7896b94fefe83972da7224f6d4a38f7878ec825e88a59bac22a7877bbfd7c9e7"
+      },
+      "premise_established": true,
+      "is_finding": false
+    },
+    {
+      "pack_id": "seam/nonclaim-promotion",
+      "target_pair": [
+        "one stage's NON-claim",
+        "another stage's premise"
+      ],
+      "attack_classes": [
+        "R14",
+        "R15"
+      ],
+      "expectation": "the premise gate REFUSES; an absence of a claim is not a claim of absence",
+      "outcome": "refused_as_expected",
+      "detail": "premise gate refused: the two vectors share no assigned key, so they merely DIFFER — this is the 5P defect",
+      "premise": {
+        "promoted_from": "non_claim",
+        "promoted_to": "premise"
+      },
+      "premise_established": true,
+      "is_finding": false
+    },
+    {
+      "pack_id": "seam/mutual-exclusion",
+      "target_pair": [
+        "two artefacts, each verifying",
+        "their joint truth"
+      ],
+      "attack_classes": [
+        "R14"
+      ],
+      "expectation": "the conflict is RECORDED, never resolved. 5Q does not adjudicate which artefact is right — that is A Conflict Is Not a Lie (5A), and inventing a winner would be the worse error",
+      "outcome": "recorded_as_expected",
+      "detail": "conflict recorded, not adjudicated: artifacts 0 and 1: same subject, conflicting assignment of state",
+      "premise": {
+        "both_verify": true,
+        "same_subject": true
+      },
+      "premise_established": true,
+      "is_finding": false
+    }
+  ],
+  "summary": "9 of 9 packs established a result; none produced a finding. 0 pack(s) established nothing.",
+  "campaign_digest": "e8ce2597858a4c3a4329f650d0dcd62c46681cc05e7644acbf7ea158869f0b2b"
+}

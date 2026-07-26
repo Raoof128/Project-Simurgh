@@ -1,0 +1,142 @@
+{
+  "campaign_id": "campaign-head",
+  "closure_digest": "87512ae221ae2de5148759dcd48ad04ebf02c1b6354bc75e95af9d991f7fc936",
+  "packs_run": 6,
+  "packs_establishing_a_result": 6,
+  "packs_errored": 0,
+  "findings": [],
+  "packs_without_premise": [],
+  "results": [
+    {
+      "pack_id": "head/canon-domain",
+      "target_pair": [
+        "stage5o/core/hkdf",
+        "stage5k/core/merkle"
+      ],
+      "attack_classes": [
+        "R3"
+      ],
+      "expectation": "two differently domain-separated constructions over ONE input must produce different digests; equality would mean the domain tag is decorative and a leaf could be read as a node",
+      "outcome": "distinct_as_expected",
+      "detail": "domains separate as designed",
+      "premise": {
+        "construction_a": "hkdf",
+        "construction_b": "merkle_leaf",
+        "ran_both": true
+      },
+      "premise_established": true,
+      "is_finding": false
+    },
+    {
+      "pack_id": "head/census-ownership",
+      "target_pair": [
+        "stage5f/core/census",
+        "stage5i (foreign member ids)"
+      ],
+      "attack_classes": [
+        "R7"
+      ],
+      "expectation": "a census may not certify another stage's universe; foreign record ids must be refused, not counted, because a completeness claim over the wrong set is still a completeness claim",
+      "outcome": "refused_as_expected",
+      "detail": "foreign universe refused",
+      "premise": {
+        "cell_ids": [
+          "5f-cell-1",
+          "5f-cell-2"
+        ],
+        "record_ids": [
+          "5i-panel-1",
+          "5i-panel-2"
+        ],
+        "disjoint": true,
+        "equal_cardinality": true
+      },
+      "premise_established": true,
+      "is_finding": false
+    },
+    {
+      "pack_id": "head/allocator-adjacency",
+      "target_pair": [
+        "stage5p/core/rawCodeAllocator",
+        "stage5o band (…463)"
+      ],
+      "attack_classes": [
+        "R6"
+      ],
+      "expectation": "adjacent code bands must not overlap at their edges. 5O ends at 463 and 5P begins at 464; a collision at the seam is a silent misreport that every green run would carry",
+      "outcome": "distinct_as_expected",
+      "detail": "band edges 463/464 do not collide",
+      "premise": {
+        "band_lo": 464,
+        "band_hi": 472,
+        "allocated": 11,
+        "adjacent_band_top": 463
+      },
+      "premise_established": true,
+      "is_finding": false
+    },
+    {
+      "pack_id": "head/shared-mutation",
+      "target_pair": [
+        "stage5k/core/merkle",
+        "a second caller of the same helper"
+      ],
+      "attack_classes": [
+        "R8"
+      ],
+      "expectation": "one caller mutating a shared input must not change what a second caller sees; a shared helper that aliases its argument turns two independent verifications into one",
+      "outcome": "accepted_as_expected",
+      "detail": "second caller unaffected by the mutation",
+      "premise": {
+        "mutated_between_calls": true,
+        "same_logical_input": true
+      },
+      "premise_established": true,
+      "is_finding": false
+    },
+    {
+      "pack_id": "head/ledger-crossbind",
+      "target_pair": [
+        "stage5b/core/findingLedger",
+        "stage5j/core/chains"
+      ],
+      "attack_classes": [
+        "R5",
+        "R14"
+      ],
+      "expectation": "a 5B finding record presented to 5J's chain verifier must be refused; ledgers are not interchangeable, and a record that verifies under two schemas has no owner",
+      "outcome": "refused_as_expected",
+      "detail": "refused by throw, not by a typed grammar check: Cannot read properties of undefined (reading 'chain_subject')",
+      "premise": {
+        "record_is_valid_in_its_own_stage": false,
+        "presented_to": "stage5j/chains",
+        "refusal_kind": "untyped_throw"
+      },
+      "premise_established": true,
+      "is_finding": false
+    },
+    {
+      "pack_id": "head/verifier-crossfeed",
+      "target_pair": [
+        "stage5p/core/section2Verifier",
+        "a stage5g-shaped attestation"
+      ],
+      "attack_classes": [
+        "R1",
+        "R5"
+      ],
+      "expectation": "5P's Section 2 verifier fed a 5G-shaped attestation must refuse at the GRAMMAR, never coerce it into something it can read — coercion is how a foreign artefact acquires a local meaning",
+      "outcome": "refused_as_expected",
+      "detail": "refused without coercion",
+      "premise": {
+        "artefact_family": "stage5g_attestation",
+        "presented_to": "stage5p_section2",
+        "shapes_are_disjoint": true
+      },
+      "premise_established": true,
+      "is_finding": false
+    }
+  ],
+  "summary": "6 of 6 packs established a result; none produced a finding. 0 pack(s) established nothing.",
+  "campaign_digest": "19ec5ccf964b31806855aab87d5afa416065a7bd612c6bd48f34bd33993728e9"
+}

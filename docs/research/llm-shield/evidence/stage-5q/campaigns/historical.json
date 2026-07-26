@@ -1,0 +1,387 @@
+{
+  "campaign_id": "campaign-historical",
+  "tags_in_output": 16,
+  "tags_in_frozen_closure": 16,
+  "every_tag_present": true,
+  "compatibility_matrix": {
+    "note": "Step 5 — 'current tooling accepting weaker historical semantics' — has no meaning without a baseline. This matrix IS the baseline: a read outside it is the finding.",
+    "rule": "a current verifier may read schema_version >= its own minimum; a lower version is a finding",
+    "minimum_schema_version_by_family": {
+      "identity": 3,
+      "completeness": 2,
+      "temporal": 2,
+      "conflict": 1
+    }
+  },
+  "step5_weaker_historical_semantics": [
+    {
+      "tag_name": "v2.36.0-stage-5a-vnc",
+      "finding": false,
+      "reason": "v3 meets the v3 minimum for identity"
+    },
+    {
+      "tag_name": "v2.37.0-stage-5b-var",
+      "finding": false,
+      "reason": "v3 meets the v3 minimum for identity"
+    },
+    {
+      "tag_name": "v2.38.0-stage-5c-vsb",
+      "finding": false,
+      "reason": "v3 meets the v3 minimum for identity"
+    },
+    {
+      "tag_name": "v2.39.0-stage-5d-varl",
+      "finding": false,
+      "reason": "v3 meets the v3 minimum for identity"
+    },
+    {
+      "tag_name": "v2.40.0-stage-5e-vda",
+      "finding": false,
+      "reason": "v3 meets the v3 minimum for identity"
+    },
+    {
+      "tag_name": "v2.41.0-stage-5f-vmp",
+      "finding": false,
+      "reason": "v3 meets the v3 minimum for identity"
+    },
+    {
+      "tag_name": "v2.42.0-stage-5g-vfc",
+      "finding": false,
+      "reason": "v3 meets the v3 minimum for identity"
+    },
+    {
+      "tag_name": "v2.43.0-stage-5h-vsd",
+      "finding": false,
+      "reason": "v3 meets the v3 minimum for identity"
+    },
+    {
+      "tag_name": "v2.44.0-stage-5i-vpc",
+      "finding": false,
+      "reason": "v3 meets the v3 minimum for identity"
+    },
+    {
+      "tag_name": "v2.45.0-stage-5j-vrc",
+      "finding": false,
+      "reason": "v3 meets the v3 minimum for identity"
+    },
+    {
+      "tag_name": "v2.46.0-stage-5k-vuc",
+      "finding": false,
+      "reason": "v3 meets the v3 minimum for identity"
+    },
+    {
+      "tag_name": "v2.47.0-stage-5l-vtcq",
+      "finding": false,
+      "reason": "v3 meets the v3 minimum for identity"
+    },
+    {
+      "tag_name": "v2.48.0-stage-5m-vtc-quorum",
+      "finding": false,
+      "reason": "v3 meets the v3 minimum for identity"
+    },
+    {
+      "tag_name": "v2.49.0-stage-5n-vtc-delay",
+      "finding": false,
+      "reason": "v3 meets the v3 minimum for identity"
+    },
+    {
+      "tag_name": "v2.50.0-stage-5o-vsc",
+      "finding": false,
+      "reason": "v3 meets the v3 minimum for identity"
+    },
+    {
+      "tag_name": "v2.51.0-stage-5p-vsi",
+      "finding": false,
+      "reason": "v3 meets the v3 minimum for identity"
+    }
+  ],
+  "outcome_tally": {
+    "reproducible_denominator": 0,
+    "unreproducible_denominator": 16,
+    "reproduced": 0,
+    "reproduced_with_diff": 0,
+    "reproduction_failed": 0,
+    "environment_unreproducible": 16,
+    "script_absent": 0,
+    "note": "the two denominators are NEVER summed; environment_unreproducible is NEVER a pass"
+  },
+  "findings": [
+    {
+      "tag_name": "v2.36.0-stage-5a-vnc",
+      "kind": "lockfile_drift",
+      "reason": "the tag's package-lock.json differs from head. Re-resolving it would make the result attributable to today's registry rather than to the tag (gauntlet P2-10)."
+    },
+    {
+      "tag_name": "v2.37.0-stage-5b-var",
+      "kind": "lockfile_drift",
+      "reason": "the tag's package-lock.json differs from head. Re-resolving it would make the result attributable to today's registry rather than to the tag (gauntlet P2-10)."
+    },
+    {
+      "tag_name": "v2.38.0-stage-5c-vsb",
+      "kind": "lockfile_drift",
+      "reason": "the tag's package-lock.json differs from head. Re-resolving it would make the result attributable to today's registry rather than to the tag (gauntlet P2-10)."
+    },
+    {
+      "tag_name": "v2.39.0-stage-5d-varl",
+      "kind": "lockfile_drift",
+      "reason": "the tag's package-lock.json differs from head. Re-resolving it would make the result attributable to today's registry rather than to the tag (gauntlet P2-10)."
+    },
+    {
+      "tag_name": "v2.40.0-stage-5e-vda",
+      "kind": "lockfile_drift",
+      "reason": "the tag's package-lock.json differs from head. Re-resolving it would make the result attributable to today's registry rather than to the tag (gauntlet P2-10)."
+    },
+    {
+      "tag_name": "v2.41.0-stage-5f-vmp",
+      "kind": "lockfile_drift",
+      "reason": "the tag's package-lock.json differs from head. Re-resolving it would make the result attributable to today's registry rather than to the tag (gauntlet P2-10)."
+    },
+    {
+      "tag_name": "v2.42.0-stage-5g-vfc",
+      "kind": "lockfile_drift",
+      "reason": "the tag's package-lock.json differs from head. Re-resolving it would make the result attributable to today's registry rather than to the tag (gauntlet P2-10)."
+    },
+    {
+      "tag_name": "v2.43.0-stage-5h-vsd",
+      "kind": "lockfile_drift",
+      "reason": "the tag's package-lock.json differs from head. Re-resolving it would make the result attributable to today's registry rather than to the tag (gauntlet P2-10)."
+    },
+    {
+      "tag_name": "v2.44.0-stage-5i-vpc",
+      "kind": "lockfile_drift",
+      "reason": "the tag's package-lock.json differs from head. Re-resolving it would make the result attributable to today's registry rather than to the tag (gauntlet P2-10)."
+    },
+    {
+      "tag_name": "v2.45.0-stage-5j-vrc",
+      "kind": "lockfile_drift",
+      "reason": "the tag's package-lock.json differs from head. Re-resolving it would make the result attributable to today's registry rather than to the tag (gauntlet P2-10)."
+    },
+    {
+      "tag_name": "v2.46.0-stage-5k-vuc",
+      "kind": "lockfile_drift",
+      "reason": "the tag's package-lock.json differs from head. Re-resolving it would make the result attributable to today's registry rather than to the tag (gauntlet P2-10)."
+    },
+    {
+      "tag_name": "v2.47.0-stage-5l-vtcq",
+      "kind": "lockfile_drift",
+      "reason": "the tag's package-lock.json differs from head. Re-resolving it would make the result attributable to today's registry rather than to the tag (gauntlet P2-10)."
+    },
+    {
+      "tag_name": "v2.48.0-stage-5m-vtc-quorum",
+      "kind": "lockfile_drift",
+      "reason": "the tag's package-lock.json differs from head. Re-resolving it would make the result attributable to today's registry rather than to the tag (gauntlet P2-10)."
+    },
+    {
+      "tag_name": "v2.49.0-stage-5n-vtc-delay",
+      "kind": "lockfile_drift",
+      "reason": "the tag's package-lock.json differs from head. Re-resolving it would make the result attributable to today's registry rather than to the tag (gauntlet P2-10)."
+    },
+    {
+      "tag_name": "v2.50.0-stage-5o-vsc",
+      "kind": "lockfile_drift",
+      "reason": "the tag's package-lock.json differs from head. Re-resolving it would make the result attributable to today's registry rather than to the tag (gauntlet P2-10)."
+    },
+    {
+      "tag_name": "v2.51.0-stage-5p-vsi",
+      "kind": "lockfile_drift",
+      "reason": "the tag's package-lock.json differs from head. Re-resolving it would make the result attributable to today's registry rather than to the tag (gauntlet P2-10)."
+    }
+  ],
+  "worktree_leak": [],
+  "harness_ok": true,
+  "records": [
+    {
+      "tag_name": "v2.36.0-stage-5a-vnc",
+      "commit_sha": "9e839d286e14e4b1cbd5c6288fdc6339f434b694",
+      "in_committed_historical_closure": true,
+      "script": "scripts/reproduce-llm-shield-stage-5a-vnc.sh",
+      "script_present_at_tag": false,
+      "node_modules_present": false,
+      "lockfile_digest_at_tag": "b5650445bd1d0d0203e7c4ef11a1fa426693d5438d8907e87796e5977557e269",
+      "lockfile_drifted_from_head": true,
+      "outcome": "environment_unreproducible",
+      "reason": "dependencies_absent_and_npm_ci_forbidden"
+    },
+    {
+      "tag_name": "v2.37.0-stage-5b-var",
+      "commit_sha": "73e55dfce2aa5022d4f64b2055456b4e13651ac4",
+      "in_committed_historical_closure": true,
+      "script": "scripts/reproduce-llm-shield-stage-5b-var.sh",
+      "script_present_at_tag": false,
+      "node_modules_present": false,
+      "lockfile_digest_at_tag": "b5650445bd1d0d0203e7c4ef11a1fa426693d5438d8907e87796e5977557e269",
+      "lockfile_drifted_from_head": true,
+      "outcome": "environment_unreproducible",
+      "reason": "dependencies_absent_and_npm_ci_forbidden"
+    },
+    {
+      "tag_name": "v2.38.0-stage-5c-vsb",
+      "commit_sha": "9686ffc7e3de6c00b39b520b1b090b901c7d3fcc",
+      "in_committed_historical_closure": true,
+      "script": "scripts/reproduce-llm-shield-stage-5c-vsb.sh",
+      "script_present_at_tag": false,
+      "node_modules_present": false,
+      "lockfile_digest_at_tag": "b5650445bd1d0d0203e7c4ef11a1fa426693d5438d8907e87796e5977557e269",
+      "lockfile_drifted_from_head": true,
+      "outcome": "environment_unreproducible",
+      "reason": "dependencies_absent_and_npm_ci_forbidden"
+    },
+    {
+      "tag_name": "v2.39.0-stage-5d-varl",
+      "commit_sha": "831a778d95102b932f60f37d6c6e187910fc4929",
+      "in_committed_historical_closure": true,
+      "script": "scripts/reproduce-llm-shield-stage-5d-varl.sh",
+      "script_present_at_tag": false,
+      "node_modules_present": false,
+      "lockfile_digest_at_tag": "b5650445bd1d0d0203e7c4ef11a1fa426693d5438d8907e87796e5977557e269",
+      "lockfile_drifted_from_head": true,
+      "outcome": "environment_unreproducible",
+      "reason": "dependencies_absent_and_npm_ci_forbidden"
+    },
+    {
+      "tag_name": "v2.40.0-stage-5e-vda",
+      "commit_sha": "6457d48c147a45e88b3dd14d54e5b22823d5fdbe",
+      "in_committed_historical_closure": true,
+      "script": "scripts/reproduce-llm-shield-stage-5e-vda.sh",
+      "script_present_at_tag": false,
+      "node_modules_present": false,
+      "lockfile_digest_at_tag": "b5650445bd1d0d0203e7c4ef11a1fa426693d5438d8907e87796e5977557e269",
+      "lockfile_drifted_from_head": true,
+      "outcome": "environment_unreproducible",
+      "reason": "dependencies_absent_and_npm_ci_forbidden"
+    },
+    {
+      "tag_name": "v2.41.0-stage-5f-vmp",
+      "commit_sha": "379e662416b45bb84376a2bcb3356b9ef67e573c",
+      "in_committed_historical_closure": true,
+      "script": "scripts/reproduce-llm-shield-stage-5f-vmp.sh",
+      "script_present_at_tag": false,
+      "node_modules_present": false,
+      "lockfile_digest_at_tag": "b5650445bd1d0d0203e7c4ef11a1fa426693d5438d8907e87796e5977557e269",
+      "lockfile_drifted_from_head": true,
+      "outcome": "environment_unreproducible",
+      "reason": "dependencies_absent_and_npm_ci_forbidden"
+    },
+    {
+      "tag_name": "v2.42.0-stage-5g-vfc",
+      "commit_sha": "fc8754a1ee13f0447bb13c6f8b78f03d6793982b",
+      "in_committed_historical_closure": true,
+      "script": "scripts/reproduce-llm-shield-stage-5g-vfc.sh",
+      "script_present_at_tag": false,
+      "node_modules_present": false,
+      "lockfile_digest_at_tag": "b5650445bd1d0d0203e7c4ef11a1fa426693d5438d8907e87796e5977557e269",
+      "lockfile_drifted_from_head": true,
+      "outcome": "environment_unreproducible",
+      "reason": "dependencies_absent_and_npm_ci_forbidden"
+    },
+    {
+      "tag_name": "v2.43.0-stage-5h-vsd",
+      "commit_sha": "f0b0ae52c2fe9b02506e12ee773f7affd1897cbc",
+      "in_committed_historical_closure": true,
+      "script": "scripts/reproduce-llm-shield-stage-5h-vsd.sh",
+      "script_present_at_tag": false,
+      "node_modules_present": false,
+      "lockfile_digest_at_tag": "b5650445bd1d0d0203e7c4ef11a1fa426693d5438d8907e87796e5977557e269",
+      "lockfile_drifted_from_head": true,
+      "outcome": "environment_unreproducible",
+      "reason": "dependencies_absent_and_npm_ci_forbidden"
+    },
+    {
+      "tag_name": "v2.44.0-stage-5i-vpc",
+      "commit_sha": "dca3aee6652f082c5f8dcc4750b20086495dc310",
+      "in_committed_historical_closure": true,
+      "script": "scripts/reproduce-llm-shield-stage-5i-vpc.sh",
+      "script_present_at_tag": false,
+      "node_modules_present": false,
+      "lockfile_digest_at_tag": "b5650445bd1d0d0203e7c4ef11a1fa426693d5438d8907e87796e5977557e269",
+      "lockfile_drifted_from_head": true,
+      "outcome": "environment_unreproducible",
+      "reason": "dependencies_absent_and_npm_ci_forbidden"
+    },
+    {
+      "tag_name": "v2.45.0-stage-5j-vrc",
+      "commit_sha": "4e6ae615b60b0bd8ed5b30d61881abed7bc3f027",
+      "in_committed_historical_closure": true,
+      "script": "scripts/reproduce-llm-shield-stage-5j-vrc.sh",
+      "script_present_at_tag": false,
+      "node_modules_present": false,
+      "lockfile_digest_at_tag": "b5650445bd1d0d0203e7c4ef11a1fa426693d5438d8907e87796e5977557e269",
+      "lockfile_drifted_from_head": true,
+      "outcome": "environment_unreproducible",
+      "reason": "dependencies_absent_and_npm_ci_forbidden"
+    },
+    {
+      "tag_name": "v2.46.0-stage-5k-vuc",
+      "commit_sha": "6e6e14969b795bb2493329f48e4e072eb36713b6",
+      "in_committed_historical_closure": true,
+      "script": "scripts/reproduce-llm-shield-stage-5k-vuc.sh",
+      "script_present_at_tag": false,
+      "node_modules_present": false,
+      "lockfile_digest_at_tag": "b5650445bd1d0d0203e7c4ef11a1fa426693d5438d8907e87796e5977557e269",
+      "lockfile_drifted_from_head": true,
+      "outcome": "environment_unreproducible",
+      "reason": "dependencies_absent_and_npm_ci_forbidden"
+    },
+    {
+      "tag_name": "v2.47.0-stage-5l-vtcq",
+      "commit_sha": "3d0c4e0d0480bbcbfd2bcc4bc8002dc5657c2337",
+      "in_committed_historical_closure": true,
+      "script": "scripts/reproduce-llm-shield-stage-5l-vtcq.sh",
+      "script_present_at_tag": false,
+      "node_modules_present": false,
+      "lockfile_digest_at_tag": "b5650445bd1d0d0203e7c4ef11a1fa426693d5438d8907e87796e5977557e269",
+      "lockfile_drifted_from_head": true,
+      "outcome": "environment_unreproducible",
+      "reason": "dependencies_absent_and_npm_ci_forbidden"
+    },
+    {
+      "tag_name": "v2.48.0-stage-5m-vtc-quorum",
+      "commit_sha": "b3c0ba346dfcbe430ca7e5f40403c383bac20b8b",
+      "in_committed_historical_closure": true,
+      "script": "scripts/reproduce-llm-shield-stage-5m-vtc-quorum.sh",
+      "script_present_at_tag": false,
+      "node_modules_present": false,
+      "lockfile_digest_at_tag": "b5650445bd1d0d0203e7c4ef11a1fa426693d5438d8907e87796e5977557e269",
+      "lockfile_drifted_from_head": true,
+      "outcome": "environment_unreproducible",
+      "reason": "dependencies_absent_and_npm_ci_forbidden"
+    },
+    {
+      "tag_name": "v2.49.0-stage-5n-vtc-delay",
+      "commit_sha": "df45662c6f478a997549505a785b17cdc242aa01",
+      "in_committed_historical_closure": true,
+      "script": "scripts/reproduce-llm-shield-stage-5n-vtc-delay.sh",
+      "script_present_at_tag": false,
+      "node_modules_present": false,
+      "lockfile_digest_at_tag": "b5650445bd1d0d0203e7c4ef11a1fa426693d5438d8907e87796e5977557e269",
+      "lockfile_drifted_from_head": true,
+      "outcome": "environment_unreproducible",
+      "reason": "dependencies_absent_and_npm_ci_forbidden"
+    },
+    {
+      "tag_name": "v2.50.0-stage-5o-vsc",
+      "commit_sha": "5403d32cde550796b7e6ca1a96218f7e03fa1c9d",
+      "in_committed_historical_closure": true,
+      "script": "scripts/reproduce-llm-shield-stage-5o-vsc.sh",
+      "script_present_at_tag": false,
+      "node_modules_present": false,
+      "lockfile_digest_at_tag": "b5650445bd1d0d0203e7c4ef11a1fa426693d5438d8907e87796e5977557e269",
+      "lockfile_drifted_from_head": true,
+      "outcome": "environment_unreproducible",
+      "reason": "dependencies_absent_and_npm_ci_forbidden"
+    },
+    {
+      "tag_name": "v2.51.0-stage-5p-vsi",
+      "commit_sha": "100ead22ccf377438ddb22dcf808da0006367a01",
+      "in_committed_historical_closure": true,
+      "script": "scripts/reproduce-llm-shield-stage-5p-vsi.sh",
+      "script_present_at_tag": false,
+      "node_modules_present": false,
+      "lockfile_digest_at_tag": "b5650445bd1d0d0203e7c4ef11a1fa426693d5438d8907e87796e5977557e269",
+      "lockfile_drifted_from_head": true,
+      "outcome": "environment_unreproducible",
+      "reason": "dependencies_absent_and_npm_ci_forbidden"
+    }
+  ],
+  "summary": "16 tag records. 0 in the reproducible denominator, 16 in the unreproducible one; they are not summed. 16 finding(s)."
+}
