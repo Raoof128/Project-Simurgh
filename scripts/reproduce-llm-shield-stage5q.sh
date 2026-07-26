@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
 # Stage 5Q — VSR: stage-wide red team over the sixteen Stage-5 releases.
 #
-# SCAFFOLD REPRODUCE (plan Task 18.4a). This script verifies everything Q0 has produced up to the
-# coverage ledger: the spec freeze, the write surface, the three censuses, the L2 closure, the
-# mutation receipts, the finding ledger, the sixteen trays and the four campaigns.
+# THE FULL REPRODUCE (plan Task 20.5). This is the artifact a reviewer runs. It verifies the spec
+# freeze, the §6.1 write surface, prior-stage non-disturbance, the unit suite, the Lean core, the
+# three censuses, the L2 closure, the mutation receipts, the finding ledger, the sixteen trays, the
+# four campaigns, the coverage ledger, cross-runtime parity, K7-A, the signed attestation, K7-B and
+# the Q0->Q1 transition conditions.
 #
-# IT PRINTS `SCAFFOLD GATES PASSED`, NEVER `ALL GATES PASSED`. The full reproduce arrives at plan
-# Task 20.5 and adds the coverage discharge ledger, the signed attestation, K7-B and prior-stage
-# non-disturbance over the attestation. Printing the final banner here would claim coverage of gates
-# that do not exist yet — which is the defect class this whole stage is named after.
+# It began as the Task 18.4a SCAFFOLD, which printed `SCAFFOLD GATES PASSED` because the coverage
+# ledger, the attestation and K7-B did not exist yet. They exist now, they are gated here, and the
+# banner is `ALL GATES PASSED` — a name this file was not allowed to print until every gate it
+# claims was real.
 #
 # EVERY GATE IS AN EXPLICIT if/then/else WITH exit 1. NO `cmd && echo OK` chains: under `set -e`
 # that pattern fails OPEN, and it cost Stage 5E two undetected failures on the droplet reproduce.
@@ -56,7 +58,7 @@ EXPECTED_GATE_PROBLEMS="11"
 # the artifact a reviewer runs, and it stays named.
 KNOWN_WRITE_SURFACE_EXCEPTIONS="tests/unit/llmShield/stage5p/rawCodeCensus.test.js"
 
-echo "== Stage 5Q VSR reproduce (SCAFFOLD) =="
+echo "== Stage 5Q VSR reproduce (FULL) =="
 "$NODE" --version
 NODE_MAJOR="$("$NODE" -p 'process.versions.node.split(".")[0]')"
 if [ "$NODE_MAJOR" != "26" ]; then
@@ -573,7 +575,61 @@ echo "K7-A: every 5Q export enumerated by walking and exercised by a typed adapt
 
 # ------------------------------------------------------------------------------------------------
 echo
-echo "-- 18. this script disturbed nothing (re-checked after every gate ran) --"
+echo "-- 18. the signed Q0 attestation (ten roots, verified in the normative order) --"
+ATT_EXIT=0
+ATT_OUT="$("$NODE" "$Q/node/attestation.mjs" 2>&1)" || ATT_EXIT=$?
+echo "$ATT_OUT" | grep -E '^      [✔✗]|public_digest|inadmissible classes' | sed 's/^/  /'
+if [ "$ATT_EXIT" != "0" ]; then
+  echo "FAIL: the Q0 attestation does not verify"
+  echo "$ATT_OUT" | tail -20
+  exit 1
+fi
+# The roots are checked BEFORE the signature by construction (see core/attestation.mjs). The gate
+# asserts the receipt records that order, because a verifier that checks the signature first and the
+# roots never is the failure the ordering exists to prevent.
+FIRST_STEP="$("$NODE" -e "process.stdout.write(String(require('./$E/attestation/verification-receipt.json').steps[0].step))")"
+if [ "$FIRST_STEP" != "roots_recompute" ]; then
+  echo "FAIL: the verification receipt's first step is '$FIRST_STEP', not roots_recompute"
+  exit 1
+fi
+echo "attestation: 10 roots recomputed, then signed bundle verified: OK"
+
+# ------------------------------------------------------------------------------------------------
+echo
+echo "-- 19. K7-B: attestation and closure cross-binding --"
+K7B_OUT="$("$NODE" --test --test-reporter=tap tests/e2e/llmShield/stage5q/k7bAttestationBinding.test.js 2>&1 || true)"
+echo "$K7B_OUT" | grep -E '^# (tests|pass|fail) ' | sed 's/^#* *//' | sed 's/^/      /' || true
+K7B_FAIL="$(echo "$K7B_OUT" | grep -E '^# fail ' | awk '{print $3}' || true)"
+if [ "${K7B_FAIL:-1}" != "0" ]; then
+  echo "FAIL: K7-B is not green"
+  echo "$K7B_OUT" | grep -E '^not ok' | head -10
+  exit 1
+fi
+echo "K7-B: every root binds its artifact; every tray is bound to the attested universe: OK"
+
+# ------------------------------------------------------------------------------------------------
+echo
+echo "-- 20. Q0->Q1 transition conditions (T1-T7) --"
+# T7 needs the full non-disturbance manifest, which runs check-e2e.sh and eight reproduce scripts.
+# Pass --with-manifest to this script to include it; without it T7 is reported NOT RUN, and not run
+# is NOT a pass — the validator says so rather than skipping the row.
+TRANS_ARGS=""
+if [ "${1:-}" = "--with-manifest" ]; then TRANS_ARGS="--manifest"; fi
+TRANS_EXIT=0
+TRANS_OUT="$("$NODE" "$Q/node/verifyTransition.mjs" $TRANS_ARGS 2>&1)" || TRANS_EXIT=$?
+echo "$TRANS_OUT" | grep -E '^  [✔✗] T[1-7]|Q1 AUTHORISED|STAGE RELEASE' | sed 's/^/  /'
+# The transition is REPORTED, not required. Q0 may freeze an incomplete result — that is the whole
+# point of Q0 — and this script's job is to reproduce what was frozen, not to pretend Q1 is ready.
+if [ "$TRANS_EXIT" = "0" ]; then
+  echo "transition: all seven conditions hold; Q1 is authorised: OK"
+else
+  echo "transition: NOT all conditions hold. Q0 is frozen and attested; Q1 is NOT authorised."
+  echo "            That is a reported state, not a failure of this reproduce."
+fi
+
+# ------------------------------------------------------------------------------------------------
+echo
+echo "-- 21. this script disturbed nothing (re-checked after every gate ran) --"
 # Gate 3 checked the branch. This checks THIS RUN: a reproduce script that verifies non-disturbance
 # and then disturbs something on its way through is worse than one that never checked, because it
 # prints a clean bill over damage it caused. It has happened once already.
@@ -593,10 +649,18 @@ echo "==========================================================================
 echo "NOT REPRODUCED BY THIS SCRIPT — named rather than omitted"
 echo "================================================================================"
 cat <<'NOTE'
-  Q0 tail, does not exist yet          the signed attestation (20), K7-B and the reproduction
-                                       receipt (20.5), transition validation (21). The full
-                                       reproduce at 20.5 is the artifact a reviewer runs; this one
-                                       is its scaffold and says so in its banner.
+  T7 non-disturbance                   NOT RUN unless this script is given --with-manifest. It
+                                       runs check-e2e.sh plus eight prior-stage reproduce scripts
+                                       and takes tens of minutes. Without it the transition
+                                       validator reports T7 as NOT RUN — which it counts as a
+                                       failure, because a condition that did not run has not
+                                       passed.
+
+  Q1 AUTHORISATION                     NOT GRANTED. T3 fails: 2522 of 2531 members derive no
+                                       coverage status. Q0 is frozen and attested honestly; Q1 does
+                                       not begin until every member carries exactly one status.
+                                       Stage RELEASE is separately blocked while R5 and R7 have no
+                                       green->red->green receipt.
 
   L1 COVERAGE — NOT CERTIFIED          gate 15 verifies the ledger; it does not certify coverage,
                                        because the ledger does not. 1438 of 23332 obligated cells
@@ -632,7 +696,9 @@ cat <<'NOTE'
 NOTE
 
 echo
-echo "SCAFFOLD GATES PASSED"
-echo "(This is not ALL GATES PASSED. That banner belongs to the Task 20.5 reproduce, which"
-echo " verifies the coverage ledger, the signed attestation and K7-B. None of those exist yet.)"
+echo "ALL GATES PASSED"
+echo "(Every gate this script names ran and returned green. It does NOT mean Stage 5Q is complete:"
+echo " L1 coverage is not certified, R5 and R7 are inadmissible, and Q1 is not authorised. Those are"
+echo " reported above and in the attestation's own non-claims. A reproduce script proves that what"
+echo " was frozen reproduces — not that what was frozen is finished.)"
 exit 0

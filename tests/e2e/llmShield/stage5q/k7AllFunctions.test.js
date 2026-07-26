@@ -709,6 +709,96 @@ const ADAPTERS = {
         "0"
       ),
   },
+
+  // ---- Task 20/21: attestation and transition ---------------------------------------------------
+  "core/attestation.mjs": {
+    PUBLIC_SCHEMA: (m) => ok(/q0\.public/.test(m.PUBLIC_SCHEMA), "the deterministic bundle schema"),
+    ENVELOPE_SCHEMA: (m) => ok(/q0\.envelope/.test(m.ENVELOPE_SCHEMA), "the envelope schema"),
+    ROTATION_SCHEMA: (m) => ok(/key-rotation/.test(m.ROTATION_SCHEMA), "the rotation schema"),
+    ROOT_NAMES: (m) => ok(m.ROOT_NAMES.length === 10, "TEN roots, not the seven originally ruled"),
+    ATTACK_RESULT_DOMAIN: (m) => isNonEmptyString(m.ATTACK_RESULT_DOMAIN),
+    MUTATION_ROOT_DOMAIN: (m) => isNonEmptyString(m.MUTATION_ROOT_DOMAIN),
+    PACK_ROOT_DOMAIN: (m) => isNonEmptyString(m.PACK_ROOT_DOMAIN),
+    KNOWN_LIMITATIONS: (m) =>
+      ok(
+        m.KNOWN_LIMITATIONS.some((l) => l.includes("zero discovered findings")),
+        "the §13 non-claim this whole stage turns on"
+      ),
+    sha256Hex: (m) => ok(/^[0-9a-f]{64}$/.test(m.sha256Hex(Buffer.from("x"))), "64 hex"),
+    buildPublicBundle: (m) =>
+      throwsWith(
+        () =>
+          m.buildPublicBundle({
+            roots: {},
+            closureMeta: {},
+            inadmissibleClasses: [],
+            signer: {},
+          }),
+        /missing or not 64-hex/
+      ),
+    publicDigest: (m) => ok(m.publicDigest({ a: 1 }) === m.publicDigest({ a: 1 }), "deterministic"),
+    signingInput: (m) =>
+      ok(m.signingInput("a".repeat(64)).includes(0x00), "domain-separated by a NUL"),
+    verifyAttestation: (m) => {
+      const r = m.verifyAttestation({
+        bundle: { roots: { closure_member_commitment_digest: "a" } },
+        envelope: {},
+        recomputedRoots: { closure_member_commitment_digest: "b" },
+        publicKey: null,
+      });
+      ok(r.ok === false && r.steps.at(-1).step === "roots_recompute", "roots are checked FIRST");
+    },
+    verifyRotationChain: (m) =>
+      ok(
+        m.verifyRotationChain({ genesisKeyB64: "G", chain: [], presentedKeyB64: "X" }).ok === false,
+        "an unlinked key with no rotation is refused"
+      ),
+    attackResultRoot: (m) =>
+      ok(
+        m.attackResultRoot({ trays: [], campaigns: [] }) !==
+          m.attackResultRoot({ trays: [{ tray_id: "t", summary: "s" }], campaigns: [] }),
+        "a tray changes the root"
+      ),
+    mutationReceiptRoot: (m) =>
+      ok(
+        /^[0-9a-f]{64}$/.test(m.mutationReceiptRoot([])),
+        "a root over no receipts is still a root"
+      ),
+    attackPackRoot: (m) => ok(/^[0-9a-f]{64}$/.test(m.attackPackRoot({})), "64 hex"),
+  },
+  "core/transition.mjs": {
+    TRANSITION_CONDITIONS: (m) => ok(m.TRANSITION_CONDITIONS.length === 7, "T1..T7"),
+    FROZEN_BLOCK_DIGEST: (m) =>
+      ok(
+        m.FROZEN_BLOCK_DIGEST ===
+          "da78774b77495459e4889e1c433e1933bb502ac81c9e5c0811e2450af7fdfc74",
+        "the pinned frozen block"
+      ),
+    UNCOVERED_STAGES: (m) => ok(m.UNCOVERED_STAGES.length === 8, "the eight check-e2e.sh omits"),
+    COVERED_BY_OWN_WORKFLOW: (m) => ok(m.COVERED_BY_OWN_WORKFLOW.includes("5o"), "5O has its own"),
+    evaluateTransition: (m) => {
+      const r = m.evaluateTransition({});
+      ok(
+        r.conditions.length === 7 && r.q1_authorised === false,
+        "an empty world authorises nothing"
+      );
+    },
+    manifestGaps: (m) =>
+      ok(
+        m.manifestGaps({ allStageScripts: ["scripts/x.sh"], coveredByCheckE2e: [] }).length === 1,
+        "a script in no category is a gap"
+      ),
+  },
+  "node/attestation.mjs": {
+    recomputeRoots: (m) => {
+      const { roots, disagreements } = m.recomputeRoots();
+      ok(disagreements.length === 0, "the artifacts that carry a root agree about it");
+      ok(Object.keys(roots).length === 10, "all ten recomputed from the evidence");
+    },
+  },
+  "node/verifyTransition.mjs": {
+    TRANSITION_CONDITIONS: (m) => ok(m.TRANSITION_CONDITIONS.length === 7, "re-exported T1..T7"),
+  },
 };
 
 // ------------------------------------------------------------------------------------------------

@@ -240,16 +240,27 @@ test("the reproduce script exists, is executable, and is inside the §6.1 write 
   assert.notEqual(statSync(REPRODUCE).mode & 0o111, 0);
 });
 
-test("the scaffold NEVER prints ALL GATES PASSED", () => {
-  // That banner belongs to the Task 20.5 reproduce, which verifies the coverage ledger, the signed
-  // attestation and K7-B. Printing it here would claim gates that do not exist.
+test("ALL GATES PASSED is EARNED: the banner requires the gates it implies to be real", () => {
+  // This test began as "the scaffold NEVER prints ALL GATES PASSED", and it fired the moment the
+  // script legitimately became the full reproduce. That is the right behaviour — the banner was
+  // forbidden until the coverage ledger, the attestation and K7-B existed and were gated. The
+  // assertion now checks the CONDITION rather than the string: if the script claims the banner, it
+  // must actually run those three, and it must say what the banner does not mean.
   const source = readFileSync(REPRODUCE, "utf8");
-  const printed = source
-    .split("\n")
-    .filter((l) => /^\s*echo\s/.test(l))
-    .join("\n");
-  assert.equal(/ALL GATES PASSED/.test(printed.replace(/not ALL GATES PASSED/g, "")), false);
-  assert.match(source, /SCAFFOLD GATES PASSED/);
+  if (source.includes("ALL GATES PASSED")) {
+    for (const gate of [
+      "node/attestation.mjs",
+      "k7bAttestationBinding.test.js",
+      "coverage/discharge-ledger.json",
+      "node/verifyTransition.mjs",
+    ]) {
+      assert.ok(source.includes(gate), `the banner is claimed without gating ${gate}`);
+    }
+    // And the honest qualification. A green reproduce proves what was frozen reproduces; it does
+    // not prove what was frozen is finished, and the script has to say so where a reader sees it.
+    assert.match(source, /does NOT mean Stage 5Q is complete/);
+    assert.match(source, /L1 coverage is not certified/);
+  }
 });
 
 test("no gate in the reproduce script uses the fail-open `cmd && echo` shape", () => {

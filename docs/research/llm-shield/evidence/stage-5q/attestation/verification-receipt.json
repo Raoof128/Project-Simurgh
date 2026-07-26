@@ -1,0 +1,48 @@
+{
+  "schema": "simurgh.vsr.q0.verification-receipt.v1",
+  "note": "Produced by the SAME code path a reviewer runs. Roots are recomputed from the evidence before the signature is looked at: a valid signature over stale claims verifies perfectly and means nothing.",
+  "public_digest": "8d04e35c6ccd7531e963de7e6aa964e4777b361666be8be516642f25eac27de6",
+  "verified": true,
+  "byte_stable": true,
+  "rotation_chain": {
+    "ok": true,
+    "reason": "no rotation; the presented key IS the genesis key",
+    "links": 0
+  },
+  "steps": [
+    {
+      "step": "roots_recompute",
+      "ok": true,
+      "reason": "all 10 roots agree"
+    },
+    {
+      "step": "limitations_complete",
+      "ok": true,
+      "reason": "every §13 non-claim is published"
+    },
+    {
+      "step": "public_digest",
+      "ok": true,
+      "reason": "8d04e35c6ccd7531e963de7e6aa964e4777b361666be8be516642f25eac27de6"
+    },
+    {
+      "step": "signer_binding",
+      "ok": true,
+      "reason": "stage5q-q0-genesis"
+    },
+    {
+      "step": "signature",
+      "ok": true,
+      "reason": "ed25519 over the domain-separated digest"
+    }
+  ],
+  "roots_recomputed_from": [
+    "closure/{function-closure,release-tag-closure,attack-taxonomy}.json.digest",
+    "closure/{commitment-receipt,obligation-matrix}.json",
+    "coverage/discharge-ledger.json",
+    "findings/q0-finding-ledger.json",
+    "mutation/receipts.json",
+    "packs/all-pack-results.json",
+    "trays/*.json + campaigns/*.json  (q0_attack_result_root)"
+  ]
+}
