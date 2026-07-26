@@ -1,0 +1,237 @@
+{
+  "schema": "simurgh.vsr.f001-complete-probe.v1",
+  "discovered_by": "pre_stage_design_review",
+  "corroborated_by": "stage5q_q0_attack_pack",
+  "note": "A finding surfaced by human design review and later reproduced by the harness is CORROBORATED, not DISCOVERED, by the harness (spec §5.1).",
+  "out_of_band": "This probe is a diagnostic. It is NOT wired into any shared workflow (spec §14.1/§14.2): F001 stays live through Q0, and a probe that quietly repaired the gate would erase the evidence it was built to collect.",
+  "attempted": 32,
+  "results": [
+    {
+      "file": "proofs/stage4/ExitLattice.lean",
+      "exit": 0,
+      "signal": null,
+      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_prefix": ""
+    },
+    {
+      "file": "proofs/stage4/Structuring.lean",
+      "exit": 0,
+      "signal": null,
+      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_prefix": ""
+    },
+    {
+      "file": "proofs/stage4m/AntiMonotonicity.lean",
+      "exit": 0,
+      "signal": null,
+      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_prefix": ""
+    },
+    {
+      "file": "proofs/stage4n/TemporalCompleteness.lean",
+      "exit": 0,
+      "signal": null,
+      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_prefix": ""
+    },
+    {
+      "file": "proofs/stage4o/MonotoneConsent.lean",
+      "exit": 0,
+      "signal": null,
+      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_prefix": ""
+    },
+    {
+      "file": "proofs/stage4p/OriginCustody.lean",
+      "exit": 0,
+      "signal": null,
+      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_prefix": ""
+    },
+    {
+      "file": "proofs/stage4q/FrictionPrecedence.lean",
+      "exit": 0,
+      "signal": null,
+      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_prefix": ""
+    },
+    {
+      "file": "proofs/stage4r/NoPublicHerdToken.lean",
+      "exit": 0,
+      "signal": null,
+      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_prefix": ""
+    },
+    {
+      "file": "proofs/stage4s/NoGhostHop.lean",
+      "exit": 0,
+      "signal": null,
+      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_prefix": ""
+    },
+    {
+      "file": "proofs/stage4t/NoHearsay.lean",
+      "exit": 0,
+      "signal": null,
+      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_prefix": ""
+    },
+    {
+      "file": "proofs/stage4u/NoSilentBypass.lean",
+      "exit": 0,
+      "signal": null,
+      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_prefix": ""
+    },
+    {
+      "file": "proofs/stage4v/DueProcess.lean",
+      "exit": 0,
+      "signal": null,
+      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_prefix": ""
+    },
+    {
+      "file": "proofs/stage4w/SlotBoundNarrative.lean",
+      "exit": 0,
+      "signal": null,
+      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_prefix": ""
+    },
+    {
+      "file": "proofs/stage4x/LeakageResidue.lean",
+      "exit": 0,
+      "signal": null,
+      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_prefix": ""
+    },
+    {
+      "file": "proofs/stage4y/DocumentResidue.lean",
+      "exit": 0,
+      "signal": null,
+      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_prefix": ""
+    },
+    {
+      "file": "proofs/stage4z/WorkspaceAttestation.lean",
+      "exit": 0,
+      "signal": null,
+      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_prefix": ""
+    },
+    {
+      "file": "proofs/stage5a/NarrativeConflict.lean",
+      "exit": 0,
+      "signal": null,
+      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_prefix": ""
+    },
+    {
+      "file": "proofs/stage5b/AdversarialReadout.lean",
+      "exit": 0,
+      "signal": null,
+      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_prefix": ""
+    },
+    {
+      "file": "proofs/stage5c/SemanticBypass.lean",
+      "exit": 0,
+      "signal": null,
+      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_prefix": ""
+    },
+    {
+      "file": "proofs/stage5d/AdaptiveRedTeam.lean",
+      "exit": 0,
+      "signal": null,
+      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_prefix": ""
+    },
+    {
+      "file": "proofs/stage5e/DeployedDetector.lean",
+      "exit": 0,
+      "signal": null,
+      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_prefix": ""
+    },
+    {
+      "file": "proofs/stage5f/PanelCompleteness.lean",
+      "exit": 0,
+      "signal": null,
+      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_prefix": ""
+    },
+    {
+      "file": "proofs/stage5g/ForeignCapture.lean",
+      "exit": 0,
+      "signal": null,
+      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_prefix": ""
+    },
+    {
+      "file": "proofs/stage5h/DisclosureTier.lean",
+      "exit": 0,
+      "signal": null,
+      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_prefix": ""
+    },
+    {
+      "file": "proofs/stage5i/PanelCoverage.lean",
+      "exit": 0,
+      "signal": null,
+      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_prefix": ""
+    },
+    {
+      "file": "proofs/stage5j/RatingContest.lean",
+      "exit": 0,
+      "signal": null,
+      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_prefix": ""
+    },
+    {
+      "file": "proofs/stage5k/UniverseCommitment.lean",
+      "exit": 0,
+      "signal": null,
+      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_prefix": ""
+    },
+    {
+      "file": "proofs/stage5l/TemporalQuorum.lean",
+      "exit": 0,
+      "signal": null,
+      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_prefix": ""
+    },
+    {
+      "file": "proofs/stage5m/EcologyQuorum.lean",
+      "exit": 0,
+      "signal": null,
+      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_prefix": ""
+    },
+    {
+      "file": "proofs/stage5n/VtcDelay.lean",
+      "exit": 0,
+      "signal": null,
+      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_prefix": ""
+    },
+    {
+      "file": "proofs/stage5o/Vsc.lean",
+      "exit": 0,
+      "signal": null,
+      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_prefix": ""
+    },
+    {
+      "file": "proofs/stage5p/Vsi.lean",
+      "exit": 0,
+      "signal": null,
+      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_prefix": ""
+    }
+  ],
+  "files_not_attempted": [],
+  "all_attempted": true,
+  "failures": []
+}

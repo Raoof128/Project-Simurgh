@@ -1,0 +1,20 @@
+{
+  "schema": "simurgh.vsr.f001-false-green.v1",
+  "discovered_by": "pre_stage_design_review",
+  "corroborated_by": "stage5q_q0_attack_pack",
+  "note": "A finding surfaced by human design review and later reproduced by the harness is CORROBORATED, not DISCOVERED, by the harness (spec §5.1).",
+  "workflow_file": ".github/workflows/stage-4-lean-proofs.yml",
+  "step_name": "Type-check the Stage 4 formal core (exit lattice, structuring, anti-monotonicity)",
+  "verbatim_run_scalar": "        run: |\n          lean proofs/stage4/ExitLattice.lean\n          lean proofs/stage4/Structuring.lean\n          lean proofs/stage4m/AntiMonotonicity.lean\n          lean proofs/stage4n/TemporalCompleteness.lean\n          lean proofs/stage4o/MonotoneConsent.lean\n          lean proofs/stage4p/OriginCustody.lean\n          lean proofs/stage4q/FrictionPrecedence.lean\n          lean proofs/stage4r/NoPublicHerdToken.lean\n          lean proofs/stage4s/NoGhostHop.lean\n          lean proofs/stage4u/NoSilentBypass.lean\n          lean proofs/stage4t/NoHearsay.lean\n          ! grep -Rn \"\\bsorry\\b\" proofs/stage4t\n          lean proofs/stage4v/DueProcess.lean\n          ! grep -Rn \"\\bsorry\\b\" proofs/stage4v\n          lean proofs/stage4w/SlotBoundNarrative.lean\n          ! grep -Rn \"\\bsorry\\b\" proofs/stage4w\n          lean proofs/stage4x/LeakageResidue.lean\n          ! grep -Rn \"\\bsorry\\b\" proofs/stage4x\n          lean proofs/stage4y/DocumentResidue.lean\n          ! grep -Rn \"\\bsorry\\b\" proofs/stage4y\n          lean proofs/stage4z/WorkspaceAttestation.lean\n          ! grep -Rn \"\\bsorry\\b\" proofs/stage4z\n          lean proofs/stage5a/NarrativeConflict.lean\n          lean proofs/stage5b/AdversarialReadout.lean\n          ! grep -Rn \"\\bsorry\\b\" proofs/stage5a\n          lean proofs/stage5c/SemanticBypass.lean\n          ! grep -Rn \"\\bsorry\\b\" proofs/stage5c\n          lean proofs/stage5d/AdaptiveRedTeam.lean\n          ! grep -REn \"\\bsorry\\b|\\badmit\\b\" proofs/stage5d\n          lean proofs/stage5e/DeployedDetector.lean\n          ! grep -REn \"\\bsorry\\b|\\badmit\\b\" proofs/stage5e\n          lean proofs/stage5f/PanelCompleteness.lean\n          ! grep -REn \"\\bsorry\\b|\\badmit\\b\" proofs/stage5f\n          lean proofs/stage5g/ForeignCapture.lean\n          ! grep -REn \"\\bsorry\\b|\\badmit\\b\" proofs/stage5g\n          lean proofs/stage5h/DisclosureTier.lean\n          ! grep -REn \"\\bsorry\\b|\\badmit\\b\" proofs/stage5h\n          lean proofs/stage5n/VtcDelay.lean\n          ! grep -REn \"\\bsorry\\b|\\badmit\\b\" proofs/stage5n\n          lean proofs/stage5o/Vsc.lean\n          ! grep -REn \"\\bsorry\\b|\\badmit\\b\" proofs/stage5o\n          lean proofs/stage5p/Vsi.lean\n          ! grep -REn \"\\bsorry\\b|\\badmit\\b\" proofs/stage5p\n",
+  "verbatim_digest": "53f7dc2b6e5fb2667e2d02eaf4b8e93ac0ae46ac449088127ee556c9b4fbf680",
+  "gate_exit_status": 0,
+  "gate_exited_successfully": true,
+  "omitted_while_green": [
+    "proofs/stage5i/PanelCoverage.lean",
+    "proofs/stage5j/RatingContest.lean",
+    "proofs/stage5k/UniverseCommitment.lean",
+    "proofs/stage5l/TemporalQuorum.lean",
+    "proofs/stage5m/EcologyQuorum.lean"
+  ],
+  "claim": "the gate exits successfully while the omitted proof files remain outside its execution closure. It is not failing to check them loudly; it is passing without checking them."
+}
