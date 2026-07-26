@@ -619,23 +619,38 @@ them, because blocking on them creates pressure to under-report.
 
 ### §7.1 The seeded mutants
 
-Representative classes, from the ruling:
+**One mutant per attack class — sixteen, not nine.** An earlier draft listed nine representative
+mutants. Nine cannot discharge sixteen classes: L4 requires _every_ class to demonstrate a
+green→red→green transition, and a representative sample silently leaves seven classes with passing
+results that were never shown to be detectable.
 
-```text
-M1  skipped signature check
-M2  swapped first-failure checks
-M3  omitted census row
-M4  weakened exact-key validation
-M5  cross-stage domain separation removed
-M6  resolver ceiling bypassed
-M7  selective-disclosure contradiction accepted
-M8  model text treated as trusted authority
-M9  historical verifier silently upgraded
-```
+| Mutant | Seeded defect                                     | Primary class |
+| ------ | ------------------------------------------------- | ------------- |
+| M1     | Weaken exact-key validation                       | R1            |
+| M2     | Introduce Unicode normalisation or case folding   | R2            |
+| M3     | Remove digest domain or profile binding           | R3            |
+| M4     | Skip signature or trust-root validation           | R4            |
+| M5     | Remove stage/tag binding and permit replay        | R5            |
+| M6     | Swap first-failure checks or raw-code rows        | R6            |
+| M7     | Omit one census member                            | R7            |
+| M8     | Retain caller state or permit partial commit      | R8            |
+| M9     | Remove size, depth or recursion bound             | R9            |
+| M10    | Hard-code a premise gate green or read its oracle | R10           |
+| M11    | Diverge one Python/browser canonical-byte rule    | R11           |
+| M12    | Silently apply the current verifier to an old tag | R12           |
+| M13    | Treat model-controlled text as trusted authority  | R13           |
+| M14    | Accept contradictory selective-disclosure views   | R14           |
+| M15    | Emit execution evidence for work never performed  | R15           |
+| M16    | Catch an exception and return success             | R16           |
 
-Each maps to the attack class it is meant to exercise. **Every seeded mutant must be detected.** An
-undetected mutant invalidates that attack class's results until the pack is strengthened and the
-mutant re-run.
+**Each mutant belongs to exactly one primary class.** Cross-class detections are recorded as
+_secondary observations_ and may never substitute for a primary receipt. Without that rule a
+particularly noisy mutant — M4, say, which plausibly trips R1, R3, R5 and R16 detectors — would make
+a quarter of the taxonomy appear tested by one seeding. The primary receipt is what discharges a
+class; everything else is colour.
+
+**Every seeded mutant must be detected.** An undetected mutant invalidates that attack class's
+results until the pack is strengthened and the mutant re-run — the mutant is not the thing on trial.
 
 ### §7.2 Mutants never become production code
 
