@@ -99,6 +99,12 @@ export function parseJs({ path, bytes }) {
   // Walk top-level statements. Deliberately shallow-plus-targeted rather than a full generic
   // visitor: every member category we admit is reachable from a known statement shape, and a
   // generic walker would invent members from expression internals we do not claim to inventory.
+  // Top-level function name -> function_id, and the AST node of every declared member. Both feed
+  // the call graph built after the top-level walk (see "THE CALL GRAPH" below).
+  const localFunctions = new Map();
+  const declaredNodes = [];
+  const importBindings = new Map();
+
   const declareFrom = (decl, exported) => {
     if (decl?.type === "FunctionDeclaration" && decl.id) {
       const id = add(
@@ -107,6 +113,8 @@ export function parseJs({ path, bytes }) {
         decl,
         exported
       );
+      localFunctions.set(decl.id.name, id);
+      declaredNodes.push({ id, node: decl });
       collectInner(decl.body, decl.id.name, id);
     } else if (decl?.type === "VariableDeclaration") {
       for (const d of decl.declarations) {
@@ -118,6 +126,8 @@ export function parseJs({ path, bytes }) {
             d,
             exported
           );
+          localFunctions.set(d.id.name, id);
+          declaredNodes.push({ id, node: d });
           collectInner(d.init.body, d.id.name, id);
         } else if (exported) {
           add(sym.top(d.id.name), "exported_constant", d, true);
@@ -129,7 +139,8 @@ export function parseJs({ path, bytes }) {
         const s = el.static
           ? sym.staticMethod(decl.id.name, el.key.name)
           : sym.instanceMethod(decl.id.name, el.key.name);
-        add(s, exported ? "exported_function" : "internal_function", el, exported);
+        const id = add(s, exported ? "exported_function" : "internal_function", el, exported);
+        declaredNodes.push({ id, node: el });
       }
     }
   };
@@ -172,6 +183,19 @@ export function parseJs({ path, bytes }) {
         derivation: "acorn_static",
         confidence: "exact",
       });
+      // Remember what each local binding actually refers to, so a call through it can be resolved
+      // to a member in another module rather than vanishing.
+      for (const spec of node.specifiers ?? []) {
+        const imported =
+          spec.type === "ImportSpecifier"
+            ? (spec.imported?.name ?? spec.imported?.value)
+            : spec.type === "ImportDefaultSpecifier"
+              ? "default"
+              : "*";
+        if (spec.local?.name) {
+          importBindings.set(spec.local.name, { source: node.source.value, imported });
+        }
+      }
     } else {
       declareFrom(node, false);
     }
@@ -225,6 +249,83 @@ export function parseJs({ path, bytes }) {
     });
   });
 
+  // ------------------------------------------------------------------------------------------
+  // THE CALL GRAPH
+  //
+  // FOUND BY EXECUTION, DURING TASK 6 (precommit_blocker). The first version of this census emitted
+  // call edges ONLY between a function and a function declared inside its own body — a shape that
+  // occurs almost nowhere in this codebase. Measured against the live repository: 2983 edges, of
+  // which **0 were resolved**. Every one was an unresolved import specifier.
+  //
+  // `buildReachability` drops unresolved edges from the forward graph, so the forward graph was
+  // EMPTY, so the §2.4 adversarial role check — the single strongest mitigation in the stage,
+  // against the attack the spec itself calls "the highest-value attack against 5Q" — could not fire
+  // on real data. It reported `violations: 0` over a graph with no edges in it.
+  //
+  // That is the exact disease this stage exists to name: a green that is green because it is empty.
+  // Three rounds of review did not catch it. Running it did.
+  //
+  // What is resolved here, stated exactly:
+  //   - a call to a top-level function declared in the SAME module  -> resolved, exact
+  //   - a call through a named/default import with a RELATIVE specifier -> linked in staticCensus
+  //   - a call through a namespace import (`ns.fn()`) with a relative specifier -> likewise
+  //   - anything else (built-ins, parameters, locals, bare-specifier packages) -> NOT an edge, but
+  //     COUNTED in `unattributed_calls`. A silently dropped call is a silently missing caller.
+  const emitted = new Set();
+  let unattributedCalls = 0;
+  const pushCall = (from, extra) => {
+    const key = `${from}|${extra.to_function_id ?? ""}|${extra.to_module_specifier ?? ""}|${extra.to_symbol ?? ""}`;
+    if (emitted.has(key)) return;
+    emitted.add(key);
+    edges.push({
+      kind: "call_edge",
+      from_function_id: from,
+      from_module_path: path,
+      derivation: "acorn_static",
+      confidence: "exact",
+      ...extra,
+    });
+  };
+
+  for (const { id, node } of declaredNodes) {
+    walkCalls(node, (call) => {
+      const callee = call.callee;
+      if (callee?.type === "Identifier") {
+        const local = localFunctions.get(callee.name);
+        if (local && local !== id) {
+          pushCall(id, { to_function_id: local });
+          return;
+        }
+        const binding = importBindings.get(callee.name);
+        if (binding) {
+          pushCall(id, {
+            to_module_specifier: binding.source,
+            to_symbol: binding.imported === "*" ? callee.name : binding.imported,
+            link_pending: true,
+          });
+          return;
+        }
+        if (!local) unattributedCalls += 1;
+        return;
+      }
+      if (
+        callee?.type === "MemberExpression" &&
+        !callee.computed &&
+        callee.object?.type === "Identifier" &&
+        callee.property?.type === "Identifier"
+      ) {
+        const binding = importBindings.get(callee.object.name);
+        if (binding?.imported === "*") {
+          pushCall(id, {
+            to_module_specifier: binding.source,
+            to_symbol: callee.property.name,
+            link_pending: true,
+          });
+        }
+      }
+    });
+  }
+
   // R8 gate files: the FILE is a member (second gauntlet B3). Without this, a unit-test file that
   // exports nothing and whose test() callbacks are excluded would yield no member at all, and the
   // annex that admitted 243 files would admit them into nothing.
@@ -244,7 +345,27 @@ export function parseJs({ path, bytes }) {
     });
   }
 
-  return { members, edges };
+  return { members, edges, unattributedCalls };
+}
+
+/**
+ * Resolve a relative import specifier against the importing module's repo-relative path.
+ *
+ * Bare specifiers (`acorn`, `node:fs`) return null: they leave the closure by definition, and R7
+ * admits only first-party modules. Extensionless and directory specifiers also return null rather
+ * than being guessed at — a guessed path is a fabricated edge.
+ */
+export function resolveSpecifier(fromPath, specifier) {
+  if (typeof specifier !== "string" || !specifier.startsWith(".")) return null;
+  const dir = fromPath.slice(0, fromPath.lastIndexOf("/"));
+  const out = [];
+  for (const part of `${dir}/${specifier}`.split("/")) {
+    if (part === "" || part === ".") continue;
+    if (part === "..") out.pop();
+    else out.push(part);
+  }
+  const joined = out.join("/");
+  return /\.(mjs|js)$/.test(joined) ? joined : null;
 }
 
 /**
@@ -317,12 +438,14 @@ export function staticCensus({ files }) {
   const members = [];
   const edges = [];
   const parseErrors = [];
+  let unattributedCalls = 0;
   for (const file of files) {
     const ext = file.path.slice(file.path.lastIndexOf("."));
     const out = ext === ".mjs" || ext === ".js" ? parseJs(file) : parseScanned({ ...file, ext });
     if (out.parseError) parseErrors.push(out.parseError);
     members.push(...out.members);
     edges.push(...out.edges);
+    unattributedCalls += out.unattributedCalls ?? 0;
   }
 
   // Duplicate ids are a HARD failure, not last-write-wins. Canonical sorting downstream would
@@ -334,5 +457,50 @@ export function staticCensus({ files }) {
     else byId.set(m.function_id, m);
   }
 
-  return { members, byId, edges, parseErrors, duplicates };
+  // ---- LINK PHASE ----
+  //
+  // Cross-module call edges cannot be resolved while parsing one file: the target member set is not
+  // known until every file has been parsed. A pending edge whose target turns out NOT to be a
+  // closure member becomes an EXPLICIT unresolved edge — never a dropped one. `to_unresolved`
+  // survives into `buildReachability`'s `unresolvedFrom`, so a member with such an edge can never
+  // claim a complete call-site list.
+  let linked = 0;
+  for (const edge of edges) {
+    if (!edge.link_pending) continue;
+    delete edge.link_pending;
+    const target = resolveSpecifier(edge.from_module_path, edge.to_module_specifier);
+    const targetId = target
+      ? makeFunctionId({
+          stageId: stageFor(target),
+          modulePath: target,
+          symbol: edge.to_symbol === "default" ? sym.default() : sym.top(edge.to_symbol),
+        })
+      : null;
+    if (targetId && byId.has(targetId)) {
+      edge.to_function_id = targetId;
+      linked += 1;
+    } else {
+      edge.to_unresolved = target
+        ? `<outside-closure>${target}:${edge.to_symbol}`
+        : `<bare-specifier>${edge.to_module_specifier}:${edge.to_symbol}`;
+      edge.confidence = "exact";
+    }
+  }
+
+  const resolvedEdges = edges.filter((e) => !e.to_unresolved).length;
+  return {
+    members,
+    byId,
+    edges,
+    parseErrors,
+    duplicates,
+    // Diagnostics that make the graph's own completeness visible. `resolved_edges: 0` is what a
+    // vacuous reachability check looks like from the outside, and Task 6 now refuses it.
+    graph: {
+      resolved_edges: resolvedEdges,
+      unresolved_edges: edges.length - resolvedEdges,
+      linked_cross_module: linked,
+      unattributed_calls: unattributedCalls,
+    },
+  };
 }
