@@ -4,7 +4,7 @@
   "corroborated_by": "stage5q_q0_attack_pack",
   "note": "A finding surfaced by human design review and later reproduced by the harness is CORROBORATED, not DISCOVERED, by the harness (spec §5.1).",
   "out_of_band": "This probe is a diagnostic. It is NOT wired into any shared workflow (spec §14.1/§14.2): F001 stays live through Q0, and a probe that quietly repaired the gate would erase the evidence it was built to collect.",
-  "attempted": 32,
+  "attempted": 33,
   "results": [
     {
       "file": "proofs/stage4/ExitLattice.lean",
@@ -225,6 +225,13 @@
     },
     {
       "file": "proofs/stage5p/Vsi.lean",
+      "exit": 0,
+      "signal": null,
+      "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_prefix": ""
+    },
+    {
+      "file": "proofs/stage5q/Vsr.lean",
       "exit": 0,
       "signal": null,
       "stderr_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",

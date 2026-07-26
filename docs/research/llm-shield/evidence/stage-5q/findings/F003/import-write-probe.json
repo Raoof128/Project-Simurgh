@@ -1,0 +1,37 @@
+{
+  "schema": "simurgh.vsr.f003-import-write-probe.v1",
+  "discovered_by": "stage5q_q0_attack_pack",
+  "corroborated_by": [],
+  "note": "A bare `await import(...)` of a committed module, executed in a scratch worktree at HEAD. No function was called. Every write below is a side effect of module evaluation.",
+  "module": "tools/simurgh-attestation/stage5m/lanec/apply-local-adversary.mjs",
+  "module_source_digest": "03d812ca52165b58c703f9e9fecf3c81a307584bceae59fcc645dab56df7877b",
+  "target_path": "docs/research/llm-shield/evidence/stage-5m/real-lanec/lanec-local-capture.json",
+  "import_exit": 0,
+  "import_signal": null,
+  "digest_before": "2e80ef0d421dbce97cb77641dcbebd0b3b3a4e5a6cc40aaa6cc83804ee4ba2f0",
+  "digest_after": "90d013c46443634a115fdf5c511dbee87299b24613ce0df4ee212a1a42a40d38",
+  "committed_evidence_rewritten_by_import": true,
+  "paths_dirtied_by_the_import": [
+    "docs/research/llm-shield/evidence/stage-5m/real-lanec/lanec-local-capture.json"
+  ],
+  "vectors": [
+    {
+      "subject": "docs/research/llm-shield/evidence/stage-5m/real-lanec/lanec-local-capture.json",
+      "summary": {
+        "attacks_run": 6,
+        "contained": 6,
+        "bypasses": 0
+      },
+      "captured_at": "2026-07-13T01:28:36.366Z"
+    },
+    {
+      "subject": "docs/research/llm-shield/evidence/stage-5m/real-lanec/lanec-local-capture.json",
+      "summary": {
+        "attacks_run": 6,
+        "contained": 1,
+        "bypasses": 5
+      },
+      "captured_at": "2026-07-26T09:51:07.552Z"
+    }
+  ]
+}

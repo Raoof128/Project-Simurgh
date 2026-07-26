@@ -1,0 +1,137 @@
+{
+  "schema": "simurgh.vsr.f002-vacuity-probe.v1",
+  "discovered_by": "stage5q_q0_attack_pack",
+  "corroborated_by": [],
+  "note": "Read-only. The producer's applyMutations rule is REPLICATED, never imported: importing it runs the ceremony and overwrites the committed capture (5Q-F003).",
+  "producer": "tools/simurgh-attestation/stage5m/lanec/apply-local-adversary.mjs",
+  "producer_source_digest": "03d812ca52165b58c703f9e9fecf3c81a307584bceae59fcc645dab56df7877b",
+  "inputs": {
+    "real-laneb/laneb-bundle.json": "b7bd2f7b3b86c844788bc53458bc7aa8dd4229cecaefc3750f7c5a31506fec36",
+    "real-lanec/lanec-local-mutations.json": "d5fb454838d295d60c1b529c22284f7e80caad8dd94866fae04729116a10240a",
+    "real-lanec/lanec-local-capture.json": "2e80ef0d421dbce97cb77641dcbebd0b3b3a4e5a6cc40aaa6cc83804ee4ba2f0"
+  },
+  "published_summary": {
+    "attacks_run": 6,
+    "contained": 6,
+    "bypasses": 0
+  },
+  "published_non_claim": "Local uncensored fuzzer (Llama-3.2-1B) exercises EVERY attack class — including those a frontier model refuses — against the frozen verifier. 'contained' = did NOT bank externally_anchored. Defensive; target is our own verifier. Digest-only, NOT CI-gated.",
+  "attacks_declared": 6,
+  "attacks_actually_exercised": 1,
+  "attacks_that_measured_nothing": 5,
+  "claimed_steps": [
+    "attack:0",
+    "attack:1",
+    "attack:2",
+    "attack:3",
+    "attack:4",
+    "attack:5"
+  ],
+  "execution_records": [
+    "attack:0"
+  ],
+  "attacks": [
+    {
+      "index": 0,
+      "attack": "Forge a fake transparency_log_seat (a Rekor entry) that makes the verifier count a third ecology and bank externally_anchored.",
+      "declared_mutations": 3,
+      "applied_mutations": 3,
+      "bundle_reached_verifier_unmutated": false,
+      "mutations": [
+        {
+          "path": "transparency_log_seat",
+          "applied": true,
+          "reason": "overwrites the existing key 'transparency_log_seat'"
+        },
+        {
+          "path": "transparency_log_seat",
+          "applied": true,
+          "reason": "overwrites the existing key 'transparency_log_seat'"
+        },
+        {
+          "path": "transparency_log_seat",
+          "applied": true,
+          "reason": "overwrites the existing key 'transparency_log_seat'"
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "attack": "Make two seats resolve to the same trust ecology but be counted as three distinct ones (counterfeit ecology).",
+      "declared_mutations": 2,
+      "applied_mutations": 0,
+      "bundle_reached_verifier_unmutated": true,
+      "mutations": [
+        {
+          "path": "a.b.c",
+          "applied": false,
+          "reason": "path segment 'a' does not exist on the bundle"
+        },
+        {
+          "path": "a.b.d",
+          "applied": false,
+          "reason": "path segment 'a' does not exist on the bundle"
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "attack": "Cross-log replay: swap in a checkpoint/inclusion proof from a different Rekor log so the seat verifies.",
+      "declared_mutations": 3,
+      "applied_mutations": 0,
+      "bundle_reached_verifier_unmutated": true,
+      "mutations": [
+        {
+          "path": "a.b.c",
+          "applied": false,
+          "reason": "path segment 'a' does not exist on the bundle"
+        },
+        {
+          "path": "b.d.e",
+          "applied": false,
+          "reason": "path segment 'b' does not exist on the bundle"
+        },
+        {
+          "path": "c.f.g",
+          "applied": false,
+          "reason": "path segment 'c' does not exist on the bundle"
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "attack": "Cross-commitment replay: staple a valid Rekor entry that binds a DIFFERENT commitment.",
+      "declared_mutations": 2,
+      "applied_mutations": 0,
+      "bundle_reached_verifier_unmutated": true,
+      "mutations": [
+        {
+          "path": "a.b.c",
+          "applied": false,
+          "reason": "path segment 'a' does not exist on the bundle"
+        },
+        {
+          "path": "a.b.d",
+          "applied": false,
+          "reason": "path segment 'a' does not exist on the bundle"
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "attack": "Promote the 2-seat floor: set declared_externally_anchored=true and ots declared_finality=confirmed with a fabricated checkpoint_evidence.",
+      "declared_mutations": 0,
+      "applied_mutations": 0,
+      "bundle_reached_verifier_unmutated": true,
+      "mutations": []
+    },
+    {
+      "index": 5,
+      "attack": "Fabricate a confirmed checkpoint_evidence (block/merkle/witness signature) so finality reads confirmed without a real Bitcoin proof.",
+      "declared_mutations": 0,
+      "applied_mutations": 0,
+      "bundle_reached_verifier_unmutated": true,
+      "mutations": []
+    }
+  ]
+}

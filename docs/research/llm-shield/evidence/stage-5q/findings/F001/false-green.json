@@ -14,7 +14,8 @@
     "proofs/stage5j/RatingContest.lean",
     "proofs/stage5k/UniverseCommitment.lean",
     "proofs/stage5l/TemporalQuorum.lean",
-    "proofs/stage5m/EcologyQuorum.lean"
+    "proofs/stage5m/EcologyQuorum.lean",
+    "proofs/stage5q/Vsr.lean"
   ],
   "claim": "the gate exits successfully while the omitted proof files remain outside its execution closure. It is not failing to check them loudly; it is passing without checking them."
 }

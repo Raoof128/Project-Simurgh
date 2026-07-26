@@ -26,7 +26,11 @@
     "stage5q:mutants": "node tools/simurgh-attestation/stage5q/node/runMutationSelfProof.mjs",
     "stage5q:attest": "node tools/simurgh-attestation/stage5q/node/attestation.mjs",
     "stage5q:transition": "node tools/simurgh-attestation/stage5q/node/verifyTransition.mjs",
-    "stage5q:proofs": "scripts/check-stage5q-proofs.sh"
+    "stage5q:proofs": "scripts/check-stage5q-proofs.sh",
+    "stage5q:probe-f002": "node tools/simurgh-attestation/stage5q/node/probeLaneCVacuity.mjs",
+    "stage5q:probe-f003": "node tools/simurgh-attestation/stage5q/node/probeImportWrites.mjs",
+    "stage5q:findings": "node tools/simurgh-attestation/stage5q/node/buildFindingLedger.mjs",
+    "stage5q:reproduce": "scripts/reproduce-llm-shield-stage5q.sh"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
