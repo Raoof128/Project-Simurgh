@@ -442,7 +442,14 @@ severity               §5.3
 claim_impact           which SHIPPED claim is weakened, by name (§5.4)
 scope                  head | tags | both
 discovered_at_commit
+discovered_by          pre_stage_design_review | stage5q_q0_attack_pack | external
+corroborated_by        packs that independently reproduced it (never re-credits discovery)
 ```
+
+**`discovered_by` and `corroborated_by` are distinct on purpose.** A finding surfaced by human
+design review and later reproduced by the harness is _corroborated_, not _discovered_, by the
+harness. Collapsing the two would let 5Q claim its machinery found defects that a person found by
+reading — the reporting analogue of R15, fabricated execution reality, committed against ourselves.
 
 ### §5.2 Q1 record — appended, never merged into Q0
 
@@ -472,6 +479,19 @@ hygiene             no claim and no assurance effect
 `5Q-F001` (§14) is `assurance_only`: the proofs may be perfectly valid; what was false is the belief
 that CI was checking them.
 
+**Severity is never rewritten — escalation mints a new finding.** If investigating a finding uncovers
+a materially different defect, the original record keeps its severity and the new defect gets its own
+`finding_id`, premise receipt and claim impact. Worked example, and the governing case for §14:
+
+```text
+F001   false-green CI coverage          assurance_only
+F00N   an actual proof failure uncovered claim_narrowing | claim_falsifying
+```
+
+Different defect, different claim impact, different receipt. Upgrading F001's severity in place would
+destroy the distinction between _"the camera was pointed away"_ and _"the photograph shows a crime"_ —
+and it would silently rewrite a frozen record, which L3 forbids.
+
 ### §5.4 `claim_impact` is mandatory and specific
 
 A finding must name the claim it touches — a closeout line, a signed limitation, a scorecard
@@ -497,6 +517,12 @@ bug list.
 Runs the trays and campaigns against a **frozen closure** (L2) at a fixed head commit. No production
 code under `tools/simurgh-attestation/stage5{a..o}/` is modified during Q0. New code lands only under
 the 5Q tree and its tests.
+
+**`.github/workflows/` is frozen during Q0 for the same reason.** Gate definitions are closure members
+with role `completeness_claim` (§2.4), and at least one of them — the Lean workflow — is itself live
+evidence for a finding (§14.1). Editing a gate during the phase that attacks gates would destroy the
+premise it is being attacked on. The one permitted addition is 5Q's own narrowly-scoped proof gate
+(§14.3), which touches no existing list.
 
 Q0 ends with: closure digest, tag closure digest, taxonomy digest, ledger digest — all four signed.
 
@@ -761,15 +787,114 @@ claim_impact           the "Lean N theorems, 0 escapes" line in the 5I/5J/5K/5L
                        closeouts was not CI-enforced at any point after its stage shipped
 scope                  head | tags (both)
 discovered_at_commit   ea574df8
-provenance             discovered during 5Q design research, not by the 5Q harness
+discovered_by          pre_stage_design_review
+corroborated_by        stage5q_q0_attack_pack   (recorded at Q0, never re-credited)
 ```
 
-Not repaired in this spec. Repair belongs to Q1 with a regression fixture that fails before it.
+### §14.1 F001 stays live through the Q0 freeze
 
-**The general lesson, which is bigger than the instance:** when 5P hit this defect, the repair added
-5P's file to the list and did not ask whether siblings were missing. Four were. A fix that treats the
-instance and not the class is how a repo accumulates exactly this. 5Q's Q1 repair must convert the
-gate to `self_extending`, not add five more names.
+**The defect is not repaired before Q0 freezes, and this is a deliberate evidentiary choice.** Fixing
+it now would preserve the prose record and destroy the strongest executable evidence: the untouched
+false-green gate itself. A finding whose premise no longer reproduces is a story about a bug; a
+finding whose premise still runs is a bug.
+
+F001 therefore receives three Q0 artefacts, all evidence collection and none of them a repair:
+
+```text
+F001-premise
+  32 Lean files exist
+  27 are named by the workflow
+  named set ≠ filesystem set
+
+F001-false-green
+  the existing CI command exits successfully
+  while omitted proof files remain outside its execution closure
+
+F001-complete-probe
+  an independent diagnostic command attempts every proof
+  and records each result
+```
+
+`F001-false-green` is the load-bearing one: it is not enough to show the list is short. The evidence
+must show the gate **passes** while the omitted files sit outside what it executed. A short list that
+failed loudly would be a nuisance, not a false green.
+
+`F001-complete-probe` is a **diagnostic**, run out-of-band and recorded. It is not wired into the
+shared production workflow before the Q0 freeze, and a successful manual sweep is never described as
+CI enforcement — that would be the same false-green claim one level up.
+
+### §14.2 Prohibited during Q0
+
+Explicitly, so no future task quietly does one of these:
+
+- adding the five missing filenames to the existing list;
+- converting the shared workflow to `find proofs/` (that is the Q1 repair, not a Q0 convenience);
+- regenerating or re-tagging historical releases;
+- describing a successful manual proof sweep as CI enforcement.
+
+### §14.3 5Q's own proofs must not repeat the defect
+
+5Q will add its own Lean proofs during the stage, and they need gating without touching the
+repository-wide workflow that is currently frozen evidence. The Q0 gate is narrowly scoped and
+self-extending by construction:
+
+```bash
+find proofs/stage5q -name '*.lean' -print0 |
+  sort -z |
+  xargs -0 -n1 lean
+```
+
+This protects 5Q's proofs, adds no filename to any list, and leaves F001's premise intact. A stage
+that red-teams enumeration gates while introducing a hand-written one would be its own first finding.
+
+### §14.4 Q1 repair contract — the class, not the instance
+
+F001 is the **first Q1 remediation**. The repair must address the defect class:
+
+```text
+manually enumerated Lean list
+  → repository-wide self-extending proof discovery
+  → filesystem-versus-executed-set equality gate
+```
+
+Required regression sequence, all three states witnessed:
+
+```text
+before repair:            workflow green, omission witness red
+after repair:             all proof files executed, set-equality witness green
+seeded omission after:    workflow or drift gate red
+```
+
+The third state is what distinguishes a repair from a coincidence: a gate that passes because
+everything currently happens to be listed is indistinguishable from a gate that works, until
+something new is added.
+
+**Adding five names is prohibited. That repairs the photograph, not the camera.**
+
+When 5P hit this defect, the repair added 5P's file and did not ask whether siblings were missing.
+Four were. A fix that treats the instance and not the class is precisely how a repository accumulates
+exactly this defect, and F001's repair is scoped to break that pattern rather than continue it.
+
+### §14.5 Historical status after the Q1 fix
+
+Per L5 (_No Retroactive Innocence_):
+
+- current head **may** become repaired;
+- every affected historical tag **remains** affected;
+- F001's Q0 record remains **immutable**;
+- the Q1 append lists the historical tags still affected, by name.
+
+A tag shipped with an unenforced proof gate, and no change at head alters what that tag shipped.
+
+### §14.6 Escalation is a new finding, never a rewrite
+
+F001 stays `assurance_only` unless the full Q0 proof sweep discovers an actual failing theorem or
+proof file. If one fails, F001's severity is **not** rewritten — a separate finding is minted under
+§5.3's escalation rule with its own premise receipt and claim impact.
+
+The two are genuinely different defects: F001 says the gate was not watching. A failing proof would
+say something the gate should have caught was wrong. Merging them would let one receipt stand for two
+claims.
 
 ---
 
@@ -816,8 +941,9 @@ Named here so their absence is deliberate rather than an omission:
   append-only monotonicity, closure-digest binding);
 - attestation payload shape and the two-tier split;
 - Python/browser parity surface for 5Q's own deterministic functions;
-- CI wiring, including whether the 5Q gate is `self_extending` by construction — it must be, or the
-  stage fails its own §2.8 rule on day one.
+- CI wiring beyond 5Q's own proof gate, which is **settled** in §14.3 as narrowly-scoped and
+  self-extending — a stage that red-teams enumeration gates while introducing a hand-written one would
+  be its own first finding.
 
 ---
 
