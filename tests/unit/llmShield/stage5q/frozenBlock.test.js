@@ -80,14 +80,17 @@ test("ONE byte changed INSIDE the frozen block changes the digest", () => {
 test("text changed OUTSIDE the frozen block does NOT change the digest", () => {
   const original = spec();
   const before = frozenBlockDigest(extractFrozenBlock(original));
-  // §15 is outside the freeze; scorecard prose must be editable without breaking the freeze.
-  const mutated = original.replace(
-    "## §15 Scorecard and founder's ledger",
-    "## §15 Scorecard and founder's ledger (edited after freeze)"
+  // Append rather than replace. An earlier version rewrote the §15 heading, which coupled this test
+  // to a real editable heading: the day someone legitimately edited §15, this test failed for a
+  // reason that had nothing to do with the freeze. Appending is unambiguously outside §§2-5 and
+  // cannot collide with anything.
+  const mutated = `${original}\n<!-- appended after the freeze; must not move the digest -->\n`;
+  assert.notEqual(mutated, original, "mutation did not apply");
+  assert.equal(
+    frozenBlockDigest(extractFrozenBlock(mutated)),
+    before,
+    "an edit outside the frozen block moved the digest"
   );
-  assert.notEqual(mutated, original, "mutation did not apply — the anchor text moved");
-  const after = frozenBlockDigest(extractFrozenBlock(mutated));
-  assert.equal(after, before, "an edit outside the frozen block moved the digest");
 });
 
 test("the receipt fields themselves are outside the frozen block", () => {
@@ -105,6 +108,41 @@ test("the receipt fields themselves are outside the frozen block", () => {
     frozenBlockDigest(extractFrozenBlock(mutated)),
     before,
     "the freeze receipt fields are INSIDE the frozen block — the digest cannot describe its own document"
+  );
+});
+
+test("THE FREEZE GATE: the recorded freeze_digest matches the live frozen block", () => {
+  // This is the test that makes the freeze real. Without it, freeze_digest is a number somebody
+  // typed once; with it, any edit to §§2-5 fails CI and must instead go through an annex.
+  const text = spec();
+  const recorded = /freeze_digest\s+([0-9a-f]{64})/.exec(text);
+  assert.ok(recorded, "the spec must record a freeze_digest");
+  assert.equal(
+    frozenBlockDigest(extractFrozenBlock(text)),
+    recorded[1],
+    "§§2-5 have changed since the freeze — amend by numbered annex, never in place"
+  );
+
+  const bytes = /frozen_bytes\s+(\d+)/.exec(text);
+  assert.ok(bytes, "the spec must record frozen_bytes");
+  assert.equal(
+    Buffer.byteLength(extractFrozenBlock(text), "utf8"),
+    Number(bytes[1]),
+    "frozen byte count drifted from the recorded value"
+  );
+});
+
+test("the freeze gate would CATCH a one-byte edit inside §§2-5", () => {
+  // L4 in miniature: a gate that has never rejected anything is not known to work. Prove this one
+  // rejects before trusting it to protect the freeze.
+  const text = spec();
+  const recorded = /freeze_digest\s+([0-9a-f]{64})/.exec(text)[1];
+  const tampered = text.replace("| R6    | Raw-code collision", "| R6    | Raw-code  collision");
+  assert.notEqual(tampered, text, "tamper anchor moved — rewrite this test");
+  assert.notEqual(
+    frozenBlockDigest(extractFrozenBlock(tampered)),
+    recorded,
+    "the freeze gate does not detect tampering inside the frozen sections"
   );
 });
 

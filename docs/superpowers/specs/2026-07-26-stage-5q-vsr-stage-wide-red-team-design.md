@@ -1062,8 +1062,9 @@ never reopened in place.
 
 ```text
 frozen_sections      §2 §3 §4 §5
-freeze_commit        AWAITING_RECEIPT_COMMIT
-freeze_digest        AWAITING_RECEIPT_COMMIT
+freeze_commit        652a2474
+freeze_digest        da78774b77495459e4889e1c433e1933bb502ac81c9e5c0811e2450af7fdfc74
+frozen_bytes         23804
 amendment_protocol   numbered post-freeze annex only; §§2-5 never reopened
 ```
 
