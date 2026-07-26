@@ -5,11 +5,12 @@
   "target_symbol": "checkCensus",
   "adapter": "deleteGuardClause",
   "intent": "stop rejecting a dropped census cell",
-  "detector_glob": "tests/unit/llmShield/stage5f",
+  "detector_glob": "tests/unit/llmShield/stage5q/selfproof",
   "args": {
     "from": "  for (const id of cellIds) if (!recSet.has(id)) return 280; // no dropped cell\n",
     "to": ""
   },
   "expected_failure": "census complete with N-1",
-  "precondition_source_digest": "7fd9ad4b1188f761a539d8292f4d4050a6ee41b1d3fa1bcadb9a9c851e8f1bcc"
+  "precondition_source_digest": "7fd9ad4b1188f761a539d8292f4d4050a6ee41b1d3fa1bcadb9a9c851e8f1bcc",
+  "detector_note": "the target stage own suite went GREEN->GREEN->GREEN on this mutant: the guard is uncovered there. Detector strengthened, mutant untouched."
 }

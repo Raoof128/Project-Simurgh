@@ -5,11 +5,12 @@
   "target_symbol": "checkAnchorBinding",
   "adapter": "weakenComparison",
   "intent": "make the empty-allowlist guard unreachable",
-  "detector_glob": "tests/unit/llmShield/stage5g",
+  "detector_glob": "tests/unit/llmShield/stage5q/selfproof",
   "args": {
     "from": "ctx.trustRootAllowlist.length === 0",
     "to": "ctx.trustRootAllowlist.length < 0"
   },
   "expected_failure": "unconfigured trust root accepted",
-  "precondition_source_digest": "aafd8850e5bb40525b58e07657d96ef86395e362601cb20f260a10a2a8919cc3"
+  "precondition_source_digest": "aafd8850e5bb40525b58e07657d96ef86395e362601cb20f260a10a2a8919cc3",
+  "detector_note": "the target stage own suite went GREEN->GREEN->GREEN on this mutant: the guard is uncovered there. Detector strengthened, mutant untouched."
 }
