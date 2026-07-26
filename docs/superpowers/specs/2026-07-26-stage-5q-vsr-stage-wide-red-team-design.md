@@ -586,9 +586,41 @@ underneath it, and the closure digest silently stops describing the thing being 
 tools/simurgh-attestation/stage5q/**
 tests/**/stage5q/**
 proofs/stage5q/**
-stage5q evidence/output directories
-the narrowly scoped 5Q-only CI addition (§14.3)
+docs/research/llm-shield/evidence/stage-5q/**
+scripts/check-stage5q-proofs.sh                  <- named explicitly (P0-14)
+scripts/reproduce-llm-shield-stage5q.sh          <- named explicitly (P0-14)
+.github/workflows/stage-5q-checks.yml            <- the ONE permitted CI addition (§14.3)
+package.json  (scripts key only)
+.prettierignore
 ```
+
+**Two 5Q scripts are named explicitly.** An earlier version declared this surface "exhaustive" while
+the plan created `scripts/reproduce-llm-shield-stage5q.sh` outside it. A rule that the work
+routinely violates is not a rule, and "obviously intended" is exactly the reasoning this stage exists
+to refuse. If a path is needed, it is named here or it is not written.
+
+**The surface is machine-checked, not observed.** A write-surface verifier compares every changed
+path against this allowlist and runs before every Q0 commit and inside the reproduce script. A
+declared-but-unenforced constraint is a comment.
+
+### §6.1.1 Q0 has three phases, and the write rules differ by phase
+
+An earlier draft called the whole campaign "Q0" while spec language implied Q0 execution begins at
+L2, leaving it ambiguous which rules applied when Tasks 1–8 were creating files.
+
+```text
+Q0 PREPARATION   Tasks 1 - 8      building the census and committing the universe.
+                                  The closure does not exist yet; nothing is bound by L2.
+                                  Write surface above applies from Task 1.
+
+Q0 DISCOVERY     Tasks 9 - 20     attacks run against the committed closure.
+                                  L2 binds: no closure may grow, shrink or re-key.
+
+Q0 TRANSITION    Task 21          validation only. No new evidence is produced.
+```
+
+The read-only constraint on `stage5{a..p}`, shared dependencies and `.github/workflows/**` applies
+across **all three** phases. What changes by phase is whether L2 binds, not what may be written.
 
 **`.github/workflows/` is otherwise frozen**, and for a sharper reason than symmetry: gate
 definitions are closure members with role `completeness_claim` (§2.4), and at least one — the Lean
