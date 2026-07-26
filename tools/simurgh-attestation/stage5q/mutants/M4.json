@@ -1,0 +1,15 @@
+{
+  "mutant_id": "M4",
+  "attack_class": "R4",
+  "target_file": "tools/simurgh-attestation/stage5m/core/crossSeat.mjs",
+  "target_symbol": "checkCrossSeat",
+  "adapter": "deleteGuardClause",
+  "intent": "drop the TSA imprint agreement check",
+  "detector_glob": "tests/unit/llmShield/stage5m",
+  "args": {
+    "from": "  if (facts.tsa_imprint !== facts.commitment) return R(391, \"tsa_imprint_disagrees\");\n",
+    "to": ""
+  },
+  "expected_failure": "disagreeing imprint accepted",
+  "precondition_source_digest": "5341face3403defcc7ff611a9a9f8bb47a4e635b3ffa075b7564396f7c7e513c"
+}

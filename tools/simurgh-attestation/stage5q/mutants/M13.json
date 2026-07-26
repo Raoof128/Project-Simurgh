@@ -1,0 +1,15 @@
+{
+  "mutant_id": "M13",
+  "attack_class": "R13",
+  "target_file": "tools/simurgh-attestation/stage5p/core/section2Verifier.mjs",
+  "target_symbol": "verifySection2",
+  "adapter": "deleteGuardClause",
+  "intent": "drop the resolver-binding provenance check",
+  "detector_glob": "tests/unit/llmShield/stage5p",
+  "args": {
+    "from": "      return reject(\"S2.C2\", \"resolver_binding_invalid\", `unpinned profile \"${e.profile_id}\"`);\n",
+    "to": ""
+  },
+  "expected_failure": "unpinned profile carries authority",
+  "precondition_source_digest": "0f2c9d9426ed1dd078d61b07f917e427f453b06c1aa059ddf4242c65bfbb9162"
+}

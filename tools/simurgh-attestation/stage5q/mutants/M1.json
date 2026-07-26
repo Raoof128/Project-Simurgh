@@ -1,0 +1,15 @@
+{
+  "mutant_id": "M1",
+  "attack_class": "R1",
+  "target_file": "tools/simurgh-attestation/stage5p/core/resolverEvidence.mjs",
+  "target_symbol": "makeResolverEvidence",
+  "adapter": "weakenComparison",
+  "intent": "loosen the exact-key gate so an unknown key is accepted",
+  "detector_glob": "tests/unit/llmShield/stage5p",
+  "args": {
+    "from": "!EVIDENCE_KEYS.includes(key) && !OPTIONAL_EVIDENCE_KEYS.includes(key)",
+    "to": "!EVIDENCE_KEYS.includes(key) && false"
+  },
+  "expected_failure": "unknown key accepted",
+  "precondition_source_digest": "9d8aa6faa51c38499c3513adb56fdf49404aaa856526c70d843b1fee19eb113f"
+}

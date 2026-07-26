@@ -1,0 +1,15 @@
+{
+  "mutant_id": "M9",
+  "attack_class": "R9",
+  "target_file": "tools/simurgh-attestation/stage5o/core/merkleTree.mjs",
+  "target_symbol": "MTH",
+  "adapter": "deleteGuardClause",
+  "intent": "remove the empty-tree refusal",
+  "detector_glob": "tests/unit/llmShield/stage5o",
+  "args": {
+    "from": "  if (n === 0) throw new Error(\"MTH_empty_forbidden\");\n",
+    "to": ""
+  },
+  "expected_failure": "degenerate input accepted",
+  "precondition_source_digest": "490ca3cc8b0794755bf3f58024f2bd7f746ab1192319e2c29ed76c4a08743608"
+}

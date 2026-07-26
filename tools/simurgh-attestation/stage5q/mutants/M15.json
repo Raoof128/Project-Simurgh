@@ -1,0 +1,15 @@
+{
+  "mutant_id": "M15",
+  "attack_class": "R15",
+  "target_file": "tools/simurgh-attestation/stage5e/core/detector.mjs",
+  "target_symbol": "checkDetectorPinned",
+  "adapter": "deleteGuardClause",
+  "intent": "accept a detector record with no pinned provenance",
+  "detector_glob": "tests/unit/llmShield/stage5e",
+  "args": {
+    "from": "  if (!d || typeof d !== \"object\") return 257;\n",
+    "to": ""
+  },
+  "expected_failure": "evidence without execution",
+  "precondition_source_digest": "90966e5f789513be35c4a0f56d28eac51852b7d2ac2670885eb43ff41b83ec34"
+}
