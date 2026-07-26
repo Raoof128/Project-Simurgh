@@ -1,0 +1,15 @@
+{
+  "mutant_id": "M16",
+  "attack_class": "R16",
+  "target_file": "tools/simurgh-attestation/stage5n/core/delayProof.mjs",
+  "target_symbol": "checkSeed",
+  "adapter": "deleteGuardClause",
+  "intent": "remove the error path so a mismatch returns success",
+  "detector_glob": "tests/unit/llmShield/stage5n",
+  "args": {
+    "from": "  if (env.delay_proof?.seed !== seed) return R(409, \"seed_derivation_mismatch\");\n",
+    "to": ""
+  },
+  "expected_failure": "exception path becomes success",
+  "precondition_source_digest": "2732ddb4b6c38b62e70e9770ef36a91a0fb2009512bfb8e53e536c97b5cd9fee"
+}

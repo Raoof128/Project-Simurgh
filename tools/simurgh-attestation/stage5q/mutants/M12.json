@@ -1,0 +1,15 @@
+{
+  "mutant_id": "M12",
+  "attack_class": "R12",
+  "target_file": "tools/simurgh-attestation/stage5h/core/tierLattice.mjs",
+  "target_symbol": "computeTierFacts",
+  "adapter": "weakenComparison",
+  "intent": "accept a lower reproducibility tier than the claim states",
+  "detector_glob": "tests/unit/llmShield/stage5h",
+  "args": {
+    "from": "receiptFact.verdict === \"reproduced\"",
+    "to": "receiptFact.verdict !== \"impossible\""
+  },
+  "expected_failure": "historical downgrade accepted",
+  "precondition_source_digest": "4873a0334047e3a0ea6b93ee7b331027e4943bc57632b8094754967b70767024"
+}
