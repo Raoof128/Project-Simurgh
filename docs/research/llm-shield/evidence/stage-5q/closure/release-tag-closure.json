@@ -1,0 +1,72 @@
+{
+  "schema": "simurgh.vsr.release-tag-closure.v1",
+  "note": "Sixteen (tag_name, commit_sha) pairs. A tag that moves is itself a finding (spec §3.1).",
+  "domain": "simurgh.vsr.release-tag-closure.v1",
+  "release_tag_closure_digest": "4e3e1e5915531ed215e4ae915b1e534e0369ebaf2fcac9a2c26d0f96f1ff98e9",
+  "tags": [
+    {
+      "tag_name": "v2.36.0-stage-5a-vnc",
+      "commit_sha": "9e839d286e14e4b1cbd5c6288fdc6339f434b694"
+    },
+    {
+      "tag_name": "v2.37.0-stage-5b-var",
+      "commit_sha": "73e55dfce2aa5022d4f64b2055456b4e13651ac4"
+    },
+    {
+      "tag_name": "v2.38.0-stage-5c-vsb",
+      "commit_sha": "9686ffc7e3de6c00b39b520b1b090b901c7d3fcc"
+    },
+    {
+      "tag_name": "v2.39.0-stage-5d-varl",
+      "commit_sha": "831a778d95102b932f60f37d6c6e187910fc4929"
+    },
+    {
+      "tag_name": "v2.40.0-stage-5e-vda",
+      "commit_sha": "6457d48c147a45e88b3dd14d54e5b22823d5fdbe"
+    },
+    {
+      "tag_name": "v2.41.0-stage-5f-vmp",
+      "commit_sha": "379e662416b45bb84376a2bcb3356b9ef67e573c"
+    },
+    {
+      "tag_name": "v2.42.0-stage-5g-vfc",
+      "commit_sha": "fc8754a1ee13f0447bb13c6f8b78f03d6793982b"
+    },
+    {
+      "tag_name": "v2.43.0-stage-5h-vsd",
+      "commit_sha": "f0b0ae52c2fe9b02506e12ee773f7affd1897cbc"
+    },
+    {
+      "tag_name": "v2.44.0-stage-5i-vpc",
+      "commit_sha": "dca3aee6652f082c5f8dcc4750b20086495dc310"
+    },
+    {
+      "tag_name": "v2.45.0-stage-5j-vrc",
+      "commit_sha": "4e6ae615b60b0bd8ed5b30d61881abed7bc3f027"
+    },
+    {
+      "tag_name": "v2.46.0-stage-5k-vuc",
+      "commit_sha": "6e6e14969b795bb2493329f48e4e072eb36713b6"
+    },
+    {
+      "tag_name": "v2.47.0-stage-5l-vtcq",
+      "commit_sha": "3d0c4e0d0480bbcbfd2bcc4bc8002dc5657c2337"
+    },
+    {
+      "tag_name": "v2.48.0-stage-5m-vtc-quorum",
+      "commit_sha": "b3c0ba346dfcbe430ca7e5f40403c383bac20b8b"
+    },
+    {
+      "tag_name": "v2.49.0-stage-5n-vtc-delay",
+      "commit_sha": "df45662c6f478a997549505a785b17cdc242aa01"
+    },
+    {
+      "tag_name": "v2.50.0-stage-5o-vsc",
+      "commit_sha": "5403d32cde550796b7e6ca1a96218f7e03fa1c9d"
+    },
+    {
+      "tag_name": "v2.51.0-stage-5p-vsi",
+      "commit_sha": "100ead22ccf377438ddb22dcf808da0006367a01"
+    }
+  ]
+}

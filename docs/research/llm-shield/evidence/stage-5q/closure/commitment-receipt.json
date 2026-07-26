@@ -1,0 +1,16 @@
+{
+  "schema": "simurgh.vsr.commitment-receipt.v1",
+  "note": "The joined receipt over all five committed roots. After this, the universe is frozen and attacks may run (L2). Rebuild by re-running commitClosure.mjs with the recorded closure_source_commit.",
+  "closure_source_commit": "3512d287d2e13ceb31115477acc8b5ff182bc36e",
+  "member_count": 2531,
+  "tag_count": 16,
+  "taxonomy_count": 16,
+  "roots": {
+    "closure_member_commitment_digest": "87512ae221ae2de5148759dcd48ad04ebf02c1b6354bc75e95af9d991f7fc936",
+    "release_tag_closure_digest": "4e3e1e5915531ed215e4ae915b1e534e0369ebaf2fcac9a2c26d0f96f1ff98e9",
+    "attack_taxonomy_digest": "f5e03d1193263afc7966263c466c7794cd2c1d7dd8105e45e1e5124103c5f2e7",
+    "historical_function_closure_digest": "c9838ae46d0d5ff00126876660e49eff2da038aef3e4ace604f6ac620711d79e",
+    "obligation_matrix_root": "eefabdf2ddf3b4c0db9a061377ffefdb484d3c09aa591fb3d61770a933f09b70",
+    "merkle_root": "5f4d4534b37df043ed624b518b7e96c116c21662d4fa8173d43ea39dfbfb9362"
+  }
+}

@@ -72,6 +72,31 @@ export const ATTACK_CLASSES = Object.freeze([
   "R16",
 ]);
 
+/**
+ * The taxonomy table, spec §4.1 — the titles that go into the committed `attack-taxonomy.json`.
+ *
+ * Kept beside the identifier list rather than in the artifact builder, so the committed artifact
+ * cannot say something the vocabulary does not.
+ */
+export const ATTACK_CLASS_TITLES = Object.freeze({
+  R1: "Exact-key, type confusion and malformed-object attacks",
+  R2: "Unicode, lexical and canonicalisation laundering",
+  R3: "Digest, domain-separation and profile-binding confusion",
+  R4: "Signature, key-swap and trust-root substitution",
+  R5: "Cross-stage and cross-tag replay",
+  R6: "Raw-code collision, reordering and first-failure shadowing",
+  R7: "Selective omission, census truncation and fake completeness",
+  R8: "State aliasing, mutation-after-validation and partial commit",
+  R9: "Resource exhaustion, oversized operands and pathological recursion",
+  R10: "Generator vacuity, oracle dependence and false-green gates",
+  R11: "Cross-runtime disagreement and browser-only divergence",
+  R12: "Historical downgrade and compatibility laundering",
+  R13: "Authority laundering from untrusted context or model output",
+  R14: "Selective-disclosure contradiction and two-story evidence",
+  R15: "Honest-looking evidence over fabricated execution reality",
+  R16: "Error-path exceptions, crashes and fail-open wrappers",
+});
+
 /** Security roles, spec §2.4. The first four carry the full applicable matrix. */
 export const SECURITY_ROLES = Object.freeze([
   "trust_decision",
