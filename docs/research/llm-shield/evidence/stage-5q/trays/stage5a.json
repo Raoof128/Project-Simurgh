@@ -1,0 +1,5695 @@
+{
+  "tray_id": "tray-5a",
+  "closure_digest": "87512ae221ae2de5148759dcd48ad04ebf02c1b6354bc75e95af9d991f7fc936",
+  "target_function_ids": [
+    "5a:tests/e2e/llmShield/stage5a/browserParity.test.js:<file-gate>",
+    "5a:tests/e2e/llmShield/stage5a/k7AllFunctions.test.js:<file-gate>",
+    "5a:tests/e2e/llmShield/stage5a/laneb.test.js:<file-gate>",
+    "5a:tests/e2e/llmShield/stage5a/parity.test.js:<file-gate>",
+    "5a:tests/unit/llmShield/stage5a/adapterCore.test.js:<file-gate>",
+    "5a:tests/unit/llmShield/stage5a/bindingCore.test.js:<file-gate>",
+    "5a:tests/unit/llmShield/stage5a/claimCore.test.js:<file-gate>",
+    "5a:tests/unit/llmShield/stage5a/constants.test.js:<file-gate>",
+    "5a:tests/unit/llmShield/stage5a/exitCodes.test.js:<file-gate>",
+    "5a:tests/unit/llmShield/stage5a/fixtures.test.js:<file-gate>",
+    "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:<file-gate>",
+    "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:D",
+    "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:manifest",
+    "5a:tests/unit/llmShield/stage5a/partitionCore.test.js:<file-gate>",
+    "5a:tests/unit/llmShield/stage5a/verdictCore.test.js:<file-gate>",
+    "5a:tests/unit/llmShield/stage5a/vncCore.test.js:<file-gate>",
+    "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_ATTESTATION_SCHEMA",
+    "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_CLAIM_TABLE_SCHEMA",
+    "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_ELIGIBLE_SPAN_TYPE",
+    "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_KNOWN_LIMITATIONS",
+    "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_LEDGER_SCHEMA",
+    "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_MINTED_SLOTS",
+    "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_NON_CLAIMS",
+    "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PAID_SLOTS",
+    "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PAID_SLOT_SCOPES",
+    "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PILOT_ADAPTATION_SCHEMA",
+    "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_POLARITIES",
+    "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_RAILS",
+    "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_REFLECTION_MANIFEST_SCHEMA",
+    "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_RESERVED_SLOTS",
+    "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_SCOPE_RULE",
+    "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_SPAN_TYPES",
+    "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_VERDICTS",
+    "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:checkManifest",
+    "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:inclusionProof",
+    "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:manifestRoot",
+    "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:node",
+    "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:verifyInclusion",
+    "5a:tools/simurgh-attestation/stage5a/node/verify-stage5a-attestation.mjs:verify"
+  ],
+  "applicable_classes": [
+    "R1",
+    "R10",
+    "R11",
+    "R12",
+    "R13",
+    "R14",
+    "R15",
+    "R16",
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R6",
+    "R7",
+    "R8",
+    "R9"
+  ],
+  "omitted_classes_with_frozen_reason": [],
+  "attack_pack_ids": [],
+  "premise_receipts": [],
+  "finding_ids": [],
+  "coverage_statuses": {},
+  "positive_path_result": {
+    "result": "reproduced",
+    "script": "scripts/reproduce-llm-shield-stage5a.sh",
+    "exit": 0,
+    "signal": null,
+    "log_digest": "8b94c4f114539e1a973508484d650cd2af4319ada9bad03adeebd66c45eb7e5c",
+    "log_tail": "-- 5/6 JS<->Python parity (digest preflight + full ledger-content equality) |    parity OK | -- 6/6 browser-parity (CSP + no-egress + WebCrypto Ed25519) + K7 all-functions net |    browser + K7 OK | == Stage 5A VNC reproduce: ALL PASS == | "
+  },
+  "obligation_receipts": [
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:inclusionProof",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:verifyInclusion",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/k7AllFunctions.test.js:<file-gate>",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_REFLECTION_MANIFEST_SCHEMA",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:<file-gate>",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:verifyInclusion",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_SCOPE_RULE",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/node/verify-stage5a-attestation.mjs:verify",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:manifest",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/laneb.test.js:<file-gate>",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:manifest",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_ELIGIBLE_SPAN_TYPE",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:inclusionProof",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_ATTESTATION_SCHEMA",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_ATTESTATION_SCHEMA",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_REFLECTION_MANIFEST_SCHEMA",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:manifestRoot",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:node",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/bindingCore.test.js:<file-gate>",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/fixtures.test.js:<file-gate>",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:D",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/verdictCore.test.js:<file-gate>",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/bindingCore.test.js:<file-gate>",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_LEDGER_SCHEMA",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_POLARITIES",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:D",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PILOT_ADAPTATION_SCHEMA",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/browserParity.test.js:<file-gate>",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_NON_CLAIMS",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_RESERVED_SLOTS",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_CLAIM_TABLE_SCHEMA",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_RAILS",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/bindingCore.test.js:<file-gate>",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:D",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/verdictCore.test.js:<file-gate>",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_ATTESTATION_SCHEMA",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/claimCore.test.js:<file-gate>",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/parity.test.js:<file-gate>",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PAID_SLOT_SCOPES",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_MINTED_SLOTS",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/node/verify-stage5a-attestation.mjs:verify",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:node",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_RESERVED_SLOTS",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_SCOPE_RULE",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_KNOWN_LIMITATIONS",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/node/verify-stage5a-attestation.mjs:verify",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/fixtures.test.js:<file-gate>",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/verdictCore.test.js:<file-gate>",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_CLAIM_TABLE_SCHEMA",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_LEDGER_SCHEMA",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_LEDGER_SCHEMA",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:manifestRoot",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PAID_SLOTS",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_ATTESTATION_SCHEMA",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:D",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_ATTESTATION_SCHEMA",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_KNOWN_LIMITATIONS",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/node/verify-stage5a-attestation.mjs:verify",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/node/verify-stage5a-attestation.mjs:verify",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/k7AllFunctions.test.js:<file-gate>",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/adapterCore.test.js:<file-gate>",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/bindingCore.test.js:<file-gate>",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/browserParity.test.js:<file-gate>",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:<file-gate>",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_KNOWN_LIMITATIONS",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/fixtures.test.js:<file-gate>",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:manifestRoot",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_KNOWN_LIMITATIONS",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:manifestRoot",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_MINTED_SLOTS",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_ELIGIBLE_SPAN_TYPE",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_CLAIM_TABLE_SCHEMA",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_CLAIM_TABLE_SCHEMA",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/node/verify-stage5a-attestation.mjs:verify",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/vncCore.test.js:<file-gate>",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:checkManifest",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/fixtures.test.js:<file-gate>",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/laneb.test.js:<file-gate>",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_REFLECTION_MANIFEST_SCHEMA",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_NON_CLAIMS",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_MINTED_SLOTS",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PAID_SLOT_SCOPES",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_SPAN_TYPES",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:manifest",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/browserParity.test.js:<file-gate>",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_VERDICTS",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/adapterCore.test.js:<file-gate>",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/vncCore.test.js:<file-gate>",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_SCOPE_RULE",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_POLARITIES",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:node",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:verifyInclusion",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PAID_SLOT_SCOPES",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/node/verify-stage5a-attestation.mjs:verify",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_ELIGIBLE_SPAN_TYPE",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_SCOPE_RULE",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_SPAN_TYPES",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PAID_SLOTS",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/bindingCore.test.js:<file-gate>",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/parity.test.js:<file-gate>",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/claimCore.test.js:<file-gate>",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_SPAN_TYPES",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/adapterCore.test.js:<file-gate>",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:checkManifest",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/constants.test.js:<file-gate>",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:manifest",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:manifest",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_NON_CLAIMS",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:<file-gate>",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/fixtures.test.js:<file-gate>",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/fixtures.test.js:<file-gate>",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:<file-gate>",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_MINTED_SLOTS",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:verifyInclusion",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:<file-gate>",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/partitionCore.test.js:<file-gate>",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_POLARITIES",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PILOT_ADAPTATION_SCHEMA",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_REFLECTION_MANIFEST_SCHEMA",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:verifyInclusion",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_RAILS",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_KNOWN_LIMITATIONS",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_VERDICTS",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:inclusionProof",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PAID_SLOT_SCOPES",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/claimCore.test.js:<file-gate>",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_ELIGIBLE_SPAN_TYPE",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/adapterCore.test.js:<file-gate>",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/partitionCore.test.js:<file-gate>",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_SPAN_TYPES",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:inclusionProof",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_KNOWN_LIMITATIONS",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/browserParity.test.js:<file-gate>",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/vncCore.test.js:<file-gate>",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PILOT_ADAPTATION_SCHEMA",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/browserParity.test.js:<file-gate>",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/partitionCore.test.js:<file-gate>",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/partitionCore.test.js:<file-gate>",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:verifyInclusion",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_MINTED_SLOTS",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/partitionCore.test.js:<file-gate>",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PAID_SLOT_SCOPES",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_RAILS",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/fixtures.test.js:<file-gate>",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/claimCore.test.js:<file-gate>",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:<file-gate>",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_RESERVED_SLOTS",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/parity.test.js:<file-gate>",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_MINTED_SLOTS",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/claimCore.test.js:<file-gate>",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/constants.test.js:<file-gate>",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_VERDICTS",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_ATTESTATION_SCHEMA",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/verdictCore.test.js:<file-gate>",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/parity.test.js:<file-gate>",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_SCOPE_RULE",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_VERDICTS",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_RESERVED_SLOTS",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_NON_CLAIMS",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_REFLECTION_MANIFEST_SCHEMA",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/partitionCore.test.js:<file-gate>",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/fixtures.test.js:<file-gate>",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_VERDICTS",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/verdictCore.test.js:<file-gate>",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/laneb.test.js:<file-gate>",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_REFLECTION_MANIFEST_SCHEMA",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:manifest",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_KNOWN_LIMITATIONS",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PAID_SLOTS",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_VERDICTS",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_RAILS",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:manifest",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_REFLECTION_MANIFEST_SCHEMA",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:node",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_MINTED_SLOTS",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_CLAIM_TABLE_SCHEMA",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_KNOWN_LIMITATIONS",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PAID_SLOT_SCOPES",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_SCOPE_RULE",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_REFLECTION_MANIFEST_SCHEMA",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_SPAN_TYPES",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:<file-gate>",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/exitCodes.test.js:<file-gate>",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/k7AllFunctions.test.js:<file-gate>",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/fixtures.test.js:<file-gate>",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_RESERVED_SLOTS",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/node/verify-stage5a-attestation.mjs:verify",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_NON_CLAIMS",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_RAILS",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_CLAIM_TABLE_SCHEMA",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_RAILS",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_CLAIM_TABLE_SCHEMA",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/parity.test.js:<file-gate>",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PAID_SLOTS",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:node",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:manifestRoot",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:verifyInclusion",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:checkManifest",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_RAILS",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:D",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_KNOWN_LIMITATIONS",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:checkManifest",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_ELIGIBLE_SPAN_TYPE",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/laneb.test.js:<file-gate>",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_LEDGER_SCHEMA",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_SPAN_TYPES",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_RESERVED_SLOTS",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_RESERVED_SLOTS",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_ATTESTATION_SCHEMA",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/bindingCore.test.js:<file-gate>",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/adapterCore.test.js:<file-gate>",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/adapterCore.test.js:<file-gate>",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/vncCore.test.js:<file-gate>",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_RESERVED_SLOTS",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/k7AllFunctions.test.js:<file-gate>",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/adapterCore.test.js:<file-gate>",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:checkManifest",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/laneb.test.js:<file-gate>",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_RAILS",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/browserParity.test.js:<file-gate>",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_ELIGIBLE_SPAN_TYPE",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_SPAN_TYPES",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/laneb.test.js:<file-gate>",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:verifyInclusion",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/bindingCore.test.js:<file-gate>",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_KNOWN_LIMITATIONS",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_VERDICTS",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:manifestRoot",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:D",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_NON_CLAIMS",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_ATTESTATION_SCHEMA",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:checkManifest",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PAID_SLOT_SCOPES",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/parity.test.js:<file-gate>",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PILOT_ADAPTATION_SCHEMA",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:node",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:manifestRoot",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/bindingCore.test.js:<file-gate>",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/browserParity.test.js:<file-gate>",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/laneb.test.js:<file-gate>",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PAID_SLOTS",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/laneb.test.js:<file-gate>",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:node",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/adapterCore.test.js:<file-gate>",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:D",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:D",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:verifyInclusion",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:checkManifest",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PILOT_ADAPTATION_SCHEMA",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:inclusionProof",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_SCOPE_RULE",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:checkManifest",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_SCOPE_RULE",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/parity.test.js:<file-gate>",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/vncCore.test.js:<file-gate>",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_SCOPE_RULE",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:inclusionProof",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_NON_CLAIMS",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/vncCore.test.js:<file-gate>",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/k7AllFunctions.test.js:<file-gate>",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/bindingCore.test.js:<file-gate>",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_RESERVED_SLOTS",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_MINTED_SLOTS",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_VERDICTS",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/fixtures.test.js:<file-gate>",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_POLARITIES",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PAID_SLOTS",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/constants.test.js:<file-gate>",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PILOT_ADAPTATION_SCHEMA",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/bindingCore.test.js:<file-gate>",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:node",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/constants.test.js:<file-gate>",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_REFLECTION_MANIFEST_SCHEMA",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PAID_SLOT_SCOPES",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/verdictCore.test.js:<file-gate>",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/verdictCore.test.js:<file-gate>",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_LEDGER_SCHEMA",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/k7AllFunctions.test.js:<file-gate>",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PILOT_ADAPTATION_SCHEMA",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/exitCodes.test.js:<file-gate>",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/node/verify-stage5a-attestation.mjs:verify",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/partitionCore.test.js:<file-gate>",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:checkManifest",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:manifest",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/parity.test.js:<file-gate>",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:manifestRoot",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/node/verify-stage5a-attestation.mjs:verify",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:manifestRoot",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PAID_SLOT_SCOPES",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/fixtures.test.js:<file-gate>",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/node/verify-stage5a-attestation.mjs:verify",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/bindingCore.test.js:<file-gate>",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/adapterCore.test.js:<file-gate>",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_SPAN_TYPES",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_ELIGIBLE_SPAN_TYPE",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/browserParity.test.js:<file-gate>",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/adapterCore.test.js:<file-gate>",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_ELIGIBLE_SPAN_TYPE",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/vncCore.test.js:<file-gate>",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PAID_SLOTS",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/k7AllFunctions.test.js:<file-gate>",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PAID_SLOTS",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:manifest",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:node",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/partitionCore.test.js:<file-gate>",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/claimCore.test.js:<file-gate>",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:<file-gate>",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/browserParity.test.js:<file-gate>",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_RAILS",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/vncCore.test.js:<file-gate>",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_VERDICTS",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/k7AllFunctions.test.js:<file-gate>",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:<file-gate>",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/claimCore.test.js:<file-gate>",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/partitionCore.test.js:<file-gate>",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/exitCodes.test.js:<file-gate>",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_NON_CLAIMS",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:<file-gate>",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:inclusionProof",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/constants.test.js:<file-gate>",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:checkManifest",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:D",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/claimCore.test.js:<file-gate>",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_RAILS",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_REFLECTION_MANIFEST_SCHEMA",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/laneb.test.js:<file-gate>",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PILOT_ADAPTATION_SCHEMA",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/constants.test.js:<file-gate>",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/laneb.test.js:<file-gate>",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:manifestRoot",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_SCOPE_RULE",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_SPAN_TYPES",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:D",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_REFLECTION_MANIFEST_SCHEMA",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:manifestRoot",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/parity.test.js:<file-gate>",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/exitCodes.test.js:<file-gate>",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_POLARITIES",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_RESERVED_SLOTS",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PILOT_ADAPTATION_SCHEMA",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/browserParity.test.js:<file-gate>",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_RESERVED_SLOTS",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_RESERVED_SLOTS",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_ELIGIBLE_SPAN_TYPE",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:<file-gate>",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/constants.test.js:<file-gate>",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_ELIGIBLE_SPAN_TYPE",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/parity.test.js:<file-gate>",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_RAILS",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/partitionCore.test.js:<file-gate>",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/exitCodes.test.js:<file-gate>",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/claimCore.test.js:<file-gate>",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:manifest",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_SCOPE_RULE",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/partitionCore.test.js:<file-gate>",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_MINTED_SLOTS",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/parity.test.js:<file-gate>",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/claimCore.test.js:<file-gate>",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:D",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PILOT_ADAPTATION_SCHEMA",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_CLAIM_TABLE_SCHEMA",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/exitCodes.test.js:<file-gate>",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/browserParity.test.js:<file-gate>",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/node/verify-stage5a-attestation.mjs:verify",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PILOT_ADAPTATION_SCHEMA",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/k7AllFunctions.test.js:<file-gate>",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_REFLECTION_MANIFEST_SCHEMA",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:<file-gate>",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_POLARITIES",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/vncCore.test.js:<file-gate>",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_MINTED_SLOTS",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_SPAN_TYPES",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:<file-gate>",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:manifestRoot",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PAID_SLOTS",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_POLARITIES",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_RAILS",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_NON_CLAIMS",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/verdictCore.test.js:<file-gate>",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_RESERVED_SLOTS",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PILOT_ADAPTATION_SCHEMA",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:<file-gate>",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_MINTED_SLOTS",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_ATTESTATION_SCHEMA",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/partitionCore.test.js:<file-gate>",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/parity.test.js:<file-gate>",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_LEDGER_SCHEMA",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/bindingCore.test.js:<file-gate>",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PAID_SLOT_SCOPES",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:verifyInclusion",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PILOT_ADAPTATION_SCHEMA",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:inclusionProof",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/constants.test.js:<file-gate>",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_KNOWN_LIMITATIONS",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_NON_CLAIMS",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_SPAN_TYPES",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/fixtures.test.js:<file-gate>",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PILOT_ADAPTATION_SCHEMA",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:node",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/partitionCore.test.js:<file-gate>",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_ATTESTATION_SCHEMA",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/claimCore.test.js:<file-gate>",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/adapterCore.test.js:<file-gate>",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_MINTED_SLOTS",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/partitionCore.test.js:<file-gate>",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_REFLECTION_MANIFEST_SCHEMA",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/constants.test.js:<file-gate>",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_ELIGIBLE_SPAN_TYPE",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_POLARITIES",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_LEDGER_SCHEMA",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_ATTESTATION_SCHEMA",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/node/verify-stage5a-attestation.mjs:verify",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/node/verify-stage5a-attestation.mjs:verify",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:<file-gate>",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_MINTED_SLOTS",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_CLAIM_TABLE_SCHEMA",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_SCOPE_RULE",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_KNOWN_LIMITATIONS",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_LEDGER_SCHEMA",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/constants.test.js:<file-gate>",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_ELIGIBLE_SPAN_TYPE",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:node",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_LEDGER_SCHEMA",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_KNOWN_LIMITATIONS",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/browserParity.test.js:<file-gate>",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_SPAN_TYPES",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/verdictCore.test.js:<file-gate>",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_POLARITIES",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_ELIGIBLE_SPAN_TYPE",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:manifest",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:D",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_VERDICTS",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_POLARITIES",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/verdictCore.test.js:<file-gate>",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/bindingCore.test.js:<file-gate>",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_VERDICTS",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/exitCodes.test.js:<file-gate>",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/vncCore.test.js:<file-gate>",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_RAILS",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_POLARITIES",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_POLARITIES",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:inclusionProof",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_LEDGER_SCHEMA",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:verifyInclusion",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/claimCore.test.js:<file-gate>",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_ELIGIBLE_SPAN_TYPE",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/k7AllFunctions.test.js:<file-gate>",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_MINTED_SLOTS",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:inclusionProof",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/adapterCore.test.js:<file-gate>",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:manifestRoot",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:node",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/laneb.test.js:<file-gate>",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_NON_CLAIMS",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/fixtures.test.js:<file-gate>",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PAID_SLOTS",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_REFLECTION_MANIFEST_SCHEMA",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:manifest",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/parity.test.js:<file-gate>",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_NON_CLAIMS",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/laneb.test.js:<file-gate>",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/adapterCore.test.js:<file-gate>",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:verifyInclusion",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_CLAIM_TABLE_SCHEMA",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_VERDICTS",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_CLAIM_TABLE_SCHEMA",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/k7AllFunctions.test.js:<file-gate>",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:D",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/adapterCore.test.js:<file-gate>",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/node/verify-stage5a-attestation.mjs:verify",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/verdictCore.test.js:<file-gate>",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/constants.test.js:<file-gate>",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PAID_SLOT_SCOPES",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_POLARITIES",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/claimCore.test.js:<file-gate>",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_LEDGER_SCHEMA",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/fixtures.test.js:<file-gate>",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/browserParity.test.js:<file-gate>",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:checkManifest",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/k7AllFunctions.test.js:<file-gate>",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_MINTED_SLOTS",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/exitCodes.test.js:<file-gate>",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:manifestRoot",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/adapterCore.test.js:<file-gate>",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PILOT_ADAPTATION_SCHEMA",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_VERDICTS",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:manifestRoot",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/vncCore.test.js:<file-gate>",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_NON_CLAIMS",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/laneb.test.js:<file-gate>",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_RESERVED_SLOTS",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/exitCodes.test.js:<file-gate>",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:D",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:<file-gate>",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/partitionCore.test.js:<file-gate>",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_REFLECTION_MANIFEST_SCHEMA",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/node/verify-stage5a-attestation.mjs:verify",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/bindingCore.test.js:<file-gate>",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/exitCodes.test.js:<file-gate>",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/browserParity.test.js:<file-gate>",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_SCOPE_RULE",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:checkManifest",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_NON_CLAIMS",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PILOT_ADAPTATION_SCHEMA",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_CLAIM_TABLE_SCHEMA",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:manifestRoot",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/parity.test.js:<file-gate>",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_RESERVED_SLOTS",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_ATTESTATION_SCHEMA",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PAID_SLOTS",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_ELIGIBLE_SPAN_TYPE",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PAID_SLOT_SCOPES",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_RAILS",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_SPAN_TYPES",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:checkManifest",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/vncCore.test.js:<file-gate>",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/claimCore.test.js:<file-gate>",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:node",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:checkManifest",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PAID_SLOTS",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_MINTED_SLOTS",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:inclusionProof",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PAID_SLOTS",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/exitCodes.test.js:<file-gate>",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_SPAN_TYPES",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/browserParity.test.js:<file-gate>",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/exitCodes.test.js:<file-gate>",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/adapterCore.test.js:<file-gate>",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/verdictCore.test.js:<file-gate>",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/claimCore.test.js:<file-gate>",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_RESERVED_SLOTS",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/vncCore.test.js:<file-gate>",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_POLARITIES",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/verdictCore.test.js:<file-gate>",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:manifest",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_LEDGER_SCHEMA",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PAID_SLOT_SCOPES",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/constants.test.js:<file-gate>",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_SPAN_TYPES",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PAID_SLOT_SCOPES",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:D",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/constants.test.js:<file-gate>",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:manifest",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/partitionCore.test.js:<file-gate>",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:inclusionProof",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:checkManifest",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_CLAIM_TABLE_SCHEMA",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_POLARITIES",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/parity.test.js:<file-gate>",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/fixtures.test.js:<file-gate>",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/vncCore.test.js:<file-gate>",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:inclusionProof",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_RAILS",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_VERDICTS",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/browserParity.test.js:<file-gate>",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_ATTESTATION_SCHEMA",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/laneb.test.js:<file-gate>",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_LEDGER_SCHEMA",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_NON_CLAIMS",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:checkManifest",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_SCOPE_RULE",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:inclusionProof",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_LEDGER_SCHEMA",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/verdictCore.test.js:<file-gate>",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_SCOPE_RULE",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:manifest",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/vncCore.test.js:<file-gate>",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/verdictCore.test.js:<file-gate>",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:verifyInclusion",
+      "attack_class": "R8",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/laneb.test.js:<file-gate>",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/claimCore.test.js:<file-gate>",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/vncCore.test.js:<file-gate>",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_KNOWN_LIMITATIONS",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:node",
+      "attack_class": "R3",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/constants.test.js:<file-gate>",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PAID_SLOT_SCOPES",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/fixtures.test.js:<file-gate>",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_REFLECTION_MANIFEST_SCHEMA",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/bindingCore.test.js:<file-gate>",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:verifyInclusion",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:manifest",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/constants.test.js:<file-gate>",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PAID_SLOTS",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_POLARITIES",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PAID_SLOTS",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/verdictCore.test.js:<file-gate>",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_CLAIM_TABLE_SCHEMA",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:verifyInclusion",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_LEDGER_SCHEMA",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/k7AllFunctions.test.js:<file-gate>",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/parity.test.js:<file-gate>",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PAID_SLOT_SCOPES",
+      "attack_class": "R9",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_ELIGIBLE_SPAN_TYPE",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_VERDICTS",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:node",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_VERDICTS",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/constants.test.js:<file-gate>",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_ATTESTATION_SCHEMA",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/bindingCore.test.js:<file-gate>",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/manifestCore.test.js:D",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:node",
+      "attack_class": "R2",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_SCOPE_RULE",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_LEDGER_SCHEMA",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_ATTESTATION_SCHEMA",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_PAID_SLOTS",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/exitCodes.test.js:<file-gate>",
+      "attack_class": "R1",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:inclusionProof",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_SPAN_TYPES",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/exitCodes.test.js:<file-gate>",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_NON_CLAIMS",
+      "attack_class": "R14",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_KNOWN_LIMITATIONS",
+      "attack_class": "R5",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_ATTESTATION_SCHEMA",
+      "attack_class": "R4",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/exitCodes.test.js:<file-gate>",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_CLAIM_TABLE_SCHEMA",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/laneb.test.js:<file-gate>",
+      "attack_class": "R15",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/k7AllFunctions.test.js:<file-gate>",
+      "attack_class": "R13",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/k7AllFunctions.test.js:<file-gate>",
+      "attack_class": "R12",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_RAILS",
+      "attack_class": "R7",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/unit/llmShield/stage5a/exitCodes.test.js:<file-gate>",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:verifyInclusion",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_KNOWN_LIMITATIONS",
+      "attack_class": "R10",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tests/e2e/llmShield/stage5a/k7AllFunctions.test.js:<file-gate>",
+      "attack_class": "R11",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/core/manifestCore.mjs:inclusionProof",
+      "attack_class": "R6",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    },
+    {
+      "function_id": "5a:tools/simurgh-attestation/stage5a/constants.mjs:VNC_CLAIM_TABLE_SCHEMA",
+      "attack_class": "R16",
+      "pack_id": null,
+      "premise_receipt_digest": null,
+      "observed_outcome": null,
+      "discharge_status": null,
+      "finding_ids": []
+    }
+  ],
+  "summary": "No attack pack has been run against this tray; no discharge is claimed and no finding is implied."
+}
