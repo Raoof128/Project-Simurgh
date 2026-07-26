@@ -154,3 +154,6 @@ tools/simurgh-attestation/stage5p/browser/parity-vectors.json
 
 # Stage 5Q evidence — canonical JSON, gated by evidenceCanonical.test.js not prettier
 docs/research/llm-shield/evidence/stage-5q/
+
+# Stage 5Q fixture tree — deliberately unformatted sample sources for the census
+tools/simurgh-attestation/stage5q/fixtures/
