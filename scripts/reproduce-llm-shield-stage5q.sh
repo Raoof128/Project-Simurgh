@@ -203,8 +203,24 @@ if ! git worktree add --detach --quiet "$SCRATCH" HEAD; then
   echo "FAIL: could not create the scratch worktree the runtime census requires"
   exit 1
 fi
-RUNTIME="$(cd "$SCRATCH" && SIMURGH_SKIP_DOTENV=1 "$NODE" "$Q/node/measureRuntimeCensus.mjs" 2>&1 | head -5)"
+# The census EXITS NON-ZERO when it detects that importing a module wrote to committed evidence —
+# which, in the scratch tree, it always will (5Q-F003). Under `set -o pipefail` a plain
+# `census | head -5` propagates that 1 and kills the script before it can say why. Captured to a
+# file with the status taken explicitly, so a real crash and a detected write stay distinguishable
+# instead of both becoming "the script stopped".
+CENSUS_LOG="$SCRATCH/../5q-runtime-census.log"
+CENSUS_EXIT=0
+(cd "$SCRATCH" && SIMURGH_SKIP_DOTENV=1 "$NODE" "$Q/node/measureRuntimeCensus.mjs") \
+  >"$CENSUS_LOG" 2>&1 || CENSUS_EXIT=$?
+RUNTIME="$(head -5 "$CENSUS_LOG")"
 CENSUS_DIRT="$(git -C "$SCRATCH" status --porcelain -- docs/research/llm-shield/evidence/ | sed 's/^...//' || true)"
+if [ "$CENSUS_EXIT" != "0" ] && [ -z "$CENSUS_DIRT" ]; then
+  echo "FAIL: the runtime census exited $CENSUS_EXIT without an import-time write to explain it"
+  tail -20 "$CENSUS_LOG" | sed 's/^/      /'
+  rm -f "$CENSUS_LOG"
+  exit 1
+fi
+rm -f "$CENSUS_LOG"
 cleanup_scratch
 trap - EXIT INT TERM
 echo "$RUNTIME" | sed 's/^/      /'
@@ -466,7 +482,36 @@ echo "no key material in $E: OK"
 
 # ------------------------------------------------------------------------------------------------
 echo
-echo "-- 15. this script disturbed nothing (re-checked after every gate ran) --"
+echo "-- 15. Q0 coverage ledger (L1, bottom-up) --"
+COV="$E/coverage/discharge-ledger.json"
+if [ ! -f "$COV" ]; then
+  echo "FAIL: the coverage ledger is missing"
+  exit 1
+fi
+COV_OUT="$("$NODE" "$Q/node/measureQ0Coverage.mjs")"
+echo "$COV_OUT" | sed -n '2,12p' | sed 's/^/      /'
+BUILT_COV="$(echo "$COV_OUT" | awk '/^  ledger_digest /{print $3}')"
+DISK_COV="$("$NODE" -e "process.stdout.write(String(require('./$COV').ledger_digest))")"
+if [ "$BUILT_COV" != "$DISK_COV" ]; then
+  echo "FAIL: the coverage ledger rebuilt to $BUILT_COV but the committed one is $DISK_COV"
+  exit 1
+fi
+# L1 IS NOT CERTIFIED, AND THAT IS THE MEASUREMENT. The gate asserts the committed ledger tells the
+# truth about itself: if `l1_certified` ever reads true, it must be because cells were attacked, and
+# a run that finds it true here while the obligated denominator is untouched is reporting a lie.
+CERTIFIED="$("$NODE" -e "process.stdout.write(String(require('./$COV').l1_certified))")"
+OBLIG="$("$NODE" -e "const j=require('./$COV');process.stdout.write(j.cells_obligated_discharged+'/'+j.cells_obligated)")"
+UNSTATUSED="$("$NODE" -e "process.stdout.write(String(require('./$COV').members_without_status))")"
+if [ "$CERTIFIED" = "true" ] && [ "$UNSTATUSED" != "0" ]; then
+  echo "FAIL: the ledger certifies L1 while $UNSTATUSED members have no status"
+  exit 1
+fi
+echo "coverage ledger: obligated cells discharged $OBLIG, unstatused members $UNSTATUSED,"
+echo "                 L1 certified = $CERTIFIED (rebuilds to the committed digest): OK"
+
+# ------------------------------------------------------------------------------------------------
+echo
+echo "-- 16. this script disturbed nothing (re-checked after every gate ran) --"
 # Gate 3 checked the branch. This checks THIS RUN: a reproduce script that verifies non-disturbance
 # and then disturbs something on its way through is worse than one that never checked, because it
 # prints a clean bill over damage it caused. It has happened once already.
@@ -486,12 +531,19 @@ echo "==========================================================================
 echo "NOT REPRODUCED BY THIS SCRIPT — named rather than omitted"
 echo "================================================================================"
 cat <<'NOTE'
-  Q0 tail, does not exist yet          the coverage discharge ledger (Task 19), the Node/Python/
-                                       browser parity vectors (19.5), the K7-A export census (19.7),
-                                       the signed attestation (20), K7-B and the reproduction
-                                       receipt (20.5), transition validation (21). The full
-                                       reproduce at 20.5 is the artifact a reviewer runs; this one
-                                       is its scaffold and says so in its banner.
+  Q0 tail, does not exist yet          the Node/Python/browser parity vectors (19.5), the K7-A
+                                       export census (19.7), the signed attestation (20), K7-B and
+                                       the reproduction receipt (20.5), transition validation (21).
+                                       The full reproduce at 20.5 is the artifact a reviewer runs;
+                                       this one is its scaffold and says so in its banner.
+
+  L1 COVERAGE — NOT CERTIFIED          gate 15 verifies the ledger; it does not certify coverage,
+                                       because the ledger does not. 8 of 23332 obligated cells are
+                                       discharged and all 2531 members derive no status. The
+                                       per-stage attack packs (plan Task 14's packs/stage5X/*.json)
+                                       were never written, so the sixteen trays contribute nothing.
+                                       The only real discharges come from the Task 12 mutants. No
+                                       attestation may claim coverage over this.
 
   16 historical tags                   UNREPRODUCIBLE, 0 reproducible. Every Stage-5 tag's
                                        package-lock.json differs from head, and re-resolving it
