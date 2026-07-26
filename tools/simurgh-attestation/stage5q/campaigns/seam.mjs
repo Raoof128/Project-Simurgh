@@ -17,6 +17,7 @@
 import { createHash } from "node:crypto";
 import { leafHash } from "../../stage5k/core/merkle.mjs";
 import { PREDICATES } from "../core/premiseReceipt.mjs";
+import { VSI_BAND_LO } from "../../stage5p/core/rawCodeAllocator.mjs";
 
 // WHAT EACH PACK ACTUALLY EXERCISES, stated per pack in `basis` and not glossed over.
 //
@@ -142,8 +143,12 @@ export const SEAM_PACKS = Object.freeze([
     attack_classes: ["R6"],
     expectation: "the SYMBOL WINS; no numeric coercion across adjacent bands",
     probe() {
-      const a = { symbol: "resolver_binding_invalid", raw: 464 };
-      const b = { symbol: "seat_imprint_disagrees", raw: 464 };
+      // The band's first code, READ FROM THE ALLOCATOR that owns it. Writing the number here
+      // would be a copy that keeps agreeing with a band it no longer tracks — and it would leak a
+      // 5P raw literal into a file 5P's own census forbids it in, which is how this line was
+      // written the first time and how it turned 5P's suite red.
+      const a = { symbol: "resolver_binding_invalid", raw: VSI_BAND_LO };
+      const b = { symbol: "seat_imprint_disagrees", raw: VSI_BAND_LO };
       const premise = { same_raw: a.raw === b.raw, distinct_symbols: a.symbol !== b.symbol };
       // Two different meanings sharing a number must still be distinguishable by symbol.
       return a.symbol === b.symbol

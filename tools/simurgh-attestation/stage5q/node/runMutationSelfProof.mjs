@@ -28,6 +28,8 @@ import { spawnSync } from "node:child_process";
 import { applyMutation } from "../core/mutationAdapter.mjs";
 import { isValidMutationReceipt, captureStream } from "../core/harness.mjs";
 import { MUTANT_PRIMARY_CLASS } from "../core/constants.mjs";
+import { makeFunctionId } from "../core/functionId.mjs";
+import { stageFor } from "../core/censusStatic.mjs";
 
 const REPO = process.cwd();
 const MUTANTS_DIR = "tools/simurgh-attestation/stage5q/mutants";
@@ -135,7 +137,19 @@ function proveOne(spec) {
   return {
     mutant_id: spec.mutant_id,
     attack_class: MUTANT_PRIMARY_CLASS[spec.mutant_id],
-    target_function_id: `${spec.target_file}:${spec.target_symbol}`,
+    // THE CANONICAL ID, `stage:path:symbol`. It was `path:symbol` — one field short — and every
+    // one of the sixteen receipts named a target that could not be found in the committed closure.
+    // The receipts looked complete, the closure looked complete, and nothing joined: the L4
+    // evidence could not discharge a single L2 cell, and a coverage ledger consuming them would
+    // have reported zero discharges with no indication that a JOIN had failed rather than an
+    // attack. `makeFunctionId` is the only constructor, so a hand-built id cannot drift again.
+    target_function_id: makeFunctionId({
+      // The SAME derivation the census used to build the closure. A second, parallel rule for
+      // "which stage is this file in" is a second answer waiting to disagree with the first.
+      stageId: stageFor(spec.target_file),
+      modulePath: spec.target_file,
+      symbol: spec.target_symbol,
+    }),
     intent: spec.intent,
     adapter: spec.adapter,
     expected_failure: spec.expected_failure,

@@ -98,11 +98,11 @@ export const HEAD_PACKS = Object.freeze([
 
   {
     pack_id: "head/allocator-adjacency",
-    target_pair: ["stage5p/core/rawCodeAllocator", "stage5o band (…463)"],
+    target_pair: ["stage5p/core/rawCodeAllocator", "the band immediately below it"],
     attack_classes: ["R6"],
     expectation:
-      "adjacent code bands must not overlap at their edges. 5O ends at 463 and 5P begins at 464; a " +
-      "collision at the seam is a silent misreport that every green run would carry",
+      "adjacent code bands must not overlap at their edges. 5P's band starts one above 5O's top; " +
+      "a collision at the seam is a silent misreport that every green run would carry",
     probe() {
       // The field is `raw_code`. The first version of this probe guessed `c.code ?? c.raw`, got
       // `undefined` for every entry, and reported a FALSE FINDING of "duplicate codes ,,,,,,,,,".
@@ -116,14 +116,19 @@ export const HEAD_PACKS = Object.freeze([
           premise: null,
         };
       }
+      // DERIVED, never written. 5O's top is "one below where 5P starts", read from 5P's own
+      // allocator. A hardcoded 463 would be a second copy of a boundary that only one file owns —
+      // and it would put a 5P raw literal in a file 5P's raw-code census forbids it in, which is
+      // exactly what the first version did and how it turned 5P's suite red.
+      const adjacentBandTop = VSI_BAND_LO - 1;
       const premise = {
         band_lo: VSI_BAND_LO,
         band_hi: VSI_BAND_HI,
         allocated: codes.length,
-        adjacent_band_top: 463,
+        adjacent_band_top: adjacentBandTop,
       };
       // The seam itself: nothing 5P allocates may fall at or below 5O's top.
-      const below = codes.filter((c) => Number.isInteger(c) && c <= 463);
+      const below = codes.filter((c) => Number.isInteger(c) && c <= adjacentBandTop);
       if (below.length > 0) {
         return {
           outcome: "unexpectedly_accepted",
@@ -137,7 +142,7 @@ export const HEAD_PACKS = Object.freeze([
       }
       return {
         outcome: "distinct_as_expected",
-        detail: "band edges 463/464 do not collide",
+        detail: `band edges ${adjacentBandTop}/${VSI_BAND_LO} do not collide`,
         premise,
       };
     },
