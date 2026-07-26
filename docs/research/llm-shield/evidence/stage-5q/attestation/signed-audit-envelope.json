@@ -1,0 +1,11 @@
+{
+  "schema": "simurgh.vsr.q0.envelope.v1",
+  "public_digest": "8d04e35c6ccd7531e963de7e6aa964e4777b361666be8be516642f25eac27de6",
+  "signer": {
+    "profile_id": "stage5q-q0-genesis",
+    "public_key_b64": "MCowBQYDK2VwAyEAmS1wVg90upPp4aT1bpfSfCU9oh4kkLXAervM9sgCh3E=",
+    "algorithm": "ed25519"
+  },
+  "signature_b64": "D1cmOO/i8IlTMR4h6fTBOuuAT2HYLbSEsUhtbcfzCgFqzlUKCxITi4TizwfU/QoBF1+VtfloeUXheqTB1LBzBg==",
+  "created_at": "2026-07-26T12:25:08.042Z"
+}

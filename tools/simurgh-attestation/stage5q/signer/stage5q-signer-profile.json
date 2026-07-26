@@ -1,0 +1,19 @@
+{
+  "schema": "simurgh.vsr.q0.signer-profile.v1",
+  "note": "The PUBLIC half, committed in exactly ONE place. The deterministic bundle carries only this key digest and the profile id; the envelope carries the key itself. Three copies of a public key is three chances to disagree.",
+  "profile_id": "stage5q-q0-genesis",
+  "algorithm": "ed25519",
+  "public_key_b64": "MCowBQYDK2VwAyEAmS1wVg90upPp4aT1bpfSfCU9oh4kkLXAervM9sgCh3E=",
+  "public_key_digest": "de557244c368b6105e5cbad5717f009fa5a6299ba896b2843d324ebdd1886811",
+  "lifecycle": {
+    "generated_for": "Stage 5Q Q0 attestation and the Q1 appends that follow it",
+    "retained_until": "the end of Q1. Destroying the only key after Q0 would make authenticated append impossible, and Q1-F001 is already scheduled (gauntlet P0-16).",
+    "private_half": "offline, outside the repository, never in a session scratchpad",
+    "private_half_location_class": "operator home directory, mode 0600, not synced"
+  },
+  "rotation": {
+    "policy": "a rotation is a signed object of schema simurgh.vsr.q0.key-rotation.v1, signed by the OUTGOING key. A rotation signed by the incoming key would let anyone holding any key declare themselves the successor.",
+    "chain": [],
+    "chain_note": "EMPTY, and empty means no rotation has happened — which is the honest state. Manufacturing a rotation event so the chain looked longer would be fabricating history in a stage about fabricated execution reality. verifyRotationChain accepts an empty chain only when the presented key IS the genesis key."
+  }
+}
