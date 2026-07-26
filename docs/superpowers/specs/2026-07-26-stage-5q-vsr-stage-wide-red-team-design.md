@@ -1121,10 +1121,158 @@ afterwards.
 
 ---
 
+## Annex A2 — the closure/discharge split (post-freeze, 2026-07-26)
+
+**Amends §2.3.** Raised by external gauntlet as P0-1.
+
+### A2.1 The defect
+
+§2.3's entry record contains two fields that **cannot exist when the closure is committed**:
+
+```text
+attack_pack_ids        produced by Tasks 9, 14-18
+coverage_status        produced by Task 19
+```
+
+L2 commits the universe _before_ any attack runs. So Task 8 faced three options and every one was
+dishonest: leave the fields blank (violating §2.7's four-status rule, which admits no empty value),
+fill them prospectively (manufacturing results before the attacks that produce them), or omit them
+(in which case Task 8 is not committing the entry record it claims to commit).
+
+This is the stage's own disease — a commitment whose shape presumes facts it does not yet have.
+
+### A2.2 The amendment
+
+§2.3's record is **one joined view over two objects with different lifetimes**:
+
+```text
+closure_member_commitment          IMMUTABLE at L2, committed by Task 8
+  function_id
+  stage_id
+  module_path
+  export_name_or_internal_symbol
+  source_digest
+  category
+  reachable_from
+  security_role
+  historical_tags
+
+function_discharge_overlay         APPENDED after attacks, committed by Task 19
+  function_id                      foreign key into the commitment
+  attack_pack_ids
+  coverage_status
+```
+
+The joined view **reproduces §2.3 exactly** and is what a reader sees in the final report. What L2
+commits is only the immutable projection.
+
+### A2.3 Consequences
+
+- The overlay's `function_id` must resolve into the committed closure. An overlay row for an
+  uncommitted member is a **gerrymandering attempt** and fails closed — this is the direction of
+  attack the split creates, and it must be tested.
+- The overlay may not add, remove or re-key members. Cardinality is fixed at L2.
+- `coverage_status` remains mandatory and four-valued **in the overlay**, where §2.7 now applies.
+- The commitment digest and the discharge digest are **separate roots** in the attestation.
+
+---
+
+## Annex A3 — precommitted historical function closure (post-freeze, 2026-07-26)
+
+**Amends §2.2 and §3.** Raised by external gauntlet as P0-2.
+
+### A3.1 The defect
+
+`historical_function` is a frozen member category, but the plan discovered those members in Task 16
+— _after_ L2 — and then explicitly kept them outside the committed closure. That is an uncommitted
+function universe inside a stage whose central law is Universe Before Attack, and it breaks L1 as
+well: members with no status.
+
+"Discover after freeze and do not commit" is not available to this stage.
+
+### A3.2 The amendment
+
+A **separate, separately-committed** closure:
+
+```text
+historical_function_closure
+  tag_name
+  commit_sha
+  function_id                      identity within that tag
+  source_digest
+  category
+  still_trusted_by                 the shipped artifact that depends on it
+```
+
+It is enumerated and committed **before Task 8**, at the same L2 boundary, under its own
+`historical_function_closure_digest`. Enumeration requires checking out each tag in an isolated
+worktree; it does **not** require running any attack, and no attack may run during enumeration.
+
+Task 16 then attacks an **already-frozen** historical target set, exactly as the trays attack an
+already-frozen head closure.
+
+### A3.3 Why a separate closure rather than a merged one
+
+Historical members are not members of head. Merging them would make the head closure describe code
+that is not at head, and `project(static, runtime_visible) == runtime` (§2.6) would be
+uncomputable against it. Two closures, two digests, one L2 boundary.
+
+---
+
+## Annex A4 — the obligation ledger (post-freeze, 2026-07-26)
+
+**Amends §2.7 and §4.2.** Raised by external gauntlet as P0-5.
+
+### A4.1 The defect
+
+The role matrix (§2.4) creates obligations **per member per class**, but the design recorded only
+member-level statuses and tray-level class lists. Nothing prevented one R3 pack against one function
+from discharging R3 for _every_ R3-obligated function in that tray.
+
+That is a false completeness claim at exactly the granularity 5Q exists to police, and it would have
+been invisible: the tray report would look complete, the coverage ledger would look complete, and the
+member statuses would all be populated.
+
+### A4.2 The amendment
+
+Obligations are first-class, keyed at the cell:
+
+```text
+obligation_id      = SHA256( UTF8("simurgh.vsr.obligation.v1") || 0x00
+                             || function_id || 0x00 || attack_class )
+function_id
+attack_class
+applicability      obligated | omitted
+omission_reason    §4.2 frozen enum; required iff applicability = omitted
+planned_pack_ids
+```
+
+Generated and committed **before Task 8** as `obligation_matrix_root`, over the committed closure
+crossed with the frozen taxonomy.
+
+### A4.3 Discharge direction is now bottom-up
+
+Task 19 discharges **every cell**, and the member-level `coverage_status` of Annex A2 is **derived**
+from its cells:
+
+```text
+member status := attacked_pass                     iff every obligated cell is discharged and none found
+                 finding_frozen                    iff any cell produced a finding
+                 mechanically_unreachable          iff every cell is omitted with a mechanical reason
+                 delegated_to_attacked_caller      iff delegation validates (§2.7 rules unchanged)
+```
+
+**The member status never replaces the cell ledger.** A member status computed without its cells is
+rejected. This inverts the original direction — the plan previously recorded member statuses and
+inferred class coverage, which is the inference that permitted the false discharge.
+
+---
+
 ## Freeze block
 
 **§§2–5 are FROZEN as of this commit.** Amendments are annex-only from here; the four objects are
-never reopened in place. Annex A1 above amends §2.1 by the permitted route.
+never reopened in place. Annexes A1–A4 above amend §§2.1, 2.2, 2.3, 2.7, 3 and 4.2 by the permitted
+route.
 
 ```text
 frozen_sections      §2 §3 §4 §5

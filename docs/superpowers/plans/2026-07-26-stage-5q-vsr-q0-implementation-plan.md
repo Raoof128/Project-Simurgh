@@ -13,7 +13,7 @@ has not been found yet is a ghost task for a ghost defect.
 | Freeze commits  | `652a2474` (freeze) / `f56b6619` (receipt)                                                    |
 | Branch          | `stage-5q-vsr-stage-wide-red-team`                                                            |
 | Target tag      | `v2.52.0-stage-5q-vsr`                                                                        |
-| Tasks           | 21 ruled + 5 inserted post-gauntlet (7.5, 18.1-18.4); Task 14 has 16 sub-tasks                |
+| Tasks           | 21 ruled + 7 inserted (1.5, 7.6, 7.7, 18.1-18.4); Task 14 has 16 sub-tasks                    |
 
 ---
 
@@ -59,8 +59,23 @@ DELEGATION (spec §2.7)
 
 CLOSURE ROOTS (spec §2.1 + ANNEX A1)
   R8 tests/unit/llmShield/stage5{a..p}/**   <- ADDED BY ANNEX A1, 243 files
-  Task 8 MUST NOT run until R8 is implemented. A closure committed without it
-  cannot be amended afterwards (L2), and would omit ~90% of stage 5's gate surface.
+  R8 is in the root set from the FIRST census (Task 1.5), not added later.
+
+CLOSURE / DISCHARGE SPLIT (ANNEX A2)
+  Task 8 commits closure_member_commitment ONLY.
+  attack_pack_ids and coverage_status live in function_discharge_overlay,
+  committed by Task 19. The joined view reproduces frozen §2.3 exactly.
+  An overlay row for an uncommitted member fails closed.
+
+HISTORICAL CLOSURE (ANNEX A3)
+  historical_function members are enumerated and committed BEFORE L2 (Task 7.6),
+  under their own historical_function_closure_digest. Task 16 attacks an
+  already-frozen set. Neither closure may grow after L2.
+
+OBLIGATION LEDGER (ANNEX A4)
+  Obligations are keyed at function_id x attack_class, committed before L2
+  (Task 7.7). Task 19 discharges CELLS; member coverage_status is DERIVED.
+  A member status written without its cells is rejected.
 
 RUNTIME PINNING — byte-stable evidence
   Every artifact whose byte-stability is asserted (Tasks 8, 19, 20) is built and
@@ -207,6 +222,56 @@ npm run format:check                                    # EXPECT clean
 ```
 
 **Commit:** `feat(5q): Task 1 — frozen-block verifier, constants, bijective mutant map`
+
+---
+
+## Task 1.5 — Annex A1: closure root R8 (**before every census**)
+
+**Moved here from Task 7.5 by the external gauntlet (P0-3).** Sitting after Tasks 2-6 meant the
+census, reachability graph and role file would all be authored over the WRONG universe and then
+enlarged by 243 members immediately before commitment. Roles in particular would be incomplete:
+the old placement never listed `stage5-roles.json` as modified, so the new members could not have
+received an assignment at all.
+
+R8 must be in the root set from the FIRST census execution.
+
+**Files**
+
+- modify: `tools/simurgh-attestation/stage5q/core/constants.mjs` (add R8 to the root table)
+- modify: `tools/simurgh-attestation/stage5q/core/censusStatic.mjs` (walk R8) — created in Task 2,
+  so if Task 2 has not run yet this modification is instead an **input constraint on Task 2**: the
+  root table it consumes already contains R8
+- modify: `tools/simurgh-attestation/stage5q/roles/stage5-roles.json` — R8 members receive role
+  assignments in the SAME pass as R1 members, never as a later top-up
+- create: `tests/unit/llmShield/stage5q/annexA1Roots.test.js`
+
+**Failing tests first:**
+
+- the root table contains R8 and it resolves to `tests/unit/llmShield/stage5{a..p}/**`;
+- the static census over a fixture tree admits a unit-test file and types it `gate_definition`;
+- a fixture that builds fixtures is typed `evidence_emission`, not `gate_definition`;
+- **`tests/unit/llmShield/stage4*/` is NOT admitted** (A1.3 scope discipline), with the single named
+  exception `stage4h/exitWrapper.test.js`, which is already in the closure by dependency;
+- R8 members are subject to the §2.4 adversarial role check exactly as R1 members are — a unit test
+  declared `pure_transform` while reachable from a `trust_decision` member fails closed.
+
+**Then the count check that proves R8 actually fired:**
+
+```bash
+npm run census:stage5q:static -- --format=summary
+# EXPECT: member count materially ABOVE the pre-annex diagnostic;
+#         the 243 stage-5 unit-test files present as members.
+#         Matching the OLD numbers means R8 did not fire.
+```
+
+**Named members that must appear, because they are why the annex exists:**
+
+```text
+tests/unit/llmShield/stage5p/rawCodeCensus.test.js         gate_definition / completeness_claim
+tests/unit/llmShield/stage5p/typedOutcomeDischarge.test.js gate_definition / completeness_claim
+```
+
+**Commit:** `feat(5q): Task 1.5 — Annex A1, closure root R8 admits stage-5 unit-level gates`
 
 ---
 
@@ -485,50 +550,127 @@ callers are attacked" is trivially true and must be rejected explicitly.
 
 ---
 
-## Task 7.5 — Annex A1: implement closure root R8 (**hard gate on Task 8**)
+## Task 7.6 — Historical function inventory (**Annex A3, pre-L2**)
 
-Inserted after the gauntlet. Without it Task 8 commits a universe omitting ~90% of Stage 5's gate
-surface, and L2 makes that permanent for the campaign.
+**Added by the external gauntlet (P0-2).** The old plan discovered `historical_function` members in
+Task 16 — after L2 — and then kept them outside the committed closure. That is an uncommitted
+function universe inside the stage whose central law is Universe Before Attack, and every one of
+those members would have had no coverage status, breaking L1 as well.
+
+**This task enumerates. It does not attack.** No pack runs here.
 
 **Files**
 
-- modify: `tools/simurgh-attestation/stage5q/core/constants.mjs` (add R8 to the root table)
-- modify: `tools/simurgh-attestation/stage5q/core/censusStatic.mjs` (walk R8)
-- create: `tests/unit/llmShield/stage5q/annexA1Roots.test.js`
+- create: `tools/simurgh-attestation/stage5q/core/historicalClosure.mjs`
+- create: `tools/simurgh-attestation/stage5q/node/inventoryHistorical.mjs`
+- create: `tests/unit/llmShield/stage5q/historicalClosure.test.js`
+- output: `docs/research/llm-shield/evidence/stage-5q/closure/historical-function-closure.json`
+
+**Interfaces**
+
+```js
+export function historicalClosure({ tagRecords }): {
+  members: Array<{ tag_name, commit_sha, function_id, source_digest, category, still_trusted_by }>,
+  historical_function_closure_digest: string
+}
+```
 
 **Failing tests first:**
 
-- the root table contains R8 and it resolves to `tests/unit/llmShield/stage5{a..p}/**`;
-- the static census over a fixture tree admits a unit-test file and types it `gate_definition`;
-- a fixture that builds fixtures is typed `evidence_emission`, not `gate_definition`;
-- **`tests/unit/llmShield/stage4*/` is NOT admitted** (A1.3 scope discipline), with the single named
-  exception `stage4h/exitWrapper.test.js`, which is already in the closure by dependency;
-- R8 members are subject to the §2.4 adversarial role check exactly as R1 members are — a unit test
-  declared `pure_transform` while reachable from a `trust_decision` member fails closed.
-
-**Then the count check that proves R8 actually fired:**
+- a member is keyed by `(tag_name, function_id)` — the **same** `function_id` may legitimately exist
+  in several tags with **different** `source_digest`s, and collapsing them loses exactly the drift
+  that R12 (historical downgrade) exists to find;
+- enumerating a tag runs **no** attack pack — assert the pack runner is never invoked;
+- a tag that cannot be checked out yields `environment_unreproducible` **as a member-level record**,
+  not an absent tag;
+- the digest is byte-stable across two runs.
 
 ```bash
-npm run census:stage5q:static -- --format=summary
-# EXPECT: member count materially ABOVE the pre-annex diagnostic;
-#         the 243 stage-5 unit-test files present as members.
-#         Matching the OLD numbers means R8 did not fire.
+export PATH="${SIMURGH_NODE26_BIN:-/opt/homebrew/opt/node@26/bin}:$PATH"
+node tools/simurgh-attestation/stage5q/node/inventoryHistorical.mjs --worktree-root /tmp/5q-inv
+# EXPECT: 16 tags enumerated, digest printed, worktrees removed
 ```
 
-**Named members that must appear, because they are why the annex exists:**
+**Commit:** `feat(5q): Task 7.6 — precommitted historical function closure (Annex A3)`
 
-```text
-tests/unit/llmShield/stage5p/rawCodeCensus.test.js         gate_definition / completeness_claim
-tests/unit/llmShield/stage5p/typedOutcomeDischarge.test.js gate_definition / completeness_claim
+---
+
+## Task 7.7 — Obligation matrix, member × class (**Annex A4, pre-L2**)
+
+**Added by the external gauntlet (P0-5), and it is the most consequential of the four.** Without a
+cell ledger, one R3 pack against one function could discharge R3 for **every** R3-obligated function
+in its tray — and nothing would look wrong. The tray report would read complete, the coverage ledger
+would read complete, and every member status would be populated. A false completeness claim at
+exactly the granularity this stage exists to police.
+
+**Files**
+
+- create: `tools/simurgh-attestation/stage5q/core/obligations.mjs`
+- create: `tools/simurgh-attestation/stage5q/node/generateObligations.mjs`
+- create: `tests/unit/llmShield/stage5q/obligations.test.js`
+- output: `docs/research/llm-shield/evidence/stage-5q/closure/obligation-matrix.json`
+
+**Interfaces**
+
+```js
+export function obligationId({ functionId, attackClass }): string
+// SHA256( UTF8("simurgh.vsr.obligation.v1") || 0x00 || function_id || 0x00 || attack_class )
+
+export function generateObligations({ members, roles, taxonomy }): {
+  cells: Array<{ obligation_id, function_id, attack_class, applicability,
+                 omission_reason, planned_pack_ids }>,
+  obligation_matrix_root: string
+}
 ```
 
-**Commit:** `feat(5q): Task 7.5 — Annex A1, closure root R8 admits stage-5 unit-level gates`
+**Failing tests first:**
+
+- the cell count equals `Σ over members of |applicable classes for its role|` — computed
+  independently of the generator, or the test merely agrees with the code;
+- `applicability: "omitted"` **requires** a reason from the §4.2 frozen six-value enum; free text is
+  rejected;
+- `applicability: "obligated"` with an omission reason is rejected (contradictory cell);
+- `obligation_id` is a pure function of `(function_id, attack_class)` and collides for neither a
+  transposed pair nor a concatenation ambiguity — test `("ab","c")` vs `("a","bc")` explicitly,
+  which is what the `0x00` separator is for;
+- a cell naming a `function_id` outside the committed closure is rejected.
+
+**Discharge direction is now bottom-up (A4.3).** Task 19 discharges cells; member status is
+**derived** from them and may never be written directly. The plan's original direction — record
+member status, infer class coverage — is precisely the inference that permitted the false discharge.
+
+**Commit:** `feat(5q): Task 7.7 — member × class obligation matrix (Annex A4)`
 
 ---
 
 ## Task 8 — Closure commitment (**the L2 boundary**)
 
-**Precondition: Task 7.5 complete.** A closure committed without R8 cannot be amended afterwards.
+**Preconditions: Tasks 1.5, 7.6 and 7.7 complete.** Nothing committed here can be amended afterwards.
+
+**Annex A2 splits what Task 8 commits.** The frozen §2.3 entry record contains `attack_pack_ids` and
+`coverage_status`, which do not exist until Tasks 9–19. Task 8 commits only the immutable
+projection; the discharge overlay is committed by Task 19.
+
+```text
+COMMITTED HERE (immutable at L2)          COMMITTED BY TASK 19 (overlay)
+  closure_member_commitment                 function_discharge_overlay
+    function_id                               function_id  (FK into the commitment)
+    stage_id                                  attack_pack_ids
+    module_path                               coverage_status
+    export_name_or_internal_symbol
+    source_digest
+    category
+    reachable_from
+    security_role
+    historical_tags
+```
+
+**Additional failing tests for the split:**
+
+- an overlay row whose `function_id` is not in the commitment is **rejected** — this is the
+  gerrymandering direction the split creates and it must be exercised, not assumed;
+- the overlay cannot add, remove or re-key members: cardinality is fixed at L2;
+- the joined view reproduces §2.3 exactly, field for field.
 
 **Files**
 
@@ -871,9 +1013,12 @@ commit. Tags are never checked out over the working tree and never rewritten.
 - step 5 — current tooling accepting weaker historical semantics — is its own assertion, because it
   is the highest-value step and the one no isolated tray can perform.
 
-This task populates the `historical_function` category (§2.2): a member of a released tag's closure
-still trusted by a shipped artifact. Members discovered here are added to the tag records, **never**
-to the committed head closure — that closure is frozen by L2 and a campaign may not grow it.
+**Annex A3 changed this task's job.** It no longer _discovers_ `historical_function` members —
+Task 7.6 enumerated and committed them before L2. Task 16 **attacks an already-frozen historical
+target set**, exactly as the trays attack an already-frozen head closure.
+
+A member encountered here that is absent from the committed historical closure is a **finding**
+(the inventory was incomplete), never a silent addition. Neither closure may grow after L2.
 
 ```bash
 node tools/simurgh-attestation/stage5q/campaigns/historical.mjs --worktree-root /tmp/5q-tags
@@ -1066,7 +1211,26 @@ attestation verification.
 - create: `tests/unit/llmShield/stage5q/coverageLedger.test.js`
 - output: `.../evidence/stage-5q/coverage/discharge-ledger.json`
 
-**The L1 gate.** Every closure member appears **exactly once** with exactly one of the four statuses.
+**The L1 gate, now bottom-up (Annex A4.3).** Task 19 discharges **every obligation cell**, and the
+member-level `coverage_status` is **derived** from its cells — never written directly:
+
+```text
+member status := attacked_pass                iff every obligated cell discharged, none found
+                 finding_frozen               iff any cell produced a finding
+                 mechanically_unreachable     iff every cell omitted with a mechanical reason
+                 delegated_to_attacked_caller iff validateDelegation() passes (§2.7 unchanged)
+```
+
+Task 19 also emits the **discharge overlay** of Annex A2, which is the second half of what §2.3
+describes; Task 8 committed the first half. Every closure member appears **exactly once** with
+exactly one of the four statuses.
+
+**Additional failing tests:**
+
+- a member status written directly, without cells, is **rejected**;
+- an undischarged obligated cell blocks the member's `attacked_pass`, even if every other cell for
+  that member passed — this is the P0-5 defect, exercised;
+- `validateDelegation` is **invoked here**, not merely unit-tested in Task 7 (gauntlet P1-14).
 
 **Failing tests first:**
 
@@ -1097,14 +1261,20 @@ npm run census:stage5q:coverage
 **Freezes exactly these seven roots:**
 
 ```text
-function_closure_digest
+closure_member_commitment_digest     (A2 — was function_closure_digest)
 release_tag_closure_digest
 attack_taxonomy_digest
 q0_finding_ledger_digest
 mutation_receipt_root
 attack_pack_root
-coverage_discharge_root
+coverage_discharge_root              (A2 — the discharge overlay)
+historical_function_closure_digest   (A3 — NEW)
+obligation_matrix_root               (A4 — NEW)
 ```
+
+**This is NINE roots, not the seven originally ruled.** A2 renamed one and clarified another; A3 and
+A4 each added one. The change is called out rather than absorbed silently, because a root list that
+grows without announcement is how an attestation quietly stops covering what it claims to cover.
 
 Two-tier Ed25519, public (recomputable) / audit (signed limitations). **Private key never leaves the
 session scratchpad and is never committed** — 5P's lesson: a deterministically derived key is
@@ -1206,58 +1376,62 @@ An earlier draft claimed coverage of "§§1–16" while omitting these rows. In 
 false completeness claims, an unqualified completeness claim in the coverage matrix is the defect
 demonstrating itself — the same standard §14.0 applied to F001's absence receipt.
 
-| Spec    | Requirement                                               | Task        | Gate                                         |
-| ------- | --------------------------------------------------------- | ----------- | -------------------------------------------- |
-| §1.2 L1 | every member has exactly one status                       | 19          | coverage ledger rejects unstatused/duplicate |
-| §1.2 L2 | universe committed before attack                          | 8, 11       | harness refuses a mismatched closure digest  |
-| §1.2 L3 | no finding erased                                         | 10          | edit-after-append throws; chain verify       |
-| §1.2 L4 | no green without a red                                    | 12, 11      | admissibility blocks publication             |
-| §1.2 L5 | no retroactive innocence                                  | 16, Q1-F001 | tags-still-affected list required            |
-| §1.3    | honest core in non-claims                                 | 20          | limitations completeness test                |
-| §2.1    | membership roots R1–R7                                    | 2, 3, 4     | fixture-tree census tests                    |
-| §2.2    | member categories                                         | 2           | category assignment test                     |
-| §2.3    | entry record fields                                       | 2, 8        | schema test                                  |
-| §2.4    | role obligation matrix                                    | 6           | `requiredClasses` test                       |
-| §2.4    | pure_transform reachable from trust_decision fails closed | 6           | adversarial role test + fault injection      |
-| §2.5    | function_id stability, no semantic normalisation          | 2           | BOM throws; CRLF≡LF; one-byte moves digest   |
-| §2.6    | projection rule, four conflict shapes                     | 5           | static-only internal is NOT a conflict       |
-| §2.7    | four statuses only                                        | 19          | fifth value rejected                         |
-| §2.7    | delegation: all callers, no cycles, not vacuous           | 7           | cycle and empty-callsite tests               |
-| §2.8    | gates classified; manual gates carry drift check          | 4           | drift returns omitted names                  |
-| §3.1    | exactly 16 tags                                           | 8, 16       | 17th tag rejected                            |
-| §3.3    | environment_unreproducible never a pass                   | 16          | separate denominators test                   |
-| §3.4    | isolated worktrees, tags never rewritten                  | 16          | no leftover worktrees                        |
-| §4.1    | 16 attack classes                                         | 1           | constants test                               |
-| §4.2    | omission reasons from frozen enum                         | 9, 14       | free-text reason rejected                    |
-| §4.4    | premise gate                                              | 9           | the 5P differ-vs-contradict fixture          |
-| §5.1    | Q0 record fields incl. discovered_by                      | 10, 13      | discovery never re-credited                  |
-| §5.3    | severity never rewritten                                  | 10          | post-append severity change throws           |
-| §5.5    | append-only, hash-chained, visible                        | 10          | tampered-middle detection                    |
-| §6.1    | read-only surface incl. 5P and workflows                  | all         | pre-commit path guard (Task 1)               |
-| §7.1    | one mutant per class, bijective                           | 1, 12       | bijection test; cross-class ≠ primary        |
-| §7.2    | mutants never committed                                   | 12          | `git status` clean after run                 |
-| §7.3    | green→red→green, no vacuous detection                     | 12          | baseline_exit≠0 invalidates                  |
-| §8.2    | model output cannot create authority                      | 18          | frozen-text assertion                        |
-| §8.3    | privacy/egress bounds                                     | 18          | prefix-bound test                            |
-| §9      | six historical steps                                      | 16          | per-step assertions                          |
-| §10     | nine seam targets                                         | 17          | per-target expected outcomes                 |
-| §12.1   | eleven release gates                                      | 19, 20, 21  | transition T1–T6                             |
-| §12.3   | prior reproduce scripts stay green                        | 21          | full `check-e2e.sh`                          |
-| §12.4   | no raw codes, symbolic only                               | 9           | numeric outcome rejected                     |
-| §13     | nine non-claims                                           | 20          | limitations completeness                     |
-| §14.1   | three F001 artefacts                                      | 13          | exit-status recorded                         |
-| §14.2   | Q0 prohibitions                                           | 13          | workflow-unmodified assertion                |
-| §14.3   | 5Q proofs self-extending **and non-vacuous**              | 1, 18.1     | count floor: empty dir → exit 1              |
-| §12.2   | Lean, zero `sorry`                                        | 18.1        | `leanProofBinding` escape scan               |
-| §12.2   | K7 net over 5Q's own code                                 | 18.2        | dynamic enumeration; dead exports fail       |
-| §12.2   | parity where claimed                                      | 18.3        | Node ≡ Python ≡ browser on shared vectors    |
-| §12.3   | 5Q reproduce script                                       | 18.4        | `if/then/else` gates, never `cmd && echo`    |
-| §2.1 A1 | root R8 admits stage-5 unit gates                         | 7.5         | member count rises; named members present    |
-| §2.2    | `verifier_branch` per `reject()` site                     | 2           | per-branch emission test                     |
-| §2.2    | `imported_dependency` present, unobligated                | 2           | marked-not-absent test                       |
-| §2.2    | `historical_function`                                     | 16          | tag records only, never head closure         |
-| §2.5    | `succession_hint` + its honest limit                      | 2           | rename+reformat produces NO hint             |
-| §14.6   | escalation mints new finding                              | 10, 13      | severity immutability                        |
+| Spec    | Requirement                                               | Task        | Gate                                          |
+| ------- | --------------------------------------------------------- | ----------- | --------------------------------------------- |
+| §1.2 L1 | every member has exactly one status                       | 19          | coverage ledger rejects unstatused/duplicate  |
+| §1.2 L2 | universe committed before attack                          | 8, 11       | harness refuses a mismatched closure digest   |
+| §1.2 L3 | no finding erased                                         | 10          | edit-after-append throws; chain verify        |
+| §1.2 L4 | no green without a red                                    | 12, 11      | admissibility blocks publication              |
+| §1.2 L5 | no retroactive innocence                                  | 16, Q1-F001 | tags-still-affected list required             |
+| §1.3    | honest core in non-claims                                 | 20          | limitations completeness test                 |
+| §2.1    | membership roots R1–R7                                    | 2, 3, 4     | fixture-tree census tests                     |
+| §2.2    | member categories                                         | 2           | category assignment test                      |
+| §2.3    | entry record fields                                       | 2, 8        | schema test                                   |
+| §2.4    | role obligation matrix                                    | 6           | `requiredClasses` test                        |
+| §2.4    | pure_transform reachable from trust_decision fails closed | 6           | adversarial role test + fault injection       |
+| §2.5    | function_id stability, no semantic normalisation          | 2           | BOM throws; CRLF≡LF; one-byte moves digest    |
+| §2.6    | projection rule, four conflict shapes                     | 5           | static-only internal is NOT a conflict        |
+| §2.7    | four statuses only                                        | 19          | fifth value rejected                          |
+| §2.7    | delegation: all callers, no cycles, not vacuous           | 7           | cycle and empty-callsite tests                |
+| §2.8    | gates classified; manual gates carry drift check          | 4           | drift returns omitted names                   |
+| §3.1    | exactly 16 tags                                           | 8, 16       | 17th tag rejected                             |
+| §3.3    | environment_unreproducible never a pass                   | 16          | separate denominators test                    |
+| §3.4    | isolated worktrees, tags never rewritten                  | 16          | no leftover worktrees                         |
+| §4.1    | 16 attack classes                                         | 1           | constants test                                |
+| §4.2    | omission reasons from frozen enum                         | 9, 14       | free-text reason rejected                     |
+| §4.4    | premise gate                                              | 9           | the 5P differ-vs-contradict fixture           |
+| §5.1    | Q0 record fields incl. discovered_by                      | 10, 13      | discovery never re-credited                   |
+| §5.3    | severity never rewritten                                  | 10          | post-append severity change throws            |
+| §5.5    | append-only, hash-chained, visible                        | 10          | tampered-middle detection                     |
+| §6.1    | read-only surface incl. 5P and workflows                  | all         | pre-commit path guard (Task 1)                |
+| §7.1    | one mutant per class, bijective                           | 1, 12       | bijection test; cross-class ≠ primary         |
+| §7.2    | mutants never committed                                   | 12          | `git status` clean after run                  |
+| §7.3    | green→red→green, no vacuous detection                     | 12          | baseline_exit≠0 invalidates                   |
+| §8.2    | model output cannot create authority                      | 18          | frozen-text assertion                         |
+| §8.3    | privacy/egress bounds                                     | 18          | prefix-bound test                             |
+| §9      | six historical steps                                      | 16          | per-step assertions                           |
+| §10     | nine seam targets                                         | 17          | per-target expected outcomes                  |
+| §12.1   | eleven release gates                                      | 19, 20, 21  | transition T1–T6                              |
+| §12.3   | prior reproduce scripts stay green                        | 21          | full `check-e2e.sh`                           |
+| §12.4   | no raw codes, symbolic only                               | 9           | numeric outcome rejected                      |
+| §13     | nine non-claims                                           | 20          | limitations completeness                      |
+| §14.1   | three F001 artefacts                                      | 13          | exit-status recorded                          |
+| §14.2   | Q0 prohibitions                                           | 13          | workflow-unmodified assertion                 |
+| §14.3   | 5Q proofs self-extending **and non-vacuous**              | 1, 18.1     | count floor: empty dir → exit 1               |
+| §12.2   | Lean, zero `sorry`                                        | 18.1        | `leanProofBinding` escape scan                |
+| §12.2   | K7 net over 5Q's own code                                 | 18.2        | dynamic enumeration; dead exports fail        |
+| §12.2   | parity where claimed                                      | 18.3        | Node ≡ Python ≡ browser on shared vectors     |
+| §12.3   | 5Q reproduce script                                       | 18.4        | `if/then/else` gates, never `cmd && echo`     |
+| §2.1 A1 | root R8 admits stage-5 unit gates                         | 1.5         | member count rises; named members present     |
+| A2      | closure/discharge split                                   | 8, 19       | overlay row for uncommitted member rejected   |
+| A3      | historical closure precommitted                           | 7.6, 16     | enumeration runs no attack pack               |
+| A4      | obligation cell ledger                                    | 7.7, 19     | undischarged cell blocks member attacked_pass |
+| A4.3    | member status derived, never written                      | 19          | direct status write rejected                  |
+| §2.2    | `verifier_branch` per `reject()` site                     | 2           | per-branch emission test                      |
+| §2.2    | `imported_dependency` present, unobligated                | 2           | marked-not-absent test                        |
+| §2.2    | `historical_function`                                     | 16          | tag records only, never head closure          |
+| §2.5    | `succession_hint` + its honest limit                      | 2           | rename+reformat produces NO hint              |
+| §14.6   | escalation mints new finding                              | 10, 13      | severity immutability                         |
 
 ---
 
@@ -1267,21 +1441,24 @@ Every published Q0 field maps to a producer, inputs, canonicaliser, digest, veri
 witness**. A field that merely "comes from the harness" fails review — the harness is a machine, not
 an oracle.
 
-| Published field               | Producer | Source inputs                        | Canonicaliser             | Digest                    | Verifier                 | Negative witness                    |
-| ----------------------------- | -------- | ------------------------------------ | ------------------------- | ------------------------- | ------------------------ | ----------------------------------- |
-| `function_closure_digest`     | T8       | static+runtime+gate censuses, roles  | canonical member ordering | `simurgh.vsr.closure.v1`  | `commitClosure --verify` | remove one member → digest moves    |
-| `release_tag_closure_digest`  | T8       | 16 `(tag, sha)` pairs                | sorted tag list           | `simurgh.vsr.tags.v1`     | tag existence check      | 17th tag rejected                   |
-| `attack_taxonomy_digest`      | T8       | spec §4.1 frozen table               | frozen order R1–R16       | `simurgh.vsr.taxonomy.v1` | constants test           | reordered table → digest moves      |
-| `q0_finding_ledger_digest`    | T10      | appended findings                    | chain order               | `simurgh.vsr.ledger.v1`   | `verifyChain`            | tampered middle record detected     |
-| `mutation_receipt_root`       | T12      | 16 receipts                          | receipt canonical form    | `simurgh.vsr.mutation.v1` | receipt validator        | green→green receipt rejected        |
-| `attack_pack_root`            | T9,T14   | pack definitions + premises          | pack canonical form       | `simurgh.vsr.pack.v1`     | `validateAttackPack`     | pack without premise inadmissible   |
-| `coverage_discharge_root`     | T19      | statuses over closure                | member order              | `simurgh.vsr.coverage.v1` | coverage ledger          | unstatused member fails             |
-| `tray.*.finding_ids`          | T14.N    | pack results                         | tray canonical form       | tray digest               | tray schema test         | invented target id rejected         |
-| `F001.*`                      | T13      | filesystem, workflow, `lean` exits   | artefact canonical form   | finding digest            | F001 capture test        | `discovered_by`=harness rejected    |
-| `tag.*.outcome`               | T16      | worktree runs                        | outcome enum              | campaign digest           | campaign test            | unreproducible ≠ pass               |
-| `tray.*.positive_path_result` | T14.N    | stage reproduce script under Node 26 | outcome enum              | tray digest               | tray schema test         | `reproduced_with_diff` is a finding |
-| `lean_theorem_set`            | T18.1    | `proofs/stage5q/Vsr.lean`            | Lean source bytes         | source-span digest        | `leanProofBinding`       | a `sorry` fails the scan            |
-| `parity_vector_result`        | T18.3    | shared vectors                       | canonical JSON            | vector digest             | `crossRuntimeParity`     | one diverged rule fails all three   |
+| Published field                      | Producer | Source inputs                        | Canonicaliser             | Digest                      | Verifier                 | Negative witness                    |
+| ------------------------------------ | -------- | ------------------------------------ | ------------------------- | --------------------------- | ------------------------ | ----------------------------------- |
+| `function_closure_digest`            | T8       | static+runtime+gate censuses, roles  | canonical member ordering | `simurgh.vsr.closure.v1`    | `commitClosure --verify` | remove one member → digest moves    |
+| `release_tag_closure_digest`         | T8       | 16 `(tag, sha)` pairs                | sorted tag list           | `simurgh.vsr.tags.v1`       | tag existence check      | 17th tag rejected                   |
+| `attack_taxonomy_digest`             | T8       | spec §4.1 frozen table               | frozen order R1–R16       | `simurgh.vsr.taxonomy.v1`   | constants test           | reordered table → digest moves      |
+| `q0_finding_ledger_digest`           | T10      | appended findings                    | chain order               | `simurgh.vsr.ledger.v1`     | `verifyChain`            | tampered middle record detected     |
+| `mutation_receipt_root`              | T12      | 16 receipts                          | receipt canonical form    | `simurgh.vsr.mutation.v1`   | receipt validator        | green→green receipt rejected        |
+| `attack_pack_root`                   | T9,T14   | pack definitions + premises          | pack canonical form       | `simurgh.vsr.pack.v1`       | `validateAttackPack`     | pack without premise inadmissible   |
+| `coverage_discharge_root`            | T19      | statuses over closure                | member order              | `simurgh.vsr.coverage.v1`   | coverage ledger          | unstatused member fails             |
+| `tray.*.finding_ids`                 | T14.N    | pack results                         | tray canonical form       | tray digest                 | tray schema test         | invented target id rejected         |
+| `F001.*`                             | T13      | filesystem, workflow, `lean` exits   | artefact canonical form   | finding digest              | F001 capture test        | `discovered_by`=harness rejected    |
+| `tag.*.outcome`                      | T16      | worktree runs                        | outcome enum              | campaign digest             | campaign test            | unreproducible ≠ pass               |
+| `tray.*.positive_path_result`        | T14.N    | stage reproduce script under Node 26 | outcome enum              | tray digest                 | tray schema test         | `reproduced_with_diff` is a finding |
+| `lean_theorem_set`                   | T18.1    | `proofs/stage5q/Vsr.lean`            | Lean source bytes         | source-span digest          | `leanProofBinding`       | a `sorry` fails the scan            |
+| `parity_vector_result`               | T18.3    | shared vectors                       | canonical JSON            | vector digest               | `crossRuntimeParity`     | one diverged rule fails all three   |
+| `historical_function_closure_digest` | T7.6     | tag worktrees                        | canonical member ordering | `simurgh.vsr.historical.v1` | inventory test           | member absent at T16 is a finding   |
+| `obligation_matrix_root`             | T7.7     | closure × taxonomy                   | canonical cell ordering   | `simurgh.vsr.obligation.v1` | `obligations` test       | ab/c vs a/bc collision test         |
+| `closure_member_commitment_digest`   | T8       | censuses, roles, edges               | canonical member ordering | `simurgh.vsr.closure.v1`    | `commitClosure --verify` | remove one member → digest moves    |
 
 ---
 
