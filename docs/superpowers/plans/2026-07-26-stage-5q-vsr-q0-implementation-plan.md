@@ -13,7 +13,7 @@ has not been found yet is a ghost task for a ghost defect.
 | Freeze commits  | `652a2474` (freeze) / `f56b6619` (receipt)                                                    |
 | Branch          | `stage-5q-vsr-stage-wide-red-team`                                                            |
 | Target tag      | `v2.52.0-stage-5q-vsr`                                                                        |
-| Tasks           | 21, in four waves (Task 14 has 16 sub-tasks)                                                  |
+| Tasks           | 21 ruled + 5 inserted post-gauntlet (7.5, 18.1-18.4); Task 14 has 16 sub-tasks                |
 
 ---
 
@@ -57,6 +57,18 @@ DELEGATION (spec §2.7)
   Every call site named and itself attacked_pass or finding_frozen.
   A cycle in the delegation graph discharges NOTHING and fails closed.
 
+CLOSURE ROOTS (spec §2.1 + ANNEX A1)
+  R8 tests/unit/llmShield/stage5{a..p}/**   <- ADDED BY ANNEX A1, 243 files
+  Task 8 MUST NOT run until R8 is implemented. A closure committed without it
+  cannot be amended afterwards (L2), and would omit ~90% of stage 5's gate surface.
+
+RUNTIME PINNING — byte-stable evidence
+  Every artifact whose byte-stability is asserted (Tasks 8, 19, 20) is built and
+  verified under NODE 26 at /opt/homebrew/opt/node@26/bin, and the reproduce
+  script pins it. Node 22 is the CI default and is NOT byte-stable for digest
+  builders (the 4H lesson). A reviewer reproducing under 22 who gets different
+  bytes is correct, and it is our defect, not theirs.
+
 RAW CODES
   NONE. Outcomes are symbolic throughout Q0. Next free code if ever needed: 475.
 
@@ -80,7 +92,8 @@ domain tags      simurgh.vsr.<object>.v1
 ## Preflight — run before Task 1, batch any concerns into one question
 
 ```bash
-node --version                                   # expect v22+; Node 26 at /opt/homebrew/opt/node@26/bin
+node --version                                   # expect v22+ for dev
+/opt/homebrew/opt/node@26/bin/node --version   # REQUIRED v26.x — byte-stable evidence only
 lean --version                                   # expect 4.15.0
 git branch --show-current                        # expect stage-5q-vsr-stage-wide-red-team
 git status --short                               # expect clean
@@ -119,7 +132,42 @@ L2, and it is the difference between a coverage ratio and a number.
 - exists: `tools/simurgh-attestation/stage5q/core/frozenBlock.mjs`
 - exists: `tests/unit/llmShield/stage5q/frozenBlock.test.js` (12 tests)
 - create: `tools/simurgh-attestation/stage5q/core/constants.mjs`
-- modify: `package.json` (scripts), `.prettierignore` (evidence dir)
+- modify: `.prettierignore` (add `docs/research/llm-shield/evidence/stage-5q/`)
+- modify: `package.json` — add **exactly these scripts**, pinned here so later tasks do not invoke
+  commands that were never created:
+
+```json
+"test:stage5q":            "node --test tests/unit/llmShield/stage5q/*.test.js",
+"census:stage5q:static":   "node tools/simurgh-attestation/stage5q/node/measureStaticCensus.mjs",
+"census:stage5q:runtime":  "node tools/simurgh-attestation/stage5q/node/measureRuntimeCensus.mjs",
+"census:stage5q:gate":     "node tools/simurgh-attestation/stage5q/node/measureGateCensus.mjs",
+"census:stage5q:coverage": "node tools/simurgh-attestation/stage5q/node/measureQ0Coverage.mjs",
+"stage5q:commit-closure":  "node tools/simurgh-attestation/stage5q/node/commitClosure.mjs",
+"stage5q:mutants":         "node tools/simurgh-attestation/stage5q/node/runMutationSelfProof.mjs",
+"stage5q:attest":          "node tools/simurgh-attestation/stage5q/node/attestation.mjs",
+"stage5q:transition":      "node tools/simurgh-attestation/stage5q/node/verifyTransition.mjs",
+"stage5q:proofs":          "scripts/check-stage5q-proofs.sh"
+```
+
+- create: `scripts/check-stage5q-proofs.sh` — the §14.3 gate, **with a non-empty assertion**:
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+COUNT=$(find proofs/stage5q -name '*.lean' | wc -l | tr -d ' ')
+if [ "$COUNT" -eq 0 ]; then
+  echo "FAIL: no proofs under proofs/stage5q — a proof gate with nothing to prove is a false green"
+  exit 1
+fi
+find proofs/stage5q -name '*.lean' -print0 | sort -z | xargs -0 -n1 lean
+echo "OK: $COUNT proof file(s) verified"
+```
+
+**Why the count floor exists.** The bare `find … | xargs … lean` from spec §14.3 exits **0** when the
+directory is empty — verified: zero files means zero invocations means success. Shipping that gate
+before Task 18.1 writes a proof would reproduce `F001-false-green` inside the stage that froze F001
+as evidence. The floor is not defensive programming; it is the stage refusing to commit its own
+defining defect.
 
 **Interfaces produced**
 
@@ -139,6 +187,11 @@ export const DOMAIN = Object.freeze({ sourceSpan:"simurgh.vsr.source-span.v1", �
 **Failing test first** — `tests/unit/llmShield/stage5q/constants.test.js`: assert 16 stage ids, 16
 attack classes, exactly 4 coverage statuses, `MUTANT_PRIMARY_CLASS` is a **bijection** onto
 `ATTACK_CLASSES` (this is the anti-noisy-mutant rule made mechanical), every collection frozen.
+
+Plus `tests/unit/llmShield/stage5q/proofGate.test.js`: **the proof gate fails on an empty
+`proofs/stage5q`.** Run it against a temp dir with no `.lean` files and assert a non-zero exit. This
+is the only test in Wave I that guards against the stage's own signature defect, so it is written
+before the gate script, not after.
 
 ```bash
 SIMURGH_SKIP_DOTENV=1 node --test tests/unit/llmShield/stage5q/constants.test.js
@@ -180,11 +233,27 @@ export function parseFunctionId(id): { stageId, modulePath, symbol }
 
 // censusStatic.mjs
 export function staticCensus({ roots, readFile, listFiles }): {
-  members: Array<Member>, byId: Map<string, Member>
+  members: Array<Member>, byId: Map<string, Member>,
+  successionHints: Array<{ disappeared_id, appeared_id, shared_source_digest }>
 }
 // Member: { function_id, stage_id, module_path, export_name_or_internal_symbol,
 //           source_digest, category, exported: boolean, runtime_visible: boolean }
 ```
+
+**Three frozen categories that an earlier draft of this plan silently dropped** (§2.2), each needing
+its own emission and its own test:
+
+- **`verifier_branch`** — one member per distinct `reject(check_id, outcome)` site. This is the
+  category that makes per-branch attack targeting possible at all; without it a tray can only aim at
+  whole functions and R6 (first-failure shadowing) has nothing to attack.
+- **`imported_dependency`** — R7-boundary members: in the closure, carrying **no** attack obligation
+  unless a stage-5 `security_role` depends on them. They must be _present and marked_, not absent.
+- **`historical_function`** — populated by Task 16, but the field and its validation belong here.
+
+**`succession_hint`** (§2.5) is emitted when a disappeared id and an appeared id share a
+`source_digest`. Test it, and test the honest limitation: **a rename accompanied by reformatting
+produces no hint at all**, because the digest carries no semantic normalisation. Assert the absence
+rather than pretending the hint is reliable.
 
 **Failing tests first.** `sourceDigest`: BOM **throws** (not stripped); CRLF and LF inputs digest
 identically; a missing trailing newline is added; the digest changes when one byte changes; two
@@ -205,9 +274,14 @@ regex fallback **only** for `.py`/`.lean`/`.sh` with the limitation recorded as 
 **Then run the live census as a diagnostic (not published):**
 
 ```bash
-node tools/simurgh-attestation/stage5q/node/measureStaticCensus.mjs --format=summary
-# EXPECT: ~827 exported JS functions, ~174 internals, ~178 python defs (spec §14 measured baseline)
+npm run census:stage5q:static -- --format=summary
 ```
+
+**These figures are a DIAGNOSTIC, never a target** (Annex A1.4). The pre-annex measurement was ~827
+exported JS functions, ~174 internals, ~178 Python defs — taken **before** root R8 added 243 unit-test
+files, so the true count is materially higher. If the census output happens to match the old numbers,
+that is evidence R8 was not implemented, not evidence the census is right. Never tune a census toward
+a remembered number.
 
 **Commit:** `feat(5q): Task 2 — static census, canonical source digest, function identity`
 
@@ -223,20 +297,33 @@ node tools/simurgh-attestation/stage5q/node/measureStaticCensus.mjs --format=sum
 
 **Interfaces**
 
+**The interface splits in two.** An earlier draft took an injected `importer` _and_ mandated
+child-process isolation, which cannot both hold — a function cannot cross a process boundary. Pure
+core takes the injection and is unit-testable; the driver owns the processes.
+
 ```js
-export async function runtimeCensus({ modulePaths, importer }): {
+// core/censusRuntime.mjs — PURE, injectable, unit-tested in-process
+export async function runtimeCensusFromNamespaces({ namespaces }): {
   members: Array<{ function_id, module_path, symbol, kind }>,  // kind: function|constant|cli
   failures: Array<{ module_path, error }>                       // import failures are DATA
 }
+
+// node/measureRuntimeCensus.mjs — DRIVER, owns crash isolation
+//   spawns a child per batch, each child imports its batch and prints JSON,
+//   merges results, converts a dead child into failures[] entries
+export async function runtimeCensusSpawned({ modulePaths, batchSize }): SameShape
 ```
 
 **Failing test first.** Import failure is recorded, never thrown away — a module that fails to import
 is a census fact, not an accident. Re-exports appear. A `Symbol`-keyed export is enumerated or
-explicitly excluded with a reason.
+explicitly excluded with a reason. **A child that dies mid-batch yields `failures` entries for the
+whole batch, not a silently short member list** — this is the R7 failure mode (census truncation)
+committed by our own tooling, and it must be tested against a fixture module that calls
+`process.exit(1)` at import time.
 
-**Critical implementation note.** Importing 400+ modules executes their top level. Any module with a
-side effect at import time will run it. Use a **child process per module batch** so one crash does
-not abort the census, and record crashes in `failures`.
+**Implementation note.** There are **380** `.mjs` files under `stage5{a..p}` (measured at `9a2f64df`),
+plus whatever R8 adds. Importing them executes their top level, so any import-time side effect runs.
+Batch size 25 is a reasonable starting point; the number is not load-bearing, the isolation is.
 
 ```bash
 node tools/simurgh-attestation/stage5q/node/measureRuntimeCensus.mjs --format=summary
@@ -398,7 +485,50 @@ callers are attacked" is trivially true and must be rejected explicitly.
 
 ---
 
+## Task 7.5 — Annex A1: implement closure root R8 (**hard gate on Task 8**)
+
+Inserted after the gauntlet. Without it Task 8 commits a universe omitting ~90% of Stage 5's gate
+surface, and L2 makes that permanent for the campaign.
+
+**Files**
+
+- modify: `tools/simurgh-attestation/stage5q/core/constants.mjs` (add R8 to the root table)
+- modify: `tools/simurgh-attestation/stage5q/core/censusStatic.mjs` (walk R8)
+- create: `tests/unit/llmShield/stage5q/annexA1Roots.test.js`
+
+**Failing tests first:**
+
+- the root table contains R8 and it resolves to `tests/unit/llmShield/stage5{a..p}/**`;
+- the static census over a fixture tree admits a unit-test file and types it `gate_definition`;
+- a fixture that builds fixtures is typed `evidence_emission`, not `gate_definition`;
+- **`tests/unit/llmShield/stage4*/` is NOT admitted** (A1.3 scope discipline), with the single named
+  exception `stage4h/exitWrapper.test.js`, which is already in the closure by dependency;
+- R8 members are subject to the §2.4 adversarial role check exactly as R1 members are — a unit test
+  declared `pure_transform` while reachable from a `trust_decision` member fails closed.
+
+**Then the count check that proves R8 actually fired:**
+
+```bash
+npm run census:stage5q:static -- --format=summary
+# EXPECT: member count materially ABOVE the pre-annex diagnostic;
+#         the 243 stage-5 unit-test files present as members.
+#         Matching the OLD numbers means R8 did not fire.
+```
+
+**Named members that must appear, because they are why the annex exists:**
+
+```text
+tests/unit/llmShield/stage5p/rawCodeCensus.test.js         gate_definition / completeness_claim
+tests/unit/llmShield/stage5p/typedOutcomeDischarge.test.js gate_definition / completeness_claim
+```
+
+**Commit:** `feat(5q): Task 7.5 — Annex A1, closure root R8 admits stage-5 unit-level gates`
+
+---
+
 ## Task 8 — Closure commitment (**the L2 boundary**)
+
+**Precondition: Task 7.5 complete.** A closure committed without R8 cannot be amended afterwards.
 
 **Files**
 
@@ -428,11 +558,20 @@ export function commitClosure({ members, roles, tagClosure, taxonomy }): {
 **Reuse, do not reinvent:** 5K's Merkle-set universe commitment already solves set-commitment. Import
 it rather than writing a second one — a second implementation is a second thing to attack.
 
+`commitClosure.mjs` takes `--out <path>` (required with `--write`) so the two builds land in
+**different files**. An earlier draft wrote twice to the same path and then compared against a
+`.rerun` file nothing produced — `cmp` would have failed on a missing operand, and the stage's
+central byte-stability proof would have been a command that errors.
+
 ```bash
-node tools/simurgh-attestation/stage5q/node/commitClosure.mjs --write
-node tools/simurgh-attestation/stage5q/node/commitClosure.mjs --write   # twice
-cmp docs/research/llm-shield/evidence/stage-5q/closure/function-closure.json{,.rerun}
-# EXPECT: identical
+export PATH=/opt/homebrew/opt/node@26/bin:$PATH   # byte-stability is pinned to Node 26
+node --version                                    # EXPECT: v26.x
+
+E=docs/research/llm-shield/evidence/stage-5q/closure
+node tools/simurgh-attestation/stage5q/node/commitClosure.mjs --write --out "$E/function-closure.json"
+node tools/simurgh-attestation/stage5q/node/commitClosure.mjs --write --out /tmp/5q-closure-rerun.json
+cmp "$E/function-closure.json" /tmp/5q-closure-rerun.json && echo "BYTE-IDENTICAL"
+# EXPECT: BYTE-IDENTICAL, exit 0
 ```
 
 **WAVE I GATE — after this commit, the universe is frozen. Attacks may now run.**
@@ -535,7 +674,9 @@ export function admissibility(mutationReceipts): { isAdmissible(cls): boolean }
 **Files**
 
 - create: `tools/simurgh-attestation/stage5q/core/mutationReceipt.mjs`
-- create: `tools/simurgh-attestation/stage5q/mutants/M01.json` … `M16.json` (descriptions only)
+- create: `tools/simurgh-attestation/stage5q/mutants/M1.json` … `M16.json` (descriptions only) —
+  **unpadded**, matching `MUTANT_IDS` exactly. An earlier draft wrote `M01.json` against ids `M1`,
+  which breaks every id→file lookup and would be found only at runtime.
 - create: `tools/simurgh-attestation/stage5q/node/runMutationSelfProof.mjs`
 - create: `tests/unit/llmShield/stage5q/mutationReceipt.test.js`
 - output: `docs/research/llm-shield/evidence/stage-5q/mutation/receipts.json`
@@ -655,6 +796,24 @@ coverage_statuses
 positive_path_result
 ```
 
+**`positive_path_result` is defined here** because an earlier draft required every tray to emit it
+without saying what it was — a zero-context implementer could not have known what to run.
+
+```text
+positive_path_result = the exit status and log digest of scripts/reproduce-llm-shield-stage5X.sh
+                       run at head, under Node 26
+
+values: reproduced | reproduced_with_diff | script_absent | environment_unreproducible
+```
+
+**Its purpose is to prove the attacks did not break the thing they attacked.** A tray reporting no
+findings while the stage's own reproduce script has stopped passing is reporting on rubble.
+
+Note that 8 of the 16 stage reproduce scripts are **not** run by `check-e2e.sh` (5f, 5g, 5i, 5j, 5k,
+5l, 5n, 5p; 5o has its own workflow). Their positive paths are therefore _unverified at head_ going
+in, and a tray that finds `reproduced_with_diff` for one of them has found something real — record it
+as a finding, do not repair it during Q0.
+
 **Failing tests per tray:**
 
 - every target id exists in the committed closure (a tray cannot invent targets);
@@ -712,10 +871,17 @@ commit. Tags are never checked out over the working tree and never rewritten.
 - step 5 — current tooling accepting weaker historical semantics — is its own assertion, because it
   is the highest-value step and the one no isolated tray can perform.
 
+This task populates the `historical_function` category (§2.2): a member of a released tag's closure
+still trusted by a shipped artifact. Members discovered here are added to the tag records, **never**
+to the committed head closure — that closure is frozen by L2 and a campaign may not grow it.
+
 ```bash
 node tools/simurgh-attestation/stage5q/campaigns/historical.mjs --worktree-root /tmp/5q-tags
-# EXPECT: 16 tag records, each with an outcome; worktrees cleaned up on exit
-git worktree list    # EXPECT: no leftover worktrees
+# EXPECT: 16 tag records, each with an outcome; worktrees removed on exit
+git worktree list
+# EXPECT: exactly ONE line — the primary worktree. `git worktree list` always lists the primary,
+# so "no worktrees" is never a correct expectation; the assertion is that no /tmp/5q-tags entry
+# survives. Assert on the absence of the worktree-root prefix, not on an empty list.
 ```
 
 **Commit:** `feat(5q): Task 16 — historical-tag campaign in isolated worktrees`
@@ -761,6 +927,129 @@ appendix treatment, because every component is individually valid and no existin
 - `model_refused` is a valid recorded outcome and is never re-run to obtain a better one.
 
 **Commit:** `feat(5q): Task 18 — Fable 5 authority-laundering containment campaign`
+
+---
+
+# WAVE III-b — the standing structural contract
+
+Inserted after the gauntlet. Spec §12.2 mandates these and §16 deferred their details **to this
+plan**; the first draft collected none of them. They sit before Wave IV because Task 20's attestation
+must cover them and §12.2 gates them.
+
+---
+
+## Task 18.1 — Lean core `proofs/stage5q/Vsr.lean`
+
+**Files**
+
+- create: `proofs/stage5q/Vsr.lean`
+- create: `tests/unit/llmShield/stage5q/leanProofBinding.test.js`
+
+**Theorem targets** — 5Q's own invariants, not restatements of prior stages:
+
+```text
+delegationAcyclic        a delegation graph with a cycle discharges nothing
+delegationNonVacuous     zero named call sites never discharges
+coverageTotality         every closure member maps to exactly one of four statuses
+ledgerAppendMonotone     the finding ledger's chain length never decreases
+admissibilityBlocks      attacked_pass requires a green->red->green receipt for its class
+closureBindsResults      a pack result carries the closure digest it ran against
+projectionSoundness      a static-only internal is never a census_conflict
+```
+
+**Failing test first.** `leanProofBinding.test.js` asserts each named theorem exists in the file, and
+that the file contains **zero** `sorry`/`admit`/`native_decide` escapes. The binding test is what
+stops a proof file drifting away from the properties the plan claims it proves.
+
+```bash
+lean proofs/stage5q/Vsr.lean          # EXPECT: exit 0, no output
+npm run stage5q:proofs                # EXPECT: "OK: 1 proof file(s) verified"
+```
+
+**Lean 4.15 gotcha:** `omega` cannot see `Nat.max`; use `Nat.le_max_left/right` and `Nat.max_le`.
+
+**Commit:** `feat(5q): Task 18.1 — Lean core, seven theorems, zero escapes`
+
+---
+
+## Task 18.2 — K7 all-functions net for 5Q's own code
+
+**Files**
+
+- create: `tests/e2e/llmShield/stage5q/k7AllFunctions.test.js`
+
+Spec §12.2: _the red team's harness is not exempt from the discipline it enforces._ The net enumerates
+every export of every `stage5q` module and exercises it, exactly as the sixteen prior K7 nets do.
+
+**Failing tests first:**
+
+- every `stage5q` export is reached (dynamic enumeration via `import * as`, never a hand list —
+  a hand-listed K7 net would be F001 a third time);
+- **dead exports fail the net.** 5P's K7 census found 5 dead exports plus 2 more when Lane L landed;
+  expect the same here and delete them rather than exercising them token-effort;
+- cross-lane invariants: a closure digest from Task 8 verifies against the attestation in Task 20.
+
+Placed under `tests/e2e/`, so `scripts/check-e2e.sh` picks it up automatically by `find` — no
+workflow edit, and therefore no new manually-enumerated gate.
+
+**Commit:** `feat(5q): Task 18.2 — K7 all-functions net over the harness itself`
+
+---
+
+## Task 18.3 — Python and browser parity for 5Q's deterministic surface
+
+**Files**
+
+- create: `tools/simurgh-attestation/stage5q/python/vsr_parity.py`
+- create: `tools/simurgh-attestation/stage5q/python/parity-vectors.json`
+- create: `tools/simurgh-attestation/stage5q/browser/{index.html,vsr-portable.mjs}`
+- create: `tests/unit/llmShield/stage5q/crossRuntimeParity.test.js`
+
+**Parity surface — deterministic functions only**, declared explicitly so the claim is bounded:
+
+```text
+canonicalSourceBytes / sourceSpanDigest      (§2.5)
+makeFunctionId / parseFunctionId
+closure canonical ordering + merkle root     (Task 8)
+coverage status validation                   (Task 19)
+```
+
+Nothing touching the filesystem, the clock, or a process is in the parity surface. **Node ≡ Python ≡
+browser on the same vectors, or the claim is withdrawn** — a parity claim over a surface where the
+runtimes were never compared is worse than no claim.
+
+**Gotchas:** CSP `default-src 'none'` with no `connect-src`; skip honestly when no browser is present
+rather than passing vacuously; Python canonical JSON is
+`json.dumps(sort_keys=True, separators=(",",":"), ensure_ascii=False)`.
+
+**Commit:** `feat(5q): Task 18.3 — Node/Python/browser parity over the deterministic surface`
+
+---
+
+## Task 18.4 — `scripts/reproduce-llm-shield-stage5q.sh`
+
+**Files**
+
+- create: `scripts/reproduce-llm-shield-stage5q.sh`
+
+Reproduces Q0 end to end from pinned inputs: freeze verification, all three censuses, closure
+commitment byte-stability, mutation receipts, tray reports, campaign reports, coverage ledger,
+attestation verification.
+
+**Hard requirements, each paid for by a prior stage:**
+
+- **explicit `if/then/else` gates — never `cmd && echo OK` chains.** Under `set -e` a failing
+  `cmd && echo` fails **open**, which cost Stage 5E two undetected failures on the droplet repro;
+- pins Node 26 for every byte-stability step;
+- names Lane/campaign items **not** reproduced, and why, rather than omitting them;
+- prints reproducible and unreproducible historical tags as separate counts (§3.3).
+
+```bash
+./scripts/reproduce-llm-shield-stage5q.sh
+# EXPECT: ALL GATES PASSED, exit 0
+```
+
+**Commit:** `feat(5q): Task 18.4 — Q0 reproduce script with fail-closed gates`
 
 ---
 
@@ -902,7 +1191,20 @@ No speculative repair task may be written into this plan.
 
 # Matrix 1 — spec-to-task coverage
 
-Every normative requirement maps to at least one task **and** a gate.
+**Scope, stated rather than assumed.** This matrix covers every **normative** requirement in
+§§1–14 plus Annex A1. It deliberately excludes four non-normative sections, named here so the
+exclusion is a declaration and not an omission:
+
+```text
+§0    ruling provenance and document scope — no requirement to discharge
+§11   architecture rationale and rejected alternatives — records a decision, imposes no gate
+§15   scorecard and founder's ledger — re-scored at closeout, not a Q0 gate
+§16   the deferred list itself — DISCHARGED by Wave III-b, which is what it deferred
+```
+
+An earlier draft claimed coverage of "§§1–16" while omitting these rows. In a stage whose blade is
+false completeness claims, an unqualified completeness claim in the coverage matrix is the defect
+demonstrating itself — the same standard §14.0 applied to F001's absence receipt.
 
 | Spec    | Requirement                                               | Task        | Gate                                         |
 | ------- | --------------------------------------------------------- | ----------- | -------------------------------------------- |
@@ -945,7 +1247,16 @@ Every normative requirement maps to at least one task **and** a gate.
 | §13     | nine non-claims                                           | 20          | limitations completeness                     |
 | §14.1   | three F001 artefacts                                      | 13          | exit-status recorded                         |
 | §14.2   | Q0 prohibitions                                           | 13          | workflow-unmodified assertion                |
-| §14.3   | 5Q proofs self-extending                                  | 1           | `find proofs/stage5q` gate                   |
+| §14.3   | 5Q proofs self-extending **and non-vacuous**              | 1, 18.1     | count floor: empty dir → exit 1              |
+| §12.2   | Lean, zero `sorry`                                        | 18.1        | `leanProofBinding` escape scan               |
+| §12.2   | K7 net over 5Q's own code                                 | 18.2        | dynamic enumeration; dead exports fail       |
+| §12.2   | parity where claimed                                      | 18.3        | Node ≡ Python ≡ browser on shared vectors    |
+| §12.3   | 5Q reproduce script                                       | 18.4        | `if/then/else` gates, never `cmd && echo`    |
+| §2.1 A1 | root R8 admits stage-5 unit gates                         | 7.5         | member count rises; named members present    |
+| §2.2    | `verifier_branch` per `reject()` site                     | 2           | per-branch emission test                     |
+| §2.2    | `imported_dependency` present, unobligated                | 2           | marked-not-absent test                       |
+| §2.2    | `historical_function`                                     | 16          | tag records only, never head closure         |
+| §2.5    | `succession_hint` + its honest limit                      | 2           | rename+reformat produces NO hint             |
 | §14.6   | escalation mints new finding                              | 10, 13      | severity immutability                        |
 
 ---
@@ -956,18 +1267,21 @@ Every published Q0 field maps to a producer, inputs, canonicaliser, digest, veri
 witness**. A field that merely "comes from the harness" fails review — the harness is a machine, not
 an oracle.
 
-| Published field              | Producer | Source inputs                       | Canonicaliser             | Digest                    | Verifier                 | Negative witness                  |
-| ---------------------------- | -------- | ----------------------------------- | ------------------------- | ------------------------- | ------------------------ | --------------------------------- |
-| `function_closure_digest`    | T8       | static+runtime+gate censuses, roles | canonical member ordering | `simurgh.vsr.closure.v1`  | `commitClosure --verify` | remove one member → digest moves  |
-| `release_tag_closure_digest` | T8       | 16 `(tag, sha)` pairs               | sorted tag list           | `simurgh.vsr.tags.v1`     | tag existence check      | 17th tag rejected                 |
-| `attack_taxonomy_digest`     | T8       | spec §4.1 frozen table              | frozen order R1–R16       | `simurgh.vsr.taxonomy.v1` | constants test           | reordered table → digest moves    |
-| `q0_finding_ledger_digest`   | T10      | appended findings                   | chain order               | `simurgh.vsr.ledger.v1`   | `verifyChain`            | tampered middle record detected   |
-| `mutation_receipt_root`      | T12      | 16 receipts                         | receipt canonical form    | `simurgh.vsr.mutation.v1` | receipt validator        | green→green receipt rejected      |
-| `attack_pack_root`           | T9,T14   | pack definitions + premises         | pack canonical form       | `simurgh.vsr.pack.v1`     | `validateAttackPack`     | pack without premise inadmissible |
-| `coverage_discharge_root`    | T19      | statuses over closure               | member order              | `simurgh.vsr.coverage.v1` | coverage ledger          | unstatused member fails           |
-| `tray.*.finding_ids`         | T14.N    | pack results                        | tray canonical form       | tray digest               | tray schema test         | invented target id rejected       |
-| `F001.*`                     | T13      | filesystem, workflow, `lean` exits  | artefact canonical form   | finding digest            | F001 capture test        | `discovered_by`=harness rejected  |
-| `tag.*.outcome`              | T16      | worktree runs                       | outcome enum              | campaign digest           | campaign test            | unreproducible ≠ pass             |
+| Published field               | Producer | Source inputs                        | Canonicaliser             | Digest                    | Verifier                 | Negative witness                    |
+| ----------------------------- | -------- | ------------------------------------ | ------------------------- | ------------------------- | ------------------------ | ----------------------------------- |
+| `function_closure_digest`     | T8       | static+runtime+gate censuses, roles  | canonical member ordering | `simurgh.vsr.closure.v1`  | `commitClosure --verify` | remove one member → digest moves    |
+| `release_tag_closure_digest`  | T8       | 16 `(tag, sha)` pairs                | sorted tag list           | `simurgh.vsr.tags.v1`     | tag existence check      | 17th tag rejected                   |
+| `attack_taxonomy_digest`      | T8       | spec §4.1 frozen table               | frozen order R1–R16       | `simurgh.vsr.taxonomy.v1` | constants test           | reordered table → digest moves      |
+| `q0_finding_ledger_digest`    | T10      | appended findings                    | chain order               | `simurgh.vsr.ledger.v1`   | `verifyChain`            | tampered middle record detected     |
+| `mutation_receipt_root`       | T12      | 16 receipts                          | receipt canonical form    | `simurgh.vsr.mutation.v1` | receipt validator        | green→green receipt rejected        |
+| `attack_pack_root`            | T9,T14   | pack definitions + premises          | pack canonical form       | `simurgh.vsr.pack.v1`     | `validateAttackPack`     | pack without premise inadmissible   |
+| `coverage_discharge_root`     | T19      | statuses over closure                | member order              | `simurgh.vsr.coverage.v1` | coverage ledger          | unstatused member fails             |
+| `tray.*.finding_ids`          | T14.N    | pack results                         | tray canonical form       | tray digest               | tray schema test         | invented target id rejected         |
+| `F001.*`                      | T13      | filesystem, workflow, `lean` exits   | artefact canonical form   | finding digest            | F001 capture test        | `discovered_by`=harness rejected    |
+| `tag.*.outcome`               | T16      | worktree runs                        | outcome enum              | campaign digest           | campaign test            | unreproducible ≠ pass               |
+| `tray.*.positive_path_result` | T14.N    | stage reproduce script under Node 26 | outcome enum              | tray digest               | tray schema test         | `reproduced_with_diff` is a finding |
+| `lean_theorem_set`            | T18.1    | `proofs/stage5q/Vsr.lean`            | Lean source bytes         | source-span digest        | `leanProofBinding`       | a `sorry` fails the scan            |
+| `parity_vector_result`        | T18.3    | shared vectors                       | canonical JSON            | vector digest             | `crossRuntimeParity`     | one diverged rule fails all three   |
 
 ---
 

@@ -1070,10 +1070,61 @@ Named here so their absence is deliberate rather than an omission:
 
 ---
 
+## Annex A1 — closure root **R8**: stage-5 unit tests (post-freeze, 2026-07-26)
+
+**Amends §2.1, which is frozen and therefore not edited in place.** This annex is the amendment.
+
+### A1.1 The defect
+
+§2.1's roots cover `tests/e2e/llmShield/stage5{a..p}/**` (**28 files**) and omit
+`tests/unit/llmShield/stage5{a..p}/**` (**243 files**). Measured at `9a2f64df`.
+
+The omission is not defensible as "tests gate the closure rather than belong to it", because §2.4
+types gate definitions as closure members with role `completeness_claim`, and §2.1 root R5 admits
+`.github/workflows/**` for exactly that reason. Excluding 243 files of the same kind while including
+the workflows is inconsistent, not principled.
+
+Concretely, the omitted set contains:
+
+- `tests/unit/llmShield/stage5p/rawCodeCensus.test.js` — polices a frozen raw-code band and its
+  approved-documentation list;
+- `tests/unit/llmShield/stage5p/typedOutcomeDischarge.test.js` — the §2.12 discharge gate;
+- every stage's parity, census and coverage assertion.
+
+Under the unamended roots, 5Q would commit a universe omitting roughly nine tenths of Stage 5's gate
+surface and then claim completeness over it. L2 would make that permanent for the campaign.
+
+### A1.2 The amendment
+
+```text
+R8  tests/unit/llmShield/stage5{a..p}/**        (unit-level gates and their fixtures)
+```
+
+Members admitted under R8 take category `gate_definition` where they assert a completeness or
+hygiene fact, and `evidence_emission` where they build fixtures. Default `security_role` is
+`completeness_claim` for the former and `evidence_emission` for the latter; both are subject to the
+§2.4 adversarial role check exactly as R1 members are.
+
+### A1.3 Scope discipline
+
+R8 admits **stage-5 unit tests only**. It does not admit `tests/unit/llmShield/stage4*/`, which stays
+`imported_dependency` under the §2.1 R7 boundary — with one named exception already in the closure by
+dependency: `tests/unit/llmShield/stage4h/exitWrapper.test.js`, the repo-wide `RUN_LEVEL_BY_RAW`
+golden that every stage extends.
+
+### A1.4 Consequence for the plan
+
+The closure member count rises materially; the plan's Task 2 baseline expectation is a **diagnostic
+figure, not a target**, and must not be used to decide the census is correct. Task 8 must not run
+until R8 is implemented — a closure committed without it is a closure that cannot be amended
+afterwards.
+
+---
+
 ## Freeze block
 
 **§§2–5 are FROZEN as of this commit.** Amendments are annex-only from here; the four objects are
-never reopened in place.
+never reopened in place. Annex A1 above amends §2.1 by the permitted route.
 
 ```text
 frozen_sections      §2 §3 §4 §5
