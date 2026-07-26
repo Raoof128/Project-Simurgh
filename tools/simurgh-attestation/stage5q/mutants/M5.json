@@ -1,0 +1,15 @@
+{
+  "mutant_id": "M5",
+  "attack_class": "R5",
+  "target_file": "tools/simurgh-attestation/stage5g/core/anchorBinding.mjs",
+  "target_symbol": "checkAnchorBinding",
+  "adapter": "weakenComparison",
+  "intent": "make the empty-allowlist guard unreachable",
+  "detector_glob": "tests/unit/llmShield/stage5g",
+  "args": {
+    "from": "ctx.trustRootAllowlist.length === 0",
+    "to": "ctx.trustRootAllowlist.length < 0"
+  },
+  "expected_failure": "unconfigured trust root accepted",
+  "precondition_source_digest": "aafd8850e5bb40525b58e07657d96ef86395e362601cb20f260a10a2a8919cc3"
+}

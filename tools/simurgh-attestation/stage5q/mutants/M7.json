@@ -1,0 +1,15 @@
+{
+  "mutant_id": "M7",
+  "attack_class": "R7",
+  "target_file": "tools/simurgh-attestation/stage5f/core/census.mjs",
+  "target_symbol": "checkCensus",
+  "adapter": "deleteGuardClause",
+  "intent": "stop rejecting a dropped census cell",
+  "detector_glob": "tests/unit/llmShield/stage5f",
+  "args": {
+    "from": "  for (const id of cellIds) if (!recSet.has(id)) return 280; // no dropped cell\n",
+    "to": ""
+  },
+  "expected_failure": "census complete with N-1",
+  "precondition_source_digest": "7fd9ad4b1188f761a539d8292f4d4050a6ee41b1d3fa1bcadb9a9c851e8f1bcc"
+}

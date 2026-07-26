@@ -1,0 +1,16 @@
+{
+  "mutant_id": "M10",
+  "attack_class": "R10",
+  "target_file": "tools/simurgh-attestation/stage5c/core/blindSeverity.mjs",
+  "target_symbol": "blindSeverity",
+  "adapter": "replaceCallWithConstant",
+  "intent": "return a constant severity regardless of the digest",
+  "detector_glob": "tests/unit/llmShield/stage5c",
+  "args": {
+    "from": "parseInt(hex[0] || \"0\", 16)",
+    "to": "0",
+    "callee": "parseInt"
+  },
+  "expected_failure": "oracle read, premise vacuous",
+  "precondition_source_digest": "1d6aab2364cc0bf5f1c882a0df6e0891266a4d3ce6f59f99ab1a43ebcf112d52"
+}

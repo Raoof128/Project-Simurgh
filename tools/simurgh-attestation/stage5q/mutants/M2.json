@@ -1,0 +1,15 @@
+{
+  "mutant_id": "M2",
+  "attack_class": "R2",
+  "target_file": "tools/simurgh-attestation/stage5o/core/digestTokenCodec.mjs",
+  "target_symbol": "decodeDigestToken",
+  "adapter": "deleteGuardClause",
+  "intent": "remove the lexical grammar gate on the digest token",
+  "detector_glob": "tests/unit/llmShield/stage5o",
+  "args": {
+    "from": "  if (!m) {\n    throw new Error(\"digest_token_grammar_violation\");\n  }\n",
+    "to": ""
+  },
+  "expected_failure": "lexical laundering accepted",
+  "precondition_source_digest": "29607886d4eb25a1c3dd9e36583d0f74c9f6dc906cd55d0fa702b86d3d1f9438"
+}

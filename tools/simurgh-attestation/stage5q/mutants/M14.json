@@ -1,0 +1,15 @@
+{
+  "mutant_id": "M14",
+  "attack_class": "R14",
+  "target_file": "tools/simurgh-attestation/stage5a/core/verdictCore.mjs",
+  "target_symbol": "verdictFor",
+  "adapter": "weakenComparison",
+  "intent": "collapse contradiction into agreement",
+  "detector_glob": "tests/unit/llmShield/stage5a",
+  "args": {
+    "from": "verdict = hits.length === 0 ? \"corroborated\" : \"contradicted\"",
+    "to": "verdict = hits.length >= 0 ? \"corroborated\" : \"contradicted\""
+  },
+  "expected_failure": "two stories both accepted",
+  "precondition_source_digest": "c73bbcc3257568735e78d3a97f7ddc9df4f5b662bbcea4d8e3a2be2aacb6fb2a"
+}

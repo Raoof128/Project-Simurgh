@@ -1,0 +1,15 @@
+{
+  "mutant_id": "M11",
+  "attack_class": "R11",
+  "target_file": "tools/simurgh-attestation/stage5p/browser/vsi-portable.mjs",
+  "target_symbol": "canonicalJson",
+  "adapter": "weakenComparison",
+  "intent": "make the browser mirror disagree with Node on null handling",
+  "detector_glob": "tests/unit/llmShield/stage5p",
+  "args": {
+    "from": "if (value === null || typeof value !== \"object\") return JSON.stringify(value);",
+    "to": "if (value === undefined || typeof value !== \"object\") return JSON.stringify(value);"
+  },
+  "expected_failure": "runtimes disagree",
+  "precondition_source_digest": "5cedee2d84c7c4672f85ed44b55665092a52c558254d70528bf7e3f294dee712"
+}
