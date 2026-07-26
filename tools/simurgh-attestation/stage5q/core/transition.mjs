@@ -49,6 +49,37 @@ export const UNCOVERED_STAGES = Object.freeze(["5f", "5g", "5i", "5j", "5k", "5l
  */
 export const COVERED_BY_OWN_WORKFLOW = Object.freeze(["5o"]);
 
+/**
+ * Attribute each manifest failure: did Q0 cause it, or was it already broken?
+ *
+ * T7 IS NOT WEAKENED BY THIS. It still requires every command green, because that is what the
+ * condition says and because a stage does not get to redefine its own gate when the gate fires.
+ * What attribution adds is the fact a reader actually needs: a command that fails identically at
+ * the merge-base was not disturbed by Q0, and reporting it as "5Q regressed a prior stage" would
+ * be a false attribution — the reporting analogue of the false findings this stage spent its whole
+ * length refusing to publish.
+ *
+ * `not_compared` is its own value. Absent a baseline run, "we did not check" must not be dressed up
+ * as "not caused by us".
+ */
+export function attributeManifest(headResults, baselineResults = null) {
+  const baseline = new Map((baselineResults ?? []).map((r) => [r.command, r.ok]));
+  const attributed = headResults.map((r) => {
+    if (r.ok) return { ...r, attribution: "green" };
+    if (baselineResults === null) return { ...r, attribution: "not_compared" };
+    if (!baseline.has(r.command)) return { ...r, attribution: "not_compared" };
+    return { ...r, attribution: baseline.get(r.command) ? "regressed_by_q0" : "pre_existing" };
+  });
+  return {
+    results: attributed,
+    regressed_by_q0: attributed
+      .filter((r) => r.attribution === "regressed_by_q0")
+      .map((r) => r.command),
+    pre_existing: attributed.filter((r) => r.attribution === "pre_existing").map((r) => r.command),
+    not_compared: attributed.filter((r) => r.attribution === "not_compared").map((r) => r.command),
+  };
+}
+
 const cond = (id, ok, detail) => ({ id, ok, detail });
 
 /**
@@ -64,6 +95,7 @@ export function evaluateTransition({
   ledger,
   frozenBlockDigest,
   manifestResults,
+  baselineResults = null,
 }) {
   const conditions = [];
 
@@ -150,6 +182,7 @@ export function evaluateTransition({
   // passed; the earlier version of this gate printed the failure and exited zero anyway.
   const ran = Array.isArray(manifestResults) && manifestResults.length > 0;
   const failed = ran ? manifestResults.filter((r) => r.ok !== true) : [];
+  const attribution = ran ? attributeManifest(manifestResults, baselineResults) : null;
   conditions.push(
     cond(
       "T7",
@@ -158,7 +191,19 @@ export function evaluateTransition({
         ? "the non-disturbance manifest did not run — that is not a pass"
         : failed.length === 0
           ? `${manifestResults.length} manifest command(s) green`
-          : `${failed.length} regressed: ${failed.map((f) => f.command).join(", ")}`
+          : `${failed.length} not green — ` +
+            `${attribution.regressed_by_q0.length} caused by Q0` +
+            (attribution.pre_existing.length
+              ? `, ${attribution.pre_existing.length} PRE-EXISTING (identical at the merge-base): ` +
+                attribution.pre_existing.join(", ")
+              : "") +
+            (attribution.not_compared.length
+              ? `, ${attribution.not_compared.length} NOT COMPARED (no baseline run): ` +
+                attribution.not_compared.join(", ")
+              : "") +
+            (attribution.regressed_by_q0.length
+              ? `. REGRESSED: ${attribution.regressed_by_q0.join(", ")}`
+              : "")
     )
   );
 
@@ -166,6 +211,10 @@ export function evaluateTransition({
   return {
     conditions,
     q1_authorised: authorised,
+    // Reported ALONGSIDE T7, never instead of it. T7 asks whether the manifest is green; this asks
+    // whether Q0 is why it is not. Both answers matter and neither substitutes for the other.
+    manifest_attribution: attribution,
+    q0_disturbed_a_prior_stage: attribution ? attribution.regressed_by_q0.length > 0 : null,
     // Deliberately separate from `q1_authorised`. Transition is not release.
     stage_release_blocked: (inadmissible?.length ?? 1) > 0,
     release_blocked_reason:
