@@ -590,9 +590,15 @@ docs/research/llm-shield/evidence/stage-5q/**
 scripts/check-stage5q-proofs.sh                  <- named explicitly (P0-14)
 scripts/reproduce-llm-shield-stage5q.sh          <- named explicitly (P0-14)
 .github/workflows/stage-5q-checks.yml            <- the ONE permitted CI addition (§14.3)
-package.json  (scripts key only)
-.prettierignore
+package.json        (the `scripts` key, plus ONE devDependency line: acorn@8.17.0)
+package-lock.json   (ONLY the lockfile delta produced by that single install)
+.prettierignore     (ONLY additive lines for stage-5q evidence)
 ```
+
+**Every mutation is scoped, not just every path** (second gauntlet B1). Naming `package.json` while
+leaving `package-lock.json` unnamed would have made Task 1 unable to run `npm i` without violating
+its own allowlist — and an allowlist the first task breaks is not a control. The permitted mutation
+is stated per path so "I only touched package.json" cannot cover an unrelated dependency change.
 
 **Two 5Q scripts are named explicitly.** An earlier version declared this surface "exhaustive" while
 the plan created `scripts/reproduce-llm-shield-stage5q.sh` outside it. A rule that the work
@@ -1276,8 +1282,14 @@ function_id
 attack_class
 applicability      obligated | omitted
 omission_reason    §4.2 frozen enum; required iff applicability = omitted
-planned_pack_ids
 ```
+
+**`planned_pack_ids` is deliberately ABSENT** (second gauntlet B6). Pack schemas arrive in Task 9,
+detector packs in Task 12, tray and campaign packs in Tasks 14-18 — all **after** L2. Committing pack
+ids here would either freeze empty assignments or let the supposedly immutable obligation matrix
+change after the universe froze, which is precisely the mutability L2 exists to forbid. Actual pack
+ids live in the Annex A2 discharge overlay: the matrix commits _what must be attacked_, the overlay
+records _what attacked it_, and those are facts from different times.
 
 Generated and committed **before Task 8** as `obligation_matrix_root`, over the committed closure
 crossed with the frozen taxonomy.
