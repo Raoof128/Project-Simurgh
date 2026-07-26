@@ -241,6 +241,12 @@ test("raw literals 464-474 occur ONLY in the allocator, the registry, goldens an
     "docs/research/llm-shield/STAGE_5P_CLOSEOUT.md",
     // The README banner states the stage's code band publicly — that is what a banner is for.
     "README.md",
+    // 5Q's spec and plan cite 474 to state where 5P's band closed and where the next free code
+    // begins. That is exactly the "approved documentation" case the 5P ruling names: widen the
+    // approved list, never weaken the band regex. A successor stage must be able to say which
+    // codes its predecessor consumed without laundering the literal out of the sentence.
+    "docs/superpowers/specs/2026-07-26-stage-5q-vsr-stage-wide-red-team-design.md",
+    "docs/superpowers/plans/2026-07-26-stage-5q-vsr-q0-implementation-plan.md",
   ];
   const SKIP = new Set(["node_modules", ".git", "dist", "build", ".remember", "coverage"]);
   // The FULL allocated range, amendment band included. The first version stopped at 472 and left
