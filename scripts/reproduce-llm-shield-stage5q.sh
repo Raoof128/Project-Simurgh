@@ -555,7 +555,25 @@ fi
 
 # ------------------------------------------------------------------------------------------------
 echo
-echo "-- 17. this script disturbed nothing (re-checked after every gate ran) --"
+echo "-- 17. K7-A: the all-functions net over 5Q's OWN harness --"
+# The red team's harness is not exempt from the discipline it enforces (spec §12.2). The net walks
+# the directory rather than reading a list, and gates on SET EQUALITY between the exports it finds
+# and the typed invocation adapters — an export nobody exercises is uncovered, and an adapter with
+# no export is dead. This is K7-A; Task 20 signs its census digest. K7-B verifies the completed
+# attestation and belongs after Task 21.
+K7_OUT="$("$NODE" --test --test-reporter=tap tests/e2e/llmShield/stage5q/k7AllFunctions.test.js 2>&1 || true)"
+echo "$K7_OUT" | grep -E 'K7-A census|^# (tests|pass|fail) ' | sed 's/^#* *//' | sed 's/^/      /' || true
+K7_FAIL="$(echo "$K7_OUT" | grep -E '^# fail ' | awk '{print $3}' || true)"
+if [ "${K7_FAIL:-1}" != "0" ]; then
+  echo "FAIL: K7-A is not green"
+  echo "$K7_OUT" | grep -E '^not ok|adapter' | head -20
+  exit 1
+fi
+echo "K7-A: every 5Q export enumerated by walking and exercised by a typed adapter: OK"
+
+# ------------------------------------------------------------------------------------------------
+echo
+echo "-- 18. this script disturbed nothing (re-checked after every gate ran) --"
 # Gate 3 checked the branch. This checks THIS RUN: a reproduce script that verifies non-disturbance
 # and then disturbs something on its way through is worse than one that never checked, because it
 # prints a clean bill over damage it caused. It has happened once already.
@@ -575,11 +593,10 @@ echo "==========================================================================
 echo "NOT REPRODUCED BY THIS SCRIPT — named rather than omitted"
 echo "================================================================================"
 cat <<'NOTE'
-  Q0 tail, does not exist yet          the K7-A export census (19.7), the signed attestation (20),
-                                       K7-B and the reproduction receipt (20.5), transition
-                                       validation (21). The full reproduce at 20.5 is the artifact
-                                       a reviewer runs; this one is its scaffold and says so in its
-                                       banner.
+  Q0 tail, does not exist yet          the signed attestation (20), K7-B and the reproduction
+                                       receipt (20.5), transition validation (21). The full
+                                       reproduce at 20.5 is the artifact a reviewer runs; this one
+                                       is its scaffold and says so in its banner.
 
   L1 COVERAGE — NOT CERTIFIED          gate 15 verifies the ledger; it does not certify coverage,
                                        because the ledger does not. 1438 of 23332 obligated cells

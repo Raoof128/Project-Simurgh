@@ -129,6 +129,22 @@ const depSections = ["dependencies", "devDependencies", "peerDependencies", "opt
  */
 export function checkPackageJsonMutation(before, after) {
   const violations = [];
+  // PARSED OBJECTS, AND A STRING IS REFUSED RATHER THAN COERCED. Handed the raw JSON text, every
+  // lookup below reads `undefined` off a string, every section compares empty-to-empty, and the
+  // checker returns `{ok: true}` for a package.json that added an arbitrary dependency. A gate that
+  // answers "nothing wrong" when it was given the wrong type is a gate that fails open, which is
+  // the R16 class this stage attacks in other people's code. Found by K7-A's adapter.
+  for (const [label, value] of [
+    ["before", before],
+    ["after", after],
+  ]) {
+    if (typeof value === "string") {
+      throw new TypeError(
+        `checkPackageJsonMutation: ${label} must be the PARSED package.json, not its text — ` +
+          "a string silently compares as empty and the check returns ok"
+      );
+    }
+  }
   const b = before ?? {};
   const a = after ?? {};
 

@@ -222,6 +222,6 @@ function main(argv) {
 }
 
 // Importable for tests; only runs the capture when invoked directly.
-if (process.argv[1] && process.argv[1].endsWith("captureF001.mjs")) {
+if (import.meta.url === `file://${process.argv[1]}`) {
   process.exit(main(process.argv.slice(2)));
 }
