@@ -9,11 +9,16 @@
 // cells, and reports whether L1 holds. It invents nothing: a cell is discharged only if some
 // artifact on disk says a named pack attacked that member for that class and what happened.
 //
-// TWO SOURCES, AND ONLY TWO:
+// THREE SOURCES, AND ONLY THREE:
 //
 //   Task 12 mutation receipts   member × class, with a green->red->green witness. A receipt whose
 //                               mutant went undetected discharges NOTHING — the pack could not
 //                               tell the difference, so its pass is inadmissible (L4).
+//
+//   Task 14 attack packs        the six control-free probe families over every invocable tray
+//                               target. A probe that could not establish its premise emits no
+//                               discharge at all; three ways of learning nothing are counted and
+//                               named, never folded into a pass.
 //
 //   Task 14 tray rows           per-cell obligation receipts emitted by the sixteen trays.
 //
@@ -22,9 +27,12 @@
 // aimed at. That is the P0-5 defect with a different label on it.
 //
 // THIS DRIVER IS EXPECTED TO REPORT L1 AS NOT CERTIFIED, and printing that plainly is the point.
-// Q0 committed 2531 members and 23332 obligated cells; the number actually attacked is small and
-// the ledger says exactly how small. A coverage ledger that certified this state would be the
-// false green this stage is named after, produced by the tool built to detect it.
+// The packs discharge the five classes they can genuinely attack without a positive control; the
+// other eleven classes of every member stay undischarged, so no member has all of its obligated
+// cells covered and no member reaches `attacked_pass`. That is the P0-5 rule working: a member is
+// claimed over ALL of its obligations, not over the ones that happened to be attacked. A coverage
+// ledger that certified this state would be the false green this stage is named after, produced by
+// the tool built to detect it.
 
 import { readFileSync, readdirSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { dirname } from "node:path";
@@ -76,6 +84,40 @@ export function dischargesFromMutants(receipts) {
   return { discharges: out, undetected };
 }
 
+/**
+ * Cell discharges from the attack packs.
+ *
+ * Finding ids are ATTACHED HERE FROM THE LEDGER, not minted. The pack runner deliberately emits
+ * `finding_ids: []`: the ledger owns the sequence, and a runner that allocated its own would create
+ * a second authority over one namespace that collides the first time either is re-run. A pack
+ * finding with no matching ledger record is a finding that was observed and never frozen, so it is
+ * reported rather than passed through.
+ */
+export function dischargesFromPacks(packResults, findingIdByCell = new Map()) {
+  const out = [];
+  const unfrozenFindings = [];
+  for (const d of packResults.discharges ?? []) {
+    const key = `${d.function_id}|${d.attack_class}`;
+    const findingId = findingIdByCell.get(key) ?? null;
+    if (d.discharge_status === "finding_frozen" && !findingId) {
+      unfrozenFindings.push(key);
+      continue;
+    }
+    out.push({
+      obligation_id: d.obligation_id,
+      function_id: d.function_id,
+      attack_class: d.attack_class,
+      pack_id: d.pack_id,
+      premise_receipt_digest: d.premise_receipt_digest,
+      observed_outcome: d.observed_outcome,
+      discharge_status: d.discharge_status,
+      finding_ids: findingId ? [findingId] : [],
+      source: d.source,
+    });
+  }
+  return { discharges: out, unfrozenFindings };
+}
+
 /** Cell discharges from the sixteen tray records. Rows with a null status contribute nothing. */
 export function dischargesFromTrays(trays) {
   const out = [];
@@ -115,9 +157,35 @@ function main(argv) {
         .map((f) => readJson(`${trayDir}/${f}`))
     : [];
 
+  const packPath = `${E}/packs/all-pack-results.json`;
+  const ledgerPath = `${E}/findings/q0-finding-ledger.json`;
+  const findingIdByCell = new Map();
+  if (existsSync(ledgerPath)) {
+    for (const r of readJson(ledgerPath).records) {
+      findingIdByCell.set(`${r.affected_function_id}|${r.attack_class}`, r.finding_id);
+    }
+  }
+  const fromPacks = existsSync(packPath)
+    ? dischargesFromPacks(readJson(packPath), findingIdByCell)
+    : { discharges: [], unfrozenFindings: [] };
+
   const fromMutants = dischargesFromMutants(receipts);
   const fromTrays = dischargesFromTrays(trays);
-  const discharges = [...fromMutants.discharges, ...fromTrays];
+
+  // THE TRAYS ARE CANONICAL ONCE THEY EXIST, AND THE RAW PACK RESULTS ARE NOT ADDED ON TOP.
+  //
+  // A tray is built FROM the pack results, so its rows are the same evidence in the artifact a
+  // reviewer actually reads. Counting both produced 1430 `duplicate_discharge` problems on the
+  // first run — one per cell, every one of them the same pack reported twice through two paths.
+  // The rule was right and the wiring was wrong: two readings of one measurement are not two
+  // measurements, and a coverage number that grew because the evidence was filed in two places
+  // would be the most embarrassing possible defect in a stage about false completeness.
+  const packsAlreadyInTrays = fromTrays.length > 0;
+  const discharges = [
+    ...fromMutants.discharges,
+    ...(packsAlreadyInTrays ? [] : fromPacks.discharges),
+    ...fromTrays,
+  ];
 
   const built = buildCoverageLedger({
     members: closure.members.map((m) => ({ function_id: m.function_id })),
@@ -153,6 +221,10 @@ function main(argv) {
       `outside the matrix ${built.discharges_outside_the_matrix})`
   );
   console.log(`      from mutation receipts  : ${fromMutants.discharges.length}`);
+  console.log(
+    `      from attack packs       : ${fromPacks.discharges.length}` +
+      (packsAlreadyInTrays ? "  (counted via the trays, not again)" : "")
+  );
   console.log(`      from tray rows          : ${fromTrays.length}`);
   console.log(`      mutants proving nothing : ${fromMutants.undetected.length}`);
   console.log(`  status tally                : ${JSON.stringify(built.tally)}`);
@@ -172,11 +244,12 @@ function main(argv) {
   for (const reason of built.l1_reasons) console.log(`      ${reason}`);
   if (!built.l1_certified) {
     console.log(
-      "\n  L1 is No Unexamined Function. It is NOT certified, and that is the measurement, not a\n" +
-        "  tooling failure: the universe was committed and the apparatus was built, but almost\n" +
-        "  none of it has been attacked. The per-stage attack packs (plan Task 14's\n" +
-        "  `packs/stage5X/*.json`) do not exist, so the trays discharge nothing. No attestation\n" +
-        "  may claim coverage over this ledger."
+      "\n  L1 is No Unexamined Function. NOT certified, and that is the measurement rather than a\n" +
+        "  tooling failure. The six probe families attack five of the sixteen classes without\n" +
+        "  needing a positive control; the other eleven need one, and synthesising a valid input\n" +
+        "  for a function whose signature nobody recorded is how a vacuous pass gets manufactured.\n" +
+        "  So those cells stay undischarged and are counted, and no member reaches attacked_pass\n" +
+        "  while any of its obligated cells is untouched. No attestation may claim coverage here."
     );
   }
 
@@ -198,6 +271,8 @@ function main(argv) {
       discharges_outside_the_matrix: built.discharges_outside_the_matrix,
       discharge_sources: {
         mutation_receipts: fromMutants.discharges.length,
+        attack_packs: fromPacks.discharges.length,
+        pack_findings_not_in_the_ledger: fromPacks.unfrozenFindings,
         tray_rows: fromTrays.length,
         mutants_proving_nothing: fromMutants.undetected,
       },

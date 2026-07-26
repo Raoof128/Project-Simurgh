@@ -57,8 +57,20 @@ const digest = (domain, value) =>
 /**
  * Index the discharge records by obligation id.
  *
- * Two discharges for one cell is refused rather than last-wins. Last-wins would let a second,
- * friendlier run overwrite a first one — outcome shopping at cell granularity, and invisible.
+ * THREE CASES, AND THEY ARE NOT THE SAME THING. The first version collapsed them into one refusal
+ * and immediately fired on three legitimate cells, where a Task 12 mutant and a Task 14 pack had
+ * both attacked the same (member, class) by different means. A rule that refuses corroboration
+ * teaches its author to stop corroborating.
+ *
+ *   same pack twice        outcome shopping. Refused. Last-wins would let a second, friendlier run
+ *                          of the same pack overwrite the first, invisibly.
+ *
+ *   different packs, same  CORROBORATION, and the good case. The first is kept and the second is
+ *   answer                 recorded as a corroborating pack on it — two independent methods
+ *                          reaching one answer is the strongest evidence this ledger can hold.
+ *
+ *   different packs,       CONFLICT. One says the cell held and the other says it produced a
+ *   different answers      finding, and no ordering rule can make that go away. Refused loudly.
  */
 export function indexDischarges(discharges) {
   const byObligation = new Map();
@@ -66,19 +78,40 @@ export function indexDischarges(discharges) {
   for (const d of discharges) {
     const id =
       d.obligation_id ?? obligationId({ functionId: d.function_id, attackClass: d.attack_class });
-    if (byObligation.has(id)) {
+    const existing = byObligation.get(id);
+    if (!existing) {
+      byObligation.set(id, { ...d, obligation_id: id, corroborating_pack_ids: [] });
+      continue;
+    }
+    if (existing.pack_id === d.pack_id) {
       problems.push({
         kind: "duplicate_discharge",
         obligation_id: id,
         function_id: d.function_id,
         attack_class: d.attack_class,
+        pack_id: d.pack_id,
         reason:
-          "one cell, two discharges. Refused rather than resolved by order: last-wins lets a " +
-          "second run overwrite the first, which is outcome shopping at cell granularity",
+          "one cell, one pack, two discharges. Refused rather than resolved by order: last-wins " +
+          "lets a second run of the same pack overwrite the first, which is outcome shopping at " +
+          "cell granularity",
       });
       continue;
     }
-    byObligation.set(id, { ...d, obligation_id: id });
+    if (existing.discharge_status !== d.discharge_status) {
+      problems.push({
+        kind: "conflicting_discharge",
+        obligation_id: id,
+        function_id: d.function_id,
+        attack_class: d.attack_class,
+        statuses: [existing.discharge_status, d.discharge_status],
+        packs: [existing.pack_id, d.pack_id],
+        reason:
+          "two packs attacked one cell and disagreed about what happened. No ordering rule " +
+          "resolves that, and picking one would be choosing the answer",
+      });
+      continue;
+    }
+    existing.corroborating_pack_ids.push(d.pack_id);
   }
   return { byObligation, problems };
 }

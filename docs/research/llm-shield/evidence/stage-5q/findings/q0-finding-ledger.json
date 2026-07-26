@@ -2,9 +2,9 @@
   "schema": "simurgh.vsr.q0-finding-ledger.v1",
   "note": "Append-only and hash-chained (L3). A record is never edited and severity is never rewritten: escalation mints a new finding with its own id, premise receipt and claim impact. Every premise here recomputed against the frozen fixture bytes at build time.",
   "closure_digest": "87512ae221ae2de5148759dcd48ad04ebf02c1b6354bc75e95af9d991f7fc936",
-  "q0_finding_ledger_digest": "a50a06f986e3a6076ad4883a77d5abbb94a33cc0fcea08d73e67721fe2a25773",
-  "head_digest": "1be0f22b552fe93ca05ae390677d757f9f6ab72dcd5a55c8a6c972e3042df80b",
-  "record_count": 3,
+  "q0_finding_ledger_digest": "7f8c70f1f14e7b49d701372759d831591f4babc215cdf3740f5bb03546f0b05f",
+  "head_digest": "4979d7fdd8af68d6b947f9474c8c12e4ac9578015d83bd329d6b26789cc5377e",
+  "record_count": 12,
   "premise_verification": [
     {
       "finding_id": "5Q-F001",
@@ -20,6 +20,51 @@
       "finding_id": "5Q-F003",
       "recomputed": true,
       "reason": "same subject, conflicting assignment of summary, captured_at"
+    },
+    {
+      "finding_id": "5Q-F004",
+      "recomputed": true,
+      "reason": "2 committed member(s) absent from the produced set: $.leakage, $.doc_residue"
+    },
+    {
+      "finding_id": "5Q-F005",
+      "recomputed": true,
+      "reason": "3 committed member(s) absent from the produced set: $.v1, $.v3, $.v4"
+    },
+    {
+      "finding_id": "5Q-F006",
+      "recomputed": true,
+      "reason": "same subject, conflicting assignment of snapshot"
+    },
+    {
+      "finding_id": "5Q-F007",
+      "recomputed": true,
+      "reason": "9 committed member(s) absent from the produced set: $.digest_token_codec, $.digest_token_codec.rule, $.digest_token_codec.rule.rejects"
+    },
+    {
+      "finding_id": "5Q-F008",
+      "recomputed": true,
+      "reason": "115 committed member(s) absent from the produced set: $.bitcoin_mainnet_header_validation, $.bitcoin_mainnet_header_validation.rules, $.bitcoin_mainnet_header_validation.rules.0"
+    },
+    {
+      "finding_id": "5Q-F009",
+      "recomputed": true,
+      "reason": "53 committed member(s) absent from the produced set: $.verified_closure_bitcoin_checkpoint, $.verified_closure_bitcoin_checkpoint.fields, $.verified_closure_bitcoin_checkpoint.fields.network_profile_id"
+    },
+    {
+      "finding_id": "5Q-F010",
+      "recomputed": true,
+      "reason": "23 committed member(s) absent from the produced set: $.0, $.1, $.2"
+    },
+    {
+      "finding_id": "5Q-F011",
+      "recomputed": true,
+      "reason": "1 committed member(s) absent from the produced set: $.registry"
+    },
+    {
+      "finding_id": "5Q-F012",
+      "recomputed": true,
+      "reason": "3 committed member(s) absent from the produced set: $.0, $.1, $.2"
     }
   ],
   "records": [
@@ -132,6 +177,294 @@
       "record_kind": "q0",
       "prev_digest": "a93c7b972f7cb0ffbd5bbcd27e499558cbb422c2b5bedee4d837ab62fafff990",
       "record_digest": "1be0f22b552fe93ca05ae390677d757f9f6ab72dcd5a55c8a6c972e3042df80b"
+    },
+    {
+      "finding_id": "5Q-F004",
+      "affected_stage": "5c",
+      "affected_function_id": "5c:tools/simurgh-attestation/stage5c/constants.mjs:VSB_MECHANISM_VERSIONS",
+      "affected_tags": [],
+      "attack_class": "R8",
+      "premise_receipt": {
+        "pack_id": "5q-all-frozenconstant-r8-01",
+        "closure_digest": "87512ae221ae2de5148759dcd48ad04ebf02c1b6354bc75e95af9d991f7fc936",
+        "target_function_id": "5c:tools/simurgh-attestation/stage5c/constants.mjs:VSB_MECHANISM_VERSIONS",
+        "fixture_digest": "515ed6b776ea19762c8ee84df6a31c0a0922756b70562c724d5f103ccafdeeb8",
+        "predicate_id": "omitsMember",
+        "predicate_args": {},
+        "receipt_digest": "b0271b3970e82d3b6fd3aba3c27d386fd5509c8a43f618c05a1dfcceb746682c"
+      },
+      "expected_result": "an exported constant presented as fixed is immutable through every path an importer can reach",
+      "observed_result": "Object.freeze covers 1 of 3 reachable node(s). The rest are writable by any module that imports it, so a value the code treats as pinned is shared mutable state.",
+      "exploit_fixture_digest": "515ed6b776ea19762c8ee84df6a31c0a0922756b70562c724d5f103ccafdeeb8",
+      "severity": "claim_narrowing",
+      "claim_impact": {
+        "file": "tools/simurgh-attestation/stage5c/constants.mjs",
+        "claim_digest": "07429d157ce5d171463f0589a6f4ff3df7291308d5a67c03f05fd13a821913b3",
+        "quote": "Object.freeze over VSB_MECHANISM_VERSIONS"
+      },
+      "scope": "head",
+      "discovered_at_commit": "5e658298",
+      "discovered_by": "stage5q_q0_attack_pack",
+      "corroborated_by": [],
+      "record_kind": "q0",
+      "prev_digest": "1be0f22b552fe93ca05ae390677d757f9f6ab72dcd5a55c8a6c972e3042df80b",
+      "record_digest": "39e380f7e71f1f8d127362a7a8458b8159735f18c6b547cfa3848b3a7fa2af48"
+    },
+    {
+      "finding_id": "5Q-F005",
+      "affected_stage": "5d",
+      "affected_function_id": "5d:tools/simurgh-attestation/stage5d/core/gateRegistry.mjs:GATE_SOURCE_FILES",
+      "affected_tags": [],
+      "attack_class": "R8",
+      "premise_receipt": {
+        "pack_id": "5q-all-frozenconstant-r8-01",
+        "closure_digest": "87512ae221ae2de5148759dcd48ad04ebf02c1b6354bc75e95af9d991f7fc936",
+        "target_function_id": "5d:tools/simurgh-attestation/stage5d/core/gateRegistry.mjs:GATE_SOURCE_FILES",
+        "fixture_digest": "395187a660625a60de58acfa5aa2a84a3b0920be4eea6947441643cfcc93f002",
+        "predicate_id": "omitsMember",
+        "predicate_args": {},
+        "receipt_digest": "b55245429ccb5cc85cc2d24a4b5cdde841b204da1a2f5def83bd23119bb4a2d6"
+      },
+      "expected_result": "an exported constant presented as fixed is immutable through every path an importer can reach",
+      "observed_result": "Object.freeze covers 1 of 4 reachable node(s). The rest are writable by any module that imports it, so a value the code treats as pinned is shared mutable state.",
+      "exploit_fixture_digest": "395187a660625a60de58acfa5aa2a84a3b0920be4eea6947441643cfcc93f002",
+      "severity": "claim_narrowing",
+      "claim_impact": {
+        "file": "tools/simurgh-attestation/stage5d/core/gateRegistry.mjs",
+        "claim_digest": "1edf83c46975bb1ada4c0d7766cf70852c2e351113dfc760f9e09e061e0a5f55",
+        "quote": "Object.freeze over GATE_SOURCE_FILES"
+      },
+      "scope": "head",
+      "discovered_at_commit": "5e658298",
+      "discovered_by": "stage5q_q0_attack_pack",
+      "corroborated_by": [],
+      "record_kind": "q0",
+      "prev_digest": "39e380f7e71f1f8d127362a7a8458b8159735f18c6b547cfa3848b3a7fa2af48",
+      "record_digest": "a65c4e67d945fdabe220931c49288aaa5445a6ee8b3584b15c95647d0171bf80"
+    },
+    {
+      "finding_id": "5Q-F006",
+      "affected_stage": "5l",
+      "affected_function_id": "5l:tools/simurgh-attestation/stage5l/node/buildSignedBundle.mjs:attachProjections",
+      "affected_tags": [],
+      "attack_class": "R8",
+      "premise_receipt": {
+        "pack_id": "5q-all-argumentaliasing-r8-02",
+        "closure_digest": "87512ae221ae2de5148759dcd48ad04ebf02c1b6354bc75e95af9d991f7fc936",
+        "target_function_id": "5l:tools/simurgh-attestation/stage5l/node/buildSignedBundle.mjs:attachProjections",
+        "fixture_digest": "3222354a899fc5316da2c336cc8838ed567575b6c38f89f2cc19356def6b67da",
+        "predicate_id": "contradicts",
+        "predicate_args": {},
+        "receipt_digest": "48768bf04846517d31eb1917f6984ab70cc32c6ca1c49f9583cd24ba8984ef40"
+      },
+      "expected_result": "a function does not mutate the object its caller handed it",
+      "observed_result": "the argument's serialisation changed across a single call: the caller's object changed during the call",
+      "exploit_fixture_digest": "3222354a899fc5316da2c336cc8838ed567575b6c38f89f2cc19356def6b67da",
+      "severity": "claim_narrowing",
+      "claim_impact": {
+        "file": "tools/simurgh-attestation/stage5l/node/buildSignedBundle.mjs",
+        "claim_digest": "bf75210cddfa342bda0c478a1bb42d77f4bf5cbca693b330823d3fa41fdd4d06",
+        "quote": "the caller's object before attachProjections"
+      },
+      "scope": "head",
+      "discovered_at_commit": "5e658298",
+      "discovered_by": "stage5q_q0_attack_pack",
+      "corroborated_by": [],
+      "record_kind": "q0",
+      "prev_digest": "a65c4e67d945fdabe220931c49288aaa5445a6ee8b3584b15c95647d0171bf80",
+      "record_digest": "082f6f21bd5f01e41b7121805f78c8d16eec969246e0f710ac92156a938ce88c"
+    },
+    {
+      "finding_id": "5Q-F007",
+      "affected_stage": "5o",
+      "affected_function_id": "5o:tools/simurgh-attestation/stage5o/core/section7AuthorityDescriptors.mjs:GRAMMAR_DESCRIPTORS",
+      "affected_tags": [],
+      "attack_class": "R8",
+      "premise_receipt": {
+        "pack_id": "5q-all-frozenconstant-r8-01",
+        "closure_digest": "87512ae221ae2de5148759dcd48ad04ebf02c1b6354bc75e95af9d991f7fc936",
+        "target_function_id": "5o:tools/simurgh-attestation/stage5o/core/section7AuthorityDescriptors.mjs:GRAMMAR_DESCRIPTORS",
+        "fixture_digest": "b550da7af95d9270217a792675cfef8bbaa1bcff527d993dc3efc07a223c493f",
+        "predicate_id": "omitsMember",
+        "predicate_args": {},
+        "receipt_digest": "75f5cf3a65f36c6081111db9f34953d6aa35fd70ddaa3093204d13d0f4763fc8"
+      },
+      "expected_result": "an exported constant presented as fixed is immutable through every path an importer can reach",
+      "observed_result": "Object.freeze covers 1 of 10 reachable node(s). The rest are writable by any module that imports it, so a value the code treats as pinned is shared mutable state.",
+      "exploit_fixture_digest": "b550da7af95d9270217a792675cfef8bbaa1bcff527d993dc3efc07a223c493f",
+      "severity": "claim_narrowing",
+      "claim_impact": {
+        "file": "tools/simurgh-attestation/stage5o/core/section7AuthorityDescriptors.mjs",
+        "claim_digest": "3c6af61625a5fad01269ee8abc9f59b80c645f6bf53090f6a1ee3ed9344f7f3e",
+        "quote": "Object.freeze over GRAMMAR_DESCRIPTORS"
+      },
+      "scope": "head",
+      "discovered_at_commit": "5e658298",
+      "discovered_by": "stage5q_q0_attack_pack",
+      "corroborated_by": [],
+      "record_kind": "q0",
+      "prev_digest": "082f6f21bd5f01e41b7121805f78c8d16eec969246e0f710ac92156a938ce88c",
+      "record_digest": "0d0c26e8d504ae4ad0259144c930367ecc815512f0570481534d4c1dcd42bd98"
+    },
+    {
+      "finding_id": "5Q-F008",
+      "affected_stage": "5o",
+      "affected_function_id": "5o:tools/simurgh-attestation/stage5o/core/section7AuthorityDescriptors.mjs:PROFILE_DESCRIPTORS",
+      "affected_tags": [],
+      "attack_class": "R8",
+      "premise_receipt": {
+        "pack_id": "5q-all-frozenconstant-r8-01",
+        "closure_digest": "87512ae221ae2de5148759dcd48ad04ebf02c1b6354bc75e95af9d991f7fc936",
+        "target_function_id": "5o:tools/simurgh-attestation/stage5o/core/section7AuthorityDescriptors.mjs:PROFILE_DESCRIPTORS",
+        "fixture_digest": "5913225434b44ea5be9d8c59ee5ee9f3479a0d4d4206cfd0b6c0262f5dce19c7",
+        "predicate_id": "omitsMember",
+        "predicate_args": {},
+        "receipt_digest": "3cc8284e42954e6f06339de1528d90b3a6f4586c841b6e559bf8420c7a744f3a"
+      },
+      "expected_result": "an exported constant presented as fixed is immutable through every path an importer can reach",
+      "observed_result": "Object.freeze covers 1 of 116 reachable node(s). The rest are writable by any module that imports it, so a value the code treats as pinned is shared mutable state.",
+      "exploit_fixture_digest": "5913225434b44ea5be9d8c59ee5ee9f3479a0d4d4206cfd0b6c0262f5dce19c7",
+      "severity": "claim_narrowing",
+      "claim_impact": {
+        "file": "tools/simurgh-attestation/stage5o/core/section7AuthorityDescriptors.mjs",
+        "claim_digest": "3c6af61625a5fad01269ee8abc9f59b80c645f6bf53090f6a1ee3ed9344f7f3e",
+        "quote": "Object.freeze over PROFILE_DESCRIPTORS"
+      },
+      "scope": "head",
+      "discovered_at_commit": "5e658298",
+      "discovered_by": "stage5q_q0_attack_pack",
+      "corroborated_by": [],
+      "record_kind": "q0",
+      "prev_digest": "0d0c26e8d504ae4ad0259144c930367ecc815512f0570481534d4c1dcd42bd98",
+      "record_digest": "3301999101df805cac680ebf8b3983e24880171cddfaccf7c06b19bce177dcdd"
+    },
+    {
+      "finding_id": "5Q-F009",
+      "affected_stage": "5o",
+      "affected_function_id": "5o:tools/simurgh-attestation/stage5o/core/section7AuthorityDescriptors.mjs:SCHEMA_DESCRIPTORS",
+      "affected_tags": [],
+      "attack_class": "R8",
+      "premise_receipt": {
+        "pack_id": "5q-all-frozenconstant-r8-01",
+        "closure_digest": "87512ae221ae2de5148759dcd48ad04ebf02c1b6354bc75e95af9d991f7fc936",
+        "target_function_id": "5o:tools/simurgh-attestation/stage5o/core/section7AuthorityDescriptors.mjs:SCHEMA_DESCRIPTORS",
+        "fixture_digest": "71aa022ab8732354fbedda818c1fed4991a5bb791677d4c35116c70599f5ea06",
+        "predicate_id": "omitsMember",
+        "predicate_args": {},
+        "receipt_digest": "e4a6d6ced7f16e363099f89a100d7c30a01039ac73eaa109a875459f3b787f0c"
+      },
+      "expected_result": "an exported constant presented as fixed is immutable through every path an importer can reach",
+      "observed_result": "Object.freeze covers 1 of 54 reachable node(s). The rest are writable by any module that imports it, so a value the code treats as pinned is shared mutable state.",
+      "exploit_fixture_digest": "71aa022ab8732354fbedda818c1fed4991a5bb791677d4c35116c70599f5ea06",
+      "severity": "claim_narrowing",
+      "claim_impact": {
+        "file": "tools/simurgh-attestation/stage5o/core/section7AuthorityDescriptors.mjs",
+        "claim_digest": "3c6af61625a5fad01269ee8abc9f59b80c645f6bf53090f6a1ee3ed9344f7f3e",
+        "quote": "Object.freeze over SCHEMA_DESCRIPTORS"
+      },
+      "scope": "head",
+      "discovered_at_commit": "5e658298",
+      "discovered_by": "stage5q_q0_attack_pack",
+      "corroborated_by": [],
+      "record_kind": "q0",
+      "prev_digest": "3301999101df805cac680ebf8b3983e24880171cddfaccf7c06b19bce177dcdd",
+      "record_digest": "ff954b1a7f937a972f2300176938ceceb4786e4644d8336f3826943026e1556e"
+    },
+    {
+      "finding_id": "5Q-F010",
+      "affected_stage": "5o",
+      "affected_function_id": "5o:tools/simurgh-attestation/stage5o/node/measureScopeManifestMaximum.mjs:BUNDLE_PROFILES",
+      "affected_tags": [],
+      "attack_class": "R8",
+      "premise_receipt": {
+        "pack_id": "5q-all-frozenconstant-r8-01",
+        "closure_digest": "87512ae221ae2de5148759dcd48ad04ebf02c1b6354bc75e95af9d991f7fc936",
+        "target_function_id": "5o:tools/simurgh-attestation/stage5o/node/measureScopeManifestMaximum.mjs:BUNDLE_PROFILES",
+        "fixture_digest": "48b8b64ff103570396824c2fd9cc0bd471c850fdd22e4f177892e9cd9bde9b68",
+        "predicate_id": "omitsMember",
+        "predicate_args": {},
+        "receipt_digest": "894af76b3a2df378a89c274a3fb92ef417ac813e3ae28079d2787b092f8d8f85"
+      },
+      "expected_result": "an exported constant presented as fixed is immutable through every path an importer can reach",
+      "observed_result": "Object.freeze covers 1 of 24 reachable node(s). The rest are writable by any module that imports it, so a value the code treats as pinned is shared mutable state.",
+      "exploit_fixture_digest": "48b8b64ff103570396824c2fd9cc0bd471c850fdd22e4f177892e9cd9bde9b68",
+      "severity": "claim_narrowing",
+      "claim_impact": {
+        "file": "tools/simurgh-attestation/stage5o/node/measureScopeManifestMaximum.mjs",
+        "claim_digest": "16de573888d9cfd546ac6f791a7a4d55239223d5efb33e0a9222693a49a1cf9b",
+        "quote": "Object.freeze over BUNDLE_PROFILES"
+      },
+      "scope": "head",
+      "discovered_at_commit": "5e658298",
+      "discovered_by": "stage5q_q0_attack_pack",
+      "corroborated_by": [],
+      "record_kind": "q0",
+      "prev_digest": "ff954b1a7f937a972f2300176938ceceb4786e4644d8336f3826943026e1556e",
+      "record_digest": "39b547583bf49c7b6e084cbbafbb56684d909e0f589cf09963b015fc391f85c6"
+    },
+    {
+      "finding_id": "5Q-F011",
+      "affected_stage": "5p",
+      "affected_function_id": "5p:tools/simurgh-attestation/stage5p/node/laneBRekor.mjs:REKOR_PINNED",
+      "affected_tags": [],
+      "attack_class": "R8",
+      "premise_receipt": {
+        "pack_id": "5q-all-frozenconstant-r8-01",
+        "closure_digest": "87512ae221ae2de5148759dcd48ad04ebf02c1b6354bc75e95af9d991f7fc936",
+        "target_function_id": "5p:tools/simurgh-attestation/stage5p/node/laneBRekor.mjs:REKOR_PINNED",
+        "fixture_digest": "576a076d95f62d6ddc02247181137c31fadfa1dec043e9814d23a84e1efdbc54",
+        "predicate_id": "omitsMember",
+        "predicate_args": {},
+        "receipt_digest": "2ac5968a637a2410a082ba68a6d10491aa93e5fc8b104b4c9f1f8e52c11e01f4"
+      },
+      "expected_result": "an exported constant presented as fixed is immutable through every path an importer can reach",
+      "observed_result": "Object.freeze covers 3 of 4 reachable node(s). The rest are writable by any module that imports it, so a value the code treats as pinned is shared mutable state.",
+      "exploit_fixture_digest": "576a076d95f62d6ddc02247181137c31fadfa1dec043e9814d23a84e1efdbc54",
+      "severity": "claim_narrowing",
+      "claim_impact": {
+        "file": "tools/simurgh-attestation/stage5p/node/laneBRekor.mjs",
+        "claim_digest": "550077141d34347238601e131772fc494c325cc579388b9b46acd435deceb93b",
+        "quote": "Object.freeze over REKOR_PINNED"
+      },
+      "scope": "head",
+      "discovered_at_commit": "5e658298",
+      "discovered_by": "stage5q_q0_attack_pack",
+      "corroborated_by": [],
+      "record_kind": "q0",
+      "prev_digest": "39b547583bf49c7b6e084cbbafbb56684d909e0f589cf09963b015fc391f85c6",
+      "record_digest": "70168fcee0e8257dfea27a84ed4126c76b1b5da44eab7eeb1dae34ca981039be"
+    },
+    {
+      "finding_id": "5Q-F012",
+      "affected_stage": "5p",
+      "affected_function_id": "5p:tools/simurgh-attestation/stage5p/node/measureStage5pRawCodes.mjs:EMISSION_SITE_PROBES",
+      "affected_tags": [],
+      "attack_class": "R8",
+      "premise_receipt": {
+        "pack_id": "5q-all-frozenconstant-r8-01",
+        "closure_digest": "87512ae221ae2de5148759dcd48ad04ebf02c1b6354bc75e95af9d991f7fc936",
+        "target_function_id": "5p:tools/simurgh-attestation/stage5p/node/measureStage5pRawCodes.mjs:EMISSION_SITE_PROBES",
+        "fixture_digest": "25929a0bead9eec952f58e8a19c73a44d3f7519a70d85f1ab2215c077a0160c7",
+        "predicate_id": "omitsMember",
+        "predicate_args": {},
+        "receipt_digest": "fdce2668f5dba42be8a49a750bf4caacc66dce9c6ac33a60462f69fa2ae1ce0f"
+      },
+      "expected_result": "an exported constant presented as fixed is immutable through every path an importer can reach",
+      "observed_result": "Object.freeze covers 1 of 4 reachable node(s). The rest are writable by any module that imports it, so a value the code treats as pinned is shared mutable state.",
+      "exploit_fixture_digest": "25929a0bead9eec952f58e8a19c73a44d3f7519a70d85f1ab2215c077a0160c7",
+      "severity": "claim_narrowing",
+      "claim_impact": {
+        "file": "tools/simurgh-attestation/stage5p/node/measureStage5pRawCodes.mjs",
+        "claim_digest": "78f2d51bbed237464949f26162295317d07cef8c9ebaf5c5befc44e89f15ba53",
+        "quote": "Object.freeze over EMISSION_SITE_PROBES"
+      },
+      "scope": "head",
+      "discovered_at_commit": "5e658298",
+      "discovered_by": "stage5q_q0_attack_pack",
+      "corroborated_by": [],
+      "record_kind": "q0",
+      "prev_digest": "70168fcee0e8257dfea27a84ed4126c76b1b5da44eab7eeb1dae34ca981039be",
+      "record_digest": "4979d7fdd8af68d6b947f9474c8c12e4ac9578015d83bd329d6b26789cc5377e"
     }
   ]
 }

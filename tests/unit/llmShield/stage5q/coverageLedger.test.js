@@ -186,14 +186,39 @@ test("an attacked_pass whose class has no mutation receipt is rejected at public
   assert.equal(ok.problems.filter((x) => x.kind === "inadmissible_pass").length, 0);
 });
 
-test("one cell cannot be discharged twice — last-wins is outcome shopping", () => {
+test("the SAME pack discharging one cell twice is outcome shopping", () => {
   const fn = "5a:m.mjs:f";
   const { problems } = indexDischarges([
-    discharge(fn, "R1", { pack_id: "first" }),
-    discharge(fn, "R1", { pack_id: "second" }),
+    discharge(fn, "R1", { pack_id: "same" }),
+    discharge(fn, "R1", { pack_id: "same" }),
   ]);
   assert.equal(problems.length, 1);
   assert.equal(problems[0].kind, "duplicate_discharge");
+});
+
+test("TWO packs agreeing on one cell is corroboration, not a problem", () => {
+  // The first version of this rule refused any second discharge and immediately fired on three
+  // legitimate cells where a Task 12 mutant and a Task 14 pack had both attacked the same
+  // (member, class) by different means. A rule that refuses corroboration teaches its author to
+  // stop corroborating.
+  const fn = "5a:m.mjs:f";
+  const { byObligation, problems } = indexDischarges([
+    discharge(fn, "R1", { pack_id: "mutant" }),
+    discharge(fn, "R1", { pack_id: "probe" }),
+  ]);
+  assert.deepEqual(problems, []);
+  assert.deepEqual([...byObligation.values()][0].corroborating_pack_ids, ["probe"]);
+});
+
+test("TWO packs DISAGREEING on one cell is a conflict, and no ordering rule resolves it", () => {
+  const fn = "5a:m.mjs:f";
+  const { problems } = indexDischarges([
+    discharge(fn, "R1", { pack_id: "a", discharge_status: "attacked_pass" }),
+    discharge(fn, "R1", { pack_id: "b", discharge_status: "finding_frozen", finding_ids: ["X"] }),
+  ]);
+  assert.equal(problems.length, 1);
+  assert.equal(problems[0].kind, "conflicting_discharge");
+  assert.deepEqual(problems[0].statuses, ["attacked_pass", "finding_frozen"]);
 });
 
 test("a discharge naming a member outside the closure is refused", () => {
@@ -352,7 +377,8 @@ test("the committed Q0 ledger reports L1 as NOT certified, with its reasons", ()
   const j = JSON.parse(readFileSync(LEDGER, "utf8"));
   assert.equal(j.l1_certified, false);
   assert.ok(j.l1_reasons.length > 0);
-  assert.equal(j.members_without_status, 2531);
+  // Nine members now derive `finding_frozen` from the attack packs; the rest derive nothing.
+  assert.equal(j.members_without_status, 2522);
   assert.ok(j.cells_obligated_discharged < j.cells_obligated);
 });
 

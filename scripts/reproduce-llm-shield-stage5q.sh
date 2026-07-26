@@ -36,7 +36,10 @@ CLOSURE_SOURCE_COMMIT="3512d287d2e13ceb31115477acc8b5ff182bc36e"
 EXPECTED_MEMBERS="2531"
 EXPECTED_TRAYS="16"
 EXPECTED_MUTANTS="16"
-EXPECTED_FINDINGS="3"
+# A FLOOR, NOT AN EXACT COUNT. L3 is No Erased Finding: a ledger that GROWS is the system working,
+# and a ledger that SHRINKS is the failure it names. An exact pin would fail the build every time a
+# finding was added, which pressures an author in precisely the wrong direction.
+MINIMUM_FINDINGS="12"
 # The gate census is a census of OTHER stages' gates. Its problem count is a measured property of
 # the repository, pinned so a change in the gate landscape is visible rather than absorbed.
 EXPECTED_GATE_PROBLEMS="11"
@@ -354,8 +357,8 @@ if [ "$BUILT_DIGEST" != "$ON_DISK" ]; then
   echo "FAIL: the ledger rebuilt to $BUILT_DIGEST but the committed one is $ON_DISK"
   exit 1
 fi
-if [ "$DISK_COUNT" != "$EXPECTED_FINDINGS" ]; then
-  echo "FAIL: the committed ledger holds $DISK_COUNT records; this stage froze $EXPECTED_FINDINGS."
+if [ "$DISK_COUNT" -lt "$MINIMUM_FINDINGS" ]; then
+  echo "FAIL: the committed ledger holds $DISK_COUNT records; it has held at least $MINIMUM_FINDINGS."
   echo "      L3 is No Erased Finding — a shrinking ledger is the failure it names."
   exit 1
 fi
@@ -538,12 +541,15 @@ cat <<'NOTE'
                                        this one is its scaffold and says so in its banner.
 
   L1 COVERAGE — NOT CERTIFIED          gate 15 verifies the ledger; it does not certify coverage,
-                                       because the ledger does not. 8 of 23332 obligated cells are
-                                       discharged and all 2531 members derive no status. The
-                                       per-stage attack packs (plan Task 14's packs/stage5X/*.json)
-                                       were never written, so the sixteen trays contribute nothing.
-                                       The only real discharges come from the Task 12 mutants. No
-                                       attestation may claim coverage over this.
+                                       because the ledger does not. 1438 of 23332 obligated cells
+                                       are discharged and 2522 of 2531 members derive no status.
+                                       The six probe families attack five of the sixteen classes
+                                       without needing a positive control; the other eleven need
+                                       one, and synthesising a valid input for a function whose
+                                       signature nobody recorded is how a vacuous pass is made. So
+                                       no member has all of its obligated cells covered, none
+                                       reaches attacked_pass, and no attestation may claim coverage
+                                       over this.
 
   16 historical tags                   UNREPRODUCIBLE, 0 reproducible. Every Stage-5 tag's
                                        package-lock.json differs from head, and re-resolving it

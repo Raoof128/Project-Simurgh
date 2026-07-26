@@ -120,13 +120,16 @@ function realFixtures() {
   };
 }
 
-test("the committed ledger holds three chained Q0 findings", () => {
+test("the committed ledger holds the three hand-written findings, then the pack findings", () => {
   const j = JSON.parse(readFileSync(`${E}/findings/q0-finding-ledger.json`, "utf8"));
-  assert.equal(j.record_count, 3);
+  assert.ok(j.record_count >= 3);
   assert.deepEqual(
-    j.records.map((r) => r.finding_id),
+    j.records.slice(0, 3).map((r) => r.finding_id),
     ["5Q-F001", "5Q-F002", "5Q-F003"]
   );
+  // Ids are dense and ordered: a gap would mean a finding was allocated and then dropped, which
+  // is exactly what L3 forbids.
+  j.records.forEach((r, i) => assert.equal(r.finding_id, `5Q-F${String(i + 1).padStart(3, "0")}`));
   const chain = verifyChain({ records: j.records, head_digest: j.head_digest });
   assert.equal(chain.ok, true, chain.reason);
 });
@@ -142,7 +145,10 @@ test("every committed premise RECOMPUTED — none is merely declared", () => {
 test("the ledger rebuilds to the committed digest from the committed fixtures", () => {
   const closureDigest = readFileSync(`${E}/closure/function-closure.json.digest`, "utf8").trim();
   const { fixtures, digests } = realFixtures();
-  const { ledger } = buildLedger({ closureDigest, fixtures, digests });
+  const packFindings = JSON.parse(
+    readFileSync(`${E}/packs/all-pack-results.json`, "utf8")
+  ).discharges.filter((d) => d.discharge_status === "finding_frozen");
+  const { ledger } = buildLedger({ closureDigest, fixtures, digests, packFindings });
   const committed = JSON.parse(readFileSync(`${E}/findings/q0-finding-ledger.json`, "utf8"));
   assert.equal(ledgerDigest(ledger), committed.q0_finding_ledger_digest);
   assert.equal(ledger.head_digest, committed.head_digest);
