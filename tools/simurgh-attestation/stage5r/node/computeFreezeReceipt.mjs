@@ -14,7 +14,12 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { join, dirname } from "node:path";
-import { freezeReceipt, FROZEN_BLOCK_DOMAIN } from "../core/frozenBlock.mjs";
+import {
+  freezeReceipt,
+  fullSpecDigest,
+  FROZEN_BLOCK_DOMAIN,
+  FULL_SPEC_DOMAIN,
+} from "../core/frozenBlock.mjs";
 
 const DEFAULT_SPEC = join(
   dirname(fileURLToPath(import.meta.url)),
@@ -52,10 +57,12 @@ export function main(argv) {
   }
   process.stdout.write(
     [
-      `domain        ${FROZEN_BLOCK_DOMAIN}`,
-      `spec          ${specPath}`,
-      `frozen_bytes  ${receipt.bytes}`,
-      `freeze_digest ${receipt.digest}`,
+      `domain           ${FROZEN_BLOCK_DOMAIN}`,
+      `spec             ${specPath}`,
+      `frozen_bytes     ${receipt.bytes}`,
+      `freeze_digest    ${receipt.digest}`,
+      `full_spec_domain ${FULL_SPEC_DOMAIN}`,
+      `full_spec_digest ${fullSpecDigest(readFileSync(specPath, "utf8"))}`,
       "",
     ].join("\n")
   );
