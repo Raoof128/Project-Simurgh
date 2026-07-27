@@ -53,8 +53,14 @@ jobs:
       # This runs exactly what the gate runs, `npm test`, and always shows the tail.
       - name: TEMPORARY diagnostic — name the failing test in the wider suite
         run: |
+          # Under Node 26 the whole suite passes on this runner, and the repo-wide gate runs Node 22.
+          # So the difference is Node 22 ON LINUX — macOS Node 22 is green here too. This installs the
+          # gate's Node and runs the gate's command.
           set +e
-          npm test > /tmp/full.log 2>&1
+          curl -fsSL https://nodejs.org/dist/v22.23.1/node-v22.23.1-linux-x64.tar.xz -o /tmp/n22.tar.xz
+          mkdir -p /tmp/n22 && tar -xJf /tmp/n22.tar.xz -C /tmp/n22 --strip-components=1
+          /tmp/n22/bin/node --version
+          /tmp/n22/bin/node --test tests/unit/*.test.js tests/unit/**/*.test.js tests/unit/**/**/*.test.js > /tmp/full.log 2>&1
           status=$?
           echo "npm test exit: $status"
           echo "--- failing tests ---"
