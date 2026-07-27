@@ -40,8 +40,31 @@ export const UNPROBED_REASONS = Object.freeze([
   "unsafe_to_execute",
 ]);
 
-/** The three terminal states of a cell in an attempted pair. */
-export const CELL_STATES = Object.freeze(["discharged", "unprobed", "inadmissible"]);
+/** The four terminal states of a cell in an attempted pair. */
+export const CELL_STATES = Object.freeze([
+  "discharged",
+  "probed_not_discharged",
+  "unprobed",
+  "inadmissible",
+]);
+
+/**
+ * Why a cell that WAS probed still did not discharge.
+ *
+ * `probed_not_discharged` exists because the first three states could not say this truthfully. A
+ * member the probe reached and found clean is not `unprobed` — something was probed — and it is not
+ * `discharged`, because clause 10 requires the defect to be found ON THIS MEMBER. Routing it through
+ * `unprobed: execution_error`, as this module first did, would have published "an error occurred"
+ * about 2 406 cells where nothing went wrong at all.
+ *
+ * The distinction matters more than it looks: it is the difference between "we have not looked" and
+ * "we looked and this instrument cannot conclude", and only the second is an honest description of a
+ * static probe over a member whose class-specific outcome was never executed.
+ */
+export const NOT_DISCHARGED_REASONS = Object.freeze([
+  "defect_signal_absent",
+  "class_outcome_not_demonstrated",
+]);
 
 /** The ten clauses, in order. All ten, or the cell is not discharged. */
 export const DISCHARGE_CLAUSES = Object.freeze([
@@ -116,9 +139,28 @@ export function classifyCell(c) {
   }
   if (c?.premise_applies === false) return { state: "unprobed", reason: "premise_not_applicable" };
   const d = dischargeCell(c);
-  return d.discharged
-    ? { state: "discharged" }
-    : { state: "unprobed", reason: "execution_error", failed: d.failed };
+  if (d.discharged) return { state: "discharged" };
+
+  // The probe reached this member and did not discharge it. Which of the two is true is a fact about
+  // the evidence, not a default: a signal that never fired and a signal that fired without the class
+  // outcome being demonstrated are different results, and neither is an error.
+  if (c?.not_discharged_reason) {
+    if (!NOT_DISCHARGED_REASONS.includes(c.not_discharged_reason)) {
+      throw new Error(
+        `not-discharged reason "${c.not_discharged_reason}" is outside the closed vocabulary: ` +
+          NOT_DISCHARGED_REASONS.join(", ")
+      );
+    }
+    return { state: "probed_not_discharged", reason: c.not_discharged_reason, failed: d.failed };
+  }
+  if (c?.execution_completed !== true || c?.deterministic !== true || c?.schema_valid !== true) {
+    return { state: "unprobed", reason: "execution_error", failed: d.failed };
+  }
+  return {
+    state: "probed_not_discharged",
+    reason: c?.verdict === "detected" ? "class_outcome_not_demonstrated" : "defect_signal_absent",
+    failed: d.failed,
+  };
 }
 
 /**
@@ -158,7 +200,12 @@ export function validateDeltaSet(ids, { universe, pairCells, q0Discharged }) {
  * @param {{newlyDischarged: string[], newFindings: number, unprobedByReason: Record<string, number>}} input
  * @returns {object}
  */
-export function buildDeltaLedger({ newlyDischarged, newFindings = 0, unprobedByReason = {} }) {
+export function buildDeltaLedger({
+  newlyDischarged,
+  newFindings = 0,
+  unprobedByReason = {},
+  notDischargedByReason = {},
+}) {
   const unique = [...new Set(newlyDischarged)].sort();
   if (unique.length !== newlyDischarged.length) {
     throw new Error("delta ledger: newly_discharged_cells contains duplicates");
@@ -166,6 +213,13 @@ export function buildDeltaLedger({ newlyDischarged, newFindings = 0, unprobedByR
   for (const reason of Object.keys(unprobedByReason)) {
     if (!UNPROBED_REASONS.includes(reason)) {
       throw new Error(`delta ledger: unprobed reason "${reason}" is outside the closed vocabulary`);
+    }
+  }
+  for (const reason of Object.keys(notDischargedByReason)) {
+    if (!NOT_DISCHARGED_REASONS.includes(reason)) {
+      throw new Error(
+        `delta ledger: not-discharged reason "${reason}" is outside the closed vocabulary`
+      );
     }
   }
   const cumulative = Q0_DISCHARGED_CELLS + unique.length;
@@ -180,6 +234,11 @@ export function buildDeltaLedger({ newlyDischarged, newFindings = 0, unprobedByR
       Object.keys(unprobedByReason)
         .sort()
         .map((k) => [k, unprobedByReason[k]])
+    ),
+    probed_not_discharged_by_reason: Object.fromEntries(
+      Object.keys(notDischargedByReason)
+        .sort()
+        .map((k) => [k, notDischargedByReason[k]])
     ),
     q0_original_coverage_percent: (tenths(Q0_DISCHARGED_CELLS, INHERITED_CELLS) / 10).toFixed(1),
     q0_original_discharged: Q0_DISCHARGED_CELLS,
