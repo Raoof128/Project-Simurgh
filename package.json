@@ -33,7 +33,15 @@
     "stage5q:packs": "node tools/simurgh-attestation/stage5q/node/runStagePacks.mjs",
     "stage5q:parity": "node tools/simurgh-attestation/stage5q/node/runCrossRuntimeParity.mjs",
     "stage5q:tray": "node tools/simurgh-attestation/stage5q/node/buildTray.mjs",
-    "stage5q:reproduce": "scripts/reproduce-llm-shield-stage5q.sh"
+    "stage5q:reproduce": "scripts/reproduce-llm-shield-stage5q.sh",
+    "test:stage5r": "node --test tests/unit/llmShield/stage5r/*.test.js",
+    "stage5r:corpus": "node tools/simurgh-attestation/stage5r/node/verifyFamilyCorpus.mjs",
+    "stage5r:campaign": "node tools/simurgh-attestation/stage5r/node/runTranche.mjs",
+    "stage5r:ledgers": "node tools/simurgh-attestation/stage5r/node/buildDeltaLedger.mjs && node tools/simurgh-attestation/stage5r/node/buildFindingLedger.mjs",
+    "stage5r:attest": "node tools/simurgh-attestation/stage5r/node/attestStage5r.mjs",
+    "stage5r:verify": "node tools/simurgh-attestation/stage5r/node/verifyAttestation.mjs",
+    "stage5r:proofs": "bash scripts/check-stage5r-proofs.sh",
+    "stage5r:reproduce": "bash scripts/reproduce-llm-shield-stage5r.sh"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
