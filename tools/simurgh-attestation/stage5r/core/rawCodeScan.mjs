@@ -14,9 +14,10 @@
 // file as data is not importing it, and the distinction is exactly the one F003 is about: an import
 // executes, a read does not.
 
-/** Where the closed band's upper bound is declared, and the constant that declares it. */
+/** The allocator whose source declares the band. */
 export const ALLOCATOR_PATH = "tools/simurgh-attestation/stage5p/core/rawCodeAllocator.mjs";
 const HI_PATTERN = /export const VSI_ALLOCATED_HI\s*=\s*(\d+)\s*;/;
+const CODE_PATTERN = /raw_code:\s*(\d+)/g;
 
 /**
  * Parse the closed band's upper bound out of the allocator's source.
@@ -36,16 +37,23 @@ export function readAllocatedHi(allocatorSource) {
 }
 
 /**
- * The band 5R documents must never print: every allocated code up to and including the bound.
+ * The band 5R documents must never print: every value the allocator actually allocates.
  *
- * @param {number} hi
- * @param {number} [lo] the first code of the predecessor band
- * @returns {number[]}
+ * DERIVED, NEVER WRITTEN. An earlier version of this function carried the band's lower bound as a
+ * default parameter — which meant the scanner that exists to stop documents printing band literals
+ * was itself printing one. The predecessor's own census caught it, correctly, and the repair is not
+ * to widen an allowlist but to stop writing the value at all: the band is whatever the allocator
+ * allocates, read from its source.
+ *
+ * @param {string} allocatorSource
+ * @returns {number[]} sorted, unique
  */
-export function bandValues(hi, lo = 464) {
-  const out = [];
-  for (let v = lo; v <= hi; v += 1) out.push(v);
-  return out;
+export function bandFromAllocator(allocatorSource) {
+  const found = [...String(allocatorSource).matchAll(CODE_PATTERN)].map((m) => Number(m[1]));
+  if (found.length === 0) {
+    throw new Error("raw-code scan: the allocator source declares no raw codes; refusing to guess");
+  }
+  return [...new Set(found)].sort((a, b) => a - b);
 }
 
 /** Strip block and line comments, so a scanner cannot match its own explanation. */
@@ -59,8 +67,8 @@ export function stripComments(text) {
 /**
  * Mask long hexadecimal runs before scanning.
  *
- * Found by this scanner firing on 5R's own spec: `466` sits inside the attack-taxonomy digest
- * `…c466c77…`, and a digit-boundary check cannot see that because the neighbours are hex LETTERS,
+ * Found by this scanner firing on 5R's own spec: one allocated code sits inside the attack-taxonomy
+ * digest, and a digit-boundary check cannot see that because the neighbours are hex LETTERS,
  * not digits. This repository is made of digests, so an unmasked scanner would report a hit on
  * almost any document and quickly be switched off — which is how a real gate dies.
  *

@@ -16,7 +16,7 @@ import {
 } from "../../../../tools/simurgh-attestation/stage5r/core/prose.mjs";
 import {
   readAllocatedHi,
-  bandValues,
+  bandFromAllocator,
   scanDocument,
   scanDocuments,
   literalVariants,
@@ -27,6 +27,10 @@ import {
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "../../../..");
 const read = (p) => readFileSync(join(ROOT, p), "utf8");
+/** The band is DERIVED from the allocator, never written here — this file is scanned by G10 too. */
+const BAND = bandFromAllocator(read("tools/simurgh-attestation/stage5p/core/rawCodeAllocator.mjs"));
+const LO = BAND[0];
+const HI = BAND.at(-1);
 
 // ---- G7: the prose gate ------------------------------------------------------------------------------
 
@@ -81,32 +85,44 @@ test("the band is READ from the allocator's source, never imported", () => {
   // importing it: an import executes, a read does not.
   const hi = readAllocatedHi(read(ALLOCATOR_PATH));
   assert.ok(Number.isInteger(hi) && hi > 0);
-  assert.equal(hi, 474);
+  assert.equal(hi, HI);
 });
 
 test("a source without the declaration fails closed rather than guessing a band", () => {
   assert.throws(() => readAllocatedHi("export const SOMETHING_ELSE = 12;"), /refusing to guess/);
 });
 
-test("the band covers the predecessor's allocated range", () => {
-  const band = bandValues(474);
-  assert.equal(band[0], 464);
-  assert.equal(band.at(-1), 474);
-  assert.equal(band.length, 11);
+test("the band is derived from the allocator, and this file prints none of it", () => {
+  // This test file is itself scanned by the predecessor's raw-code census, so it may not write a
+  // band value either — which is how the first version of it failed.
+  assert.ok(BAND.length >= 10);
+  assert.equal(
+    HI,
+    readAllocatedHi(read(ALLOCATOR_PATH)),
+    "the top of the band is the declared bound"
+  );
+  assert.deepEqual(
+    BAND,
+    [...BAND].sort((a, b) => a - b)
+  );
+  assert.equal(new Set(BAND).size, BAND.length, "the band is a set");
+  assert.equal(LO, Math.min(...BAND));
+  assert.throws(() => bandFromAllocator("no codes here"), /refusing to guess/);
 });
 
 test("G10 catches a plain band literal", () => {
-  const r = scanDocument({ path: "x.md", text: "the code is 470 here", band: bandValues(474) });
+  const r = scanDocument({ path: "x.md", text: `the code is ${BAND[6]} here`, band: BAND });
   assert.equal(r.ok, false);
-  assert.equal(r.hits[0].value, 470);
+  assert.equal(r.hits[0].value, BAND[6]);
 });
 
 test("G10 catches ENCODED variants — underscored, zero-padded and spaced", () => {
-  for (const text of ["4_7_0", "0470", "4 7 0"]) {
-    const r = scanDocument({ path: "x.md", text, band: bandValues(474) });
+  const v = String(BAND[6]).split("");
+  for (const text of [v.join("_"), `0${v.join("")}`, v.join(" ")]) {
+    const r = scanDocument({ path: "x.md", text, band: BAND });
     assert.equal(r.ok, false, text);
   }
-  assert.equal(literalVariants(470).length, 4);
+  assert.equal(literalVariants(BAND[6]).length, 4);
 });
 
 test("G10 fires REGARDLESS of adjacent phrasing — the accident that saved the first draft", () => {
@@ -114,47 +130,44 @@ test("G10 fires REGARDLESS of adjacent phrasing — the accident that saved the 
   // spec's first draft passed it because it wrote the stage id without the completing word.
   const withoutMention = scanDocument({
     path: "x.md",
-    text: "value 474 appears alone",
-    band: bandValues(474),
+    text: `value ${HI} appears alone`,
+    band: BAND,
   });
   assert.equal(withoutMention.ok, false, "no stage mention, still caught");
 });
 
 test("G10 ignores a number outside the band, and does not fire on substrings", () => {
   assert.equal(
-    scanDocument({ path: "x.md", text: "475 is the next free value", band: bandValues(474) }).ok,
+    scanDocument({ path: "x.md", text: `${HI + 1} is the next free value`, band: BAND }).ok,
     true
   );
-  assert.equal(
-    scanDocument({ path: "x.md", text: "4740 and 14741", band: bandValues(474) }).ok,
-    true
-  );
-  assert.equal(scanDocument({ path: "x.md", text: "1.470", band: bandValues(474) }).ok, true);
+  assert.equal(scanDocument({ path: "x.md", text: `${HI}0 and 1${HI}1`, band: BAND }).ok, true);
+  assert.equal(scanDocument({ path: "x.md", text: `1.${BAND[6]}`, band: BAND }).ok, true);
 });
 
 test("G10 strips comments before scanning, so documentation about the rule is not a violation", () => {
-  const text = "<!-- never write 470 in prose -->\nThe rule is described without printing it.";
-  assert.equal(scanDocument({ path: "x.md", text, band: bandValues(474) }).ok, true);
-  assert.ok(!stripComments(text).includes("470"));
+  const text = `<!-- never write ${BAND[6]} in prose -->\nThe rule is described without printing it.`;
+  assert.equal(scanDocument({ path: "x.md", text, band: BAND }).ok, true);
+  assert.ok(!stripComments(text).includes(String(BAND[6])));
 });
 
 test("G10 does NOT fire inside a hex digest — the false positive it found in its own spec", () => {
-  // Discovered by running this gate against 5R's own spec: 466 sits inside the attack-taxonomy
-  // digest c466c77. A digit-boundary check cannot see that, because the neighbours are hex LETTERS.
+  // Discovered by running this gate against 5R's own spec: one allocated code sits inside the
+  // attack-taxonomy digest. A digit-boundary check cannot see that: the neighbours are hex LETTERS.
   // This repository is made of digests, so an unmasked scanner would hit almost every document and
   // be switched off — which is how a real gate dies.
   const digest = "f5e03d1193263afc7966263c466c7794cd2c1d7dd8105e45e1e5124103c5f2e7";
-  const r = scanDocument({ path: "x.md", text: `taxonomy ${digest}`, band: bandValues(474) });
+  const r = scanDocument({ path: "x.md", text: `taxonomy ${digest}`, band: BAND });
   assert.equal(r.ok, true, JSON.stringify(r.hits));
   assert.equal(maskHexRuns(digest).trim(), "");
   // A real literal on the same line is still caught.
   const both = scanDocument({
     path: "x.md",
-    text: `taxonomy ${digest} and code 470`,
-    band: bandValues(474),
+    text: `taxonomy ${digest} and code ${BAND[6]}`,
+    band: BAND,
   });
   assert.equal(both.ok, false);
-  assert.equal(both.hits[0].value, 470);
+  assert.equal(both.hits[0].value, BAND[6]);
 });
 
 test("G10 passes over 5R's own committed documents", () => {
@@ -162,7 +175,7 @@ test("G10 passes over 5R's own committed documents", () => {
     "docs/superpowers/specs/2026-07-27-stage-5r-vpf-verifiable-probe-families-design.md",
     "docs/superpowers/plans/2026-07-27-stage-5r-vpf-implementation-plan.md",
   ].map((p) => ({ path: p, text: read(p) }));
-  const r = scanDocuments({ documents, band: bandValues(readAllocatedHi(read(ALLOCATOR_PATH))) });
+  const r = scanDocuments({ documents, band: BAND });
   assert.equal(r.ok, true, JSON.stringify(r.hits, null, 2));
 });
 
