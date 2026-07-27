@@ -1,0 +1,125 @@
+{
+  "schema": "simurgh.vsr.q0.closeout-addendum.v1",
+  "note": "ADDITIVE. The Q0 finding ledger is NOT reopened to hold this record: appending to it would move q0_finding_ledger_digest, one of the ten roots the Q0 attestation signs, and a frozen record that can be extended when something new turns up is not frozen. L3 forbids an erased finding; the same reasoning forbids an inserted one.",
+  "not_covered_by": "This addendum postdates the Q0 attestation and is NOT covered by its ten roots. Reading it as part of the signed Q0 result would be backdating.",
+  "bound_to_q0_public_digest": "8d04e35c6ccd7531e963de7e6aa964e4777b361666be8be516642f25eac27de6",
+  "q0_finding_ledger_digest_unchanged": "7f8c70f1f14e7b49d701372759d831591f4babc215cdf3740f5bb03546f0b05f",
+  "q0_ledger_record_count": 12,
+  "lifecycle": {
+    "phases": [
+      {
+        "id": "Q0_PREPARATION",
+        "may_produce": [
+          "census",
+          "closure",
+          "obligation_matrix"
+        ]
+      },
+      {
+        "id": "Q0_DISCOVERY",
+        "may_produce": [
+          "attack_results",
+          "coverage_evidence",
+          "findings",
+          "attestation"
+        ]
+      },
+      {
+        "id": "Q0_TRANSITION",
+        "may_produce": []
+      },
+      {
+        "id": "Q1",
+        "may_produce": [
+          "repairs",
+          "regression_fixtures",
+          "q1_records",
+          "harness_repairs"
+        ]
+      }
+    ],
+    "condition_requirements": {
+      "T1": {
+        "needs": "attestation",
+        "note": "produced in Q0_DISCOVERY"
+      },
+      "T2": {
+        "needs": null,
+        "note": "satisfiable by RECORDING inadmissibility; needs no new artifact"
+      },
+      "T3": {
+        "needs": "coverage_evidence",
+        "note": "every member statused requires more attack results"
+      },
+      "T4": {
+        "needs": null,
+        "note": "a property of the ledger already produced"
+      },
+      "T5": {
+        "needs": null,
+        "note": "satisfied by the absence of Q1 records"
+      },
+      "T6": {
+        "needs": null,
+        "note": "a property of the spec, not an artifact to produce"
+      },
+      "T7": {
+        "needs": "harness_repairs",
+        "note": "the failing commands are outside 5Q's write surface"
+      }
+    },
+    "current_phase": "Q0_TRANSITION",
+    "unsatisfied_conditions": [
+      "T3",
+      "T7"
+    ],
+    "deadlock": {
+      "deadlocked": true,
+      "blocked": [
+        {
+          "condition": "T3",
+          "needs": "coverage_evidence",
+          "reason": "no phase at or after Q0_TRANSITION may produce 'coverage_evidence'. Q1 could, but Q1 is gated on T3 being true."
+        },
+        {
+          "condition": "T7",
+          "needs": "harness_repairs",
+          "reason": "no phase at or after Q0_TRANSITION may produce 'harness_repairs'. Q1 could, but Q1 is gated on T7 being true."
+        }
+      ],
+      "escapes": [],
+      "reachable_phases": [
+        "Q0_TRANSITION"
+      ]
+    }
+  },
+  "finding": {
+    "finding_id": "5Q-F013",
+    "affected_stage": "5q",
+    "affected_function_id": "docs/superpowers/plans/2026-07-26-stage-5q-vsr-q0-implementation-plan.md:Q0->Q1 transition contract",
+    "affected_tags": [],
+    "attack_class": "R16",
+    "expected_result": "the Q0/Q1 lifecycle admits an incomplete Q0: Q0 freezes what actually happened, and Q1 is authorised to repair the harness as well as the code",
+    "observed_result": "Q0 is frozen and T3 and T7 are false. Q1 is gated on them. The declared phase table is exhaustive — Q0_PREPARATION, Q0_DISCOVERY, Q0_TRANSITION, Q1 — and of the phases still reachable, none may produce the artifacts those conditions require: T3 needs 'coverage_evidence'; T7 needs 'harness_repairs'. Q0_TRANSITION is validation-only by declaration and produces no evidence; Q0_DISCOVERY ended when the freeze was signed and re-entering it would rewrite frozen evidence. The state has no legal outgoing transition.",
+    "severity": "claim_narrowing",
+    "claim_impact": {
+      "file": "docs/superpowers/plans/2026-07-26-stage-5q-vsr-q0-implementation-plan.md",
+      "claim_digest": "3fb5c0a3f0d0764f708163a1a05a5dc2db71f525e9ffdcd6022641a993395033",
+      "quote": "Q0 MAY freeze an incomplete or partly inadmissible result. Freezing what actually happened is the whole point of Q0. Q1 MAY be authorised to repair the HARNESS as well as the code."
+    },
+    "narrowing_rationale": "T2 transitions on a partly-inadmissible Q0 with no new artifact, so the claim holds for inadmissibility-incompleteness. It fails only for coverage-incompleteness, where the satisfying artifact may be produced by no reachable phase.",
+    "scope": "head",
+    "discovered_at_commit": "a370f8cc",
+    "discovered_by": "external",
+    "corroborated_by": []
+  },
+  "disposition": "Published here and inherited by the successor stage. Stage 5Q is NOT reopened. The 6.2% coverage figure and the twelve-record ledger stand exactly as signed.",
+  "addendum_digest": "dc30274347d3b83f41c98d485ccce6703b90f22ee2e0522c8459b6b58e4a0ae6",
+  "signature": {
+    "signer_profile_id": "stage5q-q0-genesis",
+    "public_key_b64": "MCowBQYDK2VwAyEAmS1wVg90upPp4aT1bpfSfCU9oh4kkLXAervM9sgCh3E=",
+    "algorithm": "ed25519",
+    "signature_b64": "hWFl9F33rCYXBoh58DBIk6Rthln/fTi7Eqm7weBfbRgBXrU+eNfDYCdQn6mDS7NjCecpHFBiyewWMxkqOQ32Bg==",
+    "created_at": "2026-07-27T00:10:47.709Z"
+  }
+}

@@ -165,6 +165,37 @@ party being attacked. The closure boundary, the taxonomy and the severity assign
 5P's reproduction receipt could not discharge it either. It is the natural first ask of any external
 party, and it is the explicit "what moves it higher" for two of the four axes.
 
+## 8b. Addendum: 5Q-F013 — the lifecycle has no legal outgoing transition
+
+Raised in closeout review, **after** the Q0 freeze. Published as a signed addendum at
+`evidence/stage-5q/attestation/closeout-addendum.json`. **The Q0 ledger was NOT reopened** — it
+still holds twelve records, and `q0_finding_ledger_digest` is unchanged at `7f8c70f1…`. Appending a
+thirteenth would move one of the ten signed roots, and a frozen record that can be extended when
+something new turns up is not frozen. L3 forbids an erased finding; the same reasoning forbids an
+inserted one.
+
+The deadlock is **computed over the declared phase table**, not argued:
+
+```
+reachable phases from Q0_TRANSITION : Q0_TRANSITION  (only)
+Q0_TRANSITION may produce           : nothing — "validation only", by declaration
+T3 needs coverage_evidence          : producible by Q0_DISCOVERY (ended) or Q1 (gated on T3)
+T7 needs harness_repairs            : producible by Q1 (gated on T7)
+DEADLOCKED                          : YES
+```
+
+Q0 may freeze incomplete; Q1 may repair the harness; and there is no phase in which the work that
+would satisfy the entry conditions may be performed.
+
+**Severity `claim_narrowing`, and the distinction is computed rather than asserted.** T2 shows the
+primitive genuinely accommodates one kind of incompleteness — a partly _inadmissible_ Q0 transitions
+fine, because recording inadmissibility needs no new artifact. It fails only for _coverage_
+incompleteness, where the satisfying artifact may be produced by no reachable phase. The lifecycle
+works, over a smaller domain than the claim states.
+
+**Disposition:** Stage 5Q is not reopened. 6.2% stays 6.2% forever. F013 is inherited by the
+successor stage, which is where the lawful path out of this state gets built.
+
 ## 9. What Q1 must do
 
 ```
