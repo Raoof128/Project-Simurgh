@@ -47,18 +47,24 @@ jobs:
       - name: unit tests
         run: node --test tests/unit/llmShield/stage5r/*.test.js
 
-      # TEMPORARY (this commit only): the repo-wide Quality Gate reports one failing test on Linux
-      # and prints only the last 40 lines of its log, which carry the summary and not the failure.
-      # This step names it. It is removed as soon as it has.
+      # TEMPORARY: name the Linux-only failing test the repo-wide gate reports.
+      # The first attempt at this step expanded the globs itself, and bash without `globstar` turns
+      # `tests/unit/**/*.test.js` into something narrower — it printed nothing and told me nothing.
+      # This runs exactly what the gate runs, `npm test`, and always shows the tail.
       - name: TEMPORARY diagnostic — name the failing test in the wider suite
         run: |
-          node --test tests/unit/*.test.js tests/unit/**/*.test.js tests/unit/**/**/*.test.js \
-            > /tmp/full.log 2>&1 || true
+          set +e
+          npm test > /tmp/full.log 2>&1
+          status=$?
+          echo "npm test exit: $status"
           echo "--- failing tests ---"
-          grep -E "^not ok" /tmp/full.log | head -20
-          echo "--- detail ---"
-          grep -A 25 "^not ok" /tmp/full.log | head -60
-          grep -E "^# (tests|pass|fail|skipped)" /tmp/full.log
+          grep -E "^not ok" /tmp/full.log | head -20 || true
+          echo "--- first failure detail ---"
+          grep -m1 -A 30 "^not ok" /tmp/full.log || true
+          echo "--- summary ---"
+          grep -E "^# (tests|pass|fail|skipped)" /tmp/full.log || true
+          echo "--- tail ---"
+          tail -20 /tmp/full.log
 
       - name: the inherited commitment, roots first and signature last
         run: node tools/simurgh-attestation/stage5r/node/verifyInheritance.mjs
