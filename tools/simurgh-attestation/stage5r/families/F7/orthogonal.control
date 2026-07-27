@@ -1,0 +1,14 @@
+const SEP = "␟";
+
+export function panelPlanDigest(plan) {
+  if (plan === null || typeof plan !== "object") {
+    throw new TypeError("panelPlanDigest: plan must be an object");
+  }
+  const parts = [];
+  for (const key of Object.keys(plan).sort()) {
+    parts.push(key + SEP + String(plan[key]));
+  }
+  return parts.join(SEP);
+}
+
+panelPlanDigest(null);

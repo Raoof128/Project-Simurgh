@@ -21,10 +21,10 @@ import { isCaught } from "../../../../tools/simurgh-attestation/stage5r/node/run
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "../../../..");
 const read = (p) => readFileSync(join(ROOT, p), "utf8");
 
-test("there are SEVEN mutants — N5 is split into its two independent failures", () => {
-  assert.equal(MUTANTS.length, 7);
+test("there are EIGHT mutants — N5 split in two, and N7 added when the detector was repaired", () => {
+  assert.equal(MUTANTS.length, 8);
   const ids = MUTANTS.map((m) => m.id);
-  assert.deepEqual(ids, ["N1", "N2", "N3", "N4", "N5a", "N5b", "N6"]);
+  assert.deepEqual(ids, ["N1", "N2", "N3", "N4", "N5a", "N5b", "N6", "N7"]);
   assert.equal(new Set(ids).size, ids.length);
 });
 
@@ -38,6 +38,12 @@ test("N5a and N5b are different defects in different files", () => {
     b.file,
     "a no-op suppressor and a checker that ignores it are not the same bug"
   );
+});
+
+test("N7 seeds the defect this stage ACTUALLY SHIPPED, not one that was easy to imagine", () => {
+  const n7 = MUTANTS.find((m) => m.id === "N7");
+  assert.match(n7.intent, /LABEL/);
+  assert.match(n7.file, /signals\.mjs$/);
 });
 
 test("N6 is the blade's own mutant", () => {

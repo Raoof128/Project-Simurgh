@@ -40,6 +40,17 @@ export const ALLOWED_ENV_KEYS = Object.freeze(["PATH"]);
 export const VERDICT_RECEIPT_DOMAIN = "simurgh.vpf.verdict-receipt.v1";
 
 /**
+ * The two not-detected outcomes, which are NOT the same fact.
+ *
+ * A construct that is absent and a construct that is present and clean both produce "not detected",
+ * and the campaign must tell them apart: the first is `premise_not_applicable` about a member, the
+ * second is a probe that reached the signal path and found nothing. Collapsing them would let a
+ * detector that never reached anything report the same thing as one that looked and was satisfied.
+ */
+export const NOT_APPLICABLE = "signal_path_absent";
+export const APPLIES_CLEAN = "signal_path_present_no_defect";
+
+/**
  * Build the payload handed to the child. Only the bytes, the class and the declared signal.
  *
  * @param {{control_id: string, attack_class: string, source: string, declared_signal: string}} input
@@ -141,6 +152,28 @@ export function verifyVerdictReceipt(receipt) {
       ok: false,
       reason: `verdict "${receipt.verdict}" is neither detected nor not_detected`,
     };
+  }
+
+  // The evidence text is what distinguishes the two not-detecteds, so it is bound to the receipt
+  // rather than carried beside it: rewriting it breaks its own digest, and rewriting the digest
+  // breaks the receipt digest above.
+  if (receipt.signal_evidence !== undefined) {
+    const recomputedEvidence = createHash("sha256")
+      .update(Buffer.from(String(receipt.signal_evidence), "utf8"))
+      .digest("hex");
+    if (recomputedEvidence !== receipt.signal_evidence_digest) {
+      return { ok: false, reason: "signal_evidence does not match signal_evidence_digest" };
+    }
+    const impliesApplies = receipt.signal_evidence !== NOT_APPLICABLE;
+    if (receipt.signal_applies !== undefined && receipt.signal_applies !== impliesApplies) {
+      return {
+        ok: false,
+        reason: `signal_applies=${receipt.signal_applies} contradicts evidence "${receipt.signal_evidence}"`,
+      };
+    }
+    if (receipt.verdict === "detected" && !impliesApplies) {
+      return { ok: false, reason: "a detection whose signal path was never reached" };
+    }
   }
   return { ok: true };
 }

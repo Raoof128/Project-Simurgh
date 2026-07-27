@@ -1,0 +1,4 @@
+export function verifyPortable(bundle) {
+  const keys = Object.keys(bundle.entries).sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
+  return keys.map((k) => k + ":" + bundle.entries[k]).join("|");
+}

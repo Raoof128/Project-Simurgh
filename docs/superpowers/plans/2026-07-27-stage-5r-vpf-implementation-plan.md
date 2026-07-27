@@ -14,8 +14,8 @@ freeze_digest           64fe8e76971ab615a7d14d5fac59a2ced3e06cbf90859e448307d43e
 frozen_bytes            17472
 frozen_domain           simurgh.vpf.frozen-block.v1
 
-post_freeze_spec_commit d8c80352
-full_spec_digest        e1f282574c2a294eeae94e12abb6fc1bfaf32f17a8efb09c6bcc6f57380682d6
+post_freeze_spec_commit PENDING — the Task 18 amendment commit, recorded in its follow-up
+full_spec_digest        96185cdf78d70819ce91ee3a34528ba0e5ee08611c1443bb12e07aaa834a8c7b
 full_spec_domain        simurgh.vpf.full-spec.v1
 
 recompute both          node tools/simurgh-attestation/stage5r/node/computeFreezeReceipt.mjs
@@ -30,11 +30,13 @@ that, and a test asserts the plan's recorded value against the live spec — so 
 without re-pinning the plan turns CI red, deliberately.
 
 **Spec sections amended after the freeze, all outside §§2–5, freeze digest unchanged throughout:**
-§8.2 (N5 split into N5a/N5b — seven mutants, not six), §9.2 (Lane A's corpus is the attempted set;
+§8.2 (N5 split into N5a/N5b — seven mutants, not six; then N7 added at Task 18 for the
+label-reading detector this stage actually shipped — eight), §9.2 (Lane A's corpus is the attempted set;
 one paragraph also repaired after a wrapped `+` line was reformatted into a list item, fragmenting
 it), §10.1 (`family_result_root` total over 55 pairs; `control_receipt_root` scoped to attempted
 families; the false claim that verifying 5Q's signature needs 5Q's **private** key, corrected to the
-public key committed in the envelope), §11.1 (G6 counts seven).
+public key committed in the envelope), §11.1 (G6 counts seven, raised to eight at Task 18
+when N7 was added).
 
 Predecessor pins, verified at spec time and re-verified by Task 2:
 
@@ -1126,7 +1128,7 @@ release, which 5C learned expensively; and the fresh-worktree reproduction passe
 | G3     | every control has a recomputed premise and proven restoration    | Task 10                          | Task 16                   |
 | G4     | no `coverage_delta` intersects 5Q's discharged set               | Task 12                          | Task 15 (N2)              |
 | G5     | no per-role admissibility promotes to class-wide                 | Task 9                           | Task 15 (N6)              |
-| G6     | the seven N-mutants are detected                                 | Task 15                          | Task 16                   |
+| G6     | the eight N-mutants are detected                                 | Task 15                          | Task 16                   |
 | G7     | no 5R artifact attributes a post-5Q figure to 5Q                 | Task 13                          | Task 16                   |
 | G8     | 5Q evidence byte-identical before and after the full run         | Task 7, asserted Task 26         | Task 26 (fixture copy)    |
 | G9     | tranche disclosure present and its arithmetic checks             | Task 23, copied-check Task 27    | Task 26 (fixture copy)    |
@@ -1194,7 +1196,7 @@ verification succeeds with the private key physically absent
 closeout AND release body both pass checkCloseout, G7, G9 and G10
 tag resolves to the merged commit BY ASSERTION; gh release view returns a release
 fresh-worktree reproduction from a mktemp path passes
-freeze digest 64fe8e76… and full_spec_digest e1f28257… both unchanged, or re-pinned
+freeze digest 64fe8e76… and full_spec_digest 96185cdf… both unchanged, or re-pinned
   deliberately with the plan updated in the same commit
 ```
 

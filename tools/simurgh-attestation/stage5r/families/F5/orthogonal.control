@@ -1,0 +1,12 @@
+export function checkManifest(manifest) {
+  if (!Array.isArray(manifest.entries)) {
+    throw new TypeError("checkManifest: entries must be an array");
+  }
+  return createHash("sha256")
+    .update(Buffer.from(DOMAIN, "utf8"))
+    .update(Buffer.from([0x00]))
+    .update(canonicalJson(manifest.entries))
+    .digest("hex");
+}
+
+checkManifest({ entries: null });

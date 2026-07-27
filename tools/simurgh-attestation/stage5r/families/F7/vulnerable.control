@@ -1,0 +1,11 @@
+const SEP = "␟";
+
+export function panelPlanDigest(plan) {
+  const parts = [];
+  for (const key of Object.keys(plan).sort()) {
+    const value = plan[key];
+    if (value === undefined) continue;
+    parts.push(key + SEP + String(value));
+  }
+  return parts.join(SEP);
+}

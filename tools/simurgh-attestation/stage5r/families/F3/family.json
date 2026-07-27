@@ -1,0 +1,65 @@
+{
+  "schema": "simurgh.vpf.family-file.v1",
+  "note": "The frozen §3.1 record, plus the corpus binding it needs and cannot hold. The record's key set is exact by contract, so which inherited member each control MODELS, which file carries its bytes, and which language it is written in live under `binding` — outside the frozen shape rather than smuggled into it. A control is a hand-authored specimen of a role member, not a copy of one: 5R never writes to an inherited tree, so it cannot seed a defect into the member it models.",
+  "record": {
+    "probe_family_id": "F3",
+    "attack_class": "R12",
+    "target_security_role": "code_allocation",
+    "role_archetype": "A4",
+    "inherited_5q_obligation_cells": 17,
+    "vulnerable_control": {
+      "premise_receipt": {
+        "function_id": "5p:tools/simurgh-attestation/stage5p/core/rawCodeAllocator.mjs:allocateRawCode",
+        "predicate": "the declared signal's construct is present in this control AND carries the defect the class names",
+        "source_digest": "82100a88247af173be2738d2f08581dd023fa4377b873ac686903dce04fadee8",
+        "span_bytes": 204,
+        "holds": true
+      },
+      "expected_detection": true,
+      "expected_outcome": "a code equal to the recorded high-water mark is allocated a second time, so one raw code names two outcomes",
+      "source_span_bytes": 204
+    },
+    "safe_control": {
+      "expected_detection": false,
+      "source_span_bytes": 203,
+      "exercises_detector_signal_path": true
+    },
+    "orthogonal_failure_control": {
+      "failure_mode": "non_zero_exit",
+      "expected_detection": false,
+      "source_span_bytes": 357
+    },
+    "detector_signal": "allocator_admits_a_code_at_or_below_the_high_water_mark",
+    "forbidden_surrogate_signals": [
+      "process exit code alone",
+      "\"an exception was thrown\" alone",
+      "\"stderr was non-empty\" alone",
+      "\"the file did not parse\" alone",
+      "\"the run took longer than a threshold\" alone",
+      "\"any string matched a generic error regex\""
+    ],
+    "coverage_delta": []
+  },
+  "binding": {
+    "models_function_id": "5p:tools/simurgh-attestation/stage5p/core/rawCodeAllocator.mjs:allocateRawCode",
+    "category": "exported_function",
+    "security_role": "code_allocation",
+    "language": "js",
+    "symbol": "allocateRawCode",
+    "arity": 3,
+    "controls": {
+      "vulnerable": {
+        "control_id": "F3-c1",
+        "path": "vulnerable.control"
+      },
+      "safe": {
+        "control_id": "F3-c2",
+        "path": "safe.control"
+      },
+      "orthogonal": {
+        "control_id": "F3-c3",
+        "path": "orthogonal.control"
+      }
+    }
+  }
+}

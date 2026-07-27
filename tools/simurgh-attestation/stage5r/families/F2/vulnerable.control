@@ -1,0 +1,2 @@
+theorem conflictAntitone (h : False) : conflict a ≤ conflict b := by
+  exact absurd h notF

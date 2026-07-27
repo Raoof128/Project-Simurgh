@@ -1,0 +1,4 @@
+export function build(record) {
+  const subject = String(record.subject);
+  return { subject, subject_digest: sha256Hex(subject) };
+}

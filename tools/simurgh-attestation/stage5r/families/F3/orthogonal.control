@@ -1,0 +1,12 @@
+export function allocateRawCode(code, highWaterMark, ledger) {
+  if (ledger === undefined) {
+    process.stderr.write("allocateRawCode: the ledger is required\n");
+    process.exit(3);
+  }
+  if (code > highWaterMark) {
+    return { allocated: true, code, ledger: ledger.concat(code) };
+  }
+  return { allocated: false, code };
+}
+
+allocateRawCode(500, 499);
