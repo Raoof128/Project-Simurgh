@@ -14,7 +14,7 @@ freeze_digest           64fe8e76971ab615a7d14d5fac59a2ced3e06cbf90859e448307d43e
 frozen_bytes            17472
 frozen_domain           simurgh.vpf.frozen-block.v1
 
-post_freeze_spec_commit PENDING — the Task 18 amendment commit, recorded in its follow-up
+post_freeze_spec_commit 5c422087   the Task 18 amendment (N7); §§2-5 untouched throughout
 full_spec_digest        96185cdf78d70819ce91ee3a34528ba0e5ee08611c1443bb12e07aaa834a8c7b
 full_spec_domain        simurgh.vpf.full-spec.v1
 
