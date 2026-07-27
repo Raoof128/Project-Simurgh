@@ -134,9 +134,12 @@ export const GATE_SEEDS = Object.freeze([
   {
     gate: "G6",
     asserts: "the seven N-mutants are detected",
-    file: "tools/simurgh-attestation/stage5r/core/mutants.mjs",
-    find: '    id: "N6",',
-    replace: '    id: "N6-renamed-so-the-census-is-wrong",',
+    // The seed targets the RUNNER, not this file. Any anchor into the census appears twice — once
+    // in the code and once in the seed quoting it — and an ambiguous anchor is refused by design.
+    // The runner's catch derivation is the line whose failure would make every receipt a lie.
+    file: "tools/simurgh-attestation/stage5r/node/runMutationSelfProof.mjs",
+    find: "  return baselineOk && !mutatedOk && restoredOk;",
+    replace: "  return true;",
     command: "node --test tests/unit/llmShield/stage5r/selfProof.test.js",
   },
   {

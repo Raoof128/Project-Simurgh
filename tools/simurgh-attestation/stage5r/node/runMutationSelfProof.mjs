@@ -86,6 +86,22 @@ function run(cwd, command) {
 }
 
 /**
+ * A mutant is CAUGHT only by the full green→red→green shape.
+ *
+ * Exported and tested separately because it is the one line whose failure would make every receipt
+ * in the file a lie: a run that reported `caught: true` unconditionally would look identical to a
+ * working self-proof. It is also what gate G6 seeds, which is why it lives here rather than in the
+ * mutant census — an anchor into the census file appears twice, once in the code and once in the
+ * seed that quotes it, and this module's own rule refuses an ambiguous anchor.
+ *
+ * @param {{baselineOk: boolean, mutatedOk: boolean, restoredOk: boolean}} states
+ * @returns {boolean}
+ */
+export function isCaught({ baselineOk, mutatedOk, restoredOk }) {
+  return baselineOk && !mutatedOk && restoredOk;
+}
+
+/**
  * Seed one defect in a scratch worktree and observe the three states.
  *
  * @param {string} worktree
@@ -116,7 +132,7 @@ export function proveOne(worktree, seed) {
     baseline_exit: green.exit,
     mutated_exit: red.exit,
     restored_exit: greenAgain.exit,
-    caught: green.ok && !red.ok && greenAgain.ok,
+    caught: isCaught({ baselineOk: green.ok, mutatedOk: red.ok, restoredOk: greenAgain.ok }),
     catching_check: seed.caught_by ?? seed.command,
     expected_catch: seed.expected_catch ?? seed.asserts,
   };

@@ -16,6 +16,7 @@ import {
   GATE_SEEDS,
   applySeed,
 } from "../../../../tools/simurgh-attestation/stage5r/core/mutants.mjs";
+import { isCaught } from "../../../../tools/simurgh-attestation/stage5r/node/runMutationSelfProof.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "../../../..");
 const read = (p) => readFileSync(join(ROOT, p), "utf8");
@@ -92,4 +93,25 @@ test("applySeed actually changes the text it is given", () => {
     "keep false keep"
   );
   assert.equal(applySeed("body", { id: "x", append: "\n" }), "body\n");
+});
+
+test("a mutant is CAUGHT only by the full green→red→green shape", () => {
+  // The line gate G6 seeds. A runner that reported caught unconditionally would look identical to a
+  // working self-proof, and every receipt in the file would be a lie.
+  assert.equal(isCaught({ baselineOk: true, mutatedOk: false, restoredOk: true }), true);
+  assert.equal(
+    isCaught({ baselineOk: false, mutatedOk: false, restoredOk: true }),
+    false,
+    "never green to begin with"
+  );
+  assert.equal(
+    isCaught({ baselineOk: true, mutatedOk: true, restoredOk: true }),
+    false,
+    "the mutation was not caught"
+  );
+  assert.equal(
+    isCaught({ baselineOk: true, mutatedOk: false, restoredOk: false }),
+    false,
+    "did not come back green"
+  );
 });
