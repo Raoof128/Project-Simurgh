@@ -714,13 +714,21 @@ a="$(mktemp)"; b="$(mktemp)"
 node tools/simurgh-attestation/stage5r/node/buildPremiseReceipts.mjs --output "$a"
 node tools/simurgh-attestation/stage5r/node/buildPremiseReceipts.mjs --output "$b"
 cmp "$a" "$b"
+cmp "$a" docs/research/llm-shield/evidence/stage-5r/families/premise-receipts.json
 rm -f "$a" "$b"
 node tools/simurgh-attestation/stage5r/node/verifyFamilyCorpus.mjs
+# the corpus is COMMITTED here, by exact path, so C1 can bind bytes that are already in history
+git add tools/simurgh-attestation/stage5r/families/ \
+        docs/research/llm-shield/evidence/stage-5r/families/premise-receipts.json
+git commit -q -m "corpus(5r): T1 controls, signals and premise receipts"
+test -z "$(git status --porcelain)"
 ```
 
-**Done when.** 24 control files and 8 signal files exist; every premise receipt recomputes; every
-(vulnerable, safe) pair satisfies `max <= 3 * min`; `verifyFamilyCorpus.mjs` confirms no control has
-been executed against a target cell (no result artefacts exist yet).
+**Done when.** 24 control files and 8 signal files exist; every premise receipt recomputes and matches
+its committed copy; every (vulnerable, safe) pair satisfies `max <= 3 * min`; `verifyFamilyCorpus.mjs`
+confirms no control has been executed against a target cell (no result artefacts exist yet); **the
+corpus is committed and the tree is clean**, which is what makes Task 19's clean-tree precondition
+satisfiable — an earlier draft left that commit unstated, so C1 could not have started.
 
 ### Task 19 — the campaign commitment C1, over bytes that already exist
 
@@ -749,7 +757,13 @@ granularity.
 
 ```bash
 test -z "$(git status --porcelain)"
+a="$(mktemp)"; b="$(mktemp)"
+node tools/simurgh-attestation/stage5r/node/commitCampaign.mjs --output "$a"
+node tools/simurgh-attestation/stage5r/node/commitCampaign.mjs --output "$b"
+cmp "$a" "$b"
 node tools/simurgh-attestation/stage5r/node/commitCampaign.mjs
+cmp "$a" docs/research/llm-shield/evidence/stage-5r/commitments/campaign-c1.json
+rm -f "$a" "$b"
 git add docs/research/llm-shield/evidence/stage-5r/commitments/campaign-c1.json
 git commit -q -m "commit(5r): campaign commitment C1"
 node --test tests/unit/llmShield/stage5r/campaignCommitment.test.js
@@ -876,7 +890,12 @@ node tools/simurgh-attestation/stage5r/node/buildDeltaLedger.mjs --output "$a"
 node tools/simurgh-attestation/stage5r/node/buildDeltaLedger.mjs --output "$b"
 cmp "$a" "$b" && cmp "$a" docs/research/llm-shield/evidence/stage-5r/ledgers/delta-ledger.json
 rm -f "$a" "$b"
-node tools/simurgh-attestation/stage5r/node/buildFindingLedger.mjs
+c="$(mktemp)"; d="$(mktemp)"
+node tools/simurgh-attestation/stage5r/node/buildFindingLedger.mjs --output "$c"
+node tools/simurgh-attestation/stage5r/node/buildFindingLedger.mjs --output "$d"
+cmp "$c" "$d"
+cmp "$c" docs/research/llm-shield/evidence/stage-5r/ledgers/finding-ledger.json
+rm -f "$c" "$d"
 node --test tests/unit/llmShield/stage5r/ledgers.test.js
 test -z "$(git status --porcelain)"
 ```
@@ -979,8 +998,37 @@ two here); the 5Q tree is clean.
 ### Task 27 — closeout, its machine checker, the release receipt, and the release
 
 **Build.** `STAGE_5R_CLOSEOUT.md`, plus CLI `node/checkCloseout.mjs`, plus the signed
-`release_surface_root` covering what Task 24 deliberately excluded (parity output, K7 results, the
-deferred red receipts, the closeout itself).
+`release_surface_root` covering what Task 24 deliberately excluded.
+
+**The release-surface ceremony, named rather than gestured at.** An earlier draft named the root and
+no mechanism, which is how a root becomes a word in a document:
+
+```text
+builder    node/buildReleaseSurface.mjs   → evidence/stage-5r/release/release-surface.json
+signer     node/signReleaseSurface.mjs    → evidence/stage-5r/release/release-surface.sig
+verifier   node/verifyReleaseSurface.mjs  (public key only, roots before signature)
+schema     simurgh.vpf.release-surface.v1
+signer id  stage5r-vpf-genesis            the same key as Task 24; a second key would
+                                          make one stage look like two parties
+members    parity_output_root · k7_result_root · deferred_red_state_root
+           closeout_digest · campaign_attestation_public_digest
+```
+
+`campaign_attestation_public_digest` is a member on purpose: it chains the release surface to Task
+24's signed campaign evidence, so the two signatures are ordered rather than parallel. The verifier
+recomputes every member **before** examining the signature, and a mutation test proves it — mutate
+one member in a fixture copy and the verifier must refuse before signature verification is reached.
+
+**Tag and release creation are a named external step**, not something these commands perform. The
+ceremony below _asserts_ the tag and release exist and are correct; creating them is done by the
+maintainer between the pre-PR block and the post-merge block:
+
+```text
+EXTERNAL STEP (maintainer, after CI is green and the PR is merged):
+  git tag -a v2.53.0-stage-5r-vpf -m "Stage 5R — VPF"
+  git push origin v2.53.0-stage-5r-vpf
+  gh release create v2.53.0-stage-5r-vpf --title "…" --notes-file <release body>
+```
 
 The closeout carries, always together:
 
@@ -1033,6 +1081,14 @@ node tools/simurgh-attestation/stage5r/node/checkWriteSurface.mjs \
 node tools/simurgh-attestation/stage5r/node/computeFreezeReceipt.mjs
 node tools/simurgh-attestation/stage5r/node/checkCloseout.mjs \
   --source docs/research/llm-shield/STAGE_5R_CLOSEOUT.md
+a="$(mktemp)"; b="$(mktemp)"
+node tools/simurgh-attestation/stage5r/node/buildReleaseSurface.mjs --output "$a"
+node tools/simurgh-attestation/stage5r/node/buildReleaseSurface.mjs --output "$b"
+cmp "$a" "$b"
+cmp "$a" docs/research/llm-shield/evidence/stage-5r/release/release-surface.json
+rm -f "$a" "$b"
+node tools/simurgh-attestation/stage5r/node/signReleaseSurface.mjs
+node tools/simurgh-attestation/stage5r/node/verifyReleaseSurface.mjs
 test -z "$(git status --porcelain)"
 
 # after merge — assertions, not observations
@@ -1052,8 +1108,10 @@ git worktree remove --force "$tag_tree"; trap - EXIT
 
 **Done when.** The security review found no vulnerability and no control regression, or its findings
 are repaired and re-reviewed; every pre-PR command exits 0 with a clean tree; `checkCloseout.mjs`
-passes against the closeout **and** the release body; the release body passes G7, G9 and G10; the tag
-resolves to the merged commit by assertion; `gh release view` returns a release — a tag is not a
+passes against the closeout **and** the release body; the release body passes G7, G9 and G10; the
+release surface builds identically twice, signs, and verifies with the public key alone, and refuses
+a fixture whose member digest was mutated **before** reaching the signature; the tag resolves to the
+merged commit by assertion; `gh release view` returns a release — a tag is not a
 release, which 5C learned expensively; and the fresh-worktree reproduction passes.
 
 ---
