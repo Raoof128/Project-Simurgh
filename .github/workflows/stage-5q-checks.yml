@@ -135,9 +135,20 @@ jobs:
           fi
 
       - name: Stage 5Q mutation self-proof
+        # `--verify-against-committed`, NOT `--all`. `--all` exits non-zero unless every mutant is
+        # detected, and two never are: M5 and M7 remove guards REDUNDANT with an immediately
+        # following check, so the suite stays green and the class cannot be discharged. The
+        # attestation records R5 and R7 as inadmissible_classes, which makes 16-of-16 a gate that
+        # can never pass by the stage's own published evidence — and a gate that can never pass is
+        # a gate that gets deleted.
+        #
+        # The reproducible property is DRIFT: the same mutants must be detected today as when the
+        # receipts were signed. That catches what 16-of-16 never could — a mutant that silently
+        # stops being caught — and it also fails if M5 or M7 START being detected, because then the
+        # committed receipts no longer describe reality. Verify mode writes nothing.
         run: |
           if [ -f tools/simurgh-attestation/stage5q/node/runMutationSelfProof.mjs ]; then
-            npm run stage5q:mutants -- --all
+            npm run stage5q:mutants -- --verify-against-committed
           else
             echo "mutation self-proof not present yet — no-op until Task 12"
           fi

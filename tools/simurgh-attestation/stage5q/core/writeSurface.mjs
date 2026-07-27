@@ -60,10 +60,14 @@ export const Q0_WRITE_ALLOWLIST = Object.freeze(
  * The unrepaired §6.1 violations Stage 5Q carries, declared ONCE and by PATH.
  *
  * `tests/unit/llmShield/stage5p/rawCodeCensus.test.js` was widened by two lines so the 5Q spec and
- * plan may cite raw code 474 when stating where 5P's band closed — the case 5P's own ruling names
- * ("widen the approved list, never weaken the band regex"). It was widened FIRST and named
- * AFTERWARDS, which is the ordering L5 forbids, so amending §6.1 to legalise it is not available.
- * It stays a declared violation.
+ * plan may name the closing code of 5P's band when stating where it ended — the case 5P's own
+ * ruling covers ("widen the approved list, never weaken the band regex"). It was widened FIRST and
+ * named AFTERWARDS, which is the ordering L5 forbids, so amending §6.1 to legalise it is not
+ * available. It stays a declared violation.
+ *
+ * This comment does not print the code itself. The spec and the plan are on 5P's approved list;
+ * this file is not, and writing the literal here to explain the rule against writing it is exactly
+ * how the leak recurred.
  *
  * DECLARED BY SET, NEVER BY COUNT. A count lets a second violation hide behind a repaired first
  * one. And declared HERE rather than in the workflow, so the CI gate names no individual file:

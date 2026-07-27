@@ -4,6 +4,23 @@
 // Stage 5Q — the mutation self-proof runner (Task 12, the L4 gate).
 //
 //   node .../runMutationSelfProof.mjs --all [--out <path>]
+//   node .../runMutationSelfProof.mjs --verify-against-committed
+//
+// `--verify-against-committed` IS THE GATE CI SHOULD RUN, and `--all` is not.
+//
+// `--all` exits non-zero unless every mutant is detected, and two never are: M5 and M7 remove
+// guards that are REDUNDANT with an immediately following check, so the suite stays green and the
+// class cannot be discharged. That is a published finding — the attestation records R5 and R7 as
+// `inadmissible_classes` — which makes 16-of-16 a gate that can never pass by the stage's own
+// evidence. A gate that can never pass is a gate that gets deleted.
+//
+// The reproducible property is DRIFT: the same mutants must be detected today as when the receipts
+// were signed. That catches what 16-of-16 never could — a mutant that silently stops being caught —
+// and it fails if M5 or M7 ever START being detected too, because that also means the committed
+// receipts no longer describe reality.
+//
+// Verify mode NEVER writes. A single-mutant run overwrote the committed sixteen-receipt file during
+// this stage's own CI triage; the gate must not be able to do that.
 //   node .../runMutationSelfProof.mjs --mutant M3
 //
 // For each mutant: run the detector in a CLEAN scratch worktree (must be GREEN), apply the
@@ -183,7 +200,10 @@ function main(argv) {
     return i >= 0 ? argv[i + 1] : null;
   };
   const only = arg("--mutant");
-  const out = arg("--out") ?? OUT_DEFAULT;
+  const verifyOnly = argv.includes("--verify-against-committed");
+  // A single-mutant run used to overwrite the committed sixteen-receipt file. It did, during this
+  // stage's own CI triage. Verify mode writes nothing, and a targeted run writes only where asked.
+  const out = verifyOnly ? null : (arg("--out") ?? OUT_DEFAULT);
 
   const specs = readdirSync(MUTANTS_DIR)
     .filter((f) => f.endsWith(".json"))
@@ -245,26 +265,68 @@ function main(argv) {
     }
   }
 
-  mkdirSync(dirname(out), { recursive: true });
-  writeFileSync(
-    out,
-    `${JSON.stringify(
-      {
-        schema: "simurgh.vsr.mutation-receipts.v1",
-        note:
-          "Each receipt is a full green -> red -> green cycle in a scratch git worktree. No mutated " +
-          "source is ever committed; only descriptions, commands and observed exits enter evidence.",
-        mutants_attempted: receipts.length,
-        classes_discharged: discharged.map((r) => r.attack_class).sort(),
-        primary_worktree_unchanged_by_run: primaryUnchanged,
-        scratch_worktree_removed: scratchGone,
-        receipts,
-      },
-      null,
-      2
-    )}\n`
-  );
-  console.log(`  written           : ${out}`);
+  if (out) {
+    mkdirSync(dirname(out), { recursive: true });
+    writeFileSync(
+      out,
+      `${JSON.stringify(
+        {
+          schema: "simurgh.vsr.mutation-receipts.v1",
+          note:
+            "Each receipt is a full green -> red -> green cycle in a scratch git worktree. No mutated " +
+            "source is ever committed; only descriptions, commands and observed exits enter evidence.",
+          mutants_attempted: receipts.length,
+          classes_discharged: discharged.map((r) => r.attack_class).sort(),
+          primary_worktree_unchanged_by_run: primaryUnchanged,
+          scratch_worktree_removed: scratchGone,
+          receipts,
+        },
+        null,
+        2
+      )}\n`
+    );
+    console.log(`  written           : ${out}`);
+  }
+
+  if (verifyOnly) {
+    const committedPath = OUT_DEFAULT;
+    if (!existsSync(committedPath)) {
+      console.log("\n  REFUSING: no committed receipts to verify against");
+      return 1;
+    }
+    const committed = JSON.parse(readFileSync(committedPath, "utf8")).receipts;
+    const observedMap = new Map(receipts.map((r) => [r.mutant_id, isValidMutationReceipt(r).ok]));
+    const committedMap = new Map(committed.map((r) => [r.mutant_id, isValidMutationReceipt(r).ok]));
+    const drifted = [...new Set([...observedMap.keys(), ...committedMap.keys()])]
+      .sort()
+      .filter((id) => observedMap.get(id) !== committedMap.get(id))
+      .map(
+        (id) =>
+          `${id}: committed ${committedMap.get(id) ? "detected" : "undetected"}, ` +
+          `observed ${observedMap.get(id) ? "detected" : "undetected"}`
+      );
+
+    console.log(`\n  VERIFY AGAINST COMMITTED RECEIPTS`);
+    console.log(
+      `      committed detections : ${[...committedMap.values()].filter(Boolean).length}/${committedMap.size}`
+    );
+    console.log(
+      `      observed detections  : ${[...observedMap.values()].filter(Boolean).length}/${observedMap.size}`
+    );
+    if (drifted.length > 0) {
+      console.log(`      DRIFT:`);
+      for (const d of drifted) console.log(`        ✗ ${d}`);
+      console.log(
+        "\n      A mutant that stopped being detected means a detector regressed. One that STARTED\n" +
+          "      being detected means the committed receipts no longer describe reality. Both are\n" +
+          "      drift, and neither is fixed by re-running until the numbers agree."
+      );
+      return 1;
+    }
+    console.log(`      no drift — the same mutants are detected as when the receipts were signed`);
+    console.log(`      R5 and R7 remain undischarged, as the attestation records`);
+    return primaryUnchanged && scratchGone ? 0 : 1;
+  }
 
   return discharged.length === receipts.length && primaryUnchanged && scratchGone ? 0 : 1;
 }
