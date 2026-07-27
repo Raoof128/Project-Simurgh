@@ -23,8 +23,11 @@ import { createPublicKey } from "node:crypto";
 import {
   evaluateTransition,
   manifestGaps,
+  conditionSplit,
   UNCOVERED_STAGES,
   TRANSITION_CONDITIONS,
+  INTEGRITY_CONDITIONS,
+  COMPLETENESS_CONDITIONS,
 } from "../core/transition.mjs";
 import { verifyAttestation, ROOT_NAMES } from "../core/attestation.mjs";
 import { verifyChain } from "../core/findingLedger.mjs";
@@ -233,6 +236,36 @@ function main(argv) {
         `      NOT COMPARED (pass --baseline to attribute): ${a.not_compared.join(", ")}`
       );
     }
+  }
+
+  // --integrity-only: exit on whether the frozen record is SOUND, not on whether the campaign was
+  // FINISHED. The split is data in core/transition.mjs, so the caller enumerates nothing — a CI
+  // gate that listed the conditions by hand is what the gate census flagged in the first version.
+  if (argv.includes("--integrity-only")) {
+    const split = conditionSplit();
+    if (!split.ok) {
+      console.log(
+        `\n  REFUSING: the integrity/completeness split does not partition the conditions — ` +
+          `unclassified ${split.unclassified.join(", ") || "(none)"}, ` +
+          `in both ${split.in_both.join(", ") || "(none)"}`
+      );
+      return 1;
+    }
+    const failedIntegrity = result.conditions.filter(
+      (c) => INTEGRITY_CONDITIONS.includes(c.id) && !c.ok
+    );
+    console.log(
+      `\n  INTEGRITY (${INTEGRITY_CONDITIONS.join(", ")}) : ` +
+        (failedIntegrity.length === 0
+          ? "all green"
+          : `FAILED ${failedIntegrity.map((c) => c.id).join(", ")}`)
+    );
+    console.log(
+      `  COMPLETENESS (${COMPLETENESS_CONDITIONS.join(", ")}) : reported, not gated — ` +
+        "the campaign is incomplete and that is the published result"
+    );
+    console.log("  A green exit here does NOT mean Q1 is authorised. It is not.");
+    return failedIntegrity.length === 0 && gaps.length === 0 ? 0 : 1;
   }
 
   return result.q1_authorised && gaps.length === 0 ? 0 : 1;

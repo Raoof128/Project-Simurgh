@@ -60,21 +60,36 @@ jobs:
       - name: Stage 5Q unit tests
         run: npm run test:stage5q
 
-      # BASE_SHA goes through env: rather than being interpolated into the shell. Even though a
-      # base SHA is GitHub-controlled rather than user text, a workflow in a repository about
-      # verifiable containment does not model-check its own injection surface by eye.
       - name: Q0 write surface
+        # BASE_SHA goes through env: rather than being interpolated into the shell. Even though a
+        # base SHA is GitHub-controlled rather than user text, a workflow in a repository about
+        # verifiable containment does not model-check its own injection surface by eye.
+        # The declared-exception set lives in core/writeSurface.mjs, NOT here. Stage 5Q carries one
+        # unrepaired §6.1 violation, and `--allow-declared` passes only when the observed set is
+        # EXACTLY that set — a second violation still fails, and a count would have let one hide.
+        # Naming the file here instead would make this gate enumerate its own exceptions, which is
+        # F001 one level down, inside the stage that froze F001 as evidence.
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
           if [ -f tools/simurgh-attestation/stage5q/node/checkWriteSurface.mjs ]; then
             RANGE="${BASE_SHA:-HEAD~1}..HEAD"
-            node tools/simurgh-attestation/stage5q/node/checkWriteSurface.mjs --range "$RANGE"
+            node tools/simurgh-attestation/stage5q/node/checkWriteSurface.mjs --range "$RANGE" --allow-declared
           else
             echo "write-surface verifier not present yet — no-op until Task 1.2"
           fi
 
       - name: Stage 5Q censuses
+        # THE RUNTIME CENSUS RUNS IN A THROWAWAY WORKTREE. It enumerates by IMPORTING, and importing
+        # is not read-only: stage5m/lanec/apply-local-adversary.mjs is a top-level script with no main
+        # guard that rewrites a committed capture on evaluation (finding 5Q-F003). Run in the checkout,
+        # the census dirties prior-stage evidence and its own damage detector then — correctly — exits
+        # non-zero. The worktree is where that write lands instead.
+        #
+        # `--mode=collect`, NOT `--mode=verify`. Verify is fatal on any unresolved import failure, and
+        # 78 modules in the closure call process.exit(2) at import time when no provider credential is
+        # present. That is a real property of the closure, recorded at Task 3 and consumed by Task 8 —
+        # it is not something CI can make true, so gating on it was a gate that could never pass.
         run: |
           if [ -f tools/simurgh-attestation/stage5q/node/measureStaticCensus.mjs ]; then
             npm run census:stage5q:static
@@ -82,7 +97,20 @@ jobs:
             echo "static census not present yet — no-op until Task 2"
           fi
           if [ -f tools/simurgh-attestation/stage5q/node/measureRuntimeCensus.mjs ]; then
-            npm run census:stage5q:runtime -- --mode=verify
+            SCRATCH=".git/5q-ci-census"
+            rm -rf "$SCRATCH"
+            git worktree add --detach --quiet "$SCRATCH" HEAD
+            ( cd "$SCRATCH" && SIMURGH_SKIP_DOTENV=1 node tools/simurgh-attestation/stage5q/node/measureRuntimeCensus.mjs --mode=collect ) || CENSUS_EXIT=$?
+            DIRT="$(git -C "$SCRATCH" status --porcelain -- docs/research/llm-shield/evidence/ | sed 's/^...//')"
+            git worktree remove --force "$SCRATCH"
+            if [ -n "$DIRT" ]; then
+              echo "note: importing the closure rewrote committed evidence — finding 5Q-F003 reproducing,"
+              echo "      contained by the scratch worktree:"
+              echo "$DIRT" | sed 's/^/        /'
+            elif [ "${CENSUS_EXIT:-0}" != "0" ]; then
+              echo "FAIL: the runtime census exited ${CENSUS_EXIT} with no import-time write to explain it"
+              exit 1
+            fi
           else
             echo "runtime census not present yet — no-op until Task 3"
           fi
@@ -115,9 +143,14 @@ jobs:
           fi
 
       - name: Stage 5Q Q0 transition
+        # `--integrity-only` gates on whether the FROZEN RECORD IS SOUND and reports whether the
+        # campaign was FINISHED. Which conditions are which is data in core/transition.mjs, not a list
+        # in this file: the first version wrote `for C in T1 T4 T5 T6` here and 5Q's own gate census
+        # flagged it as a manually enumerated gate with no committed universe query — F001's pattern,
+        # inside the stage that froze F001. A green exit here does NOT mean Q1 is authorised.
         run: |
           if [ -f tools/simurgh-attestation/stage5q/node/verifyTransition.mjs ]; then
-            npm run stage5q:transition
+            npm run stage5q:transition -- --integrity-only
           else
             echo "transition validator not present yet — no-op until Task 21"
           fi

@@ -15,8 +15,10 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   Q0_WRITE_ALLOWLIST,
+  DECLARED_VIOLATIONS,
   checkPaths,
   checkPackageJsonMutation,
+  compareToDeclared,
 } from "../../../../tools/simurgh-attestation/stage5q/core/writeSurface.mjs";
 
 test("the allowlist is frozen and non-empty", () => {
@@ -155,5 +157,32 @@ test("the closeout entry does NOT open the whole docs tree", () => {
     "docs/research/other.md",
   ]) {
     assert.equal(checkPaths([path]).ok, false, `${path} must not be writable`);
+  }
+});
+
+// ------------------------------------------------------------------------------------------------
+// The declared-violation set.
+// ------------------------------------------------------------------------------------------------
+
+test("the declaration is a SET, and a new violation cannot hide behind it", () => {
+  // A count would let one through. This is the property the CI gate and the reproduce script both
+  // depend on, and it is asserted here rather than in either of them.
+  const declared = [...DECLARED_VIOLATIONS];
+  assert.equal(compareToDeclared(declared).ok, true);
+  assert.equal(compareToDeclared([...declared, "src/something/new.js"]).ok, false);
+  assert.deepEqual(compareToDeclared([...declared, "src/new.js"]).undeclared, ["src/new.js"]);
+});
+
+test("a declaration that outlives its violation is reported as STALE, not silently kept", () => {
+  const r = compareToDeclared([]);
+  assert.equal(r.ok, true, "fewer violations is not a failure");
+  assert.deepEqual(r.repaired, [...DECLARED_VIOLATIONS], "but the stale declaration is named");
+});
+
+test("every declared violation is a path the surface actually refuses", () => {
+  // A declaration for a path that is already permitted would be a permanent false alarm in the
+  // report and would train a reader to skim it.
+  for (const path of DECLARED_VIOLATIONS) {
+    assert.equal(checkPaths([path]).ok, false, `${path} is already permitted; the entry is dead`);
   }
 });

@@ -56,6 +56,37 @@ export const Q0_WRITE_ALLOWLIST = Object.freeze(
   ].map(Object.freeze)
 );
 
+/**
+ * The unrepaired §6.1 violations Stage 5Q carries, declared ONCE and by PATH.
+ *
+ * `tests/unit/llmShield/stage5p/rawCodeCensus.test.js` was widened by two lines so the 5Q spec and
+ * plan may cite raw code 474 when stating where 5P's band closed — the case 5P's own ruling names
+ * ("widen the approved list, never weaken the band regex"). It was widened FIRST and named
+ * AFTERWARDS, which is the ordering L5 forbids, so amending §6.1 to legalise it is not available.
+ * It stays a declared violation.
+ *
+ * DECLARED BY SET, NEVER BY COUNT. A count lets a second violation hide behind a repaired first
+ * one. And declared HERE rather than in the workflow, so the CI gate names no individual file:
+ * a 5Q gate that enumerated its own exceptions would be F001 one level down, inside the stage that
+ * froze F001 as evidence.
+ */
+export const DECLARED_VIOLATIONS = Object.freeze([
+  "tests/unit/llmShield/stage5p/rawCodeCensus.test.js",
+]);
+
+/**
+ * Compare an observed violation set against the declaration.
+ *
+ * Returns `undeclared` (new violations — a failure) and `repaired` (declared ones that no longer
+ * occur — reported, because a declaration that outlives its violation is stale).
+ */
+export function compareToDeclared(violationPaths) {
+  const observed = [...new Set(violationPaths)].sort();
+  const undeclared = observed.filter((p) => !DECLARED_VIOLATIONS.includes(p));
+  const repaired = DECLARED_VIOLATIONS.filter((p) => !observed.includes(p));
+  return { ok: undeclared.length === 0, observed, undeclared, repaired };
+}
+
 /** Paths that must produce a SPECIFIC reason, because a generic refusal would under-explain. */
 const NAMED_REFUSALS = Object.freeze([
   {

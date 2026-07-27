@@ -46,17 +46,9 @@ MINIMUM_FINDINGS="12"
 # the repository, pinned so a change in the gate landscape is visible rather than absorbed.
 EXPECTED_GATE_PROBLEMS="11"
 
-# The ONE unrepaired §6.1 write-surface violation, pinned BY PATH. Pinning the set rather than the
-# count is deliberate: a count lets a second violation hide behind a repaired first one.
-#
-# `tests/unit/llmShield/stage5p/rawCodeCensus.test.js` — Q0 widened 5P's approved-documentation
-# allowlist by two lines so the 5Q spec and plan may cite raw code 474 when stating where 5P's band
-# closed. The 5P ruling covers exactly that case (widen the approved list, never weaken the band
-# regex), and writing the literal obliquely would be the laundering the ruling forbids. It is still
-# a write to a closure member, it is still outside the exhaustive §6.1 surface, and it is NOT
-# retroactively legalised by amending §6.1 — L5 forbids exactly that repair. It is named here, in
-# the artifact a reviewer runs, and it stays named.
-KNOWN_WRITE_SURFACE_EXCEPTIONS="tests/unit/llmShield/stage5p/rawCodeCensus.test.js"
+# The unrepaired §6.1 violation set is declared ONCE, in core/writeSurface.mjs, and this script
+# reads it rather than keeping a second copy. Two copies of a declaration are two chances to
+# disagree — and the one that disagrees silently is the one nobody is looking at.
 
 echo "== Stage 5Q VSR reproduce (FULL) =="
 "$NODE" --version
@@ -95,23 +87,16 @@ echo "freeze digest $FREEZE_DIGEST ($FREEZE_BYTES bytes): OK"
 echo
 echo "-- 2. §6.1 write surface over the whole branch --"
 MERGE_BASE="$(git merge-base main HEAD)"
-WS_OUT="$("$NODE" "$Q/node/checkWriteSurface.mjs" --range "$MERGE_BASE..HEAD" 2>&1 || true)"
+WS_EXIT=0
+WS_OUT="$("$NODE" "$Q/node/checkWriteSurface.mjs" --range "$MERGE_BASE..HEAD" --allow-declared 2>&1)" || WS_EXIT=$?
 echo "$WS_OUT" | sed -n '1,2p'
-VIOLATIONS="$(echo "$WS_OUT" | grep -c '^  ✗ ' || true)"
-if [ "$VIOLATIONS" -gt 0 ]; then
-  # Compare the SET, not the count.
-  ACTUAL_SET="$(echo "$WS_OUT" | grep '^  ✗ ' | sed 's/^  ✗ //' | sort | tr '\n' ' ' | sed 's/ $//')"
-  EXPECTED_SET="$(echo "$KNOWN_WRITE_SURFACE_EXCEPTIONS" | tr ' ' '\n' | sort | tr '\n' ' ' | sed 's/ $//')"
-  if [ "$ACTUAL_SET" != "$EXPECTED_SET" ]; then
-    echo "FAIL: the write-surface violation set is not the one this stage declared."
-    echo "      declared: $EXPECTED_SET"
-    echo "      measured: $ACTUAL_SET"
-    exit 1
-  fi
-  echo "write surface: 1 DECLARED violation, unrepaired and named — $ACTUAL_SET"
-else
-  echo "write surface: clean"
+if [ "$WS_EXIT" != "0" ]; then
+  echo "FAIL: a violation outside the declared set — a new one may not hide behind a declared one."
+  echo "$WS_OUT" | tail -12
+  exit 1
 fi
+echo "$WS_OUT" | grep -E 'declared set|write surface|STALE' | sed 's/^ *//' | sed 's/^/  /' || true
+echo "write surface: within the declared set: OK"
 
 # ------------------------------------------------------------------------------------------------
 echo

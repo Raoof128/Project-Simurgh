@@ -10,8 +10,11 @@ import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import {
   attributeManifest,
+  conditionSplit,
   evaluateTransition,
   manifestGaps,
+  INTEGRITY_CONDITIONS,
+  COMPLETENESS_CONDITIONS,
   TRANSITION_CONDITIONS,
   UNCOVERED_STAGES,
   COVERED_BY_OWN_WORKFLOW,
@@ -284,4 +287,47 @@ test("the manifest never runs in the primary worktree", () => {
     false,
     "the HEAD manifest must not run in place"
   );
+});
+
+test("the integrity/completeness split PARTITIONS the conditions", () => {
+  // A condition in neither list would silently drop out of the CI gate; one in both would be
+  // gated and reported at once. `conditionSplit` refuses either, so adding a T8 without
+  // classifying it fails loudly.
+  const r = conditionSplit();
+  assert.equal(r.ok, true, JSON.stringify(r));
+  assert.deepEqual(r.unclassified, []);
+  assert.deepEqual(r.in_both, []);
+  assert.equal(
+    INTEGRITY_CONDITIONS.length + COMPLETENESS_CONDITIONS.length,
+    TRANSITION_CONDITIONS.length
+  );
+});
+
+test("T3 and T7 are COMPLETENESS, T1/T4/T5/T6 are INTEGRITY", () => {
+  // Integrity asks whether the frozen record is sound; completeness asks whether the campaign
+  // finished. Only the first is a reason to fail CI on this branch.
+  for (const c of ["T3", "T7"]) assert.ok(COMPLETENESS_CONDITIONS.includes(c));
+  for (const c of ["T1", "T4", "T5", "T6"]) assert.ok(INTEGRITY_CONDITIONS.includes(c));
+});
+
+test("the CI gate enumerates no condition — the split is data", () => {
+  // The first version wrote `for C in T1 T4 T5 T6` into the workflow, and 5Q's own gate census
+  // flagged it as a manually enumerated gate with no committed universe query: F001's pattern,
+  // inside the stage that froze F001.
+  //
+  // COMMENTS ARE STRIPPED FIRST — and this is the FOURTH guard in this stage to fire on its own
+  // documentation. The Lean escape scan read "sorry" from its own doc comment; the browser parity
+  // check found "VSR-PARITY-FAILED" in the branch that sets it; K7-A's bare-existence scan matched
+  // its own explanation; and this one matched the sentence above describing the loop it forbids.
+  // Four is a pattern, not a coincidence: any guard that scans a file it is documented inside will
+  // do this, and the fix is always the same — strip the prose, then assert the raw file still
+  // contains the pattern so the stripping cannot make the scan vacuous.
+  const raw = readFileSync(".github/workflows/stage-5q-checks.yml", "utf8");
+  const script = raw
+    .split("\n")
+    .filter((l) => !/^\s*#/.test(l))
+    .join("\n");
+  assert.ok(/for C in T1/.test(raw), "the raw file must still discuss it, or this scan is vacuous");
+  assert.equal(/for C in T1/.test(script), false, "the workflow must not LIST the conditions");
+  assert.match(script, /--integrity-only/);
 });

@@ -626,6 +626,16 @@ const ADAPTERS = {
     PERMITTED_WORKFLOW: (m) => ok(/stage-5q/.test(m.PERMITTED_WORKFLOW), "5Q's own workflow only"),
     PINNED_DEV_DEPENDENCY: (m) =>
       ok(/8\.17\.0/.test(JSON.stringify(m.PINNED_DEV_DEPENDENCY)), "pinned exact"),
+    DECLARED_VIOLATIONS: (m) =>
+      ok(
+        m.DECLARED_VIOLATIONS.length === 1,
+        "exactly one unrepaired §6.1 violation, declared by path"
+      ),
+    compareToDeclared: (m) =>
+      ok(
+        m.compareToDeclared([...m.DECLARED_VIOLATIONS, "src/new.js"]).ok === false,
+        "a new violation cannot hide behind a declared one"
+      ),
     checkPaths: (m) =>
       ok(m.checkPaths(["src/other.js"]).violations.length === 1, "outside the surface"),
     checkPackageJsonMutation: (m) => {
@@ -774,6 +784,11 @@ const ADAPTERS = {
   },
   "core/transition.mjs": {
     TRANSITION_CONDITIONS: (m) => ok(m.TRANSITION_CONDITIONS.length === 7, "T1..T7"),
+    INTEGRITY_CONDITIONS: (m) =>
+      ok(m.INTEGRITY_CONDITIONS.includes("T1"), "soundness of the record"),
+    COMPLETENESS_CONDITIONS: (m) =>
+      ok(m.COMPLETENESS_CONDITIONS.includes("T3"), "whether the campaign finished"),
+    conditionSplit: (m) => ok(m.conditionSplit().ok === true, "the split partitions T1..T7"),
     FROZEN_BLOCK_DIGEST: (m) =>
       ok(
         m.FROZEN_BLOCK_DIGEST ===
