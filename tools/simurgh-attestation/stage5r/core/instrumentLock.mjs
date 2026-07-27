@@ -29,6 +29,8 @@ export const LOCK_DOMAIN = "simurgh.vpf.instrument-lock.v1";
 export const LOCKED_PATHS = Object.freeze([
   "tools/simurgh-attestation/stage5r/core/admissibility.mjs",
   "tools/simurgh-attestation/stage5r/core/archetypes.mjs",
+  "tools/simurgh-attestation/stage5r/core/campaign.mjs",
+  "tools/simurgh-attestation/stage5r/core/commitment.mjs",
   "tools/simurgh-attestation/stage5r/core/controls.mjs",
   "tools/simurgh-attestation/stage5r/core/deltaLedger.mjs",
   "tools/simurgh-attestation/stage5r/core/families.mjs",
@@ -36,11 +38,13 @@ export const LOCKED_PATHS = Object.freeze([
   "tools/simurgh-attestation/stage5r/core/inherit.mjs",
   "tools/simurgh-attestation/stage5r/core/laneB.mjs",
   "tools/simurgh-attestation/stage5r/core/measurements.mjs",
+  "tools/simurgh-attestation/stage5r/core/memberSource.mjs",
   "tools/simurgh-attestation/stage5r/core/mutants.mjs",
   "tools/simurgh-attestation/stage5r/core/signals.mjs",
   "tools/simurgh-attestation/stage5r/core/suppression.mjs",
   "tools/simurgh-attestation/stage5r/node/detectorChild.mjs",
   "tools/simurgh-attestation/stage5r/node/runMutationSelfProof.mjs",
+  "tools/simurgh-attestation/stage5r/node/runTranche.mjs",
 ]);
 
 /**
