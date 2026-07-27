@@ -13,7 +13,7 @@ proof of what happened after a guardrail missed — not another jailbreak detect
 [![Node](https://img.shields.io/badge/node-%E2%89%A522.0-1a1a1a?style=flat-square)](https://nodejs.org)
 [![License](https://img.shields.io/badge/license-AGPL--3.0-d6cfbe?style=flat-square)](#license)
 [![Status](https://img.shields.io/badge/status-research%20prototype-2f4a2a?style=flat-square)](#status)
-[![Latest](https://img.shields.io/badge/release-v2.51.0-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.51.0-stage-5p-vsi)
+[![Latest](https://img.shields.io/badge/release-v2.52.0-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.52.0-stage-5q-vsr)
 
 </div>
 
