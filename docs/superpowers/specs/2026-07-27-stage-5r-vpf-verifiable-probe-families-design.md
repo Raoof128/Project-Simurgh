@@ -4,16 +4,16 @@
 > Every mechanism in this stage is safe for the provider (content and structural egress) and
 > recomputable by a reviewer, and both properties are designed in at SPEC time rather than retrofitted.
 
-|               |                                                               |
-| ------------- | ------------------------------------------------------------- |
-| Stage id      | `5R`                                                          |
-| Name          | **VPF — Verifiable Probe Families**                           |
-| Branch        | `stage-5r-vpf-verifiable-probe-families`                      |
-| Target tag    | `v2.53.0-stage-5r-vpf`                                        |
-| Predecessor   | 5Q (VSR), `v2.52.0-stage-5q-vsr`, main `20fc323c`             |
-| Successor     | 5S (witness co-signing — displaced from 5R by this ruling)    |
-| Design ruling | 2026-07-26, recorded verbatim in §0                           |
-| Raw codes     | **NONE ALLOCATED IN THIS SPEC.** See §11.4. Next free is 475. |
+|               |                                                                                                                       |
+| ------------- | --------------------------------------------------------------------------------------------------------------------- |
+| Stage id      | `5R`                                                                                                                  |
+| Name          | **VPF — Verifiable Probe Families**                                                                                   |
+| Branch        | `stage-5r-vpf-verifiable-probe-families`                                                                              |
+| Target tag    | `v2.53.0-stage-5r-vpf`                                                                                                |
+| Predecessor   | 5Q (VSR), `v2.52.0-stage-5q-vsr`, main `20fc323c`                                                                     |
+| Successor     | 5S (witness co-signing — displaced from 5R by this ruling)                                                            |
+| Design ruling | 2026-07-26, recorded verbatim in §0                                                                                   |
+| Raw codes     | **NONE ALLOCATED IN THIS SPEC.** See §11.4 — the next free value is read from the allocator, never restated in prose. |
 
 ---
 
@@ -105,8 +105,18 @@ closure and obligation matrix.
 | `orchestration`      |     125 | **no**                                |
 | `code_allocation`    |      17 | **no**                                |
 
-Four populated roles — 699 closure members — received **no mutation evidence of any kind**, and every
-class obligated over them was nonetheless discharged class-wide.
+The column counts **any** mutant. Narrowed to the fourteen classes that were actually discharged, the
+mutants reached **four** roles, not five: `completeness_claim`'s only mutant is M7, whose class R7 is
+one of the two 5Q ruled inadmissible, so it discharged nothing. Five-of-nine is the figure quoted
+above because it is the one that flatters the predecessor, and a finding against a predecessor is
+stated at its weakest defensible strength.
+
+Four populated roles — 699 closure members — received **no mutation evidence of any kind**. Between
+them those four carry **26** (role, class) obligations, and **22** were discharged class-wide on
+evidence earned in some other role: `orchestration` 2 of 2, `evidence_emission` 5 of 6,
+`formal_statement` 1 of 2, `code_allocation` 14 of 16. The four exceptions are R5 and R7 — the two
+classes 5Q discharged nowhere. Stated as a count rather than as "every", because "every" is false and
+the true number is damning enough.
 
 **Per class, the receipt covers a tenth of the area it was generalised across.** For each of the
 fourteen discharged classes, the mutant landed in exactly one role. Summing the obligated cells that
@@ -650,11 +660,18 @@ finding_id          5Q-F013            (5Q's identifier, unchanged; not renumber
 class               lifecycle / state-machine deadlock
 severity            claim_narrowing
 inherited_from      docs/research/llm-shield/evidence/stage-5q/attestation/closeout-addendum.json
-disposition         5R IS the lawful outgoing transition
+vpf_disposition     5R IS the lawful outgoing transition
 ```
 
 F013's content is inherited by digest and is **not** re-derived, re-worded or re-classified. 5R adds
-one field of its own — `disposition` — and touches nothing else.
+one field of its own — `vpf_disposition` — and touches nothing else.
+
+The name is deliberate. The inherited addendum **already carries a `disposition`**: _"Published here
+and inherited by the successor stage. Stage 5Q is NOT reopened. The 6.2% coverage figure and the
+twelve-record ledger stand exactly as signed."_ A successor writing its own value into a key its
+predecessor already signed would be overwriting the record while calling it inheritance — the
+smallest possible version of the move this whole stage exists to forbid. 5R's field sits beside 5Q's;
+5Q's is quoted, never replaced.
 
 ### §7.2 Why 5R is a lawful exit and Q1 was not
 
@@ -719,8 +736,10 @@ over the members where R is claimed to apply.
 **Observed.** Each receipt is evidence over exactly one member, in one role. Across the fourteen
 discharged classes the tested role holds **2 118 of 20 213** obligated cells — **10.5%**. Four
 populated roles totalling 699 members (`evidence_emission`, `formal_statement`, `orchestration`,
-`code_allocation`) were reached by no mutant at all, yet every class obligated over them was
-discharged class-wide. Six receipts were earned on cells the obligation matrix marks `omitted`.
+`code_allocation`) were reached by no mutant at all; of the 26 (role, class) obligations they carry,
+22 were discharged class-wide on evidence earned in another role, the 4 exceptions being R5 and R7,
+which 5Q discharged nowhere. Six receipts were earned on cells the obligation matrix marks `omitted`.
+Restricted to the fourteen discharged classes, the mutants reached four roles, not five.
 
 **Why `assurance_only` and not `claim_narrowing`.** No published 5Q coverage number depends on it.
 `status_tally` shows `attacked_pass: 0` — no member was ever admitted on the strength of a class
@@ -785,16 +804,32 @@ tools/simurgh-attestation/stage5r/
     controls.mjs         the three-control runner and restoration proof
     deltaLedger.mjs      §6; inherited ids only; empty-intersection assertion
     prose.mjs            §6.3's forbidden-sentence scanner
+    writeSurface.mjs     §2.3.1's verifier: parsed before/after STRUCTURE for the
+                         five mutation-scoped shared files, never path matching
+    transition.mjs       §11.3's prior-stage non-disturbance attribution; 5R's own
+                         copy, never an edit to 5Q's
   node/
     verifyInheritance.mjs
     buildFamilyUniverse.mjs
     runFamily.mjs
     buildDeltaLedger.mjs
     auditPriorFamilies.mjs     §7.3
+    checkWriteSurface.mjs
+    probeImportWrites.mjs      §2.4's damage detector, run after import-executing work
+    verifyTransition.mjs
     attestStage5r.mjs
+  python/                      parity mirror of the deterministic core
+  browser/                     parity mirror of the deterministic core
   families/                    55 families, one directory each, three controls each
   signer/
 ```
+
+The last five entries are listed because three sections above mandate a check that would otherwise
+have no home — §2.3.1 a structural write-surface verifier, §2.4 a damage detector, §11.3 an
+attribution model — and because §14's Node == Python == browser parity is not satisfiable by a tree
+with no mirrors. Each has a 5Q analogue (`core/writeSurface.mjs`, `node/probeImportWrites.mjs`,
+`core/transition.mjs`), read as prior art, not imported: §2.4 forbids importing a stage5{a..q} module
+in the primary worktree.
 
 Every node driver carries a main guard from the first commit. Ten of 5Q's own drivers executed on
 import until K7-A found them, and a census cannot enumerate a module that exits during enumeration.
@@ -885,9 +920,13 @@ was added, and 5Q-F001 is the same defect in the shared workflow, still open.
 ```text
 G0  §1.2's measurements recompute from the inherited receipts, closure and
     obligation matrix: the role histogram, the 2118/20213 ratio, the six
-    receipts on omitted cells.  A spec number that cannot be re-derived is
-    an assertion, and this stage's whole subject is assertions that were
-    never re-derived.
+    receipts on omitted cells, the 26 obligations carried by the four
+    unreached roles and the 22 of them discharged from another role, and
+    the four-of-nine roles reached once restricted to discharged classes.
+    A spec number that cannot be re-derived is an assertion, and this
+    stage's whole subject is assertions that were never re-derived.  Every
+    figure this gate covers is named here, so a number added to the prose
+    later without being added to the gate is visibly outside it.
 G1  the seven inherited digests recompute, and the 5Q envelope verifies roots-first
 G2  every published family satisfies all seven §4.1 conditions
 G3  every control carries a recomputed premise and a proven restoration
@@ -915,13 +954,25 @@ discovery rather than by name** — 5P's lean-check listed proofs by name and we
 
 ### §11.3 Prior-stage non-disturbance
 
-Every prior stage's reproduce script stays green, 5Q's included. 5R is additive. 5Q's attribution
-model is inherited with its `regressed_by_q0` member renamed `regressed_by_5r` and every other value
-byte-identical:
+Every prior stage's reproduce script stays green, 5Q's included. 5R is additive.
+
+5R **copies** 5Q's attribution model into its own `core/transition.mjs` (§9.1) and does not edit 5Q's.
+The member 5Q calls `regressed_by_q0` is `regressed_by_5r` in 5R's copy, because the name states whose
+work is being attributed; every other value is byte-identical:
 
 ```text
 green | regressed_by_5r | pre_existing | not_compared | not_comparable
 ```
+
+**Copy, not rename, and the reason is mechanical rather than stylistic.** `regressed_by_q0` is defined
+in `tools/simurgh-attestation/stage5q/core/transition.mjs` and asserted by name in a 5Q unit test and
+in the 5Q K7 net. Renaming it in place would edit three files §2.3 makes read-only, break the
+predecessor's own tests, and move bytes G8 requires to be identical before and after the 5R run — a
+rename dressed as inheritance. An earlier draft of this subsection said "inherited with its member
+renamed", which under the plain reading would have made the mandatory work a declared write-surface
+violation on the day it was performed: the same shape as the five wiring files §2.3.1 exists to
+prevent, recurring nine sections later. A small copied module is the whole cost of leaving 5Q's record
+exactly as signed.
 
 `not_compared` stays its own value — absent a baseline run, "we did not check" must not be dressed up
 as "green" — and `not_comparable` stays for tree-relative commands, which 5Q added only after
@@ -1081,12 +1132,12 @@ The plan ends with this net plus a docs-accuracy pass over every claim in this s
 
 Honest scores at spec time, with what would move each.
 
-| axis                   | score | reasoning                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| ---------------------- | ----: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Novelty**            |   9.0 | Positive-control families for security _detectors_, with a third orthogonal-failure control, expressed as signed recomputable evidence. §1.5 locates the seam precisely: mutation testing reasons about coupling between a mutant and a **fault**, never across a **role**, so the adequacy argument 5Q imported does not license what it was used for. Held at 9.0, not higher, because the control triad itself is a rigorous transplant from clinical/biological method rather than a new primitive — the invention is the binding to roles and obligations, not the triad. |
-| **Frontier**           |   9.0 | It attacks the exact reason a shipped red team stalled at 6.2%, with the gap now **measured** (§1.2: five of nine roles reached, 10.5% of the discharged area, 699 members with no mutation evidence) rather than argued. Raised from 8.8 on that measurement and on 5R-F001. Rises above 9.3 only if §7.3 finds one of 5Q's own six inherited families inadmissible — precommitted here, earnable or missable, not retrofittable.                                                                                                                                             |
-| **Good-for-Anthropic** |   9.4 | "One seeded test is not evidence the detector understands the class" is a safety-evals argument first and a code argument second. §1.5's construct-validity wedge is live and external: systematic reviews report roughly half of widely-cited LLM benchmarks ship no construct-validity evidence, and a JRC meta-review names construct-validity failure among its systemic issues. An eval that scores well by detecting _sadness_ is a model-evaluation failure mode, not only a red-team one.                                                                              |
-| **Constitution**       |   9.5 | The stage is structurally forbidden from improving its predecessor's number, gates its own prose against implying otherwise, publishes its own threat model as the author-adversary (§1.7), and corrected three of its own first-draft claims against measurement before freeze. Not higher until it has published an uncomfortable result of its **own campaign**; 9.5 is the design's honesty, not yet the campaign's.                                                                                                                                                       |
+| axis                   | score | reasoning                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| ---------------------- | ----: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Novelty**            |   9.0 | Positive-control families for security _detectors_, with a third orthogonal-failure control, expressed as signed recomputable evidence. §1.5 locates the seam precisely: mutation testing reasons about coupling between a mutant and a **fault**, never across a **role**, so the adequacy argument 5Q imported does not license what it was used for. Held at 9.0, not higher, because the control triad itself is a rigorous transplant from clinical/biological method rather than a new primitive — the invention is the binding to roles and obligations, not the triad.                                                                                                              |
+| **Frontier**           |   9.0 | It attacks the exact reason a shipped red team stalled at 6.2%, with the gap now **measured** (§1.2: five of nine roles reached, 10.5% of the discharged area, 699 members with no mutation evidence) rather than argued. Raised from 8.8 on that measurement and on 5R-F001. Rises above 9.3 only if §7.3 finds one of 5Q's own six inherited families inadmissible — precommitted here, earnable or missable, not retrofittable.                                                                                                                                                                                                                                                          |
+| **Good-for-Anthropic** |   9.4 | "One seeded test is not evidence the detector understands the class" is a safety-evals argument first and a code argument second. §1.5's construct-validity wedge is live and external: systematic reviews report roughly half of widely-cited LLM benchmarks ship no construct-validity evidence, and a JRC meta-review names construct-validity failure among its systemic issues. An eval that scores well by detecting _sadness_ is a model-evaluation failure mode, not only a red-team one.                                                                                                                                                                                           |
+| **Constitution**       |   9.5 | The stage is structurally forbidden from improving its predecessor's number, gates its own prose against implying otherwise, publishes its own threat model as the author-adversary (§1.7), and corrected its own claims against measurement in two pre-freeze passes — three false factual claims in the first, and in the second an "every class ... was discharged class-wide" that recomputation showed to be 22 of 26, plus a §11.3 rename that would have made mandatory work a declared write-surface violation on the day it was performed. Not higher until it has published an uncomfortable result of its **own campaign**; 9.5 is the design's honesty, not yet the campaign's. |
 
 Re-scored at closeout against what was measured, per standing practice — including downward if §7.3
 finds nothing and the tranche lands at the §11.5 floor.
