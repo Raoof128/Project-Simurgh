@@ -44,6 +44,11 @@ export const Q0_WRITE_ALLOWLIST = Object.freeze(
     { match: /^docs\/superpowers\/(specs|plans)\/2026-07-26-stage-5q-/, mutation: "any" },
     { match: /^scripts\/check-stage5q-proofs\.sh$/, mutation: "any" },
     { match: /^scripts\/reproduce-llm-shield-stage5q\.sh$/, mutation: "any" },
+    // NAMED IN §6.1 BEFORE THE FILE EXISTED. That ordering is the whole difference between this
+    // entry and the one unrepaired violation this stage carries: the 5P raw-code census test was
+    // widened first and named afterwards, which L5 forbids, so it stays a declared violation
+    // instead of becoming retroactively legal. Same rule, both directions, both visible.
+    { match: /^docs\/research\/llm-shield\/STAGE_5Q_CLOSEOUT\.md$/, mutation: "any" },
     { match: /^\.github\/workflows\/stage-5q-checks\.yml$/, mutation: "any" },
     { match: /^package\.json$/, mutation: "scripts-and-pinned-dep" },
     { match: /^package-lock\.json$/, mutation: "pinned-dep-delta" },
