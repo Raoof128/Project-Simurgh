@@ -17,7 +17,14 @@
 // Two-runtime parity is a true, smaller claim; "parity verified" with one runtime unmeasured is a
 // false one, and this receipt refuses to carry it.
 
-import { readFileSync, writeFileSync, mkdirSync, mkdtempSync, existsSync } from "node:fs";
+import {
+  readFileSync,
+  writeFileSync,
+  copyFileSync,
+  mkdirSync,
+  mkdtempSync,
+  existsSync,
+} from "node:fs";
 import { spawnSync } from "node:child_process";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
@@ -79,7 +86,16 @@ export async function main() {
         .then((a) => { out().textContent = "5R-PARITY-BEGIN" + JSON.stringify(a) + "5R-PARITY-END"; })
         .catch((e) => { out().textContent = "5R-PARITY-ERROR " + e.message; });
     `;
-    const html = join(REPO, "tools/simurgh-attestation/stage5r/browser/parity.html");
+    // The page and a copy of the module go to a SCRATCH DIRECTORY, not into the repository. An
+    // earlier version wrote the page next to the module, where it churned against the formatter on
+    // every run: a generated file living in the tree turns "the working tree is clean" into a
+    // question about who ran what last, and that check is load-bearing everywhere else in this stage.
+    const scratch = mkdtempSync(join(tmpdir(), "5r-parity-page."));
+    copyFileSync(
+      join(REPO, "tools/simurgh-attestation/stage5r/browser/vpf-portable.mjs"),
+      join(scratch, "vpf-portable.mjs")
+    );
+    const html = join(scratch, "parity.html");
     writeFileSync(
       html,
       `<!doctype html><meta charset="utf-8"><pre id="out"></pre><script type="module">${script}</script>\n`,
