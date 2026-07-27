@@ -157,3 +157,6 @@ docs/research/llm-shield/evidence/stage-5q/
 
 # Stage 5Q fixture tree — deliberately unformatted sample sources for the census
 tools/simurgh-attestation/stage5q/fixtures/
+
+# Stage 5R evidence — canonical JSON, gated by its own tests not prettier
+docs/research/llm-shield/evidence/stage-5r/
