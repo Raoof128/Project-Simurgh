@@ -24,8 +24,10 @@ import {
   frozenBlockDigest,
   canonicalSourceText,
   freezeReceipt,
+  fullSpecDigest,
   FROZEN_SECTION_IDS,
   FROZEN_BLOCK_DOMAIN,
+  FULL_SPEC_DOMAIN,
 } from "../../../../tools/simurgh-attestation/stage5r/core/frozenBlock.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "../../../..");
@@ -295,6 +297,48 @@ test("the freeze gate is INSENSITIVE to an edit outside §§2-5", () => {
     frozenBlockDigest(extractFrozenBlock(edited)),
     recorded,
     "an edit outside the frozen sections moved the freeze digest"
+  );
+});
+
+// ---- the post-freeze amendment pin ---------------------------------------------------------------
+
+test("the full-spec digest has its own domain, distinct from the frozen-block digest", () => {
+  // §§2-5 are frozen; the rest of the spec is amendable. A reviewer who verifies only the frozen
+  // digest can confirm the core and nothing else, so the amendable remainder needs its own pin —
+  // otherwise the plan depends on §8.2/§9.2/§10.1 wording that no receipt covers.
+  assert.equal(FULL_SPEC_DOMAIN, "simurgh.vpf.full-spec.v1");
+  assert.notEqual(FULL_SPEC_DOMAIN, FROZEN_BLOCK_DOMAIN);
+  assert.notEqual(fullSpecDigest(spec()), frozenBlockDigest(extractFrozenBlock(spec())));
+});
+
+test("the full-spec digest moves on an edit OUTSIDE §§2-5, where the frozen digest does not", () => {
+  const text = spec();
+  const edited = `${text}\n<!-- an amendment outside the frozen span -->\n`;
+  assert.equal(
+    frozenBlockDigest(extractFrozenBlock(edited)),
+    frozenBlockDigest(extractFrozenBlock(text)),
+    "the frozen digest should be blind to this edit"
+  );
+  assert.notEqual(
+    fullSpecDigest(edited),
+    fullSpecDigest(text),
+    "the full-spec digest must SEE the edit the frozen digest is blind to"
+  );
+});
+
+test("THE AMENDMENT PIN: the plan's recorded full_spec_digest matches the live spec", () => {
+  // The plan is written against a specific post-freeze spec. Without this, a reviewer can verify the
+  // frozen core but not the amendments the plan actually depends on.
+  const plan = readFileSync(
+    join(ROOT, "docs/superpowers/plans/2026-07-27-stage-5r-vpf-implementation-plan.md"),
+    "utf8"
+  );
+  const recorded = /full_spec_digest\s+([0-9a-f]{64})/.exec(plan);
+  assert.ok(recorded, "the plan must record a full_spec_digest");
+  assert.equal(
+    fullSpecDigest(spec()),
+    recorded[1],
+    "the spec has been amended since the plan was pinned to it — update the pin deliberately"
   );
 });
 

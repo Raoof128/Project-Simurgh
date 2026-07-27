@@ -42,6 +42,18 @@ export const TERMINATOR_SECTION_ID = "§6";
 /** Domain separation tag — a digest must mean "5R frozen block", not merely "these bytes". */
 export const FROZEN_BLOCK_DOMAIN = "simurgh.vpf.frozen-block.v1";
 
+/**
+ * Domain tag for the digest of the WHOLE spec, frozen span included.
+ *
+ * The frozen digest is deliberately blind to everything outside §§2-5, which is what makes the rest
+ * of the document amendable. But the implementation plan depends on those amendable sections — §8.2's
+ * mutant list, §9.2's corpus scope, §10.1's roots and key model — and a reviewer who can verify only
+ * the frozen core cannot tell which version of the remainder the plan was written against. This
+ * second digest pins that. Two digests, two jobs: one says the core has not moved, the other says
+ * which amendment state everything downstream assumed.
+ */
+export const FULL_SPEC_DOMAIN = "simurgh.vpf.full-spec.v1";
+
 /** A frozen heading, at line start, exactly two hashes and one space. */
 const HEADING_RE = /^## (§[2-6]) (.*)$/;
 
@@ -177,6 +189,26 @@ export function frozenBlockDigest(blockText) {
     .update(Buffer.from(FROZEN_BLOCK_DOMAIN, "utf8"))
     .update(Buffer.from([0x00]))
     .update(Buffer.from(canonicalSourceText(blockText), "utf8"))
+    .digest("hex");
+}
+
+/**
+ * Domain-separated digest of the entire spec document, canonicalised the same way.
+ *
+ * Deliberately NOT the frozen-block digest: this one moves when any section moves, including the
+ * amendable ones the plan depends on.
+ *
+ * @param {string} specText
+ * @returns {string} lowercase hex sha256
+ */
+export function fullSpecDigest(specText) {
+  if (typeof specText !== "string" || specText.length === 0) {
+    throw new Error("full spec: spec text must be a non-empty string");
+  }
+  return createHash("sha256")
+    .update(Buffer.from(FULL_SPEC_DOMAIN, "utf8"))
+    .update(Buffer.from([0x00]))
+    .update(Buffer.from(canonicalSourceText(specText), "utf8"))
     .digest("hex");
 }
 
