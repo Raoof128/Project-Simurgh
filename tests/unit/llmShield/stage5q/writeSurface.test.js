@@ -131,3 +131,29 @@ test("package.json: removing an existing script is refused", () => {
   const after = { scripts: { test: "x" }, devDependencies: {} };
   assert.equal(checkPackageJsonMutation(before, after).ok, false);
 });
+
+// ------------------------------------------------------------------------------------------------
+// The closeout, named the right way round.
+// ------------------------------------------------------------------------------------------------
+
+test("the closeout path is permitted, and nothing else under docs/research/llm-shield/ is", () => {
+  // §6.1 says: if a path is needed, it is named here or it is not written. The closeout was added
+  // to the allowlist BEFORE a byte of it existed — the opposite of the one unrepaired violation
+  // this stage carries, where a prior-stage test was widened first and named afterwards. Naming in
+  // advance is the permitted route; naming afterwards is what L5 forbids.
+  assert.equal(checkPaths(["docs/research/llm-shield/STAGE_5Q_CLOSEOUT.md"]).ok, true);
+  assert.equal(checkPaths(["docs/research/llm-shield/STAGE_5P_CLOSEOUT.md"]).ok, false);
+  assert.equal(checkPaths(["docs/research/llm-shield/NORTH_STAR.md"]).ok, false);
+});
+
+test("the closeout entry does NOT open the whole docs tree", () => {
+  // An allowlist entry is a permission for one path, not a directory. A prefix match here would
+  // have made every prior stage's closeout writable during Q0.
+  for (const path of [
+    "docs/research/llm-shield/STAGE_5Q_CLOSEOUT.md.bak",
+    "docs/research/llm-shield/evidence/stage-5m/x.json",
+    "docs/research/other.md",
+  ]) {
+    assert.equal(checkPaths([path]).ok, false, `${path} must not be writable`);
+  }
+});

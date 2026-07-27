@@ -589,6 +589,7 @@ proofs/stage5q/**
 docs/research/llm-shield/evidence/stage-5q/**
 scripts/check-stage5q-proofs.sh                  <- named explicitly (P0-14)
 scripts/reproduce-llm-shield-stage5q.sh          <- named explicitly (P0-14)
+docs/research/llm-shield/STAGE_5Q_CLOSEOUT.md    <- named BEFORE it was written
 .github/workflows/stage-5q-checks.yml            <- the ONE permitted CI addition (§14.3)
 package.json        (the `scripts` key, plus ONE devDependency line: acorn@8.17.0)
 package-lock.json   (ONLY the lockfile delta produced by that single install)
@@ -604,6 +605,19 @@ is stated per path so "I only touched package.json" cannot cover an unrelated de
 the plan created `scripts/reproduce-llm-shield-stage5q.sh` outside it. A rule that the work
 routinely violates is not a rule, and "obviously intended" is exactly the reasoning this stage exists
 to refuse. If a path is needed, it is named here or it is not written.
+
+**The closeout is named the right way round, and the contrast is the point.** Q0 ran with one
+unrepaired violation of this surface — `tests/unit/llmShield/stage5p/rawCodeCensus.test.js` was
+widened first and named afterwards, which is why it stays a declared violation rather than becoming
+retroactively legal (L5). `STAGE_5Q_CLOSEOUT.md` is the same situation handled correctly: the path is
+added to this list **before** a byte of it exists. Naming a path in advance is the permitted route;
+naming it afterwards is the thing L5 forbids. The two entries sit in the same document so the
+difference between them is legible rather than argued.
+
+**This amends §6.1, which is NOT inside the frozen block.** §§2–5 are frozen and the freeze digest is
+computed over exactly those four objects; transition condition T6 recomputes it and would fail if
+this edit had touched them. It does not, and the reproduce script's freeze gate re-checks that on
+every run.
 
 **The surface is machine-checked, not observed.** A write-surface verifier compares every changed
 path against this allowlist and runs before every Q0 commit and inside the reproduce script. A
