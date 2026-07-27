@@ -1,0 +1,88 @@
+name: Stage 5R — VPF checks
+
+on:
+  push:
+    branches: ["stage-5r-vpf-verifiable-probe-families"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  stage-5r:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # The write-surface verifier and the C1→C2 ancestry check both read history. A shallow
+          # clone makes them report a clean bill of health about commits they cannot see, which is
+          # the failure 5S fixed in stage-1-checks.yml and there is no reason to repeat it.
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "26"
+
+      - name: assert the Node major, rather than trusting the setup step
+        run: |
+          major="$(node -p 'process.versions.node.split(".")[0]')"
+          if [ "$major" != "26" ]; then
+            echo "FAIL: Node 26 is required; this runner has Node $major"
+            exit 1
+          fi
+          echo "node $(node --version)"
+
+      - run: npm ci
+
+      - name: formatting
+        run: npm run format:check
+
+      - name: unit tests
+        run: node --test tests/unit/llmShield/stage5r/*.test.js
+
+      - name: the inherited commitment, roots first and signature last
+        run: node tools/simurgh-attestation/stage5r/node/verifyInheritance.mjs
+
+      - name: the control corpus
+        run: node tools/simurgh-attestation/stage5r/node/verifyFamilyCorpus.mjs
+
+      - name: the instrument lock
+        run: node tools/simurgh-attestation/stage5r/node/lockInstrument.mjs --verify
+
+      - name: campaign commitment, and its ancestry over the results
+        run: |
+          node tools/simurgh-attestation/stage5r/node/verifyCampaignCommitment.mjs
+          node tools/simurgh-attestation/stage5r/node/verifyCampaignAncestry.mjs
+
+      - name: the commitment verifier REFUSES an altered corpus
+        run: |
+          # A verifier only ever run against the corpus it was built from has not been shown to
+          # refuse anything. This step fails if the refusal does not happen.
+          if node tools/simurgh-attestation/stage5r/node/verifyCampaignCommitment.mjs \
+               --against tests/fixtures/llmShield/stage5r/altered-family/; then
+            echo "FAIL: the altered corpus was accepted"
+            exit 1
+          fi
+          echo "OK: refused, as it must"
+
+      - name: the Lean core
+        run: bash scripts/check-stage5r-proofs.sh
+
+      - name: cross-runtime parity
+        run: |
+          node tools/simurgh-attestation/stage5r/node/checkManifestCoverage.mjs --runtime all
+          node tools/simurgh-attestation/stage5r/node/runCrossRuntimeParity.mjs
+
+      - name: the attestation verifies WITHOUT any private key
+        run: node tools/simurgh-attestation/stage5r/node/verifyAttestation.mjs
+
+      - name: the write surface
+        run: |
+          node tools/simurgh-attestation/stage5r/node/checkWriteSurface.mjs \
+            --range "$(git merge-base origin/main HEAD)..HEAD"
+
+      - name: the inherited 5Q evidence tree is untouched
+        run: |
+          if [ -n "$(git status --porcelain docs/research/llm-shield/evidence/stage-5q/)" ]; then
+            echo "FAIL: the inherited 5Q tree was modified"
+            exit 1
+          fi
+          echo "OK: clean"
