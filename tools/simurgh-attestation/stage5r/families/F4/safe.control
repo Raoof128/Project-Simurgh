@@ -1,0 +1,4 @@
+export function verify(envelope, signature) {
+  const key = TRUSTED_ROOTS[envelope.signer.key_id];
+  return verifySignature(envelope.body, signature, key);
+}

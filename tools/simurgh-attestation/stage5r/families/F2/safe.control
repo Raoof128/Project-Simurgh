@@ -1,0 +1,2 @@
+theorem conflictAntitone (h : a ≤ b) : conflict a ≤ conflict b := by
+  exact monotoneOfLe h

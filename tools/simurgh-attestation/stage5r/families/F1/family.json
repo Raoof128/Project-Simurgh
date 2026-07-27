@@ -1,0 +1,65 @@
+{
+  "schema": "simurgh.vpf.family-file.v1",
+  "note": "The frozen §3.1 record, plus the corpus binding it needs and cannot hold. The record's key set is exact by contract, so which inherited member each control MODELS, which file carries its bytes, and which language it is written in live under `binding` — outside the frozen shape rather than smuggled into it. A control is a hand-authored specimen of a role member, not a copy of one: 5R never writes to an inherited tree, so it cannot seed a defect into the member it models.",
+  "record": {
+    "probe_family_id": "F1",
+    "attack_class": "R2",
+    "target_security_role": "evidence_emission",
+    "role_archetype": "A5",
+    "inherited_5q_obligation_cells": 376,
+    "vulnerable_control": {
+      "premise_receipt": {
+        "function_id": "5a:tools/simurgh-attestation/stage5a/node/build-stage5a-fixtures.mjs:build",
+        "predicate": "the declared signal's construct is present in this control AND carries the defect the class names",
+        "source_digest": "a19081d8f5bebad89a1e2ff8646de8c14f4078af9e0ab668fff4a244ed0a1268",
+        "span_bytes": 134,
+        "holds": true
+      },
+      "expected_detection": true,
+      "expected_outcome": "one subject in two unicode normal forms emits two different subject digests, so a record can be re-emitted under a second identity",
+      "source_span_bytes": 134
+    },
+    "safe_control": {
+      "expected_detection": false,
+      "source_span_bytes": 151,
+      "exercises_detector_signal_path": true
+    },
+    "orthogonal_failure_control": {
+      "failure_mode": "throw",
+      "expected_detection": false,
+      "source_span_bytes": 276
+    },
+    "detector_signal": "digest_taken_over_a_field_never_unicode_normalised",
+    "forbidden_surrogate_signals": [
+      "process exit code alone",
+      "\"an exception was thrown\" alone",
+      "\"stderr was non-empty\" alone",
+      "\"the file did not parse\" alone",
+      "\"the run took longer than a threshold\" alone",
+      "\"any string matched a generic error regex\""
+    ],
+    "coverage_delta": []
+  },
+  "binding": {
+    "models_function_id": "5a:tools/simurgh-attestation/stage5a/node/build-stage5a-fixtures.mjs:build",
+    "category": "exported_function",
+    "security_role": "evidence_emission",
+    "language": "js",
+    "symbol": "build",
+    "arity": 1,
+    "controls": {
+      "vulnerable": {
+        "control_id": "F1-c1",
+        "path": "vulnerable.control"
+      },
+      "safe": {
+        "control_id": "F1-c2",
+        "path": "safe.control"
+      },
+      "orthogonal": {
+        "control_id": "F1-c3",
+        "path": "orthogonal.control"
+      }
+    }
+  }
+}

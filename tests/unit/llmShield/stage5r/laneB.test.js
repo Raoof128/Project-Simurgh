@@ -7,6 +7,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { join, dirname } from "node:path";
 import {
@@ -24,10 +25,16 @@ import {
   decide,
   buildReceipt,
 } from "../../../../tools/simurgh-attestation/stage5r/node/detectorChild.mjs";
+import { SIGNALS } from "../../../../tools/simurgh-attestation/stage5r/core/signals.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "../../../..");
 const CHILD = join(ROOT, "tools/simurgh-attestation/stage5r/node/detectorChild.mjs");
-const SIGNAL = "emitted-field-set differs from the declared schema";
+// A REAL declared signal, and the two sources that must divide under it. The marker comment this
+// file used to carry was an answer key: it made every assertion below true by construction.
+const SIGNAL = "digest_taken_over_a_field_never_unicode_normalised";
+const OTHER_SIGNAL = "digest_computed_without_a_domain_separator";
+const DEFECTIVE = SIGNALS[SIGNAL].specimens.defective;
+const REPAIRED = SIGNALS[SIGNAL].specimens.repaired;
 
 /** Run the real child, exactly as Lane B would: scrubbed env, absolute exe, stdin payload. */
 function runChild(payload) {
@@ -105,31 +112,44 @@ test("a non-object payload fails closed", () => {
 
 // ---- the real child --------------------------------------------------------------------------------
 
-test("the real child detects the declared signal and not-detects its absence", () => {
-  const withSignal = runChild(
+test("the real child detects the DEFECT and clears the repaired twin", () => {
+  const defective = runChild(
     buildChildPayload({
       control_id: "c-01",
       attack_class: "R2",
-      source: `function v() { /* SIGNAL:${SIGNAL} */ }`,
+      source: DEFECTIVE,
       declared_signal: SIGNAL,
     })
   );
-  const without = runChild(
+  const repaired = runChild(
     buildChildPayload({
       control_id: "c-02",
+      attack_class: "R2",
+      source: REPAIRED,
+      declared_signal: SIGNAL,
+    })
+  );
+  const absent = runChild(
+    buildChildPayload({
+      control_id: "c-03",
       attack_class: "R2",
       source: "function s() {}",
       declared_signal: SIGNAL,
     })
   );
-  assert.equal(withSignal.verdict, "detected");
-  assert.equal(without.verdict, "not_detected");
+  assert.equal(defective.verdict, "detected");
+  assert.equal(repaired.verdict, "not_detected");
+  assert.equal(absent.verdict, "not_detected");
+  // The two not-detecteds are DIFFERENT FACTS, and the receipt says which is which.
+  assert.equal(repaired.signal_applies, true);
+  assert.equal(absent.signal_applies, false);
+  assert.notEqual(repaired.signal_evidence, absent.signal_evidence);
 });
 
 test("the child's EXIT CODE is 0 for both verdicts — exit code alone is a forbidden surrogate", () => {
   // If the child encoded its verdict in the exit status, the parent would be reading §3.4's first
   // forbidden surrogate without anyone deciding to.
-  for (const source of [`/* SIGNAL:${SIGNAL} */`, "nothing here"]) {
+  for (const source of [DEFECTIVE, REPAIRED, "nothing here"]) {
     const r = execFileSync(process.execPath, [CHILD], {
       input: JSON.stringify(
         buildChildPayload({ control_id: "c", attack_class: "R2", source, declared_signal: SIGNAL })
@@ -162,10 +182,11 @@ test("the child's receipt verifies, and its digest is domain-separated", () => {
     buildChildPayload({
       control_id: "c-01",
       attack_class: "R2",
-      source: `/* SIGNAL:${SIGNAL} */`,
+      source: DEFECTIVE,
       declared_signal: SIGNAL,
     })
   );
+  assert.equal(r.verdict, "detected");
   assert.equal(verifyVerdictReceipt(r).ok, true);
   assert.equal(r.receipt_digest, verdictReceiptDigest(r));
   assert.match(r.receipt_digest, /^[0-9a-f]{64}$/);
@@ -243,14 +264,41 @@ test("control order comes from a committed seed, so sequence cannot leak the lab
 });
 
 test("decide() reads the declared signal and nothing else", () => {
-  assert.equal(
-    decide({ source: `/* SIGNAL:${SIGNAL} */`, declared_signal: SIGNAL }).verdict,
-    "detected"
-  );
-  // A different declared signal over the same bytes must not fire: the signal is pre-registered, and
+  assert.equal(decide({ source: DEFECTIVE, declared_signal: SIGNAL }).verdict, "detected");
+  // A DIFFERENT declared signal over the same bytes must not fire: the signal is pre-registered, and
   // reading a different one after the fact is exactly T3.
   assert.equal(
-    decide({ source: `/* SIGNAL:${SIGNAL} */`, declared_signal: "some other signal" }).verdict,
+    decide({ source: DEFECTIVE, declared_signal: OTHER_SIGNAL }).verdict,
     "not_detected"
   );
+  // And a signal nobody implemented is refused rather than cleared.
+  assert.throws(
+    () => decide({ source: DEFECTIVE, declared_signal: "some other signal" }),
+    /not a declared signal/
+  );
+});
+
+test("a REWRITTEN evidence field is caught, so the two not-detecteds cannot be swapped", () => {
+  // Without this, a parent could turn "the construct was absent" into "the construct was clean" and
+  // manufacture a probe that never happened.
+  const r = buildReceipt(
+    buildChildPayload({
+      control_id: "c",
+      attack_class: "R2",
+      source: "function s() {}",
+      declared_signal: SIGNAL,
+    })
+  );
+  assert.equal(verifyVerdictReceipt(r).ok, true);
+  const swapped = { ...r, signal_evidence: "signal_path_present_no_defect" };
+  assert.equal(verifyVerdictReceipt(swapped).ok, false);
+  const alsoDigest = {
+    ...swapped,
+    signal_evidence_digest: createHash("sha256")
+      .update(Buffer.from(swapped.signal_evidence, "utf8"))
+      .digest("hex"),
+  };
+  const check = verifyVerdictReceipt(alsoDigest);
+  assert.equal(check.ok, false, "rewriting both the text and its digest must break the receipt");
+  assert.match(check.reason, /the parent rewrote the child's verdict|contradicts evidence/);
 });

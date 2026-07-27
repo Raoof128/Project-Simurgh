@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 //
-// Stage 5R — Task 15: the seven harness mutants, and Task 16's gate seeds.
+// Stage 5R — Task 15: the harness mutants, and Task 16's gate seeds. N7 joined at Task 18.
 //
 // §8.2: 5R's own code is not exempt. A seeded defect in the admissibility checker, the delta ledger,
 // the inheritance verifier or the suppression machinery must be caught by 5R's own tests, with a
@@ -11,7 +11,7 @@
 // silently no-ops is a green run that proves nothing, which is the defect this file exists to catch
 // one level down.
 
-/** N1–N6, with N5 split into its two independent failures. */
+/** N1–N7: N5 split into its two independent failures, and N7 added at Task 18. */
 export const MUTANTS = Object.freeze([
   {
     id: "N1",
@@ -76,6 +76,20 @@ export const MUTANTS = Object.freeze([
     caught_by: "tests/unit/llmShield/stage5r/admissibility.test.js",
     expected_catch: "THE BLADE: admissibility in one role starts answering for another",
   },
+  {
+    id: "N7",
+    intent: "the detector decides by a LABEL in the control instead of the defect in the code",
+    // Added at Task 18, and not hypothetically: this stage's detector really did decide by a marker
+    // comment naming the declared signal, which the control's own author places. Every §4.1 condition
+    // passed and none of it was about a defect. A census that did not seed the defect the stage
+    // actually shipped would be a census of the defects that were easy to imagine.
+    file: "tools/simurgh-attestation/stage5r/core/signals.mjs",
+    find: "  const evidence = signal.defective(code);",
+    replace: '  const evidence = raw.includes("/* SIGNAL */") ? "marker" : "";',
+    caught_by: "tests/unit/llmShield/stage5r/families.test.js",
+    expected_catch:
+      "the corpus stops dividing: the vulnerable control carries a defect nobody reads",
+  },
 ]);
 
 /**
@@ -133,7 +147,7 @@ export const GATE_SEEDS = Object.freeze([
   },
   {
     gate: "G6",
-    asserts: "the seven N-mutants are detected",
+    asserts: "the eight N-mutants are detected",
     // The seed targets the RUNNER, not this file. Any anchor into the census appears twice — once
     // in the code and once in the seed quoting it — and an ambiguous anchor is refused by design.
     // The runner's catch derivation is the line whose failure would make every receipt a lie.

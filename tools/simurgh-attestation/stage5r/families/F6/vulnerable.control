@@ -1,0 +1,4 @@
+export function checkAdaptation(record) {
+  const profile = PROFILES[record.schema];
+  return profile.validate(record);
+}

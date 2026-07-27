@@ -780,11 +780,22 @@ N5a forbidden-surrogate suppression is a NO-OP: suppressing changes nothing
 N5b a family whose verdict CHANGES under suppression is admitted anyway
     because admissibility ignores the suppression result          (§3.4)
 N6  a per-role admissibility silently promotes to class-wide     (§4.2)
+N7  the detector decides by a LABEL in the control rather than by
+    the defect in the code                                       (§3.3, §1.4)
 ```
 
 N5 was one line in this document's first draft and it named only the first failure. Those are two
 different defects — a suppressor that does nothing, and an admissibility check that ignores what the
 suppressor found — and each hides the other. Seven mutants, not six.
+
+**N7 was added at Task 18, and it is not hypothetical.** The detector built at Task 11 decided by
+looking for a marker comment naming the declared signal — a marker the control's own author places.
+Under it `vulnerable → detected` and `safe → not detected` held by construction, all seven §4.1
+conditions passed, and not one byte of it was about the defect the class names: §1.4's "brilliant
+while understanding nothing", reached from the detector's side instead of the control's. It was found
+while writing the first control, before any campaign ran. A mutant census that seeded only the
+defects that were easy to imagine, and not the one the stage actually shipped, would be a census of
+the author's imagination. Eight mutants.
 
 N6 is the blade's own mutant. If it is not caught, the stage does not ship.
 
@@ -956,7 +967,7 @@ G2  every published family satisfies all seven §4.1 conditions
 G3  every control carries a recomputed premise and a proven restoration
 G4  no family's coverage_delta intersects 5Q's already-discharged set
 G5  no per-role admissibility promotes to class-wide (N6's mutant stays caught)
-G6  the seven N-mutants are detected; each gate has a recorded red state (§8.3)
+G6  the eight N-mutants are detected; each gate has a recorded red state (§8.3)
 G7  no sentence in 5R's own artifacts attributes a post-5Q figure to 5Q (§6.3)
 G8  the 5Q evidence tree is byte-identical before and after the full 5R run
 G9  the tranche disclosure of §11.5 is present and its arithmetic checks

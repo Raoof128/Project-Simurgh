@@ -1,0 +1,9 @@
+export function build(record) {
+  if (record.emitted_at === undefined) {
+    throw new Error("build: emitted_at is required");
+  }
+  const subject = String(record.subject);
+  return { subject, subject_digest: sha256Hex(subject.normalize("NFC")) };
+}
+
+build({ subject: "x" });

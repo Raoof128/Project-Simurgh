@@ -1,0 +1,8 @@
+export function checkManifest(manifest) {
+  const payload = canonicalJson(manifest.entries);
+  return createHash("sha256")
+    .update(Buffer.from(DOMAIN, "utf8"))
+    .update(Buffer.from([0x00]))
+    .update(payload)
+    .digest("hex");
+}

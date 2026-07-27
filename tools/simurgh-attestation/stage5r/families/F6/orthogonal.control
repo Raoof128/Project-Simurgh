@@ -1,0 +1,6 @@
+export function checkAdaptation(record) {
+  if (record.schema !== EXPECTED_PROFILE {
+    return { ok: false, reason: "profile not bound" };
+  }
+  return PROFILES[EXPECTED_PROFILE].validate(record);
+}

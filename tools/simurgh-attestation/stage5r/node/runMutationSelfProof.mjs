@@ -5,7 +5,7 @@
 // Usage:
 //   node tools/simurgh-attestation/stage5r/node/runMutationSelfProof.mjs [--gates] [--output <path>]
 //
-// Default: the seven N-mutants (Task 15). With --gates: the nine gate seeds (Task 16).
+// Default: the N-mutants (Task 15, plus N7 from Task 18). With --gates: the nine gate seeds.
 //
 // EVERY SEED IS APPLIED IN A SCRATCH WORKTREE (Ruling 5, P8). The primary tree is never written, not
 // even briefly, so an interrupted run cannot leave a seeded defect behind in the tree everything else
@@ -172,8 +172,9 @@ export function main(argv) {
       ? "Task 16. Every gate implemented by the end of Task 15, seeded in a scratch worktree, " +
         "observed red, reverted, observed green. G8 and G9 belong to Task 26: proving the red state " +
         "of a gate that does not exist yet is a P5 violation this plan already made once."
-      : "Task 15. The seven harness mutants, N5 split into its two independent failures. Seeded in " +
-        "a scratch worktree; the primary tree is never written.",
+      : "Task 15. The harness mutants: N5 split into its two independent failures, and N7 added at " +
+        "Task 18 for the label-reading detector this stage actually shipped. Seeded in a scratch " +
+        "worktree; the primary tree is never written.",
     receipt_kind: "runtime",
     seeded_count: receipts.length,
     all_caught: uncaught.length === 0,

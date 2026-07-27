@@ -1,0 +1,9 @@
+export function verify(envelope, signature) {
+  const key = TRUSTED_ROOTS[envelope.signer.key_id];
+  if (key === undefined) {
+    throw new Error("verify: unknown key id");
+  }
+  return verifySignature(envelope.body, signature, key);
+}
+
+verify({ signer: { key_id: "absent" }, body: "x" }, "sig");
