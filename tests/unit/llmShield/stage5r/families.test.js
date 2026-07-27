@@ -216,14 +216,17 @@ test("the premise receipts artefact is DETERMINISTIC and matches its committed c
   }
 });
 
-test("NOTHING HAS BEEN RUN YET — no campaign artefact exists at Task 18", () => {
-  // Building controls before C1 is lawful. Running them before C1 is not, and an artefact here would
-  // be the evidence that it happened.
-  assert.equal(
-    existsSync(join(ROOT, "docs/research/llm-shield/evidence/stage-5r/campaign")),
-    false,
-    "a campaign result exists before the campaign was committed"
-  );
+test("NO CAMPAIGN ARTEFACT EXISTS THAT PREDATES ITS COMMITMENT", () => {
+  // Building controls before C1 is lawful; running them before C1 is not. The first version of this
+  // test asserted the campaign directory was simply ABSENT, which is a Task-18 fact that Task 20
+  // ends on purpose — an invariant that a later, correct step is required to falsify is not an
+  // invariant, it is a countdown. What must hold forever is the ORDER: results may exist only where
+  // a commitment exists too, and `verifyCampaignAncestry` checks that C1 precedes them in history.
+  const campaign = join(ROOT, "docs/research/llm-shield/evidence/stage-5r/campaign");
+  const c1 = join(ROOT, "docs/research/llm-shield/evidence/stage-5r/commitments/campaign-c1.json");
+  if (existsSync(campaign)) {
+    assert.equal(existsSync(c1), true, "campaign results exist and nothing was ever committed");
+  }
 });
 
 test("the corpus verifier refuses a family whose control bytes moved", () => {
