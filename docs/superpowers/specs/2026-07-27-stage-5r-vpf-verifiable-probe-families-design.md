@@ -1200,8 +1200,8 @@ cmp block-1.txt block-2.txt          → identical
 ```
 
 ```text
-freeze_commit    <pending — inserted by commit 2>
-freeze_digest    <pending — inserted by commit 2>
+freeze_commit    ba8c3b96
+freeze_digest    64fe8e76971ab615a7d14d5fac59a2ced3e06cbf90859e448307d43ec5c020aa
 frozen_bytes     17472
 ```
 
