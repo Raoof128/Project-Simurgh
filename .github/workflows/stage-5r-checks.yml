@@ -47,27 +47,6 @@ jobs:
       - name: unit tests
         run: node --test tests/unit/llmShield/stage5r/*.test.js
 
-      # TEMPORARY: the wider suite passes on this runner under BOTH Node 26 and the gate's Node 22,
-      # on a clean tree. So the failure lives in check.sh's own environment, not in the tests. This
-      # runs the gate's script and prints the log it saves but does not upload.
-      - name: TEMPORARY diagnostic — run the gate's own script and show its test log
-        env:
-          NODE_ENV: test
-          SIMURGH_ALLOWED_ORIGIN: http://localhost:33030
-          SIMURGH_INSTRUCTOR_TOKEN: test-instructor-token
-          SIMURGH_HELPER_SECRET: test-helper-secret
-          SIMURGH_AUDIT_SECRET: test-audit-secret
-          SIMURGH_SESSION_SIGNING_SECRET: test-session-secret
-          SIMURGH_SCORING_MODE: local
-        run: |
-          set +e
-          bash scripts/check.sh > /tmp/check.log 2>&1
-          echo "check.sh exit: $?"
-          echo "--- failing tests from npm_test.log ---"
-          grep -E "^not ok" .simurgh_check_logs/npm_test.log | head -10 || true
-          grep -m1 -A 30 "^not ok" .simurgh_check_logs/npm_test.log || true
-          grep -E "^# (tests|pass|fail|skipped)" .simurgh_check_logs/npm_test.log || true
-
       - name: the inherited commitment, roots first and signature last
         run: node tools/simurgh-attestation/stage5r/node/verifyInheritance.mjs
 
