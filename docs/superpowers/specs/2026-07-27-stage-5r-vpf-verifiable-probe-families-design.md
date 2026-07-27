@@ -69,7 +69,7 @@ determines the family universe; the census emits the membership. Immutable rule 
 state in a generated ledger — the §2.12 discipline 5P established and 5Q inherited.
 
 It also does not allocate raw codes, and does not schedule the work. Both belong to the
-implementation plan (§12).
+implementation plan (§16).
 
 ---
 
@@ -87,22 +87,54 @@ implementation plan (§12).
 before any `attacked_pass` in that class could be admitted. Sixteen mutants M1–M16 were seeded, one
 per class, and fourteen were detected.
 
-That is a real gate, and it caught real things. It is also **weaker than it reads**, in a way that is
-precise and worth stating plainly:
+That is a real gate, and it caught real things. It is also **weaker than it reads**, and the gap is
+measured rather than argued. Every number below is recomputed by gate G0 from the inherited receipts,
+closure and obligation matrix.
+
+**The sixteen mutants reached five of the nine populated security roles.**
+
+| role                 | members | reached by a mutant?                  |
+| -------------------- | ------: | ------------------------------------- |
+| `trust_decision`     |     363 | yes (M1, M5, M8, M13)                 |
+| `schema_gate`        |     496 | yes (M4, M6, M10, M12, M14, M15, M16) |
+| `canonicalisation`   |      71 | yes (M2, M3, M9)                      |
+| `completeness_claim` |     582 | yes (M7)                              |
+| `parity_mirror`      |     320 | yes (M11)                             |
+| `evidence_emission`  |     376 | **no**                                |
+| `formal_statement`   |     181 | **no**                                |
+| `orchestration`      |     125 | **no**                                |
+| `code_allocation`    |      17 | **no**                                |
+
+Four populated roles — 699 closure members — received **no mutation evidence of any kind**, and every
+class obligated over them was nonetheless discharged class-wide.
+
+**Per class, the receipt covers a tenth of the area it was generalised across.** For each of the
+fourteen discharged classes, the mutant landed in exactly one role. Summing the obligated cells that
+lie in the tested role, against the cells in the class as a whole:
 
 ```text
-M1 seeded a defect in ONE function, of ONE role, and was detected by ONE suite.
-The receipt was then treated as evidence that class R1 is admissible EVERYWHERE.
+cells lying in the role a mutant actually tested      2 118
+cells in those fourteen classes                      20 213
+                                                     -------
+fraction of the discharged area mutation-tested       10.5%
 ```
 
-A prototype-pollution mutant in a parser and a trust-root substitution in a signature verifier are
-both labelled R1. A receipt earned by the first says nothing whatsoever about the second. The
-detector that caught the parser mutant may be a schema assertion that never runs near a trust
-decision. One seeded mutant per class is a **sample of size one over a population of eleven security
-roles**, generalised to the whole population by nothing more than a shared label.
+R1 was discharged from `trust_decision` (363 of 1 905 cells). R2 from `canonicalisation` (71 of
+2 225). R16 from `schema_gate` (496 of 1 654). In each case the remaining roles carry no receipt and
+were admitted by the shared label alone.
 
-That is a completeness claim resting on an unexamined generalisation — the exact defect family 5Q
-was built to detect, sitting one level up inside 5Q's own admissibility rule.
+**And six mutants were seeded into cells the matrix marks `omitted`.** M4, M6, M10, M14 and M15 all
+landed on cells whose omission reason is `no_trust_decision`; M12 on one reading
+`not_in_historical_closure`. Each of those receipts discharged a class using evidence from a cell
+where 5Q's own obligation matrix says the class does not apply.
+
+5Q **published this last one**: `cells_discharged_on_omitted: 6` is a field in the committed
+discharge ledger. It is quoted here as a sharpening of a disclosed fact, not as a discovery — a stage
+built on 5Q's honesty does not get to re-sell it as its own catch. The role histogram and the 10.5%
+figure are new, and become pre-stage finding **5R-F001** (§7.4).
+
+That is a completeness claim resting on an unexamined generalisation — the exact defect family 5Q was
+built to detect, sitting one level up inside 5Q's own admissibility rule.
 
 ### §1.3 The second defect: an attack that only ever fails
 
@@ -133,16 +165,70 @@ reports "R4 violation" when handed a file that simply does not parse has learned
 not signature substitution. Without the third control that detector scores a perfect
 vulnerable-detected / safe-not-detected pair and ships.
 
-This is not hypothetical. 5Q produced and killed four false findings during its campaign, and the
-mechanism in three of them was exactly this: a probe counting an unrelated failure as a security
-signal. Those were caught by hand, one at a time, after publication drafts existed. §3.4's
+This is not hypothetical. 5Q produced and killed **four** false findings, listed in its closeout:
+an argument-ignoring census function; a body-level `??` default; eight `canonicalJson` transforms
+with no verdict to fail open; and an inverted reproducible/unreproducible tally.
+
+Three of the four were the probe reading a signal the target's guard never produced — the third is
+the purest case, since a function with no verdict **cannot** fail open, so the probe's signal was
+unrelated to R16 by construction. The fourth was a consumer misreading a producer's tally and is a
+different defect. All four were caught by hand, one at a time, after draft findings existed. §3.4's
 `forbidden_surrogate_signals` makes the same catch mechanical and pre-registered.
 
-### §1.5 What 5R does not attempt
+### §1.5 Prior art, and the seam it concedes
+
+**Mutation testing's coupling effect.** L4 is a mutation-adequacy argument, and the coupling-effect
+hypothesis it inherits — that a suite killing simple mutants also catches complex real faults — is
+the most-studied assumption in the field and is known to hold only partially. The Just et al. line of
+work classifying real faults against generated mutants found a substantial minority coupled to no
+mutant at all, and later work found the syntactic distance between faulty and fixed programs is often
+far larger than any standard mutation operator produces. The literature's own framing is
+_dynamic subsumption_: a mutant is coupled to a fault only when the tests that kill the mutant also
+kill the fault, and that relation is per-fault, never per-category.
+
+The seam: **the mutation-testing literature reasons about coupling between a mutant and a fault. It
+has no notion of coupling across a security ROLE.** Nothing in it licenses "M4 died, therefore class
+R4 is testable everywhere R4 is claimed", because it never had classes claimed over role partitions
+in the first place. 5Q imported the adequacy argument and inherited an assumption the source
+literature does not actually make.
+
+**Construct validity in evaluations.** The parallel wound is live and expensive: recent systematic
+reviews of widely-cited LLM benchmarks report that only about half present any construct-validity
+evidence, and that near half lack a consensus definition of the phenomenon they claim to measure. A
+European Commission JRC meta-review names construct-validity failure and gaming risk among its
+systemic issues in AI benchmarking. The remedy that field asks for — show that the instrument
+discriminates the construct from its neighbours, not merely that it fires — is exactly a
+positive-control triad, and nobody ships one mechanically.
+
+**The wedge.** 5R's family contract is a **construct-validity instrument for a security detector**,
+expressed as recomputable evidence rather than a methods paragraph. A detector that fires on the
+vulnerable control, stays silent on the structurally-matched safe control, and stays silent on the
+orthogonal failure has demonstrated discrimination. One that cannot is measuring _sadness_, and the
+artifact says so under signature.
+
+### §1.6 What 5R does not attempt
 
 5R does **not** re-run 5Q's campaign, does not re-derive its closure, and does not improve its
 numbers. It builds the instrument that 5Q lacked and measures what that instrument discharges,
 additively. The 5Q attestation is a read-only input with a signature over it.
+
+### §1.7 Threat model — what a dishonest 5R author would do
+
+The stage's own author is the adversary with the best access, and every mechanism above is a defence
+against a specific move. Naming them makes the defences falsifiable.
+
+| #   | the move                                                                                                                                  | why it is tempting                                  | what stops it                                                                                                                                     |
+| --- | ----------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| T1  | **Stub the safe control.** Make it an empty function so the detector cannot possibly fire.                                                | Condition two passes instantly for all 55 families. | §4.3's not-a-stub rule: the safe control must exercise the `detector_signal` path, asserted by execution rather than by review.                   |
+| T2  | **Make the orthogonal control a no-op.** A control that never really fails is never misclassified.                                        | Condition three passes for free.                    | §3.2 requires a real throw, non-zero exit or parse error, recorded in the receipt; a no-op orthogonal control fails the family.                   |
+| T3  | **Pick the detector signal after seeing results.** Run first, then declare whichever signal separates the three controls.                 | Every family becomes admissible.                    | §3.3 requires one pre-registered signal, committed before the run, and the commitment is digest-bound in the family record.                       |
+| T4  | **Choose the easiest role per class.** Build one family per class in whichever role is simplest, and let §4.2 quietly do class-wide work. | 11 families instead of 55.                          | §4.2 makes class-wide promotion **unrepresentable**; N6 seeds the promotion as a mutant and G5 gates on it staying caught.                        |
+| T5  | **Count 5Q's cells again.** Let a 5R family claim a cell 5Q already discharged.                                                           | The cumulative figure rises with no new work.       | §6.2's empty-intersection assertion over inherited `obligation_id`s, gated by G4.                                                                 |
+| T6  | **Shrink the denominator.** Drop `formal_statement`, or restrict to "applicable" roles, and 15 301 becomes a friendlier number.           | Coverage percentage rises with no new families.     | `inherited_cells` is the constant 23 332 with no schema field able to hold another value; §5.2 adds A8 explicitly rather than dropping 362 cells. |
+| T7  | **Report the tranche as the universe.** Ship 12 families and describe coverage without the denominator.                                   | The stage looks finished.                           | §11.5 pins the tranche disclosure; §5.4 fixes the universe at 55 by rule, not by schedule.                                                        |
+
+T4 and T6 are the two that would actually be tempting under deadline, and they are the two the blade
+exists to forbid. If 5R fails, it should fail visibly at one of these, not quietly.
 
 ---
 
@@ -211,22 +297,51 @@ a shipped stage and a 5R input, so it acquires the protection every prior stage 
 The 5R write surface is **exhaustive**:
 
 ```text
-tools/simurgh-attestation/stage5r/**
-tests/**/stage5r/**
-proofs/stage5r/**
-docs/research/llm-shield/evidence/stage-5r/**
-docs/research/llm-shield/STAGE_5R_CLOSEOUT.md
-docs/superpowers/specs/2026-07-27-stage-5r-vpf-verifiable-probe-families-design.md
-docs/superpowers/plans/2026-07-27-stage-5r-vpf-implementation-plan.md
-scripts/check-stage5r-proofs.sh
-scripts/reproduce-llm-shield-stage5r.sh
-.github/workflows/stage-5r-checks.yml
-package.json      (scripts key only; no dependency change without a named pin)
+STAGE-OWNED (unrestricted within the path)
+  tools/simurgh-attestation/stage5r/**
+  tests/**/stage5r/**
+  tests/fixtures/llmShield/stage5r/**
+  proofs/stage5r/**
+  docs/research/llm-shield/evidence/stage-5r/**
+  docs/research/llm-shield/STAGE_5R_CLOSEOUT.md
+  docs/superpowers/specs/2026-07-27-stage-5r-vpf-verifiable-probe-families-design.md
+  docs/superpowers/plans/2026-07-27-stage-5r-vpf-implementation-plan.md
+  scripts/check-stage5r-proofs.sh
+  scripts/reproduce-llm-shield-stage5r.sh
+  .github/workflows/stage-5r-checks.yml
+
+SHARED, MUTATION-SCOPED (the file is permitted; the EDIT is not)
+  package.json                              scripts key only; no dependency change
+                                            without a named, pinned version
+  .prettierignore                           one added line: the 5R evidence dir
+  scripts/check-e2e.sh                      one added entry in the REPRODUCE array
+  scripts/security-audit-llm-shield-stage3m.sh
+  scripts/security-audit-llm-shield-stage3o.sh
+                                            one added test-key allowlist line each,
+                                            matching by PATH REGEX with no digits
+  README.md                                 the release banner, at closeout only
 ```
 
-The closeout path is named **here, before a byte of it exists**. 5Q established that naming in
-advance is the permitted route and naming afterwards is what L5 forbids; 5R inherits the practice
-rather than rediscovering it.
+### §2.3.1 Why the second list exists at all
+
+The first draft of this section listed only the stage-owned paths and called itself exhaustive. It
+was wrong, and the way it was wrong is worth freezing.
+
+The project's standing wiring checklist **requires** touching `.prettierignore` (evidence byte-
+stability depends on it), `scripts/check-e2e.sh` (the reproduce script must join the REPRODUCE
+array), both security-audit allowlists (test keys), and `README.md` at closeout. A write surface that
+forbids all five makes the mandatory wiring a declared violation on the day it is performed — and 5Q
+shipped with exactly one unrepaired write-surface violation of precisely this shape, a prior-stage
+test widened first and named afterwards.
+
+Naming them in advance is the permitted route. Naming them afterwards is what L5 forbids. So they are
+named, and they are **mutation-scoped rather than path-permitted**: "I only touched `package.json`"
+must not cover swapping a crypto library, and "I only touched `check-e2e.sh`" must not cover editing
+a prior stage's reproduce invocation. The verifier compares parsed before/after structure, not paths,
+for every entry in the second list — the discipline 5Q's `checkPackageJsonMutation` established,
+generalised to all five shared files.
+
+The closeout path is likewise named **here, before a byte of it exists**.
 
 ### §2.4 F003 is inherited as an operational constraint, not just a fact
 
@@ -513,10 +628,12 @@ cannot be discharged twice, and a family cannot claim credit for work 5Q already
 ### §6.3 The prose gate
 
 Gate G7 (§11.1) scans 5R's own spec, plan, closeout, release notes and evidence for sentence shapes
-that attribute a post-5Q coverage figure to 5Q. This gate will match its own documentation — every
-guard in 5Q that scanned a file it lived inside did, four separate times. So the gate strips comments
-first **and** asserts the raw file still contains the pattern, ensuring the stripping cannot make the
-scan vacuous. 5Q learned this the hard way, four times; 5R pays for it once, in advance.
+that attribute a post-5Q coverage figure to 5Q. This gate will match its own documentation — **three**
+5Q guards that scanned a file they lived inside did exactly that (the Lean escape scan reading
+"sorry" from its own comment, the browser parity check finding `VSR-PARITY-FAILED` in the branch that
+sets it, K7-A's bare-existence scan matching its own explanation). So the gate strips comments first
+**and** asserts the raw file still contains the pattern, ensuring the stripping cannot make the scan
+vacuous. 5Q paid for that lesson three times; 5R pays once, in advance.
 
 ---
 
@@ -572,8 +689,47 @@ say so in the delta ledger as a distinct, visible line. A stage whose blade is "
 enough" that declined to apply the blade to its own predecessor's six families would be exempting
 itself from its own thesis.
 
-Precedent: 5Q found five of its own harness defects and published them. This is that, aimed one stage
-back.
+The precedent is real but must be stated accurately, because the inaccurate version was in this
+spec's first draft: **5Q published zero findings against 5Q.** All twelve ledger records name another
+stage (`5m`, `5c`, `5d`, `5l`, `5o`, `5p`) or `cross-stage`. 5Q's own harness defects — ten drivers
+running on import, a fail-open in its own gate, breaking 5P for two commits, four false findings —
+were repaired during the campaign and narrated in the closeout, not frozen as findings.
+
+That is a defensible choice for defects fixed before the freeze, and it is also a gap: a stage's
+self-criticism lived in prose while its criticism of others lived under signature. 5R closes it by
+recording §7.3's outcomes as **ledger records**, whichever way they fall, including against itself.
+
+### §7.4 Pre-stage finding `5R-F001`
+
+Recorded here because it was measured during this spec's research, **before** the 5R harness existed
+— the 5Q §14 precedent for `5Q-F001`.
+
+```text
+finding_id        5R-F001
+affected_stage    5q
+affected_artifact docs/research/llm-shield/evidence/stage-5q/mutation/receipts.json
+                  + the L4 admissibility rule that consumes it
+attack_class      R7   (selective omission / fake completeness)
+severity          assurance_only
+```
+
+**Expected.** A green→red→green mutation receipt for class R is evidence that class R is detectable
+over the members where R is claimed to apply.
+
+**Observed.** Each receipt is evidence over exactly one member, in one role. Across the fourteen
+discharged classes the tested role holds **2 118 of 20 213** obligated cells — **10.5%**. Four
+populated roles totalling 699 members (`evidence_emission`, `formal_statement`, `orchestration`,
+`code_allocation`) were reached by no mutant at all, yet every class obligated over them was
+discharged class-wide. Six receipts were earned on cells the obligation matrix marks `omitted`.
+
+**Why `assurance_only` and not `claim_narrowing`.** No published 5Q coverage number depends on it.
+`status_tally` shows `attacked_pass: 0` — no member was ever admitted on the strength of a class
+discharge, so the weak generalisation never propagated into the 6.2%. The defect is in the
+**assurance argument**, not in the arithmetic. Any stronger severity would be an overclaim, and this
+finding exists to make an overclaim harder, not to commit one.
+
+**Not a repair.** 5Q's ledger is not reopened and its receipts are not re-run. 5R-F001 is a 5R record
+about a 5Q artifact, which is the same relationship 5Q had to 5M.
 
 ---
 
@@ -615,7 +771,9 @@ the demonstration is part of the evidence rather than a claim in a comment.
 
 ---
 
-## §9 Architecture
+## §9 Architecture and evidence lanes
+
+### §9.1 Module tree
 
 ```text
 tools/simurgh-attestation/stage5r/
@@ -641,12 +799,41 @@ tools/simurgh-attestation/stage5r/
 Every node driver carries a main guard from the first commit. Ten of 5Q's own drivers executed on
 import until K7-A found them, and a census cannot enumerate a module that exits during enumeration.
 
+### §9.2 The three evidence lanes
+
+The standing lane contract applies, and the mapping is stated rather than assumed because 5R's lanes
+are unusual — the "fixture corpus" here is a corpus of **controls**, and the thing being tested is a
+detector rather than a verdict.
+
+**Lane A — byte-stable control corpus, CI-gated.** The 165 controls and their receipts are a
+committed corpus generated by a CLI main and proven idempotent (`generate twice + git diff
+--exit-code`). Every admissibility condition in §4.1 appears at least once in a **failing** variant,
+so the tamper matrix covers the seven conditions rather than only the happy path. Includes a
+multi-byte / non-ASCII control wherever a source span or byte offset is involved — that is where
+geometry bugs die in daylight, and canonicalisation families live exactly there.
+
+**Lane B — deterministic two-process control ceremony, CI-gated.** The detector runs in a child
+process that is **blind by construction**: it receives the control's bytes on stdin and is told the
+attack class, and it is told nothing about which of the three controls it is looking at. Env scrubbed
+to `PATH`; `OPERATOR*` env and `.pem` argv refused. The parent never rewrites the child's verdict.
+Blindness negatives prove the guards fire. This lane is what makes §3.3's pre-registration mean
+something operationally — a detector that cannot see the label cannot fit to it.
+
+**Lane C — live model capture: `not_in_scope` for 5R, and the reason is recorded.** A model could
+plausibly generate control candidates, and that is precisely why it is excluded: a
+model-authored control whose vulnerability was never independently verified would put an unverified
+premise underneath the stage's central claim. Controls are hand-authored with recomputed premises.
+If a later stage wants model-assisted control generation, it arrives as its own blade with its own
+verification story, not as a convenience here.
+
 ---
 
-## §10 The 5R attestation
+## §10 The 5R attestation and proofs
 
-Two-tier, following the standing contract: a public structural bundle and a signed audit envelope.
-Roots, at minimum:
+### §10.1 Two-tier attestation
+
+Following the standing contract: a public structural bundle and a signed audit envelope. Roots, at
+minimum:
 
 ```text
 inherited_commitment_digest      the seven §2.1 digests, canonicalised together
@@ -662,6 +849,33 @@ Signed by a new 5R key. The 5Q key at `~/.simurgh/5q-ed25519.pem` **must survive
 to verify inherited signatures — but it does not sign 5R. A successor signing with its predecessor's
 key makes the two indistinguishable, which is the property 5G spent a stage establishing.
 
+### §10.2 Lean core
+
+`proofs/stage5r/`, Lean 4.15.0, no mathlib, zero `sorry`, symbolic model rather than real crypto. The
+theorem targets are the properties that must not be reachable by any execution path:
+
+```text
+L1  admissibility is conjunctive: any one of the seven §4.1 conditions false
+    ⟹ the family is inadmissible.  (no partial credit, provably)
+L2  no promotion: admissible(R, S) for any single role S does not entail
+    admissible(R, S') for S' ≠ S.  (the blade, as a theorem)
+L3  delta disjointness: the union of family deltas is disjoint from the
+    inherited discharged set ⟹ cumulative ≤ 1 and monotone in new work only.
+L4  denominator invariance: no sequence of family admissions changes
+    inherited_cells.  (T6, closed formally)
+L5  orthogonal soundness: if the detector's verdict is invariant under
+    suppression of every forbidden surrogate, then a detected vulnerable
+    control and a not-detected orthogonal control are distinguishable by
+    the declared signal alone.
+```
+
+L2 and L4 are the two that carry the stage. L5 is the weakest — it is conditional on the surrogate
+list being complete, which §13 declares as a non-claim rather than proving.
+
+The Lean gate is wired **by discovery, not by name**: the workflow enumerates `proofs/stage5r/*.lean`
+from the filesystem. 5P's lean-check listed proof files by name and went vacuously green when a file
+was added, and 5Q-F001 is the same defect in the shared workflow, still open.
+
 ---
 
 ## §11 Release gates
@@ -669,6 +883,11 @@ key makes the two indistinguishable, which is the property 5G spent a stage esta
 ### §11.1 5R's own gates
 
 ```text
+G0  §1.2's measurements recompute from the inherited receipts, closure and
+    obligation matrix: the role histogram, the 2118/20213 ratio, the six
+    receipts on omitted cells.  A spec number that cannot be re-derived is
+    an assertion, and this stage's whole subject is assertions that were
+    never re-derived.
 G1  the seven inherited digests recompute, and the 5Q envelope verifies roots-first
 G2  every published family satisfies all seven §4.1 conditions
 G3  every control carries a recomputed premise and a proven restoration
@@ -677,6 +896,11 @@ G5  no per-role admissibility promotes to class-wide (N6's mutant stays caught)
 G6  the six N-mutants are detected; each gate has a recorded red state (§8.3)
 G7  no sentence in 5R's own artifacts attributes a post-5Q figure to 5Q (§6.3)
 G8  the 5Q evidence tree is byte-identical before and after the full 5R run
+G9  the tranche disclosure of §11.5 is present and its arithmetic checks
+G10 no 5R document prints a raw-code literal from any predecessor's band
+    (§11.4 — asserted here rather than left to a prior stage's census to
+    notice, because that census fires only on a literal AND a stage-mention
+    pattern together, and passing it by phrasing is not passing it)
 ```
 
 G8 is the one most likely to fail, and it is the one that must not be softened. F003 says importing
@@ -691,25 +915,129 @@ discovery rather than by name** — 5P's lean-check listed proofs by name and we
 
 ### §11.3 Prior-stage non-disturbance
 
-Every prior stage's reproduce script stays green, 5Q's included. 5R is additive. The T7 attribution
-model 5Q built (`green | regressed_by_5r | pre_existing | not_compared | not_comparable`) is
-inherited, including `not_comparable` for tree-relative commands, which 5Q added after mislabelling
-one.
+Every prior stage's reproduce script stays green, 5Q's included. 5R is additive. 5Q's attribution
+model is inherited with its `regressed_by_q0` member renamed `regressed_by_5r` and every other value
+byte-identical:
+
+```text
+green | regressed_by_5r | pre_existing | not_compared | not_comparable
+```
+
+`not_compared` stays its own value — absent a baseline run, "we did not check" must not be dressed up
+as "green" — and `not_comparable` stays for tree-relative commands, which 5Q added only after
+mislabelling one `pre_existing`.
 
 ### §11.4 No raw codes in this spec
 
-None allocated. Next free is **475** (5P closed at 474; 5Q allocated none). If 5R needs typed
-outcomes, they come by post-freeze annex under the 5P Annex R contract: one canonical table, lookup
-never arithmetic, no literals scattered through verifiers, band closed on completion, existing codes
-never move.
+None allocated. The next free code is **one past the top of 5P's closed band**, which 5Q left
+untouched by allocating none; the value is read from the allocator rather than restated here. If 5R
+needs typed outcomes, they come by post-freeze annex under the 5P Annex R contract: one canonical
+table, lookup never arithmetic, no literals scattered through verifiers, band closed on completion,
+existing codes never move.
 
-**And the literal-in-prose trap is inherited.** 5Q broke 5P twice by writing raw-code literals into
-documentation — the second time into prose _about the rule against them_. 5R's spec, plan and
-closeout describe raw codes; they do not print them.
+**And the literal-in-prose trap is inherited.** 5Q broke its predecessor twice by writing raw-code
+literals into documentation — the second time into prose _about the rule against them_. This spec's
+first draft did it a third time, in this very subsection, printing both the closed-band top and its
+successor.
+
+It passed the census by luck rather than by rule. That gate fires on a file only when a band literal
+**and** a predecessor-mention pattern both appear, and the draft happened to write the stage id
+without the word that completes the pattern — so a purely editorial edit, one word long, would have
+turned a prior stage's gate red. A check that passes because of a phrasing accident is not a check
+that passed.
+
+So the rule is stated as behaviour, not as an aspiration: **5R's spec, plan and closeout describe raw
+codes and never print them**, and G10 asserts the absence in 5R's own documents rather than relying
+on the predecessor's census to notice.
+
+### §11.5 The tranche rule — what a shippable 5R is
+
+55 families is the universe (§5.4). It is not a schedule, and a stage that quietly redefines the
+universe to match what it built is committing T7. So the boundary is pinned here, before any family
+exists.
+
+**Minimum to ship.** One admissible family for **every role archetype A1–A8** that any
+under-supported class obligates. That is the ruling's own floor — "at minimum, require one family for
+each applicable role archetype" — and it is what proves the contract works across archetypes rather
+than in one comfortable corner. Below that floor the stage has demonstrated a mechanism, not a
+method, and should say so instead of tagging.
+
+**Every published number carries all four terms**, always together:
+
+```text
+families admissible / families attempted / families in the universe (55)
+newly discharged cells / 15 301 under-supported / 23 332 inherited
+```
+
+**A family that is attempted and fails is published.** Attempted-and-inadmissible is the honest
+outcome §4.5 requires; the only forbidden state is attempted-and-unmentioned. `families attempted`
+minus `families admissible` is therefore a number the reader can see, and if it is large that is the
+finding.
+
+The precedent is direct: 5Q shipped 6.2% with the denominator intact rather than stretching the
+campaign until the number looked better. 5R inherits the practice, including the part where the
+uncomfortable number is the headline.
 
 ---
 
-## §12 Honest non-claims
+## §12 Ledgers
+
+### §12.1 The socket ledger — 5R pays none and mints none
+
+Stated explicitly, because a stage that silently skips the IOU ledger is how the discipline dies.
+
+```text
+I7  keyless_submitter_identity_binding      OPEN
+    (5P executed a real public Rekor entry, retiring 5G's sigstore debt BY
+    EXECUTION, and stated plainly that it was not keyless. I7 survives.)
+
+I8  checkpoint_witness_cosigning            OPEN, scheduled for 5S
+    (minted by 5M; the roadmap routed it to 5Q, 5Q became the red team,
+    the ruling then routed it to 5R, and this ruling routes it to 5S.
+    Three reroutes is the point at which a socket needs saying out loud
+    rather than assuming.)
+```
+
+**5R pays neither, and mints nothing new.** Paying I8 requires witness gossip and split-view
+detection — a different blade in a different domain, and folding it in would give 5R two cores, which
+is the split rule this project applies to itself. Minting a fresh socket while carrying two open ones
+would be hoarding. If 5R's campaign surfaces a genuinely new debt it is minted at closeout, from
+measured evidence, not speculated here.
+
+### §12.2 The founder's ledger
+
+**Who could run this tomorrow.** An **AI-evaluation team publishing a safety benchmark** — internal
+to a lab or at an evaluation organisation. Their live problem is §1.5's: reviewers increasingly ask
+whether a benchmark measures the construct it names, and the field's own surveys report that around
+half of widely-cited benchmarks ship no construct-validity evidence at all. 5R's family record is a
+drop-in answer shape — vulnerable, structurally-matched safe, orthogonal failure, one pre-registered
+signal, forbidden surrogates named — and its verifier recomputes the triad offline from committed
+bytes.
+
+**The single blocker.** The contract is currently expressed over the inherited 5Q closure: a family
+is bound to a `function_id` and an `obligation_id` from one specific committed universe. An outside
+team has no such closure and cannot mint one without 5Q's census. Until the family record can bind to
+a **caller-supplied universe descriptor** — any committed set of items with roles and obligations —
+the contract is portable in principle and captive in practice.
+
+That is a concrete, buildable artifact, and it is this stage's roadmap debt rather than an
+aspiration: **a universe-adapter schema plus one worked non-Simurgh example.** It is tracked like a
+socket, and the closeout must report it as built or unbuilt by name.
+
+### §12.3 The new evidence species
+
+Every stage in the arc produced a kind of evidence the repository had never produced. 5R's is:
+
+> **A signed receipt that a detector discriminates a property from its neighbours** — not that a
+> check ran, not that an artifact verified, but that the instrument doing the checking was shown to
+> distinguish three deliberately-constructed cases and to be insensitive to a named list of
+> surrogates.
+
+Every prior stage attested to a **result**. This one attests to the **instrument**.
+
+---
+
+## §13 Honest non-claims
 
 Frozen, and published in the attestation and the closeout:
 
@@ -728,7 +1056,7 @@ Frozen, and published in the attestation and the closeout:
 
 ---
 
-## §13 K7 all-functions E2E net
+## §14 K7 all-functions E2E net
 
 Mandatory before tag, per standing project contract. The net covers **every export of every 5R
 module**, plus:
@@ -749,22 +1077,27 @@ The plan ends with this net plus a docs-accuracy pass over every claim in this s
 
 ---
 
-## §14 Scorecard
+## §15 Scorecard
 
 Honest scores at spec time, with what would move each.
 
-| axis                   | score | reasoning                                                                                                                                                                                                                                                                                                                  |
-| ---------------------- | ----: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Novelty**            |   8.9 | Positive-control families for security _detectors_ — with a third, orthogonal-failure control — is not something the red-team tooling literature does mechanically. Held below 9 because the idea is a rigorous transplant of the biological/clinical control triad rather than a new primitive.                           |
-| **Frontier**           |   8.8 | It attacks the exact reason a shipped red team stalled at 6.2%, and its blade generalises to any "we tested one and generalised" claim. Rises above 9.2 only if a family proves one of 5Q's own six inherited families inadmissible (§7.3) — that is precommitted here, so it can be earned or missed but not retrofitted. |
-| **Good-for-Anthropic** |   9.3 | "One seeded test is not evidence the detector understands the class" is directly a safety-evals argument. An eval suite that scores well because it detects _sadness_ rather than the property it claims is a live failure mode in model evaluation, not only in code red teams.                                           |
-| **Constitution**       |   9.5 | The stage is structurally forbidden from improving its predecessor's number and gates its own prose against implying otherwise. Not higher until it has actually published an uncomfortable result of its own; 9.5 is the design's honesty, not yet the campaign's.                                                        |
+| axis                   | score | reasoning                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| ---------------------- | ----: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Novelty**            |   9.0 | Positive-control families for security _detectors_, with a third orthogonal-failure control, expressed as signed recomputable evidence. §1.5 locates the seam precisely: mutation testing reasons about coupling between a mutant and a **fault**, never across a **role**, so the adequacy argument 5Q imported does not license what it was used for. Held at 9.0, not higher, because the control triad itself is a rigorous transplant from clinical/biological method rather than a new primitive — the invention is the binding to roles and obligations, not the triad. |
+| **Frontier**           |   9.0 | It attacks the exact reason a shipped red team stalled at 6.2%, with the gap now **measured** (§1.2: five of nine roles reached, 10.5% of the discharged area, 699 members with no mutation evidence) rather than argued. Raised from 8.8 on that measurement and on 5R-F001. Rises above 9.3 only if §7.3 finds one of 5Q's own six inherited families inadmissible — precommitted here, earnable or missable, not retrofittable.                                                                                                                                             |
+| **Good-for-Anthropic** |   9.4 | "One seeded test is not evidence the detector understands the class" is a safety-evals argument first and a code argument second. §1.5's construct-validity wedge is live and external: systematic reviews report roughly half of widely-cited LLM benchmarks ship no construct-validity evidence, and a JRC meta-review names construct-validity failure among its systemic issues. An eval that scores well by detecting _sadness_ is a model-evaluation failure mode, not only a red-team one.                                                                              |
+| **Constitution**       |   9.5 | The stage is structurally forbidden from improving its predecessor's number, gates its own prose against implying otherwise, publishes its own threat model as the author-adversary (§1.7), and corrected three of its own first-draft claims against measurement before freeze. Not higher until it has published an uncomfortable result of its **own campaign**; 9.5 is the design's honesty, not yet the campaign's.                                                                                                                                                       |
 
-Re-scored at closeout against what was measured, per standing practice.
+Re-scored at closeout against what was measured, per standing practice — including downward if §7.3
+finds nothing and the tranche lands at the §11.5 floor.
+
+**Scorecard teeth.** Every "what moves it higher" above names a buildable artifact or a precommitted
+measurement, not an aspiration. §12.2's universe-adapter schema is tracked like a socket and must be
+reported built or unbuilt by name at closeout.
 
 ---
 
-## §15 Deferred to the implementation plan
+## §16 Deferred to the implementation plan
 
 - task decomposition and the tranche boundary (§5.4: 55 families is the universe, not the schedule);
 - which classes are attempted first, and the stated reason;
