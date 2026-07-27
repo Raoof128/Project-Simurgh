@@ -1,0 +1,9 @@
+{
+  "schema": "simurgh.vpf.signer-profile.v1",
+  "note": "The 5R genesis signer. The private half lives in ~/.simurgh and is never committed; deterministically derived keys are forgeable and prohibited. This key signs nothing 5Q signed, and 5Q's key signs nothing of 5R's: a successor signing with its predecessor's key makes the two indistinguishable.",
+  "profile_id": "stage5r-vpf-genesis",
+  "algorithm": "ed25519",
+  "public_key_b64": "MCowBQYDK2VwAyEAsddb4yRcrgLNNwmLLObMVowtb7zXdPVOXaWbLj4nwMQ=",
+  "public_key_digest": "d78c27e79715446b3d82c717b8f18347d109d651d3b25a240a236346c67ab160",
+  "verification_needs_no_private_key": true
+}
