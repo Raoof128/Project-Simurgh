@@ -810,6 +810,34 @@ const ADAPTERS = {
   "node/verifyTransition.mjs": {
     TRANSITION_CONDITIONS: (m) => ok(m.TRANSITION_CONDITIONS.length === 7, "re-exported T1..T7"),
   },
+  "core/lifecycle.mjs": {
+    PHASES: (m) =>
+      ok(
+        m.PHASES.find((p) => p.id === "Q0_TRANSITION").may_produce.length === 0,
+        "the validation-only phase may produce NOTHING — the load-bearing fact of 5Q-F013"
+      ),
+    CONDITION_REQUIREMENTS: (m) =>
+      ok(
+        m.CONDITION_REQUIREMENTS.T2.needs === null,
+        "T2 needs no artifact, which is why it escapes"
+      ),
+    phaseDeadlock: (m) =>
+      ok(
+        m.phaseDeadlock({ unsatisfied: ["T3"], currentPhase: "Q0_TRANSITION" }).deadlocked ===
+          true &&
+          m.phaseDeadlock({ unsatisfied: ["T3"], currentPhase: "Q0_DISCOVERY" }).deadlocked ===
+            false,
+        "blocked after the freeze, reachable before it"
+      ),
+  },
+  "node/closeoutAddendum.mjs": {
+    buildFinding: (m) =>
+      ok(
+        m.buildFinding({ deadlock: { blocked: [] }, unsatisfied: ["T3"] }).severity ===
+          "claim_narrowing",
+        "narrowing, because T2 shows the primitive does accommodate one kind of incompleteness"
+      ),
+  },
 };
 
 // ------------------------------------------------------------------------------------------------
