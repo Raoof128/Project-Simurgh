@@ -47,30 +47,26 @@ jobs:
       - name: unit tests
         run: node --test tests/unit/llmShield/stage5r/*.test.js
 
-      # TEMPORARY: name the Linux-only failing test the repo-wide gate reports.
-      # The first attempt at this step expanded the globs itself, and bash without `globstar` turns
-      # `tests/unit/**/*.test.js` into something narrower — it printed nothing and told me nothing.
-      # This runs exactly what the gate runs, `npm test`, and always shows the tail.
-      - name: TEMPORARY diagnostic — name the failing test in the wider suite
+      # TEMPORARY: the wider suite passes on this runner under BOTH Node 26 and the gate's Node 22,
+      # on a clean tree. So the failure lives in check.sh's own environment, not in the tests. This
+      # runs the gate's script and prints the log it saves but does not upload.
+      - name: TEMPORARY diagnostic — run the gate's own script and show its test log
+        env:
+          NODE_ENV: test
+          SIMURGH_ALLOWED_ORIGIN: http://localhost:33030
+          SIMURGH_INSTRUCTOR_TOKEN: test-instructor-token
+          SIMURGH_HELPER_SECRET: test-helper-secret
+          SIMURGH_AUDIT_SECRET: test-audit-secret
+          SIMURGH_SESSION_SIGNING_SECRET: test-session-secret
+          SIMURGH_SCORING_MODE: local
         run: |
-          # Under Node 26 the whole suite passes on this runner, and the repo-wide gate runs Node 22.
-          # So the difference is Node 22 ON LINUX — macOS Node 22 is green here too. This installs the
-          # gate's Node and runs the gate's command.
           set +e
-          curl -fsSL https://nodejs.org/dist/v22.23.1/node-v22.23.1-linux-x64.tar.xz -o /tmp/n22.tar.xz
-          mkdir -p /tmp/n22 && tar -xJf /tmp/n22.tar.xz -C /tmp/n22 --strip-components=1
-          /tmp/n22/bin/node --version
-          /tmp/n22/bin/node --test tests/unit/*.test.js tests/unit/**/*.test.js tests/unit/**/**/*.test.js > /tmp/full.log 2>&1
-          status=$?
-          echo "npm test exit: $status"
-          echo "--- failing tests ---"
-          grep -E "^not ok" /tmp/full.log | head -20 || true
-          echo "--- first failure detail ---"
-          grep -m1 -A 30 "^not ok" /tmp/full.log || true
-          echo "--- summary ---"
-          grep -E "^# (tests|pass|fail|skipped)" /tmp/full.log || true
-          echo "--- tail ---"
-          tail -20 /tmp/full.log
+          bash scripts/check.sh > /tmp/check.log 2>&1
+          echo "check.sh exit: $?"
+          echo "--- failing tests from npm_test.log ---"
+          grep -E "^not ok" .simurgh_check_logs/npm_test.log | head -10 || true
+          grep -m1 -A 30 "^not ok" .simurgh_check_logs/npm_test.log || true
+          grep -E "^# (tests|pass|fail|skipped)" .simurgh_check_logs/npm_test.log || true
 
       - name: the inherited commitment, roots first and signature last
         run: node tools/simurgh-attestation/stage5r/node/verifyInheritance.mjs
