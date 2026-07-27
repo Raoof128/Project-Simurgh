@@ -17,210 +17,212 @@ gate            node --test tests/unit/llmShield/stage5r/frozenBlock.test.js
 ```
 
 The four frozen objects — `vpf_inherited_commitment`, `vpf_family_contract`,
-`vpf_admissibility_rules`, `vpf_role_archetypes` — were frozen **before** this plan existed, on
-purpose. A plan written against a contract still under revision becomes a fifth frozen object by
-accident: the moment the plan names a behaviour the spec does not, the plan is where the real rule
-lives. Nothing below may weaken §§2–5. Where this plan resolves an ambiguity in them it resolves it
-**strictly**, and §1.3 records every place it does.
+`vpf_admissibility_rules`, `vpf_role_archetypes` — were frozen **before** this plan existed. Nothing
+below may weaken them. Where this plan resolves an ambiguity in them it resolves it **strictly**, and
+§1.3 records every place it does.
 
-Predecessor pins, all verified at spec time and re-verified by Task 2:
+**Spec sections amended after the freeze, all outside §§2–5, digest unchanged and re-verified:** §8.2
+(N5 split into N5a/N5b — seven mutants, not six), §9.2 (Lane A's corpus is the attempted set), §10.1
+(`family_result_root` total over all 55 pairs; `control_receipt_root` scoped to attempted families;
+the false claim that verifying 5Q's signature needs 5Q's **private** key, corrected to the public key
+committed in the envelope), §11.1 (G6 counts seven).
+
+Predecessor pins, verified at spec time and re-verified by Task 2:
 
 ```text
 5Q tag                v2.52.0-stage-5q-vsr, main 20fc323c
 closure_source_commit 3512d287d2e13ceb31115477acc8b5ff182bc36e   member_count 2531
-signer to verify      stage5q-q0-genesis  (key must survive; it does not sign 5R)
+verify 5Q with        the PUBLIC key in signer.public_key_b64, pinned by
+                      expected_public_key_digest de557244…  (no private key required)
 inherited_cells       23332   already discharged 1438 (6.2%)   under-supported 15301
-family universe       55 (attack_class, target_security_role) pairs; 165 controls
+family universe       55 (attack_class, target_security_role) pairs; 165 controls at full scope
 ```
 
 ---
 
-## §1 What this plan is, and the two rulings it makes
+## §1 What this plan is, and the rulings it makes
 
 ### §1.1 Scope
 
-This plan covers the whole of 5R: inheritance, the instrument, the precommitted first tranche, the
-audit 5R owes 5Q, attestation, proofs, wiring and closeout. There is no Q0/Q1 split — that structure
-belonged to 5Q's red-team lifecycle and produced the deadlock 5Q recorded as F013. 5R's phase
-boundary is the **tranche** (§4), which is a disclosure rule rather than a lifecycle gate, and
-therefore cannot deadlock: an incomplete tranche is a published fraction, not a blocked transition.
+The whole of 5R: inheritance, the instrument, a precommitted first tranche, the audit 5R owes 5Q,
+attestation, proofs, wiring, closeout and release. There is no Q0/Q1 split — that structure belonged
+to 5Q's red-team lifecycle and produced the deadlock 5Q recorded as F013. 5R's phase boundary is the
+**tranche**, a disclosure rule rather than a lifecycle gate, so an incomplete tranche is a published
+fraction and not a blocked transition.
 
-### §1.2 Twenty-five tasks in four waves
+### §1.2 Twenty-seven tasks in four waves
 
 ```text
-WAVE 1  inheritance and universe      Tasks 1-7    nothing may be attacked before the universe is fixed
-WAVE 2  the instrument                Tasks 8-13   the contract, the runner, the ledger, the scanner
-WAVE 3  self-proof and campaign       Tasks 14-19  prove the instrument, then use it
-WAVE 4  attestation, proofs, closeout Tasks 20-25  sign it, prove it, wire it, publish it, ship it
+WAVE 1  inheritance and universe        Tasks 1-7    nothing is attacked before the universe is fixed
+WAVE 2  the instrument                  Tasks 8-14   contract, admissibility, controls, ledger, scanners
+WAVE 3  proof, commitment, campaign     Tasks 15-21  prove it, lock it, commit to it, then run it
+WAVE 4  attest, prove, wire, ship       Tasks 22-27  sign it, prove it, wire it, publish it, release it
 ```
 
-Wave boundaries are barriers. In particular **no control executes before Task 14**, because a
-campaign whose instrument has never been shown to fail is 5Q's Law 4 defect wearing this stage's
-clothes.
+Wave boundaries are barriers. **No control executes before Task 16** (the instrument must have been
+shown to fail first), and **no campaign result is produced before Task 18** (the commitment must
+exist first).
 
-### §1.3 The two rulings this plan makes, both narrowing
+### §1.3 The five rulings this plan makes, all narrowing
 
-**Ruling 1 — discharge is per cell, never per pair.** §4.2 makes class-wide promotion
-unrepresentable and says a family for `R4 × trust_decision` "discharges cells in `R4 ×
-trust_decision` and nothing else". It does not say a family discharges **all** 363 of them. This plan
-rules the strict reading: **a family's admissibility licenses attack over its (class, role) cell set;
-a cell is discharged only when the family's probe actually ran against that cell's member and
-produced a result bound to that `obligation_id`.** `coverage_delta` counts probed cells, not pair
-size.
+**Ruling 1 — discharge is per cell, never per pair.** §4.2 forbids class-wide promotion but does not
+say whether one admissible family discharges all 363 cells of its role. The loose reading is 5R-F001
+one level down: generalising one control to a whole role is the argument 5Q made from one mutant to a
+whole class, at finer grain. A cell is discharged only when the probe ran against that member and
+satisfied the full predicate of Task 12. Sampling is prohibited. **Consequence, stated now: 5R's
+delta will be small.**
 
-The reason is that the loose reading is 5R-F001 one level down. 5Q generalised one mutant to a whole
-class; a family that generalised one control to 363 members of one role would be making the identical
-argument at finer grain, in the stage built to forbid it. The blade does not get an exemption for
-being ours.
+**Ruling 2 — `orchestration` is unreachable in this universe, by measurement.** It is obligated only
+under R9 and R16, both in the attacked five, so none of the 55 pairs touches it. The universe reaches
+eight of the nine populated roles; A7's floor is met through `parity_mirror` alone, and the closeout
+says so rather than letting the tick imply coverage that never existed.
 
-Consequence, stated now so it cannot be a surprise at closeout: **5R's delta will be small.** The
-first tranche's eight pairs span 2 406 cells, and the delta will be a fraction of that, not 2 406.
-That is the honest arithmetic of the strict reading, and §11.5's four-term disclosure exists so a
-small number can be published without being dressed up.
+**Ruling 3 — the corpus is the attempted set; the result ledger is total.** Lane A cannot hold 165
+controls before anything verifies, or the tranche rule is unshippable. So the control corpus covers
+attempted families only, and `family_result_root` carries **all 55 pairs**, each in exactly one of
+`attempted_admissible | attempted_inadmissible | not_attempted`. Publishing "8 of 55" leaves 47 pairs
+unnamed; a 55-row census names them. Omission becomes a row rather than a silence.
 
-**Ruling 2 — `orchestration` is unreachable in this universe, by measurement.** §5.1 maps A7 to
-`orchestration, parity_mirror`. Recomputed from the inherited matrix, `orchestration` is obligated
-only under R9 and R16 — both in the attacked five, neither in the under-supported eleven — so no
-(class, role) pair in the 55 touches it. The universe reaches **eight** of the nine populated roles.
-A7's floor is therefore discharged through `parity_mirror` alone, and the closeout must say
-`orchestration` was never in scope rather than letting A7's tick imply it was.
+**Ruling 4 — T1 is immutable for this release.** An earlier draft said the tranche "may grow", which
+is a cherry-picking route: keep adding families until the headline improves. T1 is fixed at Task 5
+and does not change. Later families belong to a later release with its own commitment.
+
+**Ruling 5 — no destructive negative test touches the primary inherited tree.** Every seeded
+violation, tamper case and red-state demonstration runs in a scratch worktree or a copied fixture
+tree. "Seed a write into the 5Q evidence tree and revert it" was in an earlier draft; it violates the
+boundary G8 exists to protect, and an interrupted run leaves debris in the one tree that must never
+move.
 
 ---
 
 ## §2 Global constraints — binding on every task
 
 **Read-only surface.** `docs/research/llm-shield/evidence/stage-5q/**` and
-`tools/simurgh-attestation/stage5{a..q}/**`. A task that needs a predecessor's logic **reads it as
-prior art and reimplements**; §2.4 forbids importing a `stage5{a..q}` module in the primary worktree,
-and F003 established that importing a closure module is not read-only.
+`tools/simurgh-attestation/stage5{a..q}/**`, never written and never mutated even temporarily
+(Ruling 5). A task needing a predecessor's logic **reads it as prior art and reimplements**: §2.4
+forbids importing a `stage5{a..q}` module in the primary worktree.
 
-**Write surface**, exhaustive, per frozen §2.3:
+**Write surface**, per frozen §2.3 — **six files on the shared list, five of which are the standing
+wiring checklist** (`.prettierignore`, `check-e2e.sh`, both audit allowlists, `README.md`);
+`package.json` is the sixth. §2.3.1's "all five" refers to the wiring five it enumerates. The
+verifier covers all six.
 
 ```text
-STAGE-OWNED            tools/simurgh-attestation/stage5r/**
-                       tests/**/stage5r/**   tests/fixtures/llmShield/stage5r/**
-                       proofs/stage5r/**     docs/research/llm-shield/evidence/stage-5r/**
-                       docs/research/llm-shield/STAGE_5R_CLOSEOUT.md
-                       docs/superpowers/specs/2026-07-27-...-design.md   (annex only, post-freeze)
-                       docs/superpowers/plans/2026-07-27-...-implementation-plan.md
-                       scripts/check-stage5r-proofs.sh
-                       scripts/reproduce-llm-shield-stage5r.sh
-                       .github/workflows/stage-5r-checks.yml
-SHARED, MUTATION-SCOPED   package.json (scripts key only) · .prettierignore (one line)
-                       scripts/check-e2e.sh (one REPRODUCE entry) · README.md (banner, closeout only)
-                       scripts/security-audit-llm-shield-stage3m.sh
-                       scripts/security-audit-llm-shield-stage3o.sh  (one allowlist line each,
-                       matching by PATH REGEX with no digits)
+STAGE-OWNED  tools/simurgh-attestation/stage5r/**
+             tests/**/stage5r/**   tests/fixtures/llmShield/stage5r/**
+             proofs/stage5r/**     docs/research/llm-shield/evidence/stage-5r/**
+             docs/research/llm-shield/STAGE_5R_CLOSEOUT.md
+             docs/superpowers/specs/2026-07-27-stage-5r-…-design.md   (annex only for §§2-5)
+             docs/superpowers/plans/2026-07-27-stage-5r-vpf-implementation-plan.md
+             scripts/check-stage5r-proofs.sh · scripts/reproduce-llm-shield-stage5r.sh
+             .github/workflows/stage-5r-checks.yml
+SHARED       package.json            scripts key only; no dependency change      Task 24
+             .prettierignore         one added line: the 5R evidence dir         Task 1
+             scripts/check-e2e.sh    one added REPRODUCE entry                   Task 25
+             scripts/security-audit-llm-shield-stage3m.sh   one allowlist line   Task 25
+             scripts/security-audit-llm-shield-stage3o.sh   one allowlist line   Task 25
+             README.md               release banner                              Task 27
 ```
 
-Task 1 builds the verifier for this list before any other task writes a file, and the verifier
-compares **parsed before/after structure** for the shared entries, not paths: "I only touched
-`package.json`" must not cover swapping a crypto library.
+**Runtime, expressed as a constraint rather than a path.** Every evidence build and every gate
+asserts the major version, because `/opt/homebrew/opt/node@26/bin/node` exists only on this
+developer's machine and CI runs Linux:
 
-**Runtime.** Node 26 at `/opt/homebrew/opt/node@26/bin/node` for every evidence build. Evidence built
-under any other runtime is not byte-comparable and does not count as a build.
+```bash
+test "$(node -p 'process.versions.node.split(".")[0]')" = "26" || { echo "node 26 required"; exit 1; }
+```
 
-**Raw codes.** None allocated (§11.4). No 5R document prints a raw-code literal from any
-predecessor's band, and the next free value is read from the allocator rather than restated. If a 5R
-finding needs a typed outcome, it arrives by post-freeze annex under the Annex R contract — one
-canonical table, lookup never arithmetic, band closed on completion.
+Every evidence bundle records `node_version`, `node_executable_realpath`, `platform`, `arch`. The
+Homebrew path stays a local setup hint and appears in no gate.
 
-**Attribution.** Commit, PR and release messages are neutral. No co-author trailer and no tool tag
-anywhere.
+**Arithmetic.** All published percentages are computed in integer arithmetic with round-half-up at
+one decimal place:
 
-**Keys.** The 5R private key never leaves `~/.simurgh/` and is never committed. Deterministically
-derived keys are forgeable and are prohibited. The 5Q key must survive — it verifies inherited
-signatures and does not sign 5R.
+```text
+tenths = floor((numerator * 1000 + floor(denominator / 2)) / denominator)
+display = tenths / 10, one decimal
+```
 
-**Evidence hygiene.** Every generated artifact is produced by a CLI main with a main guard, is built
-twice and `cmp`-ed, and every node driver carries its main guard from its first commit.
+Verified to reproduce both inherited figures exactly: 1438/23332 → 6.2, 2118/20213 → 10.5. No
+floating point crosses a runtime boundary, so Node, Python and browser cannot each round differently.
+
+**Raw codes.** None allocated. No 5R document prints a raw-code literal from any predecessor's band;
+the next free value is read from the allocator. Enforced by G10 (Task 13), not by care.
+
+**Attribution.** Neutral commit, PR and release messages. No co-author trailer, no tool tag anywhere.
+
+**Keys.** The 5R private key lives only in `~/.simurgh/` and is never committed; deterministically
+derived keys are forgeable and prohibited. **No 5R operation requires any predecessor's private key.**
+
+**Evidence hygiene.** Every generated artefact is produced by a **named CLI builder** with a main
+guard, built twice and `cmp`-ed. The task entries below name the builder for every artefact.
 
 ---
 
 ## §3 Plan-quality gates
 
-These bind the plan itself, and a task that violates one is not ready to execute.
-
 ```text
-P1  every task states its verification COMMAND, runnable as written, with no placeholder
-P2  every task states its definition of done as an observable, not an intention
-P3  every spec gate G0-G10 has a task that BUILDS it and a task that proves it RED (§8.3)
-P4  every self-proof mutant N1-N6 has a task that seeds it and an expected catch
-P5  no task depends on an artifact produced by a later task
-P6  every frozen-object obligation appears in Matrix 2 against the task that discharges it
-P7  a task that touches a shared mutation-scoped file names the exact mutation in advance
+P1  every task states runnable verification COMMANDS — shell, not typography
+P2  every task states its done condition as an observable: exit code, digest, file, clean tree
+P3  every gate G0-G10 has a task that BUILDS it and a task that proves it RED, in that order
+P4  every self-proof mutant N1-N6 (with N5a/N5b) has a seeding task and a named expected catch
+P5  no task depends on an artifact or behaviour produced by a later task
+P6  every frozen-object obligation appears in Matrix 2 against its discharging task
+P7  a task touching a shared file names the exact mutation in advance
+P8  no destructive negative test touches the primary inherited evidence tree      (Ruling 5)
+P9  every generated artefact names its CLI builder and its exact build command
 ```
 
-**These gates caught this plan.** A line-by-line pass against the repo found three of them violated by
-the first draft: P1 twice (`<base>` written as a literal placeholder in Tasks 1 and 22), P2/P5 twice
-(Tasks 5 and 16 stated done-conditions that depended on Task 19's behaviour), and P5 again in
-Matrix 1, where Task 15 was scheduled to prove the red state of two gates that Tasks 19 and 23 had not
-yet built. All are repaired above. A quality gate that has never rejected its own author's work is
-the same unproven instrument this whole stage is about.
+**These gates have now rejected two drafts.** The first draft violated P1 (`<base>` placeholders),
+P2/P5 (done-conditions depending on later tasks) and P5 again in Matrix 1. An external line-by-line
+review then found P1 and P2 unmet across sixteen tasks, plus the defects that became Rulings 3–5 and
+Tasks 17, 18, 21 and 26. Both passes are recorded rather than quietly absorbed: a quality gate that
+has never rejected its own author is the unproven instrument this stage is about.
 
 ---
 
 ## §4 The precommitted first tranche
 
-### §4.1 The floor, and why these eight
+§11.5's minimum is one admissible family per role archetype that an under-supported class obligates —
+eight archetypes through eight roles (Ruling 2). Selection rule, checkable rather than aesthetic:
+**attack where the predecessor's evidence is thinnest first.** The three reachable roles no mutant
+ever touched — `evidence_emission`, `formal_statement`, `code_allocation` — lead; then one pair per
+remaining archetype, taking the class with the largest obligation in that role.
 
-§11.5's minimum is one admissible family per role archetype that any under-supported class obligates.
-By §1.3's Ruling 2 that is eight archetypes reached through **eight roles**. The tranche is fixed
-**here, before any family is built**, because §1.7's T3 is "pick the detector signal after seeing
-results" and its sibling is "pick the family after seeing which one worked".
-
-Selection rule, stated so it is checkable rather than aesthetic: **attack where the predecessor's
-evidence is thinnest first.** The three roles that received no mutation evidence at all and are
-reachable in this universe — `evidence_emission`, `formal_statement`, `code_allocation` — lead. Then
-one pair per remaining archetype, choosing the class carrying the largest obligation in that role so
-the delta is worth measuring.
-
-| #   | archetype | pair                      | cells | why this pair                                                                                                                            |
-| --- | --------- | ------------------------- | ----: | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| F1  | A5        | `R2 × evidence_emission`  |   376 | no mutation evidence ever reached this role                                                                                              |
-| F2  | A8        | `R10 × formal_statement`  |   181 | the archetype the ruling did not name; R10 over R7 because R7 is inadmissible in 5Q and a floor family should not depend on lifting that |
-| F3  | A4        | `R12 × code_allocation`   |    17 | smallest role in the closure; if the contract cannot work here it cannot work                                                            |
-| F4  | A1        | `R4 × trust_decision`     |   363 | the role every trust decision flows through                                                                                              |
-| F5  | A2        | `R3 × completeness_claim` |   582 | largest role in the closure                                                                                                              |
-| F6  | A6        | `R3 × schema_gate`        |   496 | schema_gate reaches only R2, R3, R7 in this universe                                                                                     |
-| F7  | A3        | `R6 × canonicalisation`   |    71 | canonicalisation is where source-span geometry bugs live                                                                                 |
-| F8  | A7        | `R11 × parity_mirror`     |   320 | A7's only reachable half (Ruling 2)                                                                                                      |
+| #   | archetype | pair                      | cells | why this pair                                                                  |
+| --- | --------- | ------------------------- | ----: | ------------------------------------------------------------------------------ |
+| F1  | A5        | `R2 × evidence_emission`  |   376 | no mutation evidence ever reached this role                                    |
+| F2  | A8        | `R10 × formal_statement`  |   181 | the archetype the ruling did not name; R10 not R7, which 5Q ruled inadmissible |
+| F3  | A4        | `R12 × code_allocation`   |    17 | smallest role in the closure; if the contract fails here it fails              |
+| F4  | A1        | `R4 × trust_decision`     |   363 | the role every trust decision flows through                                    |
+| F5  | A2        | `R3 × completeness_claim` |   582 | largest role in the closure                                                    |
+| F6  | A6        | `R3 × schema_gate`        |   496 | schema_gate reaches only R2, R3, R7 in this universe                           |
+| F7  | A3        | `R6 × canonicalisation`   |    71 | canonicalisation is where source-span geometry bugs live                       |
+| F8  | A7        | `R11 × parity_mirror`     |   320 | A7's only reachable half (Ruling 2)                                            |
 
 ```text
-tranche T1     8 families · 24 controls · 2406 cells spanned of 15301 under-supported
-universe       55 families · 165 controls
+tranche T1   8 families · 24 controls · 2406 cells spanned of 15301 under-supported
+universe     55 pairs · 165 controls at full scope · all 55 carry a result row (Ruling 3)
 ```
 
-**2 406 is the span, not the delta.** Under Ruling 1 the delta is the number of cells actually probed
-and admitted. Both numbers are published; neither substitutes for the other.
-
-### §4.2 What may change after this point
-
-The tranche list may **grow**. It may not be **swapped**: a family that is attempted and fails is
-published as attempted-and-inadmissible (§4.5), and replacing F5 with an easier pair after seeing F5
-fail is the exact move §11.5 forbids. Task 19's ledger records `families attempted` and
-`families admissible` as separate numbers, and their difference is a finding if it is large.
+**2 406 is the span, not the delta** (Ruling 1). **T1 is immutable** (Ruling 4): a family attempted
+and failed is published as `attempted_inadmissible`; the only forbidden state is attempted-and-absent.
 
 ---
 
-## §5 Wave 1 — inheritance and universe (Tasks 1–7)
+## §5 Wave 1 — inheritance and universe
 
-### Task 1 — write-surface verifier, before anything else writes
+### Task 1 — write-surface verifier, and the `.prettierignore` line
 
-**Build.** `stage5r/core/writeSurface.mjs` + `node/checkWriteSurface.mjs`. Path classification for
-the stage-owned list; **parsed structural comparison** for the six shared entries (package.json
-scripts-key-only diff; .prettierignore single added line; check-e2e.sh single REPRODUCE entry; one
-allowlist line per audit script, each matching a path regex containing no digits; README banner).
+**Build.** `core/writeSurface.mjs` + `node/checkWriteSurface.mjs`: path classification for the
+stage-owned list; **parsed structural comparison** for all six shared entries. Add the single
+`.prettierignore` line `docs/research/llm-shield/evidence/stage-5r/` **now**, because Task 4 commits
+generated JSON and every stage since 5P ignores its evidence directory — deferring this to Wave 4
+leaves `format:check` red from Wave 1 onward.
 
-**Also, in this task and not later:** add the single `.prettierignore` line
-`docs/research/llm-shield/evidence/stage-5r/`. Every stage from 5P on ignores its whole evidence
-directory, and Task 4 commits generated JSON. Scheduling this edit in Wave 4 would leave
-`npm run format:check` red from Wave 1 onward — the wiring-order gotcha this project has already paid
-for once. The mutation is named here in advance, which is the permitted route.
-
-**Tests first.** A stage-owned write passes; a write to `stage5q/**` fails; a `package.json` scripts
-addition passes while a dependency change fails; an allowlist line containing a digit fails; a
-`.prettierignore` diff of more than one added line fails.
+**Tests first.** Stage-owned write passes; `stage5q/**` write fails; `package.json` scripts addition
+passes but a dependency change fails; an allowlist line containing a digit fails; a `.prettierignore`
+diff of more than one added line fails.
 
 **Verify.**
 
@@ -231,473 +233,758 @@ node tools/simurgh-attestation/stage5r/node/checkWriteSurface.mjs \
 npm run format:check
 ```
 
-**Done when.** The verifier exits 0 on the branch as it stands, exits non-zero on a seeded
-`stage5q/**` edit, and `format:check` is green with the `.prettierignore` line present.
+**Done when.** All three exit 0; a seeded `stage5q/**` edit makes the second exit non-zero and name
+the file.
 
 ### Task 2 — inheritance verifier, roots first, signature last
 
-**Build.** `core/inherit.mjs` + `node/verifyInheritance.mjs`. Recompute all seven digests from the
-committed 5Q evidence; verify the signed envelope against `stage5q-q0-genesis`; confirm
-`member_count == 2531` and `closure_source_commit == 3512d287`; fail closed naming which digest moved.
+**Build.** `core/inherit.mjs` + `node/verifyInheritance.mjs`. Recompute the seven digests; verify the
+envelope with the **public** key committed in it, checked against `expected_public_key_digest`;
+confirm `member_count == 2531` and `closure_source_commit == 3512d287`; fail closed naming which
+digest moved.
 
-**Tests first.** All seven match on the real tree; a one-byte mutation of any inherited file is
-refused and names the digest; a valid signature over a mutated root is still refused (roots first);
-`member_count` drift is refused.
+**Tests first.** All seven match; each one-byte tamper case is refused **in a copied fixture tree**
+(P8); a valid signature over a mutated root is refused before the signature is examined;
+`member_count` drift is refused; a run with no private key on the machine still verifies.
 
-**Verify.** `node tools/simurgh-attestation/stage5r/node/verifyInheritance.mjs`
-**Done when.** Exit 0 with seven digests printed, and exit non-zero for each of the seven single-byte
-tamper cases.
+**Verify.**
 
-### Task 3 — G0: recompute every measurement §1.2 publishes
+```bash
+node --test tests/unit/llmShield/stage5r/inherit.test.js
+node tools/simurgh-attestation/stage5r/node/verifyInheritance.mjs
+git status --short docs/research/llm-shield/evidence/stage-5q/   # must print nothing
+```
 
-**Build.** `node/measureInheritedGap.mjs`. Recomputes, from the inherited receipts, closure and
-obligation matrix: the nine-role histogram summing to 2531; 15 301 under-supported and 8 031 attacked
-of 23 332; 2 118 of 20 213 at 10.5%; the 26 obligations carried by the four unreached roles and the
-22 discharged from another role; the six receipts on `omitted` cells; four-of-nine roles reached once
-restricted to discharged classes; 55 pairs.
+**Done when.** Exit 0 with seven digests printed; seven tamper fixtures each exit non-zero naming
+their digest; the 5Q tree is untouched.
 
-**Tests first.** Each figure asserted against the spec's printed value, read **from the spec text**
-so prose and gate cannot drift apart.
+### Task 3 — G0: recompute every measurement the spec publishes
 
-**Verify.** `node --test tests/unit/llmShield/stage5r/measureInheritedGap.test.js`
-**Done when.** Every number in §1.2 and §7.4 is reproduced from committed bytes, and changing any one
-of them in the spec turns the test red.
+**Build.** `node/measureInheritedGap.mjs`. Recomputes the nine-role histogram (2531); 15 301 / 8 031
+of 23 332; 2 118 of 20 213 → 10.5; the 26 obligations of the four unreached roles and the 22
+discharged from another role; six receipts on `omitted` cells; four-of-nine roles restricted to
+discharged classes; 55 pairs. Parses the spec for **every** occurrence of each claim and fails on a
+duplicate, missing or conflicting occurrence — one matching number somewhere is not agreement.
+
+**Verify.**
+
+```bash
+node --test tests/unit/llmShield/stage5r/measureInheritedGap.test.js
+node tools/simurgh-attestation/stage5r/node/measureInheritedGap.mjs
+```
+
+**Done when.** Every figure reproduces from committed bytes; changing any one occurrence in the spec
+turns the test red and the failure names the claim.
 
 ### Task 4 — the family universe
 
-**Build.** `core/archetypes.mjs` (A1–A8, plus the measured fact that `orchestration` is unreachable)
-and `node/buildFamilyUniverse.mjs` emitting `evidence/stage-5r/universe/family-universe.json`: the 55
-pairs with their inherited cell counts and archetype.
+**Build.** `core/archetypes.mjs` (A1–A8 + the measured `orchestration` exclusion as data) and CLI
+builder `node/buildFamilyUniverse.mjs` →
+`docs/research/llm-shield/evidence/stage-5r/universe/family-universe.json`.
 
-**Tests first.** Exactly 55 pairs; every pair generates ≥1 obligated cell in the inherited matrix;
-restricted to the eleven under-supported classes; eight distinct roles; `orchestration` absent with
-the reason recorded as data, not a comment; A8 present carrying 362 cells.
+**Verify.**
 
-**Verify.** `node --test tests/unit/llmShield/stage5r/archetypes.test.js`
-**Done when.** The universe file is byte-stable across two builds and `git diff --exit-code` is clean
-after the second.
+```bash
+node --test tests/unit/llmShield/stage5r/archetypes.test.js
+node tools/simurgh-attestation/stage5r/node/buildFamilyUniverse.mjs
+git add -A && git commit -q -m "wip(5r): universe"
+node tools/simurgh-attestation/stage5r/node/buildFamilyUniverse.mjs
+node tools/simurgh-attestation/stage5r/node/buildFamilyUniverse.mjs
+git diff --exit-code
+```
 
-### Task 5 — the tranche commitment
+**Done when.** Exactly 55 pairs, eight roles, `orchestration` absent with its reason recorded as
+data, A8 present at 362 cells; build → commit → rebuild twice leaves `git diff --exit-code` clean.
 
-**Build.** `evidence/stage-5r/universe/tranche-t1.json` — §4.1's eight pairs, committed **before any
-family exists**, with the selection rule recorded alongside the list.
+### Task 5 — the immutable tranche commitment
 
-**Tests first.** The tranche is a subset of the universe; covers eight distinct archetypes; its
-spanned-cell total is 2 406; a pair not in the universe is refused.
+**Build.** CLI builder `node/buildTranche.mjs` → `evidence/stage-5r/universe/tranche-t1.json`: §4's
+eight pairs plus the selection rule, digest recorded in the same commit.
 
-**Verify.** `node --test tests/unit/llmShield/stage5r/tranche.test.js`
-**Done when.** `tranche-t1.json` is committed, byte-stable across two builds, and its digest is
-recorded in the same commit. (The enforcement that no family outside it may be published belongs to
-Task 17's own done-condition; a task's done-condition may not depend on a later task's behaviour.)
+**Verify.**
 
-### Task 6 — baseline capture and the transition model
+```bash
+node --test tests/unit/llmShield/stage5r/tranche.test.js
+node tools/simurgh-attestation/stage5r/node/buildTranche.mjs && git diff --exit-code
+```
+
+**Done when.** The file is a subset of the universe, covers eight archetypes, totals 2 406 spanned
+cells, is byte-stable across two builds, and its digest is committed. T1 does not change after this
+commit (Ruling 4).
+
+### Task 6 — baseline capture at the pinned predecessor commit
 
 **Build.** `core/transition.mjs` (5R's own copy; `regressed_by_5r`, every other value byte-identical
-to 5Q's — copy, never rename, per §11.3) + `node/verifyTransition.mjs`. Capture the prior-stage
-baseline **now**, before any 5R artifact can perturb anything.
+to 5Q's) + `node/verifyTransition.mjs`. The baseline is captured **in a detached worktree at
+`20fc323c`**, not on the 5R branch: by the time this task runs, Tasks 1–5 have already added code,
+tests, a `.prettierignore` line and two evidence files, so "before any 5R artifact perturbs anything"
+was false as written in an earlier draft.
 
-**Tests first.** A tree-relative command is `not_comparable`; absent a baseline run the value is
-`not_compared`, never `green`; a command that failed before and after is `pre_existing`; one that
-passed before and fails after is `regressed_by_5r`.
+```text
+baseline_commit   20fc323c        clean detached worktree
+candidate_commit  current 5R HEAD clean worktree
+identical command manifest, identical runtime constraint
+```
 
-**Verify.** `node --test tests/unit/llmShield/stage5r/transition.test.js`
-**Done when.** A baseline record exists under `evidence/stage-5r/transition/` and 5Q's
-`transition.mjs` is untouched (`git diff --exit-code -- tools/simurgh-attestation/stage5q/`).
+**Tests first.** Tree-relative → `not_comparable`; no baseline run → `not_compared`, never `green`;
+failed before and after → `pre_existing`; passed before, fails after → `regressed_by_5r`.
 
-### Task 7 — the import-damage detector and the scratch worktree
+**Verify.**
 
-**Build.** `node/probeImportWrites.mjs` + the scratch-worktree runner every import-executing task
-uses. Snapshot digests of the primary worktree, run the import work in a scratch `git worktree`,
-re-snapshot, diff.
+```bash
+node --test tests/unit/llmShield/stage5r/transition.test.js
+node tools/simurgh-attestation/stage5r/node/verifyTransition.mjs --baseline 20fc323c
+git diff --exit-code -- tools/simurgh-attestation/stage5q/
+git worktree list   # no leftover baseline worktree
+```
 
-**Tests first.** A module that writes on import is detected and named; a clean import leaves the
-snapshot identical; the scratch worktree is removed even when the probe throws.
+**Done when.** A baseline record exists under `evidence/stage-5r/transition/` bound to `20fc323c`,
+5Q's `transition.mjs` is untouched, and no worktree leaks.
 
-**Verify.** `node --test tests/unit/llmShield/stage5r/probeImportWrites.test.js`
-**Done when.** The detector reports zero damage after a full closure-import sweep, and reports damage
-when a writer is deliberately seeded.
+### Task 7 — the scratch worktree and the damage detector, containment proven both ways
+
+**Build.** `node/probeImportWrites.mjs` + the scratch runner every import-executing task uses. The
+sequence is four snapshots, not two — an earlier draft snapshotted only the primary tree, which
+cannot see damage that lands in the scratch tree, i.e. exactly the damage F003 describes:
+
+```text
+snapshot primary
+create scratch worktree, snapshot scratch
+run the import work in scratch
+re-snapshot scratch  → diff against the declared allowlist (normally empty)
+re-snapshot primary  → must be identical
+remove scratch in a finally block
+```
+
+Every path is resolved with `realpath` and asserted to be contained in the scratch root, so a symlink
+cannot walk a write back into the primary tree.
+
+**Verify.**
+
+```bash
+node --test tests/unit/llmShield/stage5r/probeImportWrites.test.js
+node tools/simurgh-attestation/stage5r/node/probeImportWrites.mjs
+git status --short && git worktree list
+```
+
+**Done when.** A seeded import-writer is detected **and named** in the scratch diff; a clean sweep
+reports zero; the primary tree is identical throughout; the scratch worktree is removed even when the
+probe throws; a symlink escape attempt is refused.
 
 ---
 
-## §6 Wave 2 — the instrument (Tasks 8–13)
+## §6 Wave 2 — the instrument
 
 ### Task 8 — the family contract
 
-**Build.** `core/familyContract.mjs`: §3.1's record shape, mandatory fields, no optional control, and
-the **frozen** `forbidden_surrogate_signals` list of §3.4.
-
-**Tests first.** A record missing any of the three controls is refused; the forbidden list is exactly
-the six frozen entries and is immutable at runtime; `detector_signal` must be a single named signal
-and a disjunction is refused (§3.3).
+**Build.** `core/familyContract.mjs`: §3.1's record with an **exact-key schema** that rejects unknown
+fields, and the frozen six-entry `forbidden_surrogate_signals` list.
 
 **Verify.** `node --test tests/unit/llmShield/stage5r/familyContract.test.js`
 
-### Task 9 — admissibility, conjunctive and without partial credit
+**Done when.** A record missing any control, carrying an unknown key, or declaring a disjunction as
+`detector_signal` is refused with the offending key named; the frozen list is immutable at runtime.
 
-**Build.** `core/admissibility.mjs`: §4.1's seven conditions; §4.3's structural comparability
-including the not-a-stub rule; §4.4's binding to the inherited closure.
+### Task 9 — admissibility, and the comparability ratio fixed before any control exists
 
-**Tests first.** Each of the seven conditions falsified in turn yields inadmissible **and names the
-failing condition**; six-of-seven is inadmissible; a `function_id` absent from the inherited closure
-is refused; a safe control that never reaches the `detector_signal` path is refused even though it is
-"not detected".
+**Build.** `core/admissibility.mjs`: §4.1's seven conditions, conjunctive; §4.4's closure binding;
+§4.3's structural comparability with the ratio **defined here, not chosen later**:
+
+```text
+span_bytes = UTF-8 byte length of the canonical source span
+ratio      = max(vulnerable, safe) / min(vulnerable, safe)     integer comparison, no floats
+require      span_bytes > 0 for both, and ratio ≤ 3
+```
+
+Three is the precommitted bound: a safe control more than three times the size of its vulnerable twin
+is not "the same interface without the defect", it is a different function. Zero-length spans are
+refused rather than treated as equal. Generated code is refused as a control outright.
 
 **Verify.** `node --test tests/unit/llmShield/stage5r/admissibility.test.js`
 
-### Task 10 — the three-control runner and restoration proof
+**Done when.** Each of the seven conditions falsified in turn yields inadmissible **naming the failed
+condition**; six-of-seven is inadmissible; a ratio of 4 is refused and 3 accepted; a `function_id`
+outside the inherited closure is refused; a stub safe control is refused despite being "not detected".
 
-**Build.** `core/controls.mjs` + `node/runFamily.mjs`. Premise recomputation per control; mutation
-restoration proved by `source_digest` equality before and after, recorded as a receipt (§3.6); all
-mutating work inside the scratch worktree of Task 7.
+### Task 10 — the three-control runner and whole-tree restoration
 
-**Tests first.** A vulnerable control whose premise no longer holds fails the family rather than
-passing it; an unrestored mutation fails the family; a no-op orthogonal control fails the family
-(§3.2); restoration receipts are per control, not per family.
+**Build.** `core/controls.mjs` + `node/runFamily.mjs`. Premise recomputed per control; restoration
+proven over the **whole scratch tree**, not one target file — a mutation that repairs its target and
+leaves a stray artefact elsewhere restored nothing.
 
 **Verify.** `node --test tests/unit/llmShield/stage5r/controls.test.js`
 
-### Task 11 — Lane B, the blind detector process
+**Done when.** A stale premise fails the family; an unrestored mutation fails it; a no-op orthogonal
+control fails it; the whole-tree digest before and after each control is equal, per control.
 
-**Build.** The two-process ceremony: the detector runs in a child that receives control bytes on
-stdin plus the attack class and **is not told which of the three controls it is looking at**. Env
-scrubbed to `PATH`; `OPERATOR*` env and `.pem` argv refused; the parent never rewrites the child's
-verdict.
+### Task 11 — Lane B, blind by construction, with a child-emitted verdict receipt
 
-**Tests first.** Blindness is asserted **structurally**, not statistically: the payload handed to the
-child is checked to contain no field naming which control it is (`control_kind`, `is_vulnerable`,
-file paths that encode it, ordering that reveals it), and a deliberately label-leaking payload is
-caught by the lane's own guard and fails the run. A distribution comparison was the first draft's
-test and it is not a test: two runs of an honest detector agree by construction, so the assertion
-passes whether or not the child could see the label.
+**Build.** One **fresh child per control**, no persistent state, neutral control IDs, fixed working
+directory, no label-bearing filenames or env, no inherited descriptors, absolute executable paths,
+capped stdout/stderr, timeout with process-group termination, and control order taken from a
+committed permutation seed so sequence cannot leak the label.
 
-Also: a parent attempting to overwrite a verdict is refused; a `.pem` in argv aborts; an unscrubbed
-env var aborts; the child's exit code alone never becomes the verdict (§3.4's first surrogate).
+The child emits a canonical verdict receipt and the parent embeds those bytes unchanged:
+
+```text
+control_digest · detector_digest · declared_signal · verdict · signal_evidence_digest
+```
+
+The verifier recomputes that digest independently. "The parent never rewrites the verdict" is
+otherwise only a unit test about a function nobody is obliged to call.
 
 **Verify.** `node --test tests/unit/llmShield/stage5r/laneB.test.js`
 
-### Task 12 — the delta ledger
+**Done when.** The payload provably contains no field naming which control it is; a deliberately
+label-leaking payload is caught by the lane's own guard; a parent-side edit of a child receipt is
+detected by digest; a `.pem` in argv aborts; an unscrubbed env var aborts; exit code alone never
+becomes the verdict.
 
-**Build.** `core/deltaLedger.mjs` + `node/buildDeltaLedger.mjs`: §6.1's five fields;
-`inherited_cells` a constant 23 332 with no schema key able to hold another value;
-`newly_discharged_cells` a **set of inherited `obligation_id`s**; empty-intersection assertion against
-5Q's discharged set; `cumulative_coverage` always labelled `5R cumulative` and always printed beside
-the inherited 6.2%.
+### Task 12 — the delta ledger, with an exact discharge predicate
 
-**Tests first.** A cell 5Q already discharged is refused (T5); an attempt to write a different
-`inherited_cells` is unrepresentable (T6); a bare `coverage` field does not exist; per Ruling 1, a
-family claiming its whole pair without per-cell results is refused.
+**Build.** `core/deltaLedger.mjs` + CLI `node/buildDeltaLedger.mjs`. `inherited_cells` a constant
+23 332 with no key able to hold another value; percentages by §2's integer rule.
+
+**Set semantics, because a JSON array is not a set:** unique IDs, canonically sorted, duplicates
+rejected, every ID a member of the inherited universe, every ID inside its family's committed pair,
+disjoint across families, disjoint from 5Q's discharged set.
+
+**The discharge predicate — all nine, or the cell is not discharged:**
+
+```text
+1 family admissible                          6 result schema valid, exact keys
+2 obligation in the family's committed pair   7 result binds function_id AND obligation_id
+3 member source digest matches the closure    8 restoration receipt valid
+4 probe execution completed                   9 not already discharged by 5Q or another family
+5 result deterministic across two runs
+```
+
+"Produced a result bound to its `obligation_id`" was the earlier wording, and an empty or random
+result satisfies that sentence.
+
+**`unprobed` reasons are a closed vocabulary**, never free text, because free text is an
+omission-laundering tunnel:
+
+```text
+unsupported_target_shape · premise_not_applicable · detector_timeout · execution_error
+non_deterministic_result · resource_limit · unsafe_to_execute
+```
+
+Each carries a checkable receipt; the closeout publishes counts by reason.
 
 **Verify.** `node --test tests/unit/llmShield/stage5r/deltaLedger.test.js`
 
-### Task 13 — the prose gate
+**Done when.** Each of the nine predicate clauses falsified in turn keeps the cell undischarged; a
+duplicate ID is refused; an unsorted set is refused; a free-text `unprobed` reason is refused; 6.2%
+and any cumulative figure reproduce identically in Node, Python and browser.
 
-**Build.** `core/prose.mjs` + its driver: G7's scanner over 5R's spec, plan, closeout, release notes
-and evidence for sentence shapes attributing a post-5Q figure to 5Q. Strips comments first **and**
-asserts the raw file still contains the pattern, so stripping cannot make the scan vacuous.
+### Task 13 — two independent scanners: G7 and G10
 
-**Tests first.** A violating sentence is caught in each artifact type; the scanner does not match its
-own explanation; the anti-vacuity assertion fails when the pattern is absent from the raw file.
+**Build.** `core/prose.mjs` (G7: post-5Q coverage attribution) **and** `core/rawCodeScan.mjs` (G10:
+predecessor-band raw-code literals). G10 was listed in the first draft's matrix and built by nothing —
+P3 was false. G10 reads the band from the allocator rather than hard-coding it, scans every 5R
+document, and matches literals **regardless of adjacent phrasing**, because 5Q's census fired only
+when a literal and a stage-mention pattern co-occurred and this spec's first draft passed it by
+accident. Encoded and formatted variants are tested.
 
-**Verify.** `node --test tests/unit/llmShield/stage5r/prose.test.js`
+Both scanners strip comments first **and** assert the raw file still contains the pattern, so
+stripping cannot make a scan vacuous.
+
+**Verify.**
+
+```bash
+node --test tests/unit/llmShield/stage5r/prose.test.js
+node --test tests/unit/llmShield/stage5r/rawCodeScan.test.js
+node tools/simurgh-attestation/stage5r/node/scanDocuments.mjs
+```
+
+**Done when.** G7 catches a violating sentence in each artefact type and does not match its own
+explanation; G10 catches a seeded band literal and its encoded variants; both fail loudly when the
+anti-vacuity assertion cannot find the pattern in the raw file. G7's scope names where release notes
+live: the committed `docs/research/llm-shield/STAGE_5R_CLOSEOUT.md` and the GitHub Release body, the
+latter checked at Task 27 via `gh release view --json body`.
+
+### Task 14 — the parity manifest, written before the mirrors
+
+**Build.** CLI `node/buildParityManifest.mjs` → `evidence/stage-5r/parity/parity-manifest.json`:
+every deterministic export and every test vector that must agree across Node, Python and browser.
+"Deterministic core" without a manifest permits selective mirroring — mirror the easy half, call it
+parity.
+
+**Verify.**
+
+```bash
+node --test tests/unit/llmShield/stage5r/parityManifest.test.js
+node tools/simurgh-attestation/stage5r/node/buildParityManifest.mjs && git diff --exit-code
+```
+
+**Done when.** K7 (Task 26) fails if an eligible export is missing from the manifest, if a manifest
+entry has no implementation in some runtime, or if a deterministic export is silently excluded.
 
 ---
 
-## §7 Wave 3 — self-proof and campaign (Tasks 14–19)
+## §7 Wave 3 — proof, commitment, campaign
 
-### Task 14 — N1–N6, the harness-level self-proof
+### Task 15 — N1–N6, seven mutants including the N5 split
 
-**Build.** `node/runMutationSelfProof.mjs` producing a green→red→green receipt for each:
+| mutant | seeded defect                                                           | the check that must catch it                           |
+| ------ | ----------------------------------------------------------------------- | ------------------------------------------------------ |
+| N1     | admissibility accepts a family whose orthogonal control WAS detected    | inadmissible, naming condition three                   |
+| N2     | delta ledger double-counts a cell 5Q discharged                         | empty-intersection assertion throws with the id        |
+| N3     | inheritance verifier accepts a mutated 5Q digest                        | non-zero exit naming which of the seven moved          |
+| N4     | safe control is a stub the detector never reaches                       | §4.3's not-a-stub check fails the family               |
+| N5a    | the suppression machinery is a **no-op** — suppressing changes nothing  | the suppression self-test detects the no-op, run fails |
+| N5b    | a family whose verdict **changes** under suppression is admitted anyway | admissibility marks it inadmissible, reason recorded   |
+| N6     | a per-role admissibility silently promotes to class-wide                | unrepresentable; the seeded write throws at the ledger |
 
-| mutant | what is seeded                                                         | which check must catch it, and how it must fail                                  |
-| ------ | ---------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| N1     | admissibility accepts a family whose orthogonal control WAS detected   | `admissibility.mjs` returns inadmissible naming condition three                  |
-| N2     | delta ledger double-counts a cell 5Q already discharged                | the empty-intersection assertion throws, naming the `obligation_id`              |
-| N3     | inheritance verifier accepts a mutated 5Q digest                       | `verifyInheritance` exits non-zero naming which of the seven moved               |
-| N4     | safe control is a stub the detector never reaches                      | §4.3's not-a-stub check fails the family despite "not detected"                  |
-| N5     | a family whose verdict CHANGES under surrogate suppression is admitted | §3.4's suppression run marks the family inadmissible, reason recorded            |
-| N6     | a per-role admissibility silently promotes to class-wide               | the promotion is unrepresentable; the seeded write throws at the ledger boundary |
+N5 was one line in the spec's first draft and named only N5a. A suppressor that does nothing and an
+admissibility check that ignores what the suppressor found are different defects, and each hides the
+other. The spec was amended (§8.2, outside the frozen span) rather than the plan quietly choosing one.
 
-**Done when.** All six are caught, each with a recorded red state naming the catching check, not
-merely a non-zero exit. **N6 is the blade's own mutant: if it is not caught, the stage does not
-ship**, and that is a stop condition, not a warning.
+**Verify.**
 
-### Task 15 — recorded red state for every gate that exists by this point (§8.3)
-
-**Build.** For **G0–G7 and G10** — every gate whose implementation exists by the end of Task 14 —
-seed a violation, record the failure output, revert, record green. Stored under
-`evidence/stage-5r/gate-red-states/`.
-
-**G8 and G9 are excluded here and belong to Task 23**, because G8's assertion is built in Task 23 and
-G9's in Task 19, both after this task. An earlier draft of this plan scheduled all eleven here, which
-would have required proving the red state of a gate that did not yet exist — a P5 violation in the
-plan's own matrix, and precisely the kind of ordering fiction that turns into a skipped step under
-deadline.
-
-**Done when.** Nine gates have a red receipt each. A gate with no recorded red state blocks the tag —
-5Q shipped two gates that could never pass, and the inverse (a gate that can never fail) is worse
-because it is invisible.
-
-### Task 16 — build the T1 families
-
-**Build.** Eight family directories under `stage5r/families/`, each with three hand-authored controls
-and a pre-registered `detector_signal` committed **before** the run. Lane C is `not_in_scope`:
-controls are hand-authored with recomputed premises, and a model-authored control whose vulnerability
-was never independently verified would put an unverified premise under the stage's central claim.
-
-**Done when.** 24 controls exist, each with a premise receipt, and each family's `detector_signal` is
-committed as its own digest-bound file whose digest is recorded in
-`evidence/stage-5r/commitments/signal-commitments.json` **before** Task 17 runs. Task 17 refuses any
-family whose signal file is missing or whose digest differs from the recorded one.
-
-Precommitment is proved by **content, not by commit order**. An earlier draft asserted it from git
-history, which a rebase silently rewrites — a precommitment provable only by a mutable log is not a
-precommitment, and this stage's own T3 is the move it is meant to stop.
-
-### Task 17 — run the tranche
-
-**Build.** `node/runTranche.mjs`. Every family through the seven conditions; per-cell results bound to
-inherited `function_id` and `obligation_id`; forbidden-surrogate suppression run for each family.
-
-**The probe set, ruled here because Ruling 1 requires it and the spec does not fix it.** A family's
-probe set is **every cell in its (class, role) pair** — all 582 of `R3 × completeness_claim`, all 17
-of `R12 × code_allocation`, and so on. Each cell ends in exactly one of three states, all published:
-
-```text
-discharged    the probe ran against that member and produced a result bound to its obligation_id
-unprobed      the probe could not run; the reason is recorded per cell
-inadmissible  the family failed §4.1, so none of its cells are discharged
+```bash
+node tools/simurgh-attestation/stage5r/node/runMutationSelfProof.mjs
+node --test tests/unit/llmShield/stage5r/selfProof.test.js
+git status --short   # all mutations reverted, tree clean
 ```
 
-`coverage_delta` is the count of `discharged` cells and nothing else. **Sampling is prohibited**: a
-family that probed 30 of 582 members and claimed the pair would be making the identical argument 5Q
-made from one mutant to a whole class, which is the argument this stage exists to refuse. If probing
-every cell is too expensive for a family, the honest response is to publish the unprobed remainder,
-not to generalise over it — and if the unprobed count is large, that is the finding.
+**Done when.** All seven caught, each with a green→red→green receipt **naming the catching check**,
+all seeded in a scratch worktree (P8). **N6 uncaught is a stop condition, not a warning.**
 
-**Done when.** Eight families have outcomes, admissible or not; every cell in every attempted pair
-carries one of the three states; and **every attempted family is published** including the failures.
-`families attempted − families admissible` and the total `unprobed` count are numbers in the output,
-not subtractions the reader must perform. No family outside `tranche-t1.json` appears in the results.
+### Task 16 — recorded red state for every gate that exists by now
 
-### Task 18 — the audit 5R owes 5Q (§7.3)
+**Build.** For **G0–G7 and G10** — every gate implemented by the end of Task 15 — seed a violation in
+a scratch tree, record the failure output, revert, record green, via CLI
+`node/recordGateRedStates.mjs` → `evidence/stage-5r/gate-red-states/`.
 
-**Build.** `node/auditPriorFamilies.mjs`. 5Q's six control-free families — `frozen-constant` R8,
+**G8 and G9 belong to Task 26**, because G8's assertion is built there and G9's in Task 23. Proving
+the red state of a gate that does not exist is a P5 violation and, under deadline, a skipped step.
+
+**Verify.**
+
+```bash
+node tools/simurgh-attestation/stage5r/node/recordGateRedStates.mjs
+node --test tests/unit/llmShield/stage5r/gateRedStates.test.js
+git status --short
+```
+
+**Done when.** Nine gates hold a red receipt each; the tree is clean; every receipt names the gate,
+the seeded violation and the observed failure text.
+
+### Task 17 — the instrument lock
+
+**Build.** CLI `node/lockInstrument.mjs` → `evidence/stage-5r/instrument-lock.json`, covering:
+
+```text
+digests of every deterministic core module and every campaign driver
+every schema · the detector module(s) · every suppression transform
+the seven N-receipts of Task 15 · the nine gate red-state receipts of Task 16
+node_version · node_executable_realpath · platform · arch
+```
+
+Without this, 5R proves Instrument A in Task 15 and runs Instrument B in Task 20, and nothing in the
+evidence can tell. Tasks 20 and 24 **refuse to run** on any mismatch.
+
+**Verify.**
+
+```bash
+node tools/simurgh-attestation/stage5r/node/lockInstrument.mjs
+node --test tests/unit/llmShield/stage5r/instrumentLock.test.js
+```
+
+**Done when.** The lock exists and is byte-stable; editing one byte of any covered module makes Task
+20's runner exit non-zero naming the drifted module.
+
+### Task 18 — the campaign commitment, C1 (two-phase, ancestry-checked)
+
+**Build.** CLI `node/commitCampaign.mjs` → `evidence/stage-5r/commitments/campaign-c1.json`,
+committed in its own commit **C1**, containing:
+
+```text
+tranche digest · family IDs · all three control digests per family
+detector_signal per family · detector implementation digest
+suppression transforms · the target obligation set per family
+campaign ordering (permutation seed) · runner digest · instrument-lock digest
+```
+
+**Why this replaces "precommitment by content".** A digest proves content has not changed _since the
+digest was taken_. It does not prove the author chose that content before seeing results: run several
+candidate signals, keep the one that separated the controls, write its digest, publish both — every
+check passes and nothing was precommitted. So campaign results land in a **later commit C2** that
+references C1, and the verifier asserts `git merge-base --is-ancestor C1 C2` **and** that every byte
+C1 committed still matches.
+
+**Honest bound, recorded rather than papered over:** ancestry raises the cost of back-fitting, it does
+not eliminate it, because the producer controls both commits. Eliminating it needs an external witness
+— a TSA or transparency-log timestamp over C1 — which is 5M/5N machinery and belongs to a stage that
+carries it as its blade. §13's "the red team and the blue team remain the same party" already names
+this ceiling; this is that ceiling at commit granularity.
+
+**Verify.**
+
+```bash
+node tools/simurgh-attestation/stage5r/node/commitCampaign.mjs
+git add -A && git commit -q -m "commit(5r): campaign commitment C1"
+node --test tests/unit/llmShield/stage5r/campaignCommitment.test.js
+```
+
+**Done when.** C1 exists as its own commit; its digest is recorded; a verifier can assert ancestry and
+byte-equality; a family whose signal digest differs from C1 is refused by Task 20.
+
+### Task 19 — build the T1 families
+
+**Build.** Eight directories under `stage5r/families/`, 24 hand-authored controls, each with a premise
+receipt. Lane C stays `not_in_scope`: a model-authored control whose vulnerability was never
+independently verified would put an unverified premise under the stage's central claim.
+
+**Verify.**
+
+```bash
+node --test tests/unit/llmShield/stage5r/families.test.js
+node tools/simurgh-attestation/stage5r/node/verifyFamilyCorpus.mjs
+```
+
+**Done when.** 24 controls exist; every control digest matches its C1 entry; every premise receipt
+recomputes; every (vulnerable, safe) pair satisfies the ratio ≤ 3 of Task 9.
+
+### Task 20 — run the tranche (commit C2)
+
+**Build.** `node/runTranche.mjs`. Refuses to start unless the instrument lock and C1 both verify.
+
+**`attempt_start` receipt before any control executes**, binding `family_id · commitment_digest ·
+instrument_digest · target set · run ordinal`. Without it, a family can be run locally, seen to fail
+and deleted, and the final ledger cannot prove it was ever attempted. **A started family must end in
+exactly one terminal state.**
+
+**The probe set is every cell in the pair** (Ruling 1) — all 582 of `R3 × completeness_claim`, all 17
+of `R12 × code_allocation`. Each cell ends `discharged` (all nine predicate clauses of Task 12),
+`unprobed` (closed-vocabulary reason + receipt) or `inadmissible` (its family failed §4.1).
+
+**Verify.**
+
+```bash
+node tools/simurgh-attestation/stage5r/node/runTranche.mjs
+node --test tests/unit/llmShield/stage5r/runTranche.test.js
+git add -A && git commit -q -m "campaign(5r): tranche T1 results"
+node tools/simurgh-attestation/stage5r/node/verifyCampaignAncestry.mjs
+```
+
+**Done when.** Every T1 family has an `attempt_start` receipt and exactly one terminal state; every
+cell in every attempted pair carries one of the three states; no family outside `tranche-t1.json`
+appears; `families attempted − families admissible` and the total `unprobed` count are printed
+fields; ancestry verifies.
+
+### Task 21 — the audit 5R owes 5Q, with its question stated exactly
+
+**Build.** `node/auditPriorFamilies.mjs` over 5Q's six control-free families (`frozen-constant` R8,
 `argument-aliasing` R8, `prototype-pollution` R1, `determinism` R15, `pathological-operand` R9,
-`fail-open` R16 — re-examined against §4.1, reading 5Q's definitions as prior art without importing
-them.
+`fail-open` R16), read as prior art, never imported.
 
-**Done when.** Six verdicts are published as **ledger records**, whichever way they fall. 5Q's 1 438
-cells are not retroactively removed — L5 forbids rewriting a frozen record — but a discharge that
-would not be admissible under the stronger rule is recorded as a distinct, visible line. This is the
-task that can move Frontier above 9.3, and it is equally able to find nothing.
+**The question is the historical-contract audit, and its answer is known in advance:**
 
-### Task 19 — the 5R finding ledger and the delta
+```text
+Do the six signed 5Q family artefacts, as they stood, satisfy 5R's §4.1 contract?
+Expected: no — the mandatory triad did not exist when they were built.
+```
 
-**Build.** `node/buildFindingLedger.mjs` and the delta ledger build. Opens with the two inherited
-records — `5Q-F013` with 5R's `vpf_disposition` (5Q's own `disposition` quoted, never replaced) and
-`5R-F001` at `assurance_only` — then Task 17's and Task 18's outcomes, **including findings against
-5R itself**. 5Q published zero findings against 5Q; 5R records its own outcomes as ledger rows.
+**So no score moves on this task.** An earlier draft made Frontier > 9.3 conditional on finding one of
+the six inadmissible, which is guaranteed by construction: families explicitly built without controls
+cannot satisfy a contract requiring three. Attaching a score to a predetermined answer is the
+outcome-shopping this stage exists to catch, committed in the scoring rubric itself.
 
-**Done when.** The ledger verifies, the delta intersects 5Q's discharged set in ∅, and the four-term
-disclosure of §11.5 is present with arithmetic that checks.
+The **revalidation audit** — can newly built 5R triads reproduce or refute the six prior conclusions —
+is the question with an uncertain answer. It costs 18 further controls and is **out of scope for this
+release**, named here so its absence is a decision rather than an omission.
+
+**Verify.**
+
+```bash
+node tools/simurgh-attestation/stage5r/node/auditPriorFamilies.mjs
+node --test tests/unit/llmShield/stage5r/auditPriorFamilies.test.js
+```
+
+**Done when.** Six ledger records exist, each stating the question asked, the verdict and the failing
+condition. 5Q's 1 438 cells are not removed — L5 forbids rewriting a frozen record — and each record
+says plainly that it judges a historical artefact against a later contract.
 
 ---
 
-## §8 Wave 4 — attestation, proofs, wiring, closeout, release (Tasks 20–25)
+## §8 Wave 4 — attest, prove, wire, ship
 
-### Task 20 — Lean core
+### Task 22 — Lean core, with theorem identity and non-vacuity
 
-**Build.** `proofs/stage5r/`, Lean 4.15.0, no mathlib, zero `sorry`, symbolic model:
+**Build.** `proofs/stage5r/`, Lean 4.15.0, no mathlib, zero `sorry`:
 
 ```text
-Admissibility.lean          L1  conjunctive; any false condition ⟹ inadmissible
-NoPromotion.lean            L2  admissible(R,S) ⇏ admissible(R,S′) for S′ ≠ S
-DeltaDisjoint.lean          L3  union of deltas disjoint from inherited discharged ⟹ cumulative ≤ 1
+Admissibility.lean          L1  conjunctive: any false condition ⟹ inadmissible
+NoPromotion.lean            L2  admissible(R,S) ⇏ admissible(R,S′), S′ ≠ S
+DeltaDisjoint.lean          L3  deltas disjoint from inherited discharged AND a subset of the
+                                inherited universe ⟹ cumulative ≤ 1, monotone in new work only
 DenominatorInvariance.lean  L4  no admission sequence changes inherited_cells
-OrthogonalSoundness.lean    L5  verdict invariant under surrogate suppression ⟹ distinguishable
+OrthogonalSoundness.lean    L5  with the variable inputs pinned, verdict invariance under every
+                                forbidden surrogate ⟹ discrimination by the declared signal alone
 ```
 
-**Build also.** `scripts/check-stage5r-proofs.sh`, gated **by discovery with a count floor**:
-enumerate `proofs/stage5r/*.lean` from the filesystem, refuse when the count is below five, then
-check each. 5P's lean-check listed proofs by name and went vacuously green; the same defect is open
-in the shared workflow as 5Q-F001, and an empty directory piped to `xargs` exits 0.
+L3 gained the subset clause: disjointness alone does not bound cumulative coverage if new IDs may come
+from outside the universe. L5 gained the pinned-input clause: invariance proves nothing about
+causation unless the model fixes what was allowed to vary.
 
-**Verify.** `bash scripts/check-stage5r-proofs.sh`
-**Done when.** Five proofs check, zero `sorry`, and deleting a proof file turns the script red.
+**Build also.** `scripts/check-stage5r-proofs.sh`: discover every `proofs/stage5r/*.lean`; refuse below
+five; scan for `sorry`, `axiom` and unsafe escapes; **require the five theorem identifiers by name**;
+require each to be referenced by the proof manifest; reject duplicate copies masquerading as distinct
+obligations. Discovery alone passes with five irrelevant files, so discovery and required identity
+coexist.
 
-### Task 21 — attestation and the key ceremony
+**Verify.**
 
-**Build.** Two-tier attestation with the §10.1 roots; signer profile `stage5r-vpf-genesis`; Ed25519
-key generated in-session at `~/.simurgh/5r-ed25519.pem`, never committed, public key digest recorded
-in the bundle. The 5Q key is required to verify inherited signatures and **does not sign 5R** — a
-successor signing with its predecessor's key makes the two indistinguishable.
+```bash
+bash scripts/check-stage5r-proofs.sh
+node --test tests/unit/llmShield/stage5r/leanCorrespondence.test.js
+```
 
-**Tests first.** Roots-first verification; a mutated root refuses before the signature is examined; a
-bundle signed by the 5Q key is refused; the public key digest must match.
+**Done when.** Five proofs check with zero `sorry`; deleting one, renaming a theorem, or duplicating a
+file each turns the script red; runtime-to-theorem correspondence tests pass; each theorem has a
+witness showing it is not satisfied by an empty or degenerate model.
 
-**Verify.** `node --test tests/unit/llmShield/stage5r/attestation.test.js`
+### Task 23 — finding ledger, delta, disclosure
 
-### Task 22 — parity, wiring, reproduce
+**Build.** CLI `node/buildFindingLedger.mjs` and `node/buildDeltaLedger.mjs`. Opens with `5Q-F013`
+carrying 5R's `vpf_disposition` (5Q's own `disposition` quoted, never replaced) and `5R-F001` at
+`assurance_only`; then Tasks 20 and 21's outcomes, **including findings against 5R itself**. Emits the
+**55-row** `family_result_root` census (Ruling 3) and the four-term disclosure.
 
-**Build.** `python/` and `browser/` mirrors of the deterministic core;
-`scripts/reproduce-llm-shield-stage5r.sh`; `.github/workflows/stage-5r-checks.yml`, which **invokes
-`scripts/check-stage5r-proofs.sh`** so the Lean gate runs in CI rather than only on a developer's
-machine. Then the remaining mutation-scoped edits: `check-e2e.sh` (one REPRODUCE entry), both
-security-audit allowlists (one path-regex line each, no digits), `package.json` (scripts key only).
-`.prettierignore` was already edited in Task 1; `README.md` belongs to Task 24. That is **five shared
-files touched across three tasks**, not four in one, and the verifier of Task 1 sees all of them.
+**Verify.**
+
+```bash
+node tools/simurgh-attestation/stage5r/node/buildFindingLedger.mjs
+node tools/simurgh-attestation/stage5r/node/buildDeltaLedger.mjs
+node --test tests/unit/llmShield/stage5r/ledgers.test.js
+git diff --exit-code
+```
+
+**Done when.** All 55 pairs carry exactly one terminal state; delta ∩ 5Q-discharged is ∅; the
+four-term disclosure's arithmetic checks under the integer rule; both ledgers are byte-stable.
+
+### Task 24 — attestation: producer signing, kept separate from reproduction
+
+**Build.** Two-tier attestation over §10.1's roots. The two operations are different, and the plan
+says so because CI and external reviewers hold no private key:
+
+```text
+PRODUCER (once, locally)             REVIEWER / CI (every run)
+  build unsigned roots twice           rebuild unsigned roots
+  cmp                                  compare against the signed envelope
+  verify instrument lock + C1          verify the signature with the COMMITTED PUBLIC key
+  sign once with ~/.simurgh/5r-…       never sign, never require a private key
+```
+
+Signer profile `stage5r-vpf-genesis`; the public key digest is committed. The negative test "a bundle
+signed by another stage's key is refused" uses a **test fixture signer profile**, never predecessor
+private-key possession. `package.json` gains its scripts-key entries here and nowhere else.
+
+**Verify.**
+
+```bash
+node tools/simurgh-attestation/stage5r/node/attestStage5r.mjs --build-only
+node tools/simurgh-attestation/stage5r/node/attestStage5r.mjs --build-only
+git diff --exit-code
+node tools/simurgh-attestation/stage5r/node/attestStage5r.mjs --sign
+node tools/simurgh-attestation/stage5r/node/verifyAttestation.mjs
+node --test tests/unit/llmShield/stage5r/attestation.test.js
+```
+
+**Done when.** `--build-only` is byte-stable twice; verification succeeds with the private key moved
+off the machine; a mutated root is refused **before** the signature is examined; a fixture-signed
+bundle is refused.
+
+### Task 25 — parity mirrors, wiring, reproduce
+
+**Build.** `python/` and `browser/` mirrors implementing exactly the Task 14 manifest;
+`scripts/reproduce-llm-shield-stage5r.sh`; `.github/workflows/stage-5r-checks.yml`, which asserts the
+Node major version and invokes `scripts/check-stage5r-proofs.sh`. Then the named shared edits:
+`check-e2e.sh` (one REPRODUCE entry) and one allowlist line in each audit script.
 
 **Verify.**
 
 ```bash
 bash scripts/reproduce-llm-shield-stage5r.sh
+bash scripts/check-e2e.sh
+node tools/simurgh-attestation/stage5r/node/runCrossRuntimeParity.mjs
 node tools/simurgh-attestation/stage5r/node/checkWriteSurface.mjs \
   --range "$(git merge-base origin/main HEAD)..HEAD"
-bash scripts/check-e2e.sh
 ```
 
-**Done when.** Node == Python == browser on the deterministic surface, evidence built twice and
-`cmp`-ed under Node 26, the reproduce script joins the REPRODUCE array and passes from it, and the
-write-surface verifier is green **with** the shared edits present — the property whose absence 5Q
-shipped unrepaired.
+**Done when.** Node == Python == browser over every manifest entry; evidence built twice and `cmp`-ed
+under an asserted Node 26; the reproduce script runs from the REPRODUCE array; the write-surface
+verifier is green with the shared edits present.
 
-### Task 23 — K7 all-functions net
+### Task 26 — K7 all-functions net, plus the two deferred red states
 
-**Build.** Every export of every 5R module, plus §14's tamper matrix: each of the seven inherited
-digests mutated by one byte → refusal; each of the seven §4.1 conditions falsified in turn →
-inadmissible; each forbidden surrogate forced as the sole signal → inadmissible. Cross-stage
-invariants: 5Q evidence byte-identical after the full run (G8); delta ∩ 5Q-discharged == ∅;
-`inherited_cells == 23332` unconditionally; no per-role result promoted to class-wide.
+**Build.** Every export of every 5R module; §14's tamper matrix (each inherited digest mutated by one
+byte → refusal; each §4.1 condition falsified → inadmissible; each forbidden surrogate forced as sole
+signal → inadmissible); cross-stage invariants (5Q evidence byte-identical after a full run;
+delta ∩ 5Q-discharged == ∅; `inherited_cells == 23332`; no per-role result promoted).
 
-**Also.** The red states for **G8 and G9**, deferred from Task 15 because neither gate existed then:
-seed a write into the 5Q evidence tree and confirm G8 fires; seed a tranche disclosure missing one of
-its four terms and confirm G9 fires; revert both.
+**G8 and G9 red states, in a copied fixture tree (Ruling 5).** G8's proof copies the 5Q evidence tree
+to a fixture, seeds a write there, and confirms the comparison fires — the primary inherited tree is
+never mutated, not even briefly. G9's proof removes one of the four disclosure terms from a fixture
+copy.
 
-**Verify.** `node --test tests/e2e/llmShield/stage5r/k7AllFunctions.test.js`
-**Done when.** Zero exports uncovered; G8 verified by digesting the 5Q tree before and after a full
-run; and all **eleven** gates now hold a recorded red state between Task 15's nine and this task's
-two.
+**Verify.**
 
-### Task 24 — tranche disclosure, closeout, re-score
+```bash
+node --test tests/e2e/llmShield/stage5r/k7AllFunctions.test.js
+node tools/simurgh-attestation/stage5r/node/recordGateRedStates.mjs --deferred
+git status --short docs/research/llm-shield/evidence/stage-5q/   # must print nothing
+```
+
+**Done when.** Zero exports uncovered; every parity-manifest entry exercised; all **eleven** gates
+hold a recorded red state (nine from Task 16, two here); the 5Q tree is untouched.
+
+### Task 27 — closeout, re-score, security review, release
 
 **Build.** `STAGE_5R_CLOSEOUT.md` carrying, always together:
 
 ```text
-families admissible / families attempted / families in the universe (55)
+families admissible / attempted / not_attempted / universe (55)   — all four, from the census
 newly discharged cells / 15 301 under-supported / 23 332 inherited
-5Q original coverage 6.2% (1 438 of 23 332)   ·   5R cumulative <measured>
+unprobed cells by closed-vocabulary reason
+5Q original coverage 6.2% (1 438 of 23 332)   ·   5R cumulative <measured, integer rule>
 ```
 
-Plus: §13's honest non-claims verbatim; the socket ledger with I7 and I8 still **OPEN** and 5R paying
-neither and minting nothing unless measured evidence produces a genuine new debt; Ruling 2's
-`orchestration` exclusion stated rather than implied; the total `unprobed` cell count from Task 17;
-and the four-axis re-score. The `README.md` release banner is edited here and nowhere else — it is
-the sixth shared file, and it is named so its edit is declared before it happens.
+Plus §13's non-claims verbatim; the socket ledger with I7 and I8 **OPEN**, 5R paying neither and
+minting nothing unless measured evidence produces a genuine debt; §12.2's universe-adapter reported
+**`unbuilt`** — no task builds it, which is planned rather than forgotten; Ruling 2's `orchestration`
+exclusion stated; and the `README.md` release banner, edited here and nowhere else.
 
-**§12.2's universe-adapter schema will be reported `unbuilt`, and that is planned rather than
-forgotten.** No task in this plan builds it: it is roadmap debt for a later stage, and a stage that
-quietly built half of it and reported a tick would be doing to its own ledger what §7.3 criticises 5Q
-for doing to its findings. The closeout names it, names its blocker, and says `unbuilt`.
+**Re-score rule, fixed in advance and no longer attached to a predetermined answer.** Task 21 moves
+nothing, because its answer is known before it runs. Frontier rises above 9.3 only on a finding whose
+outcome was uncertain when the campaign started: an inadmissible T1 family whose failing condition
+reveals a real defect, or a finding against 5R's own instrument. Constitution rises above 9.5 only if
+the stage published an uncomfortable result of its own campaign. **If T1 lands at the floor and
+nothing uncertain is found, the scores go down and the closeout says so.** The four-axis score is
+internal commentary, clearly labelled as such, and is never a release gate or a security claim.
 
-**Re-score rule, fixed in advance so it cannot be tuned to the result.** Frontier rises above 9.3
-only if Task 18 finds one of 5Q's six families inadmissible. Constitution rises above 9.5 only if the
-stage published an uncomfortable result of its **own** campaign. If Task 17 lands at the §11.5 floor
-and Task 18 finds nothing, the scores go **down**, and the closeout says so.
+**Security review — the whole executable surface, not two files.** The reviewable surface is
+`stage5r/**` plus the two scripts, and specifically: child-process execution, environment scrubbing,
+scratch worktree creation and removal, symlink and realpath containment, mutation restoration, key
+loading, canonical JSON parsing, evidence path traversal, timeouts, subprocess output limits, and
+control execution.
 
-### Task 25 — security review, PR, tag
+**Verify.** The release ceremony, in order:
 
-**Build.** Nothing new. This task is the release sequence every prior stage ran and this plan's first
-draft omitted entirely — a plan that ends at "closeout written" ends one step before the work is
-actually exposed to anyone.
-
-```text
-1  security review of scripts/reproduce-llm-shield-stage5r.sh and
-   .github/workflows/stage-5r-checks.yml — the two new pieces of executable surface
-2  full local gate sweep: npm test · check-e2e.sh · reproduce · check-stage5r-proofs.sh
-3  PR, neutral message, no co-author trailer and no tool tag
-4  CI green, merge, tag v2.53.0-stage-5r-vpf, verify the tag has a matching release
+```bash
+# pre-PR, on the branch
+npm test
+npm run format:check
+git diff --check
+bash scripts/check-e2e.sh
+bash scripts/reproduce-llm-shield-stage5r.sh
+bash scripts/check-stage5r-proofs.sh
+node tools/simurgh-attestation/stage5r/node/checkWriteSurface.mjs \
+  --range "$(git merge-base origin/main HEAD)..HEAD"
+node tools/simurgh-attestation/stage5r/node/computeFreezeReceipt.mjs
+git status --short
+# after merge
+git rev-parse v2.53.0-stage-5r-vpf^{commit}
+git rev-parse origin/main
+gh release view v2.53.0-stage-5r-vpf --json tagName,url,isLatest,body
+# then reproduce from a FRESH worktree at the tag, never the development tree
+git worktree add /tmp/5r-tag v2.53.0-stage-5r-vpf
+(cd /tmp/5r-tag && bash scripts/reproduce-llm-shield-stage5r.sh)
+git worktree remove /tmp/5r-tag
 ```
 
 **Done when.** The security review found no vulnerability and no control regression, or its findings
-are repaired and re-reviewed; CI is green; and `gh release list` shows the tag — a tag is not a
-release, which 5C learned the expensive way.
+are repaired and re-reviewed; every pre-PR command exits 0 with a clean tree; CI is green; the tag
+resolves to the merged commit; `gh release view` returns a release — a tag is not a release, which 5C
+learned expensively — its body passes G7; and the fresh-worktree reproduction passes.
 
 ---
 
-## §9 Matrix 1 — gate → task that builds it → task that proves it red
+## §9 Matrix 1 — gate → built by → proved red by
 
-| gate   | what it asserts                                                   | built by                         | red-state proof           |
-| ------ | ----------------------------------------------------------------- | -------------------------------- | ------------------------- |
-| G0     | §1.2's measurements recompute                                     | Task 3                           | Task 15                   |
-| G1     | seven inherited digests recompute; envelope verifies roots-first  | Task 2                           | Task 15                   |
-| G2     | every published family satisfies all seven §4.1 conditions        | Task 9                           | Task 14 (N1)              |
-| G3     | every control carries a recomputed premise and proven restoration | Task 10                          | Task 15                   |
-| G4     | no `coverage_delta` intersects 5Q's discharged set                | Task 12                          | Task 14 (N2)              |
-| G5     | no per-role admissibility promotes to class-wide                  | Task 9                           | Task 14 (N6)              |
-| G6     | the six N-mutants are detected                                    | Task 14                          | Task 15                   |
-| G7     | no 5R artifact attributes a post-5Q figure to 5Q                  | Task 13                          | Task 15                   |
-| G8     | 5Q evidence byte-identical before and after the full run          | Task 7, asserted 23              | Task 23                   |
-| G9     | tranche disclosure present and its arithmetic checks              | Task 19                          | Task 23                   |
-| G10    | no 5R document prints a predecessor-band raw-code literal         | Task 13                          | Task 15                   |
-| freeze | §§2–5 match `64fe8e76…`                                           | **done** (`ba8c3b96`/`0e3a564e`) | **done**, both directions |
+| gate   | what it asserts                                                  | built by                         | red-state proof           |
+| ------ | ---------------------------------------------------------------- | -------------------------------- | ------------------------- |
+| G0     | the spec's measurements recompute                                | Task 3                           | Task 16                   |
+| G1     | seven inherited digests recompute; envelope verifies roots-first | Task 2                           | Task 16                   |
+| G2     | every published family satisfies all seven §4.1 conditions       | Task 9                           | Task 15 (N1)              |
+| G3     | every control has a recomputed premise and proven restoration    | Task 10                          | Task 16                   |
+| G4     | no `coverage_delta` intersects 5Q's discharged set               | Task 12                          | Task 15 (N2)              |
+| G5     | no per-role admissibility promotes to class-wide                 | Task 9                           | Task 15 (N6)              |
+| G6     | the seven N-mutants are detected                                 | Task 15                          | Task 16                   |
+| G7     | no 5R artifact attributes a post-5Q figure to 5Q                 | Task 13                          | Task 16                   |
+| G8     | 5Q evidence byte-identical before and after the full run         | Task 7, asserted Task 26         | Task 26 (fixture copy)    |
+| G9     | tranche disclosure present and its arithmetic checks             | Task 23                          | Task 26 (fixture copy)    |
+| G10    | no 5R document prints a predecessor-band raw-code literal        | Task 13 (`rawCodeScan.mjs`)      | Task 16                   |
+| freeze | §§2–5 match `64fe8e76…`                                          | **done** (`ba8c3b96`/`0e3a564e`) | **done**, both directions |
 
 ---
 
 ## §10 Matrix 2 — frozen obligation → discharging task
 
-| frozen source | obligation                                                        | task                |
-| ------------- | ----------------------------------------------------------------- | ------------------- |
-| §2.1          | seven digests + bound context verified before any artifact        | 2                   |
-| §2.2          | roots first, signature last; fail closed naming the digest        | 2                   |
-| §2.3          | write surface exhaustive, shared entries mutation-scoped          | 1, 22               |
-| §2.4          | no `stage5{a..q}` import in the primary worktree; damage detector | 7                   |
-| §3.1–3.2      | three mandatory controls, no optional control                     | 8, 10               |
-| §3.3          | one pre-registered `detector_signal`, committed before the run    | 8, 16, 17           |
-| §3.4          | frozen forbidden-surrogate list; suppression changes nothing      | 8, 17               |
-| §3.5          | `coverage_delta` over inherited ids (per cell — §1.3 Ruling 1)    | 12                  |
-| §3.6          | mutation restoration proven by digest equality                    | 10                  |
-| §4.1          | seven conditions, conjunctive, failing condition published        | 9                   |
-| §4.2          | per-role admissibility; class-wide unrepresentable                | 9, 14 (N6), 20 (L2) |
-| §4.3          | structural comparability incl. the not-a-stub rule                | 9, 14 (N4)          |
-| §4.4          | results bind to the inherited closure                             | 9, 17               |
-| §4.5          | inadmissible is published, never retried into green               | 17, 19              |
-| §5.1–5.2      | A1–A8 including the named A8 extension                            | 4                   |
-| §5.3–5.4      | 55-pair universe by rule, not by schedule                         | 4                   |
-| §6.1–6.2      | delta ledger; 23 332 constant; no bare coverage field             | 12                  |
-| §6.3          | prose gate, comment-stripped and anti-vacuous                     | 13                  |
-| §7.1          | F013 inherited unchanged; `vpf_disposition` added beside 5Q's     | 19                  |
-| §7.3          | 5Q's six families audited; outcomes as ledger records             | 18                  |
-| §7.4          | 5R-F001 at `assurance_only`, not a repair                         | 3, 19               |
-| §8.1–8.3      | family self-proof, N1–N6, every gate's red state                  | 14, 15              |
-| §9.2          | Lane B blindness; Lane C `not_in_scope` with the reason           | 11, 16              |
-| §10.1         | roots; new 5R key; 5Q key survives but does not sign              | 21                  |
-| §10.2         | five Lean theorems; gated by discovery with a count floor         | 20                  |
-| §11.5         | tranche rule; four terms always together                          | 5, 19, 24           |
-| §12.1–12.3    | socket ledger, founder's blocker, new evidence species            | 24                  |
-| §13           | honest non-claims published in attestation and closeout           | 21, 24              |
-| §14           | K7 net + tamper matrix + cross-stage invariants                   | 23                  |
+| frozen source | obligation                                                          | task                |
+| ------------- | ------------------------------------------------------------------- | ------------------- |
+| §2.1          | seven digests + bound context verified before any artifact          | 2                   |
+| §2.2          | roots first, signature last; fail closed naming the digest          | 2                   |
+| §2.3          | write surface exhaustive; six shared files, mutation-scoped         | 1, 24, 25, 27       |
+| §2.4          | no `stage5{a..q}` import in the primary worktree; damage detector   | 7                   |
+| §3.1–3.2      | three mandatory controls, no optional control                       | 8, 10               |
+| §3.3          | one pre-registered `detector_signal`, committed before the run      | 8, 18, 20           |
+| §3.4          | frozen forbidden-surrogate list; suppression changes nothing        | 8, 12, 15, 20       |
+| §3.5          | `coverage_delta` over inherited ids, per cell (Ruling 1)            | 12, 20              |
+| §3.6          | mutation restoration proven by digest equality                      | 10                  |
+| §4.1          | seven conditions, conjunctive, failing condition published          | 9                   |
+| §4.2          | per-role admissibility; class-wide unrepresentable                  | 9, 15 (N6), 22 (L2) |
+| §4.3          | structural comparability, not-a-stub, bounded ratio                 | 9                   |
+| §4.4          | results bind to the inherited closure                               | 9, 20               |
+| §4.5          | inadmissible is published, never retried into green                 | 20, 23              |
+| §5.1–5.2      | A1–A8 including the named A8 extension                              | 4                   |
+| §5.3–5.4      | 55-pair universe by rule, not by schedule                           | 4, 23               |
+| §6.1–6.2      | delta ledger; 23 332 constant; no bare coverage field               | 12                  |
+| §6.3          | prose gate, comment-stripped and anti-vacuous                       | 13                  |
+| §7.1          | F013 inherited unchanged; `vpf_disposition` beside 5Q's             | 23                  |
+| §7.3          | 5Q's six families audited; outcomes as ledger records               | 21                  |
+| §7.4          | 5R-F001 at `assurance_only`, not a repair                           | 3, 23               |
+| §8.1–8.3      | family self-proof; N1–N6 incl. N5a/N5b; every gate's red state      | 15, 16, 26          |
+| §9.1          | module tree incl. writeSurface, transition, frozenBlock, mirrors    | 1, 6, 25            |
+| §9.2          | Lane A corpus; Lane B blindness; Lane C `not_in_scope` + reason     | 11, 19, 20          |
+| §10.1         | roots; new 5R key; public-key verification; producer/reviewer split | 24                  |
+| §10.2         | five Lean theorems; discovery **and** theorem identity              | 22                  |
+| §11.1         | G0–G10                                                              | Matrix 1            |
+| §11.3         | prior-stage non-disturbance from a pinned baseline                  | 6                   |
+| §11.5         | tranche rule; four terms together; immutable T1                     | 5, 23, 27           |
+| §12.1–12.3    | socket ledger; founder's blocker; new evidence species              | 27                  |
+| §13           | honest non-claims published in attestation and closeout             | 24, 27              |
+| §14           | K7 net + tamper matrix + cross-stage invariants                     | 26                  |
 
 ---
 
-## §11 Definition of done for the stage
+## §11 Definition of done
 
 ```text
-25 tasks complete, each by its own verification command
-N6 caught                                    (else the stage does not ship)
-11 gates green, each with a recorded red state   (9 in Task 15, 2 in Task 23)
-5 Lean proofs, zero sorry, gated by discovery with a count floor
-Node == Python == browser on the deterministic surface
-evidence built twice and cmp-ed under Node 26
-5Q evidence tree byte-identical before and after           (G8)
-delta ∩ 5Q-discharged == ∅                                  (G4)
-inherited_cells == 23332 unconditionally                    (T6 closed)
-every attempted family published, admissible or not         (§4.5)
-four-term tranche disclosure present and arithmetically checked
+27 tasks complete, each by its own verification commands
+N6 caught                                          (else the stage does not ship)
+11 gates green, each with a recorded red state     (9 in Task 16, 2 in Task 26)
+7 N-mutants caught, each naming its catching check
+5 Lean proofs: discovery + theorem identity + non-vacuity witnesses, zero sorry
+Node == Python == browser over every parity-manifest entry
+evidence built twice and cmp-ed under an asserted Node 26
+instrument lock verified by the campaign runner and the attestation builder
+C1 proven an ancestor of C2, every committed byte still matching
+all 55 pairs carry a terminal state                 (Ruling 3)
+5Q evidence tree byte-identical, never mutated even in a negative test  (Ruling 5)
+delta ∩ 5Q-discharged == ∅ · inherited_cells == 23332 unconditionally
+verification succeeds with NO private key present
+security review over the whole stage5r executable surface
+tag resolves to the merged commit AND gh release view returns a release
+fresh-worktree reproduction from the tag passes
 freeze digest 64fe8e76… unchanged, or amended by numbered annex only
 ```
 
-**And the one that is not a checkbox.** If the campaign lands at the floor and the audit finds
-nothing, the honest closeout says the instrument was built and shown to work, that it discharged
-little, and that the scores went down. That outcome is a result. Stretching the campaign until the
-number improves is the failure mode this stage was built to make visible in other people's work, and
-it does not become acceptable when it is ours.
+**And the one that is not a checkbox.** If the campaign lands at the floor and nothing uncertain is
+found, the honest closeout says the instrument was built and shown to work, that it discharged little,
+and that the scores went down. That is a result. Stretching the campaign until the number improves is
+the failure mode this stage exists to make visible in other people's work, and it does not become
+acceptable when it is ours.
