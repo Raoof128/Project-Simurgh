@@ -808,7 +808,10 @@ tools/simurgh-attestation/stage5r/
                          five mutation-scoped shared files, never path matching
     transition.mjs       §11.3's prior-stage non-disturbance attribution; 5R's own
                          copy, never an edit to 5Q's
+    frozenBlock.mjs      the §§2-5 extractor and its domain-separated digest; the
+                         boundary is validated, not merely located
   node/
+    computeFreezeReceipt.mjs   the command the freeze ceremony records
     verifyInheritance.mjs
     buildFamilyUniverse.mjs
     runFamily.mjs
@@ -1163,16 +1166,45 @@ Nothing in the plan may weaken §§2–5 once frozen. Annex only.
 
 ## Freeze block
 
-`§§2–5` are **not yet frozen**. Freeze is the two-commit procedure:
+`§§2–5` are **FROZEN as of this commit**. Amendment is by numbered post-freeze annex only.
+
+**The extraction procedure**, recorded so the digest is re-derivable rather than remembered:
 
 ```text
-commit 1   freeze §§2-5; record the extraction procedure; generate normalised bytes
-           twice; compare byte-for-byte; digest field marked awaiting receipt
-commit 2   insert freeze_commit and freeze_digest; re-run extraction; prove a
-           one-byte change INSIDE §§2-5 fails the gate and a change OUTSIDE does not
+node tools/simurgh-attestation/stage5r/node/computeFreezeReceipt.mjs
+```
+
+The extractor is `tools/simurgh-attestation/stage5r/core/frozenBlock.mjs`. It takes the span from the
+`## §2 FROZEN OBJECT 1` heading to the line before `## §6 `, exclusive of §6, trimming the blank
+lines and horizontal rule that belong to the boundary rather than to §5. Canonicalisation is
+byte-level only — CRLF and CR normalised to LF, exactly one trailing LF, a BOM **rejected** rather
+than stripped, and no semantic normalisation of any kind. The digest is domain-separated:
+
+```text
+SHA256( UTF8("simurgh.vpf.frozen-block.v1") || 0x00 || canonical_block_bytes )
+```
+
+**The boundary is validated, not merely located.** Every one of §2, §3, §4, §5, §6 must appear
+exactly once, at line start, in document order, with each frozen section carrying its own object
+number; headings quoted inside fenced code blocks are not anchors. A missing, duplicated, reordered
+or malformed boundary makes the extractor **refuse**, because a digest over a silently-wrong span is
+a green gate describing the wrong bytes. 5Q's extractor located two strings and would have accepted
+all four of those documents.
+
+**Double generation, compared byte-for-byte:**
+
+```text
+computeFreezeReceipt.mjs --emit-block > block-1.txt
+computeFreezeReceipt.mjs --emit-block > block-2.txt
+cmp block-1.txt block-2.txt          → identical
 ```
 
 ```text
-freeze_commit    <pending>
-freeze_digest    <pending>
+freeze_commit    <pending — inserted by commit 2>
+freeze_digest    <pending — inserted by commit 2>
+frozen_bytes     17472
 ```
+
+The receipt fields are written by the **second** commit and live outside the frozen span, which is
+what makes recording them possible at all: were they inside §§2–5, writing the digest down would
+change the thing the digest describes. A test asserts that property directly rather than trusting it.
