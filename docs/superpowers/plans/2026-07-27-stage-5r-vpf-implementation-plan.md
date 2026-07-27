@@ -14,7 +14,7 @@ freeze_digest           64fe8e76971ab615a7d14d5fac59a2ced3e06cbf90859e448307d43e
 frozen_bytes            17472
 frozen_domain           simurgh.vpf.frozen-block.v1
 
-post_freeze_spec_commit <pending — inserted by the commit after this one>
+post_freeze_spec_commit d8c80352
 full_spec_digest        e1f282574c2a294eeae94e12abb6fc1bfaf32f17a8efb09c6bcc6f57380682d6
 full_spec_domain        simurgh.vpf.full-spec.v1
 
