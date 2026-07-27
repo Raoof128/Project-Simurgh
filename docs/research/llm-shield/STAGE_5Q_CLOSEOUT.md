@@ -88,9 +88,12 @@ itself has picked the easy sixteen.
 - **The non-disturbance gate disturbed.** `check-e2e.sh` regenerates 4H's exit-map in whatever tree
   it runs in; run in the primary worktree it dirtied two Stage-4H files, which `git add -A` then
   swept into a commit. Restored; the manifest now runs isolated.
-- **5Q broke Stage 5P and did not notice for two commits.** The seam campaign wrote the literals
-  `463`/`464`, which 5P's raw-code census forbids. Repaired at the cause — both files now read
-  `VSI_BAND_LO` from the allocator that owns it.
+- **5Q broke Stage 5P and did not notice for two commits.** The seam campaign hard-coded 5P's band
+  edges as literals, which 5P's raw-code census forbids outside the allocator and its approved
+  documents. Repaired at the cause — both files now read `VSI_BAND_LO` from the allocator that owns
+  it, so the probe tracks the band instead of carrying a copy of it. (This closeout is not on 5P's
+  approved list, so it describes the numbers rather than printing them: writing the literal to
+  narrate the rule against writing the literal is how this recurred a third time.)
 - **One §6.1 write-surface violation stays unrepaired and named**:
   `tests/unit/llmShield/stage5p/rawCodeCensus.test.js`, widened first and named afterwards. Amending
   §6.1 to legalise it is precisely what L5 forbids, so it stays a declared violation. The closeout
