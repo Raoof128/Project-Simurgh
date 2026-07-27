@@ -1,0 +1,42 @@
+{
+  "schema": "simurgh.vpf.proof-manifest.v1",
+  "note": "The five obligations §10.2 names, each bound to the file and the theorem identifier that discharges it. The gate requires every identifier by name: discovery alone passes with five irrelevant files, and a name-only check passes with five theorems that each prove True — so the gate checks the names AND this manifest AND that no two files are copies of each other.",
+  "toolchain": "lean 4.15.0, no mathlib",
+  "obligations": [
+    {
+      "id": "L1",
+      "file": "Admissibility.lean",
+      "theorem": "anyFalseIsInadmissible",
+      "obligation": "admissibility is conjunctive: any false condition implies inadmissible",
+      "witnesses": ["witnessAdmissible", "witnessSixOfSevenFails"]
+    },
+    {
+      "id": "L2",
+      "file": "NoPromotion.lean",
+      "theorem": "noPromotion",
+      "obligation": "a class admissible in one role can be inadmissible in another, so promotion is unsound",
+      "witnesses": ["witnessAdmissibleSomewhere", "witnessEmptyAdmitsNothing"]
+    },
+    {
+      "id": "L3",
+      "file": "DeltaDisjoint.lean",
+      "theorem": "cumulativeBounded",
+      "obligation": "a delta disjoint from the inherited discharged set and drawn from inside the universe bounds cumulative coverage at one",
+      "witnesses": ["witnessAdds", "witnessSubClauseIsLoadBearing"]
+    },
+    {
+      "id": "L4",
+      "file": "DenominatorInvariance.lean",
+      "theorem": "denominatorInvariant",
+      "obligation": "no admission sequence changes the inherited denominator",
+      "witnesses": ["witnessInheritedSurvives", "witnessCellsAccumulate"]
+    },
+    {
+      "id": "L5",
+      "file": "OrthogonalSoundness.lean",
+      "theorem": "discriminatesByDeclaredAlone",
+      "obligation": "verdict invariance under every forbidden surrogate, inputs pinned, implies discrimination by the declared signal alone",
+      "witnesses": ["witnessHonestIsInvariant", "witnessSadnessIsNotInvariant"]
+    }
+  ]
+}
