@@ -239,6 +239,65 @@ test("digesting an empty block is refused", () => {
   assert.throws(() => extractFrozenBlock(""), /non-empty|string/i);
 });
 
+// ---- THE FREEZE GATE ---------------------------------------------------------------------------
+
+test("THE FREEZE GATE: the recorded freeze_digest matches the live frozen block", () => {
+  // Without this test, freeze_digest is a number somebody typed once. With it, any edit to §§2-5
+  // fails CI and must instead go through a numbered annex.
+  const text = spec();
+  const recorded = /freeze_digest\s+([0-9a-f]{64})/.exec(text);
+  assert.ok(recorded, "the spec must record a freeze_digest");
+  assert.equal(
+    frozenBlockDigest(extractFrozenBlock(text)),
+    recorded[1],
+    "§§2-5 have changed since the freeze — amend by numbered annex, never in place"
+  );
+
+  const bytes = /frozen_bytes\s+(\d+)/.exec(text);
+  assert.ok(bytes, "the spec must record frozen_bytes");
+  assert.equal(
+    Buffer.byteLength(extractFrozenBlock(text), "utf8"),
+    Number(bytes[1]),
+    "frozen byte count drifted from the recorded value"
+  );
+});
+
+test("the freeze receipt names the commit that froze the block", () => {
+  const m = /freeze_commit\s+([0-9a-f]{7,40})/.exec(spec());
+  assert.ok(m, "the spec must record a freeze_commit; <pending> is not a receipt");
+});
+
+test("the freeze gate would CATCH a one-byte edit inside §§2-5", () => {
+  // L4 in miniature: a gate that has never rejected anything is not known to work. Prove this one
+  // rejects before trusting it to protect the freeze.
+  const text = spec();
+  const recorded = /freeze_digest\s+([0-9a-f]{64})/.exec(text)[1];
+  const tampered = text.replace(
+    "There is no partial admissibility for a family.",
+    "There is no partial admissibility for a family. "
+  );
+  assert.notEqual(tampered, text, "tamper anchor moved — rewrite this test");
+  assert.notEqual(
+    frozenBlockDigest(extractFrozenBlock(tampered)),
+    recorded,
+    "the freeze gate does not detect tampering inside the frozen sections"
+  );
+});
+
+test("the freeze gate is INSENSITIVE to an edit outside §§2-5", () => {
+  // The other half of the same proof. A gate that fires on every edit anywhere would be useless in
+  // the opposite direction: the spec's later sections are meant to stay editable.
+  const text = spec();
+  const recorded = /freeze_digest\s+([0-9a-f]{64})/.exec(text)[1];
+  const edited = text.replace("## §16 Deferred to the implementation plan", "## §16 Deferred work");
+  assert.notEqual(edited, text, "outside-edit anchor moved — rewrite this test");
+  assert.equal(
+    frozenBlockDigest(extractFrozenBlock(edited)),
+    recorded,
+    "an edit outside the frozen sections moved the freeze digest"
+  );
+});
+
 // ---- domain separation -------------------------------------------------------------------------
 
 test("the digest is domain-separated and not a bare sha256 of the block", () => {
