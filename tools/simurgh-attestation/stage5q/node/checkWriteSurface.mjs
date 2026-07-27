@@ -16,7 +16,12 @@
 
 import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
-import { checkPaths, checkPackageJsonMutation } from "../core/writeSurface.mjs";
+import {
+  checkPaths,
+  checkPackageJsonMutation,
+  compareToDeclared,
+  DECLARED_VIOLATIONS,
+} from "../core/writeSurface.mjs";
 
 const git = (args) =>
   execFileSync("git", args, { encoding: "utf8", maxBuffer: 32 * 1024 * 1024 })
@@ -82,6 +87,26 @@ function main(argv) {
   for (const v of violations) {
     console.log(`\n  ✗ ${v.path}`);
     console.log(`    ${v.reason}`);
+  }
+
+  // --allow-declared: pass iff the observed set is EXACTLY the declared one. The declaration lives
+  // in core/writeSurface.mjs, so a caller (and CI) names no individual file — a gate that
+  // enumerated its own exceptions would be F001 one level down.
+  if (argv.includes("--allow-declared")) {
+    const cmp = compareToDeclared(violations.map((v) => v.path));
+    console.log(`\n  declared violations: ${DECLARED_VIOLATIONS.length}`);
+    if (cmp.repaired.length > 0) {
+      // Reported, not failed: a declaration that outlives its violation is stale, and stale is a
+      // different problem from new.
+      console.log(`  STALE DECLARATION — no longer violated: ${cmp.repaired.join(", ")}`);
+    }
+    if (cmp.ok) {
+      console.log("  exactly the declared set, unrepaired and named — accepted");
+      return 0;
+    }
+    console.log(`  UNDECLARED: ${cmp.undeclared.join(", ")}`);
+    console.log("  a new violation may not hide behind a declared one");
+    return 1;
   }
   return 1;
 }

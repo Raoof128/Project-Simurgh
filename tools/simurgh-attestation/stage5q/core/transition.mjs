@@ -26,6 +26,37 @@
 
 export const TRANSITION_CONDITIONS = Object.freeze(["T1", "T2", "T3", "T4", "T5", "T6", "T7"]);
 
+/**
+ * INTEGRITY versus COMPLETENESS, split here as DATA rather than enumerated in a CI gate.
+ *
+ * Integrity conditions ask whether the frozen record is SOUND: the attestation verifies, the ledger
+ * chain holds, no Q1 record predates the freeze, the spec was not edited in place. If any of those
+ * is false the branch is broken and CI must fail.
+ *
+ * Completeness conditions ask whether the campaign was FINISHED. It was not, and that is the
+ * published result — so they are reported, not gated on.
+ *
+ * The split lives here because the first version enumerated it in the workflow as `for C in T1 T4
+ * T5 T6`, and 5Q's own gate census flagged it within the hour: a manually enumerated gate carrying
+ * no committed universe query is F001's pattern, inside the stage that froze F001. `conditionSplit`
+ * refuses a partition that does not cover every condition, so adding a T8 without classifying it
+ * fails loudly instead of silently dropping out of the gate.
+ */
+export const INTEGRITY_CONDITIONS = Object.freeze(["T1", "T4", "T5", "T6"]);
+export const COMPLETENESS_CONDITIONS = Object.freeze(["T2", "T3", "T7"]);
+
+/** The partition, checked. A condition in neither list, or in both, is a defect in the split. */
+export function conditionSplit() {
+  const union = [...INTEGRITY_CONDITIONS, ...COMPLETENESS_CONDITIONS].sort();
+  const both = INTEGRITY_CONDITIONS.filter((c) => COMPLETENESS_CONDITIONS.includes(c));
+  const missing = TRANSITION_CONDITIONS.filter((c) => !union.includes(c));
+  return {
+    ok: both.length === 0 && missing.length === 0 && union.length === TRANSITION_CONDITIONS.length,
+    in_both: both,
+    unclassified: missing,
+  };
+}
+
 export const FROZEN_BLOCK_DIGEST =
   "da78774b77495459e4889e1c433e1933bb502ac81c9e5c0811e2450af7fdfc74";
 
