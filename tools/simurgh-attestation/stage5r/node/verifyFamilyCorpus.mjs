@@ -23,11 +23,15 @@ import {
 
 const REPO = join(dirname(fileURLToPath(import.meta.url)), "../../../..");
 
-/** Paths whose existence would mean the campaign already ran. */
-export const PRE_CAMPAIGN_FORBIDDEN = Object.freeze([
+/** Result paths that may exist only once a commitment exists to precede them. */
+export const RESULT_PATHS = Object.freeze([
   "docs/research/llm-shield/evidence/stage-5r/campaign",
   "docs/research/llm-shield/evidence/stage-5r/ledger",
 ]);
+
+/** The commitment those results must not predate. */
+export const COMMITMENT_PATH =
+  "docs/research/llm-shield/evidence/stage-5r/commitments/campaign-c1.json";
 
 /** @returns {number} exit code */
 export function main() {
@@ -52,17 +56,24 @@ export function main() {
     lines.push("  premise receipts: NOT YET BUILT");
   }
 
-  const ran = PRE_CAMPAIGN_FORBIDDEN.filter((p) => existsSync(join(REPO, p)));
+  // Before Task 19 the honest check is "nothing has run". After it, the honest check is "nothing ran
+  // before the commitment" — an absolute absence test would have to go red the moment the campaign
+  // legitimately ran, which makes it a countdown rather than an invariant.
+  const ran = RESULT_PATHS.filter((p) => existsSync(join(REPO, p)));
+  const commitmentExists = existsSync(join(REPO, COMMITMENT_PATH));
+  const premature = ran.length > 0 && !commitmentExists;
   lines.push(
-    ran.length
-      ? `  EXECUTED BEFORE COMMITMENT: ${ran.join(", ")}`
-      : "  no campaign artefact exists — nothing has been run against a cell"
+    premature
+      ? `  EXECUTED BEFORE ANY COMMITMENT: ${ran.join(", ")}`
+      : ran.length
+        ? `  results present, and C1 exists to precede them: ${ran.join(", ")}`
+        : "  no campaign artefact exists — nothing has been run against a cell"
   );
 
   if (!result.ok) {
     for (const p of result.problems) lines.push(`  PROBLEM ${p.family}: ${p.problem}`);
   }
-  const ok = result.ok && ran.length === 0 && receiptsMatch !== false;
+  const ok = result.ok && !premature && receiptsMatch !== false;
   lines.push(ok ? "OK" : "REFUSED");
   process.stdout.write(`${lines.join("\n")}\n`);
   return ok ? 0 : 1;
