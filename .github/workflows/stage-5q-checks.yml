@@ -12,9 +12,23 @@ name: Stage 5Q (VSR) checks
 # existence check rather than being absent, so enabling them later changes no bytes of this file.
 # A test asserts its digest at Task 8 equals its digest at Task 21.
 #
-# SELF-EXTENDING BY CONSTRUCTION: this file invokes scripts, which discover their inputs with
-# `find`. It names no individual proof, test or module. A 5Q gate that listed its own files by name
-# would be F001 one level down, inside the stage that froze F001 as evidence.
+# SELF-EXTENDING WHERE IT COUNTS, AND THE CLAIM IS NARROWED TO WHAT IS TRUE.
+#
+# The GATES are self-extending: each invokes a script, and the scripts discover their inputs with
+# `find` or by walking a directory. No proof, test or module is enumerated by a gate.
+#
+# The EXISTENCE GUARDS do name files — `if [ -f tools/.../measureStaticCensus.mjs ]`. That is what
+# makes pre-L2 creation sound (every job present from the start, so the file's shape never changes
+# when a later task lands), and it is also, strictly, enumeration. 5Q's own gate census classifies
+# those steps as `manually_enumerated` and asks for a committed universe query, which they do not
+# carry.
+#
+# An earlier version of this header claimed the file "names no individual proof, test or module"
+# without qualification. That was false for the guards, and it was hidden for a while by comment
+# placement: comments sitting BETWEEN steps get swallowed into the previous step's `run:` scalar by
+# the census's bounded scan, which changed how those steps classified. Moving the comments inside
+# their steps made the classification accurate and the problem count went 11 -> 12. The landscape
+# did not move; the measurement stopped being wrong.
 
 on:
   push:
