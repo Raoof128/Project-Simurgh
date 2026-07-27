@@ -26,7 +26,6 @@ import { canonicalJson } from "../../canonicalise.mjs";
 import { loadCorpus } from "../core/families.mjs";
 import { loadInheritedTargets, attachTargets, probeCell, tallyCells } from "../core/campaign.mjs";
 import { assessFamily } from "../core/admissibility.mjs";
-import { buildUniverse } from "../core/archetypes.mjs";
 import { buildChildPayload, assertBlind, scrubEnv, verifyVerdictReceipt } from "../core/laneB.mjs";
 import { suppressionInvariance, loudObservation } from "../core/suppression.mjs";
 import { decide } from "./detectorChild.mjs";
@@ -202,7 +201,15 @@ export function main() {
   }
 
   // ---- the 55-pair result ledger, total by construction ----------------------------------------
-  const universe = buildUniverse();
+  // Read from the committed universe artefact rather than rebuilt: the pairs this campaign reports
+  // on must be the pairs that were published before it ran, not a set recomputed alongside its own
+  // results.
+  const universe = JSON.parse(
+    readFileSync(
+      join(REPO, "docs/research/llm-shield/evidence/stage-5r/universe/family-universe.json"),
+      "utf8"
+    )
+  );
   const attempted = new Map(
     familyResults.map((f) => [`${f.attack_class}|${f.target_security_role}`, f])
   );
