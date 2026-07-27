@@ -47,6 +47,19 @@ jobs:
       - name: unit tests
         run: node --test tests/unit/llmShield/stage5r/*.test.js
 
+      # TEMPORARY (this commit only): the repo-wide Quality Gate reports one failing test on Linux
+      # and prints only the last 40 lines of its log, which carry the summary and not the failure.
+      # This step names it. It is removed as soon as it has.
+      - name: TEMPORARY diagnostic — name the failing test in the wider suite
+        run: |
+          node --test tests/unit/*.test.js tests/unit/**/*.test.js tests/unit/**/**/*.test.js \
+            > /tmp/full.log 2>&1 || true
+          echo "--- failing tests ---"
+          grep -E "^not ok" /tmp/full.log | head -20
+          echo "--- detail ---"
+          grep -A 25 "^not ok" /tmp/full.log | head -60
+          grep -E "^# (tests|pass|fail|skipped)" /tmp/full.log
+
       - name: the inherited commitment, roots first and signature last
         run: node tools/simurgh-attestation/stage5r/node/verifyInheritance.mjs
 
