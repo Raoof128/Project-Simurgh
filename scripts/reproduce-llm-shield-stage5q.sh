@@ -42,9 +42,17 @@ EXPECTED_MUTANTS="16"
 # and a ledger that SHRINKS is the failure it names. An exact pin would fail the build every time a
 # finding was added, which pressures an author in precisely the wrong direction.
 MINIMUM_FINDINGS="12"
-# The gate census is a census of OTHER stages' gates. Its problem count is a measured property of
-# the repository, pinned so a change in the gate landscape is visible rather than absorbed.
-EXPECTED_GATE_PROBLEMS="11"
+# The gate census counts gates across ALL workflows, 5Q's own included. Pinned so a change in the
+# landscape is visible rather than absorbed.
+#
+# RE-PINNED 11 -> 12, and the reason matters more than the number. The 11 was itself wrong: comments
+# sitting between steps in stage-5q-checks.yml were being swallowed into the previous step's `run:`
+# scalar by the census's bounded scan, which changed how four steps classified. Moving the comments
+# inside their steps made the classification accurate. The twelfth problem is 5Q's own existence
+# guards — `if [ -f tools/.../x.mjs ]` — which genuinely name files and carry no universe query.
+# The gate landscape did not move; the measurement stopped being wrong, and re-pinning to hide that
+# would have been the opposite of what this census is for.
+EXPECTED_GATE_PROBLEMS="12"
 
 # The unrepaired §6.1 violation set is declared ONCE, in core/writeSurface.mjs, and this script
 # reads it rather than keeping a second copy. Two copies of a declaration are two chances to
