@@ -13,7 +13,7 @@ proof of what happened after a guardrail missed — not another jailbreak detect
 [![Node](https://img.shields.io/badge/node-%E2%89%A522.0-1a1a1a?style=flat-square)](https://nodejs.org)
 [![License](https://img.shields.io/badge/license-AGPL--3.0-d6cfbe?style=flat-square)](#license)
 [![Status](https://img.shields.io/badge/status-research%20prototype-2f4a2a?style=flat-square)](#status)
-[![Latest](https://img.shields.io/badge/release-v2.52.0-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.52.0-stage-5q-vsr)
+[![Latest](https://img.shields.io/badge/release-v2.53.0-blue?style=flat-square)](https://github.com/Raoof128/Project-Simurgh/releases/tag/v2.53.0-stage-5r-vpf)
 
 </div>
 
@@ -102,7 +102,49 @@ newest for the current frontier, or jump straight to
 [Constitution alignment](#design-alignment-with-claudes-constitution), or the
 [concrete result](#the-concrete-result-stage-3v-b).
 
-> 🆕 **Latest — Stage 5P · VSI: authentication is not accountability (`v2.51.0-stage-5p-vsi`).**
+> 🆕 **Latest — Stage 5R · VPF: a tranche that discharges nothing, and says so (`v2.53.0-stage-5r-vpf`).**
+> A red-team attack class is not admissible because one seeded mutant was detected. It becomes
+> admissible only when a frozen **positive-control family** separates three cases: a **vulnerable**
+> control the detector must catch, a structurally comparable **safe** control it must clear, and an
+> **orthogonal failure** control that fails loudly and must **not** be called a detection. The third is
+> the load-bearing one — without it, a detector that flags every crash, malformed file or non-zero exit
+> scores a perfect pair while understanding nothing.
+> **Tranche T1: 8 of 8 families admissible across 8 role archetypes, 2 406 cells probed, 0 discharged.**
+> That zero is the result, not a shortfall. The probe is static; the discharge predicate's tenth clause
+> requires the class-specific outcome matched **on this member**; a static reading cannot demonstrate an
+> outcome that was never executed. The bound was written into the module that produces the result
+> **before** the campaign ran. 5R demonstrates an **instrument**, and declines to convert it into
+> coverage. **Nothing in 5R changes the published 5Q result: 6.2% stays 6.2%.**
+> **Ten findings, two of them against 5R itself** — including `5R-F009`, where 5R's own detector decided
+> by a marker comment naming the declared signal, a marker the control's author places. Under it
+> vulnerable-detected and safe-not-detected held **by construction** and none of it was about a defect.
+> Found while writing the first control, before any campaign ran; mutant **N7** now seeds it. Its
+> predecessor published twelve findings and every one named another stage.
+> Eighteen candidate findings were raised against real inherited members and **all eighteen refuted** —
+> eleven were `Array.sort()` with no comparator, which is code-unit ordered and engine-independent,
+> checked against an explicit comparator rather than assumed.
+> **5 Lean theorems** (zero `sorry`, each with non-vacuity witnesses, statements pinned by digest) ·
+> **11 gates** with recorded red states · Node ≡ portable ≡ Python ≡ a real headless browser ·
+> zero uncovered exports · the inherited 5Q evidence tree byte-identical throughout. New codes: none —
+> 5R allocates no raw codes.
+> **Honesty boundary:** the campaign commitment C1 is a git ancestor of the results C2 with every
+> committed byte still matching, which **raises the cost of back-fitting and does not eliminate it**,
+> because the producer controls both commits. Closing that needs an external witness over C1 and belongs
+> to a stage carrying it as its blade. `orchestration` is excluded by measurement, not preference; the
+> universe adapter is `unbuilt`; **I7 and I8 remain OPEN**.
+
+<details>
+<summary><b>Recent stages — 5Q → 4W</b> (click to expand the prior rungs)</summary>
+
+> **Stage 5Q · VSR: a stage-wide red team that published the number it did not like (`v2.52.0-stage-5q-vsr`).**
+> A frozen closure of 2 531 members, a 40 496-cell obligation matrix, and one green→red→green mutation
+> receipt required per attack class before anything in that class could be admitted. It shipped
+> **L1 coverage 6.2% (1 438 of 23 332 cells)** with the denominator intact rather than stretching the
+> campaign until the figure looked better, published **twelve findings**, and recorded `5Q-F013`: its own
+> Q0→Q1 lifecycle admits no legal outgoing transition, so **Q1 was never authorised**. 5R is the lawful
+> exit from that deadlock, and inherits all seven of its digests.
+
+> **Stage 5P · VSI: authentication is not accountability (`v2.51.0-stage-5p-vsi`).**
 > Evidence can bind a submission to an authenticated identity **without** proving that identity stays
 > resolvable or accountable later. 5P makes the distinction machine-checkable with a **componentwise
 > Identity Resolution Lattice** over four independent axes — `binding / resolution / continuity / role`
@@ -127,9 +169,6 @@ newest for the current frontier, or jump straight to
 > **TLS-at-capture**, not an offline GLEIF signature. **Lane C2 is unreachable**: no profile proving
 > durable role authority exists yet anywhere (vLEI OOR / eIDAS QEAA, Dec-2026 EUDI deadline). All of
 > it is **signed into the attestation** as 12 known limitations — including the lane that did not run.
-
-<details>
-<summary><b>Recent stages — 5O → 4W</b> (click to expand the prior rungs)</summary>
 
 > **Stage 5O · VSC: a bounded audit of a universe the auditor never sees (`v2.50.0-stage-5o-vsc`).**
 > A producer commits to a **private** evaluation universe; a **public Bitcoin beacon** issues a challenge it
