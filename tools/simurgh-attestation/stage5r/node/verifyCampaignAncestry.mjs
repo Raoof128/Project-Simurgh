@@ -27,11 +27,17 @@ const C2_PATH = "docs/research/llm-shield/evidence/stage-5r/campaign/campaign-re
 
 const git = (args) => execFileSync("git", args, { cwd: REPO, encoding: "utf8" }).trim();
 
-/** The commit that introduced a path. */
-export function introducingCommit(path) {
-  const out = git(["log", "--format=%H", "--diff-filter=A", "--", path]);
-  const lines = out.split("\n").filter(Boolean);
-  return lines.length ? lines[lines.length - 1] : null;
+/**
+ * The commit whose bytes are in force for a path — the most recent one to touch it.
+ *
+ * NOT the commit that first added it. C1 was re-issued after the runner it binds was repaired, and
+ * resolving the first `A` entry named the superseded commitment while the verifier was checking the
+ * re-issued bytes. Reporting one commit and verifying another is the kind of near-miss that reads as
+ * a receipt and is not one.
+ */
+export function inForceCommit(path) {
+  const out = git(["log", "-1", "--format=%H", "--", path]);
+  return out || null;
 }
 
 /** @returns {number} exit code */
@@ -42,8 +48,8 @@ export function main() {
       return 1;
     }
   }
-  const c1 = introducingCommit(C1_PATH);
-  const c2 = introducingCommit(C2_PATH);
+  const c1 = inForceCommit(C1_PATH);
+  const c2 = inForceCommit(C2_PATH);
   if (!c1 || !c2) {
     process.stderr.write("ancestry: one of C1 or C2 is not in history yet — commit them first\n");
     return 1;
