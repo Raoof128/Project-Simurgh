@@ -225,6 +225,22 @@ const ADAPTERS = {
         m.parseMaintenanceSurface("## Annex A4\n| `x` | add | p | Q1-F001 |\n").present === false,
         "a table outside A5 is not A5's authority"
       ),
+    authorityPrecedesAction: (m) =>
+      ok(
+        m.authorityPrecedesAction({
+          annexPresentAtBase: true,
+          annexCommitInRange: null,
+          firstTouchCommit: "abc",
+          annexIsAncestorOfFirstTouch: false,
+        }) === true &&
+          m.authorityPrecedesAction({
+            annexPresentAtBase: false,
+            annexCommitInRange: "aaa",
+            firstTouchCommit: "aaa",
+            annexIsAncestorOfFirstTouch: true,
+          }) === false,
+        "an annex at the base precedes; an annex in the crossing commit does not"
+      ),
     judgeMaintenance: (m) => {
       const entries = [{ path: "a.mjs", op: "add" }];
       const late = m.judgeMaintenance({

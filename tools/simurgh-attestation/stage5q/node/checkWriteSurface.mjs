@@ -22,7 +22,11 @@ import {
   compareToDeclared,
   DECLARED_VIOLATIONS,
 } from "../core/writeSurface.mjs";
-import { judgeMaintenance, parseMaintenanceSurface } from "../core/maintenanceSurface.mjs";
+import {
+  authorityPrecedesAction,
+  judgeMaintenance,
+  parseMaintenanceSurface,
+} from "../core/maintenanceSurface.mjs";
 import { freezeReceipt } from "../core/frozenBlock.mjs";
 
 const git = (args) =>
@@ -211,13 +215,25 @@ function judgeMaintenanceRange(undeclared, mode, range) {
     .split("\n")
     .filter(Boolean)[0];
 
-  const authorityPrecedes = Boolean(
+  // Is the annex already at the base? Then it predates the whole branch, which is the normal case
+  // once it has been merged to main — and the case the first implementation could not see.
+  const annexPresentAtBase = gitText(["show", `${base}:${SPEC}`]).includes("## Annex A5");
+
+  // `merge-base --is-ancestor` answers by EXIT CODE and prints nothing, so a thrown call (non-zero)
+  // returns the sentinel and an empty string means "yes, ancestor".
+  const annexIsAncestorOfFirstTouch = Boolean(
     annexCommit &&
     firstTouch &&
-    annexCommit !== firstTouch &&
     gitText(["merge-base", "--is-ancestor", annexCommit, firstTouch], "ANCESTOR_FALSE") !==
       "ANCESTOR_FALSE"
   );
+
+  const authorityPrecedes = authorityPrecedesAction({
+    annexPresentAtBase,
+    annexCommitInRange: annexCommit ?? null,
+    firstTouchCommit: firstTouch ?? null,
+    annexIsAncestorOfFirstTouch,
+  });
 
   // Uncommitted work touching an authorised path was never evaluated by the range above.
   const dirty = gitText(["status", "--porcelain"])

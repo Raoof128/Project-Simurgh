@@ -13,6 +13,7 @@ import test from "node:test";
 
 import {
   MAINTENANCE_REFUSALS as R,
+  authorityPrecedesAction,
   judgeMaintenance,
   parseMaintenanceSurface,
 } from "../../../../tools/simurgh-attestation/stage5q/core/maintenanceSurface.mjs";
@@ -119,6 +120,80 @@ test("[a5] every refusal is reported, not just the first", () => {
   for (const r of [R.EMPTY_RANGE, R.AUTHORITY_DOES_NOT_PRECEDE, R.Q1_CLAIMED]) {
     assert.ok(reasons(v).includes(r), `${r} was swallowed`);
   }
+});
+
+// ---- authority ancestry: the annex may predate the branch entirely -----------------------------
+//
+// The first implementation looked for the annex commit INSIDE the diff range. That is only one of
+// the two ways authority can precede action, and it is the rarer one: it holds while the annex and
+// the repair share a branch, and stops holding the moment the annex is merged to main. Every later
+// maintenance branch is cut from a main that ALREADY carries the annex, so the annex is not in the
+// range at all — and the check reported `authority_does_not_precede_action` for work whose
+// authority preceded it by an entire merge. Fail-closed, and wrong.
+//
+// Caught by running the checker against a branch it does not govern, one commit after publishing a
+// doctrine that uses this very mechanism as its worked example.
+
+test("[a5] authority present at the MERGE BASE precedes everything on the branch", () => {
+  assert.equal(
+    authorityPrecedesAction({
+      annexPresentAtBase: true,
+      annexCommitInRange: null,
+      firstTouchCommit: "abc123",
+      annexIsAncestorOfFirstTouch: false,
+    }),
+    true,
+    "an annex already on main was treated as absent"
+  );
+});
+
+test("[a5] authority introduced in-range, before the first touch, precedes it", () => {
+  assert.equal(
+    authorityPrecedesAction({
+      annexPresentAtBase: false,
+      annexCommitInRange: "aaa",
+      firstTouchCommit: "bbb",
+      annexIsAncestorOfFirstTouch: true,
+    }),
+    true
+  );
+});
+
+test("[a5] authority in the SAME commit as the action does not precede it", () => {
+  // The permission slip written during the crossing.
+  assert.equal(
+    authorityPrecedesAction({
+      annexPresentAtBase: false,
+      annexCommitInRange: "aaa",
+      firstTouchCommit: "aaa",
+      annexIsAncestorOfFirstTouch: true,
+    }),
+    false
+  );
+});
+
+test("[a5] authority that is not an ancestor does not precede", () => {
+  assert.equal(
+    authorityPrecedesAction({
+      annexPresentAtBase: false,
+      annexCommitInRange: "aaa",
+      firstTouchCommit: "bbb",
+      annexIsAncestorOfFirstTouch: false,
+    }),
+    false
+  );
+});
+
+test("[a5] no annex anywhere is no authority", () => {
+  assert.equal(
+    authorityPrecedesAction({
+      annexPresentAtBase: false,
+      annexCommitInRange: null,
+      firstTouchCommit: "bbb",
+      annexIsAncestorOfFirstTouch: false,
+    }),
+    false
+  );
 });
 
 test("[a5] the annex does not claim Q1, in its own words", () => {
