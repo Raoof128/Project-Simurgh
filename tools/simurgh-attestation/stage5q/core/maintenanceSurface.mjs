@@ -12,9 +12,11 @@
 // the one nobody is looking at." The gate demanded the paths be named in the spec, so the spec is
 // where they are named and where this reads them from.
 //
-// AUTHORITY PRECEDES ACTION, AND IT IS CHECKED RATHER THAN ASSERTED. The commit carrying A5 must be
-// a strict ancestor of the first commit touching any path A5 authorises. A permission written after
-// the crossing is not a permission.
+// AUTHORITY PRECEDES ACTION, AND IT IS CHECKED RATHER THAN ASSERTED. The annex must either already
+// exist at the merge base — predating the branch entirely, which is the normal case once it has
+// been merged — or be introduced within the range in a strictly earlier commit than the first one
+// touching an authorised path. A permission written after the crossing is not a permission, and one
+// written in the same commit as the crossing is not either.
 
 /** Every way the maintenance surface is allowed to say no. */
 export const MAINTENANCE_REFUSALS = Object.freeze({
@@ -51,6 +53,37 @@ export function parseMaintenanceSurface(specText) {
     if (m) entries.push({ path: m[1], op: m[2], purpose: m[3].trim(), id: m[4] });
   }
   return { present: entries.length > 0, entries };
+}
+
+/**
+ * Does the authority precede the action it authorises?
+ *
+ * TWO WAYS IT CAN, AND THE FIRST IMPLEMENTATION KNEW ONLY THE SECOND:
+ *
+ *   1. the annex is already at the MERGE BASE — it predates the branch entirely, which is the
+ *      normal case for every maintenance repair after the annex has been merged to main;
+ *   2. the annex is introduced within the range, in a strictly earlier commit than the first one
+ *      touching an authorised path — the case while annex and repair share a branch.
+ *
+ * Only (2) was checked, so the first branch cut from a main already carrying Annex A5 was refused
+ * with `authority_does_not_precede_action` for work whose authority preceded it by an entire merge.
+ * It failed closed, which is the right direction to be wrong in, and it was still wrong.
+ *
+ * Same-commit is NOT precedence: a permission written during the crossing is not a permission.
+ *
+ * @param {{annexPresentAtBase: boolean, annexCommitInRange: string|null,
+ *          firstTouchCommit: string|null, annexIsAncestorOfFirstTouch: boolean}} facts
+ */
+export function authorityPrecedesAction(facts) {
+  const { annexPresentAtBase, annexCommitInRange, firstTouchCommit, annexIsAncestorOfFirstTouch } =
+    facts;
+  if (annexPresentAtBase) return true;
+  return Boolean(
+    annexCommitInRange &&
+    firstTouchCommit &&
+    annexCommitInRange !== firstTouchCommit &&
+    annexIsAncestorOfFirstTouch
+  );
 }
 
 /**
