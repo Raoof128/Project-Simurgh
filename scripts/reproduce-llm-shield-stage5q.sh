@@ -52,7 +52,12 @@ MINIMUM_FINDINGS="12"
 # guards — `if [ -f tools/.../x.mjs ]` — which genuinely name files and carry no universe query.
 # The gate landscape did not move; the measurement stopped being wrong, and re-pinning to hide that
 # would have been the opposite of what this census is for.
-EXPECTED_GATE_PROBLEMS="12"
+#
+# Q1-F002 RETIRED THE CONSTANT THAT STOOD HERE. The pin is now the committed SET at
+# `docs/research/llm-shield/evidence/stage-5q-q1/problem-gate-set.json`, compared by identity in
+# gate 8. The reasoning above is kept, because it is still the record of how the 12 was reached —
+# but the number stopped being the authority, and a stale constant a reader could mistake for one
+# is the second copy the note below warns about.
 
 # The unrepaired §6.1 violation set is declared ONCE, in core/writeSurface.mjs, and this script
 # reads it rather than keeping a second copy. Two copies of a declaration are two chances to
@@ -113,8 +118,14 @@ echo "-- 3. prior-stage evidence non-disturbance --"
 # rule was BROKEN: the Task 3 runtime census imported a 5M module with no main guard, the module
 # re-ran its ceremony, and it overwrote a published capture (finding 5Q-F003). The file was
 # restored; this gate is what makes the next occurrence loud instead of invisible.
+# Q1-F001 added a second exclusion. Q1's evidence CANNOT live under `evidence/stage-5q/`: Stage 5R
+# gates on `git status --porcelain` over that whole tree, so even an untracked subdirectory fails a
+# shipped stage's reproduce. It therefore lives in the sibling `stage-5q-q1/`, which is this stage's
+# own evidence and not another stage's — the exclusion says so explicitly rather than by accident.
 DISTURBED="$(git diff --name-only "$MERGE_BASE..HEAD" -- \
-  'docs/research/llm-shield/evidence/' ':(exclude)docs/research/llm-shield/evidence/stage-5q/' || true)"
+  'docs/research/llm-shield/evidence/' \
+  ':(exclude)docs/research/llm-shield/evidence/stage-5q/' \
+  ':(exclude)docs/research/llm-shield/evidence/stage-5q-q1/' || true)"
 if [ -n "$DISTURBED" ]; then
   echo "FAIL: Q0 changed evidence belonging to another stage:"
   echo "$DISTURBED" | sed 's/^/      ✗ /'
@@ -244,13 +255,13 @@ echo
 echo "-- 8. gate census (other stages' completeness gates) --"
 GATE="$("$NODE" "$Q/node/measureGateCensus.mjs" 2>&1)"
 echo "$GATE" | sed -n '1,3p' | sed 's/^/      /'
-G_PROBLEMS="$(echo "$GATE" | awk '/^  PROBLEMS: /{print $2}')"
-if [ "${G_PROBLEMS:-x}" != "$EXPECTED_GATE_PROBLEMS" ]; then
-  echo "FAIL: the gate census reports ${G_PROBLEMS:-<none>} problems; this stage pinned $EXPECTED_GATE_PROBLEMS."
-  echo "      A change here means the repository's gate landscape moved. Re-review, then re-pin."
+# Q1-F002. This compared a HEADCOUNT (`EXPECTED_GATE_PROBLEMS="12"`) and had been red on main since
+# Stage 5R added seven unclassified workflow steps — unnoticed, because nobody re-ran a prior
+# stage's reproduce script. A count also permits laundering: repair one gate, add another, 19 holds.
+# The pin is now a SET of {gate_id, reason_code}, and added/removed print independently.
+if ! "$NODE" "$Q/node/checkProblemGateSet.mjs"; then
   exit 1
 fi
-echo "gate census: $G_PROBLEMS problems, matching the pin: OK"
 
 # ------------------------------------------------------------------------------------------------
 echo
@@ -627,7 +638,9 @@ echo "-- 21. this script disturbed nothing (re-checked after every gate ran) --"
 # and then disturbs something on its way through is worse than one that never checked, because it
 # prints a clean bill over damage it caused. It has happened once already.
 AFTER="$(git status --porcelain -- docs/research/llm-shield/evidence/ \
-  | sed 's/^...//' | grep -v '^docs/research/llm-shield/evidence/stage-5q/' || true)"
+  | sed 's/^...//' \
+  | grep -v '^docs/research/llm-shield/evidence/stage-5q/' \
+  | grep -v '^docs/research/llm-shield/evidence/stage-5q-q1/' || true)"
 if [ -n "$AFTER" ]; then
   echo "FAIL: running this script changed evidence belonging to another stage:"
   echo "$AFTER" | sed 's/^/      ✗ /'

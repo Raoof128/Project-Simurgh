@@ -22,6 +22,8 @@ import {
   compareToDeclared,
   DECLARED_VIOLATIONS,
 } from "../core/writeSurface.mjs";
+import { judgeMaintenance, parseMaintenanceSurface } from "../core/maintenanceSurface.mjs";
+import { freezeReceipt } from "../core/frozenBlock.mjs";
 
 const git = (args) =>
   execFileSync("git", args, { encoding: "utf8", maxBuffer: 32 * 1024 * 1024 })
@@ -78,6 +80,21 @@ function main(argv) {
   console.log(`Q0 write surface — mode=${mode}${range ? ` range=${range}` : ""}`);
   console.log(`  paths examined: ${result.checked}`);
 
+  // ANTI-VACUITY (Annex A5.2). A range gate that examined nothing while the working tree carries
+  // changes has not passed — it has not run. This is exactly how the Q1-F001 repair was verified
+  // "21/21" with its work uncommitted: gates 2 and 3 diffed an empty range and printed green.
+  if (mode === "range" && result.checked === 0) {
+    const dirty = gitText(["status", "--porcelain"]);
+    if (dirty) {
+      console.log("  REFUSING: uncommitted_changes_not_evaluated");
+      console.log(
+        "    the range is empty and the working tree is not. Commit the work, or the gate is " +
+          "reporting on a change set that does not include it."
+      );
+      return 1;
+    }
+  }
+
   if (violations.length === 0) {
     console.log("  OK — every change is inside the spec §6.1 write surface");
     return 0;
@@ -104,11 +121,122 @@ function main(argv) {
       console.log("  exactly the declared set, unrepaired and named — accepted");
       return 0;
     }
+    // Annex A5. Before refusing, ask whether every UNDECLARED path is authorised maintenance. The
+    // annex is read from the spec, never re-declared here, and its authority only counts if the
+    // commit carrying it precedes the commits it authorises.
+    const m = judgeMaintenanceRange(cmp.undeclared, mode, range);
+    if (m.applicable) {
+      if (m.verdict.ok) {
+        console.log(
+          `\n  ANNEX A5 (maintenance): all ${cmp.undeclared.length} path(s) authorised by name, ` +
+            "operation matched, authority precedes action — accepted"
+        );
+        console.log("  this is NOT Q1: no transition claimed, no obligation discharged");
+        return 0;
+      }
+      console.log("\n  ANNEX A5 (maintenance) REFUSES this change:");
+      for (const r of m.verdict.refusals) {
+        console.log(
+          `    ✗ ${r.reason}${r.path ? ` — ${r.path}` : ""}${r.detail ? ` (${r.detail})` : ""}`
+        );
+      }
+      return 1;
+    }
+
     console.log(`  UNDECLARED: ${cmp.undeclared.join(", ")}`);
     console.log("  a new violation may not hide behind a declared one");
     return 1;
   }
   return 1;
+}
+
+const SPEC = "docs/superpowers/specs/2026-07-26-stage-5q-vsr-stage-wide-red-team-design.md";
+const FREEZE_DIGEST = "da78774b77495459e4889e1c433e1933bb502ac81c9e5c0811e2450af7fdfc74";
+/** T1-T7 live here. A maintenance change may not touch the transition it declines to claim. */
+const TRANSITION_FILES = "tools/simurgh-attestation/stage5q/core/transition.mjs";
+
+function gitText(args, fallback = "") {
+  try {
+    return execFileSync("git", args, { encoding: "utf8" }).trim();
+  } catch {
+    return fallback;
+  }
+}
+
+/** The operation git performed on a path across the range: `add` for A, `modify` for everything else. */
+function operationFor(path, range) {
+  const status = gitText(["diff", "--name-status", range, "--", path]).split("\n")[0] ?? "";
+  return status.startsWith("A") ? "add" : "modify";
+}
+
+/**
+ * Gather the git-side facts A5 needs, then judge. Applicable only to a commit range: the annex is a
+ * statement about commits, and "authority precedes action" is meaningless over a dirty worktree.
+ */
+function judgeMaintenanceRange(undeclared, mode, range) {
+  if (mode !== "range" || !range || undeclared.length === 0) return { applicable: false };
+
+  const specText = (() => {
+    try {
+      return readFileSync(SPEC, "utf8");
+    } catch {
+      return "";
+    }
+  })();
+  const { present, entries } = parseMaintenanceSurface(specText);
+  if (!present) return { applicable: false };
+
+  const [base, head = "HEAD"] = range.split("..");
+  const commits = gitText(["rev-list", `${base}..${head}`])
+    .split("\n")
+    .filter(Boolean);
+
+  // The commit that introduced A5, and the first commit touching any path it authorises.
+  const specCommits = gitText(["log", "--reverse", "--format=%H", `${base}..${head}`, "--", SPEC])
+    .split("\n")
+    .filter(Boolean);
+  const annexCommit = specCommits.find((c) =>
+    gitText(["show", `${c}:${SPEC}`]).includes("## Annex A5")
+  );
+
+  const authorised = new Set(entries.map((e) => e.path));
+  const firstTouch = gitText([
+    "log",
+    "--reverse",
+    "--format=%H",
+    `${base}..${head}`,
+    "--",
+    ...[...authorised],
+  ])
+    .split("\n")
+    .filter(Boolean)[0];
+
+  const authorityPrecedes = Boolean(
+    annexCommit &&
+    firstTouch &&
+    annexCommit !== firstTouch &&
+    gitText(["merge-base", "--is-ancestor", annexCommit, firstTouch], "ANCESTOR_FALSE") !==
+      "ANCESTOR_FALSE"
+  );
+
+  // Uncommitted work touching an authorised path was never evaluated by the range above.
+  const dirty = gitText(["status", "--porcelain"])
+    .split("\n")
+    .filter(Boolean)
+    .map((l) => l.slice(3).trim())
+    .filter((p) => authorised.has(p));
+
+  const verdict = judgeMaintenance({
+    entries,
+    outsideQ0: undeclared.map((p) => ({ path: p, op: operationFor(p, range) })),
+    rangeCommitCount: commits.length,
+    uncommittedPaths: dirty,
+    frozenSectionsIntact: freezeReceipt(specText).digest === FREEZE_DIGEST,
+    transitionIntact: gitText(["diff", "--name-only", range, "--", TRANSITION_FILES]).length === 0,
+    q1Authorised: false,
+    authorityPrecedes,
+  });
+  return { applicable: true, verdict };
 }
 
 // THE MAIN GUARD. Without it, `await import(...)` of this file RUNS it — which is finding 5Q-F003,

@@ -96,7 +96,12 @@ function realFixtures() {
     f003Probe: `${E}/findings/F003/import-write-probe.json`,
   };
   const digests = {
-    leanWorkflow: sha256(readFileSync(".github/workflows/stage-4-lean-proofs.yml")),
+    // Q1-F001: the Q0 capture, never the live workflow. F001's claim is about the bytes as they
+    // stood when the finding was frozen, and Q1 repaired those bytes. Recomputing a historical
+    // premise against the current tree makes every finding unreproducible the moment it is fixed.
+    leanWorkflow: sha256(
+      readFileSync("docs/research/llm-shield/evidence/stage-5q-q1/f001-workflow-at-q0.yml")
+    ),
     capture: sha256(
       readFileSync("docs/research/llm-shield/evidence/stage-5m/real-lanec/lanec-local-capture.json")
     ),

@@ -1,0 +1,61 @@
+name: stage-4-lean-proofs
+on:
+  push:
+    paths: ["proofs/**"]
+  pull_request:
+    paths: ["proofs/**"]
+jobs:
+  lean-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install elan (pinned toolchain from proofs/stage4m/lean-toolchain)
+        run: |
+          curl -sSfL https://github.com/leanprover/elan/releases/latest/download/elan-x86_64-unknown-linux-gnu.tar.gz | tar xz
+          ./elan-init -y --default-toolchain "$(cat proofs/stage4m/lean-toolchain)"
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Type-check the Stage 4 formal core (exit lattice, structuring, anti-monotonicity)
+        run: |
+          lean proofs/stage4/ExitLattice.lean
+          lean proofs/stage4/Structuring.lean
+          lean proofs/stage4m/AntiMonotonicity.lean
+          lean proofs/stage4n/TemporalCompleteness.lean
+          lean proofs/stage4o/MonotoneConsent.lean
+          lean proofs/stage4p/OriginCustody.lean
+          lean proofs/stage4q/FrictionPrecedence.lean
+          lean proofs/stage4r/NoPublicHerdToken.lean
+          lean proofs/stage4s/NoGhostHop.lean
+          lean proofs/stage4u/NoSilentBypass.lean
+          lean proofs/stage4t/NoHearsay.lean
+          ! grep -Rn "\bsorry\b" proofs/stage4t
+          lean proofs/stage4v/DueProcess.lean
+          ! grep -Rn "\bsorry\b" proofs/stage4v
+          lean proofs/stage4w/SlotBoundNarrative.lean
+          ! grep -Rn "\bsorry\b" proofs/stage4w
+          lean proofs/stage4x/LeakageResidue.lean
+          ! grep -Rn "\bsorry\b" proofs/stage4x
+          lean proofs/stage4y/DocumentResidue.lean
+          ! grep -Rn "\bsorry\b" proofs/stage4y
+          lean proofs/stage4z/WorkspaceAttestation.lean
+          ! grep -Rn "\bsorry\b" proofs/stage4z
+          lean proofs/stage5a/NarrativeConflict.lean
+          lean proofs/stage5b/AdversarialReadout.lean
+          ! grep -Rn "\bsorry\b" proofs/stage5a
+          lean proofs/stage5c/SemanticBypass.lean
+          ! grep -Rn "\bsorry\b" proofs/stage5c
+          lean proofs/stage5d/AdaptiveRedTeam.lean
+          ! grep -REn "\bsorry\b|\badmit\b" proofs/stage5d
+          lean proofs/stage5e/DeployedDetector.lean
+          ! grep -REn "\bsorry\b|\badmit\b" proofs/stage5e
+          lean proofs/stage5f/PanelCompleteness.lean
+          ! grep -REn "\bsorry\b|\badmit\b" proofs/stage5f
+          lean proofs/stage5g/ForeignCapture.lean
+          ! grep -REn "\bsorry\b|\badmit\b" proofs/stage5g
+          lean proofs/stage5h/DisclosureTier.lean
+          ! grep -REn "\bsorry\b|\badmit\b" proofs/stage5h
+          lean proofs/stage5n/VtcDelay.lean
+          ! grep -REn "\bsorry\b|\badmit\b" proofs/stage5n
+          lean proofs/stage5o/Vsc.lean
+          ! grep -REn "\bsorry\b|\badmit\b" proofs/stage5o
+          lean proofs/stage5p/Vsi.lean
+          ! grep -REn "\bsorry\b|\badmit\b" proofs/stage5p
