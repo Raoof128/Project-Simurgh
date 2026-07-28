@@ -1,5 +1,32 @@
 ## Change Log
 
+## [gate-lifecycle] — 2026-07-28 — Gate lifecycle invariant published to tracked documentation
+
+**Raouf:**
+
+- **Scope:** Documentation only. Adds `docs/research/llm-shield/references/gate-lifecycle.md`,
+  linked from `AGENT.md`. No verifier semantics, evidence values, codes, scores or runtime code
+  changed.
+- **Summary:** Publishes the rule extracted from the Q1-F001 Lean-gate repair — **every
+  stage-installed gate declares its successor-stage behaviour before the stage freezes**, via six
+  required fields (`active_phase`, `protected_surface`, `next_phase_behaviour`,
+  `maintenance_behaviour`, `sunset_or_migration_condition`, `anti_vacuity_condition`). Three of that
+  repair's five findings were the same species, a gate outliving its phase: a stale census headcount
+  that left a prior stage's reproduce red on `main` unnoticed (`Q1-F002`); a one-sided transition
+  tripwire that would have passed in silence on the very repair it was written to catch (`Q1-F004`);
+  and a CI job that ran on every pull request to `main` and refused each one (`Q1-F005`). Records
+  four measured failure modes — pin sets never counts, assertions exact in both directions, scope CI
+  triggers to the stage's own paths, and **an empty evaluated range is not a passing result** — plus
+  authority-precedes-action, checked by commit ancestry, with Stage 5Q's Annex A5 as the worked
+  example.
+- **Files changed:** `docs/research/llm-shield/references/gate-lifecycle.md` (new), `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** `npm run format:check` clean; documentation-only commit alters no gate, test or
+  evidence behaviour.
+- **Follow-ups:** Stage 5S (VWQ, pays socket I8) attaches the six declarations to every gate it
+  installs. Landed before the 5S spec deliberately, so the rule is pre-existing authority rather
+  than one invented inside the first stage it judges.
+
 ## [stage-5i-vpc] — 2026-07-11 — VPC: Verifiable Panel Coverage (`v2.44.0-stage-5i-vpc`)
 
 **Raouf:**
