@@ -1,6 +1,48 @@
 # Agent Rules and Logs
 
+## Standing invariants
+
+Doctrine that binds every stage, kept in tracked documentation so it survives independently of any
+one machine's local agent configuration:
+
+- **[The gate lifecycle invariant](docs/research/llm-shield/references/gate-lifecycle.md)** — every
+  stage-installed gate declares its successor-stage behaviour **before the stage freezes**: six
+  required fields, four measured failure modes (pin sets not counts; assertions exact in both
+  directions; scope CI triggers to the stage's own paths; **an empty evaluated range is not a
+  passing result**), and authority-precedes-action with Stage 5Q's Annex A5 as the worked example.
+  Sources: findings `Q1-F002`, `Q1-F004`, `Q1-F005`.
+
 ## Agent Change Log
+
+### 2026-07-28 (Australia/Sydney) — Gate lifecycle invariant published to tracked documentation
+
+**Raouf:**
+
+- **Scope:** Documentation only. No verifier semantics, evidence values, codes, scores or runtime
+  code changed. Adds `docs/research/llm-shield/references/gate-lifecycle.md` and links it here.
+- **Summary:** Publishes as repository doctrine the rule extracted from the Q1-F001 Lean-gate
+  repair: **every stage-installed gate must declare its successor-stage behaviour before the stage
+  freezes** (`active_phase`, `protected_surface`, `next_phase_behaviour`, `maintenance_behaviour`,
+  `sunset_or_migration_condition`, `anti_vacuity_condition`). Three of that repair's five findings
+  were one species — a gate outliving the phase it policed: 5Q's census pin went stale and left
+  5Q's reproduce red on `main` unnoticed (`Q1-F002`); 5Q's Q0→Q1 tripwire was one-sided and would
+  have passed in silence on the repair it was written to catch (`Q1-F004`); 5R's CI job ran on every
+  pull request to `main` and refused each one (`Q1-F005`). The document also records
+  authority-precedes-action — exact paths declared in the spec first, permitted operation per path,
+  and the authority commit a **strict ancestor** of the repair commit, checked by ancestry rather
+  than asserted — with Annex A5 as the worked example, and the rule that an empty evaluated range is
+  a refusal rather than a pass.
+- **Files changed:** `docs/research/llm-shield/references/gate-lifecycle.md` (new), `AGENT.md`,
+  `CHANGELOG.md`.
+- **Verification:** `npm run format:check` clean. Documentation-only: no gate, test or evidence
+  behaviour is altered by this commit. The invariant it publishes was already enforced in code by
+  the preceding repair (`beacf314`) and verified there — 5Q reproduce 21/21 and 5R reproduce green
+  on `main`.
+- **Follow-ups:** Stage 5S (VWQ — Checkpoint Witness Quorum, pays socket I8) attaches these six
+  declarations to every gate it installs, from birth. The rule is deliberately landed **before** the
+  5S spec so it is pre-existing authority rather than a rule invented inside the first stage it
+  judges. Not yet mirrored: a tracked `stage-invariants.md` does not exist in the repository — the
+  broader stage-invariants reference remains local-only by choice.
 
 ### 2026-07-11 (Australia/Sydney) — Stage 5I · VPC: Verifiable Panel Coverage (`v2.44.0-stage-5i-vpc`)
 
