@@ -4,7 +4,26 @@ on:
   push:
     branches: ["stage-5r-vpf-verifiable-probe-families"]
   pull_request:
-    branches: ["main"]
+    # Q1-F005. This was `branches: ["main"]` with NO paths filter, so the job ran on every pull
+    # request to main and judged the whole diff against 5R's write surface — which §2.3 declares
+    # EXHAUSTIVE over 5R-owned paths. Any PR touching anything else therefore failed, which is to
+    # say every PR after this stage merged. The first one to try was the Q1-F001 Lean gate repair.
+    #
+    # The surface is not weakened and 5R work is gated exactly as before. The trigger is corrected
+    # to fire when 5R's surface is actually at stake, which is how Stage 5Q's equivalent workflow
+    # was already scoped. A gate aimed at the whole repository was not measuring 5R's discipline;
+    # it was measuring whether anyone had done anything since.
+    paths:
+      - "tools/simurgh-attestation/stage5r/**"
+      - "tests/**/stage5r/**"
+      - "proofs/stage5r/**"
+      - "docs/research/llm-shield/evidence/stage-5r/**"
+      - "docs/research/llm-shield/STAGE_5R_CLOSEOUT.md"
+      - "docs/superpowers/specs/2026-07-27-stage-5r-vpf-verifiable-probe-families-design.md"
+      - "docs/superpowers/plans/2026-07-27-stage-5r-vpf-implementation-plan.md"
+      - "scripts/check-stage5r-proofs.sh"
+      - "scripts/reproduce-llm-shield-stage5r.sh"
+      - ".github/workflows/stage-5r-checks.yml"
 
 jobs:
   stage-5r:
