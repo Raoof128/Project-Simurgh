@@ -8,6 +8,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
 import {
   buildArtefacts,
   listLeanFilesSorted,
@@ -154,26 +155,57 @@ test("buildArtefacts refuses to build a premise without both sets", () => {
 });
 
 // ---------------------------------------------------------------------------------------------
-// The extractors, against the REAL workflow
+// The extractors, against the Q0 CAPTURE — and the live workflow, which Q1 repaired.
+//
+// These two tests used to read the live workflow, because during Q0 the live workflow WAS the
+// evidence. Q1 repaired it, and that changes what each test is entitled to assert:
+//
+//   the historical claim  is recomputed against `stage-5q-q1/f001-workflow-at-q0.yml`, whose digest must
+//                         equal the `claim_digest` the frozen ledger committed. F001 stays
+//                         demonstrable forever, including after its own repair.
+//   the live workflow     is asserted to be REPAIRED — a separate, opposite claim.
+//
+// The old tripwire could not have caught this landing. `named.length < existing.length` is
+// satisfied by a repaired gate that names zero proofs, so the assertion written to fail loudly
+// when the fix arrived would have passed in silence. A one-sided tripwire is a countdown, not an
+// invariant: it fires on drift in one direction and cannot see the other.
 // ---------------------------------------------------------------------------------------------
 
-test("the real workflow still names fewer proofs than exist on disk — F001 is LIVE", () => {
-  // This test is deliberately an assertion that the defect is STILL THERE. It is the tripwire for
-  // an accidental repair during Q0: fixing F001 now would erase the evidence, so the fix belongs
-  // in Q1 and this test will fail loudly when it lands.
-  const workflow = readFileSync(".github/workflows/stage-4-lean-proofs.yml", "utf8");
-  const named = namedLeanFiles(workflow);
-  const existing = listLeanFilesSorted();
-  assert.ok(existing.length > 0, "there are proofs on disk");
-  assert.ok(
-    named.length < existing.length,
-    "F001 must remain live through Q0 (spec §14.2). If this fails, the gate was repaired early " +
-      "and the false green can no longer be demonstrated."
+const Q0_WORKFLOW = "docs/research/llm-shield/evidence/stage-5q-q1/f001-workflow-at-q0.yml";
+const Q0_CLAIM_DIGEST = "0ff612ac48ea0d7fffa5e6db19fa88e22ac19f1b2bf31cdcf292363caf6e6e9b";
+
+test("the Q0 capture is the bytes the frozen ledger pinned, and F001 is reproducible from it", () => {
+  const bytes = readFileSync(Q0_WORKFLOW);
+  assert.equal(
+    createHash("sha256").update(bytes).digest("hex"),
+    Q0_CLAIM_DIGEST,
+    "the Q0 capture does not match F001's committed claim_digest — the evidence has moved"
   );
+  const named = namedLeanFiles(bytes.toString("utf8"));
+  const omitted = JSON.parse(
+    readFileSync(
+      "docs/research/llm-shield/evidence/stage-5q/findings/F001/false-green.json",
+      "utf8"
+    )
+  ).omitted_while_green;
+  assert.ok(named.length > 0, "the Q0 gate named its proofs by hand — that was the defect");
+  for (const path of omitted) {
+    assert.ok(!named.includes(path), `${path} was recorded as omitted, yet the Q0 gate named it`);
+  }
 });
 
-test("the gate step is extractable from the real workflow", () => {
+test("the LIVE workflow is repaired: it names no proof and delegates to the gate", () => {
   const workflow = readFileSync(".github/workflows/stage-4-lean-proofs.yml", "utf8");
+  assert.deepEqual(
+    namedLeanFiles(workflow),
+    [],
+    "the by-name list has regrown — Q1-F001 repaired the camera, and a list is the photograph"
+  );
+  assert.match(workflow, /check-lean-proofs\.mjs/, "the live workflow must delegate to the gate");
+});
+
+test("the gate step is extractable from the Q0 capture", () => {
+  const workflow = readFileSync(Q0_WORKFLOW, "utf8");
   const step = extractGateStep(workflow);
   assert.ok(step, "the step that makes the completeness claim must be locatable");
   assert.match(step.step_name, /Type-check the Stage 4 formal core/);

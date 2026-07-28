@@ -1,0 +1,100 @@
+{
+  "schema": "simurgh.vsr.q1-finding-ledger.v1",
+  "note": "Q1 findings. Q0 is frozen and untouched: nothing in ../findings/ is modified by this file's existence. These are the discoveries made WHILE repairing Q1-F001, recorded so a later stage can cite them by id rather than by commit archaeology.",
+  "measured_at_commit": "c82613f3",
+  "parent_mandate": {
+    "id": "Q1-F001",
+    "title": "Repair the Lean gate's camera, never the photograph",
+    "resolution_status": "resolved",
+    "disposition": "The by-name list is retired. `.github/workflows/stage-4-lean-proofs.yml` now delegates to `scripts/check-lean-proofs.mjs`, which discovers every proof, refuses escape hatches on comment-stripped source, and self-tests its own ability to go red. Adding the eleven missing filenames was prohibited and was not done.",
+    "witnesses": {
+      "W1_legacy_gate_passes_the_seed": "the legacy command block, run verbatim with a sorry-carrying theorem seeded at proofs/stage5r/W1Seed.lean, exited 0 and printed nothing",
+      "W2_repaired_gate_green": "OK: 38 Lean proof(s) discovered under proofs/ (floor 38), 0 escape hatches, all type-check, self-test red on demand",
+      "W3_repaired_gate_rejects_the_identical_seed": "FAIL: lean_gate_escape_hatch / file: proofs/stage5r/W1Seed.lean / detail: sorry (exit 1)"
+    },
+    "note_on_lean": "`lean` exits 0 on a sorry-closed theorem — it is a warning, not an error. Measured. The escape scan, not the type-check, is what makes an unproven proof fail."
+  },
+  "findings": [
+    {
+      "id": "Q1-F002",
+      "title": "The gate census pin was a stale headcount, and 5Q's reproduce script was red on main",
+      "measured_at_commit": "c82613f3",
+      "affected_artifact": "scripts/reproduce-llm-shield-stage5q.sh (gate 8, EXPECTED_GATE_PROBLEMS)",
+      "reproduction": "git worktree add --detach <dir> <tag> && node tools/simurgh-attestation/stage5q/node/measureGateCensus.mjs",
+      "observed_result": {
+        "v2.52.0-stage-5q-vsr": { "steps_classified": 14, "problems": 12 },
+        "v2.53.0-stage-5r-vpf": { "steps_classified": 22, "problems": 19 },
+        "delta": [
+          "stage-5r-checks.yml::campaign commitment, and its ancestry over the results",
+          "stage-5r-checks.yml::install elan, pinned to this stage's own toolchain file",
+          "stage-5r-checks.yml::the attestation verifies WITHOUT any private key",
+          "stage-5r-checks.yml::the commitment verifier REFUSES an altered corpus",
+          "stage-5r-checks.yml::the control corpus",
+          "stage-5r-checks.yml::the inherited commitment, roots first and signature last",
+          "stage-5r-checks.yml::the instrument lock"
+        ],
+        "cause": "all seven are Stage 5R workflow steps carrying no committed universe_query"
+      },
+      "security_or_assurance_effect": "assurance_only. Gate 8 of 5Q's reproduce script failed from the moment 5R merged until this repair, and nobody observed it, because no prior-stage reproduce script was re-run at 5R's closeout. A stage-local gate that nobody re-runs is a gate that has stopped measuring. Separately, a headcount permits laundering: repair one problem gate, introduce another, and 19 stays 19 — the exact substitution 5Q forbade for its write-surface ledger ('declared by SET, never by COUNT') and then did not apply to its own census pin.",
+      "resolution_status": "resolved",
+      "disposition": "Re-pinned by SET at stage-5q-q1/problem-gate-set.json as {gate_id, reason_code} pairs, sorted, duplicate-free. compareProblemSets reports added and removed independently and refuses a malformed pin. The seven Stage 5R steps are preserved as VISIBLE DEBT rather than repaired: fixing them would mean editing a shipped stage's signed workflow, which this repair does not do.",
+      "future_stage_reference": "A stage that gives 5R's seven steps committed universe queries would remove seven entries from the pin; the set comparison will report each removal by name."
+    },
+    {
+      "id": "Q1-F003",
+      "title": "Stage 5R's Lean comment stripper conceals escape hatches by two independent routes",
+      "measured_at_commit": "c82613f3",
+      "affected_artifact": "tools/simurgh-attestation/stage5r/core/signals.mjs :: stripNonCode(source, \"lean\")",
+      "reproduction": "import { stripNonCode } from tools/simurgh-attestation/stage5r/core/signals.mjs, then scan the returned code for /\\bsorry\\b/",
+      "sub_findings": [
+        {
+          "id": "Q1-F003-A",
+          "vector": "unterminated block comment",
+          "input": "theorem a : True := trivial\\n/- open forever\\nsorry\\n",
+          "observed_result": "code = \"theorem a : True := trivial\\n\\n\\n\", scan sees sorry: FALSE",
+          "why_silent": "everything after an unterminated `/-` is swallowed, and the file does not strip to nothing, so the strips-to-nothing vacuity guard never fires"
+        },
+        {
+          "id": "Q1-F003-B",
+          "vector": "primed identifiers read as string delimiters",
+          "input": "theorem t : True := by\\n  have a' : Nat := 1\\n  sorry\\n  have b' : Nat := 2\\n",
+          "observed_result": "code = \"theorem t : True := by\\n  have a'' : Nat := 2\\n\", scan sees sorry: FALSE",
+          "why_silent": "Lean identifiers legally carry `'`; treating it as a quote drops every character between two primed names, and the survivor still looks like plausible code"
+        }
+      ],
+      "security_or_assurance_effect": "assurance_only, and bounded: both vectors require the concealing source to be committed, which is a different threat model from an accidental omission. No committed proof in this repository exercises either vector — all 38 files were re-checked under the repaired state machine and 0 escape hatches were found. The defect is that the SCAN could not have seen one.",
+      "resolution_status": "superseded_not_patched",
+      "disposition": "5R's evidence is signed and its reproduce is byte-stable; patching signals.mjs would break a shipped stage's attestation to fix a scanner that the repo-wide gate has now replaced operationally. scripts/lib/leanProofGate.mjs carries a correct state machine — nested block comments tracked by depth, unterminated comment and unterminated string returned as ERRORS rather than silent strips, primes distinguished from char literals by the preceding character — with unit tests naming each vector. The historical weakness stays documented rather than quietly rewritten.",
+      "future_stage_reference": "Any stage re-signing 5R's evidence should adopt the repaired stripper at that point, and say so."
+    },
+    {
+      "id": "Q1-F004",
+      "title": "Stage 5Q's Q0-to-Q1 transition tripwire was one-sided and could not detect its own repair",
+      "measured_at_commit": "c82613f3",
+      "affected_artifact": "tests/unit/llmShield/stage5q/f001Capture.test.js :: \"the real workflow still names fewer proofs than exist on disk — F001 is LIVE\"",
+      "reproduction": "apply the Q1-F001 repair, then evaluate the original assertion: namedLeanFiles(live workflow).length < listLeanFilesSorted().length",
+      "observed_result": "named = 0, existing = 38, so 0 < 38 holds and the assertion PASSES against a fully repaired gate. The test whose comment reads 'this test will fail loudly when it lands' would have stayed silent. The two assertions that did fire were the ledger digest rebuild and the gate-step extractor, neither of which was written as the tripwire.",
+      "security_or_assurance_effect": "assurance_only. A one-sided bound is a countdown, not an invariant: it detects drift in one direction and is satisfied by the extreme of the other. The stage's designed signal for its own most important transition did not work.",
+      "resolution_status": "resolved",
+      "disposition": "Replaced by two opposite, exact assertions: the HISTORICAL claim recomputes against stage-5q-q1/f001-workflow-at-q0.yml, whose digest must equal the claim_digest the frozen ledger already committed; the LIVE workflow must contain exactly zero literal .lean paths and must delegate to the gate. Equality in both directions, so neither a regrown list nor a vanished one can pass.",
+      "future_stage_reference": "The general rule this yields: a premise recomputed against the live tree makes its finding unreproducible the moment the finding is FIXED. 5Q's F004-F012 (shallow Object.freeze across 5C/5D/5O/5P) carry the same exposure and should be repointed at captures when they are repaired."
+    },
+    {
+      "id": "Q1-F005",
+      "title": "Stage 5R's CI gate ran on every pull request to main and refused all of them",
+      "measured_at_commit": "c82613f3",
+      "affected_artifact": ".github/workflows/stage-5r-checks.yml (on.pull_request)",
+      "reproduction": "open any pull request to main that touches a path outside 5R's write surface; the 'the write surface' step runs checkWriteSurface.mjs over merge-base(origin/main, HEAD)..HEAD",
+      "observed_result": {
+        "trigger_as_shipped": "pull_request: branches: [\"main\"] — no paths filter",
+        "consequence": "the job ran on every PR to main and judged the entire diff against STAGE_OWNED_PATTERNS, which spec 2.3 declares exhaustive over 5R-owned paths",
+        "first_encounter": "the Q1-F001 repair, 21 of 21 changed paths reported as '[outside] ... outside the 5R write surface (frozen 2.3 is exhaustive)'",
+        "contrast": "Stage 5Q's equivalent workflow carries a paths: filter listing 5Q-owned files, so it fires only when its own surface is at stake"
+      },
+      "security_or_assurance_effect": "assurance_only, and repository-blocking. No published claim of 5R is weakened by this: the finding is that the gate could not be satisfied by any work other than 5R's own, so from 5R's merge until this repair, every pull request to main was destined to fail a red check. A gate that refuses everything measures nothing, and a red check that is always red is one nobody will keep reading.",
+      "resolution_status": "resolved",
+      "disposition": "The pull-request trigger now carries a paths: filter naming 5R-owned files, mirroring Stage 5Q's. The fix ships in its OWN pull request, because the workflow file is itself inside the corrected filter: bundling it with the Q1-F001 repair would trigger the very job it repairs, which would then refuse the other twenty paths. The surface itself is untouched and 5R work is gated exactly as before. The workflow is inside 5R's own STAGE_OWNED_PATTERNS, so 5R's rules authorise the edit, and no 5R evidence file is bound to its digest — checked, not assumed.",
+      "future_stage_reference": "The general defect class: a stage-scoped gate whose trigger outlives the phase it was built to police. Every future stage should scope its CI trigger to its own paths at authoring time, and any stage adding a repo-wide gate must state what happens to the NEXT stage's branch."
+    }
+  ]
+}

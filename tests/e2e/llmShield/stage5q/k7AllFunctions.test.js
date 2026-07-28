@@ -215,6 +215,51 @@ const ADAPTERS = {
     driftFor: (m) => ok(typeof m.driftFor({ run: "" }, []) === "object", "a drift report"),
     gateCensus: (m) => ok(m.gateCensus({ steps: [] }).ok === true, "a census over no steps"),
   },
+  // Annex A5. The maintenance surface. Each adapter exercises the refusal the export exists for:
+  // an unnamed path, and authority that arrives after the action it claims to authorise.
+  "core/maintenanceSurface.mjs": {
+    MAINTENANCE_REFUSALS: (m) =>
+      ok(Object.isFrozen(m.MAINTENANCE_REFUSALS) && m.MAINTENANCE_REFUSALS.EMPTY_RANGE, "frozen"),
+    parseMaintenanceSurface: (m) =>
+      ok(
+        m.parseMaintenanceSurface("## Annex A4\n| `x` | add | p | Q1-F001 |\n").present === false,
+        "a table outside A5 is not A5's authority"
+      ),
+    judgeMaintenance: (m) => {
+      const entries = [{ path: "a.mjs", op: "add" }];
+      const late = m.judgeMaintenance({
+        entries,
+        outsideQ0: [{ path: "a.mjs", op: "add" }],
+        rangeCommitCount: 1,
+        authorityPrecedes: false,
+      });
+      return ok(
+        !late.ok && late.refusals[0].reason === m.MAINTENANCE_REFUSALS.AUTHORITY_DOES_NOT_PRECEDE,
+        "authority written after the crossing is refused"
+      );
+    },
+  },
+  // Q1-F002. The set-based census pin. Each adapter exercises the behaviour the export exists for,
+  // not its existence: the comparator is asked to catch the laundering swap, and the reader is
+  // asked for a pin that actually carries entries.
+  "core/problemGateSet.mjs": {
+    REASON_CODES: (m) =>
+      ok(Object.isFrozen(m.REASON_CODES) && m.REASON_CODES.UNCLASSIFIABLE_STEP, "frozen codes"),
+    classifyReason: (m) => ok(m.classifyReason("nonsense nobody classified") === null, "refuses"),
+    compareProblemSets: (m) => {
+      const e = (gate_id) => ({ gate_id, reason_code: m.REASON_CODES.UNCLASSIFIABLE_STEP });
+      const r = m.compareProblemSets({ pinned: [e("a::1")], actual: [e("b::2")] });
+      return ok(!r.ok && r.added.length === 1 && r.removed.length === 1, "a swap is two events");
+    },
+  },
+  "node/checkProblemGateSet.mjs": {
+    computeProblemSet: (m) =>
+      ok(
+        m.computeProblemSet().every((x) => typeof x.gate_id === "string" && x.reason_code),
+        "every problem carries an id and a classified code"
+      ),
+    readPinnedSet: (m) => ok(m.readPinnedSet().gate_problems.length > 0, "the pin is not empty"),
+  },
   "core/censusRuntime.mjs": {
     canonicalError: (m) => ok(!/\//.test(m.canonicalError({ message: "/abs/path" })), "no paths"),
     kindOf: (m) => ok(m.kindOf(() => {}) === "function", "a function is a function"),

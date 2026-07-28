@@ -6,14 +6,21 @@ core Lean 4 only, **no mathlib**. Run locally:
 
 ```
 elan toolchain install leanprover/lean4:v4.15.0
-lean proofs/stage4/ExitLattice.lean
-lean proofs/stage4/Structuring.lean
-lean proofs/stage4m/AntiMonotonicity.lean
-lean proofs/stage4n/TemporalCompleteness.lean
+node scripts/check-lean-proofs.mjs
 ```
 
-All four files type-check with exit 0 and no `sorry`. CI gate:
-`.github/workflows/stage-4-lean-proofs.yml`.
+That gate discovers every `.lean` under `proofs/` — 38 files as of Stage 5R — type-checks each
+one, and refuses any escape hatch (`sorry`, `admit`, `native_decide`, a bare `axiom`) found in
+comment-stripped source. It also poisons a scratch corpus on every run and demands its own
+refusal, because a gate that cannot demonstrate going red is not evidence that anything passed.
+
+This README used to name four files and say "all four type-check", while the CI workflow named
+27 and 38 existed. That drift was Stage 5Q's finding F001 and is repaired in Q1: neither the gate
+nor this file names a proof any more. `.github/workflows/stage-4-lean-proofs.yml` runs the script
+above and nothing else.
+
+Note that `lean` exits **0** on a file whose theorem is closed by `sorry` — it is a warning. The
+escape scan, not the type-check, is what makes an unproven proof fail.
 
 ## What is formally proven (machine-checked)
 

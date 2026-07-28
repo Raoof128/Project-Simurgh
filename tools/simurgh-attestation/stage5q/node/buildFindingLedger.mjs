@@ -47,6 +47,21 @@ import { emptyLedger, appendFinding, verifyChain, ledgerDigest } from "../core/f
 import { makePremiseReceipt, verifyPremise } from "../core/premiseReceipt.mjs";
 
 const E = "docs/research/llm-shield/evidence/stage-5q";
+
+/**
+ * The digest of `.github/workflows/stage-4-lean-proofs.yml` AS IT STOOD AT Q0, which the frozen
+ * ledger committed as F001's `claim_impact.claim_digest`. Pinned here so the Q0 capture verifies
+ * against the record rather than the other way round.
+ */
+const F001_CLAIM_DIGEST_AT_Q0 = "0ff612ac48ea0d7fffa5e6db19fa88e22ac19f1b2bf31cdcf292363caf6e6e9b";
+
+/**
+ * The Q0 capture lives OUTSIDE `evidence/stage-5q/`, in a sibling Q1 directory. Stage 5R gates on
+ * `git status --porcelain` across the whole inherited 5Q evidence tree, so adding even an untracked
+ * subdirectory there fails a shipped stage's reproduce — measured, not predicted. Q1 evidence is
+ * not Q0 evidence, and the directory boundary now says so.
+ */
+const Q1_WORKFLOW_CAPTURE = "docs/research/llm-shield/evidence/stage-5q-q1/f001-workflow-at-q0.yml";
 const OUT = `${E}/findings/q0-finding-ledger.json`;
 
 const sha256 = (bytes) => createHash("sha256").update(bytes).digest("hex");
@@ -304,13 +319,28 @@ function main(argv) {
     f003Probe: `${E}/findings/F003/import-write-probe.json`,
   };
   const claimPaths = {
-    leanWorkflow: ".github/workflows/stage-4-lean-proofs.yml",
+    // Q1-F001. This used to read the LIVE workflow. It cannot: F001's claim is a statement about
+    // the bytes as they stood at Q0, and Q1 repaired those bytes. A ledger whose premises recompute
+    // against the current tree becomes unreproducible the moment one of its findings is FIXED —
+    // the ledger would punish the repair it exists to demand. So the claim is recomputed against a
+    // capture of the Q0 bytes, and the capture is not trusted: its digest must equal the value the
+    // frozen ledger already committed, or this builder refuses to run.
+    leanWorkflow: Q1_WORKFLOW_CAPTURE,
     capture: "docs/research/llm-shield/evidence/stage-5m/real-lanec/lanec-local-capture.json",
   };
 
   const digests = {};
   for (const [key, path] of Object.entries({ ...paths, ...claimPaths })) {
     digests[key] = sha256(read(path));
+  }
+
+  if (digests.leanWorkflow !== F001_CLAIM_DIGEST_AT_Q0) {
+    console.log(
+      `REFUSING: ${claimPaths.leanWorkflow} hashes to ${digests.leanWorkflow}, but F001's frozen ` +
+        `claim_digest is ${F001_CLAIM_DIGEST_AT_Q0}. The Q0 capture has been altered, and a ` +
+        `finding recomputed against altered evidence is not a finding.`
+    );
+    return 1;
   }
 
   const fixtures = fixtureStore(Object.values(paths));
