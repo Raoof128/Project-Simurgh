@@ -1326,6 +1326,107 @@ inferred class coverage, which is the inference that permitted the false dischar
 
 ---
 
+## Annex A5 — the `maintenance` write surface (post-freeze, 2026-07-28)
+
+### A5.1 The defect
+
+§14.2 assigns the repair of finding **5Q-F001** to Q1, and the Q0 write surface refuses
+`.github/workflows/stage-4-lean-proofs.yml` with the words _"repairing it is Q1's job"_. Both
+statements are correct and, together, they are a deadlock: the repair is authorised in prose and
+forbidden by every gate, because §6.1 knows only one phase.
+
+Waiting for Q1 does not resolve it. The Q0→Q1 transition validator **refuses Q1 today** — T3 fails
+with 2 522 members carrying no coverage status, and T7 needs `--manifest`. A gate that CI runs on
+every branch touching `stage5q/**` therefore blocks a bounded integrity repair behind the largest
+unresolved debt in the stage, and the only ways out that do not require this annex are to disable
+the gate or to file authorised work as a violation. Both are worse than the deadlock.
+
+The gate itself named the remedy: _"if this path is genuinely needed, name it in the spec first;
+'obviously intended' is not a permission."_ This annex is that naming.
+
+### A5.2 The amendment
+
+§6.1 gains a **second, narrower surface** beside the Q0 surface, selected by phase:
+
+```text
+phase = q0            the exhaustive surface of §6.1, unchanged
+phase = maintenance   the exact path set of A5.3, and nothing else
+```
+
+`maintenance` is **not Q1**. It claims no transition, discharges no obligation, and moves no
+published number. It authorises one bounded repair whose paths are enumerated below.
+
+A change is admitted under `maintenance` only when **all** of these hold. The checker refuses
+otherwise, and each refusal is typed:
+
+```text
+changed paths are non-empty                    empty_range
+every changed path outside the Q0 surface
+  appears in A5.3 with a matching operation    path_not_in_maintenance_surface
+                                               operation_not_permitted
+this annex is an ANCESTOR of the first commit
+  touching any A5.3 path                       authority_does_not_precede_action
+§§2-5 are byte-identical                       frozen_sections_modified
+the T1-T7 transition logic is unchanged        transition_conditions_modified
+Q1 remains unauthorised                        q1_authorisation_claimed
+no uncommitted change touches an A5.3 path     uncommitted_changes_not_evaluated
+```
+
+**Authority precedes action, and it is machine-checked rather than asserted.** The commit carrying
+this annex must be a strict ancestor of the commit performing the repair. A permission slip written
+after the crossing is not a permission, and a checker that cannot tell the difference is not a gate.
+
+**The anti-vacuity condition exists because the vacuity was real.** The §6.1 gate diffs
+`MERGE_BASE..HEAD`. During this repair it was run with the work uncommitted, evaluated an empty
+range, and printed a pass — a green wired to nothing, inside the repair of a false green. An empty
+range is now a refusal whenever the working tree carries relevant changes.
+
+### A5.3 The exact surface
+
+Exhaustive. A path absent here is refused under `maintenance` however obviously intended, and an
+operation not listed is refused on a path that is listed — an allowlist of files alone would permit
+unrelated edits inside an authorised file.
+
+| path                                                                    | op     | purpose                                                         | id      |
+| ----------------------------------------------------------------------- | ------ | --------------------------------------------------------------- | ------- |
+| `.github/workflows/stage-4-lean-proofs.yml`                             | modify | retire the by-name proof list; delegate to the discovering gate | Q1-F001 |
+| `scripts/check-lean-proofs.mjs`                                         | add    | the repo-wide self-enumerating Lean gate                        | Q1-F001 |
+| `scripts/lib/leanProofGate.mjs`                                         | add    | its audit logic and Lean-aware comment state machine            | Q1-F001 |
+| `tests/unit/leanProofGate.test.js`                                      | add    | the guards, including the permanent seeded-omission witness     | Q1-F001 |
+| `proofs/README.md`                                                      | modify | docs accuracy: it named four files while thirty-eight existed   | Q1-F001 |
+| `docs/research/llm-shield/evidence/stage-5q-q1/f001-workflow-at-q0.yml` | add    | the Q0 workflow bytes, pinned by the frozen `claim_digest`      | Q1-F001 |
+| `docs/research/llm-shield/evidence/stage-5q-q1/problem-gate-set.json`   | add    | the census pin, re-declared as a set                            | Q1-F002 |
+| `docs/research/llm-shield/evidence/stage-5q-q1/q1-finding-ledger.json`  | add    | Q1-F002, Q1-F003, Q1-F004 and Q1-F005, with reproductions       | Q1-F002 |
+
+Q1 evidence lives in the **sibling** `stage-5q-q1/` rather than under `evidence/stage-5q/`, because
+Stage 5R's reproduce gates on `git status --porcelain` across that entire inherited tree; an
+untracked subdirectory there fails a shipped stage. Q1 evidence is not Q0 evidence, and the
+directory boundary now says so.
+
+Paths already inside the Q0 surface — 5Q's own tools, tests and reproduce script — are unchanged by
+this annex and remain governed by §6.1.
+
+**Q1-F005 is recorded by this stage but repaired outside it.** The Q1-F001 repair uncovered it: 5R's job declared `pull_request: branches: ["main"]` with **no paths filter**, so it
+ran on every pull request to `main` and judged the whole diff against a surface its own §2.3 calls
+exhaustive over 5R-owned paths. Every pull request after 5R merged therefore failed it; this repair
+was simply the first to try. The trigger is scoped to 5R's own paths, exactly as Stage 5Q's
+equivalent workflow already was — in its own pull request, because the workflow file is itself
+inside the corrected filter, so bundling the fix here would trigger the very job it repairs. **5R's surface is not weakened and 5R's work is gated as before** —
+a gate pointed at the whole repository was not measuring 5R's discipline, only whether anyone had
+done anything since. The file is inside 5R's own write surface, so 5R's rules permit the edit, and
+no 5R evidence is bound to its digest.
+
+### A5.4 What this annex does not do
+
+- it does **not** authorise Q1, and T1–T7 are untouched: Q1 remains refused, for the same reasons;
+- it does **not** reopen §§2–5, and the freeze digest is unmoved;
+- it does **not** alter any published number — L1 stays 1 438 / 23 332 and uncertified, and the Q0
+  finding ledger still rebuilds to `7f8c70f1`;
+- it does **not** repair Stage 5R's seven unclassified CI steps or its comment stripper. Those are
+  recorded as debt in the Q1 ledger and left visible.
+
+---
+
 ## Freeze block
 
 **§§2–5 are FROZEN as of this commit.** Amendments are annex-only from here; the four objects are
