@@ -589,7 +589,11 @@ output had to be contained after the input filter missed:
 
 > 5S can expose inconsistent signed containment histories once they are compared. It does not stop
 > the model, the gateway, or the operator from producing the first bad history. It makes the second,
-> contradictory story expensive — not the first one impossible.
+> contradictory story **detectable and attributable once compared** — not the first one impossible.
+
+"Expensive" was the drafting word and is retired from every claim surface: cost is interpretive
+unless a stage measures it, and 5S measures no cost. The 511 denylist pins the retirement, so the
+word cannot reappear in a signed claim, a generated summary or the closeout by drift.
 
 ### 4.3 Limitations, separated by layer
 
@@ -681,3 +685,142 @@ Each gate 5S installs carries its six lifecycle declaration fields **adjacent to
 definition**, in the file where the gate lives. §6 provides the census and the set-pinned index; it is
 not the only place the fields appear. A reviewer must never perform document archaeology to learn a
 gate's successor behaviour — that failure mode is exactly what produced Q1-F002, F004 and F005.
+
+---
+
+## §5 Threat model and acceptance matrix
+
+Frozen 2026-07-28.
+
+### 5.1 Actors and their powers
+
+Each actor is modelled separately, because a threat model that merges roles cannot express the attack
+where one party holds two of them.
+
+| actor               | powers granted in the model                                                                                                              |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| **Producer**        | sign conflicting checkpoints; change policy or protocol-version fields; partition recipients; withhold views; attempt key substitution   |
+| **Witness**         | refuse to sign; replay; duplicate; alias keys; sign conflicting checkpoints                                                              |
+| **Receiver**        | lie about receipt; duplicate another receiver; suppress a view                                                                           |
+| **Assembler**       | cherry-pick statements; count anchors as witnesses; manufacture quorum                                                                   |
+| **Comparator**      | omit inputs; fabricate a clean result; supply incomplete ancestry                                                                        |
+| **External anchor** | be delayed, unavailable or operationally compromised — but never interprets VWQ semantics, because it is only ever handed a digest       |
+| **Reviewer**        | trusts only committed policy roots, public keys and offline verification — never our narrative, our tooling defaults, or our environment |
+
+**Stated plainly:** a single operator may hold several distinct witness keys. That run can still
+report `witnessed_quorum`, and it **must** carry `independence_unproven: true`. This is not an edge
+case in the model — it is Lane B's normal, expected condition.
+
+### 5.2 Trust assumptions, frozen apart from mechanisms
+
+Assumptions are listed separately so no reader mistakes one for something 5S establishes:
+
+1. signature unforgeability and digest collision resistance;
+2. externally committed producer, witness and receiver keys are authentic;
+3. detection requires at least one incompatible view to reach the committed comparison set;
+4. strong-tier intake completeness depends on every expected receiver signing either a receipt or an
+   unavailable status;
+5. the verifier implementation matches the frozen algebra of §2 — parity across four runtimes is
+   evidence for this assumption, not a proof of it;
+6. same-machine process separation is not organisational independence.
+
+### 5.3 Adversary wins — the failure vocabulary
+
+```text
+false_clean
+    incompatible authenticated views compared but no finding emitted
+
+false_equivocation
+    compatible or indeterminate history accused as a fork
+
+counterfeit_quorum
+    ineligible, duplicated, aliased, replayed, producer or anchor material contributes weight
+
+intake_laundering
+    omitted receiver represented as complete intake
+
+attribution_laundering
+    unsigned or wrong-key checkpoint attributed to the producer
+
+claim_laundering
+    narrow comparison result presented as global non-equivocation
+```
+
+Every mandatory case in §5.5 names the win it denies. A case that denies no named win is decoration
+and does not enter the matrix.
+
+### 5.4 Acceptance matrix shape
+
+No single expected-result column. Every independent dimension is pinned independently, because a
+collapsed column lets a case pass for the wrong reason:
+
+```text
+case_id
+verifier_exit
+quorum_status_a
+quorum_status_b
+comparison_status
+equivocation_artifact_status
+finding_codes
+intake_complete
+witness_independence_status
+external_corroboration_status
+first_failure_code
+```
+
+The matrix is pinned **as a set of `case_id`s**, never as a count (Q1-F002). Added and removed cases
+are computed and printed independently; the count is telemetry.
+
+### 5.5 Mandatory case families
+
+**1 — Clean mechanics.** One valid `q-of-n` checkpoint; two receivers reporting the same checkpoint;
+compatible multi-epoch ancestry; a valid policy/version transition. _Denies:_ `false_equivocation`.
+
+**2 — Equivocation.** Same coordinate with different bodies; two histories with neither an ancestor
+of the other; and the full quorum cross-product:
+
+| view A quorum | view B quorum | required `comparison_status` |
+| ------------- | ------------- | ---------------------------- |
+| met           | met           | `equivocation_detected`      |
+| met           | incomplete    | `equivocation_detected`      |
+| incomplete    | met           | `equivocation_detected`      |
+| incomplete    | incomplete    | `equivocation_detected`      |
+
+**All four combinations must yield `equivocation_detected`.** This is the executable form of
+`QuorumShortfallCannotSuppressEquivocation`, and it is the direct answer to the reviewer question the
+design most invites — _can a partially witnessed fork still disappear?_ — with four separate "no"
+receipts rather than one argument. _Denies:_ `false_clean`.
+
+**3 — Indeterminate.** A missing committed ancestry link; valid but incomplete ancestry inputs.
+Neither a finding nor a clean result — the outcome is `indeterminate`, and both a green verdict and an
+accusation are refused. _Denies:_ `false_equivocation` and `false_clean` simultaneously.
+
+**4 — Attribution.** Producer key absent; wrong producer key; body/envelope digest confusion;
+fabricated unsigned checkpoints. _Denies:_ `attribution_laundering`.
+
+**5 — Quorum laundering.** Producer self-witness; key aliases; duplicate identity; cross-epoch replay;
+cross-scope replay; an external anchor injected into the witness roster. _Denies:_
+`counterfeit_quorum`.
+
+**6 — Receiver laundering.** Invented receiver; aliased receiver keys; duplicate receipt; invalid
+receipt signature; a receipt issued under the wrong comparison policy. _Denies:_ `counterfeit_quorum`
+in the comparison lane.
+
+**7 — Intake tiers.** Every receiver responds → `intake_complete: true`; one signed unavailable status
+→ still complete; one receiver simply missing → `intake_complete: false`. An unavailable status
+contributes no view, no quorum weight and no corroboration — it is an authenticated statement of
+absence, not a vote. _Denies:_ `intake_laundering`.
+
+**8 — Honesty.** An empty or insufficient comparison cannot reach green; a narrow result cannot be
+rendered as "the producer did not equivocate"; every legitimate absence variant of §3.6 is exercised
+and typed. _Denies:_ `claim_laundering`.
+
+### 5.6 Closeout acceptance law
+
+> **Stage 5S is accepted only if every raw code is reached at its frozen first-failure position, every
+> typed outcome is reachable, all four quorum-status combinations preserve valid equivocation
+> findings, compatible ancestry never yields an accusation, and no external anchor contributes witness
+> weight.**
+
+Five conjuncts, each independently falsifiable, none satisfiable by a passing test count. This is the
+matrix's spine, and it is the sentence the closeout must defend rather than paraphrase.
