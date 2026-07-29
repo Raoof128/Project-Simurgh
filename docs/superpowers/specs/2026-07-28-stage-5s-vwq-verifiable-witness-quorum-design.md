@@ -1125,6 +1125,8 @@ The resolution is the same: **three paths, one operation, one purpose.** Not "St
 | `docs/research/llm-shield/evidence/stage-4h/exit-map.json`        | modify | additive raw-band ripple required by §2.10                                                                             | 5S-M002 |
 | `tests/unit/llmShield/stage4h/exitWrapper.test.js`                | modify | additive raw-band ripple required by §2.10                                                                             | 5S-M003 |
 | `tools/simurgh-attestation/stage4h/exitCodes.mjs`                 | modify | extend the shared run-level raw-code ledger through the frozen Stage 5S band and regenerate its authorised projections | 5S-M004 |
+| `tests/unit/llmShield/stage5o/exitCodes.test.js`                  | modify | move Stage 5O's successor-handoff assertion, which pins where the next band begins                                     | 5S-M005 |
+| `tests/unit/llmShield/stage5p/rawCodeCensus.test.js`              | modify | widen Stage 5P's approved-documentation list, never its band regex                                                     | 5S-M006 |
 
 The table is the authority. The write-surface checker **parses this annex** and never re-declares it,
 because two copies of a declaration are two chances to disagree and the silent one is the copy nobody
@@ -1141,6 +1143,21 @@ reproduce script regenerates it three times through `build-stage4h-digest-fixtur
 regenerated projection, not an immutable historical artifact, and that is why modifying it is
 legitimate here. Had it been covered by a historical signature, the correct move was an additive
 successor projection and this annex would say so.
+
+**Rows 5S-M005 and 5S-M006 were added on 2026-07-29**, after the ripple turned two prior-stage
+guards red. Neither is a defect in those guards; both are doing exactly their job.
+
+Stage 5O asserts that 475 stays unallocated. Its own comment already explains the shape of that
+statement: when 464 was released to 5P, the original "464 must stay unmapped" line "was recording a
+temporary fact, not a Stage 5O invariant". 475 is the same kind of fact, and it becomes false the
+moment a successor takes the handoff. The assertion moves to pin Stage 5S's band exactly, which is
+strictly stronger than asserting an absence.
+
+Stage 5P's census restricts where the literals 464-474 may appear, and its own comment states the
+remedy in advance: "widen the approved list, never weaken the band regex. A successor stage must be
+able to say which codes its predecessor consumed without laundering the literal out of the sentence."
+5S's spec and plan cite 473 and 474 for exactly that reason. The list is widened; the regex is not
+touched.
 
 ### M.3 What this annex does not authorise
 
